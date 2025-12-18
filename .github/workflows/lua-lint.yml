@@ -1,0 +1,107 @@
+name: Lua Lint
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+permissions:
+  contents: read
+
+jobs:
+  luacheck:
+    name: Luacheck
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Lua
+      uses: leafo/gh-actions-lua@v10
+      with:
+        luaVersion: "5.1"
+    
+    - name: Setup LuaRocks
+      uses: leafo/gh-actions-luarocks@v4
+      
+    - name: Install Luacheck
+      run: luarocks install luacheck
+      
+    - name: Run Luacheck
+      run: |
+        luacheck core/ tracking/ curing/ offense/ ui/ config/ tests/ \
+          --exclude-files '**/config/user_config.lua' \
+          --std lua51 \
+          --globals love \
+          --max-line-length 100 \
+          --no-unused-args || true
+      
+    - name: Run Luacheck (strict)
+      run: |
+        luacheck core/ tracking/ curing/ offense/ ui/ \
+          --exclude-files '**/config/user_config.lua' \
+          --std lua51 \
+          --max-line-length 100
+      continue-on-error: true
+
+  style-check:
+    name: Style Check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Check for tabs
+      run: |
+        ! grep -r $'\t' --include="*.lua" core/ tracking/ curing/ offense/ ui/ config/ tests/ || \
+        (echo "Error: Tabs found in Lua files. Please use spaces for indentation." && exit 1)
+      
+    - name: Check trailing whitespace
+      run: |
+        ! grep -r ' $' --include="*.lua" core/ tracking/ curing/ offense/ ui/ config/ tests/ || \
+        (echo "Warning: Trailing whitespace found in Lua files." && exit 0)
+
+  documentation-check:
+    name: Documentation Check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Check for README
+      run: |
+        if [ ! -f README.md ]; then
+          echo "Error: README.md not found"
+          exit 1
+        fi
+        
+    - name: Check for LICENSE
+      run: |
+        if [ ! -f LICENSE ]; then
+          echo "Error: LICENSE file not found"
+          exit 1
+        fi
+        
+    - name: Check for CONTRIBUTING
+      run: |
+        if [ ! -f CONTRIBUTING.md ]; then
+          echo "Error: CONTRIBUTING.md not found"
+          exit 1
+        fi
+
+    - name: Validate Markdown links
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        use-quiet-mode: 'yes'
+        config-file: '.github/workflows/markdown-link-check-config.json'
+      continue-on-error: true

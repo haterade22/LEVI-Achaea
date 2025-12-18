@@ -1,0 +1,32 @@
+# Lua compiled files
+*.luac
+
+# Mudlet profile files (user-specific)
+*.mpackage
+*.trigger
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# User configuration (keep example files)
+config/user_config.lua
+
+# Test coverage
+luacov.*.out
+luacov.stats.out
+
+# Temporary files
+*.tmp
+*.bak
