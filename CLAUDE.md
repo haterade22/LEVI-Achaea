@@ -19,7 +19,8 @@ This repository contains the **"For Levi" Mudlet package**, a comprehensive comb
 ### What is Achaea?
 - Text-based multiplayer game with real-time combat
 - Complex affliction system (30+ different afflictions per class)
-- Class-based combat with unique abilities per class (20+ classes)
+- Class-based combat with unique abilities per class (26 classes)
+- Each class has at most 3 class skills; each skill has many abilities
 - Requires sub-second reaction times
 - Combat involves illusions that can fake afflictions
 - Multiple balance types (balance, equilibrium, class-specific)
@@ -131,6 +132,86 @@ LEVI-Achaea/
 - Tracks: name, city, house, class, level, XP rank, player kills
 - City-based name highlighting
 - Enemy and army rank tracking
+
+---
+
+## Achaea Classes Reference
+
+Achaea has **26 classes** total: 21 base classes + 4 Elemental Lords + Dragon.
+
+Each class has:
+- At most 3 class skills with many abilities each
+- Unique bashing (hunting) attacks
+- Unique battlerage attacks
+
+### Class Progression
+1. **Fledgling** - Initial stage, only 2 of 3 skills, capped at Skilled level
+2. **Journeyman** - Level 20+, skills capped at Fabled level
+3. **Full Member** - After `EMBRACE CLASS` (Level 30 + House rank 2, or Level 50 without house), gains 3rd skill, no learning limits
+
+**Getting a Class**: Visit Certimene in Delos: `ASK CERTIMENE BECOME <class>`
+
+**Changing Class**:
+- **Multiclass**: Can have multiple classes (`HELP MULTICLASS`)
+- **Quit Class**: Use `QUIT CLASS` to leave (98% lesson refund before full member, 50% after)
+
+### Base Classes (21)
+
+| Class | Description | Skills |
+|-------|-------------|--------|
+| Alchemist | Enigmatic figures wielding the power of the ether | Alchemy, Physiology, Formulation/Sublimation |
+| Apostate | Evil, necromantic daemon summoners | Evileye, Necromancy, Apostasy |
+| Bard | Sword, Song, and Story at the disposal of the Virtuoso | Composition, Bladedance, Sagas (or Woe for Cyrene) |
+| Blademaster | Masters of the legendary Two Arts | TwoArts, Striking, Shindo |
+| Depthswalker | Fearless manipulators of shadow and time | Aeonics, Shadowmancy, Terminus |
+| Druid | Forest-loving metamorphs | Groves, Metamorphosis, Reclamation |
+| Infernal | Evil warriors employing necromantic methods (Knight) | Malignity, Oppression, Weaponmastery |
+| Jester | Happy-go-lucky pranksters and roguish entertainers | Puppetry, Pranks, Tarot |
+| Magi | Masters of the four elements and crystalline vibrations | Crystalism, Elementalism, Artificing |
+| Monk | Forges mind, body, and spirit into a unified whole | Tekura/Shikudo, Kaido, Telepathy |
+| Occultist | Chaos-loving summoners of extra-planar entities | Domination, Tarot, Occultism |
+| Paladin | Valorous warriors with eagle companion (Knight) | Excision, Valour, Weaponmastery |
+| Pariah | Cheaters of Death and bringers of plagues | Memorium, Pestilence, Charnel |
+| Priest | Holy warriors with a fearsome guardian angel | Spirituality, Devotion, Zeal |
+| Psion | Weavers of Aldar magic | Weaving, Psionics, Emulation |
+| Runewarden | Mystic warriors who employ runic lore (Knight) | Runelore, Discipline, Weaponmastery |
+| Sentinel | Metamorphing forest rangers with animal companions | Woodlore, Metamorphosis, Skirmishing |
+| Serpent | Masters of venoms and subterfuge | Subterfuge, Venom, Hypnosis |
+| Shaman | Mystical users of Vodun dolls, curses, and bound spirits | Vodun, Curses, Spiritlore |
+| Sylvan | Forest-lovers who blend mastery of three elements | Propagation, Groves, Weatherweaving |
+| Unnamable | Frenzied mutant warriors for Chaos (Knight) | Dominion, Anathema, Weaponmastery |
+
+### Elemental Lords (4 separate classes)
+- Airlord, Earthlord, Firelord, Waterlord
+
+### Dragon (End-Game Class)
+- Unlocked at level 99
+- 6 color variants: Red, Black, Silver, Gold, Blue, Green
+- Each color has unique breath weapon and battlerage
+
+### Class Specializations
+
+**Knight Classes** (Infernal, Paladin, Runewarden, Unnamable) - Weaponmastery specs:
+- **DWC (Dual Wield Cutting)** - Double venom application, fast attacks
+- **DWB (Dual Wield Blunt)** - Double breaks, best limb prep
+- **SnB (Sword and Board)** - Impale/stun, shield abilities, damage mitigation
+- **2H (Two-Handed)** - Best damage, passive paralysis curing, strip rebounding/shield
+
+**Monk**:
+- **Tekura** - Unarmed martial arts (default)
+- **Shikudo** - Staff-based combat (requires Trans Tekura to unlock)
+
+**Alchemist**:
+- **Formulation** - Default alchemical field
+- **Sublimation** - Alternative field using Hashan's Wellspring
+
+**Metamorphosis** (Druid/Sentinel):
+- **Druid-exclusive morphs**: Hydra, Wyvern
+- **Sentinel-exclusive morphs**: Jaguar, Basilisk
+
+**Bard**:
+- **Sagas** - Default third skill
+- **Woe** - Exclusive to Cyrene
 
 ---
 
@@ -385,7 +466,7 @@ gmcp.Room.Info = {
 ## Important Considerations
 
 ### Things to Remember
-- Achaea has 20+ classes with unique mechanics
+- Achaea has 26 classes (21 base + 4 Elemental Lords + Dragon) with unique mechanics
 - Server-side curing exists but custom systems provide advantages
 - Illusions and hidden afflictions are common (use diagnosis)
 - Combat logs can be several hundred lines per second
