@@ -1,41 +1,39 @@
--- LEVI-Achaea Loader
--- This file loads all external Lua modules into Mudlet
--- Usage: Create an alias in Mudlet (e.g., "rr") that runs:
---   dofile("C:/Users/mikew/source/repos/Achaea/LEVI-Achaea/src/loader.lua")
+-- Auto-generated loader for LEVI Achaea scripts
+-- This file loads all Lua scripts in the correct order
 
-local basePath = "C:/Users/mikew/source/repos/Achaea/LEVI-Achaea/src/"
+local base_path = getMudletHomeDir() .. "/LEVI-Achaea/src/"
 
--- Modules to load (in order - dependencies first)
-local modules = {
-	"core/init.lua",
-	"core/events.lua",
-	"tracking/afflictions.lua",
-	"tracking/balances.lua",
-	"combat/offense.lua",
-	"basher/basher.lua",
-}
+-- Helper function to load a directory of scripts
+local function load_directory(dir_name)
+    local dir_path = base_path .. dir_name
+    print(string.format("Loading %s scripts...", dir_name))
 
--- Track load status
-local loaded = 0
-local failed = 0
+    -- Get all lua files in directory
+    local files = {}
+    for _, filename in ipairs(lfs.dir(dir_path) or {}) do
+        if filename:match("%.lua$") and filename ~= "init.lua" then
+            table.insert(files, filename)
+        end
+    end
 
-for _, module in ipairs(modules) do
-	local path = basePath .. module
-	local success, err = pcall(dofile, path)
-	if success then
-		loaded = loaded + 1
-	else
-		failed = failed + 1
-		cecho("\n<red>Failed to load " .. module .. ": " .. tostring(err))
-	end
+    -- Sort files to ensure consistent load order
+    table.sort(files)
+
+    -- Load each file
+    for _, filename in ipairs(files) do
+        local file_path = dir_path .. "/" .. filename
+        local success, err = pcall(dofile, file_path)
+        if not success then
+            print(string.format("Error loading %s: %s", filename, err))
+        end
+    end
 end
 
--- Report results
-if failed == 0 then
-	cecho("\n<green>LEVI system loaded successfully (" .. loaded .. " modules)")
-else
-	cecho("\n<yellow>LEVI system loaded with errors (" .. loaded .. " ok, " .. failed .. " failed)")
-end
+-- Load directories in order
+load_directory("mmp")
+load_directory("ataxia")
+load_directory("ataxiagui")
+load_directory("ataxiaNDB")
+load_directory("ataxiaBasher")
 
--- Raise event for other systems to hook into
-raiseEvent("levi system loaded")
+print("LEVI Achaea scripts loaded successfully!")
