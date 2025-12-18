@@ -218,11 +218,93 @@ Each class has:
 ## Key Concepts
 
 ### Afflictions
-- Negative status effects applied during combat
+- Negative status effects applied during combat (~55+ different afflictions)
 - Must be cured in correct order (priority-based)
 - Some afflictions hide or fake others (diagnosis required)
-- Cure balances: herb, mineral, salve, focus, tree, immunity, sip, moss
 - GMCP provides: `gmcp.Char.Afflictions.List`, `.Add`, `.Remove`
+
+#### Cure Types
+| Action | Description | Examples |
+|--------|-------------|----------|
+| **Eat** | Consume herb or mineral | Bloodroot (paralysis), Kelp (asthma) |
+| **Apply** | Apply salve to body part | Epidermal (anorexia), Mending (crippled) |
+| **Smoke** | Smoke from pipe | Elm (aeon), Valerian (slickness) |
+| **Sip** | Drink elixir | Immunity (voyria) |
+| **Writhe** | Escape bindings | Entangled, Transfixed, Webbed |
+| **Clot** | Stop bleeding | Bleeding |
+| **Focus** | Mental cure | Breaks some locks |
+| **Tree** | Tree tattoo | Cures random affliction |
+
+#### Herb/Mineral Groupings
+Each herb has an alchemical mineral equivalent (same cure balance):
+- **Ginseng/Ferrum**: Addiction, Haemophilia, Lethargy, Nausea
+- **Kelp/Aurum**: Asthma, Clumsiness, Sensitivity, Weariness
+- **Goldenseal/Plumbum**: Epilepsy, Impatience, Stupidity, Dizziness
+- **Bloodroot/Magnesium**: Paralysis, Slickness (alt)
+- **Lobelia/Argentum**: Agoraphobia, Recklessness, Vertigo
+- **Bellwort/Cuprum**: Generosity, Pacifism, Peace
+- **Prickly Ash/Stannum**: Confusion, Dementia, Paranoia
+
+#### Affliction Locks
+**Soft Lock** (3 affs): Anorexia + Asthma + Slickness
+- Blocks eat/smoke/apply; breakable with FOCUS or TREE
+
+**Tree Lock** (4 affs): + Paralysis
+- Blocks TREE tattoo; breakable with FOCUS
+
+**True Lock** (5 affs): + Impatience
+- Blocks FOCUS; target cannot cure themselves
+- Requires class-specific affliction to block passive cures
+
+#### Class-Specific Lock Afflictions
+| Classes | Extra Affliction |
+|---------|-----------------|
+| Most Knight classes, Monk, Serpent, Sentinel, Druid, Blademaster, Elemental Lords | Weariness |
+| Apostate, Pariah, Bard, Priest | Voyria |
+| Magi, Sylvan | Haemophilia |
+| Alchemist | Stupidity |
+| Depthswalker | Recklessness |
+| Psion | Confusion |
+
+#### Server-Side Curing (SSC)
+Achaea provides built-in curing that simulates average latency. Custom systems can integrate with or replace it.
+
+**Core Commands:**
+| Command | Description |
+|---------|-------------|
+| `CURING ON/OFF` | Enable/disable the system |
+| `CURING STATUS` | Show current curing status |
+| `CURING AFFLICTIONS ON/OFF` | Toggle affliction curing |
+| `CURING DEFENCES ON/OFF` | Toggle defence upkeep |
+| `CURING SIPPING ON/OFF` | Toggle health/mana sipping |
+| `CURING SIPHEALTH/SIPMANA <percent>` | Set sip thresholds |
+| `CURING FOCUS ON/OFF` | Toggle FOCUS ability usage |
+| `CURING TREE ON/OFF` | Toggle TREE tattoo usage |
+| `CURING BATCH ON/OFF` | Send multiple cures at once |
+
+**Priority Management:**
+| Command | Description |
+|---------|-------------|
+| `CURING PRIORITY LIST` | List affliction cure priority |
+| `CURING PRIORITY <aff> <priority>` | Move affliction priority |
+| `CURING PRIORITY RESET` | Reset to default priority |
+| `CURING PRIORITY DEFENCE LIST` | List defence upkeep priority |
+
+**Curingsets** (save/load priority configurations):
+| Command | Description |
+|---------|-------------|
+| `CURINGSET NEW <name>` | Create new curingset |
+| `CURINGSET SWITCH <name>` | Switch to a curingset |
+| `CURINGSET LIST` | List all curingsets |
+| `CURINGSET CLONE <from>` | Clone into current setup |
+
+**Manual Queue:**
+| Command | Description |
+|---------|-------------|
+| `CURING QUEUE ADD <cure>` | Add manual cure to queue |
+| `CURING QUEUE LIST` | List queue contents |
+| `CURING PREDICT <aff>` | Tell system you have an affliction |
+| `CURING PRIOAFF <aff>` | Temporarily prioritise an affliction |
 
 **Example Pattern (Ataxia style):**
 ```lua
