@@ -1,7 +1,7 @@
 -- Auto-generated loader for LEVI Achaea scripts
 -- This file loads all Lua scripts in the correct order
 
-local base_path = getMudletHomeDir() .. "/LEVI-Achaea/src/"
+local base_path = "C:/Users/mikew/source/repos/Achaea/LEVI-Achaea/src/"
 
 -- Helper function to load a directory of scripts
 local function load_directory(dir_name)
