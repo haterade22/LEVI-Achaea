@@ -326,6 +326,24 @@ end
 registerAnonymousEventHandler("gmcp.Char.Afflictions.Add", affsAdd)
 ```
 
+### Combat Strategies
+Classes generally focus on one of two kill paths:
+
+**Affliction-Based**: Stack afflictions to achieve a lock or kill condition
+- Build toward Soft Lock → Tree Lock → True Lock
+- Use class-specific affliction to complete the lock
+- Examples: Serpent, Shaman, Apostate
+
+**Limb Damage-Based**: Break limbs to enable killing blows
+- Limbs track damage as percentage (0-200%+)
+- **Level 1 break**: Limb reaches ~33% (damaged)
+- **Level 2 break**: Limb reaches 100% (crippled/broken)
+- **Level 3 break**: Limb reaches 200% before victim can apply restoration+mending (mangled)
+- Cured with: Restoration salve (damage), Mending salve (breaks)
+- Examples: Knights (2H spec), Monk, Blademaster
+
+**Limbs**: Head, Torso, Left Arm, Right Arm, Left Leg, Right Leg
+
 ### Balances
 - **Balance**: Physical action cooldown (~2-4 seconds)
 - **Equilibrium**: Mental action cooldown (~2-4 seconds)
