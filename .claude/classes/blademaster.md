@@ -2,135 +2,336 @@
 
 ## Metadata
 - **Type**: Base Class
-- **Combat Style**: Limb | Damage
+- **Combat Style**: Limb | Bleed | Affliction
 - **Difficulty**: Hard
 - **Lock Affliction**: Weariness (blocks Fitness passive cure)
 
 ## Skills
 ```
-TwoArts: Dual wielding techniques with paired blades
-Striking: Precise strikes and cutting techniques
-Shindo: The Way - mental discipline and perception
+TwoArts: Stance-based combat with paired blades
+Striking: Precise strikes with affliction delivery (pommelstrike)
+Shindo: The Way - mental discipline, Shin resource, and special abilities
+```
+
+## Stances
+```yaml
+# Stances ordered by acquisition in TwoArts
+doya:
+  speed: "Slow"
+  damage: "Highest (10% more than Arash)"
+  accuracy: "Best"
+  limb_damage: "Increased"
+  defense: "Normal"
+  notes: "Slow but accurate with high limb damage"
+
+thyr:
+  speed: "Fastest"
+  damage: "Lowest"
+  accuracy: "High"
+  limb_damage: "Reduced"
+  defense: "Normal"
+  priority: "Primary 1v1 stance - speed and precision"
+
+mir:
+  speed: "Slowest"
+  damage: "Just under unstanced"
+  accuracy: "Normal"
+  limb_damage: "Normal"
+  defense: "Greatly increased"
+  priority: "Defensive stance when targeted in groups"
+
+arash:
+  speed: "Medium (slower than Thyr, faster than Sanya)"
+  damage: "Tremendous (+second highest)"
+  accuracy: "Lowest"
+  limb_damage: "Highest per hit"
+  defense: "20% MORE damage taken"
+  priority: "Burst damage when safe, group combat opener"
+  warning: "Only use when you can survive shortly after"
+
+sanya:
+  speed: "Medium"
+  damage: "Normal"
+  accuracy: "Normal"
+  limb_damage: "Normal"
+  defense: "Normal"
+  shin_gain: "12 per strike (vs normal 8)"
+  priority: "Well-rounded, increased Shin generation"
+
+# Priority Order
+1v1_priority: [thyr, sanya, mir, arash, doya]
+group_priority: [arash, thyr, mir, sanya, doya]
+```
+
+## Core Combat Mechanics
+```yaml
+primary_kill: "BrokenStar"
+brokenstar_requirement: "700+ bleeding on target"
+
+impaleslash:
+  description: "Critical ability - makes clotting use more mana"
+  importance: "Must stick this before any bleed strategy works"
+  how_to_stick:
+    - "Paralysis/prone/web removes dex-based dodging -> impale guaranteed"
+    - "Pommelstrike/strike knees after they hit you, impale before they stand"
+    - "Paralysis stacking (3x with lvl3 band, 4x with lvl0 band) beats herb balance"
+    - "After they shield: raze/strike knees, get balance before them, impale"
+
+shin_resource:
+  generation: "8 per strike normally, 12 in Sanya stance"
+  usage: "Powers special Shindo abilities"
+
+parry_bypass:
+  ability: "Airfist"
+  effect: "100% parry bypass against all forms of parrying"
+  usage: "Critical for breaking legs against smart opponents"
 ```
 
 ## Kill Routes
 
-### Primary Kill: Sever (Limb-Based)
+### Primary Kill: BrokenStar (Bleed Kill)
 ```yaml
-type: limb
-summary: Damage a limb to 200% (level 3), then sever for instant kill
+type: bleed
+summary: Stack 700+ bleeding via impale/bladetwist, then BrokenStar
 
 prerequisites:
-  - Any limb at 200% damage (level 3 mangled)
-  - Target cannot be in rebounding
+  - Must stick Impaleslash first (makes clotting cost more mana)
+  - Target needs 700+ bleeding minimum
 
-steps:
-  1: "Focus attacks on a single limb"
-  2: "Use limb-targeting strikes to build damage"
-  3: "Get limb to level 3 (200%)"
-  4: "SEVER <limb> when mangled"
+basic_method_two_legs:
+  description: "Easiest method, less effective vs experienced fighters"
+  steps:
+    1: "Prep both legs with legslash (alternate left/right)"
+    2: "Legslash/strike knees to break BOTH legs simultaneously"
+    3: "IMPALE (they can't dodge while prone)"
+    4: "BLADETWIST x4 (time permits before writhe)"
+    5: "They writhe - you get balance for BROKENSTAR before they stand"
+  bleeding: "~700-800 from 4 twists"
+  notes: "Breaking limbs simultaneously is CRITICAL vs experienced players"
 
-required_limbs:
-  any_limb: 3  # head, arm, or leg to level 3
+two_legs_torso:
+  description: "Burst bleeding method"
+  steps:
+    1: "Prep both legs for break"
+    2: "Prep torso with centreslash or compassslash"
+    3: "Break TORSO first"
+    4: "Break LEGS immediately after (prone)"
+    5: "IMPALE + IMPALESLASH on balance"
+    6: "BLADETWIST x2"
+    7: "They writhe - re-impale or BROKENSTAR based on bleeding"
+  notes: |
+    Broken torso increases bladetwist bleeding.
+    This burst usually outstrips clotting.
 
-notes: "Sever can target head, arms, or legs - choose based on parry"
+head_torso_two_legs:
+  description: "Salve balance manipulation"
+  steps:
+    1: "Prep legs, head, AND torso"
+    2: "Break HEAD + TORSO in one slash"
+    3: "Enemy applies to head (most common)"
+    4: "Break LEGS (prone) right as they apply to leg"
+    5: "IMPALE + IMPALESLASH + BLADETWISTx2"
+    6: "Re-impale or BROKENSTAR"
+  advantage: "Ensures no salve balance to heal torso before leg break"
+
+six_limb:
+  description: "Hardest to execute, provides lock option"
+  steps:
+    1: "Prep both legs, head, torso, both arms"
+    2: "Break HEAD + TORSO"
+    3: "Break ARMS"
+    4: "Break LEGS"
+    5: "With broken arms, can go for LOCK or BROKENSTAR"
+  timing_options:
+    - "Fast: Break legs immediately after arms (they apply to legs after head)"
+    - "Slow: Force them to apply to arms first, get extra bladetwist time"
+  notes: "Enemies have many escape options - use arm breaks as decoys"
 ```
 
-### Alternative Kill: Damage Rush
+### Alternative Kill: Damage (Arash Burst)
 ```yaml
 type: damage
-summary: High sustained damage through Two Arts techniques
+summary: Use Arash stance for tremendous damage output
 
 steps:
-  1: "Apply sensitivity to increase damage"
-  2: "Use high-damage strike combinations"
-  3: "Maintain pressure with fast attacks"
-  4: "Kill through accumulated damage"
+  1: "Prep both legs for break (any stance)"
+  2: "LEAVE ROOM - switch to ARASH stance"
+  3: "Return - enemy doesn't know you switched"
+  4: "FLAMEFIST (negates rebounding, allows attack strings)"
+  5: "Break legs"
+  6: "Continue LEGSLASH RIGHT (curing is left>right)"
+  7: "Mangle RIGHT leg (requires 2 restoration to cure)"
+  8: "Keep them prone longer, deal massive damage"
 
-notes: "Blademaster has high damage output with dual blades"
+ice_infuse:
+  afflictions: [shivering, frozen, disrupt]
+  benefits:
+    - "Changes damage type to ice (less mitigated)"
+    - "Bonus damage on frozen target"
+    - "Throws off salve timing (they may apply caloric)"
+
+fire_infuse:
+  affliction: ablaze
+  effect: "Small damage increase on each hit after ablaze"
+  notes: "Inferior to ice"
+
+engage:
+  usage: "After multislash - if they survive and try to run, engage hits them"
 ```
 
-### Alternative Kill: Annihilate
+### Alternative Kill: Affliction Lock
 ```yaml
-type: execute
-summary: Stack internal bleeding through strikes, then annihilate
+type: affliction
+summary: Use limb breaks to create affliction stacking window
+
+method_arms_legs:
+  steps:
+    1: "Prep both legs"
+    2: "Prep both arms"
+    3: "Break LEGS first"
+    4: "Break ARMS so they cure legs and stand before applying to arms"
+    5: "9-10 SECONDS of unhindered affliction time"
+    6: "Stack with POMMELSTRIKE (fastest affliction method)"
+
+affliction_targets:
+  chest: impatience
+  shoulder: weariness
+  stomach: anorexia
+  underarm: slickness
+  throat: asthma
+  neck: paralysis
+  knees: prone
+  feet: prone
+
+lock_strategy: |
+  Hypochondria is the ONLY way Blademaster gives impatience.
+  Must stick hypochondria FIRST to seal the lock.
+  Break arms with Addiction affliction to eat away precaching.
+
+paralysis_stacking:
+  description: "Beat herb balance with repeated pommelstrikes"
+  lvl0_band: "Every 4th pommelstrike beats herb balance"
+  lvl3_band: "Every 3rd pommelstrike beats herb balance"
+  example: "neck, neck, neck, throat -> asthma follows paralysis cure"
+```
+
+### Retardation/Aeon Strategy
+```yaml
+type: special
+summary: Exploit slowed curing in ret/aeon
 
 steps:
-  1: "Apply internal wounds through strikes"
-  2: "Stack bleeding effects"
-  3: "When internal damage high enough, ANNIHILATE"
-  4: "Target dies from internal trauma"
+  1: "PRONE or PARALYZE target"
+  2: "IMPALE"
+  3: "SHEATHE BLADE (critical! attacks don't work without sheathed blade)"
+  4: "BLADETWIST until ~700 bleeding (usually only 3 twists needed)"
+  5: "BROKENSTAR"
 
-notes: "Requires significant internal damage buildup"
+notes: |
+  Ret/aeon removes ability to clot effectively.
+  Sheathing blade after impale is PARAMOUNT - takes balance.
+  Use Striking abilities to keep paralysis and push hypochondria lock.
+
+thunderstorm:
+  skill: Shindo
+  effect: "Gives hamstring to everyone in room"
+  usage: "Prevents leaping out of retardation"
 ```
 
 ## Offensive Abilities
 ```yaml
-# TwoArts
-slash:
+# TwoArts - Slashes
+legslash:
   skill: TwoArts
   balance: bal
-  effect: "Basic slash with one blade"
-  damage_type: cutting
-  syntax: "SLASH <target>"
+  effect: "Slash targeting leg"
+  syntax: "LEGSLASH <target> LEFT/RIGHT"
+  notes: "Alternate sides to prep, break both simultaneously"
 
-draw:
+centreslash:
   skill: TwoArts
   balance: bal
-  effect: "Quick draw attack"
-  syntax: "DRAW <target>"
+  effect: "Slash targeting torso"
+  syntax: "CENTRESLASH <target>"
 
-rend:
+compassslash:
   skill: TwoArts
   balance: bal
-  effect: "Rending strike, causes bleeding"
-  syntax: "REND <target>"
+  effect: "Alternative torso slash"
+  syntax: "COMPASSSLASH <target>"
 
-ricochet:
+multislash:
   skill: TwoArts
   balance: bal
-  effect: "Bouncing blade strike"
-  syntax: "RICOCHET <target>"
+  effect: "Multiple rapid slashes"
+  syntax: "MULTISLASH <target>"
+
+# TwoArts - Impale
+impale:
+  skill: TwoArts
+  balance: bal
+  effect: "Impale target (prevents writhe for a balance)"
+  syntax: "IMPALE <target>"
+  notes: "Guaranteed balance of action before they writhe"
+
+impaleslash:
+  skill: TwoArts
+  balance: bal
+  effect: "Slash while impaled, makes clotting cost more mana"
+  syntax: "IMPALESLASH <target>"
+  notes: "CRITICAL - must stick this for bleed strategies"
+
+bladetwist:
+  skill: TwoArts
+  balance: bal
+  effect: "Twist impaled blade, causes heavy bleeding"
+  syntax: "BLADETWIST <target>"
+  notes: "~175-200 bleeding per twist, more with broken torso"
+
+brokenstar:
+  skill: TwoArts
+  balance: bal
+  effect: "Instant kill at 700+ bleeding"
+  syntax: "BROKENSTAR <target>"
+  requirement: "700+ bleeding minimum"
+
+# TwoArts - Infuse
+flamefist:
+  skill: TwoArts
+  balance: bal
+  effect: "Negates rebounding, allows attack strings"
+  syntax: "FLAMEFIST <target>"
 
 # Striking
-precision:
+pommelstrike:
   skill: Striking
   balance: bal
-  effect: "Precise limb-targeting strike"
-  syntax: "STRIKE <target> <limb>"
-  limbs: [head, torso, left_arm, right_arm, left_leg, right_leg]
+  effect: "Fast affliction delivery"
+  syntax: "POMMELSTRIKE <target> <location>"
+  locations:
+    chest: impatience
+    shoulder: weariness
+    stomach: anorexia
+    underarm: slickness
+    throat: asthma
+    neck: paralysis
+    knees: prone
+    feet: prone
 
-sever:
+airfist:
   skill: Striking
   balance: bal
-  effect: "Instant kill when limb is mangled (level 3)"
-  syntax: "SEVER <target> <limb>"
-  notes: "Main execute - requires level 3 limb"
-
-feint:
-  skill: Striking
-  balance: bal
-  effect: "Feinting attack"
-  syntax: "FEINT <target>"
+  effect: "100% parry bypass"
+  syntax: "AIRFIST <target>"
+  notes: "Critical for breaking limbs vs smart opponents"
 
 # Shindo
-contemplate:
+thunderstorm:
   skill: Shindo
   balance: eq
-  effect: "Enter contemplative state"
-  syntax: "CONTEMPLATE"
-
-focus_blade:
-  skill: Shindo
-  balance: eq
-  effect: "Focus mind on blade"
-  syntax: "FOCUS BLADE"
-
-perceive:
-  skill: Shindo
-  balance: eq
-  effect: "Perceive enemy weaknesses"
-  syntax: "PERCEIVE <target>"
+  effect: "Hamstring to everyone in room"
+  syntax: "THUNDERSTORM"
+  notes: "Prevents leaping out of retardation"
 ```
 
 ## Defensive Abilities
@@ -141,15 +342,15 @@ fitness:
   cures: [asthma]
   blocked_by: [weariness]
 
+mir_stance:
+  skill: TwoArts
+  effect: "Greatly increased defense"
+  notes: "Switch to this when targeted in groups"
+
 dodge:
   skill: TwoArts
-  effect: "Chance to dodge incoming attacks"
-  notes: "Passive dodge chance"
-
-riposte:
-  skill: TwoArts
-  effect: "Counter-attack when struck"
-  notes: "Automatic counter on successful parry"
+  effect: "Dexterity-based dodging"
+  removed_by: [paralysis, prone, web]
 ```
 
 ## Passive Cures
@@ -163,73 +364,112 @@ fitness:
 ## Limb Strategy
 ```yaml
 enabled: true
-target_order: [head, left_leg, right_leg]  # focus one limb to level 3
+primary_targets: [left_leg, right_leg, torso]
 break_requirements:
-  target_limb: 3  # sever requires level 3
-finisher: "SEVER <target> <limb>"
+  legs: "Prep both, break simultaneously"
+  torso: "Break for increased bladetwist bleeding"
+  arms: "Break for affliction window or extra twist time"
+
+leg_curing_order: "LEFT leg cured before RIGHT"
 strategy: |
-  Pick a limb based on enemy's parry pattern.
-  If they parry head, target legs.
-  If they parry legs, target head or arms.
-  Only need ONE limb to level 3 for sever.
+  Prep both legs by alternating legslash left/right.
+  Must break BOTH legs at once vs experienced players.
+  Use Airfist for 100% parry bypass.
+  Continuing to legslash RIGHT after break mangles it (2 restos to cure).
 ```
 
 ## Bashing (PvE)
 ```yaml
-attack_command: "BATTLERAGE SLASH <target>"
+attack_command: "SLASH <target>" or stance-appropriate attacks
 attack_skill: TwoArts
 battlerage_abilities:
   - slash: "Basic damage"
-  - rend: "Bleeding damage"
+  - multislash: "Multiple hits"
 ```
 
 ## Fighting Against This Class
 ```yaml
 priority_cures:
-  - weariness: "Restores your Fitness if you have it"
-  - broken_limbs: "Prevent sever setup"
-  - sensitivity: "Reduce their damage output"
-  - bleeding: "Clot to prevent bleedout"
+  - weariness: "Restores your Fitness"
+  - broken_legs: "Prevent impale setup"
+  - broken_torso: "Reduces bladetwist bleeding"
+  - bleeding: "CLOT to stay below 700"
+  - hypochondria: "Only way they give impatience"
+  - paralysis: "Enables their impale"
 
 dangerous_abilities:
-  - sever: "Instant kill when any limb at level 3"
-  - precision: "Fast limb damage accumulation"
-  - high_damage: "Sustained damage output is strong"
+  - brokenstar: "Instant kill at 700+ bleeding"
+  - impaleslash: "Makes clotting expensive"
+  - bladetwist: "~175-200 bleeding per twist"
+  - airfist: "100% parry bypass"
+  - simultaneous_breaks: "Both legs at once"
+  - arash_stance: "Massive damage burst"
 
 avoid:
-  - "Letting any limb get to level 3"
-  - "Ignoring bleeding buildup"
-  - "Static parrying (they'll switch targets)"
-  - "Letting sensitivity stack"
+  - "Reaching 700+ bleeding"
+  - "Being prone without clotting"
+  - "Static parrying (they use Airfist)"
+  - "Letting both legs get prepped"
+  - "Fighting in Arash without pressure"
+  - "Staying in retardation"
+
+clotting_strategy: |
+  Clot aggressively - MUST stay below 700 bleeding.
+  Impaleslash makes clotting cost more mana - watch mana.
+  After they impaleslash, clotting is less effective.
+
+parry_strategy: |
+  Parry legs to slow prep.
+  They WILL use Airfist for 100% bypass.
+  Track which legs are prepped.
 
 recommended_strategy: |
-  Parry dynamically - Blademaster can target any limb.
-  Track which limb they're focusing and parry it.
-  Keep restoration salve ready for limb damage.
-  Clot bleeding regularly.
+  Clot aggressively - 700 bleeding = death.
+  Don't let both legs get prepped simultaneously.
   Apply weariness to block their Fitness.
-  Apply pressure - their defense is dodge-based.
+  Watch for stance switches (Arash = incoming burst).
+  If impaled, they get guaranteed balance - prepare to clot.
+  In ret/aeon, they only need ~3 twists - escape immediately.
+  Broken torso increases twist bleeding - prioritize resto.
 ```
 
 ## Implementation Notes
 ```
 Triggers to watch for:
-- "strikes at your *" - limb being targeted
+- "legslashes your *" - leg being prepped
 - "Your * is damaged/broken/mangled" - track limb state
-- "severs your *" - sever attempt
-- Bleeding messages - track internal damage
-- Shindo activation messages
+- "impales you" - incoming impaleslash/twist
+- "twists the blade" - heavy bleeding incoming
+- "stance shifts to *" - stance change (Arash = danger)
+- "BrokenStar" - instant kill attempt
+- "Airfist" - parry being bypassed
+- "Flamefist" - rebounding negated
+- Bleeding amount messages
 
 GMCP considerations:
-- Track gmcp.Char.Vitals for limb percentages if available
-- Otherwise parse damage messages
-- Bleeding amount tracking important
+- Track gmcp.Char.Vitals for limb percentages
+- CRITICAL: Track bleeding amount (700 = death)
+- Parse stance change messages
 
 Edge cases:
-- Sever can target ANY mangled limb (level 3)
-- Dodge is passive and can frustrate attacks
-- Riposte provides free counter-attacks
-- Shindo abilities use equilibrium
-- Internal damage buildup for annihilate route
-- Fast attack speed - hard to keep up with curing
+- Airfist gives 100% parry bypass
+- Both legs must break simultaneously vs good players
+- Leg curing order is LEFT then RIGHT
+- Mangled right leg needs 2 restoration applies
+- Impaleslash makes clotting cost more mana
+- Broken torso increases bladetwist bleeding
+- In ret/aeon, only ~3 twists needed (can't clot effectively)
+- Sheathing blade after impale takes balance (in ret)
+- Thunderstorm prevents leaping out of ret
+- Arash stance = 20% more damage TAKEN by them
+
+Stance Damage Order (highest to lowest):
+Doya > Arash > Sanya > Mir > Thyr
+
+Stance Speed Order (fastest to slowest):
+Thyr > Arash > Sanya > Mir > Doya
+
+Band Levels affect paralysis stacking:
+- lvl3 band: Every 3rd pommelstrike beats herb balance
+- lvl0 band: Every 4th pommelstrike beats herb balance
 ```
