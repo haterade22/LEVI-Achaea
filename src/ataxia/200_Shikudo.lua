@@ -70,8 +70,8 @@ function shikudo.checkDispatchReady()
 end
 
 function shikudo.checkReadyForProne()
-  -- At least one leg prepped enough to sweep + break
-  return (tLimbs.LL >= 90 or tLimbs.RL >= 90)
+  -- BOTH legs prepped (90%+) for sweep
+  return (tLimbs.LL >= 90 and tLimbs.RL >= 90)
 end
 
 function shikudo.checkLegsPrepped()
@@ -81,7 +81,12 @@ end
 
 function shikudo.checkHeadPrepped()
   -- Head has enough damage to break with needle + spinkick burst
-  return (tLimbs.H >= 70)
+  return (tLimbs.H >= 90)
+end
+
+function shikudo.checkReadyForGaital()
+  -- Ready to transition to Gaital: BOTH legs 90%+ AND head 90%+
+  return shikudo.checkReadyForProne() and shikudo.checkHeadPrepped()
 end
 
 --------------------------------------------------------------------------------
@@ -102,8 +107,8 @@ function shikudo.shouldTransition()
   end
 
   -- PRIORITY 1: Ready for kill phase - go toward Gaital IMMEDIATELY
-  -- This takes precedence over all other transitions
-  if shikudo.checkReadyForProne() then
+  -- Need BOTH legs 90%+ AND head 70%+ before transitioning to Gaital
+  if shikudo.checkReadyForGaital() then
     if form == "Oak" then
       return "Gaital"
     elseif form == "Rain" then
@@ -243,8 +248,8 @@ function shikudo.selectStaff(slot)
   elseif form == "Maelstrom" then
     return shikudo.selectMaelstromStaff(slot, parried)
   else -- Tykonos
-    -- Tykonos has SWEEP available! Use it when legs are ready
-    if shikudo.checkReadyForProne() and not tAffs.prone then
+    -- Tykonos has SWEEP available! Use it when FULLY ready (legs + head prepped)
+    if shikudo.checkReadyForGaital() and not tAffs.prone then
       if slot == 1 then
         return "sweep"  -- Sweep uses both arm balances
       else
@@ -279,20 +284,18 @@ function shikudo.selectRainStaff(slot, parried)
   -- Rain: KURO (legs), HIRU (head), RUKU (arms/torso)
   -- LIGHT modifier: Use when limbs prepped and need kata to transition
 
-  local legsReady = shikudo.checkReadyForProne()
-  local headReady = (tLimbs.H >= 70)
   local kata = ataxia.vitals.kata or 0
 
-  -- If legs AND head are prepped but we need more kata to transition, use LIGHT
-  local needKataForTransition = (legsReady and headReady and kata < 5)
+  -- If all limbs prepped but we need more kata to transition, use LIGHT
+  local needKataForTransition = (shikudo.checkReadyForGaital() and kata < 5)
 
   if slot == 1 then
-    -- Primary: Focus legs first
+    -- Primary: Focus legs first, then head
     if tLimbs.LL < 90 and parried ~= "left leg" then
       return "kuro left"
     elseif tLimbs.RL < 90 and parried ~= "right leg" then
       return "kuro right"
-    elseif tLimbs.H < 70 and parried ~= "head" then
+    elseif tLimbs.H < 90 and parried ~= "head" then
       return "hiru"
     elseif needKataForTransition then
       -- Use LIGHT to build kata without messing up limb prep
@@ -306,7 +309,7 @@ function shikudo.selectRainStaff(slot, parried)
       return "kuro right"
     elseif tLimbs.LL < 90 and parried ~= "left leg" then
       return "kuro left"
-    elseif tLimbs.H < 70 then
+    elseif tLimbs.H < 90 then
       return "hiru"
     elseif needKataForTransition then
       if not tAffs.slickness then
@@ -330,19 +333,17 @@ function shikudo.selectOakStaff(slot, parried)
   -- Oak: KURO (legs), NERVESTRIKE (head), LIVESTRIKE (torso), RUKU
   -- LIGHT modifier: Use when limbs are prepped and we need kata to transition
 
-  local legsReady = shikudo.checkReadyForProne()
-  local headReady = (tLimbs.H >= 70)
   local kata = ataxia.vitals.kata or 0
 
-  -- If legs AND head are prepped but we need more kata to transition, use LIGHT
-  local needKataForTransition = (legsReady and headReady and kata < 5)
+  -- If all limbs prepped but we need more kata to transition, use LIGHT
+  local needKataForTransition = (shikudo.checkReadyForGaital() and kata < 5)
 
   if slot == 1 then
     if tLimbs.LL < 90 and parried ~= "left leg" then
       return "kuro left"
     elseif tLimbs.RL < 90 and parried ~= "right leg" then
       return "kuro right"
-    elseif tLimbs.H < 70 and parried ~= "head" then
+    elseif tLimbs.H < 90 and parried ~= "head" then
       return "nervestrike"
     elseif needKataForTransition then
       -- Use LIGHT to build kata without messing up limb prep
@@ -373,7 +374,7 @@ function shikudo.selectOakStaff(slot, parried)
       end
     elseif not tAffs.asthma then
       return "livestrike"
-    elseif not tAffs.clumsiness and legsReady then
+    elseif not tAffs.clumsiness and shikudo.checkReadyForProne() then
       return "ruku left"
     else
       return "kuro left"
@@ -533,7 +534,7 @@ function shikudo.dispatch()
   cecho(" | Form: " .. tostring(ataxia.vitals.form))
   cecho(" | Kata: " .. tostring(ataxia.vitals.kata))
   cecho("\n<cyan>[Shikudo] Limbs - H:" .. tLimbs.H .. " LL:" .. tLimbs.LL .. " RL:" .. tLimbs.RL)
-  cecho(" | Ready for Prone: " .. (shikudo.checkReadyForProne() and "YES" or "NO"))
+  cecho(" | Ready for Gaital: " .. (shikudo.checkReadyForGaital() and "YES" or "NO"))
 
   -- Safety check - skip if no target
   if not target or target == "" then
@@ -583,6 +584,12 @@ function shikudo.dispatch()
   if transition then
     cmd = cmd .. ";transition to the " .. transition .. " form"
     cecho("\n<yellow>[Shikudo] Transitioning to " .. transition .. " after this combo")
+  else
+    -- Debug: Show why no transition
+    local kata = ataxia.vitals.kata or 0
+    if shikudo.checkReadyForGaital() and kata >= 5 then
+      cecho("\n<red>[Shikudo DEBUG] Ready for Gaital + kata " .. kata .. " but no transition? Form: " .. tostring(form))
+    end
   end
 
   send("queue addclear free " .. cmd)
@@ -636,8 +643,9 @@ function shikudo.status()
   cecho("\n<cyan>║   <white>DISPATCH READY: " .. (shikudo.checkDispatchReady() and "<green>*** YES ***" or "<red>NO"))
   cecho("\n<cyan>╠══════════════════════════════════════════╣")
   cecho("\n<cyan>║ <white>PREP STATUS:<cyan>")
-  cecho("\n<cyan>║   <white>Legs Ready (90%+): " .. (shikudo.checkReadyForProne() and "<green>YES" or "<yellow>NO"))
-  cecho("\n<cyan>║   <white>Head Ready (70%+): " .. (shikudo.checkHeadPrepped() and "<green>YES" or "<yellow>NO"))
+  cecho("\n<cyan>║   <white>Both Legs Ready (90%+): " .. (shikudo.checkReadyForProne() and "<green>YES" or "<yellow>NO"))
+  cecho("\n<cyan>║   <white>Head Ready (90%+): " .. (shikudo.checkHeadPrepped() and "<green>YES" or "<yellow>NO"))
+  cecho("\n<cyan>║   <white>READY FOR GAITAL: " .. (shikudo.checkReadyForGaital() and "<green>*** YES ***" or "<yellow>NO"))
   cecho("\n<cyan>╚══════════════════════════════════════════╝\n")
 end
 
