@@ -473,3 +473,62 @@ Band Levels affect paralysis stacking:
 - lvl3 band: Every 3rd pommelstrike beats herb balance
 - lvl0 band: Every 4th pommelstrike beats herb balance
 ```
+
+---
+
+## Ice Dispatch System (302_Blademaster_Ice_Dispatch.lua)
+
+### Overview
+A V2-style dispatch system focused on pure damage kills using Ice infuse + frozen + focus-fire leg attacks.
+
+### Key Mechanics
+1. **Focus Fire ONE Leg** - Like Shikudo V2, focus damage on one leg until broken
+2. **Reactive AIRFIST** - Only use when focused leg is being parried
+3. **INFUSE ICE** - Every attack applies ice for shivering → frozen → bonus damage
+4. **Clumsiness First** - EARS strike priority makes salve applications fail
+5. **Pure Damage Kill** - No BrokenStar needed, just damage out while frozen
+
+**Key Insight**: Target can't cure frozen while applying restoration to legs - they must choose between mobility and not being frozen!
+
+### Commands
+```yaml
+bmd: Main dispatch attack (blademaster.dispatch.run())
+bmstatus: Display status panel (blademaster.dispatch.status())
+```
+
+### Combat Loop
+```
+1. RAZE if shield/rebounding present
+2. MULTISLASH burst if HP < 30% + leg broken (kill phase)
+3. AIRFIST if focused leg is parried (reactive)
+4. Strike: EARS > KNEES > NECK > SHOULDER
+5. Attack: LEGSLASH focus leg (or BALANCESLASH if ready for prone)
+6. Build: INFUSE ICE; <attack> <target> <dir> <strike>; ASSESS
+```
+
+### Affliction Priority
+| Priority | Strike | Affliction | Purpose |
+|----------|--------|------------|---------|
+| 1 | EARS | Clumsiness | Makes salve applications fail |
+| 2 | KNEES | Prone | When leg is broken |
+| 3 | NECK | Paralysis | Pressure |
+| 4 | SHOULDER | Weariness | Blocks Fitness passive cure |
+
+### Status Display
+```
++============================================+
+|       BLADEMASTER ICE DISPATCH            |
++============================================+
+| Target: <name> (HP: X%)
+| Focus Leg: left/right
+| Parried Limb: <limb>
++--------------------------------------------+
+| ICE STATUS:
+|   Shivering: YES/NO
+|   Frozen: YES (BONUS DMG!)
++--------------------------------------------+
+| AFFLICTIONS: Clumsiness, Paralysis, Weariness, Prone
+| LIMB DAMAGE: L Leg %, R Leg % (focus indicator)
+| KILL CONDITIONS: Leg Broken, HP < 30%
++============================================+
+```
