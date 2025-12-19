@@ -1,28 +1,484 @@
--- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Levi  Scripts > Leviticus > Shikudo Script - Levi > Shikudo > Shikudo
+-- Shikudo Dispatch Kill Logic System
+-- Focused on: Rain prep → Gaital kill → DISPATCH
+-- Kill requires: Prone + Broken leg + Broken head + Windpipe damage (needle)
 
-function AtaxiaGMCPParse(stat)
-  --Because they sometimes pass goofy stuff
-  --in the 'charstats' sub-table of vitals,
-  --we need a way to parse that. Forrrrr example,
-  --bleed. It gets passed as Bleed: # in charstats[1],
-  --buuuut it might not ALWAYS be charstats[1], or
-  --maybe it isn't there at all. Stupid. But here's
-  --my solution.
-  
-  local stat = stat:title()..": "
-  local toRet = false
-  for _, v in pairs(gmcp.Char.Vitals.charstats) do
-    if string.find(v, stat) then
-      toRet = v:gsub(stat, "")
-      toRet = toRet:gsub("%%", "")
-      --sometimes we want the STRING, like morph: jaguar <-- want jaguar,
-      --this will skip if there isn't a valid tonumber.
-      if tonumber(toRet) then
-        toRet = tonumber(toRet)
+shikudo = shikudo or {}
+shikudo.state = {
+  phase = "PREP",  -- PREP, PRONE, KILL
+}
+
+-- Available attacks per form
+shikudo.formAttacks = {
+  Tykonos = {
+    kicks = {"risingkick"},
+    staff = {"thrust", "sweep"}
+  },
+  Willow = {
+    kicks = {"flashheel"},
+    staff = {"dart", "hiru", "hiraku", "sweep"}
+  },
+  Rain = {
+    kicks = {"frontkick"},
+    staff = {"ruku", "kuro", "hiru"}
+  },
+  Oak = {
+    kicks = {"risingkick"},
+    staff = {"livestrike", "nervestrike", "ruku", "kuro"}
+  },
+  Gaital = {
+    kicks = {"spinkick", "flashheel", "dawnkick"},
+    staff = {"needle", "sweep", "ruku", "jinzuku", "kuro"}
+  },
+  Maelstrom = {
+    kicks = {"risingkick", "crescent"},
+    staff = {"ruku", "livestrike", "jinzuku", "sweep"}
+  }
+}
+
+-- Form transition paths (from → available destinations)
+shikudo.transitions = {
+  Tykonos = {"Willow"},
+  Willow = {"Rain"},
+  Rain = {"Tykonos", "Oak"},
+  Oak = {"Willow", "Gaital"},
+  Gaital = {"Rain", "Maelstrom"},
+  Maelstrom = {"Oak"}
+}
+
+-- Max kata per form before stumble
+shikudo.maxKata = {
+  Tykonos = 12,
+  Willow = 12,
+  Rain = 24,  -- Double chain!
+  Oak = 12,
+  Gaital = 12,
+  Maelstrom = 12
+}
+
+--------------------------------------------------------------------------------
+-- KILL CONDITION CHECKS
+--------------------------------------------------------------------------------
+
+function shikudo.checkDispatchReady()
+  -- All 4 conditions for dispatch
+  local prone = tAffs.prone
+  local legBroken = (tLimbs.LL >= 100 or tLimbs.RL >= 100)
+  local headBroken = (tLimbs.H >= 100 or tAffs.damagedhead)
+  local windpipe = (tAffs.damagedwindpipe or tAffs.crushedthroat)
+
+  return prone and legBroken and headBroken and windpipe
+end
+
+function shikudo.checkReadyForProne()
+  -- At least one leg prepped enough to sweep + break
+  return (tLimbs.LL >= 90 or tLimbs.RL >= 90)
+end
+
+function shikudo.checkLegsPrepped()
+  -- Both legs have some damage for sweep effectiveness
+  return (tLimbs.LL >= 70 and tLimbs.RL >= 70)
+end
+
+function shikudo.checkHeadPrepped()
+  -- Head has enough damage to break with needle + spinkick burst
+  return (tLimbs.H >= 70)
+end
+
+--------------------------------------------------------------------------------
+-- FORM TRANSITION LOGIC
+--------------------------------------------------------------------------------
+
+function shikudo.shouldTransition()
+  local kata = ataxia.vitals.kata or 0
+  local form = ataxia.vitals.form
+
+  if kata < 5 then
+    return nil  -- Need at least 5 kata to transition
+  end
+
+  -- In Gaital and ready to kill - stay here
+  if form == "Gaital" then
+    return nil
+  end
+
+  -- Ready for kill phase - go to Gaital
+  if shikudo.checkReadyForProne() and shikudo.checkHeadPrepped() then
+    if form == "Oak" then
+      return "Gaital"
+    elseif form == "Rain" then
+      return "Oak"  -- Rain → Oak → Gaital
+    end
+  end
+
+  -- Not ready yet - get to Rain for max prep time (24 kata)
+  if form == "Willow" then
+    return "Rain"
+  end
+
+  -- In Oak but not ready for Gaital, and kata getting high
+  if form == "Oak" and kata >= 10 then
+    return "Willow"  -- Oak → Willow → Rain for more kata
+  end
+
+  -- Near kata limit - transition to avoid stumble
+  local maxKata = shikudo.maxKata[form] or 12
+  if kata >= (maxKata - 2) then
+    local available = shikudo.transitions[form]
+    if available and #available > 0 then
+      -- Prefer path toward Gaital if ready, otherwise toward Rain
+      if form == "Rain" and shikudo.checkReadyForProne() then
+        return "Oak"
+      elseif form == "Rain" then
+        return "Tykonos"  -- Reset kata, stay in prep cycle
+      end
+      return available[1]
+    end
+  end
+
+  return nil
+end
+
+function shikudo.getPathToGaital(currentForm)
+  -- Returns next form to transition to on path to Gaital
+  local paths = {
+    Tykonos = "Willow",
+    Willow = "Rain",
+    Rain = "Oak",
+    Oak = "Gaital",
+    Gaital = nil,  -- Already there
+    Maelstrom = "Oak"
+  }
+  return paths[currentForm]
+end
+
+--------------------------------------------------------------------------------
+-- KICK SELECTION
+--------------------------------------------------------------------------------
+
+function shikudo.selectKick()
+  local form = ataxia.vitals.form
+  local parried = ataxiaTemp.parriedLimb or "none"
+
+  if form == "Rain" then
+    -- FRONTKICK targets arms
+    if parried ~= "left arm" then
+      return "frontkick left"
+    else
+      return "frontkick right"
+    end
+
+  elseif form == "Oak" then
+    -- RISINGKICK targets head or torso
+    if tAffs.prone then
+      return "risingkick head"  -- Stuns if prone
+    elseif tLimbs.H < 90 and parried ~= "head" then
+      return "risingkick head"
+    else
+      return "risingkick torso"
+    end
+
+  elseif form == "Gaital" then
+    -- Kill phase kicks
+    if tAffs.prone and (tLimbs.H >= 90 or tAffs.damagedhead) then
+      return "spinkick"  -- Massive head damage on prone
+    end
+    -- FLASHHEEL for leg breaks
+    if tLimbs.LL < tLimbs.RL and parried ~= "left leg" then
+      return "flashheel left"
+    elseif parried ~= "right leg" then
+      return "flashheel right"
+    else
+      return "flashheel left"
+    end
+
+  elseif form == "Willow" then
+    -- FLASHHEEL for legs
+    if tLimbs.LL < tLimbs.RL and parried ~= "left leg" then
+      return "flashheel left"
+    else
+      return "flashheel right"
+    end
+
+  elseif form == "Maelstrom" then
+    -- CRESCENT if target is prone and low health
+    if tAffs.prone and (tonumber(ataxiaTemp.targetHP) or 100) <= 50 then
+      return "crescent"
+    end
+    return "risingkick head"
+
+  else -- Tykonos
+    return "risingkick torso"
+  end
+end
+
+--------------------------------------------------------------------------------
+-- STAFF STRIKE SELECTION
+--------------------------------------------------------------------------------
+
+function shikudo.selectStaff(slot)
+  local form = ataxia.vitals.form
+  local parried = ataxiaTemp.parriedLimb or "none"
+
+  -- Slot 1 = primary attack, Slot 2 = secondary attack
+
+  if form == "Rain" then
+    return shikudo.selectRainStaff(slot, parried)
+  elseif form == "Oak" then
+    return shikudo.selectOakStaff(slot, parried)
+  elseif form == "Gaital" then
+    return shikudo.selectGaitalStaff(slot, parried)
+  elseif form == "Willow" then
+    return shikudo.selectWillowStaff(slot, parried)
+  elseif form == "Maelstrom" then
+    return shikudo.selectMaelstromStaff(slot, parried)
+  else -- Tykonos
+    if parried ~= "head" then
+      return "thrust head"
+    else
+      return "thrust torso"
+    end
+  end
+end
+
+function shikudo.selectRainStaff(slot, parried)
+  -- Rain: KURO (legs), HIRU (head), RUKU (arms/torso)
+
+  if slot == 1 then
+    -- Primary: Focus legs first
+    if tLimbs.LL < 90 and parried ~= "left leg" then
+      return "kuro left"
+    elseif tLimbs.RL < 90 and parried ~= "right leg" then
+      return "kuro right"
+    elseif tLimbs.H < 70 and parried ~= "head" then
+      return "hiru"
+    else
+      -- Legs prepped, hit head
+      return "hiru"
+    end
+  else
+    -- Secondary: Alternate target
+    if tLimbs.RL < 90 and parried ~= "right leg" then
+      return "kuro right"
+    elseif tLimbs.LL < 90 and parried ~= "left leg" then
+      return "kuro left"
+    elseif tLimbs.H < 70 then
+      return "hiru"
+    elseif not tAffs.slickness then
+      return "ruku torso"  -- Slickness for lock pressure
+    else
+      return "hiru"
+    end
+  end
+end
+
+function shikudo.selectOakStaff(slot, parried)
+  -- Oak: KURO (legs), NERVESTRIKE (head), LIVESTRIKE (torso), RUKU
+
+  if slot == 1 then
+    if tLimbs.LL < 90 and parried ~= "left leg" then
+      return "kuro left"
+    elseif tLimbs.RL < 90 and parried ~= "right leg" then
+      return "kuro right"
+    elseif tLimbs.H < 70 and parried ~= "head" then
+      return "nervestrike"
+    elseif not tAffs.asthma then
+      return "livestrike"
+    else
+      return "nervestrike"
+    end
+  else
+    if tLimbs.RL < 90 and parried ~= "right leg" then
+      return "kuro right"
+    elseif tLimbs.LL < 90 and parried ~= "left leg" then
+      return "kuro left"
+    elseif tLimbs.H < 90 and parried ~= "head" then
+      return "nervestrike"
+    elseif not tAffs.asthma then
+      return "livestrike"
+    else
+      return "kuro left"
+    end
+  end
+end
+
+function shikudo.selectGaitalStaff(slot, parried)
+  -- Gaital: NEEDLE (head/windpipe), SWEEP (prone), RUKU, FLASHHEEL via kicks
+
+  -- SWEEP CHECK: If ready to prone and not using sweep yet
+  if not tAffs.prone and shikudo.checkReadyForProne() then
+    if slot == 1 then
+      return "sweep"  -- Sweep uses both arm balances, so only one staff attack
+    else
+      return nil  -- No second staff attack with sweep
+    end
+  end
+
+  -- If prone, focus on head break + windpipe
+  if tAffs.prone then
+    if slot == 1 then
+      if not (tAffs.damagedwindpipe or tAffs.crushedthroat) then
+        return "needle"  -- Need windpipe for dispatch
+      elseif tLimbs.H < 100 and not tAffs.damagedhead then
+        return "needle"  -- More head damage
+      else
+        return "needle"  -- Keep needling
+      end
+    else
+      if tLimbs.H < 100 and not tAffs.damagedhead then
+        return "needle"
+      elseif not tAffs.slickness then
+        return "ruku torso"
+      else
+        return "needle"
       end
     end
   end
-  
-  return toRet
+
+  -- Not prone, not ready to sweep - build damage
+  if slot == 1 then
+    if tLimbs.H < 70 then
+      return "needle"
+    elseif tLimbs.LL < 90 and parried ~= "left leg" then
+      return "kuro left"
+    else
+      return "needle"
+    end
+  else
+    if tLimbs.RL < 90 and parried ~= "right leg" then
+      return "kuro right"
+    else
+      return "needle"
+    end
+  end
 end
 
+function shikudo.selectWillowStaff(slot, parried)
+  -- Willow: DART (fast), HIRU (head), HIRAKU (head)
+
+  if slot == 1 then
+    if tLimbs.H < 70 and parried ~= "head" then
+      return "hiru"
+    else
+      return "hiraku"
+    end
+  else
+    if tLimbs.H < 90 then
+      return "hiraku"
+    else
+      return "dart torso"
+    end
+  end
+end
+
+function shikudo.selectMaelstromStaff(slot, parried)
+  -- Maelstrom: RUKU, LIVESTRIKE, JINZUKU, SWEEP
+
+  if not tAffs.prone and shikudo.checkReadyForProne() then
+    return "sweep"
+  end
+
+  if slot == 1 then
+    if not tAffs.asthma then
+      return "livestrike"
+    elseif not tAffs.slickness then
+      return "ruku torso"
+    else
+      return "jinzuku"
+    end
+  else
+    if not tAffs.slickness then
+      return "ruku torso"
+    elseif not tAffs.addiction then
+      return "jinzuku"
+    else
+      return "livestrike"
+    end
+  end
+end
+
+--------------------------------------------------------------------------------
+-- COMBO BUILDER
+--------------------------------------------------------------------------------
+
+function shikudo.buildCombo()
+  local form = ataxia.vitals.form
+  local kick = shikudo.selectKick()
+  local staff1 = shikudo.selectStaff(1)
+  local staff2 = shikudo.selectStaff(2)
+
+  -- Handle sweep (uses both arm balances, limited combo)
+  if staff1 == "sweep" then
+    if kick then
+      return "combo $tar sweep " .. kick
+    else
+      return "combo $tar sweep"
+    end
+  end
+
+  -- Normal combo: kick + staff1 + staff2
+  local combo = "combo $tar"
+  if kick then combo = combo .. " " .. kick end
+  if staff1 then combo = combo .. " " .. staff1 end
+  if staff2 then combo = combo .. " " .. staff2 end
+
+  return combo
+end
+
+--------------------------------------------------------------------------------
+-- MAIN DISPATCH FUNCTION
+--------------------------------------------------------------------------------
+
+function shikudo.dispatch()
+  -- Safety check
+  if not table.contains(ataxia.playersHere, target) then
+    return
+  end
+
+  local form = ataxia.vitals.form
+  local kata = ataxia.vitals.kata or 0
+  local cmd = combatQueue()
+
+  -- KILL CHECK: All conditions met?
+  if shikudo.checkDispatchReady() then
+    cmd = cmd .. "wield staff489282;dispatch " .. target
+    send("queue addclear free " .. cmd)
+    cecho("\n<red>*** DISPATCH KILL ***")
+    return
+  end
+
+  -- SHIELD CHECK
+  if tAffs.shield then
+    local kick = shikudo.selectKick()
+    cmd = cmd .. "wield staff489282;combo " .. target .. " shatter " .. kick
+    send("queue addclear free " .. cmd)
+    return
+  end
+
+  -- TRANSITION CHECK
+  local transition = shikudo.shouldTransition()
+  if transition then
+    cmd = cmd .. "transition to the " .. transition .. " form;"
+  end
+
+  -- BUILD ATTACK
+  local attack = shikudo.buildCombo()
+  attack = attack:gsub("%$tar", target)
+
+  cmd = cmd .. "wield staff489282;" .. attack
+
+  send("queue addclear free " .. cmd)
+
+  -- Debug output
+  if ataxia.debug then
+    cecho("\n<cyan>[Shikudo] Form: " .. form .. " | Kata: " .. kata)
+    cecho("\n<cyan>[Shikudo] H:" .. tLimbs.H .. " LL:" .. tLimbs.LL .. " RL:" .. tLimbs.RL)
+    if transition then
+      cecho("\n<yellow>[Shikudo] Transitioning to " .. transition)
+    end
+  end
+end
+
+-- Alias for backwards compatibility
+function levishikudodispatch()
+  shikudo.dispatch()
+end
