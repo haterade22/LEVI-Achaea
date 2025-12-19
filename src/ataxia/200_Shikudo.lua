@@ -110,28 +110,29 @@ function shikudo.shouldTransition()
     end
   end
 
-  -- Not ready yet - get to Rain for max prep time (24 kata)
-  if form == "Willow" then
-    return "Rain"
-  end
-
-  -- In Oak but not ready for Gaital, and kata getting high
-  if form == "Oak" and kata >= 10 then
-    return "Willow"  -- Oak → Willow → Rain for more kata
-  end
-
-  -- Near kata limit - transition to avoid stumble
+  -- INLINE TRANSITIONS: Transition at kata 9+ for 12-kata forms
+  -- This adds transition to end of attack so we don't waste a balance
   local maxKata = shikudo.maxKata[form] or 12
-  if kata >= (maxKata - 2) then
-    local available = shikudo.transitions[form]
-    if available and #available > 0 then
-      -- Prefer path toward Gaital if ready, otherwise toward Rain
-      if form == "Rain" and shikudo.checkReadyForProne() then
-        return "Oak"
-      elseif form == "Rain" then
-        return "Tykonos"  -- Reset kata, stay in prep cycle
-      end
-      return available[1]
+
+  -- For non-Rain forms (12 kata max), transition at 9+
+  if maxKata == 12 and kata >= 9 then
+    if form == "Oak" then
+      return "Willow"  -- Oak → Willow → Rain for more prep
+    elseif form == "Willow" then
+      return "Rain"  -- Willow → Rain (24 kata!)
+    elseif form == "Tykonos" then
+      return "Willow"  -- Tykonos → Willow → Rain
+    elseif form == "Maelstrom" then
+      return "Oak"  -- Maelstrom → Oak → Willow → Rain
+    end
+  end
+
+  -- For Rain form (24 kata max), transition at 21+
+  if form == "Rain" and kata >= 21 then
+    if shikudo.checkReadyForProne() then
+      return "Oak"  -- Ready for kill, go Oak → Gaital
+    else
+      return "Tykonos"  -- Not ready, reset kata cycle
     end
   end
 
@@ -443,6 +444,7 @@ function shikudo.dispatch()
   cecho("\n<cyan>[Shikudo] Target: " .. tostring(target))
   cecho(" | Form: " .. tostring(ataxia.vitals.form))
   cecho(" | Kata: " .. tostring(ataxia.vitals.kata))
+  cecho("\n<cyan>[Shikudo] Limbs - H:" .. tLimbs.H .. " LL:" .. tLimbs.LL .. " RL:" .. tLimbs.RL)
 
   -- Safety check - skip if no target
   if not target or target == "" then
@@ -481,17 +483,18 @@ function shikudo.dispatch()
     return
   end
 
-  -- TRANSITION CHECK
-  local transition = shikudo.shouldTransition()
-  if transition then
-    cmd = cmd .. "transition to the " .. transition .. " form;"
-  end
-
   -- BUILD ATTACK
   local attack = shikudo.buildCombo()
   attack = attack:gsub("%$tar", target)
 
   cmd = cmd .. "wield staff489282;" .. attack
+
+  -- TRANSITION CHECK - add at END of combo for inline transition
+  local transition = shikudo.shouldTransition()
+  if transition then
+    cmd = cmd .. ";transition to the " .. transition .. " form"
+    cecho("\n<yellow>[Shikudo] Transitioning to " .. transition .. " after this combo")
+  end
 
   send("queue addclear free " .. cmd)
 
@@ -508,4 +511,48 @@ end
 -- Alias for backwards compatibility
 function levishikudodispatch()
   shikudo.dispatch()
+end
+
+--------------------------------------------------------------------------------
+-- STATUS COMMAND
+--------------------------------------------------------------------------------
+
+function shikudo.status()
+  -- Initialize if missing
+  tLimbs = tLimbs or {H = 0, T = 0, LL = 0, RL = 0, LA = 0, RA = 0}
+  tAffs = tAffs or {}
+  ataxia = ataxia or {}
+  ataxia.vitals = ataxia.vitals or {}
+
+  local form = ataxia.vitals.form or "Unknown"
+  local kata = ataxia.vitals.kata or 0
+  local maxKata = shikudo.maxKata[form] or 12
+
+  cecho("\n<cyan>╔══════════════════════════════════════════╗")
+  cecho("\n<cyan>║         <white>SHIKUDO STATUS<cyan>                  ║")
+  cecho("\n<cyan>╠══════════════════════════════════════════╣")
+  cecho("\n<cyan>║ <white>Target: <yellow>" .. tostring(target or "None") .. "<cyan>")
+  cecho("\n<cyan>║ <white>Form: <green>" .. form .. " <grey>(" .. kata .. "/" .. maxKata .. " kata)<cyan>")
+  cecho("\n<cyan>╠══════════════════════════════════════════╣")
+  cecho("\n<cyan>║ <white>LIMB DAMAGE:<cyan>")
+  cecho("\n<cyan>║   <white>Head: " .. (tLimbs.H >= 90 and "<green>" or (tLimbs.H >= 70 and "<yellow>" or "<red>")) .. string.format("%.1f%%", tLimbs.H))
+  cecho("\n<cyan>║   <white>L Leg: " .. (tLimbs.LL >= 90 and "<green>" or (tLimbs.LL >= 70 and "<yellow>" or "<red>")) .. string.format("%.1f%%", tLimbs.LL))
+  cecho("\n<cyan>║   <white>R Leg: " .. (tLimbs.RL >= 90 and "<green>" or (tLimbs.RL >= 70 and "<yellow>" or "<red>")) .. string.format("%.1f%%", tLimbs.RL))
+  cecho("\n<cyan>╠══════════════════════════════════════════╣")
+  cecho("\n<cyan>║ <white>KILL CONDITIONS:<cyan>")
+  cecho("\n<cyan>║   <white>Prone: " .. (tAffs.prone and "<green>YES" or "<red>NO"))
+  cecho("\n<cyan>║   <white>Leg Broken: " .. ((tLimbs.LL >= 100 or tLimbs.RL >= 100) and "<green>YES" or "<red>NO"))
+  cecho("\n<cyan>║   <white>Head Broken: " .. ((tLimbs.H >= 100 or tAffs.damagedhead) and "<green>YES" or "<red>NO"))
+  cecho("\n<cyan>║   <white>Windpipe: " .. ((tAffs.damagedwindpipe or tAffs.crushedthroat) and "<green>YES" or "<red>NO"))
+  cecho("\n<cyan>║   <white>DISPATCH READY: " .. (shikudo.checkDispatchReady() and "<green>*** YES ***" or "<red>NO"))
+  cecho("\n<cyan>╠══════════════════════════════════════════╣")
+  cecho("\n<cyan>║ <white>PREP STATUS:<cyan>")
+  cecho("\n<cyan>║   <white>Legs Ready (90%+): " .. (shikudo.checkReadyForProne() and "<green>YES" or "<yellow>NO"))
+  cecho("\n<cyan>║   <white>Head Ready (70%+): " .. (shikudo.checkHeadPrepped() and "<green>YES" or "<yellow>NO"))
+  cecho("\n<cyan>╚══════════════════════════════════════════╝\n")
+end
+
+-- Alias: skstatus
+function skstatus()
+  shikudo.status()
 end
