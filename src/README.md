@@ -13,7 +13,7 @@ Mudlet Mapper system - handles all navigation, pathfinding, and speedwalking fun
 - Area locking and room tracking
 - Map update checking
 
-### ataxia/ (301 files)
+### ataxia/ (301+ files)
 Core Ataxia combat system - main affliction tracking and combat logic.
 - Affliction tracking and management
 - Defense tracking and reporting
@@ -24,6 +24,11 @@ Core Ataxia combat system - main affliction tracking and combat logic.
 - Rift management
 - Priority swaps and management
 - Combat utilities and helpers
+- **Shikudo Dispatch System** (Monk/Shikudo auto-combat):
+  - `200_Shikudo.lua` - V1 dispatch system
+  - `201_Shikudo_V2.lua` - V2 dispatch system (focus fire strategy)
+  - `081_Shikudo_Limb_Counter.lua` - Limb damage tracking
+  - `082_Shikudo_Extras.lua` - Form transition helpers
 
 ### ataxiagui/ (5 files)
 Ataxia GUI using Geyser - visual interface elements.

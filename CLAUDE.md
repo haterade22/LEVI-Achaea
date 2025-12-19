@@ -114,11 +114,15 @@ LEVI-Achaea/
 
 ### Ataxia Combat System
 - **Affliction Tracking**: 100+ afflictions with color-coded display
-- **Limb Tracking**: `selfLimbDamage` for damage percentages
+- **Limb Tracking**: `selfLimbDamage` for damage percentages, `tLimbs` for enemy tracking
 - **Fracture Management**: Two-handed combat tracking
 - **Defense Management**: Automatic parrying, SSC integration
 - **Basher**: `ataxiaBasher` for automated hunting
 - **Class Modules**: Pariah, Bard, Monk, Magi, Two-Handed
+- **Shikudo Dispatch System**: Full auto-combat for Monk/Shikudo spec
+  - `200_Shikudo.lua` - V1 system (balanced leg prep, both legs 90%+)
+  - `201_Shikudo_V2.lua` - V2 system (focus fire one leg, clumsy first)
+  - Commands: `shikudo.dispatch()`, `shikudov2.dispatch()`, `skstatus()`, `skv2status()`
 
 ### GUI System (ataxiagui)
 - Left panel: Players, Room info, Bash stats
