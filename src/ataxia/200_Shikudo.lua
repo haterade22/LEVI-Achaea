@@ -156,7 +156,7 @@ end
 --------------------------------------------------------------------------------
 
 function shikudo.selectKick()
-  local form = ataxia.vitals.form
+  local form = ataxia.vitals.form or "Rain"
   local parried = ataxiaTemp.parriedLimb or "none"
 
   if form == "Rain" then
@@ -216,7 +216,7 @@ end
 --------------------------------------------------------------------------------
 
 function shikudo.selectStaff(slot)
-  local form = ataxia.vitals.form
+  local form = ataxia.vitals.form or "Rain"
   local parried = ataxiaTemp.parriedLimb or "none"
 
   -- Slot 1 = primary attack, Slot 2 = secondary attack
@@ -429,14 +429,41 @@ end
 --------------------------------------------------------------------------------
 
 function shikudo.dispatch()
-  -- Safety check
-  if not table.contains(ataxia.playersHere, target) then
+  -- Initialize if missing
+  ataxia = ataxia or {}
+  ataxia.vitals = ataxia.vitals or {}
+  ataxia.settings = ataxia.settings or {}
+  ataxia.settings.separator = ataxia.settings.separator or ";"
+  ataxia.playersHere = ataxia.playersHere or {}
+  ataxiaTemp = ataxiaTemp or {}
+  tLimbs = tLimbs or {H = 0, T = 0, LL = 0, RL = 0, LA = 0, RA = 0}
+  tAffs = tAffs or {}
+
+  -- Debug: Show what we have
+  cecho("\n<cyan>[Shikudo] Target: " .. tostring(target))
+  cecho(" | Form: " .. tostring(ataxia.vitals.form))
+  cecho(" | Kata: " .. tostring(ataxia.vitals.kata))
+
+  -- Safety check - skip if no target
+  if not target or target == "" then
+    cecho("\n<red>[Shikudo] No target set! Use: tar <name>")
     return
   end
 
-  local form = ataxia.vitals.form
+  -- Skip player check for now during testing (can re-enable later)
+  -- if not table.contains(ataxia.playersHere, target) then
+  --   cecho("\n<red>[Shikudo] Target not in room")
+  --   return
+  -- end
+
+  local form = ataxia.vitals.form or "Rain"  -- Default to Rain if not set
   local kata = ataxia.vitals.kata or 0
-  local cmd = combatQueue()
+
+  -- Handle combatQueue - use empty string if function doesn't exist
+  local cmd = ""
+  if combatQueue then
+    cmd = combatQueue()
+  end
 
   -- KILL CHECK: All conditions met?
   if shikudo.checkDispatchReady() then
