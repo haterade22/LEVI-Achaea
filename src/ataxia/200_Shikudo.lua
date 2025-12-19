@@ -101,17 +101,23 @@ function shikudo.shouldTransition()
     return nil
   end
 
-  -- Ready for kill phase - go to Gaital
-  if shikudo.checkReadyForProne() and shikudo.checkHeadPrepped() then
+  -- PRIORITY 1: Ready for kill phase - go toward Gaital IMMEDIATELY
+  -- This takes precedence over all other transitions
+  if shikudo.checkReadyForProne() then
     if form == "Oak" then
       return "Gaital"
     elseif form == "Rain" then
       return "Oak"  -- Rain → Oak → Gaital
+    elseif form == "Willow" then
+      return "Rain"  -- Willow → Rain → Oak → Gaital
+    elseif form == "Tykonos" then
+      return "Willow"  -- Fast path to Gaital
+    elseif form == "Maelstrom" then
+      return "Oak"  -- Maelstrom → Oak → Gaital
     end
   end
 
-  -- INLINE TRANSITIONS: Transition at kata 9+ for 12-kata forms
-  -- This adds transition to end of attack so we don't waste a balance
+  -- PRIORITY 2: Near kata limit - transition to avoid stumble
   local maxKata = shikudo.maxKata[form] or 12
 
   -- For non-Rain forms (12 kata max), transition at 9+
@@ -129,11 +135,8 @@ function shikudo.shouldTransition()
 
   -- For Rain form (24 kata max), transition at 21+
   if form == "Rain" and kata >= 21 then
-    if shikudo.checkReadyForProne() then
-      return "Oak"  -- Ready for kill, go Oak → Gaital
-    else
-      return "Tykonos"  -- Not ready, reset kata cycle
-    end
+    -- Legs not ready, need more prep time - go to Tykonos to reset kata
+    return "Tykonos"
   end
 
   return nil
