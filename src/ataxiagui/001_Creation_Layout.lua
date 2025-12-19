@@ -28,7 +28,6 @@ function ataxiagui_Create()
     ataxiagui_boxes()
     ataxiagui_consoles()
     ataxiagui_createMap()
-    ataxiagui_createChat()
     ataxiagui_vitalsElements()
   end
 end
