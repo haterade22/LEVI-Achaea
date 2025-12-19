@@ -211,6 +211,13 @@ function shikudo.selectKick()
     return "risingkick head"
 
   else -- Tykonos
+    -- RISINGKICK targets head or torso (not legs)
+    -- If sweeping and head needs damage, hit head; otherwise torso
+    if shikudo.checkReadyForProne() and not tAffs.prone then
+      if tLimbs.H < 90 then
+        return "risingkick head"  -- Build head damage while proning
+      end
+    end
     return "risingkick torso"
   end
 end
@@ -236,16 +243,48 @@ function shikudo.selectStaff(slot)
   elseif form == "Maelstrom" then
     return shikudo.selectMaelstromStaff(slot, parried)
   else -- Tykonos
-    if parried ~= "head" then
-      return "thrust head"
+    -- Tykonos has SWEEP available! Use it when legs are ready
+    if shikudo.checkReadyForProne() and not tAffs.prone then
+      if slot == 1 then
+        return "sweep"  -- Sweep uses both arm balances
+      else
+        return nil  -- No second staff attack with sweep
+      end
+    end
+
+    -- Otherwise: THRUST targets any limb - focus legs first for Dispatch prep
+    if slot == 1 then
+      if tLimbs.LL < 90 and parried ~= "left leg" then
+        return "thrust left leg"
+      elseif tLimbs.RL < 90 and parried ~= "right leg" then
+        return "thrust right leg"
+      elseif tLimbs.H < 70 and parried ~= "head" then
+        return "thrust head"
+      else
+        return "thrust left leg"
+      end
     else
-      return "thrust torso"
+      if tLimbs.RL < 90 and parried ~= "right leg" then
+        return "thrust right leg"
+      elseif tLimbs.LL < 90 and parried ~= "left leg" then
+        return "thrust left leg"
+      else
+        return "thrust head"
+      end
     end
   end
 end
 
 function shikudo.selectRainStaff(slot, parried)
   -- Rain: KURO (legs), HIRU (head), RUKU (arms/torso)
+  -- LIGHT modifier: Use when limbs prepped and need kata to transition
+
+  local legsReady = shikudo.checkReadyForProne()
+  local headReady = (tLimbs.H >= 70)
+  local kata = ataxia.vitals.kata or 0
+
+  -- If legs AND head are prepped but we need more kata to transition, use LIGHT
+  local needKataForTransition = (legsReady and headReady and kata < 5)
 
   if slot == 1 then
     -- Primary: Focus legs first
@@ -255,8 +294,10 @@ function shikudo.selectRainStaff(slot, parried)
       return "kuro right"
     elseif tLimbs.H < 70 and parried ~= "head" then
       return "hiru"
+    elseif needKataForTransition then
+      -- Use LIGHT to build kata without messing up limb prep
+      return "hiru light"
     else
-      -- Legs prepped, hit head
       return "hiru"
     end
   else
@@ -267,8 +308,18 @@ function shikudo.selectRainStaff(slot, parried)
       return "kuro left"
     elseif tLimbs.H < 70 then
       return "hiru"
+    elseif needKataForTransition then
+      if not tAffs.slickness then
+        return "ruku light torso"
+      elseif not tAffs.clumsiness then
+        return "ruku light left"
+      else
+        return "hiru light"
+      end
     elseif not tAffs.slickness then
-      return "ruku torso"  -- Slickness for lock pressure
+      return "ruku torso"
+    elseif not tAffs.clumsiness then
+      return "ruku left"
     else
       return "hiru"
     end
@@ -277,6 +328,14 @@ end
 
 function shikudo.selectOakStaff(slot, parried)
   -- Oak: KURO (legs), NERVESTRIKE (head), LIVESTRIKE (torso), RUKU
+  -- LIGHT modifier: Use when limbs are prepped and we need kata to transition
+
+  local legsReady = shikudo.checkReadyForProne()
+  local headReady = (tLimbs.H >= 70)
+  local kata = ataxia.vitals.kata or 0
+
+  -- If legs AND head are prepped but we need more kata to transition, use LIGHT
+  local needKataForTransition = (legsReady and headReady and kata < 5)
 
   if slot == 1 then
     if tLimbs.LL < 90 and parried ~= "left leg" then
@@ -285,6 +344,13 @@ function shikudo.selectOakStaff(slot, parried)
       return "kuro right"
     elseif tLimbs.H < 70 and parried ~= "head" then
       return "nervestrike"
+    elseif needKataForTransition then
+      -- Use LIGHT to build kata without messing up limb prep
+      if not tAffs.asthma then
+        return "livestrike light"
+      else
+        return "nervestrike light"
+      end
     elseif not tAffs.asthma then
       return "livestrike"
     else
@@ -297,8 +363,18 @@ function shikudo.selectOakStaff(slot, parried)
       return "kuro left"
     elseif tLimbs.H < 90 and parried ~= "head" then
       return "nervestrike"
+    elseif needKataForTransition then
+      if not tAffs.asthma then
+        return "livestrike light"
+      elseif not tAffs.clumsiness then
+        return "ruku light left"
+      else
+        return "nervestrike light"
+      end
     elseif not tAffs.asthma then
       return "livestrike"
+    elseif not tAffs.clumsiness and legsReady then
+      return "ruku left"
     else
       return "kuro left"
     end
@@ -307,6 +383,7 @@ end
 
 function shikudo.selectGaitalStaff(slot, parried)
   -- Gaital: NEEDLE (head/windpipe), SWEEP (prone), RUKU, FLASHHEEL via kicks
+  -- LIGHT modifier: Only use when head broken but still need windpipe
 
   -- SWEEP CHECK: If ready to prone and not using sweep yet
   if not tAffs.prone and shikudo.checkReadyForProne() then
@@ -319,19 +396,27 @@ function shikudo.selectGaitalStaff(slot, parried)
 
   -- If prone, focus on head break + windpipe
   if tAffs.prone then
+    local headBroken = (tLimbs.H >= 100 or tAffs.damagedhead)
+    local hasWindpipe = (tAffs.damagedwindpipe or tAffs.crushedthroat)
+
     if slot == 1 then
-      if not (tAffs.damagedwindpipe or tAffs.crushedthroat) then
-        return "needle"  -- Need windpipe for dispatch
-      elseif tLimbs.H < 100 and not tAffs.damagedhead then
-        return "needle"  -- More head damage
+      if not hasWindpipe then
+        -- Need windpipe - use LIGHT only if head already broken
+        if headBroken then
+          return "needle light"  -- Get windpipe without overkill
+        else
+          return "needle"  -- Need both head damage and windpipe
+        end
+      elseif not headBroken then
+        return "needle"  -- Still need head damage
       else
-        return "needle"  -- Keep needling
+        return "needle"  -- Everything done, just keep hitting
       end
     else
-      if tLimbs.H < 100 and not tAffs.damagedhead then
+      if not headBroken then
         return "needle"
-      elseif not tAffs.slickness then
-        return "ruku torso"
+      elseif not hasWindpipe then
+        return "needle light"
       else
         return "needle"
       end
@@ -448,6 +533,7 @@ function shikudo.dispatch()
   cecho(" | Form: " .. tostring(ataxia.vitals.form))
   cecho(" | Kata: " .. tostring(ataxia.vitals.kata))
   cecho("\n<cyan>[Shikudo] Limbs - H:" .. tLimbs.H .. " LL:" .. tLimbs.LL .. " RL:" .. tLimbs.RL)
+  cecho(" | Ready for Prone: " .. (shikudo.checkReadyForProne() and "YES" or "NO"))
 
   -- Safety check - skip if no target
   if not target or target == "" then
