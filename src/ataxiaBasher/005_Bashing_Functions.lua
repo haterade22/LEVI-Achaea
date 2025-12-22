@@ -101,8 +101,22 @@ if not ataxia.afflictions.aeon and not ataxia.afflictions.paralysis then
 end
 
 function ataxiaBasher_assembleAttack()
+  -- Maran emergency barrier check
+  if not ataxia.maranThreshold then ataxia.maranThreshold = 25 end
+  if ataxia.vitals.hpp < ataxia.maranThreshold
+     and ataxia.vitals.hpp ~= 0
+     and not ataxia.maranCooldown
+     and ataxiaTables.ldeckcardscount
+     and ataxiaTables.ldeckcardscount.Maran
+     and ataxiaTables.ldeckcardscount.Maran > 0 then
+    send("cq all;ldeck draw maran")
+    ataxia.maranCooldown = true
+    tempTimer(65, [[ataxia.maranCooldown = false]])  -- 65s cooldown (barrier lasts 60s)
+    return  -- Skip normal attack this cycle
+  end
+
 	get_Battlerage()
-  ataxiaBasher_stormhammer() 
+  ataxiaBasher_stormhammer()
 	local command = ""
   local class = gmcp.Char.Status.class:title():gsub(" Lady", ""):gsub(" Lord", "")
 	local sp = ataxia.settings.separator

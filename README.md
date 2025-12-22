@@ -39,7 +39,9 @@ This repository contains the "For Levi" Mudlet package, a comprehensive automati
 
 ## Documentation
 
-See [docs/plans/](docs/plans/) for detailed system documentation and reviews.
+- [Quick Reference](src/QUICK_REFERENCE.md) - Overview of all systems
+- [Legend Deck Reference](docs/legend-deck.md) - All cards, effects, and PVE guide
+- [Plans](docs/plans/) - Detailed system documentation and reviews
 
 ## Technology
 

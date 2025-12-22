@@ -116,6 +116,21 @@ ataxiaBasher.paused = true
 - Experience tracking
 - Auto-movement in areas
 - Statistics tracking
+- Legend Deck emergency cards (Maran barrier)
+
+### Legend Deck Integration
+**What it does**: Automatic card usage during bashing
+
+**Key Variables**:
+```lua
+ataxia.maranThreshold = 25           -- HP% to trigger Maran barrier
+ataxiaTables.ldeckcardscount.Maran   -- Remaining charges
+```
+
+**Emergency Cards** (triggered automatically):
+- **Maran** - 5000hp barrier when HP < 25% while bashing
+
+**See**: `docs/legend-deck.md` for full card reference
 
 ## File Organization
 
