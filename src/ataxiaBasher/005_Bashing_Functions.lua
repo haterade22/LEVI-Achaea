@@ -101,6 +101,29 @@ if not ataxia.afflictions.aeon and not ataxia.afflictions.paralysis then
 end
 
 function ataxiaBasher_assembleAttack()
+  -- Wand of Reflection emergency check
+  if not ataxia.wandReflectionThreshold then ataxia.wandReflectionThreshold = 10 end
+  if not ataxia.wandReflectionRecovery then ataxia.wandReflectionRecovery = 70 end
+
+  if ataxia.wandReflectionActive then
+    -- Currently waiting to recover HP
+    if ataxia.vitals.hpp >= ataxia.wandReflectionRecovery then
+      ataxia.wandReflectionActive = false
+      ataxiaEcho("HP recovered to " .. ataxia.wandReflectionRecovery .. "%, resuming attacks.")
+    else
+      return  -- Keep waiting, don't attack
+    end
+  elseif ataxia.vitals.hpp < ataxia.wandReflectionThreshold
+     and ataxia.vitals.hpp ~= 0
+     and not ataxia.wandReflectionCooldown then
+    send("cq all;point wand234800 at me")
+    ataxia.wandReflectionActive = true
+    ataxia.wandReflectionCooldown = true
+    tempTimer(3600, [[ataxia.wandReflectionCooldown = false]])  -- 1 hour cooldown (wand is hourly)
+    ataxiaEcho("EMERGENCY: HP below 10%! Using wand of reflection, pausing until 70% HP.")
+    return  -- Skip attack this cycle
+  end
+
   -- Maran emergency barrier check
   if not ataxia.maranThreshold then ataxia.maranThreshold = 25 end
   if ataxia.vitals.hpp < ataxia.maranThreshold

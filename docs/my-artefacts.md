@@ -1,6 +1,6 @@
 # My Artefacts (Personal Inventory)
 
-Quick reference of artefacts I currently own, organized by combat utility. **73 total items.**
+Quick reference of artefacts I currently own, organized by combat utility. **74 total items.**
 
 ---
 
@@ -49,6 +49,7 @@ Quick reference of artefacts I currently own, organized by combat utility. **73 
 | 578658 | Anake's Hood | anti_spying | - | Blocks eavesdrop: grove watch, mind listen, puppetry listen |
 | 395139 | talisman of obfuscation | conceal_illusions | - | Reduces lifevision effectiveness by 33% |
 | 417212 | ring of the Magus | magic_defence | - | ~15% magic damage protection |
+| 234800 | wand of reflection | reflections | - | Grants reflections 1x/hour; absorb attacks (aggressive actions destroy all) |
 
 ---
 
@@ -205,3 +206,12 @@ Quick reference of artefacts I currently own, organized by combat utility. **73 
 - Occultist: desert_sorcerer
 - Sentinel: falcon_self_sufficiency
 - Depthswalker: sorcerous_insight
+
+---
+
+## Wishlist (To Acquire)
+
+| Item | Type | Notes |
+|------|------|-------|
+| cloak of the Blood Maiden | Talisman (Marks set) | Shadowcloak + BLOODSHIELD (blocks 1 attack). Needs 5 kills to charge (PK=2x). Depletes if no kill in 3min. Pieces: cloth, embroidery, lining, hood |
+| Olivebranch | Talisman | |
