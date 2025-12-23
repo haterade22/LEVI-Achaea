@@ -4,6 +4,161 @@ Comprehensive list of artefacts and their effects.
 
 ---
 
+## My Artefacts (Personal Inventory)
+
+Quick reference of artefacts I currently own, organized by combat utility. **73 total items.**
+
+### Combat - Core Stats & Balance
+
+| ID | Name | Power | Lvl | Effect |
+|----|------|-------|-----|--------|
+| 385702 | Aldar Diadem | faster_eq | 2 | 10% faster equilibrium recovery |
+| 582367 | Armband of Celerity | celerity | - | 7% faster balance recovery |
+| 239371 | Stygian pendant | criticals | 3 | +15% critical hit chance |
+| 286876 | Logosian Gauntlets | strength | 3 | +3 STR stat |
+| 472383 | Pixie's Boots | dexterity | 3 | +3 DEX stat |
+| 300800 | Girdle of Aegis | constitution | 3 | +3 CON stat (more max health) |
+| 473632 | Sash of Wisdom | intelligence | 3 | +3 INT stat (more max mana) |
+| 270681 | Logosian ring | health_sip | 3 | +15% health from sipping |
+| 73932 | ring of Lunastra | mana_sip | 3 | +15% mana from sipping |
+| 281763 | Suremekh'neina | health_regen | 3 | +45 passive health regen per tick |
+| 281763 | Suremekh'neina | mana_regen | 3 | +45 passive mana regen per tick |
+| 42655 | Band of Tenacity | endurance_regen | 2 | +10% endurance regeneration |
+| 45985 | Circlet of Determination | willpower_regen | 2 | +10% willpower regeneration |
+| 299421 | Logosian Bracelets | reserves | 3 | +15% max endurance and willpower |
+| 608088 | Sash of Eternal Battle | reduced_endurance | - | 33% less endurance drain in combat |
+
+### Combat - Offensive
+
+| ID | Name | Power | Lvl | Effect |
+|----|------|-------|-----|--------|
+| 290626 | spiked knuckles | hand_to_hand | 3 | +15% unarmed/tekura damage |
+| 264902 | steel armband of the Fist | tekura_accuracy | 3 | +15% tekura accuracy (less misses) |
+| 405405 | peerless insignia of finesse | weaponmastery_spec | 3 | +15% damage with specialization weapon |
+| 151113 | Bracers of Flame | fire_mastery | - | +10% fire damage, fire immunity |
+| 417868 | Bracers of Frost | frost_mastery | - | +10% cold damage, cold immunity |
+| 178446 | Collar of Agatheis | magic_damage | 3 | +15% magic damage dealt |
+| 630835 | sapphire skull pendant | swiftcurse | 3 | 30% faster curse/damnation eq recovery |
+| 370963 | shiny charm | insidious_gaze | - | Gaze attacks ignore reflections |
+| 329803 | vambraces of the Berserker | battlerage_decay | - | Slower battlerage decay |
+
+### Combat - Defensive
+
+| ID | Name | Power | Lvl | Effect |
+|----|------|-------|-----|--------|
+| 83971 | Brooch of the Tempest | stability | - | Cannot be moved against will (no drag/throw) |
+| 447372 | prismatic ring | elemental_resistance | - | +10% resistance to fire/cold/electric |
+| 351860 | buckawn's amulet | anti_web | - | 50% chance to ignore web attacks |
+| 244278 | Shadowcloak | shroud | - | Hides entry/exit from room, harder to track |
+| 578658 | Anake's Hood | anti_spying | - | Blocks scrying and farsee on you |
+| 395139 | talisman of obfuscation | conceal_illusions | - | Your illusions don't show the (illusion) tag |
+| 417212 | ring of the Magus | magic_defence | - | +10% magic damage resistance |
+
+### Class-Specific - Monk
+
+| ID | Name | Power | Lvl | Effect |
+|----|------|-------|-----|--------|
+| 440733 | pink lotus blossom | monk_switch | - | Free instant switch between Tekura/Shikudo/Kaido |
+| 422142 | Bracers of the Phoenix | shin_drain | - | Shin abilities cost 33% less |
+| 456282 | ethereal lightning eagle feather | enhanced_shin | - | +20% shin damage and healing |
+| 264902 | steel armband of the Fist | tekura_accuracy | 3 | +15% tekura hit rate |
+| 290626 | spiked knuckles | hand_to_hand | 3 | +15% unarmed damage |
+
+### Class-Specific - Magi/Elemental
+
+| ID | Name | Power | Lvl | Effect |
+|----|------|-------|-----|--------|
+| 417212 | ring of the Magus | magic_defence | - | +10% magic damage resistance |
+| 442098 | gem of haematite | rapid_resonation | - | Faster resonance buildup |
+| 442748 | waterlogged gauntlet | surging_waves | - | +10% water damage, waves hit harder |
+
+### Class-Specific - Runewarden
+
+| ID | Name | Power | Lvl | Effect |
+|----|------|-------|-----|--------|
+| 421738 | rough runestone | swift_runes | - | 33% faster rune sketching |
+| 421746 | Runic Gauntlet | totems | - | Can wield totem in off-hand (free shield hand) |
+
+### Class-Specific - Bard
+
+| ID | Name | Power | Lvl | Effect |
+|----|------|-------|-----|--------|
+| 75993 | glass rose | pure_song | - | Songs bypass deafness defense |
+| 563418 | moon-and-star insignia | symphonic_master | - | +10% song damage, faster crescendo |
+| 396580 | silver tuning fork | tuning | - | Instruments never go out of tune |
+
+### Class-Specific - Psion
+
+| ID | Name | Power | Lvl | Effect |
+|----|------|-------|-----|--------|
+| 170775 | Intellect Crown | faster_mindlock | - | 15% faster mindlock timer |
+| 202898 | Ursine Band of Mind Distension | mindprint_capacity | 1 | +5% mindprint capacity |
+| 91910 | synaptic lock | silent_telepathy | - | Telepathy doesn't show your location |
+
+### Class-Specific - Occultist
+
+| ID | Name | Power | Lvl | Effect |
+|----|------|-------|-----|--------|
+| 419287 | funereal amphora | desert_sorcerer | - | +10% chaos damage, faster instill |
+| 332303 | preserved hand | grasping_death | - | Doppleganger persists through death |
+| 485994 | Shar'ilian lightspire | illusion | 2 | +10% illusion duration, harder to detect |
+
+### Class-Specific - Depthswalker
+
+| ID | Name | Power | Lvl | Effect |
+|----|------|-------|-----|--------|
+| 616281 | sorcerer's notebook | sorcerous_insight | - | Shadow damage shows target afflictions |
+
+### Class-Specific - Shaman
+
+| ID | Name | Power | Lvl | Effect |
+|----|------|-------|-----|--------|
+| 637029 | gaze of the Cacharann | primordial_fury | - | +15% curse damage |
+| 637043 | morsel of bonemeal | unyielding_stone | - | +50% bone fetish duration |
+| 637022 | cracked wheel | unending_avalanche | - | Curseward break triggers extra curse |
+
+### Class-Specific - Sentinel
+
+| ID | Name | Power | Lvl | Effect |
+|----|------|-------|-----|--------|
+| 396923 | braided length of weasel offal | falcon_self_sufficiency | - | Falcon doesn't need feeding |
+
+### Class-Specific - Weaving
+
+| ID | Name | Power | Lvl | Effect |
+|----|------|-------|-----|--------|
+| 539566 | platinum hand mirror | weaving_mastery | 3 | +15% weaving damage, faster cast |
+| 422392 | ephemeral shuttle | resilient_miriads | - | Miriad illusions last 50% longer |
+
+### Utility & Travel
+
+| ID | Name | Power | Lvl | Effect |
+|----|------|-------|-----|--------|
+| 299122 | Anklet of Dashing | dash | - | DASH ability - instant room movement |
+| 236878 | chitin greaves | leap | - | LEAP ability - jump over obstacles/walls |
+| 536688 | ring of flying | flying | - | Permanent flight without wings |
+| 582366 | flying carpet | entourage | - | Followers can fly with you |
+| 338075 | mithril spurs | quickmount | - | Instant mount/dismount |
+| 455735 | Prospero's Greater Vault | rift_expand | 2 | +200 rift capacity |
+| 477008 | vibrating stick | wormholes | 1 | Access to wormhole travel network |
+| 440716 | oval mask | lifevision | - | See health percentages of everyone in room |
+| 503549 | Hood of the Sphinx | sphinx | - | SPHINX ability - riddle-based defenses |
+| 506719 | glittering fishscale tunic | breathe_underwater | - | Permanent underwater breathing |
+| 580744 | miniature toolkit | trapmaster | - | Set traps faster, detect enemy traps |
+| 212547 | stone of lesser lorewarden | class_switch_reduction | 3 | Class changes cost 30% less lessons |
+
+### Crafting & Economy
+
+| ID | Name | Power | Lvl | Effect |
+|----|------|-------|-----|--------|
+| 72918 | Phaestean Faucet | fluid_expansion | 3 | Unlimited water, fills vials instantly |
+| 279190 | prospector's almanac | mine_capacity | 2 | +200 mining claim capacity |
+| 560673 | Prosperian attractor | gold_attractor | - | Corpses drop 10% more gold |
+| 422098 | sand-worn bandolier | jars_capacity | - | +5 jar slots for alchemist |
+| 421731 | wax stick encased in mithril | water_sketch | - | Sketch runes on water surfaces |
+
+---
+
 ## Combat - Offensive
 
 | ID | Name | Effect |

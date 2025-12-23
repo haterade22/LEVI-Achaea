@@ -4,9 +4,10 @@
 -- KEY MECHANICS:
 -- 1. DOUBLE-PREP: Alternate legs to keep both roughly equal until 90%+
 -- 2. INFUSE LIGHTNING during prep (clumsy from strikes)
--- 3. When BOTH legs 90%+: legslash + KNEES = double-break + prone
--- 4. INFUSE ICE only after both legs broken (frozen + bonus damage)
--- 5. Reactive AIRFIST only when focused leg is parried
+-- 3. AIRFIST when target parries our leg (requires 25 shin: 20 + 5 infuse)
+-- 4. When BOTH legs 90%+: legslash + KNEES = double-break + prone
+-- 5. INFUSE ICE + STERNUM after both legs broken (max damage)
+-- 6. Frozen + broken legs = massive damage output
 
 blademaster = blademaster or {}
 blademaster.dispatch = blademaster.dispatch or {}
@@ -184,6 +185,18 @@ function blademaster.getOtherLeg(leg)
   return leg == "left" and "right" or "left"
 end
 
+function blademaster.getCompassDirection(leg)
+  -- Convert leg direction to compass direction for compassslash
+  -- SOUTHEAST = left leg
+  -- SOUTHWEST = right leg
+  if leg == "left" then
+    return "southeast"
+  elseif leg == "right" then
+    return "southwest"
+  end
+  return leg  -- fallback
+end
+
 --------------------------------------------------------------------------------
 -- CONDITION CHECKS
 --------------------------------------------------------------------------------
@@ -226,27 +239,61 @@ end
 -- PARRY HANDLING - REACTIVE AIRFIST
 --------------------------------------------------------------------------------
 
+function blademaster.getShin()
+  -- Get current shin value from gmcp.Char.Vitals.charstats
+  -- Format: { "Bleed: 0", "Rage: 0", "Shin: 16", "Stance: Thyr" }
+  if gmcp and gmcp.Char and gmcp.Char.Vitals and gmcp.Char.Vitals.charstats then
+    for _, stat in ipairs(gmcp.Char.Vitals.charstats) do
+      local shinValue = string.match(stat, "Shin:%s*(%d+)")
+      if shinValue then
+        return tonumber(shinValue) or 0
+      end
+    end
+  end
+  return 0
+end
+
 function blademaster.needsAirfist()
-  -- ONLY use AIRFIST when focused leg is being parried
+  -- Use AIRFIST when target is parrying a leg we want to attack
+  -- Requires 20 shin for airfist + 5 shin for infuse = 25 total
   local parried = blademaster.getParried()
+  local focusLeg = blademaster.getFocusLeg()
+  local focusLegFull = focusLeg .. " leg"
 
-  -- Check cooldown
-  local now = os.time()
-  if (now - blademaster.state.lastAirfist) < blademaster.config.airfistCooldown then
-    return false
+  -- Check shin requirement (20 airfist + 5 infuse = 25 needed)
+  local shin = blademaster.getShin()
+  local shinNeeded = 25  -- 20 for airfist + 5 for infuse
+  if shin < shinNeeded then
+    return false, "not enough shin (" .. shin .. "/25)"
   end
 
-  -- Already airfisted
+  -- Check cooldown (use getTime for millisecond precision)
+  local now = getTime and getTime() or (os.time() * 1000)
+  local cooldownMs = blademaster.config.airfistCooldown * 1000
+  if (now - (blademaster.state.lastAirfist or 0)) < cooldownMs then
+    return false, "cooldown"
+  end
+
+  -- Already airfisted - but be less strict, allow re-application
   if tAffs.airfisted then
-    return false
+    return false, "already airfisted"
   end
 
-  -- Check if parrying either leg (we want to break their parry)
-  return parried == "left leg" or parried == "right leg"
+  -- Check if they're parrying the leg we want to attack
+  if parried == focusLegFull then
+    return true, "parrying our target leg (" .. parried .. ")"
+  end
+
+  -- Also use airfist if they're parrying ANY leg and we keep hitting parry
+  if parried == "left leg" or parried == "right leg" then
+    return true, "parrying a leg (" .. parried .. ")"
+  end
+
+  return false, "not parrying legs (parried: " .. parried .. ")"
 end
 
 function blademaster.useAirfist()
-  blademaster.state.lastAirfist = os.time()
+  blademaster.state.lastAirfist = getTime and getTime() or (os.time() * 1000)
   return "airfist"
 end
 
@@ -256,20 +303,33 @@ end
 
 function blademaster.selectStrike()
   -- Priority order:
-  -- 1. AIRFIST if focused leg is parried (reactive)
-  -- 2. KNEES when double-break ready (prone on same hit as break)
-  -- 3. EARS (clumsiness) - makes salve applications fail
-  -- 4. NECK (paralysis) for pressure
-  -- 5. SHOULDER (weariness) to block Fitness
+  -- 1. AIRFIST if focused leg is parried (reactive) - requires 25 shin (20 + 5 infuse)
+  -- 2. STERNUM if in ICE phase (both legs broken) - maximum damage
+  -- 3. KNEES when double-break ready (prone on same hit as break)
+  -- 4. HAMSTRING - prevents fleeing, ALWAYS keep up
+  -- 5. EARS (clumsiness) - makes salve applications fail
+  -- 6. NECK (paralysis) for pressure
+  -- 7. SHOULDER (weariness) to block Fitness
 
-  -- Reactive AIRFIST
-  if blademaster.needsAirfist() then
+  -- Reactive AIRFIST (only if parrying our leg and we have 25 shin)
+  local needsAF, afReason = blademaster.needsAirfist()
+  if needsAF then
     return blademaster.useAirfist()
+  end
+
+  -- ICE PHASE: Use STERNUM for maximum damage when both legs are broken
+  if blademaster.checkBothLegsBroken() then
+    return "sternum"
   end
 
   -- If ready for double-break, use KNEES to prone on same hit
   if blademaster.checkDoubleBreakReady() and not tAffs.prone then
     return "knees"
+  end
+
+  -- Hamstring - prevents fleeing, lasts 10 seconds, reapply if missing or timer expired
+  if not tAffs.hamstring or not hamstringTimer then
+    return "hamstring"
   end
 
   -- Clumsiness - makes them fail salve applications
@@ -377,8 +437,9 @@ function blademaster.buildCombo()
       combo = combo .. " " .. strike
     end
   elseif attack == "compassslash" then
-    -- Compassslash hits ONLY the specified leg (for balancing)
-    combo = combo .. "compassslash " .. target .. " " .. direction
+    -- Compassslash uses compass directions: southeast = left leg, southwest = right leg
+    local compassDir = blademaster.getCompassDirection(direction)
+    combo = combo .. "compassslash " .. target .. " " .. compassDir
     if strike then
       combo = combo .. " " .. strike
     end
@@ -432,9 +493,14 @@ function blademaster.dispatch.run()
   cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] LL:" .. string.format("%.1f", tLimbs.LL) .. "% RL:" .. string.format("%.1f", tLimbs.RL) .. "%")
   cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Dmg: P=" .. string.format("%.1f", blademaster.state.primaryDamage) .. "% S=" .. string.format("%.1f", blademaster.state.secondaryDamage) .. "%")
   local parried = blademaster.getParried()
-  cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Clumsy: " .. (tAffs.clumsiness and "YES" or "NO"))
+  local shin = blademaster.getShin()
+  local needsAF, afReason = blademaster.needsAirfist()
+  cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Hamstring: " .. (tAffs.hamstring and "YES" or "NO"))
+  cecho(" | Clumsy: " .. (tAffs.clumsiness and "YES" or "NO"))
   cecho(" | Frozen: " .. (tAffs.frozen and "YES" or "NO"))
   cecho(" | Parried: " .. parried)
+  cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Shin: " .. shin)
+  cecho(" | Airfist: " .. (needsAF and "<green>YES" or "<red>NO") .. " <grey>(" .. afReason .. ")")
 
   if doubleReady and not blademaster.checkBothLegsBroken() then
     cecho("\n<green>*** DOUBLE-BREAK READY - NEXT HIT BREAKS BOTH! ***")
@@ -445,7 +511,8 @@ function blademaster.dispatch.run()
   -- Check if compassslash is needed
   local needsCompass, compassDir, compassReason = blademaster.needsCompassslash()
   if needsCompass then
-    cecho("\n<magenta>*** COMPASSSLASH " .. compassDir:upper() .. ": " .. (compassReason or "balancing") .. " ***")
+    local compassCardinal = blademaster.getCompassDirection(compassDir)
+    cecho("\n<magenta>*** COMPASSSLASH " .. compassCardinal:upper() .. " (" .. compassDir .. " leg): " .. (compassReason or "balancing") .. " ***")
   end
 
   -- Handle combatQueue if available
@@ -528,16 +595,23 @@ function blademaster.dispatch.status()
   end
   local needsCompass, compassDir, compassReason = blademaster.needsCompassslash()
   if needsCompass then
-    cecho("\n<cyan>|   <magenta>*** COMPASSSLASH " .. compassDir:upper() .. ": " .. (compassReason or "balance") .. " ***")
+    local compassCardinal = blademaster.getCompassDirection(compassDir)
+    cecho("\n<cyan>|   <magenta>*** COMPASSSLASH " .. compassCardinal:upper() .. " (" .. compassDir .. " leg) ***")
   end
   cecho("\n<cyan>+--------------------------------------------+")
   cecho("\n<cyan>| <white>AFFLICTIONS:<cyan>")
+  local hamstringStatus = tAffs.hamstring and (hamstringTimer and "<green>YES" or "<yellow>EXPIRING") or "<red>NO (APPLY!)"
+  cecho("\n<cyan>|   <white>Hamstring:  " .. hamstringStatus)
   cecho("\n<cyan>|   <white>Clumsiness: " .. (tAffs.clumsiness and "<green>YES" or "<red>NO (APPLY!)"))
   cecho("\n<cyan>|   <white>Paralysis:  " .. (tAffs.paralysis and "<green>YES" or "<yellow>NO"))
   cecho("\n<cyan>|   <white>Weariness:  " .. (tAffs.weariness and "<green>YES" or "<yellow>NO"))
   cecho("\n<cyan>|   <white>Prone:      " .. (tAffs.prone and "<green>YES" or "<yellow>NO"))
   cecho("\n<cyan>|   <white>Frozen:     " .. (tAffs.frozen and "<blue>YES (ICE BONUS!)" or "<grey>NO"))
   cecho("\n<cyan>|   <white>Airfisted:  " .. (tAffs.airfisted and "<magenta>YES" or "<grey>NO"))
+  local shin = blademaster.getShin()
+  local needsAF, afReason = blademaster.needsAirfist()
+  cecho("\n<cyan>|   <white>Shin:       <yellow>" .. shin .. "<grey> (25 needed for airfist+infuse)")
+  cecho("\n<cyan>|   <white>AF Ready:   " .. (needsAF and "<green>YES" or "<red>NO") .. " <grey>(" .. afReason .. ")")
   cecho("\n<cyan>+--------------------------------------------+")
   cecho("\n<cyan>| <white>KILL CONDITIONS:<cyan>")
   cecho("\n<cyan>|   <white>Both Legs Broken: " .. (blademaster.checkBothLegsBroken() and "<green>YES" or "<red>NO"))
@@ -548,10 +622,11 @@ function blademaster.dispatch.status()
   cecho("\n<cyan>|   <grey>1. INFUSE LIGHTNING during prep phase")
   cecho("\n<cyan>|   <grey>2. LEGSLASH alternating (lower leg) to keep ~equal")
   cecho("\n<cyan>|   <grey>3. COMPASSSLASH if gap too big (one leg ahead)")
-  cecho("\n<cyan>|   <grey>4. When both 90%+: LEGSLASH + KNEES")
+  cecho("\n<cyan>|   <grey>4. AIRFIST if parrying our leg (needs 25 shin)")
+  cecho("\n<cyan>|   <grey>5. When both 90%+: LEGSLASH + KNEES")
   cecho("\n<cyan>|   <grey>   = Double-break + Prone in ONE hit!")
-  cecho("\n<cyan>|   <grey>5. Switch to INFUSE ICE after both broken")
-  cecho("\n<cyan>|   <grey>6. Continue damage while frozen")
+  cecho("\n<cyan>|   <grey>6. Switch to INFUSE ICE + STERNUM after both broken")
+  cecho("\n<cyan>|   <grey>7. Continue damage with frozen bonus")
   cecho("\n<cyan>+============================================+\n")
 end
 
