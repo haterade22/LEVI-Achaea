@@ -12,14 +12,24 @@ The deck of legends is a set of playing cards with unique powers obtained via gi
 
 ## System Integration
 
-### Maran Emergency Barrier (PVE)
+### Emergency Defenses (PVE)
 
 Located in `src/ataxiaBasher/005_Bashing_Functions.lua`:
 
-When HP drops below threshold while bashing, automatically draws Maran for emergency protection.
+The basher has layered emergency defenses that trigger automatically:
 
+**1. Wand of Reflection (HP < 10%)** - Most critical, triggers first
 ```lua
-ataxia.maranThreshold = 25  -- Adjust threshold (default 25%)
+ataxia.wandReflectionThreshold = 10  -- HP% to trigger (default 10%)
+ataxia.wandReflectionRecovery = 70   -- HP% to resume attacks (default 70%)
+-- Uses: point wand234800 at me
+-- Pauses attacks until HP recovers, 1 hour cooldown
+```
+
+**2. Maran Barrier (HP < 25%)** - Secondary defense
+```lua
+ataxia.maranThreshold = 25  -- HP% to trigger (default 25%)
+-- Draws Maran card for 5000hp barrier, requires card charges
 ```
 
 ### Card Tracking

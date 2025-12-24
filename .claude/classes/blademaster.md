@@ -479,16 +479,23 @@ Band Levels affect paralysis stacking:
 ## Ice Dispatch System (302_Blademaster_Ice_Dispatch.lua)
 
 ### Overview
-A V2-style dispatch system focused on pure damage kills using Ice infuse + frozen + focus-fire leg attacks.
+A double-prep dispatch system focused on breaking BOTH legs simultaneously, then switching to ice damage phase for the kill.
+
+### Kill Route
+```
+Lightning prep → double-break both legs → Ice damage phase
+```
 
 ### Key Mechanics
-1. **Focus Fire ONE Leg** - Like Shikudo V2, focus damage on one leg until broken
-2. **Reactive AIRFIST** - Only use when focused leg is being parried
-3. **INFUSE ICE** - Every attack applies ice for shivering → frozen → bonus damage
-4. **Clumsiness First** - EARS strike priority makes salve applications fail
-5. **Pure Damage Kill** - No BrokenStar needed, just damage out while frozen
+1. **DOUBLE-PREP** - Alternate legs to keep both roughly equal until 90%+
+2. **INFUSE LIGHTNING** - During prep phase (clumsy from strikes)
+3. **AIRFIST** - When target parries our leg (requires 25 shin: 20 + 5 for infuse)
+4. **HAMSTRING** - Always keep up to prevent fleeing (10 second duration, uses hamstringTimer)
+5. **KNEES** - When both legs 90%+, double-break + prone in ONE hit
+6. **INFUSE ICE + STERNUM** - After both legs broken for maximum damage
+7. **COMPASSSLASH** - Used to balance legs when gap is too big
 
-**Key Insight**: Target can't cure frozen while applying restoration to legs - they must choose between mobility and not being frozen!
+**Key Insight**: Breaking BOTH legs simultaneously is critical vs experienced players. The double-prep strategy keeps both legs roughly equal, then breaks them together with KNEES for immediate prone!
 
 ### Commands
 ```yaml
@@ -496,39 +503,93 @@ bmd: Main dispatch attack (blademaster.dispatch.run())
 bmstatus: Display status panel (blademaster.dispatch.status())
 ```
 
-### Combat Loop
+### Combat Phases
+
+#### Phase 1: Lightning Prep
 ```
-1. RAZE if shield/rebounding present
-2. MULTISLASH burst if HP < 30% + leg broken (kill phase)
-3. AIRFIST if focused leg is parried (reactive)
-4. Strike: EARS > KNEES > NECK > SHOULDER
-5. Attack: LEGSLASH focus leg (or BALANCESLASH if ready for prone)
-6. Build: INFUSE ICE; <attack> <target> <dir> <strike>; ASSESS
+- INFUSE LIGHTNING
+- LEGSLASH alternating (always hit LOWER damage leg)
+- COMPASSSLASH if gap between legs is too big
+- Strike: HAMSTRING > EARS > NECK > SHOULDER
+- Goal: Get both legs to 90%+
 ```
 
-### Affliction Priority
+#### Phase 2: Double-Break
+```
+- Both legs at 90%+
+- LEGSLASH + KNEES = break BOTH legs + prone in one hit
+- Transition to Ice phase
+```
+
+#### Phase 3: Ice Damage
+```
+- INFUSE ICE
+- LEGSLASH + STERNUM for maximum damage
+- Target is frozen + both legs broken = massive damage
+- MULTISLASH burst when HP < 30%
+```
+
+### Strike Priority
 | Priority | Strike | Affliction | Purpose |
 |----------|--------|------------|---------|
-| 1 | EARS | Clumsiness | Makes salve applications fail |
-| 2 | KNEES | Prone | When leg is broken |
-| 3 | NECK | Paralysis | Pressure |
-| 4 | SHOULDER | Weariness | Blocks Fitness passive cure |
+| 1 | AIRFIST | Parry bypass | When parrying our leg (needs 25 shin) |
+| 2 | STERNUM | Max damage | Ice phase only (both legs broken) |
+| 3 | KNEES | Prone | When double-break ready (both 90%+) |
+| 4 | HAMSTRING | Prevents flee | Always keep up (10s duration) |
+| 5 | EARS | Clumsiness | Makes salve applications fail |
+| 6 | NECK | Paralysis | Pressure |
+| 7 | SHOULDER | Weariness | Blocks Fitness passive cure |
+
+### Sword Attack Selection
+| Condition | Attack | Direction |
+|-----------|--------|-----------|
+| Shield/Rebounding | RAZE | - |
+| Both legs broken + prone | LEGSLASH | Focus leg |
+| Both legs broken | BALANCESLASH | - |
+| Gap too big | COMPASSSLASH | Lower leg (SE/SW) |
+| Normal prep | LEGSLASH | Lower leg |
+
+### Shin Mechanics
+- **Generation**: 8 per strike normally, 12 in Sanya stance
+- **Infuse cost**: 5 shin
+- **Airfist cost**: 20 shin
+- **Total for Airfist**: 25 shin (20 + 5 for infuse)
+
+### Damage Tracking
+The system dynamically captures damage values from combat:
+- **Primary damage**: ~17.3% to focused leg
+- **Secondary damage**: ~11.5% to off-leg
+- **Compassslash damage**: ~14.9% to single leg
+
+These values update automatically from combat triggers.
 
 ### Status Display
 ```
 +============================================+
-|       BLADEMASTER ICE DISPATCH            |
+|     BLADEMASTER DOUBLE-PREP DISPATCH      |
 +============================================+
 | Target: <name> (HP: X%)
-| Focus Leg: left/right
-| Parried Limb: <limb>
+| Phase: LIGHTNING (prep) / ICE (damage)
+| Focus Leg: left/right (alternating to keep even)
+| Parried: <limb>
+| Damage: P=17.3% S=11.5% C=14.9%
 +--------------------------------------------+
-| ICE STATUS:
-|   Shivering: YES/NO
-|   Frozen: YES (BONUS DMG!)
+| DOUBLE-PREP STATUS:
+|   L Leg: XX.X% [##########]
+|   R Leg: XX.X% [##########] <-
+|   Double-Break: YES/NO (need both 90%+)
+|   Path: X hits to double-break (sequence: LRLR)
 +--------------------------------------------+
-| AFFLICTIONS: Clumsiness, Paralysis, Weariness, Prone
-| LIMB DAMAGE: L Leg %, R Leg % (focus indicator)
-| KILL CONDITIONS: Leg Broken, HP < 30%
+| AFFLICTIONS:
+|   Hamstring:  YES/NO/EXPIRING
+|   Clumsiness: YES/NO
+|   Paralysis:  YES/NO
+|   Prone:      YES/NO
+|   Frozen:     YES (ICE BONUS!)
+|   Shin:       XX (25 needed for airfist+infuse)
++--------------------------------------------+
+| KILL CONDITIONS:
+|   Both Legs Broken: YES/NO
+|   Target Low HP: YES/NO (< 30%)
 +============================================+
 ```

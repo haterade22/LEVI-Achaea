@@ -117,18 +117,27 @@ ataxiaBasher.paused = true
 - Auto-movement in areas
 - Statistics tracking
 - Legend Deck emergency cards (Maran barrier)
+- Wand of Reflection emergency defense
 
-### Legend Deck Integration
-**What it does**: Automatic card usage during bashing
+### Emergency Defenses
+**What it does**: Automatic defensive abilities when HP drops critically low
 
 **Key Variables**:
 ```lua
+-- Wand of Reflection (triggers first - most critical)
+ataxia.wandReflectionThreshold = 10  -- HP% to trigger wand (default 10%)
+ataxia.wandReflectionRecovery = 70   -- HP% to resume attacks (default 70%)
+ataxia.wandReflectionActive          -- true while waiting to recover
+ataxia.wandReflectionCooldown        -- true for 1 hour after use
+
+-- Maran Legend Deck card
 ataxia.maranThreshold = 25           -- HP% to trigger Maran barrier
 ataxiaTables.ldeckcardscount.Maran   -- Remaining charges
 ```
 
-**Emergency Cards** (triggered automatically):
-- **Maran** - 5000hp barrier when HP < 25% while bashing
+**Emergency Actions** (triggered automatically):
+- **Wand of Reflection** - When HP < 10%, uses wand234800, pauses attacks until 70% HP (1hr cooldown)
+- **Maran** - 5000hp barrier when HP < 25% while bashing (requires legend deck card)
 
 **See**: `docs/legend-deck.md` for full card reference
 
