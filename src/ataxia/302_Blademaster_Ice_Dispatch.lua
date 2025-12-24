@@ -267,10 +267,9 @@ function blademaster.needsAirfist()
     return false, "not enough shin (" .. shin .. "/25)"
   end
 
-  -- Check cooldown (use getTime for millisecond precision)
-  local now = getTime and getTime() or (os.time() * 1000)
-  local cooldownMs = blademaster.config.airfistCooldown * 1000
-  if (now - (blademaster.state.lastAirfist or 0)) < cooldownMs then
+  -- Check cooldown (use os.time for seconds)
+  local now = os.time()
+  if (now - (blademaster.state.lastAirfist or 0)) < blademaster.config.airfistCooldown then
     return false, "cooldown"
   end
 
@@ -293,7 +292,7 @@ function blademaster.needsAirfist()
 end
 
 function blademaster.useAirfist()
-  blademaster.state.lastAirfist = getTime and getTime() or (os.time() * 1000)
+  blademaster.state.lastAirfist = os.time()
   return "airfist"
 end
 

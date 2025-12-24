@@ -740,6 +740,63 @@ Items obtained from promotions, purchases, or special events. Not sold directly.
 
 ---
 
+## Artefact Armour (Paragons & Rondels)
+
+Embrasures are slots in armour that hold Paragons. Use Rondels to expand embrasures (max 3).
+
+### Rondels (Armour Upgrades)
+| Item | Credits | Effect |
+|------|---------|--------|
+| gilded rondel | 350 | 2 embrasures, non-decay, resetting, customisable |
+| sun and starburst rondel | 850 | 3 embrasures, non-decay, resetting, customisable |
+
+### Damage Resistance Paragons
+| Item | Credits | Effect |
+|------|---------|--------|
+| fuscous paragon | 500 | ~5% blunt resistance |
+| vinaceous paragon | 500 | ~5% cutting resistance |
+| viridescent paragon | 500 | ~7% poison resistance |
+| piceous paragon | 500 | ~7% asphyxiation resistance |
+| citreous paragon | 450 | ~7% magic resistance |
+| aurous paragon | 400 | ~7% psychic resistance |
+| cyaneous paragon | 400 | ~7% cold resistance |
+| oleaginous paragon | 400 | ~7% fire resistance |
+| caliginous paragon | 400 | ~7% electricity resistance |
+| resonate metalliferous paragon | 750 | ~7.5% shifting resistance |
+
+### Morphing Armour Paragons
+| Item | Credits | Effect |
+|------|---------|--------|
+| nacreous tetrahedral paragon | 800 | MORPHARMOUR (1hr cooldown) |
+| nacreous octahedral paragon | 1200 | MORPHARMOUR (20min cooldown) |
+| nacreous deltahedral paragon | 1900 | MORPHARMOUR (10min cooldown) |
+
+### Combat/Utility Paragons
+| Item | Credits | Effect |
+|------|---------|--------|
+| aeneaous paragon | 1000 | Shield of Absorption effect |
+| prismatic paragon | 900 | Auto-prismatic barrier when <25% health from denizen |
+| auspicious icosagon paragon | 1000 | 20% chance to boost crit level |
+| crucious paragon | 1000 | Boost crit multiplier OR crit fail (new highest crit level) |
+| rufescent paragon | 400 | Damage boost vs last person who killed you |
+
+### Regen/Resource Paragons
+| Item | Credits | Effect |
+|------|---------|--------|
+| torpous paragon | 300 | 2x end/wp regen during sleep/meditation |
+| niveous paragon | 700 | 5% denizen damage returned as endurance |
+| serendipitous paragon | 400 | 5% denizen damage returned as willpower |
+
+### Storage/Utility Paragons
+| Item | Credits | Effect |
+|------|---------|--------|
+| cupreous paragon | 250 | Armour holds 20 items |
+| luteous dodecahedron paragon | 400 | 20 items + stasis |
+| euphonious paragon | 500 | DISCUSS with denizens for spawn info |
+| paragon u-notch pry tool | 250 | Unlimited pry uses, non-decay |
+
+---
+
 ## Notes
 
 - Effects may vary; always verify in-game with AB <power> or ARTEFACT INFO
@@ -747,3 +804,4 @@ Items obtained from promotions, purchases, or special events. Not sold directly.
 - Prices subject to credit sales and promotions
 - Shop of Wonders and House of Wonders items use Mayan Crowns, not bound credits
 - Promotional items obtained from purchases, events, or special promotions
+- Paragons require armour with embrasures (added by Legendary Armoursmith)
