@@ -150,6 +150,7 @@ function ataxia_defaultSettings()
 		customprompt = "",
 		roomshorten = "normal",
 		autogallop = false,
+    avoidType = "physical",  -- Options: physical, mental, arcane, aoe
     raid = {enabled = false},
     fishing = {
       bait = "shrimp",

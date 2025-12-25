@@ -133,3 +133,25 @@ end
 registerAnonymousEventHandler("gmcp.Char.Defences.List", "defenceList")
 registerAnonymousEventHandler("gmcp.Char.Defences.Add", "gotDef")
 registerAnonymousEventHandler("gmcp.Char.Defences.Remove", "lostDef")
+
+-- Avoid defence type management
+-- Valid types: physical, mental, arcane, aoe
+function setAvoidType(avoidType)
+  local validTypes = {physical = true, mental = true, arcane = true, aoe = true}
+  avoidType = avoidType and avoidType:lower() or "physical"
+
+  if not validTypes[avoidType] then
+    ataxiaEcho("Invalid avoid type. Valid options: physical, mental, arcane, aoe")
+    return false
+  end
+
+  ataxia.settings.avoidType = avoidType
+  buildDefsTable()  -- Rebuild tables with new avoid type
+  ataxiaEcho("Avoid type set to: " .. avoidType:upper())
+  ataxiaEcho("Use 'defup' to apply the new setting.")
+  return true
+end
+
+function getAvoidType()
+  return ataxia.settings.avoidType or "physical"
+end

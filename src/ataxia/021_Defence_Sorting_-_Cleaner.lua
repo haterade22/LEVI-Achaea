@@ -189,6 +189,7 @@ function sortedDefenceShow()
     },
    
    shared = {
+      avoid = "avoid " .. (ataxia.settings.avoidType or "physical"),
       constitution = "constitution",
       consciousness = "consciousness",
 			curseward = "curseward",
