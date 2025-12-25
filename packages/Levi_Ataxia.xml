@@ -10937,6 +10937,7 @@ registerAnonymousEventHandler("sysInstallPackage", "ataxia_updateApplied")
     unnamablepresence = "unnamablepresence",
 
 		--Shared
+    avoid = "avoid " .. (ataxia.settings.avoidType or "physical"),
     grookbubble = "grookbubble",
 		constitution = "constitution",
     consciousness = "consciousness",
