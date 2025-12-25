@@ -1,5 +1,13 @@
 -- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Ataxia-DownloadThis > Ataxia > System-related > Curing Stuff > Aff gains/losses
 
+-- Darkshade Duration Tracker
+-- Auto-prioritizes darkshade cure after threshold seconds to prevent prolonged sunlight damage
+ataxia.darkshadeTracker = ataxia.darkshadeTracker or {
+    timerId = nil,
+    threshold = 17,  -- seconds before auto-prioritize
+    prioritized = false
+}
+
 function confirmedUnknownAff()
 	if line:match("You feel your allergy to the sun going into temporary remission.")
 		or line:match("Your insomnia has cleared up.")
@@ -171,6 +179,22 @@ function gotAff()
     partyrelay = false
   elseif aff == "impatience" and ataxiaNDB_getClass(target) == "Serpent" then
     myaeon = true
+  -- Darkshade duration tracking - auto-prioritize after threshold
+  elseif aff == "darkshade" then
+    -- Kill existing timer if any
+    if ataxia.darkshadeTracker.timerId then
+        killTimer(ataxia.darkshadeTracker.timerId)
+    end
+    ataxia.darkshadeTracker.prioritized = false
+
+    -- Start timer to auto-prioritize after threshold
+    ataxia.darkshadeTracker.timerId = tempTimer(ataxia.darkshadeTracker.threshold, function()
+        if ataxia.afflictions.darkshade and not ataxia.darkshadeTracker.prioritized then
+            send("curing prioaff darkshade")
+            ataxia.darkshadeTracker.prioritized = true
+            ataxia_boxEcho("Darkshade persisting - prioritizing cure", "yellow")
+        end
+    end)
 	end
   --Are we close to being locked where we need to hit our active ability?
 	ataxia_lockBreak()
@@ -230,8 +254,15 @@ function lostAff()
     ataxia.afflictions.unweavingspirit = 0
   elseif aff[1] == "crescendo" then
     ataxia.afflictions.crescendo = 0
+  -- Darkshade cleanup - stop timer when cured
+  elseif aff[1] == "darkshade" then
+    if ataxia.darkshadeTracker.timerId then
+        killTimer(ataxia.darkshadeTracker.timerId)
+        ataxia.darkshadeTracker.timerId = nil
+    end
+    ataxia.darkshadeTracker.prioritized = false
   end
-	
+
 	raiseEvent("aff cured", aff[1])
   if zgui then zgui.showAffs() end
 Algedonic.Prioritize()
