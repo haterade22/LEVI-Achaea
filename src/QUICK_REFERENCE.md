@@ -141,6 +141,22 @@ ataxiaTables.ldeckcardscount.Maran   -- Remaining charges
 
 **See**: `docs/legend-deck.md` for full card reference
 
+### Avoid Defense
+**What it does**: Configurable damage avoidance defense with 4 types
+
+**Configuration**:
+```lua
+setAvoidType("physical")  -- Default, recommended for most situations
+setAvoidType("mental")    -- Mental damage reduction
+setAvoidType("arcane")    -- Arcane damage reduction
+setAvoidType("aoe")       -- Area-of-effect damage reduction
+
+getAvoidType()            -- Check current setting
+ataxia.settings.avoidType -- Direct access to setting
+```
+
+**Usage**: Add `avoid` to your defup profile. The system will automatically use your configured avoid type when deffing up.
+
 ## File Organization
 
 ### Finding Specific Code
