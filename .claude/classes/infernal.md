@@ -17,8 +17,9 @@ Weaponmastery: Combat with various weapon specializations (DWC, DWB, SnB, 2H)
 ```yaml
 DWC (Dual Wield Cutting):
   weapons: [scimitar, scimitar] or [longsword, longsword]
-  style: Fast attacks, double venom application
-  strength: Speed, venom stacking
+  style: Fast attacks, double venom application, limb breaking
+  strength: Speed, venom stacking, faster limb prep
+  kill_routes: [vivisect (primary), damage]
 
 DWB (Dual Wield Blunt):
   weapons: [mace, mace] or [flail, flail]
@@ -100,6 +101,40 @@ weapon_choice:
     pros: ["Faster balance", "Bonus limb damage", "3-4 hits to break"]
     cons: ["Less overall damage"]
     note: "Must learn proficiency in Hashan"
+```
+
+## Universal Combat Concepts
+
+### Salve Balance Pressure (Limb Combat)
+```yaml
+description: |
+  Core mechanic for all limb-based kill routes.
+  Like "lock" for affliction combat, salve pressure is the
+  foundation of limb combat strategy.
+
+salve_balance:
+  cooldown: "4 seconds"
+  shared_by: [Restoration, Mending, Caloric]
+
+curing_limb_breaks:
+  level_1_break: "Restoration (4s salve balance)"
+  level_2_break: "Restoration (4s) + Mending (4s) = 8 seconds minimum"
+
+victim_priority: |
+  Most players prioritize restoration on legs (to stand up).
+  This creates predictable salve usage we can exploit.
+
+the_exploit: |
+  Break leg → they restoration (4s balance down) → can't mending yet
+  They're prone for at least 8 seconds while curing the leg.
+
+  Use epteth/epseth venoms to inflict MORE level 1 breaks.
+  Each break demands another restoration application.
+  Stack salve demands faster than they can cure = overwhelm.
+
+the_math: |
+  8 second prone window ÷ ~2 second attacks = ~4 attacks
+  That's enough attacks to break remaining limbs while they can't stand.
 ```
 
 ## Kill Routes
@@ -232,23 +267,81 @@ required_limbs:
   head: 3
 ```
 
-### Alternative Kill: Venom Lock (DWC spec)
+### DWC: Vivisect (Primary Kill Path)
 ```yaml
-type: affliction
-summary: Use double venom application to build toward true lock
+type: limb
+summary: Break all 4 limbs to level 1 (withered), then vivisect
 
-steps:
-  1: "Stack lock afflictions with dual venoms"
-  2: "Add weariness to block Fitness"
-  3: "Complete true lock, then damage to death"
+prerequisites:
+  - All four limbs at level 1 break (withered/damaged state)
+  - Note: Does NOT require prone (unlike disembowel)
 
-required_afflictions:
-  - asthma: "blocks smoking"
-  - anorexia: "blocks eating"
-  - slickness: "blocks applying"
-  - paralysis: "blocks tree"
-  - impatience: "blocks focus"
-  - weariness: "blocks Fitness"
+finisher:
+  command: "VIVISECT <target>"
+  cooldown: "4.00 seconds equilibrium"
+  effect: "Instant kill, bypasses starburst tattoo resurrection"
+```
+
+#### DWC Timing
+```yaml
+attack_balance: "1.8 - 2.1 seconds per DSL"
+attacks_per_window: "~4 DSLs in 8 second prone window"
+```
+
+#### Strategy: Two-Limb Prep (vs weaker opponents)
+```yaml
+summary: Prep 2 limbs to near-break, then execute break sequence
+
+prep_phase:
+  1: "Prep leg to near-break (DO NOT BREAK YET)"
+  2: "Prep other limb to near-break (DO NOT BREAK YET)"
+
+execute_phase:
+  3: "DSL leg with delphinium - breaks leg, prones target, forces restoration"
+  4: "DSL prepped limb with epteth + epseth - breaks it + inflicts more lvl 1 breaks"
+  5: "Continue DSL with epteth/epseth - overwhelm salve balance"
+  6: "VIVISECT when all 4 limbs level 1"
+```
+
+#### Strategy: Three-Limb Prep (vs most opponents)
+```yaml
+summary: Prep 3 limbs to near-break, then execute break sequence
+
+target_limbs:
+  - right_leg: "Primary prone source"
+  - left_leg: "Backup prone + vivisect req"
+  - arm: "Either arm, vivisect req"
+
+prep_phase:
+  1: "Prep right leg to near-break (DO NOT BREAK YET)"
+  2: "Prep left leg to near-break (DO NOT BREAK YET)"
+  3: "Prep arm to near-break (DO NOT BREAK YET)"
+
+execute_phase:
+  4: "DSL right leg with delphinium - breaks leg, prones, forces restoration"
+  5: "DSL left leg with epteth/epseth - breaks + stacks salve demands"
+  6: "DSL prepped arm to break"
+  7: "DSL final arm with epteth/epseth while salve overwhelmed"
+  8: "VIVISECT when all 4 limbs level 1"
+
+why_three_limbs: |
+  Most opponents can restore fast enough to heal 2 unprepped limbs.
+  With 3 prepped, you only need to break 1 unprepped limb while
+  their salve balance is overwhelmed.
+```
+
+#### Parry Bypass (Knight Mechanic)
+```yaml
+method: "Stick nausea on target"
+effect: "Nausea prevents effective parrying"
+usage: "When target is parrying your prep limb, stick nausea first"
+```
+
+#### Limb Tracking
+```yaml
+damage_percentage: "lb[target].hits['<limb>'] tracks 0-100%+"
+level_1_break: "100% damage = level 1 (withered/damaged)"
+prep_ready: "d2prepped = one DSL will break the limb"
 ```
 
 ## Combat Preparation
