@@ -21,6 +21,29 @@ blademaster.state = {
   lastPrimaryLeg = nil,   -- Which leg received primary damage last hit
 }
 
+--------------------------------------------------------------------------------
+-- LIMB TRACKING HELPERS
+-- Uses lb[target].hits["limb"] format to match rest of BM offense system
+--------------------------------------------------------------------------------
+
+function blademaster.getLimbDamage(limb)
+  -- Get limb damage from lb[target].hits table
+  -- limb should be "left leg", "right leg", "head", "torso", "left arm", "right arm"
+  if not target or target == "" then return 0 end
+  if lb and lb[target] and lb[target].hits and lb[target].hits[limb] then
+    return lb[target].hits[limb] or 0
+  end
+  return 0
+end
+
+function blademaster.getLeftLeg()
+  return blademaster.getLimbDamage("left leg")
+end
+
+function blademaster.getRightLeg()
+  return blademaster.getLimbDamage("right leg")
+end
+
 -- Configuration
 blademaster.config = {
   legBreakThreshold = 100,      -- % damage for broken leg
@@ -62,8 +85,8 @@ function blademaster.calculateOptimalPath()
   -- Returns: { attack = "legslash"|"compassslash", direction = "left"|"right",
   --            hitsToDouble = n, explanation = "..." }
 
-  local LL = tLimbs.LL or 0
-  local RL = tLimbs.RL or 0
+  local LL = blademaster.getLeftLeg()
+  local RL = blademaster.getRightLeg()
   local P = blademaster.state.primaryDamage    -- Primary damage
   local S = blademaster.state.secondaryDamage  -- Secondary damage
   local C = blademaster.state.compassDamage    -- Compassslash damage
@@ -160,12 +183,14 @@ function blademaster.getFocusLeg()
   local parried = blademaster.getParried()
 
   -- If BOTH legs 90%+, either direction breaks both - pick non-parried
-  if tLimbs.LL >= blademaster.config.legPrepThreshold and tLimbs.RL >= blademaster.config.legPrepThreshold then
+  local LL = blademaster.getLeftLeg()
+  local RL = blademaster.getRightLeg()
+  if LL >= blademaster.config.legPrepThreshold and RL >= blademaster.config.legPrepThreshold then
     return parried == "left leg" and "right" or "left"
   end
 
   -- If both legs already broken, focus whichever isn't parried
-  if tLimbs.LL >= 100 and tLimbs.RL >= 100 then
+  if LL >= 100 and RL >= 100 then
     return parried == "left leg" and "right" or "left"
   end
 
@@ -203,11 +228,15 @@ end
 
 function blademaster.checkDoubleBreakReady()
   -- Both legs at 90%+ means next legslash breaks both
-  return tLimbs.LL >= blademaster.config.legPrepThreshold and tLimbs.RL >= blademaster.config.legPrepThreshold
+  local LL = blademaster.getLeftLeg()
+  local RL = blademaster.getRightLeg()
+  return LL >= blademaster.config.legPrepThreshold and RL >= blademaster.config.legPrepThreshold
 end
 
 function blademaster.checkBothLegsBroken()
-  return tLimbs.LL >= 100 and tLimbs.RL >= 100
+  local LL = blademaster.getLeftLeg()
+  local RL = blademaster.getRightLeg()
+  return LL >= 100 and RL >= 100
 end
 
 function blademaster.checkKillReady()
@@ -222,8 +251,8 @@ function blademaster.checkReadyForProne()
 end
 
 function blademaster.checkLegPrepped(leg)
-  local limbKey = leg == "left" and "LL" or "RL"
-  return tLimbs[limbKey] >= blademaster.config.legPrepThreshold
+  local limbValue = leg == "left" and blademaster.getLeftLeg() or blademaster.getRightLeg()
+  return limbValue >= blademaster.config.legPrepThreshold
 end
 
 function blademaster.getPhase()
@@ -467,7 +496,7 @@ function blademaster.dispatch.run()
   ataxia.vitals = ataxia.vitals or {}
   ataxia.settings = ataxia.settings or {}
   ataxiaTemp = ataxiaTemp or {}
-  tLimbs = tLimbs or {H = 0, T = 0, LL = 0, RL = 0, LA = 0, RA = 0}
+  lb = lb or {}
   tAffs = tAffs or {}
 
   -- Safety check
@@ -485,11 +514,13 @@ function blademaster.dispatch.run()
   local focusLeg = blademaster.getFocusLeg()
   local targetHP = tonumber(ataxiaTemp.targetHP) or 100
   local path = blademaster.calculateOptimalPath()
+  local LL = blademaster.getLeftLeg()
+  local RL = blademaster.getRightLeg()
 
   cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Target: " .. tostring(target))
   cecho(" | Focus: " .. focusLeg)
   cecho(" | HP: " .. targetHP .. "%")
-  cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] LL:" .. string.format("%.1f", tLimbs.LL) .. "% RL:" .. string.format("%.1f", tLimbs.RL) .. "%")
+  cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] LL:" .. string.format("%.1f", LL) .. "% RL:" .. string.format("%.1f", RL) .. "%")
   cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Dmg: P=" .. string.format("%.1f", blademaster.state.primaryDamage) .. "% S=" .. string.format("%.1f", blademaster.state.secondaryDamage) .. "%")
   local parried = blademaster.getParried()
   local shin = blademaster.getShin()
@@ -557,7 +588,7 @@ end
 
 function blademaster.dispatch.status()
   -- Initialize if missing
-  tLimbs = tLimbs or {H = 0, T = 0, LL = 0, RL = 0, LA = 0, RA = 0}
+  lb = lb or {}
   tAffs = tAffs or {}
   ataxiaTemp = ataxiaTemp or {}
 
@@ -565,6 +596,8 @@ function blademaster.dispatch.status()
   local targetHP = tonumber(ataxiaTemp.targetHP) or 100
   local phase = blademaster.getPhase()
   local doubleReady = blademaster.checkDoubleBreakReady()
+  local LL = blademaster.getLeftLeg()
+  local RL = blademaster.getRightLeg()
 
   -- Progress bar helper
   local function progressBar(pct, width)
@@ -585,8 +618,8 @@ function blademaster.dispatch.status()
   cecho("\n<cyan>| <white>Damage: <green>P=" .. string.format("%.1f", blademaster.state.primaryDamage) .. "% <yellow>S=" .. string.format("%.1f", blademaster.state.secondaryDamage) .. "% <grey>C=" .. string.format("%.1f", blademaster.state.compassDamage) .. "%<cyan>")
   cecho("\n<cyan>+--------------------------------------------+")
   cecho("\n<cyan>| <white>DOUBLE-PREP STATUS:<cyan>")
-  cecho("\n<cyan>|   <white>L Leg: " .. (tLimbs.LL >= 100 and "<green>BROKEN " or (tLimbs.LL >= 90 and "<yellow>READY  " or "<red>       ")) .. string.format("%5.1f%%", tLimbs.LL) .. " [" .. progressBar(tLimbs.LL) .. "]" .. (focusLeg == "left" and " <cyan><-" or ""))
-  cecho("\n<cyan>|   <white>R Leg: " .. (tLimbs.RL >= 100 and "<green>BROKEN " or (tLimbs.RL >= 90 and "<yellow>READY  " or "<red>       ")) .. string.format("%5.1f%%", tLimbs.RL) .. " [" .. progressBar(tLimbs.RL) .. "]" .. (focusLeg == "right" and " <cyan><-" or ""))
+  cecho("\n<cyan>|   <white>L Leg: " .. (LL >= 100 and "<green>BROKEN " or (LL >= 90 and "<yellow>READY  " or "<red>       ")) .. string.format("%5.1f%%", LL) .. " [" .. progressBar(LL) .. "]" .. (focusLeg == "left" and " <cyan><-" or ""))
+  cecho("\n<cyan>|   <white>R Leg: " .. (RL >= 100 and "<green>BROKEN " or (RL >= 90 and "<yellow>READY  " or "<red>       ")) .. string.format("%5.1f%%", RL) .. " [" .. progressBar(RL) .. "]" .. (focusLeg == "right" and " <cyan><-" or ""))
   cecho("\n<cyan>|   <white>Double-Break: " .. (doubleReady and "<green>*** READY - NEXT HIT BREAKS BOTH! ***" or "<yellow>NO (need both 90%+)"))
   local path = blademaster.calculateOptimalPath()
   if path.hitsToDouble > 0 then

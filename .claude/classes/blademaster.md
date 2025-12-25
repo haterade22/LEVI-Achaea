@@ -563,6 +563,16 @@ The system dynamically captures damage values from combat:
 
 These values update automatically from combat triggers.
 
+### Limb Tracking
+Uses `lb[target].hits["limb"]` format to match the rest of the BM offense system:
+- `lb[target].hits["left leg"]` - Left leg damage %
+- `lb[target].hits["right leg"]` - Right leg damage %
+
+Helper functions:
+- `blademaster.getLimbDamage(limb)` - Get damage % for any limb
+- `blademaster.getLeftLeg()` - Shorthand for left leg
+- `blademaster.getRightLeg()` - Shorthand for right leg
+
 ### Status Display
 ```
 +============================================+

@@ -266,6 +266,13 @@ Comprehensive reference of all available artefacts in Achaea, compiled from offi
 | 2 | stone of lorewarden | 500 | Further reduced cooldown |
 | 3 | stone of greater lorewarden | 1000 | Class switch cooldown to 1 minute |
 
+### Trait Reset (trait_reset)
+| Level | Item | Credits | Effect |
+|-------|------|---------|--------|
+| - | gilded page | 100 | Single-use trait reset (consumed) - READ PAGE |
+| 1 | Grimoire of Adaptation | 1000 | Reset traits once per RL day - READ GRIMOIRE |
+| 2 | Grimoire of Hasty Adaptation | 2000 | Reset traits once every 2 RL hours - READ GRIMOIRE |
+
 ---
 
 ## 19.10.7 Mining, Fishing, Tradeskill, and Crafting Artefacts
