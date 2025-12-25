@@ -411,6 +411,33 @@ Classes generally focus on one of two kill paths:
 
 **Limbs**: Head, Torso, Left Arm, Right Arm, Left Leg, Right Leg
 
+### Offensive System Development Guidelines
+
+**CRITICAL**: Before coding ANY offensive combat system, agents MUST read:
+1. `.claude/classes/lock_types.md` - Lock definitions and escape routes
+2. `.claude/classes/<class>.md` - Target class kill routes and vulnerabilities
+3. `.claude/classes/README.md` - Affliction stacking reference
+
+**Lock knowledge is essential for:**
+- Building toward softlock → venomlock → truelock
+- Understanding which afflictions to prioritize
+- Knowing gating requirements for key afflictions (e.g., paralysis needs nausea + weariness + asthma for Waterlord)
+- Anticipating defender cure priorities and escape routes
+
+**When creating offensive Lua files, include this header:**
+```lua
+--[[
+  OFFENSIVE SYSTEM - <Class Name>
+
+  REQUIRED READING before modifying:
+  - .claude/classes/lock_types.md (lock definitions)
+  - .claude/classes/<class>.md (class mechanics)
+
+  Lock progression: Softlock → Venomlock → Truelock
+  See lock_types.md for affliction requirements and escape routes.
+]]--
+```
+
 ### Balances
 - **Balance**: Physical action cooldown (~2-4 seconds)
 - **Equilibrium**: Mental action cooldown (~2-4 seconds)

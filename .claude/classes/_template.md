@@ -47,6 +47,22 @@ steps:
   2: "Action"
 ```
 
+## Lock Strategy Reference
+See [lock_types.md](lock_types.md) for comprehensive lock definitions.
+
+```yaml
+class_lock_affliction: "[affliction]"
+blocks: "[passive cure this affliction blocks]"
+lock_progression: "Softlock → Venomlock → Truelock"
+
+available_lock_affs:
+  asthma: "[ability that gives asthma]"
+  slickness: "[ability that gives slickness]"
+  paralysis: "[ability that gives paralysis, note any gating]"
+  anorexia: "[ability that gives anorexia, note any gating]"
+  impatience: "[ability that gives impatience, or N/A]"
+```
+
 ## Offensive Abilities
 ```yaml
 # Key abilities used to attack/afflict
