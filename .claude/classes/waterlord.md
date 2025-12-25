@@ -97,6 +97,14 @@ notes: |
 ```yaml
 type: affliction
 summary: Lock target when they over-prioritize curing latch afflictions
+reference: "See lock_types.md for complete lock definitions"
+
+lock_components:
+  paralysis: "Prevents Tree tattoo - cured by eating Bloodroot"
+  asthma: "Prevents smoking pipes - cured by eating Kelp"
+  anorexia: "Prevents eating herbs - cured by applying Epidermal or Focusing"
+  slickness: "Prevents applying salves - cured by eating Bloodroot or smoking Valerian"
+  weariness: "Waterlord class lock aff - blocks Purify passive cure"
 
 mechanics:
   available_lock_affs:
@@ -110,6 +118,11 @@ mechanics:
     paralysis: "Requires nausea + weariness + asthma present"
     anorexia: "Requires asthma + weariness present"
 
+  focuslock_strategy: |
+    Instead of impatience, stack multiple mental afflictions (goldenseal cures).
+    When opponent uses Focus, it cures a random mental aff instead of anorexia.
+    Mental affs available: stupidity, recklessness (via WRECK), hallucinations (via CHOKE on asthmatic)
+
 steps:
   1: "Apply asthma via CHOKE"
   2: "Apply weariness via DRENCH"
@@ -119,12 +132,13 @@ steps:
   6: "FLUX ROIL for anorexia (with asthma + weariness)"
   7: "Knock focus balance repeatedly with ROIL (if nauseous) or FLUX DRENCH"
   8: "Apply stupidity + recklessness via WRECK"
-  9: "Target struggles to cure anorexia with stupidity"
+  9: "Target struggles to cure anorexia with stupidity diluting focus"
 
 notes: |
   Opens when targets over-cure latch afflictions.
   Repeatedly knock focus balance to prevent breaking lock.
   Stupidity + recklessness severely lowers cure chances.
+  Weariness is Waterlord's class-specific lock affliction (blocks Purify).
 ```
 
 ## Group Combat Tactics
@@ -404,6 +418,146 @@ recommended_strategy: |
   Hydra attacks everyone except water elementals - use cautiously.
 ```
 
+## Defensive Priority Configuration
+```yaml
+problem: "Default haemophilia at priority 11 is too low to prevent latch kills"
+solution: "Move haemophilia to priority 3-4 with other latch afflictions"
+
+current_default_positions:
+  haemophilia: 11  # WAY TOO LOW - enables severe bleeding
+  nausea: 4
+  addiction: 4
+  lethargy: 4
+
+recommended_positions:
+  haemophilia: 4  # Same priority as other ginseng latch cures
+  nausea: 4
+  addiction: 4
+  lethargy: 4
+
+rationale: |
+  Haemophilia is the GATEKEEPER to severe bleeding.
+  Without haemophilia, THIN cannot apply 200 bleeding.
+  Without severe bleeding (200+), 4-aff LATCH only causes moderate bleeding.
+  No sip balance knock = no Desiccate window = no kill.
+
+manual_command: "curing priority waterlord haemophilia 4"
+```
+
+## Algedonic Anti-Waterlord Implementation
+```lua
+function Algedonic.AntiWaterlord()
+  -- Latch afflictions: addiction, haemophilia, nausea, lethargy
+  local latchCount = 0
+  local latchAffs = {"addiction", "haemophilia", "nausea", "lethargy"}
+
+  for _, aff in ipairs(latchAffs) do
+    if ataxia.afflictions[aff] then
+      latchCount = latchCount + 1
+    end
+  end
+
+  -- Severe bleeding counts as a latch aff
+  local severeBleed = ataxia.vitals.bleed >= 200
+  if severeBleed then
+    latchCount = latchCount + 1
+  end
+
+  -- CRITICAL: About to get Desiccated (4 latch affs with severe bleeding)
+  if latchCount >= 4 and severeBleed then
+    Algedonic.Echo("<red>LATCH KILL IMMINENT - SHIELD OR DIE<white>!")
+    if ataxia.afflictions.haemophilia then
+      send("curing prioaff haemophilia")
+    end
+    return
+  end
+
+  -- HIGH PRIORITY: Prevent severe bleeding setup
+  if ataxia.afflictions.haemophilia and ataxia.vitals.bleed >= 150 then
+    Algedonic.Echo("<orange>Clearing haemophilia before severe bleeding!<white>")
+    send("curing prioaff haemophilia")
+    return
+  end
+
+  -- At 3 latch affs - one more and we're in trouble
+  if latchCount >= 3 then
+    Algedonic.Echo("<yellow>3 latch affs - digging out ginseng stack<white>")
+    if ataxia.afflictions.haemophilia then
+      send("curing prioaff haemophilia")
+    elseif ataxia.afflictions.nausea then
+      send("curing prioaff nausea")
+    elseif ataxia.afflictions.lethargy then
+      send("curing prioaff lethargy")
+    elseif ataxia.afflictions.addiction then
+      send("curing prioaff addiction")
+    end
+    return
+  end
+
+  -- DROWN PREVENTION: Both asthma and nausea speed the channel
+  if ataxia.afflictions.asthma and ataxia.afflictions.nausea then
+    if Algedonic.mystack["kelp"] >= 2 then
+      send("curing prioaff asthma")
+    else
+      send("curing prioaff nausea")
+    end
+    return
+  end
+
+  -- FOCUSLOCK PREVENTION
+  local hasAsthma = ataxia.afflictions.asthma
+  local hasWeariness = ataxia.afflictions.weariness
+  local hasNausea = ataxia.afflictions.nausea
+  local hasSlickness = ataxia.afflictions.slickness
+
+  -- Paralysis gate: nausea + weariness + asthma
+  if hasNausea and hasWeariness and hasAsthma and not ataxia.afflictions.paralysis then
+    Algedonic.Echo("<orange>Paralysis gate open - clearing asthma<white>")
+    send("curing prioaff asthma")
+    return
+  end
+
+  -- Anorexia gate: asthma + weariness
+  if hasAsthma and hasWeariness and not ataxia.afflictions.anorexia then
+    if Algedonic.mystack["kelp"] >= 2 then
+      send("curing prioaff asthma")
+    else
+      send("curing prioaff weariness")
+    end
+    return
+  end
+
+  -- Already in focuslock territory
+  if ataxia.afflictions.anorexia and ataxia.afflictions.asthma and hasSlickness then
+    if not ataxia.afflictions.paralysis then
+      send("curing prioaff anorexia")
+    else
+      send("curing prioaff paralysis")
+    end
+    return
+  end
+
+  -- General maintenance: keep haemophilia cured
+  if ataxia.afflictions.haemophilia and not ataxia.afflictions.paralysis then
+    send("curing prioaff haemophilia")
+  end
+end
+```
+
+## Defensive Priority Logic Table
+```
+| Priority | Condition                      | Action                          |
+|----------|--------------------------------|---------------------------------|
+| 1        | 4 latch affs + severe bleed   | SHIELD WARNING + cure haemo     |
+| 2        | Haemophilia + bleed >= 150    | Cure haemophilia before 200     |
+| 3        | 3 latch affs                  | Dig out ginseng (haemo first)   |
+| 4        | Asthma + nausea               | Slow Drown channel              |
+| 5        | Para gate (nau+wear+asth)     | Clear asthma                    |
+| 6        | Anorexia gate (asth+wear)     | Clear asthma or weariness       |
+| 7        | In focuslock                  | Cure anorexia/paralysis         |
+| 8        | General maintenance           | Keep haemophilia cured          |
+```
+
 ## Implementation Notes
 ```
 Triggers to watch for:
@@ -451,4 +605,11 @@ Flux Bonus Effects:
 - FLUX DRENCH: +focus knock (if asthma + slickness + anorexia)
 - FLUX PARCH: +addiction (if weariness + haemophilia)
 - FLUX ROIL: +anorexia (if asthma + weariness)
+
+Algedonic Integration:
+- Add Algedonic.AntiWaterlord() to Algedonic.lua
+- Already registered in Algedonic.Prioritize() switch statement
+- Uses Algedonic.mystack["kelp"] and Algedonic.mystack["ginseng"] for stack awareness
+- Uses Algedonic.Echo() for warning messages
+- Tracks ataxia.afflictions and ataxia.vitals.bleed for latch count
 ```

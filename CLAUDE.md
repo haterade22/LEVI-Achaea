@@ -250,25 +250,88 @@ Each herb has an alchemical mineral equivalent (same cure balance):
 - **Prickly Ash/Stannum**: Confusion, Dementia, Paranoia
 
 #### Affliction Locks
-**Soft Lock** (3 affs): Anorexia + Asthma + Slickness
-- Blocks eat/smoke/apply; breakable with FOCUS or TREE
 
-**Tree Lock** (4 affs): + Paralysis
-- Blocks TREE tattoo; breakable with FOCUS
+**See also**: `.claude/classes/lock_types.md` for comprehensive documentation.
 
-**True Lock** (5 affs): + Impatience
-- Blocks FOCUS; target cannot cure themselves
-- Requires class-specific affliction to block passive cures
+##### Softlock (3 affs)
+```yaml
+afflictions:
+  asthma: "Prevents smoking pipes - cured by eating Kelp"
+  anorexia: "Prevents eating herbs - cured by applying Epidermal or Focus"
+  slickness: "Prevents applying salves - cured by eating Bloodroot or smoking Valerian"
+escape: "FOCUS to cure anorexia, then eat bloodroot, then eat kelp"
+```
+
+##### Venomlock (4 affs)
+```yaml
+afflictions: [paralysis, asthma, anorexia, slickness]
+paralysis: "Prevents Tree tattoo - cured by eating Bloodroot"
+escape: "FOCUS to cure anorexia, then eat bloodroot (cures para OR slick)"
+```
+
+##### Truelock / Hardlock (5 affs)
+```yaml
+afflictions: [paralysis, asthma, anorexia, slickness, impatience]
+impatience: "Prevents using Focus - cured by eating Goldenseal"
+escape: "None without external help"
+requires: "Class-specific affliction to block passive cures"
+```
+
+##### Focuslock (Alternative to Truelock)
+```yaml
+afflictions: [paralysis, asthma, anorexia, slickness]
+strategy: "Stack mental afflictions (goldenseal cures) instead of impatience"
+mental_affs: [stupidity, dizziness, epilepsy, shyness, depression]
+escape: "Focus may randomly cure anorexia instead of mental aff"
+```
+
+##### Riftlock (Limb-based)
+```yaml
+afflictions:
+  broken_arms: "2 broken arms - prevents rifting herbs"
+  slickness: "Prevents applying mending salve"
+  asthma: "Prevents smoking valerian"
+helper: "Addiction (Vardrax) forces eating held items"
+escape: "Smoke valerian → mend arms → rift herbs"
+```
+
+##### Salvelock (Enhanced Riftlock)
+```yaml
+afflictions:
+  mangled_arms: "Level 2+ breaks - prevents Restore ability"
+  slickness: "Prevents applying mending"
+  asthma: "Prevents smoking"
+escape: "Very difficult - requires multiple mending applications"
+```
+
+##### Sleeplock (Timing-based)
+```yaml
+steps:
+  1: "First Sleep/Delphinium strips Insomnia defence"
+  2: "Second strips Gypsum/Kola defence"
+  3: "Third puts opponent to sleep"
+timing: "All three must hit in rapid succession"
+```
+
+##### Aeonlock (Time-manipulation)
+```yaml
+afflictions:
+  aeon: "Only one action at a time on lengthy balance"
+  asthma: "Prevents smoking Elm to cure aeon"
+strategy: "Stack kelp affs to keep asthma stuck"
+kelp_stack: [asthma, clumsiness, sensitivity, weariness, healthleech]
+```
 
 #### Class-Specific Lock Afflictions
-| Classes | Extra Affliction |
-|---------|-----------------|
-| Most Knight classes, Monk, Serpent, Sentinel, Druid, Blademaster, Elemental Lords | Weariness |
-| Apostate, Pariah, Bard, Priest | Voyria |
-| Magi, Sylvan | Haemophilia |
-| Alchemist | Stupidity |
-| Depthswalker | Recklessness |
-| Psion | Confusion |
+| Classes | Extra Affliction | Blocks |
+|---------|-----------------|--------|
+| Knights, Monk, Serpent, Sentinel, Druid, Blademaster, Elemental Lords | Weariness | Various passive cures |
+| Apostate, Pariah, Bard, Priest | Voyria | Sip-based healing |
+| Magi, Sylvan | Haemophilia | Blood-based cures |
+| Alchemist | Stupidity | Transmutation cures |
+| Depthswalker | Recklessness | Shadow cures |
+| Psion | Confusion | Mental cures |
+| Jester, Occultist, Shaman | Paralysis | Already in base lock |
 
 #### Server-Side Curing (SSC)
 Achaea provides built-in curing that simulates average latency. Custom systems can integrate with or replace it.
@@ -629,7 +692,7 @@ gmcp.Room.Info = {
 
 ---
 
-**Last Updated**: 2025-12-18
+**Last Updated**: 2025-12-25
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia

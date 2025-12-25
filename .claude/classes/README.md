@@ -78,20 +78,31 @@ Different classes need different afflictions to complete a "true lock":
 
 ## Combat Concepts
 
+### Lock Types
+See **[lock_types.md](lock_types.md)** for comprehensive lock documentation including:
+- Softlock, Venomlock, Truelock/Hardlock
+- Focuslock (mental affliction stacking)
+- Riftlock, Salvelock (limb-based)
+- Sleeplock, Aeonlock (timing/control-based)
+
 ### Affliction Stacking
 Stack multiple afflictions that share the same cure herb to overwhelm curing:
-- **Kelp**: asthma, clumsiness, sensitivity, weariness
-- **Ginseng**: addiction, darkshade, haemophilia, scytherus
-- **Goldenseal**: impatience, stupidity, dizziness, epilepsy
-- **Bloodroot**: paralysis, slickness
+- **Kelp**: asthma, clumsiness, sensitivity, weariness, healthleech, parasite, rebbies
+- **Ginseng**: addiction, darkshade, haemophilia, lethargy, nausea, scytherus, flushings
+- **Goldenseal**: impatience, stupidity, dizziness, epilepsy, depression, shyness, horror
+- **Bloodroot**: paralysis, slickness, pyramides
+- **Lobelia**: recklessness, vertigo, masochism, guilt, spiritburn, tenderskin
+- **Ash**: confusion, dementia, hallucinations, hypersomnia, paranoia
+- **Bellwort**: retribution, timeloop, peace, justice, lovers, generosity, diminished
 
 ### True Lock Components
-1. **Asthma** - blocks smoking
-2. **Anorexia** - blocks eating
-3. **Slickness** - blocks applying
-4. **Paralysis** - blocks tree tattoo
-5. **Impatience** - blocks focus
-6. **Class-specific** - blocks passive cures
+1. **Asthma** - blocks smoking (cured by Kelp)
+2. **Anorexia** - blocks eating (cured by applying Epidermal or Focus)
+3. **Slickness** - blocks applying (cured by Bloodroot or smoking Valerian)
+4. **Paralysis** - blocks tree tattoo (cured by Bloodroot)
+5. **Impatience** - blocks focus (cured by Goldenseal)
+6. **Class-specific** - blocks passive cures (see table above)
 
 ## References
+- Lock types reference: See [lock_types.md](lock_types.md)
 - Complete venom list: See [serpent.md](serpent.md) - Complete Venom Reference section
