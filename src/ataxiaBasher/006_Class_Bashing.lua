@@ -207,7 +207,12 @@ function ataxiaBasher_infernalBashing()
 		bash = "dsl "..target
 	elseif spec == "Two Handed" then
 		raze = "battlefury focus speed"..sp.."splinter "..target
-		bash = "battlefury focus speed"..sp.."slaughter "..target
+		-- Add hyena maul before slaughter if ready (30s cooldown)
+		if ataxiaBasher.hyenaMaulReady then
+			bash = "battlefury focus speed"..sp.."hyena maul "..target..sp.."slaughter "..target
+		else
+			bash = "battlefury focus speed"..sp.."slaughter "..target
+		end
 	elseif spec == "Dual Blunt" then
 		raze = "fracture "..target
 		bash = "doublewhirl "..target
@@ -215,7 +220,7 @@ function ataxiaBasher_infernalBashing()
 		raze = "combination "..target.." raze smash"
 		bash = "combination "..target.." slice smash"
 	end
-	
+
 	if ataxiaBasher.shielded then
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
 			command = braze..sp..bash
@@ -225,8 +230,8 @@ function ataxiaBasher_infernalBashing()
 	else
 		command = brage..sp..bash
 	end
-	    
-	return command 
+
+	return command
 end
 
 function ataxiaBasher_jesterBashing()

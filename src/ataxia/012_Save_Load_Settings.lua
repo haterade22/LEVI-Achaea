@@ -56,10 +56,14 @@ function ataxia_loadSettings()
 	ataxia.loaded = true
 
 	if not io.exists(bash_loc) then
-		ataxia_Echo("Bashing systems not yet enabled.") 
+		ataxia_Echo("Bashing systems not yet enabled.")
 	else
 		ataxiaBasher = {}
 		table.load(bash_loc, ataxiaBasher)
+		-- Initialize hyena maul cooldown for Infernal PVE (30s cooldown, starts ready)
+		if ataxiaBasher.hyenaMaulReady == nil then
+			ataxiaBasher.hyenaMaulReady = true
+		end
 		ataxia_Echo("Bashing systems enabled, go and lay waste.")
 		if not io.exists(paths_loc) then
 			ataxiaBasherPaths = {}
