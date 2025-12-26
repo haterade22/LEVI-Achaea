@@ -2,6 +2,41 @@
 
 -------------------------------------------------
 --                                             --
+--         zData.getClassWithSpec()            --
+--  Format class name with knight spec         --
+--                                             --
+-------------------------------------------------
+function zData.getClassWithSpec()
+  local class = gmcp.Char.Status.class
+  local spec = ataxia.vitals.knight
+
+  -- Knight class abbreviations
+  local knightAbbrev = {
+    ["Infernal"] = "Inf",
+    ["Runewarden"] = "Run",
+    ["Paladin"] = "Pal",
+    ["Unnamable"] = "Unn"
+  }
+
+  -- Spec abbreviations
+  local specAbbrev = {
+    ["Dual Cutting"] = "DWC",
+    ["Dual Blunt"] = "DWB",
+    ["Sword and Shield"] = "S&B",
+    ["Two-Handed"] = "2H"
+  }
+
+  -- If knight class with known spec, format as "Abbrev - Spec"
+  if knightAbbrev[class] and spec and specAbbrev[spec] then
+    return knightAbbrev[class] .. " - " .. specAbbrev[spec]
+  end
+
+  -- Otherwise return original class name
+  return class
+end
+
+-------------------------------------------------
+--                                             --
 --               zData.movement()              --
 --  This Function Runs Everytime Room Updates  --
 --                                             --
@@ -53,7 +88,7 @@ function zData.movement()
 -- Send All information to database   
       zData.db.zoneAdd(
         zData.char.lastArea,
-        gmcp.Char.Status.class, 
+        zData.getClassWithSpec(), 
         zData.defs.exp, 
         zData.defs.crit, 
         zData.char.tempTime, 

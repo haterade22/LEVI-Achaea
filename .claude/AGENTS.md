@@ -38,6 +38,79 @@ This file contains critical instructions for AI agents working on the combat sys
 
 ---
 
+## Shikudo Lock System Reference
+
+The Lock system (`203_Shikudo_Lock.lua`) uses pure affliction-based locking with Telepathy.
+
+### Lock Progression
+
+| Phase | Afflictions | Next Step |
+|-------|-------------|-----------|
+| **Softlock** | asthma + anorexia + slickness | Apply paralysis |
+| **Venomlock** | + paralysis | Use Telepathy for impatience |
+| **Hardlock** | + impatience | Apply weariness |
+| **Truelock** | + weariness | Damage pressure to kill |
+
+### Form Abilities for Lock Afflictions
+
+| Form | Key Abilities | Lock Affs Available |
+|------|---------------|---------------------|
+| **Oak** | livestrike, nervestrike, ruku, kuro | asthma, paralysis, slickness, weariness |
+| **Willow** | hiraku, hiru, dart | anorexia, dizziness |
+| **Rain** | kuro, hiru, ruku | slickness, weariness, dizziness |
+| **Gaital** | needle, ruku, kuro, jinzuku | slickness, weariness, addiction |
+| **Maelstrom** | livestrike, ruku, jinzuku | asthma, slickness, addiction |
+
+### Form Transitions
+
+- **Need anorexia?** → Go to Willow (has Hiraku)
+- **Have anorexia?** → Go to Oak (all lock affs)
+- **Near kata limit?** → Transition to avoid stumble
+- **Kill phase + prone?** → Go to Gaital (spinkick)
+
+### Kata Limits per Form
+
+| Form | Max Kata |
+|------|----------|
+| Rain | 24 |
+| All others | 12 |
+
+### Telepathy Integration
+
+Telepathy uses EQ balance (separate from BAL for staff attacks):
+1. `mindlock` - Establish first
+2. `impatience` - Critical for hardlock
+3. `batter` - Mental pressure (stupidity, epilepsy, dizziness)
+4. `paralyse` - Backup paralysis
+
+### Shikudo Lock Commands
+
+- `shikudolock()` or `shikudoLock.dispatch()` - Main dispatch
+- `sklstatus()` or `sklockstatus()` - Status display
+
+---
+
+## Shikudo Dispatch Quick Reference
+
+### V1 System (`200_Shikudo.lua`)
+- Strategy: Balanced leg prep (both legs 90%+)
+- Kill: Prone + Broken leg + Broken head + Windpipe
+
+### V2 System (`201_Shikudo_V2.lua`)
+- Strategy: Focus fire one leg, clumsy first
+- Key mechanic: SPINKICK on prone + damaged head = instant MANGLE
+- Kill: Same as V1
+
+### Commands
+
+| System | Dispatch | Status |
+|--------|----------|--------|
+| V1 | `shikudo.dispatch()` | `skstatus()` |
+| V2 | `shikudov2.dispatch()` | `skv2status()` |
+| Lock | `shikudolock()` | `sklstatus()` |
+
+---
+
 ## Before Coding Defensive Systems
 
 Read the **attacker's class documentation** for:

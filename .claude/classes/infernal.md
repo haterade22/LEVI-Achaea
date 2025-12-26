@@ -956,6 +956,18 @@ battlerage_abilities:
   - slash: "Basic damage"
   - rend: "Additional damage"
 
+# Pre-Combat Legend Deck (ataxiaBasher)
+# Automatically draws cards before attacking dangerous multi-target rooms
+ldeck_draws:
+  elite_mhun_keepers:
+    count: "3+"
+    cards: [Maran, Matic]
+    note: "Both barrier and damage boost"
+  mhun_knights:
+    count_3: "Maran only"
+    count_4_plus: "Maran + Matic"
+  queue_command: "queue add free ldeck draw <card>"
+
 # Recommended Oppression Config
 armor_channels:
   recommended: [Relentless, Conqueror]

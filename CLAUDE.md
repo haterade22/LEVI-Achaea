@@ -55,48 +55,32 @@ This repository contains the **"For Levi" Mudlet package**, a comprehensive comb
 ```
 LEVI-Achaea/
 ├── .claude/
-│   └── commands/           # Custom Claude Code slash commands
+│   ├── AGENTS.md           # Agent instructions for AI development
+│   └── classes/            # 26 class files + lock_types.md
 ├── docs/
-│   └── plans/              # Project plans and reviews
+│   ├── plans/              # Project plans and reviews
+│   ├── legend-deck.md      # Legend Deck card reference
+│   └── artefacts-reference.md
+├── src/
+│   ├── loader.lua          # Auto-loads all systems in order
+│   ├── mmp/                # 134 files - Mudlet Mapper navigation
+│   ├── ataxia/             # 304 files - Combat system
+│   ├── ataxiaBasher/       # 13 files - Automated hunting
+│   ├── ataxiagui/          # 5 files - GUI with Geyser
+│   └── ataxiaNDB/          # 7 files - Player database
 ├── CLAUDE.md               # This file
-└── README.md               # Project readme
+├── GETTING_STARTED.md      # Setup and usage guide
+└── README.md               # Project overview
 ```
 
-### Proposed Modular Architecture
-```
-/
-├── core/           # System initialization, event handling, state management
-│   ├── init.lua           # Main initialization sequence
-│   ├── events.lua         # Event handler registration
-│   ├── state.lua          # Global state management
-│   └── config_loader.lua  # Configuration loading
-├── tracking/       # Affliction, balance, defense, cooldown tracking
-│   ├── afflictions.lua    # Affliction tracking with GMCP integration
-│   ├── balances.lua       # Balance/equilibrium tracking with stopwatches
-│   ├── defenses.lua       # Defense up/down tracking
-│   ├── cooldowns.lua      # Ability cooldown management
-│   └── vitals.lua         # HP/MP/EP/WP tracking
-├── curing/         # Curing logic, priorities, herb/mineral/salve management
-│   ├── priorities.lua     # Dynamic priority system
-│   ├── precache.lua       # Rift/inventory precaching
-│   ├── queue.lua          # Server queue integration
-│   └── ssc_integration.lua # Server-side curing settings
-├── offense/        # Combat offense, ability queuing, target tracking
-│   ├── classes/           # Class-specific offense modules
-│   ├── targeting.lua      # Target selection and tracking
-│   ├── queue.lua          # Ability queue management
-│   └── combos.lua         # Pre-defined attack sequences
-├── ui/             # Gauges, status windows, combat displays
-│   ├── gauges.lua         # Health/mana/balance gauges
-│   ├── affliction_display.lua
-│   └── combat_log.lua
-├── config/         # Configuration files, class-specific settings
-│   ├── settings.lua       # User preferences
-│   ├── class_configs/     # Per-class configurations
-│   └── aliases.lua        # System aliases
-├── docs/           # Development documentation
-└── tests/          # Test files and mock data
-```
+### Source Code Organization
+
+Each subsystem uses numbered files (001_, 002_, etc.) to enforce load order:
+- **mmp/** - Pathfinding, speedwalking, fast travel, multi-game support
+- **ataxia/** - Affliction tracking, defense management, class offenses
+- **ataxiaBasher/** - Experience tracking, class-specific bashing, emergency defenses
+- **ataxiagui/** - Vitals bars, map window, chat tabs
+- **ataxiaNDB/** - API integration, city tracking, name highlighting
 
 ---
 
@@ -117,12 +101,72 @@ LEVI-Achaea/
 - **Limb Tracking**: `selfLimbDamage` for damage percentages, `tLimbs` for enemy tracking
 - **Fracture Management**: Two-handed combat tracking
 - **Defense Management**: Automatic parrying, SSC integration
-- **Basher**: `ataxiaBasher` for automated hunting
+- **Basher**: `ataxiaBasher` for automated hunting (see details below)
 - **Class Modules**: Pariah, Bard, Monk, Magi, Two-Handed
 - **Shikudo Dispatch System**: Full auto-combat for Monk/Shikudo spec
-  - `200_Shikudo.lua` - V1 system (balanced leg prep, both legs 90%+)
-  - `201_Shikudo_V2.lua` - V2 system (focus fire one leg, clumsy first)
-  - Commands: `shikudo.dispatch()`, `shikudov2.dispatch()`, `skstatus()`, `skv2status()`
+  - `200_Shikudo.lua` (V1) - Balanced leg prep, both legs 90%+
+  - `201_Shikudo_V2.lua` (V2) - Focus fire one leg, clumsy first
+  - `203_Shikudo_Lock.lua` (Lock) - Pure affliction-based locking with Telepathy
+  - V1/V2 Commands: `shikudo.dispatch()`, `shikudov2.dispatch()`, `skstatus()`, `skv2status()`
+  - Lock Commands: `shikudolock()`, `sklstatus()`, `sklockstatus()`
+
+### ataxiaBasher (Automated Hunting System)
+
+The basher provides automated target selection and attack execution for PvE hunting.
+
+**Core Files:**
+- `src/ataxiaBasher/008_search_targets.lua` - Target selection and room scanning
+- `src/ataxiaBasher/005_Bashing_Functions.lua` - Attack assembly and execution
+- `src/ataxiaBasher/006_Class_Bashing.lua` - Class-specific bashing attacks
+- `src/ataxiaBasher/010_Autobashing_Functions.lua` - Main patterns loop
+
+**Key Functions:**
+| Function | Purpose |
+|----------|---------|
+| `search_targets()` | Scans room for valid targets from `ataxiaBasher.targetList[area]` |
+| `ataxiaBasher_attack()` | Assembles and sends attack command |
+| `ataxiaBasher_patterns()` | Main loop - fires attacks when balanced |
+| `ataxiaBasher_stormhammer()` | Populates AoE target list |
+| `ataxiaBasher_countMobsInRoom(mobName)` | Counts specific mob types in current room |
+| `ataxiaBasher_preCombatLdeck()` | Pre-combat legend deck card draws |
+
+**Key Variables:**
+| Variable | Purpose |
+|----------|---------|
+| `ataxiaBasher.enabled` | System on/off toggle |
+| `ataxiaBasher.manual` | Manual targeting mode |
+| `ataxiaBasher.targetList[area]` | Table of target mob names per area |
+| `ataxia.denizensHere` | Table of NPCs in current room (id → name) |
+| `target` | Current target ID |
+| `found_target` | Boolean - valid target exists |
+| `stormhammerTargets` | List of IDs for AoE attacks |
+
+**Pre-Combat Legend Deck Draws:**
+
+The basher automatically draws legend deck cards before attacking dangerous multi-target rooms:
+
+| Condition | Cards Drawn |
+|-----------|-------------|
+| 3+ elite mhun keepers | Maran + Matic |
+| 3 mhun knights | Maran only |
+| 4+ mhun knights | Maran + Matic |
+
+Cards are drawn using the queue system (`queue add free ldeck draw <card>`) and only once per room entry (tracked via `ataxiaBasher.ldeckDrawnRoom`).
+
+**Attack Flow:**
+```
+Room Entry (GMCP)
+    ↓
+Prompt Trigger → ataxia_promptCommands()
+    ↓
+search_targets() → Find valid target from targetList
+    ↓
+ataxiaBasher_preCombatLdeck() → Draw cards if dangerous room
+    ↓
+ataxiaBasher_patterns() → Check balance/standing
+    ↓
+ataxiaBasher_attack() → Build and send attack command
+```
 
 ### GUI System (ataxiagui)
 - Left panel: Players, Room info, Bash stats
@@ -719,7 +763,7 @@ gmcp.Room.Info = {
 
 ---
 
-**Last Updated**: 2025-12-25
+**Last Updated**: 2025-12-26
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia
