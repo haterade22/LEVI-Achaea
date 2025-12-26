@@ -175,4 +175,36 @@ When creating/modifying offensive Lua files, include:
 | `.claude/classes/lock_types.md` | Comprehensive lock definitions |
 | `.claude/classes/README.md` | Class index and combat concepts |
 | `.claude/classes/<class>.md` | Per-class kill routes and mechanics |
+| `.claude/classes/monk.md` | Monk/Shikudo kill routes and mechanics |
 | `CLAUDE.md` | Main project documentation |
+| `src/ataxia/200_Shikudo.lua` | Shikudo V1 dispatch system |
+| `src/ataxia/201_Shikudo_V2.lua` | Shikudo V2 dispatch system |
+| `src/ataxia/203_Shikudo_Lock.lua` | Shikudo Lock affliction system |
+
+---
+
+## Basher Development Reference
+
+### Key Files
+
+| File | Purpose |
+|------|---------|
+| `src/ataxiaBasher/005_Bashing_Functions.lua` | Main attack dispatch |
+| `src/ataxiaBasher/006_Class_Bashing.lua` | Class-specific patterns |
+| `src/ataxiaBasher/008_search_targets.lua` | Target acquisition, Stormhammer |
+
+### Configuration Options
+
+| Setting | Type | Purpose |
+|---------|------|---------|
+| `ataxiaBasher.enabled` | bool | Master on/off |
+| `ataxiaBasher.fleeThreshold` | number | HP% to flee |
+| `ataxiaBasher.dangerCount` | number | Max dangerous mobs |
+| `ataxiaBasher.targetList` | table | Per-area targets |
+
+### Before Modifying Basher Code
+
+See `docs/plans/basher-review.md` for:
+- Current architecture and file analysis
+- Known issues and improvement plans
+- System integrations
