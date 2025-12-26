@@ -1,5 +1,63 @@
 -- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Ataxia-DownloadThis > Basher > Bashing > genRunning > search_targets
 
+-- Track which room we've already drawn ldeck cards for
+ataxiaBasher.ldeckDrawnRoom = nil
+
+-- Helper to count specific mob types in current room
+function ataxiaBasher_countMobsInRoom(mobName)
+  local count = 0
+  for id, mob in pairs(ataxia.denizensHere) do
+    if mob:lower() == mobName:lower() then
+      count = count + 1
+    end
+  end
+  return count
+end
+
+-- Draw ldeck cards before combat for dangerous multi-target rooms
+function ataxiaBasher_preCombatLdeck()
+  local roomId = gmcp.Room.Info.num
+
+  -- Skip if we already drew for this room
+  if ataxiaBasher.ldeckDrawnRoom == roomId then
+    return false
+  end
+
+  local keeperCount = ataxiaBasher_countMobsInRoom("an elite mhun keeper")
+  local knightCount = ataxiaBasher_countMobsInRoom("a mhun knight")
+
+  local drawMaran = false
+  local drawMatic = false
+
+  -- Elite keepers: 3+ = both cards
+  if keeperCount >= 3 then
+    drawMaran = true
+    drawMatic = true
+  end
+
+  -- Knights: 3 = maran only, 4+ = both
+  if knightCount >= 3 then
+    drawMaran = true
+    if knightCount >= 4 then
+      drawMatic = true
+    end
+  end
+
+  -- Send ldeck draws using queue system
+  if drawMaran or drawMatic then
+    if drawMaran then
+      send("queue add free ldeck draw maran")
+    end
+    if drawMatic then
+      send("queue add free ldeck draw matic")
+    end
+    ataxiaBasher.ldeckDrawnRoom = roomId
+    return true
+  end
+
+  return false
+end
+
 function search_targets()
 	if (not ataxiaBasher.enabled) or need_roomCheck then return false end
   if autoHarvesting or autoExtracting then return false end
@@ -30,6 +88,7 @@ function search_targets()
 						raiseEvent("changed target")
 						--if speedWalkCounter > 0 and not mmp.paused then mmp.pause("on") end
 						if mmp.speedWalkCounter > 0 and not mmp.paused then mmp.pause("on") end
+            ataxiaBasher_preCombatLdeck()
             return
 					end
 				end

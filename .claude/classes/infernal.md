@@ -213,6 +213,7 @@ utility:
 maul:
   cooldown: "30 seconds"
   syntax: "ORDER HYENA MAUL <target>"
+  usage: "PVE ONLY - not effective in PVP combat"
   tracking: "Implemented in 013_Infernal_Hyena_PVE.lua"
   triggers:
     cooldown_start: "A daemonic hyena snarls as she hurls herself at"
