@@ -69,19 +69,42 @@ steps:
 notes: "SSK does huge damage to prone targets with broken legs"
 ```
 
-### Alternative Kill: Affliction Lock via Telepathy
+### Alternative Kill: Shikudo Lock Route (Affliction-Based)
 ```yaml
 type: affliction
-summary: Use Telepathy to stack mental afflictions toward lock
+summary: Pure affliction lock using Shikudo + Telepathy, damage through truelock
 
-steps:
-  1: "Use Telepathy abilities for mental afflictions"
-  2: "Apply mind lock afflictions"
-  3: "Combine with Tekura attacks for venom application"
-  4: "Work toward true lock"
-  5: "Damage to death through lock"
+lock_progression:
+  softlock: "asthma + anorexia + slickness"
+  venomlock: "softlock + paralysis"
+  hardlock: "venomlock + impatience (Telepathy)"
+  truelock: "hardlock + weariness (blocks Fitness)"
 
-notes: "Monk has mental affliction pressure through Telepathy"
+shikudo_afflictions:
+  hiraku: "anorexia + stuttering (Willow form)"
+  livestrike: "asthma (Oak/Maelstrom)"
+  ruku_torso: "slickness (Rain/Oak/Gaital/Maelstrom)"
+  nervestrike: "paralysis (Oak)"
+  kuro: "weariness/lethargy (Rain/Oak/Gaital)"
+
+telepathy_afflictions:
+  mindlock: "Required for Telepathy abilities"
+  impatience: "Required for hardlock"
+  batter: "stupidity + epilepsy + dizziness"
+  paralyse: "Backup for paralysis"
+
+form_strategy:
+  1: "Start in Willow - get anorexia via Hiraku"
+  2: "Transition to Rain - build kata, apply slickness"
+  3: "Transition to Oak - apply asthma, paralysis, weariness"
+  4: "Stay in Oak - maintain afflictions, use Telepathy for impatience"
+
+kill_method: "Pure damage pressure through staff attacks + Telepathy once truelocked"
+
+implementation:
+  file: "src/ataxia/203_Shikudo_Lock.lua"
+  dispatch: "shikudoLock.dispatch() or shikudolock()"
+  status: "shikudoLock.status() or sklstatus()"
 ```
 
 ### Shikudo Kill: Dispatch (Limb-Based) - PRIMARY

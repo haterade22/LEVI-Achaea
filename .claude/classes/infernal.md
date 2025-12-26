@@ -7,10 +7,28 @@
 - **Lock Affliction**: Weariness (blocks Fitness passive cure)
 
 ## Skills
-```
-Malignity: Dark powers, entropy, and curses (Infestation, Belch)
-Oppression: Aura-based abilities and control (Gravehands)
-Weaponmastery: Combat with various weapon specializations (DWC, DWB, SnB, 2H)
+```yaml
+Malignity:
+  description: "Demonic hyena companion, archery, and aggressive combat abilities"
+  components:
+    - Hyena Companion: "Trainable demonic beast with Maul attack (30s cooldown)"
+    - Archery: "Longbow, Crossbow, Darkbow for LOS (line of sight) combat"
+    - Combat Buffs: "Battlecry (stun), Fury (+2 str), Fitness (cure asthma)"
+  key_abilities: [Infestation, Belch, Battlecry, Fury, Putrefaction]
+
+Oppression:
+  description: "Hellforge system - profane weapons/armor with necromantic power"
+  components:
+    - Hellforge: "Core mechanic for channeling/investing abilities"
+    - Armor Channels: "Max 2 active - Relentless, Conqueror, Bloodlust, etc."
+    - Weapon Investments: "Replace venoms - Exploit, Torture, Torment, Punishment"
+  resource: "Life essence (not personal health drain)"
+  key_abilities: [Gravehands/Tyranny, Quash, Cripple, Vivisect, Agony]
+
+Weaponmastery:
+  description: "Combat with various weapon specializations"
+  specs: [DWC, DWB, SnB, 2H]
+  key_abilities: [DSL, Raze, Impale, Disembowel, Vivisect, Devastate]
 ```
 
 ## Specializations (Weaponmastery)
@@ -101,6 +119,124 @@ weapon_choice:
     pros: ["Faster balance", "Bonus limb damage", "3-4 hits to break"]
     cons: ["Less overall damage"]
     note: "Must learn proficiency in Hashan"
+```
+
+## Oppression Mechanics (Hellforge System)
+
+### Core Concept
+Hellforge allows Infernals to forge and profane weapons/armor at the Lord of Evil's temple, binding necromantic abilities to equipment.
+
+```yaml
+hellforge:
+  location: "Lord of Evil's temple"
+  resource: "Life essence (costs essence, not personal health)"
+  types:
+    channeled: "Armor-based abilities - max 2 active at once"
+    invested: "Weapon-based abilities - replaces venoms"
+```
+
+### Armor Channels (Max 2 Active)
+| Channel | Effect | Usage |
+|---------|--------|-------|
+| **Relentless** | Immunity to fear effects (affliction received but ineffective) | Always on for bashing |
+| **Conqueror** | Regain balance/health on adventurer kills | Recommended for bashing |
+| **Bloodlust** | Kills restore health/mana and cure afflictions | PvP sustain |
+| **Pitiless** | Strike enemies upon your death; victims go to Halls of Finality | PvP revenge |
+| **Anguish** | Causes periodic suffering to enemies; faster respawn via Halls | PvP pressure |
+
+**Recommended Bashing Config**: Relentless + Conqueror
+
+### Weapon Investments
+See [Venoms & Hellforge Investments](#venoms--hellforge-investments) section for full details.
+
+| Investment | Affliction | Best Use |
+|------------|------------|----------|
+| **INVEST TORTURE** | Haemophilia | Enable Agony healing |
+| **INVEST EXPLOIT** | Paranoia + Weariness | Softlock pressure, block Fitness |
+| **INVEST TORMENT** | Healthleech | Damage focus |
+| **INVEST PUNISHMENT** | Scaling damage | Finish low-health targets |
+
+### Passive Abilities (Oppression)
+```yaml
+relentless:
+  effect: "Immunity to fear effects (affliction received but ineffective)"
+  type: passive
+
+unswayed:
+  effect: "Damage resistance while wearing hellforged armor"
+  type: passive
+
+agony:
+  effect: "Feed on bleeding targets - heal at 100+ bleed, cure affliction at 200+"
+  trigger: "Automatic when enemy bleeds"
+  synergy: "Use Torture investment or colocasia venom to enable"
+  type: passive
+```
+
+## Hyena Companion System (Malignity)
+
+### Training Stats
+| Stat | Effect |
+|------|--------|
+| **Stamina** | Increases hyena health |
+| **Speed** | Faster attacks and movement |
+| **Strength** | More power and carrying capacity |
+
+### Commands
+```yaml
+management:
+  - HYENA ASSESS: "Check hyena status"
+  - HYENA RECALL: "Call hyena to you"
+  - HYENA SANCTUARY: "Send hyena to safety"
+  - HYENA TRAIN <stat>: "Train Stamina/Speed/Strength"
+  - HYENA REPORT: "Get status report"
+  - HYENA FEED RAT: "Feed your hyena"
+
+combat:
+  - ORDER HYENA SLAY <target>: "Attack target"
+  - ORDER HYENA MAUL <target>: "Direct attack (30s cooldown)"
+  - ORDER HYENA HUNT: "Set to hunting mode"
+  - ORDER HYENA FLEE: "Order retreat"
+
+utility:
+  - HYENA SEEK <target>: "Find target"
+  - HYENA FOLLOW <target>: "Track someone"
+  - HYENA TRACK: "Hunt down target"
+  - HYENA SCENT: "Detect presence"
+  - HYENA STARTLE <target>: "Interrupt target"
+  - HYENA RETRIEVE <item>: "Fetch items"
+  - HYENA DELIVER <item> TO <target>: "Bring items"
+```
+
+### Maul Attack
+```yaml
+maul:
+  cooldown: "30 seconds"
+  syntax: "ORDER HYENA MAUL <target>"
+  tracking: "Implemented in 013_Infernal_Hyena_PVE.lua"
+  triggers:
+    cooldown_start: "A daemonic hyena snarls as she hurls herself at"
+    cooldown_end: "You may command your hyena to maul your foes once more."
+    on_cooldown: "You cannot yet order your hyena to maul another foe."
+```
+
+## Archery (Malignity - LOS Combat)
+
+Used for **Line of Sight** combat when not in the same room as target.
+
+### Weapon Types
+| Weapon | Characteristics |
+|--------|-----------------|
+| **Longbow** | Standard ranged, more accurate |
+| **Crossbow** | Higher damage, less accuracy |
+| **Darkbow** | Superior accuracy (preferred) |
+
+### Usage
+```yaml
+syntax: "SHOOT <target> <direction>"
+example: "SHOOT enemy north"
+usage: "LOS combat only - when not in same room as target"
+accessories: ["Quiver", "Aiming skill"]
 ```
 
 ## Universal Combat Concepts
@@ -365,6 +501,137 @@ belch:
   warning: "Very deadly - use chivalrously"
 ```
 
+## Venoms & Hellforge Investments
+
+### Standard Venoms (Weaponmastery ENVENOM)
+| Venom | Affliction | Cure | Combat Use |
+|-------|------------|------|------------|
+| **curare** | paralysis | bloodroot | Venomlock, prevent tree |
+| **kalmia** | asthma | kelp | Softlock, block smoking |
+| **xentio** | clumsiness | kelp | Kelp stack, hinder attacks |
+| **euphorbia** | anorexia (via vomiting) | epidermal/focus | Softlock, block eating |
+| **gecko** | slickness | bloodroot/valerian | Softlock, block salves |
+| **prefarar** | sensitivity | kelp | Damage amplification |
+| **slike** | weariness | kelp | Block Fitness passive, lock aff |
+| **vardrax** | addiction | ginseng | Riftlock helper |
+| **delphinium** | sleep | wake/insomnia | Sleeplock, prone via leg break |
+| **epseth** | leg break (level 1) | restoration | Limb pressure |
+| **epteth** | arm break (level 1) | restoration | Limb pressure |
+| **voyria** | voyria (sip damage) | bloodletting | Lock aff for healers |
+| **eurypteria** | recklessness | lobelia | Lock aff for Depthswalker |
+| **digitalis** | shyness | goldenseal | Mental stack |
+| **monkshood** | dizziness | goldenseal | Mental stack |
+| **aconite** | stupidity | goldenseal | Mental stack, lock aff for Alchemist |
+| **darkshade** | darkshade (blind) | ginseng | Hinder targeting |
+| **colocasia** | haemophilia | ginseng | Lock aff for Magi/Sylvan, Agony synergy |
+| **sumac** | impatience | goldenseal | Truelock completion |
+| **vernalius** | lethargy | ginseng | Slow curing |
+| **notechis** | nausea | ginseng | Block parry |
+
+### Hellforge Investments (Oppression)
+Investments **replace venoms** on weapons with Oppression effects.
+
+| Investment | Affliction | Notes |
+|------------|------------|-------|
+| **INVEST TORTURE** | Haemophilia | Enables Agony passive healing |
+| **INVEST EXPLOIT** | Paranoia + Weariness | Two affs at once, blocks Fitness |
+| **INVEST TORMENT** | Healthleech | Sustained damage over time |
+| **INVEST PUNISHMENT** | Scaling damage | More damage on wounded targets |
+
+### Venom Strategy by Goal
+```yaml
+for_softlock:
+  venoms: [kalmia, gecko, euphorbia]
+  goal: "Block eating, smoking, salves"
+
+for_venomlock:
+  venoms: [curare, kalmia, gecko, euphorbia]
+  goal: "Softlock + paralysis blocks tree"
+
+for_truelock:
+  venoms: [curare, kalmia, gecko, euphorbia, sumac, slike]
+  goal: "Venomlock + impatience blocks focus + weariness blocks Fitness"
+
+for_limb_pressure:
+  venoms: [epseth, epteth, delphinium]
+  goal: "Break limbs, prone with delphinium"
+
+for_damage_amp:
+  venoms: [prefarar, colocasia]
+  goal: "Sensitivity + haemophilia for Agony healing"
+```
+
+### DWC Dual Blade Mechanics
+```yaml
+dual_blade_setup:
+  left_hand: "MAIN sword - can use HELLFORGE INVEST"
+  right_hand: "OFF-HAND sword - uses normal ENVENOM only"
+  note: "Only the main sword (left hand) can be invested"
+
+syntax: "DSL <target> <limb> <venom1> <venom2>"
+```
+
+### DWC DSL Venom Combinations
+```yaml
+# Limb Pressure Phase
+for_breaking_legs:
+  combination: [delphinium, delphinium]
+  timing: "When both legs prepped and ready to prone"
+  effect: "Break leg + force sleep (strips insomnia, then gypsum, then sleeps)"
+
+for_limb_overwhelm:
+  combinations:
+    - [epteth, epteth]   # Double arm break
+    - [epseth, epseth]   # Double leg break
+    - [epteth, epseth]   # Mixed arm+leg break
+  timing: "After first leg broken to overwhelm salve balance"
+  effect: "Stack limb damage faster than they can restore"
+
+# Affliction Building Phase
+for_lock_building:
+  combinations:
+    - [curare, euphorbia]   # Paralysis + Anorexia (via nausea)
+    - [curare, kalmia]      # Paralysis + Asthma
+    - [gecko, kalmia]       # Slickness + Asthma
+    - [aconite, slike]      # Stupidity + Weariness (mental stack + lock)
+  timing: "When prepping softlock/venomlock"
+
+for_truelock_finish:
+  combinations:
+    - [sumac, slike]        # Impatience + Weariness
+    - [curare, sumac]       # Paralysis + Impatience
+  timing: "When softlocked and pushing for truelock"
+
+# With Hellforge Investments
+investment_plus_venom:
+  note: "Investment on MAIN sword + venom on OFF-HAND sword"
+  per_dsl: "You get: Investment effect (main) + 1 venom (off-hand)"
+  examples:
+    - invest: exploit      # Main sword: Paranoia + Weariness
+      venom: curare        # Off-hand: Paralysis
+      result: "3 afflictions per DSL (para + paranoia + weariness)"
+    - invest: exploit      # Main sword: Paranoia + Weariness
+      venom: epteth        # Off-hand: Arm break
+      result: "Limb damage + 2 afflictions (paranoia + weariness)"
+    - invest: torture      # Main sword: Haemophilia
+      venom: epteth        # Off-hand: Arm break
+      result: "Limb damage + bleed for Agony healing"
+    - invest: torment      # Main sword: Healthleech
+      venom: prefarar      # Off-hand: Sensitivity
+      result: "Damage amplification combo"
+
+investment_decision_logic:
+  use_exploit: "When softlocked (has anorexia + asthma + slickness) and no weariness"
+  use_torture: "When target already has haemophilia (for Agony passive)"
+  use_torment: "When focused on damage output"
+  use_punishment: "When target is low health (scaling damage)"
+
+no_investment_mode:
+  note: "Without investment, both swords use normal venoms"
+  syntax: "DSL <target> <limb> <venom1> <venom2>"
+  example: "DSL enemy left_leg curare kalmia"
+```
+
 ## Offensive Abilities
 ```yaml
 # Weaponmastery - General
@@ -471,6 +738,61 @@ soulspears:
   effect: "Instantly raises gravehands, shatters shield, deals damage"
   syntax: "SOULSPEAR <target>"
   notes: "Very useful in group combat"
+
+# Oppression
+tyranny:
+  skill: Oppression
+  balance: eq
+  effect: "Summon gravehands, prones non-Mhaldorians"
+  cost: "3% life essence"
+  syntax: "HANDS OF THE GRAVE"
+
+quash:
+  skill: Oppression
+  balance: bal
+  effect: "Hand-strike removing magical shields + damage"
+  syntax: "QUASH <target>"
+
+cripple:
+  skill: Oppression
+  balance: bal
+  effect: "Break two limbs simultaneously"
+  syntax: "CRIPPLE <target>"
+  notes: "Accelerates vivisect setup"
+
+exterminate:
+  skill: Oppression
+  balance: eq
+  effect: "Clear plant life from room"
+  cost: "5% essence (scales on repeat)"
+  syntax: "EXTERMINATE"
+
+rampage:
+  skill: Oppression
+  balance: bal
+  effect: "Chase fleeing enemies"
+  syntax: "RAMPAGE <target>"
+  notes: "Instant with gravehands present"
+
+predator:
+  skill: Oppression
+  balance: eq
+  effect: "Detect targets across planes via oppressive gaze"
+  syntax: "PREDATOR <target>"
+
+desecration:
+  skill: Oppression
+  balance: eq
+  effect: "Sever devotional rites from locations"
+  syntax: "DESECRATE"
+
+# Malignity Combat
+battlecry:
+  skill: Malignity
+  balance: eq
+  effect: "Stun target"
+  cooldown: "4s equilibrium"
+  syntax: "BATTLECRY <target>"
 ```
 
 ## Defensive Abilities
@@ -509,6 +831,46 @@ swiftmount:
   effect: "VAULT without using balance"
   syntax: "VAULT <mount>"
   notes: "Access to MOUNTJUMP and FLY with legendary mounts"
+
+# Oppression Passives
+relentless:
+  skill: Oppression
+  effect: "Immunity to fear effects (affliction received but ineffective)"
+  type: passive
+
+unswayed:
+  skill: Oppression
+  effect: "Damage resistance while wearing hellforged armor"
+  type: passive
+
+agony:
+  skill: Oppression
+  effect: "Feed on bleeding targets - heal at 100+ bleed, cure affliction at 200+"
+  trigger: "Automatic when enemy bleeds"
+  synergy: "Use Torture investment or colocasia venom"
+  type: passive
+
+# Malignity Combat Abilities
+fury:
+  skill: Malignity
+  balance: eq
+  effect: "+2 strength temporarily"
+  cooldown: "2s equilibrium"
+  syntax: "FURY ON/OFF"
+
+rage:
+  skill: Malignity
+  balance: none
+  effect: "Cure pacifying afflictions"
+  cost: "150 mana"
+  syntax: "RAGE"
+
+clotting:
+  skill: Malignity
+  balance: none
+  effect: "Reduce bleeding"
+  cost: "60 mana"
+  syntax: "CLOT"
 ```
 
 ## Equipment Recommendations
@@ -592,6 +954,33 @@ attack_skill: Weaponmastery
 battlerage_abilities:
   - slash: "Basic damage"
   - rend: "Additional damage"
+
+# Recommended Oppression Config
+armor_channels:
+  recommended: [Relentless, Conqueror]
+  note: "Max 2 channels active at once"
+  relentless: "Fear immunity - always useful"
+  conqueror: "Regain balance/health on adventurer kills"
+
+# Hyena Usage
+hyena:
+  maul:
+    cooldown: "30 seconds"
+    syntax: "ORDER HYENA MAUL <target>"
+    tracking: "Implemented in 013_Infernal_Hyena_PVE.lua"
+  slay:
+    syntax: "ORDER HYENA SLAY <target>"
+    note: "Continuous attack mode"
+
+# Optional Abilities
+battlecry:
+  usage: "Stun high-priority targets"
+  cooldown: "4s equilibrium"
+  syntax: "BATTLECRY <target>"
+
+fury:
+  usage: "+2 strength for tough fights"
+  syntax: "FURY ON"
 ```
 
 ## Fighting Against This Class
