@@ -1,0 +1,3686 @@
+version: 1
+packageType: triggers
+groups:
+- name: Levi_Ataxia
+  packageName: Levi_Ataxia
+  attributes:
+    isTempTrigger: 'no'
+    isMultiline: 'no'
+    isPerlSlashGOption: 'no'
+    isColorizerTrigger: 'no'
+    isFilterTrigger: 'no'
+    isSoundTrigger: 'no'
+    isColorTrigger: 'no'
+    isColorTriggerFg: 'no'
+    isColorTriggerBg: 'no'
+  directory: levi_ataxia
+  children:
+  - name: For Levi
+    packageName: For Levi
+    attributes:
+      isTempTrigger: 'no'
+      isMultiline: 'no'
+      isPerlSlashGOption: 'no'
+      isColorizerTrigger: 'no'
+      isFilterTrigger: 'no'
+      isSoundTrigger: 'no'
+      isColorTrigger: 'no'
+      isColorTriggerFg: 'no'
+      isColorTriggerBg: 'no'
+    directory: levi_ataxia/for_levi
+    children:
+    - name: leviticus
+      packageName: leviticus
+      attributes:
+        isTempTrigger: 'no'
+        isMultiline: 'no'
+        isPerlSlashGOption: 'no'
+        isColorizerTrigger: 'no'
+        isFilterTrigger: 'no'
+        isSoundTrigger: 'no'
+        isColorTrigger: 'no'
+        isColorTriggerFg: 'no'
+        isColorTriggerBg: 'no'
+      directory: levi_ataxia/for_levi/leviticus
+      children:
+      - name: LeviAtax
+        packageName: DominiusAtax
+        attributes:
+          isTempTrigger: 'no'
+          isMultiline: 'no'
+          isPerlSlashGOption: 'no'
+          isColorizerTrigger: 'no'
+          isFilterTrigger: 'no'
+          isSoundTrigger: 'no'
+          isColorTrigger: 'no'
+          isColorTriggerFg: 'no'
+          isColorTriggerBg: 'no'
+        directory: levi_ataxia/for_levi/leviticus/leviatax
+        children:
+        - name: AzzysEnemyManagement
+          packageName: AzzysEnemyManagement
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          children:
+          - name: Enemy Management
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/enemy_management
+        - name: Leviticus
+          packageName: Dominius
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          children:
+          - name: Highlighting
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/highlighting
+          - name: BM
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Parry
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/parry
+            - name: Hits & Damage
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/hits_&_damage
+          - name: PVE
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/pve
+          - name: Defence
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Druid
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/druid
+          - name: DW
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/dw
+          - name: Target Defense
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/target_defense
+          - name: MINE ALL MINE
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: CHASING
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/chasing
+            - name: ARANKESH
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/arankesh
+            - name: SEVET
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/sevet
+            - name: Locate
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/locate
+          - name: Target Health
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/target_health
+          - name: Mining
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/mining
+          - name: Target Limb
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/target_limb
+          - name: Psion
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Transcend
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/transcend
+            - name: PSI Muddle
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/psi_muddle
+            - name: Colours
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/colours
+            - name: Unweave
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/unweave
+            - name: Prepare
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/prepare
+          - name: INFERNAL
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: SNB Attack Report
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/snb_attack_report
+            - name: Fractures
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: Decrease Fracture Count
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Devastate
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/devastate
+              - name: Increase Fracture Count
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/increase_fracture_count
+            - name: 2H Oppression
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/2h_oppression
+          - name: Curing Tricks
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/curing_tricks
+          - name: Mage
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Elementals
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/elementals
+            - name: RESONANCE
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: Air
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/air
+              - name: Water
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/water
+              - name: Earth
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/earth
+              - name: Fire
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/fire
+            - name: Enamation
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/enamation
+            - name: General
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/general
+            - name: Staffcast
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/staffcast
+          - name: Runie
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: DWC
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/dwc
+            - name: DWB
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: Dual Blunt
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Expend Afflictions
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/expend_afflictions
+              - name: Parry
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/parry
+            - name: RUNIE DOM
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/runie_dom
+            - name: RuneWarden
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: SNB
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Parry
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/parry
+              - name: 2H
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Replace Lines
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/replace_lines
+          - name: Curing
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/curing
+          - name: DRAGON
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/dragon
+          - name: MONK
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: TELEPATHY
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/telepathy
+          - name: Undead
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/undead
+          - name: General
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/general
+          - name: Knight
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Parry
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/parry
+          - name: Jester
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/jester
+          - name: Illusions
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/illusions
+          - name: EARTH LORD
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Limbprobe
+              script: antonius.targetting.triggertarget = antonius.targetting.gettarget(multimatches[2][2])
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'yes'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: Left arm
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'yes'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'yes'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/left_arm
+              - name: Torso
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'yes'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'yes'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/torso
+              - name: Right arm
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'yes'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'yes'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/right_arm
+              - name: Head
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'yes'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'yes'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/head
+              - name: Left leg
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'yes'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'yes'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/left_leg
+              - name: Right leg
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'yes'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'yes'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/right_leg
+          - name: PARTY TARGETTING
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/party_targetting
+          - name: slc
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Dragon Limb Attacks
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/dragon_limb_attacks
+            - name: Knight Limb Attacks
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: DualB
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Whirl
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/whirl
+                - name: Crush
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/crush
+              - name: TwoHand
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/twohand
+              - name: DSL
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/dsl
+              - name: SNB
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/snb
+            - name: Sentinel Limb Attacks
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/sentinel_limb_attacks
+            - name: Tekura Limb Attacks
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/tekura_limb_attacks
+            - name: Swashbuckling Limb Attacks
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/swashbuckling_limb_attacks
+            - name: Shikudo Limb Attacks
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: Kicks
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/kicks
+              - name: Forms
+                isActive: false
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/forms
+            - name: Blademaster Limb Attacks
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: Stances
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/stances
+            - name: Sylvan Limb Attacks
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/sylvan_limb_attacks
+            - name: Magi Limb Attacks
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/magi_limb_attacks
+            - name: Druid Limb Attacks
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/druid_limb_attacks
+            - name: Priest Limb Attacks
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/priest_limb_attacks
+          - name: Serpent
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/serpent
+          - name: MONK 1
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Monk
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: Shikudo Triggers
+                packageName: Shikudo Triggers
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Shikudo
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  children:
+                  - name: Blocking
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    directory: levi_ataxia/for_levi/leviticus/blocking
+                  - name: Stances
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    directory: levi_ataxia/for_levi/leviticus/stances
+                  - name: Calls
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    directory: levi_ataxia/for_levi/leviticus/calls
+                  - name: Gags
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    directory: levi_ataxia/for_levi/leviticus/gags
+            - name: TELEPATHY
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/telepathy
+            - name: Tekura
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: Parrying
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/parrying
+          - name: Bard
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Bard
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: voicecraft
+                packageName: voicecraft
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Voicecraft
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/voicecraft
+              - name: Harmonics
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Bagatelle
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/bagatelle
+                - name: Berceuse
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/berceuse
+              - name: Swashbuckling
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Tunesmithing
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/tunesmithing
+          - name: WEAPONS
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/weapons
+        - name: limb.1.2
+          packageName: limb.1.2
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          children:
+          - name: Limb
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/limb
+      - name: zData
+        packageName: zData
+        attributes:
+          isTempTrigger: 'no'
+          isMultiline: 'no'
+          isPerlSlashGOption: 'no'
+          isColorizerTrigger: 'no'
+          isFilterTrigger: 'no'
+          isSoundTrigger: 'no'
+          isColorTrigger: 'no'
+          isColorTriggerFg: 'no'
+          isColorTriggerBg: 'no'
+        directory: levi_ataxia/for_levi/leviticus/zdata
+        children:
+        - name: zData
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          directory: levi_ataxia/for_levi/leviticus/zdata
+      - name: Ataxia
+        attributes:
+          isTempTrigger: 'no'
+          isMultiline: 'no'
+          isPerlSlashGOption: 'no'
+          isColorizerTrigger: 'no'
+          isFilterTrigger: 'no'
+          isSoundTrigger: 'no'
+          isColorTrigger: 'no'
+          isColorTriggerFg: 'no'
+          isColorTriggerBg: 'no'
+        directory: levi_ataxia/for_levi/leviticus/ataxia
+        children:
+        - name: LegendDeck Cards
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          directory: levi_ataxia/for_levi/leviticus/legenddeck_cards
+        - name: Combat/Aff Tracking
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          children:
+          - name: Misc Tracking
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Warnings
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: Instakills
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/instakills
+              - name: Retardation Detection
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/retardation_detection
+              - name: Warnings
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Instakills
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  children:
+                  - name: Deliverance
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    directory: levi_ataxia/for_levi/leviticus/deliverance
+              - name: Shaman
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/shaman
+              - name: Lust
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/lust
+              - name: Dangerous Things
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/dangerous_things
+              - name: Misc Alerts
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/misc_alerts
+            - name: Discern Levels
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/discern_levels
+            - name: Allies/Enemies
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/allies_enemies
+          - name: Remove Afflictions
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Groups
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: Third-Person Removes
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/third-person_removes
+              - name: Passive/Active
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/passive_active
+            - name: Herbs
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/herbs
+            - name: Other Things Fading
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/other_things_fading
+          - name: Add Afflictions
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Classes A-J
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: Bard
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Bard Rework
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  children:
+                  - name: Performance Tracking
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    directory: levi_ataxia/for_levi/leviticus/performance_tracking
+                  - name: Tempo
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    directory: levi_ataxia/for_levi/leviticus/tempo
+                  - name: Blade Dance
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    directory: levi_ataxia/for_levi/leviticus/blade_dance
+                  - name: Composition
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    directory: levi_ataxia/for_levi/leviticus/composition
+              - name: Dragon
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/dragon
+              - name: Fire Lord
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Brand Lines
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/brand_lines
+              - name: Airlord
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/airlord
+              - name: Blademaster
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Striking
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/striking
+              - name: Apostate
+                script: " ataxia_boxEcho(\"NEED FORTIFY ----  NEED FORTIFY ----  \", \"purple\")\n "
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/apostate
+              - name: Alchemist
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Homunculus
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/homunculus
+              - name: Jester
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/jester
+              - name: Depthwalker
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Aeonics Related / Misc
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/aeonics_related_misc
+              - name: Air Lord
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/air_lord
+            - name: Third Person
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: 3rd Person Shikudo
+                isActive: false
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/3rd_person_shikudo
+            - name: Classes K-S
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: Psion
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Prepares
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/prepares
+              - name: INFERNAL
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/infernal
+              - name: Shaman
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/shaman
+              - name: Magi
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Destroy-related
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/destroy-related
+                - name: Pummel-related
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/pummel-related
+              - name: Unnamable
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/unnamable
+              - name: Priest
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/priest
+              - name: Serpent
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/serpent
+              - name: Occultist
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Occultism
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/occultism
+                - name: Tarot
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/tarot
+                - name: Domination Stuff
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/domination_stuff
+                - name: Various Salve Lines
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/various_salve_lines
+              - name: Double Slash
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/double_slash
+              - name: Monk
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/monk
+              - name: Pariah
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Plague/Swarm Related
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/plague_swarm_related
+                - name: Misc
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/misc
+                - name: Logographs
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/logographs
+            - name: Affs Post Queue - Gated
+              isActive: false
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: Limb Got Hit
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Limb Hits Unorganised
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/limb_hits_unorganised
+              - name: Classes A-J
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Dragon
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/dragon
+                - name: Earth Lord
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/earth_lord
+                - name: Blademaster
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/blademaster
+              - name: Classes K-S
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                children:
+                - name: Monk
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  children:
+                  - name: Telepathy/Tekura
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    directory: levi_ataxia/for_levi/leviticus/telepathy_tekura
+                  - name: Shikudo
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    directory: levi_ataxia/for_levi/leviticus/shikudo
+                  - name: Tekura Limbs
+                    isActive: false
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    children:
+                    - name: Punches
+                      attributes:
+                        isTempTrigger: 'no'
+                        isMultiline: 'no'
+                        isPerlSlashGOption: 'no'
+                        isColorizerTrigger: 'no'
+                        isFilterTrigger: 'no'
+                        isSoundTrigger: 'no'
+                        isColorTrigger: 'no'
+                        isColorTriggerFg: 'no'
+                        isColorTriggerBg: 'no'
+                      directory: levi_ataxia/for_levi/leviticus/punches
+                    - name: STANCES
+                      attributes:
+                        isTempTrigger: 'no'
+                        isMultiline: 'no'
+                        isPerlSlashGOption: 'no'
+                        isColorizerTrigger: 'no'
+                        isFilterTrigger: 'no'
+                        isSoundTrigger: 'no'
+                        isColorTrigger: 'no'
+                        isColorTriggerFg: 'no'
+                        isColorTriggerBg: 'no'
+                      directory: levi_ataxia/for_levi/leviticus/stances
+                    - name: Kicks
+                      attributes:
+                        isTempTrigger: 'no'
+                        isMultiline: 'no'
+                        isPerlSlashGOption: 'no'
+                        isColorizerTrigger: 'no'
+                        isFilterTrigger: 'no'
+                        isSoundTrigger: 'no'
+                        isColorTrigger: 'no'
+                        isColorTriggerFg: 'no'
+                        isColorTriggerBg: 'no'
+                      directory: levi_ataxia/for_levi/leviticus/kicks
+                - name: Sentinel
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  children:
+                  - name: Skirmishing
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    children:
+                    - name: Targeted Strikes
+                      attributes:
+                        isTempTrigger: 'no'
+                        isMultiline: 'no'
+                        isPerlSlashGOption: 'no'
+                        isColorizerTrigger: 'no'
+                        isFilterTrigger: 'no'
+                        isSoundTrigger: 'no'
+                        isColorTrigger: 'no'
+                        isColorTriggerFg: 'no'
+                        isColorTriggerBg: 'no'
+                      directory: levi_ataxia/for_levi/leviticus/targeted_strikes
+                  - name: Pet Afflictions
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    directory: levi_ataxia/for_levi/leviticus/pet_afflictions
+                - name: Knight
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  children:
+                  - name: Dual Blunt
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    directory: levi_ataxia/for_levi/leviticus/dual_blunt
+                  - name: Other Stuff
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    directory: levi_ataxia/for_levi/leviticus/other_stuff
+                  - name: SnB
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    directory: levi_ataxia/for_levi/leviticus/snb
+                  - name: Two-hander
+                    attributes:
+                      isTempTrigger: 'no'
+                      isMultiline: 'no'
+                      isPerlSlashGOption: 'no'
+                      isColorizerTrigger: 'no'
+                      isFilterTrigger: 'no'
+                      isSoundTrigger: 'no'
+                      isColorTrigger: 'no'
+                      isColorTriggerFg: 'no'
+                      isColorTriggerBg: 'no'
+                    children:
+                    - name: Relapses - Uses the in-game ECHO function.
+                      attributes:
+                        isTempTrigger: 'no'
+                        isMultiline: 'no'
+                        isPerlSlashGOption: 'no'
+                        isColorizerTrigger: 'no'
+                        isFilterTrigger: 'no'
+                        isSoundTrigger: 'no'
+                        isColorTrigger: 'no'
+                        isColorTriggerFg: 'no'
+                        isColorTriggerBg: 'no'
+                      directory: levi_ataxia/for_levi/leviticus/relapses_-_uses_the_in-game_echo_function.
+                    - name: Fractures
+                      isActive: false
+                      attributes:
+                        isTempTrigger: 'no'
+                        isMultiline: 'no'
+                        isPerlSlashGOption: 'no'
+                        isColorizerTrigger: 'no'
+                        isFilterTrigger: 'no'
+                        isSoundTrigger: 'no'
+                        isColorTrigger: 'no'
+                        isColorTriggerFg: 'no'
+                        isColorTriggerBg: 'no'
+                      children:
+                      - name: Decrease Fracture Count
+                        attributes:
+                          isTempTrigger: 'no'
+                          isMultiline: 'no'
+                          isPerlSlashGOption: 'no'
+                          isColorizerTrigger: 'no'
+                          isFilterTrigger: 'no'
+                          isSoundTrigger: 'no'
+                          isColorTrigger: 'no'
+                          isColorTriggerFg: 'no'
+                          isColorTriggerBg: 'no'
+                        children:
+                        - name: Devastate
+                          attributes:
+                            isTempTrigger: 'no'
+                            isMultiline: 'no'
+                            isPerlSlashGOption: 'no'
+                            isColorizerTrigger: 'no'
+                            isFilterTrigger: 'no'
+                            isSoundTrigger: 'no'
+                            isColorTrigger: 'no'
+                            isColorTriggerFg: 'no'
+                            isColorTriggerBg: 'no'
+                          directory: levi_ataxia/for_levi/leviticus/devastate
+                      - name: Increase Fracture Count
+                        attributes:
+                          isTempTrigger: 'no'
+                          isMultiline: 'no'
+                          isPerlSlashGOption: 'no'
+                          isColorizerTrigger: 'no'
+                          isFilterTrigger: 'no'
+                          isSoundTrigger: 'no'
+                          isColorTrigger: 'no'
+                          isColorTriggerFg: 'no'
+                          isColorTriggerBg: 'no'
+                        directory: levi_ataxia/for_levi/leviticus/increase_fracture_count
+                - name: Sylvan
+                  attributes:
+                    isTempTrigger: 'no'
+                    isMultiline: 'no'
+                    isPerlSlashGOption: 'no'
+                    isColorizerTrigger: 'no'
+                    isFilterTrigger: 'no'
+                    isSoundTrigger: 'no'
+                    isColorTrigger: 'no'
+                    isColorTriggerFg: 'no'
+                    isColorTriggerBg: 'no'
+                  directory: levi_ataxia/for_levi/leviticus/sylvan
+            - name: Classes Other
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: Water Lord
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/water_lord
+              - name: Misc Stuff
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/misc_stuff
+        - name: Ataxia Chat Capture
+          isActive: false
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          directory: levi_ataxia/for_levi/leviticus/ataxia_chat_capture
+        - name: Balances
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          directory: levi_ataxia/for_levi/leviticus/balances
+        - name: ZulahGUI - Saonji Edit
+          packageName: ZulahGUI - Saonji Edit
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          children:
+          - name: zGUI Redux
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Enemies
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/enemies
+            - name: Log In/Out
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/log_in_out
+            - name: DeathCape
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/deathcape
+            - name: Wilderness Map
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/wilderness_map
+            - name: Who here
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/who_here
+            - name: Allies
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/allies
+            - name: Logger
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/logger
+            - name: Prompt Window
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/prompt_window
+        - name: Class Stuff
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          children:
+          - name: Earth Lord
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/earth_lord
+          - name: Monk
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Telepathy
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/telepathy
+            - name: Shikudo
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/shikudo
+          - name: Pariah
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Heartbeat 1st Person
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/heartbeat_1st_person
+          - name: Vodun
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Afflictions
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/afflictions
+          - name: Depthswalker
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/depthswalker
+          - name: Psion
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/psion
+          - name: Blademaster
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/blademaster
+          - name: Magi
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Vibes
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/vibes
+          - name: Jinx
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/jinx
+          - name: Bard
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/bard
+        - name: Spiritlore System
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          children:
+          - name: Bindings Done
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/bindings_done
+          - name: Bindings
+            isActive: false
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/bindings
+        - name: Curing Stuff
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          children:
+          - name: Unknown Checks
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/unknown_checks
+          - name: Priority Management
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Determine Class
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/determine_class
+          - name: Pariah
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/pariah
+          - name: Curing Bals
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/curing_bals
+        - name: Pre Apply
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          directory: levi_ataxia/for_levi/leviticus/pre_apply
+        - name: Misc Triggers
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          children:
+          - name: Anti-theft/Gold
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/anti-theft_gold
+          - name: Tattoo Stuff
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/tattoo_stuff
+          - name: Item Highlighting
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Guard Highlighting
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              directory: levi_ataxia/for_levi/leviticus/guard_highlighting
+          - name: Clean-up
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/clean-up
+        - name: Self Limb Tracking
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          children:
+          - name: Attacks
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/attacks
+        - name: Ataxia NDB
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          children:
+          - name: Additional Information NDB
+            isActive: false
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/additional_information_ndb
+        - name: Fishing
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          directory: levi_ataxia/for_levi/leviticus/fishing
+        - name: Harvesting
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          children:
+          - name: Extraction
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            directory: levi_ataxia/for_levi/leviticus/extraction
+        - name: Herbs Undead
+          isActive: false
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          directory: levi_ataxia/for_levi/leviticus/herbs_undead
+        - name: Basher
+          packageName: Basher Old
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          children:
+          - name: Bashing
+            attributes:
+              isTempTrigger: 'no'
+              isMultiline: 'no'
+              isPerlSlashGOption: 'no'
+              isColorizerTrigger: 'no'
+              isFilterTrigger: 'no'
+              isSoundTrigger: 'no'
+              isColorTrigger: 'no'
+              isColorTriggerFg: 'no'
+              isColorTriggerBg: 'no'
+            children:
+            - name: Questing
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: Foray Things
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/foray_things
+              - name: Creville
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/creville
+              - name: Fire Plane
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/fire_plane
+            - name: Basher Lines
+              attributes:
+                isTempTrigger: 'no'
+                isMultiline: 'no'
+                isPerlSlashGOption: 'no'
+                isColorizerTrigger: 'no'
+                isFilterTrigger: 'no'
+                isSoundTrigger: 'no'
+                isColorTrigger: 'no'
+                isColorTriggerFg: 'no'
+                isColorTriggerBg: 'no'
+              children:
+              - name: Denizen Attacks / Misc Lines
+                isActive: false
+                attributes:
+                  isTempTrigger: 'no'
+                  isMultiline: 'no'
+                  isPerlSlashGOption: 'no'
+                  isColorizerTrigger: 'no'
+                  isFilterTrigger: 'no'
+                  isSoundTrigger: 'no'
+                  isColorTrigger: 'no'
+                  isColorTriggerFg: 'no'
+                  isColorTriggerBg: 'no'
+                directory: levi_ataxia/for_levi/leviticus/denizen_attacks_misc_lines
+- name: mudlet-mapper
+  packageName: mudlet-mapper
+  attributes:
+    isTempTrigger: 'no'
+    isMultiline: 'no'
+    isPerlSlashGOption: 'no'
+    isColorizerTrigger: 'no'
+    isFilterTrigger: 'no'
+    isSoundTrigger: 'no'
+    isColorTrigger: 'no'
+    isColorTriggerFg: 'no'
+    isColorTriggerBg: 'no'
+  directory: mudlet-mapper
+  children:
+  - name: Mudlet Mapper
+    attributes:
+      isTempTrigger: 'no'
+      isMultiline: 'no'
+      isPerlSlashGOption: 'no'
+      isColorizerTrigger: 'no'
+      isFilterTrigger: 'no'
+      isSoundTrigger: 'no'
+      isColorTrigger: 'no'
+      isColorTriggerFg: 'no'
+      isColorTriggerBg: 'no'
+    directory: mudlet-mapper/mudlet_mapper
+    children:
+    - name: Flying
+      attributes:
+        isTempTrigger: 'no'
+        isMultiline: 'no'
+        isPerlSlashGOption: 'no'
+        isColorizerTrigger: 'no'
+        isFilterTrigger: 'no'
+        isSoundTrigger: 'no'
+        isColorTrigger: 'no'
+        isColorTriggerFg: 'no'
+        isColorTriggerBg: 'no'
+      directory: mudlet-mapper/mudlet_mapper/flying
+    - name: Asteria
+      attributes:
+        isTempTrigger: 'no'
+        isMultiline: 'no'
+        isPerlSlashGOption: 'no'
+        isColorizerTrigger: 'no'
+        isFilterTrigger: 'no'
+        isSoundTrigger: 'no'
+        isColorTrigger: 'no'
+        isColorTriggerFg: 'no'
+        isColorTriggerBg: 'no'
+      directory: mudlet-mapper/mudlet_mapper/asteria
+    - name: Dragonswords
+      attributes:
+        isTempTrigger: 'no'
+        isMultiline: 'no'
+        isPerlSlashGOption: 'no'
+        isColorizerTrigger: 'no'
+        isFilterTrigger: 'no'
+        isSoundTrigger: 'no'
+        isColorTrigger: 'no'
+        isColorTriggerFg: 'no'
+        isColorTriggerBg: 'no'
+      directory: mudlet-mapper/mudlet_mapper/dragonswords
+    - name: Lithmeria
+      attributes:
+        isTempTrigger: 'no'
+        isMultiline: 'no'
+        isPerlSlashGOption: 'no'
+        isColorizerTrigger: 'no'
+        isFilterTrigger: 'no'
+        isSoundTrigger: 'no'
+        isColorTrigger: 'no'
+        isColorTriggerFg: 'no'
+        isColorTriggerBg: 'no'
+      directory: mudlet-mapper/mudlet_mapper/lithmeria
+    - name: Wormholes
+      attributes:
+        isTempTrigger: 'no'
+        isMultiline: 'no'
+        isPerlSlashGOption: 'no'
+        isColorizerTrigger: 'no'
+        isFilterTrigger: 'no'
+        isSoundTrigger: 'no'
+        isColorTrigger: 'no'
+        isColorTriggerFg: 'no'
+        isColorTriggerBg: 'no'
+      directory: mudlet-mapper/mudlet_mapper/wormholes
+    - name: StickMUD
+      attributes:
+        isTempTrigger: 'no'
+        isMultiline: 'no'
+        isPerlSlashGOption: 'no'
+        isColorizerTrigger: 'no'
+        isFilterTrigger: 'no'
+        isSoundTrigger: 'no'
+        isColorTrigger: 'no'
+        isColorTriggerFg: 'no'
+        isColorTriggerBg: 'no'
+      directory: mudlet-mapper/mudlet_mapper/stickmud
+    - name: Imperian
+      attributes:
+        isTempTrigger: 'no'
+        isMultiline: 'no'
+        isPerlSlashGOption: 'no'
+        isColorizerTrigger: 'no'
+        isFilterTrigger: 'no'
+        isSoundTrigger: 'no'
+        isColorTrigger: 'no'
+        isColorTriggerFg: 'no'
+        isColorTriggerBg: 'no'
+      directory: mudlet-mapper/mudlet_mapper/imperian
+    - name: Lusternia
+      attributes:
+        isTempTrigger: 'no'
+        isMultiline: 'no'
+        isPerlSlashGOption: 'no'
+        isColorizerTrigger: 'no'
+        isFilterTrigger: 'no'
+        isSoundTrigger: 'no'
+        isColorTrigger: 'no'
+        isColorTriggerFg: 'no'
+        isColorTriggerBg: 'no'
+      directory: mudlet-mapper/mudlet_mapper/lusternia
+      children:
+      - name: Delayed bix movement.
+        attributes:
+          isTempTrigger: 'no'
+          isMultiline: 'no'
+          isPerlSlashGOption: 'no'
+          isColorizerTrigger: 'no'
+          isFilterTrigger: 'no'
+          isSoundTrigger: 'no'
+          isColorTrigger: 'no'
+          isColorTriggerFg: 'no'
+          isColorTriggerBg: 'no'
+        directory: mudlet-mapper/mudlet_mapper/lusternia/delayed_bix_movement.
+      - name: Rifts and Paths
+        attributes:
+          isTempTrigger: 'no'
+          isMultiline: 'no'
+          isPerlSlashGOption: 'no'
+          isColorizerTrigger: 'no'
+          isFilterTrigger: 'no'
+          isSoundTrigger: 'no'
+          isColorTrigger: 'no'
+          isColorTriggerFg: 'no'
+          isColorTriggerBg: 'no'
+        directory: mudlet-mapper/mudlet_mapper/lusternia/rifts_and_paths
+    - name: Starmourn
+      attributes:
+        isTempTrigger: 'no'
+        isMultiline: 'no'
+        isPerlSlashGOption: 'no'
+        isColorizerTrigger: 'no'
+        isFilterTrigger: 'no'
+        isSoundTrigger: 'no'
+        isColorTrigger: 'no'
+        isColorTriggerFg: 'no'
+        isColorTriggerBg: 'no'
+      directory: mudlet-mapper/mudlet_mapper/starmourn
+      children:
+      - name: Lifts
+        attributes:
+          isTempTrigger: 'no'
+          isMultiline: 'no'
+          isPerlSlashGOption: 'no'
+          isColorizerTrigger: 'no'
+          isFilterTrigger: 'no'
+          isSoundTrigger: 'no'
+          isColorTrigger: 'no'
+          isColorTriggerFg: 'no'
+          isColorTriggerBg: 'no'
+        directory: mudlet-mapper/mudlet_mapper/starmourn/lifts
+    - name: Doors
+      attributes:
+        isTempTrigger: 'no'
+        isMultiline: 'no'
+        isPerlSlashGOption: 'no'
+        isColorizerTrigger: 'no'
+        isFilterTrigger: 'no'
+        isSoundTrigger: 'no'
+        isColorTrigger: 'no'
+        isColorTriggerFg: 'no'
+        isColorTriggerBg: 'no'
+      directory: mudlet-mapper/mudlet_mapper/doors
+    - name: Aetolia
+      attributes:
+        isTempTrigger: 'no'
+        isMultiline: 'no'
+        isPerlSlashGOption: 'no'
+        isColorizerTrigger: 'no'
+        isFilterTrigger: 'no'
+        isSoundTrigger: 'no'
+        isColorTrigger: 'no'
+        isColorTriggerFg: 'no'
+        isColorTriggerBg: 'no'
+      directory: mudlet-mapper/mudlet_mapper/aetolia
+    - name: Achaea
+      attributes:
+        isTempTrigger: 'no'
+        isMultiline: 'no'
+        isPerlSlashGOption: 'no'
+        isColorizerTrigger: 'no'
+        isFilterTrigger: 'no'
+        isSoundTrigger: 'no'
+        isColorTrigger: 'no'
+        isColorTriggerFg: 'no'
+        isColorTriggerBg: 'no'
+      directory: mudlet-mapper/mudlet_mapper/achaea
+    - name: Ashyria
+      attributes:
+        isTempTrigger: 'no'
+        isMultiline: 'no'
+        isPerlSlashGOption: 'no'
+        isColorizerTrigger: 'no'
+        isFilterTrigger: 'no'
+        isSoundTrigger: 'no'
+        isColorTrigger: 'no'
+        isColorTriggerFg: 'no'
+        isColorTriggerBg: 'no'
+      directory: mudlet-mapper/mudlet_mapper/ashyria

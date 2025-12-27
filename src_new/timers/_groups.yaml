@@ -1,0 +1,122 @@
+version: 1
+packageType: timers
+groups:
+- name: mudlet-mapper
+  packageName: mudlet-mapper
+  attributes:
+    isTempTimer: 'no'
+    isOffsetTimer: 'no'
+  directory: mudlet-mapper
+  children:
+  - name: Mudlet Mapper
+    attributes:
+      isTempTimer: 'no'
+      isOffsetTimer: 'no'
+    directory: mudlet-mapper/mudlet_mapper
+- name: Levi_Ataxia
+  packageName: Levi_Ataxia
+  attributes:
+    isTempTimer: 'no'
+    isOffsetTimer: 'no'
+  directory: levi_ataxia
+  children:
+  - name: For Levi
+    packageName: For Levi
+    attributes:
+      isTempTimer: 'no'
+      isOffsetTimer: 'no'
+    directory: levi_ataxia/for_levi
+    children:
+    - name: Levi_062424
+      packageName: Levi_062424
+      attributes:
+        isTempTimer: 'no'
+        isOffsetTimer: 'no'
+      directory: levi_ataxia/for_levi/levi_062424
+      children:
+      - name: mudlet-mapper_24
+        packageName: mudlet-mapper_24
+        attributes:
+          isTempTimer: 'no'
+          isOffsetTimer: 'no'
+        directory: levi_ataxia/for_levi/levi_062424/mudlet-mapper_24
+        children:
+        - name: Mudlet Mapper
+          attributes:
+            isTempTimer: 'no'
+            isOffsetTimer: 'no'
+          directory: levi_ataxia/for_levi/levi_062424/mudlet_mapper
+      - name: leviticus
+        packageName: leviticus
+        attributes:
+          isTempTimer: 'no'
+          isOffsetTimer: 'no'
+        directory: levi_ataxia/for_levi/levi_062424/leviticus
+        children:
+        - name: APO
+          attributes:
+            isTempTimer: 'no'
+            isOffsetTimer: 'no'
+          directory: levi_ataxia/for_levi/levi_062424/apo
+        - name: Levi Ataxia
+          packageName: DominiusAtax
+          attributes:
+            isTempTimer: 'no'
+            isOffsetTimer: 'no'
+          children:
+          - name: ZulahGUI - Saonji Edit
+            packageName: ZulahGUI - Saonji Edit
+            attributes:
+              isTempTimer: 'no'
+              isOffsetTimer: 'no'
+            children:
+            - name: zGUI Redux
+              attributes:
+                isTempTimer: 'no'
+                isOffsetTimer: 'no'
+              children:
+              - name: Death Cape
+                attributes:
+                  isTempTimer: 'no'
+                  isOffsetTimer: 'no'
+                directory: levi_ataxia/for_levi/levi_062424/death_cape
+          - name: mudlet-mapper
+            packageName: mudlet-mapper
+            attributes:
+              isTempTimer: 'no'
+              isOffsetTimer: 'no'
+            children:
+            - name: Mudlet Mapper
+              attributes:
+                isTempTimer: 'no'
+                isOffsetTimer: 'no'
+              directory: levi_ataxia/for_levi/levi_062424/mudlet_mapper
+          - name: MY TIMERS
+            attributes:
+              isTempTimer: 'no'
+              isOffsetTimer: 'no'
+            directory: levi_ataxia/for_levi/levi_062424/my_timers
+    - name: mudlet-mapper
+      packageName: mudlet-mapper
+      attributes:
+        isTempTimer: 'no'
+        isOffsetTimer: 'no'
+      directory: levi_ataxia/for_levi/mudlet-mapper
+      children:
+      - name: Mudlet Mapper
+        attributes:
+          isTempTimer: 'no'
+          isOffsetTimer: 'no'
+        directory: levi_ataxia/for_levi/mudlet-mapper/mudlet_mapper
+  - name: mudlet-mapper
+    packageName: mudlet-mapper
+    attributes:
+      isTempTimer: 'no'
+      isOffsetTimer: 'no'
+    directory: levi_ataxia/mudlet-mapper
+    children:
+    - name: Mudlet Mapper
+      attributes:
+        isTempTimer: 'no'
+        isOffsetTimer: 'no'
+      directory: levi_ataxia/mudlet-mapper/mudlet_mapper

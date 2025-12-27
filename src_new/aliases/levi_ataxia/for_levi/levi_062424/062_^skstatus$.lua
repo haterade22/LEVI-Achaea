@@ -1,0 +1,27 @@
+--[[mudlet
+type: alias
+name: ^skstatus$
+hierarchy:
+- Levi_Ataxia
+- For Levi
+- Levi_062424
+- Levi
+- LeviticusREG
+- Leviticus
+- Monks
+- Monk
+- Shikudo
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+regex: ^skstatus$
+command: ''
+packageName: ''
+]]--
+
+cecho("\n<white>--- Shikudo Status ---")
+cecho("\n<cyan>Form: " .. (ataxia.vitals.form or "nil") .. " | Kata: " .. (ataxia.vitals.kata or 0))
+cecho("\n<cyan>Target: " .. (target or "nil"))
+cecho("\n<yellow>Limbs - H:" .. (tLimbs.H or 0) .. " LL:" .. (tLimbs.LL or 0) .. " RL:" .. (tLimbs.RL or 0))
+cecho("\n<yellow>Prone: " .. tostring(tAffs.prone) .. " | Windpipe: " .. tostring(tAffs.damagedwindpipe or tAffs.crushedthroat))
+cecho("\n<green>Dispatch Ready: " .. tostring(shikudo.checkDispatchReady()))

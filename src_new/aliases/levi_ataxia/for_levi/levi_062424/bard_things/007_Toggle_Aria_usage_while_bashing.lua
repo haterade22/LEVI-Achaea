@@ -1,0 +1,29 @@
+--[[mudlet
+type: alias
+name: Toggle Aria usage while bashing
+hierarchy:
+- Levi_Ataxia
+- For Levi
+- Levi_062424
+- Levi
+- Ataxia-DownloadThis
+- Ataxia
+- Installation / Configuration
+- Bard Things
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+regex: ^aria bash$
+command: ''
+packageName: ''
+]]--
+
+if ataxia.bardStuff.ariaBash then
+	ataxia.bardStuff.ariaBash = false
+	ataxiaEcho("Won't keep aria up while bashing anymore.")
+else
+	ataxia.bardStuff.ariaBash = true
+	ataxiaEcho("Keeping aria up while bashing; toggling deafness off while bashing.")
+end
+
+ataxia_saveSettings(false)

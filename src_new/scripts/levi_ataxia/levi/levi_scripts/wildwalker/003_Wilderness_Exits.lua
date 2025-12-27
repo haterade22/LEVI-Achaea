@@ -1,0 +1,86 @@
+--[[mudlet
+type: script
+name: Wilderness Exits
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Levi  Scripts
+- ZulahGUI - Saonji Edit
+- Mapper
+- WildWalker
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
+wildernessExits = wildernessExits or {
+aaleneast =                {name="The Aalen Forest (east)",       x = 427,  y = -700},
+aalennorth =               {name="The Aalen Forest (north)",      x = 383,  y = -656},
+aalensouth =               {name="The Aalen Forest (south)",      x = 401,  y = -750},
+aalenwest =                {name="The Aalen Forest (west)",       x = 372,  y = -710},
+aranriod =                 {name="The Village of Aran'riod",      x = 419,  y = -315},
+ashtan =                   {name="Ashtan",                        x = 373,  y = -518},
+baltoackeast =             {name="Bataoac, the Northern Giant (right leg)",x = 365,  y = -186},
+baltoacwest =              {name="Bataoac, the Northern Giant (left leg)",x = 361,  y = -186},
+cormorantrock =            {name="Cormorant Rock",                x = 396,  y = -486},
+cyrene =                   {name="Cyrene",                        x = 475,  y = -782},
+dardanicplainseast =       {name="Dardanic Plains (east)",        x = 520,  y = -405},
+dardanicplainsnorth =      {name="Dardanic Plains (north)",       x = 450,  y = -420},
+dardanicplainssouth =      {name="Dardanic Plains (south)",       x = 513,  y = -448},
+dardanicplainssoutheast =  {name="Dardanic Plains (southeast)",   x = 560,  y = -451},
+dardanicplainssouthwest =  {name="Dardanic Plains (southwest)",   x = 497,  y = -456},
+dardanicplainswest =       {name="Dardanic Plains (west)",        x = 423,  y = -421},
+deloseast =                {name="Delos (east)",                  x = 617,  y = -629},
+deloswest =                {name="Delos (west)",                  x = 612,  y = -629},
+digsiteblood =             {name="The Digsite of Blood",          x = 522,  y = -797},
+digsiteequilibrium =       {name="The Digsite of Equilibrium",    x = 615,  y = -463},
+digsitemind =              {name="The Digsite of the Mind",       x = 438,  y = -503},
+digsitepain =              {name="Digsite of Pain",               x = 340,  y = -686},
+digsitesoul =              {name="Digsite of the Soul",           x = 568,  y = -147},
+digsitewealth =            {name="The Digsite of Wealth",         x = 498,  y = -864},
+dreamspear =               {name="Dreamspear",                    x = 268,  y = -290},
+eleusis =                  {name="Eleusis",                       x = 620,  y = -605},
+falaqtor =                 {name="The Tower of Falaq'tor",        x = 575,  y = -152},
+fissure =                  {name="The Fissure of Echoes",         x = 557,  y = -198},
+harae =                    {name="The Isle of Harae",             x = 283,  y = -619},
+hashan =                   {name="Hashan",                        x = 642,  y = -511},
+hriddan =                  {name="Hriddan Settlement",            x = 278,  y = -202},
+hthrak =                   {name="Vents of Hthrak",               x = 422,  y = -168},
+inbhirness =               {name="Inbhir Ness",                   x = 262,  y = -331},
+isaia =                    {name="Isaia",                         x = 263,  y = -189},
+istareast =                {name="Istar Jungle (east)",           x = 458,  y = -191},
+istarwest =                {name="Istar Jungle (west)",           x = 438,  y = -204},
+kamleikan =                {name="The Village of Kamleikan",      x = 387,  y = -278},
+mhaldor =                  {name="Mhaldor Harbour",               x = 218,  y = -568},
+moghedu =                  {name="Moghedu",                       x = 528,  y = -771},
+muurn =                    {name="Muurn River Valley Harbour",    x = 394,  y = -772},
+newhope =                  {name="Isle of New Hope",              x = 623,  y = -818},
+nithmia =                  {name="The Northern Ithmia",           x = 603,  y = -561},
+northerntundra =           {name="Northern Tundra",               x = 356,  y = -147},
+northreacheast =           {name="Northreach (east)",             x = 434,  y = -327},
+northreachharbour =        {name="Northreach Forest Harbour",     x = 410,  y = -426},
+northreachlake =           {name="Northreach Lake",               x = 465,  y = -326},
+northreachnorth =          {name="Northreach (north)",            x = 403,  y = -334},
+northreachwest =           {name="Northreach (west)",             x = 380,  y = -352},
+phereklos =                {name="The ruins of Phereklos",        x = 387,  y = -370},
+rheodad =                  {name="Rheodad",                       x = 268,  y = -372},
+rheodadharbour =           {name="Rheodad Harbour",               x = 243,  y = -444},
+riagath =                  {name="The Caverns of Riagath",        x = 409,  y = -221},
+ripariumharbour =          {name="Riparium Harbour",              x = 717,  y = -622},
+saoghal =                  {name="Saoghal Valley",                x = 248,  y = -311},
+sealioncove =              {name="Sea Lion Cove",                 x = 514,  y = -842},
+shallam =                  {name="Shallam",                       x = 642,  y = -758},
+shallamharbour =           {name="The Harbour of Shallam",        x = 641,  y = -762},
+shastaan =                 {name="Shastaan",                      x = 696,  y = -719},
+shastaanharbour =          {name="Shastaan Harbour",              x = 705,  y = -717},
+tasurke =                  {name="Tasur'ke",                      x = 684,  y = -504},
+tasurkeharbour =           {name="Tasur'ke Harbour",              x = 685,  y = -500},
+tasurkehouse =             {name="A private house in Tasur'ke",   x = 680,  y = -484},
+tenwat =                   {name="Tenwat Prison",                 x = 556,  y = -277},
+thera =                    {name="New Thera",                     x = 387,  y = -560},
+thraasi =                  {name="Thraasi Harbour",               x = 326,  y = -652},
+tomacula =                 {name="The Village of Tomacula",       x = 490,  y = -601},
+valho =                    {name="Valho Coast",                   x = 640,  y = -211},
+wegava =                   {name="Wegava Valley",                 x = 485,  y = -299},
+} 

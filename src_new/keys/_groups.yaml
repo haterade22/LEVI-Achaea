@@ -1,0 +1,18 @@
+version: 1
+packageType: keys
+groups:
+- name: Levi_Ataxia
+  packageName: Levi_Ataxia
+  directory: levi_ataxia
+  children:
+  - name: Levitax
+    packageName: DomTax
+    directory: levi_ataxia/levitax
+    children:
+    - name: Movement/Bashing
+      directory: levi_ataxia/levitax/movement_bashing
+    - name: Ataxia-DownloadThis
+      packageName: Ataxia-DownloadThis
+      directory: levi_ataxia/levitax/ataxia-downloadthis
+    - name: Targeting
+      directory: levi_ataxia/levitax/targeting

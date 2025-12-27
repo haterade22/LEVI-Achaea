@@ -1,0 +1,43 @@
+--[[mudlet
+type: trigger
+name: Drawslash
+hierarchy:
+- Levi_Ataxia
+- For Levi
+- leviticus
+- LeviAtax
+- Leviticus
+- slc
+- Blademaster Limb Attacks
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+  isTempTrigger: 'no'
+  isMultiline: 'yes'
+  isPerlSlashGOption: 'no'
+  isColorizerTrigger: 'no'
+  isFilterTrigger: 'no'
+  isSoundTrigger: 'no'
+  isColorTrigger: 'no'
+  isColorTriggerFg: 'no'
+  isColorTriggerBg: 'no'
+triggerType: 0
+conditonLineDelta: 2
+mStayOpen: 1
+mCommand: ''
+packageName: ''
+mFgColor: '#ff0000'
+mBgColor: '#ffff00'
+mSoundFile: ''
+colorTriggerFgColor: '#000000'
+colorTriggerBgColor: '#000000'
+patterns:
+- pattern: ^(\w+) unleashes a vicious slash towards you before resheathing \w+ blade, \w+ \w+\.$
+  type: 1
+- pattern: ^The blade bites deeply into your (.*)\.$
+  type: 1
+- pattern: '1'
+  type: 5
+]]--
+
+slc_last_limb = multimatches[2][2]

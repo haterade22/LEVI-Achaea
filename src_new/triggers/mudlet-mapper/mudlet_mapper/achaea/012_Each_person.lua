@@ -1,0 +1,37 @@
+--[[mudlet
+type: trigger
+name: Each person
+hierarchy:
+- mudlet-mapper
+- Mudlet Mapper
+- Achaea
+- Angel sense
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+  isTempTrigger: 'no'
+  isMultiline: 'no'
+  isPerlSlashGOption: 'no'
+  isColorizerTrigger: 'no'
+  isFilterTrigger: 'no'
+  isSoundTrigger: 'no'
+  isColorTrigger: 'no'
+  isColorTriggerFg: 'no'
+  isColorTriggerBg: 'no'
+triggerType: 0
+conditonLineDelta: 0
+mStayOpen: 0
+mCommand: ''
+packageName: ''
+mFgColor: '#ff0000'
+mBgColor: '#ffff00'
+mSoundFile: ''
+colorTriggerFgColor: '#000000'
+colorTriggerBgColor: '#000000'
+patterns:
+- pattern: ' is with (\w+)\.$'
+  type: 1
+]]--
+
+mmp.pdb[matches[2]] = mmp.temp_room
+mmp.pdb_lastupdate[matches[2]] = true
