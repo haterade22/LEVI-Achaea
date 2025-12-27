@@ -285,6 +285,101 @@ bellwort:
 
 ---
 
+---
+
+## Serpent-Specific Lock Strategy (Updated 2024)
+
+### Modern Serpent Lock Mechanics
+
+Serpents use **Impulse** (not SNAP) to deliver mental afflictions. Understanding this is critical for defense.
+
+```yaml
+impulse_requirements:
+  - "Victim has NO sileris/fangbarrier defense"
+  - "Victim HAS asthma affliction"
+  - "Victim HAS weariness affliction"
+
+serpent_lock_progression:
+  phase_1_kelp_setup:
+    attack: "DST target kalmia vernalius"
+    result: "asthma + weariness (both kelp cures)"
+    note: "Victim can only cure ONE per eat balance"
+
+  phase_2_defense_strip:
+    attack: "Flay sileris"
+    result: "Removes fangbarrier, opens victim to Impulse"
+
+  phase_3_impulse_delivery:
+    attack: "IMPULSE target SUGGEST impatience"
+    result: "Victim cannot focus"
+    note: "Instant delivery when requirements met"
+
+  phase_4_bloodroot_competition:
+    attack: "DST target curare gecko"
+    result: "paralysis + slickness (both bloodroot cures)"
+    note: "With asthma, victim can't smoke valerian for slickness"
+
+  phase_5_lock_complete:
+    attack: "IMPULSE target SUGGEST anorexia"
+    result: "TRUE LOCK achieved"
+
+fratricide_mechanic:
+  description: "Fratricide causes impulse mental affs to RELAPSE"
+  delivery: "SUGGEST target fratricide via Hypnosis SNAP"
+  effect: |
+    After victim focuses to cure impatience, fratricide
+    causes it to immediately relapse. Creates focus lock.
+```
+
+### Cure Competition (Critical)
+
+```yaml
+bloodroot_competition:
+  cures: [paralysis, slickness]
+  problem: |
+    When asthma blocks smoking, bloodroot must cure BOTH.
+    Only one cure per eat balance.
+  defense: "Prioritize PARALYSIS - it blocks ALL actions including tree"
+
+kelp_competition:
+  cures: [asthma, weariness]
+  problem: |
+    Both afflictions enable Impulse.
+    Only one cure per eat balance.
+  defense: "Prioritize ASTHMA - breaks Impulse requirement AND restores smoking"
+```
+
+### Defense Priority vs Serpent
+
+```yaml
+priority_order:
+  1_prevent_impulse:
+    condition: "asthma + weariness present"
+    action: "Boost asthma priority (swap: astWear)"
+    reason: "Curing asthma breaks Impulse requirement"
+
+  2_fratricide_early:
+    condition: "fratricide + asthma + slickness"
+    action: "Boost fratricide priority (swap: fratLock)"
+    reason: "Prevent impulse mental relapse loop"
+
+  3_tree_early:
+    condition: "asthma + slickness + (impatience OR anorexia)"
+    action: "Touch tree immediately"
+    reason: "This is 'approaching lock' - tree before paralysis"
+
+  4_para_over_slick:
+    condition: "asthma + paralysis + slickness"
+    action: "Boost paralysis priority (swap: paraAst)"
+    reason: "Para blocks ALL actions; can't smoke valerian anyway"
+
+  5_sileris:
+    action: "Maintain sileris/fangbarrier"
+    reason: "Blocks Impulse entirely"
+```
+
+---
+
 ## Defensive Notes
 
 ### Breaking Locks
@@ -295,9 +390,14 @@ bellwort:
 5. **Riftlock**: Smoke valerian → mend arms → rift herbs
 6. **Sleeplock**: Allies wake you, or Insomnia/Gypsum defences
 7. **Aeonlock**: Must cure asthma first, then smoke for aeon
+8. **Serpent Lock (Modern)**: See Serpent-specific section above
 
 ### Prevention Priority
-- Keep asthma cured when possible (blocks smoking)
+- Keep asthma cured when possible (blocks smoking AND enables Impulse)
 - Don't let slickness + anorexia stick together
 - Watch for arm breaks if they're building riftlock
 - Maintain Insomnia defence against sleep classes
+- **VS SERPENT**: Cure asthma when weariness present (breaks Impulse)
+- **VS SERPENT**: Cure fratricide early (prevents mental relapse)
+- **VS SERPENT**: Tree when approaching lock (asthma + slickness + impatience/anorexia)
+- **VS SERPENT**: Prioritize paralysis over slickness when asthma blocks smoking

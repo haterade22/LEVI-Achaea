@@ -10,8 +10,65 @@
 ```
 Subterfuge: Stealth, assassination, and utility abilities
 Venom: Knowledge and application of toxins
-Hypnosis: Mental manipulation through suggestions
+Hypnosis: Mental manipulation through suggestions (including Impulse)
 ```
+
+---
+
+## CRITICAL: Impulse Mechanics (Updated 2024)
+
+**Impulse is the primary method Serpents use to deliver mental afflictions.**
+
+```yaml
+impulse_requirements:
+  description: "Impulse SUGGEST only works when ALL conditions are met"
+  conditions:
+    - "Victim has NO sileris/fangbarrier defense"
+    - "Victim HAS asthma affliction"
+    - "Victim HAS weariness affliction"
+
+  delivery: |
+    Once requirements met, Serpent uses IMPULSE <target> SUGGEST <affliction>
+    This delivers mental afflictions like impatience, anorexia instantly.
+
+  note: "SNAP from hypnosis does NOT deliver impatience anymore - use Impulse instead"
+
+impulse_afflictions:
+  - impatience: "Blocks focus - critical for true lock"
+  - anorexia: "Blocks eating - delivered after slickness applied"
+  - confusion: "Random commands"
+  - amnesia: "Forgets queued commands"
+  - stupidity: "Disrupts equilibrium skills"
+
+counter_impulse:
+  - "Maintain sileris/fangbarrier defense"
+  - "Cure asthma OR weariness quickly (both are kelp - only one at a time)"
+  - "Prioritize asthma cure when both present to break impulse setup"
+```
+
+---
+
+## Fratricide Mechanics
+
+```yaml
+fratricide:
+  venom: "Unknown - likely Hypnosis or special ability"
+  cure: "Argentum (pill)"
+  effect: |
+    When victim has fratricide, impulse-delivered mental afflictions
+    will RELAPSE after being cured. This creates a "focus lock" where:
+    1. Serpent delivers impatience via impulse
+    2. Victim focuses to cure impatience
+    3. Fratricide causes impatience to RELAPSE immediately
+    4. Victim cannot escape the mental affliction loop
+
+  priority: |
+    Must cure fratricide BEFORE approaching lock state.
+    If you have asthma + slickness + fratricide, you're in danger.
+    Cure fratricide early to prevent impulse relapse loop.
+```
+
+---
 
 ## Affliction Stacking Strategy
 ```yaml
@@ -23,12 +80,12 @@ concept: |
   cures to clear.
 
 kelp_stack:
-  description: "Most common and powerful stack"
+  description: "Most common and powerful stack - ENABLES IMPULSE"
   afflictions: [asthma, clumsiness, hypochondria, sensitivity, weariness]
-  strategy: |
-    Apply 2-3 kelp-cured afflictions together.
-    Target must cure each one separately on eat balance.
-    While they cure one, you reapply another.
+  critical_note: |
+    Asthma + Weariness together enables Impulse delivery.
+    Both are kelp cures - victim can only cure ONE per eat balance.
+    This is the foundation of Serpent lock strategy.
 
 ginseng_stack:
   description: "Damage-over-time stack"
@@ -38,74 +95,105 @@ ginseng_stack:
     Add haemophilia to prevent clotting.
 
 goldenseal_stack:
-  description: "Mental affliction stack"
+  description: "Mental affliction stack (delivered via Impulse)"
   afflictions: [dissonance, dizziness, epilepsy, impatience, stupidity]
   strategy: |
-    Stack impatience (blocks focus) with stupidity.
-    Both require goldenseal to cure.
+    Impatience blocks focus - critical for true lock.
+    Delivered via IMPULSE, NOT via venom or SNAP.
 
 bloodroot_stack:
   description: "Critical lock stack"
   afflictions: [paralysis, slickness]
   strategy: |
     Both cured by bloodroot herb.
-    Paralysis blocks tree, slickness blocks salves.
-    Very powerful combination.
-
-example_attack_sequence:
-  - "DST target kalmia prefarar"     # asthma + sensitivity (both kelp)
-  - "DST target clumsiness vernalius" # clumsiness + weariness (both kelp)
-  - "Now target has 4 kelp affs, takes 4 eat balances to clear"
+    Paralysis blocks tree AND all actions.
+    Slickness blocks salves (can't cure anorexia).
+    When asthma present, can't smoke valerian for slickness.
+    PRIORITIZE PARALYSIS when asthma blocks smoking.
 ```
 
 ## Kill Routes
 
-### Primary Kill: True Lock
+### Primary Kill: Impulse Lock (Modern Serpent)
 ```yaml
 type: affliction
-summary: Stack afflictions to achieve true lock, then damage to death
+summary: Use Impulse to deliver mental afflictions after establishing kelp stack
 
 prerequisites:
-  - Must apply afflictions faster than target can cure
-  - Need weariness to block Fitness (for classes that have it)
-  - Use affliction stacking on same-cure herbs for efficiency
+  - Target must have asthma + weariness (enables Impulse)
+  - Target must NOT have sileris/fangbarrier defense
+  - Apply fratricide to prevent focus escape
 
-steps:
-  1: "Stack kelp afflictions: asthma + sensitivity/weariness"
-  2: "Apply slickness (blocks applying salves)"
-  3: "Apply anorexia (blocks eating herbs)"
-  4: "Apply paralysis (blocks tree tattoo)"
-  5: "Apply impatience (blocks focus)"
-  6: "Maintain kelp stack to keep asthma/weariness stuck"
-  7: "Damage to death with envenom attacks"
+attack_sequence_from_combat_log:
+  phase_1_kelp_setup:
+    - "DST target kalmia vernalius"   # asthma + weariness (BOTH kelp cures)
+    - "Flay sileris/rebounding"       # Remove defenses blocking impulse
+    - "Target now vulnerable to Impulse"
+
+  phase_2_impulse_delivery:
+    - "IMPULSE target SUGGEST impatience"  # Blocks focus
+    - "IMPULSE target SUGGEST anorexia"    # Blocks eating (after slickness)
+    - "Fratricide applied via hypnosis"    # Causes impulse affs to RELAPSE
+
+  phase_3_lock_completion:
+    - "DST target curare gecko"       # paralysis + slickness (BOTH bloodroot)
+    - "Target now in true lock"
+    - "Continue pressure until death"
+
+actual_combat_example:
+  round_1: "Doublestab kalmia vernalius → asthma + weariness"
+  round_2: "Flay sileris → removes fangbarrier"
+  round_3: "Impulse impatience → victim can't focus"
+  round_4: "Doublestab curare gecko → paralysis + slickness"
+  round_5: "Impulse anorexia → victim can't eat"
+  result: "TRUE LOCK - victim cannot cure anything"
 
 required_afflictions:
-  - asthma: "blocks smoking (kelp cure)"
-  - anorexia: "blocks eating"
-  - slickness: "blocks applying"
-  - paralysis: "blocks tree"
-  - impatience: "blocks focus"
-  - weariness: "blocks Fitness passive cure (kelp cure - stacks with asthma!)"
+  - asthma: "Blocks smoking, enables Impulse (kelp cure)"
+  - weariness: "Blocks Fitness, enables Impulse (kelp cure - competes with asthma!)"
+  - slickness: "Blocks salves (bloodroot cure)"
+  - paralysis: "Blocks tree AND all actions (bloodroot cure - competes with slickness!)"
+  - impatience: "Blocks focus (delivered via Impulse, NOT venom)"
+  - anorexia: "Blocks eating (delivered via Impulse, NOT venom)"
+  - fratricide: "Causes impulse mental affs to RELAPSE (argentum cure)"
+
+cure_competition_insight: |
+  KEY: Serpent exploits that bloodroot cures BOTH paralysis AND slickness.
+  When asthma present, victim can't smoke valerian for slickness.
+  So bloodroot must cure both para and slick - but only one per balance.
+  DEFENSE: Prioritize paralysis when asthma blocks smoking!
 ```
 
-### Alternative Kill: Hypnosis Suggestion Lock
+### Alternative Kill: Hypnosis + Impulse Combo
 ```yaml
 type: affliction
-summary: Use hypnosis to force actions and stack afflictions
+summary: Use hypnosis for fratricide setup, impulse for mental delivery
 
 steps:
   1: "HYPNOTISE <target>"
-  2: "Queue suggestions: SUGGEST <target> <suggestion>"
-  3: "Common suggestions: disrupt, confusion, impatience, anorexia"
-  4: "SNAP to trigger all queued suggestions"
-  5: "Continue venom pressure while suggestions fire"
+  2: "SUGGEST <target> fratricide"     # Sets up relapse mechanic
+  3: "SNAP to trigger fratricide"
+  4: "Apply asthma + weariness (kelp stack)"
+  5: "IMPULSE <target> SUGGEST impatience"  # Now relapses due to fratricide
+  6: "Apply paralysis + slickness"
+  7: "IMPULSE <target> SUGGEST anorexia"
+  8: "Target locked with relapsing impatience"
 
-key_suggestions:
+key_insight: |
+  Modern Serpent does NOT use SNAP for impatience/anorexia delivery.
+  SNAP is used for fratricide and other hypnosis-only afflictions.
+  IMPULSE is used for mental afflictions (requires asthma + weariness).
+
+hypnosis_only_afflictions:
+  - fratricide: "Causes impulse affs to relapse"
   - disrupt: "Disrupts equilibrium"
-  - confusion: "Target does random commands"
-  - impatience: "Cannot focus"
-  - anorexia: "Cannot eat"
   - amnesia: "Forgets commands"
+
+impulse_delivered_afflictions:
+  - impatience: "Blocks focus"
+  - anorexia: "Blocks eating"
+  - confusion: "Random commands"
+  - stupidity: "Disrupts equilibrium skills"
 
 notes: "Takes 4 seconds to SNAP after hypnotizing"
 ```
@@ -453,33 +541,94 @@ battlerage_abilities:
 
 ## Fighting Against This Class
 ```yaml
+# CRITICAL: Understanding the modern Serpent lock
+
+impulse_prevention:
+  description: "Impulse requires asthma + weariness + no sileris"
+  defense:
+    - "Maintain sileris/fangbarrier defense"
+    - "When asthma + weariness present, BOOST ASTHMA PRIORITY"
+    - "Asthma and weariness are BOTH kelp cures - you can only cure one at a time"
+    - "Curing asthma breaks the impulse requirement"
+
+bloodroot_competition:
+  description: "Paralysis and slickness BOTH cure with bloodroot"
+  defense:
+    - "When asthma present, you can't smoke valerian for slickness"
+    - "So bloodroot must handle BOTH paralysis and slickness"
+    - "PRIORITIZE PARALYSIS when asthma blocks smoking"
+    - "Paralysis blocks ALL actions including tree; slickness only blocks salves"
+
+fratricide_handling:
+  description: "Fratricide causes impulse mental affs to RELAPSE"
+  defense:
+    - "Cure fratricide EARLY with argentum"
+    - "If you have asthma + slickness + fratricide, you're approaching lock"
+    - "Boost fratricide priority when asthma + slickness present"
+
+tree_timing:
+  description: "Tree is your emergency escape - don't wait until locked"
+  defense:
+    - "Touch tree when APPROACHING lock, not when LOCKED"
+    - "Approaching lock = asthma + slickness + (impatience OR anorexia)"
+    - "If paralyzed, you CANNOT tree - cure para first"
+    - "Tree before paralysis is applied!"
+
 priority_cures:
-  - asthma: "Restore smoking ability"
-  - slickness: "Restore salve application"
-  - anorexia: "Restore eating ability"
-  - paralysis: "Restore tree usage"
+  - asthma: "HIGHEST vs Serpent - blocks impulse AND smoking"
+  - weariness: "Blocks Fitness, enables impulse (kelp - competes with asthma)"
+  - paralysis: "Blocks tree AND all actions - prioritize over slickness when can't smoke"
+  - slickness: "Blocks salves - cure with bloodroot OR smoke valerian (if no asthma)"
+  - fratricide: "Cure early to prevent impulse relapse loop"
   - impatience: "Restore focus ability"
+  - anorexia: "Restore eating ability"
   - sensitivity: "Reduce incoming damage"
 
 dangerous_abilities:
-  - doublestab: "Two venoms per attack"
-  - hypnosis: "Forces afflictions through suggestions"
+  - doublestab: "Two venoms per attack - can apply asthma+weariness in one hit"
+  - impulse: "Delivers mental afflictions INSTANTLY when asthma+weariness present"
+  - fratricide: "Causes impulse mental affs to RELAPSE after cure"
+  - hypnosis: "Sets up fratricide via SUGGEST/SNAP"
   - garrote: "Instant kill from stealth"
   - phase: "Makes them untargetable"
+  - flay: "Strips sileris/rebounding - opens you to impulse"
 
 avoid:
-  - "Letting lock afflictions stack"
+  - "Letting asthma + weariness stack (enables impulse)"
+  - "Letting paralysis + slickness stack when asthma present"
+  - "Waiting too long to tree (tree when APPROACHING lock)"
+  - "Ignoring fratricide (causes focus lock via relapse)"
   - "Standing still when they're hidden"
-  - "Ignoring hypnosis (will SNAP suggestions)"
   - "Low health with darkshade/scytherus active"
 
 recommended_strategy: |
-  Prioritize curing lock afflictions in order: asthma, slickness, anorexia.
-  Keep alertness/vigilance up to prevent garrote.
-  When hypnotised, move or attack to break it before SNAP.
-  Track their venom usage to anticipate next affliction.
-  Rebounding/shield helps slow their venom application.
-  If sensitivity is up, be extra careful about damage intake.
+  MODERN SERPENT DEFENSE PRIORITY:
+
+  1. PREVENT IMPULSE: Cure asthma immediately when weariness present.
+     Both are kelp - only one cure per balance. Asthma is higher priority.
+
+  2. FRATRICIDE EARLY: If you get fratricide + asthma + slickness,
+     boost fratricide priority. Cure it before impatience is delivered.
+
+  3. TREE EARLY: Touch tree when you have asthma + slickness + (impatience OR anorexia).
+     This is "approaching lock" - tree NOW before paralysis locks you out.
+
+  4. PARALYSIS OVER SLICKNESS: When asthma blocks smoking, bloodroot must
+     cure both para and slick. Prioritize paralysis - it blocks ALL actions.
+
+  5. MAINTAIN SILERIS: Sileris/fangbarrier blocks impulse entirely.
+     Serpent will flay it - re-apply immediately.
+
+  6. KELP STACK AWARENESS: Track your kelp stack. If kelp is depleted
+     and you have asthma + weariness, you're in serious danger.
+
+anti_serpent_function: |
+  See AntiSerpent() in 299_Anti_Priorities.lua for automated defense.
+  Key triggers:
+  - Approaching lock → auto tree
+  - Asthma + weariness → boost asthma priority
+  - Fratricide + asthma + slickness → boost fratricide priority
+  - Asthma + paralysis + slickness → prioritize paralysis
 ```
 
 ## Implementation Notes
@@ -488,26 +637,45 @@ Triggers to watch for:
 - "jabs you with a dirk coated in" - venom application
 - "bites you viciously" - bite attack
 - "begins to weave" - hypnosis starting
-- "snaps" - suggestions triggering
+- "snaps" - suggestions triggering (fratricide setup)
+- "impulse" - mental affliction delivery (CRITICAL)
 - "disappears into the shadows" - they hid
 - "phases out of existence" - they phased
+- "flay" - stripping sileris/rebounding
 
 GMCP considerations:
 - Track gmcp.Char.Afflictions for current affs
 - Venom tracking via attack messages
 - Hidden state not in GMCP, must use triggers
+- Track kelp stack count for curing decisions
+
+Priority Swap Triggers (implemented in 029_Priority_Swaps.lua):
+- paraAst: asthma + paralysis + slickness → boost paralysis to prio 1
+- astWear: asthma + weariness vs Serpent → boost asthma to prio 3
+- fratLock: fratricide + asthma + slickness → boost fratricide to prio 4
+
+AntiSerpent Function (299_Anti_Priorities.lua):
+- Tree when: canTree AND approachingLock (asthma + slickness + imp/ano)
+- Impulse prevention: boost asthma when asthma + weariness present
+- Fratricide handling: boost fratricide when asthma + slickness present
+- Para vs slick: prioritize paralysis when asthma blocks smoking
 
 Edge cases:
 - Double venom means 2 afflictions per attack
-- Hypnosis suggestions fire with 4s delay
+- Hypnosis suggestions fire with 4s delay (SNAP)
+- IMPULSE delivers instantly when asthma + weariness + no sileris
 - Phase makes them untargetable but they can't attack
 - Garrote requires hidden AND behind target
-- Some venoms share cure balance (kelp cures)
+- Paralysis and slickness COMPETE for bloodroot cure
+- Asthma and weariness COMPETE for kelp cure
 
 Venom cure groupings (same herb):
 - Kelp: asthma, clumsiness, hypochondria, sensitivity, weariness
 - Ginseng: addiction, darkshade, haemophilia, lethargy, scytherus
 - Goldenseal: dissonance, dizziness, epilepsy, impatience, stupidity
 - Lobelia: agoraphobia, claustrophobia, loneliness, masochism, recklessness, vertigo
-- Bloodroot: paralysis, slickness (alt)
+- Bloodroot: paralysis, slickness
+- Argentum: fratricide (IMPORTANT - cure early vs Serpent)
+
+DEPRECATED: impSnap swap (Serpents no longer deliver impatience via SNAP)
 ```

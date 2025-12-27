@@ -121,6 +121,46 @@ Read the **attacker's class documentation** for:
 
 ---
 
+## Serpent Defense Quick Reference (2024)
+
+**CRITICAL**: Modern Serpents use **Impulse** (not SNAP) to deliver mental afflictions.
+
+### Impulse Requirements
+All three must be true for Impulse to work:
+1. Victim has NO sileris/fangbarrier
+2. Victim HAS asthma
+3. Victim HAS weariness
+
+### Cure Competition
+| Herb | Competing Afflictions | Priority |
+|------|----------------------|----------|
+| **Kelp** | asthma vs weariness | Cure ASTHMA (breaks Impulse) |
+| **Bloodroot** | paralysis vs slickness | Cure PARALYSIS when asthma present |
+
+### Fratricide Mechanic
+- Delivered via Hypnosis SNAP
+- Causes impulse mental afflictions (impatience) to RELAPSE after focus
+- Cure with Argentum EARLY when asthma + slickness present
+
+### Priority Swaps (029_Priority_Swaps.lua)
+| Swap | Condition | Action |
+|------|-----------|--------|
+| `astWear` | asthma + weariness vs Serpent | Boost asthma → prio 3 |
+| `paraAst` | asthma + para + slick | Boost paralysis → prio 1 |
+| `fratLock` | fratricide + asthma + slick | Boost fratricide → prio 4 |
+
+### AntiSerpent Function (299_Anti_Priorities.lua)
+- **Tree trigger**: asthma + slickness + (impatience OR anorexia) = "approaching lock"
+- Fires tree BEFORE paralysis locks you out
+
+### Key Files
+- `.claude/classes/serpent.md` - Full Serpent mechanics
+- `.claude/classes/lock_types.md` - Serpent lock strategy section
+- `src/ataxia/029_Priority_Swaps.lua` - Priority swap implementations
+- `src/ataxia/299_Anti_Priorities.lua` - AntiSerpent function
+
+---
+
 ## Affliction Stacking Quick Reference
 
 Stack afflictions that share the same cure herb:
