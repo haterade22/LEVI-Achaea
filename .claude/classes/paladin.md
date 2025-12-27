@@ -200,6 +200,37 @@ recommended_strategy: |
   Watch for eagle attacks adding pressure.
 ```
 
+## Limb Tracking
+```yaml
+# Uses lb[target].hits["limb"] format for limb damage tracking
+# NOT tLimbs - use Romaen's limb counter format
+
+access_pattern:
+  left_leg: 'lb[target].hits["left leg"]'
+  right_leg: 'lb[target].hits["right leg"]'
+  left_arm: 'lb[target].hits["left arm"]'
+  right_arm: 'lb[target].hits["right arm"]'
+  head: 'lb[target].hits["head"]'
+  torso: 'lb[target].hits["torso"]'
+
+break_levels:
+  0-99: "Healthy"
+  100-149: "Broken (Level 1) - damaged"
+  150-199: "Broken (Level 2) - mangled"
+  200+: "Broken (Level 3) - destroyed"
+
+disembowel_check: |
+  lb[target].hits["left leg"] >= 100
+  AND lb[target].hits["right leg"] >= 100
+  AND (lb[target].hits["left arm"] >= 100 OR lb[target].hits["right arm"] >= 100)
+  AND tAffs.prone
+  → DISEMBOWEL
+
+behead_check: |
+  lb[target].hits["head"] >= 200
+  → BEHEAD
+```
+
 ## Implementation Notes
 ```
 Triggers to watch for:
@@ -211,7 +242,7 @@ Triggers to watch for:
 
 GMCP considerations:
 - Track gmcp.Char.Vitals for limb percentages if available
-- Otherwise parse damage messages
+- lb[target].hits["limb"] - enemy limb damage tracking
 
 Edge cases:
 - 2H spec cures paralysis passively when attacking

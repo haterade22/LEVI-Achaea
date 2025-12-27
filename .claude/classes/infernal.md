@@ -476,9 +476,27 @@ usage: "When target is parrying your prep limb, stick nausea first"
 
 #### Limb Tracking
 ```yaml
+# Uses lb[target].hits["limb"] format for limb damage tracking
+# NOT tLimbs - use Romaen's limb counter format
+
+access_pattern:
+  left_leg: 'lb[target].hits["left leg"]'
+  right_leg: 'lb[target].hits["right leg"]'
+  left_arm: 'lb[target].hits["left arm"]'
+  right_arm: 'lb[target].hits["right arm"]'
+  head: 'lb[target].hits["head"]'
+  torso: 'lb[target].hits["torso"]'
+
 damage_percentage: "lb[target].hits['<limb>'] tracks 0-100%+"
 level_1_break: "100% damage = level 1 (withered/damaged)"
 prep_ready: "d2prepped = one DSL will break the limb"
+
+disembowel_check: |
+  lb[target].hits["left leg"] >= 100
+  AND lb[target].hits["right leg"] >= 100
+  AND (lb[target].hits["left arm"] >= 100 OR lb[target].hits["right arm"] >= 100)
+  AND tAffs.prone
+  → DISEMBOWEL
 ```
 
 ## Combat Preparation

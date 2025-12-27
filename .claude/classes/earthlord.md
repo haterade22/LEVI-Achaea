@@ -413,6 +413,34 @@ recommended_strategy: |
   In burrowable rooms, don't get fissured at low health (entomb).
 ```
 
+## Limb Tracking
+```yaml
+# Uses lb[target].hits["limb"] format for limb damage tracking
+# NOT tLimbs - use Romaen's limb counter format
+
+access_pattern:
+  left_leg: 'lb[target].hits["left leg"]'
+  right_leg: 'lb[target].hits["right leg"]'
+  left_arm: 'lb[target].hits["left arm"]'
+  right_arm: 'lb[target].hits["right arm"]'
+  head: 'lb[target].hits["head"]'
+  torso: 'lb[target].hits["torso"]'
+
+break_levels:
+  0-99: "Healthy"
+  100-149: "Broken (Level 1)"
+  150-199: "Broken (Level 2) - kill threshold for calcify"
+  200+: "Broken (Level 3)"
+
+hits_to_break: "5 hits normally, ~2-3 at max shaping (doubled damage)"
+
+calcify_kill_check: |
+  lb[target].hits["head"] >= 100 (level 1)
+  AND calcified
+  AND not restored within 5 seconds
+  → head becomes level 2, target dies
+```
+
 ## Implementation Notes
 ```
 Triggers to watch for:

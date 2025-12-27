@@ -564,7 +564,8 @@ The system dynamically captures damage values from combat:
 These values update automatically from combat triggers.
 
 ### Limb Tracking
-Uses `lb[target].hits["limb"]` format to match the rest of the BM offense system:
+Uses `lb[target].hits["limb"]` format to match the rest of the BM offense system.
+**NOT tLimbs** - use Romaen's limb counter format:
 - `lb[target].hits["left leg"]` - Left leg damage %
 - `lb[target].hits["right leg"]` - Right leg damage %
 

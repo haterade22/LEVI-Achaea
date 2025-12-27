@@ -110,7 +110,7 @@ implementation:
 ### Shikudo Kill: Dispatch (Limb-Based) - PRIMARY
 ```yaml
 type: limb
-summary: Break legs, prone via SWEEP, break head, damage windpipe, DISPATCH for instant kill
+summary: Prep legs AND head, SWEEP to prone + break legs, SPINKICK/NEEDLE head, DISPATCH
 
 prerequisites:
   - Target must be prone (from SWEEP)
@@ -118,13 +118,44 @@ prerequisites:
   - Head broken/damaged (100%+ or damagedhead affliction)
   - Windpipe damaged (from NEEDLE - gives damagedwindpipe or crushedthroat)
 
-steps:
-  1: "Prep legs to 90%+ using KURO (Rain/Oak/Gaital forms)"
-  2: "Prep head to 90%+ using NERVESTRIKE/NEEDLE/HIRU"
-  3: "Transition to Gaital form (requires kata >= 5)"
-  4: "SWEEP + FLASHHEEL (prone + break leg in one combo)"
-  5: "NEEDLE + SPINKICK (windpipe damage + instant head mangle)"
-  6: "DISPATCH <target> for instant kill"
+# CRITICAL: NEVER break legs until head is also prepped!
+# Breaking legs prematurely wastes the setup.
+
+kill_flow:
+  phase_1_prep_legs:
+    form: "Rain (24 kata capacity)"
+    attacks: "KURO left/right"
+    goal: "Both legs to 90.8% (one hit from break)"
+    protection: "Once prepped, use LIGHT attacks to avoid breaking"
+    transition: "Rain → Oak when kata >= 5 and legs prepped"
+
+  phase_2_prep_head:
+    form: "Oak"
+    attacks: "NERVESTRIKE, RISINGKICK head"
+    goal: "Head to ~92% (one hit from break)"
+    protection: "Use LIGHT on legs if hitting them, or hit torso/arms"
+    transition: "Oak → Gaital when kata >= 5 and all limbs prepped"
+
+  phase_3_kill:
+    form: "Gaital"
+    combo_1: "SWEEP + KURO (prones + breaks both legs in one combo)"
+    combo_2: "SPINKICK + NEEDLE (breaks head + applies windpipe)"
+    combo_3: "DISPATCH (instant kill)"
+
+dynamic_thresholds:
+  description: "Prepped = ONE HIT away from breaking (100%)"
+  calculation: "threshold = 100 - attack_damage"
+  examples:
+    kuro_9.2_percent: "Leg prepped at 90.8%"
+    thrust_14.5_percent: "Leg prepped at 85.5%"
+    nervestrike_7.8_percent: "Head prepped at 92.2%"
+  note: "Actual damage depends on target health - use shikudo_limbDamage table"
+
+edge_cases:
+  partial_prep: "If legs not fully prepped in Rain, Oak can finish with KURO"
+  kata_constraint: "Rain at kata 21+ ALWAYS goes to Oak (any transition resets kata)"
+  waiting_for_kata: "Use LIGHT attacks or hit torso/arms if can't transition yet"
+  parried_limbs: "Switch to alternate limb or use LIGHT on parried limb"
 
 key_mechanics:
   spinkick:
@@ -134,19 +165,24 @@ key_mechanics:
   sweep:
     effect: "Knocks target prone"
     cost: "Uses BOTH arm balances - only one kick allowed with sweep"
+  light_modifier:
+    effect: "Reduces limb damage, builds kata safely"
+    usage: "Use on prepped limbs to avoid premature breaks"
   forms:
     transition: "Need 5+ kata to transition between forms"
+    kata_reset: "ANY transition resets kata to 0"
     kata_limit: "12 per form (24 for Rain)"
 
 kill_condition_check: |
   tAffs.prone
-  AND (tLimbs.LL >= 100 OR tLimbs.RL >= 100)
-  AND (tLimbs.H >= 100 OR tAffs.damagedhead)
+  AND (lb[target].hits["left leg"] >= 100 OR lb[target].hits["right leg"] >= 100)
+  AND (lb[target].hits["head"] >= 100 OR tAffs.damagedhead)
   AND (tAffs.damagedwindpipe OR tAffs.crushedthroat)
   → DISPATCH
 
 notes: |
-  Breaking legs is CRITICAL - it keeps them prone (can't stand up).
+  NEVER break legs until head is also prepped!
+  The correct sequence is: prep both legs → prep head → Gaital → sweep/break → kill.
   SPINKICK is the key - if head is already damaged (level 2), SPINKICK
   on a prone target instantly mangles it (level 3), setting up dispatch.
 ```
@@ -479,33 +515,66 @@ transition_map:
 
 ## Shikudo Implementation (LEVI System)
 ```yaml
-# Implementation files in src/ataxia/
+# Implementation files
 files:
+  # New dispatch system (recommended)
+  006_CC_Shikudo.lua: "Current dispatch with dynamic thresholds"
+
+  # Legacy files
   200_Shikudo.lua: "V1 Dispatch system (both legs 90%+ before sweep)"
   201_Shikudo_V2.lua: "V2 Dispatch system (focus fire, clumsy first)"
-  081_Shikudo_Limb_Counter.lua: "Limb damage tracking formulas"
-  082_Shikudo_Extras.lua: "Form transition helpers"
+
+  # Core systems
+  002_Shikudo_Limb_Counter.lua: "Limb damage tracking formulas"
+  003_Shikudo_Extras.lua: "Form transition helpers"
 
 commands:
-  v1:
+  current:
     attack: "shikudo.dispatch() or levishikudodispatch()"
     status: "skstatus() or shikudo.status()"
   v2:
     attack: "shikudov2.dispatch() or levishikudov2()"
     status: "skv2status() or shikudov2.status()"
+  lock:
+    attack: "shikudoLock.dispatch() or shikudolock()"
+    status: "shikudoLock.status() or sklstatus()"
 
-v1_vs_v2:
-  v1:
-    leg_targeting: "Alternate left/right legs"
-    head_prep: "90% before sweep"
-    clumsiness: "Weave in when legs ready"
-    kill_combo: "needle + needle"
-  v2:
-    leg_targeting: "Focus fire ONE leg until 100% broken"
-    head_prep: "100% (damaged), then SPINKICK instant mangle"
-    clumsiness: "Apply FIRST, always (clumsy is king)"
-    paralysis: "Early priority in Oak"
-    kill_combo: "needle + spinkick (instant mangle)"
+# Current dispatch system (006_CC_Shikudo.lua)
+current_system:
+  description: "Dynamic threshold-based dispatch with leg protection"
+
+  dynamic_thresholds:
+    purpose: "Calculate 'prepped' based on actual damage per hit"
+    functions:
+      - "shikudo.getLimbDamage(limb) → safely gets lb[target].hits[limb] or 0"
+      - "shikudo.getLegPrepThreshold() → 100 - kuro_damage (~90.8%)"
+      - "shikudo.getHeadPrepThreshold() → 100 - form_attack_damage"
+      - "shikudo.isLegPrepped(leg) → true if leg >= threshold"
+      - "shikudo.areBothLegsPrepped() → true if both legs prepped"
+      - "shikudo.isDynamicHeadPrepped() → true if head >= threshold"
+      - "shikudo.isLegSafe(leg) → true if safe to hit (head prepped or leg not prepped)"
+
+  limb_tracking:
+    source: "lb[target].hits table from Romaen's limb counter"
+    access_pattern: 'lb[target].hits["left leg"], lb[target].hits["right leg"], lb[target].hits["head"]'
+    helper: "shikudo.getLimbDamage(limb) provides safe access with nil checks"
+    note: "NOT tLimbs - that's for a different limb tracking system"
+
+  transition_priority:
+    1_all_ready: "Legs + head prepped → Go to Gaital for kill"
+    2_legs_only: "Legs prepped, head not → Go to Oak for head prep"
+    3_kata_limit: "Near kata max → Transition to avoid stumble"
+    4_rain_overflow: "Rain kata 21+ → ALWAYS go to Oak"
+
+  leg_protection:
+    principle: "NEVER break legs until head is also prepped"
+    method: "Use LIGHT attacks on prepped legs until head ready"
+    forms_protected: [Rain, Oak, Tykonos, Willow]
+
+  kill_sequence:
+    phase_1: "Rain: prep both legs to ~90.8%"
+    phase_2: "Oak: prep head to ~92%, protect prepped legs"
+    phase_3: "Gaital: sweep + break legs → spinkick + needle → dispatch"
 ```
 
 ## Implementation Notes
@@ -530,7 +599,7 @@ GMCP considerations:
 - Track gmcp.Char.Vitals for limb percentages if available
 - ataxia.vitals.form - current Shikudo form
 - ataxia.vitals.kata - current kata count
-- tLimbs.H, tLimbs.LL, tLimbs.RL - enemy limb damage tracking
+- lb[target].hits["limb"] - enemy limb damage tracking (e.g., lb[target].hits["left leg"])
 - tAffs.prone, tAffs.damagedwindpipe, tAffs.damagedhead - kill conditions
 - Kai balance separate from regular bal/eq
 
