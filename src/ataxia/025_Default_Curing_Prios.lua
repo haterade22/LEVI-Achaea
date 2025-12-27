@@ -96,6 +96,8 @@ function ataxia_defaultCuringPrios()
     ["pyramides"] = 6,
     ["rebbies"] = 7,
 		
+    ["fratricide"] = 9,  -- Argentum cure, boost when approaching lock vs Serpent
+
     ["nausea"] = 11,
     ["haemophilia"] = 11,
     ["lethargy"] = 11,

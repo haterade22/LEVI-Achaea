@@ -243,9 +243,7 @@ function lostAff()
     partyrelay = true
   elseif aff[1] == "impatience" then
      myaeon = false
-  elseif aff[1] == "impatience" and ataxia.prioritySwaps.impSnap and ataxia.prioritySwaps.impSnap.active then
-	   ataxia_restorePrio("impatience")
-     myaeon = false
+  -- impSnap removed: Serpents no longer deliver impatience via SNAP, they use Impulse instead
   elseif aff[1] == "unweavingmind" then
     ataxia.afflictions.unweavingmind = 0
   elseif aff[1] == "unweavingbody" then

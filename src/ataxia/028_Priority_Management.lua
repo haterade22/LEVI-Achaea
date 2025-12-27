@@ -1,8 +1,15 @@
 -- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Ataxia-DownloadThis > Ataxia > System-related > Curing Stuff > Priority-related > Swaps > Priority Management
 
 function ataxia_checkMissingSwaps()
-  if not ataxia.prioritySwaps.impSnap then
-    ataxia.prioritySwaps.impSnap = {active = true, desc = "Prioritise impatience when snapped by a Serpent."}
+  -- impSnap removed: Serpents no longer deliver impatience via SNAP, they use Impulse instead
+  if not ataxia.prioritySwaps.paraAst then
+    ataxia.prioritySwaps.paraAst = {active = true, desc = "Prioritise paralysis over slickness when asthma blocks smoking."}
+  end
+  if not ataxia.prioritySwaps.astWear then
+    ataxia.prioritySwaps.astWear = {active = true, desc = "Prioritise asthma to prevent impulse when weariness present vs Serpent."}
+  end
+  if not ataxia.prioritySwaps.fratLock then
+    ataxia.prioritySwaps.fratLock = {active = true, desc = "Prioritise fratricide when approaching softlock (asthma + slickness)."}
   end
 
 end
@@ -18,9 +25,12 @@ function ataxia_resetSwaps()
 		ravaged = {active = false, desc = "Automatically prio mana sipping while ravagedmind is active."},
 		magi = {active = false, desc = "Automatic handling for burns and frozen status."},
     psionBleed = {active = false, desc = "Elevate haemophilia once bleed is stacked up."},
-    impSnap = {active = true, desc = "Prioritise impatience when snapped by a Serpent."},
+    -- impSnap removed: Serpents no longer deliver impatience via SNAP, they use Impulse instead
     parshield = {active = false, desc = "Temporarily ignore paralysis when shielding."},
     WATER = {active = false, desc = "Don't get latched."},
+    paraAst = {active = true, desc = "Prioritise paralysis over slickness when asthma blocks smoking."},
+    astWear = {active = true, desc = "Prioritise asthma to prevent impulse when weariness present vs Serpent."},
+    fratLock = {active = true, desc = "Prioritise fratricide when approaching softlock (asthma + slickness)."},
 	}
 	ataxia_Echo("Priority management has been set to default. Check aconfig prios for details.")
 end

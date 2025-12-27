@@ -193,3 +193,79 @@ function ataxia_ravagedMindSwap(event, affliction)
 end
 registerAnonymousEventHandler("aff gained", "ataxia_ravagedMindSwap")
 registerAnonymousEventHandler("aff cured", "ataxia_ravagedMindSwap")
+
+--paraAst functions: Prioritize paralysis over slickness when asthma blocks smoking
+function ataxia_swapParaAst(event, affliction)
+  if not ataxia.prioritySwaps then ataxia_resetSwaps() end
+  if not ataxia.prioritySwaps.paraAst or not ataxia.prioritySwaps.paraAst.active then return end
+  if event == "aff gained" then
+    if affed("asthma") and affed("paralysis") and affed("slickness") then
+      ataxia_setAffPrio("paralysis", 1)
+    end
+  end
+end
+
+function ataxia_restoreParaAst(event, affliction)
+  if not ataxia.prioritySwaps then ataxia_resetSwaps() end
+  if not ataxia.prioritySwaps.paraAst or not ataxia.prioritySwaps.paraAst.active then return end
+  if event == "aff cured" then
+    if affliction == "paralysis" or affliction == "asthma" then
+      if ataxia_getPrio("paralysis") ~= ataxia_defaultPrioAff("paralysis") then
+        ataxia_restorePrio("paralysis")
+      end
+    end
+  end
+end
+registerAnonymousEventHandler("aff gained", "ataxia_swapParaAst")
+registerAnonymousEventHandler("aff cured", "ataxia_restoreParaAst")
+
+--astWear functions: Boost asthma to prevent impulse when weariness present vs Serpent
+function ataxia_swapAstWear(event, affliction)
+  if not ataxia.prioritySwaps then ataxia_resetSwaps() end
+  if not ataxia.prioritySwaps.astWear or not ataxia.prioritySwaps.astWear.active then return end
+  if not ataxiaNDB_Exists(target) then return end
+  if event == "aff gained" then
+    if affed("asthma") and affed("weariness") and ataxiaNDB_getClass(target) == "Serpent" then
+      ataxia_setAffPrio("asthma", 3)
+    end
+  end
+end
+
+function ataxia_restoreAstWear(event, affliction)
+  if not ataxia.prioritySwaps then ataxia_resetSwaps() end
+  if not ataxia.prioritySwaps.astWear or not ataxia.prioritySwaps.astWear.active then return end
+  if event == "aff cured" then
+    if affliction == "asthma" or affliction == "weariness" then
+      if ataxia_getPrio("asthma") ~= ataxia_defaultPrioAff("asthma") then
+        ataxia_restorePrio("asthma")
+      end
+    end
+  end
+end
+registerAnonymousEventHandler("aff gained", "ataxia_swapAstWear")
+registerAnonymousEventHandler("aff cured", "ataxia_restoreAstWear")
+
+--fratLock functions: Boost fratricide when approaching softlock (asthma + slickness)
+function ataxia_swapFratLock(event, affliction)
+  if not ataxia.prioritySwaps then ataxia_resetSwaps() end
+  if not ataxia.prioritySwaps.fratLock or not ataxia.prioritySwaps.fratLock.active then return end
+  if event == "aff gained" then
+    if affed("fratricide") and affed("asthma") and affed("slickness") then
+      ataxia_setAffPrio("fratricide", 4)
+    end
+  end
+end
+
+function ataxia_restoreFratLock(event, affliction)
+  if not ataxia.prioritySwaps then ataxia_resetSwaps() end
+  if not ataxia.prioritySwaps.fratLock or not ataxia.prioritySwaps.fratLock.active then return end
+  if event == "aff cured" then
+    if affliction == "fratricide" or affliction == "asthma" or affliction == "slickness" then
+      if ataxia_getPrio("fratricide") ~= ataxia_defaultPrioAff("fratricide") then
+        ataxia_restorePrio("fratricide")
+      end
+    end
+  end
+end
+registerAnonymousEventHandler("aff gained", "ataxia_swapFratLock")
+registerAnonymousEventHandler("aff cured", "ataxia_restoreFratLock")
