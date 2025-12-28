@@ -189,6 +189,13 @@ function Algedonic.AntiSerpent()
     local hasProne = ataxia.afflictions.prone
     local kelpStack = Algedonic.mystack["kelp"] or 0
 
+    -- Ekanelia conditional tracking
+    local hasMasochism = ataxia.afflictions.masochism
+    local hasClumsiness = ataxia.afflictions.clumsiness
+    local hasConfusion = ataxia.afflictions.confusion
+    local hasRecklessness = ataxia.afflictions.recklessness
+    local hasHypersomnia = ataxia.afflictions.hypersomnia
+
     -- Can we tree? (not paralyzed, arms not both broken, tree off cooldown)
     local canTree = not hasParalysis
         and not (ataxia.afflictions.brokenleftarm and ataxia.afflictions.brokenrightarm)
@@ -208,6 +215,33 @@ function Algedonic.AntiSerpent()
     if hasProne and hasParalysis and hasSlickness then
         send("endure")
         send("curing prioaff paralysis")
+        return
+    end
+
+    -- === EKANELIA PREVENTION ===
+
+    -- MASOCHISM: Blocks 2 Ekanelia transformations (monkshood + curare)
+    -- monkshood: asthma + masochism + weariness → impatience (bypasses Impulse!)
+    -- curare: hypersomnia + masochism → hypochondria
+    if hasMasochism and (hasWeariness or hasHypersomnia) then
+        Algedonic.Echo("Clearing <cyan>masochism<white> to block Ekanelia!")
+        send("curing prioaff masochism")
+        return
+    end
+
+    -- CLUMSINESS + WEARINESS: Enables kalmia → asthma + slickness
+    -- Single bite gives BOTH lock afflictions - very dangerous
+    if hasClumsiness and hasWeariness then
+        Algedonic.Echo("Blocking <yellow>Ekanelia kalmia<white> setup!")
+        send("curing prioaff clumsiness")
+        return
+    end
+
+    -- CONFUSION + RECKLESSNESS: Makes loki PREDICTABLE
+    -- Bite gives guaranteed nausea + paralysis instead of random
+    if hasConfusion and hasRecklessness then
+        Algedonic.Echo("Blocking <magenta>Ekanelia loki<white> setup!")
+        send("curing prioaff recklessness")
         return
     end
 
