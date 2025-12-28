@@ -21,6 +21,7 @@ packageName: ''
 shikudo = shikudo or {}
 shikudo.state = {
   phase = "PREP",  -- PREP, PRONE, KILL
+  hyperfocus = nil,  -- Current hyperfocus target: nil, "head", "left leg", "right leg", etc.
 }
 
 -- Available attacks per form
@@ -122,24 +123,35 @@ function shikudo.getLimbDamage(limb)
 end
 
 -- Get damage for a specific attack (from shikudo_limbDamage table or defaults)
-function shikudo.getAttackDamage(attack)
+-- If targetLimb is provided and matches hyperfocus, damage is HALVED
+function shikudo.getAttackDamage(attack, targetLimb)
   local defaults = {
     kuro = 9.2, thrust = 14.5, needle = 10.6, nervestrike = 13.4,
     hiru = 4.3, hiraku = 4.3, livestrike = 7.8, ruku = 4.5,
     dart = 4.4, flashheel = 9.2, risingkick = 9.2, frontkick = 9.2,
     spinkick = 27.0  -- Massive damage on prone
   }
+  local baseDamage
   if shikudo_limbDamage and shikudo_limbDamage[attack] then
-    return shikudo_limbDamage[attack]
+    baseDamage = shikudo_limbDamage[attack]
+  else
+    baseDamage = defaults[attack] or 10  -- Default to 10% if unknown
   end
-  return defaults[attack] or 10  -- Default to 10% if unknown
+
+  -- HYPERFOCUS: If attacking a hyperfocused limb, damage is HALVED
+  if targetLimb and shikudo.state.hyperfocus == targetLimb then
+    return baseDamage / 2
+  end
+
+  return baseDamage
 end
 
 -- CORE FUNCTION: How many hits until this limb is prepped?
 -- Returns: 0 = already prepped, 1 = one hit preps it, 2+ = needs multiple
+-- Note: Accounts for hyperfocus (halved damage if hyperfocused on this limb)
 function shikudo.hitsToPrep(limb, attack)
   local current = shikudo.getLimbDamage(limb)
-  local dmg = shikudo.getAttackDamage(attack)
+  local dmg = shikudo.getAttackDamage(attack, limb)  -- Pass limb for hyperfocus check
   local threshold = 100 - dmg  -- "Prepped" = one hit from break
 
   if current >= threshold then
@@ -161,14 +173,20 @@ function shikudo.willOneHitPrep(limb, attack)
   return shikudo.hitsToPrep(limb, attack) == 1
 end
 
-function shikudo.getLegPrepThreshold()
+function shikudo.getLegPrepThreshold(leg)
   -- Use kuro damage as the baseline (safest threshold for legs)
+  -- Account for hyperfocus if specified
+  local legName = leg or "left leg"
   local kuro = shikudo_limbDamage and shikudo_limbDamage.kuro or 9.2
+  if shikudo.state.hyperfocus == legName then
+    kuro = kuro / 2  -- Halved damage when hyperfocused
+  end
   return 100 - kuro
 end
 
 function shikudo.getHeadPrepThreshold()
   -- Head threshold depends on form (different attacks do different damage)
+  -- Account for hyperfocus if head is hyperfocused
   local form = ataxia.vitals.form or "Rain"
   local dmg
   if form == "Oak" then
@@ -178,21 +196,23 @@ function shikudo.getHeadPrepThreshold()
   else
     dmg = shikudo_limbDamage and shikudo_limbDamage.hiru or 4.3
   end
+
+  if shikudo.state.hyperfocus == "head" then
+    dmg = dmg / 2  -- Halved damage when hyperfocused
+  end
   return 100 - dmg
 end
 
 function shikudo.isLegPrepped(leg)
-  local threshold = shikudo.getLegPrepThreshold()
-  if leg == "left" or leg == "LL" then
-    return shikudo.getLimbDamage("left leg") >= threshold
-  else
-    return shikudo.getLimbDamage("right leg") >= threshold
-  end
+  local limbName = (leg == "left" or leg == "LL") and "left leg" or "right leg"
+  local threshold = shikudo.getLegPrepThreshold(limbName)
+  return shikudo.getLimbDamage(limbName) >= threshold
 end
 
 function shikudo.areBothLegsPrepped()
-  local threshold = shikudo.getLegPrepThreshold()
-  return shikudo.getLimbDamage("left leg") >= threshold and shikudo.getLimbDamage("right leg") >= threshold
+  local leftThreshold = shikudo.getLegPrepThreshold("left leg")
+  local rightThreshold = shikudo.getLegPrepThreshold("right leg")
+  return shikudo.getLimbDamage("left leg") >= leftThreshold and shikudo.getLimbDamage("right leg") >= rightThreshold
 end
 
 function shikudo.isDynamicHeadPrepped()
@@ -210,6 +230,54 @@ function shikudo.isLegSafe(leg)
 end
 
 --------------------------------------------------------------------------------
+-- HYPERFOCUS MANAGEMENT
+-- Hyperfocus bypasses parry but HALVES damage to that limb
+-- IMPORTANT: Hyperfocus costs 3.4s balance, so we ALWAYS hyperfocus HEAD
+-- and keep it there for the entire fight. No switching!
+--------------------------------------------------------------------------------
+
+-- Set hyperfocus state (called by trigger when hyperfocus is set/cleared)
+function shikudo.setHyperfocus(limb)
+  if limb == "none" or limb == nil then
+    shikudo.state.hyperfocus = nil
+    cecho("\n<yellow>[Shikudo] Hyperfocus: NONE")
+  else
+    -- Normalize limb names
+    local normalized = limb
+    if limb == "left leg" or limb == "leftleg" or limb == "ll" then
+      normalized = "left leg"
+    elseif limb == "right leg" or limb == "rightleg" or limb == "rl" then
+      normalized = "right leg"
+    end
+    shikudo.state.hyperfocus = normalized
+    cecho("\n<yellow>[Shikudo] Hyperfocus: " .. normalized)
+  end
+end
+
+-- Check if hyperfocus is already set to head (our target)
+function shikudo.isHyperfocusSet()
+  return shikudo.state.hyperfocus == "head"
+end
+
+-- Get the hyperfocus command for combat start
+-- We ALWAYS want hyperfocus head - set once at fight start
+-- Returns: "hyperfocus head" if not set, nil if already set
+function shikudo.getHyperfocusCommand()
+  -- If already hyperfocused on head, no command needed
+  if shikudo.state.hyperfocus == "head" then
+    return nil
+  end
+
+  -- Set hyperfocus to head at combat start (costs 3.4s balance but worth it)
+  return "hyperfocus head"
+end
+
+-- Reset hyperfocus state (call when combat ends)
+function shikudo.resetHyperfocus()
+  shikudo.state.hyperfocus = nil
+end
+
+--------------------------------------------------------------------------------
 -- FORM TRANSITION LOGIC
 --------------------------------------------------------------------------------
 
@@ -221,13 +289,54 @@ function shikudo.shouldTransition()
     return nil  -- Need at least 5 kata to transition
   end
 
-  -- In Gaital and ready to kill - stay here
+  -- Gaital: START form (parry bypass) OR kill form
   if form == "Gaital" then
+    local legsPrepped = shikudo.areBothLegsPrepped()
+    local headPrepped = shikudo.isDynamicHeadPrepped()
+
+    -- KILL PHASE: If all limbs prepped, stay for kill
+    if legsPrepped and headPrepped then
+      if shikudo.checkDispatchReady() then
+        return nil  -- Stay for dispatch
+      end
+      -- If stuck in Gaital kill phase too long, cycle out
+      if kata >= 9 then
+        return "Maelstrom"  -- Maelstrom → Oak → back to Gaital
+      end
+      return nil  -- Stay and keep trying for kill
+    end
+
+    -- START PHASE: Limbs not prepped, stay for parry bypass until kata 9
+    if kata >= 9 then
+      return "Rain"  -- Go to Rain for leg prep
+    end
     return nil
   end
 
   local legsPrepped = shikudo.areBothLegsPrepped()
   local headPrepped = shikudo.isDynamicHeadPrepped()
+
+  -- PRIORITY 0 (HIGHEST): KATA LIMIT - Must transition before stumbling
+  -- Willow transitions early (6 kata) to avoid over-prepping legs
+  -- Oak only goes to Gaital (never back to Willow with prepped legs)
+
+  -- Willow: transition after 2 combos (6 kata) to get to Rain quickly
+  if form == "Willow" and kata >= 6 then
+    return "Rain"
+  end
+
+  -- Other non-Rain forms: transition at 9 kata
+  if form ~= "Rain" and form ~= "Willow" and kata >= 9 then
+    if form == "Oak" then
+      if legsPrepped and headPrepped then
+        return "Gaital"  -- Ready for kill
+      else
+        return nil  -- Stay in Oak, finish head prep (risk stumble but protect legs)
+      end
+    end
+    if form == "Tykonos" then return "Willow" end
+    if form == "Maelstrom" then return "Oak" end
+  end
 
   -- PRIORITY 1: ALL LIMBS READY → Go to Gaital for kill
   if legsPrepped and headPrepped then
@@ -238,27 +347,25 @@ function shikudo.shouldTransition()
     if form == "Maelstrom" then return "Oak" end
   end
 
-  -- PRIORITY 2: LEGS PREPPED, HEAD NOT → Go to Oak for head prep
+  -- PRIORITY 2: LEGS PREPPED, HEAD NOT → Continue prepping or transition
+  -- Note: Rain can continue prepping head with hiru (24 kata max), so don't force Oak transition
   if legsPrepped and not headPrepped then
-    if form == "Rain" then return "Oak" end
+    -- Rain: Stay and prep head with hiru until kata 21 (has 24 kata max)
+    -- Don't force Oak transition - Rain can do both leg and head prep
+    if form == "Rain" then
+      -- Only go to Oak at kata 21+ for safety
+      if kata >= 21 then return "Oak" end
+      -- Otherwise stay in Rain and continue prepping head with hiru
+      return nil
+    end
     if form == "Tykonos" then return "Willow" end  -- Tykonos→Willow→Rain→Oak
     if form == "Willow" then return "Rain" end
-    if form == "Oak" then return nil end  -- Stay in Oak, prep head
+    -- Oak: fall through, will be handled by Priority 0 at kata 9
   end
 
-  -- PRIORITY 3: Near kata limit - transition to avoid stumble
-  local maxKata = shikudo.maxKata[form] or 12
-
-  if maxKata == 12 and kata >= 9 then
-    if form == "Oak" then return "Willow" end
-    if form == "Willow" then return "Rain" end
-    if form == "Tykonos" then return "Willow" end
-    if form == "Maelstrom" then return "Oak" end
-  end
-
-  -- Rain at 21+ kata - ALWAYS go to Oak (resets kata, can prep legs OR head)
+  -- Rain at 21+ kata - ALWAYS go to Oak (safety transition before 24 kata stumble)
   if form == "Rain" and kata >= 21 then
-    return "Oak"  -- Oak has kuro (legs) AND nervestrike (head)
+    return "Oak"
   end
 
   return nil
@@ -299,23 +406,19 @@ function shikudo.selectKick()
     end
 
   elseif form == "Oak" then
-    -- RISINGKICK can hit head - use hitsToPrep for coordination
+    -- OAK: Kick comes LAST (combo order: staff1 + staff2 + kick)
+    -- NERVESTRIKE FIRST for paralysis, then kick at the end
     local headHits = shikudo.hitsToPrep("head", "risingkick")
 
     if tAffs.prone then
       ataxiaTemp.kickTarget = "head"
       return "risingkick head"  -- Stuns if prone
-    elseif headHits >= 2 and parried ~= "head" then
+    elseif headHits >= 1 and parried ~= "head" then
       ataxiaTemp.kickTarget = "head"
-      return "risingkick head"  -- Head needs 2+ hits, kick can help
-    elseif headHits == 1 and parried ~= "head" then
-      -- One hit preps head - kick does it, staff does other things
-      ataxiaTemp.kickTarget = "head"
-      return "risingkick head"
+      return "risingkick head"  -- Contribute to head damage
     else
-      -- Head prepped or parried → hit torso
       ataxiaTemp.kickTarget = "torso"
-      return "risingkick torso"
+      return "risingkick torso"  -- Default to torso
     end
 
   elseif form == "Gaital" then
@@ -347,15 +450,34 @@ function shikudo.selectKick()
     local leftHits = shikudo.hitsToPrep("left leg", "flashheel")
     local rightHits = shikudo.hitsToPrep("right leg", "flashheel")
 
+    -- Safe to hit if needs more damage
     if leftHits > 0 and parried ~= "left leg" then
       ataxiaTemp.kickTarget = "left leg"
       return "flashheel left"
     elseif rightHits > 0 and parried ~= "right leg" then
       ataxiaTemp.kickTarget = "right leg"
       return "flashheel right"
+    -- Both prepped - check if safe to break
+    elseif shikudo.isLegSafe("left") then
+      ataxiaTemp.kickTarget = "left leg"
+      return "flashheel left"  -- Head prepped, safe to break
     else
-      ataxiaTemp.kickTarget = "left leg"  -- Both prepped, just hit one
-      return "flashheel left"
+      -- Unsafe! Willow only has flashheel (legs). Hit already broken if possible
+      local ll = shikudo.getLimbDamage("left leg")
+      local rl = shikudo.getLimbDamage("right leg")
+      if ll >= 100 then
+        ataxiaTemp.kickTarget = "left leg"
+        return "flashheel left"  -- Already broken, no harm
+      elseif rl >= 100 then
+        ataxiaTemp.kickTarget = "right leg"
+        return "flashheel right"  -- Already broken, no harm
+      else
+        -- Neither broken, both prepped, head not ready
+        -- Hit left but flag for immediate transition
+        ataxiaTemp.kickTarget = "left leg"
+        ataxiaTemp.needsUrgentTransition = true
+        return "flashheel left"
+      end
     end
 
   elseif form == "Maelstrom" then
@@ -411,7 +533,7 @@ end
 
 function shikudo.selectTykonosStaff(slot, parried)
   -- Tykonos: THRUST (any limb), SWEEP
-  -- Tykonos's risingkick can hit head - coordinate with kick via kickTarget
+  -- SLOT COORDINATION: Don't hit the same limb twice if it only needs 1 hit
 
   local leftHits = shikudo.hitsToPrep("left leg", "thrust")
   local rightHits = shikudo.hitsToPrep("right leg", "thrust")
@@ -422,12 +544,14 @@ function shikudo.selectTykonosStaff(slot, parried)
   if leftHits == 0 and rightHits == 0 and headHits == 0 then
     if not tAffs.prone then
       if slot == 1 then
+        ataxiaTemp.slot1Target = "sweep"
         return "sweep"  -- Sweep uses both arm balances
       else
         return nil  -- No second staff with sweep
       end
     else
       if slot == 1 then
+        ataxiaTemp.slot1Target = "torso"
         return "thrust light torso"
       else
         return "thrust light head"
@@ -436,47 +560,44 @@ function shikudo.selectTykonosStaff(slot, parried)
   end
 
   if slot == 1 then
+    ataxiaTemp.slot1Target = nil  -- Reset tracking
+
     -- LEGS first
-    if leftHits >= 2 and parried ~= "left leg" then
+    if leftHits >= 1 and parried ~= "left leg" then
+      ataxiaTemp.slot1Target = "left leg"
       return "thrust left leg"
-    elseif leftHits == 1 and parried ~= "left leg" then
-      return "thrust left leg"
-    elseif rightHits >= 2 and parried ~= "right leg" then
-      return "thrust right leg"
-    elseif rightHits == 1 and parried ~= "right leg" then
+    elseif rightHits >= 1 and parried ~= "right leg" then
+      ataxiaTemp.slot1Target = "right leg"
       return "thrust right leg"
 
     -- HEAD
-    elseif headHits >= 2 and parried ~= "head" then
-      return "thrust head"
-    elseif headHits == 1 then
-      if kickHitsHead then
+    elseif headHits >= 1 and parried ~= "head" then
+      if headHits == 1 and kickHitsHead then
+        ataxiaTemp.slot1Target = "torso"
         return "thrust light torso"  -- Kick preps head
       else
+        ataxiaTemp.slot1Target = "head"
         return "thrust head"
       end
     else
+      ataxiaTemp.slot1Target = "torso"
       return "thrust light torso"
     end
 
   else  -- slot == 2
-    if rightHits >= 2 and parried ~= "right leg" then
-      return "thrust right leg"
-    elseif leftHits == 1 and rightHits > 0 and parried ~= "right leg" then
-      return "thrust right leg"  -- Slot 1 did left, slot 2 does right
-    elseif rightHits == 1 and leftHits > 0 and parried ~= "left leg" then
+    local slot1Hit = ataxiaTemp.slot1Target or "none"
+
+    -- LEGS - but NOT the same one slot 1 hit!
+    if leftHits >= 1 and slot1Hit ~= "left leg" and parried ~= "left leg" then
       return "thrust left leg"
-    elseif leftHits == 1 or rightHits == 1 then
-      -- Slot 1 prepped a leg → do head or torso
-      if headHits > 0 and parried ~= "head" then
-        return "thrust head"
-      else
-        return "thrust light torso"
-      end
-    elseif headHits >= 2 and parried ~= "head" then
+    elseif rightHits >= 1 and slot1Hit ~= "right leg" and parried ~= "right leg" then
+      return "thrust right leg"
+
+    -- HEAD if legs done
+    elseif headHits >= 1 and slot1Hit ~= "head" and not kickHitsHead and parried ~= "head" then
       return "thrust head"
-    elseif headHits == 1 then
-      return "thrust light torso"  -- Slot 1 or kick prepped head
+
+    -- FALLBACK to torso
     else
       return "thrust light torso"
     end
@@ -485,82 +606,56 @@ end
 
 function shikudo.selectRainStaff(slot, parried)
   -- Rain: KURO (legs), HIRU (head), RUKU (arms/torso)
-  -- Rain's frontkick hits ARMS, so staff has 2 slots for legs/head
+  -- Rain's PRIMARY JOB is LEG PREP
+  -- SLOT COORDINATION: Don't hit the same limb twice if it only needs 1 hit
 
-  -- CORE: How many hits until each limb is prepped?
   local leftHits = shikudo.hitsToPrep("left leg", "kuro")
   local rightHits = shikudo.hitsToPrep("right leg", "kuro")
-  local headHits = shikudo.hitsToPrep("head", "hiru")  -- Rain uses hiru for head
+  local headHits = shikudo.hitsToPrep("head", "hiru")
 
   if slot == 1 then
-    -- LEGS: Apply hitsToPrep logic
-    if leftHits >= 2 and parried ~= "left leg" then
-      return "kuro left"  -- Needs 2+ hits, can use slot 1
-    elseif leftHits == 1 and parried ~= "left leg" then
-      return "kuro left"  -- One hit preps it, slot 2 will do something else
-    elseif rightHits >= 2 and parried ~= "right leg" then
-      return "kuro right"
-    elseif rightHits == 1 and parried ~= "right leg" then
-      return "kuro right"
+    ataxiaTemp.slot1Target = nil  -- Reset tracking
 
-    -- HEAD: If legs prepped, work on head
-    elseif leftHits == 0 and rightHits == 0 then
-      if headHits >= 1 and parried ~= "head" then
-        return "hiru"  -- Head needs work
-      else
-        -- All prepped → afflictions
-        if not tAffs.slickness then
-          return "ruku light torso"
-        else
-          return "hiru light"
-        end
-      end
-    else
-      return "hiru light"
-    end
-
-  else  -- slot == 2
-    -- Check what slot 1 did and adjust
-    if rightHits >= 2 and parried ~= "right leg" then
-      return "kuro right"  -- Needs 2+ hits
-    elseif leftHits == 1 and rightHits > 0 and parried ~= "right leg" then
-      -- Slot 1 prepped left leg → slot 2 works on right
-      return "kuro right"
-    elseif rightHits == 1 and leftHits > 0 and parried ~= "left leg" then
-      -- Slot 1 prepped right leg → slot 2 works on left
+    -- LEGS FIRST (Rain's primary job)
+    if leftHits >= 1 and parried ~= "left leg" then
+      ataxiaTemp.slot1Target = "left leg"
       return "kuro left"
-    elseif leftHits == 1 or rightHits == 1 then
-      -- Slot 1 prepped a leg, slot 2 does affliction/head
-      if headHits > 0 and parried ~= "head" then
-        return "hiru"
-      elseif not tAffs.slickness then
-        return "ruku torso"
-      elseif not tAffs.clumsiness then
-        return "ruku left"
+    elseif rightHits >= 1 and parried ~= "right leg" then
+      ataxiaTemp.slot1Target = "right leg"
+      return "kuro right"
+
+    -- LEGS PREPPED, work on head
+    elseif headHits >= 1 and parried ~= "head" then
+      ataxiaTemp.slot1Target = "head"
+      return "hiru"
+    else
+      -- All prepped → afflictions
+      ataxiaTemp.slot1Target = "torso"
+      if not tAffs.slickness then
+        return "ruku light torso"
       else
         return "hiru light"
       end
-    elseif leftHits == 0 and rightHits == 0 then
-      -- Both legs prepped
-      if headHits >= 2 and parried ~= "head" then
-        return "hiru"
-      elseif headHits == 1 then
-        -- Slot 1 hit head → slot 2 does affliction
-        if not tAffs.slickness then
-          return "ruku torso"
-        elseif not tAffs.clumsiness then
-          return "ruku left"
-        else
-          return "hiru light"
-        end
-      else
-        -- Head prepped too
-        if not tAffs.slickness then
-          return "ruku light torso"
-        else
-          return "hiru light"
-        end
-      end
+    end
+
+  else  -- slot == 2
+    local slot1Hit = ataxiaTemp.slot1Target or "none"
+
+    -- LEGS - but NOT the same one slot 1 hit!
+    if leftHits >= 1 and slot1Hit ~= "left leg" and parried ~= "left leg" then
+      return "kuro left"
+    elseif rightHits >= 1 and slot1Hit ~= "right leg" and parried ~= "right leg" then
+      return "kuro right"
+
+    -- HEAD if legs done
+    elseif headHits >= 1 and slot1Hit ~= "head" and parried ~= "head" then
+      return "hiru"
+
+    -- FALLBACK to afflictions/arms/torso
+    elseif not tAffs.slickness then
+      return "ruku torso"
+    elseif not tAffs.clumsiness then
+      return "ruku left"
     else
       return "hiru light"
     end
@@ -569,73 +664,64 @@ end
 
 function shikudo.selectOakStaff(slot, parried)
   -- Oak: KURO (legs), NERVESTRIKE (head), LIVESTRIKE (torso), RUKU
-  -- Oak's risingkick can hit HEAD - coordinate with kick via kickTarget
+  -- Oak's PRIMARY JOB is HEAD PREP - legs should be prepped from Rain
+  -- IMPORTANT: NERVESTRIKE FIRST - paralysis prevents them from parrying!
+  -- SLOT COORDINATION: Don't hit the same limb twice if it only needs 1 hit
 
-  -- CORE: How many hits until each limb is prepped?
   local leftHits = shikudo.hitsToPrep("left leg", "kuro")
   local rightHits = shikudo.hitsToPrep("right leg", "kuro")
-  local headHitsNeeded = shikudo.hitsToPrep("head", "nervestrike")
-
-  -- Check if kick is hitting head (set by selectKick)
+  local headHits = shikudo.hitsToPrep("head", "nervestrike")
   local kickHitsHead = ataxiaTemp.kickTarget == "head"
 
   if slot == 1 then
-    -- LEGS: If not prepped, continue leg work
-    if leftHits > 0 and parried ~= "left leg" then
-      return "kuro left"
-    elseif rightHits > 0 and parried ~= "right leg" then
-      return "kuro right"
+    ataxiaTemp.slot1Target = nil  -- Reset tracking
 
-    -- HEAD: Apply hitsToPrep logic, accounting for kick
-    elseif headHitsNeeded >= 3 and parried ~= "head" then
-      return "nervestrike"  -- Needs 3+, all slots can hit
-    elseif headHitsNeeded == 2 and parried ~= "head" then
-      return "nervestrike"  -- Needs 2, staff1 can hit (staff2 may vary)
-    elseif headHitsNeeded == 1 then
-      if kickHitsHead then
-        -- Kick already preps it → staff does something else
-        if not tAffs.asthma then return "livestrike" end
-        if not tAffs.clumsiness then return "ruku left" end
-        return "nervestrike light"
+    -- NERVESTRIKE FIRST when head needs ANY work (paralysis prevents parry!)
+    if headHits >= 1 and parried ~= "head" then
+      ataxiaTemp.slot1Target = "head"
+      return "nervestrike"
+
+    -- HEAD PREPPED, finish legs
+    elseif headHits == 0 then
+      if leftHits >= 1 and parried ~= "left leg" then
+        ataxiaTemp.slot1Target = "left leg"
+        return "kuro left"
+      elseif rightHits >= 1 and parried ~= "right leg" then
+        ataxiaTemp.slot1Target = "right leg"
+        return "kuro right"
+      elseif not tAffs.asthma then
+        ataxiaTemp.slot1Target = "torso"
+        return "livestrike"
       else
-        -- Kick missed head → staff1 preps it
-        return "nervestrike"
+        -- All limbs prepped, light nervestrike for paralysis
+        ataxiaTemp.slot1Target = "head"
+        return "nervestrike light"
       end
-    elseif headHitsNeeded == 0 then
-      if not tAffs.asthma then return "livestrike light" end
-      return "nervestrike light"
     else
+      ataxiaTemp.slot1Target = "head"
       return "nervestrike light"
     end
 
   else  -- slot == 2
-    if rightHits > 0 and parried ~= "right leg" then
-      return "kuro right"
-    elseif leftHits > 0 and parried ~= "left leg" then
-      return "kuro left"
+    local slot1Hit = ataxiaTemp.slot1Target or "none"
 
-    -- HEAD: Account for both kick and staff1
-    elseif headHitsNeeded >= 3 and parried ~= "head" then
-      return "nervestrike"  -- All 3 slots can hit
-    elseif headHitsNeeded == 2 then
-      if kickHitsHead then
-        return "nervestrike"  -- Kick + staff1 = 2 hits, staff2 can help
-      else
-        -- Only staff1 hit head → staff2 does something else
-        if not tAffs.asthma then return "livestrike" end
-        if not tAffs.clumsiness then return "ruku left" end
-        return "nervestrike light"
-      end
-    elseif headHitsNeeded == 1 then
-      -- One of kick or staff1 prepped it → staff2 must do something else
-      if not tAffs.asthma then return "livestrike" end
-      if not tAffs.clumsiness then return "ruku left" end
-      if not tAffs.slickness then return "ruku torso" end
-      return "nervestrike light"
-    elseif headHitsNeeded == 0 then
-      if not tAffs.asthma then return "livestrike light" end
-      if not tAffs.clumsiness then return "ruku left" end
-      return "nervestrike light"
+    -- HEAD if still needs more work (2+ hits remaining after slot 1)
+    if headHits >= 2 and parried ~= "head" then
+      return "nervestrike"
+
+    -- LEGS - but NOT the same one slot 1 hit!
+    elseif leftHits >= 1 and slot1Hit ~= "left leg" and parried ~= "left leg" then
+      return "kuro left"
+    elseif rightHits >= 1 and slot1Hit ~= "right leg" and parried ~= "right leg" then
+      return "kuro right"
+
+    -- FALLBACK to afflictions/arms/torso
+    elseif not tAffs.asthma then
+      return "livestrike"
+    elseif not tAffs.clumsiness then
+      return "ruku left"
+    elseif not tAffs.slickness then
+      return "ruku torso"
     else
       return "nervestrike light"
     end
@@ -644,11 +730,8 @@ end
 
 function shikudo.selectGaitalStaff(slot, parried)
   -- Gaital: NEEDLE (head/windpipe), SWEEP (prone), KURO (legs)
-  -- SWEEP uses BOTH arm balances - only kick allowed with sweep!
-  -- Kill sequence:
-  --   1. sweep + flashheel (prones + breaks one leg)
-  --   2. spinkick + needle + needle (breaks head + windpipe)
-  --   3. dispatch
+  -- KILL FORM - breaking legs is INTENDED here
+  -- SLOT COORDINATION: Still track to avoid hitting same unbroken leg twice
 
   local ll = shikudo.getLimbDamage("left leg")
   local rl = shikudo.getLimbDamage("right leg")
@@ -660,9 +743,14 @@ function shikudo.selectGaitalStaff(slot, parried)
   local bothLegsPrepped = shikudo.areBothLegsPrepped()
   local headPrepped = shikudo.isDynamicHeadPrepped()
 
+  if slot == 1 then
+    ataxiaTemp.slot1Target = nil  -- Reset tracking
+  end
+
   -- PHASE 1: Not prone yet → SWEEP (uses both arms, kick breaks leg)
   if not tAffs.prone and bothLegsPrepped and headPrepped then
     if slot == 1 then
+      ataxiaTemp.slot1Target = "sweep"
       return "sweep"  -- Prones target, kick (flashheel) breaks leg
     else
       return nil  -- SWEEP uses both arm balances - no second staff!
@@ -672,13 +760,8 @@ function shikudo.selectGaitalStaff(slot, parried)
   -- PHASE 2: Prone + at least one leg broken → head + windpipe
   if tAffs.prone and legsBroken then
     if slot == 1 then
-      if not headBroken then
-        return "needle"  -- Head damage + windpipe (spinkick also hits head)
-      elseif not hasWindpipe then
-        return "needle"  -- Need windpipe
-      else
-        return "needle"  -- Keep pressure
-      end
+      ataxiaTemp.slot1Target = "head"
+      return "needle"
     else
       return "needle"  -- Double needle for windpipe
     end
@@ -686,53 +769,70 @@ function shikudo.selectGaitalStaff(slot, parried)
 
   -- PHASE 2b: Prone but legs not broken yet - break them
   if tAffs.prone and not legsBroken then
+    local slot1Hit = ataxiaTemp.slot1Target or "none"
+
     if slot == 1 then
-      if ll < 100 and parried ~= "left leg" then return "kuro left" end
-      return "kuro right"
+      if ll < 100 and parried ~= "left leg" then
+        ataxiaTemp.slot1Target = "left leg"
+        return "kuro left"
+      else
+        ataxiaTemp.slot1Target = "right leg"
+        return "kuro right"
+      end
     else
-      if rl < 100 and parried ~= "right leg" then return "kuro right" end
-      return "kuro left"
+      -- Slot 2: hit the OTHER leg
+      if rl < 100 and slot1Hit ~= "right leg" and parried ~= "right leg" then
+        return "kuro right"
+      elseif ll < 100 and slot1Hit ~= "left leg" and parried ~= "left leg" then
+        return "kuro left"
+      else
+        return "needle"  -- Fallback to head
+      end
     end
   end
 
   -- Fallback: build toward kill conditions
   if slot == 1 then
-    if not tAffs.prone then return "sweep" end
+    if not tAffs.prone then
+      ataxiaTemp.slot1Target = "sweep"
+      return "sweep"
+    end
+    ataxiaTemp.slot1Target = "head"
     return "needle"
   else
-    -- If we returned sweep in slot 1, we shouldn't be here
     return "needle"
   end
 end
 
 function shikudo.selectWillowStaff(slot, parried)
   -- Willow: DART (fast), HIRU (head), HIRAKU (head)
-  -- Willow's flashheel hits LEGS - coordinate with kick via kickTarget
+  -- Willow's staff focuses on HEAD, kick does legs
+  -- SLOT COORDINATION: Don't hit head twice if it only needs 1 hit
 
-  local leftHits = shikudo.hitsToPrep("left leg", "flashheel")  -- Kick does legs
-  local rightHits = shikudo.hitsToPrep("right leg", "flashheel")
   local headHits = shikudo.hitsToPrep("head", "hiru")
-  local kickHitsLeg = ataxiaTemp.kickTarget and ataxiaTemp.kickTarget:find("leg")
 
   if slot == 1 then
-    -- HEAD: Primary focus in Willow (staff does head, kick does legs)
-    if headHits >= 2 and parried ~= "head" then
+    ataxiaTemp.slot1Target = nil  -- Reset tracking
+
+    -- HEAD: Primary focus in Willow
+    if headHits >= 1 and parried ~= "head" then
+      ataxiaTemp.slot1Target = "head"
       return "hiru"
-    elseif headHits == 1 and parried ~= "head" then
-      return "hiru"  -- Slot 2 will do something else
-    elseif headHits == 0 then
-      -- Head prepped, do torso or wait
-      return "dart torso"
     else
+      ataxiaTemp.slot1Target = "torso"
       return "dart torso"
     end
 
   else  -- slot == 2
+    local slot1Hit = ataxiaTemp.slot1Target or "none"
+
+    -- HEAD if still needs work - but NOT if slot 1 just hit it and it only needed 1
     if headHits >= 2 and parried ~= "head" then
       return "hiraku"  -- Continue head work
-    elseif headHits == 1 then
-      -- Slot 1 prepped head → do something else
-      return "dart torso"
+    elseif headHits >= 1 and slot1Hit ~= "head" and parried ~= "head" then
+      return "hiraku"
+
+    -- FALLBACK to torso
     else
       return "dart torso"
     end
@@ -741,12 +841,17 @@ end
 
 function shikudo.selectMaelstromStaff(slot, parried)
   -- Maelstrom: RUKU, LIVESTRIKE, JINZUKU, SWEEP
-  -- Maelstrom is more affliction-focused, less limb prep
-  -- Kick (risingkick) hits head
+  -- Affliction focused - doesn't hit legs with staff
+  -- SLOT COORDINATION: Track for consistency
+
+  if slot == 1 then
+    ataxiaTemp.slot1Target = nil  -- Reset tracking
+  end
 
   -- Check for sweep conditions (uses both arms, only kick allowed)
   if not tAffs.prone and shikudo.areBothLegsPrepped() and shikudo.isDynamicHeadPrepped() then
     if slot == 1 then
+      ataxiaTemp.slot1Target = "sweep"
       return "sweep"
     else
       return nil  -- Sweep uses both arm balances
@@ -756,10 +861,13 @@ function shikudo.selectMaelstromStaff(slot, parried)
   -- Affliction priority
   if slot == 1 then
     if not tAffs.asthma then
+      ataxiaTemp.slot1Target = "torso"
       return "livestrike"
     elseif not tAffs.slickness then
+      ataxiaTemp.slot1Target = "torso"
       return "ruku torso"
     else
+      ataxiaTemp.slot1Target = "torso"
       return "jinzuku"
     end
   else
@@ -777,7 +885,7 @@ end
 -- COMBO BUILDER
 --------------------------------------------------------------------------------
 
-function shikudo.buildCombo()
+function shikudo.buildCombo(transition)
   local form = ataxia.vitals.form
   local kick = shikudo.selectKick()
   local staff1 = shikudo.selectStaff(1)
@@ -785,18 +893,38 @@ function shikudo.buildCombo()
 
   -- Handle sweep (uses both arm balances, limited combo)
   if staff1 == "sweep" then
+    local combo
     if kick then
-      return "combo $tar sweep " .. kick
+      combo = "combo $tar sweep " .. kick
     else
-      return "combo $tar sweep"
+      combo = "combo $tar sweep"
     end
+    -- Add inline transition if provided
+    if transition then
+      combo = combo .. " transition " .. transition:lower()
+    end
+    return combo
   end
 
-  -- Normal combo: kick + staff1 + staff2
+  -- OAK: staff1 + staff2 + kick (nervestrike first for paralysis)
+  -- OTHER FORMS: kick + staff1 + staff2
   local combo = "combo $tar"
-  if kick then combo = combo .. " " .. kick end
-  if staff1 then combo = combo .. " " .. staff1 end
-  if staff2 then combo = combo .. " " .. staff2 end
+  if form == "Oak" then
+    -- Staff first, kick last
+    if staff1 then combo = combo .. " " .. staff1 end
+    if staff2 then combo = combo .. " " .. staff2 end
+    if kick then combo = combo .. " " .. kick end
+  else
+    -- Normal order: kick first
+    if kick then combo = combo .. " " .. kick end
+    if staff1 then combo = combo .. " " .. staff1 end
+    if staff2 then combo = combo .. " " .. staff2 end
+  end
+
+  -- Add inline transition if provided
+  if transition then
+    combo = combo .. " transition " .. transition:lower()
+  end
 
   return combo
 end
@@ -820,6 +948,7 @@ function shikudo.dispatch()
   cecho("\n<cyan>[Shikudo] Target: " .. tostring(target))
   cecho(" | Form: " .. tostring(ataxia.vitals.form))
   cecho(" | Kata: " .. tostring(ataxia.vitals.kata))
+  cecho(" | Hyperfocus: " .. tostring(shikudo.state.hyperfocus or "none"))
   cecho("\n<cyan>[Shikudo] Limbs - H:" .. shikudo.getLimbDamage("head") .. " LL:" .. shikudo.getLimbDamage("left leg") .. " RL:" .. shikudo.getLimbDamage("right leg"))
   cecho(" | Ready for Prone: " .. (shikudo.checkReadyForProne() and "YES" or "NO"))
 
@@ -844,6 +973,17 @@ function shikudo.dispatch()
     cmd = combatQueue()
   end
 
+  -- HYPERFOCUS CHECK: Set hyperfocus head at combat start (costs 3.4s balance)
+  -- This is a one-time setup, so we send it separately and wait for balance
+  local hyperfocusCmd = shikudo.getHyperfocusCommand()
+  if hyperfocusCmd then
+    send("queue addclear free " .. cmd .. hyperfocusCmd)
+    cecho("\n<yellow>[Shikudo] Setting hyperfocus head (3.4s balance cost)")
+    -- Optimistically set state so we don't spam it
+    shikudo.state.hyperfocus = "head"
+    return  -- Wait for balance before attacking
+  end
+
   -- KILL CHECK: All conditions met?
   if shikudo.checkDispatchReady() then
     cmd = cmd .. "wield staff489282;dispatch " .. target
@@ -860,18 +1000,17 @@ function shikudo.dispatch()
     return
   end
 
-  -- BUILD ATTACK
-  local attack = shikudo.buildCombo()
+  -- TRANSITION CHECK - get transition before building combo
+  local transition = shikudo.shouldTransition()
+  if transition then
+    cecho("\n<yellow>[Shikudo] Transitioning to " .. transition .. " after this combo")
+  end
+
+  -- BUILD ATTACK (includes inline transition if needed)
+  local attack = shikudo.buildCombo(transition)
   attack = attack:gsub("%$tar", target)
 
   cmd = cmd .. "wield staff489282;" .. attack
-
-  -- TRANSITION CHECK - add at END of combo for inline transition
-  local transition = shikudo.shouldTransition()
-  if transition then
-    cmd = cmd .. ";transition to the " .. transition .. " form"
-    cecho("\n<yellow>[Shikudo] Transitioning to " .. transition .. " after this combo")
-  end
 
   send("queue addclear free " .. cmd)
 
@@ -913,11 +1052,14 @@ function shikudo.status()
   local bothLegsPrepped = shikudo.areBothLegsPrepped()
   local headPrepped = shikudo.isDynamicHeadPrepped()
 
+  local hyperfocus = shikudo.state.hyperfocus or "none"
+
   cecho("\n<cyan>╔══════════════════════════════════════════╗")
   cecho("\n<cyan>║         <white>SHIKUDO STATUS<cyan>                  ║")
   cecho("\n<cyan>╠══════════════════════════════════════════╣")
   cecho("\n<cyan>║ <white>Target: <yellow>" .. tostring(target or "None") .. "<cyan>")
   cecho("\n<cyan>║ <white>Form: <green>" .. form .. " <grey>(" .. kata .. "/" .. maxKata .. " kata)<cyan>")
+  cecho("\n<cyan>║ <white>Hyperfocus: " .. (hyperfocus == "head" and "<green>HEAD" or "<yellow>" .. hyperfocus) .. "<cyan>")
   cecho("\n<cyan>╠══════════════════════════════════════════╣")
   cecho("\n<cyan>║ <white>DYNAMIC THRESHOLDS (1 hit from break):<cyan>")
   cecho("\n<cyan>║   <white>Leg Prep: <yellow>" .. string.format("%.1f%%", legThreshold) .. "<cyan>")

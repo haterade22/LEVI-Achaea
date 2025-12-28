@@ -497,6 +497,83 @@ cure_groups:
   restoration: [crippled_limbs]
 ```
 
+---
+
+## Ekanelia (Venom Bonus Afflictions)
+
+```yaml
+ekanelia_overview:
+  description: |
+    Ekanelia is a Serpent skill that ADDS bonus afflictions to BITE attacks
+    when specific conditionals are present on the target.
+    IMPORTANT: Only works with BITE, not DOUBLESTAB.
+
+  mechanic: |
+    When biting with an Ekanelia-enhanced venom, if the target has ALL
+    the required conditional afflictions, the bite delivers BOTH the normal
+    venom affliction AND the bonus Ekanelia effect. This makes single bites
+    extremely powerful when conditions are met.
+
+  tradeoff: |
+    Using BITE instead of DST means serpent only applies one venom base,
+    but gains potentially 2-3 afflictions total when Ekanelia triggers.
+
+ekanelia_transformations:
+  kalmia:
+    conditionals: [clumsiness, weariness]
+    normal_effect: asthma
+    bonus_effect: slickness
+    total: "asthma + slickness from single bite"
+    notes: "Powerful - gets both lock afflictions in one attack"
+
+  aconite:
+    conditionals: [deadening, dementia]
+    normal_effect: stupidity
+    bonus_effect: paranoia
+    total: "stupidity + paranoia from single bite"
+    notes: "Double mental pressure"
+
+  monkshood:
+    conditionals: [asthma, masochism, weariness]
+    normal_effect: disfigurement
+    bonus_effect: impatience
+    total: "disfigurement + impatience from single bite"
+    notes: "Alternative impatience delivery without Impulse requirement"
+
+  curare:
+    conditionals: [hypersomnia, masochism]
+    normal_effect: paralysis
+    bonus_effect: hypochondria
+    consumes: hypersomnia
+    total: "paralysis + hypochondria (hypersomnia consumed)"
+    notes: "Kelp stack + paralysis in one attack"
+
+  voyria:
+    conditionals: [anorexia, impatience, vertigo]
+    normal_effect: voyria
+    bonus_effect: [confusion, disrupted]
+    total: "voyria + confusion + disrupted from single bite"
+    notes: "Triple affliction from one bite"
+
+  loki:
+    conditionals: [confusion, recklessness]
+    normal_effect: random
+    bonus_effect: [nausea, paralysis]
+    total: "random + nausea + paralysis from single bite"
+    notes: "Loki becomes PREDICTABLE - guaranteed para + nausea"
+
+  scytherus:
+    conditionals: [addiction, nausea]
+    normal_effect: scytherus
+    bonus_effect: camus
+    bonus_conditionals: [haemophilia]
+    enhanced_bonus: "additional camus"
+    total: "scytherus + camus damage (enhanced with haemophilia)"
+    notes: "Heavy damage output when conditions met"
+```
+
+---
+
 ## Defensive Abilities
 ```yaml
 scales:
@@ -574,6 +651,33 @@ tree_timing:
     - "If paralyzed, you CANNOT tree - cure para first"
     - "Tree before paralysis is applied!"
 
+ekanelia_defense:
+  description: |
+    Ekanelia STACKS bonus afflictions on BITE attacks when conditionals met.
+    A single bite can deliver 2-3 afflictions - extremely dangerous.
+
+  critical_combinations:
+    kalmia_setup:
+      conditionals: [clumsiness, weariness]
+      danger: "Single bite gives asthma + slickness (both lock affs)"
+      defense: "Cure clumsiness OR weariness to block"
+
+    monkshood_setup:
+      conditionals: [asthma, masochism, weariness]
+      danger: "Gets impatience without needing Impulse"
+      defense: "Cure masochism - blocks both monkshood and curare"
+
+    loki_trap:
+      conditionals: [confusion, recklessness]
+      danger: "Loki becomes PREDICTABLE - guaranteed nausea + paralysis"
+      defense: "Cure confusion OR recklessness before they bite"
+
+  defense_priorities:
+    - "Cure masochism early - blocks 2 Ekanelia transformations"
+    - "Don't let clumsiness + weariness stack (enables kalmia→slickness)"
+    - "Track conditional combos to predict incoming afflictions"
+    - "Ekanelia only works with BITE (not DST) - serpent sacrifices double venom"
+
 priority_cures:
   - asthma: "HIGHEST vs Serpent - blocks impulse AND smoking"
   - weariness: "Blocks Fitness, enables impulse (kelp - competes with asthma)"
@@ -586,6 +690,7 @@ priority_cures:
 
 dangerous_abilities:
   - doublestab: "Two venoms per attack - can apply asthma+weariness in one hit"
+  - bite_ekanelia: "Single bite delivers 2-3 affs when conditionals met"
   - impulse: "Delivers mental afflictions INSTANTLY when asthma+weariness present"
   - fratricide: "Causes impulse mental affs to RELAPSE after cure"
   - hypnosis: "Sets up fratricide via SUGGEST/SNAP"
@@ -600,6 +705,8 @@ avoid:
   - "Ignoring fratricide (causes focus lock via relapse)"
   - "Standing still when they're hidden"
   - "Low health with darkshade/scytherus active"
+  - "Letting clumsiness + weariness stack (enables Ekanelia kalmia→slickness)"
+  - "Ignoring masochism (enables monkshood and curare Ekanelia bonuses)"
 
 recommended_strategy: |
   MODERN SERPENT DEFENSE PRIORITY:
@@ -635,13 +742,19 @@ anti_serpent_function: |
 ```
 Triggers to watch for:
 - "jabs you with a dirk coated in" - venom application
-- "bites you viciously" - bite attack
+- "bites you viciously" - bite attack (check for Ekanelia bonus!)
 - "begins to weave" - hypnosis starting
 - "snaps" - suggestions triggering (fratricide setup)
 - "impulse" - mental affliction delivery (CRITICAL)
 - "disappears into the shadows" - they hid
 - "phases out of existence" - they phased
 - "flay" - stripping sileris/rebounding
+
+Ekanelia Detection:
+- When serpent uses BITE instead of DST, check for Ekanelia bonus
+- Track target conditionals - if clumsiness+weariness, kalmia bite = asthma+slickness
+- If masochism present, curare/monkshood bites gain bonus effects
+- Bite gives fewer base venoms than DST, but more total affs when Ekanelia procs
 
 GMCP considerations:
 - Track gmcp.Char.Afflictions for current affs
@@ -668,6 +781,9 @@ Edge cases:
 - Garrote requires hidden AND behind target
 - Paralysis and slickness COMPETE for bloodroot cure
 - Asthma and weariness COMPETE for kelp cure
+- Ekanelia BITE can deliver 2-3 affs when conditionals met (check tAffs)
+- Ekanelia curare CONSUMES hypersomnia when triggered
+- Ekanelia loki becomes PREDICTABLE (nausea+para) with confusion+recklessness
 
 Venom cure groupings (same herb):
 - Kelp: asthma, clumsiness, hypochondria, sensitivity, weariness

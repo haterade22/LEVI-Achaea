@@ -508,9 +508,12 @@ transition_map:
   Gaital: [Rain, Maelstrom]
   Maelstrom: [Oak]
 
-# Optimal path to Gaital (kill form):
-# Rain → Oak → Gaital (best)
-# OR any form → build kata → transition toward Gaital
+# Optimal form cycle (one-way flow, protects prepped legs):
+# Gaital (start, parry bypass) → Rain → Oak → Gaital (kill phase)
+# If kill fails: Gaital → Maelstrom → Oak → Gaital (cycle back)
+#
+# Key: Start in Gaital for FREE parry bypass on first combo
+# Key: Oak NEVER goes back to Willow (protects prepped legs from flashheel)
 ```
 
 ## Shikudo Implementation (LEVI System)
@@ -560,21 +563,82 @@ current_system:
     helper: "shikudo.getLimbDamage(limb) provides safe access with nil checks"
     note: "NOT tLimbs - that's for a different limb tracking system"
 
+  hyperfocus:
+    description: "Bypasses parry on a limb at cost of HALF damage"
+    syntax: "HYPERFOCUS <limb|NONE>"
+    balance_cost: "3.4 seconds"
+    strategy: "ALWAYS hyperfocus HEAD at combat start, never switch"
+    reason: "Head is key prep target; 3.4s cost makes switching impractical"
+    damage_adjustment: "Head prep threshold changes from ~92% to ~96% (half damage)"
+    functions:
+      - "shikudo.setHyperfocus(limb) → set by trigger when hyperfocus message seen"
+      - "shikudo.getHyperfocusCommand() → returns 'hyperfocus head' if not already set"
+      - "shikudo.isHyperfocusSet() → true if head is hyperfocused"
+    auto_behavior: "First dispatch() call will set hyperfocus head before attacking"
+
   transition_priority:
+    0_kata_limit:
+      willow: "Willow at 6+ kata → Rain (early exit, 2 combos)"
+      oak: "Oak at 9+ kata → Gaital only (never back to Willow)"
+      others: "Other forms at 9+ kata → next form in cycle"
     1_all_ready: "Legs + head prepped → Go to Gaital for kill"
-    2_legs_only: "Legs prepped, head not → Go to Oak for head prep"
-    3_kata_limit: "Near kata max → Transition to avoid stumble"
-    4_rain_overflow: "Rain kata 21+ → ALWAYS go to Oak"
+    2_legs_only:
+      rain: "Rain stays and preps head with hiru (24 kata capacity, no rush)"
+      oak: "Oak stays until head prepped (protect prepped legs)"
+      others: "Other forms transition toward Oak"
+    3_rain_overflow: "Rain kata 21+ → ALWAYS go to Oak (safety transition)"
+
+  transition_syntax:
+    description: "Transitions are inline within the combo command"
+    example: "combo target risingkick head nervestrike livestrike transition willow"
+    note: "Non-Rain forms transition at 9 kata to avoid stumbling at 12"
 
   leg_protection:
     principle: "NEVER break legs until head is also prepped"
-    method: "Use LIGHT attacks on prepped legs until head ready"
+    method: "Use LIGHT staff attacks on prepped legs; Willow uses isLegSafe() check"
     forms_protected: [Rain, Oak, Tykonos, Willow]
+    willow_behavior: "If legs prepped but head not ready, hit already-broken leg if possible"
 
   kill_sequence:
-    phase_1: "Rain: prep both legs to ~90.8%"
-    phase_2: "Oak: prep head to ~92%, protect prepped legs"
+    phase_0: "Gaital: START HERE for FREE parry bypass, stay until kata 9"
+    phase_1: "Rain: prep both legs to ~90.8%, can also prep head with hiru (24 kata capacity)"
+    phase_2: "Oak: finish head prep with NERVESTRIKE FIRST (paralysis prevents parry!)"
     phase_3: "Gaital: sweep + break legs → spinkick + needle → dispatch"
+    fallback: "If kill fails in Gaital: Maelstrom → Oak → Gaital (cycle back)"
+
+  attack_ordering:
+    description: "Combo syntax is flexible: COMBO target attack1 attack2 attack3"
+    principle: "Order attacks to maximize affliction/prone benefits"
+
+    oak:
+      order: "staff1 + staff2 + kick (STAFF FIRST)"
+      reason: "Nervestrike paralysis prevents parrying subsequent attacks"
+      example: "combo target nervestrike kuro left risingkick head"
+
+    rain:
+      order: "kick + staff1 + staff2 (KICK FIRST - default)"
+      reason: "Frontkick can prone, which bypasses parry for staff attacks"
+      example: "combo target frontkick left kuro left kuro right"
+
+    gaital_sweep:
+      order: "sweep + kick (SWEEP FIRST)"
+      reason: "Sweep prones target, kick hits while prone"
+      example: "combo target sweep flashheel left"
+      note: "Sweep uses both arm balances - only one kick allowed"
+
+    maelstrom_sweep:
+      order: "sweep + kick (SWEEP FIRST)"
+      reason: "Same as Gaital - sweep prones, kick follows"
+      example: "combo target sweep risingkick head"
+
+    maelstrom_normal:
+      order: "kick + staff1 + staff2 (KICK FIRST - default)"
+      reason: "Risingkick stuns if prone, crescent for damage"
+      example: "combo target risingkick head livestrike ruku torso"
+
+    other_forms:
+      order: "kick + staff1 + staff2 (default)"
+      reason: "No special affliction ordering needed"
 ```
 
 ## Implementation Notes
@@ -594,6 +658,10 @@ Shikudo-specific triggers:
 - Dispatch messages: "dispatches *" - kill executed
 - SPINKICK on prone: "spins and kicks * in the head" - massive damage
 - Stumble: "You lose your rhythm" - kata reset, form may change
+- Hyperfocus: "You will now focus on bypassing attempts to deflect blows when striking the *"
+  → Call shikudo.setHyperfocus(matches[2]) to track state
+- Hyperfocus clear: "You stop focussing upon bypassing your target's parry"
+  → Call shikudo.setHyperfocus(nil) to clear state
 
 GMCP considerations:
 - Track gmcp.Char.Vitals for limb percentages if available
@@ -615,6 +683,14 @@ Edge cases:
   - Prone: hits HEAD with massive damage
   - Prone + damaged head: INSTANTLY MANGLES head (level 2 → 3)
 - SWEEP uses BOTH arm balances - only one kick allowed
-- Form transitions require 5+ kata
+- Form transitions require 5+ kata (can transition anytime after 5 if conditions met)
 - Rain form has 24 kata max (all others have 12)
+- Willow transitions at 6 kata (2 combos) to avoid over-prepping legs
+- Rain stays and preps head with hiru if legs already prepped (no rush, 24 kata)
+- Oak at 9 kata only goes to Gaital (never back to Willow with prepped legs)
+- Gaital at 9 kata goes to Maelstrom if kill not ready (Maelstrom → Oak → Gaital cycle)
+- Other non-Rain forms transition at 9 kata
+- Transitions are inline: "combo target kick staff1 staff2 transition form"
+- LIGHT modifier only works for STAFF attacks, not kicks
+- Willow's flashheel can only hit legs - uses isLegSafe() to avoid premature breaks
 ```
