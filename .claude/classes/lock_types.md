@@ -329,6 +329,28 @@ fratricide_mechanic:
   effect: |
     After victim focuses to cure impatience, fratricide
     causes it to immediately relapse. Creates focus lock.
+  scytherus_combo: |
+    When combined with scytherus (ginseng cure), each relapse
+    deals ~1200 poison damage. CRITICAL to cure fratricide early.
+
+ekanelia_mechanic:
+  description: "BITE venom transformation that ADDS bonus afflictions"
+  requirement: "Only works with BITE, not DOUBLESTAB"
+  transformations:
+    kalmia: "clumsiness + weariness → asthma + SLICKNESS"
+    monkshood: "asthma + masochism + weariness → disfigurement + IMPATIENCE"
+    curare: "hypersomnia + masochism → paralysis + HYPOCHONDRIA"
+    loki: "confusion + recklessness → random + NAUSEA + PARALYSIS"
+    scytherus: "addiction + nausea → scytherus + CAMUS DAMAGE"
+  danger: |
+    Single BITE can deliver 2-3 afflictions when conditionals met.
+    Watch for: clumsiness + weariness (enables kalmia→slickness)
+              masochism (enables monkshood AND curare bonuses)
+              confusion + recklessness (makes loki predictable)
+  defense: |
+    Cure masochism early - blocks 2 Ekanelia transformations.
+    Don't let clumsiness + weariness stack together.
+    Track conditional combos to predict incoming afflictions.
 ```
 
 ### Cure Competition (Critical)
@@ -401,3 +423,6 @@ priority_order:
 - **VS SERPENT**: Cure fratricide early (prevents mental relapse)
 - **VS SERPENT**: Tree when approaching lock (asthma + slickness + impatience/anorexia)
 - **VS SERPENT**: Prioritize paralysis over slickness when asthma blocks smoking
+- **VS SERPENT**: Cure masochism early (blocks 2 Ekanelia transformations)
+- **VS SERPENT**: Block Ekanelia kalmia by curing clumsiness OR weariness
+- **VS SERPENT**: Cure fratricide IMMEDIATELY when scytherus present (1200 damage per relapse)

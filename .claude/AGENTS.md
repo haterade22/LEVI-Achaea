@@ -127,37 +127,59 @@ Read the **attacker's class documentation** for:
 
 ### Impulse Requirements
 All three must be true for Impulse to work:
-1. Victim has NO sileris/fangbarrier
+1. Victim has NO sileris/fangbarrier (quicksilver applied)
 2. Victim HAS asthma
 3. Victim HAS weariness
+
+### Ekanelia Mechanics (BITE Venom Transformation)
+Ekanelia allows serpent BITE attacks to deliver BONUS afflictions when specific conditionals are present.
+**CRITICAL**: Only works with BITE, not DOUBLESTAB. Serpent sacrifices double venom to use it.
+
+| Venom | Conditionals | Normal + Bonus Effect |
+|-------|--------------|----------------------|
+| **kalmia** | clumsiness + weariness | asthma + **slickness** |
+| **monkshood** | asthma + masochism + weariness | disfigurement + **impatience** |
+| **curare** | hypersomnia + masochism | paralysis + **hypochondria** |
+| **loki** | confusion + recklessness | random + **nausea + paralysis** |
+| **scytherus** | addiction + nausea | scytherus + **camus damage** |
+
+### Ekanelia Defense Priorities
+| Danger | Block By Curing | Why |
+|--------|-----------------|-----|
+| kalmia setup | clumsiness OR weariness | Prevents asthma + slickness in one bite |
+| monkshood setup | masochism | Blocks 2 transforms (monkshood + curare) |
+| loki trap | confusion OR recklessness | Prevents predictable nausea + paralysis |
+
+### Fratricide + Scytherus (CRITICAL)
+- **Fratricide** causes Impulse-delivered afflictions to RELAPSE after cure
+- **Scytherus** deals ~1200 damage on each relapse tick
+- **CURE PRIORITY**: When fratricide + scytherus present, cure fratricide IMMEDIATELY
+- Fratricide cured by **Argentum** (lobelia herb group)
 
 ### Cure Competition
 | Herb | Competing Afflictions | Priority |
 |------|----------------------|----------|
 | **Kelp** | asthma vs weariness | Cure ASTHMA (breaks Impulse) |
 | **Bloodroot** | paralysis vs slickness | Cure PARALYSIS when asthma present |
+| **Argentum** | fratricide vs masochism | Cure FRATRICIDE when scytherus present |
 
-### Fratricide Mechanic
-- Delivered via Hypnosis SNAP
-- Causes impulse mental afflictions (impatience) to RELAPSE after focus
-- Cure with Argentum EARLY when asthma + slickness present
-
-### Priority Swaps (029_Priority_Swaps.lua)
-| Swap | Condition | Action |
-|------|-----------|--------|
-| `astWear` | asthma + weariness vs Serpent | Boost asthma → prio 3 |
-| `paraAst` | asthma + para + slick | Boost paralysis → prio 1 |
-| `fratLock` | fratricide + asthma + slick | Boost fratricide → prio 4 |
-
-### AntiSerpent Function (299_Anti_Priorities.lua)
-- **Tree trigger**: asthma + slickness + (impatience OR anorexia) = "approaching lock"
-- Fires tree BEFORE paralysis locks you out
+### AntiSerpent Function (001_Anti_Priorities.lua)
+**Priority Order**:
+1. **approachingLock + tree** → TREE (asthma + slickness + mental)
+2. **impulseLockThreat + tree** → TREE (asthma + weariness + no fangbarrier + mental)
+3. **fratricide + impulseEnabled + tree** → TREE (stops relapse spiral)
+4. **fangbarrier down + impulse conditions** → Re-apply quicksilver
+5. **fratricide + scytherus** → Cure fratricide NOW (1200 damage per relapse)
+6. **Ekanelia prevention** (masochism, kalmia setup, loki setup)
+7. **Impulse prevention** (asthma cure when kelp stack >= 2)
+8. **fratricide + impulseEnabled** → Cure fratricide
+9. **Standard lock handling**
 
 ### Key Files
-- `.claude/classes/serpent.md` - Full Serpent mechanics
+- `.claude/classes/serpent.md` - Full Serpent mechanics + Ekanelia
 - `.claude/classes/lock_types.md` - Serpent lock strategy section
-- `src/ataxia/029_Priority_Swaps.lua` - Priority swap implementations
-- `src/ataxia/299_Anti_Priorities.lua` - AntiSerpent function
+- `src_new/scripts/levi_ataxia/levi/levi_scripts/algedonic_defense_1.0/001_Anti_Priorities.lua` - AntiSerpent function
+- `src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Ekanelia_Offense.lua` - Serpent offense system
 
 ---
 

@@ -224,7 +224,7 @@ Each class has:
 | Psion | Weavers of Aldar magic | Weaving, Psionics, Emulation |
 | Runewarden | Mystic warriors who employ runic lore (Knight) | Runelore, Discipline, Weaponmastery |
 | Sentinel | Metamorphing forest rangers with animal companions | Woodlore, Metamorphosis, Skirmishing |
-| Serpent | Masters of venoms and subterfuge | Subterfuge, Venom, Hypnosis |
+| Serpent | Masters of venoms and subterfuge (see Ekanelia below) | Subterfuge, Venom, Hypnosis |
 | Shaman | Mystical users of Vodun dolls, curses, and bound spirits | Vodun, Curses, Spiritlore |
 | Sylvan | Forest-lovers who blend mastery of three elements | Propagation, Groves, Weatherweaving |
 | Unnamable | Frenzied mutant warriors for Chaos (Knight) | Dominion, Anathema, Weaponmastery |
@@ -444,6 +444,39 @@ Classes generally focus on one of two kill paths:
 - Build toward Soft Lock → Tree Lock → True Lock
 - Use class-specific affliction to complete the lock
 - Examples: Serpent, Shaman, Apostate
+
+### Serpent Combat System (Ekanelia + Impulse)
+
+Modern Serpent combat revolves around two key mechanics:
+
+**Impulse** - Instant mental affliction delivery when:
+- Target has asthma AND weariness AND no fangbarrier
+- Delivers impatience or anorexia instantly (no SNAP timing needed)
+
+**Ekanelia** - BITE venom transformation that ADDS bonus afflictions:
+| Venom | Conditionals Required | Normal + Bonus Effect |
+|-------|----------------------|----------------------|
+| kalmia | clumsiness + weariness | asthma + **slickness** |
+| monkshood | asthma + masochism + weariness | disfigurement + **impatience** |
+| curare | hypersomnia + masochism | paralysis + **hypochondria** |
+| loki | confusion + recklessness | random + **nausea + paralysis** |
+| scytherus | addiction + nausea | scytherus + **camus damage** |
+
+**Fratricide** - Causes Impulse-delivered afflictions to RELAPSE after cure
+- Combined with scytherus = ~1200 damage per relapse tick
+- CRITICAL to cure early when fighting serpents
+
+**Kill Routes**:
+1. **True Lock**: asthma + slickness + paralysis + impatience + anorexia + weariness
+2. **Darkshade Kill**: Keep darkshade stuck for 26 seconds (protected by ginseng stack)
+
+**Defense Priority vs Serpent**:
+1. Tree when Impulse enabled + mental affliction present
+2. Re-apply fangbarrier (quicksilver) when stripped
+3. Cure fratricide IMMEDIATELY when scytherus present
+4. Block Ekanelia setups by curing masochism, clumsiness, or confusion early
+
+**Key Files**: `.claude/classes/serpent.md`, `src_new/scripts/.../serpent/002_Ekanelia_Offense.lua`
 
 **Limb Damage-Based**: Break limbs to enable killing blows
 - Limbs track damage as percentage (0-200%+)

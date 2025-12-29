@@ -730,12 +730,17 @@ recommended_strategy: |
      and you have asthma + weariness, you're in serious danger.
 
 anti_serpent_function: |
-  See AntiSerpent() in 299_Anti_Priorities.lua for automated defense.
-  Key triggers:
-  - Approaching lock → auto tree
-  - Asthma + weariness → boost asthma priority
-  - Fratricide + asthma + slickness → boost fratricide priority
-  - Asthma + paralysis + slickness → prioritize paralysis
+  See AntiSerpent() in src_new/scripts/levi_ataxia/levi/levi_scripts/algedonic_defense_1.0/001_Anti_Priorities.lua
+
+  Key triggers (priority order):
+  1. approachingLock + tree → TREE (asthma + slickness + mental)
+  2. impulseLockThreat + tree → TREE (asthma + weariness + no fangbarrier + mental)
+  3. fratricide + impulseEnabled + tree → TREE (stops relapse spiral)
+  4. fangbarrier down → Re-apply quicksilver
+  5. fratricide + scytherus → Cure fratricide NOW (1200 damage per relapse)
+  6. Ekanelia prevention (masochism, kalmia setup, loki setup)
+  7. Impulse prevention (asthma cure)
+  8. fratricide + impulseEnabled → Cure fratricide
 ```
 
 ## Implementation Notes
