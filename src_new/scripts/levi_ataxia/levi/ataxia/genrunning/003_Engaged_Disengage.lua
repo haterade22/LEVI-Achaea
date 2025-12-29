@@ -14,6 +14,27 @@ attributes:
 packageName: ''
 ]]--
 
+-- Auto-move with arrival verification and retry
+function autoMoveAndBash(destinationRoom, expectedArea, travelTime)
+  expandAlias("goto " .. destinationRoom)
+  tempTimer(travelTime, function()
+    if gmcp.Room.Info.area == expectedArea then
+      ataxiaBasher_areabash()
+    else
+      -- Retry once
+      ataxiaEcho("Did not reach " .. expectedArea .. ", retrying...")
+      expandAlias("goto " .. destinationRoom)
+      tempTimer(travelTime, function()
+        if gmcp.Room.Info.area == expectedArea then
+          ataxiaBasher_areabash()
+        else
+          ataxiaEcho("Failed to reach " .. expectedArea .. " after retry.")
+        end
+      end)
+    end
+  end)
+end
+
 function basher_disengaged()
 	disableTimer("Clear Bashing Console")
 	disableTrigger("Denizen Attacks / Misc Lines")
@@ -77,26 +98,23 @@ end
 --Auto Move to New Area Stuff
 
 if gmcp.Room.Info.area == "the Azdun Catacombs" and clearedmog == false then
---expandAlias("goto Moghedu")
---tempTimer(20,[[ataxiaBasher_areabash()]])
+  autoMoveAndBash("Moghedu", "Moghedu", 20)
 end
+
 if gmcp.Room.Info.area == "The Digsite of Husks" and clearedtir == false then
---expandAlias("goto 21552")
---tempTimer(14,[[ataxiaBasher_areabash()]])
+  autoMoveAndBash("21552", "Tir Murann", 14)
 end
+
 if gmcp.Room.Info.area == "Tir Murann" and clearedquartz == false then
---expandAlias("goto 20822")
---tempTimer(10,[[ataxiaBasher_areabash()]])
+  autoMoveAndBash("20822", "Quartz Peak", 10)
 end
 
 if gmcp.Room.Info.area == "Quartz Peak" and clearedquisalis == false then
---expandAlias("goto 27338")
---tempTimer(10,[[ataxiaBasher_areabash()]])
+  autoMoveAndBash("27338", "the Den of the Quisalis", 10)
 end
 
 if gmcp.Room.Info.area == "the Den of the Quisalis" and clearedmog == false then
---expandAlias("goto Moghedu")
---tempTimer(20,[[ataxiaBasher_areabash()]])
+  autoMoveAndBash("Moghedu", "Moghedu", 20)
 end
 
 
