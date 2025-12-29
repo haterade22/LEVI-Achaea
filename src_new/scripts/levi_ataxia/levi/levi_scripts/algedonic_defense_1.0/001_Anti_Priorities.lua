@@ -196,6 +196,9 @@ function Algedonic.AntiSerpent()
     local hasRecklessness = ataxia.afflictions.recklessness
     local hasHypersomnia = ataxia.afflictions.hypersomnia
 
+    -- Defense tracking
+    local hasFangbarrier = ataxia.defences and ataxia.defences.fangbarrier
+
     -- Can we tree? (not paralyzed, arms not both broken, tree off cooldown)
     local canTree = not hasParalysis
         and not (ataxia.afflictions.brokenleftarm and ataxia.afflictions.brokenrightarm)
@@ -205,9 +208,29 @@ function Algedonic.AntiSerpent()
     -- Tree NOW before paralysis locks us out
     local approachingLock = hasAsthma and hasSlickness and (hasImpatience or hasAnorexia)
 
+    -- IMPULSE ENABLED: asthma + weariness + no fangbarrier = they can Impulse us
+    local impulseEnabled = hasAsthma and hasWeariness and not hasFangbarrier
+
     if canTree and approachingLock then
         Algedonic.Echo("<red>APPROACHING LOCK - TREE!<white>")
         send("touch tree")
+        return
+    end
+
+    -- EARLY TREE: When Impulse enabled + mental afflictions building, tree before lock forms
+    -- This triggers earlier than approachingLock to prevent spiraling into lock
+    local mentalsPressure = (hasImpatience and 1 or 0) + (hasAnorexia and 1 or 0) + (hasFratricide and 1 or 0)
+    if canTree and impulseEnabled and mentalsPressure >= 2 then
+        Algedonic.Echo("<yellow>IMPULSE PRESSURE<white> - tree to reset!")
+        send("touch tree")
+        return
+    end
+
+    -- FANGBARRIER RE-APPLICATION: If fangbarrier stripped and Impulse conditions developing
+    -- Re-apply sileris BEFORE they can Impulse us (asthma + weariness = Impulse ready)
+    if not hasFangbarrier and hasAsthma and hasWeariness and not hasParalysis and not hasSlickness then
+        Algedonic.Echo("<cyan>FANGBARRIER DOWN<white> - reapplying sileris to block Impulse!")
+        send("apply sileris to torso")
         return
     end
 
@@ -258,9 +281,10 @@ function Algedonic.AntiSerpent()
         return
     end
 
-    -- FRATRICIDE HANDLING: When approaching lock, fratricide causes impulse relapse
-    -- Cure fratricide when asthma + slickness present (lock developing)
-    if hasFratricide and hasAsthma and hasSlickness then
+    -- FRATRICIDE HANDLING: When Impulse is enabled, fratricide causes relapse
+    -- Cure fratricide EARLY when asthma + weariness present (before they spam Impulse)
+    -- In combat log: fratricide caused 10+ relapse cycles dealing massive scytherus damage
+    if hasFratricide and impulseEnabled then
         Algedonic.Echo("Clearing <magenta>fratricide<white> to prevent impulse relapse!")
         send("curing prioaff fratricide")
         return
