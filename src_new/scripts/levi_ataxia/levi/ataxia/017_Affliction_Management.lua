@@ -105,7 +105,11 @@ function erAff(what)
 	 else
 		  tAffs[what] = false
     end
-  affTimers[what] = false
+    affTimers[what] = false
+    -- Clear confidence when removing affliction
+    if tAffConfidence then
+      tAffConfidence[what] = nil
+    end
 	end
 
 	if ataxiaTemp.repeatOffence and not ataxiaTemp.doRepeat then
@@ -153,9 +157,15 @@ function tarAffed(...)
       elseif aff == "pyre" or aff == "pyre" then
         pali_addPyre()
       else
-        tAffs[aff] = true
-        table.insert(added, aff)
-        affTimers[aff] = getEpoch()
+        -- Nil guard to prevent errors when venom_to_aff returns nil
+        if aff and aff ~= "" then
+          tAffs[aff] = true
+          table.insert(added, aff)
+          affTimers[aff] = getEpoch()
+          -- Set assumed confidence for venom-applied afflictions
+          tAffConfidence = tAffConfidence or {}
+          tAffConfidence[aff] = 0.7
+        end
       end
     end
   end
@@ -273,7 +283,7 @@ function displayTargetAffs()
 	ataxiagui.tarAffsConsole:clear()
 	ataxiagui.tarAffsConsole:setFontSize(8)
 	ataxiagui.tarAffsConsole:setWrap(36)
-	
+
 	local ignoreAffs = {"curseward", "blindness", "deafness", "rebounding", "shield"}
 	local str = "<a_brown>[<NavajoWhite>"..target:title().."<a_brown>]: "
 	for aff, boo in pairs(tAffs) do
@@ -282,9 +292,96 @@ function displayTargetAffs()
 				str = str.."<"..affs_to_colour[aff][1]..">"..affs_to_colour[aff][2].." "
 			else
 				str = str.."<DimGrey>"..string.sub(aff, 1, 3).." "
-			end	
+			end
 		end
 	end
-	
+
 	ataxiagui.tarAffsConsole:cecho(str)
+end
+
+-- ========================================
+-- Confidence-based Affliction Tracking
+-- ========================================
+-- tAffConfidence stores confidence levels (0.0 to 1.0) for each affliction
+-- 1.0 = confirmed (saw game message)
+-- 0.7 = assumed (from venom application)
+-- 0.0 = cured/not present
+
+tAffConfidence = tAffConfidence or {}
+
+-- Confidence thresholds
+local CONF_CONFIRMED = 1.0    -- Saw game confirmation message
+local CONF_ASSUMED = 0.7      -- Assumed from venom hit
+local CONF_THRESHOLD = 0.3    -- Below this, consider cured
+local CONF_CURE_REDUCTION = 0.5  -- How much to reduce on cure attempt
+
+-- Get confidence for an affliction
+function getAffConfidence(aff)
+  if not aff then return 0 end
+  return tAffConfidence[aff] or 0
+end
+
+-- Set affliction with confidence level
+function setAffConfidence(aff, confidence)
+  if not aff or aff == "" then return end
+  tAffConfidence[aff] = confidence
+  if confidence > 0 then
+    tAffs[aff] = true
+  else
+    tAffs[aff] = false
+    tAffConfidence[aff] = nil
+  end
+end
+
+-- Add affliction(s) from confirmed game message (high confidence)
+-- Supports multiple afflictions: tarAffedConfirmed("para", "asthma", "anorexia")
+function tarAffedConfirmed(...)
+  local affs = arg
+  local added = {}
+
+  for _, aff in pairs(affs) do
+    if type(aff) ~= "number" and aff and aff ~= "" then
+      tAffs[aff] = true
+      tAffConfidence[aff] = CONF_CONFIRMED
+      affTimers[aff] = getEpoch()
+      table.insert(added, aff)
+    end
+  end
+
+  if #added > 0 then
+    raiseEvent("tar afflicted", added)
+    checkTargetLocks()
+  end
+end
+
+-- Reduce confidence for an affliction (called when enemy cures)
+function reduceAffConfidence(aff, amount)
+  if not aff then return end
+  amount = amount or CONF_CURE_REDUCTION
+
+  local current = tAffConfidence[aff] or 0
+  local newConf = current - amount
+
+  if newConf <= CONF_THRESHOLD then
+    -- Affliction is effectively cured
+    tAffs[aff] = false
+    tAffConfidence[aff] = nil
+    affTimers[aff] = false
+    return true  -- Was removed
+  else
+    tAffConfidence[aff] = newConf
+    return false  -- Still present
+  end
+end
+
+-- Check if affliction is present with sufficient confidence
+function haveAffWithConfidence(aff, minConfidence)
+  minConfidence = minConfidence or CONF_THRESHOLD
+  if not tAffs or not tAffs[aff] then return false end
+  return (tAffConfidence[aff] or 0) >= minConfidence
+end
+
+-- Reset all confidence values (called on target change)
+function resetAffConfidence()
+  tAffConfidence = {}
 end

@@ -198,6 +198,11 @@ function venom_to_aff(venom)
 		nechamandra = "shivering",	scytherus = "scytherus",
 		epseth = "legbreak",				epteth = "armbreak",
     selarnia = "selarnia",
+    -- Hellforge abilities
+    torment = "healthleech",
+    torture = "haemophilia",
+    exploit = "weariness",
+    punishment = "punishment",
 	}
 	for i,v in pairs(venom_to_affliction) do
 		if i == venom then

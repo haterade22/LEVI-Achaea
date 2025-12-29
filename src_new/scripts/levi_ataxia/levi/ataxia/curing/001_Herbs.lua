@@ -48,24 +48,84 @@ end
 
 function targetAte(herb)
 	if tAffs.anorexia then erAff("anorexia") end
+
+	-- Find all matching afflictions and their confidence levels
+	local candidates = {}
 	for i=1, #curingTable[herb] do
-		if haveAff(curingTable[herb][i]) then	
-			if herb == "goldenseal" and curingTable[herb][i] ~= "impatience" then
-				if haveAff("impatience") then
-					lastGoldenseal = curingTable[herb][i]
-					tempTimer(1, [[lastGoldenseal = nil]])
-				end
-			elseif herb == "ginseng" and curingTable[herb][i] == "haemophilia" then
-				tAffs.bleed = 0
-			elseif herb == "kelp" and haveAff("asthma") and haveSmokeAff() then
-				lastKelp = curingTable[herb][i]
-				tempTimer(0.4, [[ restoreLastKelp() ]])
-			end
-			erAff(curingTable[herb][i])
-			break
+		local aff = curingTable[herb][i]
+		if haveAff(aff) then
+			local conf = getAffConfidence and getAffConfidence(aff) or 1.0
+			table.insert(candidates, {aff = aff, confidence = conf, priority = i})
 		end
 	end
-  predictBal("herb", 1.55)	
+
+	if #candidates == 0 then
+		-- No matching afflictions, nothing to cure
+		predictBal("herb", 1.55)
+		return
+	end
+
+	-- If only one candidate, it's definitely the one being cured
+	if #candidates == 1 then
+		local aff = candidates[1].aff
+		if herb == "goldenseal" and aff ~= "impatience" then
+			if haveAff("impatience") then
+				lastGoldenseal = aff
+				tempTimer(1, [[lastGoldenseal = nil]])
+			end
+		elseif herb == "ginseng" and aff == "haemophilia" then
+			tAffs.bleed = 0
+		elseif herb == "kelp" and haveAff("asthma") and haveSmokeAff() then
+			lastKelp = aff
+			tempTimer(0.4, [[ restoreLastKelp() ]])
+		end
+		erAff(aff)
+	else
+		-- Multiple candidates - use confidence-based reduction
+		-- Higher priority (lower index) + higher confidence = more likely to be cured
+
+		-- Find the most likely candidate (highest priority first, then highest confidence)
+		local bestCandidate = candidates[1]
+		for i=2, #candidates do
+			-- First priority wins, but if confidence is much higher, consider it
+			if candidates[i].confidence > bestCandidate.confidence + 0.3 then
+				bestCandidate = candidates[i]
+			end
+		end
+
+		local affToCure = bestCandidate.aff
+
+		-- Special handling
+		if herb == "goldenseal" and affToCure ~= "impatience" then
+			if haveAff("impatience") then
+				lastGoldenseal = affToCure
+				tempTimer(1, [[lastGoldenseal = nil]])
+			end
+		elseif herb == "ginseng" and affToCure == "haemophilia" then
+			tAffs.bleed = 0
+		elseif herb == "kelp" and haveAff("asthma") and haveSmokeAff() then
+			lastKelp = affToCure
+			tempTimer(0.4, [[ restoreLastKelp() ]])
+		end
+
+		-- Use confidence reduction if available, otherwise fall back to erAff
+		if reduceAffConfidence then
+			local removed = reduceAffConfidence(affToCure, 0.5)
+			if removed then
+				-- Trigger display update
+				if ataxiaTemp.showingAffs then
+					displayTargetAffs()
+				elseif zgui then
+					zgui.showTarAffs()
+				end
+				raiseEvent("target cured aff", affToCure)
+			end
+		else
+			erAff(affToCure)
+		end
+	end
+
+	predictBal("herb", 1.55)
 end
 
 function flushingsProc()

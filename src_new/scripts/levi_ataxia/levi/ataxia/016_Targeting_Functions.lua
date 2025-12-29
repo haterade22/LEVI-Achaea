@@ -441,4 +441,6 @@ webbed = false,
 whisperingmadness = false, 
 wristfractures = false,
 }
+  -- Reset confidence tracking on target change
+  tAffConfidence = {}
 end

@@ -169,9 +169,10 @@ if truelock == true then
     table.insert(envenomListTwo,"curare") 
   elseif getLockingAffliction(target) == "weariness" and not tAffs.weariness and envenomList[1] ~= "vernalius" then
     table.insert(envenomListTwo,"vernalius") 
-  elseif getLockingAffliction(target) == "haemophilia" then
+  elseif getLockingAffliction(target) == "haemophilia" and envenomList[1] ~= "torture" then
+    table.insert(envenomListTwo,"torture")
   elseif getLockingAffliction(target) == "plague" and not tAffs.plague and envenomList[1] ~= "voyria" then
-    table.insert(envenomListTwo,"voyria") 
+    table.insert(envenomListTwo,"voyria")
   elseif getLockingAffliction(target) == "stupid" and not tAffs.stupidity and envenomList[1] ~= "aconite" then
     table.insert(envenomListTwo,"aconite")  
   elseif getLockingAffliction(target) == "reckless" and not tAffs.recklessness and envenomList[1] ~= "eurypteria" then
@@ -184,7 +185,7 @@ elseif tvenomsleep == true then
 elseif tvenomvivisectarms == true then
   table.insert(envenomListTwo,"epteth")
 elseif tvenomvivisectarms2 == true then
-  table.insert(envenomList,"epseth")
+  table.insert(envenomListTwo,"epseth")
 elseif softlock == true and not tAffs.paralysis and envenomList[1] ~= "curare" then
   table.insert(envenomListTwo,"curare")
 elseif tAffs.asthma and tAffs.impatience and not tAffs.anorexia and tAffs.slickness and envenomList[1] ~= "slike" then
@@ -241,6 +242,11 @@ elseif not tAffs.addiction and envenomList[1] ~= "vardrax" then
   table.insert(envenomListTwo,"vardrax")
 elseif envenomList[1] ~= "aconite" then
   table.insert(envenomListTwo,"aconite")
+end
+
+-- Fallback to prevent empty envenomListTwo
+if #envenomListTwo == 0 then
+  table.insert(envenomListTwo, "aconite")
 end
 
 infernaldwckelpstackattacklevi()
@@ -536,9 +542,10 @@ if truelock == true then
     table.insert(envenomListTwo,"curare") 
   elseif getLockingAffliction(target) == "weariness" and not tAffs.weariness and envenomList[1] ~= "vernalius" then
     table.insert(envenomListTwo,"vernalius") 
-  elseif getLockingAffliction(target) == "haemophilia" then
+  elseif getLockingAffliction(target) == "haemophilia" and envenomList[1] ~= "torture" then
+    table.insert(envenomListTwo,"torture")
   elseif getLockingAffliction(target) == "plague" and not tAffs.plague and envenomList[1] ~= "voyria" then
-    table.insert(envenomListTwo,"voyria") 
+    table.insert(envenomListTwo,"voyria")
   elseif getLockingAffliction(target) == "stupid" and not tAffs.stupidity and envenomList[1] ~= "aconite" then
     table.insert(envenomListTwo,"aconite")  
   elseif getLockingAffliction(target) == "reckless" and not tAffs.recklessness and envenomList[1] ~= "eurypteria" then
@@ -551,7 +558,7 @@ elseif tvenomsleep == true then
 elseif tvenomvivisectarms == true then
   table.insert(envenomListTwo,"epteth")
 elseif tvenomvivisectarms2 == true then
-  table.insert(envenomList,"epseth")
+  table.insert(envenomListTwo,"epseth")
 elseif softlock == true and not tAffs.paralysis and envenomList[1] ~= "curare" then
   table.insert(envenomListTwo,"curare")
 elseif tAffs.asthma and tAffs.impatience and not tAffs.anorexia and tAffs.slickness and envenomList[1] ~= "slike" then
@@ -610,8 +617,10 @@ elseif envenomList[1] ~= "aconite" then
   table.insert(envenomListTwo,"aconite")
 end
 
-
-
+-- Fallback to prevent empty envenomListTwo
+if #envenomListTwo == 0 then
+  table.insert(envenomListTwo, "aconite")
+end
 
 if not php then php = 100 end
 if not pm then pm = 100 end
@@ -1010,9 +1019,10 @@ if truelock == true then
     table.insert(envenomListTwo,"curare") 
   elseif getLockingAffliction(target) == "weariness" and not tAffs.weariness and envenomList[1] ~= "vernalius" then
     table.insert(envenomListTwo,"vernalius") 
-  elseif getLockingAffliction(target) == "haemophilia" then
+  elseif getLockingAffliction(target) == "haemophilia" and envenomList[1] ~= "torture" then
+    table.insert(envenomListTwo,"torture")
   elseif getLockingAffliction(target) == "plague" and not tAffs.plague and envenomList[1] ~= "voyria" then
-    table.insert(envenomListTwo,"voyria") 
+    table.insert(envenomListTwo,"voyria")
   elseif getLockingAffliction(target) == "stupid" and not tAffs.stupidity and envenomList[1] ~= "aconite" then
     table.insert(envenomListTwo,"aconite")  
   elseif getLockingAffliction(target) == "reckless" and not tAffs.recklessness and envenomList[1] ~= "eurypteria" then
@@ -1025,7 +1035,7 @@ elseif tvenomsleep == true then
 elseif tvenomvivisectarms == true then
   table.insert(envenomListTwo,"epteth")
 elseif tvenomvivisectarms2 == true then
-  table.insert(envenomList,"epseth")
+  table.insert(envenomListTwo,"epseth")
 elseif softlock == true and not tAffs.paralysis and envenomList[1] ~= "curare" then
   table.insert(envenomListTwo,"curare")
 elseif tAffs.asthma and tAffs.impatience and not tAffs.anorexia and tAffs.slickness and envenomList[1] ~= "slike" then
@@ -1085,6 +1095,10 @@ elseif not tAffs.addiction and envenomList[1] ~= "vardrax" then
 elseif envenomList[1] ~= "aconite" then
   table.insert(envenomListTwo,"aconite")
 end
+  -- Fallback to prevent empty envenomListTwo
+  if #envenomListTwo == 0 then
+    table.insert(envenomListTwo, "aconite")
+  end
   infernaldwcvivi2limblevitestattack()
 end
 
