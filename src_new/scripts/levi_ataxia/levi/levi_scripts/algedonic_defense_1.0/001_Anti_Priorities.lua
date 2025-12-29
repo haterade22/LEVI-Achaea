@@ -195,6 +195,7 @@ function Algedonic.AntiSerpent()
     local hasConfusion = ataxia.afflictions.confusion
     local hasRecklessness = ataxia.afflictions.recklessness
     local hasHypersomnia = ataxia.afflictions.hypersomnia
+    local hasScytherus = ataxia.afflictions.scytherus
 
     -- Defense tracking
     local hasFangbarrier = ataxia.defences and ataxia.defences.fangbarrier
@@ -211,26 +212,36 @@ function Algedonic.AntiSerpent()
     -- IMPULSE ENABLED: asthma + weariness + no fangbarrier = they can Impulse us
     local impulseEnabled = hasAsthma and hasWeariness and not hasFangbarrier
 
+    -- IMPULSE LOCK THREAT: Impulse enabled + ANY mental = tree IMMEDIATELY
+    -- Impulse delivers impatience/anorexia instantly, don't wait for slickness
+    local impulseLockThreat = impulseEnabled and (hasImpatience or hasAnorexia)
+
     if canTree and approachingLock then
         Algedonic.Echo("<red>APPROACHING LOCK - TREE!<white>")
         send("touch tree")
         return
     end
 
-    -- EARLY TREE: When Impulse enabled + mental afflictions building, tree before lock forms
-    -- This triggers earlier than approachingLock to prevent spiraling into lock
-    local mentalsPressure = (hasImpatience and 1 or 0) + (hasAnorexia and 1 or 0) + (hasFratricide and 1 or 0)
-    if canTree and impulseEnabled and mentalsPressure >= 2 then
-        Algedonic.Echo("<yellow>IMPULSE PRESSURE<white> - tree to reset!")
+    -- IMPULSE LOCK THREAT: Tree immediately when Impulse has delivered a mental
+    -- This triggers BEFORE slickness to prevent the lock from forming
+    if canTree and impulseLockThreat then
+        Algedonic.Echo("<yellow>IMPULSE LOCK THREAT<white> - tree NOW!")
+        send("touch tree")
+        return
+    end
+
+    -- EARLY TREE: When Impulse enabled + fratricide (relapse danger), tree before damage spirals
+    if canTree and impulseEnabled and hasFratricide then
+        Algedonic.Echo("<magenta>FRATRICIDE + IMPULSE<white> - tree to stop relapse!")
         send("touch tree")
         return
     end
 
     -- FANGBARRIER RE-APPLICATION: If fangbarrier stripped and Impulse conditions developing
-    -- Re-apply sileris BEFORE they can Impulse us (asthma + weariness = Impulse ready)
+    -- Re-apply quicksilver BEFORE they can Impulse us (asthma + weariness = Impulse ready)
     if not hasFangbarrier and hasAsthma and hasWeariness and not hasParalysis and not hasSlickness then
-        Algedonic.Echo("<cyan>FANGBARRIER DOWN<white> - reapplying sileris to block Impulse!")
-        send("apply sileris to torso")
+        Algedonic.Echo("<cyan>FANGBARRIER DOWN<white> - reapplying quicksilver to block Impulse!")
+        send("apply quicksilver to skin")
         return
     end
 
@@ -238,6 +249,14 @@ function Algedonic.AntiSerpent()
     if hasProne and hasParalysis and hasSlickness then
         send("endure")
         send("curing prioaff paralysis")
+        return
+    end
+
+    -- FRATRICIDE + SCYTHERUS: CRITICAL PRIORITY - relapse deals 1200 damage per tick
+    -- This MUST be cured immediately - moves to high priority before Ekanelia prevention
+    if hasFratricide and hasScytherus and not hasParalysis then
+        Algedonic.Echo("<red>FRATRICIDE + SCYTHERUS<white> - cure fratricide NOW!")
+        send("curing prioaff fratricide")
         return
     end
 
@@ -283,7 +302,6 @@ function Algedonic.AntiSerpent()
 
     -- FRATRICIDE HANDLING: When Impulse is enabled, fratricide causes relapse
     -- Cure fratricide EARLY when asthma + weariness present (before they spam Impulse)
-    -- In combat log: fratricide caused 10+ relapse cycles dealing massive scytherus damage
     if hasFratricide and impulseEnabled then
         Algedonic.Echo("Clearing <magenta>fratricide<white> to prevent impulse relapse!")
         send("curing prioaff fratricide")
