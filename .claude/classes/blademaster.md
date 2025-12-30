@@ -85,6 +85,8 @@ parry_bypass:
   ability: "Airfist"
   effect: "100% parry bypass against all forms of parrying"
   usage: "Critical for breaking legs against smart opponents"
+  cost: "20 shin (+ 5 for infuse = 25 total)"
+  cooldown: "NONE - only shin requirement"
 ```
 
 ## Kill Routes
@@ -323,7 +325,9 @@ airfist:
   balance: bal
   effect: "100% parry bypass"
   syntax: "AIRFIST <target>"
-  notes: "Critical for breaking limbs vs smart opponents"
+  cost: "20 shin (+ 5 for infuse = 25 total)"
+  cooldown: "NONE"
+  notes: "Critical for breaking limbs vs smart opponents. No cooldown, only shin requirement!"
 
 # Shindo
 thunderstorm:
@@ -476,7 +480,7 @@ Band Levels affect paralysis stacking:
 
 ---
 
-## Ice Dispatch System (302_Blademaster_Ice_Dispatch.lua)
+## Ice Dispatch System (005_CC_BM_Ice.lua)
 
 ### Overview
 A double-prep dispatch system focused on breaking BOTH legs simultaneously, then switching to ice damage phase for the kill.
@@ -488,12 +492,13 @@ Lightning prep → double-break both legs → Ice damage phase
 
 ### Key Mechanics
 1. **DOUBLE-PREP** - Alternate legs to keep both roughly equal until 90%+
-2. **INFUSE LIGHTNING** - During prep phase (clumsy from strikes)
-3. **AIRFIST** - When target parries our leg (requires 25 shin: 20 + 5 for infuse)
-4. **HAMSTRING** - Always keep up to prevent fleeing (10 second duration, uses hamstringTimer)
-5. **KNEES** - When both legs 90%+, double-break + prone in ONE hit
-6. **INFUSE ICE + STERNUM** - After both legs broken for maximum damage
-7. **COMPASSSLASH** - Used to balance legs when gap is too big
+2. **INFUSE LIGHTNING** - During prep phase (lightning gives clumsiness automatically)
+3. **AIRFIST** - When target parries our leg (requires 25 shin: 20 + 5 for infuse, NO cooldown)
+4. **HAMSTRING** - Always keep up to prevent fleeing (10 second duration, timestamp-tracked)
+5. **KNEES** - When ANY leg is about to break (will hit 100% on next hit), prone on same hit as break
+6. **PARRY BYPASS** - If parrying and no shin for airfist, use CENTRESLASH UP (hits torso/head)
+7. **INFUSE ICE + STERNUM** - After both legs broken for maximum damage
+8. **COMPASSSLASH** - Used to balance legs when gap is too big
 
 **Key Insight**: Breaking BOTH legs simultaneously is critical vs experienced players. The double-prep strategy keeps both legs roughly equal, then breaks them together with KNEES for immediate prone!
 
@@ -507,10 +512,10 @@ bmstatus: Display status panel (blademaster.dispatch.status())
 
 #### Phase 1: Lightning Prep
 ```
-- INFUSE LIGHTNING
+- INFUSE LIGHTNING (gives clumsiness automatically!)
 - LEGSLASH alternating (always hit LOWER damage leg)
 - COMPASSSLASH if gap between legs is too big
-- Strike: HAMSTRING > EARS > NECK > SHOULDER
+- Strike: HAMSTRING > NECK (para) > CHEST (hypo) > SHOULDER (weary) > EARS (clumsy fallback)
 - Goal: Get both legs to 90%+
 ```
 
@@ -529,21 +534,33 @@ bmstatus: Display status panel (blademaster.dispatch.status())
 - MULTISLASH burst when HP < 30%
 ```
 
-### Strike Priority
+### Strike Priority (Lightning Prep Phase)
+| Priority | Strike | Affliction | Purpose |
+|----------|--------|------------|---------|
+| 1 | AIRFIST | Parry bypass | When parrying our leg (needs 25 shin, NO cooldown) |
+| 2 | STERNUM | Max damage | Ice phase only (both legs broken) |
+| 3 | KNEES | Prone | When ANY leg about to break (100% on next hit) |
+| 4 | HAMSTRING | Prevents flee | Always keep up (10s duration, timestamp-tracked) |
+| 5 | NECK | Paralysis | Lightning gives clumsy, so strike para first |
+| 6 | CHEST | Hypochondria | Blocks focus curing |
+| 7 | SHOULDER | Weariness | Blocks Fitness passive cure |
+| 8 | EARS | Clumsiness | Fallback only (lightning already gives this) |
+
+### Strike Priority (Ice Phase)
 | Priority | Strike | Affliction | Purpose |
 |----------|--------|------------|---------|
 | 1 | AIRFIST | Parry bypass | When parrying our leg (needs 25 shin) |
-| 2 | STERNUM | Max damage | Ice phase only (both legs broken) |
-| 3 | KNEES | Prone | When double-break ready (both 90%+) |
-| 4 | HAMSTRING | Prevents flee | Always keep up (10s duration) |
-| 5 | EARS | Clumsiness | Makes salve applications fail |
-| 6 | NECK | Paralysis | Pressure |
-| 7 | SHOULDER | Weariness | Blocks Fitness passive cure |
+| 2 | STERNUM | Max damage | Both legs broken = massive damage |
+| 3 | EARS | Clumsiness | Ice doesn't give clumsy, apply it |
+| 4 | NECK | Paralysis | Pressure |
+| 5 | CHEST | Hypochondria | Blocks focus curing |
+| 6 | SHOULDER | Weariness | Blocks Fitness passive cure |
 
 ### Sword Attack Selection
 | Condition | Attack | Direction |
 |-----------|--------|-----------|
 | Shield/Rebounding | RAZE | - |
+| Parrying leg + no shin for airfist + other leg prepped | CENTRESLASH | UP (torso/head) |
 | Both legs broken + prone | LEGSLASH | Focus leg |
 | Both legs broken | BALANCESLASH | - |
 | Gap too big | COMPASSSLASH | Lower leg (SE/SW) |
@@ -554,6 +571,7 @@ bmstatus: Display status panel (blademaster.dispatch.status())
 - **Infuse cost**: 5 shin
 - **Airfist cost**: 20 shin
 - **Total for Airfist**: 25 shin (20 + 5 for infuse)
+- **Airfist cooldown**: NONE (only shin requirement)
 
 ### Damage Tracking
 The system dynamically captures damage values from combat:
@@ -571,8 +589,14 @@ Uses `lb[target].hits["limb"]` format to match the rest of the BM offense system
 
 Helper functions:
 - `blademaster.getLimbDamage(limb)` - Get damage % for any limb
-- `blademaster.getLeftLeg()` - Shorthand for left leg
-- `blademaster.getRightLeg()` - Shorthand for right leg
+- `blademaster.getLL()` - Shorthand for left leg
+- `blademaster.getRL()` - Shorthand for right leg
+
+Additional check functions:
+- `blademaster.checkDoubleBreakReady()` - Both legs at 90%+
+- `blademaster.checkBothLegsBroken()` - Both legs at 100%+
+- `blademaster.checkLegAboutToBreak()` - Either leg will hit 100% on next hit
+- `blademaster.shouldSwitchToBody()` - Parry bypass logic (no shin for airfist)
 
 ### Status Display
 ```
@@ -604,3 +628,51 @@ Helper functions:
 |   Target Low HP: YES/NO (< 30%)
 +============================================+
 ```
+
+### Hamstring Tracking
+The dispatch uses timestamp-based tracking to prevent hamstring reapplication:
+- `blademaster.state.lastHamstringTime` - Timestamp of last hamstring application
+- `blademaster.onHamstringApplied()` - Callback from hamstring trigger (002_Hamstring.lua)
+- `blademaster.config.hamstringDuration` - 10 seconds
+
+The hamstring trigger (002_Hamstring.lua) calls `blademaster.onHamstringApplied()` to update the timestamp.
+
+---
+
+## Changelog
+
+### 2024-12-30 - Bug Fixes and Improvements
+
+**Files Modified:**
+- `005_CC_BM_Ice.lua` - Main dispatch
+- `002_Hamstring.lua` - Hamstring trigger
+- `001_Anti_Priorities.lua` - Defense priorities
+
+**Bug Fixes:**
+
+1. **Limb Tracking Mismatch** - Fixed dispatch using `tLimbs` instead of `lb[target].hits`
+   - Added `blademaster.getLimbDamage()`, `getLL()`, `getRL()` helper functions
+   - Now correctly reads from `lb[target].hits["left leg"]` / `lb[target].hits["right leg"]`
+
+2. **Lightning + Clumsiness Redundancy** - Fixed striking clumsiness (ears) during lightning prep
+   - Lightning infusion ALREADY gives clumsiness automatically
+   - New priority: Paralysis > Hypochondria > Weariness > Clumsiness (fallback)
+
+3. **Hamstring Reapplication** - Fixed hamstring being applied multiple times within 10s
+   - Added timestamp-based tracking via `blademaster.state.lastHamstringTime`
+   - Hamstring trigger calls `blademaster.onHamstringApplied()` callback
+
+4. **Quicksilver Application** - Fixed "I don't see the container" error
+   - Changed to `outr 1 quicksilver;apply quicksilver to skin`
+
+5. **Knees Priority** - Fixed knees only triggering on double-break ready
+   - Now triggers when ANY leg is about to break (100% on next hit)
+   - Added `blademaster.checkLegAboutToBreak()` function
+
+6. **Parry Bypass** - Added centreslash up option when can't airfist
+   - When parrying a leg and no shin for airfist and other leg is prepped
+   - Uses CENTRESLASH UP to hit torso/head instead of wasting damage
+
+7. **Airfist Cooldown** - Removed non-existent cooldown check
+   - Airfist has NO cooldown, only shin requirement (25 shin)
+   - Removed `airfistCooldown` config and `lastAirfist` state tracking

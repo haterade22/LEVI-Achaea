@@ -57,8 +57,13 @@ end
 function restoreLastKelp()
 	local kelps = {"hypochondria", "parasite", "weariness", "healthleech", "clumsiness", "sensitivity"}
 	if lastKelp and lastKelp == "asthma" then
+		-- They smoked, proving asthma is still there - restore confidence to 1.0
 		tAffs.asthma = true
+		if tAffConfidence then
+			tAffConfidence.asthma = 1.0
+		end
 		ataxiaEcho("Doesn't look like that kelp got asthma.")
+		-- They must have cured one of the other kelp afflictions
 		for i=1, #kelps do
 			if haveAff(kelps[i]) then
 				erAff(kelps[i])
@@ -66,6 +71,7 @@ function restoreLastKelp()
 			end
 		end
 	end
+	lastKelp = nil
 end
 
 function affDuration(aff)

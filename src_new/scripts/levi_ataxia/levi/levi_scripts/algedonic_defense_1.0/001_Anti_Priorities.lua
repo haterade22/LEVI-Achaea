@@ -239,9 +239,10 @@ function Algedonic.AntiSerpent()
 
     -- FANGBARRIER RE-APPLICATION: If fangbarrier stripped and Impulse conditions developing
     -- Re-apply quicksilver BEFORE they can Impulse us (asthma + weariness = Impulse ready)
+    -- Must OUTR quicksilver from rift before applying
     if not hasFangbarrier and hasAsthma and hasWeariness and not hasParalysis and not hasSlickness then
         Algedonic.Echo("<cyan>FANGBARRIER DOWN<white> - reapplying quicksilver to block Impulse!")
-        send("apply quicksilver to skin")
+        send("outr 1 quicksilver;apply quicksilver to skin")
         return
     end
 
