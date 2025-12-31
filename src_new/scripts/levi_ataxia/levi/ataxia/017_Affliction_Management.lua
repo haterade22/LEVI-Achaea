@@ -157,12 +157,13 @@ function tarAffed(...)
       elseif aff == "pyre" or aff == "pyre" then
         pali_addPyre()
       else
-        -- Nil guard to prevent errors when venom_to_aff returns nil
+        -- Core tracking - always set the affliction
+        tAffs[aff] = true
+        table.insert(added, aff)
+        affTimers[aff] = getEpoch()
+
+        -- Confidence tracking - optional enhancement layer
         if aff and aff ~= "" then
-          tAffs[aff] = true
-          table.insert(added, aff)
-          affTimers[aff] = getEpoch()
-          -- Set confidence to 1.0 - attack landed successfully (trigger fired)
           tAffConfidence = tAffConfidence or {}
           tAffConfidence[aff] = 1.0
         end

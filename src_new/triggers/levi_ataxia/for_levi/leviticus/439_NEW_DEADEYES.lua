@@ -71,6 +71,12 @@ elseif matches[2] == "vomiting"  then
 tarAffed("nausea")
 elseif matches[2] == "reckless"  then
 tarAffed("recklessness")
+elseif matches[2] == "paralysis" then
+tarAffed("paralysis")
+elseif matches[2] == "sleep" then
+tarAffed("hypersomnia")
+elseif matches[2] == "bleed" then
+tarAffed("haemophilia")
 end
 tAffs.curseward = false
 
