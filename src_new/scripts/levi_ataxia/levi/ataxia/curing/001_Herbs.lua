@@ -81,47 +81,54 @@ function targetAte(herb)
 		end
 		erAff(aff)
 	else
-		-- Multiple candidates - use confidence-based reduction
-		-- Higher priority (lower index) + higher confidence = more likely to be cured
-
-		-- Find the most likely candidate (highest priority first, then highest confidence)
-		local bestCandidate = candidates[1]
-		for i=2, #candidates do
-			-- First priority wins, but if confidence is much higher, consider it
-			if candidates[i].confidence > bestCandidate.confidence + 0.3 then
-				bestCandidate = candidates[i]
-			end
-		end
-
-		local affToCure = bestCandidate.aff
-
-		-- Special handling
-		if herb == "goldenseal" and affToCure ~= "impatience" then
-			if haveAff("impatience") then
-				lastGoldenseal = affToCure
-				tempTimer(1, [[lastGoldenseal = nil]])
-			end
-		elseif herb == "ginseng" and affToCure == "haemophilia" then
-			tAffs.bleed = 0
-		elseif herb == "kelp" and haveAff("asthma") and haveSmokeAff() then
-			lastKelp = affToCure
-			tempTimer(0.4, [[ restoreLastKelp() ]])
-		end
-
-		-- Use confidence reduction if available, otherwise fall back to erAff
-		if reduceAffConfidence then
-			local removed = reduceAffConfidence(affToCure, 0.5)
-			if removed then
-				-- Trigger display update
-				if ataxiaTemp.showingAffs then
-					displayTargetAffs()
-				elseif zgui then
-					zgui.showTarAffs()
+		-- Multiple candidates - uncertain which was cured
+		-- For kelp with asthma: reduce ALL to 0.5, wait for smoke to disambiguate
+		if herb == "kelp" and haveAff("asthma") then
+			-- Store all kelp afflictions that might have been cured
+			lastKelpAffs = {}
+			for _, c in ipairs(candidates) do
+				lastKelpAffs[c.aff] = true
+				-- Reduce confidence of ALL matching afflictions to 0.5
+				if setAffConfidence then
+					setAffConfidence(c.aff, 0.5)
 				end
-				raiseEvent("target cured aff", affToCure)
 			end
+			-- Don't remove any yet - wait for smoke or other action to disambiguate
 		else
-			erAff(affToCure)
+			-- For non-kelp herbs or kelp without asthma: use priority-based reduction
+			local bestCandidate = candidates[1]
+			for i=2, #candidates do
+				if candidates[i].confidence > bestCandidate.confidence + 0.3 then
+					bestCandidate = candidates[i]
+				end
+			end
+
+			local affToCure = bestCandidate.aff
+
+			-- Special handling
+			if herb == "goldenseal" and affToCure ~= "impatience" then
+				if haveAff("impatience") then
+					lastGoldenseal = affToCure
+					tempTimer(1, [[lastGoldenseal = nil]])
+				end
+			elseif herb == "ginseng" and affToCure == "haemophilia" then
+				tAffs.bleed = 0
+			end
+
+			-- Use confidence reduction if available, otherwise fall back to erAff
+			if reduceAffConfidence then
+				local removed = reduceAffConfidence(affToCure, 0.5)
+				if removed then
+					if ataxiaTemp.showingAffs then
+						displayTargetAffs()
+					elseif zgui then
+						zgui.showTarAffs()
+					end
+					raiseEvent("target cured aff", affToCure)
+				end
+			else
+				erAff(affToCure)
+			end
 		end
 	end
 

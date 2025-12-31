@@ -162,9 +162,9 @@ function tarAffed(...)
           tAffs[aff] = true
           table.insert(added, aff)
           affTimers[aff] = getEpoch()
-          -- Set assumed confidence for venom-applied afflictions
+          -- Set confidence to 1.0 - attack landed successfully (trigger fired)
           tAffConfidence = tAffConfidence or {}
-          tAffConfidence[aff] = 0.7
+          tAffConfidence[aff] = 1.0
         end
       end
     end

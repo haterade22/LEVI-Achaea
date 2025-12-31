@@ -443,4 +443,6 @@ wristfractures = false,
 }
   -- Reset confidence tracking on target change
   tAffConfidence = {}
+  lastKelpAffs = nil
+  lastKelp = nil
 end

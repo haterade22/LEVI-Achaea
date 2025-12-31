@@ -28,7 +28,6 @@ blademaster = blademaster or {}
 blademaster.dispatch = blademaster.dispatch or {}
 blademaster.state = {
   focusLeg = nil,         -- "left" or "right"
-  lastAirfist = 0,        -- Timestamp of last airfist usage
   lastHamstringTime = 0,  -- Timestamp of last hamstring application
   -- Damage tracking (updated from combat)
   primaryDamage = 17.3,   -- Damage to focused leg (default, updated dynamically)
@@ -42,7 +41,7 @@ blademaster.config = {
   legBreakThreshold = 100,      -- % damage for broken leg
   legPrepThreshold = 90,        -- % damage to consider "prepped" for double-break
   killHealthThreshold = 30,     -- HP% to start kill phase
-  airfistCooldown = 8,          -- Seconds between airfist uses
+  -- NOTE: Airfist has NO cooldown, only shin requirement (25 shin)
   hamstringDuration = 10,       -- Seconds hamstring lasts
 }
 
@@ -321,16 +320,11 @@ function blademaster.needsAirfist()
   local focusLegFull = focusLeg .. " leg"
 
   -- Check shin requirement (20 airfist + 5 infuse = 25 needed)
+  -- NOTE: Airfist has NO cooldown, only shin requirement
   local shin = blademaster.getShin()
   local shinNeeded = 25  -- 20 for airfist + 5 for infuse
   if shin < shinNeeded then
     return false, "not enough shin (" .. shin .. "/25)"
-  end
-
-  -- Check cooldown (use os.time for seconds)
-  local now = os.time()
-  if (now - (blademaster.state.lastAirfist or 0)) < blademaster.config.airfistCooldown then
-    return false, "cooldown"
   end
 
   -- Already airfisted - but be less strict, allow re-application
@@ -352,7 +346,7 @@ function blademaster.needsAirfist()
 end
 
 function blademaster.useAirfist()
-  blademaster.state.lastAirfist = os.time()
+  -- Airfist has no cooldown, just shin cost
   return "airfist"
 end
 
@@ -449,6 +443,49 @@ function blademaster.needsCompassslash()
   return false, nil, nil
 end
 
+function blademaster.shouldSwitchToBody()
+  -- Check if we should switch to body attacks (centreslash up = torso/head) instead of legs
+  -- This happens when:
+  -- 1. Target is parrying a leg
+  -- 2. We can't airfist (not enough shin)
+  -- 3. The other leg is already prepped (90%+) so hitting it would waste damage
+
+  local parried = blademaster.getParried()
+
+  -- Only relevant if parrying a leg
+  if parried ~= "left leg" and parried ~= "right leg" then
+    return false, nil
+  end
+
+  -- Check if we can airfist
+  local canAirfist, _ = blademaster.needsAirfist()
+  if canAirfist then
+    return false, nil  -- We'll airfist instead
+  end
+
+  -- They're parrying a leg and we can't airfist
+  -- Check if the OTHER leg is already prepped
+  local LL = blademaster.getLL()
+  local RL = blademaster.getRL()
+  local threshold = blademaster.config.legPrepThreshold
+
+  if parried == "left leg" then
+    -- They're parrying left, we'd hit right
+    -- If right is already prepped, switch to body
+    if RL >= threshold then
+      return true, "right leg prepped, switching to body"
+    end
+  elseif parried == "right leg" then
+    -- They're parrying right, we'd hit left
+    -- If left is already prepped, switch to body
+    if LL >= threshold then
+      return true, "left leg prepped, switching to body"
+    end
+  end
+
+  return false, nil
+end
+
 function blademaster.selectSwordAttack()
   local focusLeg = blademaster.getFocusLeg()
 
@@ -460,6 +497,14 @@ function blademaster.selectSwordAttack()
   -- Rebounding handling
   if tAffs.rebounding then
     return "raze", nil
+  end
+
+  -- PARRY BYPASS: If parrying a leg and we can't airfist (no shin) and other leg is prepped
+  -- Switch to centreslash up (torso/head) to continue pressure without wasting damage
+  local shouldBody, bodyReason = blademaster.shouldSwitchToBody()
+  if shouldBody then
+    cecho("\n<magenta>*** PARRY BYPASS: " .. bodyReason .. " - using CENTRESLASH UP ***")
+    return "centreslash", "up"  -- Hit torso/head instead
   end
 
   -- After double-break and prone, continue with legslash for mangle
@@ -514,6 +559,12 @@ function blademaster.buildCombo()
     -- Compassslash uses compass directions: southeast = left leg, southwest = right leg
     local compassDir = blademaster.getCompassDirection(direction)
     combo = combo .. "compassslash " .. target .. " " .. compassDir
+    if strike then
+      combo = combo .. " " .. strike
+    end
+  elseif attack == "centreslash" then
+    -- Centreslash up hits torso/head when bypassing leg parry (no shin for airfist)
+    combo = combo .. "centreslash " .. target .. " " .. direction
     if strike then
       combo = combo .. " " .. strike
     end
