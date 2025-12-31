@@ -49,5 +49,5 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-	tarAffed("paralysis")
+	tarAffedConfirmed("paralysis")
 end
