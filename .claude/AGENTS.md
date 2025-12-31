@@ -230,6 +230,27 @@ When creating/modifying offensive Lua files, include:
 
 ---
 
+## Target Affliction Tracking Quick Reference
+
+The system uses a **dual-layer approach** for tracking enemy afflictions:
+
+| Layer | Table | Purpose |
+|-------|-------|---------|
+| **Core** | `tAffs` | Always tracks afflictions unconditionally |
+| **Confidence** | `tAffConfidence` | Optional confidence levels (0.0-1.0) |
+
+**Key Functions:**
+- `tarAffed(...)` - Add afflictions (variadic)
+- `erAff(what)` - Remove affliction
+- `haveAff(what)` - Check if target has affliction
+- `haveAffWithConfidence(aff, minConf)` - Check with confidence threshold
+
+**Files:**
+- `src_new/scripts/.../017_Affliction_Management.lua` - Core tracking
+- `src_new/triggers/.../439_NEW_DEADEYES.lua` - Apostate curse detection
+
+---
+
 ## Key Files Reference
 
 | Path | Purpose |
@@ -242,6 +263,7 @@ When creating/modifying offensive Lua files, include:
 | `src/ataxia/200_Shikudo.lua` | Shikudo V1 dispatch system |
 | `src/ataxia/201_Shikudo_V2.lua` | Shikudo V2 dispatch system |
 | `src/ataxia/203_Shikudo_Lock.lua` | Shikudo Lock affliction system |
+| `src_new/scripts/.../017_Affliction_Management.lua` | Target affliction tracking |
 
 ---
 

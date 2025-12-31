@@ -329,6 +329,7 @@ recommended_strategy: |
 ## Implementation Notes
 ```
 Triggers to watch for:
+- "Summoning up the curse of X" - Deadeyes curse (439_NEW_DEADEYES.lua)
 - "fixes you with an icy stare" - Evileye affliction incoming
 - "A fiendish * appears" - demon summoned
 - "Baalzadeen syphons" - passive cure tick (10s cycle)
@@ -339,6 +340,18 @@ Triggers to watch for:
 - "Bloodworms" - keep deafness up
 - Fiend bleeding messages
 - Daegger Hunt bleeding messages
+
+Deadeyes Curse Mappings (439_NEW_DEADEYES.lua):
+- clumsy → clumsiness
+- stupid → stupidity
+- dizzy → dizziness
+- plague → voyria
+- sicken → manaleech (first), slickness (if manaleech present)
+- vomiting → nausea
+- reckless → recklessness
+- paralysis → paralysis
+- sleep → hypersomnia
+- bleed → haemophilia
 
 GMCP considerations:
 - Track gmcp.Char.Afflictions for current affs

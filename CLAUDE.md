@@ -98,6 +98,7 @@ Each subsystem uses numbered files (001_, 002_, etc.) to enforce load order:
 
 ### Ataxia Combat System
 - **Affliction Tracking**: 100+ afflictions with color-coded display
+- **Target Affliction Tracking**: Dual system for tracking enemy afflictions (see below)
 - **Limb Tracking**: `selfLimbDamage` for damage percentages, `tLimbs` for enemy tracking
 - **Fracture Management**: Two-handed combat tracking
 - **Defense Management**: Automatic parrying, SSC integration
@@ -109,6 +110,60 @@ Each subsystem uses numbered files (001_, 002_, etc.) to enforce load order:
   - `203_Shikudo_Lock.lua` (Lock) - Pure affliction-based locking with Telepathy
   - V1/V2 Commands: `shikudo.dispatch()`, `shikudov2.dispatch()`, `skstatus()`, `skv2status()`
   - Lock Commands: `shikudolock()`, `sklstatus()`, `sklockstatus()`
+
+### Target Affliction Tracking System
+
+The system uses a **dual-layer approach** for tracking afflictions applied to enemies:
+
+**Core Files:**
+- `src_new/scripts/levi_ataxia/levi/ataxia/017_Affliction_Management.lua` - Main tracking functions
+- `src_new/triggers/levi_ataxia/for_levi/leviticus/439_NEW_DEADEYES.lua` - Apostate curse detection
+
+**Dual System Design:**
+
+| Layer | Table | Purpose |
+|-------|-------|---------|
+| **Core Tracking** | `tAffs` | Always tracks afflictions unconditionally (boolean) |
+| **Confidence Tracking** | `tAffConfidence` | Optional enhancement with confidence levels (0.0-1.0) |
+
+**Core Functions:**
+
+| Function | Purpose |
+|----------|---------|
+| `tarAffed(...)` | Add afflictions to target (variadic - accepts multiple) |
+| `tarAffedConfirmed(...)` | Add afflictions with 1.0 confidence (confirmed by game message) |
+| `erAff(what)` | Remove affliction from target tracking |
+| `haveAff(what)` | Check if target has affliction (core tracking) |
+| `haveAffWithConfidence(aff, minConf)` | Check with minimum confidence threshold |
+| `getAffConfidence(aff)` | Get current confidence level for affliction |
+| `resetAffConfidence()` | Clear all confidence values (called on target change) |
+
+**Confidence Levels:**
+
+| Level | Value | Meaning |
+|-------|-------|---------|
+| Confirmed | 1.0 | Saw game confirmation message |
+| Assumed | 0.7 | Assumed from venom/attack landing |
+| Threshold | 0.3 | Below this, affliction considered cured |
+
+**How It Works:**
+1. Core tracking (`tAffs[aff] = true`) happens unconditionally when attacks land
+2. Confidence tracking is an optional enhancement layer that doesn't affect core tracking
+3. When enemy cures, `erAff()` clears both the core tracking and confidence
+4. Combat logic can use either `haveAff()` (simple) or `haveAffWithConfidence()` (advanced)
+
+**Example Usage:**
+```lua
+-- Simple check (core tracking)
+if haveAff("paralysis") then
+  -- Target has paralysis
+end
+
+-- Advanced check (confidence-based)
+if haveAffWithConfidence("paralysis", 0.5) then
+  -- Target probably has paralysis (50%+ confidence)
+end
+```
 
 ### ataxiaBasher (Automated Hunting System)
 
@@ -796,7 +851,7 @@ gmcp.Room.Info = {
 
 ---
 
-**Last Updated**: 2025-12-26
+**Last Updated**: 2025-12-31
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia
