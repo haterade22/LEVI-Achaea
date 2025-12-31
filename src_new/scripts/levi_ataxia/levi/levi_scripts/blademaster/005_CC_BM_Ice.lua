@@ -269,6 +269,30 @@ function blademaster.checkLegAboutToBreak()
   end
 end
 
+function blademaster.checkWillDoubleBreak()
+  -- Check if BOTH legs will be broken after next hit (causes prone)
+  local LL = blademaster.getLL()
+  local RL = blademaster.getRL()
+  local P = blademaster.state.primaryDamage
+  local S = blademaster.state.secondaryDamage
+  local focusLeg = blademaster.getFocusLeg()
+
+  if focusLeg == "left" then
+    local llAfter = LL + P
+    local rlAfter = RL + S
+    return (llAfter >= 100) and (rlAfter >= 100)
+  else
+    local rlAfter = RL + P
+    local llAfter = LL + S
+    return (rlAfter >= 100) and (llAfter >= 100)
+  end
+end
+
+function blademaster.checkAnyLegBroken()
+  -- Check if at least one leg is broken (100%+)
+  return blademaster.getLL() >= 100 or blademaster.getRL() >= 100
+end
+
 function blademaster.checkKillReady()
   -- Pure damage kill - check if target is low HP and both legs broken
   local targetHP = tonumber(ataxiaTemp.targetHP) or 100
@@ -287,11 +311,20 @@ end
 
 function blademaster.getPhase()
   -- Determine current combat phase
-  if blademaster.checkBothLegsBroken() then
-    return "ice"  -- Both legs broken, switch to ice for damage
-  else
-    return "prep" -- Still prepping legs with lightning
+  -- ICE phase = when they're locked down (prone) or about to be (double-break)
+  -- PREP phase = lightning for clumsiness, building toward double-break
+
+  -- PRONE = ICE phase (they're locked down, maximize damage)
+  if tAffs.prone then
+    return "ice"
   end
+
+  -- DOUBLE-BREAK IMMINENT = Switch to ICE now (frozen bonus on break)
+  if blademaster.checkWillDoubleBreak() then
+    return "ice"
+  end
+
+  return "prep"  -- Lightning prep (clumsiness, building damage)
 end
 
 --------------------------------------------------------------------------------
@@ -355,15 +388,16 @@ end
 --------------------------------------------------------------------------------
 
 function blademaster.selectStrike()
-  -- Priority order during LIGHTNING prep (lightning infusion gives clumsiness):
+  -- Priority order:
   -- 1. AIRFIST if focused leg is parried (reactive) - requires 25 shin (20 + 5 infuse)
-  -- 2. STERNUM if in ICE phase (both legs broken) - maximum damage
-  -- 3. KNEES when any leg about to break (prone on same hit as break)
-  -- 4. HAMSTRING - prevents fleeing, ALWAYS keep up
-  -- 5. NECK (paralysis) - lightning already gives clumsy, so strike paralysis
-  -- 6. CHEST (hypochondria) - blocks focus curing
-  -- 7. SHOULDER (weariness) to block Fitness
-  -- 8. EARS (clumsiness) - fallback only
+  -- 2. STERNUM if PRONE (they're locked down, maximize damage with ice)
+  -- 3. KNEES if DOUBLE-BREAK imminent (both legs will break) - prone on break hit
+  -- 4. KNEES when SINGLE leg about to break AND target NOT prone
+  -- 5. HAMSTRING - prevents fleeing, ALWAYS keep up
+  -- 6. NECK (paralysis) - lightning gives clumsy, so strike para
+  -- 7. CHEST (hypochondria) - blocks focus curing
+  -- 8. SHOULDER (weariness) to block Fitness
+  -- 9. EARS (clumsiness) - fallback
 
   -- Reactive AIRFIST (only if parrying our leg and we have 25 shin)
   local needsAF, afReason = blademaster.needsAirfist()
@@ -371,13 +405,19 @@ function blademaster.selectStrike()
     return blademaster.useAirfist()
   end
 
-  -- ICE PHASE: Use STERNUM for maximum damage when both legs are broken
-  if blademaster.checkBothLegsBroken() then
+  -- PRONE = STERNUM (they're locked down, maximize damage)
+  -- No need for KNEES - they're already down, just pump damage with ice infuse
+  if tAffs.prone then
     return "sternum"
   end
 
-  -- If any leg is about to break, use KNEES to prone on same hit
-  if blademaster.checkLegAboutToBreak() and not tAffs.prone then
+  -- DOUBLE-BREAK IMMINENT: Use KNEES to prone on the double-break hit
+  if blademaster.checkWillDoubleBreak() then
+    return "knees"
+  end
+
+  -- SINGLE LEG about to break: Use KNEES to prone on same hit as the break
+  if blademaster.checkLegAboutToBreak() then
     return "knees"
   end
 
@@ -433,6 +473,17 @@ end
 function blademaster.needsCompassslash()
   -- Use calculated optimal path to determine if compassslash is needed
   -- This uses actual damage values from combat instead of hardcoded thresholds
+  -- IMPORTANT: Never use compassslash if any leg is broken - that's ice phase territory
+
+  -- Never compassslash if any leg is already broken
+  if blademaster.checkAnyLegBroken() then
+    return false, nil, nil
+  end
+
+  -- Never compassslash if double-break is imminent - we WANT both to break!
+  if blademaster.checkWillDoubleBreak() then
+    return false, nil, nil
+  end
 
   local path = blademaster.calculateOptimalPath()
 
@@ -488,6 +539,8 @@ end
 
 function blademaster.selectSwordAttack()
   local focusLeg = blademaster.getFocusLeg()
+  local LL = blademaster.getLL()
+  local RL = blademaster.getRL()
 
   -- Shield handling
   if tAffs.shield then
@@ -507,17 +560,25 @@ function blademaster.selectSwordAttack()
     return "centreslash", "up"  -- Hit torso/head instead
   end
 
-  -- After double-break and prone, continue with legslash for mangle
-  if tAffs.prone and blademaster.checkReadyForProne() then
-    return "legslash", focusLeg
+  -- ICE PHASE MANGLE STRATEGY:
+  -- If BOTH legs broken, hit the leg that was targeted SECOND (the off-leg from last attack)
+  -- The off-leg got secondary damage, so continue momentum on it for mangle
+  -- Mangle (level 3 break) requires 2 restoration applications to heal
+  -- NOTE: Never use BALANCESLASH - always legslash for mangle
+  if LL >= 100 and RL >= 100 then
+    -- Off-leg is the opposite of focus leg (focus got primary, off got secondary)
+    local offLeg = focusLeg == "left" and "right" or "left"
+    return "legslash", offLeg
   end
 
-  -- If ready for prone (both legs broken), use BALANCESLASH to knock down
-  if blademaster.checkReadyForProne() and not tAffs.prone then
-    return "balanceslash", nil
+  -- ONE LEG BROKEN: Continue hitting broken leg for mangle
+  if LL >= 100 and RL < 100 then
+    return "legslash", "left"
+  elseif RL >= 100 and LL < 100 then
+    return "legslash", "right"
   end
 
-  -- Check if we need compassslash to balance legs
+  -- Check if we need compassslash to balance legs (ONLY during prep phase with no broken legs)
   local needsCompass, compassDir = blademaster.needsCompassslash()
   if needsCompass then
     return "compassslash", compassDir
@@ -537,21 +598,20 @@ function blademaster.buildCombo()
 
   local combo = ""
 
-  -- INFUSE SELECTION: Lightning during prep, Ice after both legs broken
-  if blademaster.checkBothLegsBroken() then
+  -- INFUSE SELECTION: Use getPhase() to determine infuse (matches status display)
+  -- ICE phase = prone OR double-break imminent (for frozen bonus on break)
+  -- PREP phase = lightning (clumsiness from strikes)
+  local phase = blademaster.getPhase()
+  if phase == "ice" then
     combo = "infuse ice;"
   else
     combo = "infuse lightning;"
   end
 
   -- Build attack command
+  -- NOTE: BALANCESLASH removed - always use LEGSLASH in ice phase for mangle
   if attack == "raze" then
     combo = combo .. "raze " .. target
-    if strike then
-      combo = combo .. " " .. strike
-    end
-  elseif attack == "balanceslash" then
-    combo = combo .. "balanceslash " .. target
     if strike then
       combo = combo .. " " .. strike
     end
@@ -628,7 +688,8 @@ function blademaster.dispatch.run()
 
   if doubleReady and not blademaster.checkBothLegsBroken() then
     cecho("\n<green>*** DOUBLE-BREAK READY - NEXT HIT BREAKS BOTH! ***")
-  elseif path.hitsToDouble > 0 then
+  elseif path.hitsToDouble > 0 and not blademaster.checkAnyLegBroken() then
+    -- Only show prep path when no legs are broken (mangle mode has different logic)
     cecho("\n<yellow>" .. path.explanation)
   end
 
@@ -773,8 +834,9 @@ blademaster.damageCapture = {
 }
 
 -- Call this from a trigger matching:
--- Pattern: ^As you carve into .+, you perceive that you have dealt (\d+\.?\d*)% damage to (?:his|her) (left|right) leg
+-- Pattern: ^As you carve into .+, you perceive that you have dealt (\d+\.?\d*)% damage to \w+ (left|right) leg
 -- Captures: matches[2] = damage, matches[3] = leg
+-- NOTE: Uses \w+ for pronoun to match "his", "her", "its", "faes", etc.
 function blademaster.captureLegDamage(damage, leg)
   damage = tonumber(damage) or 0
   local now = os.time()
@@ -808,9 +870,9 @@ function blademaster.registerDamageTrigger()
       killTrigger(blademaster.damageTriggerID)
     end
 
-    -- Create new trigger
+    -- Create new trigger (uses \w+ to match any pronoun: his/her/its/faes/etc)
     blademaster.damageTriggerID = tempRegexTrigger(
-      "^As you carve into .+, you perceive that you have dealt (\\d+\\.?\\d*)% damage to (?:his|her) (left|right) leg",
+      "^As you carve into .+, you perceive that you have dealt (\\d+\\.?\\d*)% damage to \\w+ (left|right) leg",
       function()
         blademaster.captureLegDamage(matches[2], matches[3])
       end
@@ -818,7 +880,7 @@ function blademaster.registerDamageTrigger()
     cecho("\n<green>[BM] Damage tracking trigger registered!")
   else
     cecho("\n<yellow>[BM] tempRegexTrigger not available - create trigger manually")
-    cecho("\n<yellow>     Pattern: ^As you carve into .+, you perceive that you have dealt (\\d+\\.?\\d*)% damage to (?:his|her) (left|right) leg")
+    cecho("\n<yellow>     Pattern: ^As you carve into .+, you perceive that you have dealt (\\d+\\.?\\d*)% damage to \\w+ (left|right) leg")
     cecho("\n<yellow>     Code: blademaster.captureLegDamage(matches[2], matches[3])")
   end
 end

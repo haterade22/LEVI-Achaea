@@ -487,7 +487,7 @@ A double-prep dispatch system focused on breaking BOTH legs simultaneously, then
 
 ### Kill Route
 ```
-Lightning prep → double-break both legs → Ice damage phase
+Lightning prep → double-break both legs → Ice damage (mangle) phase
 ```
 
 ### Key Mechanics
@@ -497,10 +497,15 @@ Lightning prep → double-break both legs → Ice damage phase
 4. **HAMSTRING** - Always keep up to prevent fleeing (10 second duration, timestamp-tracked)
 5. **KNEES** - When ANY leg is about to break (will hit 100% on next hit), prone on same hit as break
 6. **PARRY BYPASS** - If parrying and no shin for airfist, use CENTRESLASH UP (hits torso/head)
-7. **INFUSE ICE + STERNUM** - After both legs broken for maximum damage
-8. **COMPASSSLASH** - Used to balance legs when gap is too big
+7. **INFUSE ICE + STERNUM** - After ANY leg broken, switch to ice for damage
+8. **MANGLE STRATEGY** - After double-break, hit the leg with HIGHER % for level 3 break
+9. **COMPASSSLASH** - Used to balance legs ONLY during prep (no broken legs)
 
-**Key Insight**: Breaking BOTH legs simultaneously is critical vs experienced players. The double-prep strategy keeps both legs roughly equal, then breaks them together with KNEES for immediate prone!
+**Key Insights**:
+- Breaking BOTH legs simultaneously is critical vs experienced players
+- After double-break, stay in ICE phase even if one leg heals
+- MANGLE (level 3 break) requires 2 restoration applications to heal = huge advantage
+- Always hit the HIGHER % broken leg when going for mangle
 
 ### Commands
 ```yaml
@@ -526,45 +531,46 @@ bmstatus: Display status panel (blademaster.dispatch.status())
 - Transition to Ice phase
 ```
 
-#### Phase 3: Ice Damage
+#### Phase 3: Ice Damage / Mangle
 ```
-- INFUSE ICE
-- LEGSLASH + STERNUM for maximum damage
-- Target is frozen + both legs broken = massive damage
+- INFUSE ICE only while PRONE (switch to lightning when they stand)
+- If PRONE + any leg broken: LEGSLASH the OFF-LEG (targeted second) + STERNUM
+- Goal: MANGLE (level 3 break) = 2 restoration applications to heal
+- If they STAND UP: Switch to LIGHTNING, continue hitting broken leg
+- Target is frozen + leg broken = massive damage
 - MULTISLASH burst when HP < 30%
 ```
 
-### Strike Priority (Lightning Prep Phase)
-| Priority | Strike | Affliction | Purpose |
-|----------|--------|------------|---------|
-| 1 | AIRFIST | Parry bypass | When parrying our leg (needs 25 shin, NO cooldown) |
-| 2 | STERNUM | Max damage | Ice phase only (both legs broken) |
-| 3 | KNEES | Prone | When ANY leg about to break (100% on next hit) |
-| 4 | HAMSTRING | Prevents flee | Always keep up (10s duration, timestamp-tracked) |
-| 5 | NECK | Paralysis | Lightning gives clumsy, so strike para first |
-| 6 | CHEST | Hypochondria | Blocks focus curing |
-| 7 | SHOULDER | Weariness | Blocks Fitness passive cure |
-| 8 | EARS | Clumsiness | Fallback only (lightning already gives this) |
+**Mangle Strategy**: After double-break:
+- While PRONE: Stay in ICE phase, hit OFF-LEG (targeted second), STERNUM
+- If they STAND UP: Switch to LIGHTNING, continue hitting broken leg
+- One leg broken: Always hit the broken leg for mangle
 
-### Strike Priority (Ice Phase)
-| Priority | Strike | Affliction | Purpose |
-|----------|--------|------------|---------|
-| 1 | AIRFIST | Parry bypass | When parrying our leg (needs 25 shin) |
-| 2 | STERNUM | Max damage | Both legs broken = massive damage |
-| 3 | EARS | Clumsiness | Ice doesn't give clumsy, apply it |
-| 4 | NECK | Paralysis | Pressure |
-| 5 | CHEST | Hypochondria | Blocks focus curing |
-| 6 | SHOULDER | Weariness | Blocks Fitness passive cure |
+### Strike Priority (All Phases)
+| Priority | Strike | Affliction | Condition |
+|----------|--------|------------|-----------|
+| 1 | AIRFIST | Parry bypass | When parrying our leg (needs 25 shin, NO cooldown) |
+| 2 | STERNUM | Max damage | PRONE (they're locked down, use ice infuse) |
+| 3 | KNEES | Prone | Double-break imminent (both legs will break) |
+| 4 | KNEES | Prone | Single leg about to break |
+| 5 | HAMSTRING | Prevents flee | Always keep up (10s duration, timestamp-tracked) |
+| 6 | NECK | Paralysis | Lightning gives clumsy, so strike para |
+| 7 | CHEST | Hypochondria | Blocks focus curing |
+| 8 | SHOULDER | Weariness | Blocks Fitness passive cure |
+| 9 | EARS | Clumsiness | Fallback |
 
 ### Sword Attack Selection
 | Condition | Attack | Direction |
 |-----------|--------|-----------|
 | Shield/Rebounding | RAZE | - |
 | Parrying leg + no shin for airfist + other leg prepped | CENTRESLASH | UP (torso/head) |
-| Both legs broken + prone | LEGSLASH | Focus leg |
-| Both legs broken | BALANCESLASH | - |
-| Gap too big | COMPASSSLASH | Lower leg (SE/SW) |
+| Both legs broken (ice phase) | LEGSLASH | OFF-LEG (targeted second) |
+| One leg broken | LEGSLASH | Broken leg |
+| Gap too big (prep phase only) | COMPASSSLASH | Lower leg (SE/SW) |
 | Normal prep | LEGSLASH | Lower leg |
+
+**NOTE**: BALANCESLASH is never used - always LEGSLASH in ice phase for mangle.
+**NOTE**: After double-break, hit the OFF-LEG (the leg that got secondary damage). It was "targeted second" in the legslash.
 
 ### Shin Mechanics
 - **Generation**: 8 per strike normally, 12 in Sanya stance
@@ -595,7 +601,9 @@ Helper functions:
 Additional check functions:
 - `blademaster.checkDoubleBreakReady()` - Both legs at 90%+
 - `blademaster.checkBothLegsBroken()` - Both legs at 100%+
+- `blademaster.checkAnyLegBroken()` - At least one leg at 100%+
 - `blademaster.checkLegAboutToBreak()` - Either leg will hit 100% on next hit
+- `blademaster.checkWillDoubleBreak()` - BOTH legs will break on next hit (causes prone)
 - `blademaster.shouldSwitchToBody()` - Parry bypass logic (no shin for airfist)
 
 ### Status Display
@@ -676,3 +684,82 @@ The hamstring trigger (002_Hamstring.lua) calls `blademaster.onHamstringApplied(
 7. **Airfist Cooldown** - Removed non-existent cooldown check
    - Airfist has NO cooldown, only shin requirement (25 shin)
    - Removed `airfistCooldown` config and `lastAirfist` state tracking
+
+### 2024-12-31 - Ice Phase and Double-Break Overhaul
+
+**Files Modified:**
+- `005_CC_BM_Ice.lua` - Main dispatch
+
+**Bug Fixes:**
+
+1. **ICE Infuse on Double-Break** - Switch to ICE when double-break imminent
+   - `getPhase()` now returns "ice" when `checkWillDoubleBreak()` is true
+   - Get frozen damage bonus on the double-break hit itself
+
+2. **KNEES on Double-Break** - Use KNEES (not STERNUM) when both legs will break
+   - Prone on the same hit as double-break
+   - Changed `selectStrike()` to return "knees" for `checkWillDoubleBreak()`
+
+3. **STERNUM in Mangle Phase** - Use STERNUM when prone + any leg broken
+   - No need for KNEES if already prone - just pump damage
+   - Added `checkAnyLegBroken()` check with prone gate
+
+4. **KNEES Safeguard** - Only use KNEES when target is NOT prone
+   - KNEES is wasted on already-prone targets
+   - Added `and not tAffs.prone` gate to single-leg break KNEES check
+
+5. **Removed BALANCESLASH** - Never use BALANCESLASH
+   - In ice phase with broken legs, always LEGSLASH for mangle
+   - Removed BALANCESLASH from `selectSwordAttack()` and combo builder
+
+6. **Phase Reset After Partial Heal** - Fixed system reverting to COMPASSSLASH when one leg healed
+   - Updated `getPhase()` to return "ice" when ANY leg is broken (≥100%)
+   - No longer falls back to prep phase after double-break
+
+7. **Mangle Strategy** - Proper post-double-break attack selection
+   - Both legs broken: Hit OFF-LEG (targeted second, got secondary damage)
+   - One leg broken: Continue hitting broken leg
+   - COMPASSSLASH catch-up only used during prep (no broken legs)
+
+**New Helper Functions:**
+- `blademaster.checkWillDoubleBreak()` - BOTH legs will break on next hit
+- `blademaster.checkAnyLegBroken()` - At least one leg at 100%+
+
+**Strike Priority (Updated):**
+1. AIRFIST (parry bypass)
+2. STERNUM (both legs broken - ice phase)
+3. KNEES (double-break imminent - prone on break)
+4. STERNUM (prone + any leg broken - mangle phase)
+5. KNEES (single leg about to break AND not prone)
+6. HAMSTRING → NECK → CHEST → SHOULDER → EARS
+
+### 2024-12-31 - Phase and Damage Tracking Fixes
+
+**Files Modified:**
+- `005_CC_BM_Ice.lua` - Main dispatch
+
+**Bug Fixes:**
+
+1. **ICE Phase Only When Prone** - Fixed ice phase triggering when target stands up
+   - `getPhase()` now requires PRONE + any leg broken for ice phase
+   - When they stand up, switches back to LIGHTNING (clumsiness)
+   - Double-break imminent still triggers ice phase
+
+2. **COMPASSSLASH When Leg Broken** - Fixed compassslash triggering with broken leg
+   - `needsCompassslash()` now returns false if any leg is broken (≥100%)
+   - COMPASSSLASH only used during prep phase with no broken legs
+
+3. **Damage Tracking Pattern** - Fixed pronoun pattern not matching "faes"
+   - Changed trigger pattern from `(?:his|her)` to `\w+`
+   - Now matches all pronouns: his, her, its, faes, etc.
+   - Damage values should now update correctly from combat
+
+**Phase Logic (Updated):**
+- **ICE phase**: PRONE OR double-break imminent
+- **PREP phase**: Lightning - all other cases (standing)
+
+**Strike Logic (Updated):**
+- **PRONE** → Always STERNUM (maximize damage with ice)
+- **Double-break imminent** → KNEES (prone on break)
+- **Leg about to break** → KNEES (prone on break)
+- **Otherwise** → HAMSTRING > afflictions
