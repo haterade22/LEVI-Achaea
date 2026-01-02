@@ -120,6 +120,27 @@ function blademaster.checkWillDoubleBreakArms()
   end
 end
 
+function blademaster.checkWillPrepBothArms()
+  -- Check if the next attack will bring BOTH arms to 90%+ (prep threshold)
+  local LA = blademaster.getLA()
+  local RA = blademaster.getRA()
+  local P = blademaster.state.armPrimaryDamage
+  local S = blademaster.state.armSecondaryDamage
+  local threshold = blademaster.config.prepThreshold
+  local focusArm = blademaster.getFocusArm()
+
+  -- If already both prepped, return false (we're past this point)
+  if LA >= threshold and RA >= threshold then
+    return false
+  end
+
+  if focusArm == "left" then
+    return (LA + P >= threshold) and (RA + S >= threshold)
+  else
+    return (RA + P >= threshold) and (LA + S >= threshold)
+  end
+end
+
 --------------------------------------------------------------------------------
 -- CONDITION CHECKS - LEGS
 --------------------------------------------------------------------------------
@@ -616,15 +637,15 @@ function blademaster.getPhaseQuadPrep()
   -- 2. leg_prep: Arms prepped, both legs < 90% (Lightning)
   -- 3. arm_break: Arms & legs prepped, arms not broken (Ice)
   -- 4. leg_break: Arms broken, legs prepped, legs not broken (Ice)
-  -- 5. mangle: All limbs broken (Ice)
+  -- 5. mangle: PRONE (Ice + Sternum) - stay in mangle as long as they're down
 
   local armsPrepped = blademaster.checkBothArmsPrepped()
   local armsBroken = blademaster.checkBothArmsBroken()
   local legsPrepped = blademaster.checkBothLegsPrepped()
   local legsBroken = blademaster.checkBothLegsBroken()
 
-  -- Phase 5: MANGLE
-  if armsBroken and legsBroken then
+  -- Phase 5: MANGLE - If prone, stay in mangle for max damage
+  if tAffs.prone then
     return "mangle"
   end
 
@@ -711,7 +732,32 @@ function blademaster.selectAttackQuadPrep()
     return "legslash", blademaster.getFocusLeg()
   end
 
+  -- MANGLE PHASE: Check if we should use balanceslash
   if phase == "mangle" then
+    -- On 4th+ attack during prone timer, use balanceslash to extend prone
+    if blademaster.state.proneTimerActive and
+       blademaster.state.proneAttackCount >= blademaster.config.balanceslashThreshold then
+      return "balanceslash", nil
+    end
+
+    -- Hit the broken leg for mangle damage
+    local LL = blademaster.getLL()
+    local RL = blademaster.getRL()
+
+    -- If both broken, hit the higher one (more mangle damage)
+    if LL >= 100 and RL >= 100 then
+      return "legslash", (LL >= RL) and "left" or "right"
+    end
+
+    -- If only one broken, hit that one
+    if LL >= 100 then
+      return "legslash", "left"
+    end
+    if RL >= 100 then
+      return "legslash", "right"
+    end
+
+    -- Fallback
     return "legslash", "right"
   end
 
@@ -725,7 +771,12 @@ function blademaster.buildComboQuadPrep()
   local combo = ""
 
   -- Infuse: Ice for break/mangle phases, Lightning for prep
+  -- EXCEPTION: Use Ice on final prep attacks to strip caloric before break
   if phase == "arm_break" or phase == "leg_break" or phase == "mangle" then
+    combo = "infuse ice;"
+  elseif phase == "arm_prep" and blademaster.checkWillPrepBothArms() then
+    combo = "infuse ice;"
+  elseif phase == "leg_prep" and blademaster.checkWillPrepBothLegs() then
     combo = "infuse ice;"
   else
     combo = "infuse lightning;"
@@ -733,6 +784,12 @@ function blademaster.buildComboQuadPrep()
 
   if attack == "raze" then
     combo = combo .. "raze " .. target
+    if strike then
+      combo = combo .. " " .. strike
+    end
+  elseif attack == "balanceslash" then
+    -- Balanceslash to extend prone time (no direction needed)
+    combo = combo .. "balanceslash " .. target
     if strike then
       combo = combo .. " " .. strike
     end
@@ -767,6 +824,11 @@ function blademaster.dispatch.runQuadPrep()
   local phaseLabel = blademaster.getPhaseLabelQuadPrep()
   local targetHP = tonumber(ataxiaTemp.targetHP) or 100
 
+  -- Reset prone timer if not in mangle phase or target not prone
+  if phase ~= "mangle" or not tAffs.prone then
+    blademaster.resetProneTimer()
+  end
+
   -- Status output
   cecho("\n<cyan>[BMQ " .. phaseLabel .. "<cyan>] Target: " .. tostring(target) .. " | HP: " .. targetHP .. "%")
   cecho("\n<cyan>[BMQ " .. phaseLabel .. "<cyan>] Arms: LA=" .. string.format("%.1f", blademaster.getLA()) .. "% RA=" .. string.format("%.1f", blademaster.getRA()) .. "%")
@@ -775,14 +837,18 @@ function blademaster.dispatch.runQuadPrep()
   -- Phase-specific messages
   if phase == "arm_prep" then
     local armPath = blademaster.calculateArmPath()
-    if armPath.hitsToDouble > 0 then
+    if blademaster.checkWillPrepBothArms() then
+      cecho("\n<blue>*** FINAL ARM PREP - ICE infuse to strip caloric! ***")
+    elseif armPath.hitsToDouble > 0 then
       cecho("\n<yellow>" .. armPath.explanation)
     else
       cecho("\n<green>*** ARMS READY ***")
     end
   elseif phase == "leg_prep" then
     local legPath = blademaster.calculateLegPath()
-    if legPath.hitsToDouble > 0 then
+    if blademaster.checkWillPrepBothLegs() then
+      cecho("\n<blue>*** FINAL LEG PREP - ICE infuse to strip caloric! ***")
+    elseif legPath.hitsToDouble > 0 then
       cecho("\n<yellow>" .. legPath.explanation)
     else
       cecho("\n<green>*** LEGS READY ***")
@@ -792,7 +858,18 @@ function blademaster.dispatch.runQuadPrep()
   elseif phase == "leg_break" then
     cecho("\n<blue>*** LEG BREAK - ICE infuse + KNEES for prone! ***")
   elseif phase == "mangle" then
-    cecho("\n<red>*** MANGLE - Legslash right + STERNUM! ***")
+    -- Show mangle info with prone timer status
+    if blademaster.state.proneTimerActive then
+      local attackNum = blademaster.state.proneAttackCount + 1  -- Next attack number
+      local threshold = blademaster.config.balanceslashThreshold
+      if attackNum >= threshold then
+        cecho("\n<magenta>*** MANGLE - BALANCESLASH + STERNUM (attack #" .. attackNum .. ", extending prone) ***")
+      else
+        cecho("\n<red>*** MANGLE - Legslash + STERNUM (attack #" .. attackNum .. "/" .. threshold .. ") ***")
+      end
+    else
+      cecho("\n<red>*** MANGLE - Legslash + STERNUM (waiting for salve) ***")
+    end
   end
 
   -- Parry info
@@ -803,6 +880,11 @@ function blademaster.dispatch.runQuadPrep()
   cecho("\n<cyan>[BMQ " .. phaseLabel .. "<cyan>] Parried: " .. parried .. " | Shin: " .. shin)
   if needsAF then
     cecho(" | <green>AIRFIST READY")
+  end
+
+  -- Increment attack count in mangle phase
+  if phase == "mangle" and blademaster.state.proneTimerActive then
+    blademaster.state.proneAttackCount = blademaster.state.proneAttackCount + 1
   end
 
   -- Build and send
