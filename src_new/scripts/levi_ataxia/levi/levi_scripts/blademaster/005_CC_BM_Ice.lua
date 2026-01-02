@@ -13,47 +13,60 @@ attributes:
 packageName: ''
 ]]--
 
--- Blademaster Double-Prep Dispatch System
--- Kill Route: Lightning prep -> double-break both legs -> Ice damage phase
+-- Blademaster Dispatch System
+-- Two strategies available:
 --
--- KEY MECHANICS:
--- 1. DOUBLE-PREP: Alternate legs to keep both roughly equal until 90%+
--- 2. INFUSE LIGHTNING during prep (clumsy from strikes)
--- 3. AIRFIST when target parries our leg (requires 25 shin: 20 + 5 infuse)
--- 4. When BOTH legs 90%+: legslash + KNEES = double-break + prone
--- 5. INFUSE ICE + STERNUM after both legs broken (max damage)
--- 6. Frozen + broken legs = massive damage output
+-- STRATEGY 1: DOUBLE-PREP (Legs only) - bmd / bmdispatch
+--   1. LEG PREP (Lightning): Alternate legslash to get both legs to 90%+
+--   2. LEG BREAK (Ice): Double-break legs + KNEES (prone)
+--   3. MANGLE (Ice): Legslash right + STERNUM
+--
+-- STRATEGY 2: QUAD-PREP (Arms + Legs) - bmdq / bmdispatchquad
+--   1. ARM PREP (Lightning): Alternate armslash to get both arms to 90%+
+--   2. LEG PREP (Lightning): Alternate legslash to get both legs to 90%+
+--   3. ARM BREAK (Ice): Double-break both arms
+--   4. LEG BREAK (Ice): Double-break both legs + KNEES (prone)
+--   5. MANGLE (Ice): Legslash right + STERNUM
 
 blademaster = blademaster or {}
 blademaster.dispatch = blademaster.dispatch or {}
 blademaster.state = {
-  focusLeg = nil,         -- "left" or "right"
-  lastHamstringTime = 0,  -- Timestamp of last hamstring application
-  -- Damage tracking (updated from combat)
-  primaryDamage = 17.3,   -- Damage to focused leg (default, updated dynamically)
-  secondaryDamage = 11.5, -- Damage to off-leg (default, updated dynamically)
-  compassDamage = 14.9,   -- Compassslash damage (single leg)
-  lastPrimaryLeg = nil,   -- Which leg received primary damage last hit
+  -- Leg tracking
+  focusLeg = nil,
+  lastPrimaryLeg = nil,
+  legPrimaryDamage = 17.3,
+  legSecondaryDamage = 11.5,
+  -- Arm tracking
+  focusArm = nil,
+  lastPrimaryArm = nil,
+  armPrimaryDamage = 17.3,
+  armSecondaryDamage = 11.5,
+  -- Prone timer tracking (Double-Prep mangle phase)
+  proneTimerStart = nil,      -- Timestamp when salve detected
+  proneAttackCount = 0,       -- Number of attacks since prone started
+  proneTimerActive = false,   -- Is the 9-second window active
+  -- Other
+  lastHamstringTime = 0,
+  compassDamage = 14.9,
 }
 
 -- Configuration
 blademaster.config = {
-  legBreakThreshold = 100,      -- % damage for broken leg
-  legPrepThreshold = 90,        -- % damage to consider "prepped" for double-break
-  killHealthThreshold = 30,     -- HP% to start kill phase
-  -- NOTE: Airfist has NO cooldown, only shin requirement (25 shin)
-  hamstringDuration = 10,       -- Seconds hamstring lasts
+  breakThreshold = 100,
+  prepThreshold = 90,
+  killHealthThreshold = 30,
+  hamstringDuration = 10,
+  proneTimerDuration = 9,     -- Seconds from salve to stand
+  balanceslashThreshold = 4,  -- Switch to balanceslash on this attack number
 }
 
 --------------------------------------------------------------------------------
 -- LB LIMB TRACKING HELPERS
--- Use lb[target].hits instead of tLimbs for accurate limb damage tracking
 --------------------------------------------------------------------------------
 
 function blademaster.getLimbDamage(limb)
-  -- limb should be "left leg" or "right leg"
   if not lb or not target then return 0 end
-  local t = target:lower():gsub("^%l", string.upper) -- Title case
+  local t = target:lower():gsub("^%l", string.upper)
   if not lb[t] or not lb[t].hits then return 0 end
   return lb[t].hits[limb] or 0
 end
@@ -66,130 +79,106 @@ function blademaster.getRL()
   return blademaster.getLimbDamage("right leg")
 end
 
--- Callback for when hamstring is applied (call from trigger)
-function blademaster.onHamstringApplied()
-  blademaster.state.lastHamstringTime = os.time()
+function blademaster.getLA()
+  return blademaster.getLimbDamage("left arm")
+end
+
+function blademaster.getRA()
+  return blademaster.getLimbDamage("right arm")
 end
 
 --------------------------------------------------------------------------------
--- DAMAGE TRACKING (Call from triggers when you see damage)
+-- CONDITION CHECKS - ARMS
 --------------------------------------------------------------------------------
 
--- Call this when you see: "you have dealt X% damage to his left/right leg"
--- Example trigger pattern: ^As you carve into .+, you perceive that you have dealt (\d+\.?\d*)% damage to (?:his|her) (left|right) leg
-function blademaster.recordLegDamage(damage, leg, isPrimary)
-  damage = tonumber(damage) or 0
-  if isPrimary then
-    blademaster.state.primaryDamage = damage
-    blademaster.state.lastPrimaryLeg = leg
+function blademaster.checkBothArmsPrepped()
+  return blademaster.getLA() >= blademaster.config.prepThreshold and
+         blademaster.getRA() >= blademaster.config.prepThreshold
+end
+
+function blademaster.checkBothArmsBroken()
+  return blademaster.getLA() >= blademaster.config.breakThreshold and
+         blademaster.getRA() >= blademaster.config.breakThreshold
+end
+
+function blademaster.checkAnyArmBroken()
+  return blademaster.getLA() >= blademaster.config.breakThreshold or
+         blademaster.getRA() >= blademaster.config.breakThreshold
+end
+
+function blademaster.checkWillDoubleBreakArms()
+  local LA = blademaster.getLA()
+  local RA = blademaster.getRA()
+  local P = blademaster.state.armPrimaryDamage
+  local S = blademaster.state.armSecondaryDamage
+  local focusArm = blademaster.getFocusArm()
+
+  if focusArm == "left" then
+    return (LA + P >= 100) and (RA + S >= 100)
   else
-    blademaster.state.secondaryDamage = damage
+    return (RA + P >= 100) and (LA + S >= 100)
   end
 end
 
--- Convenience function to record both damages from a legslash
--- Call with primary damage first, then secondary
-function blademaster.recordLegslashDamage(primaryDmg, primaryLeg, secondaryDmg)
-  blademaster.state.primaryDamage = tonumber(primaryDmg) or blademaster.state.primaryDamage
-  blademaster.state.secondaryDamage = tonumber(secondaryDmg) or blademaster.state.secondaryDamage
-  blademaster.state.lastPrimaryLeg = primaryLeg
+--------------------------------------------------------------------------------
+-- CONDITION CHECKS - LEGS
+--------------------------------------------------------------------------------
+
+function blademaster.checkBothLegsPrepped()
+  return blademaster.getLL() >= blademaster.config.prepThreshold and
+         blademaster.getRL() >= blademaster.config.prepThreshold
 end
 
---------------------------------------------------------------------------------
--- OPTIMAL PATH CALCULATION
---------------------------------------------------------------------------------
+function blademaster.checkBothLegsBroken()
+  return blademaster.getLL() >= blademaster.config.breakThreshold and
+         blademaster.getRL() >= blademaster.config.breakThreshold
+end
 
-function blademaster.calculateOptimalPath()
-  -- Calculate the optimal sequence of attacks to get both legs to 90%+
-  -- Returns: { attack = "legslash"|"compassslash", direction = "left"|"right",
-  --            hitsToDouble = n, explanation = "..." }
+function blademaster.checkAnyLegBroken()
+  return blademaster.getLL() >= blademaster.config.breakThreshold or
+         blademaster.getRL() >= blademaster.config.breakThreshold
+end
 
+function blademaster.checkWillDoubleBreakLegs()
   local LL = blademaster.getLL()
   local RL = blademaster.getRL()
-  local P = blademaster.state.primaryDamage    -- Primary damage
-  local S = blademaster.state.secondaryDamage  -- Secondary damage
-  local C = blademaster.state.compassDamage    -- Compassslash damage
-  local target = blademaster.config.legPrepThreshold  -- 90%
+  local P = blademaster.state.legPrimaryDamage
+  local S = blademaster.state.legSecondaryDamage
+  local focusLeg = blademaster.getFocusLeg()
 
-  -- If both already at 90%+, we're ready
-  if LL >= target and RL >= target then
-    return {
-      attack = "legslash",
-      direction = "left",
-      hitsToDouble = 0,
-      explanation = "Both legs ready for double-break!"
-    }
+  if focusLeg == "left" then
+    return (LL + P >= 100) and (RL + S >= 100)
+  else
+    return (RL + P >= 100) and (LL + S >= 100)
+  end
+end
+
+function blademaster.checkWillPrepBothLegs()
+  -- Check if the next attack will bring BOTH legs to 90%+ (prep threshold)
+  local LL = blademaster.getLL()
+  local RL = blademaster.getRL()
+  local P = blademaster.state.legPrimaryDamage
+  local S = blademaster.state.legSecondaryDamage
+  local threshold = blademaster.config.prepThreshold
+  local focusLeg = blademaster.getFocusLeg()
+
+  -- If already both prepped, return false (we're past this point)
+  if LL >= threshold and RL >= threshold then
+    return false
   end
 
-  -- Calculate how many hits needed if we just alternate optimally
-  -- Hitting LEFT: LL += P, RL += S
-  -- Hitting RIGHT: LL += S, RL += P
-
-  -- Simulate alternating strategy (always hit lower leg)
-  local simLL, simRL = LL, RL
-  local hits = 0
-  local sequence = {}
-
-  while simLL < target or simRL < target do
-    hits = hits + 1
-    if hits > 20 then break end  -- Safety limit
-
-    if simLL <= simRL then
-      -- Hit left (lower)
-      simLL = simLL + P
-      simRL = simRL + S
-      table.insert(sequence, "L")
-    else
-      -- Hit right (lower)
-      simLL = simLL + S
-      simRL = simRL + P
-      table.insert(sequence, "R")
-    end
+  if focusLeg == "left" then
+    return (LL + P >= threshold) and (RL + S >= threshold)
+  else
+    return (RL + P >= threshold) and (LL + S >= threshold)
   end
-
-  -- Check if one leg would break before the other reaches 90%
-  -- This happens when the gap is too large
-  local highLeg = math.max(LL, RL)
-  local lowLeg = math.min(LL, RL)
-  local gap = highLeg - lowLeg
-
-  -- Calculate: if we hit the LOW leg, high leg gets +S
-  -- Would high leg break (>100) before low leg reaches 90?
-  local hitsForLowTo90 = math.ceil((target - lowLeg) / P)
-  local highAfterHits = highLeg + (hitsForLowTo90 * S)
-
-  if highAfterHits > 100 and lowLeg < target then
-    -- High leg would break early! Need compassslash to balance
-    local compassHitsNeeded = math.ceil((target - lowLeg) / C)
-    local lowLegDir = (LL < RL) and "left" or "right"
-
-    return {
-      attack = "compassslash",
-      direction = lowLegDir,
-      hitsToDouble = compassHitsNeeded,
-      explanation = string.format("Gap too big (%.1f%%). Need %d compassslash %s to catch up",
-                                  gap, compassHitsNeeded, lowLegDir)
-    }
-  end
-
-  -- Normal case: alternate legslash
-  local focusDir = (LL <= RL) and "left" or "right"
-  return {
-    attack = "legslash",
-    direction = focusDir,
-    hitsToDouble = hits,
-    explanation = string.format("%d hits to double-break (sequence: %s)",
-                                hits, table.concat(sequence, ""))
-  }
 end
 
 --------------------------------------------------------------------------------
--- DOUBLE-PREP FOCUS LOGIC
+-- FOCUS DIRECTION HELPERS
 --------------------------------------------------------------------------------
 
 function blademaster.getParried()
-  -- Get what the target is parrying - uses tparrying variable
-  -- Returns: "left leg", "right leg", "head", "torso", or "none"/false
   local parried = tparrying or ataxiaTemp.parriedLimb or "none"
   if parried == false or parried == "" then
     parried = "none"
@@ -197,143 +186,123 @@ function blademaster.getParried()
   return parried
 end
 
-function blademaster.getFocusLeg()
-  -- Use optimal path calculation to determine focus leg
+function blademaster.getFocusArm()
+  local LA = blademaster.getLA()
+  local RA = blademaster.getRA()
   local parried = blademaster.getParried()
 
-  -- If BOTH legs 90%+, either direction breaks both - pick non-parried
-  if blademaster.getLL() >= blademaster.config.legPrepThreshold and blademaster.getRL() >= blademaster.config.legPrepThreshold then
+  if LA >= blademaster.config.prepThreshold and RA >= blademaster.config.prepThreshold then
+    return parried == "left arm" and "right" or "left"
+  end
+
+  local focus = (LA <= RA) and "left" or "right"
+
+  if parried == focus .. " arm" then
+    return focus == "left" and "right" or "left"
+  end
+
+  return focus
+end
+
+function blademaster.getFocusLeg()
+  local LL = blademaster.getLL()
+  local RL = blademaster.getRL()
+  local parried = blademaster.getParried()
+
+  if LL >= blademaster.config.prepThreshold and RL >= blademaster.config.prepThreshold then
     return parried == "left leg" and "right" or "left"
   end
 
-  -- If both legs already broken, focus whichever isn't parried
-  if blademaster.getLL() >= 100 and blademaster.getRL() >= 100 then
-    return parried == "left leg" and "right" or "left"
+  local focus = (LL <= RL) and "left" or "right"
+
+  if parried == focus .. " leg" then
+    return focus == "left" and "right" or "left"
   end
 
-  -- Use calculated optimal path
-  local path = blademaster.calculateOptimalPath()
-  local optimalDir = path.direction
-
-  -- If optimal direction is parried, switch to other leg
-  if parried == optimalDir .. " leg" then
-    return blademaster.getOtherLeg(optimalDir)
-  end
-
-  return optimalDir
-end
-
-function blademaster.getOtherLeg(leg)
-  return leg == "left" and "right" or "left"
-end
-
-function blademaster.getCompassDirection(leg)
-  -- Convert leg direction to compass direction for compassslash
-  -- SOUTHEAST = left leg
-  -- SOUTHWEST = right leg
-  if leg == "left" then
-    return "southeast"
-  elseif leg == "right" then
-    return "southwest"
-  end
-  return leg  -- fallback
+  return focus
 end
 
 --------------------------------------------------------------------------------
--- CONDITION CHECKS
+-- PATH CALCULATIONS
 --------------------------------------------------------------------------------
 
-function blademaster.checkDoubleBreakReady()
-  -- Both legs at 90%+ means next legslash breaks both
-  return blademaster.getLL() >= blademaster.config.legPrepThreshold and blademaster.getRL() >= blademaster.config.legPrepThreshold
+function blademaster.calculateArmPath()
+  local LA = blademaster.getLA()
+  local RA = blademaster.getRA()
+  local P = blademaster.state.armPrimaryDamage
+  local S = blademaster.state.armSecondaryDamage
+  local threshold = blademaster.config.prepThreshold
+
+  if LA >= threshold and RA >= threshold then
+    return { hitsToDouble = 0, explanation = "Both arms ready for double-break!" }
+  end
+
+  local simLA, simRA = LA, RA
+  local hits = 0
+  local sequence = {}
+
+  while simLA < threshold or simRA < threshold do
+    hits = hits + 1
+    if hits > 20 then break end
+
+    if simLA <= simRA then
+      simLA = simLA + P
+      simRA = simRA + S
+      table.insert(sequence, "L")
+    else
+      simLA = simLA + S
+      simRA = simRA + P
+      table.insert(sequence, "R")
+    end
+  end
+
+  return {
+    hitsToDouble = hits,
+    explanation = string.format("%d hits to arm double-break (sequence: %s)", hits, table.concat(sequence, ""))
+  }
 end
 
-function blademaster.checkBothLegsBroken()
-  return blademaster.getLL() >= 100 and blademaster.getRL() >= 100
-end
-
-function blademaster.checkLegAboutToBreak()
-  -- Check if either leg will break on next hit (for knees priority)
+function blademaster.calculateLegPath()
   local LL = blademaster.getLL()
   local RL = blademaster.getRL()
-  local P = blademaster.state.primaryDamage
-  local S = blademaster.state.secondaryDamage
-  local focusLeg = blademaster.getFocusLeg()
+  local P = blademaster.state.legPrimaryDamage
+  local S = blademaster.state.legSecondaryDamage
+  local threshold = blademaster.config.prepThreshold
 
-  -- If hitting left: LL gets +P, RL gets +S
-  -- If hitting right: RL gets +P, LL gets +S
-  if focusLeg == "left" then
-    return (LL + P >= 100) or (RL + S >= 100)
-  else
-    return (RL + P >= 100) or (LL + S >= 100)
-  end
-end
-
-function blademaster.checkWillDoubleBreak()
-  -- Check if BOTH legs will be broken after next hit (causes prone)
-  local LL = blademaster.getLL()
-  local RL = blademaster.getRL()
-  local P = blademaster.state.primaryDamage
-  local S = blademaster.state.secondaryDamage
-  local focusLeg = blademaster.getFocusLeg()
-
-  if focusLeg == "left" then
-    local llAfter = LL + P
-    local rlAfter = RL + S
-    return (llAfter >= 100) and (rlAfter >= 100)
-  else
-    local rlAfter = RL + P
-    local llAfter = LL + S
-    return (rlAfter >= 100) and (llAfter >= 100)
-  end
-end
-
-function blademaster.checkAnyLegBroken()
-  -- Check if at least one leg is broken (100%+)
-  return blademaster.getLL() >= 100 or blademaster.getRL() >= 100
-end
-
-function blademaster.checkKillReady()
-  -- Pure damage kill - check if target is low HP and both legs broken
-  local targetHP = tonumber(ataxiaTemp.targetHP) or 100
-  return targetHP <= blademaster.config.killHealthThreshold and blademaster.checkBothLegsBroken()
-end
-
-function blademaster.checkReadyForProne()
-  -- BOTH legs need to be broken (100%+) for prone
-  return blademaster.checkBothLegsBroken()
-end
-
-function blademaster.checkLegPrepped(leg)
-  local damage = leg == "left" and blademaster.getLL() or blademaster.getRL()
-  return damage >= blademaster.config.legPrepThreshold
-end
-
-function blademaster.getPhase()
-  -- Determine current combat phase
-  -- ICE phase = when they're locked down (prone) or about to be (double-break)
-  -- PREP phase = lightning for clumsiness, building toward double-break
-
-  -- PRONE = ICE phase (they're locked down, maximize damage)
-  if tAffs.prone then
-    return "ice"
+  if LL >= threshold and RL >= threshold then
+    return { hitsToDouble = 0, explanation = "Both legs ready for double-break!" }
   end
 
-  -- DOUBLE-BREAK IMMINENT = Switch to ICE now (frozen bonus on break)
-  if blademaster.checkWillDoubleBreak() then
-    return "ice"
+  local simLL, simRL = LL, RL
+  local hits = 0
+  local sequence = {}
+
+  while simLL < threshold or simRL < threshold do
+    hits = hits + 1
+    if hits > 20 then break end
+
+    if simLL <= simRL then
+      simLL = simLL + P
+      simRL = simRL + S
+      table.insert(sequence, "L")
+    else
+      simLL = simLL + S
+      simRL = simRL + P
+      table.insert(sequence, "R")
+    end
   end
 
-  return "prep"  -- Lightning prep (clumsiness, building damage)
+  return {
+    hitsToDouble = hits,
+    explanation = string.format("%d hits to leg double-break (sequence: %s)", hits, table.concat(sequence, ""))
+  }
 end
 
 --------------------------------------------------------------------------------
--- PARRY HANDLING - REACTIVE AIRFIST
+-- SHIN & AIRFIST
 --------------------------------------------------------------------------------
 
 function blademaster.getShin()
-  -- Get current shin value from gmcp.Char.Vitals.charstats
-  -- Format: { "Bleed: 0", "Rage: 0", "Shin: 16", "Stance: Thyr" }
   if gmcp and gmcp.Char and gmcp.Char.Vitals and gmcp.Char.Vitals.charstats then
     for _, stat in ipairs(gmcp.Char.Vitals.charstats) do
       local shinValue = string.match(stat, "Shin:%s*(%d+)")
@@ -345,286 +314,195 @@ function blademaster.getShin()
   return 0
 end
 
-function blademaster.needsAirfist()
-  -- Use AIRFIST when target is parrying a leg we want to attack
-  -- Requires 20 shin for airfist + 5 shin for infuse = 25 total
+function blademaster.needsAirfist(targetLimbType)
   local parried = blademaster.getParried()
-  local focusLeg = blademaster.getFocusLeg()
-  local focusLegFull = focusLeg .. " leg"
-
-  -- Check shin requirement (20 airfist + 5 infuse = 25 needed)
-  -- NOTE: Airfist has NO cooldown, only shin requirement
   local shin = blademaster.getShin()
-  local shinNeeded = 25  -- 20 for airfist + 5 for infuse
-  if shin < shinNeeded then
+
+  if shin < 25 then
     return false, "not enough shin (" .. shin .. "/25)"
   end
 
-  -- Already airfisted - but be less strict, allow re-application
   if tAffs.airfisted then
     return false, "already airfisted"
   end
 
-  -- Check if they're parrying the leg we want to attack
-  if parried == focusLegFull then
-    return true, "parrying our target leg (" .. parried .. ")"
+  if targetLimbType == "arm" then
+    if parried == "left arm" or parried == "right arm" then
+      return true, "parrying arm (" .. parried .. ")"
+    end
+  elseif targetLimbType == "leg" then
+    if parried == "left leg" or parried == "right leg" then
+      return true, "parrying leg (" .. parried .. ")"
+    end
   end
 
-  -- Also use airfist if they're parrying ANY leg and we keep hitting parry
-  if parried == "left leg" or parried == "right leg" then
-    return true, "parrying a leg (" .. parried .. ")"
-  end
-
-  return false, "not parrying legs (parried: " .. parried .. ")"
-end
-
-function blademaster.useAirfist()
-  -- Airfist has no cooldown, just shin cost
-  return "airfist"
+  return false, "not parrying target limb"
 end
 
 --------------------------------------------------------------------------------
--- AFFLICTION SELECTION (Striking)
+-- STRIKE SELECTION (shared)
 --------------------------------------------------------------------------------
 
-function blademaster.selectStrike()
-  -- Priority order:
-  -- 1. AIRFIST if focused leg is parried (reactive) - requires 25 shin (20 + 5 infuse)
-  -- 2. STERNUM if PRONE (they're locked down, maximize damage with ice)
-  -- 3. KNEES if DOUBLE-BREAK imminent (both legs will break) - prone on break hit
-  -- 4. KNEES when SINGLE leg about to break AND target NOT prone
-  -- 5. HAMSTRING - prevents fleeing, ALWAYS keep up
-  -- 6. NECK (paralysis) - lightning gives clumsy, so strike para
-  -- 7. CHEST (hypochondria) - blocks focus curing
-  -- 8. SHOULDER (weariness) to block Fitness
-  -- 9. EARS (clumsiness) - fallback
-
-  -- Reactive AIRFIST (only if parrying our leg and we have 25 shin)
-  local needsAF, afReason = blademaster.needsAirfist()
-  if needsAF then
-    return blademaster.useAirfist()
-  end
-
-  -- PRONE = STERNUM (they're locked down, maximize damage)
-  -- No need for KNEES - they're already down, just pump damage with ice infuse
-  if tAffs.prone then
-    return "sternum"
-  end
-
-  -- DOUBLE-BREAK IMMINENT: Use KNEES to prone on the double-break hit
-  if blademaster.checkWillDoubleBreak() then
-    return "knees"
-  end
-
-  -- SINGLE LEG about to break: Use KNEES to prone on same hit as the break
-  if blademaster.checkLegAboutToBreak() then
-    return "knees"
-  end
-
-  -- Hamstring - prevents fleeing, lasts 10 seconds, use timestamp tracking
+function blademaster.selectPrepStrike()
+  -- Prep phase strikes: Hamstring first, then afflictions
   local now = os.time()
   local hamstringExpired = (now - (blademaster.state.lastHamstringTime or 0)) >= blademaster.config.hamstringDuration
   if not tAffs.hamstring or hamstringExpired then
     return "hamstring"
   end
 
-  -- Phase-specific affliction priority
-  local phase = blademaster.getPhase()
-
-  if phase == "prep" then
-    -- LIGHTNING PREP: Lightning infusion gives clumsiness automatically
-    -- So strike for: paralysis > hypochondria > weariness > clumsiness (fallback)
-    if not tAffs.paralysis then
-      return "neck"
-    end
-    if not tAffs.hypochondria then
-      return "chest"
-    end
-    if not tAffs.weariness then
-      return "shoulder"
-    end
-    if not tAffs.clumsiness then
-      return "ears"
-    end
-  else
-    -- ICE PHASE: Apply clumsiness if needed (ice doesn't give it), then others
-    if not tAffs.clumsiness then
-      return "ears"
-    end
-    if not tAffs.paralysis then
-      return "neck"
-    end
-    if not tAffs.hypochondria then
-      return "chest"
-    end
-    if not tAffs.weariness then
-      return "shoulder"
-    end
+  -- Lightning prep: paralysis > hypochondria > weariness > clumsiness
+  if not tAffs.paralysis then
+    return "neck"
+  end
+  if not tAffs.hypochondria then
+    return "chest"
+  end
+  if not tAffs.weariness then
+    return "shoulder"
+  end
+  if not tAffs.clumsiness then
+    return "ears"
   end
 
-  -- Default back to paralysis pressure
+  return "neck"
+end
+
+function blademaster.selectIceStrike()
+  -- Ice phase: clumsiness first (ice doesn't give it), then others
+  if not tAffs.clumsiness then
+    return "ears"
+  end
+  if not tAffs.paralysis then
+    return "neck"
+  end
   return "neck"
 end
 
 --------------------------------------------------------------------------------
--- SWORD ATTACK SELECTION
+--------------------------------------------------------------------------------
+--
+--  STRATEGY 1: DOUBLE-PREP (LEGS ONLY)
+--
+--------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-function blademaster.needsCompassslash()
-  -- Use calculated optimal path to determine if compassslash is needed
-  -- This uses actual damage values from combat instead of hardcoded thresholds
-  -- IMPORTANT: Never use compassslash if any leg is broken - that's ice phase territory
+function blademaster.getPhaseDoublePrep()
+  -- 3-phase system for legs only:
+  -- 1. leg_prep: Both legs < 90% (Lightning)
+  -- 2. leg_break: Legs prepped, not broken (Ice)
+  -- 3. mangle: PRONE (Ice + Sternum) - stay in mangle as long as they're down
 
-  -- Never compassslash if any leg is already broken
-  if blademaster.checkAnyLegBroken() then
-    return false, nil, nil
+  local legsPrepped = blademaster.checkBothLegsPrepped()
+
+  -- MANGLE: If prone, stay in mangle for max damage
+  if tAffs.prone then
+    return "mangle"
   end
 
-  -- Never compassslash if double-break is imminent - we WANT both to break!
-  if blademaster.checkWillDoubleBreak() then
-    return false, nil, nil
+  if legsPrepped or blademaster.checkWillDoubleBreakLegs() then
+    return "leg_break"
   end
 
-  local path = blademaster.calculateOptimalPath()
-
-  if path.attack == "compassslash" then
-    return true, path.direction, path.explanation
-  end
-
-  return false, nil, nil
+  return "leg_prep"
 end
 
-function blademaster.shouldSwitchToBody()
-  -- Check if we should switch to body attacks (centreslash up = torso/head) instead of legs
-  -- This happens when:
-  -- 1. Target is parrying a leg
-  -- 2. We can't airfist (not enough shin)
-  -- 3. The other leg is already prepped (90%+) so hitting it would waste damage
-
-  local parried = blademaster.getParried()
-
-  -- Only relevant if parrying a leg
-  if parried ~= "left leg" and parried ~= "right leg" then
-    return false, nil
-  end
-
-  -- Check if we can airfist
-  local canAirfist, _ = blademaster.needsAirfist()
-  if canAirfist then
-    return false, nil  -- We'll airfist instead
-  end
-
-  -- They're parrying a leg and we can't airfist
-  -- Check if the OTHER leg is already prepped
-  local LL = blademaster.getLL()
-  local RL = blademaster.getRL()
-  local threshold = blademaster.config.legPrepThreshold
-
-  if parried == "left leg" then
-    -- They're parrying left, we'd hit right
-    -- If right is already prepped, switch to body
-    if RL >= threshold then
-      return true, "right leg prepped, switching to body"
-    end
-  elseif parried == "right leg" then
-    -- They're parrying right, we'd hit left
-    -- If left is already prepped, switch to body
-    if LL >= threshold then
-      return true, "left leg prepped, switching to body"
-    end
-  end
-
-  return false, nil
+function blademaster.getPhaseLabelDoublePrep()
+  local phase = blademaster.getPhaseDoublePrep()
+  local labels = {
+    leg_prep = "<yellow>Leg Prep",
+    leg_break = "<blue>Leg Break",
+    mangle = "<red>Mangle",
+  }
+  return labels[phase] or "<grey>Unknown"
 end
 
-function blademaster.selectSwordAttack()
-  local focusLeg = blademaster.getFocusLeg()
-  local LL = blademaster.getLL()
-  local RL = blademaster.getRL()
+function blademaster.selectStrikeDoublePrep()
+  local phase = blademaster.getPhaseDoublePrep()
 
-  -- Shield handling
-  if tAffs.shield then
+  -- Airfist check for legs
+  local needsAF, _ = blademaster.needsAirfist("leg")
+  if needsAF then
+    return "airfist"
+  end
+
+  -- MANGLE: Always STERNUM
+  if phase == "mangle" then
+    return "sternum"
+  end
+
+  -- LEG BREAK: KNEES for prone
+  if phase == "leg_break" then
+    return "knees"
+  end
+
+  -- LEG PREP: Standard prep strikes
+  return blademaster.selectPrepStrike()
+end
+
+function blademaster.selectAttackDoublePrep()
+  local phase = blademaster.getPhaseDoublePrep()
+
+  if tAffs.shield or tAffs.rebounding then
     return "raze", nil
   end
 
-  -- Rebounding handling
-  if tAffs.rebounding then
-    return "raze", nil
-  end
+  -- MANGLE PHASE: Check if we should use balanceslash
+  if phase == "mangle" then
+    -- On 4th+ attack during prone timer, use balanceslash to extend prone
+    if blademaster.state.proneTimerActive and
+       blademaster.state.proneAttackCount >= blademaster.config.balanceslashThreshold then
+      return "balanceslash", nil
+    end
 
-  -- PARRY BYPASS: If parrying a leg and we can't airfist (no shin) and other leg is prepped
-  -- Switch to centreslash up (torso/head) to continue pressure without wasting damage
-  local shouldBody, bodyReason = blademaster.shouldSwitchToBody()
-  if shouldBody then
-    cecho("\n<magenta>*** PARRY BYPASS: " .. bodyReason .. " - using CENTRESLASH UP ***")
-    return "centreslash", "up"  -- Hit torso/head instead
-  end
+    -- Hit the broken leg for mangle damage
+    local LL = blademaster.getLL()
+    local RL = blademaster.getRL()
 
-  -- ICE PHASE MANGLE STRATEGY:
-  -- If BOTH legs broken, hit the leg that was targeted SECOND (the off-leg from last attack)
-  -- The off-leg got secondary damage, so continue momentum on it for mangle
-  -- Mangle (level 3 break) requires 2 restoration applications to heal
-  -- NOTE: Never use BALANCESLASH - always legslash for mangle
-  if LL >= 100 and RL >= 100 then
-    -- Off-leg is the opposite of focus leg (focus got primary, off got secondary)
-    local offLeg = focusLeg == "left" and "right" or "left"
-    return "legslash", offLeg
-  end
+    -- If both broken, hit the higher one (more mangle damage)
+    if LL >= 100 and RL >= 100 then
+      return "legslash", (LL >= RL) and "left" or "right"
+    end
 
-  -- ONE LEG BROKEN: Continue hitting broken leg for mangle
-  if LL >= 100 and RL < 100 then
-    return "legslash", "left"
-  elseif RL >= 100 and LL < 100 then
+    -- If only one broken, hit that one
+    if LL >= 100 then
+      return "legslash", "left"
+    end
+    if RL >= 100 then
+      return "legslash", "right"
+    end
+
+    -- Fallback (shouldn't reach here if in mangle phase)
     return "legslash", "right"
   end
 
-  -- Check if we need compassslash to balance legs (ONLY during prep phase with no broken legs)
-  local needsCompass, compassDir = blademaster.needsCompassslash()
-  if needsCompass then
-    return "compassslash", compassDir
-  end
-
-  -- Focus fire leg (during prep, this alternates to keep both equal)
-  return "legslash", focusLeg
+  return "legslash", blademaster.getFocusLeg()
 end
 
---------------------------------------------------------------------------------
--- COMBO BUILDER
---------------------------------------------------------------------------------
-
-function blademaster.buildCombo()
-  local attack, direction = blademaster.selectSwordAttack()
-  local strike = blademaster.selectStrike()
-
+function blademaster.buildComboDoublePrep()
+  local attack, direction = blademaster.selectAttackDoublePrep()
+  local strike = blademaster.selectStrikeDoublePrep()
+  local phase = blademaster.getPhaseDoublePrep()
   local combo = ""
 
-  -- INFUSE SELECTION: Use getPhase() to determine infuse (matches status display)
-  -- ICE phase = prone OR double-break imminent (for frozen bonus on break)
-  -- PREP phase = lightning (clumsiness from strikes)
-  local phase = blademaster.getPhase()
-  if phase == "ice" then
+  -- Infuse: Ice for break/mangle, Lightning for prep
+  -- EXCEPTION: Use Ice on final prep attack to strip caloric before break
+  if phase == "leg_break" or phase == "mangle" then
+    combo = "infuse ice;"
+  elseif phase == "leg_prep" and blademaster.checkWillPrepBothLegs() then
     combo = "infuse ice;"
   else
     combo = "infuse lightning;"
   end
 
-  -- Build attack command
-  -- NOTE: BALANCESLASH removed - always use LEGSLASH in ice phase for mangle
   if attack == "raze" then
     combo = combo .. "raze " .. target
     if strike then
       combo = combo .. " " .. strike
     end
-  elseif attack == "compassslash" then
-    -- Compassslash uses compass directions: southeast = left leg, southwest = right leg
-    local compassDir = blademaster.getCompassDirection(direction)
-    combo = combo .. "compassslash " .. target .. " " .. compassDir
-    if strike then
-      combo = combo .. " " .. strike
-    end
-  elseif attack == "centreslash" then
-    -- Centreslash up hits torso/head when bypassing leg parry (no shin for airfist)
-    combo = combo .. "centreslash " .. target .. " " .. direction
+  elseif attack == "balanceslash" then
+    -- Balanceslash to extend prone time (no direction needed)
+    combo = combo .. "balanceslash " .. target
     if strike then
       combo = combo .. " " .. strike
     end
@@ -633,8 +511,238 @@ function blademaster.buildCombo()
     if strike then
       combo = combo .. " " .. strike
     end
-  elseif attack == "multislash" then
-    combo = combo .. "multislash " .. target
+  end
+
+  return combo
+end
+
+function blademaster.dispatch.runDoublePrep()
+  ataxia = ataxia or {}
+  ataxia.vitals = ataxia.vitals or {}
+  ataxia.settings = ataxia.settings or {}
+  ataxiaTemp = ataxiaTemp or {}
+  tAffs = tAffs or {}
+
+  if not target or target == "" then
+    cecho("\n<red>[BM] No target set! Use: tar <name>")
+    return
+  end
+
+  local phase = blademaster.getPhaseDoublePrep()
+  local phaseLabel = blademaster.getPhaseLabelDoublePrep()
+  local targetHP = tonumber(ataxiaTemp.targetHP) or 100
+
+  -- Reset prone timer if not in mangle phase or target not prone
+  if phase ~= "mangle" or not tAffs.prone then
+    blademaster.resetProneTimer()
+  end
+
+  -- Status output
+  cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Target: " .. tostring(target) .. " | HP: " .. targetHP .. "%")
+  cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Legs: LL=" .. string.format("%.1f", blademaster.getLL()) .. "% RL=" .. string.format("%.1f", blademaster.getRL()) .. "%")
+  cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Dmg: P=" .. string.format("%.1f", blademaster.state.legPrimaryDamage) .. "% S=" .. string.format("%.1f", blademaster.state.legSecondaryDamage) .. "%")
+
+  -- Phase-specific messages
+  if phase == "leg_prep" then
+    local legPath = blademaster.calculateLegPath()
+    if blademaster.checkWillPrepBothLegs() then
+      cecho("\n<blue>*** FINAL PREP - ICE infuse to strip caloric! ***")
+    elseif legPath.hitsToDouble > 0 then
+      cecho("\n<yellow>" .. legPath.explanation)
+    end
+  elseif phase == "leg_break" then
+    cecho("\n<blue>*** LEG BREAK - ICE infuse + KNEES for prone! ***")
+  elseif phase == "mangle" then
+    -- Show mangle info with prone timer status
+    if blademaster.state.proneTimerActive then
+      local attackNum = blademaster.state.proneAttackCount + 1  -- Next attack number
+      local threshold = blademaster.config.balanceslashThreshold
+      if attackNum >= threshold then
+        cecho("\n<magenta>*** MANGLE - BALANCESLASH + STERNUM (attack #" .. attackNum .. ", extending prone) ***")
+      else
+        cecho("\n<red>*** MANGLE - Legslash right + STERNUM (attack #" .. attackNum .. "/" .. threshold .. ") ***")
+      end
+    else
+      cecho("\n<red>*** MANGLE - Legslash right + STERNUM (waiting for salve) ***")
+    end
+  end
+
+  -- Parry info
+  local parried = blademaster.getParried()
+  local shin = blademaster.getShin()
+  local needsAF, _ = blademaster.needsAirfist("leg")
+  cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Parried: " .. parried .. " | Shin: " .. shin)
+  if needsAF then
+    cecho(" | <green>AIRFIST READY")
+  end
+
+  -- Increment attack count in mangle phase
+  if phase == "mangle" and blademaster.state.proneTimerActive then
+    blademaster.state.proneAttackCount = blademaster.state.proneAttackCount + 1
+  end
+
+  -- Build and send
+  local cmd = ""
+  if combatQueue then
+    cmd = combatQueue()
+  end
+
+  cmd = cmd .. blademaster.buildComboDoublePrep()
+  cmd = cmd .. ";assess " .. target
+
+  send("queue addclear free " .. cmd)
+end
+
+-- Aliases for Double-Prep
+function bmd()
+  blademaster.dispatch.runDoublePrep()
+end
+
+function bmdispatch()
+  blademaster.dispatch.runDoublePrep()
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--
+--  STRATEGY 2: QUAD-PREP (ARMS + LEGS)
+--
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+function blademaster.getPhaseQuadPrep()
+  -- 5-phase system:
+  -- 1. arm_prep: Both arms < 90% (Lightning)
+  -- 2. leg_prep: Arms prepped, both legs < 90% (Lightning)
+  -- 3. arm_break: Arms & legs prepped, arms not broken (Ice)
+  -- 4. leg_break: Arms broken, legs prepped, legs not broken (Ice)
+  -- 5. mangle: All limbs broken (Ice)
+
+  local armsPrepped = blademaster.checkBothArmsPrepped()
+  local armsBroken = blademaster.checkBothArmsBroken()
+  local legsPrepped = blademaster.checkBothLegsPrepped()
+  local legsBroken = blademaster.checkBothLegsBroken()
+
+  -- Phase 5: MANGLE
+  if armsBroken and legsBroken then
+    return "mangle"
+  end
+
+  -- Phase 4: LEG BREAK
+  if armsBroken and legsPrepped then
+    return "leg_break"
+  end
+
+  -- Phase 3: ARM BREAK
+  if armsPrepped and legsPrepped and not armsBroken then
+    return "arm_break"
+  end
+
+  -- Phase 2: LEG PREP
+  if armsPrepped and not legsPrepped then
+    return "leg_prep"
+  end
+
+  -- Phase 1: ARM PREP
+  return "arm_prep"
+end
+
+function blademaster.getPhaseLabelQuadPrep()
+  local phase = blademaster.getPhaseQuadPrep()
+  local labels = {
+    arm_prep = "<yellow>Arm Prep",
+    leg_prep = "<yellow>Leg Prep",
+    arm_break = "<blue>Arm Break",
+    leg_break = "<blue>Leg Break",
+    mangle = "<red>Mangle",
+  }
+  return labels[phase] or "<grey>Unknown"
+end
+
+function blademaster.selectStrikeQuadPrep()
+  local phase = blademaster.getPhaseQuadPrep()
+
+  -- Airfist check based on phase
+  local limbType = (phase == "arm_prep" or phase == "arm_break") and "arm" or "leg"
+  local needsAF, _ = blademaster.needsAirfist(limbType)
+  if needsAF then
+    return "airfist"
+  end
+
+  -- MANGLE: Always STERNUM
+  if phase == "mangle" then
+    return "sternum"
+  end
+
+  -- LEG BREAK: KNEES for prone
+  if phase == "leg_break" then
+    return "knees"
+  end
+
+  -- ARM BREAK: Ice afflictions
+  if phase == "arm_break" then
+    return blademaster.selectIceStrike()
+  end
+
+  -- PREP PHASES: Standard prep strikes
+  return blademaster.selectPrepStrike()
+end
+
+function blademaster.selectAttackQuadPrep()
+  local phase = blademaster.getPhaseQuadPrep()
+
+  if tAffs.shield or tAffs.rebounding then
+    return "raze", nil
+  end
+
+  if phase == "arm_prep" then
+    return "armslash", blademaster.getFocusArm()
+  end
+
+  if phase == "leg_prep" then
+    return "legslash", blademaster.getFocusLeg()
+  end
+
+  if phase == "arm_break" then
+    return "armslash", blademaster.getFocusArm()
+  end
+
+  if phase == "leg_break" then
+    return "legslash", blademaster.getFocusLeg()
+  end
+
+  if phase == "mangle" then
+    return "legslash", "right"
+  end
+
+  return "legslash", blademaster.getFocusLeg()
+end
+
+function blademaster.buildComboQuadPrep()
+  local attack, direction = blademaster.selectAttackQuadPrep()
+  local strike = blademaster.selectStrikeQuadPrep()
+  local phase = blademaster.getPhaseQuadPrep()
+  local combo = ""
+
+  -- Infuse: Ice for break/mangle phases, Lightning for prep
+  if phase == "arm_break" or phase == "leg_break" or phase == "mangle" then
+    combo = "infuse ice;"
+  else
+    combo = "infuse lightning;"
+  end
+
+  if attack == "raze" then
+    combo = combo .. "raze " .. target
+    if strike then
+      combo = combo .. " " .. strike
+    end
+  elseif attack == "armslash" then
+    combo = combo .. "armslash " .. target .. " " .. direction
+    if strike then
+      combo = combo .. " " .. strike
+    end
+  elseif attack == "legslash" then
+    combo = combo .. "legslash " .. target .. " " .. direction
     if strike then
       combo = combo .. " " .. strike
     end
@@ -643,115 +751,93 @@ function blademaster.buildCombo()
   return combo
 end
 
---------------------------------------------------------------------------------
--- MAIN DISPATCH FUNCTION
---------------------------------------------------------------------------------
-
-function blademaster.dispatch.run()
-  -- Initialize if missing
+function blademaster.dispatch.runQuadPrep()
   ataxia = ataxia or {}
   ataxia.vitals = ataxia.vitals or {}
   ataxia.settings = ataxia.settings or {}
   ataxiaTemp = ataxiaTemp or {}
   tAffs = tAffs or {}
 
-  -- Safety check
   if not target or target == "" then
     cecho("\n<red>[BM] No target set! Use: tar <name>")
     return
   end
 
-  -- Determine phase
-  local phase = blademaster.getPhase()
-  local phaseLabel = phase == "ice" and "<blue>Ice" or "<yellow>Lightning"
-  local doubleReady = blademaster.checkDoubleBreakReady()
-
-  -- Debug output
-  local focusLeg = blademaster.getFocusLeg()
+  local phase = blademaster.getPhaseQuadPrep()
+  local phaseLabel = blademaster.getPhaseLabelQuadPrep()
   local targetHP = tonumber(ataxiaTemp.targetHP) or 100
-  local path = blademaster.calculateOptimalPath()
 
-  cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Target: " .. tostring(target))
-  cecho(" | Focus: " .. focusLeg)
-  cecho(" | HP: " .. targetHP .. "%")
-  cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] LL:" .. string.format("%.1f", blademaster.getLL()) .. "% RL:" .. string.format("%.1f", blademaster.getRL()) .. "%")
-  cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Dmg: P=" .. string.format("%.1f", blademaster.state.primaryDamage) .. "% S=" .. string.format("%.1f", blademaster.state.secondaryDamage) .. "%")
+  -- Status output
+  cecho("\n<cyan>[BMQ " .. phaseLabel .. "<cyan>] Target: " .. tostring(target) .. " | HP: " .. targetHP .. "%")
+  cecho("\n<cyan>[BMQ " .. phaseLabel .. "<cyan>] Arms: LA=" .. string.format("%.1f", blademaster.getLA()) .. "% RA=" .. string.format("%.1f", blademaster.getRA()) .. "%")
+  cecho("\n<cyan>[BMQ " .. phaseLabel .. "<cyan>] Legs: LL=" .. string.format("%.1f", blademaster.getLL()) .. "% RL=" .. string.format("%.1f", blademaster.getRL()) .. "%")
+
+  -- Phase-specific messages
+  if phase == "arm_prep" then
+    local armPath = blademaster.calculateArmPath()
+    if armPath.hitsToDouble > 0 then
+      cecho("\n<yellow>" .. armPath.explanation)
+    else
+      cecho("\n<green>*** ARMS READY ***")
+    end
+  elseif phase == "leg_prep" then
+    local legPath = blademaster.calculateLegPath()
+    if legPath.hitsToDouble > 0 then
+      cecho("\n<yellow>" .. legPath.explanation)
+    else
+      cecho("\n<green>*** LEGS READY ***")
+    end
+  elseif phase == "arm_break" then
+    cecho("\n<blue>*** ARM BREAK - ICE infuse, break both arms! ***")
+  elseif phase == "leg_break" then
+    cecho("\n<blue>*** LEG BREAK - ICE infuse + KNEES for prone! ***")
+  elseif phase == "mangle" then
+    cecho("\n<red>*** MANGLE - Legslash right + STERNUM! ***")
+  end
+
+  -- Parry info
   local parried = blademaster.getParried()
   local shin = blademaster.getShin()
-  local needsAF, afReason = blademaster.needsAirfist()
-  cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Hamstring: " .. (tAffs.hamstring and "YES" or "NO"))
-  cecho(" | Clumsy: " .. (tAffs.clumsiness and "YES" or "NO"))
-  cecho(" | Frozen: " .. (tAffs.frozen and "YES" or "NO"))
-  cecho(" | Parried: " .. parried)
-  cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Shin: " .. shin)
-  cecho(" | Airfist: " .. (needsAF and "<green>YES" or "<red>NO") .. " <grey>(" .. afReason .. ")")
-
-  if doubleReady and not blademaster.checkBothLegsBroken() then
-    cecho("\n<green>*** DOUBLE-BREAK READY - NEXT HIT BREAKS BOTH! ***")
-  elseif path.hitsToDouble > 0 and not blademaster.checkAnyLegBroken() then
-    -- Only show prep path when no legs are broken (mangle mode has different logic)
-    cecho("\n<yellow>" .. path.explanation)
+  local limbType = (phase == "arm_prep" or phase == "arm_break") and "arm" or "leg"
+  local needsAF, _ = blademaster.needsAirfist(limbType)
+  cecho("\n<cyan>[BMQ " .. phaseLabel .. "<cyan>] Parried: " .. parried .. " | Shin: " .. shin)
+  if needsAF then
+    cecho(" | <green>AIRFIST READY")
   end
 
-  -- Check if compassslash is needed
-  local needsCompass, compassDir, compassReason = blademaster.needsCompassslash()
-  if needsCompass then
-    local compassCardinal = blademaster.getCompassDirection(compassDir)
-    cecho("\n<magenta>*** COMPASSSLASH " .. compassCardinal:upper() .. " (" .. compassDir .. " leg): " .. (compassReason or "balancing") .. " ***")
-  end
-
-  -- Handle combatQueue if available
+  -- Build and send
   local cmd = ""
   if combatQueue then
     cmd = combatQueue()
   end
 
-  -- KILL PHASE CHECK
-  if blademaster.checkKillReady() then
-    local strike = blademaster.selectStrike()
-    cmd = cmd .. "infuse ice;multislash " .. target
-    if strike then
-      cmd = cmd .. " " .. strike
-    end
-    send("queue addclear free " .. cmd)
-    cecho("\n<red>*** BM ICE KILL PHASE ***")
-    return
-  end
-
-  -- BUILD ATTACK
-  local attack = blademaster.buildCombo()
-  cmd = cmd .. attack
-
-  -- Add assess for limb tracking
+  cmd = cmd .. blademaster.buildComboQuadPrep()
   cmd = cmd .. ";assess " .. target
 
   send("queue addclear free " .. cmd)
 end
 
--- Alias for easy calling
-function bmd()
-  blademaster.dispatch.run()
+-- Aliases for Quad-Prep
+function bmdq()
+  blademaster.dispatch.runQuadPrep()
 end
 
-function bmdispatch()
-  blademaster.dispatch.run()
+function bmdispatchquad()
+  blademaster.dispatch.runQuadPrep()
 end
 
 --------------------------------------------------------------------------------
--- STATUS DISPLAY
+-- STATUS DISPLAYS
 --------------------------------------------------------------------------------
 
-function blademaster.dispatch.status()
-  -- Initialize if missing
+function blademaster.dispatch.statusDoublePrep()
   tAffs = tAffs or {}
   ataxiaTemp = ataxiaTemp or {}
 
-  local focusLeg = blademaster.getFocusLeg()
+  local phase = blademaster.getPhaseDoublePrep()
+  local phaseLabel = blademaster.getPhaseLabelDoublePrep()
   local targetHP = tonumber(ataxiaTemp.targetHP) or 100
-  local phase = blademaster.getPhase()
-  local doubleReady = blademaster.checkDoubleBreakReady()
 
-  -- Progress bar helper
   local function progressBar(pct, width)
     width = width or 10
     local filled = math.floor((pct / 100) * width)
@@ -760,136 +846,201 @@ function blademaster.dispatch.status()
     return string.rep("#", filled) .. string.rep("-", empty)
   end
 
+  local LL, RL = blademaster.getLL(), blademaster.getRL()
+  local threshold = blademaster.config.prepThreshold
+
   cecho("\n<cyan>+============================================+")
-  cecho("\n<cyan>|     <white>BLADEMASTER DOUBLE-PREP DISPATCH<cyan>      |")
+  cecho("\n<cyan>|     <white>BLADEMASTER DOUBLE-PREP (LEGS)<cyan>        |")
   cecho("\n<cyan>+============================================+")
   cecho("\n<cyan>| <white>Target: <yellow>" .. tostring(target or "None") .. " <grey>(HP: " .. targetHP .. "%)<cyan>")
-  cecho("\n<cyan>| <white>Phase: " .. (phase == "ice" and "<blue>ICE (damage)" or "<yellow>LIGHTNING (prep)") .. "<cyan>")
-  cecho("\n<cyan>| <white>Focus Leg: <green>" .. focusLeg .. " <grey>(alternating to keep even)<cyan>")
-  cecho("\n<cyan>| <white>Parried: <yellow>" .. blademaster.getParried() .. "<cyan>")
-  cecho("\n<cyan>| <white>Damage: <green>P=" .. string.format("%.1f", blademaster.state.primaryDamage) .. "% <yellow>S=" .. string.format("%.1f", blademaster.state.secondaryDamage) .. "% <grey>C=" .. string.format("%.1f", blademaster.state.compassDamage) .. "%<cyan>")
+  cecho("\n<cyan>| <white>Phase: " .. phaseLabel .. "<cyan>")
   cecho("\n<cyan>+--------------------------------------------+")
-  local LL = blademaster.getLL()
-  local RL = blademaster.getRL()
-  cecho("\n<cyan>| <white>DOUBLE-PREP STATUS:<cyan>")
-  cecho("\n<cyan>|   <white>L Leg: " .. (LL >= 100 and "<green>BROKEN " or (LL >= 90 and "<yellow>READY  " or "<red>       ")) .. string.format("%5.1f%%", LL) .. " [" .. progressBar(LL) .. "]" .. (focusLeg == "left" and " <cyan><-" or ""))
-  cecho("\n<cyan>|   <white>R Leg: " .. (RL >= 100 and "<green>BROKEN " or (RL >= 90 and "<yellow>READY  " or "<red>       ")) .. string.format("%5.1f%%", RL) .. " [" .. progressBar(RL) .. "]" .. (focusLeg == "right" and " <cyan><-" or ""))
-  cecho("\n<cyan>|   <white>Double-Break: " .. (doubleReady and "<green>*** READY - NEXT HIT BREAKS BOTH! ***" or "<yellow>NO (need both 90%+)"))
-  local path = blademaster.calculateOptimalPath()
-  if path.hitsToDouble > 0 then
-    cecho("\n<cyan>|   <white>Path: <yellow>" .. path.explanation)
-  end
-  local needsCompass, compassDir, compassReason = blademaster.needsCompassslash()
-  if needsCompass then
-    local compassCardinal = blademaster.getCompassDirection(compassDir)
-    cecho("\n<cyan>|   <magenta>*** COMPASSSLASH " .. compassCardinal:upper() .. " (" .. compassDir .. " leg) ***")
-  end
-  cecho("\n<cyan>+--------------------------------------------+")
-  cecho("\n<cyan>| <white>AFFLICTIONS:<cyan>")
-  local hamstringStatus = tAffs.hamstring and (hamstringTimer and "<green>YES" or "<yellow>EXPIRING") or "<red>NO (APPLY!)"
-  cecho("\n<cyan>|   <white>Hamstring:  " .. hamstringStatus)
-  cecho("\n<cyan>|   <white>Clumsiness: " .. (tAffs.clumsiness and "<green>YES" or "<red>NO (APPLY!)"))
-  cecho("\n<cyan>|   <white>Paralysis:  " .. (tAffs.paralysis and "<green>YES" or "<yellow>NO"))
-  cecho("\n<cyan>|   <white>Weariness:  " .. (tAffs.weariness and "<green>YES" or "<yellow>NO"))
-  cecho("\n<cyan>|   <white>Prone:      " .. (tAffs.prone and "<green>YES" or "<yellow>NO"))
-  cecho("\n<cyan>|   <white>Frozen:     " .. (tAffs.frozen and "<blue>YES (ICE BONUS!)" or "<grey>NO"))
-  cecho("\n<cyan>|   <white>Airfisted:  " .. (tAffs.airfisted and "<magenta>YES" or "<grey>NO"))
-  local shin = blademaster.getShin()
-  local needsAF, afReason = blademaster.needsAirfist()
-  cecho("\n<cyan>|   <white>Shin:       <yellow>" .. shin .. "<grey> (25 needed for airfist+infuse)")
-  cecho("\n<cyan>|   <white>AF Ready:   " .. (needsAF and "<green>YES" or "<red>NO") .. " <grey>(" .. afReason .. ")")
-  cecho("\n<cyan>+--------------------------------------------+")
-  cecho("\n<cyan>| <white>KILL CONDITIONS:<cyan>")
-  cecho("\n<cyan>|   <white>Both Legs Broken: " .. (blademaster.checkBothLegsBroken() and "<green>YES" or "<red>NO"))
-  cecho("\n<cyan>|   <white>Target Low HP: " .. (targetHP <= 30 and "<green>YES (" .. targetHP .. "%)" or "<yellow>NO (" .. targetHP .. "%)"))
-  cecho("\n<cyan>|   <white>KILL READY: " .. (blademaster.checkKillReady() and "<green>*** YES ***" or "<red>NO"))
+  cecho("\n<cyan>| <white>LEG STATUS:<cyan>")
+  cecho("\n<cyan>|   <white>L Leg: " .. (LL >= 100 and "<green>BROKEN " or (LL >= threshold and "<yellow>READY  " or "<red>       ")) .. string.format("%5.1f%%", LL) .. " [" .. progressBar(LL) .. "]")
+  cecho("\n<cyan>|   <white>R Leg: " .. (RL >= 100 and "<green>BROKEN " or (RL >= threshold and "<yellow>READY  " or "<red>       ")) .. string.format("%5.1f%%", RL) .. " [" .. progressBar(RL) .. "]")
   cecho("\n<cyan>+--------------------------------------------+")
   cecho("\n<cyan>| <white>STRATEGY:<cyan>")
-  cecho("\n<cyan>|   <grey>1. INFUSE LIGHTNING during prep phase")
-  cecho("\n<cyan>|   <grey>2. LEGSLASH alternating (lower leg) to keep ~equal")
-  cecho("\n<cyan>|   <grey>3. COMPASSSLASH if gap too big (one leg ahead)")
-  cecho("\n<cyan>|   <grey>4. AIRFIST if parrying our leg (needs 25 shin)")
-  cecho("\n<cyan>|   <grey>5. When both 90%+: LEGSLASH + KNEES")
-  cecho("\n<cyan>|   <grey>   = Double-break + Prone in ONE hit!")
-  cecho("\n<cyan>|   <grey>6. Switch to INFUSE ICE + STERNUM after both broken")
-  cecho("\n<cyan>|   <grey>7. Continue damage with frozen bonus")
+  cecho("\n<cyan>|   <grey>1. LEG PREP: Legslash alternating (Lightning)")
+  cecho("\n<cyan>|   <grey>2. LEG BREAK: Double-break legs + KNEES (Ice)")
+  cecho("\n<cyan>|   <grey>3. MANGLE: Legslash right + STERNUM (Ice)")
   cecho("\n<cyan>+============================================+\n")
 end
 
--- Alias: bmstatus
+function blademaster.dispatch.statusQuadPrep()
+  tAffs = tAffs or {}
+  ataxiaTemp = ataxiaTemp or {}
+
+  local phase = blademaster.getPhaseQuadPrep()
+  local phaseLabel = blademaster.getPhaseLabelQuadPrep()
+  local targetHP = tonumber(ataxiaTemp.targetHP) or 100
+
+  local function progressBar(pct, width)
+    width = width or 10
+    local filled = math.floor((pct / 100) * width)
+    if filled > width then filled = width end
+    local empty = width - filled
+    return string.rep("#", filled) .. string.rep("-", empty)
+  end
+
+  local LA, RA = blademaster.getLA(), blademaster.getRA()
+  local LL, RL = blademaster.getLL(), blademaster.getRL()
+  local threshold = blademaster.config.prepThreshold
+
+  cecho("\n<cyan>+============================================+")
+  cecho("\n<cyan>|     <white>BLADEMASTER QUAD-PREP (ARMS+LEGS)<cyan>     |")
+  cecho("\n<cyan>+============================================+")
+  cecho("\n<cyan>| <white>Target: <yellow>" .. tostring(target or "None") .. " <grey>(HP: " .. targetHP .. "%)<cyan>")
+  cecho("\n<cyan>| <white>Phase: " .. phaseLabel .. "<cyan>")
+  cecho("\n<cyan>+--------------------------------------------+")
+  cecho("\n<cyan>| <white>ARM STATUS:<cyan>")
+  cecho("\n<cyan>|   <white>L Arm: " .. (LA >= 100 and "<green>BROKEN " or (LA >= threshold and "<yellow>READY  " or "<red>       ")) .. string.format("%5.1f%%", LA) .. " [" .. progressBar(LA) .. "]")
+  cecho("\n<cyan>|   <white>R Arm: " .. (RA >= 100 and "<green>BROKEN " or (RA >= threshold and "<yellow>READY  " or "<red>       ")) .. string.format("%5.1f%%", RA) .. " [" .. progressBar(RA) .. "]")
+  cecho("\n<cyan>+--------------------------------------------+")
+  cecho("\n<cyan>| <white>LEG STATUS:<cyan>")
+  cecho("\n<cyan>|   <white>L Leg: " .. (LL >= 100 and "<green>BROKEN " or (LL >= threshold and "<yellow>READY  " or "<red>       ")) .. string.format("%5.1f%%", LL) .. " [" .. progressBar(LL) .. "]")
+  cecho("\n<cyan>|   <white>R Leg: " .. (RL >= 100 and "<green>BROKEN " or (RL >= threshold and "<yellow>READY  " or "<red>       ")) .. string.format("%5.1f%%", RL) .. " [" .. progressBar(RL) .. "]")
+  cecho("\n<cyan>+--------------------------------------------+")
+  cecho("\n<cyan>| <white>STRATEGY:<cyan>")
+  cecho("\n<cyan>|   <grey>1. ARM PREP: Armslash alternating (Lightning)")
+  cecho("\n<cyan>|   <grey>2. LEG PREP: Legslash alternating (Lightning)")
+  cecho("\n<cyan>|   <grey>3. ARM BREAK: Double-break arms (Ice)")
+  cecho("\n<cyan>|   <grey>4. LEG BREAK: Double-break legs + KNEES (Ice)")
+  cecho("\n<cyan>|   <grey>5. MANGLE: Legslash right + STERNUM (Ice)")
+  cecho("\n<cyan>+============================================+\n")
+end
+
+-- Status aliases
 function bmstatus()
-  blademaster.dispatch.status()
+  blademaster.dispatch.statusDoublePrep()
+end
+
+function bmstatusq()
+  blademaster.dispatch.statusQuadPrep()
 end
 
 --------------------------------------------------------------------------------
--- DAMAGE TRACKING TRIGGER
--- Creates a trigger to capture leg damage from combat
+-- PRONE TIMER (Double-Prep balanceslash mechanic)
 --------------------------------------------------------------------------------
 
--- State for tracking multi-line damage output
+function blademaster.resetProneTimer()
+  blademaster.state.proneTimerStart = nil
+  blademaster.state.proneAttackCount = 0
+  blademaster.state.proneTimerActive = false
+end
+
+function blademaster.onLegSalveDetected()
+  -- Only start timer if both legs broken AND target is prone
+  if not blademaster.checkBothLegsBroken() then return end
+  if not tAffs.prone then return end
+
+  -- Only start if not already active
+  if not blademaster.state.proneTimerActive then
+    blademaster.state.proneTimerStart = os.time()
+    blademaster.state.proneAttackCount = 0
+    blademaster.state.proneTimerActive = true
+    cecho("\n<magenta>[BM] Prone timer started - 9 second window, switching to BALANCESLASH on attack #4")
+  end
+end
+
+--------------------------------------------------------------------------------
+-- DAMAGE TRACKING
+--------------------------------------------------------------------------------
+
 blademaster.damageCapture = {
-  pendingPrimary = nil,   -- First damage line (primary)
-  pendingLeg = nil,       -- Which leg got primary damage
-  lastCaptureTime = 0,    -- Timestamp of last capture
+  pendingPrimary = nil,
+  pendingLimb = nil,
+  pendingType = nil,
+  lastCaptureTime = 0,
 }
 
--- Call this from a trigger matching:
--- Pattern: ^As you carve into .+, you perceive that you have dealt (\d+\.?\d*)% damage to \w+ (left|right) leg
--- Captures: matches[2] = damage, matches[3] = leg
--- NOTE: Uses \w+ for pronoun to match "his", "her", "its", "faes", etc.
-function blademaster.captureLegDamage(damage, leg)
+function blademaster.onHamstringApplied()
+  blademaster.state.lastHamstringTime = os.time()
+end
+
+function blademaster.captureLegDamage(damage, side)
   damage = tonumber(damage) or 0
   local now = os.time()
 
-  -- If this is within 1 second of last capture, it's the secondary hit
-  if blademaster.damageCapture.pendingPrimary and (now - blademaster.damageCapture.lastCaptureTime) < 2 then
-    -- This is the secondary damage (off-leg)
-    blademaster.state.secondaryDamage = damage
-    blademaster.state.primaryDamage = blademaster.damageCapture.pendingPrimary
-    blademaster.state.lastPrimaryLeg = blademaster.damageCapture.pendingLeg
-
-    -- Clear pending
+  if blademaster.damageCapture.pendingPrimary and
+     blademaster.damageCapture.pendingType == "leg" and
+     (now - blademaster.damageCapture.lastCaptureTime) < 2 then
+    blademaster.state.legSecondaryDamage = damage
+    blademaster.state.legPrimaryDamage = blademaster.damageCapture.pendingPrimary
+    blademaster.state.lastPrimaryLeg = blademaster.damageCapture.pendingLimb
     blademaster.damageCapture.pendingPrimary = nil
-    blademaster.damageCapture.pendingLeg = nil
-
-    -- Debug output
-    -- cecho("\n<grey>[BM Dmg] Updated: P=" .. blademaster.state.primaryDamage .. "% (" .. blademaster.state.lastPrimaryLeg .. ") S=" .. blademaster.state.secondaryDamage .. "%")
+    blademaster.damageCapture.pendingLimb = nil
+    blademaster.damageCapture.pendingType = nil
   else
-    -- This is the first (primary) damage line
     blademaster.damageCapture.pendingPrimary = damage
-    blademaster.damageCapture.pendingLeg = leg
+    blademaster.damageCapture.pendingLimb = side
+    blademaster.damageCapture.pendingType = "leg"
     blademaster.damageCapture.lastCaptureTime = now
   end
 end
 
--- Register the trigger if tempRegexTrigger is available (Mudlet)
-function blademaster.registerDamageTrigger()
+function blademaster.captureArmDamage(damage, side)
+  damage = tonumber(damage) or 0
+  local now = os.time()
+
+  if blademaster.damageCapture.pendingPrimary and
+     blademaster.damageCapture.pendingType == "arm" and
+     (now - blademaster.damageCapture.lastCaptureTime) < 2 then
+    blademaster.state.armSecondaryDamage = damage
+    blademaster.state.armPrimaryDamage = blademaster.damageCapture.pendingPrimary
+    blademaster.state.lastPrimaryArm = blademaster.damageCapture.pendingLimb
+    blademaster.damageCapture.pendingPrimary = nil
+    blademaster.damageCapture.pendingLimb = nil
+    blademaster.damageCapture.pendingType = nil
+  else
+    blademaster.damageCapture.pendingPrimary = damage
+    blademaster.damageCapture.pendingLimb = side
+    blademaster.damageCapture.pendingType = "arm"
+    blademaster.damageCapture.lastCaptureTime = now
+  end
+end
+
+function blademaster.registerDamageTriggers()
   if tempRegexTrigger then
-    -- Kill existing trigger if any
-    if blademaster.damageTriggerID then
-      killTrigger(blademaster.damageTriggerID)
+    -- Kill existing triggers
+    if blademaster.legDamageTriggerID then
+      killTrigger(blademaster.legDamageTriggerID)
+    end
+    if blademaster.armDamageTriggerID then
+      killTrigger(blademaster.armDamageTriggerID)
+    end
+    if blademaster.legSalveTriggerID then
+      killTrigger(blademaster.legSalveTriggerID)
     end
 
-    -- Create new trigger (uses \w+ to match any pronoun: his/her/its/faes/etc)
-    blademaster.damageTriggerID = tempRegexTrigger(
+    -- Leg damage trigger
+    blademaster.legDamageTriggerID = tempRegexTrigger(
       "^As you carve into .+, you perceive that you have dealt (\\d+\\.?\\d*)% damage to \\w+ (left|right) leg",
       function()
         blademaster.captureLegDamage(matches[2], matches[3])
       end
     )
-    cecho("\n<green>[BM] Damage tracking trigger registered!")
+
+    -- Arm damage trigger
+    blademaster.armDamageTriggerID = tempRegexTrigger(
+      "^As you carve into .+, you perceive that you have dealt (\\d+\\.?\\d*)% damage to \\w+ (left|right) arm",
+      function()
+        blademaster.captureArmDamage(matches[2], matches[3])
+      end
+    )
+
+    -- Leg salve trigger (starts prone timer for balanceslash mechanic)
+    -- Pattern matches: "takes some salve from a vial and rubs it on his/her/faes/its legs"
+    blademaster.legSalveTriggerID = tempRegexTrigger(
+      "takes some salve from a vial and rubs it on \\w+ legs",
+      function()
+        blademaster.onLegSalveDetected()
+      end
+    )
+
+    cecho("\n<green>[BM] Triggers registered (damage + leg salve)!")
   else
-    cecho("\n<yellow>[BM] tempRegexTrigger not available - create trigger manually")
-    cecho("\n<yellow>     Pattern: ^As you carve into .+, you perceive that you have dealt (\\d+\\.?\\d*)% damage to \\w+ (left|right) leg")
-    cecho("\n<yellow>     Code: blademaster.captureLegDamage(matches[2], matches[3])")
+    cecho("\n<yellow>[BM] tempRegexTrigger not available - create triggers manually")
   end
 end
 
--- Also capture compassslash damage (single leg hit)
-function blademaster.captureCompassDamage(damage)
-  damage = tonumber(damage) or 0
-  blademaster.state.compassDamage = damage
-end
-
--- Auto-register trigger on load
-blademaster.registerDamageTrigger()
+blademaster.registerDamageTriggers()
