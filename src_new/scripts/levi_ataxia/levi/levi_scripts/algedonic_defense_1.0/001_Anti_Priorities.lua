@@ -392,17 +392,59 @@ if ataxia.afflictions.damageleftleg or ataxia.afflictions.damagedrightleg or ata
 end
 
 function Algedonic.AntiPriest()
---Cure Guilty Tenderskin and Spiritburn over everything
+    -- Anti-Inquisition Defense
+    -- INQ requires: Guilt + Spiritburn (either order)
+    -- Kill condition: INQ active + mana < 50%
+    -- Strategy: Tree proactively to prevent INQ, shield at low mana
 
---If they inflict Paralysis you will be slow down but they won't win either...
-if ataxia.afflictions.guilt then
-  send("curing prioaff guilt")
-elseif ataxia.afflictions.tenderskin then
-  send("curing prioaff tenderskin")
-elseif ataxia.afflictions.spiritburn then
-  send("curing prioaff spiritburn")
-end
+    local hasGuilt = ataxia.afflictions.guilt
+    local hasSpiritburn = ataxia.afflictions.spiritburn
+    local hasTenderskin = ataxia.afflictions.tenderskin
+    local hasInquisition = ataxia.afflictions.inquisition
+    local hasParalysis = ataxia.afflictions.paralysis
+    local canTree = not hasParalysis
+        and not (ataxia.afflictions.brokenleftarm and ataxia.afflictions.brokenrightarm)
+        and tBals.tree
 
+    -- Mana threshold check (55% to be safe before 50% kill)
+    local manaPercent = (ataxia.vitals.mp / ataxia.vitals.maxmp) * 100
+
+    -- EMERGENCY SHIELD: Mana below 55% and INQ active = imminent death
+    if hasInquisition and manaPercent < 55 and not ataxia.afflictions.prone then
+        Algedonic.Echo("<red>PRIEST KILL IMMINENT - SHIELD!<white>")
+        send("touch shield")
+        return
+    end
+
+    -- PROACTIVE TREE: If we have EITHER guilt OR spiritburn and tree is available
+    -- Tree BEFORE they can apply the other + INQ
+    if canTree and (hasGuilt or hasSpiritburn) and not hasInquisition then
+        Algedonic.Echo("<yellow>PRIEST INQ PREVENTION<white> - tree NOW!")
+        send("touch tree")
+        return
+    end
+
+    -- INQ ACTIVE: Prioritize clearing both guilt and spiritburn
+    if hasInquisition then
+        if hasGuilt and hasSpiritburn then
+            -- Both present - cure guilt first (argentum)
+            send("curing prioaff guilt")
+        elseif hasGuilt then
+            send("curing prioaff guilt")
+        elseif hasSpiritburn then
+            send("curing prioaff spiritburn")
+        end
+        return
+    end
+
+    -- Standard priority when no INQ threat (tree on cooldown or paralyzed)
+    if hasGuilt then
+        send("curing prioaff guilt")
+    elseif hasSpiritburn then
+        send("curing prioaff spiritburn")
+    elseif hasTenderskin then
+        send("curing prioaff tenderskin")
+    end
 end
 
 function Algedonic.AntiOccultist()
