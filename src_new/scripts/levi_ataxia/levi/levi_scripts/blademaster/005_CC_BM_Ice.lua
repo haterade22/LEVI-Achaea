@@ -14,7 +14,7 @@ packageName: ''
 ]]--
 
 -- Blademaster Dispatch System
--- Two strategies available:
+-- Three strategies available:
 --
 -- STRATEGY 1: DOUBLE-PREP (Legs only) - bmd / bmdispatch
 --   1. LEG PREP (Lightning): Alternate legslash to get both legs to 90%+
@@ -27,6 +27,16 @@ packageName: ''
 --   3. ARM BREAK (Ice): Double-break both arms
 --   4. LEG BREAK (Ice): Double-break both legs + KNEES (prone)
 --   5. MANGLE (Ice): Legslash right + STERNUM
+--
+-- STRATEGY 3: BROKENSTAR (Instant Kill) - bmbs / bmdispatchbs
+--   1. LEG PREP (Lightning): Alternate legslash to get both legs to 90%+
+--   2. LEG BREAK (Ice): Double-break legs
+--   3. IMPALE: Impale target
+--   4. IMPALESLASH: Slash arteries for bleeding
+--   5. IMPALE2: Impale again
+--   6. BLADETWIST: Twist until 700 bleeding
+--   7. WITHDRAW: Withdraw blade
+--   8. BROKENSTAR: Execute instant kill
 
 blademaster = blademaster or {}
 blademaster.dispatch = blademaster.dispatch or {}
@@ -45,6 +55,12 @@ blademaster.state = {
   proneTimerStart = nil,      -- Timestamp when salve detected
   proneAttackCount = 0,       -- Number of attacks since prone started
   proneTimerActive = false,   -- Is the 9-second window active
+  -- Brokenstar tracking
+  isImpaled = false,          -- Target is currently impaled
+  impaleslashDone = false,    -- Impaleslash has been executed
+  secondImpale = false,       -- Second impale after impaleslash done
+  bleedingReady = false,      -- Bleeding at 700+ (heavy torrents)
+  withdrawDone = false,       -- Blade withdrawn (ready for brokenstar)
   -- Other
   lastHamstringTime = 0,
   compassDamage = 14.9,
@@ -58,6 +74,7 @@ blademaster.config = {
   hamstringDuration = 10,
   proneTimerDuration = 9,     -- Seconds from salve to stand
   balanceslashThreshold = 4,  -- Switch to balanceslash on this attack number
+  brokenstarBleedThreshold = 700,  -- Bleeding level for brokenstar execution
 }
 
 --------------------------------------------------------------------------------
@@ -441,12 +458,6 @@ end
 function blademaster.selectStrikeDoublePrep()
   local phase = blademaster.getPhaseDoublePrep()
 
-  -- Airfist check for legs
-  local needsAF, _ = blademaster.needsAirfist("leg")
-  if needsAF then
-    return "airfist"
-  end
-
   -- MANGLE: Always STERNUM
   if phase == "mangle" then
     return "sternum"
@@ -457,7 +468,16 @@ function blademaster.selectStrikeDoublePrep()
     return "knees"
   end
 
-  -- LEG PREP: Standard prep strikes
+  -- LEG PREP: Check if we need to dismount before double-break
+  if phase == "leg_prep" then
+    -- Dismount during final prep hit if mounted + hamstrung
+    -- This ensures KNEES on double-break will prone (not just dismount)
+    if tmounted and tAffs.hamstring and blademaster.checkWillPrepBothLegs() then
+      return "knees"  -- Dismount now, so KNEES on double-break will prone
+    end
+    return blademaster.selectPrepStrike()
+  end
+
   return blademaster.selectPrepStrike()
 end
 
@@ -466,6 +486,14 @@ function blademaster.selectAttackDoublePrep()
 
   if tAffs.shield or tAffs.rebounding then
     return "raze", nil
+  end
+
+  -- Airfist is its own full-balance attack (use during prep phases)
+  if phase == "leg_prep" then
+    local needsAF, _ = blademaster.needsAirfist("leg")
+    if needsAF then
+      return "airfist", nil
+    end
   end
 
   -- MANGLE PHASE: Check if we should use balanceslash
@@ -505,6 +533,11 @@ function blademaster.buildComboDoublePrep()
   local strike = blademaster.selectStrikeDoublePrep()
   local phase = blademaster.getPhaseDoublePrep()
   local combo = ""
+
+  -- Airfist is its own full-balance attack (no infuse, no strike)
+  if attack == "airfist" then
+    return "airfist " .. target .. ";assess " .. target
+  end
 
   -- Infuse: Ice for break/mangle, Lightning for prep
   -- EXCEPTION: Use Ice on final prep attack to strip caloric before break
@@ -567,7 +600,12 @@ function blademaster.dispatch.runDoublePrep()
   if phase == "leg_prep" then
     local legPath = blademaster.calculateLegPath()
     if blademaster.checkWillPrepBothLegs() then
-      cecho("\n<blue>*** FINAL PREP - ICE infuse to strip caloric! ***")
+      -- Check if dismounting mounted target
+      if tmounted and tAffs.hamstring then
+        cecho("\n<magenta>*** DISMOUNT - KNEES to dismount before double-break! ***")
+      else
+        cecho("\n<blue>*** FINAL PREP - ICE infuse to strip caloric! ***")
+      end
     elseif legPath.hitsToDouble > 0 then
       cecho("\n<yellow>" .. legPath.explanation)
     end
@@ -588,13 +626,13 @@ function blademaster.dispatch.runDoublePrep()
     end
   end
 
-  -- Parry info
+  -- Parry info and airfist status
   local parried = blademaster.getParried()
   local shin = blademaster.getShin()
-  local needsAF, _ = blademaster.needsAirfist("leg")
+  local attack, _ = blademaster.selectAttackDoublePrep()
   cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Parried: " .. parried .. " | Shin: " .. shin)
-  if needsAF then
-    cecho(" | <green>AIRFIST READY")
+  if attack == "airfist" then
+    cecho(" | <green>AIRFIST!")
   end
 
   -- Increment attack count in mangle phase
@@ -683,13 +721,6 @@ end
 function blademaster.selectStrikeQuadPrep()
   local phase = blademaster.getPhaseQuadPrep()
 
-  -- Airfist check based on phase
-  local limbType = (phase == "arm_prep" or phase == "arm_break") and "arm" or "leg"
-  local needsAF, _ = blademaster.needsAirfist(limbType)
-  if needsAF then
-    return "airfist"
-  end
-
   -- MANGLE: Always STERNUM
   if phase == "mangle" then
     return "sternum"
@@ -716,11 +747,20 @@ function blademaster.selectAttackQuadPrep()
     return "raze", nil
   end
 
+  -- Airfist is its own full-balance attack (use during prep phases)
   if phase == "arm_prep" then
+    local needsAF, _ = blademaster.needsAirfist("arm")
+    if needsAF then
+      return "airfist", nil
+    end
     return "armslash", blademaster.getFocusArm()
   end
 
   if phase == "leg_prep" then
+    local needsAF, _ = blademaster.needsAirfist("leg")
+    if needsAF then
+      return "airfist", nil
+    end
     return "legslash", blademaster.getFocusLeg()
   end
 
@@ -769,6 +809,11 @@ function blademaster.buildComboQuadPrep()
   local strike = blademaster.selectStrikeQuadPrep()
   local phase = blademaster.getPhaseQuadPrep()
   local combo = ""
+
+  -- Airfist is its own full-balance attack (no infuse, no strike)
+  if attack == "airfist" then
+    return "airfist " .. target .. ";assess " .. target
+  end
 
   -- Infuse: Ice for break/mangle phases, Lightning for prep
   -- EXCEPTION: Use Ice on final prep attacks to strip caloric before break
@@ -872,14 +917,13 @@ function blademaster.dispatch.runQuadPrep()
     end
   end
 
-  -- Parry info
+  -- Parry info and airfist status
   local parried = blademaster.getParried()
   local shin = blademaster.getShin()
-  local limbType = (phase == "arm_prep" or phase == "arm_break") and "arm" or "leg"
-  local needsAF, _ = blademaster.needsAirfist(limbType)
+  local attack, _ = blademaster.selectAttackQuadPrep()
   cecho("\n<cyan>[BMQ " .. phaseLabel .. "<cyan>] Parried: " .. parried .. " | Shin: " .. shin)
-  if needsAF then
-    cecho(" | <green>AIRFIST READY")
+  if attack == "airfist" then
+    cecho(" | <green>AIRFIST!")
   end
 
   -- Increment attack count in mangle phase
@@ -906,6 +950,286 @@ end
 
 function bmdispatchquad()
   blademaster.dispatch.runQuadPrep()
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--
+--  STRATEGY 3: BROKENSTAR (INSTANT KILL)
+--
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+function blademaster.resetBrokenstarState()
+  blademaster.state.isImpaled = false
+  blademaster.state.impaleslashDone = false
+  blademaster.state.secondImpale = false
+  blademaster.state.bleedingReady = false
+  blademaster.state.withdrawDone = false
+end
+
+function blademaster.getPhaseBrokenstar()
+  -- 8-phase system for instant kill:
+  -- 1. leg_prep: Both legs < 90% (Lightning)
+  -- 2. leg_break: Legs prepped, not broken (Ice)
+  -- 3. impale1: Legs broken, not impaled
+  -- 4. impaleslash: Impaled, impaleslash not done
+  -- 5. impale2: Impaleslash done, second impale not done
+  -- 6. bladetwist: Second impale done, bleeding < 700
+  -- 7. withdraw: Bleeding >= 700, withdraw blade
+  -- 8. brokenstar: Blade withdrawn, execute kill
+
+  local legsPrepped = blademaster.checkBothLegsPrepped()
+  local legsBroken = blademaster.checkBothLegsBroken()
+
+  -- Phase 8: BROKENSTAR (execute kill)
+  if blademaster.state.withdrawDone then
+    return "brokenstar"
+  end
+
+  -- Phase 7: WITHDRAW (pull blade out)
+  if blademaster.state.bleedingReady and not blademaster.state.withdrawDone then
+    return "withdraw"
+  end
+
+  -- Phase 6: BLADETWIST (build bleeding)
+  if blademaster.state.secondImpale then
+    return "bladetwist"
+  end
+
+  -- Phase 5: IMPALE2 (second impale after impaleslash)
+  if blademaster.state.impaleslashDone and not blademaster.state.secondImpale then
+    return "impale2"
+  end
+
+  -- Phase 4: IMPALESLASH (slash arteries)
+  if blademaster.state.isImpaled and not blademaster.state.impaleslashDone then
+    return "impaleslash"
+  end
+
+  -- Phase 3: IMPALE1 (first impale)
+  if legsBroken and not blademaster.state.isImpaled then
+    return "impale1"
+  end
+
+  -- Phase 2: LEG BREAK
+  if legsPrepped or blademaster.checkWillDoubleBreakLegs() then
+    return "leg_break"
+  end
+
+  -- Phase 1: LEG PREP
+  return "leg_prep"
+end
+
+function blademaster.getPhaseLabelBrokenstar()
+  local phase = blademaster.getPhaseBrokenstar()
+  local labels = {
+    leg_prep = "<yellow>Leg Prep",
+    leg_break = "<blue>Leg Break",
+    impale1 = "<cyan>Impale",
+    impaleslash = "<magenta>Impaleslash",
+    impale2 = "<cyan>Impale 2",
+    bladetwist = "<red>Bladetwist",
+    withdraw = "<yellow>Withdraw",
+    brokenstar = "<green>BROKENSTAR",
+  }
+  return labels[phase] or "<grey>Unknown"
+end
+
+function blademaster.selectStrikeBrokenstar()
+  local phase = blademaster.getPhaseBrokenstar()
+
+  -- Prep phases: Standard prep strikes
+  if phase == "leg_prep" then
+    return blademaster.selectPrepStrike()
+  end
+
+  -- Break phase: No strike (need both legs to break)
+  if phase == "leg_break" then
+    return nil
+  end
+
+  -- Impale phases and beyond: No strike needed
+  return nil
+end
+
+function blademaster.selectAttackBrokenstar()
+  local phase = blademaster.getPhaseBrokenstar()
+
+  if tAffs.shield or tAffs.rebounding then
+    return "raze"
+  end
+
+  -- Airfist during leg prep if needed
+  if phase == "leg_prep" then
+    local needsAF, _ = blademaster.needsAirfist("leg")
+    if needsAF then
+      return "airfist"
+    end
+  end
+
+  return phase  -- Return the phase name as the attack type
+end
+
+function blademaster.buildComboBrokenstar()
+  local phase = blademaster.getPhaseBrokenstar()
+  local attack = blademaster.selectAttackBrokenstar()
+  local strike = blademaster.selectStrikeBrokenstar()
+  local combo = ""
+
+  -- Handle raze for shield/rebounding
+  if attack == "raze" then
+    combo = "raze " .. target
+    if strike then
+      combo = combo .. " " .. strike
+    end
+    combo = combo .. ";assess " .. target
+    return combo
+  end
+
+  -- Airfist is its own full-balance attack (no infuse, no strike)
+  if attack == "airfist" then
+    return "airfist " .. target .. ";assess " .. target
+  end
+
+  if phase == "leg_prep" then
+    -- Lightning infuse for prep, Ice on final prep
+    if blademaster.checkWillPrepBothLegs() then
+      combo = "infuse ice;"
+    else
+      combo = "infuse lightning;"
+    end
+    local focusLeg = blademaster.getFocusLeg()
+    combo = combo .. "legslash " .. target .. " " .. focusLeg
+    if strike then
+      combo = combo .. " " .. strike
+    end
+
+  elseif phase == "leg_break" then
+    -- Ice infuse for break
+    combo = "infuse ice;"
+    local focusLeg = blademaster.getFocusLeg()
+    combo = combo .. "legslash " .. target .. " " .. focusLeg
+
+  elseif phase == "impale1" then
+    -- First impale
+    combo = "impale " .. target
+
+  elseif phase == "impaleslash" then
+    -- Impaleslash to start bleeding
+    combo = "impaleslash " .. target
+
+  elseif phase == "impale2" then
+    -- Second impale after impaleslash
+    combo = "impale " .. target
+
+  elseif phase == "bladetwist" then
+    -- Bladetwist to build bleeding, plus discern to check
+    combo = "bladetwist;assess " .. target .. ";discern " .. target
+    return combo  -- Skip the assess at end since we already have it
+
+  elseif phase == "withdraw" then
+    -- Withdraw blade before brokenstar
+    combo = "withdraw " .. target
+
+  elseif phase == "brokenstar" then
+    -- Execute the kill!
+    combo = "brokenstar " .. target
+  end
+
+  -- Add assess for most phases (except bladetwist which has it built in)
+  if phase ~= "bladetwist" then
+    combo = combo .. ";assess " .. target
+  end
+
+  return combo
+end
+
+function blademaster.dispatch.runBrokenstar()
+  ataxia = ataxia or {}
+  ataxia.vitals = ataxia.vitals or {}
+  ataxia.settings = ataxia.settings or {}
+  ataxiaTemp = ataxiaTemp or {}
+  tAffs = tAffs or {}
+
+  if not target or target == "" then
+    cecho("\n<red>[BM] No target set! Use: tar <name>")
+    return
+  end
+
+  local phase = blademaster.getPhaseBrokenstar()
+  local phaseLabel = blademaster.getPhaseLabelBrokenstar()
+  local targetHP = tonumber(ataxiaTemp.targetHP) or 100
+
+  -- Status output
+  cecho("\n<cyan>[BMBS " .. phaseLabel .. "<cyan>] Target: " .. tostring(target) .. " | HP: " .. targetHP .. "%")
+  cecho("\n<cyan>[BMBS " .. phaseLabel .. "<cyan>] Legs: LL=" .. string.format("%.1f", blademaster.getLL()) .. "% RL=" .. string.format("%.1f", blademaster.getRL()) .. "%")
+
+  -- Phase-specific messages
+  if phase == "leg_prep" then
+    local legPath = blademaster.calculateLegPath()
+    if blademaster.checkWillPrepBothLegs() then
+      cecho("\n<blue>*** FINAL PREP - ICE infuse to strip caloric! ***")
+    elseif legPath.hitsToDouble > 0 then
+      cecho("\n<yellow>" .. legPath.explanation)
+    end
+  elseif phase == "leg_break" then
+    cecho("\n<blue>*** LEG BREAK - Double-break legs! ***")
+  elseif phase == "impale1" then
+    cecho("\n<cyan>*** IMPALE - First impale! ***")
+  elseif phase == "impaleslash" then
+    cecho("\n<magenta>*** IMPALESLASH - Slash arteries for bleeding! ***")
+  elseif phase == "impale2" then
+    cecho("\n<cyan>*** IMPALE 2 - Second impale! ***")
+  elseif phase == "bladetwist" then
+    local bleedStatus = blademaster.state.bleedingReady and "<green>READY" or "<yellow>building"
+    cecho("\n<red>*** BLADETWIST - Building bleeding (" .. bleedStatus .. "<red>) ***")
+  elseif phase == "withdraw" then
+    cecho("\n<yellow>*** WITHDRAW - Pull blade out! ***")
+  elseif phase == "brokenstar" then
+    cecho("\n<green>*** BROKENSTAR - EXECUTE INSTANT KILL! ***")
+  end
+
+  -- State tracking display
+  cecho("\n<cyan>[BMBS " .. phaseLabel .. "<cyan>] Impaled: " .. (blademaster.state.isImpaled and "<green>YES" or "<red>NO"))
+  cecho("<cyan> | Slashed: " .. (blademaster.state.impaleslashDone and "<green>YES" or "<red>NO"))
+  cecho("<cyan> | Impale2: " .. (blademaster.state.secondImpale and "<green>YES" or "<red>NO"))
+  cecho("<cyan> | Bleed: " .. (blademaster.state.bleedingReady and "<green>700+" or "<yellow><700"))
+  cecho("<cyan> | Withdrawn: " .. (blademaster.state.withdrawDone and "<green>YES" or "<red>NO"))
+
+  -- Parry info and airfist status
+  local parried = blademaster.getParried()
+  local shin = blademaster.getShin()
+  local attack = blademaster.selectAttackBrokenstar()
+  cecho("\n<cyan>[BMBS " .. phaseLabel .. "<cyan>] Parried: " .. parried .. " | Shin: " .. shin)
+  if attack == "airfist" then
+    cecho(" | <green>AIRFIST!")
+  end
+
+  -- Build and send
+  local cmd = ""
+  if combatQueue then
+    cmd = combatQueue()
+  end
+
+  cmd = cmd .. blademaster.buildComboBrokenstar()
+
+  send("queue addclear free " .. cmd)
+end
+
+-- Aliases for Brokenstar
+function bmbs()
+  blademaster.dispatch.runBrokenstar()
+end
+
+function bmdispatchbs()
+  blademaster.dispatch.runBrokenstar()
+end
+
+-- Reset Brokenstar state
+function bmreset()
+  blademaster.resetBrokenstarState()
+  cecho("\n<green>[BM] Brokenstar state reset!")
 end
 
 --------------------------------------------------------------------------------
@@ -1081,6 +1405,41 @@ function blademaster.captureArmDamage(damage, side)
   end
 end
 
+-- Brokenstar trigger callbacks
+function blademaster.onImpaleSuccess()
+  -- First impale or second impale after impaleslash
+  if blademaster.state.impaleslashDone and not blademaster.state.secondImpale then
+    blademaster.state.secondImpale = true
+    cecho("\n<cyan>[BM] Second impale confirmed!")
+  elseif not blademaster.state.isImpaled then
+    blademaster.state.isImpaled = true
+    cecho("\n<cyan>[BM] First impale confirmed!")
+  end
+end
+
+function blademaster.onImpaleslashSuccess()
+  blademaster.state.impaleslashDone = true
+  cecho("\n<magenta>[BM] Impaleslash confirmed - arteries slashed!")
+end
+
+function blademaster.onBleedingReady()
+  blademaster.state.bleedingReady = true
+  cecho("\n<green>[BM] BLEEDING AT 700+ - BROKENSTAR READY!")
+end
+
+function blademaster.onTargetUnimpaled()
+  -- Target escaped or removed the impale
+  blademaster.state.isImpaled = false
+  blademaster.state.secondImpale = false
+  cecho("\n<red>[BM] Target no longer impaled!")
+end
+
+function blademaster.onWithdrawSuccess()
+  blademaster.state.withdrawDone = true
+  blademaster.state.isImpaled = false  -- No longer impaled after withdraw
+  cecho("\n<yellow>[BM] Blade withdrawn - BROKENSTAR READY!")
+end
+
 function blademaster.registerDamageTriggers()
   if tempRegexTrigger then
     -- Kill existing triggers
@@ -1092,6 +1451,18 @@ function blademaster.registerDamageTriggers()
     end
     if blademaster.legSalveTriggerID then
       killTrigger(blademaster.legSalveTriggerID)
+    end
+    if blademaster.impaleTriggerID then
+      killTrigger(blademaster.impaleTriggerID)
+    end
+    if blademaster.impaleslashTriggerID then
+      killTrigger(blademaster.impaleslashTriggerID)
+    end
+    if blademaster.bleedingReadyTriggerID then
+      killTrigger(blademaster.bleedingReadyTriggerID)
+    end
+    if blademaster.withdrawTriggerID then
+      killTrigger(blademaster.withdrawTriggerID)
     end
 
     -- Leg damage trigger
@@ -1119,7 +1490,41 @@ function blademaster.registerDamageTriggers()
       end
     )
 
-    cecho("\n<green>[BM] Triggers registered (damage + leg salve)!")
+    -- Brokenstar triggers
+    -- Impale success: "You draw your blade back and plunge it deep into the body of <target> impaling <pronoun> to the hilt."
+    blademaster.impaleTriggerID = tempRegexTrigger(
+      "^You draw your blade back and plunge it deep into the body of ([\\w'\\-]+) impaling [\\w'\\-]+ to the hilt\\.$",
+      function()
+        blademaster.onImpaleSuccess()
+      end
+    )
+
+    -- Impaleslash success: "steady in your grip, you drag its razor edge across arteries within <target>'s abdomen"
+    blademaster.impaleslashTriggerID = tempRegexTrigger(
+      "steady in your grip, you drag its razor edge across arteries within ([\\w'\\-]+)'s abdomen\\.$",
+      function()
+        blademaster.onImpaleslashSuccess()
+      end
+    )
+
+    -- Bleeding ready (700+): "You observe heavy torrents of lifeblood spilling from <target>'s near-fatal wounds."
+    blademaster.bleedingReadyTriggerID = tempRegexTrigger(
+      "^You observe heavy torrents of lifeblood spilling from ([\\w'\\-]+)'s near-fatal wounds\\.$",
+      function()
+        blademaster.onBleedingReady()
+      end
+    )
+
+    -- Withdraw success: Need a pattern for when blade is withdrawn
+    -- TODO: Add the correct withdraw pattern when known
+    blademaster.withdrawTriggerID = tempRegexTrigger(
+      "^You wrench your blade free of ([\\w'\\-]+)",
+      function()
+        blademaster.onWithdrawSuccess()
+      end
+    )
+
+    cecho("\n<green>[BM] Triggers registered (damage + leg salve + brokenstar)!")
   else
     cecho("\n<yellow>[BM] tempRegexTrigger not available - create triggers manually")
   end
