@@ -851,7 +851,159 @@ gmcp.Room.Info = {
 
 ---
 
-**Last Updated**: 2025-12-31
+## Blademaster Combat System
+
+### Strategies Available
+
+| Strategy | Command | Description |
+|----------|---------|-------------|
+| **Double-Prep** | `bmd` | Legs only - prep both legs, double-break, mangle |
+| **Quad-Prep** | `bmdq` | Arms + legs - prep all 4, break arms, break legs, mangle |
+| **Brokenstar** | `bmbs` | Upper + legs + impale route - instant kill at 700 bleed |
+
+### Brokenstar Kill Route (bmbs)
+
+```
+1. UPPER PREP: Centreslash up/down to get torso+head to 90%+
+2. LEG PREP: Legslash alternating to get both legs to 90%+
+3. UPPER BREAK: Centreslash up/down to break torso+head (100%+)
+4. LEG BREAK: Legslash + KNEES to break legs and prone
+5. IMPALE: Impale the prone target
+6. IMPALESLASH: Slash arteries for bleeding
+7. BLADETWIST: Twist until 700+ bleeding (discern on 3rd)
+8. WITHDRAW: Withdraw blade (or skip if writhed free)
+9. BROKENSTAR: Execute instant kill
+```
+
+### Dynamic Centreslash Direction
+
+The system auto-selects UP or DOWN to balance torso/head damage:
+- **UP**: Torso = primary (18.1%), Head = secondary (12.1%)
+- **DOWN**: Head = primary (18.1%), Torso = secondary (12.1%)
+- Always hits the **LOWER** limb as primary (like `getFocusLeg()` for legs)
+
+### Key Helper Functions
+
+| Function | Purpose |
+|----------|---------|
+| `blademaster.getFocusLeg()` | Returns "left" or "right" based on lower leg |
+| `blademaster.getCentreslashDirection()` | Returns "up" or "down" based on lower limb |
+| `blademaster.checkWillPrepBothLegs()` | True if next hit preps both legs to 90%+ |
+| `blademaster.checkWillPrepUpper()` | True if next centreslash preps both torso/head |
+
+### Documentation
+See `.claude/classes/blademaster.md` for complete documentation.
+
+---
+
+## Lessons Learned (Combat System Development)
+
+### Mudlet Trigger Patterns
+
+**Problem**: Strict regex anchors (`^` and `$`) can fail in Mudlet due to line processing quirks.
+
+```lua
+-- BAD: May not match due to anchors
+"^You observe .+ \\[(\\d+)\\]$"
+
+-- GOOD: More flexible, still specific
+"You observe .+ \\[(\\d+)\\]"
+```
+
+**Best Practices**:
+- Avoid `^` and `$` unless absolutely necessary
+- Use `.+` (one or more) instead of `.*` (zero or more) when content is expected
+- Test patterns against actual game output before deploying
+
+### Counter Incrementing (Button Spam Issue)
+
+**Problem**: Incrementing counters in dispatch/combo builder functions causes them to increment on every button press, not just when the action fires.
+
+```lua
+-- BAD: In buildComboBrokenstar() - called every button press
+blademaster.state.bladetwistCount = blademaster.state.bladetwistCount + 1
+combo = "bladetwist;discern " .. target
+
+-- GOOD: Use trigger to increment when action actually fires
+blademaster.bladetwistTriggerID = tempRegexTrigger(
+  "BLADETWIST \\[\\|\\] BLADETWIST \\[\\|\\] BLADETWIST",
+  function()
+    blademaster.state.bladetwistCount = blademaster.state.bladetwistCount + 1
+  end
+)
+```
+
+### Limb Balancing Strategy
+
+**Problem**: When attacking two limbs with asymmetric damage, one limb reaches threshold before the other.
+
+**Solution**: Always hit the **LOWER damage limb as primary** to balance progression.
+
+```lua
+function blademaster.getFocusLeg()
+  local LL = blademaster.getLL()
+  local RL = blademaster.getRL()
+  return (LL <= RL) and "left" or "right"
+end
+
+function blademaster.getCentreslashDirection()
+  local torso = blademaster.getTorso()
+  local head = blademaster.getHead()
+  return (head <= torso) and "down" or "up"
+end
+```
+
+### Mounted Target Handling
+
+**Problem**: KNEES on a mounted target DISMOUNTS instead of PRONING.
+
+**Solution**: Dismount on the final prep hit (before double-break), then KNEES on double-break will properly prone.
+
+```lua
+if phase == "leg_prep" then
+  -- Dismount during final prep hit if mounted + hamstrung
+  if tmounted and tAffs.hamstring and blademaster.checkWillPrepBothLegs() then
+    return "knees"  -- Dismount now
+  end
+  return blademaster.selectPrepStrike()
+end
+```
+
+### Phase Transition Triggers
+
+**Problem**: State-based phase transitions fail when triggers don't capture values correctly.
+
+**Best Practices**:
+1. Use simple, robust trigger patterns for critical state updates
+2. Log trigger fires during debugging to verify they're matching
+3. Have fallback phase logic when triggers miss
+4. Always update both state flags and values (e.g., `bleedingReady = true` AND `targetBleeding = value`)
+
+### Writhe/Escape Handling
+
+**Problem**: Target escaping (writhe from impale, standing from prone) should preserve progress.
+
+**Best Practices**:
+1. On writhe: Keep `bleedingReady` and `targetBleeding` - don't reset progress
+2. Check if target is still prone after writhe (free re-impale!)
+3. If bleeding >= 700 and not impaled, can go directly to brokenstar
+
+```lua
+function blademaster.onTargetUnimpaled()
+  blademaster.state.isImpaled = false
+  -- Keep bleedingReady and targetBleeding - we built that progress!
+
+  if tAffs.prone then
+    cecho("[BM] Target writhed free but STILL PRONE - FREE RE-IMPALE!")
+  elseif blademaster.state.bleedingReady then
+    -- Go to brokenstar phase (checked in getPhaseBrokenstar)
+  end
+end
+```
+
+---
+
+**Last Updated**: 2026-01-03
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia
