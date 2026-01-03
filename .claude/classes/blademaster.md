@@ -126,15 +126,34 @@ two_legs_torso:
     This burst usually outstrips clotting.
 
 head_torso_two_legs:
-  description: "Salve balance manipulation"
-  steps:
-    1: "Prep legs, head, AND torso"
-    2: "Break HEAD + TORSO in one slash"
-    3: "Enemy applies to head (most common)"
-    4: "Break LEGS (prone) right as they apply to leg"
-    5: "IMPALE + IMPALESLASH + BLADETWISTx2"
-    6: "Re-impale or BROKENSTAR"
-  advantage: "Ensures no salve balance to heal torso before leg break"
+  description: "Salve balance manipulation (BMBS dispatch)"
+  command: "bmbs / bmdispatchbs"
+  phases:
+    1_upper_prep: "Centreslash up/down to get torso+head to 90%+"
+    2_leg_prep: "Legslash alternating to get both legs to 90%+"
+    3_upper_break: "Centreslash up/down to break torso+head (100%+)"
+    4_leg_break: "Legslash + KNEES to break legs and prone"
+    5_impale: "Impale the prone target"
+    6_impaleslash: "Slash arteries for bleeding"
+    7_bladetwist: "Twist until 700+ bleeding (discern on 3rd)"
+    8_withdraw: "Withdraw blade (or skip if writhed free)"
+    9_brokenstar: "Execute instant kill"
+
+  centreslash_direction:
+    up: "Torso = primary (18.1%), Head = secondary (12.1%)"
+    down: "Head = primary (18.1%), Torso = secondary (12.1%)"
+    auto_selection: "System hits LOWER limb as primary (like getFocusLeg for legs)"
+    reason: "Balances damage so both prep/break at same time"
+
+  advantage: |
+    - Broken torso increases bladetwist bleeding
+    - Forces enemy to choose between healing head or torso
+    - Ensures no salve balance to heal torso before leg break
+
+  notes: |
+    - Centreslash applies strikes (hamstring/paralysis during prep, clumsiness during break)
+    - If target writhes free but is still prone: FREE RE-IMPALE
+    - If target writhes free and stands with 700+ bleed: BROKENSTAR immediately
 
 six_limb:
   description: "Hardest to execute, provides lock option"
@@ -511,8 +530,17 @@ Lightning prep → double-break both legs → Ice damage (mangle) phase
 
 ### Commands
 ```yaml
-bmd: Main dispatch attack (blademaster.dispatch.run())
-bmstatus: Display status panel (blademaster.dispatch.status())
+# Strategy 1: Double-Prep (Legs Only)
+bmd: Main dispatch attack - legs only (blademaster.dispatch.runDoublePrep())
+bmstatus: Display status panel (blademaster.dispatch.statusDoublePrep())
+
+# Strategy 2: Quad-Prep (Arms + Legs)
+bmdq: Quad-prep dispatch - arms + legs (blademaster.dispatch.runQuadPrep())
+bmstatusq: Display quad-prep status (blademaster.dispatch.statusQuadPrep())
+
+# Strategy 3: Brokenstar (Upper + Legs + Kill)
+bmbs: Brokenstar dispatch - upper + legs + impale route (blademaster.dispatch.runBrokenstar())
+bmreset: Reset brokenstar state (blademaster.resetBrokenstarState())
 ```
 
 ### Combat Phases
@@ -600,13 +628,28 @@ Helper functions:
 - `blademaster.getLimbDamage(limb)` - Get damage % for any limb
 - `blademaster.getLL()` - Shorthand for left leg
 - `blademaster.getRL()` - Shorthand for right leg
+- `blademaster.getLA()` - Shorthand for left arm
+- `blademaster.getRA()` - Shorthand for right arm
+- `blademaster.getTorso()` - Shorthand for torso
+- `blademaster.getHead()` - Shorthand for head
 
-Additional check functions:
+Leg check functions:
 - `blademaster.checkDoubleBreakReady()` - Both legs at 90%+
 - `blademaster.checkBothLegsBroken()` - Both legs at 100%+
 - `blademaster.checkAnyLegBroken()` - At least one leg at 100%+
 - `blademaster.checkLegAboutToBreak()` - Either leg will hit 100% on next hit
 - `blademaster.checkWillDoubleBreak()` - BOTH legs will break on next hit (causes prone)
+- `blademaster.checkWillPrepBothLegs()` - BOTH legs will reach 90%+ on next hit
+- `blademaster.getFocusLeg()` - Returns "left" or "right" based on which leg is lower
+
+Upper body check functions (Brokenstar):
+- `blademaster.checkUpperPrepped()` - Both torso AND head at 90%+
+- `blademaster.checkUpperBroken()` - Both torso AND head at 100%+
+- `blademaster.checkWillPrepUpper()` - BOTH torso and head will reach 90%+ on next centreslash
+- `blademaster.checkWillBreakUpper()` - BOTH torso and head will break on next centreslash
+- `blademaster.getCentreslashDirection()` - Returns "up" or "down" based on which limb is lower
+
+Other functions:
 - `blademaster.shouldSwitchToBody()` - Parry bypass logic (no shin for airfist)
 
 ### Status Display
@@ -651,6 +694,57 @@ The hamstring trigger (002_Hamstring.lua) calls `blademaster.onHamstringApplied(
 ---
 
 ## Changelog
+
+### 2026-01-02 - Brokenstar Upper Body Prep & Trigger Fixes
+
+**Files Modified:**
+- `005_CC_BM_Ice.lua` - Main dispatch
+
+**New Features:**
+
+1. **Dynamic Centreslash Direction** - Upper body prep now balances torso/head damage
+   - Like `getFocusLeg()` for legs, `getCentreslashDirection()` chooses UP or DOWN
+   - **UP**: Torso primary (18.1%), Head secondary (12.1%)
+   - **DOWN**: Head primary (18.1%), Torso secondary (12.1%)
+   - Always hits the LOWER limb as primary to balance damage
+   - Prevents torso breaking before head is prepped
+
+2. **Strikes During Upper Prep/Break** - Centreslash now applies afflictions
+   - Upper Prep: Uses `selectPrepStrike()` (hamstring > paralysis > hypochondria, etc.)
+   - Upper Break: Uses `selectIceStrike()` (clumsiness > paralysis)
+   - Command format: `centreslash <target> <up|down> <strike>`
+
+**Bug Fixes:**
+
+3. **Bladetwist Count on Button Spam** - Fixed count incrementing on every button press
+   - Removed increment from `buildComboBrokenstar()` (was called on each press)
+   - Added `onBladetwistSuccess()` callback triggered when bladetwist actually fires
+   - Added trigger: `BLADETWIST [|] BLADETWIST [|] BLADETWIST`
+   - Count now only increments when the triple-bladetwist actually executes
+
+4. **Bleeding Trigger Not Capturing** - Fixed bleeding value not updating
+   - Changed pattern from `^You observe .+ \\[(\\d+)\\]$` to `You observe .+ \\[(\\d+)\\]`
+   - Removed strict anchors that could fail in Mudlet
+   - Now correctly captures bleeding values: [370], [850], [900], etc.
+   - Enables brokenstar to trigger when bleeding >= 700
+
+5. **Brokenstar at 900 Bleeding** - System should now properly go to brokenstar phase
+   - When target writhes free at 900 bleeding: `isImpaled = false`, `bleedingReady = true`
+   - Phase check: `bleedingReady and not isImpaled` → returns "brokenstar"
+   - No longer falls back to upper_prep when bleeding threshold met
+
+**New State/Functions:**
+- `blademaster.getCentreslashDirection()` - Returns "up" or "down" based on which limb is lower
+- `blademaster.onBladetwistSuccess()` - Callback for bladetwist trigger
+- `blademaster.state.torsoDamage` / `headDamage` - Separate damage tracking for torso/head
+
+**Upper Body Damage Values:**
+```lua
+torsoDamage = 18.1  -- Primary damage from centreslash
+headDamage = 12.1   -- Secondary damage from centreslash
+```
+
+---
 
 ### 2026-01-02 - Mount-Aware Dismount & Brokenstar Prone Fix
 
