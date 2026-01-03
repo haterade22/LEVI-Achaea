@@ -29,14 +29,18 @@ packageName: ''
 --   5. MANGLE (Ice): Legslash right + STERNUM
 --
 -- STRATEGY 3: BROKENSTAR (Instant Kill) - bmbs / bmdispatchbs
---   1. LEG PREP (Lightning): Alternate legslash to get both legs to 90%+
---   2. LEG BREAK (Ice): Double-break legs
---   3. IMPALE: Impale target
---   4. IMPALESLASH: Slash arteries for bleeding
---   5. IMPALE2: Impale again
---   6. BLADETWIST: Twist until 700 bleeding
---   7. WITHDRAW: Withdraw blade
---   8. BROKENSTAR: Execute instant kill
+--   1. UPPER PREP (Lightning): Centreslash up/down to get torso+head to 90%+
+--      - Direction auto-selected to balance damage (like leg focus)
+--      - UP: torso primary (18.1%), head secondary (12.1%)
+--      - DOWN: head primary (18.1%), torso secondary (12.1%)
+--   2. LEG PREP (Lightning): Legslash to get both legs to 90%+
+--   3. UPPER BREAK (Ice): Centreslash up/down to break torso+head
+--   4. LEG BREAK (Ice): Double-break legs + KNEES (prone)
+--   5. IMPALE: Impale prone target
+--   6. IMPALESLASH: Slash arteries for bleeding
+--   7. BLADETWIST: Twist until 700 bleeding (discern on 3rd)
+--   8. WITHDRAW: Withdraw blade (if impaled) or skip if writhed free
+--   9. BROKENSTAR: Execute instant kill
 
 blademaster = blademaster or {}
 blademaster.dispatch = blademaster.dispatch or {}
@@ -51,6 +55,9 @@ blademaster.state = {
   lastPrimaryArm = nil,
   armPrimaryDamage = 17.3,
   armSecondaryDamage = 11.5,
+  -- Upper body tracking (centreslash up hits torso + head with different damage!)
+  torsoDamage = 18.1,  -- Damage to torso from centreslash up (primary)
+  headDamage = 12.1,   -- Damage to head from centreslash up (secondary)
   -- Prone timer tracking (Double-Prep mangle phase)
   proneTimerStart = nil,      -- Timestamp when salve detected
   proneAttackCount = 0,       -- Number of attacks since prone started
@@ -62,6 +69,7 @@ blademaster.state = {
   bleedingReady = false,      -- Bleeding at 700+ (heavy torrents)
   targetBleeding = 0,         -- Actual bleeding value from assess
   withdrawDone = false,       -- Blade withdrawn (ready for brokenstar)
+  bladetwistCount = 0,        -- Number of bladetwists since impaleslash
   -- Other
   lastHamstringTime = 0,
   compassDamage = 14.9,
@@ -103,6 +111,14 @@ end
 
 function blademaster.getRA()
   return blademaster.getLimbDamage("right arm")
+end
+
+function blademaster.getTorso()
+  return blademaster.getLimbDamage("torso")
+end
+
+function blademaster.getHead()
+  return blademaster.getLimbDamage("head")
 end
 
 --------------------------------------------------------------------------------
@@ -210,6 +226,79 @@ function blademaster.checkWillPrepBothLegs()
     return (LL + P >= threshold) and (RL + S >= threshold)
   else
     return (RL + P >= threshold) and (LL + S >= threshold)
+  end
+end
+
+--------------------------------------------------------------------------------
+-- CONDITION CHECKS - UPPER BODY (Torso + Head via Centreslash Up)
+--------------------------------------------------------------------------------
+
+function blademaster.checkUpperPrepped()
+  -- Both torso AND head must be at 90%+ for prep
+  return blademaster.getTorso() >= blademaster.config.prepThreshold and
+         blademaster.getHead() >= blademaster.config.prepThreshold
+end
+
+function blademaster.checkUpperBroken()
+  -- Both torso AND head must be at 100%+ for broken
+  return blademaster.getTorso() >= blademaster.config.breakThreshold and
+         blademaster.getHead() >= blademaster.config.breakThreshold
+end
+
+function blademaster.checkWillPrepUpper()
+  -- Check if the next centreslash will bring BOTH torso and head to 90%+
+  -- Uses optimal direction (hit lower limb as primary) for accurate calculation
+  local torso = blademaster.getTorso()
+  local head = blademaster.getHead()
+  local primaryDmg = blademaster.state.torsoDamage   -- 18.1%
+  local secondaryDmg = blademaster.state.headDamage  -- 12.1%
+  local threshold = blademaster.config.prepThreshold
+
+  -- If already both prepped, return false
+  if torso >= threshold and head >= threshold then
+    return false
+  end
+
+  -- Calculate based on which limb gets primary damage (lower limb = primary)
+  if head <= torso then
+    -- DOWN: head gets primary, torso gets secondary
+    return (head + primaryDmg >= threshold) and (torso + secondaryDmg >= threshold)
+  else
+    -- UP: torso gets primary, head gets secondary
+    return (torso + primaryDmg >= threshold) and (head + secondaryDmg >= threshold)
+  end
+end
+
+function blademaster.checkWillBreakUpper()
+  -- Check if the next centreslash will BREAK both torso and head
+  -- Uses the optimal direction (up or down) based on which limb is lower
+  local torso = blademaster.getTorso()
+  local head = blademaster.getHead()
+  local primaryDmg = blademaster.state.torsoDamage   -- 18.1%
+  local secondaryDmg = blademaster.state.headDamage  -- 12.1%
+  local breakThreshold = blademaster.config.breakThreshold
+
+  -- If we hit the lower limb as primary, calculate final values
+  if head <= torso then
+    -- DOWN: head gets primary, torso gets secondary
+    return (head + primaryDmg >= breakThreshold) and (torso + secondaryDmg >= breakThreshold)
+  else
+    -- UP: torso gets primary, head gets secondary
+    return (torso + primaryDmg >= breakThreshold) and (head + secondaryDmg >= breakThreshold)
+  end
+end
+
+function blademaster.getCentreslashDirection()
+  -- Choose direction to hit the LOWER limb as primary (like getFocusLeg)
+  -- UP: torso = primary (18.1%), head = secondary (12.1%)
+  -- DOWN: head = primary (18.1%), torso = secondary (12.1%)
+  local torso = blademaster.getTorso()
+  local head = blademaster.getHead()
+
+  if head <= torso then
+    return "down"  -- Hit head as primary
+  else
+    return "up"    -- Hit torso as primary
   end
 end
 
@@ -968,59 +1057,80 @@ function blademaster.resetBrokenstarState()
   blademaster.state.bleedingReady = false
   blademaster.state.targetBleeding = 0
   blademaster.state.withdrawDone = false
+  blademaster.state.bladetwistCount = 0
 end
 
 function blademaster.getPhaseBrokenstar()
-  -- 7-phase system for instant kill (impale2 removed - go straight to bladetwist):
-  -- 1. leg_prep: Both legs < 90% (Lightning)
-  -- 2. leg_break: Legs prepped, not broken (Ice)
-  -- 3. impale: Legs broken, not impaled
-  -- 4. impaleslash: Impaled, impaleslash not done
-  -- 5. bladetwist: Impaleslash done, bleeding < 700
-  -- 6. withdraw: Bleeding >= 700, withdraw blade
-  -- 7. brokenstar: Blade withdrawn, execute kill
+  -- 9-phase system for instant kill with upper body prep:
+  -- 1. upper_prep: Centreslash up to prep torso/head (90%+)
+  -- 2. leg_prep: Legslash to prep both legs (90%+)
+  -- 3. upper_break: Centreslash up to break torso/head (100%+)
+  -- 4. leg_break: Legslash + KNEES to break legs + prone (100%+)
+  -- 5. impale: Impale the prone target
+  -- 6. impaleslash: Slash arteries for bleeding
+  -- 7. bladetwist: Twist until 700 bleeding
+  -- 8. withdraw: Withdraw blade (if still impaled)
+  -- 9. brokenstar: Execute instant kill
 
+  local upperPrepped = blademaster.checkUpperPrepped()
+  local upperBroken = blademaster.checkUpperBroken()
   local legsPrepped = blademaster.checkBothLegsPrepped()
   local legsBroken = blademaster.checkBothLegsBroken()
 
-  -- Phase 7: BROKENSTAR (execute kill)
-  if blademaster.state.withdrawDone then
+  -- Phase 9: BROKENSTAR (execute kill)
+  -- Can brokenstar if: withdrew blade OR target not impaled (writhed free + stood up)
+  if blademaster.state.bleedingReady and (blademaster.state.withdrawDone or not blademaster.state.isImpaled) then
     return "brokenstar"
   end
 
-  -- Phase 6: WITHDRAW (pull blade out)
-  if blademaster.state.bleedingReady and not blademaster.state.withdrawDone then
+  -- Phase 8: WITHDRAW (pull blade out) - only if still impaled
+  if blademaster.state.bleedingReady and blademaster.state.isImpaled then
     return "withdraw"
   end
 
-  -- Phase 5: BLADETWIST (build bleeding) - go straight here after impaleslash
-  if blademaster.state.impaleslashDone then
+  -- Phase 7: BLADETWIST (build bleeding) - requires being impaled!
+  if blademaster.state.impaleslashDone and blademaster.state.isImpaled then
     return "bladetwist"
   end
 
-  -- Phase 4: IMPALESLASH (slash arteries)
+  -- Phase 6: IMPALESLASH (slash arteries)
   if blademaster.state.isImpaled and not blademaster.state.impaleslashDone then
     return "impaleslash"
   end
 
-  -- Phase 3: IMPALE (first and only impale)
-  if legsBroken and not blademaster.state.isImpaled then
+  -- Phase 5: IMPALE (first impale or re-impale after writhe)
+  -- Can impale if: both legs broken OR target is prone (from writhe while prone)
+  local targetProne = tAffs and tAffs.prone
+  local canImpale = legsBroken or targetProne
+  if canImpale and not blademaster.state.isImpaled then
     return "impale"
   end
 
-  -- Phase 2: LEG BREAK
-  if legsPrepped or blademaster.checkWillDoubleBreakLegs() then
+  -- Phase 4: LEG BREAK (upper must be broken first!)
+  if upperBroken and (legsPrepped or blademaster.checkWillDoubleBreakLegs()) then
     return "leg_break"
   end
 
-  -- Phase 1: LEG PREP
-  return "leg_prep"
+  -- Phase 3: UPPER BREAK (legs must be prepped first!)
+  if legsPrepped and (upperPrepped or blademaster.checkWillBreakUpper()) then
+    return "upper_break"
+  end
+
+  -- Phase 2: LEG PREP (upper must be prepped first!)
+  if upperPrepped and not legsPrepped then
+    return "leg_prep"
+  end
+
+  -- Phase 1: UPPER PREP (default - prep torso/head first)
+  return "upper_prep"
 end
 
 function blademaster.getPhaseLabelBrokenstar()
   local phase = blademaster.getPhaseBrokenstar()
   local labels = {
+    upper_prep = "<yellow>Upper Prep",
     leg_prep = "<yellow>Leg Prep",
+    upper_break = "<blue>Upper Break",
     leg_break = "<blue>Leg Break",
     impale = "<cyan>Impale",
     impaleslash = "<magenta>Impaleslash",
@@ -1033,6 +1143,16 @@ end
 
 function blademaster.selectStrikeBrokenstar()
   local phase = blademaster.getPhaseBrokenstar()
+
+  -- UPPER PREP: Standard prep strikes (hamstring > paralysis > etc)
+  if phase == "upper_prep" then
+    return blademaster.selectPrepStrike()
+  end
+
+  -- UPPER BREAK: Ice afflictions (clumsiness first since ice doesn't give it)
+  if phase == "upper_break" then
+    return blademaster.selectIceStrike()
+  end
 
   -- LEG BREAK: KNEES for prone (critical - need prone for guaranteed impale!)
   if phase == "leg_break" then
@@ -1091,7 +1211,29 @@ function blademaster.buildComboBrokenstar()
     return "airfist " .. target .. ";assess " .. target
   end
 
-  if phase == "leg_prep" then
+  if phase == "upper_prep" then
+    -- Lightning infuse for prep, Ice on final prep (when about to prep both)
+    -- Use dynamic direction to balance torso/head damage
+    local direction = blademaster.getCentreslashDirection()
+    if blademaster.checkWillPrepUpper() then
+      combo = "infuse ice;"
+    else
+      combo = "infuse lightning;"
+    end
+    combo = combo .. "centreslash " .. target .. " " .. direction
+    if strike then
+      combo = combo .. " " .. strike
+    end
+
+  elseif phase == "upper_break" then
+    -- Ice infuse for break, use dynamic direction
+    local direction = blademaster.getCentreslashDirection()
+    combo = "infuse ice;centreslash " .. target .. " " .. direction
+    if strike then
+      combo = combo .. " " .. strike
+    end
+
+  elseif phase == "leg_prep" then
     -- Lightning infuse for prep, Ice on final prep
     if blademaster.checkWillPrepBothLegs() then
       combo = "infuse ice;"
@@ -1122,8 +1264,14 @@ function blademaster.buildComboBrokenstar()
     combo = "impaleslash " .. target
 
   elseif phase == "bladetwist" then
-    -- Bladetwist to build bleeding, plus discern to check
-    combo = "bladetwist;assess " .. target .. ";discern " .. target
+    -- Bladetwist to build bleeding
+    -- Count is incremented by trigger when bladetwist actually fires (not on button press)
+    -- On 3rd+ bladetwist, add discern to check bleeding
+    if blademaster.state.bladetwistCount >= 2 then
+      combo = "bladetwist;discern " .. target
+    else
+      combo = "bladetwist;assess " .. target
+    end
     return combo  -- Skip the assess at end since we already have it
 
   elseif phase == "withdraw" then
@@ -1161,17 +1309,28 @@ function blademaster.dispatch.runBrokenstar()
 
   -- Status output
   cecho("\n<cyan>[BMBS " .. phaseLabel .. "<cyan>] Target: " .. tostring(target) .. " | HP: " .. targetHP .. "%")
+  cecho("\n<cyan>[BMBS " .. phaseLabel .. "<cyan>] Upper: T=" .. string.format("%.1f", blademaster.getTorso()) .. "% H=" .. string.format("%.1f", blademaster.getHead()) .. "%")
   cecho("\n<cyan>[BMBS " .. phaseLabel .. "<cyan>] Legs: LL=" .. string.format("%.1f", blademaster.getLL()) .. "% RL=" .. string.format("%.1f", blademaster.getRL()) .. "%")
 
   -- Phase-specific messages
-  if phase == "leg_prep" then
+  if phase == "upper_prep" then
+    local direction = blademaster.getCentreslashDirection()
+    if blademaster.checkWillPrepUpper() then
+      cecho("\n<blue>*** FINAL UPPER PREP - ICE infuse + centreslash " .. direction .. "! ***")
+    else
+      cecho("\n<yellow>*** UPPER PREP - Centreslash " .. direction .. " (hitting " .. (direction == "up" and "torso" or "head") .. " as primary) ***")
+    end
+  elseif phase == "upper_break" then
+    local direction = blademaster.getCentreslashDirection()
+    cecho("\n<blue>*** UPPER BREAK - Centreslash " .. direction .. " to break torso/head! ***")
+  elseif phase == "leg_prep" then
     local legPath = blademaster.calculateLegPath()
     if blademaster.checkWillPrepBothLegs() then
       -- Check if dismounting mounted target
       if tmounted and tAffs.hamstring then
         cecho("\n<magenta>*** DISMOUNT - KNEES to dismount before double-break! ***")
       else
-        cecho("\n<blue>*** FINAL PREP - ICE infuse to strip caloric! ***")
+        cecho("\n<blue>*** FINAL LEG PREP - ICE infuse to strip caloric! ***")
       end
     elseif legPath.hitsToDouble > 0 then
       cecho("\n<yellow>" .. legPath.explanation)
@@ -1184,7 +1343,9 @@ function blademaster.dispatch.runBrokenstar()
     cecho("\n<magenta>*** IMPALESLASH - Slash arteries for bleeding! ***")
   elseif phase == "bladetwist" then
     local bleedColor = blademaster.state.targetBleeding >= 700 and "<green>" or "<yellow>"
-    cecho("\n<red>*** BLADETWIST - Building bleeding (" .. bleedColor .. blademaster.state.targetBleeding .. "/700<red>) ***")
+    local twistNum = blademaster.state.bladetwistCount + 1  -- +1 because we display before increment
+    local discernNote = twistNum >= 3 and " <cyan>(+discern)" or ""
+    cecho("\n<red>*** BLADETWIST #" .. twistNum .. " - Building bleeding (" .. bleedColor .. blademaster.state.targetBleeding .. "/700<red>)" .. discernNote .. " ***")
   elseif phase == "withdraw" then
     cecho("\n<yellow>*** WITHDRAW - Pull blade out! ***")
   elseif phase == "brokenstar" then
@@ -1406,20 +1567,34 @@ function blademaster.captureArmDamage(damage, side)
   end
 end
 
+function blademaster.captureUpperDamage(damage, limb)
+  -- Centreslash hits torso and head with DIFFERENT damage values
+  -- Torso gets more damage (primary), head gets less (secondary)
+  damage = tonumber(damage) or 0
+  if limb == "torso" then
+    blademaster.state.torsoDamage = damage
+  elseif limb == "head" then
+    blademaster.state.headDamage = damage
+  end
+end
+
 -- Brokenstar trigger callbacks
 function blademaster.onImpaleSuccess()
-  -- First impale or second impale after impaleslash
-  if blademaster.state.impaleslashDone and not blademaster.state.secondImpale then
-    blademaster.state.secondImpale = true
-    cecho("\n<cyan>[BM] Second impale confirmed!")
-  elseif not blademaster.state.isImpaled then
-    blademaster.state.isImpaled = true
+  -- ALWAYS set isImpaled = true when we impale (first, re-impale, any impale)
+  local wasImpaled = blademaster.state.isImpaled
+  blademaster.state.isImpaled = true
+
+  -- Track if this is a re-impale (impaleslash already done = skip to bladetwist)
+  if blademaster.state.impaleslashDone then
+    cecho("\n<green>[BM] RE-IMPALE confirmed! Continuing bladetwists...")
+  elseif not wasImpaled then
     cecho("\n<cyan>[BM] First impale confirmed!")
   end
 end
 
 function blademaster.onImpaleslashSuccess()
   blademaster.state.impaleslashDone = true
+  blademaster.state.bladetwistCount = 0  -- Reset count for new bladetwist cycle
   cecho("\n<magenta>[BM] Impaleslash confirmed - arteries slashed!")
 end
 
@@ -1438,15 +1613,52 @@ function blademaster.onBleedingUpdate(bleedValue)
 end
 
 function blademaster.onTargetUnimpaled()
-  -- Target escaped or removed the impale - FULL RESET
-  blademaster.resetBrokenstarState()
-  cecho("\n<red>[BM] Target writhed free - brokenstar reset!")
+  -- Target escaped impale - need to re-impale before bladetwist
+  -- If prone: FREE RE-IMPALE - they can't dodge while prone (regardless of leg status!)
+  -- If standing + legs broken: Can re-impale
+  -- If standing + legs healed: Back to leg prep
+
+  blademaster.state.isImpaled = false
+  blademaster.state.withdrawDone = false
+  -- Keep bleedingReady and targetBleeding - we built that progress!
+  -- Keep impaleslashDone = true so we skip impaleslash after re-impale
+
+  local targetProne = tAffs and tAffs.prone
+  local legsBroken = blademaster.checkBothLegsBroken()
+
+  -- Can re-impale if prone OR both legs broken
+  if targetProne then
+    cecho("\n<green>[BM] Target writhed free but STILL PRONE - FREE RE-IMPALE!")
+    -- Phase will go to impale (canImpale = prone)
+  elseif legsBroken then
+    cecho("\n<red>[BM] Target writhed free and standing - RE-IMPALE! (legs still broken)")
+    -- Phase will go to impale (canImpale = legsBroken)
+  else
+    cecho("\n<red>[BM] Target writhed free and standing - back to leg prep")
+    -- Reset bleeding and impaleslash since we have to restart completely
+    blademaster.state.impaleslashDone = false
+    blademaster.state.bleedingReady = false
+    blademaster.state.targetBleeding = 0
+  end
 end
 
 function blademaster.onWithdrawSuccess()
   blademaster.state.withdrawDone = true
   blademaster.state.isImpaled = false  -- No longer impaled after withdraw
   cecho("\n<yellow>[BM] Blade withdrawn - BROKENSTAR READY!")
+end
+
+function blademaster.onBladetwistSuccess()
+  -- Increment count only when bladetwist actually fires (not on button spam)
+  blademaster.state.bladetwistCount = blademaster.state.bladetwistCount + 1
+end
+
+function blademaster.onTargetStandUp(who)
+  -- Only care if it's our target and we were in brokenstar route
+  if who == target and blademaster.state.impaleslashDone then
+    local bleedColor = blademaster.state.targetBleeding >= 700 and "<green>" or "<yellow>"
+    cecho("\n<yellow>[BM] Target stood up! Bleed: " .. bleedColor .. blademaster.state.targetBleeding .. "<yellow> | Twists: " .. blademaster.state.bladetwistCount)
+  end
 end
 
 function blademaster.registerDamageTriggers()
@@ -1457,6 +1669,9 @@ function blademaster.registerDamageTriggers()
     end
     if blademaster.armDamageTriggerID then
       killTrigger(blademaster.armDamageTriggerID)
+    end
+    if blademaster.upperDamageTriggerID then
+      killTrigger(blademaster.upperDamageTriggerID)
     end
     if blademaster.legSalveTriggerID then
       killTrigger(blademaster.legSalveTriggerID)
@@ -1479,6 +1694,12 @@ function blademaster.registerDamageTriggers()
     if blademaster.bleedingUpdateTriggerID then
       killTrigger(blademaster.bleedingUpdateTriggerID)
     end
+    if blademaster.standUpTriggerID then
+      killTrigger(blademaster.standUpTriggerID)
+    end
+    if blademaster.bladetwistTriggerID then
+      killTrigger(blademaster.bladetwistTriggerID)
+    end
 
     -- Leg damage trigger
     blademaster.legDamageTriggerID = tempRegexTrigger(
@@ -1493,6 +1714,14 @@ function blademaster.registerDamageTriggers()
       "^As you carve into .+, you perceive that you have dealt (\\d+\\.?\\d*)% damage to \\w+ (left|right) arm",
       function()
         blademaster.captureArmDamage(matches[2], matches[3])
+      end
+    )
+
+    -- Upper body damage trigger (torso/head from centreslash up)
+    blademaster.upperDamageTriggerID = tempRegexTrigger(
+      "^As you carve into .+, you perceive that you have dealt (\\d+\\.?\\d*)% damage to \\w+ (torso|head)",
+      function()
+        blademaster.captureUpperDamage(matches[2], matches[3])
       end
     )
 
@@ -1548,14 +1777,32 @@ function blademaster.registerDamageTriggers()
     )
 
     -- Bleeding update: "You observe ... [280]" - captures actual bleeding value
+    -- Patterns: "sluggish bleeding" [<400], "rivers of blood" [400-699], "heavy torrents" [700-899], "shortly bleed to death" [900+]
     blademaster.bleedingUpdateTriggerID = tempRegexTrigger(
-      "^You observe .+ \\[(\\d+)\\]$",
+      "You observe .+ \\[(\\d+)\\]",
       function()
         blademaster.onBleedingUpdate(matches[2])
       end
     )
 
-    cecho("\n<green>[BM] Triggers registered (damage + leg salve + brokenstar + writhe + bleeding)!")
+    -- Target stands up: "Mystor stands up." - discern to check bleeding
+    blademaster.standUpTriggerID = tempRegexTrigger(
+      "^([\\w]+) stands up\\.$",
+      function()
+        blademaster.onTargetStandUp(matches[2])
+      end
+    )
+
+    -- Bladetwist success: Increment count when bladetwist actually fires
+    -- Pattern: "[|] [|] [|] BLADETWIST [|] BLADETWIST [|] BLADETWIST [|] [|] [|]"
+    blademaster.bladetwistTriggerID = tempRegexTrigger(
+      "BLADETWIST \\[\\|\\] BLADETWIST \\[\\|\\] BLADETWIST",
+      function()
+        blademaster.onBladetwistSuccess()
+      end
+    )
+
+    cecho("\n<green>[BM] Triggers registered (leg/arm/upper damage + leg salve + brokenstar + writhe + bleeding + standUp + bladetwist)!")
   else
     cecho("\n<yellow>[BM] tempRegexTrigger not available - create triggers manually")
   end
