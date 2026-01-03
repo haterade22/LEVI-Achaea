@@ -508,12 +508,17 @@ transition_map:
   Gaital: [Rain, Maelstrom]
   Maelstrom: [Oak]
 
-# Optimal form cycle (one-way flow, protects prepped legs):
-# Gaital (start, parry bypass) → Rain → Oak → Gaital (kill phase)
-# If kill fails: Gaital → Maelstrom → Oak → Gaital (cycle back)
+# Optimal form cycle: Willow → Rain → Oak → Gaital (when ready)
 #
-# Key: Start in Gaital for FREE parry bypass on first combo
-# Key: Oak NEVER goes back to Willow (protects prepped legs from flashheel)
+# Willow: Start here, HEAD prep with hiru/hiraku, transition to Rain at 6 kata
+# Rain: PRIMARY LEG prep with kuro (24 kata capacity!), can also prep head with hiru
+# Oak: HEAD prep with nervestrike, ONLY go to Gaital when BOTH legs AND head prepped
+# Gaital: KILL form - sweep, needle, spinkick, dispatch
+#
+# If kill fails in Gaital: Maelstrom → Oak → (continue cycle)
+#
+# Key: NEVER enter Gaital until both legs AND head are prepped
+# Key: Rain has 24 kata = ~8 combos of sustained prep time
 ```
 
 ## Shikudo Implementation (LEVI System)
@@ -556,6 +561,8 @@ current_system:
       - "shikudo.areBothLegsPrepped() → true if both legs prepped"
       - "shikudo.isDynamicHeadPrepped() → true if head >= threshold"
       - "shikudo.isLegSafe(leg) → true if safe to hit (head prepped or leg not prepped)"
+      - "shikudo.getFocusLeg() → returns leg with LESS damage (hit first to balance prep)"
+      - "shikudo.getOffLeg() → returns leg with MORE damage (secondary target)"
 
   limb_tracking:
     source: "lb[target].hits table from Romaen's limb counter"
@@ -577,16 +584,19 @@ current_system:
     auto_behavior: "First dispatch() call will set hyperfocus head before attacking"
 
   transition_priority:
-    0_kata_limit:
-      willow: "Willow at 6+ kata → Rain (early exit, 2 combos)"
-      oak: "Oak at 9+ kata → Gaital only (never back to Willow)"
-      others: "Other forms at 9+ kata → next form in cycle"
-    1_all_ready: "Legs + head prepped → Go to Gaital for kill"
-    2_legs_only:
-      rain: "Rain stays and preps head with hiru (24 kata capacity, no rush)"
-      oak: "Oak stays until head prepped (protect prepped legs)"
-      others: "Other forms transition toward Oak"
-    3_rain_overflow: "Rain kata 21+ → ALWAYS go to Oak (safety transition)"
+    flow: "Willow → Rain → Oak → Gaital (when ready)"
+    0_all_ready: "BOTH legs AND head prepped → Go to Gaital for kill"
+    1_willow:
+      early_exit: "Willow at 6+ kata → Rain (head prep done, go to leg prep)"
+    2_rain:
+      legs_prepped: "Rain legs prepped + kata 9+ → Oak (for nervestrike head prep)"
+      overflow: "Rain kata 21+ → ALWAYS go to Oak (safety transition before 24 stumble)"
+    3_oak:
+      all_ready: "Oak with both prepped → Gaital for kill"
+      not_ready: "Oak at 9+ kata and NOT ready → Willow (cycle back for more prep)"
+    4_gaital:
+      kill_ready: "Stay for dispatch"
+      stuck: "Kata 9+ and not ready → Maelstrom → Oak (cycle out)"
 
   transition_syntax:
     description: "Transitions are inline within the combo command"
@@ -600,11 +610,11 @@ current_system:
     willow_behavior: "If legs prepped but head not ready, hit already-broken leg if possible"
 
   kill_sequence:
-    phase_0: "Gaital: START HERE for FREE parry bypass, stay until kata 9"
-    phase_1: "Rain: prep both legs to ~90.8%, can also prep head with hiru (24 kata capacity)"
-    phase_2: "Oak: finish head prep with NERVESTRIKE FIRST (paralysis prevents parry!)"
-    phase_3: "Gaital: sweep + break legs → spinkick + needle → dispatch"
-    fallback: "If kill fails in Gaital: Maelstrom → Oak → Gaital (cycle back)"
+    phase_1: "Willow: START HERE, head prep with hiru/hiraku, transition to Rain at 6 kata"
+    phase_2: "Rain: PRIMARY LEG prep with kuro (24 kata!), can also prep head with hiru"
+    phase_3: "Oak: HEAD prep with NERVESTRIKE FIRST (paralysis prevents parry!)"
+    phase_4: "Gaital: ONLY when both legs AND head prepped → sweep + break → dispatch"
+    fallback: "If kill fails in Gaital: Maelstrom → Oak → (continue cycle)"
 
   attack_ordering:
     description: "Combo syntax is flexible: COMBO target attack1 attack2 attack3"
@@ -687,7 +697,7 @@ Edge cases:
 - Rain form has 24 kata max (all others have 12)
 - Willow transitions at 6 kata (2 combos) to avoid over-prepping legs
 - Rain stays and preps head with hiru if legs already prepped (no rush, 24 kata)
-- Oak at 9 kata only goes to Gaital (never back to Willow with prepped legs)
+- Oak at 9 kata goes to Gaital if ready, otherwise cycles back to Willow for more prep
 - Gaital at 9 kata goes to Maelstrom if kill not ready (Maelstrom → Oak → Gaital cycle)
 - Other non-Rain forms transition at 9 kata
 - Transitions are inline: "combo target kick staff1 staff2 transition form"
