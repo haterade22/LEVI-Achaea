@@ -672,6 +672,23 @@ The hamstring trigger (002_Hamstring.lua) calls `blademaster.onHamstringApplied(
    - Target dodged impale because they weren't prone
    - Command now outputs: `infuse ice;legslash <target> <leg> knees`
 
+3. **Writhe Escape Detection** - Fixed brokenstar getting stuck after target writhes free
+   - Added trigger to detect: "manages to writhe \w+self free of the weapon which impaled"
+   - Calls `onTargetUnimpaled()` which now fully resets brokenstar state via `resetBrokenstarState()`
+   - System returns to leg_prep phase after writhe escape
+
+4. **Bleeding Value Tracking** - Now tracks actual bleeding value instead of just 700+ boolean
+   - Added `blademaster.state.targetBleeding` to store actual value
+   - Added trigger to capture bleeding from: "You observe ... [280]"
+   - Status display now shows actual value with color coding (red <300, yellow 300-699, green 700+)
+   - Helps track bladetwist progress even if target escapes
+
+5. **Removed Impale2 Phase** - Skip second impale, go directly to bladetwist after impaleslash
+   - After impaleslash, target is still impaled - no need to re-impale
+   - Reduces window for target to writhe free
+   - New flow: Impale → Impaleslash → Bladetwist (skip impale2)
+   - Bladetwist message now shows bleeding progress: "Building bleeding (280/700)"
+
 ### 2024-12-30 - Bug Fixes and Improvements
 
 **Files Modified:**

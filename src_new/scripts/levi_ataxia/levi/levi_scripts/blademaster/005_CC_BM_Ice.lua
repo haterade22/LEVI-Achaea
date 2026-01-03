@@ -60,6 +60,7 @@ blademaster.state = {
   impaleslashDone = false,    -- Impaleslash has been executed
   secondImpale = false,       -- Second impale after impaleslash done
   bleedingReady = false,      -- Bleeding at 700+ (heavy torrents)
+  targetBleeding = 0,         -- Actual bleeding value from assess
   withdrawDone = false,       -- Blade withdrawn (ready for brokenstar)
   -- Other
   lastHamstringTime = 0,
@@ -965,41 +966,36 @@ function blademaster.resetBrokenstarState()
   blademaster.state.impaleslashDone = false
   blademaster.state.secondImpale = false
   blademaster.state.bleedingReady = false
+  blademaster.state.targetBleeding = 0
   blademaster.state.withdrawDone = false
 end
 
 function blademaster.getPhaseBrokenstar()
-  -- 8-phase system for instant kill:
+  -- 7-phase system for instant kill (impale2 removed - go straight to bladetwist):
   -- 1. leg_prep: Both legs < 90% (Lightning)
   -- 2. leg_break: Legs prepped, not broken (Ice)
-  -- 3. impale1: Legs broken, not impaled
+  -- 3. impale: Legs broken, not impaled
   -- 4. impaleslash: Impaled, impaleslash not done
-  -- 5. impale2: Impaleslash done, second impale not done
-  -- 6. bladetwist: Second impale done, bleeding < 700
-  -- 7. withdraw: Bleeding >= 700, withdraw blade
-  -- 8. brokenstar: Blade withdrawn, execute kill
+  -- 5. bladetwist: Impaleslash done, bleeding < 700
+  -- 6. withdraw: Bleeding >= 700, withdraw blade
+  -- 7. brokenstar: Blade withdrawn, execute kill
 
   local legsPrepped = blademaster.checkBothLegsPrepped()
   local legsBroken = blademaster.checkBothLegsBroken()
 
-  -- Phase 8: BROKENSTAR (execute kill)
+  -- Phase 7: BROKENSTAR (execute kill)
   if blademaster.state.withdrawDone then
     return "brokenstar"
   end
 
-  -- Phase 7: WITHDRAW (pull blade out)
+  -- Phase 6: WITHDRAW (pull blade out)
   if blademaster.state.bleedingReady and not blademaster.state.withdrawDone then
     return "withdraw"
   end
 
-  -- Phase 6: BLADETWIST (build bleeding)
-  if blademaster.state.secondImpale then
+  -- Phase 5: BLADETWIST (build bleeding) - go straight here after impaleslash
+  if blademaster.state.impaleslashDone then
     return "bladetwist"
-  end
-
-  -- Phase 5: IMPALE2 (second impale after impaleslash)
-  if blademaster.state.impaleslashDone and not blademaster.state.secondImpale then
-    return "impale2"
   end
 
   -- Phase 4: IMPALESLASH (slash arteries)
@@ -1007,9 +1003,9 @@ function blademaster.getPhaseBrokenstar()
     return "impaleslash"
   end
 
-  -- Phase 3: IMPALE1 (first impale)
+  -- Phase 3: IMPALE (first and only impale)
   if legsBroken and not blademaster.state.isImpaled then
-    return "impale1"
+    return "impale"
   end
 
   -- Phase 2: LEG BREAK
@@ -1026,9 +1022,8 @@ function blademaster.getPhaseLabelBrokenstar()
   local labels = {
     leg_prep = "<yellow>Leg Prep",
     leg_break = "<blue>Leg Break",
-    impale1 = "<cyan>Impale",
+    impale = "<cyan>Impale",
     impaleslash = "<magenta>Impaleslash",
-    impale2 = "<cyan>Impale 2",
     bladetwist = "<red>Bladetwist",
     withdraw = "<yellow>Withdraw",
     brokenstar = "<green>BROKENSTAR",
@@ -1118,17 +1113,13 @@ function blademaster.buildComboBrokenstar()
       combo = combo .. " " .. strike
     end
 
-  elseif phase == "impale1" then
-    -- First impale
+  elseif phase == "impale" then
+    -- Impale the prone target
     combo = "impale " .. target
 
   elseif phase == "impaleslash" then
     -- Impaleslash to start bleeding
     combo = "impaleslash " .. target
-
-  elseif phase == "impale2" then
-    -- Second impale after impaleslash
-    combo = "impale " .. target
 
   elseif phase == "bladetwist" then
     -- Bladetwist to build bleeding, plus discern to check
@@ -1187,15 +1178,13 @@ function blademaster.dispatch.runBrokenstar()
     end
   elseif phase == "leg_break" then
     cecho("\n<blue>*** LEG BREAK - Double-break legs + KNEES to prone! ***")
-  elseif phase == "impale1" then
-    cecho("\n<cyan>*** IMPALE - First impale! ***")
+  elseif phase == "impale" then
+    cecho("\n<cyan>*** IMPALE - Impale the prone target! ***")
   elseif phase == "impaleslash" then
     cecho("\n<magenta>*** IMPALESLASH - Slash arteries for bleeding! ***")
-  elseif phase == "impale2" then
-    cecho("\n<cyan>*** IMPALE 2 - Second impale! ***")
   elseif phase == "bladetwist" then
-    local bleedStatus = blademaster.state.bleedingReady and "<green>READY" or "<yellow>building"
-    cecho("\n<red>*** BLADETWIST - Building bleeding (" .. bleedStatus .. "<red>) ***")
+    local bleedColor = blademaster.state.targetBleeding >= 700 and "<green>" or "<yellow>"
+    cecho("\n<red>*** BLADETWIST - Building bleeding (" .. bleedColor .. blademaster.state.targetBleeding .. "/700<red>) ***")
   elseif phase == "withdraw" then
     cecho("\n<yellow>*** WITHDRAW - Pull blade out! ***")
   elseif phase == "brokenstar" then
@@ -1205,8 +1194,8 @@ function blademaster.dispatch.runBrokenstar()
   -- State tracking display
   cecho("\n<cyan>[BMBS " .. phaseLabel .. "<cyan>] Impaled: " .. (blademaster.state.isImpaled and "<green>YES" or "<red>NO"))
   cecho("<cyan> | Slashed: " .. (blademaster.state.impaleslashDone and "<green>YES" or "<red>NO"))
-  cecho("<cyan> | Impale2: " .. (blademaster.state.secondImpale and "<green>YES" or "<red>NO"))
-  cecho("<cyan> | Bleed: " .. (blademaster.state.bleedingReady and "<green>700+" or "<yellow><700"))
+  local bleedColor = blademaster.state.targetBleeding >= 700 and "<green>" or (blademaster.state.targetBleeding >= 300 and "<yellow>" or "<red>")
+  cecho("<cyan> | Bleed: " .. bleedColor .. blademaster.state.targetBleeding)
   cecho("<cyan> | Withdrawn: " .. (blademaster.state.withdrawDone and "<green>YES" or "<red>NO"))
 
   -- Parry info and airfist status
@@ -1439,11 +1428,19 @@ function blademaster.onBleedingReady()
   cecho("\n<green>[BM] BLEEDING AT 700+ - BROKENSTAR READY!")
 end
 
+function blademaster.onBleedingUpdate(bleedValue)
+  bleedValue = tonumber(bleedValue) or 0
+  blademaster.state.targetBleeding = bleedValue
+  -- Also set bleedingReady if we hit 700+
+  if bleedValue >= 700 then
+    blademaster.state.bleedingReady = true
+  end
+end
+
 function blademaster.onTargetUnimpaled()
-  -- Target escaped or removed the impale
-  blademaster.state.isImpaled = false
-  blademaster.state.secondImpale = false
-  cecho("\n<red>[BM] Target no longer impaled!")
+  -- Target escaped or removed the impale - FULL RESET
+  blademaster.resetBrokenstarState()
+  cecho("\n<red>[BM] Target writhed free - brokenstar reset!")
 end
 
 function blademaster.onWithdrawSuccess()
@@ -1475,6 +1472,12 @@ function blademaster.registerDamageTriggers()
     end
     if blademaster.withdrawTriggerID then
       killTrigger(blademaster.withdrawTriggerID)
+    end
+    if blademaster.writheTriggerID then
+      killTrigger(blademaster.writheTriggerID)
+    end
+    if blademaster.bleedingUpdateTriggerID then
+      killTrigger(blademaster.bleedingUpdateTriggerID)
     end
 
     -- Leg damage trigger
@@ -1536,7 +1539,23 @@ function blademaster.registerDamageTriggers()
       end
     )
 
-    cecho("\n<green>[BM] Triggers registered (damage + leg salve + brokenstar)!")
+    -- Writhe escape: "manages to writhe faenself free of the weapon which impaled faen"
+    blademaster.writheTriggerID = tempRegexTrigger(
+      "manages to writhe \\w+self free of the weapon which impaled",
+      function()
+        blademaster.onTargetUnimpaled()
+      end
+    )
+
+    -- Bleeding update: "You observe ... [280]" - captures actual bleeding value
+    blademaster.bleedingUpdateTriggerID = tempRegexTrigger(
+      "^You observe .+ \\[(\\d+)\\]$",
+      function()
+        blademaster.onBleedingUpdate(matches[2])
+      end
+    )
+
+    cecho("\n<green>[BM] Triggers registered (damage + leg salve + brokenstar + writhe + bleeding)!")
   else
     cecho("\n<yellow>[BM] tempRegexTrigger not available - create triggers manually")
   end
