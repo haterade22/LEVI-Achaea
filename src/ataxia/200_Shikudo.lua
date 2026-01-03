@@ -7,6 +7,86 @@ shikudo.state = {
   phase = "PREP",  -- PREP, PRONE, KILL
 }
 
+--------------------------------------------------------------------------------
+-- CONFIG VALUES (can be adjusted)
+--------------------------------------------------------------------------------
+
+shikudo.config = {
+  breakThreshold = 100,   -- Limb damage % for broken
+  prepThreshold = 90,     -- Limb damage % for prepped
+  kaiSurgeCost = 31,      -- Kai energy needed for KAI SURGE
+  kuroDamage = 12.0,      -- Estimated damage per KURO hit (adjust based on stats)
+}
+
+--------------------------------------------------------------------------------
+-- HELPER FUNCTIONS (ported from Blademaster improvements)
+--------------------------------------------------------------------------------
+
+function shikudo.getKai()
+  -- Kai energy is stored in ataxia.vitals.class for Monk
+  return ataxia.vitals.class or 0
+end
+
+function shikudo.canKaiSurge()
+  return shikudo.getKai() >= shikudo.config.kaiSurgeCost
+end
+
+function shikudo.checkWillBreakBothLegs()
+  -- Predict if next KURO will break both legs (like BM's checkWillPrepBothLegs)
+  local threshold = shikudo.config.breakThreshold
+  local damage = shikudo.config.kuroDamage
+  local ll = tLimbs.LL or 0
+  local rl = tLimbs.RL or 0
+
+  -- If both legs already broken, return false
+  if ll >= threshold and rl >= threshold then return false end
+
+  -- Check if next hit will put both over 100%
+  local llAfter = ll + damage
+  local rlAfter = rl + damage
+
+  return (llAfter >= threshold and rlAfter >= threshold)
+end
+
+function shikudo.getPhase()
+  -- Dynamic phase detection based on combat state
+  local ll = tLimbs.LL or 0
+  local rl = tLimbs.RL or 0
+  local head = tLimbs.H or 0
+  local legBroken = (ll >= 100 or rl >= 100)
+  local headBroken = (head >= 100 or tAffs.damagedhead)
+  local hasWindpipe = (tAffs.damagedwindpipe or tAffs.crushedthroat)
+
+  -- DISPATCH: All conditions met
+  if tAffs.prone and legBroken and headBroken and hasWindpipe then
+    return "dispatch"
+  end
+
+  -- KILL: Prone with broken leg, working on head/windpipe
+  if tAffs.prone and legBroken then
+    return "kill"
+  end
+
+  -- PRONE: Legs prepped, need to sweep
+  if shikudo.checkReadyForProne() and not tAffs.prone then
+    return "prone"
+  end
+
+  -- PREP: Building leg/head damage
+  return "prep"
+end
+
+function shikudo.getPhaseLabel()
+  local phase = shikudo.getPhase()
+  local labels = {
+    prep = "<yellow>PREP",
+    prone = "<blue>PRONE",
+    kill = "<magenta>KILL",
+    dispatch = "<green>DISPATCH",
+  }
+  return labels[phase] or "<grey>Unknown"
+end
+
 -- Available attacks per form
 shikudo.formAttacks = {
   Tykonos = {
@@ -529,12 +609,25 @@ function shikudo.dispatch()
   tLimbs = tLimbs or {H = 0, T = 0, LL = 0, RL = 0, LA = 0, RA = 0}
   tAffs = tAffs or {}
 
-  -- Debug: Show what we have
-  cecho("\n<cyan>[Shikudo] Target: " .. tostring(target))
-  cecho(" | Form: " .. tostring(ataxia.vitals.form))
-  cecho(" | Kata: " .. tostring(ataxia.vitals.kata))
-  cecho("\n<cyan>[Shikudo] Limbs - H:" .. tLimbs.H .. " LL:" .. tLimbs.LL .. " RL:" .. tLimbs.RL)
-  cecho(" | Ready for Gaital: " .. (shikudo.checkReadyForGaital() and "YES" or "NO"))
+  -- Phase-based output with Kai energy
+  local phase = shikudo.getPhase()
+  local phaseLabel = shikudo.getPhaseLabel()
+  local kai = shikudo.getKai()
+  local kaiColor = shikudo.canKaiSurge() and "<green>" or "<yellow>"
+
+  cecho("\n<cyan>[Shikudo V1] " .. phaseLabel .. " <cyan>| Target: <white>" .. tostring(target))
+  cecho(" <cyan>| Form: <white>" .. tostring(ataxia.vitals.form))
+  cecho(" <cyan>| Kata: <white>" .. tostring(ataxia.vitals.kata))
+  cecho("\n<cyan>[Shikudo V1] Limbs: H=<white>" .. string.format("%.1f%%", tLimbs.H))
+  cecho(" <cyan>LL=<white>" .. string.format("%.1f%%", tLimbs.LL))
+  cecho(" <cyan>RL=<white>" .. string.format("%.1f%%", tLimbs.RL))
+  cecho(" <cyan>| Kai: " .. kaiColor .. kai)
+  if shikudo.canKaiSurge() then
+    cecho(" <green>KAI SURGE READY")
+  end
+  if tmounted then
+    cecho(" <yellow>| MOUNTED")
+  end
 
   -- Safety check - skip if no target
   if not target or target == "" then
@@ -623,12 +716,21 @@ function shikudo.status()
   local form = ataxia.vitals.form or "Unknown"
   local kata = ataxia.vitals.kata or 0
   local maxKata = shikudo.maxKata[form] or 12
+  local phase = shikudo.getPhase()
+  local phaseLabel = shikudo.getPhaseLabel()
+  local kai = shikudo.getKai()
+  local kaiColor = shikudo.canKaiSurge() and "<green>" or "<yellow>"
 
   cecho("\n<cyan>╔══════════════════════════════════════════╗")
-  cecho("\n<cyan>║         <white>SHIKUDO STATUS<cyan>                  ║")
+  cecho("\n<cyan>║         <white>SHIKUDO V1 STATUS<cyan>               ║")
   cecho("\n<cyan>╠══════════════════════════════════════════╣")
+  cecho("\n<cyan>║ <white>Phase: " .. phaseLabel .. "<cyan>")
   cecho("\n<cyan>║ <white>Target: <yellow>" .. tostring(target or "None") .. "<cyan>")
   cecho("\n<cyan>║ <white>Form: <green>" .. form .. " <grey>(" .. kata .. "/" .. maxKata .. " kata)<cyan>")
+  cecho("\n<cyan>║ <white>Kai: " .. kaiColor .. kai .. (shikudo.canKaiSurge() and " <green>KAI SURGE READY" or "") .. "<cyan>")
+  if tmounted then
+    cecho("\n<cyan>║ <yellow>*** TARGET IS MOUNTED ***<cyan>")
+  end
   cecho("\n<cyan>╠══════════════════════════════════════════╣")
   cecho("\n<cyan>║ <white>LIMB DAMAGE:<cyan>")
   cecho("\n<cyan>║   <white>Head: " .. (tLimbs.H >= 90 and "<green>" or (tLimbs.H >= 70 and "<yellow>" or "<red>")) .. string.format("%.1f%%", tLimbs.H))
