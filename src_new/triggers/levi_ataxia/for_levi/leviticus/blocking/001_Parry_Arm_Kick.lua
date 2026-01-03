@@ -39,7 +39,7 @@ patterns:
   type: 1
 - pattern: '1'
   type: 5
-- pattern: ^(\w+)  parries the attack with a deft manoeuvre.$
+- pattern: ^(\w+) parries the attack with a deft manoeuvre.$
   type: 1
 ]]--
 

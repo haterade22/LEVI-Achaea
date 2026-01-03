@@ -384,15 +384,33 @@ function shikudo.shouldTransition()
   end
 
   -- ═══════════════════════════════════════════════════════════════════════════
-  -- OAK: HEAD prep form (nervestrike) - Only go to Gaital when all ready
+  -- OAK: HEAD prep form (nervestrike) - Go to Gaital when close to ready
   -- ═══════════════════════════════════════════════════════════════════════════
   if form == "Oak" then
     if kata >= 9 then
       if legsPrepped and headPrepped then
         return "Gaital"  -- Ready for kill!
       else
-        -- Not ready for kill - cycle back through Willow to continue prep
-        return "Willow"
+        -- Check if we're close enough to go to Gaital instead of cycling to Willow
+        -- Gaital can continue prep with needle (head) and kuro (legs) while having kill tools
+        local ll = shikudo.getLimbDamage("left leg")
+        local rl = shikudo.getLimbDamage("right leg")
+        local h = shikudo.getLimbDamage("head")
+        local leftPrepped = shikudo.isLegPrepped("left")
+        local rightPrepped = shikudo.isLegPrepped("right")
+
+        -- Go to Gaital if: at least one leg prepped AND head is close (>85%)
+        -- OR if all limbs are reasonably close (>80%)
+        local oneLegsPrepped = leftPrepped or rightPrepped
+        local headClose = h >= 85
+        local allClose = ll >= 80 and rl >= 80 and h >= 80
+
+        if (oneLegsPrepped and headClose) or allClose then
+          return "Gaital"  -- Close enough, Gaital can finish prep and kill
+        else
+          -- Not close enough - cycle back through Willow to continue prep
+          return "Willow"
+        end
       end
     end
     return nil  -- Stay and continue head prep
@@ -440,38 +458,52 @@ function shikudo.selectKick()
 
   if form == "Rain" then
     -- FRONTKICK targets ARMS (different from legs/head)
-    -- PARRY TRACKING: If our last kick was parried, switch arms
-    -- The parry message doesn't specify limb, so we track what we kicked
-    local lastKick = ataxiaTemp.lastFrontkickArm or "none"
+    -- Track parry state using dedicated flag (set by parry trigger)
+    local lastKick = ataxiaTemp.lastFrontkickArm or "left"
+    local wasParried = ataxiaTemp.frontkickWasParried or false
 
-    -- If ANY parry happened and we kicked left last time, switch to right
-    if parried ~= "none" and lastKick == "left" then
-      ataxiaTemp.kickTarget = "right arm"
-      ataxiaTemp.lastFrontkickArm = "right"
-      return "frontkick right"
-    -- If parried and we kicked right last time, switch to left
-    elseif parried ~= "none" and lastKick == "right" then
-      ataxiaTemp.kickTarget = "left arm"
-      ataxiaTemp.lastFrontkickArm = "left"
-      return "frontkick left"
-    -- Default to left, track it
-    else
-      ataxiaTemp.kickTarget = "left arm"
-      ataxiaTemp.lastFrontkickArm = "left"
-      return "frontkick left"
+    -- Clear the parry flag for next combo
+    ataxiaTemp.frontkickWasParried = false
+
+    -- If last frontkick was parried, switch arms
+    if wasParried then
+      if lastKick == "left" then
+        ataxiaTemp.kickTarget = "right arm"
+        ataxiaTemp.lastFrontkickArm = "right"
+        return "frontkick right"
+      else
+        ataxiaTemp.kickTarget = "left arm"
+        ataxiaTemp.lastFrontkickArm = "left"
+        return "frontkick left"
+      end
     end
 
+    -- Default: use same arm as last time (or left if first)
+    ataxiaTemp.kickTarget = lastKick .. " arm"
+    return "frontkick " .. lastKick
+
   elseif form == "Oak" then
-    -- OAK: Kick comes LAST (combo order: staff1 + staff2 + kick)
-    -- NERVESTRIKE FIRST for paralysis, then kick at the end
+    -- OAK: Kick selection - be smart about head vs torso
+    -- Nervestrike will hit head too, so don't over-damage head
     local headHits = shikudo.hitsToPrep("head", "risingkick")
+    local headHitsNerve = shikudo.hitsToPrep("head", "nervestrike")
+    local legsPrepped = shikudo.areBothLegsPrepped()
 
     if tAffs.prone then
       ataxiaTemp.kickTarget = "head"
       return "risingkick head"  -- Stuns if prone
-    elseif headHits >= 1 and parried ~= "head" then
+    elseif headHits >= 2 and parried ~= "head" then
+      -- Head needs 2+ risingkicks - safe to kick head
       ataxiaTemp.kickTarget = "head"
-      return "risingkick head"  -- Contribute to head damage
+      return "risingkick head"
+    elseif headHitsNerve >= 1 and headHits == 1 then
+      -- Head needs 1 risingkick BUT nervestrike will prep it - kick torso
+      ataxiaTemp.kickTarget = "torso"
+      return "risingkick torso"
+    elseif headHits >= 1 and parried ~= "head" then
+      -- Head needs work and nervestrike won't fully prep it
+      ataxiaTemp.kickTarget = "head"
+      return "risingkick head"
     else
       ataxiaTemp.kickTarget = "torso"
       return "risingkick torso"  -- Default to torso
@@ -497,14 +529,7 @@ function shikudo.selectKick()
       end
     end
 
-    -- PRIORITY 2: Both legs broken OR not prone yet - spinkick if head needs work
-    local headHits = shikudo.hitsToPrep("head", "spinkick")
-    if tAffs.prone and (headHits > 0 or not tAffs.damagedhead) then
-      ataxiaTemp.kickTarget = "head"
-      return "spinkick"  -- Massive head damage on prone
-    end
-
-    -- Not prone yet or head done → flashheel legs
+    -- Flashheel legs - needle handles head breaking and crushedthroat
     local leftHits = shikudo.hitsToPrep("left leg", "flashheel")
     local rightHits = shikudo.hitsToPrep("right leg", "flashheel")
 
