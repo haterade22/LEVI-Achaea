@@ -500,12 +500,14 @@ Lightning prep → double-break both legs → Ice damage (mangle) phase
 7. **INFUSE ICE + STERNUM** - After ANY leg broken, switch to ice for damage
 8. **MANGLE STRATEGY** - After double-break, hit the leg with HIGHER % for level 3 break
 9. **COMPASSSLASH** - Used to balance legs ONLY during prep (no broken legs)
+10. **MOUNT-AWARE DISMOUNT** - When target is mounted + hamstrung + final prep hit, use KNEES to dismount BEFORE double-break
 
 **Key Insights**:
 - Breaking BOTH legs simultaneously is critical vs experienced players
 - After double-break, stay in ICE phase even if one leg heals
 - MANGLE (level 3 break) requires 2 restoration applications to heal = huge advantage
 - Always hit the HIGHER % broken leg when going for mangle
+- **MOUNTED TARGETS**: KNEES on mounted target DISMOUNTS but doesn't PRONE. Must dismount first, then double-break for prone.
 
 ### Commands
 ```yaml
@@ -551,13 +553,14 @@ bmstatus: Display status panel (blademaster.dispatch.status())
 |----------|--------|------------|-----------|
 | 1 | AIRFIST | Parry bypass | When parrying our leg (needs 25 shin, NO cooldown) |
 | 2 | STERNUM | Max damage | PRONE (they're locked down, use ice infuse) |
-| 3 | KNEES | Prone | Double-break imminent (both legs will break) |
-| 4 | KNEES | Prone | Single leg about to break |
-| 5 | HAMSTRING | Prevents flee | Always keep up (10s duration, timestamp-tracked) |
-| 6 | NECK | Paralysis | Lightning gives clumsy, so strike para |
-| 7 | CHEST | Hypochondria | Blocks focus curing |
-| 8 | SHOULDER | Weariness | Blocks Fitness passive cure |
-| 9 | EARS | Clumsiness | Fallback |
+| 3 | KNEES | Dismount | Mounted + hamstrung + final prep hit (dismount before double-break) |
+| 4 | KNEES | Prone | Double-break imminent (both legs will break) |
+| 5 | KNEES | Prone | Single leg about to break |
+| 6 | HAMSTRING | Prevents flee | Always keep up (10s duration, timestamp-tracked) |
+| 7 | NECK | Paralysis | Lightning gives clumsy, so strike para |
+| 8 | CHEST | Hypochondria | Blocks focus curing |
+| 9 | SHOULDER | Weariness | Blocks Fitness passive cure |
+| 10 | EARS | Clumsiness | Fallback |
 
 ### Sword Attack Selection
 | Condition | Attack | Direction |
@@ -763,3 +766,33 @@ The hamstring trigger (002_Hamstring.lua) calls `blademaster.onHamstringApplied(
 - **Double-break imminent** → KNEES (prone on break)
 - **Leg about to break** → KNEES (prone on break)
 - **Otherwise** → HAMSTRING > afflictions
+
+### 2025-01-02 - Mount-Aware Dismount Logic
+
+**Files Modified:**
+- `005_CC_BM_Ice.lua` - Main dispatch
+
+**Bug Fix:**
+
+1. **Mounted Target Not Proning** - Fixed double-break on mounted target only dismounting, not proning
+   - **Problem**: KNEES on a mounted target DISMOUNTS instead of PRONING
+   - So double-break + KNEES while mounted = dismount only, target still standing
+   - **Solution**: Use KNEES on final prep hit to dismount BEFORE double-break
+   - Conditions: `tmounted + tAffs.hamstring + checkWillPrepBothLegs()`
+   - Result: Dismount on prep hit, then KNEES on double-break prones them
+
+**Updated `selectStrikeDoublePrep()` logic:**
+```lua
+if phase == "leg_prep" then
+  -- Dismount during final prep hit if mounted + hamstrung
+  if tmounted and tAffs.hamstring and blademaster.checkWillPrepBothLegs() then
+    return "knees"  -- Dismount now, so KNEES on double-break will prone
+  end
+  return blademaster.selectPrepStrike()
+end
+```
+
+**Attack Sequence (Mounted Target):**
+- Hit 1-N: Prep legs with hamstring/afflictions
+- Hit N+1 (final prep): KNEES dismounts (mounted + hamstrung)
+- Hit N+2 (double-break): KNEES prones (now dismounted)
