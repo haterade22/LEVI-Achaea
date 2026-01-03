@@ -6,11 +6,25 @@
 -- SPINKICK hits torso if standing, HEAD if prone
 -- If prone + damaged head (level 2) -> SPINKICK instantly MANGLES head (level 3)!
 -- This means we only need to get head to damaged (100%), then SPINKICK = instant mangle
+--
+-- IMPROVEMENTS (2026-01-03, from Blademaster lessons learned):
+-- 1. getKai() / canKaiSurge() - Track Kai energy for KAI SURGE (31 cost)
+-- 2. checkWillBreakLeg() - Predict if next hit breaks focus leg
+-- 3. getPhase() / getPhaseLabel() - Dynamic phase detection with colored labels
+-- 4. Enhanced status display with phase indicator and predictions
+-- 5. SWEEP handles mounted targets (dismount + prone in one action)
 
 shikudov2 = shikudov2 or {}
 shikudov2.state = {
-  phase = "PREP",  -- PREP, KILL
+  phase = "PREP",  -- PREP, PRONE, KILL
   focusLeg = nil,  -- Which leg we're focusing (left or right)
+}
+
+-- Config values (can be adjusted)
+shikudov2.config = {
+  breakThreshold = 100,   -- Limb damage % for broken
+  kaiSurgeCost = 31,      -- Kai energy needed for KAI SURGE
+  kuroDamage = 12.0,      -- Estimated damage per KURO hit (adjust based on stats)
 }
 
 -- Max kata per form before stumble
@@ -22,6 +36,76 @@ shikudov2.maxKata = {
   Gaital = 12,
   Maelstrom = 12
 }
+
+--------------------------------------------------------------------------------
+-- HELPER FUNCTIONS (Learned from Blademaster)
+--------------------------------------------------------------------------------
+
+function shikudov2.getKai()
+  -- Kai energy is stored in ataxia.vitals.class for Monk
+  return ataxia.vitals.class or 0
+end
+
+function shikudov2.canKaiSurge()
+  -- Check if we have enough Kai for KAI SURGE (dismount + prone + prevents remount)
+  return shikudov2.getKai() >= shikudov2.config.kaiSurgeCost
+end
+
+function shikudov2.checkWillBreakLeg()
+  -- Predict if next KURO/FLASHHEEL will break the focus leg
+  -- Like Blademaster's checkWillPrepBothLegs() but for single leg break
+  local focusLeg = shikudov2.getFocusLeg()
+  local legDamage = focusLeg == "left" and tLimbs.LL or tLimbs.RL
+  local threshold = shikudov2.config.breakThreshold
+  local damage = shikudov2.config.kuroDamage
+
+  -- Already broken = false
+  if legDamage >= threshold then
+    return false
+  end
+
+  -- Will break on next hit?
+  return (legDamage + damage >= threshold)
+end
+
+function shikudov2.getPhase()
+  -- Determine current combat phase based on conditions
+  -- Returns: "prep", "prone", "kill", "dispatch"
+
+  local legBroken = (tLimbs.LL >= 100 or tLimbs.RL >= 100)
+  local headBroken = (tLimbs.H >= 100 or tAffs.damagedhead)
+  local hasWindpipe = (tAffs.damagedwindpipe or tAffs.crushedthroat)
+
+  -- DISPATCH: All conditions met
+  if tAffs.prone and legBroken and headBroken and hasWindpipe then
+    return "dispatch"
+  end
+
+  -- KILL: Prone + leg broken, working on head/windpipe
+  if tAffs.prone and legBroken then
+    return "kill"
+  end
+
+  -- PRONE: Leg broken, need to prone target
+  if legBroken and not tAffs.prone then
+    return "prone"
+  end
+
+  -- PREP: Building leg damage
+  return "prep"
+end
+
+function shikudov2.getPhaseLabel()
+  -- Returns colored phase label for status display (like Blademaster)
+  local phase = shikudov2.getPhase()
+  local labels = {
+    prep = "<yellow>PREP",
+    prone = "<blue>PRONE",
+    kill = "<magenta>KILL",
+    dispatch = "<green>DISPATCH",
+  }
+  return labels[phase] or "<grey>Unknown"
+end
 
 --------------------------------------------------------------------------------
 -- KILL CONDITION CHECKS
@@ -415,17 +499,47 @@ function shikudov2.dispatch()
   tLimbs = tLimbs or {H = 0, T = 0, LL = 0, RL = 0, LA = 0, RA = 0}
   tAffs = tAffs or {}
 
-  -- Debug output
+  -- Get phase and focus leg
+  local phase = shikudov2.getPhase()
+  local phaseLabel = shikudov2.getPhaseLabel()
   local focusLeg = shikudov2.getFocusLeg()
-  cecho("\n<magenta>[V2] Target: " .. tostring(target))
+  local kai = shikudov2.getKai()
+
+  -- Debug output with phase indicator (like Blademaster)
+  cecho("\n<magenta>[V2 " .. phaseLabel .. "<magenta>] Target: " .. tostring(target))
   cecho(" | Form: " .. tostring(ataxia.vitals.form))
   cecho(" | Kata: " .. tostring(ataxia.vitals.kata))
-  cecho("\n<magenta>[V2] Focus Leg: " .. focusLeg)
+  cecho("\n<magenta>[V2 " .. phaseLabel .. "<magenta>] Focus: " .. focusLeg)
   cecho(" | LL:" .. string.format("%.1f", tLimbs.LL) .. "% RL:" .. string.format("%.1f", tLimbs.RL) .. "%")
   cecho(" | H:" .. string.format("%.1f", tLimbs.H) .. "%")
-  cecho("\n<magenta>[V2] Clumsy: " .. (tAffs.clumsiness and "YES" or "NO"))
-  cecho(" | Para: " .. (tAffs.paralysis and "YES" or "NO"))
-  cecho(" | Prone: " .. (tAffs.prone and "YES" or "NO"))
+  cecho(" | Kai:" .. kai)
+
+  -- Phase-specific messages (like Blademaster)
+  if phase == "prep" then
+    if shikudov2.checkWillBreakLeg() then
+      cecho("\n<blue>*** FINAL PREP - Next hit breaks " .. focusLeg .. " leg! ***")
+    else
+      cecho("\n<yellow>*** PREP - Focus fire " .. focusLeg .. " leg ***")
+    end
+  elseif phase == "prone" then
+    if shikudov2.canKaiSurge() then
+      cecho("\n<blue>*** PRONE PHASE - SWEEP ready (or KAI SURGE available: " .. kai .. " Kai) ***")
+    else
+      cecho("\n<blue>*** PRONE PHASE - SWEEP to prone! ***")
+    end
+  elseif phase == "kill" then
+    local headBroken = (tLimbs.H >= 100 or tAffs.damagedhead)
+    local hasWindpipe = (tAffs.damagedwindpipe or tAffs.crushedthroat)
+    if not headBroken then
+      cecho("\n<magenta>*** KILL PHASE - NEEDLE for head + SPINKICK to mangle! ***")
+    elseif not hasWindpipe then
+      cecho("\n<magenta>*** KILL PHASE - NEEDLE for windpipe! ***")
+    else
+      cecho("\n<green>*** DISPATCH READY! ***")
+    end
+  elseif phase == "dispatch" then
+    cecho("\n<green>*** DISPATCH NOW! ***")
+  end
 
   -- Safety check
   if not target or target == "" then
@@ -494,12 +608,17 @@ function shikudov2.status()
   local kata = ataxia.vitals.kata or 0
   local maxKata = shikudov2.maxKata[form] or 12
   local focusLeg = shikudov2.getFocusLeg()
+  local phase = shikudov2.getPhase()
+  local phaseLabel = shikudov2.getPhaseLabel()
+  local kai = shikudov2.getKai()
 
   cecho("\n<magenta>+============================================+")
   cecho("\n<magenta>|         <white>SHIKUDO V2 STATUS<magenta>                 |")
   cecho("\n<magenta>+============================================+")
+  cecho("\n<magenta>| <white>Phase: " .. phaseLabel .. "<magenta>")
   cecho("\n<magenta>| <white>Target: <yellow>" .. tostring(target or "None") .. "<magenta>")
   cecho("\n<magenta>| <white>Form: <green>" .. form .. " <grey>(" .. kata .. "/" .. maxKata .. " kata)<magenta>")
+  cecho("\n<magenta>| <white>Kai: " .. (kai >= 31 and "<green>" or "<yellow>") .. kai .. " <grey>(31 for KAI SURGE)<magenta>")
   cecho("\n<magenta>| <white>Focus Leg: <cyan>" .. focusLeg .. "<magenta>")
   cecho("\n<magenta>+--------------------------------------------+")
   cecho("\n<magenta>| <white>AFFLICTIONS (V2 Priority):<magenta>")
@@ -507,24 +626,41 @@ function shikudov2.status()
   cecho("\n<magenta>|   <white>Paralysis: " .. (tAffs.paralysis and "<green>YES" or "<yellow>NO"))
   cecho("\n<magenta>+--------------------------------------------+")
   cecho("\n<magenta>| <white>LIMB DAMAGE (Focus Fire):<magenta>")
-  cecho("\n<magenta>|   <white>L Leg: " .. (tLimbs.LL >= 100 and "<green>BROKEN " or (tLimbs.LL >= 70 and "<yellow>" or "<red>")) .. string.format("%.1f%%", tLimbs.LL) .. (focusLeg == "left" and " <cyan><--FOCUS" or ""))
-  cecho("\n<magenta>|   <white>R Leg: " .. (tLimbs.RL >= 100 and "<green>BROKEN " or (tLimbs.RL >= 70 and "<yellow>" or "<red>")) .. string.format("%.1f%%", tLimbs.RL) .. (focusLeg == "right" and " <cyan><--FOCUS" or ""))
-  cecho("\n<magenta>|   <white>Head: " .. (tLimbs.H >= 100 and "<green>DAMAGED " or (tLimbs.H >= 70 and "<yellow>" or "<red>")) .. string.format("%.1f%%", tLimbs.H) .. " <grey>(need 100%/damaged, then SPINKICK mangles)")
+
+  -- Left leg with prediction
+  local llColor = tLimbs.LL >= 100 and "<green>BROKEN " or (tLimbs.LL >= 70 and "<yellow>" or "<red>")
+  local llFocus = focusLeg == "left" and " <cyan><--FOCUS" or ""
+  local llPredict = ""
+  if focusLeg == "left" and shikudov2.checkWillBreakLeg() then
+    llPredict = " <blue>(BREAKS NEXT!)"
+  end
+  cecho("\n<magenta>|   <white>L Leg: " .. llColor .. string.format("%.1f%%", tLimbs.LL) .. llFocus .. llPredict)
+
+  -- Right leg with prediction
+  local rlColor = tLimbs.RL >= 100 and "<green>BROKEN " or (tLimbs.RL >= 70 and "<yellow>" or "<red>")
+  local rlFocus = focusLeg == "right" and " <cyan><--FOCUS" or ""
+  local rlPredict = ""
+  if focusLeg == "right" and shikudov2.checkWillBreakLeg() then
+    rlPredict = " <blue>(BREAKS NEXT!)"
+  end
+  cecho("\n<magenta>|   <white>R Leg: " .. rlColor .. string.format("%.1f%%", tLimbs.RL) .. rlFocus .. rlPredict)
+
+  cecho("\n<magenta>|   <white>Head: " .. (tLimbs.H >= 100 and "<green>DAMAGED " or (tLimbs.H >= 70 and "<yellow>" or "<red>")) .. string.format("%.1f%%", tLimbs.H) .. " <grey>(need 100%/damaged)")
   cecho("\n<magenta>+--------------------------------------------+")
   cecho("\n<magenta>| <white>KILL CONDITIONS:<magenta>")
-  cecho("\n<magenta>|   <white>Prone: " .. (tAffs.prone and "<green>YES" or "<red>NO"))
+  cecho("\n<magenta>|   <white>Prone: " .. (tAffs.prone and "<green>YES" or "<red>NO") .. (shikudov2.canKaiSurge() and " <grey>(KAI SURGE ready)" or ""))
   cecho("\n<magenta>|   <white>Leg Broken (ONE): " .. ((tLimbs.LL >= 100 or tLimbs.RL >= 100) and "<green>YES" or "<red>NO"))
   cecho("\n<magenta>|   <white>Head Damaged: " .. ((tLimbs.H >= 100 or tAffs.damagedhead) and "<green>YES (SPINKICK -> mangle)" or "<yellow>NO (need 100%)"))
   cecho("\n<magenta>|   <white>Windpipe: " .. ((tAffs.damagedwindpipe or tAffs.crushedthroat) and "<green>YES" or "<red>NO"))
   cecho("\n<magenta>|   <white>DISPATCH READY: " .. (shikudov2.checkDispatchReady() and "<green>*** YES ***" or "<red>NO"))
   cecho("\n<magenta>+--------------------------------------------+")
   cecho("\n<magenta>| <white>V2 STRATEGY:<magenta>")
-  cecho("\n<magenta>|   <grey>1. Clumsy FIRST (ruku)")
-  cecho("\n<magenta>|   <grey>2. Paralysis (nervestrike)")
-  cecho("\n<magenta>|   <grey>3. Focus fire ONE leg to 100%")
-  cecho("\n<magenta>|   <grey>4. SWEEP + FLASHHEEL (prone + break)")
-  cecho("\n<magenta>|   <grey>5. NEEDLE + SPINKICK (windpipe + instant mangle)")
-  cecho("\n<magenta>|   <grey>6. DISPATCH")
+  cecho("\n<magenta>|   " .. (phase == "prep" and "<cyan>>" or "<grey>") .. " 1. Clumsy FIRST (ruku)")
+  cecho("\n<magenta>|   " .. (phase == "prep" and "<cyan>>" or "<grey>") .. " 2. Paralysis (nervestrike)")
+  cecho("\n<magenta>|   " .. (phase == "prep" and "<cyan>>" or "<grey>") .. " 3. Focus fire ONE leg to 100%")
+  cecho("\n<magenta>|   " .. (phase == "prone" and "<cyan>>" or "<grey>") .. " 4. SWEEP + FLASHHEEL (prone + break)")
+  cecho("\n<magenta>|   " .. (phase == "kill" and "<cyan>>" or "<grey>") .. " 5. NEEDLE + SPINKICK (windpipe + mangle)")
+  cecho("\n<magenta>|   " .. (phase == "dispatch" and "<cyan>>" or "<grey>") .. " 6. DISPATCH")
   cecho("\n<magenta>+============================================+\n")
 end
 
