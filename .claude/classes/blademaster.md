@@ -652,6 +652,26 @@ The hamstring trigger (002_Hamstring.lua) calls `blademaster.onHamstringApplied(
 
 ## Changelog
 
+### 2026-01-02 - Mount-Aware Dismount & Brokenstar Prone Fix
+
+**Files Modified:**
+- `005_CC_BM_Ice.lua` - Main dispatch
+
+**Bug Fixes:**
+
+1. **Mount-Aware Dismount** - Added dismount logic before double-break
+   - KNEES on mounted target DISMOUNTS instead of PRONING
+   - When mounted + hamstring + final prep hit → use KNEES to dismount first
+   - Then KNEES on double-break will properly prone the target
+   - Added status message: "*** DISMOUNT - KNEES to dismount before double-break! ***"
+   - Applied to both `selectStrikeDoublePrep()` and `selectStrikeBrokenstar()`
+
+2. **Brokenstar KNEES Missing** - Fixed brokenstar route not proning target
+   - `selectStrikeBrokenstar()` was returning `nil` for leg_break phase → now returns "knees"
+   - `buildComboBrokenstar()` wasn't appending strike for leg_break phase → now appends strike
+   - Target dodged impale because they weren't prone
+   - Command now outputs: `infuse ice;legslash <target> <leg> knees`
+
 ### 2024-12-30 - Bug Fixes and Improvements
 
 **Files Modified:**
