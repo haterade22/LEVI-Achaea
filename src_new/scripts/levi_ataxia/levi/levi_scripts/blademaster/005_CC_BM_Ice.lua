@@ -1039,14 +1039,18 @@ end
 function blademaster.selectStrikeBrokenstar()
   local phase = blademaster.getPhaseBrokenstar()
 
-  -- Prep phases: Standard prep strikes
-  if phase == "leg_prep" then
-    return blademaster.selectPrepStrike()
+  -- LEG BREAK: KNEES for prone (critical - need prone for guaranteed impale!)
+  if phase == "leg_break" then
+    return "knees"
   end
 
-  -- Break phase: No strike (need both legs to break)
-  if phase == "leg_break" then
-    return nil
+  -- LEG PREP: Check if we need to dismount before double-break
+  if phase == "leg_prep" then
+    -- Dismount during final prep hit if mounted + hamstrung
+    if tmounted and tAffs.hamstring and blademaster.checkWillPrepBothLegs() then
+      return "knees"  -- Dismount now, so KNEES on double-break will prone
+    end
+    return blademaster.selectPrepStrike()
   end
 
   -- Impale phases and beyond: No strike needed
@@ -1106,10 +1110,13 @@ function blademaster.buildComboBrokenstar()
     end
 
   elseif phase == "leg_break" then
-    -- Ice infuse for break
+    -- Ice infuse for break + KNEES to prone
     combo = "infuse ice;"
     local focusLeg = blademaster.getFocusLeg()
     combo = combo .. "legslash " .. target .. " " .. focusLeg
+    if strike then
+      combo = combo .. " " .. strike
+    end
 
   elseif phase == "impale1" then
     -- First impale
@@ -1169,12 +1176,17 @@ function blademaster.dispatch.runBrokenstar()
   if phase == "leg_prep" then
     local legPath = blademaster.calculateLegPath()
     if blademaster.checkWillPrepBothLegs() then
-      cecho("\n<blue>*** FINAL PREP - ICE infuse to strip caloric! ***")
+      -- Check if dismounting mounted target
+      if tmounted and tAffs.hamstring then
+        cecho("\n<magenta>*** DISMOUNT - KNEES to dismount before double-break! ***")
+      else
+        cecho("\n<blue>*** FINAL PREP - ICE infuse to strip caloric! ***")
+      end
     elseif legPath.hitsToDouble > 0 then
       cecho("\n<yellow>" .. legPath.explanation)
     end
   elseif phase == "leg_break" then
-    cecho("\n<blue>*** LEG BREAK - Double-break legs! ***")
+    cecho("\n<blue>*** LEG BREAK - Double-break legs + KNEES to prone! ***")
   elseif phase == "impale1" then
     cecho("\n<cyan>*** IMPALE - First impale! ***")
   elseif phase == "impaleslash" then
