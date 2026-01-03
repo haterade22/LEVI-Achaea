@@ -315,12 +315,60 @@ end
 end
 
 function Algedonic.AntiOccultist()
-  if ataxia.afflictions.asthma and ataxia.afflictions.aeon then
+  local hasAsthma = ataxia.afflictions.asthma
+  local hasAeon = ataxia.afflictions.aeon
+  local hasParalysis = ataxia.afflictions.paralysis
+  local hasSlickness = ataxia.afflictions.slickness
+  local hasAnorexia = ataxia.afflictions.anorexia
+  local hasWhisperingmadness = ataxia.afflictions.whisperingmadness
+  local hasImpatience = ataxia.afflictions.impatience
+  local hasProne = ataxia.afflictions.prone or tAffs.prone
+  local kelpStack = Algedonic.mystack["kelp"] or 0
+
+  -- PRIORITY 1: AEON - Must cure asthma to smoke elm
+  if hasAeon and hasAsthma then
+    Algedonic.Echo("<red>AEON + ASTHMA - Digging for asthma to smoke elm!<white>")
     send("curing prioaff asthma")
-  elseif ataxia.afflictions.asthma and not ataxia.afflictions.paralysis then
+    return
+  end
+
+  -- PRIORITY 2: Paralysis + Slickness + Prone = stuck, need endure
+  if hasProne and hasParalysis and hasSlickness then
+    Algedonic.Echo("<yellow>STUCK - Endure + para priority!<white>")
+    send("endure")
+    send("curing prioaff paralysis")
+    return
+  end
+
+  -- PRIORITY 3: Asthma lock developing (asthma + slickness + impatience/anorexia)
+  if hasAsthma and hasSlickness and (hasImpatience or hasAnorexia) then
+    if kelpStack >= 2 then
+      Algedonic.Echo("<orange>LOCK DEVELOPING - Digging for asthma!<white>")
+      send("curing prioaff asthma")
+    else
+      -- Low kelp, try slickness first
+      send("curing prioaff slickness")
+    end
+    return
+  end
+
+  -- PRIORITY 4: Asthma alone (blocks smoking elm for aeon cure)
+  if hasAsthma and not hasParalysis then
     send("curing prioaff asthma")
-  elseif not ataxia.afflictions.asthma and not ataxia.afflictions.paralysis and ataxia.afflictions.whisperingmadness then
+    return
+  end
+
+  -- PRIORITY 5: Whisperingmadness (from bubonis) - smoke cure
+  if hasWhisperingmadness and not hasAsthma and not hasParalysis then
     send("curing prioaff whisperingmadness")
+    return
+  end
+
+  -- PRIORITY 6: Heavy paralysis spam - enable endure when para + slick
+  if hasParalysis and hasSlickness then
+    send("endure")
+    send("curing prioaff paralysis")
+    return
   end
 end
    
