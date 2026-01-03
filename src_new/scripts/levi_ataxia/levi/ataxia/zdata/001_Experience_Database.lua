@@ -95,7 +95,7 @@ function zData.db.showData(sortWith, sortStyle, sortDirection)           -- This
     zData.buildHunter()
   end
   zData.db.localDB = {}                                   -- This is the table for sorting and display database results
-  local maxShow = 100                     ------<--<--<--<--< Max number of results to show unless ALL is used. Increase to see more (Over 200 will not allow deleting)
+  local maxShow = 10                      ------<--<--<--<--< Max number of results to show unless ALL is used. Increase to see more (Over 200 will not allow deleting)
   local titleColor = "gold" 
   local menuColor = "purple" 
   local areaColor = "ansiMagenta"
