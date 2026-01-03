@@ -29,6 +29,7 @@ db:create("exp_db",
       "time",
       "epm",
       "exp",
+      "rawexp",
       "kill",
       "kpm",
       "gold",
@@ -56,10 +57,10 @@ zData.db.expdb = db:get_database("exp_db")           -- This assigns the databas
 --  Add a new records: zData.db.zoneAdd(stuff) --
 --                                             --
 -------------------------------------------------
-function zData.db.zoneAdd(area, class, boost, critpercent, time, epm, exp, kill, kpm, gold, gpm, str, dex, int, con, attacks, crits, crits1, crits2, crits3, crits4, crits5, crits6, soa, soaparagon, glyph, maya, tali, killlist, talilist, when)
+function zData.db.zoneAdd(area, class, boost, critpercent, time, epm, exp, rawexp, kill, kpm, gold, gpm, str, dex, int, con, attacks, crits, crits1, crits2, crits3, crits4, crits5, crits6, soa, soaparagon, glyph, maya, tali, killlist, talilist, when)
   db:add(zData.db.expdb.zones,{
     area=area, class=class, boost=boost, critpercent=critpercent, 
-    time=time, epm=epm, exp=exp, kill=kill, kpm=kpm, gold=gold, gpm=gpm, 
+    time=time, epm=epm, exp=exp, rawexp=rawexp, kill=kill, kpm=kpm, gold=gold, gpm=gpm, 
     str=str, dex=dex, int=int, con=con, 
     attacks=attacks, crits=crits, crits1=crits1, crits2=crits2, crits3=crits3, crits4=crits4, crits5=crits5, crits6=crits6, 
     soa=soa, soaparagon=soaparagon, glyph=glyph, maya=maya, 
@@ -104,6 +105,7 @@ function zData.db.showData(sortWith, sortStyle, sortDirection)           -- This
   local killColor = "ansiMagenta"
   local kpmColor = "ansiMagenta"
   local expColor = "ansiMagenta"
+  local rawexpColor = "ansiMagenta"
   local epmColor = "ansiMagenta"
   local gpmColor = "ansiMagenta"
   local goldColor = "ansiMagenta"
@@ -139,12 +141,13 @@ function zData.db.showData(sortWith, sortStyle, sortDirection)           -- This
           .. " <"..killColor..">"..string.cut(string.cut(row.kill,4).."     ", 6)
           ..  " <"..kpmColor..">"..string.cut(string.cut(row.kpm,4).."     ", 6)
           ..  " <"..expColor..">"..string.cut(string.cut(row.exp,4).."     ", 6)
+          ..  " <"..rawexpColor..">"..string.cut(string.cut(row.rawexp or 0,6).."       ", 8)
           ..  " <"..epmColor..">"..string.cut(string.cut(row.epm,5).."      ", 7)
-          ..  " <"..gpmColor..">"..string.cut(string.cut(math.floor(row.gpm),6).."       ", 8) 
+          ..  " <"..gpmColor..">"..string.cut(string.cut(math.floor(row.gpm),6).."       ", 8)
           .. " <"..goldColor..">"..string.cut(row.gold .."      ", 7),
-        ---------------------------------------------------------------------------------  
+        ---------------------------------------------------------------------------------
           [[zData.db.clickback(]].._..[[)]], [[]], true)                               -- What to do when clicked on
-        --------------------------------------------------------------------------------- 
+        ---------------------------------------------------------------------------------
       end --- End of for _,row
     else
       for _, row in spairs(zData.db.localDB, function(t,a,b) return tonumber(t[a][thisChart]) > tonumber(t[b][thisChart]) end) do    
@@ -165,7 +168,7 @@ function zData.db.showData(sortWith, sortStyle, sortDirection)           -- This
           end
         end
 --------------------------- Display Each Row From The Database, Clickable For More Information
-        cechoLink("hunterDisplay", 
+        cechoLink("hunterDisplay",
           "\n  <"..areaColor..">"..string.cut(row.area.."                   ", 20)
           .." <"..classColor..">"..string.cut(row.class.."            ", 13)
           .. " <"..taliColor..">"..string.cut(string.cut(row.tali,2).."   ", 4)
@@ -173,12 +176,13 @@ function zData.db.showData(sortWith, sortStyle, sortDirection)           -- This
           .. " <"..killColor..">"..string.cut(string.cut(row.kill,4).."     ", 6)
           ..  " <"..kpmColor..">"..string.cut(string.cut(row.kpm,4).."     ", 6)
           ..  " <"..expColor..">"..string.cut(string.cut(row.exp,4).."     ", 6)
+          ..  " <"..rawexpColor..">"..string.cut(string.cut(row.rawexp or 0,6).."       ", 8)
           ..  " <"..epmColor..">"..string.cut(string.cut(row.epm,5).."      ", 7)
-          ..  " <"..gpmColor..">"..string.cut(string.cut(math.floor(row.gpm),6).."       ", 8) 
+          ..  " <"..gpmColor..">"..string.cut(string.cut(math.floor(row.gpm),6).."       ", 8)
           .. " <"..goldColor..">"..string.cut(row.gold .."      ", 7),
-        ---------------------------------------------------------------------------------  
+        ---------------------------------------------------------------------------------
           [[zData.db.clickback(]].._..[[)]], [[]], true)                               -- What to do when clicked on
-        --------------------------------------------------------------------------------- 
+        ---------------------------------------------------------------------------------
       end --- End of for _,row
     end
   end --- End of local function showCharts()
@@ -196,7 +200,7 @@ function zData.db.showData(sortWith, sortStyle, sortDirection)           -- This
 --------------------------- Blackout 0 talisman counts        
         if tonumber(row.tali) < 1 then taliColor = "black:black" else taliColor = "ansiMagenta" end
 --------------------------- Display Each Row From The Database, Clickable For More Information
-        cechoLink("hunterDisplay", 
+        cechoLink("hunterDisplay",
           "<"..areaColor..">"..string.cut(row.area.."                   ", 20)
           .." <"..classColor..">"..string.cut(row.class.."            ", 13)
           .. " <"..taliColor..">"..string.cut(string.cut(row.tali,2).."   ", 4)
@@ -204,17 +208,18 @@ function zData.db.showData(sortWith, sortStyle, sortDirection)           -- This
           .. " <"..killColor..">"..string.cut(string.cut(row.kill,4).."     ", 6)
           ..  " <"..kpmColor..">"..string.cut(string.cut(row.kpm,4).."     ", 6)
           ..  " <"..expColor..">"..string.cut(string.cut(row.exp,4).."     ", 6)
+          ..  " <"..rawexpColor..">"..string.cut(string.cut(row.rawexp or 0,6).."       ", 8)
           ..  " <"..epmColor..">"..string.cut(string.cut(row.epm,5).."      ", 7)
-          ..  " <"..gpmColor..">"..string.cut(string.cut(math.floor(row.gpm),6).."       ", 8) 
+          ..  " <"..gpmColor..">"..string.cut(string.cut(math.floor(row.gpm),6).."       ", 8)
           .. " <"..goldColor..">"..string.cut(row.gold .."      ", 7),
-        ---------------------------------------------------------------------------------  
+        ---------------------------------------------------------------------------------
           [[zData.db.clickback(]].._..[[)]], [[]], true)                               -- What to do when clicked on
-        --------------------------------------------------------------------------------- 
+        ---------------------------------------------------------------------------------
       end --- End of for _,row
     end
-  end --- End of local function showCharts()
+  end --- End of local function showLast()
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  
+
 -------------------------- Search For sortWith (First level sort: class name / all / area random
   if sortWith then
     if string.lower(sortWith) == "all" or
@@ -223,6 +228,7 @@ function zData.db.showData(sortWith, sortStyle, sortDirection)           -- This
        string.lower(sortWith) == "kill" or 
        string.lower(sortWith) == "kpm" or
        string.lower(sortWith) == "exp" or
+       string.lower(sortWith) == "rawexp" or
        string.lower(sortWith) == "epm" or
        string.lower(sortWith) == "gold" or
        string.lower(sortWith) == "gpm"
@@ -262,6 +268,7 @@ function zData.db.showData(sortWith, sortStyle, sortDirection)           -- This
     cechoLink("hunterDisplay","   <"..menuColor..">Kill", [[zData.db.showData("kill")]], [[]], true)
     cechoLink("hunterDisplay","   <"..menuColor..">KPM", [[zData.db.showData("kpm")]], [[]], true)
     cechoLink("hunterDisplay","    <"..menuColor..">Exp", [[zData.db.showData("exp")]], [[]], true)
+    cechoLink("hunterDisplay","   <"..menuColor..">RawXP", [[zData.db.showData("rawexp")]], [[]], true)
     cechoLink("hunterDisplay","     <"..menuColor..">EPM", [[zData.db.showData("epm")]], [[]], true)
     cechoLink("hunterDisplay","    <"..menuColor..">GPM", [[zData.db.showData("gpm")]], [[]], true)
     cechoLink("hunterDisplay","      <"..menuColor..">Gold", [[zData.db.showData("gold")]], [[]], true) 
@@ -270,7 +277,10 @@ function zData.db.showData(sortWith, sortStyle, sortDirection)           -- This
       showCharts("exp", "expColor") 
     elseif (sortStyle and string.lower(sortStyle) == "exp") or (sortWith and string.lower(sortWith) == "exp") then
       expColor = "gold"
-      showCharts("exp", "expColor")  
+      showCharts("exp", "expColor")
+    elseif (sortStyle and string.lower(sortStyle) == "rawexp") or (sortWith and string.lower(sortWith) == "rawexp") then
+      rawexpColor = "gold"
+      showCharts("rawexp", "rawexpColor")
     elseif (sortStyle and string.lower(sortStyle) == "epm") or (sortWith and string.lower(sortWith) == "epm") then
       epmColor = "gold"
       showCharts("epm", "epmColor")  
@@ -302,6 +312,7 @@ function zData.db.showData(sortWith, sortStyle, sortDirection)           -- This
     cechoLink("hunterDisplay","   <"..menuColor..">Kill", [[zData.db.showData("kill", nil, "down")]], [[]], true)
     cechoLink("hunterDisplay","   <"..menuColor..">KPM", [[zData.db.showData("kpm", nil, "down")]], [[]], true)
     cechoLink("hunterDisplay","    <"..menuColor..">Exp", [[zData.db.showData("exp", nil, "down")]], [[]], true)
+    cechoLink("hunterDisplay","   <"..menuColor..">RawXP", [[zData.db.showData("rawexp", nil, "down")]], [[]], true)
     cechoLink("hunterDisplay","     <"..menuColor..">EPM", [[zData.db.showData("epm", nil, "down")]], [[]], true)
     cechoLink("hunterDisplay","    <"..menuColor..">GPM", [[zData.db.showData("gpm", nil, "down")]], [[]], true)
     cechoLink("hunterDisplay","      <"..menuColor..">Gold", [[zData.db.showData("gold", nil, "down")]], [[]], true)  
@@ -336,6 +347,7 @@ function zData.db.clickback(thisRow)
   cecho("hunterDisplay","\n  <purple>Hunting in the Zone: <gold>"..zData.db.localDB[thisRow].area)
   cecho("hunterDisplay","\n  <purple>Time Spent: <ansiMagenta>"..string.cut((zData.db.localDB[thisRow].time/60),4).." minutes")
   cecho("hunterDisplay","\n  <purple>Experience: <ansiMagenta>"..zData.db.localDB[thisRow].exp)
+  cecho("hunterDisplay","\n  <purple>Raw Experience: <gold>"..(zData.db.localDB[thisRow].rawexp or 0))
   cecho("hunterDisplay","\n  <purple>Experience Modifier: <ansiMagenta>"..zData.db.localDB[thisRow].boost.."\%\n")
   cecho("hunterDisplay","\n  <purple>Stats: <ansiMagenta>Str: <gold>"..zData.db.localDB[thisRow].str.." <ansiMagenta>Dex: <gold>"..zData.db.localDB[thisRow].dex.." <ansiMagenta>Int: <gold>"..zData.db.localDB[thisRow].int.." <ansiMagenta>Con: <gold>"..zData.db.localDB[thisRow].con.."\n")
   cecho("hunterDisplay","\n     <purple>Critical Hit Chance: <ansiMagenta>"..zData.db.localDB[thisRow].critpercent.."\%")
