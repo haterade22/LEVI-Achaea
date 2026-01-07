@@ -14,6 +14,24 @@ attributes:
 packageName: ''
 ]]--
 
+-- Detect channel from message text when GMCP reports "says"
+local function detectChannelFromText(text)
+  -- City channels - check for (CityName): pattern
+  local cities = {"Mhaldor", "Ashtan", "Cyrene", "Eleusis", "Hashan", "Targossas"}
+  for _, city in ipairs(cities) do
+    if text:match("%(" .. city .. "%)") then
+      return "City"
+    end
+  end
+
+  -- Party channel
+  if text:match("%(Party%)") then
+    return "Party"
+  end
+
+  return nil
+end
+
 function zgui.showChat()
   local shortName = ""
   local chatWindow = false
@@ -44,20 +62,32 @@ function zgui.showChat()
 
   for chan, wind in pairs(chatChannels) do
     if string.starts(gmcp.Comm.Channel.Start, chan) then
-      chatWindow = wind 
+      chatWindow = wind
       break
     end
   end
+
+  -- Override for "says" - check if it's actually a city/party tell based on text
+  local detectedFromText = false
+  if gmcp.Comm.Channel.Start == "says" then
+    local detectedChannel = detectChannelFromText(gmcp.Comm.Channel.Text.text)
+    if detectedChannel then
+      chatWindow = detectedChannel
+      detectedFromText = true
+    end
+  end
+
   if not chatWindow then chatWindow = "Misc" end
 
-	
-	if person == "The guardian spirit of the totem" then 
+
+	if person == "The guardian spirit of the totem" then
 		only_to_misc = false
 		return
 	end
   local report = false
-  
-  if ataxiaNDB_Exists(person) or table.contains(ataxiaNDB.divine, person) or gmcp.Comm.Channel.Start == "shout" or person == "You" then
+
+  -- Always report city/party channel messages detected from text (NPCs like Weltar)
+  if detectedFromText or ataxiaNDB_Exists(person) or table.contains(ataxiaNDB.divine, person) or gmcp.Comm.Channel.Start == "shout" or person == "You" then
     report = true
   end
   

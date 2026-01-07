@@ -13,6 +13,24 @@ attributes:
 packageName: ''
 ]]--
 
+-- Detect channel from message text when GMCP reports "says"
+local function detectChannelFromText(text)
+  -- City channels - check for (CityName): pattern
+  local cities = {"Mhaldor", "Ashtan", "Cyrene", "Eleusis", "Hashan", "Targossas"}
+  for _, city in ipairs(cities) do
+    if text:match("%(" .. city .. "%)") then
+      return "City"
+    end
+  end
+
+  -- Party channel
+  if text:match("%(Party%)") then
+    return "Party"
+  end
+
+  return nil
+end
+
 function ataxiagui_populateChannels()
   if ataxia.usegui == true or ataxia.usegui == nil then
     ataxiagui.Chat.Channels = ataxiagui.Chat.Channels or {}
@@ -46,7 +64,8 @@ function ataxiagui_processChat(channel)
 		return
 	end
   local report = false
-  if ataxiaNDB_Exists(person) or table.contains(ataxiaNDB.divine, person) or gmcp.Comm.Channel.Start == "shout" or person == "You" then
+  -- Always report city/party channel messages detected from text (NPCs like Weltar)
+  if ataxiagui.Chat.Channels.detectedFromText or ataxiaNDB_Exists(person) or table.contains(ataxiaNDB.divine, person) or gmcp.Comm.Channel.Start == "shout" or person == "You" then
     report = true
   end
   
@@ -93,7 +112,17 @@ function ataxiagui_captureChat()
 			break
 		end
 	end
-  
+
+	-- Override for "says" - check if it's actually a city/party tell based on text
+	ataxiagui.Chat.Channels.detectedFromText = false
+	if ch == "says" then
+		local detectedChannel = detectChannelFromText(gmcp.Comm.Channel.Text.text)
+		if detectedChannel then
+			ataxiagui.Chat.Channels.last = detectedChannel
+			ataxiagui.Chat.Channels.detectedFromText = true
+		end
+	end
+
 	if t == "Tells" and not muteList[ataxiagui.Chat.Channels.talker] and ataxiagui.Chat.Channels.talker ~= "You" then 
     ataxiaBasher_alert("Normal") 
   end
