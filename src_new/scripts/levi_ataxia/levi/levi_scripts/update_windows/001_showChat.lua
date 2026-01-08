@@ -86,8 +86,18 @@ function zgui.showChat()
 	end
   local report = false
 
-  -- Always report city/party channel messages detected from text (NPCs like Weltar)
-  if detectedFromText or ataxiaNDB_Exists(person) or table.contains(ataxiaNDB.divine, person) or gmcp.Comm.Channel.Start == "shout" or person == "You" then
+  -- Always report direct channel messages (ct, ht, ot, tells, etc.)
+  -- Only filter ambient "says" messages based on database
+  local alwaysShowChannels = {"ct", "ht", "hts", "hnt", "ot", "clt", "party", "tell", "market", "armytell", "newbie", "shout", "yell"}
+  local isDirectChannel = false
+  for _, chan in ipairs(alwaysShowChannels) do
+    if string.starts(gmcp.Comm.Channel.Start, chan) then
+      isDirectChannel = true
+      break
+    end
+  end
+
+  if isDirectChannel or detectedFromText or ataxiaNDB_Exists(person) or table.contains(ataxiaNDB.divine, person) or person == "You" then
     report = true
   end
   
