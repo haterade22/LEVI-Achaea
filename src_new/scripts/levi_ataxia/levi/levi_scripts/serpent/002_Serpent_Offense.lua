@@ -1252,6 +1252,98 @@ if tempAlias then
 end
 
 -- =============================================================================
+-- TRIGGER REGISTRATION
+-- =============================================================================
+
+-- Kill existing serpent triggers to avoid duplicates
+if serpent.triggers then
+    for _, triggerId in pairs(serpent.triggers) do
+        if killTrigger then killTrigger(triggerId) end
+    end
+end
+serpent.triggers = {}
+
+-- Register triggers programmatically (no separate trigger files needed)
+if tempRegexTrigger then
+    -- Hypnosis Starting
+    serpent.triggers.hypnosisStart = tempRegexTrigger(
+        "^You prepare yourself to hypnotise your victim, (\\w+)\\.$",
+        [[
+            tAffs.hypnotising = true
+            tAffs.hypnoseal = false
+            ataxiaTemp.hypnoseal = false
+            if serpent and serpent.hypnosis and serpent.hypnosis.start then
+                serpent.hypnosis.start(matches[2])
+            end
+        ]]
+    )
+
+    -- Hypnotised Success
+    serpent.triggers.hypnotised = tempRegexTrigger(
+        "You fix (\\w+) with an entrancing stare, and smile in satisfaction as you realise that \\w+ mind is yours\\.",
+        [[
+            tAffs.hypnotising = nil
+            tAffs.hypnotised = true
+            tAffs.hypnoseal = false
+            ataxiaTemp.hypnoseal = false
+            if serpent and serpent.hypnosis and serpent.hypnosis.onHypnotised then
+                serpent.hypnosis.onHypnotised()
+            end
+        ]]
+    )
+
+    -- Snapped
+    serpent.triggers.snapped = tempRegexTrigger(
+        "^You snap your fingers in front of (\\w+)\\.$",
+        [[
+            tAffs.hypnotising = false
+            tAffs.hypnotised = false
+            tAffs.snapped = true
+            tAffs.hypnoseal = false
+            ataxiaTemp.hypnoseal = false
+            serpentsuggest = false
+            tempTimer(3, function() tAffs.snapped = false; ataxiaTemp.suggestions = nil end)
+            snapTarget = false
+            if serpent and serpent.hypnosis and serpent.hypnosis.onSnapped then
+                serpent.hypnosis.onSnapped()
+            end
+        ]]
+    )
+
+    -- Suggest Given
+    serpent.triggers.suggestGiven = tempRegexTrigger(
+        "^You issue the suggestion, concealing it deep within (\\w+)'s mind\\.$",
+        [[
+            serpentsuggest = true
+            if serpent and serpent.hypnosis and serpent.hypnosis.onSuggested then
+                local suggestion = ataxiaTemp.suggestAff or "unknown"
+                serpent.hypnosis.onSuggested(suggestion)
+            end
+        ]]
+    )
+
+    -- Suggest Already Present
+    serpent.triggers.suggestAlready = tempRegexTrigger(
+        "^(\\w+)'s mind is already holding something quite similar to that suggestion\\.$",
+        [[
+            serpentsuggest = true
+        ]]
+    )
+
+    -- Fratricide Cured
+    serpent.triggers.fratricideCured = tempRegexTrigger(
+        "The look of madness fades from (\\w+)'s eyes",
+        [[
+            if erAff then erAff("fratricide") end
+            tAffs.fratricide = false
+            if serpent and serpent.hypnosis and serpent.hypnosis.onFratricideCured then
+                serpent.hypnosis.onFratricideCured()
+            end
+        ]]
+    )
+end
+
+-- =============================================================================
 -- INITIALIZATION MESSAGE
 -- =============================================================================
 
