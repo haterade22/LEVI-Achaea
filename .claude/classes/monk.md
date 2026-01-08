@@ -651,6 +651,173 @@ current_system:
       reason: "No special affliction ordering needed"
 ```
 
+## Advanced Shikudo Combat Strategies (Mystor's Insights)
+
+### Fighting Momentum Classes
+```yaml
+principle: "Hit and run, slow prep"
+strategy:
+  - "Don't sit in combat against momentum classes (Serpents, DW)"
+  - "Run when they have ~3 afflictions on you"
+  - "Stay within kata fall off timer"
+  - "Super fast momentum classes are the biggest threat"
+  - "Time is everything - manage your windows carefully"
+
+mounted_counter:
+  problem: "Mounted stops frontkick and many monk abilities"
+  solution: "Use KAI SURGE to dismount"
+  note: "Kai surge is faster in Rain stance"
+```
+
+### Kata Double-Up Strategy (9/10 Kata)
+```yaml
+goal: "Achieve 9/10 kata for double up on kuro and ruku"
+execution:
+  1: "Build to 9-10 kata"
+  2: "Use double kuro + ruku combo for max affliction burst"
+  3: "Swap immediately after burst"
+  4: "Use the aff burst to pressure next stance"
+
+benefit: "Massive affliction pressure in single combo window"
+```
+
+### Stance Strategy Flow
+```yaml
+oak_start:
+  description: "Best early hinder"
+  afflictions: [paralysis, clumsiness]
+  reason: "Par and clumsy provide immediate combat pressure"
+
+gaital_transition:
+  description: "Transition into Gaital with strong aff state"
+  entering_with: [clumsiness, healthleech, lethargy, weariness]
+  benefit: "Good continuance because transitioning with strong affliction stack"
+
+rain_strategy:
+  description: "Lose some affliction pressure, gain mind attack options"
+  loses: "Some direct affliction pressure"
+  gains:
+    - "Mind attacks: imp, batter, blackout, illusion"
+    - "Telepathy is SPED UP in Rain"
+    - "Hiru for dizziness (confusion if prone)"
+    - "Easy prone with frontkick"
+    - "Kai surge is faster in Rain"
+
+  hiru_combo:
+    description: "Devastating frontkick hiru combo"
+    execution: "If you beat their herb bal, slip imp in, then frontkick hiru"
+    result: "Prone + dizziness + confusion if prone"
+```
+
+### Blackout Tactics (Rain Stance)
+```yaml
+description: "Blackout is a no-brainer in Rain if not using elsewhere"
+
+hidden_combo:
+  mechanic: "Blackout, then combo 1 time - combo is hidden"
+  effect: "Forces diag or enemy plays defensive"
+  psychology: "Most people assume you're disrupting and concentrate"
+
+things_to_slip_under_blackout:
+  - "Any telepathy attack"
+  - "Any combo available in Rain"
+  - "Strip a defence (if feeling lucky)"
+  - "Confusion via frontkick hiru"
+
+confusion_pressure:
+  combo: "Blackout into frontkick hiru"
+  follow_up: "If they don't cure confusion, slip mind impatience before herb bal"
+  finisher: "Then disrupt - devastating"
+  note: "Confusion extends equilibrium recovery by 100%"
+```
+
+### Riftlock Attempt (Rain Stance)
+```yaml
+setup:
+  requirements:
+    - "9 kata in Rain"
+    - "Both arms prepped"
+
+execution:
+  1: "Blackout"
+  2: "Mind paralyse (stops parry)"
+  3: "Frontkick break 1 arm"
+  4: "Kuro + ruku the other arm and a leg"
+  5: "All done within blackout"
+
+result_state:
+  limbs: "RA2, LA2, RL2"
+  afflictions: [clumsiness, healthleech, weariness, lethargy]
+
+oak_continuation:
+  description: "Transition into Oak with that state"
+  affliction_sequence:
+    1: "Oak gives asthma + slickness"
+    2: "Asthma is kelpstack buried - they can eat mag for slickness but you have perfect info"
+    3: "Follow with paralysis + slickness"
+    4: "Then mind impatience, watch their cures"
+    5: "Transition to Willow or Gaital for finisher"
+```
+
+### Scythe Fork Strategy (Gaital)
+```yaml
+description: "Fork the opponent into choosing between head or leg death"
+
+setup_combo:
+  - "SWEEP RL2 (prone + leg damage)"
+  - "SPINKICK L3H (leg level 3 + crushed throat)"
+  - "Hit LL2 (other leg damage)"
+
+enemy_choices:
+  mending_head:
+    action: "They mending head for crushed throat"
+    counter: "If they restoration leg → transition Rain and get scythe"
+
+  restoration_head:
+    action: "They restoration head level 3"
+    counter: "Needle dispatch available"
+
+  hold_salve:
+    action: "They hold salve"
+    counter: "Mind imp, mind batter on repeat to pressure scythe"
+
+outcome: "They choose head or leg first, or die to scythe"
+```
+
+### Spinkick Head Prep Optimization
+```yaml
+mechanic: "Spinkick to break head instantly elevates to level 3"
+damage_boost: "Does immense damage to head if you drop hyperfocus as you do it"
+oak_synergy: "Head prep is ~60% when starting in Oak"
+hyperfocus_tip: "Drop hyperfocus right before spinkick for max damage"
+```
+
+### Character Build Considerations
+```yaml
+quick_witted:
+  benefit: "Scythe is smoother"
+  drawback: "Makes dispatch harder"
+  recommendation: "Good for scythe-focused play"
+
+strength:
+  mystor_build: "9 strength when Shikudo"
+  note: "Low strength, optimized elsewhere"
+
+artifact_staff:
+  level_1: "Current - Oak start recommended for hindrance"
+  level_3: "Can start Gaital directly"
+  tradeoff: "Gaital start loses Oak hindrance but faster kill route"
+```
+
+### Illusion for Telepathy
+```yaml
+stance: Rain
+description: "Illusion for telepathy is huge - cannot be seen through"
+usage: "Use when losing pressure in Rain anyway"
+timing: "Slip in moments before enemy gets balance to disrupt"
+synergy: "Rain speeds up telepathy, making illusion more viable"
+```
+
 ## Implementation Notes
 ```
 Triggers to watch for:
