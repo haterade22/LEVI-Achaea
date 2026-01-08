@@ -102,9 +102,11 @@ form_strategy:
 kill_method: "Pure damage pressure through staff attacks + Telepathy once truelocked"
 
 implementation:
-  file: "src/ataxia/203_Shikudo_Lock.lua"
-  dispatch: "shikudoLock.dispatch() or shikudolock()"
-  status: "shikudoLock.status() or sklstatus()"
+  file: "010_Shikudo_Offense.lua"
+  mode: "lock"
+  activate: "sklock() or shikudolock()"
+  dispatch: "shikudo.dispatch() (after mode set)"
+  status: "shikudo.status() or skstatus()"
 ```
 
 ### Shikudo Kill: Dispatch (Limb-Based) - PRIMARY
@@ -523,29 +525,55 @@ transition_map:
 
 ## Shikudo Implementation (LEVI System)
 ```yaml
-# Implementation files
-files:
-  # New dispatch system (recommended)
-  006_CC_Shikudo.lua: "Current dispatch with dynamic thresholds"
+# UNIFIED OFFENSE SYSTEM
+# All Shikudo offense modes consolidated into single file
 
-  # Legacy files
-  200_Shikudo.lua: "V1 Dispatch system (both legs 90%+ before sweep)"
-  201_Shikudo_V2.lua: "V2 Dispatch system (focus fire, clumsy first)"
+primary_file: "010_Shikudo_Offense.lua"
+  description: "Unified Shikudo offense with mode selector"
+  includes:
+    - "Dispatch mode (limb-based kill)"
+    - "Lock mode (affliction lock)"
+    - "Riftlock mode (blackout burst + lock - Mystor strategy)"
+    - "Limb damage tracking (from 002_Shikudo_Limb_Counter.lua)"
+    - "Form transition helpers (from 003_Shikudo_Extras.lua)"
 
-  # Core systems
-  002_Shikudo_Limb_Counter.lua: "Limb damage tracking formulas"
-  003_Shikudo_Extras.lua: "Form transition helpers"
+# Legacy files (deprecated - functionality moved to unified file)
+legacy_files:
+  006_CC_Shikudo.lua: "Old dispatch (use 010 instead)"
+  007_CC_Shikudo_Lock.lua: "Old lock (use 010 instead)"
+  008_CC_Shikudo_RiftLock.lua: "Old riftlock (use 010 instead)"
+  002_Shikudo_Limb_Counter.lua: "Old limb counter (integrated into 010)"
+  003_Shikudo_Extras.lua: "Old form helpers (integrated into 010)"
+  200_Shikudo.lua: "V1 Dispatch system (obsolete)"
+  201_Shikudo_V2.lua: "V2 Dispatch system (obsolete)"
 
+# Mode Selection
+mode_system:
+  current_mode: "shikudo.mode"
+  set_mode: "shikudo.setMode(mode)"
+  available_modes: [dispatch, lock, riftlock]
+
+# Quick Commands (mode shortcuts)
+quick_commands:
+  dispatch_mode:
+    - "skdispatch()"
+    - "levishikudodispatch()"
+  lock_mode:
+    - "sklock()"
+    - "shikudolock()"
+  riftlock_mode:
+    - "skriftlock()"
+    - "shikudoriftlock()"
+
+# Common Commands (work in any mode)
 commands:
-  current:
-    attack: "shikudo.dispatch() or levishikudodispatch()"
-    status: "skstatus() or shikudo.status()"
-  v2:
-    attack: "shikudov2.dispatch() or levishikudov2()"
-    status: "skv2status() or shikudov2.status()"
-  lock:
-    attack: "shikudoLock.dispatch() or shikudolock()"
-    status: "shikudoLock.status() or sklstatus()"
+  attack: "shikudo.dispatch()"
+  status: "shikudo.status() or skstatus()"
+  reset: "shikudo.reset()"
+  mode_switch:
+    dispatch: "shikudo.setMode('dispatch')"
+    lock: "shikudo.setMode('lock')"
+    riftlock: "shikudo.setMode('riftlock')"
 
 # Current dispatch system (006_CC_Shikudo.lua)
 current_system:
@@ -757,6 +785,78 @@ oak_continuation:
     3: "Follow with paralysis + slickness"
     4: "Then mind impatience, watch their cures"
     5: "Transition to Willow or Gaital for finisher"
+
+# CRITICAL: Opponent CANNOT SEE what happens during blackout!
+# No combat messages at all - they must DIAGNOSE to know what hit them
+blackout_psychology:
+  - "Opponent sees nothing during blackout"
+  - "Most assume you're just disrupting and CONCENTRATE"
+  - "Meanwhile you've paralyzed them, burst limbs, stacked affs"
+  - "When blackout ends, they're in terrible state with ZERO info"
+  - "They waste time with DIAGNOSE while you transition to Oak"
+```
+
+### Riftlock Implementation (Unified 010_Shikudo_Offense.lua)
+```yaml
+file: "010_Shikudo_Offense.lua"
+mode: "riftlock"
+commands:
+  activate: "skriftlock() or shikudoriftlock()"
+  attack: "shikudo.dispatch() (after mode set)"
+  status: "shikudo.status() or skstatus()"
+  reset: "shikudo.reset()"
+
+phases:
+  OAK_SETUP:
+    description: "Build hindrance (paralysis + clumsiness)"
+    form: Oak
+    attacks: "nervestrike (para), ruku (clumsy)"
+    transition_to: "Willow -> Rain when para+clumsy established"
+
+  RAIN_PREP:
+    description: "Build kata for blackout burst"
+    form: Rain
+    attacks: "kuro (weariness/lethargy), ruku (clumsy), hiru (dizziness)"
+    goal: "Reach 9+ kata with mindlock established"
+    transition_to: "BLACKOUT_BURST when ready"
+
+  BLACKOUT_BURST:
+    description: "Execute the hidden burst combo"
+    form: Rain
+    execution:
+      1: "BLACKOUT (opponent goes blind)"
+      2: "Mind PARALYSE (stops parry - they can't see this!)"
+      3: "Frontkick + Kuro + Ruku burst (all hidden)"
+    transition_to: "Oak for continuation"
+
+  OAK_CONTINUATION:
+    description: "Apply lock afflictions after burst"
+    form: Oak
+    attacks: "livestrike (asthma), ruku torso (slickness), nervestrike (para)"
+    telepathy: "Mind impatience for hardlock"
+    transition_to: "LOCK_PRESSURE when truelocked"
+
+  LOCK_PRESSURE:
+    description: "Pure damage pressure on truelocked target"
+    forms: [Oak, Gaital, Rain]
+    goal: "Kill through sustained damage"
+
+key_functions:
+  isReadyForBurst: "Returns true when in Rain with 9+ kata and mindlock"
+  canBlackout: "Returns true if EQ available and cooldown elapsed"
+  updatePhase: "Automatically detects and updates current phase"
+
+synergies:
+  - "Telepathy is FASTER in Rain stance (EQ balance decrease bonus)"
+  - "Kai Surge is faster in Rain (for mounted targets)"
+  - "Blackout hides ALL combat messages from opponent"
+  - "Frontkick can prone (confusion via hiru if already prone)"
+
+telepathy_rule:
+  critical: "ONLY use Telepathy in RAIN form!"
+  reason: "Rain provides EQ balance decrease bonus - telepathy is faster"
+  exception: "Mindlock can be established in any form (one-time setup)"
+  all_other_telepathy: "blackout, paralyse, impatience, batter - RAIN ONLY"
 ```
 
 ### Scythe Fork Strategy (Gaital)
