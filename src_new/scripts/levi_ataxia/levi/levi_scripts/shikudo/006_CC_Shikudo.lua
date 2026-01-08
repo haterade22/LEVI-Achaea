@@ -532,6 +532,13 @@ function shikudo.selectKick()
 
   elseif form == "Gaital" then
     -- KILL PHASE: Prioritize breaking prepped legs
+    -- Track parry state for flashheel
+    local lastKick = ataxiaTemp.lastFlashheelLeg or "left"
+    local wasParried = ataxiaTemp.flashheelWasParried or false
+
+    -- Clear the parry flag for next combo
+    ataxiaTemp.flashheelWasParried = false
+
     local ll = shikudo.getLimbDamage("left leg")
     local rl = shikudo.getLimbDamage("right leg")
     local leftBroken = ll >= 100
@@ -539,51 +546,93 @@ function shikudo.selectKick()
     local leftPrepped = shikudo.isLegPrepped("left")
     local rightPrepped = shikudo.isLegPrepped("right")
 
+    -- PRIORITY 0: If last flashheel was parried, switch legs
+    if wasParried then
+      if lastKick == "left" then
+        ataxiaTemp.kickTarget = "right leg"
+        ataxiaTemp.lastFlashheelLeg = "right"
+        return "flashheel right"
+      else
+        ataxiaTemp.kickTarget = "left leg"
+        ataxiaTemp.lastFlashheelLeg = "left"
+        return "flashheel left"
+      end
+    end
+
     -- PRIORITY 1: If one leg broken but other prepped, break the prepped leg
     if tAffs.prone then
       if leftBroken and not rightBroken and rightPrepped then
         ataxiaTemp.kickTarget = "right leg"
+        ataxiaTemp.lastFlashheelLeg = "right"
         return "flashheel right"  -- Break right leg!
       elseif rightBroken and not leftBroken and leftPrepped then
         ataxiaTemp.kickTarget = "left leg"
+        ataxiaTemp.lastFlashheelLeg = "left"
         return "flashheel left"  -- Break left leg!
       end
     end
 
     -- PRIORITY 2: Break the PREPPED leg first (higher damage = closer to breaking)
     -- In Gaital, we want to BREAK legs, not prep them
-    if rightPrepped and not rightBroken and parried ~= "right leg" then
+    if rightPrepped and not rightBroken then
       ataxiaTemp.kickTarget = "right leg"
+      ataxiaTemp.lastFlashheelLeg = "right"
       return "flashheel right"  -- Break prepped right leg
-    elseif leftPrepped and not leftBroken and parried ~= "left leg" then
+    elseif leftPrepped and not leftBroken then
       ataxiaTemp.kickTarget = "left leg"
+      ataxiaTemp.lastFlashheelLeg = "left"
       return "flashheel left"  -- Break prepped left leg
     end
 
     -- FALLBACK: Kick whichever leg has more damage (closer to prep/break)
     if ll >= rl then
       ataxiaTemp.kickTarget = "left leg"
+      ataxiaTemp.lastFlashheelLeg = "left"
       return "flashheel left"
     else
       ataxiaTemp.kickTarget = "right leg"
+      ataxiaTemp.lastFlashheelLeg = "right"
       return "flashheel right"
     end
 
   elseif form == "Willow" then
     -- FLASHHEEL targets legs
+    -- Track parry state using dedicated flag (similar to Rain frontkick)
+    local lastKick = ataxiaTemp.lastFlashheelLeg or "left"
+    local wasParried = ataxiaTemp.flashheelWasParried or false
+
+    -- Clear the parry flag for next combo
+    ataxiaTemp.flashheelWasParried = false
+
     local leftHits = shikudo.hitsToPrep("left leg", "flashheel")
     local rightHits = shikudo.hitsToPrep("right leg", "flashheel")
 
+    -- If last flashheel was parried, switch legs
+    if wasParried then
+      if lastKick == "left" then
+        ataxiaTemp.kickTarget = "right leg"
+        ataxiaTemp.lastFlashheelLeg = "right"
+        return "flashheel right"
+      else
+        ataxiaTemp.kickTarget = "left leg"
+        ataxiaTemp.lastFlashheelLeg = "left"
+        return "flashheel left"
+      end
+    end
+
     -- Safe to hit if needs more damage
-    if leftHits > 0 and parried ~= "left leg" then
+    if leftHits > 0 then
       ataxiaTemp.kickTarget = "left leg"
+      ataxiaTemp.lastFlashheelLeg = "left"
       return "flashheel left"
-    elseif rightHits > 0 and parried ~= "right leg" then
+    elseif rightHits > 0 then
       ataxiaTemp.kickTarget = "right leg"
+      ataxiaTemp.lastFlashheelLeg = "right"
       return "flashheel right"
     -- Both prepped - check if safe to break
     elseif shikudo.isLegSafe("left") then
       ataxiaTemp.kickTarget = "left leg"
+      ataxiaTemp.lastFlashheelLeg = "left"
       return "flashheel left"  -- Head prepped, safe to break
     else
       -- Unsafe! Willow only has flashheel (legs). Hit already broken if possible
@@ -591,14 +640,17 @@ function shikudo.selectKick()
       local rl = shikudo.getLimbDamage("right leg")
       if ll >= 100 then
         ataxiaTemp.kickTarget = "left leg"
+        ataxiaTemp.lastFlashheelLeg = "left"
         return "flashheel left"  -- Already broken, no harm
       elseif rl >= 100 then
         ataxiaTemp.kickTarget = "right leg"
+        ataxiaTemp.lastFlashheelLeg = "right"
         return "flashheel right"  -- Already broken, no harm
       else
         -- Neither broken, both prepped, head not ready
         -- Hit left but flag for immediate transition
         ataxiaTemp.kickTarget = "left leg"
+        ataxiaTemp.lastFlashheelLeg = "left"
         ataxiaTemp.needsUrgentTransition = true
         return "flashheel left"
       end
@@ -1237,16 +1289,8 @@ function shikudo.dispatch()
     cmd = combatQueue()
   end
 
-  -- HYPERFOCUS CHECK: Set hyperfocus head at combat start (costs 3.4s balance)
-  -- This is a one-time setup, so we send it separately and wait for balance
-  local hyperfocusCmd = shikudo.getHyperfocusCommand()
-  if hyperfocusCmd then
-    send("queue addclear free " .. cmd .. hyperfocusCmd)
-    cecho("\n<yellow>[Shikudo] Setting hyperfocus head (3.4s balance cost)")
-    -- Optimistically set state so we don't spam it
-    shikudo.state.hyperfocus = "head"
-    return  -- Wait for balance before attacking
-  end
+  -- HYPERFOCUS: User sets this manually before combat
+  -- (Removed automatic hyperfocus - user will do this manually)
 
   -- KILL CHECK: All conditions met?
   if shikudo.checkDispatchReady() then
