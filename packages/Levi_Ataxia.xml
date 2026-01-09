@@ -57476,6 +57476,8 @@ function Algedonic.Prioritize()
         Algedonic.AntiWaterlord()
     elseif targetclass == "Firelord" then
         Algedonic.AntiFirelord()
+    elseif targetclass == "Paladin" then
+        Algedonic.AntiPaladin()
     end
 end
 
