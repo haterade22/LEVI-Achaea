@@ -79,7 +79,11 @@ function ataxia_promptAffs()
 			end
 		end
     aff_str = aff_str .. ataxia_promptLocks()
-		aff_str = aff_str .. " <tomato>]"		
+    -- Add Damnation warning when fighting Paladin with head broken + pyre/burning
+    if getDamnationPromptWarning then
+      aff_str = aff_str .. getDamnationPromptWarning()
+    end
+		aff_str = aff_str .. " <tomato>]"
 	end
 	return aff_str
 end
