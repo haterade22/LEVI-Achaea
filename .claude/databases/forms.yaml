@@ -1,0 +1,456 @@
+# Achaea Shikudo Forms Database
+# For Claude AI consumption - structured data for combat system development
+# Last Updated: 2026-01-08
+
+# ============================================================================
+# SHIKUDO OVERVIEW
+# ============================================================================
+
+overview:
+  class: Monk
+  skill: Shikudo
+  description: |
+    Shikudo is the staff-based combat specialization for Monks.
+    It uses a form/stance system where each form provides specific
+    attacks and can only transition to certain other forms.
+
+  unlock_requirement: "Transcendent Tekura"
+
+  combat_styles:
+    dispatch:
+      description: "Limb-based kill route"
+      goal: "Prep legs + head → sweep → dispatch"
+      kill_condition:
+        - prone
+        - leg_broken
+        - head_broken
+        - crushed_throat
+
+    lock:
+      description: "Pure affliction lock"
+      goal: "softlock → hardlock → truelock"
+      primary_form: Rain
+
+    riftlock:
+      description: "Blackout burst strategy"
+      goal: "Use blackout to hide afflictions"
+      key_ability: telepathy_blackout
+
+# ============================================================================
+# FORMS
+# ============================================================================
+
+forms:
+  Tykonos:
+    max_kata: 12
+    role: "Basic starter form"
+
+    transitions_to:
+      - Willow
+
+    kicks:
+      risingkick:
+        target: [torso, head]
+        damage: 9.2
+        effect: "Basic kick"
+
+    staff_attacks:
+      thrust:
+        target: [torso]
+        damage: 14.5
+        effect: "Strong torso strike"
+
+      sweep:
+        target: [legs]
+        damage: 0
+        effect: "Proning attack - requires both legs prepped"
+        special: true
+
+    strategy:
+      dispatch: "Transition to Willow quickly"
+      lock: "Transition to Willow then Rain for telepathy bonus"
+
+  Willow:
+    max_kata: 12
+    role: "Leg prep and head damage"
+
+    transitions_to:
+      - Rain
+
+    kicks:
+      flashheel:
+        target: [left_leg, right_leg]
+        damage: 9.2
+        effect: "Leg targeting kick"
+        note: "Alternate legs to balance damage"
+
+    staff_attacks:
+      dart:
+        target: [torso]
+        damage: 4.4
+        effect: "Quick strike"
+
+      hiru:
+        target: [head]
+        damage: 4.3
+        effect: "Head damage"
+
+      hiraku:
+        target: [head]
+        damage: 4.3
+        effect: "Head damage variant"
+
+      sweep:
+        inherited: true
+
+    strategy:
+      dispatch: "Prep head with hiru/hiraku, legs with flashheel"
+      lock: "Transition to Rain quickly for telepathy EQ bonus"
+
+  Rain:
+    max_kata: 24
+    role: "Primary combat form - telepathy EQ bonus"
+
+    transitions_to:
+      - Tykonos
+      - Oak
+
+    kicks:
+      frontkick:
+        target: [left_arm, right_arm]
+        damage: 9.2
+        effect: "Arm targeting kick"
+        note: "Alternate arms to balance damage for riftlock"
+
+    staff_attacks:
+      ruku:
+        target: [left_arm, right_arm, torso]
+        damage: 4.5
+        affliction: [slickness, clumsiness]
+        affliction_by_target:
+          torso: slickness
+          left_arm: clumsiness
+          right_arm: clumsiness
+
+      kuro:
+        target: [left_leg, right_leg]
+        damage: 9.2
+        affliction: weariness
+        note: "Primary leg prep + weariness delivery"
+
+      hiru:
+        target: [head]
+        damage: 4.3
+        effect: "Head damage"
+
+    telepathy_bonus: |
+      Rain form provides equilibrium bonus for telepathy attacks.
+      All telepathy (except mindlock) should be used in Rain form.
+
+    strategy:
+      dispatch: "Prep legs with kuro, transition to Oak when ready"
+      lock: "Stay in Rain for telepathy bonus, deliver impatience/batter"
+
+  Oak:
+    max_kata: 12
+    role: "Paralysis delivery and leg finisher"
+
+    transitions_to:
+      - Willow
+      - Gaital
+
+    kicks:
+      risingkick:
+        target: [torso, head]
+        damage: 9.2
+        effect: "Basic kick"
+
+    staff_attacks:
+      nervestrike:
+        target: [universal]
+        damage: 13.4
+        affliction: paralysis
+        note: "Primary paralysis delivery"
+
+      livestrike:
+        target: [universal]
+        damage: 7.8
+        affliction: asthma
+        note: "Primary asthma delivery"
+
+      ruku:
+        inherited: true
+
+      kuro:
+        inherited: true
+
+    strategy:
+      dispatch: "Finish leg prep, transition to Gaital for sweep"
+      lock: "Deliver paralysis with nervestrike, asthma with livestrike"
+
+  Gaital:
+    max_kata: 12
+    role: "Sweep and kill execution"
+
+    transitions_to:
+      - Rain
+      - Maelstrom
+
+    kicks:
+      spinkick:
+        target: [torso]
+        damage_torso: 27.0
+        damage_head: 27.0
+        effect: "High damage AoE kick"
+        special: "If prone, targets head for massive damage"
+
+      flashheel:
+        inherited: true
+
+      dawnkick:
+        target: [universal]
+        effect: "Special kick"
+
+    staff_attacks:
+      needle:
+        target: [head]
+        damage: 10.6
+        affliction: [stupidity, crushed_throat]
+        note: "Delivers stupidity (head break effect) and crushed throat"
+
+      sweep:
+        inherited: true
+
+      ruku:
+        inherited: true
+
+      jinzuku:
+        target: [universal]
+        damage: 4.5
+        affliction: addiction
+
+      kuro:
+        inherited: true
+
+    strategy:
+      dispatch: "Sweep when legs+head prepped, then needle for windpipe"
+      lock: "Use needle for stupidity, transition back to Rain"
+
+  Maelstrom:
+    max_kata: 12
+    role: "High damage finisher"
+
+    transitions_to:
+      - Oak
+
+    kicks:
+      risingkick:
+        inherited: true
+
+      crescent:
+        target: [torso]
+        damage: high
+        condition: "Opponent prone and low HP"
+        effect: "Massive damage finisher"
+
+    staff_attacks:
+      ruku:
+        inherited: true
+
+      livestrike:
+        inherited: true
+
+      jinzuku:
+        inherited: true
+
+      sweep:
+        inherited: true
+
+    strategy:
+      dispatch: "Use when target is low HP and prone for crescent"
+      lock: "Rarely used in lock mode, transition back to Oak"
+
+# ============================================================================
+# LIMB DAMAGE FORMULAS
+# ============================================================================
+
+limb_damage:
+  description: |
+    Limb damage is calculated as a percentage of target health.
+    The formula is: (coefficient * targetHP + base) * staffModifier
+
+  formula_example: |
+    dart_damage = math.floor((.0440 * health + 156) * staffMod)
+    -- Convert to percentage:
+    dart_percentage = (dart_damage / health) * 100
+
+  default_percentages:
+    dart: 4.4
+    thrust: 14.5
+    needle: 10.6
+    nervestrike: 13.4
+    hiru: 4.3
+    hiraku: 4.3
+    livestrike: 7.8
+    ruku: 4.5
+    kuro: 9.2
+    flashheel: 9.2
+    risingkick: 9.2
+    frontkick: 9.2
+    spinkick_torso: 27.0
+    spinkick_head: 27.0
+    jinzuku: 4.5
+
+  hyperfocus_modifier:
+    description: "If target uses hyperfocus on a limb, damage to that limb is halved"
+    formula: "damage = damage / 2"
+
+  break_thresholds:
+    level_1: 33
+    level_2: 100
+    level_3: 200
+
+# ============================================================================
+# TRANSITION RULES
+# ============================================================================
+
+transitions:
+  description: |
+    Each form can only transition to specific other forms.
+    Transitions use kata points and are done via the 'transition' keyword
+    at the end of a combo.
+
+  graph:
+    Tykonos: [Willow]
+    Willow: [Rain]
+    Rain: [Tykonos, Oak]
+    Oak: [Willow, Gaital]
+    Gaital: [Rain, Maelstrom]
+    Maelstrom: [Oak]
+
+  kata_requirement: 5
+  note: "Need at least 5 kata to transition"
+
+# ============================================================================
+# TELEPATHY ABILITIES
+# ============================================================================
+
+telepathy:
+  mindlock:
+    form_requirement: any
+    balance: equilibrium
+    effect: "Establishes mental link, required for other telepathy"
+    duration: permanent_until_death
+
+  paralyse:
+    form_requirement: Rain
+    balance: equilibrium
+    effect: "Delivers paralysis affliction"
+    blocked_by: mindlock_required
+
+  impatience:
+    form_requirement: Rain
+    balance: equilibrium
+    effect: "Delivers impatience affliction"
+    blocked_by: mindlock_required
+
+  blackout:
+    form_requirement: Rain
+    balance: equilibrium
+    kata_required: 9
+    cooldown: 10
+    effect: "Target cannot see any game output for duration"
+    duration: 10
+    strategy: "Use to hide affliction delivery"
+
+  batter:
+    form_requirement: Rain
+    balance: equilibrium
+    effect: "Mental damage/pressure"
+    blocked_by: mindlock_required
+
+# ============================================================================
+# KILL CONDITIONS
+# ============================================================================
+
+kill_conditions:
+  dispatch:
+    name: "Dispatch"
+    requirements:
+      - prone: true
+      - leg_broken: "Either leg at 100%+ damage"
+      - head_broken: "Head at 100%+ damage OR damagedhead affliction"
+      - windpipe: "crushed_throat OR damagedwindpipe affliction"
+
+    command: "dispatch <target>"
+    mhaldorian_variant: "incapacitate <target>"
+
+    check_function: |
+      function checkDispatchReady()
+        local prone = tAffs.prone
+        local ll = getLimbDamage("left leg")
+        local rl = getLimbDamage("right leg")
+        local h = getLimbDamage("head")
+        local legBroken = (ll >= 100 or rl >= 100)
+        local headBroken = (h >= 100 or tAffs.damagedhead)
+        local windpipe = (tAffs.damagedwindpipe or tAffs.crushedthroat)
+        return prone and legBroken and headBroken and windpipe
+      end
+
+# ============================================================================
+# COMBAT PHASES (Dispatch Mode)
+# ============================================================================
+
+dispatch_phases:
+  PREP:
+    description: "Building limb damage on legs and head"
+    goal: "Get both legs to 90%+ and head to threshold"
+    primary_form: Rain
+    key_attacks: [kuro, hiru, flashheel]
+
+  SWEEP:
+    description: "Proning the target"
+    goal: "Execute sweep to knock target prone"
+    primary_form: Gaital
+    requirements:
+      - both_legs_prepped: true
+      - head_prepped: true
+    key_attacks: [sweep]
+
+  FINISH:
+    description: "Breaking limbs and setting up kill"
+    goal: "Break leg, break head, crush throat"
+    primary_form: Gaital
+    key_attacks: [needle, spinkick]
+
+  KILL:
+    description: "Execute dispatch"
+    goal: "Kill the target"
+    command: "dispatch"
+
+# ============================================================================
+# EXAMPLE OFFENSE PATTERN
+# ============================================================================
+
+example_combo:
+  description: "Typical dispatch combo progression"
+  steps:
+    - form: Rain
+      combo: "combo target frontkick left kuro left kuro right"
+      note: "Prep both legs with kuro, arms with frontkick"
+
+    - form: Rain
+      combo: "combo target frontkick right hiru hiru transition oak"
+      note: "Prep head, transition to Oak"
+
+    - form: Oak
+      combo: "combo target risingkick head nervestrike livestrike transition gaital"
+      note: "Finish head prep, add paralysis/asthma, go to Gaital"
+
+    - form: Gaital
+      combo: "combo target sweep flashheel left needle"
+      note: "Sweep to prone, needle for windpipe"
+
+    - form: Gaital
+      combo: "dispatch target"
+      note: "Execute kill"
