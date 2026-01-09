@@ -213,6 +213,14 @@ fitness:
   blocked_by: [weariness]
   trigger: "Automatic when asthma is gained"
 
+golden_light:
+  skill: Excision
+  effect: "Passively cures one affliction"
+  cures: [one_random_affliction]
+  trigger: "Periodic/automatic"
+  detection: "A shimmering curtain of golden light sweeps over <Paladin>."
+  notes: "Similar to other class passive cures - track for affliction removal"
+
 aura:
   skill: Valour
   effect: "Protective aura reducing damage"
