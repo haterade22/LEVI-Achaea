@@ -57,9 +57,9 @@ function affed(what)
 end
 
 function setStackAff(aff, num)
-	local affs = {"horror", "pyre", "unweavingspirit", "unweavingmind", "unweavingbody", "temperedsanguine", "temperedcholeric", 
-    "temperedmelancholic", "temperedphlegmatic", "pressure", "crackedribs", "torntendons", 
-    "skullfractures", "wristfractures", "burning, burns,","crescendo",}
+	local affs = {"horror", "pyre", "unweavingspirit", "unweavingmind", "unweavingbody", "temperedsanguine", "temperedcholeric",
+    "temperedmelancholic", "temperedphlegmatic", "pressure", "crackedribs", "torntendons",
+    "skullfractures", "wristfractures", "burning", "crescendo"}
 	local tow = ""
 	for _, x in pairs(affs) do
 		if aff:find(x) then

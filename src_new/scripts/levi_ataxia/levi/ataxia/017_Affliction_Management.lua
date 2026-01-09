@@ -45,6 +45,46 @@ function unnamableHorrorLower()
   end
 end
 
+-- Paladin Pyre tracking (for Damnation kill condition)
+-- Pyre is applied via "fire surges about the righteous <Paladin>" message
+function pali_addPyre()
+  ataxia.afflictions.pyre = (ataxia.afflictions.pyre or 0) + 1
+  if ataxia.afflictions.pyre > 3 then ataxia.afflictions.pyre = 3 end  -- Pyre caps at level 3
+
+  local cstring = "<magenta>[<white>PYRE "..ataxia.afflictions.pyre.."<magenta>] "
+  cinsertText(cstring)
+
+  -- Check for Damnation threat after pyre increase
+  if checkDamnationThreat then
+    checkDamnationThreat()
+  end
+end
+
+function pali_removePyre()
+  ataxia.afflictions.pyre = (ataxia.afflictions.pyre or 1) - 1
+  if ataxia.afflictions.pyre < 0 then ataxia.afflictions.pyre = 0 end
+
+  if ataxia.afflictions.pyre == 0 then
+    cecho("\n<green> -= pyre cured completely =-")
+  else
+    cecho("\n<green> -= pyre reduced to "..ataxia.afflictions.pyre.." =-")
+  end
+end
+
+-- Paladin Burns tracking (Magi-style burning counter)
+function pali_addBurns()
+  ataxia.afflictions.burning = (ataxia.afflictions.burning or 0) + 1
+  if ataxia.afflictions.burning > 5 then ataxia.afflictions.burning = 5 end
+
+  local cstring = "<orange>[<white>BURNS "..ataxia.afflictions.burning.."<orange>] "
+  cinsertText(cstring)
+
+  -- Check for Damnation threat after burns increase (level 5 burning enables Damnation)
+  if checkDamnationThreat then
+    checkDamnationThreat()
+  end
+end
+
 function tarZealHit(aff)
 	if not affs_to_colour then populate_aff_colours() end
 	
