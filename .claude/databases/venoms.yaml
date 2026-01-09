@@ -1,0 +1,420 @@
+# Achaea Venoms Database
+# For Claude AI consumption - structured data for combat system development
+# Last Updated: 2026-01-08
+
+venoms:
+  # ============================================================================
+  # KELP/AURUM CURES (eating balance)
+  # ============================================================================
+
+  kalmia:
+    affliction: asthma
+    cure_method: eat
+    cure_herb: kelp
+    cure_mineral: aurum
+    effect: "Prevents smoking pipes"
+    lock_role: "Core softlock component - blocks smoking cures"
+    priority: critical
+
+  vernalius:
+    affliction: weariness
+    cure_method: eat
+    cure_herb: kelp
+    cure_mineral: aurum
+    effect: "Prevents Restore ability, blocks passive cures for many classes"
+    lock_role: "Class-specific lock affliction for Knights, Monk, Serpent, etc."
+    priority: high
+
+  prefarar:
+    affliction: sensitivity
+    cure_method: eat
+    cure_herb: kelp
+    cure_mineral: aurum
+    effect: "Increases damage taken"
+    priority: medium
+
+  supara:
+    affliction: clumsiness
+    cure_method: eat
+    cure_herb: kelp
+    cure_mineral: aurum
+    effect: "Causes fumbling, failed actions"
+    priority: medium
+
+  epseth:
+    affliction: healthleech
+    cure_method: eat
+    cure_herb: kelp
+    cure_mineral: aurum
+    effect: "Drains health on movement"
+    priority: low
+
+  epteth:
+    affliction: hypochondria
+    cure_method: eat
+    cure_herb: kelp
+    cure_mineral: aurum
+    effect: "Fake afflictions appear in diagnose"
+    priority: low
+
+  # ============================================================================
+  # BLOODROOT/MAGNESIUM CURES (eating balance)
+  # ============================================================================
+
+  curare:
+    affliction: paralysis
+    cure_method: eat
+    cure_herb: bloodroot
+    cure_mineral: magnesium
+    effect: "Prevents all actions and Tree tattoo"
+    lock_role: "Core venomlock component - blocks Tree escape"
+    priority: critical
+
+  gecko:
+    affliction: slickness
+    cure_method: eat
+    cure_herb: bloodroot
+    cure_mineral: magnesium
+    alternate_cure: "smoke valerian/realgar"
+    effect: "Prevents applying salves"
+    lock_role: "Core softlock component - blocks salve cures"
+    priority: critical
+
+  # ============================================================================
+  # GINSENG/FERRUM CURES (eating balance)
+  # ============================================================================
+
+  vardrax:
+    affliction: addiction
+    cure_method: eat
+    cure_herb: ginseng
+    cure_mineral: ferrum
+    effect: "Forces eating of held items"
+    lock_role: "Riftlock helper - depletes herb supply"
+    priority: medium
+
+  darkshade:
+    affliction: darkshade
+    cure_method: eat
+    cure_herb: ginseng
+    cure_mineral: ferrum
+    effect: "Causes death after 26 seconds if not cured"
+    lock_role: "Kill condition for Serpent darkshade route"
+    priority: critical
+    kill_timer: 26
+
+  scytherus:
+    affliction: scytherus
+    cure_method: eat
+    cure_herb: ginseng
+    cure_mineral: ferrum
+    effect: "Poison damage on actions, combos with fratricide"
+    priority: high
+
+  slike:
+    affliction: anorexia
+    cure_method: apply
+    cure_salve: epidermal
+    alternate_cure: focus
+    effect: "Prevents eating herbs"
+    lock_role: "Core softlock component - blocks herb cures"
+    priority: critical
+    note: "NOT a ginseng cure despite being listed here - uses epidermal salve"
+
+  voyria:
+    affliction: voyria
+    cure_method: sip
+    cure_elixir: immunity
+    effect: "Poison spreading through body, prevents sip cures"
+    lock_role: "Lock affliction for Apostate, Pariah, Bard, Priest"
+    priority: high
+
+  eurypteria:
+    affliction: haemophilia
+    cure_method: eat
+    cure_herb: ginseng
+    cure_mineral: ferrum
+    effect: "Greatly increased bleeding"
+    lock_role: "Lock affliction for Magi, Sylvan"
+    priority: medium
+
+  delphinium:
+    affliction: insomnia_strip
+    cure_method: none
+    effect: "First strips insomnia, second strips gypsum/kola, third causes sleep"
+    lock_role: "Sleeplock progression"
+    priority: high
+    mechanic: |
+      1st application: Removes Insomnia defence
+      2nd application: Removes Gypsum/Kola defence
+      3rd application: Causes sleep
+
+  loki:
+    affliction: random
+    cure_method: varies
+    effect: "Applies a random affliction"
+    priority: low
+
+  camus:
+    affliction: camus
+    cure_method: eat
+    cure_herb: ginseng
+    cure_mineral: ferrum
+    effect: "Poison damage"
+    priority: low
+
+  noctec:
+    affliction: nausea
+    cure_method: eat
+    cure_herb: ginseng
+    cure_mineral: ferrum
+    effect: "Causes vomiting"
+    priority: medium
+
+  oleander:
+    affliction: lethargy
+    cure_method: eat
+    cure_herb: ginseng
+    cure_mineral: ferrum
+    effect: "Increased balance/equilibrium times"
+    priority: medium
+
+  # ============================================================================
+  # GOLDENSEAL/PLUMBUM CURES (eating balance)
+  # ============================================================================
+
+  euphorbia:
+    affliction: impatience
+    cure_method: eat
+    cure_herb: goldenseal
+    cure_mineral: plumbum
+    effect: "Prevents using Focus"
+    lock_role: "Core hardlock component - prevents Focus escape"
+    priority: critical
+
+  xentio:
+    affliction: stupidity
+    cure_method: eat
+    cure_herb: goldenseal
+    cure_mineral: plumbum
+    effect: "Random failures, lowers cure chances"
+    lock_role: "Lock affliction for Alchemist, mental pressure"
+    priority: high
+
+  aconite:
+    affliction: dizziness
+    cure_method: eat
+    cure_herb: goldenseal
+    cure_mineral: plumbum
+    effect: "Random direction movement"
+    priority: medium
+
+  colocasia:
+    affliction: epilepsy
+    cure_method: eat
+    cure_herb: goldenseal
+    cure_mineral: plumbum
+    effect: "Random seizures"
+    priority: medium
+
+  notechis:
+    affliction: shyness
+    cure_method: eat
+    cure_herb: goldenseal
+    cure_mineral: plumbum
+    effect: "Prevents speaking/shouting"
+    priority: low
+
+  digitalis:
+    affliction: depression
+    cure_method: eat
+    cure_herb: goldenseal
+    cure_mineral: plumbum
+    effect: "Causes random sits, despair"
+    priority: medium
+
+  # ============================================================================
+  # LOBELIA/ARGENTUM CURES (eating balance)
+  # ============================================================================
+
+  sumac:
+    affliction: recklessness
+    cure_method: eat
+    cure_herb: lobelia
+    cure_mineral: argentum
+    effect: "Lowers cure chances, prevents caution"
+    lock_role: "Lock affliction for Depthswalker"
+    priority: medium
+
+  hepafarin:
+    affliction: masochism
+    cure_method: eat
+    cure_herb: lobelia
+    cure_mineral: argentum
+    effect: "Forced self-harm"
+    priority: medium
+    serpent_note: "Enables Ekanelia monkshood and curare transformations"
+
+  vernus:
+    affliction: vertigo
+    cure_method: eat
+    cure_herb: lobelia
+    cure_mineral: argentum
+    effect: "Random falls"
+    priority: low
+
+  oculus:
+    affliction: loneliness
+    cure_method: eat
+    cure_herb: lobelia
+    cure_mineral: argentum
+    effect: "Prevents following"
+    priority: low
+
+  selarnia:
+    affliction: agoraphobia
+    cure_method: eat
+    cure_herb: lobelia
+    cure_mineral: argentum
+    effect: "Fear of open spaces"
+    priority: low
+
+  dature:
+    affliction: claustrophobia
+    cure_method: eat
+    cure_herb: lobelia
+    cure_mineral: argentum
+    effect: "Fear of enclosed spaces"
+    priority: low
+
+  # ============================================================================
+  # ASH/CALCIUM CURES (eating balance)
+  # ============================================================================
+
+  monkshood:
+    affliction: disfigurement
+    cure_method: eat
+    cure_herb: ash
+    cure_mineral: calcium
+    effect: "Causes physical disfigurement"
+    priority: low
+    serpent_note: "With asthma+masochism+weariness, Ekanelia adds IMPATIENCE"
+
+  aconite_ash:
+    affliction: confusion
+    cure_method: eat
+    cure_herb: ash
+    cure_mineral: calcium
+    effect: "Random command substitution"
+    lock_role: "Lock affliction for Psion"
+    priority: high
+
+  arsenic:
+    affliction: hallucinations
+    cure_method: eat
+    cure_herb: ash
+    cure_mineral: calcium
+    effect: "Fake room descriptions and messages"
+    priority: medium
+
+  nightshade:
+    affliction: paranoia
+    cure_method: eat
+    cure_herb: ash
+    cure_mineral: calcium
+    effect: "Sees fake enemies"
+    priority: low
+
+  benzedrine:
+    affliction: hypersomnia
+    cure_method: eat
+    cure_herb: ash
+    cure_mineral: calcium
+    effect: "Extreme drowsiness"
+    priority: medium
+
+  larkspur:
+    affliction: dementia
+    cure_method: eat
+    cure_herb: ash
+    cure_mineral: calcium
+    effect: "Random actions"
+    priority: medium
+
+  # ============================================================================
+  # BELLWORT/CUPRUM CURES (eating balance)
+  # ============================================================================
+
+  selarnia_peace:
+    affliction: peace
+    cure_method: eat
+    cure_herb: bellwort
+    cure_mineral: cuprum
+    effect: "Prevents aggressive actions"
+    priority: high
+
+  maidenhair:
+    affliction: generosity
+    cure_method: eat
+    cure_herb: bellwort
+    cure_mineral: cuprum
+    effect: "Forces giving away items"
+    priority: medium
+
+# ============================================================================
+# VENOM RELATIONSHIPS
+# ============================================================================
+
+cure_competition:
+  bloodroot_competition:
+    venoms: [curare, gecko]
+    afflictions: [paralysis, slickness]
+    problem: "When asthma blocks smoking, bloodroot must cure both"
+    defense_priority: "Cure paralysis first - blocks all actions including Tree"
+
+  kelp_competition:
+    venoms: [kalmia, vernalius]
+    afflictions: [asthma, weariness]
+    problem: "Both enable Serpent Impulse mechanic"
+    defense_priority: "Cure asthma first - breaks Impulse AND restores smoking"
+
+# ============================================================================
+# EKANELIA TRANSFORMATIONS (Serpent BITE mechanic)
+# ============================================================================
+
+ekanelia:
+  description: "Serpent BITE venom transformation that adds bonus afflictions"
+  requirement: "Only works with BITE, not DOUBLESTAB"
+
+  transformations:
+    kalmia:
+      conditionals: [clumsiness, weariness]
+      normal_effect: asthma
+      bonus_effect: slickness
+      note: "Single BITE can give asthma + slickness"
+
+    monkshood:
+      conditionals: [asthma, masochism, weariness]
+      normal_effect: disfigurement
+      bonus_effect: impatience
+      note: "Critical - can deliver impatience without Impulse"
+
+    curare:
+      conditionals: [hypersomnia, masochism]
+      normal_effect: paralysis
+      bonus_effect: hypochondria
+
+    loki:
+      conditionals: [confusion, recklessness]
+      normal_effect: random
+      bonus_effect: [nausea, paralysis]
+
+    scytherus:
+      conditionals: [addiction, nausea]
+      normal_effect: scytherus
+      bonus_effect: camus_damage
+
+  defense_priority: |
+    1. Cure masochism early - blocks 2 Ekanelia transformations
+    2. Don't let clumsiness + weariness stack together
+    3. Track conditional combos to predict incoming afflictions

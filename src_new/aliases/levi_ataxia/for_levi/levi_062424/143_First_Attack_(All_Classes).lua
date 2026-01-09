@@ -92,7 +92,7 @@ end
 
 
 if gmcp.Char.Status.class == "Serpent" then
-serp_quicklock()
+serp_ekanelia_offense()
 end
 if gmcp.Char.Status.class == "Pariah" then
 levipariahlatencytest()

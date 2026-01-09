@@ -45,8 +45,10 @@ tdeliverance = false
 		lastFocus = nil
 	end
   if passiveFailsafe then restorePassiveCure() end
-  
+
 	targetAte("ginseng")
+	-- Track for adaptive serpent offense
+	if serpent and serpent.trackCure then serpent.trackCure("ginseng") end
 
 	selectString(line, 1)
 	fg("NavajoWhite")

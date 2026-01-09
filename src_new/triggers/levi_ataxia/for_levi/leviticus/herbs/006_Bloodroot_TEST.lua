@@ -44,6 +44,8 @@ tdeliverance = false
         anorexiaFailsafe = nil
         lastFocus = nil
     end
+    -- Track for adaptive serpent offense
+    if serpent and serpent.trackCure then serpent.trackCure("bloodroot") end
     
     if tAffs.prone then
       tempTimer(0.3, [[

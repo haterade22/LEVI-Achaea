@@ -49,6 +49,8 @@ if isTargeted(multimatches[1][2]) and tBals.focus then
 	else
 		tFocused()
 	end
+	-- Track for adaptive serpent offense
+	if serpent and serpent.trackCure then serpent.trackCure("focus") end
 	tBals.focus = false
   
   if tBals.timers.focus then killTimer(tBals.timers.focus) end

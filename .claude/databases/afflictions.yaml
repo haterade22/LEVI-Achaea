@@ -1,0 +1,636 @@
+# Achaea Afflictions Database
+# For Claude AI consumption - structured data for combat system development
+# Last Updated: 2026-01-08
+
+# ============================================================================
+# AFFLICTION CATEGORIES
+# ============================================================================
+
+categories:
+  eating:
+    balance_type: herb
+    description: "Cured by eating herbs or minerals"
+    subcategories:
+      - kelp_aurum
+      - bloodroot_magnesium
+      - ginseng_ferrum
+      - goldenseal_plumbum
+      - lobelia_argentum
+      - ash_calcium
+      - bellwort_cuprum
+
+  salve:
+    balance_type: salve
+    description: "Cured by applying salves"
+    subcategories:
+      - epidermal
+      - mending
+      - restoration
+
+  smoking:
+    balance_type: smoke
+    description: "Cured by smoking from pipes"
+    subcategories:
+      - elm
+      - valerian_realgar
+      - cinnabar
+
+  writhe:
+    balance_type: writhe
+    description: "Cured by writhing"
+    note: "Takes multiple seconds, interrupted by certain attacks"
+
+  special:
+    description: "Cured by special abilities"
+    subcategories:
+      - focus
+      - tree
+      - clot
+      - sip
+
+# ============================================================================
+# AFFLICTIONS BY CURE TYPE
+# ============================================================================
+
+afflictions:
+  # ==========================================================================
+  # KELP/AURUM CURES
+  # ==========================================================================
+
+  asthma:
+    cure_method: eat
+    cure_herb: kelp
+    cure_mineral: aurum
+    effect: "Prevents smoking pipes"
+    delivered_by: [kalmia, class_abilities]
+    lock_component: softlock
+    priority: 1
+    notes: "Critical lock component - blocks all smoke cures"
+
+  weariness:
+    cure_method: eat
+    cure_herb: kelp
+    cure_mineral: aurum
+    effect: "Prevents Restore ability, blocks passive cures"
+    delivered_by: [vernalius, class_abilities]
+    lock_component: class_lock
+    priority: 2
+    class_lock_for: [Blademaster, Druid, Infernal, Monk, Paladin, Unnamable, Runewarden, Sentinel, Serpent, Airlord, Waterlord, Earthlord, Firelord]
+    serpent_note: "Enables Impulse mechanic when combined with asthma"
+
+  sensitivity:
+    cure_method: eat
+    cure_herb: kelp
+    cure_mineral: aurum
+    effect: "Increases damage taken significantly"
+    delivered_by: [prefarar, class_abilities]
+    priority: 3
+
+  clumsiness:
+    cure_method: eat
+    cure_herb: kelp
+    cure_mineral: aurum
+    effect: "Random fumbling, failed weapon strikes"
+    delivered_by: [supara, class_abilities]
+    priority: 4
+    serpent_note: "With weariness, enables Ekanelia kalmia transformation"
+
+  hypochondria:
+    cure_method: eat
+    cure_herb: kelp
+    cure_mineral: aurum
+    effect: "Fake afflictions appear in DIAGNOSE"
+    delivered_by: [epteth, class_abilities]
+    priority: 5
+
+  healthleech:
+    cure_method: eat
+    cure_herb: kelp
+    cure_mineral: aurum
+    effect: "Drains health on movement"
+    delivered_by: [epseth, class_abilities]
+    priority: 6
+
+  # ==========================================================================
+  # BLOODROOT/MAGNESIUM CURES
+  # ==========================================================================
+
+  paralysis:
+    cure_method: eat
+    cure_herb: bloodroot
+    cure_mineral: magnesium
+    effect: "Prevents all voluntary actions and Tree tattoo"
+    delivered_by: [curare, class_abilities]
+    lock_component: venomlock
+    priority: 1
+    class_lock_for: [Jester, Occultist, Shaman]
+    notes: "Critical lock component - blocks Tree escape and all actions"
+
+  slickness:
+    cure_method: eat
+    cure_herb: bloodroot
+    cure_mineral: magnesium
+    alternate_cure:
+      method: smoke
+      herb: valerian
+      mineral: realgar
+    effect: "Prevents applying salves"
+    delivered_by: [gecko, class_abilities]
+    lock_component: softlock
+    priority: 2
+    notes: "Critical lock component - blocks all salve cures"
+
+  # ==========================================================================
+  # GINSENG/FERRUM CURES
+  # ==========================================================================
+
+  addiction:
+    cure_method: eat
+    cure_herb: ginseng
+    cure_mineral: ferrum
+    effect: "Forces eating of held items when triggered"
+    delivered_by: [vardrax, class_abilities]
+    priority: 2
+    lock_role: "Riftlock helper - depletes herb supply"
+
+  darkshade:
+    cure_method: eat
+    cure_herb: ginseng
+    cure_mineral: ferrum
+    effect: "Death after 26 seconds if not cured"
+    delivered_by: [darkshade_venom, serpent_bite]
+    priority: 1
+    kill_timer: 26
+    notes: "Serpent kill route - protect with ginseng stack"
+
+  scytherus:
+    cure_method: eat
+    cure_herb: ginseng
+    cure_mineral: ferrum
+    effect: "Poison damage on actions"
+    delivered_by: [scytherus_venom, class_abilities]
+    priority: 1
+    serpent_combo: "With fratricide = ~1200 damage per relapse tick"
+
+  haemophilia:
+    cure_method: eat
+    cure_herb: ginseng
+    cure_mineral: ferrum
+    effect: "Greatly increased bleeding from attacks"
+    delivered_by: [eurypteria, class_abilities]
+    priority: 2
+    class_lock_for: [Magi, Sylvan]
+
+  nausea:
+    cure_method: eat
+    cure_herb: ginseng
+    cure_mineral: ferrum
+    effect: "Random vomiting, prevents eating temporarily"
+    delivered_by: [noctec, class_abilities]
+    priority: 2
+
+  lethargy:
+    cure_method: eat
+    cure_herb: ginseng
+    cure_mineral: ferrum
+    effect: "Increased balance/equilibrium recovery times"
+    delivered_by: [oleander, class_abilities]
+    priority: 3
+
+  voyria:
+    cure_method: sip
+    cure_elixir: immunity
+    effect: "Spreading poison, prevents sip-based healing"
+    delivered_by: [voyria_venom, class_abilities]
+    priority: 1
+    class_lock_for: [Apostate, Pariah, Bard, Priest]
+    notes: "Cannot be cured by normal eating/smoking"
+
+  # ==========================================================================
+  # GOLDENSEAL/PLUMBUM CURES
+  # ==========================================================================
+
+  impatience:
+    cure_method: eat
+    cure_herb: goldenseal
+    cure_mineral: plumbum
+    effect: "Prevents using Focus ability"
+    delivered_by: [euphorbia, telepathy, class_abilities]
+    lock_component: hardlock
+    priority: 1
+    notes: "Critical lock component - removes Focus escape route"
+
+  stupidity:
+    cure_method: eat
+    cure_herb: goldenseal
+    cure_mineral: plumbum
+    effect: "Random command failures, lowered cure chances"
+    delivered_by: [xentio, class_abilities]
+    priority: 1
+    class_lock_for: [Alchemist]
+    notes: "Also causes head break with Shikudo needle attacks"
+
+  epilepsy:
+    cure_method: eat
+    cure_herb: goldenseal
+    cure_mineral: plumbum
+    effect: "Random seizures interrupting actions"
+    delivered_by: [colocasia, class_abilities]
+    priority: 2
+
+  dizziness:
+    cure_method: eat
+    cure_herb: goldenseal
+    cure_mineral: plumbum
+    effect: "Random direction changes when moving"
+    delivered_by: [aconite, class_abilities]
+    priority: 3
+
+  shyness:
+    cure_method: eat
+    cure_herb: goldenseal
+    cure_mineral: plumbum
+    effect: "Prevents speaking, shouting, tells"
+    delivered_by: [notechis, class_abilities]
+    priority: 4
+
+  depression:
+    cure_method: eat
+    cure_herb: goldenseal
+    cure_mineral: plumbum
+    effect: "Random sits, feelings of despair"
+    delivered_by: [digitalis, class_abilities]
+    priority: 3
+
+  # ==========================================================================
+  # LOBELIA/ARGENTUM CURES
+  # ==========================================================================
+
+  recklessness:
+    cure_method: eat
+    cure_herb: lobelia
+    cure_mineral: argentum
+    effect: "Lowered cure chances, prevents cautious actions"
+    delivered_by: [sumac, class_abilities]
+    priority: 1
+    class_lock_for: [Depthswalker]
+
+  masochism:
+    cure_method: eat
+    cure_herb: lobelia
+    cure_mineral: argentum
+    effect: "Forces self-harm actions"
+    delivered_by: [hepafarin, class_abilities]
+    priority: 2
+    serpent_note: "Critical - enables 2 Ekanelia transformations"
+
+  vertigo:
+    cure_method: eat
+    cure_herb: lobelia
+    cure_mineral: argentum
+    effect: "Random falling over"
+    delivered_by: [vernus, class_abilities]
+    priority: 3
+
+  agoraphobia:
+    cure_method: eat
+    cure_herb: lobelia
+    cure_mineral: argentum
+    effect: "Fear of open spaces, prevents leaving indoors"
+    delivered_by: [selarnia, class_abilities]
+    priority: 4
+
+  claustrophobia:
+    cure_method: eat
+    cure_herb: lobelia
+    cure_mineral: argentum
+    effect: "Fear of enclosed spaces, forced fleeing indoors"
+    delivered_by: [dature, class_abilities]
+    priority: 4
+
+  loneliness:
+    cure_method: eat
+    cure_herb: lobelia
+    cure_mineral: argentum
+    effect: "Prevents following others"
+    delivered_by: [oculus, class_abilities]
+    priority: 5
+
+  # ==========================================================================
+  # ASH/CALCIUM CURES
+  # ==========================================================================
+
+  confusion:
+    cure_method: eat
+    cure_herb: ash
+    cure_mineral: calcium
+    effect: "Random command substitution"
+    delivered_by: [aconite_ash, class_abilities]
+    priority: 1
+    class_lock_for: [Psion]
+
+  hallucinations:
+    cure_method: eat
+    cure_herb: ash
+    cure_mineral: calcium
+    effect: "Fake room descriptions and combat messages"
+    delivered_by: [arsenic, class_abilities]
+    priority: 2
+
+  paranoia:
+    cure_method: eat
+    cure_herb: ash
+    cure_mineral: calcium
+    effect: "Sees fake enemies in room"
+    delivered_by: [nightshade, class_abilities]
+    priority: 3
+
+  hypersomnia:
+    cure_method: eat
+    cure_herb: ash
+    cure_mineral: calcium
+    effect: "Extreme drowsiness, may fall asleep"
+    delivered_by: [benzedrine, class_abilities]
+    priority: 2
+    serpent_note: "With masochism, enables Ekanelia curare transformation"
+
+  dementia:
+    cure_method: eat
+    cure_herb: ash
+    cure_mineral: calcium
+    effect: "Random involuntary actions"
+    delivered_by: [larkspur, class_abilities]
+    priority: 2
+
+  disfigurement:
+    cure_method: eat
+    cure_herb: ash
+    cure_mineral: calcium
+    effect: "Physical disfigurement"
+    delivered_by: [monkshood, class_abilities]
+    priority: 4
+
+  # ==========================================================================
+  # BELLWORT/CUPRUM CURES
+  # ==========================================================================
+
+  peace:
+    cure_method: eat
+    cure_herb: bellwort
+    cure_mineral: cuprum
+    effect: "Prevents all aggressive actions"
+    delivered_by: [class_abilities]
+    priority: 1
+    notes: "Critical - completely disables offense"
+
+  generosity:
+    cure_method: eat
+    cure_herb: bellwort
+    cure_mineral: cuprum
+    effect: "Forces giving away items"
+    delivered_by: [maidenhair, class_abilities]
+    priority: 2
+
+  # ==========================================================================
+  # SALVE CURES (Epidermal)
+  # ==========================================================================
+
+  anorexia:
+    cure_method: apply
+    cure_salve: epidermal
+    body_part: torso
+    alternate_cure: focus
+    effect: "Prevents eating herbs/minerals"
+    delivered_by: [slike, telepathy, class_abilities]
+    lock_component: softlock
+    priority: 1
+    notes: "Critical lock component - blocks all eating cures"
+
+  indifference:
+    cure_method: apply
+    cure_salve: epidermal
+    body_part: head
+    effect: "Cannot perform certain actions"
+    delivered_by: [class_abilities]
+    priority: 2
+
+  # ==========================================================================
+  # SALVE CURES (Mending)
+  # ==========================================================================
+
+  crippled_left_leg:
+    cure_method: apply
+    cure_salve: mending
+    body_part: left leg
+    effect: "Cannot walk, slowed movement"
+    delivered_by: [limb_damage]
+    priority: 1
+    limb_level: 2
+    notes: "Level 2 break - requires mending"
+
+  crippled_right_leg:
+    cure_method: apply
+    cure_salve: mending
+    body_part: right leg
+    effect: "Cannot walk, slowed movement"
+    delivered_by: [limb_damage]
+    priority: 1
+    limb_level: 2
+
+  crippled_left_arm:
+    cure_method: apply
+    cure_salve: mending
+    body_part: left arm
+    effect: "Cannot use arm, affects rifting"
+    delivered_by: [limb_damage]
+    priority: 2
+    limb_level: 2
+    riftlock_note: "2 broken arms = cannot rift herbs from rift"
+
+  crippled_right_arm:
+    cure_method: apply
+    cure_salve: mending
+    body_part: right arm
+    effect: "Cannot use arm, affects rifting"
+    delivered_by: [limb_damage]
+    priority: 2
+    limb_level: 2
+
+  damaged_head:
+    cure_method: apply
+    cure_salve: mending
+    body_part: head
+    effect: "Head damage, enables certain kill moves"
+    delivered_by: [limb_damage, shikudo_needle]
+    priority: 2
+    limb_level: 2
+    notes: "Required for Shikudo dispatch kill"
+
+  crushed_throat:
+    cure_method: apply
+    cure_salve: mending
+    body_part: head
+    effect: "Windpipe damage"
+    delivered_by: [shikudo_needle]
+    priority: 1
+    notes: "Required for Shikudo dispatch kill"
+
+  # ==========================================================================
+  # SALVE CURES (Restoration)
+  # ==========================================================================
+
+  damaged_left_leg:
+    cure_method: apply
+    cure_salve: restoration
+    body_part: left leg
+    effect: "Minor leg damage"
+    delivered_by: [limb_damage]
+    priority: 3
+    limb_level: 1
+
+  damaged_right_leg:
+    cure_method: apply
+    cure_salve: restoration
+    body_part: right leg
+    effect: "Minor leg damage"
+    delivered_by: [limb_damage]
+    priority: 3
+    limb_level: 1
+
+  # ==========================================================================
+  # SMOKE CURES
+  # ==========================================================================
+
+  aeon:
+    cure_method: smoke
+    cure_herb: elm
+    cure_mineral: cinnabar
+    effect: "Extremely slowed actions, one at a time"
+    delivered_by: [class_abilities]
+    lock_component: aeonlock
+    priority: 1
+    notes: "Aeonlock = aeon + asthma (can't smoke elm)"
+
+  deafness:
+    cure_method: smoke
+    cure_herb: elm
+    cure_mineral: cinnabar
+    effect: "Cannot hear"
+    delivered_by: [class_abilities]
+    priority: 3
+    notes: "Sometimes a defense, sometimes harmful"
+
+  blindness:
+    cure_method: smoke
+    cure_herb: elm
+    cure_mineral: cinnabar
+    effect: "Cannot see"
+    delivered_by: [class_abilities]
+    priority: 2
+    notes: "Sometimes a defense, sometimes harmful"
+
+  # ==========================================================================
+  # WRITHE AFFLICTIONS
+  # ==========================================================================
+
+  entangled:
+    cure_method: writhe
+    effect: "Cannot move or perform most actions"
+    delivered_by: [class_abilities, snare]
+    priority: 1
+    writhe_time: 4
+
+  impaled:
+    cure_method: writhe
+    effect: "Cannot move, takes damage on writhe"
+    delivered_by: [blademaster_impale, class_abilities]
+    priority: 1
+    writhe_time: 6
+    notes: "Blademaster kill route involves impale + bleeding"
+
+  webbed:
+    cure_method: writhe
+    effect: "Slowed movement"
+    delivered_by: [webs, class_abilities]
+    priority: 2
+    writhe_time: 2
+
+  transfixed:
+    cure_method: writhe
+    effect: "Cannot move"
+    delivered_by: [runewarden_transfix, class_abilities]
+    priority: 1
+    writhe_time: 2
+
+  # ==========================================================================
+  # SPECIAL AFFLICTIONS
+  # ==========================================================================
+
+  prone:
+    cure_method: stand
+    effect: "Lying on ground, vulnerable to certain attacks"
+    delivered_by: [class_abilities, sweep, knockdown]
+    priority: 1
+    notes: "Required for many kill conditions"
+
+  blackout:
+    cure_method: none
+    effect: "Cannot see any game output"
+    delivered_by: [telepathy]
+    duration: 10
+    notes: "Hides all afflictions/damage from opponent"
+
+  mindlock:
+    cure_method: none
+    effect: "Locked to telepathy attacks"
+    delivered_by: [telepathy]
+    notes: "Required for using other telepathy abilities"
+
+  fratricide:
+    cure_method: eat
+    cure_herb: ginseng
+    cure_mineral: ferrum
+    effect: "Impulse mental afflictions relapse after cure"
+    delivered_by: [serpent_hypnosis]
+    priority: 1
+    notes: "With scytherus = ~1200 damage per relapse"
+
+# ============================================================================
+# CURE BALANCE TYPES
+# ============================================================================
+
+balances:
+  herb:
+    description: "Eating herb or mineral balance"
+    recovery: 1.5
+    shared_with: mineral
+
+  salve:
+    description: "Applying salve balance"
+    recovery: 1.0
+    note: "Different body parts have separate balances"
+
+  smoke:
+    description: "Smoking pipe balance"
+    recovery: 1.5
+
+  writhe:
+    description: "Writhe escape balance"
+    recovery: "varies"
+    note: "Depends on what you're writhing from"
+
+  focus:
+    description: "Mental focus ability balance"
+    recovery: 4.0
+    cures: [anorexia, "one random mental affliction"]
+
+  tree:
+    description: "Tree tattoo touch balance"
+    recovery: 30.0
+    cures: ["one random affliction"]
+    blocked_by: paralysis
+
+  clot:
+    description: "Clotting balance"
+    recovery: 1.0
+    cures: [bleeding]

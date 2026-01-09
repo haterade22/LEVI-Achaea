@@ -377,6 +377,7 @@ end
 
 --------------------------------------------------------------------------------
 -- TELEPATHY INTEGRATION
+-- IMPORTANT: Only use Telepathy in RAIN form - we get EQ balance decrease bonus!
 --------------------------------------------------------------------------------
 
 function shikudoLock.selectTelepathy()
@@ -387,6 +388,20 @@ function shikudoLock.selectTelepathy()
   if not ataxia.balances.eq then
     return nil
   end
+
+  local form = ataxia.vitals.form or "Oak"
+
+  -- CRITICAL: Only use Telepathy in RAIN form for the EQ balance bonus!
+  -- Exception: mindlock can be established in any form (setup requirement)
+  if form ~= "Rain" then
+    -- Only establish mindlock outside of Rain (necessary setup)
+    if not mindlocked then
+      return "mindlock " .. target
+    end
+    return nil  -- Save all other telepathy for Rain
+  end
+
+  -- === IN RAIN FORM - Telepathy is FASTER here! ===
 
   -- Priority 1: Establish mindlock (uses global 'mindlocked' variable)
   if not mindlocked then

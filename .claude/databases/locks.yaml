@@ -1,0 +1,553 @@
+# Achaea Lock Types Database
+# For Claude AI consumption - structured data for combat system development
+# Last Updated: 2026-01-08
+
+# ============================================================================
+# LOCK OVERVIEW
+# ============================================================================
+
+overview:
+  description: |
+    Locks prevent an opponent from curing by blocking all available cure
+    methods simultaneously. The severity and difficulty of escaping increases
+    with each lock type.
+
+  progression:
+    - softlock
+    - venomlock
+    - hardlock
+    - truelock
+
+  alternative_locks:
+    - focuslock
+    - riftlock
+    - salvelock
+    - sleeplock
+    - aeonlock
+
+# ============================================================================
+# MAIN LOCK PROGRESSION
+# ============================================================================
+
+locks:
+  softlock:
+    name: "Softlock"
+    description: "The entry-level lock - blocks three cure methods"
+    difficulty: easy
+
+    required_afflictions:
+      asthma:
+        effect: "Prevents smoking pipes"
+        cure: "Eating Kelp/Aurum"
+        blocks: smoke_cures
+
+      anorexia:
+        effect: "Prevents eating herbs"
+        cure: "Applying Epidermal or Focus"
+        blocks: eating_cures
+
+      slickness:
+        effect: "Prevents applying salves"
+        cure: "Eating Bloodroot/Magnesium or smoking Valerian/Realgar"
+        blocks: salve_cures
+
+    escape_route:
+      steps:
+        - "Focus to cure anorexia"
+        - "Eat bloodroot for slickness"
+        - "Eat kelp for asthma"
+      vulnerability: "Focus is available to break"
+
+    check_function: |
+      function checkSoftlock()
+        return tAffs.asthma and tAffs.anorexia and tAffs.slickness
+      end
+
+  venomlock:
+    name: "Venomlock"
+    description: "Softlock plus paralysis - blocks Tree tattoo escape"
+    difficulty: medium
+
+    required_afflictions:
+      paralysis:
+        effect: "Prevents movement and touching Tree tattoo"
+        cure: "Eating Bloodroot/Magnesium"
+        blocks: tree_tattoo
+
+      asthma:
+        inherited: true
+
+      anorexia:
+        inherited: true
+
+      slickness:
+        inherited: true
+
+    escape_route:
+      steps:
+        - "Focus to cure anorexia"
+        - "Eat bloodroot (cures para OR slick)"
+        - "Continue curing cycle"
+      vulnerability: "Focus is still available"
+
+    check_function: |
+      function checkVenomlock()
+        return checkSoftlock() and tAffs.paralysis
+      end
+
+  hardlock:
+    name: "Hardlock"
+    description: "Venomlock plus impatience - blocks Focus escape"
+    difficulty: hard
+
+    required_afflictions:
+      impatience:
+        effect: "Prevents using Focus ability"
+        cure: "Eating Goldenseal/Plumbum"
+        blocks: focus
+
+      paralysis:
+        inherited: true
+
+      asthma:
+        inherited: true
+
+      anorexia:
+        inherited: true
+
+      slickness:
+        inherited: true
+
+    escape_route:
+      steps:
+        - "Very difficult - must get lucky with cure order"
+        - "Need to cure anorexia via random Focus cure"
+      vulnerability: "Slim chance if impatience cures first"
+
+    check_function: |
+      function checkHardlock()
+        return checkVenomlock() and tAffs.impatience
+      end
+
+  truelock:
+    name: "Truelock"
+    description: "The complete lock - all cure methods blocked plus class-specific affliction"
+    difficulty: expert
+
+    required_afflictions:
+      impatience:
+        inherited: true
+
+      paralysis:
+        inherited: true
+
+      asthma:
+        inherited: true
+
+      anorexia:
+        inherited: true
+
+      slickness:
+        inherited: true
+
+      class_specific:
+        note: "See class_lock_afflictions table below"
+
+    additional_helpful:
+      - weariness: "Prevents class-specific active/passive cures"
+      - stupidity: "Prevents class-specific cures, lowers cure chances"
+      - recklessness: "Lowers cure chances"
+
+    escape_route:
+      steps: []
+      vulnerability: "None - requires external help (ally, divine intervention)"
+
+    check_function: |
+      function checkTruelock()
+        return checkHardlock() and tAffs.weariness
+      end
+
+# ============================================================================
+# ALTERNATIVE LOCK TYPES
+# ============================================================================
+
+  focuslock:
+    name: "Focuslock"
+    description: "Alternative to hardlock - uses mental affliction stacking instead of impatience"
+    difficulty: hard
+
+    strategy: |
+      Instead of impatience, stack multiple mental afflictions (goldenseal cures).
+      When opponent uses Focus, it cures a random mental aff instead of anorexia.
+
+    required_afflictions:
+      paralysis:
+        inherited: true
+      asthma:
+        inherited: true
+      anorexia:
+        inherited: true
+      slickness:
+        inherited: true
+
+    mental_stack_options:
+      - stupidity
+      - dizziness
+      - epilepsy
+      - impatience
+      - shyness
+      - depression
+
+    escape_route:
+      chance: "Low - Focus may randomly cure anorexia"
+      note: "Odds decrease with more mental afflictions stacked"
+
+    check_function: |
+      function checkFocuslock()
+        local mentalCount = 0
+        local mentals = {"stupidity", "dizziness", "epilepsy", "impatience", "shyness", "depression"}
+        for _, aff in ipairs(mentals) do
+          if tAffs[aff] then mentalCount = mentalCount + 1 end
+        end
+        return checkVenomlock() and mentalCount >= 2
+      end
+
+  riftlock:
+    name: "Riftlock"
+    description: "Limb-based lock - prevents rifting herbs from rift"
+    difficulty: hard
+
+    strategy: |
+      Break both arms so target cannot outr herbs from rift.
+      Add slickness so they cannot mend arms.
+      Add asthma so they cannot smoke valerian for slickness.
+
+    required_afflictions:
+      broken_left_arm:
+        effect: "Cannot use left arm"
+        cure: "Apply mending to left arm"
+        limb_damage: 100
+
+      broken_right_arm:
+        effect: "Cannot use right arm"
+        cure: "Apply mending to right arm"
+        limb_damage: 100
+
+      slickness:
+        effect: "Prevents applying salves (can't mend arms)"
+
+      asthma:
+        effect: "Prevents smoking pipes"
+
+    helper_affliction:
+      addiction:
+        venom: "vardrax"
+        effect: "Forces opponent to eat whatever is already in their hands"
+        synergy: "With broken arms, they can't rift more herbs after eating held ones"
+
+    escape_route:
+      steps:
+        - "Smoke valerian for slickness"
+        - "Apply mending to arms"
+        - "Rift herbs"
+      vulnerability: "Requires maintaining broken arms AND slickness"
+
+    check_function: |
+      function checkRiftlock()
+        local armsBroken = (tLimbs.LA >= 100) and (tLimbs.RA >= 100)
+        return armsBroken and tAffs.slickness and tAffs.asthma
+      end
+
+  salvelock:
+    name: "Salvelock"
+    description: "Enhanced Riftlock - level 2+ breaks prevent Restore"
+    difficulty: expert
+
+    strategy: |
+      Mangle arms (level 2+ break) so target cannot use Restore to instantly
+      heal limbs. Requires multiple mending applications to fix.
+
+    required_afflictions:
+      mangled_left_arm:
+        level: 2
+        effect: "Cannot use left arm, Restore cannot fix"
+        cure: "Apply mending multiple times"
+        limb_damage: 200
+
+      mangled_right_arm:
+        level: 2
+        effect: "Cannot use right arm, Restore cannot fix"
+        cure: "Apply mending multiple times"
+        limb_damage: 200
+
+      slickness:
+        inherited: true
+
+      asthma:
+        inherited: true
+
+    escape_route:
+      difficulty: "Very hard"
+      steps:
+        - "Smoke valerian for slickness"
+        - "Apply mending multiple times per arm"
+        - "Rift herbs"
+      notes: "Level 2 breaks need 2+ mending applications each"
+
+    check_function: |
+      function checkSalvelock()
+        local armsMangled = (tLimbs.LA >= 200) and (tLimbs.RA >= 200)
+        return armsMangled and tAffs.slickness and tAffs.asthma
+      end
+
+  sleeplock:
+    name: "Sleeplock"
+    description: "Timing-based lock - keeps opponent asleep"
+    difficulty: expert
+
+    strategy: |
+      Rapidly apply sleep affliction three times:
+      1st strips Insomnia defence
+      2nd strips Gypsum/Kola defence
+      3rd puts opponent to sleep
+
+    mechanic:
+      step_1:
+        action: "First Sleep/Delphinium"
+        effect: "Strips Insomnia affliction"
+
+      step_2:
+        action: "Second Sleep/Delphinium"
+        effect: "Strips Gypsum/Kola defence"
+
+      step_3:
+        action: "Third Sleep/Delphinium"
+        effect: "Puts opponent to sleep"
+
+    timing: "All three must be applied in very rapid succession"
+
+    follow_up: |
+      Once asleep, waking takes long enough that you can:
+      - Continue afflicting Sleep/Delphinium to keep them asleep
+      - Apply other locking afflictions while they're helpless
+      - Set up for a kill
+
+    counters:
+      - "Insomnia defence"
+      - "Gypsum/Kola defence"
+      - "Allies waking you"
+
+    check_function: |
+      function checkSleeplock()
+        return tAffs.sleep
+      end
+
+  aeonlock:
+    name: "Aeonlock"
+    description: "Time-manipulation lock - severely slows opponent"
+    difficulty: hard
+
+    strategy: |
+      Apply Aeon to slow target to one action per lengthy balance.
+      Add asthma so they cannot smoke Elm to cure aeon.
+      Stack kelp cures to keep asthma stuck.
+
+    required_afflictions:
+      aeon:
+        effect: "Allows only one action at a time on lengthy balance"
+        cure: "Smoking Elm/Cinnabar"
+
+      asthma:
+        effect: "Prevents curing Aeon by smoking"
+        cure: "Eating Kelp/Aurum"
+
+    kelp_stack:
+      purpose: "Ensure asthma remains stuck by competing cures"
+      options:
+        - clumsiness
+        - sensitivity
+        - weariness
+        - healthleech
+
+    result: "Opponent is so slowed they cannot keep up with affliction pressure"
+
+    check_function: |
+      function checkAeonlock()
+        return tAffs.aeon and tAffs.asthma
+      end
+
+# ============================================================================
+# CLASS-SPECIFIC LOCK AFFLICTIONS
+# ============================================================================
+
+class_lock_afflictions:
+  description: |
+    Different classes have passive cures that must be blocked to complete
+    a true lock. This table shows which affliction completes the lock
+    for each class.
+
+  weariness:
+    blocks: "Various passive cures, Restore ability"
+    classes:
+      - Blademaster
+      - Druid
+      - Infernal
+      - Monk
+      - Paladin
+      - Unnamable
+      - Runewarden
+      - Sentinel
+      - Serpent
+      - Airlord
+      - Waterlord
+      - Earthlord
+      - Firelord
+
+  voyria:
+    blocks: "Sip-based healing"
+    classes:
+      - Apostate
+      - Pariah
+      - Bard
+      - Priest
+
+  stupidity:
+    blocks: "Transmutation cures"
+    classes:
+      - Alchemist
+
+  haemophilia:
+    blocks: "Blood-based cures"
+    classes:
+      - Magi
+      - Sylvan
+
+  recklessness:
+    blocks: "Shadow cures"
+    classes:
+      - Depthswalker
+
+  confusion:
+    blocks: "Mental cures"
+    classes:
+      - Psion
+
+  paralysis:
+    blocks: "Already in base lock"
+    classes:
+      - Jester
+      - Occultist
+      - Shaman
+    note: "These classes don't need extra affliction beyond hardlock"
+
+# ============================================================================
+# LOCK DETECTION HELPERS
+# ============================================================================
+
+detection_helpers:
+  getLockingAffliction:
+    description: "Returns the class-specific affliction needed to complete lock"
+    lua_code: |
+      function getLockingAffliction(targetClass)
+        local lockAffs = {
+          Blademaster = "weariness",
+          Druid = "weariness",
+          Infernal = "weariness",
+          Monk = "weariness",
+          Paladin = "weariness",
+          Unnamable = "weariness",
+          Runewarden = "weariness",
+          Sentinel = "weariness",
+          Serpent = "weariness",
+          Airlord = "weariness",
+          Waterlord = "weariness",
+          Earthlord = "weariness",
+          Firelord = "weariness",
+          Apostate = "voyria",
+          Pariah = "voyria",
+          Bard = "voyria",
+          Priest = "voyria",
+          Alchemist = "stupidity",
+          Magi = "haemophilia",
+          Sylvan = "haemophilia",
+          Depthswalker = "recklessness",
+          Psion = "confusion",
+          Jester = "paralysis",
+          Occultist = "paralysis",
+          Shaman = "paralysis",
+        }
+        return lockAffs[targetClass] or "weariness"
+      end
+
+  checkTargetLocks:
+    description: "Sets global variables for lock states"
+    lua_code: |
+      function checkTargetLocks()
+        softlock = tAffs.asthma and tAffs.anorexia and tAffs.slickness
+        venomlock = softlock and tAffs.paralysis
+        hardlock = venomlock and tAffs.impatience
+        truelock = hardlock and tAffs.weariness
+      end
+
+# ============================================================================
+# BREAKING LOCKS (Defense)
+# ============================================================================
+
+breaking_locks:
+  softlock:
+    steps:
+      - "Focus to cure anorexia"
+      - "Eat bloodroot for slickness"
+      - "Eat kelp for asthma"
+
+  venomlock:
+    steps:
+      - "Focus to cure anorexia"
+      - "Eat bloodroot (para or slick)"
+      - "Continue curing cycle"
+
+  focuslock:
+    steps:
+      - "Hope Focus randomly cures anorexia"
+    note: "Low success rate"
+
+  truelock:
+    steps:
+      - "External help required"
+    note: "Cannot escape alone"
+
+  riftlock:
+    steps:
+      - "Smoke valerian for slickness"
+      - "Mend arms"
+      - "Rift herbs"
+
+  sleeplock:
+    steps:
+      - "Allies wake you"
+      - "Insomnia/Gypsum defences"
+
+  aeonlock:
+    steps:
+      - "Must cure asthma first"
+      - "Then smoke for aeon"
+
+# ============================================================================
+# PREVENTION PRIORITIES (Defense)
+# ============================================================================
+
+prevention:
+  general:
+    - "Keep asthma cured when possible (blocks smoking AND enables Serpent Impulse)"
+    - "Don't let slickness + anorexia stick together"
+    - "Watch for arm breaks if they're building riftlock"
+    - "Maintain Insomnia defence against sleep classes"
+
+  vs_serpent:
+    - "Cure asthma when weariness present (breaks Impulse requirement)"
+    - "Cure fratricide early (prevents mental relapse)"
+    - "Tree when approaching lock (asthma + slickness + impatience/anorexia)"
+    - "Prioritize paralysis over slickness when asthma blocks smoking"
+    - "Cure masochism early (blocks 2 Ekanelia transformations)"
+    - "Block Ekanelia kalmia by curing clumsiness OR weariness"
+    - "Cure fratricide IMMEDIATELY when scytherus present (1200 damage per relapse)"

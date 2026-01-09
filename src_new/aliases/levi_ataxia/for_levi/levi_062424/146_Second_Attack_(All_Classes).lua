@@ -69,7 +69,7 @@ if gmcp.Char.Status.class == "Apostate" then
 apostate_sleep()
 end
 if gmcp.Char.Status.class == "Serpent" then
-serp_quicklocksnakeprone()
+serp_ekanelia_offense()
 end
 if gmcp.Char.Status.class == "Psion" then
 levipsionflurry()

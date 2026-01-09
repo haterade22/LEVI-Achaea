@@ -25,7 +25,7 @@ if gmcp.Char.Status.class == "Monk" then
 end
 
 if gmcp.Char.Status.class == "Serpent" then
-serp_groupattack()
+serp_ekanelia_offense()
 end
  
 if gmcp.Char.Status.class == "Blademaster" then

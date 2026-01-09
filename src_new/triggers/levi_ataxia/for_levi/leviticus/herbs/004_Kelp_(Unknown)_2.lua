@@ -37,7 +37,7 @@ patterns:
 ]]--
 
 if matches[2] == target and tBals.plant then
-  --predictBal("herb", 1.55)	
+  --predictBal("herb", 1.55)
     if anorexiaFailsafe then
         tAffs[lastFocus] = true
         ataxiaEcho("Backtracked anorexia being cured with last focus.")
@@ -45,6 +45,8 @@ if matches[2] == target and tBals.plant then
         lastFocus = nil
     end
     targetAte("kelp")
+    -- Track for adaptive serpent offense
+    if serpent and serpent.trackCure then serpent.trackCure("kelp") end
 
     tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
