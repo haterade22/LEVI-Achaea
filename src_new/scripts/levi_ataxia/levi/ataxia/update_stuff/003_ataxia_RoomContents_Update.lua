@@ -74,7 +74,6 @@ function ataxia_RoomContents_Update(event)
 		for i,v in pairs(ataxia.denizensHere) do
       
 			if tonumber(i) == tonumber(gmcp.Char.Items.Remove.item.id) then
-        table.remove(stormhammerTargets,gmcp.Char.Items.Remove.item.id)
 				ataxia.denizensHere[i] = nil
       if ataxiaBasher.enabled then ataxiaBasher_stormhammer() end
 			end

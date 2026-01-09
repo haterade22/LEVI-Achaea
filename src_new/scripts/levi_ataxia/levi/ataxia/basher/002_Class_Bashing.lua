@@ -291,7 +291,7 @@ function ataxiaBasher_magiBashing()
    command = command..ataxiaBasher_assembleBattlerage()
 
    if not ataxiaBasher.shielded then
-    if ataxiaBasher_validTargets() > 2 then
+    if ataxiaBasher_validTargets() > 2 and #stormhammerTargets >= 3 then
       command = brage..sp.."cast stormhammer at "..stormhammerTargets[1].. " and " ..stormhammerTargets[2].. " and " ..stormhammerTargets[3]
     elseif ataxiaBasher_validTargets() < 3 then
       command = brage..sp.."staff cast horripilation at "..target
