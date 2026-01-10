@@ -46,10 +46,11 @@ send("pt " ..target..": Shield Down")
 end
 
 
-local aff2 = venom_to_aff(envenomListTwo[1])
-tarAffed(aff2)
-table.remove(envenomListTwo,1)
-
-if partyrelay and not ataxia.afflictions.aeon then
-      send("pt "..target..": "..aff2)
-    end
+local aff2 = envenomListTwo[1] and venom_to_aff(envenomListTwo[1]) or nil
+if aff2 then
+	tarAffed(aff2)
+	table.remove(envenomListTwo,1)
+	if partyrelay and not ataxia.afflictions.aeon then
+		send("pt "..target..": "..aff2)
+	end
+end
