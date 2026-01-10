@@ -1,14 +1,14 @@
 --[[mudlet
 type: trigger
-name: Quicksilver
+name: Flay No Coating
 hierarchy:
 - Levi_Ataxia
 - For Levi
 - leviticus
 - Ataxia
 - Combat/Aff Tracking
-- Remove Afflictions
-- Herbs
+- Add Afflictions
+- Third Person
 attributes:
   isActive: 'yes'
   isFolder: 'no'
@@ -32,15 +32,12 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^(\w+) applies a (sileris berry|quicksilver droplet) to \w+.$
+- pattern: ^You try to flay a non-existent sileris coating from (\w+)\.$
   type: 1
 ]]--
 
+-- No coating exists - clear fangbarrier tracking
 if isTargeted(matches[2]) then
-	tdeliverance = false
-	erAff("slickness")
-	erAff("paralysis")
-	-- Note: fangbarrier comes ~10 seconds later with "metallic shell" message
-	-- Don't set sileris=true here or we'll keep trying to flay non-existent coating
-	targetIshere = true
+	tAffs.fangbarrier = false
+	tAffs.sileris = false
 end
