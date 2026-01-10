@@ -76,6 +76,7 @@ affTimers = affTimers or {}                   -- Affliction timestamps
 serpent.config = {
     debug = false,
     echoStrategy = true,
+    echoAffs = true,  -- Show target afflictions each attack for debugging
     autoFratricide = true,
 }
 
@@ -680,8 +681,18 @@ function selectVenoms()
     attackMode = "doublestab"
 
     -- Check Ekanelia first - if strategy says use it, do it
+    -- BUT only if target doesn't have fangbarrier (blocks bite)
     if serpStrategy == "ekanelia" then
         checkEkaneliaOpportunities()
+
+        -- Fangbarrier blocks bite - strip it first with gecko + curare
+        if tAffs.fangbarrier or tAffs.sileris then
+            Algedonic.Echo("<red>FANGBARRIER UP<white> - stripping with gecko + curare")
+            table.insert(envenomList, "gecko")
+            table.insert(envenomListTwo, "curare")
+            return
+        end
+
         if ekaneliaReady.kalmia then
             attackMode = "bite"
             table.insert(envenomList, "kalmia")
@@ -822,7 +833,8 @@ function selectVenoms()
     if serpStrategy == "darkshade" then
         -- Check for scytherus Ekanelia
         checkEkaneliaOpportunities()
-        if ekaneliaReady.scytherus then
+        -- Only use bite if no fangbarrier
+        if ekaneliaReady.scytherus and not tAffs.fangbarrier and not tAffs.sileris then
             attackMode = "bite"
             table.insert(envenomList, "scytherus")
             Algedonic.Echo("<magenta>EKANELIA SCYTHERUS<white> - camus damage!")
@@ -857,23 +869,25 @@ function selectVenoms()
     -- LOCK (Default) - Standard lock progression
     -- ===========================================
 
-    -- Check for valuable Ekanelia opportunities
+    -- Check for valuable Ekanelia opportunities (only if no fangbarrier)
     checkEkaneliaOpportunities()
-    if ekaneliaReady.kalmia then
-        attackMode = "bite"
-        table.insert(envenomList, "kalmia")
-        Algedonic.Echo("<yellow>EKANELIA KALMIA<white> - asthma + slickness!")
-        return
-    elseif ekaneliaReady.monkshood then
-        attackMode = "bite"
-        table.insert(envenomList, "monkshood")
-        Algedonic.Echo("<yellow>EKANELIA MONKSHOOD<white> - impatience!")
-        return
-    elseif ekaneliaReady.loki then
-        attackMode = "bite"
-        table.insert(envenomList, "loki")
-        Algedonic.Echo("<yellow>EKANELIA LOKI<white> - nausea + paralysis!")
-        return
+    if not tAffs.fangbarrier and not tAffs.sileris then
+        if ekaneliaReady.kalmia then
+            attackMode = "bite"
+            table.insert(envenomList, "kalmia")
+            Algedonic.Echo("<yellow>EKANELIA KALMIA<white> - asthma + slickness!")
+            return
+        elseif ekaneliaReady.monkshood then
+            attackMode = "bite"
+            table.insert(envenomList, "monkshood")
+            Algedonic.Echo("<yellow>EKANELIA MONKSHOOD<white> - impatience!")
+            return
+        elseif ekaneliaReady.loki then
+            attackMode = "bite"
+            table.insert(envenomList, "loki")
+            Algedonic.Echo("<yellow>EKANELIA LOKI<white> - nausea + paralysis!")
+            return
+        end
     end
 
     -- Standard lock progression
@@ -1007,6 +1021,15 @@ function serp_ekanelia_attack()
     -- Build attack based on mode
     local weaponSetup = "wield left dirk;wield right shield;purge;order adder kill " .. target .. ";"
 
+    -- Safety check: Never bite if fangbarrier is up
+    if attackMode == "bite" and (tAffs.fangbarrier or tAffs.sileris) then
+        Algedonic.Echo("<red>SAFETY:<white> Fangbarrier blocks bite - switching to doublestab")
+        attackMode = "doublestab"
+        -- Use gecko + curare to strip fangbarrier
+        envenomList[1] = "gecko"
+        envenomListTwo[1] = "curare"
+    end
+
     if attackMode == "bite" then
         atk = atk .. weaponSetup .. hypnoCmd .. impulseCmd .. "bite " .. target .. " " .. envenomList[1]
     else
@@ -1064,6 +1087,25 @@ function serp_ekanelia_offense()
     -- Echo strategy if configured
     if serpent.config.echoStrategy then
         Algedonic.Echo("<dim_grey>Strategy: <white>" .. serpStrategy)
+    end
+
+    -- Echo current target afflictions for debugging
+    if serpent.config.echoAffs then
+        local affStr = ""
+        if tAffs.asthma then affStr = affStr .. "<cyan>AST " end
+        if tAffs.weariness then affStr = affStr .. "<cyan>WEA " end
+        if tAffs.clumsiness then affStr = affStr .. "<cyan>CLU " end
+        if tAffs.slickness then affStr = affStr .. "<yellow>SLI " end
+        if tAffs.paralysis then affStr = affStr .. "<yellow>PAR " end
+        if tAffs.impatience then affStr = affStr .. "<red>IMP " end
+        if tAffs.anorexia then affStr = affStr .. "<red>ANO " end
+        if tAffs.fangbarrier then affStr = affStr .. "<magenta>FNG " end
+        if tAffs.sileris then affStr = affStr .. "<magenta>SIL " end
+        if tAffs.darkshade then affStr = affStr .. "<green>DRK " end
+        if tAffs.addiction then affStr = affStr .. "<green>ADD " end
+        if tAffs.nausea then affStr = affStr .. "<green>NAU " end
+        if affStr == "" then affStr = "<dim_grey>none" end
+        cecho("<white>[tAffs]: " .. affStr .. "<reset>\n")
     end
 
     -- Build venom lists using unified adaptive venom selection
@@ -1132,6 +1174,9 @@ function serp_status()
     elseif softlock then lockStr = lockStr .. "<yellow>SOFT LOCK"
     else lockStr = lockStr .. "<dim_grey>None" end
     cecho(lockStr .. "<reset>\n")
+
+    -- Fangbarrier status (blocks bite)
+    cecho("<white>Fangbarrier: " .. ((tAffs.fangbarrier or tAffs.sileris) and "<red>UP (blocks bite)" or "<green>DOWN") .. "<reset>\n")
 
     -- Impulse status
     cecho("<white>Impulse Ready: " .. (checkImpulseReady() and "<green>YES" or "<red>NO"))
