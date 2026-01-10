@@ -57,6 +57,8 @@ patterns:
   type: 1
 - pattern: ^The air shudders about (\w+), a keening whine on the edge of hearing.$
   type: 1
+- pattern: ^A shimmering curtain of golden light sweeps over (\w+)\.$
+  type: 1
 ]]--
 
 local name = matches[2]

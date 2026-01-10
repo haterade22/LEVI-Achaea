@@ -48,6 +48,11 @@ end
 -- Paladin Pyre tracking (for Damnation kill condition)
 -- Pyre is applied via "fire surges about the righteous <Paladin>" message
 function pali_addPyre()
+  -- Auto-detect: If we're getting pyre, we're fighting a Paladin
+  -- This enables Damnation defense even if target isn't in NDB
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.fightingPaladin = true
+
   ataxia.afflictions.pyre = (ataxia.afflictions.pyre or 0) + 1
   if ataxia.afflictions.pyre > 3 then ataxia.afflictions.pyre = 3 end  -- Pyre caps at level 3
 

@@ -33,15 +33,24 @@ packageName: ''
 -- - If fighting solo Paladin, focus on preventing burning stack to 5
 
 -- ============================================================================
+-- PALADIN DETECTION HELPER
+-- ============================================================================
+-- Checks NDB class OR combat-detected flag (set when pyre is applied)
+-- This allows Damnation defense to work even if target isn't in NDB
+
+local function isPaladinTarget()
+  if not target then return false end
+  local targetClass = ataxiaNDB_getClass and ataxiaNDB_getClass(target) or nil
+  return (targetClass == "Paladin") or (ataxiaTemp and ataxiaTemp.fightingPaladin)
+end
+
+-- ============================================================================
 -- DAMNATION THREAT DETECTION
 -- ============================================================================
 
 function checkDamnationThreat()
   -- Only relevant when fighting Paladins
-  if not target then return false end
-
-  local targetClass = ataxiaNDB_getClass and ataxiaNDB_getClass(target) or nil
-  if targetClass ~= "Paladin" then return false end
+  if not isPaladinTarget() then return false end
 
   -- Check if head is broken (any level of damage counts)
   local headBroken = ataxia.afflictions.damagedhead
@@ -117,10 +126,7 @@ end
 
 function Algedonic.AntiPaladin()
   -- Only run when fighting Paladins
-  if not target then return end
-
-  local targetClass = ataxiaNDB_getClass and ataxiaNDB_getClass(target) or nil
-  if targetClass ~= "Paladin" then return end
+  if not isPaladinTarget() then return end
 
   -- Track current affliction state
   local headBroken = ataxia.afflictions.damagedhead
@@ -203,10 +209,7 @@ end
 -- ============================================================================
 -- Returns a string to append to prompt when Damnation threat is detected
 function getDamnationPromptWarning()
-  if not target then return "" end
-
-  local targetClass = ataxiaNDB_getClass and ataxiaNDB_getClass(target) or nil
-  if targetClass ~= "Paladin" then return "" end
+  if not isPaladinTarget() then return "" end
 
   local headBroken = ataxia.afflictions.damagedhead
                   or ataxia.afflictions.brokenhead
