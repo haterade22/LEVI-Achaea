@@ -47,92 +47,79 @@ function taTempers()
 end
 
 function targetAte(herb)
-	if tAffs.anorexia then erAff("anorexia") end
+    if tAffs.anorexia then erAff("anorexia") end
 
-	-- Find all matching afflictions and their confidence levels
-	local candidates = {}
-	for i=1, #curingTable[herb] do
-		local aff = curingTable[herb][i]
-		if haveAff(aff) then
-			local conf = getAffConfidence and getAffConfidence(aff) or 1.0
-			table.insert(candidates, {aff = aff, confidence = conf, priority = i})
-		end
-	end
+    -- Find all matching afflictions
+    local candidates = {}
+    for i=1, #curingTable[herb] do
+        local aff = curingTable[herb][i]
+        if haveAff(aff) then
+            table.insert(candidates, {aff = aff, priority = i})
+        end
+    end
 
-	if #candidates == 0 then
-		-- No matching afflictions, nothing to cure
-		predictBal("herb", 1.55)
-		return
-	end
+    if #candidates == 0 then
+        predictBal("herb", 1.55)
+        return
+    end
 
-	-- If only one candidate, it's definitely the one being cured
-	if #candidates == 1 then
-		local aff = candidates[1].aff
-		if herb == "goldenseal" and aff ~= "impatience" then
-			if haveAff("impatience") then
-				lastGoldenseal = aff
-				tempTimer(1, [[lastGoldenseal = nil]])
-			end
-		elseif herb == "ginseng" and aff == "haemophilia" then
-			tAffs.bleed = 0
-		elseif herb == "kelp" and haveAff("asthma") and haveSmokeAff() then
-			lastKelp = aff
-			tempTimer(0.4, [[ restoreLastKelp() ]])
-		end
-		erAff(aff)
-	else
-		-- Multiple candidates - uncertain which was cured
-		-- For kelp with asthma: reduce ALL to 0.5, wait for smoke to disambiguate
-		if herb == "kelp" and haveAff("asthma") then
-			-- Store all kelp afflictions that might have been cured
-			lastKelpAffs = {}
-			for _, c in ipairs(candidates) do
-				lastKelpAffs[c.aff] = true
-				-- Reduce confidence of ALL matching afflictions to 0.5
-				if setAffConfidence then
-					setAffConfidence(c.aff, 0.5)
-				end
-			end
-			-- Don't remove any yet - wait for smoke or other action to disambiguate
-		else
-			-- For non-kelp herbs or kelp without asthma: use priority-based reduction
-			local bestCandidate = candidates[1]
-			for i=2, #candidates do
-				if candidates[i].confidence > bestCandidate.confidence + 0.3 then
-					bestCandidate = candidates[i]
-				end
-			end
+    -- Single candidate - definitely that one
+    if #candidates == 1 then
+        local aff = candidates[1].aff
+        if herb == "goldenseal" and aff ~= "impatience" then
+            if haveAff("impatience") then
+                lastGoldenseal = aff
+                tempTimer(1, [[lastGoldenseal = nil]])
+            end
+        elseif herb == "ginseng" and aff == "haemophilia" then
+            tAffs.bleed = 0
+        end
+        erAff(aff)
+    else
+        -- Multiple candidates
+        if herb == "kelp" and haveAff("asthma") then
+            -- Kelp with asthma: wait for smoke to disambiguate
+            lastKelpAffs = {}
+            for _, c in ipairs(candidates) do
+                lastKelpAffs[c.aff] = true
+            end
 
-			local affToCure = bestCandidate.aff
+            -- Timeout: if no smoke in 2s, asthma wasn't cured
+            if kelpDisambiguateTimer then killTimer(kelpDisambiguateTimer) end
+            kelpDisambiguateTimer = tempTimer(2, function()
+                if lastKelpAffs then
+                    -- No smoke = still have asthma, cure highest priority non-asthma
+                    local kelps = {"hypochondria", "parasite", "weariness", "healthleech", "clumsiness", "sensitivity"}
+                    for i=1, #kelps do
+                        if lastKelpAffs[kelps[i]] then
+                            erAff(kelps[i])
+                            ataxiaEcho("No smoke: " .. kelps[i] .. " cured, asthma still present.")
+                            break
+                        end
+                    end
+                    lastKelpAffs = nil
+                end
+                kelpDisambiguateTimer = nil
+            end)
+        elseif herb == "goldenseal" then
+            -- Goldenseal: use priority order, track for impatience backtrack
+            local aff = candidates[1].aff
+            if aff ~= "impatience" and haveAff("impatience") then
+                lastGoldenseal = aff
+                tempTimer(1, [[lastGoldenseal = nil]])
+            end
+            erAff(aff)
+        else
+            -- Other herbs: use priority order
+            local aff = candidates[1].aff
+            if herb == "ginseng" and aff == "haemophilia" then
+                tAffs.bleed = 0
+            end
+            erAff(aff)
+        end
+    end
 
-			-- Special handling
-			if herb == "goldenseal" and affToCure ~= "impatience" then
-				if haveAff("impatience") then
-					lastGoldenseal = affToCure
-					tempTimer(1, [[lastGoldenseal = nil]])
-				end
-			elseif herb == "ginseng" and affToCure == "haemophilia" then
-				tAffs.bleed = 0
-			end
-
-			-- Use confidence reduction if available, otherwise fall back to erAff
-			if reduceAffConfidence then
-				local removed = reduceAffConfidence(affToCure, 0.5)
-				if removed then
-					if ataxiaTemp.showingAffs then
-						displayTargetAffs()
-					elseif zgui then
-						zgui.showTarAffs()
-					end
-					raiseEvent("target cured aff", affToCure)
-				end
-			else
-				erAff(affToCure)
-			end
-		end
-	end
-
-	predictBal("herb", 1.55)
+    predictBal("herb", 1.55)
 end
 
 function flushingsProc()

@@ -44,29 +44,22 @@ if isTargeted(matches[2]) then
 tdeliverance = false
   if passiveFailsafe then restorePassiveCure() end
 
+	-- Kill disambiguation timer - smoke proves asthma is cured
+	if kelpDisambiguateTimer then killTimer(kelpDisambiguateTimer); kelpDisambiguateTimer = nil end
+
 	-- Smoking proves asthma was cured (they couldn't smoke with asthma)
 	erAff("asthma")
 
 	-- If we had uncertain kelp afflictions, now we know: asthma was cured
-	-- Restore confidence of other kelp affs to 1.0
+	-- Keep other kelp affs (they weren't cured)
 	if lastKelpAffs then
-		for aff, _ in pairs(lastKelpAffs) do
-			if aff ~= "asthma" and haveAff(aff) then
-				if setAffConfidence then
-					setAffConfidence(aff, 1.0)
-				else
-					tAffs[aff] = true
-				end
-			end
-		end
 		lastKelpAffs = nil
-		ataxiaEcho("Smoke confirmed: asthma cured, other kelp affs restored.")
+		ataxiaEcho("Smoke confirmed: asthma cured, other kelp affs still present.")
 	end
 
 	-- Legacy backtrack support
 	if lastKelp and lastKelp ~= "asthma" then
 		tAffs[lastKelp] = true
-		if tAffConfidence then tAffConfidence[lastKelp] = 1.0 end
 		lastKelp = nil
 		ataxiaEcho("Backtracked asthma being cured with last eat.")
 	elseif lastKelp and lastKelp == "asthma" then

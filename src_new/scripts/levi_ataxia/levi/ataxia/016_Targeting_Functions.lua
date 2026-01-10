@@ -441,8 +441,8 @@ webbed = false,
 whisperingmadness = false, 
 wristfractures = false,
 }
-  -- Reset confidence tracking on target change
-  tAffConfidence = {}
+  -- Reset kelp disambiguation on target change
   lastKelpAffs = nil
   lastKelp = nil
+  if kelpDisambiguateTimer then killTimer(kelpDisambiguateTimer); kelpDisambiguateTimer = nil end
 end
