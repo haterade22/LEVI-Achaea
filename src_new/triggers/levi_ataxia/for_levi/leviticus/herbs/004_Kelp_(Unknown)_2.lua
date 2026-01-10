@@ -36,7 +36,7 @@ patterns:
   type: 1
 ]]--
 
-if matches[2] == target and tBals.plant then
+if matches[2] == target then
   --predictBal("herb", 1.55)
     if anorexiaFailsafe then
         tAffs[lastFocus] = true

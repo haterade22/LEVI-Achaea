@@ -38,7 +38,7 @@ patterns:
   type: 1
 ]]--
 
-if isTargeted(multimatches[1][2]) and tBals.plant then
+if isTargeted(multimatches[1][2]) then
 tdeliverance = false
   predictBal("herb", 1.55)	
 	if anorexiaFailsafe then

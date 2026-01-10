@@ -34,7 +34,7 @@ patterns:
   type: 1
 ]]--
 
-if matches[2] == target and tBals.plant then
+if matches[2] == target then
     if anorexiaFailsafe then
         tAffs[lastFocus] = true
         ataxiaEcho("Backtracked anorexia being cured with last focus.")

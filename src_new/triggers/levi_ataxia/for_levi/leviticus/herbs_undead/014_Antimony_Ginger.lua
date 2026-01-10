@@ -34,7 +34,7 @@ patterns:
   type: 1
 ]]--
 
-if isTargeted(matches[2]) and tBals.plant then
+if isTargeted(matches[2]) then
 
 	if anorexiaFailsafe then
 		tAffs[lastFocus] = true
