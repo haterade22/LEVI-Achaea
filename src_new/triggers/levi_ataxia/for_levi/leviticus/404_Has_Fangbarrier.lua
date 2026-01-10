@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: Got slickness
+name: Has Fangbarrier
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -32,12 +32,11 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^The protective coating covering the skin of (\w+) sloughs off.$
+- pattern: ^A supple metallic shell of quicksilver has formed around (\w+).$
   type: 1
 ]]--
 
 if isTargeted(matches[2]) then
-	tarAffed("slickness")
-	tAffs.fangbarrier = false
-	tAffs.sileris = false
+	tAffs.fangbarrier = true
+	tAffs.sileris = true
 end
