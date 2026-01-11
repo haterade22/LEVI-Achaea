@@ -58,7 +58,7 @@ tdeliverance = false
 		or multimatches[3][1] == name .. " shakes her head and a look of clarity returns to her eyes." then
 			erAff("lovers")
 	else
-		targetAte("bellwort")
+		targetAteWrapper("bellwort")
 	end
 	tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end

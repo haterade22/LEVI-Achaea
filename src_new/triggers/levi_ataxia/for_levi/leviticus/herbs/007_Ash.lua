@@ -47,7 +47,7 @@ if matches[2] == target then
       tAffs.crescendo = 0
       erAff("crescendo")
     end
-    targetAte("ash")
+    targetAteWrapper("ash")
 if passiveFailsafe then restorePassiveCure() end
     tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end

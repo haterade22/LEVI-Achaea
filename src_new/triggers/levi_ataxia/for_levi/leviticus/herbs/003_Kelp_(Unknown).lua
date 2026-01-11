@@ -43,7 +43,7 @@ if matches[2] == target then
         anorexiaFailsafe = nil
         lastFocus = nil
     end
-targetAte("kelp")
+targetAteWrapper("kelp")
 if passiveFailsafe then restorePassiveCure() end
     tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end

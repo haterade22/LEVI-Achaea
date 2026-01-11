@@ -44,6 +44,9 @@ if isTargeted(matches[2]) then
 tdeliverance = false
   if passiveFailsafe then restorePassiveCure() end
 
+	-- V2 integration: notify smoke detection for disambiguation
+	if onTargetSmokeV2 then onTargetSmokeV2(matches[2]) end
+
 	-- Kill disambiguation timer - smoke proves asthma is cured
 	if kelpDisambiguateTimer then killTimer(kelpDisambiguateTimer); kelpDisambiguateTimer = nil end
 

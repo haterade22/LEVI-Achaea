@@ -44,7 +44,7 @@ if matches[2] == target then
         anorexiaFailsafe = nil
         lastFocus = nil
     end
-    targetAte("kelp")
+    targetAteWrapper("kelp")
     -- Track for adaptive serpent offense
     if serpent and serpent.trackCure then serpent.trackCure("kelp") end
 

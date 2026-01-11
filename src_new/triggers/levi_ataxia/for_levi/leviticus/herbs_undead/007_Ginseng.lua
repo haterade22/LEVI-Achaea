@@ -44,7 +44,7 @@ tdeliverance = false
 	end
   if passiveFailsafe then restorePassiveCure() end
   
-	targetAte("ginseng")
+	targetAteWrapper("ginseng")
 
 	selectString(line, 1)
 	fg("NavajoWhite")

@@ -54,7 +54,7 @@ if isTargeted(multimatches[1][2]) then
   elseif multimatches[3][1] == name.." ceases his violent trembling." or multimatches[3][1] == name.." ceases her violent trembling." then
     erAff("whisperingmadness")
 	else
-		targetAte("lobelia")
+		targetAteWrapper("lobelia")
 	end
 	
 	tBals.plant = false

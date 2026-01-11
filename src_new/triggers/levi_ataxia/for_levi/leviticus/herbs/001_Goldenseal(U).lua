@@ -44,7 +44,7 @@ tdeliverance = false
         anorexiaFailsafe = nil
         lastFocus = nil
     end
-    targetAte("goldenseal")
+    targetAteWrapper("goldenseal")
 if passiveFailsafe then restorePassiveCure() end
     tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
