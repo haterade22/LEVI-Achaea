@@ -226,6 +226,12 @@ end
 
 -- Update affliction display
 function updateAffDisplayV2()
+    -- Update V2 tracking window if it exists
+    if zgui and zgui.showTarAffsV2 then
+        zgui.showTarAffsV2()
+    end
+
+    -- Also update legacy displays for backward compatibility
     if ataxiaTemp and ataxiaTemp.showingAffs then
         if displayTargetAffs then displayTargetAffs() end
     elseif zgui and zgui.showTarAffs then
