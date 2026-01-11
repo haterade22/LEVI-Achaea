@@ -165,6 +165,52 @@ if haveAffWithConfidence("paralysis", 0.5) then
 end
 ```
 
+### Target Affliction Tracking V2 System
+
+**NEW**: Advanced affliction tracking with certainty levels, stack tracking, and AK-inspired cure detection.
+
+**Full Documentation:** `.claude/projects/affliction-tracking-v2/`
+
+**Toggle:**
+```lua
+ataxia.settings.useAffTrackingV2 = true   -- Enable V2
+ataxia.settings.useAffTrackingV2 = false  -- Disable, use old system (default)
+```
+
+**Key Features:**
+- Certainty-based tracking (0/1/2+ levels with stacking support)
+- Verifiability-based priority (unverifiable affs assumed cured first)
+- Random cure counter (tracks tree/focus/passive cures like AK's `ak.randomaffs`)
+- Backtracking system (reverses incorrect guesses)
+- Third-party verification (fumble confirms clumsiness, smoke confirms no asthma)
+
+**V2 Functions:**
+
+| Function | Purpose |
+|----------|---------|
+| `confirmAffV2(aff)` | Set certainty to 2 (confirmed) |
+| `removeAffV2(aff)` | Set certainty to 0 (cured) |
+| `haveAffV2(aff)` | Check if certainty >= 1 |
+| `stackAffV2(aff)` | Add a stack (+2 certainty) |
+| `getStackCountV2(aff)` | Get number of stacks |
+| `onTargetTreeV2(target)` | Handle tree tattoo cure |
+| `onTargetFocusV2(target)` | Handle focus cure |
+
+**V2 Files:**
+```
+src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_v2/
+├── 001_Core.lua           # Certainty + stack + random cure tracking
+├── 002_Herb_Cures.lua     # Priority lists for all 7 herbs
+├── 003_Backtracking.lua   # Guess storage and reversal
+└── 004_Verification.lua   # Fumble/smoke signal handlers
+```
+
+**Integrated Triggers:**
+- 15 herb triggers → `targetAteWrapper()`
+- Tree trigger → `onTargetTreeV2()`
+- Focus triggers → `onTargetFocusV2()`
+- 16 class cure triggers → `removeAffV2()` / `reduceRandomAffCertaintyV2()`
+
 ### ataxiaBasher (Automated Hunting System)
 
 The basher provides automated target selection and attack execution for PvE hunting.
