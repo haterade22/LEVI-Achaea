@@ -152,42 +152,94 @@ function infernalDWC.getFocusLeg()
 end
 
 -------------------------------------------------------------------------------
+-- AFFLICTION TRACKING HELPERS (V2 compatible)
+-------------------------------------------------------------------------------
+
+--[[
+    Tracking System Toggle:
+    - ataxia.settings.useAffTrackingV2 = true   → Use V2 ONLY (no V1 fallback)
+    - ataxia.settings.useAffTrackingV2 = false  → Use V1 only
+
+    When V2 is enabled, V1 is completely ignored to prevent conflicts.
+]]--
+
+-- Helper to check if target has an affliction (V2 or V1, no mixing)
+function infernalDWC.hasAff(aff)
+    -- V2 system (when enabled, use ONLY V2 - no fallback)
+    if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
+        if haveAffV2 then
+            return haveAffV2(aff)
+        elseif tAffsV2 then
+            return (tAffsV2[aff] or 0) >= 1
+        end
+        -- V2 enabled but not loaded - return false (don't fall back to V1)
+        return false
+    end
+
+    -- V1 system (only when V2 is disabled)
+    if tAffs then
+        return tAffs[aff] == true
+    end
+    return false
+end
+
+-- Helper to confirm we applied an affliction (V2 or V1)
+function infernalDWC.confirmAff(aff)
+    -- V2 system (when enabled, use ONLY V2)
+    if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
+        if confirmAffV2 then
+            confirmAffV2(aff)
+        end
+        return -- Don't also set V1
+    end
+
+    -- V1 system (only when V2 is disabled)
+    if tAffs then
+        tAffs[aff] = true
+    end
+end
+
+-- Check which tracking system is active
+function infernalDWC.getTrackingSystem()
+    if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
+        return "V2"
+    end
+    return "V1"
+end
+
+-------------------------------------------------------------------------------
 -- LOCK DETECTION
 -------------------------------------------------------------------------------
 
 -- Check if we have soft lock (ANO + SLI + AST + PAR + STU)
 function infernalDWC.checkSoftLock()
-    if not tAffs then return false end
-    return tAffs.anorexia
-       and tAffs.slickness
-       and tAffs.asthma
-       and tAffs.paralysis
-       and tAffs.stupidity
+    return infernalDWC.hasAff("anorexia")
+       and infernalDWC.hasAff("slickness")
+       and infernalDWC.hasAff("asthma")
+       and infernalDWC.hasAff("paralysis")
+       and infernalDWC.hasAff("stupidity")
 end
 
 -- Check if we have venom lock (soft lock + crippled limb)
 function infernalDWC.checkVenomLock()
     if not infernalDWC.checkSoftLock() then return false end
-    if not tAffs then return false end
-    return tAffs.damagedleftarm or tAffs.damagedrightarm
-        or tAffs.damagedleftleg or tAffs.damagedrightleg
+    return infernalDWC.hasAff("damagedleftarm") or infernalDWC.hasAff("damagedrightarm")
+        or infernalDWC.hasAff("damagedleftleg") or infernalDWC.hasAff("damagedrightleg")
 end
 
 -- Check if nausea is stuck (parry bypass active)
 function infernalDWC.isNauseaStuck()
-    if not tAffs then return false end
-    return tAffs.nausea == true
+    return infernalDWC.hasAff("nausea")
 end
 
 -- Check partial lock progress (for soft lock building)
 function infernalDWC.countLockAffs()
     local count = 0
-    if not tAffs then return 0 end
-    if tAffs.anorexia then count = count + 1 end
-    if tAffs.slickness then count = count + 1 end
-    if tAffs.asthma then count = count + 1 end
-    if tAffs.paralysis then count = count + 1 end
-    if tAffs.stupidity then count = count + 1 end
+    if infernalDWC.hasAff("anorexia") then count = count + 1 end
+    if infernalDWC.hasAff("slickness") then count = count + 1 end
+    if infernalDWC.hasAff("asthma") then count = count + 1 end
+    if infernalDWC.hasAff("paralysis") then count = count + 1 end
+    if infernalDWC.hasAff("stupidity") then count = count + 1 end
     return count
 end
 
@@ -197,7 +249,7 @@ end
 
 function infernalDWC.getPhase()
     -- Kill check first - both arms broken + prone
-    if tAffs and tAffs.prone and infernalDWC.areBothArmsBroken() then
+    if infernalDWC.hasAff("prone") and infernalDWC.areBothArmsBroken() then
         return "KILL"
     end
 
@@ -224,25 +276,26 @@ end
 function infernalDWC.selectVenoms()
     local v1, v2 = nil, nil
     local phase = infernalDWC.getPhase()
+    local hasAff = infernalDWC.hasAff  -- Local reference for cleaner code
 
     if phase == "NAUSEA_SETUP" then
         -- Priority: Nausea (parry bypass) > Clumsiness (33% miss) > Weariness (blocks Fitness)
-        if not tAffs.nausea then
+        if not hasAff("nausea") then
             v1 = "eurypteria"
-        elseif not tAffs.clumsiness then
+        elseif not hasAff("clumsiness") then
             v1 = "kalmia"
-        elseif not tAffs.weariness then
+        elseif not hasAff("weariness") then
             v1 = "vernalius"
         else
             v1 = "eurypteria" -- Maintain nausea
         end
 
         -- Second venom slot
-        if not tAffs.clumsiness and v1 ~= "kalmia" then
+        if not hasAff("clumsiness") and v1 ~= "kalmia" then
             v2 = "kalmia"
-        elseif not tAffs.weariness and v1 ~= "vernalius" then
+        elseif not hasAff("weariness") and v1 ~= "vernalius" then
             v2 = "vernalius"
-        elseif not tAffs.asthma then
+        elseif not hasAff("asthma") then
             v2 = "kalmia" -- Start building asthma for lock
         else
             v2 = "curare" -- Start paralysis pressure
@@ -250,30 +303,30 @@ function infernalDWC.selectVenoms()
 
     elseif phase == "PARALLEL_PREP" then
         -- Soft lock priority order for v1
-        if not tAffs.slickness then
+        if not hasAff("slickness") then
             v1 = "gecko"
-        elseif not tAffs.asthma then
+        elseif not hasAff("asthma") then
             v1 = "kalmia"
-        elseif not tAffs.anorexia then
+        elseif not hasAff("anorexia") then
             v1 = "slike"
-        elseif not tAffs.paralysis then
+        elseif not hasAff("paralysis") then
             v1 = "curare"
-        elseif not tAffs.stupidity then
+        elseif not hasAff("stupidity") then
             v1 = "aconite"
         else
             v1 = "curare" -- Maintain paralysis
         end
 
         -- Second venom: maintain key afflictions or continue lock building
-        if not tAffs.nausea then
+        if not hasAff("nausea") then
             v2 = "eurypteria" -- Re-apply nausea if lost
-        elseif not tAffs.weariness then
+        elseif not hasAff("weariness") then
             v2 = "vernalius"
-        elseif not tAffs.clumsiness and v1 ~= "kalmia" then
+        elseif not hasAff("clumsiness") and v1 ~= "kalmia" then
             v2 = "kalmia"
-        elseif not tAffs.paralysis and v1 ~= "curare" then
+        elseif not hasAff("paralysis") and v1 ~= "curare" then
             v2 = "curare"
-        elseif not tAffs.stupidity and v1 ~= "aconite" then
+        elseif not hasAff("stupidity") and v1 ~= "aconite" then
             v2 = "aconite"
         else
             v2 = "curare" -- Default to paralysis maintenance
@@ -404,7 +457,7 @@ function infernalDWCVivisect()
 
     -- REBOUNDING CHECK - MUST clear rebounding first or attacks bounce back!
     -- Rebounding causes all melee attacks to reflect damage back to attacker
-    if tAffs.rebounding then
+    if infernalDWC.hasAff("rebounding") then
         if v1 then
             -- razeslash removes rebounding AND applies venom
             atk = atk .. ";rsl " .. target .. " " .. v1
@@ -418,7 +471,7 @@ function infernalDWCVivisect()
     end
 
     -- SHIELD CHECK - must clear shield before attacks land
-    if tAffs.shield then
+    if infernalDWC.hasAff("shield") then
         if v1 then
             atk = atk .. ";rsl " .. target .. " " .. v1
         else
@@ -499,7 +552,12 @@ function infernalDWCStatus()
     local rl = infernalDWC.getRL()
 
     cecho("\n<cyan>========================================<reset>")
-    cecho("\n<cyan>[INF DWC VIVISECT]<reset> Target: <yellow>" .. tar .. "<reset>")
+    -- Show which tracking system is in use
+    local trackingSystem = "V1 (tAffs)"
+    if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
+        trackingSystem = "V2 (tAffsV2)"
+    end
+    cecho("\n<cyan>[INF DWC VIVISECT]<reset> Target: <yellow>" .. tar .. "<reset> | Tracking: <yellow>" .. trackingSystem .. "<reset>")
     cecho("\n<cyan>[INF DWC]<reset> Phase: <yellow>" .. phase .. "<reset>")
 
     if phase == "EXECUTE" then
@@ -529,16 +587,17 @@ function infernalDWCStatus()
         cecho(" <green>VENOM LOCK!<reset>")
     end
 
-    -- Affliction checklist
+    -- Affliction checklist (using V2-compatible helper)
+    local hasAff = infernalDWC.hasAff
     local affs = {
-        {"nau", tAffs and tAffs.nausea},
-        {"clu", tAffs and tAffs.clumsiness},
-        {"wea", tAffs and tAffs.weariness},
-        {"sli", tAffs and tAffs.slickness},
-        {"ast", tAffs and tAffs.asthma},
-        {"ano", tAffs and tAffs.anorexia},
-        {"par", tAffs and tAffs.paralysis},
-        {"stu", tAffs and tAffs.stupidity},
+        {"nau", hasAff("nausea")},
+        {"clu", hasAff("clumsiness")},
+        {"wea", hasAff("weariness")},
+        {"sli", hasAff("slickness")},
+        {"ast", hasAff("asthma")},
+        {"ano", hasAff("anorexia")},
+        {"par", hasAff("paralysis")},
+        {"stu", hasAff("stupidity")},
     }
 
     cecho("\n<cyan>[INF DWC]<reset> Affs: ")
@@ -552,19 +611,19 @@ function infernalDWCStatus()
 
     -- Defenses status (rebounding/shield)
     cecho("\n<cyan>[INF DWC]<reset> Defs: ")
-    if tAffs and tAffs.rebounding then
+    if hasAff("rebounding") then
         cecho("<red>REBOUNDING<reset> ")
     else
         cecho("<green>no reb<reset> ")
     end
-    if tAffs and tAffs.shield then
+    if hasAff("shield") then
         cecho("<red>SHIELD<reset> ")
     else
         cecho("<green>no shd<reset> ")
     end
 
     -- Prone status
-    if tAffs and tAffs.prone then
+    if hasAff("prone") then
         cecho("\n<cyan>[INF DWC]<reset> <green>TARGET IS PRONE<reset>")
     end
 
@@ -611,3 +670,4 @@ end
 
 cecho("\n<cyan>[INF DWC Vivisect]<reset> Loaded! Use infernalDWCVivisect() to attack.")
 cecho("\n<cyan>[INF DWC Vivisect]<reset> Commands: infernalDWCStatus(), infernalDWCReset(), infernalDWCSetWeapons(w1, w2)")
+cecho("\n<cyan>[INF DWC Vivisect]<reset> Supports affliction tracking V2 (set ataxia.settings.useAffTrackingV2 = true)")
