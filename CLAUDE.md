@@ -211,6 +211,13 @@ src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_v2/
 - Focus triggers → `onTargetFocusV2()`
 - 16 class cure triggers → `removeAffV2()` / `reduceRandomAffCertaintyV2()`
 
+**Offense System Requirements:**
+When coding offense systems, check `ataxia.settings.useAffTrackingV2`:
+- If enabled: Use `haveAffV2(aff)` and `haveConfirmedAffV2(aff)` for affliction checks
+- If disabled: Fall back to `haveAff(aff)` (old system)
+- For stacking afflictions: Use `getStackCountV2(aff)` to check multiple stacks
+- For lock detection: Use `haveAffV2()` which returns true for certainty >= 1 (likely or confirmed)
+
 ### ataxiaBasher (Automated Hunting System)
 
 The basher provides automated target selection and attack execution for PvE hunting.
