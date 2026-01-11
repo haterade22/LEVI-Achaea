@@ -21,21 +21,88 @@ packageName: ''
     Key feature: Priority based on verifiability (unverifiable first).
 ]]--
 
--- Priority lists: unverifiable afflictions first (assume cured first)
--- Verifiable ones last (we can confirm via signals, so keep tracking)
-local kelpRemovalPriority = {
-    "hypochondria",  -- Can't verify
-    "parasite",      -- Can't verify
-    "weariness",     -- Can't easily verify
-    "healthleech",   -- Can't easily verify
-    "clumsiness",    -- CAN verify via fumble - keep longer
-    "sensitivity",   -- Hard to verify but low impact
+--[[
+    Priority lists for all herbs (AK-inspired)
+    Order: unverifiable afflictions first (assume cured first)
+    Verifiable ones last (we can confirm via signals, so keep tracking)
+]]--
+herbRemovalPriority = {
+    -- KELP/AURUM: asthma, clumsiness, sensitivity, weariness, healthleech, hypochondria, parasite
+    kelp = {
+        "hypochondria",  -- Can't verify, low combat impact
+        "parasite",      -- Can't verify
+        "weariness",     -- Can't easily verify (passive cure block)
+        "healthleech",   -- Can't easily verify
+        "sensitivity",   -- Hard to verify, moderate impact
+        "clumsiness",    -- CAN verify via fumble - keep longer
+        "asthma",        -- CAN verify via smoke - keep longest
+    },
+
+    -- GINSENG/FERRUM: addiction, darkshade, haemophilia, lethargy, nausea, scytherus
+    ginseng = {
+        "addiction",     -- Can't easily verify
+        "lethargy",      -- Can't easily verify
+        "haemophilia",   -- Can verify via bleeding
+        "darkshade",     -- Timed death - important to track
+        "nausea",        -- Can verify via vomit
+        "scytherus",     -- Damage ticks - important
+    },
+
+    -- GOLDENSEAL/PLUMBUM: dizziness, epilepsy, impatience, shyness, stupidity, depression
+    goldenseal = {
+        "depression",    -- Can't verify
+        "shyness",       -- Can't verify
+        "dizziness",     -- Can verify via stumble
+        "stupidity",     -- Can verify via failed actions
+        "epilepsy",      -- Can verify via seizure
+        "impatience",    -- Critical for locks - keep longest
+    },
+
+    -- ASH/STANNUM: confusion, dementia, hallucinations, paranoia, hypersomnia
+    ash = {
+        "hypersomnia",   -- Can't easily verify
+        "hallucinations", -- Can verify via illusion attacks
+        "dementia",      -- Can verify via random actions
+        "paranoia",      -- Can verify via random flee
+        "confusion",     -- Critical for focus lock
+    },
+
+    -- BELLWORT/CUPRUM: generosity, pacifism, justice, lovers, retribution
+    bellwort = {
+        "retribution",   -- Can verify via damage reflection
+        "lovers",        -- Can verify via refusing attack
+        "justice",       -- Can verify via damage reflection
+        "generosity",    -- Can verify via giving items
+        "pacifism",      -- Can verify via refusing attack
+    },
+
+    -- LOBELIA/ARGENTUM: agoraphobia, claustrophobia, loneliness, masochism, recklessness, vertigo, hypochondria, fratricide
+    lobelia = {
+        "fratricide",    -- Serpent specific, timed
+        "hypochondria",  -- Fake affs, can't verify
+        "loneliness",    -- Can verify via leaving group
+        "claustrophobia", -- Can verify via fleeing indoors
+        "agoraphobia",   -- Can verify via fleeing outdoors
+        "vertigo",       -- Can verify via falling
+        "masochism",     -- Important for Ekanelia
+        "recklessness",  -- Important for Ekanelia
+    },
+
+    -- BLOODROOT/MAGNESIUM: paralysis, slickness
+    bloodroot = {
+        "slickness",     -- Can verify via failed apply
+        "paralysis",     -- Critical for locks - keep longest
+    },
 }
 
--- V2 state for kelp disambiguation
+-- Backward compatibility alias
+local kelpRemovalPriority = herbRemovalPriority.kelp
+
+-- V2 state for disambiguation
 pendingKelpAffsV2 = nil
 kelpDisambiguateTimerV2 = nil
-lastKelpGuessV2 = nil
+lastGuessV2 = nil  -- Generic guess storage for all herbs
+lastKelpGuessV2 = nil  -- Backward compatibility
 
 -- Wrapper function: routes to V2 or old system based on setting
 -- Replace targetAte() calls in triggers with this
@@ -130,13 +197,14 @@ end
 
 -- Remove affliction based on priority and track for backtracking
 function removeByPriorityV2(candidates, herb)
-    local priorityList = kelpRemovalPriority  -- TODO: add lists for other herbs
+    -- Get herb-specific priority list, fall back to kelp if not found
+    local priorityList = herbRemovalPriority[herb] or herbRemovalPriority.kelp
 
     for _, aff in ipairs(priorityList) do
         if table.contains(candidates, aff) then
             removeAffV2(aff)
             -- Store for backtracking
-            storeKelpGuessV2(aff, candidates)
+            storeGuessV2(aff, candidates, herb)
             return
         end
     end
@@ -144,25 +212,31 @@ function removeByPriorityV2(candidates, herb)
     -- Fallback: if no priority match, remove first candidate
     if #candidates > 0 then
         removeAffV2(candidates[1])
-        storeKelpGuessV2(candidates[1], candidates)
+        storeGuessV2(candidates[1], candidates, herb)
     end
 end
 
--- Store guess for potential backtracking
-function storeKelpGuessV2(removedAff, candidates)
+-- Store guess for potential backtracking (generic for all herbs)
+function storeGuessV2(removedAff, candidates, herb)
     local timestamp = getEpoch()
-    lastKelpGuessV2 = {
+    lastGuessV2 = {
         removed = removedAff,
         candidates = candidates,
+        herb = herb or "unknown",
         timestamp = timestamp
     }
 
     -- Expire after 5 seconds
     tempTimer(5, function()
-        if lastKelpGuessV2 and lastKelpGuessV2.timestamp == timestamp then
-            lastKelpGuessV2 = nil
+        if lastGuessV2 and lastGuessV2.timestamp == timestamp then
+            lastGuessV2 = nil
         end
     end)
+end
+
+-- Backward compatibility alias
+function storeKelpGuessV2(removedAff, candidates)
+    storeGuessV2(removedAff, candidates, "kelp")
 end
 
 -- Called by smoke trigger when target smokes (proves asthma cured)

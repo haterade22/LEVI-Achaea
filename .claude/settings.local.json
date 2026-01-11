@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -Command \"Expand-Archive -Path ''.\\\\Loki 2.1.4 + AK 8.6.5 \\(modified\\) \\(package install\\).mpackage'' -DestinationPath ''.\\\\extracted'' -Force\")",
+      "Bash(powershell -Command \"Copy-Item ''.\\\\Loki 2.1.4 + AK 8.6.5 \\(modified\\) \\(package install\\).mpackage'' ''.\\\\temp.zip''; Expand-Archive -Path ''.\\\\temp.zip'' -DestinationPath ''.\\\\extracted'' -Force; Remove-Item ''.\\\\temp.zip''\")"
+    ]
+  }
+}

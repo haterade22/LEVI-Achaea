@@ -44,6 +44,10 @@ tdeliverance = false
 		erAff("paralysis")
 	end
   if passiveFailsafe then restorePassiveCure() end
+
+	-- V2 integration: track tree cure
+	if onTargetTreeV2 then onTargetTreeV2(name) end
+
 	tSingleRandom()
   	selectString(line, 1)
 	fg("green")

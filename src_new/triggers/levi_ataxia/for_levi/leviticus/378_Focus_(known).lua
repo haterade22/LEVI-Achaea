@@ -46,8 +46,15 @@ if isTargeted(multimatches[1][2]) and tBals.focus then
 		or multimatches[3][1] == name .. " shakes her head and a look of clarity returns to her eyes." then
 			erAff("lovers")
 			erAff("impatience")
+			-- V2 integration: Focus cured lovers and impatience specifically
+			if removeAffV2 then
+				removeAffV2("lovers")
+				removeAffV2("impatience")
+			end
 	else
 		tFocused()
+		-- V2 integration: Focus cured a random mental affliction
+		if onTargetFocusV2 then onTargetFocusV2(name) end
 	end
 	-- Track for adaptive serpent offense
 	if serpent and serpent.trackCure then serpent.trackCure("focus") end

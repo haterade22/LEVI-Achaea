@@ -38,6 +38,8 @@ patterns:
 local name = matches[2]
 if isTargeted(matches[2]) and tBals.focus then
   tFocused()
+	-- V2 integration: Focus cures a random mental affliction
+	if onTargetFocusV2 then onTargetFocusV2(name) end
 	end
 	tBals.focus = false
   
