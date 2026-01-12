@@ -56,11 +56,15 @@ lastLimbAttack = "dwcSlash"
 
 if ataxiaTemp.hitCount == 1 then
   if not affs_to_colour then populate_aff_colours() end
+  ataxiaTemp.lastAffAdded = nil
+  ataxiaTemp.lastAffAddedExtra = nil
   if envenomList[1] == "exploit" then
     tarAffed("weariness")
     tarAffed("paranoia")
     aff1 = "weariness"
     aff3 = "paranoia"
+    ataxiaTemp.lastAffAdded = "weariness"
+    ataxiaTemp.lastAffAddedExtra = "paranoia"
     if partyrelay and not ataxia.afflictions.aeon then
       send("pt " ..target..": " ..aff1.. " " ..aff3)
     end
@@ -68,6 +72,7 @@ if ataxiaTemp.hitCount == 1 then
     tarAffed("healthleech")
     aff1 = "healthleech"
     aff3 = nil
+    ataxiaTemp.lastAffAdded = "healthleech"
     if partyrelay and not ataxia.afflictions.aeon then
       send("pt " ..target..": " ..aff1)
     end
@@ -75,18 +80,21 @@ if ataxiaTemp.hitCount == 1 then
     tarAffed("haemophilia")
     aff1 = "haemophilia"
     aff3 = nil
+    ataxiaTemp.lastAffAdded = "haemophilia"
     if partyrelay and not ataxia.afflictions.aeon then
       send("pt " ..target..": " ..aff1)
     end
   elseif envenomList[1] == "punishment" then
     aff1 = "punishment"
     aff3 = nil
+    ataxiaTemp.lastAffAdded = "punishment"
     if partyrelay and not ataxia.afflictions.aeon then
       send("pt " ..target..": " ..aff1)
     end
   else
      aff1 = venom_to_aff(envenomList[1])
      tarAffed(aff1)
+     ataxiaTemp.lastAffAdded = aff1
      if partyrelay and not ataxia.afflictions.aeon then
       send("pt " ..target..": " ..aff1)
      end
@@ -94,11 +102,15 @@ if ataxiaTemp.hitCount == 1 then
 table.remove(envenomList,1)
 aff1 = nil
 elseif ataxiaTemp.hitCount == 2 then
+  ataxiaTemp.lastAffAdded = nil
+  ataxiaTemp.lastAffAddedExtra = nil
  if envenomListTwo[1] == "exploit" then
     tarAffed("weariness")
     tarAffed("paranoia")
     aff2 = "weariness"
     aff3 = "paranoia"
+    ataxiaTemp.lastAffAdded = "weariness"
+    ataxiaTemp.lastAffAddedExtra = "paranoia"
     if partyrelay and not ataxia.afflictions.aeon then
       send("pt " ..target..": " ..aff2.. " " ..aff3)
     end
@@ -106,6 +118,7 @@ elseif ataxiaTemp.hitCount == 2 then
     tarAffed("healthleech")
     aff2 = "healthleech"
     aff3 = nil
+    ataxiaTemp.lastAffAdded = "healthleech"
     if partyrelay and not ataxia.afflictions.aeon then
       send("pt " ..target..": " ..aff2)
     end
@@ -114,22 +127,25 @@ elseif ataxiaTemp.hitCount == 2 then
     tarAffed("haemophilia")
     aff2 = "haemophilia"
     aff3 = nil
+    ataxiaTemp.lastAffAdded = "haemophilia"
     if partyrelay and not ataxia.afflictions.aeon then
       send("pt " ..target..": " ..aff2)
     end
   elseif envenomListTwo[1] == "punishment" then
     aff2 = "punishment"
     aff3 = nil
+    ataxiaTemp.lastAffAdded = "punishment"
     if partyrelay and not ataxia.afflictions.aeon then
       send("pt " ..target..": " ..aff2)
     end
   else
      aff2 = venom_to_aff(envenomListTwo[1])
      tarAffed(aff2)
+     ataxiaTemp.lastAffAdded = aff2
      if partyrelay and not ataxia.afflictions.aeon then
       send("pt " ..target..": " ..aff2)
      end
-  end 
+  end
 table.remove(envenomListTwo,1)
 aff2 = nil
 aff3 = nil

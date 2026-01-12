@@ -13,6 +13,42 @@ attributes:
 packageName: ''
 ]]--
 
+-- V2 Affliction Display Helpers
+tarc = tarc or {}
+tarc.v2LockAffs = {"anorexia", "slickness", "asthma", "paralysis", "stupidity"}
+
+tarc.v2AffShortNames = {
+    -- Lock
+    anorexia = "ANO", slickness = "SLI", asthma = "AST", paralysis = "PAR", stupidity = "STU",
+    -- Pressure
+    nausea = "nau", clumsiness = "clu", weariness = "WEA",
+    -- Mental
+    impatience = "IMP", confusion = "con", dementia = "dem", paranoia = "pnoia",
+    hallucinations = "hal", dizziness = "diz", epilepsy = "epi", recklessness = "rec", shyness = "shy",
+    -- Other
+    prone = "PRONE", sensitivity = "sen", healthleech = "hleech", haemophilia = "hae",
+    lethargy = "let", darkshade = "dar", addiction = "add",
+    -- Defenses
+    rebounding = "REB", shield = "SHD",
+}
+
+function tarc.getV2AffColor(aff, certainty)
+    if certainty == 1 then return "orange" end
+    if certainty >= 4 then return "cyan" end
+    for _, lockAff in ipairs(tarc.v2LockAffs) do
+        if aff == lockAff then return "red" end
+    end
+    return "white"
+end
+
+function tarc.getV2AffDisplay(aff, certainty)
+    local shortName = tarc.v2AffShortNames[aff] or string.sub(aff, 1, 3)
+    local stackCount = math.floor(certainty / 2)
+    if stackCount >= 2 then return shortName .. "x" .. stackCount end
+    if certainty == 1 then return shortName .. "?" end
+    return shortName
+end
+
 tarcLabel = Geyser.Label:new({
   name = "tarcLabel",
   x = "0%", y = "-50%",
@@ -38,7 +74,37 @@ function tarc.write()
   
   --if target and target ~= "" and target ~= "None" and target ~= "none" and lb[target] then
   if target and target ~= "" and target ~= "None" and target ~= "none" then
-   tarc:cecho("   Target: " .. target .. "\n\n")
+   tarc:cecho("   Target: " .. target .. "\n")
+
+    -- V2 Affliction Display
+    if tAffsV2 then
+      local lockCount = 0
+      for _, aff in ipairs(tarc.v2LockAffs) do
+        if tAffsV2[aff] and tAffsV2[aff] >= 1 then
+          lockCount = lockCount + 1
+        end
+      end
+
+      local affStr = "   "
+      if lockCount >= 5 then
+        affStr = affStr .. "<green>[LOCK]<reset> "
+      elseif lockCount >= 1 then
+        affStr = affStr .. "<yellow>[" .. lockCount .. "/5]<reset> "
+      end
+
+      local ignoreAffs = {curseward = true, blindness = true, deafness = true}
+      for aff, certainty in pairs(tAffsV2) do
+        if certainty >= 1 and not ignoreAffs[aff] then
+          local color = tarc.getV2AffColor(aff, certainty)
+          local display = tarc.getV2AffDisplay(aff, certainty)
+          affStr = affStr .. "<" .. color .. ">" .. display .. "<reset> "
+        end
+      end
+
+      tarc:cecho(affStr .. "\n")
+    end
+    tarc:cecho("\n")
+
     if ataxiaBasher.enabled then
       tarc:cecho("   Mob Health: " .. gmcp.IRE.Target.Info.hpperc .. "\n")
       tarc:cecho("   BattleR:    " ..ataxia.vitals.rage.. "\n")
