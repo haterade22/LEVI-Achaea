@@ -39,6 +39,8 @@ patterns:
 if isTargeted(matches[2]) then
 tdeliverance = false
   if passiveFailsafe then restorePassiveCure() end
+	-- V2 tracking support: limb salve cures slickness and other affs
+	if onTargetSalveLimbsV2 then onTargetSalveLimbsV2(matches[2], matches[3]) end
 	erAff("slickness")
 	target_appliedTo(matches[3])
 	targetIshere = true

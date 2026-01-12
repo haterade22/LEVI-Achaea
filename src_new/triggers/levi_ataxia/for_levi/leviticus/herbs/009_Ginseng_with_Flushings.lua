@@ -50,6 +50,9 @@ tdeliverance = false
 		lastFocus = nil
 	end
   if passiveFailsafe then restorePassiveCure() end
+	targetAteWrapper("ginseng")
+	-- V2 tracking support: ginseng cures nausea, haemophilia, etc.
+	if onTargetGinsengV2 then onTargetGinsengV2(multimatches[1][2]) end
 	flushingsProc()
 
 	selectString(line, 1)

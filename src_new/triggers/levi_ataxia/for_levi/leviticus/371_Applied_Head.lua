@@ -39,6 +39,8 @@ patterns:
 if isTargeted(matches[2]) then
 tdeliverance = false
   if passiveFailsafe then restorePassiveCure() end
+	-- V2 tracking support: head salve cures slickness and other affs
+	if onTargetSalveHeadV2 then onTargetSalveHeadV2(matches[2]) end
 	erAff("slickness")
 	if haveAff("crushedthroat") then
 		erAff("crushedthroat")

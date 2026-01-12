@@ -48,6 +48,8 @@ if matches[2] == target then
       erAff("crescendo")
     end
     targetAteWrapper("ash")
+    -- V2 tracking support: ash cures confusion, dementia, paranoia, etc.
+    if onTargetAshV2 then onTargetAshV2(matches[2]) end
 if passiveFailsafe then restorePassiveCure() end
     tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end

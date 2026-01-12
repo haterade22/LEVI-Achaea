@@ -46,7 +46,10 @@ tdeliverance = false
     end
     -- Track for adaptive serpent offense
     if serpent and serpent.trackCure then serpent.trackCure("bloodroot") end
-    
+
+    -- V2 tracking support: bloodroot cures paralysis or slickness
+    if onTargetBloodrootV2 then onTargetBloodrootV2(matches[2]) end
+
     if tAffs.prone then
       tempTimer(0.3, [[
                 if not tAffs.prone then

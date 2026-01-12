@@ -57,6 +57,8 @@ if isTargeted(multimatches[1][2]) then
     erAff("whisperingmadness")
 	else
 		targetAteWrapper("lobelia")
+		-- V2 tracking support: lobelia cures agoraphobia, masochism, etc.
+		if onTargetLobeliaV2 then onTargetLobeliaV2(multimatches[1][2]) end
 	end
 	
 	tBals.plant = false

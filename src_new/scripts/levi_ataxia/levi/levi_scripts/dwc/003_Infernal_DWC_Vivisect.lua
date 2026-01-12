@@ -308,9 +308,6 @@ function infernalDWC.selectVenoms()
     local phase = infernalDWC.getPhase()
     local hasAff = infernalDWC.hasAff
 
-    -- Check if asthma is stuck (for softlock transition)
-    local asthmaStuck = hasAff("asthma")
-
     --[[
         IMPORTANT: Curare (paralysis) should ALWAYS be on v2 (second sword)
         because if WE have clumsiness, we might miss the first swing.
@@ -344,60 +341,53 @@ function infernalDWC.selectVenoms()
         v2 = nil
 
     else
-        -- PREP phase
-        -- Priority: Paralysis > Clumsiness > Nausea > Asthma > Weariness > Healthleech
-        -- Then softlock once asthma is stuck
-        -- CURARE ALWAYS ON V2!
+        -- PREP phase - SEQUENTIAL PRIORITY
+        -- Each affliction must be STUCK before moving to the next
+        -- Priority: Paralysis > Clumsiness > Nausea > Asthma > Weariness > Healthleech > Softlock
+        -- CURARE ALWAYS ON V2 (survives clumsiness miss on first swing)
 
-        -- Determine what we need
-        local needPara = not hasAff("paralysis")
-        local needClum = not hasAff("clumsiness")
-        local needNaus = not hasAff("nausea")
-        local needAsth = not hasAff("asthma")
-        local needWear = not hasAff("weariness")
-        local needHlth = not hasAff("healthleech")
-        local needAnor = asthmaStuck and not hasAff("anorexia")
-        local needSlic = asthmaStuck and not hasAff("slickness")
-        local needStup = asthmaStuck and not hasAff("stupidity")
+        -- Check what's stuck
+        local paraStuck = hasAff("paralysis")
+        local clumStuck = hasAff("clumsiness")
+        local nausStuck = hasAff("nausea")
+        local asthStuck = hasAff("asthma")
+        local wearStuck = hasAff("weariness")
+        local hlthlStuck = hasAff("healthleech")
+        local anorStuck = hasAff("anorexia")
+        local slicStuck = hasAff("slickness")
+        local stupStuck = hasAff("stupidity")
 
-        -- V2 selection (paralysis always goes here if needed)
-        if needPara then
-            v2 = "curare"
-        elseif needClum then
-            v2 = "xentio"
-        elseif needNaus then
-            v2 = "euphorbia"
-        elseif needAsth then
-            v2 = "kalmia"
-        elseif needAnor then
-            v2 = "slike"
-        elseif needSlic then
-            v2 = "gecko"
-        elseif needStup then
-            v2 = "aconite"
-        else
-            v2 = "curare"  -- Maintain paralysis
-        end
+        -- V2 always curare (paralysis) - critical to maintain
+        v2 = "curare"
 
-        -- V1 selection (second priority, or hellforge)
-        if needWear then
-            v1 = "exploit"  -- Hellforge investment
-        elseif needHlth then
-            v1 = "torment"  -- Hellforge investment
-        elseif needClum and v2 ~= "xentio" then
+        -- V1 selection: SEQUENTIAL - only move to next when current is stuck
+        if not clumStuck then
+            -- Focus on clumsiness until stuck
             v1 = "xentio"
-        elseif needNaus and v2 ~= "euphorbia" then
+        elseif not nausStuck then
+            -- Clumsiness stuck, focus on nausea
             v1 = "euphorbia"
-        elseif needAsth and v2 ~= "kalmia" then
+        elseif not asthStuck then
+            -- Nausea stuck, focus on asthma
             v1 = "kalmia"
-        elseif needAnor and v2 ~= "slike" then
+        elseif not wearStuck then
+            -- Asthma stuck, use hellforge for weariness
+            v1 = "exploit"
+        elseif not hlthlStuck then
+            -- Weariness stuck, use hellforge for healthleech
+            v1 = "torment"
+        elseif not anorStuck then
+            -- Healthleech stuck, now softlock: anorexia
             v1 = "slike"
-        elseif needSlic and v2 ~= "gecko" then
+        elseif not slicStuck then
+            -- Anorexia stuck, slickness
             v1 = "gecko"
-        elseif needStup and v2 ~= "aconite" then
+        elseif not stupStuck then
+            -- Slickness stuck, stupidity
             v1 = "aconite"
         else
-            v1 = "xentio"  -- Default to clumsiness maintenance
+            -- All stuck, maintain clumsiness
+            v1 = "xentio"
         end
     end
 
@@ -512,10 +502,29 @@ function infernalDWCVivisect()
 
     -- REBOUNDING CHECK - MUST clear rebounding first or attacks bounce back!
     -- Rebounding causes all melee attacks to reflect damage back to attacker
+    -- RSL uses first sword to raze, second sword applies venom
+    -- IMPORTANT: RSL cannot use hellforge investments (exploit/torture/torment)
+    -- Must use a regular venom like curare
     if infernalDWC.hasAff("rebounding") then
-        if v1 then
+        -- Determine which venom to use for RSL (must NOT be a hellforge investment)
+        local rslVenom = nil
+        local isV1Hellforge = (v1 == "exploit" or v1 == "torture" or v1 == "torment")
+        local isV2Hellforge = (v2 == "exploit" or v2 == "torture" or v2 == "torment")
+
+        if v2 and not isV2Hellforge then
+            rslVenom = v2  -- Prefer v2 (usually curare)
+        elseif v1 and not isV1Hellforge then
+            rslVenom = v1
+        end
+
+        -- Update envenomLists to reflect what RSL actually applies
+        -- RSL: first sword razes (no venom), second sword applies rslVenom
+        envenomList = {}
+        envenomListTwo = {}
+        if rslVenom then
+            table.insert(envenomListTwo, rslVenom)
             -- razeslash removes rebounding AND applies venom
-            atk = atk .. ";rsl " .. target .. " " .. v1
+            atk = atk .. ";rsl " .. target .. " " .. rslVenom
         else
             atk = atk .. ";raze " .. target
         end
@@ -526,9 +535,24 @@ function infernalDWCVivisect()
     end
 
     -- SHIELD CHECK - must clear shield before attacks land
+    -- Same logic as rebounding - RSL can't use hellforge investments
     if infernalDWC.hasAff("shield") then
-        if v1 then
-            atk = atk .. ";rsl " .. target .. " " .. v1
+        local rslVenom = nil
+        local isV1Hellforge = (v1 == "exploit" or v1 == "torture" or v1 == "torment")
+        local isV2Hellforge = (v2 == "exploit" or v2 == "torture" or v2 == "torment")
+
+        if v2 and not isV2Hellforge then
+            rslVenom = v2
+        elseif v1 and not isV1Hellforge then
+            rslVenom = v1
+        end
+
+        -- Update envenomLists to reflect what RSL actually applies
+        envenomList = {}
+        envenomListTwo = {}
+        if rslVenom then
+            table.insert(envenomListTwo, rslVenom)
+            atk = atk .. ";rsl " .. target .. " " .. rslVenom
         else
             atk = atk .. ";raze " .. target
         end
@@ -541,23 +565,30 @@ function infernalDWCVivisect()
     if false then
         -- This block intentionally empty - placeholder for the elseif chain below
     -- Handle hellforge investments (exploit, torture, torment)
+    -- IMPORTANT: When using hellforge invest, the investment type MUST also be included
+    -- as a "venom" in the DSL command. invest consumes the sword venom but DSL still
+    -- needs to specify what effect to apply.
+    -- Correct: "hellforge invest exploit;dsl target exploit curare"
+    -- Wrong:   "hellforge invest exploit;dsl target curare"
     elseif v1 == "exploit" or v1 == "torture" or v1 == "torment" then
         atk = atk .. ";hellforge invest " .. v1
         if limb and v2 then
-            atk = atk .. ";dsl " .. target .. " " .. limb .. " " .. v2
+            -- Include v1 (the investment) as first venom in DSL
+            atk = atk .. ";dsl " .. target .. " " .. limb .. " " .. v1 .. " " .. v2
         elseif v2 then
-            atk = atk .. ";dsl " .. target .. " " .. v2
+            atk = atk .. ";dsl " .. target .. " " .. v1 .. " " .. v2
         else
-            atk = atk .. ";dsl " .. target
+            atk = atk .. ";dsl " .. target .. " " .. v1
         end
     elseif v2 == "exploit" or v2 == "torture" or v2 == "torment" then
         atk = atk .. ";hellforge invest " .. v2
         if limb and v1 then
-            atk = atk .. ";dsl " .. target .. " " .. limb .. " " .. v1
+            -- Include v2 (the investment) as second venom in DSL
+            atk = atk .. ";dsl " .. target .. " " .. limb .. " " .. v1 .. " " .. v2
         elseif v1 then
-            atk = atk .. ";dsl " .. target .. " " .. v1
+            atk = atk .. ";dsl " .. target .. " " .. v1 .. " " .. v2
         else
-            atk = atk .. ";dsl " .. target
+            atk = atk .. ";dsl " .. target .. " " .. v2
         end
     else
         -- Standard dual slash with limb targeting

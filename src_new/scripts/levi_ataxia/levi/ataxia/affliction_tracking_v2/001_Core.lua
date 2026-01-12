@@ -198,6 +198,63 @@ treeCurableAffsV2 = {
     "paranoia", "hallucinations", "impatience", "hypersomnia", "addiction"
 }
 
+-- Bloodroot/Magnesium-curable afflictions
+bloodrootCurableAffsV2 = {
+    "paralysis", "slickness"
+}
+
+-- Ginseng/Ferrum-curable afflictions
+ginsengCurableAffsV2 = {
+    "haemophilia", "nausea", "addiction", "lethargy", "darkshade", "scytherus"
+}
+
+-- Goldenseal/Plumbum-curable afflictions
+goldensealCurableAffsV2 = {
+    "dizziness", "epilepsy", "impatience", "shyness", "stupidity", "depression"
+}
+
+-- Ash/Stannum-curable afflictions
+ashCurableAffsV2 = {
+    "confusion", "dementia", "hallucinations", "paranoia", "hypersomnia"
+}
+
+-- Bellwort/Cuprum-curable afflictions
+bellwortCurableAffsV2 = {
+    "generosity", "pacifism", "justice", "lovers", "retribution"
+}
+
+-- Lobelia/Argentum-curable afflictions
+lobeliaCurableAffsV2 = {
+    "agoraphobia", "claustrophobia", "loneliness", "masochism", "recklessness",
+    "vertigo", "hypochondria", "fratricide"
+}
+
+-- Smoke-curable afflictions (elm, valerian, skullcap)
+smokeCurableAffsV2 = {
+    "aeon", "deadening", "tension", "disloyalty", "manaleech",
+    "slickness", "unweavingspirit", "hellsight", "asthma"
+}
+
+-- Mending salve (body/skin) curable afflictions
+mendingBodyCurableAffsV2 = {
+    "slickness", "bloodfire", "selarnia", "frostbite", "anorexia", "itching"
+}
+
+-- Mending salve (skin) curable afflictions (caloric-related)
+mendingSkinCurableAffsV2 = {
+    "slickness", "bloodfire", "selarnia", "frostbite", "frozen", "shivering", "nocaloric"
+}
+
+-- Restoration salve (head) curable afflictions
+restorationHeadCurableAffsV2 = {
+    "slickness", "crushedthroat", "damagedhead", "mangledhead", "blindness", "scalded", "epidermal", "bloodfire"
+}
+
+-- Restoration salve (limbs) curable afflictions
+restorationLimbsCurableAffsV2 = {
+    "slickness", "bloodfire"
+}
+
 -- Helper: Check if affliction is in a cure list
 local function isInCureList(aff, cureList)
     for _, cureAff in ipairs(cureList) do
@@ -255,6 +312,122 @@ end
 function onTargetKelpV2(targetName)
     if not ataxia.settings.useAffTrackingV2 then return end
     reduceCureTypeAffCertaintyV2(kelpCurableAffsV2, "kelp")
+end
+
+-- Handle target eating bloodroot/magnesium (cures paralysis or slickness)
+function onTargetBloodrootV2(targetName)
+    if not ataxia.settings.useAffTrackingV2 then return end
+    reduceCureTypeAffCertaintyV2(bloodrootCurableAffsV2, "bloodroot")
+end
+
+-- Handle target eating ginseng/ferrum (cures haemophilia, nausea, etc.)
+function onTargetGinsengV2(targetName)
+    if not ataxia.settings.useAffTrackingV2 then return end
+    reduceCureTypeAffCertaintyV2(ginsengCurableAffsV2, "ginseng")
+end
+
+-- Handle target eating goldenseal/plumbum (cures dizziness, epilepsy, etc.)
+function onTargetGoldensealV2(targetName)
+    if not ataxia.settings.useAffTrackingV2 then return end
+    reduceCureTypeAffCertaintyV2(goldensealCurableAffsV2, "goldenseal")
+end
+
+-- Handle target eating ash/stannum (cures confusion, dementia, etc.)
+function onTargetAshV2(targetName)
+    if not ataxia.settings.useAffTrackingV2 then return end
+    reduceCureTypeAffCertaintyV2(ashCurableAffsV2, "ash")
+end
+
+-- Handle target eating bellwort/cuprum (cures generosity, pacifism, etc.)
+function onTargetBellwortV2(targetName)
+    if not ataxia.settings.useAffTrackingV2 then return end
+    reduceCureTypeAffCertaintyV2(bellwortCurableAffsV2, "bellwort")
+end
+
+-- Handle target eating lobelia/argentum (cures agoraphobia, masochism, etc.)
+function onTargetLobeliaV2(targetName)
+    if not ataxia.settings.useAffTrackingV2 then return end
+    reduceCureTypeAffCertaintyV2(lobeliaCurableAffsV2, "lobelia")
+end
+
+-- Handle target smoking (cures aeon, deadening, etc.)
+-- Also triggers kelp asthma disambiguation
+function onTargetSmokeV2(targetName)
+    if not ataxia.settings.useAffTrackingV2 then return end
+
+    -- Smoking proves asthma is cured (can't smoke with asthma)
+    if haveAffV2("asthma") then
+        removeAffV2("asthma")
+        if ataxiaEcho then
+            ataxiaEcho("[V2] Smoke detected - asthma cured (smoking proves no asthma)")
+        end
+    end
+
+    -- Handle kelp disambiguation
+    if onKelpSmokeCuredV2 then onKelpSmokeCuredV2() end
+
+    -- Reduce certainty of other smoke-curable affs
+    reduceCureTypeAffCertaintyV2(smokeCurableAffsV2, "smoke")
+end
+
+-- Handle target applying salve to body
+function onTargetSalveBodyV2(targetName)
+    if not ataxia.settings.useAffTrackingV2 then return end
+
+    -- Slickness is always cured by applying salve (proves no slickness)
+    if haveAffV2("slickness") then
+        removeAffV2("slickness")
+        if ataxiaEcho then
+            ataxiaEcho("[V2] Body salve - slickness cured (applying proves no slickness)")
+        end
+    end
+
+    reduceCureTypeAffCertaintyV2(mendingBodyCurableAffsV2, "body salve")
+end
+
+-- Handle target applying salve to skin
+function onTargetSalveSkinV2(targetName)
+    if not ataxia.settings.useAffTrackingV2 then return end
+
+    -- Slickness is always cured by applying salve
+    if haveAffV2("slickness") then
+        removeAffV2("slickness")
+        if ataxiaEcho then
+            ataxiaEcho("[V2] Skin salve - slickness cured (applying proves no slickness)")
+        end
+    end
+
+    reduceCureTypeAffCertaintyV2(mendingSkinCurableAffsV2, "skin salve")
+end
+
+-- Handle target applying salve to head
+function onTargetSalveHeadV2(targetName)
+    if not ataxia.settings.useAffTrackingV2 then return end
+
+    -- Slickness is always cured by applying salve
+    if haveAffV2("slickness") then
+        removeAffV2("slickness")
+        if ataxiaEcho then
+            ataxiaEcho("[V2] Head salve - slickness cured (applying proves no slickness)")
+        end
+    end
+
+    reduceCureTypeAffCertaintyV2(restorationHeadCurableAffsV2, "head salve")
+end
+
+-- Handle target applying salve to limbs (arms or legs)
+function onTargetSalveLimbsV2(targetName, limb)
+    if not ataxia.settings.useAffTrackingV2 then return end
+
+    -- Slickness is always cured by applying salve
+    if haveAffV2("slickness") then
+        removeAffV2("slickness")
+        if ataxiaEcho then
+            ataxiaEcho("[V2] " .. (limb or "limb") .. " salve - slickness cured (applying proves no slickness)")
+        end
+    end
+
+    reduceCureTypeAffCertaintyV2(restorationLimbsCurableAffsV2, (limb or "limb") .. " salve")
 end
 
 -- Smart cure reduction: If only ONE matching aff, remove it completely

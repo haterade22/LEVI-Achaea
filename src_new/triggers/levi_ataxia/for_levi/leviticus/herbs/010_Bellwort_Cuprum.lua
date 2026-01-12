@@ -59,6 +59,8 @@ tdeliverance = false
 			erAff("lovers")
 	else
 		targetAteWrapper("bellwort")
+		-- V2 tracking support: bellwort cures generosity, pacifism, etc.
+		if onTargetBellwortV2 then onTargetBellwortV2(multimatches[1][2]) end
 	end
 	tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end

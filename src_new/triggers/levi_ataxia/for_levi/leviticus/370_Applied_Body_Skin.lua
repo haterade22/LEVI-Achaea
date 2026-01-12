@@ -39,6 +39,12 @@ patterns:
 if isTargeted(matches[2]) then
 tdeliverance = false
   if passiveFailsafe then restorePassiveCure() end
+	-- V2 tracking support: salve cures slickness and other affs
+	if matches[3] == "body" then
+		if onTargetSalveBodyV2 then onTargetSalveBodyV2(matches[2]) end
+	else
+		if onTargetSalveSkinV2 then onTargetSalveSkinV2(matches[2]) end
+	end
 	erAff("slickness")
 	erAff("bloodfire")
   erAff("selarnia")
