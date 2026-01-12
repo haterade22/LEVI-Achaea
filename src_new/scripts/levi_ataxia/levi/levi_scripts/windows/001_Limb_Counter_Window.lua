@@ -81,10 +81,33 @@ function tarc.write()
     end
     --if ataxiaNDB.players[target] then
      --tarc:cecho(" Self Limb Counter\n")
-      --for _, y in ipairs({"head", "torso", "left arm", "right arm", "left leg", "right leg"}) do 
+      --for _, y in ipairs({"head", "torso", "left arm", "right arm", "left leg", "right leg"}) do
        --tarc:cecho(string.format("%11s", y) .. ": " .. slc.percentages[y] .. "\n")
-      
+
       --end
     --end
-          
+
+    -- Players in Room
+    if ataxia.playersHere and #ataxia.playersHere > 0 then
+      tarc:cecho("\n   <cyan>Players Here:<reset>\n")
+      for _, player in ipairs(ataxia.playersHere) do
+        tarc:cecho("     " .. player .. "\n")
+      end
+    end
+
+    -- Denizens in Room
+    if ataxia.denizensHere then
+      local count = 0
+      for _ in pairs(ataxia.denizensHere) do count = count + 1 end
+      if count > 0 then
+        tarc:cecho("\n   <yellow>Denizens Here:<reset>\n")
+        for id, name in pairs(ataxia.denizensHere) do
+          tarc:cecho("     " .. name .. "\n")
+        end
+      end
+    end
+
 end
+
+-- Register for room content updates
+registerAnonymousEventHandler("targets updated", tarc.write)
