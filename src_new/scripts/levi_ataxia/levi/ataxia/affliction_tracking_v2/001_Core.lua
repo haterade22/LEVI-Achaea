@@ -173,6 +173,51 @@ function hasMultipleStacksV2(aff)
 end
 
 -- ============================================
+-- CURE TYPE DEFINITIONS
+-- ============================================
+
+-- Focus-curable afflictions (mental affs)
+focusCurableAffsV2 = {
+    "impatience", "stupidity", "anorexia", "epilepsy", "masochism",
+    "recklessness", "dizziness", "shyness", "confusion", "dementia",
+    "paranoia", "hallucinations", "loneliness", "vertigo", "feeble",
+    "addiction", "hypersomnia"
+}
+
+-- Kelp/Aurum-curable afflictions
+kelpCurableAffsV2 = {
+    "asthma", "clumsiness", "hypochondria", "sensitivity", "weariness",
+    "healthleech", "parasite"
+}
+
+-- Tree-curable afflictions (most physical affs)
+treeCurableAffsV2 = {
+    "paralysis", "slickness", "anorexia", "asthma", "sensitivity",
+    "clumsiness", "weariness", "epilepsy", "haemophilia", "nausea",
+    "dizziness", "shyness", "stupidity", "confusion", "dementia",
+    "paranoia", "hallucinations", "impatience", "hypersomnia", "addiction"
+}
+
+-- Helper: Check if affliction is in a cure list
+local function isInCureList(aff, cureList)
+    for _, cureAff in ipairs(cureList) do
+        if aff == cureAff then return true end
+    end
+    return false
+end
+
+-- Helper: Get tracked afflictions matching a cure type
+local function getTrackedAffsOfType(cureList)
+    local matched = {}
+    for aff, cert in pairs(tAffsV2) do
+        if cert and cert >= 1 and isInCureList(aff, cureList) then
+            table.insert(matched, aff)
+        end
+    end
+    return matched
+end
+
+-- ============================================
 -- RANDOM CURE TRACKING (AK-inspired ak.randomaffs)
 -- ============================================
 
@@ -189,8 +234,8 @@ function onTargetTreeV2(targetName)
         -- Expected random cure - decrement counter
         randomCuresV2 = randomCuresV2 - 1
     else
-        -- Unexpected tree - reduce certainty of a random affliction
-        reduceRandomAffCertaintyV2()
+        -- Unexpected tree - reduce certainty of a tree-curable affliction
+        reduceCureTypeAffCertaintyV2(treeCurableAffsV2, "tree")
     end
 end
 
@@ -201,22 +246,48 @@ function onTargetFocusV2(targetName)
     if randomCuresV2 > 0 then
         randomCuresV2 = randomCuresV2 - 1
     else
-        reduceRandomAffCertaintyV2()
+        -- Focus only cures mental afflictions
+        reduceCureTypeAffCertaintyV2(focusCurableAffsV2, "focus")
     end
 end
 
--- Reduce certainty of a random tracked affliction
-function reduceRandomAffCertaintyV2()
-    -- Find afflictions with certainty > 0 and reduce one
-    for aff, cert in pairs(tAffsV2) do
-        if cert and cert >= 1 then
-            uncertainAffV2(aff)
-            if ataxiaEcho then
-                ataxiaEcho("[V2] Random cure reduced certainty of: " .. aff)
-            end
-            return
+-- Handle target eating kelp/aurum
+function onTargetKelpV2(targetName)
+    if not ataxia.settings.useAffTrackingV2 then return end
+    reduceCureTypeAffCertaintyV2(kelpCurableAffsV2, "kelp")
+end
+
+-- Smart cure reduction: If only ONE matching aff, remove it completely
+function reduceCureTypeAffCertaintyV2(cureList, cureType)
+    local matchedAffs = getTrackedAffsOfType(cureList)
+
+    if #matchedAffs == 0 then
+        -- No matching afflictions tracked
+        if ataxiaEcho then
+            ataxiaEcho("[V2] " .. cureType .. " used but no matching affs tracked")
+        end
+        return
+    elseif #matchedAffs == 1 then
+        -- Only ONE matching affliction - remove it completely
+        local aff = matchedAffs[1]
+        removeAffV2(aff)
+        if ataxiaEcho then
+            ataxiaEcho("[V2] " .. cureType .. " cured: " .. aff .. " (only option)")
+        end
+    else
+        -- Multiple matching afflictions - reduce certainty of first one
+        -- (could be smarter with priority later)
+        local aff = matchedAffs[1]
+        uncertainAffV2(aff)
+        if ataxiaEcho then
+            ataxiaEcho("[V2] " .. cureType .. " reduced certainty of: " .. aff)
         end
     end
+end
+
+-- Legacy function for generic random cure (tree mainly)
+function reduceRandomAffCertaintyV2()
+    reduceCureTypeAffCertaintyV2(treeCurableAffsV2, "random")
 end
 
 -- Reset random cure counter (on target change)

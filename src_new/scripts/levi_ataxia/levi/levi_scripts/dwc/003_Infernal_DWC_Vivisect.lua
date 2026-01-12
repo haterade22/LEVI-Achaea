@@ -247,98 +247,83 @@ end
 -- PHASE DETECTION
 -------------------------------------------------------------------------------
 
+--[[
+    PHASES:
+    1. PREP - Build afflictions (paralysis → clumsiness → nausea → asthma → etc.)
+              AND prep limbs simultaneously. Transition to softlock once asthma stuck.
+    2. EXECUTE - All limbs prepped + softlocked. Break arm1 → leg → arm2.
+    3. KILL - Prone + both arms broken. Execute vivisect.
+]]--
+
 function infernalDWC.getPhase()
     -- Kill check first - both arms broken + prone
     if infernalDWC.hasAff("prone") and infernalDWC.areBothArmsBroken() then
         return "KILL"
     end
 
-    -- Execute phase check - all prepped AND soft locked
+    -- Execute phase check - all limbs prepped AND soft locked
     if infernalDWC.areBothArmsPrepped()
        and infernalDWC.isFocusLegPrepped()
        and infernalDWC.checkSoftLock() then
         return "EXECUTE"
     end
 
-    -- Parallel prep phase - nausea is stuck, work on limbs + lock
-    if infernalDWC.isNauseaStuck() then
-        return "PARALLEL_PREP"
-    end
-
-    -- Initial setup - get nausea to stick first
-    return "NAUSEA_SETUP"
+    -- Default: PREP phase - building afflictions and prepping limbs
+    -- Venom selection handles the priority automatically
+    return "PREP"
 end
 
 -------------------------------------------------------------------------------
 -- VENOM SELECTION BY PHASE
 -------------------------------------------------------------------------------
 
+--[[
+    VENOM PRIORITY (user specified):
+    1. Paralysis (curare)
+    2. Clumsiness (xentio) - 33% miss chance
+    3. Nausea (euphorbia) - parry bypass
+    4. Asthma (kalmia)
+    5. Weariness (exploit - hellforge investment)
+    6. Healthleech (torture - hellforge investment)
+    7. Softlock afflictions (once asthma is stuck):
+       - Anorexia (slike)
+       - Slickness (gecko)
+       - Stupidity (aconite)
+
+    CORRECT VENOM MAPPINGS:
+    - curare = paralysis
+    - xentio = clumsiness (NOT kalmia!)
+    - euphorbia = nausea (NOT eurypteria!)
+    - kalmia = asthma
+    - exploit = weariness + paranoia (hellforge)
+    - torture = haemophilia (hellforge)
+    - torment = healthleech (hellforge)
+    - slike = anorexia
+    - gecko = slickness
+    - aconite = stupidity
+]]--
+
 function infernalDWC.selectVenoms()
     local v1, v2 = nil, nil
     local phase = infernalDWC.getPhase()
-    local hasAff = infernalDWC.hasAff  -- Local reference for cleaner code
+    local hasAff = infernalDWC.hasAff
 
-    if phase == "NAUSEA_SETUP" then
-        -- Priority: Nausea (parry bypass) > Clumsiness (33% miss) > Weariness (blocks Fitness)
-        if not hasAff("nausea") then
-            v1 = "eurypteria"
-        elseif not hasAff("clumsiness") then
-            v1 = "kalmia"
-        elseif not hasAff("weariness") then
-            v1 = "vernalius"
-        else
-            v1 = "eurypteria" -- Maintain nausea
-        end
+    -- Check if asthma is stuck (for softlock transition)
+    local asthmaStuck = hasAff("asthma")
 
-        -- Second venom slot
-        if not hasAff("clumsiness") and v1 ~= "kalmia" then
-            v2 = "kalmia"
-        elseif not hasAff("weariness") and v1 ~= "vernalius" then
-            v2 = "vernalius"
-        elseif not hasAff("asthma") then
-            v2 = "kalmia" -- Start building asthma for lock
-        else
-            v2 = "curare" -- Start paralysis pressure
-        end
+    --[[
+        IMPORTANT: Curare (paralysis) should ALWAYS be on v2 (second sword)
+        because if WE have clumsiness, we might miss the first swing.
+        This ensures paralysis still lands on the second hit.
+    ]]--
 
-    elseif phase == "PARALLEL_PREP" then
-        -- Soft lock priority order for v1
-        if not hasAff("slickness") then
-            v1 = "gecko"
-        elseif not hasAff("asthma") then
-            v1 = "kalmia"
-        elseif not hasAff("anorexia") then
-            v1 = "slike"
-        elseif not hasAff("paralysis") then
-            v1 = "curare"
-        elseif not hasAff("stupidity") then
-            v1 = "aconite"
-        else
-            v1 = "curare" -- Maintain paralysis
-        end
-
-        -- Second venom: maintain key afflictions or continue lock building
-        if not hasAff("nausea") then
-            v2 = "eurypteria" -- Re-apply nausea if lost
-        elseif not hasAff("weariness") then
-            v2 = "vernalius"
-        elseif not hasAff("clumsiness") and v1 ~= "kalmia" then
-            v2 = "kalmia"
-        elseif not hasAff("paralysis") and v1 ~= "curare" then
-            v2 = "curare"
-        elseif not hasAff("stupidity") and v1 ~= "aconite" then
-            v2 = "aconite"
-        else
-            v2 = "curare" -- Default to paralysis maintenance
-        end
-
-    elseif phase == "EXECUTE" then
+    if phase == "EXECUTE" then
         local step = infernalDWC.state.executeStep
 
         if step == 0 then
-            -- Break arm 1: maintain lock pressure
-            v1 = "curare"
-            v2 = "aconite"
+            -- Break arm 1: maintain lock pressure (curare on v2!)
+            v1 = "xentio"
+            v2 = "curare"
         elseif step == 1 then
             -- Break leg: delphinium x2 for prone on break
             v1 = "delphinium"
@@ -348,15 +333,72 @@ function infernalDWC.selectVenoms()
             v1 = "epseth"
             v2 = "epteth"
         else
-            -- Fallback
-            v1 = "curare"
-            v2 = "aconite"
+            -- Fallback (curare on v2!)
+            v1 = "xentio"
+            v2 = "curare"
         end
 
     elseif phase == "KILL" then
         -- No venoms needed for vivisect
         v1 = nil
         v2 = nil
+
+    else
+        -- PREP phase
+        -- Priority: Paralysis > Clumsiness > Nausea > Asthma > Weariness > Healthleech
+        -- Then softlock once asthma is stuck
+        -- CURARE ALWAYS ON V2!
+
+        -- Determine what we need
+        local needPara = not hasAff("paralysis")
+        local needClum = not hasAff("clumsiness")
+        local needNaus = not hasAff("nausea")
+        local needAsth = not hasAff("asthma")
+        local needWear = not hasAff("weariness")
+        local needHlth = not hasAff("healthleech")
+        local needAnor = asthmaStuck and not hasAff("anorexia")
+        local needSlic = asthmaStuck and not hasAff("slickness")
+        local needStup = asthmaStuck and not hasAff("stupidity")
+
+        -- V2 selection (paralysis always goes here if needed)
+        if needPara then
+            v2 = "curare"
+        elseif needClum then
+            v2 = "xentio"
+        elseif needNaus then
+            v2 = "euphorbia"
+        elseif needAsth then
+            v2 = "kalmia"
+        elseif needAnor then
+            v2 = "slike"
+        elseif needSlic then
+            v2 = "gecko"
+        elseif needStup then
+            v2 = "aconite"
+        else
+            v2 = "curare"  -- Maintain paralysis
+        end
+
+        -- V1 selection (second priority, or hellforge)
+        if needWear then
+            v1 = "exploit"  -- Hellforge investment
+        elseif needHlth then
+            v1 = "torment"  -- Hellforge investment
+        elseif needClum and v2 ~= "xentio" then
+            v1 = "xentio"
+        elseif needNaus and v2 ~= "euphorbia" then
+            v1 = "euphorbia"
+        elseif needAsth and v2 ~= "kalmia" then
+            v1 = "kalmia"
+        elseif needAnor and v2 ~= "slike" then
+            v1 = "slike"
+        elseif needSlic and v2 ~= "gecko" then
+            v1 = "gecko"
+        elseif needStup and v2 ~= "aconite" then
+            v1 = "aconite"
+        else
+            v1 = "xentio"  -- Default to clumsiness maintenance
+        end
     end
 
     return v1, v2
@@ -448,6 +490,19 @@ function infernalDWCVivisect()
     -- Get venoms and limb target
     local v1, v2 = infernalDWC.selectVenoms()
     local limb = infernalDWC.selectLimbTarget()
+
+    -- Populate envenomList for trigger tracking (critical for affliction detection)
+    -- The DWC triggers use these global lists to know what afflictions to track
+    envenomList = envenomList or {}
+    envenomListTwo = envenomListTwo or {}
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.hitCount = 0  -- Reset hit counter for this attack
+
+    -- Clear and set up venom lists for the triggers
+    envenomList = {}
+    envenomListTwo = {}
+    if v1 then table.insert(envenomList, v1) end
+    if v2 then table.insert(envenomListTwo, v2) end
 
     -- Build base command
     local weapon1 = infernalDWC.config.weapon1
