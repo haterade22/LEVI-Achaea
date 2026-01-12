@@ -167,6 +167,23 @@ pendingKelpCountV2 = 0
 
 -- Handle kelp when asthma is present - wait for smoke to disambiguate
 function handleKelpWithAsthmaV2()
+    -- First check if asthma is the ONLY kelp-curable affliction
+    -- If so, no point waiting for smoke - just remove asthma
+    local otherKelpAffs = {}
+    for _, aff in ipairs(curingTable["kelp"] or kelpCurableAffsV2) do
+        if aff ~= "asthma" and haveAffV2(aff) then
+            table.insert(otherKelpAffs, aff)
+        end
+    end
+
+    if #otherKelpAffs == 0 then
+        -- Asthma is the only kelp-curable aff - remove it directly
+        removeAffV2("asthma")
+        ataxiaEcho("[V2] Kelp eaten - cured asthma (only kelp aff tracked)")
+        predictBal("herb", 1.55)
+        return
+    end
+
     -- If we're already waiting for kelp disambiguation, increment counter
     -- and immediately remove a non-asthma affliction for the PREVIOUS kelp
     if pendingKelpAffsV2 and pendingKelpCountV2 > 0 then
@@ -183,7 +200,7 @@ function handleKelpWithAsthmaV2()
 
     -- Store current kelp afflictions for later disambiguation
     pendingKelpAffsV2 = {}
-    for _, aff in ipairs(curingTable["kelp"]) do
+    for _, aff in ipairs(curingTable["kelp"] or kelpCurableAffsV2) do
         if haveAffV2(aff) then
             table.insert(pendingKelpAffsV2, aff)
         end

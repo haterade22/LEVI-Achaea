@@ -453,7 +453,9 @@ function reduceCureTypeAffCertaintyV2(cureList, cureType)
         local aff = matchedAffs[1]
         uncertainAffV2(aff)
         if ataxiaEcho then
-            ataxiaEcho("[V2] " .. cureType .. " reduced certainty of: " .. aff)
+            -- Show all candidates for better debugging
+            local allAffs = table.concat(matchedAffs, ", ")
+            ataxiaEcho("[V2] " .. cureType .. " reduced certainty of: " .. aff .. " (from: " .. allAffs .. ")")
         end
     end
 end

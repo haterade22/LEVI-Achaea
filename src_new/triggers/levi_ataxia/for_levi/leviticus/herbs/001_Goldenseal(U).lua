@@ -45,8 +45,6 @@ tdeliverance = false
         lastFocus = nil
     end
     targetAteWrapper("goldenseal")
-    -- V2 tracking support: goldenseal cures dizziness, epilepsy, etc.
-    if onTargetGoldensealV2 then onTargetGoldensealV2(matches[2]) end
 if passiveFailsafe then restorePassiveCure() end
     tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end

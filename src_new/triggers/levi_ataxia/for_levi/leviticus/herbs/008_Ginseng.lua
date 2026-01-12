@@ -47,8 +47,6 @@ tdeliverance = false
   if passiveFailsafe then restorePassiveCure() end
 
 	targetAteWrapper("ginseng")
-	-- V2 tracking support: ginseng cures nausea, haemophilia, etc.
-	if onTargetGinsengV2 then onTargetGinsengV2(matches[2]) end
 	-- Track for adaptive serpent offense
 	if serpent and serpent.trackCure then serpent.trackCure("ginseng") end
 
