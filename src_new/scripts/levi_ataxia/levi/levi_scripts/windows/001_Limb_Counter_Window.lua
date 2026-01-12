@@ -13,42 +13,6 @@ attributes:
 packageName: ''
 ]]--
 
--- V2 Affliction Display Helpers
-tarc = tarc or {}
-tarc.v2LockAffs = {"anorexia", "slickness", "asthma", "paralysis", "stupidity"}
-
-tarc.v2AffShortNames = {
-    -- Lock
-    anorexia = "ANO", slickness = "SLI", asthma = "AST", paralysis = "PAR", stupidity = "STU",
-    -- Pressure
-    nausea = "nau", clumsiness = "clu", weariness = "WEA",
-    -- Mental
-    impatience = "IMP", confusion = "con", dementia = "dem", paranoia = "pnoia",
-    hallucinations = "hal", dizziness = "diz", epilepsy = "epi", recklessness = "rec", shyness = "shy",
-    -- Other
-    prone = "PRONE", sensitivity = "sen", healthleech = "hleech", haemophilia = "hae",
-    lethargy = "let", darkshade = "dar", addiction = "add",
-    -- Defenses
-    rebounding = "REB", shield = "SHD",
-}
-
-function tarc.getV2AffColor(aff, certainty)
-    if certainty == 1 then return "orange" end
-    if certainty >= 4 then return "cyan" end
-    for _, lockAff in ipairs(tarc.v2LockAffs) do
-        if aff == lockAff then return "red" end
-    end
-    return "white"
-end
-
-function tarc.getV2AffDisplay(aff, certainty)
-    local shortName = tarc.v2AffShortNames[aff] or string.sub(aff, 1, 3)
-    local stackCount = math.floor(certainty / 2)
-    if stackCount >= 2 then return shortName .. "x" .. stackCount end
-    if certainty == 1 then return shortName .. "?" end
-    return shortName
-end
-
 tarcLabel = Geyser.Label:new({
   name = "tarcLabel",
   x = "0%", y = "-50%",
@@ -76,10 +40,19 @@ function tarc.write()
   if target and target ~= "" and target ~= "None" and target ~= "none" then
    tarc:cecho("   Target: " .. target .. "\n")
 
-    -- V2 Affliction Display
+    -- V2 Affliction Display (inline to avoid dependency issues)
     if tAffsV2 then
+      local lockAffs = {"anorexia", "slickness", "asthma", "paralysis", "stupidity"}
+      local shortNames = {
+        anorexia = "ANO", slickness = "SLI", asthma = "AST", paralysis = "PAR", stupidity = "STU",
+        nausea = "nau", clumsiness = "clu", weariness = "WEA", impatience = "IMP", confusion = "con",
+        dementia = "dem", paranoia = "pnoia", hallucinations = "hal", dizziness = "diz", epilepsy = "epi",
+        recklessness = "rec", shyness = "shy", prone = "PRONE", sensitivity = "sen", healthleech = "hleech",
+        haemophilia = "hae", lethargy = "let", darkshade = "dar", addiction = "add", rebounding = "REB", shield = "SHD",
+      }
+
       local lockCount = 0
-      for _, aff in ipairs(tarc.v2LockAffs) do
+      for _, aff in ipairs(lockAffs) do
         if tAffsV2[aff] and tAffsV2[aff] >= 1 then
           lockCount = lockCount + 1
         end
@@ -95,8 +68,22 @@ function tarc.write()
       local ignoreAffs = {curseward = true, blindness = true, deafness = true}
       for aff, certainty in pairs(tAffsV2) do
         if certainty >= 1 and not ignoreAffs[aff] then
-          local color = tarc.getV2AffColor(aff, certainty)
-          local display = tarc.getV2AffDisplay(aff, certainty)
+          -- Color: orange=uncertain, cyan=stacked, red=lock, white=other
+          local color = "white"
+          if certainty == 1 then color = "orange"
+          elseif certainty >= 4 then color = "cyan"
+          else
+            for _, la in ipairs(lockAffs) do
+              if aff == la then color = "red" break end
+            end
+          end
+          -- Display: add ? for uncertain, x2 for stacked
+          local shortName = shortNames[aff] or string.sub(aff, 1, 3)
+          local display = shortName
+          local stackCount = math.floor(certainty / 2)
+          if stackCount >= 2 then display = shortName .. "x" .. stackCount
+          elseif certainty == 1 then display = shortName .. "?"
+          end
           affStr = affStr .. "<" .. color .. ">" .. display .. "<reset> "
         end
       end
@@ -161,8 +148,8 @@ function tarc.write()
       end
     end
 
-    -- Denizens in Room
-    if ataxia.denizensHere then
+    -- Denizens in Room (only when basher enabled)
+    if ataxiaBasher and ataxiaBasher.enabled and ataxia.denizensHere then
       local count = 0
       for _ in pairs(ataxia.denizensHere) do count = count + 1 end
       if count > 0 then
