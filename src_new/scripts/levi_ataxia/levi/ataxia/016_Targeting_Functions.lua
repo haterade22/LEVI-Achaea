@@ -243,10 +243,10 @@ end
 
 function targetresetafflictionslevi()
 tAffs = {
-blindness = true, 
-deafness = true, 
-shield = false, 
-rebounding = false, 
+blindness = true,
+deafness = true,
+shield = false,
+rebounding = true,  -- Assume rebounding up, raze first to be safe
 curseward = false,
 addiction = false,
 aeon = false,
@@ -447,4 +447,24 @@ wristfractures = false,
   lastKelpAffs = nil
   lastKelp = nil
   if kelpDisambiguateTimer then killTimer(kelpDisambiguateTimer); kelpDisambiguateTimer = nil end
+
+  -- V2 Affliction Tracking reset
+  if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
+    if resetAffsV2 then
+      resetAffsV2()
+    else
+      tAffsV2 = {}
+      affTimersV2 = {}
+    end
+    -- Assume rebounding up on new target (raze first to be safe)
+    tAffsV2 = tAffsV2 or {}
+    tAffsV2.rebounding = 2  -- Confirmed rebounding
+    randomCuresV2 = 0
+    -- Reset V2 herb disambiguation
+    if pendingKelpAffsV2 then pendingKelpAffsV2 = nil end
+    if kelpDisambiguateTimerV2 then killTimer(kelpDisambiguateTimerV2); kelpDisambiguateTimerV2 = nil end
+    if lastGuessV2 then lastGuessV2 = nil end
+    -- Update V2 display
+    if updateAffDisplayV2 then updateAffDisplayV2() end
+  end
 end
