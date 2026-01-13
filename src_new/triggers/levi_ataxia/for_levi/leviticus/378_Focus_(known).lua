@@ -52,9 +52,12 @@ if isTargeted(multimatches[1][2]) and tBals.focus then
 				removeAffV2("impatience")
 			end
 	else
-		tFocused()
-		-- V2 integration: Focus cured a random mental affliction
-		if onTargetFocusV2 then onTargetFocusV2(name) end
+		-- V2 integration: Focus cured a random mental affliction (mutually exclusive with old system)
+		if ataxia.settings.useAffTrackingV2 then
+			onTargetFocusV2(name)
+		else
+			tFocused()
+		end
 	end
 	-- Track for adaptive serpent offense
 	if serpent and serpent.trackCure then serpent.trackCure("focus") end

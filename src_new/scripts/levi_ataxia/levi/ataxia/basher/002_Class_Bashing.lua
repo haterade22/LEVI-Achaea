@@ -512,14 +512,19 @@ function ataxiaBasher_pariahBashing()
 	local command, sp = "", ataxia.settings.separator
 	local brage = ataxiaBasher_assembleBattlerage()
 	local raze = ataxiaBasher.battlerage.Pariah.raze
-	
+
 	if ataxiaBasher.shielded then
+		-- Target is shielded, use raze to break it
 		command = "trace fissure "..target
+	elseif ataxiaBasher.swarmDevourReady then
+		-- Swarm devour ready - unwield shield, devour, then epitaph advance
+		command = "unwield shield"..sp.."swarm devour flushings "..target..sp..brage.."epitaph advance "..target
 	else
-		command = brage.."epitaph advance "..target
+		-- Swarm devour on cooldown - wield shield and epitaph advance
+		command = "wield shield"..sp..brage.."epitaph advance "..target
 	end
-	    
-	return command 
+
+	return command
 end
 
 function ataxiaBasher_paladinBashing()

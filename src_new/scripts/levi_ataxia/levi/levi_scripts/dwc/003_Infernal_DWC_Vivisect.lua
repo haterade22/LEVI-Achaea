@@ -318,8 +318,8 @@ function infernalDWC.selectVenoms()
         local step = infernalDWC.state.executeStep
 
         if step == 0 then
-            -- Break arm 1: maintain lock pressure (curare on v2!)
-            v1 = "xentio"
+            -- Break arm 1: torture for haemophilia (blocks clotting)
+            v1 = "torture"
             v2 = "curare"
         elseif step == 1 then
             -- Break leg: delphinium x2 for prone on break
@@ -370,8 +370,11 @@ function infernalDWC.selectVenoms()
         elseif not asthStuck then
             -- Nausea stuck, focus on asthma
             v1 = "kalmia"
+        elseif not slicStuck then
+            -- Asthma stuck, get slickness to limit cure options
+            v1 = "gecko"
         elseif not wearStuck then
-            -- Asthma stuck, use hellforge for weariness
+            -- Slickness stuck, use hellforge for weariness
             v1 = "exploit"
         elseif not hlthlStuck then
             -- Weariness stuck, use hellforge for healthleech
@@ -379,11 +382,8 @@ function infernalDWC.selectVenoms()
         elseif not anorStuck then
             -- Healthleech stuck, now softlock: anorexia
             v1 = "slike"
-        elseif not slicStuck then
-            -- Anorexia stuck, slickness
-            v1 = "gecko"
         elseif not stupStuck then
-            -- Slickness stuck, stupidity
+            -- Anorexia stuck, stupidity (gecko already applied after asthma)
             v1 = "aconite"
         else
             -- All stuck, maintain clumsiness
@@ -402,32 +402,29 @@ end
 function infernalDWC.selectLimbTarget()
     local phase = infernalDWC.getPhase()
 
-    if phase == "NAUSEA_SETUP" then
-        -- No limb targeting during setup, focus on venoms
-        -- Can optionally start prepping an arm
-        local focusArm = infernalDWC.getFocusArm()
-        if not infernalDWC.isArmPrepped(focusArm) then
-            return focusArm .. " arm"
-        end
-        return nil
+    if phase == "PREP" then
+        -- Check if nausea is stuck - if so, actively prep limbs for vivisect
+        if infernalDWC.hasAff("nausea") then
+            -- Nausea stuck = parry bypass active, prep limbs aggressively
+            local focusArm = infernalDWC.getFocusArm()
+            local offArm = infernalDWC.getOffArm()
+            local focusLeg = infernalDWC.state.focusLeg
 
-    elseif phase == "PARALLEL_PREP" then
-        -- Priority: Arms first (need both for vivisect), then leg
-        local focusArm = infernalDWC.getFocusArm()
-        local offArm = infernalDWC.getOffArm()
-        local focusLeg = infernalDWC.state.focusLeg
-
-        -- Prep arms first
-        if not infernalDWC.isArmPrepped(focusArm) then
-            return focusArm .. " arm"
-        elseif not infernalDWC.isArmPrepped(offArm) then
-            return offArm .. " arm"
-        -- Then prep leg
-        elseif not infernalDWC.isLegPrepped(focusLeg) then
-            return focusLeg .. " leg"
+            -- Prep arms first (need both for vivisect)
+            if not infernalDWC.isArmPrepped(focusArm) then
+                return focusArm .. " arm"
+            elseif not infernalDWC.isArmPrepped(offArm) then
+                return offArm .. " arm"
+            -- Then prep leg
+            elseif not infernalDWC.isLegPrepped(focusLeg) then
+                return focusLeg .. " leg"
+            else
+                -- All prepped, maintain pressure on focus arm
+                return focusArm .. " arm"
+            end
         else
-            -- All prepped, maintain pressure on focus arm
-            return focusArm .. " arm"
+            -- No nausea yet - don't target limbs, focus purely on afflictions
+            return nil
         end
 
     elseif phase == "EXECUTE" then

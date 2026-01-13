@@ -45,10 +45,12 @@ tdeliverance = false
 	end
   if passiveFailsafe then restorePassiveCure() end
 
-	-- V2 integration: track tree cure
-	if onTargetTreeV2 then onTargetTreeV2(name) end
-
-	tSingleRandom()
+	-- V2 integration: track tree cure (mutually exclusive with old system)
+	if ataxia.settings.useAffTrackingV2 then
+		onTargetTreeV2(name)
+	else
+		tSingleRandom()
+	end
   	selectString(line, 1)
 	fg("green")
 	resetFormat()

@@ -37,10 +37,13 @@ patterns:
 
 local name = matches[2]
 if isTargeted(matches[2]) and tBals.focus then
-  tFocused()
-	-- V2 integration: Focus cures a random mental affliction
-	if onTargetFocusV2 then onTargetFocusV2(name) end
+	-- V2 integration: Focus cures a random mental affliction (mutually exclusive with old system)
+	if ataxia.settings.useAffTrackingV2 then
+		onTargetFocusV2(name)
+	else
+		tFocused()
 	end
+end
 	tBals.focus = false
   
   if tBals.timers.focus then killTimer(tBals.timers.focus) end
