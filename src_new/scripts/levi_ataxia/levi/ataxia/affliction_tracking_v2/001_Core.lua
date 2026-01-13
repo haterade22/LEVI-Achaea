@@ -431,6 +431,7 @@ function onTargetSalveLimbsV2(targetName, limb)
 end
 
 -- Smart cure reduction: If only ONE matching aff, remove it completely
+-- Uses priority-based removal when multiple candidates exist
 function reduceCureTypeAffCertaintyV2(cureList, cureType)
     local matchedAffs = getTrackedAffsOfType(cureList)
 
@@ -448,14 +449,29 @@ function reduceCureTypeAffCertaintyV2(cureList, cureType)
             ataxiaEcho("[V2] " .. cureType .. " cured: " .. aff .. " (only option)")
         end
     else
-        -- Multiple matching afflictions - reduce certainty of first one
-        -- (could be smarter with priority later)
-        local aff = matchedAffs[1]
-        uncertainAffV2(aff)
+        -- Multiple matching afflictions - use priority-based removal
+        local affToRemove = nil
+        local allAffs = table.concat(matchedAffs, ", ")
+
+        -- Check if we have a priority list for this cure type
+        if herbRemovalPriority and herbRemovalPriority[cureType] then
+            local priorityList = herbRemovalPriority[cureType]
+            for _, priorityAff in ipairs(priorityList) do
+                if table.contains(matchedAffs, priorityAff) then
+                    affToRemove = priorityAff
+                    break
+                end
+            end
+        end
+
+        -- Fallback to first matched if no priority match
+        if not affToRemove then
+            affToRemove = matchedAffs[1]
+        end
+
+        uncertainAffV2(affToRemove)
         if ataxiaEcho then
-            -- Show all candidates for better debugging
-            local allAffs = table.concat(matchedAffs, ", ")
-            ataxiaEcho("[V2] " .. cureType .. " reduced certainty of: " .. aff .. " (from: " .. allAffs .. ")")
+            ataxiaEcho("[V2] " .. cureType .. " reduced: " .. affToRemove .. " (from: " .. allAffs .. ")\n")
         end
     end
 end

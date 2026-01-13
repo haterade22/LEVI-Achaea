@@ -93,6 +93,50 @@ herbRemovalPriority = {
         "slickness",     -- Can verify via failed apply
         "paralysis",     -- Critical for locks - keep longest
     },
+
+    -- TREE: cures most afflictions - priority order for tracking
+    tree = {
+        "hypersomnia",   -- Can't easily verify
+        "addiction",     -- Can't easily verify
+        "shyness",       -- Can't verify
+        "dizziness",     -- Can verify via stumble
+        "sensitivity",   -- Hard to verify
+        "weariness",     -- Can't easily verify
+        "haemophilia",   -- Can verify via bleeding
+        "nausea",        -- Can verify via vomit - parry bypass important
+        "hallucinations", -- Can verify via illusion attacks
+        "dementia",      -- Can verify via random actions
+        "epilepsy",      -- Can verify via seizure
+        "clumsiness",    -- CAN verify via fumble
+        "stupidity",     -- Can verify via failed actions
+        "confusion",     -- Critical for focus lock
+        "paranoia",      -- Critical for locks
+        "asthma",        -- CAN verify via smoke - important for lock
+        "anorexia",      -- Critical for locks - keep longest
+        "slickness",     -- Critical for locks
+        "paralysis",     -- Critical for locks - keep longest
+    },
+
+    -- FOCUS: cures mental afflictions
+    focus = {
+        "hypersomnia",   -- Can't easily verify
+        "addiction",     -- Can't easily verify
+        "loneliness",    -- Can verify
+        "vertigo",       -- Can verify via falling
+        "feeble",        -- Can verify
+        "shyness",       -- Can't verify
+        "dizziness",     -- Can verify via stumble
+        "hallucinations", -- Can verify via illusion attacks
+        "dementia",      -- Can verify via random actions
+        "epilepsy",      -- Can verify via seizure
+        "recklessness",  -- Important for Ekanelia
+        "masochism",     -- Important for Ekanelia
+        "confusion",     -- Critical for focus lock
+        "paranoia",      -- Critical for locks
+        "stupidity",     -- Can verify via failed actions - important for lock
+        "anorexia",      -- Critical for locks
+        "impatience",    -- Critical for locks - keep longest
+    },
 }
 
 -- Backward compatibility alias
