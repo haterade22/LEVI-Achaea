@@ -121,6 +121,10 @@ function infernalDWC.areBothArmsBroken()
     return infernalDWC.isArmBroken("left") and infernalDWC.isArmBroken("right")
 end
 
+function infernalDWC.areBothLegsBroken()
+    return infernalDWC.isLegBroken("left") and infernalDWC.isLegBroken("right")
+end
+
 function infernalDWC.isFocusLegPrepped()
     return infernalDWC.isLegPrepped(infernalDWC.state.focusLeg)
 end
@@ -256,20 +260,19 @@ end
 ]]--
 
 function infernalDWC.getPhase()
-    -- Kill check first - both arms broken + prone
-    if infernalDWC.hasAff("prone") and infernalDWC.areBothArmsBroken() then
+    -- Kill check: Vivisect requires prone + ALL 4 limbs broken
+    if infernalDWC.hasAff("prone")
+       and infernalDWC.areBothArmsBroken()
+       and infernalDWC.areBothLegsBroken() then
         return "KILL"
     end
 
-    -- Execute phase check - all limbs prepped AND soft locked
-    if infernalDWC.areBothArmsPrepped()
-       and infernalDWC.isFocusLegPrepped()
-       and infernalDWC.checkSoftLock() then
+    -- Execute phase: all limbs prepped (soft lock NOT required)
+    if infernalDWC.areBothArmsPrepped() and infernalDWC.isFocusLegPrepped() then
         return "EXECUTE"
     end
 
     -- Default: PREP phase - building afflictions and prepping limbs
-    -- Venom selection handles the priority automatically
     return "PREP"
 end
 
@@ -341,53 +344,40 @@ function infernalDWC.selectVenoms()
         v2 = nil
 
     else
-        -- PREP phase - SEQUENTIAL PRIORITY
-        -- Each affliction must be STUCK before moving to the next
-        -- Priority: Paralysis > Clumsiness > Nausea > Asthma > Weariness > Healthleech > Softlock
+        -- PREP phase - KELP STACK PRESSURE
+        -- Priority: clumsiness → nausea → healthleech → haemophilia → sensitivity → weariness → asthma
+        -- Stack kelp-curable affs that pressure health & hinder offense
         -- CURARE ALWAYS ON V2 (survives clumsiness miss on first swing)
 
         -- Check what's stuck
-        local paraStuck = hasAff("paralysis")
         local clumStuck = hasAff("clumsiness")
         local nausStuck = hasAff("nausea")
-        local asthStuck = hasAff("asthma")
-        local wearStuck = hasAff("weariness")
         local hlthlStuck = hasAff("healthleech")
-        local anorStuck = hasAff("anorexia")
-        local slicStuck = hasAff("slickness")
-        local stupStuck = hasAff("stupidity")
+        local haemoStuck = hasAff("haemophilia")
+        local sensStuck = hasAff("sensitivity")
+        local wearStuck = hasAff("weariness")
+        local asthStuck = hasAff("asthma")
 
         -- V2 always curare (paralysis) - critical to maintain
         v2 = "curare"
 
-        -- V1 selection: SEQUENTIAL - only move to next when current is stuck
+        -- V1 selection: Kelp stack pressure
         if not clumStuck then
-            -- Focus on clumsiness until stuck
-            v1 = "xentio"
+            v1 = "xentio"         -- Clumsiness (33% miss)
         elseif not nausStuck then
-            -- Clumsiness stuck, focus on nausea
-            v1 = "euphorbia"
-        elseif not asthStuck then
-            -- Nausea stuck, focus on asthma
-            v1 = "kalmia"
-        elseif not slicStuck then
-            -- Asthma stuck, get slickness to limit cure options
-            v1 = "gecko"
-        elseif not wearStuck then
-            -- Slickness stuck, use hellforge for weariness
-            v1 = "exploit"
+            v1 = "euphorbia"      -- Nausea (parry bypass, enables limb prep)
         elseif not hlthlStuck then
-            -- Weariness stuck, use hellforge for healthleech
-            v1 = "torment"
-        elseif not anorStuck then
-            -- Healthleech stuck, now softlock: anorexia
-            v1 = "slike"
-        elseif not stupStuck then
-            -- Anorexia stuck, stupidity (gecko already applied after asthma)
-            v1 = "aconite"
+            v1 = "torment"        -- Healthleech (drains health) - hellforge
+        elseif not haemoStuck then
+            v1 = "torture"        -- Haemophilia (no clotting) - hellforge
+        elseif not sensStuck then
+            v1 = "prefarar"       -- Sensitivity (more damage taken)
+        elseif not wearStuck then
+            v1 = "exploit"        -- Weariness (blocks fitness) - hellforge
+        elseif not asthStuck then
+            v1 = "kalmia"         -- Asthma (blocks smoke cures)
         else
-            -- All stuck, maintain clumsiness
-            v1 = "xentio"
+            v1 = "xentio"         -- Maintain clumsiness
         end
     end
 
@@ -599,6 +589,29 @@ function infernalDWCVivisect()
             atk = atk .. ";dsl " .. target
         end
     end
+
+    -- Echo attack status (phase, afflictions, limbs, venoms)
+    local affStr = ""
+    if infernalDWC.hasAff("clumsiness") then affStr = affStr .. "clu " end
+    if infernalDWC.hasAff("nausea") then affStr = affStr .. "nau " end
+    if infernalDWC.hasAff("healthleech") then affStr = affStr .. "hle " end
+    if infernalDWC.hasAff("haemophilia") then affStr = affStr .. "hae " end
+    if infernalDWC.hasAff("sensitivity") then affStr = affStr .. "sen " end
+    if infernalDWC.hasAff("weariness") then affStr = affStr .. "wea " end
+    if infernalDWC.hasAff("asthma") then affStr = affStr .. "ast " end
+    if infernalDWC.hasAff("paralysis") then affStr = affStr .. "par " end
+    if affStr == "" then affStr = "none" end
+
+    local la = string.format("%.0f", infernalDWC.getLA())
+    local ra = string.format("%.0f", infernalDWC.getRA())
+    local ll = string.format("%.0f", infernalDWC.getLL())
+    local rl = string.format("%.0f", infernalDWC.getRL())
+    local limbStr = "LA:" .. la .. " RA:" .. ra .. " LL:" .. ll .. " RL:" .. rl
+
+    local venomStr = (v1 or "-") .. "/" .. (v2 or "-")
+    local limbTarget = limb or "body"
+
+    cecho("\n<cyan>[INF DWC]<reset> <yellow>" .. phase .. "<reset> | " .. limbTarget .. " | " .. venomStr .. " | [" .. affStr .. "] | " .. limbStr)
 
     -- Execute with assess
     send("queue addclear freestand " .. atk .. ";assess " .. target)

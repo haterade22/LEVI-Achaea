@@ -60,5 +60,9 @@ elseif isTargeted(tar) then
 	fg("a_brown")
 	resetFormat()
 	tAffs.shield = true
+	-- Update V2 tracking if available
+	if tAffsV2 then
+		tAffsV2.shield = 100
+	end
 end
 
