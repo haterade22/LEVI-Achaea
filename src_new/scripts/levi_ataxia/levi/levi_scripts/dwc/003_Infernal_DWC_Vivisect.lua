@@ -56,6 +56,12 @@ PHASE OVERVIEW:
         - Execute vivisect when leg broken + right arm broken
         - The epteth/epseth venoms have already provided Level 1 to remaining limbs
 
+    DAMAGE KILL (Highest Priority - Overrides ALL Phases):
+        - If target health <= 40% (ataxiaTemp.lastAssess), use QUASH + ARC
+        - This takes priority over PREP, EXECUTE, KILL, and RIFTLOCK phases
+        - When they're low, finish them with damage instead of completing vivisect setup
+        - Quash removes shields and deals damage, Arc is a high-damage follow-up
+
 -------------------------------------------------------------------------------
 RIFTLOCK MODE (Counter to RESTORE):
 -------------------------------------------------------------------------------
@@ -136,6 +142,7 @@ CONFIGURATION:
         weapon1 = "scimitar405403",     -- Left hand scimitar
         weapon2 = "scimitar405398",     -- Right hand scimitar
         battleaxe = "battleaxe590991",  -- Battleaxe for undercut
+        damageKillThreshold = 40,       -- Below this HP%, use quash+arc instead of vivisect
     }
 
 -------------------------------------------------------------------------------
@@ -211,6 +218,7 @@ infernalDWC.config = {
     weapon1 = "scimitar405403", -- Left hand weapon ID
     weapon2 = "scimitar405398", -- Right hand weapon ID
     battleaxe = "battleaxe590991", -- Battleaxe for undercut
+    damageKillThreshold = 40,   -- Below this health %, use quash + arc instead of vivisect
 }
 
 -------------------------------------------------------------------------------
@@ -651,6 +659,16 @@ end
 -- EXECUTE STEP ADVANCEMENT
 -------------------------------------------------------------------------------
 
+--[[
+    EXECUTE steps:
+    Step 0: Undercut left leg → waits for leg to break
+    Step 1: DSL right arm with epteth/epseth → after right arm breaks, KILL triggers
+
+    Note: After step 1 completes, getPhase() returns KILL (not EXECUTE),
+    so step advancement beyond 1 doesn't happen in normal flow.
+    RIFTLOCK handles left arm breaking separately.
+]]--
+
 -- Call this BEFORE selecting venoms/limbs to advance step based on previous attack results
 function infernalDWC.advanceExecuteStep()
     local phase = infernalDWC.getPhase()
@@ -667,24 +685,34 @@ function infernalDWC.advanceExecuteStep()
     local step = infernalDWC.state.executeStep
 
     if step == 0 then
-        -- Check if leg broke from undercut
+        -- Step 0 → 1: Check if leg broke from undercut
         if infernalDWC.isFocusLegBroken() then
             infernalDWC.state.executeStep = 1
-            cecho("\n<green>[INF DWC]<reset> Leg BROKEN! Moving to right arm.")
-        end
-    elseif step == 1 then
-        -- Check if RIGHT arm broke
-        if infernalDWC.isArmBroken("right") then
-            infernalDWC.state.executeStep = 2
-            cecho("\n<green>[INF DWC]<reset> Right arm BROKEN! Moving to left arm.")
-        end
-    elseif step == 2 then
-        -- Check if LEFT arm broke
-        if infernalDWC.isArmBroken("left") then
-            infernalDWC.state.executeStep = 3
-            cecho("\n<green>[INF DWC]<reset> Left arm BROKEN! All 4 limbs broken - VIVISECT!")
+            cecho("\n<green>[INF DWC]<reset> Leg BROKEN (4s salve lock)! DSL right arm with epteth/epseth.")
         end
     end
+    -- Note: Step 1 doesn't advance because KILL triggers when right arm breaks
+    -- (leg broken + right arm broken = KILL phase)
+end
+
+-------------------------------------------------------------------------------
+-- DAMAGE KILL CHECK (quash + arc when target low health)
+-------------------------------------------------------------------------------
+
+-- Check if target is below damage kill threshold (uses ataxiaTemp.lastAssess from assess)
+function infernalDWC.shouldDamageKill()
+    if not ataxiaTemp or not ataxiaTemp.lastAssess then
+        return false
+    end
+    return ataxiaTemp.lastAssess <= infernalDWC.config.damageKillThreshold
+end
+
+-- Get target health % from last assess
+function infernalDWC.getTargetHealth()
+    if ataxiaTemp and ataxiaTemp.lastAssess then
+        return ataxiaTemp.lastAssess
+    end
+    return 100  -- Default to full health if unknown
 end
 
 -------------------------------------------------------------------------------
@@ -721,6 +749,16 @@ function infernalDWCVivisect()
     if phase ~= infernalDWC.state.lastPhase then
         cecho("\n<cyan>[INF DWC]<reset> Phase: <yellow>" .. phase .. "<reset>")
         infernalDWC.state.lastPhase = phase
+    end
+
+    -- DAMAGE KILL CHECK - Use quash + arc when target is below 40% health
+    -- This takes priority over ALL phases (PREP, EXECUTE, KILL, RIFTLOCK)
+    -- When they're low, finish them with damage instead of completing vivisect setup
+    if infernalDWC.shouldDamageKill() then
+        local healthPct = infernalDWC.getTargetHealth()
+        send("queue addclear freestand quash " .. target .. ";arc " .. target)
+        cecho("\n<red>[INF DWC]<reset> DAMAGE KILL! Target at " .. healthPct .. "% - QUASH + ARC!")
+        return
     end
 
     -- KILL CHECK - Execute vivisect
@@ -912,6 +950,7 @@ function infernalDWCStatus()
     local ra = infernalDWC.getRA()
     local ll = infernalDWC.getLL()
     local rl = infernalDWC.getRL()
+    local targetHealth = infernalDWC.getTargetHealth()
 
     cecho("\n<cyan>========================================<reset>")
     -- Show which tracking system is in use
@@ -920,6 +959,14 @@ function infernalDWCStatus()
         trackingSystem = "V2 (tAffsV2)"
     end
     cecho("\n<cyan>[INF DWC VIVISECT]<reset> Target: <yellow>" .. tar .. "<reset> | Tracking: <yellow>" .. trackingSystem .. "<reset>")
+
+    -- Target health (for damage kill check)
+    local healthColor = targetHealth <= infernalDWC.config.damageKillThreshold and "<red>" or "<green>"
+    cecho("\n<cyan>[INF DWC]<reset> Target HP: " .. healthColor .. targetHealth .. "%<reset>")
+    if infernalDWC.shouldDamageKill() then
+        cecho(" <red>→ DAMAGE KILL (quash+arc)<reset>")
+    end
+
     cecho("\n<cyan>[INF DWC]<reset> Phase: <yellow>" .. phase .. "<reset>")
 
     if phase == "EXECUTE" then
