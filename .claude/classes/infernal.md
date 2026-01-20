@@ -407,10 +407,10 @@ required_limbs:
 ### DWC: Vivisect (Primary Kill Path)
 ```yaml
 type: limb
-summary: Break all 4 limbs to level 1 (withered), then vivisect
+summary: Break all 4 limbs to level 1+ (withered), then vivisect
 
 prerequisites:
-  - All four limbs at level 1 break (withered/damaged state)
+  - All four limbs at level 1+ break (withered/damaged state)
   - Note: Does NOT require prone (unlike disembowel)
 
 finisher:
@@ -419,10 +419,84 @@ finisher:
   effect: "Instant kill, bypasses starburst tattoo resurrection"
 ```
 
+#### Understanding Break Levels
+```yaml
+level_1_break:
+  sources:
+    - "Epteth venom (arm break level 1)"
+    - "Epseth venom (leg break level 1)"
+  effect: "Limb is 'withered' - counts for vivisect requirement"
+  cure: "Single restoration application (4s salve balance)"
+
+level_2_break:
+  sources:
+    - "Physical limb damage reaching 100%+"
+    - "Undercut on prepped leg"
+  effect: "Limb is 'broken/crippled' - also counts for vivisect"
+  cure: "Restoration (4s) + Mending (4s) = 8 seconds minimum"
+
+key_insight: |
+  Epteth and epseth venoms give level 1 breaks to non-targeted limbs!
+  This means a single DSL with epteth/epseth can affect multiple limbs:
+  - Physically breaks the targeted limb (level 2)
+  - Applies level 1 break to opposite arm (epteth)
+  - Applies level 1 break to opposite leg (epseth)
+```
+
 #### DWC Timing
 ```yaml
 attack_balance: "1.8 - 2.1 seconds per DSL"
 attacks_per_window: "~4 DSLs in 8 second prone window"
+undercut_salve_lock: "4 seconds (forces restoration, blocks mending)"
+```
+
+#### Optimized Two-Attack Kill (Undercut + DSL)
+```yaml
+summary: |
+  The fastest vivisect route - only 2 attacks after prep phase.
+  Uses battleaxe undercut for prone + break, then scimitars for final break.
+
+prerequisites:
+  - Both arms prepped to 90%+
+  - Left leg prepped to 90%+
+
+execute_sequence:
+  step_0:
+    weapon: "Battleaxe"
+    action: "UNDERCUT <target> left leg"
+    investment: "HELLFORGE INVEST EXPLOIT"
+    effects:
+      - "Breaks left leg (level 2)"
+      - "4 second salve lock (forces restoration, blocks mending)"
+      - "Target is effectively locked for 4 seconds"
+    note: "Undercut does NOT prone, but 4s salve lock is better"
+
+  step_1:
+    weapon: "Scimitars (DSL)"
+    action: "DSL <target> right arm epteth epseth"
+    effects:
+      - "Breaks right arm (level 2 from physical damage)"
+      - "Epteth gives level 1 to LEFT ARM"
+      - "Epseth gives level 1 to RIGHT LEG"
+    result: "All 4 limbs now at level 1+ → VIVISECT"
+
+  kill:
+    action: "VIVISECT <target>"
+    condition: "All 4 limbs at level 1+"
+
+why_this_works: |
+  1. Undercut breaks leg + 4s salve lock
+  2. DSL with epteth/epseth on right arm:
+     - Physically breaks right arm (level 2)
+     - Epteth poisons left arm (level 1)
+     - Epseth poisons right leg (level 1)
+  3. Result: 4 limbs broken in just 2 attacks!
+
+timing_window: |
+  - Undercut: ~2s balance + 4s salve lock on target
+  - DSL: ~2s balance
+  - Total window: ~4s before they can mending
+  - That's enough for DSL + vivisect
 ```
 
 #### Strategy: Two-Limb Prep (vs weaker opponents)
@@ -445,26 +519,65 @@ execute_phase:
 summary: Prep 3 limbs to near-break, then execute break sequence
 
 target_limbs:
-  - right_leg: "Primary prone source"
-  - left_leg: "Backup prone + vivisect req"
-  - arm: "Either arm, vivisect req"
+  - left_leg: "Primary undercut target"
+  - left_arm: "Prep for backup"
+  - right_arm: "DSL target with epteth/epseth"
 
 prep_phase:
-  1: "Prep right leg to near-break (DO NOT BREAK YET)"
-  2: "Prep left leg to near-break (DO NOT BREAK YET)"
-  3: "Prep arm to near-break (DO NOT BREAK YET)"
+  1: "Prep left leg to 90%+ (DO NOT BREAK YET)"
+  2: "Prep left arm to 90%+ (DO NOT BREAK YET)"
+  3: "Prep right arm to 90%+ (DO NOT BREAK YET)"
 
 execute_phase:
-  4: "DSL right leg with delphinium - breaks leg, prones, forces restoration"
-  5: "DSL left leg with epteth/epseth - breaks + stacks salve demands"
-  6: "DSL prepped arm to break"
-  7: "DSL final arm with epteth/epseth while salve overwhelmed"
-  8: "VIVISECT when all 4 limbs level 1"
+  4: "UNDERCUT left leg - breaks leg, 4s salve lock"
+  5: "DSL right arm with epteth/epseth - breaks + gives level 1 to left arm and right leg"
+  6: "VIVISECT - all 4 limbs at level 1+"
 
 why_three_limbs: |
-  Most opponents can restore fast enough to heal 2 unprepped limbs.
-  With 3 prepped, you only need to break 1 unprepped limb while
-  their salve balance is overwhelmed.
+  Provides redundancy if target mends during prep.
+  With 3 prepped, undercut + single DSL is enough for vivisect.
+```
+
+#### RIFTLOCK Mode (Counter to RESTORE)
+```yaml
+trigger: "Target uses RESTORE ability (heals all limbs)"
+detection: "<target> crackles with blue energy that wreathes itself about his limbs."
+
+strategy: |
+  When target uses RESTORE, all limb progress is lost.
+  Switch to riftlock mode to punish them and prevent further use.
+
+riftlock_goal:
+  - "Break arms (prevents rifting herbs)"
+  - "Stick anorexia (prevents eating)"
+  - "Stick slickness (prevents applying salves)"
+  - "Stick addiction (eating triggers cooldown)"
+  - "Maintain paralysis (prevents tree)"
+
+execute_sequence:
+  step_1:
+    action: "DSL left arm with kalmia/vardrax"
+    effect: "Prep arm + asthma + addiction"
+
+  step_2:
+    action: "DSL left arm with slike/gecko"
+    effect: "Break arm + weariness + slickness"
+
+  step_3:
+    action: "DSL right arm with euphorbia/curare"
+    effect: "Prep arm + anorexia + paralysis"
+
+  step_4:
+    action: "Continue pressure until locked"
+
+affliction_priority:
+  v1_choices:
+    - "slike (anorexia) - blocks eating"
+    - "gecko (slickness) - blocks applying"
+    - "vardrax (addiction) - eating triggers cooldown"
+  v2_constant: "curare (paralysis) - always"
+
+exit_condition: "Manual exit or target dead"
 ```
 
 #### Parry Bypass (Knight Mechanic)

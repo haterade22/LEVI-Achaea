@@ -103,13 +103,19 @@ Each subsystem uses numbered files (001_, 002_, etc.) to enforce load order:
 - **Fracture Management**: Two-handed combat tracking
 - **Defense Management**: Automatic parrying, SSC integration
 - **Basher**: `ataxiaBasher` for automated hunting (see details below)
-- **Class Modules**: Pariah, Bard, Monk, Magi, Two-Handed
+- **Class Modules**: Pariah, Bard, Monk, Magi, Two-Handed, Infernal DWC
 - **Shikudo Dispatch System**: Full auto-combat for Monk/Shikudo spec
   - `200_Shikudo.lua` (V1) - Balanced leg prep, both legs 90%+
   - `201_Shikudo_V2.lua` (V2) - Focus fire one leg, clumsy first
   - `203_Shikudo_Lock.lua` (Lock) - Pure affliction-based locking with Telepathy
   - V1/V2 Commands: `shikudo.dispatch()`, `shikudov2.dispatch()`, `skstatus()`, `skv2status()`
   - Lock Commands: `shikudolock()`, `sklstatus()`, `sklockstatus()`
+- **Infernal DWC Vivisect System**: Full auto-combat for Infernal DWC spec
+  - `003_Infernal_DWC_Vivisect.lua` - Undercut + DSL vivisect strategy
+  - Commands: `infernalDWCVivisect()`, `infernalDWCStatus()`, `infernalDWCReset()`
+  - Phases: NAUSEA_SETUP → PREP → EXECUTE → KILL
+  - Kill route: Undercut (break leg + 4s salve lock) → DSL with epteth/epseth (break arm + level 1 to remaining limbs) → Vivisect
+  - RIFTLOCK mode: Counter to RESTORE ability (anorexia + slickness + addiction lock)
 
 ### Target Affliction Tracking System
 
@@ -904,6 +910,103 @@ gmcp.Room.Info = {
 
 ---
 
+## Infernal DWC Vivisect Combat System
+
+### Overview
+The Infernal DWC Vivisect system provides automated combat for the Dual Wield Cutting (DWC) specialization, targeting the vivisect instant kill.
+
+### Key File
+`src_new/scripts/levi_ataxia/levi/levi_scripts/dwc/003_Infernal_DWC_Vivisect.lua`
+
+### Vivisect Kill Requirements
+```yaml
+vivisect_requirement: "All 4 limbs at level 1+ break"
+
+break_levels:
+  level_1:
+    sources: ["epteth venom (arms)", "epseth venom (legs)"]
+    effect: "Withered state - counts for vivisect"
+    cure: "Single restoration (4s salve balance)"
+
+  level_2:
+    sources: ["Physical damage 100%+", "Undercut on prepped leg"]
+    effect: "Broken/crippled - also counts for vivisect"
+    cure: "Restoration (4s) + Mending (4s) = 8s minimum"
+
+key_mechanic: |
+  Epteth/epseth venoms give level 1 breaks to NON-TARGETED limbs!
+  DSL right arm with epteth/epseth:
+    - Physically breaks right arm (level 2)
+    - Epteth gives level 1 to LEFT arm
+    - Epseth gives level 1 to RIGHT leg
+```
+
+### Phase Progression
+| Phase | Description | Entry Condition |
+|-------|-------------|-----------------|
+| **NAUSEA_SETUP** | Apply nausea to bypass parry | Start phase |
+| **PREP** | Build limb damage to 90%+ | Nausea stuck |
+| **EXECUTE** | Break limbs with undercut + DSL | Both arms + left leg at 90%+ |
+| **KILL** | Vivisect | Left leg broken + right arm broken |
+| **RIFTLOCK** | Lock mode (counter to RESTORE) | Target uses RESTORE |
+
+### Execute Sequence (Optimized 2-Attack Kill)
+```
+Step 0: UNDERCUT left leg (battleaxe)
+  → Breaks leg (level 2)
+  → 4 second salve lock
+  → Invest exploit for paranoia + weariness
+
+Step 1: DSL right arm epteth epseth (scimitars)
+  → Breaks right arm (level 2)
+  → Epteth gives left arm level 1
+  → Epseth gives right leg level 1
+  → All 4 limbs now at level 1+
+
+KILL: VIVISECT
+```
+
+### Key Helper Functions
+| Function | Purpose |
+|----------|---------|
+| `infernalDWC.getPhase()` | Determines current combat phase |
+| `infernalDWC.selectVenoms()` | Selects venoms based on phase |
+| `infernalDWC.selectLimbTarget()` | Chooses limb to attack |
+| `infernalDWC.advanceExecuteStep()` | Tracks execute sequence progress |
+| `infernalDWC.getFocusArm()` | Returns arm with lower damage |
+| `infernalDWC.isFocusLegPrepped()` | Checks if left leg at 90%+ |
+
+### RIFTLOCK Mode
+Activated when target uses RESTORE (heals all limbs). Counter-strategy:
+- Break arms (prevents rifting herbs)
+- Stick anorexia + slickness + addiction
+- Maintain paralysis
+
+### Commands
+| Command | Purpose |
+|---------|---------|
+| `infernalDWCVivisect()` | Main dispatch function |
+| `infernalDWCStatus()` | Display current state |
+| `infernalDWCReset()` | Reset all state |
+| `infernalDWC.enterRiftlock()` | Enter riftlock mode |
+| `infernalDWC.exitRiftlock()` | Exit riftlock mode |
+
+### Configuration
+```lua
+infernalDWC.config = {
+    prepThreshold = 90,      -- Limb % to consider "prepped"
+    breakThreshold = 100,    -- Limb % to consider "broken"
+    weapon1 = "scimitar405403",
+    weapon2 = "scimitar405398",
+    battleaxe = "battleaxe590991",
+}
+```
+
+### Documentation
+See `.claude/classes/infernal.md` for complete DWC vivisect strategy documentation.
+
+---
+
 ## Blademaster Combat System
 
 ### Strategies Available
@@ -1056,7 +1159,7 @@ end
 
 ---
 
-**Last Updated**: 2026-01-03
+**Last Updated**: 2026-01-20
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia
