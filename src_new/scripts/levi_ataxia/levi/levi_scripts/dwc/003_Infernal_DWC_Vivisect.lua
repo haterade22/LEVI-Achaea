@@ -139,8 +139,8 @@ CONFIGURATION:
     infernalDWC.config = {
         prepThreshold = 90,             -- Limb ready for break
         breakThreshold = 100,           -- Limb breaks at this damage
-        weapon1 = "scimitar405403",     -- Left hand scimitar
-        weapon2 = "scimitar405398",     -- Right hand scimitar
+        weapon1 = "scimitar405403",     -- Right hand scimitar
+        weapon2 = "scimitar405398",     -- Left hand scimitar
         battleaxe = "battleaxe590991",  -- Battleaxe for undercut
         damageKillThreshold = 40,       -- Below this HP%, use quash+arc instead of vivisect
     }
@@ -215,8 +215,8 @@ infernalDWC.state = {
 infernalDWC.config = {
     prepThreshold = 90,         -- Limb ready for break (90%+)
     breakThreshold = 100,       -- Limb breaks at 100%
-    weapon1 = "scimitar405403", -- Left hand weapon ID
-    weapon2 = "scimitar405398", -- Right hand weapon ID
+    weapon1 = "scimitar405403", -- Right hand weapon ID
+    weapon2 = "scimitar405398", -- Left hand weapon ID
     battleaxe = "battleaxe590991", -- Battleaxe for undercut
     damageKillThreshold = 40,   -- Below this health %, use quash + arc instead of vivisect
 }
@@ -806,7 +806,7 @@ function infernalDWCVivisect()
     -- Build base command
     local weapon1 = infernalDWC.config.weapon1
     local weapon2 = infernalDWC.config.weapon2
-    local atk = "wield left " .. weapon1 .. ";wield right " .. weapon2
+    local atk = "wield right " .. weapon1 .. ";wield left " .. weapon2
     atk = atk .. ";wipe " .. weapon1 .. ";wipe " .. weapon2
 
     -- REBOUNDING CHECK - MUST clear rebounding first or attacks bounce back!
