@@ -15,19 +15,177 @@ packageName: ''
 ]]--
 
 --[[
-    Infernal DWC Vivisect Offense
+===============================================================================
+                        INFERNAL DWC VIVISECT OFFENSE
+===============================================================================
 
-    Strategy: Nausea-first parry bypass into soft lock + limb prep for vivisect
+KILL CONDITION:
+    VIVISECT requires ALL 4 LIMBS to have at least LEVEL 1 break:
+    - Level 1 break = from epteth/epseth venoms (applied via DSL)
+    - Level 2 break = from actually breaking the limb (100%+ damage)
 
-    Kill Condition: VIVISECT requires Prone + Both Arms Broken
+    The normal vivisect sequence achieves this with only 2 physical breaks:
+    - Left leg: Level 2 (undercut breaks it)
+    - Right arm: Level 2 (DSL breaks it)
+    - Left arm: Level 1 (epteth venom on DSL provides this)
+    - Right leg: Level 1 (epseth venom on DSL provides this)
 
-    Phases:
-    1. NAUSEA_SETUP: Establish nausea (parry bypass), clumsiness (33% miss), weariness (blocks Fitness)
-    2. PARALLEL_PREP: While nausea stuck, prep both arms + one leg AND build soft lock
-    3. EXECUTE: Break arm1 → Break leg (delphinium prone) → Break arm2 (epseth/epteth) → Vivisect
-    4. KILL: Execute vivisect
+-------------------------------------------------------------------------------
+PHASE OVERVIEW:
+-------------------------------------------------------------------------------
 
-    Soft Lock = Anorexia + Slickness + Asthma + Paralysis + Stupidity
+    PREP PHASE:
+        Build afflictions AND prep limbs simultaneously.
+        - Venom priority: clumsiness → nausea → kelp stack → slickness → softlock
+        - Limb prepping: Both arms + left leg to 90%+ damage
+        - Transition to EXECUTE when all 3 limbs prepped
+
+    EXECUTE PHASE:
+        Step 0: UNDERCUT with battleaxe
+            - Command: wield battleaxe;hellforge invest exploit;undercut <target> left leg
+            - Result: Breaks left leg (Level 2) + prones target + 4 SECOND SALVE LOCK
+            - The salve lock is critical - they cannot mend during this window
+
+        Step 1: DSL RIGHT ARM with epteth/epseth
+            - Command: DSL right arm with epteth (sword 1) + epseth (sword 2)
+            - Result: Breaks right arm (Level 2) + epteth gives Level 1 to left arm
+                      + epseth gives Level 1 to right leg
+            - After this attack, ALL 4 LIMBS have at least Level 1 → can vivisect
+
+    KILL PHASE:
+        - Execute vivisect when leg broken + right arm broken
+        - The epteth/epseth venoms have already provided Level 1 to remaining limbs
+
+-------------------------------------------------------------------------------
+RIFTLOCK MODE (Counter to RESTORE):
+-------------------------------------------------------------------------------
+
+    If target uses RESTORE (heals all broken limbs), we enter RIFTLOCK mode.
+
+    RESTORE Detection:
+        Trigger pattern: "X crackles with blue energy that wreathes itself about his limbs."
+        When detected: Call infernalDWC.enterRiftlock()
+        Also reset limb counter: lb[target].hits for all limbs to 0
+        Also clear broken limb afflictions: erAff("brokenleftleg"), etc.
+
+    RIFTLOCK Strategy:
+        1. Break LEFT ARM with kalmia/vardrax (asthma + addiction)
+        2. Then go for RIFT LOCK afflictions:
+           - Anorexia (slike): Blocks eating herbs
+           - Slickness (gecko): Blocks applying salves
+           - Addiction (vardrax): When stuck, eating triggers cooldown preventing further eating
+           - Paralysis (curare): Always maintained
+
+    Rift Lock = They cannot cure because:
+        - Can't eat herbs (anorexia)
+        - Can't apply salves (slickness)
+        - If they do eat, addiction triggers cooldown
+
+-------------------------------------------------------------------------------
+VENOM PRIORITY (PREP PHASE):
+-------------------------------------------------------------------------------
+
+    V1 Priority Chain:
+        1. Clumsiness (xentio)      - 33% miss chance on their attacks
+        2. Nausea (euphorbia)       - Parry bypass, enables limb prepping
+        3. Healthleech (torment)    - Drains health (hellforge investment)
+        4. Haemophilia (torture)    - No clotting (hellforge investment)
+        5. Sensitivity (prefarar)   - Increased damage taken
+        6. Weariness (exploit)      - Blocks Fitness (hellforge investment)
+        7. Asthma (kalmia)          - Blocks smoke cures
+        8. Slickness (gecko)        - Blocks apply (salve cures)
+        9. Darkshade (darkshade)    - Blindness
+        10. Anorexia (slike)        - Softlock - blocks eating
+        11. Stupidity (aconite)     - Softlock - random failures
+
+    V2 Always: Curare (paralysis) - Critical to maintain, on V2 to survive clumsiness miss
+
+-------------------------------------------------------------------------------
+EXECUTE PHASE VENOMS:
+-------------------------------------------------------------------------------
+
+    Step 0 (Undercut):
+        - No venoms (battleaxe + hellforge exploit investment)
+
+    Step 1 (Break right arm):
+        - V1: epteth (gives Level 1 break to left arm)
+        - V2: epseth (gives Level 1 break to right leg)
+
+-------------------------------------------------------------------------------
+LIMB PREPPING:
+-------------------------------------------------------------------------------
+
+    - Limbs are tracked via Romaen's limb counter: lb[target].hits["left arm"], etc.
+    - Prepped = 90%+ damage (prepThreshold)
+    - Broken = 100%+ damage (breakThreshold)
+
+    PREP targets (in order):
+        1. Focus arm (lowest damage arm)
+        2. Off arm
+        3. Focus leg (left by default)
+
+    Only prep limbs when NAUSEA is stuck (parry bypass active).
+
+-------------------------------------------------------------------------------
+CONFIGURATION:
+-------------------------------------------------------------------------------
+
+    infernalDWC.config = {
+        prepThreshold = 90,             -- Limb ready for break
+        breakThreshold = 100,           -- Limb breaks at this damage
+        weapon1 = "scimitar405403",     -- Left hand scimitar
+        weapon2 = "scimitar405398",     -- Right hand scimitar
+        battleaxe = "battleaxe590991",  -- Battleaxe for undercut
+    }
+
+-------------------------------------------------------------------------------
+STATE TRACKING:
+-------------------------------------------------------------------------------
+
+    infernalDWC.state = {
+        phase = "NAUSEA_SETUP",     -- Current phase (not used, getPhase() is dynamic)
+        executeStep = 0,            -- 0=undercut, 1=right arm
+        focusArm = "left",          -- Dynamically set to lowest damage arm
+        focusLeg = "left",          -- Which leg to prep/break (configurable)
+        lastPhase = nil,            -- Track phase changes for debugging
+        riftlockMode = false,       -- True when target uses RESTORE
+    }
+
+-------------------------------------------------------------------------------
+COMMANDS:
+-------------------------------------------------------------------------------
+
+    infernalDWCVivisect()           -- Main attack function (alias: infdwc)
+    infernalDWCStatus()             -- Show current state and limb damage
+    infernalDWCReset()              -- Reset state to defaults
+    infernalDWCSetWeapons(w1, w2)   -- Set scimitar IDs
+    infernalDWCSetFocusLeg(side)    -- Set focus leg ("left" or "right")
+    infernalDWC.enterRiftlock()     -- Enter riftlock mode (call from RESTORE trigger)
+    infernalDWC.exitRiftlock()      -- Exit riftlock mode
+
+-------------------------------------------------------------------------------
+TRIGGER SETUP (External):
+-------------------------------------------------------------------------------
+
+    RESTORE Trigger:
+        Pattern: ^(\w+) crackles with blue energy that wreathes itself about (?:his|her) limbs\.$
+        Code:
+            if isTargeted(matches[2]) then
+                tdeliverance = false
+                erAff("brokenleftleg")
+                erAff("brokenrightleg")
+                erAff("brokenleftarm")
+                erAff("brokenrightarm")
+                if lb and lb[target] and lb[target].hits then
+                    lb[target].hits["left arm"] = 0
+                    lb[target].hits["right arm"] = 0
+                    lb[target].hits["left leg"] = 0
+                    lb[target].hits["right leg"] = 0
+                end
+                infernalDWC.enterRiftlock()
+            end
+
+===============================================================================
 ]]--
 
 -------------------------------------------------------------------------------
@@ -38,12 +196,12 @@ infernalDWC = infernalDWC or {}
 
 -- State tracking
 infernalDWC.state = {
-    phase = "NAUSEA_SETUP",     -- NAUSEA_SETUP, PARALLEL_PREP, EXECUTE, KILL
-    executeStep = 0,            -- 0=undercut, 1=arm1, 2=arm2
-    focusArm = "left",          -- Which arm to break first (set dynamically)
-    focusLeg = "left",          -- Which leg to prep/break
+    phase = "NAUSEA_SETUP",     -- Legacy field (getPhase() is dynamic now)
+    executeStep = 0,            -- 0=undercut left leg, 1=DSL right arm
+    focusArm = "left",          -- Dynamically set to lowest damage arm during PREP
+    focusLeg = "left",          -- Which leg to prep/break (default: left)
     lastPhase = nil,            -- Track phase changes for debugging
-    riftlockMode = false,       -- True when target uses RESTORE
+    riftlockMode = false,       -- True when target uses RESTORE (heals all limbs)
 }
 
 -- Configuration
@@ -255,10 +413,12 @@ end
 
 --[[
     PHASES:
-    1. PREP - Build afflictions (paralysis → clumsiness → nausea → asthma → etc.)
-              AND prep limbs simultaneously. Transition to softlock once asthma stuck.
-    2. EXECUTE - All limbs prepped + softlocked. Break arm1 → leg → arm2.
-    3. KILL - Prone + both arms broken. Execute vivisect.
+    1. PREP - Build afflictions + prep both arms + left leg to 90%+
+    2. EXECUTE - Step 0: Undercut left leg (break + 4s salve lock)
+                 Step 1: DSL right arm with epteth/epseth (break + level 1 to other limbs)
+    3. KILL - Left leg broken + right arm broken → vivisect
+              (epteth/epseth provide level 1 to left arm and right leg)
+    4. RIFTLOCK - If RESTORE detected, break left arm then go for anorexia/slickness lock
 ]]--
 
 function infernalDWC.getPhase()
@@ -267,8 +427,9 @@ function infernalDWC.getPhase()
         return "RIFTLOCK"
     end
 
-    -- Kill check: Vivisect requires ALL 4 limbs broken
-    if infernalDWC.areBothArmsBroken() and infernalDWC.areBothLegsBroken() then
+    -- Kill check: Vivisect requires broken leg + broken right arm
+    -- (undercut gives 4s salve lock, enough time to break right arm and vivisect)
+    if infernalDWC.isFocusLegBroken() and infernalDWC.isArmBroken("right") then
         return "KILL"
     end
 
@@ -277,9 +438,8 @@ function infernalDWC.getPhase()
         return "EXECUTE"
     end
 
-    -- Execute phase case 2: leg broken + at least one arm prepped (recovery)
-    if infernalDWC.isFocusLegBroken()
-       and (infernalDWC.isArmPrepped("left") or infernalDWC.isArmPrepped("right")) then
+    -- Execute phase case 2: leg broken + right arm prepped (after undercut)
+    if infernalDWC.isFocusLegBroken() and infernalDWC.isArmPrepped("right") then
         return "EXECUTE"
     end
 
@@ -335,36 +495,35 @@ function infernalDWC.selectVenoms()
             -- Undercut doesn't use venoms (handled in main function)
             v1 = nil
             v2 = nil
-        elseif step == 1 then
-            -- Break arm 1: epteth + epseth
-            v1 = "epteth"
-            v2 = "epseth"
-        elseif step == 2 then
-            -- Break arm 2: kalmia + vardrax (asthma + addiction)
-            v1 = "kalmia"
-            v2 = "vardrax"
         else
-            -- Fallback
+            -- Step 1: Break RIGHT arm with epteth + epseth → then vivisect
             v1 = "epteth"
             v2 = "epseth"
         end
 
     elseif phase == "RIFTLOCK" then
-        -- Riftlock: anorexia + slickness + addiction to prevent herb cures
-        local anoStuck = hasAff("anorexia")
-        local slickStuck = hasAff("slickness")
-        local addictStuck = hasAff("addiction")
-
-        v2 = "curare"  -- Always paralysis
-
-        if not anoStuck then
-            v1 = "slike"      -- Anorexia (blocks eat)
-        elseif not slickStuck then
-            v1 = "gecko"      -- Slickness (blocks apply)
-        elseif not addictStuck then
-            v1 = "vardrax"    -- Addiction (eating triggers cooldown)
+        -- Riftlock: they used RESTORE, break left arm then go for rift lock
+        -- If left arm not broken yet, use kalmia/vardrax to break it
+        if not infernalDWC.isArmBroken("left") then
+            v1 = "kalmia"
+            v2 = "vardrax"
         else
-            v1 = "slike"      -- Maintain anorexia
+            -- Left arm broken, now go for anorexia + slickness + addiction
+            local anoStuck = hasAff("anorexia")
+            local slickStuck = hasAff("slickness")
+            local addictStuck = hasAff("addiction")
+
+            v2 = "curare"  -- Always paralysis
+
+            if not anoStuck then
+                v1 = "slike"      -- Anorexia (blocks eat)
+            elseif not slickStuck then
+                v1 = "gecko"      -- Slickness (blocks apply)
+            elseif not addictStuck then
+                v1 = "vardrax"    -- Addiction (eating triggers cooldown)
+            else
+                v1 = "slike"      -- Maintain anorexia
+            end
         end
 
     elseif phase == "KILL" then
@@ -464,40 +623,25 @@ function infernalDWC.selectLimbTarget()
             -- Step 0: Undercut targets focus leg (handled separately in main function)
             return infernalDWC.state.focusLeg .. " leg"
         elseif step == 1 then
-            -- Step 1: Break arm 1
-            infernalDWC.state.focusArm = infernalDWC.getFocusArm()
-            return infernalDWC.state.focusArm .. " arm"
-        elseif step == 2 then
-            -- Step 2: Break arm 2 - whichever isn't broken
-            local leftBroken = infernalDWC.isArmBroken("left")
-            local rightBroken = infernalDWC.isArmBroken("right")
-
-            if not leftBroken then
-                return "left arm"
-            elseif not rightBroken then
-                return "right arm"
-            else
-                -- Both broken, shouldn't happen
-                local offArm = (infernalDWC.state.focusArm == "left") and "right" or "left"
-                return offArm .. " arm"
-            end
+            -- Step 1: Break RIGHT arm (with epteth/epseth) → then vivisect
+            return "right arm"
         end
 
     elseif phase == "RIFTLOCK" then
-        -- In riftlock, still target limbs to maintain pressure
-        local focusArm = infernalDWC.getFocusArm()
-        if not infernalDWC.isArmPrepped(focusArm) then
-            return focusArm .. " arm"
+        -- Riftlock: they used RESTORE, now break left arm and go for rift lock
+        -- Target left arm first (with kalmia/vardrax), then maintain pressure
+        if not infernalDWC.isArmBroken("left") then
+            return "left arm"
         end
-        local offArm = (focusArm == "left") and "right" or "left"
-        if not infernalDWC.isArmPrepped(offArm) then
-            return offArm .. " arm"
+        -- Left arm broken, maintain pressure on any unprepped limb
+        if not infernalDWC.isArmPrepped("right") then
+            return "right arm"
         end
         local focusLeg = infernalDWC.state.focusLeg
         if not infernalDWC.isLegPrepped(focusLeg) then
             return focusLeg .. " leg"
         end
-        return focusArm .. " arm"  -- Maintain pressure
+        return "left arm"  -- Maintain pressure
     end
 
     return nil
@@ -523,23 +667,22 @@ function infernalDWC.advanceExecuteStep()
     local step = infernalDWC.state.executeStep
 
     if step == 0 then
-        -- Check if leg broke from undercut (also implies prone)
+        -- Check if leg broke from undercut
         if infernalDWC.isFocusLegBroken() then
             infernalDWC.state.executeStep = 1
-            cecho("\n<green>[INF DWC]<reset> Leg BROKEN + PRONE! Moving to arm 1.")
+            cecho("\n<green>[INF DWC]<reset> Leg BROKEN! Moving to right arm.")
         end
     elseif step == 1 then
-        -- Check if arm 1 broke
-        if infernalDWC.state.focusArm and infernalDWC.isArmBroken(infernalDWC.state.focusArm) then
+        -- Check if RIGHT arm broke
+        if infernalDWC.isArmBroken("right") then
             infernalDWC.state.executeStep = 2
-            cecho("\n<green>[INF DWC]<reset> Arm 1 BROKEN! Moving to arm 2.")
+            cecho("\n<green>[INF DWC]<reset> Right arm BROKEN! Moving to left arm.")
         end
     elseif step == 2 then
-        -- Check if arm 2 broke
-        local offArm = (infernalDWC.state.focusArm == "left") and "right" or "left"
-        if infernalDWC.isArmBroken(offArm) then
+        -- Check if LEFT arm broke
+        if infernalDWC.isArmBroken("left") then
             infernalDWC.state.executeStep = 3
-            cecho("\n<green>[INF DWC]<reset> Arm 2 BROKEN! All 4 limbs broken - VIVISECT!")
+            cecho("\n<green>[INF DWC]<reset> Left arm BROKEN! All 4 limbs broken - VIVISECT!")
         end
     end
 end
