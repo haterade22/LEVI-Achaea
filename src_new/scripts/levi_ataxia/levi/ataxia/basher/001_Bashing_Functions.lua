@@ -86,6 +86,14 @@ if not ataxia.afflictions.aeon and not ataxia.afflictions.paralysis then
         ataxiaEcho("BASH FLEE IS TRUE/PAUSING BASHER/GETTING TO FULL HEALTH")
         ataxiagui_updateVitals()
       end
+    elseif ataxia.vitals.hp <= ataxiaBasher.fleeThreshold then
+        ataxiaTemp.bashFlee = true
+        ataxiaBasher.paused = true
+        ataxiaEcho("BASH FLEE: Health below "..ataxiaBasher.fleeThreshold.."hp - fleeing!")
+        send("cq all")
+        if mmp.paused then mmp.pause("off") end
+        expandAlias("goto " ..mmp.previousroom)
+        ataxiagui_updateVitals()
     elseif gmcp.Room.Info.area == "Moghedu" and ataxia.playersHere == "Hikagejuunin" then
       guardianofmogcunts = true
       ataxiaBasher_areaoff()
