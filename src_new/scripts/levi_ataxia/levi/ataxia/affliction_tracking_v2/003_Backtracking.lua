@@ -45,7 +45,7 @@ function backtrackCureV2(provenAff)
 
     -- We removed this aff, but it's proven still there!
     -- Put it back with high certainty
-    confirmAffV2(provenAff)
+    addAffV2(provenAff)
 
     -- Get the priority list for the herb that made the guess
     local priorityList = nil

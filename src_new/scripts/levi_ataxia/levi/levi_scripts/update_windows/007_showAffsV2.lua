@@ -18,15 +18,12 @@ packageName: ''
     V2 Affliction Display
 
     Updates the V2 tracking window with current target afflictions.
-    Shows certainty levels and stack counts from tAffsV2.
+    Binary system: tAffsV2[aff] = true/nil, tAffStacksV2[aff] = count
 
     Color coding:
-    - Red: Lock afflictions (confirmed)
-    - Yellow: Focus-curable (confirmed)
-    - Orange: Uncertain (certainty = 1)
-    - Purple: Kelp stack
-    - Green: Ginseng
+    - Red: Lock afflictions
     - Cyan: Stacked (2+ stacks)
+    - White: Other afflictions
 ]]--
 
 -- Affliction categories for V2 display
@@ -72,15 +69,13 @@ local v2AffShortNames = {
     rebounding = "REB", shield = "SHD",
 }
 
--- Get color based on certainty and affliction type
-local function getV2AffColor(aff, certainty)
-    -- Uncertain (certainty = 1)
-    if certainty == 1 then
-        return "orange"
-    end
+-- Get color based on affliction type and stack count
+local function getV2AffColor(aff)
+    -- Get stack count from separate table
+    local stackCount = getStackCountV2 and getStackCountV2(aff) or 0
 
-    -- Stacked (certainty >= 4 = 2+ confirmed stacks)
-    if certainty >= 4 then
+    -- Stacked (2+ stacks)
+    if stackCount >= 2 then
         return "cyan"
     end
 
@@ -99,18 +94,13 @@ local function getV2AffColor(aff, certainty)
 end
 
 -- Get display text for an affliction
-local function getV2AffDisplay(aff, certainty)
+local function getV2AffDisplay(aff)
     local shortName = v2AffShortNames[aff] or string.sub(aff, 1, 3)
-    local stackCount = math.floor(certainty / 2)
+    local stackCount = getStackCountV2 and getStackCountV2(aff) or 0
 
     -- Show stack count if 2+ stacks
     if stackCount >= 2 then
         return shortName .. "x" .. stackCount
-    end
-
-    -- Show ? for uncertain
-    if certainty == 1 then
-        return shortName .. "?"
     end
 
     return shortName
@@ -147,7 +137,7 @@ function zgui.showTarAffsV2()
     local lockCount = 0
     local lockAffs = {"anorexia", "slickness", "asthma", "paralysis", "stupidity"}
     for _, aff in ipairs(lockAffs) do
-        if tAffsV2[aff] and tAffsV2[aff] >= 1 then
+        if tAffsV2[aff] then
             lockCount = lockCount + 1
         end
     end
@@ -161,17 +151,16 @@ function zgui.showTarAffsV2()
 
     -- Show defenses first (rebounding/shield)
     for _, aff in ipairs(v2AffCategories.defenses) do
-        local certainty = tAffsV2[aff] or 0
-        if certainty >= 1 then
+        if tAffsV2[aff] then
             str = str .. "<red>" .. (v2AffShortNames[aff] or aff:sub(1,3)) .. "<reset> "
         end
     end
 
     -- Show all other afflictions
-    for aff, certainty in pairs(tAffsV2) do
-        if certainty >= 1 and not table.contains(ignoreAffs, aff) and not table.contains(v2AffCategories.defenses, aff) then
-            local color = getV2AffColor(aff, certainty)
-            local display = getV2AffDisplay(aff, certainty)
+    for aff, present in pairs(tAffsV2) do
+        if present and not table.contains(ignoreAffs, aff) and not table.contains(v2AffCategories.defenses, aff) then
+            local color = getV2AffColor(aff)
+            local display = getV2AffDisplay(aff)
             str = str .. "<" .. color .. ">" .. display .. "<reset> "
         end
     end
@@ -199,11 +188,11 @@ function zgui.debugTarAffsV2()
     cecho("\n<cyan>Target:<reset> " .. (target or "None"))
 
     local count = 0
-    for aff, certainty in pairs(tAffsV2) do
-        if certainty >= 1 then
-            local stacks = math.floor(certainty / 2)
-            local uncertain = (certainty % 2 == 1) and " (uncertain)" or ""
-            cecho("\n  <yellow>" .. aff .. "<reset>: certainty=" .. certainty .. " stacks=" .. stacks .. uncertain)
+    for aff, present in pairs(tAffsV2) do
+        if present then
+            local stacks = getStackCountV2 and getStackCountV2(aff) or 0
+            local stackStr = stacks > 0 and (" (x" .. stacks .. " stacks)") or ""
+            cecho("\n  <yellow>" .. aff .. "<reset>" .. stackStr)
             count = count + 1
         end
     end

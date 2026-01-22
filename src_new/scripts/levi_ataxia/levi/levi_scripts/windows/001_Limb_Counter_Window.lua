@@ -40,7 +40,7 @@ function tarc.write()
   if target and target ~= "" and target ~= "None" and target ~= "none" then
    tarc:cecho("   Target: " .. target .. "\n")
 
-    -- V2 Affliction Display (inline to avoid dependency issues)
+    -- V2 Affliction Display (binary system with separate stack counting)
     if tAffsV2 then
       local lockAffs = {"anorexia", "slickness", "asthma", "paralysis", "stupidity"}
       local shortNames = {
@@ -53,7 +53,7 @@ function tarc.write()
 
       local lockCount = 0
       for _, aff in ipairs(lockAffs) do
-        if tAffsV2[aff] and tAffsV2[aff] >= 1 then
+        if tAffsV2[aff] then
           lockCount = lockCount + 1
         end
       end
@@ -66,23 +66,23 @@ function tarc.write()
       end
 
       local ignoreAffs = {curseward = true, blindness = true, deafness = true}
-      for aff, certainty in pairs(tAffsV2) do
-        if certainty >= 1 and not ignoreAffs[aff] then
-          -- Color: orange=uncertain, cyan=stacked, red=lock, white=other
+      for aff, present in pairs(tAffsV2) do
+        if present and not ignoreAffs[aff] then
+          -- Color: cyan=stacked, red=lock, white=other
           local color = "white"
-          if certainty == 1 then color = "orange"
-          elseif certainty >= 4 then color = "cyan"
+          local stackCount = getStackCountV2 and getStackCountV2(aff) or 0
+          if stackCount >= 2 then
+            color = "cyan"
           else
             for _, la in ipairs(lockAffs) do
               if aff == la then color = "red" break end
             end
           end
-          -- Display: add ? for uncertain, x2 for stacked
+          -- Display: add xN for stacked afflictions
           local shortName = shortNames[aff] or string.sub(aff, 1, 3)
           local display = shortName
-          local stackCount = math.floor(certainty / 2)
-          if stackCount >= 2 then display = shortName .. "x" .. stackCount
-          elseif certainty == 1 then display = shortName .. "?"
+          if stackCount >= 2 then
+            display = shortName .. "x" .. stackCount
           end
           affStr = affStr .. "<" .. color .. ">" .. display .. "<reset> "
         end

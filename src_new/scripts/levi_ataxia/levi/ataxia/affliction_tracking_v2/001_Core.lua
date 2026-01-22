@@ -17,14 +17,18 @@ packageName: ''
 --[[
     Affliction Tracking V2 - Core Module
 
-    This module provides certainty-based affliction tracking.
+    Binary affliction tracking with separate stack counting.
     Runs parallel to the old tAffs system with full backward compatibility.
+
+    tAffsV2[aff] = true/nil (boolean presence)
+    tAffStacksV2[aff] = number (stack count for stackable affs)
 
     Toggle: ataxia.settings.useAffTrackingV2 = true/false
 ]]--
 
 -- Initialize V2 tracking tables
 tAffsV2 = tAffsV2 or {}
+tAffStacksV2 = tAffStacksV2 or {}
 affTimersV2 = affTimersV2 or {}
 
 -- Initialize settings
@@ -32,30 +36,11 @@ ataxia = ataxia or {}
 ataxia.settings = ataxia.settings or {}
 ataxia.settings.useAffTrackingV2 = ataxia.settings.useAffTrackingV2 or false
 
---[[
-    Certainty Levels (with stacking support):
-    Values are multiples of 2 for stacking:
-    2 = 1 confirmed instance
-    4 = 2 stacked instances
-    6 = 3 stacked instances
-    etc.
-
-    Odd values indicate uncertainty:
-    1 = 1 likely instance (might be cured)
-    3 = 2 instances, 1 uncertain
-    etc.
-
-    0 = Absent - Never applied or definitely cured
-]]--
-
--- Random cure counter (tracks tree/focus/passive cures)
-randomCuresV2 = 0
-
 -- Sync V2 state to old tAffs for backward compatibility
-function syncToOldSystem(aff, certainty)
+function syncToOldSystem(aff, present)
     if not tAffs then return end
-    tAffs[aff] = (certainty >= 1)
-    if certainty >= 1 then
+    tAffs[aff] = present
+    if present then
         if affTimersV2[aff] then
             affTimers[aff] = affTimersV2[aff]
         end
@@ -64,107 +49,95 @@ function syncToOldSystem(aff, certainty)
     end
 end
 
--- Confirm affliction with high certainty (we applied it)
-function confirmAffV2(aff)
+-- Add affliction (binary: sets to true)
+function addAffV2(aff)
     if not ataxia.settings.useAffTrackingV2 then return end
 
-    local oldVal = tAffsV2[aff] or 0
-    tAffsV2[aff] = 2
+    local wasAbsent = not tAffsV2[aff]
+    tAffsV2[aff] = true
     affTimersV2[aff] = getEpoch()
-    syncToOldSystem(aff, 2)
+    syncToOldSystem(aff, true)
 
-    if oldVal < 1 then
-        -- Was absent, now confirmed - raise event
+    if wasAbsent then
         raiseEvent("tar afflicted", {aff})
         if checkTargetLocks then checkTargetLocks() end
     end
     updateAffDisplayV2()
 end
 
--- Reduce certainty (herb eaten that could cure this)
-function uncertainAffV2(aff)
-    if not ataxia.settings.useAffTrackingV2 then return end
-
-    if tAffsV2[aff] and tAffsV2[aff] > 0 then
-        tAffsV2[aff] = tAffsV2[aff] - 1
-        syncToOldSystem(aff, tAffsV2[aff])
-        if tAffsV2[aff] == 0 then
-            affTimersV2[aff] = nil
-            raiseEvent("target cured aff", aff)
-        end
-    end
-    updateAffDisplayV2()
+-- Backward compatibility alias
+function confirmAffV2(aff)
+    addAffV2(aff)
 end
 
--- Definitely remove affliction (exact cure seen)
+-- Remove affliction (also clears stacks)
 function removeAffV2(aff)
     if not ataxia.settings.useAffTrackingV2 then return end
 
-    if tAffsV2[aff] and tAffsV2[aff] > 0 then
-        tAffsV2[aff] = 0
+    if tAffsV2[aff] then
+        tAffsV2[aff] = nil
         affTimersV2[aff] = nil
-        syncToOldSystem(aff, 0)
+        if tAffStacksV2 then tAffStacksV2[aff] = nil end
+        syncToOldSystem(aff, false)
         raiseEvent("target cured aff", aff)
     end
     updateAffDisplayV2()
 end
 
--- Check if target has affliction (certainty >= 1)
+-- Check if target has affliction
 function haveAffV2(aff)
     if not ataxia.settings.useAffTrackingV2 then
         return haveAff(aff)  -- Fall back to old system
     end
-    return tAffsV2[aff] and tAffsV2[aff] >= 1
+    return tAffsV2[aff] == true
 end
 
--- Check if affliction is confirmed (certainty >= 2)
+-- Backward compatibility alias (same as haveAffV2 in binary system)
 function haveConfirmedAffV2(aff)
-    if not ataxia.settings.useAffTrackingV2 then
-        return haveAff(aff)  -- Fall back to old system
-    end
-    return tAffsV2[aff] and tAffsV2[aff] >= 2
+    return haveAffV2(aff)
 end
 
 -- ============================================
--- STACK TRACKING (AK-inspired)
+-- STACK TRACKING (separate table)
 -- ============================================
 
--- Add a stack of an affliction (increment by 2)
+-- Add a stack of an affliction
 function stackAffV2(aff)
     if not ataxia.settings.useAffTrackingV2 then return end
 
-    local oldVal = tAffsV2[aff] or 0
-    tAffsV2[aff] = oldVal + 2
-    affTimersV2[aff] = getEpoch()
-    syncToOldSystem(aff, tAffsV2[aff])
+    tAffStacksV2 = tAffStacksV2 or {}
+    tAffStacksV2[aff] = (tAffStacksV2[aff] or 0) + 1
 
-    if oldVal < 1 then
+    -- Also ensure affliction is marked as present
+    if not tAffsV2[aff] then
+        tAffsV2[aff] = true
+        affTimersV2[aff] = getEpoch()
+        syncToOldSystem(aff, true)
         raiseEvent("tar afflicted", {aff})
         if checkTargetLocks then checkTargetLocks() end
     end
     updateAffDisplayV2()
 end
 
--- Remove one stack of an affliction (decrement by 2)
+-- Remove one stack of an affliction
 function unstackAffV2(aff)
     if not ataxia.settings.useAffTrackingV2 then return end
 
-    if tAffsV2[aff] and tAffsV2[aff] >= 2 then
-        tAffsV2[aff] = tAffsV2[aff] - 2
-        if tAffsV2[aff] < 1 then
-            tAffsV2[aff] = 0
-            affTimersV2[aff] = nil
-            raiseEvent("target cured aff", aff)
+    if tAffStacksV2 and tAffStacksV2[aff] and tAffStacksV2[aff] > 0 then
+        tAffStacksV2[aff] = tAffStacksV2[aff] - 1
+        if tAffStacksV2[aff] <= 0 then
+            tAffStacksV2[aff] = nil
+            removeAffV2(aff)
+        else
+            updateAffDisplayV2()
         end
-        syncToOldSystem(aff, tAffsV2[aff])
     end
-    updateAffDisplayV2()
 end
 
 -- Get the number of stacks of an affliction
 function getStackCountV2(aff)
-    if not tAffsV2[aff] then return 0 end
-    return math.floor(tAffsV2[aff] / 2)
+    if not tAffStacksV2 then return 0 end
+    return tAffStacksV2[aff] or 0
 end
 
 -- Check if affliction has multiple stacks
@@ -266,8 +239,8 @@ end
 -- Helper: Get tracked afflictions matching a cure type
 local function getTrackedAffsOfType(cureList)
     local matched = {}
-    for aff, cert in pairs(tAffsV2) do
-        if cert and cert >= 1 and isInCureList(aff, cureList) then
+    for aff, present in pairs(tAffsV2) do
+        if present and isInCureList(aff, cureList) then
             table.insert(matched, aff)
         end
     end
@@ -275,37 +248,19 @@ local function getTrackedAffsOfType(cureList)
 end
 
 -- ============================================
--- RANDOM CURE TRACKING (AK-inspired ak.randomaffs)
+-- CURE HANDLERS
 -- ============================================
-
--- Add expected random cure (tree/focus queued)
-function addRandomCureCounterV2()
-    randomCuresV2 = randomCuresV2 + 1
-end
 
 -- Handle target using tree tattoo
 function onTargetTreeV2(targetName)
     if not ataxia.settings.useAffTrackingV2 then return end
-
-    if randomCuresV2 > 0 then
-        -- Expected random cure - decrement counter
-        randomCuresV2 = randomCuresV2 - 1
-    else
-        -- Unexpected tree - reduce certainty of a tree-curable affliction
-        reduceCureTypeAffCertaintyV2(treeCurableAffsV2, "tree")
-    end
+    reduceCureTypeAffCertaintyV2(treeCurableAffsV2, "tree")
 end
 
 -- Handle target using focus
 function onTargetFocusV2(targetName)
     if not ataxia.settings.useAffTrackingV2 then return end
-
-    if randomCuresV2 > 0 then
-        randomCuresV2 = randomCuresV2 - 1
-    else
-        -- Focus only cures mental afflictions
-        reduceCureTypeAffCertaintyV2(focusCurableAffsV2, "focus")
-    end
+    reduceCureTypeAffCertaintyV2(focusCurableAffsV2, "focus")
 end
 
 -- Handle target eating kelp/aurum
@@ -430,8 +385,7 @@ function onTargetSalveLimbsV2(targetName, limb)
     reduceCureTypeAffCertaintyV2(restorationLimbsCurableAffsV2, (limb or "limb") .. " salve")
 end
 
--- Smart cure reduction: If only ONE matching aff, remove it completely
--- Uses priority-based removal when multiple candidates exist
+-- Priority-based cure removal: removes one affliction based on priority
 function reduceCureTypeAffCertaintyV2(cureList, cureType)
     local matchedAffs = getTrackedAffsOfType(cureList)
 
@@ -442,7 +396,7 @@ function reduceCureTypeAffCertaintyV2(cureList, cureType)
         end
         return
     elseif #matchedAffs == 1 then
-        -- Only ONE matching affliction - remove it completely
+        -- Only ONE matching affliction - remove it
         local aff = matchedAffs[1]
         removeAffV2(aff)
         if ataxiaEcho then
@@ -469,21 +423,11 @@ function reduceCureTypeAffCertaintyV2(cureList, cureType)
             affToRemove = matchedAffs[1]
         end
 
-        uncertainAffV2(affToRemove)
+        removeAffV2(affToRemove)
         if ataxiaEcho then
-            ataxiaEcho("[V2] " .. cureType .. " reduced: " .. affToRemove .. " (from: " .. allAffs .. ")\n")
+            ataxiaEcho("[V2] " .. cureType .. " cured: " .. affToRemove .. " (from: " .. allAffs .. ")")
         end
     end
-end
-
--- Legacy function for generic random cure (tree mainly)
-function reduceRandomAffCertaintyV2()
-    reduceCureTypeAffCertaintyV2(treeCurableAffsV2, "random")
-end
-
--- Reset random cure counter (on target change)
-function resetRandomCuresV2()
-    randomCuresV2 = 0
 end
 
 -- Update affliction display
@@ -504,6 +448,7 @@ end
 -- Reset V2 when target changes
 function resetAffsV2()
     tAffsV2 = {}
+    tAffStacksV2 = {}
     affTimersV2 = {}
 end
 
@@ -515,7 +460,7 @@ registerAnonymousEventHandler("tar afflicted", function(event, affList)
 
     for _, aff in pairs(affList) do
         if type(aff) == "string" then
-            tAffsV2[aff] = 2
+            tAffsV2[aff] = true
             affTimersV2[aff] = getEpoch()
         end
     end
@@ -525,21 +470,16 @@ end)
 function debugAffsV2()
     echo("=== Affliction Tracking V2 State ===\n")
     echo("Enabled: " .. tostring(ataxia.settings.useAffTrackingV2) .. "\n")
-    echo("Random Cure Counter: " .. tostring(randomCuresV2) .. "\n")
-    echo("\ntAffsV2 (certainty/stacks):\n")
+    echo("\ntAffsV2 (presence):\n")
     local hasAffs = false
-    for aff, cert in pairs(tAffsV2) do
-        if cert and cert > 0 then
+    for aff, present in pairs(tAffsV2) do
+        if present then
             local stacks = getStackCountV2(aff)
-            local certStr
-            if stacks > 1 then
-                certStr = stacks .. " STACKS"
-            elseif cert >= 2 then
-                certStr = "CONFIRMED"
-            else
-                certStr = "likely"
+            local stackStr = ""
+            if stacks > 0 then
+                stackStr = " (x" .. stacks .. " stacks)"
             end
-            echo("  " .. aff .. " = " .. cert .. " (" .. certStr .. ")\n")
+            echo("  " .. aff .. stackStr .. "\n")
             hasAffs = true
         end
     end

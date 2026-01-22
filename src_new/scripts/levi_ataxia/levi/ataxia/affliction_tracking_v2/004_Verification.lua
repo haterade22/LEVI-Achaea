@@ -30,9 +30,6 @@ packageName: ''
     These are called from triggers that detect the relevant game messages.
 ]]--
 
--- Track non-fumble attacks for clumsiness uncertainty
-clumsyAttackCountV2 = 0
-
 --[[
     Called when target fumbles an attack.
     This PROVES they have clumsiness.
@@ -50,33 +47,8 @@ function onTargetFumbleV2(attacker)
     if hasPendingGuessV2 and hasPendingGuessV2("clumsiness") then
         backtrackCureV2("clumsiness")
     else
-        -- Just confirm clumsiness is present
-        confirmAffV2("clumsiness")
-    end
-
-    -- Reset non-fumble counter
-    clumsyAttackCountV2 = 0
-end
-
---[[
-    Called when target successfully attacks (no fumble).
-    After multiple successful attacks, we become less certain about clumsiness.
-
-    Usage: Add to attack detection trigger:
-        if isTargeted(attacker) and not fumbled then
-            onTargetAttackV2(attacker)
-        end
-]]--
-function onTargetAttackV2(attacker)
-    if not ataxia.settings.useAffTrackingV2 then return end
-    if not isTargeted(attacker) then return end
-
-    clumsyAttackCountV2 = clumsyAttackCountV2 + 1
-
-    -- After 3 successful attacks without fumble, reduce clumsiness certainty
-    if clumsyAttackCountV2 >= 3 and haveAffV2("clumsiness") then
-        uncertainAffV2("clumsiness")
-        clumsyAttackCountV2 = 0
+        -- Confirm clumsiness is present
+        addAffV2("clumsiness")
     end
 end
 
@@ -124,7 +96,7 @@ function onTargetVomitV2(vomiter)
         backtrackCureV2("nausea")
     else
         -- Just confirm nausea is present
-        confirmAffV2("nausea")
+        addAffV2("nausea")
     end
 end
 
@@ -150,7 +122,7 @@ function onTargetSlickFailV2(target)
         backtrackCureV2("slickness")
     else
         -- Just confirm slickness is present
-        confirmAffV2("slickness")
+        addAffV2("slickness")
     end
 end
 
@@ -176,7 +148,7 @@ function onTargetParalysisBlockV2(target)
         backtrackCureV2("paralysis")
     else
         -- Just confirm paralysis is present
-        confirmAffV2("paralysis")
+        addAffV2("paralysis")
     end
 end
 
@@ -188,7 +160,7 @@ end
     Reset verification tracking (e.g., on target change)
 ]]--
 function resetVerificationV2()
-    clumsyAttackCountV2 = 0
+    -- No state to reset in binary system
 end
 
 --[[
