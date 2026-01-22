@@ -15,7 +15,7 @@ packageName: ''
 ]]--
 
 function zgui.stats()
-  if gmcp.Char then
+  if zgui.vitals and gmcp.Char and gmcp.Char.Vitals then
   zgui.vitals.h = tonumber(gmcp.Char.Vitals.hp)
   zgui.vitals.m = tonumber(gmcp.Char.Vitals.mp)
   zgui.vitals.e = tonumber(gmcp.Char.Vitals.ep)
