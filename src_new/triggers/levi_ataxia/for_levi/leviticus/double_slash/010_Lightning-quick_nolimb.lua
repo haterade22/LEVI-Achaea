@@ -93,10 +93,12 @@ if ataxiaTemp.hitCount == 1 then
     end
   else
      aff1 = venom_to_aff(envenomList[1])
-     tarAffed(aff1)
-     ataxiaTemp.lastAffAdded = aff1
-     if partyrelay and not ataxia.afflictions.aeon then
-      send("pt " ..target..": " ..aff1)
+     if aff1 then
+       tarAffed(aff1)
+       ataxiaTemp.lastAffAdded = aff1
+       if partyrelay and not ataxia.afflictions.aeon then
+        send("pt " ..target..": " ..aff1)
+       end
      end
   end
 table.remove(envenomList,1)
@@ -140,10 +142,12 @@ elseif ataxiaTemp.hitCount == 2 then
     end
   else
      aff2 = venom_to_aff(envenomListTwo[1])
-     tarAffed(aff2)
-     ataxiaTemp.lastAffAdded = aff2
-     if partyrelay and not ataxia.afflictions.aeon then
-      send("pt " ..target..": " ..aff2)
+     if aff2 then
+       tarAffed(aff2)
+       ataxiaTemp.lastAffAdded = aff2
+       if partyrelay and not ataxia.afflictions.aeon then
+        send("pt " ..target..": " ..aff2)
+       end
      end
   end
 table.remove(envenomListTwo,1)

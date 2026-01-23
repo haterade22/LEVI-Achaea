@@ -816,7 +816,9 @@ function infernalDWCVivisect()
     -- RSL uses first sword to raze, second sword applies venom
     -- IMPORTANT: RSL cannot use hellforge investments (exploit/torture/torment)
     -- Must use a regular venom like curare
-    if infernalDWC.hasAff("rebounding") then
+    -- Check BOTH tracking systems directly - rebounding is too important to miss
+    local hasRebounding = infernalDWC.hasAff("rebounding") or (tAffs and tAffs.rebounding)
+    if hasRebounding then
         -- Determine which venom to use for RSL (must NOT be a hellforge investment)
         local rslVenom = nil
         local isV1Hellforge = (v1 == "exploit" or v1 == "torture" or v1 == "torment")
@@ -847,7 +849,9 @@ function infernalDWCVivisect()
 
     -- SHIELD CHECK - must clear shield before attacks land
     -- Same logic as rebounding - RSL can't use hellforge investments
-    if infernalDWC.hasAff("shield") then
+    -- Check BOTH tracking systems directly - shield is too important to miss
+    local hasShield = infernalDWC.hasAff("shield") or (tAffs and tAffs.shield)
+    if hasShield then
         local rslVenom = nil
         local isV1Hellforge = (v1 == "exploit" or v1 == "torture" or v1 == "torment")
         local isV2Hellforge = (v2 == "exploit" or v2 == "torture" or v2 == "torment")
