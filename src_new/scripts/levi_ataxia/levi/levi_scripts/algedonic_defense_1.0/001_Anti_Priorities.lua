@@ -392,52 +392,46 @@ if ataxia.afflictions.damageleftleg or ataxia.afflictions.damagedrightleg or ata
 end
 
 function Algedonic.AntiPriest()
-    -- Anti-Inquisition Defense
-    -- INQ requires: Guilt + Spiritburn (either order)
-    -- Kill condition: INQ active + mana < 50%
-    -- Strategy: Tree proactively to prevent INQ, shield at low mana
+    -- Anti-Priest Defense: Counter guilt/spiritburn/tenderskin kill setup
+    -- Kill condition: 2+ of these afflictions = approaching Inquisition
+    -- Strategy: Shield defensively and prioritize curing lobelia afflictions
 
+    -- Track the three dangerous afflictions
     local hasGuilt = ataxia.afflictions.guilt
     local hasSpiritburn = ataxia.afflictions.spiritburn
     local hasTenderskin = ataxia.afflictions.tenderskin
-    local hasInquisition = ataxia.afflictions.inquisition
-    local hasParalysis = ataxia.afflictions.paralysis
-    local canTree = not hasParalysis
-        and not (ataxia.afflictions.brokenleftarm and ataxia.afflictions.brokenrightarm)
-        and tBals.tree
 
-    -- Mana threshold check (55% to be safe before 50% kill)
-    local manaPercent = (ataxia.vitals.mp / ataxia.vitals.maxmp) * 100
+    -- Count how many of the 3 key afflictions we have
+    local dangerCount = 0
+    if hasGuilt then dangerCount = dangerCount + 1 end
+    if hasSpiritburn then dangerCount = dangerCount + 1 end
+    if hasTenderskin then dangerCount = dangerCount + 1 end
 
-    -- EMERGENCY SHIELD: Mana below 55% and INQ active = imminent death
-    if hasInquisition and manaPercent < 55 and not ataxia.afflictions.prone then
-        Algedonic.Echo("<red>PRIEST KILL IMMINENT - SHIELD!<white>")
-        send("touch shield")
-        return
-    end
+    -- Check shield status
+    local hasShield = ataxia.defences.shield
 
-    -- PROACTIVE TREE: If we have EITHER guilt OR spiritburn and tree is available
-    -- Tree BEFORE they can apply the other + INQ
-    if canTree and (hasGuilt or hasSpiritburn) and not hasInquisition then
-        Algedonic.Echo("<yellow>PRIEST INQ PREVENTION<white> - tree NOW!")
-        send("touch tree")
-        return
-    end
+    -- EMERGENCY DEFENSIVE MODE: 2+ afflictions = approaching kill condition
+    if dangerCount >= 2 then
+        -- Shield if not already shielded
+        if not hasShield then
+            Algedonic.Echo("<red>PRIEST KILL SETUP - SHIELD!<white>")
+            send("touch shield")
+        end
 
-    -- INQ ACTIVE: Prioritize clearing both guilt and spiritburn
-    if hasInquisition then
-        if hasGuilt and hasSpiritburn then
-            -- Both present - cure guilt first (argentum)
-            send("curing prioaff guilt")
-        elseif hasGuilt then
+        -- Prioritize curing while shielded
+        -- Priority: guilt (blocks focus) > spiritburn (spirit damage) > tenderskin (damage amp)
+        if hasGuilt then
             send("curing prioaff guilt")
         elseif hasSpiritburn then
             send("curing prioaff spiritburn")
+        elseif hasTenderskin then
+            send("curing prioaff tenderskin")
         end
         return
     end
 
-    -- Standard priority when no INQ threat (tree on cooldown or paralyzed)
+    -- Standard priority when only 1 or 0 dangerous afflictions
+    -- Still cure these afflictions but without forcing shield
     if hasGuilt then
         send("curing prioaff guilt")
     elseif hasSpiritburn then
