@@ -82,6 +82,34 @@ Each subsystem uses numbered files (001_, 002_, etc.) to enforce load order:
 - **ataxiagui/** - Vitals bars, map window, chat tabs
 - **ataxiaNDB/** - API integration, city tracking, name highlighting
 
+### Combat Systems Index
+
+All combat systems in `src_new/scripts/levi_ataxia/levi/levi_scripts/`:
+
+| System | Files | Status | Kill Route | Location |
+|--------|-------|--------|------------|----------|
+| **apostate** | 14 | Undocumented | Curse, vivisect, sleep | `apostate/` |
+| **bard** | 10 | Undocumented | Voicecraft, affliction | `bard/` |
+| **blademaster** | ~10 | **Documented** | Lightning/Ice, Brokenstar | `blademaster/` |
+| **depthswalker** | 1 | Undocumented | Shadow/time | `depthswalker/` |
+| **dwb** | 1 | Undocumented | Breakpoint/rift | `dwb/` |
+| **dwb_runie** | 1 | Undocumented | DWB + runelore | `dwb_runie/` |
+| **dwc** | 3 | **Documented** | Vivisect, damage kill | `dwc/` |
+| **dwc_runie** | 1 | Undocumented | DWC + runelore | `dwc_runie/` |
+| **earth_lord** | 5 | Undocumented | Limb targeting | `earth_lord/` |
+| **i_snb** | 1 | Undocumented | Infernal SnB | `i_snb/` |
+| **mage** | 1 | Undocumented | Elemental | `mage/` |
+| **pariah** | 1 | Undocumented | Plague/swarm | `pariah/` |
+| **psion** | 1 | Undocumented | Mental stack | `psion/` |
+| **s_n_b** | 1 | Undocumented | Sword and Board | `s_n_b/` |
+| **shaman** | 27 | Undocumented | Tzantza, locks | `shaman/` |
+| **shikudo** | ~5 | **Documented** | V1/V2/Lock | `shikudo/` |
+| **tekura** | ~3 | Undocumented | Monk unarmed | `tekura/` |
+| **two_handed** | 1 | Undocumented | 2H knight | `two_handed/` |
+| **wildwalker** | 8 | Undocumented | Navigation/utility | `wildwalker/` |
+
+**Project Folders** for undocumented systems: `.claude/projects/<system>/README.md`
+
 ---
 
 ## Current System Components
@@ -106,16 +134,21 @@ Each subsystem uses numbered files (001_, 002_, etc.) to enforce load order:
 - **Class Modules**: Pariah, Bard, Monk, Magi, Two-Handed, Infernal DWC
 - **Shikudo Dispatch System**: Full auto-combat for Monk/Shikudo spec
   - `200_Shikudo.lua` (V1) - Balanced leg prep, both legs 90%+
-  - `201_Shikudo_V2.lua` (V2) - Focus fire one leg, clumsy first
+  - `201_Shikudo_V2.lua` (V2) - Focus fire one leg with SPINKICK kill route
   - `203_Shikudo_Lock.lua` (Lock) - Pure affliction-based locking with Telepathy
   - V1/V2 Commands: `shikudo.dispatch()`, `shikudov2.dispatch()`, `skstatus()`, `skv2status()`
   - Lock Commands: `shikudolock()`, `sklstatus()`, `sklockstatus()`
+  - **V2 SPINKICK**: If target is prone + head at level 2 damage → instant MANGLE kill
+  - **Kai Surge**: `canKaiSurge()` requires 31 kai, burst ability
+  - **Max Kata per Form**: Tykonos/Oak/Willow=12, Rain=24, Gaital=12, Maelstrom=12
+  - **Lock Telepathy**: `mindlocked` global tracks if target's mind is connected
 - **Infernal DWC Vivisect System**: Full auto-combat for Infernal DWC spec
   - `003_Infernal_DWC_Vivisect.lua` - Undercut + DSL vivisect strategy
   - Commands: `infernalDWCVivisect()`, `infernalDWCStatus()`, `infernalDWCReset()`
-  - Phases: NAUSEA_SETUP → PREP → EXECUTE → KILL
-  - Kill route: Undercut (break leg + 4s salve lock) → DSL with epteth/epseth (break arm + level 1 to remaining limbs) → Vivisect
+  - Phases: DAMAGE KILL (highest) → KILL → EXECUTE → PREP
+  - Kill routes: Vivisect (all 4 limbs broken) or Damage Kill (health ≤40%)
   - RIFTLOCK mode: Counter to RESTORE ability (anorexia + slickness + addiction lock)
+  - V2-compatible: Uses `infernalDWC.hasAff()` for certainty-based tracking when enabled
 
 ### Target Affliction Tracking System
 
@@ -217,12 +250,40 @@ src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_v2/
 - Focus triggers → `onTargetFocusV2()`
 - 16 class cure triggers → `removeAffV2()` / `reduceRandomAffCertaintyV2()`
 
+**Verification Commands:**
+```lua
+-- Check if V2 is enabled
+lua ataxia.settings.useAffTrackingV2
+
+-- View V2 state with stack counts
+debugAffsV2()
+
+-- View raw V2 table
+lua tAffsV2
+
+-- Check random cure counter
+lua randomCuresV2
+
+-- Compare V2 to old system
+lua print("V2:", tAffsV2.asthma, "Old:", tAffs.asthma)
+```
+
 **Offense System Requirements:**
 When coding offense systems, check `ataxia.settings.useAffTrackingV2`:
 - If enabled: Use `haveAffV2(aff)` and `haveConfirmedAffV2(aff)` for affliction checks
 - If disabled: Fall back to `haveAff(aff)` (old system)
 - For stacking afflictions: Use `getStackCountV2(aff)` to check multiple stacks
 - For lock detection: Use `haveAffV2()` which returns true for certainty >= 1 (likely or confirmed)
+
+**Class Cure Integrations (16 triggers):**
+| Trigger | Class | V2 Function |
+|---------|-------|-------------|
+| Passives | All | `removeAffV2("voyria")` or `reduceRandomAffCertaintyV2()` |
+| Accelerate | Depthswalker | `removeAffV2()` + 1-2x `reduceRandomAffCertaintyV2()` |
+| Alleviate | Blademaster | `removeAffV2("paralysis")` + `reduceRandomAffCertaintyV2()` |
+| Dragonheal | Dragon | `removeAffV2()` + 3x `reduceRandomAffCertaintyV2()` |
+| Fitness | Knights/Monk/BM | `removeAffV2("asthma")` + `removeAffV2("weariness")` |
+| Phoenix | Blademaster | `resetAffsV2()` (full reset) |
 
 ### ataxiaBasher (Automated Hunting System)
 
@@ -959,6 +1020,43 @@ gmcp.Room.Info = {
 
 ---
 
+## Defense Systems
+
+### Core Defense Files
+```
+src/ataxia/018_Defence_API.lua        # Main defense tracking API
+src/ataxia/020_Defence_Reporting.lua  # Defense status display
+src/ataxia/021_Defence_Sorting_-_Cleaner.lua  # Defense priority management
+```
+
+### Defence API (`ataxia.defense`)
+The defense system tracks active defenses and manages automatic rekeeping.
+
+**Key Functions:**
+| Function | Purpose |
+|----------|---------|
+| `ataxia.defense.add(def)` | Mark defense as active |
+| `ataxia.defense.remove(def)` | Mark defense as lost |
+| `ataxia.defense.has(def)` | Check if defense is active |
+| `ataxia.defense.list()` | Return all active defenses |
+
+### Anti-Serpent Defenses
+Located in `algedonic_defense_1.0/001_Anti_Priorities.lua`
+
+**Serpent Defense Priority Adjustments:**
+When fighting a serpent, automatically adjusts curing priorities:
+- Metawake high priority (vs hypnosis)
+- Insomnia high priority (vs sleep lock)
+- Kola/Gypsum for deafness cycling
+
+**Usage:**
+```lua
+ataxia.defense.antiSerpent(true)   -- Enable anti-serpent priorities
+ataxia.defense.antiSerpent(false)  -- Restore normal priorities
+```
+
+---
+
 ## Infernal DWC Vivisect Combat System
 
 ### Overview
@@ -991,13 +1089,15 @@ key_mechanic: |
 ```
 
 ### Phase Progression
-| Phase | Description | Entry Condition |
-|-------|-------------|-----------------|
-| **NAUSEA_SETUP** | Apply nausea to bypass parry | Start phase |
-| **PREP** | Build limb damage to 90%+ | Nausea stuck |
-| **EXECUTE** | Break limbs with undercut + DSL | Both arms + left leg at 90%+ |
-| **KILL** | Vivisect | Left leg broken + right arm broken |
-| **RIFTLOCK** | Lock mode (counter to RESTORE) | Target uses RESTORE |
+| Phase | Description | Entry Condition | Priority |
+|-------|-------------|-----------------|----------|
+| **DAMAGE KILL** | Quash + Arc for damage kill | Health ≤40% | 1 (highest) |
+| **KILL** | Vivisect | All 4 limbs at level 1+ | 2 |
+| **EXECUTE** | Break limbs with undercut + DSL | Both arms + focus leg at 90%+ | 3 |
+| **PREP** | Build limb damage to 90%+ | Default phase | 4 |
+| **RIFTLOCK** | Lock mode (counter to RESTORE) | Manual: `infernalDWC.enterRiftlock()` | N/A |
+
+**DAMAGE KILL** is checked first - if target health drops below threshold (default 40%), system switches to raw damage output with QUASH + ARC instead of continuing vivisect setup.
 
 ### Execute Sequence (Optimized 2-Attack Kill)
 ```
@@ -1015,16 +1115,6 @@ Step 1: DSL right arm epteth epseth (scimitars)
 KILL: VIVISECT
 ```
 
-### Key Helper Functions
-| Function | Purpose |
-|----------|---------|
-| `infernalDWC.getPhase()` | Determines current combat phase |
-| `infernalDWC.selectVenoms()` | Selects venoms based on phase |
-| `infernalDWC.selectLimbTarget()` | Chooses limb to attack |
-| `infernalDWC.advanceExecuteStep()` | Tracks execute sequence progress |
-| `infernalDWC.getFocusArm()` | Returns arm with lower damage |
-| `infernalDWC.isFocusLegPrepped()` | Checks if left leg at 90%+ |
-
 ### RIFTLOCK Mode
 Activated when target uses RESTORE (heals all limbs). Counter-strategy:
 - Break arms (prevents rifting herbs)
@@ -1039,16 +1129,45 @@ Activated when target uses RESTORE (heals all limbs). Counter-strategy:
 | `infernalDWCReset()` | Reset all state |
 | `infernalDWC.enterRiftlock()` | Enter riftlock mode |
 | `infernalDWC.exitRiftlock()` | Exit riftlock mode |
+| `infernalDWCSetWeapons(scim1, scim2, baxe)` | Configure weapon IDs |
+| `infernalDWCSetFocusLeg(leg)` | Set focus leg ("left" or "right") |
+
+### Helper Functions
+| Function | Purpose |
+|----------|---------|
+| `infernalDWC.getPhase()` | Determines current combat phase |
+| `infernalDWC.shouldDamageKill()` | Checks if target health below threshold |
+| `infernalDWC.selectVenoms()` | Selects venoms based on phase and stuck affs |
+| `infernalDWC.selectLimbTarget()` | Chooses limb to attack |
+| `infernalDWC.getFocusArm()` | Returns arm with lower damage (for balancing) |
+| `infernalDWC.getOffArm()` | Returns arm with higher damage |
+| `infernalDWC.getFocusLeg()` | Returns focus leg for prepping |
+| `infernalDWC.isFocusLegPrepped()` | Checks if focus leg at prepThreshold |
+| `infernalDWC.hasAff(aff)` | V2-compatible affliction check |
+| `infernalDWC.handleRebounding()` | Razes rebounding/shield when detected |
 
 ### Configuration
 ```lua
 infernalDWC.config = {
-    prepThreshold = 90,      -- Limb % to consider "prepped"
-    breakThreshold = 100,    -- Limb % to consider "broken"
+    prepThreshold = 90,         -- Limb % to consider "prepped"
+    breakThreshold = 100,       -- Limb % to consider "broken"
+    damageKillThreshold = 40,   -- Target health % to switch to damage kill
     weapon1 = "scimitar405403",
     weapon2 = "scimitar405398",
     battleaxe = "battleaxe590991",
+    focusLeg = "left",          -- Which leg to focus prep/break
 }
+```
+
+### V2 Affliction Tracking Support
+The system automatically uses V2 affliction tracking when enabled:
+```lua
+-- infernalDWC.hasAff() checks V2 first, falls back to tAffs
+if ataxia.settings.useAffTrackingV2 then
+    -- Uses haveAffV2() for certainty-based tracking
+else
+    -- Falls back to tAffs[aff] boolean check
+end
 ```
 
 ### Documentation
@@ -1065,6 +1184,33 @@ See `.claude/classes/infernal.md` for complete DWC vivisect strategy documentati
 | **Double-Prep** | `bmd` | Legs only - prep both legs, double-break, mangle |
 | **Quad-Prep** | `bmdq` | Arms + legs - prep all 4, break arms, break legs, mangle |
 | **Brokenstar** | `bmbs` | Upper + legs + impale route - instant kill at 700 bleed |
+| **Ice Dispatch** | `bmice` | Lightning/Ice phase - prep with lightning, damage with ice |
+
+### Lightning/Ice Phase System (bmice)
+
+The Ice Dispatch uses a two-phase approach based on limb state:
+
+| Phase | Condition | Infusion | Primary Attack |
+|-------|-----------|----------|----------------|
+| **prep** | Legs not both broken | LIGHTNING | LEGSLASH (prep damage) |
+| **ice** | Both legs broken | ICE | STERNUM (damage kill) |
+
+**Phase Logic**:
+```lua
+function blademaster.getPhase()
+  if blademaster.checkBothLegsBroken() then
+    return "ice"   -- Both legs broken, switch to ice for damage
+  else
+    return "prep"  -- Still prepping legs with lightning
+  end
+end
+```
+
+**Key Mechanics**:
+- **INFUSE LIGHTNING**: Used during prep phase for faster limb damage
+- **INFUSE ICE**: Switched when both legs broken for raw damage output
+- **STERNUM**: Primary attack in ice phase for damage kill
+- **AIRFIST**: Reactive ability when target parries focus leg (25 shin cost)
 
 ### Brokenstar Kill Route (bmbs)
 
@@ -1087,14 +1233,32 @@ The system auto-selects UP or DOWN to balance torso/head damage:
 - **DOWN**: Head = primary (18.1%), Torso = secondary (12.1%)
 - Always hits the **LOWER** limb as primary (like `getFocusLeg()` for legs)
 
-### Key Helper Functions
+### Helper Functions
 
 | Function | Purpose |
 |----------|---------|
-| `blademaster.getFocusLeg()` | Returns "left" or "right" based on lower leg |
+| `blademaster.getFocusLeg()` | Returns "left" or "right" based on lower leg damage |
 | `blademaster.getCentreslashDirection()` | Returns "up" or "down" based on lower limb |
 | `blademaster.checkWillPrepBothLegs()` | True if next hit preps both legs to 90%+ |
 | `blademaster.checkWillPrepUpper()` | True if next centreslash preps both torso/head |
+| `blademaster.getPhase()` | Returns current phase ("prep" or "ice") |
+| `blademaster.getShin()` | Returns current shin resource |
+| `blademaster.checkDoubleBreakReady()` | True if both legs at prepThreshold |
+| `blademaster.checkBothLegsBroken()` | True if both legs at breakThreshold |
+| `blademaster.needsAirfist()` | Checks if airfist should be used (parry + cooldown) |
+| `blademaster.calculateOptimalPath()` | Returns optimal attack sequence to reach 90% |
+| `blademaster.recordLegDamage(leg, pct)` | Records leg damage from hits |
+| `blademaster.recordLegslashDamage(leg, pct)` | Records legslash-specific damage |
+
+### Configuration
+```lua
+blademaster.config = {
+    legBreakThreshold = 100,    -- % to consider leg "broken"
+    legPrepThreshold = 90,      -- % to consider leg "prepped"
+    killHealthThreshold = 30,   -- Target health % for damage kill
+    airfistCooldown = 8,        -- Seconds between airfist uses
+}
+```
 
 ### Documentation
 See `.claude/classes/blademaster.md` for complete documentation.
@@ -1208,7 +1372,7 @@ end
 
 ---
 
-**Last Updated**: 2026-01-20
+**Last Updated**: 2026-01-23
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia
