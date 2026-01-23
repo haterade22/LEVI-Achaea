@@ -70,6 +70,23 @@ function confirmAffV2(aff)
     addAffV2(aff)
 end
 
+-- tarAffedConfirmed: Used by triggers to mark afflictions as confirmed
+-- In binary system, this is the same as tarAffed + V2 sync
+function tarAffedConfirmed(...)
+    -- Call original tarAffed for V1 compatibility
+    if tarAffed then
+        tarAffed(...)
+    end
+    -- Also update V2 if enabled
+    if ataxia.settings.useAffTrackingV2 then
+        for _, aff in ipairs({...}) do
+            if type(aff) == "string" then
+                addAffV2(aff)
+            end
+        end
+    end
+end
+
 -- Remove affliction (also clears stacks)
 function removeAffV2(aff)
     if not ataxia.settings.useAffTrackingV2 then return end
