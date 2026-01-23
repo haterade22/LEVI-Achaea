@@ -564,51 +564,71 @@ function infernalDWC.selectVenoms()
         v2 = nil
 
     else
-        -- PREP phase - KELP STACK PRESSURE → SLICKNESS → DARKSHADE → SOFTLOCK
-        -- Priority: clum → nausea → healthleech → haemo → sens → wear → asthma → slick → darkshade → softlock
-        -- CURARE ALWAYS ON V2 (survives clumsiness miss on first swing)
+        -- PREP phase - FOCUS LOCK STRATEGY
+        -- Alternate kelp/ginseng to overwhelm curing, then focus bait with goldenseal
+        -- Priority: clum(kelp) -> nausea(ginseng) -> healthleech(kelp) -> haemo(ginseng) -> asthma(kelp)
+        -- Then: aconite(goldenseal)/exploit(kelp) = focus bait
+        -- After focus: gecko/slike (both kelp) = lock layer
+        -- Finally: addiction(ginseng) + riftlock transition
 
         -- Check what's stuck
         local clumStuck = hasAff("clumsiness")
         local nausStuck = hasAff("nausea")
         local hlthlStuck = hasAff("healthleech")
         local haemoStuck = hasAff("haemophilia")
-        local sensStuck = hasAff("sensitivity")
-        local wearStuck = hasAff("weariness")
         local asthStuck = hasAff("asthma")
         local slickStuck = hasAff("slickness")
-        local darkStuck = hasAff("darkshade")
         local anoStuck = hasAff("anorexia")
+        local addictStuck = hasAff("addiction")
         local stuStuck = hasAff("stupidity")
+        local wearStuck = hasAff("weariness")
 
-        -- V2 always curare (paralysis) - critical to maintain
-        v2 = "curare"
+        -- PHASE 4: Addiction + slickness stuck -> transition to riftlock with epteth/epteth
+        if addictStuck and slickStuck then
+            v1 = "epteth"
+            v2 = "epteth"
+            -- Consider entering riftlock mode here
 
-        -- V1 selection: Kelp stack → slickness → darkshade → softlock
-        if not clumStuck then
-            v1 = "xentio"         -- 1. Clumsiness (33% miss)
-        elseif not nausStuck then
-            v1 = "euphorbia"      -- 2. Nausea (parry bypass, enables limb prep)
-        elseif not hlthlStuck then
-            v1 = "torment"        -- 3. Healthleech (drains health) - hellforge
-        elseif not haemoStuck then
-            v1 = "torture"        -- 4. Haemophilia (no clotting) - hellforge
-        elseif not sensStuck then
-            v1 = "prefarar"       -- 5. Sensitivity (more damage taken)
-        elseif not wearStuck then
-            v1 = "exploit"        -- 6. Weariness (blocks fitness) - hellforge
-        elseif not asthStuck then
-            v1 = "kalmia"         -- 7. Asthma (blocks smoke cures)
-        elseif not slickStuck then
-            v1 = "gecko"          -- 8. Slickness (blocks apply)
-        elseif not darkStuck then
-            v1 = "darkshade"      -- 9. Darkshade (blindness)
-        elseif not anoStuck then
-            v1 = "slike"          -- 10. Anorexia (softlock - blocks eat)
-        elseif not stuStuck then
-            v1 = "aconite"        -- 11. Stupidity (softlock - random failures)
+        -- PHASE 3: Lock layer - gecko/slike (both kelp, stacks with existing kelp affs)
+        elseif asthStuck and (stuStuck or wearStuck) then
+            -- They've been hit with focus bait, now lock them
+            if not slickStuck then
+                v1 = "gecko"      -- Slickness (kelp) - blocks apply
+                v2 = "slike"      -- Anorexia (kelp) - blocks eat
+            elseif not anoStuck then
+                v1 = "slike"      -- Anorexia (kelp)
+                v2 = "curare"     -- Paralysis
+            elseif not addictStuck then
+                v1 = "vardrax"    -- Addiction (ginseng)
+                v2 = "curare"     -- Paralysis
+            else
+                -- All lock affs stuck, maintain
+                v1 = "slike"
+                v2 = "curare"
+            end
+
+        -- PHASE 2: Focus bait - aconite/exploit (once asthma stuck)
+        elseif asthStuck then
+            v1 = "aconite"        -- Stupidity (goldenseal) - they'll want to focus this
+            v2 = "exploit"        -- Weariness (kelp) + Paranoia (ash) - hellforge, 2 affs!
+
+        -- PHASE 1: Kelp/Ginseng alternating stack (with curare)
         else
-            v1 = "delphinium"     -- All affs stuck, prep for prone on leg break
+            v2 = "curare"         -- Always paralysis (bloodroot)
+
+            if not clumStuck then
+                v1 = "xentio"     -- 1. Clumsiness (kelp)
+            elseif not nausStuck then
+                v1 = "euphorbia"  -- 2. Nausea (ginseng)
+            elseif not hlthlStuck then
+                v1 = "torment"    -- 3. Healthleech (kelp) - hellforge
+            elseif not haemoStuck then
+                v1 = "torture"    -- 4. Haemophilia (ginseng) - hellforge
+            elseif not asthStuck then
+                v1 = "kalmia"     -- 5. Asthma (kelp)
+            else
+                v1 = "xentio"     -- Maintain clumsiness
+            end
         end
     end
 
