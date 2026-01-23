@@ -407,6 +407,55 @@ Each herb has an alchemical mineral equivalent (same cure balance):
 - **Bellwort/Cuprum**: Generosity, Pacifism, Peace
 - **Prickly Ash/Stannum**: Confusion, Dementia, Paranoia
 
+#### Complete Cure Herb Reference
+**Sources:** [Venom (Skill)](https://wiki.achaea.com/Venom_(Skill)), [Oppression](https://wiki.achaea.com/Oppression)
+
+| Herb | Afflictions Cured |
+|------|-------------------|
+| **kelp** | clumsiness, healthleech, weariness, asthma, sensitivity, hypochondria, parasite |
+| **ginseng** | nausea, haemophilia, addiction, darkshade, flushings, lethargy, scytherus |
+| **goldenseal** | stupidity, impatience, depression, sandfever, epilepsy, dizziness, dissonance, shyness |
+| **lobelia** | recklessness, vertigo, spiritburn, tenderskin, loneliness, claustrophobia, masochism, agoraphobia |
+| **ash** | confusion, hypersomnia, hallucinations, paranoia, dementia, crescendo |
+| **bellwort** | timeloop, justice, lovers, peace, pacified, generosity, indifference, diminished |
+| **bloodroot** | paralysis |
+
+#### Venom → Affliction → Cure Reference
+| Venom | Affliction | Cure | Combat Use |
+|-------|------------|------|------------|
+| **curare** | paralysis | bloodroot | Venomlock, prevent tree |
+| **kalmia** | asthma | kelp | Softlock, block smoking |
+| **xentio** | clumsiness | kelp | Kelp stack, 33% miss chance |
+| **euphorbia** | nausea | ginseng | Block parry, enable limb prep |
+| **gecko** | slickness | kelp | Softlock, block salves (also cured by smoking valerian if no asthma!) |
+| **slike** | anorexia | kelp | Softlock, block eating |
+| **prefarar** | sensitivity (or removes deafness) | kelp | Damage amplification |
+| **vardrax** | addiction | ginseng | Riftlock helper, eating triggers cooldown |
+| **delphinium** | sleep | wake/insomnia | Sleeplock, prone via leg break |
+| **epseth** | crippled leg (level 1) | mending | Limb pressure |
+| **epteth** | crippled arm (level 1) | mending | Limb pressure |
+| **voyria** | voyria (sip damage) | antidote | Lock aff for healers |
+| **eurypteria** | recklessness | lobelia | Lock aff for Depthswalker |
+| **digitalis** | shyness | goldenseal | Mental stack |
+| **larkspur** | dizziness | goldenseal | Mental stack |
+| **monkshood** | disloyalty | lobelia | Hinder loyalty-based abilities |
+| **aconite** | stupidity | goldenseal | Mental stack, focus bait |
+| **darkshade** | darkshade (light allergy) | ginseng | Hinder targeting |
+| **notechis** | haemophilia | ginseng | Lock aff for Magi/Sylvan, Agony synergy |
+| **sumac** | impatience | goldenseal | Truelock completion |
+| **vernalius** | weakness | kelp | Hinder physical actions |
+| **oleander** | blindness | smoke | Hinder targeting |
+| **colocasia** | blindness + deafness | smoke + deafness | Full sensory denial |
+| **loki** | random affliction | varies | Unpredictable pressure |
+
+#### Hellforge Investments (Infernal Only)
+| Investment | Affliction | Cure | Notes |
+|------------|------------|------|-------|
+| **INVEST TORTURE** | haemophilia | ginseng | Enables Agony passive healing |
+| **INVEST EXPLOIT** | weariness + paranoia | kelp + ash | Two affs at once, blocks Fitness |
+| **INVEST TORMENT** | healthleech | kelp | Sustained damage, confusion if already has healthleech |
+| **INVEST PUNISHMENT** | scaling damage | n/a | More damage on wounded targets |
+
 #### Affliction Locks
 
 **See also**: `.claude/classes/lock_types.md` for comprehensive documentation.

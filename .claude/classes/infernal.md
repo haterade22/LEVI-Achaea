@@ -635,40 +635,81 @@ belch:
 
 ## Venoms & Hellforge Investments
 
+**Sources:** [Venom (Skill)](https://wiki.achaea.com/Venom_(Skill)), [Oppression](https://wiki.achaea.com/Oppression)
+
 ### Standard Venoms (Weaponmastery ENVENOM)
+
+#### Cure Herb Reference
+| Herb | Afflictions Cured |
+|------|-------------------|
+| **kelp** | clumsiness, healthleech, weariness, asthma, sensitivity, hypochondria, parasite |
+| **ginseng** | nausea, haemophilia, addiction, darkshade, flushings, lethargy, scytherus |
+| **goldenseal** | stupidity, impatience, depression, sandfever, epilepsy, dizziness, dissonance, shyness |
+| **lobelia** | recklessness, vertigo, spiritburn, tenderskin, loneliness, claustrophobia, masochism, agoraphobia |
+| **ash** | confusion, hypersomnia, hallucinations, paranoia, dementia, crescendo |
+| **bellwort** | timeloop, justice, lovers, peace, pacified, generosity, indifference, diminished |
+| **bloodroot** | paralysis |
+
+#### Venom → Affliction → Cure Reference
 | Venom | Affliction | Cure | Combat Use |
 |-------|------------|------|------------|
 | **curare** | paralysis | bloodroot | Venomlock, prevent tree |
-| **kalmia** | asthma | kelp | Softlock, block smoking |
-| **xentio** | clumsiness | kelp | Kelp stack, hinder attacks |
-| **euphorbia** | anorexia (via vomiting) | epidermal/focus | Softlock, block eating |
-| **gecko** | slickness | bloodroot/valerian | Softlock, block salves |
-| **prefarar** | sensitivity | kelp | Damage amplification |
-| **slike** | weariness | kelp | Block Fitness passive, lock aff |
-| **vardrax** | addiction | ginseng | Riftlock helper |
+| **kalmia** | asthma | **kelp** | Softlock, block smoking |
+| **xentio** | clumsiness | **kelp** | Kelp stack, 33% miss chance |
+| **euphorbia** | nausea | **ginseng** | Block parry, enable limb prep |
+| **gecko** | slickness | **kelp** | Softlock, block salves |
+| **slike** | anorexia | **kelp** | Softlock, block eating |
+| **prefarar** | sensitivity (or removes deafness) | **kelp** | Damage amplification |
+| **vardrax** | addiction | **ginseng** | Riftlock helper, eating triggers cooldown |
 | **delphinium** | sleep | wake/insomnia | Sleeplock, prone via leg break |
-| **epseth** | leg break (level 1) | restoration | Limb pressure |
-| **epteth** | arm break (level 1) | restoration | Limb pressure |
-| **voyria** | voyria (sip damage) | bloodletting | Lock aff for healers |
-| **eurypteria** | recklessness | lobelia | Lock aff for Depthswalker |
-| **digitalis** | shyness | goldenseal | Mental stack |
-| **monkshood** | dizziness | goldenseal | Mental stack |
-| **aconite** | stupidity | goldenseal | Mental stack, lock aff for Alchemist |
-| **darkshade** | darkshade (blind) | ginseng | Hinder targeting |
-| **colocasia** | haemophilia | ginseng | Lock aff for Magi/Sylvan, Agony synergy |
-| **sumac** | impatience | goldenseal | Truelock completion |
-| **vernalius** | lethargy | ginseng | Slow curing |
-| **notechis** | nausea | ginseng | Block parry |
+| **epseth** | crippled leg (level 1) | mending | Limb pressure |
+| **epteth** | crippled arm (level 1) | mending | Limb pressure |
+| **voyria** | voyria (sip damage) | antidote | Lock aff for healers |
+| **eurypteria** | recklessness | **lobelia** | Lock aff for Depthswalker |
+| **digitalis** | shyness | **goldenseal** | Mental stack |
+| **larkspur** | dizziness | **goldenseal** | Mental stack |
+| **monkshood** | disloyalty | **lobelia** | Hinder loyalty-based abilities |
+| **aconite** | stupidity | **goldenseal** | Mental stack, focus bait |
+| **darkshade** | darkshade (light allergy) | **ginseng** | Hinder targeting |
+| **notechis** | haemophilia | **ginseng** | Lock aff for Magi/Sylvan, Agony synergy |
+| **sumac** | impatience | **goldenseal** | Truelock completion |
+| **vernalius** | weakness | **kelp** | Hinder physical actions |
+| **oleander** | blindness | smoke | Hinder targeting |
+| **colocasia** | blindness + deafness | smoke + deafness | Full sensory denial |
+| **loki** | random affliction | varies | Unpredictable pressure |
 
 ### Hellforge Investments (Oppression)
-Investments **replace venoms** on weapons with Oppression effects.
+Investments **replace venoms** on weapons with Oppression effects. Only the main hand weapon can be invested.
 
-| Investment | Affliction | Notes |
-|------------|------------|-------|
-| **INVEST TORTURE** | Haemophilia | Enables Agony passive healing |
-| **INVEST EXPLOIT** | Paranoia + Weariness | Two affs at once, blocks Fitness |
-| **INVEST TORMENT** | Healthleech | Sustained damage over time |
-| **INVEST PUNISHMENT** | Scaling damage | More damage on wounded targets |
+| Investment | Affliction | Cure | Notes |
+|------------|------------|------|-------|
+| **INVEST TORTURE** | haemophilia | **ginseng** | Enables Agony passive healing |
+| **INVEST EXPLOIT** | weariness + paranoia | **kelp + ash** | Two affs at once, blocks Fitness |
+| **INVEST TORMENT** | healthleech | **kelp** | Sustained damage, confusion if already has healthleech |
+| **INVEST PUNISHMENT** | scaling damage | n/a | More damage on wounded targets |
+
+### Focus Lock Venom Strategy (PREP Phase)
+The focus lock strategy alternates kelp/ginseng afflictions to overwhelm curing, then baits focus with goldenseal:
+
+**Phase 1: Kelp/Ginseng Stack (with curare)**
+1. xentio → clumsiness (**kelp**)
+2. euphorbia → nausea (**ginseng**)
+3. torment → healthleech (**kelp**) - hellforge
+4. torture → haemophilia (**ginseng**) - hellforge
+5. kalmia → asthma (**kelp**)
+
+**Phase 2: Focus Bait (once asthma stuck)**
+- aconite/exploit → stupidity (**goldenseal**) + weariness + paranoia (**kelp + ash**)
+- They'll want to FOCUS to clear stupidity, but exploit adds 2 more affs
+
+**Phase 3: Lock Layer (ONLY if asthma still stuck)**
+- gecko/slike → slickness + anorexia (both **kelp**)
+- **IMPORTANT**: Only enter this phase if asthma is stuck! Slickness can be cured by smoking valerian if asthma is cured.
+- Stacks on existing kelp affs, overwhelms kelp curing
+- Slickness blocks apply, anorexia blocks eating
+
+**Phase 4: Riftlock Transition**
+- Once addiction + slickness stuck → epteth/epteth to break limbs
 
 ### Venom Strategy by Goal
 ```yaml
