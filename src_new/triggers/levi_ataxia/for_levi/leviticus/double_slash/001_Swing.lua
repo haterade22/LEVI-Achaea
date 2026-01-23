@@ -23,7 +23,7 @@ attributes:
   isColorTriggerFg: 'no'
   isColorTriggerBg: 'no'
 triggerType: 0
-conditonLineDelta: 1
+conditonLineDelta: 10
 mStayOpen: 0
 mCommand: ''
 packageName: ''
@@ -35,7 +35,7 @@ colorTriggerBgColor: '#000000'
 patterns:
 - pattern: ^You swing (.+) at (\w+)'s (.+) with all your might.$
   type: 1
-- pattern: '1'
+- pattern: '10'
   type: 5
 - pattern: ^As you carve into (\w+), you perceive that you have dealt (.+)\% damage to \w+ (torso|head|left arm|right arm|right
     leg|left leg).$
