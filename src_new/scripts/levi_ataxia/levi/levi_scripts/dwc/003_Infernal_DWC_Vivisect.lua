@@ -271,14 +271,36 @@ end
 
 function infernalDWC.isArmBroken(side)
     local damage = (side == "left") and infernalDWC.getLA() or infernalDWC.getRA()
-    local affName = (side == "left") and "damagedleftarm" or "damagedrightarm"
-    return damage >= infernalDWC.config.breakThreshold or (tAffs and tAffs[affName])
+    -- Check percentage damage (level 2 break)
+    if damage >= infernalDWC.config.breakThreshold then
+        return true
+    end
+    -- Check affliction-based breaks (level 1 from epteth/epseth, level 2 from physical)
+    if tAffs then
+        if side == "left" then
+            return tAffs.damagedleftarm or tAffs.crippledleftarm or tAffs.brokenleftarm
+        else
+            return tAffs.damagedrightarm or tAffs.crippledrightarm or tAffs.brokenrightarm
+        end
+    end
+    return false
 end
 
 function infernalDWC.isLegBroken(side)
     local damage = (side == "left") and infernalDWC.getLL() or infernalDWC.getRL()
-    local affName = (side == "left") and "damagedleftleg" or "damagedrightleg"
-    return damage >= infernalDWC.config.breakThreshold or (tAffs and tAffs[affName])
+    -- Check percentage damage (level 2 break)
+    if damage >= infernalDWC.config.breakThreshold then
+        return true
+    end
+    -- Check affliction-based breaks (level 1 from epteth/epseth, level 2 from physical)
+    if tAffs then
+        if side == "left" then
+            return tAffs.damagedleftleg or tAffs.crippledleftleg or tAffs.brokenleftleg
+        else
+            return tAffs.damagedrightleg or tAffs.crippledrightleg or tAffs.brokenrightleg
+        end
+    end
+    return false
 end
 
 function infernalDWC.areBothArmsPrepped()
@@ -738,13 +760,22 @@ end
 -------------------------------------------------------------------------------
 
 function infernalDWCVivisect()
+    --[[
+    PRIORITY ORDER:
+    1. VIVISECT - All 4 limbs broken at level 1+ → instant kill
+    2. DAMAGE KILL - Health ≤40% → quash + arc (any phase except vivisect)
+    3. RIFTLOCK - In EXECUTE and target used RESTORE → lock them down
+    4. EXECUTE - Break limbs in sequence (undercut → DSL arms)
+    5. PREP - Build limb damage to prep threshold
+    ]]--
+
     -- Use global 'target' variable (set by "t <name>" command)
     if not target or target == "" then
         cecho("\n<red>[INF DWC]<reset> No target set! Use: t <name>")
         return
     end
 
-    -- Get current phase
+    -- Get current phase (for display and venom/limb selection)
     local phase = infernalDWC.getPhase()
 
     -- Track phase changes for debugging
@@ -753,9 +784,18 @@ function infernalDWCVivisect()
         infernalDWC.state.lastPhase = phase
     end
 
-    -- DAMAGE KILL CHECK - Use quash + arc when target is below 40% health
-    -- This takes priority over ALL phases (PREP, EXECUTE, KILL, RIFTLOCK)
-    -- When they're low, finish them with damage instead of completing vivisect setup
+    --------------------------------------------------------------------------
+    -- PRIORITY 1: VIVISECT - All 4 limbs broken at level 1+
+    --------------------------------------------------------------------------
+    if infernalDWC.areBothArmsBroken() and infernalDWC.areBothLegsBroken() then
+        send("queue addclear freestand vivisect " .. target)
+        cecho("\n<green>[INF DWC]<reset> VIVISECT! All 4 limbs broken!")
+        return
+    end
+
+    --------------------------------------------------------------------------
+    -- PRIORITY 2: DAMAGE KILL - Health ≤40%
+    --------------------------------------------------------------------------
     if infernalDWC.shouldDamageKill() then
         local healthPct = infernalDWC.getTargetHealth()
         send("queue addclear freestand quash " .. target .. ";arc " .. target)
@@ -763,17 +803,45 @@ function infernalDWCVivisect()
         return
     end
 
-    -- KILL CHECK - Execute vivisect
-    if phase == "KILL" then
-        send("queue addclear freestand vivisect " .. target)
-        cecho("\n<green>[INF DWC]<reset> VIVISECT!")
+    --------------------------------------------------------------------------
+    -- PRIORITY 3: RIFTLOCK - Target used RESTORE during EXECUTE
+    --------------------------------------------------------------------------
+    if infernalDWC.state.riftlockMode then
+        -- RIFTLOCK: Focus on anorexia/slickness to lock them down
+        -- Then break left arm for salve pressure
+        local v1, v2 = infernalDWC.selectVenoms()  -- Will return riftlock venoms
+        local limb = infernalDWC.selectLimbTarget()  -- Will target arms for riftlock
+
+        -- Build attack command
+        local weapon1 = infernalDWC.config.weapon1
+        local weapon2 = infernalDWC.config.weapon2
+        local atk = "wield right " .. weapon1 .. ";wield left " .. weapon2
+        atk = atk .. ";wipe " .. weapon1 .. ";wipe " .. weapon2
+
+        -- Check for rebounding/shield
+        local hasRebounding = infernalDWC.hasAff("rebounding") or (tAffs and tAffs.rebounding)
+        local hasShield = infernalDWC.hasAff("shield") or (tAffs and tAffs.shield)
+
+        if hasRebounding or hasShield then
+            local rslVenom = v2 or v1 or "curare"
+            atk = atk .. ";rsl " .. target .. " " .. rslVenom
+            cecho("\n<yellow>[INF DWC]<reset> RIFTLOCK | Razing " .. (hasRebounding and "REBOUNDING" or "SHIELD"))
+        else
+            atk = atk .. ";dsl " .. target .. " " .. limb .. " " .. (v1 or "slike") .. " " .. (v2 or "curare")
+            cecho("\n<magenta>[INF DWC]<reset> RIFTLOCK | " .. limb .. " | " .. (v1 or "slike") .. "/" .. (v2 or "curare"))
+        end
+
+        send("queue addclear freestand " .. atk .. ";assess " .. target)
         return
     end
 
-    -- Advance EXECUTE step if previous attack broke a limb (also resets if not in EXECUTE)
+    --------------------------------------------------------------------------
+    -- PRIORITY 4: EXECUTE - Break limbs in sequence
+    --------------------------------------------------------------------------
+    -- Advance EXECUTE step if previous attack broke a limb
     infernalDWC.advanceExecuteStep()
 
-    -- EXECUTE STEP 0: Undercut with battleaxe (then switch back to scims)
+    -- EXECUTE STEP 0: Undercut with battleaxe
     if phase == "EXECUTE" and infernalDWC.state.executeStep == 0 then
         local leg = infernalDWC.state.focusLeg
         local battleaxe = infernalDWC.config.battleaxe
@@ -788,6 +856,9 @@ function infernalDWCVivisect()
         return
     end
 
+    --------------------------------------------------------------------------
+    -- PRIORITY 5: PREP / EXECUTE continuation (DSL attacks)
+    --------------------------------------------------------------------------
     -- Get venoms and limb target
     local v1, v2 = infernalDWC.selectVenoms()
     local limb = infernalDWC.selectLimbTarget()
