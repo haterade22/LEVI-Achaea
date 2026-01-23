@@ -341,16 +341,18 @@ function infernalDWC.hasAff(aff)
     if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
         if haveAffV2 then
             return haveAffV2(aff)
-        elseif tAffsV2 then
-            return (tAffsV2[aff] or 0) >= 1
+        elseif tAffsV2 and tAffsV2[aff] then
+            -- Binary system: check for any truthy value
+            return true
         end
         -- V2 enabled but not loaded - return false (don't fall back to V1)
         return false
     end
 
     -- V1 system (only when V2 is disabled)
-    if tAffs then
-        return tAffs[aff] == true
+    -- Check for any truthy value (not just == true, as some values may be 1 or timestamps)
+    if tAffs and tAffs[aff] then
+        return true
     end
     return false
 end
