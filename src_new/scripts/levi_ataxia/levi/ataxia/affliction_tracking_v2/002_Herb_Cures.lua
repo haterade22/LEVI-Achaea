@@ -236,6 +236,8 @@ function handleKelpWithAsthmaV2()
         for _, aff in ipairs(kelpRemovalPriority) do
             if aff ~= "asthma" and haveAffV2(aff) then
                 removeAffV2(aff)
+                -- Store for potential backtracking if smoke proves asthma was cured
+                storeKelpGuessV2(aff, pendingKelpAffsV2)
                 ataxiaEcho("[V2] Multi-kelp: assumed " .. aff .. " cured (asthma still present)")
                 break
             end

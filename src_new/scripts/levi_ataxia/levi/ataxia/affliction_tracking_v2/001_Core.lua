@@ -335,6 +335,16 @@ function onTargetSmokeV2(targetName)
         end
     end
 
+    -- Backtrack kelp guess if we assumed non-asthma was cured
+    -- Smoke proves asthma was actually cured, so restore the wrong guess
+    if lastGuessV2 and lastGuessV2.herb == "kelp" and lastGuessV2.removed ~= "asthma" then
+        addAffV2(lastGuessV2.removed)
+        if ataxiaEcho then
+            ataxiaEcho("[V2] Smoke backtrack: restoring " .. lastGuessV2.removed .. " (kelp actually cured asthma)")
+        end
+        lastGuessV2 = nil
+    end
+
     -- Handle kelp disambiguation
     if onKelpSmokeCuredV2 then onKelpSmokeCuredV2() end
 
