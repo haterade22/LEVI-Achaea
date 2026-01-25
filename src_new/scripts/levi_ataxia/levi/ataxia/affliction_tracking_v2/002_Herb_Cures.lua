@@ -148,10 +148,12 @@ kelpDisambiguateTimerV2 = nil
 lastGuessV2 = nil  -- Generic guess storage for all herbs
 lastKelpGuessV2 = nil  -- Backward compatibility
 
--- Wrapper function: routes to V2 or old system based on setting
+-- Wrapper function: routes to V3/V2/V1 based on settings
 -- Replace targetAte() calls in triggers with this
 function targetAteWrapper(herb)
-    if ataxia.settings.useAffTrackingV2 then
+    if affConfigV3 and affConfigV3.enabled then
+        onHerbCureV3(herb)  -- V3 branching state tracker
+    elseif ataxia.settings.useAffTrackingV2 then
         targetAteV2(herb)
     else
         targetAte(herb)  -- Original function unchanged

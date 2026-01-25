@@ -40,8 +40,15 @@ packageName: ''
         end
 ]]--
 function onTargetFumbleV2(attacker)
-    if not ataxia.settings.useAffTrackingV2 then return end
     if not isTargeted(attacker) then return end
+
+    -- Route to V3 if enabled
+    if affConfigV3 and affConfigV3.enabled then
+        collapseAffPresentV3("clumsiness")
+        return
+    end
+
+    if not ataxia.settings.useAffTrackingV2 then return end
 
     -- Check if we need to backtrack a wrong guess
     if hasPendingGuessV2 and hasPendingGuessV2("clumsiness") then
@@ -62,8 +69,15 @@ end
         end
 ]]--
 function onTargetSmokeV2(smoker)
-    if not ataxia.settings.useAffTrackingV2 then return end
     if not isTargeted(smoker) then return end
+
+    -- Route to V3 if enabled
+    if affConfigV3 and affConfigV3.enabled then
+        collapseAffAbsentV3("asthma")
+        return
+    end
+
+    if not ataxia.settings.useAffTrackingV2 then return end
 
     -- Smoking proves asthma was cured
     removeAffV2("asthma")
@@ -88,8 +102,15 @@ end
         end
 ]]--
 function onTargetVomitV2(vomiter)
-    if not ataxia.settings.useAffTrackingV2 then return end
     if not isTargeted(vomiter) then return end
+
+    -- Route to V3 if enabled
+    if affConfigV3 and affConfigV3.enabled then
+        collapseAffPresentV3("nausea")
+        return
+    end
+
+    if not ataxia.settings.useAffTrackingV2 then return end
 
     -- Check if we need to backtrack a wrong guess
     if hasPendingGuessV2 and hasPendingGuessV2("nausea") then
@@ -114,8 +135,15 @@ end
         end
 ]]--
 function onTargetSlickFailV2(target)
-    if not ataxia.settings.useAffTrackingV2 then return end
     if not isTargeted(target) then return end
+
+    -- Route to V3 if enabled
+    if affConfigV3 and affConfigV3.enabled then
+        collapseAffPresentV3("slickness")
+        return
+    end
+
+    if not ataxia.settings.useAffTrackingV2 then return end
 
     -- Check if we need to backtrack a wrong guess
     if hasPendingGuessV2 and hasPendingGuessV2("slickness") then
@@ -140,8 +168,15 @@ end
         end
 ]]--
 function onTargetParalysisBlockV2(target)
-    if not ataxia.settings.useAffTrackingV2 then return end
     if not isTargeted(target) then return end
+
+    -- Route to V3 if enabled
+    if affConfigV3 and affConfigV3.enabled then
+        collapseAffPresentV3("paralysis")
+        return
+    end
+
+    if not ataxia.settings.useAffTrackingV2 then return end
 
     -- Check if we need to backtrack a wrong guess
     if hasPendingGuessV2 and hasPendingGuessV2("paralysis") then
