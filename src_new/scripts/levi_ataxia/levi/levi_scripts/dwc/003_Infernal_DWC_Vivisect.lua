@@ -359,6 +359,11 @@ end
 
 -- Helper to check if target has an affliction (V2 or V1, no mixing)
 function infernalDWC.hasAff(aff)
+    -- V3 system (highest priority - probability-based)
+    if affConfigV3 and affConfigV3.enabled then
+        return haveAffV3(aff)  -- Uses 30% threshold by default
+    end
+
     -- V2 system (when enabled, use ONLY V2 - no fallback)
     if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
         if haveAffV2 then
@@ -379,6 +384,16 @@ function infernalDWC.hasAff(aff)
     return false
 end
 
+-- Get affliction probability (V3 only, returns 0-1)
+-- Falls back to binary (1.0 if has, 0 if not) for V2/V1
+function infernalDWC.getAffProb(aff)
+    if affConfigV3 and affConfigV3.enabled then
+        return getAffProbabilityV3(aff)
+    end
+    -- Fallback: binary (1.0 if has, 0 if not)
+    return infernalDWC.hasAff(aff) and 1.0 or 0
+end
+
 -- Helper to confirm we applied an affliction (V2 or V1)
 function infernalDWC.confirmAff(aff)
     -- V2 system (when enabled, use ONLY V2)
@@ -397,7 +412,9 @@ end
 
 -- Check which tracking system is active
 function infernalDWC.getTrackingSystem()
-    if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
+    if affConfigV3 and affConfigV3.enabled then
+        return "V3"
+    elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
         return "V2"
     end
     return "V1"
@@ -509,6 +526,55 @@ end
     - aconite = stupidity
 ]]--
 
+-- V3 probability-aware venom selection for PREP phase
+-- Scores venoms by: (1 - probability) * weight
+-- Returns the top 2 venoms, ensuring curare is on v2 for clumsiness protection
+function infernalDWC.selectVenomsV3()
+    local candidates = {}
+    local getProb = infernalDWC.getAffProb
+
+    -- Build candidate list with scores
+    -- Score = (1 - probability) * weight
+    -- Higher weight = more important to have stuck
+    local venomData = {
+        {venom = "curare",    aff = "paralysis",  weight = 1.5},
+        {venom = "xentio",    aff = "clumsiness", weight = 1.3},
+        {venom = "euphorbia", aff = "nausea",     weight = 1.2},
+        {venom = "kalmia",    aff = "asthma",     weight = 1.5},
+        {venom = "gecko",     aff = "slickness",  weight = 1.5},
+        {venom = "slike",     aff = "anorexia",   weight = 1.4},
+        {venom = "aconite",   aff = "stupidity",  weight = 1.1},
+        {venom = "vardrax",   aff = "addiction",  weight = 1.0},
+        {venom = "torment",   aff = "healthleech", weight = 0.9},
+        {venom = "torture",   aff = "haemophilia", weight = 0.9},
+    }
+
+    for _, data in ipairs(venomData) do
+        local prob = getProb(data.aff)
+        if prob < 0.9 then  -- Only consider if <90% stuck
+            local score = (1 - prob) * data.weight
+            table.insert(candidates, {
+                venom = data.venom,
+                aff = data.aff,
+                prob = prob,
+                score = score
+            })
+        end
+    end
+
+    -- Sort by score (highest = best choice)
+    table.sort(candidates, function(a, b) return a.score > b.score end)
+
+    -- Return top 2 venoms
+    local v1 = candidates[1] and candidates[1].venom or "xentio"
+    local v2 = candidates[2] and candidates[2].venom or "curare"
+
+    -- Ensure curare is on v2 (second sword) for clumsiness protection
+    if v1 == "curare" then v1, v2 = v2, v1 end
+
+    return v1, v2
+end
+
 function infernalDWC.selectVenoms()
     local v1, v2 = nil, nil
     local phase = infernalDWC.getPhase()
@@ -571,6 +637,12 @@ function infernalDWC.selectVenoms()
         -- After focus: gecko/slike (both kelp) = lock layer
         -- Finally: addiction(ginseng) + riftlock transition
 
+        -- V3: Probability-aware venom selection
+        if affConfigV3 and affConfigV3.enabled then
+            return infernalDWC.selectVenomsV3()
+        end
+
+        -- Original binary logic (V2/V1 fallback)
         -- Check what's stuck
         local clumStuck = hasAff("clumsiness")
         local nausStuck = hasAff("nausea")
