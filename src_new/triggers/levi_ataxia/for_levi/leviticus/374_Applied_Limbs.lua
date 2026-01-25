@@ -42,6 +42,9 @@ tdeliverance = false
 	-- V2 tracking support: limb salve cures slickness and other affs
 	if onTargetSalveLimbsV2 then onTargetSalveLimbsV2(matches[2], matches[3]) end
 	erAff("slickness")
+
+	-- V3 integration: collapse branches (proves slickness absent)
+	if onTargetApplySalveV3 then onTargetApplySalveV3() end
 	target_appliedTo(matches[3])
 	targetIshere = true
 	erAff("bloodfire")

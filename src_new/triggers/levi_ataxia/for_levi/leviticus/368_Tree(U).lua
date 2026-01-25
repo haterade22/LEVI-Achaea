@@ -45,6 +45,9 @@ tdeliverance = false
 	end
   if passiveFailsafe then restorePassiveCure() end
 
+	-- V3 integration: handle branching state tracker
+	if onTargetTreeV3 then onTargetTreeV3() end
+
 	-- V2 integration: track tree cure (mutually exclusive with old system)
 	if ataxia.settings.useAffTrackingV2 then
 		onTargetTreeV2(name)

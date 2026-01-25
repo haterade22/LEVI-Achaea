@@ -37,6 +37,9 @@ patterns:
 
 local name = matches[2]
 if isTargeted(matches[2]) and tBals.focus then
+	-- V3 integration: handle branching state tracker
+	if onTargetFocusV3 then onTargetFocusV3() end
+
 	-- V2 integration: Focus cures a random mental affliction (mutually exclusive with old system)
 	if ataxia.settings.useAffTrackingV2 then
 		onTargetFocusV2(name)
