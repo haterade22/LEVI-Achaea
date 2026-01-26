@@ -42,6 +42,10 @@ patterns:
 
 if isTargeted(matches[2]) then
 	tAffs.impatience = true
+
+	-- V3 integration: collapse branches (proves impatience present)
+	if onTargetImpatienceV3 then onTargetImpatienceV3() end
+
 	selectString(line, 1)
 	fg("goldenrod")
 	resetFormat()

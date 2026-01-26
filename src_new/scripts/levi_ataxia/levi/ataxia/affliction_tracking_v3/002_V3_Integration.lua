@@ -138,6 +138,24 @@ function onTargetParanoiaFleeV3()
     collapseAffPresentV3("paranoia")
 end
 
+-- Target showed impatience - proves impatience is PRESENT
+function onTargetImpatienceV3()
+    if not affConfigV3 or not affConfigV3.enabled then return end
+    collapseAffPresentV3("impatience")
+end
+
+-- Target showed dementia signs - proves dementia is PRESENT
+function onTargetDementiaV3()
+    if not affConfigV3 or not affConfigV3.enabled then return end
+    collapseAffPresentV3("dementia")
+end
+
+-- Target showed confusion - proves confusion is PRESENT
+function onTargetConfusionV3()
+    if not affConfigV3 or not affConfigV3.enabled then return end
+    collapseAffPresentV3("confusion")
+end
+
 -- Target applied salve successfully - proves slickness is ABSENT
 function onTargetApplySalveV3()
     if not affConfigV3 or not affConfigV3.enabled then return end
