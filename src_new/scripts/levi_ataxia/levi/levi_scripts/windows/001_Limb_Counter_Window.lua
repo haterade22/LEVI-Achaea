@@ -40,8 +40,68 @@ function tarc.write()
   if target and target ~= "" and target ~= "None" and target ~= "none" then
    tarc:cecho("   Target: " .. target .. "\n")
 
-    -- V2 Affliction Display (binary system with separate stack counting)
-    if tAffsV2 then
+    -- V3 Affliction Display (probability-based)
+    if affConfigV3 and affConfigV3.enabled then
+      local lockAffs = {"anorexia", "slickness", "asthma", "paralysis"}
+      local shortNames = {
+        anorexia = "ANO", slickness = "SLI", asthma = "AST", paralysis = "PAR",
+        clumsiness = "CLU", nausea = "NAU", weariness = "WEA", stupidity = "STU",
+        sensitivity = "SEN", healthleech = "HLE", haemophilia = "HAE",
+        addiction = "ADD", impatience = "IMP", rebounding = "REB", shield = "SHD",
+        prone = "PRONE", confusion = "CON", dementia = "DEM", paranoia = "PNO",
+        hallucinations = "HAL", dizziness = "DIZ", epilepsy = "EPI", recklessness = "REC",
+        shyness = "SHY", lethargy = "LET", darkshade = "DAR",
+      }
+
+      -- Show lock probability
+      local lockProb = getStateProbabilityV3(lockAffs)
+      local affStr = "   "
+      if lockProb >= 0.9 then
+        affStr = affStr .. "<green>[LOCK:" .. math.floor(lockProb * 100) .. "%]<reset> "
+      elseif lockProb >= 0.3 then
+        affStr = affStr .. "<yellow>[LOCK:" .. math.floor(lockProb * 100) .. "%]<reset> "
+      end
+
+      -- Show individual affs with probabilities
+      local allProbs = getAllAffProbabilitiesV3()
+      local sorted = {}
+      local ignoreAffs = {curseward = true, blindness = true, deafness = true}
+      for aff, prob in pairs(allProbs) do
+        if prob >= 0.1 and not ignoreAffs[aff] then  -- Only show >10%
+          table.insert(sorted, {aff = aff, prob = prob})
+        end
+      end
+      table.sort(sorted, function(a, b) return a.prob > b.prob end)
+
+      for _, entry in ipairs(sorted) do
+        local aff, prob = entry.aff, entry.prob
+        local shortName = shortNames[aff] or string.sub(aff, 1, 3):upper()
+
+        -- Color based on probability
+        local color = "white"
+        if prob >= 0.9 then color = "green"       -- 90%+ = stuck
+        elseif prob >= 0.6 then color = "yellow"  -- 60-89% = likely
+        elseif prob >= 0.3 then color = "orange"  -- 30-59% = possible
+        else color = "gray" end                   -- <30% = uncertain
+
+        -- Check if lock aff (override color to red)
+        for _, la in ipairs(lockAffs) do
+          if aff == la and prob >= 0.3 then color = "red" break end
+        end
+
+        -- Format: "AST:67" or "AST" for 100%
+        local display = shortName
+        if prob < 1.0 then
+          display = shortName .. ":" .. math.floor(prob * 100)
+        end
+        affStr = affStr .. "<" .. color .. ">" .. display .. "<reset> "
+      end
+
+      tarc:cecho(affStr .. "\n")
+      tarc:cecho("   <gray>[V3: " .. #afflictionStatesV3 .. " branches]<reset>\n")
+
+    -- V2 Affliction Display (binary system - fallback)
+    elseif tAffsV2 then
       local lockAffs = {"anorexia", "slickness", "asthma", "paralysis", "stupidity"}
       local shortNames = {
         anorexia = "ANO", slickness = "SLI", asthma = "AST", paralysis = "PAR", stupidity = "STU",

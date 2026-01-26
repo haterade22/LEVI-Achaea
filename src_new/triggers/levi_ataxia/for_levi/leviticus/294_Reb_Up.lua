@@ -37,6 +37,10 @@ patterns:
 
 tAffs.rebounding = true
 
+-- V3 tracking support
+if affConfigV3 and affConfigV3.enabled and applyAffV3 then
+	applyAffV3("rebounding")
+end
 -- V2 tracking support
 if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
     if confirmAffV2 then
