@@ -208,6 +208,7 @@ function onHerbCureV3(herb)
 
     local newStates = {}
     local branchCount = 0
+    local curedAffs = {}  -- Track unique afflictions that were cured
 
     for _, state in ipairs(afflictionStatesV3) do
         -- Find which curable afflictions exist in this branch
@@ -225,7 +226,7 @@ function onHerbCureV3(herb)
             -- Only one candidate - definitely cured
             state.affs[candidates[1]] = nil
             table.insert(newStates, state)
-            v3Echo(herb .. " cured " .. candidates[1] .. " (only option in branch)")
+            curedAffs[candidates[1]] = true  -- Track it, don't echo yet
         else
             -- Multiple candidates - BRANCH into N possibilities
             local probEach = state.prob / #candidates
@@ -245,8 +246,16 @@ function onHerbCureV3(herb)
     syncToOldSystemV3()
     updateAffDisplayV3()
 
+    -- Print consolidated summary
+    local curedList = {}
+    for aff, _ in pairs(curedAffs) do
+        table.insert(curedList, aff)
+    end
+
     if branchCount > 0 then
         v3Echo(herb .. " eaten - branched into " .. #afflictionStatesV3 .. " states")
+    elseif #curedList > 0 then
+        v3Echo(herb .. " cured: " .. table.concat(curedList, ", "))
     end
 end
 
@@ -267,6 +276,7 @@ function onSmokeCureV3()
 
     local newStates = {}
     local branchCount = 0
+    local curedAffs = {}  -- Track unique afflictions that were cured
 
     for _, state in ipairs(afflictionStatesV3) do
         -- Find which smoke-curable afflictions exist in this branch
@@ -284,7 +294,7 @@ function onSmokeCureV3()
             -- Only one candidate - definitely cured
             state.affs[candidates[1]] = nil
             table.insert(newStates, state)
-            v3Echo("smoke cured " .. candidates[1] .. " (only option in branch)")
+            curedAffs[candidates[1]] = true  -- Track it, don't echo yet
         else
             -- Multiple candidates - BRANCH into N possibilities
             local probEach = state.prob / #candidates
@@ -304,8 +314,16 @@ function onSmokeCureV3()
     syncToOldSystemV3()
     updateAffDisplayV3()
 
+    -- Print consolidated summary
+    local curedList = {}
+    for aff, _ in pairs(curedAffs) do
+        table.insert(curedList, aff)
+    end
+
     if branchCount > 0 then
         v3Echo("smoked - branched into " .. #afflictionStatesV3 .. " states")
+    elseif #curedList > 0 then
+        v3Echo("smoke cured: " .. table.concat(curedList, ", "))
     end
 end
 
