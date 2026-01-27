@@ -89,6 +89,10 @@ curingTableV3 = {
     bloodroot = {"paralysis", "slickness"},
 }
 
+-- V3 smoke cure table (priority order)
+-- Smoking cures one of these (in order if multiple present)
+smokeCureTableV3 = {"aeon", "deadening", "hellsight", "tension", "disloyalty", "manaleech", "slickness"}
+
 -- Helper to get curable afflictions for a herb
 local function getCurableAffs(herb)
     -- Check main curingTable first
@@ -243,6 +247,65 @@ function onHerbCureV3(herb)
 
     if branchCount > 0 then
         v3Echo(herb .. " eaten - branched into " .. #afflictionStatesV3 .. " states")
+    end
+end
+
+-- Handle smoke cure - similar to herb cure but uses smoke cure table
+-- Also proves asthma is absent (can't smoke with asthma)
+function onSmokeCureV3()
+    if not affConfigV3.enabled then return end
+
+    -- First, prove asthma is absent (can't smoke with asthma)
+    collapseAffAbsentV3("asthma")
+
+    -- Get the list of smoke-curable afflictions
+    local curableAffs = smokeCureTableV3
+    if not curableAffs then
+        v3Echo("smoked - no smoke cure table found")
+        return
+    end
+
+    local newStates = {}
+    local branchCount = 0
+
+    for _, state in ipairs(afflictionStatesV3) do
+        -- Find which smoke-curable afflictions exist in this branch
+        local candidates = {}
+        for _, aff in ipairs(curableAffs) do
+            if state.affs[aff] then
+                table.insert(candidates, aff)
+            end
+        end
+
+        if #candidates == 0 then
+            -- No smoke-curable affs in this branch - state unchanged
+            table.insert(newStates, state)
+        elseif #candidates == 1 then
+            -- Only one candidate - definitely cured
+            state.affs[candidates[1]] = nil
+            table.insert(newStates, state)
+            v3Echo("smoke cured " .. candidates[1] .. " (only option in branch)")
+        else
+            -- Multiple candidates - BRANCH into N possibilities
+            local probEach = state.prob / #candidates
+            for _, aff in ipairs(candidates) do
+                local branch = {affs = copyAffs(state.affs), prob = probEach}
+                branch.affs[aff] = nil
+                table.insert(newStates, branch)
+            end
+            branchCount = branchCount + #candidates - 1
+        end
+    end
+
+    afflictionStatesV3 = newStates
+    deduplicateStatesV3()
+    pruneStatesV3()
+    rebuildCacheV3()
+    syncToOldSystemV3()
+    updateAffDisplayV3()
+
+    if branchCount > 0 then
+        v3Echo("smoked - branched into " .. #afflictionStatesV3 .. " states")
     end
 end
 

@@ -47,8 +47,8 @@ tdeliverance = false
 	-- V2 integration: notify smoke detection for disambiguation
 	if onTargetSmokeV2 then onTargetSmokeV2(matches[2]) end
 
-	-- V3 integration: collapse branches (proves asthma absent)
-	if onTargetSmokeV3 then onTargetSmokeV3() end
+	-- V3 integration: handle smoke cure (proves asthma absent AND creates branches for smoke-curable affs)
+	if onSmokeCureV3 then onSmokeCureV3() end
 
 	-- Kill disambiguation timer - smoke proves asthma is cured
 	if kelpDisambiguateTimer then killTimer(kelpDisambiguateTimer); kelpDisambiguateTimer = nil end

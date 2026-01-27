@@ -527,50 +527,115 @@ end
 ]]--
 
 -- V3 probability-aware venom selection for PREP phase
--- Scores venoms by: (1 - probability) * weight
--- Returns the top 2 venoms, ensuring curare is on v2 for clumsiness protection
+-- PHASE 1: clumsiness → nausea → healthleech → haemophilia → asthma (v2 = curare)
+-- PHASE 2 (Focus Lock): Once asthma stuck, v1 = exploit (weariness+paranoia), v2 = aconite (stupidity)
+-- PHASE 3 (Softlock): Once weariness+stupidity stuck, v1/v2 = gecko/slike for full lock
 function infernalDWC.selectVenomsV3()
-    local candidates = {}
     local getProb = infernalDWC.getAffProb
 
-    -- Build candidate list with scores
-    -- Score = (1 - probability) * weight
-    -- Higher weight = more important to have stuck
-    local venomData = {
-        {venom = "curare",    aff = "paralysis",  weight = 1.5},
-        {venom = "xentio",    aff = "clumsiness", weight = 1.3},
-        {venom = "euphorbia", aff = "nausea",     weight = 1.2},
-        {venom = "kalmia",    aff = "asthma",     weight = 1.5},
-        {venom = "gecko",     aff = "slickness",  weight = 1.5},
-        {venom = "slike",     aff = "anorexia",   weight = 1.4},
-        {venom = "aconite",   aff = "stupidity",  weight = 1.1},
-        {venom = "vardrax",   aff = "addiction",  weight = 1.0},
-        {venom = "torment",   aff = "healthleech", weight = 0.9},
-        {venom = "torture",   aff = "haemophilia", weight = 0.9},
-    }
+    -- Check phase conditions
+    local asthmaProb = getProb("asthma")
+    local wearinessProb = getProb("weariness")
+    local stupidityProb = getProb("stupidity")
+    local slicknessProb = getProb("slickness")
+    local anorexiaProb = getProb("anorexia")
 
-    for _, data in ipairs(venomData) do
-        local prob = getProb(data.aff)
-        if prob < 0.9 then  -- Only consider if <90% stuck
-            local score = (1 - prob) * data.weight
-            table.insert(candidates, {
-                venom = data.venom,
-                aff = data.aff,
-                prob = prob,
-                score = score
-            })
+    local asthmaStuck = asthmaProb >= 0.9
+    local wearinessStuck = wearinessProb >= 0.9
+    local stupidityStuck = stupidityProb >= 0.9
+
+    -- PHASE 3: Focus lock complete, go for full softlock (gecko/slike)
+    if asthmaStuck and wearinessStuck and stupidityStuck then
+        local v1, v2
+        if slicknessProb < 0.9 then
+            v1 = "gecko"      -- Slickness (blocks apply)
+        elseif anorexiaProb < 0.9 then
+            v1 = "slike"      -- Anorexia (blocks eat)
+        else
+            v1 = "gecko"      -- Maintain
         end
+        -- v2: curare if not stuck, otherwise slike/gecko
+        if getProb("paralysis") < 0.9 then
+            v2 = "curare"
+        elseif v1 == "gecko" and anorexiaProb < 0.9 then
+            v2 = "slike"
+        elseif v1 == "slike" and slicknessProb < 0.9 then
+            v2 = "gecko"
+        else
+            v2 = "curare"
+        end
+        return v1, v2
     end
 
-    -- Sort by score (highest = best choice)
-    table.sort(candidates, function(a, b) return a.score > b.score end)
+    -- PHASE 2: Asthma stuck → Focus Lock (exploit + aconite)
+    -- exploit = weariness (blocks fitness) + paranoia (via hellforge)
+    -- aconite = stupidity (they'll want to focus this, but weariness blocks it)
+    if asthmaStuck then
+        local v1, v2
+        if wearinessProb < 0.9 then
+            v1 = "exploit"    -- Weariness + Paranoia (hellforge)
+        elseif slicknessProb < 0.9 then
+            v1 = "gecko"      -- Slickness
+        elseif anorexiaProb < 0.9 then
+            v1 = "slike"      -- Anorexia
+        else
+            v1 = "exploit"    -- Maintain weariness
+        end
 
-    -- Return top 2 venoms
-    local v1 = candidates[1] and candidates[1].venom or "xentio"
-    local v2 = candidates[2] and candidates[2].venom or "curare"
+        if stupidityProb < 0.9 then
+            v2 = "aconite"    -- Stupidity (focus bait)
+        elseif getProb("paralysis") < 0.9 then
+            v2 = "curare"     -- Paralysis
+        else
+            v2 = "aconite"    -- Maintain
+        end
+        return v1, v2
+    end
 
-    -- Ensure curare is on v2 (second sword) for clumsiness protection
-    if v1 == "curare" then v1, v2 = v2, v1 end
+    -- PHASE 1: Build to asthma (clumsiness → nausea → healthleech → haemophilia → asthma)
+    local v1Chain = {
+        {venom = "xentio",    aff = "clumsiness", weight = 2.0},   -- 1. Clumsiness
+        {venom = "euphorbia", aff = "nausea",     weight = 1.9},   -- 2. Nausea
+        {venom = "torment",   aff = "healthleech", weight = 1.8},  -- 3. Healthleech (hellforge)
+        {venom = "torture",   aff = "haemophilia", weight = 1.7},  -- 4. Haemophilia (hellforge)
+        {venom = "kalmia",    aff = "asthma",     weight = 1.6},   -- 5. Asthma
+    }
+
+    -- v2 default chain (curare first)
+    local v2Chain = {
+        {venom = "curare",    aff = "paralysis",  weight = 2.0},   -- 1. Paralysis (default)
+        {venom = "gecko",     aff = "slickness",  weight = 1.8},   -- 2. Slickness
+        {venom = "slike",     aff = "anorexia",   weight = 1.7},   -- 3. Anorexia
+        {venom = "aconite",   aff = "stupidity",  weight = 1.6},   -- 4. Stupidity
+        {venom = "vardrax",   aff = "addiction",  weight = 1.5},   -- 5. Addiction
+    }
+
+    -- Helper to get best venom from a chain (excludes a specific venom)
+    local function getBestFromChain(chain, excludeVenom)
+        local candidates = {}
+        for _, data in ipairs(chain) do
+            if data.venom ~= excludeVenom then
+                local prob = getProb(data.aff)
+                if prob < 0.9 then  -- Only consider if <90% stuck
+                    local score = (1 - prob) * data.weight
+                    table.insert(candidates, {
+                        venom = data.venom,
+                        aff = data.aff,
+                        prob = prob,
+                        score = score
+                    })
+                end
+            end
+        end
+        table.sort(candidates, function(a, b) return a.score > b.score end)
+        return candidates[1] and candidates[1].venom or nil
+    end
+
+    -- Select v1 from priority chain
+    local v1 = getBestFromChain(v1Chain, nil) or "xentio"
+
+    -- Select v2: curare if paralysis not stuck, otherwise use fallback chain
+    local v2 = getBestFromChain(v2Chain, v1) or "curare"
 
     return v1, v2
 end
