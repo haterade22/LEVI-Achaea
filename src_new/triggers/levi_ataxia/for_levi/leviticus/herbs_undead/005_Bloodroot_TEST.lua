@@ -42,7 +42,13 @@ tdeliverance = false
         anorexiaFailsafe = nil
         lastFocus = nil
     end
-    
+
+    -- V2 tracking support: bloodroot cures paralysis or slickness
+    if onTargetBloodrootV2 then onTargetBloodrootV2(matches[2]) end
+
+    -- V3 tracking support: bloodroot herb cure
+    if onHerbCureV3 then onHerbCureV3("bloodroot") end
+
     if tAffs.prone then
       tempTimer(0.3, [[
                 if not tAffs.prone then

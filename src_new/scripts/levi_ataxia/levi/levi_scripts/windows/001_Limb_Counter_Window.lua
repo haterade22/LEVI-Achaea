@@ -67,7 +67,7 @@ function tarc.write()
       local sorted = {}
       local ignoreAffs = {curseward = true, blindness = true, deafness = true}
       for aff, prob in pairs(allProbs) do
-        if prob >= 0.1 and not ignoreAffs[aff] then  -- Only show >10%
+        if prob >= 0.5 and not ignoreAffs[aff] then  -- Only show when likely present (50%+)
           table.insert(sorted, {aff = aff, prob = prob})
         end
       end
@@ -77,17 +77,11 @@ function tarc.write()
         local aff, prob = entry.aff, entry.prob
         local shortName = shortNames[aff] or string.sub(aff, 1, 3):upper()
 
-        -- Color based on probability
-        local color = "white"
+        -- Color based on probability (same for all afflictions including lock affs)
+        local color = "orange"
         if prob >= 0.9 then color = "green"       -- 90%+ = stuck
         elseif prob >= 0.6 then color = "yellow"  -- 60-89% = likely
-        elseif prob >= 0.3 then color = "orange"  -- 30-59% = possible
-        else color = "gray" end                   -- <30% = uncertain
-
-        -- Check if lock aff (override color to red)
-        for _, la in ipairs(lockAffs) do
-          if aff == la and prob >= 0.3 then color = "red" break end
-        end
+        end                                       -- 50-59% = orange (default)
 
         -- Format: "AST:67" or "AST" for 100%
         local display = shortName
