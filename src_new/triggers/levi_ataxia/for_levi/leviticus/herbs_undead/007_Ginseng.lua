@@ -45,6 +45,7 @@ tdeliverance = false
   if passiveFailsafe then restorePassiveCure() end
   
 	targetAteWrapper("ginseng")
+	if onHerbCureV3 then onHerbCureV3("ginseng") end
 
 	selectString(line, 1)
 	fg("NavajoWhite")

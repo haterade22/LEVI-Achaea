@@ -45,6 +45,7 @@ tdeliverance = false
         lastFocus = nil
     end
     targetAteWrapper("goldenseal")
+    if onHerbCureV3 then onHerbCureV3("goldenseal") end
 if passiveFailsafe then restorePassiveCure() end
     tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end

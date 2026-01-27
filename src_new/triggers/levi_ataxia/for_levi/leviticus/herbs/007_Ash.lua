@@ -48,6 +48,7 @@ if matches[2] == target then
       erAff("crescendo")
     end
     targetAteWrapper("ash")
+    if onHerbCureV3 then onHerbCureV3("ash") end
 if passiveFailsafe then restorePassiveCure() end
     tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end

@@ -44,6 +44,7 @@ tdeliverance = false
 	end
   if passiveFailsafe then restorePassiveCure() end
 	erAff("shadowmadness")
+	if onHerbCureV3 then onHerbCureV3("goldenseal") end
 
 	tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end

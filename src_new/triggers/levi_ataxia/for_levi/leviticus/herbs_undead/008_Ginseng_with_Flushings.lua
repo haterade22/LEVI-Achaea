@@ -48,6 +48,7 @@ tdeliverance = false
 		lastFocus = nil
 	end
   if passiveFailsafe then restorePassiveCure() end
+	if onHerbCureV3 then onHerbCureV3("ginseng") end
 	flushingsProc()
 
 	selectString(line, 1)

@@ -51,6 +51,7 @@ tdeliverance = false
 	end
   if passiveFailsafe then restorePassiveCure() end
 	targetAteWrapper("ginseng")
+	if onHerbCureV3 then onHerbCureV3("ginseng") end
 	flushingsProc()
 
 	selectString(line, 1)

@@ -42,6 +42,7 @@ if matches[2] == target then
         lastFocus = nil
     end
     targetAteWrapper("kelp")
+    if onHerbCureV3 then onHerbCureV3("kelp") end
 if passiveFailsafe then restorePassiveCure() end
     tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end

@@ -47,6 +47,7 @@ tdeliverance = false
   if passiveFailsafe then restorePassiveCure() end
 
 	targetAteWrapper("ginseng")
+	if onHerbCureV3 then onHerbCureV3("ginseng") end
 	-- Track for adaptive serpent offense
 	if serpent and serpent.trackCure then serpent.trackCure("ginseng") end
 

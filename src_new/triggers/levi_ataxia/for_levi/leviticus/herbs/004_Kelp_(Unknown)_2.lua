@@ -45,6 +45,7 @@ if matches[2] == target then
         lastFocus = nil
     end
     targetAteWrapper("kelp")
+    if onHerbCureV3 then onHerbCureV3("kelp") end
     -- Track for adaptive serpent offense
     if serpent and serpent.trackCure then serpent.trackCure("kelp") end
 

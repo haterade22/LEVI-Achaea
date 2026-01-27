@@ -57,6 +57,7 @@ if isTargeted(multimatches[1][2]) then
     erAff("whisperingmadness")
 	else
 		targetAteWrapper("lobelia")
+		if onHerbCureV3 then onHerbCureV3("lobelia") end
 	end
 	
 	tBals.plant = false

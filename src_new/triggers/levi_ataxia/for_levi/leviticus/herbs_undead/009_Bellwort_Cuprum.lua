@@ -56,6 +56,7 @@ tdeliverance = false
 			erAff("lovers")
 	else
 		targetAteWrapper("bellwort")
+		if onHerbCureV3 then onHerbCureV3("bellwort") end
 	end
 	tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
