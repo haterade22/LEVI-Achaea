@@ -43,8 +43,8 @@ tdeliverance = false
 	if onTargetSalveLimbsV2 then onTargetSalveLimbsV2(matches[2], matches[3]) end
 	erAff("slickness")
 
-	-- V3 integration: collapse branches (proves slickness absent)
-	if onTargetApplySalveV3 then onTargetApplySalveV3() end
+	-- V3 integration: limbs salve cure branching
+	if onSalveCureV3 then onSalveCureV3("limbs") end
 	target_appliedTo(matches[3])
 	targetIshere = true
 	erAff("bloodfire")

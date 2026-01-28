@@ -93,6 +93,17 @@ curingTableV3 = {
 -- Smoking cures one of these (in order if multiple present)
 smokeCureTableV3 = {"aeon", "deadening", "hellsight", "tension", "disloyalty", "manaleech", "slickness"}
 
+-- V3 salve cure tables (by body part)
+-- Applying salve always proves slickness absent, then cures one affliction from the list
+-- Slickness excluded since it's handled by collapse
+salveCureTableV3 = {
+    body = {"anorexia", "itching", "bloodfire", "selarnia", "frostbite"},
+    skin = {"frozen", "shivering", "nocaloric", "bloodfire", "selarnia", "frostbite"},
+    head = {"crushedthroat", "damagedhead", "mangledhead", "blindness", "scalded", "epidermal", "bloodfire"},
+    torso = {"hypothermia", "bloodfire", "selarnia", "frostbite"},
+    limbs = {"bloodfire"},
+}
+
 -- Helper to get curable afflictions for a herb
 local function getCurableAffs(herb)
     -- Check main curingTable first
@@ -324,6 +335,85 @@ function onSmokeCureV3()
         v3Echo("smoked - branched into " .. #afflictionStatesV3 .. " states")
     elseif #curedList > 0 then
         v3Echo("smoke cured: " .. table.concat(curedList, ", "))
+    end
+end
+
+-- Handle salve cure - proves slickness absent, then branches for salve-curable affs
+-- salveType: "body", "skin", "head", "torso", "limbs"
+function onSalveCureV3(salveType)
+    if not affConfigV3.enabled then return end
+
+    -- Applying salve proves slickness is absent
+    collapseAffAbsentV3("slickness")
+
+    -- Get the cure list for this salve type
+    local curableAffs = salveCureTableV3[salveType]
+    if not curableAffs then
+        v3Echo(salveType .. " salve applied - no cure table found")
+        return
+    end
+
+    local newStates = {}
+    local branchCount = 0
+    local curedAffs = {}
+
+    for _, state in ipairs(afflictionStatesV3) do
+        -- Find which salve-curable afflictions exist in this branch
+        local candidates = {}
+        for _, aff in ipairs(curableAffs) do
+            if state.affs[aff] then
+                table.insert(candidates, aff)
+            elseif simpleAffsV3[aff] then
+                table.insert(candidates, aff)
+            end
+        end
+
+        if #candidates == 0 then
+            -- No curable affs in this branch - state unchanged
+            table.insert(newStates, state)
+        elseif #candidates == 1 then
+            -- Only one candidate - definitely cured
+            if simpleTrackLookup[candidates[1]] then
+                simpleAffsV3[candidates[1]] = nil
+            else
+                state.affs[candidates[1]] = nil
+            end
+            table.insert(newStates, state)
+            curedAffs[candidates[1]] = true
+        else
+            -- Multiple candidates - BRANCH into N possibilities
+            local probEach = state.prob / #candidates
+            for _, aff in ipairs(candidates) do
+                local branch = {affs = copyAffs(state.affs), prob = probEach}
+                if simpleTrackLookup[aff] then
+                    -- Simple-tracked affs handled outside branching
+                    -- For now, just remove from this branch possibility
+                else
+                    branch.affs[aff] = nil
+                end
+                table.insert(newStates, branch)
+            end
+            branchCount = branchCount + #candidates - 1
+        end
+    end
+
+    afflictionStatesV3 = newStates
+    deduplicateStatesV3()
+    pruneStatesV3()
+    rebuildCacheV3()
+    syncToOldSystemV3()
+    updateAffDisplayV3()
+
+    -- Print consolidated summary
+    local curedList = {}
+    for aff, _ in pairs(curedAffs) do
+        table.insert(curedList, aff)
+    end
+
+    if branchCount > 0 then
+        v3Echo(salveType .. " salve - branched into " .. #afflictionStatesV3 .. " states")
+    elseif #curedList > 0 then
+        v3Echo(salveType .. " salve cured: " .. table.concat(curedList, ", "))
     end
 end
 

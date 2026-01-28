@@ -41,6 +41,8 @@ patterns:
 if isTargeted(matches[2]) then
 tdeliverance = false
   if passiveFailsafe then restorePassiveCure() end
+  -- V3 integration: torso salve cure branching
+  if onSalveCureV3 then onSalveCureV3("torso") end
   erAff("slickness")
 	erAff("bloodfire")
   erAff("selarnia")

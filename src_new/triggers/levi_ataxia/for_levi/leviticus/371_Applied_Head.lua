@@ -41,6 +41,8 @@ tdeliverance = false
   if passiveFailsafe then restorePassiveCure() end
 	-- V2 tracking support: head salve cures slickness and other affs
 	if onTargetSalveHeadV2 then onTargetSalveHeadV2(matches[2]) end
+	-- V3 integration: head salve cure branching
+	if onSalveCureV3 then onSalveCureV3("head") end
 	erAff("slickness")
 	if haveAff("crushedthroat") then
 		erAff("crushedthroat")

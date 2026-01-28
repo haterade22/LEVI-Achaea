@@ -45,6 +45,8 @@ tdeliverance = false
 	else
 		if onTargetSalveSkinV2 then onTargetSalveSkinV2(matches[2]) end
 	end
+	-- V3 integration: salve cure branching (body or skin)
+	if onSalveCureV3 then onSalveCureV3(matches[3]) end
 	erAff("slickness")
 	erAff("bloodfire")
   erAff("selarnia")
