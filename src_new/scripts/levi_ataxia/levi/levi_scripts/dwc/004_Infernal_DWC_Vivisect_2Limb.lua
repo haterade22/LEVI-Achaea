@@ -215,6 +215,8 @@ infernalDWC2L.state = {
     focusLeg = "left",          -- Which leg to prep/break (default: left)
     lastPhase = nil,            -- Track phase changes for debugging
     riftlockMode = false,       -- True when target uses RESTORE (heals all limbs)
+    parriedLimb = nil,          -- Which limb target is parrying (set on parry detection)
+    lastTargetedLimb = nil,     -- Last limb we targeted (for parry detection)
 }
 
 -- Configuration
@@ -751,12 +753,12 @@ function infernalDWC2L.selectLimbTarget()
     local phase = infernalDWC2L.getPhase()
 
     if phase == "PREP" then
-        -- Check if nausea is stuck - if so, actively prep limbs for vivisect
-        if infernalDWC2L.hasAff("nausea") then
-            -- Nausea stuck = parry bypass active, prep limbs aggressively
-            -- 2-LIMB: Only prep right arm + focus leg
-            local focusLeg = infernalDWC2L.state.focusLeg
+        local focusLeg = infernalDWC2L.state.focusLeg
 
+        if infernalDWC2L.hasAff("nausea") then
+            -- Nausea stuck = parry bypass active, clear parry tracking
+            infernalDWC2L.state.parriedLimb = nil
+            -- 2-LIMB: Only prep right arm + focus leg
             -- Prep right arm first (the arm we will DSL with epteth/epseth)
             if not infernalDWC2L.isArmPrepped("right") then
                 return "right arm"
@@ -767,8 +769,28 @@ function infernalDWC2L.selectLimbTarget()
                 -- Both prepped, maintain pressure on right arm
                 return "right arm"
             end
+        elseif infernalDWC2L.state.parriedLimb then
+            -- No nausea but we know what they're parrying - hit the OTHER prep limb
+            -- They can only parry one limb at a time
+            local parried = infernalDWC2L.state.parriedLimb
+            if parried == "right arm" then
+                -- Parrying right arm -> hit focus leg instead
+                return focusLeg .. " leg"
+            elseif parried == focusLeg .. " leg" then
+                -- Parrying focus leg -> hit right arm instead
+                return "right arm"
+            else
+                -- Parrying something we don't prep - safe to hit our targets
+                if not infernalDWC2L.isArmPrepped("right") then
+                    return "right arm"
+                elseif not infernalDWC2L.isLegPrepped(focusLeg) then
+                    return focusLeg .. " leg"
+                else
+                    return "right arm"
+                end
+            end
         else
-            -- No nausea yet - don't target limbs, focus purely on afflictions
+            -- No nausea, no parry info - don't target limbs, focus on afflictions
             return nil
         end
 
@@ -879,6 +901,37 @@ function infernalDWC2L.exitRiftlock()
 end
 
 -------------------------------------------------------------------------------
+-- PARRY HANDLING
+-------------------------------------------------------------------------------
+
+--[[
+    When our attack gets parried, it means nausea is NOT active on the target
+    (nausea bypasses parry). We track which limb they parried and switch to
+    the other prep target until nausea sticks again.
+
+    Call infernalDWC2L.onParry() from the parry trigger:
+        Pattern: ^(\w+) parries the attack with a deft manoeuvre\.$
+        Code: if infernalDWC2L then infernalDWC2L.onParry() end
+]]--
+
+-- Called when our attack is parried. Uses lastTargetedLimb to know which limb.
+-- Can also accept a limb parameter directly (e.g. from ataxiaTemp.parriedLimb).
+function infernalDWC2L.onParry(limb)
+    limb = limb or infernalDWC2L.state.lastTargetedLimb
+    if limb then
+        infernalDWC2L.state.parriedLimb = limb
+        -- Parry means nausea is NOT active (nausea bypasses parry)
+        if erAff then erAff("nausea") end
+        cecho("\n<yellow>[INF DWC 2L]<reset> PARRY on <red>" .. limb .. "<reset>! Switching limb target.")
+    end
+end
+
+-- Clear parry tracking (called when nausea is confirmed)
+function infernalDWC2L.clearParry()
+    infernalDWC2L.state.parriedLimb = nil
+end
+
+-------------------------------------------------------------------------------
 -- MAIN DISPATCH FUNCTION
 -------------------------------------------------------------------------------
 
@@ -985,6 +1038,9 @@ function infernalDWC2LVivisect()
     -- Get venoms and limb target
     local v1, v2 = infernalDWC2L.selectVenoms()
     local limb = infernalDWC2L.selectLimbTarget()
+
+    -- Track last targeted limb for parry detection
+    infernalDWC2L.state.lastTargetedLimb = limb
 
     -- Populate envenomList for trigger tracking (critical for affliction detection)
     -- The DWC triggers use these global lists to know what afflictions to track
@@ -1249,6 +1305,8 @@ function infernalDWC2LReset()
     infernalDWC2L.state.focusLeg = "left"
     infernalDWC2L.state.lastPhase = nil
     infernalDWC2L.state.riftlockMode = false
+    infernalDWC2L.state.parriedLimb = nil
+    infernalDWC2L.state.lastTargetedLimb = nil
     cecho("\n<cyan>[INF DWC 2L]<reset> State reset!")
 end
 
