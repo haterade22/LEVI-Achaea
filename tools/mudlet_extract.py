@@ -6,8 +6,8 @@ Extracts all package types (triggers, timers, aliases, scripts, keys) from
 a Mudlet XML package into editable Lua files with YAML metadata headers.
 
 Usage:
-    python mudlet_extract.py input.xml --output-dir ./src
-    python mudlet_extract.py input.xml --type triggers --output-dir ./src/triggers
+    python mudlet_extract.py input.xml --output-dir ./src_new
+    python mudlet_extract.py input.xml --type triggers --output-dir ./src_new/triggers
     python mudlet_extract.py input.xml --verbose
 """
 
@@ -214,7 +214,7 @@ class MudletExtractor:
         }
 
     def extract_triggers(self):
-        """Extract all triggers to src/triggers/"""
+        """Extract all triggers to src_new/triggers/"""
         print("Extracting triggers...")
         base_dir = self.output_dir / "triggers"
 
@@ -251,7 +251,7 @@ class MudletExtractor:
         print(f"  Extracted {self.file_counts['triggers']} trigger files")
 
     def extract_timers(self):
-        """Extract all timers to src/timers/"""
+        """Extract all timers to src_new/timers/"""
         print("Extracting timers...")
         base_dir = self.output_dir / "timers"
 
@@ -279,7 +279,7 @@ class MudletExtractor:
         print(f"  Extracted {self.file_counts['timers']} timer files")
 
     def extract_aliases(self):
-        """Extract all aliases to src/aliases/"""
+        """Extract all aliases to src_new/aliases/"""
         print("Extracting aliases...")
         base_dir = self.output_dir / "aliases"
 
@@ -307,7 +307,7 @@ class MudletExtractor:
         print(f"  Extracted {self.file_counts['aliases']} alias files")
 
     def extract_scripts(self):
-        """Extract all scripts to src/scripts/"""
+        """Extract all scripts to src_new/scripts/"""
         print("Extracting scripts...")
         base_dir = self.output_dir / "scripts"
 
@@ -335,7 +335,7 @@ class MudletExtractor:
         print(f"  Extracted {self.file_counts['scripts']} script files")
 
     def extract_keys(self):
-        """Extract all keys to src/keys/"""
+        """Extract all keys to src_new/keys/"""
         print("Extracting keys...")
         base_dir = self.output_dir / "keys"
 
@@ -414,8 +414,8 @@ def main():
     )
     parser.add_argument(
         "--output-dir", "-o",
-        default="./src",
-        help="Output directory (default: ./src)"
+        default="./src_new",
+        help="Output directory (default: ./src_new)"
     )
     parser.add_argument(
         "--type", "-t",

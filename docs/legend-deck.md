@@ -14,7 +14,7 @@ The deck of legends is a set of playing cards with unique powers obtained via gi
 
 ### Emergency Defenses (PVE)
 
-Located in `src/ataxiaBasher/005_Bashing_Functions.lua`:
+Located in `src_new/scripts/levi_ataxia/levi/ataxia/basher/001_Bashing_Functions.lua`:
 
 The basher has layered emergency defenses that trigger automatically:
 
@@ -34,7 +34,7 @@ ataxia.maranThreshold = 25  -- HP% to trigger (default 25%)
 
 ### Card Tracking
 
-Located in `src/ataxia/100_Legend_Deck_Table.lua`:
+Located in `src_new/scripts/levi_ataxia/levi/ataxia/legend_deck/001_Legend_Deck_Table.lua`:
 
 ```lua
 ataxiaTables.ldeckcardscount.Maran  -- Check remaining charges

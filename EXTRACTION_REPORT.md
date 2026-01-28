@@ -1,5 +1,7 @@
 # Mudlet XML to Lua Extraction Report
 
+> **NOTE:** This report documents the initial extraction to `src/`. The project has since migrated to `src_new/` using `tools/mudlet_extract.py` with a new type-based organization (aliases, keys, scripts, timers, triggers). The `src/` directory no longer exists.
+
 ## Overview
 Successfully extracted and organized all Lua code from the Mudlet XML package into a modular directory structure.
 
@@ -304,12 +306,10 @@ c:\Users\mikew\source\repos\Achaea\LEVI-Achaea\
 
 ## Extraction Tool
 
-The Python extraction script is preserved at:
-`c:\Users\mikew\source\repos\Achaea\LEVI-Achaea\extract_mudlet_xml.py`
+The original extraction script (`extract_mudlet_xml.py`) has been removed. Use the current extraction tool instead:
 
-It can be re-run at any time if the source XML is updated:
 ```bash
-python extract_mudlet_xml.py
+python tools/mudlet_extract.py input.xml --output-dir ./src_new
 ```
 
 ---

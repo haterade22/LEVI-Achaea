@@ -5,9 +5,9 @@ Mudlet XML Package Builder
 Builds a Mudlet XML package from extracted Lua files with YAML metadata headers.
 
 Usage:
-    python mudlet_build.py --src ./src --output packages/Levi_Ataxia.xml
-    python mudlet_build.py --src ./src --validate
-    python mudlet_build.py --src ./src --output packages/Levi_Ataxia.xml --verbose
+    python mudlet_build.py --src ./src_new --output packages/Levi_Ataxia.xml
+    python mudlet_build.py --src ./src_new --validate
+    python mudlet_build.py --src ./src_new --output packages/Levi_Ataxia.xml --verbose
 """
 
 import argparse
@@ -557,8 +557,8 @@ def main():
     )
     parser.add_argument(
         "--src", "-s",
-        default="./src",
-        help="Source directory with extracted files (default: ./src)"
+        default="./src_new",
+        help="Source directory with extracted files (default: ./src_new)"
     )
     parser.add_argument(
         "--output", "-o",

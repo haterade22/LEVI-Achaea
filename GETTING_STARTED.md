@@ -2,15 +2,15 @@
 
 ## Quick Start
 
-### 1. Load the Scripts in Mudlet
+### 1. Install the Package in Mudlet
 
-Open Mudlet and run:
+Install the compiled XML package from `packages/` via Mudlet's Package Manager, or build it from source:
 
-```lua
-dofile(getMudletHomeDir() .. "/LEVI-Achaea/src/loader.lua")
+```bash
+python tools/mudlet_build.py --src ./src_new --output packages/Levi_Ataxia.xml
 ```
 
-This will load all systems in the correct order:
+The package includes all systems:
 - MMP (Mudlet Mapper)
 - Ataxia (Combat System)
 - Ataxia GUI
@@ -40,7 +40,7 @@ ataxiagui_Create()
 ## System Overview
 
 ### MMP (Mudlet Mapper)
-**Location**: `src/mmp/` (134 files)
+**Location**: `src_new/scripts/` and `src_new/triggers/` (mapper components)
 
 **What it does**:
 - Navigation and pathfinding
@@ -58,7 +58,7 @@ mconfig
 ```
 
 ### Ataxia Combat System
-**Location**: `src/ataxia/` (301 files)
+**Location**: `src_new/scripts/levi_ataxia/levi/ataxia/`
 
 **What it does**:
 - Tracks afflictions automatically
@@ -83,7 +83,7 @@ display(ataxia.defences)
 ```
 
 ### Ataxia GUI
-**Location**: `src/ataxiagui/` (5 files)
+**Location**: `src_new/scripts/` (GUI components)
 
 **What it does**:
 - Health/mana/willpower/endurance bars
@@ -97,7 +97,7 @@ ataxiagui_Create()
 ```
 
 ### Ataxia NDB (Name Database)
-**Location**: `src/ataxiaNDB/` (7 files)
+**Location**: `src_new/scripts/` (NDB components)
 
 **What it does**:
 - Tracks player information (city, house, rank)
@@ -117,7 +117,7 @@ ataxiaNDB_getColour("PlayerName")
 ```
 
 ### Ataxia Basher
-**Location**: `src/ataxiaBasher/` (12 files)
+**Location**: `src_new/scripts/levi_ataxia/levi/ataxia/basher/` and `src_new/scripts/levi_ataxia/levi/ataxia/genrunning/`
 
 **What it does**:
 - Automated hunting/bashing
@@ -151,45 +151,40 @@ Each file has a header comment showing where it came from:
 ### Finding Specific Code
 
 **Want to find navigation code?**
-→ Look in `src/mmp/`
+→ Search `src_new/scripts/` and `src_new/triggers/` for mapper-related files
 
 **Want to find affliction tracking?**
-→ Look in `src/ataxia/023_Aff_gains_losses.lua` or `src/ataxia/061_Affliction_Management.lua`
+→ Look in `src_new/scripts/levi_ataxia/levi/ataxia/` for affliction management files
 
 **Want to modify the GUI?**
-→ Look in `src/ataxiagui/001_Creation_Layout.lua`
+→ Search `src_new/scripts/` for GUI creation/layout files
 
 **Want to modify bashing?**
-→ Look in `src/ataxiaBasher/005_Bashing_Functions.lua` or `006_Class_Bashing.lua`
+→ Look in `src_new/scripts/levi_ataxia/levi/ataxia/basher/`
 
 ## Common Tasks
 
-### Reload Scripts After Editing
+### Rebuild Package After Editing
 
-```lua
--- Reload everything
-dofile(getMudletHomeDir() .. "/LEVI-Achaea/src/loader.lua")
+After editing files in `src_new/`, rebuild the XML package:
 
--- Or reload just one file
-dofile(getMudletHomeDir() .. "/LEVI-Achaea/src/ataxia/023_Aff_gains_losses.lua")
+```bash
+python tools/mudlet_build.py --src ./src_new --output packages/Levi_Ataxia.xml
 ```
+
+Then reinstall the package in Mudlet.
 
 ### Modify Curing Priorities
 
-Edit: `src/ataxia/026_Prio_Management.lua`
-
-### Change GUI Colors/Layout
-
-Edit: `src/ataxiagui/001_Creation_Layout.lua`
+Search `src_new/scripts/` for prio management files.
 
 ### Add New Bashing Target
 
-Edit: `src/ataxiaBasher/005_Bashing_Functions.lua`
+Edit files in `src_new/scripts/levi_ataxia/levi/ataxia/basher/`.
 
 ### Configure Mapper
 
 Use in-game command: `mconfig`
-Or edit config files in `src/mmp/`
 
 ## Troubleshooting
 
@@ -209,7 +204,7 @@ Or edit config files in `src/mmp/`
 
 Use grep to search:
 ```bash
-cd c:\Users\mikew\source\repos\Achaea\LEVI-Achaea\src
+cd c:\Users\mikew\source\repos\Achaea\LEVI-Achaea\src_new
 grep -r "function_name" .
 ```
 
@@ -268,9 +263,8 @@ end
 
 ## Documentation
 
-- **README.md** in `src/` - Full system documentation
-- **QUICK_REFERENCE.md** in `src/` - Quick function reference
-- **EXTRACTION_REPORT.md** - Technical extraction details
+- **CLAUDE.md** - Full system documentation
+- **EXTRACTION_REPORT.md** - Historical extraction details
 - This file - Getting started guide
 
 ## Next Steps

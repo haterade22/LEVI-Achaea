@@ -61,13 +61,16 @@ LEVI-Achaea/
 │   ├── plans/              # Project plans and reviews
 │   ├── legend-deck.md      # Legend Deck card reference
 │   └── artefacts-reference.md
-├── src/
-│   ├── loader.lua          # Auto-loads all systems in order
-│   ├── mmp/                # 134 files - Mudlet Mapper navigation
-│   ├── ataxia/             # 304 files - Combat system
-│   ├── ataxiaBasher/       # 13 files - Automated hunting
-│   ├── ataxiagui/          # 5 files - GUI with Geyser
-│   └── ataxiaNDB/          # 7 files - Player database
+├── src_new/
+│   ├── aliases/            # Alias definitions
+│   ├── keys/               # Key bindings
+│   ├── scripts/            # Lua script modules (combat, basher, GUI, NDB, etc.)
+│   ├── timers/             # Timer definitions
+│   └── triggers/           # Trigger definitions
+├── tools/
+│   ├── mudlet_build.py     # Build XML package from src_new
+│   └── mudlet_extract.py   # Extract XML package to src_new
+├── packages/               # Compiled Mudlet XML packages
 ├── CLAUDE.md               # This file
 ├── GETTING_STARTED.md      # Setup and usage guide
 └── README.md               # Project overview
@@ -75,12 +78,13 @@ LEVI-Achaea/
 
 ### Source Code Organization
 
-Each subsystem uses numbered files (001_, 002_, etc.) to enforce load order:
-- **mmp/** - Pathfinding, speedwalking, fast travel, multi-game support
-- **ataxia/** - Affliction tracking, defense management, class offenses
-- **ataxiaBasher/** - Experience tracking, class-specific bashing, emergency defenses
-- **ataxiagui/** - Vitals bars, map window, chat tabs
-- **ataxiaNDB/** - API integration, city tracking, name highlighting
+Files are organized in `src_new/` by Mudlet item type (aliases, keys, scripts, timers, triggers). Each `.lua` file has a YAML metadata header and uses numbered prefixes (001_, 002_, etc.) for ordering:
+- **scripts/levi_ataxia/levi/ataxia/** - Combat system (afflictions, defense, basher, curing)
+- **scripts/levi_ataxia/levi/levi_scripts/** - Class-specific offenses (shikudo, dwc, blademaster, etc.)
+- **triggers/levi_ataxia/** - Game text pattern matching
+- **aliases/levi_ataxia/** - User command shortcuts
+- **timers/levi_ataxia/** - Delayed action definitions
+- **keys/levi_ataxia/** - Key bindings
 
 ### Combat Systems Index
 
@@ -290,10 +294,10 @@ When coding offense systems, check `ataxia.settings.useAffTrackingV2`:
 The basher provides automated target selection and attack execution for PvE hunting.
 
 **Core Files:**
-- `src/ataxiaBasher/008_search_targets.lua` - Target selection and room scanning
-- `src/ataxiaBasher/005_Bashing_Functions.lua` - Attack assembly and execution
-- `src/ataxiaBasher/006_Class_Bashing.lua` - Class-specific bashing attacks
-- `src/ataxiaBasher/010_Autobashing_Functions.lua` - Main patterns loop
+- `src_new/scripts/levi_ataxia/levi/ataxia/genrunning/002_search_targets.lua` - Target selection and room scanning
+- `src_new/scripts/levi_ataxia/levi/ataxia/basher/001_Bashing_Functions.lua` - Attack assembly and execution
+- `src_new/scripts/levi_ataxia/levi/ataxia/basher/002_Class_Bashing.lua` - Class-specific bashing attacks
+- `src_new/scripts/levi_ataxia/levi/ataxia/genrunning/004_Autobashing_Functions.lua` - Main patterns loop
 
 **Key Functions:**
 | Function | Purpose |
@@ -1024,9 +1028,9 @@ gmcp.Room.Info = {
 
 ### Core Defense Files
 ```
-src/ataxia/018_Defence_API.lua        # Main defense tracking API
-src/ataxia/020_Defence_Reporting.lua  # Defense status display
-src/ataxia/021_Defence_Sorting_-_Cleaner.lua  # Defense priority management
+src_new/scripts/levi_ataxia/levi/ataxia/deffing/001_Defence_API.lua        # Main defense tracking API
+src_new/scripts/levi_ataxia/levi/ataxia/deffing/003_Defence_Reporting.lua  # Defense status display
+src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cleaner.lua  # Defense priority management
 ```
 
 ### Defence API (`ataxia.defense`)

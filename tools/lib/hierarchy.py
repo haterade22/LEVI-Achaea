@@ -85,7 +85,7 @@ class HierarchyManager:
         Initialize hierarchy manager.
 
         Args:
-            base_dir: Base directory for the package type (e.g., src/triggers/)
+            base_dir: Base directory for the package type (e.g., src_new/triggers/)
             package_type: One of 'triggers', 'timers', 'aliases', 'scripts', 'keys'
         """
         self.base_dir = Path(base_dir)

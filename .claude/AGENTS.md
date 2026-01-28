@@ -260,9 +260,9 @@ The system uses a **dual-layer approach** for tracking enemy afflictions:
 | `.claude/classes/<class>.md` | Per-class kill routes and mechanics |
 | `.claude/classes/monk.md` | Monk/Shikudo kill routes and mechanics |
 | `CLAUDE.md` | Main project documentation |
-| `src/ataxia/200_Shikudo.lua` | Shikudo V1 dispatch system |
-| `src/ataxia/201_Shikudo_V2.lua` | Shikudo V2 dispatch system |
-| `src/ataxia/203_Shikudo_Lock.lua` | Shikudo Lock affliction system |
+| `src_new/scripts/levi_ataxia/levi/levi_scripts/shikudo/001_Shikudo.lua` | Shikudo V1 dispatch system |
+| `src_new/scripts/levi_ataxia/levi/levi_scripts/shikudo/002_Shikudo_R2.lua` | Shikudo V2 dispatch system |
+| `src_new/scripts/levi_ataxia/levi/levi_scripts/shikudo/007_CC_Shikudo_Lock.lua` | Shikudo Lock affliction system |
 | `src_new/scripts/.../017_Affliction_Management.lua` | Target affliction tracking |
 
 ---
@@ -273,9 +273,9 @@ The system uses a **dual-layer approach** for tracking enemy afflictions:
 
 | File | Purpose |
 |------|---------|
-| `src/ataxiaBasher/005_Bashing_Functions.lua` | Main attack dispatch |
-| `src/ataxiaBasher/006_Class_Bashing.lua` | Class-specific patterns |
-| `src/ataxiaBasher/008_search_targets.lua` | Target acquisition, Stormhammer |
+| `src_new/scripts/levi_ataxia/levi/ataxia/basher/001_Bashing_Functions.lua` | Main attack dispatch |
+| `src_new/scripts/levi_ataxia/levi/ataxia/basher/002_Class_Bashing.lua` | Class-specific patterns |
+| `src_new/scripts/levi_ataxia/levi/ataxia/genrunning/002_search_targets.lua` | Target acquisition, Stormhammer |
 
 ### Configuration Options
 

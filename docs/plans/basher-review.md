@@ -1,7 +1,7 @@
 # Basher System Review & Improvement Plan
 
 **Date:** 2024-12-18
-**Files:** 12 core files in `src/ataxiaBasher/` (~2,500 lines)
+**Files:** 12 core files in `src_new/scripts/levi_ataxia/levi/ataxia/basher/` and `src_new/scripts/levi_ataxia/levi/ataxia/genrunning/` (~2,500 lines)
 **Supported Classes:** 20+ including Dragons, Elementals, and standard classes
 
 ---
