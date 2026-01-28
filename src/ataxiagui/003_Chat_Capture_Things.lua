@@ -1,2 +1,0 @@
--- Chat capture functionality removed - using zgui.chat instead
--- See src/ataxia/272_buildChat.lua and src/ataxia/279_showChat.lua
