@@ -87,6 +87,52 @@ blademaster.config = {
 }
 
 --------------------------------------------------------------------------------
+-- AFFLICTION TRACKING HELPERS (V3 compatible)
+--------------------------------------------------------------------------------
+
+-- Helper to check if target has an affliction (V3/V2/V1 routing)
+function blademaster.hasAff(aff)
+  -- V3 system (highest priority - probability-based)
+  if affConfigV3 and affConfigV3.enabled then
+    if haveAffV3 then
+      return haveAffV3(aff)  -- Uses 30% threshold by default
+    end
+    -- V3 enabled but not loaded - fall through to V2/V1
+  end
+  -- V2 system (when enabled, use ONLY V2 - no fallback)
+  if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
+    if haveAffV2 then
+      return haveAffV2(aff)
+    elseif tAffsV2 and tAffsV2[aff] then
+      return true
+    end
+    return false
+  end
+  -- V1 system (only when V2 is disabled)
+  if tAffs and tAffs[aff] then
+    return true
+  end
+  return false
+end
+
+-- Get affliction probability (V3 only, returns 0-1)
+-- Falls back to binary (1.0 if has, 0 if not) for V2/V1
+function blademaster.getAffProb(aff)
+  if affConfigV3 and affConfigV3.enabled and getAffProbabilityV3 then
+    return getAffProbabilityV3(aff)
+  end
+  return blademaster.hasAff(aff) and 1.0 or 0
+end
+
+-- Check which tracking system is active
+function blademaster.getTrackingSystem()
+  if affConfigV3 and affConfigV3.enabled then return "V3"
+  elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then return "V2"
+  end
+  return "V1"
+end
+
+--------------------------------------------------------------------------------
 -- LB LIMB TRACKING HELPERS
 --------------------------------------------------------------------------------
 
@@ -450,7 +496,7 @@ function blademaster.needsAirfist(targetLimbType)
     return false, "not enough shin (" .. shin .. "/25)"
   end
 
-  if tAffs.airfisted then
+  if blademaster.hasAff("airfisted") then
     return false, "already airfisted"
   end
 
@@ -475,21 +521,21 @@ function blademaster.selectPrepStrike()
   -- Prep phase strikes: Hamstring first, then afflictions
   local now = os.time()
   local hamstringExpired = (now - (blademaster.state.lastHamstringTime or 0)) >= blademaster.config.hamstringDuration
-  if not tAffs.hamstring or hamstringExpired then
+  if not blademaster.hasAff("hamstring") or hamstringExpired then
     return "hamstring"
   end
 
   -- Lightning prep: paralysis > hypochondria > weariness > clumsiness
-  if not tAffs.paralysis then
+  if not blademaster.hasAff("paralysis") then
     return "neck"
   end
-  if not tAffs.hypochondria then
+  if not blademaster.hasAff("hypochondria") then
     return "chest"
   end
-  if not tAffs.weariness then
+  if not blademaster.hasAff("weariness") then
     return "shoulder"
   end
-  if not tAffs.clumsiness then
+  if not blademaster.hasAff("clumsiness") then
     return "ears"
   end
 
@@ -498,10 +544,10 @@ end
 
 function blademaster.selectIceStrike()
   -- Ice phase: clumsiness first (ice doesn't give it), then others
-  if not tAffs.clumsiness then
+  if not blademaster.hasAff("clumsiness") then
     return "ears"
   end
-  if not tAffs.paralysis then
+  if not blademaster.hasAff("paralysis") then
     return "neck"
   end
   return "neck"
@@ -524,7 +570,7 @@ function blademaster.getPhaseDoublePrep()
   local legsPrepped = blademaster.checkBothLegsPrepped()
 
   -- MANGLE: If prone, stay in mangle for max damage
-  if tAffs.prone then
+  if blademaster.hasAff("prone") then
     return "mangle"
   end
 
@@ -562,7 +608,7 @@ function blademaster.selectStrikeDoublePrep()
   if phase == "leg_prep" then
     -- Dismount during final prep hit if mounted + hamstrung
     -- This ensures KNEES on double-break will prone (not just dismount)
-    if tmounted and tAffs.hamstring and blademaster.checkWillPrepBothLegs() then
+    if tmounted and blademaster.hasAff("hamstring") and blademaster.checkWillPrepBothLegs() then
       return "knees"  -- Dismount now, so KNEES on double-break will prone
     end
     return blademaster.selectPrepStrike()
@@ -574,7 +620,8 @@ end
 function blademaster.selectAttackDoublePrep()
   local phase = blademaster.getPhaseDoublePrep()
 
-  if tAffs.shield or tAffs.rebounding then
+  -- Dual-check: belt-and-suspenders for critical defenses (matches DWC reference)
+  if blademaster.hasAff("shield") or blademaster.hasAff("rebounding") or (tAffs and (tAffs.shield or tAffs.rebounding)) then
     return "raze", nil
   end
 
@@ -677,12 +724,12 @@ function blademaster.dispatch.runDoublePrep()
   local targetHP = tonumber(ataxiaTemp.targetHP) or 100
 
   -- Reset prone timer if not in mangle phase or target not prone
-  if phase ~= "mangle" or not tAffs.prone then
+  if phase ~= "mangle" or not blademaster.hasAff("prone") then
     blademaster.resetProneTimer()
   end
 
   -- Status output
-  cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Target: " .. tostring(target) .. " | HP: " .. targetHP .. "%")
+  cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Target: " .. tostring(target) .. " | HP: " .. targetHP .. "% | Track: " .. blademaster.getTrackingSystem())
   cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Legs: LL=" .. string.format("%.1f", blademaster.getLL()) .. "% RL=" .. string.format("%.1f", blademaster.getRL()) .. "%")
   cecho("\n<cyan>[BM " .. phaseLabel .. "<cyan>] Dmg: P=" .. string.format("%.1f", blademaster.state.legPrimaryDamage) .. "% S=" .. string.format("%.1f", blademaster.state.legSecondaryDamage) .. "%")
 
@@ -691,7 +738,7 @@ function blademaster.dispatch.runDoublePrep()
     local legPath = blademaster.calculateLegPath()
     if blademaster.checkWillPrepBothLegs() then
       -- Check if dismounting mounted target
-      if tmounted and tAffs.hamstring then
+      if tmounted and blademaster.hasAff("hamstring") then
         cecho("\n<magenta>*** DISMOUNT - KNEES to dismount before double-break! ***")
       else
         cecho("\n<blue>*** FINAL PREP - ICE infuse to strip caloric! ***")
@@ -773,7 +820,7 @@ function blademaster.getPhaseQuadPrep()
   local legsBroken = blademaster.checkBothLegsBroken()
 
   -- Phase 5: MANGLE - If prone, stay in mangle for max damage
-  if tAffs.prone then
+  if blademaster.hasAff("prone") then
     return "mangle"
   end
 
@@ -833,7 +880,8 @@ end
 function blademaster.selectAttackQuadPrep()
   local phase = blademaster.getPhaseQuadPrep()
 
-  if tAffs.shield or tAffs.rebounding then
+  -- Dual-check: belt-and-suspenders for critical defenses (matches DWC reference)
+  if blademaster.hasAff("shield") or blademaster.hasAff("rebounding") or (tAffs and (tAffs.shield or tAffs.rebounding)) then
     return "raze", nil
   end
 
@@ -960,12 +1008,12 @@ function blademaster.dispatch.runQuadPrep()
   local targetHP = tonumber(ataxiaTemp.targetHP) or 100
 
   -- Reset prone timer if not in mangle phase or target not prone
-  if phase ~= "mangle" or not tAffs.prone then
+  if phase ~= "mangle" or not blademaster.hasAff("prone") then
     blademaster.resetProneTimer()
   end
 
   -- Status output
-  cecho("\n<cyan>[BMQ " .. phaseLabel .. "<cyan>] Target: " .. tostring(target) .. " | HP: " .. targetHP .. "%")
+  cecho("\n<cyan>[BMQ " .. phaseLabel .. "<cyan>] Target: " .. tostring(target) .. " | HP: " .. targetHP .. "% | Track: " .. blademaster.getTrackingSystem())
   cecho("\n<cyan>[BMQ " .. phaseLabel .. "<cyan>] Arms: LA=" .. string.format("%.1f", blademaster.getLA()) .. "% RA=" .. string.format("%.1f", blademaster.getRA()) .. "%")
   cecho("\n<cyan>[BMQ " .. phaseLabel .. "<cyan>] Legs: LL=" .. string.format("%.1f", blademaster.getLL()) .. "% RL=" .. string.format("%.1f", blademaster.getRL()) .. "%")
 
@@ -1100,7 +1148,7 @@ function blademaster.getPhaseBrokenstar()
 
   -- Phase 5: IMPALE (first impale or re-impale after writhe)
   -- Can impale if: both legs broken OR target is prone (from writhe while prone)
-  local targetProne = tAffs and tAffs.prone
+  local targetProne = blademaster.hasAff("prone")
   local canImpale = legsBroken or targetProne
   if canImpale and not blademaster.state.isImpaled then
     return "impale"
@@ -1162,7 +1210,7 @@ function blademaster.selectStrikeBrokenstar()
   -- LEG PREP: Check if we need to dismount before double-break
   if phase == "leg_prep" then
     -- Dismount during final prep hit if mounted + hamstrung
-    if tmounted and tAffs.hamstring and blademaster.checkWillPrepBothLegs() then
+    if tmounted and blademaster.hasAff("hamstring") and blademaster.checkWillPrepBothLegs() then
       return "knees"  -- Dismount now, so KNEES on double-break will prone
     end
     return blademaster.selectPrepStrike()
@@ -1175,7 +1223,8 @@ end
 function blademaster.selectAttackBrokenstar()
   local phase = blademaster.getPhaseBrokenstar()
 
-  if tAffs.shield or tAffs.rebounding then
+  -- Dual-check: belt-and-suspenders for critical defenses (matches DWC reference)
+  if blademaster.hasAff("shield") or blademaster.hasAff("rebounding") or (tAffs and (tAffs.shield or tAffs.rebounding)) then
     return "raze"
   end
 
@@ -1308,7 +1357,7 @@ function blademaster.dispatch.runBrokenstar()
   local targetHP = tonumber(ataxiaTemp.targetHP) or 100
 
   -- Status output
-  cecho("\n<cyan>[BMBS " .. phaseLabel .. "<cyan>] Target: " .. tostring(target) .. " | HP: " .. targetHP .. "%")
+  cecho("\n<cyan>[BMBS " .. phaseLabel .. "<cyan>] Target: " .. tostring(target) .. " | HP: " .. targetHP .. "% | Track: " .. blademaster.getTrackingSystem())
   cecho("\n<cyan>[BMBS " .. phaseLabel .. "<cyan>] Upper: T=" .. string.format("%.1f", blademaster.getTorso()) .. "% H=" .. string.format("%.1f", blademaster.getHead()) .. "%")
   cecho("\n<cyan>[BMBS " .. phaseLabel .. "<cyan>] Legs: LL=" .. string.format("%.1f", blademaster.getLL()) .. "% RL=" .. string.format("%.1f", blademaster.getRL()) .. "%")
 
@@ -1327,7 +1376,7 @@ function blademaster.dispatch.runBrokenstar()
     local legPath = blademaster.calculateLegPath()
     if blademaster.checkWillPrepBothLegs() then
       -- Check if dismounting mounted target
-      if tmounted and tAffs.hamstring then
+      if tmounted and blademaster.hasAff("hamstring") then
         cecho("\n<magenta>*** DISMOUNT - KNEES to dismount before double-break! ***")
       else
         cecho("\n<blue>*** FINAL LEG PREP - ICE infuse to strip caloric! ***")
@@ -1421,7 +1470,7 @@ function blademaster.dispatch.statusDoublePrep()
   cecho("\n<cyan>|     <white>BLADEMASTER DOUBLE-PREP (LEGS)<cyan>        |")
   cecho("\n<cyan>+============================================+")
   cecho("\n<cyan>| <white>Target: <yellow>" .. tostring(target or "None") .. " <grey>(HP: " .. targetHP .. "%)<cyan>")
-  cecho("\n<cyan>| <white>Phase: " .. phaseLabel .. "<cyan>")
+  cecho("\n<cyan>| <white>Phase: " .. phaseLabel .. " <grey>| Track: " .. blademaster.getTrackingSystem() .. "<cyan>")
   cecho("\n<cyan>+--------------------------------------------+")
   cecho("\n<cyan>| <white>LEG STATUS:<cyan>")
   cecho("\n<cyan>|   <white>L Leg: " .. (LL >= 100 and "<green>BROKEN " or (LL >= threshold and "<yellow>READY  " or "<red>       ")) .. string.format("%5.1f%%", LL) .. " [" .. progressBar(LL) .. "]")
@@ -1458,7 +1507,7 @@ function blademaster.dispatch.statusQuadPrep()
   cecho("\n<cyan>|     <white>BLADEMASTER QUAD-PREP (ARMS+LEGS)<cyan>     |")
   cecho("\n<cyan>+============================================+")
   cecho("\n<cyan>| <white>Target: <yellow>" .. tostring(target or "None") .. " <grey>(HP: " .. targetHP .. "%)<cyan>")
-  cecho("\n<cyan>| <white>Phase: " .. phaseLabel .. "<cyan>")
+  cecho("\n<cyan>| <white>Phase: " .. phaseLabel .. " <grey>| Track: " .. blademaster.getTrackingSystem() .. "<cyan>")
   cecho("\n<cyan>+--------------------------------------------+")
   cecho("\n<cyan>| <white>ARM STATUS:<cyan>")
   cecho("\n<cyan>|   <white>L Arm: " .. (LA >= 100 and "<green>BROKEN " or (LA >= threshold and "<yellow>READY  " or "<red>       ")) .. string.format("%5.1f%%", LA) .. " [" .. progressBar(LA) .. "]")
@@ -1499,7 +1548,7 @@ end
 function blademaster.onLegSalveDetected()
   -- Only start timer if both legs broken AND target is prone
   if not blademaster.checkBothLegsBroken() then return end
-  if not tAffs.prone then return end
+  if not blademaster.hasAff("prone") then return end
 
   -- Only start if not already active
   if not blademaster.state.proneTimerActive then
@@ -1623,7 +1672,7 @@ function blademaster.onTargetUnimpaled()
   -- Keep bleedingReady and targetBleeding - we built that progress!
   -- Keep impaleslashDone = true so we skip impaleslash after re-impale
 
-  local targetProne = tAffs and tAffs.prone
+  local targetProne = blademaster.hasAff("prone")
   local legsBroken = blademaster.checkBothLegsBroken()
 
   -- Can re-impale if prone OR both legs broken
