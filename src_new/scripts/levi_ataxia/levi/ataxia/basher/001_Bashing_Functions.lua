@@ -59,7 +59,7 @@ function ataxiaBasher_attack()
     ataxiaTemp.bashFlee = false
   end
   --Make a Magi Reflection Function
-if not ataxia.afflictions.aeon and not ataxia.afflictions.paralysis then
+if not ataxia.afflictions.aeon and not ataxia.afflictions.paralysis and not ataxia.afflictions.peace then
     if ataxiaTemp.bashFlee == true then
       ataxiaBasher.paused = true
       ataxiaEcho("BASH FLEE IS TRUE/PAUSING BASHER/RUNNING BACK ONE ROOM")
@@ -173,7 +173,7 @@ function ataxiaBasher_assembleAttack()
   end
 	if ataxiaBasher.nicator and not haveDef("nicatorlegend") then command = command.."legenddeck draw nicator"..sp end
  
-  if ataxiaTemp.bashFlee == false and not ataxia.afflictions.paralysis and not ataxia.afflictions.aeon then
+  if ataxiaTemp.bashFlee == false and not ataxia.afflictions.paralysis and not ataxia.afflictions.aeon and not ataxia.afflictions.peace then
     command = command..ataxiaBasher_bashingFuncs[class]()
     send("queue addclearfull freestand stand"..sp..command)	
 	
