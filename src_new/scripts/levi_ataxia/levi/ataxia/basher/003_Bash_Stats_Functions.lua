@@ -14,7 +14,6 @@ packageName: ''
 ]]--
 
 function resetBashingStats()
-cecho("TEST TEST TEST TEST")
 	bashStats = {}
 	bashStats = {
 		criticals = { ["2x"] = 0, ["4x"] = 0, ["8x"] = 0, ["16x"] = 0, ["32x"] = 0, ["64x"] = 0 },

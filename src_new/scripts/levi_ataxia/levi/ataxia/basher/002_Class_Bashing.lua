@@ -276,14 +276,16 @@ end
 
 function ataxiaBasher_magiBashing()
 
-   local command = ""   
-   local command, sp = "", ataxia.settings.separator 
+   local command, sp = "", ataxia.settings.separator
 	 local brage = ataxiaBasher_assembleBattlerage()
 	 local raze = ataxiaBasher.battlerage.Magi.raze
-    raiseEvent("targets updated")
-    ataxia_Update_RoomContents()
-    zgui.showRoomInfo() 
-    ataxiaBasher_stormhammer() 
+    -- GUI updates only when room contents have changed (dirty flag set by stormhammer invalidation)
+    if ataxiaBasher_stormhammerDirty then
+      raiseEvent("targets updated")
+      ataxia_Update_RoomContents()
+      zgui.showRoomInfo()
+    end
+    ataxiaBasher_stormhammer()
    if ataxiaBasher.shielded then
       command = command.."cast erode at "..target..ataxia.settings.separator
    end
@@ -302,92 +304,6 @@ function ataxiaBasher_magiBashing()
    end
    return command   
 end
-
-function ataxiaBasher_monkBashing()
-	local command = ""
-	local brage = ataxiaBasher_assembleBattlerage()
-	local raze = ataxiaBasher.battlerage.Monk.raze
-  local tekura = gmcp.Char.Vitals.charstats[4]:find("Stance") == 1
-  if ataxia.vitals.wp <= 5000 then
-    expandAlias("magepve")
-  end
-
-   --Transmute logic; transmute to 75%, keep mana above 45%.
-	local xmute = math.ceil(ataxia.vitals.maxhp * 0.80)
-	local mpl = (ataxia.vitals.mp - (ataxia.vitals.maxmp * 0.30))
-	local hpl = (xmute - ataxia.vitals.hp)
-	local tomute = 0
-
-	if hpl > 1 then
-		tomute = (hpl < mpl and hpl or mpl)
-		if tomute > 100 then
-			command = command.."transmute "..tomute..ataxia.settings.separator
-		end
-	end
-
-	if ataxiaBasher.shielded then
-		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-			command = command..raze..sp
-      if ataxia.settings.crushbash then
-        command = command.."mind crush "..target
-      elseif tekura then
-        command = command.."unwield all;combo "..target.." sdk ucp ucp"
-      elseif not tekura and ataxia.vitals.form == "Willow" and ataxia.vitals.kata < 5 then
-        command = command.."dismount;wield staff;combo "..target.." flashheel left hiru hiraku"
-        elseif not tekura and ataxia.vitals.form == "Willow" and ataxia.vitals.kata >= 5 then
-        command = command.."dismount;wield staff;combo "..target.." flashheel left hiru hiraku;transition to the rain form"
-           elseif not tekura and ataxia.vitals.form == "Rain" and ataxia.vitals.kata < 12 then
-        command = command.."dismount;wield staff;combo "..target.." frontkick right hiru kuro right"
-        elseif not tekura and ataxia.vitals.form == "Rain" and ataxia.vitals.kata >= 12 then
-        command = command.."dismount;wield staff;combo "..target.." frontkick right hiru kuro right;transition to the oak form"
-           elseif not tekura and ataxia.vitals.form == "Oak" and ataxia.vitals.kata < 5 then
-        command = command.."dismount;wield staff;combo "..target.." risingkick torso nervestrike livestrike"
-        elseif not tekura and ataxia.vitals.form == "Oak" and ataxia.vitals.kata >= 5 then
-        command = command.."dismount;wield staff;combo "..target.." risingkick torso nervestrike livestrike;transition to the willow form"
-        
-      end
-		else
-      if tekura then
-        command = command.."unwield all;combo "..target.." rhk ucp ucp"
-      elseif not tekura and ataxia.vitals.form == "Willow" and ataxia.vitals.kata < 5 then
-        command = command.."dismount;wield staff;combo "..target.." shatter flashheel left hiraku"
-        elseif not tekura and ataxia.vitals.form == "Willow" and ataxia.vitals.kata >= 5 then
-        command = command.."dismount;wield staff;combo "..target.." shatter flashheel left hiraku;transition to the rain form"
-           elseif not tekura and ataxia.vitals.form == "Rain" and ataxia.vitals.kata < 12 then
-        command = command.."dismount;wield staff;combo "..target.." shatter frontkick right kuro right"
-        elseif not tekura and ataxia.vitals.form == "Rain" and ataxia.vitals.kata >= 12 then
-        command = command.."dismount;wield staff;combo "..target.." shatter frontkick right kuro right;transition to the oak form"
-           elseif not tekura and ataxia.vitals.form == "Oak" and ataxia.vitals.kata < 5 then
-        command = command.."dismount;wield staff;combo "..target.." shatter risingkick torso livestrike"
-        elseif not tekura and ataxia.vitals.form == "Oak" and ataxia.vitals.kata >= 5 then
-        command = command.."dismount;wield staff;combo "..target.." shatter risingkick torso livestrike;transition to the willow form"
-        
-      end
-		end
-	else
-		command = command..brage
-     if ataxia.settings.crushbash then
-       command = command.."mind crush "..target
-     elseif tekura then
-       command = command.."unwield all;combo "..target.." sdk ucp ucp"
-  elseif not tekura and ataxia.vitals.form == "Willow" and ataxia.vitals.kata < 5 then
-        command = command.."dismount;wield staff;combo "..target.." flashheel left hiru hiraku"
-        elseif not tekura and ataxia.vitals.form == "Willow" and ataxia.vitals.kata >= 5 then
-        command = command.."dismount;wield staff;combo "..target.." flashheel left hiru hiraku;transition to the rain form"
-           elseif not tekura and ataxia.vitals.form == "Rain" and ataxia.vitals.kata < 12 then
-        command = command.."dismount;wield staff;combo "..target.." frontkick right hiru kuro right"
-        elseif not tekura and ataxia.vitals.form == "Rain" and ataxia.vitals.kata >= 12 then
-        command = command.."dismount;wield staff;combo "..target.." frontkick right hiru kuro right;transition to the oak form"
-           elseif not tekura and ataxia.vitals.form == "Oak" and ataxia.vitals.kata < 5 then
-        command = command.."dismount;wield staff;combo "..target.." risingkick torso nervestrike livestrike"
-        elseif not tekura and ataxia.vitals.form == "Oak" and ataxia.vitals.kata >= 5 then
-        command = command.."dismount;wield staff;combo "..target.." risingkick torso nervestrike livestrike;transition to the willow form"
-        
-     end    
-	end
-end
-
-
 
 
 function ataxiaBasher_monkBashing2()
@@ -546,7 +462,7 @@ function ataxiaBasher_paladinBashing()
 		raze = "combination "..target.." raze smash"
 		bash = "combination "..target.." slice smash"
 	end
-	
+
 	if ataxiaBasher.shielded then
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
 			command = braze..sp..bash
@@ -556,8 +472,8 @@ function ataxiaBasher_paladinBashing()
 	else
 		command = brage..sp..bash
 	end
-	    
-	return command  
+
+	return command
 end
 
 function ataxiaBasher_psionBashing()
@@ -620,7 +536,7 @@ function ataxiaBasher_knightBashing()
 		raze = "combination "..target.." raze smash"
 		bash = "combination "..target.." slice smash"
 	end
-	
+
 	if ataxiaBasher.shielded then
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
 			command = braze..sp..bash
@@ -630,8 +546,8 @@ function ataxiaBasher_knightBashing()
 	else
 		command = brage..sp..bash
 	end
-	    
-	return command 
+
+	return command
 end
 
 function ataxiaBasher_runewardenBashing()
@@ -653,7 +569,7 @@ function ataxiaBasher_runewardenBashing()
 		raze = "combination "..target.." raze smash"
 		bash = "combination "..target.." slice smash"
 	end
-	
+
 	if ataxiaBasher.shielded then
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
 			command = braze..sp..bash
@@ -663,8 +579,8 @@ function ataxiaBasher_runewardenBashing()
 	else
 		command = brage..sp..bash
 	end
-	    
-	return command 
+
+	return command
 end
 
 function ataxiaBasher_sentinelBashing()
@@ -685,18 +601,18 @@ end
 function ataxiaBasher_serpentBashing()
    local command = ""
 	 local brage = ataxiaBasher_assembleBattlerage()
-	 
+
    if ataxiaBasher.shielded then
       command = command.."flay "..target.." shield"..ataxia.settings.separator
    end
-   
-   command = command..ataxiaBasher_assembleBattlerage()
-      
-   if not ataxiaBasher.shielded then 
+
+   command = command..brage
+
+   if not ataxiaBasher.shielded then
       command = command.."garrote "..target
    end
- 
-   return command 
+
+   return command
 end
 
 function ataxiaBasher_shamanBashing()	

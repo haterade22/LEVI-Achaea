@@ -15,44 +15,45 @@ packageName: ''
 
 -- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Ataxia-DownloadThis > Basher > Bashing > Bashing Functions
 
+-- Dispatch table: initialized once at script load time instead of every attack
+ataxiaBasher_bashingFuncs = {
+  --Elementals
+  ["Air Elemental"] = "ataxiaBasher_aEleBashing",
+  ["Fire Elemental"] = "ataxiaBasher_fEleBashing",
+  ["Water Elemental"] = "ataxiaBasher_wEleBashing",
+  ["Earth Elemental"] = "ataxiaBasher_eEleBashing",
+  --Dragons
+  ["Blue Dragon"] = "ataxiaBasher_dragonBashing",
+  ["Black Dragon"] = "ataxiaBasher_dragonBashing",
+  ["Green Dragon"] = "ataxiaBasher_dragonBashing",
+  ["Golden Dragon"] = "ataxiaBasher_dragonBashing",
+  ["Red Dragon"] = "ataxiaBasher_dragonBashing",
+  ["Silver Dragon"] = "ataxiaBasher_dragonBashing",
+  --Standard Classes
+  Alchemist = "ataxiaBasher_alchemistBashing",
+  Apostate = "ataxiaBasher_apostateBashing",
+  Bard = "ataxiaBasher_bardBashing",
+  Blademaster = "ataxiaBasher_blademasterBashing",
+  Depthswalker = "ataxiaBasher_depthswalkerBashing",
+  Infernal = "ataxiaBasher_infernalBashing",
+  Jester = "ataxiaBasher_jesterBashing",
+  Magi = "ataxiaBasher_magiBashing",
+  Monk = "ataxiaBasher_monkBashing2",
+  Occultist = "ataxiaBasher_occultistBashing",
+  Paladin = "ataxiaBasher_paladinBashing",
+  Pariah = "ataxiaBasher_pariahBashing",
+  Priest = "ataxiaBasher_priestBashing",
+  Psion = "ataxiaBasher_psionBashing",
+  Runewarden = "ataxiaBasher_runewardenBashing",
+  Sentinel = "ataxiaBasher_sentinelBashing",
+  Serpent = "ataxiaBasher_serpentBashing",
+  Shaman = "ataxiaBasher_shamanBashing",
+  Sylvan = "ataxiaBasher_sylvanBashing",
+  Unnamable = "ataxiaBasher_knightBashing",
+}
+
 function ataxiaBasher_attack()
 
-	ataxiaBasher_bashingFuncs = {}
-	ataxiaBasher_bashingFuncs = {
-    --Elementals
-  	["Air Elemental"] = _G.ataxiaBasher_aEleBashing,
-		["Fire Elemental"] = _G.ataxiaBasher_fEleBashing,
-    ["Water Elemental"] = _G.ataxiaBasher_wEleBashing, 
-    ["Earth Elemental"] = _G.ataxiaBasher_eEleBashing,
-    --Dragons
-		["Blue Dragon"] = _G.ataxiaBasher_dragonBashing,
-		["Black Dragon"] = _G.ataxiaBasher_dragonBashing,
-    ["Green Dragon"] = _G.ataxiaBasher_dragonBashing,
-    ["Golden Dragon"] = _G.ataxiaBasher_dragonBashing,
-    ["Red Dragon"] = _G.ataxiaBasher_dragonBashing,
-    ["Silver Dragon"] = _G.ataxiaBasher_dragonBashing,
-    --Standard Classes
-    Alchemist = _G.ataxiaBasher_alchemistBashing,
-		Apostate = _G.ataxiaBasher_apostateBashing,
-		Bard = _G.ataxiaBasher_bardBashing,
-		Blademaster = _G.ataxiaBasher_blademasterBashing,
-		Depthswalker = _G.ataxiaBasher_depthswalkerBashing,
-    Infernal = _G.ataxiaBasher_infernalBashing,
-		Jester = _G.ataxiaBasher_jesterBashing,
-		Magi = _G.ataxiaBasher_magiBashing,
-		Monk = _G.ataxiaBasher_monkBashing2,
-		Occultist = _G.ataxiaBasher_occultistBashing,
-    Paladin = _G.ataxiaBasher_paladinBashing,
-    Pariah = _G.ataxiaBasher_pariahBashing,
-		Priest = _G.ataxiaBasher_priestBashing,
-		Psion = _G.ataxiaBasher_psionBashing,
-		Runewarden = _G.ataxiaBasher_runewardenBashing,
-		Sentinel = _G.ataxiaBasher_sentinelBashing,
-		Serpent = _G.ataxiaBasher_serpentBashing,
-		Shaman = _G.ataxiaBasher_shamanBashing,   
-		Sylvan = _G.ataxiaBasher_sylvanBashing,
-    Unnamable = _G.ataxiaBasher_knightBashing,
-	}
 	local class = gmcp.Char.Status.class:title()
   class = class:gsub(" Lady", ""):gsub(" Lord", "")
   if ataxiaTemp.bashFlee == nil then
@@ -65,18 +66,27 @@ if not ataxia.afflictions.aeon and not ataxia.afflictions.paralysis and not atax
       ataxiaEcho("BASH FLEE IS TRUE/PAUSING BASHER/RUNNING BACK ONE ROOM")
       send("cq all")
       if mmp.paused then mmp.pause("off") end
-        expandAlias("goto " ..mmp.previousroom) 
+      if mmp.previousroom then
+        expandAlias("goto " ..mmp.previousroom)
+      else
+        ataxiaEcho("No previous room to flee to - shielding instead.")
+        send("touch shield")
+      end
 		  if ataxia.vitals.hp >= ataxia.vitals.maxhp then
 			  ataxiaTemp.bashFlee = false
         ataxiaBasher.paused = false
+        -- Cancel flee circuit breaker since we recovered
+        if ataxiaTemp.fleeCircuitBreaker then killTimer(ataxiaTemp.fleeCircuitBreaker); ataxiaTemp.fleeCircuitBreaker = nil end
 			  search_targets()
-			   if not found_target and ataxiaTemp.bashFlee == true then	
-				  ataxiaEcho("Healed to threshold, moving back to v"..mmp.previousroom..".")
-          ataxiaTemp.bashFlee = false
-          ataxiaBasher.paused = false
-          if mmp.paused then mmp.pause("off") end
-          expandAlias("goto " ..mmp.previousroom)
-          search_targets() 
+			   if not found_target and ataxiaTemp.bashFlee == true then
+          if mmp.previousroom then
+				    ataxiaEcho("Healed to threshold, moving back to v"..mmp.previousroom..".")
+            ataxiaTemp.bashFlee = false
+            ataxiaBasher.paused = false
+            if mmp.paused then mmp.pause("off") end
+            expandAlias("goto " ..mmp.previousroom)
+            search_targets()
+          end
 			   end
 			  ataxiaBasher_patterns()
         ataxiagui_updateVitals()
@@ -89,18 +99,35 @@ if not ataxia.afflictions.aeon and not ataxia.afflictions.paralysis and not atax
     elseif ataxia.vitals.hp <= ataxiaBasher.fleeThreshold then
         ataxiaTemp.bashFlee = true
         ataxiaBasher.paused = true
-        ataxiaEcho("BASH FLEE: Health below "..ataxiaBasher.fleeThreshold.."hp - fleeing!")
+        ataxiaBasher_startFleeTimer()
         send("cq all")
         if mmp.paused then mmp.pause("off") end
-        expandAlias("goto " ..mmp.previousroom)
+        if mmp.previousroom then
+          expandAlias("goto " ..mmp.previousroom)
+        else
+          ataxiaEcho("No previous room to flee to - shielding instead.")
+          send("touch shield")
+        end
         ataxiagui_updateVitals()
-    elseif gmcp.Room.Info.area == "Moghedu" and ataxia.playersHere == "Hikagejuunin" then
-      guardianofmogcunts = true
-      ataxiaBasher_areaoff()
-      ataxiaBasher.pause = true
-      expandAlias("mstop")
-      send("cq all")
-      expandAlias("goto Mhaldor")
+    elseif ataxiaBasher.fleeFromPlayers and ataxiaBasher.fleeFromPlayers[gmcp.Room.Info.area] then
+      -- Configurable per-area player flee: check if any hostile player matches the flee list
+      local shouldFlee = false
+      if type(ataxia.playersHere) == "table" then
+        for _, player in pairs(ataxia.playersHere) do
+          if table.contains(ataxiaBasher.fleeFromPlayers[gmcp.Room.Info.area], player) then
+            shouldFlee = true
+            break
+          end
+        end
+      end
+      if shouldFlee then
+        ataxiaBasher_areaoff()
+        ataxiaBasher.paused = true
+        expandAlias("mstop")
+        send("cq all")
+        send("touch shield")
+        ataxiaEcho("Hostile player detected in area! Fleeing and disabling basher.")
+      end
    
 		elseif ataxia.afflictions.unknown and ataxia.afflictions.unknown >= 2 and not sent_diagnose then
 			send("queue addclear freestand diagnose", false)
@@ -166,276 +193,142 @@ function ataxiaBasher_assembleAttack()
 	local command = ""
   local class = gmcp.Char.Status.class:title():gsub(" Lady", ""):gsub(" Lord", "")
 	local sp = ataxia.settings.separator
-	if ataxiaTemp.goldInRoom then 
-    command = command.."get gold"..sp.."open pack436363"..sp.."put gold in pack436363"..sp.."close pack436363"..sp
+	local goldPack = ataxiaBasher.goldPack or "pack436363"
+	if ataxiaTemp.goldInRoom then
+    command = command.."get gold"..sp.."open "..goldPack..sp.."put gold in "..goldPack..sp.."close "..goldPack..sp
   elseif ataxiaTemp.goldinhand then
-    command = command.."open pack436363"..sp.."put gold in pack436363"..sp.."close pack436363"..sp
+    command = command.."open "..goldPack..sp.."put gold in "..goldPack..sp.."close "..goldPack..sp
   end
 	if ataxiaBasher.nicator and not haveDef("nicatorlegend") then command = command.."legenddeck draw nicator"..sp end
  
   if ataxiaTemp.bashFlee == false and not ataxia.afflictions.paralysis and not ataxia.afflictions.aeon and not ataxia.afflictions.peace then
-    command = command..ataxiaBasher_bashingFuncs[class]()
-    send("queue addclearfull freestand stand"..sp..command)	
+    command = command.._G[ataxiaBasher_bashingFuncs[class]]()
+    send("queue addclearfull freestand stand"..sp..command)
 	
   end
 	  
+end
+
+-- Per-class special rage thresholds for the standard battlerage pattern
+-- Classes not listed here use unique logic handled below
+ataxiaBasher_specialRageThresholds = {
+  ["Blue Dragon"] = 16,
+  Bard = 28,
+  Runewarden = 28,
+  Infernal = 21,
+  Pariah = 32,
+  Blademaster = 26,
+  Magi = 35,
+  Serpent = 28,
+  Apostate = 32,
+  Monk = 22,
+}
+
+-- Generic battlerage handler for the standard pattern:
+-- With 2+ targets: try special → small → large
+-- With <2 targets: try small → large
+local function ataxiaBasher_standardBattlerage(class, specialRage, level, sp)
+  local command = ""
+  local brData = ataxiaBasher.battlerage[class]
+  if not brData then return "" end
+
+  if ataxiaBasher_validTargets() >= 2 then
+    if not battleRage_Timers.special and ataxia.vitals.rage >= specialRage then
+      command = brData.special..sp
+    elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
+      command = brData.small..sp
+    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and battleRage_Timers.special and level > 35 then
+      command = brData.large..sp
+    end
+  else
+    if not battleRage_Timers.small and ataxia.vitals.rage >= 14 then
+      command = brData.small..sp
+    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and level > 35 then
+      command = brData.large..sp
+    end
+  end
+  return command
+end
+
+-- Crowd-control battlerage for 3+ targets (Black Dragon dragonfear, Shaman invoke korkma)
+local function ataxiaBasher_crowdControlBattlerage(class, specialCmd, level, sp, smallRage, bigRage)
+  local command = ""
+  local brData = ataxiaBasher.battlerage[class]
+  if not brData then return "" end
+
+  if #stormhammerTargets >= 3 then
+    if not battleRage_Timers.special and ataxia.vitals.rage >= 29 then
+      command = specialCmd..sp
+    elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
+      command = brData.small..sp
+    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and battleRage_Timers.special and level > 35 then
+      command = brData.large..sp
+    end
+  else
+    if not battleRage_Timers.small and ataxia.vitals.rage >= smallRage then
+      command = brData.small..sp
+    elseif not battleRage_Timers.large and ataxia.vitals.rage >= bigRage and level > 35 then
+      command = brData.large..sp
+    end
+  end
+  return command
 end
 
 function ataxiaBasher_assembleBattlerage()
 	local command = ""
 	local class = gmcp.Char.Status.class:title():gsub(" Lady", ""):gsub(" Lord", "")
 	local level = tonumber(string.match(gmcp.Char.Status.level, "%d+ "))
-	
+	local sp = ataxia.settings.separator
+
 	local bigRage = (ataxiaBasher.rageraze and 54 or 36)
 	local smallRage = (ataxiaBasher.rageraze and 34 or 16)
-  local specialRage = 25
-	
+
+	-- Mob health-based rage conservation: skip rage abilities if mob is nearly dead
+	-- Set ataxiaBasher.rageConserveThreshold (e.g., 15) to enable.
+	-- Culling Blade (reap) is exempt since it's a finisher.
+	if ataxiaBasher.rageConserveThreshold then
+		local mobhp = tonumber((gmcp.IRE.Target.Info.hpperc or "100"):gsub("%%", "")) or 100
+		if mobhp > 0 and mobhp <= ataxiaBasher.rageConserveThreshold then
+			return ""
+		end
+	end
+
+	-- Culling Blade check (applies before any class-specific logic)
 	if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and ataxiaBasher_validTargets() >= 2 then
 		if ataxia.vitals.rage >= bigRage then
-			command = command.."reap "..target..ataxia.settings.separator
+			command = command.."reap "..target..sp
 		end
-  elseif gmcp.Char.Status.class == "Blue Dragon" then
-    
-   mobhealth = gmcp.IRE.Target.Info.hpperc:gsub("%%", "")
-   mobhealth = tonumber(mobhealth)
-    if ataxiaBasher_validTargets() >= 2 then
-    if not battleRage_Timers.special and ataxia.vitals.rage >= 16 then
-      command = command..ataxiaBasher.battlerage[class].special..ataxia.settings.separator
-    elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and battleRage_Timers.special and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  elseif ataxiaBasher_validTargets() < 2 then 
-    if not battleRage_Timers.small and ataxia.vitals.rage >= 14 then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  end
-  
-  elseif gmcp.Char.Status.class == "Bard" then
-   mobhealth = gmcp.IRE.Target.Info.hpperc:gsub("%%", "")
-   mobhealth = tonumber(mobhealth)
-  if ataxiaBasher_validTargets() >= 2 then
-    if not battleRage_Timers.special and ataxia.vitals.rage >= 28 then
-      command = command..ataxiaBasher.battlerage[class].special..ataxia.settings.separator
-    elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and battleRage_Timers.special and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  elseif ataxiaBasher_validTargets() < 2 then 
-    if not battleRage_Timers.small and ataxia.vitals.rage >= 14 then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  end
-  elseif gmcp.Char.Status.class == "Psion" then
-    
-   mobhealth = gmcp.IRE.Target.Info.hpperc:gsub("%%", "")
-   mobhealth = tonumber(mobhealth)
-    if not battleRage_Timers.special and mobhealth >= 40 and ataxia.vitals.rage >= 40 and not battleRage_Timers.small then
-      command = command..ataxiaBasher.battlerage[class].special..ataxia.settings.separator
-    elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 25 and battleRage_Timers.special and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  elseif gmcp.Char.Status.class == "Runewarden" then
-   mobhealth = gmcp.IRE.Target.Info.hpperc:gsub("%%", "")
-   mobhealth = tonumber(mobhealth)
-    if ataxiaBasher_validTargets() >= 2 then
-      if not battleRage_Timers.special and ataxia.vitals.rage >= 28 then
-        command = command..ataxiaBasher.battlerage[class].special..ataxia.settings.separator
-      elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
-		    command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-      elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and battleRage_Timers.special and level > 35 then
-	     command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-      end
-    elseif ataxiaBasher_validTargets() < 2 then 
-      if not battleRage_Timers.small and ataxia.vitals.rage >= 14 then
-		    command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-      elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and level > 35 then
-	     command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-      end
-  end
-  elseif gmcp.Char.Status.class == "Infernal" then
-   mobhealth = gmcp.IRE.Target.Info.hpperc:gsub("%%", "")
-   mobhealth = tonumber(mobhealth)
-   if ataxiaBasher_validTargets() >= 2 then
-    if not battleRage_Timers.special and ataxia.vitals.rage >= 21 then
-      command = command..ataxiaBasher.battlerage[class].special..ataxia.settings.separator
-    elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and battleRage_Timers.special and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  elseif ataxiaBasher_validTargets() < 2 then 
-    if not battleRage_Timers.small and ataxia.vitals.rage >= 14 then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  end
-  elseif gmcp.Char.Status.class == "Pariah" then
-   mobhealth = gmcp.IRE.Target.Info.hpperc:gsub("%%", "")
-   mobhealth = tonumber(mobhealth)
-    if ataxiaBasher_validTargets() >= 2 then
-    if not battleRage_Timers.special and ataxia.vitals.rage >= 32 then
-      command = command..ataxiaBasher.battlerage[class].special..ataxia.settings.separator
-    elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and battleRage_Timers.special and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  elseif ataxiaBasher_validTargets() < 2 then 
-    if not battleRage_Timers.small and ataxia.vitals.rage >= 14 then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  end
-  elseif gmcp.Char.Status.class == "Blademaster" then
-   mobhealth = gmcp.IRE.Target.Info.hpperc:gsub("%%", "")
-   mobhealth = tonumber(mobhealth)
-   if ataxiaBasher_validTargets() >= 2 then
-    if not battleRage_Timers.special and ataxia.vitals.rage >= 26 then
-      command = command..ataxiaBasher.battlerage[class].special..ataxia.settings.separator
-    elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and battleRage_Timers.special and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  elseif ataxiaBasher_validTargets() < 2 then 
-    if not battleRage_Timers.small and ataxia.vitals.rage >= 14 then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  end
-  elseif gmcp.Char.Status.class == "Magi" then
-   mobhealth = gmcp.IRE.Target.Info.hpperc:gsub("%%", "")
-   mobhealth = tonumber(mobhealth)
-  if ataxiaBasher_validTargets() >= 2 then
-    if not battleRage_Timers.special and ataxia.vitals.rage >= 35 then
-      command = command..ataxiaBasher.battlerage[class].special..ataxia.settings.separator
-    elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and battleRage_Timers.special and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  elseif ataxiaBasher_validTargets() < 2 then 
-    if not battleRage_Timers.small and ataxia.vitals.rage >= 14 then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  end
-  elseif gmcp.Char.Status.class == "Serpent" then
-   mobhealth = gmcp.IRE.Target.Info.hpperc:gsub("%%", "")
-   mobhealth = tonumber(mobhealth)
-  if ataxiaBasher_validTargets() >= 2 then
-    if not battleRage_Timers.special and ataxia.vitals.rage >= 28 then
-      command = command..ataxiaBasher.battlerage[class].special..ataxia.settings.separator
-    elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and battleRage_Timers.special and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  elseif ataxiaBasher_validTargets() < 2 then 
-    if not battleRage_Timers.small and ataxia.vitals.rage >= 14 then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  end
-  elseif gmcp.Char.Status.class == "Apostate" then
-   mobhealth = gmcp.IRE.Target.Info.hpperc:gsub("%%", "")
-   mobhealth = tonumber(mobhealth)
-   if ataxiaBasher_validTargets() >= 2 then
-    if not battleRage_Timers.special and ataxia.vitals.rage >= 32 then
-      command = command..ataxiaBasher.battlerage[class].special..ataxia.settings.separator
-    elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and battleRage_Timers.special and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  elseif ataxiaBasher_validTargets() < 2 then 
-    if not battleRage_Timers.small and ataxia.vitals.rage >= 14 then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  end
-  elseif gmcp.Char.Status.class == "Monk" then
-   mobhealth = gmcp.IRE.Target.Info.hpperc:gsub("%%", "")
-   mobhealth = tonumber(mobhealth)
- if ataxiaBasher_validTargets() >= 2 then
-    if not battleRage_Timers.special and ataxia.vitals.rage >= 22 then
-      command = command..ataxiaBasher.battlerage[class].special..ataxia.settings.separator
-    elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and battleRage_Timers.special and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  elseif ataxiaBasher_validTargets() < 2 then 
-    if not battleRage_Timers.small and ataxia.vitals.rage >= 14 then
-		  command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and level > 35 then
-	   command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-    end
-  end
-   elseif gmcp.Char.Status.class == "Black Dragon" then
-   mobhealth = gmcp.IRE.Target.Info.hpperc:gsub("%%", "")
-   mobhealth = tonumber(mobhealth)
-    if #stormhammerTargets >= 3 then -- If there are more than two targets than Fear the third
-      if not battleRage_Timers.special and ataxia.vitals.rage >= 29  then
-        command = command.." dragonfear " ..stormhammerTargets[3]..ataxia.settings.separator
-      elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
-		    command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-      elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and battleRage_Timers.special and level > 35 then
-	       command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-      end
-    elseif #stormhammerTargets < 3 then
-      if not battleRage_Timers.small and ataxia.vitals.rage >= smallRage then
-		    command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-	    elseif not battleRage_Timers.large and ataxia.vitals.rage >= bigRage and level > 35 then
-		    command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-      end
-    end
-  elseif gmcp.Char.Status.class == "Shaman" then
-   mobhealth = gmcp.IRE.Target.Info.hpperc:gsub("%%", "")
-   mobhealth = tonumber(mobhealth)
-    --[[if #stormhammerTargets >= 1 then
-      if not battleRage_Timers.special2 and ataxia.vitals.rage >= 19  then
-        command = command..ataxiaBasher.battlerage[class].special2..ataxia.settings.separator
-      elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special2 then
-		    command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-      elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and battleRage_Timers.special2 and level > 35 then
-	       command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-      end
-    elseif]]
-    if #stormhammerTargets >= 3 then -- If there are more than two targets than Fear the third
-      if not battleRage_Timers.special and ataxia.vitals.rage >= 29  then
-        command = command.." invoke korkma " ..stormhammerTargets[3]..ataxia.settings.separator
-      elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
-		    command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-      elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and battleRage_Timers.special and level > 35 then
-	       command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-      end
-    elseif #stormhammerTargets < 3 then
-      if not battleRage_Timers.small and ataxia.vitals.rage >= smallRage then
-		    command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-	    elseif not battleRage_Timers.large and ataxia.vitals.rage >= bigRage and level > 35 then
-		    command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
-      end
-    end
-  elseif not battleRage_Timers.small and ataxia.vitals.rage >= smallRage then
-		command = command..ataxiaBasher.battlerage[class].small..ataxia.settings.separator
-	elseif not battleRage_Timers.large and ataxia.vitals.rage >= bigRage and level > 35 then
-		command = command..ataxiaBasher.battlerage[class].large..ataxia.settings.separator
+	-- Psion: unique logic — special requires mobhealth >= 40, rage >= 40, and small NOT on CD; large at 25 rage
+	elseif gmcp.Char.Status.class == "Psion" then
+		local mobhp = tonumber((gmcp.IRE.Target.Info.hpperc or "0"):gsub("%%", "")) or 0
+		local brData = ataxiaBasher.battlerage[class]
+		if brData then
+			if not battleRage_Timers.special and mobhp >= 40 and ataxia.vitals.rage >= 40 and not battleRage_Timers.small then
+				command = brData.special..sp
+			elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
+				command = brData.small..sp
+			elseif not battleRage_Timers.large and ataxia.vitals.rage >= 25 and battleRage_Timers.special and level > 35 then
+				command = brData.large..sp
+			end
+		end
+	-- Black Dragon: dragonfear on 3rd target when 3+ mobs present
+	elseif gmcp.Char.Status.class == "Black Dragon" then
+		local specialCmd = " dragonfear "..(stormhammerTargets[3] or target)
+		command = ataxiaBasher_crowdControlBattlerage(class, specialCmd, level, sp, smallRage, bigRage)
+	-- Shaman: invoke korkma on 3rd target when 3+ mobs present
+	elseif gmcp.Char.Status.class == "Shaman" then
+		local specialCmd = " invoke korkma "..(stormhammerTargets[3] or target)
+		command = ataxiaBasher_crowdControlBattlerage(class, specialCmd, level, sp, smallRage, bigRage)
+	-- Standard pattern: check if class has a known specialRage threshold
+	elseif ataxiaBasher_specialRageThresholds[class] then
+		command = ataxiaBasher_standardBattlerage(class, ataxiaBasher_specialRageThresholds[class], level, sp)
+	-- Fallback for unknown classes: just use small/large
+	elseif ataxiaBasher.battlerage[class] then
+		if not battleRage_Timers.small and ataxia.vitals.rage >= smallRage then
+			command = ataxiaBasher.battlerage[class].small..sp
+		elseif not battleRage_Timers.large and ataxia.vitals.rage >= bigRage and level > 35 then
+			command = ataxiaBasher.battlerage[class].large..sp
+		end
 	end
 	return command
 end

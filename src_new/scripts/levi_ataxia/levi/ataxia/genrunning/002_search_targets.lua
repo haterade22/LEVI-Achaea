@@ -21,6 +21,16 @@ eventHandlers:
 -- Track which room we've already drawn ldeck cards for
 ataxiaBasher.ldeckDrawnRoom = nil
 
+-- Data-driven ldeck rules: { mob = "mob name", count = N, cards = {"maran", "matic", ...} }
+-- Add entries for any area/mob combination where pre-combat draws are needed.
+if not ataxiaBasher.ldeckRules then
+  ataxiaBasher.ldeckRules = {
+    { mob = "an elite mhun keeper", count = 3, cards = {"maran", "matic"} },
+    { mob = "a mhun knight",        count = 3, cards = {"maran"} },
+    { mob = "a mhun knight",        count = 4, cards = {"maran", "matic"} },
+  }
+end
+
 -- Helper to count specific mob types in current room
 function ataxiaBasher_countMobsInRoom(mobName)
   local count = 0
@@ -41,34 +51,25 @@ function ataxiaBasher_preCombatLdeck()
     return false
   end
 
-  local keeperCount = ataxiaBasher_countMobsInRoom("an elite mhun keeper")
-  local knightCount = ataxiaBasher_countMobsInRoom("a mhun knight")
-
-  local drawMaran = false
-  local drawMatic = false
-
-  -- Elite keepers: 3+ = both cards
-  if keeperCount >= 3 then
-    drawMaran = true
-    drawMatic = true
-  end
-
-  -- Knights: 3 = maran only, 4+ = both
-  if knightCount >= 3 then
-    drawMaran = true
-    if knightCount >= 4 then
-      drawMatic = true
+  -- Evaluate all rules and collect which cards to draw
+  local cardsToDraw = {}
+  for _, rule in ipairs(ataxiaBasher.ldeckRules) do
+    local mobCount = ataxiaBasher_countMobsInRoom(rule.mob)
+    if mobCount >= rule.count then
+      for _, card in ipairs(rule.cards) do
+        cardsToDraw[card] = true
+      end
     end
   end
 
   -- Send ldeck draws using queue system
-  if drawMaran or drawMatic then
-    if drawMaran then
-      send("queue add free ldeck draw maran")
-    end
-    if drawMatic then
-      send("queue add free ldeck draw matic")
-    end
+  local drew = false
+  for card, _ in pairs(cardsToDraw) do
+    send("queue add free ldeck draw " .. card)
+    drew = true
+  end
+
+  if drew then
     ataxiaBasher.ldeckDrawnRoom = roomId
     return true
   end
@@ -81,6 +82,7 @@ function search_targets()
   if autoHarvesting or autoExtracting then return false end
 	found_target = false
 	if ataxiaBasher_skipRoom then return false end
+	if not ataxiaBasher.targetList[gmcp.Room.Info.area] then return false end
 	
   for i,v in pairs(ataxia.denizensHere) do
 		if tonumber(i) == target then
@@ -116,19 +118,34 @@ function search_targets()
   ataxiaBasher_stormhammer()
 end
 
-function ataxiaBasher_stormhammer()
-stormhammerTargets = {}
-for k,v in pairs(ataxia.denizensHere) do
-  if (table.contains(ataxiaBasher.targetList[gmcp.Room.Info.area], v)) then 
+-- Configurable shield retarget timers per mob (seconds).
+-- When a mob shields, the basher swaps to another target for this duration, then swaps back.
+-- Default is ataxiaBasher.shieldTimerDefault (3.1s) if the mob isn't listed.
+if not ataxiaBasher.shieldTimers then
+  ataxiaBasher.shieldTimers = {
+    ["a mhun knight"] = 4.7,
+  }
+end
+ataxiaBasher.shieldTimerDefault = ataxiaBasher.shieldTimerDefault or 3.1
 
-    table.insert(stormhammerTargets, tostring(k))
-    --cecho("\n<green>Added <white>"..tostring(v).."<white> to Stormhammer table: ")
-    --display(stormhammerTargets)
-  --else
-    --cecho("\n<white>Skipping <red>"..v.."<white> as it was not found in targetList")
+-- Cache flag: set to true when room contents change, cleared after recompute
+ataxiaBasher_stormhammerDirty = true
+
+function ataxiaBasher_stormhammer(forceRefresh)
+  if not forceRefresh and not ataxiaBasher_stormhammerDirty then return end
+  stormhammerTargets = {}
+  if not ataxiaBasher.targetList[gmcp.Room.Info.area] then return end
+  for k,v in pairs(ataxia.denizensHere) do
+    if (table.contains(ataxiaBasher.targetList[gmcp.Room.Info.area], v)) then
+      table.insert(stormhammerTargets, tostring(k))
+    end
   end
+  ataxiaBasher_stormhammerDirty = false
 end
 
+-- Call this on room change or denizen list update to invalidate the cache
+function ataxiaBasher_invalidateStormhammer()
+  ataxiaBasher_stormhammerDirty = true
 end
 
 function ataxiaBasher_retargetShielded()
@@ -168,11 +185,9 @@ function ataxiaBasher_shieldedTarget()
 						end
 						raiseEvent("changed target")
             if ataxiaTemp.mobshieldtimer then killTimer(ataxiaTemp.mobshieldtimer); ataxiaTemp.mobshieldtimer = nil end
-            if ataxiaTemp.retargetsecond == "a mhun knight" then
-              ataxiaTemp.mobshieldtimer = tempTimer(4.7, [[ ataxiaBasher_retargetShielded() ]])
-            else
-              ataxiaTemp.mobshieldtimer = tempTimer(3.1, [[ ataxiaBasher_retargetShielded() ]])
-            end
+            local shieldDuration = (ataxiaBasher.shieldTimers and ataxiaBasher.shieldTimers[ataxiaTemp.retargetsecond])
+              or ataxiaBasher.shieldTimerDefault or 3.1
+            ataxiaTemp.mobshieldtimer = tempTimer(shieldDuration, [[ ataxiaBasher_retargetShielded() ]])
             return
           end
         end
@@ -183,13 +198,6 @@ function ataxiaBasher_shieldedTarget()
 end
 
 function ataxiaBasher_validTargets()
-  local c = 0
-   ataxiaBasher_stormhammer()  
-  for i, v in pairs(ataxia.denizensHere) do
-    if table.contains(ataxiaBasher.targetList[gmcp.Room.Info.area], v) then
-      c= c + 1
-    end
-  end
-  return c
-
+  ataxiaBasher_stormhammer()
+  return #stormhammerTargets
 end
