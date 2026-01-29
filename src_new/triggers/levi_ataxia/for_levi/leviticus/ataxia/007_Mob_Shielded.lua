@@ -48,7 +48,9 @@ if type(target) == "number" and ataxiaBasher.enabled and tar == secondTarget:low
   
   if not ataxiaBasher.shieldswap or ataxiaBasher_validTargets() <= 1 or ataxiaTemp.mobshieldtimer then
     ataxiaBasher.shielded = true
-    removeShield = tempTimer( (secondTarget == "a mhun knight" and 4.5 or 3.1), [[ ataxiaBasher.shielded = false; removeShield = nil]]) 
+    local shieldDur = (ataxiaBasher.shieldTimers and ataxiaBasher.shieldTimers[secondTarget])
+      or ataxiaBasher.shieldTimerDefault or 3.1
+    removeShield = tempTimer(shieldDur, [[ ataxiaBasher.shielded = false; removeShield = nil]])
   elseif ataxiaBasher.shieldswap and ataxiaBasher_validTargets() > 1 and not ataxiaTemp.mobshieldtimer then
     ataxiaBasher_shieldedTarget()
   end

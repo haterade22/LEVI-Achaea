@@ -20,7 +20,7 @@ eventHandlers:
 
 function ataxia_RoomContents_Update(event)
 	--Create the table if it's not already there.
-   ataxiaBasher_stormhammer()  
+   ataxiaBasher_invalidateStormhammer()
 	ataxia.denizensHere = ataxia.denizensHere or {}
 	atempDenizens = atempDenizens or {}
 	waterGuards = waterGuards or {}
@@ -65,9 +65,9 @@ function ataxia_RoomContents_Update(event)
       elseif table.contains(item_Pickup, v.name) then
         send("get "..v.id,false)
 			end
-  if ataxiaBasher.enabled then ataxiaBasher_stormhammer() end
+  if ataxiaBasher.enabled then ataxiaBasher_invalidateStormhammer() end
 		end
-	
+
 	--Remove (either by leaving, or dying)
 	elseif event == "gmcp.Char.Items.Remove" then
   
@@ -75,7 +75,7 @@ function ataxia_RoomContents_Update(event)
       
 			if tonumber(i) == tonumber(gmcp.Char.Items.Remove.item.id) then
 				ataxia.denizensHere[i] = nil
-      if ataxiaBasher.enabled then ataxiaBasher_stormhammer() end
+      if ataxiaBasher.enabled then ataxiaBasher_invalidateStormhammer() end
 			end
     
       

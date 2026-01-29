@@ -17,7 +17,7 @@ eventHandlers:
 ]]--
 
 function ataxia_Room_Update()
- ataxiaBasher_stormhammer()  
+ ataxiaBasher_invalidateStormhammer()
 	if not gmcp.Room.Info then return end
 	if ataxiaBasher.enabled and ataxia.settings.roomshorten then enableTrigger("Room Info Shortener") end
 	
