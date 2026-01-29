@@ -42,6 +42,9 @@ patterns:
 
 local tar = matches[2]:lower()
 
+-- Ignore if this line follows an illusion
+if ataxia_illusionActive then return end
+
 if type(target) == "number" and ataxiaBasher.enabled and tar == secondTarget:lower() then
   bashConsoleEcho("denizen", "Coward shielded!")
   local argFound = false
