@@ -10,9 +10,10 @@ Install the compiled package from `packages/` via Mudlet's Package Manager, or b
 # Convert source to Muddler format
 python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project
 
-# Build with Muddler (requires Java 17+)
+# Build with Muddler (requires Java 8+)
+set JAVA_HOME=E:\Java
 cd muddler_project
-muddle.bat
+E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
 ```
 
 Output: `muddler_project/build/Levi_Ataxia.mpackage`
@@ -208,8 +209,9 @@ After editing files in `src_new/`, rebuild the package with Muddler:
 python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project
 
 # Build with Muddler
+set JAVA_HOME=E:\Java
 cd muddler_project
-muddle.bat
+E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
 ```
 
 Then reinstall the `.mpackage` from `muddler_project/build/` in Mudlet.

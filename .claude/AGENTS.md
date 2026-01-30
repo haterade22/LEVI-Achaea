@@ -277,9 +277,10 @@ The project uses [Muddler](https://github.com/demonnic/muddler) to build Mudlet 
 # 1. Convert source to Muddler format
 python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project
 
-# 2. Build with Muddler (requires Java 17+)
+# 2. Build with Muddler (requires Java 8+)
+set JAVA_HOME=E:\Java
 cd muddler_project
-muddle.bat
+E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
 ```
 
 **Output**: `muddler_project/build/Levi_Ataxia.mpackage`

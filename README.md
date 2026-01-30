@@ -39,16 +39,16 @@ This repository contains the "For Levi" Mudlet package, a comprehensive automati
 
 ## Building from Source
 
-The project uses [Muddler](https://github.com/demonnic/muddler) to build packages. Requires **Java 17+**.
+The project uses [Muddler](https://github.com/demonnic/muddler) to build packages. Requires **Java 8+**.
 
 ```bash
 # Convert source to Muddler format
 python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project
 
-# Build with Muddler
+# Build with Muddler (set JAVA_HOME first)
+set JAVA_HOME=E:\Java
 cd muddler_project
-muddle.bat        # Windows
-# muddle          # Linux/Mac
+E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
 ```
 
 Output: `muddler_project/build/Levi_Ataxia.mpackage`

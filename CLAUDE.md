@@ -93,10 +93,15 @@ The project uses [Muddler](https://github.com/demonnic/muddler) to build Mudlet 
 
 1. **Edit** source files in `src_new/` (YAML-header Lua format)
 2. **Convert** to Muddler format: `python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project`
-3. **Build** with Muddler: `cd muddler_project && muddle.bat` (Windows) or `muddle` (Linux/Mac)
+3. **Build** with Muddler (from `muddler_project/` directory):
+   ```bash
+   set JAVA_HOME=E:\Java
+   cd muddler_project
+   E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
+   ```
 4. **Output**: `muddler_project/build/Levi_Ataxia.mpackage` and `.xml`
 
-**Requirements**: Java 17+ (Temurin JDK recommended), Muddler CLI on PATH.
+**Requirements**: Java 8+ (`E:\Java`), Muddler (`E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\`).
 
 **Conversion script** (`tools/convert_to_muddler.py`):
 - Strips YAML headers from Lua files, outputs pure Lua

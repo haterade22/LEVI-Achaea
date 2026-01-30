@@ -24453,7 +24453,7 @@
                                         "type": "regex"
                                       },
                                       {
-                                        "pattern": "FG9BG2",
+                                        "pattern": "9,2",
                                         "type": "color"
                                       }
                                     ],
