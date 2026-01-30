@@ -37,7 +37,7 @@ PHASE OVERVIEW:
 
     PREP PHASE:
         Build afflictions AND prep 2 limbs simultaneously.
-        - Venom priority: clumsiness -> nausea -> kelp stack -> slickness -> softlock
+        - Venom priority: clumsiness -> nausea -> healthleech -> asthma -> slickness -> anorexia/exploit -> aconite/recklessness
         - Limb prepping: Right arm + left leg to 90%+ damage (2 limbs only)
         - Transition to EXECUTE when both limbs prepped
 
@@ -94,8 +94,8 @@ VENOM PRIORITY (PREP PHASE):
 
     Phase 1 (Build to asthma):
         v1 chain:
-            1. Nausea (euphorbia)       - Parry bypass, enables limb prepping
-            2. Clumsiness (xentio)      - 33% miss chance on their attacks
+            1. Clumsiness (xentio)      - 33% miss chance on their attacks
+            2. Nausea (euphorbia)       - Parry bypass, enables limb prepping
             3. Healthleech (torment)    - Drains health (hellforge investment)
             4. Asthma (kalmia)          - Blocks smoke cures
         v2: Curare (paralysis) - Always
@@ -517,7 +517,7 @@ end
 ]]--
 
 -- V3 probability-aware venom selection for PREP phase
--- PHASE 1: nausea -> clumsiness -> healthleech -> asthma (v2 = curare)
+-- PHASE 1: clumsiness -> nausea -> healthleech -> asthma (v2 = curare)
 -- PHASE 2 (Push Slickness): Once asthma >50%, v1 = gecko (slickness), v2 = curare
 -- PHASE 3 (Focus Lock): Once slickness confirmed, v1 = slike (anorexia), v2 = exploit (hellforge)
 -- PHASE 4 (Complete Lock): Once anorexia+weariness stuck, v1 = aconite (stupidity), v2 = eurypteria (recklessness)
@@ -576,12 +576,12 @@ function infernalDWC2L.selectVenomsV3()
         return v1, v2
     end
 
-    -- PHASE 1: Build to asthma (nausea -> clumsiness -> healthleech -> asthma)
+    -- PHASE 1: Build to asthma (clumsiness -> nausea -> healthleech -> asthma)
     local v1Chain = {
-        {venom = "euphorbia", aff = "nausea",      weight = 2.0},  -- 1. Nausea (parry bypass)
-        {venom = "xentio",    aff = "clumsiness",  weight = 1.9},  -- 2. Clumsiness
+        {venom = "xentio",    aff = "clumsiness",  weight = 2.0},  -- 1. Clumsiness (33% miss chance)
+        {venom = "euphorbia", aff = "nausea",       weight = 1.9},  -- 2. Nausea (parry bypass)
         {venom = "torment",   aff = "healthleech",  weight = 1.8}, -- 3. Healthleech (hellforge)
-        {venom = "kalmia",    aff = "asthma",      weight = 1.7},  -- 4. Asthma
+        {venom = "kalmia",    aff = "asthma",       weight = 1.7},  -- 4. Asthma
     }
 
     -- Helper to get best venom from a chain (excludes a specific venom)
@@ -606,7 +606,7 @@ function infernalDWC2L.selectVenomsV3()
     end
 
     -- Select v1 from priority chain
-    local v1 = getBestFromChain(v1Chain, nil) or "euphorbia"
+    local v1 = getBestFromChain(v1Chain, nil) or "xentio"
 
     -- v2: always curare in phase 1
     local v2 = "curare"
@@ -670,7 +670,7 @@ function infernalDWC2L.selectVenoms()
 
     else
         -- PREP phase - FOCUS LOCK STRATEGY (2-LIMB)
-        -- Phase 1: nausea -> clumsiness -> healthleech -> asthma (v2 = curare)
+        -- Phase 1: clumsiness -> nausea -> healthleech -> asthma (v2 = curare)
         -- Phase 2: asthma stuck -> push slickness (v1 = gecko, v2 = curare)
         -- Phase 3: slickness confirmed -> anorexia/exploit (focus lock)
         -- Phase 4: anorexia + weariness stuck -> aconite/recklessness (complete lock)
@@ -723,20 +723,20 @@ function infernalDWC2L.selectVenoms()
             v1 = "gecko"             -- Slickness (blocks apply)
             v2 = "curare"            -- Paralysis
 
-        -- PHASE 1: Build to asthma (nausea -> clumsiness -> healthleech -> asthma)
+        -- PHASE 1: Build to asthma (clumsiness -> nausea -> healthleech -> asthma)
         else
             v2 = "curare"            -- Always paralysis
 
-            if not nausStuck then
-                v1 = "euphorbia"     -- 1. Nausea (parry bypass)
-            elseif not clumStuck then
-                v1 = "xentio"        -- 2. Clumsiness (33% miss chance)
+            if not clumStuck then
+                v1 = "xentio"        -- 1. Clumsiness (33% miss chance)
+            elseif not nausStuck then
+                v1 = "euphorbia"     -- 2. Nausea (parry bypass)
             elseif not hlthlStuck then
                 v1 = "torment"       -- 3. Healthleech (hellforge)
             elseif not asthStuck then
                 v1 = "kalmia"        -- 4. Asthma (blocks smoke)
             else
-                v1 = "euphorbia"     -- Maintain nausea
+                v1 = "xentio"        -- Maintain clumsiness
             end
         end
     end

@@ -36,7 +36,7 @@ PHASE OVERVIEW:
 
     PREP PHASE:
         Build afflictions AND prep limbs simultaneously.
-        - Venom priority: clumsiness → nausea → kelp stack → slickness → softlock
+        - Venom priority: clumsiness → nausea → healthleech → asthma → slickness → anorexia/exploit → aconite/recklessness
         - Limb prepping: Both arms + left leg to 90%+ damage
         - Transition to EXECUTE when all 3 limbs prepped
 
@@ -91,20 +91,25 @@ RIFTLOCK MODE (Counter to RESTORE):
 VENOM PRIORITY (PREP PHASE):
 -------------------------------------------------------------------------------
 
-    V1 Priority Chain:
+    PHASE 1 - Build to Asthma (v2 = curare):
         1. Clumsiness (xentio)      - 33% miss chance on their attacks
         2. Nausea (euphorbia)       - Parry bypass, enables limb prepping
         3. Healthleech (torment)    - Drains health (hellforge investment)
-        4. Haemophilia (torture)    - No clotting (hellforge investment)
-        5. Sensitivity (prefarar)   - Increased damage taken
-        6. Weariness (exploit)      - Blocks Fitness (hellforge investment)
-        7. Asthma (kalmia)          - Blocks smoke cures
-        8. Slickness (gecko)        - Blocks apply (salve cures)
-        9. Darkshade (darkshade)    - Blindness
-        10. Anorexia (slike)        - Softlock - blocks eating
-        11. Stupidity (aconite)     - Softlock - random failures
+        4. Asthma (kalmia)          - Blocks smoke cures
 
-    V2 Always: Curare (paralysis) - Critical to maintain, on V2 to survive clumsiness miss
+    PHASE 2 - Push Slickness (once asthma >50% / stuck):
+        V1: Slickness (gecko)       - Blocks apply (salve cures)
+        V2: Curare (paralysis)      - Maintain paralysis
+
+    PHASE 3 - Focus Lock (once slickness confirmed):
+        V1: Anorexia (slike)        - Blocks eating
+        V2: Exploit (weariness+paranoia) - Hellforge, blocks Fitness
+
+    PHASE 4 - Complete Lock (once anorexia + weariness stuck):
+        V1: Stupidity (aconite)     - Focus bait
+        V2: Recklessness (eurypteria) - Prevents defensive abilities
+
+    V2 Default: Curare (paralysis) - Critical to maintain, on V2 to survive clumsiness miss
 
 -------------------------------------------------------------------------------
 EXECUTE PHASE VENOMS:
@@ -529,87 +534,71 @@ end
 ]]--
 
 -- V3 probability-aware venom selection for PREP phase
--- PHASE 1: clumsiness → nausea → healthleech → haemophilia → asthma (v2 = curare)
--- PHASE 2 (Focus Lock): Once asthma stuck, v1 = exploit (weariness+paranoia), v2 = aconite (stupidity)
--- PHASE 3 (Softlock): Once weariness+stupidity stuck, v1/v2 = gecko/slike for full lock
+-- PHASE 1: clumsiness -> nausea -> healthleech -> asthma (v2 = curare)
+-- PHASE 2 (Push Slickness): Once asthma >50%, v1 = gecko (slickness), v2 = curare
+-- PHASE 3 (Focus Lock): Once slickness confirmed, v1 = slike (anorexia), v2 = exploit (hellforge)
+-- PHASE 4 (Complete Lock): Once anorexia+weariness stuck, v1 = aconite (stupidity), v2 = eurypteria (recklessness)
 function infernalDWC.selectVenomsV3()
     local getProb = infernalDWC.getAffProb
 
     -- Check phase conditions
     local asthmaProb = getProb("asthma")
-    local wearinessProb = getProb("weariness")
-    local stupidityProb = getProb("stupidity")
     local slicknessProb = getProb("slickness")
     local anorexiaProb = getProb("anorexia")
+    local wearinessProb = getProb("weariness")
+    local stupidityProb = getProb("stupidity")
+    local recklessnessProb = getProb("recklessness")
 
-    local asthmaStuck = asthmaProb >= 0.9
+    local asthmaHigh = asthmaProb >= 0.5
+    local slicknessStuck = slicknessProb >= 0.9
+    local anorexiaStuck = anorexiaProb >= 0.9
     local wearinessStuck = wearinessProb >= 0.9
-    local stupidityStuck = stupidityProb >= 0.9
 
-    -- PHASE 3: Focus lock complete, go for full softlock (gecko/slike)
-    if asthmaStuck and wearinessStuck and stupidityStuck then
+    -- PHASE 4: Anorexia + weariness stuck -> aconite/recklessness (complete lock)
+    if slicknessStuck and anorexiaStuck and wearinessStuck then
         local v1, v2
-        if slicknessProb < 0.9 then
-            v1 = "gecko"      -- Slickness (blocks apply)
-        elseif anorexiaProb < 0.9 then
-            v1 = "slike"      -- Anorexia (blocks eat)
-        else
-            v1 = "gecko"      -- Maintain
-        end
-        -- v2: curare if not stuck, otherwise slike/gecko
-        if getProb("paralysis") < 0.9 then
-            v2 = "curare"
-        elseif v1 == "gecko" and anorexiaProb < 0.9 then
-            v2 = "slike"
-        elseif v1 == "slike" and slicknessProb < 0.9 then
-            v2 = "gecko"
-        else
-            v2 = "curare"
-        end
-        return v1, v2
-    end
-
-    -- PHASE 2: Asthma stuck → Focus Lock (exploit + aconite)
-    -- exploit = weariness (blocks fitness) + paranoia (via hellforge)
-    -- aconite = stupidity (they'll want to focus this, but weariness blocks it)
-    if asthmaStuck then
-        local v1, v2
-        if wearinessProb < 0.9 then
-            v1 = "exploit"    -- Weariness + Paranoia (hellforge)
-        elseif slicknessProb < 0.9 then
-            v1 = "gecko"      -- Slickness
-        elseif anorexiaProb < 0.9 then
-            v1 = "slike"      -- Anorexia
-        else
-            v1 = "exploit"    -- Maintain weariness
-        end
-
         if stupidityProb < 0.9 then
-            v2 = "aconite"    -- Stupidity (focus bait)
-        elseif getProb("paralysis") < 0.9 then
-            v2 = "curare"     -- Paralysis
+            v1 = "aconite"        -- Stupidity (focus bait)
         else
-            v2 = "aconite"    -- Maintain
+            v1 = "slike"          -- Maintain anorexia
+        end
+        if recklessnessProb < 0.9 then
+            v2 = "eurypteria"     -- Recklessness (prevents defensive abilities)
+        else
+            v2 = "aconite"        -- Maintain stupidity
         end
         return v1, v2
     end
 
-    -- PHASE 1: Build to asthma (clumsiness → nausea → healthleech → haemophilia → asthma)
-    local v1Chain = {
-        {venom = "xentio",    aff = "clumsiness", weight = 2.0},   -- 1. Clumsiness
-        {venom = "euphorbia", aff = "nausea",     weight = 1.9},   -- 2. Nausea
-        {venom = "torment",   aff = "healthleech", weight = 1.8},  -- 3. Healthleech (hellforge)
-        {venom = "torture",   aff = "haemophilia", weight = 1.7},  -- 4. Haemophilia (hellforge)
-        {venom = "kalmia",    aff = "asthma",     weight = 1.6},   -- 5. Asthma
-    }
+    -- PHASE 3: Slickness confirmed -> anorexia/exploit (focus lock)
+    if slicknessStuck then
+        local v1, v2
+        if anorexiaProb < 0.9 then
+            v1 = "slike"          -- Anorexia (blocks eat)
+        else
+            v1 = "aconite"        -- Stupidity (focus bait) if anorexia already stuck
+        end
+        if wearinessProb < 0.9 then
+            v2 = "exploit"        -- Weariness + Paranoia (hellforge)
+        else
+            v2 = "eurypteria"     -- Recklessness if weariness already stuck
+        end
+        return v1, v2
+    end
 
-    -- v2 default chain (curare first)
-    local v2Chain = {
-        {venom = "curare",    aff = "paralysis",  weight = 2.0},   -- 1. Paralysis (default)
-        {venom = "gecko",     aff = "slickness",  weight = 1.8},   -- 2. Slickness
-        {venom = "slike",     aff = "anorexia",   weight = 1.7},   -- 3. Anorexia
-        {venom = "aconite",   aff = "stupidity",  weight = 1.6},   -- 4. Stupidity
-        {venom = "vardrax",   aff = "addiction",  weight = 1.5},   -- 5. Addiction
+    -- PHASE 2: Asthma >50% -> push slickness
+    if asthmaHigh then
+        local v1 = "gecko"        -- Slickness (blocks apply)
+        local v2 = "curare"       -- Paralysis
+        return v1, v2
+    end
+
+    -- PHASE 1: Build to asthma (clumsiness -> nausea -> healthleech -> asthma)
+    local v1Chain = {
+        {venom = "xentio",    aff = "clumsiness",  weight = 2.0},  -- 1. Clumsiness (33% miss chance)
+        {venom = "euphorbia", aff = "nausea",       weight = 1.9},  -- 2. Nausea (parry bypass)
+        {venom = "torment",   aff = "healthleech",  weight = 1.8}, -- 3. Healthleech (hellforge)
+        {venom = "kalmia",    aff = "asthma",       weight = 1.7},  -- 4. Asthma
     }
 
     -- Helper to get best venom from a chain (excludes a specific venom)
@@ -636,8 +625,8 @@ function infernalDWC.selectVenomsV3()
     -- Select v1 from priority chain
     local v1 = getBestFromChain(v1Chain, nil) or "xentio"
 
-    -- Select v2: curare if paralysis not stuck, otherwise use fallback chain
-    local v2 = getBestFromChain(v2Chain, v1) or "curare"
+    -- v2: always curare in phase 1
+    local v2 = "curare"
 
     return v1, v2
 end
@@ -698,75 +687,73 @@ function infernalDWC.selectVenoms()
 
     else
         -- PREP phase - FOCUS LOCK STRATEGY
-        -- Alternate kelp/ginseng to overwhelm curing, then focus bait with goldenseal
-        -- Priority: clum(kelp) -> nausea(ginseng) -> healthleech(kelp) -> haemo(ginseng) -> asthma(kelp)
-        -- Then: aconite(goldenseal)/exploit(kelp) = focus bait
-        -- After focus: gecko/slike (both kelp) = lock layer
-        -- Finally: addiction(ginseng) + riftlock transition
+        -- Phase 1: clumsiness -> nausea -> healthleech -> asthma (v2 = curare)
+        -- Phase 2: asthma stuck -> push slickness (v1 = gecko, v2 = curare)
+        -- Phase 3: slickness confirmed -> anorexia/exploit (focus lock)
+        -- Phase 4: anorexia + weariness stuck -> aconite/recklessness (complete lock)
 
         -- V3: Probability-aware venom selection
         if affConfigV3 and affConfigV3.enabled then
             return infernalDWC.selectVenomsV3()
         end
 
-        -- Original binary logic (V2/V1 fallback)
+        -- Binary logic (V2/V1 fallback)
         -- Check what's stuck
-        local clumStuck = hasAff("clumsiness")
         local nausStuck = hasAff("nausea")
+        local clumStuck = hasAff("clumsiness")
         local hlthlStuck = hasAff("healthleech")
-        local haemoStuck = hasAff("haemophilia")
         local asthStuck = hasAff("asthma")
         local slickStuck = hasAff("slickness")
         local anoStuck = hasAff("anorexia")
-        local addictStuck = hasAff("addiction")
-        local stuStuck = hasAff("stupidity")
         local wearStuck = hasAff("weariness")
+        local stuStuck = hasAff("stupidity")
+        local reckStuck = hasAff("recklessness")
 
-        -- PHASE 4: Addiction + slickness stuck -> transition to riftlock with epteth/epteth
-        if addictStuck and slickStuck then
-            v1 = "epteth"
-            v2 = "epteth"
-            -- Consider entering riftlock mode here
-
-        -- PHASE 3: Lock layer - gecko/slike (both kelp, stacks with existing kelp affs)
-        elseif asthStuck and (stuStuck or wearStuck) then
-            -- They've been hit with focus bait, now lock them
-            if not slickStuck then
-                v1 = "gecko"      -- Slickness (kelp) - blocks apply
-                v2 = "slike"      -- Anorexia (kelp) - blocks eat
-            elseif not anoStuck then
-                v1 = "slike"      -- Anorexia (kelp)
-                v2 = "curare"     -- Paralysis
-            elseif not addictStuck then
-                v1 = "vardrax"    -- Addiction (ginseng)
-                v2 = "curare"     -- Paralysis
+        -- PHASE 4: Anorexia + weariness stuck -> aconite/recklessness (complete lock)
+        if slickStuck and anoStuck and wearStuck then
+            if not stuStuck then
+                v1 = "aconite"        -- Stupidity (focus bait)
             else
-                -- All lock affs stuck, maintain
-                v1 = "slike"
-                v2 = "curare"
+                v1 = "slike"          -- Maintain anorexia
+            end
+            if not reckStuck then
+                v2 = "eurypteria"     -- Recklessness (prevents defensive abilities)
+            else
+                v2 = "aconite"        -- Maintain stupidity
             end
 
-        -- PHASE 2: Focus bait - aconite/exploit (once asthma stuck)
-        elseif asthStuck then
-            v1 = "aconite"        -- Stupidity (goldenseal) - they'll want to focus this
-            v2 = "exploit"        -- Weariness (kelp) + Paranoia (ash) - hellforge, 2 affs!
+        -- PHASE 3: Slickness confirmed -> anorexia/exploit (focus lock)
+        elseif slickStuck then
+            if not anoStuck then
+                v1 = "slike"          -- Anorexia (blocks eat)
+            else
+                v1 = "aconite"        -- Stupidity if anorexia already stuck
+            end
+            if not wearStuck then
+                v2 = "exploit"        -- Weariness + Paranoia (hellforge)
+            else
+                v2 = "eurypteria"     -- Recklessness if weariness already stuck
+            end
 
-        -- PHASE 1: Kelp/Ginseng alternating stack (with curare)
+        -- PHASE 2: Asthma stuck -> push slickness
+        elseif asthStuck then
+            v1 = "gecko"             -- Slickness (blocks apply)
+            v2 = "curare"            -- Paralysis
+
+        -- PHASE 1: Build to asthma (clumsiness -> nausea -> healthleech -> asthma)
         else
-            v2 = "curare"         -- Always paralysis (bloodroot)
+            v2 = "curare"            -- Always paralysis
 
             if not clumStuck then
-                v1 = "xentio"     -- 1. Clumsiness (kelp)
+                v1 = "xentio"        -- 1. Clumsiness (33% miss chance)
             elseif not nausStuck then
-                v1 = "euphorbia"  -- 2. Nausea (ginseng)
+                v1 = "euphorbia"     -- 2. Nausea (parry bypass)
             elseif not hlthlStuck then
-                v1 = "torment"    -- 3. Healthleech (kelp) - hellforge
-            elseif not haemoStuck then
-                v1 = "torture"    -- 4. Haemophilia (ginseng) - hellforge
+                v1 = "torment"       -- 3. Healthleech (hellforge)
             elseif not asthStuck then
-                v1 = "kalmia"     -- 5. Asthma (kelp)
+                v1 = "kalmia"        -- 4. Asthma (blocks smoke)
             else
-                v1 = "xentio"     -- Maintain clumsiness
+                v1 = "xentio"        -- Maintain clumsiness
             end
         end
     end
