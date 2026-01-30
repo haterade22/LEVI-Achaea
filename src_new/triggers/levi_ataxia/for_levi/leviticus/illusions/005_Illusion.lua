@@ -43,7 +43,6 @@ tshield = false
 trebounding = false
 tAffs.curseward = false
 
--- Flag that an illusion was detected; ignore next 2 lines
-ataxia_illusionActive = true
-if ataxia_illusionClear then killTimer(ataxia_illusionClear) end
-ataxia_illusionClear = tempLineTrigger(2, 1, [[ataxia_illusionActive = false; ataxia_illusionClear = nil]])
+-- Illusion detected; undo any shield set on the next 2 lines
+tempLineTrigger(1, 1, [[tAffs.shield = false; if tAffsV2 then tAffsV2.shield = 0 end]])
+tempLineTrigger(2, 1, [[tAffs.shield = false; if tAffsV2 then tAffsV2.shield = 0 end]])
