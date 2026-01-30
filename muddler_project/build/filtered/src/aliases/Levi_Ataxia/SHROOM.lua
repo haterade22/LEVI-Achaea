@@ -1,0 +1,1 @@
+send("cq all;g mushroom from kitbag;attach mushroom to monolith")

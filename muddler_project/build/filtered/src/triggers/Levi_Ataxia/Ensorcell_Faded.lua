@@ -1,0 +1,1 @@
+if not pariah.ensorcell then erAff("ensorcelled") end

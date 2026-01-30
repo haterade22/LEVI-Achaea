@@ -512,8 +512,15 @@ class MuddlerConverter:
                     except ValueError:
                         ptype_int = 0
                 ptype_str = PATTERN_TYPE_MAP.get(ptype_int, "substring")
+                pat_value = p.get("pattern", "")
+                # Color patterns (type 6): Mudlet stores as "FGxBGy",
+                # Muddler expects comma-separated "x,y"
+                if ptype_int == 6 and pat_value:
+                    color_match = re.match(r"FG(\d+)BG(\d+)", pat_value)
+                    if color_match:
+                        pat_value = f"{color_match.group(1)},{color_match.group(2)}"
                 muddler_patterns.append({
-                    "pattern": p.get("pattern", ""),
+                    "pattern": pat_value,
                     "type": ptype_str,
                 })
             result["patterns"] = muddler_patterns

@@ -1,0 +1,1 @@
+monk.shikudo.limb_hit(matches[2], "ruku")

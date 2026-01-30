@@ -1,0 +1,2 @@
+targetlimb = "head"
+infernalpriostrample()

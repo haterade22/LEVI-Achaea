@@ -1,0 +1,1 @@
+if ataxiaBasher.paused == false then deleteFull() end

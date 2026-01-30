@@ -1,0 +1,1 @@
+send("get mushroom from pack;put 50 monolith in pack;attach mushroom to monolith;say ride home")

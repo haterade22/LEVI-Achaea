@@ -1,0 +1,1 @@
+zgui.running = false

@@ -1,0 +1,1 @@
+send("clearqueue all; dragonsense "..target)

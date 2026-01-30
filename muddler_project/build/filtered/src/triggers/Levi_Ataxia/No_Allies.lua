@@ -1,0 +1,2 @@
+zgui.allies = {}
+zgui.showAllies()

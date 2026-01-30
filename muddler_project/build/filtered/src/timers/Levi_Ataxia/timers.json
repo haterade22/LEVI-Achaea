@@ -1,0 +1,218 @@
+[
+  {
+    "name": "Levi_Ataxia",
+    "isActive": "yes",
+    "isFolder": "yes",
+    "children": [
+      {
+        "name": "For Levi",
+        "isActive": "yes",
+        "isFolder": "yes",
+        "children": [
+          {
+            "name": "Levi_062424",
+            "isActive": "yes",
+            "isFolder": "yes",
+            "children": [
+              {
+                "name": "mudlet-mapper_24",
+                "isActive": "yes",
+                "isFolder": "yes",
+                "children": [
+                  {
+                    "name": "Mudlet Mapper",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Check for updates periodically",
+                        "hours": "1",
+                        "minutes": "0",
+                        "seconds": "0",
+                        "milliseconds": "0"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "leviticus",
+                "isActive": "yes",
+                "isFolder": "yes",
+                "children": [
+                  {
+                    "name": "APO",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "NIGHTMARE TICK",
+                        "isActive": "no",
+                        "hours": "0",
+                        "minutes": "0",
+                        "seconds": "6",
+                        "milliseconds": "500"
+                      },
+                      {
+                        "name": "NIGHTMARE AFFLICTION",
+                        "hours": "0",
+                        "minutes": "0",
+                        "seconds": "8",
+                        "milliseconds": "500"
+                      },
+                      {
+                        "name": "BLOODWORMS",
+                        "isActive": "no",
+                        "hours": "0",
+                        "minutes": "0",
+                        "seconds": "7",
+                        "milliseconds": "500"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Levi Ataxia",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "ZulahGUI - Saonji Edit",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "zGUI Redux",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Death Cape",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "Deathcape Timer",
+                                    "isActive": "no",
+                                    "hours": "0",
+                                    "minutes": "0",
+                                    "seconds": "1",
+                                    "milliseconds": "0"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "mudlet-mapper",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "Mudlet Mapper",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Check for updates periodically",
+                                "hours": "1",
+                                "minutes": "0",
+                                "seconds": "0",
+                                "milliseconds": "0"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "MY TIMERS",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "Battlefury Perceive",
+                            "isActive": "no",
+                            "hours": "0",
+                            "minutes": "0",
+                            "seconds": "1",
+                            "milliseconds": "0"
+                          },
+                          {
+                            "name": "Clear Bashing Console",
+                            "isActive": "no",
+                            "hours": "0",
+                            "minutes": "1",
+                            "seconds": "10",
+                            "milliseconds": "0"
+                          },
+                          {
+                            "name": "TargetOutOfRoom",
+                            "isActive": "no",
+                            "hours": "0",
+                            "minutes": "0",
+                            "seconds": "1",
+                            "milliseconds": "400"
+                          },
+                          {
+                            "name": "Bard Performance",
+                            "hours": "0",
+                            "minutes": "15",
+                            "seconds": "0",
+                            "milliseconds": "0"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "mudlet-mapper",
+            "isActive": "yes",
+            "isFolder": "yes",
+            "children": [
+              {
+                "name": "Mudlet Mapper",
+                "isActive": "yes",
+                "isFolder": "yes",
+                "children": [
+                  {
+                    "name": "Check for updates periodically",
+                    "hours": "1",
+                    "minutes": "0",
+                    "seconds": "0",
+                    "milliseconds": "0"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "mudlet-mapper",
+        "isActive": "yes",
+        "isFolder": "yes",
+        "children": [
+          {
+            "name": "Mudlet Mapper",
+            "isActive": "yes",
+            "isFolder": "yes",
+            "children": [
+              {
+                "name": "Check for updates periodically",
+                "hours": "1",
+                "minutes": "0",
+                "seconds": "0",
+                "milliseconds": "0"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

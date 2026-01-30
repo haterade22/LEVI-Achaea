@@ -62,6 +62,31 @@ function apostate_vivisect()
   apostate.dispatch()
 end
 
+function apostate_weari()
+  apostate.state.mode = "lock"
+  apostate.dispatch()
+end
+
+function apostate_mental()
+  apostate.state.mode = "lock"
+  apostate.dispatch()
+end
+
+function apostate_kelp()
+  apostate.state.mode = "lock"
+  apostate.dispatch()
+end
+
+function apostate_group()
+  apostate.state.mode = "group"
+  apostate.dispatch()
+end
+
+function apostate_clumsyillusion()
+  apostate.state.mode = "lock"
+  apostate.dispatch()
+end
+
 -- Legacy corruptDmg wrapper
 function corruptDmg()
   return apostate.corruptDmg()

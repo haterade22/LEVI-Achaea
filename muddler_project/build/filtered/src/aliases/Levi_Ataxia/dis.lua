@@ -1,0 +1,1 @@
+send("cq all;stand;falcon slay " ..target.. " ;disembowel " ..target.. " ;engage " ..target)

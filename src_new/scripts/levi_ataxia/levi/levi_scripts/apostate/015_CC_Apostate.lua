@@ -23,7 +23,7 @@ packageName: ''
 --   4. Sleep      - Build asthma + impatience + hypersomnia -> sleep curse
 --
 -- DEADEYES delivers 2 curses per action (2.3s balance)
--- SICKEN cascade: paralysis -> manaleech -> slickness -> damage
+-- Lock priority: clumsiness -> asthma -> manaleech -> impatience -> slickness -> anorexia
 --------------------------------------------------------------------------------
 
 apostate = apostate or {}
@@ -36,7 +36,6 @@ apostate.state = {
   mode = "lock",            -- "lock", "corrupt", "vivisect", "sleep", "group"
   corrupted = false,        -- corrupt has been fired (awaiting catharsis)
   lastCorruptTime = 0,      -- corrupt cooldown tracking
-  daeggerhunt = false,      -- daegger hunt active
   daeggerhere = false,      -- daegger summoned
   freshblood = false,       -- fresh blood available for bloodpact
   fiendthing = "nightmare", -- preferred lesser daemon
@@ -119,32 +118,6 @@ function apostate.getLocks()
 end
 
 --------------------------------------------------------------------------------
--- SICKEN CASCADE LOGIC
---------------------------------------------------------------------------------
-
--- Returns what SICKEN will deliver based on target's current state
--- Cascade: paralysis -> manaleech -> slickness -> damage
-function apostate.sickenWillGive()
-  local hasPara = apostate.hasAff("paralysis")
-  local hasMana = apostate.hasAff("manaleech")
-  local hasSlick = apostate.hasAff("slickness")
-
-  if not hasPara then return "paralysis" end
-  if not hasMana then return "manaleech" end
-  if not hasSlick then return "slickness" end
-  return "damage"
-end
-
--- Returns true if SICKEN advances our lock goal
-function apostate.shouldUseSicken()
-  local gives = apostate.sickenWillGive()
-  if gives == "paralysis" then return true end
-  if gives == "manaleech" and apostate.hasAff("asthma") then return true end
-  if gives == "slickness" then return true end
-  return false
-end
-
---------------------------------------------------------------------------------
 -- CORRUPT DAMAGE CALCULATOR (V3-aware)
 --------------------------------------------------------------------------------
 
@@ -190,34 +163,20 @@ local function dedupList(list)
   return result
 end
 
--- Select the top 2 curses, handling paralysis ordering for DEADEYES.
--- SICKEN should be curse1 when paired with paralysis (sicken needs to land first
--- to cascade properly with the paralysis DEADEYES also delivers).
+-- Select the top 2 curses for DEADEYES, deduplicating and filling gaps.
 function apostate.pickTopTwo(curses)
   curses = dedupList(curses)
   if #curses == 0 then
-    return {"clumsy", "impatience"}  -- safety fallback
+    return {"clumsy", "asthma"}  -- safety fallback
   end
   if #curses == 1 then
-    -- Fill second slot with best available filler
-    if curses[1] ~= "impatience" then
-      return {curses[1], "impatience"}
-    else
+    if curses[1] ~= "clumsy" then
       return {curses[1], "clumsy"}
+    else
+      return {curses[1], "asthma"}
     end
   end
-
-  local c1 = curses[1]
-  local c2 = curses[2]
-
-  -- If paralysis is curse1, swap so the other curse goes first
-  -- (paralysis from DEADEYES is delivered as second curse)
-  if c1 == "paralysis" and c2 ~= "paralysis" then
-    c1 = curses[2]
-    c2 = "paralysis"
-  end
-
-  return {c1, c2}
+  return {curses[1], curses[2]}
 end
 
 -- Main curse selection. Returns table of 2 curse names for DEADEYES.
@@ -244,11 +203,11 @@ function apostate.selectCurses()
   end
 
   -- PHASE 2: Core lock building
-  -- Sequence: paralysis -> asthma -> sicken(manaleech/slickness) -> impatience -> anorexia
+  -- Sequence: clumsiness -> asthma -> manaleech -> impatience -> slickness -> anorexia
 
-  -- Step 1: Paralysis (required for SICKEN cascade + blocks tree tattoo)
-  if not apostate.hasAff("paralysis") then
-    table.insert(curses, "paralysis")
+  -- Step 1: Clumsiness (fumble herb eating = delays cures)
+  if not apostate.hasAff("clumsiness") then
+    table.insert(curses, "clumsy")
   end
 
   -- Step 2: Asthma (blocks smoking = protects manaleech/asthma from cure)
@@ -256,9 +215,9 @@ function apostate.selectCurses()
     table.insert(curses, "asthma")
   end
 
-  -- Step 3: SICKEN cascade (delivers manaleech then slickness when asthma present)
-  if apostate.hasAff("asthma") and apostate.shouldUseSicken() then
-    table.insert(curses, "sicken")
+  -- Step 3: Manaleech (drains mana toward catharsis, smoke-cured but blocked by asthma)
+  if not apostate.hasAff("manaleech") then
+    table.insert(curses, "manaleech")
   end
 
   -- Step 4: Impatience (blocks FOCUS = mental affliction cure)
@@ -266,13 +225,19 @@ function apostate.selectCurses()
     table.insert(curses, "impatience")
   end
 
-  -- Step 5: Anorexia (blocks eating = herb cures)
-  -- Only push anorexia when we have slickness or manaleech+asthma (near softlock)
+  -- Step 5: Slickness (blocks salve application)
+  if not apostate.hasAff("slickness") then
+    table.insert(curses, "slickness")
+  end
+
+  -- Step 6: Anorexia (blocks eating = herb cures)
   if not apostate.hasAff("anorexia") then
-    if apostate.hasAff("slickness") or
-       (apostate.hasAff("manaleech") and apostate.hasAff("asthma")) then
-      table.insert(curses, "anorexia")
-    end
+    table.insert(curses, "anorexia")
+  end
+
+  -- Step 7: Paralysis (tree block + action denial)
+  if not apostate.hasAff("paralysis") then
+    table.insert(curses, "paralysis")
   end
 
   -- PHASE 3: Sleep mode additions
@@ -310,7 +275,6 @@ function apostate.selectCurses()
 
   -- PHASE 6: Filler afflictions (corrupt damage padding + lock reinforcement)
   local fillers = {
-    {aff = "clumsiness",     curse = "clumsy"},
     {aff = "stupidity",      curse = "stupid"},
     {aff = "dizziness",      curse = "dizzy"},
     {aff = "weariness",      curse = "weariness"},
@@ -340,7 +304,7 @@ function apostate.selectCurses()
     end
   end
 
-  -- Pick top 2 with dedup and paralysis ordering
+  -- Pick top 2 with dedup
   return apostate.pickTopTwo(curses)
 end
 
@@ -437,24 +401,13 @@ function apostate.buildPostAttack()
   end
 
   -- Dispel wrong daemon and resummon correct one
-  if apopentagram and apopentagram() and demon and demon() ~= state.fiendthing and state.daeggerhunt then
+  if apopentagram and apopentagram() and demon and demon() ~= state.fiendthing then
     return ";summon daegger;wield daegger shield;dispel pentagram;summon " .. state.fiendthing
   end
 
-  -- Disfigure for disloyalty when delivering sicken
+  -- Disfigure for disloyalty
   if state.wantDisloyalty and apostate.hasAff("asthma") and not apostate.hasAff("disloyalty") then
-    if c1 == "sicken" or c2 == "sicken" then
-      return ";disfigure " .. target
-    end
-  end
-
-  -- Start daegger hunt if not active and target not prone
-  if not state.daeggerhunt and not apostate.hasAff("prone") then
-    if state.daeggerhere then
-      return ";wield daegger shield;daegger levitate;daegger hunt " .. target
-    else
-      return ";summon daegger;wield daegger shield;daegger levitate;daegger hunt " .. target
-    end
+    return ";disfigure " .. target
   end
 
   return nil
@@ -565,13 +518,10 @@ function apostate.status()
   local sys = apostate.getTrackingSystem()
   local locks = apostate.getLocks()
   local dmg = apostate.corruptDmg()
-  local sicken = apostate.sickenWillGive()
-
   echo("\n=== Apostate Offense Status ===\n")
   echo("  Mode: " .. apostate.state.mode .. "\n")
   echo("  Tracking: " .. sys .. "\n")
   echo("  Corrupt Dmg: " .. string.format("%.1f", dmg) .. "\n")
-  echo("  SICKEN will give: " .. sicken .. "\n")
   echo("  Softlock: " .. string.format("%.0f%%", locks.softlock * 100) .. "\n")
   echo("  Hardlock: " .. string.format("%.0f%%", locks.hardlock * 100) .. "\n")
   echo("  Truelock: " .. string.format("%.0f%%", locks.truelock * 100) .. "\n")
@@ -581,7 +531,6 @@ function apostate.status()
   end
 
   echo("  Daemon: " .. apostate.state.fiendthing .. "\n")
-  echo("  Daegger Hunt: " .. tostring(apostate.state.daeggerhunt) .. "\n")
   echo("  Corrupted: " .. tostring(apostate.state.corrupted) .. "\n")
 
   if pm then

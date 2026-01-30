@@ -1,0 +1,1 @@
+bardNeedRapierWield = true

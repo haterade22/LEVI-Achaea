@@ -1,0 +1,13 @@
+if type(target) == "string" and isTargeted(matches[2]) then
+	tAffs.shield = false
+	selectString(line,1)
+	setBold(true)
+	fg("NavajoWhite")
+	resetFormat()
+end
+
+if ataxiaBasher.enabled then
+  if not ataxiaBasher.manual then
+    deleteFull()
+  end
+end

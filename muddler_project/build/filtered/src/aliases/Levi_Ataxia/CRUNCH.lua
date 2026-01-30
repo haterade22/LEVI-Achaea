@@ -1,0 +1,1 @@
+send("clearqueue all;terran crunch "..target)

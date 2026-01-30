@@ -1,0 +1,1 @@
+expandAlias("kconfig bashing attackcommand stand/wield shield/incantation &tar")

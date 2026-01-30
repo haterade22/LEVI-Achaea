@@ -1,0 +1,1 @@
+send("g pouch33977 from kitbag;g gold from pouch33977")

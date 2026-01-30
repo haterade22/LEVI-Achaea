@@ -1,0 +1,3 @@
+-- NOTE: Old dofile() reload removed. Use the build pipeline:
+-- python tools/mudlet_build.py --src ./src_new --output packages/Levi_Ataxia.xml
+-- Then reinstall the package in Mudlet.
