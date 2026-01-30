@@ -13,6 +13,21 @@ attributes:
 packageName: ''
 ]]--
 
+--[[mudlet
+type: script
+name: CC_Apostate
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Levi  Scripts
+- Leviticus
+- APOSTATE
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 --------------------------------------------------------------------------------
 -- CC_Apostate: Unified Apostate Offensive System (V3 Integration)
 --
@@ -261,9 +276,9 @@ end
 
 -- Curse 2: Lock support chain (sicken for paralysis/slickness, then lock affs)
 function apostate.selectSecondaryCurse(c1)
-  -- Sicken first: delivers paralysis when target lacks it
-  if not apostate.hasAff("paralysis") and c1 ~= "sicken" then
-    return "sicken"
+  -- Direct paralysis when target lacks it
+  if not apostate.hasAff("paralysis") and c1 ~= "paralysis" then
+    return "paralysis"
   end
 
   -- After paralysis, build other lock components
@@ -510,6 +525,9 @@ function apostate.dispatch()
   -- Select curses based on current mode and target state
   apostate.curses = apostate.selectCurses()
 
+  -- Debug echo: curses being sent + stuck afflictions
+  apostate.debugEcho()
+
   -- Build the attack
   local preCmd, atkCmd, postCmd = apostate.buildAttack()
 
@@ -539,6 +557,26 @@ end
 --------------------------------------------------------------------------------
 -- DEBUG / STATUS
 --------------------------------------------------------------------------------
+
+function apostate.debugEcho()
+  local c1 = apostate.curses and apostate.curses[1] or "?"
+  local c2 = apostate.curses and apostate.curses[2] or "?"
+
+  -- Key lock afflictions to track
+  local lockAffs = {"clumsiness", "asthma", "manaleech", "impatience", "slickness", "anorexia", "paralysis"}
+  local stuck = {}
+  for _, aff in ipairs(lockAffs) do
+    if apostate.hasAff(aff) then
+      stuck[#stuck + 1] = aff
+    end
+  end
+
+  local stuckStr = #stuck > 0 and table.concat(stuck, ", ") or "none"
+  local sys = apostate.getTrackingSystem()
+
+  cecho("\n<yellow>[APO]<reset> Curses: <green>" .. c1 .. "<reset> + <green>" .. c2 ..
+    "<reset> | Stuck(<cyan>" .. sys .. "<reset>): <red>" .. stuckStr .. "<reset>\n")
+end
 
 function apostate.status()
   local sys = apostate.getTrackingSystem()

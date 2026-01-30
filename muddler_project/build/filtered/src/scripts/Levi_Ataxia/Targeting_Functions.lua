@@ -1,3 +1,18 @@
+--[[mudlet
+type: script
+name: Targeting Functions
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Ataxia
+- Ataxia
+- Combat
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 function switchTarget(who)
 	local tName = who
 	possible_targets = ataxiaTemp.enemies
@@ -44,6 +59,7 @@ function switchTarget(who)
 	send("unally "..target..ataxia.settings.separator.."enemy "..target..ataxia.settings.separator.."st "..target)
   send("settarget " ..target)
   --expandAlias("t " ..target)
+  resetStatesV3()
   setafflictionstackslevi()
   php = 100
   pm = 100
@@ -73,10 +89,6 @@ function switchTarget(who)
 	if target_calling then send("pt Target: "..target) end
 
   targetresetafflictionslevi()
-  -- Reset V3 affliction tracking on target change
-  if affConfigV3 and affConfigV3.enabled and resetStatesV3 then
-    resetStatesV3()
-  end
   tBals = {tree = true, focus = true, plant = true, salve = true, timers = {}, passive = true}
 	ataxiaTemp.bleeding = 0
 	if ataxia_isClass("magi") then

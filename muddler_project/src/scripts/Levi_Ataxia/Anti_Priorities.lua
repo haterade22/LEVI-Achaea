@@ -65,15 +65,11 @@ function Algedonic.AntiDruid()
 end
 function Algedonic.AntiDepthswalker()
 
-  if ataxia.afflictions.timeloop and not ataxia.afflictions.paralysis then
+  if ataxia.afflictions.timeloop then
     send("curing prioaff timeloop")
-  elseif ataxia.afflictions.timeloop and ataxia.afflictions.paralysis then
-    send("curing prioaff paralysis")
+    send("cq all;shield")
   elseif ataxia.afflictions.hypochondria and not ataxia.afflictions.paralysis then
     send("curing prioaff hypochondria")
-  elseif ataxia.afflictions.depression and not ataxia.afflictions.timeloop and not ataxia.afflictions.hypochondria then
-    send("curing prioaff depression")
-
   end
 end
 
@@ -137,7 +133,6 @@ elseif ataxia.afflictions.unweavingspirit ~= nil then
   send("curing prioaff asthma")
   end
 end
-
 end
 
 function Algedonic.AntiSentinel()
@@ -175,17 +170,6 @@ function Algedonic.AntiSerpent()
     local hasProne = ataxia.afflictions.prone
     local kelpStack = Algedonic.mystack["kelp"] or 0
 
-    -- Ekanelia conditional tracking
-    local hasMasochism = ataxia.afflictions.masochism
-    local hasClumsiness = ataxia.afflictions.clumsiness
-    local hasConfusion = ataxia.afflictions.confusion
-    local hasRecklessness = ataxia.afflictions.recklessness
-    local hasHypersomnia = ataxia.afflictions.hypersomnia
-    local hasScytherus = ataxia.afflictions.scytherus
-
-    -- Defense tracking
-    local hasFangbarrier = ataxia.defences and ataxia.defences.fangbarrier
-
     -- Can we tree? (not paralyzed, arms not both broken, tree off cooldown)
     local canTree = not hasParalysis
         and not (ataxia.afflictions.brokenleftarm and ataxia.afflictions.brokenrightarm)
@@ -195,40 +179,9 @@ function Algedonic.AntiSerpent()
     -- Tree NOW before paralysis locks us out
     local approachingLock = hasAsthma and hasSlickness and (hasImpatience or hasAnorexia)
 
-    -- IMPULSE ENABLED: asthma + weariness + no fangbarrier = they can Impulse us
-    local impulseEnabled = hasAsthma and hasWeariness and not hasFangbarrier
-
-    -- IMPULSE LOCK THREAT: Impulse enabled + ANY mental = tree IMMEDIATELY
-    -- Impulse delivers impatience/anorexia instantly, don't wait for slickness
-    local impulseLockThreat = impulseEnabled and (hasImpatience or hasAnorexia)
-
     if canTree and approachingLock then
         Algedonic.Echo("<red>APPROACHING LOCK - TREE!<white>")
         send("touch tree")
-        return
-    end
-
-    -- IMPULSE LOCK THREAT: Tree immediately when Impulse has delivered a mental
-    -- This triggers BEFORE slickness to prevent the lock from forming
-    if canTree and impulseLockThreat then
-        Algedonic.Echo("<yellow>IMPULSE LOCK THREAT<white> - tree NOW!")
-        send("touch tree")
-        return
-    end
-
-    -- EARLY TREE: When Impulse enabled + fratricide (relapse danger), tree before damage spirals
-    if canTree and impulseEnabled and hasFratricide then
-        Algedonic.Echo("<magenta>FRATRICIDE + IMPULSE<white> - tree to stop relapse!")
-        send("touch tree")
-        return
-    end
-
-    -- FANGBARRIER RE-APPLICATION: If fangbarrier stripped and Impulse conditions developing
-    -- Re-apply quicksilver BEFORE they can Impulse us (asthma + weariness = Impulse ready)
-    -- Must OUTR quicksilver from rift before applying
-    if not hasFangbarrier and hasAsthma and hasWeariness and not hasParalysis and not hasSlickness then
-        Algedonic.Echo("<cyan>FANGBARRIER DOWN<white> - reapplying quicksilver to block Impulse!")
-        send("outr 1 quicksilver;apply quicksilver to skin")
         return
     end
 
@@ -236,41 +189,6 @@ function Algedonic.AntiSerpent()
     if hasProne and hasParalysis and hasSlickness then
         send("endure")
         send("curing prioaff paralysis")
-        return
-    end
-
-    -- FRATRICIDE + SCYTHERUS: CRITICAL PRIORITY - relapse deals 1200 damage per tick
-    -- This MUST be cured immediately - moves to high priority before Ekanelia prevention
-    if hasFratricide and hasScytherus and not hasParalysis then
-        Algedonic.Echo("<red>FRATRICIDE + SCYTHERUS<white> - cure fratricide NOW!")
-        send("curing prioaff fratricide")
-        return
-    end
-
-    -- === EKANELIA PREVENTION ===
-
-    -- MASOCHISM: Blocks 2 Ekanelia transformations (monkshood + curare)
-    -- monkshood: asthma + masochism + weariness → impatience (bypasses Impulse!)
-    -- curare: hypersomnia + masochism → hypochondria
-    if hasMasochism and (hasWeariness or hasHypersomnia) then
-        Algedonic.Echo("Clearing <cyan>masochism<white> to block Ekanelia!")
-        send("curing prioaff masochism")
-        return
-    end
-
-    -- CLUMSINESS + WEARINESS: Enables kalmia → asthma + slickness
-    -- Single bite gives BOTH lock afflictions - very dangerous
-    if hasClumsiness and hasWeariness then
-        Algedonic.Echo("Blocking <yellow>Ekanelia kalmia<white> setup!")
-        send("curing prioaff clumsiness")
-        return
-    end
-
-    -- CONFUSION + RECKLESSNESS: Makes loki PREDICTABLE
-    -- Bite gives guaranteed nausea + paralysis instead of random
-    if hasConfusion and hasRecklessness then
-        Algedonic.Echo("Blocking <magenta>Ekanelia loki<white> setup!")
-        send("curing prioaff recklessness")
         return
     end
 
@@ -287,9 +205,9 @@ function Algedonic.AntiSerpent()
         return
     end
 
-    -- FRATRICIDE HANDLING: When Impulse is enabled, fratricide causes relapse
-    -- Cure fratricide EARLY when asthma + weariness present (before they spam Impulse)
-    if hasFratricide and impulseEnabled then
+    -- FRATRICIDE HANDLING: When approaching lock, fratricide causes impulse relapse
+    -- Cure fratricide when asthma + slickness present (lock developing)
+    if hasFratricide and hasAsthma and hasSlickness then
         Algedonic.Echo("Clearing <magenta>fratricide<white> to prevent impulse relapse!")
         send("curing prioaff fratricide")
         return
@@ -427,13 +345,62 @@ function Algedonic.AntiPriest()
     end
 end
 
+
 function Algedonic.AntiOccultist()
-  if ataxia.afflictions.asthma and ataxia.afflictions.aeon then
+  local hasAsthma = ataxia.afflictions.asthma
+  local hasAeon = ataxia.afflictions.aeon
+  local hasParalysis = ataxia.afflictions.paralysis
+  local hasSlickness = ataxia.afflictions.slickness
+  local hasAnorexia = ataxia.afflictions.anorexia
+  local hasWhisperingmadness = ataxia.afflictions.whisperingmadness
+  local hasImpatience = ataxia.afflictions.impatience
+  local hasProne = ataxia.afflictions.prone or tAffs.prone
+  local kelpStack = Algedonic.mystack["kelp"] or 0
+
+  -- PRIORITY 1: AEON - Must cure asthma to smoke elm
+  if hasAeon and hasAsthma then
+    Algedonic.Echo("<red>AEON + ASTHMA - Digging for asthma to smoke elm!<white>")
     send("curing prioaff asthma")
-  elseif ataxia.afflictions.asthma and not ataxia.afflictions.paralysis then
+    return
+  end
+
+  -- PRIORITY 2: Paralysis + Slickness + Prone = stuck, need endure
+  if hasProne and hasParalysis and hasSlickness then
+    Algedonic.Echo("<yellow>STUCK - Endure + para priority!<white>")
+    send("endure")
+    send("curing prioaff paralysis")
+    return
+  end
+
+  -- PRIORITY 3: Asthma lock developing (asthma + slickness + impatience/anorexia)
+  if hasAsthma and hasSlickness and (hasImpatience or hasAnorexia) then
+    if kelpStack >= 2 then
+      Algedonic.Echo("<orange>LOCK DEVELOPING - Digging for asthma!<white>")
+      send("curing prioaff asthma")
+    else
+      -- Low kelp, try slickness first
+      send("curing prioaff slickness")
+    end
+    return
+  end
+
+  -- PRIORITY 4: Asthma alone (blocks smoking elm for aeon cure)
+  if hasAsthma and not hasParalysis then
     send("curing prioaff asthma")
-  elseif not ataxia.afflictions.asthma and not ataxia.afflictions.paralysis and ataxia.afflictions.whisperingmadness then
+    return
+  end
+
+  -- PRIORITY 5: Whisperingmadness (from bubonis) - smoke cure
+  if hasWhisperingmadness and not hasAsthma and not hasParalysis then
     send("curing prioaff whisperingmadness")
+    return
+  end
+
+  -- PRIORITY 6: Heavy paralysis spam - enable endure when para + slick
+  if hasParalysis and hasSlickness then
+    send("endure")
+    send("curing prioaff paralysis")
+    return
   end
 end
    

@@ -38,6 +38,6 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-	tarAffedConfirmed("anorexia")
+	tarAffed("anorexia")
 end
 

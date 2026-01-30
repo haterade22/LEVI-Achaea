@@ -23,7 +23,7 @@ attributes:
   isColorTriggerFg: 'no'
   isColorTriggerBg: 'no'
 triggerType: 0
-conditonLineDelta: 1
+conditonLineDelta: 10
 mStayOpen: 0
 mCommand: ''
 packageName: ''
@@ -38,7 +38,7 @@ patterns:
 - pattern: '1'
   type: 5
 - pattern: ^As you carve into (\w+), you perceive that you have dealt (.+)\% damage to \w+ (torso|head|left arm|right arm|right
-    leg|left leg).$
+    leg|left leg).
   type: 1
 ]]--
 
@@ -139,5 +139,4 @@ aff3 = nil
 end
 
 end
-
 

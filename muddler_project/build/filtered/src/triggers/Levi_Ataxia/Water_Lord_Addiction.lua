@@ -1,3 +1,3 @@
 if isTargeted(matches[2]) then
-	tarAffedConfirmed("weariness", "haemophilia", "addiction")
+	tarAffed("weariness", "haemophilia", "addiction")
 end

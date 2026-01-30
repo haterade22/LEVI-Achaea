@@ -1,3 +1,18 @@
+--[[mudlet
+type: script
+name: Class Bashing
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Ataxia
+- Basher
+- Bashing
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 function ataxiaBasher_dragonBashing()
   local command, sp = "", ataxia.settings.separator
   local brage = ataxiaBasher_assembleBattlerage()

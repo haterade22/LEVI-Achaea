@@ -8,7 +8,7 @@ hierarchy:
 - Leviticus
 - APOSTATE
 attributes:
-  isActive: 'no'
+  isActive: 'yes'
   isFolder: 'no'
 packageName: ''
 ]]--

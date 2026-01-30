@@ -1,14 +1,52 @@
+--[[mudlet
+type: script
+name: CC_Apostate
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Levi  Scripts
+- Leviticus
+- APOSTATE
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 --------------------------------------------------------------------------------
 -- CC_Apostate: Unified Apostate Offensive System (V3 Integration)
 --
--- Kill Routes:
+-- Replaces old files 001-013 with a single namespace-based system.
+-- Backward-compat wrappers live in 014_Levi_Apostate.lua.
+-- Integrates with Affliction Tracker V3 (probability-based), V2, or V1.
+--
+-- Kill Routes (4 modes):
 --   1. True Lock  - DEADEYES curse delivery building toward truelock
 --   2. Corrupt    - Stack afflictions then demon corrupt for damage/catharsis
 --   3. Vivisect   - Truelock -> prone -> shrivel 4 limbs -> vivisect
 --   4. Sleep      - Build asthma + impatience + hypersomnia -> sleep curse
 --
--- DEADEYES delivers 2 curses per action (2.3s balance)
--- Lock priority: clumsiness -> asthma -> manaleech -> impatience -> slickness -> anorexia
+-- DEADEYES delivers 2 curses per action (2.3s balance).
+-- Curses are selected independently via a dual-slot system:
+--
+--   Curse 1 (primary) - Direct affliction stacking:
+--     clumsiness -> asthma -> manaleech -> impatience -> slickness -> anorexia
+--     Then: sleep/nightmare synergies -> sensitivity -> fillers -> class lock aff
+--
+--   Curse 2 (secondary) - Lock support via sicken cascade:
+--     sicken (delivers paralysis) -> impatience -> asthma
+--     -> sicken again (delivers manaleech/slickness when asthma protects smoke)
+--     -> anorexia -> slickness -> manaleech -> fillers -> class lock aff
+--
+-- Sicken cascade: sicken delivers paralysis -> manaleech -> slickness in order,
+-- based on what the target already has. Asthma blocks smoke cures, protecting
+-- manaleech and slickness once applied.
+--
+-- Lock progression: softlock (asthma+anorexia+slickness) -> hardlock (+impatience)
+--   -> truelock (+paralysis) -> class lock aff for kill
+--
+-- Corrupt damage: physical affs x7 + mental affs x8 + smoke affs x9,
+-- weighted by V3 probability when available.
 --------------------------------------------------------------------------------
 
 apostate = apostate or {}
@@ -132,165 +170,162 @@ function apostate.corruptDmg()
 end
 
 --------------------------------------------------------------------------------
--- UNIFIED CURSE PRIORITY ENGINE
+-- DUAL-SLOT CURSE PRIORITY ENGINE
+--
+-- DEADEYES takes 2 curses. Each slot has its own independent priority chain.
+-- selectCurses() orchestrates both and handles overrides (curseward, truelock).
+--
+-- Curse 1 (selectPrimaryCurse): direct affliction delivery
+--   clumsiness -> asthma -> manaleech -> impatience -> slickness -> anorexia
+--   -> sleep mode / nightmare synergy / sensitivity -> fillers -> class lock aff
+--
+-- Curse 2 (selectSecondaryCurse): sicken cascade + lock support
+--   sicken (paralysis) -> impatience -> asthma
+--   -> sicken (manaleech/slickness, protected by asthma blocking smoke cure)
+--   -> anorexia -> slickness -> manaleech -> fillers -> class lock aff
+--
+-- Curse 2 never duplicates curse 1 (c1 passed as parameter to avoid overlap).
 --------------------------------------------------------------------------------
 
--- Remove duplicates from a list while preserving order
-local function dedupList(list)
-  local seen = {}
-  local result = {}
-  for _, v in ipairs(list) do
-    if not seen[v] then
-      seen[v] = true
-      table.insert(result, v)
+-- Filler afflictions shared by both curse slots
+apostate.fillers = {
+  {aff = "stupidity",      curse = "stupid"},
+  {aff = "dizziness",      curse = "dizzy"},
+  {aff = "weariness",      curse = "weariness"},
+  {aff = "nausea",         curse = "vomiting"},
+  {aff = "confusion",      curse = "confusion"},
+  {aff = "addiction",       curse = "addiction"},
+  {aff = "epilepsy",       curse = "epilepsy"},
+  {aff = "dementia",       curse = "dementia"},
+  {aff = "vertigo",        curse = "vertigo"},
+  {aff = "recklessness",   curse = "reckless"},
+  {aff = "masochism",      curse = "masochism"},
+  {aff = "agoraphobia",    curse = "agoraphobia"},
+  {aff = "claustrophobia", curse = "claustrophobia"},
+  {aff = "paranoia",       curse = "paranoia"},
+}
+
+-- Curse 1: Primary offensive priority chain
+function apostate.selectPrimaryCurse()
+  -- Core lock building: clumsiness -> asthma -> manaleech -> impatience -> slickness -> anorexia
+  if not apostate.hasAff("clumsiness") then return "clumsy" end
+  if not apostate.hasAff("asthma") then return "asthma" end
+  if not apostate.hasAff("manaleech") then return "manaleech" end
+  if not apostate.hasAff("impatience") then return "impatience" end
+  if not apostate.hasAff("slickness") then return "slickness" end
+  if not apostate.hasAff("anorexia") then return "anorexia" end
+
+  -- Sleep mode
+  if apostate.state.mode == "sleep" then
+    local tarInsomnia = false
+    if ataxiaTemp and ataxiaTemp.tarInsomnia ~= nil then
+      tarInsomnia = ataxiaTemp.tarInsomnia
+    end
+    if apostate.hasAff("impatience") and apostate.hasAff("hypersomnia") and not tarInsomnia then
+      return "sleep"
     end
   end
-  return result
+
+  -- Nightmare synergy: push dementia for hellsight chain
+  if maretick and not apostate.hasAff("hellsight") and
+     apostate.hasAff("hypersomnia") and not apostate.hasAff("dementia") and
+     apostate.hasAff("asthma") and apostate.hasAff("impatience") then
+    return "dementia"
+  end
+
+  -- Sensitivity when deaf
+  if apostate.hasAff("deafness") and not apostate.hasAff("sensitivity") then
+    local tarClass = ataxiaNDB_getClass and ataxiaNDB_getClass(target) or ""
+    if tarClass ~= "Blademaster" and tarClass ~= "Monk" then
+      return "sensitivity"
+    end
+  end
+
+  -- Fillers
+  for _, f in ipairs(apostate.fillers) do
+    if not apostate.hasAff(f.aff) then
+      return f.curse
+    end
+  end
+
+  -- Class lock affliction
+  if getLockingAffliction then
+    local lockAff = getLockingAffliction(target)
+    if lockAff and not apostate.hasAff(lockAff) then
+      return lockAff
+    end
+  end
+
+  return "clumsy"  -- ultimate fallback
 end
 
--- Select the top 2 curses for DEADEYES, deduplicating and filling gaps.
-function apostate.pickTopTwo(curses)
-  curses = dedupList(curses)
-  if #curses == 0 then
-    return {"clumsy", "asthma"}  -- safety fallback
+-- Curse 2: Lock support chain (sicken for paralysis/slickness, then lock affs)
+function apostate.selectSecondaryCurse(c1)
+  -- Direct paralysis when target lacks it
+  if not apostate.hasAff("paralysis") and c1 ~= "paralysis" then
+    return "paralysis"
   end
-  if #curses == 1 then
-    if curses[1] ~= "clumsy" then
-      return {curses[1], "clumsy"}
-    else
-      return {curses[1], "asthma"}
+
+  -- After paralysis, build other lock components
+  if not apostate.hasAff("impatience") and c1 ~= "impatience" then return "impatience" end
+  if not apostate.hasAff("asthma") and c1 ~= "asthma" then return "asthma" end
+
+  -- Sicken again: with asthma present, sicken cascades to manaleech/slickness
+  -- (asthma blocks smoke cure, protecting both)
+  if apostate.hasAff("asthma") and
+     (not apostate.hasAff("manaleech") or not apostate.hasAff("slickness")) and
+     c1 ~= "sicken" then
+    return "sicken"
+  end
+
+  -- Remaining lock afflictions
+  if not apostate.hasAff("anorexia") and c1 ~= "anorexia" then return "anorexia" end
+  if not apostate.hasAff("slickness") and c1 ~= "slickness" then return "slickness" end
+  if not apostate.hasAff("manaleech") and c1 ~= "manaleech" then return "manaleech" end
+
+  -- Fillers (skip whatever c1 is using)
+  for _, f in ipairs(apostate.fillers) do
+    if not apostate.hasAff(f.aff) and c1 ~= f.curse then
+      return f.curse
     end
   end
-  return {curses[1], curses[2]}
+
+  -- Class lock affliction
+  if getLockingAffliction then
+    local lockAff = getLockingAffliction(target)
+    if lockAff and not apostate.hasAff(lockAff) and c1 ~= lockAff then
+      return lockAff
+    end
+  end
+
+  if c1 ~= "clumsy" then return "clumsy" end
+  return "asthma"
 end
 
 -- Main curse selection. Returns table of 2 curse names for DEADEYES.
 function apostate.selectCurses()
-  local curses = {}
-  local mode = apostate.state.mode
   local locks = apostate.getLocks()
 
-  -- PHASE 0: Curseward check (universal - must breach first)
+  -- Curseward: must breach first
   if apostate.hasAff("curseward") then
-    table.insert(curses, "breach")
+    return {"breach", apostate.selectSecondaryCurse("breach")}
   end
 
-  -- PHASE 1: Truelock completion
-  -- If near truelock, push class-specific lock affliction
+  -- Truelock completion: push class-specific lock affliction
   if locks.truelock >= 0.7 then
     local lockAff = nil
     if getLockingAffliction then
       lockAff = getLockingAffliction(target)
     end
     if lockAff and not apostate.hasAff(lockAff) then
-      table.insert(curses, lockAff)
+      return {lockAff, apostate.selectSecondaryCurse(lockAff)}
     end
   end
 
-  -- PHASE 2: Core lock building
-  -- Sequence: clumsiness -> asthma -> manaleech -> impatience -> slickness -> anorexia
-
-  -- Step 1: Clumsiness (fumble herb eating = delays cures)
-  if not apostate.hasAff("clumsiness") then
-    table.insert(curses, "clumsy")
-  end
-
-  -- Step 2: Asthma (blocks smoking = protects manaleech/asthma from cure)
-  if not apostate.hasAff("asthma") then
-    table.insert(curses, "asthma")
-  end
-
-  -- Step 3: Manaleech (drains mana toward catharsis, smoke-cured but blocked by asthma)
-  if not apostate.hasAff("manaleech") then
-    table.insert(curses, "manaleech")
-  end
-
-  -- Step 4: Impatience (blocks FOCUS = mental affliction cure)
-  if not apostate.hasAff("impatience") then
-    table.insert(curses, "impatience")
-  end
-
-  -- Step 5: Slickness (blocks salve application)
-  if not apostate.hasAff("slickness") then
-    table.insert(curses, "slickness")
-  end
-
-  -- Step 6: Anorexia (blocks eating = herb cures)
-  if not apostate.hasAff("anorexia") then
-    table.insert(curses, "anorexia")
-  end
-
-  -- Step 7: Paralysis (tree block + action denial)
-  if not apostate.hasAff("paralysis") then
-    table.insert(curses, "paralysis")
-  end
-
-  -- PHASE 3: Sleep mode additions
-  if mode == "sleep" then
-    local tarInsomnia = false
-    if ataxiaTemp and ataxiaTemp.tarInsomnia ~= nil then
-      tarInsomnia = ataxiaTemp.tarInsomnia
-    end
-    if apostate.hasAff("impatience") and apostate.hasAff("hypersomnia") and not tarInsomnia then
-      table.insert(curses, "sleep")
-    end
-  end
-
-  -- PHASE 4: Nightmare synergy
-  -- If nightmare is active and has delivered hypersomnia, push dementia for hellsight chain
-  if maretick and not apostate.hasAff("hellsight") and
-     apostate.hasAff("hypersomnia") and not apostate.hasAff("dementia") and
-     apostate.hasAff("asthma") and apostate.hasAff("impatience") then
-    table.insert(curses, "dementia")
-  end
-
-  -- PHASE 5: Sensitivity when deaf (strips deafness + applies sensitivity)
-  if apostate.hasAff("deafness") then
-    if not apostate.hasAff("sensitivity") then
-      local tarClass = ""
-      if ataxiaNDB_getClass then
-        tarClass = ataxiaNDB_getClass(target) or ""
-      end
-      -- Skip sensitivity against Blademaster/Monk (deaf is core defense)
-      if tarClass ~= "Blademaster" and tarClass ~= "Monk" then
-        table.insert(curses, "sensitivity")
-      end
-    end
-  end
-
-  -- PHASE 6: Filler afflictions (corrupt damage padding + lock reinforcement)
-  local fillers = {
-    {aff = "stupidity",      curse = "stupid"},
-    {aff = "dizziness",      curse = "dizzy"},
-    {aff = "weariness",      curse = "weariness"},
-    {aff = "nausea",         curse = "vomiting"},
-    {aff = "confusion",      curse = "confusion"},
-    {aff = "addiction",       curse = "addiction"},
-    {aff = "epilepsy",       curse = "epilepsy"},
-    {aff = "dementia",       curse = "dementia"},
-    {aff = "vertigo",        curse = "vertigo"},
-    {aff = "recklessness",   curse = "reckless"},
-    {aff = "masochism",      curse = "masochism"},
-    {aff = "agoraphobia",    curse = "agoraphobia"},
-    {aff = "claustrophobia", curse = "claustrophobia"},
-    {aff = "paranoia",       curse = "paranoia"},
-  }
-  for _, f in ipairs(fillers) do
-    if not apostate.hasAff(f.aff) then
-      table.insert(curses, f.curse)
-    end
-  end
-
-  -- PHASE 7: Class lock affliction if not already covered
-  if getLockingAffliction then
-    local lockAff = getLockingAffliction(target)
-    if lockAff and not apostate.hasAff(lockAff) then
-      table.insert(curses, lockAff)
-    end
-  end
-
-  -- Pick top 2 with dedup
-  return apostate.pickTopTwo(curses)
+  -- Normal: curse 1 from primary chain, curse 2 from secondary chain
+  local c1 = apostate.selectPrimaryCurse()
+  local c2 = apostate.selectSecondaryCurse(c1)
+  return {c1, c2}
 end
 
 -- Convenience accessors
@@ -299,7 +334,7 @@ function apostate.getCurse1()
 end
 
 function apostate.getCurse2()
-  return apostate.curses[2] or "impatience"
+  return apostate.curses[2] or "sicken"
 end
 
 --------------------------------------------------------------------------------
@@ -356,6 +391,8 @@ end
 
 --------------------------------------------------------------------------------
 -- PRE/POST ATTACK BUILDERS
+-- Pre: bloodpact setup, daegger summon for catharsis/prone
+-- Post: bloodworm summon, daemon resummon, disfigure for disloyalty
 --------------------------------------------------------------------------------
 
 function apostate.buildPreAttack()
@@ -400,6 +437,8 @@ end
 
 --------------------------------------------------------------------------------
 -- UNIFIED ATTACK BUILDER
+-- Priority: vivisect > shield strip > trample > catharsis > corrupt
+--   > corrupt followup > shrivel > DEADEYES (default curse delivery)
 --------------------------------------------------------------------------------
 
 function apostate.buildAttack()
@@ -451,6 +490,8 @@ end
 
 --------------------------------------------------------------------------------
 -- MAIN DISPATCH
+-- Entry point called by all backward-compat wrappers in 014_Levi_Apostate.lua.
+-- Validates target, selects curses, builds attack, ensures baalzadeen, sends.
 --------------------------------------------------------------------------------
 
 function apostate.dispatch()
@@ -468,6 +509,9 @@ function apostate.dispatch()
 
   -- Select curses based on current mode and target state
   apostate.curses = apostate.selectCurses()
+
+  -- Debug echo: curses being sent + stuck afflictions
+  apostate.debugEcho()
 
   -- Build the attack
   local preCmd, atkCmd, postCmd = apostate.buildAttack()
@@ -498,6 +542,26 @@ end
 --------------------------------------------------------------------------------
 -- DEBUG / STATUS
 --------------------------------------------------------------------------------
+
+function apostate.debugEcho()
+  local c1 = apostate.curses and apostate.curses[1] or "?"
+  local c2 = apostate.curses and apostate.curses[2] or "?"
+
+  -- Key lock afflictions to track
+  local lockAffs = {"clumsiness", "asthma", "manaleech", "impatience", "slickness", "anorexia", "paralysis"}
+  local stuck = {}
+  for _, aff in ipairs(lockAffs) do
+    if apostate.hasAff(aff) then
+      stuck[#stuck + 1] = aff
+    end
+  end
+
+  local stuckStr = #stuck > 0 and table.concat(stuck, ", ") or "none"
+  local sys = apostate.getTrackingSystem()
+
+  cecho("\n<yellow>[APO]<reset> Curses: <green>" .. c1 .. "<reset> + <green>" .. c2 ..
+    "<reset> | Stuck(<cyan>" .. sys .. "<reset>): <red>" .. stuckStr .. "<reset>\n")
+end
 
 function apostate.status()
   local sys = apostate.getTrackingSystem()

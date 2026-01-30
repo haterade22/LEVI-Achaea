@@ -13,6 +13,21 @@ attributes:
 packageName: ''
 ]]--
 
+--[[mudlet
+type: script
+name: Serpent Offense
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Levi  Scripts
+- Leviticus
+- Serpent
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 --[[
     ============================================================================
     SERPENT OFFENSE SYSTEM

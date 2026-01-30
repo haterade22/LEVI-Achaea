@@ -1,3 +1,18 @@
+--[[mudlet
+type: script
+name: Affliction Management
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Ataxia
+- Ataxia
+- Combat
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 function unnamableHorrorSet()
   tAffs.horror = tAffs.horror or 1
   

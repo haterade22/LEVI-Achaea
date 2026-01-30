@@ -1,3 +1,23 @@
+--[[mudlet
+type: script
+name: ataxia_RoomContents_Update
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Ataxia
+- Ataxia
+- Gmcp Related
+- Update Stuff
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+eventHandlers:
+- gmcp.Char.Items.List
+- gmcp.Char.Items.Remove
+- gmcp.Char.Items.Add
+]]--
+
 function ataxia_RoomContents_Update(event)
 	--Create the table if it's not already there.
    ataxiaBasher_invalidateStormhammer()

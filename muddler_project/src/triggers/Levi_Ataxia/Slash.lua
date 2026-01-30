@@ -1,4 +1,5 @@
 local person = multimatches[1][2]
+
 ataxiaTemp.hitCount = ataxiaTemp.hitCount + 1
 
 if ataxiaTemp.class == "Bard" then return end
@@ -95,4 +96,3 @@ aff3 = nil
 end
 
 end
-

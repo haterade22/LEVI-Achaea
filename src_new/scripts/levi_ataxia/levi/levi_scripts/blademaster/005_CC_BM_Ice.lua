@@ -13,6 +13,21 @@ attributes:
 packageName: ''
 ]]--
 
+--[[mudlet
+type: script
+name: CC_BM_Ice
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Levi  Scripts
+- Leviticus
+- Blademaster
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 -- Blademaster Dispatch System
 -- Three strategies available:
 --

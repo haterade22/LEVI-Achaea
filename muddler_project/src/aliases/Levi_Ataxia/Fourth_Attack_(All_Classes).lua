@@ -11,15 +11,7 @@ serpent_kelp()
 end
  
 if gmcp.Char.Status.class == "Blademaster" then
-tjew = false
-bmgrouplock()
-
-  if tAffs.rebounding or tAffs.shield then
-    send("queue addclear free assess "..target.. ";raze " ..target.. " " ..tstrike)
-  else
-    send("queue addclear free infuse ice;assess " ..target.. " ;pommelstrike " ..target.. " " ..tstrike)
-  end
-  
+bmbs()  
 end
 
 if gmcp.Char.Status.class == "Runewarden" and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" then

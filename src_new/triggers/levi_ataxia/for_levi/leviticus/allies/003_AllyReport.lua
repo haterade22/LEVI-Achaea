@@ -10,7 +10,7 @@ hierarchy:
 - zGUI Redux
 - Allies
 attributes:
-  isActive: 'no'
+  isActive: 'yes'
   isFolder: 'no'
   isTempTrigger: 'no'
   isMultiline: 'no'

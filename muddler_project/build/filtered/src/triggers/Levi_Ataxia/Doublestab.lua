@@ -36,4 +36,3 @@ if isTargeted(person) then
     end
 	end
 end
-

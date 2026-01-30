@@ -1,3 +1,19 @@
+--[[mudlet
+type: script
+name: showAffsV2
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Levi  Scripts
+- ZulahGUI - Saonji Edit
+- zGUI Redux
+- Update Windows
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 --[[
     V2 Affliction Display
 

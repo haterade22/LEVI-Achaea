@@ -8,7 +8,7 @@ tekura.dispatch.run()
 end
 
 if gmcp.Char.Status.class == "Blademaster" then
-bm_brokenstarroute2()
+bmdq()
 end
 
 if gmcp.Char.Status.class == "Runewarden" and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Cutting" then
@@ -38,7 +38,7 @@ if gmcp.Char.Status.class == "Infernal" and gmcp.Char.Vitals.charstats[4] == "Sp
 idwb_skullfractures()
 end
 if gmcp.Char.Status.class == "Infernal" and gmcp.Char.Vitals.charstats[4] == "Spec: Dual Cutting" then
-infernaldwcvivi2limblevitest()
+infernalDWC2LVivisect()
 end
 if gmcp.Char.Status.class == "Infernal" and gmcp.Char.Vitals.charstats[4] == "Spec: Two Handed" then
 infernaltwohand()
@@ -50,10 +50,11 @@ infernalpriosblackout()
 end
 
 if gmcp.Char.Status.class == "Apostate" then
-apostate_sleep()
+apostate.setMode("corrupt")
+apostate.dispatch()
 end
 if gmcp.Char.Status.class == "Serpent" then
-serp_ekanelia_offense()
+serp_quicklocksnakeprone()
 end
 if gmcp.Char.Status.class == "Psion" then
 levipsionflurry()

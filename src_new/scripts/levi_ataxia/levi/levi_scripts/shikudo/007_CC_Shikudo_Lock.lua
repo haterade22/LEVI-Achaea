@@ -33,6 +33,40 @@ shikudoLock.state = {
 -- Note: Uses global 'mindlocked' variable (set in 099_Login_Function.lua)
 -- Triggers should set mindlocked = true when mindlock is established
 
+--------------------------------------------------------------------------------
+-- CONFIG VALUES (can be adjusted)
+--------------------------------------------------------------------------------
+
+shikudoLock.config = {
+  kaiSurgeCost = 31,      -- Kai energy needed for KAI SURGE
+}
+
+--------------------------------------------------------------------------------
+-- HELPER FUNCTIONS (ported from Blademaster improvements)
+--------------------------------------------------------------------------------
+
+function shikudoLock.getKai()
+  -- Kai energy is stored in ataxia.vitals.class for Monk
+  return ataxia.vitals.class or 0
+end
+
+function shikudoLock.canKaiSurge()
+  return shikudoLock.getKai() >= shikudoLock.config.kaiSurgeCost
+end
+
+function shikudoLock.getPhaseLabel()
+  -- Colored phase labels for consistent output
+  local phase = shikudoLock.state.phase
+  local labels = {
+    SOFTLOCK = "<yellow>SOFTLOCK",
+    VENOMLOCK = "<orange>VENOMLOCK",
+    HARDLOCK = "<magenta>HARDLOCK",
+    TRUELOCK = "<red>TRUELOCK",
+    KILL = "<green>KILL",
+  }
+  return labels[phase] or "<grey>Unknown"
+end
+
 -- Max kata per form before stumble
 shikudoLock.maxKata = {
   Tykonos = 12,
@@ -377,7 +411,6 @@ end
 
 --------------------------------------------------------------------------------
 -- TELEPATHY INTEGRATION
--- IMPORTANT: Only use Telepathy in RAIN form - we get EQ balance decrease bonus!
 --------------------------------------------------------------------------------
 
 function shikudoLock.selectTelepathy()
@@ -388,20 +421,6 @@ function shikudoLock.selectTelepathy()
   if not ataxia.balances.eq then
     return nil
   end
-
-  local form = ataxia.vitals.form or "Oak"
-
-  -- CRITICAL: Only use Telepathy in RAIN form for the EQ balance bonus!
-  -- Exception: mindlock can be established in any form (setup requirement)
-  if form ~= "Rain" then
-    -- Only establish mindlock outside of Rain (necessary setup)
-    if not mindlocked then
-      return "mindlock " .. target
-    end
-    return nil  -- Save all other telepathy for Rain
-  end
-
-  -- === IN RAIN FORM - Telepathy is FASTER here! ===
 
   -- Priority 1: Establish mindlock (uses global 'mindlocked' variable)
   if not mindlocked then
@@ -462,15 +481,20 @@ function shikudoLock.dispatch()
   -- Update current phase
   shikudoLock.updatePhase()
 
-  -- Debug output
+  -- Phase-based output with Kai energy
   local form = ataxia.vitals.form or "Unknown"
   local kata = ataxia.vitals.kata or 0
-  local phase = shikudoLock.state.phase
+  local phaseLabel = shikudoLock.getPhaseLabel()
+  local kai = shikudoLock.getKai()
+  local kaiColor = shikudoLock.canKaiSurge() and "<green>" or "<yellow>"
 
-  cecho("\n<cyan>[LOCK] Target: " .. tostring(target))
-  cecho(" | Phase: <yellow>" .. phase)
-  cecho(" <cyan>| Form: " .. form)
-  cecho(" | Kata: " .. kata)
+  cecho("\n<cyan>[LOCK] " .. phaseLabel .. " <cyan>| Target: <white>" .. tostring(target))
+  cecho(" <cyan>| Form: <white>" .. form)
+  cecho(" <cyan>| Kata: <white>" .. kata)
+  cecho(" <cyan>| Kai: " .. kaiColor .. kai)
+  if shikudoLock.canKaiSurge() then
+    cecho(" <green>KAI SURGE READY")
+  end
 
   cecho("\n<cyan>[LOCK] Affs: ")
   cecho(tAffs.asthma and "<green>asthma " or "<red>asthma ")
@@ -539,14 +563,17 @@ function shikudoLock.status()
 
   -- Update phase
   shikudoLock.updatePhase()
-  local phase = shikudoLock.state.phase
+  local phaseLabel = shikudoLock.getPhaseLabel()
+  local kai = shikudoLock.getKai()
+  local kaiColor = shikudoLock.canKaiSurge() and "<green>" or "<yellow>"
 
   cecho("\n<cyan>+============================================+")
   cecho("\n<cyan>|         <white>SHIKUDO LOCK STATUS<cyan>                |")
   cecho("\n<cyan>+============================================+")
 
-  cecho("\n<cyan>| <white>Phase: <yellow>" .. phase)
+  cecho("\n<cyan>| <white>Phase: " .. phaseLabel)
   cecho("\n<cyan>| <white>Form: <yellow>" .. form .. " <white>(<yellow>" .. kata .. "/" .. maxKata .. " kata<white>)")
+  cecho("\n<cyan>| <white>Kai: " .. kaiColor .. kai .. (shikudoLock.canKaiSurge() and " <green>KAI SURGE READY" or ""))
   cecho("\n<cyan>| <white>Mindlock: " .. (mindlocked and "<green>ACTIVE" or "<red>INACTIVE"))
 
   cecho("\n<cyan>+--------------------------------------------+")

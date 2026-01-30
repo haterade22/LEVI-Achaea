@@ -1,3 +1,19 @@
+--[[mudlet
+type: script
+name: Aff gains/losses
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Ataxia
+- Ataxia
+- System-related
+- Curing Stuff
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 -- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Ataxia-DownloadThis > Ataxia > System-related > Curing Stuff > Aff gains/losses
 
 -- Darkshade Duration Tracker

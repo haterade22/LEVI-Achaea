@@ -1,0 +1,45 @@
+--[[mudlet
+type: trigger
+name: Clumsiness - Missed Attacks
+hierarchy:
+- Levi_Ataxia
+- For Levi
+- leviticus
+- Ataxia
+- Combat/Aff Tracking
+- Add Afflictions
+- Third Person
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+  isTempTrigger: 'no'
+  isMultiline: 'no'
+  isPerlSlashGOption: 'no'
+  isColorizerTrigger: 'no'
+  isFilterTrigger: 'no'
+  isSoundTrigger: 'no'
+  isColorTrigger: 'no'
+  isColorTriggerFg: 'no'
+  isColorTriggerBg: 'no'
+triggerType: 0
+conditonLineDelta: 0
+mStayOpen: 0
+mCommand: ''
+packageName: ''
+mFgColor: '#ff0000'
+mBgColor: '#ffff00'
+mSoundFile: ''
+colorTriggerFgColor: '#000000'
+colorTriggerBgColor: '#000000'
+patterns:
+- pattern: ^A frustrated frown crosses the face of (\w+).$
+  type: 1
+]]--
+
+
+if isTargeted(matches[2]) then
+	tarAffed("clumsiness")
+
+	-- V3 integration: collapse branches (proves clumsiness present)
+	if onTargetFumbleV3 then onTargetFumbleV3() end
+end

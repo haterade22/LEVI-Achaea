@@ -96,5 +96,3 @@ aff3 = nil
 end
 
 end
-
-

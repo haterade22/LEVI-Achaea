@@ -1,3 +1,19 @@
+--[[mudlet
+type: script
+name: Infernal DWC Vivisect 2L
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Levi  Scripts
+- Leviticus
+- INFERNAL
+- DWC
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 --[[
 ===============================================================================
                     INFERNAL DWC 2-LIMB VIVISECT OFFENSE
@@ -119,25 +135,7 @@ LIMB PREPPING (2-LIMB):
         1. Right arm (the arm we will DSL with epteth/epseth)
         2. Left leg (the leg we will undercut)
 
-    Limb prepping requires NAUSEA stuck (parry bypass active).
-    If attack is parried, switch to the other prep limb until nausea sticks again.
-
--------------------------------------------------------------------------------
-PARRY HANDLING:
--------------------------------------------------------------------------------
-
-    When our attack gets parried, nausea is NOT active on the target
-    (nausea bypasses parry). We track which limb they parried and switch
-    to the other prep target until nausea sticks again.
-
-    Parry Detection Trigger:
-        Pattern: ^(\w+) parries the attack with a deft manoeuvre\.$
-        Code: if isTargeted(matches[2]) then infernalDWC2L.onParry() end
-
-    Behavior:
-        - onParry() records the parried limb and clears nausea tracking
-        - selectLimbTarget() hits the OTHER prep limb (right arm or focus leg)
-        - When nausea is confirmed again, parry tracking is cleared automatically
+    Only prep limbs when NAUSEA is stuck (parry bypass active).
 
 -------------------------------------------------------------------------------
 CONFIGURATION:
@@ -162,8 +160,6 @@ STATE TRACKING:
         focusLeg = "left",          -- Which leg to prep/break (configurable)
         lastPhase = nil,            -- Track phase changes for debugging
         riftlockMode = false,       -- True when target uses RESTORE
-        parriedLimb = nil,          -- Which limb target is parrying (set on parry detection)
-        lastTargetedLimb = nil,     -- Last limb we targeted (for parry detection)
     }
 
 -------------------------------------------------------------------------------
@@ -177,8 +173,6 @@ COMMANDS:
     infernalDWC2LSetFocusLeg(side)  -- Set focus leg ("left" or "right")
     infernalDWC2L.enterRiftlock()   -- Enter riftlock mode (call from RESTORE trigger)
     infernalDWC2L.exitRiftlock()    -- Exit riftlock mode
-    infernalDWC2L.onParry()         -- Called when attack is parried (from parry trigger)
-    infernalDWC2L.clearParry()      -- Clear parry tracking manually
 
 -------------------------------------------------------------------------------
 TRIGGER SETUP (External):
@@ -202,18 +196,6 @@ TRIGGER SETUP (External):
                 infernalDWC.enterRiftlock()
                 if infernalDWC2L then
                     infernalDWC2L.enterRiftlock()
-                end
-            end
-
-    PARRY DETECTION Trigger (380_DWC_Parry_Detected.lua):
-        Pattern: ^(\w+) parries the attack with a deft manoeuvre\.$
-        Code:
-            if isTargeted(matches[2]) then
-                if infernalDWC and infernalDWC.onParry then
-                    infernalDWC.onParry()
-                end
-                if infernalDWC2L and infernalDWC2L.onParry then
-                    infernalDWC2L.onParry()
                 end
             end
 

@@ -1,15 +1,16 @@
 if gmcp.Char.Status.class == "Apostate" then
-  apostate_group()
+apostate.setMode("group")
+apostate.dispatch()
 end
 
 --utter lament
 
 if gmcp.Char.Status.class == "Monk" then
- shikudoLock.dispatch()
+shikudolock()
 end
 
 if gmcp.Char.Status.class == "Serpent" then
-serp_ekanelia_offense()
+serp_groupattack()
 end
  
 if gmcp.Char.Status.class == "Blademaster" then

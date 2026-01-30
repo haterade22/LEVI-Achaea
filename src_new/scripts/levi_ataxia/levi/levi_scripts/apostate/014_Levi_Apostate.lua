@@ -13,6 +13,21 @@ attributes:
 packageName: ''
 ]]--
 
+--[[mudlet
+type: script
+name: Levi Apostate
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Levi  Scripts
+- Leviticus
+- APOSTATE
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 --------------------------------------------------------------------------------
 -- BACKWARD COMPATIBILITY WRAPPERS
 -- Old function names route to the new CC_Apostate system (015_CC_Apostate.lua)

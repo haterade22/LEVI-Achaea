@@ -1,5 +1,6 @@
 local name = multimatches[1][2]
 if isTargeted(multimatches[1][2]) and tBals.focus then
+onTargetFocusV3()
   if passiveFailsafe then restorePassiveCure() end
 	if multimatches[3][1] == name .. " shakes his head and a look of clarity returns to his eyes."
 		or multimatches[3][1] == name .. " shakes her head and a look of clarity returns to her eyes." then

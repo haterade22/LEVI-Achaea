@@ -37,7 +37,7 @@ patterns:
   type: 1
 - pattern: '1'
   type: 5
-- pattern: ^(\w+) attempts to defend against your attack but you bat (\w+) weak attempt aside.$
+- pattern: ^(\w+) attempts to defend against your attack but you bat (\w+) weak attempt aside.
   type: 1
 ]]--
 
@@ -139,5 +139,3 @@ aff3 = nil
 end
 
 end
-
-

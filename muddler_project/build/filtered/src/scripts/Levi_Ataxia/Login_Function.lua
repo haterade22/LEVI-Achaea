@@ -1,5 +1,5 @@
 function levilogin()
-
+enableV3()
 sendGMCP('Core.Supports.Add ["Comm.Channel 1"]')
 sendGMCP('Core.Supports.Add ["IRE.Target 1"]')
 sendGMCP('Core.Supports.Add ["IRE.Time 1"]')
@@ -204,22 +204,22 @@ expandAlias("defup earthlord")
 tempTimer(20,[[send("terran tremorsense")]])
 end
 if ataxia_isClass("Silver Dragon") then
-	expandAlias("defup bdragon")
+	expandAlias("defup dragon")
 end
 if ataxia_isClass("Blue Dragon") then
-	expandAlias("defup bdragon")
+	expandAlias("defup dragon")
 end
-if ataxia_isClass("Gold Dragon") then
-	expandAlias("defup bdragon")
+if ataxia_isClass("Golden Dragon") then
+	expandAlias("defup dragon")
 end
 if ataxia_isClass("Red Dragon") then
-	expandAlias("defup bdragon")
+	expandAlias("defup dragon")
 end
 if ataxia_isClass("Green Dragon") then
-	expandAlias("defup bdragon")
+	expandAlias("defup dragon")
 end
 if ataxia_isClass("Black Dragon") then
-	expandAlias("defup bdragon")
+	expandAlias("defup dragon")
 end
 
 if ataxia_isClass("Earth Lord") then

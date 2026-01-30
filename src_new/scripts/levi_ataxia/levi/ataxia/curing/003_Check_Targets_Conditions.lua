@@ -14,6 +14,22 @@ attributes:
 packageName: ''
 ]]--
 
+--[[mudlet
+type: script
+name: Check Targets Conditions
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Ataxia
+- Ataxia
+- Combat
+- Curing
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 function checkTargetLocks()
   if lockEchoTimer then return end
 

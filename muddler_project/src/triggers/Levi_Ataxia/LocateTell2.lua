@@ -1,3 +1,3 @@
 locateon = true
 locateperson = matches[2]
-send("farsee " ..matches[3])
+send("cq all;farsee " ..matches[3])

@@ -1,3 +1,19 @@
+--[[mudlet
+type: script
+name: Autobashing Functions
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Ataxia
+- Basher
+- Bashing
+- genRunning
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 -- Per-class manual attack cooldown overrides (seconds).
 -- Falls back to ataxiaBasher.attackCooldown or 0.4s if not listed.
 ataxiaBasher_attackCooldowns = {

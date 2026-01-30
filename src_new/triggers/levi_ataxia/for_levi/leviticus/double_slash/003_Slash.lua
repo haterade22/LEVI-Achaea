@@ -35,14 +35,15 @@ colorTriggerBgColor: '#000000'
 patterns:
 - pattern: ^You slash into (\w+)'s (.+) with (.+).$
   type: 1
-- pattern: '10'
+- pattern: '1'
   type: 5
 - pattern: ^As you carve into (\w+), you perceive that you have dealt (.+)\% damage to \w+ (torso|head|left arm|right arm|right
-    leg|left leg).$
+    leg|left leg).
   type: 1
 ]]--
 
 local person = multimatches[1][2]
+
 ataxiaTemp.hitCount = ataxiaTemp.hitCount + 1
 
 if ataxiaTemp.class == "Bard" then return end
@@ -139,4 +140,3 @@ aff3 = nil
 end
 
 end
-

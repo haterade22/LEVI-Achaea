@@ -1,3 +1,18 @@
+--[[mudlet
+type: script
+name: Chat Capture Things
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Ataxia
+- Ataxia
+- Gui Stuff
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 -- Detect channel from message text when GMCP reports "says"
 local function detectChannelFromText(text)
   -- City channels - check for (CityName): pattern

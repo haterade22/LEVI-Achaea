@@ -1,0 +1,41 @@
+--[[mudlet
+type: trigger
+name: Consolation Prize
+hierarchy:
+- Sugardown Fields
+- Race Status
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+  isTempTrigger: 'no'
+  isMultiline: 'no'
+  isPerlSlashGOption: 'no'
+  isColorizerTrigger: 'no'
+  isFilterTrigger: 'no'
+  isSoundTrigger: 'no'
+  isColorTrigger: 'no'
+  isColorTriggerFg: 'no'
+  isColorTriggerBg: 'no'
+triggerType: 0
+conditonLineDelta: 0
+mStayOpen: 0
+mCommand: ''
+packageName: ''
+mFgColor: '#ff0000'
+mBgColor: '#ffff00'
+mSoundFile: ''
+colorTriggerFgColor: '#000000'
+colorTriggerBgColor: '#000000'
+patterns:
+- pattern: ^Even though you're unlucky at Sugardown Fields, you'll have better luck with (.+) for the next few Achaean days\.$
+  type: 1
+]]--
+
+selectString(line,1)
+setBold(true)
+fg("snow")
+selectCaptureGroup(2)
+setBold(true)
+fg("SkyBlue")
+resetFormat()
+sugardown.endRace()

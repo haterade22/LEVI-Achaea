@@ -13,6 +13,21 @@ attributes:
 packageName: ''
 ]]--
 
+--[[mudlet
+type: script
+name: Bash Stats Functions
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Ataxia
+- Basher
+- Bashing
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 function resetBashingStats()
 	bashStats = {}
 	bashStats = {

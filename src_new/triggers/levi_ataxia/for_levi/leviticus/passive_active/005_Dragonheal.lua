@@ -37,8 +37,6 @@ patterns:
   type: 1
 ]]--
 
-
-
 local name = matches[2]
 
 if isTargeted(matches[2]) then

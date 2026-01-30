@@ -16,6 +16,24 @@ attributes:
 packageName: ''
 ]]--
 
+--[[mudlet
+type: script
+name: Priority Swaps
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Ataxia
+- Ataxia
+- System-related
+- Curing Stuff
+- Priority-related
+- Swaps
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 -- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Ataxia-DownloadThis > Ataxia > System-related > Curing Stuff > Priority-related > Swaps > Priority Swaps
 
 --scyPara functions

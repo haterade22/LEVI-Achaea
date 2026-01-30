@@ -14,6 +14,33 @@ attributes:
 packageName: ''
 ]]--
 
+--[[mudlet
+type: script
+name: Engaged/Disengage
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Ataxia
+- Basher
+- Bashing
+- genRunning
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
+autoBashRotation = autoBashRotation or false
+
+function toggleAutoBashRotation()
+  autoBashRotation = not autoBashRotation
+  if autoBashRotation then
+    ataxiaEcho("Auto bash rotation ENABLED")
+  else
+    ataxiaEcho("Auto bash rotation DISABLED")
+  end
+end
+
 -- Auto-move with arrival verification and retry
 function autoMoveAndBash(destinationRoom, expectedArea, travelTime)
   expandAlias("goto " .. destinationRoom)
@@ -34,6 +61,9 @@ function autoMoveAndBash(destinationRoom, expectedArea, travelTime)
     end
   end)
 end
+
+-- Register to check whenever room players update
+registerAnonymousEventHandler("gmcp.Room.Players", "checkForNaytorlin")
 
 function basher_disengaged()
 	disableTimer("Clear Bashing Console")
@@ -71,55 +101,53 @@ function basher_disengaged()
   autoExtracting = false
   
 if gmcp.Room.Info.area == "Annwyn" then
-expandAlias("goto 18280")
+expandAlias("goto 17435")
 end
 
 if gmcp.Room.Info.area == "Annwyn" then
 clearedannwyn = true
-tempTimer(1900,[[clearedannwyn = false]])
+tempTimer(190,[[clearedannwyn = false]])
 elseif gmcp.Room.Info.area == "Moghedu" then
 clearedmog = true
-tempTimer(1800,[[clearedmog = false]])
+tempTimer(180,[[clearedmog = false]])
 elseif gmcp.Room.Info.area == "the Azdun Catacombs" then
 clearedcatacombs = true
-tempTimer(1800,[[clearedcatacombs = false]])
+tempTimer(180,[[clearedcatacombs = false]])
 elseif gmcp.Room.Info.area == "Tir Murann" then
 clearedtir = true
-tempTimer(2400,[[clearedtir = false]])
+tempTimer(240,[[clearedtir = false]])
 elseif gmcp.Room.Info.area == "Quartz Peak" then
 clearedquartz = true
-tempTimer(1800,[[clearedquartz = false]])
+tempTimer(180,[[clearedquartz = false]])
 elseif gmcp.Room.Info.area == "the Den of the Quisalis" then
 clearedquisalis = true
-tempTimer(1800,[[clearedqusalis = false]])
+tempTimer(180,[[clearedquisalis = false]])
 end
 
 
 --Auto Move to New Area Stuff
+if autoBashRotation then
+  if gmcp.Room.Info.area == "Moghedu" and (clearedcatacombs == false or clearedcatacombs == nil) then
+    autoMoveAndBash("Azdun Catacombs", "the Azdun Catacombs", 15)
+  end
 
-if gmcp.Room.Info.area == "the Azdun Catacombs" and clearedmog == false then
-  autoMoveAndBash("Moghedu", "Moghedu", 20)
+  if gmcp.Room.Info.area == "the Azdun Catacombs" and (clearedtir == false or clearedtir == nil) then
+    autoMoveAndBash("21552", "Tir Murann", 10)
+  end
+
+  if gmcp.Room.Info.area == "Tir Murann" and (clearedquisalis == false or clearedquisalis == nil) then
+    autoMoveAndBash("27338", "the Den of the Quisalis", 20)
+  end
+
+  if gmcp.Room.Info.area == "the Den of the Quisalis" and (clearedquartz == false or clearedquartz == nil) then
+    autoMoveAndBash("20822", "Quartz Peak", 10)
+  end
+
+  if gmcp.Room.Info.area == "Quartz Peak" and (clearedmog == false or clearedmog == nil) then
+    autoMoveAndBash("Moghedu", "Moghedu", 12)
+  end
+  end
 end
-
-if gmcp.Room.Info.area == "The Digsite of Husks" and clearedtir == false then
-  autoMoveAndBash("21552", "Tir Murann", 14)
-end
-
-if gmcp.Room.Info.area == "Tir Murann" and clearedquartz == false then
-  autoMoveAndBash("20822", "Quartz Peak", 10)
-end
-
-if gmcp.Room.Info.area == "Quartz Peak" and clearedquisalis == false then
-  autoMoveAndBash("27338", "the Den of the Quisalis", 10)
-end
-
-if gmcp.Room.Info.area == "the Den of the Quisalis" and clearedmog == false then
-  autoMoveAndBash("Moghedu", "Moghedu", 20)
-end
-
-
-end
-
 function basher_engaged()
   if zgui then
     zgui.bwindow.console:clear()
@@ -146,6 +174,7 @@ function basher_engaged()
   lockRoom(28221, true) -- Den of Qualisus - Enormous FuckHead
   lockRoom(21143, true) -- Quartz Peak 
   lockRoom(33, true) --MOG
+  lockRoom(27580, true) -- Gil Den
   guardianofmogcunts = false
 
 	ataxia_saveSettings(false)
@@ -200,7 +229,7 @@ function basher_engaged()
   elseif gmcp.Char.Status.class == "Shaman" then
     send("unwield left;unwield right;wield right shield")
     if ataxiaTemp.me == "Leviticus" then
-    shaman.spiritlore.bashType = "swiftcurse"
+    shaman.spiritlore.bashType = shaman.spiritlore.bashType
     end
   elseif gmcp.Char.Status.class == "Magi" then
     send("unwield left;unwield right;wield left staff569815;wield right shield")

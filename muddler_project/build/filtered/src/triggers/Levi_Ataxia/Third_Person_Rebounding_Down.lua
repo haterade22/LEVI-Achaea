@@ -1,9 +1,6 @@
 if target == matches[2] then
 	tAffs.rebounding = false
-	-- V3 tracking support
-	if affConfigV3 and affConfigV3.enabled and removeAffV3 then
-		removeAffV3("rebounding")
-	end
+  removeAffV3("rebounding")
 	-- V2 tracking support
 	if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
 		if removeAffV2 then

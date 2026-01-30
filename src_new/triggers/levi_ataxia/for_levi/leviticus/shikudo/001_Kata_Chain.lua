@@ -10,7 +10,7 @@ hierarchy:
 - Monk
 - Shikudo
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
   isTempTrigger: 'no'
   isMultiline: 'no'

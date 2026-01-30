@@ -53,11 +53,13 @@ elseif gmcp.Room.Info.area == "Mhaldor" then
     send("pt "..matches[2].." "..(matches[3] == "entered" and "IN!" or "OUT!"))
     send("clt6 "..matches[2].." "..(matches[3] == "entered" and "has entered" or "has left").." "..gmcp.Room.Info.area)
     ataxiaBasher_alert("Normal")
+    ataxia_boxEcho("Enemy has entered the area", "green")
   end
 elseif gmcp.Room.Info.area == "Annwyn" then
   -- Alert for everyone in Annwyn (free PK area)
   send("pt "..matches[2].." "..(matches[3] == "entered" and "IN!" or "OUT!"))
   ataxiaBasher_alert("Normal")
+  ataxia_boxEcho("Enemy has entered the area", "green")
 end
 
 

@@ -1,0 +1,3 @@
+send("clan mmc tell Started prospect for - General "..gmcp.Room.Info.name.." in "..gmcp.Room.Info.area)
+
+tempTimer(3600, [[ataxiaEcho("PROSPECT AVAILABLE");ataxiaEcho("PROSPECT AVAILABLE");ataxiaEcho("PROSPECT AVAILABLE";ataxiaEcho("PROSPECT AVAILABLE";ataxiaEcho("PROSPECT AVAILABLE";ataxiaEcho("PROSPECT AVAILABLE";ataxiaEcho("PROSPECT AVAILABLE";ataxiaEcho("PROSPECT AVAILABLE";ataxiaEcho("PROSPECT AVAILABLE"]])

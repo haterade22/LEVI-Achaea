@@ -1,3 +1,19 @@
+--[[mudlet
+type: script
+name: Miscellaneous Aff Tracking Methods
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Ataxia
+- Ataxia
+- Combat
+- Offensive Things
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 --In-testing function for Psion bleed tracking. May or may not work.
 function psion_bleedAdd(num)
 	local tobleed = tonumber(num)

@@ -1,0 +1,1 @@
+send("queue addclear free bite " ..target.. " scytherus")

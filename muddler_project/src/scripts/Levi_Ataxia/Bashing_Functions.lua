@@ -1,3 +1,18 @@
+--[[mudlet
+type: script
+name: Bashing Functions
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Ataxia
+- Basher
+- Bashing
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 -- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Ataxia-DownloadThis > Basher > Bashing > Bashing Functions
 
 -- Dispatch table: initialized once at script load time instead of every attack

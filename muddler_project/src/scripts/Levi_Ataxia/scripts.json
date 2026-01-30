@@ -10,163 +10,737 @@
         "isFolder": "yes",
         "children": [
           {
+            "name": "Ataxia",
+            "isActive": "yes",
+            "isFolder": "yes",
+            "children": [
+              {
+                "name": "Ataxia",
+                "isActive": "yes",
+                "isFolder": "yes",
+                "script": "ataxia = ataxia or {}\nataxiaTables = ataxiaTables or {}\nataxiaTemp = ataxiaTemp or {}\nataxiaTemp.addedHerbID = 1\nataxiaTemp.removedHerbID = 2\nataxiagui = ataxiagui or {}\nataxiaVersion = \"4.1\"\t\t\t\t\t\t--last was 4.1\nmuteList = muteList or {}\n\nataxiaTables.limbTimers = ataxiaTables.limbTimers or {}\nataxiaTables.fractureTimers = ataxiaTables.fractureTimers or {}\n\nataxia.bals = ataxia.bals or {}\nataxia.bals.get = {\"bal\", \"eq\"}\nataxia.bals.used = ataxia.bals.used or {}\nataxia.bals.timestamps = ataxia.bals.timestamps or {}\n\n\nfunction ataxia_Echo(text)\n\tcecho(\"\\n<a_darkcyan>(<a_darkmagenta>LEVI<a_darkcyan>): <NavajoWhite>\"..text)\nend\n\nfunction ataxiaEcho(text)\n\tcecho(\"\\n<a_darkcyan>(<a_darkmagenta>LEVI<a_darkcyan>): <NavajoWhite>\"..text)\nend",
+                "children": [
+                  {
+                    "name": "SYSTEM DOCUMENTATION",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Combat Documentation",
+                        "isActive": "no"
+                      },
+                      {
+                        "name": "Miscellaneous Documentation",
+                        "isActive": "no"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Harvesting/Crafting",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Harvester Functions"
+                      },
+                      {
+                        "name": "Toggling Functions"
+                      },
+                      {
+                        "name": "Inkmilling"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Affliction Tracking Core",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Core"
+                      },
+                      {
+                        "name": "Herb Cures"
+                      },
+                      {
+                        "name": "Backtracking"
+                      },
+                      {
+                        "name": "Verification"
+                      },
+                      {
+                        "name": "buildTarAffsV2"
+                      },
+                      {
+                        "name": "showAffsV2"
+                      },
+                      {
+                        "name": "Branching State Tracker"
+                      },
+                      {
+                        "name": "V3 Integration"
+                      },
+                      {
+                        "name": "Test Scenario"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Gmcp Related",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Rift",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "Rift functions"
+                          },
+                          {
+                            "name": "Precaching functions"
+                          },
+                          {
+                            "name": "Outrifting Functions"
+                          },
+                          {
+                            "name": "Gmcp Rift Events"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Update Stuff",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "ataxia_Players_Update",
+                            "eventHandlerList": [
+                              "gmcp.Room.Players",
+                              "gmcp.Room.AddPlayer",
+                              "gmcp.Room.RemovePlayer"
+                            ]
+                          },
+                          {
+                            "name": "ataxia_Room_Update",
+                            "eventHandlerList": [
+                              "gmcp.Room"
+                            ]
+                          },
+                          {
+                            "name": "ataxia_RoomContents_Update",
+                            "eventHandlerList": [
+                              "gmcp.Char.Items.List",
+                              "gmcp.Char.Items.Remove",
+                              "gmcp.Char.Items.Add"
+                            ]
+                          },
+                          {
+                            "name": "ataxia_Vitals_Update",
+                            "eventHandlerList": [
+                              "gmcp.Char.Vitals"
+                            ]
+                          },
+                          {
+                            "name": "Balance Tracking"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Legend Deck",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Legend Deck Table"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Shaman System",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Spirit Table"
+                      },
+                      {
+                        "name": "Save/Load functions"
+                      },
+                      {
+                        "name": "Binding functions"
+                      },
+                      {
+                        "name": "Shaman functions"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Combat",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "script": "function calculateDictate(mana)\n\tlocal dicAff = {\"shadowmadness\", \"parasite\", \"retribution\", \"depression\"}\n\tlocal c = 0\n\tlocal dictPos = 40\n\tfor _,aff in pairs(dicAff) do\n\t\tif haveAff(aff) then\n\t\t\tc = c + 1\n\t\tend\n\tend\n\tif c > 0 then c = (c*5) end\n\tdictPos = dictPos + c\n\n\tif mana <= dictPos then\n\t\tcecho(\"<NavajoWhite> [<blue>\"..mana..\"%<NavajoWhite>|<LightSkyBlue>\"..dictPos..\"%<NavajoWhite>]\")\n\t\tataxia_boxEcho(string.upper(target)..\" CAN BE DICTATED\", \"black:DodgerBlue\")\n\telse\n\t\tcecho(\"<NavajoWhite> [<blue>\"..mana..\"%<NavajoWhite>|<LightSkyBlue>\"..dictPos..\"%<NavajoWhite>]\")\n\tend\nend\n\nfunction depressionCount()\n\tlocal depAff = {\"depression\", \"nausea\", \"hypochondria\"}\n\tlocal c = 0\n\tfor _, aff in pairs(depAff) do\n\t\tif haveAff(aff) then\n\t\t\tc = c + 1\n\t\tend\n\tend\n\treturn c\nend\n\nfunction targetAffCount()\n\tlocal ignore = {\"curseward\", \"prone\", \"blindness\", \"deafness\", \"rebounding\", \"shield\", \"hierophant\", \"worms\"}\n\tlocal c = 0\n\tfor i,v in pairs(tAffs) do\n\t\tif not table.contains(ignore, i) then\n\t\t\tif v == true then\n\t\t\t\tc = c + 1\n\t\t\tend\n\t\tend\n\tend\n\treturn c\nend",
+                    "children": [
+                      {
+                        "name": "Curing",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "script": "curingTable = {\n\tgoldenseal = {\"depression\", \"sandfever\", \"stupidity\", \"epilepsy\", \"dizziness\", \"dissonance\", \"shyness\", \"impatience\", \"unweavingmind\", \"fulminated\"},\n\tlobelia = {\"recklessness\", \"vertigo\", \"spiritburn\", \"tenderskin\", \"loneliness\", \"claustrophobia\", \"masochism\", \"agoraphobia\"},\n\tbellwort = {\"timeloop\", \"justice\", \"lovers\", \"peace\", \"pacified\", \"generosity\", \"indifference\",\"diminished\"},\n\tkelp = {\"hypochondria\", \"parasite\", \"weariness\",  \"asthma\", \"healthleech\", \"clumsiness\", \"sensitivity\"},\n\tash = {\"confusion\", \"hypersomnia\", \"hallucinations\", \"paranoia\", \"dementia\",\"crescendo\",},\n\tginseng = {\"flushings\", \"lethargy\", \"haemophilia\", \"addiction\", \"nausea\", \"scytherus\", \"darkshade\", \"unweavingbody\"},\n}\n\nfunction haveSmokeAff()\n\tlocal smoke = false\n\tlocal sAffs = {\"deadening\", \"tension\",\n\t\t\"disloyalty\", \"hellsight\", \"manaleech\", \"slickness\", \"unweavingspirit\",\"earworm\",}\n    \n\tfor i=1, #sAffs do\n\t\tif haveAff(sAffs[i]) then\n\t\t\tsmoke = true\n\t\t\tbreak\n\t\tend\n\tend\n\t\n\treturn smoke\nend\n\nfunction hasSalveAff()\n  local salve = false\n  local sAffs = {\"frozen\", \"shivering\", \"anorexia\", \"burns\", \"ablaze\", \"selarnia\",\n    \"damagedleftleg\", \"damagedrightleg\", \"mangledleftleg\", \"mangledrightleg\",\n    \"damagedleftarm\", \"damagedrightarm\", \"mangledleftarm\", \"mangledrightarm\",\n    \"brokenleftarm\", \"brokenrightarm\", \"brokenleftleg\", \"brokenrightleg\", \"hypothermia\"}\n    \n  for i=1, #sAffs do\n    if haveAff(sAffs[i]) then\n      salve = true\n      break\n    end\n  end\n  \n  return salve\nend\n\nfunction restorePassiveCure()\n  cecho(\"\\n<green>+ \"..passiveFailsafe..\" +\")\n  tAffs[passiveFailsafe] = true\n  passiveFailsafe = nil\nend",
+                        "children": [
+                          {
+                            "name": "Herbs"
+                          },
+                          {
+                            "name": "Wide Groups"
+                          },
+                          {
+                            "name": "Check Targets Conditions"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Offensive Things",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "script": "function getLockingAffliction(type)\n\tlocal lockaff = {\n\t\tAlchemist = {\"stupidity\", \"stupid\"},\n\t\tApostate = {\"voyria\", \"plague\"},\n    Pariah = {\"voyria\", \"plague\"},\n\t\tBard = {\"voyria\", \"plague\"},\n\t\tBlademaster = {\"weariness\", \"weariness\"},\n\t\tDepthswalker = {\"recklessness\", \"reckless\"},\n\t\tDruid = {\"weariness\", \"weariness\"},\n\t\tInfernal = {\"weariness\", \"weariness\"},\n\t\tJester = {\"paralysis\", \"paralyse\"},\n\t\tMagi = {\"haemophilia\", \"haemophilia\"},\n\t\tMonk = {\"weariness\", \"weariness\"},\n\t\tOccultist = {\"paralysis\", \"paralyse\"},\n\t\tPaladin = {\"weariness\", \"weariness\"},\n    Unnamable = {\"weariness\", \"weariness\"},\n\t\tPriest = {\"voyria\", \"plague\"},\n\t\tPsion = {\"confusion\", \"confusion\"},\n\t\tRunewarden = {\"weariness\", \"weariness\"},\n\t\tSentinel = {\"weariness\", \"weariness\"},\n\t\tSerpent = {\"weariness\", \"weariness\"},\n\t\tShaman = {\"paralysis\", \"paralyse\"},\n\t\tSylvan = {\"haemophilia\", \"haemophilia\"},\n    Airlord = {\"weariness\", \"weariness\"},\n    Waterlord = {\"weariness\", \"weariness\"},\n    Earthlord = {\"weariness\", \"weariness\"},\n    Firelord = {\"weariness\", \"weariness\"},\n\t}\n\tif ataxiaNDB and ataxiaNDB_Exists(target) and ataxiaNDB.players[target].city ~= \"Underworld\" then\n\t\tlocal gClass = ataxiaNDB_getClass(target)\n\t\tif type == \"name\" then\n\t\t\treturn lockaff[gClass][1]\n\t\telse\n\t\t\treturn lockaff[gClass][2]\n\t\tend\n\telse\n\t\tif type == \"name\" and ataxiaNDB.players[target].city == \"Underworld\" then\n\t\t\treturn \"paralysis\"\n\t\telse\n\t\t\treturn \"paralyse\"\n\t\tend\n\tend\nend",
+                        "children": [
+                          {
+                            "name": "Monk",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "script": "function monk_checkCombo(str)\n  local sp = ataxia.settings.separator or \"::\"\n  local aSplit = string.split(str, sp)\n  local shik, tekStr = true, \"\"\n  local comboList = false\n  for _, com in pairs(aSplit) do\n    if com:find(\"combo\") then\n      comboList = string.split(com)\n      break\n    end\n  end\n  \n  if comboList then\n    ataxiaTemp.shikCombo = {}\n    local kicks = {\"flashheel\", \"risingkick\", \"frontkick\", \"spinkick\", \"crescent\"}\n    local staff = {\"shatter\", \"thrust\", \"dart\", \"hiraku\", \"hiru\", \"ruku\", \"kuro\", \"livestrike\", \"nervestrike\", \"needle\", \"jinzuku\"}\n    local tek = {\"hrs\", \"hkp\", \"snk\", \"jbp\", \"sdk\", \"ucp\", \"pmp\", \"hfp\", \"cts\", \"rhk\", \"swk\", \"brs\",\n      \"slt\", \"mnk\", \"spp\", \"rts\", \"thk\", \"wrt\", \"axk\", \"scs\", \"wwk\", \"blp\", \"bbt\", \"jpk\", \"drs\"}\n    local hit = \"\"\n    \n    for num, act in pairs(comboList) do\n      if table.contains(kicks, act) then\n        ataxiaTemp.shikCombo.kick = act\n      elseif table.contains(staff, act) then\n        if comboList[num+1] == \"light\" then\n          hit = act..\" light\"\n        else\n          hit = act\n        end\n        if ataxiaTemp.shikCombo.attackone then\n          ataxiaTemp.shikCombo.attacktwo = hit\n        else\n          ataxiaTemp.shikCombo.attackone = hit\n        end\n      elseif table.contains(tek, act) then\n        tekStr = tekStr..\" <green>(<NavajoWhite>\"..act\n        if comboList[num+1] == \"left\" or comboList[num+1] == \"right\" then\n          tekStr = tekStr..\" \"..comboList[num+1]\n        end\n        tekStr = tekStr..\"<green>)\"\n      end\n    end\n    if table.contains(comboList, \"sweep\") then\n      ataxiaTemp.shikCombo.attackone = \"sweep\"; ataxiaTemp.shikCombo.attacktwo = \"sweep\"\n    end\n    if not ataxiaBasher.enabled then\n      cecho(\"\\n<a_darkblue>[<DimGrey>\"..comboList[2]:upper()..\"<a_darkblue>]: \")\n      if tekStr == \"\" then\n        cecho(\"<DimGrey>\"..(ataxiaTemp.shikCombo.kick and ataxiaTemp.shikCombo.kick..\" - \" or \"\"))\n        cecho(\"<DimGrey>\"..(ataxiaTemp.shikCombo.attackone and ataxiaTemp.shikCombo.attackone..\" - \" or \"\"))\n        cecho(\"<DimGrey>\"..(ataxiaTemp.shikCombo.attacktwo and ataxiaTemp.shikCombo.attacktwo..\".\" or \".\"))\n      else\n        cecho(\"<DimGrey>\"..tekStr..\".\")\n      end\n    end\n  end\nend",
+                            "children": [
+                              {
+                                "name": "Tekura Limb Counter"
+                              },
+                              {
+                                "name": "Shikudo Limb Counter"
+                              },
+                              {
+                                "name": "Shikudo Extras"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Limb Management",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "script": "function target_limbBroke(limb)\n\tlocal brk = \"damaged\"..string.gsub(limb, \" \", \"\")\n\tlocal mend = \"broken\"..string.gsub(limb, \" \", \"\")\n\ttAffs[brk] = true\n--\terAff(mend)\nend\n\nfunction targetLimbs_updateTimers(limbhit)\n\tataxiaTables.limbTimers = ataxiaTables.limbTimers or {}\n\n\tif ataxiaTables.limbTimers[limbhit] then killTimer( ataxiaTables.limbTimers[limbhit] ) end\n\tataxiaTables.limbTimers[limbhit] = tempTimer(180, [[ target_resetLimb(\"]]..limbhit..[[\")]])\n\nend\n\nfunction target_resetLimb(limbhit)\n  local lco = ataxia_shortLimb(limbhit)\n\ttLimbs[lco] = 0\n\tcecho(\"\\n<a_brown>( Limb damage on target's <a_red>\"..limbhit..\"<a_brown> has been reset )\")\n\t\n\tif limbhit == \"head\" or limbhit == \"torso\" then\n\t\terAff(\"damaged\"..limbhit)\n\tend\n\t\n\tif ataxiaTables.limbTimers[limb] then \n\t\tkillTimer( ataxiaTables.limbTimers[limb] )\n\t\tataxiaTables.limbTimers[limb] = nil\n\tend\nend\n\nfunction limbCounter_textTag()\n\tlocal zero = 0\n\tfor limb, num in pairs(tLimbs) do\n\t\tif limb ~= \"BP\" and limb ~= \"staff\" and limb ~= \"airstrike\" and type(num) == \"number\" and num > 0 then\n\t\t\tzero = zero + 1\n\t\tend\n\tend\n\tif zero == 0 then return \"\" end\n\n\tlocal str = \" <a_brown>[\"\n\tlocal limbs = {\"LL\", \"RL\", \"LA\", \"RA\", \"T\", \"H\"}\n\tfor i=1, #limbs do\n\t\tlocal colour = \"\"\n\t\tif tLimbs[limbs[i]] >= 99 then\n\t\t\tcolour = \"<a_darkred>\"\n\t\telseif tLimbs[limbs[i]] >= 90 then\n\t\t\tcolour = \"<a_red>\"\n\t\telseif tLimbs[limbs[i]] >= 80 then\n\t\t\tcolour = \"<OrangeRed>\"\n\t\telseif tLimbs[limbs[i]] >= 70 then\n\t\t\tcolour = \"<dark_orange>\"\n\t\telseif tLimbs[limbs[i]] >= 60 then\n\t\t\tcolour = \"<orange>\"\n\t\telseif tLimbs[limbs[i]] >= 50 then\n\t\t\tcolour = \"<coral>\"\n\t\telseif tLimbs[limbs[i]] >= 40 then\n\t\t\tcolour = \"<goldenrod>\"\n\t\telseif tLimbs[limbs[i]] >= 30 then\n\t\t\tcolour = \"<yellow>\"\n\t\telseif tLimbs[limbs[i]] >= 20 then\n\t\t\tcolour = \"<LightGoldenrod>\"\n\t\telse\n\t\t\tcolour = \"<DimGrey>\"\n\t\tend\n\t\t\n\t\tif limbs[i] ~= limbs[#limbs] then\n\t\t\tstr = str..colour..limbs[i]..\"<a_brown>.\"\n\t\telse\n\t\t\tstr = str..colour..limbs[i]..\"<a_brown>] \"\n\t\tend\n\tend\n\n\treturn str\nend\n\nfunction limbCounter_numberTag()\n\n\tlocal zero = 0\n\tfor limb, num in pairs(tLimbs) do\n\t\tif limb ~= \"BP\" and limb ~= \"staff\" and limb ~= \"airstrike\" and type(num) == \"number\" and num > 0 then\n\t\t\tzero = zero + 1\n\t\tend\n\tend\n\tif zero == 0 then return \"\" end\n\n\tlocal str = \" <a_brown>[\"\n\tlocal limbs = {\"LL\", \"RL\", \"LA\", \"RA\", \"T\", \"H\"}\n  local val = 0\n\tfor i=1, #limbs do\n\t\tlocal colour = \"\"\n\t\tif tLimbs[limbs[i]] >= 99 then\n\t\t\tcolour = \"<a_darkred>\"\n\t\telseif tLimbs[limbs[i]] >= 90 then\n\t\t\tcolour = \"<a_red>\"\n\t\telseif tLimbs[limbs[i]] >= 80 then\n\t\t\tcolour = \"<OrangeRed>\"\n\t\telseif tLimbs[limbs[i]] >= 70 then\n\t\t\tcolour = \"<dark_orange>\"\n\t\telseif tLimbs[limbs[i]] >= 60 then\n\t\t\tcolour = \"<orange>\"\n\t\telseif tLimbs[limbs[i]] >= 50 then\n\t\t\tcolour = \"<coral>\"\n\t\telseif tLimbs[limbs[i]] >= 40 then\n\t\t\tcolour = \"<goldenrod>\"\n\t\telseif tLimbs[limbs[i]] >= 30 then\n\t\t\tcolour = \"<yellow>\"\n\t\telseif tLimbs[limbs[i]] >= 20 then\n\t\t\tcolour = \"<LightGoldenrod>\"\n\t\telse\n\t\t\tcolour = \"<DimGrey>\"\n\t\tend\n\t\t\n\t\tif limbs[i] ~= limbs[#limbs] then\n\t\t\tstr = str..colour..tLimbs[limbs[i]]..\"<NavajoWhite>|\"\n\t\telse\n\t\t\tstr = str..colour..tLimbs[limbs[i]]..\"<a_brown>] \"\n\t\tend\n\tend\n\n\treturn str\nend",
+                            "children": [
+                              {
+                                "name": "Bard Limbcounting"
+                              },
+                              {
+                                "name": "Blademaster Limbcounting"
+                              },
+                              {
+                                "name": "Dragon/Elord"
+                              },
+                              {
+                                "name": "Magi-Specific"
+                              },
+                              {
+                                "name": "Priest-Specific"
+                              },
+                              {
+                                "name": "Psion Limb Tracking"
+                              },
+                              {
+                                "name": "Target Applied Somewhere"
+                              },
+                              {
+                                "name": "Knight Limbcounting"
+                              },
+                              {
+                                "name": "Limb Data/Scripting"
+                              },
+                              {
+                                "name": "Sentinel Limb Data"
+                              },
+                              {
+                                "name": "Sylvan Limbcounting"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Miscellaneous Aff Tracking Methods"
+                          },
+                          {
+                            "name": "Sentinel-specific"
+                          },
+                          {
+                            "name": "Queueing Related"
+                          },
+                          {
+                            "name": "Firelord Stuff"
+                          },
+                          {
+                            "name": "Affliction Relapses for Two-handed"
+                          },
+                          {
+                            "name": "Twohander Fractures"
+                          },
+                          {
+                            "name": "Pariah things"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Targeting Functions"
+                      },
+                      {
+                        "name": "Affliction Management"
+                      },
+                      {
+                        "name": "Parse Cures"
+                      },
+                      {
+                        "name": "Bard Harmonics Tracking"
+                      },
+                      {
+                        "name": "Combat Tables"
+                      },
+                      {
+                        "name": "Magi Vibes Tracking"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Login",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Login Function"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Gui Stuff",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "script": "function Geyser.MiniConsole:clear()\n\tclearWindow(self.name)\nend\n\nfunction Geyser.MiniConsole:append()\n\tappendBuffer(self.name)\nend",
+                    "children": [
+                      {
+                        "name": "Creation/Layout"
+                      },
+                      {
+                        "name": "Map and Chat"
+                      },
+                      {
+                        "name": "Chat Capture Things"
+                      },
+                      {
+                        "name": "Vitals Related"
+                      },
+                      {
+                        "name": "Small Map / Small Chat"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "System-related",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Self Limb Tracking",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "script": "--Initialise the tables.\nselfLimbDamage = selfLimbDamage or {\n\t[\"head\"] = {damage = 0},\n\t[\"torso\"] = {damage = 0},\n\t[\"left arm\"] = {damage = 0},\n\t[\"right arm\"] = {damage = 0},\n\t[\"left leg\"] = {damage = 0},\n\t[\"right leg\"] = {damage = 0},\n\t\n\ttimers = {},\n\tlasthit = \"left leg\",\t\n}\n\nfunction resetMissLines()\n\tataxiaTables.missLines = {}\n\tataxiaTables.missLines = {\n\t\t\"You parry the attack with a deft manoeuvre.\", \n\t\t\"The attack rebounds back onto %w+!\", \n\t\t\"The attack rebounds onto %w+!\", \n\t\t\"The attack rebounds off your rebounding aura!\", \n\t\t\"%w+ misses you with \", \n\t\t\"You dodge nimbly out of the way.\", \n\t\t\"One of your reflections has been destroyed! You have %d+ left.\", \n\t\t\"You twist your body out of harm's way.\", \n\t\t\"You quickly jump back, avoiding the attack.\", \n\t\t\"You frantically attempt to parry the attack of %w+, but succeed only in redirecting it.\", \n\t\t\"You move inside %w+'s guard, deflecting %w+ attack to one side with your forearm before countering with a swift blow to %w+ temple.\",\n\t}\nend\n\nfunction resetBladeMasterDamage()\n\tataxiaTemp.blademasterDamage = {}\n\tlocal health = ataxia.vitals.maxhp\n\tlocal breakp = 0\n\tif health < 3600 then breakp = 7\n\telseif health < 4300 then breakp = 8\n\telseif health < 4900 then breakp = 9\n\telseif health < 5500 then breakp = 10\n\telseif health < 6200 then breakp = 11\n\telseif health < 6900 then breakp = 12\n\telseif health < 7600 then breakp = 13\n\telseif health < 8300 then breakp = 14\n\telse breakp = 15 end\n\t\n\tataxiaTemp.blademasterDamage.slash = (210/breakp)\n\tataxiaTemp.blademasterDamage.off = (150/breakp)\n\tataxiaTemp.blademasterDamage.compass = (200/breakp)\nend\n\nfunction resetKnightDamage()\n\tataxiaTemp.knightDamage = {}\n\tlocal health = ataxia.vitals.maxhp\n\t--snb calculation first\n\tlocal brk = 7\n\tif health > 3800 then\n\t\thealth = health - 3800\n\t\twhile health > 0 do\n\t\t\thealth = health - 450\n\t\t\tbrk = brk + 1\n\t\tend\n\tend\n\tataxiaTemp.knightDamage.snb = (100/brk)\n  local dwc = ((ataxia.vitals.maxhp-3800)/500)+9\n  ataxiaTemp.knightDamage.dwc = (100/dwc)\nend",
+                        "children": [
+                          {
+                            "name": "Different Attacks"
+                          },
+                          {
+                            "name": "Track The Damage"
+                          },
+                          {
+                            "name": "Parrying"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Lua Matrix package",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "complex"
+                          },
+                          {
+                            "name": "matrix"
+                          },
+                          {
+                            "name": "linear regression"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Class Things",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "Alchemist"
+                          },
+                          {
+                            "name": "Depthswalker"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Curing Stuff",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "Fracture Management",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Handle Fracture Counts"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Can(x)",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Various \"can do\" stuff"
+                              },
+                              {
+                                "name": "Misc CanDo"
+                              },
+                              {
+                                "name": "Lock breakers"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Priority-related",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Swaps",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "Class Specific"
+                                  },
+                                  {
+                                    "name": "Priority Management"
+                                  },
+                                  {
+                                    "name": "Priority Swaps"
+                                  },
+                                  {
+                                    "name": "Heartseed Management"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Default Curing Prios"
+                              },
+                              {
+                                "name": "Prio Management"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Aff gains/losses"
+                          },
+                          {
+                            "name": "Prompt Affs"
+                          },
+                          {
+                            "name": "Affliction Colouring"
+                          },
+                          {
+                            "name": "Burn Handling"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Deffing",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "script": "function buildDefsTable()\n\tataxiaTables.defences = {}\n\n\tataxiaTables.defences = {\n\t\t--Curatives\n\t\tairpocket = \"airpocket\",\n\t\tblindness = \"blindness\",\n\t\tcaloric = \"insulation\",\n\t\tdeafness = \"deafness\",\n\t\tdeathsight = \"deathsight\",\n\t\tfangbarrier = \"fangbarrier\",\n\t\tfrost = \"temperance\",\n\t\tinsomnia = \"insomnia\",\n\t\tkola = \"kola\",\n\t\tlevitation = \"levitating\",\n\t\tmass = \"density\",\n\t\tparrying = \"parrying\",\n\t\trebounding = \"rebounding\",\n\t\tspeed = \"speed\",\n\t\tshield = \"shield\",\n\t\tthirdeye = \"thirdeye\",\n\t\tvenom = \"poisonresist\",\n\n\t\t--Alchemist\n\t\tastronomy = \"astronomy\",\n    compoundmask = \"compoundmask\",\n\t\tmercury = \"mercury\",\n\t\tsulphur = \"sulphur\",\n\t\ttin = \"tin\",\n\n\t\t--Blademaster\n\t\tconsciousness = \"consciousness\",\n\t\tshinclarity = \"shinclarity\",\n\t\tshinbinding = \"shinbinding\",\n\t\tshintrance = \"shintrance\",\n\t\tretaliation = \"retaliation\",\n    mindnet = \"mindnet\",\n    weathering = \"weathering\",\n\n\n\t\t--Apostate\n\t\tdemonarmour = \"demonarmour\",\n\t\ttruestare = \"truestare\",\n\t\t\n\t\t--Bard\n\t\taria = \"aria\",\n\t\tlay = \"lay\",\n\t\tsongbird = \"songbird\",\n\t\ttune = \"blade tune\",\n\t\theartsfury = \"heartsfury\",\n    acrobatics = \"acrobatics on\",\n    harrying = \"dance harrying\",\n\n\t\t--Depthswalker\n\t\tblur = \"blur\",\n\t\tbodyaugment = \"bodyaugment\",\n\t\tdisperse = \"disperse\",\n\t\tdurability = \"durability\",\n\t\tprecision = \"precision\",\n\t\tshadowveil = \"shadowveil\",\n    antiforce = \"antiforce\",\n\t\t\n\t\t--Dragon/Elemental Lord\n\t\tcohesion = \"cohesion\",\n\t\tdragonbreath = \"dragonbreath\",\n\t\tdragonarmour = \"dragonarmour\",\n\t\ttempest = \"tempest\",\n\t\tsusurrating = \"susurrating\",\n    fireshroud = \"fireshroud\",\n    extrusion = \"extrusion\",\n    strata = \"strata\",\n\t\t\n\t\t--Jester\n\t\tslippery = \"slippery\",\n\t\tbalancing = \"balancing\",\n\t\tacrobatics = \"acrobatics\",\n    \n    -- Knight\n    deflect = \"deflect\",\n    blademastery = \"blademastery\",\n\t\t\n    --Magi\n\t\tchargeshield = \"chargeshield\",\n\t\tdiamondskin = \"diamondskin\",\n\t\tstoneskin = \"stoneskin\",\n    simultaneity = \"simultaneity\",\n\n\t\t--Monk\n\t\tboostedregeneration = \"boosting\",\n\t\tkaitrance = \"kaitrance\",\n\t\thyperfocus = \"hyperfocus\",\n\t\tregeneration = \"regeneration\",\n\t\tshikudoform = \"shikudoform\",\n\t\tsplitmind = \"splitmind\",\n\t\tmindnet = \"mindnet\",\n    bodyblock = \"bodyblock\",\n    evadeblock = \"evadeblock\",\n    pinchblock = \"pinchblock\",\n    hypersense = \"hypersense\",\n    kaiboost = \"kaiboost\",\n    mindcloak = \"mindcloak\", \n    \n    --pariah\n    shieldlogograph = \"shieldlogograph\",\n    accursedresolve = \"accursedresolve\",\n    leechlogograph = \"leechlogograph\",       \n\n\t\t--Necromancy\n\t\tdeathaura = \"deathaura\",\n\t\tlifevision = \"lifevision\",\n\t\tsoulcage = \"soulcage\",\n\t\tvengeance = \"vengeance\",\n\n\t\t--Occultist\n\t\tarctar = \"arctar\",\n\t\tdevilmark = \"devilmark\",\n\t\tdistortedaura = \"distortedaura\",\n\t\ttentacles = \"tentacles\",\n\n\t\t--Priest\n\t\twillpowerblessing = \"willpowerblessing\",\n\t\tenduranceblessing = \"enduranceblessing\",\n\t\tthermalshield = \"thermalshield\",\n\t\tfrostshield = \"frostshield\",\n\t\tearthshield = \"earthshield\",\n\n\t\t--Psion\n\t\tguidedstrike = \"guidedstrike\",\n\t\tpsitranscend = \"psitranscend\",\n\t\tsecondskin = \"secondskin\",\n\t\trupturesight = \"rupturesight\",\n    psicomprehend = \"psicomprehend\",\n    psibreakthrough = \"psibreakthrough\",\n\n\t\t--Sentinel\n\t\taffinity = \"affinity\",\n\t\tbarkskin = \"barkskin\",\n\t\tfirstaid = \"firstaid\",\n\t\tstealth = \"stealth\",\n    scouting = \"scouting\",\n    fleetness = \"fleetness\",\n    \n\n\t\t--Serpent\n     ghost = \"ghost\",\n     lipreading = \"lipreading\",\n     pacing = \"pacing\",\n     scales = \"scales\",\n     weaving = \"weaving\",\n     secondsight = \"secondsight\",\n     hide = \"hiding\",\n\n\t\t--Shaman\n\t\tswiftcurse = \"swiftcurse\",\n    \n    --Sylvan\n    spinningstaff = \"spinningstaff\",\n    viridian = \"viridian\",\n    \n    --Unnamable\n    bulk = \"bulk\",\n    mouths = \"mouths\",\n    joints = \"joints\",\n    eyes = \"eyes\",\n    unnamablepresence = \"unnamablepresence\",\n\n\t\t--Shared\n    avoid = \"avoid \" .. (ataxia.settings.avoidType or \"physical\"),\n    grookbubble = \"grookbubble\",\n\t\tconstitution = \"constitution\",\n    consciousness = \"consciousness\",\n\t\tcurseward = \"curseward\",\n\t\tgripping = \"gripping\",\n\t\tlifevision = \"lifevision\",\n\t\tnicatorlegend = \"nicatorlegend\",\n\t\tnightsight = \"nightsight\",\n\t\tresistance = \"resistance\",\n\t\ttoughness = \"toughness\",\n    shroud = \"shroud\",\n\t\tweathering = \"weathering\",\n\t\tvitality = \"vitality\",\n\t\tblocking = \"blocking\",\n\t\tcoldresist = \"coldresist\",\n\t\telectricresist = \"electricresist\",\n\t\tfireresist = \"fireresist\",\n\t\tmagicresist = \"magicresist\",\n\t\thypersight = \"hypersight\",\n\t\talertness = \"alertness\",\n\t\tvigilance = \"vigilance\",\n\t\tskywatch = \"skywatch\",\n\t\ttreewatch = \"treewatch\",\n\t\tgroundwatch = \"groundwatch\",\n    selfishness = \"selfishness\",\n    heldbreath = \"heldbreath\",\n\n\t\t--Tattoos\n\t\tboartattoo = \"boartattoo\",\n\t\tcloak = \"cloak\",\n\t\tmegalithtattoo = \"megalithtattoo\",\n\t\tmindseye = \"mindseye\",\n\t\tmoontattoo = \"moontattoo\",\n\t\tmosstattoo = \"mosstattoo\",\n\n\t}\nend\n\nfunction find_defence(d)\n\tlocal def = d\n\tbuildDefsTable()\n\n\n\n\tfor defence, actual in pairs(ataxiaTables.defences) do\n\t\tif defence == def or actual == def then\n\t\t\treturn defence\n\t\tend\n\tend\nend\n\nfunction trueDef(def)\n\tlocal def = def:lower()\n\tbuildDefsTable()\n\n\tif def:find(\"parrying\") then\n\t\treturn \"parrying\"\n\telse\n\t\tfor defence, actual in pairs(ataxiaTables.defences) do\n\t\t\tif defence == def or actual == def then\n\t\t\t\treturn defence\n\t\t\tend\n\t\tend\n\tend\n  return def\nend",
+                        "children": [
+                          {
+                            "name": "Defence API"
+                          },
+                          {
+                            "name": "Deffing Up"
+                          },
+                          {
+                            "name": "Defence Reporting"
+                          },
+                          {
+                            "name": "Defence Sorting - Cleaner"
+                          },
+                          {
+                            "name": "Dragon Breath"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Save/Load Settings"
+                      },
+                      {
+                        "name": "Check For Any Missing Variables"
+                      },
+                      {
+                        "name": "Install System"
+                      },
+                      {
+                        "name": "Prompt Running"
+                      },
+                      {
+                        "name": "Pause Toggling"
+                      },
+                      {
+                        "name": "Prompt Substitution"
+                      },
+                      {
+                        "name": "Raid Mode Things (WIP)"
+                      },
+                      {
+                        "name": "Balance Timers"
+                      },
+                      {
+                        "name": "Set Affliction Stacks to Zero"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Ataxia NDB",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Ataxia NDB Settings"
+                      },
+                      {
+                        "name": "Get Information"
+                      },
+                      {
+                        "name": "ataxiaNDB API"
+                      },
+                      {
+                        "name": "ataxiaNDB Highlighting"
+                      },
+                      {
+                        "name": "ataxiaNDB Display API"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Misc Scripts",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Queue Scanning"
+                      },
+                      {
+                        "name": "System Class Functions"
+                      },
+                      {
+                        "name": "Box Echo"
+                      },
+                      {
+                        "name": "Retardation Management"
+                      },
+                      {
+                        "name": "keepAlive"
+                      },
+                      {
+                        "name": "Delete Full"
+                      },
+                      {
+                        "name": "Custom Colour Table"
+                      },
+                      {
+                        "name": "Ab Cheat"
+                      },
+                      {
+                        "name": "Deepcopy"
+                      },
+                      {
+                        "name": "Uncategorised Functions"
+                      },
+                      {
+                        "name": "Ping/Latency measuring"
+                      },
+                      {
+                        "name": "Directions"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Basher",
+                "isActive": "yes",
+                "isFolder": "yes",
+                "children": [
+                  {
+                    "name": "zData",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "zData",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "Experience Database"
+                          },
+                          {
+                            "name": "movement"
+                          },
+                          {
+                            "name": "Rainbow Script"
+                          },
+                          {
+                            "name": "buildHunter"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Bashing",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "script": "ataxiaBasher = ataxiaBasher or {}\nataxiaBasher.functions = ataxiaBasher.functions or {}\n\nfunction get_Battlerage()\n\tataxiaBasher.battlerage = {\n\t\tAlchemist = {\n\t\t\tsmall = \"throw miasma at \"..target, large = \"educe magnesium \"..target,\n\t\t\traze = \"throw caustic at \"..target,\n\t\t},\n\t\t\n\t\tApostate = {\n\t\t\tsmall = \"stare \"..target..\" convulsions\", large = \"daegger burrow \"..target,\n\t\t\traze = \"daegger pierce \"..target,specialuse = \"bloodlet \" ..target, \n      specialafflict = \"possess \" ..target, special = \"possess \" ..target\n      --Convulsions - Small Rage - 14 Rage | 16 Cooldown\n      -- Pierce - 17 rage\n      --Horrify - Gives Fear - 29 Rage | 34 CD\n      -- Dagger burrow - Large Rage - 36 Rage | 24 CD\n      --Bloodlet - Uses Sensitivity or Stun - 25 Rage | 23 Cooldown\n      --Possess - Gives Charm - 32 Rage | 43 CD\n      \n\t\t},\t\n\t\t\n\t\tBard = {\n\t\t\tsmall = \"moulinet \"..target,\tlarge = \"howlslash \"..target,\n      special2 = \"play charm at \"..target, special = \"play trill at \"..target\n\t\t},\n\n\t\tBlademaster = {\n\t\t\tsmall = \"leapstrike \"..target, large = \"spinslash \"..target,\n\t\t\traze = \"shin shatter \"..target, special = \"shin daze \"..target,\n      specialuse = \"strike \"..target..\" head\", specialafflict = \"nsl \" ..target,\n      --Headstrike (Strike Target Head) - Uses Recklessness or Fear\n      --Nerveslash - NSL Target - gives Weakness\n\t\t},\n\n\t\t[\"Black Dragon\"] = {\n\t\t\tsmall = \"dragonspit \"..target,\n\t\t\tlarge = \"override \"..target,\n\t\t\traze = \"dissolve \"..target,\n      special = \"dragonfear \" ..target,\n\t\t},\n\t\t\n\t\t[\"Blue Dragon\"] = {\n\t\t\tsmall = \"dragonchill \"..target,\n\t\t\tlarge = \"override \"..target,\n\t\t\traze = \"frostrive \"..target,\n      special = \"ague \"..target,\n\t\t},\n\t\t\n\t\tDepthswalker = {\n\t\t\tsmall = \"shadow drain \"..target, large = \"shadow lash \"..target,\n\t\t\traze = \"intone nakail \"..target,\n\t\t},\n    \n    Infernal = {\n      small = \"ravage \"..target, large = \"spike \"..target,\n      raze = \"shiver \"..target, special = \"soulshield\",\n    },\n\t\t\n\t\tJester = {\n\t\t\tsmall = \"noogie \"..target, large = \"ensconce firecracker on \"..target,\n\t\t\traze = \"throw jacks at \"..target,\n\t\t},\n\t\t\n\t\tMagi = {\n\t\t\tsmall = \"cast windlash at \"..target, large = \"cast squeeze \"..target,\n      special = \"cast dilation at \"..target,\n\t\t},\n\t\t\n\t\tMonk = { \n\t\t\tsmall = \"sbp \"..target,\t\t\t\tlarge = \"tnk \"..target,\n      raze = \"spk \"..target, special = \"mind scramble \" ..target,\n\t\t},\n\t\tOccultist = {\n\t\t\tsmall = \"harry \"..target,\t\t\tlarge = \"chaosgate \"..target\n\t\t},\n    \n    Pariah = {\n      small = \"blood boil \"..target,  large = \"swarm feast \"..target,\n      raze = \"accursed scour \"..target, specialuse = \"trace spider \"..target,\n      specialafflict = \"accursed wail \"..target, special = \"accursed wail \"..target,\n      --Trace Spider - Sensitive or Inhitbited\n      --Accursed Wail - Gives Clumsiness\n    },\n    \n    Paladin = {\n      small = \"harrow \"..target,\n      large = \"perform rite of shock at \"..target,\n      raze = \"faithrend \"..target,\n    },\n\t\t\n\t\tPriest = {\n\t\t\tsmall = \"angel torment \"..target,\n\t\t\tlarge = \"perform rite of desolation on \"..target,\n\t\t\traze = \"crack \"..target,\n\t\t},\n\t\t\n\t\tPsion = {\n\t\t\tsmall = \"weave barbedblade \"..target,\n\t\t\tlarge = \"weave whirlwind \"..target,\n      special = \"enact regrowth \"..target,\n      raze = \"weave pulverise \"..target,\n\t\t},\n\t\t\n\t\tRunewarden = {\n\t\t\tsmall = \"collide \"..target,\t\tlarge = \"onslaught \"..target,\n\t\t\traze = \"fragment \"..target, special = \"bulwark\",\n\t\t},\n\n\t\tSentinel = {\n\t\t\tsmall = \"pester \"..target, \n\t\t\tlarge = \"skewer \"..target,\n\t\t},\n\n\t\tSerpent = {\n\t\t\tsmall = \"thrash \"..target,\n\t\t\tlarge = \"throatrip \"..target,\n\t\t\traze = \"excoriate \"..target,\n      special = \"obliviate \"..target,\t\t\n\t\t},\n\t\t\n\t\tShaman = {\n\t\t\tsmall = \"curse \"..target..\" corruption\",\n\t\t\tlarge = \"curse \"..target..\" haemorrhage\",\n\t\t\traze = \"curse \"..target..\" vulnerability\",\n      special = \"invoke korkma \"..target,\n      special2 = \"invoke cesaret \"..target,\n\t\t},\n\t\t\n\t\tSylvan = {\n\t\t\tsmall = \"cast torrent at \"..target,\n\t\t\tlarge = \"stonevine \"..target,\n\t\t},\n    \n    Unnamable = {\n      small = \"unnamable shriek \"..target,\n      large = \"unnamable destroy \"..target,\n      raze = \"unnamable sunder \"..target,\n    },\n\t\t\n\t\t[\"Silver Dragon\"] = {\n\t\t\tsmall = \"overwhelm \"..target,\n\t\t\tlarge = \"dragonspark \"..target,\n\t\t\traze = \"splinter \"..target,\n\t\t},\n\t\t\n\t\t[\"Water Elemental\"] = {\n\t\t\tsmall = \"manifest icicles \"..target,\n\t\t\tlarge = \"manifest needlerain \"..target,\n\t\t},\n    \n\t\t[\"Air Elemental\"] = {\n\t\t\tsmall = \"manifest bolt \"..target, \n\t\t\tlarge = \"manifest pressurewave \"..target\n\t\t},\n    \n    [\"Fire Elemental\"] = {\n      small = \"manifest engulf \"..target,\n      large = \"manifest devastation \"..target,\n      raze = \"manifest wires \"..target,\n    },\n    \n    [\"Earth Elemental\"] = {\n      small = \"terran smash \"..target,\n      large = \"terran flurry \"..target,\n      raze = \"terran charge \"..target,\n    },\n    \n    [\"Green Dragon\"] = {\n      small = \"dragonspit \"..target,\n      large = \"override \"..target,\n      raze = \"deteriorate \"..target,\n    }, \n    \n    [\"Red Dragon\"] = {\n      small = \"overwhelm \"..target,\n      large = \"dragonblaze \"..target,\n      raze = \"melt \"..target,\n    },\n    \n    [\"Golden Dragon\"] = {\n      small = \"overwhelm \"..target,\n      large = \"psiblast \"..target,\n      raze = \"psishatter \"..target,\n    },   \n\t}\nend\n\nfunction ataxiaBasher_elevatemob(mob)\n\tlocal area = gmcp.Room.Info.area\n\ttable.remove(ataxiaBasher.targetList[area], table.index_of(ataxiaBasher.targetList[area], mob))\n\ttable.insert(ataxiaBasher.targetList[area], 1, mob)\n\tataxiaEcho(\"Elevated priority of \"..mob..\".\")\n\tataxia_saveSettings(false)\nend\n\nfunction ataxiaBasher_addmob(mob)\n\tlocal area = gmcp.Room.Info.area\n\tif not table.contains(ataxiaBasher.targetList[area], mob) then\n\t\ttable.insert(ataxiaBasher.targetList[area], mob)\n\t\tataxiaEcho(\"Added \"..mob..\" to \"..area..\"'s target list.\")\n\telse\n\t\tataxiaEcho(\"That mob is already on the list.\")\n\tend\n\tataxia_saveSettings(false)\nend\n\nfunction ataxiaBasher_remmob(mob)\n\tlocal area = gmcp.Room.Info.area\n\tif table.contains(ataxiaBasher.targetList[area], mob) then\n\t\tfor i,v in pairs(ataxiaBasher.targetList[area]) do\n\t\t\tif v == mob then\n\t\t\t\ttable.remove(ataxiaBasher.targetList[area], i)\n\t\t\t\tbreak\n\t\t\tend\n\t\tend\n\t\tataxiaEcho(\"Removed \"..mob..\" from \"..area..\"'s target list.\")\n\telse\n\t\tataxiaEcho(\"That mob is not on the list.\")\n\tend\n\tataxia_saveSettings(false)\nend\n\nfunction ataxiaBasher_ignoremob(mob)\n\tif not table.contains(ataxiaBasher.mobIgnore, mob) then\n\t\ttable.insert(ataxiaBasher.mobIgnore, mob)\n\t\tataxiaEcho(\"Added \"..mob..\" to ignore list.\")\n\telse\n\t\tataxiaEcho(\"That mob is already on the list.\")\n\tend\n\tataxia_saveSettings(false)\nend\n\nfunction ataxiaBasher_unignoremob(mob)\n\tif table.contains(ataxiaBasher.mobIgnore, mob) then\n\t\tfor i,v in pairs(ataxiaBasher.mobIgnore) do\n\t\t\tif v == mob then\n\t\t\t\ttable.remove(ataxiaBasher.mobIgnore, i)\n\t\t\t\tbreak\n\t\t\tend\n\t\tend\n\t\tataxiaEcho(\"Removed \"..mob..\" from the ignore list.\")\n\telse\n\t\tataxiaEcho(\"That mob is not on the list.\")\n\tend\n\tataxia_saveSettings(false)\nend\n\nfunction ataxiaBasher_dangerAdd(mob)\n\tataxiaBasher.dangerList = ataxiaBasher.dangerList or {}\n\tif ataxiaBasher.dangerList[mob] then\n\t\tataxiaEcho(mob:title()..\" is already in the danger list.\")\n\telse\n\t\tataxiaBasher.dangerList[mob] = true\n\t\tataxiaEcho(\"Added \"..mob..\" to the danger list.\")\n\tend\nend\n\nfunction ataxiaBasher_dangerRemove(mob)\n\tataxiaBasher.dangerList = ataxiaBasher.dangerList or {}\n\tif ataxiaBasher.dangerList[mob] then\n\t\tataxiaBasher.dangerList[mob] = nil\n\t\tataxiaEcho(\"Removed \"..mob..\" from the danger list.\")\n\telse\n\t\tataxiaEcho(mob:title()..\" was not considered dangerous anyway.\")\n\tend\nend\n\nfunction ataxiaBasher_shieldingRemove(mob)\n\tataxiaBasher.noShieldBreak = ataxiaBasher.noShieldBreak or {mobs = {}, threshold = 0}\n\tif ataxiaBasher.noShieldBreak.mobs[mob] then\n\t\tataxiaBasher.noShieldBreak.mobs[mob] = nil\n\t\tataxiaEcho(\"Removed \"..mob..\" from the shield-safety list.\")\n\telse\n\t\tataxiaEcho(mob:title()..\" was already recognised as being able to break shields.\")\n\tend\nend\n\nfunction ataxiaBasher_shieldingAdd(mob)\n\tataxiaBasher.noShieldBreak = ataxiaBasher.noShieldBreak or {mobs = {}, threshold = 0}\n\tif ataxiaBasher.noShieldBreak.mobs[mob] then\n\t\tataxiaEcho(mob:title()..\" is already in the shielding list.\")\n\telse\n\t\tataxiaBasher.noShieldBreak.mobs[mob] = true\n\t\tataxiaEcho(\"Added \"..mob..\" to the shielding list.\")\n\tend\nend\n\nfunction ataxiaBasher_alert(alerttype)\n\tif ataxiaTemp.playedAlarm then return end\n\tlocal alarm = alerttype:title()\n\tif not hasFocus() then \n\t\tplaySoundFile(getMudletHomeDir()..[[/Alerts/]]..alarm..[[.mp3]]) \n\tend\n\t\n\tataxiaTemp.playedAlarm = tempTimer(3, [[ ataxiaTemp.playedAlarm = nil ]])\nend",
+                    "children": [
+                      {
+                        "name": "genRunning",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "script": "item_Pickup = {\n  --Creville Quests\n  \"a dirty scalpel\", \"a sewing needle\", \"soiled bandages\", \"a spool of yellowed thread\", \"a foul syringe\", \"a stained sheet\",\"a small blood ruby shard\",\n}\n\nfunction bashConsoleEcho(type, msg)\n\tlocal colours = {\n\t\tattack = {\"red\", \"NavajoWhite\", \"atk\"},\n\t\tdenizen = {\"a_darkcyan\", \"a_darkmagenta\", \"den\"},\n\t\tcuring = {\"green\", \"SeaGreen\", \"cure\"},\n\t\tbattlerage = {\"orange\", \"DimGrey\", \"brg\"},\n\t\tfishing = {\"violet\", \"purple\", \"fish\"},\n    hellforge = {\"red\", \"green\", \"hell\"},\n\t}\n\tif not ataxiaBasher.manual then\n\t\tdeleteFull()\n\tend\n  if not zgui or ataxia.usegui then\n    ataxiagui.bashConsole:setFontSize(7)\n    ataxiagui.bashConsole:cecho(\"\\n<\"..colours[type][1]..\">\"..colours[type][3]:upper()..\"| <\"..colours[type][2]..\">\"..msg)\n  else\n    cecho(\"bashDisplay\",\"\\n<\"..colours[type][1]..\">\"..colours[type][3]:upper()..\"| <\"..colours[type][2]..\">\"..msg)\n  end\nend\n\nfunction bashConsoleEchom(type, msg, colone, coltwo)\n\tif not ataxiaBasher.manual then\n\t\tdeleteFull()\n\tend\n  \n  if not zgui or ataxia.usegui then\n    ataxiagui.bashConsole:setFontSize(7)\n    ataxiagui.bashConsole:cecho(\"\\n<\"..colone..\">\"..type..\"| <\"..coltwo..\">\"..msg)\n  else\n    cecho(\"bashDisplay\",\"\\n<\"..colone..\">\"..type..\"| <\"..coltwo..\">\"..msg)\n  end\nend\n\nfunction fishParse(what, pound, ounce)\n\tlocal message = what:title()\n\tmessage = message..\" - \"..(pound and pound..\"lb \" or \"\")..(ounce and ounce..\"oz\" or \"\")\n\tbashConsoleEchom(\"$$$$\", message, \"gold\", \"sienna\")\nend",
+                        "children": [
+                          {
+                            "name": "Bashing API"
+                          },
+                          {
+                            "name": "search_targets",
+                            "eventHandlerList": [
+                              "targets updated"
+                            ]
+                          },
+                          {
+                            "name": "Engaged/Disengage"
+                          },
+                          {
+                            "name": "Autobashing Functions"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Bashing Functions"
+                      },
+                      {
+                        "name": "Class Bashing"
+                      },
+                      {
+                        "name": "Bash Stats Functions"
+                      },
+                      {
+                        "name": "Guardians Of MoG",
+                        "isActive": "no"
+                      },
+                      {
+                        "name": "Falcon Cooldowns"
+                      },
+                      {
+                        "name": "Pariah Cooldown"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "name": "Levi  Scripts",
             "isActive": "yes",
             "isFolder": "yes",
             "children": [
+              {
+                "name": "slc",
+                "isActive": "yes",
+                "isFolder": "yes",
+                "children": [
+                  {
+                    "name": "functions"
+                  },
+                  {
+                    "name": "slc_variables"
+                  }
+                ]
+              },
               {
                 "name": "Leviticus",
                 "isActive": "yes",
                 "isFolder": "yes",
                 "children": [
                   {
-                    "name": "INFERNAL",
+                    "name": "Global Script",
                     "isActive": "yes",
                     "isFolder": "yes",
                     "children": [
                       {
-                        "name": "DWC",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "Dom Infernal DWC"
-                          },
-                          {
-                            "name": "Infernal DWC - Levi"
-                          },
-                          {
-                            "name": "Infernal DWC Vivisect"
-                          },
-                          {
-                            "name": "Infernal DWC Vivisect 2L"
-                          }
-                        ]
+                        "name": "Global"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "BARD",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "VENOM PRIOS LIMB",
+                        "isActive": "no"
                       },
                       {
-                        "name": "DWB",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "Infernal DWB Logic - Levi"
-                          }
-                        ]
+                        "name": "VOICECRAFT PRIOS"
                       },
                       {
-                        "name": "INFERNAL",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "TWO HANDED",
-                            "isActive": "yes",
-                            "isFolder": "yes",
-                            "children": [
-                              {
-                                "name": "BAST PRIOS"
-                              },
-                              {
-                                "name": "LIMBSELECT CLU"
-                              },
-                              {
-                                "name": "LIMBSELECT NAU"
-                              },
-                              {
-                                "name": "LIMBSELECT LET"
-                              },
-                              {
-                                "name": "LIMBSELECT SEN"
-                              },
-                              {
-                                "name": "WAR Devastate"
-                              },
-                              {
-                                "name": "WAR BASIC"
-                              }
-                            ]
-                          },
-                          {
-                            "name": "S n B",
-                            "isActive": "yes",
-                            "isFolder": "yes",
-                            "children": [
-                              {
-                                "name": "DAMAGE"
-                              },
-                              {
-                                "name": "IMPALE"
-                              },
-                              {
-                                "name": "HEAD TORSO toggle"
-                              },
-                              {
-                                "name": "DARKSHADE"
-                              },
-                              {
-                                "name": "SOFT LOCK WEA"
-                              },
-                              {
-                                "name": "SOFT LOCK CLU"
-                              },
-                              {
-                                "name": "SOFT LOCK"
-                              },
-                              {
-                                "name": "Levi Damage"
-                              }
-                            ]
-                          },
-                          {
-                            "name": "LIMB PREP"
-                          },
-                          {
-                            "name": "RAMPAGE"
-                          }
-                        ]
+                        "name": "ATTACK"
                       },
                       {
-                        "name": "Infernal 2H",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "TWO HANDED",
-                            "isActive": "yes",
-                            "isFolder": "yes",
-                            "children": [
-                              {
-                                "name": "Infernal Two Hand"
-                              }
-                            ]
-                          }
-                        ]
+                        "name": "SOFTATTACK"
                       },
                       {
-                        "name": "I SNB",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "BLACKOUT HELL"
-                          },
-                          {
-                            "name": "test"
-                          },
-                          {
-                            "name": "PRIOS WEARINESS",
-                            "isActive": "no"
-                          },
-                          {
-                            "name": "RAMPAGE"
-                          },
-                          {
-                            "name": "LIMB PREP"
-                          },
-                          {
-                            "name": "Damage Into Lock"
-                          }
-                        ]
+                        "name": "LIMBATTACK"
+                      },
+                      {
+                        "name": "SINGATTACK"
+                      },
+                      {
+                        "name": "SINGPRIOS"
+                      },
+                      {
+                        "name": "TEST PRIOS"
+                      },
+                      {
+                        "name": "TEST PRIOS SOFT"
+                      },
+                      {
+                        "name": "TEST LIMB PRIOS"
                       }
                     ]
                   },
@@ -197,281 +771,61 @@
                             "name": "Shikudo Needle Logic"
                           },
                           {
-                            "name": "CC_Shikudo"
+                            "name": "CC_Shikudo_Dispatch"
                           },
                           {
                             "name": "CC_Shikudo Lock"
                           },
                           {
-                            "name": "CC_Shikudo RiftLock"
-                          },
-                          {
-                            "name": "Shikudo Offense (Unified)"
+                            "name": "CC_Shikudo_Offense_ALL",
+                            "isActive": "no"
                           }
                         ]
                       }
                     ]
                   },
                   {
-                    "name": "Mage",
+                    "name": "Psion",
                     "isActive": "yes",
                     "isFolder": "yes",
                     "children": [
                       {
-                        "name": "Resonance"
+                        "name": "Levi Psion Logic"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Serpent",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Levi Kelp Stack"
                       },
+                      {
+                        "name": "Serpent Offense"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Blademaster",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
                       {
                         "name": "Logic"
                       },
                       {
-                        "name": "Magi Levi Logic 2"
-                      },
-                      {
-                        "name": "Mizik Bullshit"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "DRAGON",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "RAGEBLADE",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "PRIOS"
-                          },
-                          {
-                            "name": "ATTACK"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "ATTACK LIMB",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "REND"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "Dragon Logic"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "MONK",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "SCYTHE",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "SCYTHE"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "SHIKUDO",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "TELEPATHY",
-                            "isActive": "yes",
-                            "isFolder": "yes",
-                            "children": [
-                              {
-                                "name": "DISRUPT"
-                              }
-                            ]
-                          },
-                          {
-                            "name": "LOCK THEM"
-                          },
-                          {
-                            "name": "LOCK PRIOS"
-                          },
-                          {
-                            "name": "FORM SWAP LOCK"
-                          },
-                          {
-                            "name": "FORM SWAP DISPATCH"
-                          },
-                          {
-                            "name": "FORM group"
-                          },
-                          {
-                            "name": "DISPTACH GROUP"
-                          },
-                          {
-                            "name": "DISPTACH LEG PRIOS"
-                          },
-                          {
-                            "name": "DISPTACH PRIOS"
-                          },
-                          {
-                            "name": "DISPATCH"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "BACKBREAKER",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "BACKBREAKER"
-                          },
-                          {
-                            "name": "BACKBREAKER SOLID"
-                          },
-                          {
-                            "name": "LIMB PREP FUNCTION"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "Tekura",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "Tekura Offense"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "RIGHT LEG"
-                      },
-                      {
-                        "name": "SWEEP RL"
-                      },
-                      {
-                        "name": "LEFT LEG"
-                      },
-                      {
-                        "name": "RIGHT ARM"
-                      },
-                      {
-                        "name": "LEFT ARM"
-                      },
-                      {
-                        "name": "TORSO"
-                      },
-                      {
-                        "name": "HEAD"
-                      },
-                      {
-                        "name": "SWEEP LL"
-                      },
-                      {
-                        "name": "SWEEP TORSO"
-                      },
-                      {
-                        "name": "SWEEP LEGS"
-                      },
-                      {
-                        "name": "AXE"
-                      },
-                      {
-                        "name": "SWEEP RA"
-                      },
-                      {
-                        "name": "SWEEP HEAD"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "RuneWarden",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "DWC RUNIE",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "RIFT",
-                            "isActive": "no"
-                          },
-                          {
-                            "name": "BASIC 2"
-                          },
-                          {
-                            "name": "Disembowel Prep"
-                          },
-                          {
-                            "name": "Head Prep"
-                          },
-                          {
-                            "name": "DWCLogic"
-                          },
-                          {
-                            "name": "Attack DWC"
-                          },
-                          {
-                            "name": "LeviDWCDisembowel"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "DWB Runie",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "DWB Runie Logic"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "SNB"
-                      },
-                      {
-                        "name": "Two Handed Runie"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "limb.1.2",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "Limb",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "limb init"
-                          },
-                          {
-                            "name": "limb management"
-                          },
-                          {
-                            "name": "limb prompt"
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "name": "DEPTHSWALKER",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
                         "name": "Attack"
+                      },
+                      {
+                        "name": "BrokenStar"
+                      },
+                      {
+                        "name": "Group"
+                      },
+                      {
+                        "name": "CC_BM_Ice"
                       }
                     ]
                   },
@@ -564,6 +918,39 @@
                     ]
                   },
                   {
+                    "name": "limb.1.2",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Limb",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "limb init"
+                          },
+                          {
+                            "name": "limb management"
+                          },
+                          {
+                            "name": "limb prompt"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Pariah",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Pariah Logic"
+                      }
+                    ]
+                  },
+                  {
                     "name": "EARTH LORD",
                     "isActive": "yes",
                     "isFolder": "yes",
@@ -586,6 +973,16 @@
                     ]
                   },
                   {
+                    "name": "Bard",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "LeviBard"
+                      }
+                    ]
+                  },
+                  {
                     "name": "Windows",
                     "isActive": "yes",
                     "isFolder": "yes",
@@ -596,12 +993,209 @@
                     ]
                   },
                   {
-                    "name": "Serpent",
+                    "name": "INFERNAL",
                     "isActive": "yes",
                     "isFolder": "yes",
                     "children": [
                       {
-                        "name": "Serpent Offense"
+                        "name": "DWC",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "Infernal DWC Vivisect"
+                          },
+                          {
+                            "name": "Infernal_DWC_Vivisect_2L"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "I SNB",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "BLACKOUT HELL"
+                          },
+                          {
+                            "name": "test"
+                          },
+                          {
+                            "name": "PRIOS WEARINESS",
+                            "isActive": "no"
+                          },
+                          {
+                            "name": "RAMPAGE"
+                          },
+                          {
+                            "name": "LIMB PREP"
+                          },
+                          {
+                            "name": "Damage Into Lock"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "DWB",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "Infernal DWB Logic - Levi"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Infernal 2H",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "TWO HANDED",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Infernal Two Hand"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "INFERNAL",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "S n B",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "DAMAGE"
+                              },
+                              {
+                                "name": "IMPALE"
+                              },
+                              {
+                                "name": "HEAD TORSO toggle"
+                              },
+                              {
+                                "name": "DARKSHADE"
+                              },
+                              {
+                                "name": "SOFT LOCK WEA"
+                              },
+                              {
+                                "name": "SOFT LOCK CLU"
+                              },
+                              {
+                                "name": "SOFT LOCK"
+                              },
+                              {
+                                "name": "Levi Damage"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "TWO HANDED",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "BAST PRIOS"
+                              },
+                              {
+                                "name": "LIMBSELECT CLU"
+                              },
+                              {
+                                "name": "LIMBSELECT NAU"
+                              },
+                              {
+                                "name": "LIMBSELECT LET"
+                              },
+                              {
+                                "name": "LIMBSELECT SEN"
+                              },
+                              {
+                                "name": "WAR Devastate"
+                              },
+                              {
+                                "name": "WAR BASIC"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "LIMB PREP"
+                          },
+                          {
+                            "name": "RAMPAGE"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "DEPTHSWALKER",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Attack"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "RuneWarden",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "DWB Runie",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "DWB Runie Logic"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "DWC RUNIE",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "RIFT",
+                            "isActive": "no"
+                          },
+                          {
+                            "name": "BASIC 2"
+                          },
+                          {
+                            "name": "Disembowel Prep"
+                          },
+                          {
+                            "name": "Head Prep"
+                          },
+                          {
+                            "name": "DWCLogic"
+                          },
+                          {
+                            "name": "Attack DWC"
+                          },
+                          {
+                            "name": "LeviDWCDisembowel"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "SNB"
+                      },
+                      {
+                        "name": "Two Handed Runie"
                       }
                     ]
                   },
@@ -632,60 +1226,54 @@
                     ]
                   },
                   {
-                    "name": "Bard",
+                    "name": "APOSTATE",
                     "isActive": "yes",
                     "isFolder": "yes",
                     "children": [
                       {
-                        "name": "LeviBard"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Pariah",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "Pariah Logic"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "BARD",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "VENOM PRIOS LIMB",
-                        "isActive": "no"
+                        "name": "CLUMSY PRIOS"
                       },
                       {
-                        "name": "VOICECRAFT PRIOS"
+                        "name": "CORRUPT ATTACK 2"
                       },
                       {
-                        "name": "ATTACK"
+                        "name": "VIVISECT"
                       },
                       {
-                        "name": "SOFTATTACK"
+                        "name": "VIVI PRIOS"
                       },
                       {
-                        "name": "LIMBATTACK"
+                        "name": "MENTAL PRIOS"
                       },
                       {
-                        "name": "SINGATTACK"
+                        "name": "KELP STACK"
                       },
                       {
-                        "name": "SINGPRIOS"
+                        "name": "SLEEP"
                       },
                       {
-                        "name": "TEST PRIOS"
+                        "name": "SLEEP ATTACK"
                       },
                       {
-                        "name": "TEST PRIOS SOFT"
+                        "name": "GROUP PRIOS"
                       },
                       {
-                        "name": "TEST LIMB PRIOS"
+                        "name": "Weariness STACK"
+                      },
+                      {
+                        "name": "Faster Lock"
+                      },
+                      {
+                        "name": "Illusion Clum"
+                      },
+                      {
+                        "name": "LOCK ATTACK"
+                      },
+                      {
+                        "name": "Levi Apostate"
+                      },
+                      {
+                        "name": "CC_Apostate"
                       }
                     ]
                   },
@@ -700,132 +1288,182 @@
                     ]
                   },
                   {
-                    "name": "APOSTATE",
+                    "name": "Mage",
                     "isActive": "yes",
                     "isFolder": "yes",
                     "children": [
                       {
-                        "name": "CLUMSY PRIOS",
-                        "isActive": "no"
+                        "name": "Resonance"
                       },
-                      {
-                        "name": "CORRUPT ATTACK 2",
-                        "isActive": "no"
-                      },
-                      {
-                        "name": "VIVISECT",
-                        "isActive": "no"
-                      },
-                      {
-                        "name": "VIVI PRIOS",
-                        "isActive": "no"
-                      },
-                      {
-                        "name": "MENTAL PRIOS",
-                        "isActive": "no"
-                      },
-                      {
-                        "name": "KELP STACK",
-                        "isActive": "no"
-                      },
-                      {
-                        "name": "SLEEP",
-                        "isActive": "no"
-                      },
-                      {
-                        "name": "SLEEP ATTACK",
-                        "isActive": "no"
-                      },
-                      {
-                        "name": "GROUP PRIOS",
-                        "isActive": "no"
-                      },
-                      {
-                        "name": "Weariness STACK",
-                        "isActive": "no"
-                      },
-                      {
-                        "name": "Faster Lock",
-                        "isActive": "no"
-                      },
-                      {
-                        "name": "Illusion Clum",
-                        "isActive": "no"
-                      },
-                      {
-                        "name": "LOCK ATTACK",
-                        "isActive": "no"
-                      },
-                      {
-                        "name": "Levi Apostate"
-                      },
-                      {
-                        "name": "CC_Apostate"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Global Script",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "Global"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Psion",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "Levi Psion Logic"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Blademaster",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
                       {
                         "name": "Logic"
                       },
                       {
-                        "name": "Attack"
+                        "name": "Magi Levi Logic 2"
                       },
                       {
-                        "name": "BrokenStar"
-                      },
-                      {
-                        "name": "Group"
-                      },
-                      {
-                        "name": "CC_BM_Ice"
+                        "name": "Mizik Bullshit"
                       }
                     ]
-                  }
-                ]
-              },
-              {
-                "name": "Gear System",
-                "isActive": "yes",
-                "isFolder": "yes",
-                "children": [
+                  },
                   {
-                    "name": "Gear Audit"
-                  }
-                ]
-              },
-              {
-                "name": "Algedonic Defense 1.0",
-                "isActive": "yes",
-                "isFolder": "yes",
-                "script": "--Algedonic.AffCount = Algedonic.Count_My_affs()  \n--Algedonic.Stack_My_Affs(false, aff)\n--Algedonic.Prioritize()\n\n-- Add the above to the functions gotAff() and lostAff() at the bottom.  Add only the FIRST line to afflictionList() at the end\n\n\n\nAlgedonic = Algedonic or {}\n\nAlgedonic.whatcures = {\n    [\"kelp\"] = {\"asthma\", \"clumsiness\", \"hypochondria\", \"sensitivity\", \"weariness\", \"healthleech\", \"parasite\", \"rebbies\"},\n    [\"lobelia\"] = {\"agoraphobia\", \"guilt\", \"spiritburn\", \"tenderskin\", \"claustrophobia\", \"loneliness\", \"masochism\", \"recklessness\", \"vertigo\"},\n    [\"ash\"] = {\"confusion\", \"dementia\", \"hallucinations\", \"hypersomnia\", \"paranoia\"},\n    [\"bellwort\"] = {\"retribution\",\"timeloop\", \"peace\",\"justice\",\"lovers\",\"generosity\",\"dminished\"},\n    [\"goldenseal\"] = {\"dizziness\", \"epilepsy\", \"impatience\", \"shyness\", \"stupidity\", \"depression\", \"shadowmadness\", \"mycalium\", \"sandfever\", \"horror\", \"fulminated\",},\n    [\"bloodroot\"] = {\"paralysis\", \"slickness\", \"pyramides\"},\n    [\"ginseng\"] = {\"addiction\", \"darkshade\", \"haemophilia\", \"lethargy\", \"nausea\", \"scytherus\", \"flushings\"},\n    [\"pear\"] = {\"pressure\"},\n  }\n\n  Algedonic.mystack = Algedonic.mystack or {\n    [\"kelp\"] = 0,\n    [\"lobelia\"] = 0,\n    [\"ash\"] = 0,\n    [\"bellwort\"] = 0,\n    [\"goldenseal\"] = 0,\n    [\"bloodroot\"] = 0,\n    [\"ginseng\"] = 0,\n  }\n\n  Algedonic.AffCount = Algedonic.AffCount or 0\n\nfunction Algedonic.Stack_My_Affs(adding, aff)\n    local stack = \"default\"\n    for i, j in pairs(Algedonic.whatcures) do \n      if table.contains(j, aff) then\n        stack = i\n        break\n      end\n    end\n    if stack == \"default\" then return end\n    if adding == true then\n      Algedonic.mystack[stack] = Algedonic.mystack[stack] + 1\n    else\n      Algedonic.mystack[stack] = Algedonic.mystack[stack] - 1\n    end\n  end\n\n  function Algedonic.Echo(thing)\n    cecho(\"\\n<ansi_light_cyan>[Levi]: <white>\"..thing)\nend\n\nfunction Algedonic.Prioritize()\n    local targetclass = ataxiaNDB_getClass(target)\n    if targetclass == \"Apostate\" then\n        Algedonic.AntiApostate()\n    elseif targetclass == \"Alchemist\" then\n        Algedonic.AntiAlchemist()\n    elseif targetclass == \"Bard\" then\n        Algedonic.AntiBard()\n    elseif targetclass == \"Blademaster\" then\n        Algedonic.Blademaster()\n    elseif targetclass == \"Serpent\" then\n        Algedonic.AntiSerpent()\n    elseif targetclass == \"Shaman\" then\n        Algedonic.AntiShaman()\n    elseif targetclass == \"Magi\" then\n        Algedonic.AntiMagi()\n    elseif targetclass == \"Sylvan\" then\n        Algedonic.AntiSylvan()\n    elseif targetclass == \"Unnameable\" then\n        Algedonic.AntiUnnameable()\n    elseif targetclass == \"Psion\" then\n        Algedonic.AntiPsion()\n    elseif targetclass == \"Priest\" then\n        Algedonic.AntiPriest()\n    elseif targetclass == \"Sentinel\" then\n        Algedonic.AntiSentinel()\n    elseif targetclass == \"Pariah\" then\n        Algedonic.AntiPariah()\n    elseif targetclass == \"Occultist\" then\n      Algedonic.AntiOccultist()\n    elseif targetclass == \"Druid\" then\n        Algedonic.AntiDruid()\n    elseif targetclass == \"Depthswalker\" then\n        Algedonic.AntiDepthswalker()\n    elseif targetclass == \"Airlord\" then\n        Algedonic.AntiAirlord()\n    elseif targetclass == \"Waterlord\" then\n        Algedonic.AntiWaterlord()\n    elseif targetclass == \"Firelord\" then\n        Algedonic.AntiFirelord()\n    end\nend\n\nfunction Algedonic.ClassSwap()\n    local targetclass = ataxiaNDB_getClass(target)\n    if targetclass == \"Apostate\" then\n        Algedonic.ApostateSwap()\n    elseif targetclass == \"Alchemist\" then\n        Algedonic.AlchemistSwap()\n    elseif targetclass == \"Bard\" then\n        Algedonic.AntiBard()    \n    elseif targetclass == \"Blademaster\" then\n        Algedonic.Blademaster()\n    elseif targetclass == \"Depthswalker\" then\n        Algedonic.Depthswalker() \n    elseif targetclass == \"Pariah\" then\n        Algedonic.AntiPariah()    \n    --etc\n    end\nend\n\nfunction Algedonic.Count_My_Affs()\n    local count = 0\n    for _, v in pairs(ataxia.afflictions) do\n        if v then\n            count = count + 1\n        end\n    end\n    return count\nend",
-                "children": [
+                    "name": "DRAGON",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "ATTACK LIMB",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "REND"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "RAGEBLADE",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "PRIOS"
+                          },
+                          {
+                            "name": "ATTACK"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Dragon Logic"
+                      }
+                    ]
+                  },
                   {
-                    "name": "Anti Priorities"
+                    "name": "MONK",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "SHIKUDO",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "TELEPATHY",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "DISRUPT"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "LOCK THEM"
+                          },
+                          {
+                            "name": "LOCK PRIOS"
+                          },
+                          {
+                            "name": "FORM SWAP LOCK"
+                          },
+                          {
+                            "name": "FORM SWAP DISPATCH"
+                          },
+                          {
+                            "name": "FORM group"
+                          },
+                          {
+                            "name": "DISPTACH GROUP"
+                          },
+                          {
+                            "name": "DISPTACH LEG PRIOS"
+                          },
+                          {
+                            "name": "DISPTACH PRIOS"
+                          },
+                          {
+                            "name": "DISPATCH"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "BACKBREAKER",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "BACKBREAKER"
+                          },
+                          {
+                            "name": "BACKBREAKER SOLID"
+                          },
+                          {
+                            "name": "LIMB PREP FUNCTION"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Tekura",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "Tekura Offense"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "SCYTHE",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "SCYTHE"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "RIGHT LEG"
+                      },
+                      {
+                        "name": "SWEEP RL"
+                      },
+                      {
+                        "name": "LEFT LEG"
+                      },
+                      {
+                        "name": "RIGHT ARM"
+                      },
+                      {
+                        "name": "LEFT ARM"
+                      },
+                      {
+                        "name": "TORSO"
+                      },
+                      {
+                        "name": "HEAD"
+                      },
+                      {
+                        "name": "SWEEP LL"
+                      },
+                      {
+                        "name": "SWEEP TORSO"
+                      },
+                      {
+                        "name": "SWEEP LEGS"
+                      },
+                      {
+                        "name": "AXE"
+                      },
+                      {
+                        "name": "SWEEP RA"
+                      },
+                      {
+                        "name": "SWEEP HEAD"
+                      }
+                    ]
                   }
                 ]
               },
@@ -835,44 +1473,23 @@
                 "isFolder": "yes",
                 "children": [
                   {
-                    "name": "zGUI Redux",
+                    "name": "Room Items",
                     "isActive": "yes",
                     "isFolder": "yes",
                     "children": [
                       {
-                        "name": "Update Windows",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "showChat"
-                          },
-                          {
-                            "name": "wildMoved"
-                          },
-                          {
-                            "name": "sendPrompt"
-                          },
-                          {
-                            "name": "showAllies"
-                          },
-                          {
-                            "name": "showEnemies"
-                          },
-                          {
-                            "name": "showAffs"
-                          },
-                          {
-                            "name": "showAffsV2"
-                          },
-                          {
-                            "name": "showCape"
-                          },
-                          {
-                            "name": "showRoomInfo"
-                          }
-                        ]
+                        "name": "buildRoomItems"
                       },
+                      {
+                        "name": "showRoomItems"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "zGUI Redux",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
                       {
                         "name": "Build Windows",
                         "isActive": "yes",
@@ -889,9 +1506,6 @@
                           },
                           {
                             "name": "buildRoomPlayers"
-                          },
-                          {
-                            "name": "buildTarAffsV2"
                           },
                           {
                             "name": "buildRoomDenizens"
@@ -952,6 +1566,37 @@
                         ]
                       },
                       {
+                        "name": "Update Windows",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "showChat"
+                          },
+                          {
+                            "name": "wildMoved"
+                          },
+                          {
+                            "name": "sendPrompt"
+                          },
+                          {
+                            "name": "showAllies"
+                          },
+                          {
+                            "name": "showEnemies"
+                          },
+                          {
+                            "name": "showAffs"
+                          },
+                          {
+                            "name": "showCape"
+                          },
+                          {
+                            "name": "showRoomInfo"
+                          }
+                        ]
+                      },
+                      {
                         "name": "Extra Code",
                         "isActive": "yes",
                         "isFolder": "yes",
@@ -992,19 +1637,6 @@
                       },
                       {
                         "name": "EDIT ME: Restyle GUI Colors"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Room Items",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "buildRoomItems"
-                      },
-                      {
-                        "name": "showRoomItems"
                       }
                     ]
                   },
@@ -1056,704 +1688,30 @@
                 ]
               },
               {
-                "name": "slc",
+                "name": "Algedonic Defense 1.0",
                 "isActive": "yes",
                 "isFolder": "yes",
+                "script": "--Algedonic.AffCount = Algedonic.Count_My_affs()  \n--Algedonic.Stack_My_Affs(false, aff)\n--Algedonic.Prioritize()\n\n-- Add the above to the functions gotAff() and lostAff() at the bottom.  Add only the FIRST line to afflictionList() at the end\n\n\n\nAlgedonic = Algedonic or {}\n\nAlgedonic.whatcures = {\n    [\"kelp\"] = {\"asthma\", \"clumsiness\", \"hypochondria\", \"sensitivity\", \"weariness\", \"healthleech\", \"parasite\", \"rebbies\"},\n    [\"lobelia\"] = {\"agoraphobia\", \"guilt\", \"spiritburn\", \"tenderskin\", \"claustrophobia\", \"loneliness\", \"masochism\", \"recklessness\", \"vertigo\"},\n    [\"ash\"] = {\"confusion\", \"dementia\", \"hallucinations\", \"hypersomnia\", \"paranoia\"},\n    [\"bellwort\"] = {\"retribution\",\"timeloop\", \"peace\",\"justice\",\"lovers\",\"generosity\",\"dminished\"},\n    [\"goldenseal\"] = {\"dizziness\", \"epilepsy\", \"impatience\", \"shyness\", \"stupidity\", \"depression\", \"shadowmadness\", \"mycalium\", \"sandfever\", \"horror\", \"fulminated\",},\n    [\"bloodroot\"] = {\"paralysis\", \"slickness\", \"pyramides\"},\n    [\"ginseng\"] = {\"addiction\", \"darkshade\", \"haemophilia\", \"lethargy\", \"nausea\", \"scytherus\", \"flushings\"},\n    [\"pear\"] = {\"pressure\"},\n  }\n\n  Algedonic.mystack = Algedonic.mystack or {\n    [\"kelp\"] = 0,\n    [\"lobelia\"] = 0,\n    [\"ash\"] = 0,\n    [\"bellwort\"] = 0,\n    [\"goldenseal\"] = 0,\n    [\"bloodroot\"] = 0,\n    [\"ginseng\"] = 0,\n  }\n\n  Algedonic.AffCount = Algedonic.AffCount or 0\n\nfunction Algedonic.Stack_My_Affs(adding, aff)\n    local stack = \"default\"\n    for i, j in pairs(Algedonic.whatcures) do \n      if table.contains(j, aff) then\n        stack = i\n        break\n      end\n    end\n    if stack == \"default\" then return end\n    if adding == true then\n      Algedonic.mystack[stack] = Algedonic.mystack[stack] + 1\n    else\n      Algedonic.mystack[stack] = Algedonic.mystack[stack] - 1\n    end\n  end\n\n  function Algedonic.Echo(thing)\n    cecho(\"\\n<ansi_light_cyan>[Levi]: <white>\"..thing)\nend\n\nfunction Algedonic.Prioritize()\n    local targetclass = ataxiaNDB_getClass(target)\n    if targetclass == \"Apostate\" then\n        Algedonic.AntiApostate()\n    elseif targetclass == \"Alchemist\" then\n        Algedonic.AntiAlchemist()\n    elseif targetclass == \"Bard\" then\n        Algedonic.AntiBard()\n    elseif targetclass == \"Blademaster\" then\n        Algedonic.Blademaster()\n    elseif targetclass == \"Serpent\" then\n        Algedonic.AntiSerpent()\n    elseif targetclass == \"Shaman\" then\n        Algedonic.AntiShaman()\n    elseif targetclass == \"Magi\" then\n        Algedonic.AntiMagi()\n    elseif targetclass == \"Sylvan\" then\n        Algedonic.AntiSylvan()\n    elseif targetclass == \"Unnameable\" then\n        Algedonic.AntiUnnameable()\n    elseif targetclass == \"Psion\" then\n        Algedonic.AntiPsion()\n    elseif targetclass == \"Priest\" then\n        Algedonic.AntiPriest()\n    elseif targetclass == \"Sentinel\" then\n        Algedonic.AntiSentinel()\n    elseif targetclass == \"Pariah\" then\n        Algedonic.AntiPariah()\n    elseif targetclass == \"Occultist\" then\n      Algedonic.AntiOccultist()\n    elseif targetclass == \"Druid\" then\n        Algedonic.AntiDruid()\n    elseif targetclass == \"Depthswalker\" then\n        Algedonic.AntiDepthswalker()\n    elseif targetclass == \"Airlord\" then\n        Algedonic.AntiAirlord()\n    elseif targetclass == \"Waterlord\" then\n        Algedonic.AntiWaterlord()\n    elseif targetclass == \"Firelord\" then\n        Algedonic.AntiFirelord()\n    end\nend\n\nfunction Algedonic.ClassSwap()\n    local targetclass = ataxiaNDB_getClass(target)\n    if targetclass == \"Apostate\" then\n        Algedonic.ApostateSwap()\n    elseif targetclass == \"Alchemist\" then\n        Algedonic.AlchemistSwap()\n    elseif targetclass == \"Bard\" then\n        Algedonic.AntiBard()    \n    elseif targetclass == \"Blademaster\" then\n        Algedonic.Blademaster()\n    elseif targetclass == \"Depthswalker\" then\n        Algedonic.Depthswalker() \n    elseif targetclass == \"Pariah\" then\n        Algedonic.AntiPariah()    \n    --etc\n    end\nend\n\nfunction Algedonic.Count_My_Affs()\n    local count = 0\n    for _, v in pairs(ataxia.afflictions) do\n        if v then\n            count = count + 1\n        end\n    end\n    return count\nend",
                 "children": [
                   {
-                    "name": "functions"
+                    "name": "Anti Priorities"
                   },
                   {
-                    "name": "slc_variables"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "name": "Ataxia",
-            "isActive": "yes",
-            "isFolder": "yes",
-            "children": [
-              {
-                "name": "Basher",
-                "isActive": "yes",
-                "isFolder": "yes",
-                "children": [
-                  {
-                    "name": "zData",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "zData",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "Experience Database"
-                          },
-                          {
-                            "name": "movement"
-                          },
-                          {
-                            "name": "Rainbow Script"
-                          },
-                          {
-                            "name": "buildHunter"
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Bashing",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "script": "ataxiaBasher = ataxiaBasher or {}\nataxiaBasher.functions = ataxiaBasher.functions or {}\n\nfunction get_Battlerage()\n\tataxiaBasher.battlerage = {\n\t\tAlchemist = {\n\t\t\tsmall = \"throw miasma at \"..target, large = \"educe magnesium \"..target,\n\t\t\traze = \"throw caustic at \"..target,\n\t\t},\n\t\t\n\t\tApostate = {\n\t\t\tsmall = \"stare \"..target..\" convulsions\", large = \"daegger burrow \"..target,\n\t\t\traze = \"daegger pierce \"..target,specialuse = \"bloodlet \" ..target, \n      specialafflict = \"possess \" ..target, special = \"possess \" ..target\n      --Convulsions - Small Rage - 14 Rage | 16 Cooldown\n      -- Pierce - 17 rage\n      --Horrify - Gives Fear - 29 Rage | 34 CD\n      -- Dagger burrow - Large Rage - 36 Rage | 24 CD\n      --Bloodlet - Uses Sensitivity or Stun - 25 Rage | 23 Cooldown\n      --Possess - Gives Charm - 32 Rage | 43 CD\n      \n\t\t},\t\n\t\t\n\t\tBard = {\n\t\t\tsmall = \"moulinet \"..target,\tlarge = \"howlslash \"..target,\n      special2 = \"play charm at \"..target, special = \"play trill at \"..target\n\t\t},\n\n\t\tBlademaster = {\n\t\t\tsmall = \"leapstrike \"..target, large = \"spinslash \"..target,\n\t\t\traze = \"shin shatter \"..target, special = \"shin daze \"..target,\n      specialuse = \"strike \"..target..\" head\", specialafflict = \"nsl \" ..target,\n      --Headstrike (Strike Target Head) - Uses Recklessness or Fear\n      --Nerveslash - NSL Target - gives Weakness\n\t\t},\n\n\t\t[\"Black Dragon\"] = {\n\t\t\tsmall = \"dragonspit \"..target,\n\t\t\tlarge = \"override \"..target,\n\t\t\traze = \"dissolve \"..target,\n      special = \"dragonfear \" ..target,\n\t\t},\n\t\t\n\t\t[\"Blue Dragon\"] = {\n\t\t\tsmall = \"dragonchill \"..target,\n\t\t\tlarge = \"override \"..target,\n\t\t\traze = \"frostrive \"..target,\n      special = \"ague \"..target,\n\t\t},\n\t\t\n\t\tDepthswalker = {\n\t\t\tsmall = \"shadow drain \"..target, large = \"shadow lash \"..target,\n\t\t\traze = \"intone nakail \"..target,\n\t\t},\n    \n    Infernal = {\n      small = \"ravage \"..target, large = \"spike \"..target,\n      raze = \"shiver \"..target, special = \"soulshield\",\n    },\n\t\t\n\t\tJester = {\n\t\t\tsmall = \"noogie \"..target, large = \"ensconce firecracker on \"..target,\n\t\t\traze = \"throw jacks at \"..target,\n\t\t},\n\t\t\n\t\tMagi = {\n\t\t\tsmall = \"cast windlash at \"..target, large = \"cast squeeze \"..target,\n      special = \"cast dilation at \"..target,\n\t\t},\n\t\t\n\t\tMonk = { \n\t\t\tsmall = \"sbp \"..target,\t\t\t\tlarge = \"tnk \"..target,\n      raze = \"spk \"..target, special = \"mind scramble \" ..target,\n\t\t},\n\t\tOccultist = {\n\t\t\tsmall = \"harry \"..target,\t\t\tlarge = \"chaosgate \"..target\n\t\t},\n    \n    Pariah = {\n      small = \"blood boil \"..target,  large = \"swarm feast \"..target,\n      raze = \"accursed scour \"..target, specialuse = \"trace spider \"..target,\n      specialafflict = \"accursed wail \"..target, special = \"accursed wail \"..target,\n      --Trace Spider - Sensitive or Inhitbited\n      --Accursed Wail - Gives Clumsiness\n    },\n    \n    Paladin = {\n      small = \"harrow \"..target,\n      large = \"perform rite of shock at \"..target,\n      raze = \"faithrend \"..target,\n    },\n\t\t\n\t\tPriest = {\n\t\t\tsmall = \"angel torment \"..target,\n\t\t\tlarge = \"perform rite of desolation on \"..target,\n\t\t\traze = \"crack \"..target,\n\t\t},\n\t\t\n\t\tPsion = {\n\t\t\tsmall = \"weave barbedblade \"..target,\n\t\t\tlarge = \"weave whirlwind \"..target,\n      special = \"enact regrowth \"..target,\n      raze = \"weave pulverise \"..target,\n\t\t},\n\t\t\n\t\tRunewarden = {\n\t\t\tsmall = \"collide \"..target,\t\tlarge = \"onslaught \"..target,\n\t\t\traze = \"fragment \"..target, special = \"bulwark\",\n\t\t},\n\n\t\tSentinel = {\n\t\t\tsmall = \"pester \"..target, \n\t\t\tlarge = \"skewer \"..target,\n\t\t},\n\n\t\tSerpent = {\n\t\t\tsmall = \"thrash \"..target,\n\t\t\tlarge = \"throatrip \"..target,\n\t\t\traze = \"excoriate \"..target,\n      special = \"obliviate \"..target,\t\t\n\t\t},\n\t\t\n\t\tShaman = {\n\t\t\tsmall = \"curse \"..target..\" corruption\",\n\t\t\tlarge = \"curse \"..target..\" haemorrhage\",\n\t\t\traze = \"curse \"..target..\" vulnerability\",\n      special = \"invoke korkma \"..target,\n      special2 = \"invoke cesaret \"..target,\n\t\t},\n\t\t\n\t\tSylvan = {\n\t\t\tsmall = \"cast torrent at \"..target,\n\t\t\tlarge = \"stonevine \"..target,\n\t\t},\n    \n    Unnamable = {\n      small = \"unnamable shriek \"..target,\n      large = \"unnamable destroy \"..target,\n      raze = \"unnamable sunder \"..target,\n    },\n\t\t\n\t\t[\"Silver Dragon\"] = {\n\t\t\tsmall = \"overwhelm \"..target,\n\t\t\tlarge = \"dragonspark \"..target,\n\t\t\traze = \"splinter \"..target,\n\t\t},\n\t\t\n\t\t[\"Water Elemental\"] = {\n\t\t\tsmall = \"manifest icicles \"..target,\n\t\t\tlarge = \"manifest needlerain \"..target,\n\t\t},\n    \n\t\t[\"Air Elemental\"] = {\n\t\t\tsmall = \"manifest bolt \"..target, \n\t\t\tlarge = \"manifest pressurewave \"..target\n\t\t},\n    \n    [\"Fire Elemental\"] = {\n      small = \"manifest engulf \"..target,\n      large = \"manifest devastation \"..target,\n      raze = \"manifest wires \"..target,\n    },\n    \n    [\"Earth Elemental\"] = {\n      small = \"terran smash \"..target,\n      large = \"terran flurry \"..target,\n      raze = \"terran charge \"..target,\n    },\n    \n    [\"Green Dragon\"] = {\n      small = \"dragonspit \"..target,\n      large = \"override \"..target,\n      raze = \"deteriorate \"..target,\n    }, \n    \n    [\"Red Dragon\"] = {\n      small = \"overwhelm \"..target,\n      large = \"dragonblaze \"..target,\n      raze = \"melt \"..target,\n    },\n    \n    [\"Gold Dragon\"] = {\n      small = \"overwhelm \"..target,\n      large = \"psiblast \"..target,\n      raze = \"psishatter \"..target,\n    },   \n\t}\nend\n\nfunction ataxiaBasher_elevatemob(mob)\n\tlocal area = gmcp.Room.Info.area\n\ttable.remove(ataxiaBasher.targetList[area], table.index_of(ataxiaBasher.targetList[area], mob))\n\ttable.insert(ataxiaBasher.targetList[area], 1, mob)\n\tataxiaEcho(\"Elevated priority of \"..mob..\".\")\n\tataxia_saveSettings(false)\nend\n\nfunction ataxiaBasher_addmob(mob)\n\tlocal area = gmcp.Room.Info.area\n\tif not table.contains(ataxiaBasher.targetList[area], mob) then\n\t\ttable.insert(ataxiaBasher.targetList[area], mob)\n\t\tataxiaEcho(\"Added \"..mob..\" to \"..area..\"'s target list.\")\n\telse\n\t\tataxiaEcho(\"That mob is already on the list.\")\n\tend\n\tataxia_saveSettings(false)\nend\n\nfunction ataxiaBasher_remmob(mob)\n\tlocal area = gmcp.Room.Info.area\n\tif table.contains(ataxiaBasher.targetList[area], mob) then\n\t\tfor i,v in pairs(ataxiaBasher.targetList[area]) do\n\t\t\tif v == mob then\n\t\t\t\ttable.remove(ataxiaBasher.targetList[area], i)\n\t\t\t\tbreak\n\t\t\tend\n\t\tend\n\t\tataxiaEcho(\"Removed \"..mob..\" from \"..area..\"'s target list.\")\n\telse\n\t\tataxiaEcho(\"That mob is not on the list.\")\n\tend\n\tataxia_saveSettings(false)\nend\n\nfunction ataxiaBasher_ignoremob(mob)\n\tif not table.contains(ataxiaBasher.mobIgnore, mob) then\n\t\ttable.insert(ataxiaBasher.mobIgnore, mob)\n\t\tataxiaEcho(\"Added \"..mob..\" to ignore list.\")\n\telse\n\t\tataxiaEcho(\"That mob is already on the list.\")\n\tend\n\tataxia_saveSettings(false)\nend\n\nfunction ataxiaBasher_unignoremob(mob)\n\tif table.contains(ataxiaBasher.mobIgnore, mob) then\n\t\tfor i,v in pairs(ataxiaBasher.mobIgnore) do\n\t\t\tif v == mob then\n\t\t\t\ttable.remove(ataxiaBasher.mobIgnore, i)\n\t\t\t\tbreak\n\t\t\tend\n\t\tend\n\t\tataxiaEcho(\"Removed \"..mob..\" from the ignore list.\")\n\telse\n\t\tataxiaEcho(\"That mob is not on the list.\")\n\tend\n\tataxia_saveSettings(false)\nend\n\nfunction ataxiaBasher_dangerAdd(mob)\n\tataxiaBasher.dangerList = ataxiaBasher.dangerList or {}\n\tif ataxiaBasher.dangerList[mob] then\n\t\tataxiaEcho(mob:title()..\" is already in the danger list.\")\n\telse\n\t\tataxiaBasher.dangerList[mob] = true\n\t\tataxiaEcho(\"Added \"..mob..\" to the danger list.\")\n\tend\nend\n\nfunction ataxiaBasher_dangerRemove(mob)\n\tataxiaBasher.dangerList = ataxiaBasher.dangerList or {}\n\tif ataxiaBasher.dangerList[mob] then\n\t\tataxiaBasher.dangerList[mob] = nil\n\t\tataxiaEcho(\"Removed \"..mob..\" from the danger list.\")\n\telse\n\t\tataxiaEcho(mob:title()..\" was not considered dangerous anyway.\")\n\tend\nend\n\nfunction ataxiaBasher_shieldingRemove(mob)\n\tataxiaBasher.noShieldBreak = ataxiaBasher.noShieldBreak or {mobs = {}, threshold = 0}\n\tif ataxiaBasher.noShieldBreak.mobs[mob] then\n\t\tataxiaBasher.noShieldBreak.mobs[mob] = nil\n\t\tataxiaEcho(\"Removed \"..mob..\" from the shield-safety list.\")\n\telse\n\t\tataxiaEcho(mob:title()..\" was already recognised as being able to break shields.\")\n\tend\nend\n\nfunction ataxiaBasher_shieldingAdd(mob)\n\tataxiaBasher.noShieldBreak = ataxiaBasher.noShieldBreak or {mobs = {}, threshold = 0}\n\tif ataxiaBasher.noShieldBreak.mobs[mob] then\n\t\tataxiaEcho(mob:title()..\" is already in the shielding list.\")\n\telse\n\t\tataxiaBasher.noShieldBreak.mobs[mob] = true\n\t\tataxiaEcho(\"Added \"..mob..\" to the shielding list.\")\n\tend\nend\n\nfunction ataxiaBasher_alert(alerttype)\n\tif ataxiaTemp.playedAlarm then return end\n\tlocal alarm = alerttype:title()\n\tif not hasFocus() then \n\t\tplaySoundFile(getMudletHomeDir()..[[/Alerts/]]..alarm..[[.mp3]]) \n\tend\n\t\n\tataxiaTemp.playedAlarm = tempTimer(3, [[ ataxiaTemp.playedAlarm = nil ]])\nend",
-                    "children": [
-                      {
-                        "name": "genRunning",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "script": "item_Pickup = {\n  --Creville Quests\n  \"a dirty scalpel\", \"a sewing needle\", \"soiled bandages\", \"a spool of yellowed thread\", \"a foul syringe\", \"a stained sheet\",\"a small blood ruby shard\",\n}\n\nfunction bashConsoleEcho(type, msg)\n\tlocal colours = {\n\t\tattack = {\"red\", \"NavajoWhite\", \"atk\"},\n\t\tdenizen = {\"a_darkcyan\", \"a_darkmagenta\", \"den\"},\n\t\tcuring = {\"green\", \"SeaGreen\", \"cure\"},\n\t\tbattlerage = {\"orange\", \"DimGrey\", \"brg\"},\n\t\tfishing = {\"violet\", \"purple\", \"fish\"},\n    hellforge = {\"red\", \"green\", \"hell\"},\n\t}\n\tif not ataxiaBasher.manual then\n\t\tdeleteFull()\n\tend\n  if not zgui or ataxia.usegui then\n    ataxiagui.bashConsole:setFontSize(7)\n    ataxiagui.bashConsole:cecho(\"\\n<\"..colours[type][1]..\">\"..colours[type][3]:upper()..\"| <\"..colours[type][2]..\">\"..msg)\n  else\n    cecho(\"bashDisplay\",\"\\n<\"..colours[type][1]..\">\"..colours[type][3]:upper()..\"| <\"..colours[type][2]..\">\"..msg)\n  end\nend\n\nfunction bashConsoleEchom(type, msg, colone, coltwo)\n\tif not ataxiaBasher.manual then\n\t\tdeleteFull()\n\tend\n  \n  if not zgui or ataxia.usegui then\n    ataxiagui.bashConsole:setFontSize(7)\n    ataxiagui.bashConsole:cecho(\"\\n<\"..colone..\">\"..type..\"| <\"..coltwo..\">\"..msg)\n  else\n    cecho(\"bashDisplay\",\"\\n<\"..colone..\">\"..type..\"| <\"..coltwo..\">\"..msg)\n  end\nend\n\nfunction fishParse(what, pound, ounce)\n\tlocal message = what:title()\n\tmessage = message..\" - \"..(pound and pound..\"lb \" or \"\")..(ounce and ounce..\"oz\" or \"\")\n\tbashConsoleEchom(\"$$$$\", message, \"gold\", \"sienna\")\nend",
-                        "children": [
-                          {
-                            "name": "Bashing API"
-                          },
-                          {
-                            "name": "search_targets",
-                            "eventHandlerList": [
-                              "targets updated"
-                            ]
-                          },
-                          {
-                            "name": "Engaged/Disengage"
-                          },
-                          {
-                            "name": "Autobashing Functions"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "Bashing Functions"
-                      },
-                      {
-                        "name": "Class Bashing"
-                      },
-                      {
-                        "name": "Bash Stats Functions"
-                      },
-                      {
-                        "name": "Guardians Of MoG",
-                        "isActive": "no"
-                      },
-                      {
-                        "name": "Falcon Cooldowns"
-                      },
-                      {
-                        "name": "Pariah Cooldowns"
-                      }
-                    ]
+                    "name": "Damnation Defence"
                   }
                 ]
               },
               {
-                "name": "Ataxia",
+                "name": "Gear System",
                 "isActive": "yes",
                 "isFolder": "yes",
-                "script": "ataxia = ataxia or {}\nataxiaTables = ataxiaTables or {}\nataxiaTemp = ataxiaTemp or {}\nataxiaTemp.addedHerbID = 1\nataxiaTemp.removedHerbID = 2\nataxiagui = ataxiagui or {}\nataxiaVersion = \"4.1\"\t\t\t\t\t\t--last was 4.1\nmuteList = muteList or {}\n\nataxiaTables.limbTimers = ataxiaTables.limbTimers or {}\nataxiaTables.fractureTimers = ataxiaTables.fractureTimers or {}\n\nataxia.bals = ataxia.bals or {}\nataxia.bals.get = {\"bal\", \"eq\"}\nataxia.bals.used = ataxia.bals.used or {}\nataxia.bals.timestamps = ataxia.bals.timestamps or {}\n\n\nfunction ataxia_Echo(text)\n\tcecho(\"\\n<a_darkcyan>(<a_darkmagenta>LEVI<a_darkcyan>): <NavajoWhite>\"..text)\nend\n\nfunction ataxiaEcho(text)\n\tcecho(\"\\n<a_darkcyan>(<a_darkmagenta>LEVI<a_darkcyan>): <NavajoWhite>\"..text)\nend",
                 "children": [
                   {
-                    "name": "Login",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "Login Function"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Combat",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "script": "function calculateDictate(mana)\n\tlocal dicAff = {\"shadowmadness\", \"parasite\", \"retribution\", \"depression\"}\n\tlocal c = 0\n\tlocal dictPos = 40\n\tfor _,aff in pairs(dicAff) do\n\t\tif haveAff(aff) then\n\t\t\tc = c + 1\n\t\tend\n\tend\n\tif c > 0 then c = (c*5) end\n\tdictPos = dictPos + c\n\n\tif mana <= dictPos then\n\t\tcecho(\"<NavajoWhite> [<blue>\"..mana..\"%<NavajoWhite>|<LightSkyBlue>\"..dictPos..\"%<NavajoWhite>]\")\n\t\tataxia_boxEcho(string.upper(target)..\" CAN BE DICTATED\", \"black:DodgerBlue\")\n\telse\n\t\tcecho(\"<NavajoWhite> [<blue>\"..mana..\"%<NavajoWhite>|<LightSkyBlue>\"..dictPos..\"%<NavajoWhite>]\")\n\tend\nend\n\nfunction depressionCount()\n\tlocal depAff = {\"depression\", \"nausea\", \"hypochondria\"}\n\tlocal c = 0\n\tfor _, aff in pairs(depAff) do\n\t\tif haveAff(aff) then\n\t\t\tc = c + 1\n\t\tend\n\tend\n\treturn c\nend\n\nfunction targetAffCount()\n\tlocal ignore = {\"curseward\", \"prone\", \"blindness\", \"deafness\", \"rebounding\", \"shield\", \"hierophant\", \"worms\"}\n\tlocal c = 0\n\tfor i,v in pairs(tAffs) do\n\t\tif not table.contains(ignore, i) then\n\t\t\tif v == true then\n\t\t\t\tc = c + 1\n\t\t\tend\n\t\tend\n\tend\n\treturn c\nend",
-                    "children": [
-                      {
-                        "name": "Curing",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "script": "curingTable = {\n\tgoldenseal = {\"depression\", \"sandfever\", \"stupidity\", \"epilepsy\", \"dizziness\", \"dissonance\", \"shyness\", \"impatience\", \"unweavingmind\", \"fulminated\"},\n\tlobelia = {\"recklessness\", \"vertigo\", \"spiritburn\", \"tenderskin\", \"loneliness\", \"claustrophobia\", \"masochism\", \"agoraphobia\"},\n\tbellwort = {\"timeloop\", \"justice\", \"lovers\", \"peace\", \"pacified\", \"generosity\", \"indifference\",\"diminished\"},\n\tkelp = {\"hypochondria\", \"parasite\", \"weariness\",  \"asthma\", \"healthleech\", \"clumsiness\", \"sensitivity\"},\n\tash = {\"confusion\", \"hypersomnia\", \"hallucinations\", \"paranoia\", \"dementia\",\"crescendo\",},\n\tginseng = {\"flushings\", \"lethargy\", \"haemophilia\", \"addiction\", \"nausea\", \"scytherus\", \"darkshade\", \"unweavingbody\"},\n}\n\nfunction haveSmokeAff()\n\tlocal smoke = false\n\tlocal sAffs = {\"deadening\", \"tension\",\n\t\t\"disloyalty\", \"hellsight\", \"manaleech\", \"slickness\", \"unweavingspirit\",\"earworm\",}\n    \n\tfor i=1, #sAffs do\n\t\tif haveAff(sAffs[i]) then\n\t\t\tsmoke = true\n\t\t\tbreak\n\t\tend\n\tend\n\t\n\treturn smoke\nend\n\nfunction hasSalveAff()\n  local salve = false\n  local sAffs = {\"frozen\", \"shivering\", \"anorexia\", \"burns\", \"ablaze\", \"selarnia\",\n    \"damagedleftleg\", \"damagedrightleg\", \"mangledleftleg\", \"mangledrightleg\",\n    \"damagedleftarm\", \"damagedrightarm\", \"mangledleftarm\", \"mangledrightarm\",\n    \"brokenleftarm\", \"brokenrightarm\", \"brokenleftleg\", \"brokenrightleg\", \"hypothermia\"}\n    \n  for i=1, #sAffs do\n    if haveAff(sAffs[i]) then\n      salve = true\n      break\n    end\n  end\n  \n  return salve\nend\n\nfunction restorePassiveCure()\n  cecho(\"\\n<green>+ \"..passiveFailsafe..\" +\")\n  tAffs[passiveFailsafe] = true\n  passiveFailsafe = nil\nend",
-                        "children": [
-                          {
-                            "name": "Herbs"
-                          },
-                          {
-                            "name": "Wide Groups"
-                          },
-                          {
-                            "name": "Check Targets Conditions"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "Offensive Things",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "script": "function getLockingAffliction(type)\n\tlocal lockaff = {\n\t\tAlchemist = {\"stupidity\", \"stupid\"},\n\t\tApostate = {\"voyria\", \"plague\"},\n    Pariah = {\"voyria\", \"plague\"},\n\t\tBard = {\"voyria\", \"plague\"},\n\t\tBlademaster = {\"weariness\", \"weariness\"},\n\t\tDepthswalker = {\"recklessness\", \"reckless\"},\n\t\tDruid = {\"weariness\", \"weariness\"},\n\t\tInfernal = {\"weariness\", \"weariness\"},\n\t\tJester = {\"paralysis\", \"paralyse\"},\n\t\tMagi = {\"haemophilia\", \"haemophilia\"},\n\t\tMonk = {\"weariness\", \"weariness\"},\n\t\tOccultist = {\"paralysis\", \"paralyse\"},\n\t\tPaladin = {\"weariness\", \"weariness\"},\n    Unnamable = {\"weariness\", \"weariness\"},\n\t\tPriest = {\"voyria\", \"plague\"},\n\t\tPsion = {\"confusion\", \"confusion\"},\n\t\tRunewarden = {\"weariness\", \"weariness\"},\n\t\tSentinel = {\"weariness\", \"weariness\"},\n\t\tSerpent = {\"weariness\", \"weariness\"},\n\t\tShaman = {\"paralysis\", \"paralyse\"},\n\t\tSylvan = {\"haemophilia\", \"haemophilia\"},\n    Airlord = {\"weariness\", \"weariness\"},\n    Waterlord = {\"weariness\", \"weariness\"},\n    Earthlord = {\"weariness\", \"weariness\"},\n    Firelord = {\"weariness\", \"weariness\"},\n\t}\n\tif ataxiaNDB and ataxiaNDB_Exists(target) and ataxiaNDB.players[target].city ~= \"Underworld\" then\n\t\tlocal gClass = ataxiaNDB_getClass(target)\n\t\tif type == \"name\" then\n\t\t\treturn lockaff[gClass][1]\n\t\telse\n\t\t\treturn lockaff[gClass][2]\n\t\tend\n\telse\n\t\tif type == \"name\" and ataxiaNDB.players[target].city == \"Underworld\" then\n\t\t\treturn \"paralysis\"\n\t\telse\n\t\t\treturn \"paralyse\"\n\t\tend\n\tend\nend",
-                        "children": [
-                          {
-                            "name": "Limb Management",
-                            "isActive": "yes",
-                            "isFolder": "yes",
-                            "script": "function target_limbBroke(limb)\n\tlocal brk = \"damaged\"..string.gsub(limb, \" \", \"\")\n\tlocal mend = \"broken\"..string.gsub(limb, \" \", \"\")\n\ttAffs[brk] = true\n--\terAff(mend)\nend\n\nfunction targetLimbs_updateTimers(limbhit)\n\tataxiaTables.limbTimers = ataxiaTables.limbTimers or {}\n\n\tif ataxiaTables.limbTimers[limbhit] then killTimer( ataxiaTables.limbTimers[limbhit] ) end\n\tataxiaTables.limbTimers[limbhit] = tempTimer(180, [[ target_resetLimb(\"]]..limbhit..[[\")]])\n\nend\n\nfunction target_resetLimb(limbhit)\n  local lco = ataxia_shortLimb(limbhit)\n\ttLimbs[lco] = 0\n\tcecho(\"\\n<a_brown>( Limb damage on target's <a_red>\"..limbhit..\"<a_brown> has been reset )\")\n\t\n\tif limbhit == \"head\" or limbhit == \"torso\" then\n\t\terAff(\"damaged\"..limbhit)\n\tend\n\t\n\tif ataxiaTables.limbTimers[limb] then \n\t\tkillTimer( ataxiaTables.limbTimers[limb] )\n\t\tataxiaTables.limbTimers[limb] = nil\n\tend\nend\n\nfunction limbCounter_textTag()\n\tlocal zero = 0\n\tfor limb, num in pairs(tLimbs) do\n\t\tif limb ~= \"BP\" and limb ~= \"staff\" and limb ~= \"airstrike\" and type(num) == \"number\" and num > 0 then\n\t\t\tzero = zero + 1\n\t\tend\n\tend\n\tif zero == 0 then return \"\" end\n\n\tlocal str = \" <a_brown>[\"\n\tlocal limbs = {\"LL\", \"RL\", \"LA\", \"RA\", \"T\", \"H\"}\n\tfor i=1, #limbs do\n\t\tlocal colour = \"\"\n\t\tif tLimbs[limbs[i]] >= 99 then\n\t\t\tcolour = \"<a_darkred>\"\n\t\telseif tLimbs[limbs[i]] >= 90 then\n\t\t\tcolour = \"<a_red>\"\n\t\telseif tLimbs[limbs[i]] >= 80 then\n\t\t\tcolour = \"<OrangeRed>\"\n\t\telseif tLimbs[limbs[i]] >= 70 then\n\t\t\tcolour = \"<dark_orange>\"\n\t\telseif tLimbs[limbs[i]] >= 60 then\n\t\t\tcolour = \"<orange>\"\n\t\telseif tLimbs[limbs[i]] >= 50 then\n\t\t\tcolour = \"<coral>\"\n\t\telseif tLimbs[limbs[i]] >= 40 then\n\t\t\tcolour = \"<goldenrod>\"\n\t\telseif tLimbs[limbs[i]] >= 30 then\n\t\t\tcolour = \"<yellow>\"\n\t\telseif tLimbs[limbs[i]] >= 20 then\n\t\t\tcolour = \"<LightGoldenrod>\"\n\t\telse\n\t\t\tcolour = \"<DimGrey>\"\n\t\tend\n\t\t\n\t\tif limbs[i] ~= limbs[#limbs] then\n\t\t\tstr = str..colour..limbs[i]..\"<a_brown>.\"\n\t\telse\n\t\t\tstr = str..colour..limbs[i]..\"<a_brown>] \"\n\t\tend\n\tend\n\n\treturn str\nend\n\nfunction limbCounter_numberTag()\n\n\tlocal zero = 0\n\tfor limb, num in pairs(tLimbs) do\n\t\tif limb ~= \"BP\" and limb ~= \"staff\" and limb ~= \"airstrike\" and type(num) == \"number\" and num > 0 then\n\t\t\tzero = zero + 1\n\t\tend\n\tend\n\tif zero == 0 then return \"\" end\n\n\tlocal str = \" <a_brown>[\"\n\tlocal limbs = {\"LL\", \"RL\", \"LA\", \"RA\", \"T\", \"H\"}\n  local val = 0\n\tfor i=1, #limbs do\n\t\tlocal colour = \"\"\n\t\tif tLimbs[limbs[i]] >= 99 then\n\t\t\tcolour = \"<a_darkred>\"\n\t\telseif tLimbs[limbs[i]] >= 90 then\n\t\t\tcolour = \"<a_red>\"\n\t\telseif tLimbs[limbs[i]] >= 80 then\n\t\t\tcolour = \"<OrangeRed>\"\n\t\telseif tLimbs[limbs[i]] >= 70 then\n\t\t\tcolour = \"<dark_orange>\"\n\t\telseif tLimbs[limbs[i]] >= 60 then\n\t\t\tcolour = \"<orange>\"\n\t\telseif tLimbs[limbs[i]] >= 50 then\n\t\t\tcolour = \"<coral>\"\n\t\telseif tLimbs[limbs[i]] >= 40 then\n\t\t\tcolour = \"<goldenrod>\"\n\t\telseif tLimbs[limbs[i]] >= 30 then\n\t\t\tcolour = \"<yellow>\"\n\t\telseif tLimbs[limbs[i]] >= 20 then\n\t\t\tcolour = \"<LightGoldenrod>\"\n\t\telse\n\t\t\tcolour = \"<DimGrey>\"\n\t\tend\n\t\t\n\t\tif limbs[i] ~= limbs[#limbs] then\n\t\t\tstr = str..colour..tLimbs[limbs[i]]..\"<NavajoWhite>|\"\n\t\telse\n\t\t\tstr = str..colour..tLimbs[limbs[i]]..\"<a_brown>] \"\n\t\tend\n\tend\n\n\treturn str\nend",
-                            "children": [
-                              {
-                                "name": "Bard Limbcounting"
-                              },
-                              {
-                                "name": "Blademaster Limbcounting"
-                              },
-                              {
-                                "name": "Dragon/Elord"
-                              },
-                              {
-                                "name": "Magi-Specific"
-                              },
-                              {
-                                "name": "Priest-Specific"
-                              },
-                              {
-                                "name": "Psion Limb Tracking"
-                              },
-                              {
-                                "name": "Target Applied Somewhere"
-                              },
-                              {
-                                "name": "Knight Limbcounting"
-                              },
-                              {
-                                "name": "Limb Data/Scripting"
-                              },
-                              {
-                                "name": "Sentinel Limb Data"
-                              },
-                              {
-                                "name": "Sylvan Limbcounting"
-                              }
-                            ]
-                          },
-                          {
-                            "name": "Monk",
-                            "isActive": "yes",
-                            "isFolder": "yes",
-                            "script": "function monk_checkCombo(str)\n  local sp = ataxia.settings.separator or \"::\"\n  local aSplit = string.split(str, sp)\n  local shik, tekStr = true, \"\"\n  local comboList = false\n  for _, com in pairs(aSplit) do\n    if com:find(\"combo\") then\n      comboList = string.split(com)\n      break\n    end\n  end\n  \n  if comboList then\n    ataxiaTemp.shikCombo = {}\n    local kicks = {\"flashheel\", \"risingkick\", \"frontkick\", \"spinkick\", \"crescent\"}\n    local staff = {\"shatter\", \"thrust\", \"dart\", \"hiraku\", \"hiru\", \"ruku\", \"kuro\", \"livestrike\", \"nervestrike\", \"needle\", \"jinzuku\"}\n    local tek = {\"hrs\", \"hkp\", \"snk\", \"jbp\", \"sdk\", \"ucp\", \"pmp\", \"hfp\", \"cts\", \"rhk\", \"swk\", \"brs\",\n      \"slt\", \"mnk\", \"spp\", \"rts\", \"thk\", \"wrt\", \"axk\", \"scs\", \"wwk\", \"blp\", \"bbt\", \"jpk\", \"drs\"}\n    local hit = \"\"\n    \n    for num, act in pairs(comboList) do\n      if table.contains(kicks, act) then\n        ataxiaTemp.shikCombo.kick = act\n      elseif table.contains(staff, act) then\n        if comboList[num+1] == \"light\" then\n          hit = act..\" light\"\n        else\n          hit = act\n        end\n        if ataxiaTemp.shikCombo.attackone then\n          ataxiaTemp.shikCombo.attacktwo = hit\n        else\n          ataxiaTemp.shikCombo.attackone = hit\n        end\n      elseif table.contains(tek, act) then\n        tekStr = tekStr..\" <green>(<NavajoWhite>\"..act\n        if comboList[num+1] == \"left\" or comboList[num+1] == \"right\" then\n          tekStr = tekStr..\" \"..comboList[num+1]\n        end\n        tekStr = tekStr..\"<green>)\"\n      end\n    end\n    if table.contains(comboList, \"sweep\") then\n      ataxiaTemp.shikCombo.attackone = \"sweep\"; ataxiaTemp.shikCombo.attacktwo = \"sweep\"\n    end\n    if not ataxiaBasher.enabled then\n      cecho(\"\\n<a_darkblue>[<DimGrey>\"..comboList[2]:upper()..\"<a_darkblue>]: \")\n      if tekStr == \"\" then\n        cecho(\"<DimGrey>\"..(ataxiaTemp.shikCombo.kick and ataxiaTemp.shikCombo.kick..\" - \" or \"\"))\n        cecho(\"<DimGrey>\"..(ataxiaTemp.shikCombo.attackone and ataxiaTemp.shikCombo.attackone..\" - \" or \"\"))\n        cecho(\"<DimGrey>\"..(ataxiaTemp.shikCombo.attacktwo and ataxiaTemp.shikCombo.attacktwo..\".\" or \".\"))\n      else\n        cecho(\"<DimGrey>\"..tekStr..\".\")\n      end\n    end\n  end\nend",
-                            "children": [
-                              {
-                                "name": "Tekura Limb Counter"
-                              },
-                              {
-                                "name": "Shikudo Limb Counter"
-                              },
-                              {
-                                "name": "Shikudo Extras"
-                              }
-                            ]
-                          },
-                          {
-                            "name": "Miscellaneous Aff Tracking Methods"
-                          },
-                          {
-                            "name": "Sentinel-specific"
-                          },
-                          {
-                            "name": "Queueing Related"
-                          },
-                          {
-                            "name": "Firelord Stuff"
-                          },
-                          {
-                            "name": "Affliction Relapses for Two-handed"
-                          },
-                          {
-                            "name": "Twohander Fractures"
-                          },
-                          {
-                            "name": "Pariah things"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "Affliction Tracking V2",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "Affliction Tracking V2 - Core"
-                          },
-                          {
-                            "name": "Affliction Tracking V2 - Herb Cures"
-                          },
-                          {
-                            "name": "Affliction Tracking V2 - Backtracking"
-                          },
-                          {
-                            "name": "Affliction Tracking V2 - Verification"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "Affliction Tracking V3",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "Affliction Tracking V3 - Branching State Tracker"
-                          },
-                          {
-                            "name": "Affliction Tracking V3 - Integration"
-                          },
-                          {
-                            "name": "Affliction Tracking V3 - Test Scenario"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "Targeting Functions"
-                      },
-                      {
-                        "name": "Affliction Management"
-                      },
-                      {
-                        "name": "Parse Cures"
-                      },
-                      {
-                        "name": "Bard Harmonics Tracking"
-                      },
-                      {
-                        "name": "Combat Tables"
-                      },
-                      {
-                        "name": "Magi Vibes Tracking"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "SYSTEM DOCUMENTATION",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "Combat Documentation",
-                        "isActive": "no"
-                      },
-                      {
-                        "name": "Miscellaneous Documentation",
-                        "isActive": "no"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "System-related",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "Deffing",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "script": "function buildDefsTable()\n\tataxiaTables.defences = {}\n\n\tataxiaTables.defences = {\n\t\t--Curatives\n\t\tairpocket = \"airpocket\",\n\t\tblindness = \"blindness\",\n\t\tcaloric = \"insulation\",\n\t\tdeafness = \"deafness\",\n\t\tdeathsight = \"deathsight\",\n\t\tfangbarrier = \"fangbarrier\",\n\t\tfrost = \"temperance\",\n\t\tinsomnia = \"insomnia\",\n\t\tkola = \"kola\",\n\t\tlevitation = \"levitating\",\n\t\tmass = \"density\",\n\t\tparrying = \"parrying\",\n\t\trebounding = \"rebounding\",\n\t\tspeed = \"speed\",\n\t\tshield = \"shield\",\n\t\tthirdeye = \"thirdeye\",\n\t\tvenom = \"poisonresist\",\n\n\t\t--Alchemist\n\t\tastronomy = \"astronomy\",\n    compoundmask = \"compoundmask\",\n\t\tmercury = \"mercury\",\n\t\tsulphur = \"sulphur\",\n\t\ttin = \"tin\",\n\n\t\t--Blademaster\n\t\tconsciousness = \"consciousness\",\n\t\tshinclarity = \"shinclarity\",\n\t\tshinbinding = \"shinbinding\",\n\t\tshintrance = \"shintrance\",\n\t\tretaliation = \"retaliation\",\n    mindnet = \"mindnet\",\n    weathering = \"weathering\",\n\n\n\t\t--Apostate\n\t\tdemonarmour = \"demonarmour\",\n\t\ttruestare = \"truestare\",\n\t\t\n\t\t--Bard\n\t\taria = \"aria\",\n\t\tlay = \"lay\",\n\t\tsongbird = \"songbird\",\n\t\ttune = \"blade tune\",\n\t\theartsfury = \"heartsfury\",\n    acrobatics = \"acrobatics on\",\n    harrying = \"dance harrying\",\n\n\t\t--Depthswalker\n\t\tblur = \"blur\",\n\t\tbodyaugment = \"bodyaugment\",\n\t\tdisperse = \"disperse\",\n\t\tdurability = \"durability\",\n\t\tprecision = \"precision\",\n\t\tshadowveil = \"shadowveil\",\n    antiforce = \"antiforce\",\n\t\t\n\t\t--Dragon/Elemental Lord\n\t\tcohesion = \"cohesion\",\n\t\tdragonbreath = \"dragonbreath\",\n\t\tdragonarmour = \"dragonarmour\",\n\t\ttempest = \"tempest\",\n\t\tsusurrating = \"susurrating\",\n    fireshroud = \"fireshroud\",\n    extrusion = \"extrusion\",\n    strata = \"strata\",\n\t\t\n\t\t--Jester\n\t\tslippery = \"slippery\",\n\t\tbalancing = \"balancing\",\n\t\tacrobatics = \"acrobatics\",\n    \n    -- Knight\n    deflect = \"deflect\",\n    blademastery = \"blademastery\",\n\t\t\n    --Magi\n\t\tchargeshield = \"chargeshield\",\n\t\tdiamondskin = \"diamondskin\",\n\t\tstoneskin = \"stoneskin\",\n    simultaneity = \"simultaneity\",\n\n\t\t--Monk\n\t\tboostedregeneration = \"boosting\",\n\t\tkaitrance = \"kaitrance\",\n\t\thyperfocus = \"hyperfocus\",\n\t\tregeneration = \"regeneration\",\n\t\tshikudoform = \"shikudoform\",\n\t\tsplitmind = \"splitmind\",\n\t\tmindnet = \"mindnet\",\n    bodyblock = \"bodyblock\",\n    evadeblock = \"evadeblock\",\n    pinchblock = \"pinchblock\",\n    hypersense = \"hypersense\",\n    kaiboost = \"kaiboost\",\n    mindcloak = \"mindcloak\", \n    \n    --pariah\n    shieldlogograph = \"shieldlogograph\",\n    accursedresolve = \"accursedresolve\",\n    leechlogograph = \"leechlogograph\",       \n\n\t\t--Necromancy\n\t\tdeathaura = \"deathaura\",\n\t\tlifevision = \"lifevision\",\n\t\tsoulcage = \"soulcage\",\n\t\tvengeance = \"vengeance\",\n\n\t\t--Occultist\n\t\tarctar = \"arctar\",\n\t\tdevilmark = \"devilmark\",\n\t\tdistortedaura = \"distortedaura\",\n\t\ttentacles = \"tentacles\",\n\n\t\t--Priest\n\t\twillpowerblessing = \"willpowerblessing\",\n\t\tenduranceblessing = \"enduranceblessing\",\n\t\tthermalshield = \"thermalshield\",\n\t\tfrostshield = \"frostshield\",\n\t\tearthshield = \"earthshield\",\n\n\t\t--Psion\n\t\tguidedstrike = \"guidedstrike\",\n\t\tpsitranscend = \"psitranscend\",\n\t\tsecondskin = \"secondskin\",\n\t\trupturesight = \"rupturesight\",\n    psicomprehend = \"psicomprehend\",\n    psibreakthrough = \"psibreakthrough\",\n\n\t\t--Sentinel\n\t\taffinity = \"affinity\",\n\t\tbarkskin = \"barkskin\",\n\t\tfirstaid = \"firstaid\",\n\t\tstealth = \"stealth\",\n    scouting = \"scouting\",\n    fleetness = \"fleetness\",\n    \n\n\t\t--Serpent\n     ghost = \"ghost\",\n     lipreading = \"lipreading\",\n     pacing = \"pacing\",\n     scales = \"scales\",\n     weaving = \"weaving\",\n\n\t\t--Shaman\n\t\tswiftcurse = \"swiftcurse\",\n    \n    --Sylvan\n    spinningstaff = \"spinningstaff\",\n    viridian = \"viridian\",\n    \n    --Unnamable\n    bulk = \"bulk\",\n    mouths = \"mouths\",\n    joints = \"joints\",\n    eyes = \"eyes\",\n    unnamablepresence = \"unnamablepresence\",\n\n\t\t--Shared\n    avoid = \"avoid \" .. (ataxia.settings.avoidType or \"physical\"),\n    grookbubble = \"grookbubble\",\n\t\tconstitution = \"constitution\",\n    consciousness = \"consciousness\",\n\t\tcurseward = \"curseward\",\n\t\tgripping = \"gripping\",\n\t\tlifevision = \"lifevision\",\n\t\tnicatorlegend = \"nicatorlegend\",\n\t\tnightsight = \"nightsight\",\n\t\tresistance = \"resistance\",\n\t\ttoughness = \"toughness\",\n    shroud = \"shroud\",\n\t\tweathering = \"weathering\",\n\t\tvitality = \"vitality\",\n\t\tblocking = \"blocking\",\n\t\tcoldresist = \"coldresist\",\n\t\telectricresist = \"electricresist\",\n\t\tfireresist = \"fireresist\",\n\t\tmagicresist = \"magicresist\",\n\t\thypersight = \"hypersight\",\n\t\talertness = \"alertness\",\n\t\tvigilance = \"vigilance\",\n\t\tskywatch = \"skywatch\",\n\t\ttreewatch = \"treewatch\",\n\t\tgroundwatch = \"groundwatch\",\n    selfishness = \"selfishness\",\n    heldbreath = \"heldbreath\",\n\n\t\t--Tattoos\n\t\tboartattoo = \"boartattoo\",\n\t\tcloak = \"cloak\",\n\t\tmegalithtattoo = \"megalithtattoo\",\n\t\tmindseye = \"mindseye\",\n\t\tmoontattoo = \"moontattoo\",\n\t\tmosstattoo = \"mosstattoo\",\n\n\t}\nend\n\nfunction find_defence(d)\n\tlocal def = d\n\tbuildDefsTable()\n\n\n\n\tfor defence, actual in pairs(ataxiaTables.defences) do\n\t\tif defence == def or actual == def then\n\t\t\treturn defence\n\t\tend\n\tend\nend\n\nfunction trueDef(def)\n\tlocal def = def:lower()\n\tbuildDefsTable()\n\n\tif def:find(\"parrying\") then\n\t\treturn \"parrying\"\n\telse\n\t\tfor defence, actual in pairs(ataxiaTables.defences) do\n\t\t\tif defence == def or actual == def then\n\t\t\t\treturn defence\n\t\t\tend\n\t\tend\n\tend\n  return def\nend",
-                        "children": [
-                          {
-                            "name": "Defence API"
-                          },
-                          {
-                            "name": "Deffing Up"
-                          },
-                          {
-                            "name": "Defence Reporting"
-                          },
-                          {
-                            "name": "Defence Sorting - Cleaner"
-                          },
-                          {
-                            "name": "Dragon Breath"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "Curing Stuff",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "Priority-related",
-                            "isActive": "yes",
-                            "isFolder": "yes",
-                            "children": [
-                              {
-                                "name": "Swaps",
-                                "isActive": "yes",
-                                "isFolder": "yes",
-                                "children": [
-                                  {
-                                    "name": "Class Specific"
-                                  },
-                                  {
-                                    "name": "Priority Management"
-                                  },
-                                  {
-                                    "name": "Priority Swaps"
-                                  },
-                                  {
-                                    "name": "Heartseed Management"
-                                  }
-                                ]
-                              },
-                              {
-                                "name": "Default Curing Prios"
-                              },
-                              {
-                                "name": "Prio Management"
-                              }
-                            ]
-                          },
-                          {
-                            "name": "Can(x)",
-                            "isActive": "yes",
-                            "isFolder": "yes",
-                            "children": [
-                              {
-                                "name": "Various \"can do\" stuff"
-                              },
-                              {
-                                "name": "Misc CanDo"
-                              },
-                              {
-                                "name": "Lock breakers"
-                              }
-                            ]
-                          },
-                          {
-                            "name": "Fracture Management",
-                            "isActive": "yes",
-                            "isFolder": "yes",
-                            "children": [
-                              {
-                                "name": "Handle Fracture Counts"
-                              }
-                            ]
-                          },
-                          {
-                            "name": "Aff gains/losses"
-                          },
-                          {
-                            "name": "Prompt Affs"
-                          },
-                          {
-                            "name": "Affliction Colouring"
-                          },
-                          {
-                            "name": "Burn Handling"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "Class Things",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "Alchemist"
-                          },
-                          {
-                            "name": "Depthswalker"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "Lua Matrix package",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "complex"
-                          },
-                          {
-                            "name": "matrix"
-                          },
-                          {
-                            "name": "linear regression"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "Self Limb Tracking",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "script": "--Initialise the tables.\nselfLimbDamage = selfLimbDamage or {\n\t[\"head\"] = {damage = 0},\n\t[\"torso\"] = {damage = 0},\n\t[\"left arm\"] = {damage = 0},\n\t[\"right arm\"] = {damage = 0},\n\t[\"left leg\"] = {damage = 0},\n\t[\"right leg\"] = {damage = 0},\n\t\n\ttimers = {},\n\tlasthit = \"left leg\",\t\n}\n\nfunction resetMissLines()\n\tataxiaTables.missLines = {}\n\tataxiaTables.missLines = {\n\t\t\"You parry the attack with a deft manoeuvre.\", \n\t\t\"The attack rebounds back onto %w+!\", \n\t\t\"The attack rebounds onto %w+!\", \n\t\t\"The attack rebounds off your rebounding aura!\", \n\t\t\"%w+ misses you with \", \n\t\t\"You dodge nimbly out of the way.\", \n\t\t\"One of your reflections has been destroyed! You have %d+ left.\", \n\t\t\"You twist your body out of harm's way.\", \n\t\t\"You quickly jump back, avoiding the attack.\", \n\t\t\"You frantically attempt to parry the attack of %w+, but succeed only in redirecting it.\", \n\t\t\"You move inside %w+'s guard, deflecting %w+ attack to one side with your forearm before countering with a swift blow to %w+ temple.\",\n\t}\nend\n\nfunction resetBladeMasterDamage()\n\tataxiaTemp.blademasterDamage = {}\n\tlocal health = ataxia.vitals.maxhp\n\tlocal breakp = 0\n\tif health < 3600 then breakp = 7\n\telseif health < 4300 then breakp = 8\n\telseif health < 4900 then breakp = 9\n\telseif health < 5500 then breakp = 10\n\telseif health < 6200 then breakp = 11\n\telseif health < 6900 then breakp = 12\n\telseif health < 7600 then breakp = 13\n\telseif health < 8300 then breakp = 14\n\telse breakp = 15 end\n\t\n\tataxiaTemp.blademasterDamage.slash = (210/breakp)\n\tataxiaTemp.blademasterDamage.off = (150/breakp)\n\tataxiaTemp.blademasterDamage.compass = (200/breakp)\nend\n\nfunction resetKnightDamage()\n\tataxiaTemp.knightDamage = {}\n\tlocal health = ataxia.vitals.maxhp\n\t--snb calculation first\n\tlocal brk = 7\n\tif health > 3800 then\n\t\thealth = health - 3800\n\t\twhile health > 0 do\n\t\t\thealth = health - 450\n\t\t\tbrk = brk + 1\n\t\tend\n\tend\n\tataxiaTemp.knightDamage.snb = (100/brk)\n  local dwc = ((ataxia.vitals.maxhp-3800)/500)+9\n  ataxiaTemp.knightDamage.dwc = (100/dwc)\nend",
-                        "children": [
-                          {
-                            "name": "Different Attacks"
-                          },
-                          {
-                            "name": "Track The Damage"
-                          },
-                          {
-                            "name": "Parrying"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "Save/Load Settings"
-                      },
-                      {
-                        "name": "Check For Any Missing Variables"
-                      },
-                      {
-                        "name": "Install System"
-                      },
-                      {
-                        "name": "Prompt Running"
-                      },
-                      {
-                        "name": "Pause Toggling"
-                      },
-                      {
-                        "name": "Prompt Substitution"
-                      },
-                      {
-                        "name": "Raid Mode Things (WIP)"
-                      },
-                      {
-                        "name": "Balance Timers"
-                      },
-                      {
-                        "name": "Set Affliction Stacks to Zero"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Gui Stuff",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "script": "function Geyser.MiniConsole:clear()\n\tclearWindow(self.name)\nend\n\nfunction Geyser.MiniConsole:append()\n\tappendBuffer(self.name)\nend",
-                    "children": [
-                      {
-                        "name": "Creation/Layout"
-                      },
-                      {
-                        "name": "Map and Chat"
-                      },
-                      {
-                        "name": "Chat Capture Things"
-                      },
-                      {
-                        "name": "Vitals Related"
-                      },
-                      {
-                        "name": "Small Map / Small Chat"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Shaman System",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "Spirit Table"
-                      },
-                      {
-                        "name": "Save/Load functions"
-                      },
-                      {
-                        "name": "Binding functions"
-                      },
-                      {
-                        "name": "Shaman functions"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Harvesting/Crafting",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "Harvester Functions"
-                      },
-                      {
-                        "name": "Toggling Functions"
-                      },
-                      {
-                        "name": "Inkmilling"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Misc Scripts",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "Queue Scanning"
-                      },
-                      {
-                        "name": "System Class Functions"
-                      },
-                      {
-                        "name": "Box Echo"
-                      },
-                      {
-                        "name": "Retardation Management"
-                      },
-                      {
-                        "name": "keepAlive"
-                      },
-                      {
-                        "name": "Delete Full"
-                      },
-                      {
-                        "name": "Custom Colour Table"
-                      },
-                      {
-                        "name": "Ab Cheat"
-                      },
-                      {
-                        "name": "Deepcopy"
-                      },
-                      {
-                        "name": "Uncategorised Functions"
-                      },
-                      {
-                        "name": "Ping/Latency measuring"
-                      },
-                      {
-                        "name": "Directions"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Gmcp Related",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "Rift",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "Rift functions"
-                          },
-                          {
-                            "name": "Precaching functions"
-                          },
-                          {
-                            "name": "Outrifting Functions"
-                          },
-                          {
-                            "name": "Gmcp Rift Events"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "Update Stuff",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "ataxia_Players_Update",
-                            "eventHandlerList": [
-                              "gmcp.Room.Players",
-                              "gmcp.Room.AddPlayer",
-                              "gmcp.Room.RemovePlayer"
-                            ]
-                          },
-                          {
-                            "name": "ataxia_Room_Update",
-                            "eventHandlerList": [
-                              "gmcp.Room"
-                            ]
-                          },
-                          {
-                            "name": "ataxia_RoomContents_Update",
-                            "eventHandlerList": [
-                              "gmcp.Char.Items.List",
-                              "gmcp.Char.Items.Remove",
-                              "gmcp.Char.Items.Add"
-                            ]
-                          },
-                          {
-                            "name": "ataxia_Vitals_Update",
-                            "eventHandlerList": [
-                              "gmcp.Char.Vitals"
-                            ]
-                          },
-                          {
-                            "name": "Balance Tracking"
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Legend Deck",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "Legend Deck Table"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Ataxia NDB",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "Ataxia NDB Settings"
-                      },
-                      {
-                        "name": "Get Information"
-                      },
-                      {
-                        "name": "ataxiaNDB API"
-                      },
-                      {
-                        "name": "ataxiaNDB Highlighting"
-                      },
-                      {
-                        "name": "ataxiaNDB Display API"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Curing",
-                    "isActive": "yes",
-                    "isFolder": "yes",
-                    "children": [
-                      {
-                        "name": "Damnation Defense"
-                      }
-                    ]
+                    "name": "Gear Audit"
                   }
                 ]
               }
             ]
-          }
-        ]
-      },
-      {
-        "name": "deleteOldProfiles",
-        "isActive": "yes",
-        "isFolder": "yes",
-        "children": [
-          {
-            "name": "deleteOldProfiles script"
           }
         ]
       },

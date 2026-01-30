@@ -14,6 +14,22 @@ attributes:
 packageName: ''
 ]]--
 
+--[[mudlet
+type: script
+name: zgui.stats()
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Levi  Scripts
+- ZulahGUI - Saonji Edit
+- zGUI Redux
+- Logger
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 function zgui.stats()
   if zgui.vitals and gmcp.Char and gmcp.Char.Vitals then
   zgui.vitals.h = tonumber(gmcp.Char.Vitals.hp)

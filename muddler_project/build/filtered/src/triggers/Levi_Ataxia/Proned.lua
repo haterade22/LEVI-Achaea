@@ -5,5 +5,8 @@ if isTargeted(matches[2]) then
 	setBold(true)
 	fg("violet")
 	resetFormat()
+  tarAffed("prone")
+  confirmAffV2("prone")
+  applyAffV3("prone")
 end
 

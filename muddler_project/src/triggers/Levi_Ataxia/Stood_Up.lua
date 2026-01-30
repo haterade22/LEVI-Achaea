@@ -7,4 +7,6 @@ if isTargeted(matches[2]) then
 	for _, aff in pairs(rem) do
 		erAff(aff)
 	end
+  tAffs.prone = false
+  removeAffV3("prone")
 end

@@ -1,3 +1,21 @@
+--[[mudlet
+type: script
+name: ataxia_Room_Update
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Ataxia
+- Ataxia
+- Gmcp Related
+- Update Stuff
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+eventHandlers:
+- gmcp.Room
+]]--
+
 function ataxia_Room_Update()
  ataxiaBasher_invalidateStormhammer()
 	if not gmcp.Room.Info then return end

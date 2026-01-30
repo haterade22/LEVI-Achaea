@@ -3,7 +3,6 @@ if isTargeted(matches[2]) then
 	fg("black")
 	bg("yellow")
 	resetFormat()
-	erAff("paralysis")
 	targetIshere = true
 	tAffs.curseward = true
 end

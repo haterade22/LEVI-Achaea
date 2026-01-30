@@ -35,10 +35,10 @@ colorTriggerBgColor: '#000000'
 patterns:
 - pattern: ^You swing (.+) at (\w+)'s (.+) with all your might.$
   type: 1
-- pattern: '10'
+- pattern: '1'
   type: 5
 - pattern: ^As you carve into (\w+), you perceive that you have dealt (.+)\% damage to \w+ (torso|head|left arm|right arm|right
-    leg|left leg).$
+    leg|left leg).
   type: 1
 ]]--
 
@@ -140,5 +140,3 @@ aff3 = nil
 end
 
 end
-
-

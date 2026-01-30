@@ -1,1 +1,1 @@
-send("say *mhaldorian Duanatharan")
+send("say *mhaldorian Duanatharan.")

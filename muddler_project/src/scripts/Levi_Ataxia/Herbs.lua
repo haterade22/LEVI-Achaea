@@ -1,3 +1,19 @@
+--[[mudlet
+type: script
+name: Herbs
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Ataxia
+- Ataxia
+- Combat
+- Curing
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 function taTempers()
 	if tAffs.anorexia then erAff("anorexia") end
   predictBal("herb", 1.55)	

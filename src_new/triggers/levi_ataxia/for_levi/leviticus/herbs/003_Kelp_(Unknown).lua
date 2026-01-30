@@ -10,7 +10,7 @@ hierarchy:
 - Remove Afflictions
 - Herbs
 attributes:
-  isActive: 'no'
+  isActive: 'yes'
   isFolder: 'no'
   isTempTrigger: 'no'
   isMultiline: 'no'
@@ -35,6 +35,7 @@ patterns:
 - pattern: ^(\w+) eats (a withered piece of kelp|a piece of kelp|an aurum flake).$
   type: 1
 ]]--
+
 
 if matches[2] == target then
     if anorexiaFailsafe then

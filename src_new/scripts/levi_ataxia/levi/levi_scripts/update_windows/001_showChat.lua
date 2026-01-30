@@ -14,6 +14,22 @@ attributes:
 packageName: ''
 ]]--
 
+--[[mudlet
+type: script
+name: showChat
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Levi  Scripts
+- ZulahGUI - Saonji Edit
+- zGUI Redux
+- Update Windows
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 -- Detect channel from message text when GMCP reports "says"
 local function detectChannelFromText(text)
   -- City channels - check for (CityName): pattern

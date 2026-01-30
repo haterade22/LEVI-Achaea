@@ -36,6 +36,7 @@ patterns:
   type: 1
 ]]--
 
+
 if isTargeted(matches[2]) then
 tdeliverance = false
 	if anorexiaFailsafe then

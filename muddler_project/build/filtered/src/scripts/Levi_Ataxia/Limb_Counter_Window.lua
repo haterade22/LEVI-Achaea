@@ -1,3 +1,18 @@
+--[[mudlet
+type: script
+name: Limb Counter Window
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Levi  Scripts
+- Leviticus
+- Windows
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 tarcLabel = Geyser.Label:new({
   name = "tarcLabel",
   x = "0%", y = "-50%",

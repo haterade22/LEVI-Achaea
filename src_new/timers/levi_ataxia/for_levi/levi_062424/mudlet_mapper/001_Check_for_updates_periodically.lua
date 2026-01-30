@@ -5,9 +5,7 @@ hierarchy:
 - Levi_Ataxia
 - For Levi
 - Levi_062424
-- leviticus
-- Levi Ataxia
-- mudlet-mapper
+- mudlet-mapper_24
 - Mudlet Mapper
 attributes:
   isActive: 'yes'

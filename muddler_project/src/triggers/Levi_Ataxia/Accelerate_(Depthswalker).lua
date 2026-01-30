@@ -17,4 +17,3 @@ if isTargeted(name) and class == "Depthswalker" then
 	end
 	targetIshere = true
 end
-

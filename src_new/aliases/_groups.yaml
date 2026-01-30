@@ -1,23 +1,36 @@
 version: 1
 packageType: aliases
 groups:
+- name: mudlet-mapper
+  packageName: mudlet-mapper
+  directory: mudlet-mapper
+  children:
+  - name: Mudlet Mapper
+    script: mudlet = mudlet or {}; mudlet.mapper_script = true
+    directory: mudlet-mapper/mudlet_mapper
+    children:
+    - name: mm Mapping
+      isActive: false
+      directory: mudlet-mapper/mudlet_mapper/mm_mapping
+    - name: Game-specific
+      directory: mudlet-mapper/mudlet_mapper/game-specific
+      children:
+      - name: Lusternia
+        directory: mudlet-mapper/mudlet_mapper/game-specific/lusternia
 - name: Levi_Ataxia
   packageName: Levi_Ataxia
   directory: levi_ataxia
   children:
+  - name: echo
+    packageName: echo
+    directory: levi_ataxia/echo
   - name: For Levi
     packageName: For Levi
     directory: levi_ataxia/for_levi
     children:
-    - name: run-lua-code-v4
-      packageName: run-lua-code-v4
-      directory: levi_ataxia/for_levi/run-lua-code-v4
     - name: deleteOldProfiles
       packageName: deleteOldProfiles
       directory: levi_ataxia/for_levi/deleteoldprofiles
-    - name: echo
-      packageName: echo
-      directory: levi_ataxia/for_levi/echo
     - name: Levi_062424
       packageName: Levi_062424
       directory: levi_ataxia/for_levi/levi_062424
@@ -25,6 +38,9 @@ groups:
       - name: deleteOldProfiles
         packageName: deleteOldProfiles
         directory: levi_ataxia/for_levi/levi_062424/deleteoldprofiles
+      - name: echo
+        packageName: echo
+        directory: levi_ataxia/for_levi/levi_062424/echo
       - name: Levi
         packageName: leviticus
         script: '--Quaskan
@@ -41,74 +57,139 @@ groups:
           --36888 Azdun - Mummy Lord'
         directory: levi_ataxia/for_levi/levi_062424/levi
         children:
-        - name: Gear System
-          directory: levi_ataxia/for_levi/levi_062424/gear_system
-        - name: zData
-          packageName: zData
-          children:
-          - name: zData
-            directory: levi_ataxia/for_levi/levi_062424/zdata
         - name: RAGEPULL
           isActive: false
           directory: levi_ataxia/for_levi/levi_062424/ragepull
+        - name: Gear System
+          directory: levi_ataxia/for_levi/levi_062424/gear_system
         - name: LeviticusREG
           packageName: DominiusAtax
           script: "-- Groves\n-- Raem 7600\n\n--Ficus\n--5706\n\n\n--- PVE Derrillin\n-- Callibius\n--push tombstone\n\n--21476\n\
             \n--23806\n\n-- Board \n--23900\n\n\n--MEROPIS\n--Dralhu\n--Fortress"
           children:
-          - name: ZulahGUI - Saonji Edit
-            packageName: ZulahGUI - Saonji Edit
-            children:
-            - name: zGUI Redux
-              directory: levi_ataxia/for_levi/levi_062424/zgui_redux
           - name: Leviticus
             packageName: Dominius
             children:
-            - name: Defence
-              directory: levi_ataxia/for_levi/levi_062424/defence
+            - name: General
+              children:
+              - name: Mhaldor
+                directory: levi_ataxia/for_levi/levi_062424/mhaldor
+              - name: SHOPKEEPING
+                directory: levi_ataxia/for_levi/levi_062424/shopkeeping
+              - name: TARGETTING
+                directory: levi_ataxia/for_levi/levi_062424/targetting
+              - name: FREEZETAG
+                directory: levi_ataxia/for_levi/levi_062424/freezetag
+              - name: MOVEMENT
+                directory: levi_ataxia/for_levi/levi_062424/movement
+            - name: EARTH LORD
+              directory: levi_ataxia/for_levi/levi_062424/earth_lord
+            - name: slc
+              directory: levi_ataxia/for_levi/levi_062424/slc
+            - name: EGGHUNT
+              directory: levi_ataxia/for_levi/levi_062424/egghunt
+            - name: AzzysEnemyManagement
+              packageName: AzzysEnemyManagement
+              children:
+              - name: Enemy Management
+                directory: levi_ataxia/for_levi/levi_062424/enemy_management
             - name: Monks
               children:
-              - name: ALIASES
-                isActive: false
-                directory: levi_ataxia/for_levi/levi_062424/aliases
-              - name: KAIDO
-                isActive: false
-                directory: levi_ataxia/for_levi/levi_062424/kaido
-              - name: Monk
-                packageName: Monk
-                children:
-                - name: Kaido
-                  directory: levi_ataxia/for_levi/levi_062424/kaido
-                - name: Telepathy
-                  directory: levi_ataxia/for_levi/levi_062424/telepathy
-                - name: telepathy_reporting
-                  packageName: telepathy_reporting
-                  children:
-                  - name: Telepathy Reporting
-                    directory: levi_ataxia/for_levi/levi_062424/telepathy_reporting
-                - name: Monk
-                  children:
-                  - name: Tekura
-                    directory: levi_ataxia/for_levi/levi_062424/tekura
-                  - name: monkcustomcombo
-                    packageName: monkcustomcombo
-                    isActive: false
-                    directory: levi_ataxia/for_levi/levi_062424/monkcustomcombo
-                - name: Shikudo
-                  directory: levi_ataxia/for_levi/levi_062424/shikudo
               - name: TELEPATHY
                 isActive: false
                 directory: levi_ataxia/for_levi/levi_062424/telepathy
               - name: TEKURA
                 isActive: false
                 directory: levi_ataxia/for_levi/levi_062424/tekura
+              - name: KAIDO
+                isActive: false
+                directory: levi_ataxia/for_levi/levi_062424/kaido
               - name: SHIKUDO
                 isActive: false
                 directory: levi_ataxia/for_levi/levi_062424/shikudo
+              - name: ALIASES
+                isActive: false
+                directory: levi_ataxia/for_levi/levi_062424/aliases
+              - name: Monk
+                packageName: Monk
+                children:
+                - name: Monk
+                  children:
+                  - name: monkcustomcombo
+                    packageName: monkcustomcombo
+                    isActive: false
+                    directory: levi_ataxia/for_levi/levi_062424/monkcustomcombo
+                  - name: Tekura
+                    directory: levi_ataxia/for_levi/levi_062424/tekura
+                - name: Shikudo
+                  directory: levi_ataxia/for_levi/levi_062424/shikudo
+                - name: Telepathy
+                  directory: levi_ataxia/for_levi/levi_062424/telepathy
+                - name: Kaido
+                  directory: levi_ataxia/for_levi/levi_062424/kaido
+                - name: telepathy_reporting
+                  packageName: telepathy_reporting
+                  children:
+                  - name: Telepathy Reporting
+                    directory: levi_ataxia/for_levi/levi_062424/telepathy_reporting
             - name: APOSTATE
               directory: levi_ataxia/for_levi/levi_062424/apostate
-            - name: Dragon
-              directory: levi_ataxia/for_levi/levi_062424/dragon
+            - name: Knight
+              children:
+              - name: Infernal
+                script: '-- Infernal Forge 53507
+
+
+                  -- Exploit Weariness and Paranoia
+
+                  -- Torment: Healthleech and if that then confusion'
+                children:
+                - name: Oppression
+                  directory: levi_ataxia/for_levi/levi_062424/oppression
+                - name: SNB
+                  isActive: false
+                  directory: levi_ataxia/for_levi/levi_062424/snb
+                - name: Dual Blunt
+                  isActive: false
+                  directory: levi_ataxia/for_levi/levi_062424/dual_blunt
+                - name: 2H
+                  isActive: false
+                  directory: levi_ataxia/for_levi/levi_062424/2h
+              - name: RUNIE
+                children:
+                - name: SNB
+                  directory: levi_ataxia/for_levi/levi_062424/snb
+                - name: 2H
+                  isActive: false
+                  directory: levi_ataxia/for_levi/levi_062424/2h
+            - name: Defence
+              directory: levi_ataxia/for_levi/levi_062424/defence
+            - name: Mage
+              directory: levi_ataxia/for_levi/levi_062424/mage
+            - name: DRAGON
+              children:
+              - name: RAGEBLADE
+                directory: levi_ataxia/for_levi/levi_062424/rageblade
+            - name: BladeMaster
+              directory: levi_ataxia/for_levi/levi_062424/blademaster
+            - name: Serpent
+              directory: levi_ataxia/for_levi/levi_062424/serpent
+            - name: DRAGON TALISMAN
+              script: send("talisman combine "..color.."dragon"..dragonthing.." 1;talisman combine "..color.."dragon"..dragonthing.."
+                2;talisman combine "..color.."dragon"..dragonthing.." 3;talisman combine "..color.."dragon"..dragonthing.."
+                4;talisman combine "..color.."dragon"..dragonthing.." 5;talisman combine "..color.."dragon"..dragonthing.."
+                6")
+              directory: levi_ataxia/for_levi/levi_062424/dragon_talisman
+            - name: Undead
+              directory: levi_ataxia/for_levi/levi_062424/undead
+            - name: DEPTHSWALKER
+              directory: levi_ataxia/for_levi/levi_062424/depthswalker
+            - name: Psion
+              children:
+              - name: Psionics
+                directory: levi_ataxia/for_levi/levi_062424/psionics
+              - name: Emulation
+                directory: levi_ataxia/for_levi/levi_062424/emulation
             - name: Artefacts
               children:
               - name: LegendDeck
@@ -122,88 +203,18 @@ groups:
                   --Severian -- Steelmind defence \n--Sycaerunax\n--Travian\n--Ugrach\n--Wavel \n--Yozhik -- Thornwall!\n\
                   --Yudhishthira\n--Yuthka -- Meteor to someone         "
                 directory: levi_ataxia/for_levi/levi_062424/legenddeck
-            - name: Psion
-              children:
-              - name: Emulation
-                directory: levi_ataxia/for_levi/levi_062424/emulation
-              - name: Psionics
-                directory: levi_ataxia/for_levi/levi_062424/psionics
-            - name: Mage
-              directory: levi_ataxia/for_levi/levi_062424/mage
-            - name: DRAGON
-              children:
-              - name: RAGEBLADE
-                directory: levi_ataxia/for_levi/levi_062424/rageblade
-            - name: BladeMaster
-              directory: levi_ataxia/for_levi/levi_062424/blademaster
-            - name: Undead
-              directory: levi_ataxia/for_levi/levi_062424/undead
-            - name: General
-              children:
-              - name: SHOPKEEPING
-                directory: levi_ataxia/for_levi/levi_062424/shopkeeping
-              - name: FREEZETAG
-                directory: levi_ataxia/for_levi/levi_062424/freezetag
-              - name: TARGETTING
-                directory: levi_ataxia/for_levi/levi_062424/targetting
-              - name: Mhaldor
-                directory: levi_ataxia/for_levi/levi_062424/mhaldor
-              - name: MOVEMENT
-                directory: levi_ataxia/for_levi/levi_062424/movement
-            - name: Knight
-              children:
-              - name: Infernal
-                script: '-- Infernal Forge 53507
-
-
-                  -- Exploit Weariness and Paranoia
-
-                  -- Torment: Healthleech and if that then confusion'
-                children:
-                - name: 2H
-                  isActive: false
-                  directory: levi_ataxia/for_levi/levi_062424/2h
-                - name: SNB
-                  isActive: false
-                  directory: levi_ataxia/for_levi/levi_062424/snb
-                - name: Dual Blunt
-                  isActive: false
-                  directory: levi_ataxia/for_levi/levi_062424/dual_blunt
-                - name: Oppression
-                  directory: levi_ataxia/for_levi/levi_062424/oppression
-              - name: RUNIE
-                children:
-                - name: 2H
-                  isActive: false
-                  directory: levi_ataxia/for_levi/levi_062424/2h
-                - name: SNB
-                  directory: levi_ataxia/for_levi/levi_062424/snb
+            - name: Dragon
+              directory: levi_ataxia/for_levi/levi_062424/dragon
             - name: limb.1.2
               packageName: limb.1.2
               children:
               - name: Limb
                 directory: levi_ataxia/for_levi/levi_062424/limb
-            - name: EGGHUNT
-              directory: levi_ataxia/for_levi/levi_062424/egghunt
-            - name: DEPTHSWALKER
-              directory: levi_ataxia/for_levi/levi_062424/depthswalker
-            - name: DRAGON TALISMAN
-              script: send("talisman combine "..color.."dragon"..dragonthing.." 1;talisman combine "..color.."dragon"..dragonthing.."
-                2;talisman combine "..color.."dragon"..dragonthing.." 3;talisman combine "..color.."dragon"..dragonthing.."
-                4;talisman combine "..color.."dragon"..dragonthing.." 5;talisman combine "..color.."dragon"..dragonthing.."
-                6")
-              directory: levi_ataxia/for_levi/levi_062424/dragon_talisman
-            - name: EARTH LORD
-              directory: levi_ataxia/for_levi/levi_062424/earth_lord
-            - name: slc
-              directory: levi_ataxia/for_levi/levi_062424/slc
-            - name: Serpent
-              directory: levi_ataxia/for_levi/levi_062424/serpent
-            - name: AzzysEnemyManagement
-              packageName: AzzysEnemyManagement
-              children:
-              - name: Enemy Management
-                directory: levi_ataxia/for_levi/levi_062424/enemy_management
+          - name: ZulahGUI - Saonji Edit
+            packageName: ZulahGUI - Saonji Edit
+            children:
+            - name: zGUI Redux
+              directory: levi_ataxia/for_levi/levi_062424/zgui_redux
         - name: Ataxia-DownloadThis
           packageName: Ataxia-DownloadThis
           children:
@@ -213,22 +224,16 @@ groups:
               children:
               - name: Configuration Commands
                 directory: levi_ataxia/for_levi/levi_062424/configuration_commands
-            - name: Autobashing
-              children:
-              - name: Configs
-                directory: levi_ataxia/for_levi/levi_062424/configs
-              - name: Lists
-                directory: levi_ataxia/for_levi/levi_062424/lists
-            - name: Combat Aliases
-              directory: levi_ataxia/for_levi/levi_062424/combat_aliases
+            - name: Shaman System
+              directory: levi_ataxia/for_levi/levi_062424/shaman_system
             - name: Installation / Configuration
               children:
-              - name: Sylvan Things
-                directory: levi_ataxia/for_levi/levi_062424/sylvan_things
-              - name: Magi Things
-                directory: levi_ataxia/for_levi/levi_062424/magi_things
               - name: Toggles/Settings/Etc.
                 directory: levi_ataxia/for_levi/levi_062424/toggles_settings_etc.
+              - name: Bard Things
+                directory: levi_ataxia/for_levi/levi_062424/bard_things
+              - name: Magi Things
+                directory: levi_ataxia/for_levi/levi_062424/magi_things
               - name: Custom Prompt Aliases
                 script: "--ACONFIG CUSTOMPROMPT <text> will set what you want your custom prompt to look like, following the\
                   \ guidelines below. \n--This setting is saved in the ataxia.settings.customprompt variable. You can see\
@@ -253,10 +258,24 @@ groups:
                   \ 25% mana and otherwise red if below 25% mana\n--#wcolour / #mcolour : same as hcolour.\n--#(colour) :\
                   \ any color you can find in mudlet. \n\n"
                 directory: levi_ataxia/for_levi/levi_062424/custom_prompt_aliases
-              - name: Bard Things
-                directory: levi_ataxia/for_levi/levi_062424/bard_things
-            - name: Shaman System
-              directory: levi_ataxia/for_levi/levi_062424/shaman_system
+              - name: Sylvan Things
+                directory: levi_ataxia/for_levi/levi_062424/sylvan_things
+            - name: Autobashing
+              children:
+              - name: Configs
+                directory: levi_ataxia/for_levi/levi_062424/configs
+              - name: Lists
+                directory: levi_ataxia/for_levi/levi_062424/lists
+            - name: Combat Aliases
+              directory: levi_ataxia/for_levi/levi_062424/combat_aliases
+            - name: Ataxia NDB
+              children:
+              - name: Actions
+                children:
+                - name: Notes
+                  directory: levi_ataxia/for_levi/levi_062424/notes
+              - name: Configs
+                directory: levi_ataxia/for_levi/levi_062424/configs
             - name: Other stuff
               children:
               - name: Crafting/Tradeskill Related
@@ -266,17 +285,17 @@ groups:
                   directory: levi_ataxia/for_levi/levi_062424/inkmilling
             - name: Fishing
               directory: levi_ataxia/for_levi/levi_062424/fishing
-            - name: Ataxia NDB
-              children:
-              - name: Actions
-                children:
-                - name: Notes
-                  directory: levi_ataxia/for_levi/levi_062424/notes
-              - name: Configs
-                directory: levi_ataxia/for_levi/levi_062424/configs
-      - name: echo
-        packageName: echo
-        directory: levi_ataxia/for_levi/levi_062424/echo
+        - name: zData
+          packageName: zData
+          children:
+          - name: zData
+            directory: levi_ataxia/for_levi/levi_062424/zdata
+    - name: run-lua-code-v4
+      packageName: run-lua-code-v4
+      directory: levi_ataxia/for_levi/run-lua-code-v4
+    - name: echo
+      packageName: echo
+      directory: levi_ataxia/for_levi/echo
   - name: deletestuff
     packageName: deletestuff
     directory: levi_ataxia/deletestuff
@@ -284,25 +303,6 @@ groups:
     - name: deleteOldProfiles
       packageName: deleteOldProfiles
       directory: levi_ataxia/deletestuff/deleteoldprofiles
-  - name: echo
-    packageName: echo
-    directory: levi_ataxia/echo
 - name: echo
   packageName: echo
   directory: echo
-- name: mudlet-mapper
-  packageName: mudlet-mapper
-  directory: mudlet-mapper
-  children:
-  - name: Mudlet Mapper
-    script: mudlet = mudlet or {}; mudlet.mapper_script = true
-    directory: mudlet-mapper/mudlet_mapper
-    children:
-    - name: Game-specific
-      directory: mudlet-mapper/mudlet_mapper/game-specific
-      children:
-      - name: Lusternia
-        directory: mudlet-mapper/mudlet_mapper/game-specific/lusternia
-    - name: mm Mapping
-      isActive: false
-      directory: mudlet-mapper/mudlet_mapper/mm_mapping
