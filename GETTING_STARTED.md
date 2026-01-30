@@ -120,15 +120,43 @@ ataxiaNDB_getColour("PlayerName")
 **Location**: `src_new/scripts/levi_ataxia/levi/ataxia/basher/` and `src_new/scripts/levi_ataxia/levi/ataxia/genrunning/`
 
 **What it does**:
-- Automated hunting/bashing
-- Experience tracking
-- Class-specific bashing attacks
+- Automated hunting/bashing with 20+ class support
+- Two modes: manual (single room) and areabash (full path automation)
+- GMCP-based balance tracking (learns per-class attack timing)
+- Data-driven legend deck card draws before dangerous rooms
+- Stormhammer multi-target tracking with dirty-flag caching
+- Configurable shield retarget timers
+- Death recovery, flee circuit breaker, mapper-stuck detection
+- Battlerage rotation with rage conservation (skips abilities on low-HP mobs)
+- Experience tracking and session statistics
 
 **Try it**:
 ```lua
 -- Pause/unpause basher
 ataxiaBasher.paused = true   -- pause
 ataxiaBasher.paused = false  -- unpause
+
+-- Start manual bashing (single room)
+ataxiaBasher_manual()
+
+-- Start areabash (full area path automation)
+ataxiaBasher_areabash()
+
+-- Configure gold container
+ataxiaBasher.goldPack = "pack436363"
+
+-- Configure shield retarget timers
+ataxiaBasher.shieldTimers = { ["a mhun knight"] = 4.7 }
+ataxiaBasher.shieldTimerDefault = 3.1
+
+-- Configure legend deck rules
+ataxiaBasher.ldeckRules = {
+  { mob = "an elite mhun keeper", count = 3, cards = {"maran", "matic"} },
+  { mob = "a mhun knight", count = 3, cards = {"maran"} },
+}
+
+-- View learned balance samples
+display(ataxiaBasher_balanceSamples)
 ```
 
 ## File Organization

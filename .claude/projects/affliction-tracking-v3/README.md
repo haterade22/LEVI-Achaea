@@ -11,11 +11,12 @@ The V3 affliction tracking system is a probability-based branching state tracker
 | Core Branching | ✅ | Multiple state tracking with probabilities |
 | Herb Cures | ✅ | All 7 herbs with branching support |
 | Smoke Cures | ✅ | Smoke cure table with branching |
+| Salve Cures | ✅ | All 5 salve types (body/skin/head/torso/limbs) with branching |
 | Affliction Application | ✅ | `applyAffV3()` for adding afflictions |
 | Affliction Collapse | ✅ | `collapseAffPresentV3()` / `collapseAffAbsentV3()` |
 | Probability Queries | ✅ | `getAffProbabilityV3()`, `getAllAffProbabilitiesV3()` |
 | Limb Counter Integration | ✅ | Display with probability-based coloring |
-| Trigger Integration | ✅ | All herb triggers call `onHerbCureV3()` |
+| Trigger Integration | ✅ | All herb + salve triggers integrated |
 
 ## Key Concepts
 
@@ -54,6 +55,16 @@ affConfigV3.enabled = false  -- Disable V3
 - [03-trigger-integration.md](03-trigger-integration.md) - How triggers integrate with V3
 - [04-display-integration.md](04-display-integration.md) - Limb Counter window integration
 
+## Integrated Combat Classes
+
+| Class | File | Helper Function | Status |
+|-------|------|-----------------|--------|
+| **Infernal DWC** | `dwc/003_Infernal_DWC_Vivisect.lua` | `infernalDWC.hasAff()` | V3 ready |
+| **Blademaster Ice** | `blademaster/005_CC_BM_Ice.lua` | `blademaster.hasAff()` | V3 ready (2026-01-29) |
+
+Each class uses the same routing pattern: V3 (probability, 30% threshold) → V2 (certainty) → V1 (boolean tAffs).
+Shield/rebounding checks use dual-check pattern for safety (hasAff + raw tAffs fallback).
+
 ## Deployed Files
 
 ```
@@ -83,6 +94,19 @@ All herb triggers now call `onHerbCureV3(herbname)`:
 1. Proves asthma is absent (can't smoke with asthma)
 2. Branches on which smoke-curable affliction was removed
 
+### Salve Triggers
+All salve triggers call `onSalveCureV3(salveType)` which:
+1. Proves slickness is absent (can't apply salve while slick)
+2. Branches on which salve-curable affliction was removed
+
+| File | Salve Type | V3 Call |
+|------|------------|---------|
+| `370_Applied_Body_Skin.lua` | body/skin | `onSalveCureV3(matches[3])` |
+| `371_Applied_Head.lua` | head | `onSalveCureV3("head")` |
+| `372_Applied_Torso.lua` | torso | `onSalveCureV3("torso")` |
+| `374_Applied_Limbs.lua` | limbs | `onSalveCureV3("limbs")` |
+| `375_Salves.lua` | generic | `onTargetApplySalveV3()` (slickness only) |
+
 ## Cure Tables
 
 ### Herb Cure Priority Tables
@@ -102,6 +126,18 @@ herbCureTableV3 = {
 ```lua
 smokeCureTableV3 = {"aeon", "deadening", "hellsight", "tension",
                     "disloyalty", "manaleech", "slickness"}
+```
+
+### Salve Cure Tables (by body part)
+```lua
+salveCureTableV3 = {
+    body = {"anorexia", "itching", "bloodfire", "selarnia", "frostbite"},
+    skin = {"frozen", "shivering", "nocaloric", "bloodfire", "selarnia", "frostbite"},
+    head = {"crushedthroat", "damagedhead", "mangledhead", "blindness",
+            "scalded", "epidermal", "bloodfire"},
+    torso = {"hypothermia", "bloodfire", "selarnia", "frostbite"},
+    limbs = {"bloodfire"},
+}
 ```
 
 ## Quick Reference
@@ -127,6 +163,9 @@ onHerbCureV3("kelp")
 
 -- Handle smoke cure (called by trigger)
 onSmokeCureV3()
+
+-- Handle salve cure (called by salve triggers)
+onSalveCureV3("body")   -- body, skin, head, torso, or limbs
 
 -- Reset all states (new target)
 resetStatesV3()

@@ -135,7 +135,25 @@ LIMB PREPPING:
         2. Off arm
         3. Focus leg (left by default)
 
-    Only prep limbs when NAUSEA is stuck (parry bypass active).
+    Limb prepping requires NAUSEA stuck (parry bypass active).
+    If attack is parried, switch to a different prep limb until nausea sticks again.
+
+-------------------------------------------------------------------------------
+PARRY HANDLING:
+-------------------------------------------------------------------------------
+
+    When our attack gets parried, nausea is NOT active on the target
+    (nausea bypasses parry). We track which limb they parried and switch
+    to a different prep target until nausea sticks again.
+
+    Parry Detection Trigger:
+        Pattern: ^(\w+) parries the attack with a deft manoeuvre\.$
+        Code: if isTargeted(matches[2]) then infernalDWC.onParry() end
+
+    Behavior:
+        - onParry() records the parried limb and clears nausea tracking
+        - selectLimbTarget() avoids the parried limb, hits a different prep target
+        - When nausea is confirmed again, parry tracking is cleared automatically
 
 -------------------------------------------------------------------------------
 CONFIGURATION:
@@ -161,6 +179,8 @@ STATE TRACKING:
         focusLeg = "left",          -- Which leg to prep/break (configurable)
         lastPhase = nil,            -- Track phase changes for debugging
         riftlockMode = false,       -- True when target uses RESTORE
+        parriedLimb = nil,          -- Which limb target is parrying (set on parry detection)
+        lastTargetedLimb = nil,     -- Last limb we targeted (for parry detection)
     }
 
 -------------------------------------------------------------------------------
@@ -174,12 +194,14 @@ COMMANDS:
     infernalDWCSetFocusLeg(side)    -- Set focus leg ("left" or "right")
     infernalDWC.enterRiftlock()     -- Enter riftlock mode (call from RESTORE trigger)
     infernalDWC.exitRiftlock()      -- Exit riftlock mode
+    infernalDWC.onParry()           -- Called when attack is parried (from parry trigger)
+    infernalDWC.clearParry()        -- Clear parry tracking manually
 
 -------------------------------------------------------------------------------
 TRIGGER SETUP (External):
 -------------------------------------------------------------------------------
 
-    RESTORE Trigger:
+    RESTORE Trigger (376_Restore.lua):
         Pattern: ^(\w+) crackles with blue energy that wreathes itself about (?:his|her) limbs\.$
         Code:
             if isTargeted(matches[2]) then
@@ -195,6 +217,18 @@ TRIGGER SETUP (External):
                     lb[target].hits["right leg"] = 0
                 end
                 infernalDWC.enterRiftlock()
+            end
+
+    PARRY DETECTION Trigger (380_DWC_Parry_Detected.lua):
+        Pattern: ^(\w+) parries the attack with a deft manoeuvre\.$
+        Code:
+            if isTargeted(matches[2]) then
+                if infernalDWC and infernalDWC.onParry then
+                    infernalDWC.onParry()
+                end
+                if infernalDWC2L and infernalDWC2L.onParry then
+                    infernalDWC2L.onParry()
+                end
             end
 
 ===============================================================================

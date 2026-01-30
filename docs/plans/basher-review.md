@@ -224,9 +224,56 @@ ataxiaBasher
 ├── ataxia.combat (vitals, balance, afflictions)
 ├── ataxia.settings (config persistence)
 ├── mmp.mapper (navigation, room locking)
-├── GMCP (room info, denizen list, vitals, target info)
+├── GMCP (room info, denizen list, vitals, target info, balance timing)
 ├── ataxia.harvester (shares path generation)
 ├── zData.experience (database for statistics)
 ├── Ataxia GUI (basherBar windows)
-└── Triggers (Denizen Attacks, Gold Dropped)
+└── Triggers (Denizen Attacks, Gold Dropped, Mob Shielded)
 ```
+
+---
+
+## Completed Improvements (2026-01-29)
+
+A comprehensive review was performed with 27 items identified across 5 priority categories. The following items were implemented (items marked with [KEPT] were the user's choice to keep; [REVERTED] were rejected and reverted; [SKIPPED] were deferred):
+
+### Bug Fixes (All Completed)
+- [KEPT] 1.1 Removed debug output `cecho("TEST TEST TEST TEST")`
+- [KEPT] 1.2 Fixed pause typo (`.pause` → `.paused`)
+- [KEPT] 1.3 Added nil guard for `mmp.previousroom`
+- [KEPT] 1.4 Added nil check for player database access
+- [KEPT] 1.5 Removed hardcoded player name check
+
+### Performance Improvements
+- [KEPT] 2.1 Dispatch table built once at load time (not per-attack)
+- [KEPT] 2.2 Battlerage refactored to generic handlers (`standardBattlerage`, `crowdControlBattlerage`) — reduced ~300 lines to ~50
+- [SKIPPED] 2.3 `mobhealth` variable left in place (used elsewhere)
+- [KEPT] 2.4 Magi GUI spam gated behind `ataxiaBasher_stormhammerDirty` flag
+- [KEPT] 2.5 Stormhammer caching with dirty-flag invalidation — room/denizen events call `invalidateStormhammer()`, lazy recompute on prompt
+- [KEPT] 2.6 `validTargets()` double-count fix
+
+### Effectiveness Improvements
+- [REVERTED] 3.1 Flee loop prevention — user prefers to keep attacking same mob
+- [REVERTED] 3.2 Path cycling — respawns take long enough, current behavior is fine
+- [KEPT] 3.3 Death recovery handler (pauses basher, waits for resurrection)
+- [KEPT] 3.4 GMCP-based balance tracking — measures inter-attack intervals in rolling window of 20, returns 95% of average for optimal throughput
+- [KEPT] 3.5 Data-driven legend deck rules via `ataxiaBasher.ldeckRules` table
+- [KEPT] 3.6 Configurable shield timers via `ataxiaBasher.shieldTimers` table (both trigger and retarget function use same config)
+- [KEPT] 3.7 Gold pack ID configurable via `ataxiaBasher.goldPack`
+- [KEPT] 3.8 Rage conservation — skips battlerage if mob HP < 15%
+- [REVERTED] 3.9 PvP flee — user decided not to implement this
+
+### Code Maintainability
+- [REVERTED] 4.1 Knight consolidation — user wants 4 separate functions (one per knight class, each with 4 specs)
+- [NOTE] 4.2 Monk — `monkBashing()` was deleted but cannot be restored (no git history). `monkBashing2()` handles both Tekura and Shikudo.
+- [KEPT] 4.3 Serpent double battlerage fix (uses cached `brage` variable)
+- [SKIPPED] 4.4 Global namespacing — deferred as too large a change
+
+### Robustness & Safety
+- [KEPT] 5.1 Flee circuit breaker with 20-second timeout (configurable via `ataxiaBasher.fleeTimeout`)
+- [KEPT] 5.2 Mapper-stuck detection with `ataxiaBasher_startStuckTimer()`
+- [KEPT] 5.3 Area targetList nil check in `search_targets()`
+
+### Trigger Changes (Follow-up)
+- Updated `007_Mob_Shielded.lua` to use `ataxiaBasher.shieldTimers` config table (was hardcoded 4.5/3.1)
+- Replaced `ataxiaBasher_stormhammer()` calls with `ataxiaBasher_invalidateStormhammer()` in `002_ataxia_Room_Update.lua` and `003_ataxia_RoomContents_Update.lua` (4 locations)

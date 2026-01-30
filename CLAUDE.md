@@ -291,23 +291,41 @@ When coding offense systems, check `ataxia.settings.useAffTrackingV2`:
 
 ### ataxiaBasher (Automated Hunting System)
 
-The basher provides automated target selection and attack execution for PvE hunting.
+The basher provides automated target selection and attack execution for PvE hunting. It supports 20+ classes, two operating modes (manual/areabash), and integrates with the mapper, GMCP, battlerage, and GUI systems.
 
 **Core Files:**
-- `src_new/scripts/levi_ataxia/levi/ataxia/genrunning/002_search_targets.lua` - Target selection and room scanning
-- `src_new/scripts/levi_ataxia/levi/ataxia/basher/001_Bashing_Functions.lua` - Attack assembly and execution
-- `src_new/scripts/levi_ataxia/levi/ataxia/basher/002_Class_Bashing.lua` - Class-specific bashing attacks
-- `src_new/scripts/levi_ataxia/levi/ataxia/genrunning/004_Autobashing_Functions.lua` - Main patterns loop
+| File | Purpose |
+|------|---------|
+| `src_new/scripts/.../basher/001_Bashing_Functions.lua` | Attack dispatch, flee logic, emergency checks, battlerage assembly |
+| `src_new/scripts/.../basher/002_Class_Bashing.lua` | Class-specific attack builders (20+ classes) |
+| `src_new/scripts/.../basher/003_Bash_Stats_Functions.lua` | Session statistics |
+| `src_new/scripts/.../genrunning/001_Bashing_API.lua` | Path generation, room scanning, death recovery, flee timeout, mapper-stuck detection |
+| `src_new/scripts/.../genrunning/002_search_targets.lua` | Target selection, stormhammer caching, shield retarget, ldeck rules |
+| `src_new/scripts/.../genrunning/004_Autobashing_Functions.lua` | Main loop, mode control, GMCP balance tracking |
+| `src_new/triggers/.../007_Mob_Shielded.lua` | Shield detection trigger (uses configurable timers) |
+| `src_new/scripts/.../update_stuff/002_ataxia_Room_Update.lua` | Room change handler (invalidates stormhammer cache) |
+| `src_new/scripts/.../update_stuff/003_ataxia_RoomContents_Update.lua` | Denizen list handler (invalidates stormhammer cache) |
 
 **Key Functions:**
 | Function | Purpose |
 |----------|---------|
 | `search_targets()` | Scans room for valid targets from `ataxiaBasher.targetList[area]` |
-| `ataxiaBasher_attack()` | Assembles and sends attack command |
-| `ataxiaBasher_patterns()` | Main loop - fires attacks when balanced |
-| `ataxiaBasher_stormhammer()` | Populates AoE target list |
+| `ataxiaBasher_attack()` | Assembles and sends attack command via static dispatch table |
+| `ataxiaBasher_patterns()` | Main prompt loop — fires attacks when balanced, records balance samples |
+| `ataxiaBasher_stormhammer()` | Populates AoE target list (dirty-flag cached, lazy recompute) |
+| `ataxiaBasher_invalidateStormhammer()` | Marks stormhammer cache dirty (called by room/denizen update events) |
 | `ataxiaBasher_countMobsInRoom(mobName)` | Counts specific mob types in current room |
-| `ataxiaBasher_preCombatLdeck()` | Pre-combat legend deck card draws |
+| `ataxiaBasher_preCombatLdeck()` | Data-driven pre-combat legend deck card draws |
+| `ataxiaBasher_assembleBattlerage()` | Builds battlerage commands via generic handlers with rage conservation |
+| `ataxiaBasher_standardBattlerage()` | Generic battlerage handler for most classes |
+| `ataxiaBasher_crowdControlBattlerage()` | Generic CC battlerage handler (Bard, Jester, etc.) |
+| `ataxiaBasher_validTargets()` | Returns count of valid targets in room |
+| `ataxiaBasher_shieldedTarget()` | Handles mob shield retarget with configurable timers |
+| `ataxiaBasher_recordBalanceSample()` | Records inter-attack interval for GMCP-based balance tracking |
+| `ataxiaBasher_getAttackCooldown()` | Returns learned attack cooldown (95% of rolling average) |
+| `ataxiaBasher_onDeath()` | Death recovery — pauses basher, waits for resurrection |
+| `ataxiaBasher_startFleeTimer()` | Flee circuit breaker (20s default timeout) |
+| `ataxiaBasher_startStuckTimer()` | Mapper-stuck detection for speedwalk hangs |
 
 **Key Variables:**
 | Variable | Purpose |
@@ -317,34 +335,94 @@ The basher provides automated target selection and attack execution for PvE hunt
 | `ataxiaBasher.targetList[area]` | Table of target mob names per area |
 | `ataxia.denizensHere` | Table of NPCs in current room (id → name) |
 | `target` | Current target ID |
-| `found_target` | Boolean - valid target exists |
+| `found_target` | Boolean — valid target exists |
 | `stormhammerTargets` | List of IDs for AoE attacks |
+| `ataxiaBasher_stormhammerDirty` | Dirty flag for stormhammer cache invalidation |
+| `ataxiaBasher_balanceSamples` | Per-class rolling balance sample table (max 20) |
+| `ataxiaBasher_lastAttackEpoch` | Timestamp of last attack for balance measurement |
 
-**Pre-Combat Legend Deck Draws:**
+**Configuration Options:**
+| Setting | Type | Default | Purpose |
+|---------|------|---------|---------|
+| `ataxiaBasher.enabled` | bool | false | Master on/off |
+| `ataxiaBasher.paused` | bool | false | Pause without disable |
+| `ataxiaBasher.manual` | bool | false | Manual movement mode |
+| `ataxiaBasher.areabash` | bool | false | Full automation mode |
+| `ataxiaBasher.fleeThreshold` | number | varies | HP% to trigger flee |
+| `ataxiaBasher.dangerCount` | number | varies | Max dangerous mobs per room |
+| `ataxiaBasher.goldPack` | string | `"pack436363"` | Container ID for gold collection |
+| `ataxiaBasher.attackCooldown` | number | 0.4 | Default attack cooldown (seconds) |
+| `ataxiaBasher.fleeTimeout` | number | 20 | Flee circuit breaker timeout (seconds) |
+| `ataxiaBasher.shieldTimers` | table | `{["a mhun knight"]=4.7}` | Per-mob shield durations |
+| `ataxiaBasher.shieldTimerDefault` | number | 3.1 | Default shield duration |
+| `ataxiaBasher.shieldswap` | bool | varies | Enable shield retarget swapping |
+| `ataxiaBasher.targetList` | table | — | Per-area target mob lists |
+| `ataxiaBasher.mobIgnore` | table | — | NPCs to skip |
+| `ataxiaBasher.dangerList` | table | — | Dangerous mob names |
+| `ataxiaBasher.ldeckRules` | table | see below | Data-driven legend deck draw rules |
+| `ataxiaBasher_attackCooldowns` | table | — | Per-class static cooldown overrides |
 
-The basher automatically draws legend deck cards before attacking dangerous multi-target rooms:
+**Pre-Combat Legend Deck (Data-Driven):**
 
-| Condition | Cards Drawn |
-|-----------|-------------|
-| 3+ elite mhun keepers | Maran + Matic |
-| 3 mhun knights | Maran only |
-| 4+ mhun knights | Maran + Matic |
+The basher draws legend deck cards before attacking dangerous multi-target rooms, configured via `ataxiaBasher.ldeckRules`:
+
+```lua
+ataxiaBasher.ldeckRules = {
+  { mob = "an elite mhun keeper", count = 3, cards = {"maran", "matic"} },
+  { mob = "a mhun knight", count = 3, cards = {"maran"} },
+  { mob = "a mhun knight", count = 4, cards = {"maran", "matic"} },
+  -- Add rules for other areas/mobs here
+}
+```
 
 Cards are drawn using the queue system (`queue add free ldeck draw <card>`) and only once per room entry (tracked via `ataxiaBasher.ldeckDrawnRoom`).
+
+**GMCP-Based Balance Tracking:**
+
+The basher learns per-class attack timing from actual balance/equilibrium recovery:
+1. `ataxiaBasher_recordBalanceSample()` is called on each attack, measuring the time since the previous attack
+2. Samples are stored in a rolling window of 20 per class in `ataxiaBasher_balanceSamples`
+3. `ataxiaBasher_getAttackCooldown()` returns 95% of the rolling average (with 3+ samples), allowing the basher to attack slightly before balance returns for optimal throughput
+4. Falls back to per-class static overrides (`ataxiaBasher_attackCooldowns`) or the global default (`ataxiaBasher.attackCooldown`, 0.4s)
+
+**Stormhammer Dirty-Flag Caching:**
+
+Stormhammer target list recomputation is cached via a dirty flag:
+1. Room change and denizen update events call `ataxiaBasher_invalidateStormhammer()` (sets `ataxiaBasher_stormhammerDirty = true`)
+2. `ataxiaBasher_stormhammer()` short-circuits if the dirty flag is false
+3. When the basher logic calls `stormhammer()` during the prompt cycle, denizen data is fully up to date
+4. This avoids stale-data recomputes on room entry and redundant N-per-room recomputes
+
+**Robustness Features:**
+| Feature | Description |
+|---------|-------------|
+| **Flee circuit breaker** | If still fleeing after 20s (configurable), disables basher and alerts player |
+| **Death recovery** | Pauses basher on death, waits for resurrection/rebirth event |
+| **Mapper-stuck detection** | Timer checks if speedwalk counter hasn't changed, triggers `pathFail()` |
+| **Nil guards** | `mmp.previousroom`, player database, area targetList all nil-checked |
+| **Rage conservation** | Skips battlerage abilities if mob is near death (< 15% HP) |
 
 **Attack Flow:**
 ```
 Room Entry (GMCP)
     ↓
+ataxia_Room_Update() → invalidateStormhammer()
+    ↓
+ataxia_RoomContents_Update() → invalidateStormhammer(), raiseEvent("targets updated")
+    ↓
 Prompt Trigger → ataxia_promptCommands()
     ↓
-search_targets() → Find valid target from targetList
+ataxiaBasher_scanRoom() → need_roomCheck flag, player/danger detection
     ↓
-ataxiaBasher_preCombatLdeck() → Draw cards if dangerous room
+search_targets() → Find valid target from targetList[area]
     ↓
-ataxiaBasher_patterns() → Check balance/standing
+ataxiaBasher_preCombatLdeck() → Draw cards if rules match (data-driven)
     ↓
-ataxiaBasher_attack() → Build and send attack command
+ataxiaBasher_patterns() → Check balance/standing, recordBalanceSample()
+    ↓
+ataxiaBasher_attack() → Static dispatch table → class-specific function
+    ↓
+ataxiaBasher_assembleBattlerage() → Generic/CC handler with rage conservation
 ```
 
 ### GUI System (ataxiagui)
@@ -1163,16 +1241,14 @@ infernalDWC.config = {
 }
 ```
 
-### V2 Affliction Tracking Support
-The system automatically uses V2 affliction tracking when enabled:
+### V3/V2 Affliction Tracking Support
+The system uses `infernalDWC.hasAff()` which routes through V3 → V2 → V1:
 ```lua
--- infernalDWC.hasAff() checks V2 first, falls back to tAffs
-if ataxia.settings.useAffTrackingV2 then
-    -- Uses haveAffV2() for certainty-based tracking
-else
-    -- Falls back to tAffs[aff] boolean check
-end
+-- infernalDWC.hasAff() routes: V3 (probability) → V2 (certainty) → V1 (boolean tAffs)
+-- Shield/rebounding use dual-check pattern for safety:
+local hasRebounding = infernalDWC.hasAff("rebounding") or (tAffs and tAffs.rebounding)
 ```
+The Blademaster Ice Dispatch (`005_CC_BM_Ice.lua`) follows the same pattern via `blademaster.hasAff()`.
 
 ### Documentation
 See `.claude/classes/infernal.md` for complete DWC vivisect strategy documentation.
@@ -1253,6 +1329,9 @@ The system auto-selects UP or DOWN to balance torso/head damage:
 | `blademaster.calculateOptimalPath()` | Returns optimal attack sequence to reach 90% |
 | `blademaster.recordLegDamage(leg, pct)` | Records leg damage from hits |
 | `blademaster.recordLegslashDamage(leg, pct)` | Records legslash-specific damage |
+| `blademaster.hasAff(aff)` | Check affliction via V3 → V2 → V1 routing |
+| `blademaster.getAffProb(aff)` | Get affliction probability (V3: 0.0-1.0, V2/V1: binary) |
+| `blademaster.getTrackingSystem()` | Returns "V3", "V2", or "V1" |
 
 ### Configuration
 ```lua
@@ -1335,7 +1414,7 @@ end
 ```lua
 if phase == "leg_prep" then
   -- Dismount during final prep hit if mounted + hamstrung
-  if tmounted and tAffs.hamstring and blademaster.checkWillPrepBothLegs() then
+  if tmounted and blademaster.hasAff("hamstring") and blademaster.checkWillPrepBothLegs() then
     return "knees"  -- Dismount now
   end
   return blademaster.selectPrepStrike()
@@ -1366,7 +1445,7 @@ function blademaster.onTargetUnimpaled()
   blademaster.state.isImpaled = false
   -- Keep bleedingReady and targetBleeding - we built that progress!
 
-  if tAffs.prone then
+  if blademaster.hasAff("prone") then
     cecho("[BM] Target writhed free but STILL PRONE - FREE RE-IMPALE!")
   elseif blademaster.state.bleedingReady then
     -- Go to brokenstar phase (checked in getPhaseBrokenstar)
@@ -1376,7 +1455,7 @@ end
 
 ---
 
-**Last Updated**: 2026-01-23
+**Last Updated**: 2026-01-29
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia

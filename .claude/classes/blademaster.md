@@ -633,6 +633,11 @@ Helper functions:
 - `blademaster.getTorso()` - Shorthand for torso
 - `blademaster.getHead()` - Shorthand for head
 
+Affliction tracking helpers (V3 compatible):
+- `blademaster.hasAff(aff)` - Check if target has affliction (routes V3 → V2 → V1)
+- `blademaster.getAffProb(aff)` - Get affliction probability (V3: 0.0-1.0, V2/V1: binary 0 or 1.0)
+- `blademaster.getTrackingSystem()` - Returns "V3", "V2", or "V1" based on active system
+
 Leg check functions:
 - `blademaster.checkDoubleBreakReady()` - Both legs at 90%+
 - `blademaster.checkBothLegsBroken()` - Both legs at 100%+
@@ -657,7 +662,7 @@ Other functions:
 +============================================+
 |     BLADEMASTER DOUBLE-PREP DISPATCH      |
 +============================================+
-| Target: <name> (HP: X%)
+| Target: <name> (HP: X%) | Track: V1/V2/V3
 | Phase: LIGHTNING (prep) / ICE (damage)
 | Focus Leg: left/right (alternating to keep even)
 | Parried: <limb>
@@ -694,6 +699,42 @@ The hamstring trigger (002_Hamstring.lua) calls `blademaster.onHamstringApplied(
 ---
 
 ## Changelog
+
+### 2026-01-29 - V3 Affliction Tracker Integration
+
+**Files Modified:**
+- `005_CC_BM_Ice.lua` - Main dispatch
+
+**New Features:**
+
+1. **V3 Affliction Tracking Support** - All affliction checks now route through V3/V2/V1
+   - Added `blademaster.hasAff(aff)` - Routes V3 → V2 → V1 based on active tracking system
+   - Added `blademaster.getAffProb(aff)` - Returns probability (0.0-1.0) for V3, binary for V2/V1
+   - Added `blademaster.getTrackingSystem()` - Returns "V3", "V2", or "V1"
+   - Replaced all 22 direct `tAffs.xxx` reads with `blademaster.hasAff("xxx")` calls
+   - Follows identical pattern to `infernalDWC.hasAff()` in DWC Vivisect reference
+
+2. **Tracking System Status Display** - Status panels now show active tracking system
+   - All 5 status displays (runDoublePrep, runQuadPrep, runBrokenstar, statusDoublePrep, statusQuadPrep) show `| Track: V1/V2/V3`
+
+3. **Nil-Safety Guards** - Defensive coding for V3 module load order
+   - `blademaster.hasAff()` checks `haveAffV3` exists before calling (graceful V2/V1 fallback)
+   - `blademaster.getAffProb()` checks `getAffProbabilityV3` exists before calling
+
+4. **Dual-Check Shield/Rebounding** - Belt-and-suspenders for critical defenses
+   - All 3 shield/rebounding checks (`selectAttackDoublePrep`, `selectAttackQuadPrep`, `selectAttackBrokenstar`) use dual-check pattern matching DWC reference
+   - Pattern: `blademaster.hasAff("shield") or blademaster.hasAff("rebounding") or (tAffs and (tAffs.shield or tAffs.rebounding))`
+   - Ensures defenses are never missed even if V2/V3 desyncs with V1 table
+
+**Afflictions Migrated (22 total):**
+- `airfisted`, `hamstring` (5 locations), `paralysis` (2), `hypochondria`, `weariness`, `clumsiness` (2), `prone` (7), `shield` (3), `rebounding` (3)
+
+**Not Changed (intentional):**
+- `tmounted` (4 locations) - mount tracking, not affliction system
+- `tparrying` / `ataxiaTemp.parriedLimb` - parry tracking, not affliction system
+- `tAffs = tAffs or {}` initializations (5 locations) - kept for V1 fallback safety
+
+---
 
 ### 2026-01-02 - Brokenstar Upper Body Prep & Trigger Fixes
 

@@ -116,10 +116,11 @@ end
 
 ## Cure Table Design
 
-Herbs cure afflictions in priority order. V3 only considers afflictions that:
-1. Are in the herb's cure table
+Herbs and salves cure afflictions in priority order. V3 only considers afflictions that:
+1. Are in the cure table for the given herb/salve type
 2. Actually exist in the current branch
 
+### Herb Cure Tables
 ```lua
 herbCureTableV3 = {
     kelp = {
@@ -130,6 +131,32 @@ herbCureTableV3 = {
     bloodroot = {"paralysis", "slickness"},
     -- etc.
 }
+```
+
+### Salve Cure Tables
+Salves cure differently depending on the body part they're applied to. Slickness is excluded from tables because applying salve inherently proves slickness absent (can't apply if slick).
+
+```lua
+salveCureTableV3 = {
+    body = {"anorexia", "itching", "bloodfire", "selarnia", "frostbite"},
+    skin = {"frozen", "shivering", "nocaloric", "bloodfire", "selarnia", "frostbite"},
+    head = {"crushedthroat", "damagedhead", "mangledhead", "blindness",
+            "scalded", "epidermal", "bloodfire"},
+    torso = {"hypothermia", "bloodfire", "selarnia", "frostbite"},
+    limbs = {"bloodfire"},
+}
+```
+
+### Salve Cure Branching Example
+**Before body salve** (1 state):
+```lua
+{affs = {anorexia=true, itching=true, paralysis=true}, prob = 1.0}
+```
+
+**After body salve** (2 states, branched):
+```lua
+{affs = {itching=true, paralysis=true}, prob = 0.5},    -- anorexia cured
+{affs = {anorexia=true, paralysis=true}, prob = 0.5}    -- itching cured
 ```
 
 ## Sync to Legacy System

@@ -119,6 +119,27 @@ onSmokeCureV3()
 
 **Smoke-curable afflictions**: aeon, deadening, hellsight, tension, disloyalty, manaleech, slickness
 
+### `onSalveCureV3(salveType)`
+Handle target applying salve. Proves slickness absent and branches on salve-curable afflictions for the specified body part.
+
+```lua
+-- Called by salve triggers
+onSalveCureV3("body")    -- Body salve (mending)
+onSalveCureV3("skin")    -- Skin salve (mending)
+onSalveCureV3("head")    -- Head salve (restoration)
+onSalveCureV3("torso")   -- Torso salve (mending/restoration)
+onSalveCureV3("limbs")   -- Limbs salve (restoration)
+```
+
+**salveType parameter**: `"body"`, `"skin"`, `"head"`, `"torso"`, `"limbs"`
+
+**Behavior**:
+1. Collapses slickness absent (applying salve proves no slickness)
+2. Checks each branch for salve-curable afflictions
+3. If 1 candidate → cures it definitively
+4. If multiple candidates → branches into possibilities
+5. Consolidated echo output (one line per cure event)
+
 ## Utility Functions
 
 ### `getCurableAffs(herb)`
@@ -200,6 +221,18 @@ herbCureTableV3 = {
 ```lua
 smokeCureTableV3 = {"aeon", "deadening", "hellsight", "tension",
                     "disloyalty", "manaleech", "slickness"}
+```
+
+### `salveCureTableV3`
+```lua
+salveCureTableV3 = {
+    body = {"anorexia", "itching", "bloodfire", "selarnia", "frostbite"},
+    skin = {"frozen", "shivering", "nocaloric", "bloodfire", "selarnia", "frostbite"},
+    head = {"crushedthroat", "damagedhead", "mangledhead", "blindness",
+            "scalded", "epidermal", "bloodfire"},
+    torso = {"hypothermia", "bloodfire", "selarnia", "frostbite"},
+    limbs = {"bloodfire"},
+}
 ```
 
 ## Event Handlers

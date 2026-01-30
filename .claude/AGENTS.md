@@ -232,22 +232,39 @@ When creating/modifying offensive Lua files, include:
 
 ## Target Affliction Tracking Quick Reference
 
-The system uses a **dual-layer approach** for tracking enemy afflictions:
+The system uses a **three-tier approach** for tracking enemy afflictions:
 
-| Layer | Table | Purpose |
-|-------|-------|---------|
-| **Core** | `tAffs` | Always tracks afflictions unconditionally |
-| **Confidence** | `tAffConfidence` | Optional confidence levels (0.0-1.0) |
+| System | Table/Module | Purpose |
+|--------|-------------|---------|
+| **V1 (Core)** | `tAffs` | Boolean tracking - always present |
+| **V2 (Certainty)** | `tAffsV2` / `haveAffV2()` | Certainty-based tracking with stacks |
+| **V3 (Probability)** | `afflictionStatesV3` / `haveAffV3()` | Branching probability states (0.0-1.0) |
 
-**Key Functions:**
+**Toggle:**
+- V2: `ataxia.settings.useAffTrackingV2 = true`
+- V3: `affConfigV3.enabled = true`
+
+**Global Functions:**
 - `tarAffed(...)` - Add afflictions (variadic)
 - `erAff(what)` - Remove affliction
-- `haveAff(what)` - Check if target has affliction
-- `haveAffWithConfidence(aff, minConf)` - Check with confidence threshold
+- `haveAff(what)` - Check if target has affliction (V1)
+- `haveAffV2(aff)` - Check with V2 certainty
+- `haveAffV3(aff, threshold)` - Check with V3 probability (default 30% threshold)
+- `getAffProbabilityV3(aff)` - Get probability 0.0-1.0
+
+**Class-Specific Routing (V3 → V2 → V1):**
+- `infernalDWC.hasAff(aff)` - DWC Vivisect system
+- `blademaster.hasAff(aff)` - Blademaster Ice Dispatch
+
+Each class's `hasAff()` routes: V3 (if enabled) → V2 (if enabled) → V1 (fallback).
+Shield/rebounding use dual-check pattern: `hasAff("rebounding") or (tAffs and tAffs.rebounding)`
 
 **Files:**
-- `src_new/scripts/.../017_Affliction_Management.lua` - Core tracking
-- `src_new/triggers/.../439_NEW_DEADEYES.lua` - Apostate curse detection
+- `src_new/scripts/.../017_Affliction_Management.lua` - V1 core tracking
+- `src_new/scripts/.../affliction_tracking_v2/` - V2 certainty system
+- `src_new/scripts/.../affliction_tracking_v3/` - V3 branching states
+- `src_new/scripts/.../dwc/003_Infernal_DWC_Vivisect.lua` - DWC V3 integration
+- `src_new/scripts/.../blademaster/005_CC_BM_Ice.lua` - BM V3 integration
 
 ---
 
@@ -273,22 +290,45 @@ The system uses a **dual-layer approach** for tracking enemy afflictions:
 
 | File | Purpose |
 |------|---------|
-| `src_new/scripts/levi_ataxia/levi/ataxia/basher/001_Bashing_Functions.lua` | Main attack dispatch |
-| `src_new/scripts/levi_ataxia/levi/ataxia/basher/002_Class_Bashing.lua` | Class-specific patterns |
-| `src_new/scripts/levi_ataxia/levi/ataxia/genrunning/002_search_targets.lua` | Target acquisition, Stormhammer |
+| `src_new/scripts/.../basher/001_Bashing_Functions.lua` | Attack dispatch, flee logic, battlerage assembly |
+| `src_new/scripts/.../basher/002_Class_Bashing.lua` | Class-specific attack builders (20+ classes) |
+| `src_new/scripts/.../basher/003_Bash_Stats_Functions.lua` | Session statistics |
+| `src_new/scripts/.../genrunning/001_Bashing_API.lua` | Path generation, room scanning, death recovery, flee timeout, mapper-stuck detection |
+| `src_new/scripts/.../genrunning/002_search_targets.lua` | Target selection, stormhammer caching, shield retarget, ldeck rules |
+| `src_new/scripts/.../genrunning/004_Autobashing_Functions.lua` | Main loop, mode control, GMCP balance tracking |
+| `src_new/triggers/.../007_Mob_Shielded.lua` | Shield detection trigger (uses configurable timers) |
+| `src_new/scripts/.../update_stuff/002_ataxia_Room_Update.lua` | Room change handler (invalidates stormhammer cache) |
+| `src_new/scripts/.../update_stuff/003_ataxia_RoomContents_Update.lua` | Denizen list handler (invalidates stormhammer cache) |
 
 ### Configuration Options
 
-| Setting | Type | Purpose |
-|---------|------|---------|
-| `ataxiaBasher.enabled` | bool | Master on/off |
-| `ataxiaBasher.fleeThreshold` | number | HP% to flee |
-| `ataxiaBasher.dangerCount` | number | Max dangerous mobs |
-| `ataxiaBasher.targetList` | table | Per-area targets |
+| Setting | Type | Default | Purpose |
+|---------|------|---------|---------|
+| `ataxiaBasher.enabled` | bool | false | Master on/off |
+| `ataxiaBasher.paused` | bool | false | Pause without disable |
+| `ataxiaBasher.fleeThreshold` | number | varies | HP% to flee |
+| `ataxiaBasher.dangerCount` | number | varies | Max dangerous mobs |
+| `ataxiaBasher.targetList` | table | — | Per-area targets |
+| `ataxiaBasher.goldPack` | string | `"pack436363"` | Container ID for gold collection |
+| `ataxiaBasher.attackCooldown` | number | 0.4 | Default attack cooldown (seconds) |
+| `ataxiaBasher.fleeTimeout` | number | 20 | Flee circuit breaker timeout (seconds) |
+| `ataxiaBasher.shieldTimers` | table | `{["a mhun knight"]=4.7}` | Per-mob shield durations |
+| `ataxiaBasher.shieldTimerDefault` | number | 3.1 | Default shield duration |
+| `ataxiaBasher.ldeckRules` | table | see CLAUDE.md | Data-driven legend deck draw rules |
+| `ataxiaBasher_attackCooldowns` | table | — | Per-class static cooldown overrides |
+
+### Architecture Notes
+
+- **Dispatch table** is built once at load time (not per-attack). Maps class name to function name via `_G[]` lookup.
+- **Battlerage** uses generic handlers (`standardBattlerage`, `crowdControlBattlerage`) with only 4 special-cased classes.
+- **Stormhammer caching**: Update events call `invalidateStormhammer()` (sets dirty flag). Recompute happens lazily during prompt cycle.
+- **GMCP balance tracking**: `recordBalanceSample()` measures inter-attack intervals in a rolling window of 20 per class. `getAttackCooldown()` returns 95% of the average.
+- **Knight classes** have separate standalone functions with 4 specs each.
+- **Monk** has `monkBashing2()` handling both Tekura and Shikudo specs.
 
 ### Before Modifying Basher Code
 
 See `docs/plans/basher-review.md` for:
 - Current architecture and file analysis
-- Known issues and improvement plans
+- Known issues and improvement history
 - System integrations
