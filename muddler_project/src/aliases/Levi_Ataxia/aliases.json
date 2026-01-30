@@ -1,0 +1,2693 @@
+[
+  {
+    "name": "Levi_Ataxia",
+    "isActive": "yes",
+    "isFolder": "yes",
+    "children": [
+      {
+        "name": "For Levi",
+        "isActive": "yes",
+        "isFolder": "yes",
+        "children": [
+          {
+            "name": "run-lua-code-v4",
+            "isActive": "yes",
+            "isFolder": "yes",
+            "children": [
+              {
+                "name": "run lua code",
+                "regex": "^lua (.*)$"
+              }
+            ]
+          },
+          {
+            "name": "deleteOldProfiles",
+            "isActive": "yes",
+            "isFolder": "yes",
+            "children": [
+              {
+                "name": "delete old profiles",
+                "regex": "^delete old (profiles|maps|modules)(?: (\\d+))?$"
+              }
+            ]
+          },
+          {
+            "name": "echo",
+            "isActive": "yes",
+            "isFolder": "yes",
+            "children": [
+              {
+                "name": "`echo",
+                "regex": "`echo (.+)"
+              }
+            ]
+          },
+          {
+            "name": "Levi_062424",
+            "isActive": "yes",
+            "isFolder": "yes",
+            "children": [
+              {
+                "name": "deleteOldProfiles",
+                "isActive": "yes",
+                "isFolder": "yes",
+                "children": [
+                  {
+                    "name": "delete old profiles",
+                    "regex": "^delete old (profiles|maps|modules)(?: (\\d+))?$"
+                  }
+                ]
+              },
+              {
+                "name": "Levi",
+                "isActive": "yes",
+                "isFolder": "yes",
+                "script": "--Quaskan\n\n--Shala'jen\n\n--32789 37176 37312 8274 9892 Block Room\n\n--8274 3 Elite Mhun\n--36888 Azdun - Mummy Lord",
+                "children": [
+                  {
+                    "name": "Gear System",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Gear Audit",
+                        "regex": "^gearaudit\\s*(.*)$"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "zData",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "zData",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "(zBash)",
+                            "regex": "^zbash(?: (\\w+))?(?: (\\w+))?$"
+                          },
+                          {
+                            "name": "ZGUI BASH",
+                            "regex": "^zgui bash$"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "RAGEPULL",
+                    "isActive": "no",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "NORTH",
+                        "regex": "^bn$"
+                      },
+                      {
+                        "name": "SOUTH",
+                        "regex": "^bs$"
+                      },
+                      {
+                        "name": "EAST",
+                        "regex": "^be$"
+                      },
+                      {
+                        "name": "WEST",
+                        "regex": "^bw$"
+                      },
+                      {
+                        "name": "NW",
+                        "regex": "^bnw$"
+                      },
+                      {
+                        "name": "SE",
+                        "regex": "^bse$"
+                      },
+                      {
+                        "name": "SW",
+                        "regex": "^bsw$"
+                      },
+                      {
+                        "name": "UP",
+                        "regex": "^bu$"
+                      },
+                      {
+                        "name": "DOWN",
+                        "regex": "^bd$"
+                      },
+                      {
+                        "name": "IN",
+                        "regex": "^bin$"
+                      },
+                      {
+                        "name": "OUT",
+                        "regex": "^bo$"
+                      },
+                      {
+                        "name": "BASHTARGET",
+                        "regex": "^bt (\\w+)$"
+                      },
+                      {
+                        "name": "NE",
+                        "regex": "^bne$"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "LeviticusREG",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "script": "-- Groves\n-- Raem 7600\n\n--Ficus\n--5706\n\n\n--- PVE Derrillin\n-- Callibius\n--push tombstone\n\n--21476\n\n--23806\n\n-- Board \n--23900\n\n\n--MEROPIS\n--Dralhu\n--Fortress",
+                    "children": [
+                      {
+                        "name": "ZulahGUI - Saonji Edit",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "zGUI Redux",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "(ZGUI)",
+                                "regex": "^zgui$"
+                              },
+                              {
+                                "name": "(ZGUIS) zGUI Size",
+                                "regex": "^zguis$"
+                              },
+                              {
+                                "name": "(ZSHOW) Show Windows",
+                                "regex": "^zshow(?: (\\w+))?$"
+                              },
+                              {
+                                "name": "(ZSTYLE) Style Windows",
+                                "regex": "^zstyle(?: (\\w+))?$"
+                              },
+                              {
+                                "name": "(ZFIX) Default a Window",
+                                "regex": "^zfix(?: (\\w+))?$"
+                              },
+                              {
+                                "name": "(ZCHAT) Toggle Chat Command Line",
+                                "regex": "^zchat$"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Leviticus",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "Defence",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Sylvan",
+                                "regex": "^sy(l|ll)$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Monks",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "ALIASES",
+                                "isActive": "no",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "LEFT ARM",
+                                    "regex": "^la$"
+                                  },
+                                  {
+                                    "name": "RIGHT ARM",
+                                    "regex": "^ra$"
+                                  },
+                                  {
+                                    "name": "LEFT LEG",
+                                    "regex": "^ll$"
+                                  },
+                                  {
+                                    "name": "RIGHT LEG",
+                                    "regex": "^rl$"
+                                  },
+                                  {
+                                    "name": "RAMPAGE",
+                                    "regex": "^ram$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "KAIDO",
+                                "isActive": "no",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "SURGE",
+                                    "regex": "^sur$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Monk",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "Kaido",
+                                    "isActive": "yes",
+                                    "isFolder": "yes",
+                                    "children": [
+                                      {
+                                        "name": "kai enfeeble",
+                                        "regex": "^ke$"
+                                      },
+                                      {
+                                        "name": "KAI CHOKE",
+                                        "regex": "^kc$"
+                                      },
+                                      {
+                                        "name": "KAI CRIPPLE",
+                                        "regex": "^kcr$"
+                                      },
+                                      {
+                                        "name": "Numb",
+                                        "regex": "^nu$"
+                                      },
+                                      {
+                                        "name": "Kai heal",
+                                        "regex": "^kh$"
+                                      },
+                                      {
+                                        "name": "Kaido Surge",
+                                        "regex": "^ks$"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": "Telepathy",
+                                    "isActive": "yes",
+                                    "isFolder": "yes",
+                                    "children": [
+                                      {
+                                        "name": "MIND UNLOCK",
+                                        "regex": "^mu$"
+                                      },
+                                      {
+                                        "name": "MIND LOCK",
+                                        "regex": "^ml$"
+                                      },
+                                      {
+                                        "name": "Mind Batter",
+                                        "regex": "^mba$"
+                                      },
+                                      {
+                                        "name": "Blackout",
+                                        "regex": "^mb$"
+                                      },
+                                      {
+                                        "name": "MIND CRUSH",
+                                        "regex": "^mcr$"
+                                      },
+                                      {
+                                        "name": "MIND PARALYZE",
+                                        "regex": "^mp$"
+                                      },
+                                      {
+                                        "name": "MIND IMPATIENCE",
+                                        "regex": "^mi$"
+                                      },
+                                      {
+                                        "name": "MIND DISRUPT",
+                                        "regex": "^md$"
+                                      },
+                                      {
+                                        "name": "Mind Hallucinate Legs",
+                                        "regex": "^mhl$"
+                                      },
+                                      {
+                                        "name": "Mind Hallucinate Attack monk legs",
+                                        "regex": "^mha"
+                                      },
+                                      {
+                                        "name": "Mind Hallucinate DSl",
+                                        "regex": "^mhd$"
+                                      },
+                                      {
+                                        "name": "Mind Sense",
+                                        "regex": "^ms$"
+                                      },
+                                      {
+                                        "name": "Mind Rape",
+                                        "regex": "^mrap$"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": "telepathy_reporting",
+                                    "isActive": "yes",
+                                    "isFolder": "yes",
+                                    "children": [
+                                      {
+                                        "name": "Telepathy Reporting",
+                                        "isActive": "yes",
+                                        "isFolder": "yes",
+                                        "children": [
+                                          {
+                                            "name": "^telereport",
+                                            "regex": "^telereport"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": "Monk",
+                                    "isActive": "yes",
+                                    "isFolder": "yes",
+                                    "children": [
+                                      {
+                                        "name": "Tekura",
+                                        "isActive": "yes",
+                                        "isFolder": "yes",
+                                        "children": [
+                                          {
+                                            "name": "Wrench",
+                                            "regex": "^wr(ra|la|h|t)?$"
+                                          },
+                                          {
+                                            "name": "bbbt",
+                                            "regex": "^bb$"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "name": "monkcustomcombo",
+                                        "isActive": "no",
+                                        "isFolder": "yes",
+                                        "children": [
+                                          {
+                                            "name": "Monk Custom Combo",
+                                            "regex": "^(w|a|s|d|z|x|f|j|q|r|c)(w|a|s|d|z|x|e|f|q)(w|a|s|d|z|x|e|f|q)$"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": "Shikudo",
+                                    "isActive": "yes",
+                                    "isFolder": "yes",
+                                    "children": [
+                                      {
+                                        "name": "Group Flow Attack",
+                                        "isActive": "no",
+                                        "regex": "^sr$"
+                                      },
+                                      {
+                                        "name": "Crescent Kill",
+                                        "isActive": "no",
+                                        "regex": "^sc$"
+                                      },
+                                      {
+                                        "name": "Combo Shikudo",
+                                        "isActive": "no",
+                                        "regex": "^(w|a|s|d|z|x|f|j|q|r|c|e)(w|a|s|d|z|x|e|f|q)(w|a|s|d|z|x|e|f|q)$"
+                                      },
+                                      {
+                                        "name": "Dispatch",
+                                        "regex": "^sk$"
+                                      },
+                                      {
+                                        "name": "^skstatus$",
+                                        "regex": "^skstatus$"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "TELEPATHY",
+                                "isActive": "no",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "MIND LOCK TOGGLE",
+                                    "regex": "^min$"
+                                  },
+                                  {
+                                    "name": "RADIANCE",
+                                    "regex": "^rad$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "TEKURA",
+                                "isActive": "no",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "RIGHT LEG",
+                                    "regex": "^ril$"
+                                  },
+                                  {
+                                    "name": "SWEEP RL",
+                                    "regex": "^srl$"
+                                  },
+                                  {
+                                    "name": "LEFT LEG",
+                                    "regex": "^lel$"
+                                  },
+                                  {
+                                    "name": "TORSO",
+                                    "regex": "^tor$"
+                                  },
+                                  {
+                                    "name": "SWEEP LL",
+                                    "regex": "^sll$"
+                                  },
+                                  {
+                                    "name": "SWEEP TORSO",
+                                    "regex": "^sto$"
+                                  },
+                                  {
+                                    "name": "HEAD",
+                                    "regex": "^hea$"
+                                  },
+                                  {
+                                    "name": "SWEEP HEAD",
+                                    "regex": "^she$"
+                                  },
+                                  {
+                                    "name": "RIGHT ARM",
+                                    "regex": "^ra$"
+                                  },
+                                  {
+                                    "name": "SCYTHE",
+                                    "regex": "^scy$"
+                                  },
+                                  {
+                                    "name": "SWEEP BOTH LEGS",
+                                    "regex": "^sb$"
+                                  },
+                                  {
+                                    "name": "AXE",
+                                    "regex": "^ax$"
+                                  },
+                                  {
+                                    "name": "BACKBREAKER",
+                                    "regex": "^bb$"
+                                  },
+                                  {
+                                    "name": "BBT SOLID",
+                                    "regex": "^bbb$"
+                                  },
+                                  {
+                                    "name": "LEFT ARM",
+                                    "regex": "^la$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "SHIKUDO",
+                                "isActive": "no",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "DISPATCH",
+                                    "regex": "^dis$"
+                                  },
+                                  {
+                                    "name": "LOCK",
+                                    "regex": "^lock$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "QUASH ARC",
+                                "regex": "^qa$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "APOSTATE",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "apo",
+                                "regex": "^apo$"
+                              },
+                              {
+                                "name": "FIEND",
+                                "regex": "^fie$"
+                              },
+                              {
+                                "name": "MARE",
+                                "regex": "^mare$"
+                              },
+                              {
+                                "name": "DAEMO",
+                                "regex": "^dae$"
+                              },
+                              {
+                                "name": "MENTAL AFFS",
+                                "regex": "^men$"
+                              },
+                              {
+                                "name": "WORMS",
+                                "regex": "^wor$"
+                              },
+                              {
+                                "name": "SHADOWSTRIKE",
+                                "isActive": "no",
+                                "regex": "^dss$"
+                              },
+                              {
+                                "name": "KELP STACK",
+                                "regex": "^kel$"
+                              },
+                              {
+                                "name": "BECKON",
+                                "regex": "^bec$"
+                              },
+                              {
+                                "name": "STAR SIGIL",
+                                "regex": "^star$"
+                              },
+                              {
+                                "name": "cath",
+                                "regex": "^cath$"
+                              },
+                              {
+                                "name": "BECKON ALL",
+                                "regex": "^beck$"
+                              },
+                              {
+                                "name": "Group Attack",
+                                "isActive": "no",
+                                "regex": "^yy$"
+                              },
+                              {
+                                "name": "Illusion Curse",
+                                "regex": "^kee$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Dragon",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "LOS Dragon Runie",
+                                "regex": "^ds(n|s|e|w|u|d|out|in|se|ne|nw|sw)$"
+                              },
+                              {
+                                "name": "Rend",
+                                "regex": "^r(ll|rl|ra|la|hh|tt)$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Artefacts",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "LegendDeck",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "script": "--Agith'maal -- Teleport - Blocked by Monolith\n--Agith'tai  -- Gives Focus Afflictions to Target\n--Alcibiades -- Saviours Refresher\n--Ama-maalier -- \n--Ashaxei -- Earring to Mutal Ally\n--Belladona\n--Camilla -- All allies follow you\n--Catarin -- Heal Health of everyone in room\n--Davis - Knight Defend Ability - LDECK Draw Davis ..target\n--Elma    -- Reset Yozhik/Waval/Jovan\n--Enheduanna - Destroy Corpse and deal massive mana damage to target\n--Han-silnar - Restores Betreayed and Betrayers\n--Horror - remove name from them\n--Jovan \n--Kemnast -- Destroy Corpse on ground\n--Matic\n--Maya \n--Morimbuul\n--Nicator\n--Pazuzu \n--Rudolpho\n--Seasone -- For Elixir boost health sip by 10 for 5 minutes, poison - loki for everyone\n--Severian -- Steelmind defence \n--Sycaerunax\n--Travian\n--Ugrach\n--Wavel \n--Yozhik -- Thornwall!\n--Yudhishthira\n--Yuthka -- Meteor to someone",
+                                "children": [
+                                  {
+                                    "name": "Season (Elixir|Poison)",
+                                    "regex": "^lsea$"
+                                  },
+                                  {
+                                    "name": "Pazuzu (Not Magical Travel)",
+                                    "regex": "^lpaz$"
+                                  },
+                                  {
+                                    "name": "Heal",
+                                    "regex": "^lcata$"
+                                  },
+                                  {
+                                    "name": "Severian",
+                                    "regex": "^lseve$"
+                                  },
+                                  {
+                                    "name": "Agith'tai (Gives Focus Afflictions to Target)",
+                                    "regex": "^lagi$"
+                                  },
+                                  {
+                                    "name": "Yuthka (Flaming Meteor to target)",
+                                    "regex": "^lyuh$"
+                                  },
+                                  {
+                                    "name": "Horror",
+                                    "regex": "^lhor$"
+                                  },
+                                  {
+                                    "name": "Rudolpo (Stuttering)",
+                                    "regex": "^lrud$"
+                                  },
+                                  {
+                                    "name": "Matic",
+                                    "regex": "^lmat$"
+                                  },
+                                  {
+                                    "name": "Morimbuul (Anti Web)",
+                                    "regex": "^lmor$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "HELP Earring",
+                                "regex": "^h(pro|ent|ant|axi|aeg|pha|zyl|vit|tab|xar|ils)$"
+                              },
+                              {
+                                "name": "Icewall",
+                                "regex": "^iw(n|ne|nw|o|i|w|e|se|sw|u|d|s)$"
+                              },
+                              {
+                                "name": "Freeze Ground",
+                                "regex": "^frg$"
+                              },
+                              {
+                                "name": "Firelash",
+                                "regex": "^fl(i|g|v|t)$"
+                              },
+                              {
+                                "name": "Ramm",
+                                "regex": "^ramm$"
+                              },
+                              {
+                                "name": "Siren Song",
+                                "regex": "^sir$"
+                              },
+                              {
+                                "name": "Ride Home",
+                                "regex": "^hom$"
+                              },
+                              {
+                                "name": "Perform Mockery (Unfollow)",
+                                "regex": "^moc$"
+                              },
+                              {
+                                "name": "Composition (Gives Shield to All)",
+                                "regex": "^comp$"
+                              },
+                              {
+                                "name": "FURY",
+                                "regex": "^fur$"
+                              },
+                              {
+                                "name": "Armour Paragons",
+                                "regex": "^barmp$"
+                              },
+                              {
+                                "name": "death horn",
+                                "regex": "^deathhorn$"
+                              },
+                              {
+                                "name": "Shield Illusion Me",
+                                "regex": "^shi$"
+                              },
+                              {
+                                "name": "Lyre Illusion",
+                                "regex": "^ly$"
+                              },
+                              {
+                                "name": "Reflections",
+                                "regex": "^wan$"
+                              },
+                              {
+                                "name": "Portal",
+                                "regex": "^pwan$"
+                              },
+                              {
+                                "name": "Mage PvE",
+                                "regex": "^magepve$"
+                              },
+                              {
+                                "name": "Serpent PvE",
+                                "regex": "^serppve$"
+                              },
+                              {
+                                "name": "Shikudo Pve",
+                                "regex": "^stickpve$"
+                              },
+                              {
+                                "name": "^pariahpve$",
+                                "regex": "^pariahpve$"
+                              },
+                              {
+                                "name": "BM Pve Traits",
+                                "regex": "^bmpve$"
+                              },
+                              {
+                                "name": "^stickpvp$",
+                                "regex": "^stickpvp$"
+                              },
+                              {
+                                "name": "Class PvP",
+                                "regex": "^armourpvp$"
+                              },
+                              {
+                                "name": "Psion PVP",
+                                "regex": "^psionpvp$"
+                              },
+                              {
+                                "name": "^inkmonkpvp$",
+                                "regex": "^inkmonkpvp$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Psion",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Emulation",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "WaveSurge (get out)",
+                                    "regex": "^wav$"
+                                  },
+                                  {
+                                    "name": "Upheaval",
+                                    "regex": "^gr$"
+                                  },
+                                  {
+                                    "name": "Destruction (LoS)",
+                                    "regex": "^los$"
+                                  },
+                                  {
+                                    "name": "Rupture (Bleeding)",
+                                    "regex": "^rup$"
+                                  },
+                                  {
+                                    "name": "Clarity (Increase EQ",
+                                    "regex": "^clar$"
+                                  },
+                                  {
+                                    "name": "Rezz",
+                                    "regex": "^rezz$"
+                                  },
+                                  {
+                                    "name": "Wrath",
+                                    "regex": "^wra$"
+                                  },
+                                  {
+                                    "name": "Indomitability",
+                                    "regex": "^indom$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Psionics",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "Expunge (Cure Mental Affliction)",
+                                    "regex": "^pim$"
+                                  },
+                                  {
+                                    "name": "Ironwill (break lock)",
+                                    "regex": "^piron$"
+                                  },
+                                  {
+                                    "name": "Muddle (mental hinder)",
+                                    "regex": "^pmud$"
+                                  },
+                                  {
+                                    "name": "Psi Blast (Need three mentals and unwoven mind)",
+                                    "regex": "^pbl$"
+                                  },
+                                  {
+                                    "name": "Psi Vanish Total",
+                                    "regex": "^pvant$"
+                                  },
+                                  {
+                                    "name": "Catheris",
+                                    "regex": "^cath$"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Mage",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Transfix",
+                                "regex": "^tr$"
+                              },
+                              {
+                                "name": "Staffcast",
+                                "regex": "^stc$"
+                              },
+                              {
+                                "name": "Spin Cata",
+                                "regex": "^scata$"
+                              },
+                              {
+                                "name": "Vibes",
+                                "regex": "^vib$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "DRAGON",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "RAGEBLADE",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "RAGEBLADE",
+                                    "regex": "^rag$"
+                                  },
+                                  {
+                                    "name": "HUNTING",
+                                    "regex": "^rage$"
+                                  },
+                                  {
+                                    "name": "NO MORE HUNTING",
+                                    "regex": "^norage$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "DRAGONSENSE",
+                                "isActive": "no",
+                                "regex": "^ds$"
+                              },
+                              {
+                                "name": "DRAGONFORM",
+                                "regex": "^dra$"
+                              },
+                              {
+                                "name": "LESSERFORM",
+                                "regex": "^hu$"
+                              },
+                              {
+                                "name": "GUT",
+                                "regex": "^gu$"
+                              },
+                              {
+                                "name": "INCANTATION",
+                                "regex": "^inc$"
+                              },
+                              {
+                                "name": "PIERCE THE VEIL",
+                                "regex": "^pv$"
+                              },
+                              {
+                                "name": "ENMESH",
+                                "regex": "^en$"
+                              },
+                              {
+                                "name": "REND RL",
+                                "regex": "^rrl$"
+                              },
+                              {
+                                "name": "REND LL",
+                                "regex": "^rll$"
+                              },
+                              {
+                                "name": "BITE",
+                                "regex": "^bit$"
+                              },
+                              {
+                                "name": "BREATHSTREAM",
+                                "regex": "^br (\\w+)$"
+                              },
+                              {
+                                "name": "CATARIN",
+                                "regex": "^cat$"
+                              },
+                              {
+                                "name": "REND RIGHT LEG",
+                                "regex": "^orl$"
+                              },
+                              {
+                                "name": "REND LEFT LEG",
+                                "regex": "^oll$"
+                              },
+                              {
+                                "name": "REND RIGHT ARM",
+                                "regex": "^ora$"
+                              },
+                              {
+                                "name": "REND LEFT ARM",
+                                "regex": "^ola$"
+                              },
+                              {
+                                "name": "REND HEAD",
+                                "regex": "^oah$"
+                              },
+                              {
+                                "name": "REND TORSO",
+                                "regex": "^oat$"
+                              },
+                              {
+                                "name": "DEVOUR",
+                                "regex": "^dev$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "BladeMaster",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Perfection",
+                                "regex": "^per$"
+                              },
+                              {
+                                "name": "Evade Direction",
+                                "regex": "^e(e|w|n|so|o|i|nw|ne|se|sw)$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Undead",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Undead Attack",
+                                "regex": "^kp$"
+                              },
+                              {
+                                "name": "^q(ll|rl|t|h|ra|la)$",
+                                "regex": "^q(ll|rl|t|h|ra|la)$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "General",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "SHOPKEEPING",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "DROP",
+                                    "regex": "^dro$"
+                                  },
+                                  {
+                                    "name": "PRICE",
+                                    "regex": "^pri (\\d+)$"
+                                  },
+                                  {
+                                    "name": "SET HERB",
+                                    "regex": "^her (\\w+)$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "FREEZETAG",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "FREEZE",
+                                    "regex": "^fr$"
+                                  },
+                                  {
+                                    "name": "FREEZE DIR",
+                                    "regex": "^fr (\\d+)$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "TARGETTING",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "NEXT TARGET",
+                                    "regex": "^nt$"
+                                  },
+                                  {
+                                    "name": "MAKE LIST",
+                                    "regex": "^sete (\\w+(,? a?n?d? ?\\w+)*){1}\\.?$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Mhaldor",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "Empower Totem",
+                                    "isActive": "no",
+                                    "regex": "^emtot$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "MOVEMENT",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "North",
+                                    "regex": "^n$"
+                                  },
+                                  {
+                                    "name": "South",
+                                    "regex": "^s$"
+                                  },
+                                  {
+                                    "name": "East",
+                                    "regex": "^e$"
+                                  },
+                                  {
+                                    "name": "West",
+                                    "regex": "^w$"
+                                  },
+                                  {
+                                    "name": "Northwest",
+                                    "regex": "^nw$"
+                                  },
+                                  {
+                                    "name": "Northeast",
+                                    "regex": "^ne$"
+                                  },
+                                  {
+                                    "name": "Southwest",
+                                    "regex": "^sw$"
+                                  },
+                                  {
+                                    "name": "Southeast",
+                                    "regex": "^se$"
+                                  },
+                                  {
+                                    "name": "Up",
+                                    "regex": "^u$"
+                                  },
+                                  {
+                                    "name": "Down",
+                                    "regex": "^d$"
+                                  },
+                                  {
+                                    "name": "In",
+                                    "regex": "^in$"
+                                  },
+                                  {
+                                    "name": "Out",
+                                    "regex": "^out$"
+                                  },
+                                  {
+                                    "name": "CHASE",
+                                    "isActive": "no",
+                                    "regex": "^ch$"
+                                  },
+                                  {
+                                    "name": "JUMPING",
+                                    "regex": "^mj$"
+                                  },
+                                  {
+                                    "name": "relay off",
+                                    "regex": "^relay$"
+                                  },
+                                  {
+                                    "name": "PARTY LEADER",
+                                    "regex": "^pl (\\w+)$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "PutGoldAway",
+                                "regex": "^pgp$"
+                              },
+                              {
+                                "name": "TARGET",
+                                "isActive": "no",
+                                "regex": "^t (\\w+)$"
+                              },
+                              {
+                                "name": "FARSEE",
+                                "regex": "^scr$"
+                              },
+                              {
+                                "name": "ASSESS",
+                                "regex": "^assess$"
+                              },
+                              {
+                                "name": "CLEAR QUEUE",
+                                "regex": "^cl$"
+                              },
+                              {
+                                "name": "GIVE ARTIES",
+                                "regex": "^givearties$"
+                              },
+                              {
+                                "name": "WEAR ARTIES",
+                                "regex": "^weararties$"
+                              },
+                              {
+                                "name": "GO IN",
+                                "regex": "^goin$"
+                              },
+                              {
+                                "name": "GO OUT",
+                                "regex": "^goout$"
+                              },
+                              {
+                                "name": "GALLOP",
+                                "regex": "^ga (\\w+)$"
+                              },
+                              {
+                                "name": "MOUNTKICK",
+                                "regex": "^mk (\\w+)$"
+                              },
+                              {
+                                "name": "DISPLAY OFF",
+                                "regex": "^aoff$"
+                              },
+                              {
+                                "name": "ICEWALL",
+                                "regex": "^ice (\\w+)$"
+                              },
+                              {
+                                "name": "DUANATHAR",
+                                "regex": "^sd$"
+                              },
+                              {
+                                "name": "FLYING",
+                                "regex": "^flyy$"
+                              },
+                              {
+                                "name": "RESET",
+                                "regex": "^res$"
+                              },
+                              {
+                                "name": "PARALYSE",
+                                "regex": "^para$"
+                              },
+                              {
+                                "name": "TUMBLE",
+                                "regex": "^tu (\\w+)$"
+                              },
+                              {
+                                "name": "PASSIVE",
+                                "regex": "^pass$"
+                              },
+                              {
+                                "name": "GET SECURE GOLD",
+                                "regex": "^ggg$"
+                              },
+                              {
+                                "name": "WEB THEM",
+                                "regex": "^tw$"
+                              },
+                              {
+                                "name": "BUY CREDITS",
+                                "regex": "^cr (\\d+) (\\d+)$"
+                              },
+                              {
+                                "name": "TESTALIAS",
+                                "regex": "^testalias (\\d+) (\\d+)$"
+                              },
+                              {
+                                "name": "BRAZIER",
+                                "regex": "^tb$"
+                              },
+                              {
+                                "name": "MEROPIS",
+                                "regex": "^mer$"
+                              },
+                              {
+                                "name": "TOUCH TREE",
+                                "regex": "^tt$"
+                              },
+                              {
+                                "name": "WOOP",
+                                "regex": "^woop$"
+                              },
+                              {
+                                "name": "FOOD",
+                                "regex": "^food$"
+                              },
+                              {
+                                "name": "INITIATE",
+                                "regex": "^init$"
+                              },
+                              {
+                                "name": "BEHEAD",
+                                "regex": "^bh$"
+                              },
+                              {
+                                "name": "SHOP ENTRY",
+                                "regex": "^shopin$"
+                              },
+                              {
+                                "name": "SHOP OUT",
+                                "regex": "^shopout$"
+                              },
+                              {
+                                "name": "TEARDROP NEST",
+                                "regex": "^tear$"
+                              },
+                              {
+                                "name": "GET ALL",
+                                "regex": "^gall$"
+                              },
+                              {
+                                "name": "VOFFER",
+                                "regex": "^voffer$"
+                              },
+                              {
+                                "name": "CALL FOR HELP",
+                                "regex": "^hel$"
+                              },
+                              {
+                                "name": "CHASE",
+                                "regex": "^to$"
+                              },
+                              {
+                                "name": "TELL IMPASTUS",
+                                "regex": "^ti$"
+                              },
+                              {
+                                "name": "SHROOM",
+                                "regex": "^shroom$"
+                              },
+                              {
+                                "name": "Throw Eye Sigils",
+                                "isActive": "no",
+                                "regex": "^te$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Knight",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Infernal",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "script": "-- Infernal Forge 53507\n\n-- Exploit Weariness and Paranoia\n-- Torment: Healthleech and if that then confusion",
+                                "children": [
+                                  {
+                                    "name": "2H",
+                                    "isActive": "no",
+                                    "isFolder": "yes",
+                                    "children": [
+                                      {
+                                        "name": "Hew (Bastard)",
+                                        "regex": "^q(ll|rl|ra|la|hh|tt)$"
+                                      },
+                                      {
+                                        "name": "Impale",
+                                        "regex": "^ip$"
+                                      },
+                                      {
+                                        "name": "disembowel",
+                                        "regex": "^dis$"
+                                      },
+                                      {
+                                        "name": "Devastate",
+                                        "regex": "^d(aa|ll)$"
+                                      },
+                                      {
+                                        "name": "RAM",
+                                        "regex": "^ram$"
+                                      },
+                                      {
+                                        "name": "Arc",
+                                        "regex": "^arc$"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": "SNB",
+                                    "isActive": "no",
+                                    "isFolder": "yes",
+                                    "children": [
+                                      {
+                                        "name": "Attack",
+                                        "regex": "^sr$"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": "Dual Blunt",
+                                    "isActive": "no",
+                                    "isFolder": "yes",
+                                    "children": [
+                                      {
+                                        "name": "Double Whirl Normal",
+                                        "regex": "^s(w|a|s|d|z|x)(w|a|s|d|z|x)$"
+                                      },
+                                      {
+                                        "name": "Double Whirl Expend",
+                                        "regex": "^s(w|a|s|d|z|x)(w|a|s|d|z|x)(e)$"
+                                      },
+                                      {
+                                        "name": "DoubleWhirl Expend Expend",
+                                        "regex": "^s(w|a|s|d|z|x)(w|a|s|d|z|x)(e)(e)$"
+                                      },
+                                      {
+                                        "name": "Double Whirl Normal MS",
+                                        "regex": "^q(w|a|s|d|z|x)(w|a|s|d|z|x)$"
+                                      },
+                                      {
+                                        "name": "Assault Torso",
+                                        "regex": "^att$"
+                                      },
+                                      {
+                                        "name": "MS Double Whirl Expend",
+                                        "regex": "^q(w|a|s|d|z|x)(w|a|s|d|z|x)(e)$"
+                                      },
+                                      {
+                                        "name": "Assault Head",
+                                        "regex": "^ahh$"
+                                      },
+                                      {
+                                        "name": "Pulp",
+                                        "regex": "^pul$"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": "Oppression",
+                                    "isActive": "yes",
+                                    "isFolder": "yes",
+                                    "children": [
+                                      {
+                                        "name": "Gravehands",
+                                        "regex": "^gr$"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "RUNIE",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "2H",
+                                    "isActive": "no",
+                                    "isFolder": "yes",
+                                    "children": [
+                                      {
+                                        "name": "Bastard Hew",
+                                        "regex": "^q(ll|rl|ra|la|hh|tt)$"
+                                      },
+                                      {
+                                        "name": "disembowel",
+                                        "regex": "^dis$"
+                                      },
+                                      {
+                                        "name": "Impale",
+                                        "regex": "^ip$"
+                                      },
+                                      {
+                                        "name": "Devastate",
+                                        "regex": "^d(aa|ll)$"
+                                      },
+                                      {
+                                        "name": "RAM",
+                                        "regex": "^ram$"
+                                      },
+                                      {
+                                        "name": "Warhammer Pulvervise",
+                                        "regex": "^a(ll|rl|ra|la|hh|tt)$"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": "SNB",
+                                    "isActive": "yes",
+                                    "isFolder": "yes",
+                                    "children": [
+                                      {
+                                        "name": "Slice Combo Bay Bay",
+                                        "regex": "^ff$"
+                                      },
+                                      {
+                                        "name": "Target Slice",
+                                        "isActive": "no",
+                                        "regex": "^scc$"
+                                      },
+                                      {
+                                        "name": "Limb Target",
+                                        "regex": "^scc$"
+                                      },
+                                      {
+                                        "name": "Impale",
+                                        "regex": "^ip$"
+                                      },
+                                      {
+                                        "name": "dis",
+                                        "regex": "^dis$"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": "LEFT ARM",
+                                    "regex": "^ila$"
+                                  },
+                                  {
+                                    "name": "SOFTLOCK BASIC",
+                                    "regex": "^isl$"
+                                  },
+                                  {
+                                    "name": "RIGHT ARM",
+                                    "regex": "^ira$"
+                                  },
+                                  {
+                                    "name": "RIGHT LEG",
+                                    "regex": "^irl$"
+                                  },
+                                  {
+                                    "name": "LEFT LEG",
+                                    "regex": "^ill$"
+                                  },
+                                  {
+                                    "name": "GRAVEHANDS",
+                                    "regex": "^gh$"
+                                  },
+                                  {
+                                    "name": "TORSO",
+                                    "regex": "^ito$"
+                                  },
+                                  {
+                                    "name": "HEAD",
+                                    "regex": "^ihe$"
+                                  },
+                                  {
+                                    "name": "MAGGOTS",
+                                    "regex": "^mag$"
+                                  },
+                                  {
+                                    "name": "DAMAGE",
+                                    "regex": "^ida$"
+                                  },
+                                  {
+                                    "name": "DEATHAURA",
+                                    "regex": "^da$"
+                                  },
+                                  {
+                                    "name": "HYENA",
+                                    "regex": "^hy$"
+                                  },
+                                  {
+                                    "name": "IMPALE",
+                                    "regex": "^ip$"
+                                  },
+                                  {
+                                    "name": "HANDS AND MAGGOTS",
+                                    "regex": "^gm$"
+                                  },
+                                  {
+                                    "name": "HYENA FOLLOW",
+                                    "regex": "^hf$"
+                                  },
+                                  {
+                                    "name": "TRAMPLE",
+                                    "regex": "^tra$"
+                                  },
+                                  {
+                                    "name": "RAGEBLADE",
+                                    "regex": "^bla$"
+                                  },
+                                  {
+                                    "name": "VIVISECT",
+                                    "regex": "^viv$"
+                                  },
+                                  {
+                                    "name": "DARKSHADE",
+                                    "regex": "^dar$"
+                                  },
+                                  {
+                                    "name": "WEARINESS PRIO",
+                                    "isActive": "no",
+                                    "regex": "^iwe$"
+                                  },
+                                  {
+                                    "name": "DWC Head",
+                                    "regex": "^xxx$"
+                                  },
+                                  {
+                                    "name": "PROP",
+                                    "regex": "^prop$"
+                                  },
+                                  {
+                                    "name": "RUNES",
+                                    "regex": "^runes (\\w+)$"
+                                  },
+                                  {
+                                    "name": "tots",
+                                    "regex": "^tots$"
+                                  },
+                                  {
+                                    "name": "thurisaz",
+                                    "regex": "^thur$"
+                                  },
+                                  {
+                                    "name": "Empower Weapons",
+                                    "regex": "^remweap$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Totem",
+                                "regex": "^stot$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "limb.1.2",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Limb",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "^lra$",
+                                    "regex": "^lra$"
+                                  },
+                                  {
+                                    "name": "^lr (.+)$",
+                                    "regex": "^lr (.+)$"
+                                  },
+                                  {
+                                    "name": "^t (.+)$",
+                                    "isActive": "no",
+                                    "regex": "^t (.+)$"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "name": "EGGHUNT",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "GET EGG",
+                                "regex": "^gu$"
+                              },
+                              {
+                                "name": "BANDERSHOOT",
+                                "regex": "^b (\\w+)$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "DEPTHSWALKER",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Shadow Enshroud (Darkness)",
+                                "regex": "^sen$"
+                              },
+                              {
+                                "name": "Shadow Step",
+                                "regex": "^ste$"
+                              },
+                              {
+                                "name": "Shadow Preeminence (Sense)",
+                                "regex": "^shp$"
+                              },
+                              {
+                                "name": "Darkness",
+                                "regex": "^dark$"
+                              },
+                              {
+                                "name": "Leach Attack",
+                                "regex": "^lea$"
+                              },
+                              {
+                                "name": "Madness Attack",
+                                "regex": "^mad$"
+                              },
+                              {
+                                "name": "Retribution Attack",
+                                "regex": "^ret$"
+                              },
+                              {
+                                "name": "Degeneration Attack",
+                                "regex": "^deg$"
+                              },
+                              {
+                                "name": "Depression Attack",
+                                "regex": "^dep$"
+                              },
+                              {
+                                "name": "Fuck Them Attack",
+                                "regex": "^fk$"
+                              },
+                              {
+                                "name": "Aeon",
+                                "regex": "^aeon(b)$"
+                              },
+                              {
+                                "name": "Accelerate",
+                                "regex": "^cab$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "DRAGON TALISMAN",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "script": "send(\"talisman combine \"..color..\"dragon\"..dragonthing..\" 1;talisman combine \"..color..\"dragon\"..dragonthing..\" 2;talisman combine \"..color..\"dragon\"..dragonthing..\" 3;talisman combine \"..color..\"dragon\"..dragonthing..\" 4;talisman combine \"..color..\"dragon\"..dragonthing..\" 5;talisman combine \"..color..\"dragon\"..dragonthing..\" 6\")",
+                            "children": [
+                              {
+                                "name": "DRAGONCOLOR",
+                                "regex": "^dracol (\\w+)$"
+                              },
+                              {
+                                "name": "DRAGONTHING",
+                                "regex": "^thing$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "EARTH LORD",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "FORM",
+                                "regex": "^earth$"
+                              },
+                              {
+                                "name": "DEFORM",
+                                "regex": "^for$"
+                              },
+                              {
+                                "name": "JUGGERNAUT",
+                                "regex": "^j (\\w+)$"
+                              },
+                              {
+                                "name": "CRUNCH",
+                                "regex": "^cr$"
+                              },
+                              {
+                                "name": "PULVERISE",
+                                "regex": "^pu$"
+                              },
+                              {
+                                "name": "HEAD PATH",
+                                "regex": "^hea$"
+                              },
+                              {
+                                "name": "TORSO PATH",
+                                "isActive": "no",
+                                "regex": "^tor$"
+                              },
+                              {
+                                "name": "AVALANCHE",
+                                "regex": "^av$"
+                              },
+                              {
+                                "name": "TEST",
+                                "regex": "^etest$"
+                              },
+                              {
+                                "name": "QUAKE",
+                                "regex": "^qu$"
+                              },
+                              {
+                                "name": "ROCKSLIDE",
+                                "regex": "^rock$"
+                              },
+                              {
+                                "name": "DEMOLITION",
+                                "regex": "^dem$"
+                              },
+                              {
+                                "name": "BELLOW TOGGLE",
+                                "regex": "^bel$"
+                              },
+                              {
+                                "name": "RIGHT SIDE",
+                                "regex": "^ri$"
+                              },
+                              {
+                                "name": "LEFT SIDE",
+                                "regex": "^le$"
+                              },
+                              {
+                                "name": "LIMPROBE",
+                                "regex": "^lp$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "slc",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "SLC Display",
+                                "regex": "^c$"
+                              },
+                              {
+                                "name": "SLC Reset",
+                                "regex": "^cres$"
+                              },
+                              {
+                                "name": "SLC Set # of Hits Needed",
+                                "regex": "^cset (\\w+) (\\d+)$"
+                              },
+                              {
+                                "name": "SLC geyser toggle",
+                                "regex": "^slc$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Serpent",
+                            "isActive": "yes",
+                            "isFolder": "yes"
+                          },
+                          {
+                            "name": "AzzysEnemyManagement",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Enemy Management",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "enemy city",
+                                    "regex": "^cenemy (.*)$"
+                                  },
+                                  {
+                                    "name": "priority targets",
+                                    "regex": "^prio (.*)$"
+                                  },
+                                  {
+                                    "name": "autotest",
+                                    "regex": "^aauto (.*)$"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "name": "GO TO TARGET",
+                            "regex": "^top(?: (\\w+))?$"
+                          },
+                          {
+                            "name": "TOUCH CRYSTAL",
+                            "regex": "^tc$"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Ataxia-DownloadThis",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Ataxia",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "Defence Stuff",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Configuration Commands",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "Create a new profile",
+                                    "regex": "^aconfig profile (create|remove) (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Switch to without deffing",
+                                    "regex": "^defswitch (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Add/Remove/Copy Defence to Keepup Profile",
+                                    "regex": "^keep(add|remove|copy) (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Add/Remove/Copy Defences to a Defup Profile",
+                                    "regex": "^def(add|remove|copy) (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Defup",
+                                    "regex": "^defup (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Show Defs",
+                                    "regex": "^ashow defup$"
+                                  },
+                                  {
+                                    "name": "Show Valid defs",
+                                    "regex": "^(defs valid|valid defs)$"
+                                  },
+                                  {
+                                    "name": "Selfishness / Rebounding / Mass / Breathing",
+                                    "regex": "^(sl|mass|reb|br)$"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Autobashing",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Configs",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "Change Roomshorten Setting",
+                                    "regex": "^aconfig roomshorten (off|normal|notmanual)$"
+                                  },
+                                  {
+                                    "name": "Jab instead of gut",
+                                    "regex": "^aconfig jab$"
+                                  },
+                                  {
+                                    "name": "Nicator",
+                                    "regex": "^nic$"
+                                  },
+                                  {
+                                    "name": "Set Flee Threshold",
+                                    "regex": "^bash threshold (\\d+)$"
+                                  },
+                                  {
+                                    "name": "Tree-Blackout",
+                                    "regex": "^aconfig treeblackout$"
+                                  },
+                                  {
+                                    "name": "Battlerage Razing",
+                                    "regex": "^bash rageraze (on|off)$"
+                                  },
+                                  {
+                                    "name": "WoT instead of gut",
+                                    "regex": "^aconfig wot$"
+                                  },
+                                  {
+                                    "name": "Swap on shielded target",
+                                    "regex": "^aconfig shieldswap$"
+                                  },
+                                  {
+                                    "name": "Incantation Bash",
+                                    "regex": "^bash incant$"
+                                  },
+                                  {
+                                    "name": "Morimbuul Card",
+                                    "regex": "^aconfig morim$"
+                                  },
+                                  {
+                                    "name": "Seasone",
+                                    "regex": "^aconfig seasone$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Lists",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "Display Mobs In Area",
+                                    "regex": "^bash room$"
+                                  },
+                                  {
+                                    "name": "Display Mobs To Add",
+                                    "regex": "^bash add$"
+                                  },
+                                  {
+                                    "name": "Ignore List",
+                                    "regex": "^bsi (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Ignore Mobs",
+                                    "regex": "^bash ignore$"
+                                  },
+                                  {
+                                    "name": "Remove Ignore",
+                                    "regex": "^bash unignore$"
+                                  },
+                                  {
+                                    "name": "Dangerous Mobs",
+                                    "regex": "^bash dangerc?$"
+                                  },
+                                  {
+                                    "name": "Set Danger Count",
+                                    "regex": "^bash count (\\d+)$"
+                                  },
+                                  {
+                                    "name": "Set Shield Threshold",
+                                    "regex": "^bash shield (\\d+)$"
+                                  },
+                                  {
+                                    "name": "Set Mobs That Don't Break Shield",
+                                    "regex": "^bash safec?$"
+                                  },
+                                  {
+                                    "name": "Set Culling Blade Keyword",
+                                    "regex": "^cbkey (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Toggle Culling Blade Usage",
+                                    "regex": "^cbuse$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Install",
+                                "regex": "^abinstall$"
+                              },
+                              {
+                                "name": "Reset Bashing Stats",
+                                "regex": "^rsbs$"
+                              },
+                              {
+                                "name": "Show Bashing Stats",
+                                "regex": "^shbs$"
+                              },
+                              {
+                                "name": "Harvesting",
+                                "regex": "^abharm?$"
+                              },
+                              {
+                                "name": "Pause Basher",
+                                "regex": "^bash pause$"
+                              },
+                              {
+                                "name": "Extracting",
+                                "regex": "^abextm?$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Combat Aliases",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Toggle Target Chasing",
+                                "regex": "^tch$"
+                              },
+                              {
+                                "name": "Targeting",
+                                "regex": "^t (.+)$"
+                              },
+                              {
+                                "name": "Target Calling",
+                                "regex": "^tcal$"
+                              },
+                              {
+                                "name": "shielding/cward",
+                                "regex": "^(cwd|ts)$"
+                              },
+                              {
+                                "name": "Set Parry Mode",
+                                "regex": "^parryy (\\w+)$"
+                              },
+                              {
+                                "name": "Manually Parry",
+                                "regex": "^t?p(h|tt|rl|ll|la|ra|c|l|r)$"
+                              },
+                              {
+                                "name": "Aff Display",
+                                "regex": "^t(f|n) affshow$"
+                              },
+                              {
+                                "name": "Reset Aff Prios",
+                                "regex": "^reset prios$"
+                              },
+                              {
+                                "name": "enemies",
+                                "regex": "^enemy (.+)$"
+                              },
+                              {
+                                "name": "Blocking",
+                                "regex": "^(unblock|block)(?: (.+)|)$"
+                              },
+                              {
+                                "name": "Reset Afflictions on Target",
+                                "regex": "^raffs$"
+                              },
+                              {
+                                "name": "Reset a target's limb",
+                                "regex": "^limb (\\w+)$"
+                              },
+                              {
+                                "name": "Lust List",
+                                "regex": "^lustallow (\\w+)$"
+                              },
+                              {
+                                "name": "Urn",
+                                "regex": "^urnx?$"
+                              },
+                              {
+                                "name": "Diagnose",
+                                "regex": "^diag$"
+                              },
+                              {
+                                "name": "Set Hyperfocus (shikudo)",
+                                "regex": "^(hf|hyper|hyperf|hyperfocus) (head|torso|left arm|right arm|left leg|right leg|rl|ll|la|ra|h|t)$"
+                              },
+                              {
+                                "name": "Shikudo Artifact Level",
+                                "regex": "^aconfig shikstaff (1|1.1|1.15|1.2|1.3)$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Installation / Configuration",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Sylvan Things",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "Sylvan Help",
+                                    "regex": "^aconfig sylvan help$"
+                                  },
+                                  {
+                                    "name": "Set Propagations",
+                                    "regex": "^prop (\\w+) (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Do Propagations",
+                                    "regex": "^prop$"
+                                  },
+                                  {
+                                    "name": "Heartseed Mode",
+                                    "regex": "^hseed$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Magi Things",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "Magi Help",
+                                    "regex": "^magi help$"
+                                  },
+                                  {
+                                    "name": "Toggle Vibes",
+                                    "regex": "^vibe (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Embed Vibes",
+                                    "regex": "^evibe$"
+                                  },
+                                  {
+                                    "name": "Stormhammering",
+                                    "regex": "^(shrt|shre)$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Toggles/Settings/Etc.",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "Vaulting",
+                                    "regex": "^(vault|mount) (\\d+)$"
+                                  },
+                                  {
+                                    "name": "Change Auto Gallop Toggle",
+                                    "regex": "^aconfig gallop (on|off)$"
+                                  },
+                                  {
+                                    "name": "Priorities for Afflictions",
+                                    "regex": "^aconfig prios$"
+                                  },
+                                  {
+                                    "name": "Reset Affs On Login",
+                                    "regex": "^aconfig resetaffs (yes|no)$"
+                                  },
+                                  {
+                                    "name": "Gag clot",
+                                    "regex": "^aconfig gagclot (on|off)$"
+                                  },
+                                  {
+                                    "name": "Set Serverside Separator",
+                                    "regex": "^aconfig separator (.+)$"
+                                  },
+                                  {
+                                    "name": "Toggle System",
+                                    "regex": "^pp(?: (\\w+)|)$"
+                                  },
+                                  {
+                                    "name": "Channel Relay Setting",
+                                    "regex": "^aconfig relay (.+)$"
+                                  },
+                                  {
+                                    "name": "Toggle Health/Mana Sipping",
+                                    "regex": "^hh$"
+                                  },
+                                  {
+                                    "name": "Configure Precache",
+                                    "regex": "^pconfig (\\w+) (\\d+)$"
+                                  },
+                                  {
+                                    "name": "Show precache",
+                                    "regex": "^pc show$"
+                                  },
+                                  {
+                                    "name": "Change the display of affliction tracking",
+                                    "regex": "^affconfig (default|minimal|bar)$"
+                                  },
+                                  {
+                                    "name": "Low Hp Alert",
+                                    "regex": "^lowhp (\\d+)$"
+                                  },
+                                  {
+                                    "name": "Item Highlighting",
+                                    "regex": "^aconfig highlight (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Toggle Monk Bashing",
+                                    "regex": "^aconfig monk$"
+                                  },
+                                  {
+                                    "name": "Raid Mode",
+                                    "regex": "^raid (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Gold Grabbing",
+                                    "regex": "^aconfig goldgrab (.+)$"
+                                  },
+                                  {
+                                    "name": "Toggle Ataxia's GUI",
+                                    "isActive": "no",
+                                    "regex": "^aconfig gui (on|off)$"
+                                  },
+                                  {
+                                    "name": "Lyre Keepup",
+                                    "regex": "^lyre$"
+                                  },
+                                  {
+                                    "name": "BECKON TOGGLE",
+                                    "isActive": "no",
+                                    "regex": "^beck(?: (\\w+)|)$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Custom Prompt Aliases",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "script": "--ACONFIG CUSTOMPROMPT <text> will set what you want your custom prompt to look like, following the guidelines below. \n--This setting is saved in the ataxia.settings.customprompt variable. You can see the current prompt string by doing ACONFIG CUSTOMPROMPT SHOW\n--An example aconfig customprompt @health @mana @willpower @endurance would show you 6007 5339 25470 22200 or something similar. \n--For the most part, you can freely add text to the end of these tags, so @healthh would change that 6007 to a 6007h. @percenthealth would show \n--100 if at full health, @percenthealth%h would show 100%h. ]]--\n\n-- Prompt Tags:\n--@health: Your current health.\n--@percenthealth: Your current health in percent form.\n--@mana: Your current mana.\n--@percentmana: Your current mana in percent form.\n--@endurance: Your current endurance.\n--@percentendurance: Your current endurance in percent form.\n--@willpower: Your current willpower.\n--@precentwillpower: Your current willpower in percent form.\n--@bleeding: Will display a number if your bleeding is greater than 100.\n--@bal: Will show a simple x if you have balance.\n--@eq: Will show a simple e if you have equilibrium.\n--@targetinfo: Will display what 'target' is currently set to, as well as its health if it's a mob.\n--@paused: Shows (pp) if system is paused.\n--@metawake: Shows \"Mw\" if metawake is up.\n--@exp: Shows current % experience into the next level.\n--@timestamp: Displays a timestamp of current time.\n--@defs: Shows which defencess are active. b (blindness), d (deafness), c (Cloak), k (kola), m (mass)\n--@affs: Shows what affs are affecting you.\n\n--@tlimbs: shows limbs on prompt, when any limb gets damaged. Text format. RL.LL etc.\n--@nlimbs: same as above, but number format. Order is lleg, rleg, larm, rarm, torso, head.\n-- EG: {99.91|58.2|69.23...} etc.\n\n-- Prompt Color Tags:\n--#hcolour : Colours something  green if over 75% health, yellow if over 50% health, orange if over 25 and otherwise red if below 25% health.\n--#mcolour: Colours something green if over 75% mana, yellow if over 50% mana, orange if over 25% mana and otherwise red if below 25% mana\n--#wcolour / #mcolour : same as hcolour.\n--#(colour) : any color you can find in mudlet.",
+                                "children": [
+                                  {
+                                    "name": "Custom Prompt",
+                                    "regex": "^aconfig customprompt (.*)$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Bard Things",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "Bard Help",
+                                    "regex": "^bard help$"
+                                  },
+                                  {
+                                    "name": "Toggle Harmonics",
+                                    "regex": "^harm (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Set Instrument",
+                                    "regex": "^bins (\\w+)"
+                                  },
+                                  {
+                                    "name": "Summon Harmonics",
+                                    "regex": "^harms$"
+                                  },
+                                  {
+                                    "name": "Toggle Symphony Usage",
+                                    "regex": "^symph$"
+                                  },
+                                  {
+                                    "name": "Toggle Bashing Harmonics",
+                                    "regex": "^bharms$"
+                                  },
+                                  {
+                                    "name": "Toggle Aria usage while bashing",
+                                    "regex": "^aria bash$"
+                                  },
+                                  {
+                                    "name": "Rapier Level",
+                                    "regex": "^rapier (\\d+)$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Install/Reset System",
+                                "regex": "^atinstall$"
+                              },
+                              {
+                                "name": "Show Curing Order",
+                                "regex": "^ashow prios$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Shaman System",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Commune",
+                                "regex": "^comm$"
+                              },
+                              {
+                                "name": "Shaman config",
+                                "regex": "^shaman profile save (\\w+)$"
+                              },
+                              {
+                                "name": "Profile Switcher",
+                                "regex": "^sp\\s+(\\w+)\\s?(.*)?$"
+                              },
+                              {
+                                "name": "Create New",
+                                "regex": "^sp create (\\w+) binds (.+) attunes (.+) tether (\\w+)$"
+                              },
+                              {
+                                "name": "Bashing Type",
+                                "regex": "^sp bash (jinx|swiftcurse|arius)$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Other stuff",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Crafting/Tradeskill Related",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "Inkmilling",
+                                    "isActive": "yes",
+                                    "isFolder": "yes",
+                                    "script": "--ink make\t\t\t\t\tWill show a list of what you can make based on current rift ingredients.",
+                                    "children": [
+                                      {
+                                        "name": "What Can We Make",
+                                        "regex": "^ink make$"
+                                      },
+                                      {
+                                        "name": "Mill Inks",
+                                        "regex": "^mill (\\d+) (gold|blue|red|purple|yellow|green)$"
+                                      },
+                                      {
+                                        "name": "Stop Inkmilling",
+                                        "regex": "^ink stop$"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": "Butchering",
+                                    "regex": "^reagents$"
+                                  },
+                                  {
+                                    "name": "Ink Important Tattoos",
+                                    "regex": "^tat$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "OOC Tells",
+                                "regex": "^ooc (\\w+) (.+)$"
+                              },
+                              {
+                                "name": "Reply ooc",
+                                "regex": "^rooc (.+)$"
+                              },
+                              {
+                                "name": "Ab Cheat",
+                                "regex": "^cb (\\w+)(?: (\\S+))?$"
+                              },
+                              {
+                                "name": "Update System",
+                                "isActive": "no",
+                                "regex": "^aupdate$"
+                              },
+                              {
+                                "name": "Do Repeat",
+                                "regex": "^dor(?: (.+)|)$"
+                              },
+                              {
+                                "name": "Show Changelog",
+                                "regex": "^changelog$"
+                              },
+                              {
+                                "name": "Muting people",
+                                "regex": "^(mute|unmute) (\\w+)$"
+                              },
+                              {
+                                "name": "Talisman Pieces",
+                                "regex": "^tpcs$"
+                              },
+                              {
+                                "name": "Learning",
+                                "regex": "^learn (\\w+) (\\w+)$"
+                              },
+                              {
+                                "name": "Eat",
+                                "regex": "^eat (\\w+)$"
+                              },
+                              {
+                                "name": "Extract Minerals",
+                                "regex": "^ext$"
+                              },
+                              {
+                                "name": "Mineral Locations",
+                                "regex": "^extract$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Fishing",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Initialise Fishing",
+                                "regex": "^afish init$"
+                              },
+                              {
+                                "name": "Bait Hook",
+                                "regex": "^afish bh$"
+                              },
+                              {
+                                "name": "Reel Line",
+                                "regex": "^afish rl$"
+                              },
+                              {
+                                "name": "Cast Line",
+                                "regex": "^afish cl (\\w+)$"
+                              },
+                              {
+                                "name": "Set Bait",
+                                "regex": "^afish bait (\\w+)$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Ataxia NDB",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Actions",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "Notes",
+                                    "isActive": "yes",
+                                    "isFolder": "yes",
+                                    "children": [
+                                      {
+                                        "name": "Add Note",
+                                        "regex": "^an noteadd (\\w+) (.+)$"
+                                      },
+                                      {
+                                        "name": "Remove Note",
+                                        "regex": "^an noteremove (\\w+) (\\d+)$"
+                                      },
+                                      {
+                                        "name": "Show Notes",
+                                        "regex": "^an noteshow (\\w+)$"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": "Honours Person",
+                                    "regex": "^honou?rs? (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Display Who",
+                                    "regex": "^whois (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Remove Unranked/Retired",
+                                    "regex": "^an remove (rank|level) (\\d+)$"
+                                  },
+                                  {
+                                    "name": "Re-honours everyone.",
+                                    "regex": "^an recreate$"
+                                  },
+                                  {
+                                    "name": "Show Class Count",
+                                    "regex": "^an classes$"
+                                  },
+                                  {
+                                    "name": "Show City Count",
+                                    "regex": "^an cclasses (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Show Player Count",
+                                    "regex": "^an citymembers$"
+                                  },
+                                  {
+                                    "name": "Tracked from city",
+                                    "regex": "^an show (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Tracked of class",
+                                    "regex": "^an class (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Grab City Enemies",
+                                    "regex": "^cityenemies$"
+                                  },
+                                  {
+                                    "name": "QWC update",
+                                    "regex": "^qwc$"
+                                  },
+                                  {
+                                    "name": "Re-honours from specific cities",
+                                    "regex": "^an redo (\\w+)$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Configs",
+                                "isActive": "yes",
+                                "isFolder": "yes",
+                                "children": [
+                                  {
+                                    "name": "Highlight Toggle",
+                                    "regex": "^anhl$"
+                                  },
+                                  {
+                                    "name": "Set Colours of Orgs",
+                                    "regex": "^anhl (\\w+) (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Show Settings",
+                                    "regex": "^anss$"
+                                  },
+                                  {
+                                    "name": "Set Highlight Prioritiy",
+                                    "regex": "^an prio (enemies|city)$"
+                                  },
+                                  {
+                                    "name": "Toggle Options For Enemy Highlighting",
+                                    "regex": "^aneh (i|u|b)$"
+                                  },
+                                  {
+                                    "name": "Highlight Irrespective of NDB",
+                                    "regex": "^highlight (\\w+) (.+)$"
+                                  },
+                                  {
+                                    "name": "Manually install ndb",
+                                    "regex": "^aninstall$"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Parse QWHO",
+                                "regex": "^qwp(?: (\\w+)|)$"
+                              },
+                              {
+                                "name": "Who Groups",
+                                "regex": "^who groups$"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Show Colours",
+                            "regex": "^colours (\\d+)$"
+                          },
+                          {
+                            "name": "Zgui Stuff",
+                            "isActive": "no",
+                            "regex": "^aconfig (zgui|zguihelp)$"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "First Attack (All Classes)",
+                    "regex": "^zz$"
+                  },
+                  {
+                    "name": "Fourth Attack (All Classes)",
+                    "regex": "^vv$"
+                  },
+                  {
+                    "name": "Group (All Classes)",
+                    "regex": "^sr$"
+                  },
+                  {
+                    "name": "Second Attack (All Classes)",
+                    "regex": "^xx$"
+                  },
+                  {
+                    "name": "Third Attack (All Classes)",
+                    "regex": "^cc$"
+                  },
+                  {
+                    "name": "Magi Reset",
+                    "regex": "^mreset$"
+                  }
+                ]
+              },
+              {
+                "name": "echo",
+                "isActive": "yes",
+                "isFolder": "yes",
+                "children": [
+                  {
+                    "name": "`echo",
+                    "regex": "`echo (.+)"
+                  },
+                  {
+                    "name": "`cecho",
+                    "regex": "`cecho (.+)"
+                  },
+                  {
+                    "name": "`decho",
+                    "regex": "`decho (.+)"
+                  },
+                  {
+                    "name": "`hecho",
+                    "regex": "`hecho (.+)"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Reload",
+            "regex": "^rrr$"
+          }
+        ]
+      },
+      {
+        "name": "deletestuff",
+        "isActive": "yes",
+        "isFolder": "yes",
+        "children": [
+          {
+            "name": "deleteOldProfiles",
+            "isActive": "yes",
+            "isFolder": "yes",
+            "children": [
+              {
+                "name": "delete old profiles",
+                "regex": "^delete old (profiles|maps|modules)(?: (\\d+))?$"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "echo",
+        "isActive": "yes",
+        "isFolder": "yes",
+        "children": [
+          {
+            "name": "`echo",
+            "regex": "`echo (.+)"
+          },
+          {
+            "name": "`cecho",
+            "regex": "`cecho (.+)"
+          },
+          {
+            "name": "`decho",
+            "regex": "`decho (.+)"
+          },
+          {
+            "name": "`hecho",
+            "regex": "`hecho (.+)"
+          }
+        ]
+      }
+    ]
+  }
+]

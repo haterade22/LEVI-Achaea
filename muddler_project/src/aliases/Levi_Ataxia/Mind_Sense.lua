@@ -1,0 +1,1 @@
+sendAll("queue addclear free mind sense " ..target)

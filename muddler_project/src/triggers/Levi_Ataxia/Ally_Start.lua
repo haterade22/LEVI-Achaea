@@ -1,0 +1,2 @@
+zgui.allies = {}
+enableTrigger("AllyReport")

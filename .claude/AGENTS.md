@@ -268,6 +268,26 @@ Shield/rebounding use dual-check pattern: `hasAff("rebounding") or (tAffs and tA
 
 ---
 
+## Build System
+
+The project uses [Muddler](https://github.com/demonnic/muddler) to build Mudlet packages.
+
+**Build pipeline**:
+```bash
+# 1. Convert source to Muddler format
+python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project
+
+# 2. Build with Muddler (requires Java 17+)
+cd muddler_project
+muddle.bat
+```
+
+**Output**: `muddler_project/build/Levi_Ataxia.mpackage`
+
+**Verify conversion**: `python tools/compare_builds.py --old packages/Test_Build.xml --new ./muddler_project`
+
+---
+
 ## Key Files Reference
 
 | Path | Purpose |

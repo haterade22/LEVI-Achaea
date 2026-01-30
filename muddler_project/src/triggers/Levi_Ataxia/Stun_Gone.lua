@@ -1,0 +1,1 @@
+ataxia.afflictions.stun = nil

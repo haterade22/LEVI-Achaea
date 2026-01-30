@@ -1,0 +1,1 @@
+send("envenom axe with curare;wield axe;throw axe at " .. target ..";get axe") 

@@ -33,9 +33,25 @@ This repository contains the "For Levi" Mudlet package, a comprehensive automati
 
 ## Installation
 
-1. Download the Mudlet package
+1. Download the compiled `.mpackage` or `.xml` from `packages/` (or build from source — see below)
 2. In Mudlet, go to Package Manager
-3. Install the XML package file
+3. Install the package file
+
+## Building from Source
+
+The project uses [Muddler](https://github.com/demonnic/muddler) to build packages. Requires **Java 17+**.
+
+```bash
+# Convert source to Muddler format
+python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project
+
+# Build with Muddler
+cd muddler_project
+muddle.bat        # Windows
+# muddle          # Linux/Mac
+```
+
+Output: `muddler_project/build/Levi_Ataxia.mpackage`
 
 ## Documentation
 

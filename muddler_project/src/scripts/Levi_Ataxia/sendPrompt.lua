@@ -1,0 +1,3 @@
+function zgui.sendPrompt()
+
+end

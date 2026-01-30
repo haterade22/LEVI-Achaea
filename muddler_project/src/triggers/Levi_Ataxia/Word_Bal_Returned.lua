@@ -1,0 +1,1 @@
+ataxiaTables.depthswalker.wordBal = true

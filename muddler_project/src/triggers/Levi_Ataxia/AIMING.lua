@@ -1,0 +1,1 @@
+aimed = tempTimer(1, [[aimed = true; aimed = false]])

@@ -1,0 +1,1 @@
+setTriggerStayOpen("Allies List", 0)

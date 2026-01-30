@@ -1,0 +1,2 @@
+targetIshere = false
+enableTimer("TargetOutOfRoom")

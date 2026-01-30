@@ -1,0 +1,2 @@
+zgui.enemies = {}
+enableTrigger("EnemyReport")

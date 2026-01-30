@@ -1,0 +1,1 @@
+ataxia.vitals.focusbal = true

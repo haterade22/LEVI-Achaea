@@ -1,0 +1,1 @@
+ataxiaTemp.activeCureUsed = true

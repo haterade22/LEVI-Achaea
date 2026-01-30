@@ -4,11 +4,18 @@
 
 ### 1. Install the Package in Mudlet
 
-Install the compiled XML package from `packages/` via Mudlet's Package Manager, or build it from source:
+Install the compiled package from `packages/` via Mudlet's Package Manager, or build it from source:
 
 ```bash
-python tools/mudlet_build.py --src ./src_new --output packages/Levi_Ataxia.xml
+# Convert source to Muddler format
+python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project
+
+# Build with Muddler (requires Java 17+)
+cd muddler_project
+muddle.bat
 ```
+
+Output: `muddler_project/build/Levi_Ataxia.mpackage`
 
 The package includes all systems:
 - MMP (Mudlet Mapper)
@@ -194,13 +201,18 @@ Each file has a header comment showing where it came from:
 
 ### Rebuild Package After Editing
 
-After editing files in `src_new/`, rebuild the XML package:
+After editing files in `src_new/`, rebuild the package with Muddler:
 
 ```bash
-python tools/mudlet_build.py --src ./src_new --output packages/Levi_Ataxia.xml
+# Re-convert source to Muddler format
+python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project
+
+# Build with Muddler
+cd muddler_project
+muddle.bat
 ```
 
-Then reinstall the package in Mudlet.
+Then reinstall the `.mpackage` from `muddler_project/build/` in Mudlet.
 
 ### Modify Curing Priorities
 

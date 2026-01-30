@@ -1,0 +1,2 @@
+send("scry for " .. target)
+

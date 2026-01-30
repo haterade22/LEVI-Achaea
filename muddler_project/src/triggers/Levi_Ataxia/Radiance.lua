@@ -1,0 +1,2 @@
+cecho("\n\n<red>[WARNING]:<white> You are being RADIANCED!!\n<red>[WARNING]:<white> You are being RADIANCED!!\n<red>[WARNING]:<white> You are being RADIANCED!!\n\n")
+ataxia_setWarning("you're being radianced",  2.5)	

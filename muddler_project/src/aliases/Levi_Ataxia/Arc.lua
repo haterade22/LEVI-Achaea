@@ -1,0 +1,1 @@
+send("quash " ..target.. "| arc curare")

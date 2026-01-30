@@ -1,0 +1,1 @@
+send("clearqueue all;queue add eqbal legenddeck draw catarin")

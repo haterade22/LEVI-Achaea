@@ -1,0 +1,2 @@
+mindlocked = false
+deleteFull()

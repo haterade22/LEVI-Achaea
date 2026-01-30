@@ -1,0 +1,5 @@
+selectString(line,1)
+fg("red")
+deselect()
+ataxia_boxEcho("SOMEONE TRYING TO PULL US OFF SHIP", "red")
+ataxiaBasher_alert("Normal")

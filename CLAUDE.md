@@ -61,20 +61,53 @@ LEVI-Achaea/
 │   ├── plans/              # Project plans and reviews
 │   ├── legend-deck.md      # Legend Deck card reference
 │   └── artefacts-reference.md
-├── src_new/
+├── src_new/                # Canonical source (YAML-header Lua files)
 │   ├── aliases/            # Alias definitions
 │   ├── keys/               # Key bindings
 │   ├── scripts/            # Lua script modules (combat, basher, GUI, NDB, etc.)
 │   ├── timers/             # Timer definitions
 │   └── triggers/           # Trigger definitions
+├── muddler_project/        # Muddler build project (generated from src_new)
+│   ├── mfile               # Package metadata JSON
+│   └── src/
+│       ├── aliases/Levi_Ataxia/   # aliases.json + *.lua
+│       ├── keys/Levi_Ataxia/      # keys.json + *.lua
+│       ├── scripts/Levi_Ataxia/   # scripts.json + *.lua
+│       ├── timers/Levi_Ataxia/    # timers.json + *.lua
+│       ├── triggers/Levi_Ataxia/  # triggers.json + *.lua
+│       └── resources/             # Static resources
 ├── tools/
-│   ├── mudlet_build.py     # Build XML package from src_new
-│   └── mudlet_extract.py   # Extract XML package to src_new
-├── packages/               # Compiled Mudlet XML packages
+│   ├── convert_to_muddler.py  # Convert src_new → muddler_project
+│   ├── compare_builds.py      # Compare old XML vs Muddler output
+│   ├── mudlet_build.py        # Legacy: build XML from src_new
+│   └── mudlet_extract.py      # Extract XML package to src_new
+├── packages/               # Compiled Mudlet packages
 ├── CLAUDE.md               # This file
 ├── GETTING_STARTED.md      # Setup and usage guide
 └── README.md               # Project overview
 ```
+
+### Build System (Muddler)
+
+The project uses [Muddler](https://github.com/demonnic/muddler) to build Mudlet packages. The build pipeline is:
+
+1. **Edit** source files in `src_new/` (YAML-header Lua format)
+2. **Convert** to Muddler format: `python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project`
+3. **Build** with Muddler: `cd muddler_project && muddle.bat` (Windows) or `muddle` (Linux/Mac)
+4. **Output**: `muddler_project/build/Levi_Ataxia.mpackage` and `.xml`
+
+**Requirements**: Java 17+ (Temurin JDK recommended), Muddler CLI on PATH.
+
+**Conversion script** (`tools/convert_to_muddler.py`):
+- Strips YAML headers from Lua files, outputs pure Lua
+- Builds nested JSON hierarchy from `_groups.yaml` files
+- Handles name collisions by prepending parent group names
+- Preserves group inline scripts
+- Converts pattern types, timer formats, key codes
+
+**Comparison tool** (`tools/compare_builds.py`):
+- Compares old Python-built XML against Muddler project source
+- Verifies item counts, names, hierarchy, and code content
 
 ### Source Code Organization
 
@@ -1455,7 +1488,7 @@ end
 
 ---
 
-**Last Updated**: 2026-01-29
+**Last Updated**: 2026-01-30
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia
