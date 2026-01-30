@@ -16,14 +16,37 @@ packageName: ''
 --------------------------------------------------------------------------------
 -- CC_Apostate: Unified Apostate Offensive System (V3 Integration)
 --
--- Kill Routes:
+-- Replaces old files 001-013 with a single namespace-based system.
+-- Backward-compat wrappers live in 014_Levi_Apostate.lua.
+-- Integrates with Affliction Tracker V3 (probability-based), V2, or V1.
+--
+-- Kill Routes (4 modes):
 --   1. True Lock  - DEADEYES curse delivery building toward truelock
 --   2. Corrupt    - Stack afflictions then demon corrupt for damage/catharsis
 --   3. Vivisect   - Truelock -> prone -> shrivel 4 limbs -> vivisect
 --   4. Sleep      - Build asthma + impatience + hypersomnia -> sleep curse
 --
--- DEADEYES delivers 2 curses per action (2.3s balance)
--- Lock priority: clumsiness -> asthma -> manaleech -> impatience -> slickness -> anorexia
+-- DEADEYES delivers 2 curses per action (2.3s balance).
+-- Curses are selected independently via a dual-slot system:
+--
+--   Curse 1 (primary) - Direct affliction stacking:
+--     clumsiness -> asthma -> manaleech -> impatience -> slickness -> anorexia
+--     Then: sleep/nightmare synergies -> sensitivity -> fillers -> class lock aff
+--
+--   Curse 2 (secondary) - Lock support via sicken cascade:
+--     sicken (delivers paralysis) -> impatience -> asthma
+--     -> sicken again (delivers manaleech/slickness when asthma protects smoke)
+--     -> anorexia -> slickness -> manaleech -> fillers -> class lock aff
+--
+-- Sicken cascade: sicken delivers paralysis -> manaleech -> slickness in order,
+-- based on what the target already has. Asthma blocks smoke cures, protecting
+-- manaleech and slickness once applied.
+--
+-- Lock progression: softlock (asthma+anorexia+slickness) -> hardlock (+impatience)
+--   -> truelock (+paralysis) -> class lock aff for kill
+--
+-- Corrupt damage: physical affs x7 + mental affs x8 + smoke affs x9,
+-- weighted by V3 probability when available.
 --------------------------------------------------------------------------------
 
 apostate = apostate or {}
@@ -147,14 +170,21 @@ function apostate.corruptDmg()
 end
 
 --------------------------------------------------------------------------------
--- UNIFIED CURSE PRIORITY ENGINE
+-- DUAL-SLOT CURSE PRIORITY ENGINE
 --
--- Curse 1 (primary): offensive affliction stacking
+-- DEADEYES takes 2 curses. Each slot has its own independent priority chain.
+-- selectCurses() orchestrates both and handles overrides (curseward, truelock).
+--
+-- Curse 1 (selectPrimaryCurse): direct affliction delivery
 --   clumsiness -> asthma -> manaleech -> impatience -> slickness -> anorexia
+--   -> sleep mode / nightmare synergy / sensitivity -> fillers -> class lock aff
 --
--- Curse 2 (secondary): lock support via sicken cascade
---   sicken (for paralysis) -> impatience -> asthma -> sicken (for slickness)
---   -> anorexia -> fillers
+-- Curse 2 (selectSecondaryCurse): sicken cascade + lock support
+--   sicken (paralysis) -> impatience -> asthma
+--   -> sicken (manaleech/slickness, protected by asthma blocking smoke cure)
+--   -> anorexia -> slickness -> manaleech -> fillers -> class lock aff
+--
+-- Curse 2 never duplicates curse 1 (c1 passed as parameter to avoid overlap).
 --------------------------------------------------------------------------------
 
 -- Filler afflictions shared by both curse slots
@@ -361,6 +391,8 @@ end
 
 --------------------------------------------------------------------------------
 -- PRE/POST ATTACK BUILDERS
+-- Pre: bloodpact setup, daegger summon for catharsis/prone
+-- Post: bloodworm summon, daemon resummon, disfigure for disloyalty
 --------------------------------------------------------------------------------
 
 function apostate.buildPreAttack()
@@ -405,6 +437,8 @@ end
 
 --------------------------------------------------------------------------------
 -- UNIFIED ATTACK BUILDER
+-- Priority: vivisect > shield strip > trample > catharsis > corrupt
+--   > corrupt followup > shrivel > DEADEYES (default curse delivery)
 --------------------------------------------------------------------------------
 
 function apostate.buildAttack()
@@ -456,6 +490,8 @@ end
 
 --------------------------------------------------------------------------------
 -- MAIN DISPATCH
+-- Entry point called by all backward-compat wrappers in 014_Levi_Apostate.lua.
+-- Validates target, selects curses, builds attack, ensures baalzadeen, sends.
 --------------------------------------------------------------------------------
 
 function apostate.dispatch()

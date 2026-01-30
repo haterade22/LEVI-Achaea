@@ -377,3 +377,224 @@ Catharsis Threshold:
 - Clotting bleeding drains mana significantly
 - Watch for Fiend + Daegger bleed -> clot -> mana drain -> Catharsis
 ```
+
+---
+
+## CC_Apostate System (015_CC_Apostate.lua)
+
+### Architecture
+The Apostate offensive system was consolidated from 14 legacy files into a single `apostate` namespace following the Blademaster pattern. Files 001-013 are all disabled (`isActive: 'no'`). File 014 retains backward-compat wrappers and daemon utility functions.
+
+### File Map
+| File | Purpose |
+|------|---------|
+| `015_CC_Apostate.lua` | Complete unified system — namespace, state, V3 routing, curse engine, attack builder, dispatch |
+| `014_Levi_Apostate.lua` | Backward-compat wrappers (all old function names → `apostate.dispatch()`) + daemon utilities |
+| `001-013_*.lua` | Legacy files, all disabled |
+
+### Entry Point
+```lua
+apostate.dispatch()
+-- 1. Validate target exists and is in room
+-- 2. Check for aeon (don't act)
+-- 3. Initialize pm (target mana) if not set
+-- 4. Select curses via dual-slot engine
+-- 5. Build attack (pre + main + post)
+-- 6. Ensure baalzadeen is summoned
+-- 7. Check for paralysis (don't send if paralyzed)
+-- 8. Assemble and send via queue addclear freestand
+```
+
+### Namespace & State
+```lua
+apostate = apostate or {}
+apostate.state = {
+  mode = "lock",            -- "lock", "corrupt", "vivisect", "sleep", "group"
+  corrupted = false,        -- corrupt has been fired (awaiting catharsis)
+  lastCorruptTime = 0,      -- corrupt cooldown tracking
+  daeggerhere = false,      -- daegger summoned
+  freshblood = false,       -- fresh blood available for bloodpact
+  fiendthing = "nightmare", -- preferred lesser daemon
+  wantDisloyalty = false,   -- disfigure toggle
+  partyrelay = true,        -- relay to party
+}
+
+apostate.config = {
+  corruptThreshold = 0.7,   -- V3 probability threshold for corrupt consideration
+  lockThreshold = 0.3,      -- V3 threshold for "has affliction"
+  catharsisThreshold = 50,  -- mana % for catharsis execute
+  sapThreshold = 60,        -- mana % for sap consideration
+  debugEcho = false,        -- enable debug output
+}
+```
+
+### Kill Routes (4 Modes)
+| Mode | Description | Kill Condition |
+|------|-------------|----------------|
+| **lock** | DEADEYES dual-curse delivery building toward truelock + class lock | Truelock → voyria → damage/catharsis |
+| **corrupt** | Stack afflictions → `demon corrupt` for burst damage | Corrupt dmg >= assessed health, or mana pushed to catharsis range |
+| **vivisect** | Truelock → trample prone → shrivel all 4 limbs → vivisect | All limbs broken while truelocked |
+| **sleep** | Build asthma + impatience + hypersomnia → sleep curse | Hypersomnia + sleep curse with asthma/impatience protecting it |
+
+### Dual-Slot Curse Priority Engine
+DEADEYES delivers 2 curses per action (2.3s balance). Each slot has an independent priority chain:
+
+**Curse 1 (`selectPrimaryCurse`)** — Direct affliction stacking:
+```
+clumsiness → asthma → manaleech → impatience → slickness → anorexia
+→ sleep mode curses / nightmare synergy / sensitivity (when deaf)
+→ fillers (stupidity, dizziness, weariness, nausea, confusion, etc.)
+→ class lock affliction → fallback: clumsy
+```
+
+**Curse 2 (`selectSecondaryCurse(c1)`)** — Sicken cascade + lock support:
+```
+sicken (delivers paralysis when target lacks it)
+→ impatience → asthma
+→ sicken again (delivers manaleech/slickness when asthma blocks smoke cure)
+→ anorexia → slickness → manaleech
+→ fillers (skipping whatever c1 is)
+→ class lock affliction → fallback
+```
+
+**Key rules:**
+- Curse 2 never duplicates curse 1 — the `c1` parameter is checked at every step
+- Sicken cascade: delivers `paralysis → manaleech → slickness` in order based on what target has
+- First sicken use: paralysis (for tree block)
+- Second sicken use: after asthma secured, delivers manaleech/slickness (asthma protects smoke cure)
+
+**Orchestrator (`selectCurses`):**
+- Curseward detected → breach + secondary
+- Truelock >= 70% → class lock aff + secondary
+- Otherwise → primary + secondary
+
+### Lock Progression
+```
+softlock  = asthma + anorexia + slickness
+hardlock  = softlock + impatience
+truelock  = hardlock + paralysis
+classlock = truelock + voyria
+```
+
+### Attack Builder Priority
+Kill condition checks in order:
+1. `needVivisect()` — All 4 limbs broken → vivisect
+2. `needShieldStrip()` — Catharsis/corrupt ready but target shielded
+3. `needTrample()` — Truelocked + target prone → trample
+4. `needCatharsis()` — Target mana below `catharsisThreshold`
+5. `needCorrupt()` — Corrupt damage >= assessed health, or pushes mana to catharsis range
+6. Corrupt followup — Corrupt already fired → follow with catharsis
+7. `needShrivel()` — Vivisect mode, truelocked, prone, limbs remaining
+8. Default: DEADEYES dual-curse delivery
+
+### Corrupt Damage Calculator
+```lua
+function apostate.corruptDmg()
+  -- Categorizes afflictions into physical, mental, smoke
+  -- Physical affs × 7 + Mental affs × 8 + Smoke affs × 9
+  -- V3 mode: weights each affliction by probability (0.0-1.0)
+  -- V1/V2 mode: binary 1.0 or 0 per affliction
+  -- Returns expected damage value for kill-condition checks
+end
+```
+
+### V3/V2/V1 Tracking Integration
+Same routing chain as Blademaster (`blademaster.hasAff`):
+```lua
+function apostate.hasAff(aff)
+  -- V3: haveAffV3(aff) with lockThreshold (0.3)
+  -- V2: haveAffV2(aff) or tAffsV2[aff]
+  -- V1: tAffs[aff]
+end
+
+function apostate.getAffProb(aff)
+  -- V3: getAffProbabilityV3(aff) returns 0.0-1.0
+  -- Fallback: binary 1.0 or 0
+end
+
+function apostate.getTrackingSystem()
+  -- Returns "V3", "V2", or "V1"
+end
+
+function apostate.getLocks()
+  -- Returns {softlock=prob, hardlock=prob, truelock=prob}
+  -- V3: getLockStatusV3()
+  -- Fallback: boolean check of required afflictions
+end
+```
+
+### Pre/Post Attack Actions
+**Pre-attack:**
+- Bloodpact setup (fresh blood + no pentagram active)
+- Daegger summon when catharsis/prone situations require it
+
+**Post-attack:**
+- Bloodworm summon (when fresh blood available)
+- Daemon resummon (when wrong daemon type present)
+- Disfigure for disloyalty (when asthma is held)
+
+**Design decision:** Daegger hunt was intentionally removed from commands — it slows offense when seconds matter.
+
+### Backward Compatibility (014_Levi_Apostate.lua)
+All old function names route to `apostate.dispatch()` with appropriate mode:
+
+| Legacy Function | Mode |
+|-----------------|------|
+| `leviclumsapo()` | lock |
+| `leviweariapo()` | lock |
+| `levisleepapo()` | sleep |
+| `apostate_lock()` | lock |
+| `apostate_lockattack()` | (current) |
+| `apostate_lockImpale()` | lock |
+| `apostate_sleepattack()` | sleep |
+| `apostate_clumsy()` | lock |
+| `apostate_vivisect()` | vivisect |
+| `apostate_weari()` | lock |
+| `apostate_mental()` | lock |
+| `apostate_kelp()` | lock |
+| `apostate_group()` | group |
+| `apostate_clumsyillusion()` | lock |
+
+Legacy global wrappers kept: `corruptDmg()`, `corruptKill()`, `cathCorrupt()`
+
+### Daemon Utilities (014_Levi_Apostate.lua)
+These functions remain in 014 and are called by the attack builder:
+
+| Function | Purpose |
+|----------|---------|
+| `bloodPact()` | Bloodpact setup (fresh blood + no pentagram) |
+| `bloodworm()` | Summon bloodworms (post-attack) |
+| `baalzadeen()` | Ensure Baalzadeen summoned |
+| `apopentagram()` | Pentagram setup |
+| `demon()` | Summon preferred lesser daemon |
+| `daemonite()` | Summon daemonite entity |
+| `fiend()` | Summon fiend entity |
+| `nightmare()` | Summon nightmare entity |
+
+### Commands (Aliases)
+| Alias | Regex | Action |
+|-------|-------|--------|
+| `cath` | `^cath$` | `apostate_lock()` → dispatch (lock) |
+| `KELP STACK` | `^kel$` | Class-conditional dispatch (lock) |
+| `Group Attack` | `^yy$` | `apostate_group()` → dispatch (group, currently disabled) |
+| `Levi Lock Apo` | `^ll$` | `apostate_lock()` → dispatch (lock) |
+| `Vivisect` | `^viv$` | `apostate_vivisect()` → dispatch (vivisect) |
+| `SLEEP` | `^slee$` | `apostate_sleepattack()` → dispatch (sleep) |
+| `Corrupt` | `^corr$` | `apostate.setMode("corrupt")` → dispatch (corrupt) |
+
+### Debug & Status
+```lua
+apostate.status()
+-- Displays: mode, tracking system, corrupt damage estimate,
+-- lock probabilities (soft/hard/true), current curse selections,
+-- daemon type, corrupted state, target mana, last assess value
+```
+
+### Changelog
+- **v1.0** (Jan 2025): Consolidated 14 files → single `015_CC_Apostate.lua`
+- Integrated V3 affliction tracker (probability-based decisions)
+- All classes use clumsiness route (no weariness split)
+- Dual-slot curse engine with sicken cascade
+- Removed daegger hunt from attack commands
+- Added corrupt damage calculator with V3 weighting
+- Backward-compat wrappers in 014 for all legacy function names
