@@ -19,8 +19,8 @@ packageName: ''
 --
 -- Phases:
 --   1. PREP:        All 6 limbs to 86%+ (one punch from break)
---   2. BREAK_UPPER: combo tar mnk <arm> spp <arm> hkp;hrs
---   3. BREAK_LOWER: combo tar wrt torso hfp left hfp right;brs
+--   2. BREAK_UPPER: combo tar mnk <arm> spp <arm> hkp hrs
+--   3. BREAK_LOWER: combo tar wrt torso hfp left hfp right brs
 --   4. KILL:        bbt tar (Bear stance)
 --
 -- Parry Avoidance:
@@ -176,12 +176,12 @@ function tekura6.dispatch.getPhase()
     return tekura6.PHASES.KILL
   end
 
-  -- BREAK_LOWER: Arms + torso broken, legs NOT yet broken
+  -- BREAK_LOWER: Both arms + torso broken (from BREAK_UPPER), legs NOT yet both broken
   local armsBroken = tekura6.isLimbBroken("left arm") and tekura6.isLimbBroken("right arm")
   local torsoBroken = tekura6.isLimbBroken("torso")
-  local legsBroken = tekura6.isLimbBroken("left leg") and tekura6.isLimbBroken("right leg")
+  local bothLegsBroken = tekura6.isLimbBroken("left leg") and tekura6.isLimbBroken("right leg")
 
-  if armsBroken and torsoBroken and not legsBroken then
+  if armsBroken and torsoBroken and not bothLegsBroken then
     return tekura6.PHASES.BREAK_LOWER
   end
 
@@ -277,7 +277,7 @@ end
 function tekura6.dispatch.buildBreakUpperAttack()
   local parried = tekura6.getEffectiveParry()
 
-  -- Default: kick left arm, punch right arm + torso
+  -- Default: kick left arm, punch right arm
   local kickArm = "left"
   local punchArm = "right"
 
@@ -291,13 +291,14 @@ function tekura6.dispatch.buildBreakUpperAttack()
   end
 
   -- MNK arm (25% = breaks), SPP other arm (14% = breaks if prepped), HKP torso (14% = breaks if prepped)
-  return "combo " .. target .. " mnk " .. kickArm .. " spp " .. punchArm .. " hkp;hrs"
+  -- hrs (Horse stance) is part of the combo syntax, not a separate command
+  return "combo " .. target .. " mnk " .. kickArm .. " spp " .. punchArm .. " hkp hrs"
 end
 
 -- BREAK_LOWER: Wrench torso (prones) + break both legs, switch to Bear stance
 function tekura6.dispatch.buildBreakLowerAttack()
   -- WRT torso (Horse stance, prones target) + HFP left + HFP right (break both legs)
-  return "combo " .. target .. " wrt torso hfp left hfp right;brs"
+  return "combo " .. target .. " wrt torso hfp left hfp right brs"
 end
 
 -- KILL: Backbreaker in Bear stance
@@ -460,7 +461,7 @@ function tekura6.dispatch.status()
   cecho("\n<yellow>+------------------------------------------------+")
   cecho("\n<yellow>| <white>STRATEGY:<yellow>")
   cecho("\n<yellow>|   " .. (phase == 1 and "<white>" or "<grey>") .. "1. PREP: All 6 limbs to 86%+ (kick+punch+punch)")
-  cecho("\n<yellow>|   " .. (phase == 2 and "<white>" or "<grey>") .. "2. BREAK UPPER: MNK arm + SPP arm + HKP -> HRS")
+  cecho("\n<yellow>|   " .. (phase == 2 and "<white>" or "<grey>") .. "2. BREAK UPPER: MNK arm + SPP arm + HKP torso -> HRS")
   cecho("\n<yellow>|   " .. (phase == 3 and "<white>" or "<grey>") .. "3. BREAK LOWER: WRT torso + HFP left + HFP right -> BRS")
   cecho("\n<yellow>|   " .. (phase == 4 and "<green>" or "<grey>") .. "4. KILL: BBT until dead (Bear Stance)")
   cecho("\n<yellow>+================================================+\n")
