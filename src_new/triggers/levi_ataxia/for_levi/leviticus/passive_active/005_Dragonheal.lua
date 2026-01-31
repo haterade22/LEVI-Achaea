@@ -47,11 +47,13 @@ if isTargeted(matches[2]) then
 		removeAffV2("recklessness")
 		removeAffV2("weariness")
 	end
+	if removeAffV3 then removeAffV3("recklessness"); removeAffV3("weariness") end
 	if reduceRandomAffCertaintyV2 then
 		reduceRandomAffCertaintyV2()
 		reduceRandomAffCertaintyV2()
 		reduceRandomAffCertaintyV2()
 	end
+	if onPassiveCureV3 then onPassiveCureV3(3) end
 	selectString(line,1)
 	fg("NavajoWhite")
 	resetFormat()

@@ -69,10 +69,12 @@ if isTargeted(matches[2]) then
     erAff("voyria")
     -- V2 integration: remove voyria with certainty
     if removeAffV2 then removeAffV2("voyria") end
+    if removeAffV3 then removeAffV3("voyria") end
   else
     ataxiaTemp.randomCure = 1
     -- V2 integration: passive cured a random affliction
     if reduceRandomAffCertaintyV2 then reduceRandomAffCertaintyV2() end
+    if onPassiveCureV3 then onPassiveCureV3(1) end
   end
 	selectString(line,1)
 	fg("NavajoWhite")

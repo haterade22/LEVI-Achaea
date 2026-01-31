@@ -44,9 +44,11 @@ if isTargeted(matches[2]) and class == "Psion" then
   erAff("confusion")
   -- V2 integration: Expunge cures confusion + impatience/mental aff
   if removeAffV2 then removeAffV2("confusion") end
+  if removeAffV3 then removeAffV3("confusion") end
   if haveAff("impatience") then
     erAff("impatience")
     if removeAffV2 then removeAffV2("impatience") end
+    if removeAffV3 then removeAffV3("impatience") end
   else
   	local eAffs = {"stuttering", "stupidity", "recklessness", "hallucinations", "epilepsy", "confusion", "dizziness", "vertigo", "anorexia",
 		"masochism", "agoraphobia", "claustrophobia", "dementia", "generosity", "loneliness", "lovers", "pacified", "paranoia", "shyness", "stuttering",}
@@ -54,6 +56,7 @@ if isTargeted(matches[2]) and class == "Psion" then
       if haveAff(aff) then
         erAff(aff)
         if removeAffV2 then removeAffV2(aff) end
+        if removeAffV3 then removeAffV3(aff) end
         break
       end
     end

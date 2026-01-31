@@ -397,6 +397,85 @@ function onTargetFocusV3()
 end
 
 -- ============================================
+-- PASSIVE CURE HANDLING
+-- ============================================
+
+-- Pool of afflictions curable by passive abilities (from tSingleRandom/tMultipleRandom)
+passiveCurableAffsV3 = {
+    "aeon", "anorexia", "pyramides", "flushings", "crushedthroat",
+    "sandfever", "paralysis", "asthma", "timeloop", "lethargy",
+    "depression", "impatience", "hypersomnia", "retribution", "confusion",
+    "darkshade", "healthleech", "hypochondria", "slickness", "manaleech",
+    "nausea", "parasite", "shivering", "frozen", "spiritburn",
+    "clumsiness", "sensitivity", "scytherus", "tenderskin", "stupidity",
+    "haemophilia", "weariness", "hallucinations", "dizziness", "justice",
+    "recklessness", "epilepsy", "addiction", "loneliness", "shyness",
+    "vertigo", "paranoia", "agoraphobia", "claustrophobia", "generosity",
+    "pacifism", "disloyalty", "selarnia",
+    "brokenleftleg", "brokenrightleg", "brokenleftarm", "brokenrightarm"
+}
+
+-- Handle passive ability curing N random afflictions (branching model)
+-- Used by: Passives(1), Alleviate(1), Bloodboil(1), Dragonheal(3), Fool(3),
+--          Might(1), Purification(1), Purify(1), Salt(1), Shrugging(1),
+--          Slough(1), Eruption(1)
+function onPassiveCureV3(numCures)
+    if not affConfigV3 or not affConfigV3.enabled then return end
+    if not numCures or numCures < 1 then return end
+
+    local pool = passiveCurableAffsV3
+
+    for cure = 1, numCures do
+        local newStates = {}
+
+        for _, state in ipairs(afflictionStatesV3) do
+            local candidates = {}
+            for _, aff in ipairs(pool) do
+                if state.affs[aff] then
+                    table.insert(candidates, aff)
+                end
+            end
+
+            if #candidates == 0 then
+                -- No curable affs in this state - passes through unchanged
+                table.insert(newStates, state)
+            elseif #candidates == 1 then
+                -- Only one option - deterministic cure
+                state.affs[candidates[1]] = nil
+                table.insert(newStates, state)
+            else
+                -- Multiple candidates - branch into all possibilities
+                local probEach = state.prob / #candidates
+                for _, aff in ipairs(candidates) do
+                    local branch = {affs = {}, prob = probEach}
+                    for k, v in pairs(state.affs) do branch.affs[k] = v end
+                    branch.affs[aff] = nil
+                    table.insert(newStates, branch)
+                end
+            end
+        end
+
+        afflictionStatesV3 = newStates
+
+        -- Dedup between cure rounds to control state explosion
+        if cure < numCures then
+            deduplicateStatesV3()
+        end
+    end
+
+    -- Final cleanup after all cures
+    deduplicateStatesV3()
+    pruneStatesV3()
+    rebuildCacheV3()
+    syncToOldSystemV3()
+    updateAffDisplayV3()
+
+    if ataxiaEcho and affConfigV3.debugEcho then
+        ataxiaEcho("[V3] Passive cure (" .. numCures .. ") - branched to " .. #afflictionStatesV3 .. " states")
+    end
+end
+
+-- ============================================
 -- INTEGRATION HELPERS
 -- ============================================
 

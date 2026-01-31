@@ -45,5 +45,6 @@ if isTargeted(matches[2]) then
 		removeAffV2("asthma")
 		removeAffV2("weariness")
 	end
+	if removeAffV3 then removeAffV3("asthma"); removeAffV3("weariness") end
 	fg("DarkSlateGrey")
 end
