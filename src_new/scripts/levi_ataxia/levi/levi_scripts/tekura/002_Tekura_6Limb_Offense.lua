@@ -19,8 +19,8 @@ packageName: ''
 --
 -- Phases:
 --   1. PREP:        All 6 limbs to 86%+ (one punch from break)
---   2. BREAK_UPPER: combo tar mnk <arm> spp <arm> hkp hrs
---   3. BREAK_LOWER: combo tar wrt torso hfp left hfp right brs
+--   2. BREAK_UPPER: combo tar mnk <arm> spp <arm> hkp;hrs
+--   3. BREAK_LOWER: combo tar wrt torso hfp left hfp right;brs
 --   4. KILL:        bbt tar (Bear stance)
 --
 -- Parry Avoidance:
@@ -291,14 +291,13 @@ function tekura6.dispatch.buildBreakUpperAttack()
   end
 
   -- MNK arm (25% = breaks), SPP other arm (14% = breaks if prepped), HKP torso (14% = breaks if prepped)
-  -- hrs (Horse stance) is part of the combo syntax, not a separate command
-  return "combo " .. target .. " mnk " .. kickArm .. " spp " .. punchArm .. " hkp hrs"
+  return "combo " .. target .. " mnk " .. kickArm .. " spp " .. punchArm .. " hkp;hrs"
 end
 
 -- BREAK_LOWER: Wrench torso (prones) + break both legs, switch to Bear stance
 function tekura6.dispatch.buildBreakLowerAttack()
   -- WRT torso (Horse stance, prones target) + HFP left + HFP right (break both legs)
-  return "combo " .. target .. " wrt torso hfp left hfp right brs"
+  return "combo " .. target .. " wrt torso hfp left hfp right;brs"
 end
 
 -- KILL: Backbreaker in Bear stance
