@@ -1,0 +1,2 @@
+haveAff("haemophilia")
+tarAffed("haemophilia")

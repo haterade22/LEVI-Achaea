@@ -5,13 +5,9 @@ hierarchy:
 - Levi_Ataxia
 - For Levi
 - leviticus
-- Ataxia
-- Combat/Aff Tracking
-- Add Afflictions
-- Affs Post Queue - Gated
-- Classes K-S
-- Knight
-- Two-hander
+- LeviAtax
+- Leviticus
+- INFERNAL
 - Fractures
 - Increase Fracture Count
 attributes:

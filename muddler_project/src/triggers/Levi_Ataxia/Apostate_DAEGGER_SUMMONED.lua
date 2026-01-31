@@ -1,0 +1,3 @@
+daeggerhere = true
+
+daeggerhunt = false

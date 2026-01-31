@@ -5,52 +5,10 @@
     "isFolder": "yes",
     "children": [
       {
-        "name": "mudlet-mapper",
-        "isActive": "yes",
-        "isFolder": "yes",
-        "children": [
-          {
-            "name": "Mudlet Mapper",
-            "isActive": "yes",
-            "isFolder": "yes",
-            "children": [
-              {
-                "name": "Check for updates periodically",
-                "hours": "1",
-                "minutes": "0",
-                "seconds": "0",
-                "milliseconds": "0"
-              }
-            ]
-          }
-        ]
-      },
-      {
         "name": "For Levi",
         "isActive": "yes",
         "isFolder": "yes",
         "children": [
-          {
-            "name": "mudlet-mapper",
-            "isActive": "yes",
-            "isFolder": "yes",
-            "children": [
-              {
-                "name": "Mudlet Mapper",
-                "isActive": "yes",
-                "isFolder": "yes",
-                "children": [
-                  {
-                    "name": "Check for updates periodically",
-                    "hours": "1",
-                    "minutes": "0",
-                    "seconds": "0",
-                    "milliseconds": "0"
-                  }
-                ]
-              }
-            ]
-          },
           {
             "name": "Levi_062424",
             "isActive": "yes",
@@ -66,6 +24,27 @@
                     "isActive": "yes",
                     "isFolder": "yes",
                     "children": [
+                      {
+                        "name": "mudlet-mapper",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "Mudlet Mapper",
+                            "isActive": "yes",
+                            "isFolder": "yes",
+                            "children": [
+                              {
+                                "name": "Check for updates periodically",
+                                "hours": "1",
+                                "minutes": "0",
+                                "seconds": "0",
+                                "milliseconds": "0"
+                              }
+                            ]
+                          }
+                        ]
+                      },
                       {
                         "name": "MY TIMERS",
                         "isActive": "yes",
@@ -101,27 +80,6 @@
                             "minutes": "15",
                             "seconds": "0",
                             "milliseconds": "0"
-                          }
-                        ]
-                      },
-                      {
-                        "name": "mudlet-mapper",
-                        "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "Mudlet Mapper",
-                            "isActive": "yes",
-                            "isFolder": "yes",
-                            "children": [
-                              {
-                                "name": "Check for updates periodically",
-                                "hours": "1",
-                                "minutes": "0",
-                                "seconds": "0",
-                                "milliseconds": "0"
-                              }
-                            ]
                           }
                         ]
                       },
@@ -208,6 +166,48 @@
                     ]
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "name": "mudlet-mapper",
+            "isActive": "yes",
+            "isFolder": "yes",
+            "children": [
+              {
+                "name": "Mudlet Mapper",
+                "isActive": "yes",
+                "isFolder": "yes",
+                "children": [
+                  {
+                    "name": "Check for updates periodically",
+                    "hours": "1",
+                    "minutes": "0",
+                    "seconds": "0",
+                    "milliseconds": "0"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "mudlet-mapper",
+        "isActive": "yes",
+        "isFolder": "yes",
+        "children": [
+          {
+            "name": "Mudlet Mapper",
+            "isActive": "yes",
+            "isFolder": "yes",
+            "children": [
+              {
+                "name": "Check for updates periodically",
+                "hours": "1",
+                "minutes": "0",
+                "seconds": "0",
+                "milliseconds": "0"
               }
             ]
           }

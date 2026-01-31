@@ -42,6 +42,7 @@ resetFormat()
 send("ql")
 dir_left = "forcefly"
 tAffs.paralysis = false
+if removeAffV3 then removeAffV3("paralysis") end
 
 if tChaseTimer then
 	killTimer(tostring(tChaseTimer))

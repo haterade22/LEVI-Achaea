@@ -1,1 +1,1 @@
-snb_selfLimbHit(matches[3])
+slc_last_limb = multimatches[1][3]

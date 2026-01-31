@@ -9,8 +9,7 @@ hierarchy:
 - Leviticus
 - slc
 - Shikudo Limb Attacks
-- Kicks
-- Flashheel
+- Dart 1
 attributes:
   isActive: 'yes'
   isFolder: 'no'
@@ -39,5 +38,5 @@ patterns:
 ]]--
 
 if SLC_blocked(matches[1]) == false then
-	SLC_connects(slc_last_limb,"flashheel")
+	SLC_connects(slc_last_limb,"dart")
 end

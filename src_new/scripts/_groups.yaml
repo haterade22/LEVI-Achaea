@@ -1,9 +1,6 @@
 version: 1
 packageType: scripts
 groups:
-- name: Sugardown Fields
-  packageName: Sugardown Fields
-  directory: sugardown_fields
 - name: mudlet-mapper
   packageName: mudlet-mapper
   directory: mudlet-mapper
@@ -12,58 +9,6 @@ groups:
     script: mudlet = mudlet or {}; mudlet.mapper_script = true
     directory: mudlet-mapper/mudlet_mapper
     children:
-    - name: Check for map updates
-      script: '-------------------------------------------------
-
-        --         Put your Lua functions here.        --
-
-        --                                             --
-
-        -- Note that you can also use external Scripts --
-
-        -------------------------------------------------
-
-        '
-      directory: mudlet-mapper/mudlet_mapper/check_for_map_updates
-    - name: Wings and other fast travel
-      script: '-------------------------------------------------
-
-        --         Put your Lua functions here.        --
-
-        --                                             --
-
-        -- Note that you can also use external Scripts --
-
-        -------------------------------------------------
-
-        '
-      directory: mudlet-mapper/mudlet_mapper/wings_and_other_fast_travel
-    - name: Test / one-time things
-      script: '-------------------------------------------------
-
-        --         Put your Lua functions here.        --
-
-        --                                             --
-
-        -- Note that you can also use external Scripts --
-
-        -------------------------------------------------
-
-        '
-      directory: mudlet-mapper/mudlet_mapper/test_one-time_things
-    - name: mm Mapping
-      script: '-------------------------------------------------
-
-        --         Put your Lua functions here.        --
-
-        --                                             --
-
-        -- Note that you can also use external Scripts --
-
-        -------------------------------------------------
-
-        '
-      directory: mudlet-mapper/mudlet_mapper/mm_mapping
     - name: Game-specific
       script: '-------------------------------------------------
 
@@ -77,10 +22,72 @@ groups:
 
         '
       directory: mudlet-mapper/mudlet_mapper/game-specific
+    - name: mm Mapping
+      script: '-------------------------------------------------
+
+        --         Put your Lua functions here.        --
+
+        --                                             --
+
+        -- Note that you can also use external Scripts --
+
+        -------------------------------------------------
+
+        '
+      directory: mudlet-mapper/mudlet_mapper/mm_mapping
+    - name: Test / one-time things
+      script: '-------------------------------------------------
+
+        --         Put your Lua functions here.        --
+
+        --                                             --
+
+        -- Note that you can also use external Scripts --
+
+        -------------------------------------------------
+
+        '
+      directory: mudlet-mapper/mudlet_mapper/test_one-time_things
+    - name: Wings and other fast travel
+      script: '-------------------------------------------------
+
+        --         Put your Lua functions here.        --
+
+        --                                             --
+
+        -- Note that you can also use external Scripts --
+
+        -------------------------------------------------
+
+        '
+      directory: mudlet-mapper/mudlet_mapper/wings_and_other_fast_travel
+    - name: Check for map updates
+      script: '-------------------------------------------------
+
+        --         Put your Lua functions here.        --
+
+        --                                             --
+
+        -- Note that you can also use external Scripts --
+
+        -------------------------------------------------
+
+        '
+      directory: mudlet-mapper/mudlet_mapper/check_for_map_updates
+- name: Sugardown Fields
+  packageName: Sugardown Fields
+  directory: sugardown_fields
 - name: Levi_Ataxia
   packageName: Levi_Ataxia
   directory: levi_ataxia
   children:
+  - name: deletestuff
+    packageName: deletestuff
+    directory: levi_ataxia/deletestuff
+    children:
+    - name: deleteOldProfiles
+      packageName: deleteOldProfiles
+      directory: levi_ataxia/deletestuff/deleteoldprofiles
   - name: LEVI
     packageName: Levi_062424
     directory: levi_ataxia/levi
@@ -99,8 +106,8 @@ groups:
           \tcecho(\"\\n<a_darkcyan>(<a_darkmagenta>LEVI<a_darkcyan>): <NavajoWhite>\"..text)\nend\n\n\n"
         directory: levi_ataxia/levi/ataxia/ataxia
         children:
-        - name: SYSTEM DOCUMENTATION
-          directory: levi_ataxia/levi/ataxia/system_documentation
+        - name: Login
+          directory: levi_ataxia/levi/ataxia/login
         - name: Harvesting/Crafting
           script: '-------------------------------------------------
 
@@ -114,8 +121,6 @@ groups:
 
             '
           directory: levi_ataxia/levi/ataxia/harvesting_crafting
-        - name: Affliction Tracking Core
-          directory: levi_ataxia/levi/ataxia/affliction_tracking_core
         - name: Gmcp Related
           children:
           - name: Rift
@@ -133,8 +138,6 @@ groups:
             directory: levi_ataxia/levi/ataxia/rift
           - name: Update Stuff
             directory: levi_ataxia/levi/ataxia/update_stuff
-        - name: Legend Deck
-          directory: levi_ataxia/levi/ataxia/legend_deck
         - name: Shaman System
           script: '-------------------------------------------------
 
@@ -148,6 +151,182 @@ groups:
 
             '
           directory: levi_ataxia/levi/ataxia/shaman_system
+        - name: Misc Scripts
+          directory: levi_ataxia/levi/ataxia/misc_scripts
+        - name: System-related
+          children:
+          - name: Deffing
+            script: "function buildDefsTable()\n\tataxiaTables.defences = {}\n\n\tataxiaTables.defences = {\n\t\t--Curatives\n\
+              \t\tairpocket = \"airpocket\",\n\t\tblindness = \"blindness\",\n\t\tcaloric = \"insulation\",\n\t\tdeafness\
+              \ = \"deafness\",\n\t\tdeathsight = \"deathsight\",\n\t\tfangbarrier = \"fangbarrier\",\n\t\tfrost = \"temperance\"\
+              ,\n\t\tinsomnia = \"insomnia\",\n\t\tkola = \"kola\",\n\t\tlevitation = \"levitating\",\n\t\tmass = \"density\"\
+              ,\n\t\tparrying = \"parrying\",\n\t\trebounding = \"rebounding\",\n\t\tspeed = \"speed\",\n\t\tshield = \"shield\"\
+              ,\n\t\tthirdeye = \"thirdeye\",\n\t\tvenom = \"poisonresist\",\n\n\t\t--Alchemist\n\t\tastronomy = \"astronomy\"\
+              ,\n    compoundmask = \"compoundmask\",\n\t\tmercury = \"mercury\",\n\t\tsulphur = \"sulphur\",\n\t\ttin = \"\
+              tin\",\n\n\t\t--Blademaster\n\t\tconsciousness = \"consciousness\",\n\t\tshinclarity = \"shinclarity\",\n\t\t\
+              shinbinding = \"shinbinding\",\n\t\tshintrance = \"shintrance\",\n\t\tretaliation = \"retaliation\",\n    mindnet\
+              \ = \"mindnet\",\n    weathering = \"weathering\",\n\n\n\t\t--Apostate\n\t\tdemonarmour = \"demonarmour\",\n\
+              \t\ttruestare = \"truestare\",\n\t\t\n\t\t--Bard\n\t\taria = \"aria\",\n\t\tlay = \"lay\",\n\t\tsongbird = \"\
+              songbird\",\n\t\ttune = \"blade tune\",\n\t\theartsfury = \"heartsfury\",\n    acrobatics = \"acrobatics on\"\
+              ,\n    harrying = \"dance harrying\",\n\n\t\t--Depthswalker\n\t\tblur = \"blur\",\n\t\tbodyaugment = \"bodyaugment\"\
+              ,\n\t\tdisperse = \"disperse\",\n\t\tdurability = \"durability\",\n\t\tprecision = \"precision\",\n\t\tshadowveil\
+              \ = \"shadowveil\",\n    antiforce = \"antiforce\",\n\t\t\n\t\t--Dragon/Elemental Lord\n\t\tcohesion = \"cohesion\"\
+              ,\n\t\tdragonbreath = \"dragonbreath\",\n\t\tdragonarmour = \"dragonarmour\",\n\t\ttempest = \"tempest\",\n\t\
+              \tsusurrating = \"susurrating\",\n    fireshroud = \"fireshroud\",\n    extrusion = \"extrusion\",\n    strata\
+              \ = \"strata\",\n\t\t\n\t\t--Jester\n\t\tslippery = \"slippery\",\n\t\tbalancing = \"balancing\",\n\t\tacrobatics\
+              \ = \"acrobatics\",\n    \n    -- Knight\n    deflect = \"deflect\",\n    blademastery = \"blademastery\",\n\
+              \t\t\n    --Magi\n\t\tchargeshield = \"chargeshield\",\n\t\tdiamondskin = \"diamondskin\",\n\t\tstoneskin =\
+              \ \"stoneskin\",\n    simultaneity = \"simultaneity\",\n\n\t\t--Monk\n\t\tboostedregeneration = \"boosting\"\
+              ,\n\t\tkaitrance = \"kaitrance\",\n\t\thyperfocus = \"hyperfocus\",\n\t\tregeneration = \"regeneration\",\n\t\
+              \tshikudoform = \"shikudoform\",\n\t\tsplitmind = \"splitmind\",\n\t\tmindnet = \"mindnet\",\n    bodyblock\
+              \ = \"bodyblock\",\n    evadeblock = \"evadeblock\",\n    pinchblock = \"pinchblock\",\n    hypersense = \"\
+              hypersense\",\n    kaiboost = \"kaiboost\",\n    mindcloak = \"mindcloak\", \n    \n    --pariah\n    shieldlogograph\
+              \ = \"shieldlogograph\",\n    accursedresolve = \"accursedresolve\",\n    leechlogograph = \"leechlogograph\"\
+              ,       \n\n\t\t--Necromancy\n\t\tdeathaura = \"deathaura\",\n\t\tlifevision = \"lifevision\",\n\t\tsoulcage\
+              \ = \"soulcage\",\n\t\tvengeance = \"vengeance\",\n\n\t\t--Occultist\n\t\tarctar = \"arctar\",\n\t\tdevilmark\
+              \ = \"devilmark\",\n\t\tdistortedaura = \"distortedaura\",\n\t\ttentacles = \"tentacles\",\n\n\t\t--Priest\n\
+              \t\twillpowerblessing = \"willpowerblessing\",\n\t\tenduranceblessing = \"enduranceblessing\",\n\t\tthermalshield\
+              \ = \"thermalshield\",\n\t\tfrostshield = \"frostshield\",\n\t\tearthshield = \"earthshield\",\n\n\t\t--Psion\n\
+              \t\tguidedstrike = \"guidedstrike\",\n\t\tpsitranscend = \"psitranscend\",\n\t\tsecondskin = \"secondskin\"\
+              ,\n\t\trupturesight = \"rupturesight\",\n    psicomprehend = \"psicomprehend\",\n    psibreakthrough = \"psibreakthrough\"\
+              ,\n\n\t\t--Sentinel\n\t\taffinity = \"affinity\",\n\t\tbarkskin = \"barkskin\",\n\t\tfirstaid = \"firstaid\"\
+              ,\n\t\tstealth = \"stealth\",\n    scouting = \"scouting\",\n    fleetness = \"fleetness\",\n    \n\n\t\t--Serpent\n\
+              \     ghost = \"ghost\",\n     lipreading = \"lipreading\",\n     pacing = \"pacing\",\n     scales = \"scales\"\
+              ,\n     weaving = \"weaving\",\n     secondsight = \"secondsight\",\n     hide = \"hiding\",\n\n\t\t--Shaman\n\
+              \t\tswiftcurse = \"swiftcurse\",\n    \n    --Sylvan\n    spinningstaff = \"spinningstaff\",\n    viridian =\
+              \ \"viridian\",\n    \n    --Unnamable\n    bulk = \"bulk\",\n    mouths = \"mouths\",\n    joints = \"joints\"\
+              ,\n    eyes = \"eyes\",\n    unnamablepresence = \"unnamablepresence\",\n\n\t\t--Shared\n    avoid = \"avoid\
+              \ \" .. (ataxia.settings.avoidType or \"physical\"),\n    grookbubble = \"grookbubble\",\n\t\tconstitution =\
+              \ \"constitution\",\n    consciousness = \"consciousness\",\n\t\tcurseward = \"curseward\",\n\t\tgripping =\
+              \ \"gripping\",\n\t\tlifevision = \"lifevision\",\n\t\tnicatorlegend = \"nicatorlegend\",\n\t\tnightsight =\
+              \ \"nightsight\",\n\t\tresistance = \"resistance\",\n\t\ttoughness = \"toughness\",\n    shroud = \"shroud\"\
+              ,\n\t\tweathering = \"weathering\",\n\t\tvitality = \"vitality\",\n\t\tblocking = \"blocking\",\n\t\tcoldresist\
+              \ = \"coldresist\",\n\t\telectricresist = \"electricresist\",\n\t\tfireresist = \"fireresist\",\n\t\tmagicresist\
+              \ = \"magicresist\",\n\t\thypersight = \"hypersight\",\n\t\talertness = \"alertness\",\n\t\tvigilance = \"vigilance\"\
+              ,\n\t\tskywatch = \"skywatch\",\n\t\ttreewatch = \"treewatch\",\n\t\tgroundwatch = \"groundwatch\",\n    selfishness\
+              \ = \"selfishness\",\n    heldbreath = \"heldbreath\",\n\n\t\t--Tattoos\n\t\tboartattoo = \"boartattoo\",\n\t\
+              \tcloak = \"cloak\",\n\t\tmegalithtattoo = \"megalithtattoo\",\n\t\tmindseye = \"mindseye\",\n\t\tmoontattoo\
+              \ = \"moontattoo\",\n\t\tmosstattoo = \"mosstattoo\",\n\n\t}\nend\n\nfunction find_defence(d)\n\tlocal def =\
+              \ d\n\tbuildDefsTable()\n\n\n\n\tfor defence, actual in pairs(ataxiaTables.defences) do\n\t\tif defence == def\
+              \ or actual == def then\n\t\t\treturn defence\n\t\tend\n\tend\nend\n\nfunction trueDef(def)\n\tlocal def = def:lower()\n\
+              \tbuildDefsTable()\n\n\tif def:find(\"parrying\") then\n\t\treturn \"parrying\"\n\telse\n\t\tfor defence, actual\
+              \ in pairs(ataxiaTables.defences) do\n\t\t\tif defence == def or actual == def then\n\t\t\t\treturn defence\n\
+              \t\t\tend\n\t\tend\n\tend\n  return def\nend"
+            directory: levi_ataxia/levi/ataxia/deffing
+          - name: Curing Stuff
+            script: '-------------------------------------------------
+
+              --         Put your Lua functions here.        --
+
+              --                                             --
+
+              -- Note that you can also use external Scripts --
+
+              -------------------------------------------------
+
+              '
+            children:
+            - name: Can(x)
+              script: '-------------------------------------------------
+
+                --         Put your Lua functions here.        --
+
+                --                                             --
+
+                -- Note that you can also use external Scripts --
+
+                -------------------------------------------------
+
+                '
+              directory: levi_ataxia/levi/ataxia/can(x)
+            - name: Priority-related
+              children:
+              - name: Swaps
+                script: '-------------------------------------------------
+
+                  --         Put your Lua functions here.        --
+
+                  --                                             --
+
+                  -- Note that you can also use external Scripts --
+
+                  -------------------------------------------------
+
+                  '
+                directory: levi_ataxia/levi/ataxia/swaps
+            - name: Fracture Management
+              script: '-------------------------------------------------
+
+                --         Put your Lua functions here.        --
+
+                --                                             --
+
+                -- Note that you can also use external Scripts --
+
+                -------------------------------------------------
+
+                '
+              directory: levi_ataxia/levi/ataxia/fracture_management
+          - name: Class Things
+            script: '-------------------------------------------------
+
+              --         Put your Lua functions here.        --
+
+              --                                             --
+
+              -- Note that you can also use external Scripts --
+
+              -------------------------------------------------
+
+              '
+            directory: levi_ataxia/levi/ataxia/class_things
+          - name: Self Limb Tracking
+            script: "--Initialise the tables.\nselfLimbDamage = selfLimbDamage or {\n\t[\"head\"] = {damage = 0},\n\t[\"torso\"\
+              ] = {damage = 0},\n\t[\"left arm\"] = {damage = 0},\n\t[\"right arm\"] = {damage = 0},\n\t[\"left leg\"] = {damage\
+              \ = 0},\n\t[\"right leg\"] = {damage = 0},\n\t\n\ttimers = {},\n\tlasthit = \"left leg\",\t\n}\n\nfunction resetMissLines()\n\
+              \tataxiaTables.missLines = {}\n\tataxiaTables.missLines = {\n\t\t\"You parry the attack with a deft manoeuvre.\"\
+              , \n\t\t\"The attack rebounds back onto %w+!\", \n\t\t\"The attack rebounds onto %w+!\", \n\t\t\"The attack\
+              \ rebounds off your rebounding aura!\", \n\t\t\"%w+ misses you with \", \n\t\t\"You dodge nimbly out of the\
+              \ way.\", \n\t\t\"One of your reflections has been destroyed! You have %d+ left.\", \n\t\t\"You twist your body\
+              \ out of harm's way.\", \n\t\t\"You quickly jump back, avoiding the attack.\", \n\t\t\"You frantically attempt\
+              \ to parry the attack of %w+, but succeed only in redirecting it.\", \n\t\t\"You move inside %w+'s guard, deflecting\
+              \ %w+ attack to one side with your forearm before countering with a swift blow to %w+ temple.\",\n\t}\nend\n\
+              \nfunction resetBladeMasterDamage()\n\tataxiaTemp.blademasterDamage = {}\n\tlocal health = ataxia.vitals.maxhp\n\
+              \tlocal breakp = 0\n\tif health < 3600 then breakp = 7\n\telseif health < 4300 then breakp = 8\n\telseif health\
+              \ < 4900 then breakp = 9\n\telseif health < 5500 then breakp = 10\n\telseif health < 6200 then breakp = 11\n\
+              \telseif health < 6900 then breakp = 12\n\telseif health < 7600 then breakp = 13\n\telseif health < 8300 then\
+              \ breakp = 14\n\telse breakp = 15 end\n\t\n\tataxiaTemp.blademasterDamage.slash = (210/breakp)\n\tataxiaTemp.blademasterDamage.off\
+              \ = (150/breakp)\n\tataxiaTemp.blademasterDamage.compass = (200/breakp)\nend\n\nfunction resetKnightDamage()\n\
+              \tataxiaTemp.knightDamage = {}\n\tlocal health = ataxia.vitals.maxhp\n\t--snb calculation first\n\tlocal brk\
+              \ = 7\n\tif health > 3800 then\n\t\thealth = health - 3800\n\t\twhile health > 0 do\n\t\t\thealth = health -\
+              \ 450\n\t\t\tbrk = brk + 1\n\t\tend\n\tend\n\tataxiaTemp.knightDamage.snb = (100/brk)\n  local dwc = ((ataxia.vitals.maxhp-3800)/500)+9\n\
+              \  ataxiaTemp.knightDamage.dwc = (100/dwc)\nend"
+            directory: levi_ataxia/levi/ataxia/self_limb_tracking
+          - name: Lua Matrix package
+            directory: levi_ataxia/levi/ataxia/lua_matrix_package
+        - name: SYSTEM DOCUMENTATION
+          directory: levi_ataxia/levi/ataxia/system_documentation
+        - name: Gui Stuff
+          script: "function Geyser.MiniConsole:clear()\n\tclearWindow(self.name)\nend\n\nfunction Geyser.MiniConsole:append()\n\
+            \tappendBuffer(self.name)\nend"
+          directory: levi_ataxia/levi/ataxia/gui_stuff
+        - name: Affliction Tracking Core
+          directory: levi_ataxia/levi/ataxia/affliction_tracking_core
+        - name: Ataxia NDB
+          script: '-------------------------------------------------
+
+            --         Put your Lua functions here.        --
+
+            --                                             --
+
+            -- Note that you can also use external Scripts --
+
+            -------------------------------------------------
+
+            '
+          directory: levi_ataxia/levi/ataxia/ataxia_ndb
+        - name: Legend Deck
+          directory: levi_ataxia/levi/ataxia/legend_deck
         - name: Combat
           script: "function calculateDictate(mana)\n\tlocal dicAff = {\"shadowmadness\", \"parasite\", \"retribution\", \"\
             depression\"}\n\tlocal c = 0\n\tlocal dictPos = 40\n\tfor _,aff in pairs(dicAff) do\n\t\tif haveAff(aff) then\n\
@@ -161,25 +340,6 @@ groups:
             , \"shield\", \"hierophant\", \"worms\"}\n\tlocal c = 0\n\tfor i,v in pairs(tAffs) do\n\t\tif not table.contains(ignore,\
             \ i) then\n\t\t\tif v == true then\n\t\t\t\tc = c + 1\n\t\t\tend\n\t\tend\n\tend\n\treturn c\nend"
           children:
-          - name: Curing
-            script: "curingTable = {\n\tgoldenseal = {\"depression\", \"sandfever\", \"stupidity\", \"epilepsy\", \"dizziness\"\
-              , \"dissonance\", \"shyness\", \"impatience\", \"unweavingmind\", \"fulminated\"},\n\tlobelia = {\"recklessness\"\
-              , \"vertigo\", \"spiritburn\", \"tenderskin\", \"loneliness\", \"claustrophobia\", \"masochism\", \"agoraphobia\"\
-              },\n\tbellwort = {\"timeloop\", \"justice\", \"lovers\", \"peace\", \"pacified\", \"generosity\", \"indifference\"\
-              ,\"diminished\"},\n\tkelp = {\"hypochondria\", \"parasite\", \"weariness\",  \"asthma\", \"healthleech\", \"\
-              clumsiness\", \"sensitivity\"},\n\tash = {\"confusion\", \"hypersomnia\", \"hallucinations\", \"paranoia\",\
-              \ \"dementia\",\"crescendo\",},\n\tginseng = {\"flushings\", \"lethargy\", \"haemophilia\", \"addiction\", \"\
-              nausea\", \"scytherus\", \"darkshade\", \"unweavingbody\"},\n}\n\nfunction haveSmokeAff()\n\tlocal smoke = false\n\
-              \tlocal sAffs = {\"deadening\", \"tension\",\n\t\t\"disloyalty\", \"hellsight\", \"manaleech\", \"slickness\"\
-              , \"unweavingspirit\",\"earworm\",}\n    \n\tfor i=1, #sAffs do\n\t\tif haveAff(sAffs[i]) then\n\t\t\tsmoke\
-              \ = true\n\t\t\tbreak\n\t\tend\n\tend\n\t\n\treturn smoke\nend\n\nfunction hasSalveAff()\n  local salve = false\n\
-              \  local sAffs = {\"frozen\", \"shivering\", \"anorexia\", \"burns\", \"ablaze\", \"selarnia\",\n    \"damagedleftleg\"\
-              , \"damagedrightleg\", \"mangledleftleg\", \"mangledrightleg\",\n    \"damagedleftarm\", \"damagedrightarm\"\
-              , \"mangledleftarm\", \"mangledrightarm\",\n    \"brokenleftarm\", \"brokenrightarm\", \"brokenleftleg\", \"\
-              brokenrightleg\", \"hypothermia\"}\n    \n  for i=1, #sAffs do\n    if haveAff(sAffs[i]) then\n      salve =\
-              \ true\n      break\n    end\n  end\n  \n  return salve\nend\n\nfunction restorePassiveCure()\n  cecho(\"\\\
-              n<green>+ \"..passiveFailsafe..\" +\")\n  tAffs[passiveFailsafe] = true\n  passiveFailsafe = nil\nend\n\n"
-            directory: levi_ataxia/levi/ataxia/curing
           - name: Offensive Things
             script: "function getLockingAffliction(type)\n\tlocal lockaff = {\n\t\tAlchemist = {\"stupidity\", \"stupid\"\
               },\n\t\tApostate = {\"voyria\", \"plague\"},\n    Pariah = {\"voyria\", \"plague\"},\n\t\tBard = {\"voyria\"\
@@ -258,221 +418,29 @@ groups:
                 \n\t\tend\n\t\t\n\t\tif limbs[i] ~= limbs[#limbs] then\n\t\t\tstr = str..colour..tLimbs[limbs[i]]..\"<NavajoWhite>|\"\
                 \n\t\telse\n\t\t\tstr = str..colour..tLimbs[limbs[i]]..\"<a_brown>] \"\n\t\tend\n\tend\n\n\treturn str\nend"
               directory: levi_ataxia/levi/ataxia/limb_management
-        - name: Login
-          directory: levi_ataxia/levi/ataxia/login
-        - name: Gui Stuff
-          script: "function Geyser.MiniConsole:clear()\n\tclearWindow(self.name)\nend\n\nfunction Geyser.MiniConsole:append()\n\
-            \tappendBuffer(self.name)\nend"
-          directory: levi_ataxia/levi/ataxia/gui_stuff
-        - name: System-related
-          children:
-          - name: Self Limb Tracking
-            script: "--Initialise the tables.\nselfLimbDamage = selfLimbDamage or {\n\t[\"head\"] = {damage = 0},\n\t[\"torso\"\
-              ] = {damage = 0},\n\t[\"left arm\"] = {damage = 0},\n\t[\"right arm\"] = {damage = 0},\n\t[\"left leg\"] = {damage\
-              \ = 0},\n\t[\"right leg\"] = {damage = 0},\n\t\n\ttimers = {},\n\tlasthit = \"left leg\",\t\n}\n\nfunction resetMissLines()\n\
-              \tataxiaTables.missLines = {}\n\tataxiaTables.missLines = {\n\t\t\"You parry the attack with a deft manoeuvre.\"\
-              , \n\t\t\"The attack rebounds back onto %w+!\", \n\t\t\"The attack rebounds onto %w+!\", \n\t\t\"The attack\
-              \ rebounds off your rebounding aura!\", \n\t\t\"%w+ misses you with \", \n\t\t\"You dodge nimbly out of the\
-              \ way.\", \n\t\t\"One of your reflections has been destroyed! You have %d+ left.\", \n\t\t\"You twist your body\
-              \ out of harm's way.\", \n\t\t\"You quickly jump back, avoiding the attack.\", \n\t\t\"You frantically attempt\
-              \ to parry the attack of %w+, but succeed only in redirecting it.\", \n\t\t\"You move inside %w+'s guard, deflecting\
-              \ %w+ attack to one side with your forearm before countering with a swift blow to %w+ temple.\",\n\t}\nend\n\
-              \nfunction resetBladeMasterDamage()\n\tataxiaTemp.blademasterDamage = {}\n\tlocal health = ataxia.vitals.maxhp\n\
-              \tlocal breakp = 0\n\tif health < 3600 then breakp = 7\n\telseif health < 4300 then breakp = 8\n\telseif health\
-              \ < 4900 then breakp = 9\n\telseif health < 5500 then breakp = 10\n\telseif health < 6200 then breakp = 11\n\
-              \telseif health < 6900 then breakp = 12\n\telseif health < 7600 then breakp = 13\n\telseif health < 8300 then\
-              \ breakp = 14\n\telse breakp = 15 end\n\t\n\tataxiaTemp.blademasterDamage.slash = (210/breakp)\n\tataxiaTemp.blademasterDamage.off\
-              \ = (150/breakp)\n\tataxiaTemp.blademasterDamage.compass = (200/breakp)\nend\n\nfunction resetKnightDamage()\n\
-              \tataxiaTemp.knightDamage = {}\n\tlocal health = ataxia.vitals.maxhp\n\t--snb calculation first\n\tlocal brk\
-              \ = 7\n\tif health > 3800 then\n\t\thealth = health - 3800\n\t\twhile health > 0 do\n\t\t\thealth = health -\
-              \ 450\n\t\t\tbrk = brk + 1\n\t\tend\n\tend\n\tataxiaTemp.knightDamage.snb = (100/brk)\n  local dwc = ((ataxia.vitals.maxhp-3800)/500)+9\n\
-              \  ataxiaTemp.knightDamage.dwc = (100/dwc)\nend"
-            directory: levi_ataxia/levi/ataxia/self_limb_tracking
-          - name: Lua Matrix package
-            directory: levi_ataxia/levi/ataxia/lua_matrix_package
-          - name: Class Things
-            script: '-------------------------------------------------
-
-              --         Put your Lua functions here.        --
-
-              --                                             --
-
-              -- Note that you can also use external Scripts --
-
-              -------------------------------------------------
-
-              '
-            directory: levi_ataxia/levi/ataxia/class_things
-          - name: Curing Stuff
-            script: '-------------------------------------------------
-
-              --         Put your Lua functions here.        --
-
-              --                                             --
-
-              -- Note that you can also use external Scripts --
-
-              -------------------------------------------------
-
-              '
-            children:
-            - name: Fracture Management
-              script: '-------------------------------------------------
-
-                --         Put your Lua functions here.        --
-
-                --                                             --
-
-                -- Note that you can also use external Scripts --
-
-                -------------------------------------------------
-
-                '
-              directory: levi_ataxia/levi/ataxia/fracture_management
-            - name: Can(x)
-              script: '-------------------------------------------------
-
-                --         Put your Lua functions here.        --
-
-                --                                             --
-
-                -- Note that you can also use external Scripts --
-
-                -------------------------------------------------
-
-                '
-              directory: levi_ataxia/levi/ataxia/can(x)
-            - name: Priority-related
-              children:
-              - name: Swaps
-                script: '-------------------------------------------------
-
-                  --         Put your Lua functions here.        --
-
-                  --                                             --
-
-                  -- Note that you can also use external Scripts --
-
-                  -------------------------------------------------
-
-                  '
-                directory: levi_ataxia/levi/ataxia/swaps
-          - name: Deffing
-            script: "function buildDefsTable()\n\tataxiaTables.defences = {}\n\n\tataxiaTables.defences = {\n\t\t--Curatives\n\
-              \t\tairpocket = \"airpocket\",\n\t\tblindness = \"blindness\",\n\t\tcaloric = \"insulation\",\n\t\tdeafness\
-              \ = \"deafness\",\n\t\tdeathsight = \"deathsight\",\n\t\tfangbarrier = \"fangbarrier\",\n\t\tfrost = \"temperance\"\
-              ,\n\t\tinsomnia = \"insomnia\",\n\t\tkola = \"kola\",\n\t\tlevitation = \"levitating\",\n\t\tmass = \"density\"\
-              ,\n\t\tparrying = \"parrying\",\n\t\trebounding = \"rebounding\",\n\t\tspeed = \"speed\",\n\t\tshield = \"shield\"\
-              ,\n\t\tthirdeye = \"thirdeye\",\n\t\tvenom = \"poisonresist\",\n\n\t\t--Alchemist\n\t\tastronomy = \"astronomy\"\
-              ,\n    compoundmask = \"compoundmask\",\n\t\tmercury = \"mercury\",\n\t\tsulphur = \"sulphur\",\n\t\ttin = \"\
-              tin\",\n\n\t\t--Blademaster\n\t\tconsciousness = \"consciousness\",\n\t\tshinclarity = \"shinclarity\",\n\t\t\
-              shinbinding = \"shinbinding\",\n\t\tshintrance = \"shintrance\",\n\t\tretaliation = \"retaliation\",\n    mindnet\
-              \ = \"mindnet\",\n    weathering = \"weathering\",\n\n\n\t\t--Apostate\n\t\tdemonarmour = \"demonarmour\",\n\
-              \t\ttruestare = \"truestare\",\n\t\t\n\t\t--Bard\n\t\taria = \"aria\",\n\t\tlay = \"lay\",\n\t\tsongbird = \"\
-              songbird\",\n\t\ttune = \"blade tune\",\n\t\theartsfury = \"heartsfury\",\n    acrobatics = \"acrobatics on\"\
-              ,\n    harrying = \"dance harrying\",\n\n\t\t--Depthswalker\n\t\tblur = \"blur\",\n\t\tbodyaugment = \"bodyaugment\"\
-              ,\n\t\tdisperse = \"disperse\",\n\t\tdurability = \"durability\",\n\t\tprecision = \"precision\",\n\t\tshadowveil\
-              \ = \"shadowveil\",\n    antiforce = \"antiforce\",\n\t\t\n\t\t--Dragon/Elemental Lord\n\t\tcohesion = \"cohesion\"\
-              ,\n\t\tdragonbreath = \"dragonbreath\",\n\t\tdragonarmour = \"dragonarmour\",\n\t\ttempest = \"tempest\",\n\t\
-              \tsusurrating = \"susurrating\",\n    fireshroud = \"fireshroud\",\n    extrusion = \"extrusion\",\n    strata\
-              \ = \"strata\",\n\t\t\n\t\t--Jester\n\t\tslippery = \"slippery\",\n\t\tbalancing = \"balancing\",\n\t\tacrobatics\
-              \ = \"acrobatics\",\n    \n    -- Knight\n    deflect = \"deflect\",\n    blademastery = \"blademastery\",\n\
-              \t\t\n    --Magi\n\t\tchargeshield = \"chargeshield\",\n\t\tdiamondskin = \"diamondskin\",\n\t\tstoneskin =\
-              \ \"stoneskin\",\n    simultaneity = \"simultaneity\",\n\n\t\t--Monk\n\t\tboostedregeneration = \"boosting\"\
-              ,\n\t\tkaitrance = \"kaitrance\",\n\t\thyperfocus = \"hyperfocus\",\n\t\tregeneration = \"regeneration\",\n\t\
-              \tshikudoform = \"shikudoform\",\n\t\tsplitmind = \"splitmind\",\n\t\tmindnet = \"mindnet\",\n    bodyblock\
-              \ = \"bodyblock\",\n    evadeblock = \"evadeblock\",\n    pinchblock = \"pinchblock\",\n    hypersense = \"\
-              hypersense\",\n    kaiboost = \"kaiboost\",\n    mindcloak = \"mindcloak\", \n    \n    --pariah\n    shieldlogograph\
-              \ = \"shieldlogograph\",\n    accursedresolve = \"accursedresolve\",\n    leechlogograph = \"leechlogograph\"\
-              ,       \n\n\t\t--Necromancy\n\t\tdeathaura = \"deathaura\",\n\t\tlifevision = \"lifevision\",\n\t\tsoulcage\
-              \ = \"soulcage\",\n\t\tvengeance = \"vengeance\",\n\n\t\t--Occultist\n\t\tarctar = \"arctar\",\n\t\tdevilmark\
-              \ = \"devilmark\",\n\t\tdistortedaura = \"distortedaura\",\n\t\ttentacles = \"tentacles\",\n\n\t\t--Priest\n\
-              \t\twillpowerblessing = \"willpowerblessing\",\n\t\tenduranceblessing = \"enduranceblessing\",\n\t\tthermalshield\
-              \ = \"thermalshield\",\n\t\tfrostshield = \"frostshield\",\n\t\tearthshield = \"earthshield\",\n\n\t\t--Psion\n\
-              \t\tguidedstrike = \"guidedstrike\",\n\t\tpsitranscend = \"psitranscend\",\n\t\tsecondskin = \"secondskin\"\
-              ,\n\t\trupturesight = \"rupturesight\",\n    psicomprehend = \"psicomprehend\",\n    psibreakthrough = \"psibreakthrough\"\
-              ,\n\n\t\t--Sentinel\n\t\taffinity = \"affinity\",\n\t\tbarkskin = \"barkskin\",\n\t\tfirstaid = \"firstaid\"\
-              ,\n\t\tstealth = \"stealth\",\n    scouting = \"scouting\",\n    fleetness = \"fleetness\",\n    \n\n\t\t--Serpent\n\
-              \     ghost = \"ghost\",\n     lipreading = \"lipreading\",\n     pacing = \"pacing\",\n     scales = \"scales\"\
-              ,\n     weaving = \"weaving\",\n     secondsight = \"secondsight\",\n     hide = \"hiding\",\n\n\t\t--Shaman\n\
-              \t\tswiftcurse = \"swiftcurse\",\n    \n    --Sylvan\n    spinningstaff = \"spinningstaff\",\n    viridian =\
-              \ \"viridian\",\n    \n    --Unnamable\n    bulk = \"bulk\",\n    mouths = \"mouths\",\n    joints = \"joints\"\
-              ,\n    eyes = \"eyes\",\n    unnamablepresence = \"unnamablepresence\",\n\n\t\t--Shared\n    avoid = \"avoid\
-              \ \" .. (ataxia.settings.avoidType or \"physical\"),\n    grookbubble = \"grookbubble\",\n\t\tconstitution =\
-              \ \"constitution\",\n    consciousness = \"consciousness\",\n\t\tcurseward = \"curseward\",\n\t\tgripping =\
-              \ \"gripping\",\n\t\tlifevision = \"lifevision\",\n\t\tnicatorlegend = \"nicatorlegend\",\n\t\tnightsight =\
-              \ \"nightsight\",\n\t\tresistance = \"resistance\",\n\t\ttoughness = \"toughness\",\n    shroud = \"shroud\"\
-              ,\n\t\tweathering = \"weathering\",\n\t\tvitality = \"vitality\",\n\t\tblocking = \"blocking\",\n\t\tcoldresist\
-              \ = \"coldresist\",\n\t\telectricresist = \"electricresist\",\n\t\tfireresist = \"fireresist\",\n\t\tmagicresist\
-              \ = \"magicresist\",\n\t\thypersight = \"hypersight\",\n\t\talertness = \"alertness\",\n\t\tvigilance = \"vigilance\"\
-              ,\n\t\tskywatch = \"skywatch\",\n\t\ttreewatch = \"treewatch\",\n\t\tgroundwatch = \"groundwatch\",\n    selfishness\
-              \ = \"selfishness\",\n    heldbreath = \"heldbreath\",\n\n\t\t--Tattoos\n\t\tboartattoo = \"boartattoo\",\n\t\
-              \tcloak = \"cloak\",\n\t\tmegalithtattoo = \"megalithtattoo\",\n\t\tmindseye = \"mindseye\",\n\t\tmoontattoo\
-              \ = \"moontattoo\",\n\t\tmosstattoo = \"mosstattoo\",\n\n\t}\nend\n\nfunction find_defence(d)\n\tlocal def =\
-              \ d\n\tbuildDefsTable()\n\n\n\n\tfor defence, actual in pairs(ataxiaTables.defences) do\n\t\tif defence == def\
-              \ or actual == def then\n\t\t\treturn defence\n\t\tend\n\tend\nend\n\nfunction trueDef(def)\n\tlocal def = def:lower()\n\
-              \tbuildDefsTable()\n\n\tif def:find(\"parrying\") then\n\t\treturn \"parrying\"\n\telse\n\t\tfor defence, actual\
-              \ in pairs(ataxiaTables.defences) do\n\t\t\tif defence == def or actual == def then\n\t\t\t\treturn defence\n\
-              \t\t\tend\n\t\tend\n\tend\n  return def\nend"
-            directory: levi_ataxia/levi/ataxia/deffing
-        - name: Ataxia NDB
-          script: '-------------------------------------------------
-
-            --         Put your Lua functions here.        --
-
-            --                                             --
-
-            -- Note that you can also use external Scripts --
-
-            -------------------------------------------------
-
-            '
-          directory: levi_ataxia/levi/ataxia/ataxia_ndb
-        - name: Misc Scripts
-          directory: levi_ataxia/levi/ataxia/misc_scripts
+          - name: Curing
+            script: "curingTable = {\n\tgoldenseal = {\"depression\", \"sandfever\", \"stupidity\", \"epilepsy\", \"dizziness\"\
+              , \"dissonance\", \"shyness\", \"impatience\", \"unweavingmind\", \"fulminated\"},\n\tlobelia = {\"recklessness\"\
+              , \"vertigo\", \"spiritburn\", \"tenderskin\", \"loneliness\", \"claustrophobia\", \"masochism\", \"agoraphobia\"\
+              },\n\tbellwort = {\"timeloop\", \"justice\", \"lovers\", \"peace\", \"pacified\", \"generosity\", \"indifference\"\
+              ,\"diminished\"},\n\tkelp = {\"hypochondria\", \"parasite\", \"weariness\",  \"asthma\", \"healthleech\", \"\
+              clumsiness\", \"sensitivity\"},\n\tash = {\"confusion\", \"hypersomnia\", \"hallucinations\", \"paranoia\",\
+              \ \"dementia\",\"crescendo\",},\n\tginseng = {\"flushings\", \"lethargy\", \"haemophilia\", \"addiction\", \"\
+              nausea\", \"scytherus\", \"darkshade\", \"unweavingbody\"},\n}\n\nfunction haveSmokeAff()\n\tlocal smoke = false\n\
+              \tlocal sAffs = {\"deadening\", \"tension\",\n\t\t\"disloyalty\", \"hellsight\", \"manaleech\", \"slickness\"\
+              , \"unweavingspirit\",\"earworm\",}\n    \n\tfor i=1, #sAffs do\n\t\tif haveAff(sAffs[i]) then\n\t\t\tsmoke\
+              \ = true\n\t\t\tbreak\n\t\tend\n\tend\n\t\n\treturn smoke\nend\n\nfunction hasSalveAff()\n  local salve = false\n\
+              \  local sAffs = {\"frozen\", \"shivering\", \"anorexia\", \"burns\", \"ablaze\", \"selarnia\",\n    \"damagedleftleg\"\
+              , \"damagedrightleg\", \"mangledleftleg\", \"mangledrightleg\",\n    \"damagedleftarm\", \"damagedrightarm\"\
+              , \"mangledleftarm\", \"mangledrightarm\",\n    \"brokenleftarm\", \"brokenrightarm\", \"brokenleftleg\", \"\
+              brokenrightleg\", \"hypothermia\"}\n    \n  for i=1, #sAffs do\n    if haveAff(sAffs[i]) then\n      salve =\
+              \ true\n      break\n    end\n  end\n  \n  return salve\nend\n\nfunction restorePassiveCure()\n  cecho(\"\\\
+              n<green>+ \"..passiveFailsafe..\" +\")\n  tAffs[passiveFailsafe] = true\n  passiveFailsafe = nil\nend\n\n"
+            directory: levi_ataxia/levi/ataxia/curing
       - name: Basher
         packageName: Basher Old
         directory: levi_ataxia/levi/ataxia/basher
         children:
-        - name: zData
-          packageName: zData
-          children:
-          - name: zData
-            script: "-------------------------------------------------\n--                                             --\n\
-              --       Zulah's Hunting Database: zData       --\n--            Last Update: 3/17/22             --\n--   \
-              \                                          --\n-------------------------------------------------\n--       \
-              \                                      --\n--                    Setup                    --\n--           \
-              \                                  --\n-------------------------------------------------\nzData = zData or {}\n\
-              \nzData.bardName = \"Leviticus\"\nzData.bardVoice = \" with a grave voice\"\n\nfunction zData.echo(text)\n\t\
-              hecho(rainbow(\"\\n\"..zData.bardName..\", appears strumming his lute to a tune of your greatness.\\nEager to\
-              \ record your recent hunt in lavish detail and song, \"..zData.bardName..\" frantically works his quill.\"))\n\
-              \  cecho(\"\\n\\n<gold>\"..zData.bardName..\"<cyan> says to you\"..zData.bardVoice..\", \\\"Quite the slaughter\
-              \ you had at \"..text..\"\\\"\\n\\n\")\nend\n\nzData.deleteAble = false\n\ncreateStopWatch(\"zoneHuntWatch\"\
-              )\nstopStopWatch(\"zoneHuntWatch\")\nresetStopWatch(\"zoneHuntWatch\")\n\nzData.db = zData.db or {}\n\nzData.defs\
-              \ = zData.defs or {}\n\nzData.char = zData.char or {}\nzData.char = {\n  lastArea = \"NA\", \n  \n  tempTime\
-              \ = 0,\n  minuteTime = 0,\n  xpGains = 0,\n  xpGainsMin = 0,\n  killsPerMinute = 0, \n  \n  totalAttacks = 0,\n\
-              \  crithits = 0,\n  crit1 = 0,\n  crit2 = 0,\n  crit3 = 0,\n  crit4 = 0,\n  crit5 = 0,\n  crit6 = 0,\n  searedglyph\
-              \ = 0,\n  shield = 0,\n  paragon = 0,\n  mayafigure = 0,\n  \n  ogold = 0,         -- old gold\n  gold = 0,\n\
-              \  gpm = 0,          -- gold per minute\n  \n \txp = 0,\n  oxp = 0,       --old xp\n  \n  str = 0,\n  dex =\
-              \ 0,\n  int = 0,\n  con = 0,\n  \n  killsCount = 0,\n  killList = {},\n  \n  taliCount = 0,\n  taliList = {},\n\
-              \  \n  when = 0,\n}\n\nzData.classList =  {                                                       -- List of\
-              \ classes for searching the database by class\n  [\"alchemist\"] = {[\"int\"] = zData.char.int,},\n  [\"apostate\"\
-              ] = {[\"int\"] = zData.char.int,},\n  [\"bard\"] = {[\"str\"] = zData.char.str,},\n  [\"blademaster\"] = {[\"\
-              str\"] = zData.char.str,},\n  [\"depthswalker\"] = {[\"str\"] = zData.char.str,},\n  [\"druid\"] = {[\"str\"\
-              ] = zData.char.str,},\n  [\"infernal\"] = {[\"str\"] = zData.char.str,},\n  [\"jester\"] = {[\"str\"] = zData.char.str,},\n\
-              \  [\"magi\"] = {[\"int\"] = zData.char.int,},\n  [\"monk\"] = {[\"str\"] = zData.char.str,[\"int\"] = zData.char.int,},\n\
-              \  [\"occultist\"] = {[\"int\"] = zData.char.int,},\n  [\"paladin\"] = {[\"str\"] = zData.char.str,},\n  [\"\
-              pariah\"] = {[\"int\"] = zData.char.int,},\n  [\"priest\"] = {[\"int\"] = zData.char.int,},\n  [\"psion\"] =\
-              \ {[\"str\"] = zData.char.str,[\"int\"] = zData.char.int,},\n  [\"runewarden\"] = {[\"str\"] = zData.char.str,},\n\
-              \  [\"sentinel\"] = {[\"str\"] = zData.char.str,},\n  [\"serpent\"] = {[\"dex\"] = zData.char.dex,},\n  [\"\
-              shaman\"] = {[\"int\"] = zData.char.int,},\n  [\"sylvan\"] = {[\"int\"] = zData.char.int,},\n  \n  [\"unnamable\"\
-              ] = {[\"str\"] = zData.char.str,},\n  \n  [\"red dragon\"] = {[\"str\"] = zData.char.str,[\"int\"] = zData.char.int,},\n\
-              \  [\"blue dragon\"] = {[\"str\"] = zData.char.str,[\"int\"] = zData.char.int,},\n  [\"gold dragon\"] = {[\"\
-              str\"] = zData.char.str,[\"int\"] = zData.char.int,},\n  [\"silver dragon\"] = {[\"str\"] = zData.char.str,[\"\
-              int\"] = zData.char.int,},\n  [\"green dragon\"] = {[\"str\"] = zData.char.str,[\"int\"] = zData.char.int,},\n\
-              \  [\"black dragon\"] = {[\"str\"] = zData.char.str,[\"int\"] = zData.char.int,},\n  [\"dragon\"] = \"na\",\n\
-              \  [\"elemental\"] = \"na\",                                                         \n}"
-            directory: levi_ataxia/levi/ataxia/zdata
         - name: Bashing
           script: "ataxiaBasher = ataxiaBasher or {}\nataxiaBasher.functions = ataxiaBasher.functions or {}\n\nfunction get_Battlerage()\n\
             \tataxiaBasher.battlerage = {\n\t\tAlchemist = {\n\t\t\tsmall = \"throw miasma at \"..target, large = \"educe\
@@ -576,175 +544,49 @@ groups:
               \ pound, ounce)\n\tlocal message = what:title()\n\tmessage = message..\" - \"..(pound and pound..\"lb \" or\
               \ \"\")..(ounce and ounce..\"oz\" or \"\")\n\tbashConsoleEchom(\"$$$$\", message, \"gold\", \"sienna\")\nend"
             directory: levi_ataxia/levi/ataxia/genrunning
+        - name: zData
+          packageName: zData
+          children:
+          - name: zData
+            script: "-------------------------------------------------\n--                                             --\n\
+              --       Zulah's Hunting Database: zData       --\n--            Last Update: 3/17/22             --\n--   \
+              \                                          --\n-------------------------------------------------\n--       \
+              \                                      --\n--                    Setup                    --\n--           \
+              \                                  --\n-------------------------------------------------\nzData = zData or {}\n\
+              \nzData.bardName = \"Leviticus\"\nzData.bardVoice = \" with a grave voice\"\n\nfunction zData.echo(text)\n\t\
+              hecho(rainbow(\"\\n\"..zData.bardName..\", appears strumming his lute to a tune of your greatness.\\nEager to\
+              \ record your recent hunt in lavish detail and song, \"..zData.bardName..\" frantically works his quill.\"))\n\
+              \  cecho(\"\\n\\n<gold>\"..zData.bardName..\"<cyan> says to you\"..zData.bardVoice..\", \\\"Quite the slaughter\
+              \ you had at \"..text..\"\\\"\\n\\n\")\nend\n\nzData.deleteAble = false\n\ncreateStopWatch(\"zoneHuntWatch\"\
+              )\nstopStopWatch(\"zoneHuntWatch\")\nresetStopWatch(\"zoneHuntWatch\")\n\nzData.db = zData.db or {}\n\nzData.defs\
+              \ = zData.defs or {}\n\nzData.char = zData.char or {}\nzData.char = {\n  lastArea = \"NA\", \n  \n  tempTime\
+              \ = 0,\n  minuteTime = 0,\n  xpGains = 0,\n  xpGainsMin = 0,\n  killsPerMinute = 0, \n  \n  totalAttacks = 0,\n\
+              \  crithits = 0,\n  crit1 = 0,\n  crit2 = 0,\n  crit3 = 0,\n  crit4 = 0,\n  crit5 = 0,\n  crit6 = 0,\n  searedglyph\
+              \ = 0,\n  shield = 0,\n  paragon = 0,\n  mayafigure = 0,\n  \n  ogold = 0,         -- old gold\n  gold = 0,\n\
+              \  gpm = 0,          -- gold per minute\n  \n \txp = 0,\n  oxp = 0,       --old xp\n  \n  str = 0,\n  dex =\
+              \ 0,\n  int = 0,\n  con = 0,\n  \n  killsCount = 0,\n  killList = {},\n  \n  taliCount = 0,\n  taliList = {},\n\
+              \  \n  when = 0,\n}\n\nzData.classList =  {                                                       -- List of\
+              \ classes for searching the database by class\n  [\"alchemist\"] = {[\"int\"] = zData.char.int,},\n  [\"apostate\"\
+              ] = {[\"int\"] = zData.char.int,},\n  [\"bard\"] = {[\"str\"] = zData.char.str,},\n  [\"blademaster\"] = {[\"\
+              str\"] = zData.char.str,},\n  [\"depthswalker\"] = {[\"str\"] = zData.char.str,},\n  [\"druid\"] = {[\"str\"\
+              ] = zData.char.str,},\n  [\"infernal\"] = {[\"str\"] = zData.char.str,},\n  [\"jester\"] = {[\"str\"] = zData.char.str,},\n\
+              \  [\"magi\"] = {[\"int\"] = zData.char.int,},\n  [\"monk\"] = {[\"str\"] = zData.char.str,[\"int\"] = zData.char.int,},\n\
+              \  [\"occultist\"] = {[\"int\"] = zData.char.int,},\n  [\"paladin\"] = {[\"str\"] = zData.char.str,},\n  [\"\
+              pariah\"] = {[\"int\"] = zData.char.int,},\n  [\"priest\"] = {[\"int\"] = zData.char.int,},\n  [\"psion\"] =\
+              \ {[\"str\"] = zData.char.str,[\"int\"] = zData.char.int,},\n  [\"runewarden\"] = {[\"str\"] = zData.char.str,},\n\
+              \  [\"sentinel\"] = {[\"str\"] = zData.char.str,},\n  [\"serpent\"] = {[\"dex\"] = zData.char.dex,},\n  [\"\
+              shaman\"] = {[\"int\"] = zData.char.int,},\n  [\"sylvan\"] = {[\"int\"] = zData.char.int,},\n  \n  [\"unnamable\"\
+              ] = {[\"str\"] = zData.char.str,},\n  \n  [\"red dragon\"] = {[\"str\"] = zData.char.str,[\"int\"] = zData.char.int,},\n\
+              \  [\"blue dragon\"] = {[\"str\"] = zData.char.str,[\"int\"] = zData.char.int,},\n  [\"gold dragon\"] = {[\"\
+              str\"] = zData.char.str,[\"int\"] = zData.char.int,},\n  [\"silver dragon\"] = {[\"str\"] = zData.char.str,[\"\
+              int\"] = zData.char.int,},\n  [\"green dragon\"] = {[\"str\"] = zData.char.str,[\"int\"] = zData.char.int,},\n\
+              \  [\"black dragon\"] = {[\"str\"] = zData.char.str,[\"int\"] = zData.char.int,},\n  [\"dragon\"] = \"na\",\n\
+              \  [\"elemental\"] = \"na\",                                                         \n}"
+            directory: levi_ataxia/levi/ataxia/zdata
     - name: Levi  Scripts
       packageName: DominiusAtax
       directory: levi_ataxia/levi/levi_scripts
       children:
-      - name: slc
-        directory: levi_ataxia/levi/levi_scripts/slc
-      - name: Leviticus
-        directory: levi_ataxia/levi/levi_scripts/leviticus
-        children:
-        - name: Global Script
-          directory: levi_ataxia/levi/levi_scripts/global_script
-        - name: BARD
-          directory: levi_ataxia/levi/levi_scripts/bard
-        - name: Shikudo Script - Levi
-          packageName: Shikudo Script
-          children:
-          - name: Shikudo
-            script: '-------------------------------------------------
-
-              --         Put your Lua functions here.        --
-
-              --                                             --
-
-              -- Note that you can also use external Scripts --
-
-              -------------------------------------------------
-
-              '
-            directory: levi_ataxia/levi/levi_scripts/shikudo
-        - name: Psion
-          script: '-------------------------------------------------
-
-            --         Put your Lua functions here.        --
-
-            --                                             --
-
-            -- Note that you can also use external scripts --
-
-            -------------------------------------------------
-
-            '
-          directory: levi_ataxia/levi/levi_scripts/psion
-        - name: Serpent
-          directory: levi_ataxia/levi/levi_scripts/serpent
-        - name: Blademaster
-          directory: levi_ataxia/levi/levi_scripts/blademaster
-        - name: SHAMAN
-          directory: levi_ataxia/levi/levi_scripts/shaman
-        - name: limb.1.2
-          packageName: limb.1.2
-          children:
-          - name: Limb
-            directory: levi_ataxia/levi/levi_scripts/limb
-        - name: Pariah
-          directory: levi_ataxia/levi/levi_scripts/pariah
-        - name: EARTH LORD
-          directory: levi_ataxia/levi/levi_scripts/earth_lord
-        - name: Bard
-          directory: levi_ataxia/levi/levi_scripts/bard
-        - name: Windows
-          directory: levi_ataxia/levi/levi_scripts/windows
-        - name: INFERNAL
-          children:
-          - name: DWC
-            directory: levi_ataxia/levi/levi_scripts/dwc
-          - name: I SNB
-            directory: levi_ataxia/levi/levi_scripts/i_snb
-          - name: DWB
-            directory: levi_ataxia/levi/levi_scripts/dwb
-          - name: Infernal 2H
-            children:
-            - name: TWO HANDED
-              directory: levi_ataxia/levi/levi_scripts/two_handed
-          - name: INFERNAL
-            children:
-            - name: S n B
-              directory: levi_ataxia/levi/levi_scripts/s_n_b
-            - name: TWO HANDED
-              directory: levi_ataxia/levi/levi_scripts/two_handed
-        - name: DEPTHSWALKER
-          directory: levi_ataxia/levi/levi_scripts/depthswalker
-        - name: RuneWarden
-          children:
-          - name: DWB Runie
-            directory: levi_ataxia/levi/levi_scripts/dwb_runie
-          - name: DWC RUNIE
-            directory: levi_ataxia/levi/levi_scripts/dwc_runie
-        - name: AzzysEnemyManagement
-          packageName: AzzysEnemyManagement
-          children:
-          - name: Enemy Management
-            directory: levi_ataxia/levi/levi_scripts/enemy_management
-        - name: APOSTATE
-          directory: levi_ataxia/levi/levi_scripts/apostate
-        - name: Defence
-          directory: levi_ataxia/levi/levi_scripts/defence
-        - name: Mage
-          directory: levi_ataxia/levi/levi_scripts/mage
-        - name: DRAGON
-          script: '-------------------------------------------------
-
-            --         Put your Lua functions here.        --
-
-            --                                             --
-
-            -- Note that you can also use external scripts --
-
-            -------------------------------------------------
-
-            '
-          children:
-          - name: ATTACK LIMB
-            directory: levi_ataxia/levi/levi_scripts/attack_limb
-          - name: RAGEBLADE
-            directory: levi_ataxia/levi/levi_scripts/rageblade
-        - name: MONK
-          children:
-          - name: SHIKUDO
-            children:
-            - name: TELEPATHY
-              directory: levi_ataxia/levi/levi_scripts/telepathy
-          - name: BACKBREAKER
-            directory: levi_ataxia/levi/levi_scripts/backbreaker
-          - name: Tekura
-            directory: levi_ataxia/levi/levi_scripts/tekura
-          - name: SCYTHE
-            directory: levi_ataxia/levi/levi_scripts/scythe
-      - name: ZulahGUI - Saonji Edit
-        packageName: ZulahGUI - Saonji Edit
-        directory: levi_ataxia/levi/levi_scripts/zulahgui_-_saonji_edit
-        children:
-        - name: Room Items
-          directory: levi_ataxia/levi/levi_scripts/room_items
-        - name: zGUI Redux
-          script: "-------------------------------------------------\n-- Zulah GUI build \n-- 21/04/2021\n-- 4.0 - Forked\
-            \ by Saonji/Pyori.\n-- Full credit to Zulah, with his permission to use it.\n-- Note: saving if UserWindow won't\
-            \ bring back as UserWindow if reloading\n-- by Edru 7th October 2020\n-------------------------------------------------\n\
-            zgui = zgui or {}\nzgui.modules = zgui.modules or {}\nzCore = zCore or {}\nzgui.styles = {  \n    [\"greygroove\"\
-            ] = \"background-color:rgba(0,0,0,0%); border: 5px groove grey;\",\n    [\"greengroove\"] = \"background-color:rgba(0,0,0,100%);\
-            \ border: 5px groove green;\",\n    \n    [\"dimgreyinset\"] = \"background-color:rgba(20,20,20,100%); border:\
-            \ 5px inset dimgray;\",\n    [\"greyinset\"] = \"background-color:rgba(0,0,0,100%); border: 10px inset grey;\"\
-            ,\n    [\"greeninset\"] = \"background-color:rgba(0,0,0,100%); border: 5px inset green;\",\n    [\"chaosinset\"\
-            ] = \"background-color:rgba(0,40,100,100%); border: 5px inset purple;\",\n    [\"chaosincet\"] = \"background-color:rgba(0,40,100,100%);\
-            \ border: 5px inset yellow;\",\n    \n    [\"greydouble\"] = \"background-color:rgba(0,0,0,0%); border: 5px double\
-            \ grey;\",\n    [\"greendouble\"] = \"background-color:rgba(0,0,0,50%); border: 5px double green;\",    \n   \
-            \ [\"golddouble\"] = \"background-color:rgba(0,0,0,50%); border: 5px double gold;\",\n    \n    [\"darkmode\"\
-            ] = \"background-color:rgba(5,5,5,100%); border: 2px groove rgba(10,10,10,100%);\",\n}\n\n-- Changes\n-- Room\
-            \ Windows use the same format that Ataxia's GUI does.\n-- Aff window uses the same as the prompt tag.\n-- Titles\
-            \ are removed by default; you can enable them by removing the -- in their scripts.\n-- Added a number of new modules\
-            \ over the default zgui, as well as removed a few."
-          children:
-          - name: Build Windows
-            directory: levi_ataxia/levi/levi_scripts/build_windows
-          - name: Defences
-            children:
-            - name: GMCP Def Functions
-              directory: levi_ataxia/levi/levi_scripts/gmcp_def_functions
-          - name: Update Windows
-            directory: levi_ataxia/levi/levi_scripts/update_windows
-          - name: Extra Code
-            packageName: convertToUserWindow
-            directory: levi_ataxia/levi/levi_scripts/extra_code
-          - name: Logger
-            directory: levi_ataxia/levi/levi_scripts/logger
-        - name: Mapper
-          children:
-          - name: WildWalker
-            script: wildernessLocations = wildernessLocations or {}
-            directory: levi_ataxia/levi/levi_scripts/wildwalker
       - name: Algedonic Defense 1.0
         script: "--Algedonic.AffCount = Algedonic.Count_My_affs()  \n--Algedonic.Stack_My_Affs(false, aff)\n--Algedonic.Prioritize()\n\
           \n-- Add the above to the functions gotAff() and lostAff() at the bottom.  Add only the FIRST line to afflictionList()\
@@ -788,10 +630,168 @@ groups:
         directory: levi_ataxia/levi/levi_scripts/algedonic_defense_1.0
       - name: Gear System
         directory: levi_ataxia/levi/levi_scripts/gear_system
-  - name: deletestuff
-    packageName: deletestuff
-    directory: levi_ataxia/deletestuff
-    children:
-    - name: deleteOldProfiles
-      packageName: deleteOldProfiles
-      directory: levi_ataxia/deletestuff/deleteoldprofiles
+      - name: slc
+        directory: levi_ataxia/levi/levi_scripts/slc
+      - name: ZulahGUI - Saonji Edit
+        packageName: ZulahGUI - Saonji Edit
+        directory: levi_ataxia/levi/levi_scripts/zulahgui_-_saonji_edit
+        children:
+        - name: Room Items
+          directory: levi_ataxia/levi/levi_scripts/room_items
+        - name: zGUI Redux
+          script: "-------------------------------------------------\n-- Zulah GUI build \n-- 21/04/2021\n-- 4.0 - Forked\
+            \ by Saonji/Pyori.\n-- Full credit to Zulah, with his permission to use it.\n-- Note: saving if UserWindow won't\
+            \ bring back as UserWindow if reloading\n-- by Edru 7th October 2020\n-------------------------------------------------\n\
+            zgui = zgui or {}\nzgui.modules = zgui.modules or {}\nzCore = zCore or {}\nzgui.styles = {  \n    [\"greygroove\"\
+            ] = \"background-color:rgba(0,0,0,0%); border: 5px groove grey;\",\n    [\"greengroove\"] = \"background-color:rgba(0,0,0,100%);\
+            \ border: 5px groove green;\",\n    \n    [\"dimgreyinset\"] = \"background-color:rgba(20,20,20,100%); border:\
+            \ 5px inset dimgray;\",\n    [\"greyinset\"] = \"background-color:rgba(0,0,0,100%); border: 10px inset grey;\"\
+            ,\n    [\"greeninset\"] = \"background-color:rgba(0,0,0,100%); border: 5px inset green;\",\n    [\"chaosinset\"\
+            ] = \"background-color:rgba(0,40,100,100%); border: 5px inset purple;\",\n    [\"chaosincet\"] = \"background-color:rgba(0,40,100,100%);\
+            \ border: 5px inset yellow;\",\n    \n    [\"greydouble\"] = \"background-color:rgba(0,0,0,0%); border: 5px double\
+            \ grey;\",\n    [\"greendouble\"] = \"background-color:rgba(0,0,0,50%); border: 5px double green;\",    \n   \
+            \ [\"golddouble\"] = \"background-color:rgba(0,0,0,50%); border: 5px double gold;\",\n    \n    [\"darkmode\"\
+            ] = \"background-color:rgba(5,5,5,100%); border: 2px groove rgba(10,10,10,100%);\",\n}\n\n-- Changes\n-- Room\
+            \ Windows use the same format that Ataxia's GUI does.\n-- Aff window uses the same as the prompt tag.\n-- Titles\
+            \ are removed by default; you can enable them by removing the -- in their scripts.\n-- Added a number of new modules\
+            \ over the default zgui, as well as removed a few."
+          children:
+          - name: Extra Code
+            packageName: convertToUserWindow
+            directory: levi_ataxia/levi/levi_scripts/extra_code
+          - name: Build Windows
+            directory: levi_ataxia/levi/levi_scripts/build_windows
+          - name: Logger
+            directory: levi_ataxia/levi/levi_scripts/logger
+          - name: Defences
+            children:
+            - name: GMCP Def Functions
+              directory: levi_ataxia/levi/levi_scripts/gmcp_def_functions
+          - name: Update Windows
+            directory: levi_ataxia/levi/levi_scripts/update_windows
+        - name: Mapper
+          children:
+          - name: WildWalker
+            script: wildernessLocations = wildernessLocations or {}
+            directory: levi_ataxia/levi/levi_scripts/wildwalker
+      - name: Leviticus
+        directory: levi_ataxia/levi/levi_scripts/leviticus
+        children:
+        - name: BARD
+          directory: levi_ataxia/levi/levi_scripts/bard
+        - name: Defence
+          directory: levi_ataxia/levi/levi_scripts/defence
+        - name: MONK
+          children:
+          - name: SCYTHE
+            directory: levi_ataxia/levi/levi_scripts/scythe
+          - name: Tekura
+            directory: levi_ataxia/levi/levi_scripts/tekura
+          - name: BACKBREAKER
+            directory: levi_ataxia/levi/levi_scripts/backbreaker
+          - name: SHIKUDO
+            children:
+            - name: TELEPATHY
+              directory: levi_ataxia/levi/levi_scripts/telepathy
+        - name: Blademaster
+          directory: levi_ataxia/levi/levi_scripts/blademaster
+        - name: DRAGON
+          script: '-------------------------------------------------
+
+            --         Put your Lua functions here.        --
+
+            --                                             --
+
+            -- Note that you can also use external scripts --
+
+            -------------------------------------------------
+
+            '
+          children:
+          - name: ATTACK LIMB
+            directory: levi_ataxia/levi/levi_scripts/attack_limb
+          - name: RAGEBLADE
+            directory: levi_ataxia/levi/levi_scripts/rageblade
+        - name: AzzysEnemyManagement
+          packageName: AzzysEnemyManagement
+          children:
+          - name: Enemy Management
+            directory: levi_ataxia/levi/levi_scripts/enemy_management
+        - name: Pariah
+          directory: levi_ataxia/levi/levi_scripts/pariah
+        - name: RuneWarden
+          children:
+          - name: DWB Runie
+            directory: levi_ataxia/levi/levi_scripts/dwb_runie
+          - name: DWC RUNIE
+            directory: levi_ataxia/levi/levi_scripts/dwc_runie
+        - name: Windows
+          directory: levi_ataxia/levi/levi_scripts/windows
+        - name: Psion
+          script: '-------------------------------------------------
+
+            --         Put your Lua functions here.        --
+
+            --                                             --
+
+            -- Note that you can also use external scripts --
+
+            -------------------------------------------------
+
+            '
+          directory: levi_ataxia/levi/levi_scripts/psion
+        - name: Bard
+          directory: levi_ataxia/levi/levi_scripts/bard
+        - name: SHAMAN
+          directory: levi_ataxia/levi/levi_scripts/shaman
+        - name: Global Script
+          directory: levi_ataxia/levi/levi_scripts/global_script
+        - name: Mage
+          directory: levi_ataxia/levi/levi_scripts/mage
+        - name: EARTH LORD
+          directory: levi_ataxia/levi/levi_scripts/earth_lord
+        - name: INFERNAL
+          children:
+          - name: I SNB
+            directory: levi_ataxia/levi/levi_scripts/i_snb
+          - name: Infernal 2H
+            children:
+            - name: TWO HANDED
+              directory: levi_ataxia/levi/levi_scripts/two_handed
+          - name: DWC
+            directory: levi_ataxia/levi/levi_scripts/dwc
+          - name: INFERNAL
+            children:
+            - name: TWO HANDED
+              directory: levi_ataxia/levi/levi_scripts/two_handed
+            - name: S n B
+              directory: levi_ataxia/levi/levi_scripts/s_n_b
+          - name: DWB
+            directory: levi_ataxia/levi/levi_scripts/dwb
+        - name: Shikudo Script - Levi
+          packageName: Shikudo Script
+          children:
+          - name: Shikudo
+            script: '-------------------------------------------------
+
+              --         Put your Lua functions here.        --
+
+              --                                             --
+
+              -- Note that you can also use external Scripts --
+
+              -------------------------------------------------
+
+              '
+            directory: levi_ataxia/levi/levi_scripts/shikudo
+        - name: Serpent
+          directory: levi_ataxia/levi/levi_scripts/serpent
+        - name: APOSTATE
+          directory: levi_ataxia/levi/levi_scripts/apostate
+        - name: DEPTHSWALKER
+          directory: levi_ataxia/levi/levi_scripts/depthswalker
+        - name: limb.1.2
+          packageName: limb.1.2
+          children:
+          - name: Limb
+            directory: levi_ataxia/levi/levi_scripts/limb

@@ -50,9 +50,11 @@ local maybemiss = multimatches[3][1]
 if isTargeted(person) then
   targetIshere = true
   tAffs.shield = false
+  if removeAffV3 then removeAffV3("shield") end
   ignoreThirdPerson = true
   moveCursor(0, getLineNumber()-1)
   tarAffed("paralysis")
+  if applyAffV3 then applyAffV3("paralysis") end
   moveCursorEnd()
   lastLimbAttack = "shikNervestrike"
  if partyrelay then send("pt "..target..": paralysis")

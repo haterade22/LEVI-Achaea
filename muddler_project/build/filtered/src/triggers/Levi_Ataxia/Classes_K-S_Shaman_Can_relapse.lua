@@ -1,0 +1,1 @@
+ataxiaTemp.relapse = false

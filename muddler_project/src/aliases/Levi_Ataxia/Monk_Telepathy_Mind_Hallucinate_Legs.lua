@@ -1,0 +1,1 @@
+send("mind hallucinate " ..target.. " Leviticus takes some balm from a vial and rubs it on his legs.")

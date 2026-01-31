@@ -1,0 +1,2 @@
+bbastard = true
+wwarhammer = false

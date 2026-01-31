@@ -1,3 +1,4 @@
-if toppression == "torment" then
-tarAffed("healthleech")
+if matches[3] == target then
+  tarAffed("healthleech")
+
 end

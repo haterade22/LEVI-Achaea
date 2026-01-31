@@ -1,0 +1,1 @@
+sendAll("mind lock " ..target)

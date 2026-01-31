@@ -1,0 +1,1 @@
+lightwall = true

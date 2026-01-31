@@ -1,0 +1,1 @@
+send("shadow instill scythe with degeneration")

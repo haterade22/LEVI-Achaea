@@ -1,0 +1,5 @@
+honoursPerson = matches[2]:title()
+enableTrigger("Get Player Information")
+enableTrigger("Check Player City")
+--enableTrigger("No city found")
+ataxiaNDB_Acquire(matches[2]:title(),false)

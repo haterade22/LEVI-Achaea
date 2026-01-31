@@ -1,1 +1,3 @@
-SLC_broke(matches[2])
+if gmcp.Char.Status.class == "earth Elemental Lord" then
+tLimbs.T = 200
+end

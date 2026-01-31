@@ -8,9 +8,8 @@ hierarchy:
 - LeviAtax
 - Leviticus
 - slc
-- Knight Limb Attacks
-- SNB
-- slice
+- Shikudo Limb Attacks
+- Thrust 1
 attributes:
   isActive: 'yes'
   isFolder: 'no'
@@ -38,7 +37,6 @@ patterns:
   type: 1
 ]]--
 
---dbg(matches[1])
 if SLC_blocked(matches[1]) == false then
-	SLC_connects(slc_last_limb,"snb_slice")
+	SLC_connects(slc_last_limb,"thrust")
 end

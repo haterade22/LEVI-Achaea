@@ -1,0 +1,1 @@
+send("cq all;hyena recall;hyena track "..target..";order hyena attack "..target)

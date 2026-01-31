@@ -13,6 +13,21 @@ attributes:
 packageName: ''
 ]]--
 
+--[[mudlet
+type: script
+name: CC_Apostate
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Levi  Scripts
+- Leviticus
+- APOSTATE
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 --------------------------------------------------------------------------------
 -- CC_Apostate: Unified Apostate Offensive System (V3 Integration)
 --
@@ -30,7 +45,7 @@ packageName: ''
 -- Curses are selected independently via a dual-slot system:
 --
 --   Curse 1 (primary) - Direct affliction stacking:
---     clumsiness -> asthma -> manaleech -> impatience -> slickness -> anorexia
+--     clumsiness -> asthma -> manaleech -> impatience -> sicken (slickness) -> anorexia
 --     Then: sleep/nightmare synergies -> sensitivity -> fillers -> class lock aff
 --
 --   Curse 2 (secondary) - Lock support via sicken cascade:
@@ -176,7 +191,8 @@ end
 -- selectCurses() orchestrates both and handles overrides (curseward, truelock).
 --
 -- Curse 1 (selectPrimaryCurse): direct affliction delivery
---   clumsiness -> asthma -> manaleech -> impatience -> slickness -> anorexia
+--   If asthma stuck: manaleech -> impatience -> sicken (slickness) -> anorexia -> clumsiness
+--   Default:         clumsiness -> asthma -> manaleech -> impatience -> sicken (slickness) -> anorexia
 --   -> sleep mode / nightmare synergy / sensitivity -> fillers -> class lock aff
 --
 -- Curse 2 (selectSecondaryCurse): sicken cascade + lock support
@@ -207,13 +223,24 @@ apostate.fillers = {
 
 -- Curse 1: Primary offensive priority chain
 function apostate.selectPrimaryCurse()
-  -- Core lock building: clumsiness -> asthma -> manaleech -> impatience -> slickness -> anorexia
-  if not apostate.hasAff("clumsiness") then return "clumsy" end
-  if not apostate.hasAff("asthma") then return "asthma" end
-  if not apostate.hasAff("manaleech") then return "manaleech" end
-  if not apostate.hasAff("impatience") then return "impatience" end
-  if not apostate.hasAff("slickness") then return "slickness" end
-  if not apostate.hasAff("anorexia") then return "anorexia" end
+  -- When asthma is stuck, skip clumsiness and prioritize lock completion
+  -- (asthma blocks smoke cure, protecting manaleech/slickness)
+  if apostate.hasAff("asthma") then
+    -- Lock completion: manaleech -> impatience -> sicken (slickness) -> anorexia -> clumsiness
+    if not apostate.hasAff("manaleech") then return "manaleech" end
+    if not apostate.hasAff("impatience") then return "impatience" end
+    if not apostate.hasAff("slickness") then return "sicken" end
+    if not apostate.hasAff("anorexia") then return "anorexia" end
+    if not apostate.hasAff("clumsiness") then return "clumsy" end
+  else
+    -- Default: clumsiness -> asthma -> manaleech -> impatience -> sicken (slickness) -> anorexia
+    if not apostate.hasAff("clumsiness") then return "clumsy" end
+    if not apostate.hasAff("asthma") then return "asthma" end
+    if not apostate.hasAff("manaleech") then return "manaleech" end
+    if not apostate.hasAff("impatience") then return "impatience" end
+    if not apostate.hasAff("slickness") then return "sicken" end
+    if not apostate.hasAff("anorexia") then return "anorexia" end
+  end
 
   -- Sleep mode
   if apostate.state.mode == "sleep" then
@@ -280,7 +307,7 @@ function apostate.selectSecondaryCurse(c1)
 
   -- Remaining lock afflictions
   if not apostate.hasAff("anorexia") and c1 ~= "anorexia" then return "anorexia" end
-  if not apostate.hasAff("slickness") and c1 ~= "slickness" then return "slickness" end
+  if not apostate.hasAff("slickness") and c1 ~= "sicken" then return "sicken" end
   if not apostate.hasAff("manaleech") and c1 ~= "manaleech" then return "manaleech" end
 
   -- Fillers (skip whatever c1 is using)

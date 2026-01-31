@@ -42,6 +42,7 @@ if isTargeted(name) and tBals.tree then
 tdeliverance = false
 	if tAffs.paralysis then
 		erAff("paralysis")
+		if removeAffV3 then removeAffV3("paralysis") end
 	end
   if passiveFailsafe then restorePassiveCure() end
 

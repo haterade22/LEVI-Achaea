@@ -12,6 +12,3 @@ if isTargeted(matches[2]) and not ataxiaTemp.ignoreShield then
 	end
 end
 ataxiaTemp.ignoreShield = nil
-
-
-tinvest = false

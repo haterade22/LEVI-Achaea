@@ -9,7 +9,7 @@ hierarchy:
 - LeviticusREG
 - Leviticus
 - Knight
-- RUNIE
+- Infernal
 - 2H
 attributes:
   isActive: 'yes'

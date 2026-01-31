@@ -1,0 +1,1 @@
+ataxia.defences.dragonbreath = false

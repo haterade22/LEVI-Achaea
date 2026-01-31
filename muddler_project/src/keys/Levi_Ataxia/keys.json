@@ -10,11 +10,6 @@
         "isFolder": "yes",
         "children": [
           {
-            "name": "Ataxia-DownloadThis",
-            "isActive": "yes",
-            "isFolder": "yes"
-          },
-          {
             "name": "Targeting",
             "isActive": "yes",
             "isFolder": "yes",
@@ -71,6 +66,11 @@
                 "keys": "F11"
               }
             ]
+          },
+          {
+            "name": "Ataxia-DownloadThis",
+            "isActive": "yes",
+            "isFolder": "yes"
           }
         ]
       }

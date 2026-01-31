@@ -1,0 +1,1 @@
+tAffs.nausea = false

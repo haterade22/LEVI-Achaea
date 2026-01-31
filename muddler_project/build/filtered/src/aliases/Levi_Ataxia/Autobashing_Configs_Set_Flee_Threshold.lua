@@ -1,0 +1,2 @@
+ataxiaBasher.fleeThreshold = tonumber(matches[2])
+ataxiaEcho("Threshold for fleeing has been set to <a_green>"..ataxiaBasher.fleeThreshold.."hp. <NavajoWhite>We'll re-enter room while autobashing when above this amount.")

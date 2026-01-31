@@ -28,6 +28,21 @@ attributes:
 packageName: ''
 ]]--
 
+--[[mudlet
+type: script
+name: CC_Apostate
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Levi  Scripts
+- Leviticus
+- APOSTATE
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
 --------------------------------------------------------------------------------
 -- CC_Apostate: Unified Apostate Offensive System (V3 Integration)
 --

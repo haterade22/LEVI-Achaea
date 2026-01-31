@@ -1,7 +1,5 @@
-if gmcp.Char.Status.class == "Infernal" then
-send("cq all;summon infestation;tyranny")
-
-elseif gmcp.Char.Status.class == "Apostate" then
-send("cq all;summon hands of the grave")
-
+if ataxiaTemp.class == "Infernal" then
+send("summon infestation;tyranny")
+elseif ataxiaTemp.class == "Apostate" then
+send("summon hands of the grave")
 end

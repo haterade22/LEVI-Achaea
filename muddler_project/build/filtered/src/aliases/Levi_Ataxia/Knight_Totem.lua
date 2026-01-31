@@ -1,0 +1,6 @@
+send("queue add eqbal sketch wunjo on totem on slot 1")
+send("queue add eqbal sketch mannaz on totem on slot 2")
+send("queue add eqbal sketch sowulu on totem on slot 3")
+send("queue add eqbal sketch sowulu on totem on slot 4")
+send("queue add eqbal sketch sowulu on totem on slot 5")
+send("queue add eqbal sketch kena on totem on slot 6")

@@ -1,0 +1,1 @@
+sendAll("wield left knife;wield right shield;crux let me")
