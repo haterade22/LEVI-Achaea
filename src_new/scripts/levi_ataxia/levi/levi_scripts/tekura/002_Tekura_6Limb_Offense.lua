@@ -36,10 +36,11 @@ tekura6.dispatch = tekura6.dispatch or {}
 
 tekura6.state = {
   lastAttackTime = 0,
+  kickDamage = 25,       -- default, updated dynamically from combat
+  punchDamage = 14,      -- default, updated dynamically from combat
 }
 
 tekura6.config = {
-  prepThreshold = 86,    -- 86 + 14 (one punch) = 100 = break
   breakThreshold = 100,
   debugEcho = true,
 }
@@ -77,6 +78,25 @@ tekura6.ALL_LIMBS = {
 -- HELPER FUNCTIONS
 --------------------------------------------------------------------------------
 
+-- Dynamic prep threshold based on actual punch damage
+function tekura6.getPrepThreshold()
+  return tekura6.config.breakThreshold - tekura6.state.punchDamage
+end
+
+-- Event handler: capture actual kick/punch damage from combat
+function tekura6.onLimbHitUpdated(event, name, limb, amount)
+  if not target or name:lower() ~= target:lower() then return end
+  -- Kicks do ~18-25%, punches do ~14-15%. Threshold at 16% to classify.
+  if amount > 16 then
+    tekura6.state.kickDamage = amount
+  else
+    tekura6.state.punchDamage = amount
+  end
+end
+
+if tekura6._eventHandler then killAnonymousEventHandler(tekura6._eventHandler) end
+tekura6._eventHandler = registerAnonymousEventHandler("limb hits updated", "tekura6.onLimbHitUpdated")
+
 -- Get limb damage from lb[target].hits
 function tekura6.getLimbDamage(limb)
   if not target or target == "" then return 0 end
@@ -86,9 +106,9 @@ function tekura6.getLimbDamage(limb)
   return lb[target].hits[limb] or 0
 end
 
--- Check if a specific limb is prepped (86%+ = one punch from break)
+-- Check if a specific limb is prepped (one punch from break, dynamic threshold)
 function tekura6.isLimbPrepped(limb)
-  return tekura6.getLimbDamage(limb) >= tekura6.config.prepThreshold
+  return tekura6.getLimbDamage(limb) >= tekura6.getPrepThreshold()
 end
 
 -- Check if a specific limb is broken (100%+)
@@ -202,58 +222,92 @@ end
 -- COMBO BUILDERS
 --------------------------------------------------------------------------------
 
--- PREP: Dynamic combo builder with parry avoidance
+-- PREP: Dynamic combo builder with parry avoidance and overflow prevention
+-- RULE: Never break a limb before all 6 are prepped.
+-- Priority: non-parried safe > parried safe > jbp arms (punches only)
 function tekura6.dispatch.buildPrepAttack()
   local parried = tekura6.getEffectiveParry()
   local unprepped = tekura6.getUnpreppedLimbs()
+  local kickDmg = tekura6.state.kickDamage
+  local punchDmg = tekura6.state.punchDamage
+  local breakAt = tekura6.config.breakThreshold
 
-  -- Filter out parried limb
-  local available = {}
-  for _, limb in ipairs(unprepped) do
-    if limb ~= parried then
-      table.insert(available, limb)
-    end
-  end
-
-  -- EDGE CASE: Last limb is parried
-  if #unprepped == 1 and #available == 0 then
+  -- EDGE CASE: Only 1 unprepped limb and it's parried
+  if #unprepped == 1 and unprepped[1] == parried then
     return tekura6.dispatch.buildParryBypassAttack(unprepped[1])
   end
 
-  -- EDGE CASE: Multiple unprepped but all parried (shouldn't happen with 1 parry)
-  if #available == 0 then
-    return "combo " .. target .. " sdk hkp hkp"
+  -- EDGE CASE: No unprepped limbs (shouldn't reach here, phase would be BREAK)
+  if #unprepped == 0 then
+    return "combo " .. target .. " sdk jbp arms jbp arms"
   end
 
-  -- Sort by damage ascending (lowest damage = most work needed = kick priority)
-  table.sort(available, function(a, b)
-    return tekura6.getLimbDamage(a) < tekura6.getLimbDamage(b)
-  end)
+  -- Build simulated damage table for ALL unprepped limbs
+  local simDmg = {}
+  for _, limb in ipairs(unprepped) do
+    simDmg[limb] = tekura6.getLimbDamage(limb)
+  end
 
-  -- KICK: The limb with the lowest damage (25% = most impact)
-  local kickLimb = available[1]
+  -- Helper: find the best safe limb for an attack of given damage
+  -- Prefers non-parried, falls back to parried if no safe non-parried exists
+  local function findSafeLimb(candidates, atkDmg)
+    -- Sort candidates by simulated damage ascending
+    table.sort(candidates, function(a, b)
+      return (simDmg[a] or 0) < (simDmg[b] or 0)
+    end)
+    -- First pass: non-parried limbs
+    for _, limb in ipairs(candidates) do
+      if limb ~= parried and (simDmg[limb] or 0) + atkDmg < breakAt then
+        return limb
+      end
+    end
+    -- Second pass: parried limb (better to waste a hit than break a limb)
+    for _, limb in ipairs(candidates) do
+      if limb == parried and (simDmg[limb] or 0) + atkDmg < breakAt then
+        return limb
+      end
+    end
+    return nil
+  end
 
-  -- PUNCHES: Next most-needing limbs
-  local punch1Limb, punch2Limb
+  -- Make a working copy of unprepped for candidate lists
+  local allCandidates = {}
+  for _, limb in ipairs(unprepped) do
+    table.insert(allCandidates, limb)
+  end
 
-  if #available >= 3 then
-    punch1Limb = available[2]
-    punch2Limb = available[3]
-  elseif #available == 2 then
-    -- Kick #1, punch #2, punch #1 (spread + double up on most-needing)
-    punch1Limb = available[2]
-    punch2Limb = available[1]
+  -- KICK: Find safe kick target (prefer non-parried, fallback to parried)
+  local kickLimb = findSafeLimb(allCandidates, kickDmg)
+  if not kickLimb then
+    -- Absolute last resort: kick lowest-damage limb (extremely rare)
+    table.sort(allCandidates, function(a, b)
+      return (simDmg[a] or 0) < (simDmg[b] or 0)
+    end)
+    kickLimb = allCandidates[1]
+  end
+  simDmg[kickLimb] = (simDmg[kickLimb] or 0) + kickDmg
+
+  -- PUNCH 1: Find safe punch target
+  local punch1Str
+  local punch1Limb = findSafeLimb(allCandidates, punchDmg)
+  if punch1Limb then
+    punch1Str = tekura6.LIMB_ATTACKS[punch1Limb].punch
+    simDmg[punch1Limb] = (simDmg[punch1Limb] or 0) + punchDmg
   else
-    -- Only 1 limb: kick + double punch
-    punch1Limb = available[1]
-    punch2Limb = available[1]
+    punch1Str = "jbp arms"
+  end
+
+  -- PUNCH 2: Find safe punch target (after simulated punch 1)
+  local punch2Str
+  local punch2Limb = findSafeLimb(allCandidates, punchDmg)
+  if punch2Limb then
+    punch2Str = tekura6.LIMB_ATTACKS[punch2Limb].punch
+  else
+    punch2Str = "jbp arms"
   end
 
   local kick = tekura6.LIMB_ATTACKS[kickLimb].kick
-  local punch1 = tekura6.LIMB_ATTACKS[punch1Limb].punch
-  local punch2 = tekura6.LIMB_ATTACKS[punch2Limb].punch
-
-  return "combo " .. target .. " " .. kick .. " " .. punch1 .. " " .. punch2
+  return "combo " .. target .. " " .. kick .. " " .. punch1Str .. " " .. punch2Str
 end
 
 -- PARRY BYPASS: Kai surge (dismount) + sweep (prone) + punch last limb
@@ -346,6 +400,8 @@ function tekura6.dispatch.run()
     cecho("LL:<cyan>" .. string.format("%.0f", ll) .. "%<reset> ")
     cecho("RL:<cyan>" .. string.format("%.0f", rl) .. "%<reset> ")
     cecho("Prone:<" .. (tAffs.prone and "green>YES" or "red>NO") .. "<reset>")
+    cecho(" K:<yellow>" .. string.format("%.1f", tekura6.state.kickDamage) .. "<reset>")
+    cecho(" P:<yellow>" .. string.format("%.1f", tekura6.state.punchDamage) .. "<reset>")
     if parried ~= "none" then
       cecho(" <red>PARRY:" .. parried .. "<reset>")
     end
@@ -418,11 +474,12 @@ function tekura6.dispatch.status()
     return string.rep("#", filled) .. string.rep("-", width - filled)
   end
 
-  -- Prep status helper
+  -- Prep status helper (dynamic threshold)
+  local prepThresh = tekura6.getPrepThreshold()
   local function prepStatus(pct)
     if pct >= 100 then
       return "<green>BROKEN "
-    elseif pct >= 86 then
+    elseif pct >= prepThresh then
       return "<yellow>PREPPED"
     else
       return "<red>       "
@@ -434,6 +491,10 @@ function tekura6.dispatch.status()
   cecho("\n<yellow>+================================================+")
   cecho("\n<yellow>| <white>Target: <cyan>" .. string.format("%-16s", tostring(target or "None")))
   cecho("<white>Phase: <green>" .. phaseName)
+  cecho("\n<yellow>+------------------------------------------------+")
+  cecho("\n<yellow>| <white>Kick: <cyan>" .. string.format("%.1f%%", tekura6.state.kickDamage))
+  cecho("  <white>Punch: <cyan>" .. string.format("%.1f%%", tekura6.state.punchDamage))
+  cecho("  <white>Prep@: <cyan>" .. string.format("%.1f%%", prepThresh))
   cecho("\n<yellow>+------------------------------------------------+")
   cecho("\n<yellow>| <white>LIMB STATUS (prepped = 1 punch from break):<yellow>")
 
