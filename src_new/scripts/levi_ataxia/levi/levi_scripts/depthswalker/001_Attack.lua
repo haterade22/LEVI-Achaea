@@ -8,7 +8,7 @@ hierarchy:
 - Leviticus
 - DEPTHSWALKER
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
 packageName: ''
 ]]--
