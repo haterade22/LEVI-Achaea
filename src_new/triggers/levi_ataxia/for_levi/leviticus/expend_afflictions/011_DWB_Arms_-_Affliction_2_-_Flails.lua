@@ -46,7 +46,8 @@ else
   twohanded_armsHit()
 end
 tarAffed("paralysis")
+if applyAffV3 then applyAffV3("paralysis") end
 
 if partyrelay then send("pt "..target..": paralysis and " ..ataxiaTemp.fractures.wristfractures.. " wristfractures") end
 
-tempTimer(2.5, [[tarAffed("paralysis"]])
+tempTimer(2.5, [[tarAffed("paralysis"); if applyAffV3 then applyAffV3("paralysis") end]])

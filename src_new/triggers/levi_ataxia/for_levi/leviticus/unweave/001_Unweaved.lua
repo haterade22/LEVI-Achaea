@@ -45,10 +45,13 @@ elseif tAffs.unweavingspirit and (not tAffs.unweavingmind or not tAffs.unweaving
 --
 elseif tAffs.unweavingspirit and (matches[4] == "body" or matches[4] == "mind") then
 tarAffed("prone")
+if applyAffV3 then applyAffV3("prone") end
 elseif tAffs.unweavingbody and (matches[4] == "mind" or matches[4] == "spirit") then
 tarAffed("prone")
+if applyAffV3 then applyAffV3("prone") end
 elseif tAffs.unweavingmind and (matches[4] == "body" or matches[4] == "spirit") then
 tarAffed("prone")
+if applyAffV3 then applyAffV3("prone") end
 end
 
 

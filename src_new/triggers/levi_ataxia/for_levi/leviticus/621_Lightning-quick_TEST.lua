@@ -66,6 +66,7 @@ if isTargeted(person) then
   	if multimatches[3][1] == "The attack rebounds back onto you!" then
     ataxiaTemp.ignoreShield = true
 			tarAffed("rebounding")
+			if applyAffV3 then applyAffV3("rebounding") end
       	else
 		ataxiaTemp.ignoreShield = false
 		end
@@ -74,6 +75,7 @@ if isTargeted(person) then
 		end
      if multimatches[3][1] == "The songblessing upon the rapier swells with a rich, vibrant hum." then
 		    tarAffed("prone")
+		    if applyAffV3 then applyAffV3("prone") end
     end
 
 

@@ -58,5 +58,7 @@ end
 end
 
 tarAffed("prone")
+if applyAffV3 then applyAffV3("prone") end
 tarAffed("healthleech")
-tempTimer(2.5, [[tarAffed("healthleech"]])
+if applyAffV3 then applyAffV3("healthleech") end
+tempTimer(2.5, [[tarAffed("healthleech"; if applyAffV3 then applyAffV3("healthleech") end]])

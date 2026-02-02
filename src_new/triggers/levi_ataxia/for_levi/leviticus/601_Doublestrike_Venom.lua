@@ -58,11 +58,13 @@ if isTargeted(person) then
 	then
 		if multimatches[3][1] == "The attack rebounds back onto you!" then
 			tAffs.rebounding = true
+			if applyAffV3 then applyAffV3("rebounding") end
 		end
 	else
 		if next(envenomList) then
 			moveCursor(0, getLineNumber()-1)
 			tarAffed(envenomList[1])
+			if applyAffV3 then applyAffV3(envenomList[1]) end
 			table.remove(envenomList, 1)
 			moveCursorEnd()
 		end

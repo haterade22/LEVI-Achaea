@@ -48,14 +48,18 @@ if isTargeted(person) then
 		if multimatches[1][2] == "left" then
 			if tLimbs.LL < 79 or lb[target].hits["left leg"] < 75 then
 				tarAffed("brokenleftleg")
+				if applyAffV3 then applyAffV3("brokenleftleg") end
 			else
 				tarAffed("damagedleftleg", "prone")
+				if applyAffV3 then applyAffV3("damagedleftleg"); applyAffV3("prone") end
 			end
 		else
 			if tLimbs.RL < 79 or lb[target].hits["right leg"] < 75 then
 				tarAffed("brokenrightleg")
+				if applyAffV3 then applyAffV3("brokenrightleg") end
 			else
 				tarAffed("damagedrightleg", "prone")
+				if applyAffV3 then applyAffV3("damagedrightleg"); applyAffV3("prone") end
 			end	
 		end
 

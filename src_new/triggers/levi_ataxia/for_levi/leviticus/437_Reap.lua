@@ -44,6 +44,7 @@ local aff = venom_to_aff(envenomList[1])
 
 if type(target) ~= "number" and isTargeted(matches[2]) then
 	tarAffed(aff)
+	if applyAffV3 then applyAffV3(aff) end
 	targetIshere = true
 	disableTimer("TargetOutOfRoom")
 end

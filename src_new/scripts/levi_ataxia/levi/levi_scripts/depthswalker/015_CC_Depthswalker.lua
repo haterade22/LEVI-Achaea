@@ -75,6 +75,7 @@ depthswalker.selections = {
     venom = nil,
     attune = "degeneration",
     useTimeloop = false,
+    phase = "init",       -- "shadow", "bellwort", or mode name (set by selectInstill)
 }
 
 -- The 9 DW-specific afflictions tracked on the target
@@ -261,16 +262,48 @@ end
 --------------------------------------------------------------------------------
 -- INSTILL PRIORITY CHAINS
 --
--- Each mode has its own instill priority. The instill determines:
--- 1. Which DW affliction to deliver
--- 2. Which capstone fires (when at 5 DW affs, capstone = instill type)
+-- Strategy: Universal opening phase -> Mode-specific finisher
+--
+-- UNIVERSAL OPENING (all modes):
+--   1. SHADOW: Instill leach until shadow claimed (parasite/healthleech/manaleech)
+--   2. BELLWORT STACK: Stick timeloop -> retribution -> justice
+--      All 3 are bellwort-cured. Target can only eat bellwort once per balance,
+--      so with 3 bellwort affs, 2 remain stuck at all times.
+--   3. MODE-SPECIFIC: After opening completes, enter mode finisher
+--
+-- Capstone note: When 5+ DW affs are present, capstone fires matching the
+-- instill type. Mode finishers handle capstone selection.
 --------------------------------------------------------------------------------
 
--- Lock: build toward capstone, depression capstone for anorexia, impatience via instill
+-- Universal opening: shadow -> bellwort stack (timeloop -> retribution -> justice)
+-- Returns the next instill for the opening phase, or nil if opening is complete.
+function depthswalker.selectInstillOpening()
+    -- Phase 1: SHADOW - get leach affs for shadow claim
+    if not depthswalker.state.haveShadow then
+        if not depthswalker.hasAff("parasite") then return "leach" end
+        if not depthswalker.hasAff("healthleech") then return "leach" end
+        if not depthswalker.hasAff("manaleech") then return "leach" end
+        -- All leach affs present but no shadow yet: if capstone ready, fire leach
+        -- capstone to enable shadow claim. If not ready, fall through to bellwort
+        -- stacking to build DW aff count toward capstone.
+        if depthswalker.capstoneReady() then return "leach" end
+    end
+
+    -- Phase 2: BELLWORT STACK - bury target with bellwort affs
+    -- Priority: timeloop first (also useful mechanically), then retribution, then justice
+    if not depthswalker.hasAff("timeloop") then return "timeloop" end
+    if not depthswalker.hasAff("retribution") then return "retribution" end
+    if not depthswalker.hasAff("justice") then return "justice" end
+
+    -- Opening complete: all bellwort affs stuck
+    return nil
+end
+
+-- Lock finisher: impatience (only via instill!), depression capstone for anorexia+masochism
 function depthswalker.selectInstillLock()
     local capReady = depthswalker.capstoneReady()
 
-    -- Capstone ready: depression gives anorexia + masochism (lock component)
+    -- Capstone ready: depression gives anorexia + masochism (lock components)
     if capReady then
         return "depression"
     end
@@ -280,10 +313,8 @@ function depthswalker.selectInstillLock()
         return "impatience"
     end
 
-    -- Build DW aff count toward capstone (5 needed)
+    -- Build remaining DW affs toward capstone (bellwort affs already stuck from opening)
     if not depthswalker.hasAff("depression") then return "depression" end
-    if not depthswalker.hasAff("retribution") then return "retribution" end
-    if not depthswalker.hasAff("justice") then return "justice" end
     if not depthswalker.hasAff("madness") then return "madness" end
     if not depthswalker.hasAff("degeneration") then return "degeneration" end
     if not depthswalker.hasAff("parasite") then return "leach" end
@@ -294,35 +325,27 @@ function depthswalker.selectInstillLock()
     return "depression"
 end
 
--- Damage: leach affs for shadow claim, degeneration capstone for burst
+-- Damage finisher: degeneration capstone for burst damage
 function depthswalker.selectInstillDamage()
     local capReady = depthswalker.capstoneReady()
 
-    -- Have shadow: degeneration capstone for damage burst
-    if depthswalker.state.haveShadow and capReady then
+    -- Capstone ready: degeneration for damage burst
+    if capReady then
         return "degeneration"
     end
 
-    -- No shadow: build leach affs for shadow claim
-    if not depthswalker.state.haveShadow then
-        if not depthswalker.hasAff("parasite") then return "leach" end
-        if not depthswalker.hasAff("healthleech") then return "leach" end
-        if not depthswalker.hasAff("manaleech") then return "leach" end
-        -- Leach affs present, capstone will fire leach -> enables shadow claim
-        if capReady then return "leach" end
-    end
-
-    -- Build DW aff count for capstone + degeneration burst
+    -- Build DW aff count for capstone (bellwort affs already stuck from opening)
     if not depthswalker.hasAff("degeneration") then return "degeneration" end
-    if not depthswalker.hasAff("retribution") then return "retribution" end
-    if not depthswalker.hasAff("justice") then return "justice" end
     if not depthswalker.hasAff("depression") then return "depression" end
     if not depthswalker.hasAff("madness") then return "madness" end
+    if not depthswalker.hasAff("parasite") then return "leach" end
+    if not depthswalker.hasAff("healthleech") then return "leach" end
+    if not depthswalker.hasAff("manaleech") then return "leach" end
 
     return "degeneration"
 end
 
--- Dictate: maximize DW aff count, retribution capstone for mana sap
+-- Dictate finisher: retribution capstone for mana sap (retribution already stuck from opening)
 function depthswalker.selectInstillDictate()
     local capReady = depthswalker.capstoneReady()
 
@@ -331,9 +354,7 @@ function depthswalker.selectInstillDictate()
         return "retribution"
     end
 
-    -- Stack DW affs to lower dictate threshold (each aff = 5% more lenient)
-    if not depthswalker.hasAff("retribution") then return "retribution" end
-    if not depthswalker.hasAff("justice") then return "justice" end
+    -- Build DW aff count (bellwort affs already stuck, each lowers dictate threshold by 5%)
     if not depthswalker.hasAff("depression") then return "depression" end
     if not depthswalker.hasAff("madness") then return "madness" end
     if not depthswalker.hasAff("degeneration") then return "degeneration" end
@@ -344,7 +365,7 @@ function depthswalker.selectInstillDictate()
     return "retribution"
 end
 
--- Madpression: build to 5, then madness (stun) -> depression (anorexia+masochism)
+-- Madpression finisher: madness capstone (stun) then depression capstone (anorexia+masochism)
 function depthswalker.selectInstillMadpression()
     local capReady = depthswalker.capstoneReady()
 
@@ -358,11 +379,9 @@ function depthswalker.selectInstillMadpression()
         return "depression"
     end
 
-    -- Build DW aff count toward capstone
+    -- Build remaining DW affs toward capstone (bellwort affs already stuck)
     if not depthswalker.hasAff("depression") then return "depression" end
     if not depthswalker.hasAff("madness") then return "madness" end
-    if not depthswalker.hasAff("retribution") then return "retribution" end
-    if not depthswalker.hasAff("justice") then return "justice" end
     if not depthswalker.hasAff("degeneration") then return "degeneration" end
     if not depthswalker.hasAff("parasite") then return "leach" end
     if not depthswalker.hasAff("healthleech") then return "leach" end
@@ -370,9 +389,23 @@ function depthswalker.selectInstillMadpression()
     return "madness"
 end
 
--- Unified instill selector: routes to correct chain by mode
+-- Unified instill selector: opening first, then mode-specific finisher
 function depthswalker.selectInstill()
+    -- Universal opening takes priority (shadow -> bellwort stack)
+    local opening = depthswalker.selectInstillOpening()
+    if opening then
+        -- Track which opening phase we're in for debug echo
+        if opening == "leach" and not depthswalker.state.haveShadow then
+            depthswalker.selections.phase = "shadow"
+        else
+            depthswalker.selections.phase = "bellwort"
+        end
+        return opening
+    end
+
+    -- Opening complete: route to mode-specific finisher
     local mode = depthswalker.state.mode
+    depthswalker.selections.phase = mode
     if mode == "lock" then return depthswalker.selectInstillLock()
     elseif mode == "damage" then return depthswalker.selectInstillDamage()
     elseif mode == "dictate" then return depthswalker.selectInstillDictate()
@@ -690,7 +723,11 @@ function depthswalker.debugEcho()
     end
     local stuckStr = #stuck > 0 and table.concat(stuck, ", ") or "none"
 
-    cecho("\n<cyan>[DW:" .. depthswalker.state.mode .. "]<reset> Instill: <green>" .. inst
+    local phase = depthswalker.selections.phase or depthswalker.state.mode
+    local phaseColor = (phase == "shadow" and "<yellow>") or (phase == "bellwort" and "<magenta>") or "<cyan>"
+
+    cecho("\n<cyan>[DW:" .. depthswalker.state.mode .. "|" .. phaseColor .. phase .. "<reset>]<reset>"
+        .. " Instill: <green>" .. inst
         .. "<reset> | Venom: <green>" .. ven
         .. "<reset> | " .. loop
         .. " | Cap: <yellow>" .. capStr
@@ -734,8 +771,9 @@ function depthswalker.status()
 
     -- Current selections
     local sel = depthswalker.selections
+    echo("\n  Phase: " .. (sel.phase or "init") .. "\n")
     if sel.instill then
-        echo("\n  Last Instill: " .. sel.instill .. "\n")
+        echo("  Last Instill: " .. sel.instill .. "\n")
     end
     if sel.venom then
         echo("  Last Venom: " .. sel.venom .. "\n")

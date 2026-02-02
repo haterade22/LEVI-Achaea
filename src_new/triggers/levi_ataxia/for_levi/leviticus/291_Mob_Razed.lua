@@ -154,7 +154,9 @@ if type(target) == "number" and ataxiaBasher.enabled then
 	end
 else
 	erAff("rebounding")
+	if removeAffV3 then removeAffV3("rebounding") end
 	erAff("shield")
+	if removeAffV3 then removeAffV3("shield") end
 end
 
 

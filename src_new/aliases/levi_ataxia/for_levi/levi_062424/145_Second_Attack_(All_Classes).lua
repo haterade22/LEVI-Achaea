@@ -42,7 +42,7 @@ end
 
 
 if gmcp.Char.Status.class == "Depthswalker" then
-depthswalker_lockroute()
+depthswalker.dispatch()
 end
 
 if gmcp.Char.Status.class == "Magi" then

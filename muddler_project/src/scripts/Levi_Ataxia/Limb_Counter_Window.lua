@@ -172,12 +172,14 @@ function tarc.write()
     end
     end
     if gmcp.Char.Status.class == "Monk" then
-    tarc:cecho("          Kai: " ..ataxia.vitals.class)
-    tarc:cecho("\n         Kata: " ..katachain.. "")
+    tarc:cecho("          Kai: " .. (ataxia.vitals.class or 0))
+    tarc:cecho("\n         Kata: " .. (katachain or 0) .. "")
       if ataxia.vitals.form then
-        tarc:cecho("\n       Stance: " ..ataxia.vitals.form.. "\n")
+        tarc:cecho("\n       Form: " .. ataxia.vitals.form .. "\n")
+      elseif ataxia.vitals.stance then
+        tarc:cecho("\n       Stance: " .. ataxia.vitals.stance .. "\n")
       else
-        tarc:cecho("\n       Stance: " ..ataxia.vitals.stance.. "\n")
+        tarc:cecho("\n       Stance: unknown\n")
       end
     end
     if gmcp.Char.Status.class == "Blademaster" then

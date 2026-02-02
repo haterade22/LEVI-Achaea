@@ -51,6 +51,7 @@ if ataxiaTemp.class == "Bard" then return end
 if isTargeted(person) then
 targetIshere = true
 tAffs.shield = false
+if removeAffV3 then removeAffV3("shield") end
 ataxiaTemp.ignoreShield = false
 lastLimbAttack = "dwcSlash"
 
@@ -60,7 +61,9 @@ if ataxiaTemp.hitCount == 1 then
   ataxiaTemp.lastAffAddedExtra = nil
   if envenomList[1] == "exploit" then
     tarAffed("weariness")
+    if applyAffV3 then applyAffV3("weariness") end
     tarAffed("paranoia")
+    if applyAffV3 then applyAffV3("paranoia") end
     aff1 = "weariness"
     aff3 = "paranoia"
     ataxiaTemp.lastAffAdded = "weariness"
@@ -70,6 +73,7 @@ if ataxiaTemp.hitCount == 1 then
     end
   elseif envenomList[1] == "torment" then
     tarAffed("healthleech")
+    if applyAffV3 then applyAffV3("healthleech") end
     aff1 = "healthleech"
     aff3 = nil
     ataxiaTemp.lastAffAdded = "healthleech"
@@ -78,6 +82,7 @@ if ataxiaTemp.hitCount == 1 then
     end
   elseif envenomList[1] == "torture" then
     tarAffed("haemophilia")
+    if applyAffV3 then applyAffV3("haemophilia") end
     aff1 = "haemophilia"
     aff3 = nil
     ataxiaTemp.lastAffAdded = "haemophilia"
@@ -95,6 +100,7 @@ if ataxiaTemp.hitCount == 1 then
      aff1 = venom_to_aff(envenomList[1])
      if aff1 then
        tarAffed(aff1)
+       if applyAffV3 then applyAffV3(aff1) end
        ataxiaTemp.lastAffAdded = aff1
        if partyrelay and not ataxia.afflictions.aeon then
         send("pt " ..target..": " ..aff1)
@@ -108,7 +114,9 @@ elseif ataxiaTemp.hitCount == 2 then
   ataxiaTemp.lastAffAddedExtra = nil
  if envenomListTwo[1] == "exploit" then
     tarAffed("weariness")
+    if applyAffV3 then applyAffV3("weariness") end
     tarAffed("paranoia")
+    if applyAffV3 then applyAffV3("paranoia") end
     aff2 = "weariness"
     aff3 = "paranoia"
     ataxiaTemp.lastAffAdded = "weariness"
@@ -118,6 +126,7 @@ elseif ataxiaTemp.hitCount == 2 then
     end
   elseif envenomListTwo[1] == "torment" then
     tarAffed("healthleech")
+    if applyAffV3 then applyAffV3("healthleech") end
     aff2 = "healthleech"
     aff3 = nil
     ataxiaTemp.lastAffAdded = "healthleech"
@@ -127,6 +136,7 @@ elseif ataxiaTemp.hitCount == 2 then
 
   elseif envenomListTwo[1] == "torture" then
     tarAffed("haemophilia")
+    if applyAffV3 then applyAffV3("haemophilia") end
     aff2 = "haemophilia"
     aff3 = nil
     ataxiaTemp.lastAffAdded = "haemophilia"
@@ -144,6 +154,7 @@ elseif ataxiaTemp.hitCount == 2 then
      aff2 = venom_to_aff(envenomListTwo[1])
      if aff2 then
        tarAffed(aff2)
+       if applyAffV3 then applyAffV3(aff2) end
        ataxiaTemp.lastAffAdded = aff2
        if partyrelay and not ataxia.afflictions.aeon then
         send("pt " ..target..": " ..aff2)

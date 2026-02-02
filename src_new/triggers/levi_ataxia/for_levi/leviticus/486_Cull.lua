@@ -39,6 +39,7 @@ patterns:
 
 if type(target) ~= "number" and isTargeted(matches[2]) and #envenomList > 0 then
 	tarAffed(envenomList[1])
+	if applyAffV3 then applyAffV3(envenomList[1]) end
 	table.remove(envenomList, 1)
 	targetIshere = true
 	disableTimer("TargetOutOfRoom")

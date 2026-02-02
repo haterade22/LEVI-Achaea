@@ -42,10 +42,12 @@ if target == matches[2] then
   if wieldweapons == "morningstars" then
       if not tAffs.unblind then
         tarAffed("unblind")
+        if applyAffV3 then applyAffV3("unblind") end
         if partyrelay then send("pt "..target..": unblind") end
       end
       if tAffs.prone then
        tarAffed("unblind")
+       if applyAffV3 then applyAffV3("unblind") end
         if ataxiaTemp.fractures.skullfractures == 0 or ataxiaTemp.fractures.skullfractures == nil then
           ataxiaTemp.fractures.skullfractures = 1
           twohanded_headHit()

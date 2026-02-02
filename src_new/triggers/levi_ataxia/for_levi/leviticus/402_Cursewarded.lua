@@ -46,4 +46,5 @@ if isTargeted(matches[2]) then
 	resetFormat()
 	targetIshere = true
 	tAffs.curseward = true
+	if applyAffV3 then applyAffV3("curseward") end
 end

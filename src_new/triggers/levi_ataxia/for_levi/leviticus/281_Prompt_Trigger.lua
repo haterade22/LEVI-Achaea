@@ -88,6 +88,7 @@ end
 if lb[target] then
 if lb[target].hits["torso"] >= 100 and lb[target].hits["torso"] < 200 and not tAffs.mildtrauma then
   tarAffed("mildtrauma")
+  if applyAffV3 then applyAffV3("mildtrauma") end
 end
 end
 

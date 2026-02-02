@@ -47,6 +47,7 @@ local person = target
 
 if multimatches[3][1] == "The attack rebounds back onto you!" then
   tarAffed("rebounding")
+  if applyAffV3 then applyAffV3("rebounding") end
 elseif multimatches[3][1] == person .. " dodges nimbly out of the way." 
 		or multimatches[3][1] == person .. " parries the attack with a deft manoeuvre." 
 		or multimatches[3][1] == person .. " steps into the attack, grabs your arm, and throws you violently to the ground." 
@@ -65,28 +66,37 @@ elseif multimatches[3][1] == person .. " dodges nimbly out of the way."
 else
 
 if bardtempo == "front" then
-  if tAffs.clumsiness and tAffs.weariness then 
+  if tAffs.clumsiness and tAffs.weariness then
     tarAffed("recklessness")
+    if applyAffV3 then applyAffV3("recklessness") end
   elseif tAffs.clumsiness and not tAffs.weariness then
     tarAffed("weariness")
+    if applyAffV3 then applyAffV3("weariness") end
   elseif not tAffs.clumsiness then
     tarAffed("clumsiness")
+    if applyAffV3 then applyAffV3("clumsiness") end
   end
 elseif bardtempo == "side" then
   if tAffs.addiction and tAffs.generosity then
     tarAffed("confusion")
+    if applyAffV3 then applyAffV3("confusion") end
   elseif tAffs.addiction and not tAffs.generosity then
     tarAffed("generosity")
+    if applyAffV3 then applyAffV3("generosity") end
   elseif not tAffs.addiction then
     tarAffed("addiction")
+    if applyAffV3 then applyAffV3("addiction") end
   end
 elseif bardtempo == "back" then
   if tAffs.paralysis and tAffs.generosity and not tAffs.diminished then
     tarAffed("diminished")
+    if applyAffV3 then applyAffV3("diminished") end
   elseif tAffs.paralysis and not tAffs.generosity then
     tarAffed("generosity")
+    if applyAffV3 then applyAffV3("generosity") end
   elseif not tAffs.paralysis then
     tarAffed("paralysis")
+    if applyAffV3 then applyAffV3("paralysis") end
   end
 end
 end

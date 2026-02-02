@@ -46,5 +46,6 @@ if ataxia_isClass("runewarden") or ataxia_isClass("paladin") or ataxia_isClass("
 end
 
 tAffs.impaled = true
+if applyAffV3 then applyAffV3("impaled") end
 
 disableTimer("Battlefury Perceive")

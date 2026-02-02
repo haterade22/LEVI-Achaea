@@ -65,6 +65,7 @@ if isTargeted(person) then
   	if multimatches[3][1] == "The attack rebounds back onto you!" then
     ataxiaTemp.ignoreShield = true
 			tarAffed("rebounding")
+			if applyAffV3 then applyAffV3("rebounding") end
       	else
 		ataxiaTemp.ignoreShield = false
 		end
@@ -76,6 +77,7 @@ else
 
  targetIshere = true
   tAffs.shield = false
+  if removeAffV3 then removeAffV3("shield") end
 
 	ataxiaTemp.ignoreShield = false
 	if next(envenomList) then

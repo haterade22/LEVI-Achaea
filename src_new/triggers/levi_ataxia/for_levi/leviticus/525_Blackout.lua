@@ -47,7 +47,8 @@ if isTargeted(person) then
 		if haveAff("prone") then
 			moveCursor(0, getLineNumber()-1)
 			tarAffed("blackout")
-			tempTimer(3.5, [[erAff("blackout")]])
+			if applyAffV3 then applyAffV3("blackout") end
+			tempTimer(3.5, [[erAff("blackout"); if removeAffV3 then removeAffV3("blackout") end]])
 		end
 		psion_hitLimb("head")
 		send("contemplate "..target,false)		

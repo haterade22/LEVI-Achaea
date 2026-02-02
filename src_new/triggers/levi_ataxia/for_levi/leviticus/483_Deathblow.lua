@@ -47,6 +47,7 @@ if isTargeted(person) then
 	if multimatches[3][1] ~= "Your blow strikes "..person.." but is robbed of much of its impact by your faulty technique." then
 		moveCursor(0, getLineNumber()-1)
 		tarAffed("asthma")
+		if applyAffV3 then applyAffV3("asthma") end
 		psion_hitLimb("head")
 		send("contemplate "..target,false)		
 		moveCursorEnd()

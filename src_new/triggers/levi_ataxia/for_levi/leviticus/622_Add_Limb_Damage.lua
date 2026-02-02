@@ -45,30 +45,42 @@ patterns:
 
 if lb[target].hits["left leg"] >= 100 and lb[target].hits["left leg"] <= 199 then
 tarAffed("damagedleftleg")
+if applyAffV3 then applyAffV3("damagedleftleg") end
 elseif lb[target].hits["right leg"] >= 100 and lb[target].hits["right leg"] <= 199 then
 tarAffed("damagedrightleg")
+if applyAffV3 then applyAffV3("damagedrightleg") end
 elseif lb[target].hits["right arm"] >= 100 and lb[target].hits["right arm"] <= 199 then
 tarAffed("damagedrightarm")
+if applyAffV3 then applyAffV3("damagedrightarm") end
 elseif lb[target].hits["left arm"] >= 100 and lb[target].hits["left arm"] <= 199 then
 tarAffed("damagedleftarm")
+if applyAffV3 then applyAffV3("damagedleftarm") end
 elseif lb[target].hits["torso"] >= 100 and lb[target].hits["torso"] <= 199 then
 tarAffed("mildtrauma")
+if applyAffV3 then applyAffV3("mildtrauma") end
 elseif lb[target].hits["head"] >= 100 and lb[target].hits["head"] <= 199 then
 tarAffed("damagedhead")
+if applyAffV3 then applyAffV3("damagedhead") end
 end
 
 if lb[target].hits["left leg"] >= 200 then
 tarAffed("mangledleftleg")
+if applyAffV3 then applyAffV3("mangledleftleg") end
 elseif lb[target].hits["right leg"] >= 200 then
 tarAffed("mangledrightleg")
+if applyAffV3 then applyAffV3("mangledrightleg") end
 elseif lb[target].hits["right arm"] >= 200 then
 tarAffed("mangledrightarm")
+if applyAffV3 then applyAffV3("mangledrightarm") end
 elseif lb[target].hits["left arm"] >= 200 then
 tarAffed("mangledleftarm")
+if applyAffV3 then applyAffV3("mangledleftarm") end
 elseif lb[target].hits["torso"] >= 200 then
 tarAffed("serioustrauma")
+if applyAffV3 then applyAffV3("serioustrauma") end
 elseif lb[target].hits["head"] >= 200 then
 tarAffed("concussion")
+if applyAffV3 then applyAffV3("concussion") end
 end
 
 

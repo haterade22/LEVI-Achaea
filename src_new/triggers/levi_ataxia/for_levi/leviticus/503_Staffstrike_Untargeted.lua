@@ -56,6 +56,7 @@ if isTargeted(person) then
 		--Do nothing, because it didn't hit.
 	elseif maybemiss == "The attack rebounds onto you!" then
 		tAffs.rebounding = true
+		if applyAffV3 then applyAffV3("rebounding") end
 		selectString(line, 1)
 		fg("yellow")
 		resetFormat()
@@ -75,10 +76,13 @@ if isTargeted(person) then
     if aff then
       moveCursor(0, getLineNumber()-1)
 			tarAffed(aff)
+			if applyAffV3 then applyAffV3(aff) end
 			moveCursorEnd() 
     end
 		tAffs.rebounding = false
+		if removeAffV3 then removeAffV3("rebounding") end
 		tAffs.shield = false
+		if removeAffV3 then removeAffV3("shield") end
 	end
   tempTimer(0.7, [[ if tempGarash then tempGarash = nil end ]])  
 end

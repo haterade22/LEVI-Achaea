@@ -50,6 +50,7 @@ local maybemiss = multimatches[3][1]
 if isTargeted(person) then
   targetIshere = true
   tAffs.shield = false
+  if removeAffV3 then removeAffV3("shield") end
   ignoreThirdPerson = true
 
     moveCursor(0, getLineNumber()-1)

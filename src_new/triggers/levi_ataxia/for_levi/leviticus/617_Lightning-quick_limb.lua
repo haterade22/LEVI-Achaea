@@ -67,6 +67,7 @@ if isTargeted(person) then
   	if multimatches[3][1] == "The attack rebounds back onto you!" then
     ataxiaTemp.ignoreShield = true
 			tarAffed("rebounding")
+			if applyAffV3 then applyAffV3("rebounding") end
       	else
 		ataxiaTemp.ignoreShield = false
 		end

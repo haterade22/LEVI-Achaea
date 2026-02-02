@@ -43,6 +43,7 @@ if isTargeted(matches[2]) and not ataxiaTemp.ignoreShield then
 		if not haveAff(smashAffs[i]) then
 			moveCursor(0, getLineNumber())
 			tarAffed(smashAffs[i])
+			if applyAffV3 then applyAffV3(smashAffs[i]) end
 			moveCursorEnd()
 			break
 		end

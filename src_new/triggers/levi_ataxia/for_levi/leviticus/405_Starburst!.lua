@@ -51,6 +51,7 @@ if type(target) == "string" then
 		send("cq all")
 
 		tAffs = {blindness = false, deafness = false, shield = false, rebounding = false, curseward = false}
+		if resetStatesV3 then resetStatesV3() end
 		tBals = {tree = true, focus = true, plant = true, timers = {}}
 		tLimbs = {H=0, T=0, RL=0, LL=0, RA=0, LA=0, BP=5}
     if ataxiaTemp.lastAssess then ataxiaTemp.lastAssess = 100 end

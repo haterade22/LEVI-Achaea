@@ -47,6 +47,7 @@ local person = target
 
 if multimatches[3][1] == "The attack rebounds back onto you!" then
   tarAffed("rebounding")
+  if applyAffV3 then applyAffV3("rebounding") end
 elseif multimatches[3][1] == person .. " dodges nimbly out of the way." 
 		or multimatches[3][1] == person .. " parries the attack with a deft manoeuvre." 
 		or multimatches[3][1] == person .. " steps into the attack, grabs your arm, and throws you violently to the ground." 
@@ -66,13 +67,17 @@ else
 
 if bardtempo == "front" then
   tarAffed("nausea")
+  if applyAffV3 then applyAffV3("nausea") end
 elseif bardtempo == "side" then
   tarAffed("asthma")
+  if applyAffV3 then applyAffV3("asthma") end
 elseif bardtempo == "back" then
   tarAffed("anorexia")
+  if applyAffV3 then applyAffV3("anorexia") end
 end
 if bardsunset == true then
   tarAffed("asthma")
+  if applyAffV3 then applyAffV3("asthma") end
 end
 end
 

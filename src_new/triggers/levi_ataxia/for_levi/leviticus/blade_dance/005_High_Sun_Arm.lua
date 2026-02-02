@@ -47,6 +47,7 @@ local person = target
 
 if multimatches[3][1] == "The attack rebounds back onto you!" then
   tarAffed("rebounding")
+  if applyAffV3 then applyAffV3("rebounding") end
 elseif multimatches[3][1] == person .. " dodges nimbly out of the way." 
 		or multimatches[3][1] == person .. " parries the attack with a deft manoeuvre." 
 		or multimatches[3][1] == person .. " steps into the attack, grabs your arm, and throws you violently to the ground." 
@@ -65,28 +66,37 @@ elseif multimatches[3][1] == person .. " dodges nimbly out of the way."
 else
 
 if bardtempo == "front" then
-  if tAffs.clumsiness and tAffs.weariness then 
+  if tAffs.clumsiness and tAffs.weariness then
     tarAffed("haemophilia")
+    if applyAffV3 then applyAffV3("haemophilia") end
   elseif tAffs.clumsiness and not tAffs.weariness then
     tarAffed("weariness")
+    if applyAffV3 then applyAffV3("weariness") end
   elseif not tAffs.clumsiness then
     tarAffed("clumsiness")
+    if applyAffV3 then applyAffV3("clumsiness") end
   end
 elseif bardtempo == "side" then
   if tAffs.weariness and tAffs.clumsiness then
     tarAffed("healthleech")
+    if applyAffV3 then applyAffV3("healthleech") end
   elseif tAffs.weariness and not tAffs.clumsiness then
     tarAffed("clumsiness")
+    if applyAffV3 then applyAffV3("clumsiness") end
   elseif not tAffs.weariness then
     tarAffed("weariness")
+    if applyAffV3 then applyAffV3("weariness") end
   end
 elseif bardtempo == "back" then
   if tAffs.paralysis and tAffs.healthleech and not tAffs.sensitivity then
     tarAffed("sensitivity")
+    if applyAffV3 then applyAffV3("sensitivity") end
   elseif tAffs.paralysis and not tAffs.healthleech then
     tarAffed("healthleech")
+    if applyAffV3 then applyAffV3("healthleech") end
   elseif not tAffs.paralysis then
     tarAffed("paralysis")
+    if applyAffV3 then applyAffV3("paralysis") end
   end
 end
     

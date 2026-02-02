@@ -45,5 +45,6 @@ if type(target) == "string" and isTargeted(matches[2]) then
 	send("cq eqbal")
 
 	tAffs.shield = true
+	if applyAffV3 then applyAffV3("shield") end
   
 end

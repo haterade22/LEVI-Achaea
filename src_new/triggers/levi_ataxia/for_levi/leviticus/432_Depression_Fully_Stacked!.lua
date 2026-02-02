@@ -44,4 +44,5 @@ if isTargeted(matches[2]) then
 	setBold(true)
 	resetFormat()
 	tarAffed("anorexia", "hypochondria", "nausea", "masochism")
+	if applyAffV3 then applyAffV3("anorexia"); applyAffV3("hypochondria"); applyAffV3("nausea"); applyAffV3("masochism") end
 end

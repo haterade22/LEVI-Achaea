@@ -44,6 +44,7 @@ if isTargeted(matches[2]) then
 		bg("orange")
 		resetFormat()
 		tAffs.dehydrate = false
+		if removeAffV3 then removeAffV3("dehydrate") end
 		tAffs.burns = 0
 		
 		if dehydrateTimer then killTimer(dehydrateTimer) end

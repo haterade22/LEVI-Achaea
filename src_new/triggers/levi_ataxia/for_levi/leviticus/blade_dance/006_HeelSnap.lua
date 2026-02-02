@@ -47,6 +47,7 @@ local person = target
 
 if multimatches[3][1] == "The attack rebounds back onto you!" then
   tarAffed("rebounding")
+  if applyAffV3 then applyAffV3("rebounding") end
 elseif multimatches[3][1] == person .. " dodges nimbly out of the way." 
 		or multimatches[3][1] == person .. " parries the attack with a deft manoeuvre." 
 		or multimatches[3][1] == person .. " steps into the attack, grabs your arm, and throws you violently to the ground." 
@@ -66,18 +67,23 @@ else
 if bardtempo == "front" then
   if multimatches[1][2] == "left" then
     tarAffed("brokenleftleg")
+    if applyAffV3 then applyAffV3("brokenleftleg") end
   elseif multimatches[1][2] == "right" then
    tarAffed("brokenrightleg")
+   if applyAffV3 then applyAffV3("brokenrightleg") end
   end
 elseif bardtempo == "side" then
    if multimatches[1][2] == "left" then
     tarAffed("healthleech")
+    if applyAffV3 then applyAffV3("healthleech") end
   elseif multimatches[1][2] == "right" then
    tarAffed("sensitivity")
+   if applyAffV3 then applyAffV3("sensitivity") end
   end
 elseif bardtempo == "back" then
   tarAffed("hamstring")
-  
+  if applyAffV3 then applyAffV3("hamstring") end
+
 end
     
 end

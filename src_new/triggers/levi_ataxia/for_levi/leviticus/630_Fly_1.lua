@@ -57,7 +57,9 @@ if isTargeted(matches[2]) then
 	resetFormat()
 	dir_left = "fly"
 	tAffs.paralysis = false
+	if removeAffV3 then removeAffV3("paralysis") end
 	tAffs.vertigo = false
+	if removeAffV3 then removeAffV3("vertigo") end
   send("pt " ..target.. ": Flying!")
   if gmcp.Char.Status.class == "Runewarden" and rtiwaz == true then
     send("queue addclear free empower tiwaz " ..target)

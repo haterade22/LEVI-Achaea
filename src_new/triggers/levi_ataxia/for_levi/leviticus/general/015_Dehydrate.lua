@@ -58,18 +58,26 @@ if target == matches[2] then
 
   if not tAffs.weariness and not tAffs.nausea then
    tarAffed("weariness")
+   if applyAffV3 then applyAffV3("weariness") end
    tarAffed("nausea")
+   if applyAffV3 then applyAffV3("nausea") end
   end
 
   if not tAffs.weariness and tAffs.nausea and not tAffs.shivering and tAffs.nocaloric then
     tarAffed("weariness")
+    if applyAffV3 then applyAffV3("weariness") end
     tarAffed("shivering")
+    if applyAffV3 then applyAffV3("shivering") end
   elseif not tAffs.weariness and tAffs.nausea and not tAffs.nocaloric then
     tarAffed("weariness")
+    if applyAffV3 then applyAffV3("weariness") end
     tarAffed("nocaloric")
+    if applyAffV3 then applyAffV3("nocaloric") end
   elseif not tAffs.weariness and tAffs.nausea and tAffs.shivering and tAffs.nocaloric and not tAffs.frozen then
     tarAffed("frozen")
+    if applyAffV3 then applyAffV3("frozen") end
     tarAffed("weariness")
+    if applyAffV3 then applyAffV3("weariness") end
   end
 
   if not tAffs.nausea and tAffs.weariness then
@@ -87,7 +95,9 @@ if target == matches[2] then
 	    tburns = 5
     end
     tarAffed("frozen")
+    if applyAffV3 then applyAffV3("frozen") end
     tarAffed("nausea")
+    if applyAffV3 then applyAffV3("nausea") end
     haveAff("weariness")
     cecho(" <DimGrey>[<red>"..tburns.."/5<DimGrey>]")
   end

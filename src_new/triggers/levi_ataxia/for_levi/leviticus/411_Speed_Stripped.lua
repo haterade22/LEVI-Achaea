@@ -45,4 +45,5 @@ if isTargeted(matches[2]) then
 	fg("LightSkyBlue")
 	resetFormat()
 	tarAffed("nospeed")
+	if applyAffV3 then applyAffV3("nospeed") end
 end

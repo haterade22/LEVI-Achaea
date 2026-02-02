@@ -47,6 +47,7 @@ if line:find("not adequately prepared") then
 	for i,v in pairs(tzAffs) do
 		if haveAff(v) then
 			erAff(v)
+			if removeAffV3 then removeAffV3(v) end
 		end
 	end
 	selectString(line,1)

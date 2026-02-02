@@ -59,6 +59,7 @@ if isTargeted(matches[2]) then
 	
 	if ataxia_isClass("Runewarden") or ataxia_isClass("Infernal") or ataxia_isClass("Paladin") or ataxia_isClass("Unnamable") then
 		erAff("nausea")
+		if removeAffV3 then removeAffV3("nausea") end
   elseif ataxia_isClass("Blademaster") then  
     if bmFistTimer then killTimer(bmFistTimer) end
 		tAffs.airfist = nil           

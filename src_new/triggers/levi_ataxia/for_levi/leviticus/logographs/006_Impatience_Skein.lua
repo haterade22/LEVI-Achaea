@@ -43,6 +43,7 @@ patterns:
 
 if type(target) == "string" and isTargeted(matches[2]) then
 	tarAffed("impatience")
+	if applyAffV3 then applyAffV3("impatience") end
 end
 
 if ataxiaBasher.enabled then

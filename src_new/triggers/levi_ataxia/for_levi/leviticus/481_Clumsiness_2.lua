@@ -46,6 +46,7 @@ if isTargeted(person) then
 	if multimatches[3][1] ~= "Your blow strikes "..person.." but is robbed of much of its impact by your faulty technique." then
 		moveCursor(0, getLineNumber()-1)
 		tarAffed("clumsiness")
+		if applyAffV3 then applyAffV3("clumsiness") end
 		psion_hitLimb(multimatches[1][2].." arm")
 		moveCursorEnd()
 		psion_bleedAdd("20")		

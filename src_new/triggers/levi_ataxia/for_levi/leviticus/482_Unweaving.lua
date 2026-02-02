@@ -46,6 +46,7 @@ if isTargeted(person) then
 	if multimatches[3][1] ~= "Your blow strikes "..person.." but is robbed of much of its impact by your faulty technique." then
 		moveCursor(0, getLineNumber()-2)
 		tarAffed("unweaving"..multimatches[1][3])	
+		if applyAffV3 then applyAffV3("unweaving") end
 		moveCursorEnd()	
 	end
 end

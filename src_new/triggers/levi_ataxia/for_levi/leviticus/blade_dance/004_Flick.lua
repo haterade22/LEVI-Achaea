@@ -47,6 +47,7 @@ local person = target
 
 if multimatches[3][1] == "The attack rebounds back onto you!" then
   tarAffed("rebounding")
+  if applyAffV3 then applyAffV3("rebounding") end
 elseif multimatches[3][1] == person .. " dodges nimbly out of the way." 
 		or multimatches[3][1] == person .. " parries the attack with a deft manoeuvre." 
 		or multimatches[3][1] == person .. " steps into the attack, grabs your arm, and throws you violently to the ground." 
@@ -81,6 +82,7 @@ if bardtempo == "front" then
      
 elseif bardtempo == "side" then
   tarAffed("earworm")
+  if applyAffV3 then applyAffV3("earworm") end
 elseif bardtempo == "back" then
   if tAffs.crescendo == 0 or tAffs.crescendo == false then
     tAffs.crescendo = 1
@@ -96,6 +98,7 @@ elseif bardtempo == "back" then
     tAffs.crescendo = 5
   end
   tarAffed("earworm")
+  if applyAffV3 then applyAffV3("earworm") end
 end
     
 end

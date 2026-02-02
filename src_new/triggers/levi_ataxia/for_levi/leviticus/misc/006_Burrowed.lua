@@ -46,6 +46,7 @@ local burrowed, tar = string.match(multimatches[1][2]:lower(), "swarm burrow ([!
 
 if isTargeted(multimatches[2][2]) then
   tAffs.burrow = true
+  if applyAffV3 then applyAffV3("burrow") end
   pariah.burrow = string.trim(burrowed)
 
   selectString(line,1)

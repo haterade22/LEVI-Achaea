@@ -45,6 +45,7 @@ local person = multimatches[1][2]
 if isTargeted(perosn) then
 	if multimatches[3][1] == "The attack rebounds back onto you!" then
   tAffs.rebounding = true
+  if applyAffV3 then applyAffV3("rebounding") end
   table.remove(envenomList, 1)
 	table.remove(envenomListTwo, 1)
 	elseif  multimatches[3][1] == "A reflection of " .. person .. " blinks out of existence." then
@@ -57,6 +58,7 @@ if isTargeted(perosn) then
     table.remove(envenomList, 1)
     aff2 = venom_to_aff(envenomListTwo[1])
     tarAffed(aff2)
+    if applyAffV3 then applyAffV3(aff2) end
 	end
 end
 

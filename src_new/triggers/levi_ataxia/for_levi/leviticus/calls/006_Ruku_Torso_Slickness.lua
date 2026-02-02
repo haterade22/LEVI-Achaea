@@ -44,3 +44,4 @@ replace("" ..matches[2].. " [RUKU: Slickness]")
  
 send("pt " ..matches[2].. ": slickness")
 tarAffed("slickness")
+if applyAffV3 then applyAffV3("slickness") end

@@ -47,10 +47,13 @@ if isTargeted(person) then
 		moveCursor(0, getLineNumber()-1)
 		if tLimbs.H >= 75 or lb[target].hits["head"] >= 75 then
 			tarAffed("impatience", "stupidity", "prone")
+			if applyAffV3 then applyAffV3("impatience"); applyAffV3("stupidity"); applyAffV3("prone") end
     elseif haveAff("prone") then
-      tarAffed("impatience")      
+      tarAffed("impatience")
+      if applyAffV3 then applyAffV3("impatience") end
 		else
 			tarAffed("stupidity", "prone")
+			if applyAffV3 then applyAffV3("stupidity"); applyAffV3("prone") end
 		end
 		psion_hitLimb("head")
 	

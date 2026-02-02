@@ -42,6 +42,7 @@ if target == matches[2] then
 	targshield = false
 	tAffs.rebounding = false
 	tAffs.shield = false
+	if removeAffV3 then removeAffV3("shield") end
   removeAffV3("rebounding")
 	-- V2 tracking support
 	if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then

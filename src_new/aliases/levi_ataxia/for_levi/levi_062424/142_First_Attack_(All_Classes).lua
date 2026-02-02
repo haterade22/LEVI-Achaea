@@ -60,7 +60,7 @@ end
 
 
 if gmcp.Char.Status.class == "Depthswalker" then
-depthswalker_damageroute()
+depthswalker.dispatch()
 end
 
 if gmcp.Char.Status.class == "Infernal" and gmcp.Char.Vitals.charstats[4] == "Spec: Sword and Shield" then

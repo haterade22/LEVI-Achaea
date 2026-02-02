@@ -67,10 +67,12 @@ if isTargeted(person) then
 		if next(envenomList) then
 			moveCursor(0, getLineNumber()-1)
 			tarAffed(envenomList[1])
+			if applyAffV3 then applyAffV3(envenomList[1]) end
 			table.remove(envenomList, 1)
 			moveCursorEnd()
       if not ataxia_isClass("bard") or ataxia.bardStuff.tunesmith ~= "martellato" then	
         tAffs.shield = false; tAffs.rebounding = false
+        if removeAffV3 then removeAffV3("shield"); removeAffV3("rebounding") end
       end
 		end
 	end
