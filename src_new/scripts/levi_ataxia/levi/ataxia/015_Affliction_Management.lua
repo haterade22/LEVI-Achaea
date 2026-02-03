@@ -185,11 +185,16 @@ function erAff(what)
 end
 
 function haveAff(what)
-	if tAffs and tAffs[what] then
-		return true
-	else
-		return false
-	end
+    -- V3 routing: check V3 first when enabled
+    if affConfigV3 and affConfigV3.enabled and haveAffV3 then
+        return haveAffV3(what)
+    end
+    -- V1 fallback
+    if tAffs and tAffs[what] then
+        return true
+    else
+        return false
+    end
 end
 
 function tarAffed(...)

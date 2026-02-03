@@ -85,16 +85,17 @@ depthswalker.DW_AFFS = {
 }
 
 --------------------------------------------------------------------------------
--- V3 ROUTING HELPERS (follows apostate.hasAff pattern)
+-- V3 ROUTING HELPERS
 --------------------------------------------------------------------------------
 
 -- Check if target has an affliction (V3 -> V2 -> V1 routing)
+-- Now consistent with global haveAff() which also routes to V3 when enabled.
 function depthswalker.hasAff(aff)
-    if affConfigV3 and affConfigV3.enabled then
-        if haveAffV3 then
-            return haveAffV3(aff)
-        end
+    -- V3 first when enabled
+    if affConfigV3 and affConfigV3.enabled and haveAffV3 then
+        return haveAffV3(aff)
     end
+    -- V2 fallback
     if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
         if haveAffV2 then
             return haveAffV2(aff)
@@ -103,6 +104,7 @@ function depthswalker.hasAff(aff)
         end
         return false
     end
+    -- V1 fallback
     if tAffs and tAffs[aff] then
         return true
     end
@@ -220,7 +222,7 @@ function depthswalker.canTimeloop()
 end
 
 -- Timeloop decision: trade venom for double instill?
--- Mode-specific logic: damage mode only uses loop boost for healthleech->manaleech
+-- Key timing: when healthleech stuck, use chrono loop boost to get manaleech in same hit
 function depthswalker.shouldTimeloop()
     if not depthswalker.canTimeloop() then return false end
 
@@ -229,15 +231,26 @@ function depthswalker.shouldTimeloop()
 
     local dwCount = depthswalker.countDWAffsInt()
     local mode = depthswalker.state.mode
+    local phase = depthswalker.selections.phase
 
-    -- DAMAGE MODE: ONLY use chrono loop boost for healthleech->manaleech transition
-    -- This is the critical timing window where they'd otherwise cure healthleech
+    -- CRITICAL: When healthleech stuck but not manaleech, use chrono loop boost
+    -- This applies to ALL modes during shadow phase - double-apply leach to get manaleech
+    -- before they can cure healthleech with kelp
+    if depthswalker.hasAff("healthleech") and not depthswalker.hasAff("manaleech") then
+        return true
+    end
+
+    -- DAMAGE/GROUP MODE: only use timeloop for the healthleech->manaleech transition (above)
+    -- All other damage situations: chrono assert (keep venom pressure)
     if mode == "damage" or mode == "group" then
-        if depthswalker.hasAff("healthleech") and not depthswalker.hasAff("manaleech") then
-            return true  -- Must be boosted (age > 250 typically)
-        end
-        -- All other damage situations: chrono assert (keep venom pressure)
         return false
+    end
+
+    -- BELLWORT PHASE: use chrono loop to apply timeloop as part of bellwort stack
+    -- Timeloop is NOT an instill - it comes from chrono loop
+    local phase = depthswalker.selections.phase
+    if phase == "bellwort" and not depthswalker.hasAff("timeloop") then
+        return true
     end
 
     -- LOCK/DICTATE/MADPRESSION: use timeloop more aggressively to build DW aff count
@@ -259,6 +272,12 @@ end
 -- Get the chrono command based on timeloop decision
 function depthswalker.getChronoCommand()
     if depthswalker.selections.useTimeloop then
+        -- CRITICAL: For healthleech->manaleech transition, MUST use boost to double-apply leach
+        -- Boost doubles the instill effect, which is what gets manaleech in one hit
+        if depthswalker.hasAff("healthleech") and not depthswalker.hasAff("manaleech") then
+            return "chrono loop boost"
+        end
+        -- Otherwise prefer unboosted if available (saves age resource)
         if depthswalker.canUnboostedLoop() then
             return "chrono loop"
         else
@@ -316,11 +335,12 @@ function depthswalker.selectInstillOpening()
     end
 
     -- Phase 3: BELLWORT STACK - bury target with bellwort affs
-    -- Priority: timeloop first (also useful mechanically), then retribution, then justice
+    -- justice and retribution both come from instill retribution (justice first, retribution second)
+    -- timeloop comes from chrono loop (handled by shouldTimeloop())
     depthswalker.selections.phase = "bellwort"
-    if not depthswalker.hasAff("timeloop") then return "timeloop" end
+    if not depthswalker.hasAff("justice") then return "retribution" end
     if not depthswalker.hasAff("retribution") then return "retribution" end
-    if not depthswalker.hasAff("justice") then return "justice" end
+    -- timeloop is applied via chrono loop when shouldTimeloop() returns true
 
     -- Opening complete: all bellwort affs stuck
     return nil
