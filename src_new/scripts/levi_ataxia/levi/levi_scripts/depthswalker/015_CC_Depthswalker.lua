@@ -464,8 +464,17 @@ end
 --------------------------------------------------------------------------------
 
 -- Lock: build toward truelock (asthma + slickness + anorexia + impatience + paralysis)
+-- During kelp/shadow phase: use curare to force paralysis cures (helps clumsiness stick)
+-- After bellwort phase: standard lock progression
 function depthswalker.selectVenomLock()
     local locks = depthswalker.getLocks()
+    local phase = depthswalker.selections.phase
+
+    -- KELP/SHADOW PHASE: curare for paralysis pressure
+    -- They have to cure paralysis (high priority) instead of clumsiness/kelp affs
+    if phase == "kelp" or phase == "shadow" then
+        return "curare"
+    end
 
     -- Truelock achieved: apply class-specific lock aff to block passive cure
     if locks.truelock >= depthswalker.config.highConfidence then
@@ -485,7 +494,7 @@ function depthswalker.selectVenomLock()
         if not depthswalker.hasAff("recklessness") then return "eurypteria" end
     end
 
-    -- Lock progression
+    -- Lock progression (after opening complete)
     if not depthswalker.hasAff("asthma") then return "kalmia" end
     if not depthswalker.hasAff("slickness") then return "gecko" end
     if not depthswalker.hasAff("paralysis") then return "curare" end
@@ -513,8 +522,16 @@ function depthswalker.selectVenomDamage()
     return "curare"
 end
 
--- Dictate: asthma first (blocks curing), then kelp stacking
+-- Dictate: curare during opening (paralysis pressure), then asthma + kelp stacking
 function depthswalker.selectVenomDictate()
+    local phase = depthswalker.selections.phase
+
+    -- KELP/SHADOW PHASE: curare for paralysis pressure
+    if phase == "kelp" or phase == "shadow" then
+        return "curare"
+    end
+
+    -- After opening: asthma blocks curing, then kelp stacking
     if not depthswalker.hasAff("asthma") then return "kalmia" end
     if not depthswalker.hasAff("paralysis") then return "curare" end
     if not depthswalker.hasAff("clumsiness") then return "xentio" end
@@ -523,8 +540,16 @@ function depthswalker.selectVenomDictate()
     return "curare"
 end
 
--- Madpression: paralysis + asthma for action denial, sensitivity for masochism damage
+-- Madpression: curare during opening, then paralysis + asthma + sensitivity
 function depthswalker.selectVenomMadpression()
+    local phase = depthswalker.selections.phase
+
+    -- KELP/SHADOW PHASE: curare for paralysis pressure
+    if phase == "kelp" or phase == "shadow" then
+        return "curare"
+    end
+
+    -- After opening: action denial + sensitivity for masochism damage
     if not depthswalker.hasAff("paralysis") then return "curare" end
     if not depthswalker.hasAff("asthma") then return "kalmia" end
     if not depthswalker.hasAff("sensitivity") then return "prefarar" end
