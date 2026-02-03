@@ -39,14 +39,19 @@ patterns:
 
 if not affs_to_colour then populate_aff_colours() end
 
-
-local aff = venom_to_aff(envenomList[1])
+-- Guard: envenomList may be nil or empty (e.g., when using timeloop)
+local aff = nil
+if envenomList and envenomList[1] then
+    aff = venom_to_aff(envenomList[1])
+end
 
 if type(target) ~= "number" and isTargeted(matches[2]) then
-	tarAffed(aff)
-	if applyAffV3 then applyAffV3(aff) end
-	targetIshere = true
-	disableTimer("TargetOutOfRoom")
+    if aff then
+        tarAffed(aff)
+        if applyAffV3 then applyAffV3(aff) end
+    end
+    targetIshere = true
+    disableTimer("TargetOutOfRoom")
 end
 	if haveAff("timeloop") then
 		checkTimeloop = false

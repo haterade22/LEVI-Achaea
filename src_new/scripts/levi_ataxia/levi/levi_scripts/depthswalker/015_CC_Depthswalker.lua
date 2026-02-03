@@ -220,6 +220,7 @@ function depthswalker.canTimeloop()
 end
 
 -- Timeloop decision: trade venom for double instill?
+-- Mode-specific logic: damage mode only uses loop boost for healthleech->manaleech
 function depthswalker.shouldTimeloop()
     if not depthswalker.canTimeloop() then return false end
 
@@ -229,6 +230,17 @@ function depthswalker.shouldTimeloop()
     local dwCount = depthswalker.countDWAffsInt()
     local mode = depthswalker.state.mode
 
+    -- DAMAGE MODE: ONLY use chrono loop boost for healthleech->manaleech transition
+    -- This is the critical timing window where they'd otherwise cure healthleech
+    if mode == "damage" or mode == "group" then
+        if depthswalker.hasAff("healthleech") and not depthswalker.hasAff("manaleech") then
+            return true  -- Must be boosted (age > 250 typically)
+        end
+        -- All other damage situations: chrono assert (keep venom pressure)
+        return false
+    end
+
+    -- LOCK/DICTATE/MADPRESSION: use timeloop more aggressively to build DW aff count
     -- High-value: 3-4 DW affs, rushing to capstone threshold (5)
     if dwCount >= 3 and dwCount < 5 then return true end
 
@@ -240,9 +252,6 @@ function depthswalker.shouldTimeloop()
 
     -- Dictate: maximize DW aff count for lower threshold
     if mode == "dictate" and dwCount >= 2 then return true end
-
-    -- Early game: timeloop when we have some venom pressure established
-    if dwCount < 2 and depthswalker.hasAff("clumsiness") then return true end
 
     return false
 end
@@ -264,22 +273,39 @@ end
 --
 -- Strategy: Universal opening phase -> Mode-specific finisher
 --
--- UNIVERSAL OPENING (all modes):
---   1. SHADOW: Instill leach until shadow claimed (parasite/healthleech/manaleech)
---   2. BELLWORT STACK: Stick timeloop -> retribution -> justice
+-- DAMAGE/GROUP MODE: Completely different strategy (kelp pressure first)
+--   1. Spam degeneration + curare to build kelp stack (clumsiness, weariness)
+--   2. Once kelp stuck, build leach toward shadow (kalmia when healthleech stuck)
+--   3. Shadow claimed = spam degeneration for capstone damage
+--
+-- LOCK/DICTATE/MADPRESSION: Use universal opening (kelp -> shadow -> bellwort)
+--   1. KELP: Stick clumsiness with degeneration (healthleech/manaleech are kelp-cured!)
+--   2. SHADOW: Instill leach until shadow claimed (parasite/healthleech/manaleech)
+--   3. BELLWORT STACK: Stick timeloop -> retribution -> justice
 --      All 3 are bellwort-cured. Target can only eat bellwort once per balance,
 --      so with 3 bellwort affs, 2 remain stuck at all times.
---   3. MODE-SPECIFIC: After opening completes, enter mode finisher
+--   4. MODE-SPECIFIC: After opening completes, enter mode finisher
 --
 -- Capstone note: When 5+ DW affs are present, capstone fires matching the
 -- instill type. Mode finishers handle capstone selection.
 --------------------------------------------------------------------------------
 
--- Universal opening: shadow -> bellwort stack (timeloop -> retribution -> justice)
+-- Universal opening: kelp pressure -> shadow -> bellwort stack
 -- Returns the next instill for the opening phase, or nil if opening is complete.
+--
+-- ALL modes need kelp pressure first! healthleech/manaleech are kelp-cured,
+-- so without clumsiness stuck, they just cure the leach affs immediately.
 function depthswalker.selectInstillOpening()
-    -- Phase 1: SHADOW - get leach affs for shadow claim
+    -- Phase 1: KELP PRESSURE - must stick clumsiness before going for leach
+    -- Without kelp pressure, healthleech/manaleech get cured instantly
+    if not depthswalker.hasAff("clumsiness") then
+        depthswalker.selections.phase = "kelp"
+        return "degeneration"
+    end
+
+    -- Phase 2: SHADOW - get leach affs for shadow claim (kelp is now pressured)
     if not depthswalker.state.haveShadow then
+        depthswalker.selections.phase = "shadow"
         if not depthswalker.hasAff("parasite") then return "leach" end
         if not depthswalker.hasAff("healthleech") then return "leach" end
         if not depthswalker.hasAff("manaleech") then return "leach" end
@@ -289,8 +315,9 @@ function depthswalker.selectInstillOpening()
         if depthswalker.capstoneReady() then return "leach" end
     end
 
-    -- Phase 2: BELLWORT STACK - bury target with bellwort affs
+    -- Phase 3: BELLWORT STACK - bury target with bellwort affs
     -- Priority: timeloop first (also useful mechanically), then retribution, then justice
+    depthswalker.selections.phase = "bellwort"
     if not depthswalker.hasAff("timeloop") then return "timeloop" end
     if not depthswalker.hasAff("retribution") then return "retribution" end
     if not depthswalker.hasAff("justice") then return "justice" end
@@ -325,23 +352,37 @@ function depthswalker.selectInstillLock()
     return "depression"
 end
 
--- Damage finisher: degeneration capstone for burst damage
+-- Damage route: kelp pressure first -> leach for shadow -> degeneration capstone
+-- DIFFERENT from other modes: does NOT use universal opening, has its own strategy
+--
+-- Goal: Claim shadow to amplify degeneration damage (halved without shadow)
+-- Strategy:
+--   1. Spam degeneration + curare until clumsiness sticks (establishes kelp pressure)
+--   2. Once clumsiness stuck, switch to leach for shadow (healthleech/manaleech are kelp-cured)
+--   3. When healthleech stuck: use kalmia venom or chrono loop boost to get manaleech
+--   4. Shadow claimed = spam degeneration for full capstone damage
 function depthswalker.selectInstillDamage()
-    local capReady = depthswalker.capstoneReady()
-
-    -- Capstone ready: degeneration for damage burst
-    if capReady then
+    -- Priority 1: Spam degeneration until clumsiness sticks
+    -- Clumsiness is the first degeneration aff - once it sticks, kelp is pressured
+    -- We don't wait for weariness because that comes automatically from continued degeneration
+    if not depthswalker.hasAff("clumsiness") then
+        depthswalker.selections.phase = "kelp"
         return "degeneration"
     end
 
-    -- Build DW aff count for capstone (bellwort affs already stuck from opening)
-    if not depthswalker.hasAff("degeneration") then return "degeneration" end
-    if not depthswalker.hasAff("depression") then return "depression" end
-    if not depthswalker.hasAff("madness") then return "madness" end
-    if not depthswalker.hasAff("parasite") then return "leach" end
-    if not depthswalker.hasAff("healthleech") then return "leach" end
-    if not depthswalker.hasAff("manaleech") then return "leach" end
+    -- Priority 2: Clumsiness stuck, now build leach toward shadow
+    -- Continue degeneration pressure (weariness/paralysis) via the venom slot
+    if not depthswalker.state.haveShadow then
+        depthswalker.selections.phase = "shadow"
+        if not depthswalker.hasAff("parasite") then return "leach" end
+        if not depthswalker.hasAff("healthleech") then return "leach" end
+        if not depthswalker.hasAff("manaleech") then return "leach" end
+        -- All leach affs present: capstone will fire and claim shadow
+        return "leach"
+    end
 
+    -- Priority 3: Shadow claimed = spam degeneration for capstone damage
+    depthswalker.selections.phase = "damage"
     return "degeneration"
 end
 
@@ -389,28 +430,28 @@ function depthswalker.selectInstillMadpression()
     return "madness"
 end
 
--- Unified instill selector: opening first, then mode-specific finisher
+-- Unified instill selector: damage skips opening, others use opening first
 function depthswalker.selectInstill()
-    -- Universal opening takes priority (shadow -> bellwort stack)
+    local mode = depthswalker.state.mode
+
+    -- DAMAGE/GROUP: Skip universal opening, use dedicated damage logic
+    -- Damage route has its own kelp pressure -> leach -> degeneration strategy
+    if mode == "damage" or mode == "group" then
+        return depthswalker.selectInstillDamage()
+    end
+
+    -- LOCK/DICTATE/MADPRESSION: Universal opening takes priority (kelp -> shadow -> bellwort)
+    -- Note: selectInstillOpening() sets depthswalker.selections.phase internally
     local opening = depthswalker.selectInstillOpening()
     if opening then
-        -- Track which opening phase we're in for debug echo
-        if opening == "leach" and not depthswalker.state.haveShadow then
-            depthswalker.selections.phase = "shadow"
-        else
-            depthswalker.selections.phase = "bellwort"
-        end
         return opening
     end
 
     -- Opening complete: route to mode-specific finisher
-    local mode = depthswalker.state.mode
     depthswalker.selections.phase = mode
     if mode == "lock" then return depthswalker.selectInstillLock()
-    elseif mode == "damage" then return depthswalker.selectInstillDamage()
     elseif mode == "dictate" then return depthswalker.selectInstillDictate()
     elseif mode == "madpression" then return depthswalker.selectInstillMadpression()
-    elseif mode == "group" then return depthswalker.selectInstillDamage()
     end
     return "degeneration"
 end
@@ -458,14 +499,17 @@ function depthswalker.selectVenomLock()
     return "curare"
 end
 
--- Damage: clumsiness/weariness for kelp pressure, sensitivity for damage amp
+-- Damage: curare by default, kalmia when healthleech stuck (to protect manaleech)
+-- Strategy: curare stacks with degeneration for paralysis pressure
+-- When healthleech stuck: kalmia blocks herb cure so manaleech sticks
 function depthswalker.selectVenomDamage()
-    if not depthswalker.hasAff("clumsiness") then return "xentio" end
-    if not depthswalker.hasAff("weariness") then return "xentio" end
-    if not depthswalker.hasAff("asthma") then return "kalmia" end
-    if not depthswalker.hasAff("sensitivity") then return "prefarar" end
-    if not depthswalker.hasAff("paralysis") then return "curare" end
+    -- Critical timing: when healthleech stuck, switch to kalmia
+    -- Asthma blocks herb cure, so manaleech will stick when we apply it
+    if depthswalker.hasAff("healthleech") and not depthswalker.hasAff("asthma") then
+        return "kalmia"
+    end
 
+    -- Default: curare for paralysis pressure (stacks with degeneration)
     return "curare"
 end
 
@@ -642,6 +686,9 @@ function depthswalker.dispatch()
     if not php then php = 100 end
     if not pm then pm = 100 end
 
+    -- Initialize envenomList global (triggers read this to know which venom was applied)
+    envenomList = {}
+
     -- Sync shadow state from global (set by triggers)
     depthswalker.state.haveShadow = haveshadow or false
     depthswalker.state.distorted = depdistort or false
@@ -658,6 +705,11 @@ function depthswalker.dispatch()
     depthswalker.selections.venom = depthswalker.selectVenom()
     depthswalker.selections.useTimeloop = depthswalker.shouldTimeloop()
 
+    -- Populate envenomList for triggers (unless using timeloop = no venom)
+    if not depthswalker.selections.useTimeloop and depthswalker.selections.venom then
+        table.insert(envenomList, depthswalker.selections.venom)
+    end
+
     -- Attune selection by mode
     if depthswalker.state.mode == "madpression" then
         depthswalker.selections.attune = "madness"
@@ -665,7 +717,8 @@ function depthswalker.dispatch()
         depthswalker.selections.attune = "degeneration"
     end
 
-    -- Debug echo
+    -- Attack echo (always shows) and debug echo (if enabled)
+    depthswalker.attackEcho()
     depthswalker.debugEcho()
 
     -- Shield check: strip shield instead of attacking
@@ -702,16 +755,50 @@ end
 -- DEBUG / STATUS
 --------------------------------------------------------------------------------
 
+-- Attack echo - ALWAYS shows attack info (like Infernal/Shikudo offenses)
+function depthswalker.attackEcho()
+    local sel = depthswalker.selections
+    local inst = sel.instill or "?"
+    local ven = sel.venom or "?"
+    local chrono = sel.useTimeloop and "<magenta>LOOP<reset>" or "assert"
+    local phase = sel.phase or depthswalker.state.mode
+    local mode = depthswalker.state.mode:upper()
+
+    -- Phase color
+    local phaseColor = "<cyan>"
+    if phase == "kelp" then phaseColor = "<green>"
+    elseif phase == "shadow" then phaseColor = "<yellow>"
+    elseif phase == "bellwort" then phaseColor = "<magenta>"
+    elseif phase == "damage" then phaseColor = "<red>"
+    end
+
+    -- DW affs summary for damage mode
+    local dwInfo = ""
+    if depthswalker.state.mode == "damage" or depthswalker.state.mode == "group" then
+        local clum = depthswalker.hasAff("clumsiness") and "<green>C<reset>" or "<red>c<reset>"
+        local wear = depthswalker.hasAff("weariness") and "<green>W<reset>" or "<red>w<reset>"
+        local para = depthswalker.hasAff("paralysis") and "<green>P<reset>" or "<red>p<reset>"
+        local par = depthswalker.hasAff("parasite") and "<green>p<reset>" or "<red>-<reset>"
+        local hl = depthswalker.hasAff("healthleech") and "<green>h<reset>" or "<red>-<reset>"
+        local ml = depthswalker.hasAff("manaleech") and "<green>m<reset>" or "<red>-<reset>"
+        local shad = depthswalker.state.haveShadow and "<green>SHADOW<reset>" or "<red>no shadow<reset>"
+        dwInfo = " | Degen:[" .. clum .. wear .. para .. "] Leach:[" .. par .. hl .. ml .. "] " .. shad
+    end
+
+    cecho("\n<cyan>[DW:" .. mode .. "]<reset> " .. phaseColor .. phase:upper() .. "<reset>"
+        .. " | <green>" .. inst .. "<reset>/" .. ven
+        .. " | " .. chrono
+        .. dwInfo .. "\n")
+end
+
+-- Verbose debug echo - shows full details (toggle with dwd)
 function depthswalker.debugEcho()
     if not depthswalker.config.debugEcho then return end
 
     local sel = depthswalker.selections
-    local inst = sel.instill or "?"
-    local ven = sel.venom or "?"
-    local loop = sel.useTimeloop and "LOOP" or "assert"
     local dwCount = depthswalker.countDWAffsInt()
     local sys = depthswalker.getTrackingSystem()
-    local capStr = depthswalker.capstoneReady() and "READY" or (tostring(dwCount) .. "/5")
+    local capStr = depthswalker.capstoneReady() and "<green>READY<reset>" or (tostring(dwCount) .. "/5")
 
     -- Key lock affs
     local lockAffs = {"asthma", "slickness", "paralysis", "impatience", "anorexia", "recklessness"}
@@ -723,14 +810,7 @@ function depthswalker.debugEcho()
     end
     local stuckStr = #stuck > 0 and table.concat(stuck, ", ") or "none"
 
-    local phase = depthswalker.selections.phase or depthswalker.state.mode
-    local phaseColor = (phase == "shadow" and "<yellow>") or (phase == "bellwort" and "<magenta>") or "<cyan>"
-
-    cecho("\n<cyan>[DW:" .. depthswalker.state.mode .. "|" .. phaseColor .. phase .. "<reset>]<reset>"
-        .. " Instill: <green>" .. inst
-        .. "<reset> | Venom: <green>" .. ven
-        .. "<reset> | " .. loop
-        .. " | Cap: <yellow>" .. capStr
+    cecho("<cyan>[DW DEBUG]<reset> Cap: <yellow>" .. capStr
         .. "<reset> | Stuck(<cyan>" .. sys .. "<reset>): <red>" .. stuckStr .. "<reset>\n")
 end
 
