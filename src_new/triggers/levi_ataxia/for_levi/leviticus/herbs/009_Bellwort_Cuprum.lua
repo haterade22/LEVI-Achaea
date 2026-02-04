@@ -53,10 +53,15 @@ tdeliverance = false
 	
 	if multimatches[3][1] == name .. " gives a sigh of relief." then
 		erAff("retribution")
-    erAff("earworm")
+		erAff("earworm")
+		-- V3: Definite cure (we know exactly what was cured)
+		if removeAffV3 then removeAffV3("retribution") end
+		if removeAffV3 then removeAffV3("earworm") end
 	elseif multimatches[3][1] == name .. " shakes his head and a look of clarity returns to his eyes."
 		or multimatches[3][1] == name .. " shakes her head and a look of clarity returns to her eyes." then
 			erAff("lovers")
+			-- V3: Definite cure (we know exactly what was cured)
+			if removeAffV3 then removeAffV3("lovers") end
 	else
 		targetAteWrapper("bellwort")
 		if onHerbCureV3 then onHerbCureV3("bellwort") end

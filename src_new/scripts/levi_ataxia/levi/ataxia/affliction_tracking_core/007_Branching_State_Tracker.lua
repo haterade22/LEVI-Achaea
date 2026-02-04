@@ -234,7 +234,8 @@ function onHerbCureV3(herb)
 
     local newStates = {}
     local branchCount = 0
-    local curedAffs = {}  -- Track unique afflictions that were cured
+    local curedAffs = {}  -- Track unique afflictions that were definitely cured
+    local branchedAffs = {}  -- Track unique afflictions that were candidates in branching
 
     for _, state in ipairs(afflictionStatesV3) do
         -- Find which curable afflictions exist in this branch
@@ -260,6 +261,7 @@ function onHerbCureV3(herb)
                 local branch = {affs = copyAffs(state.affs), prob = probEach}
                 branch.affs[aff] = nil
                 table.insert(newStates, branch)
+                branchedAffs[aff] = true  -- Track branched candidates
             end
             branchCount = branchCount + #candidates - 1
         end
@@ -278,8 +280,14 @@ function onHerbCureV3(herb)
         table.insert(curedList, aff)
     end
 
+    local branchedList = {}
+    for aff, _ in pairs(branchedAffs) do
+        table.insert(branchedList, aff)
+    end
+
     if branchCount > 0 then
         v3Echo(herb .. " eaten - branched into " .. #afflictionStatesV3 .. " states")
+        v3Echo(herb .. " cured: " .. table.concat(branchedList, ", "))
     elseif #curedList > 0 then
         v3Echo(herb .. " cured: " .. table.concat(curedList, ", "))
     end

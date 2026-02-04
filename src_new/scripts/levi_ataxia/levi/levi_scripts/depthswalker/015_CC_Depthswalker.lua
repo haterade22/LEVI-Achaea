@@ -57,6 +57,8 @@ depthswalker.state = {
     canClaimShadow = false,     -- leach capstone fired, shadow available to claim
     distorted = false,          -- distort active in room
     partyrelay = true,          -- relay to party
+    bellwortComplete = false,   -- bellwort phase done (timeloop applied), skip to finisher
+    lastTarget = nil,           -- track target changes to reset state
 }
 
 depthswalker.config = {
@@ -234,9 +236,10 @@ function depthswalker.shouldTimeloop()
     local phase = depthswalker.selections.phase
 
     -- CRITICAL: When healthleech stuck but not manaleech, use chrono loop boost
-    -- This applies to ALL modes during shadow phase - double-apply leach to get manaleech
-    -- before they can cure healthleech with kelp
-    if depthswalker.hasAff("healthleech") and not depthswalker.hasAff("manaleech") then
+    -- ONLY during shadow phase - double-apply leach to get manaleech before they cure healthleech
+    -- Don't let this trigger during bellwort/lock phases!
+    local phase = depthswalker.selections.phase
+    if phase == "shadow" and depthswalker.hasAff("healthleech") and not depthswalker.hasAff("manaleech") then
         return true
     end
 
@@ -246,11 +249,21 @@ function depthswalker.shouldTimeloop()
         return false
     end
 
-    -- BELLWORT PHASE: use chrono loop to apply timeloop as part of bellwort stack
-    -- Timeloop is NOT an instill - it comes from chrono loop
+    -- BELLWORT PHASE: Only use chrono loop AFTER first bellwort aff is CONFIRMED stuck
+    -- Strategy: (1) retribution+curare → justice, (2) retribution+chrono loop → retribution+timeloop
+    -- This maximizes bellwort pressure: all 3 bellwort affs stuck, they can only cure 1 per balance
     local phase = depthswalker.selections.phase
-    if phase == "bellwort" and not depthswalker.hasAff("timeloop") then
-        return true
+    if phase == "bellwort" then
+        -- Use probability threshold to ensure bellwort aff is actually stuck (not just V3 branching)
+        local justiceProb = depthswalker.getAffProb("justice")
+        local retribProb = depthswalker.getAffProb("retribution")
+        local hasBellwortConfirmed = justiceProb >= depthswalker.config.highConfidence
+                                  or retribProb >= depthswalker.config.highConfidence
+
+        if hasBellwortConfirmed and not depthswalker.hasAff("timeloop") then
+            return true
+        end
+        return false  -- Don't use chrono loop until first bellwort aff is CONFIRMED stuck
     end
 
     -- LOCK/DICTATE/MADPRESSION: use timeloop more aggressively to build DW aff count
@@ -314,7 +327,25 @@ end
 --
 -- ALL modes need kelp pressure first! healthleech/manaleech are kelp-cured,
 -- so without clumsiness stuck, they just cure the leach affs immediately.
+--
+-- CRITICAL: Once bellwort phase is complete (timeloop applied), we NEVER go back
+-- to opening phases. The bellwortComplete flag ensures we move to finisher (depression)
+-- even if target cures bellwort affs. This prevents the kelp->bellwort loop.
 function depthswalker.selectInstillOpening()
+    -- BELLWORT COMPLETE: Skip opening entirely, go straight to mode finisher
+    -- This is set when timeloop is first applied during bellwort phase.
+    -- Even if target cures bellwort affs, we stay in finisher (depression/madness).
+    if depthswalker.state.bellwortComplete then
+        return nil
+    end
+
+    -- Check if timeloop is present - if so, bellwort phase is complete
+    -- This catches the case where timeloop was applied but bellwortComplete wasn't set yet
+    if depthswalker.hasAff("timeloop") then
+        depthswalker.state.bellwortComplete = true
+        return nil
+    end
+
     -- Phase 1: KELP PRESSURE - must stick clumsiness before going for leach
     -- Without kelp pressure, healthleech/manaleech get cured instantly
     if not depthswalker.hasAff("clumsiness") then
@@ -323,7 +354,10 @@ function depthswalker.selectInstillOpening()
     end
 
     -- Phase 2: SHADOW - get leach affs for shadow claim (kelp is now pressured)
-    if not depthswalker.state.haveShadow then
+    -- LOCK MODE: Skip shadow phase entirely - go straight to bellwort for mental stacking
+    -- Shadow is only needed for damage/dictate modes (mutilate execute, enhanced damage)
+    local mode = depthswalker.state.mode
+    if mode ~= "lock" and not depthswalker.state.haveShadow then
         depthswalker.selections.phase = "shadow"
         if not depthswalker.hasAff("parasite") then return "leach" end
         if not depthswalker.hasAff("healthleech") then return "leach" end
@@ -481,113 +515,120 @@ end
 --
 -- Venoms deliver standard afflictions via weapon strike (shadow reap).
 -- When timeloop is active, venom slot is empty (no venom applied).
+--
+-- RULE: Use curare ALWAYS unless:
+--   1. Target already has paralysis
+--   2. Instill is madness or depression (use mode-specific logic)
 --------------------------------------------------------------------------------
 
--- Lock: build toward truelock (asthma + slickness + anorexia + impatience + paralysis)
--- During kelp/shadow phase: use curare to force paralysis cures (helps clumsiness stick)
--- After bellwort phase: standard lock progression
-function depthswalker.selectVenomLock()
-    local locks = depthswalker.getLocks()
-    local phase = depthswalker.selections.phase
-
-    -- KELP/SHADOW PHASE: curare for paralysis pressure
-    -- They have to cure paralysis (high priority) instead of clumsiness/kelp affs
-    if phase == "kelp" or phase == "shadow" then
-        return "curare"
-    end
-
-    -- Truelock achieved: apply class-specific lock aff to block passive cure
-    if locks.truelock >= depthswalker.config.highConfidence then
-        if getLockingAffliction then
-            local lockAff = getLockingAffliction(target)
-            if lockAff == "reckless" and not depthswalker.hasAff("recklessness") then
-                return "eurypteria"
-            elseif lockAff == "weariness" and not depthswalker.hasAff("weariness") then
-                return "xentio"
-            elseif lockAff == "plague" and not depthswalker.hasAff("voyria") then
-                return "voyria"
-            elseif lockAff == "stupid" and not depthswalker.hasAff("stupidity") then
-                return "aconite"
-            end
-        end
-        -- Default: recklessness blocks Accelerate (DW passive cure)
-        if not depthswalker.hasAff("recklessness") then return "eurypteria" end
-    end
-
-    -- Lock progression (after opening complete)
-    if not depthswalker.hasAff("asthma") then return "kalmia" end
-    if not depthswalker.hasAff("slickness") then return "gecko" end
-    if not depthswalker.hasAff("paralysis") then return "curare" end
-    if not depthswalker.hasAff("anorexia") then return "slike" end
-    if not depthswalker.hasAff("nausea") then return "euphorbia" end
-
-    -- Maintenance: kelp stacking to protect asthma
-    if not depthswalker.hasAff("clumsiness") then return "xentio" end
-    if not depthswalker.hasAff("weariness") then return "xentio" end
-
-    return "curare"
-end
-
--- Damage: curare by default, kalmia when healthleech stuck (to protect manaleech)
--- Strategy: curare stacks with degeneration for paralysis pressure
--- When healthleech stuck: kalmia blocks herb cure so manaleech sticks
-function depthswalker.selectVenomDamage()
-    -- Critical timing: when healthleech stuck, switch to kalmia
-    -- Asthma blocks herb cure, so manaleech will stick when we apply it
-    if depthswalker.hasAff("healthleech") and not depthswalker.hasAff("asthma") then
-        return "kalmia"
-    end
-
-    -- Default: curare for paralysis pressure (stacks with degeneration)
-    return "curare"
-end
-
--- Dictate: curare during opening (paralysis pressure), then asthma + kelp stacking
-function depthswalker.selectVenomDictate()
-    local phase = depthswalker.selections.phase
-
-    -- KELP/SHADOW PHASE: curare for paralysis pressure
-    if phase == "kelp" or phase == "shadow" then
-        return "curare"
-    end
-
-    -- After opening: asthma blocks curing, then kelp stacking
-    if not depthswalker.hasAff("asthma") then return "kalmia" end
-    if not depthswalker.hasAff("paralysis") then return "curare" end
-    if not depthswalker.hasAff("clumsiness") then return "xentio" end
-    if not depthswalker.hasAff("weariness") then return "xentio" end
-
-    return "curare"
-end
-
--- Madpression: curare during opening, then paralysis + asthma + sensitivity
-function depthswalker.selectVenomMadpression()
-    local phase = depthswalker.selections.phase
-
-    -- KELP/SHADOW PHASE: curare for paralysis pressure
-    if phase == "kelp" or phase == "shadow" then
-        return "curare"
-    end
-
-    -- After opening: action denial + sensitivity for masochism damage
-    if not depthswalker.hasAff("paralysis") then return "curare" end
-    if not depthswalker.hasAff("asthma") then return "kalmia" end
-    if not depthswalker.hasAff("sensitivity") then return "prefarar" end
-    if not depthswalker.hasAff("clumsiness") then return "xentio" end
-
-    return "curare"
-end
-
--- Unified venom selector: routes to correct chain by mode
-function depthswalker.selectVenom()
+-- Special venom selection for madness/depression instills
+-- These instills are used when building toward capstone, so we want to stack
+-- afflictions that support the kill route
+function depthswalker.selectVenomSpecial()
     local mode = depthswalker.state.mode
-    if mode == "lock" then return depthswalker.selectVenomLock()
-    elseif mode == "damage" then return depthswalker.selectVenomDamage()
-    elseif mode == "dictate" then return depthswalker.selectVenomDictate()
-    elseif mode == "madpression" then return depthswalker.selectVenomMadpression()
-    elseif mode == "group" then return depthswalker.selectVenomDamage()
+    local locks = depthswalker.getLocks()
+    local instill = depthswalker.selections.instill
+
+    -- INSTILL-SPECIFIC VENOM PAIRING (takes priority over mode logic)
+    -- Depression: euphorbia (nausea) to progress the depression stack faster
+    -- Depression stack: depression → nausea → hypochondria → capstone
+    if instill == "depression" then
+        if not depthswalker.hasAff("nausea") then return "euphorbia" end
+        -- Nausea present: fall through to mode-specific logic
     end
+
+    -- Madness: aconite (stupidity) for goldenseal stacking
+    -- All madness affs are goldenseal-cured, stupidity is also goldenseal-cured
+    -- Stacking goldenseal affs creates cure pressure (only 1 goldenseal per balance)
+    if instill == "madness" then
+        if not depthswalker.hasAff("stupidity") then return "aconite" end
+        -- Stupidity present: fall through to mode-specific logic
+    end
+
+    -- Lock mode: build toward lock afflictions
+    if mode == "lock" then
+        -- Truelock achieved: apply class-specific lock aff
+        if locks.truelock >= depthswalker.config.highConfidence then
+            if getLockingAffliction then
+                local lockAff = getLockingAffliction(target)
+                if lockAff == "reckless" and not depthswalker.hasAff("recklessness") then
+                    return "eurypteria"
+                elseif lockAff == "weariness" and not depthswalker.hasAff("weariness") then
+                    return "xentio"
+                elseif lockAff == "plague" and not depthswalker.hasAff("voyria") then
+                    return "voyria"
+                elseif lockAff == "stupid" and not depthswalker.hasAff("stupidity") then
+                    return "aconite"
+                end
+            end
+            if not depthswalker.hasAff("recklessness") then return "eurypteria" end
+        end
+        -- Lock progression
+        if not depthswalker.hasAff("asthma") then return "kalmia" end
+        if not depthswalker.hasAff("slickness") then return "gecko" end
+        if not depthswalker.hasAff("anorexia") then return "slike" end
+        return "curare"
+    end
+
+    -- Madpression: sensitivity for masochism damage boost
+    if mode == "madpression" then
+        if not depthswalker.hasAff("sensitivity") then return "prefarar" end
+        if not depthswalker.hasAff("asthma") then return "kalmia" end
+        return "curare"
+    end
+
+    -- Dictate/Damage: asthma to block curing
+    if not depthswalker.hasAff("asthma") then return "kalmia" end
     return "curare"
+end
+
+-- Secondary venom when paralysis already present (and not madness/depression instill)
+function depthswalker.selectVenomSecondary()
+    local mode = depthswalker.state.mode
+
+    -- Damage mode: special healthleech timing
+    if mode == "damage" or mode == "group" then
+        if depthswalker.hasAff("healthleech") and not depthswalker.hasAff("asthma") then
+            return "kalmia"
+        end
+    end
+
+    -- Lock mode: continue lock progression
+    if mode == "lock" then
+        local locks = depthswalker.getLocks()
+        if locks.truelock >= depthswalker.config.highConfidence then
+            if not depthswalker.hasAff("recklessness") then return "eurypteria" end
+        end
+        if not depthswalker.hasAff("asthma") then return "kalmia" end
+        if not depthswalker.hasAff("slickness") then return "gecko" end
+        if not depthswalker.hasAff("anorexia") then return "slike" end
+    end
+
+    -- Default secondary: asthma if missing, else kelp stacking
+    if not depthswalker.hasAff("asthma") then return "kalmia" end
+    if not depthswalker.hasAff("clumsiness") then return "xentio" end
+    if not depthswalker.hasAff("weariness") then return "xentio" end
+
+    return "curare"
+end
+
+-- Unified venom selector
+-- RULE: curare ALWAYS unless paralysis present OR instill is madness/depression
+function depthswalker.selectVenom()
+    local instill = depthswalker.selections.instill
+
+    -- Madness/depression instills: use mode-specific smart selection
+    if instill == "madness" or instill == "depression" then
+        return depthswalker.selectVenomSpecial()
+    end
+
+    -- Default: curare unless paralysis present
+    if not depthswalker.hasAff("paralysis") then
+        return "curare"
+    end
+
+    -- Paralysis present: use secondary choice based on mode/situation
+    return depthswalker.selectVenomSecondary()
 end
 
 --------------------------------------------------------------------------------
@@ -726,6 +767,16 @@ function depthswalker.dispatch()
 
     -- Don't act if paralysed
     if ataxia and ataxia.afflictions and ataxia.afflictions.paralysis then return end
+
+    -- RESET STATE: Clear bellwortComplete when target changes or new fight detected
+    if depthswalker.state.lastTarget ~= target then
+        depthswalker.state.bellwortComplete = false
+        depthswalker.state.lastTarget = target
+    end
+    -- Also reset if no DW affs on target (fresh fight, they reset or new target)
+    if depthswalker.countDWAffsInt() == 0 then
+        depthswalker.state.bellwortComplete = false
+    end
 
     -- Initialize defaults
     if not php then php = 100 end
