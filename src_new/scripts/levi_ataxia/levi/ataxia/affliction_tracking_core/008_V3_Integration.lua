@@ -424,15 +424,18 @@ function onPassiveCureV3(numCures)
     if not numCures or numCures < 1 then return end
 
     local pool = passiveCurableAffsV3
+    local allCandidates = {}  -- Track all unique candidates across all states/rounds
 
     for cure = 1, numCures do
         local newStates = {}
+        local roundCandidates = {}  -- Track candidates this round
 
         for _, state in ipairs(afflictionStatesV3) do
             local candidates = {}
             for _, aff in ipairs(pool) do
                 if state.affs[aff] then
                     table.insert(candidates, aff)
+                    roundCandidates[aff] = true  -- Track for echo
                 end
             end
 
@@ -455,6 +458,11 @@ function onPassiveCureV3(numCures)
             end
         end
 
+        -- Merge round candidates into allCandidates
+        for aff, _ in pairs(roundCandidates) do
+            allCandidates[aff] = true
+        end
+
         afflictionStatesV3 = newStates
 
         -- Dedup between cure rounds to control state explosion
@@ -470,8 +478,21 @@ function onPassiveCureV3(numCures)
     syncToOldSystemV3()
     updateAffDisplayV3()
 
+    -- Enhanced debug echo with candidates
     if ataxiaEcho and affConfigV3.debugEcho then
-        ataxiaEcho("[V3] Passive cure (" .. numCures .. ") - branched to " .. #afflictionStatesV3 .. " states")
+        local candList = {}
+        for aff, _ in pairs(allCandidates) do
+            table.insert(candList, aff)
+        end
+
+        if #candList == 0 then
+            ataxiaEcho("[V3] Passive cure (" .. numCures .. ") - no curable affs tracked")
+        elseif #candList == 1 then
+            ataxiaEcho("[V3] Passive cure (" .. numCures .. ") - cured: " .. candList[1])
+        else
+            local candStr = table.concat(candList, ", ")
+            ataxiaEcho("[V3] Passive cure (" .. numCures .. ") - candidates: " .. candStr .. " (branched to " .. #afflictionStatesV3 .. " states)")
+        end
     end
 end
 
