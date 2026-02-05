@@ -41,14 +41,8 @@ function confirm_armslash(side)
 end
 
 function confirmed_armslash(side)
-	if not ataxiaTemp.blademasterDamage then resetBladeMasterDamage() end
-	if side == "left" then
-		ataxia_raiseLimbDamage("right arm", ataxiaTemp.blademasterDamage.off)
-		ataxia_raiseLimbDamage("left arm", ataxiaTemp.blademasterDamage.slash)
-	else
-		ataxia_raiseLimbDamage("left arm", ataxiaTemp.blademasterDamage.off)
-		ataxia_raiseLimbDamage("right arm", ataxiaTemp.blademasterDamage.slash)
-	end
+	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
+	-- which captures actual damage percentages from the game message
 end
 --[legslash]--
 function legslash_selfLimbhit(side)
@@ -75,14 +69,8 @@ function confirm_legslash(side)
 end
 
 function confirmed_legslash(side)
-	if not ataxiaTemp.blademasterDamage then resetBladeMasterDamage() end
-	if side == "left" then
-		ataxia_raiseLimbDamage("right leg", ataxiaTemp.blademasterDamage.off)
-		ataxia_raiseLimbDamage("left leg", ataxiaTemp.blademasterDamage.slash)
-	else
-		ataxia_raiseLimbDamage("left leg", ataxiaTemp.blademasterDamage.off)
-		ataxia_raiseLimbDamage("right leg", ataxiaTemp.blademasterDamage.slash)
-	end
+	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
+	-- which captures actual damage percentages from the game message
 end
 --[centreslash]--
 function centreslash_selfLimbhit(section)
@@ -109,14 +97,8 @@ function confirm_centreslash(section)
 end
 
 function confirmed_centreslash(section)
-	if not ataxiaTemp.blademasterDamage then resetBladeMasterDamage() end
-	if section == "torso" then
-		ataxia_raiseLimbDamage("head", ataxiaTemp.blademasterDamage.off)
-		ataxia_raiseLimbDamage("torso", ataxiaTemp.blademasterDamage.slash)
-	else
-		ataxia_raiseLimbDamage("torso", ataxiaTemp.blademasterDamage.off)
-		ataxia_raiseLimbDamage("head", ataxiaTemp.blademasterDamage.slash)
-	end
+	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
+	-- which captures actual damage percentages from the game message
 end
 ------------------------------------------------------------------------------------------------------------------------
 --> Earth Lord
@@ -131,16 +113,8 @@ function earthLord_selfLimbHit(limb)
 end
 
 function earthLord_confirmHit(limb)
-	if not ataxiaTables.missLines then resetMissLines() end
-	local parry = false
-	for _, part in pairs(ataxiaTables.missLines) do
-		if line:match(part) then
-			parry = true
-			break
-		end
-	end
-	
-	if not parry then ataxia_raiseLimbDamage(limb, 16.7) end
+	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
+	-- which captures actual damage percentages from the game message
 end
 ------------------------------------------------------------------------------------------------------------------------
 --> Knight (WIP)
@@ -155,17 +129,8 @@ function snb_selfLimbHit(limb)
 end
 
 function confirm_snbhit(limb)
-	if not ataxiaTables.missLines then resetMissLines() end
-	if not ataxiaTemp.knightDamage then resetKnightDamage() end
-	local parry = false
-	for _, part in pairs(ataxiaTables.missLines) do
-		if line:match(part) then
-			parry = true
-			break
-		end
-	end
-	
-	if not parry then ataxia_raiseLimbDamage(limb, ataxiaTemp.knightDamage.snb) end
+	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
+	-- which captures actual damage percentages from the game message
 end
 
 function dwc_selfLimbHit(limb)
@@ -179,17 +144,8 @@ function dwc_selfLimbHit(limb)
 end
 
 function confirm_dwchit(limb)
-	if not ataxiaTables.missLines then resetMissLines() end
-	if not ataxiaTemp.knightDamage then resetKnightDamage() end
-	local parry = false
-	for _, part in pairs(ataxiaTables.missLines) do
-		if line:match(part) then
-			parry = true
-			break
-		end
-	end
-	
-	if not parry then ataxia_raiseLimbDamage(limb, ataxiaTemp.knightDamage.dwc) end
+	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
+	-- which captures actual damage percentages from the game message
 end
 
 ------------------------------------------------------------------------------------------------------------------------
@@ -205,16 +161,8 @@ function priest_selfLimbHit(limb)
 end
 
 function confirm_limbsmite(limb)
-	if not ataxiaTables.missLines then resetMissLines() end
-	local parry = false
-	for _, part in pairs(ataxiaTables.missLines) do
-		if line:match(part) then
-			parry = true
-			break
-		end
-	end
-	
-	if not parry then ataxia_raiseLimbDamage(limb, 15.8) end
+	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
+	-- which captures actual damage percentages from the game message
 end  
 
 ------------------------------------------------------------------------------------------------------------------------
@@ -231,16 +179,8 @@ function quarterHit_selfLimbHit(limb)
 end
 
 function confirm_quarterHit(limb)
-	if not ataxiaTables.missLines then resetMissLines() end
-	local parry = false
-	for _, part in pairs(ataxiaTables.missLines) do
-		if line:match(part) then
-			parry = true
-			break
-		end
-	end
-	
-	if not parry then ataxia_raiseLimbDamage(limb, 25) end
+	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
+	-- which captures actual damage percentages from the game message
 end
 ------------------------------------------------------------------------------------------------------------------------
 --> Magi
@@ -269,22 +209,8 @@ function confirm_staffStrike(element, limb)
 end
 
 function confirmed_staffStrike(element, limb)
-	local health = ataxia.vitals.maxhp
-	local sd, ad
-	if health <= 3499 then
-		sd = string.format("%2.2f", (100/6.5))
-	elseif health <= 6700 then
-		sd = string.format("%2.2f", (100/6.5))
-	else
-		sd = string.format("%2.2f", (100/7))
-	end
-	ad = string.format("%2.2f", (100/12))
-
-	if element == "Whirrh" then
-		ataxia_raiseLimbDamage(limb, ad)
-	else
-		ataxia_raiseLimbDamage(limb, sd)
-	end
+	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
+	-- which captures actual damage percentages from the game message
 end
 ------------------------------------------------------------------------------------------------------------------------
 --> Sylvan
@@ -300,22 +226,8 @@ function thornrend_selfLimbHit(limb)
 end
 
 function confirm_thornrend(limb)
-	if not ataxiaTables.missLines then resetMissLines() end
-	local parry = false
-	for _, part in pairs(ataxiaTables.missLines) do
-		if line:match(part) then
-			parry = true
-			break
-		end
-	end
-	
-	if not parry then 
-		if affed("vinewreathed") then
-			ataxia_raiseLimbDamage(limb, 12.5)
-		else
-			ataxia_raiseLimbDamage(limb, 25)
-		end
-	end
+	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
+	-- which captures actual damage percentages from the game message
 end
 ------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------
