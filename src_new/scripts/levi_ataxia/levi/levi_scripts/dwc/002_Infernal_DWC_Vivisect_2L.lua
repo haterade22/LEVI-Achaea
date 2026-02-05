@@ -771,43 +771,26 @@ function infernalDWC2L.selectLimbTarget()
     if phase == "PREP" then
         local focusLeg = infernalDWC2L.state.focusLeg
 
-        if infernalDWC2L.hasAff("nausea") then
-            -- Nausea stuck = parry bypass active, clear parry tracking
-            infernalDWC2L.state.parriedLimb = nil
-            -- 2-LIMB: Only prep right arm + focus leg
-            -- Prep right arm first (the arm we will DSL with epteth/epseth)
-            if not infernalDWC2L.isArmPrepped("right") then
-                return "right arm"
-            -- Then prep focus leg (the leg we will undercut)
-            elseif not infernalDWC2L.isLegPrepped(focusLeg) then
-                return focusLeg .. " leg"
-            else
-                -- Both prepped, maintain pressure on right arm
-                return "right arm"
-            end
-        elseif infernalDWC2L.state.parriedLimb then
-            -- No nausea but we know what they're parrying - hit the OTHER prep limb
-            -- They can only parry one limb at a time
-            local parried = infernalDWC2L.state.parriedLimb
-            if parried == "right arm" then
-                -- Parrying right arm -> hit focus leg instead
-                return focusLeg .. " leg"
-            elseif parried == focusLeg .. " leg" then
-                -- Parrying focus leg -> hit right arm instead
-                return "right arm"
-            else
-                -- Parrying something we don't prep - safe to hit our targets
-                if not infernalDWC2L.isArmPrepped("right") then
-                    return "right arm"
-                elseif not infernalDWC2L.isLegPrepped(focusLeg) then
-                    return focusLeg .. " leg"
-                else
-                    return "right arm"
-                end
-            end
-        else
-            -- No nausea, no parry info - don't target limbs, focus on afflictions
+        -- NAUSEA REQUIRED for limb targeting (parry bypass)
+        -- Without nausea, they can parry whatever we hit - so don't target limbs
+        if not infernalDWC2L.hasAff("nausea") then
+            -- No nausea = don't target limbs, focus on building afflictions
             return nil
+        end
+
+        -- Nausea stuck = parry bypass active, can target limbs freely
+        infernalDWC2L.state.parriedLimb = nil  -- Clear stale parry data
+
+        -- 2-LIMB: Only prep right arm + focus leg
+        -- Prep right arm first (the arm we will DSL with epteth/epseth)
+        if not infernalDWC2L.isArmPrepped("right") then
+            return "right arm"
+        -- Then prep focus leg (the leg we will undercut)
+        elseif not infernalDWC2L.isLegPrepped(focusLeg) then
+            return focusLeg .. " leg"
+        else
+            -- Both prepped, maintain pressure on right arm
+            return "right arm"
         end
 
     elseif phase == "EXECUTE" then
@@ -1010,9 +993,9 @@ function infernalDWC2LVivisect()
         local atk = "wield right " .. weapon1 .. ";wield left " .. weapon2
         atk = atk .. ";wipe " .. weapon1 .. ";wipe " .. weapon2
 
-        -- Check for rebounding/shield
-        local hasRebounding = infernalDWC2L.hasAff("rebounding") or (tAffs and tAffs.rebounding)
-        local hasShield = infernalDWC2L.hasAff("shield") or (tAffs and tAffs.shield)
+        -- Check for rebounding/shield (trust hasAff() V3→V2→V1 hierarchy)
+        local hasRebounding = infernalDWC2L.hasAff("rebounding")
+        local hasShield = infernalDWC2L.hasAff("shield")
 
         if hasRebounding or hasShield then
             local rslVenom = v2 or v1 or "curare"
@@ -1082,8 +1065,8 @@ function infernalDWC2LVivisect()
     -- RSL uses first sword to raze, second sword applies venom
     -- IMPORTANT: RSL cannot use hellforge investments (exploit/torture/torment)
     -- Must use a regular venom like curare
-    -- Check BOTH tracking systems directly - rebounding is too important to miss
-    local hasRebounding = infernalDWC2L.hasAff("rebounding") or (tAffs and tAffs.rebounding)
+    -- Trust hasAff() which routes through V3→V2→V1 hierarchy based on what's enabled
+    local hasRebounding = infernalDWC2L.hasAff("rebounding")
     if hasRebounding then
         -- Determine which venom to use for RSL (must NOT be a hellforge investment)
         local rslVenom = nil
@@ -1115,8 +1098,8 @@ function infernalDWC2LVivisect()
 
     -- SHIELD CHECK - must clear shield before attacks land
     -- Same logic as rebounding - RSL can't use hellforge investments
-    -- Check BOTH tracking systems directly - shield is too important to miss
-    local hasShield = infernalDWC2L.hasAff("shield") or (tAffs and tAffs.shield)
+    -- Trust hasAff() which routes through V3→V2→V1 hierarchy based on what's enabled
+    local hasShield = infernalDWC2L.hasAff("shield")
     if hasShield then
         local rslVenom = nil
         local isV1Hellforge = (v1 == "exploit" or v1 == "torture" or v1 == "torment")
