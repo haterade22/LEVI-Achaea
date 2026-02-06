@@ -233,6 +233,7 @@ infernalDWC2L.state = {
     riftlockMode = false,       -- True when target uses RESTORE (heals all limbs)
     parriedLimb = nil,          -- Which limb target is parrying (set on parry detection)
     lastTargetedLimb = nil,     -- Last limb we targeted (for parry detection)
+    attackInFlight = false,     -- True while off balance after sending attack (prevents envenomList desync)
 }
 
 -- Configuration
@@ -920,7 +921,9 @@ function infernalDWC2L.onParry(limb)
     if limb then
         infernalDWC2L.state.parriedLimb = limb
         -- Parry means nausea is NOT active (nausea bypasses parry)
+        -- Clear from ALL tracking systems (V1, V2, and V3)
         if erAff then erAff("nausea") end
+        if removeAffV3 then removeAffV3("nausea") end
         cecho("\n<yellow>[INF DWC 2L]<reset> PARRY on <red>" .. limb .. "<reset>! Switching limb target.")
     end
 end
@@ -944,6 +947,12 @@ function infernalDWC2LVivisect()
     5. PREP - Build limb damage to prep threshold (2 limbs only)
     ]]--
 
+    -- Guard: prevent re-dispatch while off balance (avoids envenomList desync)
+    -- When off balance, the previous attack's envenomList must stay intact for hit triggers
+    if infernalDWC2L.state.attackInFlight then
+        return
+    end
+
     -- Use global 'target' variable (set by "t <name>" command)
     if not target or target == "" then
         cecho("\n<red>[INF DWC 2L]<reset> No target set! Use: t <name>")
@@ -963,6 +972,7 @@ function infernalDWC2LVivisect()
     -- PRIORITY 1: VIVISECT - All 4 limbs broken at level 1+
     --------------------------------------------------------------------------
     if infernalDWC2L.areBothArmsBroken() and infernalDWC2L.areBothLegsBroken() then
+        infernalDWC2L.state.attackInFlight = true
         send("queue addclear freestand vivisect " .. target)
         cecho("\n<green>[INF DWC 2L]<reset> VIVISECT! All 4 limbs broken!")
         return
@@ -973,6 +983,7 @@ function infernalDWC2LVivisect()
     --------------------------------------------------------------------------
     if infernalDWC2L.shouldDamageKill() then
         local healthPct = infernalDWC2L.getTargetHealth()
+        infernalDWC2L.state.attackInFlight = true
         send("queue addclear freestand quash " .. target .. ";arc " .. target)
         cecho("\n<red>[INF DWC 2L]<reset> DAMAGE KILL! Target at " .. healthPct .. "% - QUASH + ARC!")
         return
@@ -1006,6 +1017,7 @@ function infernalDWC2LVivisect()
             cecho("\n<magenta>[INF DWC 2L]<reset> RIFTLOCK | " .. limb .. " | " .. (v1 or "slike") .. "/" .. (v2 or "curare"))
         end
 
+        infernalDWC2L.state.attackInFlight = true
         send("queue addclear freestand " .. atk .. ";assess " .. target)
         return
     end
@@ -1027,6 +1039,7 @@ function infernalDWC2LVivisect()
         atk = atk .. ";undercut " .. target .. " " .. leg .. " leg"
 
         cecho("\n<cyan>[INF DWC 2L]<reset> <yellow>EXECUTE<reset> | " .. leg .. " leg | UNDERCUT | [prone + break]")
+        infernalDWC2L.state.attackInFlight = true
         send("queue addclear freestand " .. atk .. ";assess " .. target)
         return
     end
@@ -1091,6 +1104,7 @@ function infernalDWC2LVivisect()
             atk = atk .. ";raze " .. target
         end
         -- Execute raze and return - don't continue with normal attack
+        infernalDWC2L.state.attackInFlight = true
         send("queue addclear freestand " .. atk .. ";assess " .. target)
         cecho("\n<yellow>[INF DWC 2L]<reset> Razing REBOUNDING!")
         return
@@ -1120,6 +1134,7 @@ function infernalDWC2LVivisect()
         else
             atk = atk .. ";raze " .. target
         end
+        infernalDWC2L.state.attackInFlight = true
         send("queue addclear freestand " .. atk .. ";assess " .. target)
         cecho("\n<yellow>[INF DWC 2L]<reset> Razing SHIELD!")
         return
@@ -1191,6 +1206,7 @@ function infernalDWC2LVivisect()
     cecho("\n<cyan>[INF DWC 2L]<reset> <yellow>" .. phase .. "<reset> | " .. limbTarget .. " | " .. venomStr .. " | [" .. affStr .. "] | " .. limbStr)
 
     -- Execute with assess
+    infernalDWC2L.state.attackInFlight = true
     send("queue addclear freestand " .. atk .. ";assess " .. target)
 end
 
@@ -1306,6 +1322,7 @@ function infernalDWC2LReset()
     infernalDWC2L.state.riftlockMode = false
     infernalDWC2L.state.parriedLimb = nil
     infernalDWC2L.state.lastTargetedLimb = nil
+    infernalDWC2L.state.attackInFlight = false
     cecho("\n<cyan>[INF DWC 2L]<reset> State reset!")
 end
 
@@ -1333,6 +1350,21 @@ end
 -- Reset alias: infdwc2lreset or infernaldwc2lreset
 -- Set weapons: infdwc2lweapons weapon1 weapon2
 -- Set focus leg: infdwc2lleg left/right
+
+-------------------------------------------------------------------------------
+-- BALANCE RECOVERY HANDLER (clears attackInFlight flag)
+-------------------------------------------------------------------------------
+
+-- Register GMCP handler to clear attackInFlight when balance returns
+-- This prevents envenomList desync from re-dispatch while off balance
+if infernalDWC2L._balHandler then
+    killAnonymousEventHandler(infernalDWC2L._balHandler)
+end
+infernalDWC2L._balHandler = registerAnonymousEventHandler("gmcp.Char.Vitals", function()
+    if gmcp.Char.Vitals.bal == "1" then
+        infernalDWC2L.state.attackInFlight = false
+    end
+end)
 
 cecho("\n<cyan>[INF DWC 2L Vivisect]<reset> Loaded! Use infernalDWC2LVivisect() to attack.")
 cecho("\n<cyan>[INF DWC 2L Vivisect]<reset> Commands: infernalDWC2LStatus(), infernalDWC2LReset(), infernalDWC2LSetWeapons(w1, w2)")
