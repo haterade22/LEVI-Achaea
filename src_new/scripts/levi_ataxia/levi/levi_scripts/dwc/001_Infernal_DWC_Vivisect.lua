@@ -52,7 +52,7 @@ PHASE OVERVIEW:
 
     PREP PHASE:
         Build afflictions AND prep limbs simultaneously.
-        - Venom priority: nausea(90%) → clumsiness(33%) → healthleech(33%) → asthma(33%) → slickness(50%) → anorexia/exploit → stupidity → recklessness/dizziness
+        - Venom priority: nausea(51%) → clumsiness(33%) → healthleech(33%) → asthma(33%) → slickness(50%) → anorexia/exploit → stupidity → recklessness/dizziness
         - Limb prepping: Both arms + left leg to 90%+ damage
         - Transition to EXECUTE when all 3 limbs prepped
 
@@ -108,7 +108,7 @@ VENOM PRIORITY (PREP PHASE):
 -------------------------------------------------------------------------------
 
     PREP CASCADE (v2 = curare):
-        1. Nausea (euphorbia)       - 90% threshold, parry bypass
+        1. Nausea (euphorbia)       - 51% threshold, parry bypass
         2. Clumsiness (xentio)      - 33% threshold, miss chance on their attacks
         3. Healthleech (torment)    - 33% threshold, drains health (hellforge)
         4. Asthma (kalmia)          - 33% threshold, blocks smoke cures
@@ -552,7 +552,7 @@ end
 ]]--
 
 -- V3 probability-aware venom selection for PREP phase
--- PREP: nausea(90%) -> clumsiness(33%) -> healthleech(33%) -> asthma(33%) -> slickness(50%) (v2 = curare)
+-- PREP: nausea(51%) -> clumsiness(33%) -> healthleech(33%) -> asthma(33%) -> slickness(50%) (v2 = curare)
 -- FOCUS LOCK: Once slickness >=50%, v1 = slike (anorexia), v2 = exploit (hellforge)
 -- STUPIDITY PUSH: Once anorexia+weariness stuck, v1 = aconite (stupidity), v2 = exploit
 -- GOLDENSEAL STACK: Once stupidity stuck, v1/v2 = eurypteria (recklessness) + larkspar (dizziness)
@@ -615,10 +615,10 @@ function infernalDWC.selectVenomsV3()
         return v1, v2
     end
 
-    -- PREP CASCADE: nausea(90%) -> clumsiness(33%) -> healthleech(33%) -> asthma(33%) -> slickness(50%)
+    -- PREP CASCADE: nausea(51%) -> clumsiness(33%) -> healthleech(33%) -> asthma(33%) -> slickness(50%)
     local v1
-    if nauseaProb < 0.9 then
-        v1 = "euphorbia"      -- 1. Nausea (must be 90%)
+    if nauseaProb < 0.51 then
+        v1 = "euphorbia"      -- 1. Nausea (51%)
     elseif clumProb < 0.33 then
         v1 = "xentio"         -- 2. Clumsiness (33%)
     elseif healthleechProb < 0.33 then
@@ -691,7 +691,7 @@ function infernalDWC.selectVenoms()
 
     else
         -- PREP phase - FOCUS LOCK STRATEGY
-        -- Prep: nausea(90%) -> clumsiness(33%) -> healthleech(33%) -> asthma(33%) -> slickness(50%)
+        -- Prep: nausea(51%) -> clumsiness(33%) -> healthleech(33%) -> asthma(33%) -> slickness(50%)
         -- Focus lock: slickness stuck -> anorexia/exploit
         -- Stupidity push: anorexia + weariness stuck -> aconite + exploit
         -- Goldenseal stack: stupidity stuck -> recklessness + dizziness
@@ -984,7 +984,7 @@ function infernalDWCVivisect()
     --------------------------------------------------------------------------
     if infernalDWC.areBothArmsBroken() and infernalDWC.areBothLegsBroken() then
         infernalDWC.state.attackInFlight = true
-        send("queue addclear freestand vivisect " .. target)
+        send("queue addclear freestand dismount;vivisect " .. target)
         cecho("\n<green>[INF DWC]<reset> VIVISECT! All 4 limbs broken!")
         return
     end
