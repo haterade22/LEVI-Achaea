@@ -52,7 +52,7 @@ PHASE OVERVIEW:
 
     PREP PHASE:
         Build afflictions AND prep limbs simultaneously.
-        - Venom priority: clumsiness → nausea → healthleech → asthma → slickness → anorexia/exploit → aconite/recklessness
+        - Venom priority: nausea → clumsiness → healthleech → asthma → slickness → anorexia/exploit → aconite/recklessness
         - Limb prepping: Both arms + left leg to 90%+ damage
         - Transition to EXECUTE when all 3 limbs prepped
 
@@ -551,7 +551,7 @@ end
 ]]--
 
 -- V3 probability-aware venom selection for PREP phase
--- PHASE 1: clumsiness -> nausea -> healthleech -> asthma (v2 = curare)
+-- PHASE 1: nausea -> clumsiness -> healthleech -> asthma (v2 = curare)
 -- PHASE 2 (Push Slickness): Once asthma >50%, v1 = gecko (slickness), v2 = curare
 -- PHASE 3 (Focus Lock): Once slickness confirmed, v1 = slike (anorexia), v2 = exploit (hellforge)
 -- PHASE 4 (Complete Lock): Once anorexia+weariness stuck, v1 = aconite (stupidity), v2 = eurypteria (recklessness)
@@ -610,41 +610,27 @@ function infernalDWC.selectVenomsV3()
         return v1, v2
     end
 
-    -- PHASE 1: Build to asthma (clumsiness -> nausea -> healthleech -> asthma)
-    local v1Chain = {
-        {venom = "xentio",    aff = "clumsiness",  weight = 2.0},  -- 1. Clumsiness (33% miss chance)
-        {venom = "euphorbia", aff = "nausea",       weight = 1.9},  -- 2. Nausea (parry bypass)
-        {venom = "torment",   aff = "healthleech",  weight = 1.8}, -- 3. Healthleech (hellforge)
-        {venom = "kalmia",    aff = "asthma",       weight = 1.7},  -- 4. Asthma
-    }
+    -- PHASE 1: Build to asthma (nausea -> clumsiness -> healthleech -> asthma)
+    -- Nausea must be 90% before moving on (parry bypass is critical for limb targeting)
+    -- Clumsiness only needs 33% to move on (just needs some miss chance pressure)
+    local nauseaProb = getProb("nausea")
+    local clumProb = getProb("clumsiness")
+    local healthleechProb = getProb("healthleech")
 
-    -- Helper to get best venom from a chain (excludes a specific venom)
-    local function getBestFromChain(chain, excludeVenom)
-        local candidates = {}
-        for _, data in ipairs(chain) do
-            if data.venom ~= excludeVenom then
-                local prob = getProb(data.aff)
-                if prob < 0.9 then  -- Only consider if <90% stuck
-                    local score = (1 - prob) * data.weight
-                    table.insert(candidates, {
-                        venom = data.venom,
-                        aff = data.aff,
-                        prob = prob,
-                        score = score
-                    })
-                end
-            end
-        end
-        table.sort(candidates, function(a, b) return a.score > b.score end)
-        return candidates[1] and candidates[1].venom or nil
+    local v1
+    if nauseaProb < 0.9 then
+        v1 = "euphorbia"      -- 1. Nausea (must be 90%)
+    elseif clumProb < 0.33 then
+        v1 = "xentio"         -- 2. Clumsiness (33% is enough)
+    elseif healthleechProb < 0.9 then
+        v1 = "torment"        -- 3. Healthleech (hellforge)
+    elseif asthmaProb < 0.5 then
+        v1 = "kalmia"         -- 4. Asthma (blocks smoke)
+    else
+        v1 = "euphorbia"      -- Maintain nausea
     end
 
-    -- Select v1 from priority chain
-    local v1 = getBestFromChain(v1Chain, nil) or "xentio"
-
-    -- v2: always curare in phase 1
     local v2 = "curare"
-
     return v1, v2
 end
 
@@ -704,7 +690,7 @@ function infernalDWC.selectVenoms()
 
     else
         -- PREP phase - FOCUS LOCK STRATEGY
-        -- Phase 1: clumsiness -> nausea -> healthleech -> asthma (v2 = curare)
+        -- Phase 1: nausea -> clumsiness -> healthleech -> asthma (v2 = curare)
         -- Phase 2: asthma stuck -> push slickness (v1 = gecko, v2 = curare)
         -- Phase 3: slickness confirmed -> anorexia/exploit (focus lock)
         -- Phase 4: anorexia + weariness stuck -> aconite/recklessness (complete lock)
@@ -757,20 +743,20 @@ function infernalDWC.selectVenoms()
             v1 = "gecko"             -- Slickness (blocks apply)
             v2 = "curare"            -- Paralysis
 
-        -- PHASE 1: Build to asthma (clumsiness -> nausea -> healthleech -> asthma)
+        -- PHASE 1: Build to asthma (nausea -> clumsiness -> healthleech -> asthma)
         else
             v2 = "curare"            -- Always paralysis
 
-            if not clumStuck then
-                v1 = "xentio"        -- 1. Clumsiness (33% miss chance)
-            elseif not nausStuck then
-                v1 = "euphorbia"     -- 2. Nausea (parry bypass)
+            if not nausStuck then
+                v1 = "euphorbia"     -- 1. Nausea (parry bypass, must confirm first)
+            elseif not clumStuck then
+                v1 = "xentio"        -- 2. Clumsiness (33% miss chance)
             elseif not hlthlStuck then
                 v1 = "torment"       -- 3. Healthleech (hellforge)
             elseif not asthStuck then
                 v1 = "kalmia"        -- 4. Asthma (blocks smoke)
             else
-                v1 = "xentio"        -- Maintain clumsiness
+                v1 = "euphorbia"     -- Maintain nausea
             end
         end
     end
@@ -1025,9 +1011,10 @@ function infernalDWCVivisect()
         local atk = "wield right " .. weapon1 .. ";wield left " .. weapon2
         atk = atk .. ";wipe " .. weapon1 .. ";wipe " .. weapon2
 
-        -- Check for rebounding/shield (trust hasAff() V3→V2→V1 hierarchy)
-        local hasRebounding = infernalDWC.hasAff("rebounding")
-        local hasShield = infernalDWC.hasAff("shield")
+        -- Check for rebounding/shield (V1 fallback for timing safety - GMCP can clear
+        -- attackInFlight before text triggers set rebounding in the same data chunk)
+        local hasRebounding = infernalDWC.hasAff("rebounding") or (tAffs and tAffs.rebounding)
+        local hasShield = infernalDWC.hasAff("shield") or (tAffs and tAffs.shield)
 
         if hasRebounding or hasShield then
             local rslVenom = v2 or v1 or "curare"
@@ -1099,8 +1086,8 @@ function infernalDWCVivisect()
     -- RSL uses first sword to raze, second sword applies venom
     -- IMPORTANT: RSL cannot use hellforge investments (exploit/torture/torment)
     -- Must use a regular venom like curare
-    -- Trust hasAff() which routes through V3→V2→V1 hierarchy based on what's enabled
-    local hasRebounding = infernalDWC.hasAff("rebounding")
+    -- V1 fallback for timing safety: GMCP can fire before text triggers in same chunk
+    local hasRebounding = infernalDWC.hasAff("rebounding") or (tAffs and tAffs.rebounding)
     if hasRebounding then
         -- Determine which venom to use for RSL (must NOT be a hellforge investment)
         local rslVenom = nil
@@ -1133,8 +1120,8 @@ function infernalDWCVivisect()
 
     -- SHIELD CHECK - must clear shield before attacks land
     -- Same logic as rebounding - RSL can't use hellforge investments
-    -- Trust hasAff() which routes through V3→V2→V1 hierarchy based on what's enabled
-    local hasShield = infernalDWC.hasAff("shield")
+    -- V1 fallback for timing safety: GMCP can fire before text triggers in same chunk
+    local hasShield = infernalDWC.hasAff("shield") or (tAffs and tAffs.shield)
     if hasShield then
         local rslVenom = nil
         local isV1Hellforge = (v1 == "exploit" or v1 == "torture" or v1 == "torment")
