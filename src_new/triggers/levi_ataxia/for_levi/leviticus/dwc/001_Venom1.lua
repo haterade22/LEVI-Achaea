@@ -10,7 +10,7 @@ hierarchy:
 - Runie
 - DWC
 attributes:
-  isActive: 'no'
+  isActive: 'yes'
   isFolder: 'no'
   isTempTrigger: 'no'
   isMultiline: 'no'
@@ -37,4 +37,7 @@ patterns:
 ]]--
 
 envenom1 = matches[2]
+envenomList = {}
+table.insert(envenomList, matches[2])
+ataxiaTemp.hitCount = 0
 
