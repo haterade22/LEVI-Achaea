@@ -85,7 +85,7 @@ end
 
 -- Event handler: capture actual kick/punch damage from combat
 function tekura6.onLimbHitUpdated(event, name, limb, amount)
-  if not target or name:lower() ~= target:lower() then return end
+  if not target or type(target) ~= "string" or name:lower() ~= target:lower() then return end
   -- Kicks do ~18-25%, punches do ~14-15%. Threshold at 16% to classify.
   if amount > 16 then
     tekura6.state.kickDamage = amount
