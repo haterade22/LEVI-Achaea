@@ -111,7 +111,7 @@ function zData.db.showData(sortWith, sortStyle, sortDirection)           -- This
     zData.buildHunter()
   end
   zData.db.localDB = {}                                   -- This is the table for sorting and display database results
-  local maxShow = 10                     ------<--<--<--<--< Max number of results to show unless ALL is used. Increase to see more (Over 200 will not allow deleting)
+  local maxShow = 100                    ------<--<--<--<--< Max number of results to show unless ALL is used. Increase to see more (Over 200 will not allow deleting)
   local titleColor = "gold" 
   local menuColor = "purple" 
   local areaColor = "ansiMagenta"
@@ -131,56 +131,25 @@ function zData.db.showData(sortWith, sortStyle, sortDirection)           -- This
 -- Show Rows Based on Sorting  
   local function showCharts(thisChart, thisRow)
     if sortDirection and sortDirection == "down" then
-      for _, row in spairs(zData.db.localDB, function(t,a,b) return tonumber(t[a][thisChart]) < tonumber(t[b][thisChart]) end) do    
--------------------------- Limit results to MAXSHOW        
-        if sortWith and string.lower(sortWith) == "all" then 
+      local seen = {}
+      for _, row in spairs(zData.db.localDB, function(t,a,b) return tonumber(t[a][thisChart]) < tonumber(t[b][thisChart]) end) do
+        local dedupKey = row.area .. "|" .. row.class
+        if not seen[dedupKey] then
+        seen[dedupKey] = true
+-------------------------- Limit results to MAXSHOW
+        if sortWith and string.lower(sortWith) == "all" then
           zData.deleteAble = false
-        else 
+        else
           if maxShow < 240 then zData.deleteAble = true end
           showCount = showCount + 1
-          if showCount >= maxShow then break end      
+          if showCount >= maxShow then break end
         end
---------------------------- Blackout 0 talisman counts        
-        if tonumber(row.tali) < 1 then taliColor = "black:black" else 
+--------------------------- Blackout 0 talisman counts
+        if tonumber(row.tali) < 1 then taliColor = "black:black" else
           if thisChart == "tali" then
-            taliColor = "gold" 
+            taliColor = "gold"
           else
-            taliColor = "ansiMagenta" 
-          end
-        end
---------------------------- Display Each Row From The Database, Clickable For More Information
-        cechoLink("hunterDisplay", 
-          "\n  <"..areaColor..">"..string.cut(row.area.."                   ", 20)
-          .." <"..classColor..">"..string.cut(row.class.."            ", 13)
-          .. " <"..taliColor..">"..string.cut(string.cut(row.tali,2).."   ", 4)
-          .. " <"..timeColor..">"..string.cut(string.cut((row.time/60), 4).."      ", 6)
-          .. " <"..killColor..">"..string.cut(string.cut(row.kill,4).."     ", 6)
-          ..  " <"..kpmColor..">"..string.cut(string.cut(row.kpm,4).."     ", 6)
-          ..  " <"..expColor..">"..string.cut(string.cut(row.exp,4).."     ", 6)
-          ..  " <"..rawexpColor..">"..string.cut(string.cut(row.rawexp or 0,6).."       ", 8)
-          ..  " <"..epmColor..">"..string.cut(string.cut(row.epm,5).."      ", 7)
-          ..  " <"..gpmColor..">"..string.cut(string.cut(math.floor(row.gpm),6).."       ", 8)
-          .. " <"..goldColor..">"..string.cut(row.gold .."      ", 7),
-        ---------------------------------------------------------------------------------
-          [[zData.db.clickback(]].._..[[)]], [[]], true)                               -- What to do when clicked on
-        ---------------------------------------------------------------------------------
-      end --- End of for _,row
-    else
-      for _, row in spairs(zData.db.localDB, function(t,a,b) return tonumber(t[a][thisChart]) > tonumber(t[b][thisChart]) end) do    
--------------------------- Limit results to MAXSHOW        
-        if sortWith and string.lower(sortWith) == "all" then 
-          zData.deleteAble = false
-        else 
-          if maxShow < 240 then zData.deleteAble = true end
-          showCount = showCount + 1
-          if showCount >= maxShow then break end      
-        end
---------------------------- Blackout 0 talisman counts        
-        if tonumber(row.tali) < 1 then taliColor = "black:black" else 
-          if thisChart == "tali" then
-            taliColor = "gold" 
-          else
-            taliColor = "ansiMagenta" 
+            taliColor = "ansiMagenta"
           end
         end
 --------------------------- Display Each Row From The Database, Clickable For More Information
@@ -199,6 +168,47 @@ function zData.db.showData(sortWith, sortStyle, sortDirection)           -- This
         ---------------------------------------------------------------------------------
           [[zData.db.clickback(]].._..[[)]], [[]], true)                               -- What to do when clicked on
         ---------------------------------------------------------------------------------
+        end --- End of dedup check
+      end --- End of for _,row
+    else
+      local seen = {}
+      for _, row in spairs(zData.db.localDB, function(t,a,b) return tonumber(t[a][thisChart]) > tonumber(t[b][thisChart]) end) do
+        local dedupKey = row.area .. "|" .. row.class
+        if not seen[dedupKey] then
+        seen[dedupKey] = true
+-------------------------- Limit results to MAXSHOW
+        if sortWith and string.lower(sortWith) == "all" then
+          zData.deleteAble = false
+        else
+          if maxShow < 240 then zData.deleteAble = true end
+          showCount = showCount + 1
+          if showCount >= maxShow then break end
+        end
+--------------------------- Blackout 0 talisman counts
+        if tonumber(row.tali) < 1 then taliColor = "black:black" else
+          if thisChart == "tali" then
+            taliColor = "gold"
+          else
+            taliColor = "ansiMagenta"
+          end
+        end
+--------------------------- Display Each Row From The Database, Clickable For More Information
+        cechoLink("hunterDisplay",
+          "\n  <"..areaColor..">"..string.cut(row.area.."                   ", 20)
+          .." <"..classColor..">"..string.cut(row.class.."            ", 13)
+          .. " <"..taliColor..">"..string.cut(string.cut(row.tali,2).."   ", 4)
+          .. " <"..timeColor..">"..string.cut(string.cut((row.time/60), 4).."      ", 6)
+          .. " <"..killColor..">"..string.cut(string.cut(row.kill,4).."     ", 6)
+          ..  " <"..kpmColor..">"..string.cut(string.cut(row.kpm,4).."     ", 6)
+          ..  " <"..expColor..">"..string.cut(string.cut(row.exp,4).."     ", 6)
+          ..  " <"..rawexpColor..">"..string.cut(string.cut(row.rawexp or 0,6).."       ", 8)
+          ..  " <"..epmColor..">"..string.cut(string.cut(row.epm,5).."      ", 7)
+          ..  " <"..gpmColor..">"..string.cut(string.cut(math.floor(row.gpm),6).."       ", 8)
+          .. " <"..goldColor..">"..string.cut(row.gold .."      ", 7),
+        ---------------------------------------------------------------------------------
+          [[zData.db.clickback(]].._..[[)]], [[]], true)                               -- What to do when clicked on
+        ---------------------------------------------------------------------------------
+        end --- End of dedup check
       end --- End of for _,row
     end
   end --- End of local function showCharts()
@@ -258,8 +268,19 @@ function zData.db.showData(sortWith, sortStyle, sortDirection)           -- This
   else
     zData.db.localDB = db:fetch(zData.db.expdb.zones)
   end
-  
--------------------------- Clear Display   
+
+-------------------------- Purge bad data (low kill counts by area)
+  local minKills = { ["Moghedu"] = 220, ["Quartz Peak"] = 40, ["the Den of the Quisa"] = 81 }
+  for i = #zData.db.localDB, 1, -1 do
+    local row = zData.db.localDB[i]
+    local threshold = minKills[row.area]
+    if threshold and tonumber(row.kill) < threshold then
+      db:delete(zData.db.expdb.zones, row._row_id)
+      table.remove(zData.db.localDB, i)
+    end
+  end
+
+-------------------------- Clear Display
   clearWindow("hunterDisplay") 
 -------------------------- Display NO Results
   if #zData.db.localDB == 0 then
