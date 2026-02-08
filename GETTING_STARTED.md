@@ -228,7 +228,7 @@ E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
 
 Then reinstall the `.mpackage` from `muddler_project/build/` in Mudlet.
 
-Or just press **Ctrl+B** in Visual Studio if you have the solution open.
+Or right-click the root folder in VS2022 Solution Explorer and run the **Build Levi_Ataxia** task.
 
 ### Build a Separate Package
 
