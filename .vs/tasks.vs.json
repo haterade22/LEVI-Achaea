@@ -1,0 +1,60 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "Build Levi_Ataxia",
+      "appliesTo": "/",
+      "type": "launch",
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "python tools\\convert_to_muddler.py --src src_new --output muddler_project && set \"JAVA_HOME=E:\\Java\" && cd muddler_project && \"E:\\muddle-shadow-1.1.0\\muddle-shadow-1.1.0\\bin\\muddle.bat\""
+      ],
+      "contextType": "build"
+    },
+    {
+      "taskLabel": "Build Levi_Test",
+      "appliesTo": "/",
+      "type": "launch",
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "python tools\\convert_to_muddler.py --src src_new --output levi_test_project --package-name Levi_Test --package-title \"Levi Test Package\" --package-version 4.1 --package-author Leviticus --include-roots Levi_Ataxia && set \"JAVA_HOME=E:\\Java\" && cd levi_test_project && \"E:\\muddle-shadow-1.1.0\\muddle-shadow-1.1.0\\bin\\muddle.bat\""
+      ],
+      "contextType": "build"
+    },
+    {
+      "taskLabel": "Convert Only (Levi_Ataxia)",
+      "appliesTo": "/",
+      "type": "launch",
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "python tools\\convert_to_muddler.py --src src_new --output muddler_project"
+      ],
+      "contextType": "build"
+    },
+    {
+      "taskLabel": "Convert Only (Dry Run)",
+      "appliesTo": "/",
+      "type": "launch",
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "python tools\\convert_to_muddler.py --src src_new --output muddler_project --dry-run"
+      ],
+      "contextType": "build"
+    },
+    {
+      "taskLabel": "Clean Build Output",
+      "appliesTo": "/",
+      "type": "launch",
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "if exist muddler_project\\build rmdir /s /q muddler_project\\build"
+      ],
+      "contextType": "clean"
+    }
+  ]
+}

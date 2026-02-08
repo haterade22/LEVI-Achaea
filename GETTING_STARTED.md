@@ -200,9 +200,15 @@ Each file has a header comment showing where it came from:
 
 ## Visual Studio 2022
 
-Open `LEVI-Achaea.sln` in VS2022 to browse all source files. The solution uses a Makefile project with wildcard includes, so all Lua, Python, YAML, and Markdown files appear in Solution Explorer automatically.
+Use **File > Open > Folder** and select the `LEVI-Achaea/` directory. VS2022 shows all files in the folder tree automatically.
 
-**Build (Ctrl+B)** runs the full pipeline: convert source then build with Muddler.
+Build tasks are configured in `.vs/tasks.vs.json`. To run them, right-click the root folder in Solution Explorer and pick a task:
+
+- **Build Levi_Ataxia** — Full convert + Muddler pipeline for the main package
+- **Build Levi_Test** — Build the test/distribution package
+- **Convert Only (Levi_Ataxia)** — Just run the conversion step (no Muddler)
+- **Convert Only (Dry Run)** — Preview conversion without writing files
+- **Clean Build Output** — Delete `muddler_project/build/`
 
 ## Common Tasks
 

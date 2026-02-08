@@ -86,8 +86,8 @@ LEVI-Achaea/
 │       ├── mudlet_build.py    # Old Python XML builder
 │       └── mudlet_validate.py # Old validation script
 ├── packages/               # Compiled Mudlet packages
-├── LEVI-Achaea.sln         # Visual Studio 2022 solution
-├── LEVI-Achaea.vcxproj     # Makefile project (Ctrl+B builds)
+├── .vs/
+│   └── tasks.vs.json       # VS2022 Open Folder build tasks
 ├── CLAUDE.md               # This file
 ├── GETTING_STARTED.md      # Setup and usage guide
 └── README.md               # Project overview
@@ -135,13 +135,13 @@ python tools/convert_to_muddler.py --src ./src_new --output ./my_package_project
 
 ### Visual Studio 2022
 
-Open `LEVI-Achaea.sln` to browse all source files in Solution Explorer. The solution uses a Makefile project with wildcard includes — all Lua, Python, YAML, and Markdown files are included automatically. **Ctrl+B** runs the full convert + Muddler build pipeline.
+Use **File > Open > Folder** and select the `LEVI-Achaea/` directory. VS2022 shows all files in the folder tree. Build tasks are in `.vs/tasks.vs.json` — right-click the root folder in Solution Explorer to run them:
 
-Solution Explorer filters:
-- `Source\scripts`, `Source\triggers`, `Source\aliases`, `Source\timers`, `Source\keys` — Lua source
-- `Tools` — Python build scripts
-- `Config` — `_groups.yaml` files and `mfile` metadata
-- `Docs` — Markdown documentation
+- **Build Levi_Ataxia** — Full convert + Muddler pipeline
+- **Build Levi_Test** — Build the test/distribution package
+- **Convert Only** — Just the conversion step, no Muddler
+- **Convert Only (Dry Run)** — Preview without writing
+- **Clean Build Output** — Remove `muddler_project/build/`
 
 ### Source Code Organization
 

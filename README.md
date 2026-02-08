@@ -70,7 +70,7 @@ See `python tools/convert_to_muddler.py --help` for all options.
 
 ## Visual Studio 2022
 
-Open `LEVI-Achaea.sln` in VS2022 to browse all source files with Solution Explorer and build via Ctrl+B. The solution is a Makefile project that runs the convert + Muddler pipeline automatically.
+Use **File > Open > Folder** and select the `LEVI-Achaea/` directory. VS2022 shows all files natively. Build tasks are in `.vs/tasks.vs.json` — right-click the root folder in Solution Explorer and choose a build task to run the convert + Muddler pipeline.
 
 ## Documentation
 
