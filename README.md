@@ -53,6 +53,25 @@ E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
 
 Output: `muddler_project/build/Levi_Ataxia.mpackage`
 
+### Building a Custom Package
+
+The conversion script supports building separate standalone packages from the same source tree. Use CLI arguments to override the package name and root group filter:
+
+```bash
+python tools/convert_to_muddler.py --src ./src_new --output ./my_package_project \
+  --package-name My_Package --package-title "My Package" --include-roots My_Package
+
+set JAVA_HOME=E:\Java
+cd my_package_project
+E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
+```
+
+See `python tools/convert_to_muddler.py --help` for all options.
+
+## Visual Studio 2022
+
+Open `LEVI-Achaea.sln` in VS2022 to browse all source files with Solution Explorer and build via Ctrl+B. The solution is a Makefile project that runs the convert + Muddler pipeline automatically.
+
 ## Documentation
 
 - [Legend Deck Reference](docs/legend-deck.md) - All cards, effects, and PVE guide

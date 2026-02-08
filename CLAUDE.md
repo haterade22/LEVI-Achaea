@@ -67,7 +67,7 @@ LEVI-Achaea/
 │   ├── scripts/            # Lua script modules (combat, basher, GUI, NDB, etc.)
 │   ├── timers/             # Timer definitions
 │   └── triggers/           # Trigger definitions
-├── muddler_project/        # Muddler build project (generated from src_new)
+├── muddler_project/        # Muddler build project for Levi_Ataxia (generated)
 │   ├── mfile               # Package metadata JSON
 │   └── src/
 │       ├── aliases/Levi_Ataxia/   # aliases.json + *.lua
@@ -76,14 +76,18 @@ LEVI-Achaea/
 │       ├── timers/Levi_Ataxia/    # timers.json + *.lua
 │       ├── triggers/Levi_Ataxia/  # triggers.json + *.lua
 │       └── resources/             # Static resources
+├── my_package_project/     # Muddler build project for custom packages
+├── levi_test_project/      # Muddler build project for Levi_Test
 ├── tools/
-│   ├── convert_to_muddler.py  # Convert src_new → muddler_project
+│   ├── convert_to_muddler.py  # Convert src_new → muddler project (multi-package)
 │   ├── compare_builds.py      # Compare old XML vs Muddler output
 │   ├── mudlet_extract.py      # Extract XML package to src_new
 │   └── legacy/                # Retired build tools
 │       ├── mudlet_build.py    # Old Python XML builder
 │       └── mudlet_validate.py # Old validation script
 ├── packages/               # Compiled Mudlet packages
+├── LEVI-Achaea.sln         # Visual Studio 2022 solution
+├── LEVI-Achaea.vcxproj     # Makefile project (Ctrl+B builds)
 ├── CLAUDE.md               # This file
 ├── GETTING_STARTED.md      # Setup and usage guide
 └── README.md               # Project overview
@@ -111,10 +115,33 @@ The project uses [Muddler](https://github.com/demonnic/muddler) to build Mudlet 
 - Handles name collisions by prepending parent group names
 - Preserves group inline scripts
 - Converts pattern types, timer formats, key codes
+- Supports multi-package builds via CLI arguments:
+  - `--package-name` — Package identifier (default: `Levi_Ataxia`)
+  - `--package-title` — Human-readable title
+  - `--package-version` — Version string
+  - `--package-author` — Author name
+  - `--include-roots` — Root group names to include from `_groups.yaml`
+  - `--include-dirs` — Source subdirectory names to scan (default: derived from roots)
+
+**Building a custom package**:
+```bash
+python tools/convert_to_muddler.py --src ./src_new --output ./my_package_project \
+  --package-name My_Package --include-roots My_Package
+```
 
 **Comparison tool** (`tools/compare_builds.py`):
 - Compares old Python-built XML against Muddler project source
 - Verifies item counts, names, hierarchy, and code content
+
+### Visual Studio 2022
+
+Open `LEVI-Achaea.sln` to browse all source files in Solution Explorer. The solution uses a Makefile project with wildcard includes — all Lua, Python, YAML, and Markdown files are included automatically. **Ctrl+B** runs the full convert + Muddler build pipeline.
+
+Solution Explorer filters:
+- `Source\scripts`, `Source\triggers`, `Source\aliases`, `Source\timers`, `Source\keys` — Lua source
+- `Tools` — Python build scripts
+- `Config` — `_groups.yaml` files and `mfile` metadata
+- `Docs` — Markdown documentation
 
 ### Source Code Organization
 

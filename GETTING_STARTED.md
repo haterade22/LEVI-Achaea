@@ -198,6 +198,12 @@ Each file has a header comment showing where it came from:
 **Want to modify bashing?**
 → Look in `src_new/scripts/levi_ataxia/levi/ataxia/basher/`
 
+## Visual Studio 2022
+
+Open `LEVI-Achaea.sln` in VS2022 to browse all source files. The solution uses a Makefile project with wildcard includes, so all Lua, Python, YAML, and Markdown files appear in Solution Explorer automatically.
+
+**Build (Ctrl+B)** runs the full pipeline: convert source then build with Muddler.
+
 ## Common Tasks
 
 ### Rebuild Package After Editing
@@ -215,6 +221,34 @@ E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
 ```
 
 Then reinstall the `.mpackage` from `muddler_project/build/` in Mudlet.
+
+Or just press **Ctrl+B** in Visual Studio if you have the solution open.
+
+### Build a Separate Package
+
+The conversion script supports multiple packages from the same source tree. Each package needs:
+1. A root group entry in the `_groups.yaml` files under `src_new/`
+2. A source directory under `src_new/<type>/<package_dir>/`
+3. Lua files with YAML headers referencing the package's root group in their `hierarchy`
+
+Build with CLI overrides:
+
+```bash
+python tools/convert_to_muddler.py --src ./src_new --output ./my_project \
+  --package-name My_Package --package-title "My Package" --include-roots My_Package
+
+set JAVA_HOME=E:\Java
+cd my_project
+E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
+```
+
+Run `python tools/convert_to_muddler.py --help` for all available options:
+- `--package-name` — Package identifier (default: Levi_Ataxia)
+- `--package-title` — Human-readable title
+- `--package-version` — Version string
+- `--package-author` — Author name
+- `--include-roots` — Root group names to include from `_groups.yaml`
+- `--include-dirs` — Source subdirectory names to scan (default: derived from roots)
 
 ### Modify Curing Priorities
 
