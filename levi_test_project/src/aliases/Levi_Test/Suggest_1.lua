@@ -1,0 +1,7 @@
+send("suggest " ..target.. " stuttering")
+send("suggest " ..target.. " addiction")
+send("suggest " ..target.. " disrupt")
+send("suggest " ..target.. " recklessness")
+send("suggest " ..target.. " confusion")
+send("suggest " ..target.. " hypochondria")
+send("suggest " ..target.. " impatience")

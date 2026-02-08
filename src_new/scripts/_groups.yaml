@@ -795,3 +795,7 @@ groups:
           children:
           - name: Limb
             directory: levi_ataxia/levi/levi_scripts/limb
+- name: My_Package
+  packageName: My_Package
+  directory: my_package
+  children: []

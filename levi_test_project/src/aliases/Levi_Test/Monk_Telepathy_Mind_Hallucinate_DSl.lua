@@ -1,0 +1,1 @@
+send("mind hallucinate " ..target.. " Lightning-quick, you jab Leviticus's right leg with an ornate steel rapier.\\nLightning-quick, you jab Leviticus's right leg with an ornate steel rapier.")

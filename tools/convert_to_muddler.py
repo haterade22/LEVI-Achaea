@@ -187,11 +187,29 @@ def parse_time(time_str: str) -> Dict[str, str]:
 class MuddlerConverter:
     """Convert src_new/ structure to Muddler project."""
 
-    def __init__(self, src_dir: str, output_dir: str, verbose: bool = False, dry_run: bool = False):
+    def __init__(
+        self,
+        src_dir: str,
+        output_dir: str,
+        verbose: bool = False,
+        dry_run: bool = False,
+        package_name: str = PACKAGE_NAME,
+        package_title: str = PACKAGE_TITLE,
+        package_version: str = PACKAGE_VERSION,
+        package_author: str = PACKAGE_AUTHOR,
+        include_roots: Optional[set] = None,
+        include_dirs: Optional[set] = None,
+    ):
         self.src_dir = Path(src_dir)
         self.output_dir = Path(output_dir)
         self.verbose = verbose
         self.dry_run = dry_run
+        self.package_name = package_name
+        self.package_title = package_title
+        self.package_version = package_version
+        self.package_author = package_author
+        self.include_roots = include_roots if include_roots is not None else set(INCLUDE_ROOTS)
+        self.include_dirs = include_dirs if include_dirs is not None else {r.lower().replace(" ", "_") for r in self.include_roots}
         self.errors: List[str] = []
         self.warnings: List[str] = []
         self.stats = defaultdict(int)
@@ -254,18 +272,18 @@ class MuddlerConverter:
     # ------------------------------------------------------------------
 
     def _read_lua_files(self, pkg_type: str) -> List[Tuple[Path, Dict, str]]:
-        """Read all Lua files for a package type, filtering to Levi_Ataxia only."""
+        """Read all Lua files for a package type, filtering to include_dirs only."""
         base_dir = self.src_dir / pkg_type
         if not base_dir.exists():
             return []
 
         items = []
         for lua_file in sorted(base_dir.rglob("*.lua")):
-            # Filter: only include files under levi_ataxia/ subdirectory
+            # Filter: only include files under allowed subdirectories
             rel = lua_file.relative_to(base_dir)
             parts = rel.parts
-            if not parts or parts[0] != "levi_ataxia":
-                self.log(f"  SKIP (not levi_ataxia): {rel}")
+            if not parts or parts[0] not in self.include_dirs:
+                self.log(f"  SKIP (not in {self.include_dirs}): {rel}")
                 continue
 
             try:
@@ -352,10 +370,10 @@ class MuddlerConverter:
         hmgr = HierarchyManager(self.src_dir / pkg_type, pkg_type)
         hmgr.load()
 
-        # Find the Levi_Ataxia root group(s)
-        levi_roots = [g for g in hmgr.root_groups if g.name in INCLUDE_ROOTS]
+        # Find the matching root group(s)
+        levi_roots = [g for g in hmgr.root_groups if g.name in self.include_roots]
         if not levi_roots:
-            self.warnings.append(f"No '{PACKAGE_NAME}' root group found in {pkg_type} _groups.yaml")
+            self.warnings.append(f"No '{self.package_name}' root group found in {pkg_type} _groups.yaml")
             return []
 
         # Collect all known group hierarchy paths from _groups.yaml
@@ -372,7 +390,7 @@ class MuddlerConverter:
         # for items whose hierarchy references groups not in _groups.yaml
         for file_path, metadata, lua_code in items:
             hierarchy = tuple(metadata.get("hierarchy", []))
-            if hierarchy and hierarchy not in known_groups and hierarchy[0] in INCLUDE_ROOTS:
+            if hierarchy and hierarchy not in known_groups and hierarchy[0] in self.include_roots:
                 # Walk the hierarchy and create missing nodes
                 self._ensure_group_path(levi_roots, hierarchy, known_groups)
 
@@ -398,7 +416,7 @@ class MuddlerConverter:
         known_groups: set,
     ):
         """Ensure all group nodes exist along a hierarchy path, creating missing ones."""
-        if not hierarchy or hierarchy[0] not in INCLUDE_ROOTS:
+        if not hierarchy or hierarchy[0] not in self.include_roots:
             return
 
         # Find root
@@ -666,10 +684,10 @@ class MuddlerConverter:
 
         # Write mfile
         mfile = {
-            "package": PACKAGE_NAME,
-            "title": PACKAGE_TITLE,
-            "version": PACKAGE_VERSION,
-            "author": PACKAGE_AUTHOR,
+            "package": self.package_name,
+            "title": self.package_title,
+            "version": self.package_version,
+            "author": self.package_author,
         }
         mfile_path = self.output_dir / "mfile"
         mfile_path.write_text(json.dumps(mfile, indent=2), encoding='utf-8')
@@ -684,7 +702,7 @@ class MuddlerConverter:
             if not tree and not items:
                 continue
 
-            type_dir = self.output_dir / "src" / TYPE_DIRS[pkg_type] / PACKAGE_NAME
+            type_dir = self.output_dir / "src" / TYPE_DIRS[pkg_type] / self.package_name
             type_dir.mkdir(parents=True, exist_ok=True)
 
             # Collect all Lua files from the tree (recursively)
@@ -796,14 +814,55 @@ def main():
         action="store_true",
         help="Scan and report without writing output"
     )
+    parser.add_argument(
+        "--package-name",
+        default=PACKAGE_NAME,
+        help=f"Package name (default: {PACKAGE_NAME})"
+    )
+    parser.add_argument(
+        "--package-title",
+        default=PACKAGE_TITLE,
+        help=f"Package title (default: {PACKAGE_TITLE})"
+    )
+    parser.add_argument(
+        "--package-version",
+        default=PACKAGE_VERSION,
+        help=f"Package version (default: {PACKAGE_VERSION})"
+    )
+    parser.add_argument(
+        "--package-author",
+        default=PACKAGE_AUTHOR,
+        help=f"Package author (default: {PACKAGE_AUTHOR})"
+    )
+    parser.add_argument(
+        "--include-roots",
+        nargs="+",
+        default=list(INCLUDE_ROOTS),
+        help=f"Root group names to include (default: {list(INCLUDE_ROOTS)})"
+    )
+    parser.add_argument(
+        "--include-dirs",
+        nargs="+",
+        default=None,
+        help="Source subdirectory names to scan (default: derived from --include-roots)"
+    )
 
     args = parser.parse_args()
+
+    include_roots = set(args.include_roots)
+    include_dirs = set(args.include_dirs) if args.include_dirs else None
 
     converter = MuddlerConverter(
         src_dir=args.src,
         output_dir=args.output,
         verbose=args.verbose,
         dry_run=args.dry_run,
+        package_name=args.package_name,
+        package_title=args.package_title,
+        package_version=args.package_version,
+        package_author=args.package_author,
+        include_roots=include_roots,
+        include_dirs=include_dirs,
     )
 
     success = converter.convert()

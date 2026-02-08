@@ -1,0 +1,1 @@
+send("cq all;queue addclear free shin perfection")

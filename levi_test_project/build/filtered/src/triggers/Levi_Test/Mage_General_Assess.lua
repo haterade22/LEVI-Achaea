@@ -1,0 +1,1 @@
+targetHealth = math.floor((matches[4] / matches[5]) * 100)

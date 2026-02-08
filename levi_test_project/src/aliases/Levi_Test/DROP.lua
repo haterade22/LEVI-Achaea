@@ -1,0 +1,1 @@
+send("generosity;drop group all "..herbivore)

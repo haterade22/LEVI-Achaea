@@ -1,0 +1,1 @@
+send("wield left fang;wield right shield")

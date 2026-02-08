@@ -1,0 +1,2 @@
+shaman.resetspirittables()
+shaman.save()

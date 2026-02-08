@@ -3733,3 +3733,7 @@ groups:
       isColorTriggerFg: 'no'
       isColorTriggerBg: 'no'
     directory: sugardown_fields/racetrack_bets
+- name: My_Package
+  packageName: My_Package
+  directory: my_package
+  children: []

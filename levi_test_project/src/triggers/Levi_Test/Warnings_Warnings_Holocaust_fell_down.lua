@@ -1,0 +1,1 @@
+ataxia_setWarning("holobomb landed", 1)

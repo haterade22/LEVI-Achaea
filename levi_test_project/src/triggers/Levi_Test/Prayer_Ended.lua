@@ -1,0 +1,1 @@
+ataxiaTemp.prayerList = {}

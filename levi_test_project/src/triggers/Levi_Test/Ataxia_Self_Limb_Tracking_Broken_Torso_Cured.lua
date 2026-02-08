@@ -1,0 +1,1 @@
+ataxia_clearLimbDamage(torso)

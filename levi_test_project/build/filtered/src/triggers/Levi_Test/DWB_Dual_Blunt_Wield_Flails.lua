@@ -1,0 +1,1 @@
+wieldweapons = "flails"

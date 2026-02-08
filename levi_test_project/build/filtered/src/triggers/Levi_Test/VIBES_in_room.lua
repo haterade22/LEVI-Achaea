@@ -1,0 +1,1 @@
+vibes_inRoom = {}

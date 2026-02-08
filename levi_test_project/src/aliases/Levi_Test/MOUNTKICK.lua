@@ -1,0 +1,1 @@
+send("clearqueue all;mountkick "..target.." " ..matches[2])

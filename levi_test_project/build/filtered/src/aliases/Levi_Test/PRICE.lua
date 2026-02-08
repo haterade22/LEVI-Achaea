@@ -1,0 +1,1 @@
+send("price "..herbivore.." at "..matches[2])

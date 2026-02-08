@@ -1,0 +1,79 @@
+[
+  {
+    "name": "Levi_Ataxia",
+    "isActive": "yes",
+    "isFolder": "yes",
+    "children": [
+      {
+        "name": "Levitax",
+        "isActive": "yes",
+        "isFolder": "yes",
+        "children": [
+          {
+            "name": "Targeting",
+            "isActive": "yes",
+            "isFolder": "yes",
+            "children": [
+              {
+                "name": "Left Leg",
+                "keys": "1"
+              },
+              {
+                "name": "Right Leg",
+                "keys": "3"
+              },
+              {
+                "name": "Torso",
+                "keys": "5"
+              },
+              {
+                "name": "Head",
+                "keys": "8"
+              },
+              {
+                "name": "left arm",
+                "keys": "4"
+              },
+              {
+                "name": "Right Arm",
+                "keys": "6"
+              }
+            ]
+          },
+          {
+            "name": "Movement/Bashing",
+            "isActive": "yes",
+            "isFolder": "yes",
+            "children": [
+              {
+                "name": "Bash",
+                "keys": "F2"
+              },
+              {
+                "name": "toggle manual",
+                "keys": "F3"
+              },
+              {
+                "name": "enable systems",
+                "keys": "F1"
+              },
+              {
+                "name": "make path f12",
+                "keys": "F12"
+              },
+              {
+                "name": "save path f11",
+                "keys": "F11"
+              }
+            ]
+          },
+          {
+            "name": "Ataxia-DownloadThis",
+            "isActive": "yes",
+            "isFolder": "yes"
+          }
+        ]
+      }
+    ]
+  }
+]

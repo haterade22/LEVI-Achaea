@@ -306,3 +306,7 @@ groups:
 - name: echo
   packageName: echo
   directory: echo
+- name: My_Package
+  packageName: My_Package
+  directory: my_package
+  children: []

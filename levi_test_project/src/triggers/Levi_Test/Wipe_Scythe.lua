@@ -1,0 +1,1 @@
+send("wipe scythe20431")

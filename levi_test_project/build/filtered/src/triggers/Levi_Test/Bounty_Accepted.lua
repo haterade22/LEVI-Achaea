@@ -1,0 +1,5 @@
+selectString(line,1)
+fg("red")
+deselect()
+ataxia_boxEcho("bounty got taken on us!", "firebrick")
+ataxiaBasher_alert("Normal")

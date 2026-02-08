@@ -1,0 +1,1 @@
+if not pariah.ensorcell then erAff("ensorcelled"); if removeAffV3 then removeAffV3("ensorcelled") end end

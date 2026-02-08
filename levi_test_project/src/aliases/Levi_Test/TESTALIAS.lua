@@ -1,0 +1,1 @@
+send("say I think "..matches[2].." is better than "..matches[3].." huh?")

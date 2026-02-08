@@ -1,0 +1,1 @@
+send("cq all;dismount;wield totem;stand totem")

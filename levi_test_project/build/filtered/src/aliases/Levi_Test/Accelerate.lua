@@ -1,0 +1,1 @@
+send("cq all|chrono accelerate boost")

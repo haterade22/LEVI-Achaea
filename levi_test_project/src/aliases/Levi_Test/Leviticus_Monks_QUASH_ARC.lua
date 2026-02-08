@@ -1,0 +1,1 @@
+send("queue addclear free wield shield longsword;quash "..target..";arc "..target.." prefarar")

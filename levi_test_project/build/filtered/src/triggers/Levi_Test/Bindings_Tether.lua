@@ -1,0 +1,1 @@
+shaman.spiritlore.tether = matches[2]

@@ -1,0 +1,2 @@
+zgui.whoRoomList={}
+enableTrigger("whoHereCatch")

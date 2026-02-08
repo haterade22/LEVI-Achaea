@@ -1,0 +1,1 @@
+send("battlefury perceive " ..target)

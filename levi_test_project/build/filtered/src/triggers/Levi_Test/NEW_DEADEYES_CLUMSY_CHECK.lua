@@ -1,0 +1,1 @@
+tAffs[deadaff] = false

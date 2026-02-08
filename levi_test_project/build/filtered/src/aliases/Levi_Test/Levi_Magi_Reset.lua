@@ -1,0 +1,1 @@
+targets[target] = tget:new(target)

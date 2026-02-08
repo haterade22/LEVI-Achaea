@@ -1,0 +1,5 @@
+selectString(line, 1)
+setBold(true)
+fg("SpringGreen")
+deselect()
+resetFormat()
