@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- Virtual folders in Solution Explorer -->
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{12847564-8297-4FA2-B542-74485FA8CC9F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\scripts">
+      <UniqueIdentifier>{AAE799D5-2B11-4380-83F7-A29487DF7BC3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\triggers">
+      <UniqueIdentifier>{3F8DBFE7-F3A5-4EE4-B9CF-0A5CAAFE680F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\aliases">
+      <UniqueIdentifier>{BEBAFA46-64E7-4A96-8288-9854703897FD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\timers">
+      <UniqueIdentifier>{457BC169-B9B8-43F9-91D6-273CCC69357D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\keys">
+      <UniqueIdentifier>{C2226B1E-57F7-4913-AC8C-EAEA01ED6E48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{4F5A0A6C-2BC5-40DE-9C6D-919C26CA8E3C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{345DF320-5B8D-41FC-B85E-163198BF1102}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Docs">
+      <UniqueIdentifier>{661A2488-B60A-42FE-8B8A-CBDEEA1D2FFE}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+
+  <!-- Map file globs to filters -->
+  <ItemGroup>
+    <!-- Lua scripts -->
+    <None Include="src_new\scripts\**\*.lua">
+      <Filter>Source\scripts</Filter>
+    </None>
+    <!-- Lua triggers -->
+    <None Include="src_new\triggers\**\*.lua">
+      <Filter>Source\triggers</Filter>
+    </None>
+    <!-- Lua aliases -->
+    <None Include="src_new\aliases\**\*.lua">
+      <Filter>Source\aliases</Filter>
+    </None>
+    <!-- Lua timers -->
+    <None Include="src_new\timers\**\*.lua">
+      <Filter>Source\timers</Filter>
+    </None>
+    <!-- Lua keys -->
+    <None Include="src_new\keys\**\*.lua">
+      <Filter>Source\keys</Filter>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Hierarchy definitions -->
+    <None Include="src_new\scripts\_groups.yaml">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="src_new\triggers\_groups.yaml">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="src_new\aliases\_groups.yaml">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="src_new\timers\_groups.yaml">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="src_new\keys\_groups.yaml">
+      <Filter>Config</Filter>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Python tools -->
+    <None Include="tools\**\*.py">
+      <Filter>Tools</Filter>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Package metadata -->
+    <None Include="muddler_project\mfile">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="my_package_project\mfile">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="levi_test_project\mfile">
+      <Filter>Config</Filter>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Documentation -->
+    <None Include="*.md">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="docs\**\*">
+      <Filter>Docs</Filter>
+    </None>
+  </ItemGroup>
+
+</Project>
