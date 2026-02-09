@@ -38,6 +38,8 @@ patterns:
   type: 1
 - pattern: ^The protective coating covering the skin of \w+ is ripped away with \w+ protections\.$
   type: 1
+- pattern: ^The protective coating covering the skin of \w+ sloughs off\.$
+  type: 1
 ]]--
 
 tAffs.fangbarrier = false
