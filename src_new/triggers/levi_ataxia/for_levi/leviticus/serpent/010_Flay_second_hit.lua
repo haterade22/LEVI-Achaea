@@ -47,11 +47,11 @@ end
 
 removeAffV3("rebounding")
 removeAffV3("shield")
-local aff2 = envenomListTwo[1] and venom_to_aff(envenomListTwo[1]) or nil
+local aff2 = envenomList[1] and venom_to_aff(envenomList[1]) or nil
 if aff2 then
 	tarAffed(aff2)
 	if applyAffV3 then applyAffV3(aff2) end
-	table.remove(envenomListTwo,1)
+	table.remove(envenomList,1)
 	if partyrelay and not ataxia.afflictions.aeon then
 		send("pt "..target..": "..aff2)
 	end
