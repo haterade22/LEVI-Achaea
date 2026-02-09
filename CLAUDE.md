@@ -1139,6 +1139,7 @@ gmcp.Room.Info = {
 - **Achaea API**: http://api.achaea.com
 - **IRE Mapping Script Wiki**: http://wiki.mudlet.org/w/IRE_mapping_script
 - **Achaea Forums**: https://forums.achaea.com/
+- **Agent Teams Guide**: `docs/ai-includes/agent-teams.md` - Multi-agent team coordination for parallel development
 
 ---
 
@@ -1688,7 +1689,30 @@ end
 
 ---
 
-**Last Updated**: 2026-01-30
+## Agent Teams
+
+Claude Code agent teams enable parallel development across isolated combat subsystems. See `docs/ai-includes/agent-teams.md` for the full guide.
+
+### Quick Reference
+
+**When to use**:
+- Parallel class system development (e.g., shaman + blademaster simultaneously)
+- Cross-system feature rollouts (e.g., adding V3 tracking to multiple classes)
+- Parallel code review of independent subsystems
+- Documentation sprints across multiple class files
+
+**When NOT to use**:
+- Single class edits, threshold tweaks, trigger fixes
+- Sequential debugging (cause-and-effect tracing)
+- Changes to shared `ataxia/` core files (serialize through lead)
+
+**File ownership rule**: Each teammate owns a class directory under `levi_scripts/`. The `ataxia/` core (affliction tracking, curing, balance) is shared -- coordinate through the team lead before modifying.
+
+**Build contention**: Only one agent may run `convert_to_muddler.py` or `muddle.bat` at a time.
+
+---
+
+**Last Updated**: 2026-02-09
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia
