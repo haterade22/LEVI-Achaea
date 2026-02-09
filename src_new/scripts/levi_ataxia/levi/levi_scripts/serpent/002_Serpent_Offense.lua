@@ -13,55 +13,41 @@ attributes:
 packageName: ''
 ]]--
 
---[[mudlet
-type: script
-name: Serpent Offense
-hierarchy:
-- Levi_Ataxia
-- LEVI
-- Levi  Scripts
-- Leviticus
-- Serpent
-attributes:
-  isActive: 'yes'
-  isFolder: 'no'
-packageName: ''
-]]--
-
 --[[
     ============================================================================
-    SERPENT OFFENSE SYSTEM
+    SERPENT OFFENSE SYSTEM (Overhaul)
     ============================================================================
 
-    Complete serpent offense with three kill routes and Ekanelia support.
+    DSTAB-primary offense with conditional IMPULSE for Ekanelia triggers.
 
-    KILL ROUTES:
-    1. Impulse Lock (Primary)
-       - Build kelp stack (asthma + weariness) to enable Impulse
-       - Flay sileris/fangbarrier to open target
-       - Deliver impatience/anorexia via Impulse
-       - Complete lock with paralysis + slickness
+    ATTACK MODES:
+    - DSTAB (primary): 2 venoms per round, BAL only. Always works.
+    - IMPULSE (conditional): suggestion + bite + Ekanelia (BAL+EQ).
+      Only when: no sileris/fangbarrier AND Ekanelia achievable AND eq free.
+    - FLAY: strip defense + venom, BAL only.
+    - EXECUTE: truelock finish.
 
-    2. Hypnosis + Fratricide Combo
-       - Hypnotise target, suggest fratricide
-       - Snap to apply fratricide
-       - Impulse delivers mental affs that RELAPSE after cure!
-       - Creates inescapable focus lock
+    EKANELIA TRANSFORMATIONS (BITE/IMPULSE only):
+    - kalmia:    clumsiness + weariness           → slickness
+    - aconite:   deadening + dementia              → paranoia
+    - monkshood: asthma + masochism + weariness    → impatience
+    - curare:    hypersomnia + masochism            → hypochondria
+    - voyria:    anorexia + impatience + vertigo    → confusion + disrupted
+    - loki:      confusion + recklessness           → nausea + paralysis
+    - scytherus: addiction + nausea                 → camus
 
-    3. Darkshade DoT
-       - Stack ginseng afflictions to protect darkshade
-       - Keep darkshade stuck 26+ seconds for kill
-       - Add scytherus for bonus damage
-
-    EKANELIA TRANSFORMATIONS (BITE only):
-    - kalmia: clumsiness + weariness → asthma + slickness
-    - monkshood: asthma + masochism + weariness → disfigurement + impatience
-    - curare: hypersomnia + masochism → paralysis + hypochondria
-    - loki: confusion + recklessness → nausea + paralysis
-    - scytherus: addiction + nausea → scytherus + camus damage
+    SELECTION LOGIC (Lock-First):
+    0. Strip rebounding/shield (flay)
+    1. Can complete truelock? → deliver missing piece
+    2. Can complete hardlock? → deliver missing piece
+    3. Can complete softlock? → deliver missing piece
+    4. Ekanelia conditionals all met? → free Ekanelia via impulse
+    5. One trivial conditional missing? → impulse completes it
+    6. Need DSTAB setup? → dstab venoms that set up Ekanelia
+    Fallback: general affliction pressure
 
     ALIASES:
-    - ek        : Main attack (semi-auto trigger)
+    - ek        : Main attack
     - eklock    : Lock mode
     - ekhyp     : Hypnosis combo mode
     - ekdark    : Darkshade DoT mode
@@ -74,58 +60,80 @@ packageName: ''
 -- INITIALIZATION & CONFIGURATION
 -- =============================================================================
 
--- Initialize namespaces
 serpent = serpent or {}
 serpent.config = serpent.config or {}
 serpent.hypnosis = serpent.hypnosis or {}
+serpent.state = serpent.state or {}
 
--- Configuration Variables
-serpOffenseMode = serpOffenseMode or "auto"  -- "lock", "darkshade", "hypnosis", or "auto"
-serpStrategy = serpStrategy or "lock"        -- Current active strategy
-attackMode = attackMode or "doublestab"      -- "bite" or "doublestab"
-ekaneliaReady = ekaneliaReady or {}          -- Ekanelia opportunities detected
-impulseReady = false                          -- Impulse delivery state
-affTimers = affTimers or {}                   -- Affliction timestamps
+-- Combat state
+serpOffenseMode = serpOffenseMode or "auto"
+serpStrategy = serpStrategy or "lock"
+attackMode = attackMode or "dstab"
+ekaneliaReady = ekaneliaReady or {}
+impulseReady = false
+affTimers = affTimers or {}
 
--- Configuration options
+-- Attack state tracking
+serpent.state.attackInFlight = serpent.state.attackInFlight or false
+serpent.state.dispelSent = serpent.state.dispelSent or false
+
+-- Suggestion queueing (keybind-driven)
+hSuggRequest = hSuggRequest or ""
+hSuggActive = hSuggActive or ""
+
+-- Configuration
 serpent.config = {
     debug = false,
     echoStrategy = true,
-    echoAffs = true,  -- Show target afflictions each attack for debugging
+    echoAffs = true,
     autoFratricide = true,
 }
 
 -- Constants
-DARKSHADE_KILL_TIME = 26   -- Seconds darkshade must stick for kill
-DARKSHADE_SWITCH_TIME = 15 -- Seconds before switching to darkshade mode
-SNAP_DELAY = 4             -- Seconds after hypnotise before snap is ready
-COOLDOWN_TIME = 4          -- Seconds cooldown after snapping
+DARKSHADE_KILL_TIME = 26
+DARKSHADE_SWITCH_TIME = 15
+SNAP_DELAY = 4
+COOLDOWN_TIME = 4
+
+-- Trivial suggestions (deliverable via IMPULSE)
+local TRIVIAL_SUGGESTIONS = {
+    "amnesia", "paranoia", "loneliness", "claustrophobia", "stuttering",
+    "hallucinations", "dementia", "deadening", "epilepsy", "agoraphobia",
+    "masochism", "recklessness", "vertigo", "confusion", "stupidity"
+}
+
+-- Venom → affliction mapping
+local VENOM_TO_AFF = {
+    kalmia = "asthma", vernalius = "weariness", xentio = "clumsiness",
+    curare = "paralysis", gecko = "slickness", slike = "anorexia",
+    euphorbia = "nausea", vardrax = "addiction", eurypteria = "recklessness",
+    aconite = "stupidity", monkshood = "disfigurement", scytherus = "scytherus",
+    darkshade = "darkshade", voyria = "voyria", notechis = "haemophilia",
+    loki = "random",
+}
+
+-- Affliction → venom mapping (for lock completion)
+local AFF_TO_VENOM = {
+    asthma = "kalmia", weariness = "vernalius", clumsiness = "xentio",
+    paralysis = "curare", slickness = "gecko", anorexia = "slike",
+    nausea = "euphorbia", addiction = "vardrax", recklessness = "eurypteria",
+    stupidity = "aconite", darkshade = "darkshade",
+}
 
 -- =============================================================================
 -- HYPNOSIS STATE MACHINE
 -- =============================================================================
 
---[[
-    Hypnosis State Machine
-
-    Tracks hypnosis state through the combat cycle:
-    idle -> hypnotising -> hypnotised -> suggesting -> ready_snap -> snapped -> cooldown
-
-    Key mechanic: Fratricide causes Impulse-delivered mental afflictions to RELAPSE
-    after being cured, creating an inescapable focus lock.
-]]--
-
 serpent.hypnosis = {
-    phase = "idle",            -- idle, hypnotising, hypnotised, suggesting, ready_snap, cooldown
-    suggestions = {},          -- Queue of suggestions to deliver
-    fratricideApplied = false, -- Fratricide suggestion queued
-    fratricideActive = false,  -- Fratricide currently on target
-    snapTimer = nil,           -- Timer ID for 4-second SNAP delay
-    snapReadyTime = nil,       -- Epoch when snap becomes ready
-    hypnoTarget = nil,         -- Target being hypnotised
+    phase = "idle",
+    suggestions = {},
+    fratricideApplied = false,
+    fratricideActive = false,
+    snapTimer = nil,
+    snapReadyTime = nil,
+    hypnoTarget = nil,
 }
 
--- Called when we begin hypnotising a target
 function serpent.hypnosis.start(tar)
     serpent.hypnosis.phase = "hypnotising"
     serpent.hypnosis.suggestions = {}
@@ -137,18 +145,14 @@ function serpent.hypnosis.start(tar)
     end
 end
 
--- Called when target is fully hypnotised
 function serpent.hypnosis.onHypnotised()
     serpent.hypnosis.phase = "hypnotised"
     tAffs.hypnotised = true
     tAffs.hypnotising = false
 
-    -- Set timer for when snap will be ready
     serpent.hypnosis.snapReadyTime = getEpoch() + SNAP_DELAY
-
     Algedonic.Echo("<green>HYPNOSIS: <white>Target hypnotised! Snap ready in " .. SNAP_DELAY .. "s")
 
-    -- Start timer to update phase to ready_snap
     if serpent.hypnosis.snapTimer then
         killTimer(serpent.hypnosis.snapTimer)
     end
@@ -160,11 +164,9 @@ function serpent.hypnosis.onHypnotised()
     end)
 end
 
--- Called when a suggestion is applied
 function serpent.hypnosis.onSuggested(suggestion)
     serpent.hypnosis.phase = "suggesting"
 
-    -- Track fratricide specifically
     if suggestion and suggestion:lower():find("fratricide") then
         serpent.hypnosis.fratricideApplied = true
         Algedonic.Echo("<magenta>HYPNOSIS: <white>Fratricide queued - mental affs will RELAPSE!")
@@ -177,13 +179,11 @@ function serpent.hypnosis.onSuggested(suggestion)
     end
 end
 
--- Called when snap is triggered
 function serpent.hypnosis.onSnapped()
     serpent.hypnosis.phase = "cooldown"
     tAffs.snapped = true
     tAffs.hypnotised = false
 
-    -- If fratricide was suggested, it's now active
     if serpent.hypnosis.fratricideApplied then
         serpent.hypnosis.fratricideActive = true
         tAffs.fratricide = true
@@ -192,26 +192,22 @@ function serpent.hypnosis.onSnapped()
         Algedonic.Echo("<yellow>HYPNOSIS: <white>SNAP triggered!")
     end
 
-    -- Clear snap timer
     if serpent.hypnosis.snapTimer then
         killTimer(serpent.hypnosis.snapTimer)
         serpent.hypnosis.snapTimer = nil
     end
 
-    -- Start cooldown timer
     tempTimer(COOLDOWN_TIME, function()
         serpent.hypnosis.phase = "idle"
     end)
 end
 
--- Called when target cures fratricide
 function serpent.hypnosis.onFratricideCured()
     serpent.hypnosis.fratricideActive = false
     tAffs.fratricide = false
     Algedonic.Echo("<dim_grey>HYPNOSIS: <white>Target cured fratricide")
 end
 
--- Reset hypnosis state (on target change, death, etc.)
 function serpent.hypnosis.reset()
     serpent.hypnosis.phase = "idle"
     serpent.hypnosis.suggestions = {}
@@ -226,45 +222,37 @@ function serpent.hypnosis.reset()
     end
 end
 
--- Returns the appropriate hypnosis command based on current state
 function serpent.hypnosis.getCommand()
     local tar = target or serpent.hypnosis.hypnoTarget
 
-    -- Phase: idle - start hypnosis
     if serpent.hypnosis.phase == "idle" then
         return "hypnotise " .. tar
     end
 
-    -- Phase: hypnotised/suggesting - suggest fratricide if not done
     if (serpent.hypnosis.phase == "hypnotised" or serpent.hypnosis.phase == "suggesting")
        and not serpent.hypnosis.fratricideApplied then
         return "suggest " .. tar .. " fratricide"
     end
 
-    -- Phase: ready_snap - snap!
     if serpent.hypnosis.phase == "ready_snap" then
-        return "snap"
+        return "snap " .. tar
     end
 
     return nil
 end
 
--- Returns true if snap is ready
 function serpent.hypnosis.canSnap()
     return serpent.hypnosis.phase == "ready_snap"
 end
 
--- Returns true if hypnosis is in progress
 function serpent.hypnosis.isActive()
     return serpent.hypnosis.phase ~= "idle" and serpent.hypnosis.phase ~= "cooldown"
 end
 
--- Returns true if fratricide is active on target
 function serpent.hypnosis.hasFratricide()
     return serpent.hypnosis.fratricideActive or tAffs.fratricide
 end
 
--- Returns seconds until snap is ready, or 0 if ready
 function serpent.hypnosis.getTimeToSnap()
     if serpent.hypnosis.phase == "ready_snap" then
         return 0
@@ -273,10 +261,9 @@ function serpent.hypnosis.getTimeToSnap()
         local remaining = serpent.hypnosis.snapReadyTime - getEpoch()
         return remaining > 0 and remaining or 0
     end
-    return -1  -- Not in hypnosis
+    return -1
 end
 
--- Display hypnosis state
 function serpent.hypnosis.status()
     cecho("\n<cyan>===== Hypnosis Status =====<reset>\n")
     cecho("<white>Phase: <yellow>" .. serpent.hypnosis.phase .. "<reset>\n")
@@ -306,57 +293,158 @@ function serpent.hypnosis.status()
 end
 
 -- =============================================================================
--- EKANELIA DETECTION
+-- EKANELIA DETECTION & IMPULSE PAIR SELECTION
 -- =============================================================================
 
 --[[
-    Check for Ekanelia opportunities
-    Detects when conditionals are met for BITE transformations
+    Ekanelia transformation table.
+    Each entry: trigger venom, conditional afflictions, result afflictions,
+    and which conditionals are trivial suggestions (impulse-deliverable).
+]]--
+local EKANELIA_TABLE = {
+    {
+        trigger = "monkshood",
+        conditionals = {"asthma", "masochism", "weariness"},
+        trivials = {"masochism"},
+        result = "impatience",
+        priority = 1, -- truelock piece
+    },
+    {
+        trigger = "kalmia",
+        conditionals = {"clumsiness", "weariness"},
+        trivials = {},
+        result = "slickness",
+        priority = 2, -- softlock piece
+    },
+    {
+        trigger = "loki",
+        conditionals = {"confusion", "recklessness"},
+        trivials = {"confusion", "recklessness"},
+        result = "nausea + paralysis",
+        priority = 3, -- double aff, paralysis blocks tree
+    },
+    {
+        trigger = "curare",
+        conditionals = {"hypersomnia", "masochism"},
+        trivials = {"masochism"},
+        result = "hypochondria",
+        priority = 4, -- kelp stack pressure
+    },
+    {
+        trigger = "scytherus",
+        conditionals = {"addiction", "nausea"},
+        trivials = {},
+        result = "camus",
+        priority = 5, -- damage pressure
+    },
+    {
+        trigger = "aconite",
+        conditionals = {"deadening", "dementia"},
+        trivials = {"deadening", "dementia"},
+        result = "paranoia",
+        priority = 6, -- mental stack
+    },
+    {
+        trigger = "voyria",
+        conditionals = {"anorexia", "impatience", "vertigo"},
+        trivials = {"vertigo"},
+        result = "confusion + disrupted",
+        priority = 7, -- needs monkshood chain first
+    },
+}
+
+--[[
+    Check for Ekanelia opportunities.
+    Populates ekaneliaReady table with triggers that have ALL conditionals met.
 ]]--
 function checkEkaneliaOpportunities()
     ekaneliaReady = {}
 
-    -- kalmia: clumsiness + weariness → asthma + slickness
-    -- Only trigger if we don't already have BOTH asthma and slickness
-    if tAffs.clumsiness and tAffs.weariness and not (tAffs.asthma and tAffs.slickness) then
-        ekaneliaReady.kalmia = true
-    end
-
-    -- monkshood: asthma + masochism + weariness → impatience
-    -- Only trigger if we don't already have impatience
-    if tAffs.asthma and tAffs.masochism and tAffs.weariness and not tAffs.impatience then
-        ekaneliaReady.monkshood = true
-    end
-
-    -- curare: hypersomnia + masochism → paralysis + hypochondria
-    -- Only trigger if we don't already have paralysis
-    if tAffs.hypersomnia and tAffs.masochism and not tAffs.paralysis then
-        ekaneliaReady.curare = true
-    end
-
-    -- loki: confusion + recklessness → nausea + paralysis
-    -- Only trigger if we don't already have paralysis
-    if tAffs.confusion and tAffs.recklessness and not tAffs.paralysis then
-        ekaneliaReady.loki = true
-    end
-
-    -- scytherus: addiction + nausea → camus (damage bonus)
-    -- Always ready when conditionals met (damage is always good)
-    if tAffs.addiction and tAffs.nausea then
-        ekaneliaReady.scytherus = true
+    for _, ek in ipairs(EKANELIA_TABLE) do
+        local allMet = true
+        for _, cond in ipairs(ek.conditionals) do
+            if not haveAff(cond) then
+                allMet = false
+                break
+            end
+        end
+        if allMet then
+            ekaneliaReady[ek.trigger] = true
+        end
     end
 end
 
+--[[
+    Select the best impulse suggestion + venom pair for Ekanelia.
+    Returns {suggestion=X, venom=Y} or nil if no Ekanelia achievable.
+
+    Logic:
+    1. If ALL conditionals met → return {suggestion=<useful>, venom=<trigger>}
+    2. If exactly ONE trivial conditional missing → return {suggestion=<missing>, venom=<trigger>}
+    3. Otherwise → nil
+]]--
+function selectImpulsePair()
+    for _, ek in ipairs(EKANELIA_TABLE) do
+        local missing = {}
+        local missingTrivials = {}
+
+        for _, cond in ipairs(ek.conditionals) do
+            if not haveAff(cond) then
+                table.insert(missing, cond)
+                -- Check if this missing conditional is a trivial suggestion
+                for _, t in ipairs(ek.trivials) do
+                    if t == cond then
+                        table.insert(missingTrivials, cond)
+                        break
+                    end
+                end
+            end
+        end
+
+        if #missing == 0 then
+            -- ALL conditionals met → free Ekanelia
+            -- Pick a useful suggestion (not a conditional we already have)
+            local suggestion = selectFallbackSuggestion()
+            return {suggestion = suggestion, venom = ek.trigger, label = ek.result}
+        elseif #missing == 1 and #missingTrivials == 1 then
+            -- Exactly one trivial conditional missing → impulse completes it
+            return {suggestion = missingTrivials[1], venom = ek.trigger, label = ek.result}
+        end
+    end
+
+    return nil
+end
+
+--[[
+    Select a useful fallback suggestion when Ekanelia is free (all conditions met).
+    Prioritize suggestions that advance the lock or add pressure.
+]]--
+function selectFallbackSuggestion()
+    -- Priority: suggestions that help the lock
+    local priorities = {"stupidity", "epilepsy", "confusion", "recklessness", "amnesia", "masochism", "vertigo"}
+    for _, sug in ipairs(priorities) do
+        if not haveAff(sug) then
+            return sug
+        end
+    end
+    return "stupidity"
+end
+
 -- =============================================================================
--- IMPULSE DETECTION
+-- IMPULSE ELIGIBILITY
 -- =============================================================================
 
 --[[
-    Check if Impulse can deliver mental afflictions
-    Requires: asthma + weariness + no fangbarrier/sileris
+    Check if impulse can be used this round.
+    Requires: no sileris/fangbarrier on target (bite must land).
+    Does NOT check eq availability or Ekanelia — those are checked separately.
 ]]--
-function checkImpulseReady()
-    impulseReady = tAffs.asthma and tAffs.weariness and not tAffs.fangbarrier and not tAffs.sileris
+function checkImpulseEligible()
+    -- V1 fallback is safe here: stale TRUE just means we use dstab instead (no harm)
+    -- haveAff() alone misses fangbarrier when "quicksilver" trigger doesn't fire
+    local hasSileris = haveAff("sileris") or (tAffs and tAffs.sileris)
+    local hasFangbarrier = haveAff("fangbarrier") or (tAffs and tAffs.fangbarrier)
+    impulseReady = not hasSileris and not hasFangbarrier
     return impulseReady
 end
 
@@ -364,9 +452,6 @@ end
 -- DARKSHADE TRACKING
 -- =============================================================================
 
---[[
-    Check darkshade timer for kill condition
-]]--
 function checkDarkshadeTimer()
     if tAffs.darkshade and affTimers.darkshade then
         local darkshadeStuckTime = getEpoch() - affTimers.darkshade
@@ -383,10 +468,6 @@ end
 -- STACK COUNTING
 -- =============================================================================
 
---[[
-    Count ginseng stack afflictions
-    Ginseng cures: addiction, darkshade, haemophilia, lethargy, scytherus, nausea
-]]--
 function countGinsengStack()
     local count = 0
     local ginsengAffs = {"addiction", "darkshade", "haemophilia", "lethargy", "scytherus", "nausea"}
@@ -396,9 +477,6 @@ function countGinsengStack()
     return count
 end
 
---[[
-    Count kelp stack afflictions
-]]--
 function countKelpStack()
     local count = 0
     local kelpAffs = {"asthma", "clumsiness", "hypochondria", "sensitivity", "weariness", "healthleech", "parasite"}
@@ -408,9 +486,6 @@ function countKelpStack()
     return count
 end
 
---[[
-    Count bloodroot stack afflictions
-]]--
 function countBloodrootStack()
     local count = 0
     if tAffs.paralysis then count = count + 1 end
@@ -419,27 +494,21 @@ function countBloodrootStack()
 end
 
 -- =============================================================================
--- ADAPTIVE STRATEGY SYSTEM
+-- ADAPTIVE STRATEGY SYSTEM (Lock-First)
 -- =============================================================================
 
---[[
-    Cure tracking - monitors how quickly target cures different herb types
-    This allows us to adapt strategy based on their curing priorities
-]]--
 serpent.cureTracking = serpent.cureTracking or {
-    kelpCures = 0,          -- Times kelp affs were cured recently
-    ginsengCures = 0,       -- Times ginseng affs were cured recently
-    bloodrootCures = 0,     -- Times bloodroot affs were cured recently
-    focusCures = 0,         -- Times they used focus
-    lastReset = 0,          -- When we last reset counters
-    trackingWindow = 30,    -- Seconds to track cure patterns
+    kelpCures = 0,
+    ginsengCures = 0,
+    bloodrootCures = 0,
+    focusCures = 0,
+    lastReset = 0,
+    trackingWindow = 30,
 }
 
--- Call this when target cures an affliction (from triggers)
 function serpent.trackCure(herbType)
     local now = getEpoch()
 
-    -- Reset counters if tracking window expired
     if now - serpent.cureTracking.lastReset > serpent.cureTracking.trackingWindow then
         serpent.cureTracking.kelpCures = 0
         serpent.cureTracking.ginsengCures = 0
@@ -460,68 +529,59 @@ function serpent.trackCure(herbType)
 end
 
 --[[
-    Determine strategy adaptively based on:
-    1. Current affliction state
-    2. Lock progress
-    3. Impulse readiness
-    4. Fratricide state
-    5. Darkshade stick time
-    6. Target's cure patterns
-
-    This is NOT mode-based - it dynamically picks the best action every attack.
+    Determine strategy using LOCK-FIRST logic.
+    The goal is always lock completion. Ekanelia is a mechanism to get lock pieces.
 ]]--
 function determineStrategy()
-    local dominated = serpent.assessCombatState()
-
-    -- The strategy is really about WHAT TO PRIORITIZE next
-    -- Not a rigid "mode" but adaptive decision making
-
-    -- ===========================================
-    -- FINISHING MOVES - Lock is close, finish it
-    -- ===========================================
-
+    -- ===== FINISHING MOVES =====
     if truelock then
         serpStrategy = "finish"
         return
     end
 
-    if hardlock and not tAffs.paralysis then
-        -- One affliction from true lock - apply paralysis
-        serpStrategy = "lock"
+    -- ===== CAN WE COMPLETE TRUELOCK? =====
+    -- Need: paralysis + asthma + anorexia + slickness + impatience
+    if hardlock then
+        -- Hardlock means: asthma + anorexia + slickness + impatience (missing paralysis)
+        if not haveAff("paralysis") then
+            serpStrategy = "complete_truelock"
+            return
+        end
+    end
+
+    -- Close to truelock: have most lock pieces, missing 1-2
+    local lockPieces = 0
+    if haveAff("paralysis") then lockPieces = lockPieces + 1 end
+    if haveAff("asthma") then lockPieces = lockPieces + 1 end
+    if haveAff("anorexia") then lockPieces = lockPieces + 1 end
+    if haveAff("slickness") then lockPieces = lockPieces + 1 end
+    if haveAff("impatience") then lockPieces = lockPieces + 1 end
+
+    if lockPieces >= 4 then
+        serpStrategy = "complete_truelock"
         return
     end
 
-    -- ===========================================
-    -- IMPULSE OPPORTUNITY - Can deliver mental NOW
-    -- ===========================================
-
-    if checkImpulseReady() then
-        -- We have asthma + weariness + no fangbarrier
-        -- This is our window to deliver impatience/anorexia
-
-        if not tAffs.impatience then
-            serpStrategy = "impulse"
-            return
-        end
-
-        if tAffs.impatience and tAffs.slickness and not tAffs.anorexia then
-            -- Have impatience and slickness, deliver anorexia for lock
-            serpStrategy = "impulse"
-            return
-        end
-
-        -- Fratricide active = impulse affs will RELAPSE
-        -- This is extremely powerful - keep delivering mental pressure
-        if serpent.hypnosis.fratricideActive or tAffs.fratricide then
-            serpStrategy = "impulse"
-            return
-        end
+    -- ===== CAN WE COMPLETE HARDLOCK? =====
+    -- Need: asthma + anorexia + slickness + (paralysis or impatience)
+    if softlock then
+        serpStrategy = "complete_hardlock"
+        return
     end
 
-    -- ===========================================
-    -- HYPNOSIS MANAGEMENT - Continue if in progress
-    -- ===========================================
+    -- ===== CAN WE COMPLETE SOFTLOCK? =====
+    -- Need: asthma + anorexia + slickness
+    local softPieces = 0
+    if haveAff("asthma") then softPieces = softPieces + 1 end
+    if haveAff("anorexia") then softPieces = softPieces + 1 end
+    if haveAff("slickness") then softPieces = softPieces + 1 end
 
+    if softPieces >= 2 then
+        serpStrategy = "complete_softlock"
+        return
+    end
+
+    -- ===== HYPNOSIS IN PROGRESS =====
     if serpent.hypnosis.phase == "ready_snap" then
         serpStrategy = "hypnosis"
         return
@@ -532,145 +592,56 @@ function determineStrategy()
         return
     end
 
-    -- ===========================================
-    -- ADAPTIVE STRATEGY - React to target's cure patterns
-    -- ===========================================
-
+    -- ===== ADAPTIVE: DARKSHADE STICKING =====
     local darkshadeStuckTime = 0
     if tAffs.darkshade and affTimers and affTimers.darkshade then
         darkshadeStuckTime = getEpoch() - affTimers.darkshade
     end
 
-    local ginsengCount = countGinsengStack()
-    local kelpCount = countKelpStack()
-
-    --[[
-        BIDIRECTIONAL ADAPTIVE LOGIC:
-        - If they prioritize curing darkshade (ginseng) → push LOCK hard
-        - If they prioritize curing lock affs (kelp) → push DARKSHADE to keep it stuck
-
-        The idea: punish their curing priority by pushing the OTHER route.
-    ]]--
-
-    -- TARGET IS CURING GINSENG (darkshade) FAST → Push LOCK
-    -- They're afraid of darkshade damage, so lock them down!
-    if serpent.cureTracking.ginsengCures > serpent.cureTracking.kelpCures + 2 then
-        -- They keep curing darkshade - hit them with lock pressure
-        if serpent.config.debug then
-            Algedonic.Echo("<cyan>ADAPTIVE: <white>Target prioritizing darkshade cure - pushing LOCK")
-        end
-
-        -- If we have some lock progress, maintain that route
-        if kelpCount >= 1 or tAffs.slickness or tAffs.paralysis then
-            serpStrategy = "lock"
-            return
-        end
-
-        -- Setup for lock if we have nothing
-        serpStrategy = "setup_impulse"
-        return
-    end
-
-    -- TARGET IS CURING KELP (lock affs) FAST → Push DARKSHADE
-    -- They're afraid of lock, so punish with DoT!
-    if serpent.cureTracking.kelpCures > serpent.cureTracking.ginsengCures + 2 then
-        if serpent.config.debug then
-            Algedonic.Echo("<cyan>ADAPTIVE: <white>Target prioritizing lock cure - pushing DARKSHADE")
-        end
-
-        -- Keep darkshade stuck with higher priority ginseng affs
-        if ginsengCount >= 1 or not tAffs.darkshade then
-            serpStrategy = "darkshade"
-            return
-        end
-    end
-
-    -- DARKSHADE IS STICKING WELL - protect it and go for DoT kill
-    if tAffs.darkshade and darkshadeStuckTime > 10 and ginsengCount >= 2 then
+    if tAffs.darkshade and darkshadeStuckTime > 10 and countGinsengStack() >= 2 then
         serpStrategy = "darkshade"
         return
     end
 
-    -- ===========================================
-    -- EKANELIA OPPORTUNITY - Conditionals are met
-    -- ===========================================
-
-    checkEkaneliaOpportunities()
-
-    -- High-value Ekanelia ready - use it
-    if ekaneliaReady.kalmia then
-        -- Gets asthma + slickness in one bite!
-        serpStrategy = "ekanelia"
+    -- ===== ADAPTIVE: React to cure patterns =====
+    if serpent.cureTracking.ginsengCures > serpent.cureTracking.kelpCures + 2 then
+        if serpent.config.debug then
+            Algedonic.Echo("<cyan>ADAPTIVE: <white>Target prioritizing darkshade cure - pushing LOCK")
+        end
+        serpStrategy = "setup_lock"
         return
     end
 
-    if ekaneliaReady.monkshood then
-        -- Gets impatience without needing impulse!
-        serpStrategy = "ekanelia"
+    if serpent.cureTracking.kelpCures > serpent.cureTracking.ginsengCures + 2 then
+        if serpent.config.debug then
+            Algedonic.Echo("<cyan>ADAPTIVE: <white>Target prioritizing lock cure - pushing DARKSHADE")
+        end
+        serpStrategy = "darkshade"
         return
     end
 
-    if ekaneliaReady.loki then
-        -- Predictable paralysis + nausea
-        serpStrategy = "ekanelia"
-        return
-    end
-
-    -- ===========================================
-    -- SETUP PHASE - Build toward lock or impulse
-    -- ===========================================
-
-    -- Need to build kelp stack for impulse
-    if not tAffs.asthma or not tAffs.weariness then
-        serpStrategy = "setup_impulse"
-        return
-    end
-
-    -- Have kelp stack but need to strip fangbarrier
-    if (tAffs.sileris or tAffs.fangbarrier) and tAffs.asthma and tAffs.weariness then
-        serpStrategy = "strip_fangbarrier"
-        return
-    end
-
-    -- Softlock achieved but need more pressure
-    if softlock then
-        serpStrategy = "lock"
-        return
-    end
-
-    -- Default: Build toward lock
-    serpStrategy = "lock"
+    -- ===== DEFAULT: Build toward lock =====
+    serpStrategy = "setup_lock"
 end
 
---[[
-    Assess overall combat dominance
-    Returns a score indicating how well we're doing
-]]--
 function serpent.assessCombatState()
     local dominated = 0
 
-    -- Lock progress
     if truelock then dominated = dominated + 100 end
     if hardlock then dominated = dominated + 50 end
     if softlock then dominated = dominated + 25 end
 
-    -- Impulse readiness
-    if checkImpulseReady() then dominated = dominated + 30 end
+    if haveAff("asthma") then dominated = dominated + 10 end
+    if haveAff("weariness") then dominated = dominated + 10 end
+    if haveAff("slickness") then dominated = dominated + 15 end
+    if haveAff("paralysis") then dominated = dominated + 20 end
+    if haveAff("impatience") then dominated = dominated + 25 end
+    if haveAff("anorexia") then dominated = dominated + 20 end
 
-    -- Key afflictions
-    if tAffs.asthma then dominated = dominated + 10 end
-    if tAffs.weariness then dominated = dominated + 10 end
-    if tAffs.slickness then dominated = dominated + 15 end
-    if tAffs.paralysis then dominated = dominated + 20 end
-    if tAffs.impatience then dominated = dominated + 25 end
-    if tAffs.anorexia then dominated = dominated + 20 end
-
-    -- Fratricide pressure
     if tAffs.fratricide or serpent.hypnosis.fratricideActive then
         dominated = dominated + 20
     end
 
-    -- Darkshade damage
     if tAffs.darkshade then
         local stuckTime = 0
         if affTimers and affTimers.darkshade then
@@ -683,70 +654,27 @@ function serpent.assessCombatState()
 end
 
 -- =============================================================================
--- UNIFIED ADAPTIVE VENOM SELECTION
+-- VENOM SELECTION (Ekanelia-Aware, Lock-First)
 -- =============================================================================
 
 --[[
-    Select venoms based on current strategy and combat state.
-    This is a unified function that responds to determineStrategy() output.
+    Select venoms based on current strategy.
+    DSTAB venoms are chosen to:
+    1. Complete lock pieces directly
+    2. Set up Ekanelia conditionals for future impulse rounds
 ]]--
 function selectVenoms()
     envenomList = {}
     envenomListTwo = {}
-    attackMode = "doublestab"
+    attackMode = "dstab"
 
-    -- Check Ekanelia first - if strategy says use it, do it
-    -- BUT only if target doesn't have fangbarrier (blocks bite)
-    if serpStrategy == "ekanelia" then
-        checkEkaneliaOpportunities()
-
-        -- Fangbarrier blocks bite - strip it first with gecko + curare
-        if tAffs.fangbarrier or tAffs.sileris then
-            Algedonic.Echo("<red>FANGBARRIER UP<white> - stripping with gecko + curare")
-            table.insert(envenomList, "gecko")
-            table.insert(envenomListTwo, "curare")
-            return
-        end
-
-        if ekaneliaReady.kalmia then
-            attackMode = "bite"
-            table.insert(envenomList, "kalmia")
-            Algedonic.Echo("<yellow>EKANELIA KALMIA<white> - asthma + slickness!")
-            return
-        elseif ekaneliaReady.monkshood then
-            attackMode = "bite"
-            table.insert(envenomList, "monkshood")
-            Algedonic.Echo("<yellow>EKANELIA MONKSHOOD<white> - impatience!")
-            return
-        elseif ekaneliaReady.loki then
-            attackMode = "bite"
-            table.insert(envenomList, "loki")
-            Algedonic.Echo("<yellow>EKANELIA LOKI<white> - nausea + paralysis!")
-            return
-        elseif ekaneliaReady.curare then
-            attackMode = "bite"
-            table.insert(envenomList, "curare")
-            Algedonic.Echo("<yellow>EKANELIA CURARE<white> - paralysis + hypochondria!")
-            return
-        elseif ekaneliaReady.scytherus then
-            attackMode = "bite"
-            table.insert(envenomList, "scytherus")
-            Algedonic.Echo("<magenta>EKANELIA SCYTHERUS<white> - camus damage!")
-            return
-        end
-    end
-
-    -- ===========================================
-    -- FINISH - True lock achieved, apply voyria or class-specific
-    -- ===========================================
+    -- ===== FINISH: Truelock achieved =====
     if serpStrategy == "finish" then
         local lockAff = getLockingAffliction(target)
-        if lockAff == "weariness" and not tAffs.weariness then
+        if lockAff == "weariness" and not haveAff("weariness") then
             table.insert(envenomList, "vernalius")
-        elseif lockAff == "paralyse" and not tAffs.paralysis then
+        elseif lockAff == "paralyse" and not haveAff("paralysis") then
             table.insert(envenomList, "curare")
-        elseif lockAff == "plague" and not tAffs.voyria then
-            table.insert(envenomList, "voyria")
         else
             table.insert(envenomList, "voyria")
         end
@@ -754,86 +682,102 @@ function selectVenoms()
         return
     end
 
-    -- ===========================================
-    -- IMPULSE - Impulse is ready, we're delivering mental
-    -- Venoms should support the lock while we impulse
-    -- ===========================================
-    if serpStrategy == "impulse" then
-        -- We'll deliver mental via impulse command
-        -- Venoms should complete the physical lock
-        if not tAffs.slickness then
-            table.insert(envenomList, "gecko")
-        elseif not tAffs.paralysis then
+    -- ===== COMPLETE TRUELOCK: Missing 1-2 pieces =====
+    if serpStrategy == "complete_truelock" then
+        -- Deliver missing lock pieces directly via venom
+        if not haveAff("paralysis") then
             table.insert(envenomList, "curare")
-        elseif not tAffs.anorexia then
+        elseif not haveAff("impatience") then
+            -- Impatience has no venom — must come from Ekanelia monkshood
+            -- Set up monkshood conditionals: asthma + masochism(impulse) + weariness
+            if not haveAff("weariness") then
+                table.insert(envenomList, "vernalius")
+            elseif not haveAff("asthma") then
+                table.insert(envenomList, "kalmia")
+            else
+                -- Conditionals are ready for impulse masochism monkshood
+                -- Deliver other useful venoms while we wait for impulse round
+                table.insert(envenomList, "gecko")
+            end
+        elseif not haveAff("slickness") then
+            table.insert(envenomList, "gecko")
+        elseif not haveAff("asthma") then
+            table.insert(envenomList, "kalmia")
+        elseif not haveAff("anorexia") then
             table.insert(envenomList, "slike")
         else
-            -- Lock is solid, add pressure
-            table.insert(envenomList, "darkshade")
+            table.insert(envenomList, "voyria")
         end
         buildSecondVenom()
         return
     end
 
-    -- ===========================================
-    -- STRIP FANGBARRIER - Need to flay for impulse access
-    -- ===========================================
-    if serpStrategy == "strip_fangbarrier" then
-        -- Attack function will handle the flay
-        -- Still select venoms for the flay venom
-        if not tAffs.paralysis then
+    -- ===== COMPLETE HARDLOCK: Softlock + need paralysis/impatience =====
+    if serpStrategy == "complete_hardlock" then
+        if not haveAff("paralysis") then
             table.insert(envenomList, "curare")
-        elseif not tAffs.slickness then
-            table.insert(envenomList, "gecko")
-        else
-            table.insert(envenomList, "darkshade")
-        end
-        buildSecondVenom()
-        return
-    end
-
-    -- ===========================================
-    -- SETUP IMPULSE - Build kelp stack (asthma + weariness)
-    -- ===========================================
-    if serpStrategy == "setup_impulse" then
-        -- Priority: Get asthma + weariness for impulse
-        -- Also set up Ekanelia kalmia conditionals (clumsiness + weariness)
-
-        if not tAffs.clumsiness and not tAffs.weariness then
-            -- Set up both Ekanelia conditionals
-            table.insert(envenomList, "xentio")
-            table.insert(envenomListTwo, "vernalius")
-            return
-        elseif not tAffs.weariness then
-            table.insert(envenomList, "vernalius")
-        elseif not tAffs.asthma then
-            table.insert(envenomList, "kalmia")
-        elseif not tAffs.clumsiness then
-            table.insert(envenomList, "xentio")
-        else
-            -- Have kelp setup, add bloodroot pressure
-            if not tAffs.slickness then
-                table.insert(envenomList, "gecko")
+        elseif not haveAff("impatience") then
+            -- Set up monkshood Ekanelia conditionals
+            if not haveAff("weariness") then
+                table.insert(envenomList, "vernalius")
+            elseif not haveAff("asthma") then
+                table.insert(envenomList, "kalmia")
             else
                 table.insert(envenomList, "curare")
+            end
+        else
+            table.insert(envenomList, "curare")
+        end
+        buildSecondVenom()
+        return
+    end
+
+    -- ===== COMPLETE SOFTLOCK: Need asthma + anorexia + slickness =====
+    if serpStrategy == "complete_softlock" then
+        -- Direct venom delivery for softlock pieces
+        if not haveAff("asthma") then
+            table.insert(envenomList, "kalmia")
+        elseif not haveAff("slickness") then
+            -- Can we trigger kalmia Ekanelia? (clumsiness + weariness → slickness)
+            if haveAff("clumsiness") and haveAff("weariness") then
+                -- Ekanelia conditions met - but we need bite for that
+                -- Use kalmia venom to get asthma+slickness via Ekanelia
+                table.insert(envenomList, "kalmia")
+            elseif not haveAff("clumsiness") and not haveAff("weariness") then
+                -- Set up kalmia Ekanelia: clumsiness + weariness
+                table.insert(envenomList, "xentio")
+                table.insert(envenomListTwo, "vernalius")
+                return
+            elseif not haveAff("clumsiness") then
+                table.insert(envenomList, "xentio")
+            elseif not haveAff("weariness") then
+                table.insert(envenomList, "vernalius")
+            else
+                table.insert(envenomList, "gecko")
+            end
+        elseif not haveAff("anorexia") then
+            table.insert(envenomList, "slike")
+        else
+            -- Softlock pieces in place, add pressure
+            if not haveAff("paralysis") then
+                table.insert(envenomList, "curare")
+            else
+                table.insert(envenomList, "darkshade")
             end
         end
         buildSecondVenom()
         return
     end
 
-    -- ===========================================
-    -- HYPNOSIS - Continue hypnosis process
-    -- ===========================================
+    -- ===== HYPNOSIS: Maintain pressure while hypnosis completes =====
     if serpStrategy == "hypnosis" then
-        -- Maintain pressure while hypnosis completes
-        if not tAffs.slickness then
+        if not haveAff("slickness") then
             table.insert(envenomList, "gecko")
-        elseif not tAffs.paralysis then
+        elseif not haveAff("paralysis") then
             table.insert(envenomList, "curare")
-        elseif not tAffs.asthma then
+        elseif not haveAff("asthma") then
             table.insert(envenomList, "kalmia")
-        elseif not tAffs.weariness then
+        elseif not haveAff("weariness") then
             table.insert(envenomList, "vernalius")
         else
             table.insert(envenomList, "darkshade")
@@ -842,36 +786,23 @@ function selectVenoms()
         return
     end
 
-    -- ===========================================
-    -- DARKSHADE - Protect darkshade with ginseng stack
-    -- ===========================================
+    -- ===== DARKSHADE: Protect darkshade with ginseng stack =====
     if serpStrategy == "darkshade" then
-        -- Check for scytherus Ekanelia
-        checkEkaneliaOpportunities()
-        -- Only use bite if no fangbarrier
-        if ekaneliaReady.scytherus and not tAffs.fangbarrier and not tAffs.sileris then
-            attackMode = "bite"
-            table.insert(envenomList, "scytherus")
-            Algedonic.Echo("<magenta>EKANELIA SCYTHERUS<white> - camus damage!")
-            return
-        end
-
-        -- Build ginseng stack while maintaining some lock pressure
         if not tAffs.darkshade then
             table.insert(envenomList, "darkshade")
-        elseif not tAffs.asthma then
+        elseif not haveAff("asthma") then
             table.insert(envenomList, "kalmia")
-        elseif not tAffs.addiction then
+        elseif not haveAff("addiction") then
             table.insert(envenomList, "vardrax")
-        elseif not tAffs.nausea then
+        elseif not haveAff("nausea") then
             table.insert(envenomList, "euphorbia")
-        elseif not tAffs.scytherus then
+        elseif not haveAff("scytherus") then
             table.insert(envenomList, "scytherus")
-        elseif not tAffs.paralysis then
+        elseif not haveAff("paralysis") then
             table.insert(envenomList, "curare")
-        elseif not tAffs.slickness then
+        elseif not haveAff("slickness") then
             table.insert(envenomList, "gecko")
-        elseif not tAffs.haemophilia then
+        elseif not haveAff("haemophilia") then
             table.insert(envenomList, "notechis")
         else
             table.insert(envenomList, "aconite")
@@ -880,53 +811,31 @@ function selectVenoms()
         return
     end
 
-    -- ===========================================
-    -- LOCK (Default) - Standard lock progression
-    -- ===========================================
+    -- ===== SETUP LOCK (Default): Build toward lock + set up Ekanelia =====
+    -- Priority: paralysis (blocks tree) → clumsiness (Ekanelia setup) → lock pieces
 
-    -- Check for valuable Ekanelia opportunities (only if no fangbarrier)
-    checkEkaneliaOpportunities()
-    if not tAffs.fangbarrier and not tAffs.sileris then
-        if ekaneliaReady.kalmia then
-            attackMode = "bite"
-            table.insert(envenomList, "kalmia")
-            Algedonic.Echo("<yellow>EKANELIA KALMIA<white> - asthma + slickness!")
-            return
-        elseif ekaneliaReady.monkshood then
-            attackMode = "bite"
-            table.insert(envenomList, "monkshood")
-            Algedonic.Echo("<yellow>EKANELIA MONKSHOOD<white> - impatience!")
-            return
-        elseif ekaneliaReady.loki then
-            attackMode = "bite"
-            table.insert(envenomList, "loki")
-            Algedonic.Echo("<yellow>EKANELIA LOKI<white> - nausea + paralysis!")
-            return
-        end
-    end
-
-    -- Standard lock progression
-    if hardlock and not tAffs.paralysis then
+    if not haveAff("paralysis") then
         table.insert(envenomList, "curare")
-    elseif softlock and not tAffs.paralysis then
-        table.insert(envenomList, "curare")
-    -- Build toward softlock
-    elseif not tAffs.clumsiness then
+    elseif not haveAff("clumsiness") then
         table.insert(envenomList, "xentio")
-    elseif not tAffs.weariness then
-        table.insert(envenomList, "vernalius")
-    elseif not tAffs.asthma then
+    elseif not haveAff("asthma") and not haveAff("weariness") then
+        -- Set up monkshood Ekanelia: asthma + weariness (masochism via impulse)
         table.insert(envenomList, "kalmia")
-    elseif not tAffs.slickness then
+        table.insert(envenomListTwo, "vernalius")
+        return
+    elseif not haveAff("asthma") then
+        table.insert(envenomList, "kalmia")
+    elseif not haveAff("weariness") then
+        table.insert(envenomList, "vernalius")
+    elseif not haveAff("slickness") then
         table.insert(envenomList, "gecko")
-    elseif not tAffs.paralysis then
-        table.insert(envenomList, "curare")
-    -- Add ginseng pressure
-    elseif not tAffs.darkshade then
+    elseif not haveAff("anorexia") then
+        table.insert(envenomList, "slike")
+    elseif not haveAff("darkshade") then
         table.insert(envenomList, "darkshade")
-    elseif not tAffs.addiction then
+    elseif not haveAff("addiction") then
         table.insert(envenomList, "vardrax")
-    elseif not tAffs.nausea then
+    elseif not haveAff("nausea") then
         table.insert(envenomList, "euphorbia")
     else
         table.insert(envenomList, "aconite")
@@ -935,32 +844,33 @@ function selectVenoms()
     buildSecondVenom()
 end
 
--- =============================================================================
--- SECOND VENOM BUILDER
--- =============================================================================
-
 --[[
-    Build second venom for doublestab (must differ from first)
+    Build second venom for doublestab (must differ from first).
+    Ekanelia-aware: prefers venoms that complete Ekanelia conditionals.
 ]]--
 function buildSecondVenom()
+    if #envenomListTwo > 0 then return end
+
     local firstVenom = envenomList[1]
 
-    -- Priority chain for second venom
-    if not tAffs.paralysis and firstVenom ~= "curare" then
-        table.insert(envenomListTwo, "curare")
-    elseif not tAffs.slickness and firstVenom ~= "gecko" then
-        table.insert(envenomListTwo, "gecko")
-    elseif not tAffs.clumsiness and firstVenom ~= "xentio" then
+    -- Priority: clumsiness (Ekanelia setup) → weariness → lock pieces
+    if not haveAff("clumsiness") and firstVenom ~= "xentio" then
         table.insert(envenomListTwo, "xentio")
-    elseif not tAffs.asthma and firstVenom ~= "kalmia" then
-        table.insert(envenomListTwo, "kalmia")
-    elseif not tAffs.weariness and firstVenom ~= "vernalius" then
+    elseif not haveAff("weariness") and firstVenom ~= "vernalius" then
         table.insert(envenomListTwo, "vernalius")
-    elseif not tAffs.darkshade and firstVenom ~= "darkshade" then
+    elseif not haveAff("paralysis") and firstVenom ~= "curare" then
+        table.insert(envenomListTwo, "curare")
+    elseif not haveAff("asthma") and firstVenom ~= "kalmia" then
+        table.insert(envenomListTwo, "kalmia")
+    elseif not haveAff("slickness") and firstVenom ~= "gecko" then
+        table.insert(envenomListTwo, "gecko")
+    elseif not haveAff("anorexia") and firstVenom ~= "slike" then
+        table.insert(envenomListTwo, "slike")
+    elseif not haveAff("darkshade") and firstVenom ~= "darkshade" then
         table.insert(envenomListTwo, "darkshade")
-    elseif not tAffs.addiction and firstVenom ~= "vardrax" then
+    elseif not haveAff("addiction") and firstVenom ~= "vardrax" then
         table.insert(envenomListTwo, "vardrax")
-    elseif not tAffs.nausea and firstVenom ~= "euphorbia" then
+    elseif not haveAff("nausea") and firstVenom ~= "euphorbia" then
         table.insert(envenomListTwo, "euphorbia")
     elseif firstVenom ~= "aconite" then
         table.insert(envenomListTwo, "aconite")
@@ -974,7 +884,12 @@ end
 -- =============================================================================
 
 --[[
-    Execute the attack based on current strategy and venom selection
+    Execute the attack based on current strategy and venom selection.
+
+    DSTAB is the primary attack. IMPULSE is conditional on:
+    1. No sileris/fangbarrier (bite must land)
+    2. Ekanelia conditions met or completable by impulse suggestion
+    3. EQ is free (snap/shrug/hypnosis take priority)
 ]]--
 function serp_ekanelia_attack()
     if not target or target == "" then
@@ -982,97 +897,156 @@ function serp_ekanelia_attack()
         return
     end
 
-    local atk = combatQueue()
+    local sp = ataxia.settings.separator
+    local preAtk = combatQueue()
 
-    -- Handle defenses first (rebounding, shield)
-    if tAffs.rebounding and tAffs.shield then
-        atk = atk .. "wield left dirk;wield right lash;purge;order adder kill " .. target .. ";flay " .. target .. " shield " .. (envenomListTwo[1] or "curare")
-        serp_sendAttack(atk)
-        return
-    elseif tAffs.rebounding then
-        atk = atk .. "wield left dirk;wield right lash;purge;order adder kill " .. target .. ";flay " .. target .. " rebounding " .. (envenomListTwo[1] or "curare")
-        serp_sendAttack(atk)
-        return
-    elseif tAffs.shield then
-        atk = atk .. "wield left dirk;wield right lash;purge;order adder kill " .. target .. ";flay " .. target .. " shield " .. (envenomListTwo[1] or "curare")
-        serp_sendAttack(atk)
+    -- Rebounding/shield check with V1 fallback (GMCP timing gap)
+    local hasRebounding = haveAff("rebounding") or (tAffs and tAffs.rebounding)
+    local hasShield = haveAff("shield") or (tAffs and tAffs.shield)
+
+    -- Weapon wielding prefixes (single command, game assigns hands)
+    local wieldWhip = "wield shield whip" .. sp
+    local wieldDirk = "wield shield dirk" .. sp
+
+    -- ===== DEFENSE STRIPPING (Flay) =====
+    if hasRebounding or hasShield then
+        local defense = hasShield and "shield" or "rebounding"
+        local flayVenom = envenomList[1] or "curare"
+        local cmd = wieldWhip .. "flay " .. target .. " " .. defense .. " " .. flayVenom
+
+        -- Flay delivers one venom — fix envenom lists for hit triggers
+        envenomList = {flayVenom}
+        envenomListTwo = {}
+
+        -- Chain eq action if available
+        local eqAction = getEqAction()
+        if eqAction then
+            cmd = cmd .. sp .. eqAction
+        end
+
+        serp_sendAttack(preAtk .. cmd)
         return
     end
 
-    -- Flay sileris/fangbarrier for Impulse setup
-    -- If we have kelp stack ready but target has fangbarrier, strip it!
-    if (tAffs.sileris or tAffs.fangbarrier) and tAffs.asthma and tAffs.weariness then
-        atk = atk .. "wield left dirk;wield right lash;purge;order adder kill " .. target .. ";flay " .. target .. " sileris " .. (envenomListTwo[1] or "curare")
-        Algedonic.Echo("<yellow>FLAY SILERIS<white> - enabling Impulse!")
-        serp_sendAttack(atk)
+    -- NOTE: Sileris/fangbarrier does NOT need flaying — dstab works through it.
+    -- Only impulse/bite is blocked. checkImpulseEligible() handles this.
+
+    -- ===== EXECUTE (Truelock finish) =====
+    if truelock then
+        serp_sendAttack(preAtk .. "execute " .. target)
         return
     end
 
-    -- Build hypnosis command if in hypnosis mode
-    local hypnoCmd = ""
-    if serpStrategy == "hypnosis" and serpent.hypnosis then
-        local cmd = serpent.hypnosis.getCommand()
-        if cmd then
-            hypnoCmd = cmd .. ";"
+    -- ===== DETERMINE EQ ACTION (priority order) =====
+    local eqAction = getEqAction()
+
+    -- ===== CHECK IMPULSE ELIGIBILITY =====
+    local useImpulse = false
+    local impulsePair = nil
+
+    if not eqAction and checkImpulseEligible() then
+        -- EQ is free and no sileris — check if Ekanelia is achievable
+        impulsePair = selectImpulsePair()
+        if impulsePair then
+            useImpulse = true
         end
     end
 
-    -- Check for Impulse opportunity (delivers impatience/anorexia)
-    local impulseCmd = ""
-    if checkImpulseReady() then
-        -- Priority: impatience > anorexia > confusion > amnesia
-        if not tAffs.impatience then
-            impulseCmd = "impulse " .. target .. " suggest impatience;"
-        elseif not tAffs.anorexia and tAffs.slickness then
-            -- Only deliver anorexia if slickness is on (blocks salve cure)
-            impulseCmd = "impulse " .. target .. " suggest anorexia;"
-        elseif not tAffs.confusion then
-            impulseCmd = "impulse " .. target .. " suggest confusion;"
-        elseif not tAffs.amnesia then
-            impulseCmd = "impulse " .. target .. " suggest amnesia;"
-        end
-    end
+    -- ===== BUILD ATTACK =====
+    local cmd
 
-    -- Build attack based on mode
-    local weaponSetup = "wield left dirk;wield right shield;purge;order adder kill " .. target .. ";"
+    if useImpulse and impulsePair then
+        -- IMPULSE: suggestion + bite + Ekanelia (bal+eq)
+        cmd = wieldDirk .. "impulse " .. target .. " " .. impulsePair.suggestion .. " " .. impulsePair.venom
+        Algedonic.Echo("<yellow>IMPULSE " .. impulsePair.suggestion:upper() .. " + " .. impulsePair.venom:upper() .. "<white> → " .. impulsePair.label)
 
-    -- Safety check: Never bite if fangbarrier is up
-    if attackMode == "bite" and (tAffs.fangbarrier or tAffs.sileris) then
-        Algedonic.Echo("<red>SAFETY:<white> Fangbarrier blocks bite - switching to doublestab")
-        attackMode = "doublestab"
-        -- Use gecko + curare to strip fangbarrier
-        envenomList[1] = "gecko"
-        envenomListTwo[1] = "curare"
-    end
-
-    if attackMode == "bite" then
-        atk = atk .. weaponSetup .. hypnoCmd .. impulseCmd .. "bite " .. target .. " " .. envenomList[1]
+        -- Populate envenomList for hit triggers (impulse bites with the venom)
+        envenomList = {}
+        table.insert(envenomList, impulsePair.venom)
+        envenomListTwo = {}
+    elseif eqAction then
+        -- DSTAB + eq action
+        cmd = wieldDirk .. "dstab " .. target .. " " .. envenomList[1] .. " " .. envenomListTwo[1] .. sp .. eqAction
     else
-        atk = atk .. weaponSetup .. hypnoCmd .. impulseCmd .. "doublestab " .. target .. " " .. envenomList[1] .. " " .. envenomListTwo[1]
+        -- DSTAB only (no eq action, no impulse)
+        cmd = wieldDirk .. "dstab " .. target .. " " .. envenomList[1] .. " " .. envenomListTwo[1]
     end
 
-    serp_sendAttack(atk)
+    -- Handle hSuggRequest override: if keybind requested a specific suggestion
+    -- and we're using impulse, swap in the requested suggestion
+    if useImpulse and hSuggActive ~= "" and impulsePair then
+        cmd = wieldDirk .. "impulse " .. target .. " " .. hSuggActive .. " " .. impulsePair.venom
+    end
+
+    serp_sendAttack(preAtk .. cmd)
 end
 
 --[[
-    Send the attack if target is present
+    Determine the best EQ action for this round.
+    Returns the eq command string or nil.
+    Priority: snap > shrug > hypnosis step
+]]--
+function getEqAction()
+    -- 1. Snap: asthma on target + snap ready + not yet snapped
+    if serpent.hypnosis.canSnap() then
+        return "snap " .. target
+    end
+
+    -- 2. Shrug: we're near-locked and can self-cure
+    -- (Shrugging uses eq to cure an affliction from ourselves)
+    if serpent.state.shouldShrug then
+        serpent.state.shouldShrug = false
+        return "shrugging"
+    end
+
+    -- 3. Hypnosis step: active hypnosis chain
+    if serpent.hypnosis.isActive() then
+        local hypCmd = serpent.hypnosis.getCommand()
+        if hypCmd then
+            return hypCmd
+        end
+    end
+
+    return nil
+end
+
+--[[
+    Send the attack if target is present.
+    Wraps with queue and handles dispel + attackInFlight.
 ]]--
 function serp_sendAttack(atk)
-    if table.contains(ataxia.playersHere, target) then
-        send("queue addclear freestand " .. atk)
-    else
+    if not table.contains(ataxia.playersHere, target) then
         Algedonic.Echo("<red>Target not in room!<white>")
+        return
     end
+
+    local sp = ataxia.settings.separator
+
+    -- Prepend dispel if first attack
+    if not serpent.state.dispelSent then
+        atk = "dispel " .. target .. sp .. atk
+        serpent.state.dispelSent = true
+    end
+
+    send("queue addclear freestand " .. atk)
+    serpent.state.attackInFlight = true
 end
 
 -- =============================================================================
 -- MAIN OFFENSE FUNCTION
 -- =============================================================================
 
---[[
-    Main offense function - call this to attack
-]]--
 function serp_ekanelia_offense()
+    -- Guard: don't re-dispatch while off balance
+    if serpent.state.attackInFlight then
+        return
+    end
+
+    -- Sync suggestion queueing
+    if hSuggRequest ~= "" and hSuggRequest ~= hSuggActive then
+        hSuggActive = hSuggRequest
+    end
+
     -- Initialize state
     tAffs.hypnotising = tAffs.hypnotising or false
     tAffs.hypnotised = tAffs.hypnotised or false
@@ -1088,7 +1062,7 @@ function serp_ekanelia_offense()
     -- Check darkshade timer
     local darkshadeTime = checkDarkshadeTimer()
 
-    -- Auto-switch strategy based on progress
+    -- Determine strategy (lock-first)
     if serpOffenseMode == "auto" then
         determineStrategy()
     elseif serpOffenseMode == "lock" then
@@ -1099,31 +1073,34 @@ function serp_ekanelia_offense()
         serpStrategy = "hypnosis"
     end
 
-    -- Echo strategy if configured
+    -- Echo strategy
     if serpent.config.echoStrategy then
         Algedonic.Echo("<dim_grey>Strategy: <white>" .. serpStrategy)
     end
 
-    -- Echo current target afflictions for debugging
+    -- Echo target afflictions for debugging
     if serpent.config.echoAffs then
         local affStr = ""
-        if tAffs.asthma then affStr = affStr .. "<cyan>AST " end
-        if tAffs.weariness then affStr = affStr .. "<cyan>WEA " end
-        if tAffs.clumsiness then affStr = affStr .. "<cyan>CLU " end
-        if tAffs.slickness then affStr = affStr .. "<yellow>SLI " end
-        if tAffs.paralysis then affStr = affStr .. "<yellow>PAR " end
-        if tAffs.impatience then affStr = affStr .. "<red>IMP " end
-        if tAffs.anorexia then affStr = affStr .. "<red>ANO " end
-        if tAffs.fangbarrier then affStr = affStr .. "<magenta>FNG " end
-        if tAffs.sileris then affStr = affStr .. "<magenta>SIL " end
+        if haveAff("asthma") then affStr = affStr .. "<cyan>AST " end
+        if haveAff("weariness") then affStr = affStr .. "<cyan>WEA " end
+        if haveAff("clumsiness") then affStr = affStr .. "<cyan>CLU " end
+        if haveAff("slickness") then affStr = affStr .. "<yellow>SLI " end
+        if haveAff("paralysis") then affStr = affStr .. "<yellow>PAR " end
+        if haveAff("impatience") then affStr = affStr .. "<red>IMP " end
+        if haveAff("anorexia") then affStr = affStr .. "<red>ANO " end
+        if haveAff("masochism") then affStr = affStr .. "<magenta>MAS " end
+        if haveAff("confusion") then affStr = affStr .. "<magenta>CON " end
+        if haveAff("recklessness") then affStr = affStr .. "<magenta>RCK " end
+        if haveAff("sileris") or (tAffs and tAffs.sileris) then affStr = affStr .. "<red>SIL " end
+        if haveAff("fangbarrier") or (tAffs and tAffs.fangbarrier) then affStr = affStr .. "<red>FNG " end
         if tAffs.darkshade then affStr = affStr .. "<green>DRK " end
-        if tAffs.addiction then affStr = affStr .. "<green>ADD " end
-        if tAffs.nausea then affStr = affStr .. "<green>NAU " end
+        if haveAff("addiction") then affStr = affStr .. "<green>ADD " end
+        if haveAff("nausea") then affStr = affStr .. "<green>NAU " end
         if affStr == "" then affStr = "<dim_grey>none" end
         cecho("<white>[tAffs]: " .. affStr .. "<reset>\n")
     end
 
-    -- Build venom lists using unified adaptive venom selection
+    -- Build venom lists
     selectVenoms()
 
     -- Execute attack
@@ -1137,7 +1114,7 @@ end
 function serp_setmode_lock()
     serpOffenseMode = "lock"
     cecho("\n<green>Serpent offense: LOCK mode<reset>\n")
-    cecho("<dim_grey>  Priority: Impulse lock via kelp stack + bloodroot competition<reset>\n")
+    cecho("<dim_grey>  Priority: Lock completion via Ekanelia + venom pressure<reset>\n")
 end
 
 function serp_setmode_darkshade()
@@ -1148,7 +1125,6 @@ end
 
 function serp_setmode_hypnosis()
     serpOffenseMode = "hypnosis"
-    -- Reset hypnosis state when entering hypnosis mode
     if serpent.hypnosis and serpent.hypnosis.reset then
         serpent.hypnosis.reset()
     end
@@ -1159,16 +1135,13 @@ end
 function serp_setmode_auto()
     serpOffenseMode = "auto"
     cecho("\n<yellow>Serpent offense: AUTO mode<reset>\n")
-    cecho("<dim_grey>  Auto-switches between lock, darkshade, and hypnosis<reset>\n")
+    cecho("<dim_grey>  Lock-first with adaptive Ekanelia + darkshade<reset>\n")
 end
 
 -- =============================================================================
 -- STATUS DISPLAY
 -- =============================================================================
 
---[[
-    Status display function
-]]--
 function serp_status()
     local darkshadeTime = 0
     if tAffs.darkshade and affTimers.darkshade then
@@ -1190,21 +1163,42 @@ function serp_status()
     else lockStr = lockStr .. "<dim_grey>None" end
     cecho(lockStr .. "<reset>\n")
 
-    -- Fangbarrier status (blocks bite)
-    cecho("<white>Fangbarrier: " .. ((tAffs.fangbarrier or tAffs.sileris) and "<red>UP (blocks bite)" or "<green>DOWN") .. "<reset>\n")
+    -- Sileris/fangbarrier status (V1 fallback — haveAff alone misses fangbarrier)
+    local hasSileris = haveAff("sileris") or (tAffs and tAffs.sileris)
+    local hasFangbarrier = haveAff("fangbarrier") or (tAffs and tAffs.fangbarrier)
+    cecho("<white>Sileris/Fangbarrier: " .. ((hasSileris or hasFangbarrier) and "<red>UP (blocks bite/impulse)" or "<green>DOWN") .. "<reset>\n")
 
-    -- Impulse status
-    cecho("<white>Impulse Ready: " .. (checkImpulseReady() and "<green>YES" or "<red>NO"))
-    if not checkImpulseReady() then
+    -- Impulse eligibility
+    cecho("<white>Impulse Eligible: " .. (checkImpulseEligible() and "<green>YES" or "<red>NO"))
+    if not checkImpulseEligible() then
         local missing = {}
-        if not tAffs.asthma then table.insert(missing, "asthma") end
-        if not tAffs.weariness then table.insert(missing, "weariness") end
-        if tAffs.sileris or tAffs.fangbarrier then table.insert(missing, "flay sileris") end
+        if hasSileris then table.insert(missing, "sileris") end
+        if hasFangbarrier then table.insert(missing, "fangbarrier") end
         if #missing > 0 then
-            cecho(" <dim_grey>(need: " .. table.concat(missing, ", ") .. ")")
+            cecho(" <dim_grey>(blocked: " .. table.concat(missing, ", ") .. ")")
         end
     end
     cecho("<reset>\n")
+
+    -- Ekanelia opportunities
+    checkEkaneliaOpportunities()
+    local impPair = selectImpulsePair()
+
+    if next(ekaneliaReady) then
+        cecho("<white>Ekanelia Ready: ")
+        for k, v in pairs(ekaneliaReady) do
+            if v then cecho("<yellow>" .. k .. " ") end
+        end
+        cecho("<reset>\n")
+    else
+        cecho("<white>Ekanelia Ready: <dim_grey>None<reset>\n")
+    end
+
+    if impPair then
+        cecho("<white>Impulse Pair: <green>impulse " .. target .. " " .. impPair.suggestion .. " " .. impPair.venom .. " → " .. impPair.label .. "<reset>\n")
+    else
+        cecho("<white>Impulse Pair: <dim_grey>None available<reset>\n")
+    end
 
     -- Hypnosis status
     if serpent.hypnosis then
@@ -1232,26 +1226,13 @@ function serp_status()
     cecho("<white>Kelp Stack: <yellow>" .. countKelpStack() .. "/7<reset>\n")
     cecho("<white>Bloodroot Stack: <yellow>" .. countBloodrootStack() .. "/2<reset>\n")
 
-    -- Ekanelia opportunities
-    checkEkaneliaOpportunities()
-    if next(ekaneliaReady) then
-        cecho("<white>Ekanelia Ready: ")
-        for k, v in pairs(ekaneliaReady) do
-            if v then cecho("<yellow>" .. k .. " ") end
-        end
-        cecho("<reset>\n")
-    else
-        cecho("<white>Ekanelia Ready: <dim_grey>None<reset>\n")
-    end
-
-    -- Cure tracking (adaptive system)
+    -- Cure tracking
     cecho("<white>------- Adaptive Tracking --------<reset>\n")
     cecho("<white>Kelp Cures: <yellow>" .. serpent.cureTracking.kelpCures .. "<reset>")
     cecho("  <white>Ginseng Cures: <yellow>" .. serpent.cureTracking.ginsengCures .. "<reset>\n")
     cecho("<white>Bloodroot Cures: <yellow>" .. serpent.cureTracking.bloodrootCures .. "<reset>")
     cecho("  <white>Focus: <yellow>" .. serpent.cureTracking.focusCures .. "<reset>\n")
 
-    -- Show what the adaptive system would recommend
     if serpent.cureTracking.ginsengCures > serpent.cureTracking.kelpCures + 2 then
         cecho("<green>ADAPTIVE: <white>Target fears darkshade → pushing LOCK<reset>\n")
     elseif serpent.cureTracking.kelpCures > serpent.cureTracking.ginsengCures + 2 then
@@ -1260,6 +1241,10 @@ function serp_status()
         cecho("<dim_grey>ADAPTIVE: <white>Balanced curing - standard progression<reset>\n")
     end
 
+    -- Attack in flight
+    cecho("<white>Attack In Flight: " .. (serpent.state.attackInFlight and "<yellow>YES" or "<dim_grey>No") .. "<reset>\n")
+    cecho("<white>Dispel Sent: " .. (serpent.state.dispelSent and "<green>YES" or "<dim_grey>No") .. "<reset>\n")
+
     cecho("<cyan>==================================<reset>\n")
 end
 
@@ -1267,7 +1252,6 @@ end
 -- EVENT HANDLERS
 -- =============================================================================
 
--- Reset cure tracking
 function serpent.resetCureTracking()
     serpent.cureTracking.kelpCures = 0
     serpent.cureTracking.ginsengCures = 0
@@ -1276,15 +1260,31 @@ function serpent.resetCureTracking()
     serpent.cureTracking.lastReset = getEpoch()
 end
 
--- Register event handlers for target change
+-- Kill existing event handlers to avoid duplicates
+if serpent.eventHandlers then
+    for _, handlerId in pairs(serpent.eventHandlers) do
+        if killAnonymousEventHandler then killAnonymousEventHandler(handlerId) end
+    end
+end
+serpent.eventHandlers = {}
+
 if registerAnonymousEventHandler then
-    registerAnonymousEventHandler("tar changed", function()
-        -- Reset hypnosis state
+    -- Target change: reset state
+    serpent.eventHandlers.tarChanged = registerAnonymousEventHandler("tar changed", function()
         if serpent.hypnosis and serpent.hypnosis.reset then
             serpent.hypnosis.reset()
         end
-        -- Reset cure tracking for new target
         serpent.resetCureTracking()
+        serpent.state.dispelSent = false
+        serpent.state.attackInFlight = false
+        hSuggActive = ""
+    end)
+
+    -- Balance recovery: clear attackInFlight
+    serpent.eventHandlers.balRecovery = registerAnonymousEventHandler("gmcp.Char.Vitals", function()
+        if gmcp.Char.Vitals.bal == "1" then
+            serpent.state.attackInFlight = false
+        end
     end)
 end
 
@@ -1292,7 +1292,6 @@ end
 -- ALIAS REGISTRATION
 -- =============================================================================
 
--- Kill existing serpent aliases to avoid duplicates
 if serpent.aliases then
     for _, aliasId in pairs(serpent.aliases) do
         if killAlias then killAlias(aliasId) end
@@ -1300,7 +1299,6 @@ if serpent.aliases then
 end
 serpent.aliases = {}
 
--- Register aliases programmatically (no separate alias files needed)
 if tempAlias then
     serpent.aliases.ek = tempAlias("^ek$", [[serp_ekanelia_offense()]])
     serpent.aliases.eklock = tempAlias("^eklock$", [[serp_setmode_lock()]])
@@ -1315,7 +1313,6 @@ end
 -- TRIGGER REGISTRATION
 -- =============================================================================
 
--- Kill existing serpent triggers to avoid duplicates
 if serpent.triggers then
     for _, triggerId in pairs(serpent.triggers) do
         if killTrigger then killTrigger(triggerId) end
@@ -1323,9 +1320,7 @@ if serpent.triggers then
 end
 serpent.triggers = {}
 
--- Register triggers programmatically (no separate trigger files needed)
 if tempRegexTrigger then
-    -- Hypnosis Starting
     serpent.triggers.hypnosisStart = tempRegexTrigger(
         "^You prepare yourself to hypnotise your victim, (\\w+)\\.$",
         [[
@@ -1338,7 +1333,6 @@ if tempRegexTrigger then
         ]]
     )
 
-    -- Hypnotised Success
     serpent.triggers.hypnotised = tempRegexTrigger(
         "You fix (\\w+) with an entrancing stare, and smile in satisfaction as you realise that \\w+ mind is yours\\.",
         [[
@@ -1352,7 +1346,6 @@ if tempRegexTrigger then
         ]]
     )
 
-    -- Snapped
     serpent.triggers.snapped = tempRegexTrigger(
         "^You snap your fingers in front of (\\w+)\\.$",
         [[
@@ -1370,7 +1363,6 @@ if tempRegexTrigger then
         ]]
     )
 
-    -- Suggest Given
     serpent.triggers.suggestGiven = tempRegexTrigger(
         "^You issue the suggestion, concealing it deep within (\\w+)'s mind\\.$",
         [[
@@ -1382,7 +1374,6 @@ if tempRegexTrigger then
         ]]
     )
 
-    -- Suggest Already Present
     serpent.triggers.suggestAlready = tempRegexTrigger(
         "^(\\w+)'s mind is already holding something quite similar to that suggestion\\.$",
         [[
@@ -1390,7 +1381,6 @@ if tempRegexTrigger then
         ]]
     )
 
-    -- Fratricide Cured
     serpent.triggers.fratricideCured = tempRegexTrigger(
         "The look of madness fades from (\\w+)'s eyes",
         [[
@@ -1407,5 +1397,10 @@ end
 -- INITIALIZATION MESSAGE
 -- =============================================================================
 
-Algedonic.Echo("<cyan>Serpent Offense System<white> loaded.")
-Algedonic.Echo("<dim_grey>  Commands: ek, eklock, ekhyp, ekdark, ekauto, ekstatus, ekhypstatus<reset>")
+if Algedonic and Algedonic.Echo then
+    Algedonic.Echo("<cyan>Serpent Offense System (Overhaul)<white> loaded.")
+    Algedonic.Echo("<dim_grey>  DSTAB-primary, IMPULSE for Ekanelia triggers<reset>")
+    Algedonic.Echo("<dim_grey>  Commands: ek, eklock, ekhyp, ekdark, ekauto, ekstatus, ekhypstatus<reset>")
+else
+    cecho("<cyan>Serpent Offense System (Overhaul)<white> loaded.\n")
+end

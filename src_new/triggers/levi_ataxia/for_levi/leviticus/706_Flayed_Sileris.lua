@@ -36,6 +36,8 @@ patterns:
   type: 1
 - pattern: ^A death adder lunges for the throat of (\w+), fangs sinking through \w+ fang barrier defence\.$
   type: 1
+- pattern: ^The protective coating covering the skin of \w+ is ripped away with \w+ protections\.$
+  type: 1
 ]]--
 
 tAffs.fangbarrier = false

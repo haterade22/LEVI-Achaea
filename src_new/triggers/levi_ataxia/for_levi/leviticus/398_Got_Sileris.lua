@@ -34,6 +34,8 @@ colorTriggerBgColor: '#000000'
 patterns:
 - pattern: ^A supple metallic shell of quicksilver has formed around (\w+).$
   type: 1
+- pattern: ^(\w+) applies a quicksilver droplet to \w+\.$
+  type: 1
 ]]--
 
 if isTargeted(matches[2]) then
