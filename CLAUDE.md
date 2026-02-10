@@ -1212,8 +1212,11 @@ ataxia.defense.antiSerpent(false)  -- Restore normal priorities
 ### Overview
 The Infernal DWC Vivisect system provides automated combat for the Dual Wield Cutting (DWC) specialization, targeting the vivisect instant kill.
 
-### Key File
-`src_new/scripts/levi_ataxia/levi/levi_scripts/dwc/003_Infernal_DWC_Vivisect.lua`
+### Key Files
+| File | Purpose |
+|------|---------|
+| `src_new/scripts/levi_ataxia/levi/levi_scripts/dwc/001_Infernal_DWC_Vivisect.lua` | 4-limb variant (`infernalDWC` namespace) |
+| `src_new/scripts/levi_ataxia/levi/levi_scripts/dwc/002_Infernal_DWC_Vivisect_2L.lua` | 2-limb variant (`infernalDWC2L` namespace) |
 
 ### Vivisect Kill Requirements
 ```yaml
@@ -1243,11 +1246,13 @@ key_mechanic: |
 |-------|-------------|-----------------|----------|
 | **DAMAGE KILL** | Quash + Arc for damage kill | Health ≤40% | 1 (highest) |
 | **KILL** | Vivisect | All 4 limbs at level 1+ | 2 |
-| **EXECUTE** | Break limbs with undercut + DSL | Both arms + focus leg at 90%+ | 3 |
+| **EXECUTE** | Break limbs with undercut + DSL | Both arms + focus leg at 90%+ (or would-break) | 3 |
 | **PREP** | Build limb damage to 90%+ | Default phase | 4 |
 | **RIFTLOCK** | Lock mode (counter to RESTORE) | Manual: `infernalDWC.enterRiftlock()` | N/A |
 
 **DAMAGE KILL** is checked first - if target health drops below threshold (default 40%), system switches to raw damage output with QUASH + ARC instead of continuing vivisect setup.
+
+**Break Prevention**: `isArmPrepped()`/`isLegPrepped()` also return true when `wouldBreakLimb()` detects that the next DSL would push the limb past `breakThreshold` (i.e., `currentDamage + 2 * slashDamage >= 100`). This prevents accidental limb breaks during PREP — the system treats near-break limbs as prepped so it transitions to EXECUTE, where the break happens intentionally with epteth/epseth venoms.
 
 ### Execute Sequence (Optimized 2-Attack Kill)
 ```
@@ -1288,13 +1293,18 @@ Activated when target uses RESTORE (heals all limbs). Counter-strategy:
 | `infernalDWC.getPhase()` | Determines current combat phase |
 | `infernalDWC.shouldDamageKill()` | Checks if target health below threshold |
 | `infernalDWC.selectVenoms()` | Selects venoms based on phase and stuck affs |
-| `infernalDWC.selectLimbTarget()` | Chooses limb to attack |
+| `infernalDWC.selectLimbTarget()` | Chooses limb to attack (with break prevention guard) |
+| `infernalDWC.wouldBreakLimb(limbName)` | Returns true if next DSL would break a limb (damage + 2*slashDamage >= breakThreshold) |
 | `infernalDWC.getFocusArm()` | Returns arm with lower damage (for balancing) |
 | `infernalDWC.getOffArm()` | Returns arm with higher damage |
 | `infernalDWC.getFocusLeg()` | Returns focus leg for prepping |
+| `infernalDWC.isArmPrepped(side)` | Checks if arm at prepThreshold OR would break from next DSL |
+| `infernalDWC.isLegPrepped(side)` | Checks if leg at prepThreshold OR would break from next DSL |
 | `infernalDWC.isFocusLegPrepped()` | Checks if focus leg at prepThreshold |
 | `infernalDWC.hasAff(aff)` | V2-compatible affliction check |
 | `infernalDWC.handleRebounding()` | Razes rebounding/shield when detected |
+
+**Note**: The 2-limb variant uses `infernalDWC2L` namespace with the same function signatures.
 
 ### Configuration
 ```lua
@@ -1712,7 +1722,7 @@ Claude Code agent teams enable parallel development across isolated combat subsy
 
 ---
 
-**Last Updated**: 2026-02-09
+**Last Updated**: 2026-02-10
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia
