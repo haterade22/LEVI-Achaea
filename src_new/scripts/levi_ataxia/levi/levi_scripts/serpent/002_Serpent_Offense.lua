@@ -1022,6 +1022,9 @@ function serp_sendAttack(atk)
 
     local sp = ataxia.settings.separator
 
+    -- Purge residual venom before new attack
+    atk = "purge" .. sp .. atk
+
     -- Prepend dispel if first attack
     if not serpent.state.dispelSent then
         atk = "dispel " .. target .. sp .. atk
@@ -1037,6 +1040,13 @@ end
 -- =============================================================================
 
 function serp_ekanelia_offense()
+    -- Only dispatch when we actually have balance — prevents computing
+    -- attack with current state then queuing it for later execution
+    -- (by which time game state has changed)
+    if gmcp.Char.Vitals.bal ~= "1" then
+        return
+    end
+
     -- Guard: don't re-dispatch while off balance
     if serpent.state.attackInFlight then
         return
