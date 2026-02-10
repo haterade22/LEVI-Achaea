@@ -539,6 +539,12 @@ function determineStrategy()
         return
     end
 
+    -- ===== DARKSHADE FORK: Apply darkshade if not on target (highest priority) =====
+    if not tAffs.darkshade then
+        serpStrategy = "apply_darkshade"
+        return
+    end
+
     -- ===== CAN WE COMPLETE TRUELOCK? =====
     -- Need: paralysis + asthma + anorexia + slickness + impatience
     if hardlock then
@@ -592,35 +598,21 @@ function determineStrategy()
         return
     end
 
-    -- ===== ADAPTIVE: DARKSHADE STICKING =====
-    local darkshadeStuckTime = 0
-    if tAffs.darkshade and affTimers and affTimers.darkshade then
-        darkshadeStuckTime = getEpoch() - affTimers.darkshade
-    end
-
-    if tAffs.darkshade and darkshadeStuckTime > 10 and countGinsengStack() >= 2 then
-        serpStrategy = "darkshade"
-        return
-    end
-
-    -- ===== ADAPTIVE: React to cure patterns =====
-    if serpent.cureTracking.ginsengCures > serpent.cureTracking.kelpCures + 2 then
+    -- ===== CURE ADAPTATION: Darkshade is on, react to cure patterns =====
+    -- If target fears darkshade (eating ginseng), stack ginseng to 3 first, THEN lock.
+    -- If target fears lock (eating kelp), darkshade stays — just keep locking.
+    local ct = serpent.cureTracking
+    if ct.ginsengCures > ct.kelpCures + 2 and countGinsengStack() < 3 then
+        -- Target fears darkshade + ginseng stack not deep enough yet
+        -- Stack ginseng affs first so they spend rounds eating ginseng
         if serpent.config.debug then
-            Algedonic.Echo("<cyan>ADAPTIVE: <white>Target prioritizing darkshade cure - pushing LOCK")
+            Algedonic.Echo("<cyan>ADAPTIVE: <white>Target prioritizing ginseng — stacking ginseng (" .. countGinsengStack() .. "/3)")
         end
-        serpStrategy = "setup_lock"
+        serpStrategy = "ginseng_pressure"
         return
     end
 
-    if serpent.cureTracking.kelpCures > serpent.cureTracking.ginsengCures + 2 then
-        if serpent.config.debug then
-            Algedonic.Echo("<cyan>ADAPTIVE: <white>Target prioritizing lock cure - pushing DARKSHADE")
-        end
-        serpStrategy = "darkshade"
-        return
-    end
-
-    -- ===== DEFAULT: Build toward lock =====
+    -- Default: push lock (works for both "target fears lock" and "ginseng stack ready")
     serpStrategy = "setup_lock"
 end
 
@@ -786,28 +778,29 @@ function selectVenoms()
         return
     end
 
-    -- ===== DARKSHADE: Protect darkshade with ginseng stack =====
-    if serpStrategy == "darkshade" then
-        if not tAffs.darkshade then
-            table.insert(envenomList, "darkshade")
-        elseif not haveAff("asthma") then
-            table.insert(envenomList, "kalmia")
-        elseif not haveAff("addiction") then
+    -- ===== APPLY DARKSHADE: Get darkshade on target ASAP =====
+    if serpStrategy == "apply_darkshade" then
+        table.insert(envenomList, "darkshade")
+        buildSecondVenom()
+        return
+    end
+
+    -- ===== GINSENG PRESSURE: Stack ginseng affs quickly (both venoms) =====
+    -- Target is eating ginseng to cure darkshade — stack to 3 ginseng affs
+    -- so they spend multiple rounds eating ginseng, then we switch to lock
+    if serpStrategy == "ginseng_pressure" then
+        if not haveAff("addiction") then
             table.insert(envenomList, "vardrax")
         elseif not haveAff("nausea") then
             table.insert(envenomList, "euphorbia")
-        elseif not haveAff("scytherus") then
-            table.insert(envenomList, "scytherus")
-        elseif not haveAff("paralysis") then
-            table.insert(envenomList, "curare")
-        elseif not haveAff("slickness") then
-            table.insert(envenomList, "gecko")
         elseif not haveAff("haemophilia") then
             table.insert(envenomList, "notechis")
+        elseif not haveAff("scytherus") then
+            table.insert(envenomList, "scytherus")
         else
-            table.insert(envenomList, "aconite")
+            table.insert(envenomList, "curare")
         end
-        buildSecondVenom()
+        buildSecondVenomGinseng()
         return
     end
 
@@ -831,14 +824,8 @@ function selectVenoms()
         table.insert(envenomList, "gecko")
     elseif not haveAff("anorexia") then
         table.insert(envenomList, "slike")
-    elseif not haveAff("darkshade") then
-        table.insert(envenomList, "darkshade")
-    elseif not haveAff("addiction") then
-        table.insert(envenomList, "vardrax")
-    elseif not haveAff("nausea") then
-        table.insert(envenomList, "euphorbia")
     else
-        table.insert(envenomList, "aconite")
+        table.insert(envenomList, "curare")
     end
 
     buildSecondVenom()
@@ -876,6 +863,30 @@ function buildSecondVenom()
         table.insert(envenomListTwo, "aconite")
     else
         table.insert(envenomListTwo, "sumac")
+    end
+end
+
+--[[
+    Build second venom prioritizing ginseng afflictions.
+    Used by ginseng_pressure and protect_darkshade strategies.
+]]--
+function buildSecondVenomGinseng()
+    if #envenomListTwo > 0 then return end
+    local firstVenom = envenomList[1]
+
+    if not tAffs.darkshade and firstVenom ~= "darkshade" then
+        table.insert(envenomListTwo, "darkshade")
+    elseif not haveAff("addiction") and firstVenom ~= "vardrax" then
+        table.insert(envenomListTwo, "vardrax")
+    elseif not haveAff("nausea") and firstVenom ~= "euphorbia" then
+        table.insert(envenomListTwo, "euphorbia")
+    elseif not haveAff("haemophilia") and firstVenom ~= "notechis" then
+        table.insert(envenomListTwo, "notechis")
+    elseif not haveAff("scytherus") and firstVenom ~= "scytherus" then
+        table.insert(envenomListTwo, "scytherus")
+    else
+        -- All ginseng affs covered, fall back to lock piece
+        buildSecondVenom()
     end
 end
 
