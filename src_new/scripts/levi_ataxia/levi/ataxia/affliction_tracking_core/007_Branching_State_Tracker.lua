@@ -99,7 +99,7 @@ curingTableV3 = {
     ginseng = {"flushings", "lethargy", "haemophilia", "addiction", "nausea", "scytherus", "darkshade"},
     goldenseal = {"depression", "sandfever", "stupidity", "epilepsy", "dizziness", "dissonance", "shyness", "impatience"},
     ash = {"confusion", "hypersomnia", "hallucinations", "paranoia", "dementia", "crescendo"},
-    lobelia = {"recklessness", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia"},
+    lobelia = {"fratricide", "recklessness", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia"},
     bellwort = {"timeloop", "justice", "retribution", "lovers", "peace", "pacified", "generosity", "indifference", "diminished"},
     bloodroot = {"paralysis", "slickness"},
 }

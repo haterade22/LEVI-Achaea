@@ -954,8 +954,8 @@ function serp_ekanelia_attack()
     local useImpulse = false
     local impulsePair = nil
 
-    if not eqAction and checkImpulseEligible() then
-        -- EQ is free and no sileris — check if Ekanelia is achievable
+    if not eqAction and not serpent.impulseSuccess and checkImpulseEligible() then
+        -- EQ is free, no sileris, and impulse hasn't already succeeded (fratricide handles relapse)
         impulsePair = selectImpulsePair()
         if impulsePair then
             useImpulse = true
@@ -963,7 +963,7 @@ function serp_ekanelia_attack()
     end
 
     -- Gecko override: strip sileris to enable impulse next round
-    if not useImpulse and not eqAction then
+    if not useImpulse and not eqAction and not serpent.impulseSuccess then
         local potentialImpulse = selectImpulsePair()
         if potentialImpulse and potentialImpulse.label == "impatience" and not checkImpulseEligible() then
             -- Monkshood ekanelia ready but sileris/fangbarrier blocking bite
@@ -1314,6 +1314,8 @@ if registerAnonymousEventHandler then
         serpent.resetCureTracking()
         serpent.state.dispelSent = false
         serpent.state.attackInFlight = false
+        serpent.impulseSuccess = false
+        serpent.impulseRelapsing = false
         hSuggActive = ""
     end)
 
@@ -1421,8 +1423,7 @@ if tempRegexTrigger then
     serpent.triggers.fratricideCured = tempRegexTrigger(
         "The look of madness fades from (\\w+)'s eyes",
         [[
-            if erAff then erAff("fratricide") end
-            tAffs.fratricide = false
+            if erAffWrapper then erAffWrapper("fratricide") elseif erAff then erAff("fratricide") end
             if serpent and serpent.hypnosis and serpent.hypnosis.onFratricideCured then
                 serpent.hypnosis.onFratricideCured()
             end
