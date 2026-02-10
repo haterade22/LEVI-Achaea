@@ -503,7 +503,7 @@ serpent.cureTracking = serpent.cureTracking or {
     bloodrootCures = 0,
     focusCures = 0,
     lastReset = 0,
-    trackingWindow = 30,
+    trackingWindow = 6,
 }
 
 function serpent.trackCure(herbType)
@@ -599,20 +599,19 @@ function determineStrategy()
     end
 
     -- ===== CURE ADAPTATION: Darkshade is on, react to cure patterns =====
-    -- If target fears darkshade (eating ginseng), stack ginseng to 3 first, THEN lock.
-    -- If target fears lock (eating kelp), darkshade stays — just keep locking.
+    -- If target is eating ginseng, stack ginseng to 3 first so they're busy curing it.
+    -- If target eats anything else, darkshade stays on — just push lock.
     local ct = serpent.cureTracking
-    if ct.ginsengCures > ct.kelpCures + 2 and countGinsengStack() < 3 then
-        -- Target fears darkshade + ginseng stack not deep enough yet
-        -- Stack ginseng affs first so they spend rounds eating ginseng
+    if ct.ginsengCures > 2 and countGinsengStack() < 3 then
+        -- Target eating ginseng + stack not deep enough yet
         if serpent.config.debug then
-            Algedonic.Echo("<cyan>ADAPTIVE: <white>Target prioritizing ginseng — stacking ginseng (" .. countGinsengStack() .. "/3)")
+            Algedonic.Echo("<cyan>ADAPTIVE: <white>Target eating ginseng — stacking (" .. countGinsengStack() .. "/3)")
         end
         serpStrategy = "ginseng_pressure"
         return
     end
 
-    -- Default: push lock (works for both "target fears lock" and "ginseng stack ready")
+    -- Default: push lock (darkshade is on, lock them)
     serpStrategy = "setup_lock"
 end
 
