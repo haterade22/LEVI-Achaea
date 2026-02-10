@@ -132,6 +132,11 @@ serpent.hypnosis = {
     snapTimer = nil,
     snapReadyTime = nil,
     hypnoTarget = nil,
+    -- Hypno lock mode fields
+    mode = "fratricide",      -- "fratricide" (existing) | "lock" (hypno lock)
+    targetSuggestions = {},    -- pre-selected suggestions for lock mode
+    sealed = false,           -- seal confirmed
+    snapTimerFired = false,   -- 4s timer has fired (independent of phase)
 }
 
 function serpent.hypnosis.start(tar)
@@ -156,7 +161,9 @@ function serpent.hypnosis.onHypnotised()
     if serpent.hypnosis.snapTimer then
         killTimer(serpent.hypnosis.snapTimer)
     end
+    serpent.hypnosis.snapTimerFired = false
     serpent.hypnosis.snapTimer = tempTimer(SNAP_DELAY, function()
+        serpent.hypnosis.snapTimerFired = true
         if serpent.hypnosis.phase == "suggesting" or serpent.hypnosis.phase == "hypnotised" then
             serpent.hypnosis.phase = "ready_snap"
             Algedonic.Echo("<yellow>HYPNOSIS: <white>SNAP READY!")
@@ -197,6 +204,14 @@ function serpent.hypnosis.onSnapped()
         serpent.hypnosis.snapTimer = nil
     end
 
+    -- Auto-switch: hypnolock → lock after snap
+    if serpOffenseMode == "hypnolock" then
+        tempTimer(0.5, function()
+            serpOffenseMode = "lock"
+            Algedonic.Echo("<green>HYPNO LOCK: <white>Snap complete -> switching to LOCK mode")
+        end)
+    end
+
     tempTimer(COOLDOWN_TIME, function()
         serpent.hypnosis.phase = "idle"
     end)
@@ -208,6 +223,11 @@ function serpent.hypnosis.onFratricideCured()
     Algedonic.Echo("<dim_grey>HYPNOSIS: <white>Target cured fratricide")
 end
 
+function serpent.hypnosis.onSealed()
+    serpent.hypnosis.sealed = true
+    Algedonic.Echo("<green>HYPNOSIS: <white>Sealed " .. #serpent.hypnosis.suggestions .. " suggestions!")
+end
+
 function serpent.hypnosis.reset()
     serpent.hypnosis.phase = "idle"
     serpent.hypnosis.suggestions = {}
@@ -215,6 +235,11 @@ function serpent.hypnosis.reset()
     serpent.hypnosis.fratricideActive = false
     serpent.hypnosis.hypnoTarget = nil
     serpent.hypnosis.snapReadyTime = nil
+    -- Hypno lock fields
+    serpent.hypnosis.mode = "fratricide"
+    serpent.hypnosis.targetSuggestions = {}
+    serpent.hypnosis.sealed = false
+    serpent.hypnosis.snapTimerFired = false
 
     if serpent.hypnosis.snapTimer then
         killTimer(serpent.hypnosis.snapTimer)
@@ -225,23 +250,46 @@ end
 function serpent.hypnosis.getCommand()
     local tar = target or serpent.hypnosis.hypnoTarget
 
+    -- Start hypnosis (both modes)
     if serpent.hypnosis.phase == "idle" then
         return "hypnotise " .. tar
     end
 
-    if (serpent.hypnosis.phase == "hypnotised" or serpent.hypnosis.phase == "suggesting")
-       and not serpent.hypnosis.fratricideApplied then
-        return "suggest " .. tar .. " fratricide"
-    end
+    if serpent.hypnosis.mode == "lock" then
+        -- Lock mode: suggest ×N → seal → snap
+        local given = #serpent.hypnosis.suggestions
+        local needed = #serpent.hypnosis.targetSuggestions
 
-    if serpent.hypnosis.phase == "ready_snap" then
-        return "snap " .. tar
+        if (serpent.hypnosis.phase == "hypnotised" or serpent.hypnosis.phase == "suggesting")
+           and given < needed then
+            -- Next suggestion
+            return "suggest " .. tar .. " " .. serpent.hypnosis.targetSuggestions[given + 1]
+        elseif given >= needed and not serpent.hypnosis.sealed then
+            -- All suggestions given, seal them
+            return "seal " .. tar .. " " .. needed
+        elseif serpent.hypnosis.sealed then
+            -- Sealed, snap
+            return "snap " .. tar
+        end
+    else
+        -- Fratricide mode (existing behavior)
+        if (serpent.hypnosis.phase == "hypnotised" or serpent.hypnosis.phase == "suggesting")
+           and not serpent.hypnosis.fratricideApplied then
+            return "suggest " .. tar .. " fratricide"
+        end
+
+        if serpent.hypnosis.phase == "ready_snap" then
+            return "snap " .. tar
+        end
     end
 
     return nil
 end
 
 function serpent.hypnosis.canSnap()
+    if serpent.hypnosis.mode == "lock" then
+        return serpent.hypnosis.sealed
+    end
     return serpent.hypnosis.phase == "ready_snap"
 end
 
@@ -290,6 +338,38 @@ function serpent.hypnosis.status()
         cecho("<reset>\n")
     end
     cecho("<cyan>===========================<reset>\n")
+end
+
+-- =============================================================================
+-- HYPNO LOCK SUGGESTION SELECTION
+-- =============================================================================
+
+--[[
+    Select up to 3 complex suggestions for hypno lock mode.
+    Dynamic: picks based on what target doesn't have.
+    Priority: clumsiness > nausea > hypersomnia > addiction > anorexia
+]]--
+function selectHypnoLockSuggestions()
+    local suggestions = {}
+    local candidates = {
+        {aff = "clumsiness",  reason = "kalmia ekanelia -> slickness"},
+        {aff = "nausea",      reason = "blocks tree, scytherus cond"},
+        {aff = "hypersomnia", reason = "curare ekanelia -> hypochondria"},
+        {aff = "addiction",   reason = "scytherus ekanelia -> camus"},
+        {aff = "anorexia",    reason = "lock piece"},
+    }
+    for _, c in ipairs(candidates) do
+        if #suggestions >= 3 then break end
+        if not haveAff(c.aff) then
+            -- anorexia only if impatience present or expected
+            if c.aff == "anorexia" and not haveAff("impatience") then
+                -- skip: anorexia without impatience is wasteful
+            else
+                table.insert(suggestions, c.aff)
+            end
+        end
+    end
+    return suggestions
 end
 
 -- =============================================================================
@@ -777,6 +857,38 @@ function selectVenoms()
         return
     end
 
+    -- ===== HYPNO LOCK: Lock venoms while hypnosis handles EQ =====
+    if serpStrategy == "hypnolock" then
+        local suggesting = {}
+        for _, s in ipairs(serpent.hypnosis.targetSuggestions or {}) do
+            suggesting[s] = true
+        end
+
+        -- Lock venoms, skip what suggestions will deliver
+        if not haveAff("paralysis") then
+            table.insert(envenomList, "curare")
+        elseif not haveAff("asthma") and not haveAff("weariness") then
+            -- Monkshood setup: asthma + weariness (both venoms)
+            table.insert(envenomList, "kalmia")
+            table.insert(envenomListTwo, "vernalius")
+            return
+        elseif not haveAff("asthma") then
+            table.insert(envenomList, "kalmia")
+        elseif not haveAff("weariness") then
+            table.insert(envenomList, "vernalius")
+        elseif not haveAff("clumsiness") and not suggesting["clumsiness"] then
+            table.insert(envenomList, "xentio")
+        elseif not haveAff("slickness") then
+            table.insert(envenomList, "gecko")
+        elseif not haveAff("anorexia") and haveAff("impatience") and not suggesting["anorexia"] then
+            table.insert(envenomList, "slike")
+        else
+            table.insert(envenomList, "curare")
+        end
+        buildSecondVenom()
+        return
+    end
+
     -- ===== APPLY DARKSHADE: Get darkshade on target ASAP =====
     if serpStrategy == "apply_darkshade" then
         table.insert(envenomList, "darkshade")
@@ -954,16 +1066,16 @@ function serp_ekanelia_attack()
     local useImpulse = false
     local impulsePair = nil
 
-    if not eqAction and not serpent.impulseSuccess and checkImpulseEligible() then
-        -- EQ is free, no sileris, and impulse hasn't already succeeded (fratricide handles relapse)
+    if not eqAction and not haveAff("impatience") and checkImpulseEligible() then
+        -- EQ is free, no sileris, and impatience not on target (relapse handles it when present)
         impulsePair = selectImpulsePair()
-        if impulsePair then
+        if impulsePair and impulsePair.label == "impatience" then
             useImpulse = true
         end
     end
 
     -- Gecko override: strip sileris to enable impulse next round
-    if not useImpulse and not eqAction and not serpent.impulseSuccess then
+    if not useImpulse and not eqAction and not haveAff("impatience") then
         local potentialImpulse = selectImpulsePair()
         if potentialImpulse and potentialImpulse.label == "impatience" and not checkImpulseEligible() then
             -- Monkshood ekanelia ready but sileris/fangbarrier blocking bite
@@ -1025,6 +1137,14 @@ function getEqAction()
 
     -- 3. Hypnosis step: active hypnosis chain
     if serpent.hypnosis.isActive() then
+        local hypCmd = serpent.hypnosis.getCommand()
+        if hypCmd then
+            return hypCmd
+        end
+    end
+
+    -- 4. Hypno lock mode: start chain from idle
+    if serpOffenseMode == "hypnolock" and serpent.hypnosis.phase == "idle" then
         local hypCmd = serpent.hypnosis.getCommand()
         if hypCmd then
             return hypCmd
@@ -1108,6 +1228,14 @@ function serp_ekanelia_offense()
         serpStrategy = "darkshade"
     elseif serpOffenseMode == "hypnosis" then
         serpStrategy = "hypnosis"
+    elseif serpOffenseMode == "hypnolock" then
+        -- Use lock venoms while hypnosis handles EQ
+        if serpent.hypnosis.isActive() or serpent.hypnosis.phase == "idle" then
+            serpStrategy = "hypnolock"
+        else
+            -- After snap cooldown, mode already switched to "lock"
+            serpStrategy = "lock"
+        end
     end
 
     -- Echo strategy
@@ -1173,6 +1301,27 @@ function serp_setmode_auto()
     serpOffenseMode = "auto"
     cecho("\n<yellow>Serpent offense: AUTO mode<reset>\n")
     cecho("<dim_grey>  Lock-first with adaptive Ekanelia + darkshade<reset>\n")
+end
+
+function serp_setmode_hypnolock()
+    serpOffenseMode = "hypnolock"
+    -- Initialize hypnosis for lock mode
+    serpent.hypnosis.reset()
+    serpent.hypnosis.mode = "lock"
+    serpent.hypnosis.targetSuggestions = selectHypnoLockSuggestions()
+
+    cecho("\n<yellow>Serpent offense: HYPNO LOCK mode<reset>\n")
+    if #serpent.hypnosis.targetSuggestions > 0 then
+        cecho("<dim_grey>  Hypnosis: ")
+        for i, sug in ipairs(serpent.hypnosis.targetSuggestions) do
+            cecho(sug .. (i < #serpent.hypnosis.targetSuggestions and ", " or ""))
+        end
+        cecho("<reset>\n")
+    else
+        cecho("<dim_grey>  Hypnosis: <red>No suggestions available (target has all candidates)<reset>\n")
+    end
+    cecho("<dim_grey>  Flow: dstab+hypnotise -> suggest x" .. #serpent.hypnosis.targetSuggestions ..
+          " -> seal -> snap -> lock mode<reset>\n")
 end
 
 -- =============================================================================
@@ -1346,6 +1495,7 @@ if tempAlias then
     serpent.aliases.ekauto = tempAlias("^ekauto$", [[serp_setmode_auto()]])
     serpent.aliases.ekstatus = tempAlias("^ekstatus$", [[serp_status()]])
     serpent.aliases.ekhypstatus = tempAlias("^ekhypstatus$", [[serpent.hypnosis.status()]])
+    serpent.aliases.ekhl = tempAlias("^ekhl$", [[serp_setmode_hypnolock()]])
 end
 
 -- =============================================================================
@@ -1429,6 +1579,45 @@ if tempRegexTrigger then
             end
         ]]
     )
+
+    serpent.triggers.sealSuccess = tempRegexTrigger(
+        "^You draw (\\w+) out of \\w+ hypnotic daze, your suggestions indelibly printed on \\w+ mind\\.$",
+        [[
+            if serpent and serpent.hypnosis and serpent.hypnosis.onSealed then
+                serpent.hypnosis.onSealed()
+            end
+        ]]
+    )
+
+    serpent.triggers.hypnosisLost = tempRegexTrigger(
+        "^You feel your control over (\\w+)'s mind fade\\.$",
+        [[
+            if serpent and serpent.hypnosis and serpent.hypnosis.reset then
+                serpent.hypnosis.reset()
+                Algedonic.Echo("<red>HYPNOSIS: <white>Lost control — state reset")
+            end
+        ]]
+    )
+
+    serpent.triggers.hypnosisNoticed = tempRegexTrigger(
+        "^(\\w+) has noticed your attempt at hypnosis\\!$",
+        [[
+            if serpent and serpent.hypnosis and serpent.hypnosis.reset then
+                serpent.hypnosis.reset()
+                Algedonic.Echo("<red>HYPNOSIS: <white>Target noticed — state reset")
+            end
+        ]]
+    )
+
+    serpent.triggers.hypnosisTooPerceptive = tempRegexTrigger(
+        "^(\\w+) is too perceptive for your hypnotic skill\\. ",
+        [[
+            if serpent and serpent.hypnosis and serpent.hypnosis.reset then
+                serpent.hypnosis.reset()
+                Algedonic.Echo("<red>HYPNOSIS: <white>Too perceptive — state reset")
+            end
+        ]]
+    )
 end
 
 -- =============================================================================
@@ -1438,7 +1627,7 @@ end
 if Algedonic and Algedonic.Echo then
     Algedonic.Echo("<cyan>Serpent Offense System (Overhaul)<white> loaded.")
     Algedonic.Echo("<dim_grey>  DSTAB-primary, IMPULSE for Ekanelia triggers<reset>")
-    Algedonic.Echo("<dim_grey>  Commands: ek, eklock, ekhyp, ekdark, ekauto, ekstatus, ekhypstatus<reset>")
+    Algedonic.Echo("<dim_grey>  Commands: ek, eklock, ekhyp, ekhl, ekdark, ekauto, ekstatus, ekhypstatus<reset>")
 else
     cecho("<cyan>Serpent Offense System (Overhaul)<white> loaded.\n")
 end
