@@ -694,7 +694,7 @@ function selectVenoms()
             table.insert(envenomList, "gecko")
         elseif not haveAff("asthma") then
             table.insert(envenomList, "kalmia")
-        elseif not haveAff("anorexia") then
+        elseif not haveAff("anorexia") and haveAff("impatience") then
             table.insert(envenomList, "slike")
         else
             table.insert(envenomList, "voyria")
@@ -746,7 +746,7 @@ function selectVenoms()
             else
                 table.insert(envenomList, "gecko")
             end
-        elseif not haveAff("anorexia") then
+        elseif not haveAff("anorexia") and haveAff("impatience") then
             table.insert(envenomList, "slike")
         else
             -- Softlock pieces in place, add pressure
@@ -821,7 +821,7 @@ function selectVenoms()
         table.insert(envenomList, "vernalius")
     elseif not haveAff("slickness") then
         table.insert(envenomList, "gecko")
-    elseif not haveAff("anorexia") then
+    elseif not haveAff("anorexia") and haveAff("impatience") then
         table.insert(envenomList, "slike")
     else
         table.insert(envenomList, "curare")
@@ -850,7 +850,7 @@ function buildSecondVenom()
         table.insert(envenomListTwo, "kalmia")
     elseif not haveAff("slickness") and firstVenom ~= "gecko" then
         table.insert(envenomListTwo, "gecko")
-    elseif not haveAff("anorexia") and firstVenom ~= "slike" then
+    elseif not haveAff("anorexia") and haveAff("impatience") and firstVenom ~= "slike" then
         table.insert(envenomListTwo, "slike")
     elseif not haveAff("darkshade") and firstVenom ~= "darkshade" then
         table.insert(envenomListTwo, "darkshade")

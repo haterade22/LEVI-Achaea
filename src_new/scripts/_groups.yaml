@@ -420,7 +420,7 @@ groups:
               directory: levi_ataxia/levi/ataxia/limb_management
           - name: Curing
             script: "curingTable = {\n\tgoldenseal = {\"depression\", \"sandfever\", \"stupidity\", \"epilepsy\", \"dizziness\"\
-              , \"dissonance\", \"shyness\", \"impatience\", \"unweavingmind\", \"fulminated\"},\n\tlobelia = {\"recklessness\"\
+              , \"dissonance\", \"shyness\", \"impatience\", \"unweavingmind\", \"fulminated\"},\n\tlobelia = {\"fratricide\", \"recklessness\"\
               , \"vertigo\", \"spiritburn\", \"tenderskin\", \"loneliness\", \"claustrophobia\", \"masochism\", \"agoraphobia\"\
               },\n\tbellwort = {\"timeloop\", \"justice\", \"lovers\", \"peace\", \"pacified\", \"generosity\", \"indifference\"\
               ,\"diminished\"},\n\tkelp = {\"hypochondria\", \"parasite\", \"weariness\",  \"asthma\", \"healthleech\", \"\
