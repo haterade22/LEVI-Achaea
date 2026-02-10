@@ -289,6 +289,11 @@ end
 -- Handle target eating bloodroot/magnesium (cures paralysis or slickness)
 function onTargetBloodrootV2(targetName)
     if not ataxia.settings.useAffTrackingV2 then return end
+    -- Special case: both slickness AND paralysis tracked - wait for apply to disambiguate
+    if haveAffV2("slickness") and haveAffV2("paralysis") then
+        handleBloodrootWithSlicknessV2()
+        return
+    end
     reduceCureTypeAffCertaintyV2(bloodrootCurableAffsV2, "bloodroot")
 end
 

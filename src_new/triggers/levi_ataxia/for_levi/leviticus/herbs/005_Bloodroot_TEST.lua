@@ -70,7 +70,20 @@ tdeliverance = false
                 end
             ]])
         else
-            if tAffs.paralysis then
+            if tAffs.paralysis and tAffs.slickness then
+                -- Wait for quicksilver apply to disambiguate
+                pendingBloodrootV1 = true
+                if bloodrootApplyTimerV1 then killTimer(bloodrootApplyTimerV1) end
+                bloodrootApplyTimerV1 = tempTimer(0.5, [[
+                    if pendingBloodrootV1 then
+                        ataxiaEcho("No apply: bloodroot cured paralysis")
+                        erAff("paralysis")
+                        if removeAffV3 then removeAffV3("paralysis") end
+                        pendingBloodrootV1 = nil
+                    end
+                    bloodrootApplyTimerV1 = nil
+                ]])
+            elseif tAffs.paralysis then
                 erAff("paralysis")
                 if removeAffV3 then removeAffV3("paralysis") end
             elseif tAffs.pyramides then

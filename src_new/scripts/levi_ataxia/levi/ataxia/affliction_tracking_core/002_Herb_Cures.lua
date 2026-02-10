@@ -160,6 +160,8 @@ local kelpRemovalPriority = herbRemovalPriority.kelp
 -- V2 state for disambiguation
 pendingKelpAffsV2 = nil
 kelpDisambiguateTimerV2 = nil
+pendingBloodrootAffsV2 = nil
+bloodrootDisambiguateTimerV2 = nil
 lastGuessV2 = nil  -- Generic guess storage for all herbs
 lastKelpGuessV2 = nil  -- Backward compatibility
 
@@ -300,6 +302,59 @@ function handleKelpWithAsthmaV2()
     end)
 
     predictBal("herb", 1.55)
+end
+
+-- Handle bloodroot when both slickness AND paralysis are tracked
+-- Wait for quicksilver apply to disambiguate which was cured
+function handleBloodrootWithSlicknessV2()
+    -- If we're already waiting for bloodroot disambiguation, process previous one now
+    if pendingBloodrootAffsV2 then
+        -- Previous bloodroot still pending - assume paralysis was cured (no apply seen)
+        removeAffV2("paralysis")
+        storeGuessV2("paralysis", pendingBloodrootAffsV2, "bloodroot")
+        ataxiaEcho("[V2] Multi-bloodroot: assumed paralysis cured (no apply for previous)")
+    end
+
+    -- Store current candidates for later disambiguation
+    pendingBloodrootAffsV2 = {"slickness", "paralysis"}
+
+    -- Kill any existing timer
+    if bloodrootDisambiguateTimerV2 then
+        killTimer(bloodrootDisambiguateTimerV2)
+    end
+
+    ataxiaEcho("[V2] Bloodroot eaten with slickness + paralysis - waiting for apply")
+
+    -- Wait 0.5 seconds for quicksilver/sileris apply
+    bloodrootDisambiguateTimerV2 = tempTimer(0.5, function()
+        if pendingBloodrootAffsV2 then
+            -- No apply = paralysis was cured (still slick, can't apply)
+            removeAffV2("paralysis")
+            storeGuessV2("paralysis", pendingBloodrootAffsV2, "bloodroot")
+            ataxiaEcho("[V2] No apply: bloodroot cured paralysis (slickness still present)")
+            pendingBloodrootAffsV2 = nil
+        end
+        bloodrootDisambiguateTimerV2 = nil
+    end)
+
+    predictBal("herb", 1.55)
+end
+
+-- Called from quicksilver trigger when target applies (proves slickness absent)
+-- If bloodroot disambiguation is pending, confirms slickness was cured
+function onBloodrootApplyConfirmV2()
+    if not pendingBloodrootAffsV2 then return end
+
+    -- Apply within window = slickness was cured
+    removeAffV2("slickness")
+    storeGuessV2("slickness", pendingBloodrootAffsV2, "bloodroot")
+    ataxiaEcho("[V2] Apply detected: bloodroot cured slickness (paralysis still present)")
+    pendingBloodrootAffsV2 = nil
+
+    if bloodrootDisambiguateTimerV2 then
+        killTimer(bloodrootDisambiguateTimerV2)
+        bloodrootDisambiguateTimerV2 = nil
+    end
 end
 
 -- Remove affliction based on priority and track for backtracking
