@@ -697,19 +697,27 @@ end
 -- ============================================
 
 -- Sync V3 state to old tAffs system for backward compatibility
+-- Only SET entries when confident (>= 30%), only CLEAR when essentially absent (< 1%)
+-- Intermediate probabilities (1-30%) leave V1/V2 unchanged to prevent desync
 function syncToOldSystemV3()
     if not tAffs then return end
 
-    -- For each affliction, set tAffs based on probability threshold
     local allProbs = getAllAffProbabilitiesV3()
     for aff, prob in pairs(allProbs) do
-        tAffs[aff] = prob >= 0.3  -- Present if >= 30% probability
+        if prob >= 0.3 then
+            tAffs[aff] = true
+        elseif prob < 0.01 then
+            tAffs[aff] = false
+        end
     end
 
-    -- Also sync to V2 if it exists
     if tAffsV2 and ataxia and ataxia.settings then
         for aff, prob in pairs(allProbs) do
-            tAffsV2[aff] = prob >= 0.3
+            if prob >= 0.3 then
+                tAffsV2[aff] = true
+            elseif prob < 0.01 then
+                tAffsV2[aff] = nil
+            end
         end
     end
 end
