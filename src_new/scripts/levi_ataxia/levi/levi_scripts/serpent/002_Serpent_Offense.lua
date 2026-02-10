@@ -962,11 +962,25 @@ function serp_ekanelia_attack()
         end
     end
 
+    -- Gecko override: strip sileris to enable impulse next round
+    if not useImpulse and not eqAction then
+        local potentialImpulse = selectImpulsePair()
+        if potentialImpulse and potentialImpulse.label == "impatience" and not checkImpulseEligible() then
+            -- Monkshood ekanelia ready but sileris/fangbarrier blocking bite
+            -- Gecko strips sileris, second venom chosen by buildSecondVenom()
+            envenomList = {"gecko"}
+            envenomListTwo = {}
+            buildSecondVenom()
+            Algedonic.Echo("<yellow>GECKO STRIP<white> -> enabling impulse (" .. potentialImpulse.label .. ")")
+        end
+    end
+
     -- ===== BUILD ATTACK =====
     local cmd
 
     if useImpulse and impulsePair then
         -- IMPULSE: suggestion + bite + Ekanelia (bal+eq)
+        serpent.impulseSuccess = false
         cmd = wieldDirk .. "impulse " .. target .. " " .. impulsePair.suggestion .. " " .. impulsePair.venom
         Algedonic.Echo("<yellow>IMPULSE " .. impulsePair.suggestion:upper() .. " + " .. impulsePair.venom:upper() .. "<white> → " .. impulsePair.label)
 
@@ -1031,6 +1045,9 @@ function serp_sendAttack(atk)
     end
 
     local sp = ataxia.settings.separator
+
+    -- Order adder to attack target
+    atk = "order adder kill " .. target .. sp .. atk
 
     -- Purge residual venom before new attack
     atk = "purge" .. sp .. atk
