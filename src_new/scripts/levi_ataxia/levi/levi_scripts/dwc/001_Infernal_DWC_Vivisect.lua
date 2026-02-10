@@ -280,18 +280,36 @@ function infernalDWC.getSlashDamage()
     return 6.6 -- Default fallback
 end
 
+-- Check if a DSL would break a limb (current damage + 2*slashDamage >= breakThreshold)
+-- Used to treat near-break limbs as "prepped" to avoid accidental breaks during PREP
+function infernalDWC.wouldBreakLimb(limbName)
+    local damage = 0
+    if limbName == "left arm" then damage = infernalDWC.getLA()
+    elseif limbName == "right arm" then damage = infernalDWC.getRA()
+    elseif limbName == "left leg" then damage = infernalDWC.getLL()
+    elseif limbName == "right leg" then damage = infernalDWC.getRL()
+    end
+    if damage <= 0 then return false end
+    local dslDamage = 2 * infernalDWC.getSlashDamage()
+    return (damage + dslDamage) >= infernalDWC.config.breakThreshold
+end
+
 -------------------------------------------------------------------------------
 -- LIMB PREP CHECKING
 -------------------------------------------------------------------------------
 
 function infernalDWC.isArmPrepped(side)
     local damage = (side == "left") and infernalDWC.getLA() or infernalDWC.getRA()
-    return damage >= infernalDWC.config.prepThreshold
+    if damage >= infernalDWC.config.prepThreshold then return true end
+    -- Treat near-break limbs as prepped to prevent accidental breaks during PREP
+    return infernalDWC.wouldBreakLimb(side .. " arm")
 end
 
 function infernalDWC.isLegPrepped(side)
     local damage = (side == "left") and infernalDWC.getLL() or infernalDWC.getRL()
-    return damage >= infernalDWC.config.prepThreshold
+    if damage >= infernalDWC.config.prepThreshold then return true end
+    -- Treat near-break limbs as prepped to prevent accidental breaks during PREP
+    return infernalDWC.wouldBreakLimb(side .. " leg")
 end
 
 function infernalDWC.isArmBroken(side)
@@ -800,8 +818,16 @@ function infernalDWC.selectLimbTarget()
         elseif not infernalDWC.isLegPrepped(focusLeg) then
             return focusLeg .. " leg"
         else
-            -- All prepped, maintain pressure on focus arm
-            return focusArm .. " arm"
+            -- All prepped, maintain pressure but avoid breaking any limb
+            if not infernalDWC.wouldBreakLimb(focusArm .. " arm") then
+                return focusArm .. " arm"
+            elseif not infernalDWC.wouldBreakLimb(offArm .. " arm") then
+                return offArm .. " arm"
+            elseif not infernalDWC.wouldBreakLimb(focusLeg .. " leg") then
+                return focusLeg .. " leg"
+            else
+                return nil
+            end
         end
 
     elseif phase == "EXECUTE" then
