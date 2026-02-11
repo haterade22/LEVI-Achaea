@@ -77,6 +77,11 @@ affTimers = affTimers or {}
 serpent.state.attackInFlight = serpent.state.attackInFlight or false
 serpent.state.dispelSent = serpent.state.dispelSent or false
 
+-- Relapse locking state
+serpent.state.impatienceDelivered = serpent.state.impatienceDelivered or false
+serpent.state.relapsePhase = serpent.state.relapsePhase or false
+serpent.state.voyriaSent = serpent.state.voyriaSent or false
+
 -- Suggestion queueing (keybind-driven)
 hSuggRequest = hSuggRequest or ""
 hSuggActive = hSuggActive or ""
@@ -510,6 +515,39 @@ function selectFallbackSuggestion()
     return "stupidity"
 end
 
+--[[
+    Select impulse pair during relapse phase.
+    Priority: monkshood (re-lock) > stupidity+venom (clogs focus, relapses)
+    Returns {suggestion, venom, label} or nil.
+]]--
+function selectRelapseImpulse()
+    -- Priority 1: Monkshood ekanelia ready → re-lock with impatience
+    local monkshoodPair = selectImpulsePair()
+    if monkshoodPair and monkshoodPair.label == "impatience" then
+        return monkshoodPair
+    end
+
+    -- Priority 2: Stupidity (mental, clogs focus, relapses via fratricide) + best venom
+    if not haveAff("stupidity") then
+        local venom
+        if not haveAff("paralysis") then
+            venom = "curare"
+        elseif not haveAff("weariness") then
+            venom = "vernalius"
+        elseif not haveAff("asthma") then
+            venom = "kalmia"
+        elseif not haveAff("slickness") then
+            venom = "gecko"
+        else
+            venom = "curare"
+        end
+        return {suggestion = "stupidity", venom = venom, label = "stupidity+" .. (VENOM_TO_AFF[venom] or venom)}
+    end
+
+    -- No useful impulse — fall back to dstab
+    return nil
+end
+
 -- =============================================================================
 -- IMPULSE ELIGIBILITY
 -- =============================================================================
@@ -889,6 +927,66 @@ function selectVenoms()
         return
     end
 
+    -- ===== RELAPSE LOCK: Coordinate venoms with fratricide relapses =====
+    -- Dstab fallback when impulse can't fire (sileris or stupidity already on)
+    -- Key combo: gecko+slike. No impatience gate on slike — impatience coming via impulse.
+    if serpStrategy == "relapse_lock" then
+        -- Key combo: pre-load slickness + anorexia before second impatience
+        if not haveAff("slickness") and not haveAff("anorexia") then
+            table.insert(envenomList, "gecko")
+            table.insert(envenomListTwo, "slike")
+            return
+        end
+
+        -- Single missing pieces
+        if not haveAff("paralysis") then
+            table.insert(envenomList, "curare")
+        elseif not haveAff("asthma") then
+            table.insert(envenomList, "kalmia")
+        elseif not haveAff("weariness") then
+            table.insert(envenomList, "vernalius")
+        elseif not haveAff("slickness") then
+            table.insert(envenomList, "gecko")
+        elseif not haveAff("anorexia") then
+            table.insert(envenomList, "slike")  -- NO impatience gate
+        elseif not haveAff("stupidity") then
+            table.insert(envenomList, "aconite")  -- fallback if impulse can't deliver
+        else
+            table.insert(envenomList, "curare")
+        end
+        buildSecondVenomRelapse()
+        return
+    end
+
+    -- ===== LOCK REINFORCE: Post-truelock class-specific blocker + maintain lock =====
+    if serpStrategy == "lock_reinforce" then
+        local lockAffToVenom = {
+            stupidity = "aconite", voyria = "voyria", weariness = "vernalius",
+            recklessness = "eurypteria", paralysis = "curare", haemophilia = "notechis",
+        }
+        local lockAffName = getLockingAffliction and getLockingAffliction("name") or nil
+        local lockVenom = lockAffName and lockAffToVenom[lockAffName] or nil
+
+        if lockVenom and not haveAff(lockAffName) then
+            -- Deliver class-specific locking affliction
+            table.insert(envenomList, lockVenom)
+            if lockVenom ~= "curare" and not haveAff("paralysis") then
+                table.insert(envenomListTwo, "curare")
+            else
+                buildSecondVenom()
+            end
+        else
+            -- Already have class aff (or unknown class), maintain lock
+            if not haveAff("paralysis") then
+                table.insert(envenomList, "curare")
+            else
+                table.insert(envenomList, "eurypteria")
+            end
+            buildSecondVenom()
+        end
+        return
+    end
+
     -- ===== APPLY DARKSHADE: Get darkshade on target ASAP =====
     if serpStrategy == "apply_darkshade" then
         table.insert(envenomList, "darkshade")
@@ -1001,6 +1099,37 @@ function buildSecondVenomGinseng()
     end
 end
 
+--[[
+    Build second venom for relapse lock phase.
+    Like buildSecondVenom() but: no impatience gate on slike.
+    Lock pieces prioritized for re-locking after impatience cure.
+]]--
+function buildSecondVenomRelapse()
+    if #envenomListTwo > 0 then return end
+    local firstVenom = envenomList[1]
+
+    -- Lock pieces first, no impatience gate on anorexia
+    if not haveAff("paralysis") and firstVenom ~= "curare" then
+        table.insert(envenomListTwo, "curare")
+    elseif not haveAff("asthma") and firstVenom ~= "kalmia" then
+        table.insert(envenomListTwo, "kalmia")
+    elseif not haveAff("weariness") and firstVenom ~= "vernalius" then
+        table.insert(envenomListTwo, "vernalius")
+    elseif not haveAff("slickness") and firstVenom ~= "gecko" then
+        table.insert(envenomListTwo, "gecko")
+    elseif not haveAff("anorexia") and firstVenom ~= "slike" then
+        table.insert(envenomListTwo, "slike")  -- NO impatience gate
+    elseif not haveAff("clumsiness") and firstVenom ~= "xentio" then
+        table.insert(envenomListTwo, "xentio")
+    elseif not haveAff("stupidity") and firstVenom ~= "aconite" then
+        table.insert(envenomListTwo, "aconite")
+    elseif firstVenom ~= "curare" then
+        table.insert(envenomListTwo, "curare")
+    else
+        table.insert(envenomListTwo, "vernalius")
+    end
+end
+
 -- =============================================================================
 -- ATTACK EXECUTION
 -- =============================================================================
@@ -1055,8 +1184,12 @@ function serp_ekanelia_attack()
 
     -- ===== EXECUTE (Truelock finish) =====
     if truelock then
-        serp_sendAttack(preAtk .. "execute " .. target)
-        return
+        if serpOffenseMode == "lock" and not serpent.state.voyriaSent then
+            -- Lock reinforcement in progress, fall through to dstab/impulse
+        else
+            serp_sendAttack(preAtk .. "execute " .. target)
+            return
+        end
     end
 
     -- ===== DETERMINE EQ ACTION (priority order) =====
@@ -1066,8 +1199,28 @@ function serp_ekanelia_attack()
     local useImpulse = false
     local impulsePair = nil
 
-    if not eqAction and not haveAff("impatience") and checkImpulseEligible() then
-        -- EQ is free, no sileris, and impatience not on target (relapse handles it when present)
+    -- Case 1: Post-lock voyria impulse (bypasses impatience gate)
+    if truelock and serpOffenseMode == "lock" and not serpent.state.voyriaSent
+       and not eqAction and checkImpulseEligible()
+       and haveAff("anorexia") and haveAff("impatience") then
+        if not haveAff("vertigo") then
+            impulsePair = {suggestion = "vertigo", venom = "voyria", label = "confusion + disrupted"}
+        else
+            impulsePair = {suggestion = selectFallbackSuggestion(), venom = "voyria", label = "confusion + disrupted"}
+        end
+        useImpulse = true
+        serpent.state.voyriaSent = true
+
+    -- Case 2: Relapse phase impulse (stupidity+venom or monkshood re-lock)
+    elseif serpent.state.relapsePhase and serpOffenseMode == "lock"
+       and not eqAction and not haveAff("impatience") and checkImpulseEligible() then
+        impulsePair = selectRelapseImpulse()
+        if impulsePair then
+            useImpulse = true
+        end
+
+    -- Case 3: Normal impulse for impatience
+    elseif not eqAction and not haveAff("impatience") and checkImpulseEligible() then
         impulsePair = selectImpulsePair()
         if impulsePair and impulsePair.label == "impatience" then
             useImpulse = true
@@ -1216,6 +1369,14 @@ function serp_ekanelia_offense()
     -- Check for Ekanelia opportunities
     checkEkaneliaOpportunities()
 
+    -- Track impatience delivery and relapse phase (lock mode)
+    if haveAff("impatience") then
+        serpent.state.impatienceDelivered = true
+        serpent.state.relapsePhase = false
+    elseif serpent.state.impatienceDelivered then
+        serpent.state.relapsePhase = true
+    end
+
     -- Check darkshade timer
     local darkshadeTime = checkDarkshadeTimer()
 
@@ -1223,7 +1384,17 @@ function serp_ekanelia_offense()
     if serpOffenseMode == "auto" then
         determineStrategy()
     elseif serpOffenseMode == "lock" then
-        serpStrategy = "lock"
+        if truelock then
+            if not serpent.state.voyriaSent then
+                serpStrategy = "lock_reinforce"
+            else
+                serpStrategy = "finish"
+            end
+        elseif serpent.state.relapsePhase then
+            serpStrategy = "relapse_lock"
+        else
+            serpStrategy = "lock"
+        end
     elseif serpOffenseMode == "darkshade" then
         serpStrategy = "darkshade"
     elseif serpOffenseMode == "hypnosis" then
@@ -1254,8 +1425,11 @@ function serp_ekanelia_offense()
         if haveAff("impatience") then affStr = affStr .. "<red>IMP " end
         if haveAff("anorexia") then affStr = affStr .. "<red>ANO " end
         if haveAff("masochism") then affStr = affStr .. "<magenta>MAS " end
+        if haveAff("stupidity") then affStr = affStr .. "<magenta>STU " end
         if haveAff("confusion") then affStr = affStr .. "<magenta>CON " end
         if haveAff("recklessness") then affStr = affStr .. "<magenta>RCK " end
+        if haveAff("disrupted") then affStr = affStr .. "<red>DIS " end
+        if haveAff("voyria") then affStr = affStr .. "<red>VOY " end
         if haveAff("sileris") or (tAffs and tAffs.sileris) then affStr = affStr .. "<red>SIL " end
         if haveAff("fangbarrier") or (tAffs and tAffs.fangbarrier) then affStr = affStr .. "<red>FNG " end
         if tAffs.darkshade then affStr = affStr .. "<green>DRK " end
@@ -1278,6 +1452,9 @@ end
 
 function serp_setmode_lock()
     serpOffenseMode = "lock"
+    serpent.state.impatienceDelivered = false
+    serpent.state.relapsePhase = false
+    serpent.state.voyriaSent = false
     cecho("\n<green>Serpent offense: LOCK mode<reset>\n")
     cecho("<dim_grey>  Priority: Lock completion via Ekanelia + venom pressure<reset>\n")
 end
@@ -1463,6 +1640,9 @@ if registerAnonymousEventHandler then
         serpent.resetCureTracking()
         serpent.state.dispelSent = false
         serpent.state.attackInFlight = false
+        serpent.state.impatienceDelivered = false
+        serpent.state.relapsePhase = false
+        serpent.state.voyriaSent = false
         serpent.impulseSuccess = false
         serpent.impulseRelapsing = false
         hSuggActive = ""
