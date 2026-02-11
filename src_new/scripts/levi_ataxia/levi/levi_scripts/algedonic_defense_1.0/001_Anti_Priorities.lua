@@ -417,4 +417,38 @@ function Algedonic.AntiOccultist()
     return
   end
 end
-   
+
+function Algedonic.AntiWaterlord()
+  local hasParalysis = ataxia.afflictions.paralysis
+  local hasAsthma = ataxia.afflictions.asthma
+  local hasSlickness = ataxia.afflictions.slickness
+
+  -- EMERGENCY: par + ast + sli = full defensive mode
+  -- Clear queue (stop attacking), endure for para, shield for safety
+  if hasParalysis and hasAsthma and hasSlickness then
+    send("cq all;endure;touch shield")
+    send("curing prioaff paralysis")
+    return
+  end
+
+  -- PRIORITY 1: Haemophilia (ginseng) — prevents severe bleeding for latch kill
+  if ataxia.afflictions.haemophilia then
+    send("curing prioaff haemophilia")
+    return
+  end
+
+  -- PRIORITY 2: Weariness (kelp) — blocks Purify passive cure
+  if ataxia.afflictions.weariness then
+    send("curing prioaff weariness")
+    return
+  end
+
+  -- PRIORITY 3: Other ginseng affs (latch components + dangerous)
+  local ginsengs = {"nausea", "lethargy", "addiction", "darkshade", "scytherus"}
+  for _, aff in ipairs(ginsengs) do
+    if ataxia.afflictions[aff] then
+      send("curing prioaff " .. aff)
+      return
+    end
+  end
+end
