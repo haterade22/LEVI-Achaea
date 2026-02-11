@@ -113,7 +113,28 @@ function switchTarget(who)
 	end
 	readAuraAffs = { count = 0, list = {} }
 	if ataxia_isClass("sentinel") then sAnimals = sAnimals or {} end
-	if ataxia_isClass("serpent") then ataxiaTemp.suggestions = nil end
+	if ataxia_isClass("serpent") then
+    ataxiaTemp.suggestions = nil
+    if serpent and serpent.state then
+      serpent.state.dispelSent = false
+      serpent.state.attackInFlight = false
+      serpent.state.impatienceDelivered = false
+      serpent.state.stupidityImpulseSent = false
+      serpent.state.relapsePhase = false
+      serpent.state.voyriaSent = false
+    end
+    if serpent then
+      serpent.impulseSuccess = false
+      serpent.impulseRelapsing = false
+    end
+    if serpent and serpent.hypnosis and serpent.hypnosis.reset then
+      serpent.hypnosis.reset()
+    end
+    if serpent and serpent.resetCureTracking then
+      serpent.resetCureTracking()
+    end
+    hSuggActive = ""
+  end
 	if ataxia_isClass("priest") then ataxiaTemp.prayerList = nil end
   if ataxia_isClass("pariah") then
     ataxia_resetPariah() 

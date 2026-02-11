@@ -79,6 +79,7 @@ serpent.state.dispelSent = serpent.state.dispelSent or false
 
 -- Relapse locking state
 serpent.state.impatienceDelivered = serpent.state.impatienceDelivered or false
+serpent.state.stupidityImpulseSent = serpent.state.stupidityImpulseSent or false
 serpent.state.relapsePhase = serpent.state.relapsePhase or false
 serpent.state.voyriaSent = serpent.state.voyriaSent or false
 
@@ -517,18 +518,16 @@ end
 
 --[[
     Select impulse pair during relapse phase.
-    Priority: monkshood (re-lock) > stupidity+venom (clogs focus, relapses)
+    Priority: stupidity first (clogs focus, relapses) > monkshood re-lock (only after pre-load)
+    Stupidity MUST go first — it's mental (competes with masochism for focus)
+    and relapses via fratricide, creating the window for monkshood re-lock.
+    Monkshood only fires after slickness+anorexia are pre-loaded on target,
+    so the lock is sealed when impatience lands.
     Returns {suggestion, venom, label} or nil.
 ]]--
 function selectRelapseImpulse()
-    -- Priority 1: Monkshood ekanelia ready → re-lock with impatience
-    local monkshoodPair = selectImpulsePair()
-    if monkshoodPair and monkshoodPair.label == "impatience" then
-        return monkshoodPair
-    end
-
-    -- Priority 2: Stupidity (mental, clogs focus, relapses via fratricide) + best venom
-    if not haveAff("stupidity") then
+    -- Priority 1: Stupidity impulse (only if not already sent this fight)
+    if not serpent.state.stupidityImpulseSent then
         local venom
         if not haveAff("paralysis") then
             venom = "curare"
@@ -544,7 +543,17 @@ function selectRelapseImpulse()
         return {suggestion = "stupidity", venom = venom, label = "stupidity+" .. (VENOM_TO_AFF[venom] or venom)}
     end
 
-    -- No useful impulse — fall back to dstab
+    -- Priority 2: Monkshood re-lock — only after soft lock pieces pre-loaded
+    -- Must wait for dstab gecko+slike to land before firing monkshood,
+    -- otherwise we waste the impatience (target cures it again)
+    if haveAff("slickness") and haveAff("anorexia") then
+        local monkshoodPair = selectImpulsePair()
+        if monkshoodPair and monkshoodPair.label == "impatience" then
+            return monkshoodPair
+        end
+    end
+
+    -- No useful impulse — fall back to dstab (relapse_lock delivers gecko+slike)
     return nil
 end
 
@@ -826,11 +835,11 @@ function selectVenoms()
         if not haveAff("paralysis") then
             table.insert(envenomList, "curare")
         elseif not haveAff("impatience") then
-            -- Set up monkshood Ekanelia conditionals
-            if not haveAff("weariness") then
-                table.insert(envenomList, "vernalius")
-            elseif not haveAff("asthma") then
+            -- Set up monkshood Ekanelia conditionals (asthma first — blocks rebounding)
+            if not haveAff("asthma") then
                 table.insert(envenomList, "kalmia")
+            elseif not haveAff("weariness") then
+                table.insert(envenomList, "vernalius")
             else
                 table.insert(envenomList, "curare")
             end
@@ -1013,6 +1022,39 @@ function selectVenoms()
         return
     end
 
+    -- ===== GROUP: Reactive gap-filling for group combat =====
+    -- Both venoms deliver highest-impact missing lock pieces.
+    -- Asthma priority (blocks rebounding). Impulse monkshood via Case 3.
+    if serpStrategy == "group" then
+        local groupPriority = {
+            {aff = "asthma",    venom = "kalmia"},
+            {aff = "paralysis", venom = "curare"},
+            {aff = "weariness", venom = "vernalius"},
+            {aff = "clumsiness", venom = "xentio"},
+            {aff = "slickness", venom = "gecko"},
+            {aff = "anorexia",  venom = "slike", gate = function() return haveAff("impatience") end},
+        }
+        for _, entry in ipairs(groupPriority) do
+            if not haveAff(entry.aff) and (not entry.gate or entry.gate()) then
+                if #envenomList == 0 then
+                    table.insert(envenomList, entry.venom)
+                elseif #envenomListTwo == 0 then
+                    table.insert(envenomListTwo, entry.venom)
+                    return
+                end
+            end
+        end
+        -- Fill remaining slots
+        if #envenomList == 0 then
+            table.insert(envenomList, "curare")
+        end
+        if #envenomListTwo == 0 then
+            local fallback = envenomList[1] ~= "curare" and "curare" or "vernalius"
+            table.insert(envenomListTwo, fallback)
+        end
+        return
+    end
+
     -- ===== SETUP LOCK (Default): Build toward lock + set up Ekanelia =====
     -- Priority: paralysis (blocks tree) → clumsiness (Ekanelia setup) → lock pieces
 
@@ -1049,15 +1091,15 @@ function buildSecondVenom()
 
     local firstVenom = envenomList[1]
 
-    -- Priority: clumsiness (Ekanelia setup) → weariness → lock pieces
+    -- Priority: clumsiness (33% kelp) → asthma (blocks rebounding) → weariness → lock pieces
     if not haveAff("clumsiness") and firstVenom ~= "xentio" then
         table.insert(envenomListTwo, "xentio")
+    elseif not haveAff("asthma") and firstVenom ~= "kalmia" then
+        table.insert(envenomListTwo, "kalmia")
     elseif not haveAff("weariness") and firstVenom ~= "vernalius" then
         table.insert(envenomListTwo, "vernalius")
     elseif not haveAff("paralysis") and firstVenom ~= "curare" then
         table.insert(envenomListTwo, "curare")
-    elseif not haveAff("asthma") and firstVenom ~= "kalmia" then
-        table.insert(envenomListTwo, "kalmia")
     elseif not haveAff("slickness") and firstVenom ~= "gecko" then
         table.insert(envenomListTwo, "gecko")
     elseif not haveAff("anorexia") and haveAff("impatience") and firstVenom ~= "slike" then
@@ -1184,8 +1226,8 @@ function serp_ekanelia_attack()
 
     -- ===== EXECUTE (Truelock finish) =====
     if truelock then
-        if serpOffenseMode == "lock" and not serpent.state.voyriaSent then
-            -- Lock reinforcement in progress, fall through to dstab/impulse
+        if (serpOffenseMode == "lock" or serpOffenseMode == "group") and not serpent.state.voyriaSent then
+            -- Voyria reinforcement pending, fall through to dstab/impulse
         else
             serp_sendAttack(preAtk .. "execute " .. target)
             return
@@ -1200,7 +1242,7 @@ function serp_ekanelia_attack()
     local impulsePair = nil
 
     -- Case 1: Post-lock voyria impulse (bypasses impatience gate)
-    if truelock and serpOffenseMode == "lock" and not serpent.state.voyriaSent
+    if truelock and (serpOffenseMode == "lock" or serpOffenseMode == "group") and not serpent.state.voyriaSent
        and not eqAction and checkImpulseEligible()
        and haveAff("anorexia") and haveAff("impatience") then
         if not haveAff("vertigo") then
@@ -1212,11 +1254,15 @@ function serp_ekanelia_attack()
         serpent.state.voyriaSent = true
 
     -- Case 2: Relapse phase impulse (stupidity+venom or monkshood re-lock)
+    -- No impatience gate — once in relapse phase, fire regardless of impatience status
     elseif serpent.state.relapsePhase and serpOffenseMode == "lock"
-       and not eqAction and not haveAff("impatience") and checkImpulseEligible() then
+       and not eqAction and checkImpulseEligible() then
         impulsePair = selectRelapseImpulse()
         if impulsePair then
             useImpulse = true
+            if impulsePair.suggestion == "stupidity" then
+                serpent.state.stupidityImpulseSent = true
+            end
         end
 
     -- Case 3: Normal impulse for impatience
@@ -1369,13 +1415,11 @@ function serp_ekanelia_offense()
     -- Check for Ekanelia opportunities
     checkEkaneliaOpportunities()
 
-    -- Track impatience delivery and relapse phase (lock mode)
-    if haveAff("impatience") then
-        serpent.state.impatienceDelivered = true
-        serpent.state.relapsePhase = false
-    elseif serpent.state.impatienceDelivered then
-        serpent.state.relapsePhase = true
-    end
+    -- Track relapse phase (lock mode)
+    -- impatienceDelivered is set by 016_Ekanelia_Success trigger (event-driven)
+    -- Once impatience was delivered, we're in relapse phase — target will cure it,
+    -- and we need to immediately start stupidity+curare then gecko+slike
+    serpent.state.relapsePhase = serpent.state.impatienceDelivered
 
     -- Check darkshade timer
     local darkshadeTime = checkDarkshadeTimer()
@@ -1390,10 +1434,23 @@ function serp_ekanelia_offense()
             else
                 serpStrategy = "finish"
             end
+        elseif hardlock and serpent.state.relapsePhase then
+            -- Second monkshood landed (hardlock), need curare + class aff to complete truelock
+            serpStrategy = "lock_reinforce"
         elseif serpent.state.relapsePhase then
             serpStrategy = "relapse_lock"
         else
             serpStrategy = "lock"
+        end
+    elseif serpOffenseMode == "group" then
+        if truelock then
+            if not serpent.state.voyriaSent then
+                serpStrategy = "group"  -- maintain pressure while waiting for voyria impulse
+            else
+                serpStrategy = "finish"
+            end
+        else
+            serpStrategy = "group"
         end
     elseif serpOffenseMode == "darkshade" then
         serpStrategy = "darkshade"
@@ -1451,12 +1508,26 @@ end
 -- =============================================================================
 
 function serp_setmode_lock()
+    -- Only reset relapse state when actually changing INTO lock mode
+    if serpOffenseMode ~= "lock" then
+        serpent.state.impatienceDelivered = false
+        serpent.state.stupidityImpulseSent = false
+        serpent.state.relapsePhase = false
+        serpent.state.voyriaSent = false
+    end
     serpOffenseMode = "lock"
-    serpent.state.impatienceDelivered = false
-    serpent.state.relapsePhase = false
-    serpent.state.voyriaSent = false
     cecho("\n<green>Serpent offense: LOCK mode<reset>\n")
     cecho("<dim_grey>  Priority: Lock completion via Ekanelia + venom pressure<reset>\n")
+end
+
+function serp_setmode_group()
+    -- Only reset state when actually changing INTO group mode
+    if serpOffenseMode ~= "group" then
+        serpent.state.voyriaSent = false
+    end
+    serpOffenseMode = "group"
+    cecho("\n<cyan>Serpent offense: GROUP mode<reset>\n")
+    cecho("<dim_grey>  Priority: Reactive gap-filling — asthma > paralysis > lock pieces > impulse monkshood > voyria<reset>\n")
 end
 
 function serp_setmode_darkshade()
@@ -1633,7 +1704,7 @@ serpent.eventHandlers = {}
 
 if registerAnonymousEventHandler then
     -- Target change: reset state
-    serpent.eventHandlers.tarChanged = registerAnonymousEventHandler("tar changed", function()
+    serpent.eventHandlers.tarChanged = registerAnonymousEventHandler("changed target", function()
         if serpent.hypnosis and serpent.hypnosis.reset then
             serpent.hypnosis.reset()
         end
@@ -1641,6 +1712,7 @@ if registerAnonymousEventHandler then
         serpent.state.dispelSent = false
         serpent.state.attackInFlight = false
         serpent.state.impatienceDelivered = false
+        serpent.state.stupidityImpulseSent = false
         serpent.state.relapsePhase = false
         serpent.state.voyriaSent = false
         serpent.impulseSuccess = false
@@ -1676,6 +1748,7 @@ if tempAlias then
     serpent.aliases.ekstatus = tempAlias("^ekstatus$", [[serp_status()]])
     serpent.aliases.ekhypstatus = tempAlias("^ekhypstatus$", [[serpent.hypnosis.status()]])
     serpent.aliases.ekhl = tempAlias("^ekhl$", [[serp_setmode_hypnolock()]])
+    serpent.aliases.ekgroup = tempAlias("^ekgroup$", [[serp_setmode_group()]])
 end
 
 -- =============================================================================
