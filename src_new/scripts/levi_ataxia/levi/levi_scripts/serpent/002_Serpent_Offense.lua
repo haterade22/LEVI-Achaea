@@ -568,6 +568,11 @@ end
     Does NOT check eq availability or Ekanelia — those are checked separately.
 ]]--
 function checkImpulseEligible()
+    -- After gecko strip attempt, trust sileris is gone (was stale or gecko cleared it)
+    if serpent.state.geckoStripAttempted then
+        impulseReady = true
+        return true
+    end
     -- V1 fallback is safe here: stale TRUE just means we use dstab instead (no harm)
     -- haveAff() alone misses fangbarrier when "quicksilver" trigger doesn't fire
     local hasSileris = haveAff("sileris") or (tAffs and tAffs.sileris)
