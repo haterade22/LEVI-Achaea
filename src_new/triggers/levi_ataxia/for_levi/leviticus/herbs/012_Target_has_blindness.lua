@@ -42,7 +42,10 @@ patterns:
 
 if isTargeted(matches[2]) and tBals.plant and matches[1]:find("eats") then
 tdeliverance = false
-  predictBal("herb", 1.55)	
+	-- Eating proves no anorexia (anorexia blocks eating)
+	erAff("anorexia")
+	if removeAffV3 then removeAffV3("anorexia") end
+  predictBal("herb", 1.55)
 	selectString(line, 1)
 	fg("NavajoWhite")
 	resetFormat()

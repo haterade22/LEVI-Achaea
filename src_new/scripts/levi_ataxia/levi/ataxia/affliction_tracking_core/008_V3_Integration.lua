@@ -46,6 +46,11 @@ packageName: ''
 -- Main wrapper for herb cure detection
 -- Replace targetAte() calls in triggers with this
 function targetAteWrapper(herb)
+    -- Eating any herb proves no anorexia (anorexia blocks eating entirely)
+    -- Clear from V1 and V3 before routing (V2 handles it in targetAteV2)
+    erAff("anorexia")
+    if removeAffV3 then removeAffV3("anorexia") end
+
     if affConfigV3 and affConfigV3.enabled then
         onHerbCureV3(herb)
     elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then

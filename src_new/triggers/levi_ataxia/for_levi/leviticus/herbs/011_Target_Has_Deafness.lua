@@ -40,6 +40,9 @@ patterns:
 
 if isTargeted(matches[2]) and matches[1]:find("eats") then
 tdeliverance = false
+	-- Eating proves no anorexia (anorexia blocks eating)
+	erAff("anorexia")
+	if removeAffV3 then removeAffV3("anorexia") end
   predictBal("herb", 1.55)
 	selectString(line, 1)
 	fg("NavajoWhite")
