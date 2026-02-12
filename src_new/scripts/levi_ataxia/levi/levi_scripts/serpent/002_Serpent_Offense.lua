@@ -1204,7 +1204,20 @@ function serp_ekanelia_attack()
     -- ===== DEFENSE STRIPPING (Flay) =====
     if hasRebounding or hasShield then
         local defense = hasShield and "shield" or "rebounding"
+        -- Flay delivers only 1 venom — pick the best single lock piece
+        -- (envenomList may have been optimized for dstab pairs e.g. gecko+slike)
         local flayVenom = envenomList[1] or "curare"
+        if serpStrategy == "relapse_lock" or serpStrategy == "lock" or serpStrategy == "group"
+           or serpStrategy == "complete_hardlock" or serpStrategy == "complete_truelock"
+           or serpStrategy == "lock_reinforce" or serpStrategy == "setup_lock" then
+            if not haveAff("paralysis") then
+                flayVenom = "curare"
+            elseif not haveAff("asthma") then
+                flayVenom = "kalmia"
+            elseif not haveAff("weariness") then
+                flayVenom = "vernalius"
+            end
+        end
         local cmd = wieldWhip .. "flay " .. target .. " " .. defense .. " " .. flayVenom
 
         -- Flay delivers one venom — fix envenom lists for hit triggers
