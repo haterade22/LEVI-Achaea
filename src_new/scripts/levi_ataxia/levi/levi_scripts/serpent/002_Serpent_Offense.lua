@@ -82,6 +82,7 @@ serpent.state.impatienceDelivered = serpent.state.impatienceDelivered or false
 serpent.state.stupidityImpulseSent = serpent.state.stupidityImpulseSent or false
 serpent.state.relapsePhase = serpent.state.relapsePhase or false
 serpent.state.voyriaSent = serpent.state.voyriaSent or false
+serpent.state.geckoStripAttempted = serpent.state.geckoStripAttempted or false
 
 -- Suggestion queueing (keybind-driven)
 hSuggRequest = hSuggRequest or ""
@@ -488,9 +489,9 @@ function selectImpulsePair()
         end
 
         if #missing == 0 then
-            -- ALL conditionals met → free Ekanelia
-            -- Pick a useful suggestion (not a conditional we already have)
-            local suggestion = selectFallbackSuggestion()
+            -- ALL conditionals met → reinforce a trivial conditional to guarantee ekanelia
+            -- e.g. masochism for monkshood — ensures it's present when venom fires
+            local suggestion = ek.trivials[1] or selectFallbackSuggestion()
             return {suggestion = suggestion, venom = ek.trigger, label = ek.result}
         elseif #missing == 1 and #missingTrivials == 1 then
             -- Exactly one trivial conditional missing → impulse completes it
@@ -526,7 +527,17 @@ end
     Returns {suggestion, venom, label} or nil.
 ]]--
 function selectRelapseImpulse()
-    -- Priority 1: Stupidity impulse (only if not already sent this fight)
+    -- Priority 1: Monkshood re-lock — if softlock present, deliver impatience NOW
+    -- Anorexia blocks eating → target can't goldenseal → impatience sticks
+    -- Don't waste the softlock window on stupidity when herbs are already blocked
+    if haveAff("slickness") and haveAff("anorexia") then
+        local monkshoodPair = selectImpulsePair()
+        if monkshoodPair and monkshoodPair.label == "impatience" then
+            return monkshoodPair
+        end
+    end
+
+    -- Priority 2: Stupidity impulse (create focus pressure for when softlock isn't present)
     if not serpent.state.stupidityImpulseSent then
         local venom
         if not haveAff("paralysis") then
@@ -541,16 +552,6 @@ function selectRelapseImpulse()
             venom = "curare"
         end
         return {suggestion = "stupidity", venom = venom, label = "stupidity+" .. (VENOM_TO_AFF[venom] or venom)}
-    end
-
-    -- Priority 2: Monkshood re-lock — only after soft lock pieces pre-loaded
-    -- Must wait for dstab gecko+slike to land before firing monkshood,
-    -- otherwise we waste the impatience (target cures it again)
-    if haveAff("slickness") and haveAff("anorexia") then
-        local monkshoodPair = selectImpulsePair()
-        if monkshoodPair and monkshoodPair.label == "impatience" then
-            return monkshoodPair
-        end
     end
 
     -- No useful impulse — fall back to dstab (relapse_lock delivers gecko+slike)
@@ -1267,8 +1268,8 @@ function serp_ekanelia_attack()
         serpent.state.voyriaSent = true
 
     -- Case 2: Relapse phase impulse (stupidity+venom or monkshood re-lock)
-    -- No impatience gate — once in relapse phase, fire regardless of impatience status
-    elseif serpent.state.relapsePhase and serpOffenseMode == "lock"
+    -- Only fires for relapse_lock strategy — lock_reinforce uses dstab instead
+    elseif serpStrategy == "relapse_lock" and serpOffenseMode == "lock"
        and not eqAction and checkImpulseEligible() then
         impulsePair = selectRelapseImpulse()
         if impulsePair then
@@ -1287,7 +1288,9 @@ function serp_ekanelia_attack()
     end
 
     -- Gecko override: strip sileris to enable impulse next round
-    if not useImpulse and not eqAction and not haveAff("impatience") then
+    -- Limited to 1 attempt — stale V1 sileris/fangbarrier causes infinite gecko loop
+    if not useImpulse and not eqAction and not haveAff("impatience")
+       and not serpent.state.geckoStripAttempted then
         local potentialImpulse = selectImpulsePair()
         if potentialImpulse and potentialImpulse.label == "impatience" and not checkImpulseEligible() then
             -- Monkshood ekanelia ready but sileris/fangbarrier blocking bite
@@ -1295,6 +1298,7 @@ function serp_ekanelia_attack()
             envenomList = {"gecko"}
             envenomListTwo = {}
             buildSecondVenom()
+            serpent.state.geckoStripAttempted = true
             Algedonic.Echo("<yellow>GECKO STRIP<white> -> enabling impulse (" .. potentialImpulse.label .. ")")
         end
     end
@@ -1521,26 +1525,26 @@ end
 -- =============================================================================
 
 function serp_setmode_lock()
-    -- Only reset relapse state when actually changing INTO lock mode
     if serpOffenseMode ~= "lock" then
         serpent.state.impatienceDelivered = false
         serpent.state.stupidityImpulseSent = false
         serpent.state.relapsePhase = false
         serpent.state.voyriaSent = false
+        serpOffenseMode = "lock"
+        cecho("\n<green>Serpent offense: LOCK mode<reset>\n")
+        cecho("<dim_grey>  Priority: Lock completion via Ekanelia + venom pressure<reset>\n")
     end
     serpOffenseMode = "lock"
-    cecho("\n<green>Serpent offense: LOCK mode<reset>\n")
-    cecho("<dim_grey>  Priority: Lock completion via Ekanelia + venom pressure<reset>\n")
 end
 
 function serp_setmode_group()
-    -- Only reset state when actually changing INTO group mode
     if serpOffenseMode ~= "group" then
         serpent.state.voyriaSent = false
+        serpOffenseMode = "group"
+        cecho("\n<cyan>Serpent offense: GROUP mode<reset>\n")
+        cecho("<dim_grey>  Priority: Reactive gap-filling — asthma > paralysis > lock pieces > impulse monkshood > voyria<reset>\n")
     end
     serpOffenseMode = "group"
-    cecho("\n<cyan>Serpent offense: GROUP mode<reset>\n")
-    cecho("<dim_grey>  Priority: Reactive gap-filling — asthma > paralysis > lock pieces > impulse monkshood > voyria<reset>\n")
 end
 
 function serp_setmode_darkshade()
@@ -1728,6 +1732,7 @@ if registerAnonymousEventHandler then
         serpent.state.stupidityImpulseSent = false
         serpent.state.relapsePhase = false
         serpent.state.voyriaSent = false
+        serpent.state.geckoStripAttempted = false
         serpent.impulseSuccess = false
         serpent.impulseRelapsing = false
         hSuggActive = ""

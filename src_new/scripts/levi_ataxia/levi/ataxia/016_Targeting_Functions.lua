@@ -122,6 +122,7 @@ function switchTarget(who)
       serpent.state.stupidityImpulseSent = false
       serpent.state.relapsePhase = false
       serpent.state.voyriaSent = false
+      serpent.state.geckoStripAttempted = false
     end
     if serpent then
       serpent.impulseSuccess = false

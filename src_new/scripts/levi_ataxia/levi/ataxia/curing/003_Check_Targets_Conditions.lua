@@ -31,8 +31,6 @@ packageName: ''
 ]]--
 
 function checkTargetLocks()
-  if lockEchoTimer then return end
-
 	softlock, hardlock, truelock, toecho = false, false, false, ""
 
 	if checkEnlighten() and ataxia_isClass("Occultist") then
@@ -53,12 +51,15 @@ function checkTargetLocks()
 		truelock = true
 	end
 
+	-- Always compute state, only throttle the echo
+	if lockEchoTimer then return end
+
 	toecho = "<purple>   [<NavajoWhite>LOCKS<purple>]:  <yellow>soft"
 	if hardlock then toecho = toecho..", <orange>hard" end
 	if truelock then toecho = toecho..", <red>true" end
 	toecho = toecho.."<NavajoWhite>."
 
-	cecho("\n"..toecho)	
+	cecho("\n"..toecho)
   lockEchoTimer = tempTimer(15, [[ lockEchoTimer = nil ]])
 end
 
