@@ -87,6 +87,20 @@ function Algedonic.AntiDepthswalker()
   end
 end
 
+function Algedonic.AntiInfernal()
+    -- All four limbs at least level 1 broken = restore immediately
+    local leftArmBroken = ataxia.afflictions.brokenleftarm or ataxia.afflictions.damagedleftarm or ataxia.afflictions.mangledleftarm
+    local rightArmBroken = ataxia.afflictions.brokenrightarm or ataxia.afflictions.damagedrightarm or ataxia.afflictions.mangledrightarm
+    local leftLegBroken = ataxia.afflictions.brokenleftleg or ataxia.afflictions.damagedleftleg or ataxia.afflictions.mangledleftleg
+    local rightLegBroken = ataxia.afflictions.brokenrightleg or ataxia.afflictions.damagedrightleg or ataxia.afflictions.mangledrightleg
+
+    if leftArmBroken and rightArmBroken and leftLegBroken and rightLegBroken then
+        Algedonic.Echo("<red>ALL LIMBS BROKEN - RESTORE!<white>")
+        send("restore")
+        return
+    end
+end
+
 function Algedonic.AntiMagi()
   if ataxia.afflictions.fulminated and ataxia.afflictions.slickness and not ataxia.afflictions.anorexia then
     send("focus")
@@ -175,14 +189,10 @@ end
 
 function Algedonic.AntiSerpent()
     local hasAsthma = ataxia.afflictions.asthma
-    local hasWeariness = ataxia.afflictions.weariness
     local hasParalysis = ataxia.afflictions.paralysis
     local hasSlickness = ataxia.afflictions.slickness
     local hasAnorexia = ataxia.afflictions.anorexia
     local hasImpatience = ataxia.afflictions.impatience
-    local hasFratricide = ataxia.afflictions.fratricide
-    local hasProne = ataxia.afflictions.prone
-    local kelpStack = Algedonic.mystack["kelp"] or 0
 
     -- Can we tree? (not paralyzed, arms not both broken, tree off cooldown)
     local canTree = not hasParalysis
@@ -199,59 +209,11 @@ function Algedonic.AntiSerpent()
         return
     end
 
-    -- Prone + paralysis + slickness - need to break paralysis to stand
-    if hasProne and hasParalysis and hasSlickness then
-        send("endure")
-        send("curing prioaff paralysis")
-        return
-    end
-
-    -- IMPULSE PREVENTION: Asthma + Weariness = impulse can deliver mentals
-    -- Cure asthma (kelp) to break the impulse requirement
-    if hasAsthma and hasWeariness and not hasParalysis then
-        if kelpStack >= 2 then
-            Algedonic.Echo("Clearing <green>asthma<white> to prevent impulse!")
-            send("curing prioaff asthma")
-        else
-            -- Low kelp stack, try weariness instead (also kelp, but system picks)
-            send("curing prioaff weariness")
-        end
-        return
-    end
-
-    -- FRATRICIDE HANDLING: When approaching lock, fratricide causes impulse relapse
-    -- Cure fratricide when asthma + slickness present (lock developing)
-    if hasFratricide and hasAsthma and hasSlickness then
-        Algedonic.Echo("Clearing <magenta>fratricide<white> to prevent impulse relapse!")
-        send("curing prioaff fratricide")
-        return
-    end
-
-    -- PARALYSIS vs SLICKNESS: When asthma blocks smoking, prioritize paralysis
-    if hasAsthma and hasParalysis and hasSlickness then
-        send("endure")
-        send("curing prioaff paralysis")
-        return
-    end
-
-    -- IMPATIENCE: Clear when present with paralysis or asthma (focus lock setup)
-    if hasImpatience and (hasParalysis or hasAsthma) then
-        Algedonic.Echo("Clearing <gold>impatience<white> - focus lock developing!")
-        send("curing prioaff impatience")
-        return
-    end
-
-    -- ANOREXIA GATE: Asthma + slickness = anorexia incoming, clear asthma
-    if hasAsthma and hasSlickness and not hasAnorexia and not hasParalysis then
-        if kelpStack >= 2 then
-            send("curing prioaff asthma")
-        end
-        return
-    end
-
-    -- General impatience clearing when not in danger
+    -- IMPATIENCE: Cure immediately and shield to block next serpent attack
     if hasImpatience and not hasParalysis then
         send("curing prioaff impatience")
+        send("cq all;touch shield")
+        Algedonic.Echo("<red>TOUCH SHIELD - IMPATIENCE!<white>")
         return
     end
 end
