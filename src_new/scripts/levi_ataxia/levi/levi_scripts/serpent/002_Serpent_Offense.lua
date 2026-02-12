@@ -83,6 +83,7 @@ serpent.state.stupidityImpulseSent = serpent.state.stupidityImpulseSent or false
 serpent.state.relapsePhase = serpent.state.relapsePhase or false
 serpent.state.voyriaSent = serpent.state.voyriaSent or false
 serpent.state.geckoStripAttempted = serpent.state.geckoStripAttempted or false
+serpent.state.postGeckoLockdown = serpent.state.postGeckoLockdown or false
 
 -- Suggestion queueing (keybind-driven)
 hSuggRequest = hSuggRequest or ""
@@ -792,6 +793,19 @@ function selectVenoms()
     envenomListTwo = {}
     attackMode = "dstab"
 
+    -- ===== POST-GECKO LOCKDOWN: Close the lock after gecko strip =====
+    -- After gecko+curare dstab + impulse monkshood, if impatience landed,
+    -- slam curare+slike to deliver paralysis+anorexia and seal the lock.
+    -- One-shot: only fires the round immediately after gecko strip.
+    if serpent.state.postGeckoLockdown then
+        serpent.state.postGeckoLockdown = false
+        if haveAff("impatience") and not haveAff("anorexia") then
+            table.insert(envenomList, "curare")
+            table.insert(envenomListTwo, "slike")
+            return
+        end
+    end
+
     -- ===== FINISH: Truelock achieved =====
     if serpStrategy == "finish" then
         local lockAff = getLockingAffliction(target)
@@ -1304,6 +1318,7 @@ function serp_ekanelia_attack()
             envenomListTwo = {}
             buildSecondVenom()
             serpent.state.geckoStripAttempted = true
+            serpent.state.postGeckoLockdown = true
             Algedonic.Echo("<yellow>GECKO STRIP<white> -> enabling impulse (" .. potentialImpulse.label .. ")")
         end
     end
@@ -1738,6 +1753,7 @@ if registerAnonymousEventHandler then
         serpent.state.relapsePhase = false
         serpent.state.voyriaSent = false
         serpent.state.geckoStripAttempted = false
+        serpent.state.postGeckoLockdown = false
         serpent.impulseSuccess = false
         serpent.impulseRelapsing = false
         hSuggActive = ""
