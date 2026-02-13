@@ -27,10 +27,6 @@ function ataxia_promptCommands()
 		--ataxia_promptEcho()
 	end
 	noPromptEcho = false
-	if ataxiaBasher and ataxiaBasher.enabled and bashStats and bashStats.lastBalanceDamage and bashStats.lastBalanceDamage > 0 then
-		local sDPS, bDPS = bashStats_getDPS()
-		cecho("\n <DimGrey>[<cyan>DPS<DimGrey>] <white>"..bDPS.."/s <DimGrey>bal <white>| <yellow>"..sDPS.."/s <DimGrey>avg <white>| <green>"..bashStats.totalDamage.." <DimGrey>total")
-	end
   if ataxiaTemp.alertness then
     alertnessDisplay()
   end
