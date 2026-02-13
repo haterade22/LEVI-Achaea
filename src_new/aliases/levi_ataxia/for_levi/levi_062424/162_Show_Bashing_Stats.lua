@@ -42,5 +42,30 @@ atkLine = " 32x:"..string.rep(" ", 6-string.len(bashStats.criticals["32x"]))..ba
 cecho("\n <a_blue>|<orange>"..atkLine..string.rep(" ", 43-string.len(atkLine)).."<a_blue>|")
 atkLine = " 64x:"..string.rep(" ", 6-string.len(bashStats.criticals["64x"]))..bashStats.criticals["64x"].." ("..string.format("%2.2f", ((bashStats.criticals["64x"]/bashStats.crits))*100).."%)"
 cecho("\n <a_blue>|<red>"..atkLine..string.rep(" ", 43-string.len(atkLine)).."<a_blue>|")
+cecho("\n <a_blue>+-------------------------------------------+")
+cecho("\n <a_blue>|              <NavajoWhite>Damage / DPS Data              <a_blue>|")
+cecho("\n <a_blue>+-------------------------------------------+")
+if bashStats.totalDamage and bashStats.totalDamage > 0 then
+  local sDPS, bDPS = bashStats_getDPS()
+  local elapsed = getEpoch() - (bashStats.dpsSessionStart or getEpoch())
+  local mins = math.floor(elapsed / 60)
+  local secs = math.floor(elapsed % 60)
+  local timeStr = string.format("%dm %ds", mins, secs)
+  atkLine = " Total Dmg: "..bashStats.totalDamage
+  cecho("\n <a_blue>|<green>"..atkLine..string.rep(" ", 43-string.len(atkLine)).."<a_blue>|")
+  atkLine = " Session : "..sDPS.."/s   | Last Bal: "..bDPS.."/s"
+  cecho("\n <a_blue>|<cyan>"..atkLine..string.rep(" ", 43-string.len(atkLine)).."<a_blue>|")
+  atkLine = " Elapsed : "..timeStr
+  cecho("\n <a_blue>|<DimGrey>"..atkLine..string.rep(" ", 43-string.len(atkLine)).."<a_blue>|")
+  if bashStats.damageByType then
+    for dtype, amount in pairs(bashStats.damageByType) do
+      local pct = string.format("%2.1f", (amount / bashStats.totalDamage) * 100)
+      atkLine = "  "..dtype..": "..amount.." ("..pct.."%)"
+      cecho("\n <a_blue>|<white>"..atkLine..string.rep(" ", 43-string.len(atkLine)).."<a_blue>|")
+    end
+  end
+else
+  cecho("\n <a_blue>|<DimGrey> No damage dealt yet.                     <a_blue>|")
+end
 cecho("\n <a_blue>+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+")
 send(" ")

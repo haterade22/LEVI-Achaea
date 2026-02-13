@@ -212,9 +212,15 @@ ataxiaPromptTags = {
 			else
 				str = "<green>"..power
 			end
-			return str 
+			return str
 		end,
-	
+
+	["dps"] = function()
+			if not bashStats or not bashStats.dpsSessionStart then return "" end
+			local sDPS, bDPS = bashStats_getDPS()
+			return "<cyan>"..bDPS.."<DimGrey>/<cyan>"..sDPS.."<DimGrey>dps"
+		end,
+
 }
 
 ataxiaPromptColours = {

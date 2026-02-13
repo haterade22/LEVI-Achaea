@@ -39,6 +39,21 @@ function resetBashingStats()
 		slain = 0,
 		mobhits = 0,
 		blockedhits = 0,
+		totalDamage = 0,
+		damageByType = {},
+		dpsSessionStart = getEpoch(),
+		lastBalanceTime = 0,
+		lastBalanceDamage = 0,
+		currentBalanceDamage = 0,
 	}
 	ataxiaEcho("Bashing statistics have been reset.")
+end
+
+function bashStats_getDPS()
+	local elapsed = getEpoch() - (bashStats.dpsSessionStart or getEpoch())
+	local sessionDPS = elapsed > 0 and math.floor(bashStats.totalDamage / elapsed) or 0
+	local balanceDPS = bashStats.lastBalanceTime > 0
+		and math.floor(bashStats.lastBalanceDamage / bashStats.lastBalanceTime)
+		or 0
+	return sessionDPS, balanceDPS
 end
