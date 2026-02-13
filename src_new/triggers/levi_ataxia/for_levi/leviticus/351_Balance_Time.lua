@@ -10,7 +10,7 @@ hierarchy:
 - Bashing
 - Basher Lines
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
   isTempTrigger: 'no'
   isMultiline: 'no'
@@ -32,13 +32,13 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^\({20} BALANCE: ([\d.]+) \){20}$
-  type: 1
+- pattern: BALANCE
+  type: 0
 ]]--
 
-local balTime = tonumber(matches[2])
+local balTime = tonumber(line:match("BALANCE:%s*(%d+%.?%d*)"))
 
-if bashStats then
+if balTime and bashStats then
   bashStats.lastBalanceTime = balTime
   bashStats.lastBalanceDamage = bashStats.currentBalanceDamage or 0
   bashStats.currentBalanceDamage = 0
