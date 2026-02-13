@@ -50,10 +50,11 @@ function resetBashingStats()
 end
 
 function bashStats_getDPS()
+	local totalDmg = bashStats.totalDamage or 0
 	local elapsed = getEpoch() - (bashStats.dpsSessionStart or getEpoch())
-	local sessionDPS = elapsed > 0 and math.floor(bashStats.totalDamage / elapsed) or 0
-	local balanceDPS = bashStats.lastBalanceTime > 0
-		and math.floor(bashStats.lastBalanceDamage / bashStats.lastBalanceTime)
-		or 0
+	local sessionDPS = elapsed > 0 and math.floor(totalDmg / elapsed) or 0
+	local balTime = bashStats.lastBalanceTime or 0
+	local balDmg = bashStats.lastBalanceDamage or 0
+	local balanceDPS = balTime > 0 and math.floor(balDmg / balTime) or 0
 	return sessionDPS, balanceDPS
 end
