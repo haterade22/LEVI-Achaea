@@ -175,6 +175,13 @@ function tarc.write()
       elseif gmcp.Char.Status.class == "Pariah" then
       tarc:cecho("Our Epitaph Number: "..ataxia.vitals.epitaph..  "\n")
       end
+      if bashStats and bashStats.totalDamage and bashStats.totalDamage > 0 and bashStats_getDPS then
+        local sDPS, bDPS = bashStats_getDPS()
+        tarc:cecho("\n   <cyan>--- DPS ---<reset>\n")
+        tarc:cecho("   <white>Bal:  <cyan>" .. bDPS .. "/s<reset>\n")
+        tarc:cecho("   <white>Avg:  <yellow>" .. sDPS .. "/s<reset>\n")
+        tarc:cecho("   <white>Total:<green> " .. bashStats.totalDamage .. "<reset>\n")
+      end
     end
   
    else 
