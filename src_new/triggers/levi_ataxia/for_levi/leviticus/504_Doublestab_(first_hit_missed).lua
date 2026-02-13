@@ -42,7 +42,7 @@ patterns:
 ]]--
 
 local person = multimatches[1][2]
-if isTargeted(perosn) then
+if isTargeted(person) then
 	if multimatches[3][1] == "The attack rebounds back onto you!" then
   tAffs.rebounding = true
   if applyAffV3 then applyAffV3("rebounding") end
