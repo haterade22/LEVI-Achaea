@@ -76,6 +76,7 @@ if not slc.percentages then slc_init() end
 end
 
 function SLC_connects(limb,attack)
+		if not limb then return end
 		slc_last_attack = attack
 
 		if slc.attacks[attack] == nil then

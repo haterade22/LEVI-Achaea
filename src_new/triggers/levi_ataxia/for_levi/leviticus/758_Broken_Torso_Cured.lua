@@ -34,4 +34,4 @@ patterns:
   type: 3
 ]]--
 
-ataxia_clearLimbDamage(torso)
+ataxia_clearLimbDamage("torso")
