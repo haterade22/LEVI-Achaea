@@ -158,7 +158,7 @@ end
 --- Handle a successful snipe. Called by the success trigger.
 function snipe.onSuccess(hitTarget)
     local dir = snipe.state.currentDirection
-    local tgt = snipe.state.currentTarget or hitTarget
+    local tgt = hitTarget or snipe.state.currentTarget
 
     -- Cache the successful direction
     if dir then

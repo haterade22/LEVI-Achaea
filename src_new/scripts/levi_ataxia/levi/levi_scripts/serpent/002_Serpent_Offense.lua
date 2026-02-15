@@ -1386,9 +1386,10 @@ function serp_ekanelia_attack()
         useImpulse = true
 
     -- Case 2.75: Scytherus mode impulse — deliver scytherus when aff not on target
+    -- Impulse works through fangbarrier (unlike bite), so no checkImpulseEligible() gate
     -- Bite is preferred when scytherus aff IS stuck (saves EQ), impulse for re-delivery
     elseif serpOffenseMode == "scytherus" and serpStrategy == "scytherus_attack"
-       and not useBite and not eqAction and checkImpulseEligible()
+       and not useBite and not eqAction
        and not haveAff("scytherus") then
         impulsePair = {suggestion = "confusion", venom = "scytherus", label = "camus"}
         useImpulse = true
@@ -1420,13 +1421,13 @@ function serp_ekanelia_attack()
         end
     end
 
-    -- Scytherus gecko strip: dstab gecko to deliver slickness + prevent sileris re-apply
-    -- No one-shot flag — slickness blocks salve application, so worth reapplying
+    -- Scytherus gecko strip: only needed when scytherus stuck + fangbarrier blocks bite
+    -- Impulse works through fangbarrier, so gecko strip is only for bite path
     -- envenomList already set to gecko+useful by selectVenoms(scytherus_attack)
     if serpOffenseMode == "scytherus" and serpStrategy == "scytherus_attack"
        and not useBite and not useImpulse
-       and not checkImpulseEligible() then
-        Algedonic.Echo("<yellow>GECKO (slickness)<white> -> blocks sileris re-apply")
+       and haveAff("scytherus") and not checkImpulseEligible() then
+        Algedonic.Echo("<yellow>GECKO (slickness)<white> -> clearing fangbarrier for bite")
     end
 
     -- ===== BUILD ATTACK =====
