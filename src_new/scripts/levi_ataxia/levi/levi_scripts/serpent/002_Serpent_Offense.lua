@@ -51,6 +51,7 @@ packageName: ''
     - eklock    : Lock mode
     - ekhyp     : Hypnosis combo mode
     - ekdark    : Darkshade DoT mode
+    - ekscyth   : Scytherus camus damage mode
     - ekauto    : Auto-switch mode
     - ekstatus  : Status display
     ============================================================================
@@ -84,6 +85,8 @@ serpent.state.relapsePhase = serpent.state.relapsePhase or false
 serpent.state.voyriaSent = serpent.state.voyriaSent or false
 serpent.state.geckoStripAttempted = serpent.state.geckoStripAttempted or false
 serpent.state.postGeckoLockdown = serpent.state.postGeckoLockdown or false
+serpent.state.lockReinforceSent = serpent.state.lockReinforceSent or false
+serpent.state.camusDelivered = serpent.state.camusDelivered or false
 
 -- Suggestion queueing (keybind-driven)
 hSuggRequest = hSuggRequest or ""
@@ -654,7 +657,10 @@ function serpent.trackCure(herbType)
     if herbType == "kelp" then
         serpent.cureTracking.kelpCures = serpent.cureTracking.kelpCures + 1
     elseif herbType == "ginseng" then
-        serpent.cureTracking.ginsengCures = serpent.cureTracking.ginsengCures + 1
+        -- Only count if target has a kelp aff — proves they're prioritizing ginseng over kelp
+        if countKelpStack() > 0 then
+            serpent.cureTracking.ginsengCures = serpent.cureTracking.ginsengCures + 1
+        end
     elseif herbType == "bloodroot" then
         serpent.cureTracking.bloodrootCures = serpent.cureTracking.bloodrootCures + 1
     elseif herbType == "focus" then
@@ -909,10 +915,10 @@ function selectVenoms()
 
     -- ===== HYPNOSIS: Maintain pressure while hypnosis completes =====
     if serpStrategy == "hypnosis" then
-        if not haveAff("slickness") then
-            table.insert(envenomList, "gecko")
-        elseif not haveAff("paralysis") then
+        if not haveAff("paralysis") then
             table.insert(envenomList, "curare")
+        elseif not haveAff("slickness") then
+            table.insert(envenomList, "gecko")
         elseif not haveAff("asthma") then
             table.insert(envenomList, "kalmia")
         elseif not haveAff("weariness") then
@@ -1018,8 +1024,14 @@ function selectVenoms()
 
     -- ===== APPLY DARKSHADE: Get darkshade on target ASAP =====
     if serpStrategy == "apply_darkshade" then
-        table.insert(envenomList, "darkshade")
-        buildSecondVenom()
+        if serpOffenseMode == "darkshade" then
+            -- Darkshade mode: curare + darkshade (curare maintains paralysis, blocks tree)
+            table.insert(envenomList, "curare")
+            table.insert(envenomListTwo, "darkshade")
+        else
+            table.insert(envenomList, "darkshade")
+            buildSecondVenom()
+        end
         return
     end
 
@@ -1027,6 +1039,14 @@ function selectVenoms()
     -- Target is eating ginseng to cure darkshade — stack to 3 ginseng affs
     -- so they spend multiple rounds eating ginseng, then we switch to lock
     if serpStrategy == "ginseng_pressure" then
+        -- Darkshade mode: curare first to maintain paralysis (blocks tree),
+        -- ginseng aff as second venom
+        if serpOffenseMode == "darkshade" and not haveAff("paralysis") then
+            table.insert(envenomList, "curare")
+            buildSecondVenomGinseng()
+            return
+        end
+
         if not haveAff("addiction") then
             table.insert(envenomList, "vardrax")
         elseif not haveAff("nausea") then
@@ -1039,6 +1059,51 @@ function selectVenoms()
             table.insert(envenomList, "curare")
         end
         buildSecondVenomGinseng()
+        return
+    end
+
+    -- ===== BUILD SCYTHERUS: Build addiction+nausea for scytherus ekanelia =====
+    if serpStrategy == "build_scytherus" then
+        if not haveAff("addiction") then
+            table.insert(envenomList, "vardrax")
+        elseif not haveAff("nausea") then
+            table.insert(envenomList, "euphorbia")
+        else
+            table.insert(envenomList, "curare")
+        end
+        if #envenomListTwo == 0 then
+            local first = envenomList[1]
+            if not haveAff("nausea") and first ~= "euphorbia" then
+                table.insert(envenomListTwo, "euphorbia")
+            elseif not haveAff("addiction") and first ~= "vardrax" then
+                table.insert(envenomListTwo, "vardrax")
+            elseif not haveAff("paralysis") then
+                table.insert(envenomListTwo, "curare")
+            elseif not haveAff("asthma") then
+                table.insert(envenomListTwo, "kalmia")
+            elseif not haveAff("weariness") then
+                table.insert(envenomListTwo, "vernalius")
+            else
+                table.insert(envenomListTwo, "curare")
+            end
+        end
+        return
+    end
+
+    -- ===== SCYTHERUS ATTACK: Fallback dstab (gecko strip) when sileris blocks bite/impulse =====
+    if serpStrategy == "scytherus_attack" then
+        -- Fallback for fangbarrier: dstab slike + useful venom
+        -- Slike gives slickness (blocks salve application = prevents sileris re-apply)
+        table.insert(envenomList, "slike")
+        if not haveAff("paralysis") then
+            table.insert(envenomListTwo, "curare")
+        elseif not haveAff("asthma") then
+            table.insert(envenomListTwo, "kalmia")
+        elseif not haveAff("weariness") then
+            table.insert(envenomListTwo, "vernalius")
+        else
+            table.insert(envenomListTwo, "curare")
+        end
         return
     end
 
@@ -1229,7 +1294,8 @@ function serp_ekanelia_attack()
         local flayVenom = envenomList[1] or "curare"
         if serpStrategy == "relapse_lock" or serpStrategy == "lock" or serpStrategy == "group"
            or serpStrategy == "complete_hardlock" or serpStrategy == "complete_truelock"
-           or serpStrategy == "lock_reinforce" or serpStrategy == "setup_lock" then
+           or serpStrategy == "lock_reinforce" or serpStrategy == "setup_lock"
+           or serpStrategy == "build_scytherus" or serpStrategy == "scytherus_attack" then
             if not haveAff("paralysis") then
                 flayVenom = "curare"
             elseif not haveAff("asthma") then
@@ -1244,9 +1310,9 @@ function serp_ekanelia_attack()
         envenomList = {flayVenom}
         envenomListTwo = {}
 
-        -- Chain eq action if available
+        -- Chain eq action if available (but not hypnotise — both use balance)
         local eqAction = getEqAction()
-        if eqAction then
+        if eqAction and not eqAction:find("^hypnotise") then
             cmd = cmd .. sp .. eqAction
         end
 
@@ -1259,7 +1325,7 @@ function serp_ekanelia_attack()
 
     -- ===== EXECUTE (Truelock finish) =====
     if truelock then
-        if (serpOffenseMode == "lock" or serpOffenseMode == "group") and not serpent.state.voyriaSent then
+        if (serpOffenseMode == "lock" or serpOffenseMode == "group" or serpOffenseMode == "darkshade") and not serpent.state.voyriaSent then
             -- Voyria reinforcement pending, fall through to dstab/impulse
         else
             serp_sendAttack(preAtk .. "execute " .. target)
@@ -1270,12 +1336,25 @@ function serp_ekanelia_attack()
     -- ===== DETERMINE EQ ACTION (priority order) =====
     local eqAction = getEqAction()
 
+    -- ===== CHECK BITE ELIGIBILITY (scytherus mode) =====
+    local useBite = false
+    local biteVenom = nil
+
+    -- Scytherus mode: bite scytherus when aff already on target (BAL only, saves EQ)
+    if serpOffenseMode == "scytherus" and serpStrategy == "scytherus_attack"
+       and checkImpulseEligible() and haveAff("scytherus") then
+        useBite = true
+        biteVenom = "scytherus"
+    end
+
     -- ===== CHECK IMPULSE ELIGIBILITY =====
     local useImpulse = false
     local impulsePair = nil
 
     -- Case 1: Post-lock voyria impulse (bypasses impatience gate)
-    if truelock and (serpOffenseMode == "lock" or serpOffenseMode == "group") and not serpent.state.voyriaSent
+    -- Only after lock_reinforce dstab has landed (class-specific blocker first)
+    if truelock and (serpOffenseMode == "lock" or serpOffenseMode == "group" or serpOffenseMode == "darkshade") and not serpent.state.voyriaSent
+       and serpent.state.lockReinforceSent
        and not eqAction and checkImpulseEligible()
        and haveAff("anorexia") and haveAff("impatience") then
         if not haveAff("vertigo") then
@@ -1288,7 +1367,7 @@ function serp_ekanelia_attack()
 
     -- Case 2: Relapse phase impulse (stupidity+venom or monkshood re-lock)
     -- Only fires for relapse_lock strategy — lock_reinforce uses dstab instead
-    elseif serpStrategy == "relapse_lock" and serpOffenseMode == "lock"
+    elseif serpStrategy == "relapse_lock" and (serpOffenseMode == "lock" or serpOffenseMode == "darkshade")
        and not eqAction and checkImpulseEligible() then
         impulsePair = selectRelapseImpulse()
         if impulsePair then
@@ -1297,6 +1376,22 @@ function serp_ekanelia_attack()
                 serpent.state.stupidityImpulseSent = true
             end
         end
+
+    -- Case 2.5: Darkshade ginseng impulse — deliver camus via scytherus ekanelia
+    -- When addiction+nausea are stacked, impulse confusion+scytherus for extra ginseng pressure
+    elseif serpOffenseMode == "darkshade" and serpStrategy == "ginseng_pressure"
+       and not eqAction and checkImpulseEligible()
+       and haveAff("addiction") and haveAff("nausea") then
+        impulsePair = {suggestion = "confusion", venom = "scytherus", label = "camus"}
+        useImpulse = true
+
+    -- Case 2.75: Scytherus mode impulse — deliver scytherus when aff not on target
+    -- Bite is preferred when scytherus aff IS stuck (saves EQ), impulse for re-delivery
+    elseif serpOffenseMode == "scytherus" and serpStrategy == "scytherus_attack"
+       and not useBite and not eqAction and checkImpulseEligible()
+       and not haveAff("scytherus") then
+        impulsePair = {suggestion = "confusion", venom = "scytherus", label = "camus"}
+        useImpulse = true
 
     -- Case 3: Normal impulse for impatience
     elseif not eqAction and not haveAff("impatience") and checkImpulseEligible() then
@@ -1308,8 +1403,10 @@ function serp_ekanelia_attack()
 
     -- Gecko override: strip sileris to enable impulse next round
     -- Limited to 1 attempt — stale V1 sileris/fangbarrier causes infinite gecko loop
+    -- Skip in scytherus mode — uses slike strip instead (below)
     if not useImpulse and not eqAction and not haveAff("impatience")
-       and not serpent.state.geckoStripAttempted then
+       and not serpent.state.geckoStripAttempted
+       and serpOffenseMode ~= "scytherus" then
         local potentialImpulse = selectImpulsePair()
         if potentialImpulse and potentialImpulse.label == "impatience" and not checkImpulseEligible() then
             -- Monkshood ekanelia ready but sileris/fangbarrier blocking bite
@@ -1323,10 +1420,34 @@ function serp_ekanelia_attack()
         end
     end
 
+    -- Scytherus slike strip: dstab slike to strip sileris + prevent re-application
+    -- No one-shot flag — slike is useful and prevents sileris re-apply via slickness
+    -- envenomList already set to slike+useful by selectVenoms(scytherus_attack)
+    if serpOffenseMode == "scytherus" and serpStrategy == "scytherus_attack"
+       and not useBite and not useImpulse
+       and not checkImpulseEligible() then
+        Algedonic.Echo("<yellow>SLIKE STRIP<white> -> slickness blocks sileris re-apply")
+    end
+
     -- ===== BUILD ATTACK =====
     local cmd
 
-    if useImpulse and impulsePair then
+    if useBite then
+        -- BITE: venom + Ekanelia (bal only, saves EQ for other actions)
+        attackMode = "bite"
+        serpent.impulseSuccess = false
+        cmd = wieldDirk .. "bite " .. target .. " " .. biteVenom
+        Algedonic.Echo("<yellow>BITE " .. biteVenom:upper() .. "<white> → camus")
+
+        -- Populate envenomList for hit triggers
+        envenomList = {biteVenom}
+        envenomListTwo = {}
+
+        -- Chain eq action if available (bite uses bal only, eq is free)
+        if eqAction and not eqAction:find("^hypnotise") then
+            cmd = cmd .. sp .. eqAction
+        end
+    elseif useImpulse and impulsePair then
         -- IMPULSE: suggestion + bite + Ekanelia (bal+eq)
         serpent.impulseSuccess = false
         cmd = wieldDirk .. "impulse " .. target .. " " .. impulsePair.suggestion .. " " .. impulsePair.venom
@@ -1337,8 +1458,13 @@ function serp_ekanelia_attack()
         table.insert(envenomList, impulsePair.venom)
         envenomListTwo = {}
     elseif eqAction then
-        -- DSTAB + eq action
-        cmd = wieldDirk .. "dstab " .. target .. " " .. envenomList[1] .. " " .. envenomListTwo[1] .. sp .. eqAction
+        if eqAction:find("^hypnotise") then
+            -- Hypnotise uses balance, no dstab this round
+            cmd = wieldDirk .. eqAction
+        else
+            -- DSTAB + eq action (suggest/seal/snap)
+            cmd = wieldDirk .. "dstab " .. target .. " " .. envenomList[1] .. " " .. envenomListTwo[1] .. sp .. eqAction
+        end
     else
         -- DSTAB only (no eq action, no impulse)
         cmd = wieldDirk .. "dstab " .. target .. " " .. envenomList[1] .. " " .. envenomListTwo[1]
@@ -1348,6 +1474,11 @@ function serp_ekanelia_attack()
     -- and we're using impulse, swap in the requested suggestion
     if useImpulse and hSuggActive ~= "" and impulsePair then
         cmd = wieldDirk .. "impulse " .. target .. " " .. hSuggActive .. " " .. impulsePair.venom
+    end
+
+    -- Track lock_reinforce dstab (enables voyria impulse next round)
+    if serpStrategy == "lock_reinforce" and not useImpulse then
+        serpent.state.lockReinforceSent = true
     end
 
     serp_sendAttack(preAtk .. cmd)
@@ -1379,8 +1510,8 @@ function getEqAction()
         end
     end
 
-    -- 4. Hypno lock mode: start chain from idle
-    if serpOffenseMode == "hypnolock" and serpent.hypnosis.phase == "idle" then
+    -- 4. Hypno lock / hypnosis mode: start chain from idle
+    if (serpOffenseMode == "hypnolock" or serpOffenseMode == "hypnosis") and serpent.hypnosis.phase == "idle" then
         local hypCmd = serpent.hypnosis.getCommand()
         if hypCmd then
             return hypCmd
@@ -1490,7 +1621,39 @@ function serp_ekanelia_offense()
             serpStrategy = "group"
         end
     elseif serpOffenseMode == "darkshade" then
-        serpStrategy = "darkshade"
+        -- Darkshade-first, then full lock cycle
+        -- If target eats ginseng to cure darkshade, stack ginseng affs to protect it
+        local ct = serpent.cureTracking
+        if ct.ginsengCures > 0 and countGinsengStack() < 3 and not serpent.state.camusDelivered then
+            -- Target eating ginseng: stack addiction/nausea to hide darkshade
+            -- Once camus delivered via scytherus, transition to lock cycle
+            serpStrategy = "ginseng_pressure"
+        elseif not tAffs.darkshade and not serpent.state.camusDelivered then
+            serpStrategy = "apply_darkshade"
+        elseif truelock then
+            if not serpent.state.voyriaSent then
+                serpStrategy = "lock_reinforce"
+            else
+                serpStrategy = "finish"
+            end
+        elseif hardlock and serpent.state.relapsePhase then
+            serpStrategy = "lock_reinforce"
+        elseif serpent.state.relapsePhase then
+            serpStrategy = "relapse_lock"
+        else
+            serpStrategy = "lock"
+        end
+    elseif serpOffenseMode == "scytherus" then
+        -- Scytherus camus damage: scytherus stuck = ALWAYS bite, else build or impulse
+        if haveAff("scytherus") then
+            -- Scytherus stuck: bite for camus no matter what
+            serpStrategy = "scytherus_attack"
+        elseif haveAff("addiction") and haveAff("nausea") then
+            -- Conditionals met: impulse to deliver scytherus
+            serpStrategy = "scytherus_attack"
+        else
+            serpStrategy = "build_scytherus"
+        end
     elseif serpOffenseMode == "hypnosis" then
         serpStrategy = "hypnosis"
     elseif serpOffenseMode == "hypnolock" then
@@ -1550,6 +1713,8 @@ function serp_setmode_lock()
         serpent.state.stupidityImpulseSent = false
         serpent.state.relapsePhase = false
         serpent.state.voyriaSent = false
+        serpent.state.lockReinforceSent = false
+        serpent.state.camusDelivered = false
         serpOffenseMode = "lock"
         cecho("\n<green>Serpent offense: LOCK mode<reset>\n")
         cecho("<dim_grey>  Priority: Lock completion via Ekanelia + venom pressure<reset>\n")
@@ -1568,9 +1733,29 @@ function serp_setmode_group()
 end
 
 function serp_setmode_darkshade()
+    if serpOffenseMode ~= "darkshade" then
+        serpent.state.impatienceDelivered = false
+        serpent.state.stupidityImpulseSent = false
+        serpent.state.relapsePhase = false
+        serpent.state.voyriaSent = false
+        serpent.state.lockReinforceSent = false
+        serpent.state.camusDelivered = false
+        serpOffenseMode = "darkshade"
+        cecho("\n<magenta>Serpent offense: DARKSHADE mode<reset>\n")
+        cecho("<dim_grey>  Priority: Apply darkshade, then lock via relapse cycle<reset>\n")
+    end
     serpOffenseMode = "darkshade"
-    cecho("\n<magenta>Serpent offense: DARKSHADE mode<reset>\n")
-    cecho("<dim_grey>  Priority: Stack ginseng afflictions, keep darkshade 26+ seconds<reset>\n")
+end
+
+function serp_setmode_scytherus()
+    if serpOffenseMode ~= "scytherus" then
+        serpent.state.geckoStripAttempted = false
+        serpent.state.camusDelivered = false
+        serpOffenseMode = "scytherus"
+        cecho("\n<red>Serpent offense: SCYTHERUS mode<reset>\n")
+        cecho("<dim_grey>  Priority: Build addiction+nausea → impulse/bite scytherus → camus damage<reset>\n")
+    end
+    serpOffenseMode = "scytherus"
 end
 
 function serp_setmode_hypnosis()
@@ -1754,6 +1939,8 @@ if registerAnonymousEventHandler then
         serpent.state.voyriaSent = false
         serpent.state.geckoStripAttempted = false
         serpent.state.postGeckoLockdown = false
+        serpent.state.lockReinforceSent = false
+        serpent.state.camusDelivered = false
         serpent.impulseSuccess = false
         serpent.impulseRelapsing = false
         hSuggActive = ""
@@ -1788,6 +1975,7 @@ if tempAlias then
     serpent.aliases.ekhypstatus = tempAlias("^ekhypstatus$", [[serpent.hypnosis.status()]])
     serpent.aliases.ekhl = tempAlias("^ekhl$", [[serp_setmode_hypnolock()]])
     serpent.aliases.ekgroup = tempAlias("^ekgroup$", [[serp_setmode_group()]])
+    serpent.aliases.ekscyth = tempAlias("^ekscyth$", [[serp_setmode_scytherus()]])
 end
 
 -- =============================================================================
@@ -1919,7 +2107,7 @@ end
 if Algedonic and Algedonic.Echo then
     Algedonic.Echo("<cyan>Serpent Offense System (Overhaul)<white> loaded.")
     Algedonic.Echo("<dim_grey>  DSTAB-primary, IMPULSE for Ekanelia triggers<reset>")
-    Algedonic.Echo("<dim_grey>  Commands: ek, eklock, ekhyp, ekhl, ekdark, ekauto, ekstatus, ekhypstatus<reset>")
+    Algedonic.Echo("<dim_grey>  Commands: ek, eklock, ekhyp, ekhl, ekdark, ekscyth, ekauto, ekstatus, ekhypstatus<reset>")
 else
     cecho("<cyan>Serpent Offense System (Overhaul)<white> loaded.\n")
 end
