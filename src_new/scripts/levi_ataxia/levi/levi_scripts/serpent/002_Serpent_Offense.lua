@@ -1092,9 +1092,9 @@ function selectVenoms()
 
     -- ===== SCYTHERUS ATTACK: Fallback dstab (gecko strip) when sileris blocks bite/impulse =====
     if serpStrategy == "scytherus_attack" then
-        -- Fallback for fangbarrier: dstab slike + useful venom
-        -- Slike gives slickness (blocks salve application = prevents sileris re-apply)
-        table.insert(envenomList, "slike")
+        -- Fallback for fangbarrier: dstab gecko + useful venom
+        -- Gecko gives slickness (blocks salve application = prevents sileris re-apply)
+        table.insert(envenomList, "gecko")
         if not haveAff("paralysis") then
             table.insert(envenomListTwo, "curare")
         elseif not haveAff("asthma") then
@@ -1420,13 +1420,13 @@ function serp_ekanelia_attack()
         end
     end
 
-    -- Scytherus slike strip: dstab slike to strip sileris + prevent re-application
-    -- No one-shot flag — slike is useful and prevents sileris re-apply via slickness
-    -- envenomList already set to slike+useful by selectVenoms(scytherus_attack)
+    -- Scytherus gecko strip: dstab gecko to deliver slickness + prevent sileris re-apply
+    -- No one-shot flag — slickness blocks salve application, so worth reapplying
+    -- envenomList already set to gecko+useful by selectVenoms(scytherus_attack)
     if serpOffenseMode == "scytherus" and serpStrategy == "scytherus_attack"
        and not useBite and not useImpulse
        and not checkImpulseEligible() then
-        Algedonic.Echo("<yellow>SLIKE STRIP<white> -> slickness blocks sileris re-apply")
+        Algedonic.Echo("<yellow>GECKO (slickness)<white> -> blocks sileris re-apply")
     end
 
     -- ===== BUILD ATTACK =====
