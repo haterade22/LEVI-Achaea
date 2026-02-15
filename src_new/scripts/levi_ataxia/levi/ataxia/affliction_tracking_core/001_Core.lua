@@ -185,7 +185,8 @@ treeCurableAffsV2 = {
     "paralysis", "slickness", "anorexia", "asthma", "sensitivity",
     "clumsiness", "weariness", "epilepsy", "haemophilia", "nausea",
     "dizziness", "shyness", "stupidity", "confusion", "dementia",
-    "paranoia", "hallucinations", "impatience", "hypersomnia", "addiction"
+    "paranoia", "hallucinations", "impatience", "hypersomnia", "addiction",
+    "darkshade"
 }
 
 -- Bloodroot/Magnesium-curable afflictions
