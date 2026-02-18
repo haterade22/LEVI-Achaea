@@ -74,8 +74,10 @@ totemChecker.state = totemChecker.state or {
   totalRooms = 0,
   probeSlots = {},
   probeEmpowered = false,
+  probeDataReceived = false,
   probeTimerID = nil,
   fixTimerID = nil,
+  fixStartedAt = 0,
   stuckTimerID = nil,
   promptHandler = nil,
   arrivedHandler = nil,
@@ -290,16 +292,24 @@ end
 function totemChecker.onPrompt()
   if not totemChecker.state.active then return end
 
-  -- Detect arrival for zero-step paths (already in room)
+  -- Detect arrival: only when we're actually in the target room
   if totemChecker.state.phase == "moving" then
-    if mmp.speedWalkCounter < 1 then
+    local targetRoom = totemChecker.state.path[1]
+    if targetRoom and tonumber(gmcp.Room.Info.num) == targetRoom then
       totemChecker.onArrived()
     end
   end
 
+  -- Process probe results on prompt (after ALL output lines have been received)
+  if totemChecker.state.phase == "probing" and totemChecker.state.probeDataReceived then
+    totemChecker.onProbeComplete()
+  end
+
   -- Detect fix completion: all queued commands done when bal+eq return
+  -- Minimum 2s delay to ensure queue has started processing
   if totemChecker.state.phase == "fixing" then
-    if gmcp.Char.Vitals.bal == "1" and gmcp.Char.Vitals.eq == "1" then
+    if getEpoch() - (totemChecker.state.fixStartedAt or 0) > 2
+       and gmcp.Char.Vitals.bal == "1" and gmcp.Char.Vitals.eq == "1" then
       totemChecker.onFixComplete()
     end
   end
@@ -339,6 +349,7 @@ end
 function totemChecker.startProbe()
   totemChecker.state.probeSlots = {}
   totemChecker.state.probeEmpowered = false
+  totemChecker.state.probeDataReceived = false
   totemChecker.state.phase = "probing"
 
   if totemChecker.state.probeTimerID then
@@ -440,6 +451,7 @@ end
 
 function totemChecker.sendFix(emptySlots, needsEmpower, roomID, roomName)
   totemChecker.state.phase = "fixing"
+  totemChecker.state.fixStartedAt = getEpoch()
   local pattern = totemChecker.config.runePattern
   local actionParts = {}
 
