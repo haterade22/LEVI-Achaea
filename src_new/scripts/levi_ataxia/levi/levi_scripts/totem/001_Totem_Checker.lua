@@ -44,6 +44,16 @@ totemChecker.config = totemChecker.config or {
     [5] = "fehu",
     [6] = "fehu",
   },
+  -- Rooms to skip (unreachable, special areas, etc.)
+  excludeRooms = {
+    [4415] = true,
+    [5468] = true,
+    [5485] = true,
+    [10695] = true,
+    [11920] = true,
+  },
+  -- Rooms to add that the mapper doesn't know about
+  includeRooms = { 21775, 21777 },
   probeTimeout = 8,
   fixTimeout = 25,
   stuckTimeout = 15,
@@ -72,6 +82,8 @@ totemChecker.state = totemChecker.state or {
   phase = "idle",
   path = {},
   totalRooms = 0,
+  targetRoom = nil,
+  useMapperPath = false,
   probeSlots = {},
   probeEmpowered = false,
   probeDataReceived = false,
@@ -114,17 +126,36 @@ function totemChecker.start()
   -- Generate path
   local path = {}
   local areaName = gmcp.Room.Info.area
+  local useMapperPath = false
+
+  local exclude = totemChecker.config.excludeRooms or {}
 
   if ataxiaBasherPaths and ataxiaBasherPaths[areaName] then
     for i, v in ipairs(ataxiaBasherPaths[areaName]) do
-      table.insert(path, v)
+      if not exclude[v] then
+        table.insert(path, v)
+      end
     end
     totemChecker.echo("Using pre-computed path for <yellow>" .. areaName .. "<white>.")
   else
+    -- getAreaRooms() can return a [0] indexed table; use pairs() to catch all entries
     local rooms = getAreaRooms(getRoomArea(mmp.currentroom))
-    path = deepcopy(rooms)
+    for _, v in pairs(rooms) do
+      if not exclude[v] then
+        table.insert(path, v)
+      end
+    end
     table.sort(path)
+    useMapperPath = true
     totemChecker.echo("Using mapper rooms for <yellow>" .. areaName .. "<white>.")
+  end
+
+  -- Add extra rooms the mapper doesn't know about
+  local include = totemChecker.config.includeRooms or {}
+  for _, v in ipairs(include) do
+    if not exclude[v] then
+      table.insert(path, v)
+    end
   end
 
   if #path == 0 then
@@ -141,6 +172,7 @@ function totemChecker.start()
   totemChecker.state.path = path
   totemChecker.state.totalRooms = #path
   totemChecker.state.pendingFix = nil
+  totemChecker.state.useMapperPath = useMapperPath
 
   -- Register event handlers
   totemChecker.state.promptHandler = registerAnonymousEventHandler(
@@ -234,7 +266,37 @@ function totemChecker.moveToNext()
   end
 
   totemChecker.state.phase = "moving"
-  local nextRoom = totemChecker.state.path[1]
+  local nextRoom
+
+  if totemChecker.state.useMapperPath then
+    -- Find nearest reachable room (same approach as bashing system)
+    local bestRoom, bestDist = nil, 9999
+    for _, v in ipairs(totemChecker.state.path) do
+      local ok = getPath(tonumber(gmcp.Room.Info.num), v)
+      if ok then
+        local dist = table.size(speedWalkDir)
+        if dist == 1 then
+          -- Adjacent room, can't do better
+          bestRoom = v
+          break
+        elseif dist > 0 and dist < bestDist then
+          bestDist = dist
+          bestRoom = v
+        end
+      end
+    end
+    if not bestRoom then
+      totemChecker.echo("<red>No reachable rooms remaining. Finishing.")
+      totemChecker.finish()
+      return
+    end
+    nextRoom = bestRoom
+  else
+    -- Pre-computed path: use the order as given
+    nextRoom = totemChecker.state.path[1]
+  end
+
+  totemChecker.state.targetRoom = nextRoom
   expandAlias("goto " .. nextRoom)
   totemChecker.startStuckTimer()
 
@@ -291,10 +353,14 @@ end
 
 function totemChecker.onPrompt()
   if not totemChecker.state.active then return end
+  -- Re-entrancy guard: expandAlias/send can fire gmcp.Char.Vitals synchronously,
+  -- which would call onPrompt() again while still inside a previous call.
+  if totemChecker.state.inPrompt then return end
+  totemChecker.state.inPrompt = true
 
   -- Detect arrival: only when we're actually in the target room
   if totemChecker.state.phase == "moving" then
-    local targetRoom = totemChecker.state.path[1]
+    local targetRoom = totemChecker.state.targetRoom
     if targetRoom and tonumber(gmcp.Room.Info.num) == targetRoom then
       totemChecker.onArrived()
     end
@@ -313,6 +379,8 @@ function totemChecker.onPrompt()
       totemChecker.onFixComplete()
     end
   end
+
+  totemChecker.state.inPrompt = false
 end
 
 function totemChecker.onPathFail()
@@ -324,10 +392,16 @@ function totemChecker.onPathFail()
     totemChecker.state.stuckTimerID = nil
   end
 
-  local skippedRoom = totemChecker.state.path[1]
+  -- Remove the actual target room, not path[1] (nearest-room logic means target != path[1])
+  local skippedRoom = totemChecker.state.targetRoom or totemChecker.state.path[1]
   if skippedRoom then
     totemChecker.echo("<red>Cannot reach room " .. skippedRoom .. ". Skipping.")
-    table.remove(totemChecker.state.path, 1)
+    for i, v in ipairs(totemChecker.state.path) do
+      if v == skippedRoom then
+        table.remove(totemChecker.state.path, i)
+        break
+      end
+    end
     table.insert(totemChecker.results.errors, {
       roomID = skippedRoom,
       roomName = "unreachable",
