@@ -361,26 +361,7 @@ end
     Priority: clumsiness > nausea > hypersomnia > addiction > anorexia
 ]]--
 function selectHypnoLockSuggestions()
-    local suggestions = {}
-    local candidates = {
-        {aff = "clumsiness",  reason = "kalmia ekanelia -> slickness"},
-        {aff = "nausea",      reason = "blocks tree, scytherus cond"},
-        {aff = "hypersomnia", reason = "curare ekanelia -> hypochondria"},
-        {aff = "addiction",   reason = "scytherus ekanelia -> camus"},
-        {aff = "anorexia",    reason = "lock piece"},
-    }
-    for _, c in ipairs(candidates) do
-        if #suggestions >= 3 then break end
-        if not haveAff(c.aff) then
-            -- anorexia only if impatience present or expected
-            if c.aff == "anorexia" and not haveAff("impatience") then
-                -- skip: anorexia without impatience is wasteful
-            else
-                table.insert(suggestions, c.aff)
-            end
-        end
-    end
-    return suggestions
+    return {"hypochondria", "disrupt", "generosity"}
 end
 
 -- =============================================================================
@@ -1310,10 +1291,16 @@ function serp_ekanelia_attack()
         envenomList = {flayVenom}
         envenomListTwo = {}
 
-        -- Chain eq action if available (but not hypnotise — both use balance)
+        -- Chain eq action if available
         local eqAction = getEqAction()
-        if eqAction and not eqAction:find("^hypnotise") then
-            cmd = cmd .. sp .. eqAction
+        if eqAction then
+            if eqAction:find("^snap") or eqAction:find("^shrugging") then
+                -- Snap/shrug after flay
+                cmd = cmd .. sp .. eqAction
+            else
+                -- Hypnotise/suggest/seal before flay (server queue handles sequencing)
+                cmd = wieldWhip .. eqAction .. sp .. "flay " .. target .. " " .. defense .. " " .. flayVenom
+            end
         end
 
         serp_sendAttack(preAtk .. cmd)
@@ -1445,8 +1432,14 @@ function serp_ekanelia_attack()
         envenomListTwo = {}
 
         -- Chain eq action if available (bite uses bal only, eq is free)
-        if eqAction and not eqAction:find("^hypnotise") then
-            cmd = cmd .. sp .. eqAction
+        if eqAction then
+            if eqAction:find("^snap") or eqAction:find("^shrugging") then
+                -- Snap/shrug after bite
+                cmd = cmd .. sp .. eqAction
+            else
+                -- Hypnotise/suggest/seal before bite (server queue handles sequencing)
+                cmd = wieldDirk .. eqAction .. sp .. "bite " .. target .. " " .. biteVenom
+            end
         end
     elseif useImpulse and impulsePair then
         -- IMPULSE: suggestion + bite + Ekanelia (bal+eq)
@@ -1459,12 +1452,12 @@ function serp_ekanelia_attack()
         table.insert(envenomList, impulsePair.venom)
         envenomListTwo = {}
     elseif eqAction then
-        if eqAction:find("^hypnotise") then
-            -- Hypnotise uses balance, no dstab this round
-            cmd = wieldDirk .. eqAction
-        else
-            -- DSTAB + eq action (suggest/seal/snap)
+        if eqAction:find("^snap") or eqAction:find("^shrugging") then
+            -- Snap/shrug after dstab
             cmd = wieldDirk .. "dstab " .. target .. " " .. envenomList[1] .. " " .. envenomListTwo[1] .. sp .. eqAction
+        else
+            -- Hypnotise/suggest/seal before dstab (server queue handles sequencing)
+            cmd = wieldDirk .. eqAction .. sp .. "dstab " .. target .. " " .. envenomList[1] .. " " .. envenomListTwo[1]
         end
     else
         -- DSTAB only (no eq action, no impulse)
@@ -1760,12 +1753,15 @@ function serp_setmode_scytherus()
 end
 
 function serp_setmode_hypnosis()
-    serpOffenseMode = "hypnosis"
-    if serpent.hypnosis and serpent.hypnosis.reset then
-        serpent.hypnosis.reset()
+    if serpOffenseMode ~= "hypnosis" then
+        serpOffenseMode = "hypnosis"
+        if serpent.hypnosis and serpent.hypnosis.reset then
+            serpent.hypnosis.reset()
+        end
+        cecho("\n<cyan>Serpent offense: HYPNOSIS COMBO mode<reset>\n")
+        cecho("<dim_grey>  Priority: Fratricide -> mental affs RELAPSE after cure!<reset>\n")
     end
-    cecho("\n<cyan>Serpent offense: HYPNOSIS COMBO mode<reset>\n")
-    cecho("<dim_grey>  Priority: Fratricide -> mental affs RELAPSE after cure!<reset>\n")
+    serp_ekanelia_offense()
 end
 
 function serp_setmode_auto()
@@ -1775,24 +1771,27 @@ function serp_setmode_auto()
 end
 
 function serp_setmode_hypnolock()
-    serpOffenseMode = "hypnolock"
-    -- Initialize hypnosis for lock mode
-    serpent.hypnosis.reset()
-    serpent.hypnosis.mode = "lock"
-    serpent.hypnosis.targetSuggestions = selectHypnoLockSuggestions()
+    if serpOffenseMode ~= "hypnolock" then
+        serpOffenseMode = "hypnolock"
+        -- Initialize hypnosis for lock mode
+        serpent.hypnosis.reset()
+        serpent.hypnosis.mode = "lock"
+        serpent.hypnosis.targetSuggestions = selectHypnoLockSuggestions()
 
-    cecho("\n<yellow>Serpent offense: HYPNO LOCK mode<reset>\n")
-    if #serpent.hypnosis.targetSuggestions > 0 then
-        cecho("<dim_grey>  Hypnosis: ")
-        for i, sug in ipairs(serpent.hypnosis.targetSuggestions) do
-            cecho(sug .. (i < #serpent.hypnosis.targetSuggestions and ", " or ""))
+        cecho("\n<yellow>Serpent offense: HYPNO LOCK mode<reset>\n")
+        if #serpent.hypnosis.targetSuggestions > 0 then
+            cecho("<dim_grey>  Hypnosis: ")
+            for i, sug in ipairs(serpent.hypnosis.targetSuggestions) do
+                cecho(sug .. (i < #serpent.hypnosis.targetSuggestions and ", " or ""))
+            end
+            cecho("<reset>\n")
+        else
+            cecho("<dim_grey>  Hypnosis: <red>No suggestions available (target has all candidates)<reset>\n")
         end
-        cecho("<reset>\n")
-    else
-        cecho("<dim_grey>  Hypnosis: <red>No suggestions available (target has all candidates)<reset>\n")
+        cecho("<dim_grey>  Flow: dstab+hypnotise -> suggest x" .. #serpent.hypnosis.targetSuggestions ..
+              " -> seal -> snap -> lock mode<reset>\n")
     end
-    cecho("<dim_grey>  Flow: dstab+hypnotise -> suggest x" .. #serpent.hypnosis.targetSuggestions ..
-          " -> seal -> snap -> lock mode<reset>\n")
+    serp_ekanelia_offense()
 end
 
 -- =============================================================================
