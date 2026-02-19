@@ -8,7 +8,7 @@ hierarchy:
 - Leviticus
 - SHAMAN
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
 packageName: ''
 ]]--

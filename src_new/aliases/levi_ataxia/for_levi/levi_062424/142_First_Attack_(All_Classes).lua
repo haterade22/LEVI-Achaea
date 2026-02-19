@@ -95,3 +95,7 @@ if gmcp.Char.Status.class == "Pariah" then
 levipariahlatencytest()
 end
 
+if gmcp.Char.Status.class == "Shaman" then
+shamanOffense.dispatch()
+end
+

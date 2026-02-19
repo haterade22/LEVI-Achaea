@@ -59,3 +59,8 @@ if gmcp.Char.Status.class == "Magi" then
   MagiWaterFocus()
 end
 
+if gmcp.Char.Status.class == "Shaman" then
+  shamanOffense.setMode("group")
+  shamanOffense.dispatch()
+end
+
