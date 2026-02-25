@@ -8,7 +8,7 @@ hierarchy:
 - Ataxia
 - System-related
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
 packageName: ''
 ]]--
