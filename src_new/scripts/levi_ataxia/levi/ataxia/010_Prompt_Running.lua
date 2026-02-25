@@ -55,9 +55,11 @@ function ataxia_promptCommands()
 
 if ataxiaBasher.enabled then
 
-    -- Room scan if needed
+    -- Room scan if needed; also re-run search_targets() immediately so the
+    -- debounced "targets updated" event (tempTimer 0) doesn't arrive too late.
     if need_roomCheck then
       ataxiaBasher_scanRoom()
+      search_targets()
     end
 
     -- Flee recovery check (percentage-based, replaces buggy operator-precedence line)
