@@ -62,8 +62,6 @@ function autoMoveAndBash(destinationRoom, expectedArea, travelTime)
   end)
 end
 
--- Register to check whenever room players update
-registerAnonymousEventHandler("gmcp.Room.Players", "checkForNaytorlin")
 
 function basher_disengaged()
 	disableTimer("Clear Bashing Console")
