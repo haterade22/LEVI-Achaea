@@ -114,9 +114,7 @@ function afflictionList()
   Algedonic.AffCount = Algedonic.Count_My_Affs() 
 	end
   
-  if ataxiaBasher.enabled then
-    basher_needAction = true
-  end
+  -- Attack dispatch now handled by unified tryAttack() gate in prompt handler
   if zgui then zgui.showAffs() end
 end
 

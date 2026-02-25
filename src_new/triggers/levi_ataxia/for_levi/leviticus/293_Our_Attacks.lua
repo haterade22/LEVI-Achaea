@@ -174,20 +174,6 @@ if type(target) == "number" and ataxiaBasher.enabled then
 		deleteFull()
 	end
 	
-	if found_target and not ataxiaBasher_atk then
-
-    basher_needAction = true
-		ataxiaBasher_atk = true
-		tempTimer(0.7, [[ataxiaBasher_atk=false]])
-    
-    if ataxia_isClass("Monk") then
-      tempTimer(1.5, [[ if found_target and not ataxiaBasher_skipRoom then
-        basher_needAction = false
-        ataxiaBasher_attack()
-      end
-      ]])
-    end
-    
-	end
+	-- Attack dispatch now handled by unified tryAttack() gate in prompt handler
 end
 

@@ -56,9 +56,6 @@ if type(target) == "number" and ataxiaBasher.enabled and tar == secondTarget:low
   elseif ataxiaBasher.shieldswap and ataxiaBasher_validTargets() > 1 and not ataxiaTemp.mobshieldtimer then
     ataxiaBasher_shieldedTarget()
   end
-  basher_needAction = true
-
-	
 elseif isTargeted(tar) then
 	selectString(line, 1)
 	fg("a_brown")

@@ -20,8 +20,7 @@ function ataxia_Vitals_Update()
 	local stats = gmcp.Char.Vitals.charstats
 	local stance = ""
 	ataxiaTemp.class = ataxiaTemp.class or gmcp.Char.Status.class	
-	if not gmcp.Char.Vitals.hp then return end 
-	 ataxiaBasher_stormhammer()  
+	if not gmcp.Char.Vitals.hp then return end
 	if not ataxia.vitals or not ataxia.vitals.hp then
 		ataxia.vitals = {
 			hp = tonumber(gmcp.Char.Vitals.hp),
@@ -100,8 +99,14 @@ function ataxia_Vitals_Update()
 
 	ataxia.vitals.oldhealth = ataxia.vitals.hp
 	ataxia.vitals.hp = tonumber(gmcp.Char.Vitals.hp)
-		if ataxia.vitals.hp < ataxia.vitals.oldhealth and ataxiaBasher.enabled and not denizenAttack then
-			enableTrigger("Denizen Attack Find")
+		if ataxia.vitals.hp < ataxia.vitals.oldhealth then
+			-- Track damage rate for flee system
+			if ataxiaBasher.enabled and ataxiaBasher_recordDamage then
+				ataxiaBasher_recordDamage(ataxia.vitals.oldhealth - ataxia.vitals.hp)
+			end
+			if ataxiaBasher.enabled and not denizenAttack then
+				enableTrigger("Denizen Attack Find")
+			end
 		end
 
 	ataxia.vitals.bleed = tonumber(string.match(stats[1], "Bleed: (%d+)"))
