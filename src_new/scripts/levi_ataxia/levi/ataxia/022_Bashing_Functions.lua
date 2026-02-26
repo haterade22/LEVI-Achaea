@@ -422,7 +422,7 @@ function ataxiaBasher_assembleBattlerage()
 	end
 
 	-- Culling Blade check (applies before any class-specific logic)
-	if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and ataxiaBasher_validTargets() >= 2 then
+	if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown then
 		if ataxia.vitals.rage >= bigRage then
 			command = command.."reap "..target..sp
 		end
