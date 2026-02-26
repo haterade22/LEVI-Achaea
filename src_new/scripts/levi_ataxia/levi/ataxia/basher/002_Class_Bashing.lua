@@ -646,10 +646,9 @@ local healhealth = tonumber(math.floor((ataxia.vitals.hp/ataxia.vitals.maxhp)*10
   elseif bash_type == "arius" and shaman.spiritisbound("arius") then
     atk = "invoke roar "..target
   elseif bash_type == "swiftcurse" and shaman.spiritisbound("aelkesh") then
-    if curseCharge == 1 then
+    if curseCharge <= 1 then
       atk = "stand;wield shield;swiftcurse"
-
-    elseif curseCharge > 1 then
+    else
       atk = "stand;wield shield;swiftcurse "..target.." bleed"
     end
   else
