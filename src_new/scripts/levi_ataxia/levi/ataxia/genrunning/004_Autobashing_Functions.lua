@@ -35,6 +35,45 @@ packageName: ''
 local ANTI_SPAM_DELAY = 0.3
 
 -- ============================================================================
+-- Swiftcurse charge detection (GMCP-based, works during blackout)
+-- Swiftcurse uses EQ only. If we see 2 consecutive EQ recoveries (EQ 0→1)
+-- while BAL was never consumed, the swiftcurse charge-up succeeded.
+-- ============================================================================
+ataxiaBasher_prevEq = nil       -- previous EQ state (true/false)
+ataxiaBasher_prevBal = nil      -- previous BAL state (true/false)
+ataxiaBasher_eqOnlyCount = 0    -- consecutive EQ-only recoveries
+
+function ataxiaBasher_detectSwiftcurseCharge()
+  if not ataxiaBasher.enabled then return end
+  if not ataxia_isClass("Shaman") then return end
+
+  local curEq = (gmcp.Char.Vitals.eq == "1")
+  local curBal = (gmcp.Char.Vitals.bal == "1")
+
+  -- Detect BAL consumed (went from true to false) → reset counter (normal attack)
+  if ataxiaBasher_prevBal == true and not curBal then
+    ataxiaBasher_eqOnlyCount = 0
+  end
+
+  -- Detect EQ recovery (went from false to true) while BAL stayed up
+  if ataxiaBasher_prevEq == false and curEq and ataxiaBasher_prevBal == true and curBal then
+    ataxiaBasher_eqOnlyCount = ataxiaBasher_eqOnlyCount + 1
+    if ataxiaBasher_eqOnlyCount >= 2 and (curseCharge or 0) <= 1 then
+      curseCharge = 15
+      ataxiaBasher_eqOnlyCount = 0
+    end
+  end
+
+  ataxiaBasher_prevEq = curEq
+  ataxiaBasher_prevBal = curBal
+end
+
+if ataxiaBasher_swiftcurseHandler then
+  killAnonymousEventHandler(ataxiaBasher_swiftcurseHandler)
+end
+ataxiaBasher_swiftcurseHandler = registerAnonymousEventHandler("gmcp.Char.Vitals", "ataxiaBasher_detectSwiftcurseCharge")
+
+-- ============================================================================
 -- Global safety throttle: detect runaway attack loops
 -- ============================================================================
 ataxiaBasher_cmdCount = 0
