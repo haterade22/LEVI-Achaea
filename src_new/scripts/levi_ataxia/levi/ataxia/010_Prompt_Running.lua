@@ -55,12 +55,16 @@ function ataxia_promptCommands()
 
 if ataxiaBasher.enabled then
 
-    -- Room scan if needed; also re-run search_targets() immediately so the
-    -- debounced "targets updated" event (tempTimer 0) doesn't arrive too late.
+    -- Room scan on room change
     if need_roomCheck then
       ataxiaBasher_scanRoom()
-      search_targets()
     end
+
+    -- Re-evaluate targets every prompt. GMCP fires before text, so
+    -- ataxia.denizensHere is already up-to-date by the time we get here.
+    -- Without this, killing the last mob leaves found_target stale (true)
+    -- because the debounced "targets updated" event fires NEXT cycle.
+    search_targets()
 
     -- Flee recovery check (percentage-based, replaces buggy operator-precedence line)
     ataxiaBasher_checkFleeRecovery()
