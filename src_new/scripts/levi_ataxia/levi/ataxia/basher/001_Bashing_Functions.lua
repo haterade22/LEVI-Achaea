@@ -373,7 +373,13 @@ function ataxiaBasher_assembleAttack()
     command = command.."open "..goldPack..sp.."put gold in "..goldPack..sp.."close "..goldPack..sp
   end
 	if ataxiaBasher.nicator and not haveDef("nicatorlegend") then command = command.."legenddeck draw nicator"..sp end
- 
+
+  -- Blood Maiden cloak: prepend activate bloodshield when ready
+  if ataxiaTemp.bloodshieldReady then
+    command = command.."activate bloodshield"..sp
+    ataxiaTemp.bloodshieldReady = nil
+  end
+
   if ataxiaTemp.bashFlee == false and not ataxia.afflictions.paralysis and not ataxia.afflictions.aeon and not ataxia.afflictions.peace then
     command = command.._G[ataxiaBasher_bashingFuncs[class]]()
     send("queue addclearfull freestand stand"..sp..command)
