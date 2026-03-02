@@ -58,7 +58,10 @@ dwbRunie.config = dwbRunie.config or {
     morningstar = { left = "morningstar511732", right = "morningstar511735" },
     flail       = { left = "flail343168",       right = "flail408566"      },
   },
-  empower = "isaz wunjo sowulu",
+  empower = {
+    morningstar = "isaz wunjo sowulu",
+    flail       = "isaz wunjo sowulu",
+  },
   prepThreshold       = 99.9,
   breakThreshold      = 100,
   bisectThreshold     = 34,
@@ -79,8 +82,10 @@ dwbRunie.state = dwbRunie.state or {
 -------------------------------------------------------------------------------
 
 function dwbRunie.setMode(mode)
-  dwbRunie.state.mode = mode
-  ataxiaEcho("DWB Runie mode: " .. mode:upper())
+  if dwbRunie.state.mode ~= mode then
+    dwbRunie.state.mode = mode
+    ataxiaEcho("DWB Runie mode: " .. mode:upper())
+  end
 end
 
 function dwbRunie.status()
@@ -110,6 +115,29 @@ function dwbRunie.status()
   else
     ataxiaEcho("  No target or no limb data")
   end
+end
+
+-------------------------------------------------------------------------------
+-- DIAGNOSTIC ECHO
+-------------------------------------------------------------------------------
+
+function dwbRunie.diagnosticEcho(phase)
+  local mom = dwbRunie.getMomentum()
+  local ll = dwbRunie.getLimbDamage("left leg")
+  local rl = dwbRunie.getLimbDamage("right leg")
+  local t = dwbRunie.getLimbDamage("torso")
+  local h = dwbRunie.getLimbDamage("head")
+  local mode = (dwbRunie.state.mode or "torso"):upper()
+  local prone = dwbRunie.isProne() and " PRONE" or ""
+  local sf = (ataxiaTemp.fractures and ataxiaTemp.fractures.skullfractures or 0)
+  local cr = (ataxiaTemp.fractures and ataxiaTemp.fractures.crackedribs or 0)
+  local fracInfo = ""
+  if sf > 0 or cr > 0 then
+    fracInfo = string.format(" SF:%d CR:%d", sf, cr)
+  end
+
+  cecho(string.format("\n<yellow>[%s]<reset> <cyan>%s<reset>%s Mom:<white>%d<reset> | LL:<white>%.0f%%<reset> RL:<white>%.0f%%<reset> T:<white>%.0f%%<reset> H:<white>%.0f%%<reset>%s",
+    mode, phase, prone, mom, ll, rl, t, h, fracInfo))
 end
 
 -------------------------------------------------------------------------------
@@ -238,12 +266,22 @@ function dwbRunie.wield(weaponType)
   return "wield left " .. w.left .. ";wield right " .. w.right
 end
 
-function dwbRunie.empower()
-  return "empower priority set " .. dwbRunie.config.empower
+function dwbRunie.empower(weaponType)
+  local emp = dwbRunie.config.empower[weaponType]
+  if not emp then return "" end
+  -- Only send empower when switching weapon types (prevents spam)
+  if dwbRunie.state.lastEmpowerType == weaponType then return "" end
+  dwbRunie.state.lastEmpowerType = weaponType
+  return "empower priority set " .. emp
 end
 
 function dwbRunie.wieldAndEmpower(weaponType)
-  return dwbRunie.wield(weaponType) .. ";" .. dwbRunie.empower()
+  local emp = dwbRunie.empower(weaponType)
+  if emp ~= "" then
+    return dwbRunie.wield(weaponType) .. ";" .. emp
+  else
+    return dwbRunie.wield(weaponType)
+  end
 end
 
 -- Build prefix: combatQueue + wield + empower
@@ -301,20 +339,24 @@ function dwbRunie.pickUnparriedUnprepped(prepLimbs)
   end
   -- All unprepped limbs are parried — fall back to any unprepped
   if #unprepped > 0 then return unprepped[1] end
-  -- All prepped — fall back to a filler limb
-  return "right arm"
+  -- All prepped — pick a safe limb (never hit prepped)
+  return dwbRunie.pickSafeLimb()
 end
 
--- Pick a filler limb (not in the prep set, not parried)
-function dwbRunie.pickFillerLimb(prepLimbs)
+-- Pick a safe limb to hit (not prepped, not broken, not parried)
+function dwbRunie.pickSafeLimb(avoidLimbs)
   local parried = dwbRunie.getParriedLimb()
-  local fillers = {"left arm", "right arm"}
-  for _, limb in ipairs(fillers) do
-    local inPrepSet = false
-    for _, pl in ipairs(prepLimbs) do
-      if pl == limb then inPrepSet = true; break end
+  local candidates = {"right arm", "left arm", "head", "torso", "left leg", "right leg"}
+  for _, limb in ipairs(candidates) do
+    if not dwbRunie.isPrepped(limb) and not dwbRunie.isBroken(limb) and limb ~= parried then
+      local avoid = false
+      if avoidLimbs then
+        for _, al in ipairs(avoidLimbs) do
+          if al == limb then avoid = true; break end
+        end
+      end
+      if not avoid then return limb end
     end
-    if not inPrepSet and limb ~= parried then return limb end
   end
   return "right arm"
 end
@@ -362,9 +404,17 @@ function dwbRunie.buildPrepAttack(prepLimbs, primaryExpendLimb)
     local limb2 = (limb1 == unprepped[1]) and unprepped[2] or unprepped[1]
     return pre .. "doublewhirl " .. target .. " " .. limb1 .. " " .. limb2 .. ";sizeup " .. target .. ";assess " .. target
   elseif #unprepped == 1 then
-    -- One limb needs prep — pair with a filler
-    local filler = dwbRunie.pickFillerLimb(prepLimbs)
-    return pre .. "doublewhirl " .. target .. " " .. unprepped[1] .. " " .. filler .. ";sizeup " .. target .. ";assess " .. target
+    local limb = unprepped[1]
+    local dmg = dwbRunie.getLimbDamage(limb)
+    local whirl = dwbRunie.getWhirlDamage()
+    if dmg + (whirl * 2) >= dwbRunie.config.breakThreshold then
+      -- Double up would break — pair with safe filler to avoid breaking during prep
+      local safeLimb = dwbRunie.pickSafeLimb({limb})
+      return pre .. "doublewhirl " .. target .. " " .. limb .. " " .. safeLimb .. ";sizeup " .. target .. ";assess " .. target
+    else
+      -- Safe to double up
+      return pre .. "doublewhirl " .. target .. " " .. limb .. " " .. limb .. ";sizeup " .. target .. ";assess " .. target
+    end
   else
     -- All prepped (shouldn't reach here if allPrepped check is done first)
     return nil
@@ -379,11 +429,10 @@ function dwbRunie.buildBreakSequence(targetLimb)
   local pre = dwbRunie.buildPrefix("morningstar")
   local mom = dwbRunie.getMomentum()
 
-  -- Step 1: Disable parry if needed
+  -- Step 1: Disable parry if needed (pair with safe limb — never hit a prepped limb)
   if not dwbRunie.isParryDisabled() and mom >= 1 then
-    -- Expend left arm to disable parry, pair with a prepped leg
-    local legTarget = dwbRunie.isPrepped("left leg") and "left leg" or "right leg"
-    return pre .. "doublewhirl " .. target .. " left arm expend " .. legTarget .. ";sizeup " .. target .. ";assess " .. target
+    local safeLimb = dwbRunie.pickSafeLimb({"left arm"})
+    return pre .. "doublewhirl " .. target .. " left arm expend " .. safeLimb .. ";sizeup " .. target .. ";assess " .. target
   end
 
   -- Step 2: Double break legs (parry disabled or no momentum for it)
@@ -396,8 +445,8 @@ function dwbRunie.buildBreakSequence(targetLimb)
 
   -- Step 3: Break target limb (head or torso) — target should be prone now
   if not dwbRunie.isBroken(targetLimb) then
-    local filler = dwbRunie.pickFillerLimb({targetLimb, "left leg", "right leg"})
-    return pre .. "doublewhirl " .. target .. " " .. targetLimb .. " " .. filler .. ";sizeup " .. target .. ";assess " .. target
+    local safeLimb = dwbRunie.pickSafeLimb({targetLimb})
+    return pre .. "doublewhirl " .. target .. " " .. targetLimb .. " " .. safeLimb .. ";sizeup " .. target .. ";assess " .. target
   end
 
   return nil -- All broken, proceed to execute
@@ -426,45 +475,61 @@ end
 
 function dwbRunie.buildTorsoAttack()
   local prepLimbs = {"left leg", "right leg", "torso"}
+  local pre = dwbRunie.buildPrefix("morningstar")
   local mom = dwbRunie.getMomentum()
+
+  -- EXECUTE: torso already broken — stay in execute, never go back to prep
+  if dwbRunie.isBroken("torso") then
+
+    -- ASSAULT TORSO (flails, highest priority when momentum allows)
+    if dwbRunie.canDoubleAssaultTorso() then
+      local flailPre = dwbRunie.buildPrefix("flail")
+      return flailPre .. "falcon slay " .. target .. ";assault " .. target .. " torso;assault " .. target .. " torso;sizeup " .. target .. ";assess " .. target
+    elseif dwbRunie.canAssaultTorso() then
+      local flailPre = dwbRunie.buildPrefix("flail")
+      return flailPre .. "falcon slay " .. target .. ";assault " .. target .. " torso;sizeup " .. target .. ";assess " .. target
+    end
+
+    -- MORNINGSTAR PRESSURE (build momentum between assaults)
+    if mom >= 2 then
+      return pre .. "doublewhirl " .. target .. " torso expend torso expend;sizeup " .. target .. ";assess " .. target
+    elseif mom >= 1 then
+      return pre .. "doublewhirl " .. target .. " torso expend torso;sizeup " .. target .. ";assess " .. target
+    else
+      return pre .. "doublewhirl " .. target .. " torso torso;sizeup " .. target .. ";assess " .. target
+    end
+  end
+
+  -- RESTORATION FORK: torso was broken but target restored it, legs still broken → skull fractures → pulp
+  if not dwbRunie.isBroken("torso") and dwbRunie.isBroken("left leg") and dwbRunie.isBroken("right leg") then
+    return dwbRunie.buildSkullFractureAttack()
+  end
 
   -- PREP: not all 3 prepped yet
   if not dwbRunie.allPrepped(prepLimbs) then
     return dwbRunie.buildPrepAttack(prepLimbs, "torso")
   end
 
-  -- BREAK: limbs prepped but not all broken
-  if not dwbRunie.isBroken("left leg") or not dwbRunie.isBroken("right leg") or not dwbRunie.isBroken("torso") then
-    return dwbRunie.buildBreakSequence("torso")
+  -- BREAK SEQUENCE (torso-specific: whirl right leg expend → dwhirl left leg torso)
+
+  -- Disable parry before breaking (if parried and momentum available)
+  if dwbRunie.isParried() and not dwbRunie.isParryDisabled() and mom >= 1 then
+    local safeLimb = dwbRunie.pickSafeLimb({"left arm"})
+    return pre .. "doublewhirl " .. target .. " left arm expend " .. safeLimb .. ";sizeup " .. target .. ";assess " .. target
   end
 
-  -- EXECUTE: all broken, target should be prone
-  -- RESTORATION FORK: torso restored but legs still broken → skull fractures
-  if not dwbRunie.isBroken("torso") and dwbRunie.isBroken("left leg") and dwbRunie.isBroken("right leg") then
-    -- Target restored torso — pivot to skull fractures → pulp
-    return dwbRunie.buildSkullFractureAttack()
+  -- Step 1: Break right leg with expend (single whirl → fast, prone)
+  if not dwbRunie.isBroken("right leg") then
+    return pre .. "whirl " .. target .. " right leg expend;sizeup " .. target .. ";assess " .. target
   end
 
-  -- ASSAULT TORSO (flails, highest priority when momentum allows)
-  if dwbRunie.isProne() and dwbRunie.isBroken("torso") then
-    if dwbRunie.canDoubleAssaultTorso() then
-      local pre = dwbRunie.buildPrefix("flail")
-      return pre .. "falcon slay " .. target .. ";assault " .. target .. " torso;assault " .. target .. " torso;sizeup " .. target .. ";assess " .. target
-    elseif dwbRunie.canAssaultTorso() then
-      local pre = dwbRunie.buildPrefix("flail")
-      return pre .. "falcon slay " .. target .. ";assault " .. target .. " torso;sizeup " .. target .. ";assess " .. target
-    end
+  -- Step 2: Break left leg + torso simultaneously (target should be prone now)
+  if not dwbRunie.isBroken("left leg") or not dwbRunie.isBroken("torso") then
+    return pre .. "doublewhirl " .. target .. " left leg torso;sizeup " .. target .. ";assess " .. target
   end
 
-  -- MORNINGSTAR PRESSURE (build momentum between assaults)
-  local pre = dwbRunie.buildPrefix("morningstar")
-  if mom >= 2 then
-    return pre .. "doublewhirl " .. target .. " torso expend torso expend;sizeup " .. target .. ";assess " .. target
-  elseif mom >= 1 then
-    return pre .. "doublewhirl " .. target .. " torso expend torso;sizeup " .. target .. ";assess " .. target
-  else
-    return pre .. "doublewhirl " .. target .. " torso torso;sizeup " .. target .. ";assess " .. target
-  end
+  -- Fallback: doublewhirl torso for momentum
+  return pre .. "doublewhirl " .. target .. " torso torso;sizeup " .. target .. ";assess " .. target
 end
 
 -------------------------------------------------------------------------------
@@ -472,31 +537,74 @@ end
 -------------------------------------------------------------------------------
 
 function dwbRunie.buildPulpAttack()
-  local prepLimbs = {"left leg", "right leg", "head"}
+  local prepLimbs = {"left leg", "right leg", "head", "torso"}
+  local pre = dwbRunie.buildPrefix("morningstar")
   local mom = dwbRunie.getMomentum()
 
-  -- PREP: not all 3 prepped yet
+  -- EXECUTE: head already broken — stay in execute, never go back to prep
+  if dwbRunie.isBroken("head") then
+
+    -- TUMBLE FORK: target escaped prone → pivot to torso (already prepped)
+    if not dwbRunie.isProne() then
+      if not dwbRunie.isBroken("torso") then
+        local safeLimb = dwbRunie.pickSafeLimb({"torso"})
+        return pre .. "doublewhirl " .. target .. " torso " .. safeLimb .. ";sizeup " .. target .. ";assess " .. target
+      end
+      if dwbRunie.canAssaultTorso() then
+        local flailPre = dwbRunie.buildPrefix("flail")
+        return flailPre .. "falcon slay " .. target .. ";assault " .. target .. " torso;sizeup " .. target .. ";assess " .. target
+      else
+        return pre .. "doublewhirl " .. target .. " torso torso;sizeup " .. target .. ";assess " .. target
+      end
+    end
+
+    -- ASSAULT HEAD (7 momentum → mangles head instantly)
+    if not dwbRunie.isMangled("head") then
+      if dwbRunie.canAssaultHead() then
+        return pre .. "falcon slay " .. target .. ";assault " .. target .. " head;sizeup " .. target .. ";assess " .. target
+      end
+    end
+
+    -- SKULL FRACTURE LOOP (build to 5 skull fractures or head already mangled)
+    return dwbRunie.buildSkullFractureAttack()
+  end
+
+  -- RESTORATION FORK: head was broken but target restored it while prone → pivot to torso
+  -- (checked here because head is NOT broken, but torso IS — means we were in execute and they restored head)
+  if dwbRunie.isBroken("torso") and dwbRunie.isProne() then
+    if dwbRunie.canAssaultTorso() then
+      local flailPre = dwbRunie.buildPrefix("flail")
+      return flailPre .. "falcon slay " .. target .. ";assault " .. target .. " torso;sizeup " .. target .. ";assess " .. target
+    else
+      return pre .. "doublewhirl " .. target .. " torso torso;sizeup " .. target .. ";assess " .. target
+    end
+  end
+
+  -- PREP: not all 4 prepped yet (legs + head + torso — torso prepped for fork options)
   if not dwbRunie.allPrepped(prepLimbs) then
     return dwbRunie.buildPrepAttack(prepLimbs, "head")
   end
 
-  -- BREAK: limbs prepped but not all broken
-  if not dwbRunie.isBroken("left leg") or not dwbRunie.isBroken("right leg") or not dwbRunie.isBroken("head") then
-    return dwbRunie.buildBreakSequence("head")
+  -- BREAK SEQUENCE (pulp-specific: whirl right leg expend → dwhirl left leg head)
+
+  -- Disable parry before breaking (if parried and momentum available)
+  if dwbRunie.isParried() and not dwbRunie.isParryDisabled() and mom >= 1 then
+    local safeLimb = dwbRunie.pickSafeLimb({"left arm"})
+    return pre .. "doublewhirl " .. target .. " left arm expend " .. safeLimb .. ";sizeup " .. target .. ";assess " .. target
   end
 
-  -- EXECUTE: all broken, target should be prone
-
-  -- ASSAULT HEAD (7 momentum → mangles head instantly)
-  if dwbRunie.isProne() and dwbRunie.isBroken("head") and not dwbRunie.isMangled("head") then
-    if dwbRunie.canAssaultHead() then
-      local pre = dwbRunie.buildPrefix("morningstar")
-      return pre .. "falcon slay " .. target .. ";assault " .. target .. " head;sizeup " .. target .. ";assess " .. target
-    end
+  -- Step 1: Break right leg with expend (single whirl → prone)
+  if not dwbRunie.isBroken("right leg") then
+    return pre .. "whirl " .. target .. " right leg expend;sizeup " .. target .. ";assess " .. target
   end
 
-  -- SKULL FRACTURE LOOP (build to 5 skull fractures or head already mangled)
-  return dwbRunie.buildSkullFractureAttack()
+  -- Step 2: Break left leg + head simultaneously (target should be prone now)
+  if not dwbRunie.isBroken("left leg") or not dwbRunie.isBroken("head") then
+    return pre .. "doublewhirl " .. target .. " left leg head;sizeup " .. target .. ";assess " .. target
+  end
+
+  -- Fallback: doublewhirl head for momentum
+  return pre .. "doublewhirl " .. target .. " head head;sizeup " .. target .. ";assess " .. target
 end
 
 -------------------------------------------------------------------------------
@@ -598,16 +706,33 @@ function dwbRunie.dispatch()
     return
   end
 
-  -- Raze: strip rebounding/shield
-  if dwbRunie.hasAff("rebounding") or dwbRunie.hasAff("shield") then
+  -- Raze: strip rebounding/shield (V1 fallback: GMCP balance fires before text triggers)
+  if dwbRunie.hasAff("rebounding") or (tAffs and tAffs.rebounding) or dwbRunie.hasAff("shield") or (tAffs and tAffs.shield) then
     atk = combatQueue() .. dwbRunie.wieldAndEmpower("morningstar") .. ";falcon track " .. target .. ";falcon slay " .. target .. ";fracture " .. target .. ";sizeup " .. target .. ";assess " .. target
     dwbRunie.sendAttack(atk)
     return
   end
 
-  -- Mode routing
+  -- Diagnostic echo: show phase, momentum, limb percentages
   local mode = dwbRunie.state.mode or "torso"
+  local phase = "PREP"
+  if mode == "torso" then
+    if dwbRunie.isBroken("torso") then phase = "EXECUTE"
+    elseif dwbRunie.allPrepped({"left leg", "right leg", "torso"}) then phase = "BREAK"
+    end
+  elseif mode == "pulp" then
+    if dwbRunie.isBroken("head") then phase = "EXECUTE"
+    elseif dwbRunie.allPrepped({"left leg", "right leg", "head", "torso"}) then phase = "BREAK"
+    end
+  end
+  -- Debounce diagnostic echo (at most once per 0.3s to avoid spam when mashing)
+  local now = getEpoch()
+  if not dwbRunie.state.lastEchoTime or (now - dwbRunie.state.lastEchoTime) > 0.3 then
+    dwbRunie.state.lastEchoTime = now
+    dwbRunie.diagnosticEcho(phase)
+  end
 
+  -- Mode routing
   if mode == "torso" then
     atk = dwbRunie.buildTorsoAttack()
   elseif mode == "pulp" then

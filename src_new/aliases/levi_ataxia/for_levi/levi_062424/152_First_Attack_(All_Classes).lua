@@ -45,6 +45,7 @@ idwb_torsodamage()
 end
 
 if gmcp.Char.Status.class == "Runewarden" and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" then
+dwbRunie.setMode("torso")
 dwbRunie.dispatch()
 end
 
