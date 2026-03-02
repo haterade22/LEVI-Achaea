@@ -374,10 +374,14 @@ function ataxiaBasher_assembleAttack()
   end
 	if ataxiaBasher.nicator and not haveDef("nicatorlegend") then command = command.."legenddeck draw nicator"..sp end
 
-  -- Blood Maiden cloak: prepend activate bloodshield when ready
+  -- Blood Maiden cloak: activate bloodshield only when 4+ mobs in room
   if ataxiaTemp.bloodshieldReady then
-    command = command.."activate bloodshield"..sp
-    ataxiaTemp.bloodshieldReady = nil
+    local mobCount = 0
+    for _ in pairs(ataxia.denizensHere) do mobCount = mobCount + 1 end
+    if mobCount >= 4 then
+      command = command.."activate bloodshield"..sp
+      ataxiaTemp.bloodshieldReady = nil
+    end
   end
 
   if ataxiaTemp.bashFlee == false and not ataxia.afflictions.paralysis and not ataxia.afflictions.aeon and not ataxia.afflictions.peace then
