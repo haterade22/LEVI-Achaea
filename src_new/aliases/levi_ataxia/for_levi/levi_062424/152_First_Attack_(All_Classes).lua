@@ -45,7 +45,7 @@ idwb_torsodamage()
 end
 
 if gmcp.Char.Status.class == "Runewarden" and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" then
-dwb_torsodamage()
+dwbRunie.dispatch()
 end
 
 if gmcp.Char.Status.class == "Infernal" and gmcp.Char.Vitals.charstats[4] == "Spec: Two Handed" then

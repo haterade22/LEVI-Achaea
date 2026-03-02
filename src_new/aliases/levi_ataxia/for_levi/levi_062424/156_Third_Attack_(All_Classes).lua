@@ -31,7 +31,7 @@ infernalpriosblackout()
 end
 
 if gmcp.Char.Status.class == "Runewarden" and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" then
-dwb_skullfracturesantishield()
+dwbRunie.dispatch()
 end
 
 

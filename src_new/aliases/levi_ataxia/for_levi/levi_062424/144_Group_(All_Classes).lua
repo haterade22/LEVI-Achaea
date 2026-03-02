@@ -34,7 +34,8 @@ if gmcp.Char.Status.class == "Blademaster" then
 end
 
 if gmcp.Char.Status.class == "Runewarden" and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" then
-  dwb_groupsetup()
+  dwbRunie.setMode("group")
+  dwbRunie.dispatch()
 end
 
 if gmcp.Char.Status.class == "Runewarden" and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Cutting" then
