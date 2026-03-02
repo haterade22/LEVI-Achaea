@@ -475,7 +475,6 @@ end
 
 function dwbRunie.buildTorsoAttack()
   local prepLimbs = {"left leg", "right leg", "torso"}
-  local pre = dwbRunie.buildPrefix("morningstar")
   local mom = dwbRunie.getMomentum()
 
   -- EXECUTE: torso already broken — stay in execute, never go back to prep
@@ -483,14 +482,15 @@ function dwbRunie.buildTorsoAttack()
 
     -- ASSAULT TORSO (flails, highest priority when momentum allows)
     if dwbRunie.canDoubleAssaultTorso() then
-      local flailPre = dwbRunie.buildPrefix("flail")
-      return flailPre .. "falcon slay " .. target .. ";assault " .. target .. " torso;assault " .. target .. " torso;sizeup " .. target .. ";assess " .. target
+      local pre = dwbRunie.buildPrefix("flail")
+      return pre .. "falcon slay " .. target .. ";assault " .. target .. " torso;assault " .. target .. " torso;sizeup " .. target .. ";assess " .. target
     elseif dwbRunie.canAssaultTorso() then
-      local flailPre = dwbRunie.buildPrefix("flail")
-      return flailPre .. "falcon slay " .. target .. ";assault " .. target .. " torso;sizeup " .. target .. ";assess " .. target
+      local pre = dwbRunie.buildPrefix("flail")
+      return pre .. "falcon slay " .. target .. ";assault " .. target .. " torso;sizeup " .. target .. ";assess " .. target
     end
 
     -- MORNINGSTAR PRESSURE (build momentum between assaults)
+    local pre = dwbRunie.buildPrefix("morningstar")
     if mom >= 2 then
       return pre .. "doublewhirl " .. target .. " torso expend torso expend;sizeup " .. target .. ";assess " .. target
     elseif mom >= 1 then
@@ -511,6 +511,7 @@ function dwbRunie.buildTorsoAttack()
   end
 
   -- BREAK SEQUENCE (torso-specific: whirl right leg expend → dwhirl left leg torso)
+  local pre = dwbRunie.buildPrefix("morningstar")
 
   -- Disable parry before breaking (if parried and momentum available)
   if dwbRunie.isParried() and not dwbRunie.isParryDisabled() and mom >= 1 then
@@ -538,7 +539,6 @@ end
 
 function dwbRunie.buildPulpAttack()
   local prepLimbs = {"left leg", "right leg", "head", "torso"}
-  local pre = dwbRunie.buildPrefix("morningstar")
   local mom = dwbRunie.getMomentum()
 
   -- EXECUTE: head already broken — stay in execute, never go back to prep
@@ -547,13 +547,15 @@ function dwbRunie.buildPulpAttack()
     -- TUMBLE FORK: target escaped prone → pivot to torso (already prepped)
     if not dwbRunie.isProne() then
       if not dwbRunie.isBroken("torso") then
+        local pre = dwbRunie.buildPrefix("morningstar")
         local safeLimb = dwbRunie.pickSafeLimb({"torso"})
         return pre .. "doublewhirl " .. target .. " torso " .. safeLimb .. ";sizeup " .. target .. ";assess " .. target
       end
       if dwbRunie.canAssaultTorso() then
-        local flailPre = dwbRunie.buildPrefix("flail")
-        return flailPre .. "falcon slay " .. target .. ";assault " .. target .. " torso;sizeup " .. target .. ";assess " .. target
+        local pre = dwbRunie.buildPrefix("flail")
+        return pre .. "falcon slay " .. target .. ";assault " .. target .. " torso;sizeup " .. target .. ";assess " .. target
       else
+        local pre = dwbRunie.buildPrefix("morningstar")
         return pre .. "doublewhirl " .. target .. " torso torso;sizeup " .. target .. ";assess " .. target
       end
     end
@@ -561,6 +563,7 @@ function dwbRunie.buildPulpAttack()
     -- ASSAULT HEAD (7 momentum → mangles head instantly)
     if not dwbRunie.isMangled("head") then
       if dwbRunie.canAssaultHead() then
+        local pre = dwbRunie.buildPrefix("morningstar")
         return pre .. "falcon slay " .. target .. ";assault " .. target .. " head;sizeup " .. target .. ";assess " .. target
       end
     end
@@ -573,9 +576,10 @@ function dwbRunie.buildPulpAttack()
   -- (checked here because head is NOT broken, but torso IS — means we were in execute and they restored head)
   if dwbRunie.isBroken("torso") and dwbRunie.isProne() then
     if dwbRunie.canAssaultTorso() then
-      local flailPre = dwbRunie.buildPrefix("flail")
-      return flailPre .. "falcon slay " .. target .. ";assault " .. target .. " torso;sizeup " .. target .. ";assess " .. target
+      local pre = dwbRunie.buildPrefix("flail")
+      return pre .. "falcon slay " .. target .. ";assault " .. target .. " torso;sizeup " .. target .. ";assess " .. target
     else
+      local pre = dwbRunie.buildPrefix("morningstar")
       return pre .. "doublewhirl " .. target .. " torso torso;sizeup " .. target .. ";assess " .. target
     end
   end
@@ -586,6 +590,7 @@ function dwbRunie.buildPulpAttack()
   end
 
   -- BREAK SEQUENCE (pulp-specific: whirl right leg expend → dwhirl left leg head)
+  local pre = dwbRunie.buildPrefix("morningstar")
 
   -- Disable parry before breaking (if parried and momentum available)
   if dwbRunie.isParried() and not dwbRunie.isParryDisabled() and mom >= 1 then
@@ -687,6 +692,14 @@ function dwbRunie.dispatch()
 
   -- Emergency: instant shield
   if myinstantcath == true then
+    atk = combatQueue() .. "touch shield"
+    dwbRunie.sendAttack(atk)
+    return
+  end
+
+  -- Anti-serpent: shield on impatience until cured
+  if ataxia.afflictions.impatience then
+    send("curing prioaff impatience", false)
     atk = combatQueue() .. "touch shield"
     dwbRunie.sendAttack(atk)
     return
