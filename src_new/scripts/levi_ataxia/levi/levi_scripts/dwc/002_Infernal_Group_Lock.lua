@@ -346,8 +346,8 @@ function infernalGroupLockAttack()
         end
     end
 
-    -- Execute with assess
-    send("queue addclear freestand " .. atk .. ";assess " .. target)
+    -- Execute with assess (knightSendAttack handles engage on first attack)
+    knightSendAttack(atk .. ";assess " .. target)
 end
 
 -------------------------------------------------------------------------------

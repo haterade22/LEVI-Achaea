@@ -332,13 +332,8 @@ function runeGroupLockAttack()
         cecho("\n<cyan>[RW GROUP]<reset> " .. v1 .. "/" .. v2 .. " | Lock: " .. lockLevel .. " (" .. runeGroupLock.countLockAffs() .. "/6)")
     end
 
-    -- First attack ends with engage
-    if isOpening then
-        atk = atk .. ";engage " .. target
-    end
-
-    -- Execute with assess
-    send("queue addclear freestand " .. atk .. ";assess " .. target)
+    -- Execute with assess (knightSendAttack handles engage on first attack)
+    knightSendAttack(atk .. ";assess " .. target)
 end
 
 -------------------------------------------------------------------------------

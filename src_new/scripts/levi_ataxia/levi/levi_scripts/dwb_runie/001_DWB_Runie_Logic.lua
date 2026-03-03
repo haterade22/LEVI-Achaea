@@ -294,6 +294,7 @@ function dwbRunie.sendAttack(atk)
   if table.contains(ataxia.playersHere, target) then
     if not engaged then
       send("queue addclear freestand " .. atk .. ";engage " .. target)
+      engaged = true
     else
       send("queue addclear freestand " .. atk)
     end
@@ -698,7 +699,7 @@ function dwbRunie.dispatch()
   end
 
   -- Anti-serpent: shield on impatience until cured
-  if ataxia.afflictions.impatience then
+  if ataxia.afflictions.impatience and ataxiaNDB_getClass and ataxiaNDB_getClass(target) == "Serpent" then
     send("curing prioaff impatience", false)
     atk = combatQueue() .. "touch shield"
     dwbRunie.sendAttack(atk)

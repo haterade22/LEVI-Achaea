@@ -374,17 +374,21 @@ function ataxiaBasher_assembleAttack()
   end
 	if ataxiaBasher.nicator and not haveDef("nicatorlegend") then command = command.."legenddeck draw nicator"..sp end
 
-  -- Blood Maiden cloak: activate bloodshield based on mob count
-  -- 4+ mobs anywhere, OR 3+ elite mhun keepers in Moghedu
+  -- Blood Maiden cloak: activate bloodshield based on mob count or specific mobs
+  -- 4+ mobs anywhere, 3+ elite mhun keepers in Moghedu, Azdun bosses, or fighting Rhuzios
   if ataxiaTemp.bloodshieldReady then
     local mobCount = 0
     local keeperCount = 0
+    local hasBoss = false
     for _, name in pairs(ataxia.denizensHere) do
       mobCount = mobCount + 1
       if name == "an elite mhun keeper" then keeperCount = keeperCount + 1 end
+      if name == "Rhuzios, the Mummy Lord"
+        or name == "Underlord Seroth"
+        or name == "Underlord Dreyvos" then hasBoss = true end
     end
     local inMoghedu = gmcp.Room.Info and gmcp.Room.Info.area == "Moghedu"
-    if mobCount >= 4 or (inMoghedu and keeperCount >= 3) then
+    if mobCount >= 4 or (inMoghedu and keeperCount >= 3) or hasBoss then
       command = command.."activate bloodshield"..sp
       ataxiaTemp.bloodshieldReady = nil
     end

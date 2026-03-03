@@ -122,7 +122,7 @@ function infernalPFOffense()
         cecho("\n<yellow>[INF PF]<reset> RAZE | rsl prefarar (stripping " .. defName .. ")")
 
         infernalPF.state.attackInFlight = true
-        send("queue addclear freestand " .. atk .. ";assess " .. target)
+        knightSendAttack(atk .. ";assess " .. target)
         return
     end
 
@@ -142,7 +142,7 @@ function infernalPFOffense()
         cecho("\n<magenta>[INF PF]<reset> UNDEAF | dsl prefarar/prefarar")
 
         infernalPF.state.attackInFlight = true
-        send("queue addclear freestand " .. atk .. ";assess " .. target)
+        knightSendAttack(atk .. ";assess " .. target)
         return
     end
 
@@ -162,7 +162,7 @@ function infernalPFOffense()
         cecho("\n<green>[INF PF]<reset> KILL | battlecry + arc prefarar")
 
         infernalPF.state.attackInFlight = true
-        send("queue addclear freestand " .. atk .. ";assess " .. target)
+        knightSendAttack(atk .. ";assess " .. target)
         return
     end
 end

@@ -985,7 +985,7 @@ function infernalDWC2LVivisect()
     --------------------------------------------------------------------------
     if infernalDWC2L.areBothArmsBroken() and infernalDWC2L.areBothLegsBroken() then
         infernalDWC2L.state.attackInFlight = true
-        send("queue addclear freestand dismount;vivisect " .. target)
+        knightSendAttack("dismount;vivisect " .. target)
         cecho("\n<green>[INF DWC 2L]<reset> VIVISECT! All 4 limbs broken!")
         return
     end
@@ -996,7 +996,7 @@ function infernalDWC2LVivisect()
     if infernalDWC2L.shouldDamageKill() then
         local healthPct = infernalDWC2L.getTargetHealth()
         infernalDWC2L.state.attackInFlight = true
-        send("queue addclear freestand quash " .. target .. ";arc " .. target)
+        knightSendAttack("quash " .. target .. ";arc " .. target)
         cecho("\n<red>[INF DWC 2L]<reset> DAMAGE KILL! Target at " .. healthPct .. "% - QUASH + ARC!")
         return
     end
@@ -1031,7 +1031,7 @@ function infernalDWC2LVivisect()
         end
 
         infernalDWC2L.state.attackInFlight = true
-        send("queue addclear freestand " .. atk .. ";assess " .. target)
+        knightSendAttack(atk .. ";assess " .. target)
         return
     end
 
@@ -1053,7 +1053,7 @@ function infernalDWC2LVivisect()
 
         cecho("\n<cyan>[INF DWC 2L]<reset> <yellow>EXECUTE<reset> | " .. leg .. " leg | UNDERCUT | [prone + break]")
         infernalDWC2L.state.attackInFlight = true
-        send("queue addclear freestand " .. atk .. ";assess " .. target)
+        knightSendAttack(atk .. ";assess " .. target)
         return
     end
 
@@ -1118,7 +1118,7 @@ function infernalDWC2LVivisect()
         end
         -- Execute raze and return - don't continue with normal attack
         infernalDWC2L.state.attackInFlight = true
-        send("queue addclear freestand " .. atk .. ";assess " .. target)
+        knightSendAttack(atk .. ";assess " .. target)
         cecho("\n<yellow>[INF DWC 2L]<reset> Razing REBOUNDING!")
         return
     end
@@ -1148,7 +1148,7 @@ function infernalDWC2LVivisect()
             atk = atk .. ";raze " .. target
         end
         infernalDWC2L.state.attackInFlight = true
-        send("queue addclear freestand " .. atk .. ";assess " .. target)
+        knightSendAttack(atk .. ";assess " .. target)
         cecho("\n<yellow>[INF DWC 2L]<reset> Razing SHIELD!")
         return
     end
@@ -1220,7 +1220,7 @@ function infernalDWC2LVivisect()
 
     -- Execute with assess
     infernalDWC2L.state.attackInFlight = true
-    send("queue addclear freestand " .. atk .. ";assess " .. target)
+    knightSendAttack(atk .. ";assess " .. target)
 end
 
 -------------------------------------------------------------------------------

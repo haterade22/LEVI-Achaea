@@ -223,6 +223,18 @@ TRIGGER SETUP (External):
 
 infernalDWC = infernalDWC or {}
 
+-- Shared knight send utility with engage tracking (used by all knight specs)
+function knightSendAttack(cmd)
+  if not target or target == "" then return end
+  if not table.contains(ataxia.playersHere, target) then return end
+  if not engaged then
+    send("queue addclear freestand " .. cmd .. ";engage " .. target)
+    engaged = true
+  else
+    send("queue addclear freestand " .. cmd)
+  end
+end
+
 -- State tracking
 infernalDWC.state = {
     phase = "NAUSEA_SETUP",     -- Legacy field (getPhase() is dynamic now)
@@ -1010,7 +1022,7 @@ function infernalDWCVivisect()
     --------------------------------------------------------------------------
     if infernalDWC.areBothArmsBroken() and infernalDWC.areBothLegsBroken() then
         infernalDWC.state.attackInFlight = true
-        send("queue addclear freestand dismount;vivisect " .. target)
+        knightSendAttack("dismount;vivisect " .. target)
         cecho("\n<green>[INF DWC]<reset> VIVISECT! All 4 limbs broken!")
         return
     end
@@ -1021,7 +1033,7 @@ function infernalDWCVivisect()
     if infernalDWC.shouldDamageKill() then
         local healthPct = infernalDWC.getTargetHealth()
         infernalDWC.state.attackInFlight = true
-        send("queue addclear freestand quash " .. target .. ";arc " .. target)
+        knightSendAttack("quash " .. target .. ";arc " .. target)
         cecho("\n<red>[INF DWC]<reset> DAMAGE KILL! Target at " .. healthPct .. "% - QUASH + ARC!")
         return
     end
@@ -1056,7 +1068,7 @@ function infernalDWCVivisect()
         end
 
         infernalDWC.state.attackInFlight = true
-        send("queue addclear freestand " .. atk .. ";assess " .. target)
+        knightSendAttack(atk .. ";assess " .. target)
         return
     end
 
@@ -1078,7 +1090,7 @@ function infernalDWCVivisect()
 
         cecho("\n<cyan>[INF DWC]<reset> <yellow>EXECUTE<reset> | " .. leg .. " leg | UNDERCUT | [prone + break]")
         infernalDWC.state.attackInFlight = true
-        send("queue addclear freestand " .. atk .. ";assess " .. target)
+        knightSendAttack(atk .. ";assess " .. target)
         return
     end
 
@@ -1143,7 +1155,7 @@ function infernalDWCVivisect()
         end
         -- Execute raze and return - don't continue with normal attack
         infernalDWC.state.attackInFlight = true
-        send("queue addclear freestand " .. atk .. ";assess " .. target)
+        knightSendAttack(atk .. ";assess " .. target)
         cecho("\n<yellow>[INF DWC]<reset> Razing REBOUNDING!")
         return
     end
@@ -1173,7 +1185,7 @@ function infernalDWCVivisect()
             atk = atk .. ";raze " .. target
         end
         infernalDWC.state.attackInFlight = true
-        send("queue addclear freestand " .. atk .. ";assess " .. target)
+        knightSendAttack(atk .. ";assess " .. target)
         cecho("\n<yellow>[INF DWC]<reset> Razing SHIELD!")
         return
     end
@@ -1245,7 +1257,7 @@ function infernalDWCVivisect()
 
     -- Execute with assess
     infernalDWC.state.attackInFlight = true
-    send("queue addclear freestand " .. atk .. ";assess " .. target)
+    knightSendAttack(atk .. ";assess " .. target)
 end
 
 -------------------------------------------------------------------------------
