@@ -56,6 +56,12 @@ packageName: ''
 --   7. BLADETWIST: Twist until 700 bleeding (discern on 3rd)
 --   8. WITHDRAW: Withdraw blade (if impaled) or skip if writhed free
 --   9. BROKENSTAR: Execute instant kill
+--
+-- STRATEGY 4: GROUP (Pommelstrike Lock) - bmgroup
+--   Ice infuse + pommelstrike with affliction priority:
+--   1. Hamstring > 2. Paralysis > 3. Asthma > 4. Slickness (if asthma)
+--   5. Anorexia (if impatience+slickness) > 6. Class lock aff > 7. Hypochondria
+--   8. Sternum (damage) when locked
 
 blademaster = blademaster or {}
 blademaster.dispatch = blademaster.dispatch or {}
@@ -65,7 +71,6 @@ blademaster.state = {
   attackInFlight = false,     -- Anti-desync: true while off-balance (DWC pattern)
   lastTarget = nil,           -- Target-change detection (DWB pattern)
   lastEchoTime = nil,         -- Debounced echo timestamp (DWB pattern)
-  lastInfuseType = nil,       -- Infuse deduplication (DWB empower pattern)
   -- Leg tracking
   focusLeg = nil,
   lastPrimaryLeg = nil,
@@ -197,14 +202,10 @@ function blademaster.shouldEcho()
 end
 
 --------------------------------------------------------------------------------
--- INFUSE DEDUPLICATION (DWB empower pattern: skip if already infused same type)
+-- INFUSE COMMAND (infuse is consumed per attack, must re-send every round)
 --------------------------------------------------------------------------------
 
 function blademaster.infuseCmd(infuseType)
-  if blademaster.state.lastInfuseType == infuseType then
-    return ""
-  end
-  blademaster.state.lastInfuseType = infuseType
   return "infuse " .. infuseType .. ";"
 end
 
@@ -217,7 +218,6 @@ function blademaster.fullReset()
   blademaster.state.attackInFlight = false
   blademaster.state.lastTarget = nil
   blademaster.state.lastEchoTime = nil
-  blademaster.state.lastInfuseType = nil
   blademaster.resetBrokenstarState()
   blademaster.resetProneTimer()
   cecho("\n<green>[BM] Full state reset!")
@@ -695,7 +695,6 @@ function blademaster.run()
     blademaster.state.lastTarget = target
     blademaster.resetBrokenstarState()
     blademaster.resetProneTimer()
-    blademaster.state.lastInfuseType = nil
   end
 
   -- Mode routing
@@ -706,6 +705,8 @@ function blademaster.run()
     blademaster.dispatch.runQuadPrep()
   elseif mode == "brokenstar" then
     blademaster.dispatch.runBrokenstar()
+  elseif mode == "group" then
+    blademaster.dispatch.runGroup()
   end
 end
 
@@ -834,8 +835,7 @@ function blademaster.buildComboDoublePrep()
     return "airfist " .. target .. ";assess " .. target
   end
 
-  -- Infuse: Ice for break/mangle, Lightning for prep (deduped via lastInfuseType)
-  -- EXCEPTION: Use Ice on final prep attack to strip caloric before break
+  -- Infuse: Ice for break/mangle + final prep (strip caloric), Lightning for normal prep
   if phase == "leg_break" or phase == "mangle" then
     combo = blademaster.infuseCmd("ice")
   elseif phase == "leg_prep" and blademaster.checkWillPrepBothLegs() then
@@ -1099,7 +1099,7 @@ function blademaster.buildComboQuadPrep()
     return "airfist " .. target .. ";assess " .. target
   end
 
-  -- Infuse: Ice for break/mangle phases, Lightning for prep (deduped via lastInfuseType)
+  -- Infuse: Ice for break/mangle + final prep, Lightning for normal prep
   -- EXCEPTION: Use Ice on final prep attacks to strip caloric before break
   if phase == "arm_break" or phase == "leg_break" or phase == "mangle" then
     combo = blademaster.infuseCmd("ice")
@@ -1397,7 +1397,7 @@ function blademaster.buildComboBrokenstar()
   end
 
   if phase == "upper_prep" then
-    -- Lightning infuse for prep, Ice on final prep (deduped via lastInfuseType)
+    -- Lightning infuse for prep, Ice on final prep + break
     local direction = blademaster.getCentreslashDirection()
     if blademaster.checkWillPrepUpper() then
       combo = blademaster.infuseCmd("ice")
@@ -1562,6 +1562,142 @@ end
 -- Reset all state
 function bmreset()
   blademaster.fullReset()
+end
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--
+--  STRATEGY 4: GROUP (POMMELSTRIKE LOCK)
+--
+--  Priority:
+--  1. Hamstring (hamstring)
+--  2. Paralysis (neck)
+--  3. Asthma (throat)
+--  4. If asthma: Slickness (underarm)
+--  5. If impatience+slickness: Anorexia (stomach), else skip to #6
+--  6. getLockingAffliction() class aff
+--  7. Hypochondria (chest)
+--  8. Sternum (damage / maintain lock)
+--
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+-- Map getLockingAffliction() return values to pommelstrike strikes
+blademaster.lockAffToStrike = {
+  paralyse    = "neck",
+  weariness   = "shoulder",
+  plague      = "eyes",
+  stupid      = "temple",
+  reckless    = "groin",
+}
+
+function blademaster.selectStrikeGroup()
+  local has = blademaster.hasAff
+
+  -- 1. Hamstring
+  if not has("hamstring") then
+    return "hamstring"
+  end
+
+  -- 2. Paralysis
+  if not has("paralysis") then
+    return "neck"
+  end
+
+  -- 3. Asthma
+  if not has("asthma") then
+    return "throat"
+  end
+
+  -- 4. Slickness (gated behind asthma)
+  if not has("slickness") then
+    return "underarm"
+  end
+
+  -- 5. Anorexia (gated behind impatience + slickness)
+  if has("impatience") and has("slickness") and not has("anorexia") then
+    return "stomach"
+  end
+
+  -- 6. Class locking affliction
+  if getLockingAffliction then
+    local lockAff = getLockingAffliction()
+    if lockAff then
+      local strike = blademaster.lockAffToStrike[lockAff]
+      if strike then
+        -- Check the actual affliction name (map getLockingAffliction names to aff names)
+        local affName = ({
+          paralyse = "paralysis", weariness = "weariness", plague = "plague",
+          stupid = "stupidity", reckless = "recklessness",
+        })[lockAff] or lockAff
+        if not has(affName) then
+          return strike
+        end
+      end
+    end
+  end
+
+  -- 7. Hypochondria
+  if not has("hypochondria") then
+    return "chest"
+  end
+
+  -- 8. All lock affs present — sternum for damage
+  return "sternum"
+end
+
+function blademaster.buildComboGroup()
+  local combo = ""
+
+  -- V1 fallback for rebounding/shield (GMCP timing gap)
+  if blademaster.hasAff("shield") or blademaster.hasAff("rebounding") or (tAffs and (tAffs.shield or tAffs.rebounding)) then
+    local strike = blademaster.selectStrikeGroup()
+    combo = "raze " .. target
+    if strike then
+      combo = combo .. " " .. strike
+    end
+    combo = combo .. ";assess " .. target
+    return combo
+  end
+
+  local strike = blademaster.selectStrikeGroup()
+  combo = blademaster.infuseCmd("ice") .. "pommelstrike " .. target .. " " .. strike .. ";assess " .. target
+  return combo
+end
+
+function blademaster.dispatch.runGroup()
+  local targetHP = tonumber(ataxiaTemp.targetHP) or 100
+  local strike = blademaster.selectStrikeGroup()
+
+  -- Debounced echo
+  if blademaster.shouldEcho() then
+    cecho("\n<cyan>[BM <magenta>Group<cyan>] Target: " .. tostring(target) .. " | HP: " .. targetHP .. "% | Track: " .. blademaster.getTrackingSystem())
+    cecho("\n<cyan>[BM <magenta>Group<cyan>] Strike: <yellow>" .. strike .. "<cyan> | Pommelstrike + Ice")
+
+    -- Show lock status
+    local has = blademaster.hasAff
+    local function affTag(aff, label)
+      return (has(aff) and "<green>" or "<red>") .. label
+    end
+    cecho("\n<cyan>[BM <magenta>Group<cyan>] " ..
+      affTag("paralysis", "PAR") .. " " ..
+      affTag("asthma", "AST") .. " " ..
+      affTag("slickness", "SLI") .. " " ..
+      affTag("anorexia", "ANO") .. " " ..
+      affTag("impatience", "IMP") .. " " ..
+      affTag("hypochondria", "HYP"))
+  end
+
+  -- Build and send
+  local cmd = combatQueue and combatQueue() or ""
+  cmd = cmd .. blademaster.buildComboGroup()
+  blademaster.sendAttack(cmd)
+end
+
+-- Aliases for Group
+function bmgroup()
+  blademaster.state.mode = "group"
+  blademaster.run()
 end
 
 --------------------------------------------------------------------------------
@@ -2019,6 +2155,11 @@ if tempAlias then
 
   blademaster._aliases.bmbs = tempAlias("^bmbs$", function()
     blademaster.state.mode = "brokenstar"
+    blademaster.run()
+  end)
+
+  blademaster._aliases.bmgroup = tempAlias("^bmgroup$", function()
+    blademaster.state.mode = "group"
     blademaster.run()
   end)
 

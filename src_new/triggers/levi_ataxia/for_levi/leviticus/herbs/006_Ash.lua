@@ -43,7 +43,7 @@ if matches[2] == target then
         anorexiaFailsafe = nil
         lastFocus = nil
     end
-    if tAffs.crescendo <= 1 or tAffs.crescendo then
+    if tAffs.crescendo and tAffs.crescendo ~= 0 then
       tAffs.crescendo = 0
       erAff("crescendo")
     end
