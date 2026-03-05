@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: LDeck Card Out
+name: LDM List Stop
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -8,7 +8,7 @@ hierarchy:
 - Ataxia
 - LegendDeck Cards
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
   isTempTrigger: 'no'
   isMultiline: 'no'
@@ -30,17 +30,11 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^A card depicting (.+) currently lacks the power to invoke its stored potential\.$
-  type: 1
-- pattern: ^All of the potential for a card depicting (.+) has been expended for the moment\.$
-  type: 1
+- pattern: ''
+  type: 7
 ]]--
 
--- Card is out of charges — set to 0 via generic lookup
-if ldm and ldm.matchFullName then
-    local fullName = matches[2]
-    local cardKey = ldm.matchFullName(fullName)
-    if cardKey and ldm.deck[cardKey] then
-        ldm.deck[cardKey].charges = 0
-    end
+-- Prompt trigger: fires at the next prompt after ldeck list output finishes
+if ldm and ldm.deckStop and ldm.state and ldm.state.parsing then
+    ldm.deckStop()
 end

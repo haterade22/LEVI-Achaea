@@ -276,3 +276,121 @@ ataxiaTables.ldeckcardscount.Maran  -- Check remaining charges
 |------|--------|---------|
 | **Lordan** | Plunder bonus (20 min) | 3 (1/hr) |
 | **Horald** | Ship weapon balance reduction | 3 (1/hr) |
+
+---
+
+## Legend Deck Manager (LDM) v2.0
+
+The LDM system provides charge tracking, display, joker management, and a query API for combat scripts.
+
+### LDM Aliases
+
+| Alias | Pattern | Effect |
+|-------|---------|--------|
+| `ldm` | `^ldm(?:\| (.+))$` | Main command dispatcher (help, toggle, config) |
+| `ldm combat` | via ldm command | Show combat-relevant cards grouped by use case |
+| `ldm all` | via ldm command | Show all cards with charges |
+| `ldm <category>` | via ldm command | Filter by category (combat, travel, utility, etc.) |
+| `ldraw <card>` | `^ldraw\s+(\w+)$` | Draw a card using its suit joker |
+| `ldc` | `^ldc$` | Quick combat card display |
+
+### LDM Query API (for scripts)
+
+```lua
+ldm.hasCharges("Maran")     -- true/false
+ldm.getCharges("Maran")     -- number
+ldm.getMaxCharges("Maran")  -- number
+ldm.draw("Maran")           -- send ldeck draw maran
+ldm.draw("Maran", "target") -- send ldeck draw maran target
+ldm.drawQueued("Maran", "target", "eqbal") -- queue add eqbal ldeck draw maran target
+```
+
+### Card Tracking
+
+Located in `src_new/scripts/levi_ataxia/levi/ataxia/legend_deck/`:
+- `001_Legend_Deck_Init.lua` - Namespace, backward compat proxy, deck init
+- `002_Legend_Deck_DB.lua` - Complete card database (80+ cards)
+- `003_Legend_Deck_Functions.lua` - Display, parsing, query API, combat display
+- `004_Legend_Deck_Save_Load.lua` - Persistence
+
+Backward compatibility: `ataxiaTables.ldeckcardscount.Maran` still works — it's a metatable proxy that reads/writes through `ldm.deck["Maran"].charges`.
+
+---
+
+## Serpent Combat Use Cases
+
+**Design principle**: The serpent offense (`serp_ekanelia_offense()`) does NOT auto-draw cards. Dstab/impulse timing is too sensitive for automated card draws. Instead: manual aliases + keybinds for situational draws, with `ldc` for at-a-glance status.
+
+### Pre-Fight Setup
+
+Draw these BEFORE engaging the target:
+
+| Card | Effect | Why | Alias |
+|------|--------|-----|-------|
+| **Pazuzu** | Blood rain — blocks magical travel >1 room (1 min) | Prevents teleport escape | `ldeck draw pazuzu` |
+| **Haidion** | Lock target's celerity to yours (2-5 min) | Prevents speed kiting | `ldeck draw haidion target` |
+| **Grimlath** | PACING defence (2 min) | Sustain during extended fight | `ldeck draw grimlath` |
+| **Noxtra** | Stop flying + duanathar (3 min) | Grounds fliers pre-engage | `ldeck draw noxtra target` |
+
+### During Lock Phase
+
+Reactive draws when target tries to escape the lock:
+
+| Card | Effect | When | Alias |
+|------|--------|------|-------|
+| **Aringar** | Strip shield at LoS | Target shields during lock attempt | `ldeck draw aringar target` |
+| **Vellis** | Pull from trees/flying | Target uses aerial escape | `ldeck draw vellis target` |
+| **Centaur** | Pull from sky + stun/entangle/balance knock | Target flying | `ldeck draw centaur target` |
+| **Seasone** (POISON) | Double loki in room | Group fight area denial | `ldeck draw seasone` |
+
+### Execute / Finish Phase
+
+Use when you have the lock and are going for the kill:
+
+| Card | Effect | When | Alias |
+|------|--------|------|-------|
+| **Ama-maalier** | Self-root 10s (immovable) | Prevents pull-away during execute | `ldeck draw ama-maalier` |
+| **Rudolpho** | Prevent speech in room (1 min) | Blocks raido/wings during finish | `ldeck draw rudolpho` |
+| **Yozhik** | Thornwall in direction | Block escape route before execute | `ldeck draw yozhik <dir>` |
+| **Maklak** | Icewall in direction | Block escape route (alt) | `ldeck draw maklak <dir>` |
+
+### Defensive / Emergency
+
+| Card | Effect | When | Alias |
+|------|--------|------|-------|
+| **Maran** | 5000hp barrier (25% absorb, 1 min) | HP dropping dangerously | `ldeck draw maran` |
+| **Icosse** | +1 Reflection | Need extra defense layer | `ldeck draw icosse` |
+| **Agith'tai** | Reflect focus affs for 30s | Under heavy mental aff pressure | `ldeck draw agith'tai` |
+| **Sycaerunax** | 2nd wind 10s on death (DRAGON only) | Emergency last stand | `ldeck draw sycaerunax` |
+| **Whitewolf** | Cure aff when hitting parry (40s) | Extended fight, aff pressure | `ldeck draw whitewolf` |
+
+### Group Combat (`ekgroup` mode)
+
+| Card | Effect | When | Alias |
+|------|--------|------|-------|
+| **Severian** | Steelmind all allies | Fight start | `ldeck draw severian` |
+| **Zsarachnor** | Force target to enemy another player (30s) | Redirect enemy DPS | `ldeck draw zsarachnor target` |
+| **Parni** | Hatred (20s) — treat all as enemy | Disrupt group coordination | `ldeck draw parni target` |
+
+### Pre-Fight Macro Chains (Future)
+
+Example keybind sequences for common setups:
+```
+-- Anti-escape setup (bind to F-key)
+ldeck draw pazuzu
+ldeck draw haidion target
+ek
+
+-- Lock finish setup
+ldeck draw rudolpho
+ldeck draw ama-maalier
+ldeck draw yozhik <escape_dir>
+```
+
+### Integration Checklist
+
+- [x] `ldm.hasCharges("maran")` available for custom keybinds
+- [x] `ldc` alias shows combat cards with charges at a glance
+- [x] Backward compat: basher Maran emergency still works via `ataxiaTables.ldeckcardscount.Maran`
+- [ ] Future: pre-fight macro alias chains (e.g., `lpaz` + `lhai` + `ek`)
+- [ ] Future: situational auto-draw in defense scripts (e.g., Maran below HP threshold — already in basher)

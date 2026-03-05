@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: LDeck Card Out
+name: LDM Draw Success
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -30,17 +30,11 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^A card depicting (.+) currently lacks the power to invoke its stored potential\.$
-  type: 1
-- pattern: ^All of the potential for a card depicting (.+) has been expended for the moment\.$
+- pattern: ^You draw forth the power of (\w+)
   type: 1
 ]]--
 
--- Card is out of charges — set to 0 via generic lookup
-if ldm and ldm.matchFullName then
-    local fullName = matches[2]
-    local cardKey = ldm.matchFullName(fullName)
-    if cardKey and ldm.deck[cardKey] then
-        ldm.deck[cardKey].charges = 0
-    end
+if ldm and ldm.onDraw then
+    local cardKey = matches[2]
+    ldm.onDraw(cardKey)
 end

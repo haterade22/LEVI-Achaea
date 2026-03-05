@@ -34,22 +34,20 @@ patterns:
   type: 1
 ]]--
 
-if matches[2] == "Seasone, the Industrious" then
-  ataxiaTables.ldeckcardscount.SeasoneE = matches[3]
-elseif matches[2] == "Matic Ridley, The Salvation" then
-  ataxiaTables.ldeckcardscount.Matic = matches[2]
-elseif matches[2] == "Maran La'Saen, Seraph of Creation" then
-  ataxiaTables.ldeckcardscount.Maran = matches[2]
-elseif matches[2] == "Xylthus, the Outcast" then
-  ataxiaTables.ldeckcardscount.Xylthus = matches[2]
-elseif matches[2] == "Bakios, the Winemaster" then
-  ataxiaTables.ldeckcardscount.Bakios = matches[2]
-elseif matches[2] == "Covenant Stormcrow" then
-  ataxiaTables.ldeckcardscount.Bakios = matches[2]
+--[[
+    Generic handler: match full card name -> ldm.deck key, store charge count.
+    Fixes bugs in original:
+      - Stores matches[3] (charge number), not matches[2] (name string)
+      - Uses ldm.matchFullName() for generic lookup instead of hardcoded elseif chain
+      - Handles all cards including Covenant/Bakios correctly
+]]--
 
-                                                                                    
+if not ldm or not ldm.matchFullName then return end
+
+local fullName = matches[2]
+local charges  = tonumber(matches[3]) or 0
+local cardKey  = ldm.matchFullName(fullName)
+
+if cardKey and ldm.deck[cardKey] then
+    ldm.deck[cardKey].charges = charges
 end
-
-
-
-
