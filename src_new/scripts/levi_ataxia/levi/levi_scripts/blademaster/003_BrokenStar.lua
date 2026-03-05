@@ -8,7 +8,7 @@ hierarchy:
 - Leviticus
 - Blademaster
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
 packageName: ''
 ]]--
