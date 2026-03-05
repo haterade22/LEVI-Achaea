@@ -14,6 +14,8 @@ packageName: ''
 ]]--
 
 function levibardone()
+-- Rebound hold gate
+if reboundHold and reboundHold.gate(levibardone) then return end
 local atk = combatQueue()
 local sp = ataxia.settings.separator
 

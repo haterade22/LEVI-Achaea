@@ -635,6 +635,9 @@ function apostate.dispatch()
   -- Don't act under aeon
   if ataxia and ataxia.afflictions and ataxia.afflictions.aeon then return end
 
+  -- Rebound hold gate
+  if reboundHold and reboundHold.gate(apostate.dispatch) then return end
+
   -- Initialize pm if not set
   if not pm then pm = 100 end
 

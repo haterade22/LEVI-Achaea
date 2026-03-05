@@ -734,6 +734,9 @@ function blademaster.dispatch.runDoublePrep()
     return
   end
 
+  -- Rebound hold gate
+  if reboundHold and reboundHold.gate(blademaster.dispatch.runDoublePrep) then return end
+
   local phase = blademaster.getPhaseDoublePrep()
   local phaseLabel = blademaster.getPhaseLabelDoublePrep()
   local targetHP = tonumber(ataxiaTemp.targetHP) or 100

@@ -14,6 +14,8 @@ packageName: ''
 ]]--
 
 function levipariahlatencytest()
+-- Rebound hold gate
+if reboundHold and reboundHold.gate(levipariahlatencytest) then return end
 local atk = combatQueue()
 local sp = ataxia.settings.separator
 local e = ataxia.vitals.epitaph

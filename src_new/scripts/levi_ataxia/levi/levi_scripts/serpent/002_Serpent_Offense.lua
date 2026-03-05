@@ -1273,7 +1273,7 @@ function serp_ekanelia_attack()
         -- Flay delivers only 1 venom — pick the best single lock piece
         -- (envenomList may have been optimized for dstab pairs e.g. gecko+slike)
         local flayVenom = envenomList[1] or "curare"
-        if serpStrategy == "relapse_lock" or serpStrategy == "lock" or serpStrategy == "group"
+        if serpStrategy == "relapse_lock" or serpStrategy == "lock"
            or serpStrategy == "complete_hardlock" or serpStrategy == "complete_truelock"
            or serpStrategy == "lock_reinforce" or serpStrategy == "setup_lock"
            or serpStrategy == "build_scytherus" or serpStrategy == "scytherus_attack" then
@@ -1559,6 +1559,9 @@ function serp_ekanelia_offense()
     if serpent.state.attackInFlight then
         return
     end
+
+    -- Rebound hold gate
+    if reboundHold and reboundHold.gate(serp_ekanelia_offense) then return end
 
     -- Sync suggestion queueing
     if hSuggRequest ~= "" and hSuggRequest ~= hSuggActive then

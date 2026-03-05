@@ -673,6 +673,9 @@ function dwbRunie.dispatch()
 
   if not table.contains(ataxia.playersHere, target) then return end
 
+  -- Rebound hold gate
+  if reboundHold and reboundHold.gate(dwbRunie.dispatch) then return end
+
   -- Initialize limb counter if needed
   if not lb[target] then lb[target] = { hits = {} } end
   if not lb[target].hits then lb[target].hits = {} end

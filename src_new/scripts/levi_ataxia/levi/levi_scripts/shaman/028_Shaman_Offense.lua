@@ -1073,6 +1073,9 @@ function shamanOffense.dispatch()
         return
     end
 
+    -- Rebound hold gate
+    if reboundHold and reboundHold.gate(shamanOffense.dispatch) then return end
+
     -- One-time spirit binding warning
     if not shamanOffense.state.spiritWarningShown then
         shamanOffense.state.spiritWarningShown = true

@@ -1008,6 +1008,9 @@ function infernalDWCVivisect()
         return
     end
 
+    -- Rebound hold gate
+    if reboundHold and reboundHold.gate(infernalDWCVivisect) then return end
+
     -- Get current phase (for display and venom/limb selection)
     local phase = infernalDWC.getPhase()
 

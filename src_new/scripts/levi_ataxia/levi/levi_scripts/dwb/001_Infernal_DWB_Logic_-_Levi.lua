@@ -831,6 +831,8 @@ end
 
 
 function idwb_torsodamage()
+-- Rebound hold gate
+if reboundHold and reboundHold.gate(idwb_torsodamage) then return end
 infernaldwbviviprio()
 local atk = combatQueue()
 getLockingAffliction()

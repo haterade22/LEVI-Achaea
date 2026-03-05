@@ -483,9 +483,11 @@ end
 --enact wavesurge
 
 --End Function
-end 
+end
 
 function levipsionmind()
+-- Rebound hold gate
+if reboundHold and reboundHold.gate(levipsionmind) then return end
 local atk = combatQueue()
 local sp = ataxia.settings.separator
 php = php or 100

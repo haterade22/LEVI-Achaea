@@ -768,6 +768,9 @@ function depthswalker.dispatch()
     -- Don't act if paralysed
     if ataxia and ataxia.afflictions and ataxia.afflictions.paralysis then return end
 
+    -- Rebound hold gate
+    if reboundHold and reboundHold.gate(depthswalker.dispatch) then return end
+
     -- RESET STATE: Clear bellwortComplete when target changes or new fight detected
     if depthswalker.state.lastTarget ~= target then
         depthswalker.state.bellwortComplete = false
