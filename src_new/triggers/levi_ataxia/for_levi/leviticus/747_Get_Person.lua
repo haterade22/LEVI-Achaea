@@ -35,6 +35,7 @@ patterns:
   type: 1
 ]]--
 
-if not ataxiaNDB_Exists(matches[3]) then
+if not ataxiaNDB_Exists(matches[3])
+	and not (ataxiaNDB_isBlacklisted and ataxiaNDB_isBlacklisted(matches[3])) then
 	table.insert(explorersUnchecked, matches[3])
 end

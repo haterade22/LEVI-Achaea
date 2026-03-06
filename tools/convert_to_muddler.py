@@ -466,17 +466,55 @@ class MuddlerConverter:
 
         children_json = []
 
+        # For triggers: check if any leaf items at this level should be merged
+        # into a child group (mStayOpen triggers that are also parents).
+        # In Mudlet, a trigger with mStayOpen AND children is a single node —
+        # NOT a separate folder + trigger. The children fire during the stay-open
+        # window, so they must be nested under the trigger with the pattern.
+        merged_leaf_names: set = set()
+        child_group_names = {cg.name for cg in group.children}
+        if pkg_type == "triggers":
+            leaf_items = items_by_hierarchy.get(hierarchy_key, [])
+            for file_path, metadata, lua_code in leaf_items:
+                item_name = metadata.get("name", "")
+                m_stay_open = metadata.get("mStayOpen", 0)
+                if item_name in child_group_names and m_stay_open and int(m_stay_open) > 0:
+                    merged_leaf_names.add(item_name)
+
         # Add child groups first (preserving order)
         for child_group in group.children:
             child_json = self._group_to_json(
                 child_group, pkg_type, items_by_hierarchy, name_map, current_hierarchy
             )
             if child_json:
+                # Merge trigger properties from the matching leaf item
+                if child_group.name in merged_leaf_names:
+                    leaf_items = items_by_hierarchy.get(hierarchy_key, [])
+                    for file_path, metadata, lua_code in leaf_items:
+                        if metadata.get("name", "") == child_group.name:
+                            safe_name = name_map.get(str(file_path), sanitize_lua_filename(metadata.get("name", "unnamed")))
+                            trigger_json = self._trigger_to_json(metadata, lua_code, safe_name)
+                            if trigger_json:
+                                # Copy trigger properties onto the group node
+                                child_json["isFolder"] = "no"
+                                for key in ("patterns", "fireLength", "multiline",
+                                            "multilineDelta", "filter", "highlight",
+                                            "highlightFG", "highlightBG", "command",
+                                            "matchall", "soundFile"):
+                                    if key in trigger_json:
+                                        child_json[key] = trigger_json[key]
+                                # Inline the script
+                                if lua_code.strip():
+                                    child_json["script"] = lua_code
+                                self.stats[f"{pkg_type}_items"] += 1
+                            break
                 children_json.append(child_json)
 
-        # Add leaf items that belong to this hierarchy
+        # Add leaf items that belong to this hierarchy (skip merged ones)
         leaf_items = items_by_hierarchy.get(hierarchy_key, [])
         for file_path, metadata, lua_code in leaf_items:
+            if metadata.get("name", "") in merged_leaf_names:
+                continue
             safe_name = name_map.get(str(file_path), sanitize_lua_filename(metadata.get("name", "unnamed")))
             item_json = self._item_to_json(metadata, lua_code, safe_name, pkg_type)
             if item_json:

@@ -22,6 +22,7 @@ function ataxiaNDB_Install()
 			"Ourania", "Pandora", "Phaestus", "Prospero", "Sartan", "Scarlatti", "Twilight", "Valnurana",
 			"Vastar", "Tlalaiad", "Romeo", "Juliet",},
 		cityEnemies = {},
+		notPlayers = {},
 		highlightPriority = "city",
 		enemySettings = {bold = false, italics = false, underline = false},
 	}

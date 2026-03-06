@@ -416,7 +416,7 @@
                           {
                             "name": "Credits For Sale",
                             "isActive": "yes",
-                            "isFolder": "yes",
+                            "isFolder": "no",
                             "children": [
                               {
                                 "name": "Capture Credits",
@@ -436,7 +436,15 @@
                                   }
                                 ]
                               }
-                            ]
+                            ],
+                            "patterns": [
+                              {
+                                "pattern": "Credits currently available for purchase:",
+                                "type": "exactMatch"
+                              }
+                            ],
+                            "fireLength": 99,
+                            "script": "deleteLine()\ncreditMarket = {\n\tavailable = 0,\n\thandGold = tonumber(gmcp.Char.Status.gold),\n\tbankGold = tonumber(gmcp.Char.Status.bank),\n\tavgPrice = 0,\n\ttotalTB = 0,\n\ttotalSpent = 0\n}\ncecho(\"\\n<DarkSlateBlue> ~~~~~~~~~~~~~~* <DimGrey>Achaea Credit Market <DarkSlateBlue>*~~~~~~~~~~~~~~\")\ncecho(\"\\n<DimGrey>\"..string.rep(\" \", 44-string.len(creditMarket.handGold))..\"Balance: <gold>\"..creditMarket.handGold)\ncecho(\"\\n<DarkSlateBlue> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\")"
                           },
                           {
                             "name": "Queue Scanning",
@@ -625,18 +633,6 @@
                             ]
                           },
                           {
-                            "name": "Credits For Sale",
-                            "isActive": "no",
-                            "patterns": [
-                              {
-                                "pattern": "Credits currently available for purchase:",
-                                "type": "exactMatch"
-                              }
-                            ],
-                            "fireLength": 99,
-                            "script": "deleteLine()\ncreditMarket = {\n\tavailable = 0,\n\thandGold = tonumber(gmcp.Char.Status.gold),\n\tbankGold = tonumber(gmcp.Char.Status.bank),\n\tavgPrice = 0,\n\ttotalTB = 0,\n\ttotalSpent = 0\n}\ncecho(\"\\n<DarkSlateBlue> ~~~~~~~~~~~~~~* <DimGrey>Achaea Credit Market <DarkSlateBlue>*~~~~~~~~~~~~~~\")\ncecho(\"\\n<DimGrey>\"..string.rep(\" \", 44-string.len(creditMarket.handGold))..\"Balance: <gold>\"..creditMarket.handGold)\ncecho(\"\\n<DarkSlateBlue> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\")"
-                          },
-                          {
                             "name": "Gag + keep prompt",
                             "patterns": [
                               {
@@ -693,7 +689,7 @@
                           {
                             "name": "Tattoo List",
                             "isActive": "yes",
-                            "isFolder": "yes",
+                            "isFolder": "no",
                             "children": [
                               {
                                 "name": "Gag Lines",
@@ -748,10 +744,7 @@
                                 ],
                                 "script": "deleteLine()\nsetTriggerStayOpen(\"Tattoo List\", 0)\nif not capturing_tattoos then return end\ncapturing_tattoos = nil\necho(\"\\n  \")\nsetUnderline(true)\nfg(\"LightSlateGrey\")\necho(\"[ Body Part ]   [ 1st Slot ] (Ch)   [ 2nd Slot ] (Ch)\")\nresetFormat()\nfor slot, list in pairs(tattoosOnMe) do\n\tif slot == \"Back\" then\n\t\tif tattoosOnMe[slot][1] ~= \"empty\" and #tattoosOnMe[slot][1] == 0 then\n\t\t\ttattoosOnMe[slot][1] = \"unlearned\"\n\t\t\ttattoosOnMe[slot][2] = \"unlearned\"\n\t\telseif #tattoosOnMe[slot][2] == 0 then\n\t\t\ttattoosOnMe[slot][2] = \"unlearned\"\n\t\tend\n\telse\n\t\tif tattoosOnMe[slot][2] ~= \"empty\" and #tattoosOnMe[slot][2] == 0 then\n\t\t\ttattoosOnMe[slot][2] = \"unlearned\"\n\t\tend\n\tend\n\n\tcecho(\"\\n<green> \"..utf8.char(186)..\" <NavajoWhite>\"..slot..string.rep(\" \", 13-string.len(slot))..\"-\")\n\tif tattoosOnMe[slot][1] ~= \"empty\" and tattoosOnMe[slot][1] ~= \"unlearned\" and #tattoosOnMe[slot][1] ~= 0 then\n\t\tcecho((tattoosOnMe[slot][1][3]==\"Y\" and \"<ForestGreen>\" or \"<firebrick>\")..\" \"..tattoosOnMe[slot][1][1]:title())\n\t\tcecho(string.rep(\" \", 11-string.len(tattoosOnMe[slot][1][1]))..\" -\")\n\t\tif tattoosOnMe[slot][1][2] ~= \"n/a\" and tattoosOnMe[slot][1][2] ~= \"art\" then\n\t\t\tcecho((tonumber(tattoosOnMe[slot][1][2]) >= 10 and \"<green> \" or \"<red> \")..tattoosOnMe[slot][1][2]..string.rep(\" \", 4-string.len(tattoosOnMe[slot][1][2]))..\"<white>- \")\n\t\telseif tattoosOnMe[slot][1][2] == \"n/a\" then\n\t\t\tcecho(\"<purple> \"..utf8.char(186)..utf8.char(186)..\"<white>  - \")\n\t\telse\n\t\t\tcecho(\"<DodgerBlue> \"..utf8.char(186)..utf8.char(186)..\"<white>  - \")\n\t\tend\n\n\telseif tattoosOnMe[slot][1] == \"empty\" then\n\t\tcecho(\"<rosy_brown> Empty\")\n\t\tcecho(\"       -     - \")\n\telse\n\t\tcecho(\"<SlateGrey> Unlearned\")\n\tend\n\n\tif tattoosOnMe[slot][2] ~= \"empty\" and tattoosOnMe[slot][2] ~= \"unlearned\" then\n\t\tcecho((tattoosOnMe[slot][2][3]==\"Y\" and \"<ForestGreen>\" or \"<firebrick>\")..tattoosOnMe[slot][2][1]:title())\n\t\tcecho(string.rep(\" \", 12-string.len(tattoosOnMe[slot][2][1]))..\"-\")\n\t\tif tattoosOnMe[slot][2][2] ~= \"n/a\" and tattoosOnMe[slot][2][2] ~= \"art\" then\n\t\t\tcecho((tonumber(tattoosOnMe[slot][2][2]) >= 10 and \"<green> \" or \"<red> \")..tattoosOnMe[slot][2][2]..string.rep(\" \", 4-string.len(tattoosOnMe[slot][2][2]))..\"<white>- \")\n\t\telseif tattoosOnMe[slot][2][2] == \"n/a\" then\n\t\t\tcecho(\"<purple> \"..utf8.char(186)..utf8.char(186))\n\t\telse\n\t\t\tcecho(\"<DodgerBlue> \"..utf8.char(186)..utf8.char(186))\n\t\tend\n\n\telseif tattoosOnMe[slot][2] == \"empty\" then\n\t\tcecho(\"<rosy_brown>Empty\")\n\telse\n    if tattoosOnMe[slot][1] == \"unlearned\" then echo(\"         - \") end\n\t\tcecho(\"<SlateGrey>Unlearned\")\n\tend\t\n\nend\ncecho(\"\\n<LightSlateGrey> \"..utf8.char(186)..\"----------------------------------------------------\"..utf8.char(186))\nif #crucialTattoos > 0 then\n\tcecho(\"\\n<LightSlateBlue>   Missing: <NavajoWhite>\"..table.concat(crucialTattoos, \", \")..\"<LightSlateBlue>.\")\n\tcecho(\"\\n<LightSlateGrey> \"..utf8.char(186)..\"----------------------------------------------------\"..utf8.char(186))\nend\n\nsend(\" \")\n\n"
                               }
-                            ]
-                          },
-                          {
-                            "name": "Tattoo List",
+                            ],
                             "patterns": [
                               {
                                 "pattern": "Looking over yourself, you see the following tattoos:",
@@ -779,7 +772,7 @@
                       {
                         "name": "Reagent Butchering",
                         "isActive": "yes",
-                        "isFolder": "yes",
+                        "isFolder": "no",
                         "children": [
                           {
                             "name": "Corpse Found",
@@ -799,7 +792,15 @@
                               }
                             ]
                           }
-                        ]
+                        ],
+                        "patterns": [
+                          {
+                            "pattern": "Corpses:",
+                            "type": "exactMatch"
+                          }
+                        ],
+                        "fireLength": 99,
+                        "script": "ataxiaTemp.toButcher = {}"
                       },
                       {
                         "name": "Clickable Links",
@@ -865,17 +866,6 @@
                             "type": "regex"
                           }
                         ]
-                      },
-                      {
-                        "name": "Reagent Butchering",
-                        "patterns": [
-                          {
-                            "pattern": "Corpses:",
-                            "type": "exactMatch"
-                          }
-                        ],
-                        "fireLength": 99,
-                        "script": "ataxiaTemp.toButcher = {}"
                       },
                       {
                         "name": "Mounted",
@@ -1155,7 +1145,7 @@
                       {
                         "name": "Explorers Rankings",
                         "isActive": "yes",
-                        "isFolder": "yes",
+                        "isFolder": "no",
                         "children": [
                           {
                             "name": "Get Person",
@@ -1165,7 +1155,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if not ataxiaNDB_Exists(matches[3]) then\n\ttable.insert(explorersUnchecked, matches[3])\nend"
+                            "script": "if not ataxiaNDB_Exists(matches[3])\n\tand not (ataxiaNDB_isBlacklisted and ataxiaNDB_isBlacklisted(matches[3])) then\n\ttable.insert(explorersUnchecked, matches[3])\nend"
                           },
                           {
                             "name": "End Capture",
@@ -1177,12 +1167,20 @@
                             ],
                             "script": "setTriggerStayOpen(\"Explorers Rankings\", 0)\nexplorersUnchecked = explorersUnchecked or {}\nif explorersUnchecked[1] then\n\tataxiaEcho(#explorersUnchecked..\" new names identified, grabbing their info.\")\n\tcecho(\"\\n<a_darkgrey> - \"..table.concat(explorersUnchecked, \", \")..\".\")\n\tataxiaNDB_NameList(explorersUnchecked)\nend"
                           }
-                        ]
+                        ],
+                        "patterns": [
+                          {
+                            "pattern": "*********************************[ Explorers ]*********************************",
+                            "type": "exactMatch"
+                          }
+                        ],
+                        "fireLength": 999,
+                        "script": "explorersUnchecked = {}"
                       },
                       {
                         "name": "Who Grouping",
                         "isActive": "yes",
-                        "isFolder": "yes",
+                        "isFolder": "no",
                         "children": [
                           {
                             "name": "Get Person",
@@ -1243,7 +1241,15 @@
                               }
                             ]
                           }
-                        ]
+                        ],
+                        "patterns": [
+                          {
+                            "pattern": "-Parsing Who List:",
+                            "type": "exactMatch"
+                          }
+                        ],
+                        "fireLength": 999,
+                        "script": "needMore = false"
                       },
                       {
                         "name": "Get Player Information",
@@ -1254,17 +1260,6 @@
                             "type": "regex"
                           }
                         ]
-                      },
-                      {
-                        "name": "Explorers Rankings",
-                        "patterns": [
-                          {
-                            "pattern": "*********************************[ Explorers ]*********************************",
-                            "type": "exactMatch"
-                          }
-                        ],
-                        "fireLength": 999,
-                        "script": "explorersUnchecked = {}"
                       },
                       {
                         "name": "City Enemies Capture",
@@ -1281,18 +1276,6 @@
                         ],
                         "multiline": "yes",
                         "multilineDelta": 1
-                      },
-                      {
-                        "name": "Who Grouping",
-                        "isActive": "no",
-                        "patterns": [
-                          {
-                            "pattern": "-Parsing Who List:",
-                            "type": "exactMatch"
-                          }
-                        ],
-                        "fireLength": 999,
-                        "script": "needMore = false"
                       }
                     ]
                   },
@@ -3805,7 +3788,7 @@
                           {
                             "name": "Room Info Shortener",
                             "isActive": "yes",
-                            "isFolder": "yes",
+                            "isFolder": "no",
                             "children": [
                               {
                                 "name": "Remove Line",
@@ -3829,11 +3812,7 @@
                                   }
                                 ]
                               }
-                            ]
-                          },
-                          {
-                            "name": "Room Info Shortener",
-                            "isActive": "no",
+                            ],
                             "patterns": [
                               {
                                 "pattern": "^(.+). \\(.+\\)$",
@@ -4936,7 +4915,7 @@
                                   {
                                     "name": "Spin into retardation sequence",
                                     "isActive": "yes",
-                                    "isFolder": "yes",
+                                    "isFolder": "no",
                                     "children": [
                                       {
                                         "name": "Embedded",
@@ -4948,10 +4927,7 @@
                                         ],
                                         "fireLength": 999
                                       }
-                                    ]
-                                  },
-                                  {
-                                    "name": "Spin into retardation sequence",
+                                    ],
                                     "patterns": [
                                       {
                                         "pattern": "^(\\w+) vigorously spins (a pyramid carved of crystal|an opaque crystal disc), and it begins to hover in the air.$",
@@ -5651,7 +5627,7 @@
                               {
                                 "name": "Allies List",
                                 "isActive": "yes",
-                                "isFolder": "yes",
+                                "isFolder": "no",
                                 "children": [
                                   {
                                     "name": "Ally found",
@@ -5676,12 +5652,24 @@
                                     ],
                                     "script": "setTriggerStayOpen(\"Allies List\", 0)"
                                   }
-                                ]
+                                ],
+                                "patterns": [
+                                  {
+                                    "pattern": "You have the following allies:",
+                                    "type": "exactMatch"
+                                  },
+                                  {
+                                    "pattern": "With an indignant grunt, you remove everyone from your list of allies.",
+                                    "type": "exactMatch"
+                                  }
+                                ],
+                                "fireLength": 999,
+                                "script": "selectString(line,1)\nfg(\"NavajoWhite\")\ndeselect()\n\nataxiaTemp.allies = {}"
                               },
                               {
                                 "name": "Enemies List",
                                 "isActive": "yes",
-                                "isFolder": "yes",
+                                "isFolder": "no",
                                 "children": [
                                   {
                                     "name": "Enemy found",
@@ -5702,35 +5690,7 @@
                                     ],
                                     "script": "setTriggerStayOpen(\"Enemies List\", 0)"
                                   }
-                                ]
-                              },
-                              {
-                                "name": "No allies/enemies",
-                                "patterns": [
-                                  {
-                                    "pattern": "^You have no (allies|enemies).$",
-                                    "type": "regex"
-                                  }
                                 ],
-                                "script": "selectString(line,1)\nsetItalics(true)\ndeselect()\nresetFormat()\n\nataxiaTemp[matches[2]] = {}"
-                              },
-                              {
-                                "name": "Allies List",
-                                "patterns": [
-                                  {
-                                    "pattern": "You have the following allies:",
-                                    "type": "exactMatch"
-                                  },
-                                  {
-                                    "pattern": "With an indignant grunt, you remove everyone from your list of allies.",
-                                    "type": "exactMatch"
-                                  }
-                                ],
-                                "fireLength": 999,
-                                "script": "selectString(line,1)\nfg(\"NavajoWhite\")\ndeselect()\n\nataxiaTemp.allies = {}"
-                              },
-                              {
-                                "name": "Enemies List",
                                 "patterns": [
                                   {
                                     "pattern": "You have the following enemies:",
@@ -5743,6 +5703,16 @@
                                 ],
                                 "fireLength": 999,
                                 "script": "selectString(line,1)\nfg(\"orange\")\ndeselect()\n\nataxiaTemp.enemies = {}"
+                              },
+                              {
+                                "name": "No allies/enemies",
+                                "patterns": [
+                                  {
+                                    "pattern": "^You have no (allies|enemies).$",
+                                    "type": "regex"
+                                  }
+                                ],
+                                "script": "selectString(line,1)\nsetItalics(true)\ndeselect()\nresetFormat()\n\nataxiaTemp[matches[2]] = {}"
                               },
                               {
                                 "name": "Ally/Enemy added",
@@ -7012,7 +6982,7 @@
                                   {
                                     "name": "Swarm Tracking",
                                     "isActive": "yes",
-                                    "isFolder": "yes",
+                                    "isFolder": "no",
                                     "children": [
                                       {
                                         "name": "Swarm Found",
@@ -7033,19 +7003,7 @@
                                         ],
                                         "script": "setTriggerStayOpen(\"Swarm Tracking\", 0)\n\nif pariah and pariah.burrow then\n  tAffs.burrow = true\n  if applyAffV3 then applyAffV3(\"burrow\") end\nend"
                                       }
-                                    ]
-                                  },
-                                  {
-                                    "name": "Transpose",
-                                    "patterns": [
-                                      {
-                                        "pattern": "^You drip some (\\w+) onto .+ allowing it to mix with the blood of (\\w+).$",
-                                        "type": "regex"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "name": "Swarm Tracking",
+                                    ],
                                     "patterns": [
                                       {
                                         "pattern": "ID         Size             Infested with   Status                             ",
@@ -7056,10 +7014,19 @@
                                         "type": "exactMatch"
                                       }
                                     ],
+                                    "fireLength": 99,
                                     "multiline": "yes",
                                     "multilineDelta": 1,
-                                    "fireLength": 99,
                                     "script": "deleteLine()\nataxia_Echo(\"Reset swarm status.\")"
+                                  },
+                                  {
+                                    "name": "Transpose",
+                                    "patterns": [
+                                      {
+                                        "pattern": "^You drip some (\\w+) onto .+ allowing it to mix with the blood of (\\w+).$",
+                                        "type": "regex"
+                                      }
+                                    ]
                                   }
                                 ]
                               },
@@ -8477,7 +8444,7 @@
                                   {
                                     "name": "Readaura stuff",
                                     "isActive": "yes",
-                                    "isFolder": "yes",
+                                    "isFolder": "no",
                                     "children": [
                                       {
                                         "name": "def",
@@ -8497,7 +8464,15 @@
                                           }
                                         ]
                                       }
-                                    ]
+                                    ],
+                                    "patterns": [
+                                      {
+                                        "pattern": "^Studying the aura of (\\w+), you look for traces of anything that may be protecting it.$",
+                                        "type": "regex"
+                                      }
+                                    ],
+                                    "fireLength": 99,
+                                    "script": "capturing_readaura = true\ndeleteLine()"
                                   },
                                   {
                                     "name": "Enlighten",
@@ -8507,17 +8482,6 @@
                                         "type": "regex"
                                       }
                                     ]
-                                  },
-                                  {
-                                    "name": "Readaura stuff",
-                                    "patterns": [
-                                      {
-                                        "pattern": "^Studying the aura of (\\w+), you look for traces of anything that may be protecting it.$",
-                                        "type": "regex"
-                                      }
-                                    ],
-                                    "fireLength": 99,
-                                    "script": "capturing_readaura = true\ndeleteLine()"
                                   },
                                   {
                                     "name": "Readaura Get Affs",
@@ -10179,7 +10143,7 @@
                                   {
                                     "name": "Get Humour Levels",
                                     "isActive": "yes",
-                                    "isFolder": "yes",
+                                    "isFolder": "no",
                                     "children": [
                                       {
                                         "name": "Matched humour",
@@ -10217,7 +10181,15 @@
                                           }
                                         ]
                                       }
-                                    ]
+                                    ],
+                                    "patterns": [
+                                      {
+                                        "pattern": "^Looking over \\w+, you see that:$",
+                                        "type": "regex"
+                                      }
+                                    ],
+                                    "fireLength": 20,
+                                    "script": "deleteLine()\ncecho(\"\\n<a_blue> --- [ <NavajoWhite>EVALUATE: <a_green>\"..target:upper()..\"<a_blue> ] ---\")\ntEval = {\n\tsanguine = 0, choleric = 0, phlegmatic = 0, melancholic = 0,\n\thp = 0, mp = 0,\n}\n\ntAffs.sanguine = nil\ntAffs.melancholic = nil\ntAffs.phlegmatic = nil\ntAffs.choleric = nil"
                                   },
                                   {
                                     "name": "Homunculus Mercury",
@@ -10268,18 +10240,6 @@
                                       }
                                     ],
                                     "script": "tAffs.sanguine = nil"
-                                  },
-                                  {
-                                    "name": "Get Humour Levels",
-                                    "isActive": "no",
-                                    "patterns": [
-                                      {
-                                        "pattern": "^Looking over \\w+, you see that:$",
-                                        "type": "regex"
-                                      }
-                                    ],
-                                    "fireLength": 20,
-                                    "script": "deleteLine()\ncecho(\"\\n<a_blue> --- [ <NavajoWhite>EVALUATE: <a_green>\"..target:upper()..\"<a_blue> ] ---\")\ntEval = {\n\tsanguine = 0, choleric = 0, phlegmatic = 0, melancholic = 0,\n\thp = 0, mp = 0,\n}\n\ntAffs.sanguine = nil\ntAffs.melancholic = nil\ntAffs.phlegmatic = nil\ntAffs.choleric = nil"
                                   },
                                   {
                                     "name": "Temper",
@@ -10352,7 +10312,7 @@
                               {
                                 "name": "Fullsense-Hyena",
                                 "isActive": "yes",
-                                "isFolder": "yes",
+                                "isFolder": "no",
                                 "children": [
                                   {
                                     "name": "Each person",
@@ -10374,12 +10334,20 @@
                                     ],
                                     "script": "setTriggerStayOpen(\"Fullsense-Hyena\", 0)\nenableTrigger(\"Fullsense-Hyena\")\nif not capturing_fullsense_hyena then return end\ncapturing_fullsense_hyena = nil\ndeleteLine()\nif not fullSensePeople then return end\nlocal sp = ataxia.settings.separator\nlocal pstring = \"pt Fullsense info: \"\n\nfor location, people in pairs(fullSensePeople) do\n\tcecho(\"\\n<a_blue>[<DimGrey>\"..location..\"<a_blue>] - \")\n\tpstring = pstring..sp..\"pt [\"..location:title()..\"]: \"\n\tmmp.locateAndEchoSide(location)\n\tcecho(\"\\n\")\n\tlocal charstring = \"  \"\n\tfor ind, person in pairs(fullSensePeople[location]) do\n\t\tpstring = pstring..person\t\t\n\t\tif ataxiaNDB_Exists(person) then\n\t\t\tcharstring = charstring..\"<\"..ataxiaNDB_getColour(person)..\">\"..person\n\t\telse\n\t\t\tcharstring = charstring..\"<grey>\"..person\n\t\tend\n\t\tcharstring = charstring..\"<grey>\"..(ind == #fullSensePeople[location] and \".\" or \", \")\n\t\tpstring = pstring..(ind == #fullSensePeople[location] and \".\" or \", \")\n\tend\n\tcecho(charstring..\"\\n \")\nend\nataxiaPromptSub()\n\nif ataxia_raidMode(\"fullsense\") then\n  send(pstring)\nend"
                                   }
-                                ]
+                                ],
+                                "patterns": [
+                                  {
+                                    "pattern": "Your faithful hyena reports that it has scented the following people nearby:",
+                                    "type": "exactMatch"
+                                  }
+                                ],
+                                "fireLength": 100,
+                                "script": "capturing_fullsense_hyena = true\nmmp.pdb_lastupdate = {}\n\nfullSensePeople = {}"
                               },
                               {
                                 "name": "Fullsense-Demon",
                                 "isActive": "yes",
-                                "isFolder": "yes",
+                                "isFolder": "no",
                                 "children": [
                                   {
                                     "name": "Each person",
@@ -10401,37 +10369,7 @@
                                     ],
                                     "script": "setTriggerStayOpen(\"Fullsense-Demon\", 0)\nenableTrigger(\"Fullsense-Demon\")\nif not capturing_fullsense_demon then return end\ncapturing_fullsense_demon = nil\ndeleteLine()\nif not fullSensePeople then return end\nlocal sp = ataxia.settings.separator\nlocal pstring = \"pt Fullsense info: \"\n\nfor location, people in pairs(fullSensePeople) do\n\tcecho(\"\\n<a_blue>[<DimGrey>\"..location..\"<a_blue>] - \")\n\tpstring = pstring..sp..\"pt [\"..location:title()..\"]: \"\n\tmmp.locateAndEchoSide(location)\n\tcecho(\"\\n\")\n\tlocal charstring = \"  \"\n\tfor ind, person in pairs(fullSensePeople[location]) do\n\t\tpstring = pstring..person\t\t\n\t\tif ataxiaNDB_Exists(person) then\n\t\t\tcharstring = charstring..\"<\"..ataxiaNDB_getColour(person)..\">\"..person\n\t\telse\n\t\t\tcharstring = charstring..\"<grey>\"..person\n\t\tend\n\t\tcharstring = charstring..\"<grey>\"..(ind == #fullSensePeople[location] and \".\" or \", \")\n\t\tpstring = pstring..(ind == #fullSensePeople[location] and \".\" or \", \")\n\tend\n\tcecho(charstring..\"\\n \")\nend\nataxiaPromptSub()\n\nif ataxia_raidMode(\"fullsense\") then\n  send(pstring)\nend"
                                   }
-                                ]
-                              },
-                              {
-                                "name": "NEW DEADEYES",
-                                "isActive": "yes",
-                                "isFolder": "yes",
-                                "children": [
-                                  {
-                                    "name": "CLUMSY CHECK",
-                                    "patterns": [
-                                      {
-                                        "pattern": "Your attempt to invoke the evileye was so clumsy that the malignant power unravels long before it can take form.",
-                                        "type": "exactMatch"
-                                      }
-                                    ]
-                                  }
-                                ]
-                              },
-                              {
-                                "name": "Fullsense-Hyena",
-                                "patterns": [
-                                  {
-                                    "pattern": "Your faithful hyena reports that it has scented the following people nearby:",
-                                    "type": "exactMatch"
-                                  }
                                 ],
-                                "fireLength": 100,
-                                "script": "capturing_fullsense_hyena = true\nmmp.pdb_lastupdate = {}\n\nfullSensePeople = {}"
-                              },
-                              {
-                                "name": "Fullsense-Demon",
                                 "patterns": [
                                   {
                                     "pattern": "You bid your Baalzadeen to seek out life presences nearby.",
@@ -10443,6 +10381,19 @@
                               },
                               {
                                 "name": "NEW DEADEYES",
+                                "isActive": "yes",
+                                "isFolder": "no",
+                                "children": [
+                                  {
+                                    "name": "CLUMSY CHECK",
+                                    "patterns": [
+                                      {
+                                        "pattern": "Your attempt to invoke the evileye was so clumsy that the malignant power unravels long before it can take form.",
+                                        "type": "exactMatch"
+                                      }
+                                    ]
+                                  }
+                                ],
                                 "patterns": [
                                   {
                                     "pattern": "^Summoning up the curse of (\\w+), you stare at (\\w+), giving \\w+ the evil eye\\.$",
@@ -12266,7 +12217,7 @@
                                           {
                                             "name": "Battlefury Perceive",
                                             "isActive": "yes",
-                                            "isFolder": "yes",
+                                            "isFolder": "no",
                                             "children": [
                                               {
                                                 "name": "Fracture Type",
@@ -12288,11 +12239,7 @@
                                                 ],
                                                 "script": "setTriggerStayOpen(\"Battlefury Perceive\", 0)"
                                               }
-                                            ]
-                                          },
-                                          {
-                                            "name": "Battlefury Perceive",
-                                            "isActive": "no",
+                                            ],
                                             "patterns": [
                                               {
                                                 "pattern": "^Narrowing your gaze upon (\\w+), you take stock of \\w+ current injuries.$",
@@ -15505,7 +15452,7 @@
                           {
                             "name": "Curing Priority List",
                             "isActive": "yes",
-                            "isFolder": "yes",
+                            "isFolder": "no",
                             "children": [
                               {
                                 "name": "Get Line of Affs",
@@ -15525,10 +15472,7 @@
                                   }
                                 ]
                               }
-                            ]
-                          },
-                          {
-                            "name": "Curing Priority List",
+                            ],
                             "patterns": [
                               {
                                 "pattern": "Your affliction curing priorities:",
@@ -15649,7 +15593,7 @@
                           {
                             "name": "Tree Touch",
                             "isActive": "yes",
-                            "isFolder": "yes",
+                            "isFolder": "no",
                             "children": [
                               {
                                 "name": "Tree Touched",
@@ -15663,7 +15607,14 @@
                                 "highlightFG": "#000000",
                                 "highlightBG": "#75d16a"
                               }
-                            ]
+                            ],
+                            "patterns": [
+                              {
+                                "pattern": "[Curing]: TOUCH TREE",
+                                "type": "exactMatch"
+                              }
+                            ],
+                            "fireLength": 1
                           },
                           {
                             "name": "Treed (fake?)",
@@ -15674,16 +15625,6 @@
                               }
                             ],
                             "script": "ataxiaTemp.canTree = false"
-                          },
-                          {
-                            "name": "Tree Touch",
-                            "patterns": [
-                              {
-                                "pattern": "[Curing]: TOUCH TREE",
-                                "type": "exactMatch"
-                              }
-                            ],
-                            "fireLength": 1
                           },
                           {
                             "name": "Got Tree Bal",
@@ -15824,7 +15765,7 @@
                       {
                         "name": "Defence List",
                         "isActive": "yes",
-                        "isFolder": "yes",
+                        "isFolder": "no",
                         "children": [
                           {
                             "name": "get Defence",
@@ -15845,7 +15786,15 @@
                             ],
                             "script": "setTriggerStayOpen(\"Defence List\", 0)\nif not capturing_defences then return end\ndeleteLine()\ncapturing_defences = nil\nataxia_reportDefences()\n"
                           }
-                        ]
+                        ],
+                        "patterns": [
+                          {
+                            "pattern": "You have the following defences:",
+                            "type": "exactMatch"
+                          }
+                        ],
+                        "fireLength": 99,
+                        "script": "capturing_defences = true\ndeleteLine()\nataxiaEcho(\"Defences currently active:\")"
                       },
                       {
                         "name": "Bleeding",
@@ -15864,17 +15813,6 @@
                             "type": "exactMatch"
                           }
                         ]
-                      },
-                      {
-                        "name": "Defence List",
-                        "patterns": [
-                          {
-                            "pattern": "You have the following defences:",
-                            "type": "exactMatch"
-                          }
-                        ],
-                        "fireLength": 99,
-                        "script": "capturing_defences = true\ndeleteLine()\nataxiaEcho(\"Defences currently active:\")"
                       },
                       {
                         "name": "Transmuted",
@@ -16213,7 +16151,7 @@
                           {
                             "name": "Extraction Mineral List",
                             "isActive": "yes",
-                            "isFolder": "yes",
+                            "isFolder": "no",
                             "children": [
                               {
                                 "name": "Mineral Found",
@@ -16234,10 +16172,7 @@
                                 ],
                                 "script": "setTriggerStayOpen(\"Extraction Mineral List\",0)\nif not ataxiaExtraction or not gmcp.Room or not gmcp.Room.Info then return end\nif ataxiaExtraction[gmcp.Room.Info.area] then\n  ataxiaEcho(\"Updated \"..gmcp.Room.Info.area..\" to <green>\"..ataxiaExtraction[gmcp.Room.Info.area]..\".\")\nend"
                               }
-                            ]
-                          },
-                          {
-                            "name": "Extraction Mineral List",
+                            ],
                             "patterns": [
                               {
                                 "pattern": "You spot the following minerals here:",
@@ -16329,7 +16264,7 @@
                           {
                             "name": "Grab Terminus Abilities",
                             "isActive": "yes",
-                            "isFolder": "yes",
+                            "isFolder": "no",
                             "children": [
                               {
                                 "name": "Gag Unnecessary Lines",
@@ -16366,12 +16301,20 @@
                                   }
                                 ]
                               }
-                            ]
+                            ],
+                            "patterns": [
+                              {
+                                "pattern": "Abilities in Terminus:",
+                                "type": "exactMatch"
+                              }
+                            ],
+                            "fireLength": 999,
+                            "script": "if updating_terminus_abilities then\n\tdeleteLine()\nend\nataxiaTables.depthswalker.abilities = {}"
                           },
                           {
                             "name": "Fullsense-Monk/DW",
                             "isActive": "yes",
-                            "isFolder": "yes",
+                            "isFolder": "no",
                             "children": [
                               {
                                 "name": "Each person",
@@ -16397,18 +16340,23 @@
                                 ],
                                 "script": "setTriggerStayOpen(\"Fullsense-Monk/DW\", 0)\nenableTrigger(\"Fullsense-Monk/DW\")\ndeleteLine()\nif not fullSensePeople then return end\nlocal sp = ataxia.settings.separator\nlocal pstring = \"pt Fullsense info: \"\n\nfor location, people in pairs(fullSensePeople) do\n\tcecho(\"\\n<a_blue>[<DimGrey>\"..location..\"<a_blue>] - \")\n\tpstring = pstring..sp..\"pt [\"..location:title()..\"]: \"\n\tmmp.locateAndEchoSide(location)\n\tcecho(\"\\n\")\n\tlocal charstring = \"  \"\n\tfor ind, person in pairs(fullSensePeople[location]) do\n\t\tpstring = pstring..person\t\t\n\t\tif ataxiaNDB_Exists(person) then\n\t\t\tcharstring = charstring..\"<\"..ataxiaNDB_getColour(person)..\">\"..person\n\t\telse\n\t\t\tcharstring = charstring..\"<grey>\"..person\n\t\tend\n\t\tcharstring = charstring..\"<grey>\"..(ind == #fullSensePeople[location] and \".\" or \", \")\n\t\tpstring = pstring..(ind == #fullSensePeople[location] and \".\" or \", \")\n\tend\n\tcecho(charstring..\"\\n \")\nend\nataxiaPromptSub()\n\nif ataxia_raidMode(\"fullsense\") then\n  send(pstring)\nend"
                               }
-                            ]
-                          },
-                          {
-                            "name": "Grab Terminus Abilities",
+                            ],
                             "patterns": [
                               {
-                                "pattern": "Abilities in Terminus:",
+                                "pattern": "You cast your will out across the land, surveying all that stand within shadow's embrace.",
+                                "type": "exactMatch"
+                              },
+                              {
+                                "pattern": "You seek out all mental presences within your reach:",
+                                "type": "exactMatch"
+                              },
+                              {
+                                "pattern": "Focusing your every sense, you scour the area for traces of others:",
                                 "type": "exactMatch"
                               }
                             ],
-                            "fireLength": 999,
-                            "script": "if updating_terminus_abilities then\n\tdeleteLine()\nend\nataxiaTables.depthswalker.abilities = {}"
+                            "fireLength": 100,
+                            "script": "mmp.pdb_lastupdate = {}\n\nfullSensePeople = {}"
                           },
                           {
                             "name": "Age Changed",
@@ -16501,25 +16449,6 @@
                                 "type": "exactMatch"
                               }
                             ]
-                          },
-                          {
-                            "name": "Fullsense-Monk/DW",
-                            "patterns": [
-                              {
-                                "pattern": "You cast your will out across the land, surveying all that stand within shadow's embrace.",
-                                "type": "exactMatch"
-                              },
-                              {
-                                "pattern": "You seek out all mental presences within your reach:",
-                                "type": "exactMatch"
-                              },
-                              {
-                                "pattern": "Focusing your every sense, you scour the area for traces of others:",
-                                "type": "exactMatch"
-                              }
-                            ],
-                            "fireLength": 100,
-                            "script": "mmp.pdb_lastupdate = {}\n\nfullSensePeople = {}"
                           }
                         ]
                       },
@@ -16536,7 +16465,7 @@
                               {
                                 "name": "VIBES in room",
                                 "isActive": "yes",
-                                "isFolder": "yes",
+                                "isFolder": "no",
                                 "children": [
                                   {
                                     "name": "Vibe Found",
@@ -16561,7 +16490,15 @@
                                     ],
                                     "script": "setTriggerStayOpen(\"VIBES in room\",0)\n\nif ataxiaTemp.embeddingVibes then\n\tmagiVibes_nextEmbed()\nend\n"
                                   }
-                                ]
+                                ],
+                                "patterns": [
+                                  {
+                                    "pattern": "The following vibrations reside here:",
+                                    "type": "exactMatch"
+                                  }
+                                ],
+                                "fireLength": 99,
+                                "script": "vibes_inRoom = {}"
                               },
                               {
                                 "name": "Vibe Active",
@@ -16643,17 +16580,6 @@
                                     "type": "exactMatch"
                                   }
                                 ]
-                              },
-                              {
-                                "name": "VIBES in room",
-                                "patterns": [
-                                  {
-                                    "pattern": "The following vibrations reside here:",
-                                    "type": "exactMatch"
-                                  }
-                                ],
-                                "fireLength": 99,
-                                "script": "vibes_inRoom = {}"
                               },
                               {
                                 "name": "Embedded a vibration",
@@ -16984,7 +16910,7 @@
                           {
                             "name": "Probe Doll",
                             "isActive": "yes",
-                            "isFolder": "yes",
+                            "isFolder": "no",
                             "children": [
                               {
                                 "name": "Delete Extra",
@@ -17021,10 +16947,7 @@
                                   }
                                 ]
                               }
-                            ]
-                          },
-                          {
-                            "name": "Probe Doll",
+                            ],
                             "patterns": [
                               {
                                 "pattern": "A vodun doll roughly resembling",
@@ -21979,7 +21902,7 @@
                               {
                                 "name": "Drawslash",
                                 "isActive": "yes",
-                                "isFolder": "yes",
+                                "isFolder": "no",
                                 "children": [
                                   {
                                     "name": "hit",
@@ -21991,7 +21914,25 @@
                                     ],
                                     "script": "--former name: connect\n--slc.push(matches[2], \"drawslash\")\n\n--dbg(matches[1])\nif SLC_blocked(matches[1]) == false then\n\tSLC_connects(slc_last_limb,\"drawslash\")\nend"
                                   }
-                                ]
+                                ],
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) unleashes a vicious slash towards you before resheathing \\w+ blade, \\w+ \\w+\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^The blade bites deeply into your (.*)\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "1",
+                                    "type": "spacer"
+                                  }
+                                ],
+                                "fireLength": 1,
+                                "multiline": "yes",
+                                "multilineDelta": 2,
+                                "script": "slc_last_limb = multimatches[2][2]"
                               },
                               {
                                 "name": "Legslash",
@@ -22059,27 +22000,6 @@
                                 "multiline": "yes",
                                 "multilineDelta": 1,
                                 "script": "slc_last_limb = multimatches[1][3]"
-                              },
-                              {
-                                "name": "Drawslash",
-                                "patterns": [
-                                  {
-                                    "pattern": "^(\\w+) unleashes a vicious slash towards you before resheathing \\w+ blade, \\w+ \\w+\\.$",
-                                    "type": "regex"
-                                  },
-                                  {
-                                    "pattern": "^The blade bites deeply into your (.*)\\.$",
-                                    "type": "regex"
-                                  },
-                                  {
-                                    "pattern": "1",
-                                    "type": "spacer"
-                                  }
-                                ],
-                                "multiline": "yes",
-                                "multilineDelta": 2,
-                                "fireLength": 1,
-                                "script": "slc_last_limb = multimatches[2][2]"
                               },
                               {
                                 "name": "Legslash",
@@ -22417,7 +22337,7 @@
                               {
                                 "name": "Tekura Punch 1",
                                 "isActive": "yes",
-                                "isFolder": "yes",
+                                "isFolder": "no",
                                 "children": [
                                   {
                                     "name": "Punch Hit",
@@ -22429,12 +22349,25 @@
                                     ],
                                     "script": "slc_last_limb = matches[2]\nSLC_connects(slc_last_limb,\"tekurapunch\")"
                                   }
-                                ]
+                                ],
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) launches a powerful uppercut at you.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "1",
+                                    "type": "spacer"
+                                  }
+                                ],
+                                "fireLength": 1,
+                                "multiline": "yes",
+                                "multilineDelta": 1
                               },
                               {
                                 "name": "Tekura Punch 2",
                                 "isActive": "yes",
-                                "isFolder": "yes",
+                                "isFolder": "no",
                                 "children": [
                                   {
                                     "name": "Punch Hit",
@@ -22446,12 +22379,25 @@
                                     ],
                                     "script": "slc_last_limb = matches[2]\nSLC_connects(slc_last_limb,\"tekurapunch\")"
                                   }
-                                ]
+                                ],
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) unleashes a powerful hook towards you.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "1",
+                                    "type": "spacer"
+                                  }
+                                ],
+                                "fireLength": 1,
+                                "multiline": "yes",
+                                "multilineDelta": 1
                               },
                               {
                                 "name": "Tekura Punch 3",
                                 "isActive": "yes",
-                                "isFolder": "yes",
+                                "isFolder": "no",
                                 "children": [
                                   {
                                     "name": "Punch Hit",
@@ -22463,12 +22409,25 @@
                                     ],
                                     "script": "slc_last_limb = matches[2]\nSLC_connects(slc_last_limb,\"tekurapunch\")"
                                   }
-                                ]
+                                ],
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) forms a spear hand and stabs out at you.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "1",
+                                    "type": "spacer"
+                                  }
+                                ],
+                                "fireLength": 1,
+                                "multiline": "yes",
+                                "multilineDelta": 1
                               },
                               {
                                 "name": "Tekura Punch 4",
                                 "isActive": "yes",
-                                "isFolder": "yes",
+                                "isFolder": "no",
                                 "children": [
                                   {
                                     "name": "Punch Hit",
@@ -22480,12 +22439,25 @@
                                     ],
                                     "script": "slc_last_limb = matches[2]\nSLC_connects(slc_last_limb,\"tekurapunch\")"
                                   }
-                                ]
+                                ],
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) balls up one fist and hammerfists you.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "1",
+                                    "type": "spacer"
+                                  }
+                                ],
+                                "fireLength": 1,
+                                "multiline": "yes",
+                                "multilineDelta": 1
                               },
                               {
                                 "name": "Tekura Kick 1",
                                 "isActive": "yes",
-                                "isFolder": "yes",
+                                "isFolder": "no",
                                 "children": [
                                   {
                                     "name": "Kick Hit",
@@ -22497,12 +22469,25 @@
                                     ],
                                     "script": "slc_last_limb = matches[2]\nSLC_connects(slc_last_limb,\"tekurakick\")"
                                   }
-                                ]
+                                ],
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) pumps out at you with a powerful side kick\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "1",
+                                    "type": "spacer"
+                                  }
+                                ],
+                                "fireLength": 1,
+                                "multiline": "yes",
+                                "multilineDelta": 1
                               },
                               {
                                 "name": "Tekura Kick 2",
                                 "isActive": "yes",
-                                "isFolder": "yes",
+                                "isFolder": "no",
                                 "children": [
                                   {
                                     "name": "Kick Hit",
@@ -22514,12 +22499,25 @@
                                     ],
                                     "script": "slc_last_limb = matches[2]\nSLC_connects(slc_last_limb,\"tekurakick\")"
                                   }
-                                ]
+                                ],
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) lets fly at you with a snap kick\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "1",
+                                    "type": "spacer"
+                                  }
+                                ],
+                                "fireLength": 1,
+                                "multiline": "yes",
+                                "multilineDelta": 1
                               },
                               {
                                 "name": "Tekura Kick 3",
                                 "isActive": "yes",
-                                "isFolder": "yes",
+                                "isFolder": "no",
                                 "children": [
                                   {
                                     "name": "Kick Hit",
@@ -22531,12 +22529,25 @@
                                     ],
                                     "script": "slc_last_limb = matches[2]\nSLC_connects(slc_last_limb,\"tekurakick\")"
                                   }
-                                ]
+                                ],
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) hurls \\w+ towards you with a lightning-fast moon kick\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "1",
+                                    "type": "spacer"
+                                  }
+                                ],
+                                "fireLength": 1,
+                                "multiline": "yes",
+                                "multilineDelta": 1
                               },
                               {
                                 "name": "Tekura Kick 4",
                                 "isActive": "yes",
-                                "isFolder": "yes",
+                                "isFolder": "no",
                                 "children": [
                                   {
                                     "name": "Kick Hit",
@@ -22548,7 +22559,20 @@
                                     ],
                                     "script": "slc_last_limb = matches[2]\nSLC_connects(slc_last_limb,\"tekurakick\")"
                                   }
-                                ]
+                                ],
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) spins into the air and throws a whirlwind kick towards you\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "1",
+                                    "type": "spacer"
+                                  }
+                                ],
+                                "fireLength": 1,
+                                "multiline": "yes",
+                                "multilineDelta": 1
                               },
                               {
                                 "name": "Axekick",
@@ -22566,134 +22590,6 @@
                                     "script": "slc_last_limb = matches[2]\nSLC_connects(slc_last_limb,\"axekick\")"
                                   }
                                 ]
-                              },
-                              {
-                                "name": "Tekura Punch 1",
-                                "patterns": [
-                                  {
-                                    "pattern": "^(\\w+) launches a powerful uppercut at you.$",
-                                    "type": "regex"
-                                  },
-                                  {
-                                    "pattern": "1",
-                                    "type": "spacer"
-                                  }
-                                ],
-                                "multiline": "yes",
-                                "multilineDelta": 1,
-                                "fireLength": 1
-                              },
-                              {
-                                "name": "Tekura Punch 2",
-                                "patterns": [
-                                  {
-                                    "pattern": "^(\\w+) unleashes a powerful hook towards you.$",
-                                    "type": "regex"
-                                  },
-                                  {
-                                    "pattern": "1",
-                                    "type": "spacer"
-                                  }
-                                ],
-                                "multiline": "yes",
-                                "multilineDelta": 1,
-                                "fireLength": 1
-                              },
-                              {
-                                "name": "Tekura Punch 3",
-                                "patterns": [
-                                  {
-                                    "pattern": "^(\\w+) forms a spear hand and stabs out at you.$",
-                                    "type": "regex"
-                                  },
-                                  {
-                                    "pattern": "1",
-                                    "type": "spacer"
-                                  }
-                                ],
-                                "multiline": "yes",
-                                "multilineDelta": 1,
-                                "fireLength": 1
-                              },
-                              {
-                                "name": "Tekura Punch 4",
-                                "patterns": [
-                                  {
-                                    "pattern": "^(\\w+) balls up one fist and hammerfists you.$",
-                                    "type": "regex"
-                                  },
-                                  {
-                                    "pattern": "1",
-                                    "type": "spacer"
-                                  }
-                                ],
-                                "multiline": "yes",
-                                "multilineDelta": 1,
-                                "fireLength": 1
-                              },
-                              {
-                                "name": "Tekura Kick 1",
-                                "patterns": [
-                                  {
-                                    "pattern": "^(\\w+) pumps out at you with a powerful side kick\\.$",
-                                    "type": "regex"
-                                  },
-                                  {
-                                    "pattern": "1",
-                                    "type": "spacer"
-                                  }
-                                ],
-                                "multiline": "yes",
-                                "multilineDelta": 1,
-                                "fireLength": 1
-                              },
-                              {
-                                "name": "Tekura Kick 2",
-                                "patterns": [
-                                  {
-                                    "pattern": "^(\\w+) lets fly at you with a snap kick\\.$",
-                                    "type": "regex"
-                                  },
-                                  {
-                                    "pattern": "1",
-                                    "type": "spacer"
-                                  }
-                                ],
-                                "multiline": "yes",
-                                "multilineDelta": 1,
-                                "fireLength": 1
-                              },
-                              {
-                                "name": "Tekura Kick 3",
-                                "patterns": [
-                                  {
-                                    "pattern": "^(\\w+) hurls \\w+ towards you with a lightning-fast moon kick\\.$",
-                                    "type": "regex"
-                                  },
-                                  {
-                                    "pattern": "1",
-                                    "type": "spacer"
-                                  }
-                                ],
-                                "multiline": "yes",
-                                "multilineDelta": 1,
-                                "fireLength": 1
-                              },
-                              {
-                                "name": "Tekura Kick 4",
-                                "patterns": [
-                                  {
-                                    "pattern": "^(\\w+) spins into the air and throws a whirlwind kick towards you\\.$",
-                                    "type": "regex"
-                                  },
-                                  {
-                                    "pattern": "1",
-                                    "type": "spacer"
-                                  }
-                                ],
-                                "multiline": "yes",
-                                "multilineDelta": 1,
-                                "fireLength": 1
                               },
                               {
                                 "name": "Axekick",
@@ -22808,7 +22704,7 @@
                               {
                                 "name": "Armclamp/Legclamp",
                                 "isActive": "yes",
-                                "isFolder": "yes",
+                                "isFolder": "no",
                                 "children": [
                                   {
                                     "name": "hit",
@@ -22820,7 +22716,20 @@
                                     ],
                                     "script": "slc_last_limb = matches[2]\nSLC_connects(slc_last_limb,\"hydra\")"
                                   }
-                                ]
+                                ],
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+)'s many serpentine heads lunge towards your (.+)\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "1",
+                                    "type": "spacer"
+                                  }
+                                ],
+                                "fireLength": 1,
+                                "multiline": "yes",
+                                "multilineDelta": 1
                               },
                               {
                                 "name": "Hydra",
@@ -22854,22 +22763,6 @@
                                 "multiline": "yes",
                                 "multilineDelta": 1,
                                 "script": "slc_last_limb = multimatches[1][3]"
-                              },
-                              {
-                                "name": "Armclamp/Legclamp",
-                                "patterns": [
-                                  {
-                                    "pattern": "^(\\w+)'s many serpentine heads lunge towards your (.+)\\.$",
-                                    "type": "regex"
-                                  },
-                                  {
-                                    "pattern": "1",
-                                    "type": "spacer"
-                                  }
-                                ],
-                                "multiline": "yes",
-                                "multilineDelta": 1,
-                                "fireLength": 1
                               }
                             ]
                           },
@@ -23773,7 +23666,7 @@
                                   {
                                     "name": "Spinkick 1",
                                     "isActive": "yes",
-                                    "isFolder": "yes",
+                                    "isFolder": "no",
                                     "children": [
                                       {
                                         "name": "hit",
@@ -23785,12 +23678,26 @@
                                         ],
                                         "script": "if SLC_blocked(matches[1]) == false then\n\tSLC_connects(slc_last_limb,\"spinkick_torso\")\nend"
                                       }
-                                    ]
+                                    ],
+                                    "patterns": [
+                                      {
+                                        "pattern": "^Whirling around, (\\w+) drives the ball of \\w+ foot into your ribs\\.$",
+                                        "type": "regex"
+                                      },
+                                      {
+                                        "pattern": "1",
+                                        "type": "spacer"
+                                      }
+                                    ],
+                                    "fireLength": 1,
+                                    "multiline": "yes",
+                                    "multilineDelta": 1,
+                                    "script": "slc_last_limb = \"torso\""
                                   },
                                   {
                                     "name": "Spinkick 2",
                                     "isActive": "yes",
-                                    "isFolder": "yes",
+                                    "isFolder": "no",
                                     "children": [
                                       {
                                         "name": "hit",
@@ -23802,7 +23709,21 @@
                                         ],
                                         "script": "if SLC_blocked(matches[1]) == false then\n\tSLC_connects(slc_last_limb,\"spinkick_head\")\nend"
                                       }
-                                    ]
+                                    ],
+                                    "patterns": [
+                                      {
+                                        "pattern": "^Whirling around, (\\w+) brings the ball of \\w+ foot crashing into the side of your head\\.$",
+                                        "type": "regex"
+                                      },
+                                      {
+                                        "pattern": "1",
+                                        "type": "spacer"
+                                      }
+                                    ],
+                                    "fireLength": 1,
+                                    "multiline": "yes",
+                                    "multilineDelta": 1,
+                                    "script": "slc_last_limb = \"head\""
                                   },
                                   {
                                     "name": "Flashheel",
@@ -23850,40 +23771,6 @@
                                     ],
                                     "multiline": "yes",
                                     "multilineDelta": 1
-                                  },
-                                  {
-                                    "name": "Spinkick 1",
-                                    "patterns": [
-                                      {
-                                        "pattern": "^Whirling around, (\\w+) drives the ball of \\w+ foot into your ribs\\.$",
-                                        "type": "regex"
-                                      },
-                                      {
-                                        "pattern": "1",
-                                        "type": "spacer"
-                                      }
-                                    ],
-                                    "multiline": "yes",
-                                    "multilineDelta": 1,
-                                    "fireLength": 1,
-                                    "script": "slc_last_limb = \"torso\""
-                                  },
-                                  {
-                                    "name": "Spinkick 2",
-                                    "patterns": [
-                                      {
-                                        "pattern": "^Whirling around, (\\w+) brings the ball of \\w+ foot crashing into the side of your head\\.$",
-                                        "type": "regex"
-                                      },
-                                      {
-                                        "pattern": "1",
-                                        "type": "spacer"
-                                      }
-                                    ],
-                                    "multiline": "yes",
-                                    "multilineDelta": 1,
-                                    "fireLength": 1,
-                                    "script": "slc_last_limb = \"head\""
                                   }
                                 ]
                               },
@@ -25449,7 +25336,7 @@
                               {
                                 "name": "Start Shikudo",
                                 "isActive": "yes",
-                                "isFolder": "yes",
+                                "isFolder": "no",
                                 "children": [
                                   {
                                     "name": "Parry/Guard",
@@ -25670,11 +25557,7 @@
                                     "fireLength": 2,
                                     "script": "if isTarget(matches[2]) then\n monk.shikudo.limb_hit(\"head\", \"nervestrike\")\nend"
                                   }
-                                ]
-                              },
-                              {
-                                "name": "Start Shikudo",
-                                "isActive": "no",
+                                ],
                                 "patterns": [
                                   {
                                     "pattern": "[System]: Running queued eqbal command:",
@@ -27309,7 +27192,7 @@
                           {
                             "name": "Battlefury Perceive",
                             "isActive": "yes",
-                            "isFolder": "yes",
+                            "isFolder": "no",
                             "children": [
                               {
                                 "name": "Fracture Type",
@@ -27331,7 +27214,15 @@
                                 ],
                                 "script": "setTriggerStayOpen(\"Battlefury Perceive\", 0)"
                               }
-                            ]
+                            ],
+                            "patterns": [
+                              {
+                                "pattern": "^Narrowing your gaze upon (\\w+), you take stock of \\w+ current injuries.$",
+                                "type": "regex"
+                              }
+                            ],
+                            "fireLength": 10,
+                            "script": "if isTargeted(matches[2]) then\n\ttrackingFractures = true\nend\ndeleteLine()\ncecho(\"\\n<tomato>[<firebrick>\"..target..\"<tomato>]:\")"
                           },
                           {
                             "name": "SMASH",
@@ -27430,17 +27321,6 @@
                                 "type": "substring"
                               }
                             ]
-                          },
-                          {
-                            "name": "Battlefury Perceive",
-                            "patterns": [
-                              {
-                                "pattern": "^Narrowing your gaze upon (\\w+), you take stock of \\w+ current injuries.$",
-                                "type": "regex"
-                              }
-                            ],
-                            "fireLength": 10,
-                            "script": "if isTargeted(matches[2]) then\n\ttrackingFractures = true\nend\ndeleteLine()\ncecho(\"\\n<tomato>[<firebrick>\"..target..\"<tomato>]:\")"
                           },
                           {
                             "name": "Timer Battlefury Perceive",

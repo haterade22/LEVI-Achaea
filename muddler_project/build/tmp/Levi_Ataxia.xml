@@ -13668,6 +13668,7 @@ end
 			"Ourania", "Pandora", "Phaestus", "Prospero", "Sartan", "Scarlatti", "Twilight", "Valnurana",
 			"Vastar", "Tlalaiad", "Romeo", "Juliet",},
 		cityEnemies = {},
+		notPlayers = {},
 		highlightPriority = "city",
 		enemySettings = {bold = false, italics = false, underline = false},
 	}
@@ -13710,14 +13711,17 @@ function ataxiaNDB_Acquire(person)
 
 	assert(person)
 	local person = person:title()
+
+	-- Skip known non-players
+	if ataxiaNDB_isBlacklisted and ataxiaNDB_isBlacklisted(person) then return end
+
 	local path = getMudletHomeDir().."/ataxiaNDB"
 
 	if not lfs.attributes(path) then
-		--We'll need a folder to store downloaded data. Don't worry, it won't cause issues.
 		lfs.mkdir(path)
 		ataxiaEcho("Created folder to store downloaded data at: "..path)
 	end
-	
+
 	downloadFile(path .. "/"..person..".json", "http://api.achaea.com/characters/"..person..".json")
 
 end
@@ -13725,7 +13729,8 @@ end
 function ataxiaNDB_NameList(names)
 	--Parse list to see who isn't tracked.
 	for _, name in pairs(names) do
-		if not ataxiaNDB_Exists(name) and not table.contains(ataxiaNDB.divine, name) then
+		if not ataxiaNDB_Exists(name) and not table.contains(ataxiaNDB.divine, name)
+			and not (ataxiaNDB_isBlacklisted and ataxiaNDB_isBlacklisted(name)) then
 			ataxiaNDB_Acquire(name)
 		end
 	end
@@ -13871,7 +13876,8 @@ function ataxiaNDB_SortOnline(filepath)
 	--Parse the list to see who needs to be added.
 	local count = 0
 	for index, name in pairs(apiOnlineFound) do
-		if not ataxiaNDB_Exists(name) and not table.contains(ataxiaNDB.divine, name) then
+		if not ataxiaNDB_Exists(name) and not table.contains(ataxiaNDB.divine, name)
+			and not (ataxiaNDB_isBlacklisted and ataxiaNDB_isBlacklisted(name)) then
 			count = count + 1
 			table.insert(apiNeedUpdate, name)
 		end
@@ -14237,19 +14243,39 @@ end
                 <Script isActive="yes" isFolder="no">
   <name>ataxiaNDB_Failed</name>
                   <script>function ataxiaNDB_Failed(_, filepath)
-	ataxiaEcho("Error downloading information.")
+	-- Only handle ataxiaNDB downloads
+	if not filepath:find("ataxiaNDB", 1, true) then return end
+
+	local person = filepath:match("/([%w_]+)%.json")
 
 	if filepath:match("server replied: Not Found") then
-		echo("\n"..filepath)
-		local person = filepath:match("/(%w+).json")
-		local fpr = getMudletHomeDir().."/ataxiaNDB/"..person..".json"
-
-		ataxiaEcho("This person does not exist: "..person)
-		ataxiaNDB_Remove(person)
-		os.remove(fpr)
+		ataxiaEcho("This person does not exist: " .. (person or "unknown"))
+		if person then
+			ataxiaNDB_Remove(person)
+			os.remove(getMudletHomeDir() .. "/ataxiaNDB/" .. person .. ".json")
+			ataxiaNDB_blacklistName(person)
+		end
+	elseif filepath:match("server replied: Forbidden") then
+		-- Forbidden = not a valid player name (item, NPC, etc.)
+		if person and person ~= "Online" then
+			ataxiaNDB_blacklistName(person)
+		end
 	else
-		ataxiaEcho("Unknown error while downloading: " .. filepath)
+		ataxiaEcho("Error downloading: " .. filepath)
 	end
+end
+
+function ataxiaNDB_blacklistName(name)
+	ataxiaNDB.notPlayers = ataxiaNDB.notPlayers or {}
+	if not table.contains(ataxiaNDB.notPlayers, name) then
+		table.insert(ataxiaNDB.notPlayers, name)
+		ataxiaEcho(name .. " is not a player, added to ignore list.")
+	end
+end
+
+function ataxiaNDB_isBlacklisted(name)
+	ataxiaNDB.notPlayers = ataxiaNDB.notPlayers or {}
+	return table.contains(ataxiaNDB.notPlayers, name) or table.contains(ataxiaNDB.notPlayers, name:title())
 end
 </script>
   <packageName/>
@@ -85727,12 +85753,23 @@ ataxiaBasher_alert("Normal")</script>
 </regexCodeList>
                   <regexCodePropertyList>
 </regexCodePropertyList>
-                  <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Credits For Sale</name>
-                    <script/>
+                    <script>deleteLine()
+creditMarket = {
+	available = 0,
+	handGold = tonumber(gmcp.Char.Status.gold),
+	bankGold = tonumber(gmcp.Char.Status.bank),
+	avgPrice = 0,
+	totalTB = 0,
+	totalSpent = 0
+}
+cecho("\n&lt;DarkSlateBlue&gt; ~~~~~~~~~~~~~~* &lt;DimGrey&gt;Achaea Credit Market &lt;DarkSlateBlue&gt;*~~~~~~~~~~~~~~")
+cecho("\n&lt;DimGrey&gt;"..string.rep(" ", 44-string.len(creditMarket.handGold)).."Balance: &lt;gold&gt;"..creditMarket.handGold)
+cecho("\n&lt;DarkSlateBlue&gt; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>99</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -85742,9 +85779,11 @@ ataxiaBasher_alert("Normal")</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-</regexCodeList>
+<string>Credits currently available for purchase:</string>
+                    </regexCodeList>
                     <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>3</integer>
+                    </regexCodePropertyList>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Capture Credits</name>
                       <script>deleteLine()
@@ -85817,7 +85856,7 @@ setTriggerStayOpen("Credits for Sale", 0)</script>
 <integer>1</integer>
                       </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
+</Trigger>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Queue Scanning</name>
                     <script>queue_Scan(matches[2]:lower())</script>
@@ -86104,38 +86143,6 @@ end</script>
 <integer>3</integer>
                     </regexCodePropertyList>
 </Trigger>
-                  <Trigger isActive="no" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Credits For Sale</name>
-                    <script>deleteLine()
-creditMarket = {
-	available = 0,
-	handGold = tonumber(gmcp.Char.Status.gold),
-	bankGold = tonumber(gmcp.Char.Status.bank),
-	avgPrice = 0,
-	totalTB = 0,
-	totalSpent = 0
-}
-cecho("\n&lt;DarkSlateBlue&gt; ~~~~~~~~~~~~~~* &lt;DimGrey&gt;Achaea Credit Market &lt;DarkSlateBlue&gt;*~~~~~~~~~~~~~~")
-cecho("\n&lt;DimGrey&gt;"..string.rep(" ", 44-string.len(creditMarket.handGold)).."Balance: &lt;gold&gt;"..creditMarket.handGold)
-cecho("\n&lt;DarkSlateBlue&gt; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>99</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-<string>Credits currently available for purchase:</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-<integer>3</integer>
-                    </regexCodePropertyList>
-</Trigger>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Gag + keep prompt</name>
                     <script>deleteLine()</script>
@@ -86236,12 +86243,25 @@ end
 </regexCodeList>
                   <regexCodePropertyList>
 </regexCodePropertyList>
-                  <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Tattoo List</name>
-                    <script/>
+                    <script>capturing_tattoos = true
+tattoosOnMe = {
+	["Head"] = {{}, {} },
+	["Torso"] = {{}, {} },
+	["Left arm"] = {{}, {} },
+	["Right arm"] = {{}, {} },
+	["Left leg"] = {{}, {} },
+	["Right leg"] = {{}, {} },
+	["Back"] = {{}, {} },	
+}
+
+crucialTattoos = {
+	"Boar", "Cloak", "Mindseye", "Moon", "Moss", "Tree",
+}</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>99</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -86251,9 +86271,11 @@ end
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-</regexCodeList>
+<string>Looking over yourself, you see the following tattoos:</string>
+                    </regexCodeList>
                     <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>3</integer>
+                    </regexCodePropertyList>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Gag Lines</name>
                       <script>if not capturing_tattoos then return end
@@ -86449,40 +86471,6 @@ send(" ")
 <integer>7</integer>
                       </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Tattoo List</name>
-                    <script>capturing_tattoos = true
-tattoosOnMe = {
-	["Head"] = {{}, {} },
-	["Torso"] = {{}, {} },
-	["Left arm"] = {{}, {} },
-	["Right arm"] = {{}, {} },
-	["Left leg"] = {{}, {} },
-	["Right leg"] = {{}, {} },
-	["Back"] = {{}, {} },	
-}
-
-crucialTattoos = {
-	"Boar", "Cloak", "Mindseye", "Moon", "Moss", "Tree",
-}</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>99</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-<string>Looking over yourself, you see the following tattoos:</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-<integer>3</integer>
-                    </regexCodePropertyList>
 </Trigger>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Tattoo Inked</name>
@@ -86522,12 +86510,12 @@ end</script>
                     </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
-                <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Reagent Butchering</name>
-                  <script/>
+                  <script>ataxiaTemp.toButcher = {}</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>99</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -86537,9 +86525,11 @@ end</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                   <regexCodeList>
-</regexCodeList>
+<string>Corpses:</string>
+                  </regexCodeList>
                   <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>3</integer>
+                  </regexCodePropertyList>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Corpse Found</name>
                     <script>local corpseTypes = {
@@ -86600,7 +86590,7 @@ end</script>
 <integer>3</integer>
                     </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
+</Trigger>
                 <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Clickable Links</name>
                   <script>for i,v in ipairs(matches) do
@@ -86736,27 +86726,6 @@ talismanPieces[matches[2]] = talismanPieces[matches[2]] + 1</script>
                   </regexCodeList>
                   <regexCodePropertyList>
 <integer>1</integer>
-                  </regexCodePropertyList>
-</Trigger>
-                <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Reagent Butchering</name>
-                  <script>ataxiaTemp.toButcher = {}</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>99</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                  <regexCodeList>
-<string>Corpses:</string>
-                  </regexCodeList>
-                  <regexCodePropertyList>
-<integer>3</integer>
                   </regexCodePropertyList>
 </Trigger>
                 <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
@@ -87393,12 +87362,12 @@ disableTrigger("Additional Information NDB")</script>
                     </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
-                <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Explorers Rankings</name>
-                  <script/>
+                  <script>explorersUnchecked = {}</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>999</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -87408,12 +87377,15 @@ disableTrigger("Additional Information NDB")</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                   <regexCodeList>
-</regexCodeList>
+<string>*********************************[ Explorers ]*********************************</string>
+                  </regexCodeList>
                   <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>3</integer>
+                  </regexCodePropertyList>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Get Person</name>
-                    <script>if not ataxiaNDB_Exists(matches[3]) then
+                    <script>if not ataxiaNDB_Exists(matches[3])
+	and not (ataxiaNDB_isBlacklisted and ataxiaNDB_isBlacklisted(matches[3])) then
 	table.insert(explorersUnchecked, matches[3])
 end</script>
   <triggerType>0</triggerType>
@@ -87461,13 +87433,13 @@ end</script>
 <integer>7</integer>
                     </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+</Trigger>
+                <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Who Grouping</name>
-                  <script/>
+                  <script>needMore = false</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>999</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -87477,9 +87449,11 @@ end</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                   <regexCodeList>
-</regexCodeList>
+<string>-Parsing Who List:</string>
+                  </regexCodeList>
                   <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>3</integer>
+                  </regexCodePropertyList>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Get Person</name>
                     <script>if not matches[3] then
@@ -87648,7 +87622,7 @@ deleteLine()</script>
 <integer>7</integer>
                     </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
+</Trigger>
                 <Trigger isActive="no" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Get Player Information</name>
                   <script>if honoursPerson and matches[2]:find(honoursPerson) then
@@ -87673,27 +87647,6 @@ end</script>
                   </regexCodeList>
                   <regexCodePropertyList>
 <integer>1</integer>
-                  </regexCodePropertyList>
-</Trigger>
-                <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Explorers Rankings</name>
-                  <script>explorersUnchecked = {}</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>999</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                  <regexCodeList>
-<string>*********************************[ Explorers ]*********************************</string>
-                  </regexCodeList>
-                  <regexCodePropertyList>
-<integer>3</integer>
                   </regexCodePropertyList>
 </Trigger>
                 <Trigger isActive="no" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
@@ -87725,27 +87678,6 @@ disableTrigger("City Enemies Capture")</script>
                   <regexCodePropertyList>
 <integer>1</integer>
 <integer>1</integer>
-                  </regexCodePropertyList>
-</Trigger>
-                <Trigger isActive="no" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Who Grouping</name>
-                  <script>needMore = false</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>999</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                  <regexCodeList>
-<string>-Parsing Who List:</string>
-                  </regexCodeList>
-                  <regexCodePropertyList>
-<integer>3</integer>
                   </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
@@ -91492,12 +91424,19 @@ if ataxiaBasher.enabled then deleteFull() end
                       </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
-                  <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Room Info Shortener</name>
-                    <script/>
+                    <script>local x = ataxia.settings.roomshorten
+
+if gmcp.Room.Info.name:lower():find(matches[2]:lower()) then
+	if (x == "notmanual" and ataxiaBasher.manual ~= true) or (x == "normal") then
+		roomDeleting = true
+		deleteLine()
+	end
+end</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>25</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -91507,9 +91446,13 @@ if ataxiaBasher.enabled then deleteFull() end
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-</regexCodeList>
+<string>^(.+). \(.+\)$</string>
+<string>^(.+).$</string>
+                    </regexCodeList>
                     <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+<integer>1</integer>
+                    </regexCodePropertyList>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Remove Line</name>
                       <script>if roomDeleting then
@@ -91577,36 +91520,6 @@ disableTrigger("Room Info Shortener")</script>
 <integer>7</integer>
                       </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                  <Trigger isActive="no" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Room Info Shortener</name>
-                    <script>local x = ataxia.settings.roomshorten
-
-if gmcp.Room.Info.name:lower():find(matches[2]:lower()) then
-	if (x == "notmanual" and ataxiaBasher.manual ~= true) or (x == "normal") then
-		roomDeleting = true
-		deleteLine()
-	end
-end</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>25</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-<string>^(.+). \(.+\)$</string>
-<string>^(.+).$</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-<integer>1</integer>
-<integer>1</integer>
-                    </regexCodePropertyList>
 </Trigger>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Priest Empathy</name>
@@ -94386,12 +94299,12 @@ end</script>
 </regexCodeList>
                       <regexCodePropertyList>
 </regexCodePropertyList>
-                      <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                      <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Spin into retardation sequence</name>
-                        <script/>
+                        <script>ataxiaTemp.vibeSpinner = matches[2]</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>999</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -94401,9 +94314,11 @@ end</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-</regexCodeList>
+<string>^(\w+) vigorously spins (a pyramid carved of crystal|an opaque crystal disc), and it begins to hover in the air.$</string>
+                        </regexCodeList>
                         <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+                        </regexCodePropertyList>
                         <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Embedded</name>
                           <script>ataxiaTemp.embed = true
@@ -94431,27 +94346,6 @@ embedTimer = tempTimer(6, [[embedTimer = nil;embed = false]])
 <integer>1</integer>
                           </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                      <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Spin into retardation sequence</name>
-                        <script>ataxiaTemp.vibeSpinner = matches[2]</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>999</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                        <regexCodeList>
-<string>^(\w+) vigorously spins (a pyramid carved of crystal|an opaque crystal disc), and it begins to hover in the air.$</string>
-                        </regexCodeList>
-                        <regexCodePropertyList>
-<integer>1</integer>
-                        </regexCodePropertyList>
 </Trigger>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Sluggish</name>
@@ -95958,12 +95852,16 @@ enableTimer("TargetOutOfRoom")</script>
 </regexCodeList>
                     <regexCodePropertyList>
 </regexCodePropertyList>
-                    <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                    <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Allies List</name>
-                      <script/>
+                      <script>selectString(line,1)
+fg("NavajoWhite")
+deselect()
+
+ataxiaTemp.allies = {}</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>999</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -95973,9 +95871,13 @@ enableTimer("TargetOutOfRoom")</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                       <regexCodeList>
-</regexCodeList>
+<string>You have the following allies:</string>
+<string>With an indignant grunt, you remove everyone from your list of allies.</string>
+                      </regexCodeList>
                       <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>3</integer>
+<integer>3</integer>
+                      </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Ally found</name>
                         <script>if not table.contains(ataxiaTemp.allies, matches[2]) then
@@ -96031,13 +95933,17 @@ end</script>
 <integer>7</integer>
                         </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                    <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+</Trigger>
+                    <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Enemies List</name>
-                      <script/>
+                      <script>selectString(line,1)
+fg("orange")
+deselect()
+
+ataxiaTemp.enemies = {}</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>999</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -96047,9 +95953,13 @@ end</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                       <regexCodeList>
-</regexCodeList>
+<string>You have the following enemies:</string>
+<string>In a moment of forgiveness, you declare that you have no enemies.</string>
+                      </regexCodeList>
                       <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>3</integer>
+<integer>3</integer>
+                      </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Enemy found</name>
                         <script>if not table.contains(ataxiaTemp.enemies, matches[2]) and ataxiaNDB_Exists(matches[2]) then
@@ -96103,7 +96013,7 @@ end</script>
 <integer>7</integer>
                         </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
+</Trigger>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>No allies/enemies</name>
                       <script>selectString(line,1)
@@ -96128,60 +96038,6 @@ ataxiaTemp[matches[2]] = {}</script>
                       </regexCodeList>
                       <regexCodePropertyList>
 <integer>1</integer>
-                      </regexCodePropertyList>
-</Trigger>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Allies List</name>
-                      <script>selectString(line,1)
-fg("NavajoWhite")
-deselect()
-
-ataxiaTemp.allies = {}</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>999</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                      <regexCodeList>
-<string>You have the following allies:</string>
-<string>With an indignant grunt, you remove everyone from your list of allies.</string>
-                      </regexCodeList>
-                      <regexCodePropertyList>
-<integer>3</integer>
-<integer>3</integer>
-                      </regexCodePropertyList>
-</Trigger>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Enemies List</name>
-                      <script>selectString(line,1)
-fg("orange")
-deselect()
-
-ataxiaTemp.enemies = {}</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>999</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                      <regexCodeList>
-<string>You have the following enemies:</string>
-<string>In a moment of forgiveness, you declare that you have no enemies.</string>
-                      </regexCodeList>
-                      <regexCodePropertyList>
-<integer>3</integer>
-<integer>3</integer>
                       </regexCodePropertyList>
 </Trigger>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
@@ -99099,12 +98955,13 @@ end
                           </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
-                      <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                      <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Swarm Tracking</name>
-                        <script/>
+                        <script>deleteLine()
+ataxia_Echo("Reset swarm status.")</script>
   <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <conditonLineDelta>1</conditonLineDelta>
+  <mStayOpen>99</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -99114,9 +98971,13 @@ end
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-</regexCodeList>
+<string>ID         Size             Infested with   Status                             </string>
+<string>-------------------------------------------------------------------------------</string>
+                        </regexCodeList>
                         <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>3</integer>
+<integer>3</integer>
+                        </regexCodePropertyList>
                         <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Swarm Found</name>
                           <script>if matches[5] == "Burrowed" then
@@ -99171,7 +99032,7 @@ end</script>
 <integer>7</integer>
                           </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
+</Trigger>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Transpose</name>
                         <script>if isTargeted(matches[3]) then
@@ -99195,30 +99056,6 @@ end</script>
                         </regexCodeList>
                         <regexCodePropertyList>
 <integer>1</integer>
-                        </regexCodePropertyList>
-</Trigger>
-                      <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Swarm Tracking</name>
-                        <script>deleteLine()
-ataxia_Echo("Reset swarm status.")</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>1</conditonLineDelta>
-  <mStayOpen>99</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                        <regexCodeList>
-<string>ID         Size             Infested with   Status                             </string>
-<string>-------------------------------------------------------------------------------</string>
-                        </regexCodeList>
-                        <regexCodePropertyList>
-<integer>3</integer>
-<integer>3</integer>
                         </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
@@ -103864,12 +103701,13 @@ end</script>
                           </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
-                      <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                      <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Readaura stuff</name>
-                        <script/>
+                        <script>capturing_readaura = true
+deleteLine()</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>99</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -103879,9 +103717,11 @@ end</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-</regexCodeList>
+<string>^Studying the aura of (\w+), you look for traces of anything that may be protecting it.$</string>
+                        </regexCodeList>
                         <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+                        </regexCodePropertyList>
                         <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>def</name>
                           <script>if not capturing_readaura then return end
@@ -103928,7 +103768,7 @@ capturing_readaura = nil</script>
 <integer>1</integer>
                           </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
+</Trigger>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Enlighten</name>
                         <script>if isTargeted(matches[2]) then
@@ -103949,28 +103789,6 @@ end</script>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
 <string>^You see (.+) shout, "No, it cannot be true! I cannot accept it! I beg of you to make it stop!"$</string>
-                        </regexCodeList>
-                        <regexCodePropertyList>
-<integer>1</integer>
-                        </regexCodePropertyList>
-</Trigger>
-                      <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Readaura stuff</name>
-                        <script>capturing_readaura = true
-deleteLine()</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>99</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                        <regexCodeList>
-<string>^Studying the aura of (\w+), you look for traces of anything that may be protecting it.$</string>
                         </regexCodeList>
                         <regexCodePropertyList>
 <integer>1</integer>
@@ -108901,12 +108719,22 @@ resetFormat()</script>
                           </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
-                      <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                      <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Get Humour Levels</name>
-                        <script/>
+                        <script>deleteLine()
+cecho("\n&lt;a_blue&gt; --- [ &lt;NavajoWhite&gt;EVALUATE: &lt;a_green&gt;"..target:upper().."&lt;a_blue&gt; ] ---")
+tEval = {
+	sanguine = 0, choleric = 0, phlegmatic = 0, melancholic = 0,
+	hp = 0, mp = 0,
+}
+
+tAffs.sanguine = nil
+tAffs.melancholic = nil
+tAffs.phlegmatic = nil
+tAffs.choleric = nil</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>20</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -108916,9 +108744,11 @@ resetFormat()</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-</regexCodeList>
+<string>^Looking over \w+, you see that:$</string>
+                        </regexCodeList>
                         <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+                        </regexCodePropertyList>
                         <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Matched humour</name>
                           <script>local level = tonumber(matches[4])
@@ -109043,7 +108873,7 @@ tAffs.choleric = nil</script>
 <integer>1</integer>
                           </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
+</Trigger>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Homunculus Mercury</name>
                         <script>if isTargeted(matches[2]) then
@@ -109191,37 +109021,6 @@ end</script>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
 <string>^(\w+) has not had their sanguine fluid levels sufficiently elevated to permit for wracking of that affliction.$</string>
-                        </regexCodeList>
-                        <regexCodePropertyList>
-<integer>1</integer>
-                        </regexCodePropertyList>
-</Trigger>
-                      <Trigger isActive="no" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Get Humour Levels</name>
-                        <script>deleteLine()
-cecho("\n&lt;a_blue&gt; --- [ &lt;NavajoWhite&gt;EVALUATE: &lt;a_green&gt;"..target:upper().."&lt;a_blue&gt; ] ---")
-tEval = {
-	sanguine = 0, choleric = 0, phlegmatic = 0, melancholic = 0,
-	hp = 0, mp = 0,
-}
-
-tAffs.sanguine = nil
-tAffs.melancholic = nil
-tAffs.phlegmatic = nil
-tAffs.choleric = nil</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>20</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                        <regexCodeList>
-<string>^Looking over \w+, you see that:$</string>
                         </regexCodeList>
                         <regexCodePropertyList>
 <integer>1</integer>
@@ -109409,12 +109208,15 @@ end</script>
                         </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
-                    <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                    <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Fullsense-Hyena</name>
-                      <script/>
+                      <script>capturing_fullsense_hyena = true
+mmp.pdb_lastupdate = {}
+
+fullSensePeople = {}</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>100</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -109424,9 +109226,11 @@ end</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                       <regexCodeList>
-</regexCodeList>
+<string>Your faithful hyena reports that it has scented the following people nearby:</string>
+                      </regexCodeList>
                       <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>3</integer>
+                      </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Each person</name>
                         <script>if not capturing_fullsense_hyena then return end
@@ -109506,13 +109310,16 @@ end</script>
 <integer>7</integer>
                         </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                    <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+</Trigger>
+                    <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Fullsense-Demon</name>
-                      <script/>
+                      <script>capturing_fullsense_demon = true
+mmp.pdb_lastupdate = {}
+
+fullSensePeople = {}</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>100</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -109522,9 +109329,11 @@ end</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                       <regexCodeList>
-</regexCodeList>
+<string>You bid your Baalzadeen to seek out life presences nearby.</string>
+                      </regexCodeList>
                       <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>3</integer>
+                      </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Each person</name>
                         <script>if not capturing_fullsense_demon then return end
@@ -109604,94 +109413,6 @@ end</script>
 <integer>7</integer>
                         </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                    <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>NEW DEADEYES</name>
-                      <script/>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                      <regexCodeList>
-</regexCodeList>
-                      <regexCodePropertyList>
-</regexCodePropertyList>
-                      <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>CLUMSY CHECK</name>
-                        <script>tAffs[deadaff] = false</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                        <regexCodeList>
-<string>Your attempt to invoke the evileye was so clumsy that the malignant power unravels long before it can take form.</string>
-                        </regexCodeList>
-                        <regexCodePropertyList>
-<integer>3</integer>
-                        </regexCodePropertyList>
-</Trigger>
-</TriggerGroup>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Fullsense-Hyena</name>
-                      <script>capturing_fullsense_hyena = true
-mmp.pdb_lastupdate = {}
-
-fullSensePeople = {}</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>100</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                      <regexCodeList>
-<string>Your faithful hyena reports that it has scented the following people nearby:</string>
-                      </regexCodeList>
-                      <regexCodePropertyList>
-<integer>3</integer>
-                      </regexCodePropertyList>
-</Trigger>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Fullsense-Demon</name>
-                      <script>capturing_fullsense_demon = true
-mmp.pdb_lastupdate = {}
-
-fullSensePeople = {}</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>100</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                      <regexCodeList>
-<string>You bid your Baalzadeen to seek out life presences nearby.</string>
-                      </regexCodeList>
-                      <regexCodePropertyList>
-<integer>3</integer>
-                      </regexCodePropertyList>
 </Trigger>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>NEW DEADEYES</name>
@@ -109788,6 +109509,27 @@ if matches[2] == "sleep" and tAffs.hypersomnia and tarInsomnia == true then tarI
                       <regexCodePropertyList>
 <integer>1</integer>
                       </regexCodePropertyList>
+                      <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+  <name>CLUMSY CHECK</name>
+                        <script>tAffs[deadaff] = false</script>
+  <triggerType>0</triggerType>
+  <conditonLineDelta>0</conditonLineDelta>
+  <mStayOpen>0</mStayOpen>
+  <mCommand/>
+  <packageName/>
+  <path>Levi_Ataxia</path>
+  <mFgColor>#ff0000</mFgColor>
+  <mBgColor>#ffff00</mBgColor>
+  <mSoundFile/>
+  <colorTriggerFgColor>#000000</colorTriggerFgColor>
+  <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                        <regexCodeList>
+<string>Your attempt to invoke the evileye was so clumsy that the malignant power unravels long before it can take form.</string>
+                        </regexCodeList>
+                        <regexCodePropertyList>
+<integer>3</integer>
+                        </regexCodePropertyList>
+</Trigger>
 </Trigger>
 </TriggerGroup>
                   <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
@@ -114783,12 +114525,16 @@ end</script>
 </Trigger>
 </TriggerGroup>
 </TriggerGroup>
-                          <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                          <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Battlefury Perceive</name>
-                            <script/>
+                            <script>if isTargeted(matches[2]) then
+	trackingFractures = true
+end
+deleteLine()
+cecho("\n&lt;tomato&gt;[&lt;firebrick&gt;"..target.."&lt;tomato&gt;]:")</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>10</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -114798,9 +114544,11 @@ end</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                             <regexCodeList>
-</regexCodeList>
+<string>^Narrowing your gaze upon (\w+), you take stock of \w+ current injuries.$</string>
+                            </regexCodeList>
                             <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+                            </regexCodePropertyList>
                             <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Fracture Type</name>
                               <script>local amt, loc, col = tonumber(matches[2]), matches[3], ""
@@ -114863,31 +114611,6 @@ end
 <integer>7</integer>
                               </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                          <Trigger isActive="no" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Battlefury Perceive</name>
-                            <script>if isTargeted(matches[2]) then
-	trackingFractures = true
-end
-deleteLine()
-cecho("\n&lt;tomato&gt;[&lt;firebrick&gt;"..target.."&lt;tomato&gt;]:")</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>10</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                            <regexCodeList>
-<string>^Narrowing your gaze upon (\w+), you take stock of \w+ current injuries.$</string>
-                            </regexCodeList>
-                            <regexCodePropertyList>
-<integer>1</integer>
-                            </regexCodePropertyList>
 </Trigger>
                           <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>UNDERHAND Warhammer DAMAGE</name>
@@ -122879,12 +122602,14 @@ end
                       </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
-                  <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Curing Priority List</name>
-                    <script/>
+                    <script>ataxia.curingprio = {}
+deleteLine()
+cecho("\n&lt;blue&gt;          -=[ &lt;white&gt;Reset Curing Priorities&lt;blue&gt; ]=-")</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>99</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -122894,9 +122619,11 @@ end
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-</regexCodeList>
+<string>Your affliction curing priorities:</string>
+                    </regexCodeList>
                     <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>3</integer>
+                    </regexCodePropertyList>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Get Line of Affs</name>
                       <script>for aff in matches[3]:gmatch("%w+") do
@@ -122943,29 +122670,6 @@ ataxia_saveSettings(false)</script>
 <integer>3</integer>
                       </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Curing Priority List</name>
-                    <script>ataxia.curingprio = {}
-deleteLine()
-cecho("\n&lt;blue&gt;          -=[ &lt;white&gt;Reset Curing Priorities&lt;blue&gt; ]=-")</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>99</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-<string>Your affliction curing priorities:</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-<integer>3</integer>
-                    </regexCodePropertyList>
 </Trigger>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Affliction Set</name>
@@ -123241,12 +122945,12 @@ send("curing priority defense blind reset")</script>
 </regexCodeList>
                   <regexCodePropertyList>
 </regexCodePropertyList>
-                  <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Tree Touch</name>
                     <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>1</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -123256,9 +122960,11 @@ send("curing priority defense blind reset")</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-</regexCodeList>
+<string>[Curing]: TOUCH TREE</string>
+                    </regexCodeList>
                     <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>3</integer>
+                    </regexCodePropertyList>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="yes" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Tree Touched</name>
                       <script>ataxiaTemp.usedTree = true</script>
@@ -123280,7 +122986,7 @@ send("curing priority defense blind reset")</script>
 <integer>3</integer>
                       </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
+</Trigger>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Treed (fake?)</name>
                     <script>ataxiaTemp.canTree = false</script>
@@ -123297,27 +123003,6 @@ send("curing priority defense blind reset")</script>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
 <string>Your tree of life tattoo glows faintly for a moment then fades, leaving you unchanged.</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-<integer>3</integer>
-                    </regexCodePropertyList>
-</Trigger>
-                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Tree Touch</name>
-                    <script/>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>1</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-<string>[Curing]: TOUCH TREE</string>
                     </regexCodeList>
                     <regexCodePropertyList>
 <integer>3</integer>
@@ -123500,12 +123185,14 @@ end</script>
                     </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
-                <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Defence List</name>
-                  <script/>
+                  <script>capturing_defences = true
+deleteLine()
+ataxiaEcho("Defences currently active:")</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>99</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -123515,9 +123202,11 @@ end</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                   <regexCodeList>
-</regexCodeList>
+<string>You have the following defences:</string>
+                  </regexCodeList>
                   <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>3</integer>
+                  </regexCodePropertyList>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>get Defence</name>
                     <script>if not capturing_defences then return end
@@ -123568,7 +123257,7 @@ ataxia_reportDefences()
 <integer>7</integer>
                     </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
+</Trigger>
                 <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Bleeding</name>
                   <script>if type(target) == "number" and ataxiaBasher.enabled then
@@ -123620,29 +123309,6 @@ end</script>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                   <regexCodeList>
 <string>You exert superior mental control and your wounds clot before your eyes.</string>
-                  </regexCodeList>
-                  <regexCodePropertyList>
-<integer>3</integer>
-                  </regexCodePropertyList>
-</Trigger>
-                <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Defence List</name>
-                  <script>capturing_defences = true
-deleteLine()
-ataxiaEcho("Defences currently active:")</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>99</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                  <regexCodeList>
-<string>You have the following defences:</string>
                   </regexCodeList>
                   <regexCodePropertyList>
 <integer>3</integer>
@@ -124309,12 +123975,12 @@ end</script>
 </regexCodeList>
                   <regexCodePropertyList>
 </regexCodePropertyList>
-                  <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Extraction Mineral List</name>
-                    <script/>
+                    <script>ataxiaExtraction = ataxiaExtraction or {}</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>99</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -124324,9 +123990,11 @@ end</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-</regexCodeList>
+<string>You spot the following minerals here:</string>
+                    </regexCodeList>
                     <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>3</integer>
+                    </regexCodePropertyList>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Mineral Found</name>
                       <script>local minList = {
@@ -124381,27 +124049,6 @@ end</script>
 <integer>7</integer>
                       </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Extraction Mineral List</name>
-                    <script>ataxiaExtraction = ataxiaExtraction or {}</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>99</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-<string>You spot the following minerals here:</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-<integer>3</integer>
-                    </regexCodePropertyList>
 </Trigger>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Already Extracted</name>
@@ -124627,12 +124274,15 @@ end
 </regexCodeList>
                   <regexCodePropertyList>
 </regexCodePropertyList>
-                  <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Grab Terminus Abilities</name>
-                    <script/>
+                    <script>if updating_terminus_abilities then
+	deleteLine()
+end
+ataxiaTables.depthswalker.abilities = {}</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>999</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -124642,9 +124292,11 @@ end
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-</regexCodeList>
+<string>Abilities in Terminus:</string>
+                    </regexCodeList>
                     <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>3</integer>
+                    </regexCodePropertyList>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Gag Unnecessary Lines</name>
                       <script>if updating_terminus_abilities then
@@ -124729,13 +124381,15 @@ end</script>
 <integer>1</integer>
                       </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                  <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+</Trigger>
+                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Fullsense-Monk/DW</name>
-                    <script/>
+                    <script>mmp.pdb_lastupdate = {}
+
+fullSensePeople = {}</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>100</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -124745,9 +124399,15 @@ end</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-</regexCodeList>
+<string>You cast your will out across the land, surveying all that stand within shadow's embrace.</string>
+<string>You seek out all mental presences within your reach:</string>
+<string>Focusing your every sense, you scour the area for traces of others:</string>
+                    </regexCodeList>
                     <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>3</integer>
+<integer>3</integer>
+<integer>3</integer>
+                    </regexCodePropertyList>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Each person</name>
                       <script>mmp.locateAndEchoSide(matches[3], matches[2])
@@ -124826,30 +124486,6 @@ end</script>
 <integer>7</integer>
                       </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Grab Terminus Abilities</name>
-                    <script>if updating_terminus_abilities then
-	deleteLine()
-end
-ataxiaTables.depthswalker.abilities = {}</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>999</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-<string>Abilities in Terminus:</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-<integer>3</integer>
-                    </regexCodePropertyList>
 </Trigger>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Age Changed</name>
@@ -125036,33 +124672,6 @@ end</script>
 <integer>3</integer>
                     </regexCodePropertyList>
 </Trigger>
-                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Fullsense-Monk/DW</name>
-                    <script>mmp.pdb_lastupdate = {}
-
-fullSensePeople = {}</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>100</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-<string>You cast your will out across the land, surveying all that stand within shadow's embrace.</string>
-<string>You seek out all mental presences within your reach:</string>
-<string>Focusing your every sense, you scour the area for traces of others:</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-<integer>3</integer>
-<integer>3</integer>
-<integer>3</integer>
-                    </regexCodePropertyList>
-</Trigger>
 </TriggerGroup>
                 <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Magi</name>
@@ -125100,12 +124709,12 @@ fullSensePeople = {}</script>
 </regexCodeList>
                     <regexCodePropertyList>
 </regexCodePropertyList>
-                    <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                    <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>VIBES in room</name>
-                      <script/>
+                      <script>vibes_inRoom = {}</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>99</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -125115,9 +124724,11 @@ fullSensePeople = {}</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                       <regexCodeList>
-</regexCodeList>
+<string>The following vibrations reside here:</string>
+                      </regexCodeList>
                       <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>3</integer>
+                      </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Vibe Found</name>
                         <script>magiVibes_isHere(matches[2])
@@ -125176,7 +124787,7 @@ end
 <integer>7</integer>
                         </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
+</Trigger>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Vibe Active</name>
                       <script>magiVibes_isHere(matches[1])
@@ -125233,27 +124844,6 @@ end
 <integer>3</integer>
 <integer>3</integer>
 <integer>3</integer>
-<integer>3</integer>
-                      </regexCodePropertyList>
-</Trigger>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>VIBES in room</name>
-                      <script>vibes_inRoom = {}</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>99</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                      <regexCodeList>
-<string>The following vibrations reside here:</string>
-                      </regexCodeList>
-                      <regexCodePropertyList>
 <integer>3</integer>
                       </regexCodePropertyList>
 </Trigger>
@@ -126146,12 +125736,12 @@ cecho(" &lt;yellow&gt;(&lt;a_red&gt;"..ataxiaTemp.dollFashions.."&lt;yellow&gt;)
                       </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
-                  <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Probe Doll</name>
-                    <script/>
+                    <script>deleteLine()</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>99</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -126161,9 +125751,17 @@ cecho(" &lt;yellow&gt;(&lt;a_red&gt;"..ataxiaTemp.dollFashions.."&lt;yellow&gt;)
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-</regexCodeList>
+<string>A vodun doll roughly resembling</string>
+<string>A well-made vodun doll</string>
+<string>A nearly perfect vodun doll</string>
+<string>A living vodun doll of</string>
+                    </regexCodeList>
                     <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>2</integer>
+<integer>2</integer>
+<integer>2</integer>
+<integer>2</integer>
+                    </regexCodePropertyList>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Delete Extra</name>
                       <script>deleteLine()</script>
@@ -126233,33 +125831,6 @@ cecho("\n&lt;a_brown&gt;[&lt;purple&gt;Doll&lt;a_brown&gt;]: &lt;a_red&gt;"..ata
 <integer>7</integer>
                       </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Probe Doll</name>
-                    <script>deleteLine()</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>99</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-<string>A vodun doll roughly resembling</string>
-<string>A well-made vodun doll</string>
-<string>A nearly perfect vodun doll</string>
-<string>A living vodun doll of</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-<integer>2</integer>
-<integer>2</integer>
-<integer>2</integer>
-<integer>2</integer>
-                    </regexCodePropertyList>
 </Trigger>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Fashioned Doll</name>
@@ -137686,12 +137257,12 @@ end</script>
                         </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
-                    <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Drawslash</name>
-                      <script/>
+                      <script>slc_last_limb = multimatches[2][2]</script>
   <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <conditonLineDelta>2</conditonLineDelta>
+  <mStayOpen>1</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -137701,9 +137272,15 @@ end</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                       <regexCodeList>
-</regexCodeList>
+<string>^(\w+) unleashes a vicious slash towards you before resheathing \w+ blade, \w+ \w+\.$</string>
+<string>^The blade bites deeply into your (.*)\.$</string>
+<string>1</string>
+                      </regexCodeList>
                       <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+<integer>1</integer>
+<integer>5</integer>
+                      </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>hit</name>
                         <script>--former name: connect
@@ -137731,7 +137308,7 @@ end</script>
 <integer>1</integer>
                         </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
+</Trigger>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Legslash</name>
                       <script/>
@@ -137880,31 +137457,6 @@ end</script>
 <string>1</string>
                       </regexCodeList>
                       <regexCodePropertyList>
-<integer>1</integer>
-<integer>5</integer>
-                      </regexCodePropertyList>
-</Trigger>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Drawslash</name>
-                      <script>slc_last_limb = multimatches[2][2]</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>2</conditonLineDelta>
-  <mStayOpen>1</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                      <regexCodeList>
-<string>^(\w+) unleashes a vicious slash towards you before resheathing \w+ blade, \w+ \w+\.$</string>
-<string>^The blade bites deeply into your (.*)\.$</string>
-<string>1</string>
-                      </regexCodeList>
-                      <regexCodePropertyList>
-<integer>1</integer>
 <integer>1</integer>
 <integer>5</integer>
                       </regexCodePropertyList>
@@ -138621,12 +138173,12 @@ end</script>
 </regexCodeList>
                     <regexCodePropertyList>
 </regexCodePropertyList>
-                    <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Tekura Punch 1</name>
                       <script/>
   <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <conditonLineDelta>1</conditonLineDelta>
+  <mStayOpen>1</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -138636,9 +138188,13 @@ end</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                       <regexCodeList>
-</regexCodeList>
+<string>^(\w+) launches a powerful uppercut at you.$</string>
+<string>1</string>
+                      </regexCodeList>
                       <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+<integer>5</integer>
+                      </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Punch Hit</name>
                         <script>slc_last_limb = matches[2]
@@ -138661,13 +138217,13 @@ SLC_connects(slc_last_limb,"tekurapunch")</script>
 <integer>1</integer>
                         </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                    <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+</Trigger>
+                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Tekura Punch 2</name>
                       <script/>
   <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <conditonLineDelta>1</conditonLineDelta>
+  <mStayOpen>1</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -138677,9 +138233,13 @@ SLC_connects(slc_last_limb,"tekurapunch")</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                       <regexCodeList>
-</regexCodeList>
+<string>^(\w+) unleashes a powerful hook towards you.$</string>
+<string>1</string>
+                      </regexCodeList>
                       <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+<integer>5</integer>
+                      </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Punch Hit</name>
                         <script>slc_last_limb = matches[2]
@@ -138702,13 +138262,13 @@ SLC_connects(slc_last_limb,"tekurapunch")</script>
 <integer>1</integer>
                         </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                    <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+</Trigger>
+                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Tekura Punch 3</name>
                       <script/>
   <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <conditonLineDelta>1</conditonLineDelta>
+  <mStayOpen>1</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -138718,9 +138278,13 @@ SLC_connects(slc_last_limb,"tekurapunch")</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                       <regexCodeList>
-</regexCodeList>
+<string>^(\w+) forms a spear hand and stabs out at you.$</string>
+<string>1</string>
+                      </regexCodeList>
                       <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+<integer>5</integer>
+                      </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Punch Hit</name>
                         <script>slc_last_limb = matches[2]
@@ -138743,13 +138307,13 @@ SLC_connects(slc_last_limb,"tekurapunch")</script>
 <integer>1</integer>
                         </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                    <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+</Trigger>
+                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Tekura Punch 4</name>
                       <script/>
   <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <conditonLineDelta>1</conditonLineDelta>
+  <mStayOpen>1</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -138759,9 +138323,13 @@ SLC_connects(slc_last_limb,"tekurapunch")</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                       <regexCodeList>
-</regexCodeList>
+<string>^(\w+) balls up one fist and hammerfists you.$</string>
+<string>1</string>
+                      </regexCodeList>
                       <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+<integer>5</integer>
+                      </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Punch Hit</name>
                         <script>slc_last_limb = matches[2]
@@ -138784,13 +138352,13 @@ SLC_connects(slc_last_limb,"tekurapunch")</script>
 <integer>1</integer>
                         </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                    <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+</Trigger>
+                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Tekura Kick 1</name>
                       <script/>
   <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <conditonLineDelta>1</conditonLineDelta>
+  <mStayOpen>1</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -138800,9 +138368,13 @@ SLC_connects(slc_last_limb,"tekurapunch")</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                       <regexCodeList>
-</regexCodeList>
+<string>^(\w+) pumps out at you with a powerful side kick\.$</string>
+<string>1</string>
+                      </regexCodeList>
                       <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+<integer>5</integer>
+                      </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Kick Hit</name>
                         <script>slc_last_limb = matches[2]
@@ -138825,13 +138397,13 @@ SLC_connects(slc_last_limb,"tekurakick")</script>
 <integer>1</integer>
                         </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                    <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+</Trigger>
+                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Tekura Kick 2</name>
                       <script/>
   <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <conditonLineDelta>1</conditonLineDelta>
+  <mStayOpen>1</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -138841,9 +138413,13 @@ SLC_connects(slc_last_limb,"tekurakick")</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                       <regexCodeList>
-</regexCodeList>
+<string>^(\w+) lets fly at you with a snap kick\.$</string>
+<string>1</string>
+                      </regexCodeList>
                       <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+<integer>5</integer>
+                      </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Kick Hit</name>
                         <script>slc_last_limb = matches[2]
@@ -138866,13 +138442,13 @@ SLC_connects(slc_last_limb,"tekurakick")</script>
 <integer>1</integer>
                         </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                    <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+</Trigger>
+                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Tekura Kick 3</name>
                       <script/>
   <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <conditonLineDelta>1</conditonLineDelta>
+  <mStayOpen>1</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -138882,9 +138458,13 @@ SLC_connects(slc_last_limb,"tekurakick")</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                       <regexCodeList>
-</regexCodeList>
+<string>^(\w+) hurls \w+ towards you with a lightning-fast moon kick\.$</string>
+<string>1</string>
+                      </regexCodeList>
                       <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+<integer>5</integer>
+                      </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Kick Hit</name>
                         <script>slc_last_limb = matches[2]
@@ -138907,13 +138487,13 @@ SLC_connects(slc_last_limb,"tekurakick")</script>
 <integer>1</integer>
                         </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                    <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+</Trigger>
+                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Tekura Kick 4</name>
                       <script/>
   <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <conditonLineDelta>1</conditonLineDelta>
+  <mStayOpen>1</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -138923,9 +138503,13 @@ SLC_connects(slc_last_limb,"tekurakick")</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                       <regexCodeList>
-</regexCodeList>
+<string>^(\w+) spins into the air and throws a whirlwind kick towards you\.$</string>
+<string>1</string>
+                      </regexCodeList>
                       <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+<integer>5</integer>
+                      </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Kick Hit</name>
                         <script>slc_last_limb = matches[2]
@@ -138948,7 +138532,7 @@ SLC_connects(slc_last_limb,"tekurakick")</script>
 <integer>1</integer>
                         </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
+</Trigger>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Axekick</name>
                       <script/>
@@ -138990,190 +138574,6 @@ SLC_connects(slc_last_limb,"axekick")</script>
                         </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Tekura Punch 1</name>
-                      <script/>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>1</conditonLineDelta>
-  <mStayOpen>1</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                      <regexCodeList>
-<string>^(\w+) launches a powerful uppercut at you.$</string>
-<string>1</string>
-                      </regexCodeList>
-                      <regexCodePropertyList>
-<integer>1</integer>
-<integer>5</integer>
-                      </regexCodePropertyList>
-</Trigger>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Tekura Punch 2</name>
-                      <script/>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>1</conditonLineDelta>
-  <mStayOpen>1</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                      <regexCodeList>
-<string>^(\w+) unleashes a powerful hook towards you.$</string>
-<string>1</string>
-                      </regexCodeList>
-                      <regexCodePropertyList>
-<integer>1</integer>
-<integer>5</integer>
-                      </regexCodePropertyList>
-</Trigger>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Tekura Punch 3</name>
-                      <script/>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>1</conditonLineDelta>
-  <mStayOpen>1</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                      <regexCodeList>
-<string>^(\w+) forms a spear hand and stabs out at you.$</string>
-<string>1</string>
-                      </regexCodeList>
-                      <regexCodePropertyList>
-<integer>1</integer>
-<integer>5</integer>
-                      </regexCodePropertyList>
-</Trigger>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Tekura Punch 4</name>
-                      <script/>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>1</conditonLineDelta>
-  <mStayOpen>1</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                      <regexCodeList>
-<string>^(\w+) balls up one fist and hammerfists you.$</string>
-<string>1</string>
-                      </regexCodeList>
-                      <regexCodePropertyList>
-<integer>1</integer>
-<integer>5</integer>
-                      </regexCodePropertyList>
-</Trigger>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Tekura Kick 1</name>
-                      <script/>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>1</conditonLineDelta>
-  <mStayOpen>1</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                      <regexCodeList>
-<string>^(\w+) pumps out at you with a powerful side kick\.$</string>
-<string>1</string>
-                      </regexCodeList>
-                      <regexCodePropertyList>
-<integer>1</integer>
-<integer>5</integer>
-                      </regexCodePropertyList>
-</Trigger>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Tekura Kick 2</name>
-                      <script/>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>1</conditonLineDelta>
-  <mStayOpen>1</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                      <regexCodeList>
-<string>^(\w+) lets fly at you with a snap kick\.$</string>
-<string>1</string>
-                      </regexCodeList>
-                      <regexCodePropertyList>
-<integer>1</integer>
-<integer>5</integer>
-                      </regexCodePropertyList>
-</Trigger>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Tekura Kick 3</name>
-                      <script/>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>1</conditonLineDelta>
-  <mStayOpen>1</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                      <regexCodeList>
-<string>^(\w+) hurls \w+ towards you with a lightning-fast moon kick\.$</string>
-<string>1</string>
-                      </regexCodeList>
-                      <regexCodePropertyList>
-<integer>1</integer>
-<integer>5</integer>
-                      </regexCodePropertyList>
-</Trigger>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Tekura Kick 4</name>
-                      <script/>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>1</conditonLineDelta>
-  <mStayOpen>1</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                      <regexCodeList>
-<string>^(\w+) spins into the air and throws a whirlwind kick towards you\.$</string>
-<string>1</string>
-                      </regexCodeList>
-                      <regexCodePropertyList>
-<integer>1</integer>
-<integer>5</integer>
-                      </regexCodePropertyList>
-</Trigger>
                     <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Axekick</name>
                       <script/>
@@ -139370,12 +138770,12 @@ end</script>
                         </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
-                    <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Armclamp/Legclamp</name>
                       <script/>
   <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <conditonLineDelta>1</conditonLineDelta>
+  <mStayOpen>1</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -139385,9 +138785,13 @@ end</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                       <regexCodeList>
-</regexCodeList>
+<string>^(\w+)'s many serpentine heads lunge towards your (.+)\.$</string>
+<string>1</string>
+                      </regexCodeList>
                       <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+<integer>5</integer>
+                      </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>hit</name>
                         <script>slc_last_limb = matches[2]
@@ -139410,7 +138814,7 @@ SLC_connects(slc_last_limb,"hydra")</script>
 <integer>1</integer>
                         </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
+</Trigger>
                     <Trigger isActive="no" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Hydra</name>
                       <script>slc_last_limb = multimatches[1][2]</script>
@@ -139450,29 +138854,6 @@ SLC_connects(slc_last_limb,"hydra")</script>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                       <regexCodeList>
 <string>^(\w+) springs forwards and mauls your (.+)\.$</string>
-<string>1</string>
-                      </regexCodeList>
-                      <regexCodePropertyList>
-<integer>1</integer>
-<integer>5</integer>
-                      </regexCodePropertyList>
-</Trigger>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Armclamp/Legclamp</name>
-                      <script/>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>1</conditonLineDelta>
-  <mStayOpen>1</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                      <regexCodeList>
-<string>^(\w+)'s many serpentine heads lunge towards your (.+)\.$</string>
 <string>1</string>
                       </regexCodeList>
                       <regexCodePropertyList>
@@ -141500,12 +140881,12 @@ SLC_connects(slc_last_limb,"frontkick")</script>
                           </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
-                      <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                      <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Spinkick 1</name>
-                        <script/>
+                        <script>slc_last_limb = "torso"</script>
   <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <conditonLineDelta>1</conditonLineDelta>
+  <mStayOpen>1</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -141515,9 +140896,13 @@ SLC_connects(slc_last_limb,"frontkick")</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-</regexCodeList>
+<string>^Whirling around, (\w+) drives the ball of \w+ foot into your ribs\.$</string>
+<string>1</string>
+                        </regexCodeList>
                         <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+<integer>5</integer>
+                        </regexCodePropertyList>
                         <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>hit</name>
                           <script>if SLC_blocked(matches[1]) == false then
@@ -141541,13 +140926,13 @@ end</script>
 <integer>1</integer>
                           </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                      <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+</Trigger>
+                      <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Spinkick 2</name>
-                        <script/>
+                        <script>slc_last_limb = "head"</script>
   <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <conditonLineDelta>1</conditonLineDelta>
+  <mStayOpen>1</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -141557,9 +140942,13 @@ end</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
-</regexCodeList>
+<string>^Whirling around, (\w+) brings the ball of \w+ foot crashing into the side of your head\.$</string>
+<string>1</string>
+                        </regexCodeList>
                         <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+<integer>5</integer>
+                        </regexCodePropertyList>
                         <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>hit</name>
                           <script>if SLC_blocked(matches[1]) == false then
@@ -141583,7 +140972,7 @@ end</script>
 <integer>1</integer>
                           </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
+</Trigger>
                       <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Flashheel</name>
                         <script>if multimatches[1][3] == "left" then
@@ -141650,52 +141039,6 @@ end</script>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                         <regexCodeList>
 <string>^(\w+) lashes out with a straight kick at you\.$</string>
-<string>1</string>
-                        </regexCodeList>
-                        <regexCodePropertyList>
-<integer>1</integer>
-<integer>5</integer>
-                        </regexCodePropertyList>
-</Trigger>
-                      <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Spinkick 1</name>
-                        <script>slc_last_limb = "torso"</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>1</conditonLineDelta>
-  <mStayOpen>1</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                        <regexCodeList>
-<string>^Whirling around, (\w+) drives the ball of \w+ foot into your ribs\.$</string>
-<string>1</string>
-                        </regexCodeList>
-                        <regexCodePropertyList>
-<integer>1</integer>
-<integer>5</integer>
-                        </regexCodePropertyList>
-</Trigger>
-                      <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Spinkick 2</name>
-                        <script>slc_last_limb = "head"</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>1</conditonLineDelta>
-  <mStayOpen>1</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                        <regexCodeList>
-<string>^Whirling around, (\w+) brings the ball of \w+ foot crashing into the side of your head\.$</string>
 <string>1</string>
                         </regexCodeList>
                         <regexCodePropertyList>
@@ -144955,12 +144298,14 @@ if removeAffV3 then removeAffV3("shield") end</script>
 </Trigger>
 </TriggerGroup>
 </TriggerGroup>
-                    <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                    <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Start Shikudo</name>
-                      <script/>
+                      <script>monk.shikudo.start()
+monk.shikudo.combo_affs = {}
+monk.shikudo.parrying = {}</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>100</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -144970,9 +144315,19 @@ if removeAffV3 then removeAffV3("shield") end</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                       <regexCodeList>
-</regexCodeList>
+<string>[System]: Running queued eqbal command:</string>
+<string>You tap out the contents of your pipe.</string>
+<string>^You fill your pipe with (.*).$</string>
+<string>You hold no "malachite".</string>
+<string>^You glance over (\w+) and see that (his|her) health is at (.*).$</string>
+                      </regexCodeList>
                       <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>2</integer>
+<integer>3</integer>
+<integer>1</integer>
+<integer>3</integer>
+<integer>1</integer>
+                      </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Parry/Guard</name>
                         <script>--if last hit was a limb then set parry
@@ -145385,37 +144740,6 @@ end</script>
 <integer>1</integer>
                         </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
-                    <Trigger isActive="no" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Start Shikudo</name>
-                      <script>monk.shikudo.start()
-monk.shikudo.combo_affs = {}
-monk.shikudo.parrying = {}</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>100</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                      <regexCodeList>
-<string>[System]: Running queued eqbal command:</string>
-<string>You tap out the contents of your pipe.</string>
-<string>^You fill your pipe with (.*).$</string>
-<string>You hold no "malachite".</string>
-<string>^You glance over (\w+) and see that (his|her) health is at (.*).$</string>
-                      </regexCodeList>
-                      <regexCodePropertyList>
-<integer>2</integer>
-<integer>3</integer>
-<integer>1</integer>
-<integer>3</integer>
-<integer>1</integer>
-                      </regexCodePropertyList>
 </Trigger>
                     <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Parry Leg Kick</name>
@@ -149055,12 +148379,16 @@ if applyAffV3 then applyAffV3("healthleech") end
                       </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
-                  <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Battlefury Perceive</name>
-                    <script/>
+                    <script>if isTargeted(matches[2]) then
+	trackingFractures = true
+end
+deleteLine()
+cecho("\n&lt;tomato&gt;[&lt;firebrick&gt;"..target.."&lt;tomato&gt;]:")</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
+  <mStayOpen>10</mStayOpen>
   <mCommand/>
   <packageName/>
   <path>Levi_Ataxia</path>
@@ -149070,9 +148398,11 @@ if applyAffV3 then applyAffV3("healthleech") end
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                     <regexCodeList>
-</regexCodeList>
+<string>^Narrowing your gaze upon (\w+), you take stock of \w+ current injuries.$</string>
+                    </regexCodeList>
                     <regexCodePropertyList>
-</regexCodePropertyList>
+<integer>1</integer>
+                    </regexCodePropertyList>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Fracture Type</name>
                       <script>local amt, loc, col = tonumber(matches[2]), matches[3], ""
@@ -149147,7 +148477,7 @@ ataxiaTemp.fractures.tfractureloc = tfractureamt
 <integer>7</integer>
                       </regexCodePropertyList>
 </Trigger>
-</TriggerGroup>
+</Trigger>
                   <Trigger isActive="no" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>SMASH</name>
                     <script>deleteFull()
@@ -149361,31 +148691,6 @@ if applyAffV3 then applyAffV3("haemophilia") end</script>
                     </regexCodeList>
                     <regexCodePropertyList>
 <integer>0</integer>
-                    </regexCodePropertyList>
-</Trigger>
-                  <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Battlefury Perceive</name>
-                    <script>if isTargeted(matches[2]) then
-	trackingFractures = true
-end
-deleteLine()
-cecho("\n&lt;tomato&gt;[&lt;firebrick&gt;"..target.."&lt;tomato&gt;]:")</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>10</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                    <regexCodeList>
-<string>^Narrowing your gaze upon (\w+), you take stock of \w+ current injuries.$</string>
-                    </regexCodeList>
-                    <regexCodePropertyList>
-<integer>1</integer>
                     </regexCodePropertyList>
 </Trigger>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">

@@ -132,7 +132,8 @@ function ataxiaNDB_SortOnline(filepath)
 	--Parse the list to see who needs to be added.
 	local count = 0
 	for index, name in pairs(apiOnlineFound) do
-		if not ataxiaNDB_Exists(name) and not table.contains(ataxiaNDB.divine, name) then
+		if not ataxiaNDB_Exists(name) and not table.contains(ataxiaNDB.divine, name)
+			and not (ataxiaNDB_isBlacklisted and ataxiaNDB_isBlacklisted(name)) then
 			count = count + 1
 			table.insert(apiNeedUpdate, name)
 		end
