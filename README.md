@@ -16,11 +16,12 @@ A comprehensive [Mudlet](https://www.mudlet.org/) automation and combat system f
 
 ## Quick Install
 
-**Option A** — Use a pre-built package from `packages/`:
-1. Open Mudlet → Package Manager → Install
-2. Select the `.mpackage` file
+**Option A** — Use a pre-built package:
+1. After building (see below), the package is at `muddler_project/build/Levi_Ataxia.mpackage`
+2. Open Mudlet → Package Manager → Install
+3. Select the `.mpackage` file
 
-**Option B** — Build from source (see below)
+> **Note**: The `packages/` directory contains legacy XML builds. For the current version, always build from source using the steps below.
 
 ---
 
