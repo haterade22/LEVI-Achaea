@@ -54,6 +54,10 @@ onTargetFocusV3()
 				removeAffV2("impatience")
 			end
 	else
+		-- Focus cured something other than impatience → target doesn't have impatience
+		erAff("impatience")
+		if removeAffV2 then removeAffV2("impatience") end
+		if removeAffV3 then removeAffV3("impatience") end
 		-- V2 integration: Focus cured a random mental affliction (mutually exclusive with old system)
 		if ataxia.settings.useAffTrackingV2 then
 			onTargetFocusV2(name)

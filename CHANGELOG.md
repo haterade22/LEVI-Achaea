@@ -1,5 +1,50 @@
 # LEVI-Achaea Changelog
 
+---
+
+## 2026-03-06 — Fix: Focus trigger now clears impatience from tracking
+
+**Files modified**:
+- `src_new/triggers/.../399_Focus_(known).lua` — else branch (non-lovers cure)
+- `src_new/triggers/.../398_Focus_(UNK).lua` — all focus uses
+
+**Problem**: When target used Focus and cured a goldenseal aff other than impatience, our tracking didn't infer that impatience was absent. If focus cured something else, impatience can't be present (focus would prioritize it).
+
+**Fix**: Added `erAff("impatience")` + V2/V3 removal on focus use. In 399 (known variant), only in the non-lovers branch (the lovers branch already cleared impatience explicitly). In 398 (UNK variant), on all focus uses (impatience is gone either way — cured by focus or wasn't present).
+
+---
+
+## 2026-03-06 — Fix: Shrugging trigger gated to Serpent only
+
+**Files modified**:
+- `src_new/triggers/.../passive_active/015_Shrugging_(Serpent).lua`
+
+**Problem**: The "hunches shoulders" trigger (Shrugging) only fired for Serpent targets (class gate: `class == "Serpent"`). Other classes also use this ability.
+
+**Fix**: Removed the Serpent class gate. Now clears `weariness` + 1 random affliction from V1/V2/V3 tracking for any targeted player.
+
+---
+
+## 2026-03-06 — Tweak: Lower asthma threshold from 50% to 33% for manaleech+disfigure transition
+
+**Files modified**:
+- `src_new/scripts/.../apostate/015_CC_Apostate.lua` — `selectPrimaryCurse()` (line ~263), `selectSecondaryCurse()` (lines ~326, ~333)
+
+**Change**: Lowered the asthma probability threshold from `>= 0.50` to `>= 0.33` in three places. Once clumsy and weariness are both at 33%, asthma is delivered. As soon as asthma reaches 33%, the system transitions to manaleech+disfigure immediately rather than waiting for 50% certainty. This applies earlier pressure and pairs with the existing disfigure-on-manaleech-round logic.
+
+---
+
+## 2026-03-06 — Fix: Disfigure firing prematurely due to off-balance button spam
+
+**Files modified**:
+- `src_new/scripts/.../apostate/015_CC_Apostate.lua` — disfigure gate (line ~605)
+
+**Problem**: Spamming the attack button while off-balance caused `selectPrimaryCurse()` to pick manaleech (asthma already tracked as applied from the previous round's trigger). The `buildAttack()` function then appended `disfigure` to the queued command. When balance returned, the queued deadeyes+disfigure fired — but disfigure was computed based on stale state (manaleech hadn't actually been cursed yet).
+
+**Fix**: Added `gmcp.Char.Vitals.bal == "1"` gate to the disfigure condition. Disfigure only appends when actually on balance, ensuring it fires on the real manaleech round, not a pre-queued off-balance press.
+
+---
+
 ## 2026-03-06 — Fix: Legacy apostate files still active, causing unwanted disfigure
 
 ### Bugfix: Disfigure firing on clumsy+asthma round instead of manaleech round
