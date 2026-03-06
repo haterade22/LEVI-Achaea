@@ -34,5 +34,6 @@ patterns:
   type: 3
 ]]--
 
+capturing_defences = true
 deleteLine()
 ataxiaEcho("Defences currently active:")

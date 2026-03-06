@@ -15826,7 +15826,7 @@
                                 "type": "prompt"
                               }
                             ],
-                            "script": "setTriggerStayOpen(\"Defence List\", 0)\ndeleteLine()\nataxia_reportDefences()\n"
+                            "script": "setTriggerStayOpen(\"Defence List\", 0)\ndeleteLine()\nif not capturing_defences then return end\ncapturing_defences = nil\nataxia_reportDefences()\n"
                           }
                         ]
                       },

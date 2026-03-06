@@ -8848,7 +8848,7 @@ function ataxia_updateApplied(_, name)
 		ataxiaCheckForMissing()
 		system_packageName = name
 		
-		ataxia_changeLog()
+		if ataxia_changeLog then ataxia_changeLog() end
 	end
 end
 registerAnonymousEventHandler("sysInstallPackage", "ataxia_updateApplied")
@@ -81223,7 +81223,11 @@ end</script>
 </Alias>
                     <Alias isActive="yes" isFolder="no">
   <name>Show Changelog</name>
-                      <script>ataxia_changeLog()</script>
+                      <script>if ataxia_changeLog then
+	ataxia_changeLog()
+else
+	cecho("\n&lt;firebrick&gt;Changelog function not available.")
+end</script>
   <command/>
   <packageName/>
   <regex>^changelog$</regex>
@@ -123478,7 +123482,8 @@ end</script>
 </TriggerGroup>
                 <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Defence List</name>
-                  <script>deleteLine()
+                  <script>capturing_defences = true
+deleteLine()
 ataxiaEcho("Defences currently active:")</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
@@ -123497,7 +123502,8 @@ ataxiaEcho("Defences currently active:")</script>
 </regexCodePropertyList>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>get Defence</name>
-                    <script>if not matches[2]:find("experience") and not matches[2]:find("critical") then
+                    <script>if not capturing_defences then return end
+if not matches[2]:find("experience") and not matches[2]:find("critical") then
   deleteLine()
 end</script>
   <triggerType>0</triggerType>
@@ -123522,6 +123528,8 @@ end</script>
   <name>prompt</name>
                     <script>setTriggerStayOpen("Defence List", 0)
 deleteLine()
+if not capturing_defences then return end
+capturing_defences = nil
 ataxia_reportDefences()
 </script>
   <triggerType>0</triggerType>
@@ -123601,7 +123609,8 @@ end</script>
 </Trigger>
                 <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Defence List</name>
-                  <script>deleteLine()
+                  <script>capturing_defences = true
+deleteLine()
 ataxiaEcho("Defences currently active:")</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>

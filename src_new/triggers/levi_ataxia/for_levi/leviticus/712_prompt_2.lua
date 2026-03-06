@@ -37,4 +37,6 @@ patterns:
 
 setTriggerStayOpen("Defence List", 0)
 deleteLine()
+if not capturing_defences then return end
+capturing_defences = nil
 ataxia_reportDefences()

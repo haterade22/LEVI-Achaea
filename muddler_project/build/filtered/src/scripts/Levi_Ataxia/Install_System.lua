@@ -29,7 +29,7 @@ function ataxia_updateApplied(_, name)
 		ataxiaCheckForMissing()
 		system_packageName = name
 		
-		ataxia_changeLog()
+		if ataxia_changeLog then ataxia_changeLog() end
 	end
 end
 registerAnonymousEventHandler("sysInstallPackage", "ataxia_updateApplied")
