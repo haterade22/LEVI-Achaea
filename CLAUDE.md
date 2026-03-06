@@ -1722,7 +1722,33 @@ Claude Code agent teams enable parallel development across isolated combat subsy
 
 ---
 
-**Last Updated**: 2026-02-10
+## Documentation Requirements
+
+**MANDATORY**: After every code change, you MUST update all relevant documentation before considering the task complete. This is not optional.
+
+### CHANGELOG.md
+- **Update `CHANGELOG.md` after every change** — bug fixes, new features, refactors, anything that modifies behavior
+- Group entries by date, with newest at the top
+- Each entry must include: **what changed** (files), **why** (root cause / motivation), and **how** (what the fix/feature does)
+- Use the existing format in `CHANGELOG.md` as a template
+
+### Other Documentation
+- **CLAUDE.md**: Update if you add new systems, change architecture, modify build processes, or add new conventions
+- **Memory files** (`~/.claude/projects/.../memory/`): Update with stable patterns, conventions, and lessons learned
+- **Class docs** (`.claude/classes/*.md`): Update if combat mechanics or class-specific logic changes
+- **Plan files** (`.claude/plans/`, `docs/plans/`): Mark completed items, update status, note deviations from plan
+- **README.md / GETTING_STARTED.md**: Update if setup steps, dependencies, or usage instructions change
+
+### Checklist (run mentally after every task)
+1. Did I change code? → Update `CHANGELOG.md`
+2. Did I add/remove files? → Update `CHANGELOG.md`, verify build includes them
+3. Did I change system architecture? → Update `CLAUDE.md`
+4. Did I learn something reusable? → Update memory files
+5. Did I change class combat logic? → Update relevant `.claude/classes/*.md`
+
+---
+
+**Last Updated**: 2026-03-06
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia

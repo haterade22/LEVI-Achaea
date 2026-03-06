@@ -42,3 +42,20 @@ function resetBashingStats()
 	}
 	ataxiaEcho("Bashing statistics have been reset.")
 end
+
+function bashStats_getDPS()
+	if not bashStats then return "0", "0" end
+	-- Session DPS: total damage / elapsed time
+	local elapsed = getEpoch() - (bashStats.dpsSessionStart or getEpoch())
+	local sDPS = "0"
+	if elapsed > 0 and bashStats.totalDamage and bashStats.totalDamage > 0 then
+		sDPS = string.format("%.1f", bashStats.totalDamage / elapsed)
+	end
+	-- Per-balance DPS: last balance damage / last balance time
+	local bDPS = "0"
+	if bashStats.lastBalanceTime and bashStats.lastBalanceTime > 0
+		and bashStats.lastBalanceDamage and bashStats.lastBalanceDamage > 0 then
+		bDPS = string.format("%.1f", bashStats.lastBalanceDamage / bashStats.lastBalanceTime)
+	end
+	return sDPS, bDPS
+end

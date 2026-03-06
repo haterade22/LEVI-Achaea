@@ -1,3 +1,4 @@
+echo("\n")
 ataxia_promptCommands()
 
 if haveDef("speed") == true then

@@ -195,8 +195,13 @@ function tarc.write()
         tarc:cecho("\n       Stance: unknown\n")
       end
     end
-    if gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class == "Blademaster" and bmshin then
-    tarc:cecho("     Shin: " ..bmshin.. "\n\n")
+    if gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class == "Blademaster" then
+    local shin = blademaster and blademaster.getShin and blademaster.getShin() or (ataxia.vitals.class or 0)
+    tarc:cecho("     Shin: " .. shin .. "\n")
+    if ataxia.vitals.stance then
+      tarc:cecho("     Stance: " .. ataxia.vitals.stance .. "\n")
+    end
+    tarc:cecho("\n")
     end
     if gmcp.Char and gmcp.Char.Status and gmcp.Char.Vitals and (gmcp.Char.Status.class == "Runewarden" or gmcp.Char.Status.class == "Infernal") and (gmcp.Char.Vitals.charstats and (gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" or gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt")) then 
     tarc:cecho("\n      Momentum: " ..mymomentum.. "\n\n")

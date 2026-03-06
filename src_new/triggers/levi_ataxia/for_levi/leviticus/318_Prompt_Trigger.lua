@@ -33,6 +33,7 @@ patterns:
   type: 7
 ]]--
 
+echo("\n")
 ataxia_promptCommands()
 
 if haveDef("speed") == true then
