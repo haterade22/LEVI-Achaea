@@ -3,8 +3,7 @@ type: alias
 name: run lua code
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- run-lua-code-v4
+- Utility
 attributes:
   isActive: 'yes'
   isFolder: 'no'

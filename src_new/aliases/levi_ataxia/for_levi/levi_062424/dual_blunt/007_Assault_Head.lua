@@ -3,11 +3,7 @@ type: alias
 name: Assault Head
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
+- Classes
 - Knight
 - Infernal
 - Dual Blunt

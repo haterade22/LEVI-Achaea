@@ -3,11 +3,7 @@ type: alias
 name: Manually Parry
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
-- Ataxia
+- Combat
 - Combat Aliases
 attributes:
   isActive: 'yes'

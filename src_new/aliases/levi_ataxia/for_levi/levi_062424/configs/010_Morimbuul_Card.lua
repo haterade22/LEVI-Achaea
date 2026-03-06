@@ -3,12 +3,8 @@ type: alias
 name: Morimbuul Card
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Autobashing
+- Basher
 - Configs
 attributes:
   isActive: 'yes'

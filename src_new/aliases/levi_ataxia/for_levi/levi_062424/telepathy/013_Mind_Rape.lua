@@ -3,12 +3,7 @@ type: alias
 name: Mind Rape
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- Monks
+- Classes
 - Monk
 - Telepathy
 attributes:

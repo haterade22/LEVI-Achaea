@@ -3,8 +3,7 @@ type: alias
 name: '`echo'
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- echo
+- Utility
 attributes:
   isActive: 'yes'
   isFolder: 'no'

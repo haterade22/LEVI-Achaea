@@ -3,13 +3,8 @@ type: alias
 name: SET HERB
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
 - General
-- SHOPKEEPING
+- Shopkeeping
 attributes:
   isActive: 'yes'
   isFolder: 'no'

@@ -3,13 +3,7 @@ type: alias
 name: bbbt
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- Monks
-- Monk
+- Classes
 - Monk
 - Tekura
 attributes:

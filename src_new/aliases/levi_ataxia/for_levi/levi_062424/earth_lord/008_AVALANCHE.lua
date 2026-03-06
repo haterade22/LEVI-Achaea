@@ -3,12 +3,8 @@ type: alias
 name: AVALANCHE
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- EARTH LORD
+- Classes
+- Earth Lord
 attributes:
   isActive: 'yes'
   isFolder: 'no'

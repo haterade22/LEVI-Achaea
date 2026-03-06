@@ -3,12 +3,8 @@ type: alias
 name: BANDERSHOOT
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- EGGHUNT
+- General
+- Egghunt
 attributes:
   isActive: 'yes'
   isFolder: 'no'

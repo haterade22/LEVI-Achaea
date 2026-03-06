@@ -3,11 +3,7 @@ type: alias
 name: Clarity (Increase EQ
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
+- Classes
 - Psion
 - Emulation
 attributes:

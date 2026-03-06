@@ -3,12 +3,7 @@ type: alias
 name: Learning
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Other stuff
 attributes:
   isActive: 'yes'
   isFolder: 'no'

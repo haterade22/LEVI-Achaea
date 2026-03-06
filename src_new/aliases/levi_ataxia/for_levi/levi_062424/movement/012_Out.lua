@@ -3,13 +3,8 @@ type: alias
 name: Out
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
 - General
-- MOVEMENT
+- Movement
 attributes:
   isActive: 'yes'
   isFolder: 'no'

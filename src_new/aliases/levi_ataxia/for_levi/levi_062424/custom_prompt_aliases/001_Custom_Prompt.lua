@@ -3,13 +3,9 @@ type: alias
 name: Custom Prompt
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Installation / Configuration
-- Custom Prompt Aliases
+- Config
+- Prompt
 attributes:
   isActive: 'yes'
   isFolder: 'no'

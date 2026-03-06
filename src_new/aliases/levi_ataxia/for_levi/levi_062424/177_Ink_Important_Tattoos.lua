@@ -3,13 +3,8 @@ type: alias
 name: Ink Important Tattoos
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Other stuff
-- Crafting/Tradeskill Related
+- Crafting
 attributes:
   isActive: 'yes'
   isFolder: 'no'

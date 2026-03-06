@@ -3,10 +3,6 @@ type: alias
 name: Quash Arc
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
 attributes:
   isActive: 'yes'
   isFolder: 'no'

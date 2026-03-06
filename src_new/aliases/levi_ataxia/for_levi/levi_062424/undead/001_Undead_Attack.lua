@@ -3,11 +3,7 @@ type: alias
 name: Undead Attack
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
+- Classes
 - Undead
 attributes:
   isActive: 'yes'

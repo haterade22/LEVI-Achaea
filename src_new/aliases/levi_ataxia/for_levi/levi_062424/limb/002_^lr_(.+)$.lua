@@ -3,12 +3,7 @@ type: alias
 name: ^lr (.+)$
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- limb.1.2
+- Combat
 - Limb
 attributes:
   isActive: 'yes'

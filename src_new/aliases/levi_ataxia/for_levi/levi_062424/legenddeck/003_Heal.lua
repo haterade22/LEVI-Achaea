@@ -3,11 +3,6 @@ type: alias
 name: Heal
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
 - Artefacts
 - LegendDeck
 attributes:

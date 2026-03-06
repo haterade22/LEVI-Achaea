@@ -3,11 +3,7 @@ type: alias
 name: (ZCHAT) Toggle Chat Command Line
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- ZulahGUI - Saonji Edit
+- Systems
 - zGUI Redux
 attributes:
   isActive: 'yes'

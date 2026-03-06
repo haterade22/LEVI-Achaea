@@ -3,13 +3,9 @@ type: alias
 name: Set Propagations
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Installation / Configuration
-- Sylvan Things
+- Config
+- Sylvan
 attributes:
   isActive: 'yes'
   isFolder: 'no'

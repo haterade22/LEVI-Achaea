@@ -3,12 +3,8 @@ type: alias
 name: Pause Basher
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Autobashing
+- Basher
 attributes:
   isActive: 'yes'
   isFolder: 'no'

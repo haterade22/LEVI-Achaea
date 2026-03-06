@@ -3,12 +3,8 @@ type: alias
 name: DW Set Scythe
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- DEPTHSWALKER
+- Classes
+- Depthswalker
 attributes:
   isActive: 'yes'
   isFolder: 'no'

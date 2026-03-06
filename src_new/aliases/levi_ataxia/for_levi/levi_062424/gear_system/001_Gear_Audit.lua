@@ -3,9 +3,7 @@ type: alias
 name: Gear Audit
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
+- Systems
 - Gear System
 attributes:
   isActive: 'yes'

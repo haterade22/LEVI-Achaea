@@ -3,12 +3,8 @@ type: alias
 name: LOCK
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- Monks
+- Classes
+- Monk
 - SHIKUDO
 attributes:
   isActive: 'yes'

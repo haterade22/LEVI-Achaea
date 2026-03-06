@@ -3,12 +3,7 @@ type: alias
 name: kai enfeeble
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- Monks
+- Classes
 - Monk
 - Kaido
 attributes:

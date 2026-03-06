@@ -3,12 +3,8 @@ type: alias
 name: TORSO PATH
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- EARTH LORD
+- Classes
+- Earth Lord
 attributes:
   isActive: 'no'
   isFolder: 'no'

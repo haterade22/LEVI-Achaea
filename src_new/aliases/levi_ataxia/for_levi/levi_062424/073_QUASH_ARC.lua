@@ -3,12 +3,8 @@ type: alias
 name: QUASH ARC
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- Monks
+- Classes
+- Monk
 attributes:
   isActive: 'yes'
   isFolder: 'no'

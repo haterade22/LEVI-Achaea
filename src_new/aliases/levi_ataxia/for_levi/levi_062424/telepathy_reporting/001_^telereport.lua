@@ -3,14 +3,8 @@ type: alias
 name: ^telereport
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- Monks
+- Classes
 - Monk
-- telepathy_reporting
 - Telepathy Reporting
 attributes:
   isActive: 'yes'

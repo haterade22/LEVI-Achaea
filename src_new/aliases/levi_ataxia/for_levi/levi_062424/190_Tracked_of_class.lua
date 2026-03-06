@@ -3,12 +3,8 @@ type: alias
 name: Tracked of class
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Ataxia NDB
+- NDB
 - Actions
 attributes:
   isActive: 'yes'

@@ -3,12 +3,8 @@ type: alias
 name: Who Groups
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Ataxia NDB
+- NDB
 attributes:
   isActive: 'yes'
   isFolder: 'no'

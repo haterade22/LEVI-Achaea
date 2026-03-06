@@ -3,12 +3,8 @@ type: alias
 name: HEAD
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- Monks
+- Classes
+- Monk
 - TEKURA
 attributes:
   isActive: 'yes'

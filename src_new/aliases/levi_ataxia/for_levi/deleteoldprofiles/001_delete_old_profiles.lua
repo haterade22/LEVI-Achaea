@@ -3,8 +3,7 @@ type: alias
 name: delete old profiles
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- deleteOldProfiles
+- Utility
 attributes:
   isActive: 'yes'
   isFolder: 'no'

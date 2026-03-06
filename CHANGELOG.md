@@ -1,5 +1,30 @@
 # LEVI-Achaea Changelog
 
+## 2026-03-06 — Flatten Alias Hierarchy
+
+### Improvement: Reduce deeply nested alias group structure
+
+**Files modified**:
+- `src_new/aliases/_groups.yaml` — Rewritten with flat hierarchy (max 5 levels vs previous 10+)
+- 520 alias `.lua` files — All `hierarchy:` YAML headers updated to new paths
+- `tools/flatten_alias_hierarchy.py` — New tool for bulk hierarchy path remapping
+
+**Problem**: Alias groups were nested 7-10 levels deep (e.g., `Levi_Ataxia > For Levi > Levi_062424 > Levi > LeviticusREG > Leviticus > BladeMaster`) due to accumulated organizational layers over years. This made navigating the alias tree in Mudlet tedious.
+
+**Fix**: Consolidated all aliases into a clean top-level structure under `Levi_Ataxia`:
+- `Classes/` — All 13 class-specific alias groups (Apostate, Blademaster, Knight, Monk, etc.)
+- `General/` — Movement, Targeting, Shopkeeping, Freezetag, Egghunt
+- `Artefacts/` — LegendDeck, Dragon Talisman, Rageblade
+- `Combat/` — Combat Aliases, Defence, Enemy Management, Limb
+- `Ataxia/` — NDB, Basher, Config, Crafting, Defence Config, Fishing, Shaman System
+- `Systems/` — Gear System, zData, zGUI Redux
+- `Utility/` — Echo, delete old profiles, run-lua-code
+- `RAGEPULL` (disabled)
+
+All group-level scripts (LegendDeck notes, Infernal forge notes, Dragon Talisman combine, Inkmilling help, Custom Prompt documentation) and `isActive: false` flags preserved.
+
+---
+
 ## 2026-03-06 — NDB API Error Handling (Blacklist Non-Players)
 
 ### Bug Fix: Non-player names (items, NPCs) cause infinite API lookup spam

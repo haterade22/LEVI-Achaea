@@ -3,12 +3,8 @@ type: alias
 name: Toggle Options For Enemy Highlighting
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Ataxia NDB
+- NDB
 - Configs
 attributes:
   isActive: 'yes'

@@ -3,10 +3,6 @@ type: alias
 name: Bait Hook
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
 - Fishing
 attributes:

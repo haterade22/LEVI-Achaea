@@ -3,11 +3,7 @@ type: alias
 name: (ZSHOW) Show Windows
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- ZulahGUI - Saonji Edit
+- Systems
 - zGUI Redux
 attributes:
   isActive: 'yes'

@@ -3,11 +3,6 @@ type: alias
 name: TARGET
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
 - General
 attributes:
   isActive: 'no'

@@ -3,11 +3,7 @@ type: alias
 name: LOS Dragon Runie
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
+- Classes
 - Dragon
 attributes:
   isActive: 'yes'

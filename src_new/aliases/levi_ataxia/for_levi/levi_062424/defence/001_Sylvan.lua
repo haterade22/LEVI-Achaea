@@ -3,11 +3,7 @@ type: alias
 name: Sylvan
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
+- Combat
 - Defence
 attributes:
   isActive: 'yes'

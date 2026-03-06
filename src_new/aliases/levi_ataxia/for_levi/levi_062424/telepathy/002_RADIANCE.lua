@@ -3,12 +3,8 @@ type: alias
 name: RADIANCE
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- Monks
+- Classes
+- Monk
 - TELEPATHY
 attributes:
   isActive: 'yes'

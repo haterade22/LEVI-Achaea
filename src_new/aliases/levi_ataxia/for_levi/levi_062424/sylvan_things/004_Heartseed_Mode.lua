@@ -3,13 +3,9 @@ type: alias
 name: Heartseed Mode
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Installation / Configuration
-- Sylvan Things
+- Config
+- Sylvan
 attributes:
   isActive: 'yes'
   isFolder: 'no'

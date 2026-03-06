@@ -3,9 +3,6 @@ type: alias
 name: NW
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
 - RAGEPULL
 attributes:
   isActive: 'yes'

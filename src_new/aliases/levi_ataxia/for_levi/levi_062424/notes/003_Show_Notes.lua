@@ -3,13 +3,8 @@ type: alias
 name: Show Notes
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Ataxia NDB
-- Actions
+- NDB
 - Notes
 attributes:
   isActive: 'yes'

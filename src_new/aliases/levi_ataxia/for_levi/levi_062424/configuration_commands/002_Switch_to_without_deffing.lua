@@ -3,13 +3,8 @@ type: alias
 name: Switch to without deffing
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Defence Stuff
-- Configuration Commands
+- Defence Config
 attributes:
   isActive: 'yes'
   isFolder: 'no'

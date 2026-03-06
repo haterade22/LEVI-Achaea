@@ -3,12 +3,8 @@ type: alias
 name: Change Roomshorten Setting
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Autobashing
+- Basher
 - Configs
 attributes:
   isActive: 'yes'

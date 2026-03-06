@@ -3,13 +3,9 @@ type: alias
 name: Toggle Vibes
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Installation / Configuration
-- Magi Things
+- Config
+- Magi
 attributes:
   isActive: 'yes'
   isFolder: 'no'

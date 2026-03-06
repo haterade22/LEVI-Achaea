@@ -3,7 +3,6 @@ type: alias
 name: Reload
 hierarchy:
 - Levi_Ataxia
-- For Levi
 attributes:
   isActive: 'yes'
   isFolder: 'no'

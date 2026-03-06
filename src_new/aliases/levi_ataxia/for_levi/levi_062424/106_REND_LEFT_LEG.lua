@@ -3,12 +3,8 @@ type: alias
 name: REND LEFT LEG
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- DRAGON
+- Classes
+- Dragon
 attributes:
   isActive: 'yes'
   isFolder: 'no'

@@ -3,10 +3,7 @@ type: alias
 name: (zBash)
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- zData
+- Systems
 - zData
 attributes:
   isActive: 'yes'

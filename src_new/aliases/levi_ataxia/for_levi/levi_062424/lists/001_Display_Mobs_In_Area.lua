@@ -3,12 +3,8 @@ type: alias
 name: Display Mobs In Area
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Autobashing
+- Basher
 - Lists
 attributes:
   isActive: 'yes'

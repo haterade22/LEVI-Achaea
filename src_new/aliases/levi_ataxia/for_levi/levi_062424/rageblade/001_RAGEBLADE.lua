@@ -3,13 +3,8 @@ type: alias
 name: RAGEBLADE
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- DRAGON
-- RAGEBLADE
+- Artefacts
+- Rageblade
 attributes:
   isActive: 'yes'
   isFolder: 'no'

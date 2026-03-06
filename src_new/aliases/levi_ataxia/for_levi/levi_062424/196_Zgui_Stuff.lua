@@ -3,10 +3,6 @@ type: alias
 name: Zgui Stuff
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
 attributes:
   isActive: 'no'

@@ -3,13 +3,9 @@ type: alias
 name: Channel Relay Setting
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Installation / Configuration
-- Toggles/Settings/Etc.
+- Config
+- Toggles
 attributes:
   isActive: 'yes'
   isFolder: 'no'

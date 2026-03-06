@@ -3,12 +3,8 @@ type: alias
 name: Evade Direction
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- BladeMaster
+- Classes
+- Blademaster
 attributes:
   isActive: 'yes'
   isFolder: 'no'

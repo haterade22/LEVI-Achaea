@@ -3,10 +3,6 @@ type: alias
 name: Initialise Fishing
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
 - Fishing
 attributes:

@@ -3,11 +3,7 @@ type: alias
 name: Expunge (Cure Mental Affliction)
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
+- Classes
 - Psion
 - Psionics
 attributes:

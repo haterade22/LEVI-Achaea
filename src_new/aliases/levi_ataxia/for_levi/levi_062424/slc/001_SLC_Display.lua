@@ -3,11 +3,7 @@ type: alias
 name: SLC Display
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
+- Classes
 - slc
 attributes:
   isActive: 'yes'

@@ -3,13 +3,9 @@ type: alias
 name: Toggle Symphony Usage
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Installation / Configuration
-- Bard Things
+- Config
+- Bard
 attributes:
   isActive: 'yes'
   isFolder: 'no'

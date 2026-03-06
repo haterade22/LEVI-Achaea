@@ -3,12 +3,7 @@ type: alias
 name: enemy city
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- AzzysEnemyManagement
+- Combat
 - Enemy Management
 attributes:
   isActive: 'yes'

@@ -3,12 +3,8 @@ type: alias
 name: DRAGONTHING
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
-- DRAGON TALISMAN
+- Artefacts
+- Dragon Talisman
 attributes:
   isActive: 'yes'
   isFolder: 'no'

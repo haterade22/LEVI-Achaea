@@ -3,11 +3,6 @@ type: alias
 name: Psion PVP
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
 - Artefacts
 attributes:
   isActive: 'yes'

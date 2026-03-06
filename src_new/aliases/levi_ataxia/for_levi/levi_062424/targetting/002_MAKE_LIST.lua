@@ -3,13 +3,8 @@ type: alias
 name: MAKE LIST
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
 - General
-- TARGETTING
+- Targeting
 attributes:
   isActive: 'yes'
   isFolder: 'no'

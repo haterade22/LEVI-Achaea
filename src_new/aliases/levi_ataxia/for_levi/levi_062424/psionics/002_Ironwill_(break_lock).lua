@@ -3,11 +3,7 @@ type: alias
 name: Ironwill (break lock)
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- LeviticusREG
-- Leviticus
+- Classes
 - Psion
 - Psionics
 attributes:

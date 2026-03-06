@@ -3,12 +3,8 @@ type: alias
 name: Show Curing Order
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
-- Installation / Configuration
+- Config
 attributes:
   isActive: 'yes'
   isFolder: 'no'

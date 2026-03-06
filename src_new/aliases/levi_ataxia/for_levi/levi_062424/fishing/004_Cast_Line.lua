@@ -3,10 +3,6 @@ type: alias
 name: Cast Line
 hierarchy:
 - Levi_Ataxia
-- For Levi
-- Levi_062424
-- Levi
-- Ataxia-DownloadThis
 - Ataxia
 - Fishing
 attributes:
