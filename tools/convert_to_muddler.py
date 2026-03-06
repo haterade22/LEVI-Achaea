@@ -386,6 +386,35 @@ class MuddlerConverter:
         for root in levi_roots:
             collect_known(root, ())
 
+        # Rewrite file hierarchies to strip dissolved intermediate group names.
+        # After _groups.yaml flattening, files still reference old paths like
+        # ["Levi_Ataxia", "For Levi", "leviticus", ...]. Strip the intermediates
+        # so they match the new flattened tree.
+        # Per-type dissolved sets (some names are valid groups in one type but
+        # intermediates in another — e.g. "Ataxia" is a real group in triggers
+        # but an intermediate wrapper in scripts).
+        common_dissolved = {"For Levi", "LEVI", "Levitax",
+                            "Levi_062424", "Levi Ataxia"}
+        type_dissolved = {
+            "scripts": common_dissolved | {"Ataxia-DownloadThis", "Ataxia",
+                                           "Levi  Scripts", "Levi Scripts"},
+            "triggers": common_dissolved | {"leviticus"},
+            "aliases": common_dissolved | {"Levi_062424"},
+            "timers": common_dissolved | {"leviticus"},
+            "keys": common_dissolved,
+        }
+        dissolved = type_dissolved.get(pkg_type, common_dissolved)
+        for file_path, metadata, lua_code in items:
+            hierarchy = metadata.get("hierarchy", [])
+            if hierarchy:
+                new_h = [h for h in hierarchy if h not in dissolved]
+                # Collapse duplicate "Ataxia" in scripts
+                # (from old Levi_Ataxia > LEVI > Ataxia > Ataxia nesting)
+                if pkg_type == "scripts":
+                    while len(new_h) >= 3 and new_h[1] == "Ataxia" and new_h[2] == "Ataxia":
+                        new_h = [new_h[0]] + new_h[2:]
+                metadata["hierarchy"] = new_h
+
         # Auto-create missing intermediate groups in the _groups.yaml tree
         # for items whose hierarchy references groups not in _groups.yaml
         for file_path, metadata, lua_code in items:
@@ -401,11 +430,20 @@ class MuddlerConverter:
             items_by_hierarchy[hierarchy].append((file_path, metadata, lua_code))
 
         # Recursively build the JSON tree from the group hierarchy
+        # Unwrap root groups: output their children directly instead of wrapping
+        # in a root-level group node. This prevents redundant nesting in Mudlet
+        # (package root + JSON root + actual content = 3 levels of Levi_Ataxia).
         result = []
         for root_group in levi_roots:
             json_node = self._group_to_json(root_group, pkg_type, items_by_hierarchy, name_map, [])
             if json_node:
-                result.append(json_node)
+                # Unwrap: promote children to top level instead of wrapping in root group
+                children = json_node.get("children", [])
+                if children:
+                    result.extend(children)
+                # If root group has no children but has items, keep it as-is
+                elif json_node:
+                    result.append(json_node)
 
         return result
 

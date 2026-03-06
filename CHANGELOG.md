@@ -1,5 +1,27 @@
 # LEVI-Achaea Changelog
 
+## 2026-03-06 — Flatten Redundant Levi_Ataxia Nesting
+
+### Improvement: Remove triple-nested Levi_Ataxia wrapper groups
+
+**Files modified**:
+- `src_new/scripts/_groups.yaml` — Dissolved `LEVI > Ataxia > Ataxia` and `Levi Scripts` wrappers; moved inner Ataxia init script to root
+- `src_new/triggers/_groups.yaml` — Dissolved `For Levi > leviticus` wrappers
+- `src_new/timers/_groups.yaml` — Dissolved `For Levi > Levi_062424 > leviticus > Levi Ataxia` chain
+- `src_new/keys/_groups.yaml` — Dissolved `Levitax` wrapper
+- `tools/convert_to_muddler.py` — Added per-type hierarchy rewriting to strip dissolved group names from file YAML headers; unwrap root group in JSON output so children appear directly in the array
+- `tools/flatten_groups.py` — New helper script for flattening `_groups.yaml` intermediate groups
+
+**Problem**: The Mudlet package tree showed 3 levels of `Levi_Ataxia` before reaching actual content groups, caused by three layers combining: (1) Mudlet package import creates a root group, (2) Muddler directory adds another wrapper, (3) JSON root group object adds a third. Each item type also had its own redundant intermediate groups (e.g., scripts had `LEVI > Ataxia > Ataxia`, triggers had `For Levi > leviticus`).
+
+**Fix**: Two-part approach:
+1. Flattened `_groups.yaml` files to remove intermediate wrapper groups, promoting their children directly under `Levi_Ataxia`
+2. Modified `convert_to_muddler.py` to (a) rewrite stale hierarchy references in file YAML headers to match the new flat structure, and (b) unwrap the root group in JSON output so Muddler doesn't add another layer
+
+Result: Single `Levi_Ataxia` level (the package root), then directly into content groups.
+
+---
+
 ## 2026-03-06 — Flatten Alias Hierarchy
 
 ### Improvement: Reduce deeply nested alias group structure
