@@ -1,5 +1,27 @@
 # LEVI-Achaea Changelog
 
+## 2026-03-06 — Fix: Baalzadeen re-summoned every dispatch
+
+### Bugfix: Apostate offense wastes balance summoning Baalzadeen when already present
+
+**Files modified**:
+- `src_new/scripts/.../apostate/014_Levi_Apostate.lua` — `baalzadeen()` function
+- `src_new/scripts/.../apostate/015_CC_Apostate.lua` — dispatch Baalzadeen check
+- `src_new/triggers/.../apostate/025_BAALZADEEN_SUMMONED.lua` — **New** trigger
+- `src_new/triggers/.../apostate/014_NO_BAALZADEEN.lua` — reset flag on failure
+
+**Problem**: Every `apostate.dispatch()` call sent `queue prepend free summon baalzadeen` before the attack, even when the Baalzadeen was already in the room. This consumed balance on a redundant summon every round. Two issues:
+1. `baalzadeen()` used `table.contains(zgui.roomDenizenList, "a Baalzadeen")` — exact string match failed if the GMCP name differed in casing/article, or if the entity had a non-`"m"` attrib (landing in `roomItemList` instead)
+2. No guard against re-sending the summon while waiting for GMCP to confirm the Baalzadeen appeared
+
+**Fix**:
+1. `baalzadeen()` now uses case-insensitive partial match (`name:lower():find("baalzadeen")`) and searches both `zgui.roomDenizenList` and `zgui.roomItemList`
+2. Added `apostate.state.baalzadeenSummoned` flag — set `true` when summon is sent, prevents re-sending
+3. New trigger `025_BAALZADEEN_SUMMONED.lua` matches "You call out, ordering your Baalzadeen to return to serve your whim." and resets `baalzadeenSummoned = false`
+4. `014_NO_BAALZADEEN.lua` also resets the flag so dispatch can retry after a failure
+
+---
+
 ## 2026-03-06 — Fix: Root group init script lost during hierarchy flattening
 
 ### Bugfix: `ataxiaTemp` / `ataxiagui` / `ataxiaTables` nil on load

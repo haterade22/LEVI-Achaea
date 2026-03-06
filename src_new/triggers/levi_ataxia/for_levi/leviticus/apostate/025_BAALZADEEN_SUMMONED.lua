@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: NO BAALZADEEN
+name: BAALZADEEN SUMMONED
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -33,13 +33,10 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: You must be leading your Baalzadeen.
+- pattern: You call out, ordering your Baalzadeen to return to serve your whim.
   type: 3
 ]]--
 
-send("cq all;summon baalzadeen")
-
--- Reset the summoned flag so dispatch can re-summon if needed
 if apostate and apostate.state then
   apostate.state.baalzadeenSummoned = false
 end
