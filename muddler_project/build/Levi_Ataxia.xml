@@ -7,6 +7,37 @@
   <packageName/>
 <eventHandlerList>
 </eventHandlerList>
+      <Script isActive="yes" isFolder="no">
+  <name>Levi_Ataxia Init</name>
+        <script>ataxia = ataxia or {}
+ataxiaTables = ataxiaTables or {}
+ataxiaTemp = ataxiaTemp or {}
+ataxiaTemp.addedHerbID = 1
+ataxiaTemp.removedHerbID = 2
+ataxiagui = ataxiagui or {}
+ataxiaVersion = "4.1"						--last was 4.1
+muteList = muteList or {}
+
+ataxiaTables.limbTimers = ataxiaTables.limbTimers or {}
+ataxiaTables.fractureTimers = ataxiaTables.fractureTimers or {}
+
+ataxia.bals = ataxia.bals or {}
+ataxia.bals.get = {"bal", "eq"}
+ataxia.bals.used = ataxia.bals.used or {}
+ataxia.bals.timestamps = ataxia.bals.timestamps or {}
+
+
+function ataxia_Echo(text)
+	cecho("\n&lt;a_darkcyan&gt;(&lt;a_darkmagenta&gt;LEVI&lt;a_darkcyan&gt;): &lt;NavajoWhite&gt;"..text)
+end
+
+function ataxiaEcho(text)
+	cecho("\n&lt;a_darkcyan&gt;(&lt;a_darkmagenta&gt;LEVI&lt;a_darkcyan&gt;): &lt;NavajoWhite&gt;"..text)
+end</script>
+  <packageName/>
+<eventHandlerList>
+</eventHandlerList>
+</Script>
       <ScriptGroup isActive="yes" isFolder="yes">
   <name>deletestuff</name>
         <script/>

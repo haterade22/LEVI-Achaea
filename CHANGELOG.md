@@ -1,5 +1,26 @@
 # LEVI-Achaea Changelog
 
+## 2026-03-06 — Fix: Root group init script lost during hierarchy flattening
+
+### Bugfix: `ataxiaTemp` / `ataxiagui` / `ataxiaTables` nil on load
+
+**File modified**: `tools/convert_to_muddler.py`
+
+**Problem**: The hierarchy flattening (root group unwrap) promoted children to the top level but dropped the root group's own inline `script:` property. The `Levi_Ataxia` root group in `scripts/_groups.yaml` contained the init script that creates `ataxiaTemp`, `ataxia`, `ataxiaTables`, `ataxiagui`, `ataxiaVersion`, `muteList`, `ataxia.bals`, and the `ataxia_Echo()`/`ataxiaEcho()` functions. Without this script, every prompt trigger, vitals handler, basher function, and limb display crashed with `attempt to index global 'ataxiaTemp' (a nil value)`.
+
+**Symptoms**:
+- `[ERROR] Prompt Running: attempt to index global 'ataxiaTemp' (a nil value)`
+- `[ERROR] Limb Counter Window: attempt to index global 'ataxiaNDB' (a nil value)`
+- `[ERROR] ataxia_Vitals_Update: attempt to index global 'ataxiaTemp' (a nil value)`
+- `[ERROR] Bashing Functions: attempt to index global 'ataxiaTemp' (a nil value)`
+- Basher sending invalid commands (`lipread`, `scales`, `conjure`) — class not detected due to missing init
+
+**Fix**: When unwrapping a root group, if it has an inline `script:`, inject a synthetic `"Levi_Ataxia Init"` script node at position 0 of the children array. This ensures the init code loads before any child scripts. Only the `scripts` type was affected — triggers, aliases, timers, and keys had no root group inline scripts.
+
+**Root cause**: The flatten plan (2026-03-06) added root group unwrapping to prevent triple-nested `Levi_Ataxia` in Mudlet. The unwrap code at line 440 extracted `children` from the JSON node but did not check for the node's own `script` property.
+
+---
+
 ## 2026-03-06 — Documentation Refresh
 
 ### Improvement: Comprehensive markdown documentation update

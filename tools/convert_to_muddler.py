@@ -440,6 +440,17 @@ class MuddlerConverter:
                 # Unwrap: promote children to top level instead of wrapping in root group
                 children = json_node.get("children", [])
                 if children:
+                    # Preserve root group's inline script by injecting a synthetic
+                    # init script node at the beginning of the children list
+                    root_script = json_node.get("script", "").strip()
+                    if root_script:
+                        init_node = {
+                            "name": f"{root_group.name} Init",
+                            "isActive": "yes",
+                            "isFolder": "no",
+                            "script": root_script,
+                        }
+                        result.append(init_node)
                     result.extend(children)
                 # If root group has no children but has items, keep it as-is
                 elif json_node:
