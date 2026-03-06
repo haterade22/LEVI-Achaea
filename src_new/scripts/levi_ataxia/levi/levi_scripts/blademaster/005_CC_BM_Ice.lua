@@ -792,33 +792,14 @@ function blademaster.selectAttackDoublePrep()
     end
   end
 
-  -- MANGLE PHASE: Check if we should use balanceslash
+  -- MANGLE PHASE: Right leg first to 200%+ (mangled), then left leg
   if phase == "mangle" then
-    -- On 4th+ attack during prone timer, use balanceslash to extend prone
-    if blademaster.state.proneTimerActive and
-       blademaster.state.proneAttackCount >= blademaster.config.balanceslashThreshold then
-      return "balanceslash", nil
-    end
-
-    -- Hit the broken leg for mangle damage
-    local LL = blademaster.getLL()
     local RL = blademaster.getRL()
-
-    -- If both broken, hit the higher one (more mangle damage)
-    if LL >= 100 and RL >= 100 then
-      return "legslash", (LL >= RL) and "left" or "right"
-    end
-
-    -- If only one broken, hit that one
-    if LL >= 100 then
+    if RL < 200 then
+      return "legslash", "right"
+    else
       return "legslash", "left"
     end
-    if RL >= 100 then
-      return "legslash", "right"
-    end
-
-    -- Fallback (shouldn't reach here if in mangle phase)
-    return "legslash", "right"
   end
 
   return "legslash", blademaster.getFocusLeg()
@@ -897,16 +878,12 @@ function blademaster.dispatch.runDoublePrep()
     elseif phase == "leg_break" then
       cecho("\n<blue>*** LEG BREAK - ICE infuse + KNEES for prone! ***")
     elseif phase == "mangle" then
-      if blademaster.state.proneTimerActive then
-        local attackNum = blademaster.state.proneAttackCount + 1
-        local threshold = blademaster.config.balanceslashThreshold
-        if attackNum >= threshold then
-          cecho("\n<magenta>*** MANGLE - BALANCESLASH + STERNUM (attack #" .. attackNum .. ", extending prone) ***")
-        else
-          cecho("\n<red>*** MANGLE - Legslash right + STERNUM (attack #" .. attackNum .. "/" .. threshold .. ") ***")
-        end
+      local RL = blademaster.getRL()
+      local LL = blademaster.getLL()
+      if RL < 200 then
+        cecho("\n<red>*** MANGLE - Legslash RIGHT + STERNUM (RL=" .. string.format("%.1f", RL) .. "%/200%) ***")
       else
-        cecho("\n<red>*** MANGLE - Legslash right + STERNUM (waiting for salve) ***")
+        cecho("\n<red>*** MANGLE - Legslash LEFT + STERNUM (RL mangled, LL=" .. string.format("%.1f", LL) .. "%) ***")
       end
     end
 
@@ -1056,33 +1033,14 @@ function blademaster.selectAttackQuadPrep()
     return "legslash", blademaster.getFocusLeg()
   end
 
-  -- MANGLE PHASE: Check if we should use balanceslash
+  -- MANGLE PHASE: Right leg first to 200%+ (mangled), then left leg
   if phase == "mangle" then
-    -- On 4th+ attack during prone timer, use balanceslash to extend prone
-    if blademaster.state.proneTimerActive and
-       blademaster.state.proneAttackCount >= blademaster.config.balanceslashThreshold then
-      return "balanceslash", nil
-    end
-
-    -- Hit the broken leg for mangle damage
-    local LL = blademaster.getLL()
     local RL = blademaster.getRL()
-
-    -- If both broken, hit the higher one (more mangle damage)
-    if LL >= 100 and RL >= 100 then
-      return "legslash", (LL >= RL) and "left" or "right"
-    end
-
-    -- If only one broken, hit that one
-    if LL >= 100 then
+    if RL < 200 then
+      return "legslash", "right"
+    else
       return "legslash", "left"
     end
-    if RL >= 100 then
-      return "legslash", "right"
-    end
-
-    -- Fallback
-    return "legslash", "right"
   end
 
   return "legslash", blademaster.getFocusLeg()
@@ -1178,16 +1136,12 @@ function blademaster.dispatch.runQuadPrep()
     elseif phase == "leg_break" then
       cecho("\n<blue>*** LEG BREAK - ICE infuse + KNEES for prone! ***")
     elseif phase == "mangle" then
-      if blademaster.state.proneTimerActive then
-        local attackNum = blademaster.state.proneAttackCount + 1
-        local threshold = blademaster.config.balanceslashThreshold
-        if attackNum >= threshold then
-          cecho("\n<magenta>*** MANGLE - BALANCESLASH + STERNUM (attack #" .. attackNum .. ", extending prone) ***")
-        else
-          cecho("\n<red>*** MANGLE - Legslash + STERNUM (attack #" .. attackNum .. "/" .. threshold .. ") ***")
-        end
+      local RL = blademaster.getRL()
+      local LL = blademaster.getLL()
+      if RL < 200 then
+        cecho("\n<red>*** MANGLE - Legslash RIGHT + STERNUM (RL=" .. string.format("%.1f", RL) .. "%/200%) ***")
       else
-        cecho("\n<red>*** MANGLE - Legslash + STERNUM (waiting for salve) ***")
+        cecho("\n<red>*** MANGLE - Legslash LEFT + STERNUM (RL mangled, LL=" .. string.format("%.1f", LL) .. "%) ***")
       end
     end
 

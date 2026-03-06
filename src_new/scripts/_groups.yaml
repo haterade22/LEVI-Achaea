@@ -790,6 +790,8 @@ groups:
           directory: levi_ataxia/levi/levi_scripts/apostate
         - name: DEPTHSWALKER
           directory: levi_ataxia/levi/levi_scripts/depthswalker
+        - name: Class Detect
+          directory: levi_ataxia/levi/levi_scripts/class_detect
         - name: limb.1.2
           packageName: limb.1.2
           children:
