@@ -19,6 +19,13 @@ end
 function EQHighlight()
 etime = ataxiaEQTime or '0.000'
 cecho("\n<blue>(((((((((((((((((((( EQUILIBRIUM:<white>" ..etime.. " <blue>))))))))))))))))))))")
+if bashStats then
+  local eqTime = tonumber(etime) or 0
+  bashStats.lastBalanceTime = eqTime
+  bashStats.lastBalanceDamage = bashStats.currentBalanceDamage or 0
+  bashStats.currentBalanceDamage = 0
+  if tarc and tarc.write then tarc.write() end
+end
 end
 
 
@@ -43,4 +50,11 @@ end
 function balanceHighlight()
 btime = ataxiaBalTime or '0.000'
 cecho("\n<red>(((((((((((((((((((( BALANCE: <white>"..btime.. " <red>))))))))))))))))))))")
+if bashStats then
+  local balTime = tonumber(btime) or 0
+  bashStats.lastBalanceTime = balTime
+  bashStats.lastBalanceDamage = bashStats.currentBalanceDamage or 0
+  bashStats.currentBalanceDamage = 0
+  if tarc and tarc.write then tarc.write() end
+end
 end

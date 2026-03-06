@@ -36,7 +36,7 @@ PHASE OVERVIEW:
 
     PREP PHASE:
         Build afflictions AND prep limbs simultaneously.
-        - Venom priority: clumsiness → nausea → healthleech → asthma → slickness → anorexia/exploit → aconite/recklessness
+        - Venom priority: nausea(51%) → clumsiness(33%) → healthleech(33%) → asthma(33%) → slickness(50%) → anorexia/exploit → stupidity → recklessness/dizziness
         - Limb prepping: Both arms + left leg to 90%+ damage
         - Transition to EXECUTE when all 3 limbs prepped
 
@@ -91,23 +91,24 @@ RIFTLOCK MODE (Counter to RESTORE):
 VENOM PRIORITY (PREP PHASE):
 -------------------------------------------------------------------------------
 
-    PHASE 1 - Build to Asthma (v2 = curare):
-        1. Clumsiness (xentio)      - 33% miss chance on their attacks
-        2. Nausea (euphorbia)       - Parry bypass, enables limb prepping
-        3. Healthleech (torment)    - Drains health (hellforge investment)
-        4. Asthma (kalmia)          - Blocks smoke cures
+    PREP CASCADE (v2 = curare):
+        1. Nausea (euphorbia)       - 51% threshold, parry bypass
+        2. Clumsiness (xentio)      - 33% threshold, miss chance on their attacks
+        3. Healthleech (torment)    - 33% threshold, drains health (hellforge)
+        4. Asthma (kalmia)          - 33% threshold, blocks smoke cures
+        5. Slickness (gecko)        - 50% threshold, blocks apply (salve cures)
 
-    PHASE 2 - Push Slickness (once asthma >50% / stuck):
-        V1: Slickness (gecko)       - Blocks apply (salve cures)
-        V2: Curare (paralysis)      - Maintain paralysis
-
-    PHASE 3 - Focus Lock (once slickness confirmed):
+    FOCUS LOCK (once slickness >=50%):
         V1: Anorexia (slike)        - Blocks eating
         V2: Exploit (weariness+paranoia) - Hellforge, blocks Fitness
 
-    PHASE 4 - Complete Lock (once anorexia + weariness stuck):
-        V1: Stupidity (aconite)     - Focus bait
-        V2: Recklessness (eurypteria) - Prevents defensive abilities
+    STUPIDITY PUSH (once anorexia + weariness stuck):
+        V1: Stupidity (aconite)     - Goldenseal cure bait
+        V2: Exploit                 - Maintain weariness + paranoia
+
+    GOLDENSEAL STACK (once stupidity stuck):
+        V1: Recklessness (eurypteria) - Prevents defensive abilities
+        V2: Dizziness (larkspar)      - Stacks goldenseal cures
 
     V2 Default: Curare (paralysis) - Critical to maintain, on V2 to survive clumsiness miss
 
@@ -206,6 +207,18 @@ TRIGGER SETUP (External):
 
 infernalDWC = infernalDWC or {}
 
+-- Shared knight send utility with engage tracking (used by all knight specs)
+function knightSendAttack(cmd)
+  if not target or target == "" then return end
+  if not table.contains(ataxia.playersHere, target) then return end
+  if not engaged then
+    send("queue addclear freestand " .. cmd .. ";engage " .. target)
+    engaged = true
+  else
+    send("queue addclear freestand " .. cmd)
+  end
+end
+
 -- State tracking
 infernalDWC.state = {
     phase = "NAUSEA_SETUP",     -- Legacy field (getPhase() is dynamic now)
@@ -216,6 +229,7 @@ infernalDWC.state = {
     riftlockMode = false,       -- True when target uses RESTORE (heals all limbs)
     parriedLimb = nil,          -- Which limb target is parrying (set on parry detection)
     lastTargetedLimb = nil,     -- Last limb we targeted (for parry detection)
+    attackInFlight = false,     -- True while off balance after sending attack (prevents envenomList desync)
 }
 
 -- Configuration
@@ -262,18 +276,36 @@ function infernalDWC.getSlashDamage()
     return 6.6 -- Default fallback
 end
 
+-- Check if a DSL would break a limb (current damage + 2*slashDamage >= breakThreshold)
+-- Used to treat near-break limbs as "prepped" to avoid accidental breaks during PREP
+function infernalDWC.wouldBreakLimb(limbName)
+    local damage = 0
+    if limbName == "left arm" then damage = infernalDWC.getLA()
+    elseif limbName == "right arm" then damage = infernalDWC.getRA()
+    elseif limbName == "left leg" then damage = infernalDWC.getLL()
+    elseif limbName == "right leg" then damage = infernalDWC.getRL()
+    end
+    if damage <= 0 then return false end
+    local dslDamage = 2 * infernalDWC.getSlashDamage()
+    return (damage + dslDamage) >= infernalDWC.config.breakThreshold
+end
+
 -------------------------------------------------------------------------------
 -- LIMB PREP CHECKING
 -------------------------------------------------------------------------------
 
 function infernalDWC.isArmPrepped(side)
     local damage = (side == "left") and infernalDWC.getLA() or infernalDWC.getRA()
-    return damage >= infernalDWC.config.prepThreshold
+    if damage >= infernalDWC.config.prepThreshold then return true end
+    -- Treat near-break limbs as prepped to prevent accidental breaks during PREP
+    return infernalDWC.wouldBreakLimb(side .. " arm")
 end
 
 function infernalDWC.isLegPrepped(side)
     local damage = (side == "left") and infernalDWC.getLL() or infernalDWC.getRL()
-    return damage >= infernalDWC.config.prepThreshold
+    if damage >= infernalDWC.config.prepThreshold then return true end
+    -- Treat near-break limbs as prepped to prevent accidental breaks during PREP
+    return infernalDWC.wouldBreakLimb(side .. " leg")
 end
 
 function infernalDWC.isArmBroken(side)
@@ -534,49 +566,60 @@ end
 ]]--
 
 -- V3 probability-aware venom selection for PREP phase
--- PHASE 1: clumsiness -> nausea -> healthleech -> asthma (v2 = curare)
--- PHASE 2 (Push Slickness): Once asthma >50%, v1 = gecko (slickness), v2 = curare
--- PHASE 3 (Focus Lock): Once slickness confirmed, v1 = slike (anorexia), v2 = exploit (hellforge)
--- PHASE 4 (Complete Lock): Once anorexia+weariness stuck, v1 = aconite (stupidity), v2 = eurypteria (recklessness)
+-- PREP: nausea(51%) -> clumsiness(33%) -> healthleech(33%) -> asthma(33%) -> slickness(50%) (v2 = curare)
+-- FOCUS LOCK: Once slickness >=50%, v1 = slike (anorexia), v2 = exploit (hellforge)
+-- STUPIDITY PUSH: Once anorexia+weariness stuck, v1 = aconite (stupidity), v2 = exploit
+-- GOLDENSEAL STACK: Once stupidity stuck, v1/v2 = eurypteria (recklessness) + larkspar (dizziness)
 function infernalDWC.selectVenomsV3()
     local getProb = infernalDWC.getAffProb
 
-    -- Check phase conditions
+    -- Check affliction probabilities
+    local nauseaProb = getProb("nausea")
+    local clumProb = getProb("clumsiness")
+    local healthleechProb = getProb("healthleech")
     local asthmaProb = getProb("asthma")
     local slicknessProb = getProb("slickness")
     local anorexiaProb = getProb("anorexia")
     local wearinessProb = getProb("weariness")
     local stupidityProb = getProb("stupidity")
     local recklessnessProb = getProb("recklessness")
+    local dizzinessProb = getProb("dizziness")
 
-    local asthmaHigh = asthmaProb >= 0.5
-    local slicknessStuck = slicknessProb >= 0.9
+    local slicknessHigh = slicknessProb >= 0.5
     local anorexiaStuck = anorexiaProb >= 0.9
     local wearinessStuck = wearinessProb >= 0.9
+    local stupidityStuck = stupidityProb >= 0.9
 
-    -- PHASE 4: Anorexia + weariness stuck -> aconite/recklessness (complete lock)
-    if slicknessStuck and anorexiaStuck and wearinessStuck then
+    -- GOLDENSEAL STACK: Stupidity stuck -> recklessness + dizziness
+    if slicknessHigh and anorexiaStuck and wearinessStuck and stupidityStuck then
         local v1, v2
-        if stupidityProb < 0.9 then
-            v1 = "aconite"        -- Stupidity (focus bait)
+        if recklessnessProb < 0.9 then
+            v1 = "eurypteria"     -- Recklessness
         else
             v1 = "slike"          -- Maintain anorexia
         end
-        if recklessnessProb < 0.9 then
-            v2 = "eurypteria"     -- Recklessness (prevents defensive abilities)
+        if dizzinessProb < 0.9 then
+            v2 = "larkspar"       -- Dizziness (goldenseal)
         else
-            v2 = "aconite"        -- Maintain stupidity
+            v2 = "eurypteria"     -- Maintain recklessness
         end
         return v1, v2
     end
 
-    -- PHASE 3: Slickness confirmed -> anorexia/exploit (focus lock)
-    if slicknessStuck then
+    -- STUPIDITY PUSH: Anorexia + weariness stuck -> aconite (stupidity)
+    if slicknessHigh and anorexiaStuck and wearinessStuck then
+        local v1 = "aconite"      -- Stupidity (goldenseal)
+        local v2 = "exploit"      -- Maintain weariness + paranoia (hellforge)
+        return v1, v2
+    end
+
+    -- FOCUS LOCK: Slickness >=50% -> anorexia/exploit
+    if slicknessHigh then
         local v1, v2
         if anorexiaProb < 0.9 then
             v1 = "slike"          -- Anorexia (blocks eat)
         else
-            v1 = "aconite"        -- Stupidity (focus bait) if anorexia already stuck
+            v1 = "aconite"        -- Stupidity (goldenseal) if anorexia already stuck
         end
         if wearinessProb < 0.9 then
             v2 = "exploit"        -- Weariness + Paranoia (hellforge)
@@ -586,48 +629,23 @@ function infernalDWC.selectVenomsV3()
         return v1, v2
     end
 
-    -- PHASE 2: Asthma >50% -> push slickness
-    if asthmaHigh then
-        local v1 = "gecko"        -- Slickness (blocks apply)
-        local v2 = "curare"       -- Paralysis
-        return v1, v2
+    -- PREP CASCADE: nausea(51%) -> clumsiness(33%) -> healthleech(33%) -> asthma(33%) -> slickness(50%)
+    local v1
+    if nauseaProb < 0.51 then
+        v1 = "euphorbia"      -- 1. Nausea (51%)
+    elseif clumProb < 0.33 then
+        v1 = "xentio"         -- 2. Clumsiness (33%)
+    elseif healthleechProb < 0.33 then
+        v1 = "torment"        -- 3. Healthleech (33%, hellforge)
+    elseif asthmaProb < 0.33 then
+        v1 = "kalmia"         -- 4. Asthma (33%)
+    elseif slicknessProb < 0.5 then
+        v1 = "gecko"          -- 5. Slickness (50%)
+    else
+        v1 = "euphorbia"      -- Maintain nausea
     end
 
-    -- PHASE 1: Build to asthma (clumsiness -> nausea -> healthleech -> asthma)
-    local v1Chain = {
-        {venom = "xentio",    aff = "clumsiness",  weight = 2.0},  -- 1. Clumsiness (33% miss chance)
-        {venom = "euphorbia", aff = "nausea",       weight = 1.9},  -- 2. Nausea (parry bypass)
-        {venom = "torment",   aff = "healthleech",  weight = 1.8}, -- 3. Healthleech (hellforge)
-        {venom = "kalmia",    aff = "asthma",       weight = 1.7},  -- 4. Asthma
-    }
-
-    -- Helper to get best venom from a chain (excludes a specific venom)
-    local function getBestFromChain(chain, excludeVenom)
-        local candidates = {}
-        for _, data in ipairs(chain) do
-            if data.venom ~= excludeVenom then
-                local prob = getProb(data.aff)
-                if prob < 0.9 then  -- Only consider if <90% stuck
-                    local score = (1 - prob) * data.weight
-                    table.insert(candidates, {
-                        venom = data.venom,
-                        aff = data.aff,
-                        prob = prob,
-                        score = score
-                    })
-                end
-            end
-        end
-        table.sort(candidates, function(a, b) return a.score > b.score end)
-        return candidates[1] and candidates[1].venom or nil
-    end
-
-    -- Select v1 from priority chain
-    local v1 = getBestFromChain(v1Chain, nil) or "xentio"
-
-    -- v2: always curare in phase 1
     local v2 = "curare"
-
     return v1, v2
 end
 
@@ -687,10 +705,10 @@ function infernalDWC.selectVenoms()
 
     else
         -- PREP phase - FOCUS LOCK STRATEGY
-        -- Phase 1: clumsiness -> nausea -> healthleech -> asthma (v2 = curare)
-        -- Phase 2: asthma stuck -> push slickness (v1 = gecko, v2 = curare)
-        -- Phase 3: slickness confirmed -> anorexia/exploit (focus lock)
-        -- Phase 4: anorexia + weariness stuck -> aconite/recklessness (complete lock)
+        -- Prep: nausea(51%) -> clumsiness(33%) -> healthleech(33%) -> asthma(33%) -> slickness(50%)
+        -- Focus lock: slickness stuck -> anorexia/exploit
+        -- Stupidity push: anorexia + weariness stuck -> aconite + exploit
+        -- Goldenseal stack: stupidity stuck -> recklessness + dizziness
 
         -- V3: Probability-aware venom selection
         if affConfigV3 and affConfigV3.enabled then
@@ -701,59 +719,62 @@ function infernalDWC.selectVenoms()
         -- Check what's stuck
         local nausStuck = hasAff("nausea")
         local clumStuck = hasAff("clumsiness")
-        local hlthlStuck = hasAff("healthleech")
+        local hlStuck = hasAff("healthleech")
         local asthStuck = hasAff("asthma")
         local slickStuck = hasAff("slickness")
         local anoStuck = hasAff("anorexia")
         local wearStuck = hasAff("weariness")
         local stuStuck = hasAff("stupidity")
         local reckStuck = hasAff("recklessness")
+        local dizzStuck = hasAff("dizziness")
 
-        -- PHASE 4: Anorexia + weariness stuck -> aconite/recklessness (complete lock)
-        if slickStuck and anoStuck and wearStuck then
-            if not stuStuck then
-                v1 = "aconite"        -- Stupidity (focus bait)
+        -- GOLDENSEAL STACK: Stupidity stuck -> recklessness + dizziness
+        if slickStuck and anoStuck and wearStuck and stuStuck then
+            if not reckStuck then
+                v1 = "eurypteria"     -- Recklessness (goldenseal)
             else
                 v1 = "slike"          -- Maintain anorexia
             end
-            if not reckStuck then
-                v2 = "eurypteria"     -- Recklessness (prevents defensive abilities)
+            if not dizzStuck then
+                v2 = "larkspar"       -- Dizziness (goldenseal)
             else
-                v2 = "aconite"        -- Maintain stupidity
+                v2 = "eurypteria"     -- Maintain recklessness
             end
 
-        -- PHASE 3: Slickness confirmed -> anorexia/exploit (focus lock)
+        -- STUPIDITY PUSH: Anorexia + weariness stuck -> aconite + exploit
+        elseif slickStuck and anoStuck and wearStuck then
+            v1 = "aconite"           -- Stupidity (goldenseal)
+            v2 = "exploit"           -- Maintain weariness + paranoia (hellforge)
+
+        -- FOCUS LOCK: Slickness stuck -> anorexia/exploit
         elseif slickStuck then
             if not anoStuck then
                 v1 = "slike"          -- Anorexia (blocks eat)
             else
-                v1 = "aconite"        -- Stupidity if anorexia already stuck
+                v1 = "aconite"        -- Stupidity (goldenseal) if anorexia stuck
             end
             if not wearStuck then
                 v2 = "exploit"        -- Weariness + Paranoia (hellforge)
             else
-                v2 = "eurypteria"     -- Recklessness if weariness already stuck
+                v2 = "eurypteria"     -- Recklessness if weariness stuck
             end
 
-        -- PHASE 2: Asthma stuck -> push slickness
-        elseif asthStuck then
-            v1 = "gecko"             -- Slickness (blocks apply)
-            v2 = "curare"            -- Paralysis
-
-        -- PHASE 1: Build to asthma (clumsiness -> nausea -> healthleech -> asthma)
+        -- PREP CASCADE: nausea -> clumsiness -> healthleech -> asthma -> slickness
         else
             v2 = "curare"            -- Always paralysis
 
-            if not clumStuck then
-                v1 = "xentio"        -- 1. Clumsiness (33% miss chance)
-            elseif not nausStuck then
-                v1 = "euphorbia"     -- 2. Nausea (parry bypass)
-            elseif not hlthlStuck then
+            if not nausStuck then
+                v1 = "euphorbia"     -- 1. Nausea (parry bypass)
+            elseif not clumStuck then
+                v1 = "xentio"        -- 2. Clumsiness (miss chance)
+            elseif not hlStuck then
                 v1 = "torment"       -- 3. Healthleech (hellforge)
             elseif not asthStuck then
                 v1 = "kalmia"        -- 4. Asthma (blocks smoke)
+            elseif not slickStuck then
+                v1 = "gecko"         -- 5. Slickness (blocks apply)
             else
-                v1 = "xentio"        -- Maintain clumsiness
+                v1 = "euphorbia"     -- Maintain nausea
             end
         end
     end
@@ -774,41 +795,35 @@ function infernalDWC.selectLimbTarget()
         local offArm = infernalDWC.getOffArm()
         local focusLeg = infernalDWC.state.focusLeg
 
-        if infernalDWC.hasAff("nausea") then
-            -- Nausea stuck = parry bypass active, clear parry tracking
-            infernalDWC.state.parriedLimb = nil
-            -- Prep arms first (need both for vivisect)
-            if not infernalDWC.isArmPrepped(focusArm) then
-                return focusArm .. " arm"
-            elseif not infernalDWC.isArmPrepped(offArm) then
-                return offArm .. " arm"
-            -- Then prep leg
-            elseif not infernalDWC.isLegPrepped(focusLeg) then
-                return focusLeg .. " leg"
-            else
-                -- All prepped, maintain pressure on focus arm
-                return focusArm .. " arm"
-            end
-        elseif infernalDWC.state.parriedLimb then
-            -- No nausea but we know what they're parrying - hit a DIFFERENT limb
-            -- They can only parry one limb at a time
-            local parried = infernalDWC.state.parriedLimb
-            -- Try each prep target, skipping the parried limb
-            if parried ~= focusArm .. " arm" and not infernalDWC.isArmPrepped(focusArm) then
-                return focusArm .. " arm"
-            elseif parried ~= offArm .. " arm" and not infernalDWC.isArmPrepped(offArm) then
-                return offArm .. " arm"
-            elseif parried ~= focusLeg .. " leg" and not infernalDWC.isLegPrepped(focusLeg) then
-                return focusLeg .. " leg"
-            else
-                -- All non-parried limbs prepped, maintain on any non-parried limb
-                if parried ~= focusArm .. " arm" then return focusArm .. " arm" end
-                if parried ~= offArm .. " arm" then return offArm .. " arm" end
-                return focusLeg .. " leg"
-            end
-        else
-            -- No nausea, no parry info - don't target limbs, focus on afflictions
+        -- NAUSEA REQUIRED for limb targeting (parry bypass)
+        -- Without nausea, they can parry whatever we hit - so don't target limbs
+        if not infernalDWC.hasAff("nausea") then
+            -- No nausea = don't target limbs, focus on building afflictions
             return nil
+        end
+
+        -- Nausea stuck = parry bypass active, can target limbs freely
+        infernalDWC.state.parriedLimb = nil  -- Clear stale parry data
+
+        -- Prep arms first (need both for vivisect)
+        if not infernalDWC.isArmPrepped(focusArm) then
+            return focusArm .. " arm"
+        elseif not infernalDWC.isArmPrepped(offArm) then
+            return offArm .. " arm"
+        -- Then prep leg
+        elseif not infernalDWC.isLegPrepped(focusLeg) then
+            return focusLeg .. " leg"
+        else
+            -- All prepped, maintain pressure but avoid breaking any limb
+            if not infernalDWC.wouldBreakLimb(focusArm .. " arm") then
+                return focusArm .. " arm"
+            elseif not infernalDWC.wouldBreakLimb(offArm .. " arm") then
+                return offArm .. " arm"
+            elseif not infernalDWC.wouldBreakLimb(focusLeg .. " leg") then
+                return focusLeg .. " leg"
+            else
+                return nil
+            end
         end
 
     elseif phase == "EXECUTE" then
@@ -939,7 +954,9 @@ function infernalDWC.onParry(limb)
     if limb then
         infernalDWC.state.parriedLimb = limb
         -- Parry means nausea is NOT active (nausea bypasses parry)
+        -- Clear from ALL tracking systems (V1, V2, and V3)
         if erAff then erAff("nausea") end
+        if removeAffV3 then removeAffV3("nausea") end
         cecho("\n<yellow>[INF DWC]<reset> PARRY on <red>" .. limb .. "<reset>! Switching limb target.")
     end
 end
@@ -963,11 +980,20 @@ function infernalDWCVivisect()
     5. PREP - Build limb damage to prep threshold
     ]]--
 
+    -- Guard: prevent re-dispatch while off balance (avoids envenomList desync)
+    -- When off balance, the previous attack's envenomList must stay intact for hit triggers
+    if infernalDWC.state.attackInFlight then
+        return
+    end
+
     -- Use global 'target' variable (set by "t <name>" command)
     if not target or target == "" then
         cecho("\n<red>[INF DWC]<reset> No target set! Use: t <name>")
         return
     end
+
+    -- Rebound hold gate
+    if reboundHold and reboundHold.gate(infernalDWCVivisect) then return end
 
     -- Get current phase (for display and venom/limb selection)
     local phase = infernalDWC.getPhase()
@@ -982,7 +1008,8 @@ function infernalDWCVivisect()
     -- PRIORITY 1: VIVISECT - All 4 limbs broken at level 1+
     --------------------------------------------------------------------------
     if infernalDWC.areBothArmsBroken() and infernalDWC.areBothLegsBroken() then
-        send("queue addclear freestand vivisect " .. target)
+        infernalDWC.state.attackInFlight = true
+        knightSendAttack("dismount;vivisect " .. target)
         cecho("\n<green>[INF DWC]<reset> VIVISECT! All 4 limbs broken!")
         return
     end
@@ -992,7 +1019,8 @@ function infernalDWCVivisect()
     --------------------------------------------------------------------------
     if infernalDWC.shouldDamageKill() then
         local healthPct = infernalDWC.getTargetHealth()
-        send("queue addclear freestand quash " .. target .. ";arc " .. target)
+        infernalDWC.state.attackInFlight = true
+        knightSendAttack("quash " .. target .. ";arc " .. target)
         cecho("\n<red>[INF DWC]<reset> DAMAGE KILL! Target at " .. healthPct .. "% - QUASH + ARC!")
         return
     end
@@ -1012,7 +1040,8 @@ function infernalDWCVivisect()
         local atk = "wield right " .. weapon1 .. ";wield left " .. weapon2
         atk = atk .. ";wipe " .. weapon1 .. ";wipe " .. weapon2
 
-        -- Check for rebounding/shield
+        -- Check for rebounding/shield (V1 fallback for timing safety - GMCP can clear
+        -- attackInFlight before text triggers set rebounding in the same data chunk)
         local hasRebounding = infernalDWC.hasAff("rebounding") or (tAffs and tAffs.rebounding)
         local hasShield = infernalDWC.hasAff("shield") or (tAffs and tAffs.shield)
 
@@ -1025,7 +1054,8 @@ function infernalDWCVivisect()
             cecho("\n<magenta>[INF DWC]<reset> RIFTLOCK | " .. limb .. " | " .. (v1 or "slike") .. "/" .. (v2 or "curare"))
         end
 
-        send("queue addclear freestand " .. atk .. ";assess " .. target)
+        infernalDWC.state.attackInFlight = true
+        knightSendAttack(atk .. ";assess " .. target)
         return
     end
 
@@ -1046,7 +1076,8 @@ function infernalDWCVivisect()
         atk = atk .. ";undercut " .. target .. " " .. leg .. " leg"
 
         cecho("\n<cyan>[INF DWC]<reset> <yellow>EXECUTE<reset> | " .. leg .. " leg | UNDERCUT | [prone + break]")
-        send("queue addclear freestand " .. atk .. ";assess " .. target)
+        infernalDWC.state.attackInFlight = true
+        knightSendAttack(atk .. ";assess " .. target)
         return
     end
 
@@ -1084,7 +1115,7 @@ function infernalDWCVivisect()
     -- RSL uses first sword to raze, second sword applies venom
     -- IMPORTANT: RSL cannot use hellforge investments (exploit/torture/torment)
     -- Must use a regular venom like curare
-    -- Check BOTH tracking systems directly - rebounding is too important to miss
+    -- V1 fallback for timing safety: GMCP can fire before text triggers in same chunk
     local hasRebounding = infernalDWC.hasAff("rebounding") or (tAffs and tAffs.rebounding)
     if hasRebounding then
         -- Determine which venom to use for RSL (must NOT be a hellforge investment)
@@ -1110,14 +1141,15 @@ function infernalDWCVivisect()
             atk = atk .. ";raze " .. target
         end
         -- Execute raze and return - don't continue with normal attack
-        send("queue addclear freestand " .. atk .. ";assess " .. target)
+        infernalDWC.state.attackInFlight = true
+        knightSendAttack(atk .. ";assess " .. target)
         cecho("\n<yellow>[INF DWC]<reset> Razing REBOUNDING!")
         return
     end
 
     -- SHIELD CHECK - must clear shield before attacks land
     -- Same logic as rebounding - RSL can't use hellforge investments
-    -- Check BOTH tracking systems directly - shield is too important to miss
+    -- V1 fallback for timing safety: GMCP can fire before text triggers in same chunk
     local hasShield = infernalDWC.hasAff("shield") or (tAffs and tAffs.shield)
     if hasShield then
         local rslVenom = nil
@@ -1139,7 +1171,8 @@ function infernalDWCVivisect()
         else
             atk = atk .. ";raze " .. target
         end
-        send("queue addclear freestand " .. atk .. ";assess " .. target)
+        infernalDWC.state.attackInFlight = true
+        knightSendAttack(atk .. ";assess " .. target)
         cecho("\n<yellow>[INF DWC]<reset> Razing SHIELD!")
         return
     end
@@ -1210,7 +1243,8 @@ function infernalDWCVivisect()
     cecho("\n<cyan>[INF DWC]<reset> <yellow>" .. phase .. "<reset> | " .. limbTarget .. " | " .. venomStr .. " | [" .. affStr .. "] | " .. limbStr)
 
     -- Execute with assess
-    send("queue addclear freestand " .. atk .. ";assess " .. target)
+    infernalDWC.state.attackInFlight = true
+    knightSendAttack(atk .. ";assess " .. target)
 end
 
 -------------------------------------------------------------------------------
@@ -1326,6 +1360,7 @@ function infernalDWCReset()
     infernalDWC.state.riftlockMode = false
     infernalDWC.state.parriedLimb = nil
     infernalDWC.state.lastTargetedLimb = nil
+    infernalDWC.state.attackInFlight = false
     cecho("\n<cyan>[INF DWC]<reset> State reset!")
 end
 
@@ -1353,6 +1388,21 @@ end
 -- Reset alias: infdwcreset or infernaldwcreset
 -- Set weapons: infdwcweapons weapon1 weapon2
 -- Set focus leg: infdwcleg left/right
+
+-------------------------------------------------------------------------------
+-- BALANCE RECOVERY HANDLER (clears attackInFlight flag)
+-------------------------------------------------------------------------------
+
+-- Register GMCP handler to clear attackInFlight when balance returns
+-- This prevents envenomList desync from re-dispatch while off balance
+if infernalDWC._balHandler then
+    killAnonymousEventHandler(infernalDWC._balHandler)
+end
+infernalDWC._balHandler = registerAnonymousEventHandler("gmcp.Char.Vitals", function()
+    if gmcp.Char.Vitals.bal == "1" then
+        infernalDWC.state.attackInFlight = false
+    end
+end)
 
 cecho("\n<cyan>[INF DWC Vivisect]<reset> Loaded! Use infernalDWCVivisect() to attack.")
 cecho("\n<cyan>[INF DWC Vivisect]<reset> Commands: infernalDWCStatus(), infernalDWCReset(), infernalDWCSetWeapons(w1, w2)")

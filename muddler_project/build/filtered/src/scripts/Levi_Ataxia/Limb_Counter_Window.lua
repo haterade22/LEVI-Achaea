@@ -160,6 +160,19 @@ function tarc.write()
       elseif gmcp.Char.Status.class == "Pariah" then
       tarc:cecho("Our Epitaph Number: "..ataxia.vitals.epitaph..  "\n")
       end
+      if bashStats and bashStats_getDPS then
+        if not bashStats.totalDamage then bashStats.totalDamage = 0 end
+        if not bashStats.damageByType then bashStats.damageByType = {} end
+        if not bashStats.dpsSessionStart then bashStats.dpsSessionStart = getEpoch() end
+        if not bashStats.lastBalanceTime then bashStats.lastBalanceTime = 0 end
+        if not bashStats.lastBalanceDamage then bashStats.lastBalanceDamage = 0 end
+        if not bashStats.currentBalanceDamage then bashStats.currentBalanceDamage = 0 end
+        local sDPS, bDPS = bashStats_getDPS()
+        tarc:cecho("\n   <cyan>--- DPS ---<reset>\n")
+        tarc:cecho("   <white>Bal:  <cyan>" .. bDPS .. "/s<reset>\n")
+        tarc:cecho("   <white>Avg:  <yellow>" .. sDPS .. "/s<reset>\n")
+        tarc:cecho("   <white>Total:<green> " .. bashStats.totalDamage .. "<reset>\n")
+      end
     end
   
    else 
@@ -172,12 +185,14 @@ function tarc.write()
     end
     end
     if gmcp.Char.Status.class == "Monk" then
-    tarc:cecho("          Kai: " ..ataxia.vitals.class)
-    tarc:cecho("\n         Kata: " ..katachain.. "")
+    tarc:cecho("          Kai: " .. (ataxia.vitals.class or 0))
+    tarc:cecho("\n         Kata: " .. (katachain or 0) .. "")
       if ataxia.vitals.form then
-        tarc:cecho("\n       Stance: " ..ataxia.vitals.form.. "\n")
+        tarc:cecho("\n       Form: " .. ataxia.vitals.form .. "\n")
+      elseif ataxia.vitals.stance then
+        tarc:cecho("\n       Stance: " .. ataxia.vitals.stance .. "\n")
       else
-        tarc:cecho("\n       Stance: " ..ataxia.vitals.stance.. "\n")
+        tarc:cecho("\n       Stance: unknown\n")
       end
     end
     if gmcp.Char.Status.class == "Blademaster" then

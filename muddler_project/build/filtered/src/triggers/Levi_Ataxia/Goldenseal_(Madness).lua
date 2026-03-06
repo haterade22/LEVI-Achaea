@@ -1,5 +1,8 @@
 if isTargeted(matches[2]) then
 tdeliverance = false
+	-- Eating proves no anorexia (anorexia blocks eating)
+	erAff("anorexia")
+	if removeAffV3 then removeAffV3("anorexia") end
 	if anorexiaFailsafe then
 		tAffs[lastFocus] = true
 		ataxiaEcho("Backtracked anorexia being cured with last focus.")
@@ -14,6 +17,7 @@ tdeliverance = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
 	if tAffs.mercury then
 		tAffs.mercury = false
+		if removeAffV3 then removeAffV3("mercury") end
 		tBals.timers.plant = tempTimer(1.9, [[tBals.plant = true; tBals.timers.plant = nil]])
 	else
 		tBals.timers.plant = tempTimer(1.3, [[tBals.plant = true; tBals.timers.plant = nil]])

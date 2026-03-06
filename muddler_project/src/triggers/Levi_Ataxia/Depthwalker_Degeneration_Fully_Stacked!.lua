@@ -5,4 +5,5 @@ if isTargeted(matches[2]) then
 	setBold(true)
 	resetFormat()
 	tarAffed("weariness", "clumsiness", "paralysis")
+	if applyAffV3 then applyAffV3("weariness"); applyAffV3("clumsiness"); applyAffV3("paralysis") end
 end

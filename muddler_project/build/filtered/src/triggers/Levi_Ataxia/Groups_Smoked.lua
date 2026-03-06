@@ -8,6 +8,12 @@ tdeliverance = false
 	-- V3 integration: handle smoke cure (proves asthma absent AND creates branches for smoke-curable affs)
 	if onSmokeCureV3 then onSmokeCureV3() end
 
+	-- Cancel apostate asthma confirmation timer (they smoked, so asthma is NOT present)
+	if apostate and apostate.state and apostate.state.asthmaConfirmTimer then
+		killTimer(apostate.state.asthmaConfirmTimer)
+		apostate.state.asthmaConfirmTimer = nil
+	end
+
 	-- Kill disambiguation timer - smoke proves asthma is cured
 	if kelpDisambiguateTimer then killTimer(kelpDisambiguateTimer); kelpDisambiguateTimer = nil end
 

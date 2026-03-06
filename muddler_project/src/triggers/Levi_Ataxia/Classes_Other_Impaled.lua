@@ -6,5 +6,9 @@ if ataxia_isClass("runewarden") or ataxia_isClass("paladin") or ataxia_isClass("
 end
 
 tAffs.impaled = true
+if applyAffV3 then applyAffV3("impaled") end
+
+-- BM Brokenstar phase engine callback
+if blademaster and blademaster.onImpaleSuccess then blademaster.onImpaleSuccess() end
 
 disableTimer("Battlefury Perceive")

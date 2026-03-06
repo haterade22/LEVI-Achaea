@@ -1,1 +1,1 @@
-ataxia_clearLimbDamage(torso)
+ataxia_clearLimbDamage("torso")

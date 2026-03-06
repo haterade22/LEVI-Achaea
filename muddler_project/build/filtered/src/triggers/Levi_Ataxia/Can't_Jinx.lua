@@ -9,7 +9,4 @@ if ataxiaBasher.enabled and not ataxiaBasher.manual then
 	deleteFull()
 end
 
-if ataxiaBasher and found_target then
-	--ataxiaBasher_attack()
-  basher_needAction = true
-end
+-- Attack dispatch now handled by unified tryAttack() gate in prompt handler

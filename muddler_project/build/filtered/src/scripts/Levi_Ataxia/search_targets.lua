@@ -115,7 +115,6 @@ function search_targets()
 			end
 		end
 	end
-  ataxiaBasher_stormhammer()
 end
 
 -- Configurable shield retarget timers per mob (seconds).
@@ -152,7 +151,6 @@ function ataxiaBasher_retargetShielded()
 
   target = ataxiaTemp.retarget
   secondTarget = ataxiaTemp.retargetsecond
-  basher_needAction = true
   ataxiaTemp.retarget = nil
   ataxiaTemp.retargetsecond = nil
   raiseEvent("changed target")
@@ -162,7 +160,6 @@ function ataxiaBasher_retargetShielded()
     ataxiaEcho("Unshielded, changing back to: "..target)
   end  
   send("st "..target,false)
-  ataxiaBasher_stormhammer()
 end
 
 function ataxiaBasher_shieldedTarget()
@@ -178,7 +175,6 @@ function ataxiaBasher_shieldedTarget()
             target = tonumber(id)
             secondTarget = mob
             found_target = true
-            basher_needAction = true
             send("st "..target,false)
 						if ataxiaBasher.manual then
 							ataxiaEcho("Shielded, changing to: "..target)
@@ -193,8 +189,7 @@ function ataxiaBasher_shieldedTarget()
         end
       end
     end
-  end   
-  ataxiaBasher_stormhammer()         
+  end
 end
 
 function ataxiaBasher_validTargets()
@@ -317,7 +312,6 @@ function search_targets()
 			end
 		end
 	end
-  ataxiaBasher_stormhammer()
 end
 
 -- Configurable shield retarget timers per mob (seconds).
@@ -354,7 +348,6 @@ function ataxiaBasher_retargetShielded()
 
   target = ataxiaTemp.retarget
   secondTarget = ataxiaTemp.retargetsecond
-  basher_needAction = true
   ataxiaTemp.retarget = nil
   ataxiaTemp.retargetsecond = nil
   raiseEvent("changed target")
@@ -364,7 +357,6 @@ function ataxiaBasher_retargetShielded()
     ataxiaEcho("Unshielded, changing back to: "..target)
   end  
   send("st "..target,false)
-  ataxiaBasher_stormhammer()
 end
 
 function ataxiaBasher_shieldedTarget()
@@ -380,7 +372,6 @@ function ataxiaBasher_shieldedTarget()
             target = tonumber(id)
             secondTarget = mob
             found_target = true
-            basher_needAction = true
             send("st "..target,false)
 						if ataxiaBasher.manual then
 							ataxiaEcho("Shielded, changing to: "..target)
@@ -395,8 +386,7 @@ function ataxiaBasher_shieldedTarget()
         end
       end
     end
-  end   
-  ataxiaBasher_stormhammer()         
+  end
 end
 
 function ataxiaBasher_validTargets()

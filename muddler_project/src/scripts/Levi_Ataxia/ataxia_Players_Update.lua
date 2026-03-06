@@ -2,7 +2,6 @@ function ataxia_Players_Update(event)
 	--Create the table if it's not already there.
 	ataxia.playersHere = ataxia.playersHere or {}
 	ataxiaBasher.ignore = ataxiaBasher.ignore or {}
-   ataxiaBasher_stormhammer()  
 	--For QL/Entering a room.
 	if event == "gmcp.Room.Players" then
 		--Reset the table, then parse the gmcp one to add people that aren't you.

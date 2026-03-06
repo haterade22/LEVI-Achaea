@@ -84,8 +84,8 @@ curingTableV3 = {
     ginseng = {"flushings", "lethargy", "haemophilia", "addiction", "nausea", "scytherus", "darkshade"},
     goldenseal = {"depression", "sandfever", "stupidity", "epilepsy", "dizziness", "dissonance", "shyness", "impatience"},
     ash = {"confusion", "hypersomnia", "hallucinations", "paranoia", "dementia", "crescendo"},
-    lobelia = {"recklessness", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia"},
-    bellwort = {"timeloop", "justice", "lovers", "peace", "pacified", "generosity", "indifference", "diminished"},
+    lobelia = {"fratricide", "recklessness", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia"},
+    bellwort = {"timeloop", "justice", "retribution", "lovers", "peace", "pacified", "generosity", "indifference", "diminished"},
     bloodroot = {"paralysis", "slickness"},
 }
 
@@ -219,7 +219,8 @@ function onHerbCureV3(herb)
 
     local newStates = {}
     local branchCount = 0
-    local curedAffs = {}  -- Track unique afflictions that were cured
+    local curedAffs = {}  -- Track unique afflictions that were definitely cured
+    local branchedAffs = {}  -- Track unique afflictions that were candidates in branching
 
     for _, state in ipairs(afflictionStatesV3) do
         -- Find which curable afflictions exist in this branch
@@ -245,6 +246,7 @@ function onHerbCureV3(herb)
                 local branch = {affs = copyAffs(state.affs), prob = probEach}
                 branch.affs[aff] = nil
                 table.insert(newStates, branch)
+                branchedAffs[aff] = true  -- Track branched candidates
             end
             branchCount = branchCount + #candidates - 1
         end
@@ -263,8 +265,14 @@ function onHerbCureV3(herb)
         table.insert(curedList, aff)
     end
 
+    local branchedList = {}
+    for aff, _ in pairs(branchedAffs) do
+        table.insert(branchedList, aff)
+    end
+
     if branchCount > 0 then
         v3Echo(herb .. " eaten - branched into " .. #afflictionStatesV3 .. " states")
+        v3Echo(herb .. " cured: " .. table.concat(branchedList, ", "))
     elseif #curedList > 0 then
         v3Echo(herb .. " cured: " .. table.concat(curedList, ", "))
     end
@@ -674,19 +682,27 @@ end
 -- ============================================
 
 -- Sync V3 state to old tAffs system for backward compatibility
+-- Only SET entries when confident (>= 30%), only CLEAR when essentially absent (< 1%)
+-- Intermediate probabilities (1-30%) leave V1/V2 unchanged to prevent desync
 function syncToOldSystemV3()
     if not tAffs then return end
 
-    -- For each affliction, set tAffs based on probability threshold
     local allProbs = getAllAffProbabilitiesV3()
     for aff, prob in pairs(allProbs) do
-        tAffs[aff] = prob >= 0.3  -- Present if >= 30% probability
+        if prob >= 0.3 then
+            tAffs[aff] = true
+        elseif prob < 0.01 then
+            tAffs[aff] = false
+        end
     end
 
-    -- Also sync to V2 if it exists
     if tAffsV2 and ataxia and ataxia.settings then
         for aff, prob in pairs(allProbs) do
-            tAffsV2[aff] = prob >= 0.3
+            if prob >= 0.3 then
+                tAffsV2[aff] = true
+            elseif prob < 0.01 then
+                tAffsV2[aff] = nil
+            end
         end
     end
 end

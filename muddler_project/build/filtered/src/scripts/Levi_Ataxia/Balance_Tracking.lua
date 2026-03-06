@@ -1,5 +1,4 @@
 function ataxia_gotbal(which)
- ataxiaBasher_stormhammer()  
   if ataxia.settings.highlighting.bals then
     if not ataxiaBasher.enabled or ataxiaBasher.manual then
       if not autoHarvesting and not autoExtracting then
@@ -14,7 +13,6 @@ function ataxia_gotbal(which)
 end
 
 function ataxia_checkBalances()
- ataxiaBasher_stormhammer()  
   for _, balType in pairs(ataxia.bals.get) do
     local bool = gmcp.Char.Vitals[balType] == "1"
     if ataxia.bals.used[balType] and not bool then

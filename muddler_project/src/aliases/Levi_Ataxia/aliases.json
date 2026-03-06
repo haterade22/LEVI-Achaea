@@ -413,6 +413,18 @@
                                   {
                                     "name": "Morimbuul (Anti Web)",
                                     "regex": "^lmor$"
+                                  },
+                                  {
+                                    "name": "LDM Command",
+                                    "regex": "^ldm(?:| (.+))$"
+                                  },
+                                  {
+                                    "name": "LDM Joker",
+                                    "regex": "^ldraw\\s+(\\w+)$"
+                                  },
+                                  {
+                                    "name": "LDM Combat",
+                                    "regex": "^ldc$"
                                   }
                                 ]
                               },
@@ -670,6 +682,26 @@
                               {
                                 "name": "Accelerate",
                                 "regex": "^cab$"
+                              },
+                              {
+                                "name": "DW Dispatch",
+                                "regex": "^dw$"
+                              },
+                              {
+                                "name": "DW Set Mode",
+                                "regex": "^dwm (\\w+)$"
+                              },
+                              {
+                                "name": "DW Status",
+                                "regex": "^dws$"
+                              },
+                              {
+                                "name": "DW Debug Toggle",
+                                "regex": "^dwd$"
+                              },
+                              {
+                                "name": "DW Set Scythe",
+                                "regex": "^dwscythe (.+)$"
                               }
                             ]
                           },
@@ -1098,6 +1130,10 @@
                                   {
                                     "name": "Empower Weapons",
                                     "regex": "^remweap$"
+                                  },
+                                  {
+                                    "name": "Totem Checker",
+                                    "regex": "^totcheck(.*)$"
                                   }
                                 ]
                               },
@@ -1143,6 +1179,10 @@
                                       {
                                         "name": "Pulp",
                                         "regex": "^pul$"
+                                      },
+                                      {
+                                        "name": "DWB Runie Mode",
+                                        "regex": "^rw(torso|pulp|group|status)$"
                                       }
                                     ]
                                   },
@@ -1946,6 +1986,18 @@
                               {
                                 "name": "QUASH ARC",
                                 "regex": "^qa$"
+                              },
+                              {
+                                "name": "Prefarar Attack",
+                                "regex": "^pf$"
+                              },
+                              {
+                                "name": "Prefarar Reset",
+                                "regex": "^pfreset$"
+                              },
+                              {
+                                "name": "Prefarar Status",
+                                "regex": "^pfstatus$"
                               }
                             ]
                           },
@@ -2767,6 +2819,10 @@
                                   {
                                     "name": "Re-honours from specific cities",
                                     "regex": "^an redo (\\w+)$"
+                                  },
+                                  {
+                                    "name": "Class Detect",
+                                    "regex": "^csd (.+)$"
                                   }
                                 ]
                               },

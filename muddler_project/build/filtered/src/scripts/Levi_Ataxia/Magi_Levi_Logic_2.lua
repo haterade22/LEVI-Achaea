@@ -31,6 +31,8 @@ tAffs.burns = 0
 
 
 function MagiWaterFocus()
+-- Rebound hold gate
+if reboundHold and reboundHold.gate(MagiWaterFocus) then return end
 get_resonance() --Use this in Aliases
 
 local atk = combatQueue()

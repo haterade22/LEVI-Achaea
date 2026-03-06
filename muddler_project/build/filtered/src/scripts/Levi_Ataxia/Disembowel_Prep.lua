@@ -1,4 +1,6 @@
 function dwcprioslimb()
+-- Rebound hold gate
+if reboundHold and reboundHold.gate(dwcprioslimb) then return end
 weapon1 = "scimitar405398"
 weapon2 = "scimitar405403"
 

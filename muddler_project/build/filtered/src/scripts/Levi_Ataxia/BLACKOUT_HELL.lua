@@ -1,4 +1,6 @@
 function infernalpriosblackout()
+-- Rebound hold gate
+if reboundHold and reboundHold.gate(infernalpriosblackout) then return end
 if ataxia.afflictions.blackout then
 
 send("queue addclear free touch shield")

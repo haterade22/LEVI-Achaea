@@ -1,4 +1,6 @@
 function isnbdamageroute()
+-- Rebound hold gate
+if reboundHold and reboundHold.gate(isnbdamageroute) then return end
 local atk = combatQueue()
 getLockingAffliction()
 checkTargetLocks()

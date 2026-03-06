@@ -14,11 +14,17 @@ serp_groupattack()
 end
  
 if gmcp.Char.Status.class == "Blademaster" then
-  bm_groupfighting()
+  if blademaster and blademaster.run then
+    blademaster.state.mode = "double"
+    blademaster.run()
+  else
+    bm_groupfighting()
+  end
 end
 
 if gmcp.Char.Status.class == "Runewarden" and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" then
-  dwb_groupsetup()
+  dwbRunie.setMode("group")
+  dwbRunie.dispatch()
 end
 
 if gmcp.Char.Status.class == "Runewarden" and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Cutting" then
@@ -41,5 +47,10 @@ end
 if gmcp.Char.Status.class == "Magi" then
   get_resonance()
   MagiWaterFocus()
+end
+
+if gmcp.Char.Status.class == "Shaman" then
+  shamanOffense.setMode("group")
+  shamanOffense.dispatch()
 end
 

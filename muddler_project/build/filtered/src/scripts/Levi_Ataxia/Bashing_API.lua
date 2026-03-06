@@ -33,7 +33,6 @@ function ataxiaBasher_scanRoom()
         break
 			end
 		end
-ataxiaBasher_stormhammer()
   end
   for _, player in pairs(ataxia.playersHere) do
     local playerData = ataxiaNDB and ataxiaNDB.players and ataxiaNDB.players[player]
@@ -59,7 +58,6 @@ end
 function ataxiaBasher_arrived()
 	if not ataxiaBasher.areabash then return false end
 	ataxiaBasher_roomBashed()
-ataxiaBasher_stormhammer()
 end
 
 function ataxiaBasher_pathFail()
@@ -210,7 +208,6 @@ function ataxiaBasher_scanRoom()
         break
 			end
 		end
-ataxiaBasher_stormhammer()
   end
   for _, player in pairs(ataxia.playersHere) do
     local playerData = ataxiaNDB and ataxiaNDB.players and ataxiaNDB.players[player]
@@ -236,7 +233,6 @@ end
 function ataxiaBasher_arrived()
 	if not ataxiaBasher.areabash then return false end
 	ataxiaBasher_roomBashed()
-ataxiaBasher_stormhammer()
 end
 
 function ataxiaBasher_pathFail()

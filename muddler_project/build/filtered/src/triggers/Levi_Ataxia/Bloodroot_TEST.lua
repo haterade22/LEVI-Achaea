@@ -1,5 +1,8 @@
 if matches[2] == target then
 tdeliverance = false
+    -- Eating proves no anorexia (anorexia blocks eating)
+    erAff("anorexia")
+    if removeAffV3 then removeAffV3("anorexia") end
     if anorexiaFailsafe then
         tAffs[lastFocus] = true
         ataxiaEcho("Backtracked anorexia being cured with last focus.")
@@ -20,29 +23,52 @@ tdeliverance = false
                 if not tAffs.prone then
                     ataxiaEcho("Backtracked paralysis being cured.")
                     erAff("paralysis")
+                    if removeAffV3 then removeAffV3("paralysis") end
                     tarAffed("slickness")
+                    if applyAffV3 then applyAffV3("slickness") end
                 else
                     ataxiaEcho("Backtracked slickness being cured.")
                     erAff("slickness")
+                    if removeAffV3 then removeAffV3("slickness") end
                     tarAffed("paralysis")
+                    if applyAffV3 then applyAffV3("paralysis") end
                 end
             ]])
         else
-            if tAffs.paralysis then
+            if tAffs.paralysis and tAffs.slickness then
+                -- Wait for quicksilver apply to disambiguate
+                pendingBloodrootV1 = true
+                if bloodrootApplyTimerV1 then killTimer(bloodrootApplyTimerV1) end
+                bloodrootApplyTimerV1 = tempTimer(0.5, [[
+                    if pendingBloodrootV1 then
+                        ataxiaEcho("No apply: bloodroot cured paralysis")
+                        erAff("paralysis")
+                        if removeAffV3 then removeAffV3("paralysis") end
+                        pendingBloodrootV1 = nil
+                    end
+                    bloodrootApplyTimerV1 = nil
+                ]])
+            elseif tAffs.paralysis then
                 erAff("paralysis")
+                if removeAffV3 then removeAffV3("paralysis") end
             elseif tAffs.pyramides then
               erAff("pyramides")
+              if removeAffV3 then removeAffV3("pyramides") end
            else
                 erAff("slickness")
+                if removeAffV3 then removeAffV3("slickness") end
            end
         end
     else
             if tAffs.paralysis then
                 erAff("paralysis")
+                if removeAffV3 then removeAffV3("paralysis") end
             elseif tAffs.pyramides then
         erAff("pyramides")        
+        if removeAffV3 then removeAffV3("pyramides") end
             else
                 erAff("slickness")
+                if removeAffV3 then removeAffV3("slickness") end
             end
     
   
@@ -55,6 +81,7 @@ tdeliverance = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
     if tAffs.mercury then
         tAffs.mercury = false
+        if removeAffV3 then removeAffV3("mercury") end
         tBals.timers.plant = tempTimer(1.9, [[tBals.plant = true; tBals.timers.plant = nil]])
     else
         tBals.timers.plant = tempTimer(1.3, [[tBals.plant = true; tBals.timers.plant = nil]])

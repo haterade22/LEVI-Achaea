@@ -15,7 +15,7 @@ bmbs()
 end
 
 if gmcp.Char.Status.class == "Runewarden" and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" then
-dwb_pocketleg()
+dwbRunie.dispatch()
 end
 
 if gmcp.Char.Status.class == "Infernal" and gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt" then

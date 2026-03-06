@@ -14,7 +14,7 @@ infernalpriosblackout()
 end
 
 if gmcp.Char.Status.class == "Runewarden" and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" then
-dwb_skullfracturesantishield()
+dwbRunie.dispatch()
 end
 
 
@@ -24,7 +24,7 @@ enableTimer("Battlefury Perceive")
 --enableTimer("TargetOutOfRoom")
 end
 if gmcp.Char.Status.class == "Depthswalker" then
-depthswalker_lockroute()
+depthswalker.dispatch()
 end
 
 if gmcp.Char.Status.class == "Magi" then

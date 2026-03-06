@@ -28,7 +28,8 @@ idwb_torsodamage()
 end
 
 if gmcp.Char.Status.class == "Runewarden" and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" then
-dwb_torsodamage()
+dwbRunie.setMode("torso")
+dwbRunie.dispatch()
 end
 
 if gmcp.Char.Status.class == "Infernal" and gmcp.Char.Vitals.charstats[4] == "Spec: Two Handed" then
@@ -43,7 +44,7 @@ end
 
 
 if gmcp.Char.Status.class == "Depthswalker" then
-depthswalker_damageroute()
+depthswalker.dispatch()
 end
 
 if gmcp.Char.Status.class == "Infernal" and gmcp.Char.Vitals.charstats[4] == "Spec: Sword and Shield" then
@@ -76,5 +77,9 @@ end
 
 if gmcp.Char.Status.class == "Pariah" then
 levipariahlatencytest()
+end
+
+if gmcp.Char.Status.class == "Shaman" then
+shamanOffense.dispatch()
 end
 

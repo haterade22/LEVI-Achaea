@@ -44,18 +44,19 @@ packageName: ''
 -- DEADEYES delivers 2 curses per action (2.3s balance).
 -- Curses are selected independently via a dual-slot system:
 --
---   Curse 1 (primary) - Direct affliction stacking:
---     clumsiness -> asthma -> manaleech -> impatience -> sicken (slickness) -> anorexia
---     Then: sleep/nightmare synergies -> sensitivity -> fillers -> class lock aff
+--   Curse 1 (primary) - Truelock chain with asthma-conditional branching:
+--     No asthma: clumsiness(33%) -> weariness(33%) -> asthma
+--     With asthma(50%+): manaleech -> impatience -> sicken (slickness)
+--     -> anorexia -> weariness -> class lock aff -> voyria (fallback)
+--     Once asthma lands, clumsiness is skipped — lock speed over hinder.
 --
---   Curse 2 (secondary) - Lock support via sicken cascade:
---     sicken (delivers paralysis) -> impatience -> asthma
---     -> sicken again (delivers manaleech/slickness when asthma protects smoke)
---     -> anorexia -> slickness -> manaleech -> fillers -> class lock aff
+--   Curse 2 (secondary) - Paralysis-first, then fill missing lock pieces:
+--     paralysis -> asthma -> manaleech (gated by asthma) -> impatience
+--     -> sicken (slickness) -> anorexia -> weariness -> class lock aff -> voyria
 --
--- Sicken cascade: sicken delivers paralysis -> manaleech -> slickness in order,
--- based on what the target already has. Asthma blocks smoke cures, protecting
--- manaleech and slickness once applied.
+-- Manaleech is smoke-cured: only delivered behind asthma.
+-- Sicken delivers slickness when manaleech is present on the target.
+-- Asthma blocks smoke cures, protecting manaleech and slickness once applied.
 --
 -- Lock progression: softlock (asthma+anorexia+slickness) -> hardlock (+impatience)
 --   -> truelock (+paralysis) -> class lock aff for kill
@@ -78,6 +79,8 @@ apostate.state = {
   freshblood = false,       -- fresh blood available for bloodpact
   fiendthing = "nightmare", -- preferred lesser daemon
   wantDisloyalty = false,   -- disfigure toggle
+  disfigureSent = false,    -- disfigure spam protection (once per manaleech round)
+  asthmaConfirmTimer = nil, -- timer: confirm asthma present if target doesn't smoke
   partyrelay = true,        -- relay to party
 }
 
@@ -190,17 +193,18 @@ end
 -- DEADEYES takes 2 curses. Each slot has its own independent priority chain.
 -- selectCurses() orchestrates both and handles overrides (curseward, truelock).
 --
--- Curse 1 (selectPrimaryCurse): direct affliction delivery
---   If asthma stuck: manaleech -> impatience -> sicken (slickness) -> anorexia -> clumsiness
---   Default:         clumsiness -> asthma -> manaleech -> impatience -> sicken (slickness) -> anorexia
---   -> sleep mode / nightmare synergy / sensitivity -> fillers -> class lock aff
+-- Curse 1 (selectPrimaryCurse): Truelock chain, asthma-conditional
+--   No asthma: clumsiness(33%) -> asthma
+--   With asthma: manaleech -> impatience -> sicken -> anorexia
+--   -> class lock aff -> voyria (fallback)
 --
--- Curse 2 (selectSecondaryCurse): sicken cascade + lock support
---   sicken (paralysis) -> impatience -> asthma
---   -> sicken (manaleech/slickness, protected by asthma blocking smoke cure)
---   -> anorexia -> slickness -> manaleech -> fillers -> class lock aff
+-- Curse 2 (selectSecondaryCurse): Paralysis-first, then fill lock pieces
+--   paralysis -> asthma -> manaleech(gated) -> impatience -> sicken -> anorexia
+--   -> class lock aff -> voyria (fallback)
 --
 -- Curse 2 never duplicates curse 1 (c1 passed as parameter to avoid overlap).
+-- Manaleech is smoke-cured: only delivered behind asthma.
+-- Sicken delivers slickness when manaleech is present on target.
 --------------------------------------------------------------------------------
 
 -- Filler afflictions shared by both curse slots
@@ -221,135 +225,210 @@ apostate.fillers = {
   {aff = "paranoia",       curse = "paranoia"},
 }
 
--- Curse 1: Primary offensive priority chain
-function apostate.selectPrimaryCurse()
-  -- When asthma is stuck, skip clumsiness and prioritize lock completion
-  -- (asthma blocks smoke cure, protecting manaleech/slickness)
-  if apostate.hasAff("asthma") then
-    -- Lock completion: manaleech -> impatience -> sicken (slickness) -> anorexia -> clumsiness
-    if not apostate.hasAff("manaleech") then return "manaleech" end
-    if not apostate.hasAff("impatience") then return "impatience" end
-    if not apostate.hasAff("slickness") then return "sicken" end
-    if not apostate.hasAff("anorexia") then return "anorexia" end
-    if not apostate.hasAff("clumsiness") then return "clumsy" end
-  else
-    -- Default: clumsiness -> asthma -> manaleech -> impatience -> sicken (slickness) -> anorexia
-    if not apostate.hasAff("clumsiness") then return "clumsy" end
-    if not apostate.hasAff("asthma") then return "asthma" end
-    if not apostate.hasAff("manaleech") then return "manaleech" end
-    if not apostate.hasAff("impatience") then return "impatience" end
-    if not apostate.hasAff("slickness") then return "sicken" end
-    if not apostate.hasAff("anorexia") then return "anorexia" end
-  end
+-- Evileye curse name conversion for getLockingAffliction() mismatches
+local EVILEYE_CURSE_MAP = {
+  paralyse = "paralysis",     -- Jester, Occultist, Shaman, Underworld
+}
 
-  -- Sleep mode
-  if apostate.state.mode == "sleep" then
-    local tarInsomnia = false
-    if ataxiaTemp and ataxiaTemp.tarInsomnia ~= nil then
-      tarInsomnia = ataxiaTemp.tarInsomnia
-    end
-    if apostate.hasAff("impatience") and apostate.hasAff("hypersomnia") and not tarInsomnia then
-      return "sleep"
-    end
-  end
-
-  -- Nightmare synergy: push dementia for hellsight chain
-  if maretick and not apostate.hasAff("hellsight") and
-     apostate.hasAff("hypersomnia") and not apostate.hasAff("dementia") and
-     apostate.hasAff("asthma") and apostate.hasAff("impatience") then
-    return "dementia"
-  end
-
-  -- Sensitivity when deaf
-  if apostate.hasAff("deafness") and not apostate.hasAff("sensitivity") then
-    local tarClass = ataxiaNDB_getClass and ataxiaNDB_getClass(target) or ""
-    if tarClass ~= "Blademaster" and tarClass ~= "Monk" then
-      return "sensitivity"
-    end
-  end
-
-  -- Fillers
-  for _, f in ipairs(apostate.fillers) do
-    if not apostate.hasAff(f.aff) then
-      return f.curse
-    end
-  end
-
-  -- Class lock affliction
-  if getLockingAffliction then
-    local lockAff = getLockingAffliction(target)
-    if lockAff and not apostate.hasAff(lockAff) then
-      return lockAff
-    end
-  end
-
-  return "clumsy"  -- ultimate fallback
+local function toEvileyeCurse(curse)
+  return EVILEYE_CURSE_MAP[curse] or curse
 end
 
--- Curse 2: Lock support chain (sicken for paralysis/slickness, then lock affs)
+-- Curse 1: Truelock priority chain (V3-aware gating)
+-- Without asthma: clumsiness(33%) → weariness(33%) → asthma
+-- With asthma(50%+): manaleech (probe) → impatience → slickness → anorexia → weariness → class lock → voyria
+-- Manaleech at 50% asthma = information play: if they smoke, asthma collapses to 0%.
+-- If they don't smoke, asthma is confirmed 100% and manaleech sticks.
+-- Once asthma lands, skip clumsiness entirely and push lock pieces ASAP.
+function apostate.selectPrimaryCurse()
+  local asthmaProb = apostate.getAffProb("asthma")
+
+  if asthmaProb >= 0.50 then
+    -- Asthma likely → push manaleech (also probes asthma: smoke = no asthma, no smoke = confirmed)
+    -- Skip clumsiness: lock speed > hinder pressure
+    if not apostate.hasAff("manaleech") then return "manaleech" end
+    if not apostate.hasAff("impatience") then return "impatience" end
+
+    -- Slickness via sicken (delivers slickness when manaleech present)
+    if apostate.hasAff("impatience") and not apostate.hasAff("slickness") then
+      return "sicken"
+    end
+
+    -- Anorexia only after slickness (no point blocking eating if they can still apply)
+    if apostate.hasAff("slickness") and not apostate.hasAff("anorexia") then
+      return "anorexia"
+    end
+
+    -- Weariness (truelock piece)
+    if not apostate.hasAff("weariness") then return "weariness" end
+  else
+    -- No asthma: build hinder then secure asthma
+    if apostate.getAffProb("clumsiness") < 0.33 then return "clumsy" end
+    if apostate.getAffProb("weariness") < 0.33 then return "weariness" end
+    return "asthma"
+  end
+
+  -- Class lock affliction (recklessness, voyria, etc.)
+  if getLockingAffliction then
+    local lockAffName = getLockingAffliction("name")
+    local lockAffCurse = toEvileyeCurse(getLockingAffliction())
+    if lockAffName and not apostate.hasAff(lockAffName) then
+      return lockAffCurse
+    end
+  end
+
+  -- Voyria fallback (syphon cures it every 10s, always useful pressure)
+  return "plague"
+end
+
+-- Curse 2: Paralysis-first, then fill missing lock pieces
+-- Manaleech gated behind asthma (smoke-cured without it)
+-- When c1 is anorexia, pair with sicken to fill uncertain slickness/paralysis.
 function apostate.selectSecondaryCurse(c1)
-  -- Direct paralysis when target lacks it
+  -- Anorexia + sicken pairing: sicken fills whatever cascade piece is missing
+  -- (slickness if they lost it, paralysis if slickness is stuck)
+  -- Only skip when both slickness AND paralysis are confirmed at 100%
+  if c1 == "anorexia" then
+    if apostate.getAffProb("slickness") < 1.0 or apostate.getAffProb("paralysis") < 1.0 then
+      return "sicken"
+    end
+  end
+
+  -- 1. Paralysis: always first
   if not apostate.hasAff("paralysis") and c1 ~= "paralysis" then
     return "paralysis"
   end
 
-  -- After paralysis, build other lock components
-  if not apostate.hasAff("impatience") and c1 ~= "impatience" then return "impatience" end
+  -- 2. Fill missing lock pieces (skipping c1)
+  -- Asthma first (blocks smoking, protects manaleech)
   if not apostate.hasAff("asthma") and c1 ~= "asthma" then return "asthma" end
 
-  -- Sicken again: with asthma present, sicken cascades to manaleech/slickness
-  -- (asthma blocks smoke cure, protecting both)
-  if apostate.hasAff("asthma") and
-     (not apostate.hasAff("manaleech") or not apostate.hasAff("slickness")) and
-     c1 ~= "sicken" then
+  -- Manaleech at 50%+ asthma (smoke-cured without it; also probes asthma certainty)
+  if apostate.getAffProb("asthma") >= 0.50 and not apostate.hasAff("manaleech") and c1 ~= "manaleech" then
+    return "manaleech"
+  end
+
+  if not apostate.hasAff("impatience") and c1 ~= "impatience" then return "impatience" end
+
+  -- Slickness via sicken (gated by impatience + asthma 50%+)
+  if apostate.hasAff("impatience") and apostate.getAffProb("asthma") >= 0.50
+     and not apostate.hasAff("slickness") and c1 ~= "sicken" then
     return "sicken"
   end
 
-  -- Remaining lock afflictions
-  if not apostate.hasAff("anorexia") and c1 ~= "anorexia" then return "anorexia" end
-  if not apostate.hasAff("slickness") and c1 ~= "sicken" then return "sicken" end
-  if not apostate.hasAff("manaleech") and c1 ~= "manaleech" then return "manaleech" end
+  -- Anorexia only after slickness (no point blocking eating if they can still apply)
+  if apostate.hasAff("slickness") and not apostate.hasAff("anorexia") and c1 ~= "anorexia" then
+    return "anorexia"
+  end
 
-  -- Fillers (skip whatever c1 is using)
-  for _, f in ipairs(apostate.fillers) do
-    if not apostate.hasAff(f.aff) and c1 ~= f.curse then
-      return f.curse
+  -- Weariness (truelock piece)
+  if not apostate.hasAff("weariness") and c1 ~= "weariness" then return "weariness" end
+
+  -- 3. Class lock affliction
+  if getLockingAffliction then
+    local lockAffName = getLockingAffliction("name")
+    local lockAffCurse = toEvileyeCurse(getLockingAffliction())
+    if lockAffName and not apostate.hasAff(lockAffName) and c1 ~= lockAffCurse then
+      return lockAffCurse
     end
   end
+
+  -- 4. Voyria fallback
+  if c1 ~= "plague" then return "plague" end
+  return "paralysis"
+end
+
+--------------------------------------------------------------------------------
+-- GROUP MODE CURSE SELECTION
+-- Pure lock pieces, no hinder (clumsiness/weariness), no probability gates.
+-- Curse 1: impatience → asthma → manaleech → slickness(sicken) → anorexia → class lock → voyria
+-- Curse 2: paralysis → fill missing lock pieces in same order
+--------------------------------------------------------------------------------
+
+function apostate.selectPrimaryCurseGroup()
+  if not apostate.hasAff("impatience") then return "impatience" end
+  if not apostate.hasAff("asthma") then return "asthma" end
+  if not apostate.hasAff("manaleech") then return "manaleech" end
+  if not apostate.hasAff("slickness") then return "sicken" end
+  if not apostate.hasAff("anorexia") then return "anorexia" end
 
   -- Class lock affliction
   if getLockingAffliction then
-    local lockAff = getLockingAffliction(target)
-    if lockAff and not apostate.hasAff(lockAff) and c1 ~= lockAff then
-      return lockAff
+    local lockAffName = getLockingAffliction("name")
+    local lockAffCurse = toEvileyeCurse(getLockingAffliction())
+    if lockAffName and not apostate.hasAff(lockAffName) then
+      return lockAffCurse
     end
   end
 
-  if c1 ~= "clumsy" then return "clumsy" end
-  return "asthma"
+  return "plague"
+end
+
+function apostate.selectSecondaryCurseGroup(c1)
+  -- Anorexia + sicken pairing (same logic as lock mode)
+  if c1 == "anorexia" then
+    if apostate.getAffProb("slickness") < 1.0 or apostate.getAffProb("paralysis") < 1.0 then
+      return "sicken"
+    end
+  end
+
+  -- 1. Paralysis: always first
+  if not apostate.hasAff("paralysis") and c1 ~= "paralysis" then
+    return "paralysis"
+  end
+
+  -- 2. Fill missing lock pieces (skipping c1)
+  if not apostate.hasAff("impatience") and c1 ~= "impatience" then return "impatience" end
+  if not apostate.hasAff("asthma") and c1 ~= "asthma" then return "asthma" end
+  if not apostate.hasAff("manaleech") and c1 ~= "manaleech" then return "manaleech" end
+  if not apostate.hasAff("slickness") and c1 ~= "sicken" then return "sicken" end
+  if not apostate.hasAff("anorexia") and c1 ~= "anorexia" then return "anorexia" end
+
+  -- Class lock affliction
+  if getLockingAffliction then
+    local lockAffName = getLockingAffliction("name")
+    local lockAffCurse = toEvileyeCurse(getLockingAffliction())
+    if lockAffName and not apostate.hasAff(lockAffName) and c1 ~= lockAffCurse then
+      return lockAffCurse
+    end
+  end
+
+  if c1 ~= "plague" then return "plague" end
+  return "paralysis"
 end
 
 -- Main curse selection. Returns table of 2 curse names for DEADEYES.
+-- Routes to lock or group mode based on apostate.state.mode.
 function apostate.selectCurses()
   local locks = apostate.getLocks()
+  local mode = apostate.state.mode
 
-  -- Curseward: must breach first
+  -- Curseward: must breach first (all modes)
   if apostate.hasAff("curseward") then
-    return {"breach", apostate.selectSecondaryCurse("breach")}
+    local secondaryFn = (mode == "group") and apostate.selectSecondaryCurseGroup or apostate.selectSecondaryCurse
+    return {"breach", secondaryFn("breach")}
   end
 
-  -- Truelock completion: push class-specific lock affliction
+  -- Truelock completion: push class-specific lock affliction (all modes)
   if locks.truelock >= 0.7 then
-    local lockAff = nil
     if getLockingAffliction then
-      lockAff = getLockingAffliction(target)
-    end
-    if lockAff and not apostate.hasAff(lockAff) then
-      return {lockAff, apostate.selectSecondaryCurse(lockAff)}
+      local lockAffName = getLockingAffliction("name")
+      local lockAffCurse = toEvileyeCurse(getLockingAffliction())
+      local secondaryFn = (mode == "group") and apostate.selectSecondaryCurseGroup or apostate.selectSecondaryCurse
+      if lockAffName and not apostate.hasAff(lockAffName) then
+        return {lockAffCurse, secondaryFn(lockAffCurse)}
+      end
     end
   end
 
-  -- Normal: curse 1 from primary chain, curse 2 from secondary chain
+  -- Group mode: pure lock pieces, no hinder
+  if mode == "group" then
+    local c1 = apostate.selectPrimaryCurseGroup()
+    local c2 = apostate.selectSecondaryCurseGroup(c1)
+    return {c1, c2}
+  end
+
+  -- Lock mode (default): truelock chain with hinder setup
   local c1 = apostate.selectPrimaryCurse()
   local c2 = apostate.selectSecondaryCurse(c1)
   return {c1, c2}
@@ -361,7 +440,7 @@ function apostate.getCurse1()
 end
 
 function apostate.getCurse2()
-  return apostate.curses[2] or "sicken"
+  return apostate.curses[2] or "paralysis"
 end
 
 --------------------------------------------------------------------------------
@@ -504,6 +583,16 @@ function apostate.buildAttack()
   else
     -- Default: DEADEYES curse delivery
     atk = atk .. "wield shield;deadeyes " .. target .. " " .. c1 .. " " .. c2
+
+    -- Disfigure on EQ when cursing manaleech (lock mode only, once per manaleech round)
+    -- Chained with :: so disfigure only fires AFTER deadeyes (not as a separate immediate command)
+    if apostate.state.mode == "lock" and (c1 == "manaleech" or c2 == "manaleech")
+       and not apostate.state.disfigureSent then
+      local sep = (ataxia and ataxia.settings and ataxia.settings.separator) or "::"
+      atk = atk .. sep .. "disfigure " .. target
+      apostate.state.disfigureSent = true
+    end
+
     atk = atk .. ";assess " .. target
 
     -- Add contemplate if no post-attack actions pending
@@ -531,11 +620,19 @@ function apostate.dispatch()
   -- Don't act under aeon
   if ataxia and ataxia.afflictions and ataxia.afflictions.aeon then return end
 
+  -- Rebound hold gate
+  if reboundHold and reboundHold.gate(apostate.dispatch) then return end
+
   -- Initialize pm if not set
   if not pm then pm = 100 end
 
   -- Select curses based on current mode and target state
   apostate.curses = apostate.selectCurses()
+
+  -- Reset disfigure flag when manaleech is no longer a curse (ready for next manaleech round)
+  if apostate.curses[1] ~= "manaleech" and apostate.curses[2] ~= "manaleech" then
+    apostate.state.disfigureSent = false
+  end
 
   -- Debug echo: curses being sent + stuck afflictions
   apostate.debugEcho()
@@ -563,7 +660,26 @@ function apostate.dispatch()
     fullCmd = atkCmd
   end
 
-  send("queue addclear freestand " .. fullCmd)
+  send("queue addclearfull freestand " .. fullCmd)
+
+  -- Asthma confirmation: if we delivered smoke-curable curses and target doesn't smoke,
+  -- asthma is confirmed present (blocking their smoke cures)
+  if apostate.curses[1] == "manaleech" or apostate.curses[2] == "manaleech" then
+    if apostate.state.asthmaConfirmTimer then
+      killTimer(apostate.state.asthmaConfirmTimer)
+    end
+    local asthmaProb = apostate.getAffProb("asthma")
+    if asthmaProb > 0 and asthmaProb < 1.0 then
+      apostate.state.asthmaConfirmTimer = tempTimer(2.5, function()
+        apostate.state.asthmaConfirmTimer = nil
+        if collapseAffPresentV3 then
+          collapseAffPresentV3("asthma")
+          apostate.debugEcho()
+          cecho("\n<yellow>[APO]<reset> V3: Asthma confirmed (target didn't smoke)\n")
+        end
+      end)
+    end
+  end
 end
 
 --------------------------------------------------------------------------------

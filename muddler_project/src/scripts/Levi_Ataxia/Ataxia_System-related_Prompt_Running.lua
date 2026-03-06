@@ -39,39 +39,33 @@ function ataxia_promptCommands()
 	end
 
 if ataxiaBasher.enabled then
-    
+
+    -- Room scan on room change
     if need_roomCheck then
       ataxiaBasher_scanRoom()
     end
-  
-if ataxia.vitals.hp >= ataxia.vitals.maxhp and ataxiaTemp.bashFlee == true or ataxiaBasher.paused == true and guardianofmogcunts == false then
-			  ataxiaTemp.bashFlee = false
-        ataxiaBasher.paused = false
-			  search_targets()
-end
-  
-  if ataxia.vitals.wpp <= 5 then
-    if ataxiaBasher.dragonIncant == true then
-      ataxiaBasher.jabBash = true
-      ataxiaBasher.dragonIncant = false
-    end
-  end
-  
-    if basher_needAction and found_target and not ataxiaBasher_skipRoom then
-      basher_needAction = false
-      if gmcp.Char.Status.class == "Magi" then
-        ataxiaBasher_magiBashing()
-        ataxiaBasher_attack()
-      else
-      ataxiaBasher_attack()
+
+    -- Re-evaluate targets every prompt. GMCP fires before text, so
+    -- ataxia.denizensHere is already up-to-date by the time we get here.
+    -- Without this, killing the last mob leaves found_target stale (true)
+    -- because the debounced "targets updated" event fires NEXT cycle.
+    search_targets()
+
+    -- Flee recovery check (percentage-based, replaces buggy operator-precedence line)
+    ataxiaBasher_checkFleeRecovery()
+
+    -- Willpower-based dragon incant toggle
+    if ataxia.vitals.wpp and ataxia.vitals.wpp <= 5 then
+      if ataxiaBasher.dragonIncant == true then
+        ataxiaBasher.jabBash = true
+        ataxiaBasher.dragonIncant = false
       end
-      
     end
-    
-		disableTrigger("Denizen Attack Find")
-		ataxiaBasher_atk = false
-		ataxiaBasher_patterns()
-	end
+
+    -- SINGLE attack dispatch — no basher_needAction, no atk flag reset
+    disableTrigger("Denizen Attack Find")
+    ataxiaBasher_patterns()
+  end
 	ataxia_precacheQueue()
 end
 

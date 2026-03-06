@@ -214,6 +214,9 @@
                           },
                           {
                             "name": "Dragon Breath"
+                          },
+                          {
+                            "name": "Rebound Hold"
                           }
                         ]
                       },
@@ -362,7 +365,8 @@
                         "name": "Install System"
                       },
                       {
-                        "name": "Prompt Running"
+                        "name": "Prompt Running",
+                        "isActive": "no"
                       },
                       {
                         "name": "Pause Toggling"
@@ -499,7 +503,19 @@
                     "isFolder": "yes",
                     "children": [
                       {
+                        "name": "Legend Deck Init"
+                      },
+                      {
                         "name": "Legend Deck Table"
+                      },
+                      {
+                        "name": "Legend Deck Database"
+                      },
+                      {
+                        "name": "Legend Deck Functions"
+                      },
+                      {
+                        "name": "Legend Deck Save Load"
                       }
                     ]
                   },
@@ -621,7 +637,7 @@
                         "name": "Curing",
                         "isActive": "yes",
                         "isFolder": "yes",
-                        "script": "curingTable = {\n\tgoldenseal = {\"depression\", \"sandfever\", \"stupidity\", \"epilepsy\", \"dizziness\", \"dissonance\", \"shyness\", \"impatience\", \"unweavingmind\", \"fulminated\"},\n\tlobelia = {\"recklessness\", \"vertigo\", \"spiritburn\", \"tenderskin\", \"loneliness\", \"claustrophobia\", \"masochism\", \"agoraphobia\"},\n\tbellwort = {\"timeloop\", \"justice\", \"lovers\", \"peace\", \"pacified\", \"generosity\", \"indifference\",\"diminished\"},\n\tkelp = {\"hypochondria\", \"parasite\", \"weariness\",  \"asthma\", \"healthleech\", \"clumsiness\", \"sensitivity\"},\n\tash = {\"confusion\", \"hypersomnia\", \"hallucinations\", \"paranoia\", \"dementia\",\"crescendo\",},\n\tginseng = {\"flushings\", \"lethargy\", \"haemophilia\", \"addiction\", \"nausea\", \"scytherus\", \"darkshade\", \"unweavingbody\"},\n}\n\nfunction haveSmokeAff()\n\tlocal smoke = false\n\tlocal sAffs = {\"deadening\", \"tension\",\n\t\t\"disloyalty\", \"hellsight\", \"manaleech\", \"slickness\", \"unweavingspirit\",\"earworm\",}\n    \n\tfor i=1, #sAffs do\n\t\tif haveAff(sAffs[i]) then\n\t\t\tsmoke = true\n\t\t\tbreak\n\t\tend\n\tend\n\t\n\treturn smoke\nend\n\nfunction hasSalveAff()\n  local salve = false\n  local sAffs = {\"frozen\", \"shivering\", \"anorexia\", \"burns\", \"ablaze\", \"selarnia\",\n    \"damagedleftleg\", \"damagedrightleg\", \"mangledleftleg\", \"mangledrightleg\",\n    \"damagedleftarm\", \"damagedrightarm\", \"mangledleftarm\", \"mangledrightarm\",\n    \"brokenleftarm\", \"brokenrightarm\", \"brokenleftleg\", \"brokenrightleg\", \"hypothermia\"}\n    \n  for i=1, #sAffs do\n    if haveAff(sAffs[i]) then\n      salve = true\n      break\n    end\n  end\n  \n  return salve\nend\n\nfunction restorePassiveCure()\n  cecho(\"\\n<green>+ \"..passiveFailsafe..\" +\")\n  tAffs[passiveFailsafe] = true\n  passiveFailsafe = nil\nend",
+                        "script": "curingTable = {\n\tgoldenseal = {\"depression\", \"sandfever\", \"stupidity\", \"epilepsy\", \"dizziness\", \"dissonance\", \"shyness\", \"impatience\", \"unweavingmind\", \"fulminated\"},\n\tlobelia = {\"fratricide\", \"recklessness\", \"vertigo\", \"spiritburn\", \"tenderskin\", \"loneliness\", \"claustrophobia\", \"masochism\", \"agoraphobia\"},\n\tbellwort = {\"timeloop\", \"justice\", \"lovers\", \"peace\", \"pacified\", \"generosity\", \"indifference\",\"diminished\"},\n\tkelp = {\"hypochondria\", \"parasite\", \"weariness\",  \"asthma\", \"healthleech\", \"clumsiness\", \"sensitivity\"},\n\tash = {\"confusion\", \"hypersomnia\", \"hallucinations\", \"paranoia\", \"dementia\",\"crescendo\",},\n\tginseng = {\"flushings\", \"lethargy\", \"haemophilia\", \"addiction\", \"nausea\", \"scytherus\", \"darkshade\", \"unweavingbody\"},\n}\n\nfunction haveSmokeAff()\n\tlocal smoke = false\n\tlocal sAffs = {\"deadening\", \"tension\",\n\t\t\"disloyalty\", \"hellsight\", \"manaleech\", \"slickness\", \"unweavingspirit\",\"earworm\",}\n    \n\tfor i=1, #sAffs do\n\t\tif haveAff(sAffs[i]) then\n\t\t\tsmoke = true\n\t\t\tbreak\n\t\tend\n\tend\n\t\n\treturn smoke\nend\n\nfunction hasSalveAff()\n  local salve = false\n  local sAffs = {\"frozen\", \"shivering\", \"anorexia\", \"burns\", \"ablaze\", \"selarnia\",\n    \"damagedleftleg\", \"damagedrightleg\", \"mangledleftleg\", \"mangledrightleg\",\n    \"damagedleftarm\", \"damagedrightarm\", \"mangledleftarm\", \"mangledrightarm\",\n    \"brokenleftarm\", \"brokenrightarm\", \"brokenleftleg\", \"brokenrightleg\", \"hypothermia\"}\n    \n  for i=1, #sAffs do\n    if haveAff(sAffs[i]) then\n      salve = true\n      break\n    end\n  end\n  \n  return salve\nend\n\nfunction restorePassiveCure()\n  cecho(\"\\n<green>+ \"..passiveFailsafe..\" +\")\n  tAffs[passiveFailsafe] = true\n  passiveFailsafe = nil\nend",
                         "children": [
                           {
                             "name": "Herbs"
@@ -1161,6 +1177,9 @@
                         "children": [
                           {
                             "name": "Tekura Offense"
+                          },
+                          {
+                            "name": "Tekura 6-Limb Offense"
                           }
                         ]
                       },
@@ -1298,13 +1317,16 @@
                     "isFolder": "yes",
                     "children": [
                       {
-                        "name": "Logic"
+                        "name": "Logic",
+                        "isActive": "no"
                       },
                       {
-                        "name": "Attack"
+                        "name": "Attack",
+                        "isActive": "no"
                       },
                       {
-                        "name": "BrokenStar"
+                        "name": "BrokenStar",
+                        "isActive": "no"
                       },
                       {
                         "name": "Group"
@@ -1480,85 +1502,115 @@
                     "isFolder": "yes",
                     "children": [
                       {
-                        "name": "CLUMSY PRIOS"
+                        "name": "CLUMSY PRIOS",
+                        "isActive": "no"
                       },
                       {
-                        "name": "ATTACK"
+                        "name": "ATTACK",
+                        "isActive": "no"
                       },
                       {
-                        "name": "BASIC LOCK PRIOS"
+                        "name": "BASIC LOCK PRIOS",
+                        "isActive": "no"
                       },
                       {
-                        "name": "DAMAGE PRIOS"
+                        "name": "DAMAGE PRIOS",
+                        "isActive": "no"
                       },
                       {
-                        "name": "SWIFT"
+                        "name": "SWIFT",
+                        "isActive": "no"
                       },
                       {
-                        "name": "TZANTZA ATTACK"
+                        "name": "TZANTZA ATTACK",
+                        "isActive": "no"
                       },
                       {
-                        "name": "TZANTZA PRIOS"
+                        "name": "TZANTZA PRIOS",
+                        "isActive": "no"
                       },
                       {
-                        "name": "DOLL PRIOS"
+                        "name": "DOLL PRIOS",
+                        "isActive": "no"
                       },
                       {
-                        "name": "DOLL ATTACK"
+                        "name": "DOLL ATTACK",
+                        "isActive": "no"
                       },
                       {
-                        "name": "DAMAGE ATTACK"
+                        "name": "DAMAGE ATTACK",
+                        "isActive": "no"
                       },
                       {
-                        "name": "SLOW LOCK PRIOS"
+                        "name": "SLOW LOCK PRIOS",
+                        "isActive": "no"
                       },
                       {
-                        "name": "SLOW LOCK ATTACK"
+                        "name": "SLOW LOCK ATTACK",
+                        "isActive": "no"
                       },
                       {
-                        "name": "SALVE LOCK PRIOS"
+                        "name": "SALVE LOCK PRIOS",
+                        "isActive": "no"
                       },
                       {
-                        "name": "SALVE LOCK ATTACK"
+                        "name": "SALVE LOCK ATTACK",
+                        "isActive": "no"
                       },
                       {
-                        "name": "GOLDENSEAL PRIOS"
+                        "name": "GOLDENSEAL PRIOS",
+                        "isActive": "no"
                       },
                       {
-                        "name": "GINSENG STACK"
+                        "name": "GINSENG STACK",
+                        "isActive": "no"
                       },
                       {
-                        "name": "KILL TIMERS"
+                        "name": "KILL TIMERS",
+                        "isActive": "no"
                       },
                       {
-                        "name": "STUPID PRIOS"
+                        "name": "STUPID PRIOS",
+                        "isActive": "no"
                       },
                       {
-                        "name": "RIFTLOCK PRIOS"
+                        "name": "RIFTLOCK PRIOS",
+                        "isActive": "no"
                       },
                       {
-                        "name": "SALVE ILLUSION"
+                        "name": "SALVE ILLUSION",
+                        "isActive": "no"
                       },
                       {
-                        "name": "ILLUSION PRIOS"
+                        "name": "ILLUSION PRIOS",
+                        "isActive": "no"
                       },
                       {
-                        "name": "COAGULATE PRIOS"
+                        "name": "COAGULATE PRIOS",
+                        "isActive": "no"
                       },
                       {
-                        "name": "SALVELOCKWEARY PRIOS"
+                        "name": "SALVELOCKWEARY PRIOS",
+                        "isActive": "no"
                       },
                       {
-                        "name": "SALVE LOCK WEARY"
+                        "name": "SALVE LOCK WEARY",
+                        "isActive": "no"
                       },
                       {
-                        "name": "BLIGHT WEARINESS"
+                        "name": "BLIGHT WEARINESS",
+                        "isActive": "no"
                       },
                       {
-                        "name": "WEARY PRIOS"
+                        "name": "WEARY PRIOS",
+                        "isActive": "no"
                       },
                       {
-                        "name": "Levi Shaman"
+                        "name": "Levi Shaman",
+                        "isActive": "no"
+                      },
+                      {
+                        "name": "Shaman Offense"
                       }
                     ]
                   },
@@ -1674,6 +1726,9 @@
                           },
                           {
                             "name": "Infernal_DWC_Vivisect_2L"
+                          },
+                          {
+                            "name": "Infernal Prefarar Offense"
                           }
                         ]
                       },
@@ -1813,9 +1868,6 @@
                     "isFolder": "yes",
                     "children": [
                       {
-                        "name": "Levi Kelp Stack"
-                      },
-                      {
                         "name": "Serpent Offense"
                       }
                     ]
@@ -1878,7 +1930,24 @@
                     "isFolder": "yes",
                     "children": [
                       {
-                        "name": "Attack"
+                        "name": "Attack",
+                        "isActive": "no"
+                      },
+                      {
+                        "name": "Levi_Depthswalker"
+                      },
+                      {
+                        "name": "CC_Depthswalker"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Class Detect",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Class Detect Engine"
                       }
                     ]
                   },
@@ -1900,6 +1969,74 @@
                           },
                           {
                             "name": "limb prompt"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Snipe",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Snipe System"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Totem",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "Totem Checker"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Levi Scripts",
+            "isActive": "yes",
+            "isFolder": "yes",
+            "children": [
+              {
+                "name": "Leviticus",
+                "isActive": "yes",
+                "isFolder": "yes",
+                "children": [
+                  {
+                    "name": "INFERNAL",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "DWC",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "Infernal Group Lock"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "RUNEWARDEN",
+                    "isActive": "yes",
+                    "isFolder": "yes",
+                    "children": [
+                      {
+                        "name": "DWC",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "Runewarden Group Lock"
                           }
                         ]
                       }

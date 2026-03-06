@@ -65,7 +65,6 @@ function ataxia_RoomContents_Update(event)
       elseif table.contains(item_Pickup, v.name) then
         send("get "..v.id,false)
 			end
-  if ataxiaBasher.enabled then ataxiaBasher_invalidateStormhammer() end
 		end
 
 	--Remove (either by leaving, or dying)
@@ -110,11 +109,15 @@ function ataxia_RoomContents_Update(event)
     
 	end
 
-	--Trigger the update of the list.
-	raiseEvent("targets updated")
-
-	--Update the gui.
-	ataxia_Update_RoomContents()
+	--Trigger the update of the list (debounced to coalesce rapid GMCP item changes).
+	if not ataxiaTemp._targetsUpdatePending then
+		ataxiaTemp._targetsUpdatePending = true
+		tempTimer(0, function()
+			ataxiaTemp._targetsUpdatePending = nil
+			raiseEvent("targets updated")
+			ataxia_Update_RoomContents()
+		end)
+	end
 
 end
 

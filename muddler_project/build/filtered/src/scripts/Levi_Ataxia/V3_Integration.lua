@@ -31,6 +31,11 @@ packageName: ''
 -- Main wrapper for herb cure detection
 -- Replace targetAte() calls in triggers with this
 function targetAteWrapper(herb)
+    -- Eating any herb proves no anorexia (anorexia blocks eating entirely)
+    -- Clear from V1 and V3 before routing (V2 handles it in targetAteV2)
+    erAff("anorexia")
+    if removeAffV3 then removeAffV3("anorexia") end
+
     if affConfigV3 and affConfigV3.enabled then
         onHerbCureV3(herb)
     elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
@@ -378,6 +383,106 @@ function onTargetFocusV3()
 
     if ataxiaEcho and affConfigV3.debugEcho then
         ataxiaEcho("[V3] Focus used - branched to " .. #afflictionStatesV3 .. " states")
+    end
+end
+
+-- ============================================
+-- PASSIVE CURE HANDLING
+-- ============================================
+
+-- Pool of afflictions curable by passive abilities (from tSingleRandom/tMultipleRandom)
+passiveCurableAffsV3 = {
+    "aeon", "anorexia", "pyramides", "flushings", "crushedthroat",
+    "sandfever", "paralysis", "asthma", "timeloop", "lethargy",
+    "depression", "impatience", "hypersomnia", "retribution", "confusion",
+    "darkshade", "healthleech", "hypochondria", "slickness", "manaleech",
+    "nausea", "parasite", "shivering", "frozen", "spiritburn",
+    "clumsiness", "sensitivity", "scytherus", "tenderskin", "stupidity",
+    "haemophilia", "weariness", "hallucinations", "dizziness", "justice",
+    "recklessness", "epilepsy", "addiction", "loneliness", "shyness",
+    "vertigo", "paranoia", "agoraphobia", "claustrophobia", "generosity",
+    "pacifism", "disloyalty", "selarnia",
+    "brokenleftleg", "brokenrightleg", "brokenleftarm", "brokenrightarm"
+}
+
+-- Handle passive ability curing N random afflictions (branching model)
+-- Used by: Passives(1), Alleviate(1), Bloodboil(1), Dragonheal(3), Fool(3),
+--          Might(1), Purification(1), Purify(1), Salt(1), Shrugging(1),
+--          Slough(1), Eruption(1)
+function onPassiveCureV3(numCures)
+    if not affConfigV3 or not affConfigV3.enabled then return end
+    if not numCures or numCures < 1 then return end
+
+    local pool = passiveCurableAffsV3
+    local allCandidates = {}  -- Track all unique candidates across all states/rounds
+
+    for cure = 1, numCures do
+        local newStates = {}
+        local roundCandidates = {}  -- Track candidates this round
+
+        for _, state in ipairs(afflictionStatesV3) do
+            local candidates = {}
+            for _, aff in ipairs(pool) do
+                if state.affs[aff] then
+                    table.insert(candidates, aff)
+                    roundCandidates[aff] = true  -- Track for echo
+                end
+            end
+
+            if #candidates == 0 then
+                -- No curable affs in this state - passes through unchanged
+                table.insert(newStates, state)
+            elseif #candidates == 1 then
+                -- Only one option - deterministic cure
+                state.affs[candidates[1]] = nil
+                table.insert(newStates, state)
+            else
+                -- Multiple candidates - branch into all possibilities
+                local probEach = state.prob / #candidates
+                for _, aff in ipairs(candidates) do
+                    local branch = {affs = {}, prob = probEach}
+                    for k, v in pairs(state.affs) do branch.affs[k] = v end
+                    branch.affs[aff] = nil
+                    table.insert(newStates, branch)
+                end
+            end
+        end
+
+        -- Merge round candidates into allCandidates
+        for aff, _ in pairs(roundCandidates) do
+            allCandidates[aff] = true
+        end
+
+        afflictionStatesV3 = newStates
+
+        -- Dedup between cure rounds to control state explosion
+        if cure < numCures then
+            deduplicateStatesV3()
+        end
+    end
+
+    -- Final cleanup after all cures
+    deduplicateStatesV3()
+    pruneStatesV3()
+    rebuildCacheV3()
+    syncToOldSystemV3()
+    updateAffDisplayV3()
+
+    -- Enhanced debug echo with candidates
+    if ataxiaEcho and affConfigV3.debugEcho then
+        local candList = {}
+        for aff, _ in pairs(allCandidates) do
+            table.insert(candList, aff)
+        end
+
+        if #candList == 0 then
+            ataxiaEcho("[V3] Passive cure (" .. numCures .. ") - no curable affs tracked")
+        elseif #candList == 1 then
+            ataxiaEcho("[V3] Passive cure (" .. numCures .. ") - cured: " .. candList[1])
+        else
+            local candStr = table.concat(candList, ", ")
+            ataxiaEcho("[V3] Passive cure (" .. numCures .. ") - candidates: " .. candStr .. " (branched to " .. #afflictionStatesV3 .. " states)")
+        end
     end
 end
 

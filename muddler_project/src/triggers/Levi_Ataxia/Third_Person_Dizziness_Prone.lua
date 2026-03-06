@@ -1,5 +1,6 @@
 if isTargeted(matches[2]) then
 	tAffs.dizziness = true
+	if applyAffV3 then applyAffV3("dizziness") end
 	tAffs.prone = true
 
 	-- V3 integration: collapse branches (proves dizziness present) and track prone

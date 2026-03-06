@@ -46,14 +46,12 @@ function autoMoveAndBash(destinationRoom, expectedArea, travelTime)
   end)
 end
 
--- Register to check whenever room players update
-registerAnonymousEventHandler("gmcp.Room.Players", "checkForNaytorlin")
 
 function basher_disengaged()
 	disableTimer("Clear Bashing Console")
 	disableTrigger("Denizen Attacks / Misc Lines")
-	local times = stopStopWatch(bashWatcher)
-	times = string.format("%2.2f", (times/60))
+	local times = bashWatcher and stopStopWatch(bashWatcher) or 0
+	times = string.format("%2.2f", (times / 60))
 
 	ataxia_saveSettings(false)
 	ataxiaEcho("Bashing finished. Started at ("..getCurExp.." / "..getCurGold.."g) and bashed for "..times.." minutes. ")

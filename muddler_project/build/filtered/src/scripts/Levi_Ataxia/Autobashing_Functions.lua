@@ -14,124 +14,169 @@ attributes:
 packageName: ''
 ]]--
 
--- Per-class manual attack cooldown overrides (seconds).
--- Falls back to ataxiaBasher.attackCooldown or 0.4s if not listed.
-ataxiaBasher_attackCooldowns = {
-  -- Example overrides (used before enough GMCP samples are collected):
-  -- Serpent = 1.3,
-  -- Shaman = 0.8,
-  -- ["Blue Dragon"] = 0.5,
-}
+-- Anti-spam delay (seconds): prevents double-sends during the network round-trip
+-- before GMCP reports balance lost. canBals() handles actual balance gating.
+local ANTI_SPAM_DELAY = 0.3
 
--- GMCP-based balance tracking: learns actual balance/equilibrium recovery times per class.
--- Measures the interval between consecutive attacks as the effective cooldown.
--- Stores up to 20 samples per class and uses the rolling average.
-ataxiaBasher_balanceSamples = ataxiaBasher_balanceSamples or {}
-ataxiaBasher_lastAttackEpoch = nil
+-- ============================================================================
+-- Swiftcurse charge detection (GMCP-based, works during blackout)
+-- Swiftcurse uses EQ only. If we see 2 consecutive EQ recoveries (EQ 0→1)
+-- while BAL was never consumed, the swiftcurse charge-up succeeded.
+-- ============================================================================
+ataxiaBasher_prevEq = nil       -- previous EQ state (true/false)
+ataxiaBasher_prevBal = nil      -- previous BAL state (true/false)
+ataxiaBasher_eqOnlyCount = 0    -- consecutive EQ-only recoveries
 
--- Called each time an attack fires. Measures inter-attack interval to learn balance time.
-function ataxiaBasher_recordBalanceSample()
+function ataxiaBasher_detectSwiftcurseCharge()
+  if not ataxiaBasher.enabled then return end
+  if not ataxia_isClass("Shaman") then return end
+
+  local curEq = (gmcp.Char.Vitals.eq == "1")
+  local curBal = (gmcp.Char.Vitals.bal == "1")
+
+  -- Detect BAL consumed (went from true to false) → reset counter (normal attack)
+  if ataxiaBasher_prevBal == true and not curBal then
+    ataxiaBasher_eqOnlyCount = 0
+  end
+
+  -- Detect EQ recovery (went from false to true) while BAL stayed up
+  if ataxiaBasher_prevEq == false and curEq and ataxiaBasher_prevBal == true and curBal then
+    ataxiaBasher_eqOnlyCount = ataxiaBasher_eqOnlyCount + 1
+    if ataxiaBasher_eqOnlyCount >= 2 and (curseCharge or 0) <= 1 then
+      curseCharge = 15
+      ataxiaBasher_eqOnlyCount = 0
+    end
+  end
+
+  ataxiaBasher_prevEq = curEq
+  ataxiaBasher_prevBal = curBal
+end
+
+if ataxiaBasher_swiftcurseHandler then
+  killAnonymousEventHandler(ataxiaBasher_swiftcurseHandler)
+end
+ataxiaBasher_swiftcurseHandler = registerAnonymousEventHandler("gmcp.Char.Vitals", "ataxiaBasher_detectSwiftcurseCharge")
+
+-- ============================================================================
+-- Global safety throttle: detect runaway attack loops
+-- ============================================================================
+ataxiaBasher_cmdCount = 0
+ataxiaBasher_cmdWindowStart = 0
+
+function ataxiaBasher_throttleCheck()
   local now = getEpoch()
-  if not ataxiaBasher_lastAttackEpoch then
-    ataxiaBasher_lastAttackEpoch = now
-    return
+  if now - ataxiaBasher_cmdWindowStart > 1.0 then
+    ataxiaBasher_cmdWindowStart = now
+    ataxiaBasher_cmdCount = 0
   end
-
-  local elapsed = now - ataxiaBasher_lastAttackEpoch
-  ataxiaBasher_lastAttackEpoch = now
-
-  -- Only record sane values (0.2s to 5s)
-  if elapsed < 0.2 or elapsed > 5.0 then return end
-
-  local class = gmcp.Char.Status.class:title():gsub(" Lady", ""):gsub(" Lord", "")
-  if not ataxiaBasher_balanceSamples[class] then
-    ataxiaBasher_balanceSamples[class] = {}
+  ataxiaBasher_cmdCount = ataxiaBasher_cmdCount + 1
+  if ataxiaBasher_cmdCount > 5 then
+    ataxiaEcho("THROTTLE: Excessive attack rate detected (" .. ataxiaBasher_cmdCount .. " in 1s)! Pausing for safety.")
+    ataxiaBasher_atk = true
+    if ataxiaBasher_atkTimer then killTimer(ataxiaBasher_atkTimer) end
+    ataxiaBasher_atkTimer = tempTimer(2.0, function()
+      ataxiaBasher_atk = false
+      ataxiaBasher_atkTimer = nil
+    end)
+    return false
   end
-
-  table.insert(ataxiaBasher_balanceSamples[class], elapsed)
-  -- Keep last 20 samples
-  if #ataxiaBasher_balanceSamples[class] > 20 then
-    table.remove(ataxiaBasher_balanceSamples[class], 1)
-  end
+  return true
 end
 
--- Returns the attack cooldown for the current class.
--- Prefers learned GMCP balance times (needs >= 3 samples), then manual overrides, then default.
-function ataxiaBasher_getAttackCooldown()
-  local class = gmcp.Char.Status.class:title():gsub(" Lady", ""):gsub(" Lord", "")
+-- ============================================================================
+-- UNIFIED DISPATCH GATE: All attack requests route through here.
+-- This is the ONLY function that calls ataxiaBasher_attack().
+-- The ataxiaBasher_atk flag is ONLY reset by the timer callback.
+-- ============================================================================
+function ataxiaBasher_tryAttack()
+  -- Hard gate: cooldown active
+  if ataxiaBasher_atk then return false end
 
-  -- Use learned balance times if we have enough samples
-  local samples = ataxiaBasher_balanceSamples[class]
-  if samples and #samples >= 3 then
-    local sum = 0
-    for _, t in ipairs(samples) do sum = sum + t end
-    local avg = sum / #samples
-    -- Use 95% of observed average as the cooldown (timer fires just before balance returns,
-    -- then canBals() gates the actual attack on the next prompt)
-    return avg * 0.95
-  end
+  -- Hard gate: fleeing or paused
+  if ataxiaTemp.bashFlee then return false end
+  if ataxiaBasher.paused then return false end
 
-  -- Fallback to manual overrides or default
-  return ataxiaBasher_attackCooldowns[class] or ataxiaBasher.attackCooldown or 0.4
-end
+  -- Hard gate: balance/standing
+  if not canBals() or not canStand() then return false end
 
-function ataxiaBasher_patterns()
+  -- Hard gate: skip room
+  if ataxiaBasher_skipRoom then return false end
 
-  if ataxiaTemp.bashFlee then return end
-  if ataxiaBasher.paused then return end
-	--if not ataxiaBasher.paused and (speedWalkCounter < 1 or mmp.paused == true) and not autoHarvesting and not autoExtracting then
-	if not ataxiaBasher.paused and (mmp.speedWalkCounter < 1 or mmp.paused == true) and not autoHarvesting and not autoExtracting then
-
-    if not ataxiaBasher_skipRoom then
-			if canBals() and canStand() then
-				if found_target and not ataxiaBasher_atk then
-          if gmcp.Char.Status.class == "Magi" then
-            ataxiaBasher_magiBashing()
-            ataxiaBasher_attack()
-					  ataxiaBasher_atk = true
-					  ataxiaBasher_recordBalanceSample()
-					  tempTimer(ataxiaBasher_getAttackCooldown(), [[ataxiaBasher_atk=false]])
-          else
-					ataxiaBasher_attack()
-					ataxiaBasher_atk = true
-					ataxiaBasher_recordBalanceSample()
-					tempTimer(ataxiaBasher_getAttackCooldown(), [[ataxiaBasher_atk=false]])
-          end
-				elseif not found_target and not ataxiaBasher.manual then
-					if mmp.paused then
-						ataxiaBasher_roomBashed()
-						mmp.pause("off")
-						send(" ")
-          else
-            ataxiaBasher_nextRoom()
-          end
-				end
-			end
-		elseif not ataxiaBasher.manual then
-			if mmp.paused then
-				ataxiaBasher_roomBashed()
-				mmp.pause("off")
-				send(" ")
+  -- Hard gate: no target — advance to next room if in auto mode
+  if not found_target then
+    if not ataxiaBasher.manual then
+      if mmp.paused then
+        ataxiaBasher_roomBashed()
+        mmp.pause("off")
+        send(" ")
       else
         ataxiaBasher_nextRoom()
       end
-		end
-	elseif autoHarvesting then
-		ataxiaHarvester_check()
+    end
+    return false
+  end
+
+  -- Safety throttle
+  if not ataxiaBasher_throttleCheck() then return false end
+
+  -- All gates passed: fire the attack
+  -- Magi needs pre-attack stormhammer/GUI setup
+  if gmcp.Char.Status.class == "Magi" then
+    ataxiaBasher_magiBashing()
+  end
+
+  ataxiaBasher_attack()
+
+  -- Anti-spam cooldown: short timer prevents double-sends during network round-trip.
+  -- canBals() (line 134) is the real balance gate via GMCP.
+  ataxiaBasher_atk = true
+  if ataxiaBasher_atkTimer then killTimer(ataxiaBasher_atkTimer) end
+  ataxiaBasher_atkTimer = tempTimer(ANTI_SPAM_DELAY, function()
+    ataxiaBasher_atk = false
+    ataxiaBasher_atkTimer = nil
+  end)
+
+  return true
+end
+
+-- ============================================================================
+-- Main patterns loop (thin wrapper around tryAttack)
+-- ============================================================================
+function ataxiaBasher_patterns()
+  if not ataxiaBasher.enabled then return end
+  if ataxiaTemp.bashFlee then return end
+  if ataxiaBasher.paused then return end
+
+  if not ataxiaBasher.paused and (mmp.speedWalkCounter < 1 or mmp.paused == true) and not autoHarvesting and not autoExtracting then
+    if not ataxiaBasher_skipRoom then
+      ataxiaBasher_tryAttack()
+    elseif not ataxiaBasher.manual then
+      if mmp.paused then
+        ataxiaBasher_roomBashed()
+        mmp.pause("off")
+        send(" ")
+      else
+        ataxiaBasher_nextRoom()
+      end
+    end
+  elseif autoHarvesting then
+    ataxiaHarvester_check()
   elseif autoExtracting then
     ataxiaExtractor_check()
-	--elseif not ataxiaBasher.manual and (speedWalkCounter < 1 or mmp.paused == true) then
   elseif not ataxiaBasher.manual and (mmp.speedWalkCounter < 1 or mmp.paused == true) then
-	
-		if mmp.paused then
-			ataxiaBasher_roomBashed()
-			mmp.pause("off")
-			send(" ")
+    if mmp.paused then
+      ataxiaBasher_roomBashed()
+      mmp.pause("off")
+      send(" ")
     else
       ataxiaBasher_nextRoom()
     end
-	end
-ataxiaBasher_stormhammer()		
+  end
+
+  -- Single stormhammer refresh per prompt cycle (dirty-flag gated)
+  if ataxiaBasher_stormhammerDirty then
+    ataxiaBasher_stormhammer()
+  end
 end
 
 function ataxiaBasher_nextRoom()
@@ -163,7 +208,6 @@ function ataxiaBasher_nextRoom()
   else
     ataxiaBasher_areaoff()
   end
-   ataxiaBasher_stormhammer()
 end
 
 function ataxiaBasher_manual()
@@ -174,7 +218,6 @@ function ataxiaBasher_manual()
 		ataxiaBasher.paused = false
 		ataxiaBasher.manual = true
 		ataxiaBasher.areabash = false
-		ataxiaBasher_lastAttackEpoch = nil
 		raiseEvent("basher enabled")
 	else
 		ataxiaBasher.enabled = false
@@ -195,7 +238,6 @@ function ataxiaBasher_areabash()
 		ataxiaBasher.paused = false
 		ataxiaBasher.manual = false
 		ataxiaBasher.areabash = true
-		ataxiaBasher_lastAttackEpoch = nil
 		ataxiaBasher_generatePath()
 		raiseEvent("basher enabled")
 	end

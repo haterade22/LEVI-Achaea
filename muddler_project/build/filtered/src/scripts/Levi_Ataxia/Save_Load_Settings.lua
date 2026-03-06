@@ -28,6 +28,11 @@ function ataxia_saveSettings(disp)
     table.save(ext_loc, ataxiaExtraction)
   end
 
+  -- Save Legend Deck Manager state
+  if ldm and ldm.save then
+    ldm.save()
+  end
+
 	if disp then
 		ataxia_Echo("Nap time. Don't come back soon, "..(gmcp and gmcp.Char.Name.name or "thanks")..".")
 	end
@@ -89,6 +94,11 @@ function ataxia_loadSettings()
 		table.load(ndb_loc, ataxiaNDB)
 		ataxiaEcho("Name database loaded in.")
 	end
+
+  -- Load Legend Deck Manager state
+  if ldm and ldm.load then
+    ldm.load()
+  end
 
   raiseEvent("ataxia system loaded")
 	ataxia_saveSettings(false)

@@ -12,14 +12,12 @@ if type(target) == "number" and ataxiaBasher.enabled and tar == secondTarget:low
   elseif ataxiaBasher.shieldswap and ataxiaBasher_validTargets() > 1 and not ataxiaTemp.mobshieldtimer then
     ataxiaBasher_shieldedTarget()
   end
-  basher_needAction = true
-
-	
 elseif isTargeted(tar) then
 	selectString(line, 1)
 	fg("a_brown")
 	resetFormat()
 	tAffs.shield = true
+	if applyAffV3 then applyAffV3("shield") end
 	-- Update V2 tracking if available
 	if tAffsV2 then
 		tAffsV2.shield = 100

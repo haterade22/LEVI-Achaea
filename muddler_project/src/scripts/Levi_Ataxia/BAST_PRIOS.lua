@@ -1,4 +1,6 @@
 function infernaltwohandprios()
+-- Rebound hold gate
+if reboundHold and reboundHold.gate(infernaltwohandprios) then return end
 
   venoms = {}
 

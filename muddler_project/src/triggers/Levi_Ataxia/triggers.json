@@ -2303,12 +2303,60 @@
                         "name": "LDeck Card Out",
                         "patterns": [
                           {
-                            "pattern": "^A card depicting Matic Ridley, The Salvation currently lacks the power to invoke its stored potential\\.$",
+                            "pattern": "^A card depicting (.+) currently lacks the power to invoke its stored potential\\.$",
                             "type": "regex"
                           },
                           {
-                            "pattern": "^All of the potential for a card depicting Matic Ridley, The Salvation has been expended for the moment\\.$",
+                            "pattern": "^All of the potential for a card depicting (.+) has been expended for the moment\\.$",
                             "type": "regex"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "LDM List Start",
+                        "patterns": [
+                          {
+                            "pattern": "Name                 Charges    Max Charges     Charge Timer",
+                            "type": "exactMatch"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "LDM List Line",
+                        "isActive": "no",
+                        "patterns": [
+                          {
+                            "pattern": "^(\\S+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)$",
+                            "type": "regex"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "LDM List Stop",
+                        "isActive": "no",
+                        "patterns": [
+                          {
+                            "pattern": "",
+                            "type": "prompt"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "LDM Draw Success",
+                        "patterns": [
+                          {
+                            "pattern": "^You draw forth the power of (\\w+)",
+                            "type": "regex"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "LDM Gag Dashes",
+                        "isActive": "no",
+                        "patterns": [
+                          {
+                            "pattern": "-------------------------------------------------------------------------------",
+                            "type": "exactMatch"
                           }
                         ]
                       }
@@ -5202,6 +5250,15 @@
                                 ]
                               },
                               {
+                                "name": "Damage Dealt",
+                                "patterns": [
+                                  {
+                                    "pattern": "^Damage dealt: (\\d+) \\((\\w+)\\)\\.$",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
                                 "name": "Morimbuul",
                                 "patterns": [
                                   {
@@ -5211,10 +5268,29 @@
                                 ]
                               },
                               {
+                                "name": "Balance Time",
+                                "isActive": "no",
+                                "patterns": [
+                                  {
+                                    "pattern": "BALANCE",
+                                    "type": "substring"
+                                  }
+                                ]
+                              },
+                              {
                                 "name": "Hellforge Conqueor Channel",
                                 "patterns": [
                                   {
                                     "pattern": "As you go forth in His name, you feel your body suffused with the might of Evil.",
+                                    "type": "exactMatch"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Blood Maiden Cloak",
+                                "patterns": [
+                                  {
+                                    "pattern": "A cloak of the Blood Maiden seems to grow hot against your skin.",
                                     "type": "exactMatch"
                                   }
                                 ]
@@ -8968,6 +9044,10 @@
                                   {
                                     "pattern": "^A supple metallic shell of quicksilver has formed around (\\w+).$",
                                     "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) applies a quicksilver droplet to \\w+\\.$",
+                                    "type": "regex"
                                   }
                                 ]
                               },
@@ -9497,6 +9577,10 @@
                                 "patterns": [
                                   {
                                     "pattern": "^A supple metallic shell of quicksilver has formed around (\\w+).$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) applies a quicksilver droplet to \\w+\\.$",
                                     "type": "regex"
                                   }
                                 ]
@@ -12332,6 +12416,33 @@
                                     "patterns": [
                                       {
                                         "pattern": "^A .+ tangles itself in the legs of (\\w+), sending \\w+ sprawling to the ground\\.$",
+                                        "type": "regex"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": "Ekanelia Success",
+                                    "patterns": [
+                                      {
+                                        "pattern": "^You sense the weakness in (\\w+) as your (\\w+) takes hold\\.$",
+                                        "type": "regex"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": "Impulse Suggestion",
+                                    "patterns": [
+                                      {
+                                        "pattern": "^You craft the impulse of (\\w+) in the mind of (\\w+)\\.$",
+                                        "type": "regex"
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "name": "Impulse Relapse",
+                                    "patterns": [
+                                      {
+                                        "pattern": "^You sense the remnants of your (\\w+) impulse clawing at the psyche of (\\w+)\\.$",
                                         "type": "regex"
                                       }
                                     ]
@@ -21392,6 +21503,14 @@
                           {
                             "pattern": "^A death adder lunges for the throat of (\\w+), fangs sinking through \\w+ fang barrier defence\\.$",
                             "type": "regex"
+                          },
+                          {
+                            "pattern": "^The protective coating covering the skin of \\w+ is ripped away with \\w+ protections\\.$",
+                            "type": "regex"
+                          },
+                          {
+                            "pattern": "^The protective coating covering the skin of \\w+ sloughs off\\.$",
+                            "type": "regex"
                           }
                         ]
                       },
@@ -21453,6 +21572,14 @@
                           },
                           {
                             "pattern": "^A death adder lunges for the throat of (\\w+), fangs sinking through \\w+ fang barrier defence\\.$",
+                            "type": "regex"
+                          },
+                          {
+                            "pattern": "^The protective coating covering the skin of \\w+ is ripped away with \\w+ protections\\.$",
+                            "type": "regex"
+                          },
+                          {
+                            "pattern": "^The protective coating covering the skin of \\w+ sloughs off\\.$",
                             "type": "regex"
                           }
                         ]
@@ -21529,6 +21656,687 @@
                                   },
                                   {
                                     "pattern": "^A howling wind sweeps over you, its terrible power scouring flesh from bone and leaving your face a bloody ruin by the will of (\\w+)\\.$",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Serpent Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) quickly pricks you with \\w+ dirk\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^Striking like a snake, (\\w+) follows the first attack with another\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) sinks \\w+ fangs into you, injecting .+ venom\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) delivers a quick, stinging bite to your body\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) whips \\w+ whip at you, ripping away your .+\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) fixes you with an entrancing stare",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Shaman Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) whispers something to a (?:Vodun doll|puppet) of \\w+\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) points an imperious finger at you, bringing the curse of \\w+ down upon you\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) directs a twin assault of the curses \\w+ and \\w+ at you\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) laughs sadistically as \\w+ jabs an envenomed pin into .+ doll of you\\.$",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Apostate Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) stares at you, giving you the evil eye\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) points \\w+ blood slick daegger at you, slashing a pentagram in the air",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^The whirling daegger of (\\w+) plunges into your flesh\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) commands \\w+ baalzadeen to corrupt your soul\\.$",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Blademaster Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "Ducking behind you, (\\w+) strikes at your hamstring",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^With a smooth lunge to the \\w+, (\\w+) draws",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "Planting \\w+ foot between yours, (\\w+) draws",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Monk Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) whips .+ in a tight arc, sweeping it at your head\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) spins a full rotation, bringing .+ around in a blur to crash into your",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) whips .+ in a controlled arc, bringing the length of the weapon to crash into your",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) whips .+ at the side of your neck\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) lashes out with a high kick at your",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) lashes out with a straight kick at you\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) flows around you like water",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) reaches out with \\w+ mind, tightening its grip around you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) delivers a powerful uppercut to your",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^Dropping into a lower stance, (\\w+) sweeps .+ at your \\w+ thigh\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^Dropping back into a low crouch, (\\w+) whips .+ at your \\w+ thigh\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^Snapping back into a ready stance, (\\w+) whips .+ in a wide arc at your head\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^With pinpoint precision, (\\w+) thrusts .+ at your throat\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^Snapping \\w+ leg out to its full extent, (\\w+) drives a heel into your",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^Snapping \\w+ arms out in front of \\w+, (\\w+) delivers a lightning-fast thrust",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^Spinning on one foot (\\w+) drives .+ with a lightning-fast thrust\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^Continuing \\w+ kata, (\\w+) spins .+ in \\w+ hands before driving it in a swift thrust",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^Continuing \\w+ kata, (\\w+) drives .+ into your",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Bard Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^With a flourish of .+ (\\w+) steps in close, \\w+ blade slicing at your",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+)'s paean slams into you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+)'s blade sings with a metallic song",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) continues to circle you",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Magi Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) weaves .+ in a complex pattern and",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) lifts .+ to point at you and unleashes",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^The air thrums about (\\w+) as \\w+ weaves Elemental",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) weaves .+ and a torrent of",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) forms a lash of fire",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) touches a crystal pylon, and a loud vibration rings out",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^A crystal pylon vibrates at the command of (\\w+)",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) hurls a bolt of .+ at you",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Depthswalker Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) reaches past you, plunging .+ into your shadow",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) delivers a lightning-fast strike to you with",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) swings .+ scythe at you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^Shadows coalesce around you at the bidding of (\\w+)",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) intones a word of power",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) begins dedicating part of \\w+ attention to predicting where you shall",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Priest Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) stares at you, eyes smouldering with dark intent\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) condemns you to see the fate of the enemies of creation\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) directs a dazzling ray of light at you\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) commands you to refrain from gluttony\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^Raising an imperious hand, (\\w+) condemns you to suffer the sin of sloth\\.$",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Knight DWC Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^The blade of (\\w+) is a blur as \\w+ moves forward, slicing into your",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) carves into your .+ with a vicious strike",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^Lightning-quick, (\\w+) jabs your .+ with",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) lashes out at you with .+, catching you across the",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) whips .+ through the air in front of you, to no effect",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Infernal Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) invests necromantic energies into",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) draws upon the power of the Hellforge",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) unleashes a bolt of malignant energy at you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) orders \\w+ hyena to attack you",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Paladin Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) excises your corruption",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) calls upon \\w+ valour",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) orders \\w+ eagle to attack you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^As fire surges about the righteous (\\w+)",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) looms over you, all righteous wrath",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Runewarden Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) sketches a rune upon you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) touches a rune on the ground and it flares",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) orders \\w+ falcon to attack you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^Cold blue flames wreathe (\\w+)'s runeblade",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Unnamable Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) croons a discordant note at you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) channels the power of anathema",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) orders \\w+ chimera to attack you",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Occultist Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) glows with an emerald hue and snaps \\w+ fingers at you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) throws back \\w+ head and utters a string of words",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) makes a quick, sharp gesture toward you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) passes \\w+ hand in front of you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) flings a .+ tarot card at you",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Jester Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) whispers something to a puppet of you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) flings a .+ tarot card at you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) throws a pie at you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) jabs an envenomed needle into a puppet of you",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Alchemist Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) glowers at you with a look of repressed disgust",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) raises a platinum whistle to \\w+ lips",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^A diminutive homunculus resembling (\\w+) stares menacingly at you",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Psion Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^A translucent lash coalesces in (\\w+)'s hands",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) delivers a series of lashes against you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^Golden chains of light coalesce in the hands of (\\w+)",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Pariah Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) unleashes a swarm of pestilent insects upon you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) calls upon the power of memorium",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) drives .+ charnel weapon into your",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) sweeps .+ knife in a circle above \\w+ head",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) traces a logograph depicting",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) raises \\w+ right hand, and snaps \\w+ fingers",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Druid Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) rakes you with .+ claws",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+)'s hydra head lunges at you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) lashes at you with .+ tail",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) reclaims the land around you",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Sentinel Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) hurls .+ axe at you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) commands \\w+ (?:spider|wolf|hawk|bear) to attack you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) strikes you with a quick skirmishing blow",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) cocks back \\w+ arm and throws .+ axe at your",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) lays open your flesh with an expert lateral slice",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^Turning with the motion of \\w+ strike, (\\w+) comes back around to slam",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Sylvan Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) gestures and thorny vines erupt from the ground",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) calls upon the power of the weather",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) propagates the growth around you",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Dragon Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) mauls you viciously with .+ claws",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) breathes a stream of (?:fire|frost|lightning|acid) at you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) lashes out at you with .+ tail",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Earthlord Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) slams the ground and a pillar of stone erupts beneath you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) causes the earth to tremble violently beneath you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) commands the earth to swallow you",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Firelord Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) hurls a ball of fire at you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) summons a pillar of flame beneath you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) engulfs you in a torrent of fire",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Waterlord Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) sends a torrent of water crashing into you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) conjures a wave of water to engulf you",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) freezes the water around you",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Knight 2H Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) brings .+ down upon you with a brutal overhand blow\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) explodes upward from a low crouch, driving .+ toward your",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) comes around with a terrible swing of .+ toward your",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) unleashes a terrible blow at your .+ with",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Knight SnB Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) quickly lunges to the side, bringing \\w+ shield around to smash into",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) drives the edge of \\w+ shield .+ into your throat",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) smashes the edge of .+ into your kneecaps",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) pivots rapidly and brings \\w+ shield around to batter your head",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Knight DWB Class Grab",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) whips .+ toward your \\w+ \\w+",
                                     "type": "regex"
                                   }
                                 ]
@@ -25089,7 +25897,6 @@
                             "children": [
                               {
                                 "name": "Venom1",
-                                "isActive": "no",
                                 "patterns": [
                                   {
                                     "pattern": "You rub some (\\w+) on Malice, a vicious multi-tonal scimitar\\.$",
@@ -25099,7 +25906,6 @@
                               },
                               {
                                 "name": "Venom2",
-                                "isActive": "no",
                                 "patterns": [
                                   {
                                     "pattern": "You rub some (\\w+) on Severance, a vorpal sanguine scimitar\\.$",
@@ -26066,6 +26872,7 @@
                                   },
                                   {
                                     "name": "ASSAULT",
+                                    "isActive": "no",
                                     "patterns": [
                                       {
                                         "pattern": "^Whirling both of your weapons above your head, you unleash a vicious assault at the (.+) of (\\w+).$",
@@ -30520,6 +31327,60 @@
                                 ],
                                 "multiline": "yes",
                                 "multilineDelta": 1
+                              },
+                              {
+                                "name": "Incoming Attack Tracker",
+                                "patterns": [
+                                  {
+                                    "pattern": "^(\\w+) launches a powerful uppercut at you.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) unleashes a powerful hook towards you.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) forms a spear hand and stabs out at you.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) balls up one fist and hammerfists you.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) pumps out at you with a powerful side kick\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) lets fly at you with a snap kick\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) hurls \\w+ towards you with a lightning-fast moon kick\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) spins into the air and throws a whirlwind kick towards you\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) kicks his leg high and scythes downwards at you\\.$",
+                                    "type": "regex"
+                                  },
+                                  {
+                                    "pattern": "^(\\w+) throws \\w+ palm towards your face\\.$",
+                                    "type": "regex"
+                                  }
+                                ]
+                              },
+                              {
+                                "name": "Clumsiness Miss Confirm",
+                                "patterns": [
+                                  {
+                                    "pattern": "^\\w+ misses\\.$",
+                                    "type": "regex"
+                                  }
+                                ]
                               }
                             ]
                           },
@@ -37066,6 +37927,80 @@
                               {
                                 "pattern": "^You slice into (\\w+) with Valafar, a crimson-tinged hellforged longsword\\.$",
                                 "type": "regex"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Snipe",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "Snipe Success",
+                            "patterns": [
+                              {
+                                "pattern": "^You train your expert eye on (\\w+) and let fly an arrow with breathtaking precision\\.$",
+                                "type": "regex"
+                              },
+                              {
+                                "pattern": "Your arrow strikes true!",
+                                "type": "exactMatch"
+                              }
+                            ],
+                            "multiline": "yes",
+                            "multilineDelta": 1
+                          },
+                          {
+                            "name": "Snipe Failure",
+                            "patterns": [
+                              {
+                                "pattern": "You don't see your target in that direction.",
+                                "type": "exactMatch"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Totem",
+                        "isActive": "yes",
+                        "isFolder": "yes",
+                        "children": [
+                          {
+                            "name": "TC Probe Rune Slot",
+                            "patterns": [
+                              {
+                                "pattern": "^A rune (.+) is sketched in slot (\\d+)\\.$",
+                                "type": "regex"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "TC Probe Empowered",
+                            "patterns": [
+                              {
+                                "pattern": "The totem is currently empowered",
+                                "type": "substring"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "TC Probe Complete",
+                            "patterns": [
+                              {
+                                "pattern": "It weighs about",
+                                "type": "substring"
+                              }
+                            ]
+                          },
+                          {
+                            "name": "TC No Totem",
+                            "patterns": [
+                              {
+                                "pattern": "What do you wish to examine?",
+                                "type": "substring"
                               }
                             ]
                           }

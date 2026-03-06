@@ -1274,6 +1274,9 @@ function shikudo.dispatch()
     return
   end
 
+  -- Rebound hold gate
+  if reboundHold and reboundHold.gate(shikudo.dispatch) then return end
+
   -- Skip player check for now during testing (can re-enable later)
   -- if not table.contains(ataxia.playersHere, target) then
   --   cecho("\n<red>[Shikudo] Target not in room")

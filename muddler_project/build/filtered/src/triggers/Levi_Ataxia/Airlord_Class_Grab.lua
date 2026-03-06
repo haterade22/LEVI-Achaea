@@ -1,3 +1,1 @@
-if matches[2] == target then
-ataxiaNDB.players[target].class = "Airlord"
-end
+classDetect.setAttackerClass(matches[2], "Airlord")
