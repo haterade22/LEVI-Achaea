@@ -164,7 +164,7 @@ function ataxiagui_vitalsElements()
 end
 
 function ataxiagui_updateVitals()
-  if ataxia.usegui == nil or ataxia.usegui == true then
+  if (ataxia.usegui == nil or ataxia.usegui == true) and ataxiagui.balIdentifier then
   
     if ataxia.vitals.bal then
       ataxiagui.balIdentifier:setStyleSheet([[border-image: url("]]..ataxiagui_dir..[[onBal.png")]])

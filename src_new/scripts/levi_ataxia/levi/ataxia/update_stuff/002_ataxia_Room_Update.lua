@@ -81,7 +81,7 @@ function ataxia_Room_Update()
 
 	local roomInfo = "(v"..gmcp.Room.Info.num..") - "..gmcp.Room.Info.area.." - "..gmcp.Room.Info.name
 
-  if ataxia.usegui == nil or ataxia.usegui == true then
+  if (ataxia.usegui == nil or ataxia.usegui == true) and ataxiagui.mapRoom then
     ataxiagui.mapRoom:echo([[<p style="font-size:12px"><center><font color="NavajoWhite"><font face="Merienda">]]..roomInfo..[[</font></p>]] )
     ataxiagui.mapExits:echo([[<p style="font-size:12px"><center><font color="NavajoWhite"><font face="Merienda">]].."[ "..room_exitstr.." ]"..[[</font></p>]] )
   elseif zgui then

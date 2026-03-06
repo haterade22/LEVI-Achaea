@@ -85,7 +85,7 @@ end
 
 function ataxia_Update_Players()
 
-  if ataxia.usegui or ataxia.usegui == nil then
+  if (ataxia.usegui or ataxia.usegui == nil) and ataxiagui.playersConsole then
     ataxiagui.playersConsole:clear()
     ataxiagui.playersConsole:setFontSize(8)
     ataxiagui.playersConsole:setWrap(25)
@@ -97,14 +97,14 @@ function ataxia_Update_Players()
     if zgui then
 		  cecho("roomPlayersDisplay","<orange>"..#ataxia.playersHere.." <NavajoWhite>"..(#ataxia.playersHere == 1 and "other" or "others").." here:")
 		  cecho("roomPlayersDisplay","\n<green> "..table.concat(ataxia.playersHere, ", ")..".")    
-    else
+    elseif ataxiagui.playersConsole then
 		  ataxiagui.playersConsole:cecho("<orange>"..#ataxia.playersHere.." <NavajoWhite>"..(#ataxia.playersHere == 1 and "other" or "others").." here:")
 		  ataxiagui.playersConsole:cecho("\n<green> "..table.concat(ataxia.playersHere, ", ")..".")
     end
 	else
     if zgui then
       cecho("roomPlayersDisplay","\n\n <NavajoWhite>No one but you is standing here... \n\n\n    ...We think...")
-    else
+    elseif ataxiagui.playersConsole then
 		  ataxiagui.playersConsole:cecho("\n\n <NavajoWhite>No one but you is standing here... \n\n\n    ...We think...")
     end
 	end

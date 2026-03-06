@@ -1,3 +1,5 @@
+slc = slc or {}
+
 function slc_init()            --  use 'cres' when you finish making changes.
 
 slc =

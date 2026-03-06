@@ -1133,7 +1133,7 @@ end
 
 function ataxia_Update_Players()
 
-  if ataxia.usegui or ataxia.usegui == nil then
+  if (ataxia.usegui or ataxia.usegui == nil) and ataxiagui.playersConsole then
     ataxiagui.playersConsole:clear()
     ataxiagui.playersConsole:setFontSize(8)
     ataxiagui.playersConsole:setWrap(25)
@@ -1145,14 +1145,14 @@ function ataxia_Update_Players()
     if zgui then
 		  cecho("roomPlayersDisplay","&lt;orange&gt;"..#ataxia.playersHere.." &lt;NavajoWhite&gt;"..(#ataxia.playersHere == 1 and "other" or "others").." here:")
 		  cecho("roomPlayersDisplay","\n&lt;green&gt; "..table.concat(ataxia.playersHere, ", ")..".")    
-    else
+    elseif ataxiagui.playersConsole then
 		  ataxiagui.playersConsole:cecho("&lt;orange&gt;"..#ataxia.playersHere.." &lt;NavajoWhite&gt;"..(#ataxia.playersHere == 1 and "other" or "others").." here:")
 		  ataxiagui.playersConsole:cecho("\n&lt;green&gt; "..table.concat(ataxia.playersHere, ", ")..".")
     end
 	else
     if zgui then
       cecho("roomPlayersDisplay","\n\n &lt;NavajoWhite&gt;No one but you is standing here... \n\n\n    ...We think...")
-    else
+    elseif ataxiagui.playersConsole then
 		  ataxiagui.playersConsole:cecho("\n\n &lt;NavajoWhite&gt;No one but you is standing here... \n\n\n    ...We think...")
     end
 	end
@@ -1231,7 +1231,7 @@ function ataxia_Room_Update()
 
 	local roomInfo = "(v"..gmcp.Room.Info.num..") - "..gmcp.Room.Info.area.." - "..gmcp.Room.Info.name
 
-  if ataxia.usegui == nil or ataxia.usegui == true then
+  if (ataxia.usegui == nil or ataxia.usegui == true) and ataxiagui.mapRoom then
     ataxiagui.mapRoom:echo([[&lt;p style="font-size:12px"&gt;&lt;center&gt;&lt;font color="NavajoWhite"&gt;&lt;font face="Merienda"&gt;]]..roomInfo..[[&lt;/font&gt;&lt;/p&gt;]] )
     ataxiagui.mapExits:echo([[&lt;p style="font-size:12px"&gt;&lt;center&gt;&lt;font color="NavajoWhite"&gt;&lt;font face="Merienda"&gt;]].."[ "..room_exitstr.." ]"..[[&lt;/font&gt;&lt;/p&gt;]] )
   elseif zgui then
@@ -1399,7 +1399,7 @@ function ataxia_RoomContents_Update(event)
 end
 
 function ataxia_Update_RoomContents() 
-  if ataxia.usegui == nil or ataxia.usegui == true then
+  if (ataxia.usegui == nil or ataxia.usegui == true) and ataxiagui.roomConsole then
     ataxiagui.roomConsole:clear()
     ataxiagui.roomConsole:setFontSize(7)
   elseif zgui then
@@ -1408,7 +1408,7 @@ function ataxia_Update_RoomContents()
   end
 
 	for id, denizen in pairs(ataxia.denizensHere) do
-    if ataxia.usegui == nil or ataxia.usegui == true then
+    if (ataxia.usegui == nil or ataxia.usegui == true) and ataxiagui.roomConsole then
 		  ataxiagui.roomConsole:cecho("\n&lt;a_darkcyan&gt;[&lt;DodgerBlue&gt;"..string.rep(" ", 6-string.len(id))..id.."&lt;a_darkcyan&gt;] &lt;NavajoWhite&gt;"..denizen:title())
     else
       cecho("roomDenizensDisplay", "\n&lt;a_darkcyan&gt;[&lt;DodgerBlue&gt;"..string.rep(" ", 6-string.len(id))..id.."&lt;a_darkcyan&gt;] &lt;NavajoWhite&gt;"..denizen:title())
@@ -10130,7 +10130,7 @@ registerAnonymousEventHandler("gmcp.Comm.Channel.Start", "ataxiagui_captureChat"
 end
 
 function ataxiagui_updateVitals()
-  if ataxia.usegui == nil or ataxia.usegui == true then
+  if (ataxia.usegui == nil or ataxia.usegui == true) and ataxiagui.balIdentifier then
   
     if ataxia.vitals.bal then
       ataxiagui.balIdentifier:setStyleSheet([[border-image: url("]]..ataxiagui_dir..[[onBal.png")]])
@@ -19230,7 +19230,7 @@ function switchTarget(who)
   preventriftlock = false
   tdeliverance = false
   tBals.passive = true
-  pariah.burrow = false
+  if pariah then pariah.burrow = false end
   taccelerates = 0
   tAffs.criticalspirit = false
   tAffs.criticalmind = false
@@ -26003,7 +26003,9 @@ end
 </Script>
               <Script isActive="yes" isFolder="no">
   <name>slc_variables</name>
-                <script>function slc_init()            --  use 'cres' when you finish making changes.
+                <script>slc = slc or {}
+
+function slc_init()            --  use 'cres' when you finish making changes.
 
 slc =
 	{

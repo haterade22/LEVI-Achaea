@@ -122,7 +122,7 @@ function ataxia_RoomContents_Update(event)
 end
 
 function ataxia_Update_RoomContents() 
-  if ataxia.usegui == nil or ataxia.usegui == true then
+  if (ataxia.usegui == nil or ataxia.usegui == true) and ataxiagui.roomConsole then
     ataxiagui.roomConsole:clear()
     ataxiagui.roomConsole:setFontSize(7)
   elseif zgui then
@@ -131,7 +131,7 @@ function ataxia_Update_RoomContents()
   end
 
 	for id, denizen in pairs(ataxia.denizensHere) do
-    if ataxia.usegui == nil or ataxia.usegui == true then
+    if (ataxia.usegui == nil or ataxia.usegui == true) and ataxiagui.roomConsole then
 		  ataxiagui.roomConsole:cecho("\n<a_darkcyan>[<DodgerBlue>"..string.rep(" ", 6-string.len(id))..id.."<a_darkcyan>] <NavajoWhite>"..denizen:title())
     else
       cecho("roomDenizensDisplay", "\n<a_darkcyan>[<DodgerBlue>"..string.rep(" ", 6-string.len(id))..id.."<a_darkcyan>] <NavajoWhite>"..denizen:title())
