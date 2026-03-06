@@ -1,5 +1,25 @@
 # LEVI-Achaea Changelog
 
+## 2026-03-06 — Fix: 4 recurring nil-access runtime errors
+
+### Bugfix: Limb Counter Window, Tekura 6-Limb, Capture Msg, Start Shikudo all spamming errors
+
+**Files modified**:
+- `src_new/scripts/.../windows/001_Limb_Counter_Window.lua` — nil guard on `lb[target].hits`, removed duplicate YAML header
+- `src_new/scripts/.../tekura/002_Tekura_6Limb_Offense.lua` — nil guard on `amount` in `onLimbHitUpdated`
+- `src_new/triggers/.../ataxia_chat_capture/002_Capture_Msg.lua` — nil guard on `ataxiaBasher.targetList`
+- `src_new/triggers/.../169_Start_Shikudo.lua` — nil guard on `monk` global
+
+**Problems**:
+1. **Limb Counter Window:184** — `lb[target].hits[ln]` crashed when `lb[target]` was nil (no limb data initialized for current target). Fired every prompt tick.
+2. **Tekura 6-Limb Offense:74** — `amount > 16` crashed when `limb_init.lua` raised `"limb hits updated"` with only 3 args (no amount). Fired on every limb reset.
+3. **Capture Msg:6** — `ataxiaBasher.targetList[area]` crashed when `ataxiaBasher.targetList` was nil (basher not initialized). Fired on every say/tell.
+4. **Start Shikudo:1** — `monk.shikudo.start()` crashed because `monk` global doesn't exist. Trigger marked `isActive: 'no'` in source but was active in installed profile.
+
+**Fixes**: Added nil guards at each crash site. Also removed duplicate YAML header block in Limb Counter Window and added `or 0` fallback for missing hit values.
+
+---
+
 ## 2026-03-06 — Fix: Baalzadeen re-summoned every dispatch
 
 ### Bugfix: Apostate offense wastes balance summoning Baalzadeen when already present
@@ -15,10 +35,11 @@
 2. No guard against re-sending the summon while waiting for GMCP to confirm the Baalzadeen appeared
 
 **Fix**:
-1. `baalzadeen()` now uses case-insensitive partial match (`name:lower():find("baalzadeen")`) and searches both `zgui.roomDenizenList` and `zgui.roomItemList`
-2. Added `apostate.state.baalzadeenSummoned` flag — set `true` when summon is sent, prevents re-sending
-3. New trigger `025_BAALZADEEN_SUMMONED.lua` matches "You call out, ordering your Baalzadeen to return to serve your whim." and resets `baalzadeenSummoned = false`
-4. `014_NO_BAALZADEEN.lua` also resets the flag so dispatch can retry after a failure
+1. All daemon utility functions (`baalzadeen()`, `bloodworm()`, `demon()`, `daemonite()`, `fiend()`) switched from `zgui.roomDenizenList` to `ataxia.denizensHere` with case-insensitive partial matching. `zgui.roomDenizenList` was not populated; `ataxia.denizensHere` is the reliable GMCP-backed table used by the basher
+2. Fixed `daemonite()` and `fiend()` — they iterated `zgui.roomItemList` (wrong list) and called `item.name:match()` on plain string values (would crash)
+3. Added `apostate.state.baalzadeenSummoned` flag — set `true` when summon is sent, prevents re-sending every dispatch
+4. New trigger `025_BAALZADEEN_SUMMONED.lua` matches "You call out, ordering your Baalzadeen to return to serve your whim." and resets `baalzadeenSummoned = false`
+5. `014_NO_BAALZADEEN.lua` also resets the flag so dispatch can retry after a failure
 
 ---
 

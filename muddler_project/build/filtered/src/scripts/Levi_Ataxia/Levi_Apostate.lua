@@ -142,14 +142,14 @@ function bloodworm()
 end
 
 function baalzadeen()
-  if not zgui.roomDenizenList then
-    return false
+  if ataxia and ataxia.denizensHere then
+    for _, name in pairs(ataxia.denizensHere) do
+      if name:lower():find("baalzadeen") then
+        return true
+      end
+    end
   end
-  if table.contains(zgui.roomDenizenList, "a Baalzadeen") then
-    return true
-  else
-    return false
-  end
+  return false
 end
 
 function apopentagram()

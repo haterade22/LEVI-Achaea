@@ -44,6 +44,7 @@ patterns:
   type: 1
 ]]--
 
+if not monk or not monk.shikudo then return end
 monk.shikudo.start()
 monk.shikudo.combo_affs = {}
 monk.shikudo.parrying = {}

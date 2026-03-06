@@ -8984,6 +8984,15 @@
                         ],
                         "fireLength": 1,
                         "script": "selectString(line, 1)\nsetBold(true)\nfg(\"DarkOrange\")\ndeselect()\nresetFormat()"
+                      },
+                      {
+                        "name": "BAALZADEEN SUMMONED",
+                        "patterns": [
+                          {
+                            "pattern": "You call out, ordering your Baalzadeen to return to serve your whim.",
+                            "type": "exactMatch"
+                          }
+                        ]
                       }
                     ]
                   },

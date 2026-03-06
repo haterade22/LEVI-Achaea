@@ -81,6 +81,7 @@ apostate.state = {
   wantDisloyalty = false,   -- disfigure toggle
   disfigureSent = false,    -- disfigure spam protection (once per manaleech round)
   asthmaConfirmTimer = nil, -- timer: confirm asthma present if target doesn't smoke
+  baalzadeenSummoned = false, -- summon sent, awaiting GMCP confirmation
   partyrelay = true,        -- relay to party
 }
 
@@ -640,9 +641,10 @@ function apostate.dispatch()
   -- Build the attack
   local preCmd, atkCmd, postCmd = apostate.buildAttack()
 
-  -- Ensure Baalzadeen is present
-  if baalzadeen and not baalzadeen() then
+  -- Ensure Baalzadeen is present (only summon once, wait for confirmation)
+  if baalzadeen and not baalzadeen() and not apostate.state.baalzadeenSummoned then
     send("queue prepend free summon baalzadeen")
+    apostate.state.baalzadeenSummoned = true
   end
 
   -- Don't send if paralysed

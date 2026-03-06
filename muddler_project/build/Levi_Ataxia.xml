@@ -71729,14 +71729,14 @@ function bloodworm()
 end
 
 function baalzadeen()
-  if not zgui.roomDenizenList then
-    return false
+  if ataxia and ataxia.denizensHere then
+    for _, name in pairs(ataxia.denizensHere) do
+      if name:lower():find("baalzadeen") then
+        return true
+      end
+    end
   end
-  if table.contains(zgui.roomDenizenList, "a Baalzadeen") then
-    return true
-  else
-    return false
-  end
+  return false
 end
 
 function apopentagram()
@@ -71895,6 +71895,7 @@ apostate.state = {
   wantDisloyalty = false,   -- disfigure toggle
   disfigureSent = false,    -- disfigure spam protection (once per manaleech round)
   asthmaConfirmTimer = nil, -- timer: confirm asthma present if target doesn't smoke
+  baalzadeenSummoned = false, -- summon sent, awaiting GMCP confirmation
   partyrelay = true,        -- relay to party
 }
 
@@ -72454,9 +72455,10 @@ function apostate.dispatch()
   -- Build the attack
   local preCmd, atkCmd, postCmd = apostate.buildAttack()
 
-  -- Ensure Baalzadeen is present
-  if baalzadeen and not baalzadeen() then
+  -- Ensure Baalzadeen is present (only summon once, wait for confirmation)
+  if baalzadeen and not baalzadeen() and not apostate.state.baalzadeenSummoned then
     send("queue prepend free summon baalzadeen")
+    apostate.state.baalzadeenSummoned = true
   end
 
   -- Don't send if paralysed
@@ -105578,7 +105580,12 @@ end</script>
 </Trigger>
                 <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>NO BAALZADEEN</name>
-                  <script>send("cq all;summon baalzadeen")</script>
+                  <script>send("cq all;summon baalzadeen")
+
+-- Reset the summoned flag so dispatch can re-summon if needed
+if apostate and apostate.state then
+  apostate.state.baalzadeenSummoned = false
+end</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -105833,6 +105840,30 @@ resetFormat()</script>
                   </regexCodeList>
                   <regexCodePropertyList>
 <integer>1</integer>
+                  </regexCodePropertyList>
+</Trigger>
+                <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+  <name>BAALZADEEN SUMMONED</name>
+                  <script>if apostate and apostate.state then
+  apostate.state.baalzadeenSummoned = false
+end
+</script>
+  <triggerType>0</triggerType>
+  <conditonLineDelta>0</conditonLineDelta>
+  <mStayOpen>0</mStayOpen>
+  <mCommand/>
+  <packageName/>
+  <path>Levi_Ataxia</path>
+  <mFgColor>#ff0000</mFgColor>
+  <mBgColor>#ffff00</mBgColor>
+  <mSoundFile/>
+  <colorTriggerFgColor>#000000</colorTriggerFgColor>
+  <colorTriggerBgColor>#000000</colorTriggerBgColor>
+                  <regexCodeList>
+<string>You call out, ordering your Baalzadeen to return to serve your whim.</string>
+                  </regexCodeList>
+                  <regexCodePropertyList>
+<integer>3</integer>
                   </regexCodePropertyList>
 </Trigger>
 </TriggerGroup>
