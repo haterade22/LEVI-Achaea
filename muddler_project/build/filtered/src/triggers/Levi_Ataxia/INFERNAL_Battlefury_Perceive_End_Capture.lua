@@ -1,1 +1,0 @@
-setTriggerStayOpen("Battlefury Perceive", 0)

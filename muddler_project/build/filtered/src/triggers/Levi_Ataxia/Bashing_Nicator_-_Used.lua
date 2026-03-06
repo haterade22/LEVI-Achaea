@@ -1,1 +1,0 @@
-ataxia.defences.nicatorlegend = true

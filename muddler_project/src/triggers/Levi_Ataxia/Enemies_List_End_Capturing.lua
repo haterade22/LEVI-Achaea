@@ -1,1 +1,0 @@
-setTriggerStayOpen("Enemies List", 0)

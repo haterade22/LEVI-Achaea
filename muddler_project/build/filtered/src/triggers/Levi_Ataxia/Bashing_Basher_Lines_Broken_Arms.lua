@@ -1,1 +1,0 @@
-if ataxiaBasher.enabled then send("diag",false) end

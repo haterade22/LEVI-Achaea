@@ -1,1 +1,0 @@
-wieldweapons = "morningstars"

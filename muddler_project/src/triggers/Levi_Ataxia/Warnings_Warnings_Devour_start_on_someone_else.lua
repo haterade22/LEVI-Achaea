@@ -1,1 +1,0 @@
-ataxia_setWarning(multimatches[2][2].." devouring "..multimatches[2][3], 2)

@@ -1,1 +1,0 @@
-send("outr 1 pear;eat pear")

@@ -1,2 +1,0 @@
-targetIshere = false
-enableTimer("TargetOutOfRoom")

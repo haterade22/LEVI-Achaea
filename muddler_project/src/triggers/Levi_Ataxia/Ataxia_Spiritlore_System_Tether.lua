@@ -1,1 +1,0 @@
-shaman.tethered(matches[2])

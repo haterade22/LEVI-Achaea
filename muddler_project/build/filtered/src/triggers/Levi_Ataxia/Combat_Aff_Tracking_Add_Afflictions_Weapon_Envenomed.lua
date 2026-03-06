@@ -1,1 +1,0 @@
-ataxiaTemp.hitCount = 0

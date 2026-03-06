@@ -85594,18 +85594,7 @@ ataxiaBasher_alert("Normal")</script>
 </regexCodePropertyList>
                   <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Credits For Sale</name>
-                    <script>deleteLine()
-creditMarket = {
-	available = 0,
-	handGold = tonumber(gmcp.Char.Status.gold),
-	bankGold = tonumber(gmcp.Char.Status.bank),
-	avgPrice = 0,
-	totalTB = 0,
-	totalSpent = 0
-}
-cecho("\n&lt;DarkSlateBlue&gt; ~~~~~~~~~~~~~~* &lt;DimGrey&gt;Achaea Credit Market &lt;DarkSlateBlue&gt;*~~~~~~~~~~~~~~")
-cecho("\n&lt;DimGrey&gt;"..string.rep(" ", 44-string.len(creditMarket.handGold)).."Balance: &lt;gold&gt;"..creditMarket.handGold)
-cecho("\n&lt;DarkSlateBlue&gt; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")</script>
+                    <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -86114,20 +86103,7 @@ end
 </regexCodePropertyList>
                   <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Tattoo List</name>
-                    <script>capturing_tattoos = true
-tattoosOnMe = {
-	["Head"] = {{}, {} },
-	["Torso"] = {{}, {} },
-	["Left arm"] = {{}, {} },
-	["Right arm"] = {{}, {} },
-	["Left leg"] = {{}, {} },
-	["Right leg"] = {{}, {} },
-	["Back"] = {{}, {} },	
-}
-
-crucialTattoos = {
-	"Boar", "Cloak", "Mindseye", "Moon", "Moss", "Tree",
-}</script>
+                    <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -86413,7 +86389,7 @@ end</script>
 </TriggerGroup>
                 <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Reagent Butchering</name>
-                  <script>ataxiaTemp.toButcher = {}</script>
+                  <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -87284,7 +87260,7 @@ disableTrigger("Additional Information NDB")</script>
 </TriggerGroup>
                 <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Explorers Rankings</name>
-                  <script>explorersUnchecked = {}</script>
+                  <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -87353,7 +87329,7 @@ end</script>
 </TriggerGroup>
                 <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Who Grouping</name>
-                  <script>needMore = false</script>
+                  <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -91383,14 +91359,7 @@ if ataxiaBasher.enabled then deleteFull() end
 </TriggerGroup>
                   <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Room Info Shortener</name>
-                    <script>local x = ataxia.settings.roomshorten
-
-if gmcp.Room.Info.name:lower():find(matches[2]:lower()) then
-	if (x == "notmanual" and ataxiaBasher.manual ~= true) or (x == "normal") then
-		roomDeleting = true
-		deleteLine()
-	end
-end</script>
+                    <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -92006,9 +91975,7 @@ end</script>
 </regexCodePropertyList>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>GMCP Map Catchers</name>
-                      <script>if not zgui.map then
-  zgui.buildMap()
-end</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -94286,7 +94253,7 @@ end</script>
 </regexCodePropertyList>
                       <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Spin into retardation sequence</name>
-                        <script>ataxiaTemp.vibeSpinner = matches[2]</script>
+                        <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -95858,11 +95825,7 @@ enableTimer("TargetOutOfRoom")</script>
 </regexCodePropertyList>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Allies List</name>
-                      <script>selectString(line,1)
-fg("NavajoWhite")
-deselect()
-
-ataxiaTemp.allies = {}</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -95936,11 +95899,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Enemies List</name>
-                      <script>selectString(line,1)
-fg("orange")
-deselect()
-
-ataxiaTemp.enemies = {}</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -99007,8 +98966,7 @@ end
 </TriggerGroup>
                       <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Swarm Tracking</name>
-                        <script>deleteLine()
-ataxia_Echo("Reset swarm status.")</script>
+                        <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -103773,7 +103731,7 @@ end</script>
 </TriggerGroup>
                       <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Readaura stuff</name>
-                        <script>deleteLine()</script>
+                        <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -108806,17 +108764,7 @@ resetFormat()</script>
 </TriggerGroup>
                       <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Get Humour Levels</name>
-                        <script>deleteLine()
-cecho("\n&lt;a_blue&gt; --- [ &lt;NavajoWhite&gt;EVALUATE: &lt;a_green&gt;"..target:upper().."&lt;a_blue&gt; ] ---")
-tEval = {
-	sanguine = 0, choleric = 0, phlegmatic = 0, melancholic = 0,
-	hp = 0, mp = 0,
-}
-
-tAffs.sanguine = nil
-tAffs.melancholic = nil
-tAffs.phlegmatic = nil
-tAffs.choleric = nil</script>
+                        <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -109324,9 +109272,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Fullsense-Hyena</name>
-                      <script>mmp.pdb_lastupdate = {}
-
-fullSensePeople = {}</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -109421,9 +109367,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Fullsense-Demon</name>
-                      <script>mmp.pdb_lastupdate = {}
-
-fullSensePeople = {}</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -109518,82 +109462,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>NEW DEADEYES</name>
-                      <script>tarInsomnia = tarInsomnia or true
-deadaff = matches[2]
-
-
-
-if isTargeted(matches[3])
-
-
-and matches[2] ~= "clumsy" and matches[2] ~= "stupid" and matches[2] ~= "sicken" and matches[2] ~= "dizzy" and matches[2] ~= "vomiting" 
-and matches[2] ~= "reckless" and matches[2] ~= "plague" and matches[2] ~= "bleed" and matches[2] ~= "breach" and matches[2] ~= "sleep" and matches[2] ~= "paralysis" then
-	tarAffed(matches[2])
-	if applyAffV3 then applyAffV3(matches[2]) end
-  cecho("working")
-elseif matches[2] == "clumsy" then
-tarAffed("clumsiness")
-if applyAffV3 then applyAffV3("clumsiness") end
-elseif matches[2] == "stupid" then
-tarAffed("stupidity")
-if applyAffV3 then applyAffV3("stupidity") end
-elseif matches[2] == "confusion" then
-tarAffed("confusion")
-if applyAffV3 then applyAffV3("confusion") end
-elseif matches[2] == "sensitivity" and not tAffs.deafness then
-tarAffed("sensitivity")
-if applyAffV3 then applyAffV3("sensitivity") end
-elseif matches[2] == "sensitivity" and tAffs.deafness then
-tAffs.deafness = false
-if removeAffV3 then removeAffV3("deafness") end
-elseif matches[2] == "dizzy" then
-tarAffed("dizziness")
-if applyAffV3 then applyAffV3("dizziness") end
-elseif matches[2] == "plague" then
-tarAffed("voyria")
-if applyAffV3 then applyAffV3("voyria") end
-elseif matches[2] == "sicken" and not tAffs.manaleech  then
-tarAffed("manaleech")
-if applyAffV3 then applyAffV3("manaleech") end
-elseif matches[2] == "sicken" and tAffs.manaleech then
-tarAffed("slickness")
-if applyAffV3 then applyAffV3("slickness") end
-elseif matches[2] == "vomiting"  then
-tarAffed("nausea")
-if applyAffV3 then applyAffV3("nausea") end
-elseif matches[2] == "reckless"  then
-tarAffed("recklessness")
-if applyAffV3 then applyAffV3("recklessness") end
-elseif matches[2] == "paralysis" then
-tarAffed("paralysis")
-if applyAffV3 then applyAffV3("paralysis") end
-elseif matches[2] == "sleep" then
-tarAffed("hypersomnia")
-if applyAffV3 then applyAffV3("hypersomnia") end
-elseif matches[2] == "bleed" then
-tarAffed("haemophilia")
-if applyAffV3 then applyAffV3("haemophilia") end
-end
-tAffs.curseward = false
-if removeAffV3 then removeAffV3("curseward") end
-
-if matches[2] == "sleep" and tAffs.hypersomnia and tarInsomnia == true then tarInsomnia = tempTimer(10, [[tarInsomnia = true; tarInsomnia = false]]) end
-
-
-  if partyrelay then
-    deadeye_buffer = deadeye_buffer or {}
-    table.insert(deadeye_buffer, matches[2] == "sicken" and "manaleech" or matches[2])
-    if deadeye_timer then killTimer(deadeye_timer) end
-    deadeye_timer = tempTimer(0, function()
-      if deadeye_buffer and #deadeye_buffer &gt; 0 then
-        send("pt " .. target .. ": " .. table.concat(deadeye_buffer, ", "))
-        deadeye_buffer = {}
-      end
-      deadeye_timer = nil
-    end)
-  end
-
-</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -122865,9 +122734,7 @@ end
 </TriggerGroup>
                   <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Curing Priority List</name>
-                    <script>ataxia.curingprio = {}
-deleteLine()
-cecho("\n&lt;blue&gt;          -=[ &lt;white&gt;Reset Curing Priorities&lt;blue&gt; ]=-")</script>
+                    <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -123488,9 +123355,7 @@ end</script>
 </TriggerGroup>
                 <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Defence List</name>
-                  <script>capturing_defences = true
-deleteLine()
-ataxiaEcho("Defences currently active:")</script>
+                  <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -124299,7 +124164,7 @@ end</script>
 </regexCodePropertyList>
                   <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Extraction Mineral List</name>
-                    <script>ataxiaExtraction = ataxiaExtraction or {}</script>
+                    <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -124617,10 +124482,7 @@ end
 </regexCodePropertyList>
                   <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Grab Terminus Abilities</name>
-                    <script>if updating_terminus_abilities then
-	deleteLine()
-end
-ataxiaTables.depthswalker.abilities = {}</script>
+                    <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -125093,7 +124955,7 @@ fullSensePeople = {}</script>
 </regexCodePropertyList>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>VIBES in room</name>
-                      <script>vibes_inRoom = {}</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -126139,7 +126001,7 @@ cecho(" &lt;yellow&gt;(&lt;a_red&gt;"..ataxiaTemp.dollFashions.."&lt;yellow&gt;)
 </TriggerGroup>
                   <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Probe Doll</name>
-                    <script>deleteLine()</script>
+                    <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -134291,7 +134153,7 @@ send("clearqueue all;pull harpoon")</script>
 </regexCodePropertyList>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>WHO DIRECTION</name>
-                      <script>lookdirection = matches[2]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -137678,7 +137540,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Drawslash</name>
-                      <script>slc_last_limb = multimatches[2][2]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -138001,7 +137863,7 @@ end</script>
 </regexCodePropertyList>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Staffstrike</name>
-                      <script>slc_last_limb = multimatches[1][3]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -138086,20 +137948,7 @@ end</script>
 </regexCodePropertyList>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Jab 1</name>
-                      <script>--^Lightning-quick, \w+ (?:stabs|jabs) your (.+) with
-local weapons = {"Soulpiercer", "Eagle's Scream","rapier"}
-
-for i in pairs(weapons) do
- if string.find(multimatches[1][4], weapons[i]) then
-
-	slc_last_limb = multimatches[1][3]
-
-	weapcheck = true
-	tempTimer(1, [[weapcheck = false]] )
-	
- end
-end
-</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -138142,18 +137991,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Jab 2</name>
-                      <script>local weapons = {"Soulpiercer", "Eagle's Scream","rapier"}
-
-for i in pairs(weapons) do
- if string.find(multimatches[1][3], weapons[i]) then
-
-	slc_last_limb = multimatches[1][4]
-
-	weapcheck = true
-	tempTimer(1, [[weapcheck = false]] )
-	
- end
-end</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -138196,19 +138034,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Bard Slash 1</name>
-                      <script>local weapons = {"Soulpiercer", "Eagle's Scream","rapier"}
-
-for i in pairs(weapons) do
- if string.find(multimatches[1][4], weapons[i]) then
-	
-	slc_last_limb = multimatches[1][3]
-
-	weapcheck = true
-	tempTimer(1, [[weapcheck = false]] )
-		
- end
-end
-</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -138251,17 +138077,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Bard Slash 2</name>
-                      <script>local weapons = {"Soulpiercer", "Eagle's Scream","rapier"}
-
-for i in pairs(weapons) do
- if string.find(multimatches[1][3], weapons[i]) then
- 
-	slc_last_limb = multimatches[1][4]
-	
-	weapcheck = true
-	tempTimer(1, [[weapcheck = false]] )
- end
-end</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -138304,7 +138120,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Acciaccurato</name>
-                      <script>slc_last_limb = multimatches[1][3]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -138390,7 +138206,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Tremelo</name>
-                      <script>slc_last_limb = multimatches[1][3]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -139322,7 +139138,7 @@ end
 </regexCodePropertyList>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Hydra</name>
-                      <script>slc_last_limb = multimatches[1][2]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -139365,7 +139181,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Maul</name>
-                      <script>slc_last_limb = multimatches[1][3]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -139537,7 +139353,7 @@ SLC_connects(slc_last_limb,"hydra")</script>
 </regexCodePropertyList>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Smite</name>
-                      <script>slc_last_limb = multimatches[1][3]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -139640,8 +139456,7 @@ end</script>
 </regexCodePropertyList>
                       <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>slice</name>
-                        <script>slc_last_limb = multimatches[1][3]
-</script>
+                        <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -139684,7 +139499,7 @@ end</script>
 </TriggerGroup>
                       <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>rend</name>
-                        <script>slc_last_limb = multimatches[1][3]</script>
+                        <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -139751,7 +139566,8 @@ end</script>
 </Trigger>
                       <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>rend</name>
-                        <script>slc_last_limb = multimatches[1][3]</script>
+                        <script>slc_last_limb = multimatches[1][3]
+</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>1</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -139793,20 +139609,7 @@ end</script>
 </regexCodePropertyList>
                       <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>DSL 1</name>
-                        <script>--^\w+ viciously jabs .+ into your (.+)\.$
-local weapons = {"Soulpiercer", "Eagle's Scream","rapier"}
-
-for i in pairs(weapons) do
- if not string.find(multimatches[1][3], weapons[i]) then
-
-	slc_last_limb = multimatches[1][4]
-
-	dualcweapcheck = true
-	tempTimer(1, [[dualcweapcheck = false]] )	
-	
- end
-end
-</script>
+                        <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -139849,18 +139652,7 @@ end</script>
 </TriggerGroup>
                       <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>DSL 2</name>
-                        <script>local weapons = {"Soulpiercer", "Eagle's Scream","rapier"}
-
-for i in pairs(weapons) do
- if not string.find(multimatches[1][4], weapons[i]) then
- 
-	slc_last_limb = multimatches[1][3]
-
-	dualcweapcheck = true
-	tempTimer(1, [[slc_dualcweapcheck = false]] )
-	
- end
-end</script>
+                        <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -139903,20 +139695,7 @@ end</script>
 </TriggerGroup>
                       <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>DSL 3</name>
-                        <script>--^\w+ swings .+ at your (.+) with all (?:his|her) might\.$
-
-local weapons = {"Soulpiercer", "Eagle's Scream","rapier"}
-
-for i in pairs(weapons) do
- if not string.find(multimatches[1][3], weapons[i]) then
-
-	slc_last_limb = multimatches[1][4]
-
-	weapcheck = true
-	tempTimer(1, [[weapcheck = false]] )		
-	
- end
-end</script>
+                        <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -139958,18 +139737,7 @@ end</script>
 </TriggerGroup>
                       <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>DSL 4</name>
-                        <script>--^\w+ swings .+ at your (.+) with all (?:his|her) might\.$
-
-local weapons = {"Soulpiercer", "Eagle's Scream","rapier"}
-
-for i in pairs(weapons) do
- if not string.find(multimatches[1][4], weapons[i]) then
- 	slc_last_limb = multimatches[1][3]
-	weapcheck = true
-	tempTimer(1, [[weapcheck = false]] )		
-		
- end
-end</script>
+                        <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -140255,7 +140023,7 @@ end</script>
 </TriggerGroup>
                       <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Pulverise</name>
-                        <script>slc_last_limb = multimatches[1][3]</script>
+                        <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -140298,24 +140066,7 @@ end</script>
 </TriggerGroup>
                       <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Underhand</name>
-                        <script>local warhammers = {"warhammer", "hammer", "Warhammer","Hammer"}
-local blades = {"sword", "Sword", "blade", "Blade"}
-
-for i in pairs(warhammers) do
- if string.find(multimatches[1][3], warhammers[i]) then
-  slc.underhand_weapon = "hammer"
- end
-end
-
-for i in pairs(blades) do
- if string.find(multimatches[1][3], blades[i]) then
-  slc.underhand_weapon = "blade"
- end
-end
-
-slc_last_limb = multimatches[1][4]
-
-</script>
+                        <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -140571,7 +140322,7 @@ slc_last_limb = "head"
 </regexCodePropertyList>
                         <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>whirl 1 - morningstar</name>
-                          <script>slc_last_limb = multimatches[1][3]</script>
+                          <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -140613,7 +140364,7 @@ end</script>
 </TriggerGroup>
                         <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>whirl 2 - Flail</name>
-                          <script>slc_last_limb = multimatches[1][3]</script>
+                          <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -140725,7 +140476,7 @@ end
 </regexCodePropertyList>
                         <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Crush 1</name>
-                          <script>slc_last_limb = multimatches[1][3]</script>
+                          <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -140767,7 +140518,7 @@ end</script>
 </TriggerGroup>
                         <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Crush 2</name>
-                          <script>slc_last_limb = multimatches[1][3]</script>
+                          <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -140809,7 +140560,7 @@ end</script>
 </TriggerGroup>
                         <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Crush 3</name>
-                          <script>slc_last_limb = multimatches[1][3]</script>
+                          <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -140941,7 +140692,7 @@ end</script>
 </regexCodePropertyList>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Thornrend</name>
-                      <script>slc_last_limb = multimatches[1][3]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -141026,7 +140777,7 @@ end</script>
 </regexCodePropertyList>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Throwingaxe</name>
-                      <script>slc_last_limb = multimatches[1][2]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -141069,7 +140820,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Throwingaxe 2</name>
-                      <script>slc_last_limb = multimatches[1][4]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -141375,7 +141126,7 @@ end</script>
 </regexCodePropertyList>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Rend</name>
-                      <script>slc_last_limb = multimatches[1][3]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -141603,7 +141354,7 @@ SLC_connects(slc_last_limb,"frontkick")</script>
 </TriggerGroup>
                       <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Spinkick 1</name>
-                        <script>slc_last_limb = "torso"</script>
+                        <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -141645,7 +141396,7 @@ end</script>
 </TriggerGroup>
                       <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Spinkick 2</name>
-                        <script>slc_last_limb = "head"</script>
+                        <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -141952,7 +141703,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Thrust 1</name>
-                      <script>slc_last_limb = multimatches[1][3]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -141994,7 +141745,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Thrust 2</name>
-                      <script>slc_last_limb = multimatches[1][3]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -142036,7 +141787,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Dart 1</name>
-                      <script>slc_last_limb = multimatches[1][3]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -142078,7 +141829,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Dart 2</name>
-                      <script>slc_last_limb = multimatches[1][3]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -142120,7 +141871,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Hiraku 1</name>
-                      <script>slc_last_limb = "head"</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -142162,7 +141913,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Hiraku 2</name>
-                      <script>slc_last_limb = "head"</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -142204,7 +141955,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Hiru 1</name>
-                      <script>slc_last_limb = "head"</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -142246,7 +141997,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Hiru 2</name>
-                      <script>slc_last_limb = "head"</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -142288,7 +142039,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Ruku 1</name>
-                      <script>slc_last_limb = multimatches[1][3]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -142330,7 +142081,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Ruku 2</name>
-                      <script>slc_last_limb = multimatches[1][3]</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -142372,11 +142123,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Kuro 1</name>
-                      <script>if multimatches[1][3] == "left" then
-	slc_last_limb = "left leg"
-elseif multimatches[1][3] == "right" then
-	slc_last_limb = "right leg"
-end</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -142418,11 +142165,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Kuro 2</name>
-                      <script>if multimatches[1][3] == "left" then
-	slc_last_limb = "left leg"
-elseif multimatches[1][3] == "right" then
-	slc_last_limb = "right leg"
-end</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -142548,7 +142291,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Needle 1</name>
-                      <script>slc_last_limb = "head"</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -142590,7 +142333,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Needle 2</name>
-                      <script>slc_last_limb = "head"</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -142632,7 +142375,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Jinzuku 1</name>
-                      <script>slc_last_limb = "torso"</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -142674,7 +142417,7 @@ end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Jinzuku 2</name>
-                      <script>slc_last_limb = "torso"</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -145066,9 +144809,7 @@ if removeAffV3 then removeAffV3("shield") end</script>
 </TriggerGroup>
                     <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Start Shikudo</name>
-                      <script>monk.shikudo.start()
-monk.shikudo.combo_affs = {}
-monk.shikudo.parrying = {}</script>
+                      <script/>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>

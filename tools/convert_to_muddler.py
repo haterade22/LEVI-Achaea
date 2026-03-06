@@ -728,6 +728,15 @@ class MuddlerConverter:
 
     def _extract_lua_files(self, tree: list, lua_files: Dict[str, str]) -> list:
         """Recursively extract _lua_code/_safe_name from tree nodes, returning clean JSON."""
+        # Pre-pass: collect folder names at this level so we can detect collisions.
+        # When a non-folder trigger shares a name with a folder sibling, Muddler
+        # would match the trigger's .lua file to BOTH items. Force inline script
+        # for the trigger to prevent the folder from picking up the script.
+        folder_names = set()
+        for node in tree:
+            if node.get("isFolder") == "yes" or "children" in node:
+                folder_names.add(node.get("name", ""))
+
         clean = []
         for node in tree:
             clean_node = {}
@@ -749,9 +758,11 @@ class MuddlerConverter:
                 # Muddler simply replaces spaces with underscores in the item name
                 item_name = node.get("name", "")
                 muddler_filename = item_name.replace(" ", "_")
-                if muddler_filename != safe_name:
-                    # Name contains special chars (colons, slashes, etc.) that our
-                    # sanitizer handles but Muddler doesn't — embed code inline
+                is_folder = node.get("isFolder") == "yes" or "children" in clean_node
+                name_collides_with_folder = (not is_folder and item_name in folder_names)
+                if muddler_filename != safe_name or name_collides_with_folder:
+                    # Name contains special chars, OR a sibling folder has the same
+                    # name — embed code inline to prevent Muddler mis-matching
                     clean_node["script"] = lua_code
                 else:
                     lua_files[safe_name] = lua_code

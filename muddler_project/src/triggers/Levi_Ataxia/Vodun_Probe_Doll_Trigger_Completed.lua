@@ -1,1 +1,0 @@
-setTriggerStayOpen("Probe", 0)
