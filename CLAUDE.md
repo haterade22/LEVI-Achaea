@@ -82,6 +82,7 @@ LEVI-Achaea/
 │   ├── convert_to_muddler.py  # Convert src_new → muddler project (multi-package)
 │   ├── compare_builds.py      # Compare old XML vs Muddler output
 │   ├── mudlet_extract.py      # Extract XML package to src_new
+│   ├── flatten_groups.py      # Flatten intermediate wrapper groups in _groups.yaml
 │   └── legacy/                # Retired build tools
 │       ├── mudlet_build.py    # Old Python XML builder
 │       └── mudlet_validate.py # Old validation script
@@ -115,6 +116,8 @@ The project uses [Muddler](https://github.com/demonnic/muddler) to build Mudlet 
 - Handles name collisions by prepending parent group names
 - Preserves group inline scripts
 - Converts pattern types, timer formats, key codes
+- Rewrites stale file `hierarchy:` headers using per-type dissolved group sets (strips intermediate wrapper names)
+- Unwraps root groups in JSON output (emits children directly into array, preventing extra nesting level from Muddler)
 - Supports multi-package builds via CLI arguments:
   - `--package-name` — Package identifier (default: `Levi_Ataxia`)
   - `--package-title` — Human-readable title
