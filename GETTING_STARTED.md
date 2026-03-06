@@ -1,34 +1,29 @@
-# Getting Started with LEVI Achaea Scripts
+# Getting Started with LEVI-Achaea
 
 ## Quick Start
 
-### 1. Install the Package in Mudlet
+### 1. Build and Install
 
-Install the compiled package from `packages/` via Mudlet's Package Manager, or build it from source:
+See [README.md](README.md) for full build instructions. The short version:
 
 ```bash
 # Convert source to Muddler format
 python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project
 
 # Build with Muddler (requires Java 8+)
-set JAVA_HOME=E:\Java
+set JAVA_HOME=C:\Path\To\Java
 cd muddler_project
-E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
+/path/to/muddler/bin/muddle.bat
 ```
 
 Output: `muddler_project/build/Levi_Ataxia.mpackage`
 
-The package includes all systems:
-- MMP (Mudlet Mapper)
-- Ataxia (Combat System)
-- Ataxia GUI
-- Ataxia NDB (Player Database)
-- Ataxia Basher
+Install in Mudlet via Package Manager, then reconnect to Achaea.
 
 ### 2. Verify GMCP is Enabled
 
-The system heavily relies on GMCP. In Mudlet:
-1. Go to Settings → Protocols
+The system relies heavily on GMCP for real-time game data. In Mudlet:
+1. Go to Settings > Protocols
 2. Ensure "Enable GMCP" is checked
 3. Reconnect to Achaea if needed
 
@@ -41,342 +36,229 @@ mconfig
 -- Check ataxia is loaded
 display(ataxia)
 
--- Create GUI (if desired)
+-- Create GUI
 ataxiagui_Create()
 ```
+
+---
 
 ## System Overview
 
-### MMP (Mudlet Mapper)
-**Location**: `src_new/scripts/` and `src_new/triggers/` (mapper components)
+### Mudlet Mapper (mmp)
 
-**What it does**:
-- Navigation and pathfinding
-- Speedwalking
-- Wings and fast travel
-- Map tracking
+Navigation and pathfinding with speedwalking, fast travel, and balance-aware movement.
 
-**Try it**:
 ```lua
--- Use mapper configuration
-mconfig
-
--- Speedwalk to a room (if you know the room ID)
--- mmp.gotoRoom(12345)
+mconfig                      -- Configure mapper
+mmp.gotoRoom(12345)          -- Speedwalk to room
+mmp.gotoArea("Ashtan")       -- Go to area entrance
 ```
 
 ### Ataxia Combat System
+
+Core combat engine: affliction tracking, curing, defense management, limb tracking.
+
 **Location**: `src_new/scripts/levi_ataxia/levi/ataxia/`
 
-**What it does**:
-- Tracks afflictions automatically
-- Manages curing priorities
-- Defense tracking
-- Class-specific combat offense
-
-**Key variables**:
 ```lua
-ataxia.afflictions        -- Current afflictions table
-ataxia.defences          -- Active defenses
-ataxia.target            -- Combat target
+display(ataxia.afflictions)  -- View current afflictions
+display(ataxia.defences)     -- View active defenses
+ataxia.target                -- Current combat target
 ```
 
-**Try it**:
-```lua
--- View current afflictions
-display(ataxia.afflictions)
+### Class Offense Modules
 
--- View defenses
-display(ataxia.defences)
+Automated combat for 18+ classes. Each class has its own subdirectory under `src_new/scripts/levi_ataxia/levi/levi_scripts/`.
+
+| Class | Command | Kill Route |
+|-------|---------|------------|
+| Serpent | `ek` | Ekanelia lock, darkshade, scytherus |
+| Shaman | `zz` | Tzantza, affliction locks, bleed |
+| Blademaster | `bmd`/`bmbs` | Limb prep, brokenstar |
+| Infernal DWC | `zz` | Vivisect, damage kill |
+| Apostate | `ll`/`corr` | Lock, corrupt, vivisect |
+| Monk (Shikudo) | varies | Limb prep, spinkick |
+
+### Automated Basher
+
+PvE hunting system with 20+ class support, area pathing, and safety features.
+
+**Location**: `src_new/scripts/levi_ataxia/levi/ataxia/basher/` and `genrunning/`
+
+```lua
+ataxiaBasher.paused = false   -- Enable basher
+ataxiaBasher.paused = true    -- Pause basher
+ataxiaBasher_manual()         -- Single-room manual mode
+ataxiaBasher_areabash()       -- Full area automation
+
+-- Configure
+ataxiaBasher.goldPack = "pack436363"
+ataxiaBasher.shieldTimers = { ["a mhun knight"] = 4.7 }
+ataxiaBasher.ldeckRules = {
+  { mob = "an elite mhun keeper", count = 3, cards = {"maran", "matic"} },
+}
 ```
 
-### Ataxia GUI
-**Location**: `src_new/scripts/` (GUI components)
+### Custom GUI (ataxiagui)
 
-**What it does**:
-- Health/mana/willpower/endurance bars
-- Integrated map window
-- Chat tabs and capture
+Health/mana gauges, map display, tabbed chat, balance indicators.
 
-**Try it**:
 ```lua
--- Create the GUI
-ataxiagui_Create()
+ataxiagui_Create()  -- Create the GUI
 ```
 
-### Ataxia NDB (Name Database)
-**Location**: `src_new/scripts/` (NDB components)
+### Player Database (ataxiaNDB)
 
-**What it does**:
-- Tracks player information (city, house, rank)
-- Highlights enemy names
-- Provides player lookup API
+Tracks player information via the Achaea API.
 
-**Try it**:
 ```lua
--- Check if someone is an enemy
 ataxiaNDB_isEnemy("PlayerName")
-
--- Get someone's city
 ataxiaNDB_getCitizenship("PlayerName")
-
--- Get highlight color
 ataxiaNDB_getColour("PlayerName")
 ```
 
-### Ataxia Basher
-**Location**: `src_new/scripts/levi_ataxia/levi/ataxia/basher/` and `src_new/scripts/levi_ataxia/levi/ataxia/genrunning/`
+---
 
-**What it does**:
-- Automated hunting/bashing with 20+ class support
-- Two modes: manual (single room) and areabash (full path automation)
-- GMCP-based balance tracking (learns per-class attack timing)
-- Data-driven legend deck card draws before dangerous rooms
-- Stormhammer multi-target tracking with dirty-flag caching
-- Configurable shield retarget timers
-- Death recovery, flee circuit breaker, mapper-stuck detection
-- Battlerage rotation with rage conservation (skips abilities on low-HP mobs)
-- Experience tracking and session statistics
+## Source Code Layout
 
-**Try it**:
-```lua
--- Pause/unpause basher
-ataxiaBasher.paused = true   -- pause
-ataxiaBasher.paused = false  -- unpause
+### File Organization
 
--- Start manual bashing (single room)
-ataxiaBasher_manual()
+Each `.lua` file has a YAML metadata header and uses numbered prefixes for load order:
 
--- Start areabash (full area path automation)
-ataxiaBasher_areabash()
-
--- Configure gold container
-ataxiaBasher.goldPack = "pack436363"
-
--- Configure shield retarget timers
-ataxiaBasher.shieldTimers = { ["a mhun knight"] = 4.7 }
-ataxiaBasher.shieldTimerDefault = 3.1
-
--- Configure legend deck rules
-ataxiaBasher.ldeckRules = {
-  { mob = "an elite mhun keeper", count = 3, cards = {"maran", "matic"} },
-  { mob = "a mhun knight", count = 3, cards = {"maran"} },
-}
-
--- View learned balance samples
-display(ataxiaBasher_balanceSamples)
+```
+src_new/
+├── scripts/levi_ataxia/levi/
+│   ├── ataxia/                    # Core combat system
+│   │   ├── 017_Affliction_Management.lua
+│   │   ├── affliction_tracking_v2/  # V2 certainty tracking
+│   │   ├── affliction_tracking_core/ # V3 probability tracking
+│   │   ├── basher/                  # Bashing attack builders
+│   │   ├── genrunning/              # Basher API and automation
+│   │   ├── deffing/                 # Defense tracking
+│   │   └── ...
+│   └── levi_scripts/              # Class offense modules
+│       ├── serpent/
+│       ├── shaman/
+│       ├── blademaster/
+│       ├── dwc/
+│       ├── apostate/
+│       └── ...  (18+ class dirs)
+├── triggers/                      # 1800+ game text triggers
+├── aliases/                       # Command aliases
+├── timers/                        # Timer definitions
+└── keys/                          # Key bindings
 ```
 
-## File Organization
+### Finding Code
 
-### Understanding the Structure
+- **Affliction tracking**: `scripts/.../ataxia/017_Affliction_Management.lua`
+- **Curing**: `scripts/.../ataxia/affliction_tracking_v2/` and `affliction_tracking_core/`
+- **Class offense**: `scripts/.../levi_scripts/<class>/`
+- **Basher**: `scripts/.../ataxia/basher/` and `genrunning/`
+- **GUI**: search `scripts/` for GUI creation files
+- **Triggers**: `triggers/levi_ataxia/` organized by subsystem
 
-Each file is numbered for load order:
-```
-001_Create_Option_Table.lua
-002_Load_settings.lua
-003_speedwalking.lua
-...
-```
+### Group Hierarchy
 
-Each file has a header comment showing where it came from:
-```lua
--- unnamed > For Levi > mudlet-mapper > Mudlet Mapper > Create Option Table
-```
+Each item type has a `_groups.yaml` defining the folder tree in Mudlet. The conversion script uses these to build the JSON hierarchy that Muddler consumes.
 
-### Finding Specific Code
-
-**Want to find navigation code?**
-→ Search `src_new/scripts/` and `src_new/triggers/` for mapper-related files
-
-**Want to find affliction tracking?**
-→ Look in `src_new/scripts/levi_ataxia/levi/ataxia/` for affliction management files
-
-**Want to modify the GUI?**
-→ Search `src_new/scripts/` for GUI creation/layout files
-
-**Want to modify bashing?**
-→ Look in `src_new/scripts/levi_ataxia/levi/ataxia/basher/`
-
-## Visual Studio 2022
-
-Use **File > Open > Folder** and select the `LEVI-Achaea/` directory. VS2022 shows all files in the folder tree automatically.
-
-Build tasks are configured in `.vs/tasks.vs.json`. To run them, right-click the root folder in Solution Explorer and pick a task:
-
-- **Build Levi_Ataxia** — Full convert + Muddler pipeline for the main package
-- **Build Levi_Test** — Build the test/distribution package
-- **Convert Only (Levi_Ataxia)** — Just run the conversion step (no Muddler)
-- **Convert Only (Dry Run)** — Preview conversion without writing files
-- **Clean Build Output** — Delete `muddler_project/build/`
+---
 
 ## Common Tasks
 
-### Rebuild Package After Editing
+### Rebuild After Editing
 
-After editing files in `src_new/`, rebuild the package with Muddler:
+After modifying files in `src_new/`, rebuild:
 
 ```bash
-# Re-convert source to Muddler format
 python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project
-
-# Build with Muddler
-set JAVA_HOME=E:\Java
 cd muddler_project
-E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
+/path/to/muddler/bin/muddle.bat
 ```
 
-Then reinstall the `.mpackage` from `muddler_project/build/` in Mudlet.
+Then reinstall the `.mpackage` in Mudlet.
 
-Or right-click the root folder in VS2022 Solution Explorer and run the **Build Levi_Ataxia** task.
+Or use the **Build Levi_Ataxia** task in VS2022 (right-click root folder in Solution Explorer).
+
+### Preview Without Building
+
+```bash
+python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project --dry-run
+```
 
 ### Build a Separate Package
-
-The conversion script supports multiple packages from the same source tree. Each package needs:
-1. A root group entry in the `_groups.yaml` files under `src_new/`
-2. A source directory under `src_new/<type>/<package_dir>/`
-3. Lua files with YAML headers referencing the package's root group in their `hierarchy`
-
-Build with CLI overrides:
 
 ```bash
 python tools/convert_to_muddler.py --src ./src_new --output ./my_project \
   --package-name My_Package --package-title "My Package" --include-roots My_Package
-
-set JAVA_HOME=E:\Java
-cd my_project
-E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
 ```
 
-Run `python tools/convert_to_muddler.py --help` for all available options:
-- `--package-name` — Package identifier (default: Levi_Ataxia)
-- `--package-title` — Human-readable title
-- `--package-version` — Version string
-- `--package-author` — Author name
-- `--include-roots` — Root group names to include from `_groups.yaml`
-- `--include-dirs` — Source subdirectory names to scan (default: derived from roots)
+See `python tools/convert_to_muddler.py --help` for all options.
 
-### Modify Curing Priorities
+---
 
-Search `src_new/scripts/` for prio management files.
+## Dependencies and Load Order
 
-### Add New Bashing Target
-
-Edit files in `src_new/scripts/levi_ataxia/levi/ataxia/basher/`.
-
-### Configure Mapper
-
-Use in-game command: `mconfig`
-
-## Troubleshooting
-
-### Scripts Won't Load
-
-**Check for errors**:
-1. Look in Mudlet's error console
-2. Check file paths are correct
-3. Verify syntax (no typos introduced during edits)
-
-**Common issues**:
-- GMCP not enabled
-- Missing dependencies
-- Syntax errors in modified files
-
-### Finding Functions
-
-Use grep to search:
-```bash
-cd c:\Users\mikew\source\repos\Achaea\LEVI-Achaea\src_new
-grep -r "function_name" .
-```
-
-### Understanding Dependencies
-
-Load order matters:
-1. **mmp** must load first (navigation foundation)
+1. **mmp** loads first (navigation foundation)
 2. **ataxia** loads second (combat core)
 3. **ataxiagui** needs ataxia
 4. **ataxiaBasher** needs ataxia
 5. **ataxiaNDB** is independent
 
-## Advanced Usage
+Load order within each group is controlled by the numbered file prefixes.
+
+---
+
+## Extending the System
 
 ### Custom Aliases
-
-Create aliases in Mudlet that call the system's functions:
 
 ```lua
 -- Alias: ^target (.+)$
 ataxia.target = matches[2]
 echo("Target set to: " .. ataxia.target)
-
--- Alias: ^bash$
-ataxiaBasher.paused = false
-echo("Basher enabled")
-
--- Alias: ^nobash$
-ataxiaBasher.paused = true
-echo("Basher paused")
 ```
 
 ### Event Handlers
 
-The system uses Mudlet events. You can add your own:
-
 ```lua
--- Register event for vitals update
 registerAnonymousEventHandler("gmcp.Char.Vitals", "myVitalsHandler")
 
 function myVitalsHandler()
-    -- Custom code here
+    -- Your code here
 end
 ```
 
-### Extending Functions
-
-Add your own functions to the existing tables:
+### Adding Functions
 
 ```lua
--- Add custom function to ataxia
 function ataxia.myCustomFunction()
     -- Your code here
 end
 ```
 
-## Documentation
+---
 
-- **CLAUDE.md** - Full system documentation
-- **EXTRACTION_REPORT.md** - Historical extraction details
-- This file - Getting started guide
+## Troubleshooting
 
-## Next Steps
+### Scripts Won't Load
+1. Check Mudlet's error console for syntax errors
+2. Verify GMCP is enabled (Settings > Protocols)
+3. Ensure the package installed correctly (Package Manager shows it)
 
-1. Load the system in Mudlet
-2. Enable GMCP
-3. Create the GUI with `ataxiagui_Create()`
-4. Test navigation with mapper
-5. Explore the code in each directory
-6. Customize to your preferences
-7. Set up your aliases and keybindings
-
-## Support
-
-The code was extracted from a Mudlet XML package and organized into this modular structure. All original functionality is preserved.
-
-For understanding specific systems:
-- Check the file headers for hierarchy
-- Look at function names and comments
-- Search across files with grep
-- Read the relevant system's files in numeric order
-
-## Tips
-
-1. **Start small**: Load one system at a time to understand it
-2. **Test thoroughly**: Verify each feature works before customizing
-3. **Back up**: Keep copies before making major changes
-4. **Comment well**: Add your own comments when you understand code
-5. **Use version control**: Commit working versions to git
+### Finding Functions
+Use your editor's search across `src_new/`:
+```bash
+grep -r "functionName" src_new/
+```
 
 ---
 
-**Have fun and happy hunting in Achaea!**
+## Further Documentation
+
+| Document | Purpose |
+|----------|---------|
+| [README.md](README.md) | Project overview, build instructions, repo structure |
+| [CLAUDE.md](CLAUDE.md) | Full technical reference — architecture, combat mechanics, APIs, development guidelines |
+| [CHANGELOG.md](CHANGELOG.md) | Detailed change history |
+| [docs/legend-deck.md](docs/legend-deck.md) | Legend Deck card effects and PVE guide |
