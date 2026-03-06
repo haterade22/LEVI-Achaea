@@ -35,6 +35,7 @@ patterns:
   type: 3
 ]]--
 
+capturing_tattoos = true
 tattoosOnMe = {
 	["Head"] = {{}, {} },
 	["Torso"] = {{}, {} },

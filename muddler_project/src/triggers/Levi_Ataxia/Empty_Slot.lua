@@ -1,3 +1,4 @@
+if not capturing_tattoos then return end
 local slot = matches[2]:lower()
 slot = slot:title()
 for i,v in pairs(tattoosOnMe) do

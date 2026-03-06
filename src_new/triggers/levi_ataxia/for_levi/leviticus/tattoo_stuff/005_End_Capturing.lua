@@ -38,7 +38,8 @@ patterns:
 
 deleteLine()
 setTriggerStayOpen("Tattoo List", 0)
-if not tattoosOnMe then return end
+if not capturing_tattoos then return end
+capturing_tattoos = nil
 echo("\n  ")
 setUnderline(true)
 fg("LightSlateGrey")

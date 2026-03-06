@@ -38,4 +38,5 @@ patterns:
   type: 3
 ]]--
 
+if not capturing_tattoos then return end
 deleteLine()

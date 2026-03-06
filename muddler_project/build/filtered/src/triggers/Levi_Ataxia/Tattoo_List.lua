@@ -1,3 +1,4 @@
+capturing_tattoos = true
 tattoosOnMe = {
 	["Head"] = {{}, {} },
 	["Torso"] = {{}, {} },

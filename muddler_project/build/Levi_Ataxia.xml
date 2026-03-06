@@ -86114,7 +86114,8 @@ end
 </regexCodePropertyList>
                   <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Tattoo List</name>
-                    <script>tattoosOnMe = {
+                    <script>capturing_tattoos = true
+tattoosOnMe = {
 	["Head"] = {{}, {} },
 	["Torso"] = {{}, {} },
 	["Left arm"] = {{}, {} },
@@ -86144,7 +86145,8 @@ crucialTattoos = {
 </regexCodePropertyList>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Gag Lines</name>
-                      <script>deleteLine()</script>
+                      <script>if not capturing_tattoos then return end
+deleteLine()</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -86167,7 +86169,8 @@ crucialTattoos = {
 </Trigger>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Empty Slot</name>
-                      <script>local slot = matches[2]:lower()
+                      <script>if not capturing_tattoos then return end
+local slot = matches[2]:lower()
 slot = slot:title()
 for i,v in pairs(tattoosOnMe) do
 	if i == slot then
@@ -86200,7 +86203,8 @@ deleteLine()</script>
 </Trigger>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Found Tattoo</name>
-                      <script>local slot = matches[2]:lower()
+                      <script>if not capturing_tattoos then return end
+local slot = matches[2]:lower()
 slot = slot:title()
 local tat = matches[3]:title()
 local cge = matches[4]
@@ -86248,7 +86252,8 @@ deleteLine()</script>
   <name>End Capturing</name>
                       <script>deleteLine()
 setTriggerStayOpen("Tattoo List", 0)
-if not tattoosOnMe then return end
+if not capturing_tattoos then return end
+capturing_tattoos = nil
 echo("\n  ")
 setUnderline(true)
 fg("LightSlateGrey")
@@ -86336,7 +86341,8 @@ send(" ")
 </TriggerGroup>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Tattoo List</name>
-                    <script>tattoosOnMe = {
+                    <script>capturing_tattoos = true
+tattoosOnMe = {
 	["Head"] = {{}, {} },
 	["Torso"] = {{}, {} },
 	["Left arm"] = {{}, {} },
