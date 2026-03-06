@@ -1,5 +1,18 @@
 # LEVI-Achaea Changelog
 
+## 2026-03-06 — Fix: Legacy apostate files still active, causing unwanted disfigure
+
+### Bugfix: Disfigure firing on clumsy+asthma round instead of manaleech round
+
+**Files modified**:
+- `src_new/scripts/.../apostate/001_CLUMSY_PRIOS.lua` through `013_LOCK_ATTACK.lua` — all 13 legacy files set to `isActive: 'no'`
+
+**Problem**: All 13 legacy apostate scripts (001-013) were still `isActive: 'yes'` despite being replaced by `015_CC_Apostate.lua`. The legacy `013_LOCK_ATTACK.lua:114` had its own disfigure logic (`want_disloyalty and tAffs.asthma`) that fired as soon as the asthma curse landed (V1 boolean set immediately by trigger), not when asthma was confirmed stuck. This caused disfigure to fire on the first clumsy+asthma round instead of waiting for the manaleech round.
+
+**Fix**: Deactivated all 13 legacy files. The unified `015_CC_Apostate.lua` already has correct disfigure logic gated behind `c1 == "manaleech" or c2 == "manaleech"` (line 605).
+
+---
+
 ## 2026-03-06 — Fix: 4 recurring nil-access runtime errors
 
 ### Bugfix: Limb Counter Window, Tekura 6-Limb, Capture Msg, Start Shikudo all spamming errors
