@@ -2,6 +2,8 @@
 --07:11:08:707 
 
 function levidragongroup()
+-- Rebound hold gate
+if reboundHold and reboundHold.gate(levidragongroup) then return end
 local atk = combatQueue()
 curses = {}
 venoms = {}

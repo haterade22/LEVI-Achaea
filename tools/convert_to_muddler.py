@@ -462,10 +462,7 @@ class MuddlerConverter:
 
         # Group-level inline script
         if group.script and group.script.strip():
-            script_text = group.script.strip()
-            # Skip placeholder scripts (Mudlet default comments)
-            if not script_text.startswith("-------------------------------------------------"):
-                node["script"] = script_text
+            node["script"] = group.script.strip()
 
         children_json = []
 
@@ -748,7 +745,16 @@ class MuddlerConverter:
             safe_name = node.get("_safe_name")
             lua_code = node.get("_lua_code", "")
             if safe_name and lua_code.strip():
-                lua_files[safe_name] = lua_code
+                # Check if Muddler can find this file by its own name->filename conversion
+                # Muddler simply replaces spaces with underscores in the item name
+                item_name = node.get("name", "")
+                muddler_filename = item_name.replace(" ", "_")
+                if muddler_filename != safe_name:
+                    # Name contains special chars (colons, slashes, etc.) that our
+                    # sanitizer handles but Muddler doesn't — embed code inline
+                    clean_node["script"] = lua_code
+                else:
+                    lua_files[safe_name] = lua_code
 
             clean.append(clean_node)
 

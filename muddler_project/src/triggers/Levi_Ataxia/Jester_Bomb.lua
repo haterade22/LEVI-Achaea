@@ -1,1 +1,2 @@
-send("queue prepend free give bomb to " ..matches[2])
+send("cq all;put bomb in pack;put bomb in pack;put bomb in pack")
+havebomb = true

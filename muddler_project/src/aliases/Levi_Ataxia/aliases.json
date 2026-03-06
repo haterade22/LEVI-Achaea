@@ -16,7 +16,8 @@
             "children": [
               {
                 "name": "delete old profiles",
-                "regex": "^delete old (profiles|maps|modules)(?: (\\d+))?$"
+                "regex": "^delete old (profiles|maps|modules)(?: (\\d+))?$",
+                "script": "deleteOldProfiles(matches[3], matches[2])\n\n--Syntax examples: \"delete old profiles\"  -> deletes profiles older than 31 days\n--\t\t\t\t\t\"delete old maps 10\"\t-> deletes maps older than 10 days"
               }
             ]
           }
@@ -29,19 +30,23 @@
         "children": [
           {
             "name": "`echo",
-            "regex": "`echo (.+)"
+            "regex": "`echo (.+)",
+            "script": "local s = matches[2]\n\ns = string.gsub(s, \"%$\", \"\\n\")\nfeedTriggers(\"\\n\" .. s .. \"\\n\")\necho(\"\\n\")"
           },
           {
             "name": "`cecho",
-            "regex": "`cecho (.+)"
+            "regex": "`cecho (.+)",
+            "script": "local s = matches[2]\n\ns = string.gsub(s, \"%$\", \"\\n\")\ncfeedTriggers(\"\\n\" .. s .. \"\\n\")\necho(\"\\n\")"
           },
           {
             "name": "`decho",
-            "regex": "`decho (.+)"
+            "regex": "`decho (.+)",
+            "script": "local s = matches[2]\n\ns = string.gsub(s, \"%$\", \"\\n\")\ndfeedTriggers(\"\\n\" .. s .. \"\\n\")\necho(\"\\n\")"
           },
           {
             "name": "`hecho",
-            "regex": "`hecho (.+)"
+            "regex": "`hecho (.+)",
+            "script": "local s = matches[2]\n\ns = string.gsub(s, \"%$\", \"\\n\")\nhfeedTriggers(\"\\n\" .. s .. \"\\n\")\necho(\"\\n\")"
           }
         ]
       },
@@ -57,7 +62,8 @@
             "children": [
               {
                 "name": "delete old profiles",
-                "regex": "^delete old (profiles|maps|modules)(?: (\\d+))?$"
+                "regex": "^delete old (profiles|maps|modules)(?: (\\d+))?$",
+                "script": "deleteOldProfiles(matches[3], matches[2])\n\n--Syntax examples: \"delete old profiles\"  -> deletes profiles older than 31 days\n--\t\t\t\t\t\"delete old maps 10\"\t-> deletes maps older than 10 days"
               }
             ]
           },
@@ -68,7 +74,8 @@
             "children": [
               {
                 "name": "`echo",
-                "regex": "`echo (.+)"
+                "regex": "`echo (.+)",
+                "script": "local s = matches[2]\n\ns = string.gsub(s, \"%$\", \"\\n\")\nfeedTriggers(\"\\n\" .. s .. \"\\n\")\necho(\"\\n\")"
               }
             ]
           },
@@ -95,19 +102,23 @@
                 "children": [
                   {
                     "name": "`echo",
-                    "regex": "`echo (.+)"
+                    "regex": "`echo (.+)",
+                    "script": "local s = matches[2]\n\ns = string.gsub(s, \"%$\", \"\\n\")\nfeedTriggers(\"\\n\" .. s .. \"\\n\")\necho(\"\\n\")"
                   },
                   {
                     "name": "`cecho",
-                    "regex": "`cecho (.+)"
+                    "regex": "`cecho (.+)",
+                    "script": "local s = matches[2]\n\ns = string.gsub(s, \"%$\", \"\\n\")\ncfeedTriggers(\"\\n\" .. s .. \"\\n\")\necho(\"\\n\")"
                   },
                   {
                     "name": "`decho",
-                    "regex": "`decho (.+)"
+                    "regex": "`decho (.+)",
+                    "script": "local s = matches[2]\n\ns = string.gsub(s, \"%$\", \"\\n\")\ndfeedTriggers(\"\\n\" .. s .. \"\\n\")\necho(\"\\n\")"
                   },
                   {
                     "name": "`hecho",
-                    "regex": "`hecho (.+)"
+                    "regex": "`hecho (.+)",
+                    "script": "local s = matches[2]\n\ns = string.gsub(s, \"%$\", \"\\n\")\nhfeedTriggers(\"\\n\" .. s .. \"\\n\")\necho(\"\\n\")"
                   }
                 ]
               },
@@ -118,7 +129,8 @@
                 "children": [
                   {
                     "name": "delete old profiles",
-                    "regex": "^delete old (profiles|maps|modules)(?: (\\d+))?$"
+                    "regex": "^delete old (profiles|maps|modules)(?: (\\d+))?$",
+                    "script": "deleteOldProfiles(matches[3], matches[2])\n\n--Syntax examples: \"delete old profiles\"  -> deletes profiles older than 31 days\n--\t\t\t\t\t\"delete old maps 10\"\t-> deletes maps older than 10 days"
                   }
                 ]
               },
@@ -376,7 +388,8 @@
                                 "children": [
                                   {
                                     "name": "Season (Elixir|Poison)",
-                                    "regex": "^lsea$"
+                                    "regex": "^lsea$",
+                                    "script": "send(\"clearqueue all;queue add eqbal legenddeck draw seasone for elixir\")"
                                   },
                                   {
                                     "name": "Pazuzu (Not Magical Travel)",
@@ -453,16 +466,8 @@
                                 "regex": "^sir$"
                               },
                               {
-                                "name": "HELP Earring",
-                                "regex": "^h(pro|ent|ant|axi|aeg|pha|zyl|vit|tab|xar|ils)$"
-                              },
-                              {
                                 "name": "Ride Home",
                                 "regex": "^hom$"
-                              },
-                              {
-                                "name": "Icewall",
-                                "regex": "^iw(n|ne|nw|o|i|w|e|se|sw|u|d|s)$"
                               },
                               {
                                 "name": "Perform Mockery (Unfollow)",
@@ -473,14 +478,6 @@
                                 "regex": "^comp$"
                               },
                               {
-                                "name": "Freeze Ground",
-                                "regex": "^frg$"
-                              },
-                              {
-                                "name": "Firelash",
-                                "regex": "^fl(i|g|v|t)$"
-                              },
-                              {
                                 "name": "FURY",
                                 "regex": "^fur$"
                               },
@@ -489,20 +486,8 @@
                                 "regex": "^barmp$"
                               },
                               {
-                                "name": "Ramm",
-                                "regex": "^ramm$"
-                              },
-                              {
                                 "name": "death horn",
                                 "regex": "^deathhorn$"
-                              },
-                              {
-                                "name": "Siren Song",
-                                "regex": "^sir$"
-                              },
-                              {
-                                "name": "Ride Home",
-                                "regex": "^hom$"
                               },
                               {
                                 "name": "Shield Illusion Me",
@@ -513,92 +498,20 @@
                                 "regex": "^ly$"
                               },
                               {
-                                "name": "Perform Mockery (Unfollow)",
-                                "regex": "^moc$"
-                              },
-                              {
-                                "name": "Composition (Gives Shield to All)",
-                                "regex": "^comp$"
-                              },
-                              {
                                 "name": "Reflections",
                                 "regex": "^wan$"
-                              },
-                              {
-                                "name": "FURY",
-                                "regex": "^fur$"
                               },
                               {
                                 "name": "Portal",
                                 "regex": "^pwan$"
                               },
                               {
-                                "name": "Armour Paragons",
-                                "regex": "^barmp$"
-                              },
-                              {
                                 "name": "Mage PvE",
                                 "regex": "^magepve$"
                               },
                               {
-                                "name": "death horn",
-                                "regex": "^deathhorn$"
-                              },
-                              {
                                 "name": "Serpent PvE",
                                 "regex": "^serppve$"
-                              },
-                              {
-                                "name": "Shield Illusion Me",
-                                "regex": "^shi$"
-                              },
-                              {
-                                "name": "Shikudo Pve",
-                                "regex": "^stickpve$"
-                              },
-                              {
-                                "name": "^pariahpve$",
-                                "regex": "^pariahpve$"
-                              },
-                              {
-                                "name": "Lyre Illusion",
-                                "regex": "^ly$"
-                              },
-                              {
-                                "name": "BM Pve Traits",
-                                "regex": "^bmpve$"
-                              },
-                              {
-                                "name": "Reflections",
-                                "regex": "^wan$"
-                              },
-                              {
-                                "name": "^stickpvp$",
-                                "regex": "^stickpvp$"
-                              },
-                              {
-                                "name": "Portal",
-                                "regex": "^pwan$"
-                              },
-                              {
-                                "name": "Class PvP",
-                                "regex": "^armourpvp$"
-                              },
-                              {
-                                "name": "Mage PvE",
-                                "regex": "^magepve$"
-                              },
-                              {
-                                "name": "Psion PVP",
-                                "regex": "^psionpvp$"
-                              },
-                              {
-                                "name": "Serpent PvE",
-                                "regex": "^serppve$"
-                              },
-                              {
-                                "name": "^inkmonkpvp$",
-                                "regex": "^inkmonkpvp$"
                               },
                               {
                                 "name": "Shikudo Pve",
@@ -811,7 +724,8 @@
                               },
                               {
                                 "name": "^q(ll|rl|t|h|ra|la)$",
-                                "regex": "^q(ll|rl|t|h|ra|la)$"
+                                "regex": "^q(ll|rl|t|h|ra|la)$",
+                                "script": "if tAffs.shield then\nsend(\"queue addclear free soulbleed batter \" ..target)\nelseif not tAffs.shield then\n  if ataxiaTemp.fractures.crackedribs >= 3 then\n  send(\"soulbleed reave \" ..target)\n\nelseif matches[2] == \"ll\" then\nsend(\"queue addclear free soulbleed onslaught \" ..target.. \" left leg\")\nelseif matches[2] == \"rl\" then\nsend(\"queue addclear free soulbleed onslaught \" ..target.. \" right leg\")\nelseif matches[2] == \"ra\" then\nsend(\"queue addclear free soulbleed onslaught \" ..target.. \" right arm\")\nelseif matches[2] == \"la\" then\nsend(\"queue addclear free soulbleed onslaught \" ..target.. \" left arm\")\nelseif matches[2] == \"t\" then\nsend(\"queue addclear free soulbleed onslaught \" ..target.. \" torso\")\nelseif matches[2] == \"h\" then\nsend(\"queue addclear free soulbleed onslaught \" ..target.. \" head\")\n  end\nend"
                               }
                             ]
                           },
@@ -845,28 +759,8 @@
                                       },
                                       {
                                         "name": "Impale",
-                                        "regex": "^ip$"
-                                      },
-                                      {
-                                        "name": "dis",
-                                        "regex": "^dis$"
-                                      },
-                                      {
-                                        "name": "Slice Combo Bay Bay",
-                                        "regex": "^ff$"
-                                      },
-                                      {
-                                        "name": "Target Slice",
-                                        "isActive": "no",
-                                        "regex": "^scc$"
-                                      },
-                                      {
-                                        "name": "Limb Target",
-                                        "regex": "^scc$"
-                                      },
-                                      {
-                                        "name": "Impale",
-                                        "regex": "^ip$"
+                                        "regex": "^ip$",
+                                        "script": "send(\"queue addclear free stand;falcon slay \" ..target.. \" ;impale \" ..target.. \" ;club \" ..target.. \" ;fury on;assess \" ..target)"
                                       },
                                       {
                                         "name": "dis",
@@ -880,28 +774,14 @@
                                     "isFolder": "yes",
                                     "children": [
                                       {
-                                        "name": "Bastard Hew",
-                                        "regex": "^q(ll|rl|ra|la|hh|tt)$"
-                                      },
-                                      {
-                                        "name": "disembowel",
-                                        "regex": "^dis$"
-                                      },
-                                      {
-                                        "name": "Impale",
-                                        "regex": "^ip$"
-                                      },
-                                      {
                                         "name": "Devastate",
-                                        "regex": "^d(aa|ll)$"
+                                        "regex": "^d(aa|ll)$",
+                                        "script": "if matches[2] == \"aa\" and (svo.bals.balance and svo.bals.equilibrium) and (not svo.affl.paralysis) and (not svo.affl.cluminess) then -- exploit\nsend(\"cq all|stand|stand|wield bastard|grip|devastate \" ..target.. \" arms epseth|battlefury upset \" ..target)\nelseif matches[2] == \"aa\" and (svo.bals.balance and svo.bals.equilibrium) and (not svo.affl.paralysis) and (svo.affl.cluminess) then -- exploit/clumsiness\nsend(\"cq all|stand|stand|wield bastard|grip|discipline|devastate \" ..target.. \" arms epseth|battlefury upset \" ..target)\n\nelseif matches[2] == \"ll\" and (svo.bals.balance and svo.bals.equilibrium) and (not svo.affl.paralysis) and (not svo.affl.cluminess) then -- exploit\nsend(\"cq all|stand|stand|wield bastard|grip|devastate \" ..target.. \" legs epteth|battlefury upset \" ..target)\nelseif matches[2] == \"ll\" and (svo.bals.balance and svo.bals.equilibrium) and (not svo.affl.paralysis) and (svo.affl.cluminess) then -- exploit/clumsiness\nsend(\"cq all|stand|stand|wield bastard|grip|discipline|devastate \" ..target.. \" legs epteth|battlefury upset \" ..target)\nend"
                                       },
                                       {
                                         "name": "RAM",
-                                        "regex": "^ram$"
-                                      },
-                                      {
-                                        "name": "Warhammer Pulvervise",
-                                        "regex": "^a(ll|rl|ra|la|hh|tt)$"
+                                        "regex": "^ram$",
+                                        "script": "send(\"rampage against \" ..target)"
                                       },
                                       {
                                         "name": "Bastard Hew",
@@ -909,11 +789,13 @@
                                       },
                                       {
                                         "name": "disembowel",
-                                        "regex": "^dis$"
+                                        "regex": "^dis$",
+                                        "script": "if (svo.bals.balance and svo.bals.equilibrium) and (not svo.affl.paralysis) and (not svo.affl.cluminess) then -- exploit\nsend(\"cq all|stand|stand|wield bastard|grip|disembowel \" ..target)\nelseif (svo.bals.balance and svo.bals.equilibrium) and (not svo.affl.paralysis) and (svo.affl.cluminess) then -- exploit/clumsiness\nsend(\"cq all|stand|stand|wield bastard|grip|discipline|disembowel \" ..target)\nend"
                                       },
                                       {
                                         "name": "Impale",
-                                        "regex": "^ip$"
+                                        "regex": "^ip$",
+                                        "script": "if (svo.bals.balance and svo.bals.equilibrium) and (not svo.affl.paralysis) and (not svo.affl.cluminess) then -- exploit\nsend(\"cq all|stand|stand|wield bastard|grip|envenom bastard with epteth|battlefury focus speed|impale \" ..target)\nelseif (targreb == false) and (targshield == false) and (svo.bals.balance and svo.bals.equilibrium) and (not svo.affl.paralysis) and (svo.affl.cluminess) then -- exploit/clumsiness\nsend(\"cq all|stand|stand|wield bastard|grip|envenom bastard with epteth|discipline|battlefury focus speed|impale \" ..target)\nend"
                                       },
                                       {
                                         "name": "Warhammer Pulvervise",
@@ -923,7 +805,8 @@
                                   },
                                   {
                                     "name": "LEFT ARM",
-                                    "regex": "^ila$"
+                                    "regex": "^ila$",
+                                    "script": "targetlimb = \"left arm\"\nif tAffs.nausea\n then\n \n\ninfernalpriosprep()\n\nelseif ataxiaTemp.parriedLimb == \"left arm\" and not tAffs.nausea then\ninfernalpriosbasic()\nataxia_boxEcho(\"THEY ARE PARRYING THAT LIMB --- YOU IDIOT\", \"lightblue\")\n\nelse\n\ninfernalpriosprep()\n\n\nend\n"
                                   },
                                   {
                                     "name": "SOFTLOCK BASIC",
@@ -931,87 +814,32 @@
                                   },
                                   {
                                     "name": "RIGHT ARM",
-                                    "regex": "^ira$"
+                                    "regex": "^ira$",
+                                    "script": "targetlimb = \"right arm\"\n\n\ninfernalpriosprep()\n\n\n"
                                   },
                                   {
                                     "name": "RIGHT LEG",
-                                    "regex": "^irl$"
+                                    "regex": "^irl$",
+                                    "script": "targetlimb = \"right leg\"\n\n\n\ninfernalpriosprep()\n\n"
                                   },
                                   {
                                     "name": "LEFT LEG",
-                                    "regex": "^ill$"
+                                    "regex": "^ill$",
+                                    "script": "targetlimb = \"left leg\"\n\n\ninfernalpriosprep()\n\n\n"
                                   },
                                   {
                                     "name": "GRAVEHANDS",
                                     "regex": "^gh$"
                                   },
                                   {
-                                    "name": "LEFT ARM",
-                                    "regex": "^ila$"
-                                  },
-                                  {
                                     "name": "TORSO",
-                                    "regex": "^ito$"
+                                    "regex": "^ito$",
+                                    "script": "targetlimb = \"torso\"\n\n\n\ninfernalpriosprep()\n\n"
                                   },
                                   {
                                     "name": "HEAD",
-                                    "regex": "^ihe$"
-                                  },
-                                  {
-                                    "name": "SOFTLOCK BASIC",
-                                    "regex": "^isl$"
-                                  },
-                                  {
-                                    "name": "MAGGOTS",
-                                    "regex": "^mag$"
-                                  },
-                                  {
-                                    "name": "RIGHT ARM",
-                                    "regex": "^ira$"
-                                  },
-                                  {
-                                    "name": "DAMAGE",
-                                    "regex": "^ida$"
-                                  },
-                                  {
-                                    "name": "RIGHT LEG",
-                                    "regex": "^irl$"
-                                  },
-                                  {
-                                    "name": "DEATHAURA",
-                                    "regex": "^da$"
-                                  },
-                                  {
-                                    "name": "LEFT LEG",
-                                    "regex": "^ill$"
-                                  },
-                                  {
-                                    "name": "GRAVEHANDS",
-                                    "regex": "^gh$"
-                                  },
-                                  {
-                                    "name": "HYENA",
-                                    "regex": "^hy$"
-                                  },
-                                  {
-                                    "name": "IMPALE",
-                                    "regex": "^ip$"
-                                  },
-                                  {
-                                    "name": "TORSO",
-                                    "regex": "^ito$"
-                                  },
-                                  {
-                                    "name": "HANDS AND MAGGOTS",
-                                    "regex": "^gm$"
-                                  },
-                                  {
-                                    "name": "HEAD",
-                                    "regex": "^ihe$"
-                                  },
-                                  {
-                                    "name": "HYENA FOLLOW",
-                                    "regex": "^hf$"
+                                    "regex": "^ihe$",
+                                    "script": "targetlimb = \"head\"\nif tAffs.nausea\n then\n \n\ninfernalpriosprep()\n\nelseif ataxiaTemp.parriedLimb == \"torso\" and not tAffs.nausea then\ninfernalpriosbasic()\nataxia_boxEcho(\"THEY ARE PARRYING THAT LIMB --- YOU IDIOT\", \"lightblue\")\n\nelse\n\ninfernalpriosprep()\n\n\nend\n"
                                   },
                                   {
                                     "name": "MAGGOTS",
@@ -1022,28 +850,12 @@
                                     "regex": "^ida$"
                                   },
                                   {
-                                    "name": "TRAMPLE",
-                                    "regex": "^tra$"
-                                  },
-                                  {
                                     "name": "DEATHAURA",
                                     "regex": "^da$"
                                   },
                                   {
-                                    "name": "RAGEBLADE",
-                                    "regex": "^bla$"
-                                  },
-                                  {
                                     "name": "HYENA",
                                     "regex": "^hy$"
-                                  },
-                                  {
-                                    "name": "VIVISECT",
-                                    "regex": "^viv$"
-                                  },
-                                  {
-                                    "name": "DARKSHADE",
-                                    "regex": "^dar$"
                                   },
                                   {
                                     "name": "IMPALE",
@@ -1054,21 +866,8 @@
                                     "regex": "^gm$"
                                   },
                                   {
-                                    "name": "WEARINESS PRIO",
-                                    "isActive": "no",
-                                    "regex": "^iwe$"
-                                  },
-                                  {
-                                    "name": "DWC Head",
-                                    "regex": "^xxx$"
-                                  },
-                                  {
                                     "name": "HYENA FOLLOW",
                                     "regex": "^hf$"
-                                  },
-                                  {
-                                    "name": "PROP",
-                                    "regex": "^prop$"
                                   },
                                   {
                                     "name": "TRAMPLE",
@@ -1076,15 +875,8 @@
                                   },
                                   {
                                     "name": "RAGEBLADE",
-                                    "regex": "^bla$"
-                                  },
-                                  {
-                                    "name": "RUNES",
-                                    "regex": "^runes (\\w+)$"
-                                  },
-                                  {
-                                    "name": "tots",
-                                    "regex": "^tots$"
+                                    "regex": "^bla$",
+                                    "script": "infernalpriosblackout()"
                                   },
                                   {
                                     "name": "VIVISECT",
@@ -1093,14 +885,6 @@
                                   {
                                     "name": "DARKSHADE",
                                     "regex": "^dar$"
-                                  },
-                                  {
-                                    "name": "thurisaz",
-                                    "regex": "^thur$"
-                                  },
-                                  {
-                                    "name": "Empower Weapons",
-                                    "regex": "^remweap$"
                                   },
                                   {
                                     "name": "WEARINESS PRIO",
@@ -1205,10 +989,6 @@
                                       {
                                         "name": "Attack",
                                         "regex": "^sr$"
-                                      },
-                                      {
-                                        "name": "Attack",
-                                        "regex": "^sr$"
                                       }
                                     ]
                                   },
@@ -1223,43 +1003,23 @@
                                       },
                                       {
                                         "name": "Impale",
-                                        "regex": "^ip$"
+                                        "regex": "^ip$",
+                                        "script": "if (svo.bals.balance and svo.bals.equilibrium) and (not svo.affl.paralysis) and (not svo.affl.cluminess) then -- exploit\nsend(\"cq all|stand|stand|wield bastard|grip|envenom bastard with epteth|battlefury focus speed|impale \" ..target)\nelseif (targreb == false) and (targshield == false) and (svo.bals.balance and svo.bals.equilibrium) and (not svo.affl.paralysis) and (svo.affl.cluminess) then -- exploit/clumsiness\nsend(\"cq all|stand|stand|wield bastard|grip|envenom bastard with epteth|discipline|battlefury focus speed|impale \" ..target)\nend"
                                       },
                                       {
                                         "name": "disembowel",
-                                        "regex": "^dis$"
+                                        "regex": "^dis$",
+                                        "script": "if (svo.bals.balance and svo.bals.equilibrium) and (not svo.affl.paralysis) and (not svo.affl.cluminess) then -- exploit\nsend(\"cq all|stand|stand|wield bastard|grip|disembowel \" ..target)\nelseif (svo.bals.balance and svo.bals.equilibrium) and (not svo.affl.paralysis) and (svo.affl.cluminess) then -- exploit/clumsiness\nsend(\"cq all|stand|stand|wield bastard|grip|discipline|disembowel \" ..target)\nend"
                                       },
                                       {
                                         "name": "Devastate",
-                                        "regex": "^d(aa|ll)$"
+                                        "regex": "^d(aa|ll)$",
+                                        "script": "if matches[2] == \"aa\" and (svo.bals.balance and svo.bals.equilibrium) and (not svo.affl.paralysis) and (not svo.affl.cluminess) then -- exploit\nsend(\"cq all|stand|stand|wield bastard|grip|devastate \" ..target.. \" arms epseth|battlefury upset \" ..target)\nelseif matches[2] == \"aa\" and (svo.bals.balance and svo.bals.equilibrium) and (not svo.affl.paralysis) and (svo.affl.cluminess) then -- exploit/clumsiness\nsend(\"cq all|stand|stand|wield bastard|grip|discipline|devastate \" ..target.. \" arms epseth|battlefury upset \" ..target)\n\nelseif matches[2] == \"ll\" and (svo.bals.balance and svo.bals.equilibrium) and (not svo.affl.paralysis) and (not svo.affl.cluminess) then -- exploit\nsend(\"cq all|stand|stand|wield bastard|grip|devastate \" ..target.. \" legs epteth|battlefury upset \" ..target)\nelseif matches[2] == \"ll\" and (svo.bals.balance and svo.bals.equilibrium) and (not svo.affl.paralysis) and (svo.affl.cluminess) then -- exploit/clumsiness\nsend(\"cq all|stand|stand|wield bastard|grip|discipline|devastate \" ..target.. \" legs epteth|battlefury upset \" ..target)\nend"
                                       },
                                       {
                                         "name": "RAM",
-                                        "regex": "^ram$"
-                                      },
-                                      {
-                                        "name": "Arc",
-                                        "regex": "^arc$"
-                                      },
-                                      {
-                                        "name": "Hew (Bastard)",
-                                        "regex": "^q(ll|rl|ra|la|hh|tt)$"
-                                      },
-                                      {
-                                        "name": "Impale",
-                                        "regex": "^ip$"
-                                      },
-                                      {
-                                        "name": "disembowel",
-                                        "regex": "^dis$"
-                                      },
-                                      {
-                                        "name": "Devastate",
-                                        "regex": "^d(aa|ll)$"
-                                      },
-                                      {
-                                        "name": "RAM",
-                                        "regex": "^ram$"
+                                        "regex": "^ram$",
+                                        "script": "send(\"rampage against \" ..target)"
                                       },
                                       {
                                         "name": "Arc",
@@ -1268,10 +1028,6 @@
                                     ]
                                   }
                                 ]
-                              },
-                              {
-                                "name": "Totem",
-                                "regex": "^stot$"
                               },
                               {
                                 "name": "Totem",
@@ -1329,7 +1085,8 @@
                                 "children": [
                                   {
                                     "name": "RAGEBLADE",
-                                    "regex": "^rag$"
+                                    "regex": "^rag$",
+                                    "script": "rageprios()\n"
                                   },
                                   {
                                     "name": "HUNTING",
@@ -1417,34 +1174,6 @@
                               {
                                 "name": "DEVOUR",
                                 "regex": "^dev$"
-                              },
-                              {
-                                "name": "REND RIGHT LEG",
-                                "regex": "^orl$"
-                              },
-                              {
-                                "name": "REND LEFT LEG",
-                                "regex": "^oll$"
-                              },
-                              {
-                                "name": "REND RIGHT ARM",
-                                "regex": "^ora$"
-                              },
-                              {
-                                "name": "REND LEFT ARM",
-                                "regex": "^ola$"
-                              },
-                              {
-                                "name": "REND HEAD",
-                                "regex": "^oah$"
-                              },
-                              {
-                                "name": "REND TORSO",
-                                "regex": "^oat$"
-                              },
-                              {
-                                "name": "DEVOUR",
-                                "regex": "^dev$"
                               }
                             ]
                           },
@@ -1486,19 +1215,23 @@
                                 "children": [
                                   {
                                     "name": "LEFT ARM",
-                                    "regex": "^la$"
+                                    "regex": "^la$",
+                                    "script": "targetlimb = \"left arm\"\ndwcprep()"
                                   },
                                   {
                                     "name": "RIGHT ARM",
-                                    "regex": "^ra$"
+                                    "regex": "^ra$",
+                                    "script": "targetlimb = \"right arm\"\ndwcprep()"
                                   },
                                   {
                                     "name": "LEFT LEG",
-                                    "regex": "^ll$"
+                                    "regex": "^ll$",
+                                    "script": "targetlimb = \"left leg\"\ndwcprep()"
                                   },
                                   {
                                     "name": "RIGHT LEG",
-                                    "regex": "^rl$"
+                                    "regex": "^rl$",
+                                    "script": "targetlimb = \"right leg\"\ndwcprep()"
                                   },
                                   {
                                     "name": "RAMPAGE",
@@ -1516,29 +1249,6 @@
                                     "isActive": "yes",
                                     "isFolder": "yes",
                                     "children": [
-                                      {
-                                        "name": "Group Flow Attack",
-                                        "isActive": "no",
-                                        "regex": "^sr$"
-                                      },
-                                      {
-                                        "name": "Crescent Kill",
-                                        "isActive": "no",
-                                        "regex": "^sc$"
-                                      },
-                                      {
-                                        "name": "Combo Shikudo",
-                                        "isActive": "no",
-                                        "regex": "^(w|a|s|d|z|x|f|j|q|r|c|e)(w|a|s|d|z|x|e|f|q)(w|a|s|d|z|x|e|f|q)$"
-                                      },
-                                      {
-                                        "name": "Dispatch",
-                                        "regex": "^sk$"
-                                      },
-                                      {
-                                        "name": "^skstatus$",
-                                        "regex": "^skstatus$"
-                                      },
                                       {
                                         "name": "Group Flow Attack",
                                         "isActive": "no",
@@ -1581,14 +1291,6 @@
                                           {
                                             "name": "bbbt",
                                             "regex": "^bb$"
-                                          },
-                                          {
-                                            "name": "Wrench",
-                                            "regex": "^wr(ra|la|h|t)?$"
-                                          },
-                                          {
-                                            "name": "bbbt",
-                                            "regex": "^bb$"
                                           }
                                         ]
                                       },
@@ -1610,30 +1312,6 @@
                                     "isActive": "yes",
                                     "isFolder": "yes",
                                     "children": [
-                                      {
-                                        "name": "kai enfeeble",
-                                        "regex": "^ke$"
-                                      },
-                                      {
-                                        "name": "KAI CHOKE",
-                                        "regex": "^kc$"
-                                      },
-                                      {
-                                        "name": "KAI CRIPPLE",
-                                        "regex": "^kcr$"
-                                      },
-                                      {
-                                        "name": "Numb",
-                                        "regex": "^nu$"
-                                      },
-                                      {
-                                        "name": "Kai heal",
-                                        "regex": "^kh$"
-                                      },
-                                      {
-                                        "name": "Kaido Surge",
-                                        "regex": "^ks$"
-                                      },
                                       {
                                         "name": "kai enfeeble",
                                         "regex": "^ke$"
@@ -1716,58 +1394,6 @@
                                       {
                                         "name": "Mind Rape",
                                         "regex": "^mrap$"
-                                      },
-                                      {
-                                        "name": "MIND UNLOCK",
-                                        "regex": "^mu$"
-                                      },
-                                      {
-                                        "name": "MIND LOCK",
-                                        "regex": "^ml$"
-                                      },
-                                      {
-                                        "name": "Mind Batter",
-                                        "regex": "^mba$"
-                                      },
-                                      {
-                                        "name": "Blackout",
-                                        "regex": "^mb$"
-                                      },
-                                      {
-                                        "name": "MIND CRUSH",
-                                        "regex": "^mcr$"
-                                      },
-                                      {
-                                        "name": "MIND PARALYZE",
-                                        "regex": "^mp$"
-                                      },
-                                      {
-                                        "name": "MIND IMPATIENCE",
-                                        "regex": "^mi$"
-                                      },
-                                      {
-                                        "name": "MIND DISRUPT",
-                                        "regex": "^md$"
-                                      },
-                                      {
-                                        "name": "Mind Hallucinate Legs",
-                                        "regex": "^mhl$"
-                                      },
-                                      {
-                                        "name": "Mind Hallucinate Attack monk legs",
-                                        "regex": "^mha"
-                                      },
-                                      {
-                                        "name": "Mind Hallucinate DSl",
-                                        "regex": "^mhd$"
-                                      },
-                                      {
-                                        "name": "Mind Sense",
-                                        "regex": "^ms$"
-                                      },
-                                      {
-                                        "name": "Mind Rape",
-                                        "regex": "^mrap$"
                                       }
                                     ]
                                   },
@@ -1798,7 +1424,8 @@
                                 "children": [
                                   {
                                     "name": "RIGHT LEG",
-                                    "regex": "^ril$"
+                                    "regex": "^ril$",
+                                    "script": "rightleg()"
                                   },
                                   {
                                     "name": "SWEEP RL",
@@ -1806,11 +1433,13 @@
                                   },
                                   {
                                     "name": "LEFT LEG",
-                                    "regex": "^lel$"
+                                    "regex": "^lel$",
+                                    "script": "leftleg()"
                                   },
                                   {
                                     "name": "TORSO",
-                                    "regex": "^tor$"
+                                    "regex": "^tor$",
+                                    "script": "if ataxiaTemp.class == \"Monk\" then\n\nmonktorso()\n\nelse\n\ntorsopath()\n\nend"
                                   },
                                   {
                                     "name": "SWEEP LL",
@@ -1822,7 +1451,8 @@
                                   },
                                   {
                                     "name": "HEAD",
-                                    "regex": "^hea$"
+                                    "regex": "^hea$",
+                                    "script": "if ataxiaTemp.class == \"Monk\" then\n\nmonkhead()\n\nelse\n\nheadpath()\n\nend"
                                   },
                                   {
                                     "name": "SWEEP HEAD",
@@ -1830,7 +1460,8 @@
                                   },
                                   {
                                     "name": "RIGHT ARM",
-                                    "regex": "^ra$"
+                                    "regex": "^ra$",
+                                    "script": "rightarm()"
                                   },
                                   {
                                     "name": "SCYTHE",
@@ -1854,67 +1485,8 @@
                                   },
                                   {
                                     "name": "LEFT ARM",
-                                    "regex": "^la$"
-                                  },
-                                  {
-                                    "name": "RIGHT LEG",
-                                    "regex": "^ril$"
-                                  },
-                                  {
-                                    "name": "SWEEP RL",
-                                    "regex": "^srl$"
-                                  },
-                                  {
-                                    "name": "LEFT LEG",
-                                    "regex": "^lel$"
-                                  },
-                                  {
-                                    "name": "TORSO",
-                                    "regex": "^tor$"
-                                  },
-                                  {
-                                    "name": "SWEEP LL",
-                                    "regex": "^sll$"
-                                  },
-                                  {
-                                    "name": "SWEEP TORSO",
-                                    "regex": "^sto$"
-                                  },
-                                  {
-                                    "name": "HEAD",
-                                    "regex": "^hea$"
-                                  },
-                                  {
-                                    "name": "SWEEP HEAD",
-                                    "regex": "^she$"
-                                  },
-                                  {
-                                    "name": "RIGHT ARM",
-                                    "regex": "^ra$"
-                                  },
-                                  {
-                                    "name": "SCYTHE",
-                                    "regex": "^scy$"
-                                  },
-                                  {
-                                    "name": "SWEEP BOTH LEGS",
-                                    "regex": "^sb$"
-                                  },
-                                  {
-                                    "name": "AXE",
-                                    "regex": "^ax$"
-                                  },
-                                  {
-                                    "name": "BACKBREAKER",
-                                    "regex": "^bb$"
-                                  },
-                                  {
-                                    "name": "BBT SOLID",
-                                    "regex": "^bbb$"
-                                  },
-                                  {
-                                    "name": "LEFT ARM",
-                                    "regex": "^la$"
+                                    "regex": "^la$",
+                                    "script": "leftarm()"
                                   }
                                 ]
                               },
@@ -1923,14 +1495,6 @@
                                 "isActive": "no",
                                 "isFolder": "yes",
                                 "children": [
-                                  {
-                                    "name": "DISPATCH",
-                                    "regex": "^dis$"
-                                  },
-                                  {
-                                    "name": "LOCK",
-                                    "regex": "^lock$"
-                                  },
                                   {
                                     "name": "DISPATCH",
                                     "regex": "^dis$"
@@ -1953,14 +1517,6 @@
                                   {
                                     "name": "RADIANCE",
                                     "regex": "^rad$"
-                                  },
-                                  {
-                                    "name": "MIND LOCK TOGGLE",
-                                    "regex": "^min$"
-                                  },
-                                  {
-                                    "name": "RADIANCE",
-                                    "regex": "^rad$"
                                   }
                                 ]
                               },
@@ -1972,16 +1528,8 @@
                                   {
                                     "name": "SURGE",
                                     "regex": "^sur$"
-                                  },
-                                  {
-                                    "name": "SURGE",
-                                    "regex": "^sur$"
                                   }
                                 ]
-                              },
-                              {
-                                "name": "QUASH ARC",
-                                "regex": "^qa$"
                               },
                               {
                                 "name": "QUASH ARC",
@@ -2097,7 +1645,8 @@
                                   {
                                     "name": "CHASE",
                                     "isActive": "no",
-                                    "regex": "^ch$"
+                                    "regex": "^ch$",
+                                    "script": "killcurses()\nsend(\"who east;;who northeast;;who north;;who south;;who west;;who northwest;;who southwest;;who southeast;;who up;;who down;;who in;;who out\")\n"
                                   },
                                   {
                                     "name": "JUMPING",
@@ -2279,7 +1828,8 @@
                               },
                               {
                                 "name": "CHASE",
-                                "regex": "^to$"
+                                "regex": "^to$",
+                                "script": "local function goto(whom)\n  local p = whom:title()\n  if not mmp.pdb[p] then mmp.echo(\"Sorry - don't know where \"..p..\" is.\") return end\n \n  local nums = mmp.getnums(mmp.pdb[p], true)\n  mmp.gotoRoom(nums[1])\n  mmp.echo(string.format(\"Going to %s in %s%s.\", p, mmp.cleanAreaName(mmp.areatabler[getRoomArea(nums[1])] or '?'), (#nums ~= 1 and \" (non-unique location though)\" or \"\")))\n\nif partyrelay and not ataxia.afflictions.aeon then send(\"pt going to \"..target..\" in \"..nums[1]) end\nend\n \nif not matches[2] then\n  if not target then\n    mmp.echo(\"I don't know what your target is (set the 'target' variable)\") return\n  else\n    goto(target)\n  end\nelse\n  goto(matches[2])\nend\n  goto(matches[2])"
                               },
                               {
                                 "name": "TELL IMPASTUS",
@@ -2386,10 +1936,6 @@
                           {
                             "name": "TOUCH CRYSTAL",
                             "regex": "^tc$"
-                          },
-                          {
-                            "name": "TOUCH CRYSTAL",
-                            "regex": "^tc$"
                           }
                         ]
                       },
@@ -2430,10 +1976,6 @@
                             ]
                           }
                         ]
-                      },
-                      {
-                        "name": "Quash Arc",
-                        "regex": "^qar$"
                       },
                       {
                         "name": "Quash Arc",
@@ -2521,14 +2063,6 @@
                                   {
                                     "name": "Ink Important Tattoos",
                                     "regex": "^tat$"
-                                  },
-                                  {
-                                    "name": "Butchering",
-                                    "regex": "^reagents$"
-                                  },
-                                  {
-                                    "name": "Ink Important Tattoos",
-                                    "regex": "^tat$"
                                   }
                                 ]
                               },
@@ -2552,55 +2086,6 @@
                               {
                                 "name": "Do Repeat",
                                 "regex": "^dor(?: (.+)|)$"
-                              },
-                              {
-                                "name": "Show Changelog",
-                                "regex": "^changelog$"
-                              },
-                              {
-                                "name": "Muting people",
-                                "regex": "^(mute|unmute) (\\w+)$"
-                              },
-                              {
-                                "name": "Talisman Pieces",
-                                "regex": "^tpcs$"
-                              },
-                              {
-                                "name": "Learning",
-                                "regex": "^learn (\\w+) (\\w+)$"
-                              },
-                              {
-                                "name": "OOC Tells",
-                                "regex": "^ooc (\\w+) (.+)$"
-                              },
-                              {
-                                "name": "Reply ooc",
-                                "regex": "^rooc (.+)$"
-                              },
-                              {
-                                "name": "Ab Cheat",
-                                "regex": "^cb (\\w+)(?: (\\S+))?$"
-                              },
-                              {
-                                "name": "Eat",
-                                "regex": "^eat (\\w+)$"
-                              },
-                              {
-                                "name": "Update System",
-                                "isActive": "no",
-                                "regex": "^aupdate$"
-                              },
-                              {
-                                "name": "Do Repeat",
-                                "regex": "^dor(?: (.+)|)$"
-                              },
-                              {
-                                "name": "Extract Minerals",
-                                "regex": "^ext$"
-                              },
-                              {
-                                "name": "Mineral Locations",
-                                "regex": "^extract$"
                               },
                               {
                                 "name": "Show Changelog",
@@ -2669,34 +2154,6 @@
                                   {
                                     "name": "Manually install ndb",
                                     "regex": "^aninstall$"
-                                  },
-                                  {
-                                    "name": "Highlight Toggle",
-                                    "regex": "^anhl$"
-                                  },
-                                  {
-                                    "name": "Set Colours of Orgs",
-                                    "regex": "^anhl (\\w+) (\\w+)$"
-                                  },
-                                  {
-                                    "name": "Show Settings",
-                                    "regex": "^anss$"
-                                  },
-                                  {
-                                    "name": "Set Highlight Prioritiy",
-                                    "regex": "^an prio (enemies|city)$"
-                                  },
-                                  {
-                                    "name": "Toggle Options For Enemy Highlighting",
-                                    "regex": "^aneh (i|u|b)$"
-                                  },
-                                  {
-                                    "name": "Highlight Irrespective of NDB",
-                                    "regex": "^highlight (\\w+) (.+)$"
-                                  },
-                                  {
-                                    "name": "Manually install ndb",
-                                    "regex": "^aninstall$"
                                   }
                                 ]
                               },
@@ -2733,36 +2190,14 @@
                                     "regex": "^whois (\\w+)$"
                                   },
                                   {
-                                    "name": "Honours Person",
-                                    "regex": "^honou?rs? (\\w+)$"
-                                  },
-                                  {
-                                    "name": "Display Who",
-                                    "regex": "^whois (\\w+)$"
-                                  },
-                                  {
                                     "name": "Remove Unranked/Retired",
-                                    "regex": "^an remove (rank|level) (\\d+)$"
+                                    "regex": "^an remove (rank|level) (\\d+)$",
+                                    "script": "local remove = {}\nlocal cat, num = matches[2], tonumber(matches[3])\n\nfor i,v in pairs(ataxiaNDB.players) do\n\tif cat == \"rank\" then\n\t\tif v.xp_rank == nil or v.xp_rank == 0 or v.xp_rank > num then\n\t\t\ttable.insert(remove, v.name)\n\t\t\tataxiaNDB.players[v.name] = nil\n\t\tend\n\telse\n\t\tif not v.level or v.level < num then\n\t\t\ttable.insert(remove, v.name)\n\t\t\tataxiaNDB.players[v.name] = nil\n\t\tend\t\t\n\tend\nend\ntable.sort(remove)\n\nataxiaEcho(\"Removed a total of <green>\"..#remove..\"<NavajoWhite> unranked people from the database:\\n - \"..\n\ttable.concat(remove, \", \")..\".\")\nsend(\" \")\n"
                                   },
                                   {
                                     "name": "Re-honours everyone.",
-                                    "regex": "^an recreate$"
-                                  },
-                                  {
-                                    "name": "Remove Unranked/Retired",
-                                    "regex": "^an remove (rank|level) (\\d+)$"
-                                  },
-                                  {
-                                    "name": "Re-honours everyone.",
-                                    "regex": "^an recreate$"
-                                  },
-                                  {
-                                    "name": "Show Class Count",
-                                    "regex": "^an classes$"
-                                  },
-                                  {
-                                    "name": "Show City Count",
-                                    "regex": "^an cclasses (\\w+)$"
+                                    "regex": "^an recreate$",
+                                    "script": "local count = 0\nataxiaEcho(\"Updating everyone who's currently in the database.\")\nfor i,v in pairs(ataxiaNDB.players) do\n\tcount = count + 1\n\tataxiaNDB_Acquire(v.name:title(),false)\nend\nataxiaEcho(\"Update complete. Total of \"..count..\" people have been re-checked.\")"
                                   },
                                   {
                                     "name": "Show Class Count",
@@ -2777,14 +2212,6 @@
                                     "regex": "^an citymembers$"
                                   },
                                   {
-                                    "name": "Show Player Count",
-                                    "regex": "^an citymembers$"
-                                  },
-                                  {
-                                    "name": "Tracked from city",
-                                    "regex": "^an show (\\w+)$"
-                                  },
-                                  {
                                     "name": "Tracked from city",
                                     "regex": "^an show (\\w+)$"
                                   },
@@ -2797,24 +2224,8 @@
                                     "regex": "^cityenemies$"
                                   },
                                   {
-                                    "name": "Tracked of class",
-                                    "regex": "^an class (\\w+)$"
-                                  },
-                                  {
-                                    "name": "Grab City Enemies",
-                                    "regex": "^cityenemies$"
-                                  },
-                                  {
                                     "name": "QWC update",
                                     "regex": "^qwc$"
-                                  },
-                                  {
-                                    "name": "QWC update",
-                                    "regex": "^qwc$"
-                                  },
-                                  {
-                                    "name": "Re-honours from specific cities",
-                                    "regex": "^an redo (\\w+)$"
                                   },
                                   {
                                     "name": "Re-honours from specific cities",
@@ -2829,14 +2240,6 @@
                               {
                                 "name": "Parse QWHO",
                                 "regex": "^qwp(?: (\\w+)|)$"
-                              },
-                              {
-                                "name": "Parse QWHO",
-                                "regex": "^qwp(?: (\\w+)|)$"
-                              },
-                              {
-                                "name": "Who Groups",
-                                "regex": "^who groups$"
                               },
                               {
                                 "name": "Who Groups",
@@ -2891,11 +2294,13 @@
                                   },
                                   {
                                     "name": "Add/Remove/Copy Defence to Keepup Profile",
-                                    "regex": "^keep(add|remove|copy) (\\w+)$"
+                                    "regex": "^keep(add|remove|copy) (\\w+)$",
+                                    "script": "local profile = ataxia.settings.defences.current\n\nif profile == \"none\" or profile == nil then\n\tataxiaEcho(\"Not currently in a defup profile. Please switch to one first.\")\n\treturn\nelseif not ataxia.settings.defences.keepup[profile] then\n\tataxia.settings.defences.keepup[profile] = {}\nend\n\nlocal def = matches[3]\nif matches[2] == \"add\" then\n\tif not ataxia.settings.defences.keepup[profile] then\n\t\tataxiaEcho(\"Your current defup is set to \"..profile..\" and we don't have a defup profile for that yet.\")\n\telseif not supportedDefence(def) then\n\t\tataxiaEcho(\"That defence is not currently supported, sorry.\")\n\telseif ataxia.settings.defences.keepup[profile][def] then\n\t\tataxiaEcho(\"That defence is already in this profile.\")\n\telse\n\t\taddToKeepup(def)\n\tend\nelseif matches[2] == \"copy\" then\n\tif not ataxia.settings.defences.defup[profile] then\n\t\tataxiaEcho(\"Your current defup is set to \"..profile..\" and we don't have a defup profile for that yet.\")\n\telseif not ataxia.settings.defences.keepup[matches[3]] then\n\t\tataxiaEcho(\"Specified profile of \"..matches[3]..\" does not exist!\")\n\telse\n\t\tfor def,val in pairs(ataxia.settings.defences.keepup[matches[3]]) do\n\t\t\tataxia.settings.defences.keepup[profile][def] = true\n\t\t\tataxiaEcho(\"Copied \"..def..\" to the \"..profile..\" keepup profile.\")\n\t\tend\n\tend\t\nelse\n\tif not ataxia.settings.defences.keepup[profile] then\n\t\tataxiaEcho(\"Your current defup is set to \"..profile..\" and we don't have a defup profile for that yet.\")\n\telseif not ataxia.settings.defences.keepup[profile][def] then\n\t\tataxiaEcho(\"That defence is already not included in the defup profile.\")\n\telse\n\t\tataxia.settings.defences.keepup[profile][def] = nil\n\t\tsend(\"curing priority defence \"..def..\" reset\")\n\t\tataxiaEcho(\"Removed <white>\"..def..\" from <green>\"..profile..\"<white>'s defence list.\")\n\tend\nend\n\nataxia_saveSettings(false)"
                                   },
                                   {
                                     "name": "Add/Remove/Copy Defences to a Defup Profile",
-                                    "regex": "^def(add|remove|copy) (\\w+)$"
+                                    "regex": "^def(add|remove|copy) (\\w+)$",
+                                    "script": "local profile = ataxia.settings.defences.current\n\nif profile == \"none\" or profile == nil then\n\tataxiaEcho(\"Not currently in a defup profile. Please switch to one first.\")\n\treturn\nelseif not ataxia.settings.defences.defup[profile] then\n\tataxia.settings.defences.defup[profile] = {}\nend\n\nlocal def = matches[3]\nif matches[2] == \"add\" then\n\tif not ataxia.settings.defences.defup[profile] then\n\t\tataxiaEcho(\"Your current defup is set to \"..profile..\" and we don't have a defup profile for that yet.\")\n\telseif not supportedDefence(def) then\n\t\tataxiaEcho(\"That defence is not currently supported, sorry.\")\n\telseif ataxia.settings.defences.defup[profile][def] then\n\t\tataxiaEcho(\"That defence is already in this profile.\")\n\telse\n\t\taddToDefup(def)\n\tend\nelseif matches[2] == \"copy\" then\n\tif not ataxia.settings.defences.defup[profile] then\n\t\tataxiaEcho(\"Your current defup is set to \"..profile..\" and we don't have a defup profile for that yet.\")\n\telseif not ataxia.settings.defences.defup[matches[3]] then\n\t\tataxiaEcho(\"Specified profile of \"..matches[3]..\" does not exist!\")\n\telse\n\t\tfor def,val in pairs(ataxia.settings.defences.defup[matches[3]]) do\n\t\t\tataxia.settings.defences.defup[profile][def] = true\n\t\t\tataxiaEcho(\"Copied \"..def..\" to the \"..profile..\" defup profile.\")\n\t\tend\n\tend\t\nelse\n\tif not ataxia.settings.defences.defup[profile] then\n\t\tataxiaEcho(\"Your current defup is set to \"..profile..\" and we don't have a defup profile for that yet.\")\n\telseif not ataxia.settings.defences.defup[profile][def] then\n\t\tataxiaEcho(\"That defence is already not included in the defup profile.\")\n\telse\n\t\tataxia.settings.defences.defup[profile][def] = nil\n\t\tataxiaEcho(\"Removed <white>\"..def..\" from <green>\"..profile..\"<white>'s defence list.\")\n\tend\nend\n\nataxia_saveSettings(false)"
                                   },
                                   {
                                     "name": "Defup",
@@ -2911,7 +2316,8 @@
                                   },
                                   {
                                     "name": "Selfishness / Rebounding / Mass / Breathing",
-                                    "regex": "^(sl|mass|reb|br)$"
+                                    "regex": "^(sl|mass|reb|br)$",
+                                    "script": "local profile = ataxia.settings.defences.current\n\nif profile == \"none\" or profile == nil then\n\tataxiaEcho(\"Not currently in a defup profile. Please switch to one first.\")\n\treturn\nend\n\nlocal dl = ataxia.settings.defences.keepup[profile]\n\nif matches[2] == \"sl\" then\n  if not dl.selfishness then\n    addToKeepup(\"selfishness\")\n  else\n    ataxiaEcho(\"No longer keeping up selfishness.\")\n    ataxia.settings.defences.defup[profile].selfishness = nil\n    ataxia.settings.defences.keepup[profile].selfishness = nil\n    sendAll(\"curing priority defence selfishness reset\", \"queue addclear free generosity\",false)\n  end\nelseif matches[2] == \"mass\" then\n  if not dl.mass then\n    addToKeepup(\"mass\")\n  else\n    ataxiaEcho(\"No longer keeping up mass.\")\n    ataxia.settings.defences.defup[profile].mass = nil\n    ataxia.settings.defences.keepup[profile].mass = nil\n    send(\"curing priority defence mass reset\", false)\n  end\nelseif matches[2] == \"br\" then\n  if not dl.heldbreath then\n    addToKeepup(\"heldbreath\")\n  else\n    ataxiaEcho(\"No longer holding breath.\")\n    ataxia.settings.defences.defup[profile].heldbreath = nil\n    ataxia.settings.defences.keepup[profile].heldbreath = nil\n    send(\"curing priority defence heldbreath reset\", false)  \n  end\nelse\n  if not dl.rebounding then\n    addToKeepup(\"rebounding\")\n  else\n    ataxiaEcho(\"No longer keeping up rebounding.\")\n    ataxia.settings.defences.defup[profile].rebounding = nil\n    ataxia.settings.defences.keepup[profile].rebounding = nil\n    send(\"curing priority defence rebounding reset\", false)\n  end\nend"
                                   }
                                 ]
                               }
@@ -2936,7 +2342,8 @@
                               },
                               {
                                 "name": "shielding/cward",
-                                "regex": "^(cwd|ts)$"
+                                "regex": "^(cwd|ts)$",
+                                "script": "local atk = combatQueue()\nlocal p1, p2, p3 = \"\", \"\", \"\"\n\nif ataxia_isClass(\"magi\") then\n\tatk = atk..(matches[2] == \"ts\" and \"touch shield\" or \"curseward\")\nelseif ataxia_isClass(\"priest\") then\n\tatk = atk..(matches[2] == \"ts\" and \"angel aura\" or \"curseward\")\nelse\n\tatk = atk..(matches[2] == \"ts\" and \"touch shield\" or \"curseward\")\nend\n\nsend(\"queue addclear freestand \" ..atk)"
                               },
                               {
                                 "name": "Set Parry Mode",
@@ -3063,7 +2470,8 @@
                                   },
                                   {
                                     "name": "Toggle Health/Mana Sipping",
-                                    "regex": "^hh$"
+                                    "regex": "^hh$",
+                                    "script": "if ataxia.settings.priohealth then\n\tataxia.settings.priohealth = false\n\tsend(\"curing priority mana\",false)\nelse\n\tataxia.settings.priohealth = true\n\tsend(\"curing priority health\",false)\nend"
                                   },
                                   {
                                     "name": "Configure Precache",
@@ -3212,15 +2620,8 @@
                               },
                               {
                                 "name": "Install/Reset System",
-                                "regex": "^atinstall$"
-                              },
-                              {
-                                "name": "Show Curing Order",
-                                "regex": "^ashow prios$"
-                              },
-                              {
-                                "name": "Install/Reset System",
-                                "regex": "^atinstall$"
+                                "regex": "^atinstall$",
+                                "script": "if not installSystem then\n\tinstallSystem = tempTimer(5, [[\n\t\tataxiaEcho(\"System installation aborted.\")\n\t\tinstallSystem = nil\n\t]])\n\tataxiaEcho(\"This will reset the system, if you wish to do so, please use atinstall again.\")\nelse\n\tataxia_installSystem()\n\tkillTimer(installSystem)\nend\n\nataxia_saveSettings(false)\n"
                               },
                               {
                                 "name": "Show Curing Order",
@@ -3238,50 +2639,6 @@
                                 "isActive": "yes",
                                 "isFolder": "yes",
                                 "children": [
-                                  {
-                                    "name": "Change Roomshorten Setting",
-                                    "regex": "^aconfig roomshorten (off|normal|notmanual)$"
-                                  },
-                                  {
-                                    "name": "Jab instead of gut",
-                                    "regex": "^aconfig jab$"
-                                  },
-                                  {
-                                    "name": "Nicator",
-                                    "regex": "^nic$"
-                                  },
-                                  {
-                                    "name": "Set Flee Threshold",
-                                    "regex": "^bash threshold (\\d+)$"
-                                  },
-                                  {
-                                    "name": "Tree-Blackout",
-                                    "regex": "^aconfig treeblackout$"
-                                  },
-                                  {
-                                    "name": "Battlerage Razing",
-                                    "regex": "^bash rageraze (on|off)$"
-                                  },
-                                  {
-                                    "name": "WoT instead of gut",
-                                    "regex": "^aconfig wot$"
-                                  },
-                                  {
-                                    "name": "Swap on shielded target",
-                                    "regex": "^aconfig shieldswap$"
-                                  },
-                                  {
-                                    "name": "Incantation Bash",
-                                    "regex": "^bash incant$"
-                                  },
-                                  {
-                                    "name": "Morimbuul Card",
-                                    "regex": "^aconfig morim$"
-                                  },
-                                  {
-                                    "name": "Seasone",
-                                    "regex": "^aconfig seasone$"
-                                  },
                                   {
                                     "name": "Change Roomshorten Setting",
                                     "regex": "^aconfig roomshorten (off|normal|notmanual)$"
@@ -3406,49 +2763,12 @@
                               {
                                 "name": "Auto Bash",
                                 "regex": "^abr$"
-                              },
-                              {
-                                "name": "Install",
-                                "regex": "^abinstall$"
-                              },
-                              {
-                                "name": "Reset Bashing Stats",
-                                "regex": "^rsbs$"
-                              },
-                              {
-                                "name": "Show Bashing Stats",
-                                "regex": "^shbs$"
-                              },
-                              {
-                                "name": "Harvesting",
-                                "regex": "^abharm?$"
-                              },
-                              {
-                                "name": "Pause Basher",
-                                "regex": "^bash pause$"
-                              },
-                              {
-                                "name": "Extracting",
-                                "regex": "^abextm?$"
-                              },
-                              {
-                                "name": "Auto Bash",
-                                "regex": "^abr$"
                               }
                             ]
                           },
                           {
                             "name": "Show Colours",
                             "regex": "^colours (\\d+)$"
-                          },
-                          {
-                            "name": "Show Colours",
-                            "regex": "^colours (\\d+)$"
-                          },
-                          {
-                            "name": "Zgui Stuff",
-                            "isActive": "no",
-                            "regex": "^aconfig (zgui|zguihelp)$"
                           },
                           {
                             "name": "Zgui Stuff",
@@ -3478,30 +2798,6 @@
                   {
                     "name": "Third Attack (All Classes)",
                     "regex": "^cc$"
-                  },
-                  {
-                    "name": "First Attack (All Classes)",
-                    "regex": "^zz$"
-                  },
-                  {
-                    "name": "Fourth Attack (All Classes)",
-                    "regex": "^vv$"
-                  },
-                  {
-                    "name": "Group (All Classes)",
-                    "regex": "^sr$"
-                  },
-                  {
-                    "name": "Second Attack (All Classes)",
-                    "regex": "^xx$"
-                  },
-                  {
-                    "name": "Third Attack (All Classes)",
-                    "regex": "^cc$"
-                  },
-                  {
-                    "name": "Magi Reset",
-                    "regex": "^mreset$"
                   },
                   {
                     "name": "EPITOMISE",

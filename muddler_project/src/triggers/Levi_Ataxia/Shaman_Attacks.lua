@@ -27,9 +27,6 @@ if type(target) == "number" and ataxiaBasher.enabled then
 		deleteFull()
 	end
 	
-	if found_target then
-		--ataxiaBasher_attack()
-    basher_needAction = true
-	end
+	-- Attack dispatch now handled by unified tryAttack() gate in prompt handler
 end
 

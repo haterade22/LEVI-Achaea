@@ -1,1 +1,1 @@
-shikudo.dispatch()
+dispatch_base_prios()

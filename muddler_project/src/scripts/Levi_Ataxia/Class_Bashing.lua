@@ -281,9 +281,8 @@ function ataxiaBasher_magiBashing()
 	 local raze = ataxiaBasher.battlerage.Magi.raze
     -- GUI updates only when room contents have changed (dirty flag set by stormhammer invalidation)
     if ataxiaBasher_stormhammerDirty then
-      raiseEvent("targets updated")
       ataxia_Update_RoomContents()
-      zgui.showRoomInfo()
+      if zgui then zgui.showRoomInfo() end
     end
     ataxiaBasher_stormhammer()
    if ataxiaBasher.shielded then
@@ -632,10 +631,9 @@ local healhealth = tonumber(math.floor((ataxia.vitals.hp/ataxia.vitals.maxhp)*10
   elseif bash_type == "arius" and shaman.spiritisbound("arius") then
     atk = "invoke roar "..target
   elseif bash_type == "swiftcurse" and shaman.spiritisbound("aelkesh") then
-    if curseCharge == 1 then
+    if curseCharge <= 1 then
       atk = "stand;wield shield;swiftcurse"
-
-    elseif curseCharge > 1 then
+    else
       atk = "stand;wield shield;swiftcurse "..target.." bleed"
     end
   else
