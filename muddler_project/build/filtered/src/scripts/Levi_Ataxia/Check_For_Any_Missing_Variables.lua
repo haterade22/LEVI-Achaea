@@ -2,7 +2,9 @@ function ataxiaCheckForMissing()
 	checkedMissingVariables = true
   local sp
 	if ataxia then
-    ataxia.settings.separator = ";"
+    if not ataxia.settings.separator or ataxia.settings.separator == "" then
+      ataxia.settings.separator = ";"
+    end
     sp = ataxia.settings.separator
   end
   

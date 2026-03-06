@@ -1,5 +1,53 @@
 # LEVI-Achaea Changelog
 
+## 2026-03-06 — Setup Wizard & Separator Fix
+
+### Feature: In-game setup wizard (`levi setup`)
+
+**Files added**:
+- `src_new/scripts/.../misc_scripts/020_Setup_Wizard.lua` — `leviSetup` namespace with guided configuration for all system settings
+- `src_new/aliases/.../toggles_settings_etc/021_Setup_Wizard.lua` — `^levi setup ?(.*)$` alias to dispatch the wizard
+
+**What it does**: Provides a single `levi setup` command that walks players through configuring:
+- Class detection and weapon setup
+- Server-side separator
+- Basher settings (gold pack, flee thresholds, target lists)
+- Health/mana sipping thresholds
+- Affliction tracking mode (V1/V2/V3)
+- Combat toggles (party relay, auto-gallop, raid mode, etc.)
+- GUI creation and NDB configuration
+- Full status overview (`levi setup status`)
+
+Each category: `levi setup class`, `levi setup separator`, `levi setup weapons`, `levi setup basher`, `levi setup sipping`, `levi setup tracking`, `levi setup combat`, `levi setup gui`, `levi setup ndb`, `levi setup install`, `levi setup status`.
+
+### Feature: Installation walkthrough (`levi setup install`)
+
+Added `levi setup install` command that walks players through the three one-time install commands:
+- `atinstall` — Core Ataxia system (server-side curing config, prompt, defaults)
+- `abinstall` — Basher system (target lists, flee, shield timers)
+- `aninstall` — Name Database (player tracking, city highlighting)
+
+Subcommands: `levi setup install all` (runs basher + NDB directly, guides atinstall), `levi setup install ataxia`, `levi setup install basher`, `levi setup install ndb`.
+
+### Feature: Post-install configuration guide (`levi setup guide`)
+
+Added `levi setup guide` with per-subsystem walkthroughs showing every configurable option:
+- `levi setup guide ataxia` — Separator, system toggle, custom prompt, defence profiles (defup/defadd/defremove), curing priorities, item highlighting, sipping, room shortening, GUI, raid mode, auto-gallop, gag clotting
+- `levi setup guide basher` — Enable/disable, target lists (bash room/add/remove/list), flee thresholds, danger mobs, ignore lists, gold pack, shield swap/timer, rageraze, tree blackout, Dragon-specific options
+- `levi setup guide ndb` — City highlight colours, highlight toggle/priority, enemy formatting (bold/italic/underline), player notes, whois/honours lookup, settings display
+
+Each entry shows both the direct in-game command (e.g. `aconfig separator`) and the wizard equivalent (e.g. `levi setup separator`), so users know where to go for quick changes.
+
+### Bugfix: Separator no longer hardcoded on every login
+
+**File modified**: `src_new/scripts/.../002_Check_For_Any_Missing_Variables.lua`
+
+**Problem**: `ataxiaCheckForMissing()` unconditionally set `ataxia.settings.separator = ";"` on every login, overwriting any user-configured separator.
+
+**Fix**: Only set the default when the separator is nil or empty, preserving saved user preference.
+
+---
+
 ## 2026-03-06 — Flatten Redundant Levi_Ataxia Nesting
 
 ### Improvement: Remove triple-nested Levi_Ataxia wrapper groups

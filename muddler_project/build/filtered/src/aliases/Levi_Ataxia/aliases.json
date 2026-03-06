@@ -2260,6 +2260,10 @@
                 "name": "BECKON TOGGLE",
                 "isActive": "no",
                 "regex": "^beck(?: (\\w+)|)$"
+              },
+              {
+                "name": "Setup Wizard",
+                "regex": "^levi setup ?(.*)$"
               }
             ]
           },

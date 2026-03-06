@@ -170,6 +170,9 @@
       },
       {
         "name": "Directions"
+      },
+      {
+        "name": "Setup Wizard"
       }
     ]
   },
