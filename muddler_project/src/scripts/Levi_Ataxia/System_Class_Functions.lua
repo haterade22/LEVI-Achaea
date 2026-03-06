@@ -1,4 +1,5 @@
 function ataxia_isClass(what)
+	if not gmcp.Char or not gmcp.Char.Status or not gmcp.Char.Status.class then return false end
 	local x = gmcp.Char.Status.class:lower()
 	local y = what:lower()
 

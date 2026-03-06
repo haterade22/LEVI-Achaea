@@ -37,12 +37,13 @@ patterns:
 ]]--
 
 deleteLine()
+setTriggerStayOpen("Tattoo List", 0)
+if not tattoosOnMe then return end
 echo("\n  ")
 setUnderline(true)
 fg("LightSlateGrey")
 echo("[ Body Part ]   [ 1st Slot ] (Ch)   [ 2nd Slot ] (Ch)")
 resetFormat()
-setTriggerStayOpen("Tattoo List", 0) 
 for slot, list in pairs(tattoosOnMe) do
 	if slot == "Back" then
 		if tattoosOnMe[slot][1] ~= "empty" and #tattoosOnMe[slot][1] == 0 then

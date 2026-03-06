@@ -1,3 +1,4 @@
+if not ataxiaTables or not ataxiaTables.depthswalker or not ataxiaTables.depthswalker.abilities then return end
 if not matches[1]:find("To gain further") then
 	selectString(matches[2], 1)
 	if isAnsiFgColor(16) then

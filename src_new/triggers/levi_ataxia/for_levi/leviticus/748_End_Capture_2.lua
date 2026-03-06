@@ -36,6 +36,7 @@ patterns:
 ]]--
 
 setTriggerStayOpen("Explorers Rankings", 0)
+explorersUnchecked = explorersUnchecked or {}
 if explorersUnchecked[1] then
 	ataxiaEcho(#explorersUnchecked.." new names identified, grabbing their info.")
 	cecho("\n<a_darkgrey> - "..table.concat(explorersUnchecked, ", ")..".")

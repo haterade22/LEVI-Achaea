@@ -1,4 +1,5 @@
 function ataxia_reportDefences()
+	if not gmcp.Char or not gmcp.Char.Defences or not gmcp.Char.Defences.List then return end
 	local x = ""
 	local cur = ataxia.settings.defences.current
 	local defs = gmcp.Char.Defences.List

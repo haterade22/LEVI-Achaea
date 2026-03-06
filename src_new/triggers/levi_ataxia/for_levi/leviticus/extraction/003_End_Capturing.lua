@@ -37,6 +37,7 @@ patterns:
 ]]--
 
 setTriggerStayOpen("Extraction Mineral List",0)
+if not ataxiaExtraction or not gmcp.Room or not gmcp.Room.Info then return end
 if ataxiaExtraction[gmcp.Room.Info.area] then
   ataxiaEcho("Updated "..gmcp.Room.Info.area.." to <green>"..ataxiaExtraction[gmcp.Room.Info.area]..".")
 end

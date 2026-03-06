@@ -2152,6 +2152,7 @@ end</script>
                 <Script isActive="yes" isFolder="no">
   <name>System Class Functions</name>
                   <script>function ataxia_isClass(what)
+	if not gmcp.Char or not gmcp.Char.Status or not gmcp.Char.Status.class then return false end
 	local x = gmcp.Char.Status.class:lower()
 	local y = what:lower()
 
@@ -3287,6 +3288,7 @@ end</script>
                   <Script isActive="yes" isFolder="no">
   <name>Defence Reporting</name>
                     <script>function ataxia_reportDefences()
+	if not gmcp.Char or not gmcp.Char.Defences or not gmcp.Char.Defences.List then return end
 	local x = ""
 	local cur = ataxia.settings.defences.current
 	local defs = gmcp.Char.Defences.List
@@ -41652,7 +41654,7 @@ function tarc.write()
       tarc:cecho(string.format("%11s", ln) .. ": " .. lb[target].hits[ln] .. "\n")
     end
     end
-    if gmcp.Char.Status.class == "Monk" then
+    if gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class == "Monk" then
     tarc:cecho("          Kai: " .. (ataxia.vitals.class or 0))
     tarc:cecho("\n         Kata: " .. (katachain or 0) .. "")
       if ataxia.vitals.form then
@@ -41663,10 +41665,10 @@ function tarc.write()
         tarc:cecho("\n       Stance: unknown\n")
       end
     end
-    if gmcp.Char.Status.class == "Blademaster" then
+    if gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class == "Blademaster" and bmshin then
     tarc:cecho("     Shin: " ..bmshin.. "\n\n")
     end
-    if (gmcp.Char.Status.class == "Runewarden" or gmcp.Char.Status.class == "Infernal") and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" or gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt"  then 
+    if gmcp.Char and gmcp.Char.Status and gmcp.Char.Vitals and (gmcp.Char.Status.class == "Runewarden" or gmcp.Char.Status.class == "Infernal") and (gmcp.Char.Vitals.charstats and (gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" or gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt")) then 
     tarc:cecho("\n      Momentum: " ..mymomentum.. "\n\n")
     end
     --if ataxiaNDB.players[target] then
@@ -86241,12 +86243,13 @@ deleteLine()</script>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>End Capturing</name>
                       <script>deleteLine()
+setTriggerStayOpen("Tattoo List", 0)
+if not tattoosOnMe then return end
 echo("\n  ")
 setUnderline(true)
 fg("LightSlateGrey")
 echo("[ Body Part ]   [ 1st Slot ] (Ch)   [ 2nd Slot ] (Ch)")
 resetFormat()
-setTriggerStayOpen("Tattoo List", 0) 
 for slot, list in pairs(tattoosOnMe) do
 	if slot == "Back" then
 		if tattoosOnMe[slot][1] ~= "empty" and #tattoosOnMe[slot][1] == 0 then
@@ -87313,6 +87316,7 @@ end</script>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>End Capture</name>
                     <script>setTriggerStayOpen("Explorers Rankings", 0)
+explorersUnchecked = explorersUnchecked or {}
 if explorersUnchecked[1] then
 	ataxiaEcho(#explorersUnchecked.." new names identified, grabbing their info.")
 	cecho("\n&lt;a_darkgrey&gt; - "..table.concat(explorersUnchecked, ", ")..".")
@@ -99042,7 +99046,7 @@ end</script>
   <name>Close Trigger</name>
                           <script>setTriggerStayOpen("Swarm Tracking", 0)
 
-if pariah.burrow then
+if pariah and pariah.burrow then
   tAffs.burrow = true
   if applyAffV3 then applyAffV3("burrow") end
 end</script>
@@ -109359,6 +109363,7 @@ deleteLine()</script>
                         <script>setTriggerStayOpen("Fullsense-Hyena", 0)
 enableTrigger("Fullsense-Hyena")
 deleteLine()
+if not fullSensePeople then return end
 local sp = ataxia.settings.separator
 local pstring = "pt Fullsense info: "
 
@@ -109455,6 +109460,7 @@ deleteLine()</script>
                         <script>setTriggerStayOpen("Fullsense-Demon", 0)
 enableTrigger("Fullsense-Demon")
 deleteLine()
+if not fullSensePeople then return end
 local sp = ataxia.settings.separator
 local pstring = "pt Fullsense info: "
 
@@ -124326,6 +124332,7 @@ end</script>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>End Capturing</name>
                       <script>setTriggerStayOpen("Extraction Mineral List",0)
+if not ataxiaExtraction or not gmcp.Room or not gmcp.Room.Info then return end
 if ataxiaExtraction[gmcp.Room.Info.area] then
   ataxiaEcho("Updated "..gmcp.Room.Info.area.." to &lt;green&gt;"..ataxiaExtraction[gmcp.Room.Info.area]..".")
 end</script>
@@ -124669,7 +124676,8 @@ setTriggerStayOpen("Grab Terminus Abilities", 0)</script>
 </Trigger>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Get Skill</name>
-                      <script>if not matches[1]:find("To gain further") then
+                      <script>if not ataxiaTables or not ataxiaTables.depthswalker or not ataxiaTables.depthswalker.abilities then return end
+if not matches[1]:find("To gain further") then
 	selectString(matches[2], 1)
 	if isAnsiFgColor(16) then
 		ataxiaTables.depthswalker.abilities[matches[2]:lower()] = true
@@ -124747,6 +124755,7 @@ deleteLine()</script>
                       <script>setTriggerStayOpen("Fullsense-Monk/DW", 0)
 enableTrigger("Fullsense-Monk/DW")
 deleteLine()
+if not fullSensePeople then return end
 local sp = ataxia.settings.separator
 local pstring = "pt Fullsense info: "
 
@@ -145097,7 +145106,7 @@ end</script>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>End Shikudo</name>
                         <script>setTriggerStayOpen("Start Shikudo", 0)
-monk.shikudo.stop()</script>
+if monk and monk.shikudo then monk.shikudo.stop() end</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>

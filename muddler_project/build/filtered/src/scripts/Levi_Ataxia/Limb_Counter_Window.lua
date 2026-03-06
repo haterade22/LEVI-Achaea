@@ -184,7 +184,7 @@ function tarc.write()
       tarc:cecho(string.format("%11s", ln) .. ": " .. lb[target].hits[ln] .. "\n")
     end
     end
-    if gmcp.Char.Status.class == "Monk" then
+    if gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class == "Monk" then
     tarc:cecho("          Kai: " .. (ataxia.vitals.class or 0))
     tarc:cecho("\n         Kata: " .. (katachain or 0) .. "")
       if ataxia.vitals.form then
@@ -195,10 +195,10 @@ function tarc.write()
         tarc:cecho("\n       Stance: unknown\n")
       end
     end
-    if gmcp.Char.Status.class == "Blademaster" then
+    if gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class == "Blademaster" and bmshin then
     tarc:cecho("     Shin: " ..bmshin.. "\n\n")
     end
-    if (gmcp.Char.Status.class == "Runewarden" or gmcp.Char.Status.class == "Infernal") and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" or gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt"  then 
+    if gmcp.Char and gmcp.Char.Status and gmcp.Char.Vitals and (gmcp.Char.Status.class == "Runewarden" or gmcp.Char.Status.class == "Infernal") and (gmcp.Char.Vitals.charstats and (gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" or gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt")) then 
     tarc:cecho("\n      Momentum: " ..mymomentum.. "\n\n")
     end
     --if ataxiaNDB.players[target] then

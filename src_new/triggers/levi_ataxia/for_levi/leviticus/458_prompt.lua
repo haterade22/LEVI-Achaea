@@ -40,6 +40,7 @@ patterns:
 setTriggerStayOpen("Fullsense-Hyena", 0)
 enableTrigger("Fullsense-Hyena")
 deleteLine()
+if not fullSensePeople then return end
 local sp = ataxia.settings.separator
 local pstring = "pt Fullsense info: "
 
