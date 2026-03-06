@@ -25575,7 +25575,7 @@
                       }
                     ],
                     "fireLength": 100,
-                    "script": "monk.shikudo.start()\nmonk.shikudo.combo_affs = {}\nmonk.shikudo.parrying = {}"
+                    "script": "if not monk or not monk.shikudo then return end\nmonk.shikudo.start()\nmonk.shikudo.combo_affs = {}\nmonk.shikudo.parrying = {}"
                   },
                   {
                     "name": "Parry Leg Kick",

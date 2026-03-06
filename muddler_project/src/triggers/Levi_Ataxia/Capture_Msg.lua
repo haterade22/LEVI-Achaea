@@ -3,7 +3,8 @@ local speech = matches[3]
 local me = gmcp.Char.Status.name
 local ignoremsg = false
 
-if table.contains(ataxiaBasher.targetList[gmcp.Room.Info.area], gmcp.Comm.Channel.Text.talker) then
+if ataxiaBasher and ataxiaBasher.targetList and ataxiaBasher.targetList[gmcp.Room.Info.area]
+   and table.contains(ataxiaBasher.targetList[gmcp.Room.Info.area], gmcp.Comm.Channel.Text.talker) then
 	ignoremsg = true
 	if ataxiaBasher.enabled then
 		deleteFull()

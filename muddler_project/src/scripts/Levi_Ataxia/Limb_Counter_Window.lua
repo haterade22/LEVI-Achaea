@@ -1,18 +1,3 @@
---[[mudlet
-type: script
-name: Limb Counter Window
-hierarchy:
-- Levi_Ataxia
-- LEVI
-- Levi  Scripts
-- Leviticus
-- Windows
-attributes:
-  isActive: 'yes'
-  isFolder: 'no'
-packageName: ''
-]]--
-
 tarcLabel = Geyser.Label:new({
   name = "tarcLabel",
   x = "0%", y = "-50%",
@@ -178,10 +163,10 @@ function tarc.write()
    else 
     tarc:cecho("   Target: Sartan\n\n")
    end
-   if ataxiaNDB.players[target] then
+   if ataxiaNDB.players[target] and lb and lb[target] and lb[target].hits then
     tarc:cecho("   Limb Counter\n")
-    for _, ln in ipairs({"head", "torso", "left arm", "right arm", "left leg", "right leg"}) do 
-      tarc:cecho(string.format("%11s", ln) .. ": " .. lb[target].hits[ln] .. "\n")
+    for _, ln in ipairs({"head", "torso", "left arm", "right arm", "left leg", "right leg"}) do
+      tarc:cecho(string.format("%11s", ln) .. ": " .. (lb[target].hits[ln] or 0) .. "\n")
     end
     end
     if gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class == "Monk" then

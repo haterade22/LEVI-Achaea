@@ -33069,6 +33069,7 @@ end
 -- Event handler: capture actual kick/punch damage from combat
 function tekura6.onLimbHitUpdated(event, name, limb, amount)
   if not target or type(target) ~= "string" or name:lower() ~= target:lower() then return end
+  if not amount or type(amount) ~= "number" then return end
   -- Kicks do ~18-25%, punches do ~14-15%. Threshold at 16% to classify.
   if amount &gt; 16 then
     tekura6.state.kickDamage = amount
@@ -42462,22 +42463,7 @@ end</script>
 </eventHandlerList>
           <Script isActive="yes" isFolder="no">
   <name>Limb Counter Window</name>
-            <script>--[[mudlet
-type: script
-name: Limb Counter Window
-hierarchy:
-- Levi_Ataxia
-- LEVI
-- Levi  Scripts
-- Leviticus
-- Windows
-attributes:
-  isActive: 'yes'
-  isFolder: 'no'
-packageName: ''
-]]--
-
-tarcLabel = Geyser.Label:new({
+            <script>tarcLabel = Geyser.Label:new({
   name = "tarcLabel",
   x = "0%", y = "-50%",
   width = "14%", height = "30.4%",
@@ -42642,10 +42628,10 @@ function tarc.write()
    else 
     tarc:cecho("   Target: Sartan\n\n")
    end
-   if ataxiaNDB.players[target] then
+   if ataxiaNDB.players[target] and lb and lb[target] and lb[target].hits then
     tarc:cecho("   Limb Counter\n")
-    for _, ln in ipairs({"head", "torso", "left arm", "right arm", "left leg", "right leg"}) do 
-      tarc:cecho(string.format("%11s", ln) .. ": " .. lb[target].hits[ln] .. "\n")
+    for _, ln in ipairs({"head", "torso", "left arm", "right arm", "left leg", "right leg"}) do
+      tarc:cecho(string.format("%11s", ln) .. ": " .. (lb[target].hits[ln] or 0) .. "\n")
     end
     end
     if gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class == "Monk" then
@@ -71718,14 +71704,11 @@ function bloodPact()
 end
 
 function bloodworm()
-  if not zgui.roomDenizenList then
-    return false
+  if not ataxia or not ataxia.denizensHere then return false end
+  for _, name in pairs(ataxia.denizensHere) do
+    if name:lower():find("bloodworm") then return true end
   end
-  if table.contains(zgui.roomDenizenList, "a frenzied bloodworm") then
-    return true
-  else
-    return false
-  end
+  return false
 end
 
 function baalzadeen()
@@ -71751,40 +71734,29 @@ function apopentagram()
 end
 
 function demon()
-  if not zgui.roomDenizenList then
-    return false
+  if not ataxia or not ataxia.denizensHere then return false end
+  for _, name in pairs(ataxia.denizensHere) do
+    local ln = name:lower()
+    if ln:find("daemonite") then return "daemonite"
+    elseif ln:find("nightmare") then return "nightmare"
+    elseif ln:find("razor fiend") then return "fiend"
+    end
   end
-  if table.contains(zgui.roomDenizenList, "a small winged daemonite") then
-    return "daemonite"
-  elseif table.contains(zgui.roomDenizenList, "a fiendish nightmare") then
-    return "nightmare"
-  elseif table.contains(zgui.roomDenizenList, "a razor fiend") then
-    return "fiend"
-  else
-    return ""
-  end
+  return ""
 end
 
 function daemonite()
-  if not zgui.roomDenizenList then
-    return false
-  end
-  for id, item in pairs(zgui.roomItemList) do
-    if item.name:match("a small winged daemonite") then
-      return true
-    end
+  if not ataxia or not ataxia.denizensHere then return false end
+  for _, name in pairs(ataxia.denizensHere) do
+    if name:lower():find("daemonite") then return true end
   end
   return false
 end
 
 function fiend()
-  if not zgui.roomItemList then
-    return false
-  end
-  for id, item in pairs(zgui.roomItemList) do
-    if item.name:match("a razor fiend") then
-      return true
-    end
+  if not ataxia or not ataxia.denizensHere then return false end
+  for _, name in pairs(ataxia.denizensHere) do
+    if name:lower():find("razor fiend") then return true end
   end
   return false
 end
@@ -93347,7 +93319,8 @@ local speech = matches[3]
 local me = gmcp.Char.Status.name
 local ignoremsg = false
 
-if table.contains(ataxiaBasher.targetList[gmcp.Room.Info.area], gmcp.Comm.Channel.Text.talker) then
+if ataxiaBasher and ataxiaBasher.targetList and ataxiaBasher.targetList[gmcp.Room.Info.area]
+   and table.contains(ataxiaBasher.targetList[gmcp.Room.Info.area], gmcp.Comm.Channel.Text.talker) then
 	ignoremsg = true
 	if ataxiaBasher.enabled then
 		deleteFull()
@@ -143376,7 +143349,8 @@ if removeAffV3 then removeAffV3("shield") end</script>
 </TriggerGroup>
               <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Start Shikudo</name>
-                <script>monk.shikudo.start()
+                <script>if not monk or not monk.shikudo then return end
+monk.shikudo.start()
 monk.shikudo.combo_affs = {}
 monk.shikudo.parrying = {}</script>
   <triggerType>0</triggerType>

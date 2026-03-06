@@ -131,14 +131,11 @@ function bloodPact()
 end
 
 function bloodworm()
-  if not zgui.roomDenizenList then
-    return false
+  if not ataxia or not ataxia.denizensHere then return false end
+  for _, name in pairs(ataxia.denizensHere) do
+    if name:lower():find("bloodworm") then return true end
   end
-  if table.contains(zgui.roomDenizenList, "a frenzied bloodworm") then
-    return true
-  else
-    return false
-  end
+  return false
 end
 
 function baalzadeen()
@@ -164,40 +161,29 @@ function apopentagram()
 end
 
 function demon()
-  if not zgui.roomDenizenList then
-    return false
+  if not ataxia or not ataxia.denizensHere then return false end
+  for _, name in pairs(ataxia.denizensHere) do
+    local ln = name:lower()
+    if ln:find("daemonite") then return "daemonite"
+    elseif ln:find("nightmare") then return "nightmare"
+    elseif ln:find("razor fiend") then return "fiend"
+    end
   end
-  if table.contains(zgui.roomDenizenList, "a small winged daemonite") then
-    return "daemonite"
-  elseif table.contains(zgui.roomDenizenList, "a fiendish nightmare") then
-    return "nightmare"
-  elseif table.contains(zgui.roomDenizenList, "a razor fiend") then
-    return "fiend"
-  else
-    return ""
-  end
+  return ""
 end
 
 function daemonite()
-  if not zgui.roomDenizenList then
-    return false
-  end
-  for id, item in pairs(zgui.roomItemList) do
-    if item.name:match("a small winged daemonite") then
-      return true
-    end
+  if not ataxia or not ataxia.denizensHere then return false end
+  for _, name in pairs(ataxia.denizensHere) do
+    if name:lower():find("daemonite") then return true end
   end
   return false
 end
 
 function fiend()
-  if not zgui.roomItemList then
-    return false
-  end
-  for id, item in pairs(zgui.roomItemList) do
-    if item.name:match("a razor fiend") then
-      return true
-    end
+  if not ataxia or not ataxia.denizensHere then return false end
+  for _, name in pairs(ataxia.denizensHere) do
+    if name:lower():find("razor fiend") then return true end
   end
   return false
 end
