@@ -1,5 +1,21 @@
 # LEVI-Achaea Changelog
 
+## 2026-03-06 — Documentation Refresh
+
+### Improvement: Comprehensive markdown documentation update
+
+**Files modified**:
+- `.claude/AGENTS.md` — Added Combat Systems Quick Reference table (10 offense systems + 2 utility systems), Serpent Offense section, Shaman Offense section, Snipe System section, Setup Wizard section. Updated affliction tracking reference with `erAff()` V1-only warning, added `apostate.hasAff()` and `dwbRunie.hasAff()` to class routing. Expanded Key Files Reference table. Updated basher section with additional files and single-gate architecture notes.
+- `docs/ai-includes/agent-teams.md` — Updated Isolated Directories table with correct namespaces (`shamanOffense`, `apostate`, `serp_*`, `dwbRunie`, `snipe`, `infernalDWC2L`). Added setup wizard and shaman spirit system to Shared/Contended Files. Updated trigger ownership to mention class-specific subdirectories.
+- `CLAUDE.md` — Updated Combat Systems Index: serpent (Documented, 1 file), shaman (Documented, 1 file), snipe (Documented). Added Setup Wizard section with full command table. Updated class modules list in Ataxia Combat System overview.
+
+**Files verified (no changes needed)**:
+- `.claude/classes/README.md` — Already accurate (26 classes, lock table, combat concepts)
+- `.claude/databases/README.md` — Already accurate (4 YAML databases)
+- `.claude/templates/README.md` — Already accurate (3 templates)
+
+---
+
 ## 2026-03-06 — Setup Wizard & Separator Fix
 
 ### Feature: In-game setup wizard (`levi setup`)

@@ -38,9 +38,140 @@ This file contains critical instructions for AI agents working on the combat sys
 
 ---
 
+## Combat Systems Quick Reference
+
+### Implemented Offense Systems
+
+| System | Namespace | Dispatch | Key File(s) |
+|--------|-----------|----------|-------------|
+| **Serpent** | `serp_*` globals | `ek` → `serp_ekanelia_offense()` | `serpent/002_Serpent_Offense.lua` |
+| **Shaman** | `shamanOffense` | `zz`/`sr` → `shamanOffense.dispatch()` | `shaman/028_Shaman_Offense.lua` |
+| **DWC Infernal** | `infernalDWC` | `zz` → `infernalDWCVivisect()` | `dwc/001_Infernal_DWC_Vivisect.lua` |
+| **Blademaster** | `blademaster` | `bmd`/`bmdq`/`bmbs` → `blademaster.run()` | `blademaster/005_CC_BM_Ice.lua` |
+| **Apostate** | `apostate` | `ll`/`corr` → `apostate.dispatch()` | `apostate/015_CC_Apostate.lua` |
+| **Shikudo V1** | `shikudo` | `shikudo.dispatch()` | `shikudo/001_Shikudo.lua` |
+| **Shikudo V2** | `shikudov2` | `shikudov2.dispatch()` | `shikudo/002_Shikudo_R2.lua` |
+| **Shikudo Lock** | `shikudoLock` | `shikudolock()` | `shikudo/007_CC_Shikudo_Lock.lua` |
+| **DWB Runie** | `dwbRunie` | `dwbRunie.dispatch()` | `dwb_runie/001_DWB_Runie_Logic.lua` |
+| **Snipe** | `snipe` | `snt` → `snipe.fire()` | `snipe/001_Snipe_System.lua` |
+
+All script paths are relative to `src_new/scripts/levi_ataxia/levi/levi_scripts/`.
+
+### Utility Systems
+
+| System | Namespace | Dispatch | Key File |
+|--------|-----------|----------|----------|
+| **Basher** | `ataxiaBasher` | Prompt-driven | `ataxia/genrunning/004_Autobashing_Functions.lua` |
+| **Setup Wizard** | `leviSetup` | `levi setup <cmd>` | `ataxia/misc_scripts/020_Setup_Wizard.lua` |
+
+---
+
+## Serpent Offense System
+
+**Full details**: See memory file `serpent.md`
+
+**Key files**:
+- `serpent/002_Serpent_Offense.lua` — Unified V3-aware offense
+- `triggers/.../serpent/` — Hit triggers (010, 016, 017, 018)
+
+**Dispatch**: `ek` alias → `serp_ekanelia_offense()` → `serp_ekanelia_attack()` → `serp_sendAttack()`
+
+**Modes**:
+| Mode | Alias | Strategy |
+|------|-------|----------|
+| lock | `eklock` | Relapse-based locking (4 phases: SETUP → RELAPSE → REINFORCE → FINISH) |
+| hypnolock | `ekhl` | Hypnosis EQ chain + DSTAB → auto-switch to lock |
+| hypnosis | `ekhyp` | Fratricide via hypnosis |
+| group | `ekgroup` | Reactive gap-filling for group combat |
+| darkshade | `ekdark` | Darkshade + ginseng stack → camus transition |
+| scytherus | `ekscyth` | Camus damage mode (addiction+nausea → impulse confusion scytherus → bite) |
+| auto | `ekauto` | Adaptive strategy |
+
+**Key mechanics**:
+- Ekanelia BITE transforms venoms with bonus afflictions (conditional on existing affs)
+- Impulse delivers mental affs instantly (requires asthma + weariness + no fangbarrier)
+- Fratricide causes impulse-delivered affs to relapse after cure
+- `serp_sendAttack()` prepends `order adder kill target::purge::` before attack
+- Uses V1 fallback for sileris/fangbarrier (GMCP timing gap)
+
+---
+
+## Shaman Offense System
+
+**Full details**: See memory file `shaman.md`
+
+**Key files**:
+- `shaman/028_Shaman_Offense.lua` — Unified V3-aware offense (replaced 001-027)
+- `triggers/.../shaman/` — 12 trigger files (001-012)
+- `ataxia/shaman_system/` — Spirit binding (001=table, 002=save/load, 003=funcs)
+
+**Dispatch**: `zz`/`sr` alias → `shamanOffense.dispatch()` → `buildAttack()` → `sendAttack()`
+
+**Modes**: group (`shgroup`), lock (`shlock`), bleed (`shbleed`), damage (`shdmg`), tzantza (`shtz`)
+
+**Rotation**: Curse+Relapse(2.2s) → Jinx(2.3s) → Swiftcurse(0.8s) → Curse+Invoke(2.2s) → repeat
+
+**Key mechanics**:
+- Jinx pairing: Channel check on BOTH passes (herb + focus curability)
+- Coagulation `skipAff` prevents duplicate aff selection
+- Manaleech: smoke-cured (not kelp), gated behind asthma
+- Spirit invoke priority: Soulrend > Coagulation(haemophilia+BL≥200) > Bloodlet
+- `swiftFired` + `jinxUsedThisCycle` flags control rotation gating
+
+---
+
+## Snipe System (Class-Agnostic)
+
+**Full details**: See memory file `snipe.md`
+
+**Key files**:
+- `snipe/001_Snipe_System.lua` — Auto-scan snipe system
+- `triggers/.../snipe/001_Snipe_Success.lua` — Multiline hit detection
+- `triggers/.../snipe/002_Snipe_Failure.lua` — Wrong dir → advance scan
+- `aliases/.../targetting/003_Snipe.lua` — `snt` alias
+
+**Usage**: `snt [target] [dir]` — auto-scans room exits if no direction given
+
+**Key mechanics**:
+- Direction cache: `snipe.directionCache[target:lower()]` reused across fires
+- Scan queue built from `gmcp.Room.Info.exits` in stable order
+- Party callout: `pt Shot <target> <dir>` (unless aeon)
+- Multiline trigger: Uses `multimatches[1][2]` (NOT `matches[2]`)
+
+---
+
+## Setup Wizard System
+
+**Key file**: `src_new/scripts/levi_ataxia/levi/ataxia/misc_scripts/020_Setup_Wizard.lua`
+
+**Namespace**: `leviSetup`
+
+**Dispatch**: `levi setup <cmd> [args]` alias → `leviSetup.dispatch(cmd, rest)`
+
+**Commands**:
+| Command | Function | Purpose |
+|---------|----------|---------|
+| (none) | `setupMain()` | Main menu with all categories |
+| `class` | `setupClass(rest)` | Set/detect class |
+| `separator` | `setupSeparator(rest)` | Command separator |
+| `weapons` | `setupWeapons(rest)` | Weapon IDs |
+| `basher` | `setupBasher(rest)` | Basher settings |
+| `sipping` | `setupSipping(rest)` | Health/mana sip thresholds |
+| `tracking` | `setupTracking(rest)` | V1/V2 tracking mode |
+| `combat` | `setupCombat(rest)` | Party relay, looting, gag clot |
+| `gui` | `setupGui(rest)` | Toggle GUI on/off |
+| `ndb` | `setupNdb(rest)` | NDB highlight colours |
+| `install` | `setupInstall()` | Guided install walkthrough |
+| `status` | `setupStatus()` | One-page settings overview |
+| `guide` | `setupGuide(rest)` | Configuration guides (ataxia/basher/ndb) |
+
+**When modifying**: Follow the existing `cecho()` color pattern (dark_orchid headers, green values, light_slate_blue labels).
+
+---
+
 ## Shikudo Lock System Reference
 
-The Lock system (`203_Shikudo_Lock.lua`) uses pure affliction-based locking with Telepathy.
+The Lock system (`007_CC_Shikudo_Lock.lua`) uses pure affliction-based locking with Telepathy.
 
 ### Lock Progression
 
@@ -83,25 +214,7 @@ Telepathy uses EQ balance (separate from BAL for staff attacks):
 3. `batter` - Mental pressure (stupidity, epilepsy, dizziness)
 4. `paralyse` - Backup paralysis
 
-### Shikudo Lock Commands
-
-- `shikudolock()` or `shikudoLock.dispatch()` - Main dispatch
-- `sklstatus()` or `sklockstatus()` - Status display
-
----
-
-## Shikudo Dispatch Quick Reference
-
-### V1 System (`200_Shikudo.lua`)
-- Strategy: Balanced leg prep (both legs 90%+)
-- Kill: Prone + Broken leg + Broken head + Windpipe
-
-### V2 System (`201_Shikudo_V2.lua`)
-- Strategy: Focus fire one leg, clumsy first
-- Key mechanic: SPINKICK on prone + damaged head = instant MANGLE
-- Kill: Same as V1
-
-### Commands
+### Shikudo Commands
 
 | System | Dispatch | Status |
 |--------|----------|--------|
@@ -121,7 +234,7 @@ Read the **attacker's class documentation** for:
 
 ---
 
-## Serpent Defense Quick Reference (2024)
+## Serpent Defense Quick Reference
 
 **CRITICAL**: Modern Serpents use **Impulse** (not SNAP) to deliver mental afflictions.
 
@@ -178,8 +291,8 @@ Ekanelia allows serpent BITE attacks to deliver BONUS afflictions when specific 
 ### Key Files
 - `.claude/classes/serpent.md` - Full Serpent mechanics + Ekanelia
 - `.claude/classes/lock_types.md` - Serpent lock strategy section
-- `src_new/scripts/levi_ataxia/levi/levi_scripts/algedonic_defense_1.0/001_Anti_Priorities.lua` - AntiSerpent function
-- `src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Ekanelia_Offense.lua` - Serpent offense system
+- `src_new/scripts/.../algedonic_defense_1.0/001_Anti_Priorities.lua` - AntiSerpent function
+- `src_new/scripts/.../serpent/002_Serpent_Offense.lua` - Serpent offense system
 
 ---
 
@@ -246,8 +359,8 @@ The system uses a **three-tier approach** for tracking enemy afflictions:
 
 **Global Functions:**
 - `tarAffed(...)` - Add afflictions (variadic)
-- `erAff(what)` - Remove affliction
-- `haveAff(what)` - Check if target has affliction (V1)
+- `erAff(what)` - Remove affliction (**V1 only** — use `erAffWrapper()` or add `removeAffV3()` for V3)
+- `haveAff(what)` - Check if target has affliction (routes V3 → V1)
 - `haveAffV2(aff)` - Check with V2 certainty
 - `haveAffV3(aff, threshold)` - Check with V3 probability (default 30% threshold)
 - `getAffProbabilityV3(aff)` - Get probability 0.0-1.0
@@ -255,15 +368,20 @@ The system uses a **three-tier approach** for tracking enemy afflictions:
 **Class-Specific Routing (V3 → V2 → V1):**
 - `infernalDWC.hasAff(aff)` - DWC Vivisect system
 - `blademaster.hasAff(aff)` - Blademaster Ice Dispatch
+- `apostate.hasAff(aff)` - Apostate system
+- `dwbRunie.hasAff(aff)` - DWB Runie system
 
 Each class's `hasAff()` routes: V3 (if enabled) → V2 (if enabled) → V1 (fallback).
 Shield/rebounding use dual-check pattern: `hasAff("rebounding") or (tAffs and tAffs.rebounding)`
 
+**IMPORTANT**: Never use `hasAff(x) or (tAffs and tAffs.x)` for regular afflictions — trust `haveAff()` alone.
+**Exception**: Rebounding/shield SHOULD use V1 fallback due to GMCP timing gap.
+
 **Files:**
-- `src_new/scripts/.../017_Affliction_Management.lua` - V1 core tracking
-- `src_new/scripts/.../affliction_tracking_v2/` - V2 certainty system
-- `src_new/scripts/.../affliction_tracking_v3/` - V3 branching states
-- `src_new/scripts/.../dwc/003_Infernal_DWC_Vivisect.lua` - DWC V3 integration
+- `src_new/scripts/.../017_Affliction_Management.lua` - V1 core tracking (`haveAff()` at line 187)
+- `src_new/scripts/.../affliction_tracking_v2/` - V2 certainty system (4 files)
+- `src_new/scripts/.../affliction_tracking_core/008_V3_Integration.lua` - V3 integration
+- `src_new/scripts/.../dwc/001_Infernal_DWC_Vivisect.lua` - DWC V3 integration
 - `src_new/scripts/.../blademaster/005_CC_BM_Ice.lua` - BM V3 integration
 
 ---
@@ -295,13 +413,24 @@ E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
 |------|---------|
 | `.claude/classes/lock_types.md` | Comprehensive lock definitions |
 | `.claude/classes/README.md` | Class index and combat concepts |
-| `.claude/classes/<class>.md` | Per-class kill routes and mechanics |
-| `.claude/classes/monk.md` | Monk/Shikudo kill routes and mechanics |
+| `.claude/classes/<class>.md` | Per-class kill routes and mechanics (26 classes) |
+| `.claude/templates/` | Offense, limb tracking, lock strategy templates |
+| `.claude/databases/` | venoms.yaml, afflictions.yaml, locks.yaml, forms.yaml |
 | `CLAUDE.md` | Main project documentation |
-| `src_new/scripts/levi_ataxia/levi/levi_scripts/shikudo/001_Shikudo.lua` | Shikudo V1 dispatch system |
-| `src_new/scripts/levi_ataxia/levi/levi_scripts/shikudo/002_Shikudo_R2.lua` | Shikudo V2 dispatch system |
-| `src_new/scripts/levi_ataxia/levi/levi_scripts/shikudo/007_CC_Shikudo_Lock.lua` | Shikudo Lock affliction system |
-| `src_new/scripts/.../017_Affliction_Management.lua` | Target affliction tracking |
+| `GETTING_STARTED.md` | Setup guide and system overview |
+| `docs/ai-includes/agent-teams.md` | Multi-agent team coordination guide |
+| `src_new/scripts/.../serpent/002_Serpent_Offense.lua` | Serpent offense (unified) |
+| `src_new/scripts/.../shaman/028_Shaman_Offense.lua` | Shaman offense (unified) |
+| `src_new/scripts/.../dwc/001_Infernal_DWC_Vivisect.lua` | DWC Infernal vivisect |
+| `src_new/scripts/.../blademaster/005_CC_BM_Ice.lua` | Blademaster ice dispatch |
+| `src_new/scripts/.../apostate/015_CC_Apostate.lua` | Apostate offense |
+| `src_new/scripts/.../shikudo/001_Shikudo.lua` | Shikudo V1 |
+| `src_new/scripts/.../shikudo/002_Shikudo_R2.lua` | Shikudo V2 |
+| `src_new/scripts/.../shikudo/007_CC_Shikudo_Lock.lua` | Shikudo Lock |
+| `src_new/scripts/.../snipe/001_Snipe_System.lua` | Snipe system (class-agnostic) |
+| `src_new/scripts/.../misc_scripts/020_Setup_Wizard.lua` | Setup wizard |
+| `src_new/scripts/.../017_Affliction_Management.lua` | Target affliction tracking (V1) |
+| `src_new/scripts/.../affliction_tracking_core/008_V3_Integration.lua` | V3 integration |
 
 ---
 
@@ -314,12 +443,12 @@ E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
 | `src_new/scripts/.../basher/001_Bashing_Functions.lua` | Attack dispatch, flee logic, battlerage assembly |
 | `src_new/scripts/.../basher/002_Class_Bashing.lua` | Class-specific attack builders (20+ classes) |
 | `src_new/scripts/.../basher/003_Bash_Stats_Functions.lua` | Session statistics |
-| `src_new/scripts/.../genrunning/001_Bashing_API.lua` | Path generation, room scanning, death recovery, flee timeout, mapper-stuck detection |
-| `src_new/scripts/.../genrunning/002_search_targets.lua` | Target selection, stormhammer caching, shield retarget, ldeck rules |
-| `src_new/scripts/.../genrunning/004_Autobashing_Functions.lua` | Main loop, mode control, GMCP balance tracking |
-| `src_new/triggers/.../007_Mob_Shielded.lua` | Shield detection trigger (uses configurable timers) |
-| `src_new/scripts/.../update_stuff/002_ataxia_Room_Update.lua` | Room change handler (invalidates stormhammer cache) |
-| `src_new/scripts/.../update_stuff/003_ataxia_RoomContents_Update.lua` | Denizen list handler (invalidates stormhammer cache) |
+| `src_new/scripts/.../genrunning/001_Bashing_API.lua` | Path generation, room scanning, death recovery |
+| `src_new/scripts/.../genrunning/002_search_targets.lua` | Target selection, stormhammer, shield retarget, ldeck |
+| `src_new/scripts/.../genrunning/003_Engaged_Disengage.lua` | Basher enable/disable handlers |
+| `src_new/scripts/.../genrunning/004_Autobashing_Functions.lua` | tryAttack() dispatch gate, throttle |
+| `src_new/scripts/.../ataxia/022_Bashing_Functions.lua` | Attack execution, danger levels, flee |
+| `src_new/scripts/.../genrunning/010_Prompt_Running.lua` | Active prompt handler |
 
 ### Configuration Options
 
@@ -340,12 +469,13 @@ E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\bin\muddle.bat
 
 ### Architecture Notes
 
-- **Dispatch table** is built once at load time (not per-attack). Maps class name to function name via `_G[]` lookup.
-- **Battlerage** uses generic handlers (`standardBattlerage`, `crowdControlBattlerage`) with only 4 special-cased classes.
-- **Stormhammer caching**: Update events call `invalidateStormhammer()` (sets dirty flag). Recompute happens lazily during prompt cycle.
-- **GMCP balance tracking**: `recordBalanceSample()` measures inter-attack intervals in a rolling window of 20 per class. `getAttackCooldown()` returns 95% of the average.
-- **Knight classes** have separate standalone functions with 4 specs each.
-- **Monk** has `monkBashing2()` handling both Tekura and Shikudo specs.
+- **Single gate**: `tryAttack()` is the ONLY function that calls `ataxiaBasher_attack()`. Gates: anti-spam → bashFlee → paused → canBals()+canStand() → skipRoom → found_target → throttle
+- **Anti-spam**: 0.3s fixed timer prevents double-sends. `canBals()` (GMCP) is the real balance gate
+- **Room arrival**: GMCP Room → `need_roomCheck=true` → Items.List → denizensHere → prompt → scanRoom() + search_targets() → tryAttack()
+- **Dispatch table** built once at load time. Maps class name to function via `_G[]` lookup
+- **Stormhammer**: Dirty-flag cached, lazy recompute during prompt cycle
+- **Knight classes** have separate standalone functions with 4 specs each
+- **Monk** has `monkBashing2()` handling both Tekura and Shikudo specs
 
 ### Before Modifying Basher Code
 

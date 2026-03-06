@@ -176,7 +176,9 @@ All combat systems in `src_new/scripts/levi_ataxia/levi/levi_scripts/`:
 | **pariah** | 1 | Undocumented | Plague/swarm | `pariah/` |
 | **psion** | 1 | Undocumented | Mental stack | `psion/` |
 | **s_n_b** | 1 | Undocumented | Sword and Board | `s_n_b/` |
-| **shaman** | 27 | Undocumented | Tzantza, locks | `shaman/` |
+| **serpent** | 1 (002) | **Documented** | Ekanelia lock, darkshade, scytherus | `serpent/` |
+| **shaman** | 1 (028) | **Documented** | Tzantza, locks, bleed | `shaman/` |
+| **snipe** | 1 | **Documented** | Class-agnostic snipe system | `snipe/` |
 | **shikudo** | ~5 | **Documented** | V1/V2/Lock | `shikudo/` |
 | **tekura** | ~3 | Undocumented | Monk unarmed | `tekura/` |
 | **two_handed** | 1 | Undocumented | 2H knight | `two_handed/` |
@@ -205,7 +207,7 @@ All combat systems in `src_new/scripts/levi_ataxia/levi/levi_scripts/`:
 - **Fracture Management**: Two-handed combat tracking
 - **Defense Management**: Automatic parrying, SSC integration
 - **Basher**: `ataxiaBasher` for automated hunting (see details below)
-- **Class Modules**: Pariah, Bard, Monk, Magi, Two-Handed, Infernal DWC
+- **Class Modules**: Serpent, Shaman, Blademaster, Infernal DWC, Apostate, Monk, and 12+ more
 - **Shikudo Dispatch System**: Full auto-combat for Monk/Shikudo spec
   - `200_Shikudo.lua` (V1) - Balanced leg prep, both legs 90%+
   - `201_Shikudo_V2.lua` (V2) - Focus fire one leg with SPINKICK kill route
@@ -507,6 +509,30 @@ ataxiaBasher_assembleBattlerage() → Generic/CC handler with rage conservation
 - Tracks: name, city, house, class, level, XP rank, player kills
 - City-based name highlighting
 - Enemy and army rank tracking
+
+### Setup Wizard (leviSetup)
+In-game configuration wizard accessed via `levi setup`.
+
+**Key File**: `src_new/scripts/levi_ataxia/levi/ataxia/misc_scripts/020_Setup_Wizard.lua`
+
+**Namespace**: `leviSetup` — all functions under this table, dispatched via `leviSetup.dispatch(cmd, rest)`
+
+**Commands**:
+| Command | Purpose |
+|---------|---------|
+| `levi setup` | Main menu |
+| `levi setup class` | Set/auto-detect class |
+| `levi setup separator` | Command separator |
+| `levi setup weapons` | Weapon IDs |
+| `levi setup basher` | Basher settings (flee, gold pack, shield swap) |
+| `levi setup sipping` | Health/mana sip thresholds |
+| `levi setup tracking` | Affliction tracking mode (V1/V2) |
+| `levi setup combat` | Party relay, auto-loot, gag clot |
+| `levi setup gui` | Toggle GUI on/off |
+| `levi setup ndb` | NDB highlight colours |
+| `levi setup install` | Guided install walkthrough (atinstall/abinstall/aninstall) |
+| `levi setup status` | One-page settings overview |
+| `levi setup guide` | Configuration guides (ataxia/basher/ndb) |
 
 ---
 

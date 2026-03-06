@@ -56,13 +56,15 @@ Each per-class combat system directory is fully independent and uses its own nam
 
 | Directory | Namespace | Safe for Solo Teammate |
 |-----------|-----------|----------------------|
-| `levi_scripts/dwc/` | `infernalDWC` | Yes |
+| `levi_scripts/dwc/` | `infernalDWC`, `infernalDWC2L` | Yes |
 | `levi_scripts/blademaster/` | `blademaster` | Yes |
 | `levi_scripts/shikudo/` | `shikudo`, `shikudov2`, `shikudoLock` | Yes |
-| `levi_scripts/shaman/` | shaman tables | Yes |
-| `levi_scripts/apostate/` | apostate tables | Yes |
+| `levi_scripts/shaman/` | `shamanOffense` | Yes |
+| `levi_scripts/apostate/` | `apostate` | Yes |
+| `levi_scripts/serpent/` | `serp_*` globals | Yes |
+| `levi_scripts/dwb_runie/` | `dwbRunie` | Yes |
+| `levi_scripts/snipe/` | `snipe` | Yes |
 | `levi_scripts/bard/` | bard tables | Yes |
-| `levi_scripts/serpent/` | serpent tables | Yes |
 | `levi_scripts/earth_lord/` | earth lord tables | Yes |
 | `levi_scripts/tekura/` | tekura tables | Yes |
 | `levi_scripts/depthswalker/` | depthswalker tables | Yes |
@@ -82,13 +84,15 @@ These files are used by ALL combat systems and must NOT be modified by teammates
 | `ataxia/curing/` | Cure priorities affect all combat |
 | `ataxia/limb_management/` | Limb tracking shared across knight/monk systems |
 | `ataxia/fracture_management/` | Two-handed fracture tracking |
+| `ataxia/misc_scripts/020_Setup_Wizard.lua` | Setup wizard (`leviSetup` namespace) -- shared utility |
+| `ataxia/shaman_system/` | Spirit binding system shared by shaman offense |
 | `tools/convert_to_muddler.py` | Build pipeline -- one writer at a time |
 | `CLAUDE.md` | Project documentation -- lead only |
 | `.claude/AGENTS.md` | Agent instructions -- lead only |
 
 ### Trigger Ownership
 
-Triggers in `src_new/triggers/levi_ataxia/for_levi/leviticus/` are a flat directory with 400+ files. Triggers are often class-specific by content but NOT by file name. A teammate working on a class system should:
+Triggers in `src_new/triggers/levi_ataxia/for_levi/leviticus/` are a mix of a flat directory (400+ files) and class-specific subdirectories. Some classes have dedicated trigger subdirectories (e.g., `serpent/`, `shaman/`, `snipe/`), while others have triggers scattered in the flat directory. A teammate working on a class system should:
 
 1. Search for triggers related to their class using grep
 2. Claim specific trigger files in the task list
