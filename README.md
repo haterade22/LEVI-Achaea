@@ -71,6 +71,57 @@ Output: `muddler_project/build/Levi_Ataxia.mpackage`
 1. Open Mudlet → Package Manager
 2. Install `muddler_project/build/Levi_Ataxia.mpackage`
 3. Reconnect to Achaea (GMCP must be enabled under Settings → Protocols)
+4. Run the in-game setup wizard (see below)
+
+---
+
+## Getting Started In-Game
+
+After installing the package and connecting to Achaea, use the built-in setup wizard to configure everything:
+
+```
+levi setup
+```
+
+### First-Time Install
+
+Run these three commands to initialise the subsystems:
+
+| Step | Command | What it does |
+|------|---------|-------------|
+| 1 | `atinstall` | Configures server-side curing (priorities, sipping, batching), prompt, and loads defaults. Type it twice within 5s to confirm. |
+| 2 | `abinstall` | Initialises the basher (target lists, flee thresholds, shield timers) |
+| 3 | `aninstall` | Sets up the player database (API integration, city-based name highlighting) |
+
+Or use `levi setup install` for a guided walkthrough.
+
+### Configuration Guide
+
+After installing, `levi setup guide` shows every configurable option across all three subsystems:
+
+| Command | Section |
+|---------|---------|
+| `levi setup guide ataxia` | Separator, system toggle, custom prompt, defence profiles, curing priorities, item highlighting, sipping, room shortening, GUI, raid mode |
+| `levi setup guide basher` | Target lists, flee/shield thresholds, danger mobs, ignore lists, gold pack, shield swap/timer, rageraze, tree blackout |
+| `levi setup guide ndb` | City highlight colours, highlight toggle/priority, enemy formatting, player notes, whois lookup |
+
+### Quick Reference
+
+| Command | Purpose |
+|---------|---------|
+| `levi setup` | Main menu — all setup categories |
+| `levi setup class` | Set your class |
+| `levi setup separator` | Set command separator (default `;`) |
+| `levi setup weapons` | Configure weapon IDs |
+| `levi setup basher` | Basher settings |
+| `levi setup sipping` | Health/mana sip thresholds |
+| `levi setup tracking` | Affliction tracking mode (V1/V2) |
+| `levi setup combat` | Combat toggles (party relay, looting, etc.) |
+| `levi setup gui` | Toggle the GUI |
+| `levi setup ndb` | NDB highlighting colours |
+| `levi setup status` | Overview of all current settings |
+
+---
 
 ### Conversion Script Options
 

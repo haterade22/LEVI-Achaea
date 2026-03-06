@@ -27,7 +27,60 @@ The system relies heavily on GMCP for real-time game data. In Mudlet:
 2. Ensure "Enable GMCP" is checked
 3. Reconnect to Achaea if needed
 
-### 3. Test Basic Functionality
+### 3. First-Time Setup (In-Game)
+
+After connecting to Achaea, run the setup wizard:
+
+```
+levi setup
+```
+
+#### Step 1: Install the subsystems
+
+Run these three commands to initialise everything:
+
+```
+atinstall          -- Core system (type twice within 5s to confirm)
+abinstall          -- Basher (hunting system)
+aninstall          -- Name Database (player tracking)
+```
+
+Or use `levi setup install` for a guided walkthrough that explains each step.
+
+#### Step 2: Configure your settings
+
+The setup wizard has individual pages for each area:
+
+```
+levi setup class           -- Set your class (auto-detects via GMCP)
+levi setup separator       -- Command separator (default ;)
+levi setup weapons         -- Weapon IDs for your class
+levi setup basher          -- Flee thresholds, gold pack, shield swap
+levi setup sipping         -- Health/mana sip percentages
+levi setup tracking        -- Affliction tracking mode (V1 or V2)
+levi setup combat          -- Party relay, auto-loot, gag clot
+levi setup gui             -- Toggle the GUI on/off
+levi setup ndb             -- City highlight colours, enemy formatting
+```
+
+#### Step 3: Learn what's configurable
+
+For a full walkthrough of every option in each subsystem:
+
+```
+levi setup guide           -- Overview of all three guides
+levi setup guide ataxia    -- Core: separator, prompt, defences, highlights, priorities
+levi setup guide basher    -- Hunting: targets, flee, danger, gold, shields, rageraze
+levi setup guide ndb       -- Players: city colours, enemy format, notes, whois
+```
+
+#### Step 4: Check your settings
+
+```
+levi setup status          -- One-page overview of all current values
+```
+
+### 4. Test Basic Functionality
 
 ```lua
 -- Test mapper
