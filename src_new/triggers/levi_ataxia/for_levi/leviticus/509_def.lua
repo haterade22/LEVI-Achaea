@@ -38,4 +38,5 @@ patterns:
   type: 1
 ]]--
 
+if not capturing_readaura then return end
 deleteLine()

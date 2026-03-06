@@ -8517,7 +8517,7 @@
                                       }
                                     ],
                                     "fireLength": 99,
-                                    "script": "deleteLine()"
+                                    "script": "capturing_readaura = true\ndeleteLine()"
                                   },
                                   {
                                     "name": "Readaura Get Affs",
@@ -10362,7 +10362,7 @@
                                         "type": "regex"
                                       }
                                     ],
-                                    "script": "mmp.locateAndEchoSide(matches[3], matches[2])\n\nfullSensePeople[matches[3]] = fullSensePeople[matches[3]] or {}\ntable.insert(fullSensePeople[matches[3]], matches[2])\ntable.sort(fullSensePeople[matches[3]])\ndeleteLine()"
+                                    "script": "if not capturing_fullsense_hyena then return end\nmmp.locateAndEchoSide(matches[3], matches[2])\n\nfullSensePeople[matches[3]] = fullSensePeople[matches[3]] or {}\ntable.insert(fullSensePeople[matches[3]], matches[2])\ntable.sort(fullSensePeople[matches[3]])\ndeleteLine()"
                                   },
                                   {
                                     "name": "prompt",
@@ -10372,7 +10372,7 @@
                                         "type": "prompt"
                                       }
                                     ],
-                                    "script": "setTriggerStayOpen(\"Fullsense-Hyena\", 0)\nenableTrigger(\"Fullsense-Hyena\")\ndeleteLine()\nif not fullSensePeople then return end\nlocal sp = ataxia.settings.separator\nlocal pstring = \"pt Fullsense info: \"\n\nfor location, people in pairs(fullSensePeople) do\n\tcecho(\"\\n<a_blue>[<DimGrey>\"..location..\"<a_blue>] - \")\n\tpstring = pstring..sp..\"pt [\"..location:title()..\"]: \"\n\tmmp.locateAndEchoSide(location)\n\tcecho(\"\\n\")\n\tlocal charstring = \"  \"\n\tfor ind, person in pairs(fullSensePeople[location]) do\n\t\tpstring = pstring..person\t\t\n\t\tif ataxiaNDB_Exists(person) then\n\t\t\tcharstring = charstring..\"<\"..ataxiaNDB_getColour(person)..\">\"..person\n\t\telse\n\t\t\tcharstring = charstring..\"<grey>\"..person\n\t\tend\n\t\tcharstring = charstring..\"<grey>\"..(ind == #fullSensePeople[location] and \".\" or \", \")\n\t\tpstring = pstring..(ind == #fullSensePeople[location] and \".\" or \", \")\n\tend\n\tcecho(charstring..\"\\n \")\nend\nataxiaPromptSub()\n\nif ataxia_raidMode(\"fullsense\") then\n  send(pstring)\nend"
+                                    "script": "setTriggerStayOpen(\"Fullsense-Hyena\", 0)\nenableTrigger(\"Fullsense-Hyena\")\nif not capturing_fullsense_hyena then return end\ncapturing_fullsense_hyena = nil\ndeleteLine()\nif not fullSensePeople then return end\nlocal sp = ataxia.settings.separator\nlocal pstring = \"pt Fullsense info: \"\n\nfor location, people in pairs(fullSensePeople) do\n\tcecho(\"\\n<a_blue>[<DimGrey>\"..location..\"<a_blue>] - \")\n\tpstring = pstring..sp..\"pt [\"..location:title()..\"]: \"\n\tmmp.locateAndEchoSide(location)\n\tcecho(\"\\n\")\n\tlocal charstring = \"  \"\n\tfor ind, person in pairs(fullSensePeople[location]) do\n\t\tpstring = pstring..person\t\t\n\t\tif ataxiaNDB_Exists(person) then\n\t\t\tcharstring = charstring..\"<\"..ataxiaNDB_getColour(person)..\">\"..person\n\t\telse\n\t\t\tcharstring = charstring..\"<grey>\"..person\n\t\tend\n\t\tcharstring = charstring..\"<grey>\"..(ind == #fullSensePeople[location] and \".\" or \", \")\n\t\tpstring = pstring..(ind == #fullSensePeople[location] and \".\" or \", \")\n\tend\n\tcecho(charstring..\"\\n \")\nend\nataxiaPromptSub()\n\nif ataxia_raidMode(\"fullsense\") then\n  send(pstring)\nend"
                                   }
                                 ]
                               },
@@ -10389,7 +10389,7 @@
                                         "type": "regex"
                                       }
                                     ],
-                                    "script": "mmp.locateAndEchoSide(matches[3], matches[2])\n\nfullSensePeople[matches[3]] = fullSensePeople[matches[3]] or {}\ntable.insert(fullSensePeople[matches[3]], matches[2])\ntable.sort(fullSensePeople[matches[3]])\ndeleteLine()"
+                                    "script": "if not capturing_fullsense_demon then return end\nmmp.locateAndEchoSide(matches[3], matches[2])\n\nfullSensePeople[matches[3]] = fullSensePeople[matches[3]] or {}\ntable.insert(fullSensePeople[matches[3]], matches[2])\ntable.sort(fullSensePeople[matches[3]])\ndeleteLine()"
                                   },
                                   {
                                     "name": "prompt",
@@ -10399,7 +10399,7 @@
                                         "type": "prompt"
                                       }
                                     ],
-                                    "script": "setTriggerStayOpen(\"Fullsense-Demon\", 0)\nenableTrigger(\"Fullsense-Demon\")\ndeleteLine()\nif not fullSensePeople then return end\nlocal sp = ataxia.settings.separator\nlocal pstring = \"pt Fullsense info: \"\n\nfor location, people in pairs(fullSensePeople) do\n\tcecho(\"\\n<a_blue>[<DimGrey>\"..location..\"<a_blue>] - \")\n\tpstring = pstring..sp..\"pt [\"..location:title()..\"]: \"\n\tmmp.locateAndEchoSide(location)\n\tcecho(\"\\n\")\n\tlocal charstring = \"  \"\n\tfor ind, person in pairs(fullSensePeople[location]) do\n\t\tpstring = pstring..person\t\t\n\t\tif ataxiaNDB_Exists(person) then\n\t\t\tcharstring = charstring..\"<\"..ataxiaNDB_getColour(person)..\">\"..person\n\t\telse\n\t\t\tcharstring = charstring..\"<grey>\"..person\n\t\tend\n\t\tcharstring = charstring..\"<grey>\"..(ind == #fullSensePeople[location] and \".\" or \", \")\n\t\tpstring = pstring..(ind == #fullSensePeople[location] and \".\" or \", \")\n\tend\n\tcecho(charstring..\"\\n \")\nend\nataxiaPromptSub()\n\nif ataxia_raidMode(\"fullsense\") then\n  send(pstring)\nend"
+                                    "script": "setTriggerStayOpen(\"Fullsense-Demon\", 0)\nenableTrigger(\"Fullsense-Demon\")\nif not capturing_fullsense_demon then return end\ncapturing_fullsense_demon = nil\ndeleteLine()\nif not fullSensePeople then return end\nlocal sp = ataxia.settings.separator\nlocal pstring = \"pt Fullsense info: \"\n\nfor location, people in pairs(fullSensePeople) do\n\tcecho(\"\\n<a_blue>[<DimGrey>\"..location..\"<a_blue>] - \")\n\tpstring = pstring..sp..\"pt [\"..location:title()..\"]: \"\n\tmmp.locateAndEchoSide(location)\n\tcecho(\"\\n\")\n\tlocal charstring = \"  \"\n\tfor ind, person in pairs(fullSensePeople[location]) do\n\t\tpstring = pstring..person\t\t\n\t\tif ataxiaNDB_Exists(person) then\n\t\t\tcharstring = charstring..\"<\"..ataxiaNDB_getColour(person)..\">\"..person\n\t\telse\n\t\t\tcharstring = charstring..\"<grey>\"..person\n\t\tend\n\t\tcharstring = charstring..\"<grey>\"..(ind == #fullSensePeople[location] and \".\" or \", \")\n\t\tpstring = pstring..(ind == #fullSensePeople[location] and \".\" or \", \")\n\tend\n\tcecho(charstring..\"\\n \")\nend\nataxiaPromptSub()\n\nif ataxia_raidMode(\"fullsense\") then\n  send(pstring)\nend"
                                   }
                                 ]
                               },
@@ -10428,7 +10428,7 @@
                                   }
                                 ],
                                 "fireLength": 100,
-                                "script": "mmp.pdb_lastupdate = {}\n\nfullSensePeople = {}"
+                                "script": "capturing_fullsense_hyena = true\nmmp.pdb_lastupdate = {}\n\nfullSensePeople = {}"
                               },
                               {
                                 "name": "Fullsense-Demon",
@@ -10439,7 +10439,7 @@
                                   }
                                 ],
                                 "fireLength": 100,
-                                "script": "mmp.pdb_lastupdate = {}\n\nfullSensePeople = {}"
+                                "script": "capturing_fullsense_demon = true\nmmp.pdb_lastupdate = {}\n\nfullSensePeople = {}"
                               },
                               {
                                 "name": "NEW DEADEYES",
@@ -15843,7 +15843,7 @@
                                 "type": "prompt"
                               }
                             ],
-                            "script": "setTriggerStayOpen(\"Defence List\", 0)\ndeleteLine()\nif not capturing_defences then return end\ncapturing_defences = nil\nataxia_reportDefences()\n"
+                            "script": "setTriggerStayOpen(\"Defence List\", 0)\nif not capturing_defences then return end\ndeleteLine()\ncapturing_defences = nil\nataxia_reportDefences()\n"
                           }
                         ]
                       },

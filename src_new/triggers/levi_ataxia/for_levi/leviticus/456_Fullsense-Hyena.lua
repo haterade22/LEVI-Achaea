@@ -36,6 +36,7 @@ patterns:
   type: 3
 ]]--
 
+capturing_fullsense_hyena = true
 mmp.pdb_lastupdate = {}
 
 fullSensePeople = {}

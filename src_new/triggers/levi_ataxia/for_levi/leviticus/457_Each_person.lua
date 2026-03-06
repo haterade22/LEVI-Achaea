@@ -37,6 +37,7 @@ patterns:
   type: 1
 ]]--
 
+if not capturing_fullsense_hyena then return end
 mmp.locateAndEchoSide(matches[3], matches[2])
 
 fullSensePeople[matches[3]] = fullSensePeople[matches[3]] or {}

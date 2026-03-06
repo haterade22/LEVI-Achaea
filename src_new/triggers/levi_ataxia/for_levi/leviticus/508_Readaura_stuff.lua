@@ -37,4 +37,5 @@ patterns:
   type: 1
 ]]--
 
+capturing_readaura = true
 deleteLine()

@@ -103749,7 +103749,8 @@ end</script>
 </regexCodePropertyList>
                         <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>def</name>
-                          <script>deleteLine()</script>
+                          <script>if not capturing_readaura then return end
+deleteLine()</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -103770,8 +103771,10 @@ end</script>
 </Trigger>
                         <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>End</name>
-                          <script>deleteLine()
-setTriggerStayOpen("Readaura stuff", 0)</script>
+                          <script>if not capturing_readaura then return end
+deleteLine()
+setTriggerStayOpen("Readaura stuff", 0)
+capturing_readaura = nil</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -103818,7 +103821,8 @@ end</script>
 </Trigger>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Readaura stuff</name>
-                        <script>deleteLine()</script>
+                        <script>capturing_readaura = true
+deleteLine()</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>99</mStayOpen>
@@ -109290,7 +109294,8 @@ end</script>
 </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Each person</name>
-                        <script>mmp.locateAndEchoSide(matches[3], matches[2])
+                        <script>if not capturing_fullsense_hyena then return end
+mmp.locateAndEchoSide(matches[3], matches[2])
 
 fullSensePeople[matches[3]] = fullSensePeople[matches[3]] or {}
 table.insert(fullSensePeople[matches[3]], matches[2])
@@ -109318,6 +109323,8 @@ deleteLine()</script>
   <name>prompt</name>
                         <script>setTriggerStayOpen("Fullsense-Hyena", 0)
 enableTrigger("Fullsense-Hyena")
+if not capturing_fullsense_hyena then return end
+capturing_fullsense_hyena = nil
 deleteLine()
 if not fullSensePeople then return end
 local sp = ataxia.settings.separator
@@ -109385,7 +109392,8 @@ end</script>
 </regexCodePropertyList>
                       <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Each person</name>
-                        <script>mmp.locateAndEchoSide(matches[3], matches[2])
+                        <script>if not capturing_fullsense_demon then return end
+mmp.locateAndEchoSide(matches[3], matches[2])
 
 fullSensePeople[matches[3]] = fullSensePeople[matches[3]] or {}
 table.insert(fullSensePeople[matches[3]], matches[2])
@@ -109413,6 +109421,8 @@ deleteLine()</script>
   <name>prompt</name>
                         <script>setTriggerStayOpen("Fullsense-Demon", 0)
 enableTrigger("Fullsense-Demon")
+if not capturing_fullsense_demon then return end
+capturing_fullsense_demon = nil
 deleteLine()
 if not fullSensePeople then return end
 local sp = ataxia.settings.separator
@@ -109502,7 +109512,8 @@ end</script>
 </TriggerGroup>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Fullsense-Hyena</name>
-                      <script>mmp.pdb_lastupdate = {}
+                      <script>capturing_fullsense_hyena = true
+mmp.pdb_lastupdate = {}
 
 fullSensePeople = {}</script>
   <triggerType>0</triggerType>
@@ -109525,7 +109536,8 @@ fullSensePeople = {}</script>
 </Trigger>
                     <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Fullsense-Demon</name>
-                      <script>mmp.pdb_lastupdate = {}
+                      <script>capturing_fullsense_demon = true
+mmp.pdb_lastupdate = {}
 
 fullSensePeople = {}</script>
   <triggerType>0</triggerType>
@@ -123398,8 +123410,8 @@ end</script>
                   <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>prompt</name>
                     <script>setTriggerStayOpen("Defence List", 0)
-deleteLine()
 if not capturing_defences then return end
+deleteLine()
 capturing_defences = nil
 ataxia_reportDefences()
 </script>

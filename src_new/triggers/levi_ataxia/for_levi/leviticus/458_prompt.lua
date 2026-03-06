@@ -39,6 +39,8 @@ patterns:
 
 setTriggerStayOpen("Fullsense-Hyena", 0)
 enableTrigger("Fullsense-Hyena")
+if not capturing_fullsense_hyena then return end
+capturing_fullsense_hyena = nil
 deleteLine()
 if not fullSensePeople then return end
 local sp = ataxia.settings.separator
