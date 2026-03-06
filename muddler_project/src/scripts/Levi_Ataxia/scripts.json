@@ -479,6 +479,18 @@
                       },
                       {
                         "name": "ataxiaNDB Display API"
+                      },
+                      {
+                        "name": "ataxiaNDB_Success",
+                        "eventHandlerList": [
+                          "sysDownloadDone"
+                        ]
+                      },
+                      {
+                        "name": "ataxiaNDB_Failed",
+                        "eventHandlerList": [
+                          "sysDownloadError"
+                        ]
                       }
                     ]
                   },
