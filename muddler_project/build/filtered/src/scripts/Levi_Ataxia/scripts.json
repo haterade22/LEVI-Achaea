@@ -1357,8 +1357,7 @@
         "children": [
           {
             "name": "CLUMSY PRIOS",
-            "isActive": "no",
-            "script": "function clumsyprios()\ngetLockingAffliction()\ncurses = {}\n\nif checkAffList({\"anorexia\", \"asthma\", \"slickness\", \"bloodfire\"},3) then\n\tlocal\tsoftlock = true\n  else\n  softlock = false\n\t\n\tend\n\tif softlock and checkAffList({\"impatience\", \"sandfever\"},1) then\n\tlocal\thardlock = true\n   hardlock = false\n  end\n\t\nif checkAffList({\"healthleech\", \"asthma\", \"weariness\", \"sensitivity\", \"clumsiness\", \"hypochondria\", \"parasite\", \"rebbies\"},3) then\n\t\tkelpstack = true\n  else\n  kelpstack = false\n\n\tend\nif checkAffList({\"addiction\", \"nausea\", \"lethargy\", \"scytherus\", \"darkshade\", \"haemophilia\", \"flushings\", \"unweavingbody\"},3) then\n\t\tginstack = true\n  else\n  ginstack = false\n\n\tend\n\n\tif hardlock and haveAff(\"paralysis\") then\n\tlocal\ttruelock = true\n truelock = false\n\t\n\tend\n  swiftness = swiftness or false\n \n  if ataxiaTemp.dollFashions and ataxiaTemp.dollFashions > 0 and ataxiaTemp.dollFashions < 55 then\nrending = true\nelse\nrending = false\nend\n\nif truelock and not tAffs.voyria  then\n\n    table.insert(curses,\"plague\")\nend\n\nif tAffs.slickness and not tAffs.anorexia and tAffs.impatience then\n    table.insert(curses,\"anorexia\")\nend\n\n\nif not tAffs.paralysis and ataxiaTemp.relapseAff ~= \"paralysis\" then\n    table.insert(curses,\"paralysis\")\nend\n\nif kelpstack and not tAffs.impatience and ataxiaTemp.relapseAff ~= \"impatience\" then\n    table.insert(curses,\"impatience\")\nend\n\n\nif not tAffs.clumsiness and ataxiaTemp.relapseAff ~= \"clumsiness\" then\n    table.insert(curses,\"clumsy\")\nend\n\nif not tAffs.weariness and ataxiaTemp.relapseAff ~= \"weariness\" then\n    table.insert(curses,\"weariness\")\nend\n\nif not tAffs.asthma and ataxiaTemp.relapseAff ~= \"asthma\" then\n    table.insert(curses,\"asthma\")\nend\n\nif not tAffs.healthleech and ataxiaTemp.relapseAff ~= \"healthleech\" then\n    table.insert(curses,\"healthleech\")\nend\n\n\n\nif not tAffs.haemophilia and ataxiaTemp.relapseAff ~= \"haemophilia\" then\n    table.insert(curses,\"haemophilia\")\nend\n\n\n\n\n\n\n\n\n\n\nif getLockingAffliction() ~= \"confusion\" and getLockingAffliction() ~= \"weariness\" and getLockingAffliction() ~= \"plague\" and\n not tAffs[getLockingAffliction()] and ataxiaTemp.relapseAff ~= getLockingAffliction()\nthen    table.insert(curses,getLockingAffliction())\nend\n\nif not tAffs.recklessness and ataxiaTemp.relapseAff ~= \"recklessness\" then\ntable.insert(curses,\"reckless\")\nend\n\nif not tAffs.stupidity and ataxiaTemp.relapseAff ~= \"stupid\" then\n    table.insert(curses,\"stupid\")\nend\n\n\n\nif not tAffs.addiction and ataxiaTemp.relapseAff ~= \"addiction\" then\n    table.insert(curses,\"addiction\")\nend\n\n\n\nif not tAffs.dizziness  and ataxiaTemp.relapseAff ~= \"dizzy\" then\n    table.insert(curses,\"dizzy\")\nend\n\nif not tAffs.dementia  and ataxiaTemp.relapseAff ~= \"dementia\" then\n    table.insert(curses,\"dementia\")\nend\n\nif not tAffs.vertigo  and ataxiaTemp.relapseAff ~= \"vertigo\" then\n    table.insert(curses,\"vertigo\")\nend\n\n\n\nif not tAffs.addiction and ataxiaTemp.relapseAff ~= \"addiction\" then\n    table.insert(curses,\"addiction\")\nend\n\nif not tAffs.nausea and ataxiaTemp.relapseAff ~= \"nausea\" then\n    table.insert(curses,\"vomiting\")\nend\n\n\n\nif not tAffs.masochism and ataxiaTemp.relapseAff ~= \"masochism\" then\n    table.insert(curses,\"masochism\")\nend\n\n\n\n\n\n\n\nif swiftness == false then\nattack()\nelseif swiftness == true then\nattackswift()\nend\nend\n\n"
+            "isActive": "no"
           },
           {
             "name": "ATTACK",
@@ -1733,46 +1732,6 @@
         "isActive": "yes",
         "isFolder": "yes",
         "children": [
-          {
-            "name": "CLUMSY PRIOS",
-            "script": "function apostate_clumsy()\ngetLockingAffliction()\ncheckTargetLocks()\n\nif checkAffList({\"anorexia\", \"asthma\", \"slickness\", \"bloodfire\"},3) then\n\tlocal\tsoftlock = true\n  else\n  softlock = false\n\t\n\tend\nif checkAffList({\"anorexia\", \"asthma\", \"slickness\", \"paralysis\"},4) then\n\tlocal\ttreelock = true\n  else\n  treelock = false\n\t\n\tend\ncurses = {}\n\n\nataxiaTemp.tarTumble = ataxiaTemp.tarTumble or false\n\n\n if tAffs.curseward  then\n\n    table.insert(curses,\"breach\")\nend\n\nif ataxiaTemp.tarTumble then\n table.insert(curses,\"cowardice\")\nend\n\nif truelock and not tAffs.voyria  then\n\n    table.insert(curses,\"plague\")\nend\n\nif tAffs.slickness and not tAffs.anorexia and (tAffs.impatience or curses[2] == \"impatience\") and curses[1] ~= \"breach\" then\n    table.insert(curses,\"anorexia\")\nend\n\nif tAffs.manaleech and not tAffs.slickness and not tAffs.anorexia  and tAffs.asthma and tAffs.impatience and curses[1] ~= \"breach\" then\n    table.insert(curses,\"anorexia\")\nend\n\nif  tAffs.slickness and not tAffs.anorexia  and tAffs.asthma and not tAffs.impatience and curses[1] ~= \"breach\" and not tBals.tree then\n    table.insert(curses,\"anorexia\")\n    table.insert(curses,\"impatience\")\nend\n\n\n\n\n\n\nif maretick and maretick == true and not tAffs.hellsight and tAffs.hypersomnia and not tAffs.dementia and not tAffs.asthma and tAffs.impatience then\n   table.insert(curses,\"dementia\")\nend\n\n\n\nif tAffs.asthma and tAffs.impatience and not tAffs.slickness then\n   table.insert(curses,\"sicken\")\nend\n\n\n\nif not tAffs.paralysis then\n    table.insert(curses,\"paralysis\")\nend\n\nif tAffs.deafness then\n    table.insert(curses,\"sensitivity\")\nend\n\nif not tAffs.clumsiness  then\n    table.insert(curses,\"clumsy\")\nend\n\n\n\nif not tAffs.impatience  then\n    table.insert(curses,\"impatience\")\nend\n\nif tAffs.impatience and not tAffs.stupidity and not tAffs.asthma then\n    table.insert(curses,\"stupid\")\nend\n\n\n\nif not tAffs.asthma then\n    table.insert(curses,\"asthma\")\n       table.insert(curses,\"sicken\")\nend\n\n\n\n\nif not tAffs.weariness  then\n    table.insert(curses,\"weariness\")\nend\n\n\n\n\n\n\n\n\nif tAffs.deafness and ataxiaNDB_getClass(target) ~= \"Blademaster\" and ataxiaNDB_getClass(target) ~= \"Monk\" then\n table.insert(curses,\"sensitivity\")\nend\n\n\n\n\nif  getLockingAffliction() ~= \"plague\" and getLockingAffliction() ~= \"stupid\" and getLockingAffliction() ~= \"reckless\" and getLockingAffliction() ~= \"paralyse\" and getLockingAffliction() ~= \"haemophilia\" and\n not tAffs[getLockingAffliction()] \nthen    table.insert(curses,getLockingAffliction())\nend\n\n\n\n\n\nif tAffs.impatience and not tAffs.dizziness then\n    table.insert(curses,\"dizzy\")\nend\n\n\n\n\nif not tAffs.nausea  then\n    table.insert(curses,\"vomiting\")\nend\n\n\n\n\n\nif not tAffs.addiction then\n    table.insert(curses,\"addiction\")\nend\n\n\n\n\n\n\n\n\n\nif not tAffs.confusion  then\n    table.insert(curses,\"confusion\")\nend\n\n\n\n\n\n\n\nif not tAffs.epilepsy  then\n    table.insert(curses,\"epilepsy\")\nend\n\n\n\nif not tAffs.dementia  then\n    table.insert(curses,\"dementia\")\nend\n\nif not tAffs.vertigo then\n    table.insert(curses,\"vertigo\")\nend\n\n\n\nif not tAffs.dizziness  then\n    table.insert(curses,\"dizzy\")\nend\n\n\n\nif not tAffs.recklessness  then\ntable.insert(curses,\"reckless\")\nend\n\nif not tAffs.masochism  then\n    table.insert(curses,\"masochism\")\nend\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\napostate_lockattack()\nend"
-          },
-          {
-            "name": "CORRUPT ATTACK 2"
-          },
-          {
-            "name": "VIVISECT"
-          },
-          {
-            "name": "VIVI PRIOS"
-          },
-          {
-            "name": "MENTAL PRIOS"
-          },
-          {
-            "name": "KELP STACK"
-          },
-          {
-            "name": "SLEEP"
-          },
-          {
-            "name": "SLEEP ATTACK"
-          },
-          {
-            "name": "GROUP PRIOS"
-          },
-          {
-            "name": "Weariness STACK"
-          },
-          {
-            "name": "Faster Lock"
-          },
-          {
-            "name": "Illusion Clum"
-          },
-          {
-            "name": "LOCK ATTACK"
-          },
           {
             "name": "Levi Apostate"
           },

@@ -49,6 +49,7 @@ packageName: ''
 --     With asthma(50%+): manaleech -> impatience -> sicken (slickness)
 --     -> anorexia -> weariness -> class lock aff -> voyria (fallback)
 --     Once asthma lands, clumsiness is skipped — lock speed over hinder.
+--     Clumsy+weariness are both kelp-cured: forces 2 kelp eats before asthma.
 --
 --   Curse 2 (secondary) - Paralysis-first, then fill missing lock pieces:
 --     paralysis -> asthma -> manaleech (gated by asthma) -> impatience
@@ -236,16 +237,16 @@ local function toEvileyeCurse(curse)
 end
 
 -- Curse 1: Truelock priority chain (V3-aware gating)
--- Without asthma: clumsiness(33%) → weariness(33%) → asthma
--- With asthma(50%+): manaleech (probe) → impatience → slickness → anorexia → weariness → class lock → voyria
--- Manaleech at 50% asthma = information play: if they smoke, asthma collapses to 0%.
--- If they don't smoke, asthma is confirmed 100% and manaleech sticks.
+-- Without asthma: clumsiness(33%) → weariness(33%) → asthma (kelp stack: both must stick before asthma)
+-- With asthma(33%+): manaleech + disfigure → impatience → slickness → anorexia → weariness → class lock → voyria
+-- Manaleech at 33% asthma = early pressure: if they smoke, asthma collapses to 0%.
+-- If they don't smoke, asthma is confirmed and manaleech sticks.
 -- Once asthma lands, skip clumsiness entirely and push lock pieces ASAP.
 function apostate.selectPrimaryCurse()
   local asthmaProb = apostate.getAffProb("asthma")
 
-  if asthmaProb >= 0.50 then
-    -- Asthma likely → push manaleech (also probes asthma: smoke = no asthma, no smoke = confirmed)
+  if asthmaProb >= 0.33 then
+    -- Asthma likely → push manaleech + disfigure (probes asthma: smoke = no asthma, no smoke = confirmed)
     -- Skip clumsiness: lock speed > hinder pressure
     if not apostate.hasAff("manaleech") then return "manaleech" end
     if not apostate.hasAff("impatience") then return "impatience" end
@@ -263,7 +264,9 @@ function apostate.selectPrimaryCurse()
     -- Weariness (truelock piece)
     if not apostate.hasAff("weariness") then return "weariness" end
   else
-    -- No asthma: build hinder then secure asthma
+    -- No asthma: build kelp stack (clumsy+weariness) then push asthma
+    -- Both are kelp-cured — delivering both forces target to eat kelp twice before asthma.
+    -- Only advance to asthma once BOTH are at 33%+.
     if apostate.getAffProb("clumsiness") < 0.33 then return "clumsy" end
     if apostate.getAffProb("weariness") < 0.33 then return "weariness" end
     return "asthma"
@@ -305,14 +308,14 @@ function apostate.selectSecondaryCurse(c1)
   if not apostate.hasAff("asthma") and c1 ~= "asthma" then return "asthma" end
 
   -- Manaleech at 50%+ asthma (smoke-cured without it; also probes asthma certainty)
-  if apostate.getAffProb("asthma") >= 0.50 and not apostate.hasAff("manaleech") and c1 ~= "manaleech" then
+  if apostate.getAffProb("asthma") >= 0.33 and not apostate.hasAff("manaleech") and c1 ~= "manaleech" then
     return "manaleech"
   end
 
   if not apostate.hasAff("impatience") and c1 ~= "impatience" then return "impatience" end
 
   -- Slickness via sicken (gated by impatience + asthma 50%+)
-  if apostate.hasAff("impatience") and apostate.getAffProb("asthma") >= 0.50
+  if apostate.hasAff("impatience") and apostate.getAffProb("asthma") >= 0.33
      and not apostate.hasAff("slickness") and c1 ~= "sicken" then
     return "sicken"
   end
@@ -586,9 +589,11 @@ function apostate.buildAttack()
     atk = atk .. "wield shield;deadeyes " .. target .. " " .. c1 .. " " .. c2
 
     -- Disfigure on EQ when cursing manaleech (lock mode only, once per manaleech round)
-    -- Chained with :: so disfigure only fires AFTER deadeyes (not as a separate immediate command)
+    -- Only append when ON BALANCE to prevent stale-state dispatch (button spam while off-balance
+    -- would queue disfigure prematurely before the manaleech round actually fires)
     if apostate.state.mode == "lock" and (c1 == "manaleech" or c2 == "manaleech")
-       and not apostate.state.disfigureSent then
+       and not apostate.state.disfigureSent
+       and gmcp.Char.Vitals.bal == "1" then
       local sep = (ataxia and ataxia.settings and ataxia.settings.separator) or "::"
       atk = atk .. sep .. "disfigure " .. target
       apostate.state.disfigureSent = true
