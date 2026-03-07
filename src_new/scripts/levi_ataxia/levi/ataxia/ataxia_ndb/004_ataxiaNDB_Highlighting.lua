@@ -99,14 +99,14 @@ function ataxiaNDB_highlightName(who, city)
 			if city == "None" or city == "(hidden)" then
 				colour = ataxiaNDB.highlighting.Rogues
 			else
-				colour = ataxiaNDB.highlighting[city]
+				colour = ataxiaNDB.highlighting[city] or ataxiaNDB.highlighting.Rogues
 			end
 		end
 	else
 		if city == "None" or city == "(hidden)" then
 			colour = ataxiaNDB.highlighting.Rogues
 		else
-			colour = ataxiaNDB.highlighting[city]
+			colour = ataxiaNDB.highlighting[city] or ataxiaNDB.highlighting.Rogues
 		end
 	end
 

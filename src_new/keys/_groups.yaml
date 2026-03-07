@@ -5,8 +5,6 @@ groups:
   packageName: Levi_Ataxia
   directory: levi_ataxia
   children:
-  - name: Targeting
-    directory: levi_ataxia/levitax/targeting
   - name: Movement/Bashing
     directory: levi_ataxia/levitax/movement_bashing
   - name: Ataxia-DownloadThis

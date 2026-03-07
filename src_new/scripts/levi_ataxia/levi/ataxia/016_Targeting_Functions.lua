@@ -182,6 +182,7 @@ end
 
 --type(target) == "number"
 function isTargeted(who)
+if not target then return false end
 if type(target) ~= "number" then
   local x,y = who:lower(), target:lower()
   if string.starts(x,y) or string.starts(y,x) or x == y then

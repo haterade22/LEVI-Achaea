@@ -87,7 +87,9 @@ function zgui.zStartup()
     --if not table.contains(zgui.modules, "buildRoomInfo") then table.insert(zgui.modules, "buildRoomInfo") end
     
     for i=1, #zgui.modules, 1 do
-      zgui[zgui.modules[i]]()
+      if zgui[zgui.modules[i]] then
+        zgui[zgui.modules[i]]()
+      end
     end
     ------------------------------------------------------------------------
     zgui.debug = false

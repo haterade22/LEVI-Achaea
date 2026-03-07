@@ -39,7 +39,7 @@ zgui.buildBashWindow()
 tracklegenddeckcountreset()
 ataxia_resetPariah()
 
-tempTimer(5, [[ slc_reset();slc_force_display() ]])
+tempTimer(5, [[ if slc_reset then slc_reset() end; if slc_force_display then slc_force_display() end ]])
 tempTimer(7, [[ataxiaNDB.highlightNames = true;ataxiaNDB_loadHighlights()]])
 
 ataxia.vitals.focusbal = true
