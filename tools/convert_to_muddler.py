@@ -138,7 +138,7 @@ def fallback_yaml_parse(content: str) -> Tuple[Optional[Dict], str]:
     # Match lines like "- pattern: ^some(regex)$" and wrap the value in single quotes
     fixed_lines = []
     for line in yaml_text.split('\n'):
-        pattern_match = re.match(r'^(\s*-?\s*pattern:\s*)(.+)$', line)
+        pattern_match = re.match(r'^(\s*-?\s*(?:pattern|regex):\s*)(.+)$', line)
         if pattern_match:
             prefix, value = pattern_match.groups()
             value = value.strip()

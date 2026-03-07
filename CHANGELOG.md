@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-03-06 — Fix: Alias `regex:` fields not parsed by converter
+
+**Files modified**:
+- `tools/convert_to_muddler.py` — `fallback_yaml_parse()`
+
+**Problem**: Aliases with unquoted `regex:` values containing YAML special characters (e.g., `^snt(?: (.+))?$`) failed primary YAML parsing. The fallback parser only fixed `pattern:` lines but not `regex:` lines, causing the file to be silently skipped with a "No YAML header" warning. The Snipe alias (`003_Snipe.lua`) was missing from the built package because of this.
+
+**Fix**: Extended fallback parser regex from `pattern:` to `(?:pattern|regex):` so both trigger patterns and alias regexes are auto-quoted when they contain special YAML characters.
+
+---
+
+## 2026-03-06 — Feature: Snipe system uses SHOOT for knight classes
+
+**Files modified**:
+- `src_new/scripts/.../snipe/001_Snipe_System.lua`
+
+**Change**: Runewarden and Infernal classes use `shoot` (Weaponmastery) instead of `snipe` (Subterfuge). Added `snipe.getCommand()` helper that checks `gmcp.Char.Status.class` and returns the correct command. The `snt` alias, success trigger, and failure trigger are unchanged — only the sent command differs.
+
+---
+
 ## 2026-03-06 — Fix: Focus trigger now clears impatience from tracking
 
 **Files modified**:
