@@ -1,27 +1,225 @@
--- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Ataxia-DownloadThis > Ataxia > System-related > Self Limb Tracking > Track The Damage
+-------------------------------------------------------------------
+-- CONFIGURATION — Every feature independently toggleable
+-------------------------------------------------------------------
 
--- Initialize enhanced selfLimbDamage structure if not already present
-selfLimbDamage = selfLimbDamage or {
-	["head"] = {damage = 0, lastHit = 0, hitCount = 0},
-	["torso"] = {damage = 0, lastHit = 0, hitCount = 0},
-	["left arm"] = {damage = 0, lastHit = 0, hitCount = 0},
-	["right arm"] = {damage = 0, lastHit = 0, hitCount = 0},
-	["left leg"] = {damage = 0, lastHit = 0, hitCount = 0},
-	["right leg"] = {damage = 0, lastHit = 0, hitCount = 0},
-	timers = {},
-	lasthit = "none",
+selfLimbDamage = selfLimbDamage or {}
+
+-- Preserve existing config across reloads, merge in defaults for new keys
+local defaultConfig = {
+	-- Feature toggles
+	enabled = true,
+	autoParry = true,
+	autoShield = false,
+	sscPriority = true,
+	partyCallout = true,
+	warningAlerts = true,
+	criticalAlerts = true,
+	guiWindow = true,
+
+	-- Tunable thresholds
+	torsoBreakThreshold = 100,
+	warningHits = 2,
+	criticalHits = 1,
+	shieldCooldown = 4,
+	parrySpamCooldown = 3,
+
+	-- Parry mode
+	parryMode = "stand",
+	antiShikudo = true,
+
+	-- Parry weight tuning
+	parryWeights = {
+		critical = 10,
+		warning = 7,
+		moderate = 4,
+		minor = 1,
+		broken = -10,
+		legBias = 2,
+		nonLegBias = 1,
+	},
+
+	-- Class-specific defensive abilities
+	classDefenses = {},
 }
 
--- Ensure existing limb entries have the new fields
-for _, limb in ipairs({"head", "torso", "left arm", "right arm", "left leg", "right leg"}) do
+selfLimbDamage.config = selfLimbDamage.config or {}
+for k, v in pairs(defaultConfig) do
+	if selfLimbDamage.config[k] == nil then
+		selfLimbDamage.config[k] = v
+	end
+end
+-- Merge parryWeights sub-keys
+if type(defaultConfig.parryWeights) == "table" then
+	selfLimbDamage.config.parryWeights = selfLimbDamage.config.parryWeights or {}
+	for k, v in pairs(defaultConfig.parryWeights) do
+		if selfLimbDamage.config.parryWeights[k] == nil then
+			selfLimbDamage.config.parryWeights[k] = v
+		end
+	end
+end
+
+-------------------------------------------------------------------
+-- LIMB DATA STRUCTURE
+-------------------------------------------------------------------
+
+local LIMB_LIST = {"head", "torso", "left arm", "right arm", "left leg", "right leg"}
+local SHORT_NAMES = {
+	["head"] = "HEAD ",
+	["torso"] = "TORSO",
+	["left arm"] = "L.ARM",
+	["right arm"] = "R.ARM",
+	["left leg"] = "L.LEG",
+	["right leg"] = "R.LEG",
+}
+
+-- Initialize limb data
+for _, limb in ipairs(LIMB_LIST) do
 	selfLimbDamage[limb] = selfLimbDamage[limb] or {}
 	selfLimbDamage[limb].damage = selfLimbDamage[limb].damage or 0
 	selfLimbDamage[limb].lastHit = selfLimbDamage[limb].lastHit or 0
 	selfLimbDamage[limb].hitCount = selfLimbDamage[limb].hitCount or 0
+	selfLimbDamage[limb].threshold = selfLimbDamage[limb].threshold or "safe"
 end
 
--- Parse the "dealt X% damage to your [limb]" line and track damage
--- Pattern: "dealt 12.6% damage to your right arm"
+selfLimbDamage.timers = selfLimbDamage.timers or {}
+selfLimbDamage.lasthit = selfLimbDamage.lasthit or "none"
+
+-------------------------------------------------------------------
+-- CORE FUNCTIONS
+-------------------------------------------------------------------
+
+-- Check if a limb is "prepped" (one hit away from breaking)
+function ataxia_selfLimbPrepped(limb)
+	limb = limb:lower()
+	if not selfLimbDamage[limb] then return false end
+
+	local data = selfLimbDamage[limb]
+	local lastHit = data.lastHit or 0
+	if lastHit == 0 then lastHit = 12.5 end
+
+	return (data.damage + lastHit >= 100)
+end
+
+-- Calculate how many hits remaining to break the limb
+function ataxia_selfHitsToBreak(limb)
+	limb = limb:lower()
+	if not selfLimbDamage[limb] then return 99 end
+
+	local data = selfLimbDamage[limb]
+	local remaining = 100 - data.damage
+	local lastHit = data.lastHit or 0
+	if lastHit == 0 then lastHit = 12.5 end
+
+	if remaining <= 0 then return 0 end
+
+	return math.ceil(remaining / lastHit)
+end
+
+-- Compute threshold state from hits-to-break
+local function computeThreshold(hitsLeft)
+	local cfg = selfLimbDamage.config
+	if hitsLeft <= cfg.criticalHits then
+		return "critical"
+	elseif hitsLeft <= cfg.warningHits then
+		return "warning"
+	else
+		return "safe"
+	end
+end
+
+-- Check if a limb is broken via afflictions
+function ataxia_selfLimbBroken(limb)
+	if not ataxia or not ataxia.afflictions then return false end
+	local key = limb:gsub(" ", "")
+	return ataxia.afflictions["damaged"..key]
+		or ataxia.afflictions["mangled"..key]
+		or (limb == "torso" and (ataxia.afflictions.mildtrauma or ataxia.afflictions.serioustrauma))
+end
+
+-- Get a summary of limb status
+function ataxia_selfLimbStatus(limb)
+	limb = limb:lower()
+	if not selfLimbDamage[limb] then return nil end
+
+	local data = selfLimbDamage[limb]
+	local hitsLeft = ataxia_selfHitsToBreak(limb)
+	local broken = ataxia_selfLimbBroken(limb)
+	return {
+		damage = data.damage,
+		lastHit = data.lastHit,
+		hitCount = data.hitCount,
+		hitsToBreak = hitsLeft,
+		prepped = ataxia_selfLimbPrepped(limb),
+		threshold = broken and "broken" or data.threshold,
+		broken = broken,
+	}
+end
+
+-------------------------------------------------------------------
+-- DAMAGE TRACKING
+-------------------------------------------------------------------
+
+function ataxia_raiseLimbDamage(limb, num)
+	if not selfLimbDamage.config.enabled then return end
+
+	-- Clear target defenses when we take a hit (existing behavior)
+	if type(target) == "number" then
+		tAffs.shield = false
+		tAffs.rebounding = false
+		tAffs.paralysis = false
+		tAffs.prone = false
+	end
+
+	selfLimbDamage.lasthit = limb
+
+	-- Update damage data
+	selfLimbDamage[limb].lastHit = num
+	selfLimbDamage[limb].hitCount = (selfLimbDamage[limb].hitCount or 0) + 1
+	selfLimbDamage[limb].damage = selfLimbDamage[limb].damage + num
+
+	-- Cap at 100
+	if selfLimbDamage[limb].damage > 100 then
+		selfLimbDamage[limb].damage = 100
+	end
+
+	-- Reset timer (180s auto-decay)
+	selfLimbDamage.timers[limb] = selfLimbDamage.timers[limb] or {}
+	if selfLimbDamage.timers[limb].timer then
+		killTimer(selfLimbDamage.timers[limb].timer)
+	end
+	selfLimbDamage.timers[limb].timer = tempTimer(180, function()
+		ataxia_resetLimbDamage(limb)
+	end)
+
+	-- Compute threshold transition
+	local hitsLeft = ataxia_selfHitsToBreak(limb)
+	local oldThreshold = selfLimbDamage[limb].threshold
+	local newThreshold = computeThreshold(hitsLeft)
+
+	-- Torso break detection
+	if limb == "torso" and selfLimbDamage[limb].damage >= selfLimbDamage.config.torsoBreakThreshold then
+		newThreshold = "broken"
+		ataxia_boxEcho("TORSO IS BROKEN!", "black:red")
+		send("curing predict mildtrauma")
+	end
+
+	-- Threshold transition alerts + events
+	if newThreshold ~= oldThreshold then
+		selfLimbDamage[limb].threshold = newThreshold
+		raiseEvent("self limb threshold", limb, newThreshold, hitsLeft)
+
+		if newThreshold == "warning" and selfLimbDamage.config.warningAlerts then
+			ataxia_boxEcho(limb:upper().." is 2 HITS from break!", "black:yellow")
+		elseif newThreshold == "critical" and selfLimbDamage.config.criticalAlerts then
+			ataxia_boxEcho(limb:upper().." is PREPPED! (1 hit)", "black:orange")
+		end
+	end
+
+	-- Raise the general damage event
+	raiseEvent("self limb damaged", limb, num, selfLimbDamage[limb].damage)
+end
+
+-- Parse the "dealt X% damage to your [limb]" line
 function ataxia_parseLimbDamageLine(line)
 	local damage, limb = line:match("dealt (%d+%.?%d*)%% damage to your (.+)%.")
 	if damage and limb then
@@ -35,102 +233,25 @@ function ataxia_parseLimbDamageLine(line)
 	return false
 end
 
--- Check if a limb is "prepped" (one hit away from breaking)
--- Returns true if the next hit of the same damage would break the limb
-function ataxia_selfLimbPrepped(limb)
-	limb = limb:lower()
-	if not selfLimbDamage[limb] then return false end
+-------------------------------------------------------------------
+-- RESET / CLEAR
+-------------------------------------------------------------------
 
-	local data = selfLimbDamage[limb]
-	local lastHit = data.lastHit or 0
-
-	-- If we don't have hit data yet, use a reasonable default (12.5%)
-	if lastHit == 0 then lastHit = 12.5 end
-
-	return (data.damage + lastHit >= 100)
-end
-
--- Calculate how many hits remaining to break the limb at 100%
--- Returns number of hits based on last hit damage
-function ataxia_selfHitsToBreak(limb)
-	limb = limb:lower()
-	if not selfLimbDamage[limb] then return 0 end
-
-	local data = selfLimbDamage[limb]
-	local remaining = 100 - data.damage
-	local lastHit = data.lastHit or 0
-
-	-- If we don't have hit data yet, use a reasonable default (12.5%)
-	if lastHit == 0 then lastHit = 12.5 end
-
-	if remaining <= 0 then return 0 end
-
-	return math.ceil(remaining / lastHit)
-end
-
--- Get a summary of limb status
-function ataxia_selfLimbStatus(limb)
-	limb = limb:lower()
-	if not selfLimbDamage[limb] then return nil end
-
-	local data = selfLimbDamage[limb]
-	return {
-		damage = data.damage,
-		lastHit = data.lastHit,
-		hitCount = data.hitCount,
-		hitsToBreak = ataxia_selfHitsToBreak(limb),
-		prepped = ataxia_selfLimbPrepped(limb)
-	}
-end
-
--- Display limb status for all limbs
-function ataxia_showSelfLimbStatus()
-	local limbs = {"head", "torso", "left arm", "right arm", "left leg", "right leg"}
-	cecho("\n<DodgerBlue> -= Self Limb Damage Status =-")
-	for _, limb in ipairs(limbs) do
-		local status = ataxia_selfLimbStatus(limb)
-		if status then
-			local preppedStr = status.prepped and " <red>[PREPPED]" or ""
-			local color = status.damage >= 75 and "red" or (status.damage >= 50 and "yellow" or (status.damage > 0 and "green" or "gray"))
-			cecho(string.format("\n  <%s>%s<white>: %.1f%% | Last Hit: %.1f%% | Hits: %d | To Break: %d%s",
-				color, limb:upper(), status.damage, status.lastHit, status.hitCount, status.hitsToBreak, preppedStr))
-		end
+function ataxia_clearLimbDamage(limb)
+	selfLimbDamage[limb].damage = 0
+	selfLimbDamage[limb].lastHit = 0
+	selfLimbDamage[limb].hitCount = 0
+	selfLimbDamage[limb].threshold = "safe"
+	if selfLimbDamage.timers[limb] and selfLimbDamage.timers[limb].timer then
+		killTimer(selfLimbDamage.timers[limb].timer)
 	end
-end
-
-function ataxia_raiseLimbDamage(limb, num)
-	if type(target) == "number" then
-		tAffs.shield = false
-		tAffs.rebounding = false
-		tAffs.paralysis = false
-		tAffs.prone = false
+	selfLimbDamage.timers[limb] = nil
+	-- Update GUI
+	if selfLimbDamage.gui and selfLimbDamage.gui.console then
+		ataxia_updateSelfLimbWindow()
 	end
-
-	selfLimbDamage.lasthit = limb
-
-	-- Track the last hit damage and increment hit count
-	selfLimbDamage[limb].lastHit = num
-	selfLimbDamage[limb].hitCount = (selfLimbDamage[limb].hitCount or 0) + 1
-
-	selfLimbDamage[limb]["damage"] = selfLimbDamage[limb]["damage"] + num
-	if selfLimbDamage[limb]["damage"] > 95 then selfLimbDamage[limb]["damage"] = 100 end
-	selfLimbDamage.timers[limb] = selfLimbDamage.timers[limb] or {}
-	if selfLimbDamage.timers[limb].timer then killTimer( selfLimbDamage.timers[limb].timer ) end
-	selfLimbDamage.timers[limb].timer = tempTimer( 180, [[ ataxia_resetLimbDamage("]]..limb..[[")]])
-
-	-- Check if limb is prepped and alert
-	if ataxia_selfLimbPrepped(limb) then
-		local shortLimb = ataxia_shortLimb and ataxia_shortLimb(limb) or limb:upper():sub(1,2)
-		ataxia_boxEcho(limb:upper().." is PREPPED! (1 hit)", "black:orange")
-	end
-
-	if limb == "torso" and selfLimbDamage.torso["damage"] >= 97 then
-		ataxia_boxEcho("Torso is likely broken!", "red")
-		send("curing predict mildtrauma")
-	end
-
-	-- Raise custom event for other systems to listen to
-	raiseEvent("self limb damaged", limb, num, selfLimbDamage[limb].damage)
+	-- Reset threshold event so defensive reactions can clear their flags
+	raiseEvent("self limb threshold", limb, "safe", 99)
 end
 
 function ataxia_resetLimbDamage(limb)
@@ -138,17 +259,16 @@ function ataxia_resetLimbDamage(limb)
 	ataxiaEcho("Our <green>"..limb.."<NavajoWhite> has been reset.")
 end
 
-function ataxia_clearLimbDamage(limb)
-	selfLimbDamage[limb]["damage"] = 0
-	selfLimbDamage[limb].lastHit = 0
-	selfLimbDamage[limb].hitCount = 0
-	if selfLimbDamage.timers[limb] and selfLimbDamage.timers[limb].timer then killTimer( selfLimbDamage.timers[limb].timer ) end
-	selfLimbDamage.timers[limb] = nil
-	-- Update GUI if it exists
-	if selfLimbDamage.gui and selfLimbDamage.gui.console then
-		ataxia_updateSelfLimbWindow()
+function ataxia_clearAllLimbDamage()
+	for _, limb in ipairs(LIMB_LIST) do
+		ataxia_clearLimbDamage(limb)
 	end
+	cecho("\n<DodgerBlue> -= All self limb damage cleared =-")
 end
+
+-------------------------------------------------------------------
+-- BROKEN LIMB DETECTION (aff events)
+-------------------------------------------------------------------
 
 function ataxia_brokenLimbFound(event, affliction)
 	if event == "aff gained" then
@@ -162,87 +282,125 @@ function ataxia_brokenLimbFound(event, affliction)
 			ataxia_clearLimbDamage("left leg")
 			ataxia_boxEcho("LEFT LEG HAS BEEN BROKEN", "black:DarkOrange")
 			if not affed("damagedleftarm") and not affed("damagedrightarm") and ataxiaTemp.salvelockWait then
-				killTimer(ataxiaTemp.salvelockWait) 
+				killTimer(ataxiaTemp.salvelockWait)
 				ataxiaTemp.salvelockWait = nil
-				send("queue addclear free restore",false)
+				send("queue addclear free restore", false)
 			end
 		elseif affliction == "damagedrightleg" or affliction == "mangledrightleg" then
 			ataxia_clearLimbDamage("right leg")
 			ataxia_boxEcho("RIGHT LEG HAS BEEN BROKEN", "black:DarkOrange")
 			if not affed("damagedleftarm") and not affed("damagedrightarm") and ataxiaTemp.salvelockWait then
-				killTimer(ataxiaTemp.salvelockWait) 
-				ataxiaTemp.salvelockWait = nil			
-				send("queue addclear eqbal restore",false)
-			end			
+				killTimer(ataxiaTemp.salvelockWait)
+				ataxiaTemp.salvelockWait = nil
+				send("queue addclear eqbal restore", false)
+			end
 		elseif affliction == "damagedhead" or affliction == "mangledhead" then
 			ataxia_clearLimbDamage("head")
 			ataxia_boxEcho("HEAD HAS BEEN BROKEN", "black:goldenrod")
 		elseif affliction == "mildtrauma" or affliction == "serioustrauma" then
 			ataxia_clearLimbDamage("torso")
 			ataxia_boxEcho("TORSO HAS BEEN BROKEN", "black:red")
-		end	
+		end
 	elseif event == "aff cured" then
 		if affliction == "mildtrauma" or affliction == "serioustrauma" then
 			ataxia_clearLimbDamage("torso")
-		end	
+		end
 	end
 end
 
-registerAnonymousEventHandler("aff gained", "ataxia_brokenLimbFound")
-registerAnonymousEventHandler("aff cured", "ataxia_brokenLimbFound")
+-- Clean up old handlers on reload, then register fresh
+if selfLimbDamage._handlerAffGained then killAnonymousEventHandler(selfLimbDamage._handlerAffGained) end
+if selfLimbDamage._handlerAffCured then killAnonymousEventHandler(selfLimbDamage._handlerAffCured) end
+selfLimbDamage._handlerAffGained = registerAnonymousEventHandler("aff gained", "ataxia_brokenLimbFound")
+selfLimbDamage._handlerAffCured = registerAnonymousEventHandler("aff cured", "ataxia_brokenLimbFound")
 
--- Reset all limb damage
-function ataxia_clearAllLimbDamage()
-	for _, limb in ipairs({"head", "torso", "left arm", "right arm", "left leg", "right leg"}) do
-		ataxia_clearLimbDamage(limb)
+-------------------------------------------------------------------
+-- DISPLAY STATUS (text)
+-------------------------------------------------------------------
+
+function ataxia_showSelfLimbStatus()
+	cecho("\n<DodgerBlue> -= Self Limb Damage Status =-")
+	for _, limb in ipairs(LIMB_LIST) do
+		local status = ataxia_selfLimbStatus(limb)
+		if status then
+			local color
+			if status.broken then color = "dark_red"
+			elseif status.threshold == "critical" then color = "red"
+			elseif status.threshold == "warning" then color = "yellow"
+			elseif status.damage > 0 then color = "green"
+			else color = "gray"
+			end
+
+			local stateStr = ""
+			if status.broken then
+				stateStr = " <dark_red>[BROKEN]"
+			elseif status.threshold == "critical" then
+				stateStr = " <red>[PREPPED]"
+			elseif status.threshold == "warning" then
+				stateStr = " <yellow>[WARNING]"
+			end
+
+			cecho(string.format("\n  <%s>%s<white>: %.1f%% | Last: %.1f%% | Hits: %d | To Break: %d%s",
+				color, limb:upper(), status.damage, status.lastHit, status.hitCount, status.hitsToBreak, stateStr))
+		end
 	end
-	cecho("\n<DodgerBlue> -= All self limb damage cleared =-")
+
+	-- Show config toggles
+	local cfg = selfLimbDamage.config
+	cecho("\n<DodgerBlue> -= SLC Config =-")
+	cecho(string.format("\n  <white>Parry: <%s>%s<white> | Shield: <%s>%s<white> | SSC: <%s>%s<white> | Party: <%s>%s",
+		cfg.autoParry and "green" or "red", cfg.autoParry and "ON" or "OFF",
+		cfg.autoShield and "green" or "red", cfg.autoShield and "ON" or "OFF",
+		cfg.sscPriority and "green" or "red", cfg.sscPriority and "ON" or "OFF",
+		cfg.partyCallout and "green" or "red", cfg.partyCallout and "ON" or "OFF"))
+	cecho(string.format("\n  <white>Parry Mode: <cyan>%s<white> | Warnings: <%s>%s<white> | Critical: <%s>%s",
+		cfg.parryMode,
+		cfg.warningAlerts and "green" or "red", cfg.warningAlerts and "ON" or "OFF",
+		cfg.criticalAlerts and "green" or "red", cfg.criticalAlerts and "ON" or "OFF"))
+	cecho(string.format("\n  <white>Anti-Shikudo: <%s>%s<white> | GUI: <%s>%s",
+		cfg.antiShikudo and "green" or "red", cfg.antiShikudo and "ON" or "OFF",
+		cfg.guiWindow and "green" or "red", cfg.guiWindow and "ON" or "OFF"))
 end
 
--- Register the trigger for parsing limb damage lines
--- Call this once to set up the trigger
+-------------------------------------------------------------------
+-- TRIGGER REGISTRATION
+-------------------------------------------------------------------
+
 function ataxia_registerLimbDamageTrigger()
 	if selfLimbDamage.triggerId then
 		killTrigger(selfLimbDamage.triggerId)
 	end
 
-	-- Regex pattern: "dealt X% damage to your [limb]"
-	-- Example: "As Proficy's blow crunches into you, you perceive that he has dealt 12.6% damage to your right arm."
 	selfLimbDamage.triggerId = tempRegexTrigger(
 		[[dealt (\d+\.?\d*)% damage to your (head|torso|left arm|right arm|left leg|right leg)]],
-		[[
+		function()
 			local damage = tonumber(matches[2])
 			local limb = matches[3]:lower()
 			if damage and limb and selfLimbDamage[limb] then
 				ataxia_raiseLimbDamage(limb, damage)
 			end
-		]]
+		end
 	)
-	ataxiaEcho("Self limb damage trigger registered.")
 end
 
--- Auto-register the trigger when the script loads
+-- Auto-register on load
 ataxia_registerLimbDamageTrigger()
 
 -------------------------------------------------------------------
--- GEYSER GUI WINDOW FOR SELF LIMB DAMAGE
+-- GEYSER GUI WINDOW
 -------------------------------------------------------------------
 
 selfLimbDamage.gui = selfLimbDamage.gui or {}
 selfLimbDamage.gui.fontSize = 9
 
--- Build the self limb damage window
 function ataxia_buildSelfLimbWindow()
-	-- Clean up existing window if it exists
 	if selfLimbDamage.gui.window then
 		selfLimbDamage.gui.window:hide()
 		selfLimbDamage.gui.window = nil
 	end
 
-	-- Get saved position or use defaults
-	local savedPos = selfLimbDamage.gui.savedPosition or {x = 100, y = 100, width = 280, height = 180}
+	local savedPos = selfLimbDamage.gui.savedPosition or {x = 100, y = 100, width = 300, height = 180}
 
-	-- Create the Adjustable Container (moveable, resizable, lockable)
 	selfLimbDamage.gui.window = Adjustable.Container:new({
 		name = "selfLimbDamageWindow",
 		x = savedPos.x,
@@ -264,7 +422,6 @@ function ataxia_buildSelfLimbWindow()
 	})
 	selfLimbDamage.gui.window:changeMenuStyle("dark")
 
-	-- Create container inside
 	selfLimbDamage.gui.container = Geyser.Container:new({
 		name = "selfLimbDamageContainer",
 		x = 0, y = 0,
@@ -272,7 +429,6 @@ function ataxia_buildSelfLimbWindow()
 		height = "100%",
 	}, selfLimbDamage.gui.window)
 
-	-- Create the MiniConsole for display
 	selfLimbDamage.gui.console = Geyser.MiniConsole:new({
 		name = "selfLimbDamageConsole",
 		x = 2, y = 2,
@@ -283,63 +439,67 @@ function ataxia_buildSelfLimbWindow()
 	}, selfLimbDamage.gui.container)
 
 	setFontSize("selfLimbDamageConsole", selfLimbDamage.gui.fontSize)
-
-	-- Add callback to save position when window is moved/resized
 	selfLimbDamage.gui.window:attachToBorder("top")
-
-	-- Show the window
 	selfLimbDamage.gui.window:show()
-
-	-- Initial update
 	ataxia_updateSelfLimbWindow()
-
-	ataxiaEcho("Self limb damage window created. Right-click title bar for options.")
 end
 
--- Update the limb damage window display
 function ataxia_updateSelfLimbWindow()
 	if not selfLimbDamage.gui.console then return end
 
-	local console = selfLimbDamage.gui.console
 	clearWindow("selfLimbDamageConsole")
 
-	local limbs = {"head", "torso", "left arm", "right arm", "left leg", "right leg"}
-	local shortNames = {
-		["head"] = "HEAD",
-		["torso"] = "TORSO",
-		["left arm"] = "L.ARM",
-		["right arm"] = "R.ARM",
-		["left leg"] = "L.LEG",
-		["right leg"] = "R.LEG",
-	}
+	-- Determine current parry target for [P] marker
+	local parryTarget = ataxia and ataxia.parrying and ataxia.parrying.shouldparry or nil
 
-	for _, limb in ipairs(limbs) do
+	for _, limb in ipairs(LIMB_LIST) do
 		local status = ataxia_selfLimbStatus(limb)
 		if status then
 			local color
-			if status.damage >= 85 then
+			if status.broken then
+				color = "dark_red"
+			elseif status.threshold == "critical" then
 				color = "red"
-			elseif status.damage >= 70 then
+			elseif status.threshold == "warning" then
 				color = "orange"
-			elseif status.damage >= 50 then
-				color = "yellow"
 			elseif status.damage > 0 then
 				color = "green"
 			else
 				color = "gray"
 			end
 
-			local preppedStr = status.prepped and " <red>*PREP*" or ""
+			-- Status indicator
+			local indicator = ""
+			if status.broken then
+				indicator = " <dark_red>BROKEN"
+			elseif status.threshold == "critical" then
+				indicator = " <red>[!!]"
+			elseif status.threshold == "warning" then
+				indicator = " <orange>[!]"
+			end
 
-			-- Format: LIMB: 50.0% (4 hits) [PREP]
+			-- Parry marker
+			local parryMark = (parryTarget == limb) and " <cyan>[P]" or ""
+
+			-- Hits display
+			local hitsStr
+			if status.broken then
+				hitsStr = "  ---"
+			elseif status.damage == 0 then
+				hitsStr = " safe"
+			elseif status.hitsToBreak == 1 then
+				hitsStr = "1 hit"
+			else
+				hitsStr = string.format("%d hts", status.hitsToBreak)
+			end
+
 			cecho("selfLimbDamageConsole",
-				string.format("<%s>%-6s<white>: %5.1f%% <dim_gray>(%d to brk)%s\n",
-					color, shortNames[limb], status.damage, status.hitsToBreak, preppedStr))
+				string.format("<%s>%s<white>: %5.1f%% <dim_gray>%s%s%s\n",
+					color, SHORT_NAMES[limb], status.damage, hitsStr, indicator, parryMark))
 		end
 	end
 end
 
--- Save window position
 function ataxia_saveSelfLimbWindowPosition()
 	if selfLimbDamage.gui.window then
 		selfLimbDamage.gui.savedPosition = {
@@ -349,11 +509,9 @@ function ataxia_saveSelfLimbWindowPosition()
 			height = selfLimbDamage.gui.window.height,
 		}
 		selfLimbDamage.gui.window:savePosition()
-		ataxiaEcho("Self limb window position saved.")
 	end
 end
 
--- Toggle window visibility
 function ataxia_toggleSelfLimbWindow()
 	if not selfLimbDamage.gui.window then
 		ataxia_buildSelfLimbWindow()
@@ -365,20 +523,15 @@ function ataxia_toggleSelfLimbWindow()
 	end
 end
 
--- Lock/unlock the window
 function ataxia_lockSelfLimbWindow(lock)
 	if not selfLimbDamage.gui.window then return end
-
 	if lock then
 		selfLimbDamage.gui.window:lockContainer()
-		ataxiaEcho("Self limb window locked.")
 	else
 		selfLimbDamage.gui.window:unlockContainer()
-		ataxiaEcho("Self limb window unlocked.")
 	end
 end
 
--- Set font size
 function ataxia_setSelfLimbWindowFontSize(size)
 	selfLimbDamage.gui.fontSize = size or 9
 	if selfLimbDamage.gui.console then
@@ -387,14 +540,21 @@ function ataxia_setSelfLimbWindowFontSize(size)
 	end
 end
 
--- Close the window
 function ataxia_closeSelfLimbWindow()
 	if selfLimbDamage.gui.window then
 		selfLimbDamage.gui.window:hide()
 	end
 end
 
--- Listen to damage events to auto-update the window
-registerAnonymousEventHandler("self limb damaged", function()
-	ataxia_updateSelfLimbWindow()
+-- Auto-update GUI on damage events (debounced, with reload cleanup)
+if selfLimbDamage._handlerGuiUpdate then killAnonymousEventHandler(selfLimbDamage._handlerGuiUpdate) end
+selfLimbDamage._guiDirty = false
+selfLimbDamage._handlerGuiUpdate = registerAnonymousEventHandler("self limb damaged", function()
+	if not selfLimbDamage._guiDirty then
+		selfLimbDamage._guiDirty = true
+		tempTimer(0, function()
+			selfLimbDamage._guiDirty = false
+			ataxia_updateSelfLimbWindow()
+		end)
+	end
 end)

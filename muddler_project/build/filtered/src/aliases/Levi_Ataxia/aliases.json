@@ -1239,19 +1239,27 @@
         "children": [
           {
             "name": "SLC Display",
+            "isActive": "no",
             "regex": "^c$"
           },
           {
             "name": "SLC Reset",
+            "isActive": "no",
             "regex": "^cres$"
           },
           {
             "name": "SLC Set # of Hits Needed",
+            "isActive": "no",
             "regex": "^cset (\\w+) (\\d+)$"
           },
           {
             "name": "SLC geyser toggle",
+            "isActive": "no",
             "regex": "^slc$"
+          },
+          {
+            "name": "SLC Toggle",
+            "regex": "^slc\\s*(.*)$"
           }
         ]
       }

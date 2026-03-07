@@ -6,8 +6,7 @@ tdeliverance = false
         anorexiaFailsafe = nil
         lastFocus = nil
     end
-    targetAteWrapper("mycalium")
-     if onHerbCureV3 then onHerbCureV3("goldenseal") end
+    targetAteWrapper("goldenseal")
 if passiveFailsafe then restorePassiveCure() end
     tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
@@ -22,6 +21,7 @@ if passiveFailsafe then restorePassiveCure() end
 end
   if passiveFailsafe then restorePassiveCure() end
 	erAff("mycalium")
+	if removeAffV3 then removeAffV3("mycalium") end
 
 selectString(line, 1)
 fg("PeachPuff")

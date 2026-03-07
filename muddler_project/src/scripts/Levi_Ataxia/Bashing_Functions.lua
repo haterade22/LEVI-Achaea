@@ -90,13 +90,13 @@ if not ataxia.afflictions.aeon and not ataxia.afflictions.paralysis and not atax
 			   end
 			  ataxiaBasher_patterns()
         ataxiagui_updateVitals()
-      elseif ataxia.vitals.hp <= ataxiaBasher.fleeThreshold then
+      elseif ataxiaBasher.fleeThreshold and ataxia.vitals.hp <= ataxiaBasher.fleeThreshold then
         ataxiaTemp.bashFlee = true
         ataxiaBasher.paused = true
         ataxiaEcho("BASH FLEE IS TRUE/PAUSING BASHER/GETTING TO FULL HEALTH")
         ataxiagui_updateVitals()
       end
-    elseif ataxia.vitals.hp <= ataxiaBasher.fleeThreshold then
+    elseif ataxiaBasher.fleeThreshold and ataxia.vitals.hp <= ataxiaBasher.fleeThreshold then
         ataxiaTemp.bashFlee = true
         ataxiaBasher.paused = true
         ataxiaBasher_startFleeTimer()

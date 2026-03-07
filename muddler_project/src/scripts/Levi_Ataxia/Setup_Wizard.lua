@@ -59,6 +59,7 @@ function leviSetup.dispatch(args)
   elseif cmd == "gui"        then leviSetup.setupGui(rest)
   elseif cmd == "ndb"        then leviSetup.setupNdb(rest)
   elseif cmd == "combat"     then leviSetup.setupCombat(rest)
+  elseif cmd == "slc"        then leviSetup.setupSlc(rest)
   elseif cmd == "status"     then leviSetup.showStatus()
   elseif cmd == "install"    then leviSetup.setupInstall(rest)
   elseif cmd == "guide"      then leviSetup.setupGuide(rest)
@@ -83,6 +84,7 @@ function leviSetup.showMenu()
     {"levi setup sipping",   "Health/mana sip thresholds"},
     {"levi setup tracking",  "Affliction tracking system (V1/V2)"},
     {"levi setup combat",    "Combat toggles (partyrelay, looting, etc.)"},
+    {"levi setup slc",       "Self Limb Counter (parry, shield, alerts, etc.)"},
     {"levi setup gui",       "Toggle the GUI on/off"},
     {"levi setup ndb",       "Name Database highlighting colours"},
     {"levi setup install",   "First-time install (atinstall, abinstall, aninstall)"},
@@ -849,6 +851,133 @@ function leviSetup.showStatus()
     row("Priority", ataxiaNDB.highlightPriority or "city")
   end
 
+  -- SLC
+  if selfLimbDamage and selfLimbDamage.config then
+    local slc = selfLimbDamage.config
+    cecho("\n\n  " .. HL .. "SLC (Self Limb Counter)")
+    row("Enabled", boolStr(slc.enabled))
+    row("Auto Parry", boolStr(slc.autoParry))
+    row("Parry Mode", slc.parryMode or "stand")
+    row("Anti-Shikudo", boolStr(slc.antiShikudo))
+    row("Auto Shield", boolStr(slc.autoShield))
+    row("SSC Priority", boolStr(slc.sscPriority))
+    row("Party Callout", boolStr(slc.partyCallout))
+    row("Warning Alerts", boolStr(slc.warningAlerts))
+    row("Critical Alerts", boolStr(slc.criticalAlerts))
+    row("GUI Window", boolStr(slc.guiWindow))
+  end
+
   hint("\n  Use 'levi setup <section>' for details on any section.")
   cecho("\n")
+end
+
+-- ═══════════════════════════════════════════════════════════════════════
+-- SLC (Self Limb Counter)
+-- ═══════════════════════════════════════════════════════════════════════
+function leviSetup.setupSlc(rest)
+  if not selfLimbDamage or not selfLimbDamage.config then
+    ataxiaEcho("SLC not initialized. selfLimbDamage.config missing.")
+    return
+  end
+
+  local cfg = selfLimbDamage.config
+
+  local function slcToggle(key, label, val)
+    if val == "on" then
+      cfg[key] = true
+      cecho("\n  " .. G .. label .. ": ON")
+      save()
+    elseif val == "off" then
+      cfg[key] = false
+      cecho("\n  " .. R .. label .. ": OFF")
+      save()
+    else
+      cecho("\n  " .. V .. label .. ": " .. (cfg[key] and (G .. "ON") or (R .. "OFF")))
+      cecho("\n  " .. D .. "Use: " .. HL .. "levi setup slc " .. key .. " <on|off>")
+    end
+  end
+
+  if rest == "" then
+    header("SLC — Self Limb Counter")
+    cecho("\n  " .. V .. "Current configuration:\n")
+
+    local toggles = {
+      {"enabled",        "Master Toggle"},
+      {"autoParry",      "Auto Parry"},
+      {"autoShield",     "Auto Shield"},
+      {"sscPriority",    "SSC Priority"},
+      {"partyCallout",   "Party Callout"},
+      {"warningAlerts",  "Warning Alerts (2 hit)"},
+      {"criticalAlerts", "Critical Alerts (1 hit)"},
+      {"guiWindow",      "GUI Window"},
+      {"antiShikudo",    "Anti-Shikudo Parry"},
+    }
+
+    for i, t in ipairs(toggles) do
+      local state = cfg[t[1]] and (G .. "ON") or (R .. "OFF")
+      cecho("\n  " .. HL .. "[" .. i .. "] " .. V .. t[2])
+      local pad = string.rep(" ", math.max(1, 24 - #t[2]))
+      cecho(pad .. state)
+    end
+
+    cecho("\n\n  " .. V .. "Parry Mode: " .. HL .. (cfg.parryMode or "stand"))
+    cecho("\n  " .. V .. "Warning Hits: " .. HL .. (cfg.warningHits or 2))
+    cecho("\n  " .. V .. "Critical Hits: " .. HL .. (cfg.criticalHits or 1))
+
+    cecho("\n\n  " .. D .. "Toggle features:")
+    cecho("\n  " .. HL .. "levi setup slc <key> <on|off>")
+    hint("  e.g.: levi setup slc autoShield on")
+    cecho("\n  " .. D .. "Set parry mode:")
+    cecho("\n  " .. HL .. "levi setup slc parry <stand|defend|manual|randomarm|randomleg>")
+    cecho("\n  " .. D .. "Set thresholds:")
+    cecho("\n  " .. HL .. "levi setup slc warning <hits>")
+    cecho("\n  " .. HL .. "levi setup slc critical <hits>")
+    cecho("\n")
+    return
+  end
+
+  local key, val = rest:match("^(%S+)%s+(%S+)$")
+  if not key then key = rest end
+
+  -- Parry mode
+  if key == "parry" then
+    local validModes = {stand = true, defend = true, manual = true, randomarm = true, randomleg = true}
+    if val and validModes[val] then
+      cfg.parryMode = val
+      ataxia.parry = val
+      cecho("\n  " .. G .. "Parry mode set to: " .. HL .. val)
+      save()
+    else
+      cecho("\n  " .. V .. "Current parry mode: " .. HL .. (cfg.parryMode or "stand"))
+      cecho("\n  " .. D .. "Valid modes: stand, defend, manual, randomarm, randomleg")
+    end
+    return
+  end
+
+  -- Thresholds
+  if key == "warning" and val then
+    local n = tonumber(val)
+    if n then cfg.warningHits = n; cecho("\n  " .. G .. "Warning hits set to: " .. n); save() end
+    return
+  end
+  if key == "critical" and val then
+    local n = tonumber(val)
+    if n then cfg.criticalHits = n; cecho("\n  " .. G .. "Critical hits set to: " .. n); save() end
+    return
+  end
+
+  -- Boolean toggles
+  local boolKeys = {
+    enabled = "Master Toggle", autoParry = "Auto Parry", autoShield = "Auto Shield",
+    sscPriority = "SSC Priority", partyCallout = "Party Callout",
+    warningAlerts = "Warning Alerts", criticalAlerts = "Critical Alerts",
+    guiWindow = "GUI Window", antiShikudo = "Anti-Shikudo Parry",
+  }
+
+  if boolKeys[key] then
+    slcToggle(key, boolKeys[key], val)
+  else
+    cecho("\n  " .. W .. "Unknown SLC setting: " .. key)
+    cecho("\n  " .. D .. "Type " .. HL .. "levi setup slc" .. D .. " to see all options.")
+  end
 end

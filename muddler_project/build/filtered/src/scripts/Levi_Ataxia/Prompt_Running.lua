@@ -28,7 +28,8 @@ function ataxia_promptCommands()
 			 send("parry "..ataxia.parrying.shouldparry)
       end
 			parryAttempted = true
-			tempTimer(3, [[parryAttempted = false]])
+			local parryCd = (selfLimbDamage and selfLimbDamage.config and selfLimbDamage.config.parrySpamCooldown) or 3
+			tempTimer(parryCd, [[parryAttempted = false]])
 		end
 	end
 

@@ -162,7 +162,7 @@ zgui.buildBashWindow()
 tracklegenddeckcountreset()
 ataxia_resetPariah()
 
-tempTimer(5, [[ slc_reset();slc_force_display() ]])
+tempTimer(5, [[ if slc_reset then slc_reset() end; if slc_force_display then slc_force_display() end ]])
 tempTimer(7, [[ataxiaNDB.highlightNames = true;ataxiaNDB_loadHighlights()]])
 
 ataxia.vitals.focusbal = true
@@ -2815,6 +2815,7 @@ function leviSetup.dispatch(args)
   elseif cmd == "gui"        then leviSetup.setupGui(rest)
   elseif cmd == "ndb"        then leviSetup.setupNdb(rest)
   elseif cmd == "combat"     then leviSetup.setupCombat(rest)
+  elseif cmd == "slc"        then leviSetup.setupSlc(rest)
   elseif cmd == "status"     then leviSetup.showStatus()
   elseif cmd == "install"    then leviSetup.setupInstall(rest)
   elseif cmd == "guide"      then leviSetup.setupGuide(rest)
@@ -2839,6 +2840,7 @@ function leviSetup.showMenu()
     {"levi setup sipping",   "Health/mana sip thresholds"},
     {"levi setup tracking",  "Affliction tracking system (V1/V2)"},
     {"levi setup combat",    "Combat toggles (partyrelay, looting, etc.)"},
+    {"levi setup slc",       "Self Limb Counter (parry, shield, alerts, etc.)"},
     {"levi setup gui",       "Toggle the GUI on/off"},
     {"levi setup ndb",       "Name Database highlighting colours"},
     {"levi setup install",   "First-time install (atinstall, abinstall, aninstall)"},
@@ -3605,8 +3607,135 @@ function leviSetup.showStatus()
     row("Priority", ataxiaNDB.highlightPriority or "city")
   end
 
+  -- SLC
+  if selfLimbDamage and selfLimbDamage.config then
+    local slc = selfLimbDamage.config
+    cecho("\n\n  " .. HL .. "SLC (Self Limb Counter)")
+    row("Enabled", boolStr(slc.enabled))
+    row("Auto Parry", boolStr(slc.autoParry))
+    row("Parry Mode", slc.parryMode or "stand")
+    row("Anti-Shikudo", boolStr(slc.antiShikudo))
+    row("Auto Shield", boolStr(slc.autoShield))
+    row("SSC Priority", boolStr(slc.sscPriority))
+    row("Party Callout", boolStr(slc.partyCallout))
+    row("Warning Alerts", boolStr(slc.warningAlerts))
+    row("Critical Alerts", boolStr(slc.criticalAlerts))
+    row("GUI Window", boolStr(slc.guiWindow))
+  end
+
   hint("\n  Use 'levi setup &lt;section&gt;' for details on any section.")
   cecho("\n")
+end
+
+-- â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?
+-- SLC (Self Limb Counter)
+-- â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?â•?
+function leviSetup.setupSlc(rest)
+  if not selfLimbDamage or not selfLimbDamage.config then
+    ataxiaEcho("SLC not initialized. selfLimbDamage.config missing.")
+    return
+  end
+
+  local cfg = selfLimbDamage.config
+
+  local function slcToggle(key, label, val)
+    if val == "on" then
+      cfg[key] = true
+      cecho("\n  " .. G .. label .. ": ON")
+      save()
+    elseif val == "off" then
+      cfg[key] = false
+      cecho("\n  " .. R .. label .. ": OFF")
+      save()
+    else
+      cecho("\n  " .. V .. label .. ": " .. (cfg[key] and (G .. "ON") or (R .. "OFF")))
+      cecho("\n  " .. D .. "Use: " .. HL .. "levi setup slc " .. key .. " &lt;on|off&gt;")
+    end
+  end
+
+  if rest == "" then
+    header("SLC â€” Self Limb Counter")
+    cecho("\n  " .. V .. "Current configuration:\n")
+
+    local toggles = {
+      {"enabled",        "Master Toggle"},
+      {"autoParry",      "Auto Parry"},
+      {"autoShield",     "Auto Shield"},
+      {"sscPriority",    "SSC Priority"},
+      {"partyCallout",   "Party Callout"},
+      {"warningAlerts",  "Warning Alerts (2 hit)"},
+      {"criticalAlerts", "Critical Alerts (1 hit)"},
+      {"guiWindow",      "GUI Window"},
+      {"antiShikudo",    "Anti-Shikudo Parry"},
+    }
+
+    for i, t in ipairs(toggles) do
+      local state = cfg[t[1]] and (G .. "ON") or (R .. "OFF")
+      cecho("\n  " .. HL .. "[" .. i .. "] " .. V .. t[2])
+      local pad = string.rep(" ", math.max(1, 24 - #t[2]))
+      cecho(pad .. state)
+    end
+
+    cecho("\n\n  " .. V .. "Parry Mode: " .. HL .. (cfg.parryMode or "stand"))
+    cecho("\n  " .. V .. "Warning Hits: " .. HL .. (cfg.warningHits or 2))
+    cecho("\n  " .. V .. "Critical Hits: " .. HL .. (cfg.criticalHits or 1))
+
+    cecho("\n\n  " .. D .. "Toggle features:")
+    cecho("\n  " .. HL .. "levi setup slc &lt;key&gt; &lt;on|off&gt;")
+    hint("  e.g.: levi setup slc autoShield on")
+    cecho("\n  " .. D .. "Set parry mode:")
+    cecho("\n  " .. HL .. "levi setup slc parry &lt;stand|defend|manual|randomarm|randomleg&gt;")
+    cecho("\n  " .. D .. "Set thresholds:")
+    cecho("\n  " .. HL .. "levi setup slc warning &lt;hits&gt;")
+    cecho("\n  " .. HL .. "levi setup slc critical &lt;hits&gt;")
+    cecho("\n")
+    return
+  end
+
+  local key, val = rest:match("^(%S+)%s+(%S+)$")
+  if not key then key = rest end
+
+  -- Parry mode
+  if key == "parry" then
+    local validModes = {stand = true, defend = true, manual = true, randomarm = true, randomleg = true}
+    if val and validModes[val] then
+      cfg.parryMode = val
+      ataxia.parry = val
+      cecho("\n  " .. G .. "Parry mode set to: " .. HL .. val)
+      save()
+    else
+      cecho("\n  " .. V .. "Current parry mode: " .. HL .. (cfg.parryMode or "stand"))
+      cecho("\n  " .. D .. "Valid modes: stand, defend, manual, randomarm, randomleg")
+    end
+    return
+  end
+
+  -- Thresholds
+  if key == "warning" and val then
+    local n = tonumber(val)
+    if n then cfg.warningHits = n; cecho("\n  " .. G .. "Warning hits set to: " .. n); save() end
+    return
+  end
+  if key == "critical" and val then
+    local n = tonumber(val)
+    if n then cfg.criticalHits = n; cecho("\n  " .. G .. "Critical hits set to: " .. n); save() end
+    return
+  end
+
+  -- Boolean toggles
+  local boolKeys = {
+    enabled = "Master Toggle", autoParry = "Auto Parry", autoShield = "Auto Shield",
+    sscPriority = "SSC Priority", partyCallout = "Party Callout",
+    warningAlerts = "Warning Alerts", criticalAlerts = "Critical Alerts",
+    guiWindow = "GUI Window", antiShikudo = "Anti-Shikudo Parry",
+  }
+
+  if boolKeys[key] then
+    slcToggle(key, boolKeys[key], val)
+  else
+    cecho("\n  " .. W .. "Unknown SLC setting: " .. key)
+    cecho("\n  " .. D .. "Type " .. HL .. "levi setup slc" .. D .. " to see all options.")
+  end
 end
 </script>
   <packageName/>
@@ -4133,6 +4262,7 @@ end</script>
   <name>Defence Reporting</name>
             <script>function ataxia_reportDefences()
 	if not gmcp.Char or not gmcp.Char.Defences or not gmcp.Char.Defences.List then return end
+	if not ataxia.settings or not ataxia.settings.defences then return end
 	local x = ""
 	local cur = ataxia.settings.defences.current
 	local defs = gmcp.Char.Defences.List
@@ -6796,227 +6926,63 @@ end</script>
 </eventHandlerList>
           <Script isActive="yes" isFolder="no">
   <name>Different Attacks</name>
-            <script>------------------------------------------------------------------------------------------------------------------------
+            <script>-- Text highlighting for incoming limb attacks.
+-- Actual damage tracking is handled by the regex trigger in 002_Track_The_Damage.lua.
+
+local function highlightLimb(text)
+	selectString(text, 1)
+	setBold(true)
+	fg("a_blue")
+	resetFormat()
+	deselect()
+end
+
 --&gt; Blademaster
---[armslash]--
 function armslash_selfLimbhit(side)
-	selectString(side, 1)
-	setBold(true)
-	fg("a_blue")
-	resetFormat()
-	deselect()
-	
-	tempLineTrigger(1, 1, [[confirm_armslash("]]..side..[[")]])
+	highlightLimb(side)
 end
 
-function confirm_armslash(side)
-	if not ataxiaTables.missLines then resetMissLines() end
-	local parry = false
-	for _, part in pairs(ataxiaTables.missLines) do
-		if line:match(part) then
-			parry = true
-			break
-		end
-	end
-	
-	if not parry then confirmed_armslash(side) end
-end
-
-function confirmed_armslash(side)
-	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
-	-- which captures actual damage percentages from the game message
-end
---[legslash]--
 function legslash_selfLimbhit(side)
-	selectString(side, 1)
-	setBold(true)
-	fg("a_blue")
-	resetFormat()
-	deselect()
-	
-	tempLineTrigger(1, 1, [[confirm_legslash("]]..side..[[")]])
+	highlightLimb(side)
 end
 
-function confirm_legslash(side)
-	if not ataxiaTables.missLines then resetMissLines() end
-	local parry = false
-	for _, part in pairs(ataxiaTables.missLines) do
-		if line:match(part) then
-			parry = true
-			break
-		end
-	end
-	
-	if not parry then confirmed_legslash(side) end
-end
-
-function confirmed_legslash(side)
-	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
-	-- which captures actual damage percentages from the game message
-end
---[centreslash]--
 function centreslash_selfLimbhit(section)
-	selectString(section, 1)
-	setBold(true)
-	fg("a_blue")
-	resetFormat()
-	deselect()
-	
-	tempLineTrigger(1, 1, [[confirm_centreslash("]]..section..[[")]])
+	highlightLimb(section)
 end
 
-function confirm_centreslash(section)
-	if not ataxiaTables.missLines then resetMissLines() end
-	local parry = false
-	for _, part in pairs(ataxiaTables.missLines) do
-		if line:match(part) then
-			parry = true
-			break
-		end
-	end
-	
-	if not parry then confirmed_centreslash(section) end
-end
-
-function confirmed_centreslash(section)
-	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
-	-- which captures actual damage percentages from the game message
-end
-------------------------------------------------------------------------------------------------------------------------
 --&gt; Earth Lord
 function earthLord_selfLimbHit(limb)
-	selectString(limb, 1)
-	setBold(true)
-	fg("a_blue")
-	resetFormat()
-	deselect()
-	
-	tempLineTrigger(1, 1, [[earthLord_confirmHit("]]..limb..[[")]])
+	highlightLimb(limb)
 end
 
-function earthLord_confirmHit(limb)
-	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
-	-- which captures actual damage percentages from the game message
-end
-------------------------------------------------------------------------------------------------------------------------
---&gt; Knight (WIP)
+--&gt; Knight
 function snb_selfLimbHit(limb)
-	selectString(limb, 1)
-	setBold(true)
-	fg("a_blue")
-	resetFormat()
-	deselect()
-	
-	tempLineTrigger(1, 1, [[confirm_snbhit("]]..limb..[[")]])
-end
-
-function confirm_snbhit(limb)
-	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
-	-- which captures actual damage percentages from the game message
+	highlightLimb(limb)
 end
 
 function dwc_selfLimbHit(limb)
-	selectString(limb, 1)
-	setBold(true)
-	fg("a_blue")
-	resetFormat()
-	deselect()
-	
-	tempLineTrigger(1, 1, [[confirm_dwchit("]]..limb..[[")]])
+	highlightLimb(limb)
 end
 
-function confirm_dwchit(limb)
-	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
-	-- which captures actual damage percentages from the game message
-end
-
-------------------------------------------------------------------------------------------------------------------------
---&gt; Priest (basic for now, just as something to work with)
+--&gt; Priest
 function priest_selfLimbHit(limb)
-  selectString(limb,1)
-  setBold(true)
-  fg("a_blue")
-  resetFormat()
-  deselect()
-  
-  tempLineTrigger(1, 1, [[confirm_limbsmite("]]..limb..[[")]])
+	highlightLimb(limb)
 end
 
-function confirm_limbsmite(limb)
-	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
-	-- which captures actual damage percentages from the game message
-end  
-
-------------------------------------------------------------------------------------------------------------------------
---&gt; Dragon/Druid (quarter)
-
+--&gt; Dragon/Druid
 function quarterHit_selfLimbHit(limb)
-	selectString(limb, 1)
-	setBold(true)
-	fg("a_blue")
-	resetFormat()
-	deselect()
-	
-	tempLineTrigger(1, 1, [[confirm_quarterHit("]]..limb..[[")]])
+	highlightLimb(limb)
 end
 
-function confirm_quarterHit(limb)
-	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
-	-- which captures actual damage percentages from the game message
-end
-------------------------------------------------------------------------------------------------------------------------
 --&gt; Magi
-
 function staffStrike_selfLimbHit(element, limb)
-	selectString(limb, 1)
-	setBold(true)
-	fg("a_blue")
-	resetFormat()
-	deselect()
-	
-	tempLineTrigger(1, 1, [[confirm_staffStrike("]]..element..[[","]]..limb..[[")]])
+	highlightLimb(limb)
 end
 
-function confirm_staffStrike(element, limb)
-	if not ataxiaTables.missLines then resetMissLines() end
-	local parry = false
-	for _, part in pairs(ataxiaTables.missLines) do
-		if line:match(part) then
-			parry = true
-			break
-		end
-	end
-	
-	if not parry then confirmed_staffStrike(element, limb) end
-end
-
-function confirmed_staffStrike(element, limb)
-	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
-	-- which captures actual damage percentages from the game message
-end
-------------------------------------------------------------------------------------------------------------------------
 --&gt; Sylvan
-
 function thornrend_selfLimbHit(limb)
-	selectString(limb, 1)
-	setBold(true)
-	fg("a_blue")
-	resetFormat()
-	deselect()
-	
-	tempLineTrigger(1, 1, [[confirm_thornrend("]]..limb..[[")]])
+	highlightLimb(limb)
 end
-
-function confirm_thornrend(limb)
-	-- Damage tracking is now handled by the regex trigger in Track_The_Damage.lua
-	-- which captures actual damage percentages from the game message
-end
-------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------------------------------------------
 </script>
   <packageName/>
 <eventHandlerList>
@@ -7024,30 +6990,228 @@ end
 </Script>
           <Script isActive="yes" isFolder="no">
   <name>Track The Damage</name>
-            <script>-- unnamed &gt; For Levi &gt; Levi_062424 &gt; leviticus &gt; LeviAtaxia &gt; Ataxia-DownloadThis &gt; Ataxia &gt; System-related &gt; Self Limb Tracking &gt; Track The Damage
+            <script>-------------------------------------------------------------------
+-- CONFIGURATION — Every feature independently toggleable
+-------------------------------------------------------------------
 
--- Initialize enhanced selfLimbDamage structure if not already present
-selfLimbDamage = selfLimbDamage or {
-	["head"] = {damage = 0, lastHit = 0, hitCount = 0},
-	["torso"] = {damage = 0, lastHit = 0, hitCount = 0},
-	["left arm"] = {damage = 0, lastHit = 0, hitCount = 0},
-	["right arm"] = {damage = 0, lastHit = 0, hitCount = 0},
-	["left leg"] = {damage = 0, lastHit = 0, hitCount = 0},
-	["right leg"] = {damage = 0, lastHit = 0, hitCount = 0},
-	timers = {},
-	lasthit = "none",
+selfLimbDamage = selfLimbDamage or {}
+
+-- Preserve existing config across reloads, merge in defaults for new keys
+local defaultConfig = {
+	-- Feature toggles
+	enabled = true,
+	autoParry = true,
+	autoShield = false,
+	sscPriority = true,
+	partyCallout = true,
+	warningAlerts = true,
+	criticalAlerts = true,
+	guiWindow = true,
+
+	-- Tunable thresholds
+	torsoBreakThreshold = 100,
+	warningHits = 2,
+	criticalHits = 1,
+	shieldCooldown = 4,
+	parrySpamCooldown = 3,
+
+	-- Parry mode
+	parryMode = "stand",
+	antiShikudo = true,
+
+	-- Parry weight tuning
+	parryWeights = {
+		critical = 10,
+		warning = 7,
+		moderate = 4,
+		minor = 1,
+		broken = -10,
+		legBias = 2,
+		nonLegBias = 1,
+	},
+
+	-- Class-specific defensive abilities
+	classDefenses = {},
 }
 
--- Ensure existing limb entries have the new fields
-for _, limb in ipairs({"head", "torso", "left arm", "right arm", "left leg", "right leg"}) do
+selfLimbDamage.config = selfLimbDamage.config or {}
+for k, v in pairs(defaultConfig) do
+	if selfLimbDamage.config[k] == nil then
+		selfLimbDamage.config[k] = v
+	end
+end
+-- Merge parryWeights sub-keys
+if type(defaultConfig.parryWeights) == "table" then
+	selfLimbDamage.config.parryWeights = selfLimbDamage.config.parryWeights or {}
+	for k, v in pairs(defaultConfig.parryWeights) do
+		if selfLimbDamage.config.parryWeights[k] == nil then
+			selfLimbDamage.config.parryWeights[k] = v
+		end
+	end
+end
+
+-------------------------------------------------------------------
+-- LIMB DATA STRUCTURE
+-------------------------------------------------------------------
+
+local LIMB_LIST = {"head", "torso", "left arm", "right arm", "left leg", "right leg"}
+local SHORT_NAMES = {
+	["head"] = "HEAD ",
+	["torso"] = "TORSO",
+	["left arm"] = "L.ARM",
+	["right arm"] = "R.ARM",
+	["left leg"] = "L.LEG",
+	["right leg"] = "R.LEG",
+}
+
+-- Initialize limb data
+for _, limb in ipairs(LIMB_LIST) do
 	selfLimbDamage[limb] = selfLimbDamage[limb] or {}
 	selfLimbDamage[limb].damage = selfLimbDamage[limb].damage or 0
 	selfLimbDamage[limb].lastHit = selfLimbDamage[limb].lastHit or 0
 	selfLimbDamage[limb].hitCount = selfLimbDamage[limb].hitCount or 0
+	selfLimbDamage[limb].threshold = selfLimbDamage[limb].threshold or "safe"
 end
 
--- Parse the "dealt X% damage to your [limb]" line and track damage
--- Pattern: "dealt 12.6% damage to your right arm"
+selfLimbDamage.timers = selfLimbDamage.timers or {}
+selfLimbDamage.lasthit = selfLimbDamage.lasthit or "none"
+
+-------------------------------------------------------------------
+-- CORE FUNCTIONS
+-------------------------------------------------------------------
+
+-- Check if a limb is "prepped" (one hit away from breaking)
+function ataxia_selfLimbPrepped(limb)
+	limb = limb:lower()
+	if not selfLimbDamage[limb] then return false end
+
+	local data = selfLimbDamage[limb]
+	local lastHit = data.lastHit or 0
+	if lastHit == 0 then lastHit = 12.5 end
+
+	return (data.damage + lastHit &gt;= 100)
+end
+
+-- Calculate how many hits remaining to break the limb
+function ataxia_selfHitsToBreak(limb)
+	limb = limb:lower()
+	if not selfLimbDamage[limb] then return 99 end
+
+	local data = selfLimbDamage[limb]
+	local remaining = 100 - data.damage
+	local lastHit = data.lastHit or 0
+	if lastHit == 0 then lastHit = 12.5 end
+
+	if remaining &lt;= 0 then return 0 end
+
+	return math.ceil(remaining / lastHit)
+end
+
+-- Compute threshold state from hits-to-break
+local function computeThreshold(hitsLeft)
+	local cfg = selfLimbDamage.config
+	if hitsLeft &lt;= cfg.criticalHits then
+		return "critical"
+	elseif hitsLeft &lt;= cfg.warningHits then
+		return "warning"
+	else
+		return "safe"
+	end
+end
+
+-- Check if a limb is broken via afflictions
+function ataxia_selfLimbBroken(limb)
+	if not ataxia or not ataxia.afflictions then return false end
+	local key = limb:gsub(" ", "")
+	return ataxia.afflictions["damaged"..key]
+		or ataxia.afflictions["mangled"..key]
+		or (limb == "torso" and (ataxia.afflictions.mildtrauma or ataxia.afflictions.serioustrauma))
+end
+
+-- Get a summary of limb status
+function ataxia_selfLimbStatus(limb)
+	limb = limb:lower()
+	if not selfLimbDamage[limb] then return nil end
+
+	local data = selfLimbDamage[limb]
+	local hitsLeft = ataxia_selfHitsToBreak(limb)
+	local broken = ataxia_selfLimbBroken(limb)
+	return {
+		damage = data.damage,
+		lastHit = data.lastHit,
+		hitCount = data.hitCount,
+		hitsToBreak = hitsLeft,
+		prepped = ataxia_selfLimbPrepped(limb),
+		threshold = broken and "broken" or data.threshold,
+		broken = broken,
+	}
+end
+
+-------------------------------------------------------------------
+-- DAMAGE TRACKING
+-------------------------------------------------------------------
+
+function ataxia_raiseLimbDamage(limb, num)
+	if not selfLimbDamage.config.enabled then return end
+
+	-- Clear target defenses when we take a hit (existing behavior)
+	if type(target) == "number" then
+		tAffs.shield = false
+		tAffs.rebounding = false
+		tAffs.paralysis = false
+		tAffs.prone = false
+	end
+
+	selfLimbDamage.lasthit = limb
+
+	-- Update damage data
+	selfLimbDamage[limb].lastHit = num
+	selfLimbDamage[limb].hitCount = (selfLimbDamage[limb].hitCount or 0) + 1
+	selfLimbDamage[limb].damage = selfLimbDamage[limb].damage + num
+
+	-- Cap at 100
+	if selfLimbDamage[limb].damage &gt; 100 then
+		selfLimbDamage[limb].damage = 100
+	end
+
+	-- Reset timer (180s auto-decay)
+	selfLimbDamage.timers[limb] = selfLimbDamage.timers[limb] or {}
+	if selfLimbDamage.timers[limb].timer then
+		killTimer(selfLimbDamage.timers[limb].timer)
+	end
+	selfLimbDamage.timers[limb].timer = tempTimer(180, function()
+		ataxia_resetLimbDamage(limb)
+	end)
+
+	-- Compute threshold transition
+	local hitsLeft = ataxia_selfHitsToBreak(limb)
+	local oldThreshold = selfLimbDamage[limb].threshold
+	local newThreshold = computeThreshold(hitsLeft)
+
+	-- Torso break detection
+	if limb == "torso" and selfLimbDamage[limb].damage &gt;= selfLimbDamage.config.torsoBreakThreshold then
+		newThreshold = "broken"
+		ataxia_boxEcho("TORSO IS BROKEN!", "black:red")
+		send("curing predict mildtrauma")
+	end
+
+	-- Threshold transition alerts + events
+	if newThreshold ~= oldThreshold then
+		selfLimbDamage[limb].threshold = newThreshold
+		raiseEvent("self limb threshold", limb, newThreshold, hitsLeft)
+
+		if newThreshold == "warning" and selfLimbDamage.config.warningAlerts then
+			ataxia_boxEcho(limb:upper().." is 2 HITS from break!", "black:yellow")
+		elseif newThreshold == "critical" and selfLimbDamage.config.criticalAlerts then
+			ataxia_boxEcho(limb:upper().." is PREPPED! (1 hit)", "black:orange")
+		end
+	end
+
+	-- Raise the general damage event
+	raiseEvent("self limb damaged", limb, num, selfLimbDamage[limb].damage)
+end
+
+-- Parse the "dealt X% damage to your [limb]" line
 function ataxia_parseLimbDamageLine(line)
 	local damage, limb = line:match("dealt (%d+%.?%d*)%% damage to your (.+)%.")
 	if damage and limb then
@@ -7061,102 +7225,25 @@ function ataxia_parseLimbDamageLine(line)
 	return false
 end
 
--- Check if a limb is "prepped" (one hit away from breaking)
--- Returns true if the next hit of the same damage would break the limb
-function ataxia_selfLimbPrepped(limb)
-	limb = limb:lower()
-	if not selfLimbDamage[limb] then return false end
+-------------------------------------------------------------------
+-- RESET / CLEAR
+-------------------------------------------------------------------
 
-	local data = selfLimbDamage[limb]
-	local lastHit = data.lastHit or 0
-
-	-- If we don't have hit data yet, use a reasonable default (12.5%)
-	if lastHit == 0 then lastHit = 12.5 end
-
-	return (data.damage + lastHit &gt;= 100)
-end
-
--- Calculate how many hits remaining to break the limb at 100%
--- Returns number of hits based on last hit damage
-function ataxia_selfHitsToBreak(limb)
-	limb = limb:lower()
-	if not selfLimbDamage[limb] then return 0 end
-
-	local data = selfLimbDamage[limb]
-	local remaining = 100 - data.damage
-	local lastHit = data.lastHit or 0
-
-	-- If we don't have hit data yet, use a reasonable default (12.5%)
-	if lastHit == 0 then lastHit = 12.5 end
-
-	if remaining &lt;= 0 then return 0 end
-
-	return math.ceil(remaining / lastHit)
-end
-
--- Get a summary of limb status
-function ataxia_selfLimbStatus(limb)
-	limb = limb:lower()
-	if not selfLimbDamage[limb] then return nil end
-
-	local data = selfLimbDamage[limb]
-	return {
-		damage = data.damage,
-		lastHit = data.lastHit,
-		hitCount = data.hitCount,
-		hitsToBreak = ataxia_selfHitsToBreak(limb),
-		prepped = ataxia_selfLimbPrepped(limb)
-	}
-end
-
--- Display limb status for all limbs
-function ataxia_showSelfLimbStatus()
-	local limbs = {"head", "torso", "left arm", "right arm", "left leg", "right leg"}
-	cecho("\n&lt;DodgerBlue&gt; -= Self Limb Damage Status =-")
-	for _, limb in ipairs(limbs) do
-		local status = ataxia_selfLimbStatus(limb)
-		if status then
-			local preppedStr = status.prepped and " &lt;red&gt;[PREPPED]" or ""
-			local color = status.damage &gt;= 75 and "red" or (status.damage &gt;= 50 and "yellow" or (status.damage &gt; 0 and "green" or "gray"))
-			cecho(string.format("\n  &lt;%s&gt;%s&lt;white&gt;: %.1f%% | Last Hit: %.1f%% | Hits: %d | To Break: %d%s",
-				color, limb:upper(), status.damage, status.lastHit, status.hitCount, status.hitsToBreak, preppedStr))
-		end
+function ataxia_clearLimbDamage(limb)
+	selfLimbDamage[limb].damage = 0
+	selfLimbDamage[limb].lastHit = 0
+	selfLimbDamage[limb].hitCount = 0
+	selfLimbDamage[limb].threshold = "safe"
+	if selfLimbDamage.timers[limb] and selfLimbDamage.timers[limb].timer then
+		killTimer(selfLimbDamage.timers[limb].timer)
 	end
-end
-
-function ataxia_raiseLimbDamage(limb, num)
-	if type(target) == "number" then
-		tAffs.shield = false
-		tAffs.rebounding = false
-		tAffs.paralysis = false
-		tAffs.prone = false
+	selfLimbDamage.timers[limb] = nil
+	-- Update GUI
+	if selfLimbDamage.gui and selfLimbDamage.gui.console then
+		ataxia_updateSelfLimbWindow()
 	end
-
-	selfLimbDamage.lasthit = limb
-
-	-- Track the last hit damage and increment hit count
-	selfLimbDamage[limb].lastHit = num
-	selfLimbDamage[limb].hitCount = (selfLimbDamage[limb].hitCount or 0) + 1
-
-	selfLimbDamage[limb]["damage"] = selfLimbDamage[limb]["damage"] + num
-	if selfLimbDamage[limb]["damage"] &gt; 95 then selfLimbDamage[limb]["damage"] = 100 end
-	selfLimbDamage.timers[limb] = selfLimbDamage.timers[limb] or {}
-	if selfLimbDamage.timers[limb].timer then killTimer( selfLimbDamage.timers[limb].timer ) end
-	selfLimbDamage.timers[limb].timer = tempTimer( 180, [[ ataxia_resetLimbDamage("]]..limb..[[")]])
-
-	-- Check if limb is prepped and alert
-	if ataxia_selfLimbPrepped(limb) then
-		local shortLimb = ataxia_shortLimb and ataxia_shortLimb(limb) or limb:upper():sub(1,2)
-		ataxia_boxEcho(limb:upper().." is PREPPED! (1 hit)", "black:orange")
-	end
-
-	if limb == "torso" and selfLimbDamage.torso["damage"] &gt;= 97 then
-		ataxia_boxEcho("Torso is likely broken!", "red")
-		send("curing predict mildtrauma")
-	end
-
-	-- Raise custom event for other systems to listen to
-	raiseEvent("self limb damaged", limb, num, selfLimbDamage[limb].damage)
+	-- Reset threshold event so defensive reactions can clear their flags
+	raiseEvent("self limb threshold", limb, "safe", 99)
 end
 
 function ataxia_resetLimbDamage(limb)
@@ -7164,17 +7251,16 @@ function ataxia_resetLimbDamage(limb)
 	ataxiaEcho("Our &lt;green&gt;"..limb.."&lt;NavajoWhite&gt; has been reset.")
 end
 
-function ataxia_clearLimbDamage(limb)
-	selfLimbDamage[limb]["damage"] = 0
-	selfLimbDamage[limb].lastHit = 0
-	selfLimbDamage[limb].hitCount = 0
-	if selfLimbDamage.timers[limb] and selfLimbDamage.timers[limb].timer then killTimer( selfLimbDamage.timers[limb].timer ) end
-	selfLimbDamage.timers[limb] = nil
-	-- Update GUI if it exists
-	if selfLimbDamage.gui and selfLimbDamage.gui.console then
-		ataxia_updateSelfLimbWindow()
+function ataxia_clearAllLimbDamage()
+	for _, limb in ipairs(LIMB_LIST) do
+		ataxia_clearLimbDamage(limb)
 	end
+	cecho("\n&lt;DodgerBlue&gt; -= All self limb damage cleared =-")
 end
+
+-------------------------------------------------------------------
+-- BROKEN LIMB DETECTION (aff events)
+-------------------------------------------------------------------
 
 function ataxia_brokenLimbFound(event, affliction)
 	if event == "aff gained" then
@@ -7188,87 +7274,125 @@ function ataxia_brokenLimbFound(event, affliction)
 			ataxia_clearLimbDamage("left leg")
 			ataxia_boxEcho("LEFT LEG HAS BEEN BROKEN", "black:DarkOrange")
 			if not affed("damagedleftarm") and not affed("damagedrightarm") and ataxiaTemp.salvelockWait then
-				killTimer(ataxiaTemp.salvelockWait) 
+				killTimer(ataxiaTemp.salvelockWait)
 				ataxiaTemp.salvelockWait = nil
-				send("queue addclear free restore",false)
+				send("queue addclear free restore", false)
 			end
 		elseif affliction == "damagedrightleg" or affliction == "mangledrightleg" then
 			ataxia_clearLimbDamage("right leg")
 			ataxia_boxEcho("RIGHT LEG HAS BEEN BROKEN", "black:DarkOrange")
 			if not affed("damagedleftarm") and not affed("damagedrightarm") and ataxiaTemp.salvelockWait then
-				killTimer(ataxiaTemp.salvelockWait) 
-				ataxiaTemp.salvelockWait = nil			
-				send("queue addclear eqbal restore",false)
-			end			
+				killTimer(ataxiaTemp.salvelockWait)
+				ataxiaTemp.salvelockWait = nil
+				send("queue addclear eqbal restore", false)
+			end
 		elseif affliction == "damagedhead" or affliction == "mangledhead" then
 			ataxia_clearLimbDamage("head")
 			ataxia_boxEcho("HEAD HAS BEEN BROKEN", "black:goldenrod")
 		elseif affliction == "mildtrauma" or affliction == "serioustrauma" then
 			ataxia_clearLimbDamage("torso")
 			ataxia_boxEcho("TORSO HAS BEEN BROKEN", "black:red")
-		end	
+		end
 	elseif event == "aff cured" then
 		if affliction == "mildtrauma" or affliction == "serioustrauma" then
 			ataxia_clearLimbDamage("torso")
-		end	
+		end
 	end
 end
 
-registerAnonymousEventHandler("aff gained", "ataxia_brokenLimbFound")
-registerAnonymousEventHandler("aff cured", "ataxia_brokenLimbFound")
+-- Clean up old handlers on reload, then register fresh
+if selfLimbDamage._handlerAffGained then killAnonymousEventHandler(selfLimbDamage._handlerAffGained) end
+if selfLimbDamage._handlerAffCured then killAnonymousEventHandler(selfLimbDamage._handlerAffCured) end
+selfLimbDamage._handlerAffGained = registerAnonymousEventHandler("aff gained", "ataxia_brokenLimbFound")
+selfLimbDamage._handlerAffCured = registerAnonymousEventHandler("aff cured", "ataxia_brokenLimbFound")
 
--- Reset all limb damage
-function ataxia_clearAllLimbDamage()
-	for _, limb in ipairs({"head", "torso", "left arm", "right arm", "left leg", "right leg"}) do
-		ataxia_clearLimbDamage(limb)
+-------------------------------------------------------------------
+-- DISPLAY STATUS (text)
+-------------------------------------------------------------------
+
+function ataxia_showSelfLimbStatus()
+	cecho("\n&lt;DodgerBlue&gt; -= Self Limb Damage Status =-")
+	for _, limb in ipairs(LIMB_LIST) do
+		local status = ataxia_selfLimbStatus(limb)
+		if status then
+			local color
+			if status.broken then color = "dark_red"
+			elseif status.threshold == "critical" then color = "red"
+			elseif status.threshold == "warning" then color = "yellow"
+			elseif status.damage &gt; 0 then color = "green"
+			else color = "gray"
+			end
+
+			local stateStr = ""
+			if status.broken then
+				stateStr = " &lt;dark_red&gt;[BROKEN]"
+			elseif status.threshold == "critical" then
+				stateStr = " &lt;red&gt;[PREPPED]"
+			elseif status.threshold == "warning" then
+				stateStr = " &lt;yellow&gt;[WARNING]"
+			end
+
+			cecho(string.format("\n  &lt;%s&gt;%s&lt;white&gt;: %.1f%% | Last: %.1f%% | Hits: %d | To Break: %d%s",
+				color, limb:upper(), status.damage, status.lastHit, status.hitCount, status.hitsToBreak, stateStr))
+		end
 	end
-	cecho("\n&lt;DodgerBlue&gt; -= All self limb damage cleared =-")
+
+	-- Show config toggles
+	local cfg = selfLimbDamage.config
+	cecho("\n&lt;DodgerBlue&gt; -= SLC Config =-")
+	cecho(string.format("\n  &lt;white&gt;Parry: &lt;%s&gt;%s&lt;white&gt; | Shield: &lt;%s&gt;%s&lt;white&gt; | SSC: &lt;%s&gt;%s&lt;white&gt; | Party: &lt;%s&gt;%s",
+		cfg.autoParry and "green" or "red", cfg.autoParry and "ON" or "OFF",
+		cfg.autoShield and "green" or "red", cfg.autoShield and "ON" or "OFF",
+		cfg.sscPriority and "green" or "red", cfg.sscPriority and "ON" or "OFF",
+		cfg.partyCallout and "green" or "red", cfg.partyCallout and "ON" or "OFF"))
+	cecho(string.format("\n  &lt;white&gt;Parry Mode: &lt;cyan&gt;%s&lt;white&gt; | Warnings: &lt;%s&gt;%s&lt;white&gt; | Critical: &lt;%s&gt;%s",
+		cfg.parryMode,
+		cfg.warningAlerts and "green" or "red", cfg.warningAlerts and "ON" or "OFF",
+		cfg.criticalAlerts and "green" or "red", cfg.criticalAlerts and "ON" or "OFF"))
+	cecho(string.format("\n  &lt;white&gt;Anti-Shikudo: &lt;%s&gt;%s&lt;white&gt; | GUI: &lt;%s&gt;%s",
+		cfg.antiShikudo and "green" or "red", cfg.antiShikudo and "ON" or "OFF",
+		cfg.guiWindow and "green" or "red", cfg.guiWindow and "ON" or "OFF"))
 end
 
--- Register the trigger for parsing limb damage lines
--- Call this once to set up the trigger
+-------------------------------------------------------------------
+-- TRIGGER REGISTRATION
+-------------------------------------------------------------------
+
 function ataxia_registerLimbDamageTrigger()
 	if selfLimbDamage.triggerId then
 		killTrigger(selfLimbDamage.triggerId)
 	end
 
-	-- Regex pattern: "dealt X% damage to your [limb]"
-	-- Example: "As Proficy's blow crunches into you, you perceive that he has dealt 12.6% damage to your right arm."
 	selfLimbDamage.triggerId = tempRegexTrigger(
 		[[dealt (\d+\.?\d*)% damage to your (head|torso|left arm|right arm|left leg|right leg)]],
-		[[
+		function()
 			local damage = tonumber(matches[2])
 			local limb = matches[3]:lower()
 			if damage and limb and selfLimbDamage[limb] then
 				ataxia_raiseLimbDamage(limb, damage)
 			end
-		]]
+		end
 	)
-	ataxiaEcho("Self limb damage trigger registered.")
 end
 
--- Auto-register the trigger when the script loads
+-- Auto-register on load
 ataxia_registerLimbDamageTrigger()
 
 -------------------------------------------------------------------
--- GEYSER GUI WINDOW FOR SELF LIMB DAMAGE
+-- GEYSER GUI WINDOW
 -------------------------------------------------------------------
 
 selfLimbDamage.gui = selfLimbDamage.gui or {}
 selfLimbDamage.gui.fontSize = 9
 
--- Build the self limb damage window
 function ataxia_buildSelfLimbWindow()
-	-- Clean up existing window if it exists
 	if selfLimbDamage.gui.window then
 		selfLimbDamage.gui.window:hide()
 		selfLimbDamage.gui.window = nil
 	end
 
-	-- Get saved position or use defaults
-	local savedPos = selfLimbDamage.gui.savedPosition or {x = 100, y = 100, width = 280, height = 180}
+	local savedPos = selfLimbDamage.gui.savedPosition or {x = 100, y = 100, width = 300, height = 180}
 
-	-- Create the Adjustable Container (moveable, resizable, lockable)
 	selfLimbDamage.gui.window = Adjustable.Container:new({
 		name = "selfLimbDamageWindow",
 		x = savedPos.x,
@@ -7290,7 +7414,6 @@ function ataxia_buildSelfLimbWindow()
 	})
 	selfLimbDamage.gui.window:changeMenuStyle("dark")
 
-	-- Create container inside
 	selfLimbDamage.gui.container = Geyser.Container:new({
 		name = "selfLimbDamageContainer",
 		x = 0, y = 0,
@@ -7298,7 +7421,6 @@ function ataxia_buildSelfLimbWindow()
 		height = "100%",
 	}, selfLimbDamage.gui.window)
 
-	-- Create the MiniConsole for display
 	selfLimbDamage.gui.console = Geyser.MiniConsole:new({
 		name = "selfLimbDamageConsole",
 		x = 2, y = 2,
@@ -7309,63 +7431,67 @@ function ataxia_buildSelfLimbWindow()
 	}, selfLimbDamage.gui.container)
 
 	setFontSize("selfLimbDamageConsole", selfLimbDamage.gui.fontSize)
-
-	-- Add callback to save position when window is moved/resized
 	selfLimbDamage.gui.window:attachToBorder("top")
-
-	-- Show the window
 	selfLimbDamage.gui.window:show()
-
-	-- Initial update
 	ataxia_updateSelfLimbWindow()
-
-	ataxiaEcho("Self limb damage window created. Right-click title bar for options.")
 end
 
--- Update the limb damage window display
 function ataxia_updateSelfLimbWindow()
 	if not selfLimbDamage.gui.console then return end
 
-	local console = selfLimbDamage.gui.console
 	clearWindow("selfLimbDamageConsole")
 
-	local limbs = {"head", "torso", "left arm", "right arm", "left leg", "right leg"}
-	local shortNames = {
-		["head"] = "HEAD",
-		["torso"] = "TORSO",
-		["left arm"] = "L.ARM",
-		["right arm"] = "R.ARM",
-		["left leg"] = "L.LEG",
-		["right leg"] = "R.LEG",
-	}
+	-- Determine current parry target for [P] marker
+	local parryTarget = ataxia and ataxia.parrying and ataxia.parrying.shouldparry or nil
 
-	for _, limb in ipairs(limbs) do
+	for _, limb in ipairs(LIMB_LIST) do
 		local status = ataxia_selfLimbStatus(limb)
 		if status then
 			local color
-			if status.damage &gt;= 85 then
+			if status.broken then
+				color = "dark_red"
+			elseif status.threshold == "critical" then
 				color = "red"
-			elseif status.damage &gt;= 70 then
+			elseif status.threshold == "warning" then
 				color = "orange"
-			elseif status.damage &gt;= 50 then
-				color = "yellow"
 			elseif status.damage &gt; 0 then
 				color = "green"
 			else
 				color = "gray"
 			end
 
-			local preppedStr = status.prepped and " &lt;red&gt;*PREP*" or ""
+			-- Status indicator
+			local indicator = ""
+			if status.broken then
+				indicator = " &lt;dark_red&gt;BROKEN"
+			elseif status.threshold == "critical" then
+				indicator = " &lt;red&gt;[!!]"
+			elseif status.threshold == "warning" then
+				indicator = " &lt;orange&gt;[!]"
+			end
 
-			-- Format: LIMB: 50.0% (4 hits) [PREP]
+			-- Parry marker
+			local parryMark = (parryTarget == limb) and " &lt;cyan&gt;[P]" or ""
+
+			-- Hits display
+			local hitsStr
+			if status.broken then
+				hitsStr = "  ---"
+			elseif status.damage == 0 then
+				hitsStr = " safe"
+			elseif status.hitsToBreak == 1 then
+				hitsStr = "1 hit"
+			else
+				hitsStr = string.format("%d hts", status.hitsToBreak)
+			end
+
 			cecho("selfLimbDamageConsole",
-				string.format("&lt;%s&gt;%-6s&lt;white&gt;: %5.1f%% &lt;dim_gray&gt;(%d to brk)%s\n",
-					color, shortNames[limb], status.damage, status.hitsToBreak, preppedStr))
+				string.format("&lt;%s&gt;%s&lt;white&gt;: %5.1f%% &lt;dim_gray&gt;%s%s%s\n",
+					color, SHORT_NAMES[limb], status.damage, hitsStr, indicator, parryMark))
 		end
 	end
 end
 
--- Save window position
 function ataxia_saveSelfLimbWindowPosition()
 	if selfLimbDamage.gui.window then
 		selfLimbDamage.gui.savedPosition = {
@@ -7375,11 +7501,9 @@ function ataxia_saveSelfLimbWindowPosition()
 			height = selfLimbDamage.gui.window.height,
 		}
 		selfLimbDamage.gui.window:savePosition()
-		ataxiaEcho("Self limb window position saved.")
 	end
 end
 
--- Toggle window visibility
 function ataxia_toggleSelfLimbWindow()
 	if not selfLimbDamage.gui.window then
 		ataxia_buildSelfLimbWindow()
@@ -7391,20 +7515,15 @@ function ataxia_toggleSelfLimbWindow()
 	end
 end
 
--- Lock/unlock the window
 function ataxia_lockSelfLimbWindow(lock)
 	if not selfLimbDamage.gui.window then return end
-
 	if lock then
 		selfLimbDamage.gui.window:lockContainer()
-		ataxiaEcho("Self limb window locked.")
 	else
 		selfLimbDamage.gui.window:unlockContainer()
-		ataxiaEcho("Self limb window unlocked.")
 	end
 end
 
--- Set font size
 function ataxia_setSelfLimbWindowFontSize(size)
 	selfLimbDamage.gui.fontSize = size or 9
 	if selfLimbDamage.gui.console then
@@ -7413,33 +7532,39 @@ function ataxia_setSelfLimbWindowFontSize(size)
 	end
 end
 
--- Close the window
 function ataxia_closeSelfLimbWindow()
 	if selfLimbDamage.gui.window then
 		selfLimbDamage.gui.window:hide()
 	end
 end
 
--- Listen to damage events to auto-update the window
-registerAnonymousEventHandler("self limb damaged", function()
-	ataxia_updateSelfLimbWindow()
-end)</script>
+-- Auto-update GUI on damage events (debounced, with reload cleanup)
+if selfLimbDamage._handlerGuiUpdate then killAnonymousEventHandler(selfLimbDamage._handlerGuiUpdate) end
+selfLimbDamage._guiDirty = false
+selfLimbDamage._handlerGuiUpdate = registerAnonymousEventHandler("self limb damaged", function()
+	if not selfLimbDamage._guiDirty then
+		selfLimbDamage._guiDirty = true
+		tempTimer(0, function()
+			selfLimbDamage._guiDirty = false
+			ataxia_updateSelfLimbWindow()
+		end)
+	end
+end)
+</script>
   <packageName/>
 <eventHandlerList>
 </eventHandlerList>
 </Script>
           <Script isActive="yes" isFolder="no">
   <name>Parrying</name>
-            <script>function ataxia_createParry()
-	ataxia.parry = ataxia.parry or "stand"
+            <script>local LIMB_LIST = {"head", "torso", "left arm", "right arm", "left leg", "right leg"}
+
+function ataxia_createParry()
+	ataxia.parry = ataxia.parry or (selfLimbDamage.config and selfLimbDamage.config.parryMode or "stand")
 	ataxia.parrying = ataxia.parrying or {
 		limb = "none",
 		shouldparry = "right leg",
-		modes = {
-			"stand", "defend", "manual", "randomarm", "randomleg"
-		},
 	}
-	ataxiaEcho("Parrying initialised.")
 end
 
 function ataxia_collapseParry()
@@ -7447,112 +7572,333 @@ function ataxia_collapseParry()
 end
 
 function ataxia_parryCheck()
-	local change = ""
-	local method = ataxia.parry
+	local cfg = selfLimbDamage.config
+	if not cfg or not cfg.enabled or not cfg.autoParry then return end
 
-	if method == "manual" then return end
+	local mode = cfg.parryMode
+	if mode == "manual" then return end
 
-	--Priority lists for switching.
-	local prio_order = {"left leg", "right leg","torso","head","left arm", "right arm"}
-	local prio_order_hypemode = {"left leg", "right leg","left arm", "right arm", "torso", "head"}
+	-- Anti-Shikudo: override mode when fighting a Shikudo monk
+	local isShikudo = cfg.antiShikudo
+		and classDetect and classDetect.state
+		and classDetect.state.attackerClass == "Monk"
+		and shikudostance and shikudostance ~= ""
 
-	local ties = {}
-
-	if method == "none" then
-		ataxiaEcho("Defaulting to 'stand' parry method, since it wasn't set.")
-		ataxia.parry = "stand"
-		method = ataxia.parry
+	if isShikudo then
+		ataxia_shikudoParry()
+		return
 	end
-	ataxia.parrying.weights = {
-		["left arm"] = 0,	["right arm"] = 0,
-		["left leg"] = 0,	["right leg"] = 0,
-		["head"] = 0,		["torso"] = 0,
-	}
 
-	if method == "defend" then
-		for i=1, #prio_order do
-			local limb = ataxia.parrying.weights[prio_order_hypemode[i]]
-			local toLimb = prio_order_hypemode[i]		
-			if selfLimbDamage[toLimb]["damage"] &gt; 75 then
-				limb = limb + 2
-			elseif selfLimbDamage[toLimb]["damage"] &gt; 50 then
-				limb = limb + 1.5
-			elseif selfLimbDamage[toLimb]["damage"] &gt; 25 then
-				limb = limb + 1
-			elseif selfLimbDamage[toLimb]["damage"] &gt; 0 then
-				limb = limb + 0.5
-			end
-			
-			if ataxia.afflictions["damaged"..prio_order_hypemode[i]:gsub(" ", "")] then
-				limb = limb + 1
-			elseif ataxia.afflictions["mangled"..prio_order_hypemode[i]:gsub(" ", "")] then
-				limb = limb + 0
-			else
-				limb = limb + 2
-			end
-			ataxia.parrying.weights[prio_order_hypemode[i]] = limb
-		end
+	local pw = cfg.parryWeights
+	local weights = {}
 
-	elseif method == "stand" then
-		ataxia.parrying.weights["left leg"] = 2
-		ataxia.parrying.weights["right leg"] = 2
-
-		for i=1, #prio_order do
-			local limb = ataxia.parrying.weights[prio_order_hypemode[i]]
-			local toLimb = prio_order_hypemode[i]		
-			if selfLimbDamage[toLimb]["damage"] &gt; 75 then
-				limb = limb + 3
-			elseif selfLimbDamage[toLimb]["damage"] &gt; 50 then
-				limb = limb + 2
-			elseif selfLimbDamage[toLimb]["damage"] &gt; 25 then
-				limb = limb + 1
-			elseif selfLimbDamage[toLimb]["damage"] &gt; 0 then
-				limb = limb + 0.5
-			end
-			
-	
-			if ataxia.afflictions["damaged"..prio_order_hypemode[i]:gsub(" ", "")] then
-				limb = limb - 1
-			elseif ataxia.afflictions["mangled"..prio_order_hypemode[i]:gsub(" ", "")] then
-				limb = limb + 0
-			else
-				limb = limb + 2
-			end
-			ataxia.parrying.weights[prio_order_hypemode[i]] = limb
-		end
-	elseif method == "randomarm" or method == "randomleg" then
-	
-		local x = math.random(1, 100)
+	if mode == "randomarm" or mode == "randomleg" then
+		-- Random mode: pick a random side, heavily weight it
+		if not ataxiaTemp then ataxiaTemp = {} end
 		if ataxiaTemp.parryTimer then return end
-		ataxiaTemp.parryTimer = tempTimer(2.5, [[ ataxiaTemp.parryTimer = nil ]])
-		local limb = ( x % 2 == 0 and "left " or "right " ) .. ( method == "randomarm" and "arm" or "leg")
+		ataxiaTemp.parryTimer = tempTimer(2.5, function() ataxiaTemp.parryTimer = nil end)
 
-		ataxia.parrying.weights[limb] = 10		
-	end
+		local x = math.random(1, 100)
+		local side = (x % 2 == 0) and "left " or "right "
+		local limbType = (mode == "randomarm") and "arm" or "leg"
+		local chosen = side .. limbType
 
-	local highest = ""
-	local highest_value = 0
+		for _, limb in ipairs(LIMB_LIST) do
+			weights[limb] = (limb == chosen) and 10 or 0
+		end
+	else
+		-- Standard weighted mode (stand / defend)
+		for _, limb in ipairs(LIMB_LIST) do
+			local w = 0
+			local data = selfLimbDamage[limb]
+			if not data then
+				weights[limb] = 0
+			else
+				local hitsLeft = ataxia_selfHitsToBreak(limb)
+				local isBroken = ataxia_selfLimbBroken(limb)
 
-	for i=1, #prio_order do
-		local limb = ataxia.parrying.weights[prio_order_hypemode[i]]
-		if limb &gt; highest_value then
-			ties = {prio_order[i]}
-			highest = prio_order[i]
-			highest_value = limb
-		elseif limb == highest_value then
-			table.insert(ties, prio_order[i])
+				if isBroken then
+					w = pw.broken
+				elseif hitsLeft &lt;= cfg.criticalHits then
+					w = pw.critical
+				elseif hitsLeft &lt;= cfg.warningHits then
+					w = pw.warning
+				elseif hitsLeft &lt;= 3 then
+					w = pw.moderate
+				elseif data.damage &gt; 0 then
+					w = pw.minor
+				end
+
+				-- Mode modifiers
+				if mode == "stand" then
+					if limb:find("leg") and not isBroken then
+						w = w + pw.legBias
+					end
+				elseif mode == "defend" then
+					if not limb:find("leg") and not isBroken then
+						w = w + pw.nonLegBias
+					end
+				end
+
+				weights[limb] = w
+			end
 		end
 	end
 
-	if highest_value &gt; 0 and #ties == 1 then
-		ataxia.parrying.shouldparry = highest
-	elseif #ties &gt; 1 and highest_value &gt; 0 and not table.contains(ties, ataxia.parrying.limb) then
+	-- Select highest weight, break ties
+	local best, bestWeight, ties = nil, -math.huge, {}
+	for _, limb in ipairs(LIMB_LIST) do
+		local w = weights[limb] or 0
+		if w &gt; bestWeight then
+			best = limb
+			bestWeight = w
+			ties = {limb}
+		elseif w == bestWeight then
+			ties[#ties + 1] = limb
+		end
+	end
+
+	if #ties &gt; 1 and ataxia.parrying and table.contains(ties, ataxia.parrying.limb) then
+		-- Keep current parry if it's among the ties (don't spam switches)
+		ataxia.parrying.shouldparry = ataxia.parrying.limb
+	elseif #ties &gt; 1 then
 		ataxia.parrying.shouldparry = ties[math.random(#ties)]
 	else
-		ataxia.parrying.shouldparry = ataxia.parrying.shouldparry or "head"
+		ataxia.parrying.shouldparry = best
 	end
-  
-end</script>
+
+	ataxia.parrying.weights = weights
+end
+
+-- Anti-Shikudo dynamic parry intelligence
+-- Shikudo monks can only target specific limbs depending on their stance/form.
+-- We exploit this knowledge to parry optimally per stance.
+function ataxia_shikudoParry()
+	local form = shikudostance
+	local hyperLimb = ataxiaTemp and ataxiaTemp.hyperLimb or nil
+
+	if form == "willow" then
+		-- Willow targets legs only. Parry the highest-damage leg.
+		-- When that leg is 2 hits from break, switch to the LOWEST leg
+		-- (if they hit our parry they'll switch limbs, so we can catch up).
+		local ll = selfLimbDamage["left leg"]
+		local rl = selfLimbDamage["right leg"]
+		local llDmg = ll and ll.damage or 0
+		local rlDmg = rl and rl.damage or 0
+		local llHits = ataxia_selfHitsToBreak("left leg")
+		local rlHits = ataxia_selfHitsToBreak("right leg")
+
+		local highLeg = (llDmg &gt;= rlDmg) and "left leg" or "right leg"
+		local lowLeg = (llDmg &gt;= rlDmg) and "right leg" or "left leg"
+		local highHits = (highLeg == "left leg") and llHits or rlHits
+
+		if highHits &lt;= (selfLimbDamage.config.warningHits or 2) then
+			-- High leg is near break â€” switch to low leg to force them to swap
+			ataxia.parrying.shouldparry = lowLeg
+		else
+			-- Parry the highest damage leg
+			ataxia.parrying.shouldparry = highLeg
+		end
+
+	elseif form == "rain" then
+		-- Rain targets arms. Parry highest-damage arm to prevent dismount/knockdown.
+		-- Same threshold logic as willow but for arms.
+		local la = selfLimbDamage["left arm"]
+		local ra = selfLimbDamage["right arm"]
+		local laDmg = la and la.damage or 0
+		local raDmg = ra and ra.damage or 0
+		local laHits = ataxia_selfHitsToBreak("left arm")
+		local raHits = ataxia_selfHitsToBreak("right arm")
+
+		local highArm = (laDmg &gt;= raDmg) and "left arm" or "right arm"
+		local lowArm = (laDmg &gt;= raDmg) and "right arm" or "left arm"
+		local highHits = (highArm == "left arm") and laHits or raHits
+
+		if highHits &lt;= (selfLimbDamage.config.warningHits or 2) then
+			ataxia.parrying.shouldparry = lowArm
+		else
+			ataxia.parrying.shouldparry = highArm
+		end
+
+	elseif form == "oak" or form == "gaital" then
+		-- Oak/Gaital target head. Parry head by default.
+		-- If they hyperfocus head (hit through our parry), they bypass parry entirely
+		-- on that limb â€” switch to legs instead (secondary threat).
+		if hyperLimb == "head" then
+			-- They're hyperfocusing head â€” parrying head is useless, protect legs
+			local llHits = ataxia_selfHitsToBreak("left leg")
+			local rlHits = ataxia_selfHitsToBreak("right leg")
+			local llDmg = (selfLimbDamage["left leg"] and selfLimbDamage["left leg"].damage or 0)
+			local rlDmg = (selfLimbDamage["right leg"] and selfLimbDamage["right leg"].damage or 0)
+			ataxia.parrying.shouldparry = (llDmg &gt;= rlDmg) and "left leg" or "right leg"
+		else
+			ataxia.parrying.shouldparry = "head"
+		end
+
+	else
+		-- Tykonos, Maelstrom, or unknown form â€” fall back to standard weighted parry
+		-- Temporarily disable antiShikudo to avoid recursion, run standard logic
+		local cfg = selfLimbDamage.config
+		cfg.antiShikudo = false
+		local ok, err = pcall(ataxia_parryCheck)
+		cfg.antiShikudo = true
+		if not ok then
+			cecho("\n&lt;red&gt;[SLC] Parry fallback error: " .. tostring(err))
+		end
+		return
+	end
+end
+</script>
+  <packageName/>
+<eventHandlerList>
+</eventHandlerList>
+</Script>
+          <Script isActive="yes" isFolder="no">
+  <name>Defensive Reactions</name>
+            <script>-------------------------------------------------------------------
+-- DEFENSIVE REACTIONS — Listens to threshold events and acts
+-- Every feature is gated by selfLimbDamage.config toggles
+-------------------------------------------------------------------
+
+local limbToAff = {
+	["left arm"] = "damagedleftarm",
+	["right arm"] = "damagedrightarm",
+	["left leg"] = "damagedleftleg",
+	["right leg"] = "damagedrightleg",
+	["head"] = "damagedhead",
+	["torso"] = "mildtrauma",
+}
+
+-- Track what we've already sent (avoid spamming per-prompt)
+selfLimbDamage.reactions = selfLimbDamage.reactions or {
+	sscPrioSent = {},
+	partyCalloutSent = {},
+	shieldCooldown = false,
+	classDefCooldowns = {},
+}
+
+-------------------------------------------------------------------
+-- SSC PRIORITY — Tell server-side curing to prioritize a limb
+-------------------------------------------------------------------
+
+local function handleSSCPriority(limb, threshold)
+	local cfg = selfLimbDamage.config
+	if not cfg.sscPriority then return end
+
+	local reactions = selfLimbDamage.reactions
+
+	if threshold == "warning" or threshold == "critical" then
+		if not reactions.sscPrioSent[limb] then
+			local aff = limbToAff[limb]
+			if aff then
+				send("curing prioaff " .. aff)
+				reactions.sscPrioSent[limb] = true
+			end
+		end
+	elseif threshold == "safe" then
+		reactions.sscPrioSent[limb] = nil
+	end
+end
+
+-------------------------------------------------------------------
+-- AUTO-SHIELD — Touch shield when a limb is 1 hit from break
+-------------------------------------------------------------------
+
+local function handleAutoShield(limb, threshold)
+	local cfg = selfLimbDamage.config
+	if not cfg.autoShield then return end
+	if threshold ~= "critical" then return end
+
+	local reactions = selfLimbDamage.reactions
+	if reactions.shieldCooldown then return end
+
+	-- Don't shield if already shielded or under aeon
+	if ataxia and ataxia.afflictions then
+		if ataxia.afflictions.shield then return end
+		if ataxia.afflictions.aeon then return end
+	end
+
+	send("touch shield")
+	reactions.shieldCooldown = true
+	tempTimer(cfg.shieldCooldown, function()
+		selfLimbDamage.reactions.shieldCooldown = false
+	end)
+end
+
+-------------------------------------------------------------------
+-- PARTY CALLOUT — Alert party when a limb is critical
+-------------------------------------------------------------------
+
+local function handlePartyCallout(limb, threshold)
+	local cfg = selfLimbDamage.config
+	if not cfg.partyCallout then return end
+
+	local reactions = selfLimbDamage.reactions
+
+	if threshold == "critical" then
+		if not reactions.partyCalloutSent[limb] then
+			if partyrelay and (not ataxia or not ataxia.afflictions or not ataxia.afflictions.aeon) then
+				send("pt [SLC] My " .. limb .. " is 1 hit from break!")
+				reactions.partyCalloutSent[limb] = true
+			end
+		end
+	elseif threshold == "safe" then
+		reactions.partyCalloutSent[limb] = nil
+	end
+end
+
+-------------------------------------------------------------------
+-- CLASS-SPECIFIC DEFENSES — Configurable per-class abilities
+-------------------------------------------------------------------
+
+local function handleClassDefenses(limb, threshold)
+	local cfg = selfLimbDamage.config
+	if not cfg.classDefenses then return end
+
+	-- Determine current class
+	local currentClass = ataxia and ataxia.settings and ataxia.settings.class
+	if not currentClass then return end
+
+	local classDefs = cfg.classDefenses[currentClass:lower()]
+	if not classDefs then return end
+
+	local reactions = selfLimbDamage.reactions
+
+	for _, def in ipairs(classDefs) do
+		if def.toggle and threshold == (def.threshold or "critical") then
+			local cdKey = currentClass .. "_" .. def.ability
+			if not reactions.classDefCooldowns[cdKey] then
+				-- Check balance gate if provided
+				if def.gate and type(def.gate) == "function" and not def.gate() then
+					-- Gate function returned false, skip
+				else
+					send(def.ability)
+					reactions.classDefCooldowns[cdKey] = true
+					tempTimer(def.cooldown or 10, function()
+						selfLimbDamage.reactions.classDefCooldowns[cdKey] = nil
+					end)
+				end
+			end
+		end
+	end
+end
+
+-------------------------------------------------------------------
+-- EVENT HANDLER — Central dispatcher for all reactions
+-------------------------------------------------------------------
+
+local function onThresholdChange(event, limb, threshold, hitsLeft)
+	if not selfLimbDamage.config.enabled then return end
+
+	handleSSCPriority(limb, threshold)
+	handleAutoShield(limb, threshold)
+	handlePartyCallout(limb, threshold)
+	handleClassDefenses(limb, threshold)
+end
+
+if selfLimbDamage._handlerThreshold then killAnonymousEventHandler(selfLimbDamage._handlerThreshold) end
+selfLimbDamage._handlerThreshold = registerAnonymousEventHandler("self limb threshold", onThresholdChange)
+</script>
   <packageName/>
 <eventHandlerList>
 </eventHandlerList>
@@ -9404,6 +9750,12 @@ function ataxia_saveSettings(disp)
     ldm.save()
   end
 
+  -- Save SLC config
+  if selfLimbDamage and selfLimbDamage.config then
+    local slc_loc = getMudletHomeDir() .. separator .. "slcconfig"
+    table.save(slc_loc, selfLimbDamage.config)
+  end
+
 	if disp then
 		ataxia_Echo("Nap time. Don't come back soon, "..(gmcp and gmcp.Char.Name.name or "thanks")..".")
 	end
@@ -9469,6 +9821,18 @@ function ataxia_loadSettings()
   -- Load Legend Deck Manager state
   if ldm and ldm.load then
     ldm.load()
+  end
+
+  -- Load SLC config
+  local slc_loc = getMudletHomeDir() .. separator .. "slcconfig"
+  if io.exists(slc_loc) then
+    local saved = {}
+    table.load(slc_loc, saved)
+    selfLimbDamage = selfLimbDamage or {}
+    selfLimbDamage.config = selfLimbDamage.config or {}
+    for k, v in pairs(saved) do
+      selfLimbDamage.config[k] = v
+    end
   end
 
   raiseEvent("ataxia system loaded")
@@ -9736,7 +10100,8 @@ registerAnonymousEventHandler("sysInstallPackage", "ataxia_updateApplied")
 			 send("parry "..ataxia.parrying.shouldparry)
       end
 			parryAttempted = true
-			tempTimer(3, [[parryAttempted = false]])
+			local parryCd = (selfLimbDamage and selfLimbDamage.config and selfLimbDamage.config.parrySpamCooldown) or 3
+			tempTimer(parryCd, [[parryAttempted = false]])
 		end
 	end
 
@@ -14837,14 +15202,14 @@ function ataxiaNDB_highlightName(who, city)
 			if city == "None" or city == "(hidden)" then
 				colour = ataxiaNDB.highlighting.Rogues
 			else
-				colour = ataxiaNDB.highlighting[city]
+				colour = ataxiaNDB.highlighting[city] or ataxiaNDB.highlighting.Rogues
 			end
 		end
 	else
 		if city == "None" or city == "(hidden)" then
 			colour = ataxiaNDB.highlighting.Rogues
 		else
-			colour = ataxiaNDB.highlighting[city]
+			colour = ataxiaNDB.highlighting[city] or ataxiaNDB.highlighting.Rogues
 		end
 	end
 
@@ -20311,6 +20676,7 @@ end
 
 --type(target) == "number"
 function isTargeted(who)
+if not target then return false end
 if type(target) ~= "number" then
   local x,y = who:lower(), target:lower()
   if string.starts(x,y) or string.starts(y,x) or x == y then
@@ -22909,13 +23275,13 @@ if not ataxia.afflictions.aeon and not ataxia.afflictions.paralysis and not atax
 			   end
 			  ataxiaBasher_patterns()
         ataxiagui_updateVitals()
-      elseif ataxia.vitals.hp &lt;= ataxiaBasher.fleeThreshold then
+      elseif ataxiaBasher.fleeThreshold and ataxia.vitals.hp &lt;= ataxiaBasher.fleeThreshold then
         ataxiaTemp.bashFlee = true
         ataxiaBasher.paused = true
         ataxiaEcho("BASH FLEE IS TRUE/PAUSING BASHER/GETTING TO FULL HEALTH")
         ataxiagui_updateVitals()
       end
-    elseif ataxia.vitals.hp &lt;= ataxiaBasher.fleeThreshold then
+    elseif ataxiaBasher.fleeThreshold and ataxia.vitals.hp &lt;= ataxiaBasher.fleeThreshold then
         ataxiaTemp.bashFlee = true
         ataxiaBasher.paused = true
         ataxiaBasher_startFleeTimer()
@@ -26709,7 +27075,7 @@ end)
   <packageName/>
 <eventHandlerList>
 </eventHandlerList>
-        <Script isActive="yes" isFolder="no">
+        <Script isActive="no" isFolder="no">
   <name>functions</name>
           <script>registerAnonymousEventHandler("gmcp.Char.Vitals","slc_displayLC")
 
@@ -26997,7 +27363,7 @@ end
 <eventHandlerList>
 </eventHandlerList>
 </Script>
-        <Script isActive="yes" isFolder="no">
+        <Script isActive="no" isFolder="no">
   <name>slc_variables</name>
           <script>slc = slc or {}
 
@@ -29283,7 +29649,9 @@ function zgui.zStartup()
     --if not table.contains(zgui.modules, "buildRoomInfo") then table.insert(zgui.modules, "buildRoomInfo") end
     
     for i=1, #zgui.modules, 1 do
-      zgui[zgui.modules[i]]()
+      if zgui[zgui.modules[i]] then
+        zgui[zgui.modules[i]]()
+      end
     end
     ------------------------------------------------------------------------
     zgui.debug = false
@@ -77353,14 +77721,14 @@ end</script>
   <command/>
   <packageName/>
   <regex/>
-          <Alias isActive="yes" isFolder="no">
+          <Alias isActive="no" isFolder="no">
   <name>SLC Display</name>
             <script>SLC_force_display()</script>
   <command/>
   <packageName/>
   <regex>^c$</regex>
 </Alias>
-          <Alias isActive="yes" isFolder="no">
+          <Alias isActive="no" isFolder="no">
   <name>SLC Reset</name>
             <script>slc_reset()
 SLC_force_display()</script>
@@ -77368,7 +77736,7 @@ SLC_force_display()</script>
   <packageName/>
   <regex>^cres$</regex>
 </Alias>
-          <Alias isActive="yes" isFolder="no">
+          <Alias isActive="no" isFolder="no">
   <name>SLC Set # of Hits Needed</name>
             <script>SLC_set_attack(matches[2],matches[3])
 </script>
@@ -77376,7 +77744,7 @@ SLC_force_display()</script>
   <packageName/>
   <regex>^cset (\w+) (\d+)$</regex>
 </Alias>
-          <Alias isActive="yes" isFolder="no">
+          <Alias isActive="no" isFolder="no">
   <name>SLC geyser toggle</name>
             <script>ragewindow=ragewindow or false
 --if matches[2] == nil and huntVar.on then
@@ -77390,6 +77758,130 @@ end</script>
   <command/>
   <packageName/>
   <regex>^slc$</regex>
+</Alias>
+          <Alias isActive="yes" isFolder="no">
+  <name>SLC Toggle</name>
+            <script>local args = matches[2] and matches[2]:lower():trim() or ""
+local cfg = selfLimbDamage and selfLimbDamage.config
+
+if not cfg then
+	cecho("\n&lt;red&gt;[SLC] selfLimbDamage.config not initialized.")
+	return
+end
+
+local function toggle(key, label)
+	cfg[key] = not cfg[key]
+	local state = cfg[key] and "&lt;green&gt;ON" or "&lt;red&gt;OFF"
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;" .. label .. ": " .. state)
+end
+
+if args == "" then
+	-- Show full status
+	ataxia_showSelfLimbStatus()
+
+elseif args == "on" then
+	cfg.enabled = true
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;green&gt;System ENABLED")
+
+elseif args == "off" then
+	cfg.enabled = false
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;red&gt;System DISABLED")
+
+elseif args == "autoparry on" then
+	cfg.autoParry = true
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;Auto Parry: &lt;green&gt;ON")
+
+elseif args == "autoparry off" then
+	cfg.autoParry = false
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;Auto Parry: &lt;red&gt;OFF")
+
+elseif args == "shield on" then
+	cfg.autoShield = true
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;Auto Shield: &lt;green&gt;ON")
+
+elseif args == "shield off" then
+	cfg.autoShield = false
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;Auto Shield: &lt;red&gt;OFF")
+
+elseif args == "party on" then
+	cfg.partyCallout = true
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;Party Callout: &lt;green&gt;ON")
+
+elseif args == "party off" then
+	cfg.partyCallout = false
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;Party Callout: &lt;red&gt;OFF")
+
+elseif args == "ssc on" then
+	cfg.sscPriority = true
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;SSC Priority: &lt;green&gt;ON")
+
+elseif args == "ssc off" then
+	cfg.sscPriority = false
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;SSC Priority: &lt;red&gt;OFF")
+
+elseif args == "warn on" then
+	cfg.warningAlerts = true
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;Warning Alerts: &lt;green&gt;ON")
+
+elseif args == "warn off" then
+	cfg.warningAlerts = false
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;Warning Alerts: &lt;red&gt;OFF")
+
+elseif args == "crit on" then
+	cfg.criticalAlerts = true
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;Critical Alerts: &lt;green&gt;ON")
+
+elseif args == "crit off" then
+	cfg.criticalAlerts = false
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;Critical Alerts: &lt;red&gt;OFF")
+
+elseif args:find("^parry ") then
+	local mode = args:match("^parry (.+)")
+	local validModes = {stand = true, defend = true, manual = true, randomarm = true, randomleg = true}
+	if validModes[mode] then
+		cfg.parryMode = mode
+		ataxia.parry = mode
+		cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;Parry Mode: &lt;cyan&gt;" .. mode)
+	else
+		cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;red&gt;Invalid mode. Use: stand, defend, manual, randomarm, randomleg")
+	end
+
+elseif args == "shikudo on" then
+	cfg.antiShikudo = true
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;Anti-Shikudo Parry: &lt;green&gt;ON")
+
+elseif args == "shikudo off" then
+	cfg.antiShikudo = false
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;Anti-Shikudo Parry: &lt;red&gt;OFF")
+
+elseif args == "reset" then
+	ataxia_clearAllLimbDamage()
+
+elseif args == "gui" then
+	cfg.guiWindow = not cfg.guiWindow
+	ataxia_toggleSelfLimbWindow()
+	local state = cfg.guiWindow and "&lt;green&gt;ON" or "&lt;red&gt;OFF"
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;GUI Window: " .. state)
+
+else
+	cecho("\n&lt;DodgerBlue&gt;[SLC] &lt;white&gt;Commands:")
+	cecho("\n  &lt;cyan&gt;slc            &lt;dim_gray&gt;- Show status + config")
+	cecho("\n  &lt;cyan&gt;slc on/off     &lt;dim_gray&gt;- Master toggle")
+	cecho("\n  &lt;cyan&gt;slc autoparry on/off")
+	cecho("\n  &lt;cyan&gt;slc shield on/off")
+	cecho("\n  &lt;cyan&gt;slc party on/off")
+	cecho("\n  &lt;cyan&gt;slc ssc on/off")
+	cecho("\n  &lt;cyan&gt;slc warn on/off")
+	cecho("\n  &lt;cyan&gt;slc crit on/off")
+	cecho("\n  &lt;cyan&gt;slc shikudo on/off &lt;dim_gray&gt;- Anti-Shikudo dynamic parry")
+	cecho("\n  &lt;cyan&gt;slc parry &lt;mode&gt; &lt;dim_gray&gt;- stand/defend/manual/randomarm/randomleg")
+	cecho("\n  &lt;cyan&gt;slc reset      &lt;dim_gray&gt;- Clear all limb damage")
+	cecho("\n  &lt;cyan&gt;slc gui        &lt;dim_gray&gt;- Toggle GUI window")
+end
+</script>
+  <command/>
+  <packageName/>
+  <regex>^slc\s*(.*)$</regex>
 </Alias>
 </AliasGroup>
 </AliasGroup>
@@ -117082,7 +117574,6 @@ tdeliverance = false
         lastFocus = nil
     end
     targetAteWrapper("goldenseal")
-    if onHerbCureV3 then onHerbCureV3("goldenseal") end
 if passiveFailsafe then restorePassiveCure() end
     tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
@@ -117121,18 +117612,16 @@ selectString(line, 1)
   <name>Goldenseal (Madness)</name>
                 <script>if isTargeted(matches[2]) then
 tdeliverance = false
-	-- Eating proves no anorexia (anorexia blocks eating)
-	erAff("anorexia")
-	if removeAffV3 then removeAffV3("anorexia") end
 	if anorexiaFailsafe then
 		tAffs[lastFocus] = true
 		ataxiaEcho("Backtracked anorexia being cured with last focus.")
 		anorexiaFailsafe = nil
 		lastFocus = nil
 	end
+	targetAteWrapper("goldenseal")
   if passiveFailsafe then restorePassiveCure() end
 	erAff("shadowmadness")
-	if onHerbCureV3 then onHerbCureV3("goldenseal") end
+	if removeAffV3 then removeAffV3("shadowmadness") end
 
 	tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
@@ -117178,7 +117667,6 @@ end
         lastFocus = nil
     end
 targetAteWrapper("kelp")
-    if onHerbCureV3 then onHerbCureV3("kelp") end
 if passiveFailsafe then restorePassiveCure() end
     tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
@@ -117223,8 +117711,7 @@ tdeliverance = false
         anorexiaFailsafe = nil
         lastFocus = nil
     end
-    targetAteWrapper("mycalium")
-     if onHerbCureV3 then onHerbCureV3("goldenseal") end
+    targetAteWrapper("goldenseal")
 if passiveFailsafe then restorePassiveCure() end
     tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
@@ -117239,6 +117726,7 @@ if passiveFailsafe then restorePassiveCure() end
 end
   if passiveFailsafe then restorePassiveCure() end
 	erAff("mycalium")
+	if removeAffV3 then removeAffV3("mycalium") end
 
 selectString(line, 1)
 fg("PeachPuff")
@@ -117401,7 +117889,6 @@ selectString(line, 1)
       erAff("crescendo")
     end
     targetAteWrapper("ash")
-    if onHerbCureV3 then onHerbCureV3("ash") end
 if passiveFailsafe then restorePassiveCure() end
     tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
@@ -117446,7 +117933,6 @@ tdeliverance = false
   if passiveFailsafe then restorePassiveCure() end
 
 	targetAteWrapper("ginseng")
-	if onHerbCureV3 then onHerbCureV3("ginseng") end
 	-- Track for adaptive serpent offense
 	if serpent and serpent.trackCure then serpent.trackCure("ginseng") end
 
@@ -117511,7 +117997,6 @@ tdeliverance = false
 	end
   if passiveFailsafe then restorePassiveCure() end
 	targetAteWrapper("ginseng")
-	if onHerbCureV3 then onHerbCureV3("ginseng") end
 	flushingsProc()
 
 	selectString(line, 1)
@@ -117591,7 +118076,6 @@ tdeliverance = false
 			if removeAffV3 then removeAffV3("lovers") end
 	else
 		targetAteWrapper("bellwort")
-		if onHerbCureV3 then onHerbCureV3("bellwort") end
 	end
 	tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
@@ -117645,7 +118129,6 @@ if isTargeted(multimatches[1][2]) then
     erAff("whisperingmadness")
 	else
 		targetAteWrapper("lobelia")
-		if onHerbCureV3 then onHerbCureV3("lobelia") end
 	end
 	
 	tBals.plant = false
@@ -131783,7 +132266,7 @@ send("clearqueue all;pull harpoon")</script>
                 <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>PEOPLE CAPTURE</name>
                   <script>if target == matches[2] then
-movedirection = north
+movedirection = "north"
 send("queue addclear free "..movedirection) end</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
@@ -138829,8 +139312,11 @@ end</script>
 </TriggerGroup>
             <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>reset</name>
-              <script>slc.hitcount[matches[2]] = 0
-slc.percentages[matches[2]] = 0</script>
+              <script>-- Wire into the revamped SLC system
+local limb = matches[2]
+if limb and selfLimbDamage and selfLimbDamage[limb] then
+	ataxia_clearLimbDamage(limb)
+end</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -138851,8 +139337,11 @@ slc.percentages[matches[2]] = 0</script>
 </Trigger>
             <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Limb healed</name>
-              <script>slc.hitcount[matches[2]] = 0
-slc.percentages[matches[2]] = 0</script>
+              <script>-- Wire into the revamped SLC system
+local limb = matches[2]
+if limb and selfLimbDamage and selfLimbDamage[limb] then
+	ataxia_clearLimbDamage(limb)
+end</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -145749,62 +146238,6 @@ ataxiaTemp.epitomiseTimer = tempTimer(6, [[
   <command/>
   <keyCode>33554431</keyCode>
   <keyModifier>0</keyModifier>
-      <KeyGroup isActive="yes" isFolder="yes">
-  <name>Targeting</name>
-  <packageName/>
-        <script/>
-  <command/>
-  <keyCode>33554431</keyCode>
-  <keyModifier>0</keyModifier>
-        <Key isActive="yes" isFolder="no">
-  <name>Left Leg</name>
-  <packageName/>
-          <script>ltarget = "left leg"</script>
-  <command/>
-  <keyCode>49</keyCode>
-  <keyModifier>0</keyModifier>
-</Key>
-        <Key isActive="yes" isFolder="no">
-  <name>Right Leg</name>
-  <packageName/>
-          <script>ltarget = "right leg"</script>
-  <command/>
-  <keyCode>51</keyCode>
-  <keyModifier>0</keyModifier>
-</Key>
-        <Key isActive="yes" isFolder="no">
-  <name>Torso</name>
-  <packageName/>
-          <script>ltarget = "torso"</script>
-  <command/>
-  <keyCode>53</keyCode>
-  <keyModifier>0</keyModifier>
-</Key>
-        <Key isActive="yes" isFolder="no">
-  <name>Head</name>
-  <packageName/>
-          <script>ltarget = "head"</script>
-  <command/>
-  <keyCode>56</keyCode>
-  <keyModifier>0</keyModifier>
-</Key>
-        <Key isActive="yes" isFolder="no">
-  <name>left arm</name>
-  <packageName/>
-          <script>ltarget = "left arm"</script>
-  <command/>
-  <keyCode>52</keyCode>
-  <keyModifier>0</keyModifier>
-</Key>
-        <Key isActive="yes" isFolder="no">
-  <name>Right Arm</name>
-  <packageName/>
-          <script>ltarget = "right arm"</script>
-  <command/>
-  <keyCode>54</keyCode>
-  <keyModifier>0</keyModifier>
-</Key>
-</KeyGroup>
       <KeyGroup isActive="yes" isFolder="yes">
   <name>Movement/Bashing</name>
   <packageName/>

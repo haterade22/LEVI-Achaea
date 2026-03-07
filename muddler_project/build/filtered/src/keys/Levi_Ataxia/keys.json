@@ -1,36 +1,5 @@
 [
   {
-    "name": "Targeting",
-    "isActive": "yes",
-    "isFolder": "yes",
-    "children": [
-      {
-        "name": "Left Leg",
-        "keys": "1"
-      },
-      {
-        "name": "Right Leg",
-        "keys": "3"
-      },
-      {
-        "name": "Torso",
-        "keys": "5"
-      },
-      {
-        "name": "Head",
-        "keys": "8"
-      },
-      {
-        "name": "left arm",
-        "keys": "4"
-      },
-      {
-        "name": "Right Arm",
-        "keys": "6"
-      }
-    ]
-  },
-  {
     "name": "Movement/Bashing",
     "isActive": "yes",
     "isFolder": "yes",
