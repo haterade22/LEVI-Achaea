@@ -6,7 +6,7 @@ hierarchy:
 - Classes
 - slc
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
 regex: ^c$
 command: ''

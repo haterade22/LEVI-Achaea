@@ -48,6 +48,12 @@ function ataxia_saveSettings(disp)
     ldm.save()
   end
 
+  -- Save SLC config
+  if selfLimbDamage and selfLimbDamage.config then
+    local slc_loc = getMudletHomeDir() .. separator .. "slcconfig"
+    table.save(slc_loc, selfLimbDamage.config)
+  end
+
 	if disp then
 		ataxia_Echo("Nap time. Don't come back soon, "..(gmcp and gmcp.Char.Name.name or "thanks")..".")
 	end
@@ -113,6 +119,18 @@ function ataxia_loadSettings()
   -- Load Legend Deck Manager state
   if ldm and ldm.load then
     ldm.load()
+  end
+
+  -- Load SLC config
+  local slc_loc = getMudletHomeDir() .. separator .. "slcconfig"
+  if io.exists(slc_loc) then
+    local saved = {}
+    table.load(slc_loc, saved)
+    selfLimbDamage = selfLimbDamage or {}
+    selfLimbDamage.config = selfLimbDamage.config or {}
+    for k, v in pairs(saved) do
+      selfLimbDamage.config[k] = v
+    end
   end
 
   raiseEvent("ataxia system loaded")

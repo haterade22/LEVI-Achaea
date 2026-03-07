@@ -39,18 +39,16 @@ patterns:
 
 if isTargeted(matches[2]) then
 tdeliverance = false
-	-- Eating proves no anorexia (anorexia blocks eating)
-	erAff("anorexia")
-	if removeAffV3 then removeAffV3("anorexia") end
 	if anorexiaFailsafe then
 		tAffs[lastFocus] = true
 		ataxiaEcho("Backtracked anorexia being cured with last focus.")
 		anorexiaFailsafe = nil
 		lastFocus = nil
 	end
+	targetAteWrapper("goldenseal")
   if passiveFailsafe then restorePassiveCure() end
 	erAff("shadowmadness")
-	if onHerbCureV3 then onHerbCureV3("goldenseal") end
+	if removeAffV3 then removeAffV3("shadowmadness") end
 
 	tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
