@@ -37,4 +37,4 @@ patterns:
   type: 1
 ]]--
 
-NDBIsMark = "Quisalis"
+ataxiaNDB._mark = "Quisalis"

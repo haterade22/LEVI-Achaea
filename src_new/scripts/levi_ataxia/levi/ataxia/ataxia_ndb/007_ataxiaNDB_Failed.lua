@@ -19,7 +19,7 @@ function ataxiaNDB_Failed(_, filepath)
 	-- Only handle ataxiaNDB downloads
 	if not filepath:find("ataxiaNDB", 1, true) then return end
 
-	local person = filepath:match("/([%w_]+)%.json")
+	local person = filepath:match("[/\\]([%w_]+)%.json")
 
 	if filepath:match("server replied: Not Found") then
 		ataxiaEcho("This person does not exist: " .. (person or "unknown"))
@@ -40,13 +40,13 @@ end
 
 function ataxiaNDB_blacklistName(name)
 	ataxiaNDB.notPlayers = ataxiaNDB.notPlayers or {}
-	if not table.contains(ataxiaNDB.notPlayers, name) then
-		table.insert(ataxiaNDB.notPlayers, name)
+	if not ataxiaNDB.notPlayers[name] then
+		ataxiaNDB.notPlayers[name] = true
 		ataxiaEcho(name .. " is not a player, added to ignore list.")
 	end
 end
 
 function ataxiaNDB_isBlacklisted(name)
-	ataxiaNDB.notPlayers = ataxiaNDB.notPlayers or {}
-	return table.contains(ataxiaNDB.notPlayers, name) or table.contains(ataxiaNDB.notPlayers, name:title())
+	if not ataxiaNDB.notPlayers then return false end
+	return ataxiaNDB.notPlayers[name] or ataxiaNDB.notPlayers[name:title()] or false
 end

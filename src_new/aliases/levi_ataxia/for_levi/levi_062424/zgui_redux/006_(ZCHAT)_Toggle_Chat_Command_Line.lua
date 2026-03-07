@@ -1,6 +1,6 @@
 --[[mudlet
 type: alias
-name: (ZCHAT) Toggle Chat Command Line
+name: (ATAXIACHAT) Toggle Chat Command Line
 hierarchy:
 - Levi_Ataxia
 - Systems
@@ -8,27 +8,27 @@ hierarchy:
 attributes:
   isActive: 'yes'
   isFolder: 'no'
-regex: ^zchat$
+regex: ^ataxiachat$
 command: ''
 packageName: ''
 ]]--
 
-if not zgui.chat then zgui.buildChat() end
+if not ataxia.chat then ataxia.buildChat() end
 
-if not zgui.chat.useCmdLine then
- zgui.chat.useCmdLine = true
- zgui.chat.allchat:enableCommandLine()
- zgui.chat.citychat:enableCommandLine()
- zgui.chat.orderchat:enableCommandLine()
- zgui.chat.partychat:enableCommandLine()
- zgui.chat.marketchat:enableCommandLine()
- zgui.chat.housechat:enableCommandLine()
+if not ataxia.chat.useCmdLine then
+ ataxia.chat.useCmdLine = true
+ ataxia.chat.allchat:enableCommandLine()
+ ataxia.chat.citychat:enableCommandLine()
+ ataxia.chat.orderchat:enableCommandLine()
+ ataxia.chat.partychat:enableCommandLine()
+ ataxia.chat.marketchat:enableCommandLine()
+ ataxia.chat.housechat:enableCommandLine()
 else
- zgui.chat.useCmdLine = false
- zgui.chat.allchat:disableCommandLine()
- zgui.chat.citychat:disableCommandLine()
- zgui.chat.orderchat:disableCommandLine()
- zgui.chat.partychat:disableCommandLine()
- zgui.chat.marketchat:disableCommandLine()
- zgui.chat.housechat:disableCommandLine()
+ ataxia.chat.useCmdLine = false
+ ataxia.chat.allchat:disableCommandLine()
+ ataxia.chat.citychat:disableCommandLine()
+ ataxia.chat.orderchat:disableCommandLine()
+ ataxia.chat.partychat:disableCommandLine()
+ ataxia.chat.marketchat:disableCommandLine()
+ ataxia.chat.housechat:disableCommandLine()
 end

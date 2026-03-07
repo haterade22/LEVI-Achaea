@@ -35,43 +35,56 @@ patterns:
   type: 7
 ]]--
 
-if honoursPerson and ataxiaNDB.players[honoursPerson] and ataxiaNDB.players[honoursPerson].city ~= getNDBCity then 
-  ataxiaNDB.players[honoursPerson].city = getNDBCity
-  cecho("\n<green>Updated city for "..honoursPerson..".")
+if ataxiaNDB._honoursPerson and ataxiaNDB.players[ataxiaNDB._honoursPerson] and ataxiaNDB.players[ataxiaNDB._honoursPerson].city ~= getNDBCity then
+  ataxiaNDB.players[ataxiaNDB._honoursPerson].city = getNDBCity
+  cecho("\n<green>Updated city for "..ataxiaNDB._honoursPerson..".")
 end
 
-if NDBIsMark then
-  if not ataxiaNDB_isMark(honoursPerson) then
-    cecho("\n<red>Updated as being mark: "..NDBIsMark..".")
-    ataxiaNDB.players[honoursPerson].mark = NDBIsMark
+if ataxiaNDB._mark then
+  if not ataxiaNDB_isMark(ataxiaNDB._honoursPerson) then
+    cecho("\n<red>Updated as being mark: "..ataxiaNDB._mark..".")
+    ataxiaNDB.players[ataxiaNDB._honoursPerson].mark = ataxiaNDB._mark
   end
 else
-  if ataxiaNDB_isMark(honoursPerson) then
+  if ataxiaNDB_isMark(ataxiaNDB._honoursPerson) then
     cecho("\n<red>This person is no longer in the mark.")
-    ataxiaNDB.players[honoursPerson].mark = nil
+    ataxiaNDB.players[ataxiaNDB._honoursPerson].mark = nil
   end
 end
 
-if NDBARank > 0 then
-  if ataxiaNDB_armyRank(honoursPerson) < NDBARank then
-    cecho("\n<yellow>Updated army rank to Rank "..NDBARank..".")
-    ataxiaNDB.players[honoursPerson].armyRank = NDBARank
-    
-    if NDBARank >= 3 then
+if ataxiaNDB._dauntless then
+  if not ataxiaNDB.players[ataxiaNDB._honoursPerson].dauntless then
+    cecho("\n<cyan>Updated as being Dauntless.")
+    ataxiaNDB.players[ataxiaNDB._honoursPerson].dauntless = true
+  end
+else
+  if ataxiaNDB.players[ataxiaNDB._honoursPerson].dauntless then
+    cecho("\n<cyan>This person is no longer Dauntless.")
+    ataxiaNDB.players[ataxiaNDB._honoursPerson].dauntless = nil
+  end
+end
+
+if ataxiaNDB._armyRank > 0 then
+  if ataxiaNDB_armyRank(ataxiaNDB._honoursPerson) < ataxiaNDB._armyRank then
+    cecho("\n<yellow>Updated army rank to Rank "..ataxiaNDB._armyRank..".")
+    ataxiaNDB.players[ataxiaNDB._honoursPerson].armyRank = ataxiaNDB._armyRank
+
+    if ataxiaNDB._armyRank >= 3 then
       cecho("<red> - This person is attackable for sanctions.")
     end
   end
 else
-  if ataxiaNDB_armyRank(honoursPerson) > 0 then
+  if ataxiaNDB_armyRank(ataxiaNDB._honoursPerson) > 0 then
     cecho("\n<yellow>This person is no longer in the army.")
-    ataxiaNDB.players[honoursPerson].armyRank = nil
+    ataxiaNDB.players[ataxiaNDB._honoursPerson].armyRank = nil
   end
 end
 
 
-NDBARank = nil
-NDBIsMark = nil
+ataxiaNDB._armyRank = nil
+ataxiaNDB._mark = nil
+ataxiaNDB._dauntless = nil
 getNDBCity = nil
-honoursPerson = nil
+ataxiaNDB._honoursPerson = nil
 disableTrigger("Get Player Information")
 disableTrigger("Additional Information NDB")

@@ -1974,6 +1974,22 @@
                 "regex": "^an redo (\\w+)$"
               },
               {
+                "name": "Show Marks",
+                "regex": "^an marks(?: (\\w+)|)$"
+              },
+              {
+                "name": "Show Army",
+                "regex": "^an army(?: (\\w+)|)$"
+              },
+              {
+                "name": "Show Dauntless",
+                "regex": "^an dauntless(?: (\\w+)|)$"
+              },
+              {
+                "name": "Show Threats",
+                "regex": "^an threats(?: (\\w+)|)$"
+              },
+              {
                 "name": "Class Detect",
                 "regex": "^csd (.+)$"
               }
@@ -2635,8 +2651,8 @@
             "regex": "^zfix(?: (\\w+))?$"
           },
           {
-            "name": "(ZCHAT) Toggle Chat Command Line",
-            "regex": "^zchat$"
+            "name": "(ATAXIACHAT) Toggle Chat Command Line",
+            "regex": "^ataxiachat$"
           }
         ]
       }

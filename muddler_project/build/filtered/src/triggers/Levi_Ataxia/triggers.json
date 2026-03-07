@@ -1124,6 +1124,15 @@
                     "type": "regex"
                   }
                 ]
+              },
+              {
+                "name": "Dauntless",
+                "patterns": [
+                  {
+                    "pattern": "^(He|She|Fae) is one of The Dauntless\\.$",
+                    "type": "regex"
+                  }
+                ]
               }
             ]
           },

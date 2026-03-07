@@ -1,1 +1,1 @@
-NDBIsMark = "Ivory"
+ataxiaNDB._mark = "Ivory"

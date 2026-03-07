@@ -48,13 +48,29 @@ local function detectChannelFromText(text)
   return nil
 end
 
+local channelColors = {
+  ["says"]       = "<cyan>",
+  ["ct"]         = "<red>",
+  ["ht"]         = "<yellow>",
+  ["hts"]        = "<yellow>",
+  ["hnt"]        = "<yellow>",
+  ["ot"]         = "<white>",
+  ["party"]      = "<magenta>",
+  ["tell"]       = "<yellow>",
+  ["clt"]        = "<white>",
+  ["market"]     = "<white>",
+  ["newbie"]     = "<green>",
+  ["shout"]      = "<red>",
+  ["yell"]       = "<white>",
+  ["armytell"]   = "<white>",
+}
+
 function zgui.showChat()
   local shortName = ""
   local chatWindow = false
-	local ofr, ofg, ofb = getFgColor()
-	local obr, obg, obb = getBgColor()  
-  local text = ansi2decho(gmcp.Comm.Channel.Text.text)
+  local text = gmcp.Comm.Channel.Text.text
   local person = gmcp.Comm.Channel.Text.talker:title()
+  local color = channelColors[gmcp.Comm.Channel.Start] or "<white>"
   
   for k,v in pairs(gmcp.Comm.Channel.List) do
     shortName = gmcp.Comm.Channel.List[k].command
@@ -119,21 +135,15 @@ function zgui.showChat()
   
   
   if person == gmcp.Char.Status.name or person == "You" then
-    decho(chatWindow, text.."\n")
+    cecho(chatWindow, color .. text .. "<reset>\n")
     if chatWindow ~= "All" then
-		  decho("All", text.."\n")
+      cecho("All", color .. text .. "<reset>\n")
     end
-	elseif report then    
-		if gmcp.Comm.Channel.Start == "shout" then
-      cecho(chatWindow, "<cyan> "..person.."<red>: ")
-		end	
-		decho(chatWindow, text.."\n")
-	
+	elseif report then
+		cecho(chatWindow, color .. text .. "<reset>\n")
+
 		if not only_to_misc and chatWindow ~= "All" then
-			if gmcp.Comm.Channel.Start == "shout" then
-				cecho("All", "<cyan> "..gmcp.Comm.Channel.Text.talker.."<red>: ")
-			end			
-			decho("All", text.."\n")
+			cecho("All", color .. text .. "<reset>\n")
 		end
 
     if string.find(gmcp.Comm.Channel.Start:lower(), "tell") and not string.find(gmcp.Comm.Channel.Start:lower(), "army") and not muteList[person] and person ~= "You" then 

@@ -35,4 +35,4 @@ patterns:
   type: 1
 ]]--
 
-NDBARank = tonumber(matches[4])
+ataxiaNDB._armyRank = tonumber(matches[4])

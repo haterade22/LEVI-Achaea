@@ -603,14 +603,12 @@ function apostate.buildAttack()
     -- Default: DEADEYES curse delivery
     atk = atk .. "wield shield;deadeyes " .. target .. " " .. c1 .. " " .. c2
 
-    -- Disfigure on EQ when cursing manaleech (lock mode only, once per manaleech round)
-    -- Only append when ON BALANCE to prevent stale-state dispatch (button spam while off-balance
-    -- would queue disfigure prematurely before the manaleech round actually fires)
-    if apostate.state.mode == "lock" and (c1 == "manaleech" or c2 == "manaleech")
-       and not apostate.state.disfigureSent
-       and gmcp.Char.Vitals.bal == "1" then
-      local sep = (ataxia and ataxia.settings and ataxia.settings.separator) or "::"
-      atk = atk .. sep .. "disfigure " .. target
+    -- Disfigure on EQ when cursing asthma (lock mode only, once per asthma round)
+    -- Fires with the asthma deadeyes so we can observe if target smokes before
+    -- committing to manaleech next round (avoids wasting manaleech without asthma)
+    if apostate.state.mode == "lock" and (c1 == "asthma" or c2 == "asthma")
+       and not apostate.state.disfigureSent then
+      atk = atk .. ";disfigure " .. target
       apostate.state.disfigureSent = true
     end
 
@@ -650,8 +648,8 @@ function apostate.dispatch()
   -- Select curses based on current mode and target state
   apostate.curses = apostate.selectCurses()
 
-  -- Reset disfigure flag when manaleech is no longer a curse (ready for next manaleech round)
-  if apostate.curses[1] ~= "manaleech" and apostate.curses[2] ~= "manaleech" then
+  -- Reset disfigure flag when asthma is no longer a curse (ready for next asthma round)
+  if apostate.curses[1] ~= "asthma" and apostate.curses[2] ~= "asthma" then
     apostate.state.disfigureSent = false
   end
 

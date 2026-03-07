@@ -113,6 +113,15 @@ function ataxia_loadSettings()
 	else
 		ataxiaNDB = {}
 		table.load(ndb_loc, ataxiaNDB)
+		-- Migrate array tables to hash tables (one-time)
+		local function migrateArrayToHash(tbl)
+			if not tbl or not tbl[1] then return tbl or {} end
+			local hash = {}
+			for _, v in ipairs(tbl) do hash[v] = true end
+			return hash
+		end
+		ataxiaNDB.notPlayers = migrateArrayToHash(ataxiaNDB.notPlayers)
+		ataxiaNDB.divine = migrateArrayToHash(ataxiaNDB.divine)
 		ataxiaEcho("Name database loaded in.")
 	end
 

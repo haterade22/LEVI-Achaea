@@ -2,17 +2,16 @@ function ataxiaNDB_GetOnline()
 	local path = getMudletHomeDir().."/ataxiaNDB"
 
 	if not lfs.attributes(path) then
-		--We'll need a folder to store downloaded data. Don't worry, it won't cause issues.
 		lfs.mkdir(path)
 		ataxiaEcho("Created folder to store downloaded data at: "..path)
-	end  
-  
+	end
+
 	downloadFile(path .. "/Online.json", "http://api.achaea.com/characters.json")
 
 	ataxiaEcho("One moment while I access the list...")
 
-	ndbWatcher = ndbWatcher or createStopWatch()
-	startStopWatch(ndbWatcher)
+	ataxiaNDB._watcher = ataxiaNDB._watcher or createStopWatch()
+	startStopWatch(ataxiaNDB._watcher)
 end
 
 function ataxiaNDB_Acquire(person)
@@ -21,7 +20,7 @@ function ataxiaNDB_Acquire(person)
 	local person = person:title()
 
 	-- Skip known non-players
-	if ataxiaNDB_isBlacklisted and ataxiaNDB_isBlacklisted(person) then return end
+	if ataxiaNDB_isBlacklisted(person) then return end
 
 	local path = getMudletHomeDir().."/ataxiaNDB"
 
@@ -37,8 +36,8 @@ end
 function ataxiaNDB_NameList(names)
 	--Parse list to see who isn't tracked.
 	for _, name in pairs(names) do
-		if not ataxiaNDB_Exists(name) and not table.contains(ataxiaNDB.divine, name)
-			and not (ataxiaNDB_isBlacklisted and ataxiaNDB_isBlacklisted(name)) then
+		if not ataxiaNDB_Exists(name) and not ataxiaNDB.divine[name]
+			and not ataxiaNDB_isBlacklisted(name) then
 			ataxiaNDB_Acquire(name)
 		end
 	end

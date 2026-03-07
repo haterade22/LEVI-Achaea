@@ -52,13 +52,29 @@ function ataxiagui_populateChannels()
   end
 end
 
+local channelColors = {
+  ["says"]       = "<cyan>",
+  ["ct"]         = "<red>",
+  ["ht"]         = "<yellow>",
+  ["hts"]        = "<yellow>",
+  ["hnt"]        = "<yellow>",
+  ["ot"]         = "<white>",
+  ["party"]      = "<magenta>",
+  ["tell"]       = "<yellow>",
+  ["clt"]        = "<white>",
+  ["market"]     = "<white>",
+  ["newbie"]     = "<green>",
+  ["shout"]      = "<red>",
+  ["yell"]       = "<white>",
+  ["armytell"]   = "<white>",
+}
+
 function ataxiagui_processChat(channel)
   if ataxia.usegui ~= nil and ataxia.usegui == false then return end
 
-	local ofr, ofg, ofb = getFgColor()
-	local obr, obg, obb = getBgColor()
-	local text = ansi2decho(gmcp.Comm.Channel.Text.text)
+	local text = gmcp.Comm.Channel.Text.text
 	local person = gmcp.Comm.Channel.Text.talker:title()
+	local color = channelColors[gmcp.Comm.Channel.Start] or "<white>"
 	if person == "The guardian spirit of the totem" then 
 		only_to_misc = false
 		return
@@ -71,20 +87,13 @@ function ataxiagui_processChat(channel)
   
   
   if person == gmcp.Char.Status.name or person == "You" then
-		ataxiagui.Chat[channel.."center"]:decho(text.."\n")
-		ataxiagui.Chat.Allcenter:decho(text.."\n")	
+		ataxiagui.Chat[channel.."center"]:cecho(color .. text .. "<reset>\n")
+		ataxiagui.Chat.Allcenter:cecho(color .. text .. "<reset>\n")
 	elseif report then
-    
-		if gmcp.Comm.Channel.Start == "shout" then
-			ataxiagui.Chat[channel.."center"]:cecho("<cyan> "..gmcp.Comm.Channel.Text.talker.."<red>: ")
-		end	
-		ataxiagui.Chat[channel.."center"]:decho(text.."\n")
-	
+		ataxiagui.Chat[channel.."center"]:cecho(color .. text .. "<reset>\n")
+
 		if not only_to_misc then
-			if gmcp.Comm.Channel.Start == "shout" then
-				ataxiagui.Chat.Allcenter:cecho("<cyan> "..gmcp.Comm.Channel.Text.talker.."<red>: ")
-			end			
-			ataxiagui.Chat.Allcenter:decho(text.."\n")
+			ataxiagui.Chat.Allcenter:cecho(color .. text .. "<reset>\n")
 		end
 
     if string.find(gmcp.Comm.Channel.Start:lower(), "tell") and not string.find(gmcp.Comm.Channel.Start:lower(), "army") and not muteList[person] and person ~= "You" then 

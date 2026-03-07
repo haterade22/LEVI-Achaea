@@ -37,4 +37,4 @@ patterns:
   type: 1
 ]]--
 
-NDBIsMark = "Ivory"
+ataxiaNDB._mark = "Ivory"

@@ -1,4 +1,4 @@
-honoursPerson = matches[2]:title()
+ataxiaNDB._honoursPerson = matches[2]:title()
 enableTrigger("Get Player Information")
 enableTrigger("Check Player City")
 --enableTrigger("No city found")

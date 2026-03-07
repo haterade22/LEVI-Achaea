@@ -15,7 +15,7 @@ packageName: ''
 
 --------------------------------------------------------------------
 
-  zgui.chatSize = 8
+  ataxia.chatSize = 8
 
   zgui.loggerSize = 8
   zgui.promptSize = 6
@@ -37,15 +37,15 @@ packageName: ''
   zgui.statsWindowSize = 8
   zgui.roomInfoSize = 8
 --------------------------------------------------------------------
- setFontSize("All", zgui.chatSize)
- setFontSize("City", zgui.chatSize)
- setFontSize("House", zgui.chatSize)
- setFontSize("Order", zgui.chatSize)
- setFontSize("Party", zgui.chatSize)
- setFontSize("Clans", zgui.chatSize)
- setFontSize("Tells", zgui.chatSize)
- setFontSize("Market", zgui.chatSize)
- setFontSize("Misc", zgui.chatSize)
+ setFontSize("All", ataxia.chatSize)
+ setFontSize("City", ataxia.chatSize)
+ setFontSize("House", ataxia.chatSize)
+ setFontSize("Order", ataxia.chatSize)
+ setFontSize("Party", ataxia.chatSize)
+ setFontSize("Clans", ataxia.chatSize)
+ setFontSize("Tells", ataxia.chatSize)
+ setFontSize("Market", ataxia.chatSize)
+ setFontSize("Misc", ataxia.chatSize)
  
  setFontSize("logDisplay", zgui.loggerSize)
  setFontSize("myPrompt", zgui.promptSize) 

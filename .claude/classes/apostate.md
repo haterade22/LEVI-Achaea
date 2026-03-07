@@ -397,26 +397,32 @@ The Apostate offensive system was consolidated from 14 legacy files into a singl
 apostate.dispatch()
 -- 1. Validate target exists and is in room
 -- 2. Check for aeon (don't act)
--- 3. Initialize pm (target mana) if not set
--- 4. Select curses via dual-slot engine
--- 5. Build attack (pre + main + post)
--- 6. Ensure baalzadeen is summoned
--- 7. Check for paralysis (don't send if paralyzed)
--- 8. Assemble and send via queue addclear freestand
+-- 3. Rebound hold gate (reboundHold.gate)
+-- 4. Initialize pm (target mana) if not set
+-- 5. Select curses via dual-slot engine
+-- 6. Reset disfigure flag when asthma is no longer a curse
+-- 7. Build attack (pre + main + post)
+-- 8. Ensure baalzadeen is summoned (dedup via baalzadeenSummoned flag)
+-- 9. Check for paralysis (don't send if paralyzed)
+-- 10. Assemble and send via queue addclearfull freestand
+-- 11. Start asthma confirm timer if manaleech was delivered (V3)
 ```
 
 ### Namespace & State
 ```lua
 apostate = apostate or {}
 apostate.state = {
-  mode = "lock",            -- "lock", "corrupt", "vivisect", "sleep", "group"
-  corrupted = false,        -- corrupt has been fired (awaiting catharsis)
-  lastCorruptTime = 0,      -- corrupt cooldown tracking
-  daeggerhere = false,      -- daegger summoned
-  freshblood = false,       -- fresh blood available for bloodpact
-  fiendthing = "nightmare", -- preferred lesser daemon
-  wantDisloyalty = false,   -- disfigure toggle
-  partyrelay = true,        -- relay to party
+  mode = "lock",              -- "lock", "corrupt", "vivisect", "sleep", "group"
+  corrupted = false,          -- corrupt has been fired (awaiting catharsis)
+  lastCorruptTime = 0,        -- corrupt cooldown tracking
+  daeggerhere = false,        -- daegger summoned
+  freshblood = false,         -- fresh blood available for bloodpact
+  fiendthing = "nightmare",   -- preferred lesser daemon
+  wantDisloyalty = false,     -- disfigure toggle
+  disfigureSent = false,      -- disfigure spam protection (once per asthma round)
+  asthmaConfirmTimer = nil,   -- timer: confirm asthma if target doesn't smoke after manaleech
+  baalzadeenSummoned = false, -- summon sent, awaiting GMCP confirmation (prevents spam)
+  partyrelay = true,          -- relay to party
 }
 
 apostate.config = {
@@ -428,118 +434,126 @@ apostate.config = {
 }
 ```
 
-### Kill Routes (4 Modes)
-| Mode | Description | Kill Condition |
-|------|-------------|----------------|
-| **lock** | DEADEYES dual-curse delivery building toward truelock + class lock | Truelock → voyria → damage/catharsis |
-| **corrupt** | Stack afflictions → `demon corrupt` for burst damage | Corrupt dmg >= assessed health, or mana pushed to catharsis range |
-| **vivisect** | Truelock → trample prone → shrivel all 4 limbs → vivisect | All limbs broken while truelocked |
-| **sleep** | Build asthma + impatience + hypersomnia → sleep curse | Hypersomnia + sleep curse with asthma/impatience protecting it |
+### Kill Routes (5 Modes)
+| Mode | Command | Description |
+|------|---------|-------------|
+| **lock** | `apostate.setMode("lock")` | DEADEYES curse delivery with kelp stack + asthma-conditional branching toward truelock |
+| **group** | `apostate.setMode("group")` | Pure lock pieces only — no hinder (clumsiness/weariness), no probability gates |
+| **corrupt** | `apostate.setMode("corrupt")` | Stack afflictions → `demon corrupt` for damage / catharsis setup |
+| **vivisect** | `apostate.setMode("vivisect")` | Truelock → prone → shrivel 4 limbs → vivisect |
+| **sleep** | `apostate.setMode("sleep")` | Build asthma + impatience + hypersomnia → sleep curse |
 
 ### Dual-Slot Curse Priority Engine
-DEADEYES delivers 2 curses per action (2.3s balance). Each slot has an independent priority chain:
+DEADEYES delivers 2 curses per action (2.3s balance). Each slot has an independent priority chain.
 
-**Curse 1 (`selectPrimaryCurse`)** — Direct affliction stacking:
+**Curse 1 (`selectPrimaryCurse`)** — Truelock chain with asthma-conditional branching:
 ```
-clumsiness → asthma → manaleech → impatience → slickness → anorexia
-→ sleep mode curses / nightmare synergy / sensitivity (when deaf)
-→ fillers (stupidity, dizziness, weariness, nausea, confusion, etc.)
-→ class lock affliction → fallback: clumsy
+Without asthma (prob < 33%):
+  clumsiness (if < 33%) → weariness (if < 33%) → asthma
+  Kelp stack: both clumsy + weariness must stick before asthma.
+  Both are kelp-cured → forces 2 kelp eats before asthma can be cured.
+
+With asthma (prob >= 33%):
+  manaleech → impatience → sicken (slickness, gated by impatience)
+  → anorexia (gated by slickness) → weariness
+  → class lock affliction → plague (voyria fallback)
+  Skip clumsiness entirely — lock speed over hinder pressure.
 ```
 
-**Curse 2 (`selectSecondaryCurse(c1)`)** — Sicken cascade + lock support:
+**Curse 2 (`selectSecondaryCurse(c1)`)** — Paralysis-first, fill missing lock pieces:
 ```
-sicken (delivers paralysis when target lacks it)
-→ impatience → asthma
-→ sicken again (delivers manaleech/slickness when asthma blocks smoke cure)
-→ anorexia → slickness → manaleech
-→ fillers (skipping whatever c1 is)
-→ class lock affliction → fallback
+anorexia+sicken pairing (when c1 == "anorexia", pair with sicken
+  unless both slickness AND paralysis are confirmed at 100%)
+→ paralysis → asthma → manaleech (gated by asthma >= 33%)
+→ impatience → sicken (gated by impatience + asthma >= 33%)
+→ anorexia (gated by slickness) → weariness
+→ class lock affliction → plague fallback
 ```
 
 **Key rules:**
 - Curse 2 never duplicates curse 1 — the `c1` parameter is checked at every step
 - Sicken cascade: delivers `paralysis → manaleech → slickness` in order based on what target has
-- First sicken use: paralysis (for tree block)
-- Second sicken use: after asthma secured, delivers manaleech/slickness (asthma protects smoke cure)
+- Manaleech is smoke-cured — only delivered when asthma probability >= 33%
+- Anorexia only delivered after slickness (no point blocking eating if they can still apply salves)
+- Slickness delivered via sicken, gated behind impatience (blocks focus cure of anorexia)
+
+**Group Mode (`selectPrimaryCurseGroup` / `selectSecondaryCurseGroup`):**
+```
+Curse 1: impatience → asthma → manaleech → sicken (slickness) → anorexia → class lock → plague
+Curse 2: [anorexia+sicken pairing] → paralysis → fill remaining in same order
+No probability gates, no hinder afflictions — pure lock pieces for coordinated group combat.
+```
 
 **Orchestrator (`selectCurses`):**
-- Curseward detected → breach + secondary
-- Truelock >= 70% → class lock aff + secondary
-- Otherwise → primary + secondary
+- Curseward detected → breach + secondary (all modes)
+- Truelock >= 70% → class lock aff + secondary (all modes)
+- Group mode → group curse selectors (no hinder)
+- Lock mode → lock curse selectors (asthma-conditional branching)
+
+### Disfigure Integration
+Disfigure fires **inline** with the DEADEYES that delivers asthma (`;` separator for same-tick execution on EQ):
+- Only in lock mode, once per asthma round (`disfigureSent` flag)
+- Acts as an **asthma probe**: if target smokes before next balance, asthma was cured → skip manaleech
+- If they don't smoke → asthma confirmed → safe to push manaleech next round
+- Flag resets when asthma is no longer selected as a curse
+
+### Asthma Confirmation Timer (V3)
+When manaleech is delivered and asthma probability is between 0 and 1.0:
+- Start 2.5s timer
+- If target doesn't smoke within 2.5s → `collapseAffPresentV3("asthma")` confirms asthma
+- Rationale: manaleech is smoke-cured; if they can't smoke to cure it, asthma is blocking smoke
 
 ### Lock Progression
 ```
 softlock  = asthma + anorexia + slickness
 hardlock  = softlock + impatience
 truelock  = hardlock + paralysis
-classlock = truelock + voyria
+classlock = truelock + voyria (class lock aff)
 ```
 
 ### Attack Builder Priority
 Kill condition checks in order:
 1. `needVivisect()` — All 4 limbs broken → vivisect
-2. `needShieldStrip()` — Catharsis/corrupt ready but target shielded
+2. `needShieldStrip()` — Catharsis/corrupt ready but target shielded → demon strip
 3. `needTrample()` — Truelocked + target prone → trample
-4. `needCatharsis()` — Target mana below `catharsisThreshold`
+4. `needCatharsis()` — Target mana below `catharsisThreshold` → demon catharsis
 5. `needCorrupt()` — Corrupt damage >= assessed health, or pushes mana to catharsis range
-6. Corrupt followup — Corrupt already fired → follow with catharsis
-7. `needShrivel()` — Vivisect mode, truelocked, prone, limbs remaining
-8. Default: DEADEYES dual-curse delivery
+6. Corrupt followup — Corrupt already fired + no shield → demon catharsis
+7. `needShrivel()` — Vivisect mode, truelocked, prone, limbs remaining → shrivel next limb
+8. Default: DEADEYES dual-curse delivery (+ inline disfigure on asthma rounds + contemplate)
 
 ### Corrupt Damage Calculator
 ```lua
 function apostate.corruptDmg()
-  -- Categorizes afflictions into physical, mental, smoke
   -- Physical affs × 7 + Mental affs × 8 + Smoke affs × 9
   -- V3 mode: weights each affliction by probability (0.0-1.0)
   -- V1/V2 mode: binary 1.0 or 0 per affliction
-  -- Returns expected damage value for kill-condition checks
 end
 ```
 
 ### V3/V2/V1 Tracking Integration
-Same routing chain as Blademaster (`blademaster.hasAff`):
-```lua
-function apostate.hasAff(aff)
-  -- V3: haveAffV3(aff) with lockThreshold (0.3)
-  -- V2: haveAffV2(aff) or tAffsV2[aff]
-  -- V1: tAffs[aff]
-end
+Same routing pattern as Blademaster:
+| Helper | Purpose |
+|--------|---------|
+| `apostate.hasAff(aff)` | Check affliction via V3 → V2 → V1 routing |
+| `apostate.getAffProb(aff)` | Get affliction probability (V3: 0.0-1.0, V2/V1: binary) |
+| `apostate.getTrackingSystem()` | Returns "V3", "V2", or "V1" |
+| `apostate.getLocks()` | Returns `{softlock, hardlock, truelock}` probabilities |
 
-function apostate.getAffProb(aff)
-  -- V3: getAffProbabilityV3(aff) returns 0.0-1.0
-  -- Fallback: binary 1.0 or 0
-end
-
-function apostate.getTrackingSystem()
-  -- Returns "V3", "V2", or "V1"
-end
-
-function apostate.getLocks()
-  -- Returns {softlock=prob, hardlock=prob, truelock=prob}
-  -- V3: getLockStatusV3()
-  -- Fallback: boolean check of required afflictions
-end
-```
-
-### Pre/Post Attack Actions
-**Pre-attack:**
-- Bloodpact setup (fresh blood + no pentagram active)
-- Daegger summon when catharsis/prone situations require it
-
-**Post-attack:**
-- Bloodworm summon (when fresh blood available)
-- Daemon resummon (when wrong daemon type present)
-- Disfigure for disloyalty (when asthma is held)
-
-**Design decision:** Daegger hunt was intentionally removed from commands — it slows offense when seconds matter.
+### Commands
+| Alias | Regex | Action |
+|-------|-------|--------|
+| `cath` | `^cath$` | `apostate.dispatch()` (lock mode) |
+| `KELP STACK` | `^kel$` | `apostate.dispatch()` (lock mode, class-conditional) |
+| `Group Attack` | `^yy$` | `apostate.dispatch()` (group mode) |
+| `Levi Lock Apo` | `^ll$` | `apostate.dispatch()` (lock mode) |
+| `Vivisect` | `^viv$` | `apostate.dispatch()` (vivisect mode) |
+| `SLEEP` | `^slee$` | `apostate.dispatch()` (sleep mode) |
+| `Corrupt` | `^corr$` | `apostate.dispatch()` (corrupt mode) |
 
 ### Backward Compatibility (014_Levi_Apostate.lua)
-All old function names route to `apostate.dispatch()` with appropriate mode:
-
-| Legacy Function | Mode |
-|-----------------|------|
+| Legacy Function | Mode Set |
+|-----------------|----------|
 | `leviclumsapo()` | lock |
 | `leviweariapo()` | lock |
 | `levisleepapo()` | sleep |
@@ -571,19 +585,41 @@ These functions remain in 014 and are called by the attack builder:
 | `fiend()` | Summon fiend entity |
 | `nightmare()` | Summon nightmare entity |
 
-### Commands (Aliases)
-| Alias | Regex | Action |
-|-------|-------|--------|
-| `cath` | `^cath$` | `apostate_lock()` → dispatch (lock) |
-| `KELP STACK` | `^kel$` | Class-conditional dispatch (lock) |
-| `Group Attack` | `^yy$` | `apostate_group()` → dispatch (group, currently disabled) |
-| `Levi Lock Apo` | `^ll$` | `apostate_lock()` → dispatch (lock) |
-| `Vivisect` | `^viv$` | `apostate_vivisect()` → dispatch (vivisect) |
-| `SLEEP` | `^slee$` | `apostate_sleepattack()` → dispatch (sleep) |
-| `Corrupt` | `^corr$` | `apostate.setMode("corrupt")` → dispatch (corrupt) |
+### Pre/Post Attack Actions
+**Pre-attack:**
+- Bloodpact setup (fresh blood + no pentagram active)
+- Daegger summon when catharsis/prone situations require it
+
+**Post-attack:**
+- Bloodworm summon (when fresh blood available)
+- Daemon resummon (when wrong daemon type present)
+- Disfigure for disloyalty (when asthma is held and `wantDisloyalty` enabled)
+
+**Inline with DEADEYES:**
+- Disfigure on asthma rounds (`;` separator, EQ-based, probes asthma presence)
+
+**Design decision:** Daegger hunt was intentionally removed from commands — it slows offense when seconds matter.
+
+### Filler Afflictions
+When all lock pieces are applied, the system falls through to filler curses:
+```
+stupidity, dizziness, weariness, nausea, confusion, addiction,
+epilepsy, dementia, vertigo, recklessness, masochism, agoraphobia,
+claustrophobia, paranoia
+```
+These increase corrupt damage and add curing pressure.
+
+### Baalzadeen Summon Dedup
+`baalzadeenSummoned` flag prevents summon spam during GMCP round-trip delay:
+- Set `true` on summon send
+- Reset `false` on success trigger (025) or failure trigger (014)
 
 ### Debug & Status
 ```lua
+apostate.debugEcho()
+-- Displays: current curses, stuck lock afflictions, tracking system
+-- Format: [APO] Curses: c1 + c2 | Stuck(V3): asthma, impatience, ...
+
 apostate.status()
 -- Displays: mode, tracking system, corrupt damage estimate,
 -- lock probabilities (soft/hard/true), current curse selections,
@@ -593,8 +629,17 @@ apostate.status()
 ### Changelog
 - **v1.0** (Jan 2025): Consolidated 14 files → single `015_CC_Apostate.lua`
 - Integrated V3 affliction tracker (probability-based decisions)
-- All classes use clumsiness route (no weariness split)
 - Dual-slot curse engine with sicken cascade
 - Removed daegger hunt from attack commands
 - Added corrupt damage calculator with V3 weighting
 - Backward-compat wrappers in 014 for all legacy function names
+- **v1.1** (Mar 2025): Kelp stack + asthma-conditional branching
+- Curse 1 rewritten: clumsy+weariness before asthma (kelp stack), skip clumsy once asthma lands
+- Anorexia gated behind slickness (no point blocking eating if they can still apply)
+- Slickness gated behind impatience (blocks focus cure of anorexia)
+- Disfigure moved inline with asthma deadeyes (probes asthma, `;` separator)
+- Added asthma confirm timer (2.5s V3 collapse after manaleech delivery)
+- Added baalzadeen summon dedup (`baalzadeenSummoned` flag)
+- Added group mode with pure lock pieces (no hinder, no probability gates)
+- Added reboundHold gate to dispatch
+- Anorexia+sicken pairing in Curse 2 (fills uncertain slickness/paralysis)

@@ -28,7 +28,7 @@ function zgui.zStartup()
   zgui.running = true
 --------------------------------------------------------------------
 -- Change the Font Size of each window on startup to fit your screen size better if needed
-  zgui.chatSize = 9
+  ataxia.chatSize = 9
   zgui.loggerSize = 8
   zgui.promptSize = 8
   zgui.goldSize = 8

@@ -1234,6 +1234,71 @@ ataxia.defense.antiSerpent(true)   -- Enable anti-serpent priorities
 ataxia.defense.antiSerpent(false)  -- Restore normal priorities
 ```
 
+### Self Limb Counter (SLC) — Defensive Limb Tracking
+
+The SLC tracks exact limb damage percentages from combat text and provides automated defensive responses. Replaces the legacy hit-count estimator.
+
+**Core Files:**
+| File | Purpose |
+|------|---------|
+| `src_new/scripts/.../self_limb_tracking/001_Different_Attacks.lua` | Text highlighting (`highlightLimb()`) |
+| `src_new/scripts/.../self_limb_tracking/002_Track_The_Damage.lua` | Core tracking, thresholds, events, GUI |
+| `src_new/scripts/.../self_limb_tracking/003_Parrying.lua` | Weight-based auto-parry + anti-Shikudo |
+| `src_new/scripts/.../self_limb_tracking/004_Defensive_Reactions.lua` | Event-driven defensive reactions |
+| `src_new/aliases/.../slc/005_SLC_Toggle.lua` | Runtime toggle alias (`slc on/off`, etc.) |
+
+**Namespace:** `selfLimbDamage` (global)
+- `selfLimbDamage[limb]` = `{ damage, lastHit, hitCount, threshold }`
+- `selfLimbDamage.config` = all toggles, thresholds, parry weights
+- `selfLimbDamage.reactions` = per-prompt spam prevention flags
+
+**Threshold System:**
+| State | Condition | Alert |
+|-------|-----------|-------|
+| safe | > warningHits to break | — |
+| warning | exactly warningHits (default 2) | Yellow box echo |
+| critical | exactly criticalHits (default 1) | Orange box echo |
+| broken | damage >= 100 or aff event | Dark red |
+
+**Events:**
+| Event | Payload | When |
+|-------|---------|------|
+| `"self limb damaged"` | limb, damage, lastHit | Every damage update |
+| `"self limb threshold"` | limb, threshold, hitsLeft | Threshold state change |
+| `"self limb broken"` | limb | Limb breaks |
+
+**Defensive Reactions (004, event-driven):**
+| Reaction | Config Toggle | Behavior |
+|----------|---------------|----------|
+| SSC Priority | `sscPriority` | `curing prioaff <aff>` on warning/critical |
+| Auto-Shield | `autoShield` | `touch shield` on critical (aeon-gated, cooldown) |
+| Party Callout | `partyCallout` | `pt [SLC] My <limb> is 1 hit from break!` (per-limb dedup) |
+| Class Defenses | `classDefenses` | Per-class abilities with cooldowns + gate functions |
+
+**Parry System (003, prompt-driven):**
+- Weight-based: `parryWeights` config (critical=10, warning=7, moderate=4, minor=1, broken=-10)
+- Modes: `stand` (leg bias), `defend` (non-leg bias), `manual`, `randomarm`, `randomleg`
+- Anti-Shikudo: stance-aware dynamic parry (Willow→legs, Rain→arms, Oak/Gaital→head)
+- Tie-breaking: keep current parry if among ties (prevents spam switching)
+
+**Runtime Aliases:**
+| Alias | Action |
+|-------|--------|
+| `slc` | Show status + all toggle states |
+| `slc on/off` | Master toggle |
+| `slc shield/party/ssc/warn/crit/shikudo on/off` | Per-feature toggle |
+| `slc parry <mode>` | Switch parry mode |
+| `slc reset` | Reset all limb damage |
+| `slc gui` | Toggle GUI window |
+
+**Config Persistence:** Saved as separate `slcconfig` file via `table.save`/`table.load` in `001_Save_Load_Settings.lua`. Setup wizard: `levi setup slc`.
+
+**Key Implementation Patterns:**
+- Event handler cleanup on reload: all `registerAnonymousEventHandler` calls store IDs and `killAnonymousEventHandler` before re-registering
+- GUI debounce: dirty-flag + `tempTimer(0)` coalesces rapid damage events into single redraw
+- Module-level constants: `LIMB_LIST`, `SHORT_NAMES`, `limbToAff` avoid hot-path allocation
+- `classDefenses[].gate` functions cannot be persisted via `table.save()` — must be re-registered at script load
+
 ---
 
 ## Infernal DWC Vivisect Combat System
@@ -1469,10 +1534,11 @@ The Apostate offensive system (`CC_Apostate`) provides automated curse delivery 
 | `src_new/triggers/.../439_NEW_DEADEYES.lua` | Curse detection → `tarAffed()` |
 | `src_new/triggers/.../apostate/007_CORRUPT.lua` | Corrupt cooldown tracking |
 
-### Kill Routes (4 Modes)
+### Kill Routes (5 Modes)
 | Mode | Command | Description |
 |------|---------|-------------|
-| **lock** | `apostate.setMode("lock")` | DEADEYES curse delivery building toward truelock + class lock |
+| **lock** | `apostate.setMode("lock")` | DEADEYES with kelp stack + asthma-conditional branching toward truelock |
+| **group** | `apostate.setMode("group")` | Pure lock pieces only — no hinder, no probability gates |
 | **corrupt** | `apostate.setMode("corrupt")` | Stack afflictions → `demon corrupt` for damage / catharsis setup |
 | **vivisect** | `apostate.setMode("vivisect")` | Truelock → prone → shrivel 4 limbs → vivisect |
 | **sleep** | `apostate.setMode("sleep")` | Build asthma + impatience + hypersomnia → sleep curse |
@@ -1480,30 +1546,36 @@ The Apostate offensive system (`CC_Apostate`) provides automated curse delivery 
 ### Dual-Slot Curse Priority Engine
 DEADEYES delivers 2 curses per action (2.3s balance). Each slot has an independent priority chain:
 
-**Curse 1 (`selectPrimaryCurse`)** — Direct affliction stacking:
+**Curse 1 (`selectPrimaryCurse`)** — Truelock chain with asthma-conditional branching:
 ```
-clumsiness → asthma → manaleech → impatience → slickness → anorexia
-→ sleep mode / nightmare synergy / sensitivity → fillers → class lock aff
-```
-
-**Curse 2 (`selectSecondaryCurse(c1)`)** — Sicken cascade + lock support:
-```
-sicken (delivers paralysis) → impatience → asthma
-→ sicken again (delivers manaleech/slickness when asthma protects smoke cure)
-→ anorexia → slickness → manaleech → fillers → class lock aff
+Without asthma (< 33%): clumsy → weariness → asthma (kelp stack forces 2 eats)
+With asthma (>= 33%): manaleech → impatience → sicken → anorexia → weariness → class lock → plague
 ```
 
-Curse 2 never duplicates curse 1 (`c1` passed as parameter to avoid overlap).
+**Curse 2 (`selectSecondaryCurse(c1)`)** — Paralysis-first, fill missing lock pieces:
+```
+[anorexia+sicken pairing] → paralysis → asthma → manaleech (gated asthma >= 33%)
+→ impatience → sicken (gated impatience + asthma) → anorexia → weariness → class lock → plague
+```
+
+**Group Mode** — Pure lock pieces, no hinder:
+```
+Curse 1: impatience → asthma → manaleech → sicken → anorexia → class lock → plague
+Curse 2: [anorexia+sicken pairing] → paralysis → fill remaining
+```
+
+**Key rules:**
+- Curse 2 never duplicates curse 1 (`c1` checked at every step)
+- Manaleech is smoke-cured — only delivered when asthma >= 33%
+- Anorexia gated behind slickness; slickness (via sicken) gated behind impatience
+- Disfigure fires inline with asthma DEADEYES (`;` separator) as asthma probe
+- 2.5s asthma confirm timer after manaleech delivery (V3: collapse if no smoke)
 
 **Orchestrator (`selectCurses`):**
-- Curseward detected → breach + secondary
-- Truelock >= 70% → class lock aff + secondary
-- Otherwise → primary + secondary
-
-### Sicken Cascade Mechanics
-Sicken delivers afflictions in order: `paralysis → manaleech → slickness`. It is used at two points in the Curse 2 chain:
-1. **First use** (top priority): Delivers paralysis for tree block
-2. **Second use** (after asthma secured): Delivers manaleech/slickness — asthma blocks smoke cure, protecting both
+- Curseward detected → breach + secondary (all modes)
+- Truelock >= 70% → class lock aff + secondary (all modes)
+- Group mode → group curse selectors
+- Lock mode → lock curse selectors
 
 ### Lock Progression
 ```
@@ -1547,7 +1619,7 @@ Same routing pattern as Blademaster:
 |-------|-------|--------|
 | `cath` | `^cath$` | `apostate.dispatch()` (lock mode) |
 | `KELP STACK` | `^kel$` | `apostate.dispatch()` (lock mode, class-conditional) |
-| `Group Attack` | `^yy$` | `apostate.dispatch()` (group mode, currently disabled) |
+| `Group Attack` | `^yy$` | `apostate.dispatch()` (group mode) |
 | `Levi Lock Apo` | `^ll$` | `apostate.dispatch()` (lock mode) |
 | `Vivisect` | `^viv$` | `apostate.dispatch()` (vivisect mode) |
 | `SLEEP` | `^slee$` | `apostate.dispatch()` (sleep mode) |
@@ -1590,21 +1662,27 @@ Legacy wrappers kept: `corruptDmg()`, `corruptKill()`, `cathCorrupt()`
 **Post-attack:**
 - Bloodworm summon (when fresh blood available)
 - Daemon resummon (when wrong daemon type present)
-- Disfigure for disloyalty (when asthma is held)
+- Disfigure for disloyalty (when asthma is held and `wantDisloyalty` enabled)
+
+**Inline with DEADEYES:**
+- Disfigure on asthma rounds (`;` separator, EQ-based, probes asthma presence via `disfigureSent` flag)
 
 Note: Daegger hunt was intentionally removed from commands — it slows offense when seconds matter.
 
 ### Configuration
 ```lua
 apostate.state = {
-  mode = "lock",            -- "lock", "corrupt", "vivisect", "sleep", "group"
-  corrupted = false,        -- corrupt has been fired (awaiting catharsis)
-  lastCorruptTime = 0,      -- corrupt cooldown tracking
-  daeggerhere = false,      -- daegger summoned
-  freshblood = false,       -- fresh blood available for bloodpact
-  fiendthing = "nightmare", -- preferred lesser daemon
-  wantDisloyalty = false,   -- disfigure toggle
-  partyrelay = true,        -- relay to party
+  mode = "lock",              -- "lock", "corrupt", "vivisect", "sleep", "group"
+  corrupted = false,          -- corrupt has been fired (awaiting catharsis)
+  lastCorruptTime = 0,        -- corrupt cooldown tracking
+  daeggerhere = false,        -- daegger summoned
+  freshblood = false,         -- fresh blood available for bloodpact
+  fiendthing = "nightmare",   -- preferred lesser daemon
+  wantDisloyalty = false,     -- disfigure toggle
+  disfigureSent = false,      -- disfigure spam protection (once per asthma round)
+  asthmaConfirmTimer = nil,   -- timer: confirm asthma if target doesn't smoke
+  baalzadeenSummoned = false, -- summon dedup flag (prevents spam during GMCP round-trip)
+  partyrelay = true,          -- relay to party
 }
 
 apostate.config = {
@@ -1777,7 +1855,7 @@ Claude Code agent teams enable parallel development across isolated combat subsy
 
 ---
 
-**Last Updated**: 2026-03-06
+**Last Updated**: 2026-03-07
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia

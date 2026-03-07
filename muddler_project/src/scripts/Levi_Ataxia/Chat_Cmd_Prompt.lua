@@ -1,9 +1,9 @@
-function zgui.chatSend(channel, text)
+function ataxia.chatSend(channel, text)
   send(channel.." "..text)
 end
 
-zgui.chat.citychat:setCmdAction(zgui.chatSend, "ct")
-zgui.chat.housechat:setCmdAction(zgui.chatSend, "ht")
-zgui.chat.orderchat:setCmdAction(zgui.chatSend, "ot")
-zgui.chat.partychat:setCmdAction(zgui.chatSend, "pt")
-zgui.chat.marketchat:setCmdAction(zgui.chatSend, "market")
+ataxia.chat.citychat:setCmdAction(ataxia.chatSend, "ct")
+ataxia.chat.housechat:setCmdAction(ataxia.chatSend, "ht")
+ataxia.chat.orderchat:setCmdAction(ataxia.chatSend, "ot")
+ataxia.chat.partychat:setCmdAction(ataxia.chatSend, "pt")
+ataxia.chat.marketchat:setCmdAction(ataxia.chatSend, "market")

@@ -9815,6 +9815,15 @@ function ataxia_loadSettings()
 	else
 		ataxiaNDB = {}
 		table.load(ndb_loc, ataxiaNDB)
+		-- Migrate array tables to hash tables (one-time)
+		local function migrateArrayToHash(tbl)
+			if not tbl or not tbl[1] then return tbl or {} end
+			local hash = {}
+			for _, v in ipairs(tbl) do hash[v] = true end
+			return hash
+		end
+		ataxiaNDB.notPlayers = migrateArrayToHash(ataxiaNDB.notPlayers)
+		ataxiaNDB.divine = migrateArrayToHash(ataxiaNDB.divine)
 		ataxiaEcho("Name database loaded in.")
 	end
 
@@ -11076,13 +11085,29 @@ function ataxiagui_populateChannels()
   end
 end
 
+local channelColors = {
+  ["says"]       = "&lt;cyan&gt;",
+  ["ct"]         = "&lt;red&gt;",
+  ["ht"]         = "&lt;yellow&gt;",
+  ["hts"]        = "&lt;yellow&gt;",
+  ["hnt"]        = "&lt;yellow&gt;",
+  ["ot"]         = "&lt;white&gt;",
+  ["party"]      = "&lt;magenta&gt;",
+  ["tell"]       = "&lt;yellow&gt;",
+  ["clt"]        = "&lt;white&gt;",
+  ["market"]     = "&lt;white&gt;",
+  ["newbie"]     = "&lt;green&gt;",
+  ["shout"]      = "&lt;red&gt;",
+  ["yell"]       = "&lt;white&gt;",
+  ["armytell"]   = "&lt;white&gt;",
+}
+
 function ataxiagui_processChat(channel)
   if ataxia.usegui ~= nil and ataxia.usegui == false then return end
 
-	local ofr, ofg, ofb = getFgColor()
-	local obr, obg, obb = getBgColor()
-	local text = ansi2decho(gmcp.Comm.Channel.Text.text)
+	local text = gmcp.Comm.Channel.Text.text
 	local person = gmcp.Comm.Channel.Text.talker:title()
+	local color = channelColors[gmcp.Comm.Channel.Start] or "&lt;white&gt;"
 	if person == "The guardian spirit of the totem" then 
 		only_to_misc = false
 		return
@@ -11095,20 +11120,13 @@ function ataxiagui_processChat(channel)
   
   
   if person == gmcp.Char.Status.name or person == "You" then
-		ataxiagui.Chat[channel.."center"]:decho(text.."\n")
-		ataxiagui.Chat.Allcenter:decho(text.."\n")	
+		ataxiagui.Chat[channel.."center"]:cecho(color .. text .. "&lt;reset&gt;\n")
+		ataxiagui.Chat.Allcenter:cecho(color .. text .. "&lt;reset&gt;\n")
 	elseif report then
-    
-		if gmcp.Comm.Channel.Start == "shout" then
-			ataxiagui.Chat[channel.."center"]:cecho("&lt;cyan&gt; "..gmcp.Comm.Channel.Text.talker.."&lt;red&gt;: ")
-		end	
-		ataxiagui.Chat[channel.."center"]:decho(text.."\n")
-	
+		ataxiagui.Chat[channel.."center"]:cecho(color .. text .. "&lt;reset&gt;\n")
+
 		if not only_to_misc then
-			if gmcp.Comm.Channel.Start == "shout" then
-				ataxiagui.Chat.Allcenter:cecho("&lt;cyan&gt; "..gmcp.Comm.Channel.Text.talker.."&lt;red&gt;: ")
-			end			
-			ataxiagui.Chat.Allcenter:decho(text.."\n")
+			ataxiagui.Chat.Allcenter:cecho(color .. text .. "&lt;reset&gt;\n")
 		end
 
     if string.find(gmcp.Comm.Channel.Start:lower(), "tell") and not string.find(gmcp.Comm.Channel.Start:lower(), "army") and not muteList[person] and person ~= "You" then 
@@ -14871,13 +14889,15 @@ end
 			Targossas = "a_darkcyan",
 			Enemies = "red",
 			Rogues = "a_brown",
-      Underworld = "a_brown",
 		},
 		special = {},
     player_Notes = {},
-		divine = {"Aegis", "Artemis", "Aurora", "Babel", "Deucalion", "Gaia", "Lorielan", "Lupus", "Neraeos",
-			"Ourania", "Pandora", "Phaestus", "Prospero", "Sartan", "Scarlatti", "Twilight", "Valnurana",
-			"Vastar", "Tlalaiad", "Romeo", "Juliet",},
+		divine = {
+			Aegis=true, Artemis=true, Aurora=true, Babel=true, Deucalion=true,
+			Gaia=true, Lorielan=true, Lupus=true, Neraeos=true, Ourania=true,
+			Pandora=true, Phaestus=true, Prospero=true, Sartan=true, Scarlatti=true,
+			Twilight=true, Valnurana=true, Vastar=true, Tlalaiad=true, Romeo=true, Juliet=true,
+		},
 		cityEnemies = {},
 		notPlayers = {},
 		highlightPriority = "city",
@@ -14905,17 +14925,16 @@ end</script>
 	local path = getMudletHomeDir().."/ataxiaNDB"
 
 	if not lfs.attributes(path) then
-		--We'll need a folder to store downloaded data. Don't worry, it won't cause issues.
 		lfs.mkdir(path)
 		ataxiaEcho("Created folder to store downloaded data at: "..path)
-	end  
-  
+	end
+
 	downloadFile(path .. "/Online.json", "http://api.achaea.com/characters.json")
 
 	ataxiaEcho("One moment while I access the list...")
 
-	ndbWatcher = ndbWatcher or createStopWatch()
-	startStopWatch(ndbWatcher)
+	ataxiaNDB._watcher = ataxiaNDB._watcher or createStopWatch()
+	startStopWatch(ataxiaNDB._watcher)
 end
 
 function ataxiaNDB_Acquire(person)
@@ -14924,7 +14943,7 @@ function ataxiaNDB_Acquire(person)
 	local person = person:title()
 
 	-- Skip known non-players
-	if ataxiaNDB_isBlacklisted and ataxiaNDB_isBlacklisted(person) then return end
+	if ataxiaNDB_isBlacklisted(person) then return end
 
 	local path = getMudletHomeDir().."/ataxiaNDB"
 
@@ -14940,13 +14959,14 @@ end
 function ataxiaNDB_NameList(names)
 	--Parse list to see who isn't tracked.
 	for _, name in pairs(names) do
-		if not ataxiaNDB_Exists(name) and not table.contains(ataxiaNDB.divine, name)
-			and not (ataxiaNDB_isBlacklisted and ataxiaNDB_isBlacklisted(name)) then
+		if not ataxiaNDB_Exists(name) and not ataxiaNDB.divine[name]
+			and not ataxiaNDB_isBlacklisted(name) then
 			ataxiaNDB_Acquire(name)
 		end
 	end
 	ataxiaEcho("Database has been fully updated, thank you.")
-end</script>
+end
+</script>
   <packageName/>
 <eventHandlerList>
 </eventHandlerList>
@@ -14955,161 +14975,154 @@ end</script>
   <name>ataxiaNDB API</name>
           <script>function ataxiaNDB_isMark(name)
   if not ataxiaNDB_Exists(name) then return false end
-  if ataxiaNDB.players[name].mark then
-    return ataxiaNDB.players[name].mark
-  else
-    return false
-  end
+  return ataxiaNDB.players[name:title()].mark or false
 end
 
 function ataxiaNDB_armyRank(name)
   if not ataxiaNDB_Exists(name) then return 0 end
-  if ataxiaNDB.players[name].armyRank then
-    return ataxiaNDB.players[name].armyRank
-  else
-    return 0
-  end
+  return ataxiaNDB.players[name:title()].armyRank or 0
+end
+
+function ataxiaNDB_isDauntless(name)
+  if not ataxiaNDB_Exists(name) then return false end
+  return ataxiaNDB.players[name:title()].dauntless or false
 end
 
 function ataxiaNDB_isEnemy(name)
-	if table.contains(ataxiaNDB.cityEnemies, name) then
-		return true
-	else
-		return false
-	end
+  return table.contains(ataxiaNDB.cityEnemies, name)
 end
 
 function ataxiaNDB_getHouse(name)
-  if not ataxiaNDB_Exists(name) then
-    return "Unknown"
-  else
-    return ataxiaNDB.players[name:title()].house 
-  end
+  if not ataxiaNDB_Exists(name) then return "Unknown" end
+  return ataxiaNDB.players[name:title()].house
 end
 
 function ataxiaNDB_getColour(name)
-	if not ataxiaNDB_Exists(name) then
-		return "white"
-	else
-    if ataxiaNDB_getCitizenship(name) == "Unknown" or ataxiaNDB_getCitizenship(name) == "None" then
-      return ataxiaNDB.highlighting.Rogues
-    else
-    if ataxiaNDB_getCitizenship(name) == "underworld" then
-      return ataxiaNDB.highlighting.underworld
-    else
-		  return ataxiaNDB.highlighting[ataxiaNDB_getCitizenship(name)]
-      end   
-    end
-	end
+  if not ataxiaNDB_Exists(name) then return "white" end
+  local cit = ataxiaNDB_getCitizenship(name)
+  if cit == "Unknown" or cit == "Rogues" then
+    return ataxiaNDB.highlighting.Rogues
+  else
+    return ataxiaNDB.highlighting[cit] or ataxiaNDB.highlighting.Rogues
+  end
 end
+
 function ataxiaNDB_getClass(name)
-	if ataxiaNDB_Exists(name) then
-		return ataxiaNDB.players[name:title()].class
-    --return ataxiaNDB.players[name].class
-	else
-		return "Unknown"
-	end
+  if not ataxiaNDB_Exists(name) then return "Unknown" end
+  return ataxiaNDB.players[name:title()].class
 end
 
 function ataxiaNDB_Exists(name)
-	if not ataxiaNDB.players[name] then
-		return false
-	else
-		return true
-	end
+  if not name then return false end
+  return ataxiaNDB.players[name:title()] ~= nil
 end
 
 function ataxiaNDB_isCitizenOf(city, name)
-	if ataxiaNDB_Exists(name) then
-		return (ataxiaNDB.players[name:title()].city == city:title() and true or false)
-	else
-		ataxia_Echo("That person's information has not yet been gathered.")
-		return false
-	end
+  if not ataxiaNDB_Exists(name) then
+    ataxiaEcho("That person's information has not yet been gathered.")
+    return false
+  end
+  return ataxiaNDB.players[name:title()].city == city:title()
 end
 
 function ataxiaNDB_getCitizenship(name)
-	if ataxiaNDB_Exists(name) then
-		if ataxiaNDB.players[name].city:lower() == "none" or ataxiaNDB.players[name].city:lower() == "(hidden)" or ataxiaNDB.players[name].city:lower() == "underworld" then
-			return "Rogues"
-		else
-			return ataxiaNDB.players[name].city
-		end
-	else
-		return "Unknown"
-	end
+  if not ataxiaNDB_Exists(name) then return "Unknown" end
+  local city = ataxiaNDB.players[name:title()].city
+  if not city then return "Unknown" end
+  local cityLower = city:lower()
+  if cityLower == "none" or cityLower == "(hidden)" then
+    return "Rogues"
+  else
+    return city
+  end
 end
 
-
 function ataxiaNDB_Remove(name)
-	local person = name:title()
-	if ataxiaNDB_Exists(person) then
-		ataxiaNDB.players[person] = nil
-		--If any highlight available, then clear it.
-		if ataxiaNDB.highlightTriggers and ataxiaNDB.highlightTriggers[person] then
-			killTrigger(ataxiaNDB.highlightTriggers[person])
-		end
-		ataxiaEcho(person.." has been removed from the database.")
-	else
-		ataxiaEcho(person.." is not in the database, anyway.")
-	end
+  local person = name:title()
+  if ataxiaNDB_Exists(person) then
+    ataxiaNDB.players[person] = nil
+    if ataxiaNDB.highlightTriggers and ataxiaNDB.highlightTriggers[person] then
+      killTrigger(ataxiaNDB.highlightTriggers[person])
+      ataxiaNDB.highlightTriggers[person] = nil
+    end
+    ataxiaEcho(person.." has been removed from the database.")
+  else
+    ataxiaEcho(person.." is not in the database, anyway.")
+  end
 end
 
 function ataxiaNDB_SortOnline(filepath)
-	local f, s = io.open(filepath)
-    if f then s = f:read("*l"); io.close(f) end
+  local f = io.open(filepath, "r")
+  if not f then
+    cecho("\n&lt;red&gt;Data Acquisition Failed - could not open file!")
+    return
+  end
+  local s = f:read("*l")
+  io.close(f)
+  if not s then os.remove(filepath); return end
 
-	-- didn't get JSON data? 
-	if s:find("Internal error", 1, true) or s:find("DOCTYPE html PUBLIC", 1, true) then
-		cecho("\n&lt;red&gt;Data Acquisition Failed!") 
-		return 
-	end
+  if s:find("Internal error", 1, true) or s:find("DOCTYPE html PUBLIC", 1, true) then
+    cecho("\n&lt;red&gt;Data Acquisition Failed!")
+    os.remove(filepath)
+    return
+  end
 
-	local t = yajl.to_value(s)
+  local ok, t = pcall(yajl.to_value, s)
+  if not ok or not t then
+    cecho("\n&lt;red&gt;Failed to parse online data!")
+    os.remove(filepath)
+    return
+  end
 
-	apiOnlineFound = {}
-	apiNeedUpdate = {}
-	for ind, tab in pairs(t.characters) do
-		if not tab.name:find("masked") and not table.contains(ataxiaNDB.divine, tab.name) then
-			table.insert(apiOnlineFound, tab.name)
-		end
-	end
+  local onlineSet = {}
+  ataxiaNDB._onlineFound = {}
+  local apiNeedUpdate = {}
 
-	for ind, tab in pairs(gmcp.Comm.Channel.Players) do
-		if not table.contains(apiOnlineFound, tab.name) and not tab.name:find("masked") and not table.contains(ataxiaNDB.divine, tab.name) then
-			table.insert(apiOnlineFound, tab.name)
-		end
-	end
+  for ind, tab in pairs(t.characters) do
+    if not tab.name:find("masked") and not ataxiaNDB.divine[tab.name] then
+      if not onlineSet[tab.name] then
+        onlineSet[tab.name] = true
+        table.insert(ataxiaNDB._onlineFound, tab.name)
+      end
+    end
+  end
 
-	os.remove(filepath)
-	table.sort(apiOnlineFound)
+  for ind, tab in pairs(gmcp.Comm.Channel.Players) do
+    if not onlineSet[tab.name] and not tab.name:find("masked") and not ataxiaNDB.divine[tab.name] then
+      onlineSet[tab.name] = true
+      table.insert(ataxiaNDB._onlineFound, tab.name)
+    end
+  end
 
-	--Parse the list to see who needs to be added.
-	local count = 0
-	for index, name in pairs(apiOnlineFound) do
-		if not ataxiaNDB_Exists(name) and not table.contains(ataxiaNDB.divine, name)
-			and not (ataxiaNDB_isBlacklisted and ataxiaNDB_isBlacklisted(name)) then
-			count = count + 1
-			table.insert(apiNeedUpdate, name)
-		end
-	end
+  os.remove(filepath)
+  table.sort(ataxiaNDB._onlineFound)
 
-	if count &gt; 0 then
-		ataxiaEcho(count.." new names identified, grabbing their info.")
-		cecho("\n&lt;a_darkgrey&gt; - "..table.concat(apiNeedUpdate, ", ")..".")
-		ataxiaNDB_NameList(apiNeedUpdate)
-	else
-		if parsingCity then
-			if parsingCity:lower() == "classes" then
-				ataxiaNDB_displayOnlineClass(apiOnlineFound)
-			else
-				ataxiaNDB_displayOnlineCity(apiOnlineFound)
-			end
-		else
-			ataxiaNDB_displayOnline(apiOnlineFound)
-		end
-	end
-end</script>
+  local count = 0
+  for index, name in pairs(ataxiaNDB._onlineFound) do
+    if not ataxiaNDB_Exists(name) and not ataxiaNDB.divine[name]
+      and not ataxiaNDB_isBlacklisted(name) then
+      count = count + 1
+      table.insert(apiNeedUpdate, name)
+    end
+  end
+
+  if count &gt; 0 then
+    ataxiaEcho(count.." new names identified, grabbing their info.")
+    cecho("\n&lt;a_darkgrey&gt; - "..table.concat(apiNeedUpdate, ", ")..".")
+    ataxiaNDB_NameList(apiNeedUpdate)
+  else
+    if ataxiaNDB._parsingCity then
+      if ataxiaNDB._parsingCity:lower() == "classes" then
+        ataxiaNDB_displayOnlineClass(ataxiaNDB._onlineFound)
+      else
+        ataxiaNDB_displayOnlineCity(ataxiaNDB._onlineFound)
+      end
+    else
+      ataxiaNDB_displayOnline(ataxiaNDB._onlineFound)
+    end
+  end
+end
+</script>
   <packageName/>
 <eventHandlerList>
 </eventHandlerList>
@@ -15119,41 +15132,42 @@ end</script>
           <script>function ataxiaNDB_Unhighlight()
 	if not ataxiaNDB.highlightTriggers or not next(ataxiaNDB.highlightTriggers) then return end
 
-  	for k,v in pairs(ataxiaNDB.highlightTriggers) do
-    	killTrigger(v)
-  	end
+	for k,v in pairs(ataxiaNDB.highlightTriggers) do
+		killTrigger(v)
+	end
 
-  	ataxiaNDB.highlightTriggers = {}
+	ataxiaNDB.highlightTriggers = {}
 end
 
 function ataxiaNDB_enemyHighlights()
 	ataxiaEcho("Clearing all highlights to prevent errors. One moment, please.")
 	ataxiaNDB_Unhighlight()
-	tempTimer(2, [[ ataxiaEcho("Loading new highlights now."); ataxiaNDB_loadHighlights() ]])	
+	tempTimer(2, function() ataxiaEcho("Loading new highlights now."); ataxiaNDB_loadHighlights() end)
 end
 
 function ataxiaNDB_loadHighlights()
 	ataxiaNDB.highlightTriggers = ataxiaNDB.highlightTriggers or {}
-	collectgarbage("stop")
 
 	ataxiaNDB_Unhighlight()
 
 	if ataxiaNDB.highlightNames then
 		for index, person in pairs(ataxiaNDB.players) do
-			ataxiaNDB_highlightName( person.name, person.city )
+			if not person.name then
+				ataxiaNDB.players[index] = nil
+			else
+				ataxiaNDB_highlightName( person.name, person.city )
+			end
 		end
 	elseif ataxiaNDB.special then
 		for person, colour in pairs(ataxiaNDB.special) do
 			ataxiaNDB_highlightName( person, "nil" )
-		end		
+		end
 	end
-
-	collectgarbage()
 end
 
 function ataxiaNDB_addHighlight(_, name)
 
-	if not ataxiaNDB.highlightNames then return end	
+	if not ataxiaNDB.highlightNames then return end
 	if not name then return end
 	if not ataxiaNDB.players[name] then return end
 
@@ -15164,14 +15178,14 @@ end
 function ataxiaNDB_updateHighlights(city, colour)
 
 	ataxiaNDB.highlighting[city] = colour
-	
+
 	for name, trig in pairs(ataxiaNDB.highlightTriggers) do
 		if ataxiaNDB.players[name].city == city then
 			killTrigger(trig)
 			if ataxiaNDB.highlightNames then
 				ataxiaNDB_highlightName( ataxiaNDB.players[name].name, ataxiaNDB.players[name].city )
 			end
-		elseif city == "Rogues" or city == "(hidden)" or city == "underworld" then
+		elseif city == "Rogues" or city == "(hidden)" then
 			if ataxiaNDB_getCitizenship(name) == "None" then
 				killTrigger(trig)
 				if ataxiaNDB.highlightNames then
@@ -15184,6 +15198,7 @@ end
 
 
 function ataxiaNDB_highlightName(who, city)
+	if not who then return end
 	--If any highlight available, then clear it.
 	if ataxiaNDB.highlightTriggers and ataxiaNDB.highlightTriggers[who] then
 		killTrigger(ataxiaNDB.highlightTriggers[who])
@@ -15194,7 +15209,7 @@ function ataxiaNDB_highlightName(who, city)
 	--Get the necessary colour.
 		--Check specials first, then enemy list
 	if ataxiaNDB.special and ataxiaNDB.special[who] then
-		colour = ataxiaNDB.special[who]	
+		colour = ataxiaNDB.special[who]
 	elseif ataxiaNDB.highlightPriority == "enemies" then
 		if table.contains(ataxiaNDB.cityEnemies, who) then
 			colour = ataxiaNDB.highlighting.Enemies
@@ -15214,9 +15229,11 @@ function ataxiaNDB_highlightName(who, city)
 	end
 
 	ataxiaNDB.highlightTriggers = ataxiaNDB.highlightTriggers or {}
-	ataxiaNDB.highlightTriggers[who] = tempTrigger(who, ([[ataxiaNDB_highlight("%s", %s)]]):format(who,
-		(colour and '"' .. colour .. '"' or "false")
-	))
+	local capturedWho = who
+	local capturedColour = colour
+	ataxiaNDB.highlightTriggers[who] = tempTrigger(who, function()
+		ataxiaNDB_highlight(capturedWho, capturedColour)
+	end)
 end
 
 function ataxiaNDB_highlight(name, colour)
@@ -15235,14 +15252,18 @@ function ataxiaNDB_highlight(name, colour)
 					if ataxiaNDB.enemySettings.italics then setItalics(true) end
 				end
 				resetFormat()
-			else 
-				return 
+			else
+				return
 			end
     		end
 		k = k + 1
 	end
 end
-registerAnonymousEventHandler("ataxiaNDB Check Highlight", "ataxiaNDB_addHighlight")
+
+if ataxiaNDB._highlightHandlerId then
+	killAnonymousEventHandler(ataxiaNDB._highlightHandlerId)
+end
+ataxiaNDB._highlightHandlerId = registerAnonymousEventHandler("ataxiaNDB Check Highlight", "ataxiaNDB_addHighlight")
 </script>
   <packageName/>
 <eventHandlerList>
@@ -15252,61 +15273,60 @@ registerAnonymousEventHandler("ataxiaNDB Check Highlight", "ataxiaNDB_addHighlig
   <name>ataxiaNDB Display API</name>
           <script>function ataxiaNDB_displayOnlineClass(players)
 	local classList = {"Alchemist", "Apostate", "Bard", "Blademaster", "Depthswalker", "Druid", "Infernal", "Jester", "Magi", "Monk", "Occultist",
-		"Paladin", "Priest", "Runewarden", "Sentinel", "Serpent", "Shaman", "Sylvan"}
-	local classes = {
-		Alchemist = {}, Apostate = {}, Bard = {}, Blademaster = {}, Depthswalker = {},
-		Druid = {}, Infernal = {}, Jester = {}, Magi = {}, Monk = {}, Occultist = {},
-		Paladin = {}, Priest = {}, Runewarden = {}, Sentinel = {}, Serpent = {},
-		Shaman = {}, Sylvan = {},
-	}
+		"Paladin", "Pariah", "Priest", "Psion", "Runewarden", "Sentinel", "Serpent", "Shaman", "Sylvan", "Unnamable",
+		"Dragon", "Airlord", "Earthlord", "Firelord", "Waterlord"}
+	local classes = {}
+	for _, c in ipairs(classList) do classes[c] = {} end
 
 	for _, player in pairs(players) do
-		local class = ataxiaNDB.players[player].class
+		local class = ataxiaNDB.players[player] and ataxiaNDB.players[player].class or "Unknown"
+		if not classes[class] then classes[class] = {} end
 		table.insert(classes[class], player)
 	end
-	ataxiaEcho("Data acqusition completed and analysed. Showing class count for online players.")
+	ataxiaEcho("Data acquisition completed and analysed. Showing class count for online players.")
 
 	for _, class in ipairs(classList) do
-		cecho("\n &lt;DimGrey&gt;[&lt;NavajoWhite&gt;"..class:title().."&lt;DimGrey&gt;]"..string.rep(" ", 13-string.len(class)).."- &lt;NavajoWhite&gt;"..#classes[class].." tracked people are "..class..".")
+		cecho("\n &lt;DimGrey&gt;[&lt;NavajoWhite&gt;"..class:title().."&lt;DimGrey&gt;]"..string.rep(" ", math.max(0, 13-string.len(class))).."- &lt;NavajoWhite&gt;"..#classes[class].." tracked people are "..class..".")
 	end
 	send(" ")
-	parsingCity = nil
+	ataxiaNDB._parsingCity = nil
 end
 
 function ataxiaNDB_displayOnlineCity(players)
-	local peopleFound = {}
+	local city = ataxiaNDB._parsingCity:title()
+	local hlColour = ataxiaNDB.highlighting[city] or ataxiaNDB.highlighting.Rogues
 
-ataxiaEcho("Data acqusition completed and analysed. Showing online players from &lt;"..ataxiaNDB.highlighting[parsingCity:title()].."&gt;"..parsingCity:title()..".")
+	ataxiaEcho("Data acquisition completed and analysed. Showing online players from &lt;"..hlColour.."&gt;"..city..".")
 
 	for _, person in pairs(players) do
-		if ataxiaNDB_isCitizenOf(parsingCity:title(), person) then
-			cecho("\n &lt;"..ataxiaNDB.highlighting[parsingCity:title()].."&gt;"..person..string.rep(" ", 13-string.len(person)).."- &lt;NavajoWhite&gt;"..ataxiaNDB_getClass(person))
+		if ataxiaNDB_isCitizenOf(city, person) then
+			cecho("\n &lt;"..hlColour.."&gt;"..person..string.rep(" ", math.max(0, 13-string.len(person))).."- &lt;NavajoWhite&gt;"..ataxiaNDB_getClass(person))
 		end
 	end
 	send(" ")
-	parsingCity = nil
+	ataxiaNDB._parsingCity = nil
 end
 
 function ataxiaNDB_displayOnline(players)
 	local onlinePeople = {
-		Ashtan = {}, Cyrene = {}, Eleusis = {}, Hashan = {}, Mhaldor = {}, Targossas = {}, Rogues = {}, Untracked = {}, underworld = {},
+		Ashtan = {}, Cyrene = {}, Eleusis = {}, Hashan = {}, Mhaldor = {}, Targossas = {}, Rogues = {}, Untracked = {},
 	}
 
-  
 	for _, person in pairs(players) do
 		if not ataxiaNDB_Exists(person) then
 			table.insert(onlinePeople.Untracked, person)
-		elseif ataxiaNDB_getCitizenship(person):lower() == "none" or ataxiaNDB_getCitizenship(person):lower() == "unknown" or ataxiaNDB_getCitizenship(person) == "(hidden)"  or ataxiaNDB_getCitizenship(person) == "Unknown" or ataxiaNDB_getCitizenship(person):lower() == "Unknown" then
-			table.insert(onlinePeople.Rogues, person)
-		elseif ataxiaNDB_getCitizenship(person):lower() == "underworld" then
-      table.insert(onlinePeople.underworld, person)
-    else
-			table.insert(onlinePeople[ataxiaNDB_getCitizenship(person)], person)
+		else
+			local cit = ataxiaNDB_getCitizenship(person)
+			if cit == "Unknown" or cit == "None" or cit == "(hidden)" then
+				table.insert(onlinePeople.Rogues, person)
+			else
+				table.insert(onlinePeople[cit] or onlinePeople.Rogues, person)
+			end
 		end
 	end
 
 	ataxiaEcho("Data acquisition completed and analysed. List of players online:")
-	echo("\n"..table.concat(apiOnlineFound, ", ")..".\nTotal players visible to us: "..#apiOnlineFound..".\n")
+	echo("\n"..table.concat(ataxiaNDB._onlineFound, ", ")..".\nTotal players visible to us: "..#ataxiaNDB._onlineFound..".\n")
 
 	ataxiaEcho(" City affiliations of currently online people:")
 	cecho(string.format("\n&lt;%s&gt;[Ashtan]     :&lt;white&gt;(&lt;orange&gt;%d&lt;white&gt;)&lt;%s&gt; %s.", ataxiaNDB.highlighting.Ashtan, #onlinePeople.Ashtan, ataxiaNDB.highlighting.Ashtan, table.concat(onlinePeople.Ashtan, ", ")))
@@ -15316,47 +15336,50 @@ function ataxiaNDB_displayOnline(players)
 	cecho(string.format("\n&lt;%s&gt;[Mhaldor]    :&lt;white&gt;(&lt;orange&gt;%d&lt;white&gt;)&lt;%s&gt; %s.", ataxiaNDB.highlighting.Mhaldor, #onlinePeople.Mhaldor, ataxiaNDB.highlighting.Mhaldor, table.concat(onlinePeople.Mhaldor, ", ")))
 	cecho(string.format("\n&lt;%s&gt;[Targossas]  :&lt;white&gt;(&lt;orange&gt;%d&lt;white&gt;)&lt;%s&gt; %s.", ataxiaNDB.highlighting.Targossas, #onlinePeople.Targossas, ataxiaNDB.highlighting.Targossas, table.concat(onlinePeople.Targossas, ", ")))
 	cecho(string.format("\n&lt;%s&gt;[Rogues]     :&lt;white&gt;(&lt;orange&gt;%d&lt;white&gt;)&lt;%s&gt; %s.", ataxiaNDB.highlighting.Rogues, #onlinePeople.Rogues, ataxiaNDB.highlighting.Rogues, table.concat(onlinePeople.Rogues, ", ")))
-  --cecho(string.format("\n&lt;%s&gt;[Underworld]     :&lt;white&gt;(&lt;orange&gt;%d&lt;white&gt;)&lt;%s&gt; %s.",ataxiaNDB.highlighting.underworld, #onlinePeople.underworld, ataxiaNDB.highlighting.underworld, table.concat(onlinePeople.underworld, ", ")))
 	echo("\n ")
 	send(" ")
 
 end
 
 function ataxiaNDB_displayWho(person)
-  ataxiaNDB.checking = nil
-  local name = person:title()
-  local x, c, u
-  if not ataxiaNDB_Exists(name) then
-  	ataxiaEcho(name.." is not yet tracked!")
-  else
-  	x = ataxiaNDB.players[name]
-  	c = ataxiaNDB_getColour(name)
-  	u = "Checked: "..(x.lastUpdate and x.lastUpdate or "n/a")
-  	
-  	cecho("\n\n&lt;blue&gt;- &lt;"..c.."&gt;"..x.title.." &lt;blue&gt;"..string.rep("-", 70-(string.len(x.title)+3)).."\n")
-  	cecho("\n&lt;a_darkcyan&gt; City :   &lt;NavajoWhite&gt;"..x.city..string.rep(" ", 31-string.len(x.city)).."  &lt;a_darkcyan&gt; Level:   &lt;NavajoWhite&gt;"..x.level)
-  	cecho("\n&lt;a_darkcyan&gt; House:   &lt;NavajoWhite&gt;"..x.house..string.rep(" ", 31-string.len(x.house)).."  &lt;a_darkcyan&gt; Rank :   &lt;NavajoWhite&gt;"..x.xp_rank)
-  	cecho("\n&lt;a_darkcyan&gt; Class:   &lt;NavajoWhite&gt;"..x.class..string.rep(" ", 31-string.len(x.class)).."  &lt;a_darkcyan&gt; Kills:   &lt;NavajoWhite&gt;"..(x.pks or "n/a"))
-    if ataxiaNDB_armyRank(name) &gt; 0 then
-      cecho("\n&lt;a_darkcyan&gt; Army :   &lt;"..(ataxiaNDB_armyRank(name) &gt; 3 and "red" or "NavajoWhite").."&gt;"..ataxiaNDB_armyRank(name))
-    end
-    if ataxiaNDB_isMark(name) then
-      cecho("\n&lt;a_darkcyan&gt; Mark :   &lt;"..(ataxiaNDB_isMark(name) == "Ivory" and "NavajoWhite" or "purple").."&gt;"..ataxiaNDB_isMark(name))
-    end
-    echo("\n ")
-    if ataxiaNDB.player_Notes[name] and #ataxiaNDB.player_Notes[name] &gt; 0 then
-      cecho("\n&lt;a_darkcyan&gt; Notes:")
-      for num, note in pairs(ataxiaNDB.player_Notes[name]) do
-        cecho("\n  &lt;DarkSlateBlue&gt;"..num..") &lt;reset&gt;"..note)
-      end
-      echo("\n ")
-    end
-  	cecho("\n &lt;a_green&gt;"..string.rep(" ", 69-string.len(u))..u)
-  	cecho("\n&lt;blue&gt;"..string.rep("-", 70))
-  	cecho("\n ")
-  	send(" ",false)
-  end	
-end</script>
+	ataxiaNDB.checking = nil
+	local name = person:title()
+	local x, c, u
+	if not ataxiaNDB_Exists(name) then
+		ataxiaEcho(name.." is not yet tracked!")
+	else
+		x = ataxiaNDB.players[name]
+		c = ataxiaNDB_getColour(name)
+		u = "Checked: "..(x.lastUpdate and x.lastUpdate or "n/a")
+
+		cecho("\n\n&lt;blue&gt;- &lt;"..c.."&gt;"..x.title.." &lt;blue&gt;"..string.rep("-", math.max(0, 70-(string.len(x.title)+3))).."\n")
+		cecho("\n&lt;a_darkcyan&gt; City :   &lt;NavajoWhite&gt;"..x.city..string.rep(" ", math.max(0, 31-string.len(x.city))).."  &lt;a_darkcyan&gt; Level:   &lt;NavajoWhite&gt;"..x.level)
+		cecho("\n&lt;a_darkcyan&gt; House:   &lt;NavajoWhite&gt;"..x.house..string.rep(" ", math.max(0, 31-string.len(x.house))).."  &lt;a_darkcyan&gt; Rank :   &lt;NavajoWhite&gt;"..x.xp_rank)
+		cecho("\n&lt;a_darkcyan&gt; Class:   &lt;NavajoWhite&gt;"..x.class..string.rep(" ", math.max(0, 31-string.len(x.class))).."  &lt;a_darkcyan&gt; Kills:   &lt;NavajoWhite&gt;"..(x.pks or "n/a"))
+		if ataxiaNDB_armyRank(name) &gt; 0 then
+			cecho("\n&lt;a_darkcyan&gt; Army :   &lt;"..(ataxiaNDB_armyRank(name) &gt; 3 and "red" or "NavajoWhite").."&gt;"..ataxiaNDB_armyRank(name))
+		end
+		if ataxiaNDB_isMark(name) then
+			cecho("\n&lt;a_darkcyan&gt; Mark :   &lt;"..(ataxiaNDB_isMark(name) == "Ivory" and "NavajoWhite" or "purple").."&gt;"..ataxiaNDB_isMark(name))
+		end
+		if ataxiaNDB_isDauntless(name) then
+			cecho("\n&lt;a_darkcyan&gt; Daunt:   &lt;red&gt;The Dauntless")
+		end
+		echo("\n ")
+		if ataxiaNDB.player_Notes[name] and #ataxiaNDB.player_Notes[name] &gt; 0 then
+			cecho("\n&lt;a_darkcyan&gt; Notes:")
+			for num, note in pairs(ataxiaNDB.player_Notes[name]) do
+				cecho("\n  &lt;DarkSlateBlue&gt;"..num..") &lt;reset&gt;"..note)
+			end
+			echo("\n ")
+		end
+		cecho("\n &lt;a_green&gt;"..string.rep(" ", math.max(0, 69-string.len(u)))..u)
+		cecho("\n&lt;blue&gt;"..string.rep("-", 70))
+		cecho("\n ")
+		send(" ",false)
+	end
+end
+</script>
   <packageName/>
 <eventHandlerList>
 </eventHandlerList>
@@ -15372,8 +15395,11 @@ end</script>
 		return
 	end
 
-    local f, s = io.open(filepath)
-    if f then s = f:read("*l"); io.close(f) end
+	local f, err = io.open(filepath)
+	if not f then return end
+	local s = f:read("*l")
+	io.close(f)
+	if not s then os.remove(filepath); return end
 
 	-- didn't get JSON data?
 	if s:find("Internal error", 1, true) or s:find("DOCTYPE html PUBLIC", 1, true) then
@@ -15381,19 +15407,28 @@ end</script>
 		return
 	end
 
-	local t = yajl.to_value(s)
-	local cities = {"Ashtan", "Cyrene", "Eleusis", "Hashan", "Mhaldor", "Targossas", "Rogues","Underworld",}
+	local ok, t = pcall(yajl.to_value, s)
+	if not ok or not t then
+		cecho("\n&lt;red&gt;Failed to parse player data!")
+		os.remove(filepath)
+		return
+	end
+
+	local cities = {"Ashtan", "Cyrene", "Eleusis", "Hashan", "Mhaldor", "Targossas", "Rogues"}
 	local name = t.name
-	local title = t.fullname
-	local house = t.house:title()
-	local xp_rank = tonumber(t.xp_rank)
-	local city = t.city:title()
-	local class = t.class:title()
-	local level = tonumber(t.level)
-  local pks = tonumber(t.player_kills)
+	if not name then os.remove(filepath); return end
+	local title = t.fullname or name
+	local house = t.house and t.house:title() or "Unknown"
+	local xp_rank = tonumber(t.xp_rank) or 0
+	local city = t.city and t.city:title() or "Unknown"
+	local class = t.class and t.class:title() or "Unknown"
+	local level = tonumber(t.level) or 0
+	local pks = tonumber(t.player_kills) or 0
 
 	local tmpCity = (ataxiaNDB_Exists(name) and ataxiaNDB_getCitizenship(name) or "Unknown")
-  local isMark, aRank = ataxiaNDB_isMark(name), ataxiaNDB_armyRank(name)
+	local isMark = ataxiaNDB_isMark(name)
+	local aRank = ataxiaNDB_armyRank(name)
+	local isDauntless = ataxiaNDB_isDauntless(name)
 
 	ataxiaNDB.players[name] = {
 		name = name,
@@ -15403,10 +15438,11 @@ end</script>
 		city = city,
 		level = level,
 		class = class,
-    pks = pks,
+		pks = pks,
 		lastUpdate = os.date(),
-    armyRank = aRank or nil,
-    mark = isMark or nil,
+		armyRank = aRank or nil,
+		mark = isMark or nil,
+		dauntless = isDauntless or nil,
 	}
 	if house:find("hidden") then
 		ataxiaNDB.players[name].house = "Unknown"
@@ -15419,13 +15455,13 @@ end</script>
 	if city:find("hidden") then
 		if not table.contains(cities, tmpCity) then
 			ataxiaNDB.players[name].city = "Unknown"
-			if honoursPerson == nil then ataxiaEcho("&lt;red&gt;WARNING: "..name.."'s city is hidden; will require a manual honours/setting to update it.") end
+			if ataxiaNDB._honoursPerson == nil then ataxiaEcho("&lt;red&gt;WARNING: "..name.."'s city is hidden; will require a manual honours/setting to update it.") end
 		else
-      if tmpCity == "Rogues" then
-        ataxiaNDB.players[name].city = "None"
-      else
-			 ataxiaNDB.players[name].city = tmpCity
-      end
+			if tmpCity == "Rogues" then
+				ataxiaNDB.players[name].city = "None"
+			else
+				ataxiaNDB.players[name].city = tmpCity
+			end
 		end
 	elseif city:find("none") or city == "" then
 		ataxiaNDB.players[name].city = "None"
@@ -15433,17 +15469,17 @@ end</script>
 		ataxiaNDB.players[name].city = city:title()
 	end
 
-  	os.remove(filepath)
+	os.remove(filepath)
 
-	if honoursPerson ~= nil then
-		send("honours "..honoursPerson,false)
-		tempTimer(3, [[honoursPerson = nil]])
+	if ataxiaNDB._honoursPerson ~= nil then
+		send("honours "..ataxiaNDB._honoursPerson,false)
+		tempTimer(3, function() ataxiaNDB._honoursPerson = nil end)
 	else
 		raiseEvent("ataxiaNDB Check Highlight", t.name)
 	end
-  if ataxiaNDB.checking then
-    ataxiaNDB_displayWho(name)
-  end
+	if ataxiaNDB.checking then
+		ataxiaNDB_displayWho(name)
+	end
 end
 </script>
   <packageName/>
@@ -15457,7 +15493,7 @@ end
 	-- Only handle ataxiaNDB downloads
 	if not filepath:find("ataxiaNDB", 1, true) then return end
 
-	local person = filepath:match("/([%w_]+)%.json")
+	local person = filepath:match("[/\\]([%w_]+)%.json")
 
 	if filepath:match("server replied: Not Found") then
 		ataxiaEcho("This person does not exist: " .. (person or "unknown"))
@@ -15478,15 +15514,15 @@ end
 
 function ataxiaNDB_blacklistName(name)
 	ataxiaNDB.notPlayers = ataxiaNDB.notPlayers or {}
-	if not table.contains(ataxiaNDB.notPlayers, name) then
-		table.insert(ataxiaNDB.notPlayers, name)
+	if not ataxiaNDB.notPlayers[name] then
+		ataxiaNDB.notPlayers[name] = true
 		ataxiaEcho(name .. " is not a player, added to ignore list.")
 	end
 end
 
 function ataxiaNDB_isBlacklisted(name)
-	ataxiaNDB.notPlayers = ataxiaNDB.notPlayers or {}
-	return table.contains(ataxiaNDB.notPlayers, name) or table.contains(ataxiaNDB.notPlayers, name:title())
+	if not ataxiaNDB.notPlayers then return false end
+	return ataxiaNDB.notPlayers[name] or ataxiaNDB.notPlayers[name:title()] or false
 end
 </script>
   <packageName/>
@@ -28509,22 +28545,22 @@ end</script>
 </Script>
             <Script isActive="yes" isFolder="no">
   <name>buildChat</name>
-              <script>function zgui.buildChat()
-  zgui.chatSize = zgui.chatSize or 9
-  zgui.chat = {}
-  zgui.chat.tabs = {"All","City","House","Order","Party","Clans","Tells","Market","Misc"}
-  zgui.chat.color1 = "rgb(15,15,15)"
-  zgui.chat.color2 = "rgb(0,0,0)"
-  zgui.chat.color3 = "rgb(25,25,25)"
-  zgui.chat.width = "100%"
-  zgui.chat.height = "100%"
-  zgui.chat.current = zgui.chat.tabs[1]
-  zgui.chat.useCmdLine = false
+              <script>function ataxia.buildChat()
+  ataxia.chatSize = ataxia.chatSize or 9
+  ataxia.chat = {}
+  ataxia.chat.tabs = {"All","City","House","Order","Party","Clans","Tells","Market","Misc"}
+  ataxia.chat.color1 = "rgb(15,15,15)"
+  ataxia.chat.color2 = "rgb(0,0,0)"
+  ataxia.chat.color3 = "rgb(25,25,25)"
+  ataxia.chat.width = "100%"
+  ataxia.chat.height = "100%"
+  ataxia.chat.current = ataxia.chat.tabs[1]
+  ataxia.chat.useCmdLine = false
 
   --Create the main container
   --Our tabbed window will need a container. This will be the bottom layer. Containers are invisible so no need to set a stylesheet. 
-  zgui.chat.window = Adjustable.Container:new({
-    name = "zgui.chat.window",
+  ataxia.chat.window = Adjustable.Container:new({
+    name = "ataxia.chat.window",
     x = 0, y = 0,
     width = "50%",
     height = "50%",  
@@ -28536,58 +28572,58 @@ end</script>
     buttonFontSize = 10,
     buttonsize = 15,          
   },main)
-  zgui.chat.window:changeMenuStyle("dark")
+  ataxia.chat.window:changeMenuStyle("dark")
 
   --Create the main container
   --Our tabbed window will need a container. This will be the bottom layer. Containers are invisible so no need to set a stylesheet. 
-  zgui.chat.container = Geyser.Container:new({
-    name = "zgui.chat.back",
+  ataxia.chat.container = Geyser.Container:new({
+    name = "ataxia.chat.back",
     x = 0, y = 0,
     width = "100%",
     height = "100%",        
-  },zgui.chat.window)
+  },ataxia.chat.window)
   
  --Create an HBox
  --All of our tabs will be evenly spaced. So we'll create an HBox to sit at the top of our container. 
- zgui.chat.header = Geyser.HBox:new({
-    name = "zgui.chat.header",
+ ataxia.chat.header = Geyser.HBox:new({
+    name = "ataxia.chat.header",
     x = 0, y = 0,
     width = "100%",
     height = "8%",
-  },zgui.chat.container)  
+  },ataxia.chat.container)  
   
   --Create a label
   --This label will serve as a container for each window. It sits right underneath the HBox we just created for the tabs. 
-  zgui.chat.footer = Geyser.Label:new({
-    name = "zgui.chat.footer",
+  ataxia.chat.footer = Geyser.Label:new({
+    name = "ataxia.chat.footer",
     x = 0, y = "8%",
     width = "100%",
     height = "92%",
-  },zgui.chat.container)
+  },ataxia.chat.container)
   
   --Each window actually has two labels.
-  zgui.chat.center = Geyser.Label:new({
-    name = "zgui.chat.center",
+  ataxia.chat.center = Geyser.Label:new({
+    name = "ataxia.chat.center",
     x = 0, y = 0,
     width = "100%",
     height = "100%",
-  },zgui.chat.footer)
-  --zgui.chat.center:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
+  },ataxia.chat.footer)
+  --ataxia.chat.center:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
 
-  zgui.chat.click = function(tab)
-    zgui.chat[zgui.chat.current.."tab"]:setStyleSheet([[
-      background-color: ]]..zgui.chat.color1..[[;
+  ataxia.chat.click = function(tab)
+    ataxia.chat[ataxia.chat.current.."tab"]:setStyleSheet([[
+      background-color: ]]..ataxia.chat.color1..[[;
       color: DimGrey;
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
       margin-right: 1px;
       margin-left: 1px;
     ]])
-    zgui.chat[zgui.chat.current]:hide()
-    zgui.chat.current = tab
-    zgui.chat[zgui.chat.current]:show()
-    zgui.chat[zgui.chat.current.."tab"]:setStyleSheet([[
-      background-color: ]]..zgui.chat.color3..[[;
+    ataxia.chat[ataxia.chat.current]:hide()
+    ataxia.chat.current = tab
+    ataxia.chat[ataxia.chat.current]:show()
+    ataxia.chat[ataxia.chat.current.."tab"]:setStyleSheet([[
+      background-color: ]]..ataxia.chat.color3..[[;
       color: NavajoWhite;
       border-top-left-radius: 15px;
       border-top-right-radius: 15px;
@@ -28596,158 +28632,158 @@ end</script>
     ]])  
   end
   
-  for k,v in pairs(zgui.chat.tabs) do
-    zgui.chat[v.."tab"] = Geyser.Label:new({
-      name = "zgui.chat."..v.."tab",
+  for k,v in pairs(ataxia.chat.tabs) do
+    ataxia.chat[v.."tab"] = Geyser.Label:new({
+      name = "ataxia.chat."..v.."tab",
       fgColor = "white",
-    },zgui.chat.header)
+    },ataxia.chat.header)
     
-    zgui.chat[v.."tab"]:setStyleSheet([[
-      background-color: ]]..zgui.chat.color1..[[;
+    ataxia.chat[v.."tab"]:setStyleSheet([[
+      background-color: ]]..ataxia.chat.color1..[[;
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
       margin-right: 1px;
       margin-left: 1px;
     ]])
     
-    zgui.chat[v.."tab"]:echo("&lt;center&gt;"..v)
-    zgui.chat[v.."tab"]:setClickCallback("zgui.chat.click",v)
+    ataxia.chat[v.."tab"]:echo("&lt;center&gt;"..v)
+    ataxia.chat[v.."tab"]:setClickCallback("ataxia.chat.click",v)
 
-    zgui.chat[v] = Geyser.Label:new({
-      name = "zgui.chat."..v,
+    ataxia.chat[v] = Geyser.Label:new({
+      name = "ataxia.chat."..v,
       x = 0, y = 0,
       width = "100%",
       height = "100%",
-    },zgui.chat.footer)
+    },ataxia.chat.footer)
 
-    zgui.chat[v.."center"] = Geyser.Label:new({
-      name = "zgui.chat."..v.."center",
+    ataxia.chat[v.."center"] = Geyser.Label:new({
+      name = "ataxia.chat."..v.."center",
       x = 0, y = 0,
       width = "100%",
       height = "100%",
-    },zgui.chat[v])
+    },ataxia.chat[v])
   
-    zgui.chat[v]:hide()
+    ataxia.chat[v]:hide()
   end
   
 --  -- Setup a command line prompt for the chat windows
---  zgui.chat.cmd = Geyser.CommandLine:new({
---    name = "zgui.chat.cmd", 
+--  ataxia.chat.cmd = Geyser.CommandLine:new({
+--    name = "ataxia.chat.cmd", 
 --    x = 0, y = "100%-40px", 
 --    width = "100%", height = 40,
 --    stylesheet = "border: 1px solid silver;"
---  },zgui.chat.footer)
+--  },ataxia.chat.footer)
   
   -- Create each channel window
-  zgui.chat.allchat = Geyser.MiniConsole:new({
+  ataxia.chat.allchat = Geyser.MiniConsole:new({
     name = "All",
     x = 0, y = 0,
     autoWrap = true,
     width = "100%",
     height = "100%",
     color="black",
-  },zgui.chat.Allcenter)     
+  },ataxia.chat.Allcenter)     
   hideWindow("All")
-  --zgui.chat.allchat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
+  --ataxia.chat.allchat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
 
-  zgui.chat.citychat = Geyser.MiniConsole:new({
+  ataxia.chat.citychat = Geyser.MiniConsole:new({
     name = "City",
     x = 0, y = 0,
     autoWrap = true,
     width = "100%",
     height = "100%",
     color="black",
-  },zgui.chat.Citycenter)     
+  },ataxia.chat.Citycenter)     
   hideWindow("City")
-  --zgui.chat.citychat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
+  --ataxia.chat.citychat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
   
-  zgui.chat.housechat = Geyser.MiniConsole:new({
+  ataxia.chat.housechat = Geyser.MiniConsole:new({
     name = "House",
     x = 0, y = 0,
     autoWrap = true,
     width = "100%",
     height = "100%",
     color="black",
-  },zgui.chat.Housecenter)       
+  },ataxia.chat.Housecenter)       
   hideWindow("House")
-  --zgui.chat.housechat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
+  --ataxia.chat.housechat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
   
-  zgui.chat.orderchat = Geyser.MiniConsole:new({
+  ataxia.chat.orderchat = Geyser.MiniConsole:new({
     name = "Order",
     x = 0, y = 0,
     width = "100%",
     height = "100%",
     color="black",
-  },zgui.chat.Ordercenter)       
+  },ataxia.chat.Ordercenter)       
   hideWindow("Order")
-  --zgui.chat.orderchat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
+  --ataxia.chat.orderchat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
 
-  zgui.chat.partychat = Geyser.MiniConsole:new({
+  ataxia.chat.partychat = Geyser.MiniConsole:new({
     name = "Party",
     x = 0, y = 0,
     autoWrap = true,
     width = "100%",
     height = "100%",
     color="black",
-  },zgui.chat.Partycenter)       
+  },ataxia.chat.Partycenter)       
   hideWindow("Party")
-  --zgui.chat.partychat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
+  --ataxia.chat.partychat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
 
-  zgui.chat.clanschat = Geyser.MiniConsole:new({
+  ataxia.chat.clanschat = Geyser.MiniConsole:new({
     name = "Clans",
     x = 0, y = 0,
     autoWrap = true,
     width = "100%",
     height = "100%",
     color="black",
-  },zgui.chat.Clanscenter)       
+  },ataxia.chat.Clanscenter)       
   hideWindow("Clans")
-  --zgui.chat.clanschat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
+  --ataxia.chat.clanschat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
   
-  zgui.chat.tellschat = Geyser.MiniConsole:new({
+  ataxia.chat.tellschat = Geyser.MiniConsole:new({
     name = "Tells",
     x = 0, y = 0,
     autoWrap = true,
     width = "100%",
     height = "100%",
     color="black",
-  },zgui.chat.Tellscenter)         
+  },ataxia.chat.Tellscenter)         
   hideWindow("Tells")
-  --zgui.chat.tellschat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
+  --ataxia.chat.tellschat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
   
-  zgui.chat.marketchat = Geyser.MiniConsole:new({
+  ataxia.chat.marketchat = Geyser.MiniConsole:new({
     name = "Market",
     x = 0, y = 0,
     autoWrap = true,
     width = "100%",
     height = "100%",
     color="black",
-  },zgui.chat.Marketcenter)     
+  },ataxia.chat.Marketcenter)     
   hideWindow("Market")
-  --zgui.chat.marketchat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
+  --ataxia.chat.marketchat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
   
-  zgui.chat.miscchat = Geyser.MiniConsole:new({
+  ataxia.chat.miscchat = Geyser.MiniConsole:new({
     name = "Misc",
     x = 0, y = 0,
     autoWrap = true,
     width = "100%",
     height = "100%",
     color="black",
-  },zgui.chat.Misccenter)     
+  },ataxia.chat.Misccenter)     
   hideWindow("Misc")
-  --zgui.chat.miscchat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
+  --ataxia.chat.miscchat:setBackgroundImage(getMudletHomeDir()..[[\Zulah GUI 3.2\Artwork\Wallpapers\slate.jpg]], "center")
   
-  setFontSize("All", zgui.chatSize)
-  setFontSize("City", zgui.chatSize)
-  setFontSize("House", zgui.chatSize)
-  setFontSize("Order", zgui.chatSize)
-  setFontSize("Party", zgui.chatSize)
-  setFontSize("Clans", zgui.chatSize)
-  setFontSize("Tells", zgui.chatSize)
-  setFontSize("Market", zgui.chatSize)
-  setFontSize("Misc", zgui.chatSize)
-  --zgui.chat.window:setTitle("Chat","gray")
-  zgui.chat.window:show()
+  setFontSize("All", ataxia.chatSize)
+  setFontSize("City", ataxia.chatSize)
+  setFontSize("House", ataxia.chatSize)
+  setFontSize("Order", ataxia.chatSize)
+  setFontSize("Party", ataxia.chatSize)
+  setFontSize("Clans", ataxia.chatSize)
+  setFontSize("Tells", ataxia.chatSize)
+  setFontSize("Market", ataxia.chatSize)
+  setFontSize("Misc", ataxia.chatSize)
+  --ataxia.chat.window:setTitle("Chat","gray")
+  ataxia.chat.window:show()
   
   if not table.contains(zgui.modules, "buildChat") then
     table.insert(zgui.modules, "buildChat")
@@ -28761,15 +28797,15 @@ end
 </Script>
             <Script isActive="yes" isFolder="no">
   <name>Chat Cmd Prompt</name>
-              <script>function zgui.chatSend(channel, text)
+              <script>function ataxia.chatSend(channel, text)
   send(channel.." "..text)
 end
 
-zgui.chat.citychat:setCmdAction(zgui.chatSend, "ct")
-zgui.chat.housechat:setCmdAction(zgui.chatSend, "ht")
-zgui.chat.orderchat:setCmdAction(zgui.chatSend, "ot")
-zgui.chat.partychat:setCmdAction(zgui.chatSend, "pt")
-zgui.chat.marketchat:setCmdAction(zgui.chatSend, "market")</script>
+ataxia.chat.citychat:setCmdAction(ataxia.chatSend, "ct")
+ataxia.chat.housechat:setCmdAction(ataxia.chatSend, "ht")
+ataxia.chat.orderchat:setCmdAction(ataxia.chatSend, "ot")
+ataxia.chat.partychat:setCmdAction(ataxia.chatSend, "pt")
+ataxia.chat.marketchat:setCmdAction(ataxia.chatSend, "market")</script>
   <packageName/>
 <eventHandlerList>
 </eventHandlerList>
@@ -29294,13 +29330,29 @@ local function detectChannelFromText(text)
   return nil
 end
 
+local channelColors = {
+  ["says"]       = "&lt;cyan&gt;",
+  ["ct"]         = "&lt;red&gt;",
+  ["ht"]         = "&lt;yellow&gt;",
+  ["hts"]        = "&lt;yellow&gt;",
+  ["hnt"]        = "&lt;yellow&gt;",
+  ["ot"]         = "&lt;white&gt;",
+  ["party"]      = "&lt;magenta&gt;",
+  ["tell"]       = "&lt;yellow&gt;",
+  ["clt"]        = "&lt;white&gt;",
+  ["market"]     = "&lt;white&gt;",
+  ["newbie"]     = "&lt;green&gt;",
+  ["shout"]      = "&lt;red&gt;",
+  ["yell"]       = "&lt;white&gt;",
+  ["armytell"]   = "&lt;white&gt;",
+}
+
 function zgui.showChat()
   local shortName = ""
   local chatWindow = false
-	local ofr, ofg, ofb = getFgColor()
-	local obr, obg, obb = getBgColor()  
-  local text = ansi2decho(gmcp.Comm.Channel.Text.text)
+  local text = gmcp.Comm.Channel.Text.text
   local person = gmcp.Comm.Channel.Text.talker:title()
+  local color = channelColors[gmcp.Comm.Channel.Start] or "&lt;white&gt;"
   
   for k,v in pairs(gmcp.Comm.Channel.List) do
     shortName = gmcp.Comm.Channel.List[k].command
@@ -29365,21 +29417,15 @@ function zgui.showChat()
   
   
   if person == gmcp.Char.Status.name or person == "You" then
-    decho(chatWindow, text.."\n")
+    cecho(chatWindow, color .. text .. "&lt;reset&gt;\n")
     if chatWindow ~= "All" then
-		  decho("All", text.."\n")
+      cecho("All", color .. text .. "&lt;reset&gt;\n")
     end
-	elseif report then    
-		if gmcp.Comm.Channel.Start == "shout" then
-      cecho(chatWindow, "&lt;cyan&gt; "..person.."&lt;red&gt;: ")
-		end	
-		decho(chatWindow, text.."\n")
-	
+	elseif report then
+		cecho(chatWindow, color .. text .. "&lt;reset&gt;\n")
+
 		if not only_to_misc and chatWindow ~= "All" then
-			if gmcp.Comm.Channel.Start == "shout" then
-				cecho("All", "&lt;cyan&gt; "..gmcp.Comm.Channel.Text.talker.."&lt;red&gt;: ")
-			end			
-			decho("All", text.."\n")
+			cecho("All", color .. text .. "&lt;reset&gt;\n")
 		end
 
     if string.find(gmcp.Comm.Channel.Start:lower(), "tell") and not string.find(gmcp.Comm.Channel.Start:lower(), "army") and not muteList[person] and person ~= "You" then 
@@ -29590,7 +29636,7 @@ function zgui.zStartup()
   zgui.running = true
 --------------------------------------------------------------------
 -- Change the Font Size of each window on startup to fit your screen size better if needed
-  zgui.chatSize = 9
+  ataxia.chatSize = 9
   zgui.loggerSize = 8
   zgui.promptSize = 8
   zgui.goldSize = 8
@@ -70073,14 +70119,12 @@ function apostate.buildAttack()
     -- Default: DEADEYES curse delivery
     atk = atk .. "wield shield;deadeyes " .. target .. " " .. c1 .. " " .. c2
 
-    -- Disfigure on EQ when cursing manaleech (lock mode only, once per manaleech round)
-    -- Only append when ON BALANCE to prevent stale-state dispatch (button spam while off-balance
-    -- would queue disfigure prematurely before the manaleech round actually fires)
-    if apostate.state.mode == "lock" and (c1 == "manaleech" or c2 == "manaleech")
-       and not apostate.state.disfigureSent
-       and gmcp.Char.Vitals.bal == "1" then
-      local sep = (ataxia and ataxia.settings and ataxia.settings.separator) or "::"
-      atk = atk .. sep .. "disfigure " .. target
+    -- Disfigure on EQ when cursing asthma (lock mode only, once per asthma round)
+    -- Fires with the asthma deadeyes so we can observe if target smokes before
+    -- committing to manaleech next round (avoids wasting manaleech without asthma)
+    if apostate.state.mode == "lock" and (c1 == "asthma" or c2 == "asthma")
+       and not apostate.state.disfigureSent then
+      atk = atk .. ";disfigure " .. target
       apostate.state.disfigureSent = true
     end
 
@@ -70120,8 +70164,8 @@ function apostate.dispatch()
   -- Select curses based on current mode and target state
   apostate.curses = apostate.selectCurses()
 
-  -- Reset disfigure flag when manaleech is no longer a curse (ready for next manaleech round)
-  if apostate.curses[1] ~= "manaleech" and apostate.curses[2] ~= "manaleech" then
+  -- Reset disfigure flag when asthma is no longer a curse (ready for next asthma round)
+  if apostate.curses[1] ~= "asthma" and apostate.curses[2] ~= "asthma" then
     apostate.state.disfigureSent = false
   end
 
@@ -72370,6 +72414,11 @@ end</script>
   <name>limb prompt</name>
               <script>function lb.prompt()
   if not lb[target] then return "" end
+  local hasHits = false
+  for _, v in ipairs({"head", "torso", "left arm", "right arm", "left leg", "right leg"}) do
+    if lb[target].hits[v] &gt; 0 then hasHits = true; break end
+  end
+  if not hasHits then return "" end
   local ret = {}
   -- CHANGE ORDER BELOW! CHANGE ORDER BELOW! CHANGE ORDER BELOW! CHANGE ORDER BELOW! CHANGE ORDER BELOW! CHANGE ORDER BELOW! --
   for _, v in ipairs({"head", "torso", "left arm", "right arm", "left leg", "right leg"}) do 
@@ -79851,7 +79900,7 @@ target = matches[2]:lower():title()
   <regex/>
             <Alias isActive="yes" isFolder="no">
   <name>Honours Person</name>
-              <script>honoursPerson = matches[2]:title()
+              <script>ataxiaNDB._honoursPerson = matches[2]:title()
 enableTrigger("Get Player Information")
 enableTrigger("Check Player City")
 --enableTrigger("No city found")
@@ -80120,6 +80169,192 @@ ataxiaEcho("Update complete. Total of "..count.." people have been re-checked.")
   <command/>
   <packageName/>
   <regex>^an redo (\w+)$</regex>
+</Alias>
+            <Alias isActive="yes" isFolder="no">
+  <name>Show Marks</name>
+              <script>local cityFilter = matches[2] and matches[2]:title() or nil
+local ivory = {}
+local quisalis = {}
+
+for player, tab in pairs(ataxiaNDB.players) do
+	if tab.mark then
+		if not cityFilter or tab.city == cityFilter then
+			if tab.mark == "Ivory" then
+				table.insert(ivory, player)
+			elseif tab.mark == "Quisalis" then
+				table.insert(quisalis, player)
+			end
+		end
+	end
+end
+
+table.sort(ivory)
+table.sort(quisalis)
+
+local label = cityFilter and ("Tracked mark members from " .. cityFilter) or "All tracked mark members"
+ataxiaEcho(label .. ":")
+
+if #ivory &gt; 0 then
+	cecho("\n&lt;NavajoWhite&gt; Ivory Mark (" .. #ivory .. "): ")
+	for _, name in ipairs(ivory) do
+		cecho("&lt;" .. ataxiaNDB_getColour(name) .. "&gt;" .. name .. " ")
+	end
+end
+
+if #quisalis &gt; 0 then
+	cecho("\n&lt;purple&gt; Quisalis Mark (" .. #quisalis .. "): ")
+	for _, name in ipairs(quisalis) do
+		cecho("&lt;" .. ataxiaNDB_getColour(name) .. "&gt;" .. name .. " ")
+	end
+end
+
+if #ivory == 0 and #quisalis == 0 then
+	cecho("\n &lt;DimGrey&gt;No mark members found.")
+end
+
+echo("\n ")
+send(" ")
+</script>
+  <command/>
+  <packageName/>
+  <regex>^an marks(?: (\w+)|)$</regex>
+</Alias>
+            <Alias isActive="yes" isFolder="no">
+  <name>Show Army</name>
+              <script>local cityFilter = matches[2] and matches[2]:title() or nil
+local soldiers = {}
+
+for player, tab in pairs(ataxiaNDB.players) do
+	if tab.armyRank and tab.armyRank &gt; 0 then
+		if not cityFilter or tab.city == cityFilter then
+			table.insert(soldiers, {name = player, rank = tab.armyRank, city = tab.city})
+		end
+	end
+end
+
+table.sort(soldiers, function(a, b) return a.rank &gt; b.rank end)
+
+local label = cityFilter and ("Tracked army members from " .. cityFilter) or "All tracked army members"
+ataxiaEcho(label .. " (" .. #soldiers .. "):")
+
+for _, s in ipairs(soldiers) do
+	local rankColour = s.rank &gt;= 3 and "red" or "NavajoWhite"
+	cecho("\n &lt;" .. ataxiaNDB_getColour(s.name) .. "&gt;" .. s.name ..
+		string.rep(" ", math.max(0, 16 - string.len(s.name))) ..
+		"&lt;DimGrey&gt;Rank: &lt;" .. rankColour .. "&gt;" .. s.rank ..
+		"  &lt;DimGrey&gt;City: &lt;NavajoWhite&gt;" .. s.city)
+end
+
+if #soldiers == 0 then
+	cecho("\n &lt;DimGrey&gt;No army members found.")
+end
+
+echo("\n ")
+send(" ")
+</script>
+  <command/>
+  <packageName/>
+  <regex>^an army(?: (\w+)|)$</regex>
+</Alias>
+            <Alias isActive="yes" isFolder="no">
+  <name>Show Dauntless</name>
+              <script>local cityFilter = matches[2] and matches[2]:title() or nil
+local members = {}
+
+for player, tab in pairs(ataxiaNDB.players) do
+	if tab.dauntless then
+		if not cityFilter or tab.city == cityFilter then
+			table.insert(members, player)
+		end
+	end
+end
+
+table.sort(members)
+
+local label = cityFilter and ("Tracked Dauntless members from " .. cityFilter) or "All tracked Dauntless members"
+ataxiaEcho(label .. " (" .. #members .. "):")
+
+for _, name in ipairs(members) do
+	cecho("\n &lt;" .. ataxiaNDB_getColour(name) .. "&gt;" .. name)
+end
+
+if #members == 0 then
+	cecho("\n &lt;DimGrey&gt;No Dauntless members found.")
+end
+
+echo("\n ")
+send(" ")
+</script>
+  <command/>
+  <packageName/>
+  <regex>^an dauntless(?: (\w+)|)$</regex>
+</Alias>
+            <Alias isActive="yes" isFolder="no">
+  <name>Show Threats</name>
+              <script>local cityFilter = matches[2] and matches[2]:title() or nil
+local marks = {}
+local army = {}
+local dauntless = {}
+
+for player, tab in pairs(ataxiaNDB.players) do
+	if not cityFilter or tab.city == cityFilter then
+		if tab.mark then
+			table.insert(marks, {name = player, mark = tab.mark})
+		end
+		if tab.armyRank and tab.armyRank &gt;= 3 then
+			table.insert(army, {name = player, rank = tab.armyRank})
+		end
+		if tab.dauntless then
+			table.insert(dauntless, player)
+		end
+	end
+end
+
+table.sort(marks, function(a, b) return a.name &lt; b.name end)
+table.sort(army, function(a, b) return a.rank &gt; b.rank end)
+table.sort(dauntless)
+
+local label = cityFilter and ("Threat overview for " .. cityFilter) or "Threat overview (all cities)"
+ataxiaEcho(label .. ":")
+
+cecho("\n&lt;red&gt; Marks (" .. #marks .. "):")
+if #marks &gt; 0 then
+	for _, m in ipairs(marks) do
+		local mColour = m.mark == "Ivory" and "NavajoWhite" or "purple"
+		cecho("\n   &lt;" .. ataxiaNDB_getColour(m.name) .. "&gt;" .. m.name ..
+			string.rep(" ", math.max(0, 16 - string.len(m.name))) ..
+			"&lt;" .. mColour .. "&gt;" .. m.mark)
+	end
+else
+	cecho(" &lt;DimGrey&gt;None")
+end
+
+cecho("\n&lt;red&gt; Army Rank 3+ (" .. #army .. "):")
+if #army &gt; 0 then
+	for _, s in ipairs(army) do
+		cecho("\n   &lt;" .. ataxiaNDB_getColour(s.name) .. "&gt;" .. s.name ..
+			string.rep(" ", math.max(0, 16 - string.len(s.name))) ..
+			"&lt;red&gt;Rank " .. s.rank)
+	end
+else
+	cecho(" &lt;DimGrey&gt;None")
+end
+
+cecho("\n&lt;red&gt; Dauntless (" .. #dauntless .. "):")
+if #dauntless &gt; 0 then
+	for _, name in ipairs(dauntless) do
+		cecho("\n   &lt;" .. ataxiaNDB_getColour(name) .. "&gt;" .. name)
+	end
+else
+	cecho(" &lt;DimGrey&gt;None")
+end
+
+echo("\n ")
+send(" ")
+</script>
+  <command/>
+  <packageName/>
+  <regex>^an threats(?: (\w+)|)$</regex>
 </Alias>
             <Alias isActive="yes" isFolder="no">
   <name>Class Detect</name>
@@ -80426,7 +80661,7 @@ else
 	parsingQW = true
 	peopleOnline = {}
 	if matches[2] then
-		parsingCity = matches[2]
+		ataxiaNDB._parsingCity = matches[2]
 	end
 	sendGMCP("Comm.Channel.Players")
 	send(" ")
@@ -82614,7 +82849,7 @@ zgui.zStartup()</script>
   <name>(ZGUIS) zGUI Size</name>
             <script>--------------------------------------------------------------------
 
-  zgui.chatSize = 8
+  ataxia.chatSize = 8
 
   zgui.loggerSize = 8
   zgui.promptSize = 6
@@ -82636,15 +82871,15 @@ zgui.zStartup()</script>
   zgui.statsWindowSize = 8
   zgui.roomInfoSize = 8
 --------------------------------------------------------------------
- setFontSize("All", zgui.chatSize)
- setFontSize("City", zgui.chatSize)
- setFontSize("House", zgui.chatSize)
- setFontSize("Order", zgui.chatSize)
- setFontSize("Party", zgui.chatSize)
- setFontSize("Clans", zgui.chatSize)
- setFontSize("Tells", zgui.chatSize)
- setFontSize("Market", zgui.chatSize)
- setFontSize("Misc", zgui.chatSize)
+ setFontSize("All", ataxia.chatSize)
+ setFontSize("City", ataxia.chatSize)
+ setFontSize("House", ataxia.chatSize)
+ setFontSize("Order", ataxia.chatSize)
+ setFontSize("Party", ataxia.chatSize)
+ setFontSize("Clans", ataxia.chatSize)
+ setFontSize("Tells", ataxia.chatSize)
+ setFontSize("Market", ataxia.chatSize)
+ setFontSize("Misc", ataxia.chatSize)
  
  setFontSize("logDisplay", zgui.loggerSize)
  setFontSize("myPrompt", zgui.promptSize) 
@@ -82771,29 +83006,29 @@ end</script>
   <regex>^zfix(?: (\w+))?$</regex>
 </Alias>
           <Alias isActive="yes" isFolder="no">
-  <name>(ZCHAT) Toggle Chat Command Line</name>
-            <script>if not zgui.chat then zgui.buildChat() end
+  <name>(ATAXIACHAT) Toggle Chat Command Line</name>
+            <script>if not ataxia.chat then ataxia.buildChat() end
 
-if not zgui.chat.useCmdLine then
- zgui.chat.useCmdLine = true
- zgui.chat.allchat:enableCommandLine()
- zgui.chat.citychat:enableCommandLine()
- zgui.chat.orderchat:enableCommandLine()
- zgui.chat.partychat:enableCommandLine()
- zgui.chat.marketchat:enableCommandLine()
- zgui.chat.housechat:enableCommandLine()
+if not ataxia.chat.useCmdLine then
+ ataxia.chat.useCmdLine = true
+ ataxia.chat.allchat:enableCommandLine()
+ ataxia.chat.citychat:enableCommandLine()
+ ataxia.chat.orderchat:enableCommandLine()
+ ataxia.chat.partychat:enableCommandLine()
+ ataxia.chat.marketchat:enableCommandLine()
+ ataxia.chat.housechat:enableCommandLine()
 else
- zgui.chat.useCmdLine = false
- zgui.chat.allchat:disableCommandLine()
- zgui.chat.citychat:disableCommandLine()
- zgui.chat.orderchat:disableCommandLine()
- zgui.chat.partychat:disableCommandLine()
- zgui.chat.marketchat:disableCommandLine()
- zgui.chat.housechat:disableCommandLine()
+ ataxia.chat.useCmdLine = false
+ ataxia.chat.allchat:disableCommandLine()
+ ataxia.chat.citychat:disableCommandLine()
+ ataxia.chat.orderchat:disableCommandLine()
+ ataxia.chat.partychat:disableCommandLine()
+ ataxia.chat.marketchat:disableCommandLine()
+ ataxia.chat.housechat:disableCommandLine()
 end</script>
   <command/>
   <packageName/>
-  <regex>^zchat$</regex>
+  <regex>^ataxiachat$</regex>
 </Alias>
 </AliasGroup>
 </AliasGroup>
@@ -85596,8 +85831,8 @@ end</script>
 </regexCodePropertyList>
             <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Check Player City</name>
-              <script>if not honoursPerson then return end
-ataxiaNDB.players[honoursPerson].city = matches[3]:title()
+              <script>if not ataxiaNDB._honoursPerson then return end
+ataxiaNDB.players[ataxiaNDB._honoursPerson].city = matches[3]:title()
 
 getNDBCity = matches[3]
 
@@ -85605,7 +85840,7 @@ selectString(matches[3], 1)
 fg(ataxiaNDB.highlighting[matches[3]])
 resetFormat()
 
-raiseEvent("ataxiaNDB Check Highlight", honoursPerson)
+raiseEvent("ataxiaNDB Check Highlight", ataxiaNDB._honoursPerson)
 </script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
@@ -85631,46 +85866,60 @@ raiseEvent("ataxiaNDB Check Highlight", honoursPerson)
 </Trigger>
             <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Close Capturing</name>
-              <script>if honoursPerson and ataxiaNDB.players[honoursPerson] and ataxiaNDB.players[honoursPerson].city ~= getNDBCity then 
-  ataxiaNDB.players[honoursPerson].city = getNDBCity
-  cecho("\n&lt;green&gt;Updated city for "..honoursPerson..".")
+              <script>if ataxiaNDB._honoursPerson and ataxiaNDB.players[ataxiaNDB._honoursPerson] and ataxiaNDB.players[ataxiaNDB._honoursPerson].city ~= getNDBCity then
+  ataxiaNDB.players[ataxiaNDB._honoursPerson].city = getNDBCity
+  cecho("\n&lt;green&gt;Updated city for "..ataxiaNDB._honoursPerson..".")
 end
 
-if NDBIsMark then
-  if not ataxiaNDB_isMark(honoursPerson) then
-    cecho("\n&lt;red&gt;Updated as being mark: "..NDBIsMark..".")
-    ataxiaNDB.players[honoursPerson].mark = NDBIsMark
+if ataxiaNDB._mark then
+  if not ataxiaNDB_isMark(ataxiaNDB._honoursPerson) then
+    cecho("\n&lt;red&gt;Updated as being mark: "..ataxiaNDB._mark..".")
+    ataxiaNDB.players[ataxiaNDB._honoursPerson].mark = ataxiaNDB._mark
   end
 else
-  if ataxiaNDB_isMark(honoursPerson) then
+  if ataxiaNDB_isMark(ataxiaNDB._honoursPerson) then
     cecho("\n&lt;red&gt;This person is no longer in the mark.")
-    ataxiaNDB.players[honoursPerson].mark = nil
+    ataxiaNDB.players[ataxiaNDB._honoursPerson].mark = nil
   end
 end
 
-if NDBARank &gt; 0 then
-  if ataxiaNDB_armyRank(honoursPerson) &lt; NDBARank then
-    cecho("\n&lt;yellow&gt;Updated army rank to Rank "..NDBARank..".")
-    ataxiaNDB.players[honoursPerson].armyRank = NDBARank
-    
-    if NDBARank &gt;= 3 then
+if ataxiaNDB._dauntless then
+  if not ataxiaNDB.players[ataxiaNDB._honoursPerson].dauntless then
+    cecho("\n&lt;cyan&gt;Updated as being Dauntless.")
+    ataxiaNDB.players[ataxiaNDB._honoursPerson].dauntless = true
+  end
+else
+  if ataxiaNDB.players[ataxiaNDB._honoursPerson].dauntless then
+    cecho("\n&lt;cyan&gt;This person is no longer Dauntless.")
+    ataxiaNDB.players[ataxiaNDB._honoursPerson].dauntless = nil
+  end
+end
+
+if ataxiaNDB._armyRank &gt; 0 then
+  if ataxiaNDB_armyRank(ataxiaNDB._honoursPerson) &lt; ataxiaNDB._armyRank then
+    cecho("\n&lt;yellow&gt;Updated army rank to Rank "..ataxiaNDB._armyRank..".")
+    ataxiaNDB.players[ataxiaNDB._honoursPerson].armyRank = ataxiaNDB._armyRank
+
+    if ataxiaNDB._armyRank &gt;= 3 then
       cecho("&lt;red&gt; - This person is attackable for sanctions.")
     end
   end
 else
-  if ataxiaNDB_armyRank(honoursPerson) &gt; 0 then
+  if ataxiaNDB_armyRank(ataxiaNDB._honoursPerson) &gt; 0 then
     cecho("\n&lt;yellow&gt;This person is no longer in the army.")
-    ataxiaNDB.players[honoursPerson].armyRank = nil
+    ataxiaNDB.players[ataxiaNDB._honoursPerson].armyRank = nil
   end
 end
 
 
-NDBARank = nil
-NDBIsMark = nil
+ataxiaNDB._armyRank = nil
+ataxiaNDB._mark = nil
+ataxiaNDB._dauntless = nil
 getNDBCity = nil
-honoursPerson = nil
+ataxiaNDB._honoursPerson = nil
 disableTrigger("Get Player Information")
-disableTrigger("Additional Information NDB")</script>
+disableTrigger("Additional Information NDB")
+</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -85691,7 +85940,7 @@ disableTrigger("Additional Information NDB")</script>
 </Trigger>
             <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Army Rank</name>
-              <script>NDBARank = tonumber(matches[4])
+              <script>ataxiaNDB._armyRank = tonumber(matches[4])
 </script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
@@ -85713,7 +85962,7 @@ disableTrigger("Additional Information NDB")</script>
 </Trigger>
             <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Ivory Mark</name>
-              <script>NDBIsMark = "Ivory"</script>
+              <script>ataxiaNDB._mark = "Ivory"</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -85736,7 +85985,7 @@ disableTrigger("Additional Information NDB")</script>
 </Trigger>
             <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Quisalis Mark</name>
-              <script>NDBIsMark = "Quisalis"</script>
+              <script>ataxiaNDB._mark = "Quisalis"</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -85754,6 +86003,28 @@ disableTrigger("Additional Information NDB")</script>
               </regexCodeList>
               <regexCodePropertyList>
 <integer>1</integer>
+<integer>1</integer>
+              </regexCodePropertyList>
+</Trigger>
+            <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+  <name>Dauntless</name>
+              <script>ataxiaNDB._dauntless = true
+</script>
+  <triggerType>0</triggerType>
+  <conditonLineDelta>0</conditonLineDelta>
+  <mStayOpen>0</mStayOpen>
+  <mCommand/>
+  <packageName/>
+  <path>Levi_Ataxia</path>
+  <mFgColor>#ff0000</mFgColor>
+  <mBgColor>#ffff00</mBgColor>
+  <mSoundFile/>
+  <colorTriggerFgColor>#000000</colorTriggerFgColor>
+  <colorTriggerBgColor>#000000</colorTriggerBgColor>
+              <regexCodeList>
+<string>^(He|She|Fae) is one of The Dauntless\.$</string>
+              </regexCodeList>
+              <regexCodePropertyList>
 <integer>1</integer>
               </regexCodePropertyList>
 </Trigger>
@@ -86021,12 +86292,14 @@ deleteLine()</script>
 </Trigger>
           <Trigger isActive="no" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Get Player Information</name>
-            <script>if honoursPerson and matches[2]:find(honoursPerson) then
+            <script>if ataxiaNDB._honoursPerson and matches[2]:find(ataxiaNDB._honoursPerson) then
   getNDBCity = "None"
-  NDBIsMark = false
-  NDBARank = 0
+  ataxiaNDB._mark = false
+  ataxiaNDB._armyRank = 0
+  ataxiaNDB._dauntless = false
 	enableTrigger("Additional Information NDB")
-end</script>
+end
+</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -103281,9 +103554,15 @@ end</script>
                 <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>CORRUPT</name>
                   <script>if isTargeted(matches[2]) then
-expandAlias("res")
- corrupted = tempTimer(4.5, [[corrupted = true; corrupted = nil]])
+  expandAlias("res")
 
+  -- Reset V2 affliction tracking
+  if resetAffsV2 then resetAffsV2() end
+
+  -- Reset V3 branching state tracker
+  if resetStatesV3 then resetStatesV3() end
+
+  corrupted = tempTimer(4.5, [[corrupted = true; corrupted = nil]])
 end</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
@@ -124888,8 +125167,7 @@ ataxiaEcho("System has been "..(ataxia.settings.paused and "&lt;red&gt;paused." 
 </Trigger>
         <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Prompt Trigger</name>
-          <script>echo("\n")
-ataxia_promptCommands()
+          <script>ataxia_promptCommands()
 
 if haveDef("speed") == true then
 jestercheese = false
