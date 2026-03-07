@@ -1396,6 +1396,10 @@
           {
             "name": "MAKE LIST",
             "regex": "^sete (\\w+(,? a?n?d? ?\\w+)*){1}\\.?$"
+          },
+          {
+            "name": "Snipe",
+            "regex": "^snt(?: (.+))?$"
           }
         ]
       },

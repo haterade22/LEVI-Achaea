@@ -72480,11 +72480,22 @@ end
 -- SEND COMMANDS
 -- =============================================================================
 
+local SHOOT_CLASSES = { Runewarden = true, Infernal = true }
+
+function snipe.getCommand()
+    local class = gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class
+    if class and SHOOT_CLASSES[class] then
+        return "shoot"
+    end
+    return "snipe"
+end
+
 function snipe.sendSnipe(targetName, dirShort)
     local dirLong = dir_toLong(dirShort)
     snipe.state.currentDirection = dirShort
     local sp = ataxia.settings.separator or ";"
-    send("remove bow" .. sp .. "wield bow" .. sp .. "snipe " .. targetName .. " " .. dirLong)
+    local cmd = snipe.getCommand()
+    send("remove bow" .. sp .. "wield bow" .. sp .. cmd .. " " .. targetName .. " " .. dirLong)
 end
 
 -- =============================================================================
@@ -77955,6 +77966,60 @@ sendAll('unenemy all', 'enemy '.. table.concat(enemies, ' ; enemy '))</script>
   <command/>
   <packageName/>
   <regex>^sete (\w+(,? a?n?d? ?\w+)*){1}\.?$</regex>
+</Alias>
+          <Alias isActive="yes" isFolder="no">
+  <name>Snipe</name>
+            <script>-- Parse arguments: snt | snt &lt;dir&gt; | snt &lt;Name&gt; | snt &lt;Name&gt; &lt;dir&gt;
+local args = matches[2]
+local snipeTarget = target
+local snipeDir = nil
+
+if args and args ~= "" then
+    args = args:trim()
+    local parts = args:split(" ")
+
+    if #parts == 1 then
+        local arg = parts[1]:lower()
+        -- Check if it is a short direction (n, ne, etc.)
+        if dir_toLong(arg) ~= "???" then
+            snipeDir = arg
+        -- Check if it is a long direction (north, northeast, etc.)
+        elseif dir_toShort(arg) ~= "???" then
+            snipeDir = dir_toShort(arg)
+        else
+            -- It is a target name
+            target = parts[1]:title()
+            snipeTarget = target
+        end
+    elseif #parts == 2 then
+        -- snt &lt;Name&gt; &lt;dir&gt;
+        target = parts[1]:title()
+        snipeTarget = target
+        local dirArg = parts[2]:lower()
+        if dir_toLong(dirArg) ~= "???" then
+            snipeDir = dirArg
+        elseif dir_toShort(dirArg) ~= "???" then
+            snipeDir = dir_toShort(dirArg)
+        else
+            snipe.echo("&lt;red&gt;Unknown direction: " .. parts[2])
+            return
+        end
+    else
+        snipe.echo("&lt;red&gt;Usage: snt [target] [direction]")
+        return
+    end
+end
+
+if not snipeTarget or snipeTarget == "" then
+    snipe.echo("&lt;red&gt;No target set. Use: snt &lt;name&gt; [direction]")
+    return
+end
+
+snipe.execute(snipeTarget, snipeDir)
+</script>
+  <command/>
+  <packageName/>
+  <regex>^snt(?: (.+))?$</regex>
 </Alias>
 </AliasGroup>
         <Alias isActive="yes" isFolder="no">

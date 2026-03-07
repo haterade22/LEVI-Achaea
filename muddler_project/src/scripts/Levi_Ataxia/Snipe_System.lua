@@ -68,11 +68,22 @@ end
 -- SEND COMMANDS
 -- =============================================================================
 
+local SHOOT_CLASSES = { Runewarden = true, Infernal = true }
+
+function snipe.getCommand()
+    local class = gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class
+    if class and SHOOT_CLASSES[class] then
+        return "shoot"
+    end
+    return "snipe"
+end
+
 function snipe.sendSnipe(targetName, dirShort)
     local dirLong = dir_toLong(dirShort)
     snipe.state.currentDirection = dirShort
     local sp = ataxia.settings.separator or ";"
-    send("remove bow" .. sp .. "wield bow" .. sp .. "snipe " .. targetName .. " " .. dirLong)
+    local cmd = snipe.getCommand()
+    send("remove bow" .. sp .. "wield bow" .. sp .. cmd .. " " .. targetName .. " " .. dirLong)
 end
 
 -- =============================================================================
