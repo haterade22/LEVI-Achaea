@@ -39,12 +39,14 @@ function zgui.showCape()
       zgui.cape.capebar:echo("<center>"..zgui.cape.count.."/50 - "..(240-zgui.cape.watch).." seconds")
     end
   elseif zgui.cape.watch == 220 then
-    cecho(" == WARNING: 20 SECONDS LEFT ON CAPE ==")  
+    cecho(" == WARNING: 20 SECONDS LEFT ON CAPE ==")
     zgui.cape.capebar:setValue((240-zgui.cape.watch), 240)
     zgui.cape.capebar:echo("<center>"..zgui.cape.count.."/50 - "..(240-zgui.cape.watch).." seconds")
   else
-    zgui.clearCape()   
+    zgui.clearCape()
   end
+  -- Update movable cape bar if enabled
+  if ataxia.bars and ataxia.bars.updateCape then ataxia.bars.updateCape() end
 end
 
 function zgui.renewCape()
@@ -69,7 +71,9 @@ function zgui.clearCape()
 		  border-style: solid;
 		  border-radius: 7;
 		  padding: 3px;
-	  ]])    
+	  ]])
+  -- Update movable cape bar if enabled
+  if ataxia.bars and ataxia.bars.updateCape then ataxia.bars.updateCape() end
 end
 
 registerAnonymousEventHandler("You Died", "zgui.clearCape")

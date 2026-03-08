@@ -196,5 +196,8 @@ function ataxiagui_updateVitals()
       ataxiagui.basherBarClear:hide()
       ataxiaTemp.basherBarHidden = true
     end
+
+    -- Update movable vital bars if enabled
+    if ataxia.bars and ataxia.bars.update then ataxia.bars.update() end
  end
 end

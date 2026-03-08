@@ -33,9 +33,9 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: return gmcp.Room.Info.num < 2121028
+- pattern: return gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num < 2121028
   type: 4
-- pattern: return gmcp.Room.Info.num > 0
+- pattern: return gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num > 0
   type: 4
 ]]--
 

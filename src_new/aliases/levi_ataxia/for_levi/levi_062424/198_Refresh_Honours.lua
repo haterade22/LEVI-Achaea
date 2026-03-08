@@ -29,16 +29,11 @@ if #queue == 0 then
 end
 
 table.sort(queue)
-local delay = 2
 
-ataxiaEcho("Sending honours for " .. #queue .. " player(s)" .. (cityFilter and (" from " .. cityFilter) or "") .. ". ETA: ~" .. math.ceil(#queue * delay) .. "s.")
+ataxiaEcho("Refreshing honours for " .. #queue .. " player(s)" .. (cityFilter and (" from " .. cityFilter) or "") .. ". ETA: ~" .. math.ceil(#queue * 2) .. "s.")
 
-for i, name in ipairs(queue) do
-	tempTimer((i - 1) * delay, function()
-		send("honours " .. name, false)
-	end)
-end
-
-tempTimer(#queue * delay + 1, function()
-	ataxiaEcho("Honours refresh complete.")
-end)
+-- Store queue for sequential processing
+ataxiaNDB._refreshQueue = queue
+ataxiaNDB._refreshIndex = 1
+ataxiaNDB._refreshFilter = cityFilter
+ataxiaNDB_processRefreshQueue()

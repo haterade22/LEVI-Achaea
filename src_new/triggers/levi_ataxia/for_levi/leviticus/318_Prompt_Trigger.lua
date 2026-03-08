@@ -39,6 +39,7 @@ if haveDef("speed") == true then
 jestercheese = false
 end
 
+if gmcp.Char and gmcp.Char.Status then
 if gmcp.Char.Status.class == "Blademaster" or gmcp.Char.Status.class == "Monk" then
 
 if ataxia.defences.deafness == nil and incomingdeafness == false then
@@ -51,6 +52,7 @@ end
 if gmcp.Char.Status.class == "Magi" then
 get_resonance()
 cecho("Target: Burns " ..tburns)
+end
 end
 
 mylimbattackpercentage = tonumber(ataxiaTables.limbData.dwcSlash)
@@ -115,6 +117,6 @@ disableTrigger("3rd Person Shikudo")
 if isActive("Alertness (Achaea+Imperian)", "trigger") then
   disableTrigger("Alertness (Achaea+Imperian)")
 end
-if string.find(gmcp.Room.Info.name,"Flying above") then 
+if gmcp.Room and gmcp.Room.Info and string.find(gmcp.Room.Info.name,"Flying above") then
 ataxia_Echo("YOU ARE FLYING ")
 end

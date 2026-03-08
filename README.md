@@ -2,17 +2,113 @@
 
 A comprehensive [Mudlet](https://www.mudlet.org/) automation and combat system for [Achaea](https://www.achaea.com/), an Iron Realms Entertainment MUD.
 
-## What's Included
+## Credits
 
-| System | Description |
-|--------|-------------|
-| **Ataxia Combat System** | Affliction tracking (100+ affs), defense management, automated curing, limb tracking |
-| **Class Offense Modules** | Automated combat for 18+ classes (Serpent, Shaman, Blademaster, Infernal DWC, Apostate, Monk, and more) |
-| **Mudlet Mapper (mmp)** | Speedwalking, fast travel (wings/tarot/harness), balance-aware movement, multi-game support |
-| **Automated Basher** | PvE hunting with 20+ class support, area pathing, flee safety, battlerage rotation |
-| **Player Database (ataxiaNDB)** | Achaea API integration, city-based name highlighting, enemy tracking |
-| **Custom GUI (ataxiagui)** | Health/mana gauges, map display, tabbed chat, balance indicators |
-| **Affliction Tracking V2/V3** | Advanced certainty-based tracking with stack support and cure prediction |
+The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enhanced and extended with additional features including namespace migration, configurable vital bars, channel-colored chat, and movable window management.
+
+## Features
+
+### Combat System (Ataxia)
+
+| Feature | Description |
+|---------|-------------|
+| **Affliction Tracking** | 100+ afflictions with color-coded display and three tracking layers (V1 boolean, V2 certainty, V3 probability) |
+| **Automated Curing** | SSC integration with custom priority management, curingset profiles |
+| **Defense Management** | Automatic defense rekeeping, parry system, anti-class priority adjustments |
+| **Limb Tracking** | Self limb counter (SLC) with percentage-based damage, auto-parry, threshold alerts, party callouts |
+| **Target Affliction Tracking** | Dual-layer system (core + confidence), V2 certainty stacking, V3 probability with cure prediction |
+
+### Class Offense Modules (18+ Classes)
+
+| Class | Command | Kill Route |
+|-------|---------|------------|
+| Serpent | `ek` | Ekanelia lock, darkshade, scytherus, hypnosis |
+| Shaman | `zz` | Tzantza, affliction locks, bleed, relapse jinx |
+| Blademaster | `bmd`/`bmbs` | Limb prep, brokenstar, lightning/ice |
+| Infernal DWC | `zz` | Vivisect (4-limb / 2-limb), damage kill, riftlock |
+| Apostate | `ll`/`corr` | Lock, corrupt, vivisect, sleep |
+| Monk (Shikudo) | varies | Limb prep, spinkick, telepathy lock |
+| Snipe | `snt` | Class-agnostic snipe with auto-scan |
+| *+ 11 more* | | Bard, Depthswalker, Mage, Psion, Pariah, Earth Lord, etc. |
+
+### Automated Basher (PvE Hunting)
+
+| Feature | Description |
+|---------|-------------|
+| **20+ Class Support** | Class-specific attack builders with optimal ability selection |
+| **Area Pathing** | Mapper-integrated speedwalking through configured target lists |
+| **Safety System** | Percentage-based flee (shield at 40%, flee at 25%), death recovery, stuck detection |
+| **Battlerage** | Generic and crowd-control handlers with rage conservation |
+| **Stormhammer** | Dirty-flag cached AoE target list for multi-target rooms |
+| **Legend Deck** | Data-driven pre-combat card draws for dangerous rooms |
+| **Shield Retarget** | Per-mob configurable shield durations with target swapping |
+
+### GUI System (Enhanced zGUI Redux)
+
+*Originally created by Zulah, enhanced with additional features.*
+
+| Feature | Description |
+|---------|-------------|
+| **Draggable Windows** | ~20 `Adjustable.Container` windows with auto-save/load positions |
+| **Tabbed Chat** | All, City, House, Order, Party, Clans, Tells, Market, Misc tabs |
+| **Channel Colors** | Per-channel coloring (says=cyan, ct=red, tells=yellow, party=magenta, etc.) |
+| **Movable Vital Bars** | Configurable floating gauges for Health, Mana, Willpower, Endurance, Cape (`levibars`) |
+| **Health/Mana Gauges** | Gradient-styled gauges with clear overlays in the bottom panel |
+| **XP Progress Bar** | Purple gauge showing progress to next level |
+| **Deathcape Tracker** | Kill counter (0-50) with 240-second timer bar |
+| **Balance Indicators** | Visual bal/eq icons in the bottom panel |
+| **Map Display** | Integrated Mudlet mapper window |
+| **Pop-Out Windows** | Double-click any window to pop into a separate OS window |
+| **Window Reset** | `zfix <name>` to reset any window to default position |
+| **Hunting Stats** | Session kill count, gold earned, XP/hour tracking |
+
+### Movable Vital Bars (`levibars`)
+
+Individually movable, configurable gauge bars that float anywhere on screen:
+
+| Command | Action |
+|---------|--------|
+| `levibars` | Show status of all bars |
+| `levibars on` / `levibars off` | Master toggle |
+| `levibars health` | Toggle health bar |
+| `levibars mana` | Toggle mana bar |
+| `levibars willpower` | Toggle willpower bar |
+| `levibars endurance` | Toggle endurance bar |
+| `levibars cape` | Toggle cape tracker bar |
+| `levibars reset` | Reset all bar positions to defaults |
+
+Defaults: health, mana, and cape enabled; willpower and endurance off. Drag bars to reposition; positions auto-save.
+
+### Player Database (ataxiaNDB)
+
+| Feature | Description |
+|---------|-------------|
+| **API Integration** | Fetches online player data from `api.achaea.com` |
+| **City Highlighting** | Color-coded player names by city affiliation |
+| **Enemy Tracking** | Enemy formatting (bold/italic/underline), priority over city color |
+| **Threat Intelligence** | `an marks`, `an army`, `an dauntless`, `an threats` queries |
+| **Auto-Honours** | Automatically honours hidden-city players to resolve affiliation |
+| **Bulk Refresh** | `an refresh [city]` to update mark/army/dauntless for all tracked players |
+| **Player Notes** | `an noteadd/noteshow/noteremove` per-player notes |
+
+### Navigation (Mudlet Mapper / mmp)
+
+| Feature | Description |
+|---------|-------------|
+| **Speedwalking** | `mmp.gotoRoom(id)` with optimized pathing |
+| **Fast Travel** | Wings, tarot, harness, pebble integration |
+| **Balance-Aware** | Movement waits for balance recovery |
+| **Multi-Game** | Supports Achaea, Aetolia, Lusternia, Imperian |
+| **Area Navigation** | `mmp.gotoArea(name)`, `mmp.gotoFeature(name)` |
+
+### Configuration & Setup
+
+| Feature | Description |
+|---------|-------------|
+| **Setup Wizard** | `levi setup` — guided configuration for all subsystems |
+| **Per-System Install** | `atinstall`, `abinstall`, `aninstall` for targeted setup |
+| **Config Guides** | `levi setup guide ataxia/basher/ndb` for comprehensive option walkthrough |
+| **Settings Persistence** | All settings saved to disk via `table.save`/`table.load` |
 
 ## Quick Install
 

@@ -150,6 +150,12 @@ function classDetect.switchCuringset(className)
   classDetect.state.currentCuringset = setName
   send("curingset switch " .. setName, false)
 
+  -- Re-apply player's own defence priorities after curingset switch.
+  -- Curingsets carry their own SSC defence list which may include abilities
+  -- the player doesn't have. This re-sends the correct priorities from the
+  -- player's active defence profile (e.g., "shi", "apoo", "bm").
+  classDetect.reapplyDefencePriorities()
+
   if classDetect.config.echoSwitches then
     classDetect.echo("Switched curingset to: <white>" .. setName .. "<plum> (vs <yellow>" .. className .. "<plum>)")
   end

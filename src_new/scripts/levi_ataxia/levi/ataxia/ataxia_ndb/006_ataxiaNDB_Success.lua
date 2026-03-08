@@ -130,9 +130,79 @@ function ataxiaNDB_drainHonoursQueue()
 	ataxiaNDB._honoursQueue = nil
 
 	ataxiaEcho(#queue .. " player(s) have hidden cities — auto-honouring to update.")
-	for i, name in ipairs(queue) do
-		tempTimer((i - 1) * 2, function()
-			send("honours " .. name, false)
-		end)
+
+	-- Use the refresh queue mechanism so capture triggers are properly enabled
+	ataxiaNDB._refreshQueue = queue
+	ataxiaNDB._refreshIndex = 1
+	ataxiaNDB._refreshFilter = nil
+	ataxiaNDB_processRefreshQueue()
+end
+
+function ataxiaNDB_processRefreshQueue()
+	-- Clean up any existing poll timer
+	if ataxiaNDB._refreshPollTimer then
+		killTimer(ataxiaNDB._refreshPollTimer)
+		ataxiaNDB._refreshPollTimer = nil
+	end
+
+	local queue = ataxiaNDB._refreshQueue
+	local idx = ataxiaNDB._refreshIndex
+
+	-- Queue exhausted
+	if not queue or not idx or idx > #queue then
+		local count = queue and #queue or 0
+		local cityFilter = ataxiaNDB._refreshFilter
+		ataxiaNDB._refreshQueue = nil
+		ataxiaNDB._refreshIndex = nil
+		ataxiaNDB._refreshFilter = nil
+		if count > 0 then
+			ataxiaEcho("Honours refresh complete. " .. count .. " player(s) updated" .. (cityFilter and (" from " .. cityFilter) or "") .. ".")
+		end
+		return
+	end
+
+	-- If a previous honours capture is still in progress, wait
+	if ataxiaNDB._honoursPerson ~= nil then
+		ataxiaNDB._refreshPollTimer = tempTimer(2, function() ataxiaNDB_processRefreshQueue() end)
+		return
+	end
+
+	local name = queue[idx]
+	ataxiaNDB._refreshIndex = idx + 1
+
+	-- Set up capture pipeline (same as Honours Person alias)
+	ataxiaNDB._honoursPerson = name:title()
+	enableTrigger("Get Player Information")
+	enableTrigger("Check Player City")
+
+	-- Send the honours command to the MUD
+	send("honours " .. name, false)
+
+	-- Safety timeout: if Close Capturing doesn't fire within 8s, clear and move on
+	ataxiaNDB._refreshPollTimer = tempTimer(8, function()
+		if ataxiaNDB._honoursPerson ~= nil then
+			-- Close Capturing didn't fire — clean up manually
+			ataxiaNDB._honoursPerson = nil
+			ataxiaNDB._armyRank = nil
+			ataxiaNDB._mark = nil
+			ataxiaNDB._dauntless = nil
+			getNDBCity = nil
+			disableTrigger("Get Player Information")
+			disableTrigger("Additional Information NDB")
+		end
+		-- Process next person
+		ataxiaNDB_processRefreshQueue()
+	end)
+end
+
+-- Hook into Close Capturing: when honours capture completes, advance the refresh queue
+function ataxiaNDB_onHonoursCaptureComplete()
+	if ataxiaNDB._refreshQueue and ataxiaNDB._refreshIndex then
+		-- Small delay to let Close Capturing fully finish
+		if ataxiaNDB._refreshPollTimer then
+			killTimer(ataxiaNDB._refreshPollTimer)
+			ataxiaNDB._refreshPollTimer = nil
+		end
+		tempTimer(1.5, function() ataxiaNDB_processRefreshQueue() end)
 	end
 end

@@ -91,6 +91,9 @@ function zgui.zStartup()
         zgui[zgui.modules[i]]()
       end
     end
+
+    -- Build movable vital bars (independent of zgui.modules)
+    if ataxia.bars and ataxia.bars.buildAll then ataxia.bars.buildAll() end
     ------------------------------------------------------------------------
     zgui.debug = false
     zgui.trueTime = 0

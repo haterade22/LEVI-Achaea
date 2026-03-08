@@ -88,3 +88,8 @@ getNDBCity = nil
 ataxiaNDB._honoursPerson = nil
 disableTrigger("Get Player Information")
 disableTrigger("Additional Information NDB")
+
+-- Advance refresh queue if one is active
+if ataxiaNDB_onHonoursCaptureComplete then
+	ataxiaNDB_onHonoursCaptureComplete()
+end

@@ -4067,11 +4067,11 @@
                         "name": "GMCP Rooms",
                         "patterns": [
                           {
-                            "pattern": "return gmcp.Room.Info.num < 2121028",
+                            "pattern": "return gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num < 2121028",
                             "type": "lua"
                           },
                           {
-                            "pattern": "return gmcp.Room.Info.num > 0",
+                            "pattern": "return gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num > 0",
                             "type": "lua"
                           }
                         ],
@@ -4081,11 +4081,11 @@
                         "name": "GMCP Wilderness",
                         "patterns": [
                           {
-                            "pattern": "return gmcp.Room.Info.num > 2121028",
+                            "pattern": "return gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num > 2121028",
                             "type": "lua"
                           },
                           {
-                            "pattern": "return gmcp.Room.Info.coords==\"\"",
+                            "pattern": "return gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.coords==\"\"",
                             "type": "lua"
                           }
                         ],
@@ -4095,11 +4095,11 @@
                         "name": "GMCP Oceans",
                         "patterns": [
                           {
-                            "pattern": "return gmcp.Room.Info.environment=='Vessel'",
+                            "pattern": "return gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.environment=='Vessel'",
                             "type": "lua"
                           },
                           {
-                            "pattern": "return gmcp.Room.Info.num==-2",
+                            "pattern": "return gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num==-2",
                             "type": "lua"
                           }
                         ],

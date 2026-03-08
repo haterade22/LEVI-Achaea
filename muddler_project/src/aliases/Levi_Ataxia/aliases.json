@@ -2653,6 +2653,10 @@
           {
             "name": "(ATAXIACHAT) Toggle Chat Command Line",
             "regex": "^ataxiachat$"
+          },
+          {
+            "name": "(LEVIBARS) Vital Bars",
+            "regex": "^levibars(?: (.+))?$"
           }
         ]
       },

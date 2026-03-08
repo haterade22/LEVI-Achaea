@@ -2,13 +2,72 @@
 
 ---
 
+## 2026-03-07 — Fix: GMCP nil errors when blind
+
+**Problem**: When the player is blind, the server stops sending `gmcp.Room` data (and sometimes `gmcp.Char`), causing `gmcp.Room` to be `nil`. Five triggers accessed `gmcp.Room.Info.*` and `gmcp.Char.*` without nil guards, producing a flood of errors on every prompt line.
+
+**Root cause**: Lua pattern conditions (type 4) in map-switching triggers and inline code in prompt triggers indexed into `gmcp.Room.Info` and `gmcp.Char.Status` directly, with no nil check for the parent tables.
+
+**Fix**: Added nil guards (`gmcp.Room and gmcp.Room.Info and ...`) to all unprotected GMCP accesses. When blind, these triggers now silently skip instead of erroring.
+
+**Files modified**:
+- `triggers/.../wilderness_map/002_GMCP_Rooms.lua` — Nil guard on pattern conditions (`gmcp.Room.Info.num`)
+- `triggers/.../wilderness_map/003_GMCP_Wilderness.lua` — Nil guard on pattern conditions (`gmcp.Room.Info.num`, `.coords`)
+- `triggers/.../wilderness_map/004_GMCP_Oceans.lua` — Nil guard on pattern conditions (`gmcp.Room.Info.environment`, `.num`)
+- `triggers/.../leviticus/318_Prompt_Trigger.lua` — Nil guard on `gmcp.Char.Status.class` (BM/Monk/Magi checks) and `gmcp.Room.Info.name` (flying check)
+- `triggers/.../leviticus/276_Limb_Prompt.lua` — Nil guard on `gmcp.Char.Status.class` and `gmcp.Char.Vitals.charstats` (DWB momentum check)
+
+---
+
+## 2026-03-07 — Configurable movable vital bars (`levibars`)
+
+**New feature**: Individually movable, configurable gauge bars for Health, Mana, Willpower, Endurance, and Cape (shoulder cape kill tracker). Each bar is an `Adjustable.Container` with auto-save/load positions.
+
+**Files created**:
+- `build_windows/016_buildVitalBars.lua` — Full `ataxia.bars` namespace: build, show/hide, toggle, reset, update, config save/load
+- `aliases/zgui_redux/007_(LEVIBARS)_Vital_Bars.lua` — `^levibars(?: (.+))?$` alias
+
+**Files modified**:
+- `gui_stuff/004_Vitals_Related.lua` — Added `ataxia.bars.update()` call in `ataxiagui_updateVitals()`
+- `update_windows/007_showCape.lua` — Added `ataxia.bars.updateCape()` calls in `zgui.showCape()` and `zgui.clearCape()`
+- `039_EDIT_ME__Startup_Main.lua` — Added `ataxia.bars.buildAll()` call after module dispatch
+
+**Usage**: `levibars` (status), `levibars on/off` (master toggle), `levibars health/mana/willpower/endurance/cape` (individual toggle), `levibars reset` (reset positions). Default: health+mana+cape on, willpower+endurance off, master disabled.
+
+---
+
+## 2026-03-07 — Fix: Chat window shows raw ANSI codes
+
+**Problem**: Chat miniconsoles displayed raw ANSI escape sequences as visible text (e.g., `[0;37m`, `[0;1;36m`) because GMCP text contains embedded ANSI codes that `cecho()` doesn't interpret.
+
+**Fix**: Added `stripAnsi()` helper to strip ANSI escape sequences before passing text to `cecho()`. Applied in both chat display paths.
+
+**Files modified**:
+- `update_windows/001_showChat.lua` — Added `stripAnsi()`, applied to GMCP text
+- `gui_stuff/003_Chat_Capture_Things.lua` — Same fix
+- Both files: removed duplicate YAML headers
+
+---
+
+## 2026-03-07 — Fix: `an refresh` and auto-honours now capture mark/army/dauntless
+
+**Problem**: Both `an refresh` and the hidden-city auto-honours used `send("honours", false)` which bypasses the Mudlet alias system. The NDB capture triggers (`Get Player Information`, `Check Player City`) were never enabled, so mark, army rank, and dauntless data was silently lost during bulk honours.
+
+**Fix**: Rewrote both systems to use `ataxiaNDB_processRefreshQueue()` — a sequential queue processor that properly sets `_honoursPerson`, enables capture triggers, sends `honours`, and chains to the next player after Close Capturing completes. Includes 8s safety timeout per player.
+
+**Files modified**:
+- `006_ataxiaNDB_Success.lua` — Added `ataxiaNDB_processRefreshQueue()` and `ataxiaNDB_onHonoursCaptureComplete()`. Rewrote `ataxiaNDB_drainHonoursQueue()` to use the new queue mechanism.
+- `002_Close_Capturing.lua` (trigger) — Added call to `ataxiaNDB_onHonoursCaptureComplete()` to advance the refresh queue after each capture.
+
+---
+
 ## 2026-03-07 — NDB: Auto-honours hidden-city players + `an refresh` command
 
 **Files**: `006_ataxiaNDB_Success.lua`, `198_Refresh_Honours.lua` (new)
 
 **Feature 1 — Auto-honours hidden cities**: When the API returns `(hidden)` for a player's city and no prior city is known, the system now queues an automatic `honours` lookup instead of showing a warning. Hidden-city names are collected during the API batch and drained with 2s spacing after the batch completes.
 
-**Feature 2 — `an refresh [city]`**: New alias to send `honours` for all tracked players (or filtered by city) to update mark, army rank, and dauntless status — data only available from in-game `honours`, not from the API. Uses 2s spacing between sends with ETA display and completion message.
+**Feature 2 — `an refresh [city]`**: New alias to send `honours` for all tracked players (or filtered by city) to update mark, army rank, and dauntless status — data only available from in-game `honours`, not from the API. Uses sequential honours capture with proper trigger setup.
 
 ---
 

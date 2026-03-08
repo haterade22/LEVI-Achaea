@@ -11031,22 +11031,7 @@ end</script>
 </Script>
         <Script isActive="yes" isFolder="no">
   <name>Chat Capture Things</name>
-          <script>--[[mudlet
-type: script
-name: Chat Capture Things
-hierarchy:
-- Levi_Ataxia
-- LEVI
-- Ataxia
-- Ataxia
-- Gui Stuff
-attributes:
-  isActive: 'yes'
-  isFolder: 'no'
-packageName: ''
-]]--
-
--- Detect channel from message text when GMCP reports "says"
+          <script>-- Detect channel from message text when GMCP reports "says"
 local function detectChannelFromText(text)
   -- City channels - check for (CityName): pattern
   local cities = {"Mhaldor", "Ashtan", "Cyrene", "Eleusis", "Hashan", "Targossas"}
@@ -11102,10 +11087,15 @@ local channelColors = {
   ["armytell"]   = "&lt;white&gt;",
 }
 
+-- Strip ANSI escape sequences from GMCP text (they render as raw [0;37m etc. in miniconsoles)
+local function stripAnsi(s)
+  return s:gsub("\27%[[%d;]*m", "")
+end
+
 function ataxiagui_processChat(channel)
   if ataxia.usegui ~= nil and ataxia.usegui == false then return end
 
-	local text = gmcp.Comm.Channel.Text.text
+	local text = stripAnsi(gmcp.Comm.Channel.Text.text)
 	local person = gmcp.Comm.Channel.Text.talker:title()
 	local color = channelColors[gmcp.Comm.Channel.Start] or "&lt;white&gt;"
 	if person == "The guardian spirit of the totem" then 
@@ -11393,6 +11383,9 @@ function ataxiagui_updateVitals()
       ataxiagui.basherBarClear:hide()
       ataxiaTemp.basherBarHidden = true
     end
+
+    -- Update movable vital bars if enabled
+    if ataxia.bars and ataxia.bars.update then ataxia.bars.update() end
  end
 end</script>
   <packageName/>
@@ -15501,10 +15494,80 @@ function ataxiaNDB_drainHonoursQueue()
 	ataxiaNDB._honoursQueue = nil
 
 	ataxiaEcho(#queue .. " player(s) have hidden cities — auto-honouring to update.")
-	for i, name in ipairs(queue) do
-		tempTimer((i - 1) * 2, function()
-			send("honours " .. name, false)
-		end)
+
+	-- Use the refresh queue mechanism so capture triggers are properly enabled
+	ataxiaNDB._refreshQueue = queue
+	ataxiaNDB._refreshIndex = 1
+	ataxiaNDB._refreshFilter = nil
+	ataxiaNDB_processRefreshQueue()
+end
+
+function ataxiaNDB_processRefreshQueue()
+	-- Clean up any existing poll timer
+	if ataxiaNDB._refreshPollTimer then
+		killTimer(ataxiaNDB._refreshPollTimer)
+		ataxiaNDB._refreshPollTimer = nil
+	end
+
+	local queue = ataxiaNDB._refreshQueue
+	local idx = ataxiaNDB._refreshIndex
+
+	-- Queue exhausted
+	if not queue or not idx or idx &gt; #queue then
+		local count = queue and #queue or 0
+		local cityFilter = ataxiaNDB._refreshFilter
+		ataxiaNDB._refreshQueue = nil
+		ataxiaNDB._refreshIndex = nil
+		ataxiaNDB._refreshFilter = nil
+		if count &gt; 0 then
+			ataxiaEcho("Honours refresh complete. " .. count .. " player(s) updated" .. (cityFilter and (" from " .. cityFilter) or "") .. ".")
+		end
+		return
+	end
+
+	-- If a previous honours capture is still in progress, wait
+	if ataxiaNDB._honoursPerson ~= nil then
+		ataxiaNDB._refreshPollTimer = tempTimer(2, function() ataxiaNDB_processRefreshQueue() end)
+		return
+	end
+
+	local name = queue[idx]
+	ataxiaNDB._refreshIndex = idx + 1
+
+	-- Set up capture pipeline (same as Honours Person alias)
+	ataxiaNDB._honoursPerson = name:title()
+	enableTrigger("Get Player Information")
+	enableTrigger("Check Player City")
+
+	-- Send the honours command to the MUD
+	send("honours " .. name, false)
+
+	-- Safety timeout: if Close Capturing doesn't fire within 8s, clear and move on
+	ataxiaNDB._refreshPollTimer = tempTimer(8, function()
+		if ataxiaNDB._honoursPerson ~= nil then
+			-- Close Capturing didn't fire — clean up manually
+			ataxiaNDB._honoursPerson = nil
+			ataxiaNDB._armyRank = nil
+			ataxiaNDB._mark = nil
+			ataxiaNDB._dauntless = nil
+			getNDBCity = nil
+			disableTrigger("Get Player Information")
+			disableTrigger("Additional Information NDB")
+		end
+		-- Process next person
+		ataxiaNDB_processRefreshQueue()
+	end)
+end
+
+-- Hook into Close Capturing: when honours capture completes, advance the refresh queue
+function ataxiaNDB_onHonoursCaptureComplete()
+	if ataxiaNDB._refreshQueue and ataxiaNDB._refreshIndex then
+		-- Small delay to let Close Capturing fully finish
+		if ataxiaNDB._refreshPollTimer then
+			killTimer(ataxiaNDB._refreshPollTimer)
+			ataxiaNDB._refreshPollTimer = nil
+		end
+		tempTimer(1.5, function() ataxiaNDB_processRefreshQueue() end)
 	end
 end
 </script>
@@ -28961,6 +29024,423 @@ end</script>
 <eventHandlerList>
 </eventHandlerList>
 </Script>
+            <Script isActive="yes" isFolder="no">
+  <name>buildVitalBars</name>
+              <script>-------------------------------------------------
+--  ataxia.bars — Configurable Movable Vital Bars
+--
+--  Each bar is an Adjustable.Container with a
+--  Geyser.Gauge inside. Positions auto-save.
+--
+--  Alias: levibars          — show status
+--         levibars on/off   — master toggle
+--         levibars &lt;name&gt;   — toggle individual bar
+--         levibars reset    — reset all positions
+-------------------------------------------------
+
+ataxia.bars = ataxia.bars or {}
+ataxia.bars.config = ataxia.bars.config or {}
+
+-- Default bar definitions: order, colors, data source
+local barDefs = {
+  health = {
+    order = 1,
+    label = "Health",
+    frontStyle = [[
+      background-color: QLinearGradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #00cc00, stop:0.1 #88ff88, stop:0.49 #00cc00, stop:0.5 #009900, stop:1 #006600);
+      border-top: 1px black solid; border-left: 1px black solid;
+      border-bottom: 1px black solid; border-radius: 7; padding: 3px;
+    ]],
+    backStyle = [[
+      background-color: QLinearGradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #555555, stop:0.1 #333333, stop:0.49 #222222, stop:0.5 #111111, stop:1 #333333);
+      border-width: 1px; border-color: DimGrey; border-style: solid;
+      border-radius: 7; padding: 3px;
+    ]],
+  },
+  mana = {
+    order = 2,
+    label = "Mana",
+    frontStyle = [[
+      background-color: QLinearGradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #0044cc, stop:0.1 #6699ff, stop:0.49 #0055ff, stop:0.5 #0044cc, stop:1 #002299);
+      border-top: 1px black solid; border-left: 1px black solid;
+      border-bottom: 1px black solid; border-radius: 7; padding: 3px;
+    ]],
+    backStyle = [[
+      background-color: QLinearGradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #555555, stop:0.1 #333333, stop:0.49 #222222, stop:0.5 #111111, stop:1 #333333);
+      border-width: 1px; border-color: DimGrey; border-style: solid;
+      border-radius: 7; padding: 3px;
+    ]],
+  },
+  willpower = {
+    order = 3,
+    label = "Willpower",
+    frontStyle = [[
+      background-color: QLinearGradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #cc8800, stop:0.1 #ffcc44, stop:0.49 #cc8800, stop:0.5 #aa6600, stop:1 #664400);
+      border-top: 1px black solid; border-left: 1px black solid;
+      border-bottom: 1px black solid; border-radius: 7; padding: 3px;
+    ]],
+    backStyle = [[
+      background-color: QLinearGradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #555555, stop:0.1 #333333, stop:0.49 #222222, stop:0.5 #111111, stop:1 #333333);
+      border-width: 1px; border-color: DimGrey; border-style: solid;
+      border-radius: 7; padding: 3px;
+    ]],
+  },
+  endurance = {
+    order = 4,
+    label = "Endurance",
+    frontStyle = [[
+      background-color: QLinearGradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #888800, stop:0.1 #cccc44, stop:0.49 #888800, stop:0.5 #666600, stop:1 #444400);
+      border-top: 1px black solid; border-left: 1px black solid;
+      border-bottom: 1px black solid; border-radius: 7; padding: 3px;
+    ]],
+    backStyle = [[
+      background-color: QLinearGradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #555555, stop:0.1 #333333, stop:0.49 #222222, stop:0.5 #111111, stop:1 #333333);
+      border-width: 1px; border-color: DimGrey; border-style: solid;
+      border-radius: 7; padding: 3px;
+    ]],
+  },
+  cape = {
+    order = 5,
+    label = "Cape",
+    frontStyle = [[
+      background-color: QLinearGradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #621616, stop:0.1 #640a0a, stop:0.49 #8a0000, stop:0.5 #560000, stop:1 #260000);
+      border-top: 1px DimGrey solid; border-left: 1px DimGrey solid;
+      border-bottom: 1px DimGrey solid; border-radius: 7; padding: 3px;
+    ]],
+    backStyle = [[
+      background-color: QLinearGradient(x1:0, y1:0, x2:0, y2:1,
+        stop:0 #555555, stop:0.1 #555555, stop:0.49 #333333, stop:0.5 #333333, stop:1 #555555);
+      border-width: 1px; border-color: DimGrey; border-style: solid;
+      border-radius: 7; padding: 3px;
+    ]],
+  },
+}
+
+-- Ordered list of bar names
+local barOrder = {"health", "mana", "willpower", "endurance", "cape"}
+
+-------------------------------------------------
+-- Save / Load config
+-------------------------------------------------
+local function getConfigPath()
+  return getMudletHomeDir() .. "/ataxia_bars_config.lua"
+end
+
+function ataxia.bars.saveConfig()
+  local save = {}
+  save.enabled = ataxia.bars.config.enabled or {}
+  save.masterEnabled = ataxia.bars.config.masterEnabled
+  table.save(getConfigPath(), save)
+end
+
+function ataxia.bars.loadConfig()
+  local path = getConfigPath()
+  if io.exists(path) then
+    local save = {}
+    table.load(path, save)
+    ataxia.bars.config.enabled = save.enabled or {}
+    if save.masterEnabled ~= nil then
+      ataxia.bars.config.masterEnabled = save.masterEnabled
+    end
+  end
+
+  -- Defaults: health, mana, cape on; wp/ep off
+  if ataxia.bars.config.masterEnabled == nil then
+    ataxia.bars.config.masterEnabled = false
+  end
+  if not ataxia.bars.config.enabled then ataxia.bars.config.enabled = {} end
+  if ataxia.bars.config.enabled.health == nil then ataxia.bars.config.enabled.health = true end
+  if ataxia.bars.config.enabled.mana == nil then ataxia.bars.config.enabled.mana = true end
+  if ataxia.bars.config.enabled.willpower == nil then ataxia.bars.config.enabled.willpower = false end
+  if ataxia.bars.config.enabled.endurance == nil then ataxia.bars.config.enabled.endurance = false end
+  if ataxia.bars.config.enabled.cape == nil then ataxia.bars.config.enabled.cape = true end
+end
+
+-------------------------------------------------
+-- Build a single bar
+-------------------------------------------------
+local function buildBar(name)
+  local def = barDefs[name]
+  if not def then return end
+
+  local bar = {}
+  ataxia.bars[name] = bar
+
+  bar.window = Adjustable.Container:new({
+    name = "ataxia.bars." .. name .. ".window",
+    x = 0, y = 0,
+    width = 250, height = 35,
+    adjLabelstyle = "background-color:rgba(0,0,0,0%);",
+    buttonstyle = [[
+      QLabel{ border-radius: 3px; background-color: rgba(140,140,140,100%);}
+      QLabel::hover{ background-color: rgba(160,160,160,50%);}
+    ]],
+    buttonFontSize = 5,
+    buttonsize = 10,
+  }, main)
+
+  bar.container = Geyser.Container:new({
+    name = "ataxia.bars." .. name .. ".back",
+    x = 0, y = 0,
+    width = "100%", height = "100%",
+  }, bar.window)
+
+  bar.gauge = Geyser.Gauge:new({
+    name = "ataxia.bars." .. name .. ".gauge",
+    x = "2%", y = "2%",
+    width = "96%", height = "96%",
+  }, bar.container)
+
+  bar.gauge.front:setStyleSheet(def.frontStyle)
+  bar.gauge.back:setStyleSheet(def.backStyle)
+  bar.gauge:setValue(0, 100)
+
+  setFontSize("ataxia.bars." .. name .. ".gauge", 9)
+
+  if ataxia.bars.config.masterEnabled and ataxia.bars.config.enabled[name] then
+    bar.window:show()
+  else
+    bar.window:hide()
+  end
+end
+
+-------------------------------------------------
+-- Build all bars
+-------------------------------------------------
+function ataxia.bars.buildAll()
+  ataxia.bars.loadConfig()
+  for _, name in ipairs(barOrder) do
+    buildBar(name)
+  end
+end
+
+-------------------------------------------------
+-- Show / Hide helpers
+-------------------------------------------------
+function ataxia.bars.showAll()
+  for _, name in ipairs(barOrder) do
+    if ataxia.bars[name] and ataxia.bars[name].window then
+      if ataxia.bars.config.enabled[name] then
+        ataxia.bars[name].window:show()
+      end
+    end
+  end
+end
+
+function ataxia.bars.hideAll()
+  for _, name in ipairs(barOrder) do
+    if ataxia.bars[name] and ataxia.bars[name].window then
+      ataxia.bars[name].window:hide()
+    end
+  end
+end
+
+-------------------------------------------------
+-- Toggle master on/off
+-------------------------------------------------
+function ataxia.bars.toggle(state)
+  if state == "on" then
+    ataxia.bars.config.masterEnabled = true
+    ataxia.bars.showAll()
+  elseif state == "off" then
+    ataxia.bars.config.masterEnabled = false
+    ataxia.bars.hideAll()
+  else
+    ataxia.bars.config.masterEnabled = not ataxia.bars.config.masterEnabled
+    if ataxia.bars.config.masterEnabled then
+      ataxia.bars.showAll()
+    else
+      ataxia.bars.hideAll()
+    end
+  end
+  ataxia.bars.saveConfig()
+end
+
+-------------------------------------------------
+-- Toggle individual bar
+-------------------------------------------------
+function ataxia.bars.toggleBar(name)
+  if not barDefs[name] then
+    ataxia.echo("Unknown bar: " .. tostring(name) .. ". Valid: health, mana, willpower, endurance, cape")
+    return
+  end
+  ataxia.bars.config.enabled[name] = not ataxia.bars.config.enabled[name]
+  if ataxia.bars[name] and ataxia.bars[name].window then
+    if ataxia.bars.config.masterEnabled and ataxia.bars.config.enabled[name] then
+      ataxia.bars[name].window:show()
+    else
+      ataxia.bars[name].window:hide()
+    end
+  end
+  local status = ataxia.bars.config.enabled[name] and "&lt;green&gt;ON" or "&lt;red&gt;OFF"
+  ataxia.echo(barDefs[name].label .. " bar: " .. status)
+  ataxia.bars.saveConfig()
+end
+
+-------------------------------------------------
+-- Reset all positions
+-------------------------------------------------
+function ataxia.bars.resetPositions()
+  for _, name in ipairs(barOrder) do
+    if ataxia.bars[name] and ataxia.bars[name].window then
+      ataxia.bars[name].window:hide()
+      ataxia.bars[name].window = nil
+    end
+  end
+  -- Rebuild with default positions
+  for _, name in ipairs(barOrder) do
+    -- Clear saved position by recreating with autoLoad=false temporarily
+    local bar = {}
+    ataxia.bars[name] = bar
+    bar.window = Adjustable.Container:new({
+      name = "ataxia.bars." .. name .. ".window",
+      x = 0, y = 0,
+      width = 250, height = 35,
+      autoLoad = false,
+      adjLabelstyle = "background-color:rgba(0,0,0,0%);",
+      buttonstyle = [[
+        QLabel{ border-radius: 3px; background-color: rgba(140,140,140,100%);}
+        QLabel::hover{ background-color: rgba(160,160,160,50%);}
+      ]],
+      buttonFontSize = 5,
+      buttonsize = 10,
+    }, main)
+
+    bar.container = Geyser.Container:new({
+      name = "ataxia.bars." .. name .. ".back",
+      x = 0, y = 0,
+      width = "100%", height = "100%",
+    }, bar.window)
+
+    bar.gauge = Geyser.Gauge:new({
+      name = "ataxia.bars." .. name .. ".gauge",
+      x = "2%", y = "2%",
+      width = "96%", height = "96%",
+    }, bar.container)
+
+    local def = barDefs[name]
+    bar.gauge.front:setStyleSheet(def.frontStyle)
+    bar.gauge.back:setStyleSheet(def.backStyle)
+    bar.gauge:setValue(0, 100)
+    setFontSize("ataxia.bars." .. name .. ".gauge", 9)
+
+    if ataxia.bars.config.masterEnabled and ataxia.bars.config.enabled[name] then
+      bar.window:show()
+    else
+      bar.window:hide()
+    end
+  end
+  ataxia.echo("Vital bar positions reset to defaults")
+end
+
+-------------------------------------------------
+-- Status display
+-------------------------------------------------
+function ataxia.bars.status()
+  local master = ataxia.bars.config.masterEnabled and "&lt;green&gt;ON" or "&lt;red&gt;OFF"
+  ataxia.echo("Vital Bars: " .. master)
+  for _, name in ipairs(barOrder) do
+    local enabled = ataxia.bars.config.enabled[name]
+    local status = enabled and "&lt;green&gt;ON" or "&lt;red&gt;OFF"
+    ataxia.echo("  " .. barDefs[name].label .. ": " .. status)
+  end
+  ataxia.echo("Commands: &lt;white&gt;levibars on/off&lt;reset&gt; | &lt;white&gt;levibars &lt;name&gt;&lt;reset&gt; | &lt;white&gt;levibars reset")
+end
+
+-------------------------------------------------
+-- Update function — called from ataxiagui_updateVitals
+-------------------------------------------------
+function ataxia.bars.update()
+  if not ataxia.bars.config.masterEnabled then return end
+  if not ataxia.vitals or not ataxia.vitals.hp then return end
+
+  -- Health
+  if ataxia.bars.health and ataxia.bars.health.gauge and ataxia.bars.config.enabled.health then
+    ataxia.bars.health.gauge:setValue(ataxia.vitals.hpp, 100)
+    ataxia.bars.health.gauge:echo("&lt;center&gt;&lt;b&gt;" .. ataxia.vitals.hp .. "&lt;/b&gt;")
+  end
+
+  -- Mana
+  if ataxia.bars.mana and ataxia.bars.mana.gauge and ataxia.bars.config.enabled.mana then
+    ataxia.bars.mana.gauge:setValue(ataxia.vitals.mpp, 100)
+    ataxia.bars.mana.gauge:echo("&lt;center&gt;&lt;b&gt;" .. ataxia.vitals.mp .. "&lt;/b&gt;")
+  end
+
+  -- Willpower
+  if ataxia.bars.willpower and ataxia.bars.willpower.gauge and ataxia.bars.config.enabled.willpower then
+    ataxia.bars.willpower.gauge:setValue(ataxia.vitals.wpp, 100)
+    ataxia.bars.willpower.gauge:echo("&lt;center&gt;&lt;b&gt;" .. ataxia.vitals.wp .. "&lt;/b&gt;")
+  end
+
+  -- Endurance
+  if ataxia.bars.endurance and ataxia.bars.endurance.gauge and ataxia.bars.config.enabled.endurance then
+    ataxia.bars.endurance.gauge:setValue(ataxia.vitals.epp, 100)
+    ataxia.bars.endurance.gauge:echo("&lt;center&gt;&lt;b&gt;" .. ataxia.vitals.ep .. "&lt;/b&gt;")
+  end
+
+  -- Cape is updated by zgui.showCape/zgui.renewCape, not here
+end
+
+-------------------------------------------------
+-- Cape bar update — called from zgui.showCape
+-------------------------------------------------
+function ataxia.bars.updateCape()
+  if not ataxia.bars.config.masterEnabled then return end
+  if not ataxia.bars.cape or not ataxia.bars.cape.gauge then return end
+  if not ataxia.bars.config.enabled.cape then return end
+  if not zgui.cape then return end
+
+  local watch = zgui.cape.watch or 0
+  local count = zgui.cape.count or 0
+
+  if watch &lt; 240 then
+    local remaining = 240 - watch
+    ataxia.bars.cape.gauge:setValue(remaining, 240)
+    if count &gt; 49 then
+      ataxia.bars.cape.gauge:echo("&lt;center&gt;&lt;b&gt;FULL - " .. remaining .. " seconds&lt;/b&gt;")
+    else
+      ataxia.bars.cape.gauge:echo("&lt;center&gt;&lt;b&gt;" .. count .. "/50 - " .. remaining .. " seconds&lt;/b&gt;")
+    end
+  else
+    ataxia.bars.cape.gauge:setValue(0, 240)
+    ataxia.bars.cape.gauge:echo("")
+  end
+end
+
+-------------------------------------------------
+-- Dispatch for alias
+-------------------------------------------------
+function ataxia.bars.dispatch(args)
+  if not args or args == "" then
+    ataxia.bars.status()
+  elseif args == "on" then
+    ataxia.bars.toggle("on")
+    ataxia.echo("Vital Bars: &lt;green&gt;ON")
+  elseif args == "off" then
+    ataxia.bars.toggle("off")
+    ataxia.echo("Vital Bars: &lt;red&gt;OFF")
+  elseif args == "reset" then
+    ataxia.bars.resetPositions()
+  elseif barDefs[args] then
+    ataxia.bars.toggleBar(args)
+  else
+    ataxia.echo("Unknown: " .. args .. ". Use: on, off, reset, health, mana, willpower, endurance, cape")
+  end
+end
+</script>
+  <packageName/>
+<eventHandlerList>
+</eventHandlerList>
+</Script>
 </ScriptGroup>
           <ScriptGroup isActive="yes" isFolder="yes">
   <name>Logger</name>
@@ -29343,23 +29823,7 @@ end</script>
 </eventHandlerList>
             <Script isActive="yes" isFolder="no">
   <name>showChat</name>
-              <script>--[[mudlet
-type: script
-name: showChat
-hierarchy:
-- Levi_Ataxia
-- LEVI
-- Levi  Scripts
-- ZulahGUI - Saonji Edit
-- zGUI Redux
-- Update Windows
-attributes:
-  isActive: 'yes'
-  isFolder: 'no'
-packageName: ''
-]]--
-
--- Detect channel from message text when GMCP reports "says"
+              <script>-- Detect channel from message text when GMCP reports "says"
 local function detectChannelFromText(text)
   -- City channels - check for (CityName): pattern
   local cities = {"Mhaldor", "Ashtan", "Cyrene", "Eleusis", "Hashan", "Targossas"}
@@ -29394,10 +29858,15 @@ local channelColors = {
   ["armytell"]   = "&lt;white&gt;",
 }
 
+-- Strip ANSI escape sequences from GMCP text (they render as raw [0;37m etc. in miniconsoles)
+local function stripAnsi(s)
+  return s:gsub("\27%[[%d;]*m", "")
+end
+
 function zgui.showChat()
   local shortName = ""
   local chatWindow = false
-  local text = gmcp.Comm.Channel.Text.text
+  local text = stripAnsi(gmcp.Comm.Channel.Text.text)
   local person = gmcp.Comm.Channel.Text.talker:title()
   local color = channelColors[gmcp.Comm.Channel.Start] or "&lt;white&gt;"
   
@@ -29608,12 +30077,14 @@ end</script>
       zgui.cape.capebar:echo("&lt;center&gt;"..zgui.cape.count.."/50 - "..(240-zgui.cape.watch).." seconds")
     end
   elseif zgui.cape.watch == 220 then
-    cecho(" == WARNING: 20 SECONDS LEFT ON CAPE ==")  
+    cecho(" == WARNING: 20 SECONDS LEFT ON CAPE ==")
     zgui.cape.capebar:setValue((240-zgui.cape.watch), 240)
     zgui.cape.capebar:echo("&lt;center&gt;"..zgui.cape.count.."/50 - "..(240-zgui.cape.watch).." seconds")
   else
-    zgui.clearCape()   
+    zgui.clearCape()
   end
+  -- Update movable cape bar if enabled
+  if ataxia.bars and ataxia.bars.updateCape then ataxia.bars.updateCape() end
 end
 
 function zgui.renewCape()
@@ -29638,7 +30109,9 @@ function zgui.clearCape()
 		  border-style: solid;
 		  border-radius: 7;
 		  padding: 3px;
-	  ]])    
+	  ]])
+  -- Update movable cape bar if enabled
+  if ataxia.bars and ataxia.bars.updateCape then ataxia.bars.updateCape() end
 end
 
 registerAnonymousEventHandler("You Died", "zgui.clearCape")
@@ -29746,6 +30219,9 @@ function zgui.zStartup()
         zgui[zgui.modules[i]]()
       end
     end
+
+    -- Build movable vital bars (independent of zgui.modules)
+    if ataxia.bars and ataxia.bars.buildAll then ataxia.bars.buildAll() end
     ------------------------------------------------------------------------
     zgui.debug = false
     zgui.trueTime = 0
@@ -80386,19 +80862,14 @@ if #queue == 0 then
 end
 
 table.sort(queue)
-local delay = 2
 
-ataxiaEcho("Sending honours for " .. #queue .. " player(s)" .. (cityFilter and (" from " .. cityFilter) or "") .. ". ETA: ~" .. math.ceil(#queue * delay) .. "s.")
+ataxiaEcho("Refreshing honours for " .. #queue .. " player(s)" .. (cityFilter and (" from " .. cityFilter) or "") .. ". ETA: ~" .. math.ceil(#queue * 2) .. "s.")
 
-for i, name in ipairs(queue) do
-	tempTimer((i - 1) * delay, function()
-		send("honours " .. name, false)
-	end)
-end
-
-tempTimer(#queue * delay + 1, function()
-	ataxiaEcho("Honours refresh complete.")
-end)
+-- Store queue for sequential processing
+ataxiaNDB._refreshQueue = queue
+ataxiaNDB._refreshIndex = 1
+ataxiaNDB._refreshFilter = cityFilter
+ataxiaNDB_processRefreshQueue()
 </script>
   <command/>
   <packageName/>
@@ -83064,6 +83535,14 @@ end</script>
   <command/>
   <packageName/>
   <regex>^ataxiachat$</regex>
+</Alias>
+          <Alias isActive="yes" isFolder="no">
+  <name>(LEVIBARS) Vital Bars</name>
+            <script>ataxia.bars.dispatch(matches[2])
+</script>
+  <command/>
+  <packageName/>
+  <regex>^levibars(?: (.+))?$</regex>
 </Alias>
 </AliasGroup>
         <AliasGroup isActive="yes" isFolder="yes">
@@ -85974,6 +86453,11 @@ getNDBCity = nil
 ataxiaNDB._honoursPerson = nil
 disableTrigger("Get Player Information")
 disableTrigger("Additional Information NDB")
+
+-- Advance refresh queue if one is active
+if ataxiaNDB_onHonoursCaptureComplete then
+	ataxiaNDB_onHonoursCaptureComplete()
+end
 </script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
@@ -90784,8 +91268,8 @@ zgui.map["Mapper"]:show()</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                   <regexCodeList>
-<string>return gmcp.Room.Info.num &lt; 2121028</string>
-<string>return gmcp.Room.Info.num &gt; 0</string>
+<string>return gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num &lt; 2121028</string>
+<string>return gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num &gt; 0</string>
                   </regexCodeList>
                   <regexCodePropertyList>
 <integer>4</integer>
@@ -90811,8 +91295,8 @@ zgui.map["Wilderness"]:show()</script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                   <regexCodeList>
-<string>return gmcp.Room.Info.num &gt; 2121028</string>
-<string>return gmcp.Room.Info.coords==""</string>
+<string>return gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num &gt; 2121028</string>
+<string>return gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.coords==""</string>
                   </regexCodeList>
                   <regexCodePropertyList>
 <integer>4</integer>
@@ -90838,8 +91322,8 @@ zgui.map["Ocean"]:show() </script>
   <colorTriggerFgColor>#000000</colorTriggerFgColor>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                   <regexCodeList>
-<string>return gmcp.Room.Info.environment=='Vessel'</string>
-<string>return gmcp.Room.Info.num==-2</string>
+<string>return gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.environment=='Vessel'</string>
+<string>return gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num==-2</string>
                   </regexCodeList>
                   <regexCodePropertyList>
 <integer>4</integer>
@@ -125235,6 +125719,7 @@ if haveDef("speed") == true then
 jestercheese = false
 end
 
+if gmcp.Char and gmcp.Char.Status then
 if gmcp.Char.Status.class == "Blademaster" or gmcp.Char.Status.class == "Monk" then
 
 if ataxia.defences.deafness == nil and incomingdeafness == false then
@@ -125247,6 +125732,7 @@ end
 if gmcp.Char.Status.class == "Magi" then
 get_resonance()
 cecho("Target: Burns " ..tburns)
+end
 end
 
 mylimbattackpercentage = tonumber(ataxiaTables.limbData.dwcSlash)
@@ -125311,7 +125797,7 @@ disableTrigger("3rd Person Shikudo")
 if isActive("Alertness (Achaea+Imperian)", "trigger") then
   disableTrigger("Alertness (Achaea+Imperian)")
 end
-if string.find(gmcp.Room.Info.name,"Flying above") then 
+if gmcp.Room and gmcp.Room.Info and string.find(gmcp.Room.Info.name,"Flying above") then
 ataxia_Echo("YOU ARE FLYING ")
 end
 </script>
@@ -142167,7 +142653,7 @@ ataxia_boxEcho("FREEZE || POUND INCOMING", "goldenrod")</script>
   <name>Limb Prompt</name>
               <script>cecho(" " ..lb.prompt())
 
-if (gmcp.Char.Status.class == "Runewarden" or gmcp.Char.Status.class == "Infernal") and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" or gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt" then 
+if gmcp.Char and gmcp.Char.Status and gmcp.Char.Vitals and ((gmcp.Char.Status.class == "Runewarden" or gmcp.Char.Status.class == "Infernal") and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" or gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt") then
 mymomentum = ataxia.vitals.class
 end
 

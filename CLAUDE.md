@@ -516,12 +516,22 @@ All GUI windows use `Adjustable.Container:new({name = "...", ...})` which provid
 
 **Startup dispatch**: `039_EDIT_ME__Startup_Main.lua` iterates `zgui.modules` array and calls `zgui[moduleName]()` for each. When renaming build functions (e.g., `zgui.buildChat` → `ataxia.buildChat`), a backward-compat shim is needed: `zgui.buildChat = ataxia.buildChat` (placed after the function definition).
 
+**Movable Vital Bars (`ataxia.bars`)**:
+Configurable floating gauge bars for Health, Mana, Willpower, Endurance, and Cape. Each bar is an `Adjustable.Container` with a `Geyser.Gauge` inside. Positions auto-save.
+- **Build**: `ataxia.bars.buildAll()` — called from startup after zgui module dispatch
+- **Update**: `ataxia.bars.update()` — called from `ataxiagui_updateVitals()` (vitals GMCP handler)
+- **Cape update**: `ataxia.bars.updateCape()` — called from `zgui.showCape()` and `zgui.clearCape()`
+- **Config**: Saved to `getMudletHomeDir() .. "/ataxia_bars_config.lua"` via `table.save`/`table.load`
+- **Alias**: `levibars` → `ataxia.bars.dispatch(args)` — on/off, individual toggle, reset, status
+- **Files**: `build_windows/016_buildVitalBars.lua`, `aliases/zgui_redux/007_(LEVIBARS)_Vital_Bars.lua`
+
 **Namespace migration status** (zgui → ataxia):
 | Component | Old Namespace | New Namespace | Status |
 |-----------|--------------|---------------|--------|
 | Chat | `zgui.chat` | `ataxia.chat` | Migrated (shim in place) |
 | Chat size | `zgui.chatSize` | `ataxia.chatSize` | Migrated |
 | Hunting stats | `zData` | `ataxia.data` | Migrated (shim in place) |
+| Vital bars | — (new) | `ataxia.bars` | New system |
 | Bash window | `zgui.bwindow` | `zgui.bwindow` | Not yet migrated |
 | Map | `zgui.map` | `zgui.map` | Not yet migrated |
 | All other windows | `zgui.*` | `zgui.*` | Not yet migrated |

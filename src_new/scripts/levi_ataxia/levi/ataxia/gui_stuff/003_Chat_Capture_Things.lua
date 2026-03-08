@@ -13,21 +13,6 @@ attributes:
 packageName: ''
 ]]--
 
---[[mudlet
-type: script
-name: Chat Capture Things
-hierarchy:
-- Levi_Ataxia
-- LEVI
-- Ataxia
-- Ataxia
-- Gui Stuff
-attributes:
-  isActive: 'yes'
-  isFolder: 'no'
-packageName: ''
-]]--
-
 -- Detect channel from message text when GMCP reports "says"
 local function detectChannelFromText(text)
   -- City channels - check for (CityName): pattern
@@ -84,10 +69,15 @@ local channelColors = {
   ["armytell"]   = "<white>",
 }
 
+-- Strip ANSI escape sequences from GMCP text (they render as raw [0;37m etc. in miniconsoles)
+local function stripAnsi(s)
+  return s:gsub("\27%[[%d;]*m", "")
+end
+
 function ataxiagui_processChat(channel)
   if ataxia.usegui ~= nil and ataxia.usegui == false then return end
 
-	local text = gmcp.Comm.Channel.Text.text
+	local text = stripAnsi(gmcp.Comm.Channel.Text.text)
 	local person = gmcp.Comm.Channel.Text.talker:title()
 	local color = channelColors[gmcp.Comm.Channel.Start] or "<white>"
 	if person == "The guardian spirit of the totem" then 

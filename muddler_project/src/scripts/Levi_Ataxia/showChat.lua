@@ -1,19 +1,3 @@
---[[mudlet
-type: script
-name: showChat
-hierarchy:
-- Levi_Ataxia
-- LEVI
-- Levi  Scripts
-- ZulahGUI - Saonji Edit
-- zGUI Redux
-- Update Windows
-attributes:
-  isActive: 'yes'
-  isFolder: 'no'
-packageName: ''
-]]--
-
 -- Detect channel from message text when GMCP reports "says"
 local function detectChannelFromText(text)
   -- City channels - check for (CityName): pattern
@@ -49,10 +33,15 @@ local channelColors = {
   ["armytell"]   = "<white>",
 }
 
+-- Strip ANSI escape sequences from GMCP text (they render as raw [0;37m etc. in miniconsoles)
+local function stripAnsi(s)
+  return s:gsub("\27%[[%d;]*m", "")
+end
+
 function zgui.showChat()
   local shortName = ""
   local chatWindow = false
-  local text = gmcp.Comm.Channel.Text.text
+  local text = stripAnsi(gmcp.Comm.Channel.Text.text)
   local person = gmcp.Comm.Channel.Text.talker:title()
   local color = channelColors[gmcp.Comm.Channel.Start] or "<white>"
   
