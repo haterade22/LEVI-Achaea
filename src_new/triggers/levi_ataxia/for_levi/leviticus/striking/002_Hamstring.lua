@@ -42,7 +42,6 @@ patterns:
 
 if isTargeted(matches[2]) then
 		tarAffed("hamstring")
-		if applyAffV3 then applyAffV3("hamstring") end
 		if hamstringTimer then killTimer(hamstringTimer) end
 		hamstringTimer = tempTimer(10, [[tAffs.hamstring = nil]])
 

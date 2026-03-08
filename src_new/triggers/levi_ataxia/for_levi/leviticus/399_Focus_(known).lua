@@ -48,22 +48,10 @@ onTargetFocusV3()
 		or multimatches[3][1] == name .. " shakes her head and a look of clarity returns to her eyes." then
 			erAff("lovers")
 			erAff("impatience")
-			-- V2 integration: Focus cured lovers and impatience specifically
-			if removeAffV2 then
-				removeAffV2("lovers")
-				removeAffV2("impatience")
-			end
 	else
 		-- Focus cured something other than impatience → target doesn't have impatience
 		erAff("impatience")
-		if removeAffV2 then removeAffV2("impatience") end
-		if removeAffV3 then removeAffV3("impatience") end
-		-- V2 integration: Focus cured a random mental affliction (mutually exclusive with old system)
-		if ataxia.settings.useAffTrackingV2 then
-			onTargetFocusV2(name)
-		else
-			tFocused()
-		end
+		tFocused()
 	end
 	-- Track for adaptive serpent offense
 	if serpent and serpent.trackCure then serpent.trackCure("focus") end

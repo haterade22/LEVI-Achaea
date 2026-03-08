@@ -40,8 +40,7 @@ patterns:
   type: 3
 ]]--
 
-tAffs.deafness = false
-if removeAffV3 then removeAffV3("deafness") end
+erAff("deafness")
 confirmAffV2("undeaf")
 
 ataxia.bardStuff.tunesmith = "pesante"

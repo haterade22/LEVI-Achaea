@@ -45,6 +45,5 @@ if isTargeted(matches[2]) then
 	bg("yellow")
 	resetFormat()
 	targetIshere = true
-	tAffs.curseward = true
-	if applyAffV3 then applyAffV3("curseward") end
+	tarAffed("curseward")
 end

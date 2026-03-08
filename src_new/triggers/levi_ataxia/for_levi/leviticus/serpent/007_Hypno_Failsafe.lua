@@ -38,7 +38,6 @@ patterns:
 ]]--
 
 ataxiaTemp.suggestions = nil
-tAffs.hypnoseal = false
-if removeAffV3 then removeAffV3("hypnoseal") end
+erAff("hypnoseal")
 ataxiaTemp.hypnoseal = false
 serpentsuggest = false

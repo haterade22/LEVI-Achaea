@@ -8,7 +8,7 @@ hierarchy:
 - Ataxia
 - Affliction Tracking Core
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
 packageName: ''
 ]]--
@@ -24,7 +24,7 @@ hierarchy:
 - zGUI Redux
 - Build Windows
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
 packageName: ''
 ]]--

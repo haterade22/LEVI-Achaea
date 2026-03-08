@@ -37,7 +37,6 @@ patterns:
   type: 1
 ]]--
 
-tAffs.rebounding = false
-if removeAffV3 then removeAffV3("rebounding") end
+erAff("rebounding")
 tAffs.shield = false
-removeAffV3("shield")
+erAff("shield")

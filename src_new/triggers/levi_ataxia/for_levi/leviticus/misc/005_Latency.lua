@@ -39,8 +39,7 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-  tAffs.burrow = true
-  if applyAffV3 then applyAffV3("burrow") end
+  tarAffed("burrow")
 
   if pariah.latency then killTimer(pariah.latency) end
   pariah.latency = tempTimer(12, [[ pariah.latency = nil ]])

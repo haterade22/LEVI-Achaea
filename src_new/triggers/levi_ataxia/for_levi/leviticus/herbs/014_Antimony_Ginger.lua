@@ -54,8 +54,7 @@ if isTargeted(matches[2]) and tBals.plant then
 	tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
 	if tAffs.mercury then
-		tAffs.mercury = false
-		if removeAffV3 then removeAffV3("mercury") end
+		erAff("mercury")
 		tBals.timers.plant = tempTimer(1.9, [[tBals.plant = true; tBals.timers.plant = nil]])
 	else
 		tBals.timers.plant = tempTimer(1.3, [[tBals.plant = true; tBals.timers.plant = nil]])

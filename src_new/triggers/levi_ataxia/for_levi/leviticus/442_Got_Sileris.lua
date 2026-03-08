@@ -39,10 +39,8 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-	tAffs.fangbarrier = true
-	if applyAffV3 then applyAffV3("fangbarrier") end
-	tAffs.sileris = true
-	if applyAffV3 then applyAffV3("sileris") end
+	tarAffed("fangbarrier")
+	tarAffed("sileris")
   confirmAffV2("fanbarrier")
   confirmAffV2("sileris")
   if serpent and serpent.state then serpent.state.geckoStripAttempted = false end

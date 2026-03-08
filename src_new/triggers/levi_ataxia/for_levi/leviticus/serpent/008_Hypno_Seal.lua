@@ -37,8 +37,7 @@ patterns:
   type: 1
 ]]--
 
-tAffs.hypnoseal = true
-if applyAffV3 then applyAffV3("hypnoseal") end
+tarAffed("hypnoseal")
 ataxiaTemp.hypnoseal = true
 selectString(line, 1)
 setBold(true)

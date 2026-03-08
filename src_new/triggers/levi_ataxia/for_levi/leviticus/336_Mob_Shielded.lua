@@ -60,8 +60,7 @@ elseif isTargeted(tar) then
 	selectString(line, 1)
 	fg("a_brown")
 	resetFormat()
-	tAffs.shield = true
-	if applyAffV3 then applyAffV3("shield") end
+	tarAffed("shield")
 	-- Update V2 tracking if available
 	if tAffsV2 then
 		tAffsV2.shield = 100

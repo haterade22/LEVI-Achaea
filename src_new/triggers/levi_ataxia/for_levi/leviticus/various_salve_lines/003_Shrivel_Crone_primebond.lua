@@ -51,4 +51,3 @@ else
   return
 end
 tarAffed("broken"..limb:gsub(" ", ""))
-if applyAffV3 then applyAffV3("broken"); applyAffV3(" ") end

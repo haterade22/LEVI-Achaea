@@ -47,8 +47,7 @@ patterns:
 local person = multimatches[1][2]
 if isTargeted(person) then
   targetIshere = true
-  tAffs.shield = false
-  if removeAffV3 then removeAffV3("shield") end
+  erAff("shield")
   lastLimbAttack = "tekuraAXK"
   
   local damage = tonumber(multimatches[3][1])

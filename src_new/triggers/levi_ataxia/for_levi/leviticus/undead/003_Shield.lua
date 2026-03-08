@@ -35,5 +35,4 @@ patterns:
   type: 1
 ]]--
 
-tAffs.shield = false
-if removeAffV3 then removeAffV3("shield") end
+erAff("shield")

@@ -39,8 +39,8 @@ patterns:
 
 targshield = false
 targreb = false
-removeAffV3("rebounding")
-removeAffV3("shield")
+erAff("rebounding")
+erAff("shield")
 
 tAffs.shield = false
 tAffs.rebounding = false

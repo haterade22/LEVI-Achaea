@@ -38,8 +38,7 @@ patterns:
   type: 1
 ]]--
 
-  tAffs.burrow = false
-  if removeAffV3 then removeAffV3("burrow") end
+  erAff("burrow")
   pariah.burrow = false
 
 if pariah.infest then killTimer(pariah.infest) end

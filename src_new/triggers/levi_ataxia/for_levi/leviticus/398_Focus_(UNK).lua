@@ -35,22 +35,14 @@ patterns:
   type: 1
 ]]--
 
-local name = matches[2]
 if isTargeted(matches[2]) and tBals.focus then
 	-- V3 integration: handle branching state tracker
 	if onTargetFocusV3 then onTargetFocusV3() end
 
 	-- Focus used → target doesn't have impatience (focus would cure it first if present)
 	erAff("impatience")
-	if removeAffV2 then removeAffV2("impatience") end
-	if removeAffV3 then removeAffV3("impatience") end
 
-	-- V2 integration: Focus cures a random mental affliction (mutually exclusive with old system)
-	if ataxia.settings.useAffTrackingV2 then
-		onTargetFocusV2(name)
-	else
-		tFocused()
-	end
+	tFocused()
 end
 	tBals.focus = false
   

@@ -49,7 +49,6 @@ twaterbond = true
   tempTimer(15, [[twaterbond = false]])
   end
 tarAffed("waterbond")
-if applyAffV3 then applyAffV3("waterbond") end
 if partyrelay and not ataxia.afflictions.aeon then send("pt " ..target.. ": Waterbond") end
 end
   

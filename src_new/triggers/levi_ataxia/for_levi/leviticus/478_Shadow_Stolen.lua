@@ -45,10 +45,7 @@ patterns:
 	resetFormat()
 	ataxia_boxEcho(target:upper().."'S SHADOW HAS BEEN STOLEN", "purple")
   ataxia_boxEcho(target:upper().."'S SHADOW HAS BEEN STOLEN", "purple")
-	tAffs.parasite = true
-	if applyAffV3 then applyAffV3("parasite") end
-	tAffs.healthleech = true
-	if applyAffV3 then applyAffV3("healthleech") end
-	tAffs.manaleech = true
-	if applyAffV3 then applyAffV3("manaleech") end
+	tarAffed("parasite")
+	tarAffed("healthleech")
+	tarAffed("manaleech")
   haveshadow = true

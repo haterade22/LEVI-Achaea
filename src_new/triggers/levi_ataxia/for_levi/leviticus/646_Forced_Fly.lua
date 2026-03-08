@@ -41,8 +41,7 @@ fg("black") bg("blue")
 resetFormat()
 send("ql")
 dir_left = "forcefly"
-tAffs.paralysis = false
-if removeAffV3 then removeAffV3("paralysis") end
+erAff("paralysis")
 
 if tChaseTimer then
 	killTimer(tostring(tChaseTimer))

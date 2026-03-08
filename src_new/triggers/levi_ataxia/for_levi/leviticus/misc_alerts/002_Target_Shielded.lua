@@ -48,11 +48,9 @@ if type(target) == "string" and isTargeted(matches[2]) then
 	resetFormat()
 	send("cq eqbal")
   if target == "Kshavatra" then
-  tAffs.shield = false
-  if removeAffV3 then removeAffV3("shield") end
+  erAff("shield")
   else
-	tAffs.shield = true
-	if applyAffV3 then applyAffV3("shield") end
+	tarAffed("shield")
   end
   
 end

@@ -48,8 +48,7 @@ local maybemiss = multimatches[3][1]
 
 if isTargeted(person) then
   targetIshere = true
-  tAffs.shield = false
-  if removeAffV3 then removeAffV3("shield") end
+  erAff("shield")
   ignoreThirdPerson = true
 
     lastLimbAttack = "shikSpinkickHead"
@@ -70,5 +69,4 @@ end
 
 local damage = tonumber(multimatches[3][1])
    ataxiaTables.limbData.shikSpinkickHead = damage
-if tAffs.damagedhead then tAffs.mangledhead = true tLimbs.H = 200 end
-if applyAffV3 then applyAffV3("mangledhead") end
+tarAffed("mangledhead")

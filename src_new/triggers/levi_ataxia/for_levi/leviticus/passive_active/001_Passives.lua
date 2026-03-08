@@ -69,7 +69,6 @@ if isTargeted(matches[2]) then
     erAff("voyria")
     -- V2 integration: remove voyria with certainty
     if removeAffV2 then removeAffV2("voyria") end
-    if removeAffV3 then removeAffV3("voyria") end
   else
     ataxiaTemp.randomCure = 1
     -- V2 integration: passive cured a random affliction

@@ -48,8 +48,7 @@ patterns:
 local person = multimatches[1][2]
 if isTargeted(person) then
 	if multimatches[3][1] == "The attack rebounds back onto you!" then
-  tAffs.rebounding = true
-  if applyAffV3 then applyAffV3("rebounding") end
+  tarAffed("rebounding")
   table.remove(envenomList, 1)
 	 table.remove(envenomListTwo, 1)
 	elseif  multimatches[3][1] == "A reflection of " .. person .. " blinks out of existence." then
@@ -59,8 +58,8 @@ if isTargeted(person) then
     if not affs_to_colour then populate_aff_colours() end
     aff1 = envenomList[1] and venom_to_aff(envenomList[1]) or nil
     aff2 = envenomListTwo[1] and venom_to_aff(envenomListTwo[1]) or nil
-    if aff1 then tarAffed(aff1); if applyAffV3 then applyAffV3(aff1) end end
-    if aff2 then tarAffed(aff2); if applyAffV3 then applyAffV3(aff2) end end
+    if aff1 then tarAffed(aff1) end
+    if aff2 then tarAffed(aff2) end
     --table.remove(envenomList,1)
     --table.remove(envenomListTwo,1)
     if snapscenarioone == true and snapscenariotwo == false then

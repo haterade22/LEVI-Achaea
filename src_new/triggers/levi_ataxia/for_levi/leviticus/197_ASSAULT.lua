@@ -65,24 +65,18 @@ if isTargeted(tar) then
   if lb[tar].hits[limb] >= 200 then
     if limb == "head" then
       tarAffed("concussion")
-      if applyAffV3 then applyAffV3("concussion") end
     elseif limb == "torso" then
       tarAffed("serioustrauma")
-      if applyAffV3 then applyAffV3("serioustrauma") end
     else
       tarAffed("mangled" .. limbNoSpace)
-      if applyAffV3 then applyAffV3("mangled" .. limbNoSpace) end
     end
   elseif lb[tar].hits[limb] >= 100 then
     if limb == "head" then
       tarAffed("damagedhead")
-      if applyAffV3 then applyAffV3("damagedhead") end
     elseif limb == "torso" then
       tarAffed("mildtrauma")
-      if applyAffV3 then applyAffV3("mildtrauma") end
     else
       tarAffed("damaged" .. limbNoSpace)
-      if applyAffV3 then applyAffV3("damaged" .. limbNoSpace) end
     end
   end
 

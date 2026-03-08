@@ -116,7 +116,8 @@ function tarZealHit(aff)
 	cecho("\n"..cstring)
 
 	tAffs[aff] = true
-	
+	if applyAffV3 then applyAffV3(aff) end
+
 	if ataxiaTemp.showingAffs then
 		displayTargetAffs()
 	end
@@ -156,70 +157,70 @@ end
 registerAnonymousEventHandler("tar afflicted", "tarGained")
 
 function erAff(what)
-	if tAffs[what] then
+    -- Special numeric tracking
     if what == "haemophilia" then
-      tAffs.bleed = 0
-      tAffs.bleeding = 0
+        tAffs.bleed = 0
+        tAffs.bleeding = 0
     elseif what == "crescendo" then
-			tAffs.crescendo = 0
-	 else
-		  tAffs[what] = false
+        tAffs.crescendo = 0
+    else
+        tAffs[what] = false
     end
     affTimers[what] = false
-	end
 
-	if ataxiaTemp.repeatOffence and not ataxiaTemp.doRepeat then
-		enableTrigger("Repeat Offence")
-	end
-	
-	if ataxiaTemp.showingAffs then
-		displayTargetAffs()
-  elseif zgui then
-    zgui.showTarAffs()
-	end
-	
-	if ataxiaTemp.class == "Occultist" and readAuraAffs and readAuraAffs.count then
-		readAuraAffs.count = readAuraAffs.count - 1
-	end
-  raiseEvent("target cured aff", what)	
+    -- V3 core removal (handles branching state + sync)
+    if removeAffV3 then removeAffV3(what) end
+
+    -- Repeat offence
+    if ataxiaTemp and ataxiaTemp.repeatOffence and not ataxiaTemp.doRepeat then
+        enableTrigger("Repeat Offence")
+    end
+
+    -- GUI updates
+    if ataxiaTemp and ataxiaTemp.showingAffs then
+        displayTargetAffs()
+    elseif zgui then
+        zgui.showTarAffs()
+    end
+
+    -- Occultist aura tracking
+    if ataxiaTemp and ataxiaTemp.class == "Occultist" and readAuraAffs and readAuraAffs.count then
+        readAuraAffs.count = readAuraAffs.count - 1
+    end
+    raiseEvent("target cured aff", what)
 end
 
 function haveAff(what)
-    -- V3 routing: check V3 first when enabled
-    if affConfigV3 and affConfigV3.enabled and haveAffV3 then
-        return haveAffV3(what)
-    end
-    -- V1 fallback
-    if tAffs and tAffs[what] then
-        return true
-    else
-        return false
-    end
+    if haveAffV3 then return haveAffV3(what) end
+    -- Ultra-fallback during load order (before V3 script loads)
+    return tAffs and tAffs[what] and true or false
 end
 
 function tarAffed(...)
   local affs = arg
   local added = {}
-  
+
   for _, aff in pairs(affs) do
     if type(aff) ~= "number" then
       if aff == "sensitivity" then
         if tAffs.deafness then
           tAffs.deafness = false
+          if removeAffV3 then removeAffV3("deafness") end
           table.insert(added, "nodeaf")
         else
           tAffs.sensitivity = true
+          if applyAffV3 then applyAffV3("sensitivity") end
           table.insert(added, "sensitivity")
-          
           affTimers.sensitivity = getEpoch()
         end
       elseif aff == "burns" or aff == "burn" then
         pali_addBurns()
-      elseif aff == "pyre" or aff == "pyre" then
+      elseif aff == "pyre" then
         pali_addPyre()
       else
-        -- Core tracking
+        -- Core tracking: V1 cache + V3 branching state
         tAffs[aff] = true
+        if applyAffV3 then applyAffV3(aff) end
         table.insert(added, aff)
         affTimers[aff] = getEpoch()
       end
@@ -235,15 +236,17 @@ function addAffList(affTable)
   if type(affTable) ~= "table" then return end
   local affs = affTable
   local added = {}
-  
+
   for _, aff in pairs(affs) do
     if type(aff) ~= "number" then
       if aff == "sensitivity" then
         if tAffs.deafness then
           tAffs.deafness = false
+          if removeAffV3 then removeAffV3("deafness") end
           table.insert(added, "nodeaf")
         else
           tAffs.sensitivity = true
+          if applyAffV3 then applyAffV3("sensitivity") end
           table.insert(added, "sensitivity")
           affTimers.sensitivity = getEpoch()
         end
@@ -251,6 +254,7 @@ function addAffList(affTable)
         magi_addBurns()
       else
         tAffs[aff] = true
+        if applyAffV3 then applyAffV3(aff) end
         table.insert(added, aff)
         affTimers[aff] = getEpoch()
       end
@@ -268,18 +272,21 @@ function tarSingleAff(what)
 		if tAffs.deafness then
 			aff = "nodeaf"
 			tAffs.deafness = false
+			if removeAffV3 then removeAffV3("deafness") end
 		else
 			tAffs.sensitivity = true
+			if applyAffV3 then applyAffV3("sensitivity") end
 		end
 	elseif what == "burns" or what == "burn" then
 		magi_addBurns()
 	elseif not tAffs[what] then
 		tAffs[what] = true
+		if applyAffV3 then applyAffV3(what) end
 	end
-	
+
 	if what ~= "burns" and what ~= "burn" then
-		local affs = { aff }	
-		raiseEvent("tar afflicted", affs)	
+		local affs = { aff }
+		raiseEvent("tar afflicted", affs)
 		checkTargetLocks()
 	end
 end
@@ -290,48 +297,58 @@ function tarDoubleAff(affone, afftwo)
 		if tAffs.deafness then
 			affone = "nodeaf"
 			tAffs.deafness = false
+			if removeAffV3 then removeAffV3("deafness") end
 		else
 			tAffs.sensitivity = true
+			if applyAffV3 then applyAffV3("sensitivity") end
 		end
 	else
 		tAffs[affone] = true
+		if applyAffV3 then applyAffV3(affone) end
 	end
-	
+
 	if afftwo == "sensitivity" then
 		if tAffs.deafness then
 			afftwo = "nodeaf"
 			tAffs.deafness = false
+			if removeAffV3 then removeAffV3("deafness") end
 		else
 			tAffs.sensitivity = true
+			if applyAffV3 then applyAffV3("sensitivity") end
 		end
 	else
 		tAffs[afftwo] = true
+		if applyAffV3 then applyAffV3(afftwo) end
 	end
 
-	local affs = { affone, afftwo }	
-	raiseEvent("tar afflicted", affs)	
+	local affs = { affone, afftwo }
+	raiseEvent("tar afflicted", affs)
 	checkTargetLocks()
 end
 
 function tarTripleAff(affone, afftwo, affthree)
 	if not tAffs[affone] then
 		tAffs[affone] = true
+		if applyAffV3 then applyAffV3(affone) end
 	end
 	if not tAffs[afftwo] then
 		tAffs[afftwo] = true
+		if applyAffV3 then applyAffV3(afftwo) end
 	end
 	if not tAffs[affthree] then
 		tAffs[affthree] = true
+		if applyAffV3 then applyAffV3(affthree) end
 	end
 
-	local affs = { affone, afftwo, affthree }	
-	raiseEvent("tar afflicted", affs)	
+	local affs = { affone, afftwo, affthree }
+	raiseEvent("tar afflicted", affs)
 	checkTargetLocks()
 end
 
 function tarBonusAff(aff)
 	if not affs_to_colour then populate_aff_colours() end
 	tAffs[aff] = true
+	if applyAffV3 then applyAffV3(aff) end
 	cecho("<NavajoWhite> +<"..affs_to_colour[aff][1]..">"..affs_to_colour[aff][2]:upper().."<NavajoWhite>+")
 end
 

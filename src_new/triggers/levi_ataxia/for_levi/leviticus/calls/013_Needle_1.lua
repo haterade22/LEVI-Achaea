@@ -52,5 +52,4 @@ end
 send("pt " ..matches[2].. ": Crushed Throat")
    
 tarAffed("crushedthroat")
-if applyAffV3 then applyAffV3("crushedthroat") end
 tneedle = 100

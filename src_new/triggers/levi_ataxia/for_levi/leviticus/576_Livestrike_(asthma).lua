@@ -48,13 +48,11 @@ local maybemiss = multimatches[3][1]
 
 if isTargeted(person) then
   targetIshere = true
-  tAffs.shield = false
-  if removeAffV3 then removeAffV3("shield") end
+  erAff("shield")
   ignoreThirdPerson = true
 
     moveCursor(0, getLineNumber()-1)
     tarAffed("asthma")
-    if applyAffV3 then applyAffV3("asthma") end
     moveCursorEnd()
     lastLimbAttack = "shikLivestrike"
 

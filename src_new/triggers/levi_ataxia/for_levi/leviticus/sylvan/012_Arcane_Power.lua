@@ -40,9 +40,7 @@ patterns:
   type: 1
 ]]--
 
-tAffs.disturb = true
-if applyAffV3 then applyAffV3("disturb") end
+tarAffed("disturb")
 sylArcanePower = tonumber(matches[2])
-tAffs.feedback = true
-if applyAffV3 then applyAffV3("feedback") end
+tarAffed("feedback")
 ataxiaEcho("Arcane power is at: <white>"..sylArcanePower..".")

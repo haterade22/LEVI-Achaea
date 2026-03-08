@@ -39,7 +39,6 @@ patterns:
 
 if isTargeted(matches[2]) then
   tarAffed("hypersomnia")
-  if applyAffV3 then applyAffV3("hypersomnia") end
 end
 if gmcp.Char.Status.class == "Apostate" then
   if demon() == "nightmare" then
@@ -57,7 +56,6 @@ function nighttick()
   if demon() == "nightmare" then
     if tAffs.dementia and tAffs.hypersomnia then
       tarAffed("hellsight")
-      if applyAffV3 then applyAffV3("hellsight") end
     else
       killTimer(tostring(nmTimer))
 	    nmTimer = tempTimer(8.5, [[nighttick()]])

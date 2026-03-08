@@ -45,7 +45,6 @@ if isTargeted(matches[2]) then
   erAff("paralysis")
   -- V2 integration: Fool cures paralysis + 3 random
   if removeAffV2 then removeAffV2("paralysis") end
-  if removeAffV3 then removeAffV3("paralysis") end
 	if class == "Jester" or class == "Occultist" then
 		ataxiaTemp.randomCure = 3
 		if reduceRandomAffCertaintyV2 then

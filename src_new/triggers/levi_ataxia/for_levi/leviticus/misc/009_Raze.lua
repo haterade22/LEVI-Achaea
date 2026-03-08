@@ -44,8 +44,7 @@ patterns:
 ]]--
 
 if type(target) == "string" and isTargeted(matches[2]) then
-	tAffs.shield = false
-	if removeAffV3 then removeAffV3("shield") end
+	erAff("shield")
 	selectString(line,1)
 	setBold(true)
 	fg("NavajoWhite")

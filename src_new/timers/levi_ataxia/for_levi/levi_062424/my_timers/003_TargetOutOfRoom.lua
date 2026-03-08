@@ -50,6 +50,7 @@ else
 			taTempers()
 		else
 			tAffs = {blindness = true, deafness = true, shield = false, rebounding = false, curseward = false}
+      if resetStatesV3 then resetStatesV3() end
       affTimers = {}
 			if ataxiaTemp.hypnoseal then tAffs.hypnoseal = true end
       if pariah and pariah.ensorcell then tAffs.ensorcelled = true end

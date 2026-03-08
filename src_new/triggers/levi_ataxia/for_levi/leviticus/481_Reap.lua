@@ -48,7 +48,6 @@ end
 if type(target) ~= "number" and isTargeted(matches[2]) then
     if aff then
         tarAffed(aff)
-        if applyAffV3 then applyAffV3(aff) end
     end
     targetIshere = true
     disableTimer("TargetOutOfRoom")

@@ -347,31 +347,11 @@ end
 -- TRACKING
 -- ═══════════════════════════════════════════════════════════════════════
 function leviSetup.setupTracking(rest)
-  if rest == "v2" or rest == "on" then
-    ataxia.settings.useAffTrackingV2 = true
-    save()
-    ataxiaEcho("Affliction tracking V2: " .. G .. "ENABLED")
-    return
-  elseif rest == "v1" or rest == "off" then
-    ataxia.settings.useAffTrackingV2 = false
-    save()
-    ataxiaEcho("Affliction tracking V2: " .. R .. "DISABLED" .. V .. " (using V1)")
-    return
-  end
-
   header("Affliction Tracking System")
 
-  local v2 = ataxia.settings.useAffTrackingV2
-  row("Current system", v2 and "V2 (certainty-based)" or "V1 (boolean)")
-  row("V2 status", boolStr(v2))
-
-  cecho("\n\n  " .. HL .. "V1" .. V .. " — Simple boolean tracking (target has/doesn't have aff)")
-  cecho("\n  " .. HL .. "V2" .. V .. " — Certainty-based with stacking, random cure prediction,")
-  cecho("\n       " .. V .. "backtracking, and third-party verification")
-
-  cecho("\n\n  " .. V .. "Toggle:")
-  cecho("\n  " .. HL .. "levi setup tracking v2" .. V .. " — Enable V2")
-  cecho("\n  " .. HL .. "levi setup tracking v1" .. V .. " — Revert to V1")
+  row("Current system", "V3 (probability-based)")
+  cecho("\n\n  " .. V .. "V3 affliction tracking is always active.")
+  cecho("\n  " .. V .. "V2 has been removed — V2 stubs route to V3 automatically.")
   cecho("\n")
 end
 
@@ -829,7 +809,7 @@ function leviSetup.showStatus()
   -- Separator
   cecho("\n\n  " .. HL .. "SYSTEM")
   row("Separator", ataxia.settings.separator or ";")
-  row("Aff tracking", ataxia.settings.useAffTrackingV2 and "V2" or "V1")
+  row("Aff tracking", "V3")
   row("GUI", boolStr(ataxia.usegui))
   row("Party relay", boolStr(partyrelay))
   row("Auto-loot", boolStr(ataxia.settings.looting))

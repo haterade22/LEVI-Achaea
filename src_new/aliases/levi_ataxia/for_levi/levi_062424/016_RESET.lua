@@ -17,6 +17,7 @@ expandAlias("pdo")
 shape = 0
 parriedlimb = "none"
 tAffs = {blindness = true, deafness = true, shield = false, rebounding = true, curseward = true}
+if resetStatesV3 then resetStatesV3() end
 ataxia_Echo("Reset target afflictions.")
 affcount = 0
 can_enlighten = false

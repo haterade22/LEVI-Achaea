@@ -55,21 +55,17 @@ tdeliverance = false
 		erAff("retribution")
 		erAff("earworm")
 		-- V3: Definite cure (we know exactly what was cured)
-		if removeAffV3 then removeAffV3("retribution") end
-		if removeAffV3 then removeAffV3("earworm") end
 	elseif multimatches[3][1] == name .. " shakes his head and a look of clarity returns to his eyes."
 		or multimatches[3][1] == name .. " shakes her head and a look of clarity returns to her eyes." then
 			erAff("lovers")
 			-- V3: Definite cure (we know exactly what was cured)
-			if removeAffV3 then removeAffV3("lovers") end
 	else
 		targetAteWrapper("bellwort")
 	end
 	tBals.plant = false
   if tBals.timers.plant then killTimer(tBals.timers.plant) end
 	if tAffs.mercury then
-		tAffs.mercury = false
-		if removeAffV3 then removeAffV3("mercury") end
+		erAff("mercury")
 		tBals.timers.plant = tempTimer(1.9, [[tBals.plant = true; tBals.timers.plant = nil]])
 	else
 		tBals.timers.plant = tempTimer(1.3, [[tBals.plant = true; tBals.timers.plant = nil]])

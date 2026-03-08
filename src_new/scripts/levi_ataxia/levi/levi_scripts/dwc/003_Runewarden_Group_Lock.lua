@@ -125,10 +125,6 @@ function runeGroupLock.hasAff(aff)
     if affConfigV3 and affConfigV3.enabled then
         return haveAffV3(aff)
     end
-    -- V2 (certainty levels) - when enabled
-    if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-        if haveAffV2 then return haveAffV2(aff) end
-    end
     -- V1 (boolean) - fallback
     return tAffs and tAffs[aff]
 end

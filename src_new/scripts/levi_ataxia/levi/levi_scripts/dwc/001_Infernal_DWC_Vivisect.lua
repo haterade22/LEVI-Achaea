@@ -401,65 +401,21 @@ function infernalDWC.getFocusLeg()
 end
 
 -------------------------------------------------------------------------------
--- AFFLICTION TRACKING HELPERS (V2 compatible)
+-- AFFLICTION TRACKING HELPERS
 -------------------------------------------------------------------------------
 
---[[
-    Tracking System Toggle:
-    - ataxia.settings.useAffTrackingV2 = true   → Use V2 ONLY (no V1 fallback)
-    - ataxia.settings.useAffTrackingV2 = false  → Use V1 only
-
-    When V2 is enabled, V1 is completely ignored to prevent conflicts.
-]]--
-
--- Helper to check if target has an affliction (V2 or V1, no mixing)
+-- Helper to check if target has an affliction (V3 is always on, routes through global haveAff)
 function infernalDWC.hasAff(aff)
-    -- V3 system (highest priority - probability-based)
-    if affConfigV3 and affConfigV3.enabled then
-        return haveAffV3(aff)  -- Uses 30% threshold by default
-    end
-
-    -- V2 system (when enabled, use ONLY V2 - no fallback)
-    if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-        if haveAffV2 then
-            return haveAffV2(aff)
-        elseif tAffsV2 and tAffsV2[aff] then
-            -- Binary system: check for any truthy value
-            return true
-        end
-        -- V2 enabled but not loaded - return false (don't fall back to V1)
-        return false
-    end
-
-    -- V1 system (only when V2 is disabled)
-    -- Check for any truthy value (not just == true, as some values may be 1 or timestamps)
-    if tAffs and tAffs[aff] then
-        return true
-    end
-    return false
+    return haveAff(aff)
 end
 
--- Get affliction probability (V3 only, returns 0-1)
--- Falls back to binary (1.0 if has, 0 if not) for V2/V1
+-- Get affliction probability (0.0-1.0).
 function infernalDWC.getAffProb(aff)
-    if affConfigV3 and affConfigV3.enabled then
-        return getAffProbabilityV3(aff)
-    end
-    -- Fallback: binary (1.0 if has, 0 if not)
-    return infernalDWC.hasAff(aff) and 1.0 or 0
+    return getAffProbabilityV3 and getAffProbabilityV3(aff) or 0
 end
 
--- Helper to confirm we applied an affliction (V2 or V1)
+-- Helper to confirm we applied an affliction
 function infernalDWC.confirmAff(aff)
-    -- V2 system (when enabled, use ONLY V2)
-    if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-        if confirmAffV2 then
-            confirmAffV2(aff)
-        end
-        return -- Don't also set V1
-    end
-
-    -- V1 system (only when V2 is disabled)
     if tAffs then
         tAffs[aff] = true
     end
@@ -467,12 +423,7 @@ end
 
 -- Check which tracking system is active
 function infernalDWC.getTrackingSystem()
-    if affConfigV3 and affConfigV3.enabled then
-        return "V3"
-    elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-        return "V2"
-    end
-    return "V1"
+    return "V3"
 end
 
 -------------------------------------------------------------------------------
@@ -972,7 +923,6 @@ function infernalDWC.onParry(limb)
         -- Parry means nausea is NOT active (nausea bypasses parry)
         -- Clear from ALL tracking systems (V1, V2, and V3)
         if erAff then erAff("nausea") end
-        if removeAffV3 then removeAffV3("nausea") end
         cecho("\n<yellow>[INF DWC]<reset> PARRY on <red>" .. limb .. "<reset>! Switching limb target.")
     end
 end
@@ -1278,10 +1228,7 @@ function infernalDWCStatus()
 
     cecho("\n<cyan>========================================<reset>")
     -- Show which tracking system is in use
-    local trackingSystem = "V1 (tAffs)"
-    if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-        trackingSystem = "V2 (tAffsV2)"
-    end
+    local trackingSystem = (affConfigV3 and affConfigV3.enabled) and "V3" or "V1"
     cecho("\n<cyan>[INF DWC VIVISECT]<reset> Target: <yellow>" .. tar .. "<reset> | Tracking: <yellow>" .. trackingSystem .. "<reset>")
 
     -- Target health (for damage kill check)
@@ -1422,4 +1369,3 @@ end)
 
 cecho("\n<cyan>[INF DWC Vivisect]<reset> Loaded! Use infernalDWCVivisect() to attack.")
 cecho("\n<cyan>[INF DWC Vivisect]<reset> Commands: infernalDWCStatus(), infernalDWCReset(), infernalDWCSetWeapons(w1, w2)")
-cecho("\n<cyan>[INF DWC Vivisect]<reset> Supports affliction tracking V2 (set ataxia.settings.useAffTrackingV2 = true)")
