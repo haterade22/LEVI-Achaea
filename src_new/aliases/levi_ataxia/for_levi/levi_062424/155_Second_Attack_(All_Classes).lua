@@ -17,7 +17,11 @@ if gmcp.Char.Status.class == "Bard" then
 levibardtwo()
 end
 if gmcp.Char.Status.class == "Monk" then
-tekura.dispatch.run()
+  if ataxia.vitals.stance then
+    tekura.dispatch.run()
+  else
+    shikudo.dispatch()
+  end
 end
 
 if gmcp.Char.Status.class == "Blademaster" then

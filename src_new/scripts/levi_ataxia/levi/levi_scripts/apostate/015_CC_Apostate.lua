@@ -46,15 +46,17 @@ packageName: ''
 --------------------------------------------------------------------------------
 -- CC_Apostate: Unified Apostate Offensive System (V3 Integration)
 --
--- Replaces old files 001-013 with a single namespace-based system.
+-- Replaces old files 001-014 with a single namespace-based system.
 -- Backward-compat wrappers, daemon utilities, and nightmare tracking below.
 -- Integrates with Affliction Tracker V3 (probability-based), V2, or V1.
 --
--- Kill Routes (4 modes):
+-- Kill Routes (6 modes):
 --   1. True Lock  - DEADEYES curse delivery building toward truelock
---   2. Corrupt    - Stack afflictions then demon corrupt for damage/catharsis
---   3. Vivisect   - Truelock -> prone -> shrivel 4 limbs -> vivisect
---   4. Sleep      - Build asthma + impatience + hypersomnia -> sleep curse
+--   2. Mental     - Flood goldenseal+lobelia (IMP→STU→DIZ→VER) then lock
+--   3. Group      - Pure lock pieces, no hinder, no probability gates
+--   4. Corrupt    - Stack afflictions then demon corrupt for damage/catharsis
+--   5. Vivisect   - Truelock -> prone -> shrivel 4 limbs -> vivisect
+--   6. Sleep      - Build asthma + impatience + hypersomnia -> sleep curse
 --
 -- DEADEYES delivers 2 curses per action (2.3s balance).
 -- Curses are selected independently via a dual-slot system:

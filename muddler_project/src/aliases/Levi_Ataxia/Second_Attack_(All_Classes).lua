@@ -4,7 +4,11 @@ if gmcp.Char.Status.class == "Bard" then
 levibardtwo()
 end
 if gmcp.Char.Status.class == "Monk" then
-tekura.dispatch.run()
+  if ataxia.vitals.stance then
+    tekura.dispatch.run()
+  else
+    shikudo.dispatch()
+  end
 end
 
 if gmcp.Char.Status.class == "Blademaster" then
@@ -51,7 +55,7 @@ infernalpriosblackout()
 end
 
 if gmcp.Char.Status.class == "Apostate" then
-apostate.setMode("corrupt")
+apostate.setMode("mental")
 apostate.dispatch()
 end
 if gmcp.Char.Status.class == "Serpent" then

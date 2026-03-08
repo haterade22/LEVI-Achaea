@@ -27,9 +27,9 @@ function lb.addHit(name, ltar, amount)
     lb.resetLimb("]] .. name .. [[", "]] .. ltar .. [[")
     lb["]] .. name .. [["].t["]] .. ltar .. [["] = nil
   ]])
-  cecho(" " .. ((lb[name].hits[ltar] > 100 and "<firebrick>") or "<ansi_yellow>") .. "("
+  cecho(" " .. ((lb[name].hits[ltar] > 100 and "<firebrick>") or "<yellow>") .. "("
             .. ((lb[name].hits[ltar] > 100 and "<orange_red>") or "<yellow>") .. lb[name].hits[ltar] .. "%"
-            .. ((lb[name].hits[ltar] > 100 and "<firebrick>") or "<ansi_yellow>") .. ")")    
+            .. ((lb[name].hits[ltar] > 100 and "<firebrick>") or "<yellow>") .. ")")    
   
 if lb[name].hits[ltar] < 100 and (lb[name].hits[ltar] + mylimbattackpercentage) >= 100 then
 singleHitPrepped = true

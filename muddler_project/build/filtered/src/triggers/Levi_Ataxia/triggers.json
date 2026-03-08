@@ -15205,10 +15205,6 @@
                         "type": "regex"
                       },
                       {
-                        "pattern": "^(\\w+) raises a platinum whistle to \\w+ lips",
-                        "type": "regex"
-                      },
-                      {
                         "pattern": "^A diminutive homunculus resembling (\\w+) stares menacingly at you",
                         "type": "regex"
                       }

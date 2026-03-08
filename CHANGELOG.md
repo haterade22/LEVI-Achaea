@@ -2,6 +2,29 @@
 
 ---
 
+## 2026-03-07 — Monk: Fix Tekura/Shikudo spec detection in zz/xx aliases
+
+**Problem**: Pressing `zz` as a Tekura Monk called `shikudo.dispatch()` unconditionally — wielding a staff and showing `[Shikudo:DISPATCH]` instead of Tekura combat. The `xx` alias had the inverse problem (always called `tekura.dispatch.run()`).
+
+**Fix**: Both aliases now check `ataxia.vitals.stance` (populated from GMCP charstats when Tekura is active). If stance is truthy → Tekura dispatch; otherwise → Shikudo dispatch.
+
+**Files modified**:
+- `src_new/aliases/.../152_First_Attack_(All_Classes).lua` — Monk branch: added spec detection
+- `src_new/aliases/.../155_Second_Attack_(All_Classes).lua` — Monk branch: added spec detection
+
+---
+
+## 2026-03-07 — Limb: Fix literal `<ansi_yellow>` tags in damage echo
+
+**Problem**: Limb damage percentage echo (e.g., `(44.4%)`) printed literal `<ansi_yellow>` text instead of rendering as yellow color.
+
+**Fix**: Replaced `<ansi_yellow>` with `<yellow>` in `cecho()` calls — a universally supported Mudlet color name.
+
+**Files modified**:
+- `src_new/scripts/.../limb/002_limb_management.lua` — lines 30-32: `<ansi_yellow>` → `<yellow>`
+
+---
+
 ## 2026-03-07 — Apostate: Fix mental mode impatience loop
 
 **Problem**: Mental mode sent `impatience + paralysis` every round forever. `selectPrimaryCurseMental()` required impatience at 100% V3 probability (`< 1.0`) before advancing to stupidity/dizziness/epilepsy. But the target cures impatience with goldenseal each round, so it never reaches 100%. The goldenseal flood (the whole point of mental mode) never happens.

@@ -2,7 +2,11 @@ if gmcp.Char.Status.class == "Blue Dragon" or gmcp.Char.Status.class == "Red Dra
 levidragongroup()
 end
 if gmcp.Char.Status.class == "Monk" then
-shikudo.dispatch()
+  if ataxia.vitals.stance then
+    tekura.dispatch.run()
+  else
+    shikudo.dispatch()
+  end
 end
 
 if gmcp.Char.Status.class == "Bard" then

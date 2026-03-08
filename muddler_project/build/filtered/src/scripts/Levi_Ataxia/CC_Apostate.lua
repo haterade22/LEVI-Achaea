@@ -31,15 +31,17 @@ packageName: ''
 --------------------------------------------------------------------------------
 -- CC_Apostate: Unified Apostate Offensive System (V3 Integration)
 --
--- Replaces old files 001-013 with a single namespace-based system.
--- Backward-compat wrappers live in 014_Levi_Apostate.lua.
+-- Replaces old files 001-014 with a single namespace-based system.
+-- Backward-compat wrappers, daemon utilities, and nightmare tracking below.
 -- Integrates with Affliction Tracker V3 (probability-based), V2, or V1.
 --
--- Kill Routes (4 modes):
+-- Kill Routes (6 modes):
 --   1. True Lock  - DEADEYES curse delivery building toward truelock
---   2. Corrupt    - Stack afflictions then demon corrupt for damage/catharsis
---   3. Vivisect   - Truelock -> prone -> shrivel 4 limbs -> vivisect
---   4. Sleep      - Build asthma + impatience + hypersomnia -> sleep curse
+--   2. Mental     - Flood goldenseal+lobelia (IMP→STU→DIZ→VER) then lock
+--   3. Group      - Pure lock pieces, no hinder, no probability gates
+--   4. Corrupt    - Stack afflictions then demon corrupt for damage/catharsis
+--   5. Vivisect   - Truelock -> prone -> shrivel 4 limbs -> vivisect
+--   6. Sleep      - Build asthma + impatience + hypersomnia -> sleep curse
 --
 -- DEADEYES delivers 2 curses per action (2.3s balance).
 -- Curses are selected independently via a dual-slot system:
@@ -73,7 +75,7 @@ apostate = apostate or {}
 --------------------------------------------------------------------------------
 
 apostate.state = {
-  mode = "lock",            -- "lock", "corrupt", "vivisect", "sleep", "group"
+  mode = "lock",            -- "lock", "corrupt", "vivisect", "sleep", "group", "mental"
   corrupted = false,        -- corrupt has been fired (awaiting catharsis)
   lastCorruptTime = 0,      -- corrupt cooldown tracking
   daeggerhere = false,      -- daegger summoned
@@ -323,7 +325,8 @@ function apostate.selectSecondaryCurse(c1)
   end
 
   -- Anorexia only after slickness (no point blocking eating if they can still apply)
-  if apostate.hasAff("slickness") and not apostate.hasAff("anorexia") and c1 ~= "anorexia" then
+  -- Also allow when c1=sicken since sicken delivers slickness this round
+  if (apostate.hasAff("slickness") or c1 == "sicken") and not apostate.hasAff("anorexia") and c1 ~= "anorexia" then
     return "anorexia"
   end
 
@@ -403,15 +406,86 @@ function apostate.selectSecondaryCurseGroup(c1)
   return "paralysis"
 end
 
+--------------------------------------------------------------------------------
+-- MENTAL MODE CURSE SELECTION
+-- Flood goldenseal+lobelia with mental affs. Once impatience + 2 other
+-- mentals are stuck, transition to lock mode curse selectors for physical lock.
+--
+-- Curse 1: impatience → stupid → dizzy → vertigo → (lock selectors)
+-- Curse 2: paralysis (blocks tree) → fill mental pieces → (lock selectors)
+-- All delivery thresholds at 25% (deliver once, move on to flood cures).
+-- Transition gate (mentalReady): impatience(100%) + 2 of {stupidity, dizziness, vertigo}(25%) → lock
+--------------------------------------------------------------------------------
+
+-- Count how many mental stack affs are stuck (excludes impatience — that's the gate)
+function apostate.mentalStackCount()
+  local count = 0
+  local mentals = {"stupidity", "dizziness", "vertigo"}
+  for _, aff in ipairs(mentals) do
+    if apostate.hasAff(aff) then count = count + 1 end
+  end
+  return count
+end
+
+-- Check if mental mode should transition to lock curse selectors
+-- Requires impatience CONFIRMED (100%) + 2 of {stupidity, dizziness, vertigo} at 25%+
+function apostate.mentalReady()
+  return apostate.getAffProb("impatience") >= 1.0 and apostate.mentalStackCount() >= 2
+end
+
+function apostate.selectPrimaryCurseMental()
+  -- If mental stack is ready, transition to lock selectors
+  if apostate.mentalReady() then
+    return apostate.selectPrimaryCurse()
+  end
+
+  -- Mental stack priority: impatience → stupid → dizzy → vertigo
+  -- All at 25% delivery threshold — deliver each once then move on.
+  -- The 100% impatience gate is in mentalReady() (transition to lock), not here.
+  if apostate.getAffProb("impatience") < 0.25 then return "impatience" end
+  if apostate.getAffProb("stupidity") < 0.25 then return "stupid" end
+  if apostate.getAffProb("dizziness") < 0.25 then return "dizzy" end
+  if apostate.getAffProb("vertigo") < 0.25 then return "vertigo" end
+
+  -- All mentals stuck but transition not met — fill with lock
+  return apostate.selectPrimaryCurse()
+end
+
+function apostate.selectSecondaryCurseMental(c1)
+  -- If mental stack is ready, transition to lock selectors
+  if apostate.mentalReady() then
+    return apostate.selectSecondaryCurse(c1)
+  end
+
+  -- Always paralysis (blocks tree, which would randomly cure a mental)
+  if not apostate.hasAff("paralysis") and c1 ~= "paralysis" then
+    return "paralysis"
+  end
+
+  -- Paralysis stuck — fill missing mental pieces (skipping c1)
+  -- All at 25% delivery threshold (same as primary — flood cures, don't loop)
+  if apostate.getAffProb("impatience") < 0.25 and c1 ~= "impatience" then return "impatience" end
+  if apostate.getAffProb("stupidity") < 0.25 and c1 ~= "stupid" then return "stupid" end
+  if apostate.getAffProb("dizziness") < 0.25 and c1 ~= "dizzy" then return "dizzy" end
+  if apostate.getAffProb("vertigo") < 0.25 and c1 ~= "vertigo" then return "vertigo" end
+
+  -- All mentals stuck — fill with lock secondary
+  return apostate.selectSecondaryCurse(c1)
+end
+
 -- Main curse selection. Returns table of 2 curse names for DEADEYES.
--- Routes to lock or group mode based on apostate.state.mode.
+-- Routes to lock, group, or mental mode based on apostate.state.mode.
 function apostate.selectCurses()
   local locks = apostate.getLocks()
   local mode = apostate.state.mode
 
+  -- Secondary selector for the current mode
+  local secondaryFn = apostate.selectSecondaryCurse
+  if mode == "group" then secondaryFn = apostate.selectSecondaryCurseGroup
+  elseif mode == "mental" then secondaryFn = apostate.selectSecondaryCurseMental end
+
   -- Curseward: must breach first (all modes)
   if apostate.hasAff("curseward") then
-    local secondaryFn = (mode == "group") and apostate.selectSecondaryCurseGroup or apostate.selectSecondaryCurse
     return {"breach", secondaryFn("breach")}
   end
 
@@ -420,7 +494,6 @@ function apostate.selectCurses()
     if getLockingAffliction then
       local lockAffName = getLockingAffliction("name")
       local lockAffCurse = toEvileyeCurse(getLockingAffliction())
-      local secondaryFn = (mode == "group") and apostate.selectSecondaryCurseGroup or apostate.selectSecondaryCurse
       if lockAffName and not apostate.hasAff(lockAffName) then
         return {lockAffCurse, secondaryFn(lockAffCurse)}
       end
@@ -431,6 +504,13 @@ function apostate.selectCurses()
   if mode == "group" then
     local c1 = apostate.selectPrimaryCurseGroup()
     local c2 = apostate.selectSecondaryCurseGroup(c1)
+    return {c1, c2}
+  end
+
+  -- Mental mode: stack goldenseal/lobelia affs then transition to lock
+  if mode == "mental" then
+    local c1 = apostate.selectPrimaryCurseMental()
+    local c2 = apostate.selectSecondaryCurseMental(c1)
     return {c1, c2}
   end
 
@@ -595,7 +675,8 @@ function apostate.buildAttack()
     -- committing to manaleech next round (avoids wasting manaleech without asthma)
     -- Sent as separate queue entry in dispatch() so it doesn't fire immediately
     -- (server-side ; splits commands — disfigure would consume EQ before deadeyes fires)
-    if apostate.state.mode == "lock" and (c1 == "asthma" or c2 == "asthma")
+    if (apostate.state.mode == "lock" or apostate.state.mode == "mental")
+       and (c1 == "asthma" or c2 == "asthma")
        and not apostate.state.disfigureSent then
       apostate.state.pendingDisfigure = true
       apostate.state.disfigureSent = true
@@ -614,7 +695,7 @@ end
 
 --------------------------------------------------------------------------------
 -- MAIN DISPATCH
--- Entry point called by all backward-compat wrappers in 014_Levi_Apostate.lua.
+-- Entry point called by all backward-compat wrappers and aliases.
 -- Validates target, selects curses, builds attack, ensures baalzadeen, sends.
 --------------------------------------------------------------------------------
 
@@ -778,5 +859,197 @@ function apostate.setMode(mode)
   end
   if ataxiaEcho then
     ataxiaEcho("[Apostate] Mode set to: " .. mode)
+  end
+end
+
+--------------------------------------------------------------------------------
+-- BACKWARD COMPATIBILITY WRAPPERS
+-- Old function names route to the apostate namespace system above.
+--------------------------------------------------------------------------------
+
+function leviclumsapo()
+  apostate.state.mode = "lock"
+  apostate.dispatch()
+end
+
+function leviweariapo()
+  apostate.state.mode = "lock"
+  apostate.dispatch()
+end
+
+function levisleepapo()
+  apostate.state.mode = "sleep"
+  apostate.dispatch()
+end
+
+function apostate_lock()
+  apostate.state.mode = "lock"
+  apostate.dispatch()
+end
+
+function apostate_lockattack()
+  apostate.dispatch()
+end
+
+function apostate_lockImpale()
+  apostate.state.mode = "lock"
+  apostate.dispatch()
+end
+
+function apostate_sleepattack()
+  apostate.state.mode = "sleep"
+  apostate.dispatch()
+end
+
+function apostate_clumsy()
+  apostate.state.mode = "lock"
+  apostate.dispatch()
+end
+
+function apostate_vivisect()
+  apostate.state.mode = "vivisect"
+  apostate.dispatch()
+end
+
+function apostate_weari()
+  apostate.state.mode = "lock"
+  apostate.dispatch()
+end
+
+function apostate_mental()
+  apostate.setMode("mental")
+  apostate.dispatch()
+end
+
+function apostate_kelp()
+  apostate.state.mode = "lock"
+  apostate.dispatch()
+end
+
+function apostate_group()
+  apostate.state.mode = "group"
+  apostate.dispatch()
+end
+
+function apostate_clumsyillusion()
+  apostate.state.mode = "lock"
+  apostate.dispatch()
+end
+
+-- Legacy corruptDmg wrapper
+function corruptDmg()
+  return apostate.corruptDmg()
+end
+
+function corruptKill()
+  if ataxiaTemp and ataxiaTemp.lastAssess and ataxiaTemp.lastAssess <= apostate.corruptDmg() then
+    apostate.state.mode = "corrupt"
+    apostate.dispatch()
+  end
+end
+
+function cathCorrupt()
+  if pm and pm - apostate.corruptDmg() <= 20 then
+    apostate.state.mode = "corrupt"
+    apostate.dispatch()
+  end
+end
+
+--------------------------------------------------------------------------------
+-- DAEMON UTILITY FUNCTIONS (used by CC_Apostate and triggers)
+--------------------------------------------------------------------------------
+
+function bloodPact()
+  if not apo.pentagram() then
+    if bloodTimer then
+      if not dsum then
+        addToCommand("summon daegger")
+      end
+      addToCommand(
+        "wield daegger shield;demon bloodpact &tar for " ..
+        pentagramEnt ..
+        "/order loyals kill &tar"
+      )
+    end
+  elseif apo.demon() ~= pentagramEnt then
+    if not dsum then
+      addToCommand("summon daegger")
+    end
+    addToCommand("wield daegger shield;dispel pentagram;summon " .. pentagramEnt)
+  end
+end
+
+function bloodworm()
+  if not ataxia or not ataxia.denizensHere then return false end
+  for _, name in pairs(ataxia.denizensHere) do
+    if name:lower():find("bloodworm") then return true end
+  end
+  return false
+end
+
+function baalzadeen()
+  if ataxia and ataxia.denizensHere then
+    for _, name in pairs(ataxia.denizensHere) do
+      if name:lower():find("baalzadeen") then
+        return true
+      end
+    end
+  end
+  return false
+end
+
+function apopentagram()
+  if not zgui.roomItemList then
+    return false
+  end
+  if table.contains(zgui.roomItemList, "a floating silver pentagram") then
+    return true
+  else
+    return false
+  end
+end
+
+function demon()
+  if not ataxia or not ataxia.denizensHere then return false end
+  for _, name in pairs(ataxia.denizensHere) do
+    local ln = name:lower()
+    if ln:find("daemonite") then return "daemonite"
+    elseif ln:find("nightmare") then return "nightmare"
+    elseif ln:find("razor fiend") then return "fiend"
+    end
+  end
+  return ""
+end
+
+function daemonite()
+  if not ataxia or not ataxia.denizensHere then return false end
+  for _, name in pairs(ataxia.denizensHere) do
+    if name:lower():find("daemonite") then return true end
+  end
+  return false
+end
+
+function fiend()
+  if not ataxia or not ataxia.denizensHere then return false end
+  for _, name in pairs(ataxia.denizensHere) do
+    if name:lower():find("razor fiend") then return true end
+  end
+  return false
+end
+
+--------------------------------------------------------------------------------
+-- NIGHTMARE TRACKING (timer-based affliction prediction)
+--------------------------------------------------------------------------------
+
+function nightmare()
+  if gmcp.Char.Status.class == "Apostate" and demon() == "nightmare" then
+    maretick = tempTimer(6.5, [[maretick = false; maretick = true]])
+    nightmareaff = tempTimer(8.5, [[nightmareaff = false; nightmareaff = true]])
+
+    if nightmareaff and tAffs.dementia and tAffs.hypersomnia then
+      tarAffed("hellsight")
+    elseif nightmareaff and tAffs.hypersomnia and not tAffs.dementia then
+      tarAffed("dementia")
+    end
   end
 end
