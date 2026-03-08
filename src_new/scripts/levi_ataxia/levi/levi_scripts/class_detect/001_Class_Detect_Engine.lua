@@ -134,6 +134,24 @@ local function countAttackers()
 end
 
 --------------------------------------------------------------------------------
+-- DEFENCE PRIORITY RE-APPLICATION
+--------------------------------------------------------------------------------
+
+function classDetect.reapplyDefencePriorities()
+  if not ataxia or not ataxia.settings or not ataxia.settings.defences then return end
+  local cur = ataxia.settings.defences.current
+  if not cur or cur == "" then return end
+  local defup = ataxia.settings.defences.defup
+  if not defup or not defup[cur] then return end
+
+  local command = "curing priority defence "
+  for def in pairs(defup[cur]) do
+    command = command .. def .. " 25 "
+  end
+  send(command, false)
+end
+
+--------------------------------------------------------------------------------
 -- CURINGSET SWITCHING (debounced)
 --------------------------------------------------------------------------------
 

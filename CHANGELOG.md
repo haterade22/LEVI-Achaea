@@ -2,6 +2,23 @@
 
 ---
 
+## 2026-03-07 — ClassDetect: Shikudo differentiation + defence priority re-application
+
+**Problem 1**: ClassDetect treated all monks as "Monk", switching to the `monk` curingset even for Shikudo (staff) monks who need the `shikudo` curingset.
+
+**Fix**: The Monk Class Grab trigger now inspects the matched line text for weapon keywords (`whips`, `staff`, `thrust`, `kata`, `sweeps`) to distinguish Shikudo from Tekura. Added `["Shikudo"] = "shikudo"` to `curingsetMap`. Updated anti-Shikudo parry check to accept `attackerClass == "Shikudo"` directly.
+
+**Problem 2**: After switching curingsets, SSC re-applied the curingset's own defence priority list, which may include abilities the player doesn't have (e.g., toughness, shin for a non-BM). This caused "I don't know what X does" spam.
+
+**Fix**: Added `classDetect.reapplyDefencePriorities()` — after every curingset switch, re-sends the player's own defence profile from `ataxia.settings.defences.defup[current]` using `curing priority defence ... 25`, matching the pattern in `systemDefup()`.
+
+**Files modified**:
+- `triggers/.../determine_class/006_Monk_Class_Grab.lua` — Shikudo vs Tekura keyword detection in trigger action
+- `scripts/.../class_detect/001_Class_Detect_Engine.lua` — Added `["Shikudo"]` to curingsetMap, added `reapplyDefencePriorities()` function, called it from `switchCuringset()`
+- `scripts/.../self_limb_tracking/003_Parrying.lua` — Updated `isShikudo` check to accept `attackerClass == "Shikudo"` directly
+
+---
+
 ## 2026-03-07 — Fix: GMCP nil errors when blind
 
 **Problem**: When the player is blind, the server stops sending `gmcp.Room` data (and sometimes `gmcp.Char`), causing `gmcp.Room` to be `nil`. Five triggers accessed `gmcp.Room.Info.*` and `gmcp.Char.*` without nil guards, producing a flood of errors on every prompt line.
