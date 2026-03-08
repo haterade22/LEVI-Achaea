@@ -2,6 +2,21 @@
 
 ---
 
+## 2026-03-08 — Fix: table.load wiping runtime functions and state
+
+`table.load(file_loc, ataxia)` in `ataxia_loadSettings()` replaced the entire `ataxia` table contents on `sysLoadEvent`, destroying runtime sub-tables with functions that were initialized by scripts before the load event. This caused `ataxia.data.db.addChar` (nil), `ataxia.data.movement` (nil), and `ataxiaBasher.ldeckRules` (nil) errors on every prompt/trigger fire.
+
+**Root cause**: `table.save` can't serialize functions. When `table.load` replaces a sub-table, the saved version has data but no functions — wiping `ataxia.data.movement()`, `ataxia.data.db.addChar()`, etc.
+
+**Fix**: Replaced `table.load(path, ataxia)` with a `mergeLoad()` helper that loads into a temp table and merges keys into the existing table, preserving sub-tables that contain runtime functions. Same pattern applied to `ataxiaBasher` load. Added nil guards to `ataxiaBasher_countMobsInRoom()` and `ataxiaBasher_preCombatLdeck()`.
+
+| File | Changes |
+|------|---------|
+| `ataxia/001_Save_Load_Settings.lua` | Added `mergeLoad()` helper; use it for `ataxia` and `ataxiaBasher` loads |
+| `genrunning/002_search_targets.lua` | Nil guard on `ataxia.denizensHere` in `countMobsInRoom()`, nil guard on `ldeckRules` in `preCombatLdeck()` |
+
+---
+
 ## 2026-03-08 — Feature: Profile Backup for All Saved Data
 
 Added redundant profile backup alongside existing disk saves. Every save now copies data into a `_ataxia_backup` global table (Mudlet saved variable), providing a fallback if disk files are lost or corrupted. On load, if a disk file is missing, the system automatically restores from the profile backup.

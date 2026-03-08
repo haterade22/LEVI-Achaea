@@ -51,6 +51,7 @@ end
 
 -- Helper to count specific mob types in current room
 function ataxiaBasher_countMobsInRoom(mobName)
+  if not ataxia.denizensHere then return 0 end
   local count = 0
   for id, mob in pairs(ataxia.denizensHere) do
     if mob:lower() == mobName:lower() then
@@ -70,6 +71,7 @@ function ataxiaBasher_preCombatLdeck()
   end
 
   -- Evaluate all rules and collect which cards to draw
+  if not ataxiaBasher.ldeckRules then return false end
   local cardsToDraw = {}
   for _, rule in ipairs(ataxiaBasher.ldeckRules) do
     local mobCount = ataxiaBasher_countMobsInRoom(rule.mob)
@@ -248,6 +250,7 @@ end
 
 -- Helper to count specific mob types in current room
 function ataxiaBasher_countMobsInRoom(mobName)
+  if not ataxia.denizensHere then return 0 end
   local count = 0
   for id, mob in pairs(ataxia.denizensHere) do
     if mob:lower() == mobName:lower() then
@@ -267,6 +270,7 @@ function ataxiaBasher_preCombatLdeck()
   end
 
   -- Evaluate all rules and collect which cards to draw
+  if not ataxiaBasher.ldeckRules then return false end
   local cardsToDraw = {}
   for _, rule in ipairs(ataxiaBasher.ldeckRules) do
     local mobCount = ataxiaBasher_countMobsInRoom(rule.mob)

@@ -100,6 +100,26 @@ function ataxia_loadSettings()
 	local ndb_loc = getMudletHomeDir()..separator.."andb"
   local ext_loc = getMudletHomeDir()..separator.."extractLocations"
 
+	-- Merge-load helper: loads saved data into target table without wiping
+	-- existing keys. This preserves runtime functions and state that were
+	-- set up by scripts before sysLoadEvent (e.g. ataxia.data.movement,
+	-- ataxia.data.db.addChar). table.save can't serialize functions, so
+	-- a plain table.load would replace sub-tables with function-less copies.
+	local function mergeLoad(path, target)
+		local loaded = {}
+		table.load(path, loaded)
+		for k, v in pairs(loaded) do
+			if type(v) == "table" and type(target[k]) == "table" then
+				-- Merge into existing sub-table (preserves functions)
+				for sk, sv in pairs(v) do
+					target[k][sk] = sv
+				end
+			else
+				target[k] = v
+			end
+		end
+	end
+
 	if not io.exists(file_loc) then
     -- Try profile backup before giving up
     if _ataxia_backup and _ataxia_backup.ataxia then
@@ -110,7 +130,7 @@ function ataxia_loadSettings()
       return
     end
 	else
-    table.load(file_loc, ataxia)
+    mergeLoad(file_loc, ataxia)
   end
 	ataxia_Echo("I suppose I can lend you my aid. Go and annihilate our foes.")
 	ataxia.loaded = true
@@ -123,8 +143,12 @@ function ataxia_loadSettings()
       ataxia_Echo("Bashing systems not yet enabled.")
     end
 	else
-		ataxiaBasher = {}
-		table.load(bash_loc, ataxiaBasher)
+		if ataxiaBasher then
+			mergeLoad(bash_loc, ataxiaBasher)
+		else
+			ataxiaBasher = {}
+			table.load(bash_loc, ataxiaBasher)
+		end
 		ataxia_Echo("Bashing systems enabled, go and lay waste.")
 	end
   -- Initialize hyena maul cooldown for Infernal PVE (30s cooldown, starts ready)
