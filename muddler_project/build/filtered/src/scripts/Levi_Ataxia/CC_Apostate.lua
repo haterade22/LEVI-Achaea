@@ -80,7 +80,9 @@ apostate.state = {
   freshblood = false,       -- fresh blood available for bloodpact
   fiendthing = "nightmare", -- preferred lesser daemon
   wantDisloyalty = false,   -- disfigure toggle
-  disfigureSent = false,    -- disfigure spam protection (once per manaleech round)
+  disfigureSent = false,    -- disfigure spam protection (once per asthma round)
+  disfigureTrigger = nil,   -- one-shot tempTrigger ID for disfigure on deadeyes text
+  pendingDisfigure = false, -- flag: disfigure should fire with next deadeyes
   asthmaConfirmTimer = nil, -- timer: confirm asthma present if target doesn't smoke
   baalzadeenSummoned = false, -- summon sent, awaiting GMCP confirmation
   partyrelay = true,        -- relay to party
@@ -591,9 +593,11 @@ function apostate.buildAttack()
     -- Disfigure on EQ when cursing asthma (lock mode only, once per asthma round)
     -- Fires with the asthma deadeyes so we can observe if target smokes before
     -- committing to manaleech next round (avoids wasting manaleech without asthma)
+    -- Sent as separate queue entry in dispatch() so it doesn't fire immediately
+    -- (server-side ; splits commands — disfigure would consume EQ before deadeyes fires)
     if apostate.state.mode == "lock" and (c1 == "asthma" or c2 == "asthma")
        and not apostate.state.disfigureSent then
-      atk = atk .. ";disfigure " .. target
+      apostate.state.pendingDisfigure = true
       apostate.state.disfigureSent = true
     end
 
@@ -636,6 +640,11 @@ function apostate.dispatch()
   -- Reset disfigure flag when asthma is no longer a curse (ready for next asthma round)
   if apostate.curses[1] ~= "asthma" and apostate.curses[2] ~= "asthma" then
     apostate.state.disfigureSent = false
+    -- Kill stale disfigure trigger from a previous asthma round
+    if apostate.state.disfigureTrigger then
+      killTrigger(apostate.state.disfigureTrigger)
+      apostate.state.disfigureTrigger = nil
+    end
   end
 
   -- Debug echo: curses being sent + stuck afflictions
@@ -666,6 +675,23 @@ function apostate.dispatch()
   end
 
   send("queue addclearfull freestand " .. fullCmd)
+
+  -- Disfigure via one-shot trigger: fires when deadeyes curse text appears
+  -- Can't use queue (auto-queue fires deadeyes first, consuming balance)
+  if apostate.state.pendingDisfigure then
+    -- Kill stale trigger from previous dispatch
+    if apostate.state.disfigureTrigger then
+      killTrigger(apostate.state.disfigureTrigger)
+      apostate.state.disfigureTrigger = nil
+    end
+    local tgt = target  -- capture for closure
+    apostate.state.disfigureTrigger = tempTrigger("curse of asthma", function()
+      send("disfigure " .. tgt)
+      killTrigger(apostate.state.disfigureTrigger)
+      apostate.state.disfigureTrigger = nil
+    end)
+    apostate.state.pendingDisfigure = false
+  end
 
   -- Asthma confirmation: if we delivered smoke-curable curses and target doesn't smoke,
   -- asthma is confirmed present (blocking their smoke cures)
@@ -745,6 +771,11 @@ end
 
 function apostate.setMode(mode)
   apostate.state.mode = mode
+  -- Kill stale disfigure trigger on mode change
+  if apostate.state.disfigureTrigger then
+    killTrigger(apostate.state.disfigureTrigger)
+    apostate.state.disfigureTrigger = nil
+  end
   if ataxiaEcho then
     ataxiaEcho("[Apostate] Mode set to: " .. mode)
   end
