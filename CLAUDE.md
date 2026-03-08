@@ -503,6 +503,28 @@ ataxiaBasher_assembleBattlerage() → Generic/CC handler with rage conservation
 - Bottom panel: Health/Mana/Willpower/Endurance gauges
 - Balance/Equilibrium indicators
 - Tabbed chat (All, City, Clans, Misc, Order, Party, Tells)
+- Chat channel colors: per-channel coloring via `channelColors` map (says=cyan, ct=red, ht/tell=yellow, party=magenta, etc.)
+
+**Window Management (`Adjustable.Container`)**:
+All GUI windows use `Adjustable.Container:new({name = "...", ...})` which provides:
+- **Auto-save/load**: Position and size persist automatically via the `name` parameter (`autoLoad` defaults to `true`)
+- **Drag to reposition**: Windows are draggable by default
+- **Lock/unlock**: `lockContainer()`/`unlockContainer()` + `savePosition()` for explicit save on lock
+- **Double-click to pop out**: Custom `convertAdj.Init` wrapper enables popping windows into `Geyser.UserWindow` (separate OS window) via double-click on title bar
+- **Reset**: `zfix <windowname>` alias recreates with `autoLoad=false` to discard saved position
+- ~20 windows total: chat, map, bash, afflictions, enemy, ally, room players, room denizens, room items, defence, stats, cape, prompt, hunter, SLC, logger, affliction lock, room info, target affs V2
+
+**Startup dispatch**: `039_EDIT_ME__Startup_Main.lua` iterates `zgui.modules` array and calls `zgui[moduleName]()` for each. When renaming build functions (e.g., `zgui.buildChat` → `ataxia.buildChat`), a backward-compat shim is needed: `zgui.buildChat = ataxia.buildChat` (placed after the function definition).
+
+**Namespace migration status** (zgui → ataxia):
+| Component | Old Namespace | New Namespace | Status |
+|-----------|--------------|---------------|--------|
+| Chat | `zgui.chat` | `ataxia.chat` | Migrated (shim in place) |
+| Chat size | `zgui.chatSize` | `ataxia.chatSize` | Migrated |
+| Hunting stats | `zData` | `ataxia.data` | Migrated (shim in place) |
+| Bash window | `zgui.bwindow` | `zgui.bwindow` | Not yet migrated |
+| Map | `zgui.map` | `zgui.map` | Not yet migrated |
+| All other windows | `zgui.*` | `zgui.*` | Not yet migrated |
 
 ### Player Database (ataxiaNDB)
 - Fetches from Achaea API (`http://api.achaea.com/characters/`)
