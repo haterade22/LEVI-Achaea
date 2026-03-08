@@ -64,7 +64,7 @@ infernalpriosblackout()
 end
 
 if gmcp.Char.Status.class == "Apostate" then
-apostate.setMode("corrupt")
+apostate.setMode("mental")
 apostate.dispatch()
 end
 if gmcp.Char.Status.class == "Serpent" then

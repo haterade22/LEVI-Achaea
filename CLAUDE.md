@@ -162,7 +162,7 @@ All combat systems in `src_new/scripts/levi_ataxia/levi/levi_scripts/`:
 
 | System | Files | Status | Kill Route | Location |
 |--------|-------|--------|------------|----------|
-| **apostate** | 2 (015+014) | **Documented** | Lock, corrupt, vivisect, sleep | `apostate/` |
+| **apostate** | 1 (015) | **Documented** | Lock, corrupt, vivisect, sleep, mental | `apostate/` |
 | **bard** | 10 | Undocumented | Voicecraft, affliction | `bard/` |
 | **blademaster** | ~10 | **Documented** | Lightning/Ice, Brokenstar | `blademaster/` |
 | **depthswalker** | 1 | Undocumented | Shadow/time | `depthswalker/` |
@@ -1565,15 +1565,16 @@ The Apostate offensive system (`CC_Apostate`) provides automated curse delivery 
 | File | Purpose |
 |------|---------|
 | `src_new/scripts/.../apostate/015_CC_Apostate.lua` | Complete unified system with `apostate` namespace |
-| `src_new/scripts/.../apostate/014_Levi_Apostate.lua` | Backward-compat wrappers + daemon utility functions |
+| *(014 merged into 015)* | Backward-compat wrappers + daemon utilities now in 015 |
 | `src_new/scripts/.../apostate/001-013_*.lua` | Legacy files (all disabled, `isActive: 'no'`) |
 | `src_new/triggers/.../439_NEW_DEADEYES.lua` | Curse detection → `tarAffed()` |
 | `src_new/triggers/.../apostate/007_CORRUPT.lua` | Corrupt cooldown tracking |
 
-### Kill Routes (5 Modes)
+### Kill Routes (6 Modes)
 | Mode | Command | Description |
 |------|---------|-------------|
 | **lock** | `apostate.setMode("lock")` | DEADEYES with kelp stack + asthma-conditional branching toward truelock |
+| **mental** | `apostate.setMode("mental")` | Flood goldenseal+lobelia with mentals (impatience→stupidity→dizziness→vertigo) then transition to lock |
 | **group** | `apostate.setMode("group")` | Pure lock pieces only — no hinder, no probability gates |
 | **corrupt** | `apostate.setMode("corrupt")` | Stack afflictions → `demon corrupt` for damage / catharsis setup |
 | **vivisect** | `apostate.setMode("vivisect")` | Truelock → prone → shrivel 4 limbs → vivisect |
@@ -1661,7 +1662,7 @@ Same routing pattern as Blademaster:
 | `SLEEP` | `^slee$` | `apostate.dispatch()` (sleep mode) |
 | `Corrupt` | `^corr$` | `apostate.dispatch()` (corrupt mode) |
 
-### Backward Compatibility (014_Levi_Apostate.lua)
+### Backward Compatibility (in 015_CC_Apostate.lua)
 | Legacy Function | Mode Set |
 |-----------------|----------|
 | `leviclumsapo()` | lock |
@@ -1681,7 +1682,7 @@ Same routing pattern as Blademaster:
 
 Legacy wrappers kept: `corruptDmg()`, `corruptKill()`, `cathCorrupt()`
 
-### Daemon Utilities (014_Levi_Apostate.lua)
+### Daemon Utilities (in 015_CC_Apostate.lua)
 | Function | Purpose |
 |----------|---------|
 | `bloodPact()` | Bloodpact setup (fresh blood + no pentagram) |

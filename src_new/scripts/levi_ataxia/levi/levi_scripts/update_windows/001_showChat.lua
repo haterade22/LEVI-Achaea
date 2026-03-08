@@ -44,7 +44,7 @@ local channelColors = {
   ["clt"]        = "<white>",
   ["market"]     = "<white>",
   ["newbie"]     = "<green>",
-  ["shout"]      = "<blue>",
+  ["shout"]      = "<teal>",
   ["yell"]       = "<white>",
   ["armytell"]   = "<white>",
 }

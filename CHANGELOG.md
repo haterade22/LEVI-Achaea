@@ -2,6 +2,45 @@
 
 ---
 
+## 2026-03-07 — Apostate: Fix mental mode impatience loop
+
+**Problem**: Mental mode sent `impatience + paralysis` every round forever. `selectPrimaryCurseMental()` required impatience at 100% V3 probability (`< 1.0`) before advancing to stupidity/dizziness/epilepsy. But the target cures impatience with goldenseal each round, so it never reaches 100%. The goldenseal flood (the whole point of mental mode) never happens.
+
+**Fix**: Changed impatience delivery threshold from 100% to 25% in both primary and secondary mental selectors. Now all mentals use the same 25% "deliver once, move on" threshold. The 100% impatience requirement remains in `mentalReady()` — it gates the *transition to lock*, not delivery.
+
+**Priority reorder**: Removed clumsiness from mental stack. Replaced epilepsy with vertigo (lobelia-cured). New order: impatience → stupidity → dizziness → vertigo. Transition: impatience(100%) + 2 of {stupidity, dizziness, vertigo}.
+
+**Files modified**:
+- `src_new/scripts/.../apostate/015_CC_Apostate.lua` — Mental selectors: impatience threshold 1.0 → 0.25, removed clumsy, epilepsy → vertigo
+
+---
+
+## 2026-03-07 — Apostate: Fix anorexia not selected when c1=sicken
+
+**Problem**: `selectSecondaryCurse("sicken")` skipped anorexia because it was gated behind `apostate.hasAff("slickness")`, which returned false. When c1=sicken, slickness will be delivered by that same curse round — but the gate didn't account for this. Result: plague selected instead of anorexia.
+
+**Fix**: Added `or c1 == "sicken"` to the anorexia gate, so anorexia is selectable when sicken (slickness delivery) is the primary curse.
+
+**Files modified**:
+- `src_new/scripts/.../apostate/015_CC_Apostate.lua` — line 341: anorexia gate now checks `c1 == "sicken"`
+
+---
+
+## 2026-03-07 — Apostate: Merge 014 into 015, mental mode updates
+
+**Merge**: Deleted `014_Levi_Apostate.lua` — all backward-compat wrappers, daemon utilities (`bloodworm`, `baalzadeen`, `demon`, `apopentagram`, `bloodPact`, `daemonite`, `fiend`), legacy wrappers (`corruptDmg`, `corruptKill`, `cathCorrupt`), and `nightmare()` tracking moved into `015_CC_Apostate.lua`.
+
+**Mental mode updates**: Priority reordered to clumsiness → impatience → stupidity → dizziness → epilepsy. Clumsiness first for 33% miss hinder. Thresholds changed from 33% to 25% for mentals (impatience stays 100%). Both primary and secondary selectors updated.
+
+**Alias**: `xx` now sets apostate to mental mode (was corrupt). `men` still activates mental mode.
+
+**Files modified**:
+- `src_new/scripts/.../apostate/015_CC_Apostate.lua` — Absorbed all 014 content; mental mode reordered + thresholds adjusted
+- `src_new/scripts/.../apostate/014_Levi_Apostate.lua` — Deleted
+- `src_new/aliases/.../155_Second_Attack_(All_Classes).lua` — Apostate block: corrupt → mental
+
+---
+
 ## 2026-03-07 — Fix: Chat channel colors not applied in miniconsoles
 
 **Problem**: Most chat channel colors (tells=yellow, says=cyan, clan=white, etc.) appeared as white/default in the GUI chat miniconsoles. Only channels with exact GMCP name matches (like `"shout"`) showed their configured color.
@@ -13,6 +52,8 @@
 **Files modified**:
 - `scripts/.../update_windows/001_showChat.lua` — Added `getChannelColor()`, replaced exact lookup
 - `scripts/.../gui_stuff/003_Chat_Capture_Things.lua` — Added `getChannelColor()`, replaced exact lookup
+
+**Shout color**: Changed from red → teal (`<teal>`) in both files.
 
 ---
 

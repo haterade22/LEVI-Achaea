@@ -330,9 +330,10 @@ groups:
         , \"weariness\"},\n\t\tShaman = {\"paralysis\", \"paralyse\"},\n\t\tSylvan = {\"haemophilia\", \"haemophilia\"},\n\
         \    Airlord = {\"weariness\", \"weariness\"},\n    Waterlord = {\"weariness\", \"weariness\"},\n    Earthlord = {\"\
         weariness\", \"weariness\"},\n    Firelord = {\"weariness\", \"weariness\"},\n\t}\n\tif ataxiaNDB and ataxiaNDB_Exists(target)\
-        \ and ataxiaNDB.players[target].city ~= \"Underworld\" then\n\t\tlocal gClass = ataxiaNDB_getClass(target)\n\t\tif\
+        \ and ataxiaNDB.players[target] and ataxiaNDB.players[target].city ~= \"Underworld\" then\n\t\tlocal gClass = ataxiaNDB_getClass(target)\n\t\tif\
+        \ not gClass or not lockaff[gClass] then return nil end\n\t\tif\
         \ type == \"name\" then\n\t\t\treturn lockaff[gClass][1]\n\t\telse\n\t\t\treturn lockaff[gClass][2]\n\t\tend\n\telse\n\
-        \t\tif type == \"name\" and ataxiaNDB.players[target].city == \"Underworld\" then\n\t\t\treturn \"paralysis\"\n\t\t\
+        \t\tif ataxiaNDB and ataxiaNDB.players and ataxiaNDB.players[target] and type == \"name\" and ataxiaNDB.players[target].city == \"Underworld\" then\n\t\t\treturn \"paralysis\"\n\t\t\
         else\n\t\t\treturn \"paralyse\"\n\t\tend\n\tend\nend"
       children:
       - name: Monk
