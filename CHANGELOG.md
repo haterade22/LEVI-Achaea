@@ -2,6 +2,25 @@
 
 ---
 
+## 2026-03-08 — Feature: Profile Backup for All Saved Data
+
+Added redundant profile backup alongside existing disk saves. Every save now copies data into a `_ataxia_backup` global table (Mudlet saved variable), providing a fallback if disk files are lost or corrupted. On load, if a disk file is missing, the system automatically restores from the profile backup.
+
+**Backup keys**: `ataxia`, `basher`, `basherpaths`, `ndb`, `extraction`, `slcconfig`, `shaman`, `legenddeck`, `legenddeck_config`, `classDetect`, `gearaudit`, `bars_config`
+
+| File | Changes |
+|------|---------|
+| `ataxia/001_Save_Load_Settings.lua` | Save: backup 6 datasets to `_ataxia_backup`. Load: fallback from backup for all 6 |
+| `shaman_system/002_Save_Load_functions.lua` | Save: backup shaman config. Load: fallback |
+| `legend_deck/004_Legend_Deck_Save_Load.lua` | Save: backup deck + config. Load: fallback |
+| `class_detect/001_Class_Detect_Engine.lua` | Save: backup classDetect data. Load: fallback |
+| `gear_system/001_Gear_Audit.lua` | Save: backup gear data. Load: fallback |
+| `build_windows/016_buildVitalBars.lua` | Save: backup bars config. Load: fallback |
+
+**Setup**: Add `_ataxia_backup` as a saved variable in Mudlet's Variables panel (one-time, type: table).
+
+---
+
 ## 2026-03-08 — Fix: ataxiaNDB API crash with numeric target (bashing)
 
 Fixed crash in `ataxiaNDB_Exists()` when `target` is a numeric GMCP NPC ID (during bashing). The Prompt Trigger calls `ataxiaNDB_getClass(target)` every prompt, which called `name:title()` on a number. Added type guard `type(name) ~= "string"` in `ataxiaNDB_Exists()` — protects all 50+ NDB API callers across the codebase.

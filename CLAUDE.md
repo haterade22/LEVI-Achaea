@@ -529,6 +529,40 @@ In-game configuration wizard accessed via `ataxia setup`.
 | `ataxia setup status` | One-page settings overview |
 | `ataxia setup guide` | Configuration guides (ataxia/basher/ndb) |
 
+### Data Persistence & Profile Backup
+
+All system state is saved to disk files in `getMudletHomeDir()` via `table.save()`/`table.load()`. A profile backup system provides redundancy by also storing data in the `_ataxia_backup` global (Mudlet saved variable).
+
+**Save flow**: Every save writes to disk AND copies into `_ataxia_backup`.
+**Load flow**: Load from disk (primary). If disk file missing, fall back to `_ataxia_backup`.
+
+**Disk Files** (all relative to `getMudletHomeDir()`):
+
+| File | Variable | Data | Save Source |
+|------|----------|------|-------------|
+| `ataxia` | `ataxia` | Main settings, vitals, curing priorities | `001_Save_Load_Settings.lua` |
+| `basher` | `ataxiaBasher` | Basher state, targets, shield timers | `001_Save_Load_Settings.lua` |
+| `basherpaths` | `ataxiaBasherPaths` | Hunting route paths | `001_Save_Load_Settings.lua` |
+| `andb` | `ataxiaNDB` | Player database | `001_Save_Load_Settings.lua` |
+| `extractLocations` | `ataxiaExtraction` | Extraction zones | `001_Save_Load_Settings.lua` |
+| `slcconfig` | `selfLimbDamage.config` | Self-Limb Tracking config | `001_Save_Load_Settings.lua` |
+| `shaman_profile.lua` | `shaman` | Shaman offense config | `shaman_system/002_Save_Load_functions.lua` |
+| `legenddeck` | `ldm.deck` | Card charges/timers | `legend_deck/004_Legend_Deck_Save_Load.lua` |
+| `legenddeck_config` | `ldm.config/favorites/enabled` | Card config | `legend_deck/004_Legend_Deck_Save_Load.lua` |
+| `classDetect_config.lua` | `classDetect.config/curingsetMap` | Class detection settings | `class_detect/001_Class_Detect_Engine.lua` |
+| `gearaudit` | `gearAudit.data` | Gear inventory | `gear_system/001_Gear_Audit.lua` |
+| `ataxia_bars_config.lua` | `ataxia.bars.config` | Vital bar toggles | `build_windows/016_buildVitalBars.lua` |
+| `mapper.options.lua` | `mmp.locked/settings` | Mapper options | `mudlet-mapper` (no profile backup) |
+
+**Profile Backup Keys** (in `_ataxia_backup`):
+`ataxia`, `basher`, `basherpaths`, `ndb`, `extraction`, `slcconfig`, `shaman`, `legenddeck`, `legenddeck_config`, `classDetect`, `gearaudit`, `bars_config`
+
+**Other Storage**: SQLite `exp_db` (hunting stats via Mudlet `db` API), `ataxiaNDB/*.json` (temp API downloads).
+
+**Event Hooks**: `sysDisconnectionEvent` → `ataxia_saveSettings()`, `sysLoadEvent` → `ataxia_loadSettings()`
+
+**Setup**: User must add `_ataxia_backup` as a saved variable in Mudlet's Variables panel (one-time, type: table).
+
 ---
 
 ## Achaea Classes Reference
