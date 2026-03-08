@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-03-08 — Fix: Stale darkshade tracking in serpent offense
+
+8 sites in `002_Serpent_Offense.lua` read `tAffs.darkshade` directly instead of `haveAff("darkshade")`. After V3 correctly cured darkshade (target eats ginseng), the stale `tAffs` cache kept `darkshade = true`, causing wrong strategy decisions (not re-applying darkshade) and incorrect `[tAffs]` display showing `DRK`.
+
+**Root cause**: `syncToOldSystemV3()` only clears `tAffs` entries when probability drops below 1%. Intermediate probabilities (1-30%) leave entries unchanged.
+
+| File | Changes |
+|------|---------|
+| `serpent/002_Serpent_Offense.lua` | Replaced all 8 `tAffs.darkshade` with `haveAff("darkshade")` (lines 574, 664, 757, 1194, 1628, 1689, 1806, 1883) |
+
+---
+
 ## 2026-03-08 — Fix: table.load wiping runtime functions and state
 
 `table.load(file_loc, ataxia)` in `ataxia_loadSettings()` replaced the entire `ataxia` table contents on `sysLoadEvent`, destroying runtime sub-tables with functions that were initialized by scripts before the load event. This caused `ataxia.data.db.addChar` (nil), `ataxia.data.movement` (nil), and `ataxiaBasher.ldeckRules` (nil) errors on every prompt/trigger fire.
