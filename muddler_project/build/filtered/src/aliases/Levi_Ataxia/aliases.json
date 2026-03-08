@@ -2295,7 +2295,7 @@
               },
               {
                 "name": "Setup Wizard",
-                "regex": "^levi setup ?(.*)$"
+                "regex": "^ataxia setup ?(.*)$"
               }
             ]
           },
@@ -2656,7 +2656,7 @@
           },
           {
             "name": "(LEVIBARS) Vital Bars",
-            "regex": "^levibars(?: (.+))?$"
+            "regex": "^ataxiabars(?: (.+))?$"
           }
         ]
       },

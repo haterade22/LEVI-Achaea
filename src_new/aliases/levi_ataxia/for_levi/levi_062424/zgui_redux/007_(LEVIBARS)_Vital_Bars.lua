@@ -8,7 +8,7 @@ hierarchy:
 attributes:
   isActive: 'yes'
   isFolder: 'no'
-regex: ^levibars(?: (.+))?$
+regex: ^ataxiabars(?: (.+))?$
 command: ''
 packageName: ''
 ]]--

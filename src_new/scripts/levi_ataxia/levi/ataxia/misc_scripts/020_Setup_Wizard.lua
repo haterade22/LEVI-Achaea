@@ -10,8 +10,8 @@ attributes:
 ]]--
 
 ---------------------------------------------------------------------------
--- LEVI Setup Wizard
--- Provides "levi setup" command for guided system configuration.
+-- Ataxia Setup Wizard
+-- Provides "ataxia setup" command for guided system configuration.
 -- All settings are persisted via ataxia_saveSettings().
 ---------------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ function leviSetup.dispatch(args)
   elseif cmd == "guide"      then leviSetup.setupGuide(rest)
   else
     ataxiaEcho("Unknown setup command: " .. W .. cmd)
-    cecho("\n  " .. V .. "Type " .. HL .. "levi setup" .. V .. " for a list of commands.")
+    cecho("\n  " .. V .. "Type " .. HL .. "ataxia setup" .. V .. " for a list of commands.")
   end
 end
 
@@ -84,23 +84,23 @@ end
 -- MAIN MENU
 -- ═══════════════════════════════════════════════════════════════════════
 function leviSetup.showMenu()
-  header("LEVI Setup Wizard")
+  header("Ataxia Setup Wizard")
   cecho("\n  " .. V .. "Configure your system with these commands:\n")
 
   local cmds = {
-    {"levi setup class",     "Set your class (auto-detects from GMCP)"},
-    {"levi setup separator", "Set command separator (currently: " .. (ataxia.settings.separator or ";") .. ")"},
-    {"levi setup weapons",   "Configure weapon IDs for your class"},
-    {"levi setup basher",    "Basher settings (flee, gold pack, etc.)"},
-    {"levi setup sipping",   "Health/mana sip thresholds"},
-    {"levi setup tracking",  "Affliction tracking system (V1/V2)"},
-    {"levi setup combat",    "Combat toggles (partyrelay, looting, etc.)"},
-    {"levi setup slc",       "Self Limb Counter (parry, shield, alerts, etc.)"},
-    {"levi setup gui",       "Toggle the GUI on/off"},
-    {"levi setup ndb",       "Name Database highlighting colours"},
-    {"levi setup install",   "First-time install (atinstall, abinstall, aninstall)"},
-    {"levi setup guide",     "Post-install config guide (ataxia, basher, ndb)"},
-    {"levi setup status",    "Show all current settings at a glance"},
+    {"ataxia setup class",     "Set your class (auto-detects from GMCP)"},
+    {"ataxia setup separator", "Set command separator (currently: " .. (ataxia.settings.separator or ";") .. ")"},
+    {"ataxia setup weapons",   "Configure weapon IDs for your class"},
+    {"ataxia setup basher",    "Basher settings (flee, gold pack, etc.)"},
+    {"ataxia setup sipping",   "Health/mana sip thresholds"},
+    {"ataxia setup tracking",  "Affliction tracking system (V1/V2)"},
+    {"ataxia setup combat",    "Combat toggles (partyrelay, looting, etc.)"},
+    {"ataxia setup slc",       "Self Limb Counter (parry, shield, alerts, etc.)"},
+    {"ataxia setup gui",       "Toggle the GUI on/off"},
+    {"ataxia setup ndb",       "Name Database highlighting colours"},
+    {"ataxia setup install",   "First-time install (atinstall, abinstall, aninstall)"},
+    {"ataxia setup guide",     "Post-install config guide (ataxia, basher, ndb)"},
+    {"ataxia setup status",    "Show all current settings at a glance"},
   }
 
   for _, c in ipairs(cmds) do
@@ -109,7 +109,7 @@ function leviSetup.showMenu()
     cecho(pad .. D .. c[2])
   end
 
-  hint("\n  Settings auto-save on disconnect. Manual save: levi setup save")
+  hint("\n  Settings auto-save on disconnect. Manual save: ataxia setup save")
   cecho("\n")
 end
 
@@ -144,12 +144,12 @@ function leviSetup.setupClass(rest)
   }
 
   cecho("\n\n  " .. V .. "To set your class:")
-  cecho("\n  " .. HL .. "levi setup class <ClassName>")
-  hint("  e.g.: levi setup class Infernal")
+  cecho("\n  " .. HL .. "ataxia setup class <ClassName>")
+  hint("  e.g.: ataxia setup class Infernal")
 
   if detected and detected ~= "Unknown" and detected ~= (ataxia.settings.class or "") then
     cecho("\n\n  " .. G .. "GMCP detected " .. W .. detected .. G .. ". To accept:")
-    cecho("\n  " .. HL .. "levi setup class " .. detected)
+    cecho("\n  " .. HL .. "ataxia setup class " .. detected)
   end
 
   cecho("\n\n  " .. D .. "Available: " .. table.concat(classes, ", "))
@@ -172,8 +172,8 @@ function leviSetup.setupSeparator(rest)
 
   cecho("\n\n  " .. V .. "The separator joins multiple commands in one line.")
   cecho("\n  " .. V .. "Achaea default is " .. W .. ";;" .. V .. " but most use " .. W .. ";")
-  cecho("\n\n  " .. HL .. "levi setup separator <sep>")
-  hint("  e.g.: levi setup separator ;;")
+  cecho("\n\n  " .. HL .. "ataxia setup separator <sep>")
+  hint("  e.g.: ataxia setup separator ;;")
   cecho("\n")
 end
 
@@ -181,7 +181,7 @@ end
 -- WEAPONS
 -- ═══════════════════════════════════════════════════════════════════════
 function leviSetup.setupWeapons(rest)
-  -- Parse: levi setup weapons <slot> <id>
+  -- Parse: ataxia setup weapons <slot> <id>
   local slot, id = rest:match("^(%S+)%s+(%S+)$")
 
   if slot and id then
@@ -228,11 +228,11 @@ function leviSetup.setupWeapons(rest)
   row("staff", weapons.staff or (type(staff) == "string" and staff) or "not set")
 
   cecho("\n\n  " .. V .. "Set a weapon ID:")
-  cecho("\n  " .. HL .. "levi setup weapons <slot> <itemID>")
+  cecho("\n  " .. HL .. "ataxia setup weapons <slot> <itemID>")
   cecho("\n")
   cecho("\n  " .. D .. "Slots: weapon1, weapon2, battleaxe, staff")
-  hint("  e.g.: levi setup weapons weapon1 scimitar405403")
-  hint("  e.g.: levi setup weapons battleaxe battleaxe590991")
+  hint("  e.g.: ataxia setup weapons weapon1 scimitar405403")
+  hint("  e.g.: ataxia setup weapons battleaxe battleaxe590991")
   hint("  Find IDs with: IH (inventory highlights) or II (inventory)")
   cecho("\n")
 end
@@ -288,14 +288,14 @@ function leviSetup.setupBasher(rest)
   row("Battlerage raze", boolStr(ataxiaBasher.rageraze), "use razing battlerage")
 
   cecho("\n\n  " .. V .. "Set values:")
-  cecho("\n  " .. HL .. "levi setup basher goldpack <packID>")
-  cecho("\n  " .. HL .. "levi setup basher flee <hp>")
-  cecho("\n  " .. HL .. "levi setup basher fleepct <percent>")
-  cecho("\n  " .. HL .. "levi setup basher shieldpct <percent>")
-  cecho("\n  " .. HL .. "levi setup basher shieldtimer <seconds>")
-  cecho("\n  " .. HL .. "levi setup basher swap <on|off>")
-  hint("  e.g.: levi setup basher goldpack pack436363")
-  hint("  e.g.: levi setup basher flee 2500")
+  cecho("\n  " .. HL .. "ataxia setup basher goldpack <packID>")
+  cecho("\n  " .. HL .. "ataxia setup basher flee <hp>")
+  cecho("\n  " .. HL .. "ataxia setup basher fleepct <percent>")
+  cecho("\n  " .. HL .. "ataxia setup basher shieldpct <percent>")
+  cecho("\n  " .. HL .. "ataxia setup basher shieldtimer <seconds>")
+  cecho("\n  " .. HL .. "ataxia setup basher swap <on|off>")
+  hint("  e.g.: ataxia setup basher goldpack pack436363")
+  hint("  e.g.: ataxia setup basher flee 2500")
   cecho("\n")
 end
 
@@ -337,9 +337,9 @@ function leviSetup.setupSipping(rest)
   row("transmuteto", (sip.transmuteto or 70) .. "%", "transmute until HP%")
 
   cecho("\n\n  " .. V .. "Set a threshold:")
-  cecho("\n  " .. HL .. "levi setup sipping <key> <value>")
-  hint("  e.g.: levi setup sipping siphealth 85")
-  hint("  e.g.: levi setup sipping sipmana 75")
+  cecho("\n  " .. HL .. "ataxia setup sipping <key> <value>")
+  hint("  e.g.: ataxia setup sipping siphealth 85")
+  hint("  e.g.: ataxia setup sipping sipmana 75")
   cecho("\n")
 end
 
@@ -397,11 +397,11 @@ function leviSetup.setupCombat(rest)
   row("Aeon cmd block", boolStr(ataxia.settings.aeoncommandblock), "block commands in aeon")
 
   cecho("\n\n  " .. V .. "Toggle:")
-  cecho("\n  " .. HL .. "levi setup combat partyrelay <on|off>")
-  cecho("\n  " .. HL .. "levi setup combat looting <on|off>")
-  cecho("\n  " .. HL .. "levi setup combat gagclot <on|off>")
-  cecho("\n  " .. HL .. "levi setup combat gold <command>")
-  hint("  e.g.: levi setup combat partyrelay on")
+  cecho("\n  " .. HL .. "ataxia setup combat partyrelay <on|off>")
+  cecho("\n  " .. HL .. "ataxia setup combat looting <on|off>")
+  cecho("\n  " .. HL .. "ataxia setup combat gagclot <on|off>")
+  cecho("\n  " .. HL .. "ataxia setup combat gold <command>")
+  hint("  e.g.: ataxia setup combat partyrelay on")
   cecho("\n")
 end
 
@@ -431,8 +431,8 @@ function leviSetup.setupGui(rest)
   row("GUI enabled", boolStr(ataxia.usegui))
 
   cecho("\n\n  " .. V .. "Commands:")
-  cecho("\n  " .. HL .. "levi setup gui on" .. V .. "  — Create/enable GUI")
-  cecho("\n  " .. HL .. "levi setup gui off" .. V .. " — Disable GUI")
+  cecho("\n  " .. HL .. "ataxia setup gui on" .. V .. "  — Create/enable GUI")
+  cecho("\n  " .. HL .. "ataxia setup gui off" .. V .. " — Disable GUI")
   cecho("\n")
 end
 
@@ -481,11 +481,11 @@ function leviSetup.setupNdb(rest)
   end
 
   cecho("\n\n  " .. V .. "Set a colour:")
-  cecho("\n  " .. HL .. "levi setup ndb <city> <colour>")
-  cecho("\n  " .. HL .. "levi setup ndb highlight <on|off>")
-  cecho("\n  " .. HL .. "levi setup ndb priority <city|enemies>")
-  hint("  e.g.: levi setup ndb Mhaldor red")
-  hint("  e.g.: levi setup ndb Ashtan purple")
+  cecho("\n  " .. HL .. "ataxia setup ndb <city> <colour>")
+  cecho("\n  " .. HL .. "ataxia setup ndb highlight <on|off>")
+  cecho("\n  " .. HL .. "ataxia setup ndb priority <city|enemies>")
+  hint("  e.g.: ataxia setup ndb Mhaldor red")
+  hint("  e.g.: ataxia setup ndb Ashtan purple")
   cecho("\n")
 end
 
@@ -562,12 +562,12 @@ function leviSetup.setupInstall(rest)
   cecho("\n  " .. D .. "  name highlighting, enemy tracking, and player notes.")
 
   cecho("\n\n  " .. V .. "Or run them from here:")
-  cecho("\n  " .. HL .. "levi setup install all" .. V .. "     — Install basher + NDB (Ataxia still needs manual confirm)")
-  cecho("\n  " .. HL .. "levi setup install ataxia" .. V .. "  — Guidance for atinstall")
-  cecho("\n  " .. HL .. "levi setup install basher" .. V .. "  — Run abinstall directly")
-  cecho("\n  " .. HL .. "levi setup install ndb" .. V .. "     — Run aninstall directly")
+  cecho("\n  " .. HL .. "ataxia setup install all" .. V .. "     — Install basher + NDB (Ataxia still needs manual confirm)")
+  cecho("\n  " .. HL .. "ataxia setup install ataxia" .. V .. "  — Guidance for atinstall")
+  cecho("\n  " .. HL .. "ataxia setup install basher" .. V .. "  — Run abinstall directly")
+  cecho("\n  " .. HL .. "ataxia setup install ndb" .. V .. "     — Run aninstall directly")
 
-  cecho("\n\n  " .. D .. "After installing, use " .. HL .. "levi setup guide" .. D .. " to learn what to configure.")
+  cecho("\n\n  " .. D .. "After installing, use " .. HL .. "ataxia setup guide" .. D .. " to learn what to configure.")
   cecho("\n")
 end
 
@@ -591,11 +591,11 @@ function leviSetup.setupGuide(rest)
   cecho("\n  " .. V .. "After installing, configure each subsystem to your playstyle.")
   cecho("\n  " .. V .. "Pick a section below to see what you can change:\n")
 
-  cecho("\n  " .. HL .. "levi setup guide ataxia" .. V .. "  — Core system (separator, prompt, defences, highlights, etc.)")
-  cecho("\n  " .. HL .. "levi setup guide basher" .. V .. "  — Hunting (target lists, flee, danger, gold, shields)")
-  cecho("\n  " .. HL .. "levi setup guide ndb" .. V .. "     — Player database (city colours, enemy formatting, notes)")
+  cecho("\n  " .. HL .. "ataxia setup guide ataxia" .. V .. "  — Core system (separator, prompt, defences, highlights, etc.)")
+  cecho("\n  " .. HL .. "ataxia setup guide basher" .. V .. "  — Hunting (target lists, flee, danger, gold, shields)")
+  cecho("\n  " .. HL .. "ataxia setup guide ndb" .. V .. "     — Player database (city colours, enemy formatting, notes)")
 
-  cecho("\n\n  " .. D .. "Or jump straight into any setting with " .. HL .. "levi setup <section>" .. D .. ".")
+  cecho("\n\n  " .. D .. "Or jump straight into any setting with " .. HL .. "ataxia setup <section>" .. D .. ".")
   cecho("\n")
 end
 
@@ -608,7 +608,7 @@ function leviSetup.guideAtaxia()
   cecho("\n  " .. W .. "1. Command Separator")
   cecho("\n  " .. D .. "   Joins multiple commands into one line. Achaea default is ;; but most use ;")
   cecho("\n  " .. V .. "   Command:  " .. G .. "aconfig separator <sep>")
-  cecho("\n  " .. V .. "   Wizard:   " .. G .. "levi setup separator <sep>")
+  cecho("\n  " .. V .. "   Wizard:   " .. G .. "ataxia setup separator <sep>")
 
   cecho("\n\n  " .. W .. "2. Toggle System On/Off")
   cecho("\n  " .. D .. "   Master toggle to pause all Ataxia processing.")
@@ -642,7 +642,7 @@ function leviSetup.guideAtaxia()
   cecho("\n\n  " .. W .. "7. Sipping Thresholds")
   cecho("\n  " .. D .. "   Control when health/mana potions are sipped.")
   cecho("\n  " .. V .. "   Command:  " .. G .. "hh <percent>" .. V .. "  — Set health sip %")
-  cecho("\n  " .. V .. "   Wizard:   " .. G .. "levi setup sipping")
+  cecho("\n  " .. V .. "   Wizard:   " .. G .. "ataxia setup sipping")
 
   cecho("\n\n  " .. W .. "8. Room Shortening")
   cecho("\n  " .. D .. "   Shorten long room descriptions for a cleaner display.")
@@ -651,7 +651,7 @@ function leviSetup.guideAtaxia()
   cecho("\n\n  " .. W .. "9. GUI Toggle")
   cecho("\n  " .. D .. "   Enable/disable the Ataxia GUI (map, gauges, chat tabs).")
   cecho("\n  " .. V .. "   Command:  " .. G .. "aconfig gui <on|off>")
-  cecho("\n  " .. V .. "   Wizard:   " .. G .. "levi setup gui <on|off>")
+  cecho("\n  " .. V .. "   Wizard:   " .. G .. "ataxia setup gui <on|off>")
 
   cecho("\n\n  " .. W .. "10. Raid Mode")
   cecho("\n  " .. D .. "    Toggles raid-specific behaviour (group curing, priority shifts).")
@@ -665,7 +665,7 @@ function leviSetup.guideAtaxia()
   cecho("\n  " .. D .. "    Hide clot messages from the main output.")
   cecho("\n  " .. V .. "    Command:  " .. G .. "aconfig gagclot <on|off>")
 
-  cecho("\n\n  " .. D .. "See all current values: " .. HL .. "levi setup status")
+  cecho("\n\n  " .. D .. "See all current values: " .. HL .. "ataxia setup status")
   cecho("\n")
 end
 
@@ -692,7 +692,7 @@ function leviSetup.guideBasher()
   cecho("\n  " .. W .. "3. Flee Threshold")
   cecho("\n  " .. D .. "   HP percentage to trigger automatic flee.")
   cecho("\n  " .. V .. "   Command:  " .. G .. "bash threshold <hp>")
-  cecho("\n  " .. V .. "   Wizard:   " .. G .. "levi setup basher flee <hp>")
+  cecho("\n  " .. V .. "   Wizard:   " .. G .. "ataxia setup basher flee <hp>")
   cecho("\n  " .. D .. "   Default: ~25% HP to flee, ~40% HP to shield")
 
   cecho("\n\n  " .. W .. "4. Danger Mobs")
@@ -711,18 +711,18 @@ function leviSetup.guideBasher()
   cecho("\n  " .. W .. "6. Gold Pack")
   cecho("\n  " .. D .. "   Container for automatic gold pickup.")
   cecho("\n  " .. V .. "   Command:  " .. G .. "bash goldpack <packID>")
-  cecho("\n  " .. V .. "   Wizard:   " .. G .. "levi setup basher goldpack <packID>")
+  cecho("\n  " .. V .. "   Wizard:   " .. G .. "ataxia setup basher goldpack <packID>")
   cecho("\n  " .. D .. "   Find your pack ID with: " .. G .. "IH" .. D .. " (inventory highlights)")
 
   cecho("\n\n  " .. W .. "7. Shield Swap")
   cecho("\n  " .. D .. "   Retarget to a different mob when current target shields.")
   cecho("\n  " .. V .. "   Command:  " .. G .. "aconfig shieldswap <on|off>")
-  cecho("\n  " .. V .. "   Wizard:   " .. G .. "levi setup basher swap <on|off>")
+  cecho("\n  " .. V .. "   Wizard:   " .. G .. "ataxia setup basher swap <on|off>")
 
   cecho("\n\n  " .. W .. "8. Shield Timer")
   cecho("\n  " .. D .. "   How long to wait before re-engaging a shielded mob.")
   cecho("\n  " .. V .. "   Command:  " .. G .. "bash shieldtimer <seconds>")
-  cecho("\n  " .. V .. "   Wizard:   " .. G .. "levi setup basher shieldtimer <seconds>")
+  cecho("\n  " .. V .. "   Wizard:   " .. G .. "ataxia setup basher shieldtimer <seconds>")
 
   cecho("\n\n  " .. W .. "9. Rageraze (Battlerage)")
   cecho("\n  " .. D .. "   Use razing battlerage abilities when available.")
@@ -738,7 +738,7 @@ function leviSetup.guideBasher()
   cecho("\n  " .. V .. "              " .. G .. "bash wot <on|off>")
   cecho("\n  " .. V .. "              " .. G .. "bash incant <on|off>")
 
-  cecho("\n\n  " .. D .. "See all current values: " .. HL .. "levi setup basher")
+  cecho("\n\n  " .. D .. "See all current values: " .. HL .. "ataxia setup basher")
   cecho("\n")
 end
 
@@ -751,7 +751,7 @@ function leviSetup.guideNdb()
   cecho("\n  " .. W .. "1. City Highlight Colours")
   cecho("\n  " .. D .. "   Each city's players are shown in a specific colour.")
   cecho("\n  " .. V .. "   Command:  " .. G .. "anhl <city> <colour>")
-  cecho("\n  " .. V .. "   Wizard:   " .. G .. "levi setup ndb <city> <colour>")
+  cecho("\n  " .. V .. "   Wizard:   " .. G .. "ataxia setup ndb <city> <colour>")
   cecho("\n  " .. D .. "   Cities: Ashtan, Cyrene, Eleusis, Hashan, Mhaldor, Targossas")
   cecho("\n  " .. D .. "   Also: Enemies, Rogues, Underworld")
   cecho("\n  " .. V .. "   Example:  " .. D .. "anhl Mhaldor red")
@@ -763,7 +763,7 @@ function leviSetup.guideNdb()
   cecho("\n\n  " .. W .. "3. Highlight Priority")
   cecho("\n  " .. D .. "   Whether enemy status or city determines highlight colour.")
   cecho("\n  " .. V .. "   Command:  " .. G .. "an prio <city|enemies>")
-  cecho("\n  " .. V .. "   Wizard:   " .. G .. "levi setup ndb priority <city|enemies>")
+  cecho("\n  " .. V .. "   Wizard:   " .. G .. "ataxia setup ndb priority <city|enemies>")
 
   cecho("\n\n  " .. HL .. "ENEMY FORMATTING" .. "\n")
 
@@ -790,7 +790,7 @@ function leviSetup.guideNdb()
   cecho("\n  " .. D .. "   View all NDB settings at once.")
   cecho("\n  " .. V .. "   Command:  " .. G .. "anss")
 
-  cecho("\n\n  " .. D .. "See current colours: " .. HL .. "levi setup ndb")
+  cecho("\n\n  " .. D .. "See current colours: " .. HL .. "ataxia setup ndb")
   cecho("\n")
 end
 
@@ -858,7 +858,7 @@ function leviSetup.showStatus()
     row("GUI Window", boolStr(slc.guiWindow))
   end
 
-  hint("\n  Use 'levi setup <section>' for details on any section.")
+  hint("\n  Use 'ataxia setup <section>' for details on any section.")
   cecho("\n")
 end
 
@@ -884,7 +884,7 @@ function leviSetup.setupSlc(rest)
       save()
     else
       cecho("\n  " .. V .. label .. ": " .. (cfg[key] and (G .. "ON") or (R .. "OFF")))
-      cecho("\n  " .. D .. "Use: " .. HL .. "levi setup slc " .. key .. " <on|off>")
+      cecho("\n  " .. D .. "Use: " .. HL .. "ataxia setup slc " .. key .. " <on|off>")
     end
   end
 
@@ -916,13 +916,13 @@ function leviSetup.setupSlc(rest)
     cecho("\n  " .. V .. "Critical Hits: " .. HL .. (cfg.criticalHits or 1))
 
     cecho("\n\n  " .. D .. "Toggle features:")
-    cecho("\n  " .. HL .. "levi setup slc <key> <on|off>")
-    hint("  e.g.: levi setup slc autoShield on")
+    cecho("\n  " .. HL .. "ataxia setup slc <key> <on|off>")
+    hint("  e.g.: ataxia setup slc autoShield on")
     cecho("\n  " .. D .. "Set parry mode:")
-    cecho("\n  " .. HL .. "levi setup slc parry <stand|defend|manual|randomarm|randomleg>")
+    cecho("\n  " .. HL .. "ataxia setup slc parry <stand|defend|manual|randomarm|randomleg>")
     cecho("\n  " .. D .. "Set thresholds:")
-    cecho("\n  " .. HL .. "levi setup slc warning <hits>")
-    cecho("\n  " .. HL .. "levi setup slc critical <hits>")
+    cecho("\n  " .. HL .. "ataxia setup slc warning <hits>")
+    cecho("\n  " .. HL .. "ataxia setup slc critical <hits>")
     cecho("\n")
     return
   end
@@ -969,6 +969,6 @@ function leviSetup.setupSlc(rest)
     slcToggle(key, boolKeys[key], val)
   else
     cecho("\n  " .. W .. "Unknown SLC setting: " .. key)
-    cecho("\n  " .. D .. "Type " .. HL .. "levi setup slc" .. D .. " to see all options.")
+    cecho("\n  " .. D .. "Type " .. HL .. "ataxia setup slc" .. D .. " to see all options.")
   end
 end

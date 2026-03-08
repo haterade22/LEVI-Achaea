@@ -481,7 +481,7 @@ Configurable floating gauge bars for Health, Mana, Willpower, Endurance, and Cap
 - **Update**: `ataxia.bars.update()` — called from `ataxiagui_updateVitals()` (vitals GMCP handler)
 - **Cape update**: `ataxia.bars.updateCape()` — called from `zgui.showCape()` and `zgui.clearCape()`
 - **Config**: Saved to `getMudletHomeDir() .. "/ataxia_bars_config.lua"` via `table.save`/`table.load`
-- **Alias**: `levibars` → `ataxia.bars.dispatch(args)` — on/off, individual toggle, reset, status
+- **Alias**: `ataxiabars` → `ataxia.bars.dispatch(args)` — on/off, individual toggle, reset, status
 - **Files**: `build_windows/016_buildVitalBars.lua`, `aliases/zgui_redux/007_(LEVIBARS)_Vital_Bars.lua`
 
 **Namespace migration status** (zgui → ataxia):
@@ -506,28 +506,28 @@ Configurable floating gauge bars for Health, Mana, Willpower, Endurance, and Cap
 - Player notes: `an noteadd/noteshow/noteremove`
 
 ### Setup Wizard (leviSetup)
-In-game configuration wizard accessed via `levi setup`.
+In-game configuration wizard accessed via `ataxia setup`.
 
 **Key File**: `src_new/scripts/levi_ataxia/levi/ataxia/misc_scripts/020_Setup_Wizard.lua`
 
-**Namespace**: `leviSetup` — all functions under this table, dispatched via `leviSetup.dispatch(cmd, rest)`
+**Namespace**: `leviSetup` — all functions under this table, dispatched via `leviSetup.dispatch(cmd, rest)`. Note: the internal Lua namespace was intentionally kept as `leviSetup` (internal only); only the user-facing alias changed from `levi setup` to `ataxia setup`.
 
 **Commands**:
 | Command | Purpose |
 |---------|---------|
-| `levi setup` | Main menu |
-| `levi setup class` | Set/auto-detect class |
-| `levi setup separator` | Command separator |
-| `levi setup weapons` | Weapon IDs |
-| `levi setup basher` | Basher settings (flee, gold pack, shield swap) |
-| `levi setup sipping` | Health/mana sip thresholds |
-| `levi setup tracking` | Affliction tracking mode (V1/V2) |
-| `levi setup combat` | Party relay, auto-loot, gag clot |
-| `levi setup gui` | Toggle GUI on/off |
-| `levi setup ndb` | NDB highlight colours |
-| `levi setup install` | Guided install walkthrough (atinstall/abinstall/aninstall) |
-| `levi setup status` | One-page settings overview |
-| `levi setup guide` | Configuration guides (ataxia/basher/ndb) |
+| `ataxia setup` | Main menu |
+| `ataxia setup class` | Set/auto-detect class |
+| `ataxia setup separator` | Command separator |
+| `ataxia setup weapons` | Weapon IDs |
+| `ataxia setup basher` | Basher settings (flee, gold pack, shield swap) |
+| `ataxia setup sipping` | Health/mana sip thresholds |
+| `ataxia setup tracking` | Affliction tracking mode (V1/V2) |
+| `ataxia setup combat` | Party relay, auto-loot, gag clot |
+| `ataxia setup gui` | Toggle GUI on/off |
+| `ataxia setup ndb` | NDB highlight colours |
+| `ataxia setup install` | Guided install walkthrough (atinstall/abinstall/aninstall) |
+| `ataxia setup status` | One-page settings overview |
+| `ataxia setup guide` | Configuration guides (ataxia/basher/ndb) |
 
 ---
 
@@ -1286,7 +1286,7 @@ The SLC tracks exact limb damage percentages from combat text and provides autom
 | `slc reset` | Reset all limb damage |
 | `slc gui` | Toggle GUI window |
 
-**Config Persistence:** Saved as separate `slcconfig` file via `table.save`/`table.load` in `001_Save_Load_Settings.lua`. Setup wizard: `levi setup slc`.
+**Config Persistence:** Saved as separate `slcconfig` file via `table.save`/`table.load` in `001_Save_Load_Settings.lua`. Setup wizard: `ataxia setup slc`.
 
 **Key Implementation Patterns:**
 - Event handler cleanup on reload: all `registerAnonymousEventHandler` calls store IDs and `killAnonymousEventHandler` before re-registering

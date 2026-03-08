@@ -2,6 +2,33 @@
 
 ---
 
+## 2026-03-08 — User-Facing Command Rename: `levi` → `ataxia`
+
+Renamed all user-facing aliases from `levi` prefix to `ataxia` prefix for consistency with the system name. Internal Lua namespace (`leviSetup`) is unchanged.
+
+| Old Command | New Command |
+|-------------|-------------|
+| `levi setup` | `ataxia setup` |
+| `levi setup class` | `ataxia setup class` |
+| `levi setup basher` | `ataxia setup basher` |
+| `levi setup sipping` | `ataxia setup sipping` |
+| *(all other `levi setup` subcommands)* | *(same with `ataxia setup` prefix)* |
+| `levibars` | `ataxiabars` |
+
+Header text in setup wizard changed from "LEVI Setup Wizard" to "Ataxia Setup Wizard".
+
+---
+
+## 2026-03-08 — Nil Guard for `ataxiaBasher.targetList` (F1 Autobash Crash)
+
+Fixed a crash when pressing F1 (autobash) before basher settings were loaded. `search_targets()` accessed `ataxiaBasher.targetList[area]` without checking if `targetList` was initialized, causing a nil index error.
+
+| File | Issue | Fix |
+|------|-------|-----|
+| `genrunning/002_search_targets.lua` | `ataxiaBasher.targetList` nil before basher settings loaded | Added nil guard: early return if `targetList` is nil |
+
+---
+
 ## 2026-03-08 — Nil Guard Fixes for Blind/Startup State
 
 Fixed 8 runtime errors that occurred when logging in blind (no `gmcp.Room` data) or during early connection (incomplete GMCP state).

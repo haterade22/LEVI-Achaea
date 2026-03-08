@@ -20,10 +20,10 @@ packageName: ''
 --  Each bar is an Adjustable.Container with a
 --  Geyser.Gauge inside. Positions auto-save.
 --
---  Alias: levibars          — show status
---         levibars on/off   — master toggle
---         levibars <name>   — toggle individual bar
---         levibars reset    — reset all positions
+--  Alias: ataxiabars          — show status
+--         ataxiabars on/off   — master toggle
+--         ataxiabars <name>   — toggle individual bar
+--         ataxiabars reset    — reset all positions
 -------------------------------------------------
 
 ataxia.bars = ataxia.bars or {}
@@ -341,7 +341,7 @@ function ataxia.bars.status()
     local status = enabled and "<green>ON" or "<red>OFF"
     ataxia.echo("  " .. barDefs[name].label .. ": " .. status)
   end
-  ataxia.echo("Commands: <white>levibars on/off<reset> | <white>levibars <name><reset> | <white>levibars reset")
+  ataxia.echo("Commands: <white>ataxiabars on/off<reset> | <white>ataxiabars <name><reset> | <white>ataxiabars reset")
 end
 
 -------------------------------------------------

@@ -32,7 +32,7 @@ The system relies heavily on GMCP for real-time game data. In Mudlet:
 After connecting to Achaea, run the setup wizard:
 
 ```
-levi setup
+ataxia setup
 ```
 
 #### Step 1: Install the subsystems
@@ -45,22 +45,22 @@ abinstall          -- Basher (hunting system)
 aninstall          -- Name Database (player tracking)
 ```
 
-Or use `levi setup install` for a guided walkthrough that explains each step.
+Or use `ataxia setup install` for a guided walkthrough that explains each step.
 
 #### Step 2: Configure your settings
 
 The setup wizard has individual pages for each area:
 
 ```
-levi setup class           -- Set your class (auto-detects via GMCP)
-levi setup separator       -- Command separator (default ;)
-levi setup weapons         -- Weapon IDs for your class
-levi setup basher          -- Flee thresholds, gold pack, shield swap
-levi setup sipping         -- Health/mana sip percentages
-levi setup tracking        -- Affliction tracking settings
-levi setup combat          -- Party relay, auto-loot, gag clot
-levi setup gui             -- Toggle the GUI on/off
-levi setup ndb             -- City highlight colours, enemy formatting
+ataxia setup class           -- Set your class (auto-detects via GMCP)
+ataxia setup separator       -- Command separator (default ;)
+ataxia setup weapons         -- Weapon IDs for your class
+ataxia setup basher          -- Flee thresholds, gold pack, shield swap
+ataxia setup sipping         -- Health/mana sip percentages
+ataxia setup tracking        -- Affliction tracking settings
+ataxia setup combat          -- Party relay, auto-loot, gag clot
+ataxia setup gui             -- Toggle the GUI on/off
+ataxia setup ndb             -- City highlight colours, enemy formatting
 ```
 
 #### Step 3: Learn what's configurable
@@ -68,16 +68,16 @@ levi setup ndb             -- City highlight colours, enemy formatting
 For a full walkthrough of every option in each subsystem:
 
 ```
-levi setup guide           -- Overview of all three guides
-levi setup guide ataxia    -- Core: separator, prompt, defences, highlights, priorities
-levi setup guide basher    -- Hunting: targets, flee, danger, gold, shields, rageraze
-levi setup guide ndb       -- Players: city colours, enemy format, notes, whois
+ataxia setup guide           -- Overview of all three guides
+ataxia setup guide ataxia    -- Core: separator, prompt, defences, highlights, priorities
+ataxia setup guide basher    -- Hunting: targets, flee, danger, gold, shields, rageraze
+ataxia setup guide ndb       -- Players: city colours, enemy format, notes, whois
 ```
 
 #### Step 4: Check your settings
 
 ```
-levi setup status          -- One-page overview of all current values
+ataxia setup status          -- One-page overview of all current values
 ```
 
 ### 4. Test Basic Functionality

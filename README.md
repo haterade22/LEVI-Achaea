@@ -52,7 +52,7 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 | **Draggable Windows** | ~20 `Adjustable.Container` windows with auto-save/load positions |
 | **Tabbed Chat** | All, City, House, Order, Party, Clans, Tells, Market, Misc tabs |
 | **Channel Colors** | Per-channel coloring (says=cyan, ct=red, tells=yellow, party=magenta, etc.) |
-| **Movable Vital Bars** | Configurable floating gauges for Health, Mana, Willpower, Endurance, Cape (`levibars`) |
+| **Movable Vital Bars** | Configurable floating gauges for Health, Mana, Willpower, Endurance, Cape (`ataxiabars`) |
 | **Health/Mana Gauges** | Gradient-styled gauges with clear overlays in the bottom panel |
 | **XP Progress Bar** | Purple gauge showing progress to next level |
 | **Deathcape Tracker** | Kill counter (0-50) with 240-second timer bar |
@@ -62,20 +62,20 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 | **Window Reset** | `zfix <name>` to reset any window to default position |
 | **Hunting Stats** | Session kill count, gold earned, XP/hour tracking |
 
-### Movable Vital Bars (`levibars`)
+### Movable Vital Bars (`ataxiabars`)
 
 Individually movable, configurable gauge bars that float anywhere on screen:
 
 | Command | Action |
 |---------|--------|
-| `levibars` | Show status of all bars |
-| `levibars on` / `levibars off` | Master toggle |
-| `levibars health` | Toggle health bar |
-| `levibars mana` | Toggle mana bar |
-| `levibars willpower` | Toggle willpower bar |
-| `levibars endurance` | Toggle endurance bar |
-| `levibars cape` | Toggle cape tracker bar |
-| `levibars reset` | Reset all bar positions to defaults |
+| `ataxiabars` | Show status of all bars |
+| `ataxiabars on` / `ataxiabars off` | Master toggle |
+| `ataxiabars health` | Toggle health bar |
+| `ataxiabars mana` | Toggle mana bar |
+| `ataxiabars willpower` | Toggle willpower bar |
+| `ataxiabars endurance` | Toggle endurance bar |
+| `ataxiabars cape` | Toggle cape tracker bar |
+| `ataxiabars reset` | Reset all bar positions to defaults |
 
 Defaults: health, mana, and cape enabled; willpower and endurance off. Drag bars to reposition; positions auto-save.
 
@@ -105,9 +105,9 @@ Defaults: health, mana, and cape enabled; willpower and endurance off. Drag bars
 
 | Feature | Description |
 |---------|-------------|
-| **Setup Wizard** | `levi setup` — guided configuration for all subsystems |
+| **Setup Wizard** | `ataxia setup` — guided configuration for all subsystems |
 | **Per-System Install** | `atinstall`, `abinstall`, `aninstall` for targeted setup |
-| **Config Guides** | `levi setup guide ataxia/basher/ndb` for comprehensive option walkthrough |
+| **Config Guides** | `ataxia setup guide ataxia/basher/ndb` for comprehensive option walkthrough |
 | **Settings Persistence** | All settings saved to disk via `table.save`/`table.load` |
 
 ## Affliction Tracker (V3 Branching Probability Engine)
@@ -345,7 +345,7 @@ Output: `muddler_project/build/Levi_Ataxia.mpackage`
 After installing the package and connecting to Achaea, use the built-in setup wizard to configure everything:
 
 ```
-levi setup
+ataxia setup
 ```
 
 ### First-Time Install
@@ -358,33 +358,33 @@ Run these three commands to initialise the subsystems:
 | 2 | `abinstall` | Initialises the basher (target lists, flee thresholds, shield timers) |
 | 3 | `aninstall` | Sets up the player database (API integration, city-based name highlighting) |
 
-Or use `levi setup install` for a guided walkthrough.
+Or use `ataxia setup install` for a guided walkthrough.
 
 ### Configuration Guide
 
-After installing, `levi setup guide` shows every configurable option across all three subsystems:
+After installing, `ataxia setup guide` shows every configurable option across all three subsystems:
 
 | Command | Section |
 |---------|---------|
-| `levi setup guide ataxia` | Separator, system toggle, custom prompt, defence profiles, curing priorities, item highlighting, sipping, room shortening, GUI, raid mode |
-| `levi setup guide basher` | Target lists, flee/shield thresholds, danger mobs, ignore lists, gold pack, shield swap/timer, rageraze, tree blackout |
-| `levi setup guide ndb` | City highlight colours, highlight toggle/priority, enemy formatting, player notes, whois lookup |
+| `ataxia setup guide ataxia` | Separator, system toggle, custom prompt, defence profiles, curing priorities, item highlighting, sipping, room shortening, GUI, raid mode |
+| `ataxia setup guide basher` | Target lists, flee/shield thresholds, danger mobs, ignore lists, gold pack, shield swap/timer, rageraze, tree blackout |
+| `ataxia setup guide ndb` | City highlight colours, highlight toggle/priority, enemy formatting, player notes, whois lookup |
 
 ### Quick Reference
 
 | Command | Purpose |
 |---------|---------|
-| `levi setup` | Main menu — all setup categories |
-| `levi setup class` | Set your class |
-| `levi setup separator` | Set command separator (default `;`) |
-| `levi setup weapons` | Configure weapon IDs |
-| `levi setup basher` | Basher settings |
-| `levi setup sipping` | Health/mana sip thresholds |
-| `levi setup tracking` | Affliction tracking settings |
-| `levi setup combat` | Combat toggles (party relay, looting, etc.) |
-| `levi setup gui` | Toggle the GUI |
-| `levi setup ndb` | NDB highlighting colours |
-| `levi setup status` | Overview of all current settings |
+| `ataxia setup` | Main menu — all setup categories |
+| `ataxia setup class` | Set your class |
+| `ataxia setup separator` | Set command separator (default `;`) |
+| `ataxia setup weapons` | Configure weapon IDs |
+| `ataxia setup basher` | Basher settings |
+| `ataxia setup sipping` | Health/mana sip thresholds |
+| `ataxia setup tracking` | Affliction tracking settings |
+| `ataxia setup combat` | Combat toggles (party relay, looting, etc.) |
+| `ataxia setup gui` | Toggle the GUI |
+| `ataxia setup ndb` | NDB highlighting colours |
+| `ataxia setup status` | Overview of all current settings |
 
 ---
 
@@ -394,7 +394,7 @@ The ataxiaNDB system tracks player information from the Achaea API and provides 
 
 ### Installation
 
-Run `aninstall` in-game (or `levi setup install ndb`) to initialise the database. This fetches the online player list from the Achaea API and begins populating player records.
+Run `aninstall` in-game (or `ataxia setup install ndb`) to initialise the database. This fetches the online player list from the Achaea API and begins populating player records.
 
 ### How It Works
 
@@ -472,7 +472,7 @@ Name highlighting colours players by their city affiliation. Toggle and configur
 
 **Available cities**: Ashtan, Cyrene, Eleusis, Hashan, Mhaldor, Targossas, Rogues
 
-Or use the setup wizard: `levi setup ndb` for a guided menu.
+Or use the setup wizard: `ataxia setup ndb` for a guided menu.
 
 ### Data Tracked Per Player
 

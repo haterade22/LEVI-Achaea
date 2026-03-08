@@ -249,7 +249,7 @@ function ataxiaBasher_areabash()
 	mmp.pause("off")
 	local curArea = gmcp.Room.Info.area
 	if not ataxiaBasher.targetList then
-		ataxiaEcho("Bashing systems not yet loaded. Run 'levi setup' or 'abinstall' first.")
+		ataxiaEcho("Bashing systems not yet loaded. Run 'ataxia setup' or 'abinstall' first.")
 		return
 	end
 	if ataxiaBasher.targetList[curArea] then

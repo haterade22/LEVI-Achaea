@@ -9,7 +9,7 @@ hierarchy:
 attributes:
   isActive: 'yes'
   isFolder: 'no'
-regex: ^levi setup ?(.*)$
+regex: ^ataxia setup ?(.*)$
 command: ''
 packageName: ''
 ]]--
