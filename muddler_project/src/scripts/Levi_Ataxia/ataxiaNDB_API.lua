@@ -38,7 +38,7 @@ function ataxiaNDB_getClass(name)
 end
 
 function ataxiaNDB_Exists(name)
-  if not name then return false end
+  if not name or type(name) ~= "string" then return false end
   return ataxiaNDB.players[name:title()] ~= nil
 end
 

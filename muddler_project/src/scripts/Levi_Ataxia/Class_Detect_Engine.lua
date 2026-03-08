@@ -88,13 +88,22 @@ function classDetect.save()
     curingsetMap = classDetect.curingsetMap,
   }
   table.save(path, data)
+
+  -- Profile backup
+  _ataxia_backup = _ataxia_backup or {}
+  _ataxia_backup.classDetect = deepcopy(data)
 end
 
 function classDetect.load()
   local path = classDetect.getSavePath()
+  local data = nil
   if io.exists(path) then
-    local data = {}
+    data = {}
     table.load(path, data)
+  elseif _ataxia_backup and _ataxia_backup.classDetect then
+    data = _ataxia_backup.classDetect
+  end
+  if data then
     if data.config then
       for k, v in pairs(data.config) do
         classDetect.config[k] = v

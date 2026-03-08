@@ -30,6 +30,11 @@ function ldm.save()
         enabled = ldm.enabled,
     }
     table.save(config_loc, configData)
+
+    -- Profile backup
+    _ataxia_backup = _ataxia_backup or {}
+    _ataxia_backup.legenddeck = deepcopy(ldm.deck)
+    _ataxia_backup.legenddeck_config = deepcopy(configData)
 end
 
 -- =============================================================================
@@ -42,11 +47,17 @@ function ldm.load()
     local config_loc = getMudletHomeDir() .. separator .. "legenddeck_config"
 
     -- Load deck state
-    if io.exists(deck_loc) then
+    local deckLoaded = io.exists(deck_loc)
+    local deckSource = nil
+    if deckLoaded then
         local loaded = {}
         table.load(deck_loc, loaded)
-        -- Merge: loaded data takes priority, but only for known cards
-        for key, data in pairs(loaded) do
+        deckSource = loaded
+    elseif _ataxia_backup and _ataxia_backup.legenddeck then
+        deckSource = _ataxia_backup.legenddeck
+    end
+    if deckSource then
+        for key, data in pairs(deckSource) do
             if type(data) == "table" and data.charges then
                 ldm.deck[key] = {
                     charges      = tonumber(data.charges) or 0,
@@ -58,9 +69,15 @@ function ldm.load()
     end
 
     -- Load config
-    if io.exists(config_loc) then
-        local configData = {}
+    local configLoaded = io.exists(config_loc)
+    local configData = nil
+    if configLoaded then
+        configData = {}
         table.load(config_loc, configData)
+    elseif _ataxia_backup and _ataxia_backup.legenddeck_config then
+        configData = _ataxia_backup.legenddeck_config
+    end
+    if configData then
         if configData.favorites then ldm.favorites = configData.favorites end
         if configData.config then
             for k, v in pairs(configData.config) do

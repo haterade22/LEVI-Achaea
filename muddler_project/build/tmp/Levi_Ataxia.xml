@@ -1641,6 +1641,11 @@ end</script>
 	local saveFile = getMudletHomeDir() ..  _sep .. "shaman_profile.lua"
 
 	table.save(saveFile, temp_shaman)
+
+	-- Profile backup
+	_ataxia_backup = _ataxia_backup or {}
+	_ataxia_backup.shaman = deepcopy(temp_shaman)
+
 	shecho("Settings saved.")
 end
 
@@ -1648,7 +1653,12 @@ function shaman.load()
 	if string.char(getMudletHomeDir():byte()) == "/" then _sep = "/" else  _sep = "\\" end
 	local loadFile = getMudletHomeDir() ..  _sep .. "shaman_profile.lua"
 
-    if io.exists(loadFile) then table.load(loadFile, shaman) end
+	if io.exists(loadFile) then
+		table.load(loadFile, shaman)
+	elseif _ataxia_backup and _ataxia_backup.shaman then
+		for k, v in pairs(_ataxia_backup.shaman) do shaman[k] = v end
+		shecho("Settings restored from profile backup.")
+	end
 	shecho("Settings loaded.")
 end</script>
   <packageName/>
@@ -9738,6 +9748,17 @@ function ataxia_saveSettings(disp)
     table.save(slc_loc, selfLimbDamage.config)
   end
 
+  -- Profile backup (persists via Mudlet saved variables)
+  _ataxia_backup = _ataxia_backup or {}
+  _ataxia_backup.ataxia = deepcopy(ataxia)
+  if ataxiaBasher then _ataxia_backup.basher = deepcopy(ataxiaBasher) end
+  if ataxiaBasherPaths then _ataxia_backup.basherpaths = deepcopy(ataxiaBasherPaths) end
+  if ataxiaNDB then _ataxia_backup.ndb = deepcopy(ataxiaNDB) end
+  if ataxiaExtraction then _ataxia_backup.extraction = deepcopy(ataxiaExtraction) end
+  if selfLimbDamage and selfLimbDamage.config then
+    _ataxia_backup.slcconfig = deepcopy(selfLimbDamage.config)
+  end
+
 	if disp then
 		ataxia_Echo("Nap time. Don't come back soon, "..(gmcp and gmcp.Char.Name.name or "thanks")..".")
 	end
@@ -9756,44 +9777,71 @@ function ataxia_loadSettings()
 	local ndb_loc = getMudletHomeDir()..separator.."andb"
   local ext_loc = getMudletHomeDir()..separator.."extractLocations"
 
-	if not io.exists(file_loc) then 
-		ataxia_Echo("I don't believe I recognise you. If you want my abilities, fix that.")
-		return
-	end
-
-	table.load(file_loc, ataxia)
+	if not io.exists(file_loc) then
+    -- Try profile backup before giving up
+    if _ataxia_backup and _ataxia_backup.ataxia then
+      ataxia_Echo("Disk save not found -- restoring from profile backup.")
+      for k, v in pairs(_ataxia_backup.ataxia) do ataxia[k] = v end
+    else
+      ataxia_Echo("I don't believe I recognise you. If you want my abilities, fix that.")
+      return
+    end
+	else
+    table.load(file_loc, ataxia)
+  end
 	ataxia_Echo("I suppose I can lend you my aid. Go and annihilate our foes.")
 	ataxia.loaded = true
 
 	if not io.exists(bash_loc) then
-		ataxia_Echo("Bashing systems not yet enabled.") 
+    if _ataxia_backup and _ataxia_backup.basher then
+      ataxiaBasher = deepcopy(_ataxia_backup.basher)
+      ataxia_Echo("Bashing systems restored from profile backup.")
+    else
+      ataxia_Echo("Bashing systems not yet enabled.")
+    end
 	else
 		ataxiaBasher = {}
 		table.load(bash_loc, ataxiaBasher)
 		ataxia_Echo("Bashing systems enabled, go and lay waste.")
-    -- Initialize hyena maul cooldown for Infernal PVE (30s cooldown, starts ready)
-		if ataxiaBasher.hyenaMaulReady == nil then
-			ataxiaBasher.hyenaMaulReady = true
-		end
-		if not io.exists(paths_loc) then
-			ataxiaBasherPaths = {}
-			ataxia_Echo("Area paths not yet enabled. Will have to start those from scratch, I'm afraid.")
-		else
-			ataxia_Echo("Paths have been acquired for bashing.")
-			ataxiaBasherPaths = {}
-			table.load(paths_loc, ataxiaBasherPaths)
-		end
 	end
+  -- Initialize hyena maul cooldown for Infernal PVE (30s cooldown, starts ready)
+  if ataxiaBasher and ataxiaBasher.hyenaMaulReady == nil then
+    ataxiaBasher.hyenaMaulReady = true
+  end
+
+  if ataxiaBasher then
+    if not io.exists(paths_loc) then
+      if _ataxia_backup and _ataxia_backup.basherpaths then
+        ataxiaBasherPaths = deepcopy(_ataxia_backup.basherpaths)
+        ataxia_Echo("Paths restored from profile backup.")
+      else
+        ataxiaBasherPaths = {}
+        ataxia_Echo("Area paths not yet enabled. Will have to start those from scratch, I'm afraid.")
+      end
+    else
+      ataxia_Echo("Paths have been acquired for bashing.")
+      ataxiaBasherPaths = {}
+      table.load(paths_loc, ataxiaBasherPaths)
+    end
+  end
 
   if io.exists(ext_loc) then
     ataxiaExtraction = {}
     table.load(ext_loc, ataxiaExtraction)
     ataxiaEcho("Loaded extraction database.")
+  elseif _ataxia_backup and _ataxia_backup.extraction then
+    ataxiaExtraction = deepcopy(_ataxia_backup.extraction)
+    ataxiaEcho("Extraction database restored from profile backup.")
   end
 
 	if not io.exists(ndb_loc) then
-		ataxiaEcho("Name database not initialised. Loading default settings.")
-		ataxiaNDB_Install()
+    if _ataxia_backup and _ataxia_backup.ndb then
+      ataxiaNDB = deepcopy(_ataxia_backup.ndb)
+      ataxiaEcho("Name database restored from profile backup.")
+    else
+      ataxiaEcho("Name database not initialised. Loading default settings.")
+      ataxiaNDB_Install()
+    end
 	else
 		ataxiaNDB = {}
 		table.load(ndb_loc, ataxiaNDB)
@@ -9822,6 +9870,12 @@ function ataxia_loadSettings()
     selfLimbDamage = selfLimbDamage or {}
     selfLimbDamage.config = selfLimbDamage.config or {}
     for k, v in pairs(saved) do
+      selfLimbDamage.config[k] = v
+    end
+  elseif _ataxia_backup and _ataxia_backup.slcconfig then
+    selfLimbDamage = selfLimbDamage or {}
+    selfLimbDamage.config = selfLimbDamage.config or {}
+    for k, v in pairs(_ataxia_backup.slcconfig) do
       selfLimbDamage.config[k] = v
     end
   end
@@ -14871,7 +14925,7 @@ function ataxiaNDB_getClass(name)
 end
 
 function ataxiaNDB_Exists(name)
-  if not name then return false end
+  if not name or type(name) ~= "string" then return false end
   return ataxiaNDB.players[name:title()] ~= nil
 end
 
@@ -18070,6 +18124,11 @@ function ldm.save()
         enabled = ldm.enabled,
     }
     table.save(config_loc, configData)
+
+    -- Profile backup
+    _ataxia_backup = _ataxia_backup or {}
+    _ataxia_backup.legenddeck = deepcopy(ldm.deck)
+    _ataxia_backup.legenddeck_config = deepcopy(configData)
 end
 
 -- =============================================================================
@@ -18082,11 +18141,17 @@ function ldm.load()
     local config_loc = getMudletHomeDir() .. separator .. "legenddeck_config"
 
     -- Load deck state
-    if io.exists(deck_loc) then
+    local deckLoaded = io.exists(deck_loc)
+    local deckSource = nil
+    if deckLoaded then
         local loaded = {}
         table.load(deck_loc, loaded)
-        -- Merge: loaded data takes priority, but only for known cards
-        for key, data in pairs(loaded) do
+        deckSource = loaded
+    elseif _ataxia_backup and _ataxia_backup.legenddeck then
+        deckSource = _ataxia_backup.legenddeck
+    end
+    if deckSource then
+        for key, data in pairs(deckSource) do
             if type(data) == "table" and data.charges then
                 ldm.deck[key] = {
                     charges      = tonumber(data.charges) or 0,
@@ -18098,9 +18163,15 @@ function ldm.load()
     end
 
     -- Load config
-    if io.exists(config_loc) then
-        local configData = {}
+    local configLoaded = io.exists(config_loc)
+    local configData = nil
+    if configLoaded then
+        configData = {}
         table.load(config_loc, configData)
+    elseif _ataxia_backup and _ataxia_backup.legenddeck_config then
+        configData = _ataxia_backup.legenddeck_config
+    end
+    if configData then
         if configData.favorites then ldm.favorites = configData.favorites end
         if configData.config then
             for k, v in pairs(configData.config) do
@@ -26417,6 +26488,11 @@ function gearAudit.save()
   local separator = package.config:sub(1, 1)
   local filepath = getMudletHomeDir() .. separator .. gearAudit.config.saveFile
   table.save(filepath, gearAudit.data)
+
+  -- Profile backup
+  _ataxia_backup = _ataxia_backup or {}
+  _ataxia_backup.gearaudit = deepcopy(gearAudit.data)
+
   gearAudit.echo("Saved " .. gearAudit.tableSize(gearAudit.data) .. " gear items to disk.")
 end
 
@@ -26427,6 +26503,9 @@ function gearAudit.load()
     gearAudit.data = {}
     table.load(filepath, gearAudit.data)
     gearAudit.echo("Loaded " .. gearAudit.tableSize(gearAudit.data) .. " gear items from disk.")
+  elseif _ataxia_backup and _ataxia_backup.gearaudit then
+    gearAudit.data = deepcopy(_ataxia_backup.gearaudit)
+    gearAudit.echo("Loaded " .. gearAudit.tableSize(gearAudit.data) .. " gear items from profile backup.")
   else
     gearAudit.echo("No saved gear audit data found.")
   end
@@ -29009,6 +29088,10 @@ function ataxia.bars.saveConfig()
   save.enabled = ataxia.bars.config.enabled or {}
   save.masterEnabled = ataxia.bars.config.masterEnabled
   table.save(getConfigPath(), save)
+
+  -- Profile backup
+  _ataxia_backup = _ataxia_backup or {}
+  _ataxia_backup.bars_config = deepcopy(save)
 end
 
 function ataxia.bars.loadConfig()
@@ -29016,6 +29099,12 @@ function ataxia.bars.loadConfig()
   if io.exists(path) then
     local save = {}
     table.load(path, save)
+    ataxia.bars.config.enabled = save.enabled or {}
+    if save.masterEnabled ~= nil then
+      ataxia.bars.config.masterEnabled = save.masterEnabled
+    end
+  elseif _ataxia_backup and _ataxia_backup.bars_config then
+    local save = _ataxia_backup.bars_config
     ataxia.bars.config.enabled = save.enabled or {}
     if save.masterEnabled ~= nil then
       ataxia.bars.config.masterEnabled = save.masterEnabled
@@ -72457,13 +72546,22 @@ function classDetect.save()
     curingsetMap = classDetect.curingsetMap,
   }
   table.save(path, data)
+
+  -- Profile backup
+  _ataxia_backup = _ataxia_backup or {}
+  _ataxia_backup.classDetect = deepcopy(data)
 end
 
 function classDetect.load()
   local path = classDetect.getSavePath()
+  local data = nil
   if io.exists(path) then
-    local data = {}
+    data = {}
     table.load(path, data)
+  elseif _ataxia_backup and _ataxia_backup.classDetect then
+    data = _ataxia_backup.classDetect
+  end
+  if data then
     if data.config then
       for k, v in pairs(data.config) do
         classDetect.config[k] = v

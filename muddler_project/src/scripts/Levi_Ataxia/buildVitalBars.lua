@@ -112,6 +112,10 @@ function ataxia.bars.saveConfig()
   save.enabled = ataxia.bars.config.enabled or {}
   save.masterEnabled = ataxia.bars.config.masterEnabled
   table.save(getConfigPath(), save)
+
+  -- Profile backup
+  _ataxia_backup = _ataxia_backup or {}
+  _ataxia_backup.bars_config = deepcopy(save)
 end
 
 function ataxia.bars.loadConfig()
@@ -119,6 +123,12 @@ function ataxia.bars.loadConfig()
   if io.exists(path) then
     local save = {}
     table.load(path, save)
+    ataxia.bars.config.enabled = save.enabled or {}
+    if save.masterEnabled ~= nil then
+      ataxia.bars.config.masterEnabled = save.masterEnabled
+    end
+  elseif _ataxia_backup and _ataxia_backup.bars_config then
+    local save = _ataxia_backup.bars_config
     ataxia.bars.config.enabled = save.enabled or {}
     if save.masterEnabled ~= nil then
       ataxia.bars.config.masterEnabled = save.masterEnabled
