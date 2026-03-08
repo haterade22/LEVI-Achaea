@@ -432,6 +432,7 @@ function clearPendingGuessesV2() end
 function updateAffDisplayV2() updateAffDisplayV3() end
 function reduceCureTypeAffCertaintyV2() end
 function reduceRandomAffCertaintyV2() end
+function onBloodrootApplyConfirmV2() end
 tAffsV2 = tAffsV2 or {}
 tAffStacksV2 = tAffStacksV2 or {}
 
