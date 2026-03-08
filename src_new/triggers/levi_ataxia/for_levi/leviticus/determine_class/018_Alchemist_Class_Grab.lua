@@ -34,8 +34,6 @@ colorTriggerBgColor: '#000000'
 patterns:
 - pattern: ^(\w+) glowers at you with a look of repressed disgust
   type: 1
-- pattern: ^(\w+) raises a platinum whistle to \w+ lips
-  type: 1
 - pattern: ^A diminutive homunculus resembling (\w+) stares menacingly at you
   type: 1
 ]]--

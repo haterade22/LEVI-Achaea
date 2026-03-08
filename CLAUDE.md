@@ -1601,10 +1601,17 @@ Curse 1: impatience → asthma → manaleech → sicken → anorexia → class l
 Curse 2: [anorexia+sicken pairing] → paralysis → fill remaining
 ```
 
+**Mental Mode** — Flood goldenseal+lobelia, then transition to lock:
+```
+Curse 1: impatience → stupidity → dizziness → vertigo → (lock selectors)
+Curse 2: paralysis → fill mental pieces → (lock selectors)
+All at 25% delivery threshold. Transition: impatience(100%) + 2 of {stupidity, dizziness, vertigo}
+```
+
 **Key rules:**
 - Curse 2 never duplicates curse 1 (`c1` checked at every step)
 - Manaleech is smoke-cured — only delivered when asthma >= 33%
-- Anorexia gated behind slickness; slickness (via sicken) gated behind impatience
+- Anorexia gated behind slickness OR c1=sicken; slickness (via sicken) gated behind impatience
 - Disfigure fires inline with asthma DEADEYES (`;` separator) as asthma probe
 - 2.5s asthma confirm timer after manaleech delivery (V3: collapse if no smoke)
 
@@ -1675,7 +1682,7 @@ Same routing pattern as Blademaster:
 | `apostate_clumsy()` | lock |
 | `apostate_vivisect()` | vivisect |
 | `apostate_weari()` | lock |
-| `apostate_mental()` | lock |
+| `apostate_mental()` | mental |
 | `apostate_kelp()` | lock |
 | `apostate_group()` | group |
 | `apostate_clumsyillusion()` | lock |
