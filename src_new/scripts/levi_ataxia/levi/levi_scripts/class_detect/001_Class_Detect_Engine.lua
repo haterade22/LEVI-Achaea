@@ -104,9 +104,10 @@ function classDetect.save()
   }
   table.save(path, data)
 
-  -- Profile backup
+  -- Profile backup (re-read from file to avoid circular ref issues)
   _ataxia_backup = _ataxia_backup or {}
-  _ataxia_backup.classDetect = deepcopy(data)
+  _ataxia_backup.classDetect = {}
+  table.load(path, _ataxia_backup.classDetect)
 end
 
 function classDetect.load()

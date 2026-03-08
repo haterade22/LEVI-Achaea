@@ -55,14 +55,31 @@ function ataxia_saveSettings(disp)
   end
 
   -- Profile backup (persists via Mudlet saved variables)
+  -- Re-read from just-saved files to get clean serialized data (avoids
+  -- deepcopy stack overflow on tables with circular refs like GUI objects)
   _ataxia_backup = _ataxia_backup or {}
-  _ataxia_backup.ataxia = deepcopy(ataxia)
-  if ataxiaBasher then _ataxia_backup.basher = deepcopy(ataxiaBasher) end
-  if ataxiaBasherPaths then _ataxia_backup.basherpaths = deepcopy(ataxiaBasherPaths) end
-  if ataxiaNDB then _ataxia_backup.ndb = deepcopy(ataxiaNDB) end
-  if ataxiaExtraction then _ataxia_backup.extraction = deepcopy(ataxiaExtraction) end
+  _ataxia_backup.ataxia = {}
+  table.load(file_loc, _ataxia_backup.ataxia)
+  if ataxiaBasher then
+    _ataxia_backup.basher = {}
+    table.load(bash_loc, _ataxia_backup.basher)
+  end
+  if ataxiaBasherPaths then
+    _ataxia_backup.basherpaths = {}
+    table.load(paths_loc, _ataxia_backup.basherpaths)
+  end
+  if ataxiaNDB then
+    _ataxia_backup.ndb = {}
+    table.load(ndb_loc, _ataxia_backup.ndb)
+  end
+  if ataxiaExtraction then
+    _ataxia_backup.extraction = {}
+    table.load(ext_loc, _ataxia_backup.extraction)
+  end
   if selfLimbDamage and selfLimbDamage.config then
-    _ataxia_backup.slcconfig = deepcopy(selfLimbDamage.config)
+    local slc_loc2 = getMudletHomeDir() .. separator .. "slcconfig"
+    _ataxia_backup.slcconfig = {}
+    table.load(slc_loc2, _ataxia_backup.slcconfig)
   end
 
 	if disp then

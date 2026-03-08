@@ -46,10 +46,12 @@ function ldm.save()
     }
     table.save(config_loc, configData)
 
-    -- Profile backup
+    -- Profile backup (re-read from files to avoid circular ref issues)
     _ataxia_backup = _ataxia_backup or {}
-    _ataxia_backup.legenddeck = deepcopy(ldm.deck)
-    _ataxia_backup.legenddeck_config = deepcopy(configData)
+    _ataxia_backup.legenddeck = {}
+    table.load(deck_loc, _ataxia_backup.legenddeck)
+    _ataxia_backup.legenddeck_config = {}
+    table.load(config_loc, _ataxia_backup.legenddeck_config)
 end
 
 -- =============================================================================

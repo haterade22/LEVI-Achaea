@@ -113,9 +113,10 @@ function ataxia.bars.saveConfig()
   save.masterEnabled = ataxia.bars.config.masterEnabled
   table.save(getConfigPath(), save)
 
-  -- Profile backup
+  -- Profile backup (re-read from file to avoid circular ref issues)
   _ataxia_backup = _ataxia_backup or {}
-  _ataxia_backup.bars_config = deepcopy(save)
+  _ataxia_backup.bars_config = {}
+  table.load(getConfigPath(), _ataxia_backup.bars_config)
 end
 
 function ataxia.bars.loadConfig()

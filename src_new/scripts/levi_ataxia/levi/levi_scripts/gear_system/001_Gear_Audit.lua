@@ -99,9 +99,10 @@ function gearAudit.save()
   local filepath = getMudletHomeDir() .. separator .. gearAudit.config.saveFile
   table.save(filepath, gearAudit.data)
 
-  -- Profile backup
+  -- Profile backup (re-read from file to avoid circular ref issues)
   _ataxia_backup = _ataxia_backup or {}
-  _ataxia_backup.gearaudit = deepcopy(gearAudit.data)
+  _ataxia_backup.gearaudit = {}
+  table.load(filepath, _ataxia_backup.gearaudit)
 
   gearAudit.echo("Saved " .. gearAudit.tableSize(gearAudit.data) .. " gear items to disk.")
 end

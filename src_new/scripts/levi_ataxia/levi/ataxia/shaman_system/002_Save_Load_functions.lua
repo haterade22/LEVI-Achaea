@@ -23,9 +23,10 @@ function shaman.save()
 
 	table.save(saveFile, temp_shaman)
 
-	-- Profile backup
+	-- Profile backup (re-read from file to avoid circular ref issues)
 	_ataxia_backup = _ataxia_backup or {}
-	_ataxia_backup.shaman = deepcopy(temp_shaman)
+	_ataxia_backup.shaman = {}
+	table.load(saveFile, _ataxia_backup.shaman)
 
 	shecho("Settings saved.")
 end
