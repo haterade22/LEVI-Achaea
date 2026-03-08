@@ -41,14 +41,23 @@ local channelColors = {
   ["ot"]         = "<white>",
   ["party"]      = "<magenta>",
   ["tell"]       = "<yellow>",
-  ["tells"]      = "<yellow>",
   ["clt"]        = "<white>",
   ["market"]     = "<white>",
   ["newbie"]     = "<green>",
-  ["shout"]      = "<red>",
+  ["shout"]      = "<blue>",
   ["yell"]       = "<white>",
   ["armytell"]   = "<white>",
 }
+
+-- Look up channel color using prefix matching (GMCP names have suffixes like "tells Proficy", "clt Holocaust Inc")
+local function getChannelColor(ch)
+  for prefix, color in pairs(channelColors) do
+    if string.starts(ch, prefix) then
+      return color
+    end
+  end
+  return "<white>"
+end
 
 -- Strip ANSI escape sequences from GMCP text (they render as raw [0;37m etc. in miniconsoles)
 local function stripAnsi(s)
@@ -60,7 +69,7 @@ function zgui.showChat()
   local chatWindow = false
   local text = stripAnsi(gmcp.Comm.Channel.Text.text)
   local person = gmcp.Comm.Channel.Text.talker:title()
-  local color = channelColors[gmcp.Comm.Channel.Start] or "<white>"
+  local color = getChannelColor(gmcp.Comm.Channel.Start)
   
   for k,v in pairs(gmcp.Comm.Channel.List) do
     shortName = gmcp.Comm.Channel.List[k].command

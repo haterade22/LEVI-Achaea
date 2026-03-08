@@ -2,17 +2,17 @@
 
 ---
 
-## 2026-03-07 — Fix: Tells not showing in yellow in chat miniconsoles
+## 2026-03-07 — Fix: Chat channel colors not applied in miniconsoles
 
-**Problem**: Player tells appeared in white/default color instead of yellow in both GUI chat systems.
+**Problem**: Most chat channel colors (tells=yellow, says=cyan, clan=white, etc.) appeared as white/default in the GUI chat miniconsoles. Only channels with exact GMCP name matches (like `"shout"`) showed their configured color.
 
-**Root cause**: Achaea's GMCP sends `"tells"` (plural) as the `Comm.Channel.Start` value for player tells, but `channelColors` only had `["tell"]` (singular). The color lookup is an exact key match (`channelColors[gmcp.Comm.Channel.Start]`), so `"tells"` returned nil → fell back to `"<white>"`. Window routing worked fine because it uses substring matching (`string.starts`/`find`).
+**Root cause**: The color lookup used exact key match (`channelColors[gmcp.Comm.Channel.Start]`), but Achaea's GMCP channel names include suffixes — e.g., `"tells Proficy"` for tells, `"clt Holocaust Inc"` for clans. The exact lookup for `"tells Proficy"` against key `"tell"` returned nil → fell back to `"<white>"`. Window routing already worked because it used `string.starts()` prefix matching.
 
-**Fix**: Added `["tells"] = "<yellow>"` to `channelColors` in both chat display files.
+**Fix**: Added `getChannelColor(ch)` helper that iterates `channelColors` with `string.starts()` prefix matching, replacing the exact key lookup. Applied to both chat display files.
 
 **Files modified**:
-- `scripts/.../update_windows/001_showChat.lua` — Added `["tells"]` to `channelColors`
-- `scripts/.../gui_stuff/003_Chat_Capture_Things.lua` — Added `["tells"]` to `channelColors`
+- `scripts/.../update_windows/001_showChat.lua` — Added `getChannelColor()`, replaced exact lookup
+- `scripts/.../gui_stuff/003_Chat_Capture_Things.lua` — Added `getChannelColor()`, replaced exact lookup
 
 ---
 
@@ -179,7 +179,7 @@
 ## 2026-03-07 — Apostate: Disfigure fires on asthma round + CORRUPT V2/V3 reset
 
 **Files modified**:
-- `src_new/scripts/.../apostate/015_CC_Apostate.lua` — Moved disfigure from manaleech round to asthma round (probes whether target smokes before committing manaleech). Changed separator from `::` to `;` so disfigure fires same server tick as DEADEYES (bal+eq consumed simultaneously via `queue addclearfull freestand`). Removed `gmcp.Char.Vitals.bal == "1"` guard that prevented disfigure from firing when dispatch was called from reboundHold callback (GMCP bal update hadn't arrived yet in same data chunk). The `disfigureSent` flag already prevents spam.
+- `src_new/scripts/.../apostate/015_CC_Apostate.lua` — Moved disfigure from manaleech round to asthma round (probes whether target smokes before committing manaleech). Removed `gmcp.Char.Vitals.bal == "1"` guard that prevented disfigure from firing when dispatch was called from reboundHold callback. **Fixed orphaned disfigure**: `queue add free` approach failed because deadeyes ends up in Achaea's auto-queue (not the manual freestand queue), which fires first on balance return and consumes balance — the `free` queue's disfigure then waits for the NEXT balance return and fires alone. Fix: replaced with a one-shot `tempTrigger("curse of asthma", ...)` that sends disfigure when deadeyes text appears in the same server output batch. Trigger cleanup on mode change, target change, and non-asthma rounds.
 - `src_new/triggers/.../apostate/007_CORRUPT.lua` — Added `resetAffsV2()` and `resetStatesV3()` calls after `expandAlias("res")`. Demon corrupt resets all target afflictions but the trigger only cleared V1 (via `res` alias). V2 certainty tracking and V3 probability branching states were stale after corrupt.
 
 ---
