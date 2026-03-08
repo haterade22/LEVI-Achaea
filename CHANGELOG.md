@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-03-08 — Fix: ataxiaNDB API crash with numeric target (bashing)
+
+Fixed crash in `ataxiaNDB_Exists()` when `target` is a numeric GMCP NPC ID (during bashing). The Prompt Trigger calls `ataxiaNDB_getClass(target)` every prompt, which called `name:title()` on a number. Added type guard `type(name) ~= "string"` in `ataxiaNDB_Exists()` — protects all 50+ NDB API callers across the codebase.
+
+| File | Fix |
+|------|-----|
+| `ataxia_ndb/003_ataxiaNDB_API.lua` | `ataxiaNDB_Exists()`: reject non-string `name` values (returns `false`) |
+
+---
+
 ## 2026-03-08 — User-Facing Command Rename: `levi` → `ataxia`
 
 Renamed all user-facing aliases from `levi` prefix to `ataxia` prefix for consistency with the system name. Internal Lua namespace (`leviSetup`) is unchanged.

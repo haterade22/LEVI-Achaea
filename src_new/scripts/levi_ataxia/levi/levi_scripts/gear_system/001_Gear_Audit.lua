@@ -98,6 +98,11 @@ function gearAudit.save()
   local separator = package.config:sub(1, 1)
   local filepath = getMudletHomeDir() .. separator .. gearAudit.config.saveFile
   table.save(filepath, gearAudit.data)
+
+  -- Profile backup
+  _ataxia_backup = _ataxia_backup or {}
+  _ataxia_backup.gearaudit = deepcopy(gearAudit.data)
+
   gearAudit.echo("Saved " .. gearAudit.tableSize(gearAudit.data) .. " gear items to disk.")
 end
 
@@ -108,6 +113,9 @@ function gearAudit.load()
     gearAudit.data = {}
     table.load(filepath, gearAudit.data)
     gearAudit.echo("Loaded " .. gearAudit.tableSize(gearAudit.data) .. " gear items from disk.")
+  elseif _ataxia_backup and _ataxia_backup.gearaudit then
+    gearAudit.data = deepcopy(_ataxia_backup.gearaudit)
+    gearAudit.echo("Loaded " .. gearAudit.tableSize(gearAudit.data) .. " gear items from profile backup.")
   else
     gearAudit.echo("No saved gear audit data found.")
   end

@@ -54,6 +54,17 @@ function ataxia_saveSettings(disp)
     table.save(slc_loc, selfLimbDamage.config)
   end
 
+  -- Profile backup (persists via Mudlet saved variables)
+  _ataxia_backup = _ataxia_backup or {}
+  _ataxia_backup.ataxia = deepcopy(ataxia)
+  if ataxiaBasher then _ataxia_backup.basher = deepcopy(ataxiaBasher) end
+  if ataxiaBasherPaths then _ataxia_backup.basherpaths = deepcopy(ataxiaBasherPaths) end
+  if ataxiaNDB then _ataxia_backup.ndb = deepcopy(ataxiaNDB) end
+  if ataxiaExtraction then _ataxia_backup.extraction = deepcopy(ataxiaExtraction) end
+  if selfLimbDamage and selfLimbDamage.config then
+    _ataxia_backup.slcconfig = deepcopy(selfLimbDamage.config)
+  end
+
 	if disp then
 		ataxia_Echo("Nap time. Don't come back soon, "..(gmcp and gmcp.Char.Name.name or "thanks")..".")
 	end
@@ -72,44 +83,71 @@ function ataxia_loadSettings()
 	local ndb_loc = getMudletHomeDir()..separator.."andb"
   local ext_loc = getMudletHomeDir()..separator.."extractLocations"
 
-	if not io.exists(file_loc) then 
-		ataxia_Echo("I don't believe I recognise you. If you want my abilities, fix that.")
-		return
-	end
-
-	table.load(file_loc, ataxia)
+	if not io.exists(file_loc) then
+    -- Try profile backup before giving up
+    if _ataxia_backup and _ataxia_backup.ataxia then
+      ataxia_Echo("Disk save not found -- restoring from profile backup.")
+      for k, v in pairs(_ataxia_backup.ataxia) do ataxia[k] = v end
+    else
+      ataxia_Echo("I don't believe I recognise you. If you want my abilities, fix that.")
+      return
+    end
+	else
+    table.load(file_loc, ataxia)
+  end
 	ataxia_Echo("I suppose I can lend you my aid. Go and annihilate our foes.")
 	ataxia.loaded = true
 
 	if not io.exists(bash_loc) then
-		ataxia_Echo("Bashing systems not yet enabled.") 
+    if _ataxia_backup and _ataxia_backup.basher then
+      ataxiaBasher = deepcopy(_ataxia_backup.basher)
+      ataxia_Echo("Bashing systems restored from profile backup.")
+    else
+      ataxia_Echo("Bashing systems not yet enabled.")
+    end
 	else
 		ataxiaBasher = {}
 		table.load(bash_loc, ataxiaBasher)
 		ataxia_Echo("Bashing systems enabled, go and lay waste.")
-    -- Initialize hyena maul cooldown for Infernal PVE (30s cooldown, starts ready)
-		if ataxiaBasher.hyenaMaulReady == nil then
-			ataxiaBasher.hyenaMaulReady = true
-		end
-		if not io.exists(paths_loc) then
-			ataxiaBasherPaths = {}
-			ataxia_Echo("Area paths not yet enabled. Will have to start those from scratch, I'm afraid.")
-		else
-			ataxia_Echo("Paths have been acquired for bashing.")
-			ataxiaBasherPaths = {}
-			table.load(paths_loc, ataxiaBasherPaths)
-		end
 	end
+  -- Initialize hyena maul cooldown for Infernal PVE (30s cooldown, starts ready)
+  if ataxiaBasher and ataxiaBasher.hyenaMaulReady == nil then
+    ataxiaBasher.hyenaMaulReady = true
+  end
+
+  if ataxiaBasher then
+    if not io.exists(paths_loc) then
+      if _ataxia_backup and _ataxia_backup.basherpaths then
+        ataxiaBasherPaths = deepcopy(_ataxia_backup.basherpaths)
+        ataxia_Echo("Paths restored from profile backup.")
+      else
+        ataxiaBasherPaths = {}
+        ataxia_Echo("Area paths not yet enabled. Will have to start those from scratch, I'm afraid.")
+      end
+    else
+      ataxia_Echo("Paths have been acquired for bashing.")
+      ataxiaBasherPaths = {}
+      table.load(paths_loc, ataxiaBasherPaths)
+    end
+  end
 
   if io.exists(ext_loc) then
     ataxiaExtraction = {}
     table.load(ext_loc, ataxiaExtraction)
     ataxiaEcho("Loaded extraction database.")
+  elseif _ataxia_backup and _ataxia_backup.extraction then
+    ataxiaExtraction = deepcopy(_ataxia_backup.extraction)
+    ataxiaEcho("Extraction database restored from profile backup.")
   end
 
 	if not io.exists(ndb_loc) then
-		ataxiaEcho("Name database not initialised. Loading default settings.")
-		ataxiaNDB_Install()
+    if _ataxia_backup and _ataxia_backup.ndb then
+      ataxiaNDB = deepcopy(_ataxia_backup.ndb)
+      ataxiaEcho("Name database restored from profile backup.")
+    else
+      ataxiaEcho("Name database not initialised. Loading default settings.")
+      ataxiaNDB_Install()
+    end
 	else
 		ataxiaNDB = {}
 		table.load(ndb_loc, ataxiaNDB)
@@ -138,6 +176,12 @@ function ataxia_loadSettings()
     selfLimbDamage = selfLimbDamage or {}
     selfLimbDamage.config = selfLimbDamage.config or {}
     for k, v in pairs(saved) do
+      selfLimbDamage.config[k] = v
+    end
+  elseif _ataxia_backup and _ataxia_backup.slcconfig then
+    selfLimbDamage = selfLimbDamage or {}
+    selfLimbDamage.config = selfLimbDamage.config or {}
+    for k, v in pairs(_ataxia_backup.slcconfig) do
       selfLimbDamage.config[k] = v
     end
   end
