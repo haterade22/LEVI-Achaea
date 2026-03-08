@@ -573,7 +573,7 @@ groups:
       \ do \n      if table.contains(j, aff) then\n        stack = i\n        break\n      end\n    end\n    if stack == \"\
       default\" then return end\n    if adding == true then\n      Algedonic.mystack[stack] = Algedonic.mystack[stack] + 1\n\
       \    else\n      Algedonic.mystack[stack] = Algedonic.mystack[stack] - 1\n    end\n  end\n\n  function Algedonic.Echo(thing)\n\
-      \    cecho(\"\\n<ansi_light_cyan>[Levi]: <white>\"..thing)\nend\n\nfunction Algedonic.Prioritize()\n    local targetclass\
+      \    cecho(\"\\n<light_cyan>[Levi]: <white>\"..thing)\nend\n\nfunction Algedonic.Prioritize()\n    local targetclass\
       \ = ataxiaNDB_getClass(target)\n    if targetclass == \"Apostate\" then\n        Algedonic.AntiApostate()\n    elseif\
       \ targetclass == \"Alchemist\" then\n        Algedonic.AntiAlchemist()\n    elseif targetclass == \"Bard\" then\n  \
       \      Algedonic.AntiBard()\n    elseif targetclass == \"Blademaster\" then\n        Algedonic.Blademaster()\n    elseif\

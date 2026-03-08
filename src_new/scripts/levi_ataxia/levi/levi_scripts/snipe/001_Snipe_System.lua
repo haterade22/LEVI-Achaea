@@ -49,7 +49,7 @@ snipe.state.currentDirection = nil
 -- =============================================================================
 
 function snipe.echo(msg)
-    cecho("\n<ansi_light_cyan>[<white>Snipe<ansi_light_cyan>]: <white>" .. msg)
+    cecho("\n<light_cyan>[<white>Snipe<light_cyan>]: <white>" .. msg)
 end
 
 -- =============================================================================

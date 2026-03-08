@@ -72,7 +72,7 @@ apostate.setMode("mental")
 apostate.dispatch()
 end
 if gmcp.Char.Status.class == "Serpent" then
-serp_quicklocksnakeprone()
+  serp_setmode_hypnolock()
 end
 if gmcp.Char.Status.class == "Psion" then
 levipsionflurry()

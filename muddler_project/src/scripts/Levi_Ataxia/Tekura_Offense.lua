@@ -13,6 +13,9 @@ tekura.dispatch = tekura.dispatch or {}
 tekura.state = {
   preferScythe = false,
   lastAttackTime = 0,
+  attackInFlight = false,     -- Anti-desync: true while off-balance (DWC pattern)
+  lastTarget = nil,           -- Target-change detection (DWB pattern)
+  lastEchoTime = nil,         -- Debounced echo timestamp (DWB pattern)
 }
 
 tekura.config = {
@@ -40,6 +43,98 @@ tekura.PHASE_NAMES = {
 }
 
 --------------------------------------------------------------------------------
+-- AFFLICTION TRACKING HELPERS (V3 compatible)
+--------------------------------------------------------------------------------
+
+-- Helper to check if target has an affliction (V3/V2/V1 routing)
+function tekura.hasAff(aff)
+  -- V3 system (highest priority - probability-based)
+  if affConfigV3 and affConfigV3.enabled then
+    if haveAffV3 then
+      return haveAffV3(aff)
+    end
+  end
+  -- V2 system (when enabled, use ONLY V2 - no fallback)
+  if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
+    if haveAffV2 then
+      return haveAffV2(aff)
+    elseif tAffsV2 and tAffsV2[aff] then
+      return true
+    end
+    return false
+  end
+  -- V1 system (only when V2 is disabled)
+  if tAffs and tAffs[aff] then
+    return true
+  end
+  return false
+end
+
+-- Get affliction probability (V3 only, returns 0-1)
+function tekura.getAffProb(aff)
+  if affConfigV3 and affConfigV3.enabled and getAffProbabilityV3 then
+    return getAffProbabilityV3(aff)
+  end
+  return tekura.hasAff(aff) and 1.0 or 0
+end
+
+-- Check which tracking system is active
+function tekura.getTrackingSystem()
+  if affConfigV3 and affConfigV3.enabled then return "V3"
+  elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then return "V2"
+  end
+  return "V1"
+end
+
+--------------------------------------------------------------------------------
+-- SEND ATTACK (centralized: engage + freestand + attackInFlight)
+--------------------------------------------------------------------------------
+
+function tekura.sendAttack(cmd)
+  if not cmd or cmd == "" then return end
+
+  -- Lock break check (shared system)
+  if ataxia_needLockBreak and ataxia_needLockBreak() then
+    if ataxia_lockBreak then ataxia_lockBreak() end
+    return
+  end
+
+  -- Target presence check
+  if ataxia and ataxia.playersHere and not table.contains(ataxia.playersHere, target) then
+    return
+  end
+
+  tekura.state.attackInFlight = true
+  send("queue addclear free " .. cmd)
+end
+
+--------------------------------------------------------------------------------
+-- ECHO DEBOUNCE (DWB pattern: 0.3s guard prevents spam on rapid mashing)
+--------------------------------------------------------------------------------
+
+function tekura.shouldEcho()
+  local now = getEpoch()
+  if not tekura.state.lastEchoTime or (now - tekura.state.lastEchoTime) > 0.3 then
+    tekura.state.lastEchoTime = now
+    return true
+  end
+  return false
+end
+
+--------------------------------------------------------------------------------
+-- WOULD-BREAK GUARD (DWC pattern: prevents accidental breaks during PREP)
+--------------------------------------------------------------------------------
+
+-- Check if next combo attack would break a limb prematurely
+-- punchDamage = HFP (14%), kickDamage varies by attack (SDK=25, SNK=25)
+function tekura.wouldBreakLimb(limb, attackDamage)
+  local damage = tekura.dispatch.getLimbDamage(limb)
+  if damage <= 0 then return false end
+  attackDamage = attackDamage or 14  -- default to HFP punch damage
+  return (damage + attackDamage) >= tekura.config.breakThreshold
+end
+
+--------------------------------------------------------------------------------
 -- CONDITION CHECK FUNCTIONS
 --------------------------------------------------------------------------------
 
@@ -52,26 +147,31 @@ function tekura.dispatch.getLimbDamage(limb)
   return lb[target].hits[limb] or 0
 end
 
--- Check if torso is prepped (one punch away from breaking)
+-- Check if torso is prepped (one punch away from breaking, or wouldBreak)
 function tekura.dispatch.checkTorsoPrepped()
-  local hfpDamage = 14
   local torsoDmg = tekura.dispatch.getLimbDamage("torso")
-  return torsoDmg + hfpDamage >= tekura.config.breakThreshold and torsoDmg < tekura.config.breakThreshold
+  if torsoDmg >= tekura.config.prepThreshold and torsoDmg < tekura.config.breakThreshold then
+    return true
+  end
+  -- Treat near-break limbs as prepped to prevent accidental breaks during PREP
+  return tekura.wouldBreakLimb("torso", 14)
 end
 
 -- Check if torso is broken
 function tekura.dispatch.checkTorsoBroken()
-  tAffs = tAffs or {}
   local torsoDmg = tekura.dispatch.getLimbDamage("torso")
-  return torsoDmg >= tekura.config.breakThreshold or tAffs.damagedtorso
+  return torsoDmg >= tekura.config.breakThreshold or tekura.hasAff("damagedtorso")
 end
 
--- Check if a specific leg is prepped (one punch away from breaking)
+-- Check if a specific leg is prepped (one punch away from breaking, or wouldBreak)
 function tekura.dispatch.checkLegPrepped(leg)
-  local hfpDamage = 14
   local limbName = leg .. " leg"
   local legDmg = tekura.dispatch.getLimbDamage(limbName)
-  return legDmg + hfpDamage >= tekura.config.breakThreshold and legDmg < tekura.config.breakThreshold
+  if legDmg >= tekura.config.prepThreshold and legDmg < tekura.config.breakThreshold then
+    return true
+  end
+  -- Treat near-break limbs as prepped to prevent accidental breaks during PREP
+  return tekura.wouldBreakLimb(limbName, 14)
 end
 
 -- Check if both legs are prepped
@@ -94,17 +194,20 @@ end
 
 -- Check if SCYTHE kill route is ready
 function tekura.dispatch.checkScytheReady()
-  tAffs = tAffs or {}
   local hasBattered = battered or false
-  local hasDamagedHead = tAffs.damagedhead or false
-  local isProne = tAffs.prone or false
+  local hasDamagedHead = tekura.hasAff("damagedhead")
+  local isProne = tekura.hasAff("prone")
   return hasBattered and hasDamagedHead and isProne
 end
 
--- Check if target has shield
+-- Check if target has shield (V1 fallback for GMCP timing gap)
 function tekura.dispatch.checkShield()
-  tAffs = tAffs or {}
-  return tAffs.shield or false
+  return tekura.hasAff("shield") or (tAffs and tAffs.shield) or false
+end
+
+-- Check if target has rebounding (V1 fallback for GMCP timing gap)
+function tekura.dispatch.checkRebounding()
+  return tekura.hasAff("rebounding") or (tAffs and tAffs.rebounding) or false
 end
 
 -- Check if target is parrying legs
@@ -143,17 +246,20 @@ end
 -- PHASE DETECTION
 --------------------------------------------------------------------------------
 
-function tekura.dispatch.getPhase()
-  tAffs = tAffs or {}
-  tLimbs = tLimbs or {H = 0, T = 0, LL = 0, RL = 0, LA = 0, RA = 0}
+-- Check if we're in Bear stance (set after DOUBLE_BREAK via ;brs)
+function tekura.isInBearStance()
+  return ataxia and ataxia.vitals and ataxia.vitals.stance == "Bear"
+end
 
+function tekura.dispatch.getPhase()
   -- SCYTHE: Alternative kill (if enabled and ready)
   if tekura.state.preferScythe and tekura.dispatch.checkScytheReady() then
     return tekura.PHASES.SCYTHE
   end
 
-  -- KILL: Both legs broken AND prone AND torso broken
-  if tekura.dispatch.checkBothLegsBroken() and tAffs.prone then
+  -- KILL: In Bear stance AND target is prone → BBT
+  -- Bear stance means we already completed break phases
+  if tekura.isInBearStance() and tekura.hasAff("prone") then
     return tekura.PHASES.KILL
   end
 
@@ -187,13 +293,12 @@ end
 
 -- Get focus leg (lower damage, avoid parry)
 function tekura.dispatch.getFocusLeg()
-  tAffs = tAffs or {}
   ataxiaTemp = ataxiaTemp or {}
 
   local parried = ataxiaTemp.parriedLimb or "none"
 
   -- If target is prone or paralyzed, parry doesn't matter
-  if tAffs.prone or tAffs.paralysis then
+  if tekura.hasAff("prone") or tekura.hasAff("paralysis") then
     parried = "none"
   end
 
@@ -348,13 +453,25 @@ function tekura.dispatch.run()
   ataxia = ataxia or {}
   ataxia.vitals = ataxia.vitals or {}
   ataxiaTemp = ataxiaTemp or {}
-  tLimbs = tLimbs or {H = 0, T = 0, LL = 0, RL = 0, LA = 0, RA = 0}
   tAffs = tAffs or {}
 
   -- Safety check for target
   if not target or target == "" then
     cecho("\n<red>[TKD] No target set! Use: tar <name>")
     return
+  end
+
+  -- Aeon check: don't dispatch under aeon (DWB pattern)
+  if ataxia.afflictions and ataxia.afflictions.aeon then
+    cecho("\n<yellow>[TKD] <red>AEON - skipping dispatch")
+    return
+  end
+
+  -- Target-change detection: auto-reset on new target (DWB pattern)
+  if tekura.state.lastTarget ~= target then
+    tekura.parry.clear()
+    tekura.state.attackInFlight = false
+    tekura.state.lastTarget = target
   end
 
   -- Get current phase
@@ -364,19 +481,20 @@ function tekura.dispatch.run()
   -- Get parry status
   local parried = tekura.dispatch.getParried()
 
-  -- Get limb damage from lb[target].hits
-  local torsoDmg = tekura.dispatch.getLimbDamage("torso")
-  local llDmg = tekura.dispatch.getLimbDamage("left leg")
-  local rlDmg = tekura.dispatch.getLimbDamage("right leg")
+  -- Debounced echo (0.3s guard prevents spam on rapid mashing)
+  if tekura.shouldEcho() then
+    local torsoDmg = tekura.dispatch.getLimbDamage("torso")
+    local llDmg = tekura.dispatch.getLimbDamage("left leg")
+    local rlDmg = tekura.dispatch.getLimbDamage("right leg")
 
-  -- Debug output
-  cecho("\n<yellow>[TKD " .. phaseName .. "]<reset> ")
-  cecho("T:<cyan>" .. string.format("%.0f", torsoDmg) .. "%<reset> ")
-  cecho("LL:<cyan>" .. string.format("%.0f", llDmg) .. "%<reset> ")
-  cecho("RL:<cyan>" .. string.format("%.0f", rlDmg) .. "%<reset> ")
-  cecho("Prone:<" .. (tAffs.prone and "green>YES" or "red>NO") .. "<reset>")
-  if parried ~= "none" then
-    cecho(" <red>PARRY:" .. parried .. "<reset>")
+    cecho("\n<yellow>[TKD " .. phaseName .. "]<reset> ")
+    cecho("T:<cyan>" .. string.format("%.0f", torsoDmg) .. "%<reset> ")
+    cecho("LL:<cyan>" .. string.format("%.0f", llDmg) .. "%<reset> ")
+    cecho("RL:<cyan>" .. string.format("%.0f", rlDmg) .. "%<reset> ")
+    cecho("Prone:<" .. (tekura.hasAff("prone") and "green>YES" or "red>NO") .. "<reset>")
+    if parried ~= "none" then
+      cecho(" <red>PARRY:" .. parried .. "<reset>")
+    end
   end
 
   -- Build command with combatQueue prefix
@@ -385,11 +503,23 @@ function tekura.dispatch.run()
     cmd = combatQueue()
   end
 
+  -- Handle rebounding (raze with RHK - roundhouse kick)
+  if tekura.dispatch.checkRebounding() then
+    cmd = cmd .. "unwield all;dismount;combo " .. target .. " rhk hkp hkp"
+    tekura.sendAttack(cmd)
+    if tekura.shouldEcho() then
+      cecho("\n<yellow>[TKD] RAZING REBOUNDING")
+    end
+    return
+  end
+
   -- Handle shield (raze with RHK - roundhouse kick)
   if tekura.dispatch.checkShield() then
     cmd = cmd .. "unwield all;dismount;combo " .. target .. " rhk hkp hkp"
-    send("queue addclear free " .. cmd)
-    cecho("\n<yellow>[TKD] RAZING SHIELD")
+    tekura.sendAttack(cmd)
+    if tekura.shouldEcho() then
+      cecho("\n<yellow>[TKD] RAZING SHIELD")
+    end
     return
   end
 
@@ -402,8 +532,8 @@ function tekura.dispatch.run()
   -- Construct full command
   cmd = cmd .. "unwield all;dismount;" .. attack
 
-  -- Queue command
-  send("queue addclear free " .. cmd)
+  -- Queue command via centralized send
+  tekura.sendAttack(cmd)
 
   -- Update state
   tekura.state.lastAttackTime = os.time()
@@ -414,8 +544,6 @@ end
 --------------------------------------------------------------------------------
 
 function tekura.dispatch.status()
-  -- Initialize if missing
-  tAffs = tAffs or {}
   ataxiaTemp = ataxiaTemp or {}
 
   local phase = tekura.dispatch.getPhase()
@@ -461,13 +589,14 @@ function tekura.dispatch.status()
   cecho("\n<yellow>|   <white>Head:  " .. prepStatus(headDmg) .. string.format("%5.1f%%", headDmg) .. "<reset> [<magenta>" .. progressBar(headDmg) .. "<reset>] <grey>(SCYTHE)")
   cecho("\n<yellow>+--------------------------------------------+")
   cecho("\n<yellow>| <white>CONDITIONS:<yellow>")
-  cecho("\n<yellow>|   <white>Prone: " .. (tAffs.prone and "<green>YES" or "<red>NO"))
+  cecho("\n<yellow>|   <white>Prone: " .. (tekura.hasAff("prone") and "<green>YES" or "<red>NO"))
   cecho("      <white>Parried: <cyan>" .. (ataxiaTemp.parriedLimb or "none"))
   cecho("\n<yellow>|   <white>All Prepped: " .. (tekura.dispatch.checkAllPrepped() and "<green>YES" or "<red>NO"))
   cecho("  <white>Torso Broken: " .. (tekura.dispatch.checkTorsoBroken() and "<green>YES" or "<red>NO"))
+  cecho("\n<yellow>|   <white>Tracking: <cyan>" .. tekura.getTrackingSystem())
   cecho("\n<yellow>+--------------------------------------------+")
   cecho("\n<yellow>| <white>KILL ROUTES:<yellow>")
-  cecho("\n<yellow>|   <white>BBT Ready: " .. (tekura.dispatch.checkBothLegsBroken() and tAffs.prone and "<green>YES" or "<red>NO"))
+  cecho("\n<yellow>|   <white>BBT Ready: " .. (tekura.isInBearStance() and tekura.hasAff("prone") and "<green>YES" or "<red>NO"))
   cecho("    <white>SCYTHE Ready: " .. (tekura.dispatch.checkScytheReady() and "<magenta>YES" or "<grey>NO"))
   cecho("\n<yellow>|   <white>SCYTHE Mode: " .. (tekura.state.preferScythe and "<magenta>ENABLED" or "<grey>DISABLED"))
   cecho("\n<yellow>+--------------------------------------------+")
@@ -494,6 +623,8 @@ end
 -- Reset state for new target
 function tekura.dispatch.reset()
   tekura.state.preferScythe = false
+  tekura.state.attackInFlight = false
+  tekura.state.lastTarget = nil
   tekura.parry.clear()
   cecho("\n<yellow>[TKD] State reset (parry tracking cleared)<reset>")
 end

@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-03-07 — Tekura: Modernize offense with BM/DWC/DWB patterns + fix 6-limb KILL phase
+
+**Improvements applied to both Tekura systems** (001_Tekura_Offense.lua, 002_Tekura_6Limb_Offense.lua):
+
+1. **V3→V2→V1 affliction routing** — `tekura.hasAff()` / `tekura6.hasAff()` replaces raw `tAffs` access. Works with V3 probability, V2 certainty, or V1 boolean tracking.
+2. **`wouldBreakLimb()` guard** — Prevents accidental limb breaks during PREP by treating near-break limbs as prepped (DWC pattern).
+3. **`attackInFlight` flag** — Anti-desync: prevents `envenomList`-style state corruption while off-balance (DWC pattern).
+4. **Target-change auto-reset** — Parry tracking and state automatically cleared when switching targets (DWB pattern).
+5. **Echo debounce** — 0.3s guard prevents spam when rapidly pressing attack key (DWB pattern).
+6. **Rebounding handling** — New `checkRebounding()` with V1 fallback for GMCP timing gap. Razes rebounding before attacking.
+7. **Shield V1 fallback** — `checkShield()` now uses V1 fallback pattern for reliability.
+8. **Aeon guard** — Dispatch skipped when under aeon effect.
+9. **Centralized `sendAttack()`** — Lock-break check + target presence check before sending (BM pattern).
+
+**Bug fix (both systems)**: KILL phase now uses Bear stance + prone instead of limb damage checks. Bear stance means we already completed the break phases (`;brs` switches to Bear). Previously the 6-limb system required ALL 6 limbs broken (impossible — head never explicitly broken in attack flow), and the 4-limb system checked leg damage that could be cured by the time balance returned. Now: `ataxia.vitals.stance == "Bear" and prone → BBT`.
+
+**Files modified**:
+- `src_new/scripts/.../tekura/001_Tekura_Offense.lua` — All 9 improvements
+- `src_new/scripts/.../tekura/002_Tekura_6Limb_Offense.lua` — All 9 improvements + KILL phase fix
+
+---
+
 ## 2026-03-07 — Monk: Fix Tekura/Shikudo spec detection in zz/xx aliases
 
 **Problem**: Pressing `zz` as a Tekura Monk called `shikudo.dispatch()` unconditionally — wielding a staff and showing `[Shikudo:DISPATCH]` instead of Tekura combat. The `xx` alias had the inverse problem (always called `tekura.dispatch.run()`).
@@ -14,14 +36,19 @@
 
 ---
 
-## 2026-03-07 — Limb: Fix literal `<ansi_yellow>` tags in damage echo
+## 2026-03-07 — Fix literal `<ansi_*>` tags printed as text in cecho() calls
 
-**Problem**: Limb damage percentage echo (e.g., `(44.4%)`) printed literal `<ansi_yellow>` text instead of rendering as yellow color.
+**Problem**: Multiple scripts used `<ansi_yellow>` and `<ansi_light_cyan>` color tags in `cecho()` calls. These rendered as literal text instead of colors (e.g., `<ansi_light_cyan>[Levi]:` in startup, `<ansi_yellow>(44.4%)` in limb damage).
 
-**Fix**: Replaced `<ansi_yellow>` with `<yellow>` in `cecho()` calls — a universally supported Mudlet color name.
+**Fix**: Replaced all `<ansi_*>` tags with standard Mudlet color names: `<ansi_yellow>` → `<yellow>`, `<ansi_light_cyan>` → `<light_cyan>`.
 
-**Files modified**:
-- `src_new/scripts/.../limb/002_limb_management.lua` — lines 30-32: `<ansi_yellow>` → `<yellow>`
+**Files modified** (6 total):
+- `src_new/scripts/.../limb/002_limb_management.lua` — limb damage percentage echo
+- `src_new/scripts/.../affliction_tracking_core/004_Verification.lua` — softlock echo
+- `src_new/scripts/.../affliction_tracking_core/008_V3_Integration.lua` — softlock echo
+- `src_new/scripts/.../totem/001_Totem_Checker.lua` — totemChecker.echo()
+- `src_new/scripts/.../snipe/001_Snipe_System.lua` — snipe.echo()
+- `src_new/scripts/_groups.yaml` — Algedonic.Echo() inline script
 
 ---
 

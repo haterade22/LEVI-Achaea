@@ -199,7 +199,7 @@ function checkTargetLocksV3()
         if softlockProb >= 0.9 then
             cecho("\n<yellow>[SOFTLOCK: " .. math.floor(softlockProb * 100) .. "%]<reset>")
         else
-            cecho("\n<ansi_yellow>[SOFTLOCK: " .. math.floor(softlockProb * 100) .. "%]<reset>")
+            cecho("\n<yellow>[SOFTLOCK: " .. math.floor(softlockProb * 100) .. "%]<reset>")
         end
     end
 end

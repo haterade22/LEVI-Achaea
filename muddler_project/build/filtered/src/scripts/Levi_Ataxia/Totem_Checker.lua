@@ -95,7 +95,7 @@ totemChecker.results = totemChecker.results or {
 -- =============================================================================
 
 function totemChecker.echo(text)
-  cecho("\n<ansi_light_cyan>[<white>TotemCheck<ansi_light_cyan>]: <white>" .. text)
+  cecho("\n<light_cyan>[<white>TotemCheck<light_cyan>]: <white>" .. text)
 end
 
 -- =============================================================================
