@@ -33,10 +33,8 @@ colorTriggerBgColor: '#000000'
 patterns:
 - pattern: I'm sorry, I don't know what "livestrike" does.
   type: 3
-- pattern: ^I'm sorry, I don't know what "(\w+)" does\.$
-  type: 1
 - pattern: I cannot fathom the meaning of "livestrike".
-  type: 1
+  type: 3
 ]]--
 
 send("cq all")

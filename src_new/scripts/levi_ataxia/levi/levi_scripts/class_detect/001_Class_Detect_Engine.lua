@@ -144,6 +144,10 @@ function classDetect.reapplyDefencePriorities()
   local defup = ataxia.settings.defences.defup
   if not defup or not defup[cur] then return end
 
+  -- Reset the curingset's embedded defence list first, then re-apply ours.
+  -- Without the reset, SSC keeps trying the curingset's own defence entries
+  -- (e.g., toughness/shin/weathering from a shikudo curingset on an Apostate).
+  send("curing priority defence list reset", false)
   local command = "curing priority defence "
   for def in pairs(defup[cur]) do
     command = command .. def .. " 25 "
@@ -236,14 +240,21 @@ function classDetect.setAttackerClass(attackerName, className)
 
   attackerName = attackerName:title()
 
+  -- Track unique attackers (1v1 guard)
+  classDetect.state.attackers[attackerName:lower()] = true
+
+  -- If same attacker + same class already tracked, just refresh timeout
+  if classDetect.state.attackerName == attackerName
+     and classDetect.state.attackerClass == className then
+    classDetect.resetCombatTimeout()
+    return
+  end
+
   -- Store in NDB for persistence
   if ataxiaNDB and ataxiaNDB.players then
     ataxiaNDB.players[attackerName] = ataxiaNDB.players[attackerName] or {}
     ataxiaNDB.players[attackerName].class = className
   end
-
-  -- Track unique attackers (1v1 guard)
-  classDetect.state.attackers[attackerName:lower()] = true
 
   -- Reset combat timeout on every incoming attack
   classDetect.resetCombatTimeout()

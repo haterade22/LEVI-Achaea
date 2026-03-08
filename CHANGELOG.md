@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-03-07 — Fix: Tells not showing in yellow in chat miniconsoles
+
+**Problem**: Player tells appeared in white/default color instead of yellow in both GUI chat systems.
+
+**Root cause**: Achaea's GMCP sends `"tells"` (plural) as the `Comm.Channel.Start` value for player tells, but `channelColors` only had `["tell"]` (singular). The color lookup is an exact key match (`channelColors[gmcp.Comm.Channel.Start]`), so `"tells"` returned nil → fell back to `"<white>"`. Window routing worked fine because it uses substring matching (`string.starts`/`find`).
+
+**Fix**: Added `["tells"] = "<yellow>"` to `channelColors` in both chat display files.
+
+**Files modified**:
+- `scripts/.../update_windows/001_showChat.lua` — Added `["tells"]` to `channelColors`
+- `scripts/.../gui_stuff/003_Chat_Capture_Things.lua` — Added `["tells"]` to `channelColors`
+
+---
+
 ## 2026-03-07 — ClassDetect: Shikudo differentiation + defence priority re-application
 
 **Problem 1**: ClassDetect treated all monks as "Monk", switching to the `monk` curingset even for Shikudo (staff) monks who need the `shikudo` curingset.
@@ -10,12 +24,21 @@
 
 **Problem 2**: After switching curingsets, SSC re-applied the curingset's own defence priority list, which may include abilities the player doesn't have (e.g., toughness, shin for a non-BM). This caused "I don't know what X does" spam.
 
-**Fix**: Added `classDetect.reapplyDefencePriorities()` — after every curingset switch, re-sends the player's own defence profile from `ataxia.settings.defences.defup[current]` using `curing priority defence ... 25`, matching the pattern in `systemDefup()`.
+**Fix**: Added `classDetect.reapplyDefencePriorities()` — after every curingset switch, sends `curing priority defence list reset` to wipe the curingset's embedded list, then re-sends the player's own defence profile from `ataxia.settings.defences.defup[current]` using `curing priority defence ... 25`, matching the pattern in `systemDefup()`.
+
+**Problem 3**: Shikudo monks also use kicks (no weapon keywords), causing ClassDetect to flip-flop between "Shikudo" and "Monk" on alternating attack lines. This triggered repeated curingset switches.
+
+**Fix**: Trigger action now checks if the attacker is already identified as Shikudo — if so, kick-only lines just reset the combat timeout instead of downgrading to "Monk".
+
+**Problem 4**: The `362_Shikudo_Bashing_Error` trigger had an overly broad regex (`^I'm sorry, I don't know what "(\w+)" does\.$`) that matched ALL unknown ability errors, not just livestrike. The defence priority spam ("toughness", "shin", "weathering") triggered this, calling `ataxiaBasher_attack()` when the basher wasn't initialized, causing nil errors on `ataxiaBasher.noShieldBreak` and `ataxiaBasher.targetList`.
+
+**Fix**: Removed the broad regex pattern — trigger now only matches the specific livestrike error messages it was designed for.
 
 **Files modified**:
-- `triggers/.../determine_class/006_Monk_Class_Grab.lua` — Shikudo vs Tekura keyword detection in trigger action
-- `scripts/.../class_detect/001_Class_Detect_Engine.lua` — Added `["Shikudo"]` to curingsetMap, added `reapplyDefencePriorities()` function, called it from `switchCuringset()`
+- `triggers/.../determine_class/006_Monk_Class_Grab.lua` — Shikudo vs Tekura keyword detection + no-downgrade guard
+- `scripts/.../class_detect/001_Class_Detect_Engine.lua` — Added `["Shikudo"]` to curingsetMap, added `reapplyDefencePriorities()` with defence list reset, called from `switchCuringset()`
 - `scripts/.../self_limb_tracking/003_Parrying.lua` — Updated `isShikudo` check to accept `attackerClass == "Shikudo"` directly
+- `triggers/.../362_Shikudo_Bashing_Error.lua` — Removed overly broad regex pattern, kept only specific livestrike patterns
 
 ---
 

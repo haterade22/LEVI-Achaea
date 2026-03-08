@@ -11079,6 +11079,7 @@ local channelColors = {
   ["ot"]         = "&lt;white&gt;",
   ["party"]      = "&lt;magenta&gt;",
   ["tell"]       = "&lt;yellow&gt;",
+  ["tells"]      = "&lt;yellow&gt;",
   ["clt"]        = "&lt;white&gt;",
   ["market"]     = "&lt;white&gt;",
   ["newbie"]     = "&lt;green&gt;",
@@ -29850,6 +29851,7 @@ local channelColors = {
   ["ot"]         = "&lt;white&gt;",
   ["party"]      = "&lt;magenta&gt;",
   ["tell"]       = "&lt;yellow&gt;",
+  ["tells"]      = "&lt;yellow&gt;",
   ["clt"]        = "&lt;white&gt;",
   ["market"]     = "&lt;white&gt;",
   ["newbie"]     = "&lt;green&gt;",
@@ -72493,6 +72495,28 @@ local function countAttackers()
 end
 
 --------------------------------------------------------------------------------
+-- DEFENCE PRIORITY RE-APPLICATION
+--------------------------------------------------------------------------------
+
+function classDetect.reapplyDefencePriorities()
+  if not ataxia or not ataxia.settings or not ataxia.settings.defences then return end
+  local cur = ataxia.settings.defences.current
+  if not cur or cur == "" then return end
+  local defup = ataxia.settings.defences.defup
+  if not defup or not defup[cur] then return end
+
+  -- Reset the curingset's embedded defence list first, then re-apply ours.
+  -- Without the reset, SSC keeps trying the curingset's own defence entries
+  -- (e.g., toughness/shin/weathering from a shikudo curingset on an Apostate).
+  send("curing priority defence list reset", false)
+  local command = "curing priority defence "
+  for def in pairs(defup[cur]) do
+    command = command .. def .. " 25 "
+  end
+  send(command, false)
+end
+
+--------------------------------------------------------------------------------
 -- CURINGSET SWITCHING (debounced)
 --------------------------------------------------------------------------------
 
@@ -72508,6 +72532,12 @@ function classDetect.switchCuringset(className)
   classDetect.state.lastSwitchTime = now
   classDetect.state.currentCuringset = setName
   send("curingset switch " .. setName, false)
+
+  -- Re-apply player's own defence priorities after curingset switch.
+  -- Curingsets carry their own SSC defence list which may include abilities
+  -- the player doesn't have. This re-sends the correct priorities from the
+  -- player's active defence profile (e.g., "shi", "apoo", "bm").
+  classDetect.reapplyDefencePriorities()
 
   if classDetect.config.echoSwitches then
     classDetect.echo("Switched curingset to: &lt;white&gt;" .. setName .. "&lt;plum&gt; (vs &lt;yellow&gt;" .. className .. "&lt;plum&gt;)")
@@ -72571,14 +72601,21 @@ function classDetect.setAttackerClass(attackerName, className)
 
   attackerName = attackerName:title()
 
+  -- Track unique attackers (1v1 guard)
+  classDetect.state.attackers[attackerName:lower()] = true
+
+  -- If same attacker + same class already tracked, just refresh timeout
+  if classDetect.state.attackerName == attackerName
+     and classDetect.state.attackerClass == className then
+    classDetect.resetCombatTimeout()
+    return
+  end
+
   -- Store in NDB for persistence
   if ataxiaNDB and ataxiaNDB.players then
     ataxiaNDB.players[attackerName] = ataxiaNDB.players[attackerName] or {}
     ataxiaNDB.players[attackerName].class = className
   end
-
-  -- Track unique attackers (1v1 guard)
-  classDetect.state.attackers[attackerName:lower()] = true
 
   -- Reset combat timeout on every incoming attack
   classDetect.resetCombatTimeout()
@@ -90917,13 +90954,11 @@ ataxiaBasher_attack()</script>
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
               <regexCodeList>
 <string>I'm sorry, I don't know what "livestrike" does.</string>
-<string>^I'm sorry, I don't know what "(\w+)" does\.$</string>
 <string>I cannot fathom the meaning of "livestrike".</string>
               </regexCodeList>
               <regexCodePropertyList>
 <integer>3</integer>
-<integer>1</integer>
-<integer>1</integer>
+<integer>3</integer>
               </regexCodePropertyList>
 </Trigger>
             <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
@@ -121073,13 +121108,20 @@ end</script>
 </Trigger>
               <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Monk Class Grab</name>
-                <script>-- Shikudo uses staves; Tekura uses bare fists/kicks
--- Staff attacks contain weapon references in the line text
+                <script>-- Shikudo uses staves; Tekura uses bare fists/kicks.
+-- Staff attacks contain weapon references in the line text.
+-- Once identified as Shikudo, never downgrade to Monk (kicks are shared).
+local attacker = matches[2]
 if line:find("whips") or line:find("staff") or line:find("thrust")
    or line:find("kata") or line:find("sweeps") then
-  classDetect.setAttackerClass(matches[2], "Shikudo")
+  classDetect.setAttackerClass(attacker, "Shikudo")
+elseif classDetect.state.attackerName
+   and classDetect.state.attackerName:lower() == attacker:lower()
+   and classDetect.state.attackerClass == "Shikudo" then
+  -- Already identified as Shikudo — kick is just part of their toolkit
+  classDetect.resetCombatTimeout()
 else
-  classDetect.setAttackerClass(matches[2], "Monk")
+  classDetect.setAttackerClass(attacker, "Monk")
 end
 </script>
   <triggerType>0</triggerType>

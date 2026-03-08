@@ -3911,12 +3911,8 @@
                     "type": "exactMatch"
                   },
                   {
-                    "pattern": "^I'm sorry, I don't know what \"(\\w+)\" does\\.$",
-                    "type": "regex"
-                  },
-                  {
                     "pattern": "I cannot fathom the meaning of \"livestrike\".",
-                    "type": "regex"
+                    "type": "exactMatch"
                   }
                 ]
               },

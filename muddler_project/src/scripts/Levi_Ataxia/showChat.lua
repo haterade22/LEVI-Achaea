@@ -25,6 +25,7 @@ local channelColors = {
   ["ot"]         = "<white>",
   ["party"]      = "<magenta>",
   ["tell"]       = "<yellow>",
+  ["tells"]      = "<yellow>",
   ["clt"]        = "<white>",
   ["market"]     = "<white>",
   ["newbie"]     = "<green>",
