@@ -1,1 +1,1 @@
-zData.db.addChar("mayafigure")
+ataxia.data.db.addChar("mayafigure")

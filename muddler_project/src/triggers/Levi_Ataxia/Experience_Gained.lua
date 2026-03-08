@@ -1,1 +1,1 @@
-zData.char.rawExpGains = zData.char.rawExpGains + tonumber(matches[2])
+ataxia.data.char.rawExpGains = ataxia.data.char.rawExpGains + tonumber(matches[2])

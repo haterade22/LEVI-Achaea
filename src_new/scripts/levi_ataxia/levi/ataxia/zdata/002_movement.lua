@@ -6,8 +6,8 @@ hierarchy:
 - LEVI
 - Ataxia
 - Basher
-- zData
-- zData
+- ataxia.data
+- ataxia.data
 attributes:
   isActive: 'yes'
   isFolder: 'no'
@@ -22,23 +22,23 @@ hierarchy:
 - LEVI
 - Ataxia
 - Basher
-- zData
-- zData
+- ataxia.data
+- ataxia.data
 attributes:
   isActive: 'yes'
   isFolder: 'no'
 packageName: ''
 ]]--
 
--- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Ataxia-DownloadThis > Basher > zData > zData > movement
+-- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Ataxia-DownloadThis > Basher > ataxia.data > ataxia.data > movement
 
 -------------------------------------------------
 --                                             --
---         zData.getClassWithSpec()            --
+--         ataxia.data.getClassWithSpec()            --
 --  Format class name with knight spec         --
 --                                             --
 -------------------------------------------------
-function zData.getClassWithSpec()
+function ataxia.data.getClassWithSpec()
   local class = gmcp.Char.Status.class
   local spec = ataxia.vitals.knight
 
@@ -69,88 +69,88 @@ end
 
 -------------------------------------------------
 --                                             --
---               zData.movement()              --
+--               ataxia.data.movement()              --
 --  This Function Runs Everytime Room Updates  --
 --                                             --
 -------------------------------------------------
-function zData.movement() 
+function ataxia.data.movement() 
 -----------------------------------------------------------------------------------------------
 -- Update Area    
-  if gmcp.Room.Info.area ~= zData.char.lastArea then  -------------<--<--< Zone Change Detected
+  if gmcp.Room.Info.area ~= ataxia.data.char.lastArea then  -------------<--<--< Zone Change Detected
 
 -----------------------------------------------------------------------------------------------
--- Collect experience percent from gmcp, check old xp (zData.char.oxp)
+-- Collect experience percent from gmcp, check old xp (ataxia.data.char.oxp)
     if string.match(gmcp.Char.Status.xp, "%d+.%d+") then
-      zData.char.xp = tonumber(string.match(gmcp.Char.Status.xp, "%d+.%d+"))
+      ataxia.data.char.xp = tonumber(string.match(gmcp.Char.Status.xp, "%d+.%d+"))
     elseif string.match(gmcp.Char.Status.xp, "%d+") then
-      zData.char.xp = tonumber(string.match(gmcp.Char.Status.xp, "%d+"))
+      ataxia.data.char.xp = tonumber(string.match(gmcp.Char.Status.xp, "%d+"))
     end
-    if zData.char.oxp == 0 then zData.char.oxp = zData.char.xp end
+    if ataxia.data.char.oxp == 0 then ataxia.data.char.oxp = ataxia.data.char.xp end
 
 -----------------------------------------------------------------------------------------------
 -- If your exp is not = to your old exp AND you have been in a zone FOR MORE > THAN 60 SECONDS
-    if (zData.char.oxp ~= zData.char.xp or zData.char.killsCount > 0) and getStopWatchTime("zoneHuntWatch") > 60 then
+    if (ataxia.data.char.oxp ~= ataxia.data.char.xp or ataxia.data.char.killsCount > 0) and getStopWatchTime("zoneHuntWatch") > 60 then
       stopStopWatch("zoneHuntWatch")  
 
 -----------------------------------------------------------------------------------------------
--- Update zData.Character Variables used for saving to the Database
-      zData.char.tempTime = getStopWatchTime("zoneHuntWatch")
-      zData.char.minuteTime = zData.char.tempTime/60
-      zData.char.xpGains = zData.char.xp-zData.char.oxp
-      zData.char.xpGainsMin = zData.char.xpGains/zData.char.minuteTime
-      zData.char.killsPerMinute = zData.char.killsCount/zData.char.minuteTime
-      zData.char.gpm = zData.char.gold/zData.char.minuteTime
+-- Update ataxia.data.Character Variables used for saving to the Database
+      ataxia.data.char.tempTime = getStopWatchTime("zoneHuntWatch")
+      ataxia.data.char.minuteTime = ataxia.data.char.tempTime/60
+      ataxia.data.char.xpGains = ataxia.data.char.xp-ataxia.data.char.oxp
+      ataxia.data.char.xpGainsMin = ataxia.data.char.xpGains/ataxia.data.char.minuteTime
+      ataxia.data.char.killsPerMinute = ataxia.data.char.killsCount/ataxia.data.char.minuteTime
+      ataxia.data.char.gpm = ataxia.data.char.gold/ataxia.data.char.minuteTime
 
 -----------------------------------------------------------------------------------------------
 -- Convert tables to strings for the database (will turn back to tables when pulled)
-      zData.char.killListString = nil
-      if #zData.char.killList > 0 then
-        zData.char.killListString = table.concat(zData.char.killList, "| ")
+      ataxia.data.char.killListString = nil
+      if #ataxia.data.char.killList > 0 then
+        ataxia.data.char.killListString = table.concat(ataxia.data.char.killList, "| ")
       end
-      zData.char.taliListString = nil
-      if #zData.char.taliList > 0 then
-        zData.char.taliListString = table.concat(zData.char.taliList, "| ")
+      ataxia.data.char.taliListString = nil
+      if #ataxia.data.char.taliList > 0 then
+        ataxia.data.char.taliListString = table.concat(ataxia.data.char.taliList, "| ")
       end
 
 -----------------------------------------------------------------------------------------------
 -- Record when this happened with Epoch time
-      zData.char.when = getEpoch()
+      ataxia.data.char.when = getEpoch()
       
 -----------------------------------------------------------------------------------------------
 -- Send All information to database   
-      zData.db.zoneAdd(
-        zData.char.lastArea,
-        zData.getClassWithSpec(), 
-        zData.defs.exp, 
-        zData.defs.crit, 
-        zData.char.tempTime, 
-        zData.char.xpGainsMin,
-        zData.char.xpGains,
-        zData.char.rawExpGains,
-        zData.char.killsCount, 
-        zData.char.killsPerMinute, 
-        zData.char.gold, 
-        zData.char.gpm, 
-        zData.char.str, 
-        zData.char.dex, 
-        zData.char.int, 
-        zData.char.con, 
-        zData.char.totalAttacks, 
-        zData.char.crithits, zData.char.crit1, zData.char.crit2, zData.char.crit3, zData.char.crit4, zData.char.crit5, zData.char.crit6, 
-        zData.char.shield, 
-        zData.char.paragon, 
-        zData.char.searedglyph, 
-        zData.char.mayafigure, 
-        zData.char.taliCount, 
-        zData.char.killListString, 
-        zData.char.taliListString,
-        zData.char.when
+      ataxia.data.db.zoneAdd(
+        ataxia.data.char.lastArea,
+        ataxia.data.getClassWithSpec(), 
+        ataxia.data.defs.exp, 
+        ataxia.data.defs.crit, 
+        ataxia.data.char.tempTime, 
+        ataxia.data.char.xpGainsMin,
+        ataxia.data.char.xpGains,
+        ataxia.data.char.rawExpGains,
+        ataxia.data.char.killsCount, 
+        ataxia.data.char.killsPerMinute, 
+        ataxia.data.char.gold, 
+        ataxia.data.char.gpm, 
+        ataxia.data.char.str, 
+        ataxia.data.char.dex, 
+        ataxia.data.char.int, 
+        ataxia.data.char.con, 
+        ataxia.data.char.totalAttacks, 
+        ataxia.data.char.crithits, ataxia.data.char.crit1, ataxia.data.char.crit2, ataxia.data.char.crit3, ataxia.data.char.crit4, ataxia.data.char.crit5, ataxia.data.char.crit6, 
+        ataxia.data.char.shield, 
+        ataxia.data.char.paragon, 
+        ataxia.data.char.searedglyph, 
+        ataxia.data.char.mayafigure, 
+        ataxia.data.char.taliCount, 
+        ataxia.data.char.killListString, 
+        ataxia.data.char.taliListString,
+        ataxia.data.char.when
         )
     end
 
 -----------------------------------------------------------------------------------------------
 -- Reset all saved data for next area
-    zData.char = {
+    ataxia.data.char = {
       lastArea = gmcp.Room.Info.area,
       tempTime = 0,
       minuteTime = 0,
@@ -183,9 +183,9 @@ function zData.movement()
 -----------------------------------------------------------------------------------------------
 -- Save OLD experience for new zone    
     if string.match(gmcp.Char.Status.xp, "%d+.%d+") then
-      zData.char.oxp = tonumber(string.match(gmcp.Char.Status.xp, "%d+.%d+"))
+      ataxia.data.char.oxp = tonumber(string.match(gmcp.Char.Status.xp, "%d+.%d+"))
     elseif string.match(gmcp.Char.Status.xp, "%d+") then
-      zData.char.oxp = tonumber(string.match(gmcp.Char.Status.xp, "%d+"))
+      ataxia.data.char.oxp = tonumber(string.match(gmcp.Char.Status.xp, "%d+"))
     end
 
 -----------------------------------------------------------------------------------------------
@@ -195,5 +195,5 @@ function zData.movement()
 	end  
 end
 -----------------------------------------------------------------------------------------------
-registerAnonymousEventHandler("gmcp.Room.Info", "zData.movement") ---<--< Run When Room Updates
+registerAnonymousEventHandler("gmcp.Room.Info", "ataxia.data.movement") ---<--< Run When Room Updates
 -----------------------------------------------------------------------------------------------

@@ -34,4 +34,4 @@ patterns:
   type: 1
 ]]--
 
-zData.defs.crit = matches[2]
+ataxia.data.defs.crit = matches[2]

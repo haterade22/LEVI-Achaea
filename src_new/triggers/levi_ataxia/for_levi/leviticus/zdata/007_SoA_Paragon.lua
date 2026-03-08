@@ -34,4 +34,4 @@ patterns:
   type: 2
 ]]--
 
-zData.db.addChar("paragon")
+ataxia.data.db.addChar("paragon")

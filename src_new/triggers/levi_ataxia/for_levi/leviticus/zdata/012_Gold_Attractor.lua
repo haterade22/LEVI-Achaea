@@ -34,7 +34,7 @@ patterns:
   type: 1
 ]]--
 
-if zData.char.ogold ~= tonumber(gmcp.Char.Status.gold) then
-  zData.char.gold = zData.char.gold + (tonumber(gmcp.Char.Status.gold) - zData.char.ogold)
-  zData.char.ogold = tonumber(gmcp.Char.Status.gold)
+if ataxia.data.char.ogold ~= tonumber(gmcp.Char.Status.gold) then
+  ataxia.data.char.gold = ataxia.data.char.gold + (tonumber(gmcp.Char.Status.gold) - ataxia.data.char.ogold)
+  ataxia.data.char.ogold = tonumber(gmcp.Char.Status.gold)
 end

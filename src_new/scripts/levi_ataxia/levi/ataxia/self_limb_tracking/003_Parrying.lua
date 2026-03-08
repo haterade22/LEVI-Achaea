@@ -38,8 +38,8 @@ function ataxia_parryCheck()
 	-- Anti-Shikudo: override mode when fighting a Shikudo monk
 	local isShikudo = cfg.antiShikudo
 		and classDetect and classDetect.state
-		and classDetect.state.attackerClass == "Monk"
-		and shikudostance and shikudostance ~= ""
+		and (classDetect.state.attackerClass == "Shikudo"
+			or (classDetect.state.attackerClass == "Monk" and shikudostance and shikudostance ~= ""))
 
 	if isShikudo then
 		ataxia_shikudoParry()

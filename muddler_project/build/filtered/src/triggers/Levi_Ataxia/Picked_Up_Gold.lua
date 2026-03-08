@@ -1,2 +1,2 @@
-zData.char.gold = zData.char.gold + matches[2]
-zData.char.ogold = tonumber(gmcp.Char.Status.gold)
+ataxia.data.char.gold = ataxia.data.char.gold + matches[2]
+ataxia.data.char.ogold = tonumber(gmcp.Char.Status.gold)

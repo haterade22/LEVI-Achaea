@@ -34,4 +34,4 @@ patterns:
   type: 1
 ]]--
 
-zData.db.addChar("searedglyph")
+ataxia.data.db.addChar("searedglyph")

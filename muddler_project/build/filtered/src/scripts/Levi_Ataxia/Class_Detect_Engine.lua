@@ -42,6 +42,7 @@ classDetect.curingsetMap = classDetect.curingsetMap or {
   ["Bard"]          = "bard",
   ["Blademaster"]   = "blademaster",
   ["Monk"]          = "monk",
+  ["Shikudo"]       = "shikudo",
   ["Magi"]          = "magi",
   ["Priest"]        = "priest",
   ["Depthswalker"]  = "depthswalker",

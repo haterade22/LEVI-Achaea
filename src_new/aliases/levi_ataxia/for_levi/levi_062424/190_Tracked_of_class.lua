@@ -15,7 +15,8 @@ packageName: ''
 ]]--
 
 local classList = {"Alchemist", "Apostate", "Bard", "Blademaster", "Depthswalker", "Dragon", "Druid", "Infernal", "Jester", "Magi", "Monk", "Occultist",
-	"Paladin", "Priest", "Psion", "Runewarden", "Sentinel", "Serpent", "Shaman", "Sylvan"}
+	"Paladin", "Pariah", "Priest", "Psion", "Runewarden", "Sentinel", "Serpent", "Shaman", "Sylvan",
+	"Unnamable", "Airlord", "Earthlord", "Firelord", "Waterlord"}
 	
 	ataxiaEcho("Displaying tracked people as "..matches[2].." class:")
 	local people = {}

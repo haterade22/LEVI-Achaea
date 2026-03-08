@@ -4,4 +4,4 @@ fg("DodgerBlue")
 deselect()
 resetFormat()
 
-zData.db.addChar("paragon")
+ataxia.data.db.addChar("paragon")

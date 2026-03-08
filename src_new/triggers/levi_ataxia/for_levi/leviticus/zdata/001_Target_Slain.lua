@@ -34,5 +34,5 @@ patterns:
   type: 1
 ]]--
 
-zData.char.killsCount = zData.char.killsCount + 1
-table.insert(zData.char.killList, 1, matches[2])
+ataxia.data.char.killsCount = ataxia.data.char.killsCount + 1
+table.insert(ataxia.data.char.killList, 1, matches[2])

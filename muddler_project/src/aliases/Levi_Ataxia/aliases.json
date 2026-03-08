@@ -1990,6 +1990,10 @@
                 "regex": "^an threats(?: (\\w+)|)$"
               },
               {
+                "name": "Refresh Honours",
+                "regex": "^an refresh(?: (\\w+)|)$"
+              },
+              {
                 "name": "Class Detect",
                 "regex": "^csd (.+)$"
               }
@@ -2616,10 +2620,6 @@
         "isFolder": "yes",
         "children": [
           {
-            "name": "(zBash)",
-            "regex": "^zbash(?: (\\w+))?(?: (\\w+))?$"
-          },
-          {
             "name": "ZGUI BASH",
             "regex": "^zgui bash$"
           }
@@ -2653,6 +2653,17 @@
           {
             "name": "(ATAXIACHAT) Toggle Chat Command Line",
             "regex": "^ataxiachat$"
+          }
+        ]
+      },
+      {
+        "name": "ataxia.data",
+        "isActive": "yes",
+        "isFolder": "yes",
+        "children": [
+          {
+            "name": "(zBash)",
+            "regex": "^zbash(?: (\\w+))?(?: (\\w+))?$"
           }
         ]
       }

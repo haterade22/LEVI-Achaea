@@ -2,6 +2,64 @@
 
 ---
 
+## 2026-03-07 — NDB: Auto-honours hidden-city players + `an refresh` command
+
+**Files**: `006_ataxiaNDB_Success.lua`, `198_Refresh_Honours.lua` (new)
+
+**Feature 1 — Auto-honours hidden cities**: When the API returns `(hidden)` for a player's city and no prior city is known, the system now queues an automatic `honours` lookup instead of showing a warning. Hidden-city names are collected during the API batch and drained with 2s spacing after the batch completes.
+
+**Feature 2 — `an refresh [city]`**: New alias to send `honours` for all tracked players (or filtered by city) to update mark, army rank, and dauntless status — data only available from in-game `honours`, not from the API. Uses 2s spacing between sends with ETA display and completion message.
+
+---
+
+## 2026-03-07 — Namespace rename: zData → ataxia.data + buildHunter fix
+
+**Problem**: The hunting statistics system (`zData`) used a legacy namespace inconsistent with the standardized `ataxia` namespace. Additionally, `buildHunter` crashed with `attempt to call method 'loadPosition' (a nil value)` on some Mudlet versions.
+
+**Fix — Namespace rename** (`zData` → `ataxia.data`):
+- `src_new/scripts/_groups.yaml` — Inline init script: all `zData` refs → `ataxia.data`. Added backward-compat shim `zData = ataxia.data` at end of init block. Group names unchanged (build hierarchy).
+- `src_new/scripts/.../zdata/001_Experience_Database.lua` — All `zData` → `ataxia.data`
+- `src_new/scripts/.../zdata/002_movement.lua` — All `zData` → `ataxia.data`
+- `src_new/scripts/.../zdata/004_buildHunter.lua` — All `zData` → `ataxia.data`
+- `src_new/aliases/.../zdata/001_(zBash).lua` — All `zData` → `ataxia.data`
+- `src_new/triggers/.../zdata/001-014` — All Lua code `zData` → `ataxia.data` (YAML hierarchy names unchanged)
+- `src_new/triggers/.../highlighting/014_Paragon.lua` — `zData` → `ataxia.data`
+
+**Fix — buildHunter loadPosition**: Wrapped `loadPosition()` call in nil check (`if window.loadPosition then`) for Mudlet version compatibility.
+
+**Fix — buildChat startup**: Added `zgui.buildChat = ataxia.buildChat` shim after function definition in `012_buildChat.lua`. The startup module dispatch (`039_EDIT_ME__Startup_Main.lua` lines 89-91) calls `zgui["buildChat"]()` — after the previous rename to `ataxia.buildChat()`, this was nil and the chat never built at startup.
+
+---
+
+## 2026-03-07 — Bugfix: NDB alias crashes on unknown classes
+
+**Files**: `186_Show_Class_Count.lua`, `187_Show_City_Count.lua`, `190_Tracked_of_class.lua`
+
+**Root cause**: The `an classes` and `an cclasses` aliases had hardcoded `classes` tables missing Unnamable, Airlord, Earthlord, Firelord, and Waterlord. When a tracked player had one of these classes, `table.insert(classes[tab.class], ...)` crashed with "bad argument #1 to 'insert' (table expected, got nil)". The `an class` alias was also missing these classes from its `classList` used for the "Classless" filter.
+
+**Fix**:
+- Added all 5 missing classes to `classList` in all 3 alias files
+- Replaced hardcoded `classes` table with dynamic construction from `classList`
+- Added nil guard: `if not classes[tab.class] then classes[tab.class] = {} end`
+- Added nil guard on `tab.class` and `tab.level` checks
+- Added `math.max(0, ...)` guard on `string.rep` padding (prevents crash on long class names)
+- Added nil guard on highlighting colour lookup in `an cclasses` (prevents crash for unknown city)
+
+---
+
+## 2026-03-07 — ClassDetect: Differentiate Shikudo from Tekura monks
+
+**Problem**: ClassDetect set `attackerClass = "Monk"` for all monk attacks, switching to the generic `monk` curingset. Shikudo monks (staff-based) need the `shikudo` curingset for different curing priorities.
+
+**Fix**:
+- `src_new/triggers/.../determine_class/006_Monk_Class_Grab.lua` — Action now checks `line` for weapon keywords (`whips`, `staff`, `thrust`, `kata`, `sweeps`). Staff attacks → `"Shikudo"`, bare fist/kick attacks → `"Monk"` (Tekura).
+- `src_new/scripts/.../class_detect/001_Class_Detect_Engine.lua` — Added `["Shikudo"] = "shikudo"` to `curingsetMap`.
+- `src_new/scripts/.../self_limb_tracking/003_Parrying.lua` — Anti-Shikudo parry check now accepts `attackerClass == "Shikudo"` directly (in addition to legacy `"Monk"` + `shikudostance` fallback).
+
+**Note**: Run `csd setup` in-game to create the `shikudo` curingset if it doesn't exist yet.
+
+---
+
 ## 2026-03-07 — Chat: Channel colors + namespace rename (zgui.chat → ataxia.chat)
 
 **Problem**: Chat miniconsoles showed mostly white/uncolored text. The `showChat()` function relied on `ansi2decho(gmcp.Comm.Channel.Text.text)` which doesn't carry the same ANSI coloring as the main console telnet stream. Only `shout` had custom color treatment. Additionally, the chat system used the legacy `zgui.chat` namespace instead of the standardized `ataxia` namespace.

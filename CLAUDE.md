@@ -506,9 +506,13 @@ ataxiaBasher_assembleBattlerage() → Generic/CC handler with rage conservation
 
 ### Player Database (ataxiaNDB)
 - Fetches from Achaea API (`http://api.achaea.com/characters/`)
-- Tracks: name, city, house, class, level, XP rank, player kills
-- City-based name highlighting
+- Tracks: name, city, house, class, level, XP rank, player kills, mark, army rank, dauntless
+- City-based name highlighting with per-city colours
 - Enemy and army rank tracking
+- Auto-honours hidden-city players (queued with 2s spacing after API batch)
+- `an refresh [city]` — bulk `honours` to update mark/army/dauntless (honours-only data)
+- Threat queries: `an marks`, `an army`, `an dauntless`, `an threats` (all support optional city filter)
+- Player notes: `an noteadd/noteshow/noteremove`
 
 ### Setup Wizard (leviSetup)
 In-game configuration wizard accessed via `levi setup`.

@@ -243,3 +243,5 @@ function ataxia.buildChat()
   end
 end
 
+-- Shim so zgui.modules dispatch (zgui["buildChat"]()) still finds this function
+zgui.buildChat = ataxia.buildChat

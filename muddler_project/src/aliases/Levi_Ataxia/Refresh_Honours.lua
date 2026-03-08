@@ -1,0 +1,28 @@
+local cityFilter = matches[2] and matches[2]:title() or nil
+local queue = {}
+
+for _, v in pairs(ataxiaNDB.players) do
+	if not cityFilter or v.city == cityFilter or (cityFilter == "Rogues" and v.city == "None") then
+		table.insert(queue, v.name)
+	end
+end
+
+if #queue == 0 then
+	ataxiaEcho("No players found" .. (cityFilter and (" in " .. cityFilter) or "") .. ".")
+	return
+end
+
+table.sort(queue)
+local delay = 2
+
+ataxiaEcho("Sending honours for " .. #queue .. " player(s)" .. (cityFilter and (" from " .. cityFilter) or "") .. ". ETA: ~" .. math.ceil(#queue * delay) .. "s.")
+
+for i, name in ipairs(queue) do
+	tempTimer((i - 1) * delay, function()
+		send("honours " .. name, false)
+	end)
+end
+
+tempTimer(#queue * delay + 1, function()
+	ataxiaEcho("Honours refresh complete.")
+end)

@@ -67,7 +67,11 @@ function ataxiaNDB_Success(_, filepath)
 	if city:find("hidden") then
 		if not table.contains(cities, tmpCity) then
 			ataxiaNDB.players[name].city = "Unknown"
-			if ataxiaNDB._honoursPerson == nil then ataxiaEcho("<red>WARNING: "..name.."'s city is hidden; will require a manual honours/setting to update it.") end
+			if ataxiaNDB._honoursPerson == nil then
+				-- Queue auto-honours for hidden-city players
+				ataxiaNDB._honoursQueue = ataxiaNDB._honoursQueue or {}
+				table.insert(ataxiaNDB._honoursQueue, name)
+			end
 		else
 			if tmpCity == "Rogues" then
 				ataxiaNDB.players[name].city = "None"
@@ -91,5 +95,27 @@ function ataxiaNDB_Success(_, filepath)
 	end
 	if ataxiaNDB.checking then
 		ataxiaNDB_displayWho(name)
+	end
+
+	-- After API batch: drain hidden-city honours queue
+	if ataxiaNDB._honoursPerson == nil and ataxiaNDB._honoursQueue and #ataxiaNDB._honoursQueue > 0 then
+		if not ataxiaNDB._honoursQueueTimer then
+			ataxiaNDB._honoursQueueTimer = tempTimer(2, function() ataxiaNDB_drainHonoursQueue() end)
+		end
+	end
+end
+
+function ataxiaNDB_drainHonoursQueue()
+	ataxiaNDB._honoursQueueTimer = nil
+	if not ataxiaNDB._honoursQueue or #ataxiaNDB._honoursQueue == 0 then return end
+
+	local queue = ataxiaNDB._honoursQueue
+	ataxiaNDB._honoursQueue = nil
+
+	ataxiaEcho(#queue .. " player(s) have hidden cities — auto-honouring to update.")
+	for i, name in ipairs(queue) do
+		tempTimer((i - 1) * 2, function()
+			send("honours " .. name, false)
+		end)
 	end
 end

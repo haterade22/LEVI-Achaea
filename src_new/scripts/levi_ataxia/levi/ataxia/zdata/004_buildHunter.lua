@@ -6,21 +6,21 @@ hierarchy:
 - LEVI
 - Ataxia
 - Basher
-- zData
-- zData
+- ataxia.data
+- ataxia.data
 attributes:
   isActive: 'yes'
   isFolder: 'no'
 packageName: ''
 ]]--
 
--- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Ataxia-DownloadThis > Basher > zData > zData > buildHunter
+-- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Ataxia-DownloadThis > Basher > ataxia.data > ataxia.data > buildHunter
 
-function zData.buildHunter()
-  zData.hunter = {}
+function ataxia.data.buildHunter()
+  ataxia.data.hunter = {}
 
   --Create the hunter Adjustable with position saving
-  zData.hunter.window = Adjustable.Container:new({
+  ataxia.data.hunter.window = Adjustable.Container:new({
     name = "zgui.hunter.window",
     x = 0, y = 0,
     width = "50%",
@@ -38,15 +38,15 @@ function zData.buildHunter()
   },main)
 
   --Create the hunter container
-  zData.hunter.container = Geyser.Container:new({
-    name = "zData.hunter.back",
+  ataxia.data.hunter.container = Geyser.Container:new({
+    name = "ataxia.data.hunter.back",
     x = 0, y = 0,
     width = "100%",
     height = "100%",
-  },zData.hunter.window)
+  },ataxia.data.hunter.window)
 
   --Create the hunter Console
-  zData.hunter.console = Geyser.MiniConsole:new({
+  ataxia.data.hunter.console = Geyser.MiniConsole:new({
     name = "hunterDisplay",
     x = 0, y = 0,
     autoWrap = false,
@@ -54,38 +54,40 @@ function zData.buildHunter()
     height = "100%",
     color="black",
     scrollBar = true,
-  },zData.hunter.container)
+  },ataxia.data.hunter.container)
 
   setFontSize("hunterDisplay", 9)
-  zData.hunter.window:setTitle("Hunting Scrolls","gray")
+  ataxia.data.hunter.window:setTitle("Hunting Scrolls","gray")
 
   -- Load saved position if it exists
-  zData.hunter.window:loadPosition()
+  if ataxia.data.hunter.window.loadPosition then
+    ataxia.data.hunter.window:loadPosition()
+  end
 
-  zData.hunter.window:show()
+  ataxia.data.hunter.window:show()
 end
 
 -- Toggle lock state for hunting scrolls window
-function zData.hunterToggleLock()
-  if not zData.hunter or not zData.hunter.window then
-    zData.echo("Hunter window not open")
+function ataxia.data.hunterToggleLock()
+  if not ataxia.data.hunter or not ataxia.data.hunter.window then
+    ataxia.data.echo("Hunter window not open")
     return
   end
 
-  if zData.hunter.window.locked then
-    zData.hunter.window:unlockContainer()
-    zData.echo("Hunting Scrolls: <green>UNLOCKED<reset> - drag to reposition")
+  if ataxia.data.hunter.window.locked then
+    ataxia.data.hunter.window:unlockContainer()
+    ataxia.data.echo("Hunting Scrolls: <green>UNLOCKED<reset> - drag to reposition")
   else
-    zData.hunter.window:lockContainer()
-    zData.hunter.window:savePosition()
-    zData.echo("Hunting Scrolls: <red>LOCKED<reset> - position saved")
+    ataxia.data.hunter.window:lockContainer()
+    ataxia.data.hunter.window:savePosition()
+    ataxia.data.echo("Hunting Scrolls: <red>LOCKED<reset> - position saved")
   end
 end
 
 -- Save position without locking
-function zData.hunterSavePosition()
-  if zData.hunter and zData.hunter.window then
-    zData.hunter.window:savePosition()
-    zData.echo("Hunting Scrolls position saved")
+function ataxia.data.hunterSavePosition()
+  if ataxia.data.hunter and ataxia.data.hunter.window then
+    ataxia.data.hunter.window:savePosition()
+    ataxia.data.echo("Hunting Scrolls position saved")
   end
 end

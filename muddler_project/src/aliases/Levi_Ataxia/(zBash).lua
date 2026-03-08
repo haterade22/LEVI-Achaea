@@ -1,7 +1,7 @@
 if matches[3] then
-  zData.db.showData(matches[2], matches[3])
+  ataxia.data.db.showData(matches[2], matches[3])
 elseif matches[2] then
-  zData.db.showData(matches[2])
+  ataxia.data.db.showData(matches[2])
 else
-  zData.db.showData()
+  ataxia.data.db.showData()
 end

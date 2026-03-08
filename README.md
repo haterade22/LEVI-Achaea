@@ -123,6 +123,112 @@ After installing, `levi setup guide` shows every configurable option across all 
 
 ---
 
+## Player Database (ataxiaNDB)
+
+The ataxiaNDB system tracks player information from the Achaea API and provides city-based name highlighting, enemy tracking, mark/army/dauntless detection, and player notes.
+
+### Installation
+
+Run `aninstall` in-game (or `levi setup install ndb`) to initialise the database. This fetches the online player list from the Achaea API and begins populating player records.
+
+### How It Works
+
+1. **API Population** — On `qwp`, the system fetches `http://api.achaea.com/characters/` to get the online player list, then queues `honours` lookups for unknown players
+2. **Honours Capture** — When you `honours <player>`, triggers capture city, house, class, level, XP rank, player kills, mark membership, army rank, and Dauntless status
+3. **Auto-Honours** — Players with hidden cities are automatically queued for `honours` lookup (2s spacing) to resolve their city
+4. **Name Highlighting** — Once a player's city is known, their name is highlighted in the configured city colour whenever it appears in game text
+4. **Persistent Storage** — Player data is saved to disk and persists across sessions
+
+### Quick Reference
+
+#### Online & Lookup
+
+| Command | Description |
+|---------|-------------|
+| `qwp` | Fetch online players from API, display by city |
+| `qwp <city>` | Show online players from a specific city only |
+| `whois <name>` | Look up a player's full profile (city, class, house, level, kills, mark, army, dauntless) |
+| `honours <name>` | Query honours for a player and add/update in database |
+
+#### Database Queries
+
+| Command | Description |
+|---------|-------------|
+| `an show <city>` | List all tracked players from a city |
+| `an class <class>` | List all tracked players of a class |
+| `an classes` | Show player count per class |
+| `an cclasses <city>` | Show class distribution for a specific city |
+| `an citymembers` | Show tracked player count by city |
+
+#### Threat Intelligence
+
+| Command | Description |
+|---------|-------------|
+| `an marks [city]` | List Ivory and Quisalis Mark members (optional city filter) |
+| `an army [city]` | List players with army rank (sorted by rank, optional city filter) |
+| `an dauntless [city]` | List Dauntless members (optional city filter) |
+| `an threats [city]` | Combined view: marks + army rank 3+ + dauntless (optional city filter) |
+
+#### Player Notes
+
+| Command | Description |
+|---------|-------------|
+| `an noteadd <name> <text>` | Add a note to a player |
+| `an noteshow <name>` | Show all notes for a player |
+| `an noteremove <name> <id>` | Remove a note by ID |
+
+#### Database Maintenance
+
+| Command | Description |
+|---------|-------------|
+| `an recreate` | Re-query API data for every player in database |
+| `an redo <city>` | Re-query API data for all players from a specific city |
+| `an refresh` | Send `honours` for all players to update mark/army/dauntless |
+| `an refresh <city>` | Send `honours` for players from a specific city only |
+| `an remove rank <num>` | Remove players with XP rank above threshold |
+| `an remove level <num>` | Remove players with level below threshold |
+
+### Highlighting Configuration
+
+Name highlighting colours players by their city affiliation. Toggle and configure via:
+
+| Command | Description |
+|---------|-------------|
+| `anhl` | Toggle highlighting on/off |
+| `anhl <city> <colour>` | Set highlight colour for a city (e.g., `anhl Mhaldor red`) |
+| `anss` | Show all current NDB settings |
+| `an prio enemies` | Prioritise enemy colour over city colour |
+| `an prio city` | Prioritise city colour over enemy colour |
+| `aneh i` | Toggle italic formatting for enemies |
+| `aneh u` | Toggle underline formatting for enemies |
+| `aneh b` | Toggle bold formatting for enemies |
+| `highlight <name> <colour>` | Override colour for a specific player |
+| `highlight <name> none` | Remove per-player colour override |
+
+**Available cities**: Ashtan, Cyrene, Eleusis, Hashan, Mhaldor, Targossas, Rogues
+
+Or use the setup wizard: `levi setup ndb` for a guided menu.
+
+### Data Tracked Per Player
+
+| Field | Source | Description |
+|-------|--------|-------------|
+| Name | API / Honours | Player name |
+| City | API / Honours | City affiliation (or Rogues) |
+| House | Honours | House membership |
+| Class | API / Honours | Current class |
+| Level | Honours | Player level |
+| XP Rank | Honours | Experience ranking |
+| Player Kills | Honours | PK count |
+| Mark | Honours | Ivory Mark or Quisalis Mark membership |
+| Army Rank | Honours | Army rank (1–5) |
+| Dauntless | Honours | Member of The Dauntless |
+| Notes | User | Custom player notes |
+
+> **Note**: The Achaea API provides name, city, class, and basic stats. Mark, army rank, and Dauntless are **only** available from in-game `honours` output. Use `an refresh` to bulk-update these fields for all tracked players.
+
+---
+
 ### Conversion Script Options
 
 ```

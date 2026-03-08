@@ -34,4 +34,4 @@ patterns:
   type: 0
 ]]--
 
-zData.db.addChar("mayafigure")
+ataxia.data.db.addChar("mayafigure")

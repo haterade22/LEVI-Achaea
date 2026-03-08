@@ -7581,8 +7581,8 @@ function ataxia_parryCheck()
 	-- Anti-Shikudo: override mode when fighting a Shikudo monk
 	local isShikudo = cfg.antiShikudo
 		and classDetect and classDetect.state
-		and classDetect.state.attackerClass == "Monk"
-		and shikudostance and shikudostance ~= ""
+		and (classDetect.state.attackerClass == "Shikudo"
+			or (classDetect.state.attackerClass == "Monk" and shikudostance and shikudostance ~= ""))
 
 	if isShikudo then
 		ataxia_shikudoParry()
@@ -15455,7 +15455,11 @@ end
 	if city:find("hidden") then
 		if not table.contains(cities, tmpCity) then
 			ataxiaNDB.players[name].city = "Unknown"
-			if ataxiaNDB._honoursPerson == nil then ataxiaEcho("&lt;red&gt;WARNING: "..name.."'s city is hidden; will require a manual honours/setting to update it.") end
+			if ataxiaNDB._honoursPerson == nil then
+				-- Queue auto-honours for hidden-city players
+				ataxiaNDB._honoursQueue = ataxiaNDB._honoursQueue or {}
+				table.insert(ataxiaNDB._honoursQueue, name)
+			end
 		else
 			if tmpCity == "Rogues" then
 				ataxiaNDB.players[name].city = "None"
@@ -15479,6 +15483,28 @@ end
 	end
 	if ataxiaNDB.checking then
 		ataxiaNDB_displayWho(name)
+	end
+
+	-- After API batch: drain hidden-city honours queue
+	if ataxiaNDB._honoursPerson == nil and ataxiaNDB._honoursQueue and #ataxiaNDB._honoursQueue &gt; 0 then
+		if not ataxiaNDB._honoursQueueTimer then
+			ataxiaNDB._honoursQueueTimer = tempTimer(2, function() ataxiaNDB_drainHonoursQueue() end)
+		end
+	end
+end
+
+function ataxiaNDB_drainHonoursQueue()
+	ataxiaNDB._honoursQueueTimer = nil
+	if not ataxiaNDB._honoursQueue or #ataxiaNDB._honoursQueue == 0 then return end
+
+	local queue = ataxiaNDB._honoursQueue
+	ataxiaNDB._honoursQueue = nil
+
+	ataxiaEcho(#queue .. " player(s) have hidden cities — auto-honouring to update.")
+	for i, name in ipairs(queue) do
+		tempTimer((i - 1) * 2, function()
+			send("honours " .. name, false)
+		end)
 	end
 end
 </script>
@@ -24636,28 +24662,28 @@ end
 --                    Setup                    --
 --                                             --
 -------------------------------------------------
-zData = zData or {}
+ataxia.data = ataxia.data or {}
 
-zData.bardName = "Leviticus"
-zData.bardVoice = " with a grave voice"
+ataxia.data.bardName = "Leviticus"
+ataxia.data.bardVoice = " with a grave voice"
 
-function zData.echo(text)
-	hecho(rainbow("\n"..zData.bardName..", appears strumming his lute to a tune of your greatness.\nEager to record your recent hunt in lavish detail and song, "..zData.bardName.." frantically works his quill."))
-  cecho("\n\n&lt;gold&gt;"..zData.bardName.."&lt;cyan&gt; says to you"..zData.bardVoice..", \"Quite the slaughter you had at "..text.."\"\n\n")
+function ataxia.data.echo(text)
+	hecho(rainbow("\n"..ataxia.data.bardName..", appears strumming his lute to a tune of your greatness.\nEager to record your recent hunt in lavish detail and song, "..ataxia.data.bardName.." frantically works his quill."))
+  cecho("\n\n&lt;gold&gt;"..ataxia.data.bardName.."&lt;cyan&gt; says to you"..ataxia.data.bardVoice..", \"Quite the slaughter you had at "..text.."\"\n\n")
 end
 
-zData.deleteAble = false
+ataxia.data.deleteAble = false
 
 createStopWatch("zoneHuntWatch")
 stopStopWatch("zoneHuntWatch")
 resetStopWatch("zoneHuntWatch")
 
-zData.db = zData.db or {}
+ataxia.data.db = ataxia.data.db or {}
 
-zData.defs = zData.defs or {}
+ataxia.data.defs = ataxia.data.defs or {}
 
-zData.char = zData.char or {}
-zData.char = {
+ataxia.data.char = ataxia.data.char or {}
+ataxia.data.char = {
   lastArea = "NA", 
   
   tempTime = 0,
@@ -24700,687 +24726,45 @@ zData.char = {
   when = 0,
 }
 
-zData.classList =  {                                                       -- List of classes for searching the database by class
-  ["alchemist"] = {["int"] = zData.char.int,},
-  ["apostate"] = {["int"] = zData.char.int,},
-  ["bard"] = {["str"] = zData.char.str,},
-  ["blademaster"] = {["str"] = zData.char.str,},
-  ["depthswalker"] = {["str"] = zData.char.str,},
-  ["druid"] = {["str"] = zData.char.str,},
-  ["infernal"] = {["str"] = zData.char.str,},
-  ["jester"] = {["str"] = zData.char.str,},
-  ["magi"] = {["int"] = zData.char.int,},
-  ["monk"] = {["str"] = zData.char.str,["int"] = zData.char.int,},
-  ["occultist"] = {["int"] = zData.char.int,},
-  ["paladin"] = {["str"] = zData.char.str,},
-  ["pariah"] = {["int"] = zData.char.int,},
-  ["priest"] = {["int"] = zData.char.int,},
-  ["psion"] = {["str"] = zData.char.str,["int"] = zData.char.int,},
-  ["runewarden"] = {["str"] = zData.char.str,},
-  ["sentinel"] = {["str"] = zData.char.str,},
-  ["serpent"] = {["dex"] = zData.char.dex,},
-  ["shaman"] = {["int"] = zData.char.int,},
-  ["sylvan"] = {["int"] = zData.char.int,},
+ataxia.data.classList =  {                                                       -- List of classes for searching the database by class
+  ["alchemist"] = {["int"] = ataxia.data.char.int,},
+  ["apostate"] = {["int"] = ataxia.data.char.int,},
+  ["bard"] = {["str"] = ataxia.data.char.str,},
+  ["blademaster"] = {["str"] = ataxia.data.char.str,},
+  ["depthswalker"] = {["str"] = ataxia.data.char.str,},
+  ["druid"] = {["str"] = ataxia.data.char.str,},
+  ["infernal"] = {["str"] = ataxia.data.char.str,},
+  ["jester"] = {["str"] = ataxia.data.char.str,},
+  ["magi"] = {["int"] = ataxia.data.char.int,},
+  ["monk"] = {["str"] = ataxia.data.char.str,["int"] = ataxia.data.char.int,},
+  ["occultist"] = {["int"] = ataxia.data.char.int,},
+  ["paladin"] = {["str"] = ataxia.data.char.str,},
+  ["pariah"] = {["int"] = ataxia.data.char.int,},
+  ["priest"] = {["int"] = ataxia.data.char.int,},
+  ["psion"] = {["str"] = ataxia.data.char.str,["int"] = ataxia.data.char.int,},
+  ["runewarden"] = {["str"] = ataxia.data.char.str,},
+  ["sentinel"] = {["str"] = ataxia.data.char.str,},
+  ["serpent"] = {["dex"] = ataxia.data.char.dex,},
+  ["shaman"] = {["int"] = ataxia.data.char.int,},
+  ["sylvan"] = {["int"] = ataxia.data.char.int,},
   
-  ["unnamable"] = {["str"] = zData.char.str,},
+  ["unnamable"] = {["str"] = ataxia.data.char.str,},
   
-  ["red dragon"] = {["str"] = zData.char.str,["int"] = zData.char.int,},
-  ["blue dragon"] = {["str"] = zData.char.str,["int"] = zData.char.int,},
-  ["gold dragon"] = {["str"] = zData.char.str,["int"] = zData.char.int,},
-  ["silver dragon"] = {["str"] = zData.char.str,["int"] = zData.char.int,},
-  ["green dragon"] = {["str"] = zData.char.str,["int"] = zData.char.int,},
-  ["black dragon"] = {["str"] = zData.char.str,["int"] = zData.char.int,},
+  ["red dragon"] = {["str"] = ataxia.data.char.str,["int"] = ataxia.data.char.int,},
+  ["blue dragon"] = {["str"] = ataxia.data.char.str,["int"] = ataxia.data.char.int,},
+  ["gold dragon"] = {["str"] = ataxia.data.char.str,["int"] = ataxia.data.char.int,},
+  ["silver dragon"] = {["str"] = ataxia.data.char.str,["int"] = ataxia.data.char.int,},
+  ["green dragon"] = {["str"] = ataxia.data.char.str,["int"] = ataxia.data.char.int,},
+  ["black dragon"] = {["str"] = ataxia.data.char.str,["int"] = ataxia.data.char.int,},
   ["dragon"] = "na",
   ["elemental"] = "na",                                                         
-}</script>
+}
+
+-- Backward-compat shim
+zData = ataxia.data</script>
   <packageName/>
 <eventHandlerList>
 </eventHandlerList>
-            <Script isActive="yes" isFolder="no">
-  <name>Experience Database</name>
-              <script>--[[mudlet
-type: script
-name: Experience Database
-hierarchy:
-- Levi_Ataxia
-- LEVI
-- Ataxia
-- Basher
-- zData
-- zData
-attributes:
-  isActive: 'yes'
-  isFolder: 'no'
-packageName: ''
-]]--
-
--------------------------------------------------
---                                             --
---                    Setup                    --
---                                             --
--------------------------------------------------
-db:create("exp_db", 
-  {
-    zones={             
-      "area",
-      "class",
-      "boost",
-      "critpercent",
-      "time",
-      "epm",
-      "exp",
-      "rawexp",
-      "kill",
-      "kpm",
-      "gold",
-      "gpm",
-      "str",
-      "dex",
-      "int",
-      "con",  
-      "attacks",
-      "crits","crits1","crits2","crits3","crits4","crits5","crits6",
-      "soa",
-      "soaparagon",
-      "glyph",
-      "maya",
-      "tali",
-      "killlist",
-      "talilist",
-      "when",
-      },
-  })                                                 -- This creates database exp_db (if not already)
-zData.db.expdb = db:get_database("exp_db")           -- This assigns the database name to a variable for ease of use purposes.
- 
--------------------------------------------------
---                                             --
---  Add a new records: zData.db.zoneAdd(stuff) --
---                                             --
--------------------------------------------------
-function zData.db.zoneAdd(area, class, boost, critpercent, time, epm, exp, rawexp, kill, kpm, gold, gpm, str, dex, int, con, attacks, crits, crits1, crits2, crits3, crits4, crits5, crits6, soa, soaparagon, glyph, maya, tali, killlist, talilist, when)
-  db:add(zData.db.expdb.zones,{
-    area=area, class=class, boost=boost, critpercent=critpercent, 
-    time=time, epm=epm, exp=exp, rawexp=rawexp, kill=kill, kpm=kpm, gold=gold, gpm=gpm, 
-    str=str, dex=dex, int=int, con=con, 
-    attacks=attacks, crits=crits, crits1=crits1, crits2=crits2, crits3=crits3, crits4=crits4, crits5=crits5, crits6=crits6, 
-    soa=soa, soaparagon=soaparagon, glyph=glyph, maya=maya, 
-    tali=tali, 
-    killlist=killlist, 
-    talilist=talilist,
-    when=when})
-  zData.echo("&lt;magenta&gt;"..area.."&lt;cyan&gt;\! &lt;NavajoWhite&gt;"..string.cut(exp,5).."&lt;cyan&gt; experience. &lt;NavajoWhite&gt;"..string.cut(kpm,4).."&lt;cyan&gt; KPM!")
-end
-
--------------------------------------------------
---                                             --
---  Simple Add +1 : zData.db.addChar(addThis)  --
---                                             --
--------------------------------------------------
-function zData.db.addChar(addThis)
-  zData.char[addThis] = zData.char[addThis] + 1
-end
-
-------------------------------------------------------------
---                                                        --
--- Sort Database: zData.db.showData(sortWith, sortStyle)  --
---                                                        --
--- sortWith = Class / all / area search                   --
--- sortStyle = exp / epm / kill / kpm                     --
---                                                        --
-------------------------------------------------------------
-function zData.db.showData(sortWith, sortStyle, sortDirection)           -- This is my spaghetti code function 
-  if zData.hunter then
-    zData.hunter.window:show()
-  else
-    zData.buildHunter()
-  end
-  zData.db.localDB = {}                                   -- This is the table for sorting and display database results
-  local maxShow = 100                    ------&lt;--&lt;--&lt;--&lt;--&lt; Max number of results to show unless ALL is used. Increase to see more (Over 200 will not allow deleting)
-  local titleColor = "gold" 
-  local menuColor = "purple" 
-  local areaColor = "ansiMagenta"
-  local classColor = "purple"
-  local taliColor = "ansiMagenta"
-  local timeColor = "ansiMagenta"
-  local killColor = "ansiMagenta"
-  local kpmColor = "ansiMagenta"
-  local expColor = "ansiMagenta"
-  local rawexpColor = "ansiMagenta"
-  local epmColor = "ansiMagenta"
-  local gpmColor = "ansiMagenta"
-  local goldColor = "ansiMagenta"
-  local showCount = 0  
-
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Show Rows Based on Sorting  
-  local function showCharts(thisChart, thisRow)
-    if sortDirection and sortDirection == "down" then
-      local seen = {}
-      for _, row in spairs(zData.db.localDB, function(t,a,b) return tonumber(t[a][thisChart]) &lt; tonumber(t[b][thisChart]) end) do
-        local dedupKey = row.area .. "|" .. row.class
-        if not seen[dedupKey] then
-        seen[dedupKey] = true
--------------------------- Limit results to MAXSHOW
-        if sortWith and string.lower(sortWith) == "all" then
-          zData.deleteAble = false
-        else
-          if maxShow &lt; 240 then zData.deleteAble = true end
-          showCount = showCount + 1
-          if showCount &gt;= maxShow then break end
-        end
---------------------------- Blackout 0 talisman counts
-        if tonumber(row.tali) &lt; 1 then taliColor = "black:black" else
-          if thisChart == "tali" then
-            taliColor = "gold"
-          else
-            taliColor = "ansiMagenta"
-          end
-        end
---------------------------- Display Each Row From The Database, Clickable For More Information
-        cechoLink("hunterDisplay",
-          "\n  &lt;"..areaColor.."&gt;"..string.cut(row.area.."                   ", 20)
-          .." &lt;"..classColor.."&gt;"..string.cut(row.class.."            ", 13)
-          .. " &lt;"..taliColor.."&gt;"..string.cut(string.cut(row.tali,2).."   ", 4)
-          .. " &lt;"..timeColor.."&gt;"..string.cut(string.cut((row.time/60), 4).."      ", 6)
-          .. " &lt;"..killColor.."&gt;"..string.cut(string.cut(row.kill,4).."     ", 6)
-          ..  " &lt;"..kpmColor.."&gt;"..string.cut(string.cut(row.kpm,4).."     ", 6)
-          ..  " &lt;"..expColor.."&gt;"..string.cut(string.cut(row.exp,4).."     ", 6)
-          ..  " &lt;"..rawexpColor.."&gt;"..string.cut(string.cut(row.rawexp or 0,6).."       ", 8)
-          ..  " &lt;"..epmColor.."&gt;"..string.cut(string.cut(row.epm,5).."      ", 7)
-          ..  " &lt;"..gpmColor.."&gt;"..string.cut(string.cut(math.floor(row.gpm),6).."       ", 8)
-          .. " &lt;"..goldColor.."&gt;"..string.cut(row.gold .."      ", 7),
-        ---------------------------------------------------------------------------------
-          [[zData.db.clickback(]].._..[[)]], [[]], true)                               -- What to do when clicked on
-        ---------------------------------------------------------------------------------
-        end --- End of dedup check
-      end --- End of for _,row
-    else
-      local seen = {}
-      for _, row in spairs(zData.db.localDB, function(t,a,b) return tonumber(t[a][thisChart]) &gt; tonumber(t[b][thisChart]) end) do
-        local dedupKey = row.area .. "|" .. row.class
-        if not seen[dedupKey] then
-        seen[dedupKey] = true
--------------------------- Limit results to MAXSHOW
-        if sortWith and string.lower(sortWith) == "all" then
-          zData.deleteAble = false
-        else
-          if maxShow &lt; 240 then zData.deleteAble = true end
-          showCount = showCount + 1
-          if showCount &gt;= maxShow then break end
-        end
---------------------------- Blackout 0 talisman counts
-        if tonumber(row.tali) &lt; 1 then taliColor = "black:black" else
-          if thisChart == "tali" then
-            taliColor = "gold"
-          else
-            taliColor = "ansiMagenta"
-          end
-        end
---------------------------- Display Each Row From The Database, Clickable For More Information
-        cechoLink("hunterDisplay",
-          "\n  &lt;"..areaColor.."&gt;"..string.cut(row.area.."                   ", 20)
-          .." &lt;"..classColor.."&gt;"..string.cut(row.class.."            ", 13)
-          .. " &lt;"..taliColor.."&gt;"..string.cut(string.cut(row.tali,2).."   ", 4)
-          .. " &lt;"..timeColor.."&gt;"..string.cut(string.cut((row.time/60), 4).."      ", 6)
-          .. " &lt;"..killColor.."&gt;"..string.cut(string.cut(row.kill,4).."     ", 6)
-          ..  " &lt;"..kpmColor.."&gt;"..string.cut(string.cut(row.kpm,4).."     ", 6)
-          ..  " &lt;"..expColor.."&gt;"..string.cut(string.cut(row.exp,4).."     ", 6)
-          ..  " &lt;"..rawexpColor.."&gt;"..string.cut(string.cut(row.rawexp or 0,6).."       ", 8)
-          ..  " &lt;"..epmColor.."&gt;"..string.cut(string.cut(row.epm,5).."      ", 7)
-          ..  " &lt;"..gpmColor.."&gt;"..string.cut(string.cut(math.floor(row.gpm),6).."       ", 8)
-          .. " &lt;"..goldColor.."&gt;"..string.cut(row.gold .."      ", 7),
-        ---------------------------------------------------------------------------------
-          [[zData.db.clickback(]].._..[[)]], [[]], true)                               -- What to do when clicked on
-        ---------------------------------------------------------------------------------
-        end --- End of dedup check
-      end --- End of for _,row
-    end
-  end --- End of local function showCharts()
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
---------------------------- Show Last 3 Zones
-  local function showLast(thisChart, countBack)
-    showCount = 0  
-    local useRow = tonumber(#zData.db.localDB) - countBack
-    for _, row in spairs(zData.db.localDB) do               
-      if _ == useRow then
--------------------------- Limit results to 1        
-        showCount = showCount + 1
-        if showCount &gt;= 2 then break end          
---------------------------- Blackout 0 talisman counts        
-        if tonumber(row.tali) &lt; 1 then taliColor = "black:black" else taliColor = "ansiMagenta" end
---------------------------- Display Each Row From The Database, Clickable For More Information
-        cechoLink("hunterDisplay",
-          "&lt;"..areaColor.."&gt;"..string.cut(row.area.."                   ", 20)
-          .." &lt;"..classColor.."&gt;"..string.cut(row.class.."            ", 13)
-          .. " &lt;"..taliColor.."&gt;"..string.cut(string.cut(row.tali,2).."   ", 4)
-          .. " &lt;"..timeColor.."&gt;"..string.cut(string.cut((row.time/60), 4).."      ", 6)
-          .. " &lt;"..killColor.."&gt;"..string.cut(string.cut(row.kill,4).."     ", 6)
-          ..  " &lt;"..kpmColor.."&gt;"..string.cut(string.cut(row.kpm,4).."     ", 6)
-          ..  " &lt;"..expColor.."&gt;"..string.cut(string.cut(row.exp,4).."     ", 6)
-          ..  " &lt;"..rawexpColor.."&gt;"..string.cut(string.cut(row.rawexp or 0,6).."       ", 8)
-          ..  " &lt;"..epmColor.."&gt;"..string.cut(string.cut(row.epm,5).."      ", 7)
-          ..  " &lt;"..gpmColor.."&gt;"..string.cut(string.cut(math.floor(row.gpm),6).."       ", 8)
-          .. " &lt;"..goldColor.."&gt;"..string.cut(row.gold .."      ", 7),
-        ---------------------------------------------------------------------------------
-          [[zData.db.clickback(]].._..[[)]], [[]], true)                               -- What to do when clicked on
-        ---------------------------------------------------------------------------------
-      end --- End of for _,row
-    end
-  end --- End of local function showLast()
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
--------------------------- Search For sortWith (First level sort: class name / all / area random
-  if sortWith then
-    if string.lower(sortWith) == "all" or
-       string.lower(sortWith) == "tali" or
-       string.lower(sortWith) == "time" or
-       string.lower(sortWith) == "kill" or 
-       string.lower(sortWith) == "kpm" or
-       string.lower(sortWith) == "exp" or
-       string.lower(sortWith) == "rawexp" or
-       string.lower(sortWith) == "epm" or
-       string.lower(sortWith) == "gold" or
-       string.lower(sortWith) == "gpm"
-     then
-      zData.db.localDB = db:fetch(zData.db.expdb.zones)
-    elseif table.contains(zData.classList, string.lower(sortWith)) then
-      zData.db.localDB = db:fetch(zData.db.expdb.zones, db:like(zData.db.expdb.zones.class,"%"..sortWith.."%")) 
-    else
-	    zData.db.localDB = db:fetch(zData.db.expdb.zones, db:like(zData.db.expdb.zones.area,"%"..sortWith.."%")) 
-    end   
-  else
-    zData.db.localDB = db:fetch(zData.db.expdb.zones)
-  end
-
--------------------------- Purge bad data (low kill counts by area)
-  local minKills = { ["Moghedu"] = 220, ["Quartz Peak"] = 40, ["the Den of the Quisa"] = 81 }
-  for i = #zData.db.localDB, 1, -1 do
-    local row = zData.db.localDB[i]
-    local threshold = minKills[row.area]
-    if threshold and tonumber(row.kill) &lt; threshold then
-      db:delete(zData.db.expdb.zones, row._row_id)
-      table.remove(zData.db.localDB, i)
-    end
-  end
-
--------------------------- Clear Display
-  clearWindow("hunterDisplay") 
--------------------------- Display NO Results
-  if #zData.db.localDB == 0 then
-    cecho("hunterDisplay", "\n\n&lt;red&gt;     Nothing Found Searching &lt;gold&gt;Zones&lt;red&gt; for the string: &lt;gold&gt;"..sortWith.."\n       &lt;green&gt;Try Typing: &lt;gold&gt;zbash "..string.lower(gmcp.Char.Status.class).."\n")
--------------------------- Display Results
-  else
-    cecho("hunterDisplay", "\n                                   &lt;"..titleColor.."&gt;Detailed Hunting Scrolls\n")
--------------------------- Display Last 3 Zones
-  hecho("hunterDisplay", rainbow("@@#############################################################################################@@"))    
-  cecho("hunterDisplay", "\n&lt;"..titleColor.."&gt;1:")
-    showLast("when", 0)
-  cecho("hunterDisplay", "\n&lt;"..titleColor.."&gt;2:")
-    showLast("when", 1)
-  cecho("hunterDisplay", "\n&lt;"..titleColor.."&gt;3:")
-    showLast("when", 2)
-  cecho("hunterDisplay", "\n")
-  hecho("hunterDisplay", rainbow("@@#############################################################################################@@\n"))
--------------------------- Display
-    cecho("hunterDisplay","&lt;"..menuColor.."&gt;                                ")
-    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;Tali", [[zData.db.showData("tali")]], [[]], true)
-    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;Time", [[zData.db.showData("time")]], [[]], true)
-    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;Kill", [[zData.db.showData("kill")]], [[]], true)
-    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;KPM", [[zData.db.showData("kpm")]], [[]], true)
-    cechoLink("hunterDisplay","    &lt;"..menuColor.."&gt;Exp", [[zData.db.showData("exp")]], [[]], true)
-    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;RawXP", [[zData.db.showData("rawexp")]], [[]], true)
-    cechoLink("hunterDisplay","     &lt;"..menuColor.."&gt;EPM", [[zData.db.showData("epm")]], [[]], true)
-    cechoLink("hunterDisplay","    &lt;"..menuColor.."&gt;GPM", [[zData.db.showData("gpm")]], [[]], true)
-    cechoLink("hunterDisplay","      &lt;"..menuColor.."&gt;Gold", [[zData.db.showData("gold")]], [[]], true) 
--------------------------- Display Results based on search(sortStyle)    
-    if (sortStyle and string.lower(sortStyle) == "all") or (sortWith and string.lower(sortWith) == "all") then
-      showCharts("exp", "expColor") 
-    elseif (sortStyle and string.lower(sortStyle) == "exp") or (sortWith and string.lower(sortWith) == "exp") then
-      expColor = "gold"
-      showCharts("exp", "expColor")
-    elseif (sortStyle and string.lower(sortStyle) == "rawexp") or (sortWith and string.lower(sortWith) == "rawexp") then
-      rawexpColor = "gold"
-      showCharts("rawexp", "rawexpColor")
-    elseif (sortStyle and string.lower(sortStyle) == "epm") or (sortWith and string.lower(sortWith) == "epm") then
-      epmColor = "gold"
-      showCharts("epm", "epmColor")  
-    elseif (sortStyle and string.lower(sortStyle) == "time") or (sortWith and string.lower(sortWith) == "time") then
-      timeColor = "gold"
-      showCharts("time", "timeColor")  
-    elseif (sortStyle and string.lower(sortStyle) == "tali") or (sortWith and string.lower(sortWith) == "tali") then
-      taliColor = "gold"
-      showCharts("tali", "taliColor")    
-    elseif (sortStyle and string.lower(sortStyle) == "gpm") or (sortWith and string.lower(sortWith) == "gpm") then
-      gpmColor = "gold"
-      showCharts("gpm", "gpmColor") 
-    elseif (sortStyle and string.lower(sortStyle) == "gold") or (sortWith and string.lower(sortWith) == "gold") then
-      goldColor = "gold"
-      showCharts("gold", "goldColor")  
-    elseif (sortStyle and string.lower(sortStyle) == "kill") or (sortWith and string.lower(sortWith) == "kill") then
-      killColor = "gold"
-      showCharts("kill", "killColor")  
-    elseif (sortStyle and string.lower(sortStyle) == "kpm") or (sortWith and string.lower(sortWith) == "kpm") then
-      kpmColor = "gold"
-      showCharts("kpm", "kpmColor")  
-    else
-      kpmColor = "gold"
-      showCharts("kpm", "kpmColor")
-    end  
-    cecho("hunterDisplay","\n&lt;"..menuColor.."&gt;                                ")
-    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;Tali", [[zData.db.showData("tali", nil, "down")]], [[]], true)
-    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;Time", [[zData.db.showData("time", nil, "down")]], [[]], true)
-    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;Kill", [[zData.db.showData("kill", nil, "down")]], [[]], true)
-    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;KPM", [[zData.db.showData("kpm", nil, "down")]], [[]], true)
-    cechoLink("hunterDisplay","    &lt;"..menuColor.."&gt;Exp", [[zData.db.showData("exp", nil, "down")]], [[]], true)
-    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;RawXP", [[zData.db.showData("rawexp", nil, "down")]], [[]], true)
-    cechoLink("hunterDisplay","     &lt;"..menuColor.."&gt;EPM", [[zData.db.showData("epm", nil, "down")]], [[]], true)
-    cechoLink("hunterDisplay","    &lt;"..menuColor.."&gt;GPM", [[zData.db.showData("gpm", nil, "down")]], [[]], true)
-    cechoLink("hunterDisplay","      &lt;"..menuColor.."&gt;Gold", [[zData.db.showData("gold", nil, "down")]], [[]], true)  
-  end
--------------------------- Display Footer     
-  hecho("hunterDisplay", rainbow("\n@@#############################################################################################@@\n"))  
-end 
-
-
--------------------------------------------------
---                                             --
---  View a saved record: zData.db.clickback()  --
---                                             --
--------------------------------------------------
-function zData.db.clickback(thisRow)
-  local deleteRow = 0
--------------------------- Clear Display   
-  clearWindow("hunterDisplay") 
--------------------------- DELETE DATABASE ENTRY ---------------------------
-  if zData.deleteAble then
-    for _, row in spairs(zData.db.localDB) do
-      if _ == thisRow then
-        deleteRow = _
-      end
-    end
-    cechoLink("hunterDisplay","\n&lt;red&gt;  --@@ DELETE ENTRY @@--  ", [[zData.db.clickbackdelete(]]..thisRow..[[)]], [[Clicking here will PERMENENTLY DELETE this entry]], true)
-  end
-----------------------------------------------------------------------------
-  hecho("hunterDisplay", rainbow("\n@@#############################################################################################@@\n")) 
--------------------------- Display Header ^
-  cecho("hunterDisplay","\n  &lt;purple&gt;Extended Report For: &lt;gold&gt;"..zData.db.localDB[thisRow].class)
-  cecho("hunterDisplay","\n  &lt;purple&gt;Hunting in the Zone: &lt;gold&gt;"..zData.db.localDB[thisRow].area)
-  cecho("hunterDisplay","\n  &lt;purple&gt;Time Spent: &lt;ansiMagenta&gt;"..string.cut((zData.db.localDB[thisRow].time/60),4).." minutes")
-  cecho("hunterDisplay","\n  &lt;purple&gt;Experience: &lt;ansiMagenta&gt;"..zData.db.localDB[thisRow].exp)
-  cecho("hunterDisplay","\n  &lt;purple&gt;Raw Experience: &lt;gold&gt;"..(zData.db.localDB[thisRow].rawexp or 0))
-  cecho("hunterDisplay","\n  &lt;purple&gt;Experience Modifier: &lt;ansiMagenta&gt;"..zData.db.localDB[thisRow].boost.."\%\n")
-  cecho("hunterDisplay","\n  &lt;purple&gt;Stats: &lt;ansiMagenta&gt;Str: &lt;gold&gt;"..zData.db.localDB[thisRow].str.." &lt;ansiMagenta&gt;Dex: &lt;gold&gt;"..zData.db.localDB[thisRow].dex.." &lt;ansiMagenta&gt;Int: &lt;gold&gt;"..zData.db.localDB[thisRow].int.." &lt;ansiMagenta&gt;Con: &lt;gold&gt;"..zData.db.localDB[thisRow].con.."\n")
-  cecho("hunterDisplay","\n     &lt;purple&gt;Critical Hit Chance: &lt;ansiMagenta&gt;"..zData.db.localDB[thisRow].critpercent.."\%")
-  cecho("hunterDisplay","\n &lt;gold&gt;"..zData.db.localDB[thisRow].crits.."  &lt;purple&gt;Critical Hits")
-  cecho("hunterDisplay","\n &lt;gold&gt;"..string.cut(zData.db.localDB[thisRow].crits1.."  ",3).." &lt;ansiMagenta&gt; 2x "..string.cut("Critical                    ",25).."&lt;gold&gt;"..zData.db.localDB[thisRow].glyph.."  &lt;ansiMagenta&gt;Seared Glyph")
-  cecho("hunterDisplay","\n &lt;gold&gt;"..string.cut(zData.db.localDB[thisRow].crits2.."  ",3).." &lt;ansiMagenta&gt; 4x "..string.cut("Crushing                    ",25).."&lt;gold&gt;"..zData.db.localDB[thisRow].soa.."  &lt;ansiMagenta&gt;Shield of Absorption")
-  cecho("hunterDisplay","\n &lt;gold&gt;"..string.cut(zData.db.localDB[thisRow].crits3.."  ",3).." &lt;ansiMagenta&gt; 8x "..string.cut("Obliterating                    ",25).."&lt;gold&gt;"..zData.db.localDB[thisRow].soaparagon.."  &lt;ansiMagenta&gt;SoA Paragon")
-  cecho("hunterDisplay","\n &lt;gold&gt;"..string.cut(zData.db.localDB[thisRow].crits4.."  ",3).." &lt;ansiMagenta&gt;16x "..string.cut("Annihilating                    ",25).."&lt;gold&gt;"..zData.db.localDB[thisRow].maya.."  &lt;ansiMagenta&gt;Maya Figurine")
-  cecho("hunterDisplay","\n &lt;gold&gt;"..string.cut(zData.db.localDB[thisRow].crits5.."  ",3).." &lt;ansiMagenta&gt;32x "..string.cut("World Shattering                    ",25))
-  cecho("hunterDisplay","\n &lt;gold&gt;"..string.cut(zData.db.localDB[thisRow].crits6.."  ",3).." &lt;ansiMagenta&gt;64x "..string.cut("Plane Razing                    ",25))
-  cecho("hunterDisplay","\n")   
-  cecho("hunterDisplay","\n &lt;gold&gt;"..zData.db.localDB[thisRow].gold.." &lt;ansiMagenta&gt; : Total Gold Gained")
-  cecho("hunterDisplay","\n &lt;gold&gt;"..string.cut((zData.db.localDB[thisRow].gpm),5).."&lt;ansiMagenta&gt; : Gold Gained Per Minute")
-  cecho("hunterDisplay","\n") 
--------------------------- Breakdown the killList string into a table for display
-  local tempTable = string.split(zData.db.localDB[thisRow].killlist, "| ")
-  local tempKillTable = {}
-  for k, v in pairs(tempTable) do
-    if tempKillTable[v] then 
-      tempKillTable[v] = tempKillTable[v] + 1
-    else
-      tempKillTable[v] = 1
-    end
-  end   
-  cecho("hunterDisplay","\n &lt;gold&gt;"..zData.db.localDB[thisRow].kill.." &lt;purple&gt;Kills at &lt;gold&gt;"..string.cut(zData.db.localDB[thisRow].kpm,5).."&lt;purple&gt; Kills Per Minute")
-  for k, v in spairs(tempKillTable) do
-    if v&gt;9 then
-      cecho("hunterDisplay","\n  &lt;purple&gt;\["..string.cut(" ",1).."&lt;gold&gt;"..string.cut(v.." ",3).."&lt;purple&gt;\]  &lt;ansiMagenta&gt;"..k)
-    else
-      cecho("hunterDisplay","\n  &lt;purple&gt;\["..string.cut("  ",2).."&lt;gold&gt;"..string.cut(v.." ",3).."&lt;purple&gt;\]  &lt;ansiMagenta&gt;"..k)
-    end
-  end
-  cecho("hunterDisplay","\n") 
--------------------------- Breakdown the long taliList string into a table for display
-  cecho("hunterDisplay","\n &lt;purple&gt;Total Talismans: &lt;gold&gt;"..zData.db.localDB[thisRow].tali)
-  if tonumber(zData.db.localDB[thisRow].tali) &gt; 0 then
-  tempTable = string.split(zData.db.localDB[thisRow].talilist, "| ") 
-  local tempTaliTable = {}
-  for k, v in pairs(tempTable) do
-    if tempTaliTable[v] then 
-      tempTaliTable[v] = tempTaliTable[v] + 1
-    else
-      tempTaliTable[v] = 1
-    end
-  end   
-  for k, v in spairs(tempTaliTable) do 
-    if v&gt;9 then
-      cecho("hunterDisplay","\n  &lt;purple&gt;\["..string.cut(" ",1).."&lt;gold&gt;"..string.cut(v.." ",3).."&lt;purple&gt;\]  &lt;ansiMagenta&gt;"..string.gsub(k, ":", "&lt;purple&gt;:"))
-    else
-      cecho("hunterDisplay","\n  &lt;purple&gt;\["..string.cut("  ",2).."&lt;gold&gt;"..string.cut(v.." ",3).."&lt;purple&gt;\]  &lt;ansiMagenta&gt;"..string.gsub(k, ":", "&lt;purple&gt;:"))
-    end
-  end 
-  end
--------------------------- Display Footer  
-  cecho("hunterDisplay","\n")
-  hecho("hunterDisplay", rainbow("\n@@#############################################################################################@@"))
-  cechoLink("hunterDisplay", "\n                                    Click Here For zBash Chart                               ", [[zData.db.showData("kpm")]], [[]], true)
-  hecho("hunterDisplay", rainbow("\n@@#############################################################################################@@"))
-end 
-
-
--------------------------------------------------
---                                             --
---  Delete a saved record:                     --
---               zData.db.clickbackdelete()    --
---                                             --
--------------------------------------------------
-function zData.db.clickbackdelete(thisRow)
-  db:delete(zData.db.expdb.zones, zData.db.localDB[thisRow]._row_id)
-  clearWindow("hunterDisplay") 
-  hecho("hunterDisplay", rainbow("\n\n\n\n@@#############################################################################################@@"))  
-  cecho("hunterDisplay","\n&lt;red&gt;                                     --@@ DELETED ENTRY @@--  ")
-  hecho("hunterDisplay", rainbow("\n@@#############################################################################################@@\n")) 
-  cechoLink("hunterDisplay", "                                    Click Here For zBash Chart                               ", [[zData.db.showData("kpm")]], [[]], true)
-  hecho("hunterDisplay", rainbow("\n      @@#################################################################################@@\n"))
-end
-
-
-</script>
-  <packageName/>
-<eventHandlerList>
-</eventHandlerList>
-</Script>
-            <Script isActive="yes" isFolder="no">
-  <name>movement</name>
-              <script>--[[mudlet
-type: script
-name: movement
-hierarchy:
-- Levi_Ataxia
-- LEVI
-- Ataxia
-- Basher
-- zData
-- zData
-attributes:
-  isActive: 'yes'
-  isFolder: 'no'
-packageName: ''
-]]--
-
--- unnamed &gt; For Levi &gt; Levi_062424 &gt; leviticus &gt; LeviAtaxia &gt; Ataxia-DownloadThis &gt; Basher &gt; zData &gt; zData &gt; movement
-
--------------------------------------------------
---                                             --
---         zData.getClassWithSpec()            --
---  Format class name with knight spec         --
---                                             --
--------------------------------------------------
-function zData.getClassWithSpec()
-  local class = gmcp.Char.Status.class
-  local spec = ataxia.vitals.knight
-
-  -- Knight class abbreviations
-  local knightAbbrev = {
-    ["Infernal"] = "Inf",
-    ["Runewarden"] = "Run",
-    ["Paladin"] = "Pal",
-    ["Unnamable"] = "Unn"
-  }
-
-  -- Spec abbreviations
-  local specAbbrev = {
-    ["Dual Cutting"] = "DWC",
-    ["Dual Blunt"] = "DWB",
-    ["Sword and Shield"] = "S&amp;B",
-    ["Two-Handed"] = "2H"
-  }
-
-  -- If knight class with known spec, format as "Abbrev - Spec"
-  if knightAbbrev[class] and spec and specAbbrev[spec] then
-    return knightAbbrev[class] .. " - " .. specAbbrev[spec]
-  end
-
-  -- Otherwise return original class name
-  return class
-end
-
--------------------------------------------------
---                                             --
---               zData.movement()              --
---  This Function Runs Everytime Room Updates  --
---                                             --
--------------------------------------------------
-function zData.movement() 
------------------------------------------------------------------------------------------------
--- Update Area    
-  if gmcp.Room.Info.area ~= zData.char.lastArea then  -------------&lt;--&lt;--&lt; Zone Change Detected
-
------------------------------------------------------------------------------------------------
--- Collect experience percent from gmcp, check old xp (zData.char.oxp)
-    if string.match(gmcp.Char.Status.xp, "%d+.%d+") then
-      zData.char.xp = tonumber(string.match(gmcp.Char.Status.xp, "%d+.%d+"))
-    elseif string.match(gmcp.Char.Status.xp, "%d+") then
-      zData.char.xp = tonumber(string.match(gmcp.Char.Status.xp, "%d+"))
-    end
-    if zData.char.oxp == 0 then zData.char.oxp = zData.char.xp end
-
------------------------------------------------------------------------------------------------
--- If your exp is not = to your old exp AND you have been in a zone FOR MORE &gt; THAN 60 SECONDS
-    if (zData.char.oxp ~= zData.char.xp or zData.char.killsCount &gt; 0) and getStopWatchTime("zoneHuntWatch") &gt; 60 then
-      stopStopWatch("zoneHuntWatch")  
-
------------------------------------------------------------------------------------------------
--- Update zData.Character Variables used for saving to the Database
-      zData.char.tempTime = getStopWatchTime("zoneHuntWatch")
-      zData.char.minuteTime = zData.char.tempTime/60
-      zData.char.xpGains = zData.char.xp-zData.char.oxp
-      zData.char.xpGainsMin = zData.char.xpGains/zData.char.minuteTime
-      zData.char.killsPerMinute = zData.char.killsCount/zData.char.minuteTime
-      zData.char.gpm = zData.char.gold/zData.char.minuteTime
-
------------------------------------------------------------------------------------------------
--- Convert tables to strings for the database (will turn back to tables when pulled)
-      zData.char.killListString = nil
-      if #zData.char.killList &gt; 0 then
-        zData.char.killListString = table.concat(zData.char.killList, "| ")
-      end
-      zData.char.taliListString = nil
-      if #zData.char.taliList &gt; 0 then
-        zData.char.taliListString = table.concat(zData.char.taliList, "| ")
-      end
-
------------------------------------------------------------------------------------------------
--- Record when this happened with Epoch time
-      zData.char.when = getEpoch()
-      
------------------------------------------------------------------------------------------------
--- Send All information to database   
-      zData.db.zoneAdd(
-        zData.char.lastArea,
-        zData.getClassWithSpec(), 
-        zData.defs.exp, 
-        zData.defs.crit, 
-        zData.char.tempTime, 
-        zData.char.xpGainsMin,
-        zData.char.xpGains,
-        zData.char.rawExpGains,
-        zData.char.killsCount, 
-        zData.char.killsPerMinute, 
-        zData.char.gold, 
-        zData.char.gpm, 
-        zData.char.str, 
-        zData.char.dex, 
-        zData.char.int, 
-        zData.char.con, 
-        zData.char.totalAttacks, 
-        zData.char.crithits, zData.char.crit1, zData.char.crit2, zData.char.crit3, zData.char.crit4, zData.char.crit5, zData.char.crit6, 
-        zData.char.shield, 
-        zData.char.paragon, 
-        zData.char.searedglyph, 
-        zData.char.mayafigure, 
-        zData.char.taliCount, 
-        zData.char.killListString, 
-        zData.char.taliListString,
-        zData.char.when
-        )
-    end
-
------------------------------------------------------------------------------------------------
--- Reset all saved data for next area
-    zData.char = {
-      lastArea = gmcp.Room.Info.area,
-      tempTime = 0,
-      minuteTime = 0,
-      xpGains = 0,
-      xpGainsMin = 0,
-      rawExpGains = 0,
-      killsPerMinute = 0, 
-      killsCount = 0,
-      taliCount = 0,
-      ogold = gmcp.Char.Status.gold,
-      gold = 0,
-      gpm = 0,
-      totalAttacks = 0,
-      crithits = 0,
-      crit1 = 0,
-      crit2 = 0,
-      crit3 = 0,
-      crit4 = 0,
-      crit5 = 0,
-      crit6 = 0,
-      searedglyph = 0,
-      shield = 0,
-      paragon = 0,
-      mayafigure = 0,     
-      killList = {},
-      taliList = {},
-      when= 0,
-    }
-
------------------------------------------------------------------------------------------------
--- Save OLD experience for new zone    
-    if string.match(gmcp.Char.Status.xp, "%d+.%d+") then
-      zData.char.oxp = tonumber(string.match(gmcp.Char.Status.xp, "%d+.%d+"))
-    elseif string.match(gmcp.Char.Status.xp, "%d+") then
-      zData.char.oxp = tonumber(string.match(gmcp.Char.Status.xp, "%d+"))
-    end
-
------------------------------------------------------------------------------------------------
--- Reset and Start Stopwatch for this zone (always running / only resets here on zone change)
-    resetStopWatch("zoneHuntWatch")
-    startStopWatch("zoneHuntWatch") 
-	end  
-end
------------------------------------------------------------------------------------------------
-registerAnonymousEventHandler("gmcp.Room.Info", "zData.movement") ---&lt;--&lt; Run When Room Updates
------------------------------------------------------------------------------------------------</script>
-  <packageName/>
-<eventHandlerList>
-</eventHandlerList>
-</Script>
             <Script isActive="yes" isFolder="no">
   <name>Rainbow Script</name>
               <script>-- Take in a string to rainbow-ify, optionally rainbow type and frequency for type 1
@@ -25479,15 +24863,674 @@ end</script>
 <eventHandlerList>
 </eventHandlerList>
 </Script>
+</ScriptGroup>
+</ScriptGroup>
+        <ScriptGroup isActive="yes" isFolder="yes">
+  <name>ataxia.data</name>
+          <script/>
+  <packageName/>
+<eventHandlerList>
+</eventHandlerList>
+          <ScriptGroup isActive="yes" isFolder="yes">
+  <name>ataxia.data</name>
+            <script/>
+  <packageName/>
+<eventHandlerList>
+</eventHandlerList>
+            <Script isActive="yes" isFolder="no">
+  <name>Experience Database</name>
+              <script>--[[mudlet
+type: script
+name: Experience Database
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Ataxia
+- Basher
+- ataxia.data
+- ataxia.data
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
+-------------------------------------------------
+--                                             --
+--                    Setup                    --
+--                                             --
+-------------------------------------------------
+db:create("exp_db", 
+  {
+    zones={             
+      "area",
+      "class",
+      "boost",
+      "critpercent",
+      "time",
+      "epm",
+      "exp",
+      "rawexp",
+      "kill",
+      "kpm",
+      "gold",
+      "gpm",
+      "str",
+      "dex",
+      "int",
+      "con",  
+      "attacks",
+      "crits","crits1","crits2","crits3","crits4","crits5","crits6",
+      "soa",
+      "soaparagon",
+      "glyph",
+      "maya",
+      "tali",
+      "killlist",
+      "talilist",
+      "when",
+      },
+  })                                                 -- This creates database exp_db (if not already)
+ataxia.data.db.expdb = db:get_database("exp_db")           -- This assigns the database name to a variable for ease of use purposes.
+ 
+-------------------------------------------------
+--                                             --
+--  Add a new records: ataxia.data.db.zoneAdd(stuff) --
+--                                             --
+-------------------------------------------------
+function ataxia.data.db.zoneAdd(area, class, boost, critpercent, time, epm, exp, rawexp, kill, kpm, gold, gpm, str, dex, int, con, attacks, crits, crits1, crits2, crits3, crits4, crits5, crits6, soa, soaparagon, glyph, maya, tali, killlist, talilist, when)
+  db:add(ataxia.data.db.expdb.zones,{
+    area=area, class=class, boost=boost, critpercent=critpercent, 
+    time=time, epm=epm, exp=exp, rawexp=rawexp, kill=kill, kpm=kpm, gold=gold, gpm=gpm, 
+    str=str, dex=dex, int=int, con=con, 
+    attacks=attacks, crits=crits, crits1=crits1, crits2=crits2, crits3=crits3, crits4=crits4, crits5=crits5, crits6=crits6, 
+    soa=soa, soaparagon=soaparagon, glyph=glyph, maya=maya, 
+    tali=tali, 
+    killlist=killlist, 
+    talilist=talilist,
+    when=when})
+  ataxia.data.echo("&lt;magenta&gt;"..area.."&lt;cyan&gt;\! &lt;NavajoWhite&gt;"..string.cut(exp,5).."&lt;cyan&gt; experience. &lt;NavajoWhite&gt;"..string.cut(kpm,4).."&lt;cyan&gt; KPM!")
+end
+
+-------------------------------------------------
+--                                             --
+--  Simple Add +1 : ataxia.data.db.addChar(addThis)  --
+--                                             --
+-------------------------------------------------
+function ataxia.data.db.addChar(addThis)
+  ataxia.data.char[addThis] = ataxia.data.char[addThis] + 1
+end
+
+------------------------------------------------------------
+--                                                        --
+-- Sort Database: ataxia.data.db.showData(sortWith, sortStyle)  --
+--                                                        --
+-- sortWith = Class / all / area search                   --
+-- sortStyle = exp / epm / kill / kpm                     --
+--                                                        --
+------------------------------------------------------------
+function ataxia.data.db.showData(sortWith, sortStyle, sortDirection)           -- This is my spaghetti code function 
+  if ataxia.data.hunter then
+    ataxia.data.hunter.window:show()
+  else
+    ataxia.data.buildHunter()
+  end
+  ataxia.data.db.localDB = {}                                   -- This is the table for sorting and display database results
+  local maxShow = 100                    ------&lt;--&lt;--&lt;--&lt;--&lt; Max number of results to show unless ALL is used. Increase to see more (Over 200 will not allow deleting)
+  local titleColor = "gold" 
+  local menuColor = "purple" 
+  local areaColor = "ansiMagenta"
+  local classColor = "purple"
+  local taliColor = "ansiMagenta"
+  local timeColor = "ansiMagenta"
+  local killColor = "ansiMagenta"
+  local kpmColor = "ansiMagenta"
+  local expColor = "ansiMagenta"
+  local rawexpColor = "ansiMagenta"
+  local epmColor = "ansiMagenta"
+  local gpmColor = "ansiMagenta"
+  local goldColor = "ansiMagenta"
+  local showCount = 0  
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Show Rows Based on Sorting  
+  local function showCharts(thisChart, thisRow)
+    if sortDirection and sortDirection == "down" then
+      local seen = {}
+      for _, row in spairs(ataxia.data.db.localDB, function(t,a,b) return tonumber(t[a][thisChart]) &lt; tonumber(t[b][thisChart]) end) do
+        local dedupKey = row.area .. "|" .. row.class
+        if not seen[dedupKey] then
+        seen[dedupKey] = true
+-------------------------- Limit results to MAXSHOW
+        if sortWith and string.lower(sortWith) == "all" then
+          ataxia.data.deleteAble = false
+        else
+          if maxShow &lt; 240 then ataxia.data.deleteAble = true end
+          showCount = showCount + 1
+          if showCount &gt;= maxShow then break end
+        end
+--------------------------- Blackout 0 talisman counts
+        if tonumber(row.tali) &lt; 1 then taliColor = "black:black" else
+          if thisChart == "tali" then
+            taliColor = "gold"
+          else
+            taliColor = "ansiMagenta"
+          end
+        end
+--------------------------- Display Each Row From The Database, Clickable For More Information
+        cechoLink("hunterDisplay",
+          "\n  &lt;"..areaColor.."&gt;"..string.cut(row.area.."                   ", 20)
+          .." &lt;"..classColor.."&gt;"..string.cut(row.class.."            ", 13)
+          .. " &lt;"..taliColor.."&gt;"..string.cut(string.cut(row.tali,2).."   ", 4)
+          .. " &lt;"..timeColor.."&gt;"..string.cut(string.cut((row.time/60), 4).."      ", 6)
+          .. " &lt;"..killColor.."&gt;"..string.cut(string.cut(row.kill,4).."     ", 6)
+          ..  " &lt;"..kpmColor.."&gt;"..string.cut(string.cut(row.kpm,4).."     ", 6)
+          ..  " &lt;"..expColor.."&gt;"..string.cut(string.cut(row.exp,4).."     ", 6)
+          ..  " &lt;"..rawexpColor.."&gt;"..string.cut(string.cut(row.rawexp or 0,6).."       ", 8)
+          ..  " &lt;"..epmColor.."&gt;"..string.cut(string.cut(row.epm,5).."      ", 7)
+          ..  " &lt;"..gpmColor.."&gt;"..string.cut(string.cut(math.floor(row.gpm),6).."       ", 8)
+          .. " &lt;"..goldColor.."&gt;"..string.cut(row.gold .."      ", 7),
+        ---------------------------------------------------------------------------------
+          [[ataxia.data.db.clickback(]].._..[[)]], [[]], true)                               -- What to do when clicked on
+        ---------------------------------------------------------------------------------
+        end --- End of dedup check
+      end --- End of for _,row
+    else
+      local seen = {}
+      for _, row in spairs(ataxia.data.db.localDB, function(t,a,b) return tonumber(t[a][thisChart]) &gt; tonumber(t[b][thisChart]) end) do
+        local dedupKey = row.area .. "|" .. row.class
+        if not seen[dedupKey] then
+        seen[dedupKey] = true
+-------------------------- Limit results to MAXSHOW
+        if sortWith and string.lower(sortWith) == "all" then
+          ataxia.data.deleteAble = false
+        else
+          if maxShow &lt; 240 then ataxia.data.deleteAble = true end
+          showCount = showCount + 1
+          if showCount &gt;= maxShow then break end
+        end
+--------------------------- Blackout 0 talisman counts
+        if tonumber(row.tali) &lt; 1 then taliColor = "black:black" else
+          if thisChart == "tali" then
+            taliColor = "gold"
+          else
+            taliColor = "ansiMagenta"
+          end
+        end
+--------------------------- Display Each Row From The Database, Clickable For More Information
+        cechoLink("hunterDisplay",
+          "\n  &lt;"..areaColor.."&gt;"..string.cut(row.area.."                   ", 20)
+          .." &lt;"..classColor.."&gt;"..string.cut(row.class.."            ", 13)
+          .. " &lt;"..taliColor.."&gt;"..string.cut(string.cut(row.tali,2).."   ", 4)
+          .. " &lt;"..timeColor.."&gt;"..string.cut(string.cut((row.time/60), 4).."      ", 6)
+          .. " &lt;"..killColor.."&gt;"..string.cut(string.cut(row.kill,4).."     ", 6)
+          ..  " &lt;"..kpmColor.."&gt;"..string.cut(string.cut(row.kpm,4).."     ", 6)
+          ..  " &lt;"..expColor.."&gt;"..string.cut(string.cut(row.exp,4).."     ", 6)
+          ..  " &lt;"..rawexpColor.."&gt;"..string.cut(string.cut(row.rawexp or 0,6).."       ", 8)
+          ..  " &lt;"..epmColor.."&gt;"..string.cut(string.cut(row.epm,5).."      ", 7)
+          ..  " &lt;"..gpmColor.."&gt;"..string.cut(string.cut(math.floor(row.gpm),6).."       ", 8)
+          .. " &lt;"..goldColor.."&gt;"..string.cut(row.gold .."      ", 7),
+        ---------------------------------------------------------------------------------
+          [[ataxia.data.db.clickback(]].._..[[)]], [[]], true)                               -- What to do when clicked on
+        ---------------------------------------------------------------------------------
+        end --- End of dedup check
+      end --- End of for _,row
+    end
+  end --- End of local function showCharts()
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------- Show Last 3 Zones
+  local function showLast(thisChart, countBack)
+    showCount = 0  
+    local useRow = tonumber(#ataxia.data.db.localDB) - countBack
+    for _, row in spairs(ataxia.data.db.localDB) do               
+      if _ == useRow then
+-------------------------- Limit results to 1        
+        showCount = showCount + 1
+        if showCount &gt;= 2 then break end          
+--------------------------- Blackout 0 talisman counts        
+        if tonumber(row.tali) &lt; 1 then taliColor = "black:black" else taliColor = "ansiMagenta" end
+--------------------------- Display Each Row From The Database, Clickable For More Information
+        cechoLink("hunterDisplay",
+          "&lt;"..areaColor.."&gt;"..string.cut(row.area.."                   ", 20)
+          .." &lt;"..classColor.."&gt;"..string.cut(row.class.."            ", 13)
+          .. " &lt;"..taliColor.."&gt;"..string.cut(string.cut(row.tali,2).."   ", 4)
+          .. " &lt;"..timeColor.."&gt;"..string.cut(string.cut((row.time/60), 4).."      ", 6)
+          .. " &lt;"..killColor.."&gt;"..string.cut(string.cut(row.kill,4).."     ", 6)
+          ..  " &lt;"..kpmColor.."&gt;"..string.cut(string.cut(row.kpm,4).."     ", 6)
+          ..  " &lt;"..expColor.."&gt;"..string.cut(string.cut(row.exp,4).."     ", 6)
+          ..  " &lt;"..rawexpColor.."&gt;"..string.cut(string.cut(row.rawexp or 0,6).."       ", 8)
+          ..  " &lt;"..epmColor.."&gt;"..string.cut(string.cut(row.epm,5).."      ", 7)
+          ..  " &lt;"..gpmColor.."&gt;"..string.cut(string.cut(math.floor(row.gpm),6).."       ", 8)
+          .. " &lt;"..goldColor.."&gt;"..string.cut(row.gold .."      ", 7),
+        ---------------------------------------------------------------------------------
+          [[ataxia.data.db.clickback(]].._..[[)]], [[]], true)                               -- What to do when clicked on
+        ---------------------------------------------------------------------------------
+      end --- End of for _,row
+    end
+  end --- End of local function showLast()
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------- Search For sortWith (First level sort: class name / all / area random
+  if sortWith then
+    if string.lower(sortWith) == "all" or
+       string.lower(sortWith) == "tali" or
+       string.lower(sortWith) == "time" or
+       string.lower(sortWith) == "kill" or 
+       string.lower(sortWith) == "kpm" or
+       string.lower(sortWith) == "exp" or
+       string.lower(sortWith) == "rawexp" or
+       string.lower(sortWith) == "epm" or
+       string.lower(sortWith) == "gold" or
+       string.lower(sortWith) == "gpm"
+     then
+      ataxia.data.db.localDB = db:fetch(ataxia.data.db.expdb.zones)
+    elseif table.contains(ataxia.data.classList, string.lower(sortWith)) then
+      ataxia.data.db.localDB = db:fetch(ataxia.data.db.expdb.zones, db:like(ataxia.data.db.expdb.zones.class,"%"..sortWith.."%")) 
+    else
+	    ataxia.data.db.localDB = db:fetch(ataxia.data.db.expdb.zones, db:like(ataxia.data.db.expdb.zones.area,"%"..sortWith.."%")) 
+    end   
+  else
+    ataxia.data.db.localDB = db:fetch(ataxia.data.db.expdb.zones)
+  end
+
+-------------------------- Purge bad data (low kill counts by area)
+  local minKills = { ["Moghedu"] = 220, ["Quartz Peak"] = 40, ["the Den of the Quisa"] = 81 }
+  for i = #ataxia.data.db.localDB, 1, -1 do
+    local row = ataxia.data.db.localDB[i]
+    local threshold = minKills[row.area]
+    if threshold and tonumber(row.kill) &lt; threshold then
+      db:delete(ataxia.data.db.expdb.zones, row._row_id)
+      table.remove(ataxia.data.db.localDB, i)
+    end
+  end
+
+-------------------------- Clear Display
+  clearWindow("hunterDisplay") 
+-------------------------- Display NO Results
+  if #ataxia.data.db.localDB == 0 then
+    cecho("hunterDisplay", "\n\n&lt;red&gt;     Nothing Found Searching &lt;gold&gt;Zones&lt;red&gt; for the string: &lt;gold&gt;"..sortWith.."\n       &lt;green&gt;Try Typing: &lt;gold&gt;zbash "..string.lower(gmcp.Char.Status.class).."\n")
+-------------------------- Display Results
+  else
+    cecho("hunterDisplay", "\n                                   &lt;"..titleColor.."&gt;Detailed Hunting Scrolls\n")
+-------------------------- Display Last 3 Zones
+  hecho("hunterDisplay", rainbow("@@#############################################################################################@@"))    
+  cecho("hunterDisplay", "\n&lt;"..titleColor.."&gt;1:")
+    showLast("when", 0)
+  cecho("hunterDisplay", "\n&lt;"..titleColor.."&gt;2:")
+    showLast("when", 1)
+  cecho("hunterDisplay", "\n&lt;"..titleColor.."&gt;3:")
+    showLast("when", 2)
+  cecho("hunterDisplay", "\n")
+  hecho("hunterDisplay", rainbow("@@#############################################################################################@@\n"))
+-------------------------- Display
+    cecho("hunterDisplay","&lt;"..menuColor.."&gt;                                ")
+    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;Tali", [[ataxia.data.db.showData("tali")]], [[]], true)
+    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;Time", [[ataxia.data.db.showData("time")]], [[]], true)
+    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;Kill", [[ataxia.data.db.showData("kill")]], [[]], true)
+    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;KPM", [[ataxia.data.db.showData("kpm")]], [[]], true)
+    cechoLink("hunterDisplay","    &lt;"..menuColor.."&gt;Exp", [[ataxia.data.db.showData("exp")]], [[]], true)
+    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;RawXP", [[ataxia.data.db.showData("rawexp")]], [[]], true)
+    cechoLink("hunterDisplay","     &lt;"..menuColor.."&gt;EPM", [[ataxia.data.db.showData("epm")]], [[]], true)
+    cechoLink("hunterDisplay","    &lt;"..menuColor.."&gt;GPM", [[ataxia.data.db.showData("gpm")]], [[]], true)
+    cechoLink("hunterDisplay","      &lt;"..menuColor.."&gt;Gold", [[ataxia.data.db.showData("gold")]], [[]], true) 
+-------------------------- Display Results based on search(sortStyle)    
+    if (sortStyle and string.lower(sortStyle) == "all") or (sortWith and string.lower(sortWith) == "all") then
+      showCharts("exp", "expColor") 
+    elseif (sortStyle and string.lower(sortStyle) == "exp") or (sortWith and string.lower(sortWith) == "exp") then
+      expColor = "gold"
+      showCharts("exp", "expColor")
+    elseif (sortStyle and string.lower(sortStyle) == "rawexp") or (sortWith and string.lower(sortWith) == "rawexp") then
+      rawexpColor = "gold"
+      showCharts("rawexp", "rawexpColor")
+    elseif (sortStyle and string.lower(sortStyle) == "epm") or (sortWith and string.lower(sortWith) == "epm") then
+      epmColor = "gold"
+      showCharts("epm", "epmColor")  
+    elseif (sortStyle and string.lower(sortStyle) == "time") or (sortWith and string.lower(sortWith) == "time") then
+      timeColor = "gold"
+      showCharts("time", "timeColor")  
+    elseif (sortStyle and string.lower(sortStyle) == "tali") or (sortWith and string.lower(sortWith) == "tali") then
+      taliColor = "gold"
+      showCharts("tali", "taliColor")    
+    elseif (sortStyle and string.lower(sortStyle) == "gpm") or (sortWith and string.lower(sortWith) == "gpm") then
+      gpmColor = "gold"
+      showCharts("gpm", "gpmColor") 
+    elseif (sortStyle and string.lower(sortStyle) == "gold") or (sortWith and string.lower(sortWith) == "gold") then
+      goldColor = "gold"
+      showCharts("gold", "goldColor")  
+    elseif (sortStyle and string.lower(sortStyle) == "kill") or (sortWith and string.lower(sortWith) == "kill") then
+      killColor = "gold"
+      showCharts("kill", "killColor")  
+    elseif (sortStyle and string.lower(sortStyle) == "kpm") or (sortWith and string.lower(sortWith) == "kpm") then
+      kpmColor = "gold"
+      showCharts("kpm", "kpmColor")  
+    else
+      kpmColor = "gold"
+      showCharts("kpm", "kpmColor")
+    end  
+    cecho("hunterDisplay","\n&lt;"..menuColor.."&gt;                                ")
+    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;Tali", [[ataxia.data.db.showData("tali", nil, "down")]], [[]], true)
+    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;Time", [[ataxia.data.db.showData("time", nil, "down")]], [[]], true)
+    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;Kill", [[ataxia.data.db.showData("kill", nil, "down")]], [[]], true)
+    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;KPM", [[ataxia.data.db.showData("kpm", nil, "down")]], [[]], true)
+    cechoLink("hunterDisplay","    &lt;"..menuColor.."&gt;Exp", [[ataxia.data.db.showData("exp", nil, "down")]], [[]], true)
+    cechoLink("hunterDisplay","   &lt;"..menuColor.."&gt;RawXP", [[ataxia.data.db.showData("rawexp", nil, "down")]], [[]], true)
+    cechoLink("hunterDisplay","     &lt;"..menuColor.."&gt;EPM", [[ataxia.data.db.showData("epm", nil, "down")]], [[]], true)
+    cechoLink("hunterDisplay","    &lt;"..menuColor.."&gt;GPM", [[ataxia.data.db.showData("gpm", nil, "down")]], [[]], true)
+    cechoLink("hunterDisplay","      &lt;"..menuColor.."&gt;Gold", [[ataxia.data.db.showData("gold", nil, "down")]], [[]], true)  
+  end
+-------------------------- Display Footer     
+  hecho("hunterDisplay", rainbow("\n@@#############################################################################################@@\n"))  
+end 
+
+
+-------------------------------------------------
+--                                             --
+--  View a saved record: ataxia.data.db.clickback()  --
+--                                             --
+-------------------------------------------------
+function ataxia.data.db.clickback(thisRow)
+  local deleteRow = 0
+-------------------------- Clear Display   
+  clearWindow("hunterDisplay") 
+-------------------------- DELETE DATABASE ENTRY ---------------------------
+  if ataxia.data.deleteAble then
+    for _, row in spairs(ataxia.data.db.localDB) do
+      if _ == thisRow then
+        deleteRow = _
+      end
+    end
+    cechoLink("hunterDisplay","\n&lt;red&gt;  --@@ DELETE ENTRY @@--  ", [[ataxia.data.db.clickbackdelete(]]..thisRow..[[)]], [[Clicking here will PERMENENTLY DELETE this entry]], true)
+  end
+----------------------------------------------------------------------------
+  hecho("hunterDisplay", rainbow("\n@@#############################################################################################@@\n")) 
+-------------------------- Display Header ^
+  cecho("hunterDisplay","\n  &lt;purple&gt;Extended Report For: &lt;gold&gt;"..ataxia.data.db.localDB[thisRow].class)
+  cecho("hunterDisplay","\n  &lt;purple&gt;Hunting in the Zone: &lt;gold&gt;"..ataxia.data.db.localDB[thisRow].area)
+  cecho("hunterDisplay","\n  &lt;purple&gt;Time Spent: &lt;ansiMagenta&gt;"..string.cut((ataxia.data.db.localDB[thisRow].time/60),4).." minutes")
+  cecho("hunterDisplay","\n  &lt;purple&gt;Experience: &lt;ansiMagenta&gt;"..ataxia.data.db.localDB[thisRow].exp)
+  cecho("hunterDisplay","\n  &lt;purple&gt;Raw Experience: &lt;gold&gt;"..(ataxia.data.db.localDB[thisRow].rawexp or 0))
+  cecho("hunterDisplay","\n  &lt;purple&gt;Experience Modifier: &lt;ansiMagenta&gt;"..ataxia.data.db.localDB[thisRow].boost.."\%\n")
+  cecho("hunterDisplay","\n  &lt;purple&gt;Stats: &lt;ansiMagenta&gt;Str: &lt;gold&gt;"..ataxia.data.db.localDB[thisRow].str.." &lt;ansiMagenta&gt;Dex: &lt;gold&gt;"..ataxia.data.db.localDB[thisRow].dex.." &lt;ansiMagenta&gt;Int: &lt;gold&gt;"..ataxia.data.db.localDB[thisRow].int.." &lt;ansiMagenta&gt;Con: &lt;gold&gt;"..ataxia.data.db.localDB[thisRow].con.."\n")
+  cecho("hunterDisplay","\n     &lt;purple&gt;Critical Hit Chance: &lt;ansiMagenta&gt;"..ataxia.data.db.localDB[thisRow].critpercent.."\%")
+  cecho("hunterDisplay","\n &lt;gold&gt;"..ataxia.data.db.localDB[thisRow].crits.."  &lt;purple&gt;Critical Hits")
+  cecho("hunterDisplay","\n &lt;gold&gt;"..string.cut(ataxia.data.db.localDB[thisRow].crits1.."  ",3).." &lt;ansiMagenta&gt; 2x "..string.cut("Critical                    ",25).."&lt;gold&gt;"..ataxia.data.db.localDB[thisRow].glyph.."  &lt;ansiMagenta&gt;Seared Glyph")
+  cecho("hunterDisplay","\n &lt;gold&gt;"..string.cut(ataxia.data.db.localDB[thisRow].crits2.."  ",3).." &lt;ansiMagenta&gt; 4x "..string.cut("Crushing                    ",25).."&lt;gold&gt;"..ataxia.data.db.localDB[thisRow].soa.."  &lt;ansiMagenta&gt;Shield of Absorption")
+  cecho("hunterDisplay","\n &lt;gold&gt;"..string.cut(ataxia.data.db.localDB[thisRow].crits3.."  ",3).." &lt;ansiMagenta&gt; 8x "..string.cut("Obliterating                    ",25).."&lt;gold&gt;"..ataxia.data.db.localDB[thisRow].soaparagon.."  &lt;ansiMagenta&gt;SoA Paragon")
+  cecho("hunterDisplay","\n &lt;gold&gt;"..string.cut(ataxia.data.db.localDB[thisRow].crits4.."  ",3).." &lt;ansiMagenta&gt;16x "..string.cut("Annihilating                    ",25).."&lt;gold&gt;"..ataxia.data.db.localDB[thisRow].maya.."  &lt;ansiMagenta&gt;Maya Figurine")
+  cecho("hunterDisplay","\n &lt;gold&gt;"..string.cut(ataxia.data.db.localDB[thisRow].crits5.."  ",3).." &lt;ansiMagenta&gt;32x "..string.cut("World Shattering                    ",25))
+  cecho("hunterDisplay","\n &lt;gold&gt;"..string.cut(ataxia.data.db.localDB[thisRow].crits6.."  ",3).." &lt;ansiMagenta&gt;64x "..string.cut("Plane Razing                    ",25))
+  cecho("hunterDisplay","\n")   
+  cecho("hunterDisplay","\n &lt;gold&gt;"..ataxia.data.db.localDB[thisRow].gold.." &lt;ansiMagenta&gt; : Total Gold Gained")
+  cecho("hunterDisplay","\n &lt;gold&gt;"..string.cut((ataxia.data.db.localDB[thisRow].gpm),5).."&lt;ansiMagenta&gt; : Gold Gained Per Minute")
+  cecho("hunterDisplay","\n") 
+-------------------------- Breakdown the killList string into a table for display
+  local tempTable = string.split(ataxia.data.db.localDB[thisRow].killlist, "| ")
+  local tempKillTable = {}
+  for k, v in pairs(tempTable) do
+    if tempKillTable[v] then 
+      tempKillTable[v] = tempKillTable[v] + 1
+    else
+      tempKillTable[v] = 1
+    end
+  end   
+  cecho("hunterDisplay","\n &lt;gold&gt;"..ataxia.data.db.localDB[thisRow].kill.." &lt;purple&gt;Kills at &lt;gold&gt;"..string.cut(ataxia.data.db.localDB[thisRow].kpm,5).."&lt;purple&gt; Kills Per Minute")
+  for k, v in spairs(tempKillTable) do
+    if v&gt;9 then
+      cecho("hunterDisplay","\n  &lt;purple&gt;\["..string.cut(" ",1).."&lt;gold&gt;"..string.cut(v.." ",3).."&lt;purple&gt;\]  &lt;ansiMagenta&gt;"..k)
+    else
+      cecho("hunterDisplay","\n  &lt;purple&gt;\["..string.cut("  ",2).."&lt;gold&gt;"..string.cut(v.." ",3).."&lt;purple&gt;\]  &lt;ansiMagenta&gt;"..k)
+    end
+  end
+  cecho("hunterDisplay","\n") 
+-------------------------- Breakdown the long taliList string into a table for display
+  cecho("hunterDisplay","\n &lt;purple&gt;Total Talismans: &lt;gold&gt;"..ataxia.data.db.localDB[thisRow].tali)
+  if tonumber(ataxia.data.db.localDB[thisRow].tali) &gt; 0 then
+  tempTable = string.split(ataxia.data.db.localDB[thisRow].talilist, "| ") 
+  local tempTaliTable = {}
+  for k, v in pairs(tempTable) do
+    if tempTaliTable[v] then 
+      tempTaliTable[v] = tempTaliTable[v] + 1
+    else
+      tempTaliTable[v] = 1
+    end
+  end   
+  for k, v in spairs(tempTaliTable) do 
+    if v&gt;9 then
+      cecho("hunterDisplay","\n  &lt;purple&gt;\["..string.cut(" ",1).."&lt;gold&gt;"..string.cut(v.." ",3).."&lt;purple&gt;\]  &lt;ansiMagenta&gt;"..string.gsub(k, ":", "&lt;purple&gt;:"))
+    else
+      cecho("hunterDisplay","\n  &lt;purple&gt;\["..string.cut("  ",2).."&lt;gold&gt;"..string.cut(v.." ",3).."&lt;purple&gt;\]  &lt;ansiMagenta&gt;"..string.gsub(k, ":", "&lt;purple&gt;:"))
+    end
+  end 
+  end
+-------------------------- Display Footer  
+  cecho("hunterDisplay","\n")
+  hecho("hunterDisplay", rainbow("\n@@#############################################################################################@@"))
+  cechoLink("hunterDisplay", "\n                                    Click Here For zBash Chart                               ", [[ataxia.data.db.showData("kpm")]], [[]], true)
+  hecho("hunterDisplay", rainbow("\n@@#############################################################################################@@"))
+end 
+
+
+-------------------------------------------------
+--                                             --
+--  Delete a saved record:                     --
+--               ataxia.data.db.clickbackdelete()    --
+--                                             --
+-------------------------------------------------
+function ataxia.data.db.clickbackdelete(thisRow)
+  db:delete(ataxia.data.db.expdb.zones, ataxia.data.db.localDB[thisRow]._row_id)
+  clearWindow("hunterDisplay") 
+  hecho("hunterDisplay", rainbow("\n\n\n\n@@#############################################################################################@@"))  
+  cecho("hunterDisplay","\n&lt;red&gt;                                     --@@ DELETED ENTRY @@--  ")
+  hecho("hunterDisplay", rainbow("\n@@#############################################################################################@@\n")) 
+  cechoLink("hunterDisplay", "                                    Click Here For zBash Chart                               ", [[ataxia.data.db.showData("kpm")]], [[]], true)
+  hecho("hunterDisplay", rainbow("\n      @@#################################################################################@@\n"))
+end
+
+
+</script>
+  <packageName/>
+<eventHandlerList>
+</eventHandlerList>
+</Script>
+            <Script isActive="yes" isFolder="no">
+  <name>movement</name>
+              <script>--[[mudlet
+type: script
+name: movement
+hierarchy:
+- Levi_Ataxia
+- LEVI
+- Ataxia
+- Basher
+- ataxia.data
+- ataxia.data
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
+-- unnamed &gt; For Levi &gt; Levi_062424 &gt; leviticus &gt; LeviAtaxia &gt; Ataxia-DownloadThis &gt; Basher &gt; ataxia.data &gt; ataxia.data &gt; movement
+
+-------------------------------------------------
+--                                             --
+--         ataxia.data.getClassWithSpec()            --
+--  Format class name with knight spec         --
+--                                             --
+-------------------------------------------------
+function ataxia.data.getClassWithSpec()
+  local class = gmcp.Char.Status.class
+  local spec = ataxia.vitals.knight
+
+  -- Knight class abbreviations
+  local knightAbbrev = {
+    ["Infernal"] = "Inf",
+    ["Runewarden"] = "Run",
+    ["Paladin"] = "Pal",
+    ["Unnamable"] = "Unn"
+  }
+
+  -- Spec abbreviations
+  local specAbbrev = {
+    ["Dual Cutting"] = "DWC",
+    ["Dual Blunt"] = "DWB",
+    ["Sword and Shield"] = "S&amp;B",
+    ["Two-Handed"] = "2H"
+  }
+
+  -- If knight class with known spec, format as "Abbrev - Spec"
+  if knightAbbrev[class] and spec and specAbbrev[spec] then
+    return knightAbbrev[class] .. " - " .. specAbbrev[spec]
+  end
+
+  -- Otherwise return original class name
+  return class
+end
+
+-------------------------------------------------
+--                                             --
+--               ataxia.data.movement()              --
+--  This Function Runs Everytime Room Updates  --
+--                                             --
+-------------------------------------------------
+function ataxia.data.movement() 
+-----------------------------------------------------------------------------------------------
+-- Update Area    
+  if gmcp.Room.Info.area ~= ataxia.data.char.lastArea then  -------------&lt;--&lt;--&lt; Zone Change Detected
+
+-----------------------------------------------------------------------------------------------
+-- Collect experience percent from gmcp, check old xp (ataxia.data.char.oxp)
+    if string.match(gmcp.Char.Status.xp, "%d+.%d+") then
+      ataxia.data.char.xp = tonumber(string.match(gmcp.Char.Status.xp, "%d+.%d+"))
+    elseif string.match(gmcp.Char.Status.xp, "%d+") then
+      ataxia.data.char.xp = tonumber(string.match(gmcp.Char.Status.xp, "%d+"))
+    end
+    if ataxia.data.char.oxp == 0 then ataxia.data.char.oxp = ataxia.data.char.xp end
+
+-----------------------------------------------------------------------------------------------
+-- If your exp is not = to your old exp AND you have been in a zone FOR MORE &gt; THAN 60 SECONDS
+    if (ataxia.data.char.oxp ~= ataxia.data.char.xp or ataxia.data.char.killsCount &gt; 0) and getStopWatchTime("zoneHuntWatch") &gt; 60 then
+      stopStopWatch("zoneHuntWatch")  
+
+-----------------------------------------------------------------------------------------------
+-- Update ataxia.data.Character Variables used for saving to the Database
+      ataxia.data.char.tempTime = getStopWatchTime("zoneHuntWatch")
+      ataxia.data.char.minuteTime = ataxia.data.char.tempTime/60
+      ataxia.data.char.xpGains = ataxia.data.char.xp-ataxia.data.char.oxp
+      ataxia.data.char.xpGainsMin = ataxia.data.char.xpGains/ataxia.data.char.minuteTime
+      ataxia.data.char.killsPerMinute = ataxia.data.char.killsCount/ataxia.data.char.minuteTime
+      ataxia.data.char.gpm = ataxia.data.char.gold/ataxia.data.char.minuteTime
+
+-----------------------------------------------------------------------------------------------
+-- Convert tables to strings for the database (will turn back to tables when pulled)
+      ataxia.data.char.killListString = nil
+      if #ataxia.data.char.killList &gt; 0 then
+        ataxia.data.char.killListString = table.concat(ataxia.data.char.killList, "| ")
+      end
+      ataxia.data.char.taliListString = nil
+      if #ataxia.data.char.taliList &gt; 0 then
+        ataxia.data.char.taliListString = table.concat(ataxia.data.char.taliList, "| ")
+      end
+
+-----------------------------------------------------------------------------------------------
+-- Record when this happened with Epoch time
+      ataxia.data.char.when = getEpoch()
+      
+-----------------------------------------------------------------------------------------------
+-- Send All information to database   
+      ataxia.data.db.zoneAdd(
+        ataxia.data.char.lastArea,
+        ataxia.data.getClassWithSpec(), 
+        ataxia.data.defs.exp, 
+        ataxia.data.defs.crit, 
+        ataxia.data.char.tempTime, 
+        ataxia.data.char.xpGainsMin,
+        ataxia.data.char.xpGains,
+        ataxia.data.char.rawExpGains,
+        ataxia.data.char.killsCount, 
+        ataxia.data.char.killsPerMinute, 
+        ataxia.data.char.gold, 
+        ataxia.data.char.gpm, 
+        ataxia.data.char.str, 
+        ataxia.data.char.dex, 
+        ataxia.data.char.int, 
+        ataxia.data.char.con, 
+        ataxia.data.char.totalAttacks, 
+        ataxia.data.char.crithits, ataxia.data.char.crit1, ataxia.data.char.crit2, ataxia.data.char.crit3, ataxia.data.char.crit4, ataxia.data.char.crit5, ataxia.data.char.crit6, 
+        ataxia.data.char.shield, 
+        ataxia.data.char.paragon, 
+        ataxia.data.char.searedglyph, 
+        ataxia.data.char.mayafigure, 
+        ataxia.data.char.taliCount, 
+        ataxia.data.char.killListString, 
+        ataxia.data.char.taliListString,
+        ataxia.data.char.when
+        )
+    end
+
+-----------------------------------------------------------------------------------------------
+-- Reset all saved data for next area
+    ataxia.data.char = {
+      lastArea = gmcp.Room.Info.area,
+      tempTime = 0,
+      minuteTime = 0,
+      xpGains = 0,
+      xpGainsMin = 0,
+      rawExpGains = 0,
+      killsPerMinute = 0, 
+      killsCount = 0,
+      taliCount = 0,
+      ogold = gmcp.Char.Status.gold,
+      gold = 0,
+      gpm = 0,
+      totalAttacks = 0,
+      crithits = 0,
+      crit1 = 0,
+      crit2 = 0,
+      crit3 = 0,
+      crit4 = 0,
+      crit5 = 0,
+      crit6 = 0,
+      searedglyph = 0,
+      shield = 0,
+      paragon = 0,
+      mayafigure = 0,     
+      killList = {},
+      taliList = {},
+      when= 0,
+    }
+
+-----------------------------------------------------------------------------------------------
+-- Save OLD experience for new zone    
+    if string.match(gmcp.Char.Status.xp, "%d+.%d+") then
+      ataxia.data.char.oxp = tonumber(string.match(gmcp.Char.Status.xp, "%d+.%d+"))
+    elseif string.match(gmcp.Char.Status.xp, "%d+") then
+      ataxia.data.char.oxp = tonumber(string.match(gmcp.Char.Status.xp, "%d+"))
+    end
+
+-----------------------------------------------------------------------------------------------
+-- Reset and Start Stopwatch for this zone (always running / only resets here on zone change)
+    resetStopWatch("zoneHuntWatch")
+    startStopWatch("zoneHuntWatch") 
+	end  
+end
+-----------------------------------------------------------------------------------------------
+registerAnonymousEventHandler("gmcp.Room.Info", "ataxia.data.movement") ---&lt;--&lt; Run When Room Updates
+-----------------------------------------------------------------------------------------------</script>
+  <packageName/>
+<eventHandlerList>
+</eventHandlerList>
+</Script>
             <Script isActive="yes" isFolder="no">
   <name>buildHunter</name>
-              <script>-- unnamed &gt; For Levi &gt; Levi_062424 &gt; leviticus &gt; LeviAtaxia &gt; Ataxia-DownloadThis &gt; Basher &gt; zData &gt; zData &gt; buildHunter
+              <script>-- unnamed &gt; For Levi &gt; Levi_062424 &gt; leviticus &gt; LeviAtaxia &gt; Ataxia-DownloadThis &gt; Basher &gt; ataxia.data &gt; ataxia.data &gt; buildHunter
 
-function zData.buildHunter()
-  zData.hunter = {}
+function ataxia.data.buildHunter()
+  ataxia.data.hunter = {}
 
   --Create the hunter Adjustable with position saving
-  zData.hunter.window = Adjustable.Container:new({
+  ataxia.data.hunter.window = Adjustable.Container:new({
     name = "zgui.hunter.window",
     x = 0, y = 0,
     width = "50%",
@@ -25505,15 +25548,15 @@ function zData.buildHunter()
   },main)
 
   --Create the hunter container
-  zData.hunter.container = Geyser.Container:new({
-    name = "zData.hunter.back",
+  ataxia.data.hunter.container = Geyser.Container:new({
+    name = "ataxia.data.hunter.back",
     x = 0, y = 0,
     width = "100%",
     height = "100%",
-  },zData.hunter.window)
+  },ataxia.data.hunter.window)
 
   --Create the hunter Console
-  zData.hunter.console = Geyser.MiniConsole:new({
+  ataxia.data.hunter.console = Geyser.MiniConsole:new({
     name = "hunterDisplay",
     x = 0, y = 0,
     autoWrap = false,
@@ -25521,39 +25564,41 @@ function zData.buildHunter()
     height = "100%",
     color="black",
     scrollBar = true,
-  },zData.hunter.container)
+  },ataxia.data.hunter.container)
 
   setFontSize("hunterDisplay", 9)
-  zData.hunter.window:setTitle("Hunting Scrolls","gray")
+  ataxia.data.hunter.window:setTitle("Hunting Scrolls","gray")
 
   -- Load saved position if it exists
-  zData.hunter.window:loadPosition()
+  if ataxia.data.hunter.window.loadPosition then
+    ataxia.data.hunter.window:loadPosition()
+  end
 
-  zData.hunter.window:show()
+  ataxia.data.hunter.window:show()
 end
 
 -- Toggle lock state for hunting scrolls window
-function zData.hunterToggleLock()
-  if not zData.hunter or not zData.hunter.window then
-    zData.echo("Hunter window not open")
+function ataxia.data.hunterToggleLock()
+  if not ataxia.data.hunter or not ataxia.data.hunter.window then
+    ataxia.data.echo("Hunter window not open")
     return
   end
 
-  if zData.hunter.window.locked then
-    zData.hunter.window:unlockContainer()
-    zData.echo("Hunting Scrolls: &lt;green&gt;UNLOCKED&lt;reset&gt; - drag to reposition")
+  if ataxia.data.hunter.window.locked then
+    ataxia.data.hunter.window:unlockContainer()
+    ataxia.data.echo("Hunting Scrolls: &lt;green&gt;UNLOCKED&lt;reset&gt; - drag to reposition")
   else
-    zData.hunter.window:lockContainer()
-    zData.hunter.window:savePosition()
-    zData.echo("Hunting Scrolls: &lt;red&gt;LOCKED&lt;reset&gt; - position saved")
+    ataxia.data.hunter.window:lockContainer()
+    ataxia.data.hunter.window:savePosition()
+    ataxia.data.echo("Hunting Scrolls: &lt;red&gt;LOCKED&lt;reset&gt; - position saved")
   end
 end
 
 -- Save position without locking
-function zData.hunterSavePosition()
-  if zData.hunter and zData.hunter.window then
-    zData.hunter.window:savePosition()
-    zData.echo("Hunting Scrolls position saved")
+function ataxia.data.hunterSavePosition()
+  if ataxia.data.hunter and ataxia.data.hunter.window then
+    ataxia.data.hunter.window:savePosition()
+    ataxia.data.echo("Hunting Scrolls position saved")
   end
 end</script>
   <packageName/>
@@ -28790,6 +28835,8 @@ end</script>
   end
 end
 
+-- Shim so zgui.modules dispatch (zgui["buildChat"]()) still finds this function
+zgui.buildChat = ataxia.buildChat
 </script>
   <packageName/>
 <eventHandlerList>
@@ -71893,6 +71940,7 @@ classDetect.curingsetMap = classDetect.curingsetMap or {
   ["Bard"]          = "bard",
   ["Blademaster"]   = "blademaster",
   ["Monk"]          = "monk",
+  ["Shikudo"]       = "shikudo",
   ["Magi"]          = "magi",
   ["Priest"]        = "priest",
   ["Depthswalker"]  = "depthswalker",
@@ -79965,43 +80013,24 @@ ataxiaEcho("Update complete. Total of "..count.." people have been re-checked.")
             <Alias isActive="yes" isFolder="no">
   <name>Show Class Count</name>
               <script>local classList = {"Alchemist", "Apostate", "Bard", "Blademaster", "Depthswalker", "Dragon", "Druid", "Infernal", "Jester", "Magi", "Monk", "Occultist",
-	"Paladin", "Pariah", "Priest", "Psion", "Runewarden", "Sentinel", "Serpent", "Shaman", "Sylvan",}
-local classes = {
-	Alchemist = {},
-	Apostate = {},
-	Bard = {},
-	Blademaster = {},
-	Depthswalker = {},
-	Dragon = {},
-	Druid = {},
-	Infernal = {},
-	Jester = {},
-	Magi = {},
-	Monk = {},
-	Occultist = {},
-	Paladin = {},
-  Pariah = {},
-	Priest = {},
-	Psion = {},
-	Runewarden = {},
-	Sentinel = {},
-	Serpent = {},
-	Shaman = {},
-	Sylvan = {},
-}
+	"Paladin", "Pariah", "Priest", "Psion", "Runewarden", "Sentinel", "Serpent", "Shaman", "Sylvan",
+	"Unnamable", "Airlord", "Earthlord", "Firelord", "Waterlord",}
+local classes = {}
+for _, c in ipairs(classList) do classes[c] = {} end
 
 for player, tab in pairs(ataxiaNDB.players) do
-	if tab.class ~= "" then
+	if tab.class and tab.class ~= "" then
+		if not classes[tab.class] then classes[tab.class] = {} end
 		table.insert(classes[tab.class], player)
-		if tab.level &gt;= 99 then
-		table.insert(classes.Dragon, player)
-		end	
+		if tab.level and tab.level &gt;= 99 then
+			table.insert(classes.Dragon, player)
+		end
 	end
 end
 
 ataxiaEcho("Displaying class count of currently tracked players.")
 for _, class in ipairs(classList) do
-	cecho("\n &lt;DimGrey&gt;[&lt;NavajoWhite&gt;"..class:title().."&lt;DimGrey&gt;]"..string.rep(" ", 13-string.len(class)).."- &lt;NavajoWhite&gt;"..#classes[class].." tracked people are "..class..".")
+	cecho("\n &lt;DimGrey&gt;[&lt;NavajoWhite&gt;"..class:title().."&lt;DimGrey&gt;]"..string.rep(" ", math.max(0, 13-string.len(class))).."- &lt;NavajoWhite&gt;"..#classes[class].." tracked people are "..class..".")
 end
 send(" ")</script>
   <command/>
@@ -80011,44 +80040,27 @@ send(" ")</script>
             <Alias isActive="yes" isFolder="no">
   <name>Show City Count</name>
               <script>local classList = {"Alchemist", "Apostate", "Bard", "Blademaster", "Depthswalker", "Dragon", "Druid", "Infernal", "Jester", "Magi", "Monk", "Occultist",
-	"Paladin", "Pariah", "Priest", "Psion", "Runewarden", "Sentinel", "Serpent", "Shaman", "Sylvan"}
-local classes = {
-	Alchemist = {},
-	Apostate = {},
-	Bard = {},
-	Blademaster = {},
-	Depthswalker = {},
-	Dragon = {},
-	Druid = {},
-	Infernal = {},
-	Jester = {},
-	Magi = {},
-	Monk = {},
-	Occultist = {},
-	Paladin = {},
-  Pariah = {},
-	Priest = {},
-	Psion = {},
-	Runewarden = {},
-	Sentinel = {},
-	Serpent = {},
-	Shaman = {},
-	Sylvan = {},
-}
+	"Paladin", "Pariah", "Priest", "Psion", "Runewarden", "Sentinel", "Serpent", "Shaman", "Sylvan",
+	"Unnamable", "Airlord", "Earthlord", "Firelord", "Waterlord",}
+local classes = {}
+for _, c in ipairs(classList) do classes[c] = {} end
 
+local cityName = matches[2]:title()
 for player, tab in pairs(ataxiaNDB.players) do
-	if (( tab.city == matches[2]:title() ) or (tab.city == "None" and matches[2]:title() == "Rogues")) and tab.class ~= "" then
+	if ((tab.city == cityName) or (tab.city == "None" and cityName == "Rogues")) and tab.class and tab.class ~= "" then
+		if not classes[tab.class] then classes[tab.class] = {} end
 		table.insert(classes[tab.class], player)
-		if tab.level &gt;= 99 then
+		if tab.level and tab.level &gt;= 99 then
 			table.insert(classes.Dragon, player)
-		end	
+		end
 	end
 end
 
-ataxiaEcho("Displaying class count of currently tracked players in &lt;"..ataxiaNDB.highlighting[matches[2]:title()].."&gt;"..matches[2]:title()..".")
+local hlColour = ataxiaNDB.highlighting[cityName] or ataxiaNDB.highlighting.Rogues
+ataxiaEcho("Displaying class count of currently tracked players in &lt;"..hlColour.."&gt;"..cityName..".")
 for _, class in ipairs(classList) do
 	if #classes[class] &gt; 0 then
-		cecho("\n &lt;DimGrey&gt;[&lt;NavajoWhite&gt;"..class:title().."&lt;DimGrey&gt;]"..string.rep(" ", 13-string.len(class)).."- &lt;NavajoWhite&gt;"..#classes[class].." tracked people are "..class..".")
+		cecho("\n &lt;DimGrey&gt;[&lt;NavajoWhite&gt;"..class:title().."&lt;DimGrey&gt;]"..string.rep(" ", math.max(0, 13-string.len(class))).."- &lt;NavajoWhite&gt;"..#classes[class].." tracked people are "..class..".")
 	end
 end
 send(" ")</script>
@@ -80115,7 +80127,8 @@ end
             <Alias isActive="yes" isFolder="no">
   <name>Tracked of class</name>
               <script>local classList = {"Alchemist", "Apostate", "Bard", "Blademaster", "Depthswalker", "Dragon", "Druid", "Infernal", "Jester", "Magi", "Monk", "Occultist",
-	"Paladin", "Priest", "Psion", "Runewarden", "Sentinel", "Serpent", "Shaman", "Sylvan"}
+	"Paladin", "Pariah", "Priest", "Psion", "Runewarden", "Sentinel", "Serpent", "Shaman", "Sylvan",
+	"Unnamable", "Airlord", "Earthlord", "Firelord", "Waterlord"}
 	
 	ataxiaEcho("Displaying tracked people as "..matches[2].." class:")
 	local people = {}
@@ -80355,6 +80368,41 @@ send(" ")
   <command/>
   <packageName/>
   <regex>^an threats(?: (\w+)|)$</regex>
+</Alias>
+            <Alias isActive="yes" isFolder="no">
+  <name>Refresh Honours</name>
+              <script>local cityFilter = matches[2] and matches[2]:title() or nil
+local queue = {}
+
+for _, v in pairs(ataxiaNDB.players) do
+	if not cityFilter or v.city == cityFilter or (cityFilter == "Rogues" and v.city == "None") then
+		table.insert(queue, v.name)
+	end
+end
+
+if #queue == 0 then
+	ataxiaEcho("No players found" .. (cityFilter and (" in " .. cityFilter) or "") .. ".")
+	return
+end
+
+table.sort(queue)
+local delay = 2
+
+ataxiaEcho("Sending honours for " .. #queue .. " player(s)" .. (cityFilter and (" from " .. cityFilter) or "") .. ". ETA: ~" .. math.ceil(#queue * delay) .. "s.")
+
+for i, name in ipairs(queue) do
+	tempTimer((i - 1) * delay, function()
+		send("honours " .. name, false)
+	end)
+end
+
+tempTimer(#queue * delay + 1, function()
+	ataxiaEcho("Honours refresh complete.")
+end)
+</script>
+  <command/>
+  <packageName/>
+  <regex>^an refresh(?: (\w+)|)$</regex>
 </Alias>
             <Alias isActive="yes" isFolder="no">
   <name>Class Detect</name>
@@ -82810,19 +82858,6 @@ end</script>
   <packageName/>
   <regex/>
           <Alias isActive="yes" isFolder="no">
-  <name>(zBash)</name>
-            <script>if matches[3] then
-  zData.db.showData(matches[2], matches[3])
-elseif matches[2] then
-  zData.db.showData(matches[2])
-else
-  zData.db.showData()
-end</script>
-  <command/>
-  <packageName/>
-  <regex>^zbash(?: (\w+))?(?: (\w+))?$</regex>
-</Alias>
-          <Alias isActive="yes" isFolder="no">
   <name>ZGUI BASH</name>
             <script>zgui.buildBashWindow()</script>
   <command/>
@@ -83029,6 +83064,26 @@ end</script>
   <command/>
   <packageName/>
   <regex>^ataxiachat$</regex>
+</Alias>
+</AliasGroup>
+        <AliasGroup isActive="yes" isFolder="yes">
+  <name>ataxia.data</name>
+          <script/>
+  <command/>
+  <packageName/>
+  <regex/>
+          <Alias isActive="yes" isFolder="no">
+  <name>(zBash)</name>
+            <script>if matches[3] then
+  ataxia.data.db.showData(matches[2], matches[3])
+elseif matches[2] then
+  ataxia.data.db.showData(matches[2])
+else
+  ataxia.data.db.showData()
+end</script>
+  <command/>
+  <packageName/>
+  <regex>^zbash(?: (\w+))?(?: (\w+))?$</regex>
 </Alias>
 </AliasGroup>
 </AliasGroup>
@@ -120534,7 +120589,14 @@ end</script>
 </Trigger>
               <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Monk Class Grab</name>
-                <script>classDetect.setAttackerClass(matches[2], "Monk")
+                <script>-- Shikudo uses staves; Tekura uses bare fists/kicks
+-- Staff attacks contain weapon references in the line text
+if line:find("whips") or line:find("staff") or line:find("thrust")
+   or line:find("kata") or line:find("sweeps") then
+  classDetect.setAttackerClass(matches[2], "Shikudo")
+else
+  classDetect.setAttackerClass(matches[2], "Monk")
+end
 </script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
@@ -125554,8 +125616,8 @@ end</script>
 </regexCodePropertyList>
           <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Target Slain</name>
-            <script>zData.char.killsCount = zData.char.killsCount + 1
-table.insert(zData.char.killList, 1, matches[2])</script>
+            <script>ataxia.data.char.killsCount = ataxia.data.char.killsCount + 1
+table.insert(ataxia.data.char.killList, 1, matches[2])</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -125578,13 +125640,13 @@ table.insert(zData.char.killList, 1, matches[2])</script>
   <name>Catch Stats</name>
             <script>deleteLine()
 if matches[2] == "strength" then
-  zData.char.str = matches[3]
+  ataxia.data.char.str = matches[3]
 elseif matches[2] == "dexterity" then
-  zData.char.dex = matches[3]
+  ataxia.data.char.dex = matches[3]
 elseif matches[2] == "intelligence" then
-  zData.char.int = matches[3]
+  ataxia.data.char.int = matches[3]
 elseif matches[2] == "constitution" then
-  zData.char.con = matches[3]
+  ataxia.data.char.con = matches[3]
 end</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
@@ -125606,7 +125668,7 @@ end</script>
 </Trigger>
           <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Exp From DEF</name>
-            <script>zData.defs.exp = matches[2]</script>
+            <script>ataxia.data.defs.exp = matches[2]</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -125627,7 +125689,7 @@ end</script>
 </Trigger>
           <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Crit From DEF</name>
-            <script>zData.defs.crit = matches[2]</script>
+            <script>ataxia.data.defs.crit = matches[2]</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -125672,19 +125734,19 @@ send("show con")</script>
 </Trigger>
           <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Crit Hit</name>
-            <script>zData.db.addChar("crithits")
+            <script>ataxia.data.db.addChar("crithits")
 if matches[3] == "CRITICAL" then
-  zData.db.addChar("crit1")
+  ataxia.data.db.addChar("crit1")
 elseif matches[3] == "CRUSHING CRITICAL" then
-  zData.db.addChar("crit2")
+  ataxia.data.db.addChar("crit2")
 elseif matches[3] == "OBLITERATING CRITICAL" then
-  zData.db.addChar("crit3")
+  ataxia.data.db.addChar("crit3")
 elseif matches[3] == "ANNIHILATINGLY POWERFUL CRITICAL" then
-  zData.db.addChar("crit4")
+  ataxia.data.db.addChar("crit4")
 elseif matches[3] == "WORLD-SHATTERING CRITICAL" then
-  zData.db.addChar("crit5")
+  ataxia.data.db.addChar("crit5")
 elseif matches[3] == "PLANE-RAZING CRITICAL" then
-  zData.db.addChar("crit6")
+  ataxia.data.db.addChar("crit6")
 end</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
@@ -125708,7 +125770,7 @@ end</script>
 </Trigger>
           <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>SoA Paragon</name>
-            <script>zData.db.addChar("paragon")</script>
+            <script>ataxia.data.db.addChar("paragon")</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -125729,7 +125791,7 @@ end</script>
 </Trigger>
           <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Maya Proc</name>
-            <script>zData.db.addChar("mayafigure")</script>
+            <script>ataxia.data.db.addChar("mayafigure")</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -125750,7 +125812,7 @@ end</script>
 </Trigger>
           <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Seared Glyph Armour</name>
-            <script>zData.db.addChar("searedglyph")</script>
+            <script>ataxia.data.db.addChar("searedglyph")</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -125771,7 +125833,7 @@ end</script>
 </Trigger>
           <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>SoA Shield</name>
-            <script>zData.db.addChar("shield")</script>
+            <script>ataxia.data.db.addChar("shield")</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -125792,8 +125854,8 @@ end</script>
 </Trigger>
           <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Picked Up Gold</name>
-            <script>zData.char.gold = zData.char.gold + matches[2]
-zData.char.ogold = tonumber(gmcp.Char.Status.gold)</script>
+            <script>ataxia.data.char.gold = ataxia.data.char.gold + matches[2]
+ataxia.data.char.ogold = tonumber(gmcp.Char.Status.gold)</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -125814,9 +125876,9 @@ zData.char.ogold = tonumber(gmcp.Char.Status.gold)</script>
 </Trigger>
           <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Gold Attractor</name>
-            <script>if zData.char.ogold ~= tonumber(gmcp.Char.Status.gold) then
-  zData.char.gold = zData.char.gold + (tonumber(gmcp.Char.Status.gold) - zData.char.ogold)
-  zData.char.ogold = tonumber(gmcp.Char.Status.gold)
+            <script>if ataxia.data.char.ogold ~= tonumber(gmcp.Char.Status.gold) then
+  ataxia.data.char.gold = ataxia.data.char.gold + (tonumber(gmcp.Char.Status.gold) - ataxia.data.char.ogold)
+  ataxia.data.char.ogold = tonumber(gmcp.Char.Status.gold)
 end</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
@@ -125838,9 +125900,9 @@ end</script>
 </Trigger>
           <Trigger isActive="yes" isFolder="no" isMultiline="yes" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Talisman Found</name>
-            <script>zData.char.taliCount = zData.char.taliCount + 1
-local tempName = multimatches[2][2].." : "..multimatches[1][2] 
-table.insert(zData.char.taliList, 1, tempName)</script>
+            <script>ataxia.data.char.taliCount = ataxia.data.char.taliCount + 1
+local tempName = multimatches[2][2].." : "..multimatches[1][2]
+table.insert(ataxia.data.char.taliList, 1, tempName)</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>2</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
@@ -125863,7 +125925,7 @@ table.insert(zData.char.taliList, 1, tempName)</script>
 </Trigger>
           <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Experience Gained</name>
-            <script>zData.char.rawExpGains = zData.char.rawExpGains + tonumber(matches[2])
+            <script>ataxia.data.char.rawExpGains = ataxia.data.char.rawExpGains + tonumber(matches[2])
 </script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
@@ -142608,7 +142670,7 @@ fg("DodgerBlue")
 deselect()
 resetFormat()
 
-zData.db.addChar("paragon")</script>
+ataxia.data.db.addChar("paragon")</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>
