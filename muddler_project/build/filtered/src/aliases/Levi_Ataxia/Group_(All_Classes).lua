@@ -10,7 +10,8 @@ shikudolock()
 end
 
 if gmcp.Char.Status.class == "Serpent" then
-serp_groupattack()
+  serp_setmode_group()
+  serp_ekanelia_offense()
 end
  
 if gmcp.Char.Status.class == "Blademaster" then

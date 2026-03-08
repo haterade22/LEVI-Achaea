@@ -11,8 +11,7 @@ if isTargeted(matches[3]) then
 	dir_left = matches[4]
 
 	if not string.find(matches[1], "tumble") then
-		tAffs.paralysis = false
-		if removeAffV3 then removeAffV3("paralysis") end
+		erAff("paralysis")
 	end
 
 	ataxia_boxEcho(target.." HAS LEFT TO THE "..dir_left, "black:green")

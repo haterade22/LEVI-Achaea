@@ -4,11 +4,9 @@ ataxiaTemp.lastLimbHit = multimatches[1][3]
 
 if isTargeted(person) then
   targetIshere = true
-  tAffs.shield = false
-  if removeAffV3 then removeAffV3("shield") end
+  erAff("shield")
   moveCursor(0, getLineNumber()-1)
   tarAffed("broken"..multimatches[1][2].."leg")
-  if applyAffV3 then applyAffV3("broken"); applyAffV3("leg") end
   moveCursorEnd()
   lastLimbAttack = "shikFlashheel"
 end

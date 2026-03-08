@@ -105,44 +105,19 @@ apostate.curses = {}
 -- V3 ROUTING HELPERS (Blademaster pattern)
 --------------------------------------------------------------------------------
 
--- Check if target has an affliction (V3 -> V2 -> V1 routing)
+-- Check if target has an affliction (V3 is always on, routes through global haveAff)
 function apostate.hasAff(aff)
-  -- V3 system (highest priority - probability-based)
-  if affConfigV3 and affConfigV3.enabled then
-    if haveAffV3 then
-      return haveAffV3(aff)  -- Uses 30% threshold by default
-    end
-  end
-  -- V2 system
-  if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-    if haveAffV2 then
-      return haveAffV2(aff)
-    elseif tAffsV2 and tAffsV2[aff] then
-      return true
-    end
-    return false
-  end
-  -- V1 system
-  if tAffs and tAffs[aff] then
-    return true
-  end
-  return false
+  return haveAff(aff)
 end
 
--- Get affliction probability (0.0-1.0). Falls back to binary for V2/V1.
+-- Get affliction probability (0.0-1.0).
 function apostate.getAffProb(aff)
-  if affConfigV3 and affConfigV3.enabled and getAffProbabilityV3 then
-    return getAffProbabilityV3(aff)
-  end
-  return apostate.hasAff(aff) and 1.0 or 0
+  return getAffProbabilityV3 and getAffProbabilityV3(aff) or 0
 end
 
 -- Check which tracking system is active
 function apostate.getTrackingSystem()
-  if affConfigV3 and affConfigV3.enabled then return "V3"
-  elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then return "V2"
-  end
-  return "V1"
+  return "V3"
 end
 
 -- Get lock status with probabilities

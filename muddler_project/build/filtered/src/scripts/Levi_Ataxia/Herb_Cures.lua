@@ -9,7 +9,7 @@ hierarchy:
 - Combat
 - Affliction Tracking V2
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
 packageName: ''
 ]]--

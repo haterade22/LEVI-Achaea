@@ -12,11 +12,11 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 
 | Feature | Description |
 |---------|-------------|
-| **Affliction Tracking** | 100+ afflictions with color-coded display and three tracking layers (V1 boolean, V2 certainty, V3 probability) |
+| **Affliction Tracking** | Branching probability tracker (V3) — models multiple possible world states, resolves ambiguous cures via probabilistic branching and verification collapse |
 | **Automated Curing** | SSC integration with custom priority management, curingset profiles |
 | **Defense Management** | Automatic defense rekeeping, parry system, anti-class priority adjustments |
 | **Limb Tracking** | Self limb counter (SLC) with percentage-based damage, auto-parry, threshold alerts, party callouts |
-| **Target Affliction Tracking** | Dual-layer system (core + confidence), V2 certainty stacking, V3 probability with cure prediction |
+| **Target Affliction Tracking** | V3 probability engine with branching cure prediction, lock detection at configurable confidence thresholds |
 
 ### Class Offense Modules (18+ Classes)
 
@@ -109,6 +109,175 @@ Defaults: health, mana, and cape enabled; willpower and endurance off. Drag bars
 | **Per-System Install** | `atinstall`, `abinstall`, `aninstall` for targeted setup |
 | **Config Guides** | `levi setup guide ataxia/basher/ndb` for comprehensive option walkthrough |
 | **Settings Persistence** | All settings saved to disk via `table.save`/`table.load` |
+
+## Affliction Tracker (V3 Branching Probability Engine)
+
+The affliction tracker is the core combat intelligence system. It tracks what afflictions the target currently has, resolving the fundamental problem in Achaea combat: **ambiguous cures**. When a target eats an herb that could cure any of several afflictions, which one was actually cured?
+
+### The Problem
+
+In Achaea, each herb cures multiple possible afflictions. For example, eating **kelp** cures one of: asthma, weariness, clumsiness, sensitivity, hypochondria, parasite, or healthleech. When the target eats kelp and we've given them both asthma and clumsiness, we see the cure happen but don't know *which* affliction was removed.
+
+A simple boolean tracker must guess — and guessing wrong means our offense works against a fiction, wasting attacks or missing kill windows. The V3 system eliminates guessing entirely.
+
+### How It Works: Branching States
+
+Instead of tracking afflictions as simple true/false values, V3 maintains **multiple possible world states simultaneously**, each with a probability weight. All probabilities always sum to 1.0.
+
+**Core data structure:**
+```
+afflictionStatesV3 = {
+    {affs = {asthma=true, paralysis=true}, prob = 0.6},
+    {affs = {paralysis=true},              prob = 0.4},
+}
+-- "60% chance target has both asthma+paralysis, 40% chance only paralysis"
+```
+
+#### Definite Operations (No Branching)
+
+When we **inflict** an affliction (confirmed by a hit trigger), it's added to every branch:
+```
+Before:  {asthma=T} @ 60%  |  {} @ 40%
+Apply paralysis →
+After:   {asthma=T, paralysis=T} @ 60%  |  {paralysis=T} @ 40%
+```
+
+When we **confirm** a cure (unambiguous removal), it's removed from every branch:
+```
+Before:  {asthma=T, paralysis=T} @ 60%  |  {paralysis=T} @ 40%
+Remove paralysis →
+After:   {asthma=T} @ 60%  |  {} @ 40%
+```
+
+#### Ambiguous Cures: The Branching Step
+
+When the target eats an herb that could cure multiple afflictions they have, the system **splits each branch** into sub-branches — one for each possible cure outcome — dividing the probability equally:
+
+```
+Before:  {paralysis=T, slickness=T} @ 100%
+Target eats bloodroot (cures paralysis OR slickness) →
+
+After:
+  Branch A: {slickness=T}  @ 50%   (paralysis was cured)
+  Branch B: {paralysis=T}  @ 50%   (slickness was cured)
+```
+
+A more complex example with multiple pre-existing branches:
+```
+Before:
+  {asthma=T, paralysis=T, slickness=T} @ 60%
+  {paralysis=T, slickness=T}            @ 40%
+
+Target eats bloodroot (cures paralysis OR slickness):
+
+After:
+  {asthma=T, slickness=T}  @ 30%   (from 60%, paralysis cured)
+  {asthma=T, paralysis=T}  @ 30%   (from 60%, slickness cured)
+  {slickness=T}             @ 20%   (from 40%, paralysis cured)
+  {paralysis=T}             @ 20%   (from 40%, slickness cured)
+```
+
+#### Verification Signals: The Collapse Step
+
+Branches are resolved by **verification signals** — observable in-game events that prove an affliction's presence or absence:
+
+| Signal | Proves | Example |
+|--------|--------|---------|
+| Target fumbles | Clumsiness present | `collapseAffPresentV3("clumsiness")` |
+| Target vomits | Nausea present | `collapseAffPresentV3("nausea")` |
+| Target smokes | Asthma absent | `collapseAffAbsentV3("asthma")` |
+| Target applies salve | Slickness absent | `collapseAffAbsentV3("slickness")` |
+| Target stumbles | Dizziness present | `collapseAffPresentV3("dizziness")` |
+| Target has seizure | Epilepsy present | `collapseAffPresentV3("epilepsy")` |
+| Target paralysis fires | Paralysis present | `collapseAffPresentV3("paralysis")` |
+
+**Collapse algorithm**: Eliminate all branches that contradict the observation, then renormalize:
+
+```
+Before:
+  {clumsiness=T, asthma=T}  @ 60%
+  {asthma=T}                 @ 40%
+
+Observation: target fumbled (proves clumsiness present)
+→ Eliminate branches without clumsiness (40% branch removed)
+→ Renormalize: 60% → 100%
+
+After:
+  {clumsiness=T, asthma=T}  @ 100%
+```
+
+This is mathematically equivalent to Bayesian updating — each observation narrows the probability distribution.
+
+### Querying Affliction State
+
+The system provides probabilistic queries instead of binary answers:
+
+| Function | Returns | Usage |
+|----------|---------|-------|
+| `haveAffV3(aff)` | Boolean (prob >= 30%) | Standard combat decisions |
+| `haveAffV3(aff, 0.9)` | Boolean (prob >= 90%) | High-confidence gates |
+| `getAffProbabilityV3(aff)` | Float 0.0–1.0 | Exact probability |
+| `getStateProbabilityV3(affList)` | Float 0.0–1.0 | Joint probability of multiple affs |
+| `getAllAffProbabilitiesV3()` | Table {aff=prob, ...} | Full state snapshot |
+
+**Lock detection** uses joint probabilities:
+```
+Softlock  = P(anorexia AND asthma AND slickness)
+Hardlock  = P(anorexia AND asthma AND slickness AND impatience)
+Truelock  = P(anorexia AND asthma AND slickness AND impatience AND paralysis)
+```
+
+Locks display at 30%+ probability, with color intensity increasing at 90%+.
+
+### Performance: Keeping Branch Count Manageable
+
+Without constraints, branches would grow exponentially. Three mechanisms prevent this:
+
+1. **Deduplication**: After branching, identical affliction sets (same affs, different histories) are merged by summing their probabilities. This is the primary reduction — most cures produce duplicate states.
+
+2. **Pruning**: Branches below 1% probability are eliminated and their probability mass is redistributed proportionally to surviving branches.
+
+3. **Hard cap**: If branches exceed 50 (configurable), the lowest-probability branches are dropped and probability is redistributed.
+
+All queries use a **pre-computed cache** (`affCacheV3`) rebuilt after every state change, providing O(1) lookups regardless of branch count.
+
+### Simple Tracking (Non-Branching)
+
+Some afflictions never need branching because they're cured through unambiguous channels (limb restoration, writhing, etc.). These are tracked as simple booleans for efficiency:
+
+- Limb damage states (broken/damaged/mangled legs, arms, head)
+- Status effects (prone, stun, unconscious, sleeping)
+- Sensory (blindness, deafness)
+- Defenses tracked as afflictions (rebounding, shield)
+
+### Architecture
+
+V3 is the single source of truth. The legacy boolean table (`tAffs`) is maintained as a synchronized read cache for backward compatibility with 89+ direct-access sites across 30+ files.
+
+```
+                    ┌─────────────────────────┐
+                    │    V3 Branching Engine   │
+                    │  afflictionStatesV3[]    │
+                    │  affCacheV3{}            │
+                    └────────┬────────────────┘
+                             │ syncToOldSystemV3()
+    ┌────────────────────────┼────────────────────────┐
+    │                        │                        │
+    ▼                        ▼                        ▼
+ tarAffed()              erAff()                 haveAff()
+ (apply aff)          (remove aff)            (query aff)
+    │                        │                        │
+    ├─ tAffs[x]=true         ├─ tAffs[x]=false       ├─ haveAffV3()
+    ├─ applyAffV3()          ├─ removeAffV3()         └─ fallback: tAffs
+    └─ raiseEvent            └─ raiseEvent
+```
+
+**Key files:**
+- `affliction_tracking_core/007_Branching_State_Tracker.lua` — V3 engine (branching, collapsing, cache, sync)
+- `affliction_tracking_core/008_V3_Integration.lua` — Verification handlers, cure lists, lock detection, wrappers
+- `017_Affliction_Management.lua` — Public API (`haveAff`, `tarAffed`, `erAff`)
+
+---
 
 ## Quick Install
 
@@ -211,7 +380,7 @@ After installing, `levi setup guide` shows every configurable option across all 
 | `levi setup weapons` | Configure weapon IDs |
 | `levi setup basher` | Basher settings |
 | `levi setup sipping` | Health/mana sip thresholds |
-| `levi setup tracking` | Affliction tracking mode (V1/V2) |
+| `levi setup tracking` | Affliction tracking settings |
 | `levi setup combat` | Combat toggles (party relay, looting, etc.) |
 | `levi setup gui` | Toggle the GUI |
 | `levi setup ndb` | NDB highlighting colours |

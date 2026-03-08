@@ -4,11 +4,9 @@ local maybemiss = multimatches[3][1]
 if isTargeted(person) then
 if not wearicheck and haveAff("weariness") then
 erAff("weariness")
-if removeAffV3 then removeAffV3("weariness") end
 end
   targetIshere = true
-  tAffs.shield = false
-  if removeAffV3 then removeAffV3("shield") end
+  erAff("shield")
 
 	ataxiaTemp.ignoreShield = false
    lastLimbAttack = "snbSlice"
@@ -18,7 +16,6 @@ if gmcp.Char.Status.class == "Runewarden" then
     if next(envenomList) then
 			moveCursor(0, getLineNumber()-1)
 			tarAffed(envenomList[1])
-			if applyAffV3 then applyAffV3(envenomList[1]) end
      local affstruck = envenomList[1]
 			table.remove(envenomList, 1)
 			moveCursorEnd()
@@ -33,7 +30,6 @@ if gmcp.Char.Status.class == "Infernal" then
 		if next(envenomList) then
 			moveCursor(0, getLineNumber()-1)
 			tarAffed(envenomList[1])
-			if applyAffV3 then applyAffV3(envenomList[1]) end
      local affstruck = envenomList[1]
 			table.remove(envenomList, 1)
 			moveCursorEnd()

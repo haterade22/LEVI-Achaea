@@ -1,5 +1,4 @@
 if isTargeted(matches[2]) then
-	tAffs.curseward = false
-	if removeAffV3 then removeAffV3("curseward") end
+	erAff("curseward")
 	targetIshere = true
 end

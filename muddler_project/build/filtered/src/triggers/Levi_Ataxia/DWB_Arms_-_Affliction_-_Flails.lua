@@ -10,9 +10,8 @@ if tAffs.paralysis then
    
 else
   tarAffed("paralysis")
-  if applyAffV3 then applyAffV3("paralysis") end
    if partyrelay then send("pt "..target..": paralysis") end
 
 end
 
-tempTimer(2.5, [[tarAffed("paralysis"); if applyAffV3 then applyAffV3("paralysis") end]])
+tempTimer(2.5, [[tarAffed("paralysis")]])

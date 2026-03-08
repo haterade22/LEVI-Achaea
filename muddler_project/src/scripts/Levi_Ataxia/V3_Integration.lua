@@ -17,69 +17,38 @@ packageName: ''
 --[[
     Affliction Tracking V3 - Integration Layer
 
-    This module provides:
-    - Wrapper functions that route to V3/V2/V1 based on settings
+    V3 is now the sole tracking system. This module provides:
+    - Backward-compatible wrapper functions (delegate to V3)
     - Verification signal handlers (smoke, fumble, etc.)
     - Probabilistic lock detection
+    - V2 compatibility stubs
     - Debug/display functions
 ]]--
 
 -- ============================================
--- WRAPPER FUNCTIONS (Route to correct system)
+-- WRAPPER FUNCTIONS (Backward Compatibility)
 -- ============================================
 
 -- Main wrapper for herb cure detection
--- Replace targetAte() calls in triggers with this
 function targetAteWrapper(herb)
-    -- Eating any herb proves no anorexia (anorexia blocks eating entirely)
-    -- Clear from V1 and V3 before routing (V2 handles it in targetAteV2)
+    -- Eating any herb proves no anorexia (erAff now calls removeAffV3 internally)
     erAff("anorexia")
-    if removeAffV3 then removeAffV3("anorexia") end
-
-    if affConfigV3 and affConfigV3.enabled then
-        onHerbCureV3(herb)
-    elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-        targetAteV2(herb)
-    else
-        if targetAte then targetAte(herb) end
-    end
+    onHerbCureV3(herb)
 end
 
--- Wrapper for adding afflictions
+-- Wrapper for adding afflictions (delegates to tarAffed which calls applyAffV3)
 function tarAffedWrapper(...)
-    if affConfigV3 and affConfigV3.enabled then
-        for _, aff in ipairs({...}) do
-            if type(aff) == "string" then
-                applyAffV3(aff)
-            end
-        end
-    elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-        if tarAffedConfirmed then tarAffedConfirmed(...) end
-    else
-        if tarAffed then tarAffed(...) end
-    end
+    tarAffed(...)
 end
 
--- Wrapper for removing afflictions
+-- Wrapper for removing afflictions (delegates to erAff which calls removeAffV3)
 function erAffWrapper(aff)
-    if affConfigV3 and affConfigV3.enabled then
-        removeAffV3(aff)
-    elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-        if removeAffV2 then removeAffV2(aff) end
-    else
-        if erAff then erAff(aff) end
-    end
+    erAff(aff)
 end
 
--- Wrapper for checking afflictions
+-- Wrapper for checking afflictions (delegates to haveAff which calls haveAffV3)
 function haveAffWrapper(aff)
-    if affConfigV3 and affConfigV3.enabled then
-        return haveAffV3(aff)
-    elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-        return haveAffV2 and haveAffV2(aff) or false
-    else
-        return haveAff and haveAff(aff) or false
-    end
+    return haveAff(aff)
 end
 
 -- ============================================
@@ -88,71 +57,72 @@ end
 
 -- Target smoked - proves asthma is ABSENT (can't smoke with asthma)
 function onTargetSmokeV3()
-    if not affConfigV3 or not affConfigV3.enabled then return end
     collapseAffAbsentV3("asthma")
-
-    -- Also collapse any smoke-curable affs if they smoked successfully
-    -- (proves they don't have asthma blocking the smoke)
 end
 
 -- Target fumbled - proves clumsiness is PRESENT
 function onTargetFumbleV3()
-    if not affConfigV3 or not affConfigV3.enabled then return end
     collapseAffPresentV3("clumsiness")
 end
 
 -- Target vomited - proves nausea is PRESENT
 function onTargetVomitV3()
-    if not affConfigV3 or not affConfigV3.enabled then return end
     collapseAffPresentV3("nausea")
 end
 
 -- Target slipped on slickness - proves slickness is PRESENT
 function onTargetSlickFailV3()
-    if not affConfigV3 or not affConfigV3.enabled then return end
     collapseAffPresentV3("slickness")
 end
 
 -- Target couldn't act due to paralysis - proves paralysis is PRESENT
 function onTargetParalysisBlockV3()
-    if not affConfigV3 or not affConfigV3.enabled then return end
     collapseAffPresentV3("paralysis")
 end
 
 -- Target stumbled (dizziness) - proves dizziness is PRESENT
 function onTargetStumbleV3()
-    if not affConfigV3 or not affConfigV3.enabled then return end
     collapseAffPresentV3("dizziness")
 end
 
 -- Target had a seizure - proves epilepsy is PRESENT
 function onTargetSeizureV3()
-    if not affConfigV3 or not affConfigV3.enabled then return end
     collapseAffPresentV3("epilepsy")
 end
 
 -- Target acted stupidly - proves stupidity is PRESENT
 function onTargetStupidActionV3()
-    if not affConfigV3 or not affConfigV3.enabled then return end
     collapseAffPresentV3("stupidity")
 end
 
 -- Target fled randomly (paranoia) - proves paranoia is PRESENT
 function onTargetParanoiaFleeV3()
-    if not affConfigV3 or not affConfigV3.enabled then return end
     collapseAffPresentV3("paranoia")
 end
 
 -- Target applied salve successfully - proves slickness is ABSENT
 function onTargetApplySalveV3()
-    if not affConfigV3 or not affConfigV3.enabled then return end
     collapseAffAbsentV3("slickness")
 end
 
 -- Target ate something - proves anorexia is ABSENT
 function onTargetAteV3()
-    if not affConfigV3 or not affConfigV3.enabled then return end
     collapseAffAbsentV3("anorexia")
+end
+
+-- Target showed impatience - proves impatience is PRESENT
+function onTargetImpatienceV3()
+    collapseAffPresentV3("impatience")
+end
+
+-- Target showed dementia signs - proves dementia is PRESENT
+function onTargetDementiaV3()
+    collapseAffPresentV3("dementia")
+end
+
+-- Target showed confusion - proves confusion is PRESENT
+function onTargetConfusionV3()
+    collapseAffPresentV3("confusion")
 end
 
 -- ============================================
@@ -161,22 +131,13 @@ end
 
 -- Check for locks with probability display
 function checkTargetLocksV3()
-    if not affConfigV3 or not affConfigV3.enabled then
-        -- Fall back to V2 or V1 lock detection
-        if checkTargetLocks then checkTargetLocks() end
-        return
-    end
-
     -- Calculate lock probabilities
-    -- Softlock: asthma + slickness + anorexia (need all 3)
     local softlockAffs = {"anorexia", "asthma", "slickness"}
     local softlockProb = getStateProbabilityV3(softlockAffs)
 
-    -- Hardlock: softlock + impatience
     local hardlockAffs = {"anorexia", "asthma", "slickness", "impatience"}
     local hardlockProb = getStateProbabilityV3(hardlockAffs)
 
-    -- Truelock: hardlock + paralysis
     local truelockAffs = {"anorexia", "asthma", "slickness", "impatience", "paralysis"}
     local truelockProb = getStateProbabilityV3(truelockAffs)
 
@@ -206,10 +167,6 @@ end
 
 -- Get detailed lock status
 function getLockStatusV3()
-    if not affConfigV3 or not affConfigV3.enabled then
-        return nil
-    end
-
     return {
         softlock = getStateProbabilityV3({"anorexia", "asthma", "slickness"}),
         hardlock = getStateProbabilityV3({"anorexia", "asthma", "slickness", "impatience"}),
@@ -218,48 +175,11 @@ function getLockStatusV3()
 end
 
 -- ============================================
--- TOGGLE / SETTINGS
--- ============================================
-
--- Enable V3 tracking
-function enableV3()
-    affConfigV3.enabled = true
-    resetStatesV3()
-    if ataxiaEcho then
-        ataxiaEcho("[V3] Branching state tracking ENABLED")
-    end
-end
-
--- Disable V3 tracking (falls back to V2 or V1)
-function disableV3()
-    affConfigV3.enabled = false
-    if ataxiaEcho then
-        ataxiaEcho("[V3] Branching state tracking DISABLED")
-    end
-end
-
--- Toggle V3 tracking
-function toggleV3()
-    if affConfigV3.enabled then
-        disableV3()
-    else
-        enableV3()
-    end
-end
-
--- ============================================
 -- ALIAS COMMANDS (for user convenience)
 -- ============================================
 
--- These can be called from aliases in Mudlet
-
 -- Show current V3 state
 function v3status()
-    if not affConfigV3 or not affConfigV3.enabled then
-        echo("\nV3 tracking is DISABLED\n")
-        return
-    end
-
     showBranchesV3()
 
     local locks = getLockStatusV3()
@@ -273,10 +193,6 @@ end
 
 -- Show affliction probabilities
 function v3probs()
-    if not affConfigV3 or not affConfigV3.enabled then
-        echo("\nV3 tracking is DISABLED\n")
-        return
-    end
     showAffProbsV3()
 end
 
@@ -284,18 +200,30 @@ end
 -- TREE / FOCUS HANDLING
 -- ============================================
 
+-- Canonical tree-curable affliction list (was treeCurableAffsV2, now owned by V3)
+treeCurableAffsV3 = {
+    "paralysis", "slickness", "anorexia", "asthma", "sensitivity",
+    "clumsiness", "weariness", "epilepsy", "haemophilia", "nausea",
+    "dizziness", "shyness", "stupidity", "confusion", "dementia",
+    "paranoia", "hallucinations", "impatience", "hypersomnia", "addiction",
+    "darkshade"
+}
+-- Backward compat alias
+treeCurableAffsV2 = treeCurableAffsV3
+
+-- Canonical focus-curable affliction list (was focusCurableAffsV2, now owned by V3)
+focusCurableAffsV3 = {
+    "impatience", "stupidity", "anorexia", "epilepsy", "masochism",
+    "recklessness", "dizziness", "shyness", "confusion", "dementia",
+    "paranoia", "hallucinations", "loneliness", "vertigo", "feeble",
+    "addiction", "hypersomnia"
+}
+-- Backward compat alias
+focusCurableAffsV2 = focusCurableAffsV3
+
 -- Handle target using tree tattoo (cures random physical aff)
 function onTargetTreeV3()
-    if not affConfigV3 or not affConfigV3.enabled then return end
-
-    -- Tree cures one random affliction from the tree-curable list
-    -- We treat this like an herb cure but with the tree cure list
-    local treeCurable = treeCurableAffsV2 or {
-        "paralysis", "slickness", "anorexia", "asthma", "sensitivity",
-        "clumsiness", "weariness", "epilepsy", "haemophilia", "nausea",
-        "dizziness", "shyness", "stupidity", "confusion", "dementia",
-        "paranoia", "hallucinations", "impatience", "hypersomnia", "addiction"
-    }
+    local treeCurable = treeCurableAffsV3
 
     local newStates = {}
 
@@ -313,8 +241,6 @@ function onTargetTreeV3()
             state.affs[candidates[1]] = nil
             table.insert(newStates, state)
         else
-            -- Tree cures based on curing priority, but we don't know the target's prio
-            -- So we branch into all possibilities
             local probEach = state.prob / #candidates
             for _, aff in ipairs(candidates) do
                 local branch = {affs = {}, prob = probEach}
@@ -339,14 +265,7 @@ end
 
 -- Handle target using focus (cures random mental aff)
 function onTargetFocusV3()
-    if not affConfigV3 or not affConfigV3.enabled then return end
-
-    local focusCurable = focusCurableAffsV2 or {
-        "impatience", "stupidity", "anorexia", "epilepsy", "masochism",
-        "recklessness", "dizziness", "shyness", "confusion", "dementia",
-        "paranoia", "hallucinations", "loneliness", "vertigo", "feeble",
-        "addiction", "hypersomnia"
-    }
+    local focusCurable = focusCurableAffsV3
 
     local newStates = {}
 
@@ -406,38 +325,31 @@ passiveCurableAffsV3 = {
 }
 
 -- Handle passive ability curing N random afflictions (branching model)
--- Used by: Passives(1), Alleviate(1), Bloodboil(1), Dragonheal(3), Fool(3),
---          Might(1), Purification(1), Purify(1), Salt(1), Shrugging(1),
---          Slough(1), Eruption(1)
 function onPassiveCureV3(numCures)
-    if not affConfigV3 or not affConfigV3.enabled then return end
     if not numCures or numCures < 1 then return end
 
     local pool = passiveCurableAffsV3
-    local allCandidates = {}  -- Track all unique candidates across all states/rounds
+    local allCandidates = {}
 
     for cure = 1, numCures do
         local newStates = {}
-        local roundCandidates = {}  -- Track candidates this round
+        local roundCandidates = {}
 
         for _, state in ipairs(afflictionStatesV3) do
             local candidates = {}
             for _, aff in ipairs(pool) do
                 if state.affs[aff] then
                     table.insert(candidates, aff)
-                    roundCandidates[aff] = true  -- Track for echo
+                    roundCandidates[aff] = true
                 end
             end
 
             if #candidates == 0 then
-                -- No curable affs in this state - passes through unchanged
                 table.insert(newStates, state)
             elseif #candidates == 1 then
-                -- Only one option - deterministic cure
                 state.affs[candidates[1]] = nil
                 table.insert(newStates, state)
             else
-                -- Multiple candidates - branch into all possibilities
                 local probEach = state.prob / #candidates
                 for _, aff in ipairs(candidates) do
                     local branch = {affs = {}, prob = probEach}
@@ -448,27 +360,23 @@ function onPassiveCureV3(numCures)
             end
         end
 
-        -- Merge round candidates into allCandidates
         for aff, _ in pairs(roundCandidates) do
             allCandidates[aff] = true
         end
 
         afflictionStatesV3 = newStates
 
-        -- Dedup between cure rounds to control state explosion
         if cure < numCures then
             deduplicateStatesV3()
         end
     end
 
-    -- Final cleanup after all cures
     deduplicateStatesV3()
     pruneStatesV3()
     rebuildCacheV3()
     syncToOldSystemV3()
     updateAffDisplayV3()
 
-    -- Enhanced debug echo with candidates
     if ataxiaEcho and affConfigV3.debugEcho then
         local candList = {}
         for aff, _ in pairs(allCandidates) do
@@ -487,21 +395,35 @@ function onPassiveCureV3(numCures)
 end
 
 -- ============================================
--- INTEGRATION HELPERS
+-- V2 COMPATIBILITY STUBS
+-- Route straggler V2 calls to V3
 -- ============================================
 
--- Check if V3 is the active system
-function isV3Active()
-    return affConfigV3 and affConfigV3.enabled
-end
+function addAffV2(aff) if applyAffV3 then applyAffV3(aff) end end
+function removeAffV2(aff) if removeAffV3 then removeAffV3(aff) end end
+function haveAffV2(aff) return haveAffV3 and haveAffV3(aff) or false end
+function confirmAffV2(aff) if applyAffV3 then applyAffV3(aff) end end
+function haveConfirmedAffV2(aff) return haveAffV3 and haveAffV3(aff) or false end
+function stackAffV2(aff) if applyAffV3 then applyAffV3(aff) end end
+function getStackCountV2(aff) return haveAffV3 and haveAffV3(aff) and 1 or 0 end
+function hasMultipleStacksV2(aff) return false end
+function targetAteV2(herb) if onHerbCureV3 then onHerbCureV3(herb) end end
+function onTargetTreeV2(t) onTargetTreeV3() end
+function onTargetFocusV2(t) onTargetFocusV3() end
+function resetAffsV2() resetStatesV3() end
+function debugAffsV2() showBranchesV3() end
+function backtrackCureV2(a) return false end
+function clearPendingGuessesV2() end
+function updateAffDisplayV2() updateAffDisplayV3() end
+function reduceCureTypeAffCertaintyV2() end
+function reduceRandomAffCertaintyV2() end
+function onBloodrootApplyConfirmV2() end
+tAffsV2 = tAffsV2 or {}
+tAffStacksV2 = tAffStacksV2 or {}
 
--- Get the current tracking system name
-function getCurrentTrackingSystem()
-    if affConfigV3 and affConfigV3.enabled then
-        return "V3"
-    elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-        return "V2"
-    else
-        return "V1"
-    end
-end
+-- Legacy toggle stubs (V3 is always on)
+function isV3Active() return true end
+function getCurrentTrackingSystem() return "V3" end
+function enableV3() end
+function disableV3() end
+function toggleV3() end

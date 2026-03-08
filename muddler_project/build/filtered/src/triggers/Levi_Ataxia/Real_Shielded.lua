@@ -5,7 +5,6 @@ if type(target) == "string" and isTargeted(matches[2]) then
 	resetFormat()
 	send("cq eqbal")
 
-	tAffs.shield = true
-	if applyAffV3 then applyAffV3("shield") end
+	tarAffed("shield")
   
 end

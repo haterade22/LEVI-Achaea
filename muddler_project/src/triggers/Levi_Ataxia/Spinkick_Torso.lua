@@ -3,8 +3,7 @@ local maybemiss = multimatches[3][1]
 
 if isTargeted(person) then
   targetIshere = true
-  tAffs.shield = false
-  if removeAffV3 then removeAffV3("shield") end
+  erAff("shield")
   ignoreThirdPerson = true
 
     lastLimbAttack = "shikSpinkickTorso"

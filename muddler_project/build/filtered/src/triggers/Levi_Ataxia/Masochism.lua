@@ -1,6 +1,5 @@
 if isTargeted(matches[2]) then
 	tarAffed("masochism")
-	if applyAffV3 then applyAffV3("masochism") end
   confirmAffV2("masochism")
 end
 
@@ -19,7 +18,6 @@ function wormtick()
   if bloodworm() == true then
     if tAffs.masochism and not tAffs.deafness then
       tarAffed("dizziness")
-      if applyAffV3 then applyAffV3("dizziness") end
       confirmAffV2("dizziness")
     else
       killTimer(tostring(wormTimer))

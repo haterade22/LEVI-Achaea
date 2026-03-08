@@ -216,7 +216,7 @@ function dwbRunie.useBisect()
 end
 
 -------------------------------------------------------------------------------
--- HELPERS: AFFLICTION TRACKING (V3 → V2 → V1)
+-- HELPERS: AFFLICTION TRACKING (V3 → V1)
 -------------------------------------------------------------------------------
 
 function dwbRunie.hasAff(aff)
@@ -224,16 +224,7 @@ function dwbRunie.hasAff(aff)
   if affConfigV3 and affConfigV3.enabled then
     return haveAffV3(aff)
   end
-  -- V2 system (when enabled, use ONLY V2 - no fallback)
-  if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-    if haveAffV2 then
-      return haveAffV2(aff)
-    elseif tAffsV2 and tAffsV2[aff] then
-      return true
-    end
-    return false
-  end
-  -- V1 system (only when V2 is disabled)
+  -- V1 fallback
   if tAffs and tAffs[aff] then
     return true
   end

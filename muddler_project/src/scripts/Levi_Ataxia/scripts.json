@@ -422,22 +422,28 @@
     "isFolder": "yes",
     "children": [
       {
-        "name": "Core"
+        "name": "Core",
+        "isActive": "no"
       },
       {
-        "name": "Herb Cures"
+        "name": "Herb Cures",
+        "isActive": "no"
       },
       {
-        "name": "Backtracking"
+        "name": "Backtracking",
+        "isActive": "no"
       },
       {
-        "name": "Verification"
+        "name": "Verification",
+        "isActive": "no"
       },
       {
-        "name": "buildTarAffsV2"
+        "name": "buildTarAffsV2",
+        "isActive": "no"
       },
       {
-        "name": "showAffsV2"
+        "name": "showAffsV2",
+        "isActive": "no"
       },
       {
         "name": "Branching State Tracker"

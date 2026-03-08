@@ -5943,7 +5943,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n  tarAffed(\"asthma\")\n  if applyAffV3 then applyAffV3(\"asthma\") end\nend"
+                        "script": "if isTargeted(matches[2]) then\n  tarAffed(\"asthma\")\nend"
                       },
                       {
                         "name": "Hiraku (ano/stutt)",
@@ -5953,7 +5953,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n  if not ignoreThirdPerson then\n    tarAffed(\"anorexia\", \"stuttering\")\n    if applyAffV3 then applyAffV3(\"anorexia\"); applyAffV3(\"stuttering\") end\n  else\n    ignoreThirdPerson = nil\n  end\nend"
+                        "script": "if isTargeted(matches[2]) then\n  if not ignoreThirdPerson then\n    tarAffed(\"anorexia\", \"stuttering\")\n  else\n    ignoreThirdPerson = nil\n  end\nend"
                       },
                       {
                         "name": "Hiru (dizzy)",
@@ -5963,7 +5963,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n  if not ignoreThirdPerson then\n    tarAffed(\"dizziness\")\n    if applyAffV3 then applyAffV3(\"dizziness\") end\n  else\n    ignoreThirdPerson = nil\n  end\nend"
+                        "script": "if isTargeted(matches[2]) then\n  if not ignoreThirdPerson then\n    tarAffed(\"dizziness\")\n  else\n    ignoreThirdPerson = nil\n  end\nend"
                       },
                       {
                         "name": "Ruku torso (slickness)",
@@ -5973,7 +5973,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n  if not ignoreThirdPerson then\n    tarAffed(\"slickness\")\n    if applyAffV3 then applyAffV3(\"slickness\") end\n  else\n    ignoreThirdPerson = nil\n  end\nend"
+                        "script": "if isTargeted(matches[2]) then\n  if not ignoreThirdPerson then\n    tarAffed(\"slickness\")\n  else\n    ignoreThirdPerson = nil\n  end\nend"
                       },
                       {
                         "name": "Jinzuku (addiction)",
@@ -5992,7 +5992,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n  if not ignoreThirdPerson then\n    tarAffed(\"crushedthroat\")\n    if applyAffV3 then applyAffV3(\"crushedthroat\") end\n  else\n    ignoreThirdPerson = nil\n  end\nend"
+                        "script": "if isTargeted(matches[2]) then\n  if not ignoreThirdPerson then\n    tarAffed(\"crushedthroat\")\n  else\n    ignoreThirdPerson = nil\n  end\nend"
                       },
                       {
                         "name": "Kuro (weariness/lethargy)",
@@ -6002,7 +6002,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[3]) then\n  if not ignoreThirdPerson then\n    if haveAff(\"weariness\") then\n      tarAffed(\"lethargy\")\n      if applyAffV3 then applyAffV3(\"lethargy\") end\n    else\n      tarAffed(\"weariness\")\n      if applyAffV3 then applyAffV3(\"weariness\") end\n    end\n  else\n    ignoreThirdPerson = nil    \n  end\nend"
+                        "script": "if isTargeted(matches[3]) then\n  if not ignoreThirdPerson then\n    if haveAff(\"weariness\") then\n      tarAffed(\"lethargy\")\n    else\n      tarAffed(\"weariness\")\n    end\n  else\n    ignoreThirdPerson = nil    \n  end\nend"
                       }
                     ]
                   },
@@ -6022,7 +6022,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\ttAffs.impatience = true\n\tif applyAffV3 then applyAffV3(\"impatience\") end\n\n\t-- V3 integration: collapse branches (proves impatience present)\n\tif onTargetImpatienceV3 then onTargetImpatienceV3() end\n\n\tselectString(line, 1)\n\tfg(\"goldenrod\")\n\tresetFormat()\n\tif ataxia_isClass(\"depthswalker\") then\n\t\tif matches[1]:find(\"in boredom\") then\n\t\t\ttAffs.hypochondria = true\n\t\t\ttAffs.nausea = true\n\t\t\ttAffs.addiction = true\n\t\t\ttAffs.lethargy = true\n\t\t\tif applyAffV3 then applyAffV3(\"hypochondria\"); applyAffV3(\"nausea\"); applyAffV3(\"addiction\"); applyAffV3(\"lethargy\") end\n\t\tend\n\tend\nend"
+                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"impatience\")\n\n\t-- V3 integration: collapse branches (proves impatience present)\n\tif onTargetImpatienceV3 then onTargetImpatienceV3() end\n\n\tselectString(line, 1)\n\tfg(\"goldenrod\")\n\tresetFormat()\n\tif ataxia_isClass(\"depthswalker\") then\n\t\tif matches[1]:find(\"in boredom\") then\n\t\t\ttarAffed(\"hypochondria\", \"nausea\", \"addiction\", \"lethargy\")\n\t\tend\n\tend\nend"
                   },
                   {
                     "name": "Epilepsy",
@@ -6040,7 +6040,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"epilepsy\")\n\tif applyAffV3 then applyAffV3(\"epilepsy\") end\n\n\t-- V3 integration: collapse branches (proves epilepsy present)\n\tif onTargetSeizureV3 then onTargetSeizureV3() end\nend"
+                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"epilepsy\")\n\n\t-- V3 integration: collapse branches (proves epilepsy present)\n\tif onTargetSeizureV3 then onTargetSeizureV3() end\nend"
                   },
                   {
                     "name": "Clumsiness",
@@ -6070,7 +6070,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"clumsiness\")\n\tif applyAffV3 then applyAffV3(\"clumsiness\") end\n\n\t-- V3 integration: collapse branches (proves clumsiness present)\n\tif onTargetFumbleV3 then onTargetFumbleV3() end\nend"
+                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"clumsiness\")\n\n\t-- V3 integration: collapse branches (proves clumsiness present)\n\tif onTargetFumbleV3 then onTargetFumbleV3() end\nend"
                   },
                   {
                     "name": "Dizziness",
@@ -6080,7 +6080,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"dizziness\")\n\tif applyAffV3 then applyAffV3(\"dizziness\") end\n\n\t-- V3 integration: collapse branches (proves dizziness present)\n\tif onTargetStumbleV3 then onTargetStumbleV3() end\nend"
+                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"dizziness\")\n\n\t-- V3 integration: collapse branches (proves dizziness present)\n\tif onTargetStumbleV3 then onTargetStumbleV3() end\nend"
                   },
                   {
                     "name": "Confusion",
@@ -6094,7 +6094,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"confusion\")\n\tif applyAffV3 then applyAffV3(\"confusion\") end\n\n\t-- V3 integration: collapse branches (proves confusion present)\n\tif onTargetConfusionV3 then onTargetConfusionV3() end\nend"
+                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"confusion\")\n\n\t-- V3 integration: collapse branches (proves confusion present)\n\tif onTargetConfusionV3 then onTargetConfusionV3() end\nend"
                   },
                   {
                     "name": "Stupidity",
@@ -6152,7 +6152,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"stupidity\")\n\tif applyAffV3 then applyAffV3(\"stupidity\") end\n\n\t-- V3 integration: collapse branches (proves stupidity present)\n\tif onTargetStupidActionV3 then onTargetStupidActionV3() end\nend"
+                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"stupidity\")\n\n\t-- V3 integration: collapse branches (proves stupidity present)\n\tif onTargetStupidActionV3 then onTargetStupidActionV3() end\nend"
                   },
                   {
                     "name": "Paralysis",
@@ -6186,7 +6186,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\ttarAffedConfirmed(\"paralysis\")\n\tif applyAffV3 then applyAffV3(\"paralysis\") end\n\n\t-- V3 integration: collapse branches (proves paralysis present)\n\tif onTargetParalysisBlockV3 then onTargetParalysisBlockV3() end\nend"
+                    "script": "if isTargeted(matches[2]) then\n\ttarAffedConfirmed(\"paralysis\")\n\n\t-- V3 integration: collapse branches (proves paralysis present)\n\tif onTargetParalysisBlockV3 then onTargetParalysisBlockV3() end\nend"
                   },
                   {
                     "name": "Darkshade",
@@ -6200,7 +6200,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"darkshade\")\n\tif applyAffV3 then applyAffV3(\"darkshade\") end\n  confirmAffV2(\"darkshade\")\nend"
+                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"darkshade\")\n  confirmAffV2(\"darkshade\")\nend"
                   },
                   {
                     "name": "Nausea",
@@ -6218,7 +6218,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"nausea\")\n\tif applyAffV3 then applyAffV3(\"nausea\") end\n\n\t-- V3 integration: collapse branches (proves nausea present)\n\tif onTargetVomitV3 then onTargetVomitV3() end\nend"
+                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"nausea\")\n\n\t-- V3 integration: collapse branches (proves nausea present)\n\tif onTargetVomitV3 then onTargetVomitV3() end\nend"
                   },
                   {
                     "name": "Hypersomnia",
@@ -6228,7 +6228,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"hypersomnia\")\n\tif applyAffV3 then applyAffV3(\"hypersomnia\") end\n   confirmAffV2(\"hypersomnia\")\nend"
+                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"hypersomnia\")\n   confirmAffV2(\"hypersomnia\")\nend"
                   },
                   {
                     "name": "Got slickness",
@@ -6442,7 +6442,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"justice\")\n\tif applyAffV3 then applyAffV3(\"justice\") end\n  confirmAffV2(\"justice\")\nend"
+                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"justice\")\n  confirmAffV2(\"justice\")\nend"
                   },
                   {
                     "name": "Masochism",
@@ -6465,7 +6465,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"dementia\")\n\tif applyAffV3 then applyAffV3(\"dementia\") end\n\n\t-- V3 integration: collapse branches (proves dementia present)\n\tif onTargetDementiaV3 then onTargetDementiaV3() end\nend"
+                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"dementia\")\n\n\t-- V3 integration: collapse branches (proves dementia present)\n\tif onTargetDementiaV3 then onTargetDementiaV3() end\nend"
                   },
                   {
                     "name": "Siren Seduce",
@@ -6511,7 +6511,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"addiction\")\n\tif applyAffV3 then applyAffV3(\"addiction\") end\n  confirmAffV2(\"addiction\")\nend"
+                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"addiction\")\n  confirmAffV2(\"addiction\")\nend"
                   },
                   {
                     "name": "Weariness",
@@ -6521,7 +6521,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"weariness\")\n\tif applyAffV3 then applyAffV3(\"weariness\") end\n  confirmAffV2(\"weariness\")\nend"
+                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"weariness\")\n  confirmAffV2(\"weariness\")\nend"
                   },
                   {
                     "name": "Rebounding Down",
@@ -6531,7 +6531,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if target == matches[2] then\n\ttAffs.rebounding = false\n  removeAffV3(\"rebounding\")\n\t-- V2 tracking support\n\tif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then\n\t\tif removeAffV2 then\n\t\t\tremoveAffV2(\"rebounding\")\n\t\telseif tAffsV2 then\n\t\t\ttAffsV2.rebounding = 0\n\t\tend\n\tend\n\tselectString(line,1)\n\tsetBold(true)\n\tfg(\"NavajoWhite\")\n\tresetFormat()\nend\n\n--Archaeon reaches out and nimbly plucks the arrow from the air.\n--You begin sketching a thurisaz rune on the ground.\n\n"
+                    "script": "if target == matches[2] then\n\ttAffs.rebounding = false\n  erAff(\"rebounding\")\n\tselectString(line,1)\n\tsetBold(true)\n\tfg(\"NavajoWhite\")\n\tresetFormat()\nend\n\n--Archaeon reaches out and nimbly plucks the arrow from the air.\n--You begin sketching a thurisaz rune on the ground.\n\n"
                   },
                   {
                     "name": "Got Sileris",
@@ -6580,7 +6580,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"healthleech\")\n\tif applyAffV3 then applyAffV3(\"healthleech\") end\nend"
+                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"healthleech\")\nend"
                           },
                           {
                             "name": "Slickness",
@@ -6590,7 +6590,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"slickness\")\n\tif applyAffV3 then applyAffV3(\"slickness\") end\nend"
+                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"slickness\")\nend"
                           },
                           {
                             "name": "Darkshade",
@@ -6600,7 +6600,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"darkshade\")\n\tif applyAffV3 then applyAffV3(\"darkshade\") end\nend"
+                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"darkshade\")\nend"
                           },
                           {
                             "name": "Anorexia",
@@ -6610,7 +6610,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"anorexia\")\n\tif applyAffV3 then applyAffV3(\"anorexia\") end\nend"
+                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"anorexia\")\nend"
                           },
                           {
                             "name": "Plagues Taken",
@@ -6641,7 +6641,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"dizziness\")\n\tif applyAffV3 then applyAffV3(\"dizziness\") end\nend"
+                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"dizziness\")\nend"
                           },
                           {
                             "name": "Peace",
@@ -6720,7 +6720,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n  tAffs.burrow = true\n  if applyAffV3 then applyAffV3(\"burrow\") end\n\n  if pariah.latency then killTimer(pariah.latency) end\n  pariah.latency = tempTimer(12, [[ pariah.latency = nil ]])\n\n  if haveAff(\"voyria\") then\n    ataxia_boxEcho(\"TARGET PRIMED FOR DEATH\", \"DimGrey\")\n  end\nend\n\nataxia_boxEcho(\"TARGET HAS LATENCY\", \"DimGrey\")"
+                            "script": "if isTargeted(matches[2]) then\n  tarAffed(\"burrow\")\n\n  if pariah.latency then killTimer(pariah.latency) end\n  pariah.latency = tempTimer(12, [[ pariah.latency = nil ]])\n\n  if haveAff(\"voyria\") then\n    ataxia_boxEcho(\"TARGET PRIMED FOR DEATH\", \"DimGrey\")\n  end\nend\n\nataxia_boxEcho(\"TARGET HAS LATENCY\", \"DimGrey\")"
                           },
                           {
                             "name": "Burrowed",
@@ -6847,7 +6847,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if type(target) == \"string\" and isTargeted(matches[2]) then\n\ttarAffed(\"paralysis\")\n\tif applyAffV3 then applyAffV3(\"paralysis\") end\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
+                            "script": "if type(target) == \"string\" and isTargeted(matches[2]) then\n\ttarAffed(\"paralysis\")\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
                           },
                           {
                             "name": "Haemophilia/Bear",
@@ -6861,7 +6861,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if type(target) == \"string\" and isTargeted(matches[2]) then\n\ttarAffed(\"haemophilia\")\n\tif applyAffV3 then applyAffV3(\"haemophilia\") end\n  \nend\n\nif not tAffs.haemophilia then\ntarAffed(\"haemophilia\") \nif applyAffV3 then applyAffV3(\"haemophilia\") end\ntAffs.bleed = tAffs.bleed + 50\nend\nif tAffs.haemophilia then\ntAffs.bleed = tAffs.bleed + 100\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
+                            "script": "if type(target) == \"string\" and isTargeted(matches[2]) then\n\ttarAffed(\"haemophilia\")\n  \nend\n\nif not tAffs.haemophilia then\ntarAffed(\"haemophilia\") \ntAffs.bleed = tAffs.bleed + 50\nend\nif tAffs.haemophilia then\ntAffs.bleed = tAffs.bleed + 100\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
                           },
                           {
                             "name": "Epilepsy/Sun",
@@ -6875,7 +6875,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if  type(target) == \"string\" and isTargeted(matches[2]) then\n\ttarAffed(\"epilepsy\")\n\tif applyAffV3 then applyAffV3(\"epilepsy\") end\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
+                            "script": "if  type(target) == \"string\" and isTargeted(matches[2]) then\n\ttarAffed(\"epilepsy\")\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
                           },
                           {
                             "name": "Weariness/Nest",
@@ -6885,7 +6885,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if type(target) == \"string\" and isTargeted(matches[2]) then\n\ttarAffed(\"weariness\")\n\tif applyAffV3 then applyAffV3(\"weariness\") end\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
+                            "script": "if type(target) == \"string\" and isTargeted(matches[2]) then\n\ttarAffed(\"weariness\")\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
                           },
                           {
                             "name": "Clumsiness/Scales",
@@ -6899,7 +6899,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if type(target) == \"string\" and isTargeted(matches[2]) then\n\ttarAffed(\"clumsiness\")\n\tif applyAffV3 then applyAffV3(\"clumsiness\") end\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
+                            "script": "if type(target) == \"string\" and isTargeted(matches[2]) then\n\ttarAffed(\"clumsiness\")\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
                           },
                           {
                             "name": "Impatience/Skein",
@@ -6913,7 +6913,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if type(target) == \"string\" and isTargeted(matches[2]) then\n\ttarAffed(\"impatience\")\n\tif applyAffV3 then applyAffV3(\"impatience\") end\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
+                            "script": "if type(target) == \"string\" and isTargeted(matches[2]) then\n\ttarAffed(\"impatience\")\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
                           },
                           {
                             "name": "Addiction/Scarab",
@@ -6931,7 +6931,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if type(target) == \"string\" and isTargeted(matches[2]) then\n\ttarAffed(\"addiction\")\n\tif applyAffV3 then applyAffV3(\"addiction\") end\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
+                            "script": "if type(target) == \"string\" and isTargeted(matches[2]) then\n\ttarAffed(\"addiction\")\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
                           },
                           {
                             "name": "Asthma/Jackal",
@@ -6945,7 +6945,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if type(target) == \"string\" and isTargeted(matches[2]) then\n\ttarAffed(\"asthma\")\n\tif applyAffV3 then applyAffV3(\"asthma\") end\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
+                            "script": "if type(target) == \"string\" and isTargeted(matches[2]) then\n\ttarAffed(\"asthma\")\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
                           },
                           {
                             "name": "Scytherus/Scorpion",
@@ -6955,7 +6955,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"scytherus\")\n\tif applyAffV3 then applyAffV3(\"scytherus\") end\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
+                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"scytherus\")\nend\n\nif ataxiaBasher.enabled then\n  if not ataxiaBasher.manual then\n    deleteFull()\n  end\nend"
                           },
                           {
                             "name": "Voyria",
@@ -6965,7 +6965,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"voyria\")\n\tif applyAffV3 then applyAffV3(\"voyria\") end\n  \n  if pariah and pariah.latency then\n    ataxia_boxEcho(\"TARGET PRIMED FOR DEATH\", \"DimGrey\")\n  end  \nend\n\n"
+                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"voyria\")\n  \n  if pariah and pariah.latency then\n    ataxia_boxEcho(\"TARGET PRIMED FOR DEATH\", \"DimGrey\")\n  end  \nend\n\n"
                           }
                         ]
                       },
@@ -6991,7 +6991,7 @@
                                 "type": "prompt"
                               }
                             ],
-                            "script": "setTriggerStayOpen(\"Swarm Tracking\", 0)\n\nif pariah and pariah.burrow then\n  tAffs.burrow = true\n  if applyAffV3 then applyAffV3(\"burrow\") end\nend"
+                            "script": "setTriggerStayOpen(\"Swarm Tracking\", 0)\n\nif pariah and pariah.burrow then\n  tarAffed(\"burrow\")\nend"
                           }
                         ],
                         "patterns": [
@@ -7059,7 +7059,7 @@
                         ],
                         "multiline": "yes",
                         "multilineDelta": 10,
-                        "script": "local person = multimatches[1][3]\n\nataxiaTemp.hitCount = ataxiaTemp.hitCount + 1\n\nif ataxiaTemp.class == \"Bard\" then return end\n\nif isTargeted(person) then\ntargetIshere = true\ntAffs.shield = false\nif removeAffV3 then removeAffV3(\"shield\") end\nataxiaTemp.ignoreShield = false\nlastLimbAttack = \"dwcSlash\"\n\nif ataxiaTemp.hitCount == 1 then\n  if not affs_to_colour then populate_aff_colours() end\n  if envenomList[1] == \"exploit\" then\n    tarAffed(\"weariness\")\n    if applyAffV3 then applyAffV3(\"weariness\") end\n    tarAffed(\"paranoia\")\n    if applyAffV3 then applyAffV3(\"paranoia\") end\n    aff1 = \"weariness\"\n    aff3 = \"paranoia\"\n    if partyrelay and not ataxia.afflictions.aeon then\n      send(\"pt \" ..target..\": \" ..aff1.. \" \" ..aff3)\n    end\n  elseif envenomList[1] == \"torment\" then\n    tarAffed(\"healthleech\")\n    if applyAffV3 then applyAffV3(\"healthleech\") end\n    aff1 = \"healthleech\"\n    aff3 = nil\n    if partyrelay and not ataxia.afflictions.aeon then\n      send(\"pt \" ..target..\": \" ..aff1)\n    end\n  elseif envenomList[1] == \"torture\" then\n    tarAffed(\"haemophilia\")\n    if applyAffV3 then applyAffV3(\"haemophilia\") end\n    aff1 = \"haemophilia\"\n    aff3 = nil\n    if partyrelay and not ataxia.afflictions.aeon then\n      send(\"pt \" ..target..\": \" ..aff1)\n    end\n  elseif envenomList[1] == \"punishment\" then\n    aff1 = \"punishment\"\n    aff3 = nil\n    if partyrelay and not ataxia.afflictions.aeon then\n      send(\"pt \" ..target..\": \" ..aff1)\n    end\n  else\n     aff1 = venom_to_aff(envenomList[1])\n     if aff1 then\n       tarAffed(aff1)\n       if applyAffV3 then applyAffV3(aff1) end\n       if partyrelay and not ataxia.afflictions.aeon then\n        send(\"pt \" ..target..\": \" ..aff1)\n       end\n     end\n  end\ntable.remove(envenomList,1)\naff1 = nil\nelseif ataxiaTemp.hitCount == 2 then\n if envenomListTwo[1] == \"exploit\" then\n    tarAffed(\"weariness\")\n    if applyAffV3 then applyAffV3(\"weariness\") end\n    tarAffed(\"paranoia\")\n    if applyAffV3 then applyAffV3(\"paranoia\") end\n    aff2 = \"weariness\"\n    aff3 = \"paranoia\"\n    if partyrelay and not ataxia.afflictions.aeon then\n      send(\"pt \" ..target..\": \" ..aff2.. \" \" ..aff3)\n    end\n  elseif envenomListTwo[1] == \"torment\" then\n    tarAffed(\"healthleech\")\n    if applyAffV3 then applyAffV3(\"healthleech\") end\n    aff2 = \"healthleech\"\n    aff3 = nil\n    if partyrelay and not ataxia.afflictions.aeon then\n      send(\"pt \" ..target..\": \" ..aff2)\n    end\n\n  elseif envenomListTwo[1] == \"torture\" then\n    tarAffed(\"haemophilia\")\n    if applyAffV3 then applyAffV3(\"haemophilia\") end\n    aff2 = \"haemophilia\"\n    aff3 = nil\n    if partyrelay and not ataxia.afflictions.aeon then\n      send(\"pt \" ..target..\": \" ..aff2)\n    end\n  elseif envenomListTwo[1] == \"punishment\" then\n    aff2 = \"punishment\"\n    aff3 = nil\n    if partyrelay and not ataxia.afflictions.aeon then\n      send(\"pt \" ..target..\": \" ..aff2)\n    end\n  else\n     aff2 = venom_to_aff(envenomListTwo[1])\n     if aff2 then\n       tarAffed(aff2)\n       if applyAffV3 then applyAffV3(aff2) end\n       if partyrelay and not ataxia.afflictions.aeon then\n        send(\"pt \" ..target..\": \" ..aff2)\n       end\n     end\n  end\ntable.remove(envenomListTwo,1)\naff2 = nil\naff3 = nil\nend\n\nend\n"
+                        "script": "local person = multimatches[1][3]\n\nataxiaTemp.hitCount = ataxiaTemp.hitCount + 1\n\nif ataxiaTemp.class == \"Bard\" then return end\n\nif isTargeted(person) then\ntargetIshere = true\nerAff(\"shield\")\nataxiaTemp.ignoreShield = false\nlastLimbAttack = \"dwcSlash\"\n\nif ataxiaTemp.hitCount == 1 then\n  if not affs_to_colour then populate_aff_colours() end\n  if envenomList[1] == \"exploit\" then\n    tarAffed(\"weariness\")\n    tarAffed(\"paranoia\")\n    aff1 = \"weariness\"\n    aff3 = \"paranoia\"\n    if partyrelay and not ataxia.afflictions.aeon then\n      send(\"pt \" ..target..\": \" ..aff1.. \" \" ..aff3)\n    end\n  elseif envenomList[1] == \"torment\" then\n    tarAffed(\"healthleech\")\n    aff1 = \"healthleech\"\n    aff3 = nil\n    if partyrelay and not ataxia.afflictions.aeon then\n      send(\"pt \" ..target..\": \" ..aff1)\n    end\n  elseif envenomList[1] == \"torture\" then\n    tarAffed(\"haemophilia\")\n    aff1 = \"haemophilia\"\n    aff3 = nil\n    if partyrelay and not ataxia.afflictions.aeon then\n      send(\"pt \" ..target..\": \" ..aff1)\n    end\n  elseif envenomList[1] == \"punishment\" then\n    aff1 = \"punishment\"\n    aff3 = nil\n    if partyrelay and not ataxia.afflictions.aeon then\n      send(\"pt \" ..target..\": \" ..aff1)\n    end\n  else\n     aff1 = venom_to_aff(envenomList[1])\n     if aff1 then\n       tarAffed(aff1)\n       if partyrelay and not ataxia.afflictions.aeon then\n        send(\"pt \" ..target..\": \" ..aff1)\n       end\n     end\n  end\ntable.remove(envenomList,1)\naff1 = nil\nelseif ataxiaTemp.hitCount == 2 then\n if envenomListTwo[1] == \"exploit\" then\n    tarAffed(\"weariness\")\n    tarAffed(\"paranoia\")\n    aff2 = \"weariness\"\n    aff3 = \"paranoia\"\n    if partyrelay and not ataxia.afflictions.aeon then\n      send(\"pt \" ..target..\": \" ..aff2.. \" \" ..aff3)\n    end\n  elseif envenomListTwo[1] == \"torment\" then\n    tarAffed(\"healthleech\")\n    aff2 = \"healthleech\"\n    aff3 = nil\n    if partyrelay and not ataxia.afflictions.aeon then\n      send(\"pt \" ..target..\": \" ..aff2)\n    end\n\n  elseif envenomListTwo[1] == \"torture\" then\n    tarAffed(\"haemophilia\")\n    aff2 = \"haemophilia\"\n    aff3 = nil\n    if partyrelay and not ataxia.afflictions.aeon then\n      send(\"pt \" ..target..\": \" ..aff2)\n    end\n  elseif envenomListTwo[1] == \"punishment\" then\n    aff2 = \"punishment\"\n    aff3 = nil\n    if partyrelay and not ataxia.afflictions.aeon then\n      send(\"pt \" ..target..\": \" ..aff2)\n    end\n  else\n     aff2 = venom_to_aff(envenomListTwo[1])\n     if aff2 then\n       tarAffed(aff2)\n       if partyrelay and not ataxia.afflictions.aeon then\n        send(\"pt \" ..target..\": \" ..aff2)\n       end\n     end\n  end\ntable.remove(envenomListTwo,1)\naff2 = nil\naff3 = nil\nend\n\nend\n"
                       },
                       {
                         "name": "Swing2",
@@ -7254,7 +7254,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"addiction\")\n\tif applyAffV3 then applyAffV3(\"addiction\") end\nend"
+                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"addiction\")\nend"
                       },
                       {
                         "name": "Nausea",
@@ -7264,7 +7264,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"nausea\")\n\tif applyAffV3 then applyAffV3(\"nausea\") end\nend"
+                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"nausea\")\nend"
                       },
                       {
                         "name": "Manaleech",
@@ -7322,7 +7322,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n  for _, aff in pairs({\"nocaloric\", \"shivering\", \"frozen\"}) do\n    if not haveAff(aff) then\n      tarAffed(aff)\n      if applyAffV3 then applyAffV3(aff) end\n      break\n    end\n  end\nend"
+                            "script": "if isTargeted(matches[2]) then\n  for _, aff in pairs({\"nocaloric\", \"shivering\", \"frozen\"}) do\n    if not haveAff(aff) then\n      tarAffed(aff)\n      break\n    end\n  end\nend"
                           }
                         ]
                       },
@@ -7385,7 +7385,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\t\ttarAffed(\"dehydrate\")\n\t\tif applyAffV3 then applyAffV3(\"dehydrate\") end\n\t\tif dehydrateTimer then killTimer(dehydrateTimer) end\n\t\tdehydrateTimer = tempTimer(46, [[tAffs.burns = 0; tAffs.dehydrate = false; if removeAffV3 then removeAffV3(\"dehydrate\") end]])\nend"
+                            "script": "if isTargeted(matches[2]) then\n\t\ttarAffed(\"dehydrate\")\n\t\tif dehydrateTimer then killTimer(dehydrateTimer) end\n\t\tdehydrateTimer = tempTimer(46, [[tAffs.burns = 0; erAff(\"dehydrate\")]])\nend"
                           },
                           {
                             "name": "Lost Dehydrate",
@@ -7528,7 +7528,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\t\n\ttarAffed(\"anorexia\")\n\tif applyAffV3 then applyAffV3(\"anorexia\") end\nend"
+                        "script": "if isTargeted(matches[2]) then\t\n\ttarAffed(\"anorexia\")\nend"
                       },
                       {
                         "name": "Sloth",
@@ -7890,7 +7890,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"haemophilia\")\n\tif applyAffV3 then applyAffV3(\"haemophilia\") end\nend"
+                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"haemophilia\")\nend"
                           },
                           {
                             "name": "Epilepsy",
@@ -7900,7 +7900,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"epilepsy\")\n\tif applyAffV3 then applyAffV3(\"epilepsy\") end\nend"
+                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"epilepsy\")\nend"
                           },
                           {
                             "name": "Asthma",
@@ -7910,7 +7910,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"asthma\")\n\tif applyAffV3 then applyAffV3(\"asthma\") end\nend"
+                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"asthma\")\nend"
                           },
                           {
                             "name": "Paralysis",
@@ -7920,7 +7920,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"paralysis\")\n\tif applyAffV3 then applyAffV3(\"paralysis\") end\nend"
+                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"paralysis\")\nend"
                           },
                           {
                             "name": "Clumsiness",
@@ -7930,7 +7930,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"clumsiness\")\n\tif applyAffV3 then applyAffV3(\"clumsiness\") end\nend"
+                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"clumsiness\")\nend"
                           }
                         ]
                       },
@@ -7952,7 +7952,7 @@
                         ],
                         "multiline": "yes",
                         "multilineDelta": 1,
-                        "script": "local person = multimatches[1][2]\nif isTargeted(person) then\n\tif multimatches[3][1] ~= \"Your blow strikes \"..person..\" but is robbed of much of its impact by your faulty technique.\" then\n\t\tmoveCursor(0, getLineNumber()-1)\n\t\tif tLimbs.H >= 75 or lb[target].hits[\"head\"] >= 75 then\n\t\t\ttarAffed(\"impatience\", \"stupidity\", \"prone\")\n\t\t\tif applyAffV3 then applyAffV3(\"impatience\"); applyAffV3(\"stupidity\"); applyAffV3(\"prone\") end\n    elseif haveAff(\"prone\") then\n      tarAffed(\"impatience\")\n      if applyAffV3 then applyAffV3(\"impatience\") end\n\t\telse\n\t\t\ttarAffed(\"stupidity\", \"prone\")\n\t\t\tif applyAffV3 then applyAffV3(\"stupidity\"); applyAffV3(\"prone\") end\n\t\tend\n\t\tpsion_hitLimb(\"head\")\n\t\n\t\tsend(\"contemplate \"..target,false)\t\t\n\t\tmoveCursorEnd()\t\n\t\t\n\t\tpsion_bleedAdd(\"20\")\n\t\t\n\tend\nend\n\nif tAffs.prone then\nsend(\"pt \" ..target.. \": impatience\")\nelse \nsend(\"pt \" ..target.. \": prone and stupidity\")\nend\n\n"
+                        "script": "local person = multimatches[1][2]\nif isTargeted(person) then\n\tif multimatches[3][1] ~= \"Your blow strikes \"..person..\" but is robbed of much of its impact by your faulty technique.\" then\n\t\tmoveCursor(0, getLineNumber()-1)\n\t\tif tLimbs.H >= 75 or lb[target].hits[\"head\"] >= 75 then\n\t\t\ttarAffed(\"impatience\", \"stupidity\", \"prone\")\n    elseif haveAff(\"prone\") then\n      tarAffed(\"impatience\")\n\t\telse\n\t\t\ttarAffed(\"stupidity\", \"prone\")\n\t\tend\n\t\tpsion_hitLimb(\"head\")\n\t\n\t\tsend(\"contemplate \"..target,false)\t\t\n\t\tmoveCursorEnd()\t\n\t\t\n\t\tpsion_bleedAdd(\"20\")\n\t\t\n\tend\nend\n\nif tAffs.prone then\nsend(\"pt \" ..target.. \": impatience\")\nelse \nsend(\"pt \" ..target.. \": prone and stupidity\")\nend\n\n"
                       },
                       {
                         "name": "Backhand",
@@ -7991,7 +7991,7 @@
                         ],
                         "multiline": "yes",
                         "multilineDelta": 1,
-                        "script": "local person = multimatches[1][3]\nif isTargeted(person) then\n\tif multimatches[3][1] ~= \"Your blow strikes \"..person..\" but is robbed of much of its impact by your faulty technique.\" then\n\t\tmoveCursor(0, getLineNumber()-1)\n\t\ttarAffed(\"weariness\")\n\t\tif applyAffV3 then applyAffV3(\"weariness\") end\n\t\tpsion_hitLimb(multimatches[1][2]..\" arm\")\n\t\t\n\t\tmoveCursorEnd()\n\t\tpsion_bleedAdd(\"35\")\t\t\n\tend\nend\n\nsend(\"pt \" ..target.. \": weariness\")\n"
+                        "script": "local person = multimatches[1][3]\nif isTargeted(person) then\n\tif multimatches[3][1] ~= \"Your blow strikes \"..person..\" but is robbed of much of its impact by your faulty technique.\" then\n\t\tmoveCursor(0, getLineNumber()-1)\n\t\ttarAffed(\"weariness\")\n\t\tpsion_hitLimb(multimatches[1][2]..\" arm\")\n\t\t\n\t\tmoveCursorEnd()\n\t\tpsion_bleedAdd(\"35\")\t\t\n\tend\nend\n\nsend(\"pt \" ..target.. \": weariness\")\n"
                       },
                       {
                         "name": "Clumsiness",
@@ -8011,7 +8011,7 @@
                         ],
                         "multiline": "yes",
                         "multilineDelta": 1,
-                        "script": "local person = multimatches[1][3]\nif isTargeted(person) then\n\tif multimatches[3][1] ~= \"Your blow strikes \"..person..\" but is robbed of much of its impact by your faulty technique.\" then\n\t\tmoveCursor(0, getLineNumber()-1)\n\t\ttarAffed(\"clumsiness\")\n\t\tif applyAffV3 then applyAffV3(\"clumsiness\") end\n\t\tpsion_hitLimb(multimatches[1][2]..\" arm\")\n\t\tmoveCursorEnd()\n\t\tpsion_bleedAdd(\"20\")\t\t\n\tend\nend\nif partyrelay and not ataxia.afflictions.aeon then\nsend(\"pt \" ..target.. \": clumsiness\")\nend"
+                        "script": "local person = multimatches[1][3]\nif isTargeted(person) then\n\tif multimatches[3][1] ~= \"Your blow strikes \"..person..\" but is robbed of much of its impact by your faulty technique.\" then\n\t\tmoveCursor(0, getLineNumber()-1)\n\t\ttarAffed(\"clumsiness\")\n\t\tpsion_hitLimb(multimatches[1][2]..\" arm\")\n\t\tmoveCursorEnd()\n\t\tpsion_bleedAdd(\"20\")\t\t\n\tend\nend\nif partyrelay and not ataxia.afflictions.aeon then\nsend(\"pt \" ..target.. \": clumsiness\")\nend"
                       },
                       {
                         "name": "Unweaving",
@@ -8050,7 +8050,7 @@
                         ],
                         "multiline": "yes",
                         "multilineDelta": 1,
-                        "script": "local person = multimatches[1][2]\nif isTargeted(person) then\n\tif multimatches[3][1] ~= \"Your blow strikes \"..person..\" but is robbed of much of its impact by your faulty technique.\" then\n\t\tmoveCursor(0, getLineNumber()-1)\n\t\ttarAffed(\"asthma\")\n\t\tif applyAffV3 then applyAffV3(\"asthma\") end\n\t\tpsion_hitLimb(\"head\")\n\t\tsend(\"contemplate \"..target,false)\t\t\n\t\tmoveCursorEnd()\n\t\tif haveAff(\"prone\") then\n\t\t\tpsion_bleedAdd(\"150\")\n\t\telse\n\t\t\tpsion_bleedAdd(\"65\")\n\t\tend\n\tend\nend\n\nif partyrelay and not ataxia.afflictions.aeon then\nsend(\"pt \" ..target.. \": asthma\")\nend"
+                        "script": "local person = multimatches[1][2]\nif isTargeted(person) then\n\tif multimatches[3][1] ~= \"Your blow strikes \"..person..\" but is robbed of much of its impact by your faulty technique.\" then\n\t\tmoveCursor(0, getLineNumber()-1)\n\t\ttarAffed(\"asthma\")\n\t\tpsion_hitLimb(\"head\")\n\t\tsend(\"contemplate \"..target,false)\t\t\n\t\tmoveCursorEnd()\n\t\tif haveAff(\"prone\") then\n\t\t\tpsion_bleedAdd(\"150\")\n\t\telse\n\t\t\tpsion_bleedAdd(\"65\")\n\t\tend\n\tend\nend\n\nif partyrelay and not ataxia.afflictions.aeon then\nsend(\"pt \" ..target.. \": asthma\")\nend"
                       },
                       {
                         "name": "Hamstring",
@@ -8070,7 +8070,7 @@
                         ],
                         "multiline": "yes",
                         "multilineDelta": 1,
-                        "script": "local person = multimatches[1][3]\nif isTargeted(person) then\n\tif multimatches[3][1] ~= \"Your blow strikes \"..person..\" but is robbed of much of its impact by your faulty technique.\" then\n\t\tmoveCursor(0, getLineNumber()-1)\n\t\tif multimatches[1][2] == \"left\" then\n\t\t\tif tLimbs.LL < 79 or lb[target].hits[\"left leg\"] < 75 then\n\t\t\t\ttarAffed(\"brokenleftleg\")\n\t\t\t\tif applyAffV3 then applyAffV3(\"brokenleftleg\") end\n\t\t\telse\n\t\t\t\ttarAffed(\"damagedleftleg\", \"prone\")\n\t\t\t\tif applyAffV3 then applyAffV3(\"damagedleftleg\"); applyAffV3(\"prone\") end\n\t\t\tend\n\t\telse\n\t\t\tif tLimbs.RL < 79 or lb[target].hits[\"right leg\"] < 75 then\n\t\t\t\ttarAffed(\"brokenrightleg\")\n\t\t\t\tif applyAffV3 then applyAffV3(\"brokenrightleg\") end\n\t\t\telse\n\t\t\t\ttarAffed(\"damagedrightleg\", \"prone\")\n\t\t\t\tif applyAffV3 then applyAffV3(\"damagedrightleg\"); applyAffV3(\"prone\") end\n\t\t\tend\t\n\t\tend\n\n\t\tpsion_hitLimb(multimatches[1][2]..\" leg\")\n\t\tsend(\"contemplate \"..target,false)\t\t\n\t\tmoveCursorEnd()\n\t\tpsion_bleedAdd(\"20\")\t\n\tend\nend"
+                        "script": "local person = multimatches[1][3]\nif isTargeted(person) then\n\tif multimatches[3][1] ~= \"Your blow strikes \"..person..\" but is robbed of much of its impact by your faulty technique.\" then\n\t\tmoveCursor(0, getLineNumber()-1)\n\t\tif multimatches[1][2] == \"left\" then\n\t\t\tif tLimbs.LL < 79 or lb[target].hits[\"left leg\"] < 75 then\n\t\t\t\ttarAffed(\"brokenleftleg\")\n\t\t\telse\n\t\t\t\ttarAffed(\"damagedleftleg\", \"prone\")\n\t\t\tend\n\t\telse\n\t\t\tif tLimbs.RL < 79 or lb[target].hits[\"right leg\"] < 75 then\n\t\t\t\ttarAffed(\"brokenrightleg\")\n\t\t\telse\n\t\t\t\ttarAffed(\"damagedrightleg\", \"prone\")\n\t\t\tend\t\n\t\tend\n\n\t\tpsion_hitLimb(multimatches[1][2]..\" leg\")\n\t\tsend(\"contemplate \"..target,false)\t\t\n\t\tmoveCursorEnd()\n\t\tpsion_bleedAdd(\"20\")\t\n\tend\nend"
                       },
                       {
                         "name": "Exsanguinate",
@@ -8109,7 +8109,7 @@
                         ],
                         "multiline": "yes",
                         "multilineDelta": 1,
-                        "script": "local person = multimatches[1][2]\nif isTargeted(person) then\n\tif multimatches[3][1] ~= \"Your blow strikes \"..person..\" but is robbed of much of its impact by your faulty technique.\" then\n\t\tif haveAff(\"prone\") then\n\t\t\tmoveCursor(0, getLineNumber()-1)\n\t\t\ttarAffed(\"blackout\")\n\t\t\tif applyAffV3 then applyAffV3(\"blackout\") end\n\t\t\ttempTimer(3.5, [[erAff(\"blackout\"); if removeAffV3 then removeAffV3(\"blackout\") end]])\n\t\tend\n\t\tpsion_hitLimb(\"head\")\n\t\tsend(\"contemplate \"..target,false)\t\t\n\t\tmoveCursorEnd()\t\n\tend\nend\nif partyrelay and not ataxia.afflictions.aeon then\nsend(\"pt \" ..target.. \": blackout\")\nend\n"
+                        "script": "local person = multimatches[1][2]\nif isTargeted(person) then\n\tif multimatches[3][1] ~= \"Your blow strikes \"..person..\" but is robbed of much of its impact by your faulty technique.\" then\n\t\tif haveAff(\"prone\") then\n\t\t\tmoveCursor(0, getLineNumber()-1)\n\t\t\ttarAffed(\"blackout\")\n\t\t\ttempTimer(3.5, [[erAff(\"blackout\")]])\n\t\tend\n\t\tpsion_hitLimb(\"head\")\n\t\tsend(\"contemplate \"..target,false)\t\t\n\t\tmoveCursorEnd()\t\n\tend\nend\nif partyrelay and not ataxia.afflictions.aeon then\nsend(\"pt \" ..target.. \": blackout\")\nend\n"
                       },
                       {
                         "name": "RavagedMind",
@@ -8123,7 +8123,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"mindravaged\")\n\tif applyAffV3 then applyAffV3(\"mindravaged\") end\nend\n\n\n\nataxia_boxEcho(\"RAVAGED||RAVAGED||RAVAGED\", \"black:orange\")"
+                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"mindravaged\")\nend\n\n\n\nataxia_boxEcho(\"RAVAGED||RAVAGED||RAVAGED\", \"black:orange\")"
                       },
                       {
                         "name": "Critical Unweave",
@@ -8208,7 +8208,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"haemophilia\")\n\tif applyAffV3 then applyAffV3(\"haemophilia\") end\n  \n  predictBal(\"class\", 1.7)\t\nend"
+                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"haemophilia\")\n  \n  predictBal(\"class\", 1.7)\t\nend"
                           },
                           {
                             "name": "Humbug (addiction)",
@@ -8292,7 +8292,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(matches[3])\n\tif applyAffV3 then applyAffV3(matches[3]) end\n\tif readAuraAffs and readAuraAffs.count then\n\t\treadAuraAffs.count = readAuraAffs.count + 1\n\tend\n  \n  predictBal(\"eq\", 1.8)\t\nend"
+                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(matches[3])\n\tif readAuraAffs and readAuraAffs.count then\n\t\treadAuraAffs.count = readAuraAffs.count + 1\n\tend\n  \n  predictBal(\"eq\", 1.8)\t\nend"
                           },
                           {
                             "name": "Unnamable",
@@ -8311,7 +8311,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"whisperingmadness\")\n\tif applyAffV3 then applyAffV3(\"whisperingmadness\") end\n  \n  predictBal(\"eq\", 1.9)\t\nend"
+                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"whisperingmadness\")\n  \n  predictBal(\"eq\", 1.9)\t\nend"
                           },
                           {
                             "name": "Attend",
@@ -8393,7 +8393,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "local limb = \"\"\nif isTargeted(matches[2]) then\n  limb = matches[3]\nelseif isTargeted(matches[3]) then\n  limb = matches[2]\nelse\n  return\nend\ntarAffed(\"broken\"..limb:gsub(\" \", \"\"))\nif applyAffV3 then applyAffV3(\"broken\"); applyAffV3(\" \") end"
+                            "script": "local limb = \"\"\nif isTargeted(matches[2]) then\n  limb = matches[3]\nelseif isTargeted(matches[3]) then\n  limb = matches[2]\nelse\n  return\nend\ntarAffed(\"broken\"..limb:gsub(\" \", \"\"))"
                           }
                         ]
                       },
@@ -8490,7 +8490,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"justice\")\n\tif applyAffV3 then applyAffV3(\"justice\") end\nend"
+                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"justice\")\nend"
                       }
                     ]
                   },
@@ -8788,7 +8788,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n  tarAffed(\"hypersomnia\")\n  if applyAffV3 then applyAffV3(\"hypersomnia\") end\nend\nif gmcp.Char.Status.class == \"Apostate\" then\n  if demon() == \"nightmare\" then\n    killTimer(tostring(nmTimer))\n    nmTimer = tempTimer(8.5, [[nighttick()]])\n    killTimer(tostring(mareTimer))\n    mareTimer = tempTimer(6.5, [[maretickthing()]])\n  end\nend\n\n\n\n\nfunction nighttick()\n  if demon() == \"nightmare\" then\n    if tAffs.dementia and tAffs.hypersomnia then\n      tarAffed(\"hellsight\")\n      if applyAffV3 then applyAffV3(\"hellsight\") end\n    else\n      killTimer(tostring(nmTimer))\n\t    nmTimer = tempTimer(8.5, [[nighttick()]])\n    end\n  end\nend\n\nfunction maretickthing()\n  if demon() == \"nightmare\" then\n    if not tAffs.dementia and tAffs.hypersomnia and tAffs.asthma and tAffs.impatience then\n      maretick = true\n    else\n    maretick = false\n      killTimer(tostring(mareTimer))\n\t    mareTimer = tempTimer(6.5, [[maretickthing()]])\n    end\n  end\nend"
+                        "script": "if isTargeted(matches[2]) then\n  tarAffed(\"hypersomnia\")\nend\nif gmcp.Char.Status.class == \"Apostate\" then\n  if demon() == \"nightmare\" then\n    killTimer(tostring(nmTimer))\n    nmTimer = tempTimer(8.5, [[nighttick()]])\n    killTimer(tostring(mareTimer))\n    mareTimer = tempTimer(6.5, [[maretickthing()]])\n  end\nend\n\n\n\n\nfunction nighttick()\n  if demon() == \"nightmare\" then\n    if tAffs.dementia and tAffs.hypersomnia then\n      tarAffed(\"hellsight\")\n    else\n      killTimer(tostring(nmTimer))\n\t    nmTimer = tempTimer(8.5, [[nighttick()]])\n    end\n  end\nend\n\nfunction maretickthing()\n  if demon() == \"nightmare\" then\n    if not tAffs.dementia and tAffs.hypersomnia and tAffs.asthma and tAffs.impatience then\n      maretick = true\n    else\n    maretick = false\n      killTimer(tostring(mareTimer))\n\t    mareTimer = tempTimer(6.5, [[maretickthing()]])\n    end\n  end\nend"
                       },
                       {
                         "name": "Dementia",
@@ -8798,7 +8798,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"dementia\")\n\tif applyAffV3 then applyAffV3(\"dementia\") end\nend\n\n"
+                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"dementia\")\nend\n\n"
                       },
                       {
                         "name": "Sicken Capstone",
@@ -9198,7 +9198,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n  tarAffed(\"paralysis\", \"clumsiness\")\n  if applyAffV3 then applyAffV3(\"paralysis\"); applyAffV3(\"clumsiness\") end\nend"
+                        "script": "if isTargeted(matches[2]) then\n  tarAffed(\"paralysis\", \"clumsiness\")\nend"
                       },
                       {
                         "name": "Latency",
@@ -9231,7 +9231,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n  tarAffed(\"paralysis\")\n  if applyAffV3 then applyAffV3(\"paralysis\") end\nend"
+                        "script": "if isTargeted(matches[2]) then\n  tarAffed(\"paralysis\")\nend"
                       },
                       {
                         "name": "Sensitivity",
@@ -9347,7 +9347,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n    Target_Instill = \"madness\"\n    -- Guard: get venom name safely (may be nil when using timeloop)\n    local venomName = (envenomList and envenomList[1]) or \"unknown\"\n\n    if not haveAff(\"shadowmadness\") then\n        tarAffed(\"shadowmadness\")\n        if applyAffV3 then applyAffV3(\"shadowmadness\") end\n        if partyrelay and tloop == false and tloop2 == false then send(\"pt \"..target..\": \" ..venomName.. \" and shadowmadness\") end\n        if partyrelay and (tloop == true or tloop2 == true) then send(\"pt \"..target..\": timeloop and shadowmadness\") end\n    elseif not haveAff(\"vertigo\") then\n        tarAffed(\"vertigo\")\n        if applyAffV3 then applyAffV3(\"vertigo\") end\n        if partyrelay and tloop == false and tloop2 == false then send(\"pt \"..target..\": \" ..venomName.. \" and vertigo\") end\n        if partyrelay and (tloop == true or tloop2 == true) then send(\"pt \"..target..\": timeloop and vertigo\") end\n    else\n        tarAffed(\"hallucinations\")\n        if applyAffV3 then applyAffV3(\"hallucinations\") end\n        if partyrelay and tloop == false and tloop2 == false then send(\"pt \"..target..\": \" ..venomName.. \" and hallucinations\") end\n        if partyrelay and (tloop == true or tloop2 == true) then send(\"pt \"..target..\": timeloop and hallucinations\") end\n    end\nend\n\n"
+                        "script": "if isTargeted(matches[2]) then\n    Target_Instill = \"madness\"\n    -- Guard: get venom name safely (may be nil when using timeloop)\n    local venomName = (envenomList and envenomList[1]) or \"unknown\"\n\n    if not haveAff(\"shadowmadness\") then\n        tarAffed(\"shadowmadness\")\n        if partyrelay and tloop == false and tloop2 == false then send(\"pt \"..target..\": \" ..venomName.. \" and shadowmadness\") end\n        if partyrelay and (tloop == true or tloop2 == true) then send(\"pt \"..target..\": timeloop and shadowmadness\") end\n    elseif not haveAff(\"vertigo\") then\n        tarAffed(\"vertigo\")\n        if partyrelay and tloop == false and tloop2 == false then send(\"pt \"..target..\": \" ..venomName.. \" and vertigo\") end\n        if partyrelay and (tloop == true or tloop2 == true) then send(\"pt \"..target..\": timeloop and vertigo\") end\n    else\n        tarAffed(\"hallucinations\")\n        if partyrelay and tloop == false and tloop2 == false then send(\"pt \"..target..\": \" ..venomName.. \" and hallucinations\") end\n        if partyrelay and (tloop == true or tloop2 == true) then send(\"pt \"..target..\": timeloop and hallucinations\") end\n    end\nend\n\n"
                       },
                       {
                         "name": "Leach",
@@ -9357,7 +9357,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n    Target_Instill = \"leach\"\n    -- Guard: get venom name safely (may be nil when using timeloop)\n    local venomName = (envenomList and envenomList[1]) or \"unknown\"\n\n    if not haveAff(\"parasite\") then\n        tarAffed(\"parasite\")\n        if applyAffV3 then applyAffV3(\"parasite\") end\n        if partyrelay and tloop == false and tloop2 == false then send(\"pt \"..target..\": \" ..venomName.. \" and parasite\") end\n        if partyrelay and (tloop == true or tloop2 == true) then send(\"pt \"..target..\": timeloop and parasite\") end\n    elseif not haveAff(\"healthleech\") then\n        tarAffed(\"healthleech\")\n        if applyAffV3 then applyAffV3(\"healthleech\") end\n        if partyrelay and tloop == false and tloop2 == false then send(\"pt \"..target..\": \" ..venomName.. \" and healthleech\") end\n        if partyrelay and (tloop == true or tloop2 == true) then send(\"pt \"..target..\": timeloop and healthleech\") end\n    elseif not haveAff(\"manaleech\") then\n        tarAffed(\"manaleech\")\n        if applyAffV3 then applyAffV3(\"manaleech\") end\n        if partyrelay and tloop == false and tloop2 == false then send(\"pt \"..target..\": \" ..venomName.. \" and manaleech\") end\n        if partyrelay and (tloop == true or tloop2 == true) then send(\"pt \"..target..\": timeloop and manaleech\") end\n    else\n        tarAffed(\"parasite\", \"healthleech\", \"manaleech\")\n        if applyAffV3 then applyAffV3(\"parasite\"); applyAffV3(\"healthleech\"); applyAffV3(\"manaleech\") end\n    end\nend"
+                        "script": "if isTargeted(matches[2]) then\n    Target_Instill = \"leach\"\n    -- Guard: get venom name safely (may be nil when using timeloop)\n    local venomName = (envenomList and envenomList[1]) or \"unknown\"\n\n    if not haveAff(\"parasite\") then\n        tarAffed(\"parasite\")\n        if partyrelay and tloop == false and tloop2 == false then send(\"pt \"..target..\": \" ..venomName.. \" and parasite\") end\n        if partyrelay and (tloop == true or tloop2 == true) then send(\"pt \"..target..\": timeloop and parasite\") end\n    elseif not haveAff(\"healthleech\") then\n        tarAffed(\"healthleech\")\n        if partyrelay and tloop == false and tloop2 == false then send(\"pt \"..target..\": \" ..venomName.. \" and healthleech\") end\n        if partyrelay and (tloop == true or tloop2 == true) then send(\"pt \"..target..\": timeloop and healthleech\") end\n    elseif not haveAff(\"manaleech\") then\n        tarAffed(\"manaleech\")\n        if partyrelay and tloop == false and tloop2 == false then send(\"pt \"..target..\": \" ..venomName.. \" and manaleech\") end\n        if partyrelay and (tloop == true or tloop2 == true) then send(\"pt \"..target..\": timeloop and manaleech\") end\n    else\n        tarAffed(\"parasite\", \"healthleech\", \"manaleech\")\n    end\nend"
                       },
                       {
                         "name": "Madness Is Active!",
@@ -9546,7 +9546,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\t\ttarAffed(\"hamstring\")\n\t\tif applyAffV3 then applyAffV3(\"hamstring\") end\n\t\tif hamstringTimer then killTimer(hamstringTimer) end\n\t\thamstringTimer = tempTimer(10, [[tAffs.hamstring = nil]])\n\n\t\t-- Update BM dispatch timestamp for hamstring tracking\n\t\tif blademaster and blademaster.onHamstringApplied then\n\t\t\tblademaster.onHamstringApplied()\n\t\tend\n\nif not ataxia.afflictions.aeon and partyrelay then\n  send(\"pt \" ..target..\": Hamstring\")\nend\nend"
+                            "script": "if isTargeted(matches[2]) then\n\t\ttarAffed(\"hamstring\")\n\t\tif hamstringTimer then killTimer(hamstringTimer) end\n\t\thamstringTimer = tempTimer(10, [[tAffs.hamstring = nil]])\n\n\t\t-- Update BM dispatch timestamp for hamstring tracking\n\t\tif blademaster and blademaster.onHamstringApplied then\n\t\t\tblademaster.onHamstringApplied()\n\t\tend\n\nif not ataxia.afflictions.aeon and partyrelay then\n  send(\"pt \" ..target..\": Hamstring\")\nend\nend"
                           },
                           {
                             "name": "Slickness (underarm)",
@@ -10257,7 +10257,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"voyria\")\n\tif applyAffV3 then applyAffV3(\"voyria\") end\nend\n\n"
+                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"voyria\")\nend\n\n"
                       }
                     ]
                   },
@@ -10400,7 +10400,7 @@
                       }
                     ],
                     "fireLength": 1,
-                    "script": "tarInsomnia = tarInsomnia or true\ndeadaff = matches[2]\n\n\n\nif isTargeted(matches[3])\n\n\nand matches[2] ~= \"clumsy\" and matches[2] ~= \"stupid\" and matches[2] ~= \"sicken\" and matches[2] ~= \"dizzy\" and matches[2] ~= \"vomiting\" \nand matches[2] ~= \"reckless\" and matches[2] ~= \"plague\" and matches[2] ~= \"bleed\" and matches[2] ~= \"breach\" and matches[2] ~= \"sleep\" and matches[2] ~= \"paralysis\" then\n\ttarAffed(matches[2])\n\tif applyAffV3 then applyAffV3(matches[2]) end\n  cecho(\"working\")\nelseif matches[2] == \"clumsy\" then\ntarAffed(\"clumsiness\")\nif applyAffV3 then applyAffV3(\"clumsiness\") end\nelseif matches[2] == \"stupid\" then\ntarAffed(\"stupidity\")\nif applyAffV3 then applyAffV3(\"stupidity\") end\nelseif matches[2] == \"confusion\" then\ntarAffed(\"confusion\")\nif applyAffV3 then applyAffV3(\"confusion\") end\nelseif matches[2] == \"sensitivity\" and not tAffs.deafness then\ntarAffed(\"sensitivity\")\nif applyAffV3 then applyAffV3(\"sensitivity\") end\nelseif matches[2] == \"sensitivity\" and tAffs.deafness then\ntAffs.deafness = false\nif removeAffV3 then removeAffV3(\"deafness\") end\nelseif matches[2] == \"dizzy\" then\ntarAffed(\"dizziness\")\nif applyAffV3 then applyAffV3(\"dizziness\") end\nelseif matches[2] == \"plague\" then\ntarAffed(\"voyria\")\nif applyAffV3 then applyAffV3(\"voyria\") end\nelseif matches[2] == \"sicken\" and not tAffs.manaleech  then\ntarAffed(\"manaleech\")\nif applyAffV3 then applyAffV3(\"manaleech\") end\nelseif matches[2] == \"sicken\" and tAffs.manaleech then\ntarAffed(\"slickness\")\nif applyAffV3 then applyAffV3(\"slickness\") end\nelseif matches[2] == \"vomiting\"  then\ntarAffed(\"nausea\")\nif applyAffV3 then applyAffV3(\"nausea\") end\nelseif matches[2] == \"reckless\"  then\ntarAffed(\"recklessness\")\nif applyAffV3 then applyAffV3(\"recklessness\") end\nelseif matches[2] == \"paralysis\" then\ntarAffed(\"paralysis\")\nif applyAffV3 then applyAffV3(\"paralysis\") end\nelseif matches[2] == \"sleep\" then\ntarAffed(\"hypersomnia\")\nif applyAffV3 then applyAffV3(\"hypersomnia\") end\nelseif matches[2] == \"bleed\" then\ntarAffed(\"haemophilia\")\nif applyAffV3 then applyAffV3(\"haemophilia\") end\nend\ntAffs.curseward = false\nif removeAffV3 then removeAffV3(\"curseward\") end\n\nif matches[2] == \"sleep\" and tAffs.hypersomnia and tarInsomnia == true then tarInsomnia = tempTimer(10, [[tarInsomnia = true; tarInsomnia = false]]) end\n\n\n  if partyrelay then\n    deadeye_buffer = deadeye_buffer or {}\n    table.insert(deadeye_buffer, matches[2] == \"sicken\" and \"manaleech\" or matches[2])\n    if deadeye_timer then killTimer(deadeye_timer) end\n    deadeye_timer = tempTimer(0, function()\n      if deadeye_buffer and #deadeye_buffer > 0 then\n        send(\"pt \" .. target .. \": \" .. table.concat(deadeye_buffer, \", \"))\n        deadeye_buffer = {}\n      end\n      deadeye_timer = nil\n    end)\n  end\n\n"
+                    "script": "tarInsomnia = tarInsomnia or true\ndeadaff = matches[2]\n\n\n\nif isTargeted(matches[3])\n\n\nand matches[2] ~= \"clumsy\" and matches[2] ~= \"stupid\" and matches[2] ~= \"sicken\" and matches[2] ~= \"dizzy\" and matches[2] ~= \"vomiting\" \nand matches[2] ~= \"reckless\" and matches[2] ~= \"plague\" and matches[2] ~= \"bleed\" and matches[2] ~= \"breach\" and matches[2] ~= \"sleep\" and matches[2] ~= \"paralysis\" then\n\ttarAffed(matches[2])\n  cecho(\"working\")\nelseif matches[2] == \"clumsy\" then\ntarAffed(\"clumsiness\")\nelseif matches[2] == \"stupid\" then\ntarAffed(\"stupidity\")\nelseif matches[2] == \"confusion\" then\ntarAffed(\"confusion\")\nelseif matches[2] == \"sensitivity\" and not tAffs.deafness then\ntarAffed(\"sensitivity\")\nelseif matches[2] == \"sensitivity\" and tAffs.deafness then\nerAff(\"deafness\")\nelseif matches[2] == \"dizzy\" then\ntarAffed(\"dizziness\")\nelseif matches[2] == \"plague\" then\ntarAffed(\"voyria\")\nelseif matches[2] == \"sicken\" and not tAffs.manaleech  then\ntarAffed(\"manaleech\")\nelseif matches[2] == \"sicken\" and tAffs.manaleech then\ntarAffed(\"slickness\")\nelseif matches[2] == \"vomiting\"  then\ntarAffed(\"nausea\")\nelseif matches[2] == \"reckless\"  then\ntarAffed(\"recklessness\")\nelseif matches[2] == \"paralysis\" then\ntarAffed(\"paralysis\")\nelseif matches[2] == \"sleep\" then\ntarAffed(\"hypersomnia\")\nelseif matches[2] == \"bleed\" then\ntarAffed(\"haemophilia\")\nend\nerAff(\"curseward\")\n\nif matches[2] == \"sleep\" and tAffs.hypersomnia and tarInsomnia == true then tarInsomnia = tempTimer(10, [[tarInsomnia = true; tarInsomnia = false]]) end\n\n\n  if partyrelay then\n    deadeye_buffer = deadeye_buffer or {}\n    table.insert(deadeye_buffer, matches[2] == \"sicken\" and \"manaleech\" or matches[2])\n    if deadeye_timer then killTimer(deadeye_timer) end\n    deadeye_timer = tempTimer(0, function()\n      if deadeye_buffer and #deadeye_buffer > 0 then\n        send(\"pt \" .. target .. \": \" .. table.concat(deadeye_buffer, \", \"))\n        deadeye_buffer = {}\n      end\n      deadeye_timer = nil\n    end)\n  end\n\n"
                   }
                 ]
               },
@@ -10422,7 +10422,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"weariness\", \"haemophilia\", \"addiction\")\n\tif applyAffV3 then applyAffV3(\"weariness\"); applyAffV3(\"haemophilia\"); applyAffV3(\"addiction\") end\nend"
+                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"weariness\", \"haemophilia\", \"addiction\")\nend"
                       },
                       {
                         "name": "Anorexia",
@@ -10432,7 +10432,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"anorexia\")\n\tif applyAffV3 then applyAffV3(\"anorexia\") end\nend\n\n"
+                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"anorexia\")\nend\n\n"
                       },
                       {
                         "name": "Asthma",
@@ -10442,7 +10442,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"asthma\")\n\tif applyAffV3 then applyAffV3(\"asthma\") end\nend"
+                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"asthma\")\nend"
                       },
                       {
                         "name": "Confusion",
@@ -10452,7 +10452,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"confusion\", \"weariness\")\n\tif applyAffV3 then applyAffV3(\"confusion\"); applyAffV3(\"weariness\") end\nend"
+                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"confusion\", \"weariness\")\nend"
                       },
                       {
                         "name": "Lethargy",
@@ -10471,7 +10471,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"haemophilia\")\n\tif applyAffV3 then applyAffV3(\"haemophilia\") end\nend"
+                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"haemophilia\")\nend"
                       },
                       {
                         "name": "Nausea",
@@ -10485,7 +10485,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"nausea\")\n\tif applyAffV3 then applyAffV3(\"nausea\") end\n\nend"
+                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"nausea\")\n\nend"
                       },
                       {
                         "name": "Paralysis",
@@ -10495,7 +10495,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"paralysis\")\n\tif applyAffV3 then applyAffV3(\"paralysis\") end\nend"
+                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"paralysis\")\nend"
                       },
                       {
                         "name": "Slickness",
@@ -10505,7 +10505,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"slickness\")\n\tif applyAffV3 then applyAffV3(\"slickness\") end\nend"
+                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"slickness\")\nend"
                       },
                       {
                         "name": "Weariness",
@@ -10515,7 +10515,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"weariness\")\n\tif applyAffV3 then applyAffV3(\"weariness\") end\nend\n"
+                        "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"weariness\")\nend\n"
                       },
                       {
                         "name": "++ Focus Knock ++",
@@ -10629,7 +10629,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"unconsciousness\")\n\tif applyAffV3 then applyAffV3(\"unconsciousness\") end\nend"
+                    "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"unconsciousness\")\nend"
                   },
                   {
                     "name": "Impaled",
@@ -10643,7 +10643,7 @@
                         "type": "exactMatch"
                       }
                     ],
-                    "script": "selectString(line,1)\nfg(\"black\")\nbg(\"DodgerBlue\")\nif ataxia_isClass(\"runewarden\") or ataxia_isClass(\"paladin\") or ataxia_isClass(\"infernal\") or ataxia_isClass(\"unnamable\") then\n  send(\"fury on\")\nend\n\ntAffs.impaled = true\nif applyAffV3 then applyAffV3(\"impaled\") end\n\n-- BM Brokenstar phase engine callback\nif blademaster and blademaster.onImpaleSuccess then blademaster.onImpaleSuccess() end\n\ndisableTimer(\"Battlefury Perceive\")"
+                    "script": "selectString(line,1)\nfg(\"black\")\nbg(\"DodgerBlue\")\nif ataxia_isClass(\"runewarden\") or ataxia_isClass(\"paladin\") or ataxia_isClass(\"infernal\") or ataxia_isClass(\"unnamable\") then\n  send(\"fury on\")\nend\n\ntarAffed(\"impaled\")\n\n-- BM Brokenstar phase engine callback\nif blademaster and blademaster.onImpaleSuccess then blademaster.onImpaleSuccess() end\n\ndisableTimer(\"Battlefury Perceive\")"
                   },
                   {
                     "name": "No Impale",
@@ -10866,7 +10866,7 @@
                         ],
                         "multiline": "yes",
                         "multilineDelta": 1,
-                        "script": "ataxiaTemp.lastLimbHit = \"head\"\nif ataxiaTemp.class ~= \"Bard\" then return end\nlocal person = multimatches[1][2]\n\nif isTargeted(person) then\n\tif multimatches[3][1] == \"The attack rebounds back onto you!\"\n\t\tor multimatches[3][1] == person .. \" dodges nimbly out of the way.\" \n\t\tor multimatches[3][1] == person .. \" parries the attack with a deft manoeuvre.\" \n\t\tor multimatches[3][1] == person .. \" steps into the attack, grabs your arm, and throws you violently to the ground.\" \n\t\tor multimatches[3][1] == person .. \" quickly jumps back, avoiding the attack.\"  \n\t\tor multimatches[3][1] == \"A reflection of \" .. person .. \" blinks out of existence.\" \n\t\tor multimatches[3][1] == person .. \" moves into your attack, knocking your blow aside before viciously countering with a strike to your head.\" \n\t\tor multimatches[3][1] == \"You lash out at \" .. person .. \" with a \" .. multimatches[1][2] .. \", but miss.\"\n\t\tor multimatches[3][1] == person .. \" twists his body out of harm's way.\"\n\t\tor multimatches[3][1] == person .. \" twists her body out of harm's way.\"\n\tthen\n    if multimatches[3][1] == person .. \" parries the attack with a deft manoeuvre.\" then\n      ataxiaTemp.parriedLimb = ataxiaTemp.lastLimbHit\n      cecho(\"<green> -> \"..ataxiaTemp.parriedLimb)\n    end      \n\telse\n\t\tbard_addLimbDamage(multimatches[1][3])\n\t\tif next(envenomList) then\n\t\t\tmoveCursor(0, getLineNumber()-1)\n\t\t\ttarAffed(envenomList[1])\n\t\t\tif applyAffV3 then applyAffV3(envenomList[1]) end\n\t\t\ttable.remove(envenomList, 1)\n\t\t\tmoveCursorEnd()\n      if not ataxia_isClass(\"bard\") or ataxia.bardStuff.tunesmith ~= \"martellato\" then\t\n        tAffs.shield = false; tAffs.rebounding = false\n        if removeAffV3 then removeAffV3(\"shield\"); removeAffV3(\"rebounding\") end\n      end\n\t\tend\n\tend\n\tenableTrigger(\"Martellato Check\")\n\tif ataxia.defences.heartsfury then\n\t\tsend(\"envenom rapier with curare\",false)\n\tend\t\nend\n\n"
+                        "script": "ataxiaTemp.lastLimbHit = \"head\"\nif ataxiaTemp.class ~= \"Bard\" then return end\nlocal person = multimatches[1][2]\n\nif isTargeted(person) then\n\tif multimatches[3][1] == \"The attack rebounds back onto you!\"\n\t\tor multimatches[3][1] == person .. \" dodges nimbly out of the way.\" \n\t\tor multimatches[3][1] == person .. \" parries the attack with a deft manoeuvre.\" \n\t\tor multimatches[3][1] == person .. \" steps into the attack, grabs your arm, and throws you violently to the ground.\" \n\t\tor multimatches[3][1] == person .. \" quickly jumps back, avoiding the attack.\"  \n\t\tor multimatches[3][1] == \"A reflection of \" .. person .. \" blinks out of existence.\" \n\t\tor multimatches[3][1] == person .. \" moves into your attack, knocking your blow aside before viciously countering with a strike to your head.\" \n\t\tor multimatches[3][1] == \"You lash out at \" .. person .. \" with a \" .. multimatches[1][2] .. \", but miss.\"\n\t\tor multimatches[3][1] == person .. \" twists his body out of harm's way.\"\n\t\tor multimatches[3][1] == person .. \" twists her body out of harm's way.\"\n\tthen\n    if multimatches[3][1] == person .. \" parries the attack with a deft manoeuvre.\" then\n      ataxiaTemp.parriedLimb = ataxiaTemp.lastLimbHit\n      cecho(\"<green> -> \"..ataxiaTemp.parriedLimb)\n    end      \n\telse\n\t\tbard_addLimbDamage(multimatches[1][3])\n\t\tif next(envenomList) then\n\t\t\tmoveCursor(0, getLineNumber()-1)\n\t\t\ttarAffed(envenomList[1])\n\t\t\ttable.remove(envenomList, 1)\n\t\t\tmoveCursorEnd()\n      if not ataxia_isClass(\"bard\") or ataxia.bardStuff.tunesmith ~= \"martellato\" then\t\n        erAff(\"shield\"); erAff(\"rebounding\")\n      end\n\t\tend\n\tend\n\tenableTrigger(\"Martellato Check\")\n\tif ataxia.defences.heartsfury then\n\t\tsend(\"envenom rapier with curare\",false)\n\tend\t\nend\n\n"
                       },
                       {
                         "name": "Frontkick right",
@@ -11245,7 +11245,7 @@
                                 ],
                                 "multiline": "yes",
                                 "multilineDelta": 1,
-                                "script": "local person = multimatches[1][3]\nlocal maybemiss = multimatches[3][1]\n\n\n\nif isTargeted(person) then\n  targetIshere = true\n  tAffs.shield = false\n  if removeAffV3 then removeAffV3(\"shield\") end\n  ignoreThirdPerson = true\n\n\n if partyrelay and not haveAff(\"weariness\") then\n  send(\"pt \"..target..\": weariness\")\n  elseif\npartyrelay and  haveAff(\"weariness\") then send(\"pt \"..target..\": lethargy weariness\")\n\n   end \n   \n    moveCursor(0, getLineNumber()-1)\n   \n      if haveAff(\"weariness\") then\n        tarAffed(\"lethargy\")\n        if applyAffV3 then applyAffV3(\"lethargy\") end\n      else\n        tarAffed(\"weariness\")\n        if applyAffV3 then applyAffV3(\"weariness\") end\n      end\n     \n    moveCursorEnd()\n    lastLimbAttack = \"shikKuro\"\n    \n    \n\n   \n  \nend\n\nlocal damage = tonumber(multimatches[3][1])\n   ataxiaTables.limbData.shikKuro = damage\n"
+                                "script": "local person = multimatches[1][3]\nlocal maybemiss = multimatches[3][1]\n\n\n\nif isTargeted(person) then\n  targetIshere = true\n  erAff(\"shield\")\n  ignoreThirdPerson = true\n\n\n if partyrelay and not haveAff(\"weariness\") then\n  send(\"pt \"..target..\": weariness\")\n  elseif\npartyrelay and  haveAff(\"weariness\") then send(\"pt \"..target..\": lethargy weariness\")\n\n   end \n   \n    moveCursor(0, getLineNumber()-1)\n   \n      if haveAff(\"weariness\") then\n        tarAffed(\"lethargy\")\n      else\n        tarAffed(\"weariness\")\n      end\n     \n    moveCursorEnd()\n    lastLimbAttack = \"shikKuro\"\n    \n    \n\n   \n  \nend\n\nlocal damage = tonumber(multimatches[3][1])\n   ataxiaTables.limbData.shikKuro = damage\n"
                               },
                               {
                                 "name": "2Kuro (weariness/lethargy)",
@@ -11265,7 +11265,7 @@
                                 ],
                                 "multiline": "yes",
                                 "multilineDelta": 1,
-                                "script": "local person = multimatches[1][2]\nlocal maybemiss = multimatches[3][1]\n\n\n\nif isTargeted(person) then\n  targetIshere = true\n  tAffs.shield = false\n  if removeAffV3 then removeAffV3(\"shield\") end\n  ignoreThirdPerson = true\n  \n  \n  if partyrelay and not haveAff(\"weariness\") then\n  send(\"pt \"..target..\": weariness\")\n  elseif\npartyrelay and  haveAff(\"weariness\") then send(\"pt \"..target..\": lethargy weariness\")\n\n   end \n\n    moveCursor(0, getLineNumber()-1)\n    \n      if haveAff(\"weariness\") then\n        tarAffed(\"lethargy\")\n        if applyAffV3 then applyAffV3(\"lethargy\") end\n      else\n        tarAffed(\"weariness\")\n        if applyAffV3 then applyAffV3(\"weariness\") end\n      end\n       \n    moveCursorEnd()\n    lastLimbAttack = \"shikKuro\"\n\n \n\n   \nend\n\n\nlocal damage = tonumber(multimatches[3][1])\n   ataxiaTables.limbData.shikKuro = damage\n"
+                                "script": "local person = multimatches[1][2]\nlocal maybemiss = multimatches[3][1]\n\n\n\nif isTargeted(person) then\n  targetIshere = true\n  erAff(\"shield\")\n  ignoreThirdPerson = true\n  \n  \n  if partyrelay and not haveAff(\"weariness\") then\n  send(\"pt \"..target..\": weariness\")\n  elseif\npartyrelay and  haveAff(\"weariness\") then send(\"pt \"..target..\": lethargy weariness\")\n\n   end \n\n    moveCursor(0, getLineNumber()-1)\n    \n      if haveAff(\"weariness\") then\n        tarAffed(\"lethargy\")\n      else\n        tarAffed(\"weariness\")\n      end\n       \n    moveCursorEnd()\n    lastLimbAttack = \"shikKuro\"\n\n \n\n   \nend\n\n\nlocal damage = tonumber(multimatches[3][1])\n   ataxiaTables.limbData.shikKuro = damage\n"
                               },
                               {
                                 "name": "Hiraku (ano/stutt)",
@@ -11285,7 +11285,7 @@
                                 ],
                                 "multiline": "yes",
                                 "multilineDelta": 1,
-                                "script": "local person = multimatches[1][2]\nlocal maybemiss = multimatches[3][1]\n\n\n\nif isTargeted(person) then\n  targetIshere = true\n  tAffs.shield = false\n  if removeAffV3 then removeAffV3(\"shield\") end\n  ignoreThirdPerson = true\n\n    moveCursor(0, getLineNumber()-1)\n    tarAffed(\"anorexia\", \"stuttering\")\n    if applyAffV3 then applyAffV3(\"anorexia\"); applyAffV3(\"stuttering\") end\n    moveCursorEnd()\n    lastLimbAttack = \"shikHiraku\"\n\nend\nif partyrelay then send(\"pt \"..target..\": anorexia stuttering\")\n      end\nlocal damage = tonumber(multimatches[3][1])\n   ataxiaTables.limbData.shikHiraku = damage\n"
+                                "script": "local person = multimatches[1][2]\nlocal maybemiss = multimatches[3][1]\n\n\n\nif isTargeted(person) then\n  targetIshere = true\n  erAff(\"shield\")\n  ignoreThirdPerson = true\n\n    moveCursor(0, getLineNumber()-1)\n    tarAffed(\"anorexia\", \"stuttering\")\n    moveCursorEnd()\n    lastLimbAttack = \"shikHiraku\"\n\nend\nif partyrelay then send(\"pt \"..target..\": anorexia stuttering\")\n      end\nlocal damage = tonumber(multimatches[3][1])\n   ataxiaTables.limbData.shikHiraku = damage\n"
                               },
                               {
                                 "name": "Hiru (dizzy)",
@@ -11305,7 +11305,7 @@
                                 ],
                                 "multiline": "yes",
                                 "multilineDelta": 1,
-                                "script": "local person = multimatches[1][2]\nlocal maybemiss = multimatches[3][1]\n\n\n\nif isTargeted(person) then\n  targetIshere = true\n  tAffs.shield = false\n  if removeAffV3 then removeAffV3(\"shield\") end\n  ignoreThirdPerson = true\n\n    moveCursor(0, getLineNumber()-1)\n    tarAffed(\"dizziness\")\n    if applyAffV3 then applyAffV3(\"dizziness\") end\n    moveCursorEnd()\n    lastLimbAttack = \"shikHiru\"\n\nend\nif partyrelay and tAffs.prone then send(\"pt \"..target..\": dizziness confusion\")\nelseif partyrelay and not tAffs.prone then send(\"pt \"..target..\": dizziness\")\n      end\nlocal damage = tonumber(multimatches[3][1])\n   ataxiaTables.limbData.shikHiru = damage\n"
+                                "script": "local person = multimatches[1][2]\nlocal maybemiss = multimatches[3][1]\n\n\n\nif isTargeted(person) then\n  targetIshere = true\n  erAff(\"shield\")\n  ignoreThirdPerson = true\n\n    moveCursor(0, getLineNumber()-1)\n    tarAffed(\"dizziness\")\n    moveCursorEnd()\n    lastLimbAttack = \"shikHiru\"\n\nend\nif partyrelay and tAffs.prone then send(\"pt \"..target..\": dizziness confusion\")\nelseif partyrelay and not tAffs.prone then send(\"pt \"..target..\": dizziness\")\n      end\nlocal damage = tonumber(multimatches[3][1])\n   ataxiaTables.limbData.shikHiru = damage\n"
                               },
                               {
                                 "name": "Livestrike (asthma)",
@@ -11325,7 +11325,7 @@
                                 ],
                                 "multiline": "yes",
                                 "multilineDelta": 1,
-                                "script": "local person = multimatches[1][2]\nlocal maybemiss = multimatches[3][1]\n\nif isTargeted(person) then\n  targetIshere = true\n  tAffs.shield = false\n  if removeAffV3 then removeAffV3(\"shield\") end\n  ignoreThirdPerson = true\n\n    moveCursor(0, getLineNumber()-1)\n    tarAffed(\"asthma\")\n    if applyAffV3 then applyAffV3(\"asthma\") end\n    moveCursorEnd()\n    lastLimbAttack = \"shikLivestrike\"\n\nend\n  if partyrelay then send(\"pt \"..target..\": asthma\")\n      end\n\nlocal damage = tonumber(multimatches[3][1])\n   ataxiaTables.limbData.shikLivestrike = damage\n"
+                                "script": "local person = multimatches[1][2]\nlocal maybemiss = multimatches[3][1]\n\nif isTargeted(person) then\n  targetIshere = true\n  erAff(\"shield\")\n  ignoreThirdPerson = true\n\n    moveCursor(0, getLineNumber()-1)\n    tarAffed(\"asthma\")\n    moveCursorEnd()\n    lastLimbAttack = \"shikLivestrike\"\n\nend\n  if partyrelay then send(\"pt \"..target..\": asthma\")\n      end\n\nlocal damage = tonumber(multimatches[3][1])\n   ataxiaTables.limbData.shikLivestrike = damage\n"
                               },
                               {
                                 "name": "Flashheel (break leg)",
@@ -11364,7 +11364,7 @@
                                 ],
                                 "multiline": "yes",
                                 "multilineDelta": 1,
-                                "script": "local person = multimatches[1][2]\nlocal maybemiss = multimatches[3][1]\n\nif isTargeted(person) then\n  targetIshere = true\n  tAffs.shield = false\n  if removeAffV3 then removeAffV3(\"shield\") end\n  ignoreThirdPerson = true\n    if partyrelay and not haveAff(\"clumsiness\") then\n  send(\"pt \"..target..\": clumsiness\")\n   elseif\npartyrelay and haveAff(\"clumsiness\") then send(\"pt \"..target..\": healthleech clumsiness\")\n   end \n\n        if haveAff(\"clumsiness\") then\n        tarAffed(\"healthleech\")\n        if applyAffV3 then applyAffV3(\"healthleech\") end\n      else\n        tarAffed(\"clumsiness\")\n        if applyAffV3 then applyAffV3(\"clumsiness\") end\n      end\n    \n    lastLimbAttack = \"shikRuku\"\n\n     \nend\n\n\nlocal damage = tonumber(multimatches[3][1])\n   ataxiaTables.limbData.shikRuku = damage\n"
+                                "script": "local person = multimatches[1][2]\nlocal maybemiss = multimatches[3][1]\n\nif isTargeted(person) then\n  targetIshere = true\n  erAff(\"shield\")\n  ignoreThirdPerson = true\n    if partyrelay and not haveAff(\"clumsiness\") then\n  send(\"pt \"..target..\": clumsiness\")\n   elseif\npartyrelay and haveAff(\"clumsiness\") then send(\"pt \"..target..\": healthleech clumsiness\")\n   end \n\n        if haveAff(\"clumsiness\") then\n        tarAffed(\"healthleech\")\n      else\n        tarAffed(\"clumsiness\")\n      end\n    \n    lastLimbAttack = \"shikRuku\"\n\n     \nend\n\n\nlocal damage = tonumber(multimatches[3][1])\n   ataxiaTables.limbData.shikRuku = damage\n"
                               },
                               {
                                 "name": "Spinkick Torso",
@@ -11450,7 +11450,7 @@
                                 ],
                                 "multiline": "yes",
                                 "multilineDelta": 1,
-                                "script": "local person = multimatches[1][2]\nlocal maybemiss = multimatches[3][1]\n\nif isTargeted(person) then\n  targetIshere = true\n  tAffs.shield = false\n  if removeAffV3 then removeAffV3(\"shield\") end\n  ignoreThirdPerson = true\n      if partyrelay and not haveAff(\"clumsiness\") then\n  send(\"pt \"..target..\": clumsiness\")\n   elseif\npartyrelay and haveAff(\"clumsiness\") then send(\"pt \"..target..\": healthleech clumsiness\")\n   end \n      \n        if haveAff(\"clumsiness\") then\n        tarAffed(\"healthleech\")\n        if applyAffV3 then applyAffV3(\"healthleech\") end\n      else\n        tarAffed(\"clumsiness\")\n        if applyAffV3 then applyAffV3(\"clumsiness\") end\n      end\n     \n    lastLimbAttack = \"shikRuku\"\n\n     \nend\n \n\n\n\nlocal damage = tonumber(multimatches[3][1])\n   ataxiaTables.limbData.shikRuku = damage\n"
+                                "script": "local person = multimatches[1][2]\nlocal maybemiss = multimatches[3][1]\n\nif isTargeted(person) then\n  targetIshere = true\n  erAff(\"shield\")\n  ignoreThirdPerson = true\n      if partyrelay and not haveAff(\"clumsiness\") then\n  send(\"pt \"..target..\": clumsiness\")\n   elseif\npartyrelay and haveAff(\"clumsiness\") then send(\"pt \"..target..\": healthleech clumsiness\")\n   end \n      \n        if haveAff(\"clumsiness\") then\n        tarAffed(\"healthleech\")\n      else\n        tarAffed(\"clumsiness\")\n      end\n     \n    lastLimbAttack = \"shikRuku\"\n\n     \nend\n \n\n\n\nlocal damage = tonumber(multimatches[3][1])\n   ataxiaTables.limbData.shikRuku = damage\n"
                               },
                               {
                                 "name": "Dart",
@@ -11470,7 +11470,7 @@
                                 ],
                                 "multiline": "yes",
                                 "multilineDelta": 1,
-                                "script": "local person = multimatches[1][3]\nlocal maybemiss = multimatches[3][1]\n\nif isTargeted(person) then\n  targetIshere = true\n  tAffs.shield = false\n  if removeAffV3 then removeAffV3(\"shield\") end\n  ignoreThirdPerson = true\n\n     \n    lastLimbAttack = \"shikDart\"\n\n     \nend\n \n\n\n\nlocal damage = tonumber(multimatches[3][1])\n   ataxiaTables.limbData.shikDart = damage\n"
+                                "script": "local person = multimatches[1][3]\nlocal maybemiss = multimatches[3][1]\n\nif isTargeted(person) then\n  targetIshere = true\n  erAff(\"shield\")\n  ignoreThirdPerson = true\n\n     \n    lastLimbAttack = \"shikDart\"\n\n     \nend\n \n\n\n\nlocal damage = tonumber(multimatches[3][1])\n   ataxiaTables.limbData.shikDart = damage\n"
                               },
                               {
                                 "name": "Ruku torso (slickness)",
@@ -11480,7 +11480,7 @@
                                     "type": "regex"
                                   }
                                 ],
-                                "script": "if isTargeted(matches[2]) then\n  if not ignoreThirdPerson then\n    tarAffed(\"slickness\")\n    if applyAffV3 then applyAffV3(\"slickness\") end\n  else\n    ignoreThirdPerson = nil\n  end\nend\n"
+                                "script": "if isTargeted(matches[2]) then\n  if not ignoreThirdPerson then\n    tarAffed(\"slickness\")\n  else\n    ignoreThirdPerson = nil\n  end\nend\n"
                               }
                             ]
                           },
@@ -11671,7 +11671,7 @@
                                     ],
                                     "multiline": "yes",
                                     "multilineDelta": 1,
-                                    "script": "local person = multimatches[1][2]\nif isTargeted(person) then\n  targetIshere = true\n  tAffs.shield = false\n  if removeAffV3 then removeAffV3(\"shield\") end\n  lastLimbAttack = \"tekuraAXK\"\n  \n  local damage = tonumber(multimatches[3][1])\n  if ataxiaTables.limbData.tekuraSDK == 25 then ataxiaTables.limbData.tekuraSNK = math.floor(damage*1.2) end\n  if ataxiaTables.limbData.tekuraMNK == 25 then ataxiaTables.limbData.tekuraMNK = damage end\n  if ataxiaTables.limbData.tekuraSNK == 25 then ataxiaTables.limbData.tekuraSNK = damage end\n  if ataxiaTables.limbData.tekuraAXK == 25 then ataxiaTables.limbData.tekuraWWK = damage end\nend"
+                                    "script": "local person = multimatches[1][2]\nif isTargeted(person) then\n  targetIshere = true\n  erAff(\"shield\")\n  lastLimbAttack = \"tekuraAXK\"\n  \n  local damage = tonumber(multimatches[3][1])\n  if ataxiaTables.limbData.tekuraSDK == 25 then ataxiaTables.limbData.tekuraSNK = math.floor(damage*1.2) end\n  if ataxiaTables.limbData.tekuraMNK == 25 then ataxiaTables.limbData.tekuraMNK = damage end\n  if ataxiaTables.limbData.tekuraSNK == 25 then ataxiaTables.limbData.tekuraSNK = damage end\n  if ataxiaTables.limbData.tekuraAXK == 25 then ataxiaTables.limbData.tekuraWWK = damage end\nend"
                                   },
                                   {
                                     "name": "WRENCH HEAD",
@@ -11728,7 +11728,7 @@
                                     "type": "regex"
                                   }
                                 ],
-                                "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"impatience\")\n\tif applyAffV3 then applyAffV3(\"impatience\") end\n  if ataxia.settings.raid.enabled then\n    send(\"pt \"..matches[2]..\": impatience\",false)\n  end\nend"
+                                "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"impatience\")\n  if ataxia.settings.raid.enabled then\n    send(\"pt \"..matches[2]..\": impatience\",false)\n  end\nend"
                               },
                               {
                                 "name": "Confusion",
@@ -11738,7 +11738,7 @@
                                     "type": "regex"
                                   }
                                 ],
-                                "script": "if isTargeted(matches[2]) then\n\ttarAffedConfirmed(\"confusion\")\n\tif applyAffV3 then applyAffV3(\"confusion\") end\n  if ataxia.settings.raid.enabled then\n    if partyrelay and not ataxia.afflictions.aeon then\n    send(\"pt confusion on \"..matches[2],false)\n    end\n  end\nend"
+                                "script": "if isTargeted(matches[2]) then\n\ttarAffedConfirmed(\"confusion\")\n  if ataxia.settings.raid.enabled then\n    if partyrelay and not ataxia.afflictions.aeon then\n    send(\"pt confusion on \"..matches[2],false)\n    end\n  end\nend"
                               },
                               {
                                 "name": "Batter",
@@ -11757,7 +11757,7 @@
                                     "type": "regex"
                                   }
                                 ],
-                                "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"paralysis\")\n\tif applyAffV3 then applyAffV3(\"paralysis\") end\n  if ataxia.settings.raid.enabled then\n    send(\"pt paralysis on \"..matches[2],false)\n  end\nend"
+                                "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"paralysis\")\n  if ataxia.settings.raid.enabled then\n    send(\"pt paralysis on \"..matches[2],false)\n  end\nend"
                               },
                               {
                                 "name": "Stupidity",
@@ -11771,7 +11771,7 @@
                                     "type": "regex"
                                   }
                                 ],
-                                "script": "if isTargeted(matches[2]) then\n\ttarAffedConfirmed(\"stupidity\")\n\tif applyAffV3 then applyAffV3(\"stupidity\") end\n  if ataxia.settings.raid.enabled then\n    send(\"pt stupidity on \"..matches[2],false)\n  end\nend"
+                                "script": "if isTargeted(matches[2]) then\n\ttarAffedConfirmed(\"stupidity\")\n  if ataxia.settings.raid.enabled then\n    send(\"pt stupidity on \"..matches[2],false)\n  end\nend"
                               },
                               {
                                 "name": "Dizziness",
@@ -11781,7 +11781,7 @@
                                     "type": "regex"
                                   }
                                 ],
-                                "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"dizziness\")\n\tif applyAffV3 then applyAffV3(\"dizziness\") end\nend"
+                                "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"dizziness\")\nend"
                               },
                               {
                                 "name": "Disrupt",
@@ -11842,7 +11842,7 @@
                                     "type": "regex"
                                   }
                                 ],
-                                "script": "if isTargeted(matches[2]) and not ataxiaTemp.ignoreShield then\n\tmoveCursor(0, getLineNumber())\n\ttarAffed(\"paralysis\")\n\tif applyAffV3 then applyAffV3(\"paralysis\") end\n\tmoveCursorEnd()\n   if partyrelay then send(\"pt \"..target..\": paralysis\")\n      end\nend\nataxiaTemp.ignoreShield = nil\n\ntinvest = false"
+                                "script": "if isTargeted(matches[2]) and not ataxiaTemp.ignoreShield then\n\tmoveCursor(0, getLineNumber())\n\ttarAffed(\"paralysis\")\n\tmoveCursorEnd()\n   if partyrelay then send(\"pt \"..target..\": paralysis\")\n      end\nend\nataxiaTemp.ignoreShield = nil\n\ntinvest = false"
                               },
                               {
                                 "name": "Drive",
@@ -11861,7 +11861,7 @@
                                     "type": "regex"
                                   }
                                 ],
-                                "script": "if isTargeted(matches[2]) and not ataxiaTemp.ignoreShield then\n\tlocal smashAffs = {\"dizziness\", \"recklessness\", \"stupidity\", \"confusion\", \"epilepsy\"}\n\tfor i=1, #smashAffs do\n\t\tif not haveAff(smashAffs[i]) then\n\t\t\tmoveCursor(0, getLineNumber())\n\t\t\ttarAffed(smashAffs[i])\n\t\t\tif applyAffV3 then applyAffV3(smashAffs[i]) end\n\t\t\tmoveCursorEnd()\n\t\t\tbreak\n\t\tend\n       if partyrelay then send(\"pt \"..target..\": \"..smashAffs[i])\n      end\n\tend\nend\nataxiaTemp.ignoreShield = nil\n\n\ntinvest = false"
+                                "script": "if isTargeted(matches[2]) and not ataxiaTemp.ignoreShield then\n\tlocal smashAffs = {\"dizziness\", \"recklessness\", \"stupidity\", \"confusion\", \"epilepsy\"}\n\tfor i=1, #smashAffs do\n\t\tif not haveAff(smashAffs[i]) then\n\t\t\tmoveCursor(0, getLineNumber())\n\t\t\ttarAffed(smashAffs[i])\n\t\t\tmoveCursorEnd()\n\t\t\tbreak\n\t\tend\n       if partyrelay then send(\"pt \"..target..\": \"..smashAffs[i])\n      end\n\tend\nend\nataxiaTemp.ignoreShield = nil\n\n\ntinvest = false"
                               },
                               {
                                 "name": "Shieldstrike Mid",
@@ -11908,7 +11908,7 @@
                                     "type": "regex"
                                   }
                                 ],
-                                "script": "if isTargeted(matches[2]) and not ataxiaTemp.ignoreShield then\n\tif haveAff(\"prone\") then\n\t\tmoveCursor(0, getLineNumber())\n\t\ttarAffed(\"blackout\")\n\t\tif applyAffV3 then applyAffV3(\"blackout\") end\n\t\tmoveCursorEnd()\n\t\ttempTimer(3.5, [[erAff(\"blackout\"); if removeAffV3 then removeAffV3(\"blackout\") end]])\n      if partyrelay and not ataxia.afflictions.aeon then send(\"pt \"..target..\": blackout\")\n      end\n\tend\nend\n\ntinvest = false"
+                                "script": "if isTargeted(matches[2]) and not ataxiaTemp.ignoreShield then\n\tif haveAff(\"prone\") then\n\t\tmoveCursor(0, getLineNumber())\n\t\ttarAffed(\"blackout\")\n\t\tmoveCursorEnd()\n\t\ttempTimer(3.5, [[erAff(\"blackout\")]])\n      if partyrelay and not ataxia.afflictions.aeon then send(\"pt \"..target..\": blackout\")\n      end\n\tend\nend\n\ntinvest = false"
                               },
                               {
                                 "name": "Exploit",
@@ -11918,7 +11918,7 @@
                                     "type": "regex"
                                   }
                                 ],
-                                "script": "if isTargeted(matches[2]) and not ataxiaTemp.ignoreShield then\n\tmoveCursor(0, getLineNumber())\n\ttarAffed(\"weariness\")\n\tif applyAffV3 then applyAffV3(\"weariness\") end\n  tarAffed(\"paranoia\")\n  if applyAffV3 then applyAffV3(\"paranoia\") end\n\tmoveCursorEnd()\n  if partyrelay then send(\"pt \"..target..\": weariness paranoia\")\n  end\nend\nataxiaTemp.ignoreShield = nil"
+                                "script": "if isTargeted(matches[2]) and not ataxiaTemp.ignoreShield then\n\tmoveCursor(0, getLineNumber())\n\ttarAffed(\"weariness\")\n  tarAffed(\"paranoia\")\n\tmoveCursorEnd()\n  if partyrelay then send(\"pt \"..target..\": weariness paranoia\")\n  end\nend\nataxiaTemp.ignoreShield = nil"
                               },
                               {
                                 "name": "Torture",
@@ -12018,7 +12018,7 @@
                                     "type": "regex"
                                   }
                                 ],
-                                "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"prone\")\n\tif applyAffV3 then applyAffV3(\"prone\") end\n     if partyrelay then send(\"pt \"..target..\": prone\")\n      end\nend"
+                                "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"prone\")\n     if partyrelay then send(\"pt \"..target..\": prone\")\n      end\nend"
                               },
                               {
                                 "name": "Gritting",
@@ -12110,7 +12110,7 @@
                                                 "type": "regex"
                                               }
                                             ],
-                                            "script": "if isTargeted(matches[3]) then\n\n  if ataxiaTemp.fractures.torntendons >= 6 then\n    tarAffed(\"mangledleftarm\", \"mangledrightarm\")\n    if applyAffV3 then applyAffV3(\"mangledleftarm\"); applyAffV3(\"mangledrightarm\") end\n  elseif ataxiaTemp.fractures.torntendons >= 4 then\n    tarAffed(\"damagedleftarm\", \"damagedrightarm\")\n    if applyAffV3 then applyAffV3(\"damagedleftarm\"); applyAffV3(\"damagedrightarm\") end\n  else\n    tarAffed(\"brokenleftarm\", \"brokenrightarm\")\n    if applyAffV3 then applyAffV3(\"brokenleftarm\"); applyAffV3(\"brokenrightarm\") end\n  end\n  \n  ataxiaTemp.fractures.wristfractures = 0\n  twohanded_armsHit()  \nend"
+                                            "script": "if isTargeted(matches[3]) then\n\n  if ataxiaTemp.fractures.torntendons >= 6 then\n    tarAffed(\"mangledleftarm\", \"mangledrightarm\")\n  elseif ataxiaTemp.fractures.torntendons >= 4 then\n    tarAffed(\"damagedleftarm\", \"damagedrightarm\")\n  else\n    tarAffed(\"brokenleftarm\", \"brokenrightarm\")\n  end\n  \n  ataxiaTemp.fractures.wristfractures = 0\n  twohanded_armsHit()  \nend"
                                           },
                                           {
                                             "name": "Legs",
@@ -12132,7 +12132,7 @@
                                                 "type": "regex"
                                               }
                                             ],
-                                            "script": "if isTargeted(matches[2]) then\n\n  if ataxiaTemp.fractures.torntendons >= 6 then\n    tarAffed(\"mangledleftleg\", \"mangledrightleg\", \"prone\")\n    if applyAffV3 then applyAffV3(\"mangledleftleg\"); applyAffV3(\"mangledrightleg\"); applyAffV3(\"prone\") end\n  elseif ataxiaTemp.fractures.torntendons >= 4 then\n    tarAffed(\"damagedleftleg\", \"damagedrightleg\", \"prone\")\n    if applyAffV3 then applyAffV3(\"damagedleftleg\"); applyAffV3(\"damagedrightleg\"); applyAffV3(\"prone\") end\n  else\n    tarAffed(\"brokenleftleg\", \"brokenrightleg\", \"prone\")\n    if applyAffV3 then applyAffV3(\"brokenleftleg\"); applyAffV3(\"brokenrightleg\"); applyAffV3(\"prone\") end\n  end\n  \n  ataxiaTemp.fractures.torntendons = 0\n  twohanded_legsHit()  \nend"
+                                            "script": "if isTargeted(matches[2]) then\n\n  if ataxiaTemp.fractures.torntendons >= 6 then\n    tarAffed(\"mangledleftleg\", \"mangledrightleg\", \"prone\")\n  elseif ataxiaTemp.fractures.torntendons >= 4 then\n    tarAffed(\"damagedleftleg\", \"damagedrightleg\", \"prone\")\n  else\n    tarAffed(\"brokenleftleg\", \"brokenrightleg\", \"prone\")\n  end\n  \n  ataxiaTemp.fractures.torntendons = 0\n  twohanded_legsHit()  \nend"
                                           }
                                         ]
                                       },
@@ -12285,7 +12285,7 @@
                                 ],
                                 "multiline": "yes",
                                 "multilineDelta": 1,
-                                "script": "local person = multimatches[1][2]\nlocal maybemiss = multimatches[3][1]\nataxiaTemp.lastLimbHit = \"torso\"\nif isTargeted(person) then\n\n  targetIshere = true\n  tAffs.shield = false\n  if removeAffV3 then removeAffV3(\"shield\") end\n\n\tataxiaTemp.ignoreShield = false\n\tif next(envenomList) then\n\t\t\tmoveCursor(0, getLineNumber()-1)\n\t\t\ttarAffed(envenomList[1])\n\t\t\tif applyAffV3 then applyAffV3(envenomList[1]) end\n     local affstruck = envenomList[1]\n       if partyrelay then send(\"pt \"..target..\": \"..affstruck)\n      end\n\t\t\ttable.remove(envenomList, 1)\n\t\t\tmoveCursorEnd()\n\n\tend\nend\n       lastLimbAttack = \"twoHander\"\n\nlocal damage = tonumber(multimatches[3][3])\n   ataxiaTables.limbData.twoHander = damage\n"
+                                "script": "local person = multimatches[1][2]\nlocal maybemiss = multimatches[3][1]\nataxiaTemp.lastLimbHit = \"torso\"\nif isTargeted(person) then\n\n  targetIshere = true\n  erAff(\"shield\")\n\n\tataxiaTemp.ignoreShield = false\n\tif next(envenomList) then\n\t\t\tmoveCursor(0, getLineNumber()-1)\n\t\t\ttarAffed(envenomList[1])\n     local affstruck = envenomList[1]\n       if partyrelay then send(\"pt \"..target..\": \"..affstruck)\n      end\n\t\t\ttable.remove(envenomList, 1)\n\t\t\tmoveCursorEnd()\n\n\tend\nend\n       lastLimbAttack = \"twoHander\"\n\nlocal damage = tonumber(multimatches[3][3])\n   ataxiaTables.limbData.twoHander = damage\n"
                               },
                               {
                                 "name": "HEW DAMAGE",
@@ -12457,7 +12457,7 @@
                                 ],
                                 "multiline": "yes",
                                 "multilineDelta": 1,
-                                "script": "local person = multimatches[1][3]\nlocal maybemiss = multimatches[3][1]\nataxiaTemp.lastLimbHit = \"head\"\n\nif isTargeted(person) then\n\n  targetIshere = true\n  tAffs.shield = false\n  if removeAffV3 then removeAffV3(\"shield\") end\n\n\tataxiaTemp.ignoreShield = false\n\tif next(envenomList) then\n\t\t\tmoveCursor(0, getLineNumber()-1)\n\t\t\ttarAffed(envenomList[1])\n\t\t\tif applyAffV3 then applyAffV3(envenomList[1]) end\n     local affstruck = envenomList[1]\n       if partyrelay then send(\"pt \"..target..\": \"..affstruck)\n      end\n\t\t\ttable.remove(envenomList, 1)\n\t\t\tmoveCursorEnd()\n\n\tend\nend\n       lastLimbAttack = \"twoHander\"\n\nlocal damage = tonumber(multimatches[3][3])\n   ataxiaTables.limbData.twoHander = damage\n"
+                                "script": "local person = multimatches[1][3]\nlocal maybemiss = multimatches[3][1]\nataxiaTemp.lastLimbHit = \"head\"\n\nif isTargeted(person) then\n\n  targetIshere = true\n  erAff(\"shield\")\n\n\tataxiaTemp.ignoreShield = false\n\tif next(envenomList) then\n\t\t\tmoveCursor(0, getLineNumber()-1)\n\t\t\ttarAffed(envenomList[1])\n     local affstruck = envenomList[1]\n       if partyrelay then send(\"pt \"..target..\": \"..affstruck)\n      end\n\t\t\ttable.remove(envenomList, 1)\n\t\t\tmoveCursorEnd()\n\n\tend\nend\n       lastLimbAttack = \"twoHander\"\n\nlocal damage = tonumber(multimatches[3][3])\n   ataxiaTables.limbData.twoHander = damage\n"
                               },
                               {
                                 "name": "Battlefury Upset",
@@ -12545,7 +12545,7 @@
                                     "type": "regex"
                                   }
                                 ],
-                                "script": "if isTargeted(matches[3]) then\ntparrying = \"none\"\ndwbparrying = false\nataxiaTemp.parriedLimb = \"none\"\ntempTimer(15, [[ tAffs.numbedleftarm = nil;cecho(\"\\n<a_darkgreen>target can parry again\") ]])\n\tif matches[2] == \"right\" then\n    if numbedRight then killTimer(numbedRight) end\n    numbedRight = tempTimer(15, [[ tAffs.numbedrightarm = nil; cecho(\"\\n<green>target can use tattoos again\") ]])\n    tarAffed(\"numbedrightarm\")\n    if applyAffV3 then applyAffV3(\"numbedrightarm\") end\n \n  else\n    if numbedLeft then killTimer(numbedLeft) end\n    numbedLeft = tempTimer(15, [[ tAffs.numbedleftarm = nil; cecho(\"\\n<a_darkgreen>target can parry again\") ]])\n    tarAffed(\"numbedleftarm\")  \n    if applyAffV3 then applyAffV3(\"numbedleftarm\") end\n  end\nend"
+                                "script": "if isTargeted(matches[3]) then\ntparrying = \"none\"\ndwbparrying = false\nataxiaTemp.parriedLimb = \"none\"\ntempTimer(15, [[ tAffs.numbedleftarm = nil;cecho(\"\\n<a_darkgreen>target can parry again\") ]])\n\tif matches[2] == \"right\" then\n    if numbedRight then killTimer(numbedRight) end\n    numbedRight = tempTimer(15, [[ tAffs.numbedrightarm = nil; cecho(\"\\n<green>target can use tattoos again\") ]])\n    tarAffed(\"numbedrightarm\")\n \n  else\n    if numbedLeft then killTimer(numbedLeft) end\n    numbedLeft = tempTimer(15, [[ tAffs.numbedleftarm = nil; cecho(\"\\n<a_darkgreen>target can parry again\") ]])\n    tarAffed(\"numbedleftarm\")  \n  end\nend"
                               },
                               {
                                 "name": "ASSAULT",
@@ -12596,7 +12596,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"prone\")\n\tif applyAffV3 then applyAffV3(\"prone\") end\n     if partyrelay then send(\"pt \"..target..\": prone\")\n      end\nend"
+                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"prone\")\n     if partyrelay then send(\"pt \"..target..\": prone\")\n      end\nend"
                           },
                           {
                             "name": "Swing",
@@ -12616,7 +12616,7 @@
                             ],
                             "multiline": "yes",
                             "multilineDelta": 1,
-                            "script": "local person = multimatches[1][4]\nlocal maybemiss = multimatches[3][1]\n\nif ataxiaTemp.class == \"Bard\" then return end\n\nif isTargeted(person) then\n  targetIshere = true\n  tAffs.shield = false\n  if removeAffV3 then removeAffV3(\"shield\") end\n\n\tataxiaTemp.ignoreShield = false\n  lastLimbAttack = \"dwcSlash\"\n  moveCursor(0, getLineNumber()-1)\n  if ataxiaTemp.hitCount == 0 then\n    if next(envenomList) then\t\n\t\t  tarAffed(envenomList[1])\n\t\t  if applyAffV3 then applyAffV3(envenomList[1]) end\n\t\t  table.remove(envenomList, 1)\n    end\n  else  \n    if envenomListTwo and next(envenomListTwo) then\n      tarAffed(envenomListTwo[1])\n      if applyAffV3 then applyAffV3(envenomListTwo[1]) end\n      table.remove(envenomListTwo,1)\n    else\n      if next(envenomList) then\t\n  \t\t  tarAffed(envenomList[1])\n  \t\t  if applyAffV3 then applyAffV3(envenomList[1]) end\n  \t\t  table.remove(envenomList, 1)\n      end    \n    end\n\tend\n  moveCursorEnd()\nend\n\n\nataxiaTemp.hitCount = ataxiaTemp.hitCount + 1"
+                            "script": "local person = multimatches[1][4]\nlocal maybemiss = multimatches[3][1]\n\nif ataxiaTemp.class == \"Bard\" then return end\n\nif isTargeted(person) then\n  targetIshere = true\n  erAff(\"shield\")\n\n\tataxiaTemp.ignoreShield = false\n  lastLimbAttack = \"dwcSlash\"\n  moveCursor(0, getLineNumber()-1)\n  if ataxiaTemp.hitCount == 0 then\n    if next(envenomList) then\t\n\t\t  tarAffed(envenomList[1])\n\t\t  table.remove(envenomList, 1)\n    end\n  else  \n    if envenomListTwo and next(envenomListTwo) then\n      tarAffed(envenomListTwo[1])\n      table.remove(envenomListTwo,1)\n    else\n      if next(envenomList) then\t\n  \t\t  tarAffed(envenomList[1])\n  \t\t  table.remove(envenomList, 1)\n      end    \n    end\n\tend\n  moveCursorEnd()\nend\n\n\nataxiaTemp.hitCount = ataxiaTemp.hitCount + 1"
                           }
                         ]
                       },
@@ -12750,7 +12750,7 @@
                                     ],
                                     "multiline": "yes",
                                     "multilineDelta": 1,
-                                    "script": "if isTargeted(multimatches[1][3]) then\n  if next(envenomList) then\n    moveCursor(0, getLineNumber()-1)\n    tarAffed(envenomList[1])\n    if applyAffV3 then applyAffV3(envenomList[1]) end\n    table.remove(envenomList, 1)\n    moveCursorEnd()\n  end\n\tlastLimbAttack = \"sentSpear\"\nend"
+                                    "script": "if isTargeted(multimatches[1][3]) then\n  if next(envenomList) then\n    moveCursor(0, getLineNumber()-1)\n    tarAffed(envenomList[1])\n    table.remove(envenomList, 1)\n    moveCursorEnd()\n  end\n\tlastLimbAttack = \"sentSpear\"\nend"
                                   },
                                   {
                                     "name": "Trip",
@@ -12846,7 +12846,7 @@
                                     ],
                                     "multiline": "yes",
                                     "multilineDelta": 1,
-                                    "script": "if isTargeted(multimatches[1][3]) then\n  if next(envenomList) then\n    moveCursor(0, getLineNumber()-1)\n    tarAffed(envenomList[1], \"weariness\")\n    if applyAffV3 then applyAffV3(envenomList[1], \"weariness\") end\n    table.remove(envenomList, 1)\n    moveCursorEnd()\n  end\n\tlastLimbAttack = \"sentSpear\"\nend"
+                                    "script": "if isTargeted(multimatches[1][3]) then\n  if next(envenomList) then\n    moveCursor(0, getLineNumber()-1)\n    tarAffed(envenomList[1], \"weariness\")\n    table.remove(envenomList, 1)\n    moveCursorEnd()\n  end\n\tlastLimbAttack = \"sentSpear\"\nend"
                                   },
                                   {
                                     "name": "Lacerate",
@@ -12866,7 +12866,7 @@
                                     ],
                                     "multiline": "yes",
                                     "multilineDelta": 1,
-                                    "script": "if isTargeted(multimatches[1][3]) then\n  if next(envenomList) then\n    moveCursor(0, getLineNumber()-1)\n    tarAffed(envenomList[1], \"haemophilia\")\n    if applyAffV3 then applyAffV3(envenomList[1], \"haemophilia\") end\n    table.remove(envenomList, 1)\n    moveCursorEnd()\n  end\n\tlastLimbAttack = \"sentSpear\"\nend"
+                                    "script": "if isTargeted(multimatches[1][3]) then\n  if next(envenomList) then\n    moveCursor(0, getLineNumber()-1)\n    tarAffed(envenomList[1], \"haemophilia\")\n    table.remove(envenomList, 1)\n    moveCursorEnd()\n  end\n\tlastLimbAttack = \"sentSpear\"\nend"
                                   }
                                 ]
                               },
@@ -12888,7 +12888,7 @@
                                 ],
                                 "multiline": "yes",
                                 "multilineDelta": 1,
-                                "script": "local person = multimatches[1][2]\nif isTargeted(person) then\n\tif multimatches[3][1] == \"The attack rebounds back onto you!\"\n\t\tor multimatches[3][1] == person .. \" dodges nimbly out of the way.\" \n\t\tor multimatches[3][1] == person .. \" quickly jumps back, avoiding the attack.\" \n\t\tor multimatches[3][1] == \"A reflection of \" .. person .. \" blinks out of existence.\" \n\t\tor multimatches[3][1] == person .. \" moves into your attack, knocking your blow aside before viciously countering with a strike to your head.\" \n\t\tor multimatches[3][1] == person .. \" fumbles his parry, clumsily redirecting your attack.\" \n\t\tor multimatches[3][1] == person .. \" fumbles her parry, clumsily redirecting your attack.\"\n\t\tor multimatches[3][1]:find(\"You lash out at \")\n\t\tor multimatches[3][1] == person .. \" twists his body out of harm's way.\"\n\t\tor multimatches[3][1] == person .. \" twists her body out of harm's way.\"\n\tthen\n\t\tif multimatches[3][1] == \"The attack rebounds back onto you!\" then\n\t\t\ttAffs.rebounding = true\n\t\t\tif applyAffV3 then applyAffV3(\"rebounding\") end\n\t\tend\n\telse\n\t\tif next(envenomList) then\n\t\t\tmoveCursor(0, getLineNumber()-1)\n\t\t\ttarAffed(envenomList[1], \"haemophilia\")\n\t\t\tif applyAffV3 then applyAffV3(envenomList[1], \"haemophilia\") end\n\t\t\ttable.remove(envenomList, 1)\n\t\t\tmoveCursorEnd()\n\t\tend\n\tend\nend"
+                                "script": "local person = multimatches[1][2]\nif isTargeted(person) then\n\tif multimatches[3][1] == \"The attack rebounds back onto you!\"\n\t\tor multimatches[3][1] == person .. \" dodges nimbly out of the way.\" \n\t\tor multimatches[3][1] == person .. \" quickly jumps back, avoiding the attack.\" \n\t\tor multimatches[3][1] == \"A reflection of \" .. person .. \" blinks out of existence.\" \n\t\tor multimatches[3][1] == person .. \" moves into your attack, knocking your blow aside before viciously countering with a strike to your head.\" \n\t\tor multimatches[3][1] == person .. \" fumbles his parry, clumsily redirecting your attack.\" \n\t\tor multimatches[3][1] == person .. \" fumbles her parry, clumsily redirecting your attack.\"\n\t\tor multimatches[3][1]:find(\"You lash out at \")\n\t\tor multimatches[3][1] == person .. \" twists his body out of harm's way.\"\n\t\tor multimatches[3][1] == person .. \" twists her body out of harm's way.\"\n\tthen\n\t\tif multimatches[3][1] == \"The attack rebounds back onto you!\" then\n\t\t\ttarAffed(\"rebounding\")\n\t\tend\n\telse\n\t\tif next(envenomList) then\n\t\t\tmoveCursor(0, getLineNumber()-1)\n\t\t\ttarAffed(envenomList[1], \"haemophilia\")\n\t\t\ttable.remove(envenomList, 1)\n\t\t\tmoveCursorEnd()\n\t\tend\n\tend\nend"
                               },
                               {
                                 "name": "Truss (bound)",
@@ -12917,7 +12917,7 @@
                                 ],
                                 "multiline": "yes",
                                 "multilineDelta": 1,
-                                "script": "local person = multimatches[1][2]\nif isTargeted(person) then\n\tif multimatches[3][1] == \"The attack rebounds back onto you!\"\n\t\tor multimatches[3][1] == person .. \" dodges nimbly out of the way.\" \n\t\tor multimatches[3][1] == person .. \" quickly jumps back, avoiding the attack.\" \n\t\tor multimatches[3][1] == \"A reflection of \" .. person .. \" blinks out of existence.\" \n\t\tor multimatches[3][1] == person .. \" moves into your attack, knocking your blow aside before viciously countering with a strike to your head.\" \n\t\tor multimatches[3][1] == person .. \" fumbles his parry, clumsily redirecting your attack.\" \n\t\tor multimatches[3][1] == person .. \" fumbles her parry, clumsily redirecting your attack.\"\n\t\tor multimatches[3][1]:find(\"You lash out at \")\n\t\tor multimatches[3][1] == person .. \" twists his body out of harm's way.\"\n\t\tor multimatches[3][1] == person .. \" twists her body out of harm's way.\"\n\tthen\n\t\tif multimatches[3][1] == \"The attack rebounds back onto you!\" then\n\t\t\ttAffs.rebounding = true\n\t\t\tif applyAffV3 then applyAffV3(\"rebounding\") end\n\t\tend\n\telse\n\t\tif next(envenomList) then\n\t\t\tmoveCursor(0, getLineNumber()-1)\n\t\t\ttarAffed(envenomList[1], \"weariness\")\n\t\t\tif applyAffV3 then applyAffV3(envenomList[1], \"weariness\") end\n\t\t\ttable.remove(envenomList, 1)\n\t\t\tmoveCursorEnd()\n\t\tend\n\tend\nend"
+                                "script": "local person = multimatches[1][2]\nif isTargeted(person) then\n\tif multimatches[3][1] == \"The attack rebounds back onto you!\"\n\t\tor multimatches[3][1] == person .. \" dodges nimbly out of the way.\" \n\t\tor multimatches[3][1] == person .. \" quickly jumps back, avoiding the attack.\" \n\t\tor multimatches[3][1] == \"A reflection of \" .. person .. \" blinks out of existence.\" \n\t\tor multimatches[3][1] == person .. \" moves into your attack, knocking your blow aside before viciously countering with a strike to your head.\" \n\t\tor multimatches[3][1] == person .. \" fumbles his parry, clumsily redirecting your attack.\" \n\t\tor multimatches[3][1] == person .. \" fumbles her parry, clumsily redirecting your attack.\"\n\t\tor multimatches[3][1]:find(\"You lash out at \")\n\t\tor multimatches[3][1] == person .. \" twists his body out of harm's way.\"\n\t\tor multimatches[3][1] == person .. \" twists her body out of harm's way.\"\n\tthen\n\t\tif multimatches[3][1] == \"The attack rebounds back onto you!\" then\n\t\t\ttarAffed(\"rebounding\")\n\t\tend\n\telse\n\t\tif next(envenomList) then\n\t\t\tmoveCursor(0, getLineNumber()-1)\n\t\t\ttarAffed(envenomList[1], \"weariness\")\n\t\t\ttable.remove(envenomList, 1)\n\t\t\tmoveCursorEnd()\n\t\tend\n\tend\nend"
                               },
                               {
                                 "name": "Doublestrike Second Hit",
@@ -12999,7 +12999,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"healthleech\")\n\tif applyAffV3 then applyAffV3(\"healthleech\") end\nend\n\n"
+                            "script": "if isTargeted(matches[2]) then\n\ttarAffed(\"healthleech\")\nend\n\n"
                           },
                           {
                             "name": "Hailstone",
@@ -13514,7 +13514,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n\terAff(\"asthma\")\n\terAff(\"weariness\")\n\t-- V2 integration: Fitness cures asthma and weariness specifically\n\tif removeAffV2 then\n\t\tremoveAffV2(\"asthma\")\n\t\tremoveAffV2(\"weariness\")\n\tend\n\tif removeAffV3 then removeAffV3(\"asthma\"); removeAffV3(\"weariness\") end\n\tfg(\"DarkSlateGrey\")\nend\n"
+                        "script": "if isTargeted(matches[2]) then\n\terAff(\"asthma\")\n\terAff(\"weariness\")\n\t-- V2 integration: Fitness cures asthma and weariness specifically\n\tif removeAffV2 then\n\t\tremoveAffV2(\"asthma\")\n\t\tremoveAffV2(\"weariness\")\n\tend\n\tfg(\"DarkSlateGrey\")\nend\n"
                       },
                       {
                         "name": "Fool (Occultist/Jester)",
@@ -13524,7 +13524,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "local name = matches[2]\n\nlocal class = (ataxiaNDB_getClass(name) or \"Unknown\")\n\nif isTargeted(matches[2]) then\n  erAff(\"paralysis\")\n  -- V2 integration: Fool cures paralysis + 3 random\n  if removeAffV2 then removeAffV2(\"paralysis\") end\n  if removeAffV3 then removeAffV3(\"paralysis\") end\n\tif class == \"Jester\" or class == \"Occultist\" then\n\t\tataxiaTemp.randomCure = 3\n\t\tif reduceRandomAffCertaintyV2 then\n\t\t\treduceRandomAffCertaintyV2()\n\t\t\treduceRandomAffCertaintyV2()\n\t\t\treduceRandomAffCertaintyV2()\n\t\tend\n\t\tif onPassiveCureV3 then onPassiveCureV3(3) end\n\t\tselectString(line,1)\n\t\tfg(\"goldenrod\")\n\t\tresetFormat()\n\t\ttargetIshere = true\n\tend\nend"
+                        "script": "local name = matches[2]\n\nlocal class = (ataxiaNDB_getClass(name) or \"Unknown\")\n\nif isTargeted(matches[2]) then\n  erAff(\"paralysis\")\n  -- V2 integration: Fool cures paralysis + 3 random\n  if removeAffV2 then removeAffV2(\"paralysis\") end\n\tif class == \"Jester\" or class == \"Occultist\" then\n\t\tataxiaTemp.randomCure = 3\n\t\tif reduceRandomAffCertaintyV2 then\n\t\t\treduceRandomAffCertaintyV2()\n\t\t\treduceRandomAffCertaintyV2()\n\t\t\treduceRandomAffCertaintyV2()\n\t\tend\n\t\tif onPassiveCureV3 then onPassiveCureV3(3) end\n\t\tselectString(line,1)\n\t\tfg(\"goldenrod\")\n\t\tresetFormat()\n\t\ttargetIshere = true\n\tend\nend"
                       },
                       {
                         "name": "Might (Metamorph)",
@@ -13900,7 +13900,7 @@
                     ],
                     "multiline": "yes",
                     "multilineDelta": 1,
-                    "script": "local name = multimatches[1][2]\nif isTargeted(multimatches[1][2]) then\ntdeliverance = false\n\tif anorexiaFailsafe then\n\t\ttAffs[lastFocus] = true\n\t\tataxiaEcho(\"Backtracked anorexia being cured with last focus.\")\n\t\tanorexiaFailsafe = nil\n\t\tlastFocus = nil\n\tend\n  if passiveFailsafe then restorePassiveCure() end\n\t\n\tif multimatches[3][1] == name .. \" gives a sigh of relief.\" then\n\t\terAff(\"retribution\")\n\t\terAff(\"earworm\")\n\t\t-- V3: Definite cure (we know exactly what was cured)\n\t\tif removeAffV3 then removeAffV3(\"retribution\") end\n\t\tif removeAffV3 then removeAffV3(\"earworm\") end\n\telseif multimatches[3][1] == name .. \" shakes his head and a look of clarity returns to his eyes.\"\n\t\tor multimatches[3][1] == name .. \" shakes her head and a look of clarity returns to her eyes.\" then\n\t\t\terAff(\"lovers\")\n\t\t\t-- V3: Definite cure (we know exactly what was cured)\n\t\t\tif removeAffV3 then removeAffV3(\"lovers\") end\n\telse\n\t\ttargetAteWrapper(\"bellwort\")\n\tend\n\ttBals.plant = false\n  if tBals.timers.plant then killTimer(tBals.timers.plant) end\n\tif tAffs.mercury then\n\t\ttAffs.mercury = false\n\t\tif removeAffV3 then removeAffV3(\"mercury\") end\n\t\ttBals.timers.plant = tempTimer(1.9, [[tBals.plant = true; tBals.timers.plant = nil]])\n\telse\n\t\ttBals.timers.plant = tempTimer(1.3, [[tBals.plant = true; tBals.timers.plant = nil]])\n\tend\n\ttargetIshere = true\nend"
+                    "script": "local name = multimatches[1][2]\nif isTargeted(multimatches[1][2]) then\ntdeliverance = false\n\tif anorexiaFailsafe then\n\t\ttAffs[lastFocus] = true\n\t\tataxiaEcho(\"Backtracked anorexia being cured with last focus.\")\n\t\tanorexiaFailsafe = nil\n\t\tlastFocus = nil\n\tend\n  if passiveFailsafe then restorePassiveCure() end\n\t\n\tif multimatches[3][1] == name .. \" gives a sigh of relief.\" then\n\t\terAff(\"retribution\")\n\t\terAff(\"earworm\")\n\t\t-- V3: Definite cure (we know exactly what was cured)\n\telseif multimatches[3][1] == name .. \" shakes his head and a look of clarity returns to his eyes.\"\n\t\tor multimatches[3][1] == name .. \" shakes her head and a look of clarity returns to her eyes.\" then\n\t\t\terAff(\"lovers\")\n\t\t\t-- V3: Definite cure (we know exactly what was cured)\n\telse\n\t\ttargetAteWrapper(\"bellwort\")\n\tend\n\ttBals.plant = false\n  if tBals.timers.plant then killTimer(tBals.timers.plant) end\n\tif tAffs.mercury then\n\t\terAff(\"mercury\")\n\t\ttBals.timers.plant = tempTimer(1.9, [[tBals.plant = true; tBals.timers.plant = nil]])\n\telse\n\t\ttBals.timers.plant = tempTimer(1.3, [[tBals.plant = true; tBals.timers.plant = nil]])\n\tend\n\ttargetIshere = true\nend"
                   },
                   {
                     "name": "Lobelia",
@@ -13968,7 +13968,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) and tBals.plant then\n\n\tif anorexiaFailsafe then\n\t\ttAffs[lastFocus] = true\n\t\tataxiaEcho(\"Backtracked anorexia being cured with last focus.\")\n\t\tanorexiaFailsafe = nil\n\t\tlastFocus = nil\n\tend\n  if passiveFailsafe then restorePassiveCure() end\n\ttaTempers()\n\n\tselectString(line, 1)\n\tfg(\"burlywood\")\n\tresetFormat()\n\n\ttBals.plant = false\n  if tBals.timers.plant then killTimer(tBals.timers.plant) end\n\tif tAffs.mercury then\n\t\ttAffs.mercury = false\n\t\tif removeAffV3 then removeAffV3(\"mercury\") end\n\t\ttBals.timers.plant = tempTimer(1.9, [[tBals.plant = true; tBals.timers.plant = nil]])\n\telse\n\t\ttBals.timers.plant = tempTimer(1.3, [[tBals.plant = true; tBals.timers.plant = nil]])\n\tend\n\ttargetIshere = true\nend"
+                    "script": "if isTargeted(matches[2]) and tBals.plant then\n\n\tif anorexiaFailsafe then\n\t\ttAffs[lastFocus] = true\n\t\tataxiaEcho(\"Backtracked anorexia being cured with last focus.\")\n\t\tanorexiaFailsafe = nil\n\t\tlastFocus = nil\n\tend\n  if passiveFailsafe then restorePassiveCure() end\n\ttaTempers()\n\n\tselectString(line, 1)\n\tfg(\"burlywood\")\n\tresetFormat()\n\n\ttBals.plant = false\n  if tBals.timers.plant then killTimer(tBals.timers.plant) end\n\tif tAffs.mercury then\n\t\terAff(\"mercury\")\n\t\ttBals.timers.plant = tempTimer(1.9, [[tBals.plant = true; tBals.timers.plant = nil]])\n\telse\n\t\ttBals.timers.plant = tempTimer(1.3, [[tBals.plant = true; tBals.timers.plant = nil]])\n\tend\n\ttargetIshere = true\nend"
                   },
                   {
                     "name": "Slickness",
@@ -13984,7 +13984,7 @@
                     ],
                     "multiline": "yes",
                     "multilineDelta": 1,
-                    "script": "if matches[2] == target then\ntdeliverance = false\n-- Eating proves no anorexia (anorexia blocks eating)\nerAff(\"anorexia\")\nif removeAffV3 then removeAffV3(\"anorexia\") end\nerAff(\"slickness\")\nif removeAffV3 then removeAffV3(\"slickness\") end\nend"
+                    "script": "if matches[2] == target then\ntdeliverance = false\n-- Eating proves no anorexia (anorexia blocks eating)\nerAff(\"anorexia\")\nerAff(\"slickness\")\nend"
                   },
                   {
                     "name": "Cured Earworm",
@@ -14037,7 +14037,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\terAff(\"mindravaged\")\n\tif removeAffV3 then removeAffV3(\"mindravaged\") end\n\tselectString(line, 1)\n\tfg(\"a_darkred\")\n\tresetFormat()\nend\n\n\n"
+                    "script": "if isTargeted(matches[2]) then\n\terAff(\"mindravaged\")\n\tselectString(line, 1)\n\tfg(\"a_darkred\")\n\tresetFormat()\nend\n\n\n"
                   },
                   {
                     "name": "Failed whm",
@@ -14056,7 +14056,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\terAff(\"unconsciousness\")\n\tif removeAffV3 then removeAffV3(\"unconsciousness\") end\n\ttargetIshere = true\nend\n"
+                    "script": "if isTargeted(matches[2]) then\n\terAff(\"unconsciousness\")\n\ttargetIshere = true\nend\n"
                   },
                   {
                     "name": "Entity Shield Strips",
@@ -14387,7 +14387,7 @@
                     "type": "regex"
                   }
                 ],
-                "script": "if isTargeted(matches[2]) then\n\tselectString(line,1)\n\tsetBold(true)\n\tfg(\"LightSkyBlue\")\n\tresetFormat()\n\ttarAffed(\"nospeed\")\n\tif applyAffV3 then applyAffV3(\"nospeed\") end\nend"
+                "script": "if isTargeted(matches[2]) then\n\tselectString(line,1)\n\tsetBold(true)\n\tfg(\"LightSkyBlue\")\n\tresetFormat()\n\ttarAffed(\"nospeed\")\nend"
               },
               {
                 "name": "Not Cursewarded",
@@ -14607,7 +14607,7 @@
                 "type": "regex"
               }
             ],
-            "script": "if type(target) ~= \"string\" then\n\treturn false\nend\n\nif isTargeted(matches[2]) then\n\tselectString(line,1)\n\tfg(\"black\") bg(\"blue\")\n\tresetFormat()\n\tdir_left = \"fly\"\n\ttAffs.paralysis = false\n\ttAffs.vertigo = false\n\tif removeAffV3 then removeAffV3(\"paralysis\"); removeAffV3(\"vertigo\") end\n  send(\"pt \" ..target.. \": Flying!\")\n  if gmcp.Char.Status.class == \"Runewarden\" and rtiwaz == true then\n    send(\"queue addclear free empower tiwaz \" ..target)\n  else\n    send(\"queue addclear free touch tentacle \" ..target)\n  end\nend\n  if tChaseTimer then\n\t\tkillTimer(tostring(tChaseTimer))\n \tend\n \ttChaseTimer = tempTimer(2.3, [[tChaseTimer = nil]])\n\n\ttargetIshere = false\n\tenableTimer(\"TargetOutOfRoom\")\n\t\n"
+            "script": "if type(target) ~= \"string\" then\n\treturn false\nend\n\nif isTargeted(matches[2]) then\n\tselectString(line,1)\n\tfg(\"black\") bg(\"blue\")\n\tresetFormat()\n\tdir_left = \"fly\"\n\terAff(\"paralysis\")\n\terAff(\"vertigo\")\n  send(\"pt \" ..target.. \": Flying!\")\n  if gmcp.Char.Status.class == \"Runewarden\" and rtiwaz == true then\n    send(\"queue addclear free empower tiwaz \" ..target)\n  else\n    send(\"queue addclear free touch tentacle \" ..target)\n  end\nend\n  if tChaseTimer then\n\t\tkillTimer(tostring(tChaseTimer))\n \tend\n \ttChaseTimer = tempTimer(2.3, [[tChaseTimer = nil]])\n\n\ttargetIshere = false\n\tenableTimer(\"TargetOutOfRoom\")\n\t\n"
           },
           {
             "name": "Target no here?",
@@ -16871,7 +16871,7 @@
                         "type": "exactMatch"
                       }
                     ],
-                    "script": "ataxiaTemp.dollFashions = ataxiaTemp.dollFashions - 1\ntarAffed(\"paralysis\")\nif applyAffV3 then applyAffV3(\"paralysis\") end\ncecho(\" <yellow>(<a_red>\"..ataxiaTemp.dollFashions..\"<yellow>)\")"
+                    "script": "ataxiaTemp.dollFashions = ataxiaTemp.dollFashions - 1\ntarAffed(\"paralysis\")\ncecho(\" <yellow>(<a_red>\"..ataxiaTemp.dollFashions..\"<yellow>)\")"
                   },
                   {
                     "name": "Vodun Command",
@@ -17896,7 +17896,7 @@
                     "type": "regex"
                   }
                 ],
-                "script": "targshield = false\ntAffs.shield = false\nif removeAffV3 then removeAffV3(\"shield\") end\nsend(\"pt \" ..target..\": SHIELD DOWN\")\n\n"
+                "script": "targshield = false\nerAff(\"shield\")\nsend(\"pt \" ..target..\": SHIELD DOWN\")\n\n"
               },
               {
                 "name": "Lightsteal",
@@ -18095,7 +18095,7 @@
                     "type": "regex"
                   }
                 ],
-                "script": "tAffs.rebounding = false\nif removeAffV3 then removeAffV3(\"rebounding\") end\ntAffs.shield = false\nremoveAffV3(\"shield\")"
+                "script": "erAff(\"rebounding\")\ntAffs.shield = false\nerAff(\"shield\")"
               },
               {
                 "name": "Shield Up",
@@ -18187,7 +18187,7 @@
                     "type": "regex"
                   }
                 ],
-                "script": "tAffs.shield = false\nif removeAffV3 then removeAffV3(\"shield\") end\n"
+                "script": "erAff(\"shield\")\n"
               }
             ]
           },
@@ -18414,7 +18414,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if target == matches[2] then\n\ttargreb = false\n\ttargshield = false\n\ttAffs.rebounding = false\n\ttAffs.shield = false\n\tif removeAffV3 then removeAffV3(\"shield\") end\n  removeAffV3(\"rebounding\")\n\t-- V2 tracking support\n\tif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then\n\t\tif removeAffV2 then\n\t\t\tremoveAffV2(\"rebounding\")\n\t\t\tremoveAffV2(\"shield\")\n\t\telseif tAffsV2 then\n\t\t\ttAffsV2.rebounding = 0\n\t\t\ttAffsV2.shield = 0\n\t\tend\n\tend\nend"
+                        "script": "if target == matches[2] then\n\ttargreb = false\n\ttargshield = false\n\ttAffs.rebounding = false\n\terAff(\"shield\")\n  erAff(\"rebounding\")\nend"
                       }
                     ]
                   },
@@ -18503,7 +18503,7 @@
                             ],
                             "multiline": "yes",
                             "multilineDelta": 1,
-                            "script": "Deadeyes1 = nil\nsvenom1 = \"\"\n\ntparrying = \"torso\"\nsend(\"pt \" ..target.. \": PARRYING \" ..tparrying)\n\nerAff(\"nausea\")\nif removeAffV3 then removeAffV3(\"nausea\") end\ntAffs.nausea = false\n\n"
+                            "script": "Deadeyes1 = nil\nsvenom1 = \"\"\n\ntparrying = \"torso\"\nsend(\"pt \" ..target.. \": PARRYING \" ..tparrying)\n\nerAff(\"nausea\")\ntAffs.nausea = false\n\n"
                           }
                         ]
                       },
@@ -18529,7 +18529,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "targreb = false\ntAffs.rebounding = false\nremoveAffV3(\"rebounding\")\n-- V2 tracking support\nif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then\n\tif removeAffV2 then\n\t\tremoveAffV2(\"rebounding\")\n\telseif tAffsV2 then\n\t\ttAffsV2.rebounding = 0\n\tend\nend"
+                        "script": "targreb = false\ntAffs.rebounding = false\nerAff(\"rebounding\")"
                       },
                       {
                         "name": "Shield Down",
@@ -18543,7 +18543,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "targshield = false\ntAffs.shield = false\nif removeAffV3 then removeAffV3(\"shield\") end"
+                        "script": "targshield = false\nerAff(\"shield\")"
                       },
                       {
                         "name": "Smash High",
@@ -18554,7 +18554,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) and not ataxiaTemp.ignoreShield then\n\tlocal smashAffs = {\"dizziness\", \"recklessness\", \"stupidity\", \"confusion\", \"epilepsy\"}\n\tfor i=1, #smashAffs do\n\t\tif not haveAff(smashAffs[i]) then\n\t\t\tmoveCursor(0, getLineNumber())\n\t\t\ttarAffed(smashAffs[i])\n\t\t\tif applyAffV3 then applyAffV3(smashAffs[i]) end\n\t\t\tmoveCursorEnd()\n\t\t\tbreak\n\t\tend\n       if partyrelay then send(\"pt \"..target..\": \"..smashAffs[i])\n      end\n\tend\nend\nataxiaTemp.ignoreShield = nil"
+                        "script": "if isTargeted(matches[2]) and not ataxiaTemp.ignoreShield then\n\tlocal smashAffs = {\"dizziness\", \"recklessness\", \"stupidity\", \"confusion\", \"epilepsy\"}\n\tfor i=1, #smashAffs do\n\t\tif not haveAff(smashAffs[i]) then\n\t\t\tmoveCursor(0, getLineNumber())\n\t\t\ttarAffed(smashAffs[i])\n\t\t\tmoveCursorEnd()\n\t\t\tbreak\n\t\tend\n       if partyrelay then send(\"pt \"..target..\": \"..smashAffs[i])\n      end\n\tend\nend\nataxiaTemp.ignoreShield = nil"
                       },
                       {
                         "name": "Smash low",
@@ -18575,7 +18575,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "tarAffed(\"paralysis\")\nif applyAffV3 then applyAffV3(\"paralysis\") end\n\nsend(\"pt \" ..target..\": paralysis\")\n\n"
+                        "script": "tarAffed(\"paralysis\")\n\nsend(\"pt \" ..target..\": paralysis\")\n\n"
                       },
                       {
                         "name": "Weariness",
@@ -18589,7 +18589,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "tarAffed(\"weariness\")\nif applyAffV3 then applyAffV3(\"weariness\") end\ntarAffed(\"nausea\")\nif applyAffV3 then applyAffV3(\"nausea\") end\n\nsend(\"pt \" ..target..\": weariness nausea\")"
+                        "script": "tarAffed(\"weariness\")\ntarAffed(\"nausea\")\n\nsend(\"pt \" ..target..\": weariness nausea\")"
                       },
                       {
                         "name": "Cracked Ribs",
@@ -18798,7 +18798,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "local limb = matches[2]\nlocal tar = matches[3]\n\nif isTargeted(tar) then\n  -- Initialize if needed\n  if not lb[tar] then lb[tar] = { hits = {} } end\n  if not lb[tar].hits then lb[tar].hits = {} end\n  lb[tar].hits[limb] = lb[tar].hits[limb] or 0\n\n  -- Assault raises damage level (+100%)\n  lb[tar].hits[limb] = lb[tar].hits[limb] + 100\n\n  -- Update tLimbs for limb highlighting\n  local shortMap = {\n    head = \"H\", torso = \"T\",\n    [\"left leg\"] = \"LL\", [\"right leg\"] = \"RL\",\n    [\"left arm\"] = \"LA\", [\"right arm\"] = \"RA\",\n  }\n  local short = shortMap[limb]\n  if short and tLimbs then\n    tLimbs[short] = lb[tar].hits[limb]\n  end\n\n  -- Track damage/mangle affs based on new damage level\n  local limbNoSpace = limb:gsub(\" \", \"\")\n  if lb[tar].hits[limb] >= 200 then\n    if limb == \"head\" then\n      tarAffed(\"concussion\")\n      if applyAffV3 then applyAffV3(\"concussion\") end\n    elseif limb == \"torso\" then\n      tarAffed(\"serioustrauma\")\n      if applyAffV3 then applyAffV3(\"serioustrauma\") end\n    else\n      tarAffed(\"mangled\" .. limbNoSpace)\n      if applyAffV3 then applyAffV3(\"mangled\" .. limbNoSpace) end\n    end\n  elseif lb[tar].hits[limb] >= 100 then\n    if limb == \"head\" then\n      tarAffed(\"damagedhead\")\n      if applyAffV3 then applyAffV3(\"damagedhead\") end\n    elseif limb == \"torso\" then\n      tarAffed(\"mildtrauma\")\n      if applyAffV3 then applyAffV3(\"mildtrauma\") end\n    else\n      tarAffed(\"damaged\" .. limbNoSpace)\n      if applyAffV3 then applyAffV3(\"damaged\" .. limbNoSpace) end\n    end\n  end\n\n  -- Torso assault: adds cracked ribs\n  if limb == \"torso\" then\n    if not ataxiaTemp.fractures then\n      ataxiaTemp.fractures = { skullfractures = 0, wristfractures = 0, torntendons = 0, crackedribs = 0 }\n    end\n    ataxiaTemp.fractures.crackedribs = (ataxiaTemp.fractures.crackedribs or 0) + 3\n  end\nend\n"
+                        "script": "local limb = matches[2]\nlocal tar = matches[3]\n\nif isTargeted(tar) then\n  -- Initialize if needed\n  if not lb[tar] then lb[tar] = { hits = {} } end\n  if not lb[tar].hits then lb[tar].hits = {} end\n  lb[tar].hits[limb] = lb[tar].hits[limb] or 0\n\n  -- Assault raises damage level (+100%)\n  lb[tar].hits[limb] = lb[tar].hits[limb] + 100\n\n  -- Update tLimbs for limb highlighting\n  local shortMap = {\n    head = \"H\", torso = \"T\",\n    [\"left leg\"] = \"LL\", [\"right leg\"] = \"RL\",\n    [\"left arm\"] = \"LA\", [\"right arm\"] = \"RA\",\n  }\n  local short = shortMap[limb]\n  if short and tLimbs then\n    tLimbs[short] = lb[tar].hits[limb]\n  end\n\n  -- Track damage/mangle affs based on new damage level\n  local limbNoSpace = limb:gsub(\" \", \"\")\n  if lb[tar].hits[limb] >= 200 then\n    if limb == \"head\" then\n      tarAffed(\"concussion\")\n    elseif limb == \"torso\" then\n      tarAffed(\"serioustrauma\")\n    else\n      tarAffed(\"mangled\" .. limbNoSpace)\n    end\n  elseif lb[tar].hits[limb] >= 100 then\n    if limb == \"head\" then\n      tarAffed(\"damagedhead\")\n    elseif limb == \"torso\" then\n      tarAffed(\"mildtrauma\")\n    else\n      tarAffed(\"damaged\" .. limbNoSpace)\n    end\n  end\n\n  -- Torso assault: adds cracked ribs\n  if limb == \"torso\" then\n    if not ataxiaTemp.fractures then\n      ataxiaTemp.fractures = { skullfractures = 0, wristfractures = 0, torntendons = 0, crackedribs = 0 }\n    end\n    ataxiaTemp.fractures.crackedribs = (ataxiaTemp.fractures.crackedribs or 0) + 3\n  end\nend\n"
                       },
                       {
                         "name": "Whirl Damage",
@@ -18817,7 +18817,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[3]) then\ntparrying = \"none\"\ndwbparrying = false\nataxiaTemp.parriedLimb = \"none\"\ntempTimer(15, [[ tAffs.numbedleftarm = nil;cecho(\"\\n<a_darkgreen>target can parry again\");erAff(\"numbedleftarm\") ; if removeAffV3 then removeAffV3(\"numbedleftarm\") end]])\n\tif matches[2] == \"right\" then\n    if numbedRight then killTimer(numbedRight) end\n    numbedRight = tempTimer(15, [[ tAffs.numbedrightarm = nil; cecho(\"\\n<green>target can use tattoos again\");erAff(\"numbedrightarm\") ; if removeAffV3 then removeAffV3(\"numbedrightarm\") end]])\n    tarAffed(\"numbedrightarm\")\n    if applyAffV3 then applyAffV3(\"numbedrightarm\") end\n  else\n    if numbedLeft then killTimer(numbedLeft) end\n    numbedLeft = tempTimer(15, [[ tAffs.numbedleftarm = nil; cecho(\"\\n<a_darkgreen>target can parry again\");erAff(\"numbedleftarm\") ; if removeAffV3 then removeAffV3(\"numbedleftarm\") end]])\n    tarAffed(\"numbedleftarm\")  \n    if applyAffV3 then applyAffV3(\"numbedleftarm\") end\n  end\nend"
+                        "script": "if isTargeted(matches[3]) then\ntparrying = \"none\"\ndwbparrying = false\nataxiaTemp.parriedLimb = \"none\"\ntempTimer(15, [[ tAffs.numbedleftarm = nil;cecho(\"\\n<a_darkgreen>target can parry again\");erAff(\"numbedleftarm\")]])\n\tif matches[2] == \"right\" then\n    if numbedRight then killTimer(numbedRight) end\n    numbedRight = tempTimer(15, [[ tAffs.numbedrightarm = nil; cecho(\"\\n<green>target can use tattoos again\");erAff(\"numbedrightarm\")]])\n    tarAffed(\"numbedrightarm\")\n  else\n    if numbedLeft then killTimer(numbedLeft) end\n    numbedLeft = tempTimer(15, [[ tAffs.numbedleftarm = nil; cecho(\"\\n<a_darkgreen>target can parry again\");erAff(\"numbedleftarm\")]])\n    tarAffed(\"numbedleftarm\")  \n  end\nend"
                       },
                       {
                         "name": "DWB Torso Increase",
@@ -19243,7 +19243,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2])  then\n  tarAffed(\"prone\"); if applyAffV3 then applyAffV3(\"prone\") end end"
+                    "script": "if isTargeted(matches[2])  then\n  tarAffed(\"prone\") end"
                   },
                   {
                     "name": "IMPATIENCE KENA",
@@ -19598,7 +19598,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if target == matches[2] then\n\n  if tAffs.weariness and tAffs.nausea then\n      if tburns == 0 or nil then \n       tburns = 1\n      elseif tburns == 1 then\n       tburns = 2\n      elseif tburns == 2 then\n       tburns = 3\n      elseif tburns == 3 then\n       tburns = 4\n      elseif tburns == 4 then\n       tburns = 5\n      elseif tburns == 5 then\n\t     tburns = 5\n      cecho(\" <DimGrey>[<red>\"..tburns..\"/5<DimGrey>]\")\n      end\n    \n  end\n\n  if not tAffs.weariness and not tAffs.nausea then\n   tarAffed(\"weariness\")\n   if applyAffV3 then applyAffV3(\"weariness\") end\n   tarAffed(\"nausea\")\n   if applyAffV3 then applyAffV3(\"nausea\") end\n  end\n\n  if not tAffs.weariness and tAffs.nausea and not tAffs.shivering and tAffs.nocaloric then\n    tarAffed(\"weariness\")\n    if applyAffV3 then applyAffV3(\"weariness\") end\n    tarAffed(\"shivering\")\n    if applyAffV3 then applyAffV3(\"shivering\") end\n  elseif not tAffs.weariness and tAffs.nausea and not tAffs.nocaloric then\n    tarAffed(\"weariness\")\n    if applyAffV3 then applyAffV3(\"weariness\") end\n    tarAffed(\"nocaloric\")\n    if applyAffV3 then applyAffV3(\"nocaloric\") end\n  elseif not tAffs.weariness and tAffs.nausea and tAffs.shivering and tAffs.nocaloric and not tAffs.frozen then\n    tarAffed(\"frozen\")\n    if applyAffV3 then applyAffV3(\"frozen\") end\n    tarAffed(\"weariness\")\n    if applyAffV3 then applyAffV3(\"weariness\") end\n  end\n\n  if not tAffs.nausea and tAffs.weariness then\n    if tburns == 0 then \n      tburns = 1\n    elseif tburns == 1 then\n      tburns = 2\n    elseif tburns == 2 then\n     tburns = 3\n    elseif tburns == 3 then\n      tburns = 4\n    elseif tburns == 4 then\n      tburns = 5\n    elseif tburns == 5 then\n\t    tburns = 5\n    end\n    tarAffed(\"frozen\")\n    if applyAffV3 then applyAffV3(\"frozen\") end\n    tarAffed(\"nausea\")\n    if applyAffV3 then applyAffV3(\"nausea\") end\n    haveAff(\"weariness\")\n    cecho(\" <DimGrey>[<red>\"..tburns..\"/5<DimGrey>]\")\n  end\n  if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": weariness and nausea\") end\nend\n\n\n\n   \n   \n"
+                    "script": "if target == matches[2] then\n\n  if tAffs.weariness and tAffs.nausea then\n      if tburns == 0 or nil then \n       tburns = 1\n      elseif tburns == 1 then\n       tburns = 2\n      elseif tburns == 2 then\n       tburns = 3\n      elseif tburns == 3 then\n       tburns = 4\n      elseif tburns == 4 then\n       tburns = 5\n      elseif tburns == 5 then\n\t     tburns = 5\n      cecho(\" <DimGrey>[<red>\"..tburns..\"/5<DimGrey>]\")\n      end\n    \n  end\n\n  if not tAffs.weariness and not tAffs.nausea then\n   tarAffed(\"weariness\")\n   tarAffed(\"nausea\")\n  end\n\n  if not tAffs.weariness and tAffs.nausea and not tAffs.shivering and tAffs.nocaloric then\n    tarAffed(\"weariness\")\n    tarAffed(\"shivering\")\n  elseif not tAffs.weariness and tAffs.nausea and not tAffs.nocaloric then\n    tarAffed(\"weariness\")\n    tarAffed(\"nocaloric\")\n  elseif not tAffs.weariness and tAffs.nausea and tAffs.shivering and tAffs.nocaloric and not tAffs.frozen then\n    tarAffed(\"frozen\")\n    tarAffed(\"weariness\")\n  end\n\n  if not tAffs.nausea and tAffs.weariness then\n    if tburns == 0 then \n      tburns = 1\n    elseif tburns == 1 then\n      tburns = 2\n    elseif tburns == 2 then\n     tburns = 3\n    elseif tburns == 3 then\n      tburns = 4\n    elseif tburns == 4 then\n      tburns = 5\n    elseif tburns == 5 then\n\t    tburns = 5\n    end\n    tarAffed(\"frozen\")\n    tarAffed(\"nausea\")\n    haveAff(\"weariness\")\n    cecho(\" <DimGrey>[<red>\"..tburns..\"/5<DimGrey>]\")\n  end\n  if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": weariness and nausea\") end\nend\n\n\n\n   \n   \n"
                   },
                   {
                     "name": "Bombard",
@@ -19786,7 +19786,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if target == matches[2] then\n\tif matches[2] == \"left arm\" then\n  tarAffed(\"brokenleftarm\")\n  if applyAffV3 then applyAffV3(\"brokenleftarm\") end\n  elseif matches[2] == \"right arm\" then\n  tarAffed(\"brokenrightarm\")\n  if applyAffV3 then applyAffV3(\"brokenrightarm\") end\n  elseif matches[2] == \"left leg\" then\n  tarAffed(\"brokenleftleg\")\n  if applyAffV3 then applyAffV3(\"brokenleftleg\") end\n  elseif matches[2] == \"right leg\" then\n  tarAffed(\"brokenrightleg\")\n  if applyAffV3 then applyAffV3(\"brokenrightleg\") end\n  end\n  \nend\n   \n   "
+                        "script": "if target == matches[2] then\n\tif matches[2] == \"left arm\" then\n  tarAffed(\"brokenleftarm\")\n  elseif matches[2] == \"right arm\" then\n  tarAffed(\"brokenrightarm\")\n  elseif matches[2] == \"left leg\" then\n  tarAffed(\"brokenleftleg\")\n  elseif matches[2] == \"right leg\" then\n  tarAffed(\"brokenrightleg\")\n  end\n  \nend\n   \n   "
                       },
                       {
                         "name": "Second",
@@ -19796,7 +19796,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if target == matches[2] then\n  if not tAffs.paralysis then\n    tarAffed(\"paralysis\")\n    if applyAffV3 then applyAffV3(\"paralysis\") end\n    if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": Paralysis\") end\n  end\nend"
+                        "script": "if target == matches[2] then\n  if not tAffs.paralysis then\n    tarAffed(\"paralysis\")\n    if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": Paralysis\") end\n  end\nend"
                       },
                       {
                         "name": "Third",
@@ -19806,7 +19806,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if target == matches[2] then\n  tarAffed(\"crackedribs\")\n  if applyAffV3 then applyAffV3(\"crackedribs\") end\n  if partyrelay and not ataxia.afflictions.aeon  then send(\"pt \" ..target.. \": Crackedribs\") end\nend\n\n"
+                        "script": "if target == matches[2] then\n  tarAffed(\"crackedribs\")\n  if partyrelay and not ataxia.afflictions.aeon  then send(\"pt \" ..target.. \": Crackedribs\") end\nend\n\n"
                       }
                     ]
                   },
@@ -19832,7 +19832,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if target == matches[2] then\n  tarAffed(\"stuttering\")\n  if applyAffV3 then applyAffV3(\"stuttering\") end\n   if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": Stuttering\") end\nend"
+                        "script": "if target == matches[2] then\n  tarAffed(\"stuttering\")\n   if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": Stuttering\") end\nend"
                       },
                       {
                         "name": "Third",
@@ -19842,7 +19842,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if target == matches[2] then\n  tarAffed(\"anorexia\")\n  if applyAffV3 then applyAffV3(\"anorexia\") end\n   if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": Anorexia\") end\nend"
+                        "script": "if target == matches[2] then\n  tarAffed(\"anorexia\")\n   if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": Anorexia\") end\nend"
                       }
                     ]
                   },
@@ -19859,7 +19859,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if target == matches[2] then\n  tarAffed(\"asthma\")\n  if applyAffV3 then applyAffV3(\"asthma\") end\n   if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": Asthma\") end\nend"
+                        "script": "if target == matches[2] then\n  tarAffed(\"asthma\")\n   if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": Asthma\") end\nend"
                       },
                       {
                         "name": "Second",
@@ -19869,7 +19869,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if target == matches[2] then\n  if tAffs.deaf == false then\n  tarAffed(\"sensitivity\")\n  if applyAffV3 then applyAffV3(\"sensitivity\") end\n    if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": sensitivity\") end\n  else\n    tAffs.deaf = false\n    if removeAffV3 then removeAffV3(\"deaf\") end\n  end\n \nend"
+                        "script": "if target == matches[2] then\n  if tAffs.deaf == false then\n  tarAffed(\"sensitivity\")\n    if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": sensitivity\") end\n  else\n    erAff(\"deaf\")\n  end\n \nend"
                       },
                       {
                         "name": "Third",
@@ -19879,7 +19879,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if target == matches[2] then\n  tarAffed(\"healthleech\")\n  if applyAffV3 then applyAffV3(\"healthleech\") end\n  if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": Healthleech\") end\nend"
+                        "script": "if target == matches[2] then\n  tarAffed(\"healthleech\")\n  if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": Healthleech\") end\nend"
                       }
                     ]
                   }
@@ -21539,7 +21539,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if svo then\n\tsvo.bals.voice = false\n\tsvo.startbalancewatch(\"voice\")\n\traiseEvent(\"svo lost balance\", \"voice\")\nend\n\nif matches[2] == target then\ntAffs.rebounding = false\nif removeAffV3 then removeAffV3(\"rebounding\") end\ntAffs.shield = false\nif removeAffV3 then removeAffV3(\"shield\") end\nend"
+                            "script": "if svo then\n\tsvo.bals.voice = false\n\tsvo.startbalancewatch(\"voice\")\n\traiseEvent(\"svo lost balance\", \"voice\")\nend\n\nif matches[2] == target then\nerAff(\"rebounding\")\nerAff(\"shield\")\nend"
                           },
                           {
                             "name": "Dirge (banish gravehands)",
@@ -21772,7 +21772,7 @@
                     "type": "regex"
                   }
                 ],
-                "script": "targreb = false\ntAffs.rebounding = false\nremoveAffV3(\"rebounding\")\n-- V2 tracking support\nif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then\n\tif removeAffV2 then\n\t\tremoveAffV2(\"rebounding\")\n\telseif tAffsV2 then\n\t\ttAffsV2.rebounding = 0\n\tend\nend"
+                "script": "targreb = false\ntAffs.rebounding = false\nerAff(\"rebounding\")"
               },
               {
                 "name": "Guard Right Leg",
@@ -24756,7 +24756,7 @@
                     "type": "regex"
                   }
                 ],
-                "script": "tAffs.shield = true\nif applyAffV3 then applyAffV3(\"shield\") end"
+                "script": "tarAffed(\"shield\")"
               }
             ]
           },
@@ -24848,7 +24848,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\n\ttarAffedConfirmed(\"impatience\")\n\tif applyAffV3 then applyAffV3(\"impatience\") end\n  if ataxia.settings.raid.enabled then\n    send(\"pt \"..matches[2]..\": impatience\",false)\n  end\nend"
+                    "script": "if isTargeted(matches[2]) then\n\ttarAffedConfirmed(\"impatience\")\n  if ataxia.settings.raid.enabled then\n    send(\"pt \"..matches[2]..\": impatience\",false)\n  end\nend"
                   },
                   {
                     "name": "Stupdity",
@@ -25169,7 +25169,7 @@
                                     "type": "regex"
                                   }
                                 ],
-                                "script": "selectCurrentLine() fg(\"a_yellow\") bg(\"black\") \nreplace(\"\" ..matches[2].. \" [Frontkick: Prone]\")\n\n\nsend(\"pt \" ..matches[2].. \": prone\")\ntarAffed(\"prone\")\nif applyAffV3 then applyAffV3(\"prone\") end\n\t\t\t\n"
+                                "script": "selectCurrentLine() fg(\"a_yellow\") bg(\"black\") \nreplace(\"\" ..matches[2].. \" [Frontkick: Prone]\")\n\n\nsend(\"pt \" ..matches[2].. \": prone\")\ntarAffed(\"prone\")\n\t\t\t\n"
                               },
                               {
                                 "name": "Needle",
@@ -25187,7 +25187,7 @@
                                     "type": "regex"
                                   }
                                 ],
-                                "script": "if matches[2]==target then\nselectCurrentLine() fg(\"a_yellow\") bg(\"black\") \nreplace(\"\" ..matches[2].. \" [NEEDLE: Crushed Throat]\")\nend\n\n\nsend(\"pt \" ..matches[2].. \": Crushed Throat\")\n   \ntarAffed(\"crushedthroat\")\nif applyAffV3 then applyAffV3(\"crushedthroat\") end\ntneedle = 100\n"
+                                "script": "if matches[2]==target then\nselectCurrentLine() fg(\"a_yellow\") bg(\"black\") \nreplace(\"\" ..matches[2].. \" [NEEDLE: Crushed Throat]\")\nend\n\n\nsend(\"pt \" ..matches[2].. \": Crushed Throat\")\n   \ntarAffed(\"crushedthroat\")\ntneedle = 100\n"
                               },
                               {
                                 "name": "Maybe Cure Needle",
@@ -25298,7 +25298,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "targshield = false\ntAffs.shield = false\nif removeAffV3 then removeAffV3(\"shield\") end"
+                            "script": "targshield = false\nerAff(\"shield\")"
                           },
                           {
                             "name": "Shield",
@@ -25964,7 +25964,7 @@
                     "type": "regex"
                   }
                 ],
-                "script": "if isTargeted(matches[2]) then\n\ttarAffedConfirmed(\"impatience\")\n\tif applyAffV3 then applyAffV3(\"impatience\") end\n  if ataxia.settings.raid.enabled then\n    send(\"pt \"..matches[2]..\": impatience\",false)\n  end\nend"
+                "script": "if isTargeted(matches[2]) then\n\ttarAffedConfirmed(\"impatience\")\n  if ataxia.settings.raid.enabled then\n    send(\"pt \"..matches[2]..\": impatience\",false)\n  end\nend"
               },
               {
                 "name": "Dragon Stream",
@@ -27120,7 +27120,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[3]) then\n\n  if ataxiaTemp.fractures.torntendons >= 6 then\n    tarAffed(\"mangledleftarm\", \"mangledrightarm\")\n    if applyAffV3 then applyAffV3(\"mangledleftarm\"); applyAffV3(\"mangledrightarm\") end\n  elseif ataxiaTemp.fractures.torntendons >= 4 then\n    tarAffed(\"damagedleftarm\", \"damagedrightarm\")\n    if applyAffV3 then applyAffV3(\"damagedleftarm\"); applyAffV3(\"damagedrightarm\") end\n  else\n    tarAffed(\"brokenleftarm\", \"brokenrightarm\")\n    if applyAffV3 then applyAffV3(\"brokenleftarm\"); applyAffV3(\"brokenrightarm\") end\n  end\n  \n  ataxiaTemp.fractures.wristfractures = 0\n  twohanded_armsHit()  \nend"
+                            "script": "if isTargeted(matches[3]) then\n\n  if ataxiaTemp.fractures.torntendons >= 6 then\n    tarAffed(\"mangledleftarm\", \"mangledrightarm\")\n  elseif ataxiaTemp.fractures.torntendons >= 4 then\n    tarAffed(\"damagedleftarm\", \"damagedrightarm\")\n  else\n    tarAffed(\"brokenleftarm\", \"brokenrightarm\")\n  end\n  \n  ataxiaTemp.fractures.wristfractures = 0\n  twohanded_armsHit()  \nend"
                           },
                           {
                             "name": "Legs",
@@ -27142,7 +27142,7 @@
                                 "type": "regex"
                               }
                             ],
-                            "script": "if isTargeted(matches[2]) then\n\n  if ataxiaTemp.fractures.torntendons >= 6 then\n    tarAffed(\"mangledleftleg\", \"mangledrightleg\", \"prone\")\n    if applyAffV3 then applyAffV3(\"mangledleftleg\"); applyAffV3(\"mangledrightleg\"); applyAffV3(\"prone\") end\n  elseif ataxiaTemp.fractures.torntendons >= 4 then\n    tarAffed(\"damagedleftleg\", \"damagedrightleg\", \"prone\")\n    if applyAffV3 then applyAffV3(\"damagedleftleg\"); applyAffV3(\"damagedrightleg\"); applyAffV3(\"prone\") end\n  else\n    tarAffed(\"brokenleftleg\", \"brokenrightleg\", \"prone\")\n    if applyAffV3 then applyAffV3(\"brokenleftleg\"); applyAffV3(\"brokenrightleg\"); applyAffV3(\"prone\") end\n  end\n  \n  ataxiaTemp.fractures.torntendons = 0\n  twohanded_legsHit()  \nend"
+                            "script": "if isTargeted(matches[2]) then\n\n  if ataxiaTemp.fractures.torntendons >= 6 then\n    tarAffed(\"mangledleftleg\", \"mangledrightleg\", \"prone\")\n  elseif ataxiaTemp.fractures.torntendons >= 4 then\n    tarAffed(\"damagedleftleg\", \"damagedrightleg\", \"prone\")\n  else\n    tarAffed(\"brokenleftleg\", \"brokenrightleg\", \"prone\")\n  end\n  \n  ataxiaTemp.fractures.torntendons = 0\n  twohanded_legsHit()  \nend"
                           }
                         ]
                       },
@@ -27282,7 +27282,7 @@
                     "type": "regex"
                   }
                 ],
-                "script": "if isTargeted(matches[2])  then\n  tarAffed(\"prone\")\n  if applyAffV3 then applyAffV3(\"prone\") end\nend"
+                "script": "if isTargeted(matches[2])  then\n  tarAffed(\"prone\")\nend"
               },
               {
                 "name": "Exploit",
@@ -27293,7 +27293,7 @@
                     "type": "regex"
                   }
                 ],
-                "script": "if target == matches[2] then\n  tarAffed(\"weariness\",\"paranoia\")\n  if applyAffV3 then applyAffV3(\"weariness\"); applyAffV3(\"paranoia\") end\nend"
+                "script": "if target == matches[2] then\n  tarAffed(\"weariness\",\"paranoia\")\nend"
               },
               {
                 "name": "HealthLeech",

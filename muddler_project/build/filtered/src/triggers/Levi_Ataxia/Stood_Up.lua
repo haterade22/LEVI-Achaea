@@ -8,5 +8,5 @@ if isTargeted(matches[2]) then
 		erAff(aff)
 	end
   tAffs.prone = false
-  removeAffV3("prone")
+  erAff("prone")
 end

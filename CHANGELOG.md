@@ -2,6 +2,57 @@
 
 ---
 
+## 2026-03-08 — V3 Affliction Tracker Migration: Single Source of Truth
+
+**Major architecture change**: Migrated from three parallel affliction tracking systems (V1 boolean, V2 certainty, V3 probability) to **V3-only**. The branching probability engine is now the single source of truth, with `tAffs` maintained as a synchronized read cache for backward compatibility.
+
+### Core Changes
+
+**007_Branching_State_Tracker.lua** (V3 engine):
+- Set `affConfigV3.enabled = true` permanently
+- Removed all toggle guards (`if not affConfigV3.enabled then return end`) from every function
+- Removed all `raiseEvent` calls from `applyAffV3()` and `removeAffV3()` — events now owned by public API
+- Removed circular `"tar afflicted"` event listener that re-applied affs from V1→V3
+- Removed V2 sync block from `syncToOldSystemV3()`
+- Removed V2 display delegation from `updateAffDisplayV3()`
+
+**017_Affliction_Management.lua** (public API):
+- `haveAff()` now routes to `haveAffV3()` first, with `tAffs` fallback during load order
+- `erAff()` now calls `removeAffV3()` internally
+- `tarAffed()` now calls `applyAffV3()` internally for each affliction
+- All helper functions (`tarSingleAff`, `tarDoubleAff`, `tarTripleAff`, `addAffList`, `tarBonusAff`, `tarZealHit`) updated to call `applyAffV3()`
+
+**008_V3_Integration.lua** (integration layer):
+- Simplified all wrapper functions (`targetAteWrapper`, `tarAffedWrapper`, `erAffWrapper`, `haveAffWrapper`) — now thin delegates to public API
+- Removed all toggle guards from 14 verification handlers
+- Added `treeCurableAffsV3` and `focusCurableAffsV3` cure lists (migrated from V2)
+- Added 19 V2 backward-compatibility stubs routing to V3 (`addAffV2`, `removeAffV2`, `haveAffV2`, `targetAteV2`, `onBloodrootApplyConfirmV2`, etc.)
+- Removed `enableV3()`, `disableV3()`, `toggleV3()` — replaced with no-op stubs
+- `isV3Active()` now always returns `true`
+
+### V2 Deactivation
+Set `isActive: 'no'` on 6 V2 files:
+- `001_Core.lua`, `002_Herb_Cures.lua`, `003_Backtracking.lua`, `004_Verification.lua`, `005_buildTarAffsV2.lua`, `006_showAffsV2.lua`
+
+### Reset Site Coverage
+Added `if resetStatesV3 then resetStatesV3() end` to all 8 `tAffs` reset locations:
+- `016_Targeting_Functions.lua`, `001_Login_Function.lua`, `003_TargetOutOfRoom.lua`, `016_RESET.lua`, `011_Reset_Afflictions_on_Target.lua`, `401_Target_Has_Died.lua`, `405_Starburst!.lua`, `010_Phoenix_(BM).lua`
+
+### Offense System Simplification
+Simplified 5 class-specific `hasAff()` wrappers to `return haveAff(aff)`:
+- `apostate.hasAff()`, `blademaster.hasAff()`, `infernalDWC.hasAff()`, `infernalDWC2L.hasAff()`, `depthswalker.hasAff()`
+
+### Event Architecture
+- Events (`"tar afflicted"`, `"target cured aff"`) now fire exclusively from public API (`tarAffed()`, `erAff()`)
+- V3 internal functions (`applyAffV3`, `removeAffV3`) no longer raise events — prevents double-firing
+
+### Bug Fixes
+- **447_Inundate.lua**: Was bypassing V3 by setting `tAffs` directly. Now calls `tarAffed()` for proper V3 tracking
+- **442_Got_Sileris.lua**: Fixed pre-existing typo `"fanbarrier"` → `"fangbarrier"`
+- **008_V3_Integration.lua**: Added missing `onBloodrootApplyConfirmV2()` stub
+
+---
+
 ## 2026-03-07 — Tekura: Modernize offense with BM/DWC/DWB patterns + fix 6-limb KILL phase
 
 **Improvements applied to both Tekura systems** (001_Tekura_Offense.lua, 002_Tekura_6Limb_Offense.lua):

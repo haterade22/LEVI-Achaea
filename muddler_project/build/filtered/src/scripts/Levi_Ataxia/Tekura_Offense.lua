@@ -54,16 +54,7 @@ function tekura.hasAff(aff)
       return haveAffV3(aff)
     end
   end
-  -- V2 system (when enabled, use ONLY V2 - no fallback)
-  if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-    if haveAffV2 then
-      return haveAffV2(aff)
-    elseif tAffsV2 and tAffsV2[aff] then
-      return true
-    end
-    return false
-  end
-  -- V1 system (only when V2 is disabled)
+  -- V1 fallback
   if tAffs and tAffs[aff] then
     return true
   end
@@ -80,9 +71,7 @@ end
 
 -- Check which tracking system is active
 function tekura.getTrackingSystem()
-  if affConfigV3 and affConfigV3.enabled then return "V3"
-  elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then return "V2"
-  end
+  if affConfigV3 and affConfigV3.enabled then return "V3" end
   return "V1"
 end
 
@@ -246,14 +235,20 @@ end
 -- PHASE DETECTION
 --------------------------------------------------------------------------------
 
+-- Check if we're in Bear stance (set after DOUBLE_BREAK via ;brs)
+function tekura.isInBearStance()
+  return ataxia and ataxia.vitals and ataxia.vitals.stance == "Bear"
+end
+
 function tekura.dispatch.getPhase()
   -- SCYTHE: Alternative kill (if enabled and ready)
   if tekura.state.preferScythe and tekura.dispatch.checkScytheReady() then
     return tekura.PHASES.SCYTHE
   end
 
-  -- KILL: Both legs broken AND prone AND torso broken
-  if tekura.dispatch.checkBothLegsBroken() and tekura.hasAff("prone") then
+  -- KILL: In Bear stance AND target is prone → BBT
+  -- Bear stance means we already completed break phases
+  if tekura.isInBearStance() and tekura.hasAff("prone") then
     return tekura.PHASES.KILL
   end
 
@@ -590,7 +585,7 @@ function tekura.dispatch.status()
   cecho("\n<yellow>|   <white>Tracking: <cyan>" .. tekura.getTrackingSystem())
   cecho("\n<yellow>+--------------------------------------------+")
   cecho("\n<yellow>| <white>KILL ROUTES:<yellow>")
-  cecho("\n<yellow>|   <white>BBT Ready: " .. (tekura.dispatch.checkBothLegsBroken() and tekura.hasAff("prone") and "<green>YES" or "<red>NO"))
+  cecho("\n<yellow>|   <white>BBT Ready: " .. (tekura.isInBearStance() and tekura.hasAff("prone") and "<green>YES" or "<red>NO"))
   cecho("    <white>SCYTHE Ready: " .. (tekura.dispatch.checkScytheReady() and "<magenta>YES" or "<grey>NO"))
   cecho("\n<yellow>|   <white>SCYTHE Mode: " .. (tekura.state.preferScythe and "<magenta>ENABLED" or "<grey>DISABLED"))
   cecho("\n<yellow>+--------------------------------------------+")

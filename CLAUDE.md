@@ -202,7 +202,7 @@ All combat systems in `src_new/scripts/levi_ataxia/levi/levi_scripts/`:
 
 ### Ataxia Combat System
 - **Affliction Tracking**: 100+ afflictions with color-coded display
-- **Target Affliction Tracking**: Dual system for tracking enemy afflictions (see below)
+- **Target Affliction Tracking**: V3 branching probability engine — single source of truth (see below)
 - **Limb Tracking**: `selfLimbDamage` for damage percentages, `tLimbs` for enemy tracking
 - **Fracture Management**: Two-handed combat tracking
 - **Defense Management**: Automatic parrying, SSC integration
@@ -226,140 +226,99 @@ All combat systems in `src_new/scripts/levi_ataxia/levi/levi_scripts/`:
   - RIFTLOCK mode: Counter to RESTORE ability (anorexia + slickness + addiction lock)
   - V2-compatible: Uses `infernalDWC.hasAff()` for certainty-based tracking when enabled
 
-### Target Affliction Tracking System
+### Target Affliction Tracking System (V3 Branching Probability Engine)
 
-The system uses a **dual-layer approach** for tracking afflictions applied to enemies:
+V3 is the **single source of truth** for target affliction tracking. It models multiple possible world states simultaneously with probability weights, resolving ambiguous cures via branching and collapsing branches via verification signals.
 
 **Core Files:**
-- `src_new/scripts/levi_ataxia/levi/ataxia/017_Affliction_Management.lua` - Main tracking functions
-- `src_new/triggers/levi_ataxia/for_levi/leviticus/439_NEW_DEADEYES.lua` - Apostate curse detection
+- `affliction_tracking_core/007_Branching_State_Tracker.lua` — V3 engine (branching, collapsing, cache, sync)
+- `affliction_tracking_core/008_V3_Integration.lua` — Verification handlers, cure lists, lock detection, V2 stubs
+- `017_Affliction_Management.lua` — Public API (`haveAff`, `tarAffed`, `erAff`)
 
-**Dual System Design:**
-
-| Layer | Table | Purpose |
-|-------|-------|---------|
-| **Core Tracking** | `tAffs` | Always tracks afflictions unconditionally (boolean) |
-| **Confidence Tracking** | `tAffConfidence` | Optional enhancement with confidence levels (0.0-1.0) |
-
-**Core Functions:**
+**Public API:**
 
 | Function | Purpose |
 |----------|---------|
-| `tarAffed(...)` | Add afflictions to target (variadic - accepts multiple) |
-| `tarAffedConfirmed(...)` | Add afflictions with 1.0 confidence (confirmed by game message) |
-| `erAff(what)` | Remove affliction from target tracking |
-| `haveAff(what)` | Check if target has affliction (core tracking) |
-| `haveAffWithConfidence(aff, minConf)` | Check with minimum confidence threshold |
-| `getAffConfidence(aff)` | Get current confidence level for affliction |
-| `resetAffConfidence()` | Clear all confidence values (called on target change) |
+| `tarAffed(...)` | Add afflictions to target (sets tAffs + calls applyAffV3 + raises event) |
+| `erAff(what)` | Remove affliction (clears tAffs + calls removeAffV3 + raises event) |
+| `haveAff(what)` | Query affliction (routes to haveAffV3, fallback to tAffs during load) |
+| `haveAffV3(aff, threshold)` | Probabilistic query (default threshold 30%) |
+| `getAffProbabilityV3(aff)` | Get exact probability 0.0–1.0 (O(1) via cache) |
+| `getStateProbabilityV3(affList)` | Joint probability of multiple affs (for lock detection) |
+| `getAllAffProbabilitiesV3()` | Full probability map {aff=prob, ...} |
 
-**Confidence Levels:**
-
-| Level | Value | Meaning |
-|-------|-------|---------|
-| Confirmed | 1.0 | Saw game confirmation message |
-| Assumed | 0.7 | Assumed from venom/attack landing |
-| Threshold | 0.3 | Below this, affliction considered cured |
-
-**How It Works:**
-1. Core tracking (`tAffs[aff] = true`) happens unconditionally when attacks land
-2. Confidence tracking is an optional enhancement layer that doesn't affect core tracking
-3. When enemy cures, `erAff()` clears both the core tracking and confidence
-4. Combat logic can use either `haveAff()` (simple) or `haveAffWithConfidence()` (advanced)
-
-**Example Usage:**
+**Data Structure:**
 ```lua
--- Simple check (core tracking)
-if haveAff("paralysis") then
-  -- Target has paralysis
-end
-
--- Advanced check (confidence-based)
-if haveAffWithConfidence("paralysis", 0.5) then
-  -- Target probably has paralysis (50%+ confidence)
-end
+afflictionStatesV3 = {
+    {affs = {asthma=true, paralysis=true}, prob = 0.6},
+    {affs = {paralysis=true},              prob = 0.4},
+}
+-- "60% chance target has both, 40% only paralysis"
+-- All probabilities always sum to 1.0
 ```
 
-### Target Affliction Tracking V2 System
+**Algorithm:**
+1. **Apply aff**: Add to ALL branches (definite — hit confirmed)
+2. **Remove aff**: Remove from ALL branches (definite — cure confirmed)
+3. **Ambiguous herb cure**: BRANCH — split each branch into sub-branches per possible cure, divide probability equally
+4. **Verification signal**: COLLAPSE — eliminate branches contradicting the observation, renormalize
 
-**NEW**: Advanced affliction tracking with certainty levels, stack tracking, and AK-inspired cure detection.
+**Verification Signals** (collapse triggers in 008_V3_Integration.lua):
 
-**Full Documentation:** `.claude/projects/affliction-tracking-v2/`
+| Signal | Proves | Function |
+|--------|--------|----------|
+| Target fumbles | Clumsiness present | `onTargetFumbleV3()` → `collapseAffPresentV3("clumsiness")` |
+| Target vomits | Nausea present | `onTargetVomitV3()` → `collapseAffPresentV3("nausea")` |
+| Target smokes | Asthma absent | `onTargetSmokeV3()` → `collapseAffAbsentV3("asthma")` |
+| Target applies salve | Slickness absent | `onTargetApplySalveV3()` → `collapseAffAbsentV3("slickness")` |
+| Target stumbles | Dizziness present | `onTargetStumbleV3()` → `collapseAffPresentV3("dizziness")` |
+| Target seizure | Epilepsy present | `onTargetSeizureV3()` → `collapseAffPresentV3("epilepsy")` |
+| Target paralysis | Paralysis present | `onTargetParalysisBlockV3()` → `collapseAffPresentV3("paralysis")` |
 
-**Toggle:**
+**Lock Detection:**
 ```lua
-ataxia.settings.useAffTrackingV2 = true   -- Enable V2
-ataxia.settings.useAffTrackingV2 = false  -- Disable, use old system (default)
+getLockStatusV3() → {
+    softlock = P(anorexia AND asthma AND slickness),
+    hardlock = P(anorexia AND asthma AND slickness AND impatience),
+    truelock = P(anorexia AND asthma AND slickness AND impatience AND paralysis),
+}
 ```
 
-**Key Features:**
-- Certainty-based tracking (0/1/2+ levels with stacking support)
-- Verifiability-based priority (unverifiable affs assumed cured first)
-- Random cure counter (tracks tree/focus/passive cures like AK's `ak.randomaffs`)
-- Backtracking system (reverses incorrect guesses)
-- Third-party verification (fumble confirms clumsiness, smoke confirms no asthma)
+**Performance Controls:**
+- Deduplication: merge identical branches (sum probabilities)
+- Pruning: branches < 1% probability eliminated, probability redistributed
+- Hard cap: max 50 branches, lowest dropped if exceeded
+- Cache: `affCacheV3{}` rebuilt after every state change → O(1) lookups
 
-**V2 Functions:**
+**tAffs Backward Compatibility:**
+- `tAffs` is a synced read cache, populated by `syncToOldSystemV3()`
+- Prob >= 30% → `tAffs[aff] = true`; Prob < 1% → `tAffs[aff] = false`
+- 89+ direct access sites across 30+ files read from `tAffs`
+- 8 reset sites all call `resetStatesV3()` alongside tAffs reset
 
-| Function | Purpose |
-|----------|---------|
-| `confirmAffV2(aff)` | Set certainty to 2 (confirmed) |
-| `removeAffV2(aff)` | Set certainty to 0 (cured) |
-| `haveAffV2(aff)` | Check if certainty >= 1 |
-| `stackAffV2(aff)` | Add a stack (+2 certainty) |
-| `getStackCountV2(aff)` | Get number of stacks |
-| `onTargetTreeV2(target)` | Handle tree tattoo cure |
-| `onTargetFocusV2(target)` | Handle focus cure |
+**Simple Tracking** (non-branching): Limb damage, prone, stun, blindness, deafness, rebounding, shield — tracked as simple booleans in `simpleAffsV3`, never create branches.
 
-**V2 Files:**
-```
-src_new/scripts/levi_ataxia/levi/ataxia/affliction_tracking_v2/
-├── 001_Core.lua           # Certainty + stack + random cure tracking
-├── 002_Herb_Cures.lua     # Priority lists for all 7 herbs
-├── 003_Backtracking.lua   # Guess storage and reversal
-└── 004_Verification.lua   # Fumble/smoke signal handlers
-```
+**V2 Stubs**: V2 is deactivated (6 files `isActive: 'no'`). 19 compatibility stubs in 008 route V2 calls to V3 (`addAffV2`, `removeAffV2`, `haveAffV2`, `targetAteV2`, etc.).
 
-**Integrated Triggers:**
-- 15 herb triggers → `targetAteWrapper()`
-- Tree trigger → `onTargetTreeV2()`
-- Focus triggers → `onTargetFocusV2()`
-- 16 class cure triggers → `removeAffV2()` / `reduceRandomAffCertaintyV2()`
+**Event Architecture:**
+- Events (`"tar afflicted"`, `"target cured aff"`) fire from public API only (`tarAffed()`, `erAff()`)
+- V3 internals (`applyAffV3`, `removeAffV3`) do NOT raise events
+- Offense systems should always use the public API, never call V3 functions directly
 
 **Verification Commands:**
 ```lua
--- Check if V2 is enabled
-lua ataxia.settings.useAffTrackingV2
-
--- View V2 state with stack counts
-debugAffsV2()
-
--- View raw V2 table
-lua tAffsV2
-
--- Check random cure counter
-lua randomCuresV2
-
--- Compare V2 to old system
-lua print("V2:", tAffsV2.asthma, "Old:", tAffs.asthma)
+v3status()                    -- Show branch count, top branches
+v3probs()                     -- Show all affliction probabilities
+showBranchesV3()              -- Detailed branch dump
+getLockStatusV3()             -- Lock probabilities
+getAffProbabilityV3("asthma") -- Single aff probability
 ```
 
 **Offense System Requirements:**
-When coding offense systems, check `ataxia.settings.useAffTrackingV2`:
-- If enabled: Use `haveAffV2(aff)` and `haveConfirmedAffV2(aff)` for affliction checks
-- If disabled: Fall back to `haveAff(aff)` (old system)
-- For stacking afflictions: Use `getStackCountV2(aff)` to check multiple stacks
-- For lock detection: Use `haveAffV2()` which returns true for certainty >= 1 (likely or confirmed)
-
-**Class Cure Integrations (16 triggers):**
-| Trigger | Class | V2 Function |
-|---------|-------|-------------|
-| Passives | All | `removeAffV2("voyria")` or `reduceRandomAffCertaintyV2()` |
-| Accelerate | Depthswalker | `removeAffV2()` + 1-2x `reduceRandomAffCertaintyV2()` |
-| Alleviate | Blademaster | `removeAffV2("paralysis")` + `reduceRandomAffCertaintyV2()` |
-| Dragonheal | Dragon | `removeAffV2()` + 3x `reduceRandomAffCertaintyV2()` |
-| Fitness | Knights/Monk/BM | `removeAffV2("asthma")` + `removeAffV2("weariness")` |
-| Phoenix | Blademaster | `resetAffsV2()` (full reset) |
+- Use `haveAff(aff)` for standard checks (routes to V3 at 30% threshold)
+- Use `haveAffV3(aff, 0.9)` for high-confidence gates
+- Use `getAffProbabilityV3(aff)` for probability-weighted decisions
+- Class-specific `hasAff()` wrappers (apostate, blademaster, DWC, depthswalker) all delegate to `haveAff()`
 
 ### ataxiaBasher (Automated Hunting System)
 
@@ -1449,12 +1408,12 @@ infernalDWC.config = {
 }
 ```
 
-### V3/V2 Affliction Tracking Support
-The system uses `infernalDWC.hasAff()` which routes through V3 → V2 → V1:
+### V3 Affliction Tracking Support
+Class-specific `hasAff()` wrappers delegate to the global `haveAff()` which routes to V3:
 ```lua
--- infernalDWC.hasAff() routes: V3 (probability) → V2 (certainty) → V1 (boolean tAffs)
--- Shield/rebounding use dual-check pattern for safety:
-local hasRebounding = infernalDWC.hasAff("rebounding") or (tAffs and tAffs.rebounding)
+-- infernalDWC.hasAff(aff) → return haveAff(aff) → haveAffV3(aff)
+-- Shield/rebounding use V1 fallback for GMCP timing gap:
+local hasRebounding = haveAff("rebounding") or (tAffs and tAffs.rebounding)
 ```
 The Blademaster Ice Dispatch (`005_CC_BM_Ice.lua`) follows the same pattern via `blademaster.hasAff()`.
 

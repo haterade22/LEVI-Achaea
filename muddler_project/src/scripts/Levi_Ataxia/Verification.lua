@@ -9,7 +9,7 @@ hierarchy:
 - Combat
 - Affliction Tracking V3
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
 packageName: ''
 ]]--
@@ -33,8 +33,6 @@ packageName: ''
 function targetAteWrapper(herb)
     if affConfigV3 and affConfigV3.enabled then
         onHerbCureV3(herb)
-    elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-        targetAteV2(herb)
     else
         if targetAte then targetAte(herb) end
     end
@@ -48,8 +46,6 @@ function tarAffedWrapper(...)
                 applyAffV3(aff)
             end
         end
-    elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-        if tarAffedConfirmed then tarAffedConfirmed(...) end
     else
         if tarAffed then tarAffed(...) end
     end
@@ -59,8 +55,6 @@ end
 function erAffWrapper(aff)
     if affConfigV3 and affConfigV3.enabled then
         removeAffV3(aff)
-    elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-        if removeAffV2 then removeAffV2(aff) end
     else
         if erAff then erAff(aff) end
     end
@@ -70,8 +64,6 @@ end
 function haveAffWrapper(aff)
     if affConfigV3 and affConfigV3.enabled then
         return haveAffV3(aff)
-    elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-        return haveAffV2 and haveAffV2(aff) or false
     else
         return haveAff and haveAff(aff) or false
     end
@@ -412,8 +404,6 @@ end
 function getCurrentTrackingSystem()
     if affConfigV3 and affConfigV3.enabled then
         return "V3"
-    elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-        return "V2"
     else
         return "V1"
     end

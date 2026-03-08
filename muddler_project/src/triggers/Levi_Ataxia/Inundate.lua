@@ -9,14 +9,11 @@ if humour == "phlegmatic" then
 		else
 			affList = {lethargy = 1, anorexia = 5, slickness = 7}
 		end
-		local afflicted = {}
 		for aff, count in pairs(affList) do
 			if tAffs.phlegmatic > count then
-				table.insert(afflicted, aff)
-				tAffs[aff] = true
+				tarAffed(aff)
 			end
 		end
-		raiseEvent("tar afflicted", afflicted)	
 		checkTargetLocks()
 	end
 	tAffs.phlegmatic = nil

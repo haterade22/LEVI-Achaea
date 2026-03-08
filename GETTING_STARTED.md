@@ -57,7 +57,7 @@ levi setup separator       -- Command separator (default ;)
 levi setup weapons         -- Weapon IDs for your class
 levi setup basher          -- Flee thresholds, gold pack, shield swap
 levi setup sipping         -- Health/mana sip percentages
-levi setup tracking        -- Affliction tracking mode (V1 or V2)
+levi setup tracking        -- Affliction tracking settings
 levi setup combat          -- Party relay, auto-loot, gag clot
 levi setup gui             -- Toggle the GUI on/off
 levi setup ndb             -- City highlight colours, enemy formatting
@@ -183,8 +183,8 @@ src_new/
 ├── scripts/levi_ataxia/levi/
 │   ├── ataxia/                    # Core combat system
 │   │   ├── 017_Affliction_Management.lua
-│   │   ├── affliction_tracking_v2/  # V2 certainty tracking
-│   │   ├── affliction_tracking_core/ # V3 probability tracking
+│   │   ├── affliction_tracking_v2/  # V2 (deactivated, stubs route to V3)
+│   │   ├── affliction_tracking_core/ # V3 probability engine (single source of truth)
 │   │   ├── basher/                  # Bashing attack builders
 │   │   ├── genrunning/              # Basher API and automation
 │   │   ├── deffing/                 # Defense tracking
@@ -205,7 +205,7 @@ src_new/
 ### Finding Code
 
 - **Affliction tracking**: `scripts/.../ataxia/017_Affliction_Management.lua`
-- **Curing**: `scripts/.../ataxia/affliction_tracking_v2/` and `affliction_tracking_core/`
+- **V3 tracker**: `scripts/.../ataxia/affliction_tracking_core/007_Branching_State_Tracker.lua` + `008_V3_Integration.lua`
 - **Class offense**: `scripts/.../levi_scripts/<class>/`
 - **Basher**: `scripts/.../ataxia/basher/` and `genrunning/`
 - **GUI**: search `scripts/` for GUI creation files

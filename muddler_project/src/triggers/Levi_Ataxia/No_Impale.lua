@@ -1,3 +1,2 @@
-tAffs.impaled = false
-if removeAffV3 then removeAffV3("impaled") end
+erAff("impaled")
 timpale = false

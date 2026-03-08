@@ -6,10 +6,8 @@ if isTargeted(matches[4]) then
   
   if ataxiaTemp.jinxone ~= "bleed" and ataxiaTemp.jinxtwo == "bleed" then
     tarAffed(ataxiaTemp.jinxone)
-    if applyAffV3 then applyAffV3(ataxiaTemp.jinxone) end
   elseif ataxiaTemp.jinxone ~= "bleed" and ataxiaTemp.jinxtwo ~= "bleed" then
     tarAffed(ataxiaTemp.jinxone, ataxiaTemp.jinxtwo)
-    if applyAffV3 then applyAffV3(ataxiaTemp.jinxone, ataxiaTemp.jinxtwo) end
    if partyrelay then send("pt "..target..": "..ataxiaTemp.jinxone.." "..ataxiaTemp.jinxtwo) end
   end
 	
@@ -18,7 +16,7 @@ if isTargeted(matches[4]) then
 	end
 
 	if ataxiaTemp.jinxtwo == "inflame" then
-		tempTimer(2, [[tAffs.inflame = false; if removeAffV3 then removeAffV3("inflame") end]])
+		tempTimer(2, [[erAff("inflame")]])
 	end
 	targetIshere = true
 

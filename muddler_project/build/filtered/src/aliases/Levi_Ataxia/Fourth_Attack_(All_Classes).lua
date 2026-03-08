@@ -7,7 +7,8 @@ lock_base_prios()
 end
 
 if gmcp.Char.Status.class == "Serpent" then
-serpent_kelp()
+  serp_setmode_darkshade()
+  serp_ekanelia_offense()
 end
  
 if gmcp.Char.Status.class == "Blademaster" then

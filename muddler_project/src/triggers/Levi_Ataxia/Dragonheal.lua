@@ -8,7 +8,6 @@ if isTargeted(matches[2]) then
 		removeAffV2("recklessness")
 		removeAffV2("weariness")
 	end
-	if removeAffV3 then removeAffV3("recklessness"); removeAffV3("weariness") end
 	if reduceRandomAffCertaintyV2 then
 		reduceRandomAffCertaintyV2()
 		reduceRandomAffCertaintyV2()

@@ -36,4 +36,3 @@ end
 magi.firestormm = true
 
 tarAffed("firestorm")
-if applyAffV3 then applyAffV3("firestorm") end

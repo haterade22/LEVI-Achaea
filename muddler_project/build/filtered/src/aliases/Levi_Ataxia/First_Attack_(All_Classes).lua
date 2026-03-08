@@ -76,7 +76,8 @@ end
 
 
 if gmcp.Char.Status.class == "Serpent" then
-serp_setmode_auto()
+  serp_setmode_lock()
+  serp_ekanelia_offense()
 end
 
 if gmcp.Char.Status.class == "Pariah" then

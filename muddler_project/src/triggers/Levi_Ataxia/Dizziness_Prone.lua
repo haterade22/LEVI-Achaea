@@ -1,11 +1,9 @@
 if isTargeted(matches[2]) then
-	tAffs.dizziness = true
-	if applyAffV3 then applyAffV3("dizziness") end
-	tAffs.prone = true
+	tarAffed("dizziness")
+	tarAffed("prone")
 
-	-- V3 integration: collapse branches (proves dizziness present) and track prone
+	-- V3 integration: collapse branches (proves dizziness present)
 	if onTargetStumbleV3 then onTargetStumbleV3() end
-	if applyAffV3 then applyAffV3("prone") end
 
 	selectString(line,1)
 	setBold(true)

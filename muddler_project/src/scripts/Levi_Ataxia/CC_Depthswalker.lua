@@ -75,43 +75,19 @@ depthswalker.DW_AFFS = {
 -- V3 ROUTING HELPERS
 --------------------------------------------------------------------------------
 
--- Check if target has an affliction (V3 -> V2 -> V1 routing)
--- Now consistent with global haveAff() which also routes to V3 when enabled.
+-- Check if target has an affliction (V3 is always on, routes through global haveAff)
 function depthswalker.hasAff(aff)
-    -- V3 first when enabled
-    if affConfigV3 and affConfigV3.enabled and haveAffV3 then
-        return haveAffV3(aff)
-    end
-    -- V2 fallback
-    if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then
-        if haveAffV2 then
-            return haveAffV2(aff)
-        elseif tAffsV2 and tAffsV2[aff] then
-            return true
-        end
-        return false
-    end
-    -- V1 fallback
-    if tAffs and tAffs[aff] then
-        return true
-    end
-    return false
+    return haveAff(aff)
 end
 
--- Get affliction probability (0.0-1.0). Falls back to binary for V2/V1.
+-- Get affliction probability (0.0-1.0).
 function depthswalker.getAffProb(aff)
-    if affConfigV3 and affConfigV3.enabled and getAffProbabilityV3 then
-        return getAffProbabilityV3(aff)
-    end
-    return depthswalker.hasAff(aff) and 1.0 or 0
+    return getAffProbabilityV3 and getAffProbabilityV3(aff) or 0
 end
 
 -- Check which tracking system is active
 function depthswalker.getTrackingSystem()
-    if affConfigV3 and affConfigV3.enabled then return "V3"
-    elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then return "V2"
-    end
-    return "V1"
+    return "V3"
 end
 
 -- Get lock status with probabilities

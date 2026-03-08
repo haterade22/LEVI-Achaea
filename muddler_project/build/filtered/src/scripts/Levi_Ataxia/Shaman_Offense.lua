@@ -172,9 +172,6 @@ function shamanOffense.hasAff(aff)
     if affConfigV3 and affConfigV3.enabled and haveAffV3 then
         return haveAffV3(aff)
     end
-    if ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 and haveAffV2 then
-        return haveAffV2(aff)
-    end
     -- V1 fallback (haveAff routes V3→V1 when available)
     if haveAff then
         return haveAff(aff)
@@ -1124,9 +1121,7 @@ function shamanOffense.status()
 
     -- Tracking system
     local tracking = "V1"
-    if affConfigV3 and affConfigV3.enabled then tracking = "V3"
-    elseif ataxia and ataxia.settings and ataxia.settings.useAffTrackingV2 then tracking = "V2"
-    end
+    if affConfigV3 and affConfigV3.enabled then tracking = "V3" end
     shamanOffense.echo("Tracking: " .. tracking)
 
     -- Ability status

@@ -46,7 +46,7 @@ afflictionStatesV3 = afflictionStatesV3 or {
 
 -- Configuration
 affConfigV3 = affConfigV3 or {
-    enabled = false,
+    enabled = true,
     minProbability = 0.01,  -- Prune branches below 1%
     maxStates = 50,         -- Max branches to track
     debugEcho = true,       -- Show debug messages
@@ -158,13 +158,10 @@ end
 
 -- Add affliction to ALL branches (we definitely inflicted it)
 function applyAffV3(aff)
-    if not affConfigV3.enabled then return end
-
     -- Check if this is a simple-tracked affliction
     if simpleTrackLookup[aff] then
         simpleAffsV3[aff] = true
         syncToOldSystemV3()
-        raiseEvent("tar afflicted", {aff})
         return
     end
 
@@ -175,19 +172,15 @@ function applyAffV3(aff)
     deduplicateStatesV3()
     rebuildCacheV3()
     syncToOldSystemV3()
-    raiseEvent("tar afflicted", {aff})
     updateAffDisplayV3()
 end
 
 -- Remove affliction from ALL branches (definite cure - we saw the message)
 function removeAffV3(aff)
-    if not affConfigV3.enabled then return end
-
     -- Check simple tracking
     if simpleTrackLookup[aff] then
         simpleAffsV3[aff] = nil
         syncToOldSystemV3()
-        raiseEvent("target cured aff", aff)
         return
     end
 
@@ -198,7 +191,6 @@ function removeAffV3(aff)
     deduplicateStatesV3()
     rebuildCacheV3()
     syncToOldSystemV3()
-    raiseEvent("target cured aff", aff)
     updateAffDisplayV3()
 end
 
@@ -208,7 +200,6 @@ end
 
 -- Handle herb cure - this is where branching happens
 function onHerbCureV3(herb)
-    if not affConfigV3.enabled then return end
 
     -- Get the list of afflictions this herb can cure
     local curableAffs = getCurableAffs(herb)
@@ -281,7 +272,6 @@ end
 -- Handle smoke cure - similar to herb cure but uses smoke cure table
 -- Also proves asthma is absent (can't smoke with asthma)
 function onSmokeCureV3()
-    if not affConfigV3.enabled then return end
 
     -- First, prove asthma is absent (can't smoke with asthma)
     collapseAffAbsentV3("asthma")
@@ -349,7 +339,6 @@ end
 -- Handle salve cure - proves slickness absent, then branches for salve-curable affs
 -- salveType: "body", "skin", "head", "torso", "limbs"
 function onSalveCureV3(salveType)
-    if not affConfigV3.enabled then return end
 
     -- Applying salve proves slickness is absent
     collapseAffAbsentV3("slickness")
@@ -431,7 +420,6 @@ end
 
 -- Collapse branches where affliction is PRESENT (e.g., smoke proves no asthma)
 function collapseAffAbsentV3(aff)
-    if not affConfigV3.enabled then return end
 
     local surviving = {}
     local totalProb = 0
@@ -472,7 +460,6 @@ end
 
 -- Collapse branches where affliction is ABSENT (e.g., fumble proves clumsiness present)
 function collapseAffPresentV3(aff)
-    if not affConfigV3.enabled then return end
 
     local surviving = {}
     local totalProb = 0
@@ -696,23 +683,12 @@ function syncToOldSystemV3()
         end
     end
 
-    if tAffsV2 and ataxia and ataxia.settings then
-        for aff, prob in pairs(allProbs) do
-            if prob >= 0.3 then
-                tAffsV2[aff] = true
-            elseif prob < 0.01 then
-                tAffsV2[aff] = nil
-            end
-        end
-    end
+    -- V2 removed: tAffsV2 sync no longer needed (V3 is sole source of truth)
 end
 
 -- Update affliction display
 function updateAffDisplayV3()
-    -- Update displays (reuse V2's display logic if available)
-    if updateAffDisplayV2 then
-        updateAffDisplayV2()
-    elseif zgui and zgui.showTarAffs then
+    if zgui and zgui.showTarAffs then
         zgui.showTarAffs()
     end
 end
@@ -770,22 +746,7 @@ end
 
 -- Reset on target change
 registerAnonymousEventHandler("ataxia target changed", function()
-    if affConfigV3.enabled then
-        resetStatesV3()
-    end
+    resetStatesV3()
 end)
 
--- Sync from old system when afflictions applied via tarAffed()
-registerAnonymousEventHandler("tar afflicted", function(event, affList)
-    if not affConfigV3.enabled then return end
-    if not affList or type(affList) ~= "table" then return end
-
-    for _, aff in pairs(affList) do
-        if type(aff) == "string" then
-            -- Only add if not already tracked (avoid double-adding)
-            if getAffProbabilityV3(aff) < 0.5 then
-                applyAffV3(aff)
-            end
-        end
-    end
-end)
+-- V1→V3 sync listener removed: tarAffed() now calls applyAffV3() directly

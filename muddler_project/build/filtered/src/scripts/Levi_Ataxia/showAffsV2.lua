@@ -9,7 +9,7 @@ hierarchy:
 - zGUI Redux
 - Update Windows
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
 packageName: ''
 ]]--

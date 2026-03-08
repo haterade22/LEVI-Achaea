@@ -47,6 +47,7 @@ tempTimer(15, [[send("queue add avoid physical")]])
 slow = 0
 shape = 0
 tAffs = {blindness = true, deafness = true, shield = false, rebounding = false, curseward = false}
+if resetStatesV3 then resetStatesV3() end
 ataxia_Echo("Reset target afflictions.")
 affcount = 0
 can_enlighten = false

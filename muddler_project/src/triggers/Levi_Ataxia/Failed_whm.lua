@@ -8,5 +8,4 @@ resetFormat()
 
 for _, aff in pairs(whm) do
   erAff(aff)
-  if removeAffV3 then removeAffV3(aff) end
 end

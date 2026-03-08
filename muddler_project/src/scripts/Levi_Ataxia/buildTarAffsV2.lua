@@ -9,7 +9,7 @@ hierarchy:
 - zGUI Redux
 - Build Windows
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
 packageName: ''
 ]]--

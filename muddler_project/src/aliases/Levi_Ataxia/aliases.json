@@ -2710,6 +2710,10 @@
     "regex": "^cc$"
   },
   {
+    "name": "Scytherus (All Classes)",
+    "regex": "^srr$"
+  },
+  {
     "name": "EPITOMISE",
     "regex": "^ep$"
   },
