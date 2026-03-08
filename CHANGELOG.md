@@ -2,6 +2,23 @@
 
 ---
 
+## 2026-03-08 — Nil Guard Fixes for Blind/Startup State
+
+Fixed 8 runtime errors that occurred when logging in blind (no `gmcp.Room` data) or during early connection (incomplete GMCP state).
+
+| File | Issue | Fix |
+|------|-------|-----|
+| `defence/001_Pre_Apply.lua` | `gmcp.Room.Info.exits` nil when blind | Early return guard |
+| `318_Prompt_Trigger.lua` | `ataxiaTables.limbData` nil before init | Wrapped in nil check |
+| `016_Targeting_Functions.lua` | `ataxiaTemp.enemies` nil, `ataxia.playersHere` non-table | Default to `{}`, type check |
+| `012_Prompt_Substitution.lua` | `ataxiaTemp.mobhealth` nil comparison | Added nil check before `~= 0` |
+| `003_ataxia_RoomContents_Update.lua` | `gmcp.Char.Items.List` nil during early connect | Early return guard |
+| `006_showAffs.lua` | `target` nil before `:title()` | Added nil check |
+| `008_showRoomInfo.lua` | `gmcp.Room.Info` nil when blind | Early return guard |
+| `352_Room_Info_Shortener.lua` | `gmcp.Room.Info` nil when blind | Early return guard (already deactivated) |
+
+---
+
 ## 2026-03-08 — V3 Affliction Tracker Migration: Single Source of Truth
 
 **Major architecture change**: Migrated from three parallel affliction tracking systems (V1 boolean, V2 certainty, V3 probability) to **V3-only**. The branching probability engine is now the single source of truth, with `tAffs` maintained as a synchronized read cache for backward compatibility.

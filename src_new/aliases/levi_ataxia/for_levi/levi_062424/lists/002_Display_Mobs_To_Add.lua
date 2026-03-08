@@ -14,6 +14,10 @@ command: ''
 packageName: ''
 ]]--
 
+if not ataxiaBasher.targetList then
+	ataxiaEcho("Bashing systems not yet loaded. Run 'levi setup' or 'abinstall' first.")
+	return
+end
 if ataxia.denizensHere and ataxiaBasher.targetList[gmcp.Room.Info.area] then
 	ataxiaEcho("Displaying mobs currently in room, but not in target list. Click to add.")
 	for i,v in pairs(ataxia.denizensHere) do

@@ -24,6 +24,7 @@ function ataxia_RoomContents_Update(event)
 	ataxia.denizensHere = ataxia.denizensHere or {}
 	atempDenizens = atempDenizens or {}
 	waterGuards = waterGuards or {}
+  if not gmcp.Char or not gmcp.Char.Items or not gmcp.Char.Items.List then return end
   if gmcp.Char.Items.List.location ~= "inv" then
     ataxia.lightwall = false
     ataxiaTemp.monolith = false

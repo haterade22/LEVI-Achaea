@@ -15,11 +15,11 @@ packageName: ''
 
 function switchTarget(who)
 	local tName = who
-	possible_targets = ataxiaTemp.enemies
+	possible_targets = ataxiaTemp.enemies or {}
 
 	local found_target = false
   if who ~= target then ataxia_resetLimbTable() end
-	if ataxia.playersHere then
+	if ataxia.playersHere and type(ataxia.playersHere) == "table" then
 		for i,v in pairs(ataxia.playersHere) do
 			if string.find(v, tName) then
 				target = v

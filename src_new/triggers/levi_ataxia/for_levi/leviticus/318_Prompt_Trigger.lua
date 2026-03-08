@@ -55,7 +55,9 @@ cecho("Target: Burns " ..tburns)
 end
 end
 
-mylimbattackpercentage = tonumber(ataxiaTables.limbData.dwcSlash)
+if ataxiaTables and ataxiaTables.limbData then
+  mylimbattackpercentage = tonumber(ataxiaTables.limbData.dwcSlash)
+end
 
 
 lpreapply()

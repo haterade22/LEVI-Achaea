@@ -15,6 +15,7 @@ packageName: ''
 
 function getdirectionn()
 random_direction = nil
+if not gmcp.Room or not gmcp.Room.Info or not gmcp.Room.Info.exits then return end
 for k, v in pairs(gmcp.Room.Info.exits) do
   random_direction = k
   break

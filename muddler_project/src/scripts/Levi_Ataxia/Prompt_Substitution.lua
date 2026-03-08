@@ -173,7 +173,7 @@ ataxiaPromptTags = {
 			local str = ""
 			if target then str = "<DimGrey>(<white>"..target end
 			if gmcp.IRE.Target and gmcp.IRE.Target.Info and gmcp.IRE.Target.Info.hpperc ~= "-1" then
-				if ataxiaTemp.mobhealth ~= 0 then
+				if ataxiaTemp.mobhealth and ataxiaTemp.mobhealth ~= 0 then
 					str = str.."<DimGrey>|<white>"..gmcp.IRE.Target.Info.hpperc
 				end
 			end

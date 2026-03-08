@@ -3818,7 +3818,7 @@
                   }
                 ],
                 "fireLength": 25,
-                "script": "local x = ataxia.settings.roomshorten\n\nif gmcp.Room.Info.name:lower():find(matches[2]:lower()) then\n\tif (x == \"notmanual\" and ataxiaBasher.manual ~= true) or (x == \"normal\") then\n\t\troomDeleting = true\n\t\tdeleteLine()\n\tend\nend"
+                "script": "local x = ataxia.settings.roomshorten\n\nif not gmcp.Room or not gmcp.Room.Info then return end\nif gmcp.Room.Info.name:lower():find(matches[2]:lower()) then\n\tif (x == \"notmanual\" and ataxiaBasher.manual ~= true) or (x == \"normal\") then\n\t\troomDeleting = true\n\t\tdeleteLine()\n\tend\nend"
               },
               {
                 "name": "Priest Empathy",

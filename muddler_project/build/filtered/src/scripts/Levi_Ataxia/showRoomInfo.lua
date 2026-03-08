@@ -1,5 +1,6 @@
 function zgui.showRoomInfo()
   clearUserWindow("roomInfoDisplay")
+  if not gmcp.Room or not gmcp.Room.Info then return end
   local areaName, roomName = mmp.cleanAreaName(gmcp.Room.Info.area), mmp.cleanroomname(gmcp.Room.Info.name)
   cecho("roomInfoDisplay", " <NavajoWhite>"..roomName:title().." - "..areaName.." <DodgerBlue>(v<NavajoWhite>"..gmcp.Room.Info.num.."<DodgerBlue>)")
   cecho("roomInfoDisplay", "\n<brown>  [<orange>"..room_exitstr.."<brown>]\n")

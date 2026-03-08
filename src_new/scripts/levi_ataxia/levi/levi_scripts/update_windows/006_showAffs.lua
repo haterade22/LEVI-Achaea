@@ -37,7 +37,7 @@ function zgui.showAffs()
 end
 
 function zgui.showTarAffs()
-if type(target) ~= "number" then
+if target and type(target) ~= "number" then
 	local ignoreAffs = {"curseward", "blindness", "deafness", "rebounding", "shield"}
 	local str = "<a_brown>[<NavajoWhite>"..target:title().."<a_brown>]: "
 	for aff, boo in pairs(tAffs) do
