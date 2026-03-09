@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-03-09 — Fix: Tekura basher attacks fail when wielding weapons
+
+Tekura combos (`sdk ucp ucp` / `rhk ucp ucp`) require empty hands. Added `unwield all` before all 3 tekura attack paths in the Monk basher (shielded+rageraze, shielded+no-rageraze, normal).
+
+| File | Changes |
+|------|---------|
+| `scripts/.../basher/002_Class_Bashing.lua` | Prepended `unwield all` (via separator) before all 3 tekura `combo` commands |
+
+---
+
 ## 2026-03-09 — Fix: Hunting Scrolls `<ansiMagenta>` rendered as literal text
 
 `ansiMagenta` is not a valid `cecho`/`cechoLink` color name — it's an `hecho` format. All 30+ occurrences in the Hunting Scrolls display were rendering as literal `<ansiMagenta>` text instead of magenta color.

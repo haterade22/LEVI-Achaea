@@ -346,7 +346,7 @@ function ataxiaBasher_monkBashing2()
       if ataxia.settings.crushbash then
         command = command.." mind crush " ..target.. ";"
       elseif tekura then
-          command = command.."combo "..target.. " sdk ucp ucp; "
+          command = command.."unwield all"..sp.."combo "..target.. " sdk ucp ucp; "
       elseif shikudo then
         if ataxia.vitals.form == "Rain" and ataxia.vitals.kata >= 20 then
           command = command.."combo "..target.. " ruku torso kuro left frontkick left;transition to the oak form; "
@@ -370,7 +370,7 @@ function ataxiaBasher_monkBashing2()
       if ataxia.settings.crushbash then
         command = command.." mind crush " ..target..";"
       elseif tekura then
-        command = command.."combo "..target.. " rhk ucp ucp; "
+        command = command.."unwield all"..sp.."combo "..target.. " rhk ucp ucp; "
       elseif shikudo and ataxia.settings.crushbash == false then
         if ataxia.vitals.form == "Rain" and ataxia.vitals.kata >= 19 then
           command = command.."combo "..target.. " shatter hiru frontkick left;transition to the oak form; "
@@ -396,7 +396,7 @@ function ataxiaBasher_monkBashing2()
      if ataxia.settings.crushbash then
        command = command.."mind crush " ..target..";"
      elseif tekura then
-       command = command.."combo "..target.. " sdk ucp ucp; "
+       command = command.."unwield all"..sp.."combo "..target.. " sdk ucp ucp; "
      elseif shikudo and ataxia.settings.crushbash == false then
         if ataxia.vitals.form == "Rain" and ataxia.vitals.kata >= 20 then
           command = command.."combo "..target.. " ruku torso kuro left frontkick left;transition to the oak form; "
