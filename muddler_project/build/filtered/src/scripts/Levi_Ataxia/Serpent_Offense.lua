@@ -556,7 +556,7 @@ end
 -- =============================================================================
 
 function checkDarkshadeTimer()
-    if tAffs.darkshade and affTimers.darkshade then
+    if haveAff("darkshade") and affTimers.darkshade then
         local darkshadeStuckTime = getEpoch() - affTimers.darkshade
         if darkshadeStuckTime >= DARKSHADE_KILL_TIME then
             Algedonic.Echo("<magenta>DARKSHADE KILL!<white> " .. math.floor(darkshadeStuckTime) .. "s stuck - target should be dead!")
@@ -646,7 +646,7 @@ function determineStrategy()
     end
 
     -- ===== DARKSHADE FORK: Apply darkshade if not on target (highest priority) =====
-    if not tAffs.darkshade then
+    if not haveAff("darkshade") then
         serpStrategy = "apply_darkshade"
         return
     end
@@ -739,7 +739,7 @@ function serpent.assessCombatState()
         dominated = dominated + 20
     end
 
-    if tAffs.darkshade then
+    if haveAff("darkshade") then
         local stuckTime = 0
         if affTimers and affTimers.darkshade then
             stuckTime = getEpoch() - affTimers.darkshade
@@ -1176,7 +1176,7 @@ function buildSecondVenomGinseng()
     if #envenomListTwo > 0 then return end
     local firstVenom = envenomList[1]
 
-    if not tAffs.darkshade and firstVenom ~= "darkshade" then
+    if not haveAff("darkshade") and firstVenom ~= "darkshade" then
         table.insert(envenomListTwo, "darkshade")
     elseif not haveAff("addiction") and firstVenom ~= "vardrax" then
         table.insert(envenomListTwo, "vardrax")
@@ -1610,7 +1610,7 @@ function serp_ekanelia_offense()
             -- Target eating ginseng: stack addiction/nausea to hide darkshade
             -- Once camus delivered via scytherus, transition to lock cycle
             serpStrategy = "ginseng_pressure"
-        elseif not tAffs.darkshade and not serpent.state.camusDelivered then
+        elseif not haveAff("darkshade") and not serpent.state.camusDelivered then
             serpStrategy = "apply_darkshade"
         elseif truelock then
             if not serpent.state.voyriaSent then
@@ -1671,7 +1671,7 @@ function serp_ekanelia_offense()
         if haveAff("voyria") then affStr = affStr .. "<red>VOY " end
         if haveAff("sileris") or (tAffs and tAffs.sileris) then affStr = affStr .. "<red>SIL " end
         if haveAff("fangbarrier") or (tAffs and tAffs.fangbarrier) then affStr = affStr .. "<red>FNG " end
-        if tAffs.darkshade then affStr = affStr .. "<green>DRK " end
+        if haveAff("darkshade") then affStr = affStr .. "<green>DRK " end
         if haveAff("addiction") then affStr = affStr .. "<green>ADD " end
         if haveAff("nausea") then affStr = affStr .. "<green>NAU " end
         if affStr == "" then affStr = "<dim_grey>none" end
@@ -1788,7 +1788,7 @@ end
 
 function serp_status()
     local darkshadeTime = 0
-    if tAffs.darkshade and affTimers.darkshade then
+    if haveAff("darkshade") and affTimers.darkshade then
         darkshadeTime = getEpoch() - affTimers.darkshade
     end
 
@@ -1865,7 +1865,7 @@ function serp_status()
     end
 
     -- Darkshade tracking
-    cecho("<white>Darkshade: " .. (tAffs.darkshade and ("<green>YES<white> (" .. math.floor(darkshadeTime) .. "s/" .. DARKSHADE_KILL_TIME .. "s)") or "<red>NO") .. "<reset>\n")
+    cecho("<white>Darkshade: " .. (haveAff("darkshade") and ("<green>YES<white> (" .. math.floor(darkshadeTime) .. "s/" .. DARKSHADE_KILL_TIME .. "s)") or "<red>NO") .. "<reset>\n")
     cecho("<white>Ginseng Stack: <yellow>" .. ginsengCount .. "/6<reset>\n")
     cecho("<white>Kelp Stack: <yellow>" .. countKelpStack() .. "/7<reset>\n")
     cecho("<white>Bloodroot Stack: <yellow>" .. countBloodrootStack() .. "/2<reset>\n")

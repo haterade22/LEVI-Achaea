@@ -44628,25 +44628,25 @@ end
 
 envenomList = {}
 bardrefrain = {}
-if not tAffs.paralysis then
+if not haveAff("paralysis") then
   table.insert(bardrefrain,"paean")
-elseif not tAffs.asthma then
+elseif not haveAff("asthma") then
   table.insert(bardrefrain,"ode")
-elseif not tAffs.slickness then
+elseif not haveAff("slickness") then
   table.insert(bardrefrain,"ghazal")
-elseif not tAffs.lethargy then
+elseif not haveAff("lethargy") then
   table.insert(bardrefrain,"elegy")
-elseif not tAffs.sensitivity then
+elseif not haveAff("sensitivity") then
   table.insert(bardrefrain,"prosodion")
-elseif not tAffs.dizziness then
+elseif not haveAff("dizziness") then
   table.insert(bardrefrain,"bhajan")
-elseif not tAffs.addiction then
+elseif not haveAff("addiction") then
   table.insert(bardrefrain,"gusheh")
-else 
+else
   table.insert(bardrefrain,"paean")
-end 
+end
 
-if tAffs.shield or tAffs.rebounding then
+if haveAff("shield") or (tAffs and tAffs.shield) or haveAff("rebounding") or (tAffs and tAffs.rebounding) then
   atk = atk.."blade punctuate " ..target.. " " ..bardrefrain[1]
 elseif bladefinale == true then
   atk = atk.."blade flick " ..target.. ";finale " ..target
@@ -44774,25 +44774,25 @@ end
 
 envenomList = {}
 bardrefrain = {}
-if not tAffs.paralysis then
+if not haveAff("paralysis") then
   table.insert(bardrefrain,"paean")
-elseif not tAffs.asthma then
+elseif not haveAff("asthma") then
   table.insert(bardrefrain,"ode")
-elseif not tAffs.slickness then
+elseif not haveAff("slickness") then
   table.insert(bardrefrain,"ghazal")
-elseif not tAffs.lethargy then
+elseif not haveAff("lethargy") then
   table.insert(bardrefrain,"elegy")
-elseif not tAffs.sensitivity then
+elseif not haveAff("sensitivity") then
   table.insert(bardrefrain,"prosodion")
-elseif not tAffs.dizziness then
+elseif not haveAff("dizziness") then
   table.insert(bardrefrain,"bhajan")
-elseif not tAffs.addiction then
+elseif not haveAff("addiction") then
   table.insert(bardrefrain,"gusheh")
-else 
+else
   table.insert(bardrefrain,"paean")
-end 
+end
 
-if tAffs.shield or tAffs.rebounding then
+if haveAff("shield") or (tAffs and tAffs.shield) or haveAff("rebounding") or (tAffs and tAffs.rebounding) then
   atk = atk.."blade punctuate " ..target.. " " ..bardrefrain[1]
 
   
@@ -68374,7 +68374,7 @@ end
 -- =============================================================================
 
 function checkDarkshadeTimer()
-    if tAffs.darkshade and affTimers.darkshade then
+    if haveAff("darkshade") and affTimers.darkshade then
         local darkshadeStuckTime = getEpoch() - affTimers.darkshade
         if darkshadeStuckTime &gt;= DARKSHADE_KILL_TIME then
             Algedonic.Echo("&lt;magenta&gt;DARKSHADE KILL!&lt;white&gt; " .. math.floor(darkshadeStuckTime) .. "s stuck - target should be dead!")
@@ -68464,7 +68464,7 @@ function determineStrategy()
     end
 
     -- ===== DARKSHADE FORK: Apply darkshade if not on target (highest priority) =====
-    if not tAffs.darkshade then
+    if not haveAff("darkshade") then
         serpStrategy = "apply_darkshade"
         return
     end
@@ -68557,7 +68557,7 @@ function serpent.assessCombatState()
         dominated = dominated + 20
     end
 
-    if tAffs.darkshade then
+    if haveAff("darkshade") then
         local stuckTime = 0
         if affTimers and affTimers.darkshade then
             stuckTime = getEpoch() - affTimers.darkshade
@@ -68994,7 +68994,7 @@ function buildSecondVenomGinseng()
     if #envenomListTwo &gt; 0 then return end
     local firstVenom = envenomList[1]
 
-    if not tAffs.darkshade and firstVenom ~= "darkshade" then
+    if not haveAff("darkshade") and firstVenom ~= "darkshade" then
         table.insert(envenomListTwo, "darkshade")
     elseif not haveAff("addiction") and firstVenom ~= "vardrax" then
         table.insert(envenomListTwo, "vardrax")
@@ -69428,7 +69428,7 @@ function serp_ekanelia_offense()
             -- Target eating ginseng: stack addiction/nausea to hide darkshade
             -- Once camus delivered via scytherus, transition to lock cycle
             serpStrategy = "ginseng_pressure"
-        elseif not tAffs.darkshade and not serpent.state.camusDelivered then
+        elseif not haveAff("darkshade") and not serpent.state.camusDelivered then
             serpStrategy = "apply_darkshade"
         elseif truelock then
             if not serpent.state.voyriaSent then
@@ -69489,7 +69489,7 @@ function serp_ekanelia_offense()
         if haveAff("voyria") then affStr = affStr .. "&lt;red&gt;VOY " end
         if haveAff("sileris") or (tAffs and tAffs.sileris) then affStr = affStr .. "&lt;red&gt;SIL " end
         if haveAff("fangbarrier") or (tAffs and tAffs.fangbarrier) then affStr = affStr .. "&lt;red&gt;FNG " end
-        if tAffs.darkshade then affStr = affStr .. "&lt;green&gt;DRK " end
+        if haveAff("darkshade") then affStr = affStr .. "&lt;green&gt;DRK " end
         if haveAff("addiction") then affStr = affStr .. "&lt;green&gt;ADD " end
         if haveAff("nausea") then affStr = affStr .. "&lt;green&gt;NAU " end
         if affStr == "" then affStr = "&lt;dim_grey&gt;none" end
@@ -69606,7 +69606,7 @@ end
 
 function serp_status()
     local darkshadeTime = 0
-    if tAffs.darkshade and affTimers.darkshade then
+    if haveAff("darkshade") and affTimers.darkshade then
         darkshadeTime = getEpoch() - affTimers.darkshade
     end
 
@@ -69683,7 +69683,7 @@ function serp_status()
     end
 
     -- Darkshade tracking
-    cecho("&lt;white&gt;Darkshade: " .. (tAffs.darkshade and ("&lt;green&gt;YES&lt;white&gt; (" .. math.floor(darkshadeTime) .. "s/" .. DARKSHADE_KILL_TIME .. "s)") or "&lt;red&gt;NO") .. "&lt;reset&gt;\n")
+    cecho("&lt;white&gt;Darkshade: " .. (haveAff("darkshade") and ("&lt;green&gt;YES&lt;white&gt; (" .. math.floor(darkshadeTime) .. "s/" .. DARKSHADE_KILL_TIME .. "s)") or "&lt;red&gt;NO") .. "&lt;reset&gt;\n")
     cecho("&lt;white&gt;Ginseng Stack: &lt;yellow&gt;" .. ginsengCount .. "/6&lt;reset&gt;\n")
     cecho("&lt;white&gt;Kelp Stack: &lt;yellow&gt;" .. countKelpStack() .. "/7&lt;reset&gt;\n")
     cecho("&lt;white&gt;Bloodroot Stack: &lt;yellow&gt;" .. countBloodrootStack() .. "/2&lt;reset&gt;\n")
@@ -70954,9 +70954,9 @@ function nightmare()
     maretick = tempTimer(6.5, [[maretick = false; maretick = true]])
     nightmareaff = tempTimer(8.5, [[nightmareaff = false; nightmareaff = true]])
 
-    if nightmareaff and tAffs.dementia and tAffs.hypersomnia then
+    if nightmareaff and haveAff("dementia") and haveAff("hypersomnia") then
       tarAffed("hellsight")
-    elseif nightmareaff and tAffs.hypersomnia and not tAffs.dementia then
+    elseif nightmareaff and haveAff("hypersomnia") and not haveAff("dementia") then
       tarAffed("dementia")
     end
   end

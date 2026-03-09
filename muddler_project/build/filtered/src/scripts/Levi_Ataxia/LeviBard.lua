@@ -56,25 +56,25 @@ end
 
 envenomList = {}
 bardrefrain = {}
-if not tAffs.paralysis then
+if not haveAff("paralysis") then
   table.insert(bardrefrain,"paean")
-elseif not tAffs.asthma then
+elseif not haveAff("asthma") then
   table.insert(bardrefrain,"ode")
-elseif not tAffs.slickness then
+elseif not haveAff("slickness") then
   table.insert(bardrefrain,"ghazal")
-elseif not tAffs.lethargy then
+elseif not haveAff("lethargy") then
   table.insert(bardrefrain,"elegy")
-elseif not tAffs.sensitivity then
+elseif not haveAff("sensitivity") then
   table.insert(bardrefrain,"prosodion")
-elseif not tAffs.dizziness then
+elseif not haveAff("dizziness") then
   table.insert(bardrefrain,"bhajan")
-elseif not tAffs.addiction then
+elseif not haveAff("addiction") then
   table.insert(bardrefrain,"gusheh")
-else 
+else
   table.insert(bardrefrain,"paean")
-end 
+end
 
-if tAffs.shield or tAffs.rebounding then
+if haveAff("shield") or (tAffs and tAffs.shield) or haveAff("rebounding") or (tAffs and tAffs.rebounding) then
   atk = atk.."blade punctuate " ..target.. " " ..bardrefrain[1]
 elseif bladefinale == true then
   atk = atk.."blade flick " ..target.. ";finale " ..target
@@ -202,25 +202,25 @@ end
 
 envenomList = {}
 bardrefrain = {}
-if not tAffs.paralysis then
+if not haveAff("paralysis") then
   table.insert(bardrefrain,"paean")
-elseif not tAffs.asthma then
+elseif not haveAff("asthma") then
   table.insert(bardrefrain,"ode")
-elseif not tAffs.slickness then
+elseif not haveAff("slickness") then
   table.insert(bardrefrain,"ghazal")
-elseif not tAffs.lethargy then
+elseif not haveAff("lethargy") then
   table.insert(bardrefrain,"elegy")
-elseif not tAffs.sensitivity then
+elseif not haveAff("sensitivity") then
   table.insert(bardrefrain,"prosodion")
-elseif not tAffs.dizziness then
+elseif not haveAff("dizziness") then
   table.insert(bardrefrain,"bhajan")
-elseif not tAffs.addiction then
+elseif not haveAff("addiction") then
   table.insert(bardrefrain,"gusheh")
-else 
+else
   table.insert(bardrefrain,"paean")
-end 
+end
 
-if tAffs.shield or tAffs.rebounding then
+if haveAff("shield") or (tAffs and tAffs.shield) or haveAff("rebounding") or (tAffs and tAffs.rebounding) then
   atk = atk.."blade punctuate " ..target.. " " ..bardrefrain[1]
 
   
