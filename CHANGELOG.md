@@ -2,15 +2,15 @@
 
 ---
 
-## 2026-03-08 — Fix: Stale darkshade tracking in serpent offense
+## 2026-03-08 — Fix: Stale tAffs reads across offense systems
 
-8 sites in `002_Serpent_Offense.lua` read `tAffs.darkshade` directly instead of `haveAff("darkshade")`. After V3 correctly cured darkshade (target eats ginseng), the stale `tAffs` cache kept `darkshade = true`, causing wrong strategy decisions (not re-applying darkshade) and incorrect `[tAffs]` display showing `DRK`.
-
-**Root cause**: `syncToOldSystemV3()` only clears `tAffs` entries when probability drops below 1%. Intermediate probabilities (1-30%) leave entries unchanged.
+Multiple offense scripts read `tAffs.<aff>` directly instead of `haveAff("<aff>")`. After V3 correctly cured afflictions, the stale `tAffs` cache could retain `true` values (intermediate 1-30% probability range not cleared by `syncToOldSystemV3()`), causing wrong strategy decisions and incorrect displays.
 
 | File | Changes |
 |------|---------|
-| `serpent/002_Serpent_Offense.lua` | Replaced all 8 `tAffs.darkshade` with `haveAff("darkshade")` (lines 574, 664, 757, 1194, 1628, 1689, 1806, 1883) |
+| `serpent/002_Serpent_Offense.lua` | Replaced all 8 `tAffs.darkshade` with `haveAff("darkshade")` |
+| `apostate/015_CC_Apostate.lua` | Replaced `tAffs.dementia`/`tAffs.hypersomnia` with `haveAff()` (nightmare aff tracking) |
+| `bard/001_LeviBard.lua` | Replaced 14 bare `tAffs.<aff>` with `haveAff()` (paralysis, asthma, slickness, lethargy, sensitivity, dizziness, addiction). Fixed 2 shield/rebounding checks to use V1 fallback pattern |
 
 ---
 

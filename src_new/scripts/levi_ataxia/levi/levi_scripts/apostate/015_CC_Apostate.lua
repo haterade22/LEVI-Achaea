@@ -1036,9 +1036,9 @@ function nightmare()
     maretick = tempTimer(6.5, [[maretick = false; maretick = true]])
     nightmareaff = tempTimer(8.5, [[nightmareaff = false; nightmareaff = true]])
 
-    if nightmareaff and tAffs.dementia and tAffs.hypersomnia then
+    if nightmareaff and haveAff("dementia") and haveAff("hypersomnia") then
       tarAffed("hellsight")
-    elseif nightmareaff and tAffs.hypersomnia and not tAffs.dementia then
+    elseif nightmareaff and haveAff("hypersomnia") and not haveAff("dementia") then
       tarAffed("dementia")
     end
   end
