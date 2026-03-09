@@ -17,7 +17,7 @@ levidragongroup()
 end
 if gmcp.Char.Status.class == "Monk" then
   if ataxia.vitals.stance then
-    tekura.dispatch.run()
+    tekura6.dispatch.run()
   else
     shikudo.dispatch()
   end
