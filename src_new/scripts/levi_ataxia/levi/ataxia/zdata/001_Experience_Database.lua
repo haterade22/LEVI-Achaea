@@ -114,17 +114,17 @@ function ataxia.data.db.showData(sortWith, sortStyle, sortDirection)           -
   local maxShow = 100                    ------<--<--<--<--< Max number of results to show unless ALL is used. Increase to see more (Over 200 will not allow deleting)
   local titleColor = "gold" 
   local menuColor = "purple" 
-  local areaColor = "ansiMagenta"
+  local areaColor = "magenta"
   local classColor = "purple"
-  local taliColor = "ansiMagenta"
-  local timeColor = "ansiMagenta"
-  local killColor = "ansiMagenta"
-  local kpmColor = "ansiMagenta"
-  local expColor = "ansiMagenta"
-  local rawexpColor = "ansiMagenta"
-  local epmColor = "ansiMagenta"
-  local gpmColor = "ansiMagenta"
-  local goldColor = "ansiMagenta"
+  local taliColor = "magenta"
+  local timeColor = "magenta"
+  local killColor = "magenta"
+  local kpmColor = "magenta"
+  local expColor = "magenta"
+  local rawexpColor = "magenta"
+  local epmColor = "magenta"
+  local gpmColor = "magenta"
+  local goldColor = "magenta"
   local showCount = 0  
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -149,7 +149,7 @@ function ataxia.data.db.showData(sortWith, sortStyle, sortDirection)           -
           if thisChart == "tali" then
             taliColor = "gold"
           else
-            taliColor = "ansiMagenta"
+            taliColor = "magenta"
           end
         end
 --------------------------- Display Each Row From The Database, Clickable For More Information
@@ -189,7 +189,7 @@ function ataxia.data.db.showData(sortWith, sortStyle, sortDirection)           -
           if thisChart == "tali" then
             taliColor = "gold"
           else
-            taliColor = "ansiMagenta"
+            taliColor = "magenta"
           end
         end
 --------------------------- Display Each Row From The Database, Clickable For More Information
@@ -224,7 +224,7 @@ function ataxia.data.db.showData(sortWith, sortStyle, sortDirection)           -
         showCount = showCount + 1
         if showCount >= 2 then break end          
 --------------------------- Blackout 0 talisman counts        
-        if tonumber(row.tali) < 1 then taliColor = "black:black" else taliColor = "ansiMagenta" end
+        if tonumber(row.tali) < 1 then taliColor = "black:black" else taliColor = "magenta" end
 --------------------------- Display Each Row From The Database, Clickable For More Information
         cechoLink("hunterDisplay",
           "<"..areaColor..">"..string.cut(row.area.."                   ", 20)
@@ -382,22 +382,22 @@ function ataxia.data.db.clickback(thisRow)
 -------------------------- Display Header ^
   cecho("hunterDisplay","\n  <purple>Extended Report For: <gold>"..ataxia.data.db.localDB[thisRow].class)
   cecho("hunterDisplay","\n  <purple>Hunting in the Zone: <gold>"..ataxia.data.db.localDB[thisRow].area)
-  cecho("hunterDisplay","\n  <purple>Time Spent: <ansiMagenta>"..string.cut((ataxia.data.db.localDB[thisRow].time/60),4).." minutes")
-  cecho("hunterDisplay","\n  <purple>Experience: <ansiMagenta>"..ataxia.data.db.localDB[thisRow].exp)
+  cecho("hunterDisplay","\n  <purple>Time Spent: <magenta>"..string.cut((ataxia.data.db.localDB[thisRow].time/60),4).." minutes")
+  cecho("hunterDisplay","\n  <purple>Experience: <magenta>"..ataxia.data.db.localDB[thisRow].exp)
   cecho("hunterDisplay","\n  <purple>Raw Experience: <gold>"..(ataxia.data.db.localDB[thisRow].rawexp or 0))
-  cecho("hunterDisplay","\n  <purple>Experience Modifier: <ansiMagenta>"..ataxia.data.db.localDB[thisRow].boost.."\%\n")
-  cecho("hunterDisplay","\n  <purple>Stats: <ansiMagenta>Str: <gold>"..ataxia.data.db.localDB[thisRow].str.." <ansiMagenta>Dex: <gold>"..ataxia.data.db.localDB[thisRow].dex.." <ansiMagenta>Int: <gold>"..ataxia.data.db.localDB[thisRow].int.." <ansiMagenta>Con: <gold>"..ataxia.data.db.localDB[thisRow].con.."\n")
-  cecho("hunterDisplay","\n     <purple>Critical Hit Chance: <ansiMagenta>"..ataxia.data.db.localDB[thisRow].critpercent.."\%")
+  cecho("hunterDisplay","\n  <purple>Experience Modifier: <magenta>"..ataxia.data.db.localDB[thisRow].boost.."\%\n")
+  cecho("hunterDisplay","\n  <purple>Stats: <magenta>Str: <gold>"..ataxia.data.db.localDB[thisRow].str.." <magenta>Dex: <gold>"..ataxia.data.db.localDB[thisRow].dex.." <magenta>Int: <gold>"..ataxia.data.db.localDB[thisRow].int.." <magenta>Con: <gold>"..ataxia.data.db.localDB[thisRow].con.."\n")
+  cecho("hunterDisplay","\n     <purple>Critical Hit Chance: <magenta>"..ataxia.data.db.localDB[thisRow].critpercent.."\%")
   cecho("hunterDisplay","\n <gold>"..ataxia.data.db.localDB[thisRow].crits.."  <purple>Critical Hits")
-  cecho("hunterDisplay","\n <gold>"..string.cut(ataxia.data.db.localDB[thisRow].crits1.."  ",3).." <ansiMagenta> 2x "..string.cut("Critical                    ",25).."<gold>"..ataxia.data.db.localDB[thisRow].glyph.."  <ansiMagenta>Seared Glyph")
-  cecho("hunterDisplay","\n <gold>"..string.cut(ataxia.data.db.localDB[thisRow].crits2.."  ",3).." <ansiMagenta> 4x "..string.cut("Crushing                    ",25).."<gold>"..ataxia.data.db.localDB[thisRow].soa.."  <ansiMagenta>Shield of Absorption")
-  cecho("hunterDisplay","\n <gold>"..string.cut(ataxia.data.db.localDB[thisRow].crits3.."  ",3).." <ansiMagenta> 8x "..string.cut("Obliterating                    ",25).."<gold>"..ataxia.data.db.localDB[thisRow].soaparagon.."  <ansiMagenta>SoA Paragon")
-  cecho("hunterDisplay","\n <gold>"..string.cut(ataxia.data.db.localDB[thisRow].crits4.."  ",3).." <ansiMagenta>16x "..string.cut("Annihilating                    ",25).."<gold>"..ataxia.data.db.localDB[thisRow].maya.."  <ansiMagenta>Maya Figurine")
-  cecho("hunterDisplay","\n <gold>"..string.cut(ataxia.data.db.localDB[thisRow].crits5.."  ",3).." <ansiMagenta>32x "..string.cut("World Shattering                    ",25))
-  cecho("hunterDisplay","\n <gold>"..string.cut(ataxia.data.db.localDB[thisRow].crits6.."  ",3).." <ansiMagenta>64x "..string.cut("Plane Razing                    ",25))
+  cecho("hunterDisplay","\n <gold>"..string.cut(ataxia.data.db.localDB[thisRow].crits1.."  ",3).." <magenta> 2x "..string.cut("Critical                    ",25).."<gold>"..ataxia.data.db.localDB[thisRow].glyph.."  <magenta>Seared Glyph")
+  cecho("hunterDisplay","\n <gold>"..string.cut(ataxia.data.db.localDB[thisRow].crits2.."  ",3).." <magenta> 4x "..string.cut("Crushing                    ",25).."<gold>"..ataxia.data.db.localDB[thisRow].soa.."  <magenta>Shield of Absorption")
+  cecho("hunterDisplay","\n <gold>"..string.cut(ataxia.data.db.localDB[thisRow].crits3.."  ",3).." <magenta> 8x "..string.cut("Obliterating                    ",25).."<gold>"..ataxia.data.db.localDB[thisRow].soaparagon.."  <magenta>SoA Paragon")
+  cecho("hunterDisplay","\n <gold>"..string.cut(ataxia.data.db.localDB[thisRow].crits4.."  ",3).." <magenta>16x "..string.cut("Annihilating                    ",25).."<gold>"..ataxia.data.db.localDB[thisRow].maya.."  <magenta>Maya Figurine")
+  cecho("hunterDisplay","\n <gold>"..string.cut(ataxia.data.db.localDB[thisRow].crits5.."  ",3).." <magenta>32x "..string.cut("World Shattering                    ",25))
+  cecho("hunterDisplay","\n <gold>"..string.cut(ataxia.data.db.localDB[thisRow].crits6.."  ",3).." <magenta>64x "..string.cut("Plane Razing                    ",25))
   cecho("hunterDisplay","\n")   
-  cecho("hunterDisplay","\n <gold>"..ataxia.data.db.localDB[thisRow].gold.." <ansiMagenta> : Total Gold Gained")
-  cecho("hunterDisplay","\n <gold>"..string.cut((ataxia.data.db.localDB[thisRow].gpm),5).."<ansiMagenta> : Gold Gained Per Minute")
+  cecho("hunterDisplay","\n <gold>"..ataxia.data.db.localDB[thisRow].gold.." <magenta> : Total Gold Gained")
+  cecho("hunterDisplay","\n <gold>"..string.cut((ataxia.data.db.localDB[thisRow].gpm),5).."<magenta> : Gold Gained Per Minute")
   cecho("hunterDisplay","\n") 
 -------------------------- Breakdown the killList string into a table for display
   local tempTable = string.split(ataxia.data.db.localDB[thisRow].killlist, "| ")
@@ -412,9 +412,9 @@ function ataxia.data.db.clickback(thisRow)
   cecho("hunterDisplay","\n <gold>"..ataxia.data.db.localDB[thisRow].kill.." <purple>Kills at <gold>"..string.cut(ataxia.data.db.localDB[thisRow].kpm,5).."<purple> Kills Per Minute")
   for k, v in spairs(tempKillTable) do
     if v>9 then
-      cecho("hunterDisplay","\n  <purple>\["..string.cut(" ",1).."<gold>"..string.cut(v.." ",3).."<purple>\]  <ansiMagenta>"..k)
+      cecho("hunterDisplay","\n  <purple>\["..string.cut(" ",1).."<gold>"..string.cut(v.." ",3).."<purple>\]  <magenta>"..k)
     else
-      cecho("hunterDisplay","\n  <purple>\["..string.cut("  ",2).."<gold>"..string.cut(v.." ",3).."<purple>\]  <ansiMagenta>"..k)
+      cecho("hunterDisplay","\n  <purple>\["..string.cut("  ",2).."<gold>"..string.cut(v.." ",3).."<purple>\]  <magenta>"..k)
     end
   end
   cecho("hunterDisplay","\n") 
@@ -432,9 +432,9 @@ function ataxia.data.db.clickback(thisRow)
   end   
   for k, v in spairs(tempTaliTable) do 
     if v>9 then
-      cecho("hunterDisplay","\n  <purple>\["..string.cut(" ",1).."<gold>"..string.cut(v.." ",3).."<purple>\]  <ansiMagenta>"..string.gsub(k, ":", "<purple>:"))
+      cecho("hunterDisplay","\n  <purple>\["..string.cut(" ",1).."<gold>"..string.cut(v.." ",3).."<purple>\]  <magenta>"..string.gsub(k, ":", "<purple>:"))
     else
-      cecho("hunterDisplay","\n  <purple>\["..string.cut("  ",2).."<gold>"..string.cut(v.." ",3).."<purple>\]  <ansiMagenta>"..string.gsub(k, ":", "<purple>:"))
+      cecho("hunterDisplay","\n  <purple>\["..string.cut("  ",2).."<gold>"..string.cut(v.." ",3).."<purple>\]  <magenta>"..string.gsub(k, ":", "<purple>:"))
     end
   end 
   end

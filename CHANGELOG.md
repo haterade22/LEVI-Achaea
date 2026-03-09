@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-03-09 — Fix: Hunting Scrolls `<ansiMagenta>` rendered as literal text
+
+`ansiMagenta` is not a valid `cecho`/`cechoLink` color name — it's an `hecho` format. All 30+ occurrences in the Hunting Scrolls display were rendering as literal `<ansiMagenta>` text instead of magenta color.
+
+| File | Changes |
+|------|---------|
+| `scripts/.../zdata/001_Experience_Database.lua` | Replaced all `ansiMagenta` with `magenta` (both variable assignments and inline cecho tags) |
+
+---
+
 ## 2026-03-09 — Feature: Players in Area (Mindnet) display in tarc window
 
 When Monk/BM has mindnet defense active, the game fires enter/leave messages for players in the area. The mindnet trigger now maintains a persistent `ataxia.playersInArea` list and displays it in the tarc bashing window with NDB city-based coloring. List clears automatically on area change.
