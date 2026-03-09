@@ -219,6 +219,16 @@ function tarc.write()
       end
     end
 
+    -- Players in Area (mindnet)
+    if ataxia.playersInArea and #ataxia.playersInArea > 0 then
+      tarc:cecho("\n   <magenta>Players in Area:<reset>\n")
+      for _, player in ipairs(ataxia.playersInArea) do
+        local color = "white"
+        if ataxiaNDB_getColour then color = ataxiaNDB_getColour(player) or "white" end
+        tarc:cecho("     <" .. color .. ">" .. player .. "<reset>\n")
+      end
+    end
+
 end
 
 -- Register for room content updates
