@@ -135,18 +135,13 @@ function Algedonic.AntiPariah()
 end
 
 function Algedonic.AntiPsion()
-
-if ataxia.afflictions.unweavingbody ~= nil and ataxia.afflictions.unweavingmind ~= nil then
-  if ataxia.afflictions.unweavingbody >= 2 and ataxia.afflictions.unweavingmind < 2 then
-    send("curing prioaff unweavingbody")
-  elseif ataxia.afflictions.unweavingbody < 2 and ataxia.afflictions.unweavingmind > 2 then
+  if ataxia.afflictions.unweavingmind and ataxia.afflictions.unweavingmind >= 2 then
     send("curing prioaff unweavingmind")
+  elseif ataxia.afflictions.unweavingbody and ataxia.afflictions.unweavingbody >= 2 then
+    send("curing prioaff unweavingbody")
+  elseif ataxia.afflictions.unweavingspirit and ataxia.afflictions.asthma then
+    send("curing prioaff asthma")
   end
-elseif ataxia.afflictions.unweavingspirit ~= nil then
-  if ataxia.afflictions.unweavingspirit >= 2 and ataxia.afflictions.asthma then
-  send("curing prioaff asthma")
-  end
-end
 end
 
 function Algedonic.AntiSentinel()

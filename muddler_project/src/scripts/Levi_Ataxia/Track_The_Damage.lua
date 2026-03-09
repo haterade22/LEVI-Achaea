@@ -399,7 +399,7 @@ function ataxia_buildSelfLimbWindow()
 		selfLimbDamage.gui.window = nil
 	end
 
-	local savedPos = selfLimbDamage.gui.savedPosition or {x = 100, y = 100, width = 300, height = 180}
+	local savedPos = selfLimbDamage.gui.savedPosition or {x = 100, y = 100, width = 300, height = 216}
 
 	selfLimbDamage.gui.window = Adjustable.Container:new({
 		name = "selfLimbDamageWindow",

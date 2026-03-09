@@ -268,11 +268,18 @@ function dwbRunie.sendAttack(atk)
   if not atk or atk == "" then return end
   if table.contains(ataxia.playersHere, target) then
     if not engaged then
-      send("queue addclear freestand " .. atk .. ";engage " .. target)
+      send("queue addclearfull free " .. atk .. ";engage " .. target)
       engaged = true
     else
-      send("queue addclear freestand " .. atk)
+      send("queue addclearfull free " .. atk)
     end
+    -- Anti-spam cooldown (0.3s)
+    dwbRunie.state.atkCooldown = true
+    if dwbRunie.state.atkTimer then killTimer(dwbRunie.state.atkTimer) end
+    dwbRunie.state.atkTimer = tempTimer(0.3, function()
+      dwbRunie.state.atkCooldown = false
+      dwbRunie.state.atkTimer = nil
+    end)
   end
 end
 
@@ -635,6 +642,12 @@ end
 -------------------------------------------------------------------------------
 
 function dwbRunie.dispatch()
+  -- Balance gate: don't compute/send when off balance
+  if gmcp.Char.Vitals.bal ~= "1" then return end
+
+  -- Anti-spam: 0.3s cooldown prevents duplicate sends during network round-trip
+  if dwbRunie.state.atkCooldown then return end
+
   -- Target change detection
   if dwbRunie.state.lastTarget ~= target then
     dwbRunie.state.lastTarget = target

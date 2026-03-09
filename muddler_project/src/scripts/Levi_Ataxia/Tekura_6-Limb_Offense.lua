@@ -285,7 +285,7 @@ end
 
 -- PREP: Dynamic combo builder with parry avoidance and overflow prevention
 -- RULE: Never break a limb before all 6 are prepped.
--- Priority: non-parried safe > parried safe > jbp arms (punches only)
+-- Priority: non-parried unprepped > parried unprepped > non-parried prepped (safe overflow) > parried prepped
 function tekura6.dispatch.buildPrepAttack()
   local parried = tekura6.getEffectiveParry()
   local unprepped = tekura6.getUnpreppedLimbs()
@@ -300,30 +300,56 @@ function tekura6.dispatch.buildPrepAttack()
 
   -- EDGE CASE: No unprepped limbs (shouldn't reach here, phase would be BREAK)
   if #unprepped == 0 then
-    return "combo " .. target .. " sdk jbp arms jbp arms"
+    return "combo " .. target .. " sdk hkp hkp"
   end
 
-  -- Build simulated damage table for ALL unprepped limbs
+  -- Build TWO candidate lists + simulated damage for ALL non-broken limbs
+  local unprepCandidates = {}   -- unprepped limbs (priority targets)
+  local overflowCandidates = {} -- prepped-but-not-broken limbs (safe overflow)
   local simDmg = {}
-  for _, limb in ipairs(unprepped) do
-    simDmg[limb] = tekura6.getLimbDamage(limb)
+  for _, limb in ipairs(tekura6.ALL_LIMBS) do
+    if not tekura6.isLimbBroken(limb) then
+      simDmg[limb] = tekura6.getLimbDamage(limb)
+      if not tekura6.isLimbPrepped(limb) then
+        table.insert(unprepCandidates, limb)
+      else
+        table.insert(overflowCandidates, limb)
+      end
+    end
   end
 
   -- Helper: find the best safe limb for an attack of given damage
-  -- Prefers non-parried, falls back to parried if no safe non-parried exists
-  local function findSafeLimb(candidates, atkDmg)
-    -- Sort candidates by simulated damage ascending
-    table.sort(candidates, function(a, b)
+  -- Searches preferred list first, then fallback list
+  -- Within each list: non-parried first, then parried
+  local function findSafeLimb(preferred, fallback, atkDmg)
+    -- Sort both lists by simulated damage ascending (lowest first)
+    table.sort(preferred, function(a, b)
       return (simDmg[a] or 0) < (simDmg[b] or 0)
     end)
-    -- First pass: non-parried limbs
-    for _, limb in ipairs(candidates) do
+    table.sort(fallback, function(a, b)
+      return (simDmg[a] or 0) < (simDmg[b] or 0)
+    end)
+
+    -- Pass 1: non-parried preferred (unprepped)
+    for _, limb in ipairs(preferred) do
       if limb ~= parried and (simDmg[limb] or 0) + atkDmg < breakAt then
         return limb
       end
     end
-    -- Second pass: parried limb (better to waste a hit than break a limb)
-    for _, limb in ipairs(candidates) do
+    -- Pass 2: parried preferred (better to waste than break)
+    for _, limb in ipairs(preferred) do
+      if limb == parried and (simDmg[limb] or 0) + atkDmg < breakAt then
+        return limb
+      end
+    end
+    -- Pass 3: non-parried overflow (prepped, safe waste)
+    for _, limb in ipairs(fallback) do
+      if limb ~= parried and (simDmg[limb] or 0) + atkDmg < breakAt then
+        return limb
+      end
+    end
+    -- Pass 4: parried overflow
+    for _, limb in ipairs(fallback) do
       if limb == parried and (simDmg[limb] or 0) + atkDmg < breakAt then
         return limb
       end
@@ -331,44 +357,47 @@ function tekura6.dispatch.buildPrepAttack()
     return nil
   end
 
-  -- Make a working copy of unprepped for candidate lists
-  local allCandidates = {}
-  for _, limb in ipairs(unprepped) do
-    table.insert(allCandidates, limb)
-  end
-
-  -- KICK: Find safe kick target (prefer non-parried, fallback to parried)
-  local kickLimb = findSafeLimb(allCandidates, kickDmg)
-  if not kickLimb then
-    -- Absolute last resort: kick lowest-damage limb (extremely rare)
-    table.sort(allCandidates, function(a, b)
-      return (simDmg[a] or 0) < (simDmg[b] or 0)
-    end)
-    kickLimb = allCandidates[1]
-  end
-  simDmg[kickLimb] = (simDmg[kickLimb] or 0) + kickDmg
-
-  -- PUNCH 1: Find safe punch target
-  local punch1Str
-  local punch1Limb = findSafeLimb(allCandidates, punchDmg)
-  if punch1Limb then
-    punch1Str = tekura6.LIMB_ATTACKS[punch1Limb].punch
-    simDmg[punch1Limb] = (simDmg[punch1Limb] or 0) + punchDmg
+  -- KICK: Find safe kick target
+  local kickStr
+  local kickLimb = findSafeLimb(unprepCandidates, overflowCandidates, kickDmg)
+  if kickLimb then
+    kickStr = tekura6.LIMB_ATTACKS[kickLimb].kick
+    simDmg[kickLimb] = (simDmg[kickLimb] or 0) + kickDmg
   else
-    punch1Str = "jbp arms"
+    -- No safe kick target (all limbs would break) — use RHK as filler (no limb damage)
+    kickStr = "rhk"
   end
 
-  -- PUNCH 2: Find safe punch target (after simulated punch 1)
-  local punch2Str
-  local punch2Limb = findSafeLimb(allCandidates, punchDmg)
-  if punch2Limb then
-    punch2Str = tekura6.LIMB_ATTACKS[punch2Limb].punch
+  -- PUNCHES: Find two safe punch targets, then order with JBP first (disables parry for next punch)
+  local punchA, punchB  -- raw targets (nil = filler)
+
+  local punchALimb = findSafeLimb(unprepCandidates, overflowCandidates, punchDmg)
+  if punchALimb then
+    punchA = tekura6.LIMB_ATTACKS[punchALimb].punch
+    simDmg[punchALimb] = (simDmg[punchALimb] or 0) + punchDmg
+  end
+
+  local punchBLimb = findSafeLimb(unprepCandidates, overflowCandidates, punchDmg)
+  if punchBLimb then
+    punchB = tekura6.LIMB_ATTACKS[punchBLimb].punch
+  end
+
+  -- Order: JBP filler always goes first (disables parry for the following real punch)
+  local punch1Str, punch2Str
+  if punchA and punchB then
+    -- Both real punches — no reorder needed
+    punch1Str, punch2Str = punchA, punchB
+  elseif punchA and not punchB then
+    -- One real, one filler — jbp first, real punch second (benefits from parry disable)
+    punch1Str, punch2Str = "jbp", punchA
+  elseif not punchA and punchB then
+    punch1Str, punch2Str = "jbp", punchB
   else
-    punch2Str = "jbp arms"
+    -- Both fillers
+    punch1Str, punch2Str = "jbp", "jbp"
   end
 
-  local kick = tekura6.LIMB_ATTACKS[kickLimb].kick
-  return "combo " .. target .. " " .. kick .. " " .. punch1Str .. " " .. punch2Str
+  return "combo " .. target .. " " .. kickStr .. " " .. punch1Str .. " " .. punch2Str
 end
 
 -- PARRY BYPASS: Kai surge (dismount) + sweep (prone) + punch last limb
