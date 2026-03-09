@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-03-09 — Fix: TK6 PREP breaks limb prematurely + wastes punches as jabs
+
+During PREP phase, when only 1 unprepped limb remained and a kick would break it (e.g., RL at 84.5% + 18.3% kick = 102.8%), the kick fallback had no break guard and kicked it anyway. Both punches then fell back to generic `"jbp arms"` (wasted jabs to left shoulder) because the candidate pool only contained unprepped limbs.
+
+**Root causes:**
+1. Kick fallback (last resort) picked lowest-damage candidate with no break check
+2. `allCandidates` only contained unprepped limbs — prepped-but-not-broken limbs were invisible to punch selection
+3. Punch fallback used ambiguous `"jbp arms"` instead of explicit limb targeting
+
+**Fix:**
+- Expanded candidate pool: `unprepCandidates` (priority) + `overflowCandidates` (prepped-but-not-broken, safe overflow)
+- `findSafeLimb()` now searches 4 passes: non-parried unprepped → parried unprepped → non-parried overflow → parried overflow
+- When no kick target is safe, uses RHK (roundhouse kick) as filler — does no limb damage
+- Punch fallback uses `jbp` filler (no limb damage) instead of ambiguous `"jbp arms"` that targeted random limbs
+- JBP filler always ordered first in combo (slot 1) — disables parry for the following real punch in slot 2
+
+| File | Changes |
+|------|---------|
+| `scripts/.../tekura/002_Tekura_6Limb_Offense.lua` | Rewrote `buildPrepAttack()`: dual candidate pools, RHK filler kick, explicit punch targeting |
+
+---
+
 ## 2026-03-09 — Fix: Tekura basher attacks fail when wielding weapons
 
 Tekura combos (`sdk ucp ucp` / `rhk ucp ucp`) require empty hands. Added `unwield all` before all 3 tekura attack paths in the Monk basher (shielded+rageraze, shielded+no-rageraze, normal).
