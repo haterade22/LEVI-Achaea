@@ -40,6 +40,22 @@ if not ataxiaNDB_Exists(matches[2]) then
   ataxiaNDB_Acquire(matches[2]:title())
 end
 
+-- Mindnet area player tracking
+ataxia.playersInArea = ataxia.playersInArea or {}
+local playerName = matches[2]:title()
+local me = (gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.name) or ""
+if playerName ~= me:title() then
+  if matches[3] == "entered" then
+    if not table.contains(ataxia.playersInArea, playerName) then
+      table.insert(ataxia.playersInArea, playerName)
+    end
+  else -- "left"
+    local idx = table.index_of(ataxia.playersInArea, playerName)
+    if idx then table.remove(ataxia.playersInArea, idx) end
+  end
+  if tarc and tarc.write then tarc.write() end
+end
+
 if ataxia_paused() then return end
 
 -- Check if raid mode is enabled (report everyone)

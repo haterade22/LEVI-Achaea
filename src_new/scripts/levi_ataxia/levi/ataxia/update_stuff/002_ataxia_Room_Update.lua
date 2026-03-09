@@ -37,6 +37,15 @@ eventHandlers:
 function ataxia_Room_Update()
  ataxiaBasher_invalidateStormhammer()
 	if not gmcp.Room.Info then return end
+
+  -- Clear mindnet area players on area change
+  ataxia.playersInArea = ataxia.playersInArea or {}
+  ataxia._lastMindnetArea = ataxia._lastMindnetArea or ""
+  if gmcp.Room.Info.area ~= ataxia._lastMindnetArea then
+    ataxia.playersInArea = {}
+    ataxia._lastMindnetArea = gmcp.Room.Info.area
+  end
+
 	if ataxiaBasher.enabled and ataxia.settings.roomshorten then enableTrigger("Room Info Shortener") end
 	
   if ataxiaBasher.enabled then need_roomCheck = true end

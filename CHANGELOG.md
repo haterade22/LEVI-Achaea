@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-03-09 — Feature: Players in Area (Mindnet) display in tarc window
+
+When Monk/BM has mindnet defense active, the game fires enter/leave messages for players in the area. The mindnet trigger now maintains a persistent `ataxia.playersInArea` list and displays it in the tarc bashing window with NDB city-based coloring. List clears automatically on area change.
+
+| File | Changes |
+|------|---------|
+| `triggers/.../telepathy/001_Mindnet.lua` | Added enter/leave tracking to populate `ataxia.playersInArea`, refresh tarc on update |
+| `scripts/.../update_stuff/002_ataxia_Room_Update.lua` | Clear `ataxia.playersInArea` on area change via `ataxia._lastMindnetArea` |
+| `scripts/.../windows/001_Limb_Counter_Window.lua` | Added "Players in Area:" display section (magenta header, NDB coloring) |
+
+---
+
 ## 2026-03-08 — Fix: Stale tAffs reads across offense systems
 
 Multiple offense scripts read `tAffs.<aff>` directly instead of `haveAff("<aff>")`. After V3 correctly cured afflictions, the stale `tAffs` cache could retain `true` values (intermediate 1-30% probability range not cleared by `syncToOldSystemV3()`), causing wrong strategy decisions and incorrect displays.
