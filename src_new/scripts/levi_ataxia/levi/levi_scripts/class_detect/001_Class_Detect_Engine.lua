@@ -71,13 +71,22 @@ classDetect.curingsetMap = classDetect.curingsetMap or {
   ["Sylvan"]        = "sylvan",
   ["Infernal"]      = "infernal",
   ["Paladin"]       = "paladin",
-  ["Runewarden"]    = "runewarden",
+  ["Runewarden"]    = "knights",
   ["Unnamable"]     = "unnamable",
   ["Airlord"]       = "airlord",
   ["Earthlord"]     = "earthlord",
   ["Firelord"]      = "firelord",
   ["Waterlord"]     = "waterlord",
   ["Dragon"]        = "dragon",
+}
+
+classDetect.validCuringsets = {
+  normal = true, slowcuring = true, infernal = true, wundersys = true,
+  waterlord = true, general = true, depthswalker = true, apostate = true,
+  bashing = true, knights = true, paladin = true, serpent = true,
+  shikudo = true, sentinel = true, occultist = true, alchemist = true,
+  pariah = true, druid = true, runewarden = true, priest = true,
+  unnamable = true,
 }
 
 --------------------------------------------------------------------------------
@@ -173,6 +182,7 @@ function classDetect.switchCuringset(className)
   if not classDetect.state.enabled then return end
 
   local setName = classDetect.curingsetMap[className] or "normal"
+  if not classDetect.validCuringsets[setName] then setName = "normal" end
   if setName == classDetect.state.currentCuringset then return end
 
   local now = getEpoch()
