@@ -44,25 +44,38 @@ function ataxia_defaultCuringPrios()
     -----------------------------------------------------------
 
     -----------------------------------------------------------
-    -- PRIORITY 2: Life-threatening / total incapacitation
+    -- PRIORITY 2: Life-threatening / total incapacitation / writhe / escape
     -----------------------------------------------------------
     ["aeon"] = 2,             -- Blocks everything. Smoke (elm).
     ["hypothermia"] = 2,      -- Ticking freeze kill. Salve.
     ["peace"] = 2,            -- Cannot attack or defend. Bellwort.
+    ["sleeping"] = 2,         -- Total incapacitation. Bal-free.
+    ["heartseed"] = 2,        -- Ticking kill. Salve.
+    ["prone"] = 2,            -- Enables kill combos. Bal-free.
+    ["disrupted"] = 2,        -- Blocks tree tattoo. Bal-free.
+    ["voyria"] = 2,           -- Sip-cured (separate balance). Class lock aff.
+    -- Writhe affs
+    ["entangled"] = 2,        -- Writhe.
+    ["bound"] = 2,            -- Writhe.
+    ["daeggerimpale"] = 2,    -- Writhe.
+    ["impaled"] = 2,          -- Writhe.
+    ["transfixation"] = 2,    -- Writhe.
+    ["webbed"] = 2,           -- Writhe.
+    -- Psion unweaving (high stacks = near-kill)
+    ["unweavingbody5"] = 2,   -- Psion mechanic. 5 stacks = critical.
+    ["unweavingbody4"] = 2,   -- Psion mechanic. 4 stacks.
+    ["unweavingbody3"] = 2,   -- Psion mechanic. 3 stacks.
+    ["unweavingmind5"] = 2,   -- Psion mechanic. 5 stacks = critical.
+    ["unweavingmind4"] = 2,   -- Psion mechanic. 4 stacks.
+    ["unweavingmind3"] = 2,   -- Psion mechanic. 3 stacks.
 
     -----------------------------------------------------------
     -- PRIORITY 3: Severe incapacitation / lock core
     -----------------------------------------------------------
-    ["sleeping"] = 3,         -- Total incapacitation. Bal-free.
     ["slickness"] = 3,        -- Softlock core. Smoke (valerian). Higher than para so smoke > eat broot.
     ["pacified"] = 3,         -- Prevents aggressive actions. Bellwort.
     ["paralysis"] = 3,        -- Blocks tree (emergency escape). Bloodroot has NO herb competition. paraAst swap boosts to 1.
-
-    -----------------------------------------------------------
-    -- PRIORITY 3: Urgent damage / near-lock
-    -----------------------------------------------------------
     ["scytherus"] = 3,        -- Ticking damage + relapse. Ginseng.
-    ["heartseed"] = 3,        -- Ticking kill. Salve.
 
     -----------------------------------------------------------
     -- PRIORITY 4: Lock components / critical affs
@@ -70,29 +83,21 @@ function ataxia_defaultCuringPrios()
     ["anorexia"] = 4,         -- Blocks eating. Softlock core. Salve/focus.
     ["sandfever"] = 4,        -- Pariah mechanic. Goldenseal.
     ["impatience"] = 4,       -- Hardlock component. Blocks focus. #1 goldenseal priority.
+    ["timeloop"] = 4,         -- DW mechanic. Bellwort.
 
     -----------------------------------------------------------
     -- PRIORITY 5: Important combat / balance-free
     -----------------------------------------------------------
-    ["timeloop"] = 5,         -- DW mechanic. Bellwort.
     ["hypochondria"] = 5,     -- Aff amplifier. Kelp.
     ["crushedthroat"] = 5,    -- Eventually kills. Salve.
     ["itching"] = 5,          -- Forces scratching (lose bal). Salve.
     ["mycalium"] = 5,         -- Magi mechanic. Ginseng.
     ["flushings"] = 5,        -- Pariah mechanic. Ginseng.
-    ["prone"] = 5,            -- Enables kill combos. Bal-free.
     ["fear"] = 5,             -- Forces fleeing. Bal-free.
-    ["disrupted"] = 5,        -- Blocks tree tattoo. Bal-free.
 
     -----------------------------------------------------------
-    -- PRIORITY 6: Writhe / moderate combat
+    -- PRIORITY 6: Moderate combat
     -----------------------------------------------------------
-    ["bound"] = 6,            -- Writhe.
-    ["transfixation"] = 6,    -- Writhe.
-    ["webbed"] = 6,           -- Writhe.
-    ["entangled"] = 6,        -- Writhe.
-    ["daeggerimpale"] = 6,    -- Writhe.
-    ["impaled"] = 6,          -- Writhe.
     ["pyramides"] = 6,        -- Pariah mechanic. Salve.
     ["retribution"] = 6,
     ["depression"] = 6,       -- Goldenseal.
@@ -107,15 +112,16 @@ function ataxia_defaultCuringPrios()
     ["clumsiness"] = 7,       -- 33% miss chance! Kelp. (was 14)
     ["parasite"] = 7,         -- Kelp.
     ["rebbies"] = 7,          -- Pariah mechanic. Ginseng.
-    ["unweavingbody"] = 7,    -- Psion mechanic.
+    ["unweavingbody2"] = 25,  -- Psion mechanic (low stacks, deprioritized).
+    ["unweavingbody1"] = 25,  -- Psion mechanic (low stacks, deprioritized).
     ["brokenrightleg"] = 7,   -- Mending.
     ["brokenleftleg"] = 7,    -- Mending.
-    ["voyria"] = 7,           -- Sip-cured (separate balance). Class lock aff for Apostate. (was 9)
 
     -----------------------------------------------------------
     -- PRIORITY 8: Mental fallback / moderate
     -----------------------------------------------------------
-    ["unweavingmind"] = 8,    -- Psion mechanic.
+    ["unweavingmind2"] = 25,  -- Psion mechanic (low stacks, deprioritized).
+    ["unweavingmind1"] = 25,  -- Psion mechanic (low stacks, deprioritized).
     ["guilt"] = 8,            -- Paladin mechanic. Lobelia.
     ["nausea"] = 8,           -- Blocks parry. Ginseng. (was 11)
     ["skullfractures"] = 8,   -- Health elixir.
@@ -141,7 +147,7 @@ function ataxia_defaultCuringPrios()
     ["vertigo"] = 9,          -- Dizziness+vertigo = falling. Lobelia. (was 16)
     ["healthleech"] = 9,      -- Ticking damage. Kelp. (was 14)
     ["addiction"] = 9,        -- Riftlock enabler. Ginseng. (was 11)
-    ["mangledhead"] = 9,      -- Mending.
+    ["mangledhead"] = 8,      -- Mending.
 
     -----------------------------------------------------------
     -- PRIORITY 10: Arm breaks / misc
@@ -150,6 +156,11 @@ function ataxia_defaultCuringPrios()
     ["brokenrightarm"] = 10,  -- Mending.
     ["torntendons"] = 10,     -- Health elixir.
     ["horror"] = 10,          -- Less urgent than recklessness/masochism. (was 8)
+    ["horror1"] = 9,          -- Stacking horror.
+    ["horror2"] = 9,          -- Stacking horror.
+    ["horror3"] = 9,          -- Stacking horror.
+    ["horror4"] = 9,          -- Stacking horror.
+    ["horror5"] = 9,          -- Stacking horror.
     ["paranoia"] = 10,        -- Blocks allies helping. Ash. (was 17)
     ["dementia"] = 10,        -- Random actions. Ash. (was 17)
 
@@ -206,12 +217,24 @@ function ataxia_defaultCuringPrios()
     --["rebounding"] = 18,    -- (DEFENCE QUEUE SLOT 18) IMPORTANT: keep below pressure
 
     ["burning"] = 19,         -- Salve.
+    ["burning1"] = 9,         -- Salve. Stacking burn.
+    ["burning2"] = 9,         -- Salve. Stacking burn.
+    ["burning3"] = 9,         -- Salve. Stacking burn.
+    ["burning4"] = 9,         -- Salve. Stacking burn.
+    ["burning5"] = 9,         -- Salve. Stacking burn.
+    ["pyre"] = 8,             -- Salve. Pyre damage.
+    ["pyre1"] = 9,            -- Salve. Stacking pyre.
+    ["pyre2"] = 9,            -- Salve. Stacking pyre.
+    ["pyre3"] = 9,            -- Salve. Stacking pyre.
     ["stuttering"] = 19,      -- Salve.
     ["slashedthroat"] = 19,   -- Salve.
     ["laceratedthroat"] = 19, -- Salve.
     ["selarnia"] = 20,        -- Salve.
 
+    ["indifference"] = 25,    -- Bellwort. Deprioritized.
+
     ["blindness"] = 26,       -- Ignored by SSC (custom handling).
     ["deafness"] = 26,        -- Ignored by SSC (custom handling).
+    ["insomnia"] = 26,        -- Ignored by SSC (custom handling).
   }
 end

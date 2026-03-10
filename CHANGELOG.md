@@ -2,6 +2,63 @@
 
 ---
 
+## 2026-03-10 — Default Curing Priorities Overhaul
+
+### Summary
+Complete overhaul of SSC default curing priorities in `ataxia_defaultCuringPrios()`. Many afflictions were at dangerously low priorities (e.g., peace at 16, fear at 20, confusion at 20) with comments about dynamic swaps that were never implemented. Priorities now reflect actual combat urgency.
+
+### File Changed
+`001_Default_Curing_Prios.lua` (scripts/levi_ataxia/levi/ataxia/ataxia/)
+
+### Architecture Change
+- `ataxia_sendDefaultPrios()` refactored to loop over the `ataxia_defaultCuringPrios()` table instead of hardcoded send strings — eliminates duplication and keeps table+send in sync
+- Fixed `local function` → global `function` for `ataxia_sendDefaultPrios()` (was nil when called from alias)
+
+### Priority Changes (24 afflictions adjusted)
+| Affliction | Old | New | Reason |
+|-----------|-----|-----|--------|
+| peace | 16 | 2 | Can't attack or defend — total incapacitation |
+| pacified | 14 | 3 | Can't use aggressive actions |
+| paralysis | 4 | 3 | User priority: stay unparalyzed. Blocks tree. No bloodroot competition |
+| impatience | 6 | 4 | Blocks focus. Hardlock component |
+| prone | 9 | 2 | Enables kill combos (impale, vivisect, trample) |
+| fear | 20 | 5 | Forces fleeing. Bal-free cure |
+| disrupted | 9 | 2 | Blocks tree tattoo. Bal-free cure |
+| clumsiness | 14 | 7 | 33% miss chance |
+| voyria | 9 | 2 | Class lock aff. Sip-cured (separate balance) |
+| nausea | 11 | 8 | Blocks parry. Important vs limb classes |
+| stupidity | 18 | 8 | Focus handles normally, but 18 was absurd fallback |
+| epilepsy | 18 | 8 | Random seizures lose balance |
+| recklessness | 21 | 8 | 50% more damage taken |
+| masochism | 21 | 8 | Ekanelia enabler for Serpents |
+| confusion | 20 | 8 | Blocks actions. Ash-cured |
+| dizziness | 23 | 9 | Vertigo synergy |
+| vertigo | 16 | 9 | Dizziness+vertigo = falling |
+| healthleech | 14 | 9 | Ticking damage |
+| addiction | 11 | 9 | Riftlock enabler |
+| horror | 8 | 10 | Less urgent than combat affs |
+| paranoia | 17 | 10 | Blocks ally help |
+| dementia | 17 | 10 | Random actions |
+| shyness | 23 | 12 | Focus fallback was at 23 |
+| timeloop | 5 | 4 | DW mechanic — moved from 5 to 4 |
+
+### Stacking Affliction Variants Added
+- `burning1`–`burning5` at priority 9
+- `pyre1`–`pyre3` at priority 9, `pyre` base at 8
+- `horror1`–`horror5` at priority 9
+- `unweavingbody1`/`unweavingbody2`/`unweavingmind1`/`unweavingmind2` at 25 (low stacks deprioritized)
+- `unweavingbody3`–`5`/`unweavingmind3`–`5` at 2 (high stacks = critical)
+- `insomnia` at 26 (SSC custom handling)
+
+### Other Adjustments
+- `mangledhead` moved from 9 → 8
+- Removed generic `unweavingbody`/`unweavingmind` entries (replaced by leveled variants)
+- `indifference` set to 25 (deprioritized)
+- Writhe affs (entangled, bound, webbed, etc.) kept at 2
+- Priority 1 remains RESERVED for dynamic swap system
+
+---
+
 ## 2026-03-10 — Magi Burns: Scintilla Not Incrementing Burns Counter
 
 ### Root Cause

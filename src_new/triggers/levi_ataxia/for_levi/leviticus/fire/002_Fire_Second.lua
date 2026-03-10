@@ -11,7 +11,7 @@ hierarchy:
 - RESONANCE
 - Fire
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
   isTempTrigger: 'no'
   isMultiline: 'no'

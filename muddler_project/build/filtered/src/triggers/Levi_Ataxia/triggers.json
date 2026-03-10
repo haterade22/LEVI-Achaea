@@ -19880,6 +19880,10 @@
                       {
                         "pattern": "^The firestorm roars all about you, searing your flesh\\.$",
                         "type": "substring"
+                      },
+                      {
+                        "pattern": "^The fires consuming (\\w+) diminish somewhat\\.$",
+                        "type": "regex"
                       }
                     ]
                   },
@@ -19917,6 +19921,7 @@
                 "children": [
                   {
                     "name": "Efreeti",
+                    "isActive": "no",
                     "patterns": [
                       {
                         "pattern": "^(\\w+) bursts into flame as a fiery efreeti spins into (\\w+)\\.$",
@@ -19990,6 +19995,7 @@
                     "children": [
                       {
                         "name": "Fire Third",
+                        "isActive": "no",
                         "patterns": [
                           {
                             "pattern": "^The incandescent might of Elemental Fire filling you, you command (\\w+) to burn from within\\.$",
@@ -19999,6 +20005,7 @@
                       },
                       {
                         "name": "Fire Second",
+                        "isActive": "no",
                         "patterns": [
                           {
                             "pattern": "^You will that (\\w+) should burn, and so \\w+ does\\.$",

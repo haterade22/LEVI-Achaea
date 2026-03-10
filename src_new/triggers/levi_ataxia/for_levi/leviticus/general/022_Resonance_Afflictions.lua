@@ -139,31 +139,42 @@ elseif line:find("smite .+ with the full force") then
   end
 
 -- FIRE RESONANCE AFFLICTIONS
--- Moderate: Scalded → ablaze
+-- Moderate (fire level 2): Scalded first, then burns if already scalded
 elseif line:find("should burn, and so") then
   local tgt = matches[2]
   if tgt == target then
-    tarAffed("burning")
-    magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
-    tburns = magi.offense.state.burns
-    magi.offense.ptRelay(target .. ": Resonance Fire (scalded>burning, burns:" .. magi.offense.state.burns .. ")")
+    if magi.offense.hasAff("scalded") or magi.offense.state.scalded then
+      -- Already scalded → increment burns
+      magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
+      tburns = magi.offense.state.burns
+      tarAffed("burning")
+      cecho(" <DimGrey>[<red>" .. tburns .. "/5<DimGrey>]")
+      magi.offense.ptRelay(target .. ": Resonance Fire (burning, burns:" .. magi.offense.state.burns .. ")")
+    else
+      -- Not scalded yet → apply scalded + 20s timer
+      tarAffed("scalded")
+      magi.offense.setScalded()
+      magi.offense.ptRelay(target .. ": Resonance Fire (scalded)")
+    end
   end
 
--- Major: Blistered (not already suffering)
+-- Major (fire level 3): Blistered first (game text without "suffering")
 elseif line:find("command (%w+) to burn from within") and not line:find("suffering") then
   local tgt = matches[2]
   if tgt == target then
     tarAffed("blistered")
+    tempTimer(15, [[erAff("blistered")]])
     magi.offense.ptRelay(target .. ": Resonance Fire (blistered)")
   end
 
--- Major: Burning (already suffering/blistered)
+-- Major (fire level 3): Burning (game text with "suffering" = already blistered)
 elseif line:find("command the suffering") then
   local tgt = matches[2]
   if tgt == target then
-    tarAffed("burning")
     magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
     tburns = magi.offense.state.burns
+    tarAffed("burning")
+    cecho(" <DimGrey>[<red>" .. tburns .. "/5<DimGrey>]")
     magi.offense.ptRelay(target .. ": Resonance Fire (burning, burns:" .. magi.offense.state.burns .. ")")
   end
 end
