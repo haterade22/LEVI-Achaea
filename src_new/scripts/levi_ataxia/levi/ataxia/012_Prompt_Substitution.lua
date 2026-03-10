@@ -219,30 +219,34 @@ ataxiaPromptTags = {
 
 ataxiaPromptColours = {
 	["hcolour"] = function()
-			if ataxia.vitals.hpp > 75 then return "green"
-			elseif ataxia.vitals.hpp > 50 then return "yellow"
-			elseif ataxia.vitals.hpp > 25 then return "orange"
+			local hpp = ataxia.vitals.hpp or 0
+			if hpp > 75 then return "green"
+			elseif hpp > 50 then return "yellow"
+			elseif hpp > 25 then return "orange"
 			else return "red" end
 		end,
 		
 	["mcolour"] = function()
-			if ataxia.vitals.mpp > 75 then return "green"
-			elseif ataxia.vitals.mpp > 50 then return "yellow"
-			elseif ataxia.vitals.mpp > 25 then return "orange"
+			local mpp = ataxia.vitals.mpp or 0
+			if mpp > 75 then return "green"
+			elseif mpp > 50 then return "yellow"
+			elseif mpp > 25 then return "orange"
 			else return "red" end
 		end,
-		
+
 	["ecolour"] = function()
-			if ataxia.vitals.epp > 75 then return "green"
-			elseif ataxia.vitals.epp > 50 then return "yellow"
-			elseif ataxia.vitals.epp > 25 then return "orange"
+			local epp = ataxia.vitals.epp or 0
+			if epp > 75 then return "green"
+			elseif epp > 50 then return "yellow"
+			elseif epp > 25 then return "orange"
 			else return "red" end
 		end,
-		
+
 	["wcolour"] = function()
-			if ataxia.vitals.wpp > 75 then return "green"
-			elseif ataxia.vitals.wpp > 50 then return "yellow"
-			elseif ataxia.vitals.wpp > 25 then return "orange"
+			local wpp = ataxia.vitals.wpp or 0
+			if wpp > 75 then return "green"
+			elseif wpp > 50 then return "yellow"
+			elseif wpp > 25 then return "orange"
 			else return "a_darkred" end
 		end,
     

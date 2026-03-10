@@ -24,6 +24,7 @@ end
 
 function lpreapply()
 getdirectionn() --random_direction for tumble
+if not slc or not slc.percentages then return end
 
 --Druid/Infernal 4 Limb Prep
 if slc.percentages["left arm"] >= 90 and slc.percentages["left leg"] >= 90 and slc.percentages["right leg"] >= 90 and slc.percentages["right arm"] >= 90 and slc.percentages["left arm"] < 100 and slc.percentages["left leg"] < 100 and slc.percentages["right leg"] < 100 and slc.percentages["right arm"] < 100 and mypreapply == false then

@@ -87,7 +87,7 @@ function ataxia_RoomContents_Update(event)
 		end
 		if gmcp.Char.Items.Remove.item.icon == "coin" then
 			ataxiaTemp.goldInRoom = false
-    elseif gmcp.Char.Items.Add.location == "room" and gmcp.Char.Items.Remove.item.name == "a monolith sigil" then
+    elseif gmcp.Char.Items.Remove.item.name == "a monolith sigil" then
       ataxiaTemp.monolith = false
 		end		
 		

@@ -146,7 +146,7 @@ function tarc.write()
     end
     tarc:cecho("\n")
 
-    if ataxiaBasher.enabled then
+    if ataxiaBasher.enabled and gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info then
       tarc:cecho("   Mob Health: " .. gmcp.IRE.Target.Info.hpperc .. "\n")
       tarc:cecho("   BattleR:    " ..ataxia.vitals.rage.. "\n")
       tarc:cecho("   Our Health: "..ataxia.vitals.hp..  "\n")
@@ -204,7 +204,7 @@ function tarc.write()
     tarc:cecho("\n")
     end
     if gmcp.Char and gmcp.Char.Status and gmcp.Char.Vitals and (gmcp.Char.Status.class == "Runewarden" or gmcp.Char.Status.class == "Infernal") and (gmcp.Char.Vitals.charstats and (gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" or gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt")) then 
-    tarc:cecho("\n      Momentum: " ..mymomentum.. "\n\n")
+    tarc:cecho("\n      Momentum: " ..(mymomentum or 0).. "\n\n")
     end
     --if ataxiaNDB.players[target] then
      --tarc:cecho(" Self Limb Counter\n")

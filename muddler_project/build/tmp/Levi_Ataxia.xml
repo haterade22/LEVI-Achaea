@@ -1357,7 +1357,7 @@ function ataxia_RoomContents_Update(event)
 		end
 		if gmcp.Char.Items.Remove.item.icon == "coin" then
 			ataxiaTemp.goldInRoom = false
-    elseif gmcp.Char.Items.Add.location == "room" and gmcp.Char.Items.Remove.item.name == "a monolith sigil" then
+    elseif gmcp.Char.Items.Remove.item.name == "a monolith sigil" then
       ataxiaTemp.monolith = false
 		end		
 		
@@ -3791,6 +3791,15 @@ end
 function ataxia.updater.onDownloadError(_, errMsg, url)
   if url and (url:find("haterade22/LEVI%-Achaea") or url:find("version%.txt")) then
     ataxia_Echo("Update check failed: " .. tostring(errMsg))
+  end
+end
+
+-- Event handler dispatch (Mudlet calls this by script name)
+function Auto_Update(event, ...)
+  if event == "sysDownloadDone" then
+    ataxia.updater.onDownloadDone(event, ...)
+  elseif event == "sysDownloadError" then
+    ataxia.updater.onDownloadError(event, ...)
   end
 end
 
@@ -10554,30 +10563,34 @@ ataxiaPromptTags = {
 
 ataxiaPromptColours = {
 	["hcolour"] = function()
-			if ataxia.vitals.hpp &gt; 75 then return "green"
-			elseif ataxia.vitals.hpp &gt; 50 then return "yellow"
-			elseif ataxia.vitals.hpp &gt; 25 then return "orange"
+			local hpp = ataxia.vitals.hpp or 0
+			if hpp &gt; 75 then return "green"
+			elseif hpp &gt; 50 then return "yellow"
+			elseif hpp &gt; 25 then return "orange"
 			else return "red" end
 		end,
 		
 	["mcolour"] = function()
-			if ataxia.vitals.mpp &gt; 75 then return "green"
-			elseif ataxia.vitals.mpp &gt; 50 then return "yellow"
-			elseif ataxia.vitals.mpp &gt; 25 then return "orange"
+			local mpp = ataxia.vitals.mpp or 0
+			if mpp &gt; 75 then return "green"
+			elseif mpp &gt; 50 then return "yellow"
+			elseif mpp &gt; 25 then return "orange"
 			else return "red" end
 		end,
-		
+
 	["ecolour"] = function()
-			if ataxia.vitals.epp &gt; 75 then return "green"
-			elseif ataxia.vitals.epp &gt; 50 then return "yellow"
-			elseif ataxia.vitals.epp &gt; 25 then return "orange"
+			local epp = ataxia.vitals.epp or 0
+			if epp &gt; 75 then return "green"
+			elseif epp &gt; 50 then return "yellow"
+			elseif epp &gt; 25 then return "orange"
 			else return "red" end
 		end,
-		
+
 	["wcolour"] = function()
-			if ataxia.vitals.wpp &gt; 75 then return "green"
-			elseif ataxia.vitals.wpp &gt; 50 then return "yellow"
-			elseif ataxia.vitals.wpp &gt; 25 then return "orange"
+			local wpp = ataxia.vitals.wpp or 0
+			if wpp &gt; 75 then return "green"
+			elseif wpp &gt; 50 then return "yellow"
+			elseif wpp &gt; 25 then return "orange"
 			else return "a_darkred" end
 		end,
     
@@ -32877,6 +32890,7 @@ end
 
 function lpreapply()
 getdirectionn() --random_direction for tumble
+if not slc or not slc.percentages then return end
 
 --Druid/Infernal 4 Limb Prep
 if slc.percentages["left arm"] &gt;= 90 and slc.percentages["left leg"] &gt;= 90 and slc.percentages["right leg"] &gt;= 90 and slc.percentages["right arm"] &gt;= 90 and slc.percentages["left arm"] &lt; 100 and slc.percentages["left leg"] &lt; 100 and slc.percentages["right leg"] &lt; 100 and slc.percentages["right arm"] &lt; 100 and mypreapply == false then
@@ -43849,7 +43863,7 @@ function tarc.write()
     end
     tarc:cecho("\n")
 
-    if ataxiaBasher.enabled then
+    if ataxiaBasher.enabled and gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info then
       tarc:cecho("   Mob Health: " .. gmcp.IRE.Target.Info.hpperc .. "\n")
       tarc:cecho("   BattleR:    " ..ataxia.vitals.rage.. "\n")
       tarc:cecho("   Our Health: "..ataxia.vitals.hp..  "\n")
@@ -43907,7 +43921,7 @@ function tarc.write()
     tarc:cecho("\n")
     end
     if gmcp.Char and gmcp.Char.Status and gmcp.Char.Vitals and (gmcp.Char.Status.class == "Runewarden" or gmcp.Char.Status.class == "Infernal") and (gmcp.Char.Vitals.charstats and (gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" or gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt")) then 
-    tarc:cecho("\n      Momentum: " ..mymomentum.. "\n\n")
+    tarc:cecho("\n      Momentum: " ..(mymomentum or 0).. "\n\n")
     end
     --if ataxiaNDB.players[target] then
      --tarc:cecho(" Self Limb Counter\n")
@@ -141824,8 +141838,8 @@ ataxia_boxEcho("FREEZE || POUND INCOMING", "goldenrod")</script>
   <name>Limb Prompt</name>
               <script>cecho(" " ..lb.prompt())
 
-if gmcp.Char and gmcp.Char.Status and gmcp.Char.Vitals and ((gmcp.Char.Status.class == "Runewarden" or gmcp.Char.Status.class == "Infernal") and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" or gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt") then
-mymomentum = ataxia.vitals.class
+if gmcp.Char and gmcp.Char.Status and gmcp.Char.Vitals and gmcp.Char.Vitals.charstats and (gmcp.Char.Status.class == "Runewarden" or gmcp.Char.Status.class == "Infernal") and (gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" or gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt") then
+mymomentum = ataxia.vitals.class or 0
 end
 
 tarc.write()</script>

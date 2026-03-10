@@ -2,6 +2,22 @@
 
 ---
 
+## 2026-03-10 — Fix: Nil guard errors across prompt, display, and event systems
+
+Fixed 7 runtime errors caused by nil field access during early login, blind state, or missing data. All fixes add proper nil guards with fallback defaults.
+
+| File | Error | Fix |
+|------|-------|-----|
+| `scripts/.../misc_scripts/021_Auto_Update.lua` | `Auto_Update` called as nil — Mudlet `eventHandlers` expects global function matching script name | Added global `Auto_Update(event, ...)` dispatcher routing to `ataxia.updater.onDownloadDone`/`onDownloadError` |
+| `scripts/.../defence/001_Pre_Apply.lua` | `slc.percentages` nil when SLC not initialized | Added `if not slc or not slc.percentages then return end` early guard |
+| `scripts/.../012_Prompt_Substitution.lua` | `ataxia.vitals.hpp/mpp/epp/wpp` nil on early prompts | Added `local var = ataxia.vitals.xxx or 0` for all 8 colour functions (hcolour, mcolour, ecolour, wcolour, darkh, darkm, darke, darkw) |
+| `scripts/.../windows/001_Limb_Counter_Window.lua` | `gmcp.IRE.Target` nil when no target | Added nil guard chain `gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info` |
+| `scripts/.../windows/001_Limb_Counter_Window.lua` | `mymomentum` nil for non-DWB classes | Changed to `(mymomentum or 0)` |
+| `scripts/.../update_stuff/003_ataxia_RoomContents_Update.lua` | `gmcp.Char.Items.Add` accessed during Remove event | Removed erroneous `gmcp.Char.Items.Add.location` check from Remove branch |
+| `triggers/.../276_Limb_Prompt.lua` | `gmcp.Char.Vitals.charstats` nil + operator precedence bug | Added nil guard for charstats, fixed `and`/`or` parentheses, added `or 0` fallback |
+
+---
+
 ## 2026-03-09 — Auto-Update System (`sysupdate`)
 
 Added in-game auto-update system that checks for new versions on login and allows one-command updates. Uses Mudlet's async `downloadFile` + `sysDownloadDone` event pattern (same as the mapper), not fragile `tempTimer` delays.

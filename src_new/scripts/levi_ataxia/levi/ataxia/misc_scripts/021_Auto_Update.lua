@@ -62,6 +62,15 @@ function ataxia.updater.onDownloadError(_, errMsg, url)
   end
 end
 
+-- Event handler dispatch (Mudlet calls this by script name)
+function Auto_Update(event, ...)
+  if event == "sysDownloadDone" then
+    ataxia.updater.onDownloadDone(event, ...)
+  elseif event == "sysDownloadError" then
+    ataxia.updater.onDownloadError(event, ...)
+  end
+end
+
 -- Check for updates on load
 registerAnonymousEventHandler("sysLoadEvent", function()
   tempTimer(5, function() ataxia.updater.checkVersion() end)
