@@ -2,6 +2,49 @@
 
 ---
 
+## 2026-03-09 — ClassDetect: Default unsupported curingsets to "normal" + AntiPsion fix
+
+**ClassDetect curingset validation**: Added a `validCuringsets` whitelist so classes that map to curingsets that don't exist in-game fall back to "normal" instead of sending invalid `curingset switch` commands. Also changed Runewarden mapping from "runewarden" to "knights".
+
+**AntiPsion rewrite**: Fixed priority order — mind (≥2) checked first (was second), body (≥2) second, spirit+asthma third. Removed requirement for both body AND mind to be present simultaneously. Spirit no longer requires ≥2 check.
+
+| File | Changes |
+|------|---------|
+| `scripts/.../class_detect/001_Class_Detect_Engine.lua` | Added `classDetect.validCuringsets` whitelist, validation in `switchCuringset()`, Runewarden → "knights" |
+| `scripts/.../algedonic_defense_1.0/001_Anti_Priorities.lua` | Rewrote `Algedonic.AntiPsion()` with correct priority order |
+
+---
+
+## 2026-03-09 — Fix: DWB Runie lag when spamming ZZ + wrong queue command
+
+Spamming `zz` on DWB Runewarden caused massive lag because the dispatch had no balance gate, no anti-spam timer, and sent 9+ commands per keypress. Additionally used `queue addclear freestand` instead of `queue addclearfull free`, causing queued commands to stack instead of replace.
+
+**Root causes:**
+1. No balance check before dispatch — sent attacks every keypress regardless of balance state
+2. No anti-spam cooldown — unlike basher (0.3s timer) or serpent (balance gate)
+3. `queue addclear` only clears the free queue, not all queues — spam stacked commands
+
+**Fix:**
+- Added GMCP balance gate at top of `dwbRunie.dispatch()` (`gmcp.Char.Vitals.bal ~= "1"`)
+- Added 0.3s anti-spam cooldown timer in `dwbRunie.sendAttack()` (same pattern as basher)
+- Changed `queue addclear freestand` → `queue addclearfull free` (same pattern as apostate)
+
+| File | Changes |
+|------|---------|
+| `scripts/.../dwb_runie/001_DWB_Runie_Logic.lua` | Balance gate + anti-spam in `dispatch()`, queue command fix + cooldown timer in `sendAttack()` |
+
+---
+
+## 2026-03-09 — GUI: Increase SLC window default height
+
+Increased the Self Limb Counter (SLC) GUI window default height by 20% (180 → 216) to fit more data. Existing windows need `zfix selfLimbDamageWindow` to pick up the new default.
+
+| File | Changes |
+|------|---------|
+| `scripts/.../self_limb_tracking/002_Track_The_Damage.lua` | Default height 180 → 216 |
+
+---
+
 ## 2026-03-09 — Fix: TK6 PREP breaks limb prematurely + wastes punches as jabs
 
 During PREP phase, when only 1 unprepped limb remained and a kick would break it (e.g., RL at 84.5% + 18.3% kick = 102.8%), the kick fallback had no break guard and kicked it anyway. Both punches then fell back to generic `"jbp arms"` (wasted jabs to left shoulder) because the candidate pool only contained unprepped limbs.
