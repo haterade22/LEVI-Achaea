@@ -632,7 +632,7 @@ Right-click the root folder in Solution Explorer to run any task.
 | [CLAUDE.md](CLAUDE.md) | Full technical reference (architecture, APIs, combat mechanics, development guidelines) |
 | [CHANGELOG.md](CHANGELOG.md) | Change history with dates and details |
 | [docs/legend-deck.md](docs/legend-deck.md) | Legend Deck card reference and PVE guide |
-| [.claude/classes/](LEVI-Achaea/.claude/classes/) | Per-class combat mechanic documentation (26 classes) |
+| [.claude/classes/](.claude/classes/) | Per-class combat mechanic documentation (26 classes) |
 
 ---
 

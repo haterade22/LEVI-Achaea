@@ -2,6 +2,75 @@
 
 ---
 
+## 2026-03-10 — Magi Trigger Audit: Fix duplicates, add missing triggers
+
+### Issue
+5 legacy triggers (011_Mudslide, 013_Fulminate, 016_Bombard, 017_Magma, 018_Firelash) fired on the same regex patterns as 021_Spell_Outcomes.lua, causing double burns counting, double affliction applications, and double scalded tracking. Additionally, 021 had bugs: dehydrate incorrectly incremented burns on cast (before outcome known), fulminate lacked smart chain logic, bombard missed clumsiness, mudslide missed slickness, firelash missed burning.
+
+### Fix
+- **Rewrote 021_Spell_Outcomes.lua** with merged logic from all 5 legacy triggers
+- **Deactivated 5 legacy duplicates** (`isActive: 'no'`): 011, 013, 016, 017, 018
+- **Created 7 new triggers** in `magi_offense_tracking/` (008-014): Transfix, Transfix Unblind, Scintilla Spark/Ignition, Staffcast Lightning/Freeze, Deepfreeze
+
+### Changes
+- **`general/021_Spell_Outcomes.lua`** — Full rewrite with merged logic: fulminate smart chain (fulminated→epilepsy→paralysis), dehydrate no longer increments burns on cast, bombard tracks clumsiness, mudslide tracks slickness+prone, firelash tracks burning+burns, magma has 20s scalded timer
+- **`general/011_Mudslide.lua`** — Deactivated (superseded by 021)
+- **`general/013_Fulminate.lua`** — Deactivated (smart chain merged into 021)
+- **`general/016_Bombard.lua`** — Deactivated (clumsiness merged into 021)
+- **`general/017_Magma.lua`** — Deactivated (scalded+timer merged into 021)
+- **`general/018_Firelash.lua`** — Deactivated (burning+burns merged into 021)
+- **`magi_offense_tracking/008_Transfix.lua`** — New: tracks transfix writhing on target
+- **`magi_offense_tracking/009_Transfix_Unblind.lua`** — New: detects transfix curing blindness
+- **`magi_offense_tracking/010_Scintilla_Spark.lua`** — New: 4s spark timer tracking
+- **`magi_offense_tracking/011_Scintilla_Ignition.lua`** — New: burning + burns increment on ignition
+- **`magi_offense_tracking/012_Staffcast_Lightning.lua`** — New: staffcast lightning relay
+- **`magi_offense_tracking/013_Staffcast_Freeze.lua`** — New: horripilation from staffcast freeze
+- **`magi_offense_tracking/014_Deepfreeze.lua`** — New: AoE frozen tracking
+
+---
+
+## 2026-03-10 — README: Fix broken .claude/classes/ link
+
+### Problem
+The `.claude/classes/` link in README.md returned a 404 on GitHub. The link target was `LEVI-Achaea/.claude/classes/` — the extra `LEVI-Achaea/` prefix caused a double path since the repo name is already part of the GitHub URL structure.
+
+### Fix
+Changed link target from `LEVI-Achaea/.claude/classes/` to `.claude/classes/`.
+
+### Changes
+- **`README.md`** — Fixed relative link path for the `.claude/classes/` directory
+
+---
+
+## 2026-03-10 — Limb Counter: Convert to Adjustable.Container
+
+### Summary
+Converted the Limb Counter window (`tarc`) from a raw `Geyser.MiniConsole` to an `Adjustable.Container` with an embedded `MiniConsole`. Users can now drag, resize, lock, and pop out the limb counter window, and its position auto-saves across sessions.
+
+### Changes
+- **`windows/001_Limb_Counter_Window.lua`** — Wrapped `tarc` in `Adjustable.Container:new({name = "tarc.window"})` with dark styling; embedded `Geyser.MiniConsole` as `tarc.console` inside a `Geyser.Container`; added simple forwarding functions (`tarc:cecho()` → `tarc.console:cecho()`, `tarc:clear()` → `tarc.console:clear()`) for backward compatibility with `tarc.write()` callers
+
+### Notes
+- All existing code calling `tarc:cecho(text)` and `tarc:clear()` works without modification
+- Window position persists via Adjustable.Container's auto-save (`name = "tarc.window"`)
+- Use `zfix tarc.window` to reset position if needed
+
+---
+
+## 2026-03-10 — Serpent: Darkshade mode second venom should be curare
+
+### Issue
+In darkshade mode, `apply_darkshade` strategy was hitting with `curare + darkshade` (curare first) instead of `darkshade + curare`. Similarly, `ginseng_pressure` in darkshade mode put curare first. The second venom should always be curare (to maintain paralysis and block tree) unless paralysis is already present.
+
+### Fix
+- `apply_darkshade` + darkshade mode: darkshade first, curare second (falls back to `buildSecondVenom()` if paralysis present)
+- `ginseng_pressure` + darkshade mode: ginseng aff first, curare second
+
+### Changes
+- **`002_Serpent_Offense.lua`** — Reordered venoms in `apply_darkshade` and `ginseng_pressure` strategies for darkshade mode
+
+---
+
 ## 2026-03-10 — Serpent: Fix double dispatch on gecko strip round
 
 ### Root Cause

@@ -1006,12 +1006,15 @@ function selectVenoms()
 
     -- ===== APPLY DARKSHADE: Get darkshade on target ASAP =====
     if serpStrategy == "apply_darkshade" then
+        table.insert(envenomList, "darkshade")
         if serpOffenseMode == "darkshade" then
-            -- Darkshade mode: curare + darkshade (curare maintains paralysis, blocks tree)
-            table.insert(envenomList, "curare")
-            table.insert(envenomListTwo, "darkshade")
+            -- Darkshade mode: darkshade + curare (curare maintains paralysis, blocks tree)
+            if not haveAff("paralysis") then
+                table.insert(envenomListTwo, "curare")
+            else
+                buildSecondVenom()
+            end
         else
-            table.insert(envenomList, "darkshade")
             buildSecondVenom()
         end
         return
@@ -1021,11 +1024,18 @@ function selectVenoms()
     -- Target is eating ginseng to cure darkshade — stack to 3 ginseng affs
     -- so they spend multiple rounds eating ginseng, then we switch to lock
     if serpStrategy == "ginseng_pressure" then
-        -- Darkshade mode: curare first to maintain paralysis (blocks tree),
-        -- ginseng aff as second venom
+        -- Darkshade mode: ginseng aff first, curare second (blocks tree)
         if serpOffenseMode == "darkshade" and not haveAff("paralysis") then
-            table.insert(envenomList, "curare")
-            buildSecondVenomGinseng()
+            if not haveAff("addiction") then
+                table.insert(envenomList, "vardrax")
+            elseif not haveAff("nausea") then
+                table.insert(envenomList, "euphorbia")
+            elseif not haveAff("haemophilia") then
+                table.insert(envenomList, "notechis")
+            else
+                table.insert(envenomList, "darkshade")
+            end
+            table.insert(envenomListTwo, "curare")
             return
         end
 
