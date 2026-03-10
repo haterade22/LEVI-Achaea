@@ -89,6 +89,7 @@ LEVI-Achaea/
 ├── packages/               # Compiled Mudlet packages
 ├── .vs/
 │   └── tasks.vs.json       # VS2022 Open Folder build tasks
+├── version.txt             # Package version (fetched by auto-updater)
 ├── CLAUDE.md               # This file
 ├── GETTING_STARTED.md      # Setup and usage guide
 └── README.md               # Project overview
@@ -109,6 +110,28 @@ The project uses [Muddler](https://github.com/demonnic/muddler) to build Mudlet 
 4. **Output**: `muddler_project/build/Levi_Ataxia.mpackage` and `.xml`
 
 **Requirements**: Java 8+ (`E:\Java`), Muddler (`E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\`).
+
+### Versioning & Auto-Update
+
+**Version is tracked in 3 places** (must stay in sync):
+
+| Location | Format | Purpose |
+|----------|--------|---------|
+| `version.txt` | Plain text (`4.1`) | Remote check — fetched by clients on login |
+| `muddler_project/mfile` | JSON (`"version": "4.1"`) | Build metadata — muddler reads this |
+| `_groups.yaml` init script | Lua (`ataxiaVersion = "4.1"`) | Runtime global — compared against remote |
+
+**Version bump workflow** (for every release):
+1. Update `version.txt` with new version string
+2. Update `mfile` → `"version": "X.Y"`
+3. `ataxiaVersion` in `_groups.yaml` init script — update to match
+4. Build with muddler → push everything to GitHub (mpackage + version.txt)
+
+**Auto-update system** (`ataxia.updater` namespace, `misc_scripts/021_Auto_Update.lua`):
+- On `sysLoadEvent` (5s delay): downloads `version.txt` from GitHub raw, compares against `ataxiaVersion`
+- If newer: shows notification, prompts user to type `SYSUPDATE`
+- `sysupdate` alias: downloads `.mpackage` → `uninstallPackage` → `installPackage` → cleanup
+- Uses `sysDownloadDone`/`sysDownloadError` events (same pattern as mudlet-mapper), not `tempTimer`
 
 **Conversion script** (`tools/convert_to_muddler.py`):
 - Strips YAML headers from Lua files, outputs pure Lua
@@ -1892,7 +1915,7 @@ Claude Code agent teams enable parallel development across isolated combat subsy
 
 ---
 
-**Last Updated**: 2026-03-07
+**Last Updated**: 2026-03-09
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia

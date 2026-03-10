@@ -2,6 +2,33 @@
 
 ---
 
+## 2026-03-09 — Auto-Update System (`sysupdate`)
+
+Added in-game auto-update system that checks for new versions on login and allows one-command updates. Uses Mudlet's async `downloadFile` + `sysDownloadDone` event pattern (same as the mapper), not fragile `tempTimer` delays.
+
+**On login (5s after load):**
+- Downloads `version.txt` from GitHub, compares against `ataxiaVersion`
+- If newer version available: shows notification with "Type SYSUPDATE to update"
+- If current: shows "up to date" confirmation
+
+**`sysupdate` command:**
+- Downloads latest `Levi_Ataxia.mpackage` from GitHub
+- Uninstalls old package, installs new one, cleans up temp file
+
+**Version bump workflow (for releases):**
+1. Update `version.txt` with new version string
+2. Update `muddler_project/mfile` `"version"` field
+3. Build with muddler
+4. Push to GitHub (mpackage + version.txt)
+
+| File | Changes |
+|------|---------|
+| `version.txt` | **New** — Single-line version string (currently `4.1`) |
+| `scripts/.../misc_scripts/021_Auto_Update.lua` | **New** — `ataxia.updater` namespace, version check + download + install logic |
+| `aliases/.../levi_062424/201_Sysupdate.lua` | **New** — `^sysupdate$` alias |
+
+---
+
 ## 2026-03-09 — ClassDetect: Default unsupported curingsets to "normal" + AntiPsion fix
 
 **ClassDetect curingset validation**: Added a `validCuringsets` whitelist so classes that map to curingsets that don't exist in-game fall back to "normal" instead of sending invalid `curingset switch` commands. Also changed Runewarden mapping from "runewarden" to "knights".
