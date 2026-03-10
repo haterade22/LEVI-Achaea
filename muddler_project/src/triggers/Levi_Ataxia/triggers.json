@@ -13727,7 +13727,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if isTargeted(matches[2]) then\ntdeliverance = false\n  if passiveFailsafe then restorePassiveCure() end\n\t-- V2 tracking support: salve cures slickness and other affs\n\tif matches[3] == \"body\" then\n\t\tif onTargetSalveBodyV2 then onTargetSalveBodyV2(matches[2]) end\n\telse\n\t\tif onTargetSalveSkinV2 then onTargetSalveSkinV2(matches[2]) end\n\tend\n\t-- V3 integration: salve cure branching (body or skin)\n\tif onSalveCureV3 then onSalveCureV3(matches[3]) end\n\terAff(\"slickness\")\n\terAff(\"bloodfire\")\n  erAff(\"selarnia\")\n  erAff(\"frostbite\")\n\tif matches[3] == \"body\" then\n\t\terAff(\"anorexia\")\n\t\terAff(\"itching\")\n  \n  \n  if tburns == nil then \n    tburns = 0\n  elseif tburns == 0 then \n    tburns = 0\n  elseif tburns == 1 then\n    tburns = 0\n  elseif tburns == 2 then\n    tburns = 1\n  elseif tburns == 3 then\n    tburns = 2\n  elseif tburns == 4 then\n    tburns = 3\n  elseif tburns == 5 then\n    tburns = 4\n  end\n  selectCurrentLine() fg(\"slate_grey\")\n  cecho(\" <DimGrey>[<red>\"..tburns..\"/5<DimGrey>]\")\n    \n    \n\telseif not haveAff(\"hypothermia\") then\n\t\tlocal freeze = {\"frozen\", \"shivering\", \"nocaloric\"}\n\t\tfor _, aff in pairs(freeze) do\n\t\t\tif haveAff(aff) then\n\t\t\t\terAff(aff)\n\t\t\t\tbreak\n\t\t\tend\n\t\tend\n\tend\n\ttargetIshere = true\nend\n\n"
+                    "script": "if isTargeted(matches[2]) then\ntdeliverance = false\n  if passiveFailsafe then restorePassiveCure() end\n\t-- V2 tracking support: salve cures slickness and other affs\n\tif matches[3] == \"body\" then\n\t\tif onTargetSalveBodyV2 then onTargetSalveBodyV2(matches[2]) end\n\telse\n\t\tif onTargetSalveSkinV2 then onTargetSalveSkinV2(matches[2]) end\n\tend\n\t-- V3 integration: salve cure branching (body or skin)\n\tif onSalveCureV3 then onSalveCureV3(matches[3]) end\n\terAff(\"slickness\")\n\terAff(\"bloodfire\")\n  erAff(\"selarnia\")\n  erAff(\"frostbite\")\n\tif matches[3] == \"body\" then\n\t\terAff(\"anorexia\")\n\t\terAff(\"itching\")\n  \n  \n  magi.offense = magi.offense or {}\n  magi.offense.state = magi.offense.state or {}\n  magi.offense.state.burns = math.max((magi.offense.state.burns or 0) - 1, 0)\n  tburns = magi.offense.state.burns\n  selectCurrentLine() fg(\"slate_grey\")\n  cecho(\" <DimGrey>[<red>\"..tburns..\"/5<DimGrey>]\")\n    \n    \n\telseif not haveAff(\"hypothermia\") then\n\t\tlocal freeze = {\"frozen\", \"shivering\", \"nocaloric\"}\n\t\tfor _, aff in pairs(freeze) do\n\t\t\tif haveAff(aff) then\n\t\t\t\terAff(aff)\n\t\t\t\tbreak\n\t\t\tend\n\t\tend\n\tend\n\ttargetIshere = true\nend\n\n"
                   },
                   {
                     "name": "Applied Head",
@@ -17612,6 +17612,27 @@
                     "type": "regex"
                   }
                 ]
+              },
+              {
+                "name": "Party Magi Coordination",
+                "patterns": [
+                  {
+                    "pattern": "^\\(Party\\): (\\w+) says, \"Staffcast: (\\w+)[.!]?\"$",
+                    "type": "regex"
+                  },
+                  {
+                    "pattern": "^\\(Party\\): (\\w+) says, \"(\\w+): [Tt]ransfixed?[.!]?\"$",
+                    "type": "regex"
+                  },
+                  {
+                    "pattern": "^\\(Party\\): (\\w+) says, \"(\\w+): TRANSFIXED[.!]?\"$",
+                    "type": "regex"
+                  },
+                  {
+                    "pattern": "^\\(Party\\): (\\w+) says, \"(\\w+): [Uu]nblind[.!]?\"$",
+                    "type": "regex"
+                  }
+                ]
               }
             ]
           },
@@ -19442,7 +19463,7 @@
                     "name": "Fire Emanation",
                     "patterns": [
                       {
-                        "pattern": "^The might of elemental Fire filling you like a scorching river, you lift a primordial staff to point at (\\w+) and unleash a stream of searing flame\\.$",
+                        "pattern": "^The might of elemental Fire filling you like a scorching river, you lift an? \\w+ staff to point at (\\w+) and unleash a stream of searing flame\\.$",
                         "type": "regex"
                       }
                     ]
@@ -19451,7 +19472,7 @@
                     "name": "Water Emanation",
                     "patterns": [
                       {
-                        "pattern": "^The might of elemental Water surging through your body, you make the slightest flick with a primordial staff, and the hand of Sllshya descends as a freezing deluge to smash (\\w+)\\.$",
+                        "pattern": "^The might of elemental Water surging through your body, you make the slightest flick with an? \\w+ staff, and the hand of Sllshya descends as a freezing deluge to smash (\\w+)\\.$",
                         "type": "regex"
                       }
                     ]
@@ -19460,7 +19481,7 @@
                     "name": "Air Emanation",
                     "patterns": [
                       {
-                        "pattern": "^You sweep a primordial staff over your head and a great wind rises, picking up (\\w+) and dashing them violently about before casting them back to the ground\\.$",
+                        "pattern": "^You sweep an? \\w+ staff over your head and a great wind rises, picking up (\\w+) and dashing them violently about before casting them back to the ground\\.$",
                         "type": "regex"
                       }
                     ]
@@ -19469,7 +19490,7 @@
                     "name": "Earth Emanation",
                     "patterns": [
                       {
-                        "pattern": "^The might of elemental Earth thrumming within your bones, you point a primordial staff at (\\w+) and an intangible wave of power strikes forth to smite (\\w+)\\.$",
+                        "pattern": "^The might of elemental Earth thrumming within your bones, you point an? \\w+ staff at (\\w+) and an intangible wave of power strikes forth to smite (\\w+)\\.$",
                         "type": "regex"
                       }
                     ]
@@ -19573,10 +19594,28 @@
                     ]
                   },
                   {
+                    "name": "Third Party Transfix",
+                    "patterns": [
+                      {
+                        "pattern": "^With blinding speed, (\\w+) weaves a swirling pattern of fire and air\\.$",
+                        "type": "regex"
+                      }
+                    ]
+                  },
+                  {
                     "name": "Mudslide",
                     "patterns": [
                       {
                         "pattern": "^You weave earth and water and a torrent of thick mud thunders forth to roll over (\\w+), knocking (.+) sprawling\\.$",
+                        "type": "regex"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Third Party Transfix Unblind",
+                    "patterns": [
+                      {
+                        "pattern": "^(\\w+) attempts to transfix (\\w+), but succeeds only in curing \\w+ blindness\\.$",
                         "type": "regex"
                       }
                     ]
@@ -19591,10 +19630,32 @@
                     ]
                   },
                   {
+                    "name": "Storm Starburst",
+                    "patterns": [
+                      {
+                        "pattern": "^A starburst tattoo flares and bathes (\\w+) in red light\\.$",
+                        "type": "regex"
+                      }
+                    ]
+                  },
+                  {
                     "name": "Fulminate",
                     "patterns": [
                       {
                         "pattern": "^You click your fingers and lightning strikes from the air to smite (\\w+)\\.$",
+                        "type": "regex"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Storm Death Replace",
+                    "patterns": [
+                      {
+                        "pattern": "^\\w+ has culled (\\w+) from the ranks of the living\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^Kill breakdown for (\\w+)",
                         "type": "regex"
                       }
                     ]
@@ -19616,7 +19677,7 @@
                         "type": "regex"
                       }
                     ],
-                    "script": "if target == matches[2] then\n\n  if tAffs.weariness and tAffs.nausea then\n      if tburns == 0 or nil then \n       tburns = 1\n      elseif tburns == 1 then\n       tburns = 2\n      elseif tburns == 2 then\n       tburns = 3\n      elseif tburns == 3 then\n       tburns = 4\n      elseif tburns == 4 then\n       tburns = 5\n      elseif tburns == 5 then\n\t     tburns = 5\n      cecho(\" <DimGrey>[<red>\"..tburns..\"/5<DimGrey>]\")\n      end\n    \n  end\n\n  if not tAffs.weariness and not tAffs.nausea then\n   tarAffed(\"weariness\")\n   tarAffed(\"nausea\")\n  end\n\n  if not tAffs.weariness and tAffs.nausea and not tAffs.shivering and tAffs.nocaloric then\n    tarAffed(\"weariness\")\n    tarAffed(\"shivering\")\n  elseif not tAffs.weariness and tAffs.nausea and not tAffs.nocaloric then\n    tarAffed(\"weariness\")\n    tarAffed(\"nocaloric\")\n  elseif not tAffs.weariness and tAffs.nausea and tAffs.shivering and tAffs.nocaloric and not tAffs.frozen then\n    tarAffed(\"frozen\")\n    tarAffed(\"weariness\")\n  end\n\n  if not tAffs.nausea and tAffs.weariness then\n    if tburns == 0 then \n      tburns = 1\n    elseif tburns == 1 then\n      tburns = 2\n    elseif tburns == 2 then\n     tburns = 3\n    elseif tburns == 3 then\n      tburns = 4\n    elseif tburns == 4 then\n      tburns = 5\n    elseif tburns == 5 then\n\t    tburns = 5\n    end\n    tarAffed(\"frozen\")\n    tarAffed(\"nausea\")\n    haveAff(\"weariness\")\n    cecho(\" <DimGrey>[<red>\"..tburns..\"/5<DimGrey>]\")\n  end\n  if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": weariness and nausea\") end\nend\n\n\n\n   \n   \n"
+                    "script": "if target == matches[2] then\n\n  if tAffs.weariness and tAffs.nausea then\n      magi.offense = magi.offense or {}\n      magi.offense.state = magi.offense.state or {}\n      magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)\n      tburns = magi.offense.state.burns -- backward compat\n      tarAffed(\"burning\")\n      cecho(\" <DimGrey>[<red>\"..tburns..\"/5<DimGrey>]\")\n  end\n\n  if not tAffs.weariness and not tAffs.nausea then\n   tarAffed(\"weariness\")\n   tarAffed(\"nausea\")\n  end\n\n  if not tAffs.weariness and tAffs.nausea and not tAffs.shivering and tAffs.nocaloric then\n    tarAffed(\"weariness\")\n    tarAffed(\"shivering\")\n  elseif not tAffs.weariness and tAffs.nausea and not tAffs.nocaloric then\n    tarAffed(\"weariness\")\n    tarAffed(\"nocaloric\")\n  elseif not tAffs.weariness and tAffs.nausea and tAffs.shivering and tAffs.nocaloric and not tAffs.frozen then\n    tarAffed(\"frozen\")\n    tarAffed(\"weariness\")\n  end\n\n  if not tAffs.nausea and tAffs.weariness then\n    magi.offense = magi.offense or {}\n    magi.offense.state = magi.offense.state or {}\n    magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)\n    tburns = magi.offense.state.burns -- backward compat\n    tarAffed(\"burning\")\n    tarAffed(\"frozen\")\n    tarAffed(\"nausea\")\n    haveAff(\"weariness\")\n    cecho(\" <DimGrey>[<red>\"..tburns..\"/5<DimGrey>]\")\n  end\n  if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": weariness and nausea\") end\nend\n\n\n\n   \n   \n"
                   },
                   {
                     "name": "Bombard",
@@ -19658,7 +19719,7 @@
                     "name": "Conflagrated Fail",
                     "patterns": [
                       {
-                        "pattern": "^You bend your will upon (\\w+), attempting to rouse a conflagration to consume \\w+, but to noavail\\.$",
+                        "pattern": "^You bend your will upon (\\w+), attempting to rouse a conflagration to consume \\w+, but to no avail\\.$",
                         "type": "regex"
                       }
                     ]
@@ -19673,10 +19734,176 @@
                     ]
                   },
                   {
+                    "name": "Spell Outcomes",
+                    "patterns": [
+                      {
+                        "pattern": "^You weave fire and earth and bubbling magma boils into existence to wash over (\\w+) in a skin-melting tide\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^Weaving the elements of fire and water, you attempt to rip the excess water from the body of (\\w+)\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^You click your fingers and lightning strikes from the air to smite (\\w+)\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^You tap the Elemental Plane of Earth, summoning up a flurry of rocks to bombard (\\w+)\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^You form a lash of fire, and send it to scorch the flesh of (\\w+)\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^You weave earth and water and a torrent of thick mud thunders forth to roll over (\\w+), knocking \\w+ sprawling\\.$",
+                        "type": "regex"
+                      }
+                    ]
+                  },
+                  {
                     "name": "Increase Burning",
                     "patterns": [
                       {
                         "pattern": "^You fan the heat of \\w+'s body into consuming flame\\.$",
+                        "type": "regex"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Resonance Afflictions",
+                    "patterns": [
+                      {
+                        "pattern": "^(\\w+) clutches at \\w+ throat as \\w+ gasps for breath\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^A vicious wind rises, lashing and flaying at the body of (\\w+) to leave \\w+ sensitive and raw\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^A dreadful pallor overcomes the features of (\\w+)\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^As you begin to tap your connection with the Elemental Plane of Water, you summon up a freezing wave to deluge (\\w+)\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^You summon up a flurry of icicles to slash at (\\w+) in a shower of freezing daggers\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^The might of Elemental Water suffusing you, you tear at the vital fluids which sustain the body of (\\w+) with your will alone\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^A loud crack emanates from the (.+) of (\\w+)\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^You bleed off residual power from your connection with the Elemental Plane of Earth, directing it in an unfocussed blast of arcane might at (\\w+)\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^The might of Elemental Earth coursing through you, you smite (\\w+) with the full force of your directed will\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^You will that (\\w+) should burn, and so \\w+ does\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^The incandescent might of Elemental Fire filling you, you command (\\w+) to burn from within\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^The incandescent might of Elemental Fire filling you, you command the suffering (\\w+) to burn from within\\.$",
+                        "type": "regex"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Shalestorm",
+                    "patterns": [
+                      {
+                        "pattern": "^You call upon the might of Elemental Earth to grind down (\\w+)",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^One of the boulders smashes into the (.+) of (\\w+) with a sickening crack\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^Huge boulders hammer at the magical shield surrounding (\\w+), shattering it in a spray of translucent shards\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^You can no longer maintain your shalestorm against (\\w+)\\.$",
+                        "type": "regex"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Meteorite",
+                    "patterns": [
+                      {
+                        "pattern": "^A meteorite smashes through the translucent shield surrounding (\\w+) in an explosion of translucent shards and snapping bones\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^A flaming meteorite smashes through the magical shield surrounding (\\w+) in an explosion of translucent shards and fire\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^A frozen meteorite smashes through the magical shield surrounding (\\w+) in an explosion of translucent shards and chill\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "You sense your arcane work unravel as no wards are found to shatter\\.",
+                        "type": "substring"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Burns Tracking",
+                    "patterns": [
+                      {
+                        "pattern": "^(\\w+) bursts into flame as a fiery efreeti spins into \\w+\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^The conflagration about (\\w+) continues to rage, searing flesh from bone\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^The firestorm roars all about you, searing your flesh\\.$",
+                        "type": "substring"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Calcify",
+                    "patterns": [
+                      {
+                        "pattern": "^The might of elemental Earth thrumming within your bones, you point an? \\w+ staff at (\\w+) and an intangible wave of power strikes forth to smite \\w+\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^A look of pain comes over (\\w+) and the bones seem to shift beneath the skin stretched across \\w+ skull\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^You sense calcification setting in across the torso of (\\w+)\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^The calcified torso of (\\w+) returns to normal\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "^The calcified skull of (\\w+) returns to normal\\.$",
                         "type": "regex"
                       }
                     ]

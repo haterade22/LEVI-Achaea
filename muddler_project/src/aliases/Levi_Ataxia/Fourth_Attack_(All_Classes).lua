@@ -1,34 +1,22 @@
 if gmcp.Char.Status.class == "Apostate" then
-apostate_group()
-end
-
-if gmcp.Char.Status.class == "Monk" then
-lock_base_prios()
+  apostate.setMode("group")
+  apostate.dispatch()
 end
 
 if gmcp.Char.Status.class == "Serpent" then
   serp_setmode_darkshade()
   serp_ekanelia_offense()
 end
- 
+
 if gmcp.Char.Status.class == "Blademaster" then
-bmbs()  
+  bmbs()
 end
 
 if gmcp.Char.Status.class == "Runewarden" and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" then
-dwbRunie.dispatch()
-end
-
-if gmcp.Char.Status.class == "Infernal" and gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt" then
-  idwb_damageroute3()
-end 
-
-if gmcp.Char.Status.class == "Infernal" and gmcp.Char.Vitals.charstats[4] == "Spec: Sword and Shield" then
-  infernalpriosdamage()
+  dwbRunie.dispatch()
 end
 
 if gmcp.Char.Status.class == "Magi" then
-magiPVP()
-send("queue addclear freestand mpvp")
+  magi.offense.setMode("water")
+  magi.offense.dispatch()
 end
-

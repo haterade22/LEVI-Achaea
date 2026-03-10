@@ -151,12 +151,12 @@ function classDetect.reapplyDefencePriorities()
   -- Reset the curingset's embedded defence list first, then re-apply ours.
   -- Without the reset, SSC keeps trying the curingset's own defence entries
   -- (e.g., toughness/shin/weathering from a shikudo curingset on an Apostate).
-  send("curing priority defence list reset", false)
+  ataxia_sendCuringPriority("curing priority defence list reset", false)
   local command = "curing priority defence "
   for def in pairs(defup[cur]) do
     command = command .. def .. " 25 "
   end
-  send(command, false)
+  ataxia_sendCuringPriority(command, false)
 end
 
 --------------------------------------------------------------------------------

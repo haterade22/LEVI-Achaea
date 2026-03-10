@@ -1,3 +1,53 @@
+-- Global curing priority throttle (5 commands/second limit per Announce #5450)
+ataxia.prioThrottle = ataxia.prioThrottle or {
+  commands = {},
+  sentThisSecond = 0,
+  windowStart = 0,
+  MAX_PER_SECOND = 4,
+  drainTimer = nil,
+}
+
+function ataxia_sendCuringPriority(cmd, silent)
+  local now = getEpoch()
+  local throttle = ataxia.prioThrottle
+
+  if (now - throttle.windowStart) >= 1.0 then
+    throttle.sentThisSecond = 0
+    throttle.windowStart = now
+  end
+
+  if throttle.sentThisSecond < throttle.MAX_PER_SECOND then
+    throttle.sentThisSecond = throttle.sentThisSecond + 1
+    send(cmd, silent or false)
+  else
+    table.insert(throttle.commands, {cmd = cmd, silent = silent or false})
+    if not throttle.drainTimer then
+      throttle.drainTimer = tempTimer(0.25, function() ataxia_drainPrioQueue() end)
+    end
+  end
+end
+
+function ataxia_drainPrioQueue()
+  local throttle = ataxia.prioThrottle
+  throttle.drainTimer = nil
+
+  local now = getEpoch()
+  if (now - throttle.windowStart) >= 1.0 then
+    throttle.sentThisSecond = 0
+    throttle.windowStart = now
+  end
+
+  while #throttle.commands > 0 and throttle.sentThisSecond < throttle.MAX_PER_SECOND do
+    local entry = table.remove(throttle.commands, 1)
+    throttle.sentThisSecond = throttle.sentThisSecond + 1
+    send(entry.cmd, entry.silent)
+  end
+
+  if #throttle.commands > 0 then
+    throttle.drainTimer = tempTimer(0.25, function() ataxia_drainPrioQueue() end)
+  end
+end
+
 function ataxia_defaultPrioAff(aff)
 	local defaultPrios = ataxia_defaultCuringPrios()
 	return defaultPrios[aff]
@@ -7,7 +57,7 @@ function ataxia_setAffPrio(aff, num)
 	prioWaitfor = prioWaitfor or {}
 	if not prioWaitfor[aff] then
 		prioWaitfor[aff] = tempTimer(1, [[ prioWaitfor["]]..aff..[["] = nil ]])
-		send("curing priority "..aff.. " "..num,false)
+		ataxia_sendCuringPriority("curing priority "..aff.. " "..num, false)
 	end
 end
 
@@ -20,7 +70,7 @@ function ataxia_restorePrio(aff)
 	if ataxia_getPrio(aff) == ataxia_defaultPrioAff(aff) then return end
 	if not prioWaitrestore[aff] then
 		prioWaitrestore[aff] = tempTimer(1, [[ prioWaitrestore["]]..aff..[["] = nil ]])
-		send("curing priority "..aff.." "..defaultPrios[aff])
+		ataxia_sendCuringPriority("curing priority "..aff.." "..defaultPrios[aff])
 	end
 end
 
@@ -52,8 +102,8 @@ end
 function ataxia_raisePrio(aff, hide)
 	local newprio = (ataxia.curingprio[aff] - 1)
 	ataxia.curingprio[aff] = newprio
-	send("curing priority "..aff.." "..newprio)
-	
+	ataxia_sendCuringPriority("curing priority "..aff.." "..newprio)
+
 	if not hide then
 		ataxiaEcho("Raised "..aff.." to a priority of "..newprio)
 		ataxia_showPrios(newprio)
@@ -63,8 +113,8 @@ end
 function ataxia_lowerPrio(aff, hide)
 	local newprio = (ataxia.curingprio[aff] + 1)
 	ataxia.curingprio[aff] = newprio
-	send("curing priority "..aff.." "..newprio)
-	
+	ataxia_sendCuringPriority("curing priority "..aff.." "..newprio)
+
 	if not hide then
 		ataxiaEcho("Lowered "..aff.." to a priority of "..newprio)
 		ataxia_showPrios(newprio)

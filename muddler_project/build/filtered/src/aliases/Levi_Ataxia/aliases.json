@@ -2335,6 +2335,10 @@
               {
                 "name": "Stormhammering",
                 "regex": "^(shrt|shre)$"
+              },
+              {
+                "name": "Storm",
+                "regex": "^storm$"
               }
             ]
           },
@@ -2674,6 +2678,17 @@
             "regex": "^zbash(?: (\\w+))?(?: (\\w+))?$"
           }
         ]
+      }
+    ]
+  },
+  {
+    "name": "Magi Things",
+    "isActive": "yes",
+    "isFolder": "yes",
+    "children": [
+      {
+        "name": "Magi Mode",
+        "regex": "^mm\\s*(.*)$"
       }
     ]
   },

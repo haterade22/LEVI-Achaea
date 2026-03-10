@@ -46,7 +46,7 @@ function addToKeepup(defence)
 		ataxia.settings.defences.defup[cur][defence] = true
 		ataxia.settings.defences.keepup[cur][defence] = true
 		ataxiaEcho(defence.." has been added to the "..cur.." keepup profile.")
-		send("curing priority defence "..defence.." 25")
+		ataxia_sendCuringPriority("curing priority defence "..defence.." 25")
 	else
 		ataxiaEcho(defence.." is already in the "..cur.." keepup profile.")
 	end
@@ -86,12 +86,12 @@ function gotDef()
 
 	if cur ~= "" and not def:find("parrying") and not def:find("blocking") then
 		if not ataxia.settings.defences.keepup[cur][def] and not ataxiaBasher.enabled then
-			send("curing priority defence "..def:lower().." reset",false)
+			ataxia_sendCuringPriority("curing priority defence "..def:lower().." reset", false)
 		end
     
     if def:lower() == "shield" or def:lower() == "curseward" then
       if ataxia.prioritySwaps and ataxia.prioritySwaps.parshield and ataxia.prioritySwaps.parshield.active then
-        sendAll("curing priority slickness 25;curing priority paralysis 25",false)
+        ataxia_sendCuringPriority("curing priority slickness 25;curing priority paralysis 25", false)
         tempTimer(1.4, [[ ataxia_restorePrio("paralysis");ataxia_restorePrio("slickness") ]])
       end
     elseif def == "alertness" then

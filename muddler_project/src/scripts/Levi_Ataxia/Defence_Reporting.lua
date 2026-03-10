@@ -18,6 +18,14 @@ function ataxia_reportDefences()
 			table.insert(defenceList.other, def.name)
 		end
 	end
+
+	-- Inject text-tracked defences not reported via GMCP
+	if ataxia.defences["simultaneity"] and ataxia.settings.defences.defup[cur]["simultaneity"] then
+		if not table.contains(defenceList.system, "simultaneity") then
+			table.insert(defenceList.system, "simultaneity")
+		end
+	end
+
 	total = #defenceList.other
 	table.sort(defenceList.system)
 

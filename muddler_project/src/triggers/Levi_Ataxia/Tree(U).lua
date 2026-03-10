@@ -19,19 +19,10 @@ tdeliverance = false
 	tBals.timers.tree = tempTimer(13, [[tBals.tree = true; tBals.timers.tree = nil]])
 	targetIshere = true
 	
-  if tburns >= 1 then
-    if tburns == 1 then
-      tburns = 0
-    elseif tburns == 2 then
-      tburns = 1
-    elseif tburns == 3 then
-      tburns = 2
-    elseif tburns == 4 then
-      tburns = 3
-    elseif tburns == 5 then
-      tburns = 4
-    end
-  end
+  magi.offense = magi.offense or {}
+  magi.offense.state = magi.offense.state or {}
+  magi.offense.state.burns = math.max((magi.offense.state.burns or 0) - 1, 0)
+  tburns = magi.offense.state.burns
 if treeTimer0 then return end
 if treeTimer4 then return end
 if treeTimer9 then return end

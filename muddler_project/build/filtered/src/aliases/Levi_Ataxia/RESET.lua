@@ -23,4 +23,7 @@ mindinvert = false
 spiritinvert = false
 bodyinvert = false
 blast_count = 0
+magi.offense = magi.offense or {}
+magi.offense.state = magi.offense.state or {}
+magi.offense.state.burns = 0
 tburns = 0

@@ -69,6 +69,8 @@ spiritinvert = false
 bodyinvert = false
 blast_count = 0
 tburns = 0
+magi = magi or {}; magi.offense = magi.offense or {}; magi.offense.state = magi.offense.state or {}
+magi.offense.state.burns = 0
 wantmindlock = false
 need_dwcempower = true
 need_falcon = true

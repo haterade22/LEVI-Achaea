@@ -1,19 +1,18 @@
-magi = {
+magi = magi or {}
 
-staff = "staff569815",
-keep_firestorm = true,
-immolation_windup = false,
-calcifying_head = false,
-calcify_resto = false,
-firestorm = false,
-convergence = false,
-auto_focus = false,
-    resonance = {
-        ["earth"] = 0,
-        ["water"] = 0,
-        ["air"] = 0,
-        ["fire"] = 0
-    }
+magi.staff = magi.staff or "staff569815"
+magi.keep_firestorm = (magi.keep_firestorm == nil) and true or magi.keep_firestorm
+magi.immolation_windup = magi.immolation_windup or false
+magi.calcifying_head = magi.calcifying_head or false
+magi.calcify_resto = magi.calcify_resto or false
+magi.firestorm = magi.firestorm or false
+magi.convergence = magi.convergence or false
+magi.auto_focus = magi.auto_focus or false
+magi.resonance = magi.resonance or {
+    ["earth"] = 0,
+    ["water"] = 0,
+    ["air"] = 0,
+    ["fire"] = 0
 }
 function get_resonance()
   for k, v in pairs(gmcp.Char.Vitals.charstats) do
@@ -64,4 +63,5 @@ function get_resonance()
   end
 end
 
-registerAnonymousEventHandler("gmcp.Char.Vitals", "get_resonance")
+if magi._resonanceHandler then killAnonymousEventHandler(magi._resonanceHandler) end
+magi._resonanceHandler = registerAnonymousEventHandler("gmcp.Char.Vitals", "get_resonance")

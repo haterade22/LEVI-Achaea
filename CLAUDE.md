@@ -195,7 +195,7 @@ All combat systems in `src_new/scripts/levi_ataxia/levi/levi_scripts/`:
 | **dwc_runie** | 1 | Undocumented | DWC + runelore | `dwc_runie/` |
 | **earth_lord** | 5 | Undocumented | Limb targeting | `earth_lord/` |
 | **i_snb** | 1 | Undocumented | Infernal SnB | `i_snb/` |
-| **mage** | 1 | Undocumented | Elemental | `mage/` |
+| **mage** | 4 | **Documented** | Elementalism: salve push, fire burns, water freeze, lock, group, stormhammer | `mage/` |
 | **pariah** | 1 | Undocumented | Plague/swarm | `pariah/` |
 | **psion** | 1 | **Documented** | Mana kill, deconstruct, flurry burst | `psion/` |
 | **s_n_b** | 1 | Undocumented | Sword and Board | `s_n_b/` |

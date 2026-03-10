@@ -1,7 +1,9 @@
 if target == matches[2] then
     tarAffed("conflagration")
-    if partyrelay and not ataxia.afflictions.aeon then send("pt " ..target.. ": conflagration") end
-    tburns = tburns or 2
+    magi.offense.state.conflagrated = true
+    if magi.offense.state.burns < 2 then magi.offense.state.burns = 2 end
+    tburns = magi.offense.state.burns
+    magi.offense.ptRelay(target .. ": Conflagrated! (burns:" .. magi.offense.state.burns .. ")")
   end
 
 tfirelash = false
