@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-03-10 — Fix: Death/starburst causes double death from basher spam
+
+When dying during bashing, the basher would keep attacking on the next prompt — causing a second death immediately after starburst resurrection. Three root causes:
+
+1. **No trigger for player's own starburst** — trigger 405 only matched when *your target* starburst, not when *you* starburst. The text "Your starburst tattoo flares as the world is momentarily tinted red" was completely unhandled.
+2. **`ataxiaBasher_onDeath()` only paused** — set `ataxiaBasher.paused = true` but left `ataxiaBasher.enabled = true`, so the prompt handler still ran `search_targets()` and could dispatch attacks before the pause took effect.
+3. **Auto bash rotation never cleared** — `autoBashRotation` stayed true after death, causing `basher_disengaged()` to auto-move to the next bashing area.
+
+**Fix**: `ataxiaBasher_onDeath()` now fully disables the basher (`enabled = false`), clears all queues (`cq all`), kills all active timers (flee, stuck, anti-spam), turns off auto bash rotation, stops mapper movement, and after a 2s delay moves to `mmp.previousroom` (the room before where you died) to heal up safely.
+
+| File | Changes |
+|------|---------|
+| `scripts/.../genrunning/001_Bashing_API.lua` | Rewrote `ataxiaBasher_onDeath()` — full disable instead of pause, clears rotation, kills timers, moves to safe room |
+| `triggers/.../406_Own_Starburst.lua` | **New** — triggers on "Your starburst tattoo flares", calls `ataxiaBasher_onDeath()` |
+| `triggers/.../407_Player_Slain.lua` | **New** — triggers on "You have been slain by", calls `ataxiaBasher_onDeath()` (fires before starburst line) |
+
+---
+
 ## 2026-03-10 — Fix: Nil guard errors across prompt, display, and event systems
 
 Fixed 7 runtime errors caused by nil field access during early login, blind state, or missing data. All fixes add proper nil guards with fallback defaults.

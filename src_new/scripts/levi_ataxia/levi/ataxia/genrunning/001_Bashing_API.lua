@@ -142,16 +142,45 @@ function saveRoomPath()
 	ataxia_saveSettings(false)
 end
 
--- Death recovery: pause basher on death so it doesn't keep running in a dead state.
--- The character can manually re-enable after resurrection.
+-- Death recovery: fully disable basher, clear all queues, and retreat after resurrection.
+-- Saves the room we died in so we can move back one room to heal up safely.
 function ataxiaBasher_onDeath()
   if not ataxiaBasher.enabled then return end
-  ataxiaEcho("Death detected! Pausing basher. Re-enable after resurrection.")
-  ataxiaBasher.paused = true
+
+  -- Save safe room before anything else (previousroom is the room before we died)
+  local safeRoom = mmp and mmp.previousroom or nil
+
+  -- Immediately stop everything
+  send("cq all")
+  ataxiaBasher.enabled = false
+  ataxiaBasher.paused = false
+  ataxiaBasher.areabash = false
   ataxiaTemp.bashFlee = false
+  autoBashRotation = false
   target = nil
   found_target = false
-  send("cq all")
+
+  -- Kill any active timers that could restart movement/attacks
+  if ataxiaTemp.fleeCircuitBreaker then killTimer(ataxiaTemp.fleeCircuitBreaker); ataxiaTemp.fleeCircuitBreaker = nil end
+  if ataxiaTemp.stuckTimer then killTimer(ataxiaTemp.stuckTimer); ataxiaTemp.stuckTimer = nil end
+  if ataxiaBasher_atkTimer then killTimer(ataxiaBasher_atkTimer); ataxiaBasher_atkTimer = nil end
+  ataxiaBasher_atk = false
+
+  -- Stop mapper movement
+  if mmp and mmp.pause then mmp.pause("on") end
+
+  raiseEvent("basher disabled")
+
+  ataxiaEcho("DEATH DETECTED! Basher disabled. Queues cleared. Auto-rotation OFF.")
+
+  -- After resurrection/starburst, move to the room before where we died to heal up
+  if safeRoom then
+    tempTimer(2, function()
+      if mmp and mmp.pause then mmp.pause("off") end
+      ataxiaEcho("Moving to safe room (v" .. safeRoom .. ") to heal up.")
+      expandAlias("goto " .. safeRoom)
+    end)
+  end
 end
 
 -- Flee timeout / circuit breaker: if flee state persists beyond a timeout, disable basher.
@@ -317,16 +346,45 @@ function saveRoomPath()
 	ataxia_saveSettings(false)
 end
 
--- Death recovery: pause basher on death so it doesn't keep running in a dead state.
--- The character can manually re-enable after resurrection.
+-- Death recovery: fully disable basher, clear all queues, and retreat after resurrection.
+-- Saves the room we died in so we can move back one room to heal up safely.
 function ataxiaBasher_onDeath()
   if not ataxiaBasher.enabled then return end
-  ataxiaEcho("Death detected! Pausing basher. Re-enable after resurrection.")
-  ataxiaBasher.paused = true
+
+  -- Save safe room before anything else (previousroom is the room before we died)
+  local safeRoom = mmp and mmp.previousroom or nil
+
+  -- Immediately stop everything
+  send("cq all")
+  ataxiaBasher.enabled = false
+  ataxiaBasher.paused = false
+  ataxiaBasher.areabash = false
   ataxiaTemp.bashFlee = false
+  autoBashRotation = false
   target = nil
   found_target = false
-  send("cq all")
+
+  -- Kill any active timers that could restart movement/attacks
+  if ataxiaTemp.fleeCircuitBreaker then killTimer(ataxiaTemp.fleeCircuitBreaker); ataxiaTemp.fleeCircuitBreaker = nil end
+  if ataxiaTemp.stuckTimer then killTimer(ataxiaTemp.stuckTimer); ataxiaTemp.stuckTimer = nil end
+  if ataxiaBasher_atkTimer then killTimer(ataxiaBasher_atkTimer); ataxiaBasher_atkTimer = nil end
+  ataxiaBasher_atk = false
+
+  -- Stop mapper movement
+  if mmp and mmp.pause then mmp.pause("on") end
+
+  raiseEvent("basher disabled")
+
+  ataxiaEcho("DEATH DETECTED! Basher disabled. Queues cleared. Auto-rotation OFF.")
+
+  -- After resurrection/starburst, move to the room before where we died to heal up
+  if safeRoom then
+    tempTimer(2, function()
+      if mmp and mmp.pause then mmp.pause("off") end
+      ataxiaEcho("Moving to safe room (v" .. safeRoom .. ") to heal up.")
+      expandAlias("goto " .. safeRoom)
+    end)
+  end
 end
 
 -- Flee timeout / circuit breaker: if flee state persists beyond a timeout, disable basher.

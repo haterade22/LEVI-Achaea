@@ -14267,6 +14267,15 @@
                 ]
               },
               {
+                "name": "Own Starburst",
+                "patterns": [
+                  {
+                    "pattern": "^Your starburst tattoo flares as the world is momentarily tinted red\\.$",
+                    "type": "regex"
+                  }
+                ]
+              },
+              {
                 "name": "Shield Strip",
                 "patterns": [
                   {
@@ -14307,6 +14316,15 @@
                   },
                   {
                     "pattern": "^You bid your guardian angel to strip a defence from (\\w+).$",
+                    "type": "regex"
+                  }
+                ]
+              },
+              {
+                "name": "Player Slain",
+                "patterns": [
+                  {
+                    "pattern": "^You have been slain by",
                     "type": "regex"
                   }
                 ]

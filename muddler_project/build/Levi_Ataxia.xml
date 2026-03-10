@@ -22211,16 +22211,45 @@ function saveRoomPath()
 	ataxia_saveSettings(false)
 end
 
--- Death recovery: pause basher on death so it doesn't keep running in a dead state.
--- The character can manually re-enable after resurrection.
+-- Death recovery: fully disable basher, clear all queues, and retreat after resurrection.
+-- Saves the room we died in so we can move back one room to heal up safely.
 function ataxiaBasher_onDeath()
   if not ataxiaBasher.enabled then return end
-  ataxiaEcho("Death detected! Pausing basher. Re-enable after resurrection.")
-  ataxiaBasher.paused = true
+
+  -- Save safe room before anything else (previousroom is the room before we died)
+  local safeRoom = mmp and mmp.previousroom or nil
+
+  -- Immediately stop everything
+  send("cq all")
+  ataxiaBasher.enabled = false
+  ataxiaBasher.paused = false
+  ataxiaBasher.areabash = false
   ataxiaTemp.bashFlee = false
+  autoBashRotation = false
   target = nil
   found_target = false
-  send("cq all")
+
+  -- Kill any active timers that could restart movement/attacks
+  if ataxiaTemp.fleeCircuitBreaker then killTimer(ataxiaTemp.fleeCircuitBreaker); ataxiaTemp.fleeCircuitBreaker = nil end
+  if ataxiaTemp.stuckTimer then killTimer(ataxiaTemp.stuckTimer); ataxiaTemp.stuckTimer = nil end
+  if ataxiaBasher_atkTimer then killTimer(ataxiaBasher_atkTimer); ataxiaBasher_atkTimer = nil end
+  ataxiaBasher_atk = false
+
+  -- Stop mapper movement
+  if mmp and mmp.pause then mmp.pause("on") end
+
+  raiseEvent("basher disabled")
+
+  ataxiaEcho("DEATH DETECTED! Basher disabled. Queues cleared. Auto-rotation OFF.")
+
+  -- After resurrection/starburst, move to the room before where we died to heal up
+  if safeRoom then
+    tempTimer(2, function()
+      if mmp and mmp.pause then mmp.pause("off") end
+      ataxiaEcho("Moving to safe room (v" .. safeRoom .. ") to heal up.")
+      expandAlias("goto " .. safeRoom)
+    end)
+  end
 end
 
 -- Flee timeout / circuit breaker: if flee state persists beyond a timeout, disable basher.
@@ -22386,16 +22415,45 @@ function saveRoomPath()
 	ataxia_saveSettings(false)
 end
 
--- Death recovery: pause basher on death so it doesn't keep running in a dead state.
--- The character can manually re-enable after resurrection.
+-- Death recovery: fully disable basher, clear all queues, and retreat after resurrection.
+-- Saves the room we died in so we can move back one room to heal up safely.
 function ataxiaBasher_onDeath()
   if not ataxiaBasher.enabled then return end
-  ataxiaEcho("Death detected! Pausing basher. Re-enable after resurrection.")
-  ataxiaBasher.paused = true
+
+  -- Save safe room before anything else (previousroom is the room before we died)
+  local safeRoom = mmp and mmp.previousroom or nil
+
+  -- Immediately stop everything
+  send("cq all")
+  ataxiaBasher.enabled = false
+  ataxiaBasher.paused = false
+  ataxiaBasher.areabash = false
   ataxiaTemp.bashFlee = false
+  autoBashRotation = false
   target = nil
   found_target = false
-  send("cq all")
+
+  -- Kill any active timers that could restart movement/attacks
+  if ataxiaTemp.fleeCircuitBreaker then killTimer(ataxiaTemp.fleeCircuitBreaker); ataxiaTemp.fleeCircuitBreaker = nil end
+  if ataxiaTemp.stuckTimer then killTimer(ataxiaTemp.stuckTimer); ataxiaTemp.stuckTimer = nil end
+  if ataxiaBasher_atkTimer then killTimer(ataxiaBasher_atkTimer); ataxiaBasher_atkTimer = nil end
+  ataxiaBasher_atk = false
+
+  -- Stop mapper movement
+  if mmp and mmp.pause then mmp.pause("on") end
+
+  raiseEvent("basher disabled")
+
+  ataxiaEcho("DEATH DETECTED! Basher disabled. Queues cleared. Auto-rotation OFF.")
+
+  -- After resurrection/starburst, move to the room before where we died to heal up
+  if safeRoom then
+    tempTimer(2, function()
+      if mmp and mmp.pause then mmp.pause("off") end
+      ataxiaEcho("Moving to safe room (v" .. safeRoom .. ") to heal up.")
+      expandAlias("goto " .. safeRoom)
+    end)
+  end
 end
 
 -- Flee timeout / circuit breaker: if flee state persists beyond a timeout, disable basher.
@@ -119318,6 +119376,30 @@ end
               </regexCodePropertyList>
 </Trigger>
             <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+  <name>Own Starburst</name>
+              <script>-- We just died and starburst resurrected. Fire the death handler immediately
+-- to shut down the basher before the next prompt can dispatch another attack.
+ataxiaBasher_onDeath()
+</script>
+  <triggerType>0</triggerType>
+  <conditonLineDelta>0</conditonLineDelta>
+  <mStayOpen>0</mStayOpen>
+  <mCommand/>
+  <packageName/>
+  <path>Levi_Ataxia</path>
+  <mFgColor>#ff0000</mFgColor>
+  <mBgColor>#ffff00</mBgColor>
+  <mSoundFile/>
+  <colorTriggerFgColor>#000000</colorTriggerFgColor>
+  <colorTriggerBgColor>#000000</colorTriggerBgColor>
+              <regexCodeList>
+<string>^Your starburst tattoo flares as the world is momentarily tinted red\.$</string>
+              </regexCodeList>
+              <regexCodePropertyList>
+<integer>1</integer>
+              </regexCodePropertyList>
+</Trigger>
+            <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Shield Strip</name>
               <script>if isTargeted(matches[2]) then
 	erAff("shield")
@@ -119361,6 +119443,32 @@ end
 <integer>1</integer>
 <integer>1</integer>
 <integer>1</integer>
+<integer>1</integer>
+              </regexCodePropertyList>
+</Trigger>
+            <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+  <name>Player Slain</name>
+              <script>-- We just died. Fire death handler immediately to stop the basher
+-- before the next prompt can dispatch another attack.
+-- ataxiaBasher_onDeath() is idempotent — safe to call from both
+-- "You have been slain" and "Your starburst tattoo flares".
+ataxiaBasher_onDeath()
+</script>
+  <triggerType>0</triggerType>
+  <conditonLineDelta>0</conditonLineDelta>
+  <mStayOpen>0</mStayOpen>
+  <mCommand/>
+  <packageName/>
+  <path>Levi_Ataxia</path>
+  <mFgColor>#ff0000</mFgColor>
+  <mBgColor>#ffff00</mBgColor>
+  <mSoundFile/>
+  <colorTriggerFgColor>#000000</colorTriggerFgColor>
+  <colorTriggerBgColor>#000000</colorTriggerBgColor>
+              <regexCodeList>
+<string>^You have been slain by</string>
+              </regexCodeList>
+              <regexCodePropertyList>
 <integer>1</integer>
               </regexCodePropertyList>
 </Trigger>
