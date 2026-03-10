@@ -53,101 +53,44 @@ ataxiaBasher_bashingFuncs = {
 }
 
 function ataxiaBasher_attack()
+  -- Determine danger level (flee/shield/attack/wait) — single check, no redundant logic
+  local danger = ataxiaBasher_dangerLevel()
 
-	local class = gmcp.Char.Status.class:title()
-  class = class:gsub(" Lady", ""):gsub(" Lord", "")
-  if ataxiaTemp.bashFlee == nil then
-    ataxiaTemp.bashFlee = false
+  if danger == "flee" then
+    ataxiaBasher_executeFlee()
+    return
   end
-  --Make a Magi Reflection Function
-if not ataxia.afflictions.aeon and not ataxia.afflictions.paralysis and not ataxia.afflictions.peace then
-    if ataxiaTemp.bashFlee == true then
-      ataxiaBasher.paused = true
-      ataxiaEcho("BASH FLEE IS TRUE/PAUSING BASHER/RUNNING BACK ONE ROOM")
-      send("cq all")
-      if mmp.paused then mmp.pause("off") end
-      if mmp.previousroom then
-        expandAlias("goto " ..mmp.previousroom)
-      else
-        ataxiaEcho("No previous room to flee to - shielding instead.")
-        send("touch shield")
-      end
-		  if ataxia.vitals.hp >= ataxia.vitals.maxhp then
-			  ataxiaTemp.bashFlee = false
-        ataxiaBasher.paused = false
-        -- Cancel flee circuit breaker since we recovered
-        if ataxiaTemp.fleeCircuitBreaker then killTimer(ataxiaTemp.fleeCircuitBreaker); ataxiaTemp.fleeCircuitBreaker = nil end
-			  search_targets()
-			   if not found_target and ataxiaTemp.bashFlee == true then
-          if mmp.previousroom then
-				    ataxiaEcho("Healed to threshold, moving back to v"..mmp.previousroom..".")
-            ataxiaTemp.bashFlee = false
-            ataxiaBasher.paused = false
-            if mmp.paused then mmp.pause("off") end
-            expandAlias("goto " ..mmp.previousroom)
-            search_targets()
-          end
-			   end
-			  ataxiaBasher_patterns()
-        ataxiagui_updateVitals()
-      elseif ataxiaBasher.fleeThreshold and ataxia.vitals.hp <= ataxiaBasher.fleeThreshold then
-        ataxiaTemp.bashFlee = true
-        ataxiaBasher.paused = true
-        ataxiaEcho("BASH FLEE IS TRUE/PAUSING BASHER/GETTING TO FULL HEALTH")
-        ataxiagui_updateVitals()
-      end
-    elseif ataxiaBasher.fleeThreshold and ataxia.vitals.hp <= ataxiaBasher.fleeThreshold then
-        ataxiaTemp.bashFlee = true
-        ataxiaBasher.paused = true
-        ataxiaBasher_startFleeTimer()
-        send("cq all")
-        if mmp.paused then mmp.pause("off") end
-        if mmp.previousroom then
-          expandAlias("goto " ..mmp.previousroom)
-        else
-          ataxiaEcho("No previous room to flee to - shielding instead.")
-          send("touch shield")
-        end
-        ataxiagui_updateVitals()
-    elseif ataxiaBasher.fleeFromPlayers and ataxiaBasher.fleeFromPlayers[gmcp.Room.Info.area] then
-      -- Configurable per-area player flee: check if any hostile player matches the flee list
-      local shouldFlee = false
-      if type(ataxia.playersHere) == "table" then
-        for _, player in pairs(ataxia.playersHere) do
-          if table.contains(ataxiaBasher.fleeFromPlayers[gmcp.Room.Info.area], player) then
-            shouldFlee = true
-            break
-          end
-        end
-      end
-      if shouldFlee then
-        ataxiaBasher_areaoff()
-        ataxiaBasher.paused = true
-        expandAlias("mstop")
-        send("cq all")
-        send("touch shield")
-        ataxiaEcho("Hostile player detected in area! Fleeing and disabling basher.")
-      end
-   
-		elseif ataxia.afflictions.unknown and ataxia.afflictions.unknown >= 2 and not sent_diagnose then
-			send("queue addclear freestand diagnose", false)
-			sent_diagnose = tempTimer(3, [[sent_diagnose = nil]])
-		elseif ataxiaBasher.noShieldBreak.threshold > 0 and ataxia.vitals.hp < ataxiaBasher.noShieldBreak.threshold and ataxiaBasher_canShield() then
-			if not ataxia.defences.shield then
-				ataxiaEcho("Going to shield on balance!")
-				send("queue addclear freestand touch shield")
-			end
-		elseif ataxia.defences.shield and ataxiaBasher_bashingFuncs[class] and canStand() then
-			if ataxia.vitals.hpp >= 70 then
-				ataxiaBasher_assembleAttack()
-			end
-		elseif ataxiaBasher_bashingFuncs[class] and canStand() then
-			ataxiaBasher_assembleAttack()
-		elseif not ataxiaBasher_bashingFuncs[class] and canStand() then
-			ataxiaEcho(class.." isn't supported yet, sorry!")
-		end
-	end
-   ataxiaBasher_stormhammer()  
+
+  if danger == "wait" then return end
+
+  -- Player flee check (per-area configurable)
+  if ataxiaBasher_checkPlayerFlee() then return end
+
+  -- Diagnose if too many unknown afflictions
+  if ataxia.afflictions.unknown and ataxia.afflictions.unknown >= 2 and not sent_diagnose then
+    send("queue addclear freestand diagnose", false)
+    sent_diagnose = tempTimer(3, [[sent_diagnose = nil]])
+    return
+  end
+
+  if danger == "shield" then
+    send("queue addclear freestand touch shield")
+    return
+  end
+
+  -- danger == "attack"
+  local class = gmcp.Char.Status.class:title():gsub(" Lady", ""):gsub(" Lord", "")
+
+  -- If shielded, wait until HP recovers before dropping shield to attack
+  if ataxia.defences.shield then
+    if ataxia.vitals.hpp >= 70 and ataxiaBasher_bashingFuncs[class] and canStand() then
+      ataxiaBasher_assembleAttack()
+    end
+  elseif ataxiaBasher_bashingFuncs[class] and canStand() then
+    ataxiaBasher_assembleAttack()
+  elseif not ataxiaBasher_bashingFuncs[class] and canStand() then
+    ataxiaEcho(class.." isn't supported yet, sorry!")
+  end
 end
 
 -- ============================================================================
@@ -347,7 +290,6 @@ function ataxiaBasher_assembleAttack()
   end
 
 	get_Battlerage()
-  ataxiaBasher_stormhammer()
 	local command = ""
   local class = gmcp.Char.Status.class:title():gsub(" Lady", ""):gsub(" Lord", "")
 	local sp = ataxia.settings.separator

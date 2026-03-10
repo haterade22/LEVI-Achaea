@@ -11231,44 +11231,13 @@ function ataxiagui_populateChannels()
   end
 end
 
-local channelColors = {
-  ["says"]       = "&lt;cyan&gt;",
-  ["ct"]         = "&lt;red&gt;",
-  ["ht"]         = "&lt;yellow&gt;",
-  ["hts"]        = "&lt;yellow&gt;",
-  ["hnt"]        = "&lt;yellow&gt;",
-  ["ot"]         = "&lt;white&gt;",
-  ["party"]      = "&lt;magenta&gt;",
-  ["tell"]       = "&lt;yellow&gt;",
-  ["clt"]        = "&lt;white&gt;",
-  ["market"]     = "&lt;white&gt;",
-  ["newbie"]     = "&lt;green&gt;",
-  ["shout"]      = "&lt;teal&gt;",
-  ["yell"]       = "&lt;white&gt;",
-  ["armytell"]   = "&lt;white&gt;",
-}
-
--- Look up channel color using prefix matching (GMCP names have suffixes like "tells Proficy", "clt Holocaust Inc")
-local function getChannelColor(ch)
-  for prefix, color in pairs(channelColors) do
-    if string.starts(ch, prefix) then
-      return color
-    end
-  end
-  return "&lt;white&gt;"
-end
-
--- Strip ANSI escape sequences from GMCP text (they render as raw [0;37m etc. in miniconsoles)
-local function stripAnsi(s)
-  return s:gsub("\27%[[%d;]*m", "")
-end
-
 function ataxiagui_processChat(channel)
   if ataxia.usegui ~= nil and ataxia.usegui == false then return end
 
-	local text = stripAnsi(gmcp.Comm.Channel.Text.text)
+	local ofr, ofg, ofb = getFgColor()
+	local obr, obg, obb = getBgColor()
+	local text = ansi2decho(gmcp.Comm.Channel.Text.text)
 	local person = gmcp.Comm.Channel.Text.talker:title()
-	local color = getChannelColor(gmcp.Comm.Channel.Start)
 	if person == "The guardian spirit of the totem" then 
 		only_to_misc = false
 		return
@@ -11281,13 +11250,20 @@ function ataxiagui_processChat(channel)
   
   
   if person == gmcp.Char.Status.name or person == "You" then
-		ataxiagui.Chat[channel.."center"]:cecho(color .. text .. "&lt;reset&gt;\n")
-		ataxiagui.Chat.Allcenter:cecho(color .. text .. "&lt;reset&gt;\n")
+		ataxiagui.Chat[channel.."center"]:decho(text.."\n")
+		ataxiagui.Chat.Allcenter:decho(text.."\n")
 	elseif report then
-		ataxiagui.Chat[channel.."center"]:cecho(color .. text .. "&lt;reset&gt;\n")
+
+		if gmcp.Comm.Channel.Start == "shout" then
+			ataxiagui.Chat[channel.."center"]:cecho("&lt;cyan&gt; "..gmcp.Comm.Channel.Text.talker.."&lt;red&gt;: ")
+		end
+		ataxiagui.Chat[channel.."center"]:decho(text.."\n")
 
 		if not only_to_misc then
-			ataxiagui.Chat.Allcenter:cecho(color .. text .. "&lt;reset&gt;\n")
+			if gmcp.Comm.Channel.Start == "shout" then
+				ataxiagui.Chat.Allcenter:cecho("&lt;cyan&gt; "..gmcp.Comm.Channel.Text.talker.."&lt;red&gt;: ")
+			end
+			ataxiagui.Chat.Allcenter:decho(text.."\n")
 		end
 
     if string.find(gmcp.Comm.Channel.Start:lower(), "tell") and not string.find(gmcp.Comm.Channel.Start:lower(), "army") and not muteList[person] and person ~= "You" then 
@@ -23492,101 +23468,44 @@ ataxiaBasher_bashingFuncs = {
 }
 
 function ataxiaBasher_attack()
+  -- Determine danger level (flee/shield/attack/wait) — single check, no redundant logic
+  local danger = ataxiaBasher_dangerLevel()
 
-	local class = gmcp.Char.Status.class:title()
-  class = class:gsub(" Lady", ""):gsub(" Lord", "")
-  if ataxiaTemp.bashFlee == nil then
-    ataxiaTemp.bashFlee = false
+  if danger == "flee" then
+    ataxiaBasher_executeFlee()
+    return
   end
-  --Make a Magi Reflection Function
-if not ataxia.afflictions.aeon and not ataxia.afflictions.paralysis and not ataxia.afflictions.peace then
-    if ataxiaTemp.bashFlee == true then
-      ataxiaBasher.paused = true
-      ataxiaEcho("BASH FLEE IS TRUE/PAUSING BASHER/RUNNING BACK ONE ROOM")
-      send("cq all")
-      if mmp.paused then mmp.pause("off") end
-      if mmp.previousroom then
-        expandAlias("goto " ..mmp.previousroom)
-      else
-        ataxiaEcho("No previous room to flee to - shielding instead.")
-        send("touch shield")
-      end
-		  if ataxia.vitals.hp &gt;= ataxia.vitals.maxhp then
-			  ataxiaTemp.bashFlee = false
-        ataxiaBasher.paused = false
-        -- Cancel flee circuit breaker since we recovered
-        if ataxiaTemp.fleeCircuitBreaker then killTimer(ataxiaTemp.fleeCircuitBreaker); ataxiaTemp.fleeCircuitBreaker = nil end
-			  search_targets()
-			   if not found_target and ataxiaTemp.bashFlee == true then
-          if mmp.previousroom then
-				    ataxiaEcho("Healed to threshold, moving back to v"..mmp.previousroom..".")
-            ataxiaTemp.bashFlee = false
-            ataxiaBasher.paused = false
-            if mmp.paused then mmp.pause("off") end
-            expandAlias("goto " ..mmp.previousroom)
-            search_targets()
-          end
-			   end
-			  ataxiaBasher_patterns()
-        ataxiagui_updateVitals()
-      elseif ataxiaBasher.fleeThreshold and ataxia.vitals.hp &lt;= ataxiaBasher.fleeThreshold then
-        ataxiaTemp.bashFlee = true
-        ataxiaBasher.paused = true
-        ataxiaEcho("BASH FLEE IS TRUE/PAUSING BASHER/GETTING TO FULL HEALTH")
-        ataxiagui_updateVitals()
-      end
-    elseif ataxiaBasher.fleeThreshold and ataxia.vitals.hp &lt;= ataxiaBasher.fleeThreshold then
-        ataxiaTemp.bashFlee = true
-        ataxiaBasher.paused = true
-        ataxiaBasher_startFleeTimer()
-        send("cq all")
-        if mmp.paused then mmp.pause("off") end
-        if mmp.previousroom then
-          expandAlias("goto " ..mmp.previousroom)
-        else
-          ataxiaEcho("No previous room to flee to - shielding instead.")
-          send("touch shield")
-        end
-        ataxiagui_updateVitals()
-    elseif ataxiaBasher.fleeFromPlayers and ataxiaBasher.fleeFromPlayers[gmcp.Room.Info.area] then
-      -- Configurable per-area player flee: check if any hostile player matches the flee list
-      local shouldFlee = false
-      if type(ataxia.playersHere) == "table" then
-        for _, player in pairs(ataxia.playersHere) do
-          if table.contains(ataxiaBasher.fleeFromPlayers[gmcp.Room.Info.area], player) then
-            shouldFlee = true
-            break
-          end
-        end
-      end
-      if shouldFlee then
-        ataxiaBasher_areaoff()
-        ataxiaBasher.paused = true
-        expandAlias("mstop")
-        send("cq all")
-        send("touch shield")
-        ataxiaEcho("Hostile player detected in area! Fleeing and disabling basher.")
-      end
-   
-		elseif ataxia.afflictions.unknown and ataxia.afflictions.unknown &gt;= 2 and not sent_diagnose then
-			send("queue addclear freestand diagnose", false)
-			sent_diagnose = tempTimer(3, [[sent_diagnose = nil]])
-		elseif ataxiaBasher.noShieldBreak.threshold &gt; 0 and ataxia.vitals.hp &lt; ataxiaBasher.noShieldBreak.threshold and ataxiaBasher_canShield() then
-			if not ataxia.defences.shield then
-				ataxiaEcho("Going to shield on balance!")
-				send("queue addclear freestand touch shield")
-			end
-		elseif ataxia.defences.shield and ataxiaBasher_bashingFuncs[class] and canStand() then
-			if ataxia.vitals.hpp &gt;= 70 then
-				ataxiaBasher_assembleAttack()
-			end
-		elseif ataxiaBasher_bashingFuncs[class] and canStand() then
-			ataxiaBasher_assembleAttack()
-		elseif not ataxiaBasher_bashingFuncs[class] and canStand() then
-			ataxiaEcho(class.." isn't supported yet, sorry!")
-		end
-	end
-   ataxiaBasher_stormhammer()  
+
+  if danger == "wait" then return end
+
+  -- Player flee check (per-area configurable)
+  if ataxiaBasher_checkPlayerFlee() then return end
+
+  -- Diagnose if too many unknown afflictions
+  if ataxia.afflictions.unknown and ataxia.afflictions.unknown &gt;= 2 and not sent_diagnose then
+    send("queue addclear freestand diagnose", false)
+    sent_diagnose = tempTimer(3, [[sent_diagnose = nil]])
+    return
+  end
+
+  if danger == "shield" then
+    send("queue addclear freestand touch shield")
+    return
+  end
+
+  -- danger == "attack"
+  local class = gmcp.Char.Status.class:title():gsub(" Lady", ""):gsub(" Lord", "")
+
+  -- If shielded, wait until HP recovers before dropping shield to attack
+  if ataxia.defences.shield then
+    if ataxia.vitals.hpp &gt;= 70 and ataxiaBasher_bashingFuncs[class] and canStand() then
+      ataxiaBasher_assembleAttack()
+    end
+  elseif ataxiaBasher_bashingFuncs[class] and canStand() then
+    ataxiaBasher_assembleAttack()
+  elseif not ataxiaBasher_bashingFuncs[class] and canStand() then
+    ataxiaEcho(class.." isn't supported yet, sorry!")
+  end
 end
 
 -- ============================================================================
@@ -23786,7 +23705,6 @@ function ataxiaBasher_assembleAttack()
   end
 
 	get_Battlerage()
-  ataxiaBasher_stormhammer()
 	local command = ""
   local class = gmcp.Char.Status.class:title():gsub(" Lady", ""):gsub(" Lord", "")
 	local sp = ataxia.settings.separator
@@ -23842,8 +23760,8 @@ ataxiaBasher_specialRageThresholds = {
 }
 
 -- Generic battlerage handler for the standard pattern:
--- With 2+ targets: try special â†’ small â†’ large
--- With &lt;2 targets: try small â†’ large
+-- With 2+ targets: try special → small → large
+-- With &lt;2 targets: try small → large
 local function ataxiaBasher_standardBattlerage(class, specialRage, level, sp)
   local command = ""
   local brData = ataxiaBasher.battlerage[class]
@@ -23915,7 +23833,7 @@ function ataxiaBasher_assembleBattlerage()
 		if ataxia.vitals.rage &gt;= bigRage then
 			command = command.."reap "..target..sp
 		end
-	-- Psion: unique logic â€” special requires mobhealth &gt;= 40, rage &gt;= 40, and small NOT on CD; large at 25 rage
+	-- Psion: unique logic — special requires mobhealth &gt;= 40, rage &gt;= 40, and small NOT on CD; large at 25 rage
 	elseif gmcp.Char.Status.class == "Psion" then
 		local mobhp = tonumber((gmcp.IRE.Target.Info.hpperc or "0"):gsub("%%", "")) or 0
 		local brData = ataxiaBasher.battlerage[class]
@@ -29985,44 +29903,13 @@ local function detectChannelFromText(text)
   return nil
 end
 
-local channelColors = {
-  ["says"]       = "&lt;cyan&gt;",
-  ["ct"]         = "&lt;red&gt;",
-  ["ht"]         = "&lt;yellow&gt;",
-  ["hts"]        = "&lt;yellow&gt;",
-  ["hnt"]        = "&lt;yellow&gt;",
-  ["ot"]         = "&lt;white&gt;",
-  ["party"]      = "&lt;magenta&gt;",
-  ["tell"]       = "&lt;yellow&gt;",
-  ["clt"]        = "&lt;white&gt;",
-  ["market"]     = "&lt;white&gt;",
-  ["newbie"]     = "&lt;green&gt;",
-  ["shout"]      = "&lt;teal&gt;",
-  ["yell"]       = "&lt;white&gt;",
-  ["armytell"]   = "&lt;white&gt;",
-}
-
--- Look up channel color using prefix matching (GMCP names have suffixes like "tells Proficy", "clt Holocaust Inc")
-local function getChannelColor(ch)
-  for prefix, color in pairs(channelColors) do
-    if string.starts(ch, prefix) then
-      return color
-    end
-  end
-  return "&lt;white&gt;"
-end
-
--- Strip ANSI escape sequences from GMCP text (they render as raw [0;37m etc. in miniconsoles)
-local function stripAnsi(s)
-  return s:gsub("\27%[[%d;]*m", "")
-end
-
 function zgui.showChat()
   local shortName = ""
   local chatWindow = false
-  local text = stripAnsi(gmcp.Comm.Channel.Text.text)
+	local ofr, ofg, ofb = getFgColor()
+	local obr, obg, obb = getBgColor()
+  local text = ansi2decho(gmcp.Comm.Channel.Text.text)
   local person = gmcp.Comm.Channel.Text.talker:title()
-  local color = getChannelColor(gmcp.Comm.Channel.Start)
   
   for k,v in pairs(gmcp.Comm.Channel.List) do
     shortName = gmcp.Comm.Channel.List[k].command
@@ -30087,15 +29974,21 @@ function zgui.showChat()
   
   
   if person == gmcp.Char.Status.name or person == "You" then
-    cecho(chatWindow, color .. text .. "&lt;reset&gt;\n")
+    decho(chatWindow, text.."\n")
     if chatWindow ~= "All" then
-      cecho("All", color .. text .. "&lt;reset&gt;\n")
+		  decho("All", text.."\n")
     end
 	elseif report then
-		cecho(chatWindow, color .. text .. "&lt;reset&gt;\n")
+		if gmcp.Comm.Channel.Start == "shout" then
+      cecho(chatWindow, "&lt;cyan&gt; "..person.."&lt;red&gt;: ")
+		end
+		decho(chatWindow, text.."\n")
 
 		if not only_to_misc and chatWindow ~= "All" then
-			cecho("All", color .. text .. "&lt;reset&gt;\n")
+			if gmcp.Comm.Channel.Start == "shout" then
+				cecho("All", "&lt;cyan&gt; "..gmcp.Comm.Channel.Text.talker.."&lt;red&gt;: ")
+			end
+			decho("All", text.."\n")
 		end
 
     if string.find(gmcp.Comm.Channel.Start:lower(), "tell") and not string.find(gmcp.Comm.Channel.Start:lower(), "army") and not muteList[person] and person ~= "You" then 

@@ -16,44 +16,13 @@ local function detectChannelFromText(text)
   return nil
 end
 
-local channelColors = {
-  ["says"]       = "<cyan>",
-  ["ct"]         = "<red>",
-  ["ht"]         = "<yellow>",
-  ["hts"]        = "<yellow>",
-  ["hnt"]        = "<yellow>",
-  ["ot"]         = "<white>",
-  ["party"]      = "<magenta>",
-  ["tell"]       = "<yellow>",
-  ["clt"]        = "<white>",
-  ["market"]     = "<white>",
-  ["newbie"]     = "<green>",
-  ["shout"]      = "<teal>",
-  ["yell"]       = "<white>",
-  ["armytell"]   = "<white>",
-}
-
--- Look up channel color using prefix matching (GMCP names have suffixes like "tells Proficy", "clt Holocaust Inc")
-local function getChannelColor(ch)
-  for prefix, color in pairs(channelColors) do
-    if string.starts(ch, prefix) then
-      return color
-    end
-  end
-  return "<white>"
-end
-
--- Strip ANSI escape sequences from GMCP text (they render as raw [0;37m etc. in miniconsoles)
-local function stripAnsi(s)
-  return s:gsub("\27%[[%d;]*m", "")
-end
-
 function zgui.showChat()
   local shortName = ""
   local chatWindow = false
-  local text = stripAnsi(gmcp.Comm.Channel.Text.text)
+	local ofr, ofg, ofb = getFgColor()
+	local obr, obg, obb = getBgColor()
+  local text = ansi2decho(gmcp.Comm.Channel.Text.text)
   local person = gmcp.Comm.Channel.Text.talker:title()
-  local color = getChannelColor(gmcp.Comm.Channel.Start)
   
   for k,v in pairs(gmcp.Comm.Channel.List) do
     shortName = gmcp.Comm.Channel.List[k].command
@@ -118,15 +87,21 @@ function zgui.showChat()
   
   
   if person == gmcp.Char.Status.name or person == "You" then
-    cecho(chatWindow, color .. text .. "<reset>\n")
+    decho(chatWindow, text.."\n")
     if chatWindow ~= "All" then
-      cecho("All", color .. text .. "<reset>\n")
+		  decho("All", text.."\n")
     end
 	elseif report then
-		cecho(chatWindow, color .. text .. "<reset>\n")
+		if gmcp.Comm.Channel.Start == "shout" then
+      cecho(chatWindow, "<cyan> "..person.."<red>: ")
+		end
+		decho(chatWindow, text.."\n")
 
 		if not only_to_misc and chatWindow ~= "All" then
-			cecho("All", color .. text .. "<reset>\n")
+			if gmcp.Comm.Channel.Start == "shout" then
+				cecho("All", "<cyan> "..gmcp.Comm.Channel.Text.talker.."<red>: ")
+			end
+			decho("All", text.."\n")
 		end
 
     if string.find(gmcp.Comm.Channel.Start:lower(), "tell") and not string.find(gmcp.Comm.Channel.Start:lower(), "army") and not muteList[person] and person ~= "You" then 

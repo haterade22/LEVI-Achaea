@@ -52,44 +52,13 @@ function ataxiagui_populateChannels()
   end
 end
 
-local channelColors = {
-  ["says"]       = "<cyan>",
-  ["ct"]         = "<red>",
-  ["ht"]         = "<yellow>",
-  ["hts"]        = "<yellow>",
-  ["hnt"]        = "<yellow>",
-  ["ot"]         = "<white>",
-  ["party"]      = "<magenta>",
-  ["tell"]       = "<yellow>",
-  ["clt"]        = "<white>",
-  ["market"]     = "<white>",
-  ["newbie"]     = "<green>",
-  ["shout"]      = "<teal>",
-  ["yell"]       = "<white>",
-  ["armytell"]   = "<white>",
-}
-
--- Look up channel color using prefix matching (GMCP names have suffixes like "tells Proficy", "clt Holocaust Inc")
-local function getChannelColor(ch)
-  for prefix, color in pairs(channelColors) do
-    if string.starts(ch, prefix) then
-      return color
-    end
-  end
-  return "<white>"
-end
-
--- Strip ANSI escape sequences from GMCP text (they render as raw [0;37m etc. in miniconsoles)
-local function stripAnsi(s)
-  return s:gsub("\27%[[%d;]*m", "")
-end
-
 function ataxiagui_processChat(channel)
   if ataxia.usegui ~= nil and ataxia.usegui == false then return end
 
-	local text = stripAnsi(gmcp.Comm.Channel.Text.text)
+	local ofr, ofg, ofb = getFgColor()
+	local obr, obg, obb = getBgColor()
+	local text = ansi2decho(gmcp.Comm.Channel.Text.text)
 	local person = gmcp.Comm.Channel.Text.talker:title()
-	local color = getChannelColor(gmcp.Comm.Channel.Start)
 	if person == "The guardian spirit of the totem" then 
 		only_to_misc = false
 		return
@@ -102,13 +71,20 @@ function ataxiagui_processChat(channel)
   
   
   if person == gmcp.Char.Status.name or person == "You" then
-		ataxiagui.Chat[channel.."center"]:cecho(color .. text .. "<reset>\n")
-		ataxiagui.Chat.Allcenter:cecho(color .. text .. "<reset>\n")
+		ataxiagui.Chat[channel.."center"]:decho(text.."\n")
+		ataxiagui.Chat.Allcenter:decho(text.."\n")
 	elseif report then
-		ataxiagui.Chat[channel.."center"]:cecho(color .. text .. "<reset>\n")
+
+		if gmcp.Comm.Channel.Start == "shout" then
+			ataxiagui.Chat[channel.."center"]:cecho("<cyan> "..gmcp.Comm.Channel.Text.talker.."<red>: ")
+		end
+		ataxiagui.Chat[channel.."center"]:decho(text.."\n")
 
 		if not only_to_misc then
-			ataxiagui.Chat.Allcenter:cecho(color .. text .. "<reset>\n")
+			if gmcp.Comm.Channel.Start == "shout" then
+				ataxiagui.Chat.Allcenter:cecho("<cyan> "..gmcp.Comm.Channel.Text.talker.."<red>: ")
+			end
+			ataxiagui.Chat.Allcenter:decho(text.."\n")
 		end
 
     if string.find(gmcp.Comm.Channel.Start:lower(), "tell") and not string.find(gmcp.Comm.Channel.Start:lower(), "army") and not muteList[person] and person ~= "You" then 

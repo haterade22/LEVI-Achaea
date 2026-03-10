@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-03-10 — Perf: Basher attack hot-path optimization
+
+The basher attack dispatch (`ataxiaBasher_attack()`) ran ~90 lines of deeply nested inline flee logic with recursive calls, redundant function invocations (stormhammer recomputed 3x, search_targets 3x, updateVitals redundantly), all executing every prompt when health was low. The clean danger-level system (`ataxiaBasher_dangerLevel()` / `ataxiaBasher_executeFlee()`) existed but was dead code — never wired into the attack path.
+
+**Fix**: Replaced the entire inline flee/shield/threshold block with clean calls to the existing danger-level system. Removed redundant `ataxiaBasher_stormhammer()` call from `ataxiaBasher_assembleAttack()` (already called once per prompt cycle via dirty-flag in `ataxiaBasher_patterns()`). Eliminated recursive `ataxiaBasher_patterns()` call and redundant `search_targets()` / `ataxiagui_updateVitals()` calls from the attack path.
+
+| File | Changes |
+|------|---------|
+| `scripts/.../basher/001_Bashing_Functions.lua` | Rewrote `ataxiaBasher_attack()` to use `ataxiaBasher_dangerLevel()` + `ataxiaBasher_executeFlee()`. Removed redundant `ataxiaBasher_stormhammer()` from `ataxiaBasher_assembleAttack()` |
+
+---
+
+## 2026-03-10 — Fix: Chat windows lose original MUD colors
+
+Chat capture was stripping all ANSI escape sequences and applying a flat per-channel color (e.g., all "says" in cyan). This lost the MUD's original per-word coloring (player names, channel tags, speech text).
+
+**Fix**: Replaced `stripAnsi()` + `cecho()` with Mudlet's built-in `ansi2decho()` + `decho()`, which converts ANSI escape codes to decho color format and preserves the original coloring from the server.
+
+| File | Changes |
+|------|---------|
+| `scripts/.../update_windows/001_showChat.lua` | Removed `stripAnsi()`, `channelColors`, `getChannelColor()`. Use `ansi2decho()` + `decho()` for display |
+| `scripts/.../gui_stuff/003_Chat_Capture_Things.lua` | Same changes for the ataxiagui chat system |
+
+---
+
 ## 2026-03-10 — Fix: Death/starburst causes double death from basher spam
 
 When dying during bashing, the basher would keep attacking on the next prompt — causing a second death immediately after starburst resurrection. Three root causes:
