@@ -80,7 +80,18 @@ ataxia setup guide ndb       -- Players: city colours, enemy format, notes, whoi
 ataxia setup status          -- One-page overview of all current values
 ```
 
-### 4. Test Basic Functionality
+### 4. Updating the System
+
+The system checks for updates automatically on every login (5 seconds after load). If a new version is available, you'll see a notification.
+
+To update:
+```
+sysupdate
+```
+
+This downloads the latest package from GitHub, replaces the old installation, and cleans up automatically. No manual download or reinstall needed.
+
+### 5. Test Basic Functionality
 
 ```lua
 -- Test mapper
@@ -218,6 +229,17 @@ Each item type has a `_groups.yaml` defining the folder tree in Mudlet. The conv
 ---
 
 ## Common Tasks
+
+### Updating the Package
+
+**For users**: Just type `sysupdate` in-game. The system handles everything automatically.
+
+**For developers releasing a new version**:
+1. Update `version.txt` with the new version string
+2. Update `muddler_project/mfile` → `"version": "X.Y"`
+3. Update `ataxiaVersion` in `src_new/scripts/.../levi_ataxia/_groups.yaml` init script
+4. Rebuild (see below)
+5. Push `version.txt` and `muddler_project/build/Levi_Ataxia.mpackage` to GitHub
 
 ### Rebuild After Editing
 

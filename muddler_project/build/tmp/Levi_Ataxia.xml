@@ -3744,6 +3744,67 @@ end
 <eventHandlerList>
 </eventHandlerList>
 </Script>
+        <Script isActive="yes" isFolder="no">
+  <name>Auto_Update</name>
+          <script>ataxia.updater = ataxia.updater or {}
+
+local UPDATE_URL = "https://github.com/haterade22/LEVI-Achaea/raw/main/muddler_project/build/Levi_Ataxia.mpackage"
+local VERSION_URL = "https://raw.githubusercontent.com/haterade22/LEVI-Achaea/main/version.txt"
+
+function ataxia.updater.checkVersion()
+  ataxia.updater.versionFile = getMudletHomeDir() .. "/levi_version_check.txt"
+  downloadFile(ataxia.updater.versionFile, VERSION_URL)
+end
+
+function ataxia.updater.doUpdate()
+  ataxia.updater.packageFile = getMudletHomeDir() .. "/Levi_update.mpackage"
+  ataxia_Echo("Downloading latest Levi Ataxia update...")
+  downloadFile(ataxia.updater.packageFile, UPDATE_URL)
+end
+
+function ataxia.updater.onDownloadDone(_, filename)
+  if filename == ataxia.updater.versionFile then
+    local f = io.open(filename, "r")
+    if f then
+      local latest = f:read("*all"):gsub("%s+", "")
+      f:close()
+      os.remove(filename)
+      if latest ~= ataxiaVersion then
+        cecho("\n&lt;a_darkcyan&gt;(&lt;a_darkmagenta&gt;LEVI&lt;a_darkcyan&gt;): &lt;orange&gt;Levi Ataxia v" .. ataxiaVersion .. " loaded.\n")
+        cecho("&lt;a_darkcyan&gt;(&lt;a_darkmagenta&gt;LEVI&lt;a_darkcyan&gt;): &lt;red&gt;New version available: " .. latest .. "\n")
+        cecho("&lt;a_darkcyan&gt;(&lt;a_darkmagenta&gt;LEVI&lt;a_darkcyan&gt;): &lt;yellow&gt;Type SYSUPDATE to update.\n\n")
+      else
+        cecho("\n&lt;a_darkcyan&gt;(&lt;a_darkmagenta&gt;LEVI&lt;a_darkcyan&gt;): &lt;green&gt;Levi Ataxia v" .. ataxiaVersion .. " is up to date.\n\n")
+      end
+    end
+  elseif filename == ataxia.updater.packageFile then
+    ataxia_Echo("Download complete. Installing...")
+    uninstallPackage("Levi_Ataxia")
+    tempTimer(1, function()
+      installPackage(ataxia.updater.packageFile)
+      os.remove(ataxia.updater.packageFile)
+      ataxia_Echo("Levi Ataxia updated successfully!")
+    end)
+  end
+end
+
+function ataxia.updater.onDownloadError(_, errMsg, url)
+  if url and (url:find("haterade22/LEVI%-Achaea") or url:find("version%.txt")) then
+    ataxia_Echo("Update check failed: " .. tostring(errMsg))
+  end
+end
+
+-- Check for updates on load
+registerAnonymousEventHandler("sysLoadEvent", function()
+  tempTimer(5, function() ataxia.updater.checkVersion() end)
+end)
+</script>
+  <packageName/>
+<eventHandlerList>
+<string>sysDownloadDone</string>
+<string>sysDownloadError</string>
+</eventHandlerList>
+</Script>
 </ScriptGroup>
       <ScriptGroup isActive="yes" isFolder="yes">
   <name>System-related</name>
@@ -79696,6 +79757,14 @@ end
   <command/>
   <packageName/>
   <regex>^shroom$</regex>
+</Alias>
+        <Alias isActive="yes" isFolder="no">
+  <name>Sysupdate</name>
+          <script>ataxia.updater.doUpdate()
+</script>
+  <command/>
+  <packageName/>
+  <regex>^sysupdate$</regex>
 </Alias>
 </AliasGroup>
       <AliasGroup isActive="yes" isFolder="yes">

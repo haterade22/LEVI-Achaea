@@ -1568,6 +1568,10 @@
       {
         "name": "SHROOM",
         "regex": "^shroom$"
+      },
+      {
+        "name": "Sysupdate",
+        "regex": "^sysupdate$"
       }
     ]
   },

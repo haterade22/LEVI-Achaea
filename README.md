@@ -101,6 +101,15 @@ Defaults: health, mana, and cape enabled; willpower and endurance off. Drag bars
 | **Multi-Game** | Supports Achaea, Aetolia, Lusternia, Imperian |
 | **Area Navigation** | `mmp.gotoArea(name)`, `mmp.gotoFeature(name)` |
 
+### Auto-Update System
+
+| Feature | Description |
+|---------|-------------|
+| **Version Check** | Automatic check on login — compares local version against GitHub `version.txt` |
+| **One-Command Update** | Type `sysupdate` to download, uninstall old, install new, and clean up |
+| **Async Downloads** | Uses Mudlet's `sysDownloadDone` event pattern (no fragile timer delays) |
+| **Error Handling** | Reports download failures via `sysDownloadError` |
+
 ### Configuration & Setup
 
 | Feature | Description |
@@ -287,6 +296,18 @@ V3 is the single source of truth. The legacy boolean table (`tAffs`) is maintain
 3. Select the `.mpackage` file
 
 > **Note**: The `packages/` directory contains legacy XML builds. For the current version, always build from source using the steps below.
+
+## Updating
+
+The system includes a built-in auto-updater. On every login, it checks for new versions automatically.
+
+| Scenario | What happens |
+|----------|-------------|
+| **Up to date** | Shows "Levi Ataxia vX.Y is up to date" |
+| **New version available** | Shows notification with the new version number |
+| **To update** | Type `sysupdate` in-game |
+
+The `sysupdate` command downloads the latest `.mpackage` from GitHub, uninstalls the old package, installs the new one, and cleans up automatically.
 
 ---
 
@@ -556,6 +577,7 @@ LEVI-Achaea/
 │   └── artefacts-reference.md  #   Artefact effects reference
 ├── .claude/
 │   └── classes/                # 26 class mechanic files + lock_types.md
+├── version.txt                 # Package version (fetched by auto-updater on login)
 ├── CLAUDE.md                   # Full system documentation (AI assistant guide)
 ├── GETTING_STARTED.md          # Setup and usage guide
 ├── CHANGELOG.md                # Change history
