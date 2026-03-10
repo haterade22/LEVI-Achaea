@@ -230,7 +230,7 @@ function ataxia_defaultCuringPrios()
 
     ["serioustrauma"] = 17,   -- Salve.
     ["mildtrauma"] = 17,      -- Salve.
-    ["pressure"] = 17,        -- Smoke.
+    ["pressure"] = 25,        -- Smoke. Deprioritized.
     --["rebounding"] = 18,    -- (DEFENCE QUEUE SLOT 18) IMPORTANT: keep below pressure
 
     ["burning"] = 19,         -- Salve.
@@ -248,6 +248,7 @@ function ataxia_defaultCuringPrios()
     ["laceratedthroat"] = 19, -- Salve.
     ["selarnia"] = 20,        -- Salve.
 
+    ["stridulating"] = 24,    -- Deprioritized.
     ["indifference"] = 25,    -- Bellwort. Deprioritized.
 
     ["blindness"] = 26,       -- Ignored by SSC (custom handling).
