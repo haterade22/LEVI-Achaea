@@ -222,9 +222,9 @@ function ataxia_ravagedMindSwap(event, affliction)
   if not ataxia.prioritySwaps then ataxia_resetSwaps() end
 	if not ataxia.prioritySwaps.ravaged or not ataxia.prioritySwaps.ravaged.active or affliction ~= "mindravaged" then return end
 	if event == "aff gained" and ataxia.settings.priohealth then
-		send("curing priority mana",false)
+		ataxia_sendCuringPriority("curing priority mana", false)
 	elseif event == "aff cured" then
-		send("curing priority health",false)
+		ataxia_sendCuringPriority("curing priority health", false)
 	end
 end
 registerAnonymousEventHandler("aff gained", "ataxia_ravagedMindSwap")

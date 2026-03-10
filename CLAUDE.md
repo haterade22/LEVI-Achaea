@@ -197,7 +197,7 @@ All combat systems in `src_new/scripts/levi_ataxia/levi/levi_scripts/`:
 | **i_snb** | 1 | Undocumented | Infernal SnB | `i_snb/` |
 | **mage** | 1 | Undocumented | Elemental | `mage/` |
 | **pariah** | 1 | Undocumented | Plague/swarm | `pariah/` |
-| **psion** | 1 | Undocumented | Mental stack | `psion/` |
+| **psion** | 1 | **Documented** | Mana kill, deconstruct, flurry burst | `psion/` |
 | **s_n_b** | 1 | Undocumented | Sword and Board | `s_n_b/` |
 | **serpent** | 1 (002) | **Documented** | Ekanelia lock, darkshade, scytherus | `serpent/` |
 | **shaman** | 1 (028) | **Documented** | Tzantza, locks, bleed | `shaman/` |
@@ -1754,6 +1754,191 @@ See `.claude/classes/apostate.md` for complete class mechanics and implementatio
 
 ---
 
+## Psion Combat System
+
+### Overview
+The Psion offensive system provides automated weave-based combat with multiple simultaneous kill routes: mana kill (Psi Excise), unweave execute (Deconstruct), and damage burst (Flurry). Rebuilt from 720 lines of duplicated global functions into a unified `psion` namespace with V3 affliction tracker integration and rebounding handling.
+
+### Key Files
+| File | Purpose |
+|------|---------|
+| `src_new/scripts/.../psion/001_Levi_Psion_Logic.lua` | Complete unified system with `psion` namespace |
+| `src_new/triggers/.../leviticus/` (517-529) | Weave hit triggers (limb damage tracking) |
+| `src_new/triggers/.../leviticus/` (645) | Contemplate trigger (target mana % → `pm` global) |
+| `src_new/triggers/.../psion/` (001-003) | Transcendence tracking triggers |
+| `src_new/scripts/.../limb_management/006_Psion_Limb_Tracking.lua` | `psion_hitLimb()` — limb damage from weaves |
+
+### Kill Routes (2 Modes)
+| Mode | Command | Description |
+|------|---------|-------------|
+| **mind** | `psion.setMode("mind")` / `psmind` | Unweave pressure + mana kill via Psi Blast → Mind Ravaged → Psi Excise at 30% mana |
+| **flurry** | `psion.setMode("flurry")` / `psflurry` | Invert unweaves to spirit → Flurry for percent-based HP burst damage |
+
+### Attack Structure (Per Balance)
+Each attack consists of three simultaneous commands chained via separator:
+```
+psi transcend <type> <target>    -- Resource spend (blast/excise/muddle/shatter)
+weave prepare <aff>              -- Free affliction (disruption/laceration/vapours/rattle)
+weave <attack> <target>          -- Main weave attack (overhand/backhand/deathblow/unweave/etc.)
+```
+Plus suffix: `enact lightbind <target>` (if not active) + `assess <target>` + `contemplate <target>`
+
+### Kill Route Details
+
+#### Primary: Psi Excise (Mana Kill)
+```
+1. Apply unweaving mind + unweaving body (these auto-level every 4s)
+2. Stack plumbum afflictions (impatience, stupidity, dizziness, epilepsy)
+3. Once 3+ plumbum affs present → PSI BLAST → gives mind ravaged
+4. Mind ravaged: every hit drains target mana + unweaving mind drains mana
+5. When target mana ≤ 30% → PSI EXCISE for instant kill
+```
+
+#### Alternative: Deconstruct (Unweave Execute)
+```
+Any TWO unweave types (mind/body/spirit) at level 3+ = DECONSTRUCT instant kill
+System checks via psion.canDeconstruct() — counts criticalmind/criticalbody/criticalspirit
+```
+
+#### Alternative: Flurry (Damage Burst)
+```
+1. Invert unweaves from mind/body → spirit
+2. Let spirit unweave auto-level while asthma blocks smoke cure
+3. At high level, FLURRY for ~90% max HP damage
+```
+
+### Weave Selection Priority (`psion.selectWeave()`)
+The unified decision engine (both modes) evaluates in order:
+1. **Deconstruct** — 2+ critical unweaves = instant kill
+2. **[Flurry only] Flurry** — Inverted + spirit unweave ready
+3. **Head attacks** — Damaged head → overhand (impatience); prepped head → overhand/backhand/deathblow
+4. **Prone attacks** — Prone target → overhand (impatience) / backhand (stupidity/dizziness)
+5. **Standing mentals** — [Mind mode, not mind-ravaged] backhand for stupidity/dizziness
+6. **Unweave spirit** — When mind+body applied and asthma blocks cure
+7. **Filler affs** — Both unweaves applied → class-aware fillers (Priest/Occ/Pariah: weariness first; others: clumsiness first)
+8. **Apply unweaves** — Missing body → unweave body; missing mind → unweave mind
+
+### Prepare Selection (`psion.selectPrepare()`)
+Free affliction delivered with every attack:
+1. Mind ravaged + no haemophilia → laceration (bleed pressure)
+2. [Flurry] Impatience present + no epilepsy → rattle
+3. No paralysis → disruption
+4. No haemophilia → laceration
+5. No asthma → vapours
+6. Fallback → rattle (epilepsy)
+
+### Transcend Selection (`psion.selectTranscend()`)
+1. Mana ≤ 30% → excise (instant kill)
+2. Psi blast ready + not mind-ravaged → blast (apply mind ravaged)
+3. No muddled → muddle
+4. Fallback → shatter
+
+### Rebounding Handling (NEW)
+Recent game change: Psion weave attacks are now blocked by rebounding aura.
+
+**Bypass rules:**
+- Unweaves (mind/body/spirit) **bypass** rebounding
+- Deconstruct **bypasses** rebounding
+- Regular weaves (overhand/backhand/deathblow/sever/puncture/cleave) are **blocked**
+
+**Strategy in `psion.buildAttack()`:**
+```lua
+if hasRebounding and not weaveBypassesRebounding(weave) then
+  -- Strip rebounding with weave cleave, then resume normal offense next round
+  return transcend + prepare + "weave cleave " .. target
+end
+```
+This is optimal because early-fight rounds naturally use unweaves (which bypass), and cleave is only needed for mid/late-fight filler weaves.
+
+### Attack Builder Priority (`psion.buildAttack()`)
+1. **Shield** → cleave to strip
+2. **Mana ≤ 30%** → psi excise (instant kill)
+3. **Rebounding + non-bypass weave** → cleave to strip
+4. **[Flurry] Invert conditions** → invert or flurry attack
+5. **Normal** → transcend + prepare + weave
+
+### Dispatch Guard Chain (`psion.dispatch()`)
+```
+1. Target validation (exists, is string, non-empty)
+2. Aeon check (ataxia.afflictions.aeon)
+3. Balance gate (gmcp.Char.Vitals.bal ~= "1")
+4. reboundHold.gate() — OUR defensive rebounding timing
+5. Pre-combat: getLockingAffliction() + checkTargetLocks()
+6. Build and send attack
+7. Combat echo (if enabled)
+```
+
+### V3 Affliction Tracking Integration
+| Helper | Purpose |
+|--------|---------|
+| `psion.hasAff(aff)` | Routes to `haveAff()` → V3 at 30% threshold |
+| `psion.getAffProb(aff)` | Routes to `getAffProbabilityV3()` (0.0-1.0) |
+| `psion.hasRebounding()` | V1 fallback: `haveAff("rebounding") or (tAffs and tAffs.rebounding)` — needed for GMCP timing gap |
+| `psion.hasShield()` | V1 fallback: same pattern as rebounding |
+| `psion.canDeconstruct()` | Count critical unweaves ≥ 2 |
+| `psion.canPsiBlast()` | `checkAffList(PSI_BLAST_AFFS, 3)` — 3+ of 6 qualifying affs |
+| `psion.isLimbPrepped(limb)` | Limb damage + weave damage ≥ 100 |
+| `psion.isHeadDoublePrepped()` | Head damage + 2 weave hits ≥ 100 |
+
+### Globals Read from Triggers
+| Global | Source | Purpose |
+|--------|--------|---------|
+| `pm` | Contemplate trigger (645) | Target mana % (default 100) |
+| `lightbind` | Lightbind triggers (289/290) | Whether lightbind is active on target |
+| `inverted` | Invert trigger | Whether unweaves are inverted (flurry mode) |
+| `target` | System-wide | Current target name |
+
+### Psi Blast Condition
+Need 3+ of these afflictions on target:
+- Unweaving Mind, Blackout, Epilepsy, Stupidity, Impatience, Dizziness
+
+### Commands
+| Alias | Regex | Action |
+|-------|-------|--------|
+| `psmind` | `^psmind$` | `psion.setMode("mind"); psion.dispatch()` |
+| `psflurry` | `^psflurry$` | `psion.setMode("flurry"); psion.dispatch()` |
+| `psstatus` | `^psstatus$` | `psion.status()` — full status display |
+| `psreset` | `^psreset$` | `psion.reset()` — clear state |
+| `psdebug` | `^psdebug$` | Toggle debug echo |
+| `zz` | `^zz$` | `psion.dispatch()` (when class == "Psion") |
+
+### Backward Compatibility
+| Legacy Function | Action |
+|-----------------|--------|
+| `levipsionmind()` | `psion.setMode("mind"); psion.dispatch()` |
+| `levipsionflurry()` | `psion.setMode("flurry"); psion.dispatch()` |
+
+### Configuration
+```lua
+psion.state = {
+  mode = "mind",             -- "mind" or "flurry"
+  attackInFlight = false,    -- dispatch dedup flag
+  lastPrepare = nil,         -- last selected prepare (for echo)
+  lastWeave = nil,           -- last selected weave (for echo)
+  lastTranscend = nil,       -- last selected transcend (for echo)
+}
+
+psion.config = {
+  debug = false,             -- enable debug echo
+  echoStrategy = true,       -- show combat echo after each attack
+  partyRelay = true,         -- relay to party
+}
+```
+
+### Combat Echo
+Compact one-line status after each attack:
+```
+[PS] mind overhand prep:disruption trans:muddle [SOFTLOCK] [BLAST RDY] [LOW MANA]
+```
+- Weave color-coded: cyan=unweave, red=deconstruct, orange=flurry, yellow=head attacks
+- Lock status: SOFTLOCK/HARDLOCK/TRUELOCK
+- Kill conditions: BLAST RDY, EXCISE!, LOW MANA
+
+### Documentation
+See `.claude/classes/psion.md` for complete class mechanics, kill routes, defensive abilities, and counter-strategy documentation.
+
+---
+
 ## Lessons Learned (Combat System Development)
 
 ### Mudlet Trigger Patterns
@@ -1910,7 +2095,7 @@ Claude Code agent teams enable parallel development across isolated combat subsy
 
 ---
 
-**Last Updated**: 2026-03-09
+**Last Updated**: 2026-03-10
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia

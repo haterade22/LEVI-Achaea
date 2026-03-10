@@ -39,21 +39,12 @@ patterns:
 if target == matches[2] then
 
   if tAffs.weariness and tAffs.nausea then
-      if tburns == 0 or nil then 
-       tburns = 1
-      elseif tburns == 1 then
-       tburns = 2
-      elseif tburns == 2 then
-       tburns = 3
-      elseif tburns == 3 then
-       tburns = 4
-      elseif tburns == 4 then
-       tburns = 5
-      elseif tburns == 5 then
-	     tburns = 5
+      magi.offense = magi.offense or {}
+      magi.offense.state = magi.offense.state or {}
+      magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
+      tburns = magi.offense.state.burns -- backward compat
+      tarAffed("burning")
       cecho(" <DimGrey>[<red>"..tburns.."/5<DimGrey>]")
-      end
-    
   end
 
   if not tAffs.weariness and not tAffs.nausea then
@@ -73,19 +64,11 @@ if target == matches[2] then
   end
 
   if not tAffs.nausea and tAffs.weariness then
-    if tburns == 0 then 
-      tburns = 1
-    elseif tburns == 1 then
-      tburns = 2
-    elseif tburns == 2 then
-     tburns = 3
-    elseif tburns == 3 then
-      tburns = 4
-    elseif tburns == 4 then
-      tburns = 5
-    elseif tburns == 5 then
-	    tburns = 5
-    end
+    magi.offense = magi.offense or {}
+    magi.offense.state = magi.offense.state or {}
+    magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
+    tburns = magi.offense.state.burns -- backward compat
+    tarAffed("burning")
     tarAffed("frozen")
     tarAffed("nausea")
     haveAff("weariness")

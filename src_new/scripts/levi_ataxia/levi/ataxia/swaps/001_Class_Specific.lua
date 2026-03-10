@@ -45,13 +45,13 @@ function prioritySwap_magiSalveChange(event, affliction)
   if not ataxia.prioritySwaps.magi.active then return end
 	if event == "aff gained" then
 		if affliction == "dehydrated" or (affliction == "burning" and affed("dehydrated")) and ataxia_getPrio("dehydrated") > 1 then
-			send("curing priority burning 1", false)
+			ataxia_sendCuringPriority("curing priority burning 1", false)
 		elseif affliction == "hypothermia" then
-			send("curing priority shivering 20;curing priority frozen 20",false)
+			ataxia_sendCuringPriority("curing priority shivering 20;curing priority frozen 20", false)
 		end
 		
 		if affed("frozen") or affed("shivering") and ataxia_getPrio("frozen") ~= 2 then
-			send("curing priority frozen 2 shivering 2;curing priority defence insulation 2",false)
+			ataxia_sendCuringPriority("curing priority frozen 2 shivering 2;curing priority defence insulation 2", false)
 		end
 	end
 end
@@ -62,14 +62,14 @@ function prioritySwap_magiSalveReturn(event, affliction)
 	if event == "aff cured" then
 		if affliction == "hypothermia" then
       if affed("frozen") or affed("shivering") and ataxia_getPrio("frozen") ~= 2 then
-				send("curing priority frozen 2 shivering 2;curing priority defence insulation 2",false)
+				ataxia_sendCuringPriority("curing priority frozen 2 shivering 2;curing priority defence insulation 2", false)
       else
         if ataxia_getPrio("frozen") ~= ataxia_defaultPrioAff("frozen") then
           ataxia_restorePrio("frozen")
         end
         if ataxia_getPrio("shivering") ~= ataxia_defaultPrioAff("shivering") then
           ataxia_restorePrio("shivering")
-          send("curing priority defence insulation 20",false)
+          ataxia_sendCuringPriority("curing priority defence insulation 20", false)
         end
       end
     elseif affliction == "dehydrated" then
@@ -92,7 +92,7 @@ function prioritySwap_scaldTimeflux(event, affliction)
   if not ataxia.prioritySwaps then ataxia_resetSwaps() end
 	if event == "aff gained" and affliction == "timeflux" then
 		if ataxia_getPrio("scalded") < 26 and affed("timeflux") then
-			send("curing priority scalded 26")
+			ataxia_sendCuringPriority("curing priority scalded 26")
 		end
 	end
 end

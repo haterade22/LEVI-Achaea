@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: Firestorm tick
+name: Third Party Transfix Unblind
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -32,20 +32,10 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: The firestorm roars all about you, searing your flesh.
-  type: 3
+- pattern: ^(\w+) attempts to transfix (\w+), but succeeds only in curing \w+ blindness\.$
+  type: 1
 ]]--
 
-if targetIshere then
-  magi.offense = magi.offense or {}
-  magi.offense.state = magi.offense.state or {}
-  magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
-  tburns = magi.offense.state.burns -- backward compat
-  tarAffed("burning")
+if gmcp.Char.Status.class == "Magi" then
+  send("queue addclearfull freestand cast transfix " .. matches[3])
 end
-
-magi.firestorm = gmcp.Room.Info.num
-selectCurrentLine() fg("red")
-
-cecho(" <DimGrey>[<red>"..tburns.."/5<DimGrey>]")
-

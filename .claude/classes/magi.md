@@ -2,213 +2,283 @@
 
 ## Metadata
 - **Type**: Base Class
-- **Combat Style**: Affliction | Damage
+- **Combat Style**: Affliction | Damage (Hybrid)
 - **Difficulty**: Hard
-- **Lock Affliction**: Haemophilia (prevents clotting, key for their kill)
+- **Lock Affliction**: Haemophilia (prevents clotting, disrupts cure system)
+- **Offense System**: `magi.offense` namespace (`004_Magi_Offense.lua`)
+- **Dispatch**: `zz` → `magi.offense.dispatch()`, mode switch via `mm <mode>`
 
 ## Skills
 ```
-Crystalism: Vibrational crystal magic
-Elementalism: Elemental magic (fire, water, air, earth)
-Artificing: Item creation and enhancement
+Crystalism: Vibrational crystal magic (room control, afflictions via embedded crystals)
+Elementalism: Elemental magic (fire, water, air, earth resonance system)
+Artificing: Item creation and enhancement (staffs, crystals)
 ```
+
+## Resonance System
+
+The core mechanic. Every elementalism spell builds resonance in its element (0→3). At level 3, EMANATION consumes all 3 stacks for a powerful effect. Resonance also causes passive effects at each level.
+
+### Resonance Levels & Passive Effects
+```yaml
+air:
+  1: "asthma"
+  2: "sensitivity"
+  3: "healthleech"
+  emanation: "paralysis + dizziness"
+
+earth:
+  1: "random limb break"
+  2: "stun + paralysis"
+  3: "cracked ribs"
+  emanation: "calcified skull (blocks head cures)"
+
+fire:
+  1: "strip temperance → scalded/ablaze"
+  2: "blistered"
+  3: "burning +2"
+  emanation: "burning +2 (cap 5)"
+
+water:
+  1: "frostbite"
+  2: "stuttering"
+  3: "anorexia"
+  emanation: "hypothermia setup"
+```
+
+### Resonance Budgeting
+- **Never waste capped resonance** — if fire==3, emanate fire before casting more fire spells
+- Emanation consumes all 3 stacks and delivers the emanation effect
+- Building past 3 wastes the passive effects at each level
 
 ## Kill Routes
 
-### Primary Kill: Staffcast Damage
+### Primary Kill: Fire/Burn Damage
 ```yaml
 type: damage
-summary: High elemental damage through staff casting
+summary: Stack burns → conflagrate → stormhammer/destroy finisher
+mode: "fire" (mm fire)
 
-prerequisites:
-  - Must have staff wielded
-  - Elemental charges built up
+pipeline:
+  1: "Magma → scalded (20s duration, can't re-magma while active)"
+  2: "Dehydrate/Fulminate/Firelash → increment burn counter"
+  3: "At burns >= 2 + fire >= 2 + air >= 2 → CONFLAGRATE"
+  4: "Conflagrated + HP < 35% → DESTROY (instant kill)"
+  5: "HP <= 25% → STORMHAMMER (up to 3 targets)"
 
-steps:
-  1: "Build elemental charges"
-  2: "Apply sensitivity to increase damage"
-  3: "Apply haemophilia to prevent clotting"
-  4: "Staffcast high damage elemental attacks"
-  5: "Kill through accumulated damage"
-
-notes: "Magi can do very high burst damage with staffcasts"
+key_spells:
+  magma: "Applies scalded (20s), fire resonance"
+  dehydrate: "Burns +1, water resonance. If nausea+no weariness → also freezes"
+  fulminate: "Burns +1, fire+air resonance"
+  firelash: "Burns +1, fire resonance"
+  conflagrate: "Requires burns >= 2, fire >= 2, air >= 2. Sets conflagrated flag"
+  destroy: "Instant kill. Requires conflagrated + low HP"
+  stormhammer: "High damage, up to 3 same-city enemy targets"
 ```
 
-### Alternative Kill: Crystal Vibrations Lock
+### Alternative Kill: Water/Glaciate
+```yaml
+type: damage
+summary: Freeze → hypothermia → glaciate instant kill
+mode: "water" (mm water)
+
+pipeline:
+  1: "Build water + air resonance"
+  2: "Freeze target (requires shivering + broken limb)"
+  3: "Hypothermia (requires frozen + water >= 2 + air >= 2)"
+  4: "GLACIATE (requires hypothermia + water >= 2 + air >= 2)"
+
+key_spells:
+  freeze: "Requires shivering + 1 broken limb. Applies frozen"
+  hypothermia: "Requires frozen + dual resonance (water >= 2, air >= 2)"
+  glaciate: "Instant kill. Requires hypothermia + dual resonance"
+```
+
+### Alternative Kill: Affliction Lock
 ```yaml
 type: affliction
-summary: Use crystal vibrations to stack afflictions
+summary: Use resonance passive effects + mudslide + vibrations for truelock
+mode: "lock" (mm lock)
 
-steps:
-  1: "Set up vibrating crystals"
-  2: "Stack afflictions through crystal effects"
-  3: "Apply lock afflictions"
-  4: "Apply haemophilia to prevent clotting"
-  5: "Work toward true lock"
-  6: "Damage to death through lock"
+pipeline:
+  1: "Build kelp stack via resonance passives (asthma, frostbite, sensitivity)"
+  2: "Mudslide at water == 2 + asthma for anorexia"
+  3: "Horripilation via staffcast for slickness"
+  4: "Earth resonance for paralysis"
+  5: "Embedded vibrations for impatience/stupidity"
+  6: "Truelock → damage to death"
 
 required_afflictions:
-  - asthma: "blocks smoking"
-  - anorexia: "blocks eating"
-  - slickness: "blocks applying"
-  - paralysis: "blocks tree"
-  - impatience: "blocks focus"
-  - haemophilia: "prevents clotting (class-specific)"
+  - asthma: "blocks smoking (air resonance passive)"
+  - anorexia: "blocks eating (mudslide)"
+  - slickness: "blocks applying (horripilation)"
+  - paralysis: "blocks tree (earth resonance passive)"
+  - impatience: "blocks focus (vibrations)"
+  - haemophilia: "class lock aff (prevents clotting)"
 ```
 
-### Alternative Kill: Elemental Combos
+### Salve Pressure
+```yaml
+type: hybrid
+summary: Scalded + earth resonance for salve-curable afflictions
+mode: "salve" (mm salve)
+
+strategy:
+  - "Scalded strips caloric (fire passive)"
+  - "Earth resonance breaks limbs (salve cures)"
+  - "Calcified torso blocks restoration"
+  - "Cracked ribs from earth emanation"
+```
+
+### Group PvP
 ```yaml
 type: damage
-summary: Combine elemental effects for combo damage
+summary: Pure damage output, stormhammer multi-target
+mode: "group" (mm group)
 
-steps:
-  1: "Apply freezing (water element)"
-  2: "Apply ablaze (fire element)"
-  3: "Combine elements for increased effects"
-  4: "Use staffcast for burst damage"
+strategy:
+  - "Stormhammer priority (up to 3 same-city enemies)"
+  - "Emanation fire for AoE burning pressure"
+  - "Firestorm for room-wide fire damage"
 ```
 
-## Offensive Abilities
+## Meteorite Shield Breaking
+
+When target has shield up, select meteorite variant based on resonance state:
+```lua
+-- Priority: build missing resonance while stripping shield
+if fireWillBurn then "meteorite flaming 4"      -- fire not at 3, builds fire + strips shield + burning
+elseif earth < 3 then "meteorite pure 4"         -- builds earth
+elseif water < 3 then "meteorite frozen 4"        -- builds water + frozen
+else "erode maintain"                              -- all capped, just strip
+```
+
+## Vibration System (Crystalism)
+
+Room-embedded crystals that cause persistent effects:
 ```yaml
-# Crystalism
-vibrate:
-  skill: Crystalism
-  balance: eq
-  effect: "Vibrate a crystal for effect"
-  syntax: "VIBRATE <crystal>"
-  crystals:
-    - purity: "Cure afflictions"
-    - empower: "Increase damage"
-    - disruption: "Disrupt target"
-    - stability: "Defensive stability"
-
-embed:
-  skill: Crystalism
-  balance: eq
-  effect: "Embed crystal in room"
-  syntax: "EMBED <crystal>"
-
-# Elementalism
-staffcast:
-  skill: Elementalism
-  balance: eq
-  effect: "Cast elemental attack through staff"
-  syntax: "STAFFCAST <element> <target>"
-  elements:
-    - fire: "Fire damage, can ablaze"
-    - water: "Water damage, can freeze"
-    - air: "Air damage, lightning"
-    - earth: "Earth damage, crushing"
-
-freeze:
-  skill: Elementalism
-  balance: eq
-  effect: "Apply freezing effect"
-  syntax: "STAFFCAST WATER <target>"
-  affliction: freezing
-
-ablaze:
-  skill: Elementalism
-  balance: eq
-  effect: "Set target on fire"
-  syntax: "STAFFCAST FIRE <target>"
-  affliction: ablaze
-
-# Artificing
-imbue:
-  skill: Artificing
-  balance: eq
-  effect: "Imbue items with power"
-  syntax: "IMBUE <item>"
+vibes:
+  dissonance: "Damage on entry"
+  energise: "Increased damage"
+  creeps: "Fear/affliction"
+  palpitation: "Heart effects"
+  tremors: "Prone/stun"
+  disorientation: "Confusion"
+  plague: "Disease spread"
+  lullaby: "Sleep"
 ```
 
-## Defensive Abilities
-```yaml
-stonewalls:
-  skill: Elementalism
-  effect: "Create stone walls for protection"
-  syntax: "ERECT STONEWALLS"
+Auto-managed via `magi.offense.setupVibes()` or `mm vibes`.
 
-purity_crystal:
-  skill: Crystalism
-  effect: "Crystal that cures afflictions"
-  syntax: "VIBRATE PURITY"
-  notes: "Blocked by haemophilia for some effects"
+## Offensive System Architecture
+
+### Namespace
+```lua
+magi.offense = {
+  state = {        -- runtime combat state
+    mode = "fire",
+    burns = 0,
+    conflagrated = false,
+    scalded = false,
+    scaldedTimer = nil,
+    calcifiedTorso = false,
+    calcifiedSkull = false,
+    shalestorm = false,
+    firestorm = false,
+    hypothermia = false,
+  },
+  config = {       -- persistent config
+    debugEcho = false,
+  },
+}
 ```
 
-## Passive Cures
-```yaml
-# Magi has crystal-based curing
-purity:
-  cures: [various]
-  blocked_by: [haemophilia]
-  trigger: "Vibrate purity crystal"
-  notes: "Haemophilia disrupts their cure system"
+### Decision Tree Priority (selectSpell)
+```
+1.  DESTROY — conflagrated + HP < 35%
+2.  SHIELD STRIP — meteorite variant selection
+3.  GLACIATE — hypothermia + water>=2 + air>=2
+4.  STORMHAMMER — HP <= 25%
+5.  EMANATION EARTH — earth==3 + (frostbite OR burning>1 OR shivering OR no caloric)
+6.  HYPOTHERMIA — frozen + dual resonance
+7.  MUDSLIDE — asthma>=50% + water==2
+8.  MODE-SPECIFIC: LOCK (horripilation, lock tracking)
+9.  MAGMA — not scalded
+10. FREEZE — shivering + broken limb
+11. CALCIFIED PATH — calcifiedTorso + conditions
+12. BURNING PATH — burns tracking → conflagrate/dehydrate/fulminate/emanation
+13. SHALESTORM/FALLBACK — earth>=2 or generic resonance building
 ```
 
-## Limb Strategy
-```yaml
-enabled: false
-notes: "Magi is element/affliction-based, not limb-based"
-```
+### Key Files
+| File | Purpose |
+|------|---------|
+| `scripts/.../mage/001_Resonance.lua` | Creates `magi` table, `get_resonance()` reads GMCP charstats |
+| `scripts/.../mage/004_Magi_Offense.lua` | Unified offense system (dispatch, decision tree, all modes) |
+| `scripts/.../mage/005_Stormhammer_Targeting.lua` | Smart multi-target stormhammer with city filtering |
+| `triggers/.../general/021_Spell_Outcomes.lua` | Spell success detection (magma, dehydrate, fulminate, etc.) |
+| `triggers/.../general/022_Resonance_Afflictions.lua` | Resonance passive effect tracking (12 patterns) |
+| `triggers/.../general/023_Shalestorm.lua` | Shalestorm state tracking with anti-illusion guard |
+| `triggers/.../general/024_Meteorite.lua` | Meteorite shield-break variant detection |
+| `triggers/.../general/025_Burns_Tracking.lua` | Burns counter from efreeti/conflagrate/firestorm |
+| `triggers/.../general/026_Calcify.lua` | Calcified torso/skull detection |
+| `triggers/.../enamation/001-004` | Emanation fire/water/air/earth triggers |
+| `aliases/.../magi_things/006_Magi_Mode.lua` | `mm` mode-switch alias |
+
+### Commands
+| Alias | Action |
+|-------|--------|
+| `zz` | `magi.offense.dispatch()` (current mode) |
+| `sr` | `magi.offense.setMode("group"); magi.offense.dispatch()` |
+| `mm` | Show status |
+| `mm fire/water/lock/salve/group` | Set mode |
+| `mm debug` | Toggle debug echo |
+| `mm vibes` | Auto-embed missing vibrations |
+| `mm reset` | Reset all offense state |
+
+### Backward Compatibility
+Old function names still work via wrappers:
+- `MagiMain()` → fire mode dispatch
+- `MagiLock()` → lock mode dispatch
+- `MagiWaterFocus()` → water mode dispatch
+- `MagiFireNew()` → fire mode dispatch
+- `MagiSalveFocus()` → salve mode dispatch
 
 ## Bashing (PvE)
 ```yaml
 attack_command: "STAFFCAST FIRE <target>"
 attack_skill: Elementalism
-battlerage_abilities:
-  - staffcast: "Elemental damage"
-  - vibrate: "Crystal effects"
 ```
 
 ## Fighting Against This Class
 ```yaml
 priority_cures:
-  - freezing: "APPLY CALORIC - prevents being frozen solid"
-  - ablaze: "APPLY MENDING - stops fire damage"
+  - scalded/ablaze: "APPLY CALORIC - prevents burn stacking"
+  - frozen: "APPLY CALORIC - prevents hypothermia/glaciate"
+  - frostbite: "EAT KELP - prevents freeze setup"
   - haemophilia: "EAT GINSENG - restore clotting"
-  - sensitivity: "Reduce their damage"
+  - sensitivity: "EAT KELP - reduce their damage"
+  - calcified_torso: "Blocks restoration (very dangerous)"
 
 dangerous_abilities:
-  - staffcast: "High burst elemental damage"
-  - elemental_combos: "Combined element effects"
-  - crystals: "Various effects and room control"
+  - destroy: "Instant kill when conflagrated + low HP"
+  - glaciate: "Instant kill when hypothermia + dual resonance"
+  - stormhammer: "High damage to up to 3 targets"
+  - conflagrate: "Massive burn damage setup"
+  - emanation_earth: "Calcify skull/torso"
 
 avoid:
-  - "Standing near their embedded crystals"
-  - "Letting freezing + ablaze combo"
-  - "Low health with sensitivity active"
-  - "Ignoring haemophilia (key affliction)"
+  - "Letting burns stack to 2+ (conflagrate threshold)"
+  - "Being frozen with their water+air resonance high (glaciate path)"
+  - "Standing in rooms with embedded vibrations"
+  - "Ignoring scalded (enables full burn pipeline)"
+  - "Low health when conflagrated (destroy instant kill)"
 
 recommended_strategy: |
-  Cure freezing and ablaze quickly to prevent combo.
-  Keep caloric salve ready for freezing.
-  Apply haemophilia to disrupt their crystal curing.
-  Destroy or leave rooms with embedded crystals.
-  Pressure them before they can build up staffcast damage.
-  Watch for stonewalls blocking movement.
-```
-
-## Implementation Notes
-```
-Triggers to watch for:
-- "staffcasts * at you" - elemental attack incoming
-- "vibrates *" - crystal effect
-- "You are ablaze" - fire damage ticking
-- "You are frozen" - frozen effect
-- Crystal embedding messages
-- Stonewall messages
-
-GMCP considerations:
-- Track gmcp.Char.Afflictions for afflictions
-- Ablaze and freezing in afflictions
-- Crystal state may need message parsing
-
-Edge cases:
-- Haemophilia blocks their crystal curing
-- Elemental combos (fire+water) do extra effects
-- Stonewalls can block movement
-- Embedded crystals persist until destroyed
-- Staff is required for staffcasting
-- High burst potential but setup required
+  Cure caloric (scalded/ablaze/frozen) immediately — this disrupts both kill routes.
+  Eat kelp for asthma/frostbite to prevent lock and freeze setups.
+  Leave rooms with embedded crystals when possible.
+  Pressure Magi before they build resonance — they need 2-3 attacks to set up.
+  Watch for meteorite shield-strip variants (they adapt to resonance state).
+  Haemophilia is their class lock aff — cure with ginseng.
 ```

@@ -2,6 +2,206 @@
 
 ---
 
+## 2026-03-10 — Simultaneity Defense Tracking Fix
+
+### Root Cause
+GMCP never reports "simultaneity" as a defense — it's not in `gmcp.Char.Defences.List`. The `def` command only displayed defenses from GMCP, so simultaneity always showed `[-]` even when active.
+
+### Fix
+| File | Change |
+|------|--------|
+| `012_Fortify.lua` | Set `ataxia.defences["simultaneity"] = true` when "You forge a channel" trigger fires |
+| `003_Defence_Reporting.lua` | Inject text-tracked defenses (simultaneity) into the `def` display when `ataxia.defences` flag is set |
+
+---
+
+## 2026-03-10 — Magi Offense: Alias Routing per Mode
+
+### Alias Mode Routing (5 files)
+| Alias | Regex | Magi Mode | File |
+|-------|-------|-----------|------|
+| First Attack | `^zz$` | salve (default) | `152_First_Attack_(All_Classes).lua` |
+| Second Attack | `^xx$` | fire | `155_Second_Attack_(All_Classes).lua` |
+| Third Attack | `^cc$` | lock | `156_Third_Attack_(All_Classes).lua` |
+| Fourth Attack | `^vv$` | water | `153_Fourth_Attack_(All_Classes).lua` |
+| Group Attack | `^sr$` | group | `154_Group_(All_Classes).lua` (already wired) |
+| Scytherus | `^srr$` | stormhammer | `157_Scytherus_(All_Classes).lua` |
+
+Each alias now calls `magi.offense.setMode(mode)` before `magi.offense.dispatch()` so mode is explicit per keybind. Stormhammer (`srr`) uses `magi.storm.fire()` with fallback to raw `cast stormhammer`.
+
+---
+
+## 2026-03-10 — Magi Offense: Mode Logic + Final Trigger Fixes
+
+### Trigger Fixes (continued)
+| File | Fix |
+|------|-----|
+| `024_Meteorite.lua` | Flaming variant missing `tarAffed("burning")` — V3 never knew target was burning from meteorite |
+| `024_Meteorite.lua` | Burns increment uncapped — added `math.min(..., 5)` + tburns sync |
+| `022_Resonance_Afflictions.lua` | Fire moderate/major branches missing `tarAffed("burning")` — V3 unaware of resonance burns |
+| `022_Resonance_Afflictions.lua` | Burns increment uncapped — added `math.min(..., 5)` + tburns sync |
+
+### New Mode Logic (004_Magi_Offense.lua)
+- **Salve mode** (`selectSalveSpell()`): Prioritizes earth resonance for salve-curable affs (limb breaks, cracked ribs, calcified torso), magma for salve balance lock, scintilla for calcify
+- **Group mode** (`selectGroupSpell()`): Stormhammer threshold raised to 50% HP (vs 25% default), emanation fire/earth at cap for AoE pressure, shalestorm for earth AoE, pure damage fallback
+- **Firestorm state sync**: `dispatch()` now syncs `magi.firestorm` legacy global into `magi.offense.state.firestorm`
+
+---
+
+## 2026-03-10 — Magi Offense Bug Fixes & Trigger Updates
+
+Comprehensive review and bug fix pass across the entire Magi offense system. Fixed critical bugs in the core offense script, all 4 emanation triggers, shalestorm, burns tracking, conflagrate fail, and calcify triggers. Updated 16+ files to sync `tburns` with `magi.offense.state.burns`.
+
+### Critical Fixes (004_Magi_Offense.lua)
+- **State table clobbered on reload**: Unconditional `state = {...}` wiped runtime state. Changed to merge pattern preserving existing values
+- **Missing bal/eq guard in dispatch()**: Would fire selectSpell+sendAttack while off-balance/off-eq. Added GMCP vitals check
+- **Water kill route non-functional**: `st.frozen`/`st.hypothermia` state flags were NEVER set by triggers. Replaced with V3 probability queries (`getAffProb("frozen") >= 0.5`)
+- **Conflagrate missing air check**: Would attempt conflagrate without `r.air >= 2`, wasting rounds on failed casts
+
+### Trigger Fixes
+| File | Fix |
+|------|-----|
+| `020_Conflagrated_Fail.lua` | Regex typo `noavail` → `no avail` — trigger was NEVER firing |
+| `025_Burns_Tracking.lua` | Firestorm pattern tracked self-damage, not target burns — removed incorrect increment |
+| `023_Shalestorm.lua` | `erAff("shield")` incorrectly called on limb break (not shield break) — removed |
+| `004_Earth_Emanation.lua` | Premature `tarAffed("calcifiedskull")` on emanation cast (process, not result) — removed |
+| `001-004 Emanation triggers` | Added target validation (`matches[2] == target`) — prevented wrong-target tracking |
+| `001-004 Emanation triggers` | Hardcoded "primordial staff" → flexible `an? \w+ staff` — works with any staff |
+| `026_Calcify.lua` | Pattern mismatch with emanation ("elemental" vs "primordial") — made staff-agnostic |
+| `002_Water_Emanation.lua` | Updated to use `magi.offense.ptRelay()`, added target validation |
+| `003_Air_Emanation.lua` | Updated to use `magi.offense.ptRelay()`, added target validation |
+
+### tburns Sync (16 files)
+All trigger/script/alias files using old `tburns` global now sync with `magi.offense.state.burns`:
+- Increment: `math.min(state.burns + N, 5)` + `tburns = state.burns`
+- Decrement: `math.max(state.burns - 1, 0)` + `tburns = state.burns`
+- Reset: `state.burns = 0; tburns = 0`
+- Files: efreeti, fire second/third, firestorm tick/up, dehydrate, firelash, increase burning, fire staffcast, immolation, tree decrement, caloric decrement, RESET alias, login function, targeting functions
+
+### Other Fixes
+- `001_Resonance.lua`: Fixed event handler accumulation (`killAnonymousEventHandler` before re-register)
+
+---
+
+## 2026-03-10 — Psion Offense Modernization (psion namespace)
+
+Complete rewrite of the Psion offense system. Replaced 720 lines of duplicated functions (`levipsionmind` defined 3 times) and 20+ global variables with a unified `psion` namespace following modern conventions (Shaman/Apostate/Serpent pattern). Added rebounding stripping logic (recent game change: Psion weaves now blocked by rebounding, but unweaves/deconstruct bypass it). Fixed multiple operator precedence bugs and a class-check logic error.
+
+### Modified Files
+| File | Changes |
+|------|---------|
+| `scripts/.../psion/001_Levi_Psion_Logic.lua` | Full rewrite: `psion` namespace with state/config, V3 affliction routing (`psion.hasAff()` → `haveAff()`), dispatch guards (target/aeon/balance/reboundHold), rebounding strip via cleave, `selectPrepare()`/`selectWeave()`/`selectTranscend()`/`buildAttack()`/`sendAttack()`, 2 modes (mind/flurry), combat echo, backward-compat shims (`levipsionmind()`/`levipsionflurry()`), tempAlias registration with reload cleanup |
+| `aliases/.../152_First_Attack_(All_Classes).lua` | Added Psion branch → `psion.dispatch()` |
+
+### Bug Fixes
+- **Operator precedence**: `tAffs.impatience and not tAffs.stupidity or not tAffs.dizziness` evaluated incorrectly (Lua `and`/`or` precedence) — fixed with parentheses
+- **Class check always true**: `~= "Priest" or ~= "Occultist" or ~= "Pariah"` is always true — changed to lookup table
+- **Flurry invert gate**: `inverted == true and tAffs.unweavingspirit or tAffs.criticalspirit` triggered on criticalspirit regardless of inverted — fixed with parentheses
+- **No weave fallback**: `psionweave[1]` could be nil causing errors — `selectWeave()` now always returns a string
+
+### Rebounding Handling (New)
+- Regular weave attacks (overhand, backhand, deathblow, sever, puncture) are blocked by rebounding
+- Unweaves (mind/body/spirit) and Deconstruct bypass rebounding
+- When rebounding detected + non-bypass weave needed → `weave cleave` strips rebounding (prepare aff still lands)
+- Early fight: unweaves are prioritized anyway, so rebounding is bypassed for free
+
+---
+
+## 2026-03-10 — Unified Magi Offense System (magi.offense)
+
+Complete rewrite of the Magi combat system. Consolidated 5 fragmented functions (MagiMain, MagiLock, MagiWaterFocus, MagiFireNew, MagiSalveFocus) across 2 old files into a single unified `magi.offense` namespace with 5 combat modes, full resonance budgeting, meteorite shield breaking, burns tracking, calcify tracking, shalestorm tracking, and V3 affliction integration. Based on reference systems from top Magi players (xMagi decision tree + Tabethys triggers).
+
+### New Files
+| File | Purpose |
+|------|---------|
+| `scripts/.../mage/004_Magi_Offense.lua` | Unified offense (~570 lines): dispatch, 13-priority decision tree, 5 modes, meteorite variants, vibration auto-management, backward-compat wrappers |
+| `triggers/.../general/021_Spell_Outcomes.lua` | Spell success detection (magma, dehydrate, fulminate, bombard, firelash, mudslide) |
+| `triggers/.../general/022_Resonance_Afflictions.lua` | 12 resonance passive effect triggers (air/earth/fire/water affs on target) |
+| `triggers/.../general/023_Shalestorm.lua` | Shalestorm start/hit/shield/end with anti-illusion guard |
+| `triggers/.../general/024_Meteorite.lua` | Meteorite shield-break variant detection (flaming/frozen/pure/no-wards) |
+| `triggers/.../general/025_Burns_Tracking.lua` | Burns counter from efreeti/conflagrate/firestorm |
+| `triggers/.../general/026_Calcify.lua` | Calcified torso/skull detection and fade tracking |
+| `aliases/.../magi_things/006_Magi_Mode.lua` | `mm` mode-switch alias (fire/water/lock/salve/group/debug/vibes/reset) |
+
+### Modified Files
+| File | Changes |
+|------|---------|
+| `152_First_Attack_(All_Classes).lua` (zz) | Added Magi branch → `magi.offense.dispatch()` |
+| `154_Group_(All_Classes).lua` (sr) | Added Magi branch → group mode dispatch |
+| `enamation/001_Fire_Emanation.lua` | Updated burns tracking to use `magi.offense.state.burns` |
+| `enamation/004_Earth_Emanation.lua` | Added `magi.offense.state.calcifiedSkull` sync |
+| `general/019_Conflagrated.lua` | Synced with `magi.offense.state.conflagrated` and burns |
+| `general/020_Conflagrated_Fail.lua` | Added state reset on conflagrate failure |
+
+### Removed Files
+| File | Reason |
+|------|--------|
+| `scripts/.../mage/002_Logic.lua` | Old MagiMain/MagiLock — replaced by 004 |
+| `scripts/.../mage/003_Magi_Levi_Logic_2.lua` | Old MagiWaterFocus/MagiFireNew/MagiSalveFocus — replaced by 004 |
+
+### Key Improvements
+- **Meteorite shield breaking**: 4 variants (flaming/pure/frozen/erode) selected by resonance state
+- **Resonance budgeting**: Never wastes capped resonance, always emanates at cap
+- **Burns pipeline**: magma → scalded(20s timer) → burns counter → conflagrate → destroy
+- **Glaciate pathway**: Dual-resonance gate (water>=2 AND air>=2) for freeze → hypothermia → glaciate
+- **Calcify tracking**: Tracks calcified torso/skull state, adjusts emanation earth priority
+- **V3 integration**: Uses `haveAff()`/`getAffProbabilityV3()` for confidence-based gating
+- **5 modes**: fire, water, lock, salve, group (via `mm <mode>`)
+- **Backward compat**: Old function name wrappers preserved
+
+---
+
+## 2026-03-10 — Remove legacy dispatch calls from master combat aliases
+
+Cleaned all 5 master combat aliases (`zz`, `xx`, `cc`, `vv`, `sr`) by removing legacy bare-function dispatch calls. Only modern namespace-based systems remain.
+
+**Removed legacy calls** (classes without modern systems): Dragon, Bard, Psion, Runie DWC, Infernal SnB, Infernal DWB, Infernal 2H, Magi, Pariah, plus Monk `lock_base_prios()`/`formswaplock()` and Apostate `apostate_group()` wrapper (replaced with direct `apostate.setMode("group"); apostate.dispatch()`).
+
+**Modern systems retained**: Monk (tekura6/shikudo), Runie DWB (dwbRunie), Infernal DWC (infernalDWCVivisect/GroupLock), Depthswalker, Blademaster (bmd/bmdq/bmbs), Apostate, Serpent, Shaman.
+
+| File | Changes |
+|------|---------|
+| `152_First_Attack_(All_Classes).lua` (zz) | Removed Dragon, Bard, Psion, Runie DWC, Infernal SnB (×2), Infernal DWB, Infernal 2H, Magi, Pariah |
+| `155_Second_Attack_(All_Classes).lua` (xx) | Removed Bard, Runie DWC, Dragon, Magi, Infernal DWB, Infernal 2H, Infernal SnB, Psion, Pariah |
+| `156_Third_Attack_(All_Classes).lua` (cc) | Removed Monk, Bard, Runie DWC, Infernal SnB, Infernal 2H, Magi, Infernal DWB, Infernal DWC legacy |
+| `153_Fourth_Attack_(All_Classes).lua` (vv) | Removed Monk, Infernal DWB, Infernal SnB, Magi; replaced `apostate_group()` with modern dispatch |
+| `154_Group_(All_Classes).lua` (sr) | Removed Runie DWC, Infernal DWB, Infernal SnB, Magi; cleaned BM legacy fallback |
+
+---
+
+## 2026-03-10 — Wire Infernal DWC group combat to `sr` alias
+
+The `sr` (group combat) alias for Infernal DWC was calling the legacy `dwcpriosbasicinfernalgroup()`. Replaced with `infernalGroupLockAttack()` which provides full truelock offense with V3 tracking, hellforge exploit, class-aware lock afflictions, and rebounding/shield handling.
+
+| File | Changes |
+|------|---------|
+| `aliases/.../154_Group_(All_Classes).lua` | Infernal DWC branch now calls `infernalGroupLockAttack()` instead of `dwcpriosbasicinfernalgroup()` |
+
+---
+
+## 2026-03-10 — Magi Group PvP: Transfix/Staffcast Coordination + Smart Stormhammer
+
+### Transfix/Staffcast Coordination (Part A)
+When playing Magi, automatically react to transfix events from any source:
+- **Self transfix success** (`505_Transfixed.lua`): Auto-queues `staffcast horripilation at target`
+- **Self transfix unblind** (`504_Transfix_Unblind.lua`): Auto-queues `cast transfix target` to retry
+- **Third-party transfix** (`general/010_Third_Party_Transfix.lua`): New trigger, staffcasts current target
+- **Third-party unblind** (`general/011_Third_Party_Transfix_Unblind.lua`): New trigger, re-transfixes named target
+- **Party callouts** (`party_targetting/005_Party_Magi_Coordination.lua`): New trigger reacts to "Staffcast: X", "X: Transfixed", "X: Unblind" from any party member
+
+All gated behind `gmcp.Char.Status.class == "Magi"` and use `queue addclearfull freestand`.
+
+### Smart Stormhammer (Part B)
+New `storm` alias for group combat stormhammer targeting:
+- **Targeting script** (`mage/005_Stormhammer_Targeting.lua`): Picks up to 3 enemies from the **same city as current target** in the room
+- **Storm alias** (`magi_things/005_Storm.lua`): `^storm$` → selects targets and fires `cast stormhammer at X and Y and Z`
+- **Starburst tracking** (`general/012_Storm_Starburst.lua`): Marks targets that starburst as alive (don't replace)
+- **Death replacement** (`general/013_Storm_Death_Replace.lua`): Auto-replaces dead targets with next available same-city enemy
+
+**Files**: 2 edited, 7 new
+
+---
+
 ## 2026-03-10 — Overhaul: Default SSC curing priorities
 
 Comprehensive overhaul of default curing priorities sent to Achaea's server-side curing (SSC) system. Many afflictions had priorities set for dynamic swaps that were never implemented (e.g., stupidity at 18 "move to 9 if off focus balance"), leaving dangerous gaps in curing. Additionally, several combat-critical afflictions (peace, fear, confusion, recklessness, masochism) were at very low priority despite being highly impactful.

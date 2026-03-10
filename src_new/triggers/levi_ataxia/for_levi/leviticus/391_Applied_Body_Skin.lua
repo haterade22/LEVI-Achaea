@@ -56,21 +56,10 @@ tdeliverance = false
 		erAff("itching")
   
   
-  if tburns == nil then 
-    tburns = 0
-  elseif tburns == 0 then 
-    tburns = 0
-  elseif tburns == 1 then
-    tburns = 0
-  elseif tburns == 2 then
-    tburns = 1
-  elseif tburns == 3 then
-    tburns = 2
-  elseif tburns == 4 then
-    tburns = 3
-  elseif tburns == 5 then
-    tburns = 4
-  end
+  magi.offense = magi.offense or {}
+  magi.offense.state = magi.offense.state or {}
+  magi.offense.state.burns = math.max((magi.offense.state.burns or 0) - 1, 0)
+  tburns = magi.offense.state.burns
   selectCurrentLine() fg("slate_grey")
   cecho(" <DimGrey>[<red>"..tburns.."/5<DimGrey>]")
     

@@ -32,23 +32,19 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^The might of elemental Fire filling you like a scorching river, you lift a primordial staff to point at (\w+)
+- pattern: ^The might of elemental Fire filling you like a scorching river, you lift an? \w+ staff to point at (\w+)
     and unleash a stream of searing flame\.$
   type: 1
 ]]--
 
-if partyrelay and not ataxia.afflictions.aeon then send("pt " ..target.. ": Burning (ablaze)") end
-  if tburns == 0 or nil then
-     tburns = 2
-  elseif tburns == 1 then
-    tburns = 3
-  elseif tburns == 2 then
-    tburns = 4
-  elseif tburns == 3 then
-    tburns = 5
-  elseif tburns == 4 then
-    tburns = 5
-  elseif tburns == 5 then
-	tburns= 5
-  end
-cecho(" <DimGrey>[<red>"..tburns.."/5<DimGrey>]")
+local tgt = matches[2]
+if tgt ~= target then return end
+-- Emanation Fire: +2 burns (cap 5), track in magi.offense.state
+magi.offense = magi.offense or {}
+magi.offense.state = magi.offense.state or {}
+magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 2, 5)
+tburns = magi.offense.state.burns -- backward compat
+tarAffed("burning")
+magi.offense.ptRelay(target .. ": Emanation Fire (burns " .. magi.offense.state.burns .. "/5)")
+cecho(" <DimGrey>[<red>" .. magi.offense.state.burns .. "/5<DimGrey>]")
+selectCurrentLine() bg("cyan")

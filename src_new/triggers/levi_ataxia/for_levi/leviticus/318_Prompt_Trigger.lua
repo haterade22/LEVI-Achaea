@@ -67,24 +67,28 @@ profile = ataxia.settings.defences.current
   if ataxia.settings.defences.defup[profile].rebounding ~= nil and ataxia.settings.defences.keepup[profile].rebounding ~= nil then
     ataxia.settings.defences.defup[profile].rebounding = nil
     ataxia.settings.defences.keepup[profile].rebounding = nil
-    send("curing priority defence rebounding reset", false)
+    ataxia_sendCuringPriority("curing priority defence rebounding reset", false)
   end
 end
 
 if not ataxiaBasher.enabled then
-if ataxiaNDB_getClass(target) == "Apostate" or ataxiaNDB_getClass(target) == "Pariah" or ataxiaNDB_getClass(target) == "Occultist" or ataxiaNDB_getClass(target) == "Sentinel" or ataxiaNDB_getClass(target) == "Psion" or ataxiaNDB_getClass(target) == "Shaman" or ataxiaNDB_getClass(target) == "Depthswalker" or ataxiaNDB_getClass(target) == "Jester" or ataxiaNDB_getClass(target) == "Alchemist" or ataxiaNDB_getClass(target) == "Magi" or ataxiaNDB_getClass(target) == "Sylvan" then
+local targetClass = ataxiaNDB_getClass(target)
+if targetClass == "Apostate" or targetClass == "Pariah" or targetClass == "Occultist" or targetClass == "Sentinel" or targetClass == "Psion" or targetClass == "Shaman" or targetClass == "Depthswalker" or targetClass == "Jester" or targetClass == "Alchemist" or targetClass == "Magi" or targetClass == "Sylvan" then
   if myrebounding == true then
     profile = ataxia.settings.defences.current
     if ataxia.settings.defences.defup[profile].rebounding ~= nil and ataxia.settings.defences.keepup[profile].rebounding ~= nil then
     ataxia.settings.defences.defup[profile].rebounding = nil
     ataxia.settings.defences.keepup[profile].rebounding = nil
-    send("curing priority defence rebounding reset", false)
+    ataxia_sendCuringPriority("curing priority defence rebounding reset", false)
+    ataxiaTemp.reboundingPrioSent = nil
     end
   end
 elseif myrebounding == false then
-  send("curing priority defence rebounding 25")
-  addToKeepup("rebounding")
-  
+  if not ataxiaTemp.reboundingPrioSent then
+    ataxiaTemp.reboundingPrioSent = true
+    ataxia_sendCuringPriority("curing priority defence rebounding 25")
+    addToKeepup("rebounding")
+  end
 end
 
 end

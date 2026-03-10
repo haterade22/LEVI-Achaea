@@ -28,8 +28,10 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 | Infernal DWC | `zz` | Vivisect (4-limb / 2-limb), damage kill, riftlock |
 | Apostate | `ll`/`corr` | Lock, corrupt, vivisect, sleep |
 | Monk (Shikudo) | varies | Limb prep, spinkick, telepathy lock |
+| Psion | `zz`/`psmind`/`psflurry` | Mana kill (Psi Excise), unweave execute (Deconstruct), damage burst (Flurry) |
+| Magi | `zz`/`xx`/`vv`/`cc` | Elementalism: salve push, fire burns, water freeze, lock, group, stormhammer |
 | Snipe | `snt` | Class-agnostic snipe with auto-scan |
-| *+ 11 more* | | Bard, Depthswalker, Mage, Psion, Pariah, Earth Lord, etc. |
+| *+ 10 more* | | Bard, Depthswalker, Pariah, Earth Lord, etc. |
 
 ### Automated Basher (PvE Hunting)
 
@@ -37,7 +39,7 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 |---------|-------------|
 | **20+ Class Support** | Class-specific attack builders with optimal ability selection |
 | **Area Pathing** | Mapper-integrated speedwalking through configured target lists |
-| **Safety System** | Percentage-based flee (shield at 40%, flee at 25%), death recovery, stuck detection |
+| **Safety System** | Layered danger levels (shield/flee/wait), death recovery with safe-room retreat, stuck detection |
 | **Battlerage** | Generic and crowd-control handlers with rage conservation |
 | **Stormhammer** | Dirty-flag cached AoE target list for multi-target rooms |
 | **Legend Deck** | Data-driven pre-combat card draws for dangerous rooms |
@@ -51,7 +53,7 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 |---------|-------------|
 | **Draggable Windows** | ~20 `Adjustable.Container` windows with auto-save/load positions |
 | **Tabbed Chat** | All, City, House, Order, Party, Clans, Tells, Market, Misc tabs |
-| **Channel Colors** | Per-channel coloring (says=cyan, ct=red, tells=yellow, party=magenta, etc.) |
+| **Native MUD Colors** | Preserves original ANSI colors from the server via `ansi2decho()` + `decho()` |
 | **Movable Vital Bars** | Configurable floating gauges for Health, Mana, Willpower, Endurance, Cape (`ataxiabars`) |
 | **Health/Mana Gauges** | Gradient-styled gauges with clear overlays in the bottom panel |
 | **XP Progress Bar** | Purple gauge showing progress to next level |

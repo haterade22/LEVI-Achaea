@@ -37,18 +37,12 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-  if tAffs.burns == 0 or tAffs.burns == nil then 
-     tAffs.burns = 1
-  else
-    tAffs.burns = tAffs.burns + 1
-  end
-
-
-  if tburns == 0 or nil then
-     tburns = 1
-  else
-    tburns = tburns + 1
-  end
+  magi.offense = magi.offense or {}
+  magi.offense.state = magi.offense.state or {}
+  magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
+  tburns = magi.offense.state.burns -- backward compat
+  tAffs.burns = tburns
+  tarAffed("burning")
 timmolation = false
 cecho(" <DimGrey>[<red>"..tburns.."/5<DimGrey>]")
 end

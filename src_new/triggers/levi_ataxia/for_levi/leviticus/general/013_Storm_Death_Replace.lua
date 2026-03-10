@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: Firestorm tick
+name: Storm Death Replace
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -32,20 +32,15 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: The firestorm roars all about you, searing your flesh.
-  type: 3
+- pattern: ^\w+ has culled (\w+) from the ranks of the living\.$
+  type: 1
+- pattern: ^Kill breakdown for (\w+)
+  type: 1
 ]]--
 
-if targetIshere then
-  magi.offense = magi.offense or {}
-  magi.offense.state = magi.offense.state or {}
-  magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
-  tburns = magi.offense.state.burns -- backward compat
-  tarAffed("burning")
+if magi and magi.storm and magi.storm.targets then
+  local deadName = matches[2]
+  if table.contains(magi.storm.targets, deadName) then
+    magi.storm.replaceDead(deadName)
+  end
 end
-
-magi.firestorm = gmcp.Room.Info.num
-selectCurrentLine() fg("red")
-
-cecho(" <DimGrey>[<red>"..tburns.."/5<DimGrey>]")
-

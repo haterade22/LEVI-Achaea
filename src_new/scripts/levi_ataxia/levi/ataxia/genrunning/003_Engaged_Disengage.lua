@@ -78,17 +78,17 @@ function basher_disengaged()
 	if gmcp.Char.Status.class == "Bard" then
 		send("wield rapier shield",false)
 		if ataxia.bardStuff.ariaBash then
-			send("curing priority defence aria reset",false)
+			ataxia_sendCuringPriority("curing priority defence aria reset", false)
 			
 			if ataxiaTemp.deafnessToggle then
-				send("curing priority defence deafness 25",false)
+				ataxia_sendCuringPriority("curing priority defence deafness 25", false)
 				ataxiaTemp.deafnessToggle = nil
 			end
 		end
   end
   
   if string.find(ataxiaTemp.class, "fire") and ataxia_getPrio("burning") == 26 then
-    send("curing priority burning 8",false)
+    ataxia_sendCuringPriority("curing priority burning 8", false)
   end  
   
   if ataxia.usegui or ataxia.usegui == nil then
@@ -270,7 +270,8 @@ function basher_engaged()
 	end
   
   if string.find(ataxiaTemp.class, "fire") and ataxia_getPrio("burning") ~= 26 then
-    send("curing priority burning 26;manifest torch",false)
+    ataxia_sendCuringPriority("curing priority burning 26", false)
+    send("manifest torch", false)
   end  
 end
 

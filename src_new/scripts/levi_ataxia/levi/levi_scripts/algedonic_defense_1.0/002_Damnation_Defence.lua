@@ -165,27 +165,27 @@ function Algedonic.AntiPaladin()
   -- At pyre 3, burning floor is locked at 3 (Damnation danger zone)
   if headBroken and pyreLevel >= 3 then
     -- Pyre 3 + head broken = must cure pyre before resto is safe
-    send("curing priority pyre 1")
+    ataxia_sendCuringPriority("curing priority pyre 1")
     Algedonic.Echo("CRITICAL: <magenta>PYRE 3<white> + head broken - cure pyre before resto!")
     return
   end
 
   if headBroken and burnLevel >= 3 then
     -- Burning approaching Damnation threshold
-    send("curing priority burning 1")
+    ataxia_sendCuringPriority("curing priority burning 1")
     Algedonic.Echo("CRITICAL: <orange>BURNING "..burnLevel.."<white> + head broken - Damnation threat!")
     -- Also prioritize head healing
-    send("curing priority damagedhead 2")
-    send("curing priority brokenhead 2")
-    send("curing priority mangledhead 2")
+    ataxia_sendCuringPriority("curing priority damagedhead 2")
+    ataxia_sendCuringPriority("curing priority brokenhead 2")
+    ataxia_sendCuringPriority("curing priority mangledhead 2")
     return
   end
 
   -- HIGH PRIORITY: Head broken, safe to resto if pyre <= 2
   if headBroken then
-    send("curing priority damagedhead 2")
-    send("curing priority brokenhead 2")
-    send("curing priority mangledhead 2")
+    ataxia_sendCuringPriority("curing priority damagedhead 2")
+    ataxia_sendCuringPriority("curing priority brokenhead 2")
+    ataxia_sendCuringPriority("curing priority mangledhead 2")
     if pyreLevel >= 1 then
       Algedonic.Echo("Head broken + pyre "..pyreLevel.." - safe to resto (pyre <= 2)")
     else
@@ -196,14 +196,14 @@ function Algedonic.AntiPaladin()
 
   -- MEDIUM PRIORITY: Pyre 3 without head broken - cure down preemptively
   if pyreLevel >= 3 then
-    send("curing priority pyre 3")
+    ataxia_sendCuringPriority("curing priority pyre 3")
     Algedonic.Echo("Pyre 3 - curing preemptively before head gets targeted")
     return
   end
 
   -- Guilt blocks Focus - always high priority
   if hasGuilt then
-    send("curing priority guilt 3")
+    ataxia_sendCuringPriority("curing priority guilt 3")
   end
 
   -- Handle disembowel threat (standard Knight logic)
@@ -211,8 +211,8 @@ function Algedonic.AntiPaladin()
   if ataxia.afflictions.brokenleftleg and ataxia.afflictions.brokenrightleg then
     if ataxia.afflictions.brokenleftarm or ataxia.afflictions.brokenrightarm then
       -- Disembowel setup complete
-      send("curing priority brokenleftleg 1")
-      send("curing priority brokenrightleg 1")
+      ataxia_sendCuringPriority("curing priority brokenleftleg 1")
+      ataxia_sendCuringPriority("curing priority brokenrightleg 1")
       Algedonic.Echo("DISEMBOWEL THREAT - cure legs immediately!")
     end
   end

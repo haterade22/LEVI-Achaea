@@ -32,22 +32,29 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^The might of elemental Water surging through your body, you make the slightest flick with a primordial staff,
+- pattern: ^The might of elemental Water surging through your body, you make the slightest flick with an? \w+ staff,
     and the hand of Sllshya descends as a freezing deluge to smash (\w+)\.$
   type: 1
 ]]--
 
-if tAffs.nocaloric == true and tAffs.shivering then
-tarAffed("shivering")
-tarAffed("disrupted")
-tarAffed("frozen")
-  if partyrelay and not ataxia.afflictions.aeon then send("pt " ..target.. ": Shivering, Disrupted and Frozen") end
-elseif tAffs.nocaloric == true and not tAffs.shivering then
-tarAffed("shivering")
-tarAffed("disrupted")
-  if partyrelay and not ataxia.afflictions.aeon then send("pt " ..target.. ": Shivering and Disrupted") end
+local tgt = matches[2]
+if tgt ~= target then return end
+
+magi.offense = magi.offense or {}
+magi.offense.state = magi.offense.state or {}
+
+if magi.offense.hasAff("shivering") or (tAffs and tAffs.shivering) then
+  tarAffed("shivering")
+  tarAffed("disrupted")
+  tarAffed("frozen")
+  magi.offense.ptRelay(target .. ": Emanation Water (Shivering + Disrupted + Frozen)")
+elseif not magi.offense.hasAff("frostbite") or (tAffs and tAffs.nocaloric) then
+  tarAffed("shivering")
+  tarAffed("disrupted")
+  magi.offense.ptRelay(target .. ": Emanation Water (Shivering + Disrupted)")
 else
-tarAffed("nocaloric")
-tarAffed("disrupted")
-  if partyrelay and not ataxia.afflictions.aeon then send("pt " ..target.. ": Disrupted") end
+  tarAffed("nocaloric")
+  tarAffed("disrupted")
+  magi.offense.ptRelay(target .. ": Emanation Water (Disrupted)")
 end
+selectCurrentLine() bg("cyan")

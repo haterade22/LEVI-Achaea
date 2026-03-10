@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: Firestorm tick
+name: Storm Starburst
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -32,20 +32,13 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: The firestorm roars all about you, searing your flesh.
-  type: 3
+- pattern: ^A starburst tattoo flares and bathes (\w+) in red light\.$
+  type: 1
 ]]--
 
-if targetIshere then
-  magi.offense = magi.offense or {}
-  magi.offense.state = magi.offense.state or {}
-  magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
-  tburns = magi.offense.state.burns -- backward compat
-  tarAffed("burning")
+if magi and magi.storm and magi.storm.targets then
+  local name = matches[2]
+  if table.contains(magi.storm.targets, name) then
+    magi.storm.starbursted[name] = true
+  end
 end
-
-magi.firestorm = gmcp.Room.Info.num
-selectCurrentLine() fg("red")
-
-cecho(" <DimGrey>[<red>"..tburns.."/5<DimGrey>]")
-

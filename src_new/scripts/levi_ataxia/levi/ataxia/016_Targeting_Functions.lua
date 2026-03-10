@@ -80,6 +80,7 @@ function switchTarget(who)
   pm = 100
   tburns = 0
   tAffs.burns = 0
+  if magi and magi.offense and magi.offense.state then magi.offense.state.burns = 0 end
   tarpreapply = false
   tAffs.rebounding = false
   tAffs.shield = false

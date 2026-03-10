@@ -32,12 +32,16 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^The might of elemental Earth thrumming within your bones, you point a primordial staff at (\w+) and an intangible
+- pattern: ^The might of elemental Earth thrumming within your bones, you point an? \w+ staff at (\w+) and an intangible
     wave of power strikes forth to smite (\w+)\.$
   type: 1
 ]]--
 
-tarAffed("calcifiedskull")
+local tgt = matches[2]
+if tgt ~= target then return end
+-- Emanation earth STARTS calcification process, not completes it
+-- Actual calcify success tracked in 026_Calcify.lua
 magi.calcifying_head = true
+magi.offense.ptRelay(target .. ": Emanation Earth (calcifying)")
 selectCurrentLine() bg("cyan")
 
