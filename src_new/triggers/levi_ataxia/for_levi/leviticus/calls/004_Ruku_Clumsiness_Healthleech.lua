@@ -13,7 +13,7 @@ hierarchy:
 - Shikudo
 - Calls
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
   isTempTrigger: 'no'
   isMultiline: 'no'

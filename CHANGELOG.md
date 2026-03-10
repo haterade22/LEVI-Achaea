@@ -2,6 +2,70 @@
 
 ---
 
+## 2026-03-10 — Shikudo Party Callout Fix
+
+### Problem
+Third-person Shikudo "Calls" triggers (004-007 in `calls/`) fired on effect text visible from ANY monk's attacks, not just the player's. This caused false party callouts (`pt Rat: clumsiness`, etc.) and incorrect affliction tracking when other monks (e.g., Mystor) attacked nearby.
+
+### Fix
+Deactivated all 4 redundant third-person triggers — the first-person equivalents (578, 569, 572, 576) already handle the player's own attacks correctly with `isTargeted()` gates:
+
+| Deactivated Trigger | First-Person Equivalent |
+|---------------------|------------------------|
+| `004_Ruku_Clumsiness_Healthleech.lua` | `578_1Ruku_arms_(healthleech_clumsy).lua` |
+| `005_Kuro_Weariness_Lethargy.lua` | `572_1Kuro_(weariness_lethargy).lua` |
+| `006_Ruku_Torso_Slickness.lua` | `569_2Ruku_torso_(slickness).lua` |
+| `007_Livestrike_Asthma.lua` | `576_Livestrike_(asthma).lua` |
+
+---
+
+## 2026-03-10 — Magi Offense Audit Fixes (P1-P6)
+
+### Summary
+Fixed 6 priority issues from reference system audit (xMagi/Tabethys comparison). Burns double-counting, missing burns decrement, fire resonance conditional logic, conflagrate gate, and meteorite variant keyword.
+
+### Issues Fixed
+
+**P1/P3 — Burns double-counting from duplicate triggers**
+- Deactivated 3 old triggers that overlapped with new unified triggers:
+  - `elementals/001_Efreeti.lua` → duplicated by `025_Burns_Tracking.lua`
+  - `fire/001_Fire_Third.lua` → duplicated by `022_Resonance_Afflictions.lua`
+  - `fire/002_Fire_Second.lua` → duplicated by `022_Resonance_Afflictions.lua`
+- Old triggers under `staffcast/`, `fire/003` kept active (unique patterns, not duplicates)
+
+**P2 — Burns never decrement**
+- Added pattern `^The fires consuming (\w+) diminish somewhat\.$` to `025_Burns_Tracking.lua`
+- Decrements `magi.offense.state.burns`, clears `burning` aff and `conflagrated` flag when burns reach 0
+
+**P4 — Conflagrate gate too strict**
+- Changed from `burning >= 2 and r.fire >= 2 and r.air >= 2` to `burning >= 2 and r.fire >= 2`
+- Reference system (xMagi) only requires `fire >= 2`, not `air >= 2`
+
+**P6 — Meteorite missing "pure" keyword**
+- Changed `"cast meteorite at "` to `"cast meteorite pure at "` in `selectMeteorite()` fallback
+
+**Fire resonance conditional logic (in 022_Resonance_Afflictions.lua)**
+- Fire level 2: Now checks scalded state before incrementing burns (scalded first, then burns if already scalded)
+- Fire level 3 blistered: Added `tempTimer(15, ...)` for blistered fade
+- Fire level 3 burning: Added burns counter display with `cecho()`
+- Uses `magi.offense.setScalded()` for 20s timer management
+
+### Files Changed
+- `triggers/.../elementals/001_Efreeti.lua` — `isActive: 'no'`
+- `triggers/.../fire/001_Fire_Third.lua` — `isActive: 'no'`
+- `triggers/.../fire/002_Fire_Second.lua` — `isActive: 'no'`
+- `triggers/.../general/022_Resonance_Afflictions.lua` — fire conditional logic
+- `triggers/.../general/025_Burns_Tracking.lua` — burns diminish pattern
+- `scripts/.../mage/004_Magi_Offense.lua` — conflagrate gate + meteorite pure
+
+### Deferred Issues
+- P5 (staffcast lightning → stupidity): Unknown game text pattern
+- P7 (firestorm target burns): Unknown game text pattern
+- P9 (caloric defense tracking): Low priority, frostbite proxy sufficient
+- P11-P13: Low priority cleanup
+
+---
+
 ## 2026-03-10 — Default Curing Priorities Overhaul
 
 ### Summary

@@ -141,7 +141,7 @@ function ataxia_defaultCuringPrios()
     ["darkshade"] = 9,        -- dShade swap handles urgent cases. Ginseng.
     ["hypersomnia"] = 9,      -- Ash.
     ["hallucinations"] = 9,   -- Ash.
-    ["fratricide"] = 9,       -- fratLock swap boosts to 4 when approaching lock. Lobelia.
+    ["fratricide"] = 25,      -- fratLock swap boosts to 4 when approaching lock. Lobelia. Deprioritized.
     ["crackedribs"] = 9,      -- Health elixir.
     ["dizziness"] = 9,        -- Vertigo synergy. Goldenseal. Focus handles normally. (was 23)
     ["vertigo"] = 9,          -- Dizziness+vertigo = falling. Lobelia. (was 16)
@@ -213,7 +213,7 @@ function ataxia_defaultCuringPrios()
 
     ["serioustrauma"] = 17,   -- Salve.
     ["mildtrauma"] = 17,      -- Salve.
-    ["pressure"] = 17,        -- Smoke.
+    ["pressure"] = 25,        -- Smoke. Deprioritized.
     --["rebounding"] = 18,    -- (DEFENCE QUEUE SLOT 18) IMPORTANT: keep below pressure
 
     ["burning"] = 19,         -- Salve.
@@ -231,6 +231,7 @@ function ataxia_defaultCuringPrios()
     ["laceratedthroat"] = 19, -- Salve.
     ["selarnia"] = 20,        -- Salve.
 
+    ["stridulating"] = 24,    -- Deprioritized.
     ["indifference"] = 25,    -- Bellwort. Deprioritized.
 
     ["blindness"] = 26,       -- Ignored by SSC (custom handling).

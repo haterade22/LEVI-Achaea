@@ -155,7 +155,7 @@ function magi.offense.selectMeteorite()
   if fireWillBurn then
     return "cast meteorite flaming at " .. target
   elseif r.earth < 3 or st.calcifiedTorso then
-    return "cast meteorite at " .. target
+    return "cast meteorite pure at " .. target
   elseif r.water < 3 then
     return "cast meteorite frozen at " .. target
   else
@@ -298,8 +298,8 @@ function magi.offense.selectBurningSpell()
   local caloric = frostbite < 0.5
   local dehydrateWillFreeze = (nausea >= 0.5) and (weariness < 0.5)
 
-  -- Conflagrate when ready (requires burns >= 2, fire >= 2, air >= 2)
-  if burning >= 2 and r.fire >= 2 and r.air >= 2 and not st.conflagrated then
+  -- Conflagrate when ready (requires burns >= 2, fire >= 2)
+  if burning >= 2 and r.fire >= 2 and not st.conflagrated then
     return "cast conflagrate at " .. target
   end
 

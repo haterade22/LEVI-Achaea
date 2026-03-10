@@ -5940,7 +5940,7 @@ function ataxia_defaultCuringPrios()
     ["darkshade"] = 9,        -- dShade swap handles urgent cases. Ginseng.
     ["hypersomnia"] = 9,      -- Ash.
     ["hallucinations"] = 9,   -- Ash.
-    ["fratricide"] = 9,       -- fratLock swap boosts to 4 when approaching lock. Lobelia.
+    ["fratricide"] = 25,      -- fratLock swap boosts to 4 when approaching lock. Lobelia. Deprioritized.
     ["crackedribs"] = 9,      -- Health elixir.
     ["dizziness"] = 9,        -- Vertigo synergy. Goldenseal. Focus handles normally. (was 23)
     ["vertigo"] = 9,          -- Dizziness+vertigo = falling. Lobelia. (was 16)
@@ -6012,7 +6012,7 @@ function ataxia_defaultCuringPrios()
 
     ["serioustrauma"] = 17,   -- Salve.
     ["mildtrauma"] = 17,      -- Salve.
-    ["pressure"] = 17,        -- Smoke.
+    ["pressure"] = 25,        -- Smoke. Deprioritized.
     --["rebounding"] = 18,    -- (DEFENCE QUEUE SLOT 18) IMPORTANT: keep below pressure
 
     ["burning"] = 19,         -- Salve.
@@ -6030,6 +6030,7 @@ function ataxia_defaultCuringPrios()
     ["laceratedthroat"] = 19, -- Salve.
     ["selarnia"] = 20,        -- Salve.
 
+    ["stridulating"] = 24,    -- Deprioritized.
     ["indifference"] = 25,    -- Bellwort. Deprioritized.
 
     ["blindness"] = 26,       -- Ignored by SSC (custom handling).
@@ -50315,7 +50316,7 @@ function magi.offense.selectMeteorite()
   if fireWillBurn then
     return "cast meteorite flaming at " .. target
   elseif r.earth &lt; 3 or st.calcifiedTorso then
-    return "cast meteorite at " .. target
+    return "cast meteorite pure at " .. target
   elseif r.water &lt; 3 then
     return "cast meteorite frozen at " .. target
   else
@@ -50458,8 +50459,8 @@ function magi.offense.selectBurningSpell()
   local caloric = frostbite &lt; 0.5
   local dehydrateWillFreeze = (nausea &gt;= 0.5) and (weariness &lt; 0.5)
 
-  -- Conflagrate when ready (requires burns &gt;= 2, fire &gt;= 2, air &gt;= 2)
-  if burning &gt;= 2 and r.fire &gt;= 2 and r.air &gt;= 2 and not st.conflagrated then
+  -- Conflagrate when ready (requires burns &gt;= 2, fire &gt;= 2)
+  if burning &gt;= 2 and r.fire &gt;= 2 and not st.conflagrated then
     return "cast conflagrate at " .. target
   end
 
@@ -141454,7 +141455,7 @@ end</script>
 <integer>1</integer>
                       </regexCodePropertyList>
 </Trigger>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                    <Trigger isActive="no" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Ruku Clumsiness Healthleech</name>
                       <script>selectCurrentLine() fg("a_yellow") bg("black") 
 replace("" ..target.. " [RUKU: Clumsiness | Healthleech]")
@@ -141486,7 +141487,7 @@ end
 <integer>1</integer>
                       </regexCodePropertyList>
 </Trigger>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                    <Trigger isActive="no" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Kuro Weariness Lethargy</name>
                       <script>selectCurrentLine() fg("a_yellow") bg("black") 
 replace("" ..matches[3].. " [KURO: Weariness | Lethargic]")
@@ -141517,7 +141518,7 @@ end
 <integer>1</integer>
                       </regexCodePropertyList>
 </Trigger>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                    <Trigger isActive="no" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Ruku Torso Slickness</name>
                       <script>selectCurrentLine() fg("a_yellow") bg("black") 
 replace("" ..matches[2].. " [RUKU: Slickness]")
@@ -141543,7 +141544,7 @@ tarAffed("slickness")
 <integer>1</integer>
                       </regexCodePropertyList>
 </Trigger>
-                    <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+                    <Trigger isActive="no" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Livestrike Asthma</name>
                       <script>selectCurrentLine() fg("a_yellow") bg("black") 
 replace("" ..matches[2].. " [Livestrike: Asthma]")
