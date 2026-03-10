@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: Fitness (Knights/Monk/BM)
+name: Sylvan Root
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -33,23 +33,22 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^(\w+) draws a deep, measured breath.$
+- pattern: ^([\w'\-]+) stands suddenly upright\, rooted to the earth\.$
   type: 1
 ]]--
 
-if isTargeted(matches[2]) then
-	erAff("asthma")
-	erAff("weariness")
-	-- V2 integration: Fitness cures asthma and weariness specifically
-	if removeAffV2 then
-		removeAffV2("asthma")
-		removeAffV2("weariness")
-	end
-	-- V3 integration: collapse branches where asthma/weariness were possible
-	if collapseAffAbsentV3 then
-		collapseAffAbsentV3("asthma")
-		collapseAffAbsentV3("weariness")
-	end
-	fg("DarkSlateGrey")
-	targetIshere = true
+local name = matches[2]
+local class = (ataxiaNDB_getClass(name) or "Unknown")
+
+if isTargeted(name) and class == "Sylvan" then
+  -- Sylvan root cures haemophilia + 1 random
+  erAff("haemophilia")
+  ataxiaTemp.randomCure = 1
+  if removeAffV2 then removeAffV2("haemophilia") end
+  if reduceRandomAffCertaintyV2 then reduceRandomAffCertaintyV2() end
+  if onPassiveCureV3 then onPassiveCureV3(1) end
+  selectString(line,1)
+  fg("NavajoWhite")
+  resetFormat()
+  targetIshere = true
 end

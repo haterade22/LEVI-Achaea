@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-03-10 — Erode trigger + missing class cure triggers + Fitness V3
+
+### Issue
+Erode spell had no trigger to parse which defense was stripped beyond shield (rebounding, blindness, etc.). Three class-specific cure abilities (Continuation/Monk, Priest Healing, Sylvan Root) had no tracking triggers. Fitness trigger (007) lacked V3 integration and didn't set `targetIshere`.
+
+### Fix
+- **`magi_offense_tracking/015_Erode.lua`** — New multiline trigger: parses eroded defense name from followup line, calls `erAff()` for shield + stripped defense (rebounding, blindness, deafness, caloric, insomnia, cloak, speed), party relay
+- **`passive_active/018_Continuation_(Monk).lua`** — New: detects Monk continuation (`gives a great shout of exertion`), clears weariness + 1 random via V3
+- **`passive_active/019_Priest_Healing.lua`** — New: detects Priest healing projection, clears voyria if present else 1 random via V3
+- **`passive_active/020_Sylvan_Root.lua`** — New: detects Sylvan root (`stands suddenly upright, rooted to the earth`), clears haemophilia + 1 random via V3
+- **`passive_active/007_Fitness_(Knights_Monk_BM).lua`** — Added `collapseAffAbsentV3("asthma")`/`collapseAffAbsentV3("weariness")` for V3 branch collapse, added `targetIshere = true`
+
+---
+
 ## 2026-03-10 — Magi Trigger Audit: Fix duplicates, add missing triggers
 
 ### Issue

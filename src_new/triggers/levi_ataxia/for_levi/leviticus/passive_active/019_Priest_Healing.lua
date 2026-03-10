@@ -1,0 +1,57 @@
+--[[mudlet
+type: trigger
+name: Priest Healing
+hierarchy:
+- Levi_Ataxia
+- For Levi
+- leviticus
+- Ataxia
+- Combat/Aff Tracking
+- Remove Afflictions
+- Groups
+- Passive/Active
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+  isTempTrigger: 'no'
+  isMultiline: 'no'
+  isPerlSlashGOption: 'no'
+  isColorizerTrigger: 'no'
+  isFilterTrigger: 'no'
+  isSoundTrigger: 'no'
+  isColorTrigger: 'no'
+  isColorTriggerFg: 'no'
+  isColorTriggerBg: 'no'
+triggerType: 0
+conditonLineDelta: 0
+mStayOpen: 0
+mCommand: ''
+packageName: ''
+mFgColor: '#ff0000'
+mBgColor: '#ffff00'
+mSoundFile: ''
+colorTriggerFgColor: '#000000'
+colorTriggerBgColor: '#000000'
+patterns:
+- pattern: ^([\w'\-]+) calls upon the powers of (.*) and projects \w+ spiritual essence inwardly\.$
+  type: 1
+]]--
+
+local name = matches[2]
+local class = (ataxiaNDB_getClass(name) or "Unknown")
+
+if isTargeted(name) and class == "Priest" then
+  -- Priest healing cures voyria if present, else 1 random
+  if haveAff("voyria") then
+    erAff("voyria")
+    if removeAffV2 then removeAffV2("voyria") end
+  else
+    ataxiaTemp.randomCure = 1
+    if reduceRandomAffCertaintyV2 then reduceRandomAffCertaintyV2() end
+    if onPassiveCureV3 then onPassiveCureV3(1) end
+  end
+  selectString(line,1)
+  fg("NavajoWhite")
+  resetFormat()
+  targetIshere = true
+end
