@@ -319,7 +319,7 @@ The `sysupdate` command downloads the latest `.mpackage` from GitHub, uninstalls
 
 | Requirement | Details |
 |-------------|---------|
-| **Python 3.8+** | For the conversion script |
+| **Python 3.14+** | For the conversion script |
 | **Java 8+** | For Muddler (the Mudlet package builder) |
 | **Muddler** | Download from [demonnic/muddler](https://github.com/demonnic/muddler) |
 
