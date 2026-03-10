@@ -413,7 +413,7 @@ function leviSetup.setupGui(rest)
     ataxia.usegui = true
     if ataxiagui_Create then
       ataxiagui_Create()
-      ataxiaEcho("GUI created.")
+      ataxiaEcho("Full Geyser GUI enabled. Restart Mudlet to apply.")
     else
       ataxiaEcho(R .. "GUI creation function not found.")
     end
@@ -422,17 +422,20 @@ function leviSetup.setupGui(rest)
   elseif rest == "off" or rest == "destroy" then
     ataxia.usegui = false
     save()
-    ataxiaEcho("GUI disabled. Restart Mudlet to fully remove.")
+    ataxiaEcho("Full Geyser GUI disabled. Restart Mudlet to fully remove.")
     return
   end
 
   header("GUI Configuration")
 
-  row("GUI enabled", boolStr(ataxia.usegui))
+  row("Full Geyser GUI (ataxiagui)", boolStr(ataxia.usegui))
 
-  cecho("\n\n  " .. V .. "Commands:")
-  cecho("\n  " .. HL .. "ataxia setup gui on" .. V .. "  — Create/enable GUI")
-  cecho("\n  " .. HL .. "ataxia setup gui off" .. V .. " — Disable GUI")
+  cecho("\n\n  " .. V .. "The following windows always load on startup:")
+  cecho("\n    " .. HL .. "Chat" .. V .. ", " .. HL .. "Map" .. V .. ", " .. HL .. "Bash Window" .. V .. ", " .. HL .. "Limb Counter" .. V .. ", " .. HL .. "Hunter")
+  cecho("\n")
+  cecho("\n  " .. V .. "The full Geyser GUI (borders, vitals bars, gauges) is separate:")
+  cecho("\n  " .. HL .. "ataxia setup gui on" .. V .. "  — Enable full Geyser GUI")
+  cecho("\n  " .. HL .. "ataxia setup gui off" .. V .. " — Disable full Geyser GUI (recommended)")
   cecho("\n")
 end
 
@@ -810,7 +813,7 @@ function leviSetup.showStatus()
   cecho("\n\n  " .. HL .. "SYSTEM")
   row("Separator", ataxia.settings.separator or ";")
   row("Aff tracking", "V3")
-  row("GUI", boolStr(ataxia.usegui))
+  row("Full Geyser GUI", boolStr(ataxia.usegui))
   row("Party relay", boolStr(partyrelay))
   row("Auto-loot", boolStr(ataxia.settings.looting))
 

@@ -76,6 +76,7 @@ affTimers = affTimers or {}
 
 -- Attack state tracking
 serpent.state.attackInFlight = serpent.state.attackInFlight or false
+serpent.state.lastBalState = serpent.state.lastBalState or "1"
 serpent.state.dispelSent = serpent.state.dispelSent or false
 
 -- Relapse locking state
@@ -1949,10 +1950,17 @@ if registerAnonymousEventHandler then
         hSuggActive = ""
     end)
 
-    -- Balance recovery: clear attackInFlight
+    -- Balance recovery: clear attackInFlight (edge-triggered: only on 0→1 transition)
+    -- Level-triggered clear caused double dispatches when keybind mashed — GMCP vitals
+    -- fires with bal="1" on the same prompt that consumed balance, prematurely clearing the guard
     serpent.eventHandlers.balRecovery = registerAnonymousEventHandler("gmcp.Char.Vitals", function()
         if gmcp.Char.Vitals.bal == "1" then
-            serpent.state.attackInFlight = false
+            if serpent.state.lastBalState == "0" then
+                serpent.state.attackInFlight = false
+            end
+            serpent.state.lastBalState = "1"
+        else
+            serpent.state.lastBalState = "0"
         end
     end)
 end

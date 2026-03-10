@@ -179,7 +179,7 @@ function magi.offense.selectSpell()
   local asthma = magi.offense.getAffProb("asthma")
   local scalded = st.scalded
   local burning = st.burns
-  local caloric = not magi.offense.hasAff("frostbite") -- proxy: if they have frostbite, caloric is down
+  local caloric = not magi.offense.hasAff("nocaloric") -- direct: nocaloric aff = caloric defense is down
   local frostbite = magi.offense.getAffProb("frostbite")
   local shivering = magi.offense.getAffProb("shivering")
   local weariness = magi.offense.getAffProb("weariness")
@@ -295,7 +295,7 @@ function magi.offense.selectBurningSpell()
   local frostbite = magi.offense.getAffProb("frostbite")
   local weariness = magi.offense.getAffProb("weariness")
   local nausea = magi.offense.getAffProb("nausea")
-  local caloric = frostbite < 0.5
+  local caloric = not magi.offense.hasAff("nocaloric")
   local dehydrateWillFreeze = (nausea >= 0.5) and (weariness < 0.5)
 
   -- Conflagrate when ready (requires burns >= 2, fire >= 2)

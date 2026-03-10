@@ -2,6 +2,48 @@
 
 ---
 
+## 2026-03-10 — Serpent: Fix double dispatch on gecko strip round
+
+### Root Cause
+The `attackInFlight` guard in `serp_ekanelia_offense()` was defeated by the GMCP vitals event handler, which cleared `attackInFlight` on **every** `gmcp.Char.Vitals` update where `bal == "1"` (level-triggered). When the user mashed the keybind, a second dispatch snuck through within ~100ms because the vitals handler fired between presses with stale `bal = "1"` (server hadn't consumed balance yet).
+
+This caused: gecko strip echo + impulse echo on the same balance, but only the gecko dstab executed. The impulse queued for next balance via `queue addclear freestand`, creating a confusing echo mismatch.
+
+### Fix
+Changed the balance recovery handler from level-triggered to **edge-triggered** — `attackInFlight` now only clears on the `0→1` bal transition, not on every prompt where bal happens to be "1".
+
+### Changes
+- **`002_Serpent_Offense.lua`** — Edge-triggered `attackInFlight` clear via `serpent.state.lastBalState` tracking; added state init
+
+---
+
+## 2026-03-10 — GUI Simplification
+
+### Summary
+Stripped down the GUI to only load essential windows on startup. The full Geyser GUI (`ataxiagui`) is now disabled by default. All scripts remain active (`isActive: 'yes'`) — the change is purely in which windows get built on login.
+
+### Windows that load on startup
+- **Chat** — Tabbed chat window (zgui)
+- **Map** — Mapper window (zgui)
+- **Bash Window** — Basher status console (zgui)
+- **Limb Counter** — Target limb tracking (standalone `tarc` namespace)
+- **Hunter** — Hunting Scrolls (ataxia.data, loaded independently)
+
+### Windows no longer loaded by default
+Target Affs, Room Players, Room Denizens, Vital Bars, Cape gauge, Affliction Lock, Self Affs, Enemy/Ally lists, Prompt window, Stats window, Room Info — all still available via `zshow` if needed.
+
+### Changes
+- **`039_EDIT_ME__Startup_Main.lua`** — Removed `buildTarAffs`, `buildRoomPlayers`, `buildRoomDenizens` from `zgui.modules`; added `buildBashWindow`; removed vital bars `ataxia.bars.buildAll()` call; removed `zgui.vitals` init block; cleaned up unused font size vars
+- **`002_Check_For_Any_Missing_Variables.lua`** — Default `ataxia.usegui = false` (was `true`) so the full Geyser border GUI doesn't load for new installs
+- **`020_Setup_Wizard.lua`** — Updated `ataxia setup gui` to explain simplified GUI; `on`/`off` toggle still works for users who want the full Geyser layout; updated `ataxia setup status` label
+
+### Notes
+- Existing users with `ataxia.usegui = true` saved will still get the full Geyser GUI until they run `ataxia setup gui off`
+- All update functions (`showAffs`, `showAllies`, `showEnemies`, `showRoomInfo`, `showCape`) remain defined and safe to call — Mudlet silently ignores writes to non-existent consoles
+- No nil-guards needed — all call sites are either self-guarding or target consoles that handle missing windows gracefully
+
+---
+
 ## 2026-03-10 — Shikudo Party Callout Fix
 
 ### Problem
@@ -58,10 +100,13 @@ Fixed 6 priority issues from reference system audit (xMagi/Tabethys comparison).
 - `triggers/.../general/025_Burns_Tracking.lua` — burns diminish pattern
 - `scripts/.../mage/004_Magi_Offense.lua` — conflagrate gate + meteorite pure
 
+**P9 — Caloric defense tracking (frostbite proxy → direct nocaloric)**
+- Changed `caloric` variable from frostbite proxy to direct `not hasAff("nocaloric")`
+- `nocaloric` already tracked by existing triggers (391, dehydrate, freeze chain, waterbond)
+
 ### Deferred Issues
 - P5 (staffcast lightning → stupidity): Unknown game text pattern
 - P7 (firestorm target burns): Unknown game text pattern
-- P9 (caloric defense tracking): Low priority, frostbite proxy sufficient
 - P11-P13: Low priority cleanup
 
 ---

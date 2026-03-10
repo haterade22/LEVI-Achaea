@@ -1791,6 +1791,18 @@ groups:
             isColorTriggerFg: 'no'
             isColorTriggerBg: 'no'
           directory: levi_ataxia/for_levi/leviticus/vibes
+        - name: Magi Offense Tracking
+          attributes:
+            isTempTrigger: 'no'
+            isMultiline: 'no'
+            isPerlSlashGOption: 'no'
+            isColorizerTrigger: 'no'
+            isFilterTrigger: 'no'
+            isSoundTrigger: 'no'
+            isColorTrigger: 'no'
+            isColorTriggerFg: 'no'
+            isColorTriggerBg: 'no'
+          directory: levi_ataxia/for_levi/leviticus/magi_offense_tracking
       - name: Jinx
         attributes:
           isTempTrigger: 'no'

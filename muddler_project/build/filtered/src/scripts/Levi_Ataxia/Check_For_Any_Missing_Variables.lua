@@ -15,8 +15,8 @@ function ataxiaCheckForMissing()
   end
   
   if ataxia.usegui == nil then
-    ataxia.usegui = true
-    ataxiaEcho("Using default GUI for the system.")
+    ataxia.usegui = false
+    ataxiaEcho("GUI disabled by default. Only chat, map, and limb counter load.")
   end
   
   if ataxia.settings.goldcommand == nil then
