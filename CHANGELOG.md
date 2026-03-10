@@ -2,6 +2,48 @@
 
 ---
 
+## 2026-03-10 — Overhaul: Default SSC curing priorities
+
+Comprehensive overhaul of default curing priorities sent to Achaea's server-side curing (SSC) system. Many afflictions had priorities set for dynamic swaps that were never implemented (e.g., stupidity at 18 "move to 9 if off focus balance"), leaving dangerous gaps in curing. Additionally, several combat-critical afflictions (peace, fear, confusion, recklessness, masochism) were at very low priority despite being highly impactful.
+
+**23 priority changes** — all raising urgency except horror (8→10, less urgent than recklessness/masochism):
+
+| Affliction | Old | New | Why |
+|-----------|-----|-----|-----|
+| peace | 16 | 2 | Cannot attack or defend |
+| pacified | 14 | 3 | Prevents aggressive actions |
+| paralysis | 4 | 3 | User priority: stay unparalyzed. Blocks tree. No bloodroot competition |
+| impatience | 6 | 4 | Blocks focus. Hardlock component |
+| prone | 9 | 5 | Enables kill combos |
+| fear | 20 | 5 | Forces fleeing. Bal-free cure |
+| disrupted | 9 | 5 | Blocks tree tattoo. Bal-free cure |
+| clumsiness | 14 | 7 | 33% miss chance |
+| voyria | 9 | 7 | Sip-cured, class lock aff |
+| nausea | 11 | 8 | Blocks parry |
+| stupidity | 18 | 8 | Focus fallback was absurdly low |
+| epilepsy | 18 | 8 | Seizures lose balance |
+| recklessness | 21 | 8 | 50% more damage taken |
+| masochism | 21 | 8 | Ekanelia enabler |
+| confusion | 20 | 8 | Blocks actions, ash-cured |
+| dizziness | 23 | 9 | Vertigo synergy |
+| vertigo | 16 | 9 | Falling damage |
+| healthleech | 14 | 9 | Ticking damage |
+| addiction | 11 | 9 | Riftlock enabler |
+| horror | 8 | 10 | Less urgent than combat affs |
+| paranoia | 17 | 10 | Blocks ally help |
+| dementia | 17 | 10 | Random actions |
+| shyness | 23 | 12 | Focus fallback was absurdly low |
+
+**Priority 1 reserved**: No default priorities at 1 — slot is reserved for on-the-fly emergency swaps (paraAst, brSlick, astImp, WATER, hypoImp all boost to 1 dynamically). Old prio 1 affs (aeon, hypothermia, peace) moved to 2; old prio 2 affs (sleeping, slickness, pacified, paralysis) moved to 3.
+
+**Code refactor**: Replaced duplicated hardcoded `send()` calls in `ataxia_resetOnLogin()` and `ataxia_resetPrios()` with a shared `ataxia_sendDefaultPrios()` helper that loops over the `ataxia_defaultCuringPrios()` table. This eliminates desync risk between the table and the SSC commands.
+
+| File | Changes |
+|------|---------|
+| `scripts/.../ataxia/001_Default_Curing_Prios.lua` | Updated 23 priorities in `ataxia_defaultCuringPrios()`, refactored reset functions to use shared table-driven helper |
+
+---
+
 ## 2026-03-10 — Perf: Basher attack hot-path optimization
 
 The basher attack dispatch (`ataxiaBasher_attack()`) ran ~90 lines of deeply nested inline flee logic with recursive calls, redundant function invocations (stormhammer recomputed 3x, search_targets 3x, updateVitals redundantly), all executing every prompt when health was low. The clean danger-level system (`ataxiaBasher_dangerLevel()` / `ataxiaBasher_executeFlee()`) existed but was dead code — never wired into the attack path.

@@ -364,7 +364,12 @@ The basher provides automated target selection and attack execution for PvE hunt
 | Function | Purpose |
 |----------|---------|
 | `search_targets()` | Scans room for valid targets from `ataxiaBasher.targetList[area]` |
-| `ataxiaBasher_attack()` | Assembles and sends attack command via static dispatch table |
+| `ataxiaBasher_attack()` | Top-level attack dispatch — danger level check → shield/flee/attack routing |
+| `ataxiaBasher_assembleAttack()` | Builds and sends the actual attack command (class dispatch, gold, battlerage) |
+| `ataxiaBasher_dangerLevel()` | Returns danger state: "flee" / "shield" / "wait" / "attack" based on HP% thresholds |
+| `ataxiaBasher_executeFlee()` | Executes flee sequence — sets bashFlee, flee timer, sends retreat/flee |
+| `ataxiaBasher_checkFleeRecovery()` | Checks if HP recovered enough to resume after flee (called from prompt) |
+| `ataxiaBasher_checkPlayerFlee()` | Per-area player-presence flee check |
 | `ataxiaBasher_patterns()` | Main prompt loop — fires attacks when balanced, records balance samples |
 | `ataxiaBasher_stormhammer()` | Populates AoE target list (dirty-flag cached, lazy recompute) |
 | `ataxiaBasher_invalidateStormhammer()` | Marks stormhammer cache dirty (called by room/denizen update events) |
@@ -375,9 +380,7 @@ The basher provides automated target selection and attack execution for PvE hunt
 | `ataxiaBasher_crowdControlBattlerage()` | Generic CC battlerage handler (Bard, Jester, etc.) |
 | `ataxiaBasher_validTargets()` | Returns count of valid targets in room |
 | `ataxiaBasher_shieldedTarget()` | Handles mob shield retarget with configurable timers |
-| `ataxiaBasher_recordBalanceSample()` | Records inter-attack interval for GMCP-based balance tracking |
-| `ataxiaBasher_getAttackCooldown()` | Returns learned attack cooldown (95% of rolling average) |
-| `ataxiaBasher_onDeath()` | Death recovery — pauses basher, waits for resurrection |
+| `ataxiaBasher_onDeath()` | Death handler — fully disables basher, clears queues/timers/rotation, moves to safe room |
 | `ataxiaBasher_startFleeTimer()` | Flee circuit breaker (20s default timeout) |
 | `ataxiaBasher_startStuckTimer()` | Mapper-stuck detection for speedwalk hangs |
 
@@ -392,8 +395,6 @@ The basher provides automated target selection and attack execution for PvE hunt
 | `found_target` | Boolean — valid target exists |
 | `stormhammerTargets` | List of IDs for AoE attacks |
 | `ataxiaBasher_stormhammerDirty` | Dirty flag for stormhammer cache invalidation |
-| `ataxiaBasher_balanceSamples` | Per-class rolling balance sample table (max 20) |
-| `ataxiaBasher_lastAttackEpoch` | Timestamp of last attack for balance measurement |
 
 **Configuration Options:**
 | Setting | Type | Default | Purpose |
@@ -405,7 +406,6 @@ The basher provides automated target selection and attack execution for PvE hunt
 | `ataxiaBasher.fleeThreshold` | number | varies | HP% to trigger flee |
 | `ataxiaBasher.dangerCount` | number | varies | Max dangerous mobs per room |
 | `ataxiaBasher.goldPack` | string | `"pack436363"` | Container ID for gold collection |
-| `ataxiaBasher.attackCooldown` | number | 0.4 | Default attack cooldown (seconds) |
 | `ataxiaBasher.fleeTimeout` | number | 20 | Flee circuit breaker timeout (seconds) |
 | `ataxiaBasher.shieldTimers` | table | `{["a mhun knight"]=4.7}` | Per-mob shield durations |
 | `ataxiaBasher.shieldTimerDefault` | number | 3.1 | Default shield duration |
@@ -414,7 +414,6 @@ The basher provides automated target selection and attack execution for PvE hunt
 | `ataxiaBasher.mobIgnore` | table | — | NPCs to skip |
 | `ataxiaBasher.dangerList` | table | — | Dangerous mob names |
 | `ataxiaBasher.ldeckRules` | table | see below | Data-driven legend deck draw rules |
-| `ataxiaBasher_attackCooldowns` | table | — | Per-class static cooldown overrides |
 
 **Pre-Combat Legend Deck (Data-Driven):**
 
@@ -431,14 +430,6 @@ ataxiaBasher.ldeckRules = {
 
 Cards are drawn using the queue system (`queue add free ldeck draw <card>`) and only once per room entry (tracked via `ataxiaBasher.ldeckDrawnRoom`).
 
-**GMCP-Based Balance Tracking:**
-
-The basher learns per-class attack timing from actual balance/equilibrium recovery:
-1. `ataxiaBasher_recordBalanceSample()` is called on each attack, measuring the time since the previous attack
-2. Samples are stored in a rolling window of 20 per class in `ataxiaBasher_balanceSamples`
-3. `ataxiaBasher_getAttackCooldown()` returns 95% of the rolling average (with 3+ samples), allowing the basher to attack slightly before balance returns for optimal throughput
-4. Falls back to per-class static overrides (`ataxiaBasher_attackCooldowns`) or the global default (`ataxiaBasher.attackCooldown`, 0.4s)
-
 **Stormhammer Dirty-Flag Caching:**
 
 Stormhammer target list recomputation is cached via a dirty flag:
@@ -451,7 +442,8 @@ Stormhammer target list recomputation is cached via a dirty flag:
 | Feature | Description |
 |---------|-------------|
 | **Flee circuit breaker** | If still fleeing after 20s (configurable), disables basher and alerts player |
-| **Death recovery** | Pauses basher on death, waits for resurrection/rebirth event |
+| **Death recovery** | Fully disables basher on death (clears queues, kills timers, stops rotation), moves to `mmp.previousroom` after 2s to heal |
+| **Death triggers** | `406_Own_Starburst.lua` (starburst text) and `407_Player_Slain.lua` ("You have been slain") both call `ataxiaBasher_onDeath()` (idempotent) |
 | **Mapper-stuck detection** | Timer checks if speedwalk counter hasn't changed, triggers `pathFail()` |
 | **Nil guards** | `mmp.previousroom`, player database, area targetList all nil-checked |
 | **Rage conservation** | Skips battlerage abilities if mob is near death (< 15% HP) |
@@ -474,9 +466,12 @@ ataxiaBasher_preCombatLdeck() → Draw cards if rules match (data-driven)
     ↓
 ataxiaBasher_patterns() → Check balance/standing, recordBalanceSample()
     ↓
-ataxiaBasher_attack() → Static dispatch table → class-specific function
+ataxiaBasher_attack() → dangerLevel() check
     ↓
-ataxiaBasher_assembleBattlerage() → Generic/CC handler with rage conservation
+  flee → ataxiaBasher_executeFlee()
+  shield → touch shield
+  wait → skip cycle
+  attack → ataxiaBasher_assembleAttack() → class dispatch + battlerage
 ```
 
 ### GUI System (ataxiagui)
@@ -485,7 +480,7 @@ ataxiaBasher_assembleBattlerage() → Generic/CC handler with rage conservation
 - Bottom panel: Health/Mana/Willpower/Endurance gauges
 - Balance/Equilibrium indicators
 - Tabbed chat (All, City, Clans, Misc, Order, Party, Tells)
-- Chat channel colors: per-channel coloring via `channelColors` map (says=cyan, ct=red, ht/tell=yellow, party=magenta, etc.)
+- Chat preserves original MUD ANSI colors via `ansi2decho()` + `decho()` (no per-channel flat coloring)
 
 **Window Management (`Adjustable.Container`)**:
 All GUI windows use `Adjustable.Container:new({name = "...", ...})` which provides:

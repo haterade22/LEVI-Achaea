@@ -17,235 +17,218 @@ packageName: ''
 
 -- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Ataxia-DownloadThis > Ataxia > System-related > Curing Stuff > Priority-related > Default Curing Prios
 
-function ataxia_resetOnLogin()
-	local defaultPrios = ataxia_defaultCuringPrios()
-	ataxia.curingprio = ataxia.curingprio or {}
-	
---	for aff, val in pairs(defaultPrios) do
---		if ataxia.curingprio[aff] == nil or ataxia.curingprio[aff] ~= val then
---send("curing priority "..aff.." "..val)		end
---	end
+-- Sends all default curing priorities to SSC, staggered to avoid flooding.
+-- Both resetOnLogin and resetPrios use the same table-driven approach.
+local function ataxia_sendDefaultPrios()
+  local prios = ataxia_defaultCuringPrios()
+  -- Collect into array for deterministic batching
+  local entries = {}
+  for aff, val in pairs(prios) do
+    entries[#entries + 1] = "curing priority " .. aff .. " " .. val
+  end
+  -- Send in batches of 5, staggered by 1.5s
+  local batchSize = 5
+  local delay = 0
+  for i = 1, #entries, batchSize do
+    local batch = {}
+    for j = i, math.min(i + batchSize - 1, #entries) do
+      batch[#batch + 1] = entries[j]
+    end
+    local cmd = table.concat(batch, ";")
+    if delay == 0 then
+      send(cmd)
+    else
+      local d = delay
+      tempTimer(d, function() send(cmd) end)
+    end
+    delay = delay + 1.5
+  end
+end
 
-send("curing priority parasite 7;curing priority hypersomnia 9;curing priority flushings 5;curing priority generosity 16;curing priority anorexia 4")
-tempTimer(1.5, [[ send("curing priority transfixation 6;curing priority whisperingmadness 11;curing priority epilepsy 18;curing priority confusion 20;curing priority damagedleftleg 8") ]])
-tempTimer(2.5, [[ send("curing priority vertigo 16;curing priority temperedmelancholic 14;curing priority recklessness 21;curing priority weariness 7;curing priority loneliness 16") ]])
-tempTimer(3.5, [[ send("curing priority pyramides 6;curing priority pressure 17;curing priority impatience 6;curing priority paralysis 4;curing priority pacified 14") ]])
-tempTimer(4.5, [[ send("curing priority serioustrauma 17;curing priority brokenrightleg 7;curing priority webbed 6;curing priority mangledrightarm 14;curing priority stuttering 19") ]])
-tempTimer(5.5, [[ send("curing priority crackedribs 9;curing priority spiritburn 11;curing priority shadowmadness 6;curing priority unweavingbody 7;curing priority retribution 6") ]])
-tempTimer(6.5, [[ send("curing priority guilt 8;curing priority haemophilia 11;curing priority horror 8;curing priority fear 20;curing priority sensitivity 7") ]])
-tempTimer(7.5, [[ send("curing priority temperedsanguine 14;curing priority disrupted 9;curing priority prone 9;curing priority dissonance 14;curing priority timeloop 5") ]])
-tempTimer(8.5, [[ send("curing priority voyria 9;curing priority sleeping 2;curing priority impaled 6;curing priority daeggerimpale 6;curing priority entangled 6") ]])
-tempTimer(9.5, [[ send("curing priority addiction 11;curing priority frozen 15;curing priority bound 6;curing priority unweavingmind 8;curing priority slashedthroat 19") ]])
-tempTimer(10.5, [[ send("curing priority wristfractures 11;curing priority concussion 12;curing priority sandfever 4;curing priority scalded 16;curing priority skullfractures 8") ]])
-tempTimer(11.5, [[ send("curing priority tension 16;curing priority disloyalty 15;curing priority deadening 14;curing priority clumsiness 14;curing priority darkshade 9") ]])
-tempTimer(12.5, [[ send("curing priority manaleech 13;curing priority hellsight 12;curing priority depression 6;curing priority lovers 14;curing priority slickness 2") ]])
-tempTimer(13.5, [[ send("curing priority itching 5;curing priority peace 16;curing priority stupidity 18;curing priority mangledleftarm 14;curing priority healthleech 14") ]])
-tempTimer(14.5, [[ send("curing priority aeon 1;curing priority agoraphobia 16;curing priority selarnia 20;curing priority laceratedthroat 19;curing priority burning 19") ]])
-tempTimer(15.5, [[ send("curing priority deafness 26;curing priority dementia 17;curing priority paranoia 17;curing priority tenderskin 11;curing priority scytherus 3") ]])
-tempTimer(16.5, [[ send("curing priority mangledleftleg 8;curing priority lethargy 11;curing priority shyness 23;curing priority shivering 15;curing priority damagedrightarm 13") ]])
-tempTimer(17.5, [[ send("curing priority brokenleftarm 10;curing priority torntendons 10;curing priority damagedhead 12;curing priority damagedleftarm 11;curing priority brokenrightarm 10") ]])
-tempTimer(18.5, [[ send("curing priority mangledhead 9;curing priority mangledrightleg 8;curing priority damagedrightleg 8;curing priority crushedthroat 5;curing priority rebbies 7") ]])
-tempTimer(20.5, [[ send("curing priority temperedphlegmatic 14;curing priority hypothermia 1;curing priority masochism 21;curing priority blindness 26;curing priority mycalium 5") ]])
-tempTimer(21.5, [[ send("curing priority mildtrauma 17;curing priority hypochondria 5;curing priority nausea 11;curing priority hallucinations 9;curing priority dizziness 23") ]])
-tempTimer(22.5, [[ send("curing priority heartseed 3;curing priority temperedcholeric 14;curing priority claustrophobia 16;curing priority asthma 7;curing priority justice 16") ]])
-tempTimer(23.5, [[ send("curing priority brokenleftleg 7") ]])
+function ataxia_resetOnLogin()
+  ataxia.curingprio = ataxia.curingprio or {}
+  ataxia_sendDefaultPrios()
 end
 
 function ataxia_resetPrios()
-	local defaultPrios = ataxia_defaultCuringPrios()
-  
-send("curing priority parasite 7;curing priority hypersomnia 9;curing priority flushings 5;curing priority generosity 16;curing priority anorexia 4")
-tempTimer(1.5, [[ send("curing priority transfixation 6;curing priority whisperingmadness 11;curing priority epilepsy 18;curing priority confusion 20;curing priority damagedleftleg 8") ]])
-tempTimer(2.5, [[ send("curing priority vertigo 16;curing priority temperedmelancholic 14;curing priority recklessness 21;curing priority weariness 7;curing priority loneliness 16") ]])
-tempTimer(3.5, [[ send("curing priority pyramides 6;curing priority pressure 17;curing priority impatience 6;curing priority paralysis 4;curing priority pacified 14") ]])
-tempTimer(4.5, [[ send("curing priority serioustrauma 17;curing priority brokenrightleg 7;curing priority webbed 6;curing priority mangledrightarm 14;curing priority stuttering 19") ]])
-tempTimer(5.5, [[ send("curing priority crackedribs 9;curing priority spiritburn 11;curing priority shadowmadness 6;curing priority unweavingbody 7;curing priority retribution 6") ]])
-tempTimer(6.5, [[ send("curing priority guilt 8;curing priority haemophilia 11;curing priority horror 10;curing priority fear 20;curing priority sensitivity 7") ]])
-tempTimer(7.5, [[ send("curing priority temperedsanguine 14;curing priority disrupted 9;curing priority prone 9;curing priority dissonance 14;curing priority timeloop 5") ]])
-tempTimer(8.5, [[ send("curing priority voyria 9;curing priority sleeping 2;curing priority impaled 6;curing priority daeggerimpale 6;curing priority entangled 6") ]])
-tempTimer(9.5, [[ send("curing priority addiction 11;curing priority frozen 15;curing priority bound 6;curing priority unweavingmind 8;curing priority slashedthroat 19") ]])
-tempTimer(10.5, [[ send("curing priority wristfractures 11;curing priority concussion 12;curing priority sandfever 4;curing priority scalded 16;curing priority skullfractures 8") ]])
-tempTimer(11.5, [[ send("curing priority tension 16;curing priority disloyalty 15;curing priority deadening 14;curing priority clumsiness 14;curing priority darkshade 9") ]])
-tempTimer(12.5, [[ send("curing priority manaleech 13;curing priority hellsight 12;curing priority depression 6;curing priority lovers 14;curing priority slickness 2") ]])
-tempTimer(13.5, [[ send("curing priority itching 5;curing priority peace 16;curing priority stupidity 18;curing priority mangledleftarm 14;curing priority healthleech 14") ]])
-tempTimer(14.5, [[ send("curing priority aeon 1;curing priority agoraphobia 16;curing priority selarnia 20;curing priority laceratedthroat 19;curing priority burning 19") ]])
-tempTimer(15.5, [[ send("curing priority deafness 26;curing priority dementia 17;curing priority paranoia 17;curing priority tenderskin 11;curing priority scytherus 3") ]])
-tempTimer(16.5, [[ send("curing priority mangledleftleg 8;curing priority lethargy 11;curing priority shyness 23;curing priority shivering 15;curing priority damagedrightarm 13") ]])
-tempTimer(17.5, [[ send("curing priority brokenleftarm 10;curing priority torntendons 10;curing priority damagedhead 12;curing priority damagedleftarm 11;curing priority brokenrightarm 10") ]])
-tempTimer(18.5, [[ send("curing priority mangledhead 9;curing priority mangledrightleg 8;curing priority damagedrightleg 8;curing priority crushedthroat 5;curing priority rebbies 7") ]])
-tempTimer(20.5, [[ send("curing priority temperedphlegmatic 14;curing priority hypothermia 1;curing priority masochism 21;curing priority blindness 26;curing priority mycalium 5") ]])
-tempTimer(21.5, [[ send("curing priority mildtrauma 17;curing priority hypochondria 5;curing priority nausea 11;curing priority hallucinations 9;curing priority dizziness 23") ]])
-tempTimer(22.5, [[ send("curing priority heartseed 3;curing priority temperedcholeric 14;curing priority claustrophobia 16;curing priority asthma 7;curing priority justice 16") ]])
-tempTimer(23.5, [[ send("curing priority brokenleftleg 7") ]])
-
---	for aff, val in pairs(defaultPrios) do
---send("curing priority "..aff.." "..val)	end
+  ataxia_sendDefaultPrios()
 end
 
 function ataxia_defaultCuringPrios()
   return {
-    --Important afflictions here
-    ["paralysis"] = 4,
-    ["timeloop"] = 5,
-    ["shadowmadness"] = 6,
-    ["hypochondria"] = 5,
-    ["depression"] = 6,
-    ["retribution"] = 6,
-    ["horror"] = 10,
-    ["parasite"] = 7,
-    ["scytherus"] = 3,
-    ["impatience"] = 6,
-    ["asthma"] = 7,
-    ["sensitivity"] = 7,
-    ["weariness"] = 7,
-		["unweavingbody"] = 7,
-		["unweavingmind"] = 8,
-    ["guilt"] = 8,
-    ["darkshade"] = 9,
-    ["hypersomnia"] = 9,
-    ["hallucinations"] = 9,
-    --10 free for focus shifts; I swear I'll add this at some point.
-    
-    --Pariah specific afflictions
-    ["sandfever"] = 4,
-    ["mycalium"] = 5,
-    ["flushings"] = 5,
-    ["pyramides"] = 6,
-    ["rebbies"] = 7,
-		
-    ["fratricide"] = 9,  -- Argentum cure, boost when approaching lock vs Serpent
+    -----------------------------------------------------------
+    -- PRIORITY 1: RESERVED for on-the-fly emergency swaps
+    -----------------------------------------------------------
 
-    ["nausea"] = 11,
-    ["haemophilia"] = 11,
-    ["lethargy"] = 11,
-    ["addiction"] = 11,
-    ["tenderskin"] = 11,
-    ["spiritburn"] = 11,
-		
-    --13 gap for other shifts.
+    -----------------------------------------------------------
+    -- PRIORITY 2: Life-threatening / total incapacitation
+    -----------------------------------------------------------
+    ["aeon"] = 2,             -- Blocks everything. Smoke (elm).
+    ["hypothermia"] = 2,      -- Ticking freeze kill. Salve.
+    ["peace"] = 2,            -- Cannot attack or defend. Bellwort.
+
+    -----------------------------------------------------------
+    -- PRIORITY 3: Severe incapacitation / lock core
+    -----------------------------------------------------------
+    ["sleeping"] = 3,         -- Total incapacitation. Bal-free.
+    ["slickness"] = 3,        -- Softlock core. Smoke (valerian). Higher than para so smoke > eat broot.
+    ["pacified"] = 3,         -- Prevents aggressive actions. Bellwort.
+    ["paralysis"] = 3,        -- Blocks tree (emergency escape). Bloodroot has NO herb competition. paraAst swap boosts to 1.
+
+    -----------------------------------------------------------
+    -- PRIORITY 3: Urgent damage / near-lock
+    -----------------------------------------------------------
+    ["scytherus"] = 3,        -- Ticking damage + relapse. Ginseng.
+    ["heartseed"] = 3,        -- Ticking kill. Salve.
+
+    -----------------------------------------------------------
+    -- PRIORITY 4: Lock components / critical affs
+    -----------------------------------------------------------
+    ["anorexia"] = 4,         -- Blocks eating. Softlock core. Salve/focus.
+    ["sandfever"] = 4,        -- Pariah mechanic. Goldenseal.
+    ["impatience"] = 4,       -- Hardlock component. Blocks focus. #1 goldenseal priority.
+
+    -----------------------------------------------------------
+    -- PRIORITY 5: Important combat / balance-free
+    -----------------------------------------------------------
+    ["timeloop"] = 5,         -- DW mechanic. Bellwort.
+    ["hypochondria"] = 5,     -- Aff amplifier. Kelp.
+    ["crushedthroat"] = 5,    -- Eventually kills. Salve.
+    ["itching"] = 5,          -- Forces scratching (lose bal). Salve.
+    ["mycalium"] = 5,         -- Magi mechanic. Ginseng.
+    ["flushings"] = 5,        -- Pariah mechanic. Ginseng.
+    ["prone"] = 5,            -- Enables kill combos. Bal-free.
+    ["fear"] = 5,             -- Forces fleeing. Bal-free.
+    ["disrupted"] = 5,        -- Blocks tree tattoo. Bal-free.
+
+    -----------------------------------------------------------
+    -- PRIORITY 6: Writhe / moderate combat
+    -----------------------------------------------------------
+    ["bound"] = 6,            -- Writhe.
+    ["transfixation"] = 6,    -- Writhe.
+    ["webbed"] = 6,           -- Writhe.
+    ["entangled"] = 6,        -- Writhe.
+    ["daeggerimpale"] = 6,    -- Writhe.
+    ["impaled"] = 6,          -- Writhe.
+    ["pyramides"] = 6,        -- Pariah mechanic. Salve.
+    ["retribution"] = 6,
+    ["depression"] = 6,       -- Goldenseal.
+    ["shadowmadness"] = 6,
+
+    -----------------------------------------------------------
+    -- PRIORITY 7: Lock support / herb competition
+    -----------------------------------------------------------
+    ["asthma"] = 7,           -- Softlock core. #1 kelp priority. astWear swap boosts to 3 vs Serpent.
+    ["sensitivity"] = 7,      -- Damage amplifier. Kelp.
+    ["weariness"] = 7,        -- Blocks Fitness. Class lock aff. Kelp.
+    ["clumsiness"] = 7,       -- 33% miss chance! Kelp. (was 14)
+    ["parasite"] = 7,         -- Kelp.
+    ["rebbies"] = 7,          -- Pariah mechanic. Ginseng.
+    ["unweavingbody"] = 7,    -- Psion mechanic.
+    ["brokenrightleg"] = 7,   -- Mending.
+    ["brokenleftleg"] = 7,    -- Mending.
+    ["voyria"] = 7,           -- Sip-cured (separate balance). Class lock aff for Apostate. (was 9)
+
+    -----------------------------------------------------------
+    -- PRIORITY 8: Mental fallback / moderate
+    -----------------------------------------------------------
+    ["unweavingmind"] = 8,    -- Psion mechanic.
+    ["guilt"] = 8,            -- Paladin mechanic. Lobelia.
+    ["nausea"] = 8,           -- Blocks parry. Ginseng. (was 11)
+    ["skullfractures"] = 8,   -- Health elixir.
+    ["stupidity"] = 8,        -- Focus handles normally; 8 is herb fallback. Goldenseal. (was 18)
+    ["epilepsy"] = 8,         -- Seizures lose balance. Goldenseal. (was 18)
+    ["recklessness"] = 8,     -- 50% more damage taken. Lobelia. Focus can cure. (was 21)
+    ["masochism"] = 8,        -- Ekanelia enabler for Serpents. Lobelia. Focus can cure. (was 21)
+    ["confusion"] = 8,        -- Blocks actions. Ash-cured (not goldenseal!). (was 20)
+    ["damagedleftleg"] = 8,   -- Restoration.
+    ["damagedrightleg"] = 8,  -- Restoration.
+    ["mangledleftleg"] = 8,   -- Mending.
+    ["mangledrightleg"] = 8,  -- Mending.
+
+    -----------------------------------------------------------
+    -- PRIORITY 9: Lower urgency
+    -----------------------------------------------------------
+    ["darkshade"] = 9,        -- dShade swap handles urgent cases. Ginseng.
+    ["hypersomnia"] = 9,      -- Ash.
+    ["hallucinations"] = 9,   -- Ash.
+    ["fratricide"] = 9,       -- fratLock swap boosts to 4 when approaching lock. Lobelia.
+    ["crackedribs"] = 9,      -- Health elixir.
+    ["dizziness"] = 9,        -- Vertigo synergy. Goldenseal. Focus handles normally. (was 23)
+    ["vertigo"] = 9,          -- Dizziness+vertigo = falling. Lobelia. (was 16)
+    ["healthleech"] = 9,      -- Ticking damage. Kelp. (was 14)
+    ["addiction"] = 9,        -- Riftlock enabler. Ginseng. (was 11)
+    ["mangledhead"] = 9,      -- Mending.
+
+    -----------------------------------------------------------
+    -- PRIORITY 10: Arm breaks / misc
+    -----------------------------------------------------------
+    ["brokenleftarm"] = 10,   -- Mending.
+    ["brokenrightarm"] = 10,  -- Mending.
+    ["torntendons"] = 10,     -- Health elixir.
+    ["horror"] = 10,          -- Less urgent than recklessness/masochism. (was 8)
+    ["paranoia"] = 10,        -- Blocks allies helping. Ash. (was 17)
+    ["dementia"] = 10,        -- Random actions. Ash. (was 17)
+
+    -----------------------------------------------------------
+    -- PRIORITY 11: Low urgency combat
+    -----------------------------------------------------------
+    ["tenderskin"] = 11,      -- Lobelia.
+    ["spiritburn"] = 11,      -- Lobelia.
+    ["wristfractures"] = 11,  -- Health elixir.
+    ["damagedleftarm"] = 11,  -- Restoration.
+    ["lethargy"] = 11,        -- Ginseng.
+    ["haemophilia"] = 11,     -- Ginseng.
+    ["whisperingmadness"] = 11, -- Smoke.
+
+    -----------------------------------------------------------
+    -- PRIORITY 12: Low priority
+    -----------------------------------------------------------
+    ["damagedhead"] = 12,     -- Restoration.
+    ["concussion"] = 12,      -- Health elixir.
+    ["hellsight"] = 12,       -- Smoke.
+    ["shyness"] = 12,         -- Focus handles it. Goldenseal. (was 23)
+
+    -----------------------------------------------------------
+    -- PRIORITY 13+: Situational / low impact
+    -----------------------------------------------------------
+    ["damagedrightarm"] = 13, -- Restoration.
+    ["manaleech"] = 13,       -- Smoke.
+
     ["temperedmelancholic"] = 14,
     ["temperedcholeric"] = 14,
     ["temperedsanguine"] = 14,
     ["temperedphlegmatic"] = 14,
-    ["lovers"] = 14, 
-    ["pacified"] = 14, 
-    ["healthleech"] = 14,
-    ["clumsiness"] = 14,
-    ["dissonance"] = 14,
-    ["loneliness"] = 16,
-    ["claustrophobia"] = 16,
-    ["agoraphobia"] = 16,
-    ["vertigo"] = 16,
+    ["lovers"] = 14,          -- Bellwort.
+    ["deadening"] = 14,       -- Smoke.
+    ["mangledleftarm"] = 14,  -- Mending.
+    ["mangledrightarm"] = 14, -- Mending.
+    ["dissonance"] = 14,      -- Goldenseal.
 
+    ["frozen"] = 15,          -- Salve. Same rank as shivering.
+    ["shivering"] = 15,       -- Salve. CALORIC at 15 unless vs Sentinel (move to 2).
+    ["disloyalty"] = 15,      -- Smoke.
 
-    ["peace"] = 16, 
-    ["justice"] = 16, 
-    ["generosity"] = 16,
+    ["scalded"] = 16,         -- Salve.
+    ["loneliness"] = 16,      -- Lobelia.
+    ["claustrophobia"] = 16,  -- Lobelia.
+    ["agoraphobia"] = 16,     -- Lobelia.
+    ["tension"] = 16,         -- Smoke.
+    ["justice"] = 16,         -- Bellwort.
+    ["generosity"] = 16,      -- Bellwort.
 
-    ["dementia"] = 17,
-    ["paranoia"] = 17,
+    ["serioustrauma"] = 17,   -- Salve.
+    ["mildtrauma"] = 17,      -- Salve.
+    ["pressure"] = 17,        -- Smoke.
+    --["rebounding"] = 18,    -- (DEFENCE QUEUE SLOT 18) IMPORTANT: keep below pressure
 
-    ["stupidity"] = 18, --move to 9 if off focus balance
-    ["epilepsy"] = 18,
-    ["confusion"] = 20, --move to 2 if disrupted, move to 8 if off focus balance
-    ["recklessness"] = 21, --move up higher if off focus balance
-    ["masochism"] = 21,
+    ["burning"] = 19,         -- Salve.
+    ["stuttering"] = 19,      -- Salve.
+    ["slashedthroat"] = 19,   -- Salve.
+    ["laceratedthroat"] = 19, -- Salve.
+    ["selarnia"] = 20,        -- Salve.
 
-    ["dizziness"] = 23, --if off focus balance move this to 14? Seems too high honestly.
-    ["shyness"] = 23, --if off focus balance move this to 14?
-    
-    ["blindness"] = 26,
-    ["deafness"] = 26,
-
-    --Salve afflictions
-    ["heartseed"] = 3,
-    ["hypothermia"] = 1,
-    ["anorexia"] = 4,
-    ["crushedthroat"] = 5,
-    ["itching"] = 5,
-
-    --6 GAP: For resto leg breaks and prone (will fix this too, at some point)
-
-    ["brokenleftleg"] = 7,
-    ["brokenrightleg"] = 7,
-
-    ["damagedleftleg"] = 8, --move these up if prone so Sents can't screw me over.
-    ["damagedrightleg"] = 8,
-    ["mangledleftleg"] = 8,
-    ["mangledrightleg"] = 8,
-
-    ["mangledhead"] = 9,
-
-    ["brokenleftarm"] = 10,
-    ["brokenrightarm"] = 10,
-
-    ["damagedleftarm"] = 11,
-
-    ["damagedhead"] = 12,
-    ["concussion"] = 12,
-
-    ["damagedrightarm"] = 13,
-
-    ["mangledleftarm"] = 14,
-    ["mangledrightarm"] = 14,
-
-    ["frozen"] = 15,
-    ["shivering"] = 15, --same rank as frozen
-    --CALORIC(insulation) at 15 unless it's a damn sentinel, then move up to 2 along with frozen and shivering
-    ["scalded"] = 16,
-    ["mildtrauma"] = 17,
-    ["serioustrauma"] = 17,
-
-    --MASS at 18
-
-    ["burning"] = 19,
-    ["stuttering"] = 19,
-    ["slashedthroat"] = 19,
-    ["laceratedthroat"] = 19,
-    ["selarnia"] = 20,
-
-    ---------------------------
-    --PIPE
-    ---------------------------
-    ["aeon"] = 1,
-    ["slickness"] = 2, --1 higher than para so that smoke > eat broot if para and slick.
-    ["whisperingmadness"] = 11,
-    ["hellsight"] = 12,
-
-    ["manaleech"] = 13,
-    ["deadening"] = 14,
-    ["disloyalty"] = 15,
-    ["tension"] = 16,
-    ["pressure"] = 17,
-
-    --["rebounding"] = 18, (DEFENCE QUEUE SLOT 18) IMPORTANT TO MOVE THIS DOWN BELOW PRESSURE
-
-    ------------------------
-    --HEALTH ELIXIR
-    ------------------------
-    ["skullfractures"] = 8,
-    ["crackedribs"] = 9,
-    ["torntendons"] = 10,
-    ["wristfractures"] = 11,
-
-    -------------------------
-    --WRITHE
-    -------------------------
-    ["bound"] = 6,
-    ["transfixation"] = 6,
-    ["webbed"] = 6,
-    ["entangled"] = 6,
-    ["daeggerimpale"] = 6,
-    ["impaled"] = 6,
-
-    -----------------------
-    --BAL FREE CURES
-    -----------------------
-    ["sleeping"] = 2,
-    ["voyria"] = 9,
-    ["prone"] = 9,
-    ["disrupted"] = 9,
-    ["fear"] = 20, --low for retardation/aeon curing
-
+    ["blindness"] = 26,       -- Ignored by SSC (custom handling).
+    ["deafness"] = 26,        -- Ignored by SSC (custom handling).
   }
 end
