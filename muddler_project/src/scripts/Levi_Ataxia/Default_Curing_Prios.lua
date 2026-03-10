@@ -2,7 +2,7 @@
 
 -- Sends all default curing priorities to SSC, staggered to avoid flooding.
 -- Both resetOnLogin and resetPrios use the same table-driven approach.
-local function ataxia_sendDefaultPrios()
+function ataxia_sendDefaultPrios()
   local prios = ataxia_defaultCuringPrios()
   -- Collect into array for deterministic batching
   local entries = {}

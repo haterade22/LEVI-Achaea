@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-03-10 — Magi Burns: Scintilla Not Incrementing Burns Counter
+
+### Root Cause
+`004_Immolation.lua` (scintilla success trigger) only set `timmolation = true` without incrementing `magi.offense.state.burns`. Burns counter stayed at 0 through 6+ scintilla casts, only incrementing when fire resonance passive ("Flames ignite") or efreeti ticks fired.
+
+### Fix
+| File | Change |
+|------|--------|
+| `staffcast/004_Immolation.lua` | Added burns increment + `tarAffed("burning")` + burn counter echo on scintilla hit |
+
+---
+
 ## 2026-03-10 — Simultaneity Defense Tracking Fix
 
 ### Root Cause
