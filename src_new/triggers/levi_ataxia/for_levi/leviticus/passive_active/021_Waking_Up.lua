@@ -1,16 +1,17 @@
 --[[mudlet
 type: trigger
-name: Firelash
+name: Waking Up
 hierarchy:
 - Levi_Ataxia
 - For Levi
 - leviticus
-- LeviAtax
-- Leviticus
-- Mage
-- General
+- Ataxia
+- Combat/Aff Tracking
+- Remove Afflictions
+- Groups
+- Passive/Active
 attributes:
-  isActive: 'no'
+  isActive: 'yes'
   isFolder: 'no'
   isTempTrigger: 'no'
   isMultiline: 'no'
@@ -32,18 +33,18 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^You form a lash of fire, and send it to scorch the flesh of (\w+)\.$
+- pattern: ^([\w'\-]+) opens \w+ eyes and yawns mightily\.$
+  type: 1
+- pattern: ^([\w'\-]+) wakes up with a gasp of pain\.$
   type: 1
 ]]--
 
-if target == matches[2] then
-selectCurrentLine() fg("red")
-  magi.offense = magi.offense or {}
-  magi.offense.state = magi.offense.state or {}
-  magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
-  tburns = magi.offense.state.burns -- backward compat
-  tarAffed("burning")
-cecho(" <DimGrey>[<red>"..tburns.."/5<DimGrey>]")
-end
+local name = matches[2]
 
-tfirelash = true
+if isTargeted(name) then
+  erAff("sleep")
+  selectString(line, 1)
+  fg("NavajoWhite")
+  resetFormat()
+  targetIshere = true
+end

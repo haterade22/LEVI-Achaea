@@ -40,8 +40,10 @@ patterns:
 
 local name = matches[2]
 if isTargeted(matches[2]) then
+	-- Slough cures weariness + 1 random affliction
+	erAff("weariness")
+	if removeAffV2 then removeAffV2("weariness") end
 	ataxiaTemp.randomCure = 1
-	-- V2 integration: Slough cures 1 random affliction
 	if reduceRandomAffCertaintyV2 then reduceRandomAffCertaintyV2() end
 	if onPassiveCureV3 then onPassiveCureV3(1) end
 	selectString(line,1)

@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: Bombard
+name: Freeze
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -10,7 +10,7 @@ hierarchy:
 - Mage
 - General
 attributes:
-  isActive: 'no'
+  isActive: 'yes'
   isFolder: 'no'
   isTempTrigger: 'no'
   isMultiline: 'no'
@@ -32,14 +32,22 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^You tap the Elemental Plane of Earth, summoning up a flurry of rocks to bombard (\w+)\.$
+- pattern: ^You rip the heat from (\w+)\.$
   type: 1
 ]]--
 
-if target == matches[2] then
-	tarAffed("clumsiness")
-  if partyrelay and not ataxia.afflictions.aeon then send("pt " ..target.. ": Clumsiness") end
-  
-end
-   
-   
+if matches[2] ~= target then return end
+
+ if not tAffs.shivering and tAffs.nocaloric then
+    tarAffed("weariness")
+    tarAffed("shivering")
+    haveAff("nausea")
+  elseif not tAffs.nocaloric then
+    tarAffed("weariness")
+    tarAffed("nocaloric")
+    haveAff("nausea")
+  elseif tAffs.shivering and tAffs.nocaloric and not tAffs.frozen then
+    tarAffed("frozen")
+    tarAffed("weariness")
+    haveAff("nausea")
+  end

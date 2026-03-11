@@ -95,18 +95,18 @@ end
 
 -- V3 cure tables (fallback if curingTable doesn't have an entry)
 curingTableV3 = {
-    kelp = {"hypochondria", "parasite", "weariness", "asthma", "healthleech", "clumsiness", "sensitivity"},
+    kelp = {"hypochondria", "parasite", "weariness", "asthma", "healthleech", "clumsiness", "sensitivity", "rebbies"},
     ginseng = {"flushings", "lethargy", "haemophilia", "addiction", "nausea", "scytherus", "darkshade"},
-    goldenseal = {"depression", "sandfever", "stupidity", "epilepsy", "dizziness", "dissonance", "shyness", "impatience"},
+    goldenseal = {"depression", "sandfever", "stupidity", "epilepsy", "dizziness", "dissonance", "shyness", "impatience", "fulminated"},
     ash = {"confusion", "hypersomnia", "hallucinations", "paranoia", "dementia", "crescendo"},
-    lobelia = {"fratricide", "recklessness", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia"},
-    bellwort = {"timeloop", "justice", "retribution", "lovers", "peace", "pacified", "generosity", "indifference", "diminished"},
+    lobelia = {"fratricide", "recklessness", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia", "guilt", "horror"},
+    bellwort = {"timeloop", "justice", "retribution", "lovers", "peace", "pacified", "generosity", "indifference", "diminished", "pyre"},
     bloodroot = {"paralysis", "slickness"},
 }
 
 -- V3 smoke cure table (priority order)
 -- Smoking cures one of these (in order if multiple present)
-smokeCureTableV3 = {"aeon", "deadening", "hellsight", "tension", "disloyalty", "manaleech", "slickness"}
+smokeCureTableV3 = {"aeon", "deadening", "hellsight", "tension", "disloyalty", "manaleech", "slickness", "unweavingspirit"}
 
 -- V3 salve cure tables (by body part)
 -- Applying salve always proves slickness absent, then cures one affliction from the list

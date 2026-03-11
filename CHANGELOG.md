@@ -2,6 +2,22 @@
 
 ---
 
+## 2026-03-10 — Delete legacy Magi triggers, fix audit gaps
+
+### Issue
+16 deactivated legacy Magi triggers were cluttering the codebase. ExpertDiagnoser audit found V3 cure table gaps (6 missing afflictions), missing waking trigger, Slough not clearing weariness, misnamed freeze trigger, and erode line delta too narrow.
+
+### Fix
+- **Deleted 16 legacy files**: `general/006-008` (shalestorm), `general/011,013,016,017,018` (spell outcomes), `general/021_Dehydrate_-_Frozen` (misnamed freeze), `destroy-related/001-006` (all), `elementals/001_Efreeti`
+- **Removed empty directories**: `destroy-related/`, `elementals/`
+- **V3 cure tables** (`007_Branching_State_Tracker.lua`, `008_V3_Integration.lua`): Added `fulminated` (goldenseal), `guilt`+`horror` (lobelia), `pyre` (bellwort), `rebbies` (kelp), `unweavingspirit` (smoke), `stuttering` (focus)
+- **`passive_active/021_Waking_Up.lua`** — New: detects target waking from sleep (yawn + gasp patterns), calls `erAff("sleep")`
+- **`passive_active/016_Slough_(Fire_Lord).lua`** — Added `erAff("weariness")` before passive cure call
+- **`general/021_Freeze.lua`** — New: renamed from misnamed "Dehydrate - Frozen", added target validation
+- **`magi_offense_tracking/015_Erode.lua`** — `conditonLineDelta` 1→3 (matches reference, allows intervening combat lines)
+
+---
+
 ## 2026-03-10 — Deactivate duplicate shalestorm triggers
 
 ### Issue

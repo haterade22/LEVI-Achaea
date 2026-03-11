@@ -22,7 +22,7 @@ attributes:
   isColorTriggerFg: 'no'
   isColorTriggerBg: 'no'
 triggerType: 0
-conditonLineDelta: 1
+conditonLineDelta: 3
 mStayOpen: 0
 mCommand: ''
 packageName: ''
