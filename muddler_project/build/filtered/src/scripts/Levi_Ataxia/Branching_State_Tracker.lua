@@ -745,7 +745,7 @@ end
 -- ============================================
 
 -- Reset on target change
-registerAnonymousEventHandler("ataxia target changed", function()
+registerAnonymousEventHandler("changed target", function()
     resetStatesV3()
 end)
 

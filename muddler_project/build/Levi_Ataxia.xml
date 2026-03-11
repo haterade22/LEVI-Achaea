@@ -15,7 +15,7 @@ ataxiaTemp = ataxiaTemp or {}
 ataxiaTemp.addedHerbID = 1
 ataxiaTemp.removedHerbID = 2
 ataxiagui = ataxiagui or {}
-ataxiaVersion = "4.2"						--last was 4.1
+ataxiaVersion = "4.3"						--last was 4.2
 muteList = muteList or {}
 
 ataxiaTables.limbTimers = ataxiaTables.limbTimers or {}
@@ -14328,7 +14328,7 @@ end
 -- ============================================
 
 -- Reset on target change
-registerAnonymousEventHandler("ataxia target changed", function()
+registerAnonymousEventHandler("changed target", function()
     resetStatesV3()
 end)
 
@@ -52069,7 +52069,7 @@ timmolation = false
 if magi.offense._targetHandler then
   killAnonymousEventHandler(magi.offense._targetHandler)
 end
-magi.offense._targetHandler = registerAnonymousEventHandler("ataxia target changed", function()
+magi.offense._targetHandler = registerAnonymousEventHandler("changed target", function()
   magi.offense.reset()
 end)
 </script>

@@ -1,5 +1,5 @@
 mpackage = [[Levi_Ataxia]]
 author = [[Leviticus]]
 title = [[LEVI Combat System for Achaea]]
-version = [[4.2]]
-created = [[2026-03-11T08:15:43-0500]]
+version = [[4.3]]
+created = [[2026-03-11T08:56:10-0500]]
