@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-03-11 — Fix Shalestorm+Scintilla Priority + Mode Echo Spam
+
+### Bug Fixes
+- **CRITICAL: Scintilla blocking conflagrate/destroy**: Priority 5 (shalestorm+scintilla) fired every balance, preventing the burning path from ever reaching conflagrate. Burns sat at 5/5 with "CAN BE DESTROYED" but destroy never fired. Fixed by gating scintilla: skip when burns >= 5 (capped) or when conflagrate conditions are met (burns >= 2 + fire >= 2), allowing the burning path to select conflagrate properly.
+- **Mode echo spam**: `[Magi] Mode set to: salve` echoed on every `zz` keypress even when mode hadn't changed. Now only echoes when mode actually changes.
+
+### Files changed
+- `src_new/scripts/.../mage/004_Magi_Offense.lua` — Added burns gates to Priority 5 scintilla; `setMode()` only echoes on actual mode change
+
+---
+
 ## 2026-03-11 — Armour/Paragon System Fixes + Gear Audit README
 
 ### Bug Fixes

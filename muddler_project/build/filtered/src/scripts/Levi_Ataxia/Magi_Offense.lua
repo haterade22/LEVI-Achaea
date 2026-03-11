@@ -231,8 +231,12 @@ function magi.offense.selectSpell()
   end
 
   --=== PRIORITY 5: SHALESTORM+SCINTILLA (free calcify when shalestorm active) ===--
+  -- Gates: skip when burns maxed (5), skip when conflagrate ready (burns>=2 + fire>=2)
+  -- so the burning path at Priority 12 can fire conflagrate instead
   if st.shalestorm and not st.calcifiedTorso and not st.scintillaSpark
-     and r.earth >= 2 then
+     and r.earth >= 2
+     and burning < 5
+     and not (burning >= 2 and r.fire >= 2) then
     return "staffcast scintilla at " .. target
   end
 
@@ -595,8 +599,10 @@ end
 function magi.offense.setMode(mode)
   local valid = {fire = true, water = true, lock = true, salve = true, group = true}
   if valid[mode] then
+    if magi.offense.state.mode ~= mode then
+      magi.offense.echo("<gold>Mode set to: <white>" .. mode)
+    end
     magi.offense.state.mode = mode
-    magi.offense.echo("<gold>Mode set to: <white>" .. mode)
   else
     magi.offense.echo("<red>Invalid mode: " .. tostring(mode) .. " (fire/water/lock/salve/group)")
   end

@@ -27272,9 +27272,11 @@ function gearAudit.displayScrap(filterSet)
   end
 
   cecho("\n\n&lt;cyan&gt;--------------------------------------------------------------------------------")
-  cecho("\n&lt;white&gt;  Copy-paste to scrap:")
+  cecho(string.format("\n&lt;white&gt;  Sending %d scrap commands...", #scraps))
   for _, s in ipairs(scraps) do
-    cecho(string.format("\n&lt;yellow&gt;    GEAR SCRAP %d CONFIRM", s.gear.id or 0))
+    local cmd = string.format("GEAR SCRAP %d CONFIRM", s.gear.id or 0)
+    cecho(string.format("\n&lt;yellow&gt;    %s", cmd))
+    send(cmd, false)
   end
   cecho("\n&lt;cyan&gt;================================================================================\n")
 end
@@ -51702,8 +51704,12 @@ function magi.offense.selectSpell()
   end
 
   --=== PRIORITY 5: SHALESTORM+SCINTILLA (free calcify when shalestorm active) ===--
+  -- Gates: skip when burns maxed (5), skip when conflagrate ready (burns&gt;=2 + fire&gt;=2)
+  -- so the burning path at Priority 12 can fire conflagrate instead
   if st.shalestorm and not st.calcifiedTorso and not st.scintillaSpark
-     and r.earth &gt;= 2 then
+     and r.earth &gt;= 2
+     and burning &lt; 5
+     and not (burning &gt;= 2 and r.fire &gt;= 2) then
     return "staffcast scintilla at " .. target
   end
 
@@ -52066,8 +52072,10 @@ end
 function magi.offense.setMode(mode)
   local valid = {fire = true, water = true, lock = true, salve = true, group = true}
   if valid[mode] then
+    if magi.offense.state.mode ~= mode then
+      magi.offense.echo("&lt;gold&gt;Mode set to: &lt;white&gt;" .. mode)
+    end
     magi.offense.state.mode = mode
-    magi.offense.echo("&lt;gold&gt;Mode set to: &lt;white&gt;" .. mode)
   else
     magi.offense.echo("&lt;red&gt;Invalid mode: " .. tostring(mode) .. " (fire/water/lock/salve/group)")
   end

@@ -693,9 +693,11 @@ function gearAudit.displayScrap(filterSet)
   end
 
   cecho("\n\n<cyan>--------------------------------------------------------------------------------")
-  cecho("\n<white>  Copy-paste to scrap:")
+  cecho(string.format("\n<white>  Sending %d scrap commands...", #scraps))
   for _, s in ipairs(scraps) do
-    cecho(string.format("\n<yellow>    GEAR SCRAP %d CONFIRM", s.gear.id or 0))
+    local cmd = string.format("GEAR SCRAP %d CONFIRM", s.gear.id or 0)
+    cecho(string.format("\n<yellow>    %s", cmd))
+    send(cmd, false)
   end
   cecho("\n<cyan>================================================================================\n")
 end
