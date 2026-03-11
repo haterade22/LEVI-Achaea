@@ -725,8 +725,9 @@ function determineStrategy()
         return
     end
 
-    -- ===== DARKSHADE FORK: Apply darkshade if not on target (highest priority) =====
-    if not haveAff("darkshade") then
+    -- ===== DARKSHADE FORK: Apply darkshade if not on target (darkshade mode only) =====
+    -- Non-darkshade modes: darkshade auto-inserted as second venom when lightwall detected
+    if serpOffenseMode == "darkshade" and not haveAff("darkshade") then
         serpStrategy = "apply_darkshade"
         return
     end
@@ -781,6 +782,12 @@ function determineStrategy()
 
     if serpent.hypnosis.isActive() then
         serpStrategy = "hypnosis"
+        return
+    end
+
+    -- ===== POST-SNAP: Skip hindering, go straight for lock pieces =====
+    if tAffs.snapped or (serpent.hypnosis.snapTimerFired and serpent.hypnosis.phase == "cooldown") then
+        serpStrategy = "post_snap"
         return
     end
 
@@ -1210,6 +1217,26 @@ function selectVenoms()
         return
     end
 
+    -- ===== POST-SNAP: Skip hindering, go straight for lock pieces =====
+    -- After snap, their curing rhythm is disrupted — capitalize with direct lock pieces
+    if serpStrategy == "post_snap" then
+        if not haveAff("asthma") then
+            table.insert(envenomList, "kalmia")
+        elseif not haveAff("slickness") then
+            table.insert(envenomList, "gecko")
+        elseif serpent.canDeliverAnorexia(envenomList[1]) then
+            table.insert(envenomList, "slike")
+        elseif not haveAff("paralysis") then
+            table.insert(envenomList, "curare")
+        elseif not haveAff("weariness") then
+            table.insert(envenomList, "vernalius")
+        else
+            table.insert(envenomList, "curare")
+        end
+        buildSecondVenom()
+        return
+    end
+
     -- ===== SETUP LOCK (Default): Build toward lock + set up Ekanelia =====
     -- Priority: paralysis (blocks tree) → clumsiness (Ekanelia setup) → lock pieces
 
@@ -1239,22 +1266,35 @@ end
 
 --[[
     Build second venom for doublestab (must differ from first).
-    Ekanelia-aware: prefers venoms that complete Ekanelia conditionals.
+    Default: curare (paralysis blocks tree — strongest escape mechanism).
+    If paralysis stuck: fill with missing lock pieces ordered by priority.
+    Lightwall auto-insertion: darkshade as second venom when lightwall detected (non-darkshade mode).
 ]]--
 function buildSecondVenom()
     if #envenomListTwo > 0 then return end
 
     local firstVenom = envenomList[1]
 
-    -- Priority: clumsiness (33% kelp) → asthma (blocks rebounding) → weariness → lock pieces
-    if not haveAff("clumsiness") and firstVenom ~= "xentio" then
-        table.insert(envenomListTwo, "xentio")
-    elseif not haveAff("asthma") and firstVenom ~= "kalmia" then
+    -- Lightwall auto-insertion (non-darkshade mode only)
+    if serpOffenseMode ~= "darkshade" and ataxia.lightwall
+       and not haveAff("darkshade") and firstVenom ~= "darkshade" then
+        table.insert(envenomListTwo, "darkshade")
+        return
+    end
+
+    -- Default: curare (paralysis blocks tree — strongest escape mechanism)
+    if not haveAff("paralysis") and firstVenom ~= "curare" then
+        table.insert(envenomListTwo, "curare")
+        return
+    end
+
+    -- Paralysis stuck: fill with missing lock pieces
+    if not haveAff("asthma") and firstVenom ~= "kalmia" then
         table.insert(envenomListTwo, "kalmia")
     elseif not haveAff("weariness") and firstVenom ~= "vernalius" then
         table.insert(envenomListTwo, "vernalius")
-    elseif not haveAff("paralysis") and firstVenom ~= "curare" then
-        table.insert(envenomListTwo, "curare")
+    elseif not haveAff("clumsiness") and firstVenom ~= "xentio" then
+        table.insert(envenomListTwo, "xentio")
     elseif not haveAff("slickness") and firstVenom ~= "gecko" then
         table.insert(envenomListTwo, "gecko")
     elseif serpent.canDeliverAnorexia(firstVenom) and firstVenom ~= "slike" then
@@ -1268,7 +1308,7 @@ function buildSecondVenom()
     elseif firstVenom ~= "aconite" then
         table.insert(envenomListTwo, "aconite")
     else
-        table.insert(envenomListTwo, "sumac")
+        table.insert(envenomListTwo, "curare")
     end
 end
 
@@ -1470,8 +1510,10 @@ function serp_ekanelia_attack()
         impulsePair = {suggestion = "confusion", venom = "scytherus", label = "camus"}
         useImpulse = true
 
-    -- Case 3: Normal impulse for impatience
-    elseif not eqAction and not haveAff("impatience") and checkImpulseEligible() then
+    -- Case 3: Normal impulse for impatience (gated: must have supporting mechanics)
+    elseif not eqAction and not haveAff("impatience")
+           and serpent.shouldDeliverImpatience()
+           and checkImpulseEligible() then
         impulsePair = selectImpulsePair()
         if impulsePair and impulsePair.label == "impatience" then
             useImpulse = true
