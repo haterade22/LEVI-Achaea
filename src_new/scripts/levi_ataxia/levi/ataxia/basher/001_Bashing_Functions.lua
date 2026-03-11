@@ -336,7 +336,7 @@ function ataxiaBasher_assembleAttack()
     end
   end
 
-  if ataxiaTemp.bashFlee == false and not ataxia.afflictions.paralysis and not ataxia.afflictions.aeon and not ataxia.afflictions.peace then
+  if not ataxiaTemp.bashFlee and not ataxia.afflictions.paralysis and not ataxia.afflictions.aeon and not ataxia.afflictions.peace then
     command = command.._G[ataxiaBasher_bashingFuncs[class]]()
     send("queue addclearfull freestand stand"..sp..command)
 	
