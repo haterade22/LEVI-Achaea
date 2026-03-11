@@ -707,18 +707,45 @@ function gearAudit.displayScrap(filterSet)
   end
 
   cecho("\n\n<cyan>--------------------------------------------------------------------------------")
-  cecho(string.format("\n<white>  Queuing %d scrap commands (0.5s apart)...", #scraps))
-  for i, s in ipairs(scraps) do
-    local cmd = string.format("GEAR SCRAP %d CONFIRM", s.gear.id or 0)
-    local delay = (i - 1) * 0.5
-    tempTimer(delay, function()
-      cecho(string.format("\n<yellow>    [%d/%d] %s", i, #scraps, cmd))
-      send(cmd, false)
-    end)
-  end
-  local totalTime = (#scraps - 1) * 0.5
-  cecho(string.format("\n<grey>  ETA: %.0f seconds", totalTime))
+  local batchSize = 5
+  local batches = math.ceil(#scraps / batchSize)
+  cecho(string.format("\n<white>  Scrapping %d items (%d per batch, %d batches)...", #scraps, batchSize, batches))
   cecho("\n<cyan>================================================================================\n")
+
+  -- Store queue on namespace, process in batches via self-chaining timer
+  gearAudit.scrapQueue = {}
+  for _, s in ipairs(scraps) do
+    table.insert(gearAudit.scrapQueue, string.format("GEAR SCRAP %d CONFIRM", s.gear.id or 0))
+  end
+  gearAudit.scrapIndex = 1
+  gearAudit.scrapTotal = #scraps
+
+  -- Process a batch of commands, then schedule next batch
+  local function processBatch()
+    local startIdx = gearAudit.scrapIndex
+    if startIdx > gearAudit.scrapTotal then
+      gearAudit.echo(string.format("Scrap complete. Sent %d commands.", gearAudit.scrapTotal))
+      gearAudit.scrapQueue = nil
+      return
+    end
+    local endIdx = math.min(startIdx + batchSize - 1, gearAudit.scrapTotal)
+    for i = startIdx, endIdx do
+      local cmd = gearAudit.scrapQueue[i]
+      cecho(string.format("\n<yellow>    [%d/%d] %s", i, gearAudit.scrapTotal, cmd))
+      send(cmd, false)
+    end
+    gearAudit.scrapIndex = endIdx + 1
+    if gearAudit.scrapIndex <= gearAudit.scrapTotal then
+      tempTimer(1, processBatch)
+    else
+      tempTimer(1, function()
+        gearAudit.echo(string.format("Scrap complete. Sent %d commands.", gearAudit.scrapTotal))
+        gearAudit.scrapQueue = nil
+      end)
+    end
+  end
+
+  processBatch()
 end
 
 --------------------------------------------------------------------------------
