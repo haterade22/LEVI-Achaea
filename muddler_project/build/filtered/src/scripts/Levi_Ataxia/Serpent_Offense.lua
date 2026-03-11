@@ -61,6 +61,7 @@ affTimers = affTimers or {}
 
 -- Attack state tracking
 serpent.state.attackInFlight = serpent.state.attackInFlight or false
+serpent.state.lastBalState = serpent.state.lastBalState or "1"
 serpent.state.dispelSent = serpent.state.dispelSent or false
 
 -- Relapse locking state
@@ -990,12 +991,15 @@ function selectVenoms()
 
     -- ===== APPLY DARKSHADE: Get darkshade on target ASAP =====
     if serpStrategy == "apply_darkshade" then
+        table.insert(envenomList, "darkshade")
         if serpOffenseMode == "darkshade" then
-            -- Darkshade mode: curare + darkshade (curare maintains paralysis, blocks tree)
-            table.insert(envenomList, "curare")
-            table.insert(envenomListTwo, "darkshade")
+            -- Darkshade mode: darkshade + curare (curare maintains paralysis, blocks tree)
+            if not haveAff("paralysis") then
+                table.insert(envenomListTwo, "curare")
+            else
+                buildSecondVenom()
+            end
         else
-            table.insert(envenomList, "darkshade")
             buildSecondVenom()
         end
         return
@@ -1005,11 +1009,18 @@ function selectVenoms()
     -- Target is eating ginseng to cure darkshade — stack to 3 ginseng affs
     -- so they spend multiple rounds eating ginseng, then we switch to lock
     if serpStrategy == "ginseng_pressure" then
-        -- Darkshade mode: curare first to maintain paralysis (blocks tree),
-        -- ginseng aff as second venom
+        -- Darkshade mode: ginseng aff first, curare second (blocks tree)
         if serpOffenseMode == "darkshade" and not haveAff("paralysis") then
-            table.insert(envenomList, "curare")
-            buildSecondVenomGinseng()
+            if not haveAff("addiction") then
+                table.insert(envenomList, "vardrax")
+            elseif not haveAff("nausea") then
+                table.insert(envenomList, "euphorbia")
+            elseif not haveAff("haemophilia") then
+                table.insert(envenomList, "notechis")
+            else
+                table.insert(envenomList, "darkshade")
+            end
+            table.insert(envenomListTwo, "curare")
             return
         end
 
@@ -1934,10 +1945,17 @@ if registerAnonymousEventHandler then
         hSuggActive = ""
     end)
 
-    -- Balance recovery: clear attackInFlight
+    -- Balance recovery: clear attackInFlight (edge-triggered: only on 0→1 transition)
+    -- Level-triggered clear caused double dispatches when keybind mashed — GMCP vitals
+    -- fires with bal="1" on the same prompt that consumed balance, prematurely clearing the guard
     serpent.eventHandlers.balRecovery = registerAnonymousEventHandler("gmcp.Char.Vitals", function()
         if gmcp.Char.Vitals.bal == "1" then
-            serpent.state.attackInFlight = false
+            if serpent.state.lastBalState == "0" then
+                serpent.state.attackInFlight = false
+            end
+            serpent.state.lastBalState = "1"
+        else
+            serpent.state.lastBalState = "0"
         end
     end)
 end

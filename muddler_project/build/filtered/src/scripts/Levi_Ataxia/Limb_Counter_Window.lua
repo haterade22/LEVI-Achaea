@@ -1,22 +1,43 @@
-tarcLabel = Geyser.Label:new({
-  name = "tarcLabel",
+-- Limb Counter Window — uses Adjustable.Container for drag/resize/position-save
+tarc = tarc or {}
+
+tarc.window = Adjustable.Container:new({
+  name = "tarc.window",
   x = "0%", y = "-50%",
   width = "14%", height = "30.4%",
-})
+  adjLabelstyle = "background-color:rgba(0,0,0,100%); border: 1px solid #404040;",
+  buttonstyle = [[
+    QLabel{ border-radius: 4px; background-color: rgba(140,140,140,100%);}
+    QLabel::hover{ background-color: rgba(160,160,160,100%);}
+  ]],
+  titleText = "Limb Counter",
+  titleStyle = "color: gray; font-size: 8pt;",
+  lockStyle = "border: 1px solid #404040;",
+}, main)
+tarc.window:changeMenuStyle("dark")
 
-tarcLabel:setStyleSheet([[
-  border: 1px solid #404040;
-]])
+tarc.container = Geyser.Container:new({
+  name = "tarc.back",
+  x = 0, y = 0,
+  width = "100%",
+  height = "100%",
+}, tarc.window)
 
-tarc = Geyser.MiniConsole:new({
-  name='tarc',
-  color='black',
-  x='16', y='20',
-  width = '100%-20', height = '100%-30',
+tarc.console = Geyser.MiniConsole:new({
+  name = 'tarc',
+  color = 'black',
+  x = '4', y = '4',
+  width = '100%-8', height = '100%-8',
   fontSize = 12,
   font = "Bitstream Vera Sans Mono",
-  autoWrap = true
-}, tarcLabel)
+  autoWrap = true,
+}, tarc.container)
+
+tarc.window:show()
+
+-- Forward tarc:cecho() and tarc:clear() to the console
+function tarc:cecho(text) tarc.console:cecho(text) end
+function tarc:clear() tarc.console:clear() end
 
 function tarc.write()
   tarc:clear()
