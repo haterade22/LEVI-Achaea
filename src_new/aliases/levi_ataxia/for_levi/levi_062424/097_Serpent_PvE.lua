@@ -5,7 +5,7 @@ hierarchy:
 - Levi_Ataxia
 - Artefacts
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
 regex: ^serppve$
 command: ''

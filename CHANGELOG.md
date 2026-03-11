@@ -2,6 +2,67 @@
 
 ---
 
+## 2026-03-11 — Armour & Paragon Management System
+
+### Feature
+Configurable armour paragon profile system replacing 8 hardcoded aliases. Supports named profiles with paragon slots (1-3), trait selections, and armour morphing. Auto-swaps between bash and PvP profiles when basher enables/disables. Auto-detects owned paragons via `ii paragon` trigger and current embrasure state via `probe armour` trigger.
+
+### New Files
+- **`gear_system/002_Armour_Paragons.lua` (script)**: `ataxia.armour` namespace — profiles, swap logic, morph cooldowns, basher event hooks, persistence
+- **`gear_system/002_Armour_Paragons.lua` (alias)**: `armour` command dispatcher (`^armour\s*(.*)$`)
+- **`gear_system/001_Paragon_Inventory.lua` (trigger)**: Parses `ii paragon` inventory lines
+- **`gear_system/002_Armour_Probe.lua` (trigger)**: Parses `probe armour` embrasure lines
+
+### Deactivated Legacy Aliases
+090_Armour_Paragons (`barmp`), 096_Mage_PvE (`magepve`), 097_Serpent_PvE (`serppve`), 098_Shikudo_Pve (`stickpve`), 099_Pariah_PvE (`pariahpve`), 100_BM_Pve_Traits (`bmpve`), 101_stickpvp, 102_Class_PvP (`armourpvp`) — all replaced by `armour <profilename>`
+
+### New Commands
+| Command | Purpose |
+|---------|---------|
+| `armour` | Show all profiles and auto-swap status |
+| `armour <name>` | Swap to a named profile |
+| `armour add <name>` | Create a new profile |
+| `armour remove <name>` | Delete a profile |
+| `armour set <n> slot1/2/3 <id>` | Set paragon in slot |
+| `armour set <n> traits <...>` | Set trait list |
+| `armour set <n> armourtype <t>` | Set morph target (type/auto/none) |
+| `armour auto on/off` | Toggle auto-swap on basher enable/disable |
+| `armour bash <name>` | Set which profile to use for bashing |
+| `armour pvp <name>` | Set which profile to use for PvP |
+| `armour morph <type/auto>` | Manually morph armour now |
+| `armour scan` | Auto-detect paragons + current embrasures |
+| `armour paragons` | Show known paragons |
+
+### Seeded Default Profiles
+bash, pvp, stickpvp, magepve, serppve, stickpve, pariahpve, bmpve — matching all legacy alias configurations
+
+---
+
+## 2026-03-11 — Gear Audit BiS (Best in Slot) PvE Analysis
+
+### Feature
+Added PvE damage scoring and Best-in-Slot analysis to the gear audit system. Scores each gear item based on offensive stats (damage %, celerity, burst, resistance penetration) and defensive stats (HP, regen, damage reduction), identifies BiS per set per slot AND overall BiS per slot, and generates scrap recommendations with copy-paste `GEAR SCRAP` commands.
+
+### Changes
+- **`gear_system/001_Gear_Audit.lua` — config**: Added `bisWeights` (10 stat weights + conditional multipliers) and `scrapThreshold` (0.5 = scrap below 50% of BiS)
+- **`gear_system/001_Gear_Audit.lua` — scoreEffect()**: Extracts structured numeric stats from raw effect text (addDmgPct, celerity, burstPct, ignorePct, hpPct, etc. + condition detection)
+- **`gear_system/001_Gear_Audit.lua` — calculateScore()**: Applies weighted scoring with burst normalization (per-attack effective value based on cooldown) and conditional multipliers (0.5x location, 0.7x battlerage)
+- **`gear_system/001_Gear_Audit.lua` — getBisBySlot()**: Groups items by slot, sorts by score, assigns ranks
+- **`gear_system/001_Gear_Audit.lua` — getScrapRecommendations()**: Per-set threshold comparison
+- **`gear_system/001_Gear_Audit.lua` — displayBis/displayScore/displayScrap**: Color-coded display with per-set and overall BiS views, detailed score breakdowns, and ready-to-use scrap commands
+- **`gear_system/001_Gear_Audit.lua` — command handler**: New subcommands: `bis`, `bis <slot>`, `score <id>`, `scrap`, `scrap <set>`
+
+### New Commands
+| Command | Purpose |
+|---------|---------|
+| `gearaudit bis` | Full PvE BiS analysis (all slots) |
+| `gearaudit bis <slot>` | BiS analysis for a specific slot |
+| `gearaudit score <id>` | Detailed score breakdown for a gear item |
+| `gearaudit scrap` | Scrap recommendations + GEAR SCRAP commands |
+| `gearaudit scrap <set>` | Scrap recommendations for a specific set |
+
+---
+
 ## 2026-03-11 — Fix basher not attacking after F1 engagement
 
 ### Issue

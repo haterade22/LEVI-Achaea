@@ -163,6 +163,20 @@ ataxiaBasher.ldeckRules = {
 }
 ```
 
+### Gear Management
+
+Audit your gear inventory and find Best-in-Slot items for PvE.
+
+```lua
+gearaudit            -- Scan all gear (GEAR LIST ALL + GEAR PROBE)
+gearaudit bis        -- PvE Best-in-Slot analysis (per set + overall)
+gearaudit bis head   -- BiS for a specific slot
+gearaudit score 1667 -- Detailed score breakdown for an item
+gearaudit scrap      -- Items to scrap + copy-paste GEAR SCRAP commands
+```
+
+Scoring prioritizes: damage % > celerity > burst > resistance penetration > survivability. Weights are configurable via `gearAudit.config.bisWeights`.
+
 ### Custom GUI (ataxiagui)
 
 Health/mana gauges, map display, tabbed chat, balance indicators.

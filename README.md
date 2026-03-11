@@ -44,6 +44,32 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 | **Stormhammer** | Dirty-flag cached AoE target list for multi-target rooms |
 | **Legend Deck** | Data-driven pre-combat card draws for dangerous rooms |
 | **Shield Retarget** | Per-mob configurable shield durations with target swapping |
+| **Armour Paragons** | Profile-based paragon/trait swapping with auto-swap on basher enable/disable |
+
+### Armour & Paragon Management (`armour`)
+
+Configurable profile system for armour paragon slots (1-3), trait selections, and armour morphing. Replaces 8+ hardcoded aliases with a single `armour` command.
+
+| Command | Action |
+|---------|--------|
+| `armour` | Show all profiles and auto-swap status |
+| `armour <name>` | Swap to a named profile (e.g., `armour bash`, `armour pvp`) |
+| `armour add <name>` | Create a new profile |
+| `armour set <n> slot1 <id>` | Set paragon in embrasure slot 1 (slot1/slot2/slot3) |
+| `armour set <n> traits <...>` | Set trait list (space-separated) |
+| `armour set <n> armourtype <t>` | Set morph target (`fullplate`, `cloth`, `auto`, `none`) |
+| `armour auto on/off` | Toggle auto-swap on basher enable/disable |
+| `armour bash <name>` | Set which profile activates when basher starts |
+| `armour pvp <name>` | Set which profile activates when basher stops |
+| `armour morph <type/auto>` | Manually morph armour type (10min cooldown) |
+| `armour scan` | Auto-detect owned paragons via `ii paragon` + current embrasures via `probe armour` |
+| `armour paragons` | Show all known paragons |
+
+**Pre-configured profiles**: bash, pvp, stickpvp, magepve, serppve, stickpve, pariahpve, bmpve
+
+**Auto-swap**: When `armour auto on` is set, the system automatically swaps to your bash profile when the basher starts and your PvP profile when it stops. No manual intervention needed.
+
+**Armour morphing**: If a profile has `armourType = "auto"`, the system looks up the correct armour type for your current class (e.g., fullplate for knights, cloth for magi) and morphs automatically.
 
 ### GUI System (Enhanced zGUI Redux)
 

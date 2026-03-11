@@ -41,6 +41,21 @@ gearAudit.config = {
   probeDelay = 0.7,         -- Delay between probes (seconds)
   saveFile = "gearaudit",   -- Save file name
   timeout = 300,            -- Timeout in seconds (5 minutes for large inventories)
+  bisWeights = {
+    addDmgPct       = 10.0,  -- +X% damage (best PvE stat)
+    celerity         = 8.0,  -- attack speed
+    burstEffective   = 7.0,  -- burst dmg normalized to per-attack value
+    ignorePct        = 6.0,  -- ignore denizen resistance
+    hpPct            = 3.0,  -- HP increase
+    hpRegenPct       = 2.5,  -- HP regen
+    dmgReductionPct  = 2.0,  -- damage reduction
+    resistPct        = 1.5,  -- resistance
+    wpRegenPct       = 1.0,  -- WP regen
+    blackoutPct      = 1.0,  -- blackout reduction
+    conditionalMult  = 0.5,  -- location-locked gear discounted 50%
+    brMult           = 0.7,  -- battlerage-conditional discounted 30%
+  },
+  scrapThreshold = 0.5,      -- SCRAP if score < 50% of BiS in same slot
 }
 
 --------------------------------------------------------------------------------
@@ -277,6 +292,428 @@ function gearAudit.summarizeEffect(effects)
   end
 
   return table.concat(summary, ", ") .. condition
+end
+
+--------------------------------------------------------------------------------
+-- BiS SCORING ENGINE - Extract numeric stats and score for PvE
+--------------------------------------------------------------------------------
+
+-- Extract structured numeric data from raw effects array
+function gearAudit.scoreEffect(effects)
+  if not effects or #effects == 0 then return {} end
+
+  local fullText = table.concat(effects, " ")
+  local scored = {}
+
+  -- Detect condition
+  if fullText:find("requires you to be in Annwyn") then
+    scored.condition = "Annwyn"; scored.conditional = true
+  elseif fullText:find("requires you to be in the Underworld") then
+    scored.condition = "Underworld"; scored.conditional = true
+  elseif fullText:find("requires you to be within an underground") then
+    scored.condition = "Underground"; scored.conditional = true
+  elseif fullText:find("requires you to be within a watery") then
+    scored.condition = "Water"; scored.conditional = true
+  elseif fullText:find("requires you to be within a forest") then
+    scored.condition = "Forest"; scored.conditional = true
+  end
+  if fullText:find("battlerage") and fullText:find("requires") then
+    scored.brCondition = true; scored.conditional = true
+  end
+
+  -- Additional damage %
+  local addDmg = fullText:match("deal an additional (%d+)%% damage")
+  if addDmg then scored.addDmgPct = tonumber(addDmg) end
+
+  -- Celerity
+  local cel = fullText:match("increases your celerity by (%d+)")
+  if cel then scored.celerity = tonumber(cel) end
+
+  -- Burst damage + cooldown
+  local burstPct = fullText:match("additional burst of (%d+)%%")
+  if burstPct then
+    scored.burstPct = tonumber(burstPct)
+    local cd = fullText:match("(%d+) second cooldown")
+    scored.burstCooldown = cd and tonumber(cd) or 30  -- default 30s if not stated
+  end
+
+  -- Ignore denizen resistance
+  local ignorePct = fullText:match("ignore (%d+)%% of a denizen")
+  if ignorePct then scored.ignorePct = tonumber(ignorePct) end
+
+  -- HP increase
+  local hpPct = fullText:match("health is increased by (%d+)%%")
+  if hpPct then scored.hpPct = tonumber(hpPct) end
+
+  -- HP regen
+  local hpRegen = fullText:match("health will regenerate (%d+)%% faster")
+  if not hpRegen then
+    hpRegen = fullText:match("health regeneration is increased by (%d+)%%")
+  end
+  if hpRegen then scored.hpRegenPct = tonumber(hpRegen) end
+
+  -- WP regen
+  local wpRegen = fullText:match("willpower will regenerate (%d+)%% faster")
+  if wpRegen then scored.wpRegenPct = tonumber(wpRegen) end
+
+  -- Damage reduction
+  local dmgRedPct = fullText:match("[Rr]educes your %w+ damage taken by (%d+)%%")
+  if dmgRedPct then scored.dmgReductionPct = tonumber(dmgRedPct) end
+
+  -- Resistance
+  local resPct = fullText:match("gain (%d+)%% resistance")
+  if resPct then scored.resistPct = tonumber(resPct) end
+
+  -- Blackout reduction
+  local blackout = fullText:match("[Bb]lackout.-will be (%d+)%% shorter")
+  if blackout then scored.blackoutPct = tonumber(blackout) end
+
+  return scored
+end
+
+-- Calculate PvE score from scored effects
+-- Returns: score (number), breakdown (table of {stat, value, weight, points})
+function gearAudit.calculateScore(scored)
+  local w = gearAudit.config.bisWeights
+  local score = 0
+  local breakdown = {}
+
+  -- Determine conditional multiplier
+  local mult = 1.0
+  if scored.conditional then
+    mult = scored.brCondition and w.brMult or w.conditionalMult
+  end
+
+  local function add(stat, value, weight)
+    if not value or value == 0 then return end
+    local pts = value * weight * mult
+    score = score + pts
+    table.insert(breakdown, {stat = stat, value = value, weight = weight, mult = mult, points = pts})
+  end
+
+  add("Additional Damage",    scored.addDmgPct,       w.addDmgPct)
+  add("Celerity",             scored.celerity,         w.celerity)
+
+  -- Burst: normalize to per-attack effective value (3s combat cycle)
+  if scored.burstPct and scored.burstPct > 0 then
+    local cd = scored.burstCooldown or 30
+    local effective = scored.burstPct / (cd / 3)
+    local pts = effective * w.burstEffective * mult
+    score = score + pts
+    table.insert(breakdown, {
+      stat = "Burst Damage", value = scored.burstPct, weight = w.burstEffective,
+      mult = mult, points = pts, note = string.format("%.1f%% eff (%ds CD)", effective, cd)
+    })
+  end
+
+  add("Ignore Resistance",    scored.ignorePct,        w.ignorePct)
+  add("HP Increase",          scored.hpPct,            w.hpPct)
+  add("HP Regen",             scored.hpRegenPct,       w.hpRegenPct)
+  add("Damage Reduction",     scored.dmgReductionPct,  w.dmgReductionPct)
+  add("Resistance",           scored.resistPct,        w.resistPct)
+  add("WP Regen",             scored.wpRegenPct,       w.wpRegenPct)
+  add("Blackout Reduction",   scored.blackoutPct,      w.blackoutPct)
+
+  return score, breakdown
+end
+
+-- Score a single gear item
+function gearAudit.scoreItem(gearId)
+  local gear = gearAudit.data[tonumber(gearId)]
+  if not gear then return 0, {}, {} end
+  local scored = gearAudit.scoreEffect(gear.effects)
+  local score, breakdown = gearAudit.calculateScore(scored)
+  return score, breakdown, scored
+end
+
+-- Group all items by slot, sorted by score desc within each slot
+-- filterSet: optional set name to filter by
+-- Returns: { [slot] = { {gear=..., score=..., breakdown=..., rank=...}, ... } }
+function gearAudit.getBisBySlot(filterSet)
+  local bySlot = {}
+
+  for id, gear in pairs(gearAudit.data) do
+    if gear.slot then
+      local include = true
+      if filterSet and gear.set then
+        include = gear.set:lower():find(filterSet:lower())
+      elseif filterSet and not gear.set then
+        include = false
+      end
+
+      if include then
+        local scored = gearAudit.scoreEffect(gear.effects)
+        local score, breakdown = gearAudit.calculateScore(scored)
+        bySlot[gear.slot] = bySlot[gear.slot] or {}
+        table.insert(bySlot[gear.slot], {
+          gear = gear, score = score, breakdown = breakdown, scored = scored
+        })
+      end
+    end
+  end
+
+  -- Sort each slot by score descending, assign ranks
+  for slot, items in pairs(bySlot) do
+    table.sort(items, function(a, b) return a.score > b.score end)
+    for i, item in ipairs(items) do
+      item.rank = i
+    end
+  end
+
+  return bySlot
+end
+
+-- Get scrap recommendations
+function gearAudit.getScrapRecommendations(filterSet)
+  local bySlot = gearAudit.getBisBySlot(filterSet)
+  local scraps = {}
+
+  for slot, items in pairs(bySlot) do
+    if #items > 1 then
+      -- Group by set within this slot
+      local bySet = {}
+      for _, item in ipairs(items) do
+        local setName = item.gear.set or "Unknown"
+        bySet[setName] = bySet[setName] or {}
+        table.insert(bySet[setName], item)
+      end
+
+      -- Within each set, mark items below threshold of set's BiS
+      for setName, setItems in pairs(bySet) do
+        if #setItems > 1 then
+          local setBis = setItems[1].score  -- already sorted desc
+          local threshold = gearAudit.config.scrapThreshold
+          for i = 2, #setItems do
+            local item = setItems[i]
+            if setBis > 0 and (item.score / setBis) < threshold then
+              table.insert(scraps, {
+                gear = item.gear, score = item.score, bisScore = setBis,
+                slot = slot, set = setName, reason = "Below " .. math.floor(threshold * 100) .. "% of set BiS"
+              })
+            end
+          end
+        end
+      end
+    end
+  end
+
+  -- Sort scraps by slot then score
+  table.sort(scraps, function(a, b)
+    if a.slot == b.slot then return a.score < b.score end
+    return a.slot < b.slot
+  end)
+
+  return scraps
+end
+
+--------------------------------------------------------------------------------
+-- BiS DISPLAY FUNCTIONS
+--------------------------------------------------------------------------------
+
+local function bisTag(rank, score, bisScore, threshold)
+  if rank == 1 then return "BiS" end
+  if bisScore > 0 and (score / bisScore) < threshold then return "SCRAP" end
+  return "KEEP"
+end
+
+local function bisTagColor(tag)
+  if tag == "BiS" then return "<green>" end
+  if tag == "SCRAP" then return "<red>" end
+  return "<yellow>"
+end
+
+local function rarityShort(rarity)
+  if rarity == "common" then return "cmn" end
+  if rarity == "remnant" then return "rem" end
+  return rarity or "?"
+end
+
+-- Sorted slot order for display
+local SLOT_ORDER = {"head", "chest", "arms", "hands", "waist", "legs", "feet", "back", "neck", "ring", "trinket"}
+
+local function sortedSlots(bySlot)
+  local ordered = {}
+  -- Add known slots in order
+  for _, slot in ipairs(SLOT_ORDER) do
+    if bySlot[slot] then table.insert(ordered, slot) end
+  end
+  -- Add any unknown slots at end
+  for slot, _ in pairs(bySlot) do
+    local found = false
+    for _, s in ipairs(SLOT_ORDER) do
+      if s == slot then found = true; break end
+    end
+    if not found then table.insert(ordered, slot) end
+  end
+  return ordered
+end
+
+-- Full BiS analysis display
+function gearAudit.displayBis(slotFilter)
+  local bySlot = gearAudit.getBisBySlot()
+  local threshold = gearAudit.config.scrapThreshold
+
+  if gearAudit.tableSize(bySlot) == 0 then
+    gearAudit.echo("No gear data. Run 'gearaudit' to collect or 'gearaudit load' to load saved data.")
+    return
+  end
+
+  cecho("\n<cyan>================================================================================")
+  cecho("\n<cyan>                       <white>PvE BiS ANALYSIS<cyan>")
+  cecho("\n<cyan>================================================================================")
+
+  local slots = sortedSlots(bySlot)
+  for _, slot in ipairs(slots) do
+    if not slotFilter or slot:lower() == slotFilter:lower() then
+      local items = bySlot[slot]
+      cecho(string.format("\n\n<white>  %s <dark_grey>(%d items)", slot:upper(), #items))
+
+      -- Group by set
+      local bySet = {}
+      local setOrder = {}
+      for _, item in ipairs(items) do
+        local setName = item.gear.set or "Unknown"
+        if not bySet[setName] then
+          bySet[setName] = {}
+          table.insert(setOrder, setName)
+        end
+        table.insert(bySet[setName], item)
+      end
+
+      -- Per-set BiS
+      if #setOrder > 1 or (#setOrder == 1 and #bySet[setOrder[1]] > 1) then
+        cecho("\n<dark_grey>  -- Per-Set BiS --")
+        for _, setName in ipairs(setOrder) do
+          local setItems = bySet[setName]
+          cecho(string.format("\n<green>    %s<dark_grey>:", setName))
+          for i, item in ipairs(setItems) do
+            local tag = bisTag(i, item.score, setItems[1].score, threshold)
+            local tagCol = bisTagColor(tag)
+            local effectStr = gearAudit.summarizeEffect(item.gear.effects)
+            if #effectStr > 35 then effectStr = effectStr:sub(1, 33) .. ".." end
+            cecho(string.format(
+              "\n<cyan>      #%-2d %s%-5s <yellow>%5.1f  <dark_grey>[%s] <white>%-6d <light_grey>%s",
+              i, tagCol, tag, item.score, rarityShort(item.gear.rarity),
+              item.gear.id or 0, effectStr
+            ))
+          end
+        end
+      end
+
+      -- Overall BiS (top item across all sets)
+      cecho("\n<dark_grey>  -- Overall BiS --")
+      local top = items[1]
+      if top then
+        cecho(string.format(
+          "\n<cyan>      #1  <green>BiS   <yellow>%5.1f  <dark_grey>[%s] <white>%-6d <green>%s",
+          top.score, rarityShort(top.gear.rarity), top.gear.id or 0,
+          top.gear.set or "Unknown"
+        ))
+      end
+    end
+  end
+
+  cecho("\n\n<cyan>================================================================================")
+  cecho("\n<grey>Use 'gearaudit score <id>' for detailed breakdown. 'gearaudit scrap' for scrap list.\n")
+end
+
+-- Single item score breakdown
+function gearAudit.displayScore(gearId)
+  local id = tonumber(gearId)
+  if not id then
+    gearAudit.echo("Invalid gear ID: " .. tostring(gearId))
+    return
+  end
+
+  local gear = gearAudit.data[id]
+  if not gear then
+    gearAudit.echo("Gear ID " .. id .. " not found.")
+    return
+  end
+
+  local score, breakdown, scored = gearAudit.scoreItem(id)
+
+  cecho("\n<cyan>+------------------------------------------------------------------------------+")
+  cecho(string.format("\n<cyan>| <white>SCORE BREAKDOWN - ID: %d", id))
+  cecho("\n<cyan>+------------------------------------------------------------------------------+")
+  cecho(string.format("\n<cyan>| <grey>Name:<cyan>    <white>%s", gear.name or "Unknown"))
+  cecho(string.format("\n<cyan>| <grey>Set:<cyan>     <green>%s", gear.set or "None"))
+  cecho(string.format("\n<cyan>| <grey>Slot:<cyan>    <yellow>%s", gear.slot or "Unknown"))
+  cecho(string.format("\n<cyan>| <grey>Rarity:<cyan>  <magenta>%s  <grey>Months: <white>%s", gear.rarity or "?", tostring(gear.monthsLeft or "?")))
+
+  if scored.conditional then
+    local cond = scored.condition or (scored.brCondition and "Battlerage" or "Unknown")
+    cecho(string.format("\n<cyan>| <grey>Condition:<cyan> <orange>%s <grey>(mult: %.1fx)", cond, scored.brCondition and gearAudit.config.bisWeights.brMult or gearAudit.config.bisWeights.conditionalMult))
+  end
+
+  cecho("\n<cyan>+------------------------------------------------------------------------------+")
+  cecho("\n<cyan>| <white>Stat                     <grey>| <white>Value      <grey>| <white>Weight   <grey>| <white>Points")
+  cecho("\n<cyan>+------------------------------------------------------------------------------+")
+
+  if #breakdown == 0 then
+    cecho("\n<cyan>|   <dark_grey>(No scorable stats found)")
+  else
+    for _, b in ipairs(breakdown) do
+      local valStr = b.note or string.format("+%g", b.value)
+      local multStr = ""
+      if b.mult < 1.0 then multStr = string.format(" x%.1f", b.mult) end
+      cecho(string.format(
+        "\n<cyan>| <light_grey>%-24s <grey>| <white>%-10s <grey>| <white>x%-6.1f <grey>| <yellow>%5.1f%s",
+        b.stat, valStr, b.weight, b.points, multStr
+      ))
+    end
+  end
+
+  cecho("\n<cyan>+------------------------------------------------------------------------------+")
+  cecho(string.format("\n<cyan>| <white>TOTAL SCORE: <yellow>%.1f", score))
+  cecho("\n<cyan>+------------------------------------------------------------------------------+")
+
+  -- Show rank in slot
+  if gear.slot then
+    local bySlot = gearAudit.getBisBySlot()
+    local slotItems = bySlot[gear.slot]
+    if slotItems then
+      for _, item in ipairs(slotItems) do
+        if item.gear.id == id then
+          cecho(string.format("\n<cyan>| <grey>Rank: <white>#%d of %d <grey>in <white>%s <grey>slot", item.rank, #slotItems, gear.slot:upper()))
+          break
+        end
+      end
+    end
+  end
+
+  cecho("\n<cyan>+------------------------------------------------------------------------------+\n")
+end
+
+-- Scrap recommendations display with copy-paste commands
+function gearAudit.displayScrap(filterSet)
+  local scraps = gearAudit.getScrapRecommendations(filterSet)
+
+  if #scraps == 0 then
+    gearAudit.echo("No scrap recommendations. All gear looks good!")
+    return
+  end
+
+  cecho("\n<cyan>================================================================================")
+  cecho("\n<cyan>                       <red>SCRAP RECOMMENDATIONS<cyan>")
+  cecho("\n<cyan>================================================================================")
+
+  for _, s in ipairs(scraps) do
+    cecho(string.format(
+      "\n<red>  #%-6d <white>(%s) <green>%s <grey>- score <yellow>%.1f <grey>(BiS: <yellow>%.1f<grey>)",
+      s.gear.id or 0, s.slot, s.set, s.score, s.bisScore
+    ))
+    local effectStr = gearAudit.summarizeEffect(s.gear.effects)
+    if #effectStr > 60 then effectStr = effectStr:sub(1, 58) .. ".." end
+    cecho(string.format("\n<dark_grey>           %s <grey>- %s", s.gear.name or "Unknown", effectStr))
+  end
+
+  cecho("\n\n<cyan>--------------------------------------------------------------------------------")
+  cecho("\n<white>  Copy-paste to scrap:")
+  for _, s in ipairs(scraps) do
+    cecho(string.format("\n<yellow>    GEAR SCRAP %d", s.gear.id or 0))
+  end
+  cecho("\n<cyan>================================================================================\n")
 end
 
 --------------------------------------------------------------------------------
@@ -674,6 +1111,14 @@ function gearAudit.help()
   cecho("\n<cyan>| <green>gearaudit status<cyan>       - Show current audit status                 |")
   cecho("\n<cyan>| <green>gearaudit clear<cyan>        - Clear all collected data                  |")
   cecho("\n<cyan>| <green>gearaudit help<cyan>         - Show this help                            |")
+  cecho("\n<cyan>+----------------------------------------------------------------------+")
+  cecho("\n<cyan>|                    <white>PvE BiS ANALYSIS<cyan>                                |")
+  cecho("\n<cyan>+----------------------------------------------------------------------+")
+  cecho("\n<cyan>| <green>gearaudit bis<cyan>          - PvE Best in Slot analysis (all slots)     |")
+  cecho("\n<cyan>| <green>gearaudit bis <slot><cyan>   - BiS analysis for a specific slot          |")
+  cecho("\n<cyan>| <green>gearaudit score <id><cyan>   - Detailed score breakdown for a gear ID    |")
+  cecho("\n<cyan>| <green>gearaudit scrap<cyan>        - Scrap recommendations + commands          |")
+  cecho("\n<cyan>| <green>gearaudit scrap <set><cyan>  - Scrap recommendations for a set           |")
   cecho("\n<cyan>+----------------------------------------------------------------------+\n")
 end
 
@@ -722,6 +1167,16 @@ function gearAudit.command(args)
     gearAudit.load()
   elseif cmd == "status" then
     gearAudit.status()
+  elseif cmd == "bis" then
+    gearAudit.displayBis(rest ~= "" and rest or nil)
+  elseif cmd == "score" then
+    if rest and rest ~= "" then
+      gearAudit.displayScore(rest)
+    else
+      gearAudit.echo("Usage: gearaudit score <gear_id>")
+    end
+  elseif cmd == "scrap" then
+    gearAudit.displayScrap(rest ~= "" and rest or nil)
   elseif cmd == "clear" then
     gearAudit.data = {}
     gearAudit.echo("Cleared all gear audit data.")

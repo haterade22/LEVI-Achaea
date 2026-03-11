@@ -513,6 +513,73 @@ Configurable floating gauge bars for Health, Mana, Willpower, Endurance, and Cap
 | Map | `zgui.map` | `zgui.map` | Not yet migrated |
 | All other windows | `zgui.*` | `zgui.*` | Not yet migrated |
 
+### Gear Audit & BiS Analysis (`gearAudit`)
+Automated gear inventory and PvE Best-in-Slot scoring system. Collects all gear via GEAR LIST ALL + GEAR PROBE, then scores items for PvE damage output.
+
+**Key File:** `src_new/scripts/.../gear_system/001_Gear_Audit.lua`
+**Alias:** `src_new/aliases/.../gear_system/001_Gear_Audit.lua` (`gearaudit`)
+
+**Commands:**
+| Command | Purpose |
+|---------|---------|
+| `gearaudit` | Start new gear audit (GEAR LIST ALL + GEAR PROBE all items) |
+| `gearaudit show` | Display all collected gear |
+| `gearaudit detail <id>` | Full details for a gear ID |
+| `gearaudit set/slot/effect <filter>` | Filter by set, slot, or effect keyword |
+| `gearaudit bis` | PvE Best-in-Slot analysis (all slots, per-set + overall) |
+| `gearaudit bis <slot>` | BiS analysis for a specific slot |
+| `gearaudit score <id>` | Detailed score breakdown with weights |
+| `gearaudit scrap` | Scrap recommendations + copy-paste GEAR SCRAP commands |
+| `gearaudit scrap <set>` | Scrap recommendations for a specific set |
+| `gearaudit save/load` | Manual save/load |
+
+**BiS Scoring Weights** (configurable via `gearAudit.config.bisWeights`):
+| Stat | Weight | Priority |
+|------|--------|----------|
+| Additional Damage % | 10.0 | Highest |
+| Celerity | 8.0 | Very High |
+| Burst Damage (normalized) | 7.0 | High |
+| Ignore Denizen Resistance | 6.0 | High |
+| HP Increase | 3.0 | Moderate |
+| HP Regen | 2.5 | Moderate |
+| Damage Reduction | 2.0 | Low |
+| Resistance | 1.5 | Low |
+| WP Regen / Blackout Reduction | 1.0 | Lowest |
+
+Conditional gear (location-locked) discounted 50%; battlerage-conditional 30%.
+Burst damage normalized to per-attack value: `effectivePct = burstPct / (cooldown / 3)`.
+Scrap threshold: items scoring below 50% of set BiS (`gearAudit.config.scrapThreshold`).
+
+**Persistence:** `gearaudit` file via `table.save/load` with `_ataxia_backup` fallback.
+
+### Armour & Paragon Management (`ataxia.armour`)
+Configurable profile system for armour paragon slots, traits, and morphing. Auto-swaps on basher enable/disable.
+
+**Key Files:**
+| File | Purpose |
+|------|---------|
+| `src_new/scripts/.../gear_system/002_Armour_Paragons.lua` | Main system (`ataxia.armour` namespace) |
+| `src_new/aliases/.../gear_system/002_Armour_Paragons.lua` | `armour` alias dispatcher |
+| `src_new/triggers/.../gear_system/001_Paragon_Inventory.lua` | Auto-detect paragons from `ii paragon` |
+| `src_new/triggers/.../gear_system/002_Armour_Probe.lua` | Detect current embrasures from `probe armour` |
+
+**Profile Structure:**
+```lua
+ataxia.armour.config.profiles["bash"] = {
+  slots = {"paragon361796", "paragon343178", "paragon514466"},
+  traits = {"quick-witted", "fully fit", "marksman", ...},
+  armourType = nil,  -- nil/string/"auto"
+}
+```
+
+**Auto-swap:** `armour auto on` + `armour bash <profile>` + `armour pvp <profile>` — hooks into `"basher enabled"` / `"basher disabled"` events.
+
+**Morph:** Tracks cooldown (10min). `armourType = "auto"` resolves via `gmcp.Char.Status.class` → `classArmourType` lookup.
+
+**Persistence:** Self-contained `table.save/load` to `getMudletHomeDir()/armourconfig` with `_ataxia_backup` fallback.
+
+**Commands:** `armour`, `armour <name>`, `armour add/remove/set/show/auto/bash/pvp/morph/scan/paragons/help`
+
 ### Player Database (ataxiaNDB)
 - Fetches from Achaea API (`http://api.achaea.com/characters/`)
 - Tracks: name, city, house, class, level, XP rank, player kills, mark, army rank, dauntless
@@ -569,11 +636,12 @@ All system state is saved to disk files in `getMudletHomeDir()` via `table.save(
 | `legenddeck_config` | `ldm.config/favorites/enabled` | Card config | `legend_deck/004_Legend_Deck_Save_Load.lua` |
 | `classDetect_config.lua` | `classDetect.config/curingsetMap` | Class detection settings | `class_detect/001_Class_Detect_Engine.lua` |
 | `gearaudit` | `gearAudit.data` | Gear inventory | `gear_system/001_Gear_Audit.lua` |
+| `armourconfig` | `ataxia.armour.config` | Armour profiles, paragons, morph state | `gear_system/002_Armour_Paragons.lua` |
 | `ataxia_bars_config.lua` | `ataxia.bars.config` | Vital bar toggles | `build_windows/016_buildVitalBars.lua` |
 | `mapper.options.lua` | `mmp.locked/settings` | Mapper options | `mudlet-mapper` (no profile backup) |
 
 **Profile Backup Keys** (in `_ataxia_backup`):
-`ataxia`, `basher`, `basherpaths`, `ndb`, `extraction`, `slcconfig`, `shaman`, `legenddeck`, `legenddeck_config`, `classDetect`, `gearaudit`, `bars_config`
+`ataxia`, `basher`, `basherpaths`, `ndb`, `extraction`, `slcconfig`, `shaman`, `legenddeck`, `legenddeck_config`, `classDetect`, `gearaudit`, `armourconfig`, `bars_config`
 
 **Other Storage**: SQLite `exp_db` (hunting stats via Mudlet `db` API), `ataxiaNDB/*.json` (temp API downloads).
 
