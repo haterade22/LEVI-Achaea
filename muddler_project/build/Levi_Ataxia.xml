@@ -15,7 +15,7 @@ ataxiaTemp = ataxiaTemp or {}
 ataxiaTemp.addedHerbID = 1
 ataxiaTemp.removedHerbID = 2
 ataxiagui = ataxiagui or {}
-ataxiaVersion = "4.3"						--last was 4.2
+ataxiaVersion = "4.3.1"						--last was 4.3
 muteList = muteList or {}
 
 ataxiaTables.limbTimers = ataxiaTables.limbTimers or {}
