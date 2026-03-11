@@ -46,7 +46,27 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 | **Shield Retarget** | Per-mob configurable shield durations with target swapping |
 | **Armour Paragons** | Profile-based paragon/trait swapping with auto-swap on basher enable/disable |
 
-### Armour & Paragon Management (`armour`)
+### Gear & Equipment
+
+#### Gear Audit & BiS Analysis (`gearaudit`)
+
+Automated gear inventory scanner and PvE Best-in-Slot scoring system. Collects all gear via `GEAR LIST ALL` + `GEAR PROBE`, then scores items for PvE damage output.
+
+| Command | Action |
+|---------|--------|
+| `gearaudit` | Start new gear audit (scans all gear) |
+| `gearaudit show` | Display all collected gear |
+| `gearaudit detail <id>` | Full details for a gear ID |
+| `gearaudit set/slot/effect <filter>` | Filter by set, slot, or effect keyword |
+| `gearaudit bis` | PvE Best-in-Slot analysis (all slots, per-set + overall) |
+| `gearaudit bis <slot>` | BiS analysis for a specific slot |
+| `gearaudit score <id>` | Detailed score breakdown with weights |
+| `gearaudit scrap` | Scrap recommendations + copy-paste `GEAR SCRAP` commands |
+| `gearaudit scrap <set>` | Scrap recommendations for a specific set |
+
+**BiS scoring** ranks items by weighted stats: Additional Damage (10x), Celerity (8x), Burst Damage (7x), Ignore Resistance (6x), HP (3x), HP Regen (2.5x), Damage Reduction (2x), Resistance (1.5x). Conditional gear discounted 30-50%. Scrap threshold: items below 50% of set BiS.
+
+#### Armour & Paragon Management (`armour`)
 
 Configurable profile system for armour paragon slots (1-3), trait selections, and armour morphing. Replaces 8+ hardcoded aliases with a single `armour` command.
 
@@ -64,12 +84,15 @@ Configurable profile system for armour paragon slots (1-3), trait selections, an
 | `armour morph <type/auto>` | Manually morph armour type (10min cooldown) |
 | `armour scan` | Auto-detect owned paragons via `ii paragon` + current embrasures via `probe armour` |
 | `armour paragons` | Show all known paragons |
+| `armour types` | Show all 24 paragon types with effects |
 
 **Pre-configured profiles**: bash, pvp, stickpvp, magepve, serppve, stickpve, pariahpve, bmpve
 
 **Auto-swap**: When `armour auto on` is set, the system automatically swaps to your bash profile when the basher starts and your PvP profile when it stops. No manual intervention needed.
 
-**Armour morphing**: If a profile has `armourType = "auto"`, the system looks up the correct armour type for your current class (e.g., fullplate for knights, cloth for magi) and morphs automatically.
+**Armour morphing**: If a profile has `armourType = "auto"`, the system looks up the correct armour type for your current class (e.g., fullplate for knights, cloth for magi) and morphs automatically. Auto-detects current armour type on load.
+
+**Paragon lookup**: Built-in reference for all 24 paragon types with effects. Raw game names from `ii paragon` are automatically resolved to clean display names (e.g., "an aeneaous paragon" → "aeneaous (absorption)").
 
 ### GUI System (Enhanced zGUI Redux)
 

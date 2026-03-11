@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-03-11 — Armour/Paragon System Fixes + Gear Audit README
+
+### Bug Fixes
+- **Fixed morph command**: Was sending invalid `armour morph <type>`, now sends correct game command `MORPHARMOUR armour INTO <type>` (`002_Armour_Paragons.lua`)
+- **Fixed armour type "(unknown)"**: Auto-detects armour type from current class on init when `currentArmourType` is nil
+
+### Enhancements
+- **Paragon type lookup table**: Added `PARAGON_TYPES` with all 24 paragon types and effects. `registerParagon()` now resolves raw game names (e.g., "an aeneaous paragon") to clean display names (e.g., "aeneaous (absorption)"). Stale names re-resolved automatically on load.
+- **New `armour types` command**: Shows all 24 paragon types grouped by category (resistance, morphing, combat, regen, storage) with effects
+- **README: Gear & Equipment section**: Added Gear Audit (`gearaudit`) and Armour/Paragon (`armour`) documentation to GitHub README
+
+### Files changed
+- `src_new/scripts/.../gear_system/002_Armour_Paragons.lua` — PARAGON_TYPES table, resolveParagonName(), morph fix, auto-detect, `types` command
+- `CLAUDE.md` — Updated armour section with morph fix, paragon lookup, types command
+- `README.md` — Added Gear & Equipment section with gearaudit + armour subsections
+
+---
+
 ## 2026-03-11 — Target Priority Queue + Stormhammer Enhancement
 
 ### New Feature: Target Priority Queue (`tprio` namespace)
