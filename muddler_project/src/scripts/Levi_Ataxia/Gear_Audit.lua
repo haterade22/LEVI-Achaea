@@ -41,7 +41,7 @@ gearAudit.config = {
     conditionalMult  = 0.5,  -- location-locked gear discounted 50%
     brMult           = 0.7,  -- battlerage-conditional discounted 30%
   },
-  scrapThreshold = 0.5,      -- SCRAP if score < 50% of BiS in same slot
+  keepPerSet = 3,             -- Keep top N items per slot per set, scrap the rest
 }
 
 --------------------------------------------------------------------------------
@@ -464,19 +464,17 @@ function gearAudit.getScrapRecommendations(filterSet)
         table.insert(bySet[setName], item)
       end
 
-      -- Within each set, mark items below threshold of set's BiS
+      -- Within each set, keep top N and scrap the rest
+      local keepN = gearAudit.config.keepPerSet
       for setName, setItems in pairs(bySet) do
-        if #setItems > 1 then
+        if #setItems > keepN then
           local setBis = setItems[1].score  -- already sorted desc
-          local threshold = gearAudit.config.scrapThreshold
-          for i = 2, #setItems do
+          for i = keepN + 1, #setItems do
             local item = setItems[i]
-            if setBis > 0 and (item.score / setBis) < threshold then
-              table.insert(scraps, {
-                gear = item.gear, score = item.score, bisScore = setBis,
-                slot = slot, set = setName, reason = "Below " .. math.floor(threshold * 100) .. "% of set BiS"
-              })
-            end
+            table.insert(scraps, {
+              gear = item.gear, score = item.score, bisScore = setBis,
+              slot = slot, set = setName, reason = "Rank #" .. i .. " (keeping top " .. keepN .. ")"
+            })
           end
         end
       end
@@ -496,10 +494,10 @@ end
 -- BiS DISPLAY FUNCTIONS
 --------------------------------------------------------------------------------
 
-local function bisTag(rank, score, bisScore, threshold)
+local function bisTag(rank, keepN)
   if rank == 1 then return "BiS" end
-  if bisScore > 0 and (score / bisScore) < threshold then return "SCRAP" end
-  return "KEEP"
+  if rank <= keepN then return "KEEP" end
+  return "SCRAP"
 end
 
 local function bisTagColor(tag)
@@ -537,7 +535,7 @@ end
 -- Full BiS analysis display
 function gearAudit.displayBis(slotFilter)
   local bySlot = gearAudit.getBisBySlot()
-  local threshold = gearAudit.config.scrapThreshold
+  local keepN = gearAudit.config.keepPerSet
 
   if gearAudit.tableSize(bySlot) == 0 then
     gearAudit.echo("No gear data. Run 'gearaudit' to collect or 'gearaudit load' to load saved data.")
@@ -552,7 +550,7 @@ function gearAudit.displayBis(slotFilter)
   for _, slot in ipairs(slots) do
     if not slotFilter or slot:lower() == slotFilter:lower() then
       local items = bySlot[slot]
-      cecho(string.format("\n\n<white>  %s <dark_grey>(%d items)", slot:upper(), #items))
+      cecho(string.format("\n\n<white>  %s <DimGrey>(%d items)", slot:upper(), #items))
 
       -- Group by set
       local bySet = {}
@@ -568,17 +566,17 @@ function gearAudit.displayBis(slotFilter)
 
       -- Per-set BiS
       if #setOrder > 1 or (#setOrder == 1 and #bySet[setOrder[1]] > 1) then
-        cecho("\n<dark_grey>  -- Per-Set BiS --")
+        cecho("\n<DimGrey>  -- Per-Set BiS --")
         for _, setName in ipairs(setOrder) do
           local setItems = bySet[setName]
-          cecho(string.format("\n<green>    %s<dark_grey>:", setName))
+          cecho(string.format("\n<green>    %s<DimGrey>:", setName))
           for i, item in ipairs(setItems) do
-            local tag = bisTag(i, item.score, setItems[1].score, threshold)
+            local tag = bisTag(i, keepN)
             local tagCol = bisTagColor(tag)
             local effectStr = gearAudit.summarizeEffect(item.gear.effects)
             if #effectStr > 35 then effectStr = effectStr:sub(1, 33) .. ".." end
             cecho(string.format(
-              "\n<cyan>      #%-2d %s%-5s <yellow>%5.1f  <dark_grey>[%s] <white>%-6d <light_grey>%s",
+              "\n<cyan>      #%-2d %s%-5s <yellow>%5.1f  <DimGrey>[%s] <white>%-6d <light_grey>%s",
               i, tagCol, tag, item.score, rarityShort(item.gear.rarity),
               item.gear.id or 0, effectStr
             ))
@@ -587,11 +585,11 @@ function gearAudit.displayBis(slotFilter)
       end
 
       -- Overall BiS (top item across all sets)
-      cecho("\n<dark_grey>  -- Overall BiS --")
+      cecho("\n<DimGrey>  -- Overall BiS --")
       local top = items[1]
       if top then
         cecho(string.format(
-          "\n<cyan>      #1  <green>BiS   <yellow>%5.1f  <dark_grey>[%s] <white>%-6d <green>%s",
+          "\n<cyan>      #1  <green>BiS   <yellow>%5.1f  <DimGrey>[%s] <white>%-6d <green>%s",
           top.score, rarityShort(top.gear.rarity), top.gear.id or 0,
           top.gear.set or "Unknown"
         ))
@@ -637,7 +635,7 @@ function gearAudit.displayScore(gearId)
   cecho("\n<cyan>+------------------------------------------------------------------------------+")
 
   if #breakdown == 0 then
-    cecho("\n<cyan>|   <dark_grey>(No scorable stats found)")
+    cecho("\n<cyan>|   <DimGrey>(No scorable stats found)")
   else
     for _, b in ipairs(breakdown) do
       local valStr = b.note or string.format("+%g", b.value)
@@ -691,7 +689,7 @@ function gearAudit.displayScrap(filterSet)
     ))
     local effectStr = gearAudit.summarizeEffect(s.gear.effects)
     if #effectStr > 60 then effectStr = effectStr:sub(1, 58) .. ".." end
-    cecho(string.format("\n<dark_grey>           %s <grey>- %s", s.gear.name or "Unknown", effectStr))
+    cecho(string.format("\n<DimGrey>           %s <grey>- %s", s.gear.name or "Unknown", effectStr))
   end
 
   cecho("\n\n<cyan>--------------------------------------------------------------------------------")
@@ -1072,7 +1070,7 @@ function gearAudit.showDetail(gearId)
       cecho("\n<cyan>|   <light_grey>" .. eff)
     end
   else
-    cecho("\n<cyan>|   <dark_grey>(No effects recorded)")
+    cecho("\n<cyan>|   <DimGrey>(No effects recorded)")
   end
   cecho("\n<cyan>+------------------------------------------------------------------------------+\n")
 end

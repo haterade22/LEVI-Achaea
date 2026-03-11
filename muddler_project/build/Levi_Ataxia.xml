@@ -26619,7 +26619,7 @@ gearAudit.config = {
     conditionalMult  = 0.5,  -- location-locked gear discounted 50%
     brMult           = 0.7,  -- battlerage-conditional discounted 30%
   },
-  scrapThreshold = 0.5,      -- SCRAP if score &lt; 50% of BiS in same slot
+  keepPerSet = 3,             -- Keep top N items per slot per set, scrap the rest
 }
 
 --------------------------------------------------------------------------------
@@ -27042,19 +27042,17 @@ function gearAudit.getScrapRecommendations(filterSet)
         table.insert(bySet[setName], item)
       end
 
-      -- Within each set, mark items below threshold of set's BiS
+      -- Within each set, keep top N and scrap the rest
+      local keepN = gearAudit.config.keepPerSet
       for setName, setItems in pairs(bySet) do
-        if #setItems &gt; 1 then
+        if #setItems &gt; keepN then
           local setBis = setItems[1].score  -- already sorted desc
-          local threshold = gearAudit.config.scrapThreshold
-          for i = 2, #setItems do
+          for i = keepN + 1, #setItems do
             local item = setItems[i]
-            if setBis &gt; 0 and (item.score / setBis) &lt; threshold then
-              table.insert(scraps, {
-                gear = item.gear, score = item.score, bisScore = setBis,
-                slot = slot, set = setName, reason = "Below " .. math.floor(threshold * 100) .. "% of set BiS"
-              })
-            end
+            table.insert(scraps, {
+              gear = item.gear, score = item.score, bisScore = setBis,
+              slot = slot, set = setName, reason = "Rank #" .. i .. " (keeping top " .. keepN .. ")"
+            })
           end
         end
       end
@@ -27074,10 +27072,10 @@ end
 -- BiS DISPLAY FUNCTIONS
 --------------------------------------------------------------------------------
 
-local function bisTag(rank, score, bisScore, threshold)
+local function bisTag(rank, keepN)
   if rank == 1 then return "BiS" end
-  if bisScore &gt; 0 and (score / bisScore) &lt; threshold then return "SCRAP" end
-  return "KEEP"
+  if rank &lt;= keepN then return "KEEP" end
+  return "SCRAP"
 end
 
 local function bisTagColor(tag)
@@ -27115,7 +27113,7 @@ end
 -- Full BiS analysis display
 function gearAudit.displayBis(slotFilter)
   local bySlot = gearAudit.getBisBySlot()
-  local threshold = gearAudit.config.scrapThreshold
+  local keepN = gearAudit.config.keepPerSet
 
   if gearAudit.tableSize(bySlot) == 0 then
     gearAudit.echo("No gear data. Run 'gearaudit' to collect or 'gearaudit load' to load saved data.")
@@ -27130,7 +27128,7 @@ function gearAudit.displayBis(slotFilter)
   for _, slot in ipairs(slots) do
     if not slotFilter or slot:lower() == slotFilter:lower() then
       local items = bySlot[slot]
-      cecho(string.format("\n\n&lt;white&gt;  %s &lt;dark_grey&gt;(%d items)", slot:upper(), #items))
+      cecho(string.format("\n\n&lt;white&gt;  %s &lt;DimGrey&gt;(%d items)", slot:upper(), #items))
 
       -- Group by set
       local bySet = {}
@@ -27146,17 +27144,17 @@ function gearAudit.displayBis(slotFilter)
 
       -- Per-set BiS
       if #setOrder &gt; 1 or (#setOrder == 1 and #bySet[setOrder[1]] &gt; 1) then
-        cecho("\n&lt;dark_grey&gt;  -- Per-Set BiS --")
+        cecho("\n&lt;DimGrey&gt;  -- Per-Set BiS --")
         for _, setName in ipairs(setOrder) do
           local setItems = bySet[setName]
-          cecho(string.format("\n&lt;green&gt;    %s&lt;dark_grey&gt;:", setName))
+          cecho(string.format("\n&lt;green&gt;    %s&lt;DimGrey&gt;:", setName))
           for i, item in ipairs(setItems) do
-            local tag = bisTag(i, item.score, setItems[1].score, threshold)
+            local tag = bisTag(i, keepN)
             local tagCol = bisTagColor(tag)
             local effectStr = gearAudit.summarizeEffect(item.gear.effects)
             if #effectStr &gt; 35 then effectStr = effectStr:sub(1, 33) .. ".." end
             cecho(string.format(
-              "\n&lt;cyan&gt;      #%-2d %s%-5s &lt;yellow&gt;%5.1f  &lt;dark_grey&gt;[%s] &lt;white&gt;%-6d &lt;light_grey&gt;%s",
+              "\n&lt;cyan&gt;      #%-2d %s%-5s &lt;yellow&gt;%5.1f  &lt;DimGrey&gt;[%s] &lt;white&gt;%-6d &lt;light_grey&gt;%s",
               i, tagCol, tag, item.score, rarityShort(item.gear.rarity),
               item.gear.id or 0, effectStr
             ))
@@ -27165,11 +27163,11 @@ function gearAudit.displayBis(slotFilter)
       end
 
       -- Overall BiS (top item across all sets)
-      cecho("\n&lt;dark_grey&gt;  -- Overall BiS --")
+      cecho("\n&lt;DimGrey&gt;  -- Overall BiS --")
       local top = items[1]
       if top then
         cecho(string.format(
-          "\n&lt;cyan&gt;      #1  &lt;green&gt;BiS   &lt;yellow&gt;%5.1f  &lt;dark_grey&gt;[%s] &lt;white&gt;%-6d &lt;green&gt;%s",
+          "\n&lt;cyan&gt;      #1  &lt;green&gt;BiS   &lt;yellow&gt;%5.1f  &lt;DimGrey&gt;[%s] &lt;white&gt;%-6d &lt;green&gt;%s",
           top.score, rarityShort(top.gear.rarity), top.gear.id or 0,
           top.gear.set or "Unknown"
         ))
@@ -27215,7 +27213,7 @@ function gearAudit.displayScore(gearId)
   cecho("\n&lt;cyan&gt;+------------------------------------------------------------------------------+")
 
   if #breakdown == 0 then
-    cecho("\n&lt;cyan&gt;|   &lt;dark_grey&gt;(No scorable stats found)")
+    cecho("\n&lt;cyan&gt;|   &lt;DimGrey&gt;(No scorable stats found)")
   else
     for _, b in ipairs(breakdown) do
       local valStr = b.note or string.format("+%g", b.value)
@@ -27269,7 +27267,7 @@ function gearAudit.displayScrap(filterSet)
     ))
     local effectStr = gearAudit.summarizeEffect(s.gear.effects)
     if #effectStr &gt; 60 then effectStr = effectStr:sub(1, 58) .. ".." end
-    cecho(string.format("\n&lt;dark_grey&gt;           %s &lt;grey&gt;- %s", s.gear.name or "Unknown", effectStr))
+    cecho(string.format("\n&lt;DimGrey&gt;           %s &lt;grey&gt;- %s", s.gear.name or "Unknown", effectStr))
   end
 
   cecho("\n\n&lt;cyan&gt;--------------------------------------------------------------------------------")
@@ -27650,7 +27648,7 @@ function gearAudit.showDetail(gearId)
       cecho("\n&lt;cyan&gt;|   &lt;light_grey&gt;" .. eff)
     end
   else
-    cecho("\n&lt;cyan&gt;|   &lt;dark_grey&gt;(No effects recorded)")
+    cecho("\n&lt;cyan&gt;|   &lt;DimGrey&gt;(No effects recorded)")
   end
   cecho("\n&lt;cyan&gt;+------------------------------------------------------------------------------+\n")
 end
