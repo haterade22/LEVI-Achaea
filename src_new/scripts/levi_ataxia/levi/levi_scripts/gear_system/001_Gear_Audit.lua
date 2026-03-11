@@ -707,12 +707,17 @@ function gearAudit.displayScrap(filterSet)
   end
 
   cecho("\n\n<cyan>--------------------------------------------------------------------------------")
-  cecho(string.format("\n<white>  Sending %d scrap commands...", #scraps))
-  for _, s in ipairs(scraps) do
+  cecho(string.format("\n<white>  Queuing %d scrap commands (0.5s apart)...", #scraps))
+  for i, s in ipairs(scraps) do
     local cmd = string.format("GEAR SCRAP %d CONFIRM", s.gear.id or 0)
-    cecho(string.format("\n<yellow>    %s", cmd))
-    send(cmd, false)
+    local delay = (i - 1) * 0.5
+    tempTimer(delay, function()
+      cecho(string.format("\n<yellow>    [%d/%d] %s", i, #scraps, cmd))
+      send(cmd, false)
+    end)
   end
+  local totalTime = (#scraps - 1) * 0.5
+  cecho(string.format("\n<grey>  ETA: %.0f seconds", totalTime))
   cecho("\n<cyan>================================================================================\n")
 end
 

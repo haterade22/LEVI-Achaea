@@ -14,7 +14,8 @@ onTargetFocusV3()
 	-- Track for adaptive serpent offense
 	if serpent and serpent.trackCure then serpent.trackCure("focus") end
 	tBals.focus = false
-  
+	tBals.focusUsedAt = getEpoch()
+
   if tBals.timers.focus then killTimer(tBals.timers.focus) end
 	if haveAff("shadowmadness") then
 		tBals.timers.focus = tempTimer(5, [[tBals.focus = true; tBals.timers.focus = nil]])

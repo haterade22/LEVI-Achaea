@@ -8,7 +8,8 @@ if isTargeted(matches[2]) and tBals.focus then
 	tFocused()
 end
 	tBals.focus = false
-  
+	tBals.focusUsedAt = getEpoch()
+
   if tBals.timers.focus then killTimer(tBals.timers.focus) end
 	if haveAff("shadowmadness") then
 		tBals.timers.focus = tempTimer(5, [[tBals.focus = true; tBals.timers.focus = nil]])

@@ -569,6 +569,70 @@ function checkDarkshadeTimer()
 end
 
 -- =============================================================================
+-- FOCUS TIMING & ADAPTIVE GATES
+-- =============================================================================
+
+--[[
+    Get remaining focus cooldown in seconds.
+    Returns 0 if focus is available, >0 if on cooldown.
+    Uses epoch timestamp set by focus triggers (398/399).
+]]--
+function serpent.getFocusCooldownRemaining()
+    if tBals.focus then return 0 end
+    if not tBals.focusUsedAt then return 0 end
+    local cd = haveAff("shadowmadness") and 5 or 2
+    return math.max(0, cd - (getEpoch() - tBals.focusUsedAt))
+end
+
+--[[
+    Check if anorexia can stick on target.
+    Anorexia is cured by epidermal (salve) AND focus.
+    Both cure routes must be blocked:
+    - Slickness blocks epidermal (on target OR gecko delivering it this round)
+    - Impatience blocks focus (or focus on cooldown > 1.8s)
+]]--
+function serpent.canDeliverAnorexia(firstVenom)
+    if haveAff("anorexia") then return false end
+    local slicknessBlocked = haveAff("slickness") or (firstVenom == "gecko")
+    local focusBlocked = haveAff("impatience") or serpent.getFocusCooldownRemaining() > 1.8
+    return slicknessBlocked and focusBlocked
+end
+
+--[[
+    Detect bloodroot backtracking opportunity for focuslock.
+    When target eats bloodroot for paralysis (slickness stays),
+    spike anorexia + stupidity for 50/50 focus dilemma.
+]]--
+function serpent.checkBloodrootExploit()
+    return haveAff("slickness") and haveAff("asthma")
+           and not haveAff("paralysis")
+           and serpent.getFocusCooldownRemaining() > 1.5
+end
+
+--[[
+    Gate impatience delivery behind supporting mechanics.
+    Without support, target just goldenseals impatience immediately.
+]]--
+function serpent.shouldDeliverImpatience()
+    -- Gate 1: Fratricide active (relapsing masochism locks focus)
+    if serpent.hypnosis.hasFratricide() then return true end
+    -- Gate 2: Focus on cooldown (can't focus-cure goldenseal affs)
+    if serpent.getFocusCooldownRemaining() > 1.8 then return true end
+    -- Gate 3: Softlock present (anorexia blocks goldenseal eating)
+    if softlock then return true end
+    -- Gate 4: 2+ goldenseal affs stacked (they need multiple eats)
+    local gsCount = 0
+    for _, aff in ipairs({"stupidity", "dizziness", "epilepsy", "shyness"}) do
+        if haveAff(aff) then gsCount = gsCount + 1 end
+    end
+    if gsCount >= 2 then return true end
+    -- Gate 5: Hypothermia on target (cure priority conflict)
+    if haveAff("hypothermia") then return true end
+    -- No support: don't waste EQ on naked impatience
+    return false
+end
+
+-- =============================================================================
 -- STACK COUNTING
 -- =============================================================================
 
@@ -646,8 +710,9 @@ function determineStrategy()
         return
     end
 
-    -- ===== DARKSHADE FORK: Apply darkshade if not on target (highest priority) =====
-    if not haveAff("darkshade") then
+    -- ===== DARKSHADE FORK: Apply darkshade if not on target (darkshade mode only) =====
+    -- Non-darkshade modes: darkshade auto-inserted as second venom when lightwall detected
+    if serpOffenseMode == "darkshade" and not haveAff("darkshade") then
         serpStrategy = "apply_darkshade"
         return
     end
@@ -702,6 +767,12 @@ function determineStrategy()
 
     if serpent.hypnosis.isActive() then
         serpStrategy = "hypnosis"
+        return
+    end
+
+    -- ===== POST-SNAP: Skip hindering, go straight for lock pieces =====
+    if tAffs.snapped or (serpent.hypnosis.snapTimerFired and serpent.hypnosis.phase == "cooldown") then
+        serpStrategy = "post_snap"
         return
     end
 
@@ -814,7 +885,7 @@ function selectVenoms()
             table.insert(envenomList, "gecko")
         elseif not haveAff("asthma") then
             table.insert(envenomList, "kalmia")
-        elseif not haveAff("anorexia") and haveAff("impatience") then
+        elseif serpent.canDeliverAnorexia(envenomList[1]) then
             table.insert(envenomList, "slike")
         else
             table.insert(envenomList, "voyria")
@@ -825,6 +896,13 @@ function selectVenoms()
 
     -- ===== COMPLETE HARDLOCK: Softlock + need paralysis/impatience =====
     if serpStrategy == "complete_hardlock" then
+        -- Bloodroot backtracking: slickness stayed, asthma blocks smoke, focus on cd
+        -- Spike slike+aconite for 50/50 focuslock (focus cures one, other sticks)
+        if serpent.checkBloodrootExploit() then
+            table.insert(envenomList, "slike")
+            table.insert(envenomListTwo, "aconite")
+            return
+        end
         if not haveAff("paralysis") then
             table.insert(envenomList, "curare")
         elseif not haveAff("impatience") then
@@ -845,6 +923,13 @@ function selectVenoms()
 
     -- ===== COMPLETE SOFTLOCK: Need asthma + anorexia + slickness =====
     if serpStrategy == "complete_softlock" then
+        -- Bloodroot backtracking: slickness stayed, asthma blocks smoke, focus on cd
+        -- Spike slike+aconite for 50/50 focuslock (focus cures one, other sticks)
+        if serpent.checkBloodrootExploit() then
+            table.insert(envenomList, "slike")
+            table.insert(envenomListTwo, "aconite")
+            return
+        end
         -- Direct venom delivery for softlock pieces
         if not haveAff("asthma") then
             table.insert(envenomList, "kalmia")
@@ -866,7 +951,7 @@ function selectVenoms()
             else
                 table.insert(envenomList, "gecko")
             end
-        elseif not haveAff("anorexia") and haveAff("impatience") then
+        elseif serpent.canDeliverAnorexia(envenomList[1]) then
             table.insert(envenomList, "slike")
         else
             -- Softlock pieces in place, add pressure
@@ -920,7 +1005,7 @@ function selectVenoms()
             table.insert(envenomList, "xentio")
         elseif not haveAff("slickness") then
             table.insert(envenomList, "gecko")
-        elseif not haveAff("anorexia") and haveAff("impatience") and not suggesting["anorexia"] then
+        elseif serpent.canDeliverAnorexia(envenomList[1]) and not suggesting["anorexia"] then
             table.insert(envenomList, "slike")
         else
             table.insert(envenomList, "curare")
@@ -1094,7 +1179,7 @@ function selectVenoms()
             {aff = "weariness", venom = "vernalius"},
             {aff = "clumsiness", venom = "xentio"},
             {aff = "slickness", venom = "gecko"},
-            {aff = "anorexia",  venom = "slike", gate = function() return haveAff("impatience") end},
+            {aff = "anorexia",  venom = "slike", gate = function() return serpent.canDeliverAnorexia(envenomList[1] or "") end},
         }
         for _, entry in ipairs(groupPriority) do
             if not haveAff(entry.aff) and (not entry.gate or entry.gate()) then
@@ -1117,6 +1202,26 @@ function selectVenoms()
         return
     end
 
+    -- ===== POST-SNAP: Skip hindering, go straight for lock pieces =====
+    -- After snap, their curing rhythm is disrupted — capitalize with direct lock pieces
+    if serpStrategy == "post_snap" then
+        if not haveAff("asthma") then
+            table.insert(envenomList, "kalmia")
+        elseif not haveAff("slickness") then
+            table.insert(envenomList, "gecko")
+        elseif serpent.canDeliverAnorexia(envenomList[1]) then
+            table.insert(envenomList, "slike")
+        elseif not haveAff("paralysis") then
+            table.insert(envenomList, "curare")
+        elseif not haveAff("weariness") then
+            table.insert(envenomList, "vernalius")
+        else
+            table.insert(envenomList, "curare")
+        end
+        buildSecondVenom()
+        return
+    end
+
     -- ===== SETUP LOCK (Default): Build toward lock + set up Ekanelia =====
     -- Priority: paralysis (blocks tree) → clumsiness (Ekanelia setup) → lock pieces
 
@@ -1135,7 +1240,7 @@ function selectVenoms()
         table.insert(envenomList, "vernalius")
     elseif not haveAff("slickness") then
         table.insert(envenomList, "gecko")
-    elseif not haveAff("anorexia") and haveAff("impatience") then
+    elseif serpent.canDeliverAnorexia(envenomList[1]) then
         table.insert(envenomList, "slike")
     else
         table.insert(envenomList, "curare")
@@ -1146,25 +1251,38 @@ end
 
 --[[
     Build second venom for doublestab (must differ from first).
-    Ekanelia-aware: prefers venoms that complete Ekanelia conditionals.
+    Default: curare (paralysis blocks tree — strongest escape mechanism).
+    If paralysis stuck: fill with missing lock pieces ordered by priority.
+    Lightwall auto-insertion: darkshade as second venom when lightwall detected (non-darkshade mode).
 ]]--
 function buildSecondVenom()
     if #envenomListTwo > 0 then return end
 
     local firstVenom = envenomList[1]
 
-    -- Priority: clumsiness (33% kelp) → asthma (blocks rebounding) → weariness → lock pieces
-    if not haveAff("clumsiness") and firstVenom ~= "xentio" then
-        table.insert(envenomListTwo, "xentio")
-    elseif not haveAff("asthma") and firstVenom ~= "kalmia" then
+    -- Lightwall auto-insertion (non-darkshade mode only)
+    if serpOffenseMode ~= "darkshade" and ataxia.lightwall
+       and not haveAff("darkshade") and firstVenom ~= "darkshade" then
+        table.insert(envenomListTwo, "darkshade")
+        return
+    end
+
+    -- Default: curare (paralysis blocks tree — strongest escape mechanism)
+    if not haveAff("paralysis") and firstVenom ~= "curare" then
+        table.insert(envenomListTwo, "curare")
+        return
+    end
+
+    -- Paralysis stuck: fill with missing lock pieces
+    if not haveAff("asthma") and firstVenom ~= "kalmia" then
         table.insert(envenomListTwo, "kalmia")
     elseif not haveAff("weariness") and firstVenom ~= "vernalius" then
         table.insert(envenomListTwo, "vernalius")
-    elseif not haveAff("paralysis") and firstVenom ~= "curare" then
-        table.insert(envenomListTwo, "curare")
+    elseif not haveAff("clumsiness") and firstVenom ~= "xentio" then
+        table.insert(envenomListTwo, "xentio")
     elseif not haveAff("slickness") and firstVenom ~= "gecko" then
         table.insert(envenomListTwo, "gecko")
-    elseif not haveAff("anorexia") and haveAff("impatience") and firstVenom ~= "slike" then
+    elseif serpent.canDeliverAnorexia(firstVenom) and firstVenom ~= "slike" then
         table.insert(envenomListTwo, "slike")
     elseif not haveAff("darkshade") and firstVenom ~= "darkshade" then
         table.insert(envenomListTwo, "darkshade")
@@ -1175,7 +1293,7 @@ function buildSecondVenom()
     elseif firstVenom ~= "aconite" then
         table.insert(envenomListTwo, "aconite")
     else
-        table.insert(envenomListTwo, "sumac")
+        table.insert(envenomListTwo, "curare")
     end
 end
 
@@ -1377,8 +1495,10 @@ function serp_ekanelia_attack()
         impulsePair = {suggestion = "confusion", venom = "scytherus", label = "camus"}
         useImpulse = true
 
-    -- Case 3: Normal impulse for impatience
-    elseif not eqAction and not haveAff("impatience") and checkImpulseEligible() then
+    -- Case 3: Normal impulse for impatience (gated: must have supporting mechanics)
+    elseif not eqAction and not haveAff("impatience")
+           and serpent.shouldDeliverImpatience()
+           and checkImpulseEligible() then
         impulsePair = selectImpulsePair()
         if impulsePair and impulsePair.label == "impatience" then
             useImpulse = true
