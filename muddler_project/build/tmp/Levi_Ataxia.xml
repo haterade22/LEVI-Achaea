@@ -26605,6 +26605,21 @@ gearAudit.config = {
   probeDelay = 0.7,         -- Delay between probes (seconds)
   saveFile = "gearaudit",   -- Save file name
   timeout = 300,            -- Timeout in seconds (5 minutes for large inventories)
+  bisWeights = {
+    addDmgPct       = 10.0,  -- +X% damage (best PvE stat)
+    celerity         = 8.0,  -- attack speed
+    burstEffective   = 7.0,  -- burst dmg normalized to per-attack value
+    ignorePct        = 6.0,  -- ignore denizen resistance
+    hpPct            = 3.0,  -- HP increase
+    hpRegenPct       = 2.5,  -- HP regen
+    dmgReductionPct  = 2.0,  -- damage reduction
+    resistPct        = 1.5,  -- resistance
+    wpRegenPct       = 1.0,  -- WP regen
+    blackoutPct      = 1.0,  -- blackout reduction
+    conditionalMult  = 0.5,  -- location-locked gear discounted 50%
+    brMult           = 0.7,  -- battlerage-conditional discounted 30%
+  },
+  scrapThreshold = 0.5,      -- SCRAP if score &lt; 50% of BiS in same slot
 }
 
 --------------------------------------------------------------------------------
@@ -26841,6 +26856,428 @@ function gearAudit.summarizeEffect(effects)
   end
 
   return table.concat(summary, ", ") .. condition
+end
+
+--------------------------------------------------------------------------------
+-- BiS SCORING ENGINE - Extract numeric stats and score for PvE
+--------------------------------------------------------------------------------
+
+-- Extract structured numeric data from raw effects array
+function gearAudit.scoreEffect(effects)
+  if not effects or #effects == 0 then return {} end
+
+  local fullText = table.concat(effects, " ")
+  local scored = {}
+
+  -- Detect condition
+  if fullText:find("requires you to be in Annwyn") then
+    scored.condition = "Annwyn"; scored.conditional = true
+  elseif fullText:find("requires you to be in the Underworld") then
+    scored.condition = "Underworld"; scored.conditional = true
+  elseif fullText:find("requires you to be within an underground") then
+    scored.condition = "Underground"; scored.conditional = true
+  elseif fullText:find("requires you to be within a watery") then
+    scored.condition = "Water"; scored.conditional = true
+  elseif fullText:find("requires you to be within a forest") then
+    scored.condition = "Forest"; scored.conditional = true
+  end
+  if fullText:find("battlerage") and fullText:find("requires") then
+    scored.brCondition = true; scored.conditional = true
+  end
+
+  -- Additional damage %
+  local addDmg = fullText:match("deal an additional (%d+)%% damage")
+  if addDmg then scored.addDmgPct = tonumber(addDmg) end
+
+  -- Celerity
+  local cel = fullText:match("increases your celerity by (%d+)")
+  if cel then scored.celerity = tonumber(cel) end
+
+  -- Burst damage + cooldown
+  local burstPct = fullText:match("additional burst of (%d+)%%")
+  if burstPct then
+    scored.burstPct = tonumber(burstPct)
+    local cd = fullText:match("(%d+) second cooldown")
+    scored.burstCooldown = cd and tonumber(cd) or 30  -- default 30s if not stated
+  end
+
+  -- Ignore denizen resistance
+  local ignorePct = fullText:match("ignore (%d+)%% of a denizen")
+  if ignorePct then scored.ignorePct = tonumber(ignorePct) end
+
+  -- HP increase
+  local hpPct = fullText:match("health is increased by (%d+)%%")
+  if hpPct then scored.hpPct = tonumber(hpPct) end
+
+  -- HP regen
+  local hpRegen = fullText:match("health will regenerate (%d+)%% faster")
+  if not hpRegen then
+    hpRegen = fullText:match("health regeneration is increased by (%d+)%%")
+  end
+  if hpRegen then scored.hpRegenPct = tonumber(hpRegen) end
+
+  -- WP regen
+  local wpRegen = fullText:match("willpower will regenerate (%d+)%% faster")
+  if wpRegen then scored.wpRegenPct = tonumber(wpRegen) end
+
+  -- Damage reduction
+  local dmgRedPct = fullText:match("[Rr]educes your %w+ damage taken by (%d+)%%")
+  if dmgRedPct then scored.dmgReductionPct = tonumber(dmgRedPct) end
+
+  -- Resistance
+  local resPct = fullText:match("gain (%d+)%% resistance")
+  if resPct then scored.resistPct = tonumber(resPct) end
+
+  -- Blackout reduction
+  local blackout = fullText:match("[Bb]lackout.-will be (%d+)%% shorter")
+  if blackout then scored.blackoutPct = tonumber(blackout) end
+
+  return scored
+end
+
+-- Calculate PvE score from scored effects
+-- Returns: score (number), breakdown (table of {stat, value, weight, points})
+function gearAudit.calculateScore(scored)
+  local w = gearAudit.config.bisWeights
+  local score = 0
+  local breakdown = {}
+
+  -- Determine conditional multiplier
+  local mult = 1.0
+  if scored.conditional then
+    mult = scored.brCondition and w.brMult or w.conditionalMult
+  end
+
+  local function add(stat, value, weight)
+    if not value or value == 0 then return end
+    local pts = value * weight * mult
+    score = score + pts
+    table.insert(breakdown, {stat = stat, value = value, weight = weight, mult = mult, points = pts})
+  end
+
+  add("Additional Damage",    scored.addDmgPct,       w.addDmgPct)
+  add("Celerity",             scored.celerity,         w.celerity)
+
+  -- Burst: normalize to per-attack effective value (3s combat cycle)
+  if scored.burstPct and scored.burstPct &gt; 0 then
+    local cd = scored.burstCooldown or 30
+    local effective = scored.burstPct / (cd / 3)
+    local pts = effective * w.burstEffective * mult
+    score = score + pts
+    table.insert(breakdown, {
+      stat = "Burst Damage", value = scored.burstPct, weight = w.burstEffective,
+      mult = mult, points = pts, note = string.format("%.1f%% eff (%ds CD)", effective, cd)
+    })
+  end
+
+  add("Ignore Resistance",    scored.ignorePct,        w.ignorePct)
+  add("HP Increase",          scored.hpPct,            w.hpPct)
+  add("HP Regen",             scored.hpRegenPct,       w.hpRegenPct)
+  add("Damage Reduction",     scored.dmgReductionPct,  w.dmgReductionPct)
+  add("Resistance",           scored.resistPct,        w.resistPct)
+  add("WP Regen",             scored.wpRegenPct,       w.wpRegenPct)
+  add("Blackout Reduction",   scored.blackoutPct,      w.blackoutPct)
+
+  return score, breakdown
+end
+
+-- Score a single gear item
+function gearAudit.scoreItem(gearId)
+  local gear = gearAudit.data[tonumber(gearId)]
+  if not gear then return 0, {}, {} end
+  local scored = gearAudit.scoreEffect(gear.effects)
+  local score, breakdown = gearAudit.calculateScore(scored)
+  return score, breakdown, scored
+end
+
+-- Group all items by slot, sorted by score desc within each slot
+-- filterSet: optional set name to filter by
+-- Returns: { [slot] = { {gear=..., score=..., breakdown=..., rank=...}, ... } }
+function gearAudit.getBisBySlot(filterSet)
+  local bySlot = {}
+
+  for id, gear in pairs(gearAudit.data) do
+    if gear.slot then
+      local include = true
+      if filterSet and gear.set then
+        include = gear.set:lower():find(filterSet:lower())
+      elseif filterSet and not gear.set then
+        include = false
+      end
+
+      if include then
+        local scored = gearAudit.scoreEffect(gear.effects)
+        local score, breakdown = gearAudit.calculateScore(scored)
+        bySlot[gear.slot] = bySlot[gear.slot] or {}
+        table.insert(bySlot[gear.slot], {
+          gear = gear, score = score, breakdown = breakdown, scored = scored
+        })
+      end
+    end
+  end
+
+  -- Sort each slot by score descending, assign ranks
+  for slot, items in pairs(bySlot) do
+    table.sort(items, function(a, b) return a.score &gt; b.score end)
+    for i, item in ipairs(items) do
+      item.rank = i
+    end
+  end
+
+  return bySlot
+end
+
+-- Get scrap recommendations
+function gearAudit.getScrapRecommendations(filterSet)
+  local bySlot = gearAudit.getBisBySlot(filterSet)
+  local scraps = {}
+
+  for slot, items in pairs(bySlot) do
+    if #items &gt; 1 then
+      -- Group by set within this slot
+      local bySet = {}
+      for _, item in ipairs(items) do
+        local setName = item.gear.set or "Unknown"
+        bySet[setName] = bySet[setName] or {}
+        table.insert(bySet[setName], item)
+      end
+
+      -- Within each set, mark items below threshold of set's BiS
+      for setName, setItems in pairs(bySet) do
+        if #setItems &gt; 1 then
+          local setBis = setItems[1].score  -- already sorted desc
+          local threshold = gearAudit.config.scrapThreshold
+          for i = 2, #setItems do
+            local item = setItems[i]
+            if setBis &gt; 0 and (item.score / setBis) &lt; threshold then
+              table.insert(scraps, {
+                gear = item.gear, score = item.score, bisScore = setBis,
+                slot = slot, set = setName, reason = "Below " .. math.floor(threshold * 100) .. "% of set BiS"
+              })
+            end
+          end
+        end
+      end
+    end
+  end
+
+  -- Sort scraps by slot then score
+  table.sort(scraps, function(a, b)
+    if a.slot == b.slot then return a.score &lt; b.score end
+    return a.slot &lt; b.slot
+  end)
+
+  return scraps
+end
+
+--------------------------------------------------------------------------------
+-- BiS DISPLAY FUNCTIONS
+--------------------------------------------------------------------------------
+
+local function bisTag(rank, score, bisScore, threshold)
+  if rank == 1 then return "BiS" end
+  if bisScore &gt; 0 and (score / bisScore) &lt; threshold then return "SCRAP" end
+  return "KEEP"
+end
+
+local function bisTagColor(tag)
+  if tag == "BiS" then return "&lt;green&gt;" end
+  if tag == "SCRAP" then return "&lt;red&gt;" end
+  return "&lt;yellow&gt;"
+end
+
+local function rarityShort(rarity)
+  if rarity == "common" then return "cmn" end
+  if rarity == "remnant" then return "rem" end
+  return rarity or "?"
+end
+
+-- Sorted slot order for display
+local SLOT_ORDER = {"head", "chest", "arms", "hands", "waist", "legs", "feet", "back", "neck", "ring", "trinket"}
+
+local function sortedSlots(bySlot)
+  local ordered = {}
+  -- Add known slots in order
+  for _, slot in ipairs(SLOT_ORDER) do
+    if bySlot[slot] then table.insert(ordered, slot) end
+  end
+  -- Add any unknown slots at end
+  for slot, _ in pairs(bySlot) do
+    local found = false
+    for _, s in ipairs(SLOT_ORDER) do
+      if s == slot then found = true; break end
+    end
+    if not found then table.insert(ordered, slot) end
+  end
+  return ordered
+end
+
+-- Full BiS analysis display
+function gearAudit.displayBis(slotFilter)
+  local bySlot = gearAudit.getBisBySlot()
+  local threshold = gearAudit.config.scrapThreshold
+
+  if gearAudit.tableSize(bySlot) == 0 then
+    gearAudit.echo("No gear data. Run 'gearaudit' to collect or 'gearaudit load' to load saved data.")
+    return
+  end
+
+  cecho("\n&lt;cyan&gt;================================================================================")
+  cecho("\n&lt;cyan&gt;                       &lt;white&gt;PvE BiS ANALYSIS&lt;cyan&gt;")
+  cecho("\n&lt;cyan&gt;================================================================================")
+
+  local slots = sortedSlots(bySlot)
+  for _, slot in ipairs(slots) do
+    if not slotFilter or slot:lower() == slotFilter:lower() then
+      local items = bySlot[slot]
+      cecho(string.format("\n\n&lt;white&gt;  %s &lt;dark_grey&gt;(%d items)", slot:upper(), #items))
+
+      -- Group by set
+      local bySet = {}
+      local setOrder = {}
+      for _, item in ipairs(items) do
+        local setName = item.gear.set or "Unknown"
+        if not bySet[setName] then
+          bySet[setName] = {}
+          table.insert(setOrder, setName)
+        end
+        table.insert(bySet[setName], item)
+      end
+
+      -- Per-set BiS
+      if #setOrder &gt; 1 or (#setOrder == 1 and #bySet[setOrder[1]] &gt; 1) then
+        cecho("\n&lt;dark_grey&gt;  -- Per-Set BiS --")
+        for _, setName in ipairs(setOrder) do
+          local setItems = bySet[setName]
+          cecho(string.format("\n&lt;green&gt;    %s&lt;dark_grey&gt;:", setName))
+          for i, item in ipairs(setItems) do
+            local tag = bisTag(i, item.score, setItems[1].score, threshold)
+            local tagCol = bisTagColor(tag)
+            local effectStr = gearAudit.summarizeEffect(item.gear.effects)
+            if #effectStr &gt; 35 then effectStr = effectStr:sub(1, 33) .. ".." end
+            cecho(string.format(
+              "\n&lt;cyan&gt;      #%-2d %s%-5s &lt;yellow&gt;%5.1f  &lt;dark_grey&gt;[%s] &lt;white&gt;%-6d &lt;light_grey&gt;%s",
+              i, tagCol, tag, item.score, rarityShort(item.gear.rarity),
+              item.gear.id or 0, effectStr
+            ))
+          end
+        end
+      end
+
+      -- Overall BiS (top item across all sets)
+      cecho("\n&lt;dark_grey&gt;  -- Overall BiS --")
+      local top = items[1]
+      if top then
+        cecho(string.format(
+          "\n&lt;cyan&gt;      #1  &lt;green&gt;BiS   &lt;yellow&gt;%5.1f  &lt;dark_grey&gt;[%s] &lt;white&gt;%-6d &lt;green&gt;%s",
+          top.score, rarityShort(top.gear.rarity), top.gear.id or 0,
+          top.gear.set or "Unknown"
+        ))
+      end
+    end
+  end
+
+  cecho("\n\n&lt;cyan&gt;================================================================================")
+  cecho("\n&lt;grey&gt;Use 'gearaudit score &lt;id&gt;' for detailed breakdown. 'gearaudit scrap' for scrap list.\n")
+end
+
+-- Single item score breakdown
+function gearAudit.displayScore(gearId)
+  local id = tonumber(gearId)
+  if not id then
+    gearAudit.echo("Invalid gear ID: " .. tostring(gearId))
+    return
+  end
+
+  local gear = gearAudit.data[id]
+  if not gear then
+    gearAudit.echo("Gear ID " .. id .. " not found.")
+    return
+  end
+
+  local score, breakdown, scored = gearAudit.scoreItem(id)
+
+  cecho("\n&lt;cyan&gt;+------------------------------------------------------------------------------+")
+  cecho(string.format("\n&lt;cyan&gt;| &lt;white&gt;SCORE BREAKDOWN - ID: %d", id))
+  cecho("\n&lt;cyan&gt;+------------------------------------------------------------------------------+")
+  cecho(string.format("\n&lt;cyan&gt;| &lt;grey&gt;Name:&lt;cyan&gt;    &lt;white&gt;%s", gear.name or "Unknown"))
+  cecho(string.format("\n&lt;cyan&gt;| &lt;grey&gt;Set:&lt;cyan&gt;     &lt;green&gt;%s", gear.set or "None"))
+  cecho(string.format("\n&lt;cyan&gt;| &lt;grey&gt;Slot:&lt;cyan&gt;    &lt;yellow&gt;%s", gear.slot or "Unknown"))
+  cecho(string.format("\n&lt;cyan&gt;| &lt;grey&gt;Rarity:&lt;cyan&gt;  &lt;magenta&gt;%s  &lt;grey&gt;Months: &lt;white&gt;%s", gear.rarity or "?", tostring(gear.monthsLeft or "?")))
+
+  if scored.conditional then
+    local cond = scored.condition or (scored.brCondition and "Battlerage" or "Unknown")
+    cecho(string.format("\n&lt;cyan&gt;| &lt;grey&gt;Condition:&lt;cyan&gt; &lt;orange&gt;%s &lt;grey&gt;(mult: %.1fx)", cond, scored.brCondition and gearAudit.config.bisWeights.brMult or gearAudit.config.bisWeights.conditionalMult))
+  end
+
+  cecho("\n&lt;cyan&gt;+------------------------------------------------------------------------------+")
+  cecho("\n&lt;cyan&gt;| &lt;white&gt;Stat                     &lt;grey&gt;| &lt;white&gt;Value      &lt;grey&gt;| &lt;white&gt;Weight   &lt;grey&gt;| &lt;white&gt;Points")
+  cecho("\n&lt;cyan&gt;+------------------------------------------------------------------------------+")
+
+  if #breakdown == 0 then
+    cecho("\n&lt;cyan&gt;|   &lt;dark_grey&gt;(No scorable stats found)")
+  else
+    for _, b in ipairs(breakdown) do
+      local valStr = b.note or string.format("+%g", b.value)
+      local multStr = ""
+      if b.mult &lt; 1.0 then multStr = string.format(" x%.1f", b.mult) end
+      cecho(string.format(
+        "\n&lt;cyan&gt;| &lt;light_grey&gt;%-24s &lt;grey&gt;| &lt;white&gt;%-10s &lt;grey&gt;| &lt;white&gt;x%-6.1f &lt;grey&gt;| &lt;yellow&gt;%5.1f%s",
+        b.stat, valStr, b.weight, b.points, multStr
+      ))
+    end
+  end
+
+  cecho("\n&lt;cyan&gt;+------------------------------------------------------------------------------+")
+  cecho(string.format("\n&lt;cyan&gt;| &lt;white&gt;TOTAL SCORE: &lt;yellow&gt;%.1f", score))
+  cecho("\n&lt;cyan&gt;+------------------------------------------------------------------------------+")
+
+  -- Show rank in slot
+  if gear.slot then
+    local bySlot = gearAudit.getBisBySlot()
+    local slotItems = bySlot[gear.slot]
+    if slotItems then
+      for _, item in ipairs(slotItems) do
+        if item.gear.id == id then
+          cecho(string.format("\n&lt;cyan&gt;| &lt;grey&gt;Rank: &lt;white&gt;#%d of %d &lt;grey&gt;in &lt;white&gt;%s &lt;grey&gt;slot", item.rank, #slotItems, gear.slot:upper()))
+          break
+        end
+      end
+    end
+  end
+
+  cecho("\n&lt;cyan&gt;+------------------------------------------------------------------------------+\n")
+end
+
+-- Scrap recommendations display with copy-paste commands
+function gearAudit.displayScrap(filterSet)
+  local scraps = gearAudit.getScrapRecommendations(filterSet)
+
+  if #scraps == 0 then
+    gearAudit.echo("No scrap recommendations. All gear looks good!")
+    return
+  end
+
+  cecho("\n&lt;cyan&gt;================================================================================")
+  cecho("\n&lt;cyan&gt;                       &lt;red&gt;SCRAP RECOMMENDATIONS&lt;cyan&gt;")
+  cecho("\n&lt;cyan&gt;================================================================================")
+
+  for _, s in ipairs(scraps) do
+    cecho(string.format(
+      "\n&lt;red&gt;  #%-6d &lt;white&gt;(%s) &lt;green&gt;%s &lt;grey&gt;- score &lt;yellow&gt;%.1f &lt;grey&gt;(BiS: &lt;yellow&gt;%.1f&lt;grey&gt;)",
+      s.gear.id or 0, s.slot, s.set, s.score, s.bisScore
+    ))
+    local effectStr = gearAudit.summarizeEffect(s.gear.effects)
+    if #effectStr &gt; 60 then effectStr = effectStr:sub(1, 58) .. ".." end
+    cecho(string.format("\n&lt;dark_grey&gt;           %s &lt;grey&gt;- %s", s.gear.name or "Unknown", effectStr))
+  end
+
+  cecho("\n\n&lt;cyan&gt;--------------------------------------------------------------------------------")
+  cecho("\n&lt;white&gt;  Copy-paste to scrap:")
+  for _, s in ipairs(scraps) do
+    cecho(string.format("\n&lt;yellow&gt;    GEAR SCRAP %d", s.gear.id or 0))
+  end
+  cecho("\n&lt;cyan&gt;================================================================================\n")
 end
 
 --------------------------------------------------------------------------------
@@ -27238,6 +27675,14 @@ function gearAudit.help()
   cecho("\n&lt;cyan&gt;| &lt;green&gt;gearaudit status&lt;cyan&gt;       - Show current audit status                 |")
   cecho("\n&lt;cyan&gt;| &lt;green&gt;gearaudit clear&lt;cyan&gt;        - Clear all collected data                  |")
   cecho("\n&lt;cyan&gt;| &lt;green&gt;gearaudit help&lt;cyan&gt;         - Show this help                            |")
+  cecho("\n&lt;cyan&gt;+----------------------------------------------------------------------+")
+  cecho("\n&lt;cyan&gt;|                    &lt;white&gt;PvE BiS ANALYSIS&lt;cyan&gt;                                |")
+  cecho("\n&lt;cyan&gt;+----------------------------------------------------------------------+")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;gearaudit bis&lt;cyan&gt;          - PvE Best in Slot analysis (all slots)     |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;gearaudit bis &lt;slot&gt;&lt;cyan&gt;   - BiS analysis for a specific slot          |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;gearaudit score &lt;id&gt;&lt;cyan&gt;   - Detailed score breakdown for a gear ID    |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;gearaudit scrap&lt;cyan&gt;        - Scrap recommendations + commands          |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;gearaudit scrap &lt;set&gt;&lt;cyan&gt;  - Scrap recommendations for a set           |")
   cecho("\n&lt;cyan&gt;+----------------------------------------------------------------------+\n")
 end
 
@@ -27286,6 +27731,16 @@ function gearAudit.command(args)
     gearAudit.load()
   elseif cmd == "status" then
     gearAudit.status()
+  elseif cmd == "bis" then
+    gearAudit.displayBis(rest ~= "" and rest or nil)
+  elseif cmd == "score" then
+    if rest and rest ~= "" then
+      gearAudit.displayScore(rest)
+    else
+      gearAudit.echo("Usage: gearaudit score &lt;gear_id&gt;")
+    end
+  elseif cmd == "scrap" then
+    gearAudit.displayScrap(rest ~= "" and rest or nil)
   elseif cmd == "clear" then
     gearAudit.data = {}
     gearAudit.echo("Cleared all gear audit data.")
@@ -27330,6 +27785,770 @@ end)
 --
 -- Or manually call: gearAudit.command("start"), gearAudit.command("show"), etc.
 --------------------------------------------------------------------------------
+</script>
+  <packageName/>
+<eventHandlerList>
+</eventHandlerList>
+</Script>
+        <Script isActive="yes" isFolder="no">
+  <name>Armour Paragons</name>
+          <script>-- Armour &amp; Paragon Management System
+-- Configurable profiles for paragon slots, traits, and armour morphing
+-- Auto-swaps on basher enable/disable
+-- Usage: armour [add|remove|set|show|auto|bash|pvp|morph|scan|help]
+
+--------------------------------------------------------------------------------
+-- NAMESPACE
+--------------------------------------------------------------------------------
+
+ataxia = ataxia or {}
+ataxia.armour = ataxia.armour or {}
+
+--------------------------------------------------------------------------------
+-- CLASS → ARMOUR TYPE MAP
+--------------------------------------------------------------------------------
+
+ataxia.armour.classArmourType = {
+  -- Full plate
+  Infernal = "fullplate", Paladin = "fullplate",
+  Runewarden = "fullplate", Unnamable = "fullplate",
+  -- Cloth
+  Magi = "cloth", Psion = "cloth", Pariah = "cloth",
+  ["Red Dragon"] = "cloth", ["Blue Dragon"] = "cloth",
+  ["Black Dragon"] = "cloth", ["Silver Dragon"] = "cloth",
+  ["Gold Dragon"] = "cloth", ["Golden Dragon"] = "cloth",
+  ["Green Dragon"] = "cloth",
+  Airlord = "cloth", Earthlord = "cloth",
+  Firelord = "cloth", Waterlord = "cloth",
+  -- Leather
+  Monk = "leather", Bard = "leather",
+  -- Ringmail
+  Alchemist = "ringmail", Apostate = "ringmail",
+  -- Scalemail
+  Serpent = "scalemail", Jester = "scalemail",
+  Shaman = "scalemail", Depthswalker = "scalemail",
+  Occultist = "scalemail", Blademaster = "scalemail",
+  -- Chainmail
+  Druid = "chainmail", Sentinel = "chainmail", Sylvan = "chainmail",
+  -- Splintmail
+  Priest = "splintmail",
+}
+
+--------------------------------------------------------------------------------
+-- CONFIGURATION (persisted)
+--------------------------------------------------------------------------------
+
+ataxia.armour.config = ataxia.armour.config or {
+  autoSwap = false,
+  bashProfile = nil,
+  pvpProfile = nil,
+  morphParagonId = "paragon424404",
+  currentArmourType = nil,
+  lastMorphTime = 0,
+  morphCooldown = 600, -- 10 minutes
+  profiles = {},
+  paragons = {},       -- auto-detected: {["paragon123456"] = "a crucious paragon"}
+}
+
+--------------------------------------------------------------------------------
+-- RUNTIME STATE (not persisted)
+--------------------------------------------------------------------------------
+
+ataxia.armour.state = ataxia.armour.state or {
+  swapping = false,
+  currentSlots = {nil, nil, nil},
+  eventHandlers = {},
+  scanning = false,     -- true during ii paragon scan
+  probing = false,      -- true during probe armour scan
+  probeSlotIndex = 0,   -- tracks which embrasure line we're on
+}
+
+--------------------------------------------------------------------------------
+-- ECHO
+--------------------------------------------------------------------------------
+
+function ataxia.armour.echo(text)
+  cecho("\n&lt;dark_orchid&gt;[&lt;light_slate_blue&gt;Armour&lt;dark_orchid&gt;]&lt;lavender&gt;: &lt;plum&gt;" .. text)
+end
+
+--------------------------------------------------------------------------------
+-- PERSISTENCE (self-contained, like gearAudit)
+--------------------------------------------------------------------------------
+
+function ataxia.armour.save()
+  local sep = package.config:sub(1, 1)
+  local filepath = getMudletHomeDir() .. sep .. "armourconfig"
+  table.save(filepath, ataxia.armour.config)
+
+  _ataxia_backup = _ataxia_backup or {}
+  _ataxia_backup.armourconfig = {}
+  table.load(filepath, _ataxia_backup.armourconfig)
+end
+
+function ataxia.armour.load()
+  local sep = package.config:sub(1, 1)
+  local filepath = getMudletHomeDir() .. sep .. "armourconfig"
+  if io.exists(filepath) then
+    local loaded = {}
+    table.load(filepath, loaded)
+    -- Merge into existing config (preserves defaults for new fields)
+    for k, v in pairs(loaded) do
+      ataxia.armour.config[k] = v
+    end
+  elseif _ataxia_backup and _ataxia_backup.armourconfig then
+    for k, v in pairs(_ataxia_backup.armourconfig) do
+      ataxia.armour.config[k] = v
+    end
+  end
+end
+
+--------------------------------------------------------------------------------
+-- DEFAULT PROFILES (seeded on first load)
+--------------------------------------------------------------------------------
+
+function ataxia.armour.seedDefaults()
+  if next(ataxia.armour.config.profiles) then return end
+
+  ataxia.armour.config.profiles = {
+    bash = {
+      slots = {"paragon361796", "paragon343178", "paragon514466"},
+      traits = {"quick-witted", "fully fit", "marksman", "lucky",
+                "master contemplator", "decorated", "brilliance", "in service"},
+      armourType = nil,
+    },
+    magepve = {
+      slots = {"paragon361796", "paragon343178", "paragon514466"},
+      traits = {"quick-witted", "fully fit", "marksman", "lucky",
+                "master contemplator", "decorated", "brilliance", "in service"},
+      armourType = nil,
+    },
+    serppve = {
+      slots = {"paragon361796", "paragon500167", "paragon514466"},
+      traits = {},
+      armourType = nil,
+    },
+    stickpve = {
+      slots = {"paragon361796", "paragon417591", "paragon514466"},
+      traits = {"nimble", "fully fit", "marksman", "lucky",
+                "master contemplator", "decorated", "improved physique", "in service"},
+      armourType = nil,
+    },
+    pariahpve = {
+      slots = {"paragon361796", "paragon500167", "paragon514466"},
+      traits = {"nimble", "fully fit", "marksman", "lucky",
+                "master contemplator", "decorated", "brilliance", "in service"},
+      armourType = nil,
+    },
+    bmpve = {
+      slots = {},
+      traits = {"nimble", "fully fit", "marksman", "lucky",
+                "master contemplator", "decorated", "health inspector", "in service"},
+      armourType = nil,
+    },
+    pvp = {
+      slots = {"paragon500167", "paragon424404", "paragon417591"},
+      traits = {"quick-witted", "fully fit", "marksman", "health inspector",
+                "master contemplator", "decorated", "brilliance", "in service"},
+      armourType = nil,
+    },
+    stickpvp = {
+      slots = {"paragon500167", "paragon514466", "paragon417591"},
+      traits = {"nimble", "fully fit", "marksman", "health inspector",
+                "master contemplator", "decorated", "improved physique", "in service"},
+      armourType = nil,
+    },
+  }
+
+  -- Seed default paragon names
+  if not next(ataxia.armour.config.paragons) then
+    ataxia.armour.config.paragons = {
+      ["paragon417591"] = "aeneaous (absorption)",
+      ["paragon361796"] = "icosagon (20% crit)",
+      ["paragon514466"] = "crucious (crit multiplier)",
+      ["paragon500167"] = "metalliferous (7.5% resist)",
+      ["paragon343178"] = "serendipitous (5% dmg-&gt;WP)",
+      ["paragon424404"] = "deltahedral (morphing)",
+    }
+  end
+
+  ataxia.armour.config.bashProfile = "bash"
+  ataxia.armour.config.pvpProfile = "pvp"
+  ataxia.armour.save()
+  ataxia.armour.echo("Seeded default profiles: bash, pvp, stickpvp, magepve, serppve, stickpve, pariahpve, bmpve")
+end
+
+--------------------------------------------------------------------------------
+-- PARAGON NAME LOOKUP
+--------------------------------------------------------------------------------
+
+function ataxia.armour.paragonName(id)
+  if not id then return "(empty)" end
+  return ataxia.armour.config.paragons[id] or id
+end
+
+function ataxia.armour.registerParagon(id, name)
+  if not id or not name then return end
+  ataxia.armour.config.paragons[id] = name
+  ataxia.armour.save()
+end
+
+--------------------------------------------------------------------------------
+-- MORPH LOGIC
+--------------------------------------------------------------------------------
+
+function ataxia.armour.canMorph()
+  local elapsed = os.time() - (ataxia.armour.config.lastMorphTime or 0)
+  return elapsed &gt;= (ataxia.armour.config.morphCooldown or 600)
+end
+
+function ataxia.armour.morphCooldownRemaining()
+  local elapsed = os.time() - (ataxia.armour.config.lastMorphTime or 0)
+  local remaining = (ataxia.armour.config.morphCooldown or 600) - elapsed
+  return math.max(0, remaining)
+end
+
+function ataxia.armour.getArmourTypeForClass()
+  if not gmcp or not gmcp.Char or not gmcp.Char.Status then return nil end
+  local class = gmcp.Char.Status.class
+  return ataxia.armour.classArmourType[class]
+end
+
+function ataxia.armour.resolveArmourType(profileArmourType)
+  if not profileArmourType then return nil end
+  if profileArmourType == "auto" then
+    return ataxia.armour.getArmourTypeForClass()
+  end
+  return profileArmourType
+end
+
+function ataxia.armour.morph(armourType)
+  if not armourType then
+    ataxia.armour.echo("No armour type specified.")
+    return
+  end
+
+  if armourType == "auto" then
+    armourType = ataxia.armour.getArmourTypeForClass()
+    if not armourType then
+      ataxia.armour.echo("Could not determine armour type for current class.")
+      return
+    end
+  end
+
+  if ataxia.armour.config.currentArmourType == armourType then
+    ataxia.armour.echo("Armour is already " .. armourType .. ".")
+    return
+  end
+
+  if not ataxia.armour.canMorph() then
+    local remaining = ataxia.armour.morphCooldownRemaining()
+    local mins = math.floor(remaining / 60)
+    local secs = remaining % 60
+    ataxia.armour.echo("Morph on cooldown. " .. mins .. "m " .. secs .. "s remaining.")
+    return
+  end
+
+  send("armour morph " .. armourType)
+  ataxia.armour.config.lastMorphTime = os.time()
+  ataxia.armour.config.currentArmourType = armourType
+  ataxia.armour.save()
+  ataxia.armour.echo("Morphing armour to " .. armourType .. ".")
+end
+
+--------------------------------------------------------------------------------
+-- SWAP EXECUTION
+--------------------------------------------------------------------------------
+
+function ataxia.armour.swap(profileName)
+  local profile = ataxia.armour.config.profiles[profileName]
+  if not profile then
+    ataxia.armour.echo("Profile '" .. profileName .. "' not found.")
+    return
+  end
+
+  if ataxia.armour.state.swapping then
+    ataxia.armour.echo("Already swapping. Please wait.")
+    return
+  end
+
+  ataxia.armour.state.swapping = true
+  local sp = ataxia.settings and ataxia.settings.separator or "::"
+
+  -- 1. Send traits immediately (no balance cost)
+  if profile.traits and #profile.traits &gt; 0 then
+    local traitCmds = {}
+    for _, trait in ipairs(profile.traits) do
+      table.insert(traitCmds, "trait select " .. trait .. " confirm")
+    end
+    send(table.concat(traitCmds, ";"))
+  end
+
+  -- 2. Handle morphing if needed
+  local targetArmourType = ataxia.armour.resolveArmourType(profile.armourType)
+  if targetArmourType and targetArmourType ~= ataxia.armour.config.currentArmourType then
+    if ataxia.armour.canMorph() then
+      send("armour morph " .. targetArmourType)
+      ataxia.armour.config.lastMorphTime = os.time()
+      ataxia.armour.config.currentArmourType = targetArmourType
+    else
+      local remaining = ataxia.armour.morphCooldownRemaining()
+      local mins = math.floor(remaining / 60)
+      local secs = remaining % 60
+      ataxia.armour.echo("&lt;yellow&gt;Morph on cooldown (" .. mins .. "m " .. secs .. "s). Skipping morph.")
+    end
+  end
+
+  -- 3. Pry + insert with 2s delay
+  if profile.slots and #profile.slots &gt; 0 then
+    -- Check if swap is actually needed
+    local needsSwap = false
+    for i = 1, 3 do
+      if ataxia.armour.state.currentSlots[i] ~= (profile.slots[i] or nil) then
+        needsSwap = true
+        break
+      end
+    end
+
+    if needsSwap then
+      tempTimer(2, function()
+        local cmds = {}
+        -- Pry all first
+        table.insert(cmds, "pry armour embrasure 1")
+        table.insert(cmds, "pry armour embrasure 2")
+        table.insert(cmds, "pry armour embrasure 3")
+        -- Insert new
+        for i, paragonId in ipairs(profile.slots) do
+          if paragonId and paragonId ~= "" then
+            table.insert(cmds, "insert " .. paragonId .. " into armour embrasure " .. i)
+          end
+        end
+        send(table.concat(cmds, ";"))
+
+        -- Update state
+        ataxia.armour.state.currentSlots = {
+          profile.slots[1] or nil,
+          profile.slots[2] or nil,
+          profile.slots[3] or nil,
+        }
+        ataxia.armour.state.swapping = false
+        ataxia.armour.save()
+        ataxia.armour.echo("Swapped to profile: &lt;white&gt;" .. profileName)
+      end)
+    else
+      ataxia.armour.state.swapping = false
+      ataxia.armour.echo("Paragons already match profile '&lt;white&gt;" .. profileName .. "&lt;plum&gt;'. Traits sent.")
+    end
+  else
+    ataxia.armour.state.swapping = false
+    ataxia.armour.echo("Profile '&lt;white&gt;" .. profileName .. "&lt;plum&gt;' has no paragon slots. Traits sent.")
+  end
+end
+
+--------------------------------------------------------------------------------
+-- PROFILE MANAGEMENT
+--------------------------------------------------------------------------------
+
+function ataxia.armour.addProfile(name)
+  if not name or name == "" then
+    ataxia.armour.echo("Usage: armour add &lt;name&gt;")
+    return
+  end
+  name = name:lower()
+  if ataxia.armour.config.profiles[name] then
+    ataxia.armour.echo("Profile '" .. name .. "' already exists.")
+    return
+  end
+  ataxia.armour.config.profiles[name] = {
+    slots = {},
+    traits = {},
+    armourType = nil,
+  }
+  ataxia.armour.save()
+  ataxia.armour.echo("Created profile: &lt;white&gt;" .. name)
+end
+
+function ataxia.armour.removeProfile(name)
+  if not name or name == "" then
+    ataxia.armour.echo("Usage: armour remove &lt;name&gt;")
+    return
+  end
+  name = name:lower()
+  if not ataxia.armour.config.profiles[name] then
+    ataxia.armour.echo("Profile '" .. name .. "' not found.")
+    return
+  end
+  ataxia.armour.config.profiles[name] = nil
+  if ataxia.armour.config.bashProfile == name then ataxia.armour.config.bashProfile = nil end
+  if ataxia.armour.config.pvpProfile == name then ataxia.armour.config.pvpProfile = nil end
+  ataxia.armour.save()
+  ataxia.armour.echo("Removed profile: &lt;white&gt;" .. name)
+end
+
+function ataxia.armour.setSlot(name, slotNum, paragonId)
+  name = (name or ""):lower()
+  local profile = ataxia.armour.config.profiles[name]
+  if not profile then
+    ataxia.armour.echo("Profile '" .. name .. "' not found.")
+    return
+  end
+  slotNum = tonumber(slotNum)
+  if not slotNum or slotNum &lt; 1 or slotNum &gt; 3 then
+    ataxia.armour.echo("Slot must be 1, 2, or 3.")
+    return
+  end
+  if not paragonId or paragonId == "" then
+    ataxia.armour.echo("Usage: armour set &lt;name&gt; slot&lt;N&gt; &lt;paragonID&gt;")
+    return
+  end
+  -- Ensure slots table exists and is big enough
+  profile.slots = profile.slots or {}
+  profile.slots[slotNum] = paragonId
+  ataxia.armour.save()
+  ataxia.armour.echo("Set " .. name .. " slot " .. slotNum .. " = &lt;white&gt;" .. ataxia.armour.paragonName(paragonId))
+end
+
+function ataxia.armour.setTraits(name, traitStr)
+  name = (name or ""):lower()
+  local profile = ataxia.armour.config.profiles[name]
+  if not profile then
+    ataxia.armour.echo("Profile '" .. name .. "' not found.")
+    return
+  end
+  if not traitStr or traitStr == "" then
+    ataxia.armour.echo("Usage: armour set &lt;name&gt; traits &lt;trait1&gt; &lt;trait2&gt; ...")
+    return
+  end
+  local traits = {}
+  for trait in traitStr:gmatch("%S+") do
+    table.insert(traits, trait)
+  end
+  profile.traits = traits
+  ataxia.armour.save()
+  ataxia.armour.echo("Set " .. name .. " traits: &lt;white&gt;" .. table.concat(traits, ", "))
+end
+
+function ataxia.armour.setArmourType(name, armourType)
+  name = (name or ""):lower()
+  local profile = ataxia.armour.config.profiles[name]
+  if not profile then
+    ataxia.armour.echo("Profile '" .. name .. "' not found.")
+    return
+  end
+  if not armourType or armourType == "" then
+    ataxia.armour.echo("Usage: armour set &lt;name&gt; armourtype &lt;type|auto|none&gt;")
+    return
+  end
+  if armourType == "none" or armourType == "nil" then
+    profile.armourType = nil
+    ataxia.armour.echo("Cleared armour type for " .. name .. ".")
+  else
+    profile.armourType = armourType
+    ataxia.armour.echo("Set " .. name .. " armour type: &lt;white&gt;" .. armourType)
+  end
+  ataxia.armour.save()
+end
+
+--------------------------------------------------------------------------------
+-- DISPLAY
+--------------------------------------------------------------------------------
+
+function ataxia.armour.listProfiles()
+  local autoStr = ataxia.armour.config.autoSwap and "&lt;green&gt;ON" or "&lt;red&gt;OFF"
+  local bashStr = ataxia.armour.config.bashProfile or "&lt;dark_grey&gt;(none)"
+  local pvpStr = ataxia.armour.config.pvpProfile or "&lt;dark_grey&gt;(none)"
+  local armourStr = ataxia.armour.config.currentArmourType or "&lt;dark_grey&gt;(unknown)"
+  local morphStr = ataxia.armour.canMorph() and "&lt;green&gt;Ready" or
+    ("&lt;yellow&gt;" .. math.floor(ataxia.armour.morphCooldownRemaining() / 60) .. "m " ..
+     (ataxia.armour.morphCooldownRemaining() % 60) .. "s")
+
+  cecho("\n&lt;cyan&gt;===== Armour Paragon Profiles =====")
+  cecho("\n&lt;grey&gt;Auto-swap: " .. autoStr .. "&lt;grey&gt;  |  Bash: &lt;white&gt;" .. bashStr ..
+        "&lt;grey&gt;  |  PvP: &lt;white&gt;" .. pvpStr)
+  cecho("\n&lt;grey&gt;Armour type: &lt;white&gt;" .. armourStr .. "&lt;grey&gt;  |  Morph: " .. morphStr)
+  cecho("\n&lt;cyan&gt;---")
+
+  local count = 0
+  for name, profile in pairs(ataxia.armour.config.profiles) do
+    count = count + 1
+    local slotNames = {}
+    for i = 1, 3 do
+      table.insert(slotNames, ataxia.armour.paragonName(profile.slots and profile.slots[i]))
+    end
+    local traitStr = ""
+    if profile.traits and #profile.traits &gt; 0 then
+      traitStr = table.concat(profile.traits, ", ")
+      if #traitStr &gt; 60 then traitStr = traitStr:sub(1, 57) .. "..." end
+    end
+    local typeStr = profile.armourType and (" | morph: " .. profile.armourType) or ""
+
+    local marker = ""
+    if name == ataxia.armour.config.bashProfile then marker = " &lt;yellow&gt;[BASH]" end
+    if name == ataxia.armour.config.pvpProfile then marker = marker .. " &lt;magenta&gt;[PVP]" end
+
+    cecho("\n&lt;green&gt;[" .. name .. "]" .. marker)
+    cecho("\n&lt;grey&gt;  slots: &lt;white&gt;" .. table.concat(slotNames, " / ") .. typeStr)
+    if traitStr ~= "" then
+      cecho("\n&lt;grey&gt;  traits: &lt;light_grey&gt;" .. traitStr)
+    end
+  end
+
+  if count == 0 then
+    cecho("\n&lt;dark_grey&gt;  No profiles defined. Use 'armour add &lt;name&gt;' to create one.")
+  end
+
+  cecho("\n&lt;cyan&gt;---")
+  cecho("\n&lt;grey&gt;Type '&lt;white&gt;armour &lt;name&gt;&lt;grey&gt;' to swap. '&lt;white&gt;armour help&lt;grey&gt;' for commands.\n")
+end
+
+function ataxia.armour.showProfile(name)
+  name = (name or ""):lower()
+  local profile = ataxia.armour.config.profiles[name]
+  if not profile then
+    ataxia.armour.echo("Profile '" .. name .. "' not found.")
+    return
+  end
+
+  cecho("\n&lt;cyan&gt;===== Profile: " .. name .. " =====")
+  for i = 1, 3 do
+    local id = profile.slots and profile.slots[i]
+    cecho("\n&lt;grey&gt;  Slot " .. i .. ": &lt;white&gt;" .. (id or "(empty)") ..
+          " &lt;dark_grey&gt;(" .. ataxia.armour.paragonName(id) .. ")")
+  end
+  if profile.traits and #profile.traits &gt; 0 then
+    cecho("\n&lt;grey&gt;  Traits: &lt;white&gt;" .. table.concat(profile.traits, ", "))
+  else
+    cecho("\n&lt;grey&gt;  Traits: &lt;dark_grey&gt;(none)")
+  end
+  cecho("\n&lt;grey&gt;  Armour type: &lt;white&gt;" .. (profile.armourType or "(none)"))
+  cecho("\n")
+end
+
+function ataxia.armour.showParagons()
+  cecho("\n&lt;cyan&gt;===== Known Paragons =====")
+  local count = 0
+  for id, name in pairs(ataxia.armour.config.paragons) do
+    count = count + 1
+    cecho("\n&lt;yellow&gt;  " .. id .. " &lt;grey&gt;- &lt;white&gt;" .. name)
+  end
+  if count == 0 then
+    cecho("\n&lt;dark_grey&gt;  No paragons detected. Use 'armour scan' to detect.")
+  end
+  cecho("\n")
+end
+
+--------------------------------------------------------------------------------
+-- SCAN (auto-detect paragons + current embrasures)
+--------------------------------------------------------------------------------
+
+function ataxia.armour.scan()
+  ataxia.armour.state.scanning = true
+  ataxia.armour.state.probing = false
+  ataxia.armour.state.probeSlotIndex = 0
+  send("ii paragon")
+  -- probe armour after a short delay to let ii finish
+  tempTimer(2, function()
+    ataxia.armour.state.scanning = false
+    ataxia.armour.state.probing = true
+    ataxia.armour.state.probeSlotIndex = 0
+    send("probe armour")
+    tempTimer(2, function()
+      ataxia.armour.state.probing = false
+      ataxia.armour.save()
+      ataxia.armour.echo("Scan complete. Found " .. ataxia.armour.tableSize(ataxia.armour.config.paragons) .. " paragons.")
+    end)
+  end)
+end
+
+function ataxia.armour.tableSize(t)
+  local count = 0
+  for _ in pairs(t or {}) do count = count + 1 end
+  return count
+end
+
+--------------------------------------------------------------------------------
+-- BASHER EVENT HANDLERS
+--------------------------------------------------------------------------------
+
+function ataxia.armour.onBasherEnabled()
+  if not ataxia.armour.config.autoSwap then return end
+  if not ataxia.armour.config.bashProfile then return end
+  if not ataxia.armour.config.profiles[ataxia.armour.config.bashProfile] then return end
+  ataxia.armour.echo("Basher enabled — swapping to '&lt;white&gt;" .. ataxia.armour.config.bashProfile .. "&lt;plum&gt;'")
+  ataxia.armour.swap(ataxia.armour.config.bashProfile)
+end
+
+function ataxia.armour.onBasherDisabled()
+  if not ataxia.armour.config.autoSwap then return end
+  if not ataxia.armour.config.pvpProfile then return end
+  if not ataxia.armour.config.profiles[ataxia.armour.config.pvpProfile] then return end
+  ataxia.armour.echo("Basher disabled — swapping to '&lt;white&gt;" .. ataxia.armour.config.pvpProfile .. "&lt;plum&gt;'")
+  ataxia.armour.swap(ataxia.armour.config.pvpProfile)
+end
+
+--------------------------------------------------------------------------------
+-- EVENT REGISTRATION (with cleanup on reload)
+--------------------------------------------------------------------------------
+
+function ataxia.armour.registerEvents()
+  for _, id in ipairs(ataxia.armour.state.eventHandlers) do
+    killAnonymousEventHandler(id)
+  end
+  ataxia.armour.state.eventHandlers = {}
+
+  local h1 = registerAnonymousEventHandler("basher enabled", function()
+    ataxia.armour.onBasherEnabled()
+  end)
+  local h2 = registerAnonymousEventHandler("basher disabled", function()
+    ataxia.armour.onBasherDisabled()
+  end)
+
+  table.insert(ataxia.armour.state.eventHandlers, h1)
+  table.insert(ataxia.armour.state.eventHandlers, h2)
+end
+
+--------------------------------------------------------------------------------
+-- HELP
+--------------------------------------------------------------------------------
+
+function ataxia.armour.help()
+  cecho("\n&lt;cyan&gt;+----------------------------------------------------------------------+")
+  cecho("\n&lt;cyan&gt;|                    &lt;white&gt;ARMOUR PARAGON COMMANDS&lt;cyan&gt;                         |")
+  cecho("\n&lt;cyan&gt;+----------------------------------------------------------------------+")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;armour&lt;cyan&gt;                       - Show all profiles &amp; status           |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;armour &lt;name&gt;&lt;cyan&gt;                - Swap to a profile                    |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;armour add &lt;name&gt;&lt;cyan&gt;            - Create a new profile                 |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;armour remove &lt;name&gt;&lt;cyan&gt;         - Delete a profile                     |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;armour set &lt;n&gt; slot1 &lt;id&gt;&lt;cyan&gt;    - Set paragon in slot 1 (1-3)          |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;armour set &lt;n&gt; slot2 &lt;id&gt;&lt;cyan&gt;    - Set paragon in slot 2                |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;armour set &lt;n&gt; slot3 &lt;id&gt;&lt;cyan&gt;    - Set paragon in slot 3                |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;armour set &lt;n&gt; traits &lt;...&gt;&lt;cyan&gt;  - Set trait list (space-separated)     |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;armour set &lt;n&gt; armourtype &lt;t&gt;&lt;cyan&gt; - Set morph target (type/auto/none)   |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;armour auto on|off&lt;cyan&gt;           - Toggle auto-swap on basher           |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;armour bash &lt;name&gt;&lt;cyan&gt;           - Set bash profile                     |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;armour pvp &lt;name&gt;&lt;cyan&gt;            - Set PvP profile                      |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;armour show &lt;name&gt;&lt;cyan&gt;           - Show profile details                 |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;armour morph &lt;type|auto&gt;&lt;cyan&gt;     - Manually morph armour now            |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;armour scan&lt;cyan&gt;                  - Detect paragons (ii paragon + probe) |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;armour paragons&lt;cyan&gt;              - Show known paragons                  |")
+  cecho("\n&lt;cyan&gt;| &lt;green&gt;armour help&lt;cyan&gt;                  - Show this help                       |")
+  cecho("\n&lt;cyan&gt;+----------------------------------------------------------------------+\n")
+end
+
+--------------------------------------------------------------------------------
+-- COMMAND DISPATCHER
+--------------------------------------------------------------------------------
+
+function ataxia.armour.dispatch(args)
+  args = (args or ""):match("^%s*(.-)%s*$") -- trim
+  if args == "" then
+    ataxia.armour.listProfiles()
+    return
+  end
+
+  local cmd, rest = args:match("^(%S+)%s*(.*)$")
+  cmd = cmd:lower()
+
+  -- Check if cmd is a profile name first
+  if ataxia.armour.config.profiles[cmd] and rest == "" then
+    ataxia.armour.swap(cmd)
+    return
+  end
+
+  if cmd == "add" then
+    ataxia.armour.addProfile(rest)
+  elseif cmd == "remove" or cmd == "rm" or cmd == "delete" then
+    ataxia.armour.removeProfile(rest)
+  elseif cmd == "set" then
+    -- Parse: &lt;name&gt; &lt;field&gt; &lt;value...&gt;
+    local name, field, value = rest:match("^(%S+)%s+(%S+)%s+(.+)$")
+    if not name then
+      ataxia.armour.echo("Usage: armour set &lt;name&gt; &lt;slot1|slot2|slot3|traits|armourtype&gt; &lt;value&gt;")
+      return
+    end
+    field = field:lower()
+    if field == "slot1" then
+      ataxia.armour.setSlot(name, 1, value:match("^%s*(.-)%s*$"))
+    elseif field == "slot2" then
+      ataxia.armour.setSlot(name, 2, value:match("^%s*(.-)%s*$"))
+    elseif field == "slot3" then
+      ataxia.armour.setSlot(name, 3, value:match("^%s*(.-)%s*$"))
+    elseif field == "traits" then
+      ataxia.armour.setTraits(name, value)
+    elseif field == "armourtype" or field == "type" or field == "morph" then
+      ataxia.armour.setArmourType(name, value:match("^%s*(.-)%s*$"))
+    else
+      ataxia.armour.echo("Unknown field: " .. field .. ". Use slot1/slot2/slot3/traits/armourtype.")
+    end
+  elseif cmd == "auto" then
+    if rest:lower() == "on" then
+      ataxia.armour.config.autoSwap = true
+      ataxia.armour.save()
+      ataxia.armour.echo("Auto-swap &lt;green&gt;ON&lt;plum&gt;.")
+    elseif rest:lower() == "off" then
+      ataxia.armour.config.autoSwap = false
+      ataxia.armour.save()
+      ataxia.armour.echo("Auto-swap &lt;red&gt;OFF&lt;plum&gt;.")
+    else
+      ataxia.armour.echo("Usage: armour auto on|off")
+    end
+  elseif cmd == "bash" then
+    local name = rest:lower()
+    if name == "" then
+      ataxia.armour.echo("Current bash profile: &lt;white&gt;" .. (ataxia.armour.config.bashProfile or "(none)"))
+      return
+    end
+    if not ataxia.armour.config.profiles[name] then
+      ataxia.armour.echo("Profile '" .. name .. "' not found.")
+      return
+    end
+    ataxia.armour.config.bashProfile = name
+    ataxia.armour.save()
+    ataxia.armour.echo("Bash profile set to: &lt;white&gt;" .. name)
+  elseif cmd == "pvp" then
+    local name = rest:lower()
+    if name == "" then
+      ataxia.armour.echo("Current PvP profile: &lt;white&gt;" .. (ataxia.armour.config.pvpProfile or "(none)"))
+      return
+    end
+    if not ataxia.armour.config.profiles[name] then
+      ataxia.armour.echo("Profile '" .. name .. "' not found.")
+      return
+    end
+    ataxia.armour.config.pvpProfile = name
+    ataxia.armour.save()
+    ataxia.armour.echo("PvP profile set to: &lt;white&gt;" .. name)
+  elseif cmd == "show" then
+    if rest == "" then
+      ataxia.armour.listProfiles()
+    else
+      ataxia.armour.showProfile(rest)
+    end
+  elseif cmd == "morph" then
+    ataxia.armour.morph(rest:lower())
+  elseif cmd == "scan" then
+    ataxia.armour.scan()
+  elseif cmd == "paragons" then
+    ataxia.armour.showParagons()
+  elseif cmd == "help" or cmd == "?" then
+    ataxia.armour.help()
+  else
+    -- Maybe it's a profile name with extra args? Try as profile
+    if ataxia.armour.config.profiles[cmd] then
+      ataxia.armour.swap(cmd)
+    else
+      ataxia.armour.echo("Unknown command: " .. cmd .. ". Type 'armour help' for usage.")
+    end
+  end
+end
+
+--------------------------------------------------------------------------------
+-- INITIALIZATION
+--------------------------------------------------------------------------------
+
+-- Load config
+ataxia.armour.load()
+ataxia.armour.seedDefaults()
+ataxia.armour.registerEvents()
 </script>
   <packageName/>
 <eventHandlerList>
@@ -80379,7 +81598,7 @@ send("pt FURY! INCREASE BAL AND EQ")</script>
   <packageName/>
   <regex>^fur$</regex>
 </Alias>
-        <Alias isActive="yes" isFolder="no">
+        <Alias isActive="no" isFolder="no">
   <name>Armour Paragons</name>
           <script>send("queue addclear free pry all;insert paragon417591 into armour embrasure 1; insert paragon361796 into armour embrassure 2;insert paragon514466 into armour embrassure 3")
 
@@ -80423,7 +81642,7 @@ send("pt FURY! INCREASE BAL AND EQ")</script>
   <packageName/>
   <regex>^pwan$</regex>
 </Alias>
-        <Alias isActive="yes" isFolder="no">
+        <Alias isActive="no" isFolder="no">
   <name>Mage PvE</name>
           <script>send("trait select quick-witted confirm;trait select fully fit confirm;trait select marksman confirm;trait select lucky confirm;trait select master contemplator confirm;trait select decorated confirm;trait select brilliance confirm;trait select in service confirm")
 
@@ -80432,14 +81651,14 @@ tempTimer(2,[[send("pry armour embrasure 1;pry armour embrasure 2;pry armour emb
   <packageName/>
   <regex>^magepve$</regex>
 </Alias>
-        <Alias isActive="yes" isFolder="no">
+        <Alias isActive="no" isFolder="no">
   <name>Serpent PvE</name>
           <script>tempTimer(2,[[send("pry armour embrasure 1;pry armour embrasure 2;pry armour embrasure 3;insert paragon361796 into armour embrasure 1;insert paragon500167 into armour embrasure 2;insert paragon514466 into armour embrasure 3")]])  </script>
   <command/>
   <packageName/>
   <regex>^serppve$</regex>
 </Alias>
-        <Alias isActive="yes" isFolder="no">
+        <Alias isActive="no" isFolder="no">
   <name>Shikudo Pve</name>
           <script>tempTimer(2,[[send("pry armour embrasure 1;pry armour embrasure 2;pry armour embrasure 3;insert paragon361796 into armour embrasure 1;insert paragon417591 into armour embrasure 2;insert paragon514466 into armour embrasure 3")]]) 
 send("trait select nimble confirm;trait select fully fit confirm;trait select marksman confirm;trait select lucky confirm;trait select master contemplator confirm;trait select decorated confirm;trait select improved physique confirm;trait select in service confirm")
@@ -80452,7 +81671,7 @@ send("trait select nimble confirm;trait select fully fit confirm;trait select ma
   <packageName/>
   <regex>^stickpve$</regex>
 </Alias>
-        <Alias isActive="yes" isFolder="no">
+        <Alias isActive="no" isFolder="no">
   <name>^pariahpve$</name>
           <script>send("trait select nimble confirm;trait select fully fit confirm;trait select marksman confirm;trait select lucky confirm;trait select master contemplator confirm;trait select decorated confirm;trait select brilliance confirm;trait select in service confirm")
 
@@ -80461,14 +81680,14 @@ tempTimer(2,[[send("pry armour embrasure 1;pry armour embrasure 2;pry armour emb
   <packageName/>
   <regex>^pariahpve$</regex>
 </Alias>
-        <Alias isActive="yes" isFolder="no">
+        <Alias isActive="no" isFolder="no">
   <name>BM Pve Traits</name>
           <script>send("trait select nimble confirm;trait select fully fit confirm;trait select marksman confirm;trait select lucky confirm;trait select master contemplator confirm;trait select decorated confirm;trait select health inspector confirm;trait select in service confirm")</script>
   <command/>
   <packageName/>
   <regex>^bmpve$</regex>
 </Alias>
-        <Alias isActive="yes" isFolder="no">
+        <Alias isActive="no" isFolder="no">
   <name>^stickpvp$</name>
           <script>send("trait select nimble confirm;trait select fully fit confirm;trait select marksman confirm;trait select health inspector confirm;trait select master contemplator confirm;trait select decorated confirm;trait select improved physique confirm;trait select in service confirm")
 
@@ -80478,7 +81697,7 @@ tempTimer(2,[[send("pry armour embrasure 1;pry armour embrasure 2;pry armour emb
   <packageName/>
   <regex>^stickpvp$</regex>
 </Alias>
-        <Alias isActive="yes" isFolder="no">
+        <Alias isActive="no" isFolder="no">
   <name>Class PvP</name>
           <script>send("trait select quick-witted confirm;trait select fully fit confirm;trait select marksman confirm;trait select health inspector confirm;trait select master contemplator confirm;trait select decorated confirm;trait select brilliance confirm;trait select in service confirm")
 
@@ -83878,6 +85097,14 @@ end</script>
   <command/>
   <packageName/>
   <regex>^gearaudit\s*(.*)$</regex>
+</Alias>
+          <Alias isActive="yes" isFolder="no">
+  <name>Armour Paragons</name>
+            <script>ataxia.armour.dispatch(matches[2])
+</script>
+  <command/>
+  <packageName/>
+  <regex>^armour\s*(.*)$</regex>
 </Alias>
 </AliasGroup>
         <AliasGroup isActive="yes" isFolder="yes">
@@ -146604,6 +147831,89 @@ end
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
               <regexCodeList>
 <string>^You slice into (\w+) with Valafar, a crimson-tinged hellforged longsword\.$</string>
+              </regexCodeList>
+              <regexCodePropertyList>
+<integer>1</integer>
+              </regexCodePropertyList>
+</Trigger>
+</TriggerGroup>
+          <TriggerGroup isActive="yes" isFolder="yes" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+  <name>Gear System</name>
+            <script/>
+  <triggerType>0</triggerType>
+  <conditonLineDelta>0</conditonLineDelta>
+  <mStayOpen>0</mStayOpen>
+  <mCommand/>
+  <packageName/>
+  <path>Levi_Ataxia</path>
+  <mFgColor>#ff0000</mFgColor>
+  <mBgColor>#ffff00</mBgColor>
+  <mSoundFile/>
+  <colorTriggerFgColor>#000000</colorTriggerFgColor>
+  <colorTriggerBgColor>#000000</colorTriggerBgColor>
+            <regexCodeList>
+</regexCodeList>
+            <regexCodePropertyList>
+</regexCodePropertyList>
+            <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+  <name>Paragon Inventory</name>
+              <script>-- Parses "ii paragon" output lines like:
+--     paragon514466           a crucious paragon
+-- Registers each paragon in the armour management system
+
+if ataxia and ataxia.armour and ataxia.armour.state and ataxia.armour.state.scanning then
+  local id = matches[2]
+  local name = matches[3]:match("^%s*(.-)%s*$") -- trim
+  if id and name then
+    ataxia.armour.registerParagon(id, name)
+  end
+end
+</script>
+  <triggerType>0</triggerType>
+  <conditonLineDelta>0</conditonLineDelta>
+  <mStayOpen>0</mStayOpen>
+  <mCommand/>
+  <packageName/>
+  <path>Levi_Ataxia</path>
+  <mFgColor>#ff0000</mFgColor>
+  <mBgColor>#ffff00</mBgColor>
+  <mSoundFile/>
+  <colorTriggerFgColor>#000000</colorTriggerFgColor>
+  <colorTriggerBgColor>#000000</colorTriggerBgColor>
+              <regexCodeList>
+<string>^\s+(paragon\d+)\s+(.+)$</string>
+              </regexCodeList>
+              <regexCodePropertyList>
+<integer>1</integer>
+              </regexCodePropertyList>
+</Trigger>
+            <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
+  <name>Armour Probe</name>
+              <script>-- Parses "probe armour" embrasure lines like:
+-- 1: a resonate metalliferous paragon (paragon500167)     shifting damage protection (physical blunt)
+-- Populates current slot state for skip-swap optimization
+
+if ataxia and ataxia.armour and ataxia.armour.state and ataxia.armour.state.probing then
+  local slotNum = tonumber(matches[2])
+  local paragonId = matches[3]
+  if slotNum and paragonId and slotNum &gt;= 1 and slotNum &lt;= 3 then
+    ataxia.armour.state.currentSlots[slotNum] = paragonId
+  end
+end
+</script>
+  <triggerType>0</triggerType>
+  <conditonLineDelta>0</conditonLineDelta>
+  <mStayOpen>0</mStayOpen>
+  <mCommand/>
+  <packageName/>
+  <path>Levi_Ataxia</path>
+  <mFgColor>#ff0000</mFgColor>
+  <mBgColor>#ffff00</mBgColor>
+  <mSoundFile/>
+  <colorTriggerFgColor>#000000</colorTriggerFgColor>
+  <colorTriggerBgColor>#000000</colorTriggerBgColor>
+              <regexCodeList>
+<string>^(\d+): .+ \((paragon\d+)\)</string>
               </regexCodeList>
               <regexCodePropertyList>
 <integer>1</integer>

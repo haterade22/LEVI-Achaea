@@ -27604,6 +27604,31 @@
             ]
           },
           {
+            "name": "Gear System",
+            "isActive": "yes",
+            "isFolder": "yes",
+            "children": [
+              {
+                "name": "Paragon Inventory",
+                "patterns": [
+                  {
+                    "pattern": "^\\s+(paragon\\d+)\\s+(.+)$",
+                    "type": "regex"
+                  }
+                ]
+              },
+              {
+                "name": "Armour Probe",
+                "patterns": [
+                  {
+                    "pattern": "^(\\d+): .+ \\((paragon\\d+)\\)",
+                    "type": "regex"
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "name": "Snipe",
             "isActive": "yes",
             "isFolder": "yes",

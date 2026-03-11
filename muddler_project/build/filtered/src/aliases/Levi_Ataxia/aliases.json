@@ -1719,7 +1719,9 @@
       },
       {
         "name": "Armour Paragons",
-        "regex": "^barmp$"
+        "isActive": "no",
+        "regex": "^barmp$",
+        "script": "send(\"queue addclear free pry all;insert paragon417591 into armour embrasure 1; insert paragon361796 into armour embrassure 2;insert paragon514466 into armour embrassure 3\")\n\n"
       },
       {
         "name": "death horn",
@@ -1743,30 +1745,37 @@
       },
       {
         "name": "Mage PvE",
+        "isActive": "no",
         "regex": "^magepve$"
       },
       {
         "name": "Serpent PvE",
+        "isActive": "no",
         "regex": "^serppve$"
       },
       {
         "name": "Shikudo Pve",
+        "isActive": "no",
         "regex": "^stickpve$"
       },
       {
         "name": "^pariahpve$",
+        "isActive": "no",
         "regex": "^pariahpve$"
       },
       {
         "name": "BM Pve Traits",
+        "isActive": "no",
         "regex": "^bmpve$"
       },
       {
         "name": "^stickpvp$",
+        "isActive": "no",
         "regex": "^stickpvp$"
       },
       {
         "name": "Class PvP",
+        "isActive": "no",
         "regex": "^armourpvp$"
       },
       {
@@ -2619,6 +2628,11 @@
           {
             "name": "Gear Audit",
             "regex": "^gearaudit\\s*(.*)$"
+          },
+          {
+            "name": "Armour Paragons",
+            "regex": "^armour\\s*(.*)$",
+            "script": "ataxia.armour.dispatch(matches[2])\n"
           }
         ]
       },
