@@ -574,11 +574,13 @@ ataxia.armour.config.profiles["bash"] = {
 
 **Auto-swap:** `armour auto on` + `armour bash <profile>` + `armour pvp <profile>` — hooks into `"basher enabled"` / `"basher disabled"` events.
 
-**Morph:** Tracks cooldown (10min). `armourType = "auto"` resolves via `gmcp.Char.Status.class` → `classArmourType` lookup.
+**Morph:** Sends `MORPHARMOUR armour INTO <type>`. Tracks cooldown (10min). `armourType = "auto"` resolves via `gmcp.Char.Status.class` → `classArmourType` lookup. Auto-detects current armour type from class on init if unknown.
+
+**Paragon Lookup:** `PARAGON_TYPES` table maps 24 paragon type keywords to clean display names with effects. `registerParagon()` resolves raw game names (e.g., "an aeneaous paragon") to display names (e.g., "aeneaous (absorption)"). Stale names re-resolved on load.
 
 **Persistence:** Self-contained `table.save/load` to `getMudletHomeDir()/armourconfig` with `_ataxia_backup` fallback.
 
-**Commands:** `armour`, `armour <name>`, `armour add/remove/set/show/auto/bash/pvp/morph/scan/paragons/help`
+**Commands:** `armour`, `armour <name>`, `armour add/remove/set/show/auto/bash/pvp/morph/scan/paragons/types/help`
 
 ### Player Database (ataxiaNDB)
 - Fetches from Achaea API (`http://api.achaea.com/characters/`)

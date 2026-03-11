@@ -55,6 +55,43 @@ ataxia.armour.classArmourType = {
 }
 
 --------------------------------------------------------------------------------
+-- PARAGON TYPE REFERENCE (keyword → display name with effect)
+-- Used by registerParagon() to resolve raw game names to clean display
+--------------------------------------------------------------------------------
+
+ataxia.armour.PARAGON_TYPES = {
+  -- Damage resistance
+  fuscous       = "fuscous (~5% blunt resist)",
+  vinaceous     = "vinaceous (~5% cutting resist)",
+  viridescent   = "viridescent (~7% poison resist)",
+  piceous       = "piceous (~7% asphyx resist)",
+  citreous      = "citreous (~7% magic resist)",
+  aurous        = "aurous (~7% psychic resist)",
+  cyaneous      = "cyaneous (~7% cold resist)",
+  oleaginous    = "oleaginous (~7% fire resist)",
+  caliginous    = "caliginous (~7% electricity resist)",
+  metalliferous = "metalliferous (7.5% shifting resist)",
+  -- Morphing
+  tetrahedral   = "tetrahedral (morph, 1hr CD)",
+  octahedral    = "octahedral (morph, 20min CD)",
+  deltahedral   = "deltahedral (morph, 10min CD)",
+  -- Combat/utility
+  aeneaous      = "aeneaous (absorption)",
+  prismatic     = "prismatic (auto-barrier <25% HP)",
+  icosagon      = "icosagon (20% crit boost)",
+  crucious      = "crucious (crit multiplier)",
+  rufescent     = "rufescent (revenge dmg boost)",
+  -- Regen/resource
+  torpous       = "torpous (2x end/wp regen sleep)",
+  niveous       = "niveous (5% dmg->EP)",
+  serendipitous = "serendipitous (5% dmg->WP)",
+  -- Storage/utility
+  cupreous      = "cupreous (20 item container)",
+  dodecahedron  = "dodecahedron (20 items + stasis)",
+  euphonious    = "euphonious (discuss denizens)",
+}
+
+--------------------------------------------------------------------------------
 -- CONFIGURATION (persisted)
 --------------------------------------------------------------------------------
 
@@ -206,9 +243,21 @@ function ataxia.armour.paragonName(id)
   return ataxia.armour.config.paragons[id] or id
 end
 
+function ataxia.armour.resolveParagonName(rawName)
+  -- Try to match a keyword from PARAGON_TYPES in the raw game name
+  if not rawName then return nil end
+  local lower = rawName:lower()
+  for keyword, displayName in pairs(ataxia.armour.PARAGON_TYPES) do
+    if lower:find(keyword, 1, true) then
+      return displayName
+    end
+  end
+  return rawName  -- fallback to raw name if no match
+end
+
 function ataxia.armour.registerParagon(id, name)
   if not id or not name then return end
-  ataxia.armour.config.paragons[id] = name
+  ataxia.armour.config.paragons[id] = ataxia.armour.resolveParagonName(name)
   ataxia.armour.save()
 end
 
@@ -268,7 +317,7 @@ function ataxia.armour.morph(armourType)
     return
   end
 
-  send("armour morph " .. armourType)
+  send("morpharmour armour into " .. armourType)
   ataxia.armour.config.lastMorphTime = os.time()
   ataxia.armour.config.currentArmourType = armourType
   ataxia.armour.save()
@@ -307,7 +356,7 @@ function ataxia.armour.swap(profileName)
   local targetArmourType = ataxia.armour.resolveArmourType(profile.armourType)
   if targetArmourType and targetArmourType ~= ataxia.armour.config.currentArmourType then
     if ataxia.armour.canMorph() then
-      send("armour morph " .. targetArmourType)
+      send("morpharmour armour into " .. targetArmourType)
       ataxia.armour.config.lastMorphTime = os.time()
       ataxia.armour.config.currentArmourType = targetArmourType
     else
@@ -556,6 +605,27 @@ function ataxia.armour.showParagons()
   cecho("\n")
 end
 
+function ataxia.armour.showParagonTypes()
+  cecho("\n<cyan>===== All Paragon Types =====")
+  -- Group by category
+  local categories = {
+    {"Damage Resistance", {"fuscous", "vinaceous", "viridescent", "piceous", "citreous",
+                           "aurous", "cyaneous", "oleaginous", "caliginous", "metalliferous"}},
+    {"Morphing",          {"tetrahedral", "octahedral", "deltahedral"}},
+    {"Combat/Utility",    {"aeneaous", "prismatic", "icosagon", "crucious", "rufescent"}},
+    {"Regen/Resource",    {"torpous", "niveous", "serendipitous"}},
+    {"Storage/Utility",   {"cupreous", "dodecahedron", "euphonious"}},
+  }
+  for _, cat in ipairs(categories) do
+    cecho("\n<green>  " .. cat[1] .. ":")
+    for _, key in ipairs(cat[2]) do
+      local display = ataxia.armour.PARAGON_TYPES[key] or key
+      cecho("\n<grey>    <white>" .. display)
+    end
+  end
+  cecho("\n")
+end
+
 --------------------------------------------------------------------------------
 -- SCAN (auto-detect paragons + current embrasures)
 --------------------------------------------------------------------------------
@@ -650,6 +720,7 @@ function ataxia.armour.help()
   cecho("\n<cyan>| <green>armour morph <type|auto><cyan>     - Manually morph armour now            |")
   cecho("\n<cyan>| <green>armour scan<cyan>                  - Detect paragons (ii paragon + probe) |")
   cecho("\n<cyan>| <green>armour paragons<cyan>              - Show known paragons                  |")
+  cecho("\n<cyan>| <green>armour types<cyan>                 - Show all paragon types & effects     |")
   cecho("\n<cyan>| <green>armour help<cyan>                  - Show this help                       |")
   cecho("\n<cyan>+----------------------------------------------------------------------+\n")
 end
@@ -749,6 +820,8 @@ function ataxia.armour.dispatch(args)
     ataxia.armour.scan()
   elseif cmd == "paragons" then
     ataxia.armour.showParagons()
+  elseif cmd == "types" then
+    ataxia.armour.showParagonTypes()
   elseif cmd == "help" or cmd == "?" then
     ataxia.armour.help()
   else
@@ -769,3 +842,25 @@ end
 ataxia.armour.load()
 ataxia.armour.seedDefaults()
 ataxia.armour.registerEvents()
+
+-- Re-resolve paragon names using lookup table (cleans up raw game names)
+if ataxia.armour.config.paragons then
+  local dirty = false
+  for id, name in pairs(ataxia.armour.config.paragons) do
+    local resolved = ataxia.armour.resolveParagonName(name)
+    if resolved ~= name then
+      ataxia.armour.config.paragons[id] = resolved
+      dirty = true
+    end
+  end
+  if dirty then ataxia.armour.save() end
+end
+
+-- Auto-detect armour type from class if unknown
+if not ataxia.armour.config.currentArmourType then
+  local detected = ataxia.armour.getArmourTypeForClass()
+  if detected then
+    ataxia.armour.config.currentArmourType = detected
+    ataxia.armour.save()
+  end
+end
