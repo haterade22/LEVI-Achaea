@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-03-10 — Deactivate duplicate shalestorm triggers
+
+### Issue
+Three old shalestorm triggers (006, 007, 008 in `general/`) wrote to `magi.shalestorm` which nothing reads — the offense script reads `magi.offense.state.shalestorm` from the new unified `023_Shalestorm.lua`. Both sets fired on the same patterns, causing double `erAff("shield")` calls and dead writes.
+
+### Fix
+- **`general/006_Shalestorm_down.lua`** — Deactivated (superseded by 023)
+- **`general/007_Shalestorm_shield.lua`** — Deactivated (superseded by 023)
+- **`general/008_Shalestorm_up.lua`** — Deactivated (superseded by 023)
+
+---
+
 ## 2026-03-10 — Erode trigger + missing class cure triggers + Fitness V3
 
 ### Issue
