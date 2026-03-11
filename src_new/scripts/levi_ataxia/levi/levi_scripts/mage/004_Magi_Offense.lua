@@ -707,6 +707,6 @@ timmolation = false
 if magi.offense._targetHandler then
   killAnonymousEventHandler(magi.offense._targetHandler)
 end
-magi.offense._targetHandler = registerAnonymousEventHandler("ataxia target changed", function()
+magi.offense._targetHandler = registerAnonymousEventHandler("changed target", function()
   magi.offense.reset()
 end)
