@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-03-11 — Fix basher not attacking after F1 engagement
+
+### Issue
+After the Mar 10 refactor of `ataxiaBasher_attack()` into `ataxiaBasher_dangerLevel()`, the basher would engage correctly (find targets, pause mapper) but never send attack commands.
+
+### Root Cause
+The refactor removed the `if ataxiaTemp.bashFlee == nil then ataxiaTemp.bashFlee = false end` initialization from the old `ataxiaBasher_attack()`. Without it, `bashFlee` stays `nil` on fresh login. The final guard in `ataxiaBasher_assembleAttack()` used strict equality (`bashFlee == false`) which fails for `nil` since `nil == false` is `false` in Lua.
+
+### Fix
+- **`basher/001_Bashing_Functions.lua` — line 339**: Changed `ataxiaTemp.bashFlee == false` to `not ataxiaTemp.bashFlee` (truthy check), matching how all 15+ other callsites already check this variable.
+
+---
+
 ## 2026-03-10 — Magi shalestorm+scintilla automation + configurable utility prefixes
 
 ### Feature
