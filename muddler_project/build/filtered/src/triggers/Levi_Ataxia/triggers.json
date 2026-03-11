@@ -19852,24 +19852,6 @@
                     ]
                   },
                   {
-                    "name": "Fire Sco",
-                    "patterns": [
-                      {
-                        "pattern": "^Flames ignite all over the body of (\\w+), fanned to intensity in an instant\\.$",
-                        "type": "regex"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Immolation",
-                    "patterns": [
-                      {
-                        "pattern": "^You sense a combustive spark take hold of (\\w+).",
-                        "type": "regex"
-                      }
-                    ]
-                  },
-                  {
                     "name": "Immolation Staff",
                     "patterns": [
                       {
@@ -27863,15 +27845,6 @@
             "patterns": [
               {
                 "pattern": "^The might of elemental Water surging through your body, you make the slightest flick with .+, and the hand of Sllshya descends as a freezing deluge to smash (\\w+)\\.$",
-                "type": "regex"
-              }
-            ]
-          },
-          {
-            "name": "Emanation Fire",
-            "patterns": [
-              {
-                "pattern": "^The might of elemental Fire filling you like a scorching river, you lift .+ to point at (\\w+) and unleash a stream of searing flame\\.$",
                 "type": "regex"
               }
             ]

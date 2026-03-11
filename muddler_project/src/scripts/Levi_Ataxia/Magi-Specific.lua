@@ -1,8 +1,16 @@
+function magi_getBurns()
+  if magi and magi.offense and magi.offense.state then
+    return magi.offense.state.burns or 0
+  end
+  return tAffs.burns or 0
+end
+
 function magi_checkDestroy()
-	if not tAffs.burns or tAffs.burns == 0 then return false end
+	local burns = magi_getBurns()
+	if burns == 0 then return false end
 	if not ataxiaTemp.lastDiag then return false end
-	
-	if tAffs.burns >= ataxiaTemp.lastDiag then
+
+	if burns >= ataxiaTemp.lastDiag then
 		return true
 	else
 		return false
@@ -10,8 +18,9 @@ function magi_checkDestroy()
 end
 
 function magi_setDestroy(num)
-	if not tAffs.burns or tAffs.burns == 0 then return end
-  if num >= 40 and tAffs.burns >= 2 then
+	local burns = magi_getBurns()
+	if burns == 0 then return end
+  if num >= 40 and burns >= 2 then
 		ataxia_boxEcho(target.." CAN BE DESTROYED", "orange")
 		ataxiaTemp.lastDiag = needed
 		tempTimer(2, [[ ataxiaTemp.lastDiag = nil ]])
@@ -19,10 +28,13 @@ function magi_setDestroy(num)
 end
 
 function magi_addBurns()
-tAffs.burns = tAffs.burns or 0
-tAffs.burns = tAffs.burns + 1
-  if tAffs.burns > 5 then tAffs.burns = 5 end
-cecho(" <DimGrey>[<red>"..tAffs.burns.."/5<DimGrey>]")
+  -- Sync tAffs.burns from magi.offense.state.burns (authoritative source)
+  -- Burns counter display is handled by the trigger that called us
+  if magi and magi.offense and magi.offense.state then
+    tAffs.burns = magi.offense.state.burns or 0
+  else
+    tAffs.burns = math.min((tAffs.burns or 0) + 1, 5)
+  end
 end
 
 

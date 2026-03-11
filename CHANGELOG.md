@@ -2,14 +2,26 @@
 
 ---
 
-## 2026-03-11 — Fix Shalestorm+Scintilla Priority + Mode Echo Spam
+## 2026-03-11 — Fix Shalestorm+Scintilla Priority + Burns Double-Counting
 
 ### Bug Fixes
 - **CRITICAL: Scintilla blocking conflagrate/destroy**: Priority 5 (shalestorm+scintilla) fired every balance, preventing the burning path from ever reaching conflagrate. Burns sat at 5/5 with "CAN BE DESTROYED" but destroy never fired. Fixed by gating scintilla: skip when burns >= 5 (capped) or when conflagrate conditions are met (burns >= 2 + fire >= 2), allowing the burning path to select conflagrate properly.
+- **CRITICAL: Burns double/triple counting**: Three pairs of duplicate triggers fired on the same game text, causing burns to increment 2-4x per event:
+  - Scintilla spark: `staffcast/004_Immolation` incorrectly added +1 burn on spark (should be +0, ignition 4s later is +1). Deactivated — `010_Scintilla_Spark` is correct.
+  - Scintilla ignition: `staffcast/003_Fire_Sco` duplicated `011_Scintilla_Ignition`, both adding +1 = +2 total. Deactivated `003_Fire_Sco`.
+  - Emanation fire: `magi_offense_tracking/004_Emanation_Fire` duplicated `enamation/001_Fire_Emanation`, both adding +2 = +4 total. Deactivated `004_Emanation_Fire`.
+- **Efreeti burns uncapped**: `025_Burns_Tracking` efreeti increment had no `math.min(..., 5)` cap, allowing burns to exceed 5. Fixed.
+- **Misleading burns echo**: `021_Spell_Outcomes` displayed burns counter for all spell patterns (including magma, bombard, mudslide which don't affect burns). Now only shows for fulminate and firelash.
 - **Mode echo spam**: `[Magi] Mode set to: salve` echoed on every `zz` keypress even when mode hadn't changed. Now only echoes when mode actually changes.
 
 ### Files changed
 - `src_new/scripts/.../mage/004_Magi_Offense.lua` — Added burns gates to Priority 5 scintilla; `setMode()` only echoes on actual mode change
+- `src_new/triggers/.../staffcast/003_Fire_Sco.lua` — **DELETED** (duplicate of 011_Scintilla_Ignition)
+- `src_new/triggers/.../staffcast/004_Immolation.lua` — **DELETED** (duplicate of 010_Scintilla_Spark)
+- `src_new/triggers/.../magi_offense_tracking/004_Emanation_Fire.lua` — **DELETED** (duplicate of enamation/001_Fire_Emanation)
+- `src_new/triggers/.../general/025_Burns_Tracking.lua` — Added math.min cap to efreeti burns
+- `src_new/triggers/.../general/021_Spell_Outcomes.lua` — Burns counter only shows for burn-related spells
+- `src_new/scripts/.../limb_management/004_Magi-Specific.lua` — `magi_addBurns()` now syncs from `magi.offense.state.burns` (authoritative) instead of independently incrementing; `magi_checkDestroy()`/`magi_setDestroy()` read from `magi.offense.state.burns` via new `magi_getBurns()` helper
 
 ---
 

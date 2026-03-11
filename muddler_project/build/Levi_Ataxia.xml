@@ -19013,11 +19013,19 @@ end</script>
 </Script>
             <Script isActive="yes" isFolder="no">
   <name>Magi-Specific</name>
-              <script>function magi_checkDestroy()
-	if not tAffs.burns or tAffs.burns == 0 then return false end
+              <script>function magi_getBurns()
+  if magi and magi.offense and magi.offense.state then
+    return magi.offense.state.burns or 0
+  end
+  return tAffs.burns or 0
+end
+
+function magi_checkDestroy()
+	local burns = magi_getBurns()
+	if burns == 0 then return false end
 	if not ataxiaTemp.lastDiag then return false end
-	
-	if tAffs.burns &gt;= ataxiaTemp.lastDiag then
+
+	if burns &gt;= ataxiaTemp.lastDiag then
 		return true
 	else
 		return false
@@ -19025,8 +19033,9 @@ end</script>
 end
 
 function magi_setDestroy(num)
-	if not tAffs.burns or tAffs.burns == 0 then return end
-  if num &gt;= 40 and tAffs.burns &gt;= 2 then
+	local burns = magi_getBurns()
+	if burns == 0 then return end
+  if num &gt;= 40 and burns &gt;= 2 then
 		ataxia_boxEcho(target.." CAN BE DESTROYED", "orange")
 		ataxiaTemp.lastDiag = needed
 		tempTimer(2, [[ ataxiaTemp.lastDiag = nil ]])
@@ -19034,10 +19043,13 @@ function magi_setDestroy(num)
 end
 
 function magi_addBurns()
-tAffs.burns = tAffs.burns or 0
-tAffs.burns = tAffs.burns + 1
-  if tAffs.burns &gt; 5 then tAffs.burns = 5 end
-cecho(" &lt;DimGrey&gt;[&lt;red&gt;"..tAffs.burns.."/5&lt;DimGrey&gt;]")
+  -- Sync tAffs.burns from magi.offense.state.burns (authoritative source)
+  -- Burns counter display is handled by the trigger that called us
+  if magi and magi.offense and magi.offense.state then
+    tAffs.burns = magi.offense.state.burns or 0
+  else
+    tAffs.burns = math.min((tAffs.burns or 0) + 1, 5)
+  end
 end
 
 
@@ -133385,8 +133397,8 @@ elseif line:find("torrent of thick mud") then
   magi.offense.debugEcho("Mudslide hit → slickness + prone")
 end
 
--- Burns counter display
-if magi.offense.state.burns and magi.offense.state.burns &gt; 0 then
+-- Burns counter display (only for spells that actually affect burns)
+if (line:find("lightning strikes") or line:find("lash of fire")) and magi.offense.state.burns and magi.offense.state.burns &gt; 0 then
   cecho(" &lt;DimGrey&gt;[&lt;red&gt;" .. magi.offense.state.burns .. "/5&lt;DimGrey&gt;]")
 end
 </script>
@@ -133755,7 +133767,7 @@ end
 if line:find("fiery efreeti spins into") then
   local tgt = matches[2]
   if tgt == target then
-    magi.offense.state.burns = (magi.offense.state.burns or 0) + 1
+    magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
     magi.offense.debugEcho("Efreeti burn → burns:" .. magi.offense.state.burns)
     cecho(" &lt;DimGrey&gt;[&lt;red&gt;" .. magi.offense.state.burns .. "/5&lt;DimGrey&gt;]")
   end
@@ -133986,68 +133998,6 @@ end
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
                 <regexCodeList>
 <string>^Even as the wave of cold dissipates, you retain control over the fluid and send it spinning through the air to bind (\w+) in a watery web\.$</string>
-                </regexCodeList>
-                <regexCodePropertyList>
-<integer>1</integer>
-                </regexCodePropertyList>
-</Trigger>
-              <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Fire Sco</name>
-                <script>if isTargeted(matches[2]) then
-  magi.offense = magi.offense or {}
-  magi.offense.state = magi.offense.state or {}
-  magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
-  tburns = magi.offense.state.burns -- backward compat
-  tAffs.burns = tburns
-  tarAffed("burning")
-timmolation = false
-cecho(" &lt;DimGrey&gt;[&lt;red&gt;"..tburns.."/5&lt;DimGrey&gt;]")
-end
-</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                <regexCodeList>
-<string>^Flames ignite all over the body of (\w+), fanned to intensity in an instant\.$</string>
-                </regexCodeList>
-                <regexCodePropertyList>
-<integer>1</integer>
-                </regexCodePropertyList>
-</Trigger>
-              <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Immolation</name>
-                <script>timmolation = true
-
--- Scintilla applies burning — increment burns counter
-if isTargeted(matches[2]) then
-  magi.offense = magi.offense or {}
-  magi.offense.state = magi.offense.state or {}
-  magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
-  tburns = magi.offense.state.burns -- backward compat
-  tarAffed("burning")
-  cecho(" &lt;DimGrey&gt;[&lt;red&gt;" .. tburns .. "/5&lt;DimGrey&gt;]")
-end</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-                <regexCodeList>
-<string>^You sense a combustive spark take hold of (\w+).</string>
                 </regexCodeList>
                 <regexCodePropertyList>
 <integer>1</integer>
@@ -149284,36 +149234,6 @@ end
   <colorTriggerBgColor>#000000</colorTriggerBgColor>
             <regexCodeList>
 <string>^The might of elemental Water surging through your body, you make the slightest flick with .+, and the hand of Sllshya descends as a freezing deluge to smash (\w+)\.$</string>
-            </regexCodeList>
-            <regexCodePropertyList>
-<integer>1</integer>
-            </regexCodePropertyList>
-</Trigger>
-          <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
-  <name>Emanation Fire</name>
-            <script>if isTargeted(matches[2]) then
-  tarAffed("burning")
-  -- Emanation fire applies 2 burn stacks
-  magi = magi or {}
-  magi.offense = magi.offense or {}
-  magi.offense.state = magi.offense.state or {}
-  magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 2, 5)
-  tburns = magi.offense.state.burns
-end
-</script>
-  <triggerType>0</triggerType>
-  <conditonLineDelta>0</conditonLineDelta>
-  <mStayOpen>0</mStayOpen>
-  <mCommand/>
-  <packageName/>
-  <path>Levi_Ataxia</path>
-  <mFgColor>#ff0000</mFgColor>
-  <mBgColor>#ffff00</mBgColor>
-  <mSoundFile/>
-  <colorTriggerFgColor>#000000</colorTriggerFgColor>
-  <colorTriggerBgColor>#000000</colorTriggerBgColor>
-            <regexCodeList>
-<string>^The might of elemental Fire filling you like a scorching river, you lift .+ to point at (\w+) and unleash a stream of searing flame\.$</string>
             </regexCodeList>
             <regexCodePropertyList>
 <integer>1</integer>

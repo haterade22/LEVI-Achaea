@@ -110,7 +110,7 @@ elseif line:find("torrent of thick mud") then
   magi.offense.debugEcho("Mudslide hit → slickness + prone")
 end
 
--- Burns counter display
-if magi.offense.state.burns and magi.offense.state.burns > 0 then
+-- Burns counter display (only for spells that actually affect burns)
+if (line:find("lightning strikes") or line:find("lash of fire")) and magi.offense.state.burns and magi.offense.state.burns > 0 then
   cecho(" <DimGrey>[<red>" .. magi.offense.state.burns .. "/5<DimGrey>]")
 end
