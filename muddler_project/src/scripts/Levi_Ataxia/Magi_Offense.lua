@@ -36,6 +36,8 @@ local _sd = {
   calcifiedTorso = false,
   calcifiedSkull = false,
   shalestorm = false,
+  scintillaSpark = false,
+  scintillaTimer = nil,
   firestorm = false,
   hypothermia = false,
   frozen = false,
@@ -51,6 +53,8 @@ magi.offense.config = {
   destroyThreshold = 35,
   stormhammerThreshold = 25,
   scaldedDuration = 20,
+  useArachnideye = false,   -- artefact toggle: arachnideye trample prefix
+  useWebbomb = false,        -- artefact toggle: webbomb prefix
 }
 
 ----------------------------------------------------------------
@@ -137,6 +141,8 @@ function magi.offense.reset()
   st.calcifiedTorso = false
   st.calcifiedSkull = false
   st.shalestorm = false
+  st.scintillaSpark = false
+  if st.scintillaTimer then killTimer(st.scintillaTimer); st.scintillaTimer = nil end
   st.hypothermia = false
   st.frozen = false
   st.shivering = false
@@ -224,17 +230,23 @@ function magi.offense.selectSpell()
     end
   end
 
-  --=== PRIORITY 5: EMANATION EARTH (earth capped + conditions met) ===--
+  --=== PRIORITY 5: SHALESTORM+SCINTILLA (free calcify when shalestorm active) ===--
+  if st.shalestorm and not st.calcifiedTorso and not st.scintillaSpark
+     and r.earth >= 2 then
+    return "staffcast scintilla at " .. target
+  end
+
+  --=== PRIORITY 6: EMANATION EARTH (earth capped + conditions met) ===--
   if emearth then
     return "cast emanation at " .. target .. " earth"
   end
 
-  --=== PRIORITY 6: HYPOTHERMIA (frozen + dual resonance) ===--
+  --=== PRIORITY 7: HYPOTHERMIA (frozen + dual resonance) ===--
   if mode ~= "fire" and frozen and not hypothermia and freso then
     return "cast hypothermia at " .. target
   end
 
-  --=== PRIORITY 7: MUDSLIDE (asthma + water==2) ===--
+  --=== PRIORITY 8: MUDSLIDE (asthma + water==2) ===--
   if asthma >= 0.5 and r.water == 2 then
     return "cast mudslide at " .. target
   end
@@ -250,17 +262,17 @@ function magi.offense.selectSpell()
     return magi.offense.selectGroupSpell()
   end
 
-  --=== PRIORITY 8: MAGMA (not scalded) ===--
+  --=== PRIORITY 9: MAGMA (not scalded) ===--
   if not scalded then
     return "cast magma at " .. target
   end
 
-  --=== PRIORITY 9: FREEZE (shivering + broken limb) ===--
+  --=== PRIORITY 10: FREEZE (shivering + broken limb) ===--
   if mode ~= "fire" and shivering >= 0.5 and magi.offense.countBrokenLimbs() >= 1 then
     return "cast freeze at " .. target
   end
 
-  --=== PRIORITY 10: CALCIFIED PATH ===--
+  --=== PRIORITY 11: CALCIFIED PATH ===--
   if st.calcifiedTorso and (frostbite >= 0.5 or not caloric) then
     if dehydrateWillFreeze and fireWillBurn then
       return "cast dehydrate at " .. target
@@ -269,12 +281,12 @@ function magi.offense.selectSpell()
     end
   end
 
-  --=== PRIORITY 11: BURNING PATH (burns management) ===--
+  --=== PRIORITY 12: BURNING PATH (burns management) ===--
   if burning > 0 then
     return magi.offense.selectBurningSpell()
   end
 
-  --=== PRIORITY 12: SHALESTORM (earth >= 2, not active) ===--
+  --=== PRIORITY 13: SHALESTORM (earth >= 2, not active) ===--
   if not st.shalestorm and r.earth >= 2 then
     return "cast shalestorm at " .. target
   end
@@ -517,8 +529,16 @@ function magi.offense.sendAttack(spell)
 
   local sep = ataxia.settings and ataxia.settings.separator or "::"
   local staff = magi.staff or "staff569815"
+  local prefix = ""
 
-  local cmd = "stand" .. sep .. "wield " .. staff .. " shield"
+  -- Optional utility prefix (free actions, don't consume spell balance)
+  if magi.offense.config.useArachnideye and not magi.offense.hasAff("prone") then
+    prefix = "arachnideye trample " .. target .. sep
+  elseif magi.offense.config.useWebbomb and not magi.offense.hasAff("entangled") then
+    prefix = "webbomb " .. target .. sep
+  end
+
+  local cmd = prefix .. "stand" .. sep .. "wield " .. staff .. " shield"
   cmd = cmd .. sep .. spell .. sep .. "assess " .. target
 
   send("queue addclearfull freestand " .. cmd)
@@ -597,6 +617,8 @@ function magi.offense.status()
   local dispFrozen = magi.offense.getAffProb("frozen") >= 0.5
   cecho("\n <cornflower_blue>Hypothermia: " .. (dispHypo and "<dodger_blue>YES" or "<dim_grey>no"))
   cecho("\n <cornflower_blue>Frozen: " .. (dispFrozen and "<dodger_blue>YES" or "<dim_grey>no"))
+  cecho("\n <cornflower_blue>Arachnideye: " .. (magi.offense.config.useArachnideye and "<green>ON" or "<dim_grey>off"))
+  cecho("\n <cornflower_blue>Webbomb: " .. (magi.offense.config.useWebbomb and "<green>ON" or "<dim_grey>off"))
   echo("\n")
 end
 

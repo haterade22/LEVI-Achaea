@@ -2,6 +2,21 @@
 
 ---
 
+## 2026-03-10 — Magi shalestorm+scintilla automation + configurable utility prefixes
+
+### Feature
+Automated scintilla casting when shalestorm is active (guarantees spark ignition via shalestorm's automatic damage). Added configurable artefact utility abilities (arachnideye, webbomb) as free-action prefixes.
+
+### Changes
+- **`004_Magi_Offense.lua` — selectSpell()**: New priority 5 — when shalestorm is active + torso not calcified + no pending spark + earth>=2, auto-cast `staffcast scintilla`. Works in ALL modes (fire/water/lock/salve/group). Existing lock/salve scintilla branches preserved unchanged
+- **`004_Magi_Offense.lua` — sendAttack()**: Added optional utility prefix before `stand::wield`. `useArachnideye` prepends `arachnideye trample <target>` (gated: target not prone). `useWebbomb` prepends `webbomb <target>` (gated: target not entangled). Both default OFF
+- **`004_Magi_Offense.lua` — config**: Added `useArachnideye` and `useWebbomb` boolean toggles
+- **`004_Magi_Offense.lua` — status()**: Shows arachnideye/webbomb toggle state
+- **`004_Magi_Offense.lua` — state**: Added `scintillaSpark`/`scintillaTimer` defaults + reset cleanup
+- **`006_Magi_Mode.lua` — mm alias**: Added `mm arach`/`mm web` toggle commands, updated help text
+
+---
+
 ## 2026-03-10 — Delete legacy Magi triggers, fix audit gaps
 
 ### Issue

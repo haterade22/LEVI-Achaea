@@ -216,7 +216,7 @@ focusCurableAffsV3 = {
     "impatience", "stupidity", "anorexia", "epilepsy", "masochism",
     "recklessness", "dizziness", "shyness", "confusion", "dementia",
     "paranoia", "hallucinations", "loneliness", "vertigo", "feeble",
-    "addiction", "hypersomnia"
+    "addiction", "hypersomnia", "stuttering"
 }
 -- Backward compat alias
 focusCurableAffsV2 = focusCurableAffsV3

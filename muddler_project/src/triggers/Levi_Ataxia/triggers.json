@@ -7303,7 +7303,8 @@
                                 "pattern": "You drain the heat from the air around your enemies, causing them to experience the cold of the abyss itself.",
                                 "type": "exactMatch"
                               }
-                            ]
+                            ],
+                            "script": "if targetIshere then\n  if haveAff(\"nocaloric\") then\n    tarAffed(\"shivering\", \"frozen\")\n  else\n    tarAffed(\"nocaloric\", \"shivering\")\n  end\nend\n\nataxia_boxEcho(\"~ baby it's cold outside ~\", \"black:a_blue\")"
                           },
                           {
                             "name": "Hypothermia",
@@ -7329,75 +7330,7 @@
                       {
                         "name": "Destroy-related",
                         "isActive": "yes",
-                        "isFolder": "yes",
-                        "children": [
-                          {
-                            "name": "Inferno",
-                            "isActive": "no",
-                            "patterns": [
-                              {
-                                "pattern": "The firestorm roars all about you, searing your flesh.",
-                                "type": "exactMatch"
-                              }
-                            ]
-                          },
-                          {
-                            "name": "Scorch",
-                            "isActive": "no",
-                            "patterns": [
-                              {
-                                "pattern": "^A dim red glow emanates from the heart of .+ moments before flames spontaneously ignite upon (\\w+).$",
-                                "type": "regex"
-                              }
-                            ]
-                          },
-                          {
-                            "name": "Fires Dying",
-                            "isActive": "no",
-                            "patterns": [
-                              {
-                                "pattern": "^The fires consuming (\\w+) diminish somewhat.$",
-                                "type": "regex"
-                              }
-                            ]
-                          },
-                          {
-                            "name": "Efreeti/Purge",
-                            "isActive": "no",
-                            "patterns": [
-                              {
-                                "pattern": "^(\\w+) bursts into flame as a fiery efreeti spins into \\w+.$",
-                                "type": "regex"
-                              },
-                              {
-                                "pattern": "^A line of golden flame leaps forth, lashing about (\\w+) and searing \\w+ to the bone.$",
-                                "type": "regex"
-                              }
-                            ],
-                            "script": "if isTargeted(matches[2]) then\n\tdeleteLine()\n\tcecho(\"\\n<a_brown>[<\"..affs_to_colour.burns[1]..\">\"..affs_to_colour.burns[2]..\"<a_brown>] <CadetBlue>\"..matches[1])\n\t\n\tif not haveAff(\"dehydrate\") then\n\t\ttAffs.burns = 1\n\telse\n\t\tif not tAffs.burns or tAffs.burns <= 1 then\n\t\t\ttAffs.burns = 1\n\t\tend\n\tend\n  if ataxia_isClass(\"Magi\") then\n\t cecho(\" <DimGrey>[<red>\"..tAffs.burns..\"/5<DimGrey>]\")\n  end\nend"
-                          },
-                          {
-                            "name": "Dehydrate",
-                            "isActive": "no",
-                            "patterns": [
-                              {
-                                "pattern": "^(\\w+) winces in evident discomfort as .+ points a single appendage at \\w+.$",
-                                "type": "regex"
-                              }
-                            ],
-                            "script": "if isTargeted(matches[2]) then\n\t\ttarAffed(\"dehydrate\")\n\t\tif dehydrateTimer then killTimer(dehydrateTimer) end\n\t\tdehydrateTimer = tempTimer(46, [[tAffs.burns = 0; erAff(\"dehydrate\")]])\nend"
-                          },
-                          {
-                            "name": "Lost Dehydrate",
-                            "isActive": "no",
-                            "patterns": [
-                              {
-                                "pattern": "^The skin of (\\w+) appears far less dry.$",
-                                "type": "regex"
-                              }
-                            ]
-                          }
-                        ]
+                        "isFolder": "yes"
                       },
                       {
                         "name": "Plague Break",
@@ -7453,7 +7386,8 @@
                             "pattern": "^You weave fire and air together to transfix (\\w+), but succeed only in curing (\\w+) blindness.",
                             "type": "regex"
                           }
-                        ]
+                        ],
+                        "script": "send(\"pt \" ..target..\": Unblind\")\n\nerAff(\"unblind\")\n\nif gmcp.Char.Status.class == \"Magi\" then\n  send(\"queue addclearfull freestand cast transfix \" .. target)\nend"
                       },
                       {
                         "name": "Transfixed",
@@ -8366,7 +8300,8 @@
                                 "pattern": "^You create a tendril of icy blue light that lashes out at (\\w+) and wraps around (\\w+) aura.$",
                                 "type": "regex"
                               }
-                            ]
+                            ],
+                            "script": "if (line:find(\"Wheel\") and table.contains(ataxia.playersHere, target)) or isTargeted(matches[2]) then\n  for _, stage in pairs( {\"nocaloric\", \"shivering\", \"freezing\"}) do\n    if not haveAff(stage) then\n      tarAffed(stage)\n      break\n    end\n  end\nend"
                           },
                           {
                             "name": "Stuttering",
@@ -12958,7 +12893,8 @@
                                     "pattern": "^You expertly flourish .+ in front of the eyes of (\\w+), mesmerising \\w+ with your skill.$",
                                     "type": "regex"
                                   }
-                                ]
+                                ],
+                                "script": "if isTargeted(matches[2]) then\n  tarAffed(\"transfixed\") \nend"
                               }
                             ]
                           },
@@ -13514,7 +13450,7 @@
                             "type": "regex"
                           }
                         ],
-                        "script": "if isTargeted(matches[2]) then\n\terAff(\"asthma\")\n\terAff(\"weariness\")\n\t-- V2 integration: Fitness cures asthma and weariness specifically\n\tif removeAffV2 then\n\t\tremoveAffV2(\"asthma\")\n\t\tremoveAffV2(\"weariness\")\n\tend\n\tfg(\"DarkSlateGrey\")\nend\n"
+                        "script": "if isTargeted(matches[2]) then\n\terAff(\"asthma\")\n\terAff(\"weariness\")\n\t-- V2 integration: Fitness cures asthma and weariness specifically\n\tif removeAffV2 then\n\t\tremoveAffV2(\"asthma\")\n\t\tremoveAffV2(\"weariness\")\n\tend\n\t-- V3 integration: collapse branches where asthma/weariness were possible\n\tif collapseAffAbsentV3 then\n\t\tcollapseAffAbsentV3(\"asthma\")\n\t\tcollapseAffAbsentV3(\"weariness\")\n\tend\n\tfg(\"DarkSlateGrey\")\n\ttargetIshere = true\nend\n"
                       },
                       {
                         "name": "Fool (Occultist/Jester)",
@@ -13617,6 +13553,46 @@
                         "patterns": [
                           {
                             "pattern": "^Magma erupts forth from beneath the plates that cover (\\w+)\\.$",
+                            "type": "regex"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Continuation (Monk)",
+                        "patterns": [
+                          {
+                            "pattern": "^(\\w+) gives a great shout of exertion\\.$",
+                            "type": "regex"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Priest Healing",
+                        "patterns": [
+                          {
+                            "pattern": "^([\\w'\\-]+) calls upon the powers of (.*) and projects \\w+ spiritual essence inwardly\\.$",
+                            "type": "regex"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Sylvan Root",
+                        "patterns": [
+                          {
+                            "pattern": "^([\\w'\\-]+) stands suddenly upright\\, rooted to the earth\\.$",
+                            "type": "regex"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Waking Up",
+                        "patterns": [
+                          {
+                            "pattern": "^([\\w'\\-]+) opens \\w+ eyes and yawns mightily\\.$",
+                            "type": "regex"
+                          },
+                          {
+                            "pattern": "^([\\w'\\-]+) wakes up with a gasp of pain\\.$",
                             "type": "regex"
                           }
                         ]
@@ -16613,6 +16589,11 @@
                     ]
                   }
                 ]
+              },
+              {
+                "name": "Magi Offense Tracking",
+                "isActive": "yes",
+                "isFolder": "yes"
               }
             ]
           },
@@ -19549,33 +19530,6 @@
                     ]
                   },
                   {
-                    "name": "Shalestorm down",
-                    "patterns": [
-                      {
-                        "pattern": "^You can no longer maintain your shalestorm against (\\w+).$",
-                        "type": "regex"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Shalestorm shield",
-                    "patterns": [
-                      {
-                        "pattern": "^Huge boulders hammer at the magical shield surrounding (\\w+), shattering it in a spray of translucent shards.$",
-                        "type": "regex"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Shalestorm up",
-                    "patterns": [
-                      {
-                        "pattern": "^You call upon the might of Elemental Earth to grind down (\\w+), and with a terrible roar boulders begin to materialise from the air to hammer at \\w+.$",
-                        "type": "regex"
-                      }
-                    ]
-                  },
-                  {
                     "name": "Transfix Stupidity",
                     "patterns": [
                       {
@@ -19603,15 +19557,6 @@
                     ]
                   },
                   {
-                    "name": "Mudslide",
-                    "patterns": [
-                      {
-                        "pattern": "^You weave earth and water and a torrent of thick mud thunders forth to roll over (\\w+), knocking (.+) sprawling\\.$",
-                        "type": "regex"
-                      }
-                    ]
-                  },
-                  {
                     "name": "Third Party Transfix Unblind",
                     "patterns": [
                       {
@@ -19634,15 +19579,6 @@
                     "patterns": [
                       {
                         "pattern": "^A starburst tattoo flares and bathes (\\w+) in red light\\.$",
-                        "type": "regex"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Fulminate",
-                    "patterns": [
-                      {
-                        "pattern": "^You click your fingers and lightning strikes from the air to smite (\\w+)\\.$",
                         "type": "regex"
                       }
                     ]
@@ -19676,34 +19612,6 @@
                         "pattern": "^The skin of (\\w+) begins to dry and crack as (.+) grows pale\\.$",
                         "type": "regex"
                       }
-                    ],
-                    "script": "if target == matches[2] then\n\n  if tAffs.weariness and tAffs.nausea then\n      magi.offense = magi.offense or {}\n      magi.offense.state = magi.offense.state or {}\n      magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)\n      tburns = magi.offense.state.burns -- backward compat\n      tarAffed(\"burning\")\n      cecho(\" <DimGrey>[<red>\"..tburns..\"/5<DimGrey>]\")\n  end\n\n  if not tAffs.weariness and not tAffs.nausea then\n   tarAffed(\"weariness\")\n   tarAffed(\"nausea\")\n  end\n\n  if not tAffs.weariness and tAffs.nausea and not tAffs.shivering and tAffs.nocaloric then\n    tarAffed(\"weariness\")\n    tarAffed(\"shivering\")\n  elseif not tAffs.weariness and tAffs.nausea and not tAffs.nocaloric then\n    tarAffed(\"weariness\")\n    tarAffed(\"nocaloric\")\n  elseif not tAffs.weariness and tAffs.nausea and tAffs.shivering and tAffs.nocaloric and not tAffs.frozen then\n    tarAffed(\"frozen\")\n    tarAffed(\"weariness\")\n  end\n\n  if not tAffs.nausea and tAffs.weariness then\n    magi.offense = magi.offense or {}\n    magi.offense.state = magi.offense.state or {}\n    magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)\n    tburns = magi.offense.state.burns -- backward compat\n    tarAffed(\"burning\")\n    tarAffed(\"frozen\")\n    tarAffed(\"nausea\")\n    haveAff(\"weariness\")\n    cecho(\" <DimGrey>[<red>\"..tburns..\"/5<DimGrey>]\")\n  end\n  if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": weariness and nausea\") end\nend\n\n\n\n   \n   \n"
-                  },
-                  {
-                    "name": "Bombard",
-                    "patterns": [
-                      {
-                        "pattern": "^You tap the Elemental Plane of Earth, summoning up a flurry of rocks to bombard (\\w+)\\.$",
-                        "type": "regex"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Magma",
-                    "patterns": [
-                      {
-                        "pattern": "^You weave fire and earth and bubbling magma boils into existence to wash over (\\w+) in a skin-melting tide\\.$",
-                        "type": "regex"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Firelash",
-                    "patterns": [
-                      {
-                        "pattern": "^You form a lash of fire, and send it to scorch the flesh of (\\w+)\\.$",
-                        "type": "regex"
-                      }
                     ]
                   },
                   {
@@ -19725,13 +19633,14 @@
                     ]
                   },
                   {
-                    "name": "Dehydrate - Frozen",
+                    "name": "Freeze",
                     "patterns": [
                       {
                         "pattern": "^You rip the heat from (\\w+)\\.$",
                         "type": "regex"
                       }
-                    ]
+                    ],
+                    "script": "if matches[2] ~= target then return end\n\n if not tAffs.shivering and tAffs.nocaloric then\n    tarAffed(\"weariness\")\n    tarAffed(\"shivering\")\n    haveAff(\"nausea\")\n  elseif not tAffs.nocaloric then\n    tarAffed(\"weariness\")\n    tarAffed(\"nocaloric\")\n    haveAff(\"nausea\")\n  elseif tAffs.shivering and tAffs.nocaloric and not tAffs.frozen then\n    tarAffed(\"frozen\")\n    tarAffed(\"weariness\")\n    haveAff(\"nausea\")\n  end\n"
                   },
                   {
                     "name": "Spell Outcomes",
@@ -19917,19 +19826,7 @@
               {
                 "name": "Elementals",
                 "isActive": "yes",
-                "isFolder": "yes",
-                "children": [
-                  {
-                    "name": "Efreeti",
-                    "isActive": "no",
-                    "patterns": [
-                      {
-                        "pattern": "^(\\w+) bursts into flame as a fiery efreeti spins into (\\w+)\\.$",
-                        "type": "regex"
-                      }
-                    ]
-                  }
-                ]
+                "isFolder": "yes"
               },
               {
                 "name": "Staffcast",
@@ -20134,6 +20031,98 @@
                         "script": "if target == matches[2] then\n  tarAffed(\"healthleech\")\n  if partyrelay and not ataxia.afflictions.aeon then send(\"pt \" ..target.. \": Healthleech\") end\nend"
                       }
                     ]
+                  }
+                ]
+              },
+              {
+                "name": "Magi Offense Tracking",
+                "isActive": "yes",
+                "isFolder": "yes",
+                "children": [
+                  {
+                    "name": "Transfix",
+                    "patterns": [
+                      {
+                        "pattern": "^With blinding speed, you weave fire and air together in a hypnotic pattern that transfixes (\\w+)\\.$",
+                        "type": "regex"
+                      }
+                    ],
+                    "script": "local tgt = matches[2]\nif not tgt or tgt ~= target then return end\n\ntarAffed(\"writhing\")\nmagi.offense = magi.offense or {}\nif magi.offense.ptRelay then\n  magi.offense.ptRelay(target .. \": Transfix (writhing)\")\nend\nif magi.offense.debugEcho then\n  magi.offense.debugEcho(\"Transfix hit → writhing\")\nend\n"
+                  },
+                  {
+                    "name": "Transfix Unblind",
+                    "patterns": [
+                      {
+                        "pattern": "^You weave fire and air together to transfix (\\w+), but succeed only in curing",
+                        "type": "regex"
+                      }
+                    ],
+                    "script": "local tgt = matches[2]\nif not tgt or tgt ~= target then return end\n\nerAff(\"blindness\")\nmagi.offense = magi.offense or {}\nif magi.offense.ptRelay then\n  magi.offense.ptRelay(target .. \": Transfix failed (cured blindness)\")\nend\nif magi.offense.debugEcho then\n  magi.offense.debugEcho(\"Transfix unblind → erAff blindness\")\nend\n"
+                  },
+                  {
+                    "name": "Scintilla Spark",
+                    "patterns": [
+                      {
+                        "pattern": "^You sense a combustive spark take hold of (\\w+)\\.$",
+                        "type": "regex"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Scintilla Ignition",
+                    "patterns": [
+                      {
+                        "pattern": "^Flames ignite all over the body of (\\w+), fanned to intensity in an instant\\.$",
+                        "type": "regex"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Staffcast Lightning",
+                    "patterns": [
+                      {
+                        "pattern": "^You point .+ at (\\w+), and cause a bolt of lightning to cascade out and roar screaming into \\w+\\.$",
+                        "type": "regex"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Staffcast Freeze",
+                    "patterns": [
+                      {
+                        "pattern": "^You point .+ at (\\w+) and \\w+ screams in pain as \\w+ skin begins to freeze and crack\\.$",
+                        "type": "regex"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Deepfreeze",
+                    "patterns": [
+                      {
+                        "pattern": "You drain the heat from the air around your enemies",
+                        "type": "exactMatch"
+                      }
+                    ],
+                    "script": "-- Deepfreeze is AoE — applies frozen to current target if in same room\nif target and target ~= \"\" then\n  tarAffed(\"frozen\")\n  selectCurrentLine() fg(\"cyan\")\n\n  magi.offense = magi.offense or {}\n  if magi.offense.ptRelay then\n    magi.offense.ptRelay(target .. \": Deepfreeze (frozen)\")\n  end\n  if magi.offense.debugEcho then\n    magi.offense.debugEcho(\"Deepfreeze → frozen on \" .. target)\n  end\nend\n"
+                  },
+                  {
+                    "name": "Erode",
+                    "patterns": [
+                      {
+                        "pattern": "^You cast a spell of erosion at (\\w+)\\.$",
+                        "type": "regex"
+                      },
+                      {
+                        "pattern": "1",
+                        "type": "spacer"
+                      },
+                      {
+                        "pattern": "(.*)",
+                        "type": "regex"
+                      }
+                    ],
+                    "multiline": "yes",
+                    "multilineDelta": 3
                   }
                 ]
               }
@@ -27804,6 +27793,83 @@
           }
         ],
         "script": "-- Highlight the line\nselectString(line, 1)\nfg(\"orange_red\")\nsetBold(true)\nresetFormat()\n\n-- Alert with box echo\nataxia_boxEcho(\"EPITOMISE - \" .. epitomiser:upper() .. \" - SWITCH TARGETS (6s)\", \"NavajoWhite:a_darkmagenta\")\n\n-- Alert party\nsend(\"pt \" .. epitomiser .. \" used EPITOMISE - switch targets for 6 seconds!\")\n\n-- Set timer for when Epitomise ends\nif ataxiaTemp.epitomiseTimer then\n  killTimer(ataxiaTemp.epitomiseTimer)\nend\n\nataxiaTemp.epitomiseTimer = tempTimer(6, [[\n  ataxia_boxEcho(\"EPITOMISE ENDED - Resume attacking!\", \"green:a_darkgreen\")\n  cecho(\"\\n<green>-= \" .. \"]] .. epitomiser .. [[\" .. \"'s EPITOMISE has ended! =-\")\n  killTimer(ataxiaTemp.epitomiseTimer)\n  ataxiaTemp.epitomiseTimer = nil\n]])\n"
+      }
+    ]
+  },
+  {
+    "name": "Magi",
+    "isActive": "yes",
+    "isFolder": "yes",
+    "children": [
+      {
+        "name": "Magi Offense Tracking",
+        "isActive": "yes",
+        "isFolder": "yes",
+        "children": [
+          {
+            "name": "Staffcast Lightning Stupidity",
+            "patterns": [
+              {
+                "pattern": "^As the lightning bolt courses through (\\w+), a strangely blank expression descends over \\w+ features\\.$",
+                "type": "regex"
+              }
+            ]
+          },
+          {
+            "name": "Emanation Air",
+            "patterns": [
+              {
+                "pattern": "^You sweep .+ over your head and a great wind rises, picking up (\\w+) and dashing them violently about before casting them back to the ground\\.$",
+                "type": "regex"
+              }
+            ]
+          },
+          {
+            "name": "Emanation Water",
+            "patterns": [
+              {
+                "pattern": "^The might of elemental Water surging through your body, you make the slightest flick with .+, and the hand of Sllshya descends as a freezing deluge to smash (\\w+)\\.$",
+                "type": "regex"
+              }
+            ]
+          },
+          {
+            "name": "Emanation Fire",
+            "patterns": [
+              {
+                "pattern": "^The might of elemental Fire filling you like a scorching river, you lift .+ to point at (\\w+) and unleash a stream of searing flame\\.$",
+                "type": "regex"
+              }
+            ]
+          },
+          {
+            "name": "Hypothermia 1st Person",
+            "patterns": [
+              {
+                "pattern": "^You blast (\\w+) with an icy stream of water, and \\w+ begins to shiver uncontrollably\\.$",
+                "type": "regex"
+              }
+            ]
+          },
+          {
+            "name": "Plague Both Legs",
+            "patterns": [
+              {
+                "pattern": "^You hear two loud snaps and see (\\w+) fall to the ground\\.$",
+                "type": "regex"
+              }
+            ]
+          },
+          {
+            "name": "Fulminated Paralysis",
+            "patterns": [
+              {
+                "pattern": "^Horror overcomes (\\w+)'s face as \\w+ body stiffens into paralysis\\.$",
+                "type": "regex"
+              }
+            ]
+          }
+        ]
       }
     ]
   }
