@@ -158,6 +158,7 @@ end
 
 -- Add affliction to ALL branches (we definitely inflicted it)
 function applyAffV3(aff)
+    if not aff then return end
     -- Check if this is a simple-tracked affliction
     if simpleTrackLookup[aff] then
         simpleAffsV3[aff] = true
@@ -177,6 +178,7 @@ end
 
 -- Remove affliction from ALL branches (definite cure - we saw the message)
 function removeAffV3(aff)
+    if not aff then return end
     -- Check simple tracking
     if simpleTrackLookup[aff] then
         simpleAffsV3[aff] = nil

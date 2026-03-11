@@ -402,7 +402,7 @@ end
 function addAffV2(aff) if applyAffV3 then applyAffV3(aff) end end
 function removeAffV2(aff) if removeAffV3 then removeAffV3(aff) end end
 function haveAffV2(aff) return haveAffV3 and haveAffV3(aff) or false end
-function confirmAffV2(aff) if applyAffV3 then applyAffV3(aff) end end
+function confirmAffV2(aff) if aff and applyAffV3 then applyAffV3(aff) end end
 function haveConfirmedAffV2(aff) return haveAffV3 and haveAffV3(aff) or false end
 function stackAffV2(aff) if applyAffV3 then applyAffV3(aff) end end
 function getStackCountV2(aff) return haveAffV3 and haveAffV3(aff) and 1 or 0 end

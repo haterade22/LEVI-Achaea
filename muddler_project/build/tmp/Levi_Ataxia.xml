@@ -15,7 +15,7 @@ ataxiaTemp = ataxiaTemp or {}
 ataxiaTemp.addedHerbID = 1
 ataxiaTemp.removedHerbID = 2
 ataxiagui = ataxiagui or {}
-ataxiaVersion = "4.3.1"						--last was 4.3
+ataxiaVersion = "4.3.2"						--last was 4.3
 muteList = muteList or {}
 
 ataxiaTables.limbTimers = ataxiaTables.limbTimers or {}
@@ -13741,6 +13741,7 @@ end
 
 -- Add affliction to ALL branches (we definitely inflicted it)
 function applyAffV3(aff)
+    if not aff then return end
     -- Check if this is a simple-tracked affliction
     if simpleTrackLookup[aff] then
         simpleAffsV3[aff] = true
@@ -13760,6 +13761,7 @@ end
 
 -- Remove affliction from ALL branches (definite cure - we saw the message)
 function removeAffV3(aff)
+    if not aff then return end
     -- Check simple tracking
     if simpleTrackLookup[aff] then
         simpleAffsV3[aff] = nil
@@ -14744,7 +14746,7 @@ end
 function addAffV2(aff) if applyAffV3 then applyAffV3(aff) end end
 function removeAffV2(aff) if removeAffV3 then removeAffV3(aff) end end
 function haveAffV2(aff) return haveAffV3 and haveAffV3(aff) or false end
-function confirmAffV2(aff) if applyAffV3 then applyAffV3(aff) end end
+function confirmAffV2(aff) if aff and applyAffV3 then applyAffV3(aff) end end
 function haveConfirmedAffV2(aff) return haveAffV3 and haveAffV3(aff) or false end
 function stackAffV2(aff) if applyAffV3 then applyAffV3(aff) end end
 function getStackCountV2(aff) return haveAffV3 and haveAffV3(aff) and 1 or 0 end
