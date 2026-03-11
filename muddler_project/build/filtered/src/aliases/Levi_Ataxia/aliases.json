@@ -1408,6 +1408,38 @@
           {
             "name": "Snipe",
             "regex": "^snt(?: (.+))?$"
+          },
+          {
+            "name": "Target Priority",
+            "regex": "^tgh (.+)$"
+          },
+          {
+            "name": "Target Next",
+            "regex": "^tn$"
+          },
+          {
+            "name": "Target Previous",
+            "regex": "^tb$"
+          },
+          {
+            "name": "Target First",
+            "regex": "^tf$"
+          },
+          {
+            "name": "Target Priority PT",
+            "regex": "^tpt$"
+          },
+          {
+            "name": "Target Priority Reset",
+            "regex": "^tpr$"
+          },
+          {
+            "name": "Target Priority Show",
+            "regex": "^tps$"
+          },
+          {
+            "name": "Target Priority Enemy Sync",
+            "regex": "^tpe$"
           }
         ]
       },

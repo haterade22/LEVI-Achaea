@@ -35,7 +35,17 @@ elseif arg == "arachnideye" or arg == "arach" then
 elseif arg == "webbomb" or arg == "web" then
   magi.offense.config.useWebbomb = not magi.offense.config.useWebbomb
   ataxiaEcho("Webbomb: " .. (magi.offense.config.useWebbomb and "ON" or "OFF"))
+elseif arg == "storm" then
+  if magi.storm then
+    local modes = {"city", "all", "priority"}
+    local current = magi.storm.mode or "city"
+    local idx = table.index_of(modes, current) or 0
+    local next = modes[(idx % #modes) + 1]
+    magi.storm.setMode(next)
+  else
+    ataxiaEcho("Stormhammer system not loaded.")
+  end
 else
   ataxiaEcho("Magi modes: fire | water | lock | salve | group")
-  ataxiaEcho("Commands: mm debug | mm vibes | mm reset | mm arach | mm web | mm (status)")
+  ataxiaEcho("Commands: mm debug | mm vibes | mm reset | mm arach | mm web | mm storm | mm (status)")
 end

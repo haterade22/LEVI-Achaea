@@ -695,7 +695,7 @@ function gearAudit.displayScrap(filterSet)
   cecho("\n\n<cyan>--------------------------------------------------------------------------------")
   cecho("\n<white>  Copy-paste to scrap:")
   for _, s in ipairs(scraps) do
-    cecho(string.format("\n<yellow>    GEAR SCRAP %d", s.gear.id or 0))
+    cecho(string.format("\n<yellow>    GEAR SCRAP %d CONFIRM", s.gear.id or 0))
   end
   cecho("\n<cyan>================================================================================\n")
 end

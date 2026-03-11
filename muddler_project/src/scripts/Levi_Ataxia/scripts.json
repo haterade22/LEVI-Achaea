@@ -1532,6 +1532,9 @@
           },
           {
             "name": "Stormhammer Targeting"
+          },
+          {
+            "name": "Target Priority"
           }
         ]
       },

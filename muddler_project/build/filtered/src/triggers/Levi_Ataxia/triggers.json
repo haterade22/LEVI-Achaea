@@ -20123,6 +20123,15 @@
                     ],
                     "multiline": "yes",
                     "multilineDelta": 3
+                  },
+                  {
+                    "name": "Party Target Priority",
+                    "patterns": [
+                      {
+                        "pattern": "^\\(Party\\): \\S+ says, \"Targets: (.+)\\.\"$",
+                        "type": "regex"
+                      }
+                    ]
                   }
                 ]
               }

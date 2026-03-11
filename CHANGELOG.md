@@ -2,7 +2,46 @@
 
 ---
 
+## 2026-03-11 — Target Priority Queue + Stormhammer Enhancement
+
+### New Feature: Target Priority Queue (`tprio` namespace)
+Ordered kill list for group PvP coordination, inspired by Tabethys's Target Priority package. Provides single-key target cycling, party synchronization, and presence-aware auto-targeting.
+
+**New files**:
+- `scripts/.../mage/006_Target_Priority.lua` — Core system: `tprio.add()`, `tprio.next()`, `tprio.previous()`, `tprio.first()`, `tprio.switchTo()`, `tprio.autoTarget()`, `tprio.syncEnemies()`, `tprio.pt()`
+- `aliases/.../targetting/004_Target_Priority.lua` — `tgh Name1 Name2 Name3` sets priority list
+- `aliases/.../targetting/005-011` — `tn` (next), `tb` (back), `tf` (first), `tpt` (party announce), `tpr` (reset), `tps` (show), `tpe` (enemy sync)
+- `triggers/.../magi_offense_tracking/016_Party_Target_Priority.lua` — Auto-parses `(Party): X says, "Targets: A, B, C."` to set priority list
+
+**Key features**:
+- Position-resync on cycling (handles manual target changes gracefully)
+- GMCP room player tracking with incremental add/remove
+- Full combat state reset on switch (V3 affs, limbs, burns, balances)
+- Ghost/soul filtering from GMCP data
+
+### Enhancement: Stormhammer Mode System
+Added runtime mode switching to `magi.storm` with 3 modes:
+
+| Mode | Behavior |
+|------|----------|
+| `city` (default) | Original — targets enemies from same city as primary target |
+| `all` | All enemies in room regardless of city |
+| `priority` | Uses `tprio.list` ordering, then fills with remaining enemies |
+
+**Changes to `005_Stormhammer_Targeting.lua`**:
+- Added `magi.storm.mode`, `magi.storm.setMode()`, `magi.storm.getMode()`
+- Primary target (`target`) always guaranteed in slot 1
+- Priority mode iterates `tprio.list` in order for intelligent target selection
+- `mm storm` alias cycles through modes (city → all → priority → city)
+
+---
+
 ## 2026-03-11 — Stormhammer fires incorrectly after retarget + event name mismatch
+
+### Bug Fix: Scintilla double-counting burns
+**Root cause**: `005_Immolation_Staff.lua` added +1 burn via 4s timer on scintilla cast, AND `011_Scintilla_Ignition.lua` added +1 burn when the spark ignited — resulting in +2 burns per scintilla. With shalestorm causing near-instant ignition, both fired giving 2 burns instead of 1.
+
+**Fix**: Removed the burn increment from `005_Immolation_Staff.lua` — the ignition trigger (011) already handles burn tracking when the spark actually ignites.
 
 ### Bug Fix: Stormhammer firing at full HP targets
 **Root cause**: `targetHealth` (global, set by assess trigger) was never cleared on target switch, death, starburst, or manual reset. `magi.offense.getTargetHP()` checks `targetHealth` before `php`, so stale assess data from a previous target caused stormhammer to fire at HP ≤25% when the new target was actually at 91%+.
