@@ -20806,6 +20806,7 @@ function switchTarget(who)
   resetStatesV3()
   setafflictionstackslevi()
   php = 100
+  targetHealth = 100
   pm = 100
   tburns = 0
   tAffs.burns = 0
@@ -81007,6 +81008,7 @@ daeggerhunt = false
 freshblood = false
 pm = 100
 php = 100
+targetHealth = 100
 tAffs.bleed = 0
 mindinvert = false
 spiritinvert = false
@@ -120455,6 +120457,7 @@ wantmindlock = true
 lightbind = false
 tAffs.bleed = 0
 php = 100
+targetHealth = 100
 pm = 100
 tAffs.rebounding = false
 
@@ -120605,6 +120608,7 @@ wantmindlock = true
 lightbind = false
 tAffs.bleed = 0
 php = 100
+targetHealth = 100
 pm = 100
 tAffs.rebounding = false
 
@@ -133336,14 +133340,8 @@ end</script>
               <Trigger isActive="yes" isFolder="no" isMultiline="no" isPerlSlashGOption="no" isColorizerTrigger="no" isFilterTrigger="no" isColorTrigger="" isColorTriggerFg="" isColorTriggerBg="">
   <name>Immolation Staff</name>
                 <script>timmolation = true
-
-tempTimer(4, [[
-  magi.offense = magi.offense or {}
-  magi.offense.state = magi.offense.state or {}
-  magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
-  tburns = magi.offense.state.burns
-  tarAffed("burning")
-]])</script>
+-- Burns are tracked by 011_Scintilla_Ignition.lua when the spark actually ignites
+-- Do NOT add burns here — it double-counts with the ignition trigger</script>
   <triggerType>0</triggerType>
   <conditonLineDelta>0</conditonLineDelta>
   <mStayOpen>0</mStayOpen>

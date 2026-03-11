@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-03-11 — Stormhammer fires incorrectly after retarget + event name mismatch
+
+### Bug Fix: Stormhammer firing at full HP targets
+**Root cause**: `targetHealth` (global, set by assess trigger) was never cleared on target switch, death, starburst, or manual reset. `magi.offense.getTargetHP()` checks `targetHealth` before `php`, so stale assess data from a previous target caused stormhammer to fire at HP ≤25% when the new target was actually at 91%+.
+
+**Files changed**:
+- `016_Targeting_Functions.lua`: Added `targetHealth = nil` on target switch (next to `php = 100`)
+- `016_RESET.lua` (alias): Added `targetHealth = nil` on manual reset
+- `401_Target_Has_Died.lua` (trigger): Added `targetHealth = nil` on target death
+- `405_Starburst!.lua` (trigger): Added `targetHealth = nil` on target starburst
+
+### Bug Fix: Magi offense and V3 tracker not resetting on target switch
+**Root cause**: Event name mismatch — `switchTarget()` raises `"changed target"` but both handlers listened for `"ataxia target changed"` (never raised). This meant `magi.offense.reset()` and `resetStatesV3()` never fired on target change, so burns, shalestorm, scintillaSpark, and V3 affliction probabilities persisted across targets.
+
+**Files changed**:
+- `004_Magi_Offense.lua` (line 710): Changed event listener from `"ataxia target changed"` to `"changed target"`
+- `007_Branching_State_Tracker.lua` (line 763): Changed event listener from `"ataxia target changed"` to `"changed target"`
+
+---
+
 ## 2026-03-11 — Armour & Paragon Management System
 
 ### Feature

@@ -18,6 +18,7 @@ daeggerhunt = false
 freshblood = false
 pm = 100
 php = 100
+targetHealth = 100
 tAffs.bleed = 0
 mindinvert = false
 spiritinvert = false

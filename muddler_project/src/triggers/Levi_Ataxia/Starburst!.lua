@@ -34,6 +34,7 @@ wantmindlock = true
 lightbind = false
 tAffs.bleed = 0
 php = 100
+targetHealth = 100
 pm = 100
 tAffs.rebounding = false
 

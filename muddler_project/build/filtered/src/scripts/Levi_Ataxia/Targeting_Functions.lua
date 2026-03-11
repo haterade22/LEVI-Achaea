@@ -62,6 +62,7 @@ function switchTarget(who)
   resetStatesV3()
   setafflictionstackslevi()
   php = 100
+  targetHealth = 100
   pm = 100
   tburns = 0
   tAffs.burns = 0

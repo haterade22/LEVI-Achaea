@@ -1,9 +1,3 @@
 timmolation = true
-
-tempTimer(4, [[
-  magi.offense = magi.offense or {}
-  magi.offense.state = magi.offense.state or {}
-  magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
-  tburns = magi.offense.state.burns
-  tarAffed("burning")
-]])
+-- Burns are tracked by 011_Scintilla_Ignition.lua when the spark actually ignites
+-- Do NOT add burns here — it double-counts with the ignition trigger
