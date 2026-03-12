@@ -104,7 +104,7 @@ function ataxia_Room_Update()
 		end
 	end
 
-	if ataxiaTemp.bashFlee then
+	if ataxiaTemp.bashFlee and ataxiaBasher_path then
 		if not table.contains(ataxiaBasher_path, gPreviousRoom) then
 			table.insert(ataxiaBasher_path, 1, gPreviousRoom)
 		end

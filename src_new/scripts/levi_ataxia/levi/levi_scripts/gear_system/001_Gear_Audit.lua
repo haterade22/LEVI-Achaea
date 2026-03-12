@@ -56,6 +56,13 @@ gearAudit.config = {
     brMult           = 0.7,  -- battlerage-conditional discounted 30%
   },
   keepPerSet = 3,             -- Keep top N items per slot per set, scrap the rest
+  slotRules = {
+    hands = {
+      minBurstPct = 15,       -- Scrap burst items under 15%
+      maxBurstKeep = 3,       -- Keep at most 3 burst items (sorted by burst% desc)
+      minDmgPct = 2,          -- Scrap damage items under 2%
+    },
+  },
 }
 
 --------------------------------------------------------------------------------
@@ -483,7 +490,7 @@ function gearAudit.getScrapRecommendations(filterSet)
       -- Group by set within this slot
       local bySet = {}
       for _, item in ipairs(items) do
-        local setName = item.gear.set or "Unknown"
+        local setName = (slot == "trinket") and "N/A" or (item.gear.set or "Unknown")
         bySet[setName] = bySet[setName] or {}
         table.insert(bySet[setName], item)
       end
@@ -505,6 +512,9 @@ function gearAudit.getScrapRecommendations(filterSet)
     end
   end
 
+  -- Apply slot-specific rules (e.g. hands burst/damage thresholds)
+  gearAudit.applySlotRules(scraps, bySlot)
+
   -- Sort scraps by slot then score
   table.sort(scraps, function(a, b)
     if a.slot == b.slot then return a.score < b.score end
@@ -512,6 +522,69 @@ function gearAudit.getScrapRecommendations(filterSet)
   end)
 
   return scraps
+end
+
+-- Apply slot-specific scrap rules (burst thresholds, damage floors, etc.)
+function gearAudit.applySlotRules(scraps, bySlot)
+  local rules = gearAudit.config.slotRules or {}
+
+  -- Track already-scrapped IDs to avoid duplicates
+  local scrappedIds = {}
+  for _, s in ipairs(scraps) do
+    scrappedIds[s.gear.id] = true
+  end
+
+  for slot, slotItems in pairs(bySlot) do
+    local rule = rules[slot]
+    if rule then
+      -- Separate burst and damage items (using scored effects)
+      local burstItems = {}
+      for _, item in ipairs(slotItems) do
+        if not scrappedIds[item.gear.id] then
+          local scored = gearAudit.scoreEffect(item.gear.effects)
+          if scored.burstPct then
+            -- Scrap burst items under minimum threshold
+            if rule.minBurstPct and scored.burstPct < rule.minBurstPct then
+              table.insert(scraps, {
+                gear = item.gear, score = item.score, bisScore = slotItems[1].score,
+                slot = slot, set = item.gear.set or "Unknown",
+                reason = string.format("Burst %d%% < %d%% min", scored.burstPct, rule.minBurstPct)
+              })
+              scrappedIds[item.gear.id] = true
+            else
+              table.insert(burstItems, { item = item, burstPct = scored.burstPct })
+            end
+          elseif scored.addDmgPct then
+            -- Scrap damage items under minimum threshold
+            if rule.minDmgPct and scored.addDmgPct < rule.minDmgPct then
+              table.insert(scraps, {
+                gear = item.gear, score = item.score, bisScore = slotItems[1].score,
+                slot = slot, set = item.gear.set or "Unknown",
+                reason = string.format("Dmg %d%% < %d%% min", scored.addDmgPct, rule.minDmgPct)
+              })
+              scrappedIds[item.gear.id] = true
+            end
+          end
+        end
+      end
+
+      -- Keep only top N burst items (sorted by burst% desc)
+      if rule.maxBurstKeep and #burstItems > rule.maxBurstKeep then
+        table.sort(burstItems, function(a, b) return a.burstPct > b.burstPct end)
+        for i = rule.maxBurstKeep + 1, #burstItems do
+          local item = burstItems[i].item
+          if not scrappedIds[item.gear.id] then
+            table.insert(scraps, {
+              gear = item.gear, score = item.score, bisScore = slotItems[1].score,
+              slot = slot, set = item.gear.set or "Unknown",
+              reason = string.format("Burst rank #%d (keeping top %d)", i, rule.maxBurstKeep)
+            })
+            scrappedIds[item.gear.id] = true
+          end
+        end
+      end
+    end
+  end
 end
 
 --------------------------------------------------------------------------------
@@ -580,7 +653,7 @@ function gearAudit.displayBis(slotFilter)
       local bySet = {}
       local setOrder = {}
       for _, item in ipairs(items) do
-        local setName = item.gear.set or "Unknown"
+        local setName = (item.gear.slot == "trinket") and "N/A" or (item.gear.set or "Unknown")
         if not bySet[setName] then
           bySet[setName] = {}
           table.insert(setOrder, setName)
@@ -615,7 +688,7 @@ function gearAudit.displayBis(slotFilter)
         cecho(string.format(
           "\n<cyan>      #1  <green>BiS   <yellow>%5.1f  <DimGrey>[%s] <white>%-6d <green>%s",
           top.score, rarityShort(top.gear.rarity), top.gear.id or 0,
-          top.gear.set or "Unknown"
+          (top.gear.slot == "trinket") and "N/A" or (top.gear.set or "Unknown")
         ))
       end
     end
@@ -645,7 +718,7 @@ function gearAudit.displayScore(gearId)
   cecho(string.format("\n<cyan>| <white>SCORE BREAKDOWN - ID: %d", id))
   cecho("\n<cyan>+------------------------------------------------------------------------------+")
   cecho(string.format("\n<cyan>| <grey>Name:<cyan>    <white>%s", gear.name or "Unknown"))
-  cecho(string.format("\n<cyan>| <grey>Set:<cyan>     <green>%s", gear.set or "None"))
+  cecho(string.format("\n<cyan>| <grey>Set:<cyan>     <green>%s", (gear.slot == "trinket") and "N/A" or (gear.set or "None")))
   cecho(string.format("\n<cyan>| <grey>Slot:<cyan>    <yellow>%s", gear.slot or "Unknown"))
   cecho(string.format("\n<cyan>| <grey>Rarity:<cyan>  <magenta>%s  <grey>Months: <white>%s", gear.rarity or "?", tostring(gear.monthsLeft or "?")))
 
@@ -707,13 +780,15 @@ function gearAudit.displayScrap(filterSet)
   cecho("\n<cyan>================================================================================")
 
   for _, s in ipairs(scraps) do
+    local displaySet = (s.slot == "trinket") and "N/A" or s.set
     cecho(string.format(
       "\n<red>  #%-6d <white>(%s) <green>%s <grey>- score <yellow>%.1f <grey>(BiS: <yellow>%.1f<grey>)",
-      s.gear.id or 0, s.slot, s.set, s.score, s.bisScore
+      s.gear.id or 0, s.slot, displaySet, s.score, s.bisScore
     ))
     local effectStr = gearAudit.summarizeEffect(s.gear.effects)
     if #effectStr > 60 then effectStr = effectStr:sub(1, 58) .. ".." end
-    cecho(string.format("\n<DimGrey>           %s <grey>- %s", s.gear.name or "Unknown", effectStr))
+    local reasonStr = s.reason and (" <orange>[" .. s.reason .. "]") or ""
+    cecho(string.format("\n<DimGrey>           %s <grey>- %s%s", s.gear.name or "Unknown", effectStr, reasonStr))
   end
 
   cecho("\n\n<cyan>--------------------------------------------------------------------------------")
@@ -1099,7 +1174,7 @@ function gearAudit.display(filter)
     cecho(string.format(
       "\n<cyan>| <yellow>%-6d<cyan> | <green>%-28s<cyan> | <white>%-8s<cyan> | <light_grey>%-40s<cyan>|",
       gear.id or 0,
-      (gear.set or "Unknown"):sub(1, 28),
+      ((gear.slot == "trinket") and "N/A" or (gear.set or "Unknown")):sub(1, 28),
       (gear.slot or "?"):sub(1, 8),
       effectStr
     ))

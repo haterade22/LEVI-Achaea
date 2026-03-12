@@ -36,6 +36,7 @@ patterns:
   type: 1
 ]]--
 
+ataxiaTemp[matches[3]] = ataxiaTemp[matches[3]] or {}
 if not table.contains(ataxiaTemp[matches[3]], matches[2]) then
   table.insert(ataxiaTemp[matches[3]], matches[2])
 end

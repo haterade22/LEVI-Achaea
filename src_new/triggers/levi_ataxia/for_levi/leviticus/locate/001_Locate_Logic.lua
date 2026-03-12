@@ -38,12 +38,60 @@ patterns:
 
 mmp.locateAndEcho(matches[3], matches[2])
 if locateon == true then
-  local t = mmp.searchRoomExact(matches[3])
+  local targetName = matches[2]
+  local roomName = matches[3]
+  local t = mmp.searchRoomExact(roomName)
   local roomId = ""
   if next(t) then
     local k, v = next(t)
     roomId = " (" .. (type(k) == "number" and k or v) .. ")"
   end
-  send("tell " .. locateperson .. " " .. matches[2] .. " is at " .. matches[3] .. roomId)
+
+  -- Wait for faemirror result before sending tell
+  local function sendLocateReply(companionInfo)
+    local msg = targetName .. " is at " .. roomName .. roomId
+    if companionInfo then
+      msg = msg .. " " .. companionInfo
+    end
+    send("tell " .. locateperson .. " " .. msg)
+    locateon = false
+  end
+
+  -- Clean up any previous faemirror triggers/timers
+  if locateFaemirrorTrigger then killTrigger(locateFaemirrorTrigger) end
+  if locateFaemirrorBlank then killTrigger(locateFaemirrorBlank) end
+  if locateFaemirrorTimer then killTimer(locateFaemirrorTimer) end
+
+  -- Trigger: faemirror shows people
+  locateFaemirrorTrigger = tempRegexTrigger("^As you gaze into a mirror of fae perception, you see the shadow of (\\d+) (?:person|people) alongside", function()
+    local count = matches[2]
+    if locateFaemirrorBlank then killTrigger(locateFaemirrorBlank) end
+    if locateFaemirrorTimer then killTimer(locateFaemirrorTimer) end
+    locateFaemirrorTrigger = nil
+    locateFaemirrorBlank = nil
+    locateFaemirrorTimer = nil
+    sendLocateReply("[" .. count .. " with them]")
+  end)
+
+  -- Trigger: faemirror blank (alone)
+  locateFaemirrorBlank = tempRegexTrigger("^The surface of a mirror of fae perception remains blank", function()
+    if locateFaemirrorTrigger then killTrigger(locateFaemirrorTrigger) end
+    if locateFaemirrorTimer then killTimer(locateFaemirrorTimer) end
+    locateFaemirrorTrigger = nil
+    locateFaemirrorBlank = nil
+    locateFaemirrorTimer = nil
+    sendLocateReply("[alone]")
+  end)
+
+  -- Timeout fallback (2s) in case no faemirror
+  locateFaemirrorTimer = tempTimer(2, function()
+    if locateFaemirrorTrigger then killTrigger(locateFaemirrorTrigger) end
+    if locateFaemirrorBlank then killTrigger(locateFaemirrorBlank) end
+    locateFaemirrorTrigger = nil
+    locateFaemirrorBlank = nil
+    locateFaemirrorTimer = nil
+    sendLocateReply(nil)
+  end)
+else
+  locateon = false
 end
-locateon = false

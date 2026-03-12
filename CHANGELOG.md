@@ -2,6 +2,30 @@
 
 ---
 
+## 2026-03-12 — Locate system: farsee + faemirror companion count
+
+### Enhancement: Use farsee with faemirror for locate responses
+
+**Files:** `src_new/triggers/.../locate/001_Locate_Logic.lua`, `003_Party_Locate.lua`, `005_Locate3.lua`, `004_Party_Locate_Scry.lua` (disabled)
+
+All locate triggers now use `farsee` instead of `scry for`. The locate response waits for the faemirror result before replying, including companion count: `[alone]`, `[1 with them]`, `[3 with them]`, etc. Falls back to no companion info after 2s timeout if no faemirror is equipped. Scry bowl trigger disabled (no longer needed).
+
+---
+
+## 2026-03-12 — Fix nil table errors in Room Update and Ally/Enemy trigger
+
+### Bug Fix: Defensive nil checks for uninitialized tables
+
+**Files:** `src_new/scripts/.../update_stuff/002_ataxia_Room_Update.lua`, `src_new/triggers/.../allies_enemies/008_Ally_Enemy_added.lua`
+
+**Problem:** Two race conditions caused `bad argument #1 to 'insert' (table expected, got nil)`:
+1. `ataxiaBasher_path` used in Room Update flee logic before basher initialization
+2. `ataxiaTemp.allies`/`ataxiaTemp.enemies` used before ALLIES/ENEMIES list trigger populates them
+
+**Fix:** Added nil guards — `ataxiaBasher_path` check before `table.insert`, and `ataxiaTemp[key] = ataxiaTemp[key] or {}` before ally/enemy insertion.
+
+---
+
 ## 2026-03-12 — Basher attack gate: block attacks during disabling afflictions
 
 ### Enhancement: Expanded basher affliction checks

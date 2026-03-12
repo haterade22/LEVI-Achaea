@@ -316,11 +316,16 @@ V3 is the **single source of truth** for target affliction tracking. It models m
 
 Automated target selection and attack execution for PvE hunting. Supports 20+ classes, manual/areabash modes, integrates with mapper, GMCP, battlerage, and GUI.
 
-**Full documentation**: See `memory/basher.md` (dispatch chain, gates, danger levels, flee logic, room arrival flow, stormhammer caching)
+**Full documentation**: See `memory/basher.md` (dispatch chain, gates, danger levels, flee logic, room arrival flow, attack gate affliction checks, PvP auto-flee, stormhammer caching)
 
 **Core Files:** `basher/001_Bashing_Functions.lua` (attack dispatch), `basher/002_Class_Bashing.lua` (20+ classes), `genrunning/001-004` (API, targets, enable/disable, main loop)
 
 **Key Config:** `ataxiaBasher.enabled`, `.paused`, `.manual`, `.areabash`, `.targetList[area]`, `.ldeckRules`, `.goldPack`, `.fleeTimeout` (20s), `.shieldTimers`
+
+**Safety Features:**
+- **Attack gate**: Blocks attacks during disabling afflictions (paralysis, aeon, peace, transfixation, webbed, impaled, constricted, deepsleep, entangled, unconsciousness, snared)
+- **PvP auto-flee**: On `"attacker class detected"` event, disables basher and navigates to Mhaldor (`genrunning/001_Bashing_API.lua`)
+- **PvE target switching**: `switchTarget()` skips all PvP state resets when basher is enabled
 
 ### GUI System (ataxiagui)
 

@@ -10,7 +10,7 @@ hierarchy:
 - MINE ALL MINE
 - Locate
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
   isTempTrigger: 'no'
   isMultiline: 'yes'

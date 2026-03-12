@@ -200,13 +200,17 @@ function gotAff()
       send("accursed reconstitute", false)
     end
   -- Handle Retardation or Aeon
+  elseif aff == "aeon" and ataxia.afflictions.asthma then
+    send("curing prioaff asthma")
+    partyrelay = false
+    retardationOn()
   elseif aff == "aeon" and not ataxia.retardation then
     send("curing prioaff aeon")
     partyrelay = false
     retardationOn()
-  elseif aff == "aeon" and ataxia.afflictions.asthma then
+  -- Asthma gained while aeon active - prioritize asthma so we can smoke elm
+  elseif aff == "asthma" and ataxia.afflictions.aeon then
     send("curing prioaff asthma")
-    partyrelay = false
   elseif aff == "impatience" and ataxiaNDB_getClass(target) == "Serpent" then
     myaeon = true
   -- Darkshade duration tracking - auto-prioritize after threshold
