@@ -110,19 +110,22 @@ function ataxia_loadSettings()
 	-- set up by scripts before sysLoadEvent (e.g. ataxia.data.movement,
 	-- ataxia.data.db.addChar). table.save can't serialize functions, so
 	-- a plain table.load would replace sub-tables with function-less copies.
+	-- Recursive merge: preserves functions at all nesting levels.
+	-- table.save can't serialize functions, so a plain table.load would
+	-- replace sub-tables (e.g. ataxia.data.db) with function-less copies.
 	local function mergeLoad(path, target)
 		local loaded = {}
 		table.load(path, loaded)
-		for k, v in pairs(loaded) do
-			if type(v) == "table" and type(target[k]) == "table" then
-				-- Merge into existing sub-table (preserves functions)
-				for sk, sv in pairs(v) do
-					target[k][sk] = sv
+		local function deepMerge(src, dst)
+			for k, v in pairs(src) do
+				if type(v) == "table" and type(dst[k]) == "table" then
+					deepMerge(v, dst[k])
+				else
+					dst[k] = v
 				end
-			else
-				target[k] = v
 			end
 		end
+		deepMerge(loaded, target)
 	end
 
 	if not io.exists(file_loc) then

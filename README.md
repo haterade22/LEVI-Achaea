@@ -94,6 +94,28 @@ Configurable profile system for armour paragon slots (1-3), trait selections, an
 
 **Paragon lookup**: Built-in reference for all 24 paragon types with effects. Raw game names from `ii paragon` are automatically resolved to clean display names (e.g., "an aeneaous paragon" → "aeneaous (absorption)").
 
+#### Item Catalog (`catalog`)
+
+Comprehensive inventory cataloging system for artefacts, talismans, promo items, and special equipment. Scans via `ARTEFACT LIST` and `TALISMAN LIST`, cross-references each item against a 200+ entry knowledge base, and auto-probes unknown items for review.
+
+| Command | Action |
+|---------|--------|
+| `catalog scan` | Full scan — ARTEFACT LIST + TALISMAN LIST + auto-probe unknowns |
+| `catalog quick` | Quick scan — ARTEFACT LIST + TALISMAN LIST only (no probing) |
+| `catalog show` | Display all items grouped by type and category |
+| `catalog show artefacts` | Show only artefacts |
+| `catalog show talismans` | Show only talismans (grouped by set) |
+| `catalog show promo` | Show only promo items |
+| `catalog search <keyword>` | Search by name, power, effect, set, or category |
+| `catalog info <id>` | Full details for a specific item |
+| `catalog note <id> <text>` | Add/update a manual annotation |
+| `catalog unknowns` | List unidentified items needing review |
+| `catalog help` | Command reference |
+
+**Knowledge base** covers all credit artefacts (combat stats, offense, defense, utility, travel, crafting, shop of wonders, paragons, housing) and all known talisman sets (Marks, Death, Wonders, Blackwave, Underworld, Contender, Races, Seafaring, Conclave, Eldergods, Moderngods, Wanderer). Items not in the KB are auto-probed and flagged as unknown for manual review.
+
+**Persistence**: Catalog data persists per-profile — anyone who downloads the package gets the KB, and their personal catalog survives package updates.
+
 #### Vial Inventory Summary (`elist` / `vlist`)
 
 Compact summary views for elixir and venom inventories. Instead of scrolling through pages of individual vial listings, get a grouped count with total sips/doses per type.
