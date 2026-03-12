@@ -73,95 +73,98 @@ function switchTarget(who)
 	ataxiaEcho("Target acquired. Focusing fire on <white>"..target.."!")
 	send("unally "..target..ataxia.settings.separator.."enemy "..target..ataxia.settings.separator.."st "..target)
   send("settarget " ..target)
-  --expandAlias("t " ..target)
-  resetStatesV3()
-  setafflictionstackslevi()
-  php = 100
-  targetHealth = 100
-  pm = 100
-  tburns = 0
-  tAffs.burns = 0
-  if magi and magi.offense and magi.offense.state then magi.offense.state.burns = 0 end
-  tarpreapply = false
-  tAffs.rebounding = false
-  tAffs.shield = false
-  tAffs.curseward = false
-  falconattack = false
-  preventriftlock = false
-  tdeliverance = false
-  tBals.passive = true
-  if pariah then pariah.burrow = false end
-  taccelerates = 0
-  tAffs.criticalspirit = false
-  tAffs.criticalmind = false
-  tAffs.criticalbody = false
-  pdeconstruct = false
-  mindinvert = false
-  bodyinvert = false
-  spiritinvert = false
-  inverted = false
-  lightbind = false
-  
-  
-	if target_calling then send("pt Target: "..target) end
 
-  targetresetafflictionslevi()
-  tBals = {tree = true, focus = true, plant = true, salve = true, timers = {}, passive = true}
-	ataxiaTemp.bleeding = 0
-	if ataxia_isClass("magi") then
-		magi_resetLimbs()
-	else
-		tLimbs = {H=0, T=0, RL=0, LL=0, RA=0, LA=0}
-	end
-	readAuraAffs = { count = 0, list = {} }
-	if ataxia_isClass("sentinel") then sAnimals = sAnimals or {} end
-	if ataxia_isClass("serpent") then
-    ataxiaTemp.suggestions = nil
-    if serpent and serpent.state then
-      serpent.state.dispelSent = false
-      serpent.state.attackInFlight = false
-      serpent.state.impatienceDelivered = false
-      serpent.state.stupidityImpulseSent = false
-      serpent.state.relapsePhase = false
-      serpent.state.voyriaSent = false
-      serpent.state.geckoStripAttempted = false
+  -- Skip PvP combat state resets when bashing
+  if not (ataxiaBasher and ataxiaBasher.enabled) then
+    resetStatesV3()
+    setafflictionstackslevi()
+    php = 100
+    targetHealth = 100
+    pm = 100
+    tburns = 0
+    tAffs.burns = 0
+    if magi and magi.offense and magi.offense.state then magi.offense.state.burns = 0 end
+    tarpreapply = false
+    tAffs.rebounding = false
+    tAffs.shield = false
+    tAffs.curseward = false
+    falconattack = false
+    preventriftlock = false
+    tdeliverance = false
+    tBals.passive = true
+    if pariah then pariah.burrow = false end
+    taccelerates = 0
+    tAffs.criticalspirit = false
+    tAffs.criticalmind = false
+    tAffs.criticalbody = false
+    pdeconstruct = false
+    mindinvert = false
+    bodyinvert = false
+    spiritinvert = false
+    inverted = false
+    lightbind = false
+
+
+    if target_calling then send("pt Target: "..target) end
+
+    targetresetafflictionslevi()
+    tBals = {tree = true, focus = true, plant = true, salve = true, timers = {}, passive = true}
+    ataxiaTemp.bleeding = 0
+    if ataxia_isClass("magi") then
+      magi_resetLimbs()
+    else
+      tLimbs = {H=0, T=0, RL=0, LL=0, RA=0, LA=0}
     end
-    if serpent then
-      serpent.impulseSuccess = false
-      serpent.impulseRelapsing = false
+    readAuraAffs = { count = 0, list = {} }
+    if ataxia_isClass("sentinel") then sAnimals = sAnimals or {} end
+    if ataxia_isClass("serpent") then
+      ataxiaTemp.suggestions = nil
+      if serpent and serpent.state then
+        serpent.state.dispelSent = false
+        serpent.state.attackInFlight = false
+        serpent.state.impatienceDelivered = false
+        serpent.state.stupidityImpulseSent = false
+        serpent.state.relapsePhase = false
+        serpent.state.voyriaSent = false
+        serpent.state.geckoStripAttempted = false
+      end
+      if serpent then
+        serpent.impulseSuccess = false
+        serpent.impulseRelapsing = false
+      end
+      if serpent and serpent.hypnosis and serpent.hypnosis.reset then
+        serpent.hypnosis.reset()
+      end
+      if serpent and serpent.resetCureTracking then
+        serpent.resetCureTracking()
+      end
+      hSuggActive = ""
     end
-    if serpent and serpent.hypnosis and serpent.hypnosis.reset then
-      serpent.hypnosis.reset()
+    if ataxia_isClass("priest") then ataxiaTemp.prayerList = nil end
+    if ataxia_isClass("pariah") then
+      ataxia_resetPariah()
     end
-    if serpent and serpent.resetCureTracking then
-      serpent.resetCureTracking()
+    if string.find(ataxiaTemp.class, "fire") then ataxiaTemp.firelord = {} end
+    twohanded_resetFractures()
+    twohanded_resetFractures()
+
+    if gmcp.Char.Status.class == "Infernal" then
+      send("order hyena passive")
     end
-    hSuggActive = ""
-  end
-	if ataxia_isClass("priest") then ataxiaTemp.prayerList = nil end
-  if ataxia_isClass("pariah") then
-    ataxia_resetPariah() 
-  end
-  if string.find(ataxiaTemp.class, "fire") then ataxiaTemp.firelord = {} end
-  twohanded_resetFractures()
-  twohanded_resetFractures()
-  
-if gmcp.Char.Status.class == "Infernal" then
-  send("order hyena passive")
-end
-if gmcp.Char.Status.class == "Runewarden" then
-  send("order falcon passive")
-end
-  ataxiaTemp.lastLimbHit = "none"
-  ataxiaTemp.parriedLimb = "none"
-  affTimers = {}
-	tLimbs.BP = tLimbs.BP or 100
-  disableTimer("Battlefury Perceive") 
-	raiseEvent("changed target")
-  
-  
-  if zgui and zgui.showTarAffs then
-    zgui.showTarAffs()
+    if gmcp.Char.Status.class == "Runewarden" then
+      send("order falcon passive")
+    end
+    ataxiaTemp.lastLimbHit = "none"
+    ataxiaTemp.parriedLimb = "none"
+    affTimers = {}
+    tLimbs.BP = tLimbs.BP or 100
+    disableTimer("Battlefury Perceive")
+    raiseEvent("changed target")
+
+
+    if zgui and zgui.showTarAffs then
+      zgui.showTarAffs()
+    end
   end
 end
 

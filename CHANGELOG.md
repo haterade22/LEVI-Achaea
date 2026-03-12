@@ -2,6 +2,32 @@
 
 ---
 
+## 2026-03-12 — Basher attack gate: block attacks during disabling afflictions
+
+### Enhancement: Expanded basher affliction checks
+
+**Files:** `src_new/scripts/levi_ataxia/levi/ataxia/basher/001_Bashing_Functions.lua`
+
+The basher attack send gate now checks for many more disabling afflictions before sending attacks. Previously only checked paralysis, aeon, and peace. Now also blocks on: transfixation, webbed, impaled, constricted, deepsleep, entangled, unconsciousness, and snared. This prevents wasted commands and queue spam when the character can't act.
+
+---
+
+## 2026-03-12 — Auto-flee on PvP attack while bashing
+
+### New Feature: Basher attack detection
+
+**Files:** `src_new/scripts/levi_ataxia/levi/ataxia/genrunning/001_Bashing_API.lua`, `src_new/scripts/levi_ataxia/levi/ataxia/016_Targeting_Functions.lua`
+
+When the basher is enabled and the class detect system fires (`"attacker class detected"` event), the system now automatically:
+1. Clears all queues (`cq all`)
+2. Turns off auto bash rotation
+3. Disables the basher
+4. Navigates to Mhaldor via the mapper
+
+Also: `switchTarget` now skips all PvP combat state resets (V3 states, affliction tracking, limb counters, class-specific resets) when bashing is enabled, eliminating the "[V3] States reset" spam during PvE.
+
+---
+
 ## 2026-03-12 — Fix: zData hunting database nil errors
 
 ### Bug Fix: `mergeLoad` shallow merge wiping functions

@@ -216,9 +216,30 @@ function ataxiaBasher_startStuckTimer()
   end)
 end
 
+-- PvP attack detected while bashing: disable basher and flee to Mhaldor
+function ataxiaBasher_onAttacked(_, attackerName, attackerClass)
+  if not ataxiaBasher or not ataxiaBasher.enabled then return end
+
+  ataxiaEcho("<red>ATTACKED by <white>" .. (attackerName or "unknown") .. " <red>(" .. (attackerClass or "?") .. ") while bashing! Fleeing to Mhaldor.")
+
+  -- Stop everything
+  send("cq all")
+  autoBashRotation = false
+  ataxiaBasher.enabled = false
+  ataxiaBasher.paused = false
+  ataxiaBasher.areabash = false
+  ataxiaBasher_atk = false
+  raiseEvent("basher disabled")
+
+  -- Navigate to Mhaldor
+  if mmp and mmp.pause then mmp.pause("off") end
+  expandAlias("goto Mhaldor")
+end
+
 registerAnonymousEventHandler("mmapper failed path", "ataxiaBasher_pathFail")
 registerAnonymousEventHandler("mmapper arrived", "ataxiaBasher_arrived")
-registerAnonymousEventHandler("player death", "ataxiaBasher_onDeath")--[[mudlet
+registerAnonymousEventHandler("player death", "ataxiaBasher_onDeath")
+registerAnonymousEventHandler("attacker class detected", "ataxiaBasher_onAttacked")--[[mudlet
 type: script
 name: Bashing API
 hierarchy:
@@ -420,6 +441,27 @@ function ataxiaBasher_startStuckTimer()
   end)
 end
 
+-- PvP attack detected while bashing: disable basher and flee to Mhaldor
+function ataxiaBasher_onAttacked(_, attackerName, attackerClass)
+  if not ataxiaBasher or not ataxiaBasher.enabled then return end
+
+  ataxiaEcho("<red>ATTACKED by <white>" .. (attackerName or "unknown") .. " <red>(" .. (attackerClass or "?") .. ") while bashing! Fleeing to Mhaldor.")
+
+  -- Stop everything
+  send("cq all")
+  autoBashRotation = false
+  ataxiaBasher.enabled = false
+  ataxiaBasher.paused = false
+  ataxiaBasher.areabash = false
+  ataxiaBasher_atk = false
+  raiseEvent("basher disabled")
+
+  -- Navigate to Mhaldor
+  if mmp and mmp.pause then mmp.pause("off") end
+  expandAlias("goto Mhaldor")
+end
+
 registerAnonymousEventHandler("mmapper failed path", "ataxiaBasher_pathFail")
 registerAnonymousEventHandler("mmapper arrived", "ataxiaBasher_arrived")
 registerAnonymousEventHandler("player death", "ataxiaBasher_onDeath")
+registerAnonymousEventHandler("attacker class detected", "ataxiaBasher_onAttacked")
