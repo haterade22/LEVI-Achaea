@@ -37,6 +37,17 @@
       "detail": "Remove muddler_project/build/ directory"
     },
     {
+      "label": "Run Tests",
+      "type": "shell",
+      "command": "lua5.1 src_new/tests/test_runner.lua || lua src_new/tests/test_runner.lua",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "detail": "Run LEVI-Achaea unit tests"
+    },
+    {
       "label": "Build Levi_Test",
       "type": "shell",
       "command": "python tools/convert_to_muddler.py --src src_new --output levi_test_project --package-name Levi_Test --include-roots Levi_Test && cd levi_test_project && \"E:/muddle-shadow-1.1.0/muddle-shadow-1.1.0/bin/muddle.bat\"",

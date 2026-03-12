@@ -1,0 +1,117 @@
+name: Build & Validate
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Validate Lua & Version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Lua 5.1
+        run: sudo apt-get update && sudo apt-get install -y lua5.1
+
+      - name: Syntax check all Lua files
+        run: |
+          echo "=== Checking Lua syntax ==="
+          errors=0
+          while IFS= read -r file; do
+            if ! luac5.1 -p "$file" 2>/dev/null; then
+              echo "SYNTAX ERROR: $file"
+              luac5.1 -p "$file" || true
+              errors=$((errors + 1))
+            fi
+          done < <(find src_new -name '*.lua' -type f)
+          echo "=== Checked $(find src_new -name '*.lua' -type f | wc -l) files, $errors errors ==="
+          if [ $errors -gt 0 ]; then exit 1; fi
+
+      - name: Check version consistency
+        run: |
+          echo "=== Checking version sync ==="
+          V_TXT=$(cat version.txt | tr -d '[:space:]')
+          V_MFILE=$(python3 -c "import json; print(json.load(open('muddler_project/mfile'))['version'])" | tr -d '[:space:]')
+          V_YAML=$(grep -oP 'ataxiaVersion\s*=\s*"([^"]+)"' src_new/scripts/_groups.yaml | grep -oP '"[^"]+"' | tr -d '"')
+
+          echo "version.txt:    $V_TXT"
+          echo "mfile:          $V_MFILE"
+          echo "_groups.yaml:   $V_YAML"
+
+          if [ "$V_TXT" != "$V_MFILE" ] || [ "$V_TXT" != "$V_YAML" ]; then
+            echo "ERROR: Version mismatch!"
+            exit 1
+          fi
+          echo "All 3 versions match: $V_TXT"
+
+      - name: Run unit tests
+        run: |
+          echo "=== Running unit tests ==="
+          lua5.1 src_new/tests/test_runner.lua
+
+      - name: Validate YAML files
+        run: |
+          echo "=== Checking YAML files ==="
+          pip install pyyaml --quiet
+          python3 -c "
+          import yaml, glob, sys
+          errors = 0
+          for f in glob.glob('src_new/**/_groups.yaml', recursive=True):
+              try:
+                  yaml.safe_load(open(f))
+              except yaml.YAMLError as e:
+                  print(f'YAML ERROR: {f}: {e}')
+                  errors += 1
+          print(f'Checked {len(glob.glob(\"src_new/**/_groups.yaml\", recursive=True))} YAML files, {errors} errors')
+          sys.exit(1 if errors else 0)
+          "
+
+  build:
+    name: Build Package
+    runs-on: ubuntu-latest
+    needs: validate
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+
+      - name: Download Muddler
+        run: |
+          curl -L -o muddler.zip https://github.com/demonnic/muddler/releases/download/1.1.0/muddle-shadow-1.1.0.zip
+          unzip muddler.zip -d muddler-bin
+          chmod +x muddler-bin/muddle-shadow-1.1.0/bin/muddle
+
+      - name: Convert source to Muddler format
+        run: python tools/convert_to_muddler.py --src src_new --output muddler_project
+
+      - name: Build with Muddler
+        run: |
+          cd muddler_project
+          ../muddler-bin/muddle-shadow-1.1.0/bin/muddle
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Levi_Ataxia-${{ github.ref_name }}
+          path: muddler_project/build/Levi_Ataxia.mpackage
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: muddler_project/build/Levi_Ataxia.mpackage
+          generate_release_notes: true
