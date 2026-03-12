@@ -153,6 +153,7 @@ groups:
   - name: Systems
     children:
     - name: Gear System
+    - name: Inventory
     - name: zData
     - name: zGUI Redux
 - name: echo

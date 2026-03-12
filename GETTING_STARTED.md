@@ -7,14 +7,17 @@
 See [README.md](README.md) for full build instructions. The short version:
 
 ```bash
-# Convert source to Muddler format
-python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project
+# One-command build (recommended)
+./build.sh
 
-# Build with Muddler (requires Java 8+)
+# Or step by step:
+python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project
 set JAVA_HOME=C:\Path\To\Java
 cd muddler_project
 /path/to/muddler/bin/muddle.bat
 ```
+
+**VS Code**: Press `Ctrl+Shift+B` to build. **Claude Code**: Type `/build`.
 
 Output: `muddler_project/build/Levi_Ataxia.mpackage`
 
@@ -249,31 +252,32 @@ Each item type has a `_groups.yaml` defining the folder tree in Mudlet. The conv
 **For users**: Just type `sysupdate` in-game. The system handles everything automatically.
 
 **For developers releasing a new version**:
-1. Update `version.txt` with the new version string
-2. Update `muddler_project/mfile` → `"version": "X.Y"`
-3. Update `ataxiaVersion` in `src_new/scripts/.../levi_ataxia/_groups.yaml` init script
-4. Rebuild (see below)
-5. Push `version.txt` and `muddler_project/build/Levi_Ataxia.mpackage` to GitHub
+1. Bump version: `/version-bump <new_version>` in Claude Code, or manually update `version.txt`, `muddler_project/mfile`, and `ataxiaVersion` in `_groups.yaml`
+2. Build: `./build.sh` or press `Ctrl+Shift+B` in VS Code
+3. Commit, tag, and push: `git tag v<version>` → `git push --tags`
+4. CI/CD automatically creates a GitHub Release with the `.mpackage`
 
 ### Rebuild After Editing
 
 After modifying files in `src_new/`, rebuild:
 
 ```bash
-python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project
-cd muddler_project
-/path/to/muddler/bin/muddle.bat
+./build.sh                 # Full build
+./build.sh --convert-only  # Convert only (skip Muddler)
+./build.sh --dry-run       # Preview without writing
 ```
+
+Or press `Ctrl+Shift+B` in VS Code, or use `/build` in Claude Code.
 
 Then reinstall the `.mpackage` in Mudlet.
 
-Or use the **Build Levi_Ataxia** task in VS2022 (right-click root folder in Solution Explorer).
-
-### Preview Without Building
+### Run Tests
 
 ```bash
-python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project --dry-run
+lua5.1 src_new/tests/test_runner.lua
 ```
+
+Or use the "Run Tests" task in VS Code. Tests use `src_new/tests/mock_mudlet.lua` to stub the Mudlet API so combat logic can run outside the client.
 
 ### Build a Separate Package
 
@@ -342,6 +346,18 @@ grep -r "functionName" src_new/
 ```
 
 ---
+
+## Development Tools
+
+| Tool | Purpose |
+|------|---------|
+| `build.sh` | One-command build: `./build.sh [--dry-run] [--convert-only]` |
+| `.vscode/tasks.json` | VS Code build/test tasks (`Ctrl+Shift+B`) |
+| `.luacheckrc` | Lua 5.1 linter config (run with `luacheck src_new/`) |
+| `stylua.toml` | Lua formatter config (run with `stylua src_new/path/to/file.lua`) |
+| `.github/workflows/build.yml` | CI/CD: syntax check, version check, tests, release builds |
+| `.claude/skills/` | `/build` and `/version-bump` slash commands for Claude Code |
+| `.claude/agents/` | Custom subagents for offense development, builds, and team work |
 
 ## Further Documentation
 

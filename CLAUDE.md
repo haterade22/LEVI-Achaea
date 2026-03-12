@@ -55,50 +55,79 @@ This repository contains the **"For Levi" Mudlet package**, a comprehensive comb
 ```
 LEVI-Achaea/
 ├── .claude/
-│   ├── AGENTS.md           # Agent instructions for AI development
-│   └── classes/            # 26 class files + lock_types.md
+│   ├── AGENTS.md              # Agent instructions for AI development
+│   ├── classes/               # 26 class files + lock_types.md
+│   ├── agents/                # Custom Claude Code subagents
+│   │   ├── offense-system.md  # Class offense development agent
+│   │   ├── build-and-version.md # Build + version management agent
+│   │   └── team-class-offense.md # Parallel team development agent
+│   ├── skills/                # Claude Code skills (slash commands)
+│   │   ├── build/SKILL.md     # /build — full build pipeline
+│   │   └── version-bump/SKILL.md # /version-bump — sync 3 version files
+│   └── settings.local.json   # Project permissions + hooks
+├── .github/
+│   └── workflows/build.yml   # CI/CD: syntax check, version check, tests, release builds
+├── .vscode/
+│   ├── settings.json          # Lua 5.1 config, Mudlet globals, diagnostics
+│   ├── extensions.json        # Recommended: sumneko.lua + mudlet-scripts-sdk
+│   └── tasks.json             # Build, convert, test, clean tasks (Ctrl+Shift+B)
 ├── docs/
-│   ├── plans/              # Project plans and reviews
-│   ├── legend-deck.md      # Legend Deck card reference
+│   ├── plans/                 # Project plans and reviews
+│   ├── legend-deck.md         # Legend Deck card reference
 │   └── artefacts-reference.md
-├── src_new/                # Canonical source (YAML-header Lua files)
-│   ├── aliases/            # Alias definitions
-│   ├── keys/               # Key bindings
-│   ├── scripts/            # Lua script modules (combat, basher, GUI, NDB, etc.)
-│   ├── timers/             # Timer definitions
-│   └── triggers/           # Trigger definitions
-├── muddler_project/        # Muddler build project for Levi_Ataxia (generated)
-│   ├── mfile               # Package metadata JSON
-│   └── src/
-│       ├── aliases/Levi_Ataxia/   # aliases.json + *.lua
-│       ├── keys/Levi_Ataxia/      # keys.json + *.lua
-│       ├── scripts/Levi_Ataxia/   # scripts.json + *.lua
-│       ├── timers/Levi_Ataxia/    # timers.json + *.lua
-│       ├── triggers/Levi_Ataxia/  # triggers.json + *.lua
-│       └── resources/             # Static resources
-├── my_package_project/     # Muddler build project for custom packages
-├── levi_test_project/      # Muddler build project for Levi_Test
+├── src_new/                   # Canonical source (YAML-header Lua files)
+│   ├── aliases/               # Alias definitions
+│   ├── keys/                  # Key bindings
+│   ├── scripts/               # Lua script modules (combat, basher, GUI, NDB, etc.)
+│   ├── timers/                # Timer definitions
+│   ├── triggers/              # Trigger definitions
+│   └── tests/                 # Unit tests (not included in Muddler build)
+│       ├── mock_mudlet.lua    # Mudlet API mock (200+ function stubs)
+│       ├── test_runner.lua    # Minimal test framework (describe/it/expect)
+│       └── test_*.lua         # Test files
+├── muddler_project/           # Muddler build project for Levi_Ataxia
+│   └── mfile                  # Package metadata JSON (version must match version.txt)
 ├── tools/
 │   ├── convert_to_muddler.py  # Convert src_new → muddler project (multi-package)
 │   ├── compare_builds.py      # Compare old XML vs Muddler output
 │   ├── mudlet_extract.py      # Extract XML package to src_new
 │   ├── flatten_groups.py      # Flatten intermediate wrapper groups in _groups.yaml
 │   └── legacy/                # Retired build tools
-│       ├── mudlet_build.py    # Old Python XML builder
-│       └── mudlet_validate.py # Old validation script
-├── packages/               # Compiled Mudlet packages
-├── .vs/
-│   └── tasks.vs.json       # VS2022 Open Folder build tasks
-├── version.txt             # Package version (fetched by auto-updater)
-├── CLAUDE.md               # This file
-├── GETTING_STARTED.md      # Setup and usage guide
-└── README.md               # Project overview
+├── build.sh                   # Build script: ./build.sh [--dry-run] [--convert-only]
+├── .gitignore                 # Excludes build artifacts, IDE state, caches
+├── .gitattributes             # Enforces LF line endings, marks binaries
+├── .editorconfig              # 2-space indent, UTF-8, LF for Lua/YAML/JSON/MD
+├── .luacheckrc                # Lua 5.1 linter config with Mudlet globals
+├── stylua.toml                # Lua formatter config (2-space, 120 col, Unix)
+├── .claudeignore              # Excludes build output from Claude context
+├── .mcp.json                  # Serena MCP server config
+├── version.txt                # Package version (fetched by auto-updater)
+├── CLAUDE.md                  # This file
+├── GETTING_STARTED.md         # Setup and usage guide
+├── README.md                  # Project overview
+└── CHANGELOG.md               # Version history
 ```
+
+**Note**: Build artifacts (`muddler_project/build/`, `muddler_project/src/`, `levi_test_project/`, `packages/`, `.vs/`) are gitignored and not tracked.
 
 ### Build System (Muddler)
 
-The project uses [Muddler](https://github.com/demonnic/muddler) to build Mudlet packages. The build pipeline is:
+The project uses [Muddler](https://github.com/demonnic/muddler) to build Mudlet packages.
 
+**Quick build** (recommended):
+```bash
+./build.sh                 # Full convert + Muddler build
+./build.sh --convert-only  # Convert only, skip Muddler
+./build.sh --dry-run       # Preview without writing
+```
+
+**VS Code**: Press `Ctrl+Shift+B` to run the default build task. See `.vscode/tasks.json` for all tasks.
+
+**Claude Code**: Use `/build` skill or invoke the `build-and-version` subagent.
+
+**CI/CD**: GitHub Actions (`.github/workflows/build.yml`) runs Lua syntax checks, version consistency checks, unit tests, and YAML validation on every push. Tagged releases (`v*`) trigger a full build and upload to GitHub Releases.
+
+**Manual pipeline**:
 1. **Edit** source files in `src_new/` (YAML-header Lua format)
 2. **Convert** to Muddler format: `python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project`
 3. **Build** with Muddler (from `muddler_project/` directory):
@@ -109,7 +138,9 @@ The project uses [Muddler](https://github.com/demonnic/muddler) to build Mudlet 
    ```
 4. **Output**: `muddler_project/build/Levi_Ataxia.mpackage` and `.xml`
 
-**Requirements**: Java 8+ (`E:\Java`), Muddler (`E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\`).
+**Requirements**: Java 8+ (`E:\Java`), Muddler (`E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\`), Python 3.
+
+**Testing**: Run `lua5.1 src_new/tests/test_runner.lua` or use the "Run Tests" VS Code task. Tests use `mock_mudlet.lua` to stub the Mudlet API.
 
 ### Versioning & Auto-Update
 
@@ -117,15 +148,15 @@ The project uses [Muddler](https://github.com/demonnic/muddler) to build Mudlet 
 
 | Location | Format | Purpose |
 |----------|--------|---------|
-| `version.txt` | Plain text (`4.1`) | Remote check — fetched by clients on login |
-| `muddler_project/mfile` | JSON (`"version": "4.1"`) | Build metadata — muddler reads this |
-| `_groups.yaml` init script | Lua (`ataxiaVersion = "4.1"`) | Runtime global — compared against remote |
+| `version.txt` | Plain text (`4.3.2`) | Remote check — fetched by clients on login |
+| `muddler_project/mfile` | JSON (`"version": "4.3.2"`) | Build metadata — muddler reads this |
+| `_groups.yaml` init script | Lua (`ataxiaVersion = "4.3.2"`) | Runtime global — compared against remote |
 
 **Version bump workflow** (for every release):
-1. Update `version.txt` with new version string
-2. Update `mfile` → `"version": "X.Y"`
-3. `ataxiaVersion` in `_groups.yaml` init script — update to match
-4. Build with muddler → push everything to GitHub (mpackage + version.txt)
+1. Use `/version-bump <new_version>` in Claude Code, OR manually update all 3 files
+2. Build with `./build.sh`
+3. Commit and tag: `git tag v<new_version>` → `git push --tags`
+4. CI/CD automatically builds and creates a GitHub Release with the `.mpackage`
 
 **Auto-update system** (`ataxia.updater` namespace, `misc_scripts/021_Auto_Update.lua`):
 - On `sysLoadEvent` (5s delay): downloads `version.txt` from GitHub raw, compares against `ataxiaVersion`
@@ -159,15 +190,34 @@ python tools/convert_to_muddler.py --src ./src_new --output ./my_package_project
 - Compares old Python-built XML against Muddler project source
 - Verifies item counts, names, hierarchy, and code content
 
-### Visual Studio 2022
+### VS Code (Primary IDE)
 
-Use **File > Open > Folder** and select the `LEVI-Achaea/` directory. VS2022 shows all files in the folder tree. Build tasks are in `.vs/tasks.vs.json` — right-click the root folder in Solution Explorer to run them:
+Open the `LEVI-Achaea/` folder in VS Code. Recommended extensions are in `.vscode/extensions.json` (sumneko Lua + Mudlet Scripts SDK).
 
-- **Build Levi_Ataxia** — Full convert + Muddler pipeline
-- **Build Levi_Test** — Build the test/distribution package
+**Build tasks** (`.vscode/tasks.json` — press `Ctrl+Shift+B`):
+- **Build Levi_Ataxia** (default) — Full convert + Muddler pipeline
 - **Convert Only** — Just the conversion step, no Muddler
-- **Convert Only (Dry Run)** — Preview without writing
+- **Convert Dry Run** — Preview without writing
 - **Clean Build Output** — Remove `muddler_project/build/`
+- **Run Tests** (default test task) — Execute unit tests
+- **Build Levi_Test** — Build the test/distribution package
+
+**Hooks** (`.claude/settings.local.json`):
+- **SessionStart** — Prints version and recent git changes on session start
+- **PreToolUse** — Prevents concurrent builds
+
+**Claude Code skills**:
+- `/build` — Run the full build pipeline
+- `/version-bump <version>` — Sync version across all 3 tracked locations
+
+**Custom subagents** (`.claude/agents/`):
+- `offense-system` — Enforces project patterns when creating class offense systems
+- `build-and-version` — Handles version bumps and builds with validation
+- `team-class-offense` — Team agent for parallel class development
+
+### Visual Studio 2022 (Legacy)
+
+Build tasks are in `.vs/tasks.vs.json` — right-click the root folder in Solution Explorer to run them.
 
 ### Source Code Organization
 

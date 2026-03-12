@@ -368,34 +368,29 @@ The `sysupdate` command downloads the latest `.mpackage` from GitHub, uninstalls
 
 | Requirement | Details |
 |-------------|---------|
-| **Python 3.14+** | For the conversion script |
+| **Python 3** | For the conversion script |
 | **Java 8+** | For Muddler (the Mudlet package builder) |
 | **Muddler** | Download from [demonnic/muddler](https://github.com/demonnic/muddler) |
 
-### Step 1: Convert source to Muddler format
-
-The source code lives in `src_new/` as YAML-header Lua files organized by Mudlet item type. The conversion script strips headers, builds the JSON hierarchy, and outputs a Muddler project.
+### Quick Build
 
 ```bash
 cd LEVI-Achaea
-python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project
+./build.sh                 # Full convert + Muddler build
+./build.sh --convert-only  # Convert only (skip Muddler)
+./build.sh --dry-run       # Preview without writing
 ```
 
-This reads all `_groups.yaml` hierarchy definitions and `.lua` source files, then generates:
-- `muddler_project/src/scripts/Levi_Ataxia/scripts.json` + Lua files
-- `muddler_project/src/triggers/Levi_Ataxia/triggers.json` + Lua files
-- `muddler_project/src/aliases/Levi_Ataxia/aliases.json` + Lua files
-- `muddler_project/src/timers/Levi_Ataxia/timers.json` + Lua files
-- `muddler_project/src/keys/Levi_Ataxia/keys.json` + Lua files
-- `muddler_project/mfile` (package metadata)
+**VS Code**: Press `Ctrl+Shift+B` to run the default build task.
 
-### Step 2: Build with Muddler
+### Manual Build
 
 ```bash
-# Set JAVA_HOME to your Java installation
-set JAVA_HOME=C:\Path\To\Java
+# Step 1: Convert source to Muddler format
+python tools/convert_to_muddler.py --src ./src_new --output ./muddler_project
 
-# Run Muddler from the project directory
+# Step 2: Build with Muddler
+set JAVA_HOME=C:\Path\To\Java
 cd muddler_project
 /path/to/muddler/bin/muddle.bat     # Windows
 /path/to/muddler/bin/muddle         # Linux/macOS
@@ -608,12 +603,11 @@ LEVI-Achaea/
 │   │   └── levi_ataxia/levi/
 │   │       ├── ataxia/         #     Core combat system, basher, curing, GUI
 │   │       └── levi_scripts/   #     Class-specific offense modules (18+ classes)
+│   ├── tests/                  #   Unit tests (mock_mudlet.lua, test_runner.lua)
 │   ├── timers/                 #   Timer definitions
 │   └── triggers/               #   Game text pattern matching (1800+ triggers)
-├── muddler_project/            # Generated Muddler build project
-│   ├── mfile                   #   Package metadata
-│   ├── src/                    #   Generated JSON + Lua per item type
-│   └── build/                  #   Built .mpackage output
+├── muddler_project/            # Generated Muddler build project (build/ gitignored)
+│   └── mfile                   #   Package metadata
 ├── tools/
 │   ├── convert_to_muddler.py  #   Source → Muddler project converter
 │   ├── flatten_groups.py       #   Flatten intermediate wrapper groups in _groups.yaml
@@ -621,14 +615,22 @@ LEVI-Achaea/
 │   ├── compare_builds.py       #   Compare XML vs Muddler output
 │   ├── mudlet_extract.py       #   Extract XML package → src_new format
 │   └── lib/                    #   Shared library code (hierarchy, YAML parsing)
-├── packages/                   # Pre-built Mudlet packages
 ├── docs/
 │   ├── plans/                  #   Project plans and reviews
 │   ├── legend-deck.md          #   Legend Deck card reference
 │   └── artefacts-reference.md  #   Artefact effects reference
 ├── .claude/
-│   └── classes/                # 26 class mechanic files + lock_types.md
+│   ├── agents/                 # Custom subagents (offense-system, build-and-version, team)
+│   ├── classes/                # 26 class mechanic files + lock_types.md
+│   └── skills/                 # Slash commands (/build, /version-bump)
+├── .github/workflows/          # CI/CD (syntax check, tests, tagged release builds)
+├── .vscode/tasks.json          # VS Code build/test tasks (Ctrl+Shift+B)
+├── build.sh                    # One-command build script
 ├── version.txt                 # Package version (fetched by auto-updater on login)
+├── .gitignore                  # Excludes build artifacts, .vs/, __pycache__
+├── .gitattributes              # LF line endings, binary markers
+├── .luacheckrc                 # Lua 5.1 linter config
+├── stylua.toml                 # Lua formatter config
 ├── CLAUDE.md                   # Full system documentation (AI assistant guide)
 ├── GETTING_STARTED.md          # Setup and usage guide
 ├── CHANGELOG.md                # Change history
@@ -657,19 +659,27 @@ Group hierarchy is defined in `_groups.yaml` files at each item type root (e.g.,
 
 ---
 
-## Visual Studio 2022
+## IDE Setup
 
-Open the `LEVI-Achaea/` folder via **File > Open > Folder**. Build tasks are in `.vs/tasks.vs.json`:
+### VS Code (Primary)
+
+Open the `LEVI-Achaea/` folder. Press **Ctrl+Shift+B** to build, or use **Terminal > Run Task** for:
 
 | Task | Description |
 |------|-------------|
-| **Build Levi_Ataxia** | Full convert + Muddler pipeline |
-| **Build Levi_Test** | Build the test/distribution package |
+| **Build Levi_Ataxia** | Full convert + Muddler pipeline (default) |
 | **Convert Only** | Run conversion without building |
 | **Convert Only (Dry Run)** | Preview conversion output |
 | **Clean Build Output** | Remove `muddler_project/build/` |
+| **Run Tests** | Execute unit tests via test_runner.lua |
 
-Right-click the root folder in Solution Explorer to run any task.
+**Claude Code**: `/build` runs the full pipeline. `/version-bump <version>` updates all 3 version locations.
+
+**Custom subagents** (`.claude/agents/`): `offense-system` for class offense development, `build-and-version` for release automation, `team-class-offense` for parallel class work.
+
+### Visual Studio 2022 (Legacy)
+
+Build tasks are in `.vs/tasks.vs.json`. Right-click the root folder in Solution Explorer to run.
 
 ---
 
@@ -682,6 +692,8 @@ Right-click the root folder in Solution Explorer to run any task.
 | [CHANGELOG.md](CHANGELOG.md) | Change history with dates and details |
 | [docs/legend-deck.md](docs/legend-deck.md) | Legend Deck card reference and PVE guide |
 | [.claude/classes/](.claude/classes/) | Per-class combat mechanic documentation (26 classes) |
+| [.claude/agents/](.claude/agents/) | Custom subagent definitions for Claude Code |
+| [.claude/skills/](.claude/skills/) | Slash command skills (`/build`, `/version-bump`) |
 
 ---
 

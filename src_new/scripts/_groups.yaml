@@ -597,6 +597,8 @@ groups:
     directory: levi_ataxia/levi/levi_scripts/algedonic_defense_1.0
   - name: Gear System
     directory: levi_ataxia/levi/levi_scripts/gear_system
+  - name: Inventory
+    directory: levi_ataxia/levi/levi_scripts/inventory
   - name: slc
     directory: levi_ataxia/levi/levi_scripts/slc
   - name: ZulahGUI - Saonji Edit
