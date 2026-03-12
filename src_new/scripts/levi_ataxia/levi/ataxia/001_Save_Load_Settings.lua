@@ -54,6 +54,11 @@ function ataxia_saveSettings(disp)
     table.save(slc_loc, selfLimbDamage.config)
   end
 
+  -- Save Item Catalog state
+  if itemCatalog and itemCatalog.save then
+    itemCatalog.save()
+  end
+
   -- Profile backup (persists via Mudlet saved variables)
   -- Re-read from just-saved files to get clean serialized data (avoids
   -- deepcopy stack overflow on tables with circular refs like GUI objects)
@@ -225,6 +230,11 @@ function ataxia_loadSettings()
     for k, v in pairs(_ataxia_backup.slcconfig) do
       selfLimbDamage.config[k] = v
     end
+  end
+
+  -- Load Item Catalog state
+  if itemCatalog and itemCatalog.load then
+    itemCatalog.load()
   end
 
   raiseEvent("ataxia system loaded")

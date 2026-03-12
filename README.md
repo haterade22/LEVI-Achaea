@@ -94,6 +94,29 @@ Configurable profile system for armour paragon slots (1-3), trait selections, an
 
 **Paragon lookup**: Built-in reference for all 24 paragon types with effects. Raw game names from `ii paragon` are automatically resolved to clean display names (e.g., "an aeneaous paragon" → "aeneaous (absorption)").
 
+#### Vial Inventory Summary (`elist` / `vlist`)
+
+Compact summary views for elixir and venom inventories. Instead of scrolling through pages of individual vial listings, get a grouped count with total sips/doses per type.
+
+| Command | Action |
+|---------|--------|
+| `elist` | Summarise all elixir vials (sends `elixlist`, auto-pages through MORE prompts) |
+| `vlist` | Summarise all venom vials (sends `venomlist`, auto-pages through MORE prompts) |
+
+**Example output:**
+```
+--- Elixir Summary ---
+health:           15 vials  (2,849 sips)
+mana:             22 vials  (4,200 sips)
+restoration:       8 vials  (1,520 sips)
+empty:            16 vials
+speed:             5 vials  (300 sips)
+-------------------------------
+TOTAL:            66 vials  (8,869 sips)
+```
+
+Automatically handles paginated output (MORE prompts), extracts fluid/venom names from raw descriptions (e.g., "an elixir of mana" → "mana", "the venom prefarar" → "prefarar"), and includes a 30-second safety timeout.
+
 ### GUI System (Enhanced zGUI Redux)
 
 *Originally created by Zulah, enhanced with additional features.*

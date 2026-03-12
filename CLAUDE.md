@@ -397,6 +397,42 @@ ataxia.armour.config.profiles["bash"] = {
 
 **Commands:** `armour`, `armour <name>`, `armour add/remove/set/show/auto/bash/pvp/morph/scan/paragons/types/help`
 
+### Item Catalog (`itemCatalog`)
+Catalogs artefacts, talismans, promo items, and special equipment. Cross-references against a knowledge base to identify what each item does. Auto-probes unknowns and flags them for review.
+
+**Key Files:**
+| File | Purpose |
+|------|---------|
+| `src_new/scripts/.../item_catalog/001_Item_Catalog_Init.lua` | Namespace, config, state machine, echo helpers, skip patterns |
+| `src_new/scripts/.../item_catalog/002_Item_Catalog_DB.lua` | Knowledge base (200+ artefacts, all talisman sets) |
+| `src_new/scripts/.../item_catalog/003_Item_Catalog_Functions.lua` | Scan orchestration, KB matching, display, search, command dispatch |
+| `src_new/scripts/.../item_catalog/004_Item_Catalog_Save_Load.lua` | Persistence (save/load/backup) |
+| `src_new/aliases/.../item_catalog/001_Item_Catalog.lua` | `catalog` alias dispatcher |
+
+**Namespace:** `itemCatalog` (global). **Alias:** `catalog`.
+
+**Data Structures:**
+- `itemCatalog.kb` — Knowledge base keyed by normalized item name (type, category, power, effect, credits, tier)
+- `itemCatalog.talismanKB` — Talisman keyword lookup (set, effect)
+- `itemCatalog.items` — Discovered items keyed by ID (name, location, source, kbKey, probeText, userNote, etc.)
+
+**Scan Flow:** ARTEFACT LIST → TALISMAN LIST → Auto-probe unknowns (0.7s delay). Uses `tempRegexTrigger` with timer-based end-of-output detection and MORE pagination handling.
+
+**Commands:**
+| Command | Purpose |
+|---------|---------|
+| `catalog scan` | Full scan (ARTEFACT LIST + TALISMAN LIST + auto-probe) |
+| `catalog quick` | Quick scan (no probing) |
+| `catalog show [artefacts\|talismans\|promo\|unknown]` | Display by type/category |
+| `catalog search <keyword>` | Search name, power, effect, set, category |
+| `catalog info <id>` | Full item details |
+| `catalog note <id> <text>` | Add manual annotation |
+| `catalog unknowns` | List unidentified items |
+| `catalog save` / `catalog load` | Manual save/load |
+| `catalog help` | Command reference |
+
+**Persistence:** `table.save/load` to `getMudletHomeDir()/itemcatalog` with `_ataxia_backup.itemcatalog` fallback. Integrated into `ataxia_saveSettings()`/`ataxia_loadSettings()`.
+
 ### Player Database (ataxiaNDB)
 - Fetches from Achaea API (`http://api.achaea.com/characters/`)
 - Tracks: name, city, house, class, level, XP rank, player kills, mark, army rank, dauntless
@@ -454,11 +490,12 @@ All system state is saved to disk files in `getMudletHomeDir()` via `table.save(
 | `classDetect_config.lua` | `classDetect.config/curingsetMap` | Class detection settings | `class_detect/001_Class_Detect_Engine.lua` |
 | `gearaudit` | `gearAudit.data` | Gear inventory | `gear_system/001_Gear_Audit.lua` |
 | `armourconfig` | `ataxia.armour.config` | Armour profiles, paragons, morph state | `gear_system/002_Armour_Paragons.lua` |
+| `itemcatalog` | `itemCatalog.items/config` | Cataloged items, user notes, config | `item_catalog/004_Item_Catalog_Save_Load.lua` |
 | `ataxia_bars_config.lua` | `ataxia.bars.config` | Vital bar toggles | `build_windows/016_buildVitalBars.lua` |
 | `mapper.options.lua` | `mmp.locked/settings` | Mapper options | `mudlet-mapper` (no profile backup) |
 
 **Profile Backup Keys** (in `_ataxia_backup`):
-`ataxia`, `basher`, `basherpaths`, `ndb`, `extraction`, `slcconfig`, `shaman`, `legenddeck`, `legenddeck_config`, `classDetect`, `gearaudit`, `armourconfig`, `bars_config`
+`ataxia`, `basher`, `basherpaths`, `ndb`, `extraction`, `slcconfig`, `shaman`, `legenddeck`, `legenddeck_config`, `classDetect`, `gearaudit`, `armourconfig`, `itemcatalog`, `bars_config`
 
 **Other Storage**: SQLite `exp_db` (hunting stats via Mudlet `db` API), `ataxiaNDB/*.json` (temp API downloads).
 

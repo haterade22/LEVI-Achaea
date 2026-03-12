@@ -2,6 +2,45 @@
 
 ---
 
+## 2026-03-12 — Item Catalog System
+
+### New Feature: Item Catalog (`catalog`)
+A comprehensive inventory cataloging system that scans artefacts, talismans, promo items, and special equipment, cross-referencing each against a knowledge base to identify what every item does.
+
+**Commands:**
+| Command | Purpose |
+|---------|---------|
+| `catalog scan` | Full scan (ARTEFACT LIST + TALISMAN LIST + auto-probe unknowns) |
+| `catalog quick` | Quick scan (ARTEFACT LIST + TALISMAN LIST only, no probing) |
+| `catalog stop` | Abort an in-progress scan |
+| `catalog show [artefacts\|talismans\|promo\|unknown]` | Display cataloged items by type/category |
+| `catalog search <keyword>` | Search by name, power, effect, set, or category |
+| `catalog info <id>` | Full details for a specific item |
+| `catalog note <id> <text>` | Add/update a manual annotation |
+| `catalog unknowns` | List unidentified items needing review |
+| `catalog save` / `catalog load` | Manual save/load |
+| `catalog help` | Command reference |
+
+**Architecture:**
+- Knowledge base (`itemCatalog.kb`) covers 200+ artefacts and all known talisman sets with effects, categories, and tiers
+- Talisman keyword lookup (`itemCatalog.talismanKB`) maps TALISMAN LIST keywords to effects
+- Scans use `tempRegexTrigger` for ARTEFACT LIST and TALISMAN LIST parsing with MORE pagination handling
+- Auto-probes unknown items (0.7s delay between probes) and flags them for manual review
+- Persistence follows the Legend Deck Manager pattern: `table.save/load` to `getMudletHomeDir()/itemcatalog` with `_ataxia_backup` fallback
+- Skip patterns exclude boring consumables (vials, pipes)
+
+### Files added
+- `src_new/scripts/.../item_catalog/001_Item_Catalog_Init.lua` — Namespace, config, state machine, echo helpers, skip patterns
+- `src_new/scripts/.../item_catalog/002_Item_Catalog_DB.lua` — Knowledge base (~400 lines, 200+ artefacts, all talisman sets)
+- `src_new/scripts/.../item_catalog/003_Item_Catalog_Functions.lua` — Scan orchestration, KB matching, display, search, command dispatch
+- `src_new/scripts/.../item_catalog/004_Item_Catalog_Save_Load.lua` — Persistence (save/load/backup)
+- `src_new/aliases/.../item_catalog/001_Item_Catalog.lua` — `catalog` alias dispatcher
+
+### Files changed
+- `src_new/scripts/.../ataxia/001_Save_Load_Settings.lua` — Added `itemCatalog.save()` to `ataxia_saveSettings()` and `itemCatalog.load()` to `ataxia_loadSettings()`
+
+---
+
 ## 2026-03-11 — Fix Shalestorm+Scintilla Priority + Burns Double-Counting
 
 ### Bug Fixes
