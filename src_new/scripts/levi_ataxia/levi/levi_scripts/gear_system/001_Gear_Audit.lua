@@ -103,6 +103,16 @@ function gearAudit.cleanup()
   end
   gearAudit.state.triggers = {}
   gearAudit.state.timers = {}
+  -- Kill scrap event handler if active
+  if gearAudit.scrapEventHandler then
+    killAnonymousEventHandler(gearAudit.scrapEventHandler)
+    gearAudit.scrapEventHandler = nil
+  end
+  if gearAudit.scrapTimeoutTimer then
+    killTimer(gearAudit.scrapTimeoutTimer)
+    gearAudit.scrapTimeoutTimer = nil
+  end
+  gearAudit.scrapQueue = nil
 end
 
 --------------------------------------------------------------------------------
@@ -707,12 +717,10 @@ function gearAudit.displayScrap(filterSet)
   end
 
   cecho("\n\n<cyan>--------------------------------------------------------------------------------")
-  local batchSize = 5
-  local batches = math.ceil(#scraps / batchSize)
-  cecho(string.format("\n<white>  Scrapping %d items (%d per batch, %d batches)...", #scraps, batchSize, batches))
+  cecho(string.format("\n<white>  Scrapping %d items (1 per balance)...", #scraps))
   cecho("\n<cyan>================================================================================\n")
 
-  -- Store queue on namespace, process in batches via self-chaining timer
+  -- Store queue on namespace, process one at a time gated on balance
   gearAudit.scrapQueue = {}
   for _, s in ipairs(scraps) do
     table.insert(gearAudit.scrapQueue, string.format("GEAR SCRAP %d CONFIRM", s.gear.id or 0))
@@ -720,32 +728,56 @@ function gearAudit.displayScrap(filterSet)
   gearAudit.scrapIndex = 1
   gearAudit.scrapTotal = #scraps
 
-  -- Process a batch of commands, then schedule next batch
-  local function processBatch()
-    local startIdx = gearAudit.scrapIndex
-    if startIdx > gearAudit.scrapTotal then
+  -- Cleanup scrap-specific handlers
+  local function scrapCleanup()
+    if gearAudit.scrapEventHandler then
+      killAnonymousEventHandler(gearAudit.scrapEventHandler)
+      gearAudit.scrapEventHandler = nil
+    end
+    if gearAudit.scrapTimeoutTimer then
+      killTimer(gearAudit.scrapTimeoutTimer)
+      gearAudit.scrapTimeoutTimer = nil
+    end
+  end
+
+  -- Process one command when balance is available
+  local function processNext()
+    local idx = gearAudit.scrapIndex
+    if idx > gearAudit.scrapTotal then
+      scrapCleanup()
       gearAudit.echo(string.format("Scrap complete. Sent %d commands.", gearAudit.scrapTotal))
       gearAudit.scrapQueue = nil
       return
     end
-    local endIdx = math.min(startIdx + batchSize - 1, gearAudit.scrapTotal)
-    for i = startIdx, endIdx do
-      local cmd = gearAudit.scrapQueue[i]
-      cecho(string.format("\n<yellow>    [%d/%d] %s", i, gearAudit.scrapTotal, cmd))
-      send(cmd, false)
-    end
-    gearAudit.scrapIndex = endIdx + 1
-    if gearAudit.scrapIndex <= gearAudit.scrapTotal then
-      tempTimer(1, processBatch)
-    else
-      tempTimer(1, function()
-        gearAudit.echo(string.format("Scrap complete. Sent %d commands.", gearAudit.scrapTotal))
-        gearAudit.scrapQueue = nil
-      end)
-    end
+
+    -- Gate on balance (read GMCP directly to avoid handler ordering issues)
+    if gmcp.Char.Vitals.bal ~= "1" then return end
+
+    local cmd = gearAudit.scrapQueue[idx]
+    cecho(string.format("\n<yellow>    [%d/%d] %s", idx, gearAudit.scrapTotal, cmd))
+    send(cmd, false)
+    gearAudit.scrapIndex = idx + 1
+
+    -- Reset safety timeout for next command (10s)
+    if gearAudit.scrapTimeoutTimer then killTimer(gearAudit.scrapTimeoutTimer) end
+    gearAudit.scrapTimeoutTimer = tempTimer(10, function()
+      scrapCleanup()
+      gearAudit.echo(string.format(
+        "Scrap timed out waiting for balance at item %d/%d.",
+        gearAudit.scrapIndex, gearAudit.scrapTotal
+      ))
+      gearAudit.scrapQueue = nil
+    end)
   end
 
-  processBatch()
+  -- Register event handler: fires on every vitals update (every prompt)
+  gearAudit.scrapEventHandler = registerAnonymousEventHandler(
+    "gmcp.Char.Vitals",
+    processNext
+  )
+
+  -- Send first command immediately
+  processNext()
 end
 
 --------------------------------------------------------------------------------
