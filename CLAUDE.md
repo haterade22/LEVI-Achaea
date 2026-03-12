@@ -253,265 +253,30 @@ All combat systems in `src_new/scripts/levi_ataxia/levi/levi_scripts/`:
 
 V3 is the **single source of truth** for target affliction tracking. It models multiple possible world states simultaneously with probability weights, resolving ambiguous cures via branching and collapsing branches via verification signals.
 
-**Core Files:**
-- `affliction_tracking_core/007_Branching_State_Tracker.lua` — V3 engine (branching, collapsing, cache, sync)
-- `affliction_tracking_core/008_V3_Integration.lua` — Verification handlers, cure lists, lock detection, V2 stubs
-- `017_Affliction_Management.lua` — Public API (`haveAff`, `tarAffed`, `erAff`)
+**Full documentation**: See `memory/affliction-tracking.md` (API, data structure, algorithm, verification signals, performance, commands)
 
-**Public API:**
-
-| Function | Purpose |
-|----------|---------|
-| `tarAffed(...)` | Add afflictions to target (sets tAffs + calls applyAffV3 + raises event) |
-| `erAff(what)` | Remove affliction (clears tAffs + calls removeAffV3 + raises event) |
-| `haveAff(what)` | Query affliction (routes to haveAffV3, fallback to tAffs during load) |
-| `haveAffV3(aff, threshold)` | Probabilistic query (default threshold 30%) |
-| `getAffProbabilityV3(aff)` | Get exact probability 0.0–1.0 (O(1) via cache) |
-| `getStateProbabilityV3(affList)` | Joint probability of multiple affs (for lock detection) |
-| `getAllAffProbabilitiesV3()` | Full probability map {aff=prob, ...} |
-
-**Data Structure:**
-```lua
-afflictionStatesV3 = {
-    {affs = {asthma=true, paralysis=true}, prob = 0.6},
-    {affs = {paralysis=true},              prob = 0.4},
-}
--- "60% chance target has both, 40% only paralysis"
--- All probabilities always sum to 1.0
-```
-
-**Algorithm:**
-1. **Apply aff**: Add to ALL branches (definite — hit confirmed)
-2. **Remove aff**: Remove from ALL branches (definite — cure confirmed)
-3. **Ambiguous herb cure**: BRANCH — split each branch into sub-branches per possible cure, divide probability equally
-4. **Verification signal**: COLLAPSE — eliminate branches contradicting the observation, renormalize
-
-**Verification Signals** (collapse triggers in 008_V3_Integration.lua):
-
-| Signal | Proves | Function |
-|--------|--------|----------|
-| Target fumbles | Clumsiness present | `onTargetFumbleV3()` → `collapseAffPresentV3("clumsiness")` |
-| Target vomits | Nausea present | `onTargetVomitV3()` → `collapseAffPresentV3("nausea")` |
-| Target smokes | Asthma absent | `onTargetSmokeV3()` → `collapseAffAbsentV3("asthma")` |
-| Target applies salve | Slickness absent | `onTargetApplySalveV3()` → `collapseAffAbsentV3("slickness")` |
-| Target stumbles | Dizziness present | `onTargetStumbleV3()` → `collapseAffPresentV3("dizziness")` |
-| Target seizure | Epilepsy present | `onTargetSeizureV3()` → `collapseAffPresentV3("epilepsy")` |
-| Target paralysis | Paralysis present | `onTargetParalysisBlockV3()` → `collapseAffPresentV3("paralysis")` |
-
-**Lock Detection:**
-```lua
-getLockStatusV3() → {
-    softlock = P(anorexia AND asthma AND slickness),
-    hardlock = P(anorexia AND asthma AND slickness AND impatience),
-    truelock = P(anorexia AND asthma AND slickness AND impatience AND paralysis),
-}
-```
-
-**Performance Controls:**
-- Deduplication: merge identical branches (sum probabilities)
-- Pruning: branches < 1% probability eliminated, probability redistributed
-- Hard cap: max 50 branches, lowest dropped if exceeded
-- Cache: `affCacheV3{}` rebuilt after every state change → O(1) lookups
-
-**tAffs Backward Compatibility:**
-- `tAffs` is a synced read cache, populated by `syncToOldSystemV3()`
-- Prob >= 30% → `tAffs[aff] = true`; Prob < 1% → `tAffs[aff] = false`
-- 89+ direct access sites across 30+ files read from `tAffs`
-- 8 reset sites all call `resetStatesV3()` alongside tAffs reset
-
-**Simple Tracking** (non-branching): Limb damage, prone, stun, blindness, deafness, rebounding, shield — tracked as simple booleans in `simpleAffsV3`, never create branches.
-
-**V2 Stubs**: V2 is deactivated (6 files `isActive: 'no'`). 19 compatibility stubs in 008 route V2 calls to V3 (`addAffV2`, `removeAffV2`, `haveAffV2`, `targetAteV2`, etc.).
-
-**Event Architecture:**
-- Events (`"tar afflicted"`, `"target cured aff"`) fire from public API only (`tarAffed()`, `erAff()`)
-- V3 internals (`applyAffV3`, `removeAffV3`) do NOT raise events
-- Offense systems should always use the public API, never call V3 functions directly
-
-**Verification Commands:**
-```lua
-v3status()                    -- Show branch count, top branches
-v3probs()                     -- Show all affliction probabilities
-showBranchesV3()              -- Detailed branch dump
-getLockStatusV3()             -- Lock probabilities
-getAffProbabilityV3("asthma") -- Single aff probability
-```
-
-**Offense System Requirements:**
-- Use `haveAff(aff)` for standard checks (routes to V3 at 30% threshold)
-- Use `haveAffV3(aff, 0.9)` for high-confidence gates
-- Use `getAffProbabilityV3(aff)` for probability-weighted decisions
-- Class-specific `hasAff()` wrappers (apostate, blademaster, DWC, depthswalker) all delegate to `haveAff()`
+**Quick API reference:**
+- `tarAffed(...)` — Add afflictions (sets tAffs + V3 + raises event)
+- `erAff(what)` — Remove affliction (clears tAffs + V3 + raises event)
+- `haveAff(what)` — Query (routes to V3 at 30% threshold, fallback tAffs during load)
+- `getAffProbabilityV3(aff)` — Exact probability 0.0–1.0
+- Always use the public API — never call `applyAffV3()`/`removeAffV3()` directly
 
 ### ataxiaBasher (Automated Hunting System)
 
-The basher provides automated target selection and attack execution for PvE hunting. It supports 20+ classes, two operating modes (manual/areabash), and integrates with the mapper, GMCP, battlerage, and GUI systems.
+Automated target selection and attack execution for PvE hunting. Supports 20+ classes, manual/areabash modes, integrates with mapper, GMCP, battlerage, and GUI.
 
-**Core Files:**
-| File | Purpose |
-|------|---------|
-| `src_new/scripts/.../basher/001_Bashing_Functions.lua` | Attack dispatch, flee logic, emergency checks, battlerage assembly |
-| `src_new/scripts/.../basher/002_Class_Bashing.lua` | Class-specific attack builders (20+ classes) |
-| `src_new/scripts/.../basher/003_Bash_Stats_Functions.lua` | Session statistics |
-| `src_new/scripts/.../genrunning/001_Bashing_API.lua` | Path generation, room scanning, death recovery, flee timeout, mapper-stuck detection |
-| `src_new/scripts/.../genrunning/002_search_targets.lua` | Target selection, stormhammer caching, shield retarget, ldeck rules |
-| `src_new/scripts/.../genrunning/004_Autobashing_Functions.lua` | Main loop, mode control, GMCP balance tracking |
-| `src_new/triggers/.../007_Mob_Shielded.lua` | Shield detection trigger (uses configurable timers) |
-| `src_new/scripts/.../update_stuff/002_ataxia_Room_Update.lua` | Room change handler (invalidates stormhammer cache) |
-| `src_new/scripts/.../update_stuff/003_ataxia_RoomContents_Update.lua` | Denizen list handler (invalidates stormhammer cache) |
+**Full documentation**: See `memory/basher.md` (dispatch chain, gates, danger levels, flee logic, room arrival flow, stormhammer caching)
 
-**Key Functions:**
-| Function | Purpose |
-|----------|---------|
-| `search_targets()` | Scans room for valid targets from `ataxiaBasher.targetList[area]` |
-| `ataxiaBasher_attack()` | Top-level attack dispatch — danger level check → shield/flee/attack routing |
-| `ataxiaBasher_assembleAttack()` | Builds and sends the actual attack command (class dispatch, gold, battlerage) |
-| `ataxiaBasher_dangerLevel()` | Returns danger state: "flee" / "shield" / "wait" / "attack" based on HP% thresholds |
-| `ataxiaBasher_executeFlee()` | Executes flee sequence — sets bashFlee, flee timer, sends retreat/flee |
-| `ataxiaBasher_checkFleeRecovery()` | Checks if HP recovered enough to resume after flee (called from prompt) |
-| `ataxiaBasher_checkPlayerFlee()` | Per-area player-presence flee check |
-| `ataxiaBasher_patterns()` | Main prompt loop — fires attacks when balanced, records balance samples |
-| `ataxiaBasher_stormhammer()` | Populates AoE target list (dirty-flag cached, lazy recompute) |
-| `ataxiaBasher_invalidateStormhammer()` | Marks stormhammer cache dirty (called by room/denizen update events) |
-| `ataxiaBasher_countMobsInRoom(mobName)` | Counts specific mob types in current room |
-| `ataxiaBasher_preCombatLdeck()` | Data-driven pre-combat legend deck card draws |
-| `ataxiaBasher_assembleBattlerage()` | Builds battlerage commands via generic handlers with rage conservation |
-| `ataxiaBasher_standardBattlerage()` | Generic battlerage handler for most classes |
-| `ataxiaBasher_crowdControlBattlerage()` | Generic CC battlerage handler (Bard, Jester, etc.) |
-| `ataxiaBasher_validTargets()` | Returns count of valid targets in room |
-| `ataxiaBasher_shieldedTarget()` | Handles mob shield retarget with configurable timers |
-| `ataxiaBasher_onDeath()` | Death handler — fully disables basher, clears queues/timers/rotation, moves to safe room |
-| `ataxiaBasher_startFleeTimer()` | Flee circuit breaker (20s default timeout) |
-| `ataxiaBasher_startStuckTimer()` | Mapper-stuck detection for speedwalk hangs |
+**Core Files:** `basher/001_Bashing_Functions.lua` (attack dispatch), `basher/002_Class_Bashing.lua` (20+ classes), `genrunning/001-004` (API, targets, enable/disable, main loop)
 
-**Key Variables:**
-| Variable | Purpose |
-|----------|---------|
-| `ataxiaBasher.enabled` | System on/off toggle |
-| `ataxiaBasher.manual` | Manual targeting mode |
-| `ataxiaBasher.targetList[area]` | Table of target mob names per area |
-| `ataxia.denizensHere` | Table of NPCs in current room (id → name) |
-| `target` | Current target ID |
-| `found_target` | Boolean — valid target exists |
-| `stormhammerTargets` | List of IDs for AoE attacks |
-| `ataxiaBasher_stormhammerDirty` | Dirty flag for stormhammer cache invalidation |
-
-**Configuration Options:**
-| Setting | Type | Default | Purpose |
-|---------|------|---------|---------|
-| `ataxiaBasher.enabled` | bool | false | Master on/off |
-| `ataxiaBasher.paused` | bool | false | Pause without disable |
-| `ataxiaBasher.manual` | bool | false | Manual movement mode |
-| `ataxiaBasher.areabash` | bool | false | Full automation mode |
-| `ataxiaBasher.fleeThreshold` | number | varies | HP% to trigger flee |
-| `ataxiaBasher.dangerCount` | number | varies | Max dangerous mobs per room |
-| `ataxiaBasher.goldPack` | string | `"pack436363"` | Container ID for gold collection |
-| `ataxiaBasher.fleeTimeout` | number | 20 | Flee circuit breaker timeout (seconds) |
-| `ataxiaBasher.shieldTimers` | table | `{["a mhun knight"]=4.7}` | Per-mob shield durations |
-| `ataxiaBasher.shieldTimerDefault` | number | 3.1 | Default shield duration |
-| `ataxiaBasher.shieldswap` | bool | varies | Enable shield retarget swapping |
-| `ataxiaBasher.targetList` | table | — | Per-area target mob lists |
-| `ataxiaBasher.mobIgnore` | table | — | NPCs to skip |
-| `ataxiaBasher.dangerList` | table | — | Dangerous mob names |
-| `ataxiaBasher.ldeckRules` | table | see below | Data-driven legend deck draw rules |
-
-**Pre-Combat Legend Deck (Data-Driven):**
-
-The basher draws legend deck cards before attacking dangerous multi-target rooms, configured via `ataxiaBasher.ldeckRules`:
-
-```lua
-ataxiaBasher.ldeckRules = {
-  { mob = "an elite mhun keeper", count = 3, cards = {"maran", "matic"} },
-  { mob = "a mhun knight", count = 3, cards = {"maran"} },
-  { mob = "a mhun knight", count = 4, cards = {"maran", "matic"} },
-  -- Add rules for other areas/mobs here
-}
-```
-
-Cards are drawn using the queue system (`queue add free ldeck draw <card>`) and only once per room entry (tracked via `ataxiaBasher.ldeckDrawnRoom`).
-
-**Stormhammer Dirty-Flag Caching:**
-
-Stormhammer target list recomputation is cached via a dirty flag:
-1. Room change and denizen update events call `ataxiaBasher_invalidateStormhammer()` (sets `ataxiaBasher_stormhammerDirty = true`)
-2. `ataxiaBasher_stormhammer()` short-circuits if the dirty flag is false
-3. When the basher logic calls `stormhammer()` during the prompt cycle, denizen data is fully up to date
-4. This avoids stale-data recomputes on room entry and redundant N-per-room recomputes
-
-**Robustness Features:**
-| Feature | Description |
-|---------|-------------|
-| **Flee circuit breaker** | If still fleeing after 20s (configurable), disables basher and alerts player |
-| **Death recovery** | Fully disables basher on death (clears queues, kills timers, stops rotation), moves to `mmp.previousroom` after 2s to heal |
-| **Death triggers** | `406_Own_Starburst.lua` (starburst text) and `407_Player_Slain.lua` ("You have been slain") both call `ataxiaBasher_onDeath()` (idempotent) |
-| **Mapper-stuck detection** | Timer checks if speedwalk counter hasn't changed, triggers `pathFail()` |
-| **Nil guards** | `mmp.previousroom`, player database, area targetList all nil-checked |
-| **Rage conservation** | Skips battlerage abilities if mob is near death (< 15% HP) |
-
-**Attack Flow:**
-```
-Room Entry (GMCP)
-    ↓
-ataxia_Room_Update() → invalidateStormhammer()
-    ↓
-ataxia_RoomContents_Update() → invalidateStormhammer(), raiseEvent("targets updated")
-    ↓
-Prompt Trigger → ataxia_promptCommands()
-    ↓
-ataxiaBasher_scanRoom() → need_roomCheck flag, player/danger detection
-    ↓
-search_targets() → Find valid target from targetList[area]
-    ↓
-ataxiaBasher_preCombatLdeck() → Draw cards if rules match (data-driven)
-    ↓
-ataxiaBasher_patterns() → Check balance/standing, recordBalanceSample()
-    ↓
-ataxiaBasher_attack() → dangerLevel() check
-    ↓
-  flee → ataxiaBasher_executeFlee()
-  shield → touch shield
-  wait → skip cycle
-  attack → ataxiaBasher_assembleAttack() → class dispatch + battlerage
-```
+**Key Config:** `ataxiaBasher.enabled`, `.paused`, `.manual`, `.areabash`, `.targetList[area]`, `.ldeckRules`, `.goldPack`, `.fleeTimeout` (20s), `.shieldTimers`
 
 ### GUI System (ataxiagui)
-- Left panel: Players, Room info, Bash stats
-- Right panel: Map display, Chat tabs
-- Bottom panel: Health/Mana/Willpower/Endurance gauges
-- Balance/Equilibrium indicators
-- Tabbed chat (All, City, Clans, Misc, Order, Party, Tells)
-- Chat preserves original MUD ANSI colors via `ansi2decho()` + `decho()` (no per-channel flat coloring)
 
-**Window Management (`Adjustable.Container`)**:
-All GUI windows use `Adjustable.Container:new({name = "...", ...})` which provides:
-- **Auto-save/load**: Position and size persist automatically via the `name` parameter (`autoLoad` defaults to `true`)
-- **Drag to reposition**: Windows are draggable by default
-- **Lock/unlock**: `lockContainer()`/`unlockContainer()` + `savePosition()` for explicit save on lock
-- **Double-click to pop out**: Custom `convertAdj.Init` wrapper enables popping windows into `Geyser.UserWindow` (separate OS window) via double-click on title bar
-- **Reset**: `zfix <windowname>` alias recreates with `autoLoad=false` to discard saved position
-- ~20 windows total: chat, map, bash, afflictions, enemy, ally, room players, room denizens, room items, defence, stats, cape, prompt, hunter, SLC, logger, affliction lock, room info, target affs V2
+~20 windows using `Adjustable.Container`. Tabbed chat, map, bash stats, afflictions, vital bars, SLC, and more.
 
-**Startup dispatch**: `039_EDIT_ME__Startup_Main.lua` iterates `zgui.modules` array and calls `zgui[moduleName]()` for each. When renaming build functions (e.g., `zgui.buildChat` → `ataxia.buildChat`), a backward-compat shim is needed: `zgui.buildChat = ataxia.buildChat` (placed after the function definition).
-
-**Movable Vital Bars (`ataxia.bars`)**:
-Configurable floating gauge bars for Health, Mana, Willpower, Endurance, and Cape. Each bar is an `Adjustable.Container` with a `Geyser.Gauge` inside. Positions auto-save.
-- **Build**: `ataxia.bars.buildAll()` — called from startup after zgui module dispatch
-- **Update**: `ataxia.bars.update()` — called from `ataxiagui_updateVitals()` (vitals GMCP handler)
-- **Cape update**: `ataxia.bars.updateCape()` — called from `zgui.showCape()` and `zgui.clearCape()`
-- **Config**: Saved to `getMudletHomeDir() .. "/ataxia_bars_config.lua"` via `table.save`/`table.load`
-- **Alias**: `ataxiabars` → `ataxia.bars.dispatch(args)` — on/off, individual toggle, reset, status
-- **Files**: `build_windows/016_buildVitalBars.lua`, `aliases/zgui_redux/007_(LEVIBARS)_Vital_Bars.lua`
-
-**Namespace migration status** (zgui → ataxia):
-| Component | Old Namespace | New Namespace | Status |
-|-----------|--------------|---------------|--------|
-| Chat | `zgui.chat` | `ataxia.chat` | Migrated (shim in place) |
-| Chat size | `zgui.chatSize` | `ataxia.chatSize` | Migrated |
-| Hunting stats | `zData` | `ataxia.data` | Migrated (shim in place) |
-| Vital bars | — (new) | `ataxia.bars` | New system |
-| Bash window | `zgui.bwindow` | `zgui.bwindow` | Not yet migrated |
-| Map | `zgui.map` | `zgui.map` | Not yet migrated |
-| All other windows | `zgui.*` | `zgui.*` | Not yet migrated |
+**Full documentation**: See `memory/gui-windows.md` (Adjustable.Container patterns, namespace migration status, vital bars, ANSI color handling)
 
 ### Gear Audit & BiS Analysis (`gearAudit`)
 Automated gear inventory and PvE Best-in-Slot scoring system. Collects all gear via GEAR LIST ALL + GEAR PROBE, then scores items for PvE damage output.
@@ -1353,68 +1118,11 @@ ataxia.defense.antiSerpent(false)  -- Restore normal priorities
 
 ### Self Limb Counter (SLC) — Defensive Limb Tracking
 
-The SLC tracks exact limb damage percentages from combat text and provides automated defensive responses. Replaces the legacy hit-count estimator.
+Tracks exact limb damage percentages from combat text with automated defensive responses (auto-parry, auto-shield, party callouts, SSC priority).
 
-**Core Files:**
-| File | Purpose |
-|------|---------|
-| `src_new/scripts/.../self_limb_tracking/001_Different_Attacks.lua` | Text highlighting (`highlightLimb()`) |
-| `src_new/scripts/.../self_limb_tracking/002_Track_The_Damage.lua` | Core tracking, thresholds, events, GUI |
-| `src_new/scripts/.../self_limb_tracking/003_Parrying.lua` | Weight-based auto-parry + anti-Shikudo |
-| `src_new/scripts/.../self_limb_tracking/004_Defensive_Reactions.lua` | Event-driven defensive reactions |
-| `src_new/aliases/.../slc/005_SLC_Toggle.lua` | Runtime toggle alias (`slc on/off`, etc.) |
+**Full documentation**: See `memory/slc.md` (thresholds, events, parry modes, defensive reactions, config)
 
-**Namespace:** `selfLimbDamage` (global)
-- `selfLimbDamage[limb]` = `{ damage, lastHit, hitCount, threshold }`
-- `selfLimbDamage.config` = all toggles, thresholds, parry weights
-- `selfLimbDamage.reactions` = per-prompt spam prevention flags
-
-**Threshold System:**
-| State | Condition | Alert |
-|-------|-----------|-------|
-| safe | > warningHits to break | — |
-| warning | exactly warningHits (default 2) | Yellow box echo |
-| critical | exactly criticalHits (default 1) | Orange box echo |
-| broken | damage >= 100 or aff event | Dark red |
-
-**Events:**
-| Event | Payload | When |
-|-------|---------|------|
-| `"self limb damaged"` | limb, damage, lastHit | Every damage update |
-| `"self limb threshold"` | limb, threshold, hitsLeft | Threshold state change |
-| `"self limb broken"` | limb | Limb breaks |
-
-**Defensive Reactions (004, event-driven):**
-| Reaction | Config Toggle | Behavior |
-|----------|---------------|----------|
-| SSC Priority | `sscPriority` | `curing prioaff <aff>` on warning/critical |
-| Auto-Shield | `autoShield` | `touch shield` on critical (aeon-gated, cooldown) |
-| Party Callout | `partyCallout` | `pt [SLC] My <limb> is 1 hit from break!` (per-limb dedup) |
-| Class Defenses | `classDefenses` | Per-class abilities with cooldowns + gate functions |
-
-**Parry System (003, prompt-driven):**
-- Weight-based: `parryWeights` config (critical=10, warning=7, moderate=4, minor=1, broken=-10)
-- Modes: `stand` (leg bias), `defend` (non-leg bias), `manual`, `randomarm`, `randomleg`
-- Anti-Shikudo: stance-aware dynamic parry (Willow→legs, Rain→arms, Oak/Gaital→head)
-- Tie-breaking: keep current parry if among ties (prevents spam switching)
-
-**Runtime Aliases:**
-| Alias | Action |
-|-------|--------|
-| `slc` | Show status + all toggle states |
-| `slc on/off` | Master toggle |
-| `slc shield/party/ssc/warn/crit/shikudo on/off` | Per-feature toggle |
-| `slc parry <mode>` | Switch parry mode |
-| `slc reset` | Reset all limb damage |
-| `slc gui` | Toggle GUI window |
-
-**Config Persistence:** Saved as separate `slcconfig` file via `table.save`/`table.load` in `001_Save_Load_Settings.lua`. Setup wizard: `ataxia setup slc`.
-
-**Key Implementation Patterns:**
-- Event handler cleanup on reload: all `registerAnonymousEventHandler` calls store IDs and `killAnonymousEventHandler` before re-registering
-- GUI debounce: dirty-flag + `tempTimer(0)` coalesces rapid damage events into single redraw
-- Module-level constants: `LIMB_LIST`, `SHORT_NAMES`, `limbToAff` avoid hot-path allocation
-- `classDefenses[].gate` functions cannot be persisted via `table.save()` — must be re-registered at script load
+**Namespace:** `selfLimbDamage` (global). **Alias:** `slc`. **Files:** `self_limb_tracking/002-004`, `aliases/.../slc/005_SLC_Toggle.lua`
 
 ---
 
@@ -1546,281 +1254,21 @@ See `.claude/classes/infernal.md` for complete DWC vivisect strategy documentati
 
 ## Blademaster Combat System
 
-### Strategies Available
+3 modes: double-prep (`bmd`), quad-prep (`bmdq`), brokenstar (`bmbs`). Lightning/Ice phase system for damage kills.
 
-| Strategy | Command | Description |
-|----------|---------|-------------|
-| **Double-Prep** | `bmd` | Legs only - prep both legs, double-break, mangle |
-| **Quad-Prep** | `bmdq` | Arms + legs - prep all 4, break arms, break legs, mangle |
-| **Brokenstar** | `bmbs` | Upper + legs + impale route - instant kill at 700 bleed |
-| **Ice Dispatch** | `bmice` | Lightning/Ice phase - prep with lightning, damage with ice |
+**Full documentation**: See `memory/blademaster.md` (strategies, phase system, helper functions, config, brokenstar kill route)
 
-### Lightning/Ice Phase System (bmice)
-
-The Ice Dispatch uses a two-phase approach based on limb state:
-
-| Phase | Condition | Infusion | Primary Attack |
-|-------|-----------|----------|----------------|
-| **prep** | Legs not both broken | LIGHTNING | LEGSLASH (prep damage) |
-| **ice** | Both legs broken | ICE | STERNUM (damage kill) |
-
-**Phase Logic**:
-```lua
-function blademaster.getPhase()
-  if blademaster.checkBothLegsBroken() then
-    return "ice"   -- Both legs broken, switch to ice for damage
-  else
-    return "prep"  -- Still prepping legs with lightning
-  end
-end
-```
-
-**Key Mechanics**:
-- **INFUSE LIGHTNING**: Used during prep phase for faster limb damage
-- **INFUSE ICE**: Switched when both legs broken for raw damage output
-- **STERNUM**: Primary attack in ice phase for damage kill
-- **AIRFIST**: Reactive ability when target parries focus leg (25 shin cost)
-
-### Brokenstar Kill Route (bmbs)
-
-```
-1. UPPER PREP: Centreslash up/down to get torso+head to 90%+
-2. LEG PREP: Legslash alternating to get both legs to 90%+
-3. UPPER BREAK: Centreslash up/down to break torso+head (100%+)
-4. LEG BREAK: Legslash + KNEES to break legs and prone
-5. IMPALE: Impale the prone target
-6. IMPALESLASH: Slash arteries for bleeding
-7. BLADETWIST: Twist until 700+ bleeding (discern on 3rd)
-8. WITHDRAW: Withdraw blade (or skip if writhed free)
-9. BROKENSTAR: Execute instant kill
-```
-
-### Dynamic Centreslash Direction
-
-The system auto-selects UP or DOWN to balance torso/head damage:
-- **UP**: Torso = primary (18.1%), Head = secondary (12.1%)
-- **DOWN**: Head = primary (18.1%), Torso = secondary (12.1%)
-- Always hits the **LOWER** limb as primary (like `getFocusLeg()` for legs)
-
-### Helper Functions
-
-| Function | Purpose |
-|----------|---------|
-| `blademaster.getFocusLeg()` | Returns "left" or "right" based on lower leg damage |
-| `blademaster.getCentreslashDirection()` | Returns "up" or "down" based on lower limb |
-| `blademaster.checkWillPrepBothLegs()` | True if next hit preps both legs to 90%+ |
-| `blademaster.checkWillPrepUpper()` | True if next centreslash preps both torso/head |
-| `blademaster.getPhase()` | Returns current phase ("prep" or "ice") |
-| `blademaster.getShin()` | Returns current shin resource |
-| `blademaster.checkDoubleBreakReady()` | True if both legs at prepThreshold |
-| `blademaster.checkBothLegsBroken()` | True if both legs at breakThreshold |
-| `blademaster.needsAirfist()` | Checks if airfist should be used (parry + cooldown) |
-| `blademaster.calculateOptimalPath()` | Returns optimal attack sequence to reach 90% |
-| `blademaster.recordLegDamage(leg, pct)` | Records leg damage from hits |
-| `blademaster.recordLegslashDamage(leg, pct)` | Records legslash-specific damage |
-| `blademaster.hasAff(aff)` | Check affliction via V3 → V2 → V1 routing |
-| `blademaster.getAffProb(aff)` | Get affliction probability (V3: 0.0-1.0, V2/V1: binary) |
-| `blademaster.getTrackingSystem()` | Returns "V3", "V2", or "V1" |
-
-### Configuration
-```lua
-blademaster.config = {
-    legBreakThreshold = 100,    -- % to consider leg "broken"
-    legPrepThreshold = 90,      -- % to consider leg "prepped"
-    killHealthThreshold = 30,   -- Target health % for damage kill
-    airfistCooldown = 8,        -- Seconds between airfist uses
-}
-```
-
-### Documentation
-See `.claude/classes/blademaster.md` for complete documentation.
+**Key file:** `blademaster/005_CC_BM_Ice.lua`. **Namespace:** `blademaster`. **Class docs:** `.claude/classes/blademaster.md`
 
 ---
 
 ## Apostate Combat System
 
-### Overview
-The Apostate offensive system (`CC_Apostate`) provides automated curse delivery via DEADEYES, with kill routes for true locking, corrupt burst damage, vivisect, and sleep. Consolidated from 14 legacy files into a single namespace-based system with V3 affliction tracker integration.
+Dual-slot curse engine via DEADEYES. 6 modes: lock (default), mental, group, corrupt, vivisect, sleep. Consolidated from 14 legacy files into `apostate` namespace with V3 integration.
 
-### Key Files
-| File | Purpose |
-|------|---------|
-| `src_new/scripts/.../apostate/015_CC_Apostate.lua` | Complete unified system with `apostate` namespace |
-| *(014 merged into 015)* | Backward-compat wrappers + daemon utilities now in 015 |
-| `src_new/scripts/.../apostate/001-013_*.lua` | Legacy files (all disabled, `isActive: 'no'`) |
-| `src_new/triggers/.../439_NEW_DEADEYES.lua` | Curse detection → `tarAffed()` |
-| `src_new/triggers/.../apostate/007_CORRUPT.lua` | Corrupt cooldown tracking |
+**Full documentation**: See `memory/apostate.md` (curse priority engine, lock progression, corrupt calculator, kill routes, config)
 
-### Kill Routes (6 Modes)
-| Mode | Command | Description |
-|------|---------|-------------|
-| **lock** | `apostate.setMode("lock")` | DEADEYES with kelp stack + asthma-conditional branching toward truelock |
-| **mental** | `apostate.setMode("mental")` | Flood goldenseal+lobelia with mentals (impatience→stupidity→dizziness→vertigo) then transition to lock |
-| **group** | `apostate.setMode("group")` | Pure lock pieces only — no hinder, no probability gates |
-| **corrupt** | `apostate.setMode("corrupt")` | Stack afflictions → `demon corrupt` for damage / catharsis setup |
-| **vivisect** | `apostate.setMode("vivisect")` | Truelock → prone → shrivel 4 limbs → vivisect |
-| **sleep** | `apostate.setMode("sleep")` | Build asthma + impatience + hypersomnia → sleep curse |
-
-### Dual-Slot Curse Priority Engine
-DEADEYES delivers 2 curses per action (2.3s balance). Each slot has an independent priority chain:
-
-**Curse 1 (`selectPrimaryCurse`)** — Truelock chain with asthma-conditional branching:
-```
-Without asthma (< 33%): clumsy → weariness → asthma (kelp stack forces 2 eats)
-With asthma (>= 33%): manaleech → impatience → sicken → anorexia → weariness → class lock → plague
-```
-
-**Curse 2 (`selectSecondaryCurse(c1)`)** — Paralysis-first, fill missing lock pieces:
-```
-[anorexia+sicken pairing] → paralysis → asthma → manaleech (gated asthma >= 33%)
-→ impatience → sicken (gated impatience + asthma) → anorexia → weariness → class lock → plague
-```
-
-**Group Mode** — Pure lock pieces, no hinder:
-```
-Curse 1: impatience → asthma → manaleech → sicken → anorexia → class lock → plague
-Curse 2: [anorexia+sicken pairing] → paralysis → fill remaining
-```
-
-**Mental Mode** — Flood goldenseal+lobelia, then transition to lock:
-```
-Curse 1: impatience → stupidity → dizziness → vertigo → (lock selectors)
-Curse 2: paralysis → fill mental pieces → (lock selectors)
-All at 25% delivery threshold. Transition: impatience(100%) + 2 of {stupidity, dizziness, vertigo}
-```
-
-**Key rules:**
-- Curse 2 never duplicates curse 1 (`c1` checked at every step)
-- Manaleech is smoke-cured — only delivered when asthma >= 33%
-- Anorexia gated behind slickness OR c1=sicken; slickness (via sicken) gated behind impatience
-- Disfigure fires inline with asthma DEADEYES (`;` separator) as asthma probe
-- 2.5s asthma confirm timer after manaleech delivery (V3: collapse if no smoke)
-
-**Orchestrator (`selectCurses`):**
-- Curseward detected → breach + secondary (all modes)
-- Truelock >= 70% → class lock aff + secondary (all modes)
-- Group mode → group curse selectors
-- Lock mode → lock curse selectors
-
-### Lock Progression
-```
-softlock  = asthma + anorexia + slickness
-hardlock  = softlock + impatience
-truelock  = hardlock + paralysis
-classlock = truelock + voyria (class lock aff)
-```
-
-### Attack Builder Priority
-The main attack builder checks kill conditions in this order:
-1. `needVivisect()` — All 4 limbs broken → vivisect
-2. `needShieldStrip()` — Catharsis/corrupt ready but target shielded
-3. `needTrample()` — Truelocked + target prone → trample
-4. `needCatharsis()` — Target mana below threshold → catharsis
-5. `needCorrupt()` — Corrupt damage >= assessed health, or pushes mana to catharsis range
-6. Corrupt followup — Corrupt already fired → catharsis
-7. `needShrivel()` — Vivisect mode, truelocked, prone, limbs remaining
-8. Default: DEADEYES dual-curse delivery
-
-### Corrupt Damage Calculator
-```lua
-function apostate.corruptDmg()
-  -- Physical affs × 7 + Mental affs × 8 + Smoke affs × 9
-  -- V3 mode: weights each affliction by probability (0.0-1.0)
-  -- V1/V2 mode: binary 1.0 or 0 per affliction
-end
-```
-
-### V3/V2/V1 Tracking Integration
-Same routing pattern as Blademaster:
-| Helper | Purpose |
-|--------|---------|
-| `apostate.hasAff(aff)` | Check affliction via V3 → V2 → V1 routing |
-| `apostate.getAffProb(aff)` | Get affliction probability (V3: 0.0-1.0, V2/V1: binary) |
-| `apostate.getTrackingSystem()` | Returns "V3", "V2", or "V1" |
-| `apostate.getLocks()` | Returns `{softlock, hardlock, truelock}` probabilities |
-
-### Commands
-| Alias | Regex | Action |
-|-------|-------|--------|
-| `cath` | `^cath$` | `apostate.dispatch()` (lock mode) |
-| `KELP STACK` | `^kel$` | `apostate.dispatch()` (lock mode, class-conditional) |
-| `Group Attack` | `^yy$` | `apostate.dispatch()` (group mode) |
-| `Levi Lock Apo` | `^ll$` | `apostate.dispatch()` (lock mode) |
-| `Vivisect` | `^viv$` | `apostate.dispatch()` (vivisect mode) |
-| `SLEEP` | `^slee$` | `apostate.dispatch()` (sleep mode) |
-| `Corrupt` | `^corr$` | `apostate.dispatch()` (corrupt mode) |
-
-### Backward Compatibility (in 015_CC_Apostate.lua)
-| Legacy Function | Mode Set |
-|-----------------|----------|
-| `leviclumsapo()` | lock |
-| `leviweariapo()` | lock |
-| `levisleepapo()` | sleep |
-| `apostate_lock()` | lock |
-| `apostate_lockattack()` | (current mode) |
-| `apostate_lockImpale()` | lock |
-| `apostate_sleepattack()` | sleep |
-| `apostate_clumsy()` | lock |
-| `apostate_vivisect()` | vivisect |
-| `apostate_weari()` | lock |
-| `apostate_mental()` | mental |
-| `apostate_kelp()` | lock |
-| `apostate_group()` | group |
-| `apostate_clumsyillusion()` | lock |
-
-Legacy wrappers kept: `corruptDmg()`, `corruptKill()`, `cathCorrupt()`
-
-### Daemon Utilities (in 015_CC_Apostate.lua)
-| Function | Purpose |
-|----------|---------|
-| `bloodPact()` | Bloodpact setup (fresh blood + no pentagram) |
-| `bloodworm()` | Summon bloodworms |
-| `baalzadeen()` | Ensure Baalzadeen summoned |
-| `apopentagram()` | Pentagram setup |
-| `demon()` / `daemonite()` / `fiend()` / `nightmare()` | Entity management |
-
-### Pre/Post Attack Actions
-**Pre-attack:**
-- Bloodpact setup (fresh blood + no pentagram active)
-- Daegger summon when catharsis/prone situations require it
-
-**Post-attack:**
-- Bloodworm summon (when fresh blood available)
-- Daemon resummon (when wrong daemon type present)
-- Disfigure for disloyalty (when asthma is held and `wantDisloyalty` enabled)
-
-**Inline with DEADEYES:**
-- Disfigure on asthma rounds (`;` separator, EQ-based, probes asthma presence via `disfigureSent` flag)
-
-Note: Daegger hunt was intentionally removed from commands — it slows offense when seconds matter.
-
-### Configuration
-```lua
-apostate.state = {
-  mode = "lock",              -- "lock", "corrupt", "vivisect", "sleep", "group"
-  corrupted = false,          -- corrupt has been fired (awaiting catharsis)
-  lastCorruptTime = 0,        -- corrupt cooldown tracking
-  daeggerhere = false,        -- daegger summoned
-  freshblood = false,         -- fresh blood available for bloodpact
-  fiendthing = "nightmare",   -- preferred lesser daemon
-  wantDisloyalty = false,     -- disfigure toggle
-  disfigureSent = false,      -- disfigure spam protection (once per asthma round)
-  asthmaConfirmTimer = nil,   -- timer: confirm asthma if target doesn't smoke
-  baalzadeenSummoned = false, -- summon dedup flag (prevents spam during GMCP round-trip)
-  partyrelay = true,          -- relay to party
-}
-
-apostate.config = {
-  corruptThreshold = 0.7,   -- V3 probability threshold for corrupt consideration
-  lockThreshold = 0.3,      -- V3 threshold for "has affliction"
-  catharsisThreshold = 50,  -- mana % for catharsis execute
-  sapThreshold = 60,        -- mana % for sap consideration
-  debugEcho = false,        -- enable debug output
-}
-```
-
-### Documentation
-See `.claude/classes/apostate.md` for complete class mechanics and implementation documentation.
+**Key file:** `apostate/015_CC_Apostate.lua`. **Namespace:** `apostate`. **Class docs:** `.claude/classes/apostate.md`
 
 ---
 
@@ -2165,7 +1613,7 @@ Claude Code agent teams enable parallel development across isolated combat subsy
 
 ---
 
-**Last Updated**: 2026-03-10
+**Last Updated**: 2026-03-11
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia

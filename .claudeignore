@@ -1,0 +1,18 @@
+# Build output (generated, not source of truth)
+muddler_project/build/
+levi_test_project/build/
+
+# Muddler generated JSON (source of truth is src_new/)
+muddler_project/src/
+
+# Custom package generated output
+my_package_project/
+
+# Compiled packages (binary)
+packages/
+
+# VS2022 internal state
+.vs/
+
+# Legacy tools (retired)
+tools/legacy/
