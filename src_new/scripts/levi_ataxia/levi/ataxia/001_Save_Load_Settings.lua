@@ -111,15 +111,20 @@ function ataxia_loadSettings()
 	-- ataxia.data.db.addChar). table.save can't serialize functions, so
 	-- a plain table.load would replace sub-tables with function-less copies.
 	-- Recursive merge: preserves functions at all nesting levels.
-	-- table.save can't serialize functions, so a plain table.load would
-	-- replace sub-tables (e.g. ataxia.data.db) with function-less copies.
+	-- table.save can't serialize functions or GUI objects, so we only
+	-- recurse into sub-tables that ALREADY exist in the destination.
+	-- Saved table values with no dst counterpart are skipped (stale
+	-- serialized GUI objects like ataxia.data.hunter.window).
 	local function mergeLoad(path, target)
 		local loaded = {}
 		table.load(path, loaded)
 		local function deepMerge(src, dst)
 			for k, v in pairs(src) do
-				if type(v) == "table" and type(dst[k]) == "table" then
-					deepMerge(v, dst[k])
+				if type(v) == "table" then
+					if type(dst[k]) == "table" then
+						deepMerge(v, dst[k])
+					end
+					-- skip: don't inject stale serialized tables into runtime
 				else
 					dst[k] = v
 				end

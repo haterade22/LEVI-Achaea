@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-03-12 — Fix: zData hunting database nil errors
+
+### Bug Fix: `mergeLoad` shallow merge wiping functions
+
+**Files:** `src_new/scripts/levi_ataxia/levi/ataxia/001_Save_Load_Settings.lua`
+
+**Problem:** `ataxia.data.db.addChar` and `ataxia.data.db.zoneAdd` were nil at runtime, causing errors on crit hits and zone changes. Both functions are defined in `001_Experience_Database.lua` during script load, but were wiped when `ataxia_loadSettings()` ran on `sysLoadEvent`.
+
+**Root cause:** The `mergeLoad()` helper only merged 1 level deep. When loading saved `ataxia` data from disk, it correctly merged sub-keys of `ataxia.data`, but for nested tables like `ataxia.data.db`, it replaced the entire table with the saved (function-less) copy. Since `table.save` can't serialize Lua functions, the saved `ataxia.data.db` was a plain data table with no `addChar`, `zoneAdd`, `showData`, etc.
+
+**Fix:** Made `mergeLoad` recursive via an inner `deepMerge` function. Now when both the loaded value and existing value are tables at any depth, it merges into the existing table (preserving functions) instead of replacing it.
+
+---
+
 ## 2026-03-12 — Item Catalog System
 
 ### New Feature: Item Catalog (`catalog`)
