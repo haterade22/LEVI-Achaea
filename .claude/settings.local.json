@@ -4,5 +4,30 @@
       "Bash(powershell -Command \"Expand-Archive -Path ''.\\\\Loki 2.1.4 + AK 8.6.5 \\(modified\\) \\(package install\\).mpackage'' -DestinationPath ''.\\\\extracted'' -Force\")",
       "Bash(powershell -Command \"Copy-Item ''.\\\\Loki 2.1.4 + AK 8.6.5 \\(modified\\) \\(package install\\).mpackage'' ''.\\\\temp.zip''; Expand-Archive -Path ''.\\\\temp.zip'' -DestinationPath ''.\\\\extracted'' -Force; Remove-Item ''.\\\\temp.zip''\")"
     ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '=== LEVI-Achaea Session ===' && echo 'Version:' $(cat version.txt) && echo 'Recent:' && git log --oneline -5 2>/dev/null || true",
+            "statusMessage": "Loading project context..."
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"$TOOL_INPUT\" | grep -qE 'convert_to_muddler|muddle\\.bat|build\\.sh'; then if pgrep -f 'convert_to_muddler|muddle' > /dev/null 2>&1; then echo 'BLOCKED: A build process is already running.'; exit 2; fi; fi; exit 0",
+            "statusMessage": "Checking for concurrent builds..."
+          }
+        ]
+      }
+    ]
   }
 }

@@ -1,5 +1,0 @@
-ataxiaToggle("on")
-
-
-
-mindlocked = false

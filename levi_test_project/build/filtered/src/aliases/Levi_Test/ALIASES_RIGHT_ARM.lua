@@ -1,2 +1,0 @@
-targetlimb = "right arm"
-dwcprep()

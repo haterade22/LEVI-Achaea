@@ -1,1 +1,0 @@
-send("put gold in tophat")

@@ -1,6 +1,0 @@
-targetlimb = "right arm"
-
-
-infernalpriosprep()
-
-

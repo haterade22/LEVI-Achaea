@@ -1,1 +1,0 @@
-send("cq all;demon beckon " ..tar)

@@ -1,1 +1,0 @@
-send("clearqueue all;remove shackle;gallop " ..matches[2].. ";wear shackle")

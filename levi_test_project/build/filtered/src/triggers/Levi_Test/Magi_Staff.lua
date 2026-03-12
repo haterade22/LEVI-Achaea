@@ -1,1 +1,0 @@
-send("wield left staff569815;wield right shield")

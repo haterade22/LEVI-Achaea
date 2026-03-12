@@ -1,1 +1,0 @@
-send("call for help")

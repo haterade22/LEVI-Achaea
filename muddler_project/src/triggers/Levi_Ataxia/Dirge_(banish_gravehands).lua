@@ -1,1 +1,0 @@
-selectCurrentLine() fg("GreenYellow") deselect() resetFormat()

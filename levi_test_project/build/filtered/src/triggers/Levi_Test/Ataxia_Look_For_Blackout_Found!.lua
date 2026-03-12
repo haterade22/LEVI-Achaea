@@ -1,1 +1,0 @@
-ataxia.afflictions.blackout = true

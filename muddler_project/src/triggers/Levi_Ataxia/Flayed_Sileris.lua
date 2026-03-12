@@ -1,2 +1,0 @@
-erAff("fangbarrier")
-erAff("sileris")

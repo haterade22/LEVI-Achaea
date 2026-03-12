@@ -1,5 +1,0 @@
-selectString(line,1)
-  setBold(true)
-  fg("sienna")
-  deselect()
-  resetFormat()

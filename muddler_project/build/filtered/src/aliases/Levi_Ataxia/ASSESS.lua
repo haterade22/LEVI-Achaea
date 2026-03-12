@@ -1,1 +1,0 @@
-send("assess " .. target)

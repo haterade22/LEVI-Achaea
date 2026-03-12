@@ -1,4 +1,0 @@
-envenomList = {
-	"timeloop"
-}
-

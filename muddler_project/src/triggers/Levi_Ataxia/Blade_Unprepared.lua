@@ -1,1 +1,0 @@
-pariah.bladePrepared = false

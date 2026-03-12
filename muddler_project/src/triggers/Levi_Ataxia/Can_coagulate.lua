@@ -1,1 +1,0 @@
-ataxiaTemp.coagulate = false

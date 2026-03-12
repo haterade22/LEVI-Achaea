@@ -1,1 +1,0 @@
-send("remove pendant398551;remove bracelets83145;remove belt404134;remove ring;give ring to "..puptarget..";give 398551 to " .. puptarget .. ";give 83145 to " .. puptarget .. ";give 404134 to " ..puptarget)

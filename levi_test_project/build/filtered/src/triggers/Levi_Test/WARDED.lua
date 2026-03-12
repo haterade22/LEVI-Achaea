@@ -1,1 +1,0 @@
-ward_now = false

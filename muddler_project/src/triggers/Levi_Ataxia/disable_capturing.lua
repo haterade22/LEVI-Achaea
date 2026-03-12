@@ -1,1 +1,0 @@
-disableTrigger("Ataxia Chat Capture")

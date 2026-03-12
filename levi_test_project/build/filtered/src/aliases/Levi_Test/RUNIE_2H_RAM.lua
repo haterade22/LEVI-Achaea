@@ -1,1 +1,0 @@
-send("rampage against " ..target)

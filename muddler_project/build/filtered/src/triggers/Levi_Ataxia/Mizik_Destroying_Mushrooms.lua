@@ -1,1 +1,0 @@
-send("pt Ashtan destroyed monolith. Dropping Monolith;get 50 monolith from pack;drop monolith")

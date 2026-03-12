@@ -1,1 +1,0 @@
-send("get luckbinder;wear luckbinder")

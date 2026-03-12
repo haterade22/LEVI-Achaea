@@ -1,2 +1,0 @@
-targetlimb = "head"
-infernalpriostrample()

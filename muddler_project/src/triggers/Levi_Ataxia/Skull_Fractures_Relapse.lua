@@ -1,2 +1,0 @@
-tarAffed("nausea")
-

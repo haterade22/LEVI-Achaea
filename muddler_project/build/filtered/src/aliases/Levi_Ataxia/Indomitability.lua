@@ -1,1 +1,0 @@
-send("enact indomitability")

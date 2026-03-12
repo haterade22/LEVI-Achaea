@@ -1,1 +1,0 @@
-shaman.boundspirit("Ri'shen")

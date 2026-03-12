@@ -1,1 +1,0 @@
-send("queue addclear free bandershoot "..matches[2])

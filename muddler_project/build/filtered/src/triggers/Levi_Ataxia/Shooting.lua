@@ -1,1 +1,0 @@
-send("pt LoS at " ..matches[2].. " - Direct Hit") 

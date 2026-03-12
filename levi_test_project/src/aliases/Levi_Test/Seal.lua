@@ -1,1 +1,0 @@
-send("seal " ..target.. " 1")

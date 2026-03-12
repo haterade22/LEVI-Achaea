@@ -1,1 +1,0 @@
-ataxia_setWarning("radiation incoming", 2.5)	

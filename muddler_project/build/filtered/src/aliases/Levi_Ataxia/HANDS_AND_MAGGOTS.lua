@@ -1,1 +1,0 @@
-send("cq all;wield shield longsword441711;summon infestation;tyranny")

@@ -1,1 +1,0 @@
-bardperformance = false

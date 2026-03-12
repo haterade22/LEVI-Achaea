@@ -1,2 +1,0 @@
-tarAffed("disturb")
-erAff("feedback")

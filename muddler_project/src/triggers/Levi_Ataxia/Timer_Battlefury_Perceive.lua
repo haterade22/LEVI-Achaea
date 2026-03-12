@@ -1,1 +1,0 @@
-disableTimer("Battlefury Perceive")

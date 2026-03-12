@@ -1,1 +1,0 @@
-sendAll("mind lock " ..target)

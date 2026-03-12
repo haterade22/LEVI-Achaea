@@ -1,1 +1,0 @@
-table.insert(shaman.spiritlore.bindings, matches[2])

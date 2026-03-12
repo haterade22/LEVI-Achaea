@@ -1,2 +1,0 @@
-zgui.whoRoomList={}
-enableTrigger("whoHereCatch")

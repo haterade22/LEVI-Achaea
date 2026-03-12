@@ -1,2 +1,0 @@
-haveAff("haemophilia")
-tarAffed("haemophilia")

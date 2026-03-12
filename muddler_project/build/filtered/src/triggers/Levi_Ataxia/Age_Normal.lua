@@ -1,1 +1,0 @@
-ataxiaTables.depthswalker.age = 0

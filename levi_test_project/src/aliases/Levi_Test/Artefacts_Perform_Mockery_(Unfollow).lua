@@ -1,1 +1,0 @@
-send("queue add eqbal perform mockery " ..target)

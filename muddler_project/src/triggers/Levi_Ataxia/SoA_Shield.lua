@@ -1,1 +1,0 @@
-ataxia.data.db.addChar("shield")

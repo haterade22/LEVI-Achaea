@@ -1,1 +1,0 @@
-send("clearqueue all;get 50 mineral;get 50 plant")

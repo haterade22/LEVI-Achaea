@@ -1,1 +1,0 @@
-ataxiaTemp.firelord.brand = nil

@@ -1,1 +1,0 @@
-send("queue addclear free stand;falcon slay " ..target.. " ;impale " ..target.. " ;club " ..target.. " ;fury on;assess " ..target)

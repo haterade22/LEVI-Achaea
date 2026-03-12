@@ -1,6 +1,0 @@
-targetlimb = "right leg"
-
-
-
-infernalpriosprep()
-

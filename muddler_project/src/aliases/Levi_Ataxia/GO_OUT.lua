@@ -1,1 +1,0 @@
-send("open door out;out;close door in")

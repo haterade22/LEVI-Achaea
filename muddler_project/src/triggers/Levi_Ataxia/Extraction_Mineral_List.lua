@@ -1,1 +1,0 @@
-ataxiaExtraction = ataxiaExtraction or {}

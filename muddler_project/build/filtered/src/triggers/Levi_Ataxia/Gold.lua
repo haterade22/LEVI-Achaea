@@ -1,1 +1,0 @@
-send("queue addclear free get gold;put gold in kitbag")

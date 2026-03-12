@@ -1,1 +1,0 @@
-send("curing unpredict impaled",false)

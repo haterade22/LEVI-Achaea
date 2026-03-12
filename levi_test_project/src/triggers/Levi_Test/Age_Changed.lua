@@ -1,1 +1,0 @@
-ataxiaTables.depthswalker.age = tonumber(matches[2])

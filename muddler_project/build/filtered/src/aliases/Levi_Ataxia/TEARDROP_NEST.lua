@@ -1,1 +1,0 @@
-send("legenddeck draw aran'kesh;g group all teardrop from nest;combine teardrop fully;put group all teardrop in nest;shake nest")

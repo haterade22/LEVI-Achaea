@@ -1,1 +1,0 @@
-ataxiaTemp.hombal = nil

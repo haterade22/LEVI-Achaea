@@ -1,1 +1,0 @@
-shaman.savecurrentprofile(matches[2])

@@ -1,5 +1,0 @@
-selectString(matches[2],1)
-  setBold(true)
-  fg("gold")
-  deselect()
-  resetFormat()

@@ -1,1 +1,0 @@
-send("queue addclear free legenddeck draw horror for " ..target)

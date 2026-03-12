@@ -1,1 +1,0 @@
-send("cq all;summon bloodworms")

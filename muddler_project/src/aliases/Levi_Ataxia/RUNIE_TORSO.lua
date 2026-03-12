@@ -1,6 +1,0 @@
-targetlimb = "torso"
-
-
-
-infernalpriosprep()
-

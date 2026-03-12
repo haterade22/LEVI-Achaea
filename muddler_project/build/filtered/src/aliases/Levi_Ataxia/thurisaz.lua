@@ -1,1 +1,0 @@
-send("queue addclear free sketch thurisaz on ground for " ..target)

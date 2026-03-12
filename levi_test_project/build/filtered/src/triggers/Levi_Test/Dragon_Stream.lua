@@ -1,6 +1,0 @@
-selectString(line,1)
-setBold(true)
-fg("DodgerBlue")
-deselect()
-resetFormat()
-send("pt " ..matches[2].. ": BREATHSTREAMED " ..dsdir) 

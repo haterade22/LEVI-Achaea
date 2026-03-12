@@ -1,1 +1,0 @@
-monk.shikudo.limb_hit("head", "hiraku")

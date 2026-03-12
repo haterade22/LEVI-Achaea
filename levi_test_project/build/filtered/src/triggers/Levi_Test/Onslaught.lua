@@ -1,1 +1,0 @@
-send("ct Hit " ..matches[2].. " of " ..matches[3])

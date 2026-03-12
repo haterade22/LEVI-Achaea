@@ -1,1 +1,0 @@
-send("queue addclear free conjure illusion A nearly invisible magical shield forms around Leviticus.")

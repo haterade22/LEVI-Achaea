@@ -1,1 +1,0 @@
-bashConsoleEcho("fishing", "Teased the line for fish.")

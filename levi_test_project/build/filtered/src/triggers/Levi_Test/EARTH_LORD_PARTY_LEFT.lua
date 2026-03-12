@@ -1,1 +1,0 @@
-send("pt "..matches[2].." has LEFT my area !!!")

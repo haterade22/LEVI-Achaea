@@ -1,1 +1,0 @@
-zgui.sendLogger("green", "Health Sipped")

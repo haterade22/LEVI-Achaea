@@ -1,1 +1,0 @@
-thornrend_selfLimbHit(matches[2])

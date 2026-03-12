@@ -1,1 +1,0 @@
-zData.db.addChar("mayafigure")

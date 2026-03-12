@@ -1,1 +1,0 @@
-ataxia_setWarning(multimatches[2][2].." devouring someone", 2)

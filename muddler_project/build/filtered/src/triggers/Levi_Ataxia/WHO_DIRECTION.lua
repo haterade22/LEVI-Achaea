@@ -1,1 +1,0 @@
-lookdirection = matches[2]

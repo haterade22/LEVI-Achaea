@@ -1,1 +1,0 @@
-lb.resetAll(target)

@@ -1,2 +1,0 @@
-ataxiaUpdater()
-checkedMissingVariables = false

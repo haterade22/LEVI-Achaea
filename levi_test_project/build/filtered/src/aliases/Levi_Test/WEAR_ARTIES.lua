@@ -1,1 +1,0 @@
-send("wear 404134;wear 398551;wear 83145")

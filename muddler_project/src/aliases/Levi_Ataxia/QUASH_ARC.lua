@@ -1,1 +1,0 @@
-send("cq all;wield battleaxe;quash " ..target.. ";arc")

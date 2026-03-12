@@ -1,1 +1,0 @@
-gearAudit.command(matches[2])

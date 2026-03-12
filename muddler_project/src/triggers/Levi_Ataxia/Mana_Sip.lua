@@ -1,1 +1,0 @@
-zgui.sendLogger("blue", "Mana Sipped")

@@ -1,1 +1,0 @@
-send("clearqueue all;legenddeck draw agith'maal")

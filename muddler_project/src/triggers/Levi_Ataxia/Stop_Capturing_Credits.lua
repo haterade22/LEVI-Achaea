@@ -1,6 +1,0 @@
-deleteLine()
-cecho("\n <DarkSlateBlue>"..string.rep("~", 52))
-cecho("\n<DimGrey> Can buy a total of <gold>"..creditMarket.totalTB.."<DimGrey>cr for <gold>"..creditMarket.totalSpent.."<DimGrey> gold.")
-cecho("\n <DarkSlateBlue>"..string.rep("~", 52))
-echo("\n"..line)
-setTriggerStayOpen("Credits for Sale", 0)

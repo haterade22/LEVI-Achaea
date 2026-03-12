@@ -1,1 +1,0 @@
-zgui.buildBashWindow()

@@ -1,1 +1,0 @@
-send("point wand409987 at " ..target)

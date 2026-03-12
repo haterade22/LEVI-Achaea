@@ -1,2 +1,0 @@
-erAff("impaled")
-timpale = false

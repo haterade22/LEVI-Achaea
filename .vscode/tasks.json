@@ -1,0 +1,48 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Levi_Ataxia",
+      "type": "shell",
+      "command": "bash build.sh",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "detail": "Full convert + Muddler pipeline"
+    },
+    {
+      "label": "Convert Only",
+      "type": "shell",
+      "command": "bash build.sh --convert-only",
+      "group": "build",
+      "problemMatcher": [],
+      "detail": "Convert src_new to Muddler format (no build)"
+    },
+    {
+      "label": "Convert Dry Run",
+      "type": "shell",
+      "command": "bash build.sh --dry-run",
+      "group": "build",
+      "problemMatcher": [],
+      "detail": "Preview conversion without writing files"
+    },
+    {
+      "label": "Clean Build Output",
+      "type": "shell",
+      "command": "rm -rf muddler_project/build/",
+      "group": "build",
+      "problemMatcher": [],
+      "detail": "Remove muddler_project/build/ directory"
+    },
+    {
+      "label": "Build Levi_Test",
+      "type": "shell",
+      "command": "python tools/convert_to_muddler.py --src src_new --output levi_test_project --package-name Levi_Test --include-roots Levi_Test && cd levi_test_project && \"E:/muddle-shadow-1.1.0/muddle-shadow-1.1.0/bin/muddle.bat\"",
+      "group": "build",
+      "problemMatcher": [],
+      "detail": "Build the test/distribution package"
+    }
+  ]
+}

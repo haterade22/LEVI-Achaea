@@ -1,1 +1,0 @@
-send("clearqueue all;touch web "..target)

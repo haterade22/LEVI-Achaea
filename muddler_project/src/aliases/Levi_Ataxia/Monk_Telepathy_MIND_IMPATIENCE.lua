@@ -1,1 +1,0 @@
-sendAll("queue addclear free mind impatience " ..target)

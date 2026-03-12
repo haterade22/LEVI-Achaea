@@ -1,2 +1,0 @@
-wwarhammer = true
-bbastard = false

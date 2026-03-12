@@ -1,1 +1,0 @@
-send("spin wheel")

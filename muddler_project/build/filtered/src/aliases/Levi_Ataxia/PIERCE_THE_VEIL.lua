@@ -1,1 +1,0 @@
-send("clearqueue all;pierce the veil")

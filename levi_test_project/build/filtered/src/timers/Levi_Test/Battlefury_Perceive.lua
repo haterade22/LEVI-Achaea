@@ -1,1 +1,0 @@
-send("battlefury perceive " ..target)

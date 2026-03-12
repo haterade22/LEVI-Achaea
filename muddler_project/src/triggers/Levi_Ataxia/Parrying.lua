@@ -1,1 +1,0 @@
-ataxia.parrying.limb = matches[2]:lower()

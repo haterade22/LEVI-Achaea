@@ -1,1 +1,0 @@
-send("echo -Parsing QWC-"..ataxia.settings.separator.."qwc",false)

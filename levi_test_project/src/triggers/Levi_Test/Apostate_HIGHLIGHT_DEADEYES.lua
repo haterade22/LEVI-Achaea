@@ -1,5 +1,0 @@
-selectString(line, 1)
-setBold(true)
-fg("DarkOrange")
-deselect()
-resetFormat()

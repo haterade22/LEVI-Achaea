@@ -1,2 +1,0 @@
-erAff("haemophilia")
-erAff("bloodfire")
