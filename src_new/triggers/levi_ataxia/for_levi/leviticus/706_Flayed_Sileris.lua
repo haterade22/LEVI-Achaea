@@ -40,6 +40,10 @@ patterns:
   type: 1
 - pattern: ^The protective coating covering the skin of \w+ sloughs off\.$
   type: 1
+- pattern: ^You flay away (\w+)'s shield defence\.$
+  type: 1
+- pattern: ^You flay away (\w+)'s aura of rebounding defence\.$
+  type: 1
 ]]--
 
 erAff("fangbarrier")

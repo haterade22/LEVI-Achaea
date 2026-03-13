@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-03-12 — Serpent: track fangbarrier/sileris strip on flay shield/rebounding
+
+### Bug Fix: Missing flay shield/rebounding patterns in sileris strip trigger
+
+**File:** `src_new/triggers/.../706_Flayed_Sileris.lua`
+
+**Problem:** When flaying shield or rebounding, fangbarrier/sileris is also stripped as a game mechanic side effect, but the trigger was missing the "You flay away X's shield defence" and "You flay away X's aura of rebounding defence" patterns. This meant `checkImpulseEligible()` could still see stale fangbarrier/sileris tracking after a flay.
+
+**Fix:** Added two new regex patterns to trigger 706 to catch flay shield and flay rebounding messages, ensuring `erAff("fangbarrier")` and `erAff("sileris")` fire correctly.
+
+---
+
 ## 2026-03-12 — Locate system: farsee + faemirror companion count
 
 ### Enhancement: Use farsee with faemirror for locate responses
