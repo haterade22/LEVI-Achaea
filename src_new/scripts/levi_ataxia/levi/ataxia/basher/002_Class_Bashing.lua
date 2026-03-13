@@ -307,12 +307,9 @@ function ataxiaBasher_magiBashing()
    command = command..ataxiaBasher_assembleBattlerage()
 
    if not ataxiaBasher.shielded then
-    if ataxiaBasher_validTargets() > 2 and #stormhammerTargets >= 3 then
+    if ataxiaBasher.stormhammer and ataxiaBasher_validTargets() > 2 and #stormhammerTargets >= 3 then
       command = brage..sp.."cast stormhammer at "..stormhammerTargets[1].. " and " ..stormhammerTargets[2].. " and " ..stormhammerTargets[3]
-    elseif ataxiaBasher_validTargets() < 3 then
-      command = brage..sp.."staff cast horripilation at "..target
     else
-   -- Horripilation 4 percent at 17 int, max arties, half damage more speed crystal (Best)
       command = brage..sp.."staff cast horripilation at "..target
     end
    end

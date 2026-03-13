@@ -2,6 +2,23 @@
 
 ---
 
+## 2026-03-13 — Basher configurability: wand, stormhammer, gem of cloaking, cleanup
+
+### Removed: `basher/004_Guardians_Of_MoG.lua`
+### Updated: `basher/001_Bashing_Functions.lua`, `basher/002_Class_Bashing.lua`, `genrunning/003_Engaged_Disengage.lua`
+### Added: `aliases/.../configs/013_Wand_Reflection.lua`, `014_Stormhammer.lua`, `015_Gem_Cloaking.lua`
+
+**Motivation:** Several basher features were hardcoded for a specific player (wand ID, stormhammer always-on, gem of cloaking always-on, Guardians of MoG enemy detection). These are now configurable toggles so any user can enable/disable them.
+
+**Changes:**
+- Deleted `004_Guardians_Of_MoG.lua` — inactive script with hardcoded enemy player name, no longer needed
+- Removed stale `guardianofmogcunts` variable reference from `003_Engaged_Disengage.lua`
+- **Wand of Reflection**: New toggle `ataxiaBasher.wandReflection` (default off) + configurable wand ID via `ataxiaBasher.wandId`. Toggle with `abwand`, set ID with `abwand <id>` (e.g., `abwand wand234800`). Emergency HP check now gated behind toggle.
+- **Stormhammer**: New toggle `ataxiaBasher.stormhammer` (default off). Toggle with `abshuse`. Magi multi-target stormhammer only fires when enabled and 3+ valid targets present.
+- **Gem of Cloaking**: New toggle `ataxiaBasher.gemCloaking` (default off). Toggle with `abgcuse`. Auto "say Tulahuar" in Moghedu on areabash start now gated behind toggle.
+
+---
+
 ## 2026-03-13 — Blood Maiden cloak: configurable auto-activation
 
 ### Updated: `basher/001_Bashing_Functions.lua`, `triggers/.../769_Blood_Maiden_Cloak.lua`

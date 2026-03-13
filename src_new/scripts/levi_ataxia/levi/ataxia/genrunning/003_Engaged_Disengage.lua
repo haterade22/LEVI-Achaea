@@ -173,8 +173,6 @@ function basher_engaged()
   lockRoom(21143, true) -- Quartz Peak 
   lockRoom(33, true) --MOG
   lockRoom(27580, true) -- Gil Den
-  guardianofmogcunts = false
-
 	ataxia_saveSettings(false)
 	getCurExp = gmcp.Char.Status.level
 	getCurGold = gmcp.Char.Status.gold
@@ -183,7 +181,7 @@ function basher_engaged()
 	end
 	send("config mapshow off")
   
-  if gmcp.Room.Info.area == "Moghedu" then
+  if ataxiaBasher.gemCloaking and gmcp.Room.Info.area == "Moghedu" then
     send("say Tulahuar")
   end
   send("drop lily;drop lily;drop lily")
