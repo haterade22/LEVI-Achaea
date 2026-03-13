@@ -36,7 +36,7 @@ jobs:
           echo "=== Checking version sync ==="
           V_TXT=$(cat version.txt | tr -d '[:space:]')
           V_MFILE=$(python3 -c "import json; print(json.load(open('muddler_project/mfile'))['version'])" | tr -d '[:space:]')
-          V_YAML=$(grep -oP 'ataxiaVersion\s*=\s*"([^"]+)"' src_new/scripts/_groups.yaml | grep -oP '"[^"]+"' | tr -d '"')
+          V_YAML=$(grep -o 'ataxiaVersion = \\"[^\\]*' src_new/scripts/_groups.yaml | grep -o '[0-9][0-9.]*')
 
           echo "version.txt:    $V_TXT"
           echo "mfile:          $V_MFILE"
