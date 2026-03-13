@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-03-13 — World Tree area basher restrictions
+
+### Updated: `basher/001_Bashing_Functions.lua`
+
+**Motivation:** The Fathomless Expanse of the World Tree area has mobs that hit hard (triggering false danger/flee) and does not allow Culling Blade. Both needed area-specific suppression.
+
+**Changes:**
+- Culling Blade (`reap`) is now skipped when `gmcp.Room.Info.area` is "the Fathomless Expanse of the World Tree"
+- Damage-rate flee ("Extreme incoming damage rate") and HP-threshold flee are disabled in the World Tree area — shield and wait checks still apply
+
+---
+
 ## 2026-03-13 — Blademaster Ice Path (Quad-Prep) Update
 
 ### Updated: `blademaster/005_CC_BM_Ice.lua`

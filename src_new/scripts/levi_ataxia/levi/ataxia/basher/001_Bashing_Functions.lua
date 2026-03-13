@@ -169,12 +169,16 @@ function ataxiaBasher_dangerLevel()
 
   ataxiaBasher_initThresholds()
 
-  local fleePct = ataxiaBasher.fleeThresholdPct or 25
-  if hpp <= fleePct then return "flee" end
+  local inWorldTree = gmcp.Room.Info.area == "the Fathomless Expanse of the World Tree"
 
-  if ataxiaBasher_isDamageRateExtreme() then
-    ataxiaEcho("DANGER: Extreme incoming damage rate detected! Fleeing.")
-    return "flee"
+  if not inWorldTree then
+    local fleePct = ataxiaBasher.fleeThresholdPct or 25
+    if hpp <= fleePct then return "flee" end
+
+    if ataxiaBasher_isDamageRateExtreme() then
+      ataxiaEcho("DANGER: Extreme incoming damage rate detected! Fleeing.")
+      return "flee"
+    end
   end
 
   local shieldPct = ataxiaBasher.shieldThresholdPct or 40
@@ -446,7 +450,8 @@ function ataxiaBasher_assembleBattlerage()
 	end
 
 	-- Culling Blade check (applies before any class-specific logic)
-	if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown then
+	if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown
+		and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" then
 		if ataxia.vitals.rage >= bigRage then
 			command = command.."reap "..target..sp
 		end

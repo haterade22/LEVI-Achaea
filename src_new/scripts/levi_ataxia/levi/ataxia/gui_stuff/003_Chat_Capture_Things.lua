@@ -146,4 +146,5 @@ function ataxiagui_captureChat()
 
 end
 
-registerAnonymousEventHandler("gmcp.Comm.Channel.Start", "ataxiagui_captureChat")
+-- Legacy handler disabled: zgui.showChat() in update_windows/001_showChat.lua is the active handler
+-- registerAnonymousEventHandler("gmcp.Comm.Channel.Start", "ataxiagui_captureChat")
