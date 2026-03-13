@@ -21,7 +21,8 @@ bastardweapon()
 
 -- Raze Attacks/Carve
 if need_raze then
-send("queue addclear free stand;falcon track "..target.. ";falcon slay " ..target.. ";battlefury perceive " ..target.. ";wipe bastard;envenom bastard with epseth;assess " ..target.. ";carve " ..target.. ";battlefury upset " ..target)
+  send("queue addclear free stand;falcon track "..target.. ";falcon slay " ..target.. ";battlefury perceive " ..target.. ";wipe bastard;envenom bastard with epseth;assess " ..target.. ";carve " ..target.. ";battlefury upset " ..target)
+end
 -- Left Leg
 if matches[2] == "ll" then
 send("queue addclear free stand;battlefury perceive " ..target.. ";wipe bastard;envenom bastard with " ..envenomList[1].. ";assess " ..target.. ";battlefury focus " ..bfury.. ";hew " ..target.. ";battlefury upset " ..target)
