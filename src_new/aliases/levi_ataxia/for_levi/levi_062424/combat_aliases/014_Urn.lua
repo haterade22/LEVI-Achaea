@@ -24,5 +24,5 @@ if command:find("x") then
   ataxia_Echo("Not setting vault on call.")
 end
 
-local act = "dismount impastus"..sp.."tell impastus come here"..sp.."concentrate"..sp.."stand"..sp.."rub urn"..sp.."vault "..mountid..sp.."order "..mountid.." go home"
+local act = "dismount "..ataxia.getMount()..sp.."tell "..ataxia.getMount().." come here"..sp.."concentrate"..sp.."stand"..sp.."rub urn"..sp.."vault "..mountid..sp.."order "..mountid.." go home"
 send("queue addclear free "..act,false)

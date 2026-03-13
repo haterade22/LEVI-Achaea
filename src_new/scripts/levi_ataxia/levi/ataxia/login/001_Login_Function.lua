@@ -117,7 +117,7 @@ expandAlias("defup tek")
 else
 expandAlias("defswitch shi")
 expandAlias("defup shi")
-send("wield staff489282")
+send("wield "..ataxia.getWeapon("staff2"))
 send("curingset switch normal")
 end
 end
@@ -161,7 +161,7 @@ end
 
 if gmcp.Char.Status.class == "Runewarden" then
   if gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" then 
-    send("wield left morningstar511732; wield right morningstar511735")
+    send("wield left "..ataxia.getWeapon("mstar1").."; wield right "..ataxia.getWeapon("mstar2"))
     expandAlias("defswitch rdwb")
     expandAlias("defup rdwb")
   end
@@ -174,7 +174,7 @@ if gmcp.Char.Status.class == "Runewarden" then
     end
 
   if gmcp.Char.Vitals.charstats[3] == "Dual Cutting" then 
-    send("wield left scimitar405398;wield right scimitar405403")
+    send("wield left "..ataxia.getWeapon("weapon1")..";wield right "..ataxia.getWeapon("weapon2"))
     send("empower priority set isaz sleizak kena")
     expandAlias("defswitch rdwc")
     expandAlias("defup rdwc")
@@ -198,12 +198,12 @@ if ataxia_isClass("infernal") then
   send("mastery on;hyena recall;order hyena follow me")
   end
   if gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt" then 
-    send("wield left morningstar511732; wield right morningstar511735")
+    send("wield left "..ataxia.getWeapon("mstar1").."; wield right "..ataxia.getWeapon("mstar2"))
     expandAlias("defswitch idwb")
     expandAlias("defup idwb")
   end
 if gmcp.Char.Vitals.charstats[4] == "Spec: Dual Cutting" then 
-    send("unwield left;unwield right;wield left scimitar405403; wield right scimitar405398")
+    send("unwield left;unwield right;wield left "..ataxia.getWeapon("weapon1").."; wield right "..ataxia.getWeapon("weapon2"))
     expandAlias("defswitch idwc")
     expandAlias("defup idwc")
 end

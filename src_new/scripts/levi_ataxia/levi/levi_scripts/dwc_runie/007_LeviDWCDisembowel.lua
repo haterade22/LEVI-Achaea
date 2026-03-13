@@ -15,8 +15,8 @@ packageName: ''
 ]]--
 
 function levidwcheadprep()
-weapon1 = "scimitar405398"
-weapon2 = "scimitar405403"
+weapon1 = ataxia.getWeapon("weapon1")
+weapon2 = ataxia.getWeapon("weapon2")
 local atk = combatQueue()
 need_raze = need_raze or false
 empowerrunesset = "kena mannaz sleizak"

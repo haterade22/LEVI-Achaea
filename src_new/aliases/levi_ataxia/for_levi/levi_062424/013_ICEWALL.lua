@@ -12,4 +12,5 @@ command: ''
 packageName: ''
 ]]--
 
-send("clearqueue all;point ring379683 "..matches[2])
+local ring = ataxia.getArtefact("ring") or "ring"
+send("clearqueue all;point "..ring.." "..matches[2])

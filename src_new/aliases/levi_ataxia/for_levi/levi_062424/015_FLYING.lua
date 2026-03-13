@@ -12,4 +12,4 @@ command: ''
 packageName: ''
 ]]--
 
-send("clearqueue all;spur impastus skyward")
+send("clearqueue all;spur "..ataxia.getMount().." skyward")

@@ -12,4 +12,4 @@ command: ''
 packageName: ''
 ]]--
 
-send("tell impastus come here")
+send("tell "..ataxia.getMount().." come here")

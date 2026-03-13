@@ -12,4 +12,7 @@ command: ''
 packageName: ''
 ]]--
 
-send("wear 404134;wear 398551;wear 83145")
+local pendant = ataxia.getArtefact("pendant") or "pendant"
+local bracelet = ataxia.getArtefact("bracelet") or "bracelets"
+local belt = ataxia.getArtefact("belt") or "belt"
+send("wear "..belt..";wear "..pendant..";wear "..bracelet)

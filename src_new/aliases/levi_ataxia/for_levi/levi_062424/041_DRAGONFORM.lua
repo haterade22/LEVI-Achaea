@@ -13,7 +13,7 @@ command: ''
 packageName: ''
 ]]--
 
-send("clearqueue all;tell impastus come here;dragonform")
+send("clearqueue all;tell "..ataxia.getMount().." come here;dragonform")
 expandAlias("mconfig gallop false")
 expandAlias("mconfig gare true")
 ataxia.settings.paused = true

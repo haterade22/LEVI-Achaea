@@ -119,8 +119,8 @@ infernalGroupLock = infernalGroupLock or {}
 
 -- Configuration
 infernalGroupLock.config = {
-    weapon1 = "scimitar405403",  -- Right hand weapon ID (v1)
-    weapon2 = "scimitar405398",  -- Left hand weapon ID (v2 = curare)
+    weapon1 = (ataxia.settings.weapons and ataxia.settings.weapons.weapon1) or "scimitar",
+    weapon2 = (ataxia.settings.weapons and ataxia.settings.weapons.weapon2) or "scimitar",
 }
 
 -- State tracking (minimal for group combat)

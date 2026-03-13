@@ -161,9 +161,9 @@ CONFIGURATION:
     infernalDWC.config = {
         prepThreshold = 90,             -- Limb ready for break
         breakThreshold = 100,           -- Limb breaks at this damage
-        weapon1 = "scimitar405403",     -- Right hand scimitar
-        weapon2 = "scimitar405398",     -- Left hand scimitar
-        battleaxe = "battleaxe590991",  -- Battleaxe for undercut
+        weapon1 = (ataxia.settings.weapons and ataxia.settings.weapons.weapon1) or "scimitar",
+        weapon2 = (ataxia.settings.weapons and ataxia.settings.weapons.weapon2) or "scimitar",
+        battleaxe = (ataxia.settings.weapons and ataxia.settings.weapons.battleaxe) or "battleaxe",
         damageKillThreshold = 40,       -- Below this HP%, use quash+arc instead of vivisect
     }
 
@@ -252,9 +252,9 @@ infernalDWC.state = {
 infernalDWC.config = {
     prepThreshold = 90,         -- Limb ready for break (90%+)
     breakThreshold = 100,       -- Limb breaks at 100%
-    weapon1 = "scimitar405403", -- Right hand weapon ID
-    weapon2 = "scimitar405398", -- Left hand weapon ID
-    battleaxe = "battleaxe590991", -- Battleaxe for undercut
+    weapon1 = (ataxia.settings.weapons and ataxia.settings.weapons.weapon1) or "scimitar",
+    weapon2 = (ataxia.settings.weapons and ataxia.settings.weapons.weapon2) or "scimitar",
+    battleaxe = (ataxia.settings.weapons and ataxia.settings.weapons.battleaxe) or "battleaxe",
     damageKillThreshold = 40,   -- Below this health %, use quash + arc instead of vivisect
 }
 

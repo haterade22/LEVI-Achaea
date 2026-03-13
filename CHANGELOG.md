@@ -2,6 +2,67 @@
 
 ---
 
+## 2026-03-13 — Make system configurable for multiple users
+
+### New: WEAPONLIST auto-detection, configurable weapons/mount/artefacts/earrings
+
+**Motivation:** The system was built for a single character (Leviticus) with hardcoded weapon IDs, mount name, artefact IDs, and earring IDs across ~30 files. This makes the system usable by any player.
+
+**New file:** `misc_scripts/023_Weapon_Detect.lua`
+- `ataxia.scanWeapons()` — sends WEAPONLIST, parses output with temp triggers, groups weapons by type
+- Auto-suggests slot assignments (DWC weapon1/2, DWB mstar1/2, staff/staff2, etc.)
+- Sorts by damage (best weapon = primary slot)
+- `ataxia.confirmWeapons()` saves to `ataxia.settings.weapons`
+- `ataxia.swapWeaponSlots(s1, s2)` swaps pending assignments before confirming
+- `ataxia.setWeaponSlotPending(slot, id)` overrides a slot before confirming
+
+**New file:** `misc_scripts/022_User_Config.lua`
+- Centralizes `ataxia.getWeapon(slot)`, `ataxia.getMount()`, `ataxia.getArtefact(slot)`, `ataxia.getEarring(location)`
+- All helpers read from `ataxia.settings` at call time (no caching), so Setup Wizard changes take effect immediately
+- `ataxia_initUserConfig()` called from `ataxiaCheckForMissing()` on every load
+- Added `staff2` slot for Monk/Shikudo staff (separate from Magi `staff`)
+
+**Extended:** `001_Save_Load_Settings.lua`
+- `ataxia_defaultSettings()` now initializes `ataxia.settings.weapons` and `ataxia.settings.user` subtables
+
+**Extended:** `020_Setup_Wizard.lua`
+- `ataxia setup weapons scan` — auto-detect from WEAPONLIST
+- `ataxia setup weapons confirm` — save scan results
+- `ataxia setup weapons swap <s1> <s2>` — swap slot assignments
+- `ataxia setup weapons set <slot> <id>` — manually set a slot
+- `ataxia setup mount <name>` — set mount/companion name
+- `ataxia setup artefacts <slot> <id>` — set pendant/bracelet/belt/ring IDs
+- `ataxia setup earrings <location> <id>` — set travel earring locations
+- `ataxia setup status` now shows mount, artefacts, and expanded weapon list
+
+**Replaced hardcoded weapon IDs** (~30 files):
+- `genrunning/003_Engaged_Disengage.lua` — 8 weapon IDs + removed dead `ataxiaTemp.me == "Leviticus"` check
+- `dwc_runie/002-007` — scimitar IDs → `ataxia.getWeapon("weapon1"/"weapon2")`
+- `dwc/001-002, 002_Group_Lock` — config defaults read from `ataxia.settings.weapons`
+- `dwb_runie/001` — config defaults
+- `023_LIMB_PREP, 024_RAMPAGE` — wield/wipe/envenom commands
+- `i_snb/004_RAMPAGE, 005_LIMB_PREP` — same pattern
+- `login/001_Login_Function.lua` — all weapon wielding on login
+- `aliases/149_Empower_Weapons.lua` — all 13 weapon variables
+
+**Replaced hardcoded mount name** (5 files):
+- "impastus" → `ataxia.getMount()` in 038_TELL_IMPASTUS, 041_DRAGONFORM, 014_Urn, 015_FLYING, 134_NO_STEED_NEED
+
+**Replaced hardcoded artefact IDs** (3 files):
+- pendant/bracelet/belt → `ataxia.getArtefact()` in 006_GIVE_ARTIES, 007_WEAR_ARTIES
+- ring → `ataxia.getArtefact("ring")` in 013_ICEWALL
+
+**Replaced hardcoded earring IDs** (1 file):
+- 9 location→ID pairs → `ataxia.getEarring()` in 080_HELP_Earring.lua
+- Refactored from 9 if-then blocks to lookup table + helper function
+
+**Fixed Monk vs Magi staff distinction:**
+- `staff` slot = Magi primary staff, `staff2` slot = Monk/Shikudo staff
+- Updated `003_Engaged_Disengage.lua` Monk section to use `ataxia.getWeapon("staff2")`
+- Updated `login/001_Login_Function.lua` Shikudo wield to use `ataxia.getWeapon("staff2")`
+
+---
+
 ## 2026-03-13 — v4.3.5: Fix sysupdate self-update system
 
 **File:** `src_new/scripts/levi_ataxia/levi/ataxia/misc_scripts/021_Auto_Update.lua`

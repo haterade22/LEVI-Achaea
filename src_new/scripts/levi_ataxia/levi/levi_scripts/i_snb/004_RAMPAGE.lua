@@ -161,18 +161,18 @@ if quash_arc then
 atk = "stand/wield shield longsword441711/quash "..target.."/arc "..target.." curare"
 
 elseif need_shieldraze then
-atk = atk.."wield scimitar scimitar;wipe scimitar383498;wipe scimitar355418;rampage against "..target..";assess "..target..";hellforge invest "..invest..";raze "..target.." shield"
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";rampage against "..target..";assess "..target..";hellforge invest "..invest..";raze "..target.." shield"
 
 
 elseif need_raze then
-atk = atk.."wield scimitar scimitar;wipe scimitar383498;wipe scimitar355418;rampage against "..target..";assess "..target..";hellforge invest "..invest..";razeslash "..target.." "..venoms[1]
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";rampage against "..target..";assess "..target..";hellforge invest "..invest..";razeslash "..target.." "..venoms[1]
 
 elseif (invest == "exploit" or invest == "torture") then
 
-atk = atk.."wield scimitar scimitar;wipe scimitar383498;wipe scimitar355418;rampage against "..target..";assess "..target..";hellforge invest "..invest..";envenom scimitar383498 with "..venoms[1]..";dsl "..target
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";rampage against "..target..";assess "..target..";hellforge invest "..invest..";envenom "..ataxia.getWeapon("weapon1").." with "..venoms[1]..";dsl "..target
 
 else
-atk = atk.."wield scimitar scimitar;wipe scimitar383498;wipe scimitar355418;rampage against "..target..";assess "..target..";hellforge invest "..invest..";dsl "..target.." "..venoms[1].." "..venoms[2]
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";rampage against "..target..";assess "..target..";hellforge invest "..invest..";dsl "..target.." "..venoms[1].." "..venoms[2]
 
 end
 

@@ -12,4 +12,7 @@ command: ''
 packageName: ''
 ]]--
 
-send("remove pendant398551;remove bracelets83145;remove belt404134;remove ring;give ring to "..puptarget..";give 398551 to " .. puptarget .. ";give 83145 to " .. puptarget .. ";give 404134 to " ..puptarget)
+local pendant = ataxia.getArtefact("pendant") or "pendant"
+local bracelet = ataxia.getArtefact("bracelet") or "bracelets"
+local belt = ataxia.getArtefact("belt") or "belt"
+send("remove "..pendant..";remove "..bracelet..";remove "..belt..";remove ring;give ring to "..puptarget..";give "..pendant.." to "..puptarget..";give "..bracelet.." to "..puptarget..";give "..belt.." to "..puptarget)

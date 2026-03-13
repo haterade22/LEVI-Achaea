@@ -35,4 +35,4 @@ patterns:
   type: 3
 ]]--
 
-send("tell impastus come here")
+send("tell "..ataxia.getMount().." come here")

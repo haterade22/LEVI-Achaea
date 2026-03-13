@@ -14,19 +14,19 @@ command: ''
 packageName: ''
 ]]--
 
-weapon1 = "morningstar511735"
-weapon2 = "morningstar511732"
-weapon3 = "longsword441711"
-weapon4 = "flail408566"
-weapon5 = "flail343168"
-weapon6 = "bastard405364"
-weapon7 = "warhammer109410"
-weapon8 = "lash331663"
-weapon9 = "dagger56420"
-weapon10 = "scythe20431"
-weapon11 = "scimitar405403"
-weapon12 = "scimitar405398"
-weapon13 = "fang495575"
+weapon1 = ataxia.getWeapon("mstar1")
+weapon2 = ataxia.getWeapon("mstar2")
+weapon3 = ataxia.getWeapon("longsword")
+weapon4 = ataxia.getWeapon("flail1")
+weapon5 = ataxia.getWeapon("flail2")
+weapon6 = ataxia.getWeapon("bastard")
+weapon7 = ataxia.getWeapon("warhammer")
+weapon8 = ataxia.getWeapon("lash")
+weapon9 = ataxia.getWeapon("dagger")
+weapon10 = ataxia.getWeapon("scythe")
+weapon11 = ataxia.getWeapon("weapon2")
+weapon12 = ataxia.getWeapon("weapon1")
+weapon13 = ataxia.getWeapon("fang")
 
 send("sketch laguz on " ..weapon1..";sketch lagua on " ..weapon1..";sketch lagul on " ..weapon1)
 tempTimer(6, [[send("sketch laguz on " ..weapon2..";sketch lagua on " ..weapon2..";sketch lagul on " ..weapon2)]])

@@ -319,34 +319,34 @@ atk = atk.."wield shield longsword;assess "..target..";bisect "..target.." curar
 
 elseif disembowel then 
 
-atk = atk.."wield scimitar355418 scimitar383498;wipe scimitar383498;wipe scimitar355418;assess "..target..";disembowel "..target
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";assess "..target..";disembowel "..target
 
 
 
 elseif need_raze then
-atk = atk.."wield scimitar355418 scimitar383498;wipe scimitar383498;wipe scimitar355418;assess "..target..";razeslash "..target.." "..targetlimb.." "..venoms[1]
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";assess "..target..";razeslash "..target.." "..targetlimb.." "..venoms[1]
 
 elseif need_raze2 then
-atk = atk.."wield scimitar355418 scimitar383498;wipe scimitar383498;wipe scimitar355418;assess "..target..";razeslash "..target.." "..targetlimb.." "..venoms[1]
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";assess "..target..";razeslash "..target.." "..targetlimb.." "..venoms[1]
 
 elseif need_raze3 then
-atk = atk.."wield scimitar355418 scimitar383498;wipe scimitar383498;wipe scimitar355418;assess "..target..";razeslash "..target.." "..targetlimb.." "..venoms[1]
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";assess "..target..";razeslash "..target.." "..targetlimb.." "..venoms[1]
 
 
 
 
 
 elseif tAffs.prone and tAffs.damagedtorso and tAffs.damagedrightleg and tAffs.damagedleftleg then
-atk = atk.."wield scimitar355418 scimitar383498;wipe scimitar383498;wipe scimitar355418;assess "..target..";impale "..target
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";assess "..target..";impale "..target
 
 elseif tBals.salve == false and tAffs.addiction then
-atk = atk.."wield scimitar355418 scimitar383498;wipe scimitar383498;wipe scimitar355418;assess "..target..";dsl "..target.." "..targetlimb.." epteth epteth"
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";assess "..target..";dsl "..target.." "..targetlimb.." epteth epteth"
 
 
 else
 
 
-atk = atk.."wield scimitar355418 scimitar383498;wipe scimitar383498;wipe scimitar355418;assess "..target..";dsl "..target.." "..targetlimb.." "..venoms[1].." "..venoms[2]
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";assess "..target..";dsl "..target.." "..targetlimb.." "..venoms[1].." "..venoms[2]
 
 end
 

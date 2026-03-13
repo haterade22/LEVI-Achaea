@@ -204,33 +204,30 @@ function basher_engaged()
     send("unwield left;unwield right;wield left fang;wield right shield")
   elseif gmcp.Char.Status.class == "Runewarden" then
     if gmcp.Char.Vitals.charstats[3] == "Spec: Dual Cutting" then
-      send("unwield left;unwield right;wield left scimitar405398;wield right scimitar405403")
+      send("unwield left;unwield right;wield left "..ataxia.getWeapon("weapon1")..";wield right "..ataxia.getWeapon("weapon2"))
     elseif gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" then
-      send("unwield left;unwield right;wield left morningstar511732;wield right morningstar511735")
+      send("unwield left;unwield right;wield left "..ataxia.getWeapon("mstar1")..";wield right "..ataxia.getWeapon("mstar2"))
     elseif gmcp.Char.Vitals.charstats[3] == "Spec: Sword and Shield" then
-      send("unwield left;unwield right;wield left longsword;wield right shield")
+      send("unwield left;unwield right;wield left "..ataxia.getWeapon("longsword")..";wield right shield")
     elseif gmcp.Char.Vitals.charstats[3] == "Spec: Two Handed" then
-      send("unwield left;unwield right;wield bastard") 
+      send("unwield left;unwield right;wield "..ataxia.getWeapon("bastard"))
     end
     elseif gmcp.Char.Status.class == "Infernal" then
     if gmcp.Char.Vitals.charstats[4] == "Spec: Dual Cutting" then
-      send("unwield left;unwield right;wield left scimitar405398;wield right scimitar405403")
+      send("unwield left;unwield right;wield left "..ataxia.getWeapon("weapon1")..";wield right "..ataxia.getWeapon("weapon2"))
     elseif gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt" then
-      send("unwield left;unwield right;wield left morningstar511732;wield right morningstar511735")
+      send("unwield left;unwield right;wield left "..ataxia.getWeapon("mstar1")..";wield right "..ataxia.getWeapon("mstar2"))
     elseif gmcp.Char.Vitals.charstats[4] == "Spec: Sword and Shield" then
-      send("unwield left;unwield right;wield left longsword;wield right shield")
+      send("unwield left;unwield right;wield left "..ataxia.getWeapon("longsword")..";wield right shield")
     elseif gmcp.Char.Vitals.charstats[4] == "Spec: Two Handed" then
-      send("unwield left;unwield right;wield warhammer") 
+      send("unwield left;unwield right;wield "..ataxia.getWeapon("warhammer"))
     end
   elseif gmcp.Char.Status.class == "Serpent" then
     send("unwield left;unwield right;wield left lash;wield right shield")
   elseif gmcp.Char.Status.class == "Shaman" then
     send("unwield left;unwield right;wield right shield")
-    if ataxiaTemp.me == "Leviticus" then
-    shaman.spiritlore.bashType = shaman.spiritlore.bashType
-    end
   elseif gmcp.Char.Status.class == "Magi" then
-    send("unwield left;unwield right;wield left staff569815;wield right shield")
+    send("unwield left;unwield right;wield left "..ataxia.getWeapon("staff")..";wield right shield")
   elseif gmcp.Char.Status.class == "Infernal" then
     send("queue add hyena recall;queue add order hyena follow me")
   elseif gmcp.Char.Status.class == "Psion" then
@@ -253,7 +250,7 @@ function basher_engaged()
         end
       else
         if ataxia.vitals.form ~= "Rain" then
-          send("wield staff;adopt rain form")
+          send("wield "..ataxia.getWeapon("staff2")..";adopt rain form")
         end
       end
     elseif gmcp.Char.Vitals.charstats[4]:find("Stance") == 1 then
@@ -262,7 +259,7 @@ function basher_engaged()
       end
     else
       if ataxia.vitals.form ~= "Rain" or ataxia.vitals.form ~= "Oak" or ataxia.vitals.form ~= "Willow" then
-        send("wield staff489282;adopt rain form")
+        send("wield "..ataxia.getWeapon("staff2")..";adopt rain form")
       end
     end    
 	elseif ataxia_isClass("Apostate") then

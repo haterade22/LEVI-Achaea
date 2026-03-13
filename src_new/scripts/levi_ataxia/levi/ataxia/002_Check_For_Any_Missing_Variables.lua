@@ -106,4 +106,9 @@ function ataxiaCheckForMissing()
 		ataxiaEcho("Sylvan stuff defaulted to normal values. Check <red>aconfig sylvan help<Navajowhite> for info.")
 		ataxiaEcho("If you're not a Sylvan then ignore this.")
 	end
+
+	-- Initialise user config (weapons, mount, artefacts, earrings)
+	if ataxia_initUserConfig then
+		ataxia_initUserConfig()
+	end
 	end

@@ -71,6 +71,9 @@ function leviSetup.dispatch(args)
   elseif cmd == "ndb"        then leviSetup.setupNdb(rest)
   elseif cmd == "combat"     then leviSetup.setupCombat(rest)
   elseif cmd == "slc"        then leviSetup.setupSlc(rest)
+  elseif cmd == "mount"      then leviSetup.setupMount(rest)
+  elseif cmd == "artefacts" or cmd == "arties" then leviSetup.setupArtefacts(rest)
+  elseif cmd == "earrings"   then leviSetup.setupEarrings(rest)
   elseif cmd == "status"     then leviSetup.showStatus()
   elseif cmd == "install"    then leviSetup.setupInstall(rest)
   elseif cmd == "guide"      then leviSetup.setupGuide(rest)
@@ -90,7 +93,10 @@ function leviSetup.showMenu()
   local cmds = {
     {"ataxia setup class",     "Set your class (auto-detects from GMCP)"},
     {"ataxia setup separator", "Set command separator (currently: " .. (ataxia.settings.separator or ";") .. ")"},
-    {"ataxia setup weapons",   "Configure weapon IDs for your class"},
+    {"ataxia setup weapons",   "Configure weapon IDs (scan, set, confirm)"},
+    {"ataxia setup mount",     "Set your mount/companion name"},
+    {"ataxia setup artefacts", "Configure artefact IDs (pendant, belt, etc.)"},
+    {"ataxia setup earrings",  "Configure travel earring locations"},
     {"ataxia setup basher",    "Basher settings (flee, gold pack, etc.)"},
     {"ataxia setup sipping",   "Health/mana sip thresholds"},
     {"ataxia setup tracking",  "Affliction tracking system (V1/V2)"},
@@ -181,59 +187,207 @@ end
 -- WEAPONS
 -- ═══════════════════════════════════════════════════════════════════════
 function leviSetup.setupWeapons(rest)
-  -- Parse: ataxia setup weapons <slot> <id>
-  local slot, id = rest:match("^(%S+)%s+(%S+)$")
+  local cmd = rest:match("^(%S+)")
+  local cmdRest = rest:match("^%S+%s+(.+)$") or ""
 
-  if slot and id then
-    -- Knight DWC weapons
-    if slot == "scim1" or slot == "weapon1" then
-      if infernalDWC then infernalDWC.config.weapon1 = id end
-      ataxia.settings.weapons = ataxia.settings.weapons or {}
-      ataxia.settings.weapons.weapon1 = id
-      save()
-      ataxiaEcho("Weapon 1 (right hand) set to: " .. W .. id)
-      return
-    elseif slot == "scim2" or slot == "weapon2" then
-      if infernalDWC then infernalDWC.config.weapon2 = id end
-      ataxia.settings.weapons = ataxia.settings.weapons or {}
-      ataxia.settings.weapons.weapon2 = id
-      save()
-      ataxiaEcho("Weapon 2 (left hand) set to: " .. W .. id)
-      return
-    elseif slot == "battleaxe" or slot == "baxe" then
-      if infernalDWC then infernalDWC.config.battleaxe = id end
-      ataxia.settings.weapons = ataxia.settings.weapons or {}
-      ataxia.settings.weapons.battleaxe = id
-      save()
-      ataxiaEcho("Battleaxe set to: " .. W .. id)
-      return
-    elseif slot == "staff" then
-      staff = id
-      ataxia.settings.weapons = ataxia.settings.weapons or {}
-      ataxia.settings.weapons.staff = id
-      save()
-      ataxiaEcho("Staff set to: " .. W .. id)
-      return
+  -- ataxia setup weapons scan
+  if cmd == "scan" then
+    if ataxia.scanWeapons then
+      ataxia.scanWeapons()
+    else
+      ataxiaEcho("Weapon detection not loaded.")
     end
+    return
   end
 
+  -- ataxia setup weapons confirm
+  if cmd == "confirm" then
+    if ataxia.confirmWeapons then
+      ataxia.confirmWeapons()
+    else
+      ataxiaEcho("Weapon detection not loaded.")
+    end
+    return
+  end
+
+  -- ataxia setup weapons swap <slot1> <slot2>
+  if cmd == "swap" then
+    local s1, s2 = cmdRest:match("^(%S+)%s+(%S+)$")
+    if s1 and s2 and ataxia.swapWeaponSlots then
+      ataxia.swapWeaponSlots(s1, s2)
+    else
+      ataxiaEcho("Usage: " .. W .. "ataxia setup weapons swap <slot1> <slot2>")
+    end
+    return
+  end
+
+  -- ataxia setup weapons set <slot> <id>  (or legacy: ataxia setup weapons <slot> <id>)
+  local slot, id
+  if cmd == "set" then
+    slot, id = cmdRest:match("^(%S+)%s+(%S+)$")
+  else
+    slot, id = rest:match("^(%S+)%s+(%S+)$")
+  end
+
+  if slot and id then
+    -- Normalize legacy slot names
+    if slot == "scim1" then slot = "weapon1" end
+    if slot == "scim2" then slot = "weapon2" end
+    if slot == "baxe" then slot = "battleaxe" end
+
+    ataxia.settings.weapons = ataxia.settings.weapons or {}
+    ataxia.settings.weapons[slot] = id
+
+    -- Sync DWC config if loaded
+    if infernalDWC and infernalDWC.config then
+      if slot == "weapon1" then infernalDWC.config.weapon1 = id end
+      if slot == "weapon2" then infernalDWC.config.weapon2 = id end
+      if slot == "battleaxe" then infernalDWC.config.battleaxe = id end
+    end
+
+    -- Also update pending scan suggestions if active
+    if ataxia.setWeaponSlotPending then
+      ataxia.setWeaponSlotPending(slot, id)
+    end
+
+    save()
+    ataxiaEcho(slot .. " set to: " .. W .. id)
+    return
+  end
+
+  -- No subcommand: show current weapons + help
   header("Weapon Configuration")
 
   local weapons = ataxia.settings.weapons or {}
+  local allSlots = {"weapon1", "weapon2", "mstar1", "mstar2", "staff", "staff2",
+    "battleaxe", "longsword", "warhammer", "bastard", "lash", "fang", "scythe",
+    "dagger", "rapier", "bow", "daegger", "flail1", "flail2"}
 
   cecho("\n  " .. HL .. "Current weapon IDs:\n")
-  row("weapon1 (right hand)", weapons.weapon1 or (infernalDWC and infernalDWC.config and infernalDWC.config.weapon1) or "not set")
-  row("weapon2 (left hand)", weapons.weapon2 or (infernalDWC and infernalDWC.config and infernalDWC.config.weapon2) or "not set")
-  row("battleaxe", weapons.battleaxe or (infernalDWC and infernalDWC.config and infernalDWC.config.battleaxe) or "not set")
-  row("staff", weapons.staff or (type(staff) == "string" and staff) or "not set")
+  local hasAny = false
+  for _, s in ipairs(allSlots) do
+    if weapons[s] then
+      row(s, weapons[s])
+      hasAny = true
+    end
+  end
+  if not hasAny then
+    cecho("\n  " .. D .. "(no weapons configured)")
+  end
 
-  cecho("\n\n  " .. V .. "Set a weapon ID:")
-  cecho("\n  " .. HL .. "ataxia setup weapons <slot> <itemID>")
+  cecho("\n\n  " .. V .. "Commands:")
+  cecho("\n  " .. HL .. "ataxia setup weapons scan" .. D .. "            Auto-detect from WEAPONLIST")
+  cecho("\n  " .. HL .. "ataxia setup weapons set <slot> <id>" .. D .. " Set a weapon slot")
+  cecho("\n  " .. HL .. "ataxia setup weapons swap <s1> <s2>" .. D .. "  Swap two slots")
+  cecho("\n  " .. HL .. "ataxia setup weapons confirm" .. D .. "         Save scan results")
   cecho("\n")
-  cecho("\n  " .. D .. "Slots: weapon1, weapon2, battleaxe, staff")
-  hint("  e.g.: ataxia setup weapons weapon1 scimitar405403")
-  hint("  e.g.: ataxia setup weapons battleaxe battleaxe590991")
-  hint("  Find IDs with: IH (inventory highlights) or II (inventory)")
+  cecho("\n  " .. D .. "Slots: weapon1, weapon2, mstar1, mstar2, staff, staff2,")
+  cecho("\n  " .. D .. "       battleaxe, longsword, warhammer, bastard, lash, fang,")
+  cecho("\n  " .. D .. "       scythe, dagger, rapier, bow, daegger, flail1, flail2")
+  hint("  e.g.: ataxia setup weapons set weapon1 scimitar405403")
+  hint("  Recommended: ataxia setup weapons scan")
+  cecho("\n")
+end
+
+-- ═══════════════════════════════════════════════════════════════════════
+-- MOUNT
+-- ═══════════════════════════════════════════════════════════════════════
+function leviSetup.setupMount(rest)
+  if rest and rest ~= "" then
+    ataxia.settings.user = ataxia.settings.user or {}
+    ataxia.settings.user.mount = rest
+    save()
+    ataxiaEcho("Mount set to: " .. W .. rest)
+    return
+  end
+
+  header("Mount / Companion")
+
+  local current = (ataxia.settings.user and ataxia.settings.user.mount) or "not set"
+  row("Mount name", current)
+
+  cecho("\n\n  " .. V .. "Set your mount/companion name:")
+  cecho("\n  " .. HL .. "ataxia setup mount <name>")
+  hint("  e.g.: ataxia setup mount impastus")
+  hint("  Used by: flying, dragonform, urn, steed triggers")
+  cecho("\n")
+end
+
+-- ═══════════════════════════════════════════════════════════════════════
+-- ARTEFACTS
+-- ═══════════════════════════════════════════════════════════════════════
+function leviSetup.setupArtefacts(rest)
+  local slot, id = rest:match("^(%S+)%s+(%S+)$")
+
+  if slot and id then
+    ataxia.settings.user = ataxia.settings.user or {}
+    ataxia.settings.user.artefacts = ataxia.settings.user.artefacts or {}
+    local validSlots = {pendant = true, bracelet = true, belt = true, ring = true}
+    if validSlots[slot] then
+      ataxia.settings.user.artefacts[slot] = id
+      save()
+      ataxiaEcho(slot .. " set to: " .. W .. id)
+    else
+      ataxiaEcho("Unknown artefact slot: " .. W .. slot)
+      cecho("\n  " .. D .. "Valid slots: pendant, bracelet, belt, ring")
+    end
+    return
+  end
+
+  header("Artefact Configuration")
+
+  local u = ataxia.settings.user or {}
+  local a = u.artefacts or {}
+
+  cecho("\n  " .. HL .. "Current artefact IDs:\n")
+  row("pendant", a.pendant or "not set")
+  row("bracelet", a.bracelet or "not set")
+  row("belt", a.belt or "not set")
+  row("ring", a.ring or "not set", "icewall ring")
+
+  cecho("\n\n  " .. V .. "Set an artefact ID:")
+  cecho("\n  " .. HL .. "ataxia setup artefacts <slot> <itemID>")
+  hint("  e.g.: ataxia setup artefacts pendant pendant398551")
+  hint("  e.g.: ataxia setup artefacts ring ring379683")
+  hint("  Find IDs with: II pendant, II bracelet, etc.")
+  cecho("\n")
+end
+
+-- ═══════════════════════════════════════════════════════════════════════
+-- EARRINGS
+-- ═══════════════════════════════════════════════════════════════════════
+function leviSetup.setupEarrings(rest)
+  local location, id = rest:match("^(%S+)%s+(%S+)$")
+
+  if location and id then
+    ataxia.settings.user = ataxia.settings.user or {}
+    ataxia.settings.user.artefacts = ataxia.settings.user.artefacts or {}
+    ataxia.settings.user.artefacts.earrings = ataxia.settings.user.artefacts.earrings or {}
+    ataxia.settings.user.artefacts.earrings[location] = id
+    save()
+    ataxiaEcho("Earring for " .. W .. location .. V .. " set to: " .. W .. id)
+    return
+  end
+
+  header("Travel Earring Configuration")
+
+  local u = ataxia.settings.user or {}
+  local a = u.artefacts or {}
+  local e = a.earrings or {}
+
+  local locations = {"axios", "aegoth", "proficy", "pharaus", "zylvith",
+    "antoninus", "entaro", "xarthus", "tabethys"}
+
+  cecho("\n  " .. HL .. "Current earring assignments:\n")
+  for _, loc in ipairs(locations) do
+    row(loc, e[loc] or "not set")
+  end
+
+  cecho("\n\n  " .. V .. "Set an earring:")
+  cecho("\n  " .. HL .. "ataxia setup earrings <location> <earringID>")
+  hint("  e.g.: ataxia setup earrings axios earring87118")
+  hint("  e.g.: ataxia setup earrings aegoth earring244327")
+  hint("  Find IDs with: II earring")
   cecho("\n")
 end
 
@@ -817,12 +971,25 @@ function leviSetup.showStatus()
   row("Party relay", boolStr(partyrelay))
   row("Auto-loot", boolStr(ataxia.settings.looting))
 
+  -- Mount & Artefacts
+  local u = ataxia.settings.user or {}
+  cecho("\n\n  " .. HL .. "MOUNT / ARTEFACTS")
+  row("Mount", u.mount or "not set")
+  local a = u.artefacts or {}
+  row("Pendant", a.pendant or "not set")
+  row("Bracelet", a.bracelet or "not set")
+  row("Belt", a.belt or "not set")
+  row("Ring", a.ring or "not set")
+
   -- Weapons
   local weapons = ataxia.settings.weapons or {}
   cecho("\n\n  " .. HL .. "WEAPONS")
-  row("weapon1", weapons.weapon1 or "not set")
-  row("weapon2", weapons.weapon2 or "not set")
-  row("battleaxe", weapons.battleaxe or "not set")
+  local wSlots = {"weapon1", "weapon2", "mstar1", "mstar2", "staff", "staff2",
+    "battleaxe", "longsword", "warhammer", "bastard", "lash", "fang"}
+  for _, s in ipairs(wSlots) do
+    if weapons[s] then row(s, weapons[s]) end
+  end
+  if not next(weapons) then row("(none)", "run: ataxia setup weapons scan") end
 
   -- Sipping
   local sip = ataxia.settings.sipping or {}

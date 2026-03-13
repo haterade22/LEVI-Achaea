@@ -318,11 +318,11 @@ if quash_arc then
 atk = "stand/wield shield longsword63894/assess "..target.."/quash "..target.."/arc curare"
 
 elseif vivisect then
-atk = atk.."wield scimitar scimitar;wipe scimitar383498;wipe scimitar355418;assess "..target..";hellforge invest "..invest..";dismount;vivisect "..target
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";assess "..target..";hellforge invest "..invest..";dismount;vivisect "..target
 
 elseif disembowel then 
 
-atk = atk.."wield scimitar scimitar;wipe scimitar383498;wipe scimitar355418;assess "..target..";hellforge invest "..invest..";disembowel "..target
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";assess "..target..";hellforge invest "..invest..";disembowel "..target
 
 
 
@@ -331,13 +331,13 @@ atk = "stand/wield shield longsword63894/assess "..target.."/quash "..target.."/
 
 
 elseif need_raze then
-atk = atk.."wield scimitar scimitar;wipe scimitar383498;wipe scimitar355418;assess "..target..";hellforge invest "..invest..";razeslash "..target.." "..venoms[1]
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";assess "..target..";hellforge invest "..invest..";razeslash "..target.." "..venoms[1]
 
 elseif need_raze2 then
-atk = atk.."wield scimitar scimitar;wipe scimitar383498;wipe scimitar355418;assess "..target..";hellforge invest "..invest..";razeslash "..target.." "..venoms[1]
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";assess "..target..";hellforge invest "..invest..";razeslash "..target.." "..venoms[1]
 
 elseif need_raze3 then
-atk = atk.."wield scimitar scimitar;wipe scimitar383498;wipe scimitar355418;assess "..target..";hellforge invest "..invest..";razeslash "..target.." "..venoms[1]
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";assess "..target..";hellforge invest "..invest..";razeslash "..target.." "..venoms[1]
 
 --elseif prepped_leftleg and prepped_rightleg and not tAffs.prone then
 
@@ -355,16 +355,16 @@ atk = atk.."wield scimitar scimitar;wipe scimitar383498;wipe scimitar355418;asse
 
 elseif (invest == "exploit" or invest == "torture" or invest == "torment") and venoms[1] ~= "epteth" and venoms[1] ~= "delphinium" then
 
-atk = atk.."wield scimitar scimitar;wipe scimitar383498;wipe scimitar355418;assess "..target..";hellforge invest "..invest..";envenom scimitar383498 with "..venoms[1]..";dsl "..target
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";assess "..target..";hellforge invest "..invest..";envenom "..ataxia.getWeapon("weapon1").." with "..venoms[1]..";dsl "..target
 
 
 
 elseif tAffs.prone and tAffs.damagedtorso and tAffs.damagedrightleg and tAffs.damagedleftleg then
-atk = atk.."wield scimitar scimitar;wipe scimitar383498;wipe scimitar355418;assess "..target..";hellforge invest "..invest..";impale "..target
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";assess "..target..";hellforge invest "..invest..";impale "..target
 
 else
 
-atk = atk.."wield scimitar scimitar;wipe scimitar383498;wipe scimitar355418;assess "..target..";hellforge invest "..invest..";dsl "..target.." "..venoms[1].." "..venoms[2]
+atk = atk.."wield "..ataxia.getWeapon("weapon1").." "..ataxia.getWeapon("weapon2")..";wipe "..ataxia.getWeapon("weapon1")..";wipe "..ataxia.getWeapon("weapon2")..";assess "..target..";hellforge invest "..invest..";dsl "..target.." "..venoms[1].." "..venoms[2]
 
 end
 

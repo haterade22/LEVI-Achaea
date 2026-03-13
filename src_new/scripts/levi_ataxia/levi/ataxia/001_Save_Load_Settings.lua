@@ -322,6 +322,20 @@ function ataxia_defaultSettings()
 	ataxia.curingprio = {}
 	ataxia.bardStuff = {symphony = false, harmsList = {}, ariaBash = false, bashHarms = false, instrument = "lyre"}
 	ataxia.sylvanStuff = {propagateList = {arms = false, legs = false, head = false, body = false}}
+
+	-- User-configurable weapons, mount, artefacts (populated via Setup Wizard)
+	ataxia.settings.weapons = {}
+	ataxia.settings.user = {
+		mount = nil,
+		artefacts = {
+			pendant = nil,
+			bracelet = nil,
+			belt = nil,
+			ring = nil,
+			earrings = {},
+		},
+	}
+
 	--ataxia_resetPrios()
 	ataxia_Echo("Default systems have been enabled. Enjoy.")
 	ataxia_saveSettings(false)
