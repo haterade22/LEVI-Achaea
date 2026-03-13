@@ -2,6 +2,65 @@
 
 ---
 
+## 2026-03-13 — v4.3.5: Fix sysupdate self-update system
+
+**File:** `src_new/scripts/levi_ataxia/levi/ataxia/misc_scripts/021_Auto_Update.lua`
+
+**Root cause:** The sysupdate flow called `uninstallPackage("Levi_Ataxia")` from within the package's own YAML-registered event handler. When the package was uninstalled, the `sysDownloadDone` handler was destroyed, making the subsequent `tempTimer` → `installPackage` flow unreliable.
+
+**Fix:**
+- Replaced YAML `eventHandlers` with `registerAnonymousEventHandler` — these survive package uninstall since they're registered at the Lua level
+- Captured `packageFile` path to a local variable before uninstalling, so the closure doesn't depend on `ataxia.updater` surviving
+- Separated `os.remove` into its own 1s timer after `installPackage` to prevent deleting the file before Mudlet finishes reading it
+- Added handler cleanup on script reload to prevent duplicate handlers accumulating
+- Added status echo at each step for visibility
+
+---
+
+## 2026-03-13 — Serpent: Pharaus V2 offense rewrite
+
+### Major Rewrite: Attack execution, venom selection, and impulse delivery
+
+**File:** `src_new/scripts/levi_ataxia/levi/levi_scripts/serpent/002_Serpent_Offense.lua`
+
+**Motivation:** Ported 9+ improvements from the Pharaus V2 reference implementation to improve serpent lock reliability, reduce wasted EQ, and add new kill pressure mechanics.
+
+**Changes:**
+
+1. **Per-aff fratricide 3s cooldown** — `lastImpulsed[aff] = os.clock()` timestamps + `recordImpulse()` called on every impulse send. Two-pass `selectImpulse(excludeAff)` respects cooldown on Pass 1, ignores on Pass 2 (never returns nil). Replaces hardcoded "confusion" and `selectFallbackSuggestion()`.
+
+2. **canUseSecondary / getPostAction() collision prevention** — Snap/shrug no longer collide with ekanelia impulse delivery. `getPostAction()` returns `(postAction, canUseSecondary)`. Overridden to true when `impatienceConditionsMet()`, `impatienceConditionsRelapse()`, or `kalmiaEkaneliaMet()`.
+
+3. **Kalmia ekanelia during flay** — When `kalmiaEkaneliaMet()` and no eqAction, chains impulse on eq alongside flay on bal (dual-balance attack). Flay venom optimized for kalmia ekanelia context.
+
+4. **Kalmia ekanelia as priority impulse** — Dedicated P3 check before normal impulse. Fires when clumsiness+weariness present, asthma absent, impulse eligible.
+
+5. **Impatience delivery with confidence gates** — `canAttemptImpatience()` (4s cooldown, stamped from confirm trigger) + `impatienceConditionsMet()` (requires third condition: fratricide/hypochondria/scytherus/slickness) + `impatienceConditionsRelapse()` (relaxed: asthma+weariness sufficient). Replaces `serpent.shouldDeliverImpatience()`.
+
+6. **Focus lock push** — `focusLockReady()` fires monkshood impulse when fratricide + 4 mentals + focus down + impatience + asthma + weariness. Overwhelms mental cure capacity.
+
+7. **Enhanced lock_reinforce burst** — Impulse priority: scytherus ekanelia (addiction+nausea → camus spike) → voyria (anorexia+impatience → confusion+disrupted). Sets `voyriaSent`. DStab sequence: paralysis → voyria → vardrax+euphorbia → curare+recklessness.
+
+8. **Unified pickVenom(exclude)** — Priority-based second venom selection with class-aware clumsiness (`wantClumsiness()`), lightwall darkshade (`hasLightwall()`), and slike gate (`slikeGateMet()`). All strategy branches use this instead of strategy-specific `buildSecondVenom*()`.
+
+9. **Behead on prone truelock** — P2 check: truelock + prone → behead (scimitar) before execute.
+
+10. **Rebounding/Shielded globals** — Shield/rebounding detection now also checks `Rebounding` and `Shielded` Ataxia globals (most reliable source).
+
+11. **lastImpulsed cleared on target change** — Prevents stale cooldowns from previous target bleeding into new fight.
+
+**Dead code removed:** `buildSecondVenom()`, `buildSecondVenomGinseng()`, `buildSecondVenomRelapse()`, `serpent.canDeliverAnorexia()`, `serpent.shouldDeliverImpatience()`, `serpent.checkBloodrootExploit()`
+
+### Bug fixes (post-verification)
+
+12. **lastImpatienceAttempt reset on target change** — Impatience cooldown (2.5s) was persisting across target switches, delaying first monkshood attempt on new targets. Now reset to 0 alongside `lastImpulsed = {}`.
+
+13. **complete_softlock requires asthma anchor** — `determineStrategy()` was entering `complete_softlock` with just slickness+anorexia (no asthma), which has no lock value since both are salve/eat cures. Now requires asthma as mandatory anchor before counting anorexia/slickness pieces.
+
+14. **checkImpulseEligible() gecko reset logic** — Was blindly short-circuiting to `true` when `geckoStripAttempted` was set, even if target re-applied quicksilver. Now checks sileris/fangbarrier first and resets `geckoStripAttempted`/`postGeckoLockdown` if defenses are back up, preventing wasted impulse/bite into active fangbarrier.
+
+---
+
 ## 2026-03-12 — Serpent: track fangbarrier/sileris strip on flay shield/rebounding
 
 ### Bug Fix: Missing flay shield/rebounding patterns in sileris strip trigger

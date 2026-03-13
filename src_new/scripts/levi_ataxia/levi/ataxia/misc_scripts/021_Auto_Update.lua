@@ -9,9 +9,6 @@ attributes:
   isActive: 'yes'
   isFolder: 'no'
 packageName: ''
-eventHandlers:
-- sysDownloadDone
-- sysDownloadError
 ]]--
 
 ataxia.updater = ataxia.updater or {}
@@ -46,12 +43,16 @@ function ataxia.updater.onDownloadDone(_, filename)
       end
     end
   elseif filename == ataxia.updater.packageFile then
-    ataxia_Echo("Download complete. Installing...")
+    -- capture path locally before uninstalling the package that contains this script
+    local packagePath = ataxia.updater.packageFile
+    ataxia_Echo("Download complete. Removing old package...")
     uninstallPackage("Levi_Ataxia")
-    tempTimer(1, function()
-      installPackage(ataxia.updater.packageFile)
-      os.remove(ataxia.updater.packageFile)
-      ataxia_Echo("Levi Ataxia updated successfully!")
+    ataxia_Echo("Installing new package...")
+    tempTimer(2, function()
+      installPackage(packagePath)
+      tempTimer(1, function()
+        os.remove(packagePath)
+      end)
     end)
   end
 end
@@ -62,14 +63,22 @@ function ataxia.updater.onDownloadError(_, errMsg, url)
   end
 end
 
--- Event handler dispatch (Mudlet calls this by script name)
-function Auto_Update(event, ...)
-  if event == "sysDownloadDone" then
-    ataxia.updater.onDownloadDone(event, ...)
-  elseif event == "sysDownloadError" then
-    ataxia.updater.onDownloadError(event, ...)
-  end
+-- Register event handlers via anonymous handlers so they survive uninstallPackage.
+-- The old approach used YAML eventHandlers + a dispatch function named after the script,
+-- but those handlers get removed when the package is uninstalled during self-update.
+if ataxia.updater._downloadHandler then
+  killAnonymousEventHandler(ataxia.updater._downloadHandler)
 end
+if ataxia.updater._errorHandler then
+  killAnonymousEventHandler(ataxia.updater._errorHandler)
+end
+
+ataxia.updater._downloadHandler = registerAnonymousEventHandler(
+  "sysDownloadDone", ataxia.updater.onDownloadDone
+)
+ataxia.updater._errorHandler = registerAnonymousEventHandler(
+  "sysDownloadError", ataxia.updater.onDownloadError
+)
 
 -- Check for updates on load
 registerAnonymousEventHandler("sysLoadEvent", function()

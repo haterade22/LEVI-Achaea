@@ -66,6 +66,14 @@ serpent.config = serpent.config or {}
 serpent.hypnosis = serpent.hypnosis or {}
 serpent.state = serpent.state or {}
 
+-- Per-aff impulse timestamps for fratricide 3s relapse window.
+-- Every impulse call goes through recordImpulse() and selectImpulse() respects the window.
+lastImpulsed = lastImpulsed or {}
+
+-- Impatience delivery cooldown (2.5s).
+-- Stamped by the ekanelia confirm trigger, NOT on send.
+lastImpatienceAttempt = lastImpatienceAttempt or 0
+
 -- Combat state
 serpOffenseMode = serpOffenseMode or "auto"
 serpStrategy = serpStrategy or "lock"
@@ -112,6 +120,22 @@ local TRIVIAL_SUGGESTIONS = {
     "amnesia", "paranoia", "loneliness", "claustrophobia", "stuttering",
     "hallucinations", "dementia", "deadening", "epilepsy", "agoraphobia",
     "masochism", "recklessness", "vertigo", "confusion", "stupidity"
+}
+
+-- Impulse priority list for nil-safe selectImpulse().
+-- Order: focus disruption first, then mental stacking, then ekanelia setup affs.
+local IMPULSE_PRIORITY = {
+    "confusion",      -- slows focus, sets up voyria ekanelia
+    "stupidity",      -- blocks actions immediately
+    "masochism",      -- key ekanelia conditional (impatience + hypochondria)
+    "recklessness",   -- sets up loki ekanelia, blocks some passive cures
+    "vertigo",        -- sets up voyria ekanelia
+    "epilepsy",       -- nervous system disruption
+    "dementia",       -- sets up aconite ekanelia
+    "deadening",      -- sets up aconite ekanelia
+    "hallucinations", -- mental stack filler
+    "paranoia",       -- mental stack filler
+    "loneliness",     -- mental stack filler
 }
 
 -- Venom → affliction mapping
@@ -447,6 +471,230 @@ function checkEkaneliaOpportunities()
     end
 end
 
+-- =============================================================================
+-- IMPULSE SELECTION (Nil-safe, two-pass with fratricide window)
+-- =============================================================================
+
+local function now()
+    return os.clock()
+end
+
+--[[
+    Two-pass impulse selection:
+      Pass 1: respect fratricide 3s cooldown per aff
+      Pass 2: fallback ignoring cooldown (never returns nil)
+    Optional excludeAff param for cases like curare ekanelia
+    (don't re-impulse masochism when it's already the conditional).
+]]--
+local function selectImpulse(excludeAff)
+    local hasFratricide = haveAff("fratricide")
+        or (serpent.hypnosis and serpent.hypnosis.fratricideActive)
+
+    -- Pass 1: respect fratricide cooldown
+    for _, aff in ipairs(IMPULSE_PRIORITY) do
+        if aff ~= excludeAff and not haveAff(aff) then
+            if hasFratricide then
+                local lastTime = lastImpulsed[aff] or 0
+                if (now() - lastTime) >= 3.0 then
+                    return aff
+                end
+            else
+                return aff
+            end
+        end
+    end
+
+    -- Pass 2: fallback — ignore fratricide cooldown rather than returning nil
+    for _, aff in ipairs(IMPULSE_PRIORITY) do
+        if aff ~= excludeAff and not haveAff(aff) then
+            return aff
+        end
+    end
+
+    -- Last resort: always useful
+    if excludeAff ~= "masochism" then return "masochism" end
+    return "confusion"
+end
+
+-- Record impulse timestamp for fratricide window tracking.
+-- Called on every impulse send so the window is tracked for ALL ekanelia paths.
+local function recordImpulse(aff)
+    if aff then lastImpulsed[aff] = now() end
+end
+
+-- =============================================================================
+-- IMPATIENCE COOLDOWN
+-- canAttemptImpatience() gates the send.
+-- stampImpatienceCooldown() is called ONLY from the ekanelia confirm trigger.
+-- =============================================================================
+
+local function canAttemptImpatience()
+    return (now() - lastImpatienceAttempt) >= 2.5
+end
+
+function stampImpatienceCooldown()
+    lastImpatienceAttempt = now()
+end
+
+-- =============================================================================
+-- KALMIA EKANELIA GUARD
+-- Won't fire when asthma already present (primary effect wasted).
+-- =============================================================================
+
+local function kalmiaEkaneliaMet()
+    return haveAff("clumsiness") and haveAff("weariness")
+        and not haveAff("asthma")
+        and checkImpulseEligible()
+end
+
+-- =============================================================================
+-- IMPATIENCE CONDITIONS
+-- Third-condition confidence gate: asthma + weariness + supporting mechanic.
+-- =============================================================================
+
+local function impatienceConditionsMet()
+    if haveAff("impatience") then return false end
+    if not haveAff("asthma") then return false end
+    if not haveAff("weariness") then return false end
+    return haveAff("fratricide")
+        or (serpent.hypnosis and serpent.hypnosis.fratricideActive)
+        or haveAff("hypochondria")
+        or haveAff("scytherus")
+        or haveAff("slickness")
+end
+
+-- Relaxed impatience check for relapse_lock: asthma+weariness is sufficient.
+local function impatienceConditionsRelapse()
+    if haveAff("impatience") then return false end
+    if not haveAff("asthma") then return false end
+    if not haveAff("weariness") then return false end
+    return true
+end
+
+-- =============================================================================
+-- canUseSecondary / getPostAction
+-- Prevents snap/shrug from colliding with ekanelia delivery.
+-- kalmia and impatience conditions override this — they can't wait.
+-- =============================================================================
+
+local function getPostAction()
+    local shouldSnap = hypSeal2 == true and snapped == false
+    local shouldShrug = rTabSize(ataxia.afflictions) >= 3
+        and canShrug == true
+        and not ataxia.afflictions.weariness
+        and not shouldSnap
+
+    if shouldSnap then
+        return "::snap " .. target, false
+    elseif shouldShrug then
+        return "::shrugging", false
+    end
+    return "", true
+end
+
+-- =============================================================================
+-- MENTAL COUNT & FOCUS LOCK DETECTION
+-- =============================================================================
+
+local MENTAL_AFFS = {
+    "confusion", "stupidity", "masochism", "recklessness",
+    "vertigo", "epilepsy", "dementia", "deadening",
+    "hallucinations", "paranoia", "loneliness", "hypochondria",
+    "anorexia", "pacifism", "nausea", "addiction",
+}
+
+local function mentalCount()
+    local count = 0
+    for _, aff in ipairs(MENTAL_AFFS) do
+        if haveAff(aff) then count = count + 1 end
+    end
+    return count
+end
+
+local function focusLockReady()
+    return (haveAff("fratricide") or (serpent.hypnosis and serpent.hypnosis.fratricideActive))
+        and mentalCount() >= 4
+        and tBals.focus == false
+        and haveAff("impatience")
+        and haveAff("asthma")
+        and haveAff("weariness")
+end
+
+-- =============================================================================
+-- CLASS-AWARE CLUMSINESS
+-- =============================================================================
+
+local function wantClumsiness()
+    local class = tarClass or ""
+    return class ~= "air"
+        and class ~= "fire"
+        and class ~= "magi"
+        and class ~= "sylvan"
+        and class ~= "occultist"
+        and class ~= "bard"
+        and class ~= "jester"
+        and class ~= "blademaster"
+        and class ~= "water"
+        and class ~= "druid"
+        and class ~= "sentinel"
+end
+
+-- =============================================================================
+-- SLIKE (ANOREXIA) GATE
+-- =============================================================================
+
+local function slikeGateMet()
+    if haveAff("anorexia") then return false end
+    if haveAff("impatience") then return true end
+    if tBals.focus == false and haveAff("asthma") then return true end
+    return false
+end
+
+-- =============================================================================
+-- LIGHTWALL CHECK
+-- =============================================================================
+
+local function hasLightwall()
+    return haveAff("lightwall") or (tAffs and tAffs.lightwall)
+end
+
+-- =============================================================================
+-- UNIFIED VENOM SELECTION (pickVenom / pickVenomRelapse)
+-- =============================================================================
+
+local function pickVenom(exclude)
+    local hasWea = haveAff("weariness")
+    local hasClu = haveAff("clumsiness")
+    local hasAst = haveAff("asthma")
+
+    if not haveAff("paralysis") and exclude ~= "curare" then return "curare" end
+    if not hasWea and exclude ~= "vernalius" then return "vernalius" end
+    if not hasAst and hasWea and exclude ~= "kalmia" then return "kalmia" end
+    if not haveAff("darkshade") and hasLightwall() and exclude ~= "darkshade" then return "darkshade" end
+    if not haveAff("slickness") and hasAst and exclude ~= "gecko" then return "gecko" end
+    if slikeGateMet() and exclude ~= "slike" then return "slike" end
+    if not hasClu and wantClumsiness() and exclude ~= "xentio" then return "xentio" end
+    if exclude ~= "curare" then return "curare" end
+    return "vernalius"
+end
+
+local function pickVenomRelapse(exclude)
+    local hasWea = haveAff("weariness")
+    local hasAst = haveAff("asthma")
+
+    if not haveAff("paralysis") and exclude ~= "curare" then return "curare" end
+    if not hasWea and exclude ~= "vernalius" then return "vernalius" end
+    if not hasAst and hasWea and exclude ~= "kalmia" then return "kalmia" end
+    if not haveAff("slickness") and hasAst and exclude ~= "gecko" then return "gecko" end
+    if not haveAff("anorexia") and exclude ~= "slike" then return "slike" end
+    if exclude ~= "curare" then return "curare" end
+    return "vernalius"
+end
+
+-- =============================================================================
+-- IMPULSE PAIR SELECTION
+-- =============================================================================
+
 --[[
     Select the best impulse suggestion + venom pair for Ekanelia.
     Returns {suggestion=X, venom=Y} or nil if no Ekanelia achievable.
@@ -475,9 +723,10 @@ function selectImpulsePair()
         end
 
         if #missing == 0 then
-            -- ALL conditionals met → reinforce a trivial conditional to guarantee ekanelia
-            -- e.g. masochism for monkshood — ensures it's present when venom fires
-            local suggestion = ek.trivials[1] or selectFallbackSuggestion()
+            -- ALL conditionals met → use nil-safe selectImpulse()
+            -- instead of ek.trivials[1] which can be nil for venoms with
+            -- no trivial conditionals (e.g. kalmia, scytherus)
+            local suggestion = selectImpulse(nil)
             return {suggestion = suggestion, venom = ek.trigger, label = ek.result}
         elseif #missing == 1 and #missingTrivials == 1 then
             -- Exactly one trivial conditional missing → impulse completes it
@@ -493,14 +742,8 @@ end
     Prioritize suggestions that advance the lock or add pressure.
 ]]--
 function selectFallbackSuggestion()
-    -- Priority: suggestions that help the lock
-    local priorities = {"stupidity", "epilepsy", "confusion", "recklessness", "amnesia", "masochism", "vertigo"}
-    for _, sug in ipairs(priorities) do
-        if not haveAff(sug) then
-            return sug
-        end
-    end
-    return "stupidity"
+    -- Delegate to nil-safe selectImpulse()
+    return selectImpulse(nil)
 end
 
 --[[
@@ -554,15 +797,17 @@ end
     Does NOT check eq availability or Ekanelia — those are checked separately.
 ]]--
 function checkImpulseEligible()
-    -- After gecko strip attempt, trust sileris is gone (was stale or gecko cleared it)
-    if serpent.state.geckoStripAttempted then
-        impulseReady = true
-        return true
-    end
-    -- V1 fallback is safe here: stale TRUE just means we use dstab instead (no harm)
-    -- haveAff() alone misses fangbarrier when "quicksilver" trigger doesn't fire
     local hasSileris = haveAff("sileris") or (tAffs and tAffs.sileris)
     local hasFangbarrier = haveAff("fangbarrier") or (tAffs and tAffs.fangbarrier)
+
+    -- If sileris/fangbarrier is back up (quicksilver reapply), reset the strip flag.
+    -- geckoStripAttempted is only valid for one round — the moment the target
+    -- reapplies quicksilver it's no longer safe to assume bite will land.
+    if (hasSileris or hasFangbarrier) and serpent.state.geckoStripAttempted then
+        serpent.state.geckoStripAttempted = false
+        serpent.state.postGeckoLockdown = false
+    end
+
     impulseReady = not hasSileris and not hasFangbarrier
     return impulseReady
 end
@@ -606,46 +851,8 @@ end
     - Slickness blocks epidermal (on target OR gecko delivering it this round)
     - Impatience blocks focus (or focus on cooldown > 1.8s)
 ]]--
-function serpent.canDeliverAnorexia(firstVenom)
-    if haveAff("anorexia") then return false end
-    local slicknessBlocked = haveAff("slickness") or (firstVenom == "gecko")
-    local focusBlocked = haveAff("impatience") or serpent.getFocusCooldownRemaining() > 1.8
-    return slicknessBlocked and focusBlocked
-end
-
---[[
-    Detect bloodroot backtracking opportunity for focuslock.
-    When target eats bloodroot for paralysis (slickness stays),
-    spike anorexia + stupidity for 50/50 focus dilemma.
-]]--
-function serpent.checkBloodrootExploit()
-    return haveAff("slickness") and haveAff("asthma")
-           and not haveAff("paralysis")
-           and serpent.getFocusCooldownRemaining() > 1.5
-end
-
---[[
-    Gate impatience delivery behind supporting mechanics.
-    Without support, target just goldenseals impatience immediately.
-]]--
-function serpent.shouldDeliverImpatience()
-    -- Gate 1: Fratricide active (relapsing masochism locks focus)
-    if serpent.hypnosis.hasFratricide() then return true end
-    -- Gate 2: Focus on cooldown (can't focus-cure goldenseal affs)
-    if serpent.getFocusCooldownRemaining() > 1.8 then return true end
-    -- Gate 3: Softlock present (anorexia blocks goldenseal eating)
-    if softlock then return true end
-    -- Gate 4: 2+ goldenseal affs stacked (they need multiple eats)
-    local gsCount = 0
-    for _, aff in ipairs({"stupidity", "dizziness", "epilepsy", "shyness"}) do
-        if haveAff(aff) then gsCount = gsCount + 1 end
-    end
-    if gsCount >= 2 then return true end
-    -- Gate 5: Hypothermia on target (cure priority conflict)
-    if haveAff("hypothermia") then return true end
-    -- No support: don't waste EQ on naked impatience
-    return false
-end
+-- serpent.canDeliverAnorexia, serpent.checkBloodrootExploit, serpent.shouldDeliverImpatience
+-- REMOVED: replaced by slikeGateMet(), impatienceConditionsMet(), canAttemptImpatience()
 
 -- =============================================================================
 -- STACK COUNTING
@@ -764,14 +971,15 @@ function determineStrategy()
 
     -- ===== CAN WE COMPLETE SOFTLOCK? =====
     -- Need: asthma + anorexia + slickness
-    local softPieces = 0
-    if haveAff("asthma") then softPieces = softPieces + 1 end
-    if haveAff("anorexia") then softPieces = softPieces + 1 end
-    if haveAff("slickness") then softPieces = softPieces + 1 end
+    if haveAff("asthma") then
+      local softPieces = 1
+      if haveAff("anorexia") then softPieces = softPieces + 1 end
+      if haveAff("slickness") then softPieces = softPieces + 1 end
 
-    if softPieces >= 2 then
-        serpStrategy = "complete_softlock"
-        return
+      if softPieces >= 2 then
+          serpStrategy = "complete_softlock"
+          return
+      end
     end
 
     -- ===== HYPNOSIS IN PROGRESS =====
@@ -875,125 +1083,79 @@ function selectVenoms()
         else
             table.insert(envenomList, "voyria")
         end
-        buildSecondVenom()
+        local v1 = envenomList[1]
+        table.insert(envenomListTwo, pickVenom(v1))
         return
     end
 
     -- ===== COMPLETE TRUELOCK: Missing 1-2 pieces =====
     if serpStrategy == "complete_truelock" then
-        -- Deliver missing lock pieces directly via venom
+        local v1
         if not haveAff("paralysis") then
-            table.insert(envenomList, "curare")
+            v1 = "curare"
         elseif not haveAff("impatience") then
-            -- Impatience has no venom — must come from Ekanelia monkshood
-            -- Set up monkshood conditionals: asthma + masochism(impulse) + weariness
-            if not haveAff("weariness") then
-                table.insert(envenomList, "vernalius")
-            elseif not haveAff("asthma") then
-                table.insert(envenomList, "kalmia")
-            else
-                -- Conditionals are ready for impulse masochism monkshood
-                -- Deliver other useful venoms while we wait for impulse round
-                table.insert(envenomList, "gecko")
-            end
-        elseif not haveAff("slickness") then
-            table.insert(envenomList, "gecko")
-        elseif not haveAff("asthma") then
-            table.insert(envenomList, "kalmia")
-        elseif serpent.canDeliverAnorexia(envenomList[1]) then
-            table.insert(envenomList, "slike")
+            if not haveAff("weariness") then v1 = "vernalius"
+            elseif not haveAff("asthma") then v1 = "kalmia"
+            else v1 = pickVenom(nil) end
+        elseif not haveAff("slickness") and haveAff("asthma") then
+            v1 = "gecko"
+        elseif not haveAff("anorexia") and haveAff("impatience") then
+            v1 = "slike"
         else
-            table.insert(envenomList, "voyria")
+            v1 = pickVenom(nil)
         end
-        buildSecondVenom()
+        table.insert(envenomList, v1)
+        table.insert(envenomListTwo, pickVenom(v1))
         return
     end
 
     -- ===== COMPLETE HARDLOCK: Softlock + need paralysis/impatience =====
     if serpStrategy == "complete_hardlock" then
-        -- Bloodroot backtracking: slickness stayed, asthma blocks smoke, focus on cd
-        -- Spike slike+aconite for 50/50 focuslock (focus cures one, other sticks)
-        if serpent.checkBloodrootExploit() then
-            table.insert(envenomList, "slike")
-            table.insert(envenomListTwo, "aconite")
-            return
-        end
+        local v1
         if not haveAff("paralysis") then
-            table.insert(envenomList, "curare")
+            v1 = "curare"
         elseif not haveAff("impatience") then
-            -- Set up monkshood Ekanelia conditionals (asthma first — blocks rebounding)
-            if not haveAff("asthma") then
-                table.insert(envenomList, "kalmia")
-            elseif not haveAff("weariness") then
-                table.insert(envenomList, "vernalius")
-            else
-                table.insert(envenomList, "curare")
-            end
+            if not haveAff("weariness") then v1 = "vernalius"
+            elseif not haveAff("asthma") then v1 = "kalmia"
+            else v1 = pickVenom(nil) end
         else
-            table.insert(envenomList, "curare")
+            v1 = pickVenom(nil)
         end
-        buildSecondVenom()
+        table.insert(envenomList, v1)
+        table.insert(envenomListTwo, pickVenom(v1))
         return
     end
 
-    -- ===== COMPLETE SOFTLOCK: Need asthma + anorexia + slickness =====
+    -- ===== COMPLETE SOFTLOCK: asthma present, need slickness+anorexia =====
     if serpStrategy == "complete_softlock" then
-        -- Bloodroot backtracking: slickness stayed, asthma blocks smoke, focus on cd
-        -- Spike slike+aconite for 50/50 focuslock (focus cures one, other sticks)
-        if serpent.checkBloodrootExploit() then
-            table.insert(envenomList, "slike")
-            table.insert(envenomListTwo, "aconite")
-            return
-        end
-        -- Direct venom delivery for softlock pieces
-        if not haveAff("asthma") then
-            table.insert(envenomList, "kalmia")
-        elseif not haveAff("slickness") then
-            -- Can we trigger kalmia Ekanelia? (clumsiness + weariness → slickness)
+        local v1
+        if not haveAff("slickness") then
             if haveAff("clumsiness") and haveAff("weariness") then
-                -- Ekanelia conditions met - but we need bite for that
-                -- Use kalmia venom to get asthma+slickness via Ekanelia
-                table.insert(envenomList, "kalmia")
-            elseif not haveAff("clumsiness") and not haveAff("weariness") then
-                -- Set up kalmia Ekanelia: clumsiness + weariness
-                table.insert(envenomList, "xentio")
-                table.insert(envenomListTwo, "vernalius")
-                return
-            elseif not haveAff("clumsiness") then
-                table.insert(envenomList, "xentio")
+                v1 = pickVenom(nil)  -- impulse handles kalmia, dstab something useful
             elseif not haveAff("weariness") then
-                table.insert(envenomList, "vernalius")
+                v1 = "vernalius"
             else
-                table.insert(envenomList, "gecko")
+                v1 = "gecko"
             end
-        elseif serpent.canDeliverAnorexia(envenomList[1]) then
-            table.insert(envenomList, "slike")
+        elseif slikeGateMet() then
+            v1 = "slike"
+        elseif not haveAff("paralysis") then
+            v1 = "curare"
+        elseif not haveAff("weariness") then
+            v1 = "vernalius"
         else
-            -- Softlock pieces in place, add pressure
-            if not haveAff("paralysis") then
-                table.insert(envenomList, "curare")
-            else
-                table.insert(envenomList, "darkshade")
-            end
+            v1 = pickVenom(nil)
         end
-        buildSecondVenom()
+        table.insert(envenomList, v1)
+        table.insert(envenomListTwo, pickVenom(v1))
         return
     end
 
     -- ===== HYPNOSIS: Maintain pressure while hypnosis completes =====
     if serpStrategy == "hypnosis" then
-        if not haveAff("paralysis") then
-            table.insert(envenomList, "curare")
-        elseif not haveAff("slickness") then
-            table.insert(envenomList, "gecko")
-        elseif not haveAff("asthma") then
-            table.insert(envenomList, "kalmia")
-        elseif not haveAff("weariness") then
-            table.insert(envenomList, "vernalius")
-        else
-            table.insert(envenomList, "darkshade")
-        end
-        buildSecondVenom()
+        local v1 = pickVenom(nil)
+        table.insert(envenomList, v1)
+        table.insert(envenomListTwo, pickVenom(v1))
         return
     end
 
@@ -1003,265 +1165,153 @@ function selectVenoms()
         for _, s in ipairs(serpent.hypnosis.targetSuggestions or {}) do
             suggesting[s] = true
         end
-
-        -- Lock venoms, skip what suggestions will deliver
-        if not haveAff("paralysis") then
-            table.insert(envenomList, "curare")
-        elseif not haveAff("asthma") and not haveAff("weariness") then
-            -- Monkshood setup: asthma + weariness (both venoms)
-            table.insert(envenomList, "kalmia")
-            table.insert(envenomListTwo, "vernalius")
-            return
-        elseif not haveAff("asthma") then
-            table.insert(envenomList, "kalmia")
-        elseif not haveAff("weariness") then
-            table.insert(envenomList, "vernalius")
-        elseif not haveAff("clumsiness") and not suggesting["clumsiness"] then
-            table.insert(envenomList, "xentio")
-        elseif not haveAff("slickness") then
-            table.insert(envenomList, "gecko")
-        elseif serpent.canDeliverAnorexia(envenomList[1]) and not suggesting["anorexia"] then
-            table.insert(envenomList, "slike")
-        else
-            table.insert(envenomList, "curare")
-        end
-        buildSecondVenom()
+        local v1 = pickVenom(nil)
+        -- Skip venoms that hypnosis will deliver
+        if suggesting[VENOM_TO_AFF[v1] or ""] then v1 = pickVenom(v1) end
+        table.insert(envenomList, v1)
+        table.insert(envenomListTwo, pickVenom(v1))
         return
     end
 
     -- ===== RELAPSE LOCK: Coordinate venoms with fratricide relapses =====
-    -- Dstab fallback when impulse can't fire (sileris or stupidity already on)
-    -- Key combo: gecko+slike. No impatience gate on slike — impatience coming via impulse.
     if serpStrategy == "relapse_lock" then
-        -- Key combo: pre-load slickness + anorexia before second impatience
-        if not haveAff("slickness") and not haveAff("anorexia") then
+        -- Pre-load slickness+anorexia only when asthma+weariness stacked
+        local readyForPreload = haveAff("asthma") and haveAff("weariness")
+        if readyForPreload and not haveAff("slickness") and not haveAff("anorexia") then
             table.insert(envenomList, "gecko")
             table.insert(envenomListTwo, "slike")
             return
         end
+        local v1 = pickVenomRelapse(nil)
+        table.insert(envenomList, v1)
+        table.insert(envenomListTwo, pickVenomRelapse(v1))
+        return
+    end
 
-        -- Single missing pieces
+    -- ===== LOCK REINFORCE / BURST FINISH =====
+    -- Post-truelock sequence:
+    --   1. Paralysis always (they can't cure while paralysed)
+    --   2. Voyria reinforcement (confusion+disrupted deepens lock)
+    --   3. Scytherus setup: vardrax+euphorbia (addiction+nausea -> camus)
+    --   4. Scytherus delivery: impulse fires via attack execution
+    --   5. Maintain pressure with curare+recklessness
+    if serpStrategy == "lock_reinforce" then
+        -- Priority 1: paralysis always
         if not haveAff("paralysis") then
             table.insert(envenomList, "curare")
-        elseif not haveAff("asthma") then
-            table.insert(envenomList, "kalmia")
-        elseif not haveAff("weariness") then
-            table.insert(envenomList, "vernalius")
-        elseif not haveAff("slickness") then
-            table.insert(envenomList, "gecko")
-        elseif not haveAff("anorexia") then
-            table.insert(envenomList, "slike")  -- NO impatience gate
-        elseif not haveAff("stupidity") then
-            table.insert(envenomList, "aconite")  -- fallback if impulse can't deliver
-        else
-            table.insert(envenomList, "curare")
+            table.insert(envenomListTwo, pickVenom("curare"))
+            return
         end
-        buildSecondVenomRelapse()
-        return
-    end
-
-    -- ===== LOCK REINFORCE: Post-truelock class-specific blocker + maintain lock =====
-    if serpStrategy == "lock_reinforce" then
-        local lockAffToVenom = {
-            stupidity = "aconite", voyria = "voyria", weariness = "vernalius",
-            recklessness = "eurypteria", paralysis = "curare", haemophilia = "notechis",
-        }
-        local lockAffName = getLockingAffliction and getLockingAffliction("name") or nil
-        local lockVenom = lockAffName and lockAffToVenom[lockAffName] or nil
-
-        if lockVenom and not haveAff(lockAffName) then
-            -- Deliver class-specific locking affliction
-            table.insert(envenomList, lockVenom)
-            if lockVenom ~= "curare" and not haveAff("paralysis") then
+        -- Priority 2: voyria reinforcement
+        if not haveAff("voyria") then
+            table.insert(envenomList, "voyria")
+            if not haveAff("recklessness") then
+                table.insert(envenomListTwo, "eurypteria")
+            else
                 table.insert(envenomListTwo, "curare")
-            else
-                buildSecondVenom()
             end
-        else
-            -- Already have class aff (or unknown class), maintain lock
-            if not haveAff("paralysis") then
-                table.insert(envenomList, "curare")
-            else
-                table.insert(envenomList, "eurypteria")
-            end
-            buildSecondVenom()
+            return
         end
-        return
-    end
-
-    -- ===== APPLY DARKSHADE: Get darkshade on target ASAP =====
-    if serpStrategy == "apply_darkshade" then
-        table.insert(envenomList, "darkshade")
-        if serpOffenseMode == "darkshade" then
-            -- Darkshade mode: darkshade + curare (curare maintains paralysis, blocks tree)
-            if not haveAff("paralysis") then
-                table.insert(envenomListTwo, "curare")
-            else
-                buildSecondVenom()
-            end
-        else
-            buildSecondVenom()
+        -- Priority 3: scytherus burst setup — addiction+nausea -> camus damage
+        if not haveAff("addiction") then
+            table.insert(envenomList, "vardrax")
+            table.insert(envenomListTwo, not haveAff("nausea") and "euphorbia" or "curare")
+            return
         end
-        return
-    end
-
-    -- ===== GINSENG PRESSURE: Stack ginseng affs quickly (both venoms) =====
-    -- Target is eating ginseng to cure darkshade — stack to 3 ginseng affs
-    -- so they spend multiple rounds eating ginseng, then we switch to lock
-    if serpStrategy == "ginseng_pressure" then
-        -- Darkshade mode: ginseng aff first, curare second (blocks tree)
-        if serpOffenseMode == "darkshade" and not haveAff("paralysis") then
-            if not haveAff("addiction") then
-                table.insert(envenomList, "vardrax")
-            elseif not haveAff("nausea") then
-                table.insert(envenomList, "euphorbia")
-            elseif not haveAff("haemophilia") then
-                table.insert(envenomList, "notechis")
-            else
-                table.insert(envenomList, "darkshade")
-            end
+        if not haveAff("nausea") then
+            table.insert(envenomList, "euphorbia")
             table.insert(envenomListTwo, "curare")
             return
         end
-
-        if not haveAff("addiction") then
-            table.insert(envenomList, "vardrax")
-        elseif not haveAff("nausea") then
-            table.insert(envenomList, "euphorbia")
-        elseif not haveAff("haemophilia") then
-            table.insert(envenomList, "notechis")
-        elseif not haveAff("scytherus") then
-            table.insert(envenomList, "scytherus")
-        else
-            table.insert(envenomList, "curare")
-        end
-        buildSecondVenomGinseng()
+        -- Priority 4: addiction+nausea present — scytherus impulse fires via attack execution
+        table.insert(envenomList, "curare")
+        table.insert(envenomListTwo, not haveAff("recklessness") and "eurypteria" or "vardrax")
         return
     end
 
-    -- ===== BUILD SCYTHERUS: Build addiction+nausea for scytherus ekanelia =====
-    if serpStrategy == "build_scytherus" then
-        if not haveAff("addiction") then
-            table.insert(envenomList, "vardrax")
-        elseif not haveAff("nausea") then
-            table.insert(envenomList, "euphorbia")
-        else
-            table.insert(envenomList, "curare")
-        end
-        if #envenomListTwo == 0 then
-            local first = envenomList[1]
-            if not haveAff("nausea") and first ~= "euphorbia" then
-                table.insert(envenomListTwo, "euphorbia")
-            elseif not haveAff("addiction") and first ~= "vardrax" then
-                table.insert(envenomListTwo, "vardrax")
-            elseif not haveAff("paralysis") then
-                table.insert(envenomListTwo, "curare")
-            elseif not haveAff("asthma") then
-                table.insert(envenomListTwo, "kalmia")
-            elseif not haveAff("weariness") then
-                table.insert(envenomListTwo, "vernalius")
-            else
-                table.insert(envenomListTwo, "curare")
+    -- ===== APPLY DARKSHADE =====
+    if serpStrategy == "apply_darkshade" then
+        table.insert(envenomList, "darkshade")
+        local v2 = (serpOffenseMode == "darkshade" and not haveAff("paralysis"))
+            and "curare"
+            or pickVenom("darkshade")
+        table.insert(envenomListTwo, v2)
+        return
+    end
+
+    -- ===== GINSENG PRESSURE =====
+    if serpStrategy == "ginseng_pressure" then
+        local ginsengOrder = {"vardrax", "euphorbia", "notechis", "scytherus", "darkshade"}
+        local v1 = "curare"
+        for _, v in ipairs(ginsengOrder) do
+            if not haveAff(VENOM_TO_AFF[v] or v) then
+                v1 = v
+                break
             end
         end
-        return
-    end
-
-    -- ===== SCYTHERUS ATTACK: Fallback dstab (gecko strip) when sileris blocks bite/impulse =====
-    if serpStrategy == "scytherus_attack" then
-        -- Fallback for fangbarrier: dstab gecko + useful venom
-        -- Gecko gives slickness (blocks salve application = prevents sileris re-apply)
-        table.insert(envenomList, "gecko")
-        if not haveAff("paralysis") then
-            table.insert(envenomListTwo, "curare")
-        elseif not haveAff("asthma") then
-            table.insert(envenomListTwo, "kalmia")
-        elseif not haveAff("weariness") then
-            table.insert(envenomListTwo, "vernalius")
+        table.insert(envenomList, v1)
+        local v2
+        if serpOffenseMode == "darkshade" and not haveAff("paralysis") and v1 ~= "curare" then
+            v2 = "curare"
         else
-            table.insert(envenomListTwo, "curare")
-        end
-        return
-    end
-
-    -- ===== GROUP: Reactive gap-filling for group combat =====
-    -- Both venoms deliver highest-impact missing lock pieces.
-    -- Asthma priority (blocks rebounding). Impulse monkshood via Case 3.
-    if serpStrategy == "group" then
-        local groupPriority = {
-            {aff = "asthma",    venom = "kalmia"},
-            {aff = "paralysis", venom = "curare"},
-            {aff = "weariness", venom = "vernalius"},
-            {aff = "clumsiness", venom = "xentio"},
-            {aff = "slickness", venom = "gecko"},
-            {aff = "anorexia",  venom = "slike", gate = function() return serpent.canDeliverAnorexia(envenomList[1] or "") end},
-        }
-        for _, entry in ipairs(groupPriority) do
-            if not haveAff(entry.aff) and (not entry.gate or entry.gate()) then
-                if #envenomList == 0 then
-                    table.insert(envenomList, entry.venom)
-                elseif #envenomListTwo == 0 then
-                    table.insert(envenomListTwo, entry.venom)
-                    return
+            v2 = "curare"
+            for _, v in ipairs(ginsengOrder) do
+                if v ~= v1 and not haveAff(VENOM_TO_AFF[v] or v) then
+                    v2 = v
+                    break
                 end
             end
         end
-        -- Fill remaining slots
-        if #envenomList == 0 then
-            table.insert(envenomList, "curare")
-        end
-        if #envenomListTwo == 0 then
-            local fallback = envenomList[1] ~= "curare" and "curare" or "vernalius"
-            table.insert(envenomListTwo, fallback)
-        end
+        table.insert(envenomListTwo, v2)
         return
     end
 
-    -- ===== POST-SNAP: Skip hindering, go straight for lock pieces =====
-    -- After snap, their curing rhythm is disrupted — capitalize with direct lock pieces
-    if serpStrategy == "post_snap" then
-        if not haveAff("asthma") then
-            table.insert(envenomList, "kalmia")
-        elseif not haveAff("slickness") then
-            table.insert(envenomList, "gecko")
-        elseif serpent.canDeliverAnorexia(envenomList[1]) then
-            table.insert(envenomList, "slike")
-        elseif not haveAff("paralysis") then
-            table.insert(envenomList, "curare")
-        elseif not haveAff("weariness") then
-            table.insert(envenomList, "vernalius")
+    -- ===== BUILD SCYTHERUS =====
+    if serpStrategy == "build_scytherus" then
+        local v1 = not haveAff("addiction") and "vardrax"
+               or  not haveAff("nausea")    and "euphorbia"
+               or  "curare"
+        table.insert(envenomList, v1)
+        local v2
+        if v1 ~= "euphorbia" and not haveAff("nausea") then
+            v2 = "euphorbia"
+        elseif v1 ~= "vardrax" and not haveAff("addiction") then
+            v2 = "vardrax"
         else
-            table.insert(envenomList, "curare")
+            v2 = pickVenom(v1)
         end
-        buildSecondVenom()
+        table.insert(envenomListTwo, v2)
         return
     end
 
-    -- ===== SETUP LOCK (Default): Build toward lock + set up Ekanelia =====
-    -- Priority: paralysis (blocks tree) → clumsiness (Ekanelia setup) → lock pieces
-
-    if not haveAff("paralysis") then
-        table.insert(envenomList, "curare")
-    elseif not haveAff("clumsiness") then
-        table.insert(envenomList, "xentio")
-    elseif not haveAff("asthma") and not haveAff("weariness") then
-        -- Set up monkshood Ekanelia: asthma + weariness (masochism via impulse)
-        table.insert(envenomList, "kalmia")
-        table.insert(envenomListTwo, "vernalius")
-        return
-    elseif not haveAff("asthma") then
-        table.insert(envenomList, "kalmia")
-    elseif not haveAff("weariness") then
-        table.insert(envenomList, "vernalius")
-    elseif not haveAff("slickness") then
+    -- ===== SCYTHERUS ATTACK =====
+    if serpStrategy == "scytherus_attack" then
         table.insert(envenomList, "gecko")
-    elseif serpent.canDeliverAnorexia(envenomList[1]) then
-        table.insert(envenomList, "slike")
-    else
-        table.insert(envenomList, "curare")
+        table.insert(envenomListTwo, pickVenom("gecko"))
+        return
     end
 
-    buildSecondVenom()
+    -- ===== GROUP =====
+    if serpStrategy == "group" then
+        local v1 = pickVenom(nil)
+        table.insert(envenomList, v1)
+        table.insert(envenomListTwo, pickVenom(v1))
+        return
+    end
+
+    -- ===== POST-SNAP =====
+    if serpStrategy == "post_snap" then
+        local v1 = pickVenom(nil)
+        table.insert(envenomList, v1)
+        table.insert(envenomListTwo, pickVenom(v1))
+        return
+    end
+
+    -- ===== DEFAULT: setup_lock =====
+    local v1 = pickVenom(nil)
+    table.insert(envenomList, v1)
+    local v2 = pickVenom(v1)
+    table.insert(envenomListTwo, v2)
 end
 
 --[[
@@ -1270,102 +1320,8 @@ end
     If paralysis stuck: fill with missing lock pieces ordered by priority.
     Lightwall auto-insertion: darkshade as second venom when lightwall detected (non-darkshade mode).
 ]]--
-function buildSecondVenom()
-    if #envenomListTwo > 0 then return end
-
-    local firstVenom = envenomList[1]
-
-    -- Lightwall auto-insertion (non-darkshade mode only)
-    if serpOffenseMode ~= "darkshade" and ataxia.lightwall
-       and not haveAff("darkshade") and firstVenom ~= "darkshade" then
-        table.insert(envenomListTwo, "darkshade")
-        return
-    end
-
-    -- Default: curare (paralysis blocks tree — strongest escape mechanism)
-    if not haveAff("paralysis") and firstVenom ~= "curare" then
-        table.insert(envenomListTwo, "curare")
-        return
-    end
-
-    -- Paralysis stuck: fill with missing lock pieces
-    if not haveAff("asthma") and firstVenom ~= "kalmia" then
-        table.insert(envenomListTwo, "kalmia")
-    elseif not haveAff("weariness") and firstVenom ~= "vernalius" then
-        table.insert(envenomListTwo, "vernalius")
-    elseif not haveAff("clumsiness") and firstVenom ~= "xentio" then
-        table.insert(envenomListTwo, "xentio")
-    elseif not haveAff("slickness") and firstVenom ~= "gecko" then
-        table.insert(envenomListTwo, "gecko")
-    elseif serpent.canDeliverAnorexia(firstVenom) and firstVenom ~= "slike" then
-        table.insert(envenomListTwo, "slike")
-    elseif not haveAff("darkshade") and firstVenom ~= "darkshade" then
-        table.insert(envenomListTwo, "darkshade")
-    elseif not haveAff("addiction") and firstVenom ~= "vardrax" then
-        table.insert(envenomListTwo, "vardrax")
-    elseif not haveAff("nausea") and firstVenom ~= "euphorbia" then
-        table.insert(envenomListTwo, "euphorbia")
-    elseif firstVenom ~= "aconite" then
-        table.insert(envenomListTwo, "aconite")
-    else
-        table.insert(envenomListTwo, "curare")
-    end
-end
-
---[[
-    Build second venom prioritizing ginseng afflictions.
-    Used by ginseng_pressure and protect_darkshade strategies.
-]]--
-function buildSecondVenomGinseng()
-    if #envenomListTwo > 0 then return end
-    local firstVenom = envenomList[1]
-
-    if not haveAff("darkshade") and firstVenom ~= "darkshade" then
-        table.insert(envenomListTwo, "darkshade")
-    elseif not haveAff("addiction") and firstVenom ~= "vardrax" then
-        table.insert(envenomListTwo, "vardrax")
-    elseif not haveAff("nausea") and firstVenom ~= "euphorbia" then
-        table.insert(envenomListTwo, "euphorbia")
-    elseif not haveAff("haemophilia") and firstVenom ~= "notechis" then
-        table.insert(envenomListTwo, "notechis")
-    elseif not haveAff("scytherus") and firstVenom ~= "scytherus" then
-        table.insert(envenomListTwo, "scytherus")
-    else
-        -- All ginseng affs covered, fall back to lock piece
-        buildSecondVenom()
-    end
-end
-
---[[
-    Build second venom for relapse lock phase.
-    Like buildSecondVenom() but: no impatience gate on slike.
-    Lock pieces prioritized for re-locking after impatience cure.
-]]--
-function buildSecondVenomRelapse()
-    if #envenomListTwo > 0 then return end
-    local firstVenom = envenomList[1]
-
-    -- Lock pieces first, no impatience gate on anorexia
-    if not haveAff("paralysis") and firstVenom ~= "curare" then
-        table.insert(envenomListTwo, "curare")
-    elseif not haveAff("asthma") and firstVenom ~= "kalmia" then
-        table.insert(envenomListTwo, "kalmia")
-    elseif not haveAff("weariness") and firstVenom ~= "vernalius" then
-        table.insert(envenomListTwo, "vernalius")
-    elseif not haveAff("slickness") and firstVenom ~= "gecko" then
-        table.insert(envenomListTwo, "gecko")
-    elseif not haveAff("anorexia") and firstVenom ~= "slike" then
-        table.insert(envenomListTwo, "slike")  -- NO impatience gate
-    elseif not haveAff("clumsiness") and firstVenom ~= "xentio" then
-        table.insert(envenomListTwo, "xentio")
-    elseif not haveAff("stupidity") and firstVenom ~= "aconite" then
-        table.insert(envenomListTwo, "aconite")
-    elseif firstVenom ~= "curare" then
-        table.insert(envenomListTwo, "curare")
-    else
-        table.insert(envenomListTwo, "vernalius")
-    end
-end
+-- buildSecondVenom, buildSecondVenomGinseng, buildSecondVenomRelapse
+-- REMOVED: replaced by unified pickVenom(exclude) and pickVenomRelapse(exclude)
 
 -- =============================================================================
 -- ATTACK EXECUTION
@@ -1374,10 +1330,16 @@ end
 --[[
     Execute the attack based on current strategy and venom selection.
 
-    DSTAB is the primary attack. IMPULSE is conditional on:
-    1. No sileris/fangbarrier (bite must land)
-    2. Ekanelia conditions met or completable by impulse suggestion
-    3. EQ is free (snap/shrug/hypnosis take priority)
+    Priority order:
+    1. Flay (strip shield/rebounding) — with kalmia ekanelia impulse on eq
+    2. Behead (truelock + prone) or execute (finish strategy)
+    3. Kalmia ekanelia impulse (asthma not present, clumsy+weary met)
+    4. Impatience delivery (canAttemptImpatience + conditions gate)
+    5. Focus lock push (fratricide + 4 mentals + focus down)
+    6. Bite (scytherus mode, scytherus aff stuck)
+    7. Impulse cases (lock_reinforce burst, relapse, darkshade, scytherus, normal)
+    8. Gecko strip (sileris blocking impulse)
+    9. DSTAB with postAction if canUseSecondary
 ]]--
 function serp_ekanelia_attack()
     if not target or target == "" then
@@ -1388,48 +1350,64 @@ function serp_ekanelia_attack()
     local sp = ataxia.settings.separator
     local preAtk = combatQueue()
 
-    -- Rebounding/shield check with V1 fallback (GMCP timing gap)
-    local hasRebounding = haveAff("rebounding") or (tAffs and tAffs.rebounding)
-    local hasShield = haveAff("shield") or (tAffs and tAffs.shield)
+    -- Shield/rebounding detection: haveAff, tAffs, AND Ataxia globals (most reliable)
+    local hasRebounding = haveAff("rebounding") or (tAffs and tAffs.rebounding) or Rebounding
+    local hasShield = haveAff("shield") or (tAffs and tAffs.shield) or Shielded
 
     -- Weapon wielding prefixes (single command, game assigns hands)
     local wieldWhip = "wield shield whip" .. sp
     local wieldDirk = "wield shield dirk" .. sp
 
-    -- ===== DEFENSE STRIPPING (Flay) =====
+    -- canUseSecondary: prevents snap/shrug from colliding with ekanelia delivery.
+    -- Kalmia and impatience conditions override this gate (they consume eq themselves).
+    local postAction, canUseSecondary = getPostAction()
+    if impatienceConditionsMet() or impatienceConditionsRelapse() or kalmiaEkaneliaMet() then
+        canUseSecondary = true
+    end
+
+    -- --------------------------------------------------------
+    -- PRIORITY 1: Flay shield or rebounding
+    -- --------------------------------------------------------
     if hasRebounding or hasShield then
         local defense = hasShield and "shield" or "rebounding"
-        -- Flay delivers only 1 venom — pick the best single lock piece
-        -- (envenomList may have been optimized for dstab pairs e.g. gecko+slike)
+        -- Flay delivers one venom — pick the highest-value single venom.
+        -- Kalmia ekanelia window (clumsy+weariness → asthma+slickness) takes priority
+        -- over raw paralysis if bite is available, since we get two affs from one impulse.
         local flayVenom = envenomList[1] or "curare"
-        if serpStrategy == "relapse_lock" or serpStrategy == "lock"
-           or serpStrategy == "complete_hardlock" or serpStrategy == "complete_truelock"
-           or serpStrategy == "lock_reinforce" or serpStrategy == "setup_lock"
-           or serpStrategy == "build_scytherus" or serpStrategy == "scytherus_attack" then
-            if not haveAff("paralysis") then
-                flayVenom = "curare"
-            elseif not haveAff("asthma") then
-                flayVenom = "kalmia"
-            elseif not haveAff("weariness") then
-                flayVenom = "vernalius"
-            end
+        if kalmiaEkaneliaMet() then
+            -- Ekanelia fires via impulse this round — flay just needs any useful venom
+            flayVenom = not haveAff("paralysis") and "curare" or "vernalius"
+        elseif not haveAff("paralysis") then
+            flayVenom = "curare"
+        elseif not haveAff("weariness") then
+            flayVenom = "vernalius"
+        elseif not haveAff("clumsiness") then
+            flayVenom = "xentio"
+        elseif not haveAff("asthma") then
+            -- Only direct-dstab kalmia when ekanelia conditionals aren't both present
+            flayVenom = "kalmia"
         end
-        local cmd = wieldWhip .. "flay " .. target .. " " .. defense .. " " .. flayVenom
-
-        -- Flay delivers one venom — fix envenom lists for hit triggers
         envenomList = {flayVenom}
         envenomListTwo = {}
 
-        -- Chain eq action if available
         local eqAction = getEqAction()
-        if eqAction then
+        local cmd
+
+        -- If kalmia ekanelia is ready, chain impulse on eq alongside flay on bal.
+        -- Flay uses lash (bal), impulse uses dirk (eq) — they don't share a balance type.
+        if kalmiaEkaneliaMet() and not eqAction then
+            local impulseAff = selectImpulse(nil)
+            recordImpulse(impulseAff)
+            cmd = wieldWhip .. "flay " .. target .. " " .. defense .. " " .. flayVenom
+                .. sp .. wieldDirk .. "impulse " .. target .. " " .. impulseAff .. " kalmia"
+        elseif eqAction and canUseSecondary then
             if eqAction:find("^snap") or eqAction:find("^shrugging") then
-                -- Snap/shrug after flay
-                cmd = cmd .. sp .. eqAction
+                cmd = wieldWhip .. "flay " .. target .. " " .. defense .. " " .. flayVenom .. sp .. eqAction
             else
-                -- Hypnotise/suggest/seal before flay (server queue handles sequencing)
                 cmd = wieldWhip .. eqAction .. sp .. "flay " .. target .. " " .. defense .. " " .. flayVenom
             end
+        else
+            cmd = wieldWhip .. "flay " .. target .. " " .. defense .. " " .. flayVenom
         end
 
         serp_sendAttack(preAtk .. cmd)
@@ -1439,51 +1417,111 @@ function serp_ekanelia_attack()
     -- NOTE: Sileris/fangbarrier does NOT need flaying — dstab works through it.
     -- Only impulse/bite is blocked. checkImpulseEligible() handles this.
 
-    -- ===== EXECUTE (Truelock finish) =====
+    -- --------------------------------------------------------
+    -- PRIORITY 2: Behead (prone) or execute (finish strategy only)
+    -- During lock_reinforce we run the burst finish sequence, not execute.
+    -- --------------------------------------------------------
     if truelock then
-        if (serpOffenseMode == "lock" or serpOffenseMode == "group" or serpOffenseMode == "darkshade") and not serpent.state.voyriaSent then
-            -- Voyria reinforcement pending, fall through to dstab/impulse
-        else
+        if haveAff("prone") then
+            -- Prone: behead immediately regardless of strategy
+            serp_sendAttack(preAtk .. "wield shield scimitar" .. sp .. "behead " .. target)
+            return
+        elseif serpStrategy == "finish" then
             serp_sendAttack(preAtk .. "execute " .. target)
             return
         end
+        -- Otherwise fall through to lock_reinforce burst finish sequence
     end
 
-    -- ===== DETERMINE EQ ACTION (priority order) =====
     local eqAction = getEqAction()
 
-    -- ===== CHECK BITE ELIGIBILITY (scytherus mode) =====
+    -- --------------------------------------------------------
+    -- PRIORITY 3: Kalmia ekanelia — override canUseSecondary, guarded
+    -- by kalmiaEkaneliaMet() which checks asthma not already present.
+    -- recordImpulse() called on every kalmia impulse send.
+    -- --------------------------------------------------------
+    if kalmiaEkaneliaMet() and canUseSecondary and not eqAction then
+        local impulseAff = selectImpulse(nil)
+        recordImpulse(impulseAff)
+        serp_sendAttack(preAtk .. wieldDirk ..
+            "impulse " .. target .. " " .. impulseAff .. " kalmia")
+        return
+    end
+
+    -- --------------------------------------------------------
+    -- PRIORITY 4: Impatience delivery — canAttemptImpatience() gates send.
+    -- stampImpatienceCooldown() called from ekanelia confirm trigger, not here.
+    -- canUseSecondary overridden by impatienceConditionsMet().
+    -- --------------------------------------------------------
+    -- During relapse_lock, use the relaxed condition check (asthma+weariness sufficient).
+    -- Normal lock mode keeps the third-condition gate (fratricide/hypochondria/scytherus/slickness).
+    local impatienceReady = (serpStrategy == "relapse_lock")
+        and impatienceConditionsRelapse()
+        or impatienceConditionsMet()
+    if impatienceReady and canAttemptImpatience() and canUseSecondary and not eqAction then
+        local impulseAff
+        if haveAff("masochism") then
+            impulseAff = selectImpulse("masochism")
+        else
+            impulseAff = "masochism"
+        end
+        recordImpulse(impulseAff)
+        serp_sendAttack(preAtk .. wieldDirk ..
+            "impulse " .. target .. " " .. impulseAff .. " monkshood")
+        return
+    end
+
+    -- --------------------------------------------------------
+    -- PRIORITY 5: Focus lock push (fratricide + 4 mentals + focus bal down)
+    -- --------------------------------------------------------
+    if focusLockReady() and canUseSecondary and not eqAction then
+        local impulseAff = selectImpulse(nil)
+        recordImpulse(impulseAff)
+        serp_sendAttack(preAtk .. wieldDirk ..
+            "impulse " .. target .. " " .. impulseAff .. " monkshood")
+        return
+    end
+
+    -- --------------------------------------------------------
+    -- PRIORITY 6: Bite (scytherus mode, scytherus aff stuck)
+    -- --------------------------------------------------------
     local useBite = false
     local biteVenom = nil
-
-    -- Scytherus mode: bite scytherus when aff already on target (BAL only, saves EQ)
     if serpOffenseMode == "scytherus" and serpStrategy == "scytherus_attack"
        and checkImpulseEligible() and haveAff("scytherus") then
         useBite = true
         biteVenom = "scytherus"
     end
 
-    -- ===== CHECK IMPULSE ELIGIBILITY =====
+    -- --------------------------------------------------------
+    -- PRIORITY 7: Impulse eligibility (with per-aff cooldown + nil-safe)
+    -- --------------------------------------------------------
     local useImpulse = false
     local impulsePair = nil
 
-    -- Case 1: Post-lock voyria impulse (bypasses impatience gate)
-    -- Only after lock_reinforce dstab has landed (class-specific blocker first)
-    if truelock and (serpOffenseMode == "lock" or serpOffenseMode == "group" or serpOffenseMode == "darkshade") and not serpent.state.voyriaSent
-       and serpent.state.lockReinforceSent
-       and not eqAction and checkImpulseEligible()
-       and haveAff("anorexia") and haveAff("impatience") then
-        if not haveAff("vertigo") then
-            impulsePair = {suggestion = "vertigo", venom = "voyria", label = "confusion + disrupted"}
-        else
-            impulsePair = {suggestion = selectFallbackSuggestion(), venom = "voyria", label = "confusion + disrupted"}
+    -- lock_reinforce burst finish: impulse priority order
+    --   1. Scytherus ekanelia (addiction+nausea present) — camus damage burst
+    --   2. Voyria (anorexia+impatience present, vertigo missing) — confusion+disrupted
+    --   3. Normal impatience if somehow not yet landed
+    if serpStrategy == "lock_reinforce" and not eqAction and checkImpulseEligible() then
+        if haveAff("addiction") and haveAff("nausea") and not haveAff("scytherus") then
+            -- Scytherus ekanelia: camus damage spike
+            impulsePair = {suggestion = selectImpulse(nil), venom = "scytherus", label = "camus"}
+            useImpulse = true
+        elseif haveAff("anorexia") and haveAff("impatience") then
+            -- Voyria ekanelia: confusion+disrupted deepens lock
+            if not haveAff("vertigo") then
+                impulsePair = {suggestion = "vertigo", venom = "voyria", label = "confusion + disrupted"}
+            else
+                impulsePair = {suggestion = selectImpulse(nil), venom = "voyria", label = "confusion + disrupted"}
+            end
+            useImpulse = true
+            serpent.state.voyriaSent = true
         end
-        useImpulse = true
-        serpent.state.voyriaSent = true
 
-    -- Case 2: Relapse phase impulse (stupidity+venom or monkshood re-lock)
-    -- Only fires for relapse_lock strategy — lock_reinforce uses dstab instead
-    elseif serpStrategy == "relapse_lock" and (serpOffenseMode == "lock" or serpOffenseMode == "darkshade")
+    -- Relapse phase impulse (stupidity+venom or monkshood re-lock)
+    elseif serpStrategy == "relapse_lock"
+       and (serpOffenseMode == "lock" or serpOffenseMode == "darkshade")
        and not eqAction and checkImpulseEligible() then
         impulsePair = selectRelapseImpulse()
         if impulsePair then
@@ -1493,46 +1531,40 @@ function serp_ekanelia_attack()
             end
         end
 
-    -- Case 2.5: Darkshade ginseng impulse — deliver camus via scytherus ekanelia
-    -- When addiction+nausea are stacked, impulse confusion+scytherus for extra ginseng pressure
+    -- Darkshade ginseng impulse — deliver camus via scytherus ekanelia
     elseif serpOffenseMode == "darkshade" and serpStrategy == "ginseng_pressure"
        and not eqAction and checkImpulseEligible()
        and haveAff("addiction") and haveAff("nausea") then
-        impulsePair = {suggestion = "confusion", venom = "scytherus", label = "camus"}
+        impulsePair = {suggestion = selectImpulse(nil), venom = "scytherus", label = "camus"}
         useImpulse = true
 
-    -- Case 2.75: Scytherus mode impulse — deliver scytherus when aff not on target
-    -- Impulse works through fangbarrier (unlike bite), so no checkImpulseEligible() gate
-    -- Bite is preferred when scytherus aff IS stuck (saves EQ), impulse for re-delivery
+    -- Scytherus mode impulse — deliver scytherus when aff not on target
     elseif serpOffenseMode == "scytherus" and serpStrategy == "scytherus_attack"
-       and not useBite and not eqAction
-       and not haveAff("scytherus") then
-        impulsePair = {suggestion = "confusion", venom = "scytherus", label = "camus"}
+       and not useBite and not eqAction and not haveAff("scytherus") then
+        impulsePair = {suggestion = selectImpulse(nil), venom = "scytherus", label = "camus"}
         useImpulse = true
 
-    -- Case 3: Normal impulse for impatience (gated: must have supporting mechanics)
-    elseif not eqAction and not haveAff("impatience")
-           and serpent.shouldDeliverImpatience()
-           and checkImpulseEligible() then
+    -- Normal impulse for impatience (gated by shouldDeliverImpatience)
+    elseif not eqAction and not haveAff("impatience") and checkImpulseEligible() then
         impulsePair = selectImpulsePair()
         if impulsePair and impulsePair.label == "impatience" then
             useImpulse = true
         end
     end
 
-    -- Gecko override: strip sileris to enable impulse next round
-    -- Limited to 1 attempt — stale V1 sileris/fangbarrier causes infinite gecko loop
-    -- Skip in scytherus mode — uses slike strip instead (below)
+    -- Gecko override: strip sileris to enable impulse next round.
+    -- Only fires once per rotation. Don't fire if monkshood conditionals
+    -- aren't actually ready yet — no point stripping sileris prematurely.
     if not useImpulse and not eqAction and not haveAff("impatience")
        and not serpent.state.geckoStripAttempted
-       and serpOffenseMode ~= "scytherus" then
+       and serpOffenseMode ~= "scytherus"
+       and serpStrategy ~= "relapse_lock"
+       and not checkImpulseEligible() then
         local potentialImpulse = selectImpulsePair()
-        if potentialImpulse and potentialImpulse.label == "impatience" and not checkImpulseEligible() then
-            -- Monkshood ekanelia ready but sileris/fangbarrier blocking bite
-            -- Gecko strips sileris, second venom chosen by buildSecondVenom()
+        if potentialImpulse and potentialImpulse.label == "impatience" then
             envenomList = {"gecko"}
             envenomListTwo = {}
-            buildSecondVenom()
+            table.insert(envenomListTwo, pickVenom("gecko"))
             serpent.state.geckoStripAttempted = true
             serpent.state.postGeckoLockdown = true
             Algedonic.Echo("<yellow>GECKO STRIP<white> -> enabling impulse (" .. potentialImpulse.label .. ")")
@@ -1540,70 +1572,62 @@ function serp_ekanelia_attack()
     end
 
     -- Scytherus gecko strip: only needed when scytherus stuck + fangbarrier blocks bite
-    -- Impulse works through fangbarrier, so gecko strip is only for bite path
-    -- envenomList already set to gecko+useful by selectVenoms(scytherus_attack)
     if serpOffenseMode == "scytherus" and serpStrategy == "scytherus_attack"
        and not useBite and not useImpulse
        and haveAff("scytherus") and not checkImpulseEligible() then
         Algedonic.Echo("<yellow>GECKO (slickness)<white> -> clearing fangbarrier for bite")
     end
 
-    -- ===== BUILD ATTACK =====
+    -- --------------------------------------------------------
+    -- BUILD ATTACK COMMAND
+    -- postAction appended when canUseSecondary is true
+    -- and no impulse/bite/eqAction is consuming the eq slot.
+    -- --------------------------------------------------------
     local cmd
 
     if useBite then
-        -- BITE: venom + Ekanelia (bal only, saves EQ for other actions)
         attackMode = "bite"
         serpent.impulseSuccess = false
         cmd = wieldDirk .. "bite " .. target .. " " .. biteVenom
         Algedonic.Echo("<yellow>BITE " .. biteVenom:upper() .. "<white> → camus")
-
-        -- Populate envenomList for hit triggers
         envenomList = {biteVenom}
         envenomListTwo = {}
-
-        -- Chain eq action if available (bite uses bal only, eq is free)
-        if eqAction then
+        if eqAction and canUseSecondary then
             if eqAction:find("^snap") or eqAction:find("^shrugging") then
-                -- Snap/shrug after bite
                 cmd = cmd .. sp .. eqAction
             else
-                -- Hypnotise/suggest/seal before bite (server queue handles sequencing)
                 cmd = wieldDirk .. eqAction .. sp .. "bite " .. target .. " " .. biteVenom
             end
         end
+
     elseif useImpulse and impulsePair then
-        -- IMPULSE: suggestion + bite + Ekanelia (bal+eq)
         serpent.impulseSuccess = false
+        -- Record impulse timestamp for per-aff fratricide cooldown
+        recordImpulse(impulsePair.suggestion)
         cmd = wieldDirk .. "impulse " .. target .. " " .. impulsePair.suggestion .. " " .. impulsePair.venom
         Algedonic.Echo("<yellow>IMPULSE " .. impulsePair.suggestion:upper() .. " + " .. impulsePair.venom:upper() .. "<white> → " .. impulsePair.label)
-
-        -- Populate envenomList for hit triggers (impulse bites with the venom)
-        envenomList = {}
-        table.insert(envenomList, impulsePair.venom)
+        envenomList = {impulsePair.venom}
         envenomListTwo = {}
-    elseif eqAction then
+
+    elseif eqAction and canUseSecondary then
         if eqAction:find("^snap") or eqAction:find("^shrugging") then
-            -- Snap/shrug after dstab
             cmd = wieldDirk .. "dstab " .. target .. " " .. envenomList[1] .. " " .. envenomListTwo[1] .. sp .. eqAction
         else
-            -- Hypnotise/suggest/seal before dstab (server queue handles sequencing)
             cmd = wieldDirk .. eqAction .. sp .. "dstab " .. target .. " " .. envenomList[1] .. " " .. envenomListTwo[1]
         end
+
     else
-        -- DSTAB only (no eq action, no impulse)
+        -- DSTAB only — append postAction if canUseSecondary
         cmd = wieldDirk .. "dstab " .. target .. " " .. envenomList[1] .. " " .. envenomListTwo[1]
+        if canUseSecondary and postAction ~= "" then
+            cmd = cmd .. postAction
+        end
     end
 
-    -- Handle hSuggRequest override: if keybind requested a specific suggestion
-    -- and we're using impulse, swap in the requested suggestion
+    -- Keybind-requested suggestion override
     if useImpulse and hSuggActive ~= "" and impulsePair then
+        recordImpulse(hSuggActive)
         cmd = wieldDirk .. "impulse " .. target .. " " .. hSuggActive .. " " .. impulsePair.venom
-    end
-
-    -- Track lock_reinforce dstab (enables voyria impulse next round)
-    if serpStrategy == "lock_reinforce" and not useImpulse then
-        serpent.state.lockReinforceSent = true
     end
 
     serp_sendAttack(preAtk .. cmd)
@@ -2077,6 +2101,8 @@ if registerAnonymousEventHandler then
         serpent.state.camusDelivered = false
         serpent.impulseSuccess = false
         serpent.impulseRelapsing = false
+        lastImpulsed = {}
+        lastImpatienceAttempt = 0
         hSuggActive = ""
     end)
 
