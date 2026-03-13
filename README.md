@@ -386,12 +386,15 @@ V3 is the single source of truth. The legacy boolean table (`tAffs`) is maintain
 
 ## Quick Install
 
-**Option A** — Use a pre-built package:
-1. After building (see below), the package is at `muddler_project/build/Levi_Ataxia.mpackage`
+**Option A** — Download the latest release:
+1. Go to [Releases](https://github.com/haterade22/LEVI-Achaea/releases/latest) and download `Levi_Ataxia.mpackage`
+   - Direct link: https://github.com/haterade22/LEVI-Achaea/releases/latest/download/Levi_Ataxia.mpackage
 2. Open Mudlet → Package Manager → Install
 3. Select the `.mpackage` file
 
-> **Note**: The `packages/` directory contains legacy XML builds. For the current version, always build from source using the steps below.
+**Option B** — Build from source (see [Building from Source](#building-from-source) below)
+
+> **Note**: The `packages/` directory contains legacy XML builds. Always use a release download or build from source for the current version.
 
 ## Updating
 
@@ -403,7 +406,7 @@ The system includes a built-in auto-updater. On every login, it checks for new v
 | **New version available** | Shows notification with the new version number |
 | **To update** | Type `sysupdate` in-game |
 
-The `sysupdate` command downloads the latest `.mpackage` from GitHub, uninstalls the old package, installs the new one, and cleans up automatically.
+The `sysupdate` command downloads the latest `.mpackage` from [GitHub Releases](https://github.com/haterade22/LEVI-Achaea/releases/latest), uninstalls the old package, installs the new one, and cleans up automatically.
 
 ---
 
@@ -617,7 +620,7 @@ python tools/convert_to_muddler.py --help
   --dry-run, -n      Scan and report without writing
   --package-name     Package name (default: Levi_Ataxia)
   --package-title    Human-readable title
-  --package-version  Version string (default: 4.1)
+  --package-version  Version string (default: read from version.txt)
   --package-author   Author name (default: Leviticus)
   --include-roots    Root group names to include from _groups.yaml
   --include-dirs     Source subdirectory names to scan
