@@ -36,5 +36,7 @@ patterns:
   type: 3
 ]]--
 
-ataxiaTemp.bloodshieldReady = true
-if ataxiaBasher.enabled then deleteFull() end
+if ataxiaBasher.bloodMaiden then
+  ataxiaTemp.bloodshieldReady = true
+  if ataxiaBasher.enabled then deleteFull() end
+end

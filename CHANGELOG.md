@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-03-13 — Blood Maiden cloak: configurable auto-activation
+
+### Updated: `basher/001_Bashing_Functions.lua`, `triggers/.../769_Blood_Maiden_Cloak.lua`
+### Added: `aliases/.../configs/012_Blood_Maiden_Cloak.lua`
+
+**Motivation:** Blood Maiden cloak is an artefact not everyone owns. The old logic was always-on, counted all denizens (not just targets), had hardcoded Moghedu-specific rules, and didn't model the 3-minute active window correctly.
+
+**Changes:**
+- New toggle `ataxiaBasher.bloodMaiden` (default off) — toggle with `bmc` alias
+- Trigger now gated on the toggle — won't set `bloodshieldReady` if disabled
+- Mob count now only counts mobs in the area's basher target list (not all denizens)
+- Removed Moghedu keeper-specific logic — simplified to: 4+ targetable mobs OR boss
+- Boss list is configurable via `ataxiaBasher.bloodMaidenBosses` (hash table, persisted)
+- Default bosses: Rhuzios, Underlord Seroth, Underlord Dreyvos
+- After first activation, tracks a 3-minute active window (`ataxiaTemp.bloodshieldActive`) — cloak can be freely re-activated during this window without needing a new "ready" signal
+
+---
+
 ## 2026-03-13 — World Tree area basher restrictions
 
 ### Updated: `basher/001_Bashing_Functions.lua`
