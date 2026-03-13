@@ -95,6 +95,9 @@ jobs:
           unzip muddler.zip -d muddler-bin
           chmod +x muddler-bin/muddle-shadow-1.1.0/bin/muddle
 
+      - name: Install Python dependencies
+        run: pip install pyyaml --quiet
+
       - name: Convert source to Muddler format
         run: python tools/convert_to_muddler.py --src src_new --output muddler_project
 
