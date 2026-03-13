@@ -36,12 +36,13 @@ packageName: ''
 --   2. LEG BREAK (Ice): Double-break legs + KNEES (prone)
 --   3. MANGLE (Ice): Legslash right + STERNUM
 --
--- STRATEGY 2: QUAD-PREP (Arms + Legs) - bmdq / bmdispatchquad
+-- STRATEGY 2: QUAD-PREP / ICE PATH (Arms + Legs) - bmdq / bmdispatchquad
 --   1. ARM PREP (Lightning): Alternate armslash to get both arms to 90%+
 --   2. LEG PREP (Lightning): Alternate legslash to get both legs to 90%+
---   3. ARM BREAK (Ice): Double-break both arms
---   4. LEG BREAK (Ice): Double-break both legs + KNEES (prone)
---   5. MANGLE (Ice): Legslash right + STERNUM
+--   3. FLAMEFIST: Negate rebounding before break sequence
+--   4. ARM BREAK (Ice): Double-break both arms
+--   5. LEG BREAK (Ice): Double-break legs + KNEES (prone), always RIGHT
+--   6. MANGLE (Ice): Legslash RIGHT + STERNUM (always right, curing applies left first)
 --
 -- STRATEGY 3: BROKENSTAR (Instant Kill) - bmbs / bmdispatchbs
 --   1. UPPER PREP (Lightning): Centreslash up/down to get torso+head to 90%+
@@ -96,6 +97,8 @@ blademaster.state = {
   targetBleeding = 0,         -- Actual bleeding value from assess
   withdrawDone = false,       -- Blade withdrawn (ready for brokenstar)
   bladetwistCount = 0,        -- Number of bladetwists since impaleslash
+  -- Flamefist tracking (Quad-Prep ice path)
+  flamefistDone = false,       -- Flamefist sent this fight (reset on target change)
   -- Other
   lastHamstringTime = 0,
   compassDamage = 14.9,
@@ -191,6 +194,7 @@ function blademaster.fullReset()
   blademaster.state.attackInFlight = false
   blademaster.state.lastTarget = nil
   blademaster.state.lastEchoTime = nil
+  blademaster.state.flamefistDone = false
   blademaster.resetBrokenstarState()
   blademaster.resetProneTimer()
   cecho("\n<green>[BM] Full state reset!")
@@ -666,6 +670,7 @@ function blademaster.run()
   -- Target-change reset (DWB pattern: prevents stale Brokenstar state on new target)
   if blademaster.state.lastTarget ~= target then
     blademaster.state.lastTarget = target
+    blademaster.state.flamefistDone = false
     blademaster.resetBrokenstarState()
     blademaster.resetProneTimer()
   end
@@ -901,31 +906,36 @@ end
 --------------------------------------------------------------------------------
 
 function blademaster.getPhaseQuadPrep()
-  -- 5-phase system:
+  -- 6-phase system (Ice Path):
   -- 1. arm_prep: Both arms < 90% (Lightning)
   -- 2. leg_prep: Arms prepped, both legs < 90% (Lightning)
-  -- 3. arm_break: Arms & legs prepped, arms not broken (Ice)
-  -- 4. leg_break: Arms broken, legs prepped, legs not broken (Ice)
-  -- 5. mangle: PRONE (Ice + Sternum) - stay in mangle as long as they're down
+  -- 3. flamefist: All 4 limbs prepped, negate rebounding before breaks
+  -- 4. arm_break: Flamefist done, arms not broken (Ice)
+  -- 5. leg_break: Arms broken, legs prepped, legs not broken (Ice) — always RIGHT
+  -- 6. mangle: PRONE (Ice + Sternum) — always legslash RIGHT (curing applies left first)
 
   local armsPrepped = blademaster.checkBothArmsPrepped()
   local armsBroken = blademaster.checkBothArmsBroken()
   local legsPrepped = blademaster.checkBothLegsPrepped()
-  local legsBroken = blademaster.checkBothLegsBroken()
 
-  -- Phase 5: MANGLE - If prone, stay in mangle for max damage
+  -- Phase 6: MANGLE - If prone, stay in mangle for max damage
   if blademaster.hasAff("prone") then
     return "mangle"
   end
 
-  -- Phase 4: LEG BREAK
+  -- Phase 5: LEG BREAK
   if armsBroken and legsPrepped then
     return "leg_break"
   end
 
-  -- Phase 3: ARM BREAK
-  if armsPrepped and legsPrepped and not armsBroken then
+  -- Phase 4: ARM BREAK (only after flamefist done)
+  if armsPrepped and legsPrepped and not armsBroken and blademaster.state.flamefistDone then
     return "arm_break"
+  end
+
+  -- Phase 3: FLAMEFIST (all 4 limbs prepped, flamefist not yet done)
+  if armsPrepped and legsPrepped and not blademaster.state.flamefistDone then
+    return "flamefist"
   end
 
   -- Phase 2: LEG PREP
@@ -942,6 +952,7 @@ function blademaster.getPhaseLabelQuadPrep()
   local labels = {
     arm_prep = "<yellow>Arm Prep",
     leg_prep = "<yellow>Leg Prep",
+    flamefist = "<orange>Flamefist",
     arm_break = "<blue>Arm Break",
     leg_break = "<blue>Leg Break",
     mangle = "<red>Mangle",
@@ -951,6 +962,11 @@ end
 
 function blademaster.selectStrikeQuadPrep()
   local phase = blademaster.getPhaseQuadPrep()
+
+  -- FLAMEFIST: No strike (standalone ability)
+  if phase == "flamefist" then
+    return nil
+  end
 
   -- MANGLE: Always STERNUM
   if phase == "mangle" then
@@ -973,6 +989,14 @@ end
 
 function blademaster.selectAttackQuadPrep()
   local phase = blademaster.getPhaseQuadPrep()
+
+  -- FLAMEFIST: Negates rebounding — use even through rebounding, but raze shield
+  if phase == "flamefist" then
+    if blademaster.hasAff("shield") or (tAffs and tAffs.shield) then
+      return "raze", nil
+    end
+    return "flamefist", nil
+  end
 
   -- V1 fallback: GMCP balance fires before text trigger in the same data chunk,
   -- so haveAffV3("rebounding") may return false even when rebounding is active.
@@ -1002,18 +1026,14 @@ function blademaster.selectAttackQuadPrep()
     return "armslash", blademaster.getFocusArm()
   end
 
+  -- LEG BREAK: Always RIGHT (curing applies to left first, so right stays broken longer)
   if phase == "leg_break" then
-    return "legslash", blademaster.getFocusLeg()
+    return "legslash", "right"
   end
 
-  -- MANGLE PHASE: Right leg first to 200%+ (mangled), then left leg
+  -- MANGLE: Always RIGHT + STERNUM (curing applies to left first)
   if phase == "mangle" then
-    local RL = blademaster.getRL()
-    if RL < 200 then
-      return "legslash", "right"
-    else
-      return "legslash", "left"
-    end
+    return "legslash", "right"
   end
 
   return "legslash", blademaster.getFocusLeg()
@@ -1028,6 +1048,12 @@ function blademaster.buildComboQuadPrep()
   -- Airfist is its own full-balance attack (no infuse, no strike)
   if attack == "airfist" then
     return "airfist " .. target .. ";assess " .. target
+  end
+
+  -- Flamefist is its own full-balance attack (no infuse, no strike)
+  if attack == "flamefist" then
+    blademaster.state.flamefistDone = true
+    return "flamefist " .. target .. ";assess " .. target
   end
 
   -- Infuse: Ice for break/mangle + final prep, Lightning for normal prep
@@ -1104,18 +1130,15 @@ function blademaster.dispatch.runQuadPrep()
       else
         cecho("\n<green>*** LEGS READY ***")
       end
+    elseif phase == "flamefist" then
+      cecho("\n<orange>*** FLAMEFIST - Negate rebounding before breaks! ***")
     elseif phase == "arm_break" then
       cecho("\n<blue>*** ARM BREAK - ICE infuse, break both arms! ***")
     elseif phase == "leg_break" then
-      cecho("\n<blue>*** LEG BREAK - ICE infuse + KNEES for prone! ***")
+      cecho("\n<blue>*** LEG BREAK - ICE infuse + KNEES, always RIGHT! ***")
     elseif phase == "mangle" then
       local RL = blademaster.getRL()
-      local LL = blademaster.getLL()
-      if RL < 200 then
-        cecho("\n<red>*** MANGLE - Legslash RIGHT + STERNUM (RL=" .. string.format("%.1f", RL) .. "%/200%) ***")
-      else
-        cecho("\n<red>*** MANGLE - Legslash LEFT + STERNUM (RL mangled, LL=" .. string.format("%.1f", LL) .. "%) ***")
-      end
+      cecho("\n<red>*** MANGLE - Legslash RIGHT + STERNUM (RL=" .. string.format("%.1f", RL) .. "%) ***")
     end
 
     local parried = blademaster.getParried()
@@ -1124,6 +1147,8 @@ function blademaster.dispatch.runQuadPrep()
     cecho("\n<cyan>[BMQ " .. phaseLabel .. "<cyan>] Parried: " .. parried .. " | Shin: " .. shin)
     if attack == "airfist" then
       cecho(" | <green>AIRFIST!")
+    elseif attack == "flamefist" then
+      cecho(" | <orange>FLAMEFIST!")
     end
   end
 
@@ -1701,12 +1726,13 @@ function blademaster.dispatch.statusQuadPrep()
   cecho("\n<cyan>|   <white>L Leg: " .. (LL >= 100 and "<green>BROKEN " or (LL >= threshold and "<yellow>READY  " or "<red>       ")) .. string.format("%5.1f%%", LL) .. " [" .. progressBar(LL) .. "]")
   cecho("\n<cyan>|   <white>R Leg: " .. (RL >= 100 and "<green>BROKEN " or (RL >= threshold and "<yellow>READY  " or "<red>       ")) .. string.format("%5.1f%%", RL) .. " [" .. progressBar(RL) .. "]")
   cecho("\n<cyan>+--------------------------------------------+")
-  cecho("\n<cyan>| <white>STRATEGY:<cyan>")
+  cecho("\n<cyan>| <white>STRATEGY (Ice Path):<cyan>")
   cecho("\n<cyan>|   <grey>1. ARM PREP: Armslash alternating (Lightning)")
   cecho("\n<cyan>|   <grey>2. LEG PREP: Legslash alternating (Lightning)")
-  cecho("\n<cyan>|   <grey>3. ARM BREAK: Double-break arms (Ice)")
-  cecho("\n<cyan>|   <grey>4. LEG BREAK: Double-break legs + KNEES (Ice)")
-  cecho("\n<cyan>|   <grey>5. MANGLE: Legslash right + STERNUM (Ice)")
+  cecho("\n<cyan>|   <grey>3. FLAMEFIST: Negate rebounding before breaks")
+  cecho("\n<cyan>|   <grey>4. ARM BREAK: Double-break arms (Ice)")
+  cecho("\n<cyan>|   <grey>5. LEG BREAK: Double-break legs + KNEES, RIGHT (Ice)")
+  cecho("\n<cyan>|   <grey>6. MANGLE: Legslash RIGHT + STERNUM (Ice)")
   cecho("\n<cyan>+============================================+\n")
 end
 

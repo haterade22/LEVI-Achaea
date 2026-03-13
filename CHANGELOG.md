@@ -2,6 +2,23 @@
 
 ---
 
+## 2026-03-13 — Blademaster Ice Path (Quad-Prep) Update
+
+### Updated: `blademaster/005_CC_BM_Ice.lua`
+
+**Motivation:** Refined the quad-prep (`bmdq`) strategy to follow the optimal ice path kill route. Salve curing applies to the left leg first, so always targeting the right leg keeps it broken/mangled longer.
+
+**Changes:**
+- Added **flamefist phase** between leg prep and arm break — negates rebounding before the break sequence
+- Leg break now always uses **legslash RIGHT** (not balanced) — right stays broken longer since curing restores left first
+- Mangle phase now always uses **legslash RIGHT + sternum** — removed the "right to 200% then switch to left" logic
+- New state flag `flamefistDone` resets on target change and full reset
+- Flamefist pierces rebounding but still razes shield if shielded
+
+**New 6-phase quad-prep order:** arm_prep → leg_prep → flamefist → arm_break → leg_break (RIGHT) → mangle (RIGHT + sternum)
+
+---
+
 ## 2026-03-13 — Make system configurable for multiple users
 
 ### New: WEAPONLIST auto-detection, configurable weapons/mount/artefacts/earrings

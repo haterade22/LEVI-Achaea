@@ -149,6 +149,11 @@ function ataxiaBasher_initThresholds()
   end
   if not ataxiaBasher.shieldThresholdPct then ataxiaBasher.shieldThresholdPct = 40 end
   if not ataxiaBasher.fleeRecoveryPct then ataxiaBasher.fleeRecoveryPct = 70 end
+  if not ataxiaBasher.safeRooms then
+    ataxiaBasher.safeRooms = {
+      ["The Alcazar"] = { room = 53454, recoveryPct = 100 },
+    }
+  end
 end
 
 -- Returns: "attack", "shield", "flee", or "wait"
@@ -180,6 +185,13 @@ function ataxiaBasher_dangerLevel()
   return "attack"
 end
 
+-- Returns the safe room config for the current area, or nil if none configured
+function ataxiaBasher_getAreaSafeRoom(area)
+  area = area or (gmcp.Room.Info and gmcp.Room.Info.area)
+  if not area or not ataxiaBasher.safeRooms then return nil end
+  return ataxiaBasher.safeRooms[area]
+end
+
 -- ============================================================================
 -- Flee execution with movement validation
 -- ============================================================================
@@ -205,7 +217,11 @@ function ataxiaBasher_executeFlee()
 
   if mmp.paused then mmp.pause("off") end
 
-  if mmp.previousroom then
+  local safeConfig = ataxiaBasher_getAreaSafeRoom()
+  if safeConfig and safeConfig.room then
+    ataxiaEcho("FLEE: HP critical! Retreating to area safe room (v" .. safeConfig.room .. ").")
+    expandAlias("goto " .. safeConfig.room)
+  elseif mmp.previousroom then
     ataxiaEcho("FLEE: HP critical! Retreating to previous room.")
     expandAlias("goto " .. mmp.previousroom)
   else
@@ -229,7 +245,8 @@ function ataxiaBasher_checkFleeRecovery()
   if ataxiaTemp.bashFlee ~= true then return end
 
   ataxiaBasher_initThresholds()
-  local recoveryPct = ataxiaBasher.fleeRecoveryPct or 70
+  local safeConfig = ataxiaBasher_getAreaSafeRoom()
+  local recoveryPct = (safeConfig and safeConfig.recoveryPct) or ataxiaBasher.fleeRecoveryPct or 70
 
   if (ataxia.vitals.hpp or 0) >= recoveryPct then
     ataxiaTemp.bashFlee = false

@@ -147,8 +147,11 @@ end
 function ataxiaBasher_onDeath()
   if not ataxiaBasher.enabled then return end
 
-  -- Save safe room before anything else (previousroom is the room before we died)
-  local safeRoom = mmp and mmp.previousroom or nil
+  -- Save safe room before anything else
+  -- Check area-specific safe room first (capture area NOW, before respawn changes it)
+  local deathArea = gmcp.Room.Info and gmcp.Room.Info.area or nil
+  local safeConfig = ataxiaBasher_getAreaSafeRoom(deathArea)
+  local safeRoom = (safeConfig and safeConfig.room) or (mmp and mmp.previousroom) or nil
 
   -- Immediately stop everything
   send("cq all")
@@ -372,8 +375,11 @@ end
 function ataxiaBasher_onDeath()
   if not ataxiaBasher.enabled then return end
 
-  -- Save safe room before anything else (previousroom is the room before we died)
-  local safeRoom = mmp and mmp.previousroom or nil
+  -- Save safe room before anything else
+  -- Check area-specific safe room first (capture area NOW, before respawn changes it)
+  local deathArea = gmcp.Room.Info and gmcp.Room.Info.area or nil
+  local safeConfig = ataxiaBasher_getAreaSafeRoom(deathArea)
+  local safeRoom = (safeConfig and safeConfig.room) or (mmp and mmp.previousroom) or nil
 
   -- Immediately stop everything
   send("cq all")
