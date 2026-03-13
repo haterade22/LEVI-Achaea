@@ -33,7 +33,15 @@ import yaml
 
 PACKAGE_NAME = "Levi_Ataxia"
 PACKAGE_TITLE = "LEVI Combat System for Achaea"
-PACKAGE_VERSION = "4.1"
+def _read_version_txt():
+    """Read version from version.txt (single source of truth)."""
+    version_path = Path(__file__).resolve().parent.parent / "version.txt"
+    try:
+        return version_path.read_text(encoding="utf-8").strip()
+    except FileNotFoundError:
+        return "0.0.0"
+
+PACKAGE_VERSION = _read_version_txt()
 PACKAGE_AUTHOR = "Leviticus"
 
 # Only process items under these root group names (skip mudlet-mapper, echo, etc.)

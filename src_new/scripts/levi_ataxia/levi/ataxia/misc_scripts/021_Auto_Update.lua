@@ -16,7 +16,7 @@ eventHandlers:
 
 ataxia.updater = ataxia.updater or {}
 
-local UPDATE_URL = "https://github.com/haterade22/LEVI-Achaea/raw/main/muddler_project/build/Levi_Ataxia.mpackage"
+local UPDATE_URL = "https://github.com/haterade22/LEVI-Achaea/releases/latest/download/Levi_Ataxia.mpackage"
 local VERSION_URL = "https://raw.githubusercontent.com/haterade22/LEVI-Achaea/main/version.txt"
 
 function ataxia.updater.checkVersion()
