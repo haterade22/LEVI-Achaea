@@ -80,6 +80,8 @@ groups:
     children:
     - name: Egghunt
     - name: Freezetag
+    - name: Locate Relay
+      directory: levi_ataxia/for_levi/levi_062424/locate_relay
     - name: Movement
     - name: Shopkeeping
     - name: Targeting

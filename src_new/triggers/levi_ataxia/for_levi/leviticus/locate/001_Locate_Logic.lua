@@ -36,6 +36,9 @@ patterns:
   type: 1
 ]]--
 
+-- Skip when bulk locate scan is running (handled by locate_relay triggers)
+if (LocateSystem and LocateSystem.running) or (LocateWorld and LocateWorld.running) then return end
+
 mmp.locateAndEcho(matches[3], matches[2])
 if locateon == true then
   local targetName = matches[2]

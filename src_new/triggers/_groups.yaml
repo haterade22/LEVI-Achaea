@@ -2432,6 +2432,9 @@ groups:
             isColorTriggerFg: 'no'
             isColorTriggerBg: 'no'
           directory: levi_ataxia/for_levi/leviticus/locate
+        - name: locate_relay
+          isActive: false
+          directory: levi_ataxia/for_levi/leviticus/locate_relay
         - name: ARANKESH
           attributes:
             isTempTrigger: 'no'

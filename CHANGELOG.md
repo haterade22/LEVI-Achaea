@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-03-14 — Bulk Locate Relay system (locaterRelay_v3 integration)
+
+### Added: `scripts/.../locate_relay/001_Locate_System.lua`, `002_Locate_World.lua`
+### Added: `triggers/.../locate_relay/001_QWC_Parse.lua`, `002_QWC_Total.lua`, `003_Farsee_Success.lua`, `004_WhoB_Parse.lua`, `005_WhoB_End.lua`
+### Added: `aliases/.../locate_relay/001_Locate_City.lua`, `002_Locate_Enemies.lua`, `003_Locate_World.lua`, `004_Locate_Data.lua`, `005_Locate_Summary.lua`
+### Updated: `triggers/.../locate/001_Locate_Logic.lua`, `scripts/_groups.yaml`, `triggers/_groups.yaml`, `aliases/_groups.yaml`
+
+**Motivation:** The existing locate system only handled single-target farsee requests via party tells. There was no way to bulk-scan an entire city, enemy list, or world to find where players are located. The `locaterRelay_v3.mpackage` provided this capability as a standalone package and has been integrated into the main system.
+
+**Changes:**
+- Added `LocateSystem` module — city-specific (`locate mhaldor`) and enemy list (`locate enemies`) bulk scanning with `who b` pre-resolution optimization and sequential farsee queue (0.9s delay)
+- Added `LocateWorld` module — global scan (`lw`) of all online players, categorized by city and area with room grouping
+- Added 5 triggers in `locate_relay` group (disabled by default, enabled during scans): QWC name parser, total count detector, farsee success handler, who-b line parser, who-b end detector
+- Added 5 aliases: `locate <city>`, `locate enemies`, `lw` (world scan), `locate data <location>`, `locate summary`
+- Results grouped by room and relayed to party chat (`pt`) in chunks of 20
+- Added guard to existing `001_Locate_Logic.lua` to skip when bulk scan is running (prevents double-handling of farsee results)
+- Registered `locate_relay` trigger group (isActive: false), `Locate Relay` script group, and `Locate Relay` alias group in `_groups.yaml` files
+
+---
+
 ## 2026-03-13 — Chat window colors + handler consolidation (v4.5.1)
 
 ### Updated: `update_windows/001_showChat.lua`, `gui_stuff/003_Chat_Capture_Things.lua`
