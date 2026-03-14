@@ -2,6 +2,22 @@
 
 ---
 
+## 2026-03-13 — Chat window colors + handler consolidation (v4.5.1)
+
+### Updated: `update_windows/001_showChat.lua`, `gui_stuff/003_Chat_Capture_Things.lua`
+
+**Motivation:** Chat MiniConsole windows showed all text in white/gray because GMCP `Comm.Channel.Text.text` only contains `\27[0;37m` (white) ANSI — no channel-specific colors. The `ansi2decho()` conversion was faithfully producing white text. Additionally, two duplicate GMCP handlers were both firing on `gmcp.Comm.Channel.Start`.
+
+**Changes:**
+- Replaced `ansi2decho()` with `ansi2string()` to strip useless white ANSI wrapper
+- Added channel color map (`channelColors`) with distinct decho colors per channel type: green (ct/army), yellow (house), purple (order), orange (clans), cyan (party), magenta (tells), teal (market), red (shout/yell), yellow (newbie)
+- All chat text now echoed with channel-appropriate color prefix via `decho()`
+- Added `muteList` check before echoing to MiniConsoles (muted users now suppressed in chat windows)
+- Disabled legacy `ataxiagui_captureChat` handler — `zgui.showChat()` is now the single active handler
+- Removed unused `shortName` variable and `getFgColor()`/`getBgColor()` calls
+
+---
+
 ## 2026-03-13 — Basher configurability: wand, stormhammer, gem of cloaking, cleanup
 
 ### Removed: `basher/004_Guardians_Of_MoG.lua`
