@@ -30,6 +30,19 @@ packageName: ''
 ]]--
 
 --[[
+    LEGACY V2 BACKTRACKING - SUPERSEDED
+
+    All functions in this file are overridden by no-op stubs in
+    008_V3_Integration.lua (loaded after this file).
+
+    V3 negative confirmation (007_Branching_State_Tracker.lua) replaces
+    V2 backtracking with a branching probability approach.
+
+    This file is retained for reference only. Functions defined here
+    have no runtime effect.
+]]--
+
+--[[
     Affliction Tracking V2 - Backtracking Module
 
     When we guess which affliction was cured and later get verification

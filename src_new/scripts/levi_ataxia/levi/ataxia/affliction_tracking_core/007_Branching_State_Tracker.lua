@@ -93,6 +93,23 @@ for _, aff in ipairs(simpleTrackAffsV3) do
     simpleTrackLookup[aff] = true
 end
 
+-- Burning level tracking (1-5, 0 = not burning)
+-- Mending body only cures burning at level 1; higher levels persist through body cure
+targetBurningLevelV3 = targetBurningLevelV3 or 0
+
+-- Venom expansion: compound venoms that apply multiple constituent afflictions
+local venomExpansionV3 = {
+    epseth = {"brokenleftleg", "brokenrightleg"},
+    epteth = {"brokenleftarm", "brokenrightarm"},
+    sicken = {"manaleech", "slickness"},
+}
+
+-- Affliction last-confirmed timestamps for staleness pruning
+affLastConfirmedV3 = affLastConfirmedV3 or {}
+
+-- Target defense tracking (caloric, rebounding, shield, insomnia, etc.)
+targetDefensesV3 = targetDefensesV3 or {}
+
 -- V3 cure tables (fallback if curingTable doesn't have an entry)
 curingTableV3 = {
     kelp = {"hypochondria", "parasite", "weariness", "asthma", "healthleech", "clumsiness", "sensitivity", "rebbies"},
@@ -167,6 +184,28 @@ local function v3Echo(msg)
     end
 end
 
+-- Compute SSC priority weights for cure candidates
+-- SSC cures in strict priority order: first match in cure list is ALWAYS cured first.
+-- We model this with a decay: 1st=4, 2nd=2, 3rd+=1, then normalize to sum to 1.0
+local function computeCureWeightsV3(numCandidates)
+    local weights = {}
+    local total = 0
+    for i = 1, numCandidates do
+        local w
+        if i == 1 then w = 4
+        elseif i == 2 then w = 2
+        else w = 1
+        end
+        weights[i] = w
+        total = total + w
+    end
+    -- Normalize
+    for i = 1, numCandidates do
+        weights[i] = weights[i] / total
+    end
+    return weights
+end
+
 -- ============================================
 -- CORE OPERATIONS
 -- ============================================
@@ -174,6 +213,32 @@ end
 -- Add affliction to ALL branches (we definitely inflicted it)
 function applyAffV3(aff)
     if not aff then return end
+
+    -- Venom expansion: compound venoms apply all constituent afflictions
+    local expansion = expandVenomV3(aff)
+    if expansion then
+        for _, constituentAff in ipairs(expansion) do
+            applyAffV3(constituentAff)
+        end
+        return
+    end
+
+    -- Frozen/caloric/shivering interaction chain
+    if aff == "frozen" then
+        applyFrozenInteractionV3()
+        return
+    end
+
+    -- Burning level tracking (increment on each application, cap at 5)
+    if aff == "burning" then
+        targetBurningLevelV3 = math.min(targetBurningLevelV3 + 1, 5)
+    end
+
+    -- Affliction-defense interactions
+    if aff == "sensitivity" then setTargetDefenseV3("deafness", false) end
+    if aff == "transfixation" then setTargetDefenseV3("blindness", false) end
+    if aff == "sleep" then setTargetDefenseV3("insomnia", false) end
+
     -- Check if this is a simple-tracked affliction
     if simpleTrackLookup[aff] then
         simpleAffsV3[aff] = true
@@ -185,10 +250,83 @@ function applyAffV3(aff)
     for _, state in ipairs(afflictionStatesV3) do
         state.affs[aff] = true
     end
+
+    -- Update last-confirmed timestamp
+    affLastConfirmedV3[aff] = getEpoch()
+
     deduplicateStatesV3()
     rebuildCacheV3()
     syncToOldSystemV3()
     updateAffDisplayV3()
+end
+
+-- Expand compound venoms to constituent afflictions
+-- Returns expansion table or nil if not a compound venom
+function expandVenomV3(venom)
+    return venomExpansionV3[venom]
+end
+
+-- Frozen/caloric/shivering interaction chain
+-- If target has caloric defense: frozen strips caloric (don't add frozen)
+-- If target doesn't have caloric: add shivering first time, frozen second time
+function applyFrozenInteractionV3()
+    if hasTargetDefenseV3("caloric") then
+        -- Frozen strips caloric defense, doesn't actually apply frozen
+        setTargetDefenseV3("caloric", false)
+        v3Echo("Frozen stripped caloric defense")
+        return
+    end
+
+    -- No caloric: shivering first, then frozen
+    local hasShivering = getAffProbabilityV3("shivering") >= 0.3
+    if not hasShivering then
+        -- First application without caloric: apply shivering
+        for _, state in ipairs(afflictionStatesV3) do
+            state.affs["shivering"] = true
+        end
+        affLastConfirmedV3["shivering"] = getEpoch()
+        v3Echo("Applied shivering (no caloric)")
+    else
+        -- Already shivering: apply frozen
+        for _, state in ipairs(afflictionStatesV3) do
+            state.affs["frozen"] = true
+        end
+        affLastConfirmedV3["frozen"] = getEpoch()
+        v3Echo("Applied frozen (already shivering)")
+    end
+
+    deduplicateStatesV3()
+    rebuildCacheV3()
+    syncToOldSystemV3()
+    updateAffDisplayV3()
+end
+
+-- Get current burning level (0-5)
+function getBurningLevelV3()
+    return targetBurningLevelV3
+end
+
+-- Reset burning level to 0
+function resetBurningLevelV3()
+    targetBurningLevelV3 = 0
+end
+
+-- Target defense tracking
+function setTargetDefenseV3(defense, active)
+    targetDefensesV3[defense] = active and true or nil
+    -- Interactions: rebounding strip also strips shield and curseward
+    if defense == "rebounding" and not active then
+        setTargetDefenseV3("shield", false)
+        setTargetDefenseV3("curseward", false)
+    end
+end
+
+function hasTargetDefenseV3(defense)
+    return targetDefensesV3[defense] == true
+end
+
+function resetTargetDefensesV3()
+    targetDefensesV3 = {}
 end
 
 -- Remove affliction from ALL branches (definite cure - we saw the message)
@@ -248,10 +386,12 @@ function onHerbCureV3(herb)
             table.insert(newStates, state)
             curedAffs[candidates[1]] = true  -- Track it, don't echo yet
         else
-            -- Multiple candidates - BRANCH into N possibilities
-            local probEach = state.prob / #candidates
-            for _, aff in ipairs(candidates) do
-                local branch = {affs = copyAffs(state.affs), prob = probEach}
+            -- Multiple candidates - BRANCH with SSC priority weighting
+            -- SSC cures the first affliction in the cure list that's present,
+            -- so the highest priority candidate gets much higher probability
+            local weights = computeCureWeightsV3(#candidates)
+            for idx, aff in ipairs(candidates) do
+                local branch = {affs = copyAffs(state.affs), prob = state.prob * weights[idx]}
                 branch.affs[aff] = nil
                 table.insert(newStates, branch)
                 branchedAffs[aff] = true  -- Track branched candidates
@@ -413,6 +553,18 @@ function onSalveCureV3(salveType)
             end
         end
 
+        -- Burning level interaction: mending body only cures burning at level 1
+        -- At level 2+, burning persists through body cure (remove from candidates)
+        if salveType == "body" and targetBurningLevelV3 > 1 then
+            local filtered = {}
+            for _, aff in ipairs(candidates) do
+                if aff ~= "burning" then
+                    table.insert(filtered, aff)
+                end
+            end
+            candidates = filtered
+        end
+
         if #candidates == 0 then
             -- No curable affs in this branch - state unchanged
             table.insert(newStates, state)
@@ -423,13 +575,17 @@ function onSalveCureV3(salveType)
             else
                 state.affs[candidates[1]] = nil
             end
+            -- If burning was cured via body salve, reset burning level
+            if candidates[1] == "burning" and salveType == "body" then
+                resetBurningLevelV3()
+            end
             table.insert(newStates, state)
             curedAffs[candidates[1]] = true
         else
-            -- Multiple candidates - BRANCH into N possibilities
-            local probEach = state.prob / #candidates
-            for _, aff in ipairs(candidates) do
-                local branch = {affs = copyAffs(state.affs), prob = probEach}
+            -- Multiple candidates - BRANCH with SSC priority weighting
+            local weights = computeCureWeightsV3(#candidates)
+            for idx, aff in ipairs(candidates) do
+                local branch = {affs = copyAffs(state.affs), prob = state.prob * weights[idx]}
                 if simpleTrackLookup[aff] then
                     -- Simple-tracked affs: remove from simpleAffsV3 in this branch
                     -- (conservative: treat as cured since SSC prioritizes it)
@@ -707,6 +863,11 @@ function resetStatesV3()
     afflictionStatesV3 = {{affs = {}, prob = 1.0}}
     simpleAffsV3 = {}
     affCacheV3 = {}
+    resetBurningLevelV3()
+    resetAffTimestampsV3()
+    resetTargetDefensesV3()
+    if resetCureBalancesV3 then resetCureBalancesV3() end
+    if killNegativeConfirmV3 then killNegativeConfirmV3() end
     syncToOldSystemV3()
     v3Echo("States reset")
 end
@@ -722,6 +883,61 @@ function rebuildCacheV3()
             affCacheV3[aff] = (affCacheV3[aff] or 0) + state.prob
         end
     end
+end
+
+-- ============================================
+-- AFFLICTION DECAY / TIMEOUT
+-- ============================================
+
+-- Reset all affliction timestamps
+function resetAffTimestampsV3()
+    affLastConfirmedV3 = {}
+end
+
+-- Prune stale unconfirmed low-probability afflictions
+-- Removes afflictions from branches if they haven't been confirmed in 60 seconds
+-- AND their probability is below 0.3
+-- NOTE: This should be called from a periodic timer (e.g., every 10-15s)
+function pruneStaleAffsV3()
+    local now = getEpoch()
+    local staleThreshold = 60  -- seconds
+    local probThreshold = 0.3
+    local pruned = {}
+
+    -- Find stale afflictions in the cache
+    for aff, prob in pairs(affCacheV3) do
+        if prob < probThreshold then
+            local lastConfirmed = affLastConfirmedV3[aff]
+            if not lastConfirmed or (now - lastConfirmed) > staleThreshold then
+                pruned[aff] = true
+            end
+        end
+    end
+
+    if not next(pruned) then return end
+
+    -- Remove stale afflictions from all branches
+    for _, state in ipairs(afflictionStatesV3) do
+        for aff in pairs(pruned) do
+            state.affs[aff] = nil
+        end
+    end
+
+    -- Clean up timestamps
+    for aff in pairs(pruned) do
+        affLastConfirmedV3[aff] = nil
+    end
+
+    deduplicateStatesV3()
+    rebuildCacheV3()
+    syncToOldSystemV3()
+    updateAffDisplayV3()
+
+    local prunedList = {}
+    for aff in pairs(pruned) do
+        table.insert(prunedList, aff)
+    end
+    v3Echo("Pruned stale affs: " .. table.concat(prunedList, ", "))
 end
 
 -- ============================================
@@ -1037,16 +1253,58 @@ function onCureDuringNegativeConfirmV3()
     killNegativeConfirmV3()
 end
 
--- Kill pending negative confirmation
+-- Kill pending negative confirmation (iterates ALL pending timers)
 function killNegativeConfirmV3()
-    if lastGuessV3 then
-        local timerKey = lastGuessV3.cureType .. "_negconf"
-        if negativeConfirmTimersV3[timerKey] then
-            killTimer(negativeConfirmTimersV3[timerKey])
-            negativeConfirmTimersV3[timerKey] = nil
-        end
-        lastGuessV3 = nil
+    for key, timerID in pairs(negativeConfirmTimersV3) do
+        if timerID then killTimer(timerID) end
+        negativeConfirmTimersV3[key] = nil
     end
+    lastGuessV3 = nil
+end
+
+-- Gating affliction dependencies for intelligent backtracking
+-- Only backtrack a gating aff if dependent affs are still tracked in the cache
+local gatingDependenciesV3 = {
+    -- asthma blocks smoking: only backtrack if smoke-curable affs are tracked
+    asthma = {"slickness", "disloyalty", "hellsight", "aeon", "deadening", "tension", "manaleech", "unweavingspirit"},
+    -- anorexia blocks eating: only backtrack if herb-curable affs are tracked
+    anorexia = function()
+        -- Check if any herb-curable aff is tracked
+        for _, affList in pairs(curingTableV3) do
+            for _, aff in ipairs(affList) do
+                if (affCacheV3[aff] or 0) > 0 then return true end
+            end
+        end
+        return false
+    end,
+    -- slickness blocks applying salves: only backtrack if salve-curable affs are tracked
+    slickness = function()
+        for _, affList in pairs(salveCureTableV3) do
+            for _, aff in ipairs(affList) do
+                if (affCacheV3[aff] or 0) > 0 or simpleAffsV3[aff] then return true end
+            end
+        end
+        return false
+    end,
+}
+
+-- Check if a gating affliction should be backtracked
+-- Returns true if the aff should be backtracked, false if it should be skipped
+local function shouldBacktrackGatingAffV3(aff)
+    local dep = gatingDependenciesV3[aff]
+    if not dep then return true end  -- Not a gating aff, always backtrack
+
+    if type(dep) == "function" then
+        return dep()
+    end
+
+    -- dep is a table of dependent afflictions
+    for _, depAff in ipairs(dep) do
+        if (affCacheV3[depAff] or 0) > 0 then
+            return true  -- Dependent aff exists, backtrack is warranted
+        end
+    end
+    return false  -- No dependent affs, skip backtrack
 end
 
 -- Called when negative confirmation window expires (no second cure action)
@@ -1073,10 +1331,16 @@ function onNegativeConfirmExpiredV3(guess)
             table.insert(newStates, state)
         elseif #missingCandidates == 1 then
             -- Exactly one candidate missing — this is a branch from the guess
-            -- Re-add the missing candidate (unfold the guess)
-            local unfolded = {affs = copyAffs(state.affs), prob = state.prob}
-            unfolded.affs[missingCandidates[1]] = true
-            table.insert(newStates, unfolded)
+            -- Intelligent backtracking: only backtrack gating affs if dependent affs exist
+            if shouldBacktrackGatingAffV3(missingCandidates[1]) then
+                local unfolded = {affs = copyAffs(state.affs), prob = state.prob}
+                unfolded.affs[missingCandidates[1]] = true
+                table.insert(newStates, unfolded)
+            else
+                -- Skip backtrack for this gating aff (no dependent affs)
+                table.insert(newStates, state)
+                v3Echo("Skipped backtrack for " .. missingCandidates[1] .. " (no dependent affs)")
+            end
         else
             -- Multiple missing — keep as-is (not from this guess)
             table.insert(newStates, state)

@@ -72,6 +72,12 @@ end
 
 -- Target smoked - proves asthma is ABSENT (can't smoke with asthma)
 function onTargetSmokeV3()
+    if canTargetCureV3 and not canTargetCureV3("pipe") then
+        if ataxia and ataxia.decho then
+            ataxia.decho("ILLUSION: target smoked while on pipe balance")
+        end
+        return
+    end
     collapseAffAbsentV3("asthma")
     killNegativeConfirmV3()
 end
@@ -121,6 +127,12 @@ end
 
 -- Target applied salve successfully - proves slickness is ABSENT
 function onTargetApplySalveV3()
+    if canTargetCureV3 and not canTargetCureV3("salve") then
+        if ataxia and ataxia.decho then
+            ataxia.decho("ILLUSION: target applied salve while on salve balance")
+        end
+        return
+    end
     collapseAffAbsentV3("slickness")
     killNegativeConfirmV3()
     startCureBalanceV3("salve")
@@ -128,6 +140,13 @@ end
 
 -- Target ate something - proves anorexia is ABSENT
 function onTargetAteV3()
+    if canTargetCureV3 and not canTargetCureV3("herb") then
+        -- Target ate while on herb balance — likely illusion
+        if ataxia and ataxia.decho then
+            ataxia.decho("ILLUSION: target ate while on herb balance")
+        end
+        return
+    end
     collapseAffAbsentV3("anorexia")
     killNegativeConfirmV3()
     startCureBalanceV3("herb")
@@ -246,6 +265,12 @@ focusCurableAffsV2 = focusCurableAffsV3
 
 -- Handle target using tree tattoo (cures random physical aff)
 function onTargetTreeV3()
+    if canTargetCureV3 and not canTargetCureV3("tree") then
+        if ataxia and ataxia.decho then
+            ataxia.decho("ILLUSION: target used tree while on tree balance")
+        end
+        return
+    end
     local treeCurable = treeCurableAffsV3
 
     local newStates = {}
@@ -291,6 +316,16 @@ end
 
 -- Handle target using focus (cures random mental aff)
 function onTargetFocusV3()
+    if canTargetCureV3 and not canTargetCureV3("focus") then
+        if ataxia and ataxia.decho then
+            ataxia.decho("ILLUSION: target focused while on focus balance")
+        end
+        return
+    end
+    if getAffProbabilityV3 and getAffProbabilityV3("impatience") >= 1.0 then
+        -- Focus is blocked by confirmed impatience
+        return
+    end
     local focusCurable = focusCurableAffsV3
 
     local newStates = {}
@@ -340,6 +375,7 @@ end
 
 -- Pool of afflictions curable by passive abilities (from tSingleRandom/tMultipleRandom)
 passiveCurableAffsV3 = {
+    "voyria",  -- Highest priority: passive cures cure voyria FIRST if present
     "aeon", "anorexia", "pyramides", "flushings", "crushedthroat",
     "sandfever", "paralysis", "asthma", "timeloop", "lethargy",
     "depression", "impatience", "hypersomnia", "retribution", "confusion",
@@ -457,3 +493,55 @@ function getCurrentTrackingSystem() return "V3" end
 function enableV3() end
 function disableV3() end
 function toggleV3() end
+
+-- ============================================
+-- DIAGNOSE HANDLER
+-- ============================================
+
+-- Collapse all branches into a single verified state from DIAGNOSE output
+function onDiagnoseV3(diagnosedAffs)
+    if not afflictionStatesV3 then return end
+    -- diagnosedAffs is a table like {"paralysis", "asthma", "clumsiness"}
+    -- or a set like {paralysis = true, asthma = true}
+
+    -- Build the verified state
+    local verifiedAffs = {}
+    if diagnosedAffs then
+        -- Handle both array and set formats
+        if #diagnosedAffs > 0 then
+            -- Array format
+            for _, aff in ipairs(diagnosedAffs) do
+                verifiedAffs[aff] = true
+            end
+        else
+            -- Set format
+            for aff, val in pairs(diagnosedAffs) do
+                if val then verifiedAffs[aff] = true end
+            end
+        end
+    end
+
+    -- Collapse to single branch
+    afflictionStatesV3 = {{affs = verifiedAffs, prob = 1.0}}
+
+    -- Rebuild cache
+    if rebuildCacheV3 then rebuildCacheV3() end
+    if syncToOldSystemV3 then syncToOldSystemV3() end
+    if updateAffDisplayV3 then updateAffDisplayV3() end
+
+    -- Kill any pending negative confirmations since we now have ground truth
+    if killNegativeConfirmV3 then killNegativeConfirmV3() end
+end
+
+-- ============================================
+-- DISCONNECTION HANDLER
+-- ============================================
+
+registerAnonymousEventHandler("sysDisconnectionEvent", function()
+    if resetStatesV3 then resetStatesV3() end
+    if resetCureBalancesV3 then resetCureBalancesV3() end
+    if killNegativeConfirmV3 then killNegativeConfirmV3() end
+    if resetBurningLevelV3 then resetBurningLevelV3() end
+    if resetTargetDefensesV3 then resetTargetDefensesV3() end
+    if resetAffTimestampsV3 then resetAffTimestampsV3() end
+end)
