@@ -646,9 +646,9 @@ groups:
     directory: levi_ataxia/levi/levi_scripts/leviticus
     children:
     - name: BARD
+      directory: levi_ataxia/levi/levi_scripts/bard
     - name: Locate Relay
       directory: levi_ataxia/levi/levi_scripts/locate_relay
-      directory: levi_ataxia/levi/levi_scripts/bard
     - name: Defence
       directory: levi_ataxia/levi/levi_scripts/defence
     - name: MONK
