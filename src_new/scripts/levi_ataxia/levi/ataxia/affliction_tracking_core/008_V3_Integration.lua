@@ -122,11 +122,15 @@ end
 -- Target applied salve successfully - proves slickness is ABSENT
 function onTargetApplySalveV3()
     collapseAffAbsentV3("slickness")
+    killNegativeConfirmV3()
+    startCureBalanceV3("salve")
 end
 
 -- Target ate something - proves anorexia is ABSENT
 function onTargetAteV3()
     collapseAffAbsentV3("anorexia")
+    killNegativeConfirmV3()
+    startCureBalanceV3("herb")
 end
 
 -- Target showed impatience - proves impatience is PRESENT
@@ -401,6 +405,7 @@ function onPassiveCureV3(numCures)
     rebuildCacheV3()
     syncToOldSystemV3()
     updateAffDisplayV3()
+    killNegativeConfirmV3()
 
     if ataxiaEcho and affConfigV3.debugEcho then
         local candList = {}

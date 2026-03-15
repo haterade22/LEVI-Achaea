@@ -25,6 +25,9 @@
 
 - All verification signal handlers (`onTargetSmokeV3`, `onTargetFumbleV3`, `onTargetVomitV3`, `onTargetSlickFailV3`) now call `killNegativeConfirmV3()` to clear pending backtrack timers
 - `onTargetTreeV3()` and `onTargetFocusV3()` now start cure balance timers
+- `onTargetApplySalveV3()` now calls `killNegativeConfirmV3()` + `startCureBalanceV3("salve")` — salve application is a cure action
+- `onTargetAteV3()` now calls `killNegativeConfirmV3()` + `startCureBalanceV3("herb")` — eating is a cure action
+- `onPassiveCureV3()` now calls `killNegativeConfirmV3()` after state updates — passive cures resolve ambiguity
 
 ### Updated: `triggers/.../passive_active/*.lua` (21 class cure triggers)
 
