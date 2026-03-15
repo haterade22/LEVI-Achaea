@@ -42,20 +42,24 @@ local class = (ataxiaNDB_getClass(name) or "Unknown")
 
 if isTargeted(matches[2]) and class == "Psion" then
   erAff("confusion")
-  -- V2 integration: Expunge cures confusion + impatience/mental aff
-  if removeAffV2 then removeAffV2("confusion") end
   if haveAff("impatience") then
     erAff("impatience")
-    if removeAffV2 then removeAffV2("impatience") end
+    onClassCureV3({"confusion", "impatience"})
   else
   	local eAffs = {"stuttering", "stupidity", "recklessness", "hallucinations", "epilepsy", "confusion", "dizziness", "vertigo", "anorexia",
 		"masochism", "agoraphobia", "claustrophobia", "dementia", "generosity", "loneliness", "lovers", "pacified", "paranoia", "shyness", "stuttering",}
+    local secondAff = nil
     for _, aff in pairs(eAffs) do
       if haveAff(aff) then
         erAff(aff)
-        if removeAffV2 then removeAffV2(aff) end
+        secondAff = aff
         break
       end
+    end
+    if secondAff then
+      onClassCureV3({"confusion", secondAff})
+    else
+      onClassCureV3({"confusion"}, 1)
     end
   end
 	selectString(line,1)

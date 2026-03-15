@@ -112,9 +112,9 @@ smokeCureTableV3 = {"aeon", "deadening", "hellsight", "tension", "disloyalty", "
 -- Applying salve always proves slickness absent, then cures one affliction from the list
 -- Slickness excluded since it's handled by collapse
 salveCureTableV3 = {
-    body = {"anorexia", "itching", "bloodfire", "selarnia", "frostbite"},
+    body = {"anorexia", "itching", "burning", "bloodfire", "selarnia", "frostbite"},
     skin = {"frozen", "shivering", "nocaloric", "bloodfire", "selarnia", "frostbite"},
-    head = {"crushedthroat", "damagedhead", "mangledhead", "blindness", "scalded", "epidermal", "bloodfire"},
+    head = {"crushedthroat", "stuttering", "damagedhead", "mangledhead", "blindness", "scalded", "epidermal", "bloodfire"},
     torso = {"hypothermia", "bloodfire", "selarnia", "frostbite"},
     limbs = {"bloodfire"},
 }
@@ -281,9 +281,16 @@ function onHerbCureV3(herb)
     if branchCount > 0 then
         v3Echo(herb .. " eaten - branched into " .. #afflictionStatesV3 .. " states")
         v3Echo(herb .. " cured: " .. table.concat(branchedList, ", "))
+        -- Start negative confirmation for ambiguous cure
+        startNegativeConfirmV3("herb", branchedList)
     elseif #curedList > 0 then
         v3Echo(herb .. " cured: " .. table.concat(curedList, ", "))
+        -- Definite cure during neg-confirm window = guess was reasonable
+        onCureDuringNegativeConfirmV3()
     end
+
+    -- Track target's herb cure balance
+    startCureBalanceV3("herb")
 end
 
 -- Handle smoke cure - similar to herb cure but uses smoke cure table
@@ -348,9 +355,14 @@ function onSmokeCureV3()
 
     if branchCount > 0 then
         v3Echo("smoked - branched into " .. #afflictionStatesV3 .. " states")
+        startNegativeConfirmV3("smoke", curedList)
     elseif #curedList > 0 then
         v3Echo("smoke cured: " .. table.concat(curedList, ", "))
+        onCureDuringNegativeConfirmV3()
     end
+
+    -- Track target's pipe smoke balance
+    startCureBalanceV3("pipe")
 end
 
 -- Handle salve cure - proves slickness absent, then branches for salve-curable affs
@@ -379,6 +391,17 @@ function onSalveCureV3(salveType)
                 table.insert(candidates, aff)
             elseif simpleAffsV3[aff] then
                 table.insert(candidates, aff)
+            end
+        end
+
+        -- SSC anorexia priority: body mending cures anorexia (via epidermal) first
+        -- before other mending-body afflictions like burning/itching/selarnia
+        if salveType == "body" and #candidates > 1 then
+            for _, aff in ipairs(candidates) do
+                if aff == "anorexia" then
+                    candidates = {"anorexia"}
+                    break
+                end
             end
         end
 
@@ -426,9 +449,14 @@ function onSalveCureV3(salveType)
 
     if branchCount > 0 then
         v3Echo(salveType .. " salve - branched into " .. #afflictionStatesV3 .. " states")
+        startNegativeConfirmV3("salve", curedList)
     elseif #curedList > 0 then
         v3Echo(salveType .. " salve cured: " .. table.concat(curedList, ", "))
+        onCureDuringNegativeConfirmV3()
     end
+
+    -- Track target's salve balance (scalded check happens inside)
+    startCureBalanceV3("salve")
 end
 
 -- ============================================
@@ -758,12 +786,331 @@ function showAffProbsV3()
 end
 
 -- ============================================
+-- CURE GROUP COUNTING API
+-- ============================================
+
+-- Predefined cure groups for querying across branches
+cureGroupsV3 = {
+    mending_body = {"anorexia", "itching", "burning", "bloodfire", "selarnia", "frostbite"},
+    mending_skin = {"frozen", "shivering", "frostbite"},
+    mending_head = {"crushedthroat", "stuttering"},
+    mending_arm = {"brokenleftarm", "brokenrightarm"},
+    mending_leg = {"brokenleftleg", "brokenrightleg"},
+    mending_all = {
+        "anorexia", "itching", "burning", "bloodfire", "selarnia", "frostbite",
+        "frozen", "shivering",
+        "crushedthroat", "stuttering",
+        "brokenleftarm", "brokenrightarm", "brokenleftleg", "brokenrightleg",
+    },
+    herb_kelp = {"clumsiness", "healthleech", "weariness", "asthma", "sensitivity", "hypochondria", "parasite"},
+    herb_ginseng = {"nausea", "haemophilia", "addiction", "darkshade", "flushings", "lethargy", "scytherus"},
+    herb_goldenseal = {"stupidity", "impatience", "depression", "sandfever", "epilepsy", "dizziness", "dissonance", "shyness"},
+    herb_lobelia = {"recklessness", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia"},
+    herb_ash = {"confusion", "hypersomnia", "hallucinations", "paranoia", "dementia", "crescendo"},
+    herb_bellwort = {"timeloop", "justice", "retribution", "lovers", "peace", "pacified", "generosity", "indifference", "diminished"},
+    herb_bloodroot = {"paralysis", "slickness"},
+    smoke = {"aeon", "deadening", "hellsight", "tension", "disloyalty", "manaleech", "slickness", "unweavingspirit"},
+}
+
+-- Count what fraction of branches have >= minCount afflictions from a group
+-- groupOrName: string (key into cureGroupsV3) or table of affliction names
+-- minCount: minimum number of affs from group to count (default 1)
+-- Returns: probability 0.0 to 1.0
+function countGroupAffsV3(groupOrName, minCount)
+    minCount = minCount or 1
+
+    local affList = groupOrName
+    if type(groupOrName) == "string" then
+        affList = cureGroupsV3[groupOrName]
+        if not affList then
+            v3Echo("Unknown cure group: " .. groupOrName)
+            return 0
+        end
+    end
+
+    local totalProb = 0
+
+    for _, state in ipairs(afflictionStatesV3) do
+        local count = 0
+        for _, aff in ipairs(affList) do
+            if state.affs[aff] or simpleAffsV3[aff] then
+                count = count + 1
+            end
+        end
+        if count >= minCount then
+            totalProb = totalProb + state.prob
+        end
+    end
+
+    return totalProb
+end
+
+-- Get the count of affs from group in the most likely branch
+function getMostLikelyGroupAffCountV3(groupOrName)
+    local affList = groupOrName
+    if type(groupOrName) == "string" then
+        affList = cureGroupsV3[groupOrName]
+        if not affList then return 0 end
+    end
+
+    local best = getMostLikelyStateV3()
+    if not best then return 0 end
+
+    local count = 0
+    for _, aff in ipairs(affList) do
+        if best.affs[aff] or simpleAffsV3[aff] then
+            count = count + 1
+        end
+    end
+    return count
+end
+
+-- ============================================
+-- CURE BALANCE TIMERS
+-- ============================================
+
+-- Track when the target can next use each cure type
+cureBalancesV3 = cureBalancesV3 or {
+    herb = 0,
+    pipe = 0,
+    salve = 0,
+    focus = 0,
+    tree = 0,
+}
+
+-- Cure balance durations (seconds)
+cureBalanceTimingsV3 = {
+    herb = 1.3,
+    pipe = 1.3,
+    salve_normal = 0.8,
+    salve_scalded = 1.3,
+    focus = 2.2,
+    tree = 13.0,
+}
+
+-- Active timers for cleanup
+cureBalanceTimerIDs = cureBalanceTimerIDs or {}
+
+-- Start a cure balance timer for a specific cure type
+function startCureBalanceV3(cureType)
+    local duration
+    if cureType == "salve" then
+        -- Scalded doubles salve balance from 0.8s to 1.3s
+        if getAffProbabilityV3("scalded") >= 0.5 then
+            duration = cureBalanceTimingsV3.salve_scalded
+        else
+            duration = cureBalanceTimingsV3.salve_normal
+        end
+    else
+        duration = cureBalanceTimingsV3[cureType]
+    end
+
+    if not duration then return end
+
+    cureBalancesV3[cureType] = getEpoch() + duration
+
+    -- Kill old timer if exists
+    if cureBalanceTimerIDs[cureType] then
+        killTimer(cureBalanceTimerIDs[cureType])
+    end
+
+    cureBalanceTimerIDs[cureType] = tempTimer(duration, function()
+        cureBalanceTimerIDs[cureType] = nil
+    end)
+end
+
+-- Check if target can use a specific cure type NOW
+function canTargetCureV3(cureType)
+    return (cureBalancesV3[cureType] or 0) <= getEpoch()
+end
+
+-- Get remaining balance time (seconds until cure available)
+function getCureBalanceTimeV3(cureType)
+    local remaining = (cureBalancesV3[cureType] or 0) - getEpoch()
+    return math.max(0, remaining)
+end
+
+-- Get all cure balance statuses
+function getAllCureBalancesV3()
+    return {
+        herb = getCureBalanceTimeV3("herb"),
+        pipe = getCureBalanceTimeV3("pipe"),
+        salve = getCureBalanceTimeV3("salve"),
+        focus = getCureBalanceTimeV3("focus"),
+        tree = getCureBalanceTimeV3("tree"),
+    }
+end
+
+-- Reset all cure balances (on target change, death, etc.)
+function resetCureBalancesV3()
+    for cureType in pairs(cureBalancesV3) do
+        cureBalancesV3[cureType] = 0
+    end
+    for cureType, timerID in pairs(cureBalanceTimerIDs) do
+        if timerID then killTimer(timerID) end
+        cureBalanceTimerIDs[cureType] = nil
+    end
+end
+
+-- ============================================
+-- NEGATIVE CONFIRMATION (Backtracking)
+-- ============================================
+
+-- Pending guess storage for negative confirmation
+lastGuessV3 = nil
+
+-- Active timers for negative confirmation windows
+negativeConfirmTimersV3 = negativeConfirmTimersV3 or {}
+
+-- Negative confirmation configuration
+affConfigV3.negativeConfirm = {
+    enabled = true,
+    herbWindow = 1.3,
+    smokeWindow = 2.0,
+    salveWindow = 2.5,
+}
+
+-- Start negative confirmation timer after an ambiguous cure branch
+function startNegativeConfirmV3(cureType, candidates)
+    if not affConfigV3.negativeConfirm.enabled then return end
+    if not candidates or #candidates < 2 then return end
+
+    -- Store guess for negative confirmation
+    lastGuessV3 = {
+        candidates = candidates,
+        cureType = cureType,
+        timestamp = getEpoch(),
+    }
+
+    -- Determine window based on cure type
+    local window = affConfigV3.negativeConfirm.herbWindow
+    if cureType == "smoke" then
+        window = affConfigV3.negativeConfirm.smokeWindow
+    elseif cureType == "salve" then
+        window = affConfigV3.negativeConfirm.salveWindow
+    end
+
+    local timerKey = cureType .. "_negconf"
+
+    -- Kill old timer if exists
+    if negativeConfirmTimersV3[timerKey] then
+        killTimer(negativeConfirmTimersV3[timerKey])
+    end
+
+    local savedGuess = lastGuessV3
+    negativeConfirmTimersV3[timerKey] = tempTimer(window, function()
+        onNegativeConfirmExpiredV3(savedGuess)
+        negativeConfirmTimersV3[timerKey] = nil
+        if lastGuessV3 == savedGuess then
+            lastGuessV3 = nil
+        end
+    end)
+
+    v3Echo("Neg-confirm started: " .. table.concat(candidates, ", ") .. " (" .. window .. "s)")
+end
+
+-- Called when target performs another cure during the confirmation window
+-- This means our branching was reasonable — kill the timer
+function onCureDuringNegativeConfirmV3()
+    killNegativeConfirmV3()
+end
+
+-- Kill pending negative confirmation
+function killNegativeConfirmV3()
+    if lastGuessV3 then
+        local timerKey = lastGuessV3.cureType .. "_negconf"
+        if negativeConfirmTimersV3[timerKey] then
+            killTimer(negativeConfirmTimersV3[timerKey])
+            negativeConfirmTimersV3[timerKey] = nil
+        end
+        lastGuessV3 = nil
+    end
+end
+
+-- Called when negative confirmation window expires (no second cure action)
+-- Unfolds the branch: re-adds all candidates with equal probability
+function onNegativeConfirmExpiredV3(guess)
+    if not guess or not guess.candidates then return end
+
+    v3Echo("Neg-confirm timeout — unfolding branch for: " .. table.concat(guess.candidates, ", "))
+
+    -- Re-add all candidates across all branches that had them removed
+    local newStates = {}
+
+    for _, state in ipairs(afflictionStatesV3) do
+        -- Check how many candidates are MISSING from this branch
+        local missingCandidates = {}
+        for _, aff in ipairs(guess.candidates) do
+            if not state.affs[aff] and not simpleAffsV3[aff] then
+                table.insert(missingCandidates, aff)
+            end
+        end
+
+        if #missingCandidates == 0 then
+            -- All candidates present — this branch wasn't affected
+            table.insert(newStates, state)
+        elseif #missingCandidates == 1 then
+            -- Exactly one candidate missing — this is a branch from the guess
+            -- Re-add the missing candidate (unfold the guess)
+            local unfolded = {affs = copyAffs(state.affs), prob = state.prob}
+            unfolded.affs[missingCandidates[1]] = true
+            table.insert(newStates, unfolded)
+        else
+            -- Multiple missing — keep as-is (not from this guess)
+            table.insert(newStates, state)
+        end
+    end
+
+    afflictionStatesV3 = newStates
+    deduplicateStatesV3()
+    pruneStatesV3()
+    rebuildCacheV3()
+    syncToOldSystemV3()
+    updateAffDisplayV3()
+end
+
+-- ============================================
+-- CLASS-SPECIFIC CURE PROCESSING (V3)
+-- ============================================
+
+-- Cure specific afflictions deterministically, then N random from pool
+-- specificAffs: table of afflictions definitely cured (e.g., {"paralysis"})
+-- numRandom: number of additional random afflictions cured (default 0)
+function onClassCureV3(specificAffs, numRandom)
+    if not specificAffs and not numRandom then return end
+
+    -- Remove specific afflictions deterministically
+    if specificAffs then
+        for _, aff in ipairs(specificAffs) do
+            if simpleTrackLookup and simpleTrackLookup[aff] then
+                simpleAffsV3[aff] = nil
+            else
+                removeAffV3(aff)
+            end
+            -- Also collapse to prove absent
+            collapseAffAbsentV3(aff)
+            erAff(aff)
+        end
+    end
+
+    -- Handle random cures via existing passive cure handler
+    numRandom = numRandom or 0
+    if numRandom > 0 then
+        if onPassiveCureV3 then
+            onPassiveCureV3(numRandom)
+        end
+    end
+end
+
+-- ============================================
 -- EVENT HANDLERS
 -- ============================================
 
 -- Reset on target change
 registerAnonymousEventHandler("changed target", function()
     resetStatesV3()
+    resetCureBalancesV3()
+    killNegativeConfirmV3()
 end)
 
 -- V1→V3 sync listener removed: tarAffed() now calls applyAffV3() directly

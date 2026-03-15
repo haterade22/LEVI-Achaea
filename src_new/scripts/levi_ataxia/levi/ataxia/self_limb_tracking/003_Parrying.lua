@@ -292,38 +292,53 @@ function ataxia_autoParry()
 	local attackerClass = classDetect and classDetect.state and classDetect.state.attackerClass
 	local isLimbClass = attackerClass and LIMB_CLASSES[attackerClass]
 
+	-- Auto bias: legs 4, torso 3, head 2 (staying standing > torso breaks > head breaks)
+	local autoBias = { leg = 4, torso = 3, head = 2 }
+
 	if isLimbClass then
 		-- Limb class: detect focus and bias parry toward threatened group
 		local focus = ataxia_detectLimbFocus()
 		if focus == "legs" then
 			for _, limb in ipairs(LIMB_LIST) do
 				if limb:find("leg") and not ataxia_selfLimbBroken(limb) then
-					weights[limb] = weights[limb] + pw.legBias
+					weights[limb] = weights[limb] + autoBias.leg
 				end
 			end
 		elseif focus == "arms" then
 			for _, limb in ipairs(LIMB_LIST) do
 				if limb:find("arm") and not ataxia_selfLimbBroken(limb) then
-					weights[limb] = weights[limb] + pw.nonLegBias
+					weights[limb] = weights[limb] + autoBias.leg
 				end
 			end
 		elseif focus == "head" then
 			if not ataxia_selfLimbBroken("head") then
-				weights["head"] = weights["head"] + pw.legBias
+				weights["head"] = weights["head"] + autoBias.head
 			end
 		else
-			-- No focus detected yet — default to leg bias (stay standing)
+			-- No focus detected yet — apply default priority (legs > torso > head)
 			for _, limb in ipairs(LIMB_LIST) do
-				if limb:find("leg") and not ataxia_selfLimbBroken(limb) then
-					weights[limb] = weights[limb] + pw.legBias
+				if not ataxia_selfLimbBroken(limb) then
+					if limb:find("leg") then
+						weights[limb] = weights[limb] + autoBias.leg
+					elseif limb == "torso" then
+						weights[limb] = weights[limb] + autoBias.torso
+					elseif limb == "head" then
+						weights[limb] = weights[limb] + autoBias.head
+					end
 				end
 			end
 		end
 	else
-		-- Affliction class or unknown — leg bias (staying standing is priority)
+		-- Affliction class or unknown — apply default priority (legs > torso > head)
 		for _, limb in ipairs(LIMB_LIST) do
-			if limb:find("leg") and not ataxia_selfLimbBroken(limb) then
-				weights[limb] = weights[limb] + pw.legBias
+			if not ataxia_selfLimbBroken(limb) then
+				if limb:find("leg") then
+					weights[limb] = weights[limb] + autoBias.leg
+				elseif limb == "torso" then
+					weights[limb] = weights[limb] + autoBias.torso
+				elseif limb == "head" then
+					weights[limb] = weights[limb] + autoBias.head
+				end
 			end
 		end
 	end

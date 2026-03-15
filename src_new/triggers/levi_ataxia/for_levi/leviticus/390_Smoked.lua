@@ -44,6 +44,10 @@ if isTargeted(matches[2]) then
 tdeliverance = false
   if passiveFailsafe then restorePassiveCure() end
 
+	-- Flag this batch so quicksilver backtrace doesn't fire incorrectly
+	smokedThisBatchV2 = true
+	tempTimer(0, function() smokedThisBatchV2 = false end)
+
 	-- V2 integration: notify smoke detection for disambiguation
 	if onTargetSmokeV2 then onTargetSmokeV2(matches[2]) end
 

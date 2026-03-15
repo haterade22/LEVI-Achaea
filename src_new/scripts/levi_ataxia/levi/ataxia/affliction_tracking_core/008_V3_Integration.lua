@@ -73,21 +73,25 @@ end
 -- Target smoked - proves asthma is ABSENT (can't smoke with asthma)
 function onTargetSmokeV3()
     collapseAffAbsentV3("asthma")
+    killNegativeConfirmV3()
 end
 
 -- Target fumbled - proves clumsiness is PRESENT
 function onTargetFumbleV3()
     collapseAffPresentV3("clumsiness")
+    killNegativeConfirmV3()
 end
 
 -- Target vomited - proves nausea is PRESENT
 function onTargetVomitV3()
     collapseAffPresentV3("nausea")
+    killNegativeConfirmV3()
 end
 
 -- Target slipped on slickness - proves slickness is PRESENT
 function onTargetSlickFailV3()
     collapseAffPresentV3("slickness")
+    killNegativeConfirmV3()
 end
 
 -- Target couldn't act due to paralysis - proves paralysis is PRESENT
@@ -276,6 +280,9 @@ function onTargetTreeV3()
     if ataxiaEcho and affConfigV3.debugEcho then
         ataxiaEcho("[V3] Tree used - branched to " .. #afflictionStatesV3 .. " states")
     end
+
+    startCureBalanceV3("tree")
+    killNegativeConfirmV3()
 end
 
 -- Handle target using focus (cures random mental aff)
@@ -318,6 +325,9 @@ function onTargetFocusV3()
     if ataxiaEcho and affConfigV3.debugEcho then
         ataxiaEcho("[V3] Focus used - branched to " .. #afflictionStatesV3 .. " states")
     end
+
+    startCureBalanceV3("focus")
+    killNegativeConfirmV3()
 end
 
 -- ============================================

@@ -154,6 +154,7 @@ local AFF_TO_VENOM = {
     paralysis = "curare", slickness = "gecko", anorexia = "slike",
     nausea = "euphorbia", addiction = "vardrax", recklessness = "eurypteria",
     stupidity = "aconite", darkshade = "darkshade",
+    voyria = "voyria", haemophilia = "notechis",
 }
 
 -- =============================================================================
@@ -1199,7 +1200,18 @@ function selectVenoms()
         -- Priority 1: paralysis always
         if not haveAff("paralysis") then
             table.insert(envenomList, "curare")
-            table.insert(envenomListTwo, pickVenom("curare"))
+            -- Second venom: class-specific lock aff or voyria to seal
+            local v2
+            local classLockAff = getLockingAffliction and getLockingAffliction("name")
+            local classLockVenom = classLockAff and AFF_TO_VENOM[classLockAff]
+            if classLockVenom and not haveAff(classLockAff) then
+                v2 = classLockVenom
+            elseif not haveAff("voyria") then
+                v2 = "voyria"
+            else
+                v2 = "curare"
+            end
+            table.insert(envenomListTwo, v2)
             return
         end
         -- Priority 2: voyria reinforcement
@@ -1286,8 +1298,14 @@ function selectVenoms()
 
     -- ===== SCYTHERUS ATTACK =====
     if serpStrategy == "scytherus_attack" then
-        table.insert(envenomList, "gecko")
-        table.insert(envenomListTwo, pickVenom("gecko"))
+        local v1
+        if not haveAff("slickness") and haveAff("asthma") then
+            v1 = "gecko"
+        else
+            v1 = pickVenom(nil)
+        end
+        table.insert(envenomList, v1)
+        table.insert(envenomListTwo, pickVenom(v1))
         return
     end
 
@@ -1374,6 +1392,10 @@ function serp_ekanelia_attack()
         -- Kalmia ekanelia window (clumsy+weariness → asthma+slickness) takes priority
         -- over raw paralysis if bite is available, since we get two affs from one impulse.
         local flayVenom = envenomList[1] or "curare"
+        -- gecko (slickness) is wasted without asthma — target smokes valerian instantly
+        if flayVenom == "gecko" and not haveAff("asthma") then
+            flayVenom = "curare"
+        end
         if kalmiaEkaneliaMet() then
             -- Ekanelia fires via impulse this round — flay just needs any useful venom
             flayVenom = not haveAff("paralysis") and "curare" or "vernalius"
@@ -1386,6 +1408,8 @@ function serp_ekanelia_attack()
         elseif not haveAff("asthma") then
             -- Only direct-dstab kalmia when ekanelia conditionals aren't both present
             flayVenom = "kalmia"
+        elseif not haveAff("slickness") and haveAff("asthma") then
+            flayVenom = "gecko"
         end
         envenomList = {flayVenom}
         envenomListTwo = {}

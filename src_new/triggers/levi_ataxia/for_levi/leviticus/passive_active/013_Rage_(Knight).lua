@@ -45,18 +45,16 @@ local name = multimatches[1][2]
 if isTargeted(name) then
 	if multimatches[3][1] == name .. " gives a sigh of relief." then
 		erAff("retribution")
-		-- V2 integration: Rage cured retribution
-		if removeAffV2 then removeAffV2("retribution") end
+		onClassCureV3({"retribution"})
 	elseif multimatches[3][1] == name .. " shakes his head and a look of clarity returns to his eyes."
 		or multimatches[3][1] == name .. " shakes her head and a look of clarity returns to her eyes." then
 			erAff("lovers")
-			-- V2 integration: Rage cured lovers
-			if removeAffV2 then removeAffV2("lovers") end
+			onClassCureV3({"lovers"})
 	else
 		taRaged()
 		-- Rage also cures paralysis (taRaged handles group affs, not paralysis)
 		erAff("paralysis")
-		if removeAffV2 then removeAffV2("paralysis") end
+		onClassCureV3({"paralysis"})
 	end
 	targetIshere = true
 end

@@ -344,6 +344,7 @@ end
 -- If bloodroot disambiguation is pending, confirms slickness was cured
 function onBloodrootApplyConfirmV2()
     if not pendingBloodrootAffsV2 then return end
+    if smokedThisBatchV2 then return end  -- smoke in same batch invalidates apply disambiguation
 
     -- Apply within window = slickness was cured
     removeAffV2("slickness")

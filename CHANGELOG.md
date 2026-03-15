@@ -2,6 +2,52 @@
 
 ---
 
+## 2026-03-14 — V3 affliction tracking: major enhancements
+
+### Added: `scripts/.../affliction_tracking_core/007_Branching_State_Tracker.lua`
+
+**Motivation:** ExpertDiagnoser review revealed multiple gaps in our V3 target affliction tracking compared to mature combat systems. These enhancements improve cure prediction accuracy, add timing intelligence, and provide offense systems with richer query APIs.
+
+**Cure table fixes:**
+- Added `burning` to `salveCureTableV3.body` — was missing, caused magi burn tracking to be incomplete
+- Added `stuttering` to `salveCureTableV3.head` — was missing from head mending group
+- Added SSC anorexia priority: body mending now cures anorexia first before other body affs (matches SSC behavior)
+
+**New features:**
+- **`countGroupAffsV3(group, minCount)`** — Query probability that target has N+ afflictions from a cure group across all branches. Predefined groups: `mending_body`, `mending_skin`, `mending_head`, `mending_arm`, `mending_leg`, `mending_all`, all herb groups, `smoke`. Returns 0.0-1.0 probability.
+- **`getMostLikelyGroupAffCountV3(group)`** — Get count from most likely branch
+- **Cure balance timers** — Track when target can next use each cure type. `startCureBalanceV3(type)`, `canTargetCureV3(type)`, `getCureBalanceTimeV3(type)`, `getAllCureBalancesV3()`. Durations: herb 1.3s, pipe 1.3s, salve 0.8s (1.3s when scalded), focus 2.2s, tree 13s
+- **Scalded salve balance doubling** — When target has scalded, salve balance automatically uses 1.3s instead of 0.8s
+- **Negative confirmation (backtracking)** — When V3 branches on ambiguous cure, starts a timer. If no second cure action within the balance window, unfolds the branch (re-adds all candidates). Prevents wrong guesses from persisting. Config: `affConfigV3.negativeConfirm`
+- **`onClassCureV3(specificAffs, numRandom)`** — V3-native class cure processing. Removes specific affs deterministically + handles N random cures via passive cure pool
+
+### Updated: `scripts/.../affliction_tracking_core/008_V3_Integration.lua`
+
+- All verification signal handlers (`onTargetSmokeV3`, `onTargetFumbleV3`, `onTargetVomitV3`, `onTargetSlickFailV3`) now call `killNegativeConfirmV3()` to clear pending backtrack timers
+- `onTargetTreeV3()` and `onTargetFocusV3()` now start cure balance timers
+
+### Updated: `triggers/.../passive_active/*.lua` (21 class cure triggers)
+
+- Replaced dead V2 stubs (`removeAffV2`, `reduceRandomAffCertaintyV2`) with `onClassCureV3()` calls
+- All class-specific cures now properly integrate with V3 branching engine
+
+---
+
+## 2026-03-14 — Fix serpent flay wasting gecko (slickness) without asthma
+
+### Fixed: `scripts/.../serpent/002_Serpent_Offense.lua`
+
+**Motivation:** Flay venom selection could pick gecko (slickness) when the target didn't have asthma. Without asthma blocking smoking, slickness is instantly cured via valerian — a wasted venom slot. Observed in combat: flay rebounding with gecko, target immediately smokes to cure slickness.
+
+**Changes:**
+- Added asthma guard on flay fallback: if `envenomList[1]` is gecko but target lacks asthma, substitutes curare
+- Added gecko option to flay if/elseif chain (after kalmia): when all 4 base affs present and asthma confirmed, proactively picks gecko
+- Gated `scytherus_attack` strategy gecko behind asthma check, falls back to `pickVenom()` without asthma
+- Fixed `lock_reinforce` second venom when paralysis missing: now uses `getLockingAffliction("name")` to dynamically look up the target's class-specific lock affliction (e.g., weariness for Knights, voyria for Apostate, haemophilia for Magi), maps it via `AFF_TO_VENOM`, and falls back to voyria. No longer wastes the slot on generic `pickVenom()` output like clumsiness
+- Added `voyria` and `haemophilia` entries to `AFF_TO_VENOM` table for lock completion venom lookups
+
+---
+
 ## 2026-03-14 — Add auto parry mode to SLC
 
 ### Added: `scripts/.../self_limb_tracking/003_Parrying.lua`, `002_Track_The_Damage.lua`

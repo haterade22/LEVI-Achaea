@@ -43,10 +43,7 @@ local class = (ataxiaNDB_getClass(name) or "Unknown")
 if isTargeted(matches[2]) and class == "Blademaster" then
   erAff("paralysis")
 	ataxiaTemp.randomCure = 1
-	-- V2 integration: Alleviate cures paralysis + 1 random
-	if removeAffV2 then removeAffV2("paralysis") end
-	if reduceRandomAffCertaintyV2 then reduceRandomAffCertaintyV2() end
-	if onPassiveCureV3 then onPassiveCureV3(1) end
+	onClassCureV3({"paralysis"}, 1)
 	selectString(line,1)
 	fg("NavajoWhite")
 	resetFormat()
