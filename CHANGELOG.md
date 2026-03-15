@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-03-14 — Fix hardcoded command separator in Locate Relay
+
+### Updated: `scripts/.../locate_relay/001_Locate_System.lua`, `scripts/.../locate_relay/002_Locate_World.lua`
+
+**Motivation:** Bulk locate relay was joining pt commands with hardcoded `::` instead of using the user's configured command separator (`ataxia.settings.separator`), causing commands to be sent as literal text rather than split into separate commands.
+
+**Changes:**
+- Replaced all 3 instances of `table.concat(chunk, "::")` with `table.concat(chunk, sep)` where `sep` reads from `ataxia.settings.separator` (defaulting to `";"`)
+
+---
+
 ## 2026-03-14 — Auto-configure travel earrings via II + Probe
 
 ### Updated: `scripts/.../misc_scripts/020_Setup_Wizard.lua`

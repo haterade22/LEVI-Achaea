@@ -154,9 +154,12 @@ The project uses [Muddler](https://github.com/demonnic/muddler) to build Mudlet 
 
 **Version bump workflow** (for every release):
 1. Use `/version-bump <new_version>` in Claude Code, OR manually update all 3 files
-2. Build with `./build.sh`
-3. Commit and tag: `git tag v<new_version>` → `git push --tags`
-4. CI/CD automatically builds and creates a GitHub Release with the `.mpackage`
+2. Build with `/build` (or `./build.sh`)
+3. Commit all changes (version files + any code changes), tag with `v<new_version>`
+4. Push commit and tag: `git push && git push --tags`
+5. CI/CD automatically builds and creates a GitHub Release with the `.mpackage`
+
+**IMPORTANT**: When asked to rebuild the package, ALWAYS perform the full release flow: version bump → build → commit → tag → push. Do not just build locally — the user expects the new version to reach GitHub so the auto-updater can pick it up.
 
 **Auto-update system** (`ataxia.updater` namespace, `misc_scripts/021_Auto_Update.lua`):
 - On `sysLoadEvent` (5s delay): downloads `version.txt` from GitHub raw, compares against `ataxiaVersion`

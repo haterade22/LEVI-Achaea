@@ -27,6 +27,12 @@ Run the full build pipeline for the Levi_Ataxia Mudlet package.
    - File size of the built package
    - Any warnings from the conversion step
 
+4. **After a successful build, always complete the full release flow:**
+   - Commit all pending changes (version files + any code changes)
+   - Tag the commit: `git tag v<version>` (read version from `version.txt`)
+   - Push commit and tag: `git push && git push --tags`
+   - This ensures the auto-updater and GitHub Releases stay current
+
 ## Requirements
 - Java 8+ at `E:\Java`
 - Muddler at `E:\muddle-shadow-1.1.0\muddle-shadow-1.1.0\`
