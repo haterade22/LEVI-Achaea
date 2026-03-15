@@ -309,7 +309,8 @@ function onSmokeCureV3()
 
     local newStates = {}
     local branchCount = 0
-    local curedAffs = {}  -- Track unique afflictions that were cured
+    local curedAffs = {}  -- Track unique afflictions that were definitely cured
+    local branchedAffs = {}  -- Track unique afflictions that were candidates in branching
 
     for _, state in ipairs(afflictionStatesV3) do
         -- Find which smoke-curable afflictions exist in this branch
@@ -327,7 +328,7 @@ function onSmokeCureV3()
             -- Only one candidate - definitely cured
             state.affs[candidates[1]] = nil
             table.insert(newStates, state)
-            curedAffs[candidates[1]] = true  -- Track it, don't echo yet
+            curedAffs[candidates[1]] = true
         else
             -- Multiple candidates - BRANCH into N possibilities
             local probEach = state.prob / #candidates
@@ -335,6 +336,7 @@ function onSmokeCureV3()
                 local branch = {affs = copyAffs(state.affs), prob = probEach}
                 branch.affs[aff] = nil
                 table.insert(newStates, branch)
+                branchedAffs[aff] = true
             end
             branchCount = branchCount + #candidates - 1
         end
@@ -353,9 +355,14 @@ function onSmokeCureV3()
         table.insert(curedList, aff)
     end
 
+    local branchedList = {}
+    for aff, _ in pairs(branchedAffs) do
+        table.insert(branchedList, aff)
+    end
+
     if branchCount > 0 then
         v3Echo("smoked - branched into " .. #afflictionStatesV3 .. " states")
-        startNegativeConfirmV3("smoke", curedList)
+        startNegativeConfirmV3("smoke", branchedList)
     elseif #curedList > 0 then
         v3Echo("smoke cured: " .. table.concat(curedList, ", "))
         onCureDuringNegativeConfirmV3()
@@ -382,6 +389,7 @@ function onSalveCureV3(salveType)
     local newStates = {}
     local branchCount = 0
     local curedAffs = {}
+    local branchedAffs = {}
 
     for _, state in ipairs(afflictionStatesV3) do
         -- Find which salve-curable afflictions exist in this branch
@@ -423,12 +431,14 @@ function onSalveCureV3(salveType)
             for _, aff in ipairs(candidates) do
                 local branch = {affs = copyAffs(state.affs), prob = probEach}
                 if simpleTrackLookup[aff] then
-                    -- Simple-tracked affs handled outside branching
-                    -- For now, just remove from this branch possibility
+                    -- Simple-tracked affs: remove from simpleAffsV3 in this branch
+                    -- (conservative: treat as cured since SSC prioritizes it)
+                    simpleAffsV3[aff] = nil
                 else
                     branch.affs[aff] = nil
                 end
                 table.insert(newStates, branch)
+                branchedAffs[aff] = true
             end
             branchCount = branchCount + #candidates - 1
         end
@@ -447,9 +457,14 @@ function onSalveCureV3(salveType)
         table.insert(curedList, aff)
     end
 
+    local branchedList = {}
+    for aff, _ in pairs(branchedAffs) do
+        table.insert(branchedList, aff)
+    end
+
     if branchCount > 0 then
         v3Echo(salveType .. " salve - branched into " .. #afflictionStatesV3 .. " states")
-        startNegativeConfirmV3("salve", curedList)
+        startNegativeConfirmV3("salve", branchedList)
     elseif #curedList > 0 then
         v3Echo(salveType .. " salve cured: " .. table.concat(curedList, ", "))
         onCureDuringNegativeConfirmV3()
