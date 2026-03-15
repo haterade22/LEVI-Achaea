@@ -88,6 +88,20 @@ function ataxia_RoomContents_Update(event)
 			end
 		end
 
+		-- Auto-learn: when basher is active, add new denizens to this area's targetList
+		if ataxiaBasher.enabled and gmcp.Room and gmcp.Room.Info then
+			local area = gmcp.Room.Info.area
+			ataxiaBasher.targetList = ataxiaBasher.targetList or {}
+			if not ataxiaBasher.targetList[area] then
+				ataxiaBasher.targetList[area] = {}
+			end
+			for _, name in pairs(ataxia.denizensHere) do
+				if not table.contains(ataxiaBasher.targetList[area], name) then
+					table.insert(ataxiaBasher.targetList[area], name)
+				end
+			end
+		end
+
 	--Remove (either by leaving, or dying)
 	elseif event == "gmcp.Char.Items.Remove" then
   
