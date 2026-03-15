@@ -44,6 +44,6 @@ if not magi.firestorm then
   magi.firestorm = gmcp.Room.Info.num
 end
 
-magi.firestormm = true
+-- magi.firestorm already set above (stores room number)
 
 tarAffed("firestorm")

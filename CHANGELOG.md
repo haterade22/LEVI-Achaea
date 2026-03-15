@@ -41,6 +41,24 @@
 - Replaced all `tAffs.*` reads with `haveAff()` calls for V3 probability-aware tracking
 - Removed orphaned `haveAff("weariness")` no-op query in last block (weariness already confirmed by condition)
 
+### Deleted: `fire/003_Fire_First.lua` — duplicate of `014_Temperance.lua`
+
+- Both fire on identical pattern (`^You direct your will against the temperance elixir...`). 014_Temperance.lua is the better version — tracks `tarAffed("notemperance")` with 17s expiry. The `targetlostfrost` flag in both was dead code (never read by any script).
+
+### Fixed: `general/019_Conflagrated.lua` — conflagrate burns should be +2
+
+- Changed `if burns < 2 then burns = 2` to `math.min(burns + 2, 5)` — conflagrate adds 2 burn stacks per xmagi reference, not "set floor to 2". Previous logic did nothing if burns were already >= 2.
+
+### Fixed: `enamation/002_Water_Emanation.lua` — chain logic inverted
+
+- Rewrote water emanation chain progression to use `haveAff()` (V3) instead of mixed `magi.offense.hasAff()`/`tAffs` checks
+- Fixed chain: nocaloric (strip caloric) → shivering (if already nocaloric) → frozen (if both nocaloric + shivering)
+- Previous logic was inverted: checked shivering first and re-applied it redundantly
+
+### Fixed: `general/005_Firestorm_up.lua` + `003_Firestorm_down.lua` — dead code cleanup
+
+- Removed `magi.firestormm` (double-m typo) — never read by any code. `magi.firestorm` (single-m, stores room number) is the actual state used by offense engine.
+
 ### Cleaned up: Temporary files
 
 - Removed extracted `magiaddtriggs.xml` (xmagi reference file, no longer needed)

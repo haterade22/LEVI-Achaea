@@ -43,18 +43,17 @@ if tgt ~= target then return end
 magi.offense = magi.offense or {}
 magi.offense.state = magi.offense.state or {}
 
-if magi.offense.hasAff("shivering") or (tAffs and tAffs.shivering) then
-  tarAffed("shivering")
-  tarAffed("disrupted")
+if haveAff("shivering") and haveAff("nocaloric") then
   tarAffed("frozen")
-  magi.offense.ptRelay(target .. ": Emanation Water (Shivering + Disrupted + Frozen)")
-elseif not magi.offense.hasAff("frostbite") or (tAffs and tAffs.nocaloric) then
+  tarAffed("disrupted")
+  magi.offense.ptRelay(target .. ": Emanation Water (Frozen + Disrupted)")
+elseif haveAff("nocaloric") then
   tarAffed("shivering")
   tarAffed("disrupted")
   magi.offense.ptRelay(target .. ": Emanation Water (Shivering + Disrupted)")
 else
   tarAffed("nocaloric")
   tarAffed("disrupted")
-  magi.offense.ptRelay(target .. ": Emanation Water (Disrupted)")
+  magi.offense.ptRelay(target .. ": Emanation Water (Nocaloric + Disrupted)")
 end
 selectCurrentLine() bg("cyan")
