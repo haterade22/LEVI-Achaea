@@ -44,6 +44,7 @@ if isTargeted(name) and class == "Sylvan" then
   -- Sylvan root cures haemophilia + 1 random
   ataxiaTemp.randomCure = 1
   onClassCureV3({"haemophilia"}, 1)
+  if startPassiveCooldownV3 then startPassiveCooldownV3("passive_root") end
   selectString(line,1)
   fg("NavajoWhite")
   resetFormat()

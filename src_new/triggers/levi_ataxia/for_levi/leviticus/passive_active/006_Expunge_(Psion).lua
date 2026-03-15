@@ -43,6 +43,7 @@ local class = (ataxiaNDB_getClass(name) or "Unknown")
 if isTargeted(matches[2]) and class == "Psion" then
   if haveAff("impatience") then
     onClassCureV3({"confusion", "impatience"})
+    if startPassiveCooldownV3 then startPassiveCooldownV3("passive_expunge") end
   else
   	local eAffs = {"stuttering", "stupidity", "recklessness", "hallucinations", "epilepsy", "confusion", "dizziness", "vertigo", "anorexia",
 		"masochism", "agoraphobia", "claustrophobia", "dementia", "generosity", "loneliness", "lovers", "pacified", "paranoia", "shyness",}
@@ -55,8 +56,10 @@ if isTargeted(matches[2]) and class == "Psion" then
     end
     if secondAff then
       onClassCureV3({"confusion", secondAff})
+      if startPassiveCooldownV3 then startPassiveCooldownV3("passive_expunge") end
     else
       onClassCureV3({"confusion"}, 1)
+      if startPassiveCooldownV3 then startPassiveCooldownV3("passive_expunge") end
     end
   end
 	selectString(line,1)

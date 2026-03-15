@@ -39,6 +39,7 @@ patterns:
 
 if isTargeted(matches[2]) then
 	onClassCureV3({"asthma", "weariness"})
+	if startPassiveCooldownV3 then startPassiveCooldownV3("passive_fitness") end
 	fg("DarkSlateGrey")
 	targetIshere = true
 end

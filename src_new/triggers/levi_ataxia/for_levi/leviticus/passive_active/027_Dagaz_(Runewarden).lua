@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: Salt (Alchemist)
+name: Dagaz (Runewarden)
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -33,19 +33,25 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^(\w+) sketches out a symbol in the air with \w+ finger in the shape of a bisected circle.
+- pattern: ^A rune like a rising sun upon the ground flares, bathing (\w+) with healing magic\.$
   type: 1
 ]]--
 
 local name = matches[2]
 local class = (ataxiaNDB_getClass(name) or "Unknown")
 
-if isTargeted(matches[2]) and class == "Alchemist" then
-	ataxiaTemp.randomCure = 1
-	onClassCureV3({"stupidity"}, 1)
-	if startPassiveCooldownV3 then startPassiveCooldownV3("passive_salt") end
-	selectString(line,1)
-	fg("NavajoWhite")
-	resetFormat()
-	targetIshere = true
+local voyriaBlock = ((pariah and pariah.latency) and true or false)
+
+if isTargeted(name) and class == "Runewarden" then
+  if haveAff("voyria") and not voyriaBlock then
+    onClassCureV3({"voyria"})
+  else
+    ataxiaTemp.randomCure = 1
+    onClassCureV3(nil, 1)
+  end
+  if startPassiveCooldownV3 then startPassiveCooldownV3("passive_dagaz") end
+  selectString(line,1)
+  fg("NavajoWhite")
+  resetFormat()
+  targetIshere = true
 end

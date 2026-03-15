@@ -42,6 +42,7 @@ local name = matches[2]
 if isTargeted(matches[2]) then
 	ataxiaTemp.randomCure = 3
 	onClassCureV3({"recklessness", "weariness"}, 3)
+	if startPassiveCooldownV3 then startPassiveCooldownV3("passive_dragonheal") end
 	selectString(line,1)
 	fg("NavajoWhite")
 	resetFormat()

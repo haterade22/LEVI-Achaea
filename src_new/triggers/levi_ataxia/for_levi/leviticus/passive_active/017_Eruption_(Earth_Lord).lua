@@ -41,6 +41,7 @@ local name = matches[2]
 if isTargeted(matches[2]) then
 	ataxiaTemp.randomCure = 1
 	onClassCureV3(nil, 1)
+	if startPassiveCooldownV3 then startPassiveCooldownV3("passive_eruption") end
 	selectString(line,1)
 	fg("NavajoWhite")
 	resetFormat()

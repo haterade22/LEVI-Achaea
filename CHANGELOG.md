@@ -2,6 +2,97 @@
 
 ---
 
+## 2026-03-15 — V3 affliction tracking: ExpertDiagnoser parity + hardening
+
+### Fixed: `scripts/.../affliction_tracking_core/007_Branching_State_Tracker.lua` (deep review)
+
+**Fixes from deep review:**
+- **`onSmokeCureV3` now uses weighted branching** — Was using equal probability split; now uses `computeCureWeightsV3()` matching herb/salve handlers for SSC priority-weighted branching
+- **Removed epseth/epteth from venom expansion** — These break a SINGLE limb (determined by game output), not both sides. Limb damage triggers track the specific limb directly
+- **Removed rebounding→shield+curseward cascade** — Shield, curseward, and rebounding are independent defenses in Achaea. Stripping one does not strip the others
+- **Fixed `killNegativeConfirmV3` Lua 5.1 safety** — Was setting keys to nil during `pairs()` iteration (undefined behavior in Lua 5.1). Now kills all timers then reassigns table to `{}`
+
+### Added: `scripts/.../affliction_tracking_core/007_Branching_State_Tracker.lua`
+
+**Motivation:** ExpertDiagnoser comparison revealed multiple feature gaps vs mature combat systems. These enhancements close the most impactful gaps identified in the analysis.
+
+**New features:**
+- **Cure priority weighting** — `computeCureWeightsV3()` applies decay weights (4/2/1/1...) to herb/salve cure branching. Highest-priority candidate gets ~57% probability instead of equal 1/N. Matches SSC's strict priority order.
+- **Frozen/caloric/shivering interaction** — `applyFrozenInteractionV3()` models the frozen → caloric → shivering chain. Frozen strips caloric defense first; without caloric, adds shivering then frozen.
+- **Burning stack levels 1-5** — `targetBurningLevelV3` tracks burning level (0-5). Mending body skips burning cure when level > 1 (only cures at level 1). `getBurningLevelV3()`, `resetBurningLevelV3()`.
+- **Venom expansion** — `venomExpansionV3` table expands compound venoms to constituent afflictions: epseth → broken legs, epteth → broken arms, sicken → manaleech + slickness. `applyAffV3` auto-expands recursively.
+- **Affliction decay/timeout** — `affLastConfirmedV3` tracks last confirmation timestamps. `pruneStaleAffsV3()` removes unconfirmed affs older than 60s with probability < 0.3. Prevents stale low-probability branches from persisting indefinitely.
+- **Target defense model** — `targetDefensesV3` tracks caloric, rebounding, shield, curseward, blindness, deafness, insomnia. `setTargetDefenseV3()`, `hasTargetDefenseV3()`, `resetTargetDefensesV3()`. Rebounding strip cascades to shield + curseward. Affliction-defense interactions: sensitivity strips deafness, transfixation strips blindness, sleep strips insomnia.
+- **Intelligent backtracking** — `shouldBacktrackGatingAffV3()` only backtracks gating afflictions (asthma, anorexia, slickness) when dependent afflictions still exist in cache. Reduces false-positive unfolds.
+- **Voyria in passive cure pool** — Added `"voyria"` at position 1 in `passiveCurableAffsV3` (highest priority, matching game behavior).
+
+**Fixes:**
+- **`killNegativeConfirmV3()`** now iterates ALL entries in `negativeConfirmTimersV3` instead of only killing the timer for `lastGuessV3.cureType`. Prevents orphaned timers when multiple cure types have concurrent neg-confirm timers.
+- **`resetStatesV3()`** now also calls `resetCureBalancesV3()` and `killNegativeConfirmV3()` for safety — previously these were only called from the `"changed target"` event handler.
+- **Venom expansion names** fixed to match system naming convention (`brokenleftleg` not `crippled_left_leg`).
+
+### Added: `scripts/.../affliction_tracking_core/008_V3_Integration.lua`
+
+**New features:**
+- **`onDiagnoseV3(diagnosedAffs)`** — Collapses all branches to a single verified state on DIAGNOSE. Accepts both array and set format. Diagnosis is the strongest verification signal — resets to exactly one branch at 100% probability with the diagnosed afflictions.
+- **Illusion detection via cure balance gating** — All 5 cure handlers (`onTargetSmokeV3`, `onTargetApplySalveV3`, `onTargetAteV3`, `onTargetFocusV3`, `onTargetTreeV3`) now check `canTargetCureV3()` before processing. If target fires a cure while still on that cure's balance, it's flagged as an illusion and skipped. Logs via `ataxia.decho`.
+- **Focus blocked by impatience** — `onTargetFocusV3()` returns early if `getAffProbabilityV3("impatience") >= 1.0` (confirmed impatience blocks focus).
+- **`sysDisconnectionEvent` handler** — Resets all V3 state on disconnect: `resetStatesV3()`, `resetCureBalancesV3()`, `killNegativeConfirmV3()`, `resetBurningLevelV3()`, `resetTargetDefensesV3()`, `resetAffTimestampsV3()`. Prevents stale timers and branches from surviving reconnect.
+
+### Updated: `scripts/.../affliction_tracking_core/003_Backtracking.lua`
+
+- Added deprecation header marking file as superseded by V3 negative confirmation system. All functions overridden by no-op stubs in 008_V3_Integration.lua. Retained for reference only.
+
+### Added: Passive cure cooldown tracking (007 + 008)
+
+**Motivation:** ExpertDiagnoser tracks per-ability passive cooldowns. Without this, offense systems can't know when a passive cure is available again.
+
+**New features (007):**
+- **`passiveCooldownsV3` / `passiveCooldownTimingsV3`** — Per-ability cooldown table: 12s (airlord, healingrite, syphon, dagaz, leech, accelerate, alleviate, bloodboil, dragonheal, expunge, fitness, might, purification, purify, salt, shrugging, slough, eruption, continuation, root), 14s (hallelujah), 20s (suntarot, panacea, fool)
+- **`startPassiveCooldownV3(abilityKey)`** — Records cooldown expiry timestamp
+- **`canTargetPassiveV3(abilityKey)`** — Returns true if cooldown expired
+- **`getPassiveCooldownTimeV3(abilityKey)`** — Returns remaining seconds
+- **`resetPassiveCooldownsV3()`** — Clears all cooldowns. Called from `resetStatesV3()` and `sysDisconnectionEvent` handler
+
+**New features (008):**
+- **`onTargetApplyRestorationV3()`** — Illusion check via `canTargetCureV3("restoration")`, then `collapseAffAbsentV3("slickness")`, starts restoration balance timer
+- **`onTargetWritheV3()`** — Starts writhe balance timer (1.8s)
+
+**New timers (007):**
+- Restoration balance: 3.8s normal, 5.8s when scalded (same pattern as salve)
+- Writhe balance: 1.8s
+
+### Added: 7 class-specific passive cure triggers (022-028)
+
+**Motivation:** The catch-all `001_Passives.lua` treated all passive cures identically. Class-specific triggers enable per-ability cooldown tracking and future class-aware offense decisions.
+
+**New files** in `triggers/.../passive_active/`:
+- `022_Air_Lord_Passive.lua` — Air Lord, "tempestuous form...purifying breeze", 12s cooldown
+- `023_Sun_Tarot.lua` — Jester/Occultist, "globe of light illuminates", 20s cooldown
+- `024_Healing_Rite_(Priest).lua` — Priest, 3 patterns (gentle glow + guardian angel + golden light), 12s cooldown
+- `025_Hallelujah_(Bard).lua` — Bard, 2 patterns (song + soft chiming), 14s cooldown
+- `026_Syphon_(Apostate).lua` — Apostate, "demonic crimson glow", 12s cooldown
+- `027_Dagaz_(Runewarden).lua` — Runewarden, "rune like a rising sun", 12s cooldown
+- `028_Leech_(Pariah).lua` — Pariah, "pulses from chest", 12s cooldown
+
+All triggers include: `isTargeted()` check, class check via `ataxiaNDB_getClass()`, voyria-first cure logic, `onClassCureV3()`, `startPassiveCooldownV3()`, line coloring, `targetIshere = true`.
+
+### Updated: `001_Passives.lua` — catch-all cleanup
+
+- Removed 10 patterns now handled by class-specific triggers (022-028)
+- Kept 3 generic catch-all patterns: translucent achromatic aura (unknown), cool refreshing mist (uncertain mapping), keening whine (Unnamable — low priority)
+
+### Updated: Writhe triggers (407/408/409) — writhe balance timer
+
+- Added `if onTargetWritheV3 then onTargetWritheV3() end` to all 3 writhe triggers after their `erAff()` calls
+- `407_Writhed_Impale.lua`, `408_Writhe_Ropes.lua`, `409_Writhed_Transfix.lua`
+
+### Updated: Existing passive cure triggers (002-020) — cooldown tracking
+
+- Added `startPassiveCooldownV3()` call to all 18 existing passive triggers (002-020, skipping 021 Waking Up)
+
+---
+
 ## 2026-03-14 — V3 affliction tracking: major enhancements
 
 ### Added: `scripts/.../affliction_tracking_core/007_Branching_State_Tracker.lua`

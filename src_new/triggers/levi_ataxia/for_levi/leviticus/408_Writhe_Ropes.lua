@@ -37,5 +37,6 @@ patterns:
 
 if isTargeted(matches[2]) then
 	erAff("bound")
+	if onTargetWritheV3 then onTargetWritheV3() end
 	targetIshere = true
 end

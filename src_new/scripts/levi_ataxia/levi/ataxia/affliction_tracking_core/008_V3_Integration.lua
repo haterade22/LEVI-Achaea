@@ -138,6 +138,19 @@ function onTargetApplySalveV3()
     startCureBalanceV3("salve")
 end
 
+-- Target applied restoration successfully - proves slickness is ABSENT
+function onTargetApplyRestorationV3()
+    if canTargetCureV3 and not canTargetCureV3("restoration") then
+        if ataxia and ataxia.decho then
+            ataxia.decho("ILLUSION: target applied restoration while on restoration balance")
+        end
+        return
+    end
+    collapseAffAbsentV3("slickness")
+    killNegativeConfirmV3()
+    startCureBalanceV3("restoration")
+end
+
 -- Target ate something - proves anorexia is ABSENT
 function onTargetAteV3()
     if canTargetCureV3 and not canTargetCureV3("herb") then
@@ -165,6 +178,11 @@ end
 -- Target showed confusion - proves confusion is PRESENT
 function onTargetConfusionV3()
     collapseAffPresentV3("confusion")
+end
+
+-- Target writhed - start writhe balance timer
+function onTargetWritheV3()
+    if startCureBalanceV3 then startCureBalanceV3("writhe") end
 end
 
 -- ============================================
@@ -544,4 +562,5 @@ registerAnonymousEventHandler("sysDisconnectionEvent", function()
     if resetBurningLevelV3 then resetBurningLevelV3() end
     if resetTargetDefensesV3 then resetTargetDefensesV3() end
     if resetAffTimestampsV3 then resetAffTimestampsV3() end
+    if resetPassiveCooldownsV3 then resetPassiveCooldownsV3() end
 end)

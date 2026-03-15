@@ -44,9 +44,11 @@ if isTargeted(name) and class == "Priest" then
   -- Priest healing cures voyria if present, else 1 random
   if haveAff("voyria") then
     onClassCureV3({"voyria"})
+    if startPassiveCooldownV3 then startPassiveCooldownV3("passive_priesthealing") end
   else
     ataxiaTemp.randomCure = 1
     onClassCureV3(nil, 1)
+    if startPassiveCooldownV3 then startPassiveCooldownV3("passive_priesthealing") end
   end
   selectString(line,1)
   fg("NavajoWhite")

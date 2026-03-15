@@ -43,6 +43,7 @@ local class = (ataxiaNDB_getClass(name) or "Unknown")
 if isTargeted(matches[2]) and (class == "Druid" or class == "Sentinel") then
 	ataxiaTemp.randomCure = 1
 	onClassCureV3({"prone"}, 1)
+	if startPassiveCooldownV3 then startPassiveCooldownV3("passive_might") end
 	selectString(line,1)
 	fg("NavajoWhite")
 	resetFormat()

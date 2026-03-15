@@ -35,29 +35,9 @@ colorTriggerBgColor: '#000000'
 patterns:
 - pattern: ^(\w+) surrounds \w+ with a translucent achromatic aura.$
   type: 1
-- pattern: ^The globe of light illuminates (\w+) with its brilliance.$
-  type: 1
-- pattern: ^A song can be heard on the edge of hearing as the air distorts about (\w+)\.$.
-  type: 1
-- pattern: ^A rune like a rising sun upon the ground flares, bathing (\w+) with healing magic.$
-  type: 1
-- pattern: ^A demonic crimson glow emanates from (\w+).$
-  type: 1
-- pattern: ^A soft chiming emanates from (\w+).$
-  type: 1
-- pattern: ^A gentle glow surrounds (\w+).$
-  type: 1
-- pattern: ^The tempestuous form of (\w+) is cleansed by a purifying breeze.$
-  type: 1
-- pattern: ^The guardian angel of (\w+) shimmers and \w+ gives a sigh of relief.$
-  type: 1
 - pattern: ^(\w+) is surrounded in a cool, refreshing mist.$
   type: 1
-- pattern: ^Something pulses from within the chest of (.+)\, and \w+ seems more vital\.$
-  type: 1
 - pattern: ^The air shudders about (\w+), a keening whine on the edge of hearing.$
-  type: 1
-- pattern: ^A shimmering curtain of golden light sweeps over (\w+)\.$
   type: 1
 ]]--
 
@@ -67,9 +47,11 @@ local voyriaBlock = ((pariah and pariah.latency) and true or false)
 if isTargeted(matches[2]) then
   if haveAff("voyria") and not voyriaBlock then
     onClassCureV3({"voyria"})
+    if startPassiveCooldownV3 then startPassiveCooldownV3("passive_generic") end
   else
     ataxiaTemp.randomCure = 1
     onClassCureV3(nil, 1)
+    if startPassiveCooldownV3 then startPassiveCooldownV3("passive_generic") end
   end
 	selectString(line,1)
 	fg("NavajoWhite")

@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: Salt (Alchemist)
+name: Hallelujah (Bard)
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -33,19 +33,27 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^(\w+) sketches out a symbol in the air with \w+ finger in the shape of a bisected circle.
+- pattern: ^A song can be heard on the edge of hearing as the air distorts about (\w+)\.$
+  type: 1
+- pattern: ^A soft chiming emanates from (\w+)\.$
   type: 1
 ]]--
 
 local name = matches[2]
 local class = (ataxiaNDB_getClass(name) or "Unknown")
 
-if isTargeted(matches[2]) and class == "Alchemist" then
-	ataxiaTemp.randomCure = 1
-	onClassCureV3({"stupidity"}, 1)
-	if startPassiveCooldownV3 then startPassiveCooldownV3("passive_salt") end
-	selectString(line,1)
-	fg("NavajoWhite")
-	resetFormat()
-	targetIshere = true
+local voyriaBlock = ((pariah and pariah.latency) and true or false)
+
+if isTargeted(name) and class == "Bard" then
+  if haveAff("voyria") and not voyriaBlock then
+    onClassCureV3({"voyria"})
+  else
+    ataxiaTemp.randomCure = 1
+    onClassCureV3(nil, 1)
+  end
+  if startPassiveCooldownV3 then startPassiveCooldownV3("passive_hallelujah") end
+  selectString(line,1)
+  fg("NavajoWhite")
+  resetFormat()
+  targetIshere = true
 end

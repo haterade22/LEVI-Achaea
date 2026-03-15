@@ -98,9 +98,9 @@ end
 targetBurningLevelV3 = targetBurningLevelV3 or 0
 
 -- Venom expansion: compound venoms that apply multiple constituent afflictions
+-- Note: epseth/epteth removed — they break a SINGLE limb (determined by game
+-- output), so limb damage triggers handle them directly, not venom expansion.
 local venomExpansionV3 = {
-    epseth = {"brokenleftleg", "brokenrightleg"},
-    epteth = {"brokenleftarm", "brokenrightarm"},
     sicken = {"manaleech", "slickness"},
 }
 
@@ -314,11 +314,8 @@ end
 -- Target defense tracking
 function setTargetDefenseV3(defense, active)
     targetDefensesV3[defense] = active and true or nil
-    -- Interactions: rebounding strip also strips shield and curseward
-    if defense == "rebounding" and not active then
-        setTargetDefenseV3("shield", false)
-        setTargetDefenseV3("curseward", false)
-    end
+    -- Note: rebounding, shield, and curseward are independent defenses in Achaea.
+    -- Stripping one does NOT strip the others.
 end
 
 function hasTargetDefenseV3(defense)
@@ -470,10 +467,10 @@ function onSmokeCureV3()
             table.insert(newStates, state)
             curedAffs[candidates[1]] = true
         else
-            -- Multiple candidates - BRANCH into N possibilities
-            local probEach = state.prob / #candidates
-            for _, aff in ipairs(candidates) do
-                local branch = {affs = copyAffs(state.affs), prob = probEach}
+            -- Multiple candidates - BRANCH with SSC priority weighting
+            local weights = computeCureWeightsV3(#candidates)
+            for i, aff in ipairs(candidates) do
+                local branch = {affs = copyAffs(state.affs), prob = state.prob * weights[i]}
                 branch.affs[aff] = nil
                 table.insert(newStates, branch)
                 branchedAffs[aff] = true
@@ -866,6 +863,7 @@ function resetStatesV3()
     resetBurningLevelV3()
     resetAffTimestampsV3()
     resetTargetDefensesV3()
+    resetPassiveCooldownsV3()
     if resetCureBalancesV3 then resetCureBalancesV3() end
     if killNegativeConfirmV3 then killNegativeConfirmV3() end
     syncToOldSystemV3()
@@ -1107,6 +1105,8 @@ cureBalancesV3 = cureBalancesV3 or {
     salve = 0,
     focus = 0,
     tree = 0,
+    restoration = 0,
+    writhe = 0,
 }
 
 -- Cure balance durations (seconds)
@@ -1117,20 +1117,83 @@ cureBalanceTimingsV3 = {
     salve_scalded = 1.3,
     focus = 2.2,
     tree = 13.0,
+    restoration_normal = 3.8,
+    restoration_scalded = 5.8,
+    writhe = 1.8,
 }
 
 -- Active timers for cleanup
 cureBalanceTimerIDsV3 = cureBalanceTimerIDsV3 or {}
+
+-- Per-ability passive cure cooldowns (independent of cure balance timers)
+passiveCooldownsV3 = passiveCooldownsV3 or {}
+
+passiveCooldownTimingsV3 = {
+    -- 12s cooldowns
+    passive_airlord = 12.0,
+    passive_healingrite = 12.0,
+    passive_syphon = 12.0,
+    passive_dagaz = 12.0,
+    passive_leech = 12.0,
+    passive_accelerate = 12.0,
+    passive_alleviate = 12.0,
+    passive_bloodboil = 12.0,
+    passive_dragonheal = 12.0,
+    passive_expunge = 12.0,
+    passive_fitness = 12.0,
+    passive_might = 12.0,
+    passive_purification = 12.0,
+    passive_purify = 12.0,
+    passive_rage = 12.0,
+    passive_salt = 12.0,
+    passive_shrugging = 12.0,
+    passive_slough = 12.0,
+    passive_eruption = 12.0,
+    passive_continuation = 12.0,
+    passive_root = 12.0,
+    passive_priesthealing = 12.0,
+    -- 14s cooldowns
+    passive_hallelujah = 14.0,
+    -- 20s cooldowns
+    passive_suntarot = 20.0,
+    passive_panacea = 20.0,
+    passive_fool = 20.0,
+}
+
+function startPassiveCooldownV3(abilityKey)
+    local duration = passiveCooldownTimingsV3[abilityKey]
+    if not duration then return end
+    passiveCooldownsV3[abilityKey] = getEpoch() + duration
+end
+
+function canTargetPassiveV3(abilityKey)
+    return (passiveCooldownsV3[abilityKey] or 0) <= getEpoch()
+end
+
+function getPassiveCooldownTimeV3(abilityKey)
+    local remaining = (passiveCooldownsV3[abilityKey] or 0) - getEpoch()
+    return math.max(0, remaining)
+end
+
+function resetPassiveCooldownsV3()
+    passiveCooldownsV3 = {}
+end
 
 -- Start a cure balance timer for a specific cure type
 function startCureBalanceV3(cureType)
     local duration
     if cureType == "salve" then
         -- Scalded doubles salve balance from 0.8s to 1.3s
-        if getAffProbabilityV3("scalded") >= 0.5 then
+        if getAffProbabilityV3 and getAffProbabilityV3("scalded") >= 0.5 then
             duration = cureBalanceTimingsV3.salve_scalded
         else
             duration = cureBalanceTimingsV3.salve_normal
+        end
+    elseif cureType == "restoration" then
+        if getAffProbabilityV3 and getAffProbabilityV3("scalded") >= 0.5 then
+            duration = cureBalanceTimingsV3.restoration_scalded
+        else
+            duration = cureBalanceTimingsV3.restoration_normal
         end
     else
         duration = cureBalanceTimingsV3[cureType]
@@ -1169,6 +1232,8 @@ function getAllCureBalancesV3()
         salve = getCureBalanceTimeV3("salve"),
         focus = getCureBalanceTimeV3("focus"),
         tree = getCureBalanceTimeV3("tree"),
+        restoration = getCureBalanceTimeV3("restoration"),
+        writhe = getCureBalanceTimeV3("writhe"),
     }
 end
 
@@ -1255,10 +1320,10 @@ end
 
 -- Kill pending negative confirmation (iterates ALL pending timers)
 function killNegativeConfirmV3()
-    for key, timerID in pairs(negativeConfirmTimersV3) do
+    for _, timerID in pairs(negativeConfirmTimersV3) do
         if timerID then killTimer(timerID) end
-        negativeConfirmTimersV3[key] = nil
     end
+    negativeConfirmTimersV3 = {}
     lastGuessV3 = nil
 end
 

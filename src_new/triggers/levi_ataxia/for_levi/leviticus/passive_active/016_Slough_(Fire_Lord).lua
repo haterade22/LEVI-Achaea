@@ -43,6 +43,7 @@ if isTargeted(matches[2]) then
 	-- Slough cures weariness + 1 random affliction
 	ataxiaTemp.randomCure = 1
 	onClassCureV3({"weariness"}, 1)
+	if startPassiveCooldownV3 then startPassiveCooldownV3("passive_slough") end
 	selectString(line,1)
 	fg("NavajoWhite")
 	resetFormat()

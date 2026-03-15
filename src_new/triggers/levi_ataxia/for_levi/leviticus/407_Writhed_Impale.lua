@@ -53,6 +53,7 @@ patterns:
 
 if line:find("disembowelment") then
   erAff("impaled")
+  if onTargetWritheV3 then onTargetWritheV3() end
 tAffs.impaled = false
 timpale = false
   -- BM Brokenstar phase engine callback
@@ -60,6 +61,7 @@ timpale = false
 else
   if isTargeted(matches[2]) then
   	erAff("impaled")
+  	if onTargetWritheV3 then onTargetWritheV3() end
   	selectString(line,1)
   	setBold(true)
   	fg("magenta")

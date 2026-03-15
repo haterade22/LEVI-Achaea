@@ -41,6 +41,7 @@ if isTargeted(matches[2]) then
   -- Shrugging: cures weariness + 1 random affliction
   ataxiaTemp.randomCure = 1
   onClassCureV3({"weariness"}, 1)
+  if startPassiveCooldownV3 then startPassiveCooldownV3("passive_shrugging") end
   selectString(line,1)
   fg("NavajoWhite")
   resetFormat()

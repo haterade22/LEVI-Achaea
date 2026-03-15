@@ -43,6 +43,7 @@ local class = (ataxiaNDB_getClass(name) or "Unknown")
 if isTargeted(matches[2]) and class == "Shaman" then
 	ataxiaTemp.randomCure = 1
 	onClassCureV3({"selarnia"}, 1)
+	if startPassiveCooldownV3 then startPassiveCooldownV3("passive_purification") end
 	selectString(line,1)
 	fg("NavajoWhite")
 	resetFormat()

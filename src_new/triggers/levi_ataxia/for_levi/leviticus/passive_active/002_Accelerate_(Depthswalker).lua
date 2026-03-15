@@ -48,9 +48,11 @@ if isTargeted(name) and class == "Depthswalker" then
 	if multimatches[3][1] == name.." grows older before your eyes." and not haveAff("prone") then
     ataxiaTemp.randomCure = 2
 		onClassCureV3({"recklessness"}, 2)
+		if startPassiveCooldownV3 then startPassiveCooldownV3("passive_accelerate") end
 	else
 		ataxiaTemp.randomCure = 1
 		onClassCureV3({"recklessness"}, 1)
+		if startPassiveCooldownV3 then startPassiveCooldownV3("passive_accelerate") end
 	end
 	targetIshere = true
 end

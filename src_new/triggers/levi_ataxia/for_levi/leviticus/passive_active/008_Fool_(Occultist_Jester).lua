@@ -45,6 +45,7 @@ if isTargeted(matches[2]) then
 	if class == "Jester" or class == "Occultist" then
 		ataxiaTemp.randomCure = 3
 		onClassCureV3({"paralysis"}, 3)
+		if startPassiveCooldownV3 then startPassiveCooldownV3("passive_fool") end
 		selectString(line,1)
 		fg("goldenrod")
 		resetFormat()

@@ -45,13 +45,16 @@ local name = multimatches[1][2]
 if isTargeted(name) then
 	if multimatches[3][1] == name .. " gives a sigh of relief." then
 		onClassCureV3({"retribution"})
+		if startPassiveCooldownV3 then startPassiveCooldownV3("passive_rage") end
 	elseif multimatches[3][1] == name .. " shakes his head and a look of clarity returns to his eyes."
 		or multimatches[3][1] == name .. " shakes her head and a look of clarity returns to her eyes." then
 			onClassCureV3({"lovers"})
+			if startPassiveCooldownV3 then startPassiveCooldownV3("passive_rage") end
 	else
 		taRaged()
 		-- Rage also cures paralysis (taRaged handles group affs, not paralysis)
 		onClassCureV3({"paralysis"})
+		if startPassiveCooldownV3 then startPassiveCooldownV3("passive_rage") end
 	end
 	targetIshere = true
 end
