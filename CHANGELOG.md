@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-03-15 — Fix login GMCP race conditions (v4.7.1)
+
+### Fixed: nil errors on login from GMCP events firing before settings load
+
+Three scripts crash when GMCP events fire before `ataxia_loadSettings()` completes:
+- `ataxia_Room_Update` — `ataxia.settings.defences` nil check added
+- `Prompt Running` — `ataxia.settings.use` nil check added
+- `Deffing Up` / `systemDefup()` — early return if settings not loaded
+
+**Files:** `002_ataxia_Room_Update.lua`, `010_Prompt_Running.lua`, `002_Deffing_Up.lua`
+
+---
+
 ## 2026-03-15 — Basher improvements: auto-learn denizens, non-destructive install, startup config
 
 ### New: Auto-learn denizen system

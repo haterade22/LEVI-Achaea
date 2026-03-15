@@ -111,8 +111,8 @@ function ataxia_Room_Update()
 	end
 	
   local bubbleEnv = {"Freshwater", "Ocean", "River",}
-  local wDefs = ataxia.settings.defences
-  if wDefs.current ~= "" and wDefs.current ~= nil and wDefs.current ~= "empty" then
+  local wDefs = ataxia.settings and ataxia.settings.defences
+  if wDefs and wDefs.current ~= "" and wDefs.current ~= nil and wDefs.current ~= "empty" then
     if (wDefs.defup[wDefs.current].grookbubble or wDefs.keepup[wDefs.current].grookbubble) and not ataxia.defences.grookbubble then
       if table.contains(gmcp.Room.Info.details, "underwater") or table.contains(bubbleEnv, gmcp.Room.Info.environment) then
         if not triedBubble then

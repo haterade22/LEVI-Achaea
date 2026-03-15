@@ -15,6 +15,7 @@ packageName: ''
 ]]--
 
 function systemDefup(profile)
+	if not ataxia.settings or not ataxia.settings.defences then return end
 	local cur = ataxia.settings.defences.current
 	local command = ""
 	if profile == "none" then
