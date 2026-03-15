@@ -904,7 +904,7 @@ cureBalanceTimingsV3 = {
 }
 
 -- Active timers for cleanup
-cureBalanceTimerIDs = cureBalanceTimerIDs or {}
+cureBalanceTimerIDsV3 = cureBalanceTimerIDsV3 or {}
 
 -- Start a cure balance timer for a specific cure type
 function startCureBalanceV3(cureType)
@@ -925,12 +925,12 @@ function startCureBalanceV3(cureType)
     cureBalancesV3[cureType] = getEpoch() + duration
 
     -- Kill old timer if exists
-    if cureBalanceTimerIDs[cureType] then
-        killTimer(cureBalanceTimerIDs[cureType])
+    if cureBalanceTimerIDsV3[cureType] then
+        killTimer(cureBalanceTimerIDsV3[cureType])
     end
 
-    cureBalanceTimerIDs[cureType] = tempTimer(duration, function()
-        cureBalanceTimerIDs[cureType] = nil
+    cureBalanceTimerIDsV3[cureType] = tempTimer(duration, function()
+        cureBalanceTimerIDsV3[cureType] = nil
     end)
 end
 
@@ -961,9 +961,9 @@ function resetCureBalancesV3()
     for cureType in pairs(cureBalancesV3) do
         cureBalancesV3[cureType] = 0
     end
-    for cureType, timerID in pairs(cureBalanceTimerIDs) do
+    for cureType, timerID in pairs(cureBalanceTimerIDsV3) do
         if timerID then killTimer(timerID) end
-        cureBalanceTimerIDs[cureType] = nil
+        cureBalanceTimerIDsV3[cureType] = nil
     end
 end
 
@@ -975,7 +975,7 @@ end
 -- (not preserved across reload — stale timers cleaned up below)
 if lastGuessV3 then
     -- Script reloaded mid-combat: kill orphaned timers
-    for key, timerID in pairs(negativeConfirmTimersV3 or {}) do
+    for _, timerID in pairs(negativeConfirmTimersV3 or {}) do
         if timerID then killTimer(timerID) end
     end
 end
