@@ -261,7 +261,8 @@ function leviSetup.setupWeapons(rest)
   local weapons = ataxia.settings.weapons or {}
   local allSlots = {"weapon1", "weapon2", "mstar1", "mstar2", "staff", "staff2",
     "battleaxe", "longsword", "warhammer", "bastard", "lash", "fang", "scythe",
-    "dagger", "rapier", "bow", "daegger", "flail1", "flail2"}
+    "dagger", "rapier", "bow", "daegger", "flail1", "flail2",
+    "axe", "blackjack", "stiletto", "stiletto2", "stiletto3"}
 
   cecho("\n  " .. HL .. "Current weapon IDs:\n")
   local hasAny = false
@@ -283,7 +284,8 @@ function leviSetup.setupWeapons(rest)
   cecho("\n")
   cecho("\n  " .. D .. "Slots: weapon1, weapon2, mstar1, mstar2, staff, staff2,")
   cecho("\n  " .. D .. "       battleaxe, longsword, warhammer, bastard, lash, fang,")
-  cecho("\n  " .. D .. "       scythe, dagger, rapier, bow, daegger, flail1, flail2")
+  cecho("\n  " .. D .. "       scythe, dagger, rapier, bow, daegger, flail1, flail2,")
+  cecho("\n  " .. D .. "       axe, blackjack, stiletto, stiletto2, stiletto3")
   hint("  e.g.: ataxia setup weapons set weapon1 scimitar405403")
   hint("  Recommended: ataxia setup weapons scan")
   cecho("\n")

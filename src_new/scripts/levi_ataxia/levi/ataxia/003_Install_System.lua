@@ -36,7 +36,10 @@ function ataxia_installSystem()
   send("config usequeueing yes")
 
 	ataxia_defaultSettings()
-  
+
+	-- Show precache config so user can set herb/mineral outrift amounts
+	ataxiaEcho("Configure your herb and mineral precaching below. Use (+) and (-) to adjust:")
+	ataxia_precacheShow()
 end
 
 function ataxia_updateApplied(_, name)

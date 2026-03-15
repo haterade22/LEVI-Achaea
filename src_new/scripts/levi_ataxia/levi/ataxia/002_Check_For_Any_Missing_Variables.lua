@@ -96,7 +96,7 @@ function ataxiaCheckForMissing()
 	end
 	
 	if ataxiaBasher.treeblackout == nil then
-		ataxiaBasher.treeblackout = false
+		ataxiaBasher.treeblackout = true
 		ataxiaEcho("Bashing Tree Setting not found: Reverting to default; won't use tree when blacked out while bashing.")
 		cecho("\n     <NavajoWhite>aconfig treeblackout <NavajoWhite> to toggle.")
 	end

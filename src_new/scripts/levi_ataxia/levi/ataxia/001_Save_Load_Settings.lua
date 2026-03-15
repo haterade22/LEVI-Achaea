@@ -335,14 +335,14 @@ function ataxia_defaultSettings()
 		--Other stuff that doesn't fall into above categories.
 		aeoncommandblock = true,
 		gagclot = true,
-    highlighting = {},
+    highlighting = {guards = true, sigils = true, totems = true, runes = true, bals = true, limbs = true},
 		class = "Unknown",
 		looting = true,
 		paused = false,
 		prompt = {timestamp = true, afflictions = true},
 		separator = ";",
-		resetonlogin = false,
-		customprompt = "",
+		resetonlogin = true,
+		customprompt = "#grey@timestamp #white[#hcolour@health#white] #white[#mcolour@percentmana#white] #gold|@targetinfo#gold|[@affs] @paused",
 		roomshorten = "normal",
 		autogallop = false,
     avoidType = "physical",  -- Options: physical, mental, arcane, aoe
