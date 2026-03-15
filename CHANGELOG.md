@@ -2,6 +2,35 @@
 
 ---
 
+## 2026-03-14 — Fix armour paragon swap skipping pry/insert
+
+### Fixed: `scripts/.../gear_system/002_Armour_Paragons.lua`
+
+**Motivation:** `armour pvp` (and other profile swaps) would show "Paragons already match profile" and skip pry/insert commands. The `needsSwap` optimization compared `state.currentSlots` against the profile, but `currentSlots` was updated optimistically after sending commands without verifying they succeeded in-game, causing false matches on subsequent calls.
+
+**Changes:**
+- Removed the unreliable `needsSwap` check from `swap()` — profile swaps now always send pry + insert commands (idempotent in Achaea, no downside)
+
+---
+
+## 2026-03-14 — Fix evibe crash + meteorite syntax
+
+### Fixed: `aliases/.../magi_things/003_Embed_Vibes.lua`
+
+**Motivation:** `evibe` alias crashed with "attempt to index field 'magi' (a nil value)" when `ataxia.magi` hadn't been initialized yet (e.g., first use before toggling any vibes).
+
+**Changes:**
+- Added `ataxia.magi = ataxia.magi or {}` and `ataxia.magi.vibes = ataxia.magi.vibes or {}` initialization before accessing the table, matching the pattern in `002_Toggle_Vibes.lua`
+
+### Fixed: `scripts/.../mage/004_Magi_Offense.lua`
+
+**Motivation:** Meteorite cast commands had wrong word order (`cast meteorite <type> at <target>`) — correct Achaea syntax is `CAST METEORITE AT <target> <FLAMING|FROZEN|PURE>`.
+
+**Changes:**
+- Fixed all 3 meteorite commands in `selectMeteorite()` to use correct syntax: `cast meteorite at <target> <type> 4` (minimum 4s delay)
+
+---
+
 ## 2026-03-14 — Fix hardcoded command separator in Locate Relay
 
 ### Updated: `scripts/.../locate_relay/001_Locate_System.lua`, `scripts/.../locate_relay/002_Locate_World.lua`
