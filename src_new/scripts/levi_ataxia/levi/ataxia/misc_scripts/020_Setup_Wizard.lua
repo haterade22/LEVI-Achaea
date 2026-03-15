@@ -568,6 +568,11 @@ function leviSetup.setupBasher(rest)
       save()
       ataxiaEcho("Shield swap: " .. boolStr(ataxiaBasher.shieldswap))
       return
+    elseif key == "autolearn" then
+      ataxiaBasher.autoLearn = (val == "on" or val == "true" or val == "yes")
+      save()
+      ataxiaEcho("Auto-learn denizens: " .. boolStr(ataxiaBasher.autoLearn))
+      return
     end
   end
 
@@ -580,6 +585,7 @@ function leviSetup.setupBasher(rest)
   row("Shield swap", boolStr(ataxiaBasher.shieldswap), "retarget on shielded mob")
   row("Shield timer", (ataxiaBasher.shieldTimerDefault or 3.1) .. "s", "default wait")
   row("Battlerage raze", boolStr(ataxiaBasher.rageraze), "use razing battlerage")
+  row("Auto-learn", boolStr(ataxiaBasher.autoLearn), "add denizens to targetList on room entry")
 
   cecho("\n\n  " .. V .. "Set values:")
   cecho("\n  " .. HL .. "ataxia setup basher goldpack <packID>")
@@ -588,6 +594,7 @@ function leviSetup.setupBasher(rest)
   cecho("\n  " .. HL .. "ataxia setup basher shieldpct <percent>")
   cecho("\n  " .. HL .. "ataxia setup basher shieldtimer <seconds>")
   cecho("\n  " .. HL .. "ataxia setup basher swap <on|off>")
+  cecho("\n  " .. HL .. "ataxia setup basher autolearn <on|off>")
   hint("  e.g.: ataxia setup basher goldpack pack436363")
   hint("  e.g.: ataxia setup basher flee 2500")
   cecho("\n")
@@ -812,6 +819,7 @@ function leviSetup.setupInstall(rest)
       fleeThreshold = 1000,
       noShieldBreak = {mobs = {}, threshold = 0},
       rageraze = false,
+      autoLearn = true,
     }
     ataxiaBasher = ataxiaBasher or {}
     for k, v in pairs(defaults) do
@@ -1034,7 +1042,11 @@ function leviSetup.guideBasher()
   cecho("\n  " .. D .. "    Use tree tattoo during blackout to cure afflictions.")
   cecho("\n  " .. V .. "    Command:  " .. G .. "bash treeblackout <on|off>")
 
-  cecho("\n\n  " .. W .. "11. Class-Specific (Dragon)")
+  cecho("\n\n  " .. W .. "11. Auto-Learn Denizens")
+  cecho("\n  " .. D .. "    Automatically add room denizens to the area target list while bashing.")
+  cecho("\n  " .. V .. "    Wizard:   " .. G .. "ataxia setup basher autolearn <on|off>")
+
+  cecho("\n\n  " .. W .. "12. Class-Specific (Dragon)")
   cecho("\n  " .. D .. "    Dragon bashing options: jab, wot, incantation.")
   cecho("\n  " .. V .. "    Commands: " .. G .. "bash jab <on|off>")
   cecho("\n  " .. V .. "              " .. G .. "bash wot <on|off>")
@@ -1149,6 +1161,7 @@ function leviSetup.showStatus()
   row("Gold pack", ataxiaBasher.goldPack or "not set")
   row("Flee threshold", ataxiaBasher.fleeThreshold or "not set")
   row("Shield swap", boolStr(ataxiaBasher.shieldswap))
+  row("Auto-learn", boolStr(ataxiaBasher.autoLearn))
 
   -- NDB
   if ataxiaNDB then

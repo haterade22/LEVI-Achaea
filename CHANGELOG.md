@@ -2,6 +2,35 @@
 
 ---
 
+## 2026-03-15 — Basher improvements: auto-learn denizens, non-destructive install, startup config
+
+### New: Auto-learn denizen system
+Automatically adds room denizens to the area's `targetList` when the basher is active and you enter a room. No more manually adding every denizen in every area. Configurable via `ataxia setup basher autolearn on/off` (default: on).
+
+**Files:**
+- `003_ataxia_RoomContents_Update.lua` — auto-learn logic on room entry (gated by `ataxiaBasher.enabled` and `ataxiaBasher.autoLearn`)
+- `340_Slain.lua` — also learns denizens on kill (with nil guards)
+- `001_Install.lua` (alias) — `autoLearn = true` in defaults
+- `020_Setup_Wizard.lua` — toggle command, display row, guide entry, status overview
+- `002_Check_For_Any_Missing_Variables.lua` — backfill for existing users
+
+### Fixed: `abinstall` no longer wipes existing basher settings
+Both `abinstall` alias and `ataxia setup install basher` now use a merge pattern — only fills in missing keys, preserving existing `targetList`, routes, flee thresholds, etc.
+
+**Files:** `001_Install.lua` (alias), `020_Setup_Wizard.lua`
+
+### Fixed: Login GMCP race condition
+`ataxia.defences`, `ataxia.afflictions`, `ataxia.vitals` are now initialized in `_groups.yaml` init script so GMCP events that fire before `levilogin()` don't crash on nil tables.
+
+**File:** `_groups.yaml`
+
+### Added: Startup config for new installs
+`ataxia_installSystem()` now sends `config commandseparator ;` and `config usequeueing yes` on first install.
+
+**File:** `003_Install_System.lua`
+
+---
+
 ## 2026-03-15 — Hypochondria cure changed: kelp/aurum → lobelia/argentum
 
 ### Changed: Hypochondria cure reassignment

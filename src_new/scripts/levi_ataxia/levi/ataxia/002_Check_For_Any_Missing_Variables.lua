@@ -63,6 +63,12 @@ function ataxiaCheckForMissing()
 		ataxiaEcho("Battlerage razing option not found; defaulting to false.")
 		ataxiaEcho("<green>bash rageraze on/off <NavajoWhite>to change.")
 	end
+
+	if ataxiaBasher.autoLearn == nil then
+		ataxiaBasher.autoLearn = true
+		ataxiaEcho("Auto-learn denizens option not found; defaulting to on.")
+		ataxiaEcho("<green>ataxia setup basher autolearn on/off <NavajoWhite>to change.")
+	end
 	
 	if ataxia.prioritySwaps and ataxia.prioritySwaps.ravaged == nil then
 		ataxia.prioritySwaps.ravaged = {active = false, desc = "Automatically prio mana sipping while ravagedmind is active."}

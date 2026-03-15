@@ -30,6 +30,7 @@ local defaults = {
 	fleeThreshold = 1000,
 	noShieldBreak = {mobs = {}, threshold = 0},
 	rageraze = false,
+	autoLearn = true,
 }
 
 ataxiaBasher = ataxiaBasher or {}
