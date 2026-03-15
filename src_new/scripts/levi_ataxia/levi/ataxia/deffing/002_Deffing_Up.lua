@@ -30,7 +30,9 @@ function systemDefup(profile)
 			ataxiaEcho("Deffing up in the "..profile.." profile.")
       command = "curing priority defence "
 			for def, val in pairs(ataxia.settings.defences.defup[cur]) do
-				command = command..def.." 25 "
+				if isDefenceForCurrentClass(def) then
+					command = command..def.." 25 "
+				end
 			end
 
 			send(command,false)
@@ -53,7 +55,7 @@ function defupFailsafe()
 	if deffingFailsafe then killTimer(deffingFailsafe) end
 
 	for def, val in pairs(ataxia.settings.defences.defup[cur]) do
-		if not ataxia.settings.defences.keepup[cur][def] then
+		if not ataxia.settings.defences.keepup[cur][def] and isDefenceForCurrentClass(def) then
 			command = command..def.." reset "
 		end
 	end

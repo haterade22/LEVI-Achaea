@@ -16,6 +16,25 @@ packageName: ''
 
 -- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Ataxia-DownloadThis > Ataxia > System-related > Deffing > Defence Sorting - Cleaner
 
+-- Returns false if defName belongs to a class-specific table that isn't the
+-- player's current class. Universal categories (curatives, shared, tattoos,
+-- endgame) and defenses not listed in any class table are always allowed.
+function isDefenceForCurrentClass(defName)
+  if not ataxiaTables.classDefences then sortedDefenceShow() end
+
+  local myClass = (gmcp.Char.Status.class or ""):lower()
+  local universal = { curatives = true, shared = true, tattoos = true, endgame = true }
+
+  for className, defTable in pairs(ataxiaTables.classDefences) do
+    if not universal[className] then
+      if defTable[defName] and className ~= myClass then
+        return false
+      end
+    end
+  end
+  return true
+end
+
 function sortedDefenceShow()
    ataxiaTables.classDefences = {
    curatives = {

@@ -169,7 +169,9 @@ function classDetect.reapplyDefencePriorities()
   ataxia_sendCuringPriority("curing priority defence list reset", false)
   local command = "curing priority defence "
   for def in pairs(defup[cur]) do
-    command = command .. def .. " 25 "
+    if isDefenceForCurrentClass(def) then
+      command = command .. def .. " 25 "
+    end
   end
   ataxia_sendCuringPriority(command, false)
 end

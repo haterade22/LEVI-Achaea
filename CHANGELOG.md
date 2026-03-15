@@ -2,6 +2,36 @@
 
 ---
 
+## 2026-03-14 — Auto-configure travel earrings via II + Probe
+
+### Updated: `scripts/.../misc_scripts/020_Setup_Wizard.lua`
+
+**Motivation:** Manually assigning 9+ earrings to locations required running `II earring`, probing each one individually, then typing `ataxia setup earrings <location> <earringID>` for each. Tedious with 11 earrings.
+
+**Changes:**
+- Added `ataxia setup earrings auto` command that automatically discovers and assigns all travel earrings
+- Sends `II earring` to collect all earring IDs, then probes each sequentially (0.7s delay) to detect destination via "paired with another held by \<Name\>" pattern
+- Displays summary of assigned locations with unmatched earring reporting
+- Updated earring setup help text to show the auto option
+- Follows existing probe queue patterns from itemCatalog/gearAudit (timer-based end detection, temp trigger cleanup, disconnect handler)
+
+---
+
+## 2026-03-14 — Fix SSC spamming class-specific defenses when not that class
+
+### Updated: `deffing/004_Defence_Sorting_-_Cleaner.lua`, `deffing/002_Deffing_Up.lua`, `class_detect/001_Class_Detect_Engine.lua`
+
+**Motivation:** SSC was repeatedly trying to CAST STONESKIN, CHARGESHIELD, DIAMONDSKIN (magi-only spells) even when the player was not a Magi, producing "[Curing]: CAST STONESKIN / You know of no such spell to cast." spam every prompt.
+
+**Root cause:** `systemDefup()`, `defupFailsafe()`, and `classDetect.reapplyDefencePriorities()` sent all defenses from the active defup profile to SSC without checking whether the player's current class can actually use them.
+
+**Changes:**
+- Added `isDefenceForCurrentClass(defName)` helper in `004_Defence_Sorting_-_Cleaner.lua` — cross-references defenses against `ataxiaTables.classDefences` class-to-defense mapping, returning false if the defense belongs to a different class. Universal categories (curatives, shared, tattoos, endgame) always pass.
+- Filtered `systemDefup()` and `defupFailsafe()` in `002_Deffing_Up.lua` to skip class-mismatched defenses
+- Filtered `classDetect.reapplyDefencePriorities()` in `001_Class_Detect_Engine.lua` to skip class-mismatched defenses after curingset switches
+
+---
+
 ## 2026-03-14 — Bulk Locate Relay system (locaterRelay_v3 integration)
 
 ### Added: `scripts/.../locate_relay/001_Locate_System.lua`, `002_Locate_World.lua`
