@@ -972,13 +972,20 @@ end
 -- ============================================
 
 -- Pending guess storage for negative confirmation
+-- (not preserved across reload — stale timers cleaned up below)
+if lastGuessV3 then
+    -- Script reloaded mid-combat: kill orphaned timers
+    for key, timerID in pairs(negativeConfirmTimersV3 or {}) do
+        if timerID then killTimer(timerID) end
+    end
+end
 lastGuessV3 = nil
 
 -- Active timers for negative confirmation windows
 negativeConfirmTimersV3 = negativeConfirmTimersV3 or {}
 
 -- Negative confirmation configuration
-affConfigV3.negativeConfirm = {
+affConfigV3.negativeConfirm = affConfigV3.negativeConfirm or {
     enabled = true,
     herbWindow = 1.3,
     smokeWindow = 2.0,
@@ -1095,15 +1102,9 @@ function onClassCureV3(specificAffs, numRandom)
     if not specificAffs and not numRandom then return end
 
     -- Remove specific afflictions deterministically
+    -- erAff() handles: tAffs table + removeAffV3() + events + display
     if specificAffs then
         for _, aff in ipairs(specificAffs) do
-            if simpleTrackLookup and simpleTrackLookup[aff] then
-                simpleAffsV3[aff] = nil
-            else
-                removeAffV3(aff)
-            end
-            -- Also collapse to prove absent
-            collapseAffAbsentV3(aff)
             erAff(aff)
         end
     end
