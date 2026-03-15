@@ -38,7 +38,7 @@ patterns:
 
 if target == matches[2] then
 
-  if tAffs.weariness and tAffs.nausea then
+  if haveAff("weariness") and haveAff("nausea") then
       magi.offense = magi.offense or {}
       magi.offense.state = magi.offense.state or {}
       magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
@@ -47,23 +47,23 @@ if target == matches[2] then
       cecho(" <DimGrey>[<red>"..tburns.."/5<DimGrey>]")
   end
 
-  if not tAffs.weariness and not tAffs.nausea then
+  if not haveAff("weariness") and not haveAff("nausea") then
    tarAffed("weariness")
    tarAffed("nausea")
   end
 
-  if not tAffs.weariness and tAffs.nausea and not tAffs.shivering and tAffs.nocaloric then
+  if not haveAff("weariness") and haveAff("nausea") and not haveAff("shivering") and haveAff("nocaloric") then
     tarAffed("weariness")
     tarAffed("shivering")
-  elseif not tAffs.weariness and tAffs.nausea and not tAffs.nocaloric then
+  elseif not haveAff("weariness") and haveAff("nausea") and not haveAff("nocaloric") then
     tarAffed("weariness")
     tarAffed("nocaloric")
-  elseif not tAffs.weariness and tAffs.nausea and tAffs.shivering and tAffs.nocaloric and not tAffs.frozen then
+  elseif not haveAff("weariness") and haveAff("nausea") and haveAff("shivering") and haveAff("nocaloric") and not haveAff("frozen") then
     tarAffed("frozen")
     tarAffed("weariness")
   end
 
-  if not tAffs.nausea and tAffs.weariness then
+  if not haveAff("nausea") and haveAff("weariness") then
     magi.offense = magi.offense or {}
     magi.offense.state = magi.offense.state or {}
     magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
@@ -71,7 +71,6 @@ if target == matches[2] then
     tarAffed("burning")
     tarAffed("frozen")
     tarAffed("nausea")
-    haveAff("weariness")
     cecho(" <DimGrey>[<red>"..tburns.."/5<DimGrey>]")
   end
   if partyrelay and not ataxia.afflictions.aeon then send("pt " ..target.. ": weariness and nausea") end

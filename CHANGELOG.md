@@ -2,6 +2,51 @@
 
 ---
 
+## 2026-03-15 — Magi offense: xmagi deep review cleanup
+
+### Deleted: Legacy duplicate resonance triggers (11 files)
+
+**Motivation:** Deep review against xmagi (Tabethys) revealed that legacy per-element resonance triggers in `air/`, `water/`, `earth/` folders duplicate the unified `022_Resonance_Afflictions.lua`, causing double `tarAffed()` calls. Additional bugs: `water/002_Second.lua` had hardcoded "Antoninus" target, `earth/003_Third.lua` had "yourdirected" typo preventing matches, `earth/001_First.lua` had wrong capture group.
+
+**Files deleted:**
+- `air/001_First.lua`, `air/002_Second.lua`, `air/003_Third.lua`
+- `water/001_Water_First.lua`, `water/002_Second.lua`, `water/003_Third.lua`
+- `earth/001_First.lua`, `earth/002_Second.lua`, `earth/003_Third.lua`
+- `fire/001_Fire_Third.lua`, `fire/002_Fire_Second.lua` (already disabled)
+- **Kept:** `fire/003_Fire_First.lua` — has unique caloric strip tracking (`targetlostfrost`) not in 022
+
+### Deleted: Duplicate emanation triggers (2 files)
+
+**Motivation:** `magi_offense_tracking/002,003` duplicate `enamation/002,003` (the enamation versions have fuller logic including chain tracking and +2 burns).
+
+**Files deleted:**
+- `magi_offense_tracking/002_Emanation_Air.lua`
+- `magi_offense_tracking/003_Emanation_Water.lua`
+
+### Fixed: `general/002_Calcify_Head_Finish.lua` — case mismatch
+
+- Changed `erAff("Calcifiedskull")` to `erAff("calcifiedskull")` — was mismatched with `tarAffed("calcifiedskull")` in 026_Calcify.lua, causing the affliction to never be properly cleared
+
+### Fixed: `general/005_Firestorm_up.lua` — dead code removal
+
+- Removed `if target == matches[2]` block that never executed — trigger uses substring match (type 3) which has no capture groups, so `matches[2]` was always nil. Burns tracking is handled by `025_Burns_Tracking.lua` on firestorm ticks
+
+### Fixed: `general/021_Freeze.lua` — V3 migration
+
+- Replaced direct `tAffs.shivering`/`tAffs.nocaloric`/`tAffs.frozen` reads with `haveAff()` calls for V3 probability-aware tracking
+- Fixed `haveAff("nausea")` no-op queries that should have been `tarAffed("nausea")` — freeze applies nausea as an affliction, not just querying it
+
+### Fixed: `general/015_Dehydrate.lua` — V3 migration
+
+- Replaced all `tAffs.*` reads with `haveAff()` calls for V3 probability-aware tracking
+- Removed orphaned `haveAff("weariness")` no-op query in last block (weariness already confirmed by condition)
+
+### Cleaned up: Temporary files
+
+- Removed extracted `magiaddtriggs.xml` (xmagi reference file, no longer needed)
+
+---
+
 ## 2026-03-15 — V3 affliction tracking: ExpertDiagnoser parity + hardening
 
 ### Fixed: `scripts/.../affliction_tracking_core/007_Branching_State_Tracker.lua` (deep review)
@@ -86,6 +131,10 @@ All triggers include: `isTargeted()` check, class check via `ataxiaNDB_getClass(
 
 - Added `if onTargetWritheV3 then onTargetWritheV3() end` to all 3 writhe triggers after their `erAff()` calls
 - `407_Writhed_Impale.lua`, `408_Writhe_Ropes.lua`, `409_Writhed_Transfix.lua`
+
+### Fixed: `getAllCureBalancesV3()` — missing restoration/writhe (007)
+
+- Added `restoration` and `writhe` entries to the return table so callers get complete cure balance status
 
 ### Updated: Existing passive cure triggers (002-020) — cooldown tracking
 

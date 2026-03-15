@@ -38,16 +38,16 @@ patterns:
 
 if matches[2] ~= target then return end
 
- if not tAffs.shivering and tAffs.nocaloric then
+ if not haveAff("shivering") and haveAff("nocaloric") then
     tarAffed("weariness")
     tarAffed("shivering")
-    haveAff("nausea")
-  elseif not tAffs.nocaloric then
+    tarAffed("nausea")
+  elseif not haveAff("nocaloric") then
     tarAffed("weariness")
     tarAffed("nocaloric")
-    haveAff("nausea")
-  elseif tAffs.shivering and tAffs.nocaloric and not tAffs.frozen then
+    tarAffed("nausea")
+  elseif haveAff("shivering") and haveAff("nocaloric") and not haveAff("frozen") then
     tarAffed("frozen")
     tarAffed("weariness")
-    haveAff("nausea")
+    tarAffed("nausea")
   end
