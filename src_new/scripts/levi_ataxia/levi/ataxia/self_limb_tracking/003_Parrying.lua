@@ -16,6 +16,14 @@ packageName: ''
 
 local LIMB_LIST = {"head", "torso", "left arm", "right arm", "left leg", "right leg"}
 
+-- Classes whose kill route depends on prepping/breaking specific limbs
+local LIMB_CLASSES = {
+	["Infernal"] = true, ["Paladin"] = true, ["Runewarden"] = true, ["Unnamable"] = true,
+	["Monk"] = true, ["Tekura"] = true, ["Shikudo"] = true,
+	["Blademaster"] = true, ["Sentinel"] = true, ["Druid"] = true,
+	["Earthlord"] = true,
+}
+
 function ataxia_createParry()
 	ataxia.parry = ataxia.parry or (selfLimbDamage.config and selfLimbDamage.config.parryMode or "stand")
 	ataxia.parrying = ataxia.parrying or {
@@ -34,6 +42,12 @@ function ataxia_parryCheck()
 
 	local mode = cfg.parryMode
 	if mode == "manual" then return end
+
+	-- Auto mode: class-aware + hit-pattern parry
+	if mode == "auto" then
+		ataxia_autoParry()
+		return
+	end
 
 	-- Anti-Shikudo: override mode when fighting a Shikudo monk
 	local isShikudo = cfg.antiShikudo
@@ -204,4 +218,136 @@ function ataxia_shikudoParry()
 		end
 		return
 	end
+end
+
+-------------------------------------------------------------------
+-- AUTO PARRY MODE — class-aware + hit-pattern detection
+-------------------------------------------------------------------
+
+-- Detect which limb group the enemy is focusing based on recent hit history
+function ataxia_detectLimbFocus()
+	local hist = selfLimbDamage.hitHistory
+	if not hist or #hist < 2 then return nil end
+
+	local legHits, armHits, headHits = 0, 0, 0
+	local n = math.min(#hist, 4)
+	for i = #hist - n + 1, #hist do
+		local limb = hist[i]
+		if limb:find("leg") then legHits = legHits + 1
+		elseif limb:find("arm") then armHits = armHits + 1
+		elseif limb == "head" then headHits = headHits + 1
+		end
+	end
+
+	if legHits >= 2 then return "legs" end
+	if armHits >= 2 then return "arms" end
+	if headHits >= 2 then return "head" end
+	return nil
+end
+
+-- Auto parry: adapts strategy based on enemy class and attack patterns
+function ataxia_autoParry()
+	local cfg = selfLimbDamage.config
+	local pw = cfg.parryWeights
+
+	-- Anti-Shikudo takes priority (same check as standard modes)
+	local isShikudo = cfg.antiShikudo
+		and classDetect and classDetect.state
+		and (classDetect.state.attackerClass == "Shikudo"
+			or (classDetect.state.attackerClass == "Monk" and shikudostance and shikudostance ~= ""))
+
+	if isShikudo then
+		ataxia_shikudoParry()
+		return
+	end
+
+	-- Compute base damage weights (no mode bias yet)
+	local weights = {}
+	for _, limb in ipairs(LIMB_LIST) do
+		local w = 0
+		local data = selfLimbDamage[limb]
+		if not data then
+			weights[limb] = 0
+		else
+			local hitsLeft = ataxia_selfHitsToBreak(limb)
+			local isBroken = ataxia_selfLimbBroken(limb)
+
+			if isBroken then
+				w = pw.broken
+			elseif hitsLeft <= cfg.criticalHits then
+				w = pw.critical
+			elseif hitsLeft <= cfg.warningHits then
+				w = pw.warning
+			elseif hitsLeft <= 3 then
+				w = pw.moderate
+			elseif data.damage > 0 then
+				w = pw.minor
+			end
+
+			weights[limb] = w
+		end
+	end
+
+	-- Determine bias based on enemy class and attack patterns
+	local attackerClass = classDetect and classDetect.state and classDetect.state.attackerClass
+	local isLimbClass = attackerClass and LIMB_CLASSES[attackerClass]
+
+	if isLimbClass then
+		-- Limb class: detect focus and bias parry toward threatened group
+		local focus = ataxia_detectLimbFocus()
+		if focus == "legs" then
+			for _, limb in ipairs(LIMB_LIST) do
+				if limb:find("leg") and not ataxia_selfLimbBroken(limb) then
+					weights[limb] = weights[limb] + pw.legBias
+				end
+			end
+		elseif focus == "arms" then
+			for _, limb in ipairs(LIMB_LIST) do
+				if limb:find("arm") and not ataxia_selfLimbBroken(limb) then
+					weights[limb] = weights[limb] + pw.nonLegBias
+				end
+			end
+		elseif focus == "head" then
+			if not ataxia_selfLimbBroken("head") then
+				weights["head"] = weights["head"] + pw.legBias
+			end
+		else
+			-- No focus detected yet — default to leg bias (stay standing)
+			for _, limb in ipairs(LIMB_LIST) do
+				if limb:find("leg") and not ataxia_selfLimbBroken(limb) then
+					weights[limb] = weights[limb] + pw.legBias
+				end
+			end
+		end
+	else
+		-- Affliction class or unknown — leg bias (staying standing is priority)
+		for _, limb in ipairs(LIMB_LIST) do
+			if limb:find("leg") and not ataxia_selfLimbBroken(limb) then
+				weights[limb] = weights[limb] + pw.legBias
+			end
+		end
+	end
+
+	-- Select highest weight, break ties (same logic as standard modes)
+	local best, bestWeight, ties = nil, -math.huge, {}
+	for _, limb in ipairs(LIMB_LIST) do
+		local w = weights[limb] or 0
+		if w > bestWeight then
+			best = limb
+			bestWeight = w
+			ties = {limb}
+		elseif w == bestWeight then
+			ties[#ties + 1] = limb
+		end
+	end
+
+	if #ties > 1 and ataxia.parrying and table.contains(ties, ataxia.parrying.limb) then
+		ataxia.parrying.shouldparry = ataxia.parrying.limb
+	elseif #ties > 1 then
+		ataxia.parrying.shouldparry = ties[math.random(#ties)]
+	else
+		ataxia.parrying.shouldparry = best
+	end
+
+	ataxia.parrying.weights = weights
 end

@@ -112,13 +112,21 @@ function magi.offense.ptRelay(msg)
   end
 end
 
--- Count broken limbs on target
-function magi.offense.countBrokenLimbs()
+-- Count afflictions consuming target's mending/salve balance
+-- Magi is a salve pressure class: freeze is stronger when mending is occupied
+function magi.offense.countMendingAffs()
   local count = 0
+  local st = magi.offense.state
+  -- Broken limbs (each consumes a mending application)
   local limbs = {"brokenleftleg", "brokenrightleg", "brokenleftarm", "brokenrightarm"}
   for _, limb in ipairs(limbs) do
     if magi.offense.hasAff(limb) then count = count + 1 end
   end
+  -- Burns (each burn level needs mending to cure)
+  count = count + (st.burns or 0)
+  -- Calcified (needs mending to cure)
+  if st.calcifiedTorso then count = count + 1 end
+  if st.calcifiedSkull then count = count + 1 end
   return count
 end
 
@@ -174,13 +182,13 @@ function magi.offense.selectMeteorite()
   local fireWillBurn = (r.fire > 0) and (r.fire < 3)
 
   if fireWillBurn then
-    return "cast meteorite flaming at " .. target
+    return "cast meteorite at " .. target .. " flaming 4"
   elseif r.earth < 3 or st.calcifiedTorso then
-    return "cast meteorite pure at " .. target
+    return "cast meteorite at " .. target .. " pure 4"
   elseif r.water < 3 then
-    return "cast meteorite frozen at " .. target
+    return "cast meteorite at " .. target .. " frozen 4"
   else
-    return "cast erode at " .. target .. " shield"
+    return "cast erode at " .. target .. " maintain"
   end
 end
 
@@ -230,7 +238,7 @@ function magi.offense.selectSpell()
   --=== PRIORITY 3: GLACIATE (hypothermia + dual resonance) ===--
   local frozen = magi.offense.getAffProb("frozen") >= 0.5
   local hypothermia = st.hypothermia or magi.offense.getAffProb("hypothermia") >= 0.5
-  if mode ~= "fire" and hypothermia and freso then
+  if hypothermia and freso then
     return "cast glaciate at " .. target
   end
 
@@ -261,7 +269,7 @@ function magi.offense.selectSpell()
   end
 
   --=== PRIORITY 7: HYPOTHERMIA (frozen + dual resonance) ===--
-  if mode ~= "fire" and frozen and not hypothermia and freso then
+  if frozen and not hypothermia and freso then
     return "cast hypothermia at " .. target
   end
 
@@ -287,7 +295,7 @@ function magi.offense.selectSpell()
   end
 
   --=== PRIORITY 10: FREEZE (shivering + broken limb) ===--
-  if mode ~= "fire" and shivering >= 0.5 and magi.offense.countBrokenLimbs() >= 1 then
+  if shivering >= 0.5 and magi.offense.countMendingAffs() >= 1 then
     return "cast freeze at " .. target
   end
 

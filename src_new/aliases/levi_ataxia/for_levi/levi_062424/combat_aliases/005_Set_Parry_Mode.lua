@@ -18,11 +18,14 @@ if not ataxia.parrying then
 	ataxia_createParry()
 end
 
+local validModes = {stand = true, defend = true, manual = true, randomarm = true, randomleg = true, auto = true}
+
 if x == "none" then
 	ataxiaEcho("Disabled parry usage.")
 	ataxia.settings.use.parry = false
-elseif not table.contains(ataxia.parrying.modes, x) then
-	ataxiaEcho("Invalid parrying method. Options are manual, stand or defend.")
+elseif not validModes[x] then
+	ataxiaEcho("Invalid parrying method.")
+	cecho("\n<white>AUTO  :            <green>Class-aware auto parry (adapts to enemy attack patterns).")
 	cecho("\n<white>STAND :            <green>Focus on parrying what will get/keep you standing.")
 	cecho("\n<white>DEFEND:            <green>Focus on parrying what's closest to breaking, with weights.")
 	cecho("\n<white>MANUAL:            <green>Manually set your parrying.")

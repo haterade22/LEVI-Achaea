@@ -89,13 +89,13 @@ elseif args == "crit off" then
 
 elseif args:find("^parry ") then
 	local mode = args:match("^parry (.+)")
-	local validModes = {stand = true, defend = true, manual = true, randomarm = true, randomleg = true}
+	local validModes = {stand = true, defend = true, manual = true, randomarm = true, randomleg = true, auto = true}
 	if validModes[mode] then
 		cfg.parryMode = mode
 		ataxia.parry = mode
 		cecho("\n<DodgerBlue>[SLC] <white>Parry Mode: <cyan>" .. mode)
 	else
-		cecho("\n<DodgerBlue>[SLC] <red>Invalid mode. Use: stand, defend, manual, randomarm, randomleg")
+		cecho("\n<DodgerBlue>[SLC] <red>Invalid mode. Use: stand, defend, manual, randomarm, randomleg, auto")
 	end
 
 elseif args == "shikudo on" then
@@ -126,7 +126,7 @@ else
 	cecho("\n  <cyan>slc warn on/off")
 	cecho("\n  <cyan>slc crit on/off")
 	cecho("\n  <cyan>slc shikudo on/off <dim_gray>- Anti-Shikudo dynamic parry")
-	cecho("\n  <cyan>slc parry <mode> <dim_gray>- stand/defend/manual/randomarm/randomleg")
+	cecho("\n  <cyan>slc parry <mode> <dim_gray>- auto/stand/defend/manual/randomarm/randomleg")
 	cecho("\n  <cyan>slc reset      <dim_gray>- Clear all limb damage")
 	cecho("\n  <cyan>slc gui        <dim_gray>- Toggle GUI window")
 end

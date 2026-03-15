@@ -390,7 +390,7 @@ function leviSetup.setupEarrings(rest)
 
   cecho("\n\n  " .. V .. "Auto-configure all earrings:")
   cecho("\n  " .. HL .. "ataxia setup earrings auto")
-  hint("  Scans II earring + probes each to detect location")
+  hint("  Sends EARRINGS command and auto-assigns all travel earrings")
 
   cecho("\n\n  " .. V .. "Set an earring manually:")
   cecho("\n  " .. HL .. "ataxia setup earrings <location> <earringID>")
@@ -426,13 +426,7 @@ function leviSetup.earringAutoStart()
   end
 
   leviSetup.earringAuto = {
-    phase = "II_CAPTURE",
     triggers = {},
-    discovered = {},
-    probeQueue = {},
-    probeIndex = 0,
-    probeCapture = {},
-    capturingProbe = false,
     results = {},
     endTimer = nil,
     dcHandler = nil,
@@ -449,19 +443,20 @@ function leviSetup.earringAutoStart()
 
   ataxiaEcho("Scanning earrings...")
 
-  -- Capture II output lines: "earring87118          an earring of Sinope"
+  -- Capture EARRINGS output: "Earring#87118 (M) is paired with Axios."
   local capTrig = tempRegexTrigger(
-    [[^(\s*)(earring\d+)\s+(.+)$]],
+    [[Earring#(\d+).*is paired with (\w+)\.]],
     function()
-      if not leviSetup.earringAuto or leviSetup.earringAuto.phase ~= "II_CAPTURE" then return end
-      table.insert(leviSetup.earringAuto.discovered, {
-        id = matches[3],
-        name = matches[4],
-      })
+      if not leviSetup.earringAuto then return end
+      local id = "earring" .. matches[2]
+      local loc = matches[3]:lower()
+      if earringKnownLocations[loc] then
+        leviSetup.earringAuto.results[loc] = id
+      end
       -- Reset end timer on each match
       if leviSetup.earringAuto.endTimer then killTimer(leviSetup.earringAuto.endTimer) end
       leviSetup.earringAuto.endTimer = tempTimer(2.0, function()
-        leviSetup.earringAutoParseII()
+        leviSetup.earringAutoFinish()
       end)
     end
   )
@@ -469,126 +464,12 @@ function leviSetup.earringAutoStart()
 
   -- Timeout if no output at all
   st.endTimer = tempTimer(3.0, function()
-    if leviSetup.earringAuto and leviSetup.earringAuto.phase == "II_CAPTURE" then
-      leviSetup.earringAutoParseII()
+    if leviSetup.earringAuto then
+      leviSetup.earringAutoFinish()
     end
   end)
 
-  send("II earring", false)
-end
-
-function leviSetup.earringAutoParseII()
-  local st = leviSetup.earringAuto
-  if not st then return end
-
-  -- Kill II capture triggers
-  for _, tid in ipairs(st.triggers) do
-    killTrigger(tid)
-  end
-  st.triggers = {}
-  if st.endTimer then killTimer(st.endTimer); st.endTimer = nil end
-
-  if #st.discovered == 0 then
-    ataxiaEcho("No earrings found in inventory.")
-    leviSetup.earringAutoCleanup()
-    return
-  end
-
-  ataxiaEcho("Found " .. W .. #st.discovered .. V .. " earrings. Probing...")
-
-  -- Build probe queue from all discovered earrings
-  for _, item in ipairs(st.discovered) do
-    table.insert(st.probeQueue, item.id)
-  end
-
-  st.phase = "PROBING"
-  st.probeIndex = 0
-  leviSetup.earringAutoProbeNext()
-end
-
-function leviSetup.earringAutoProbeNext()
-  local st = leviSetup.earringAuto
-  if not st then return end
-
-  st.probeIndex = st.probeIndex + 1
-  if st.probeIndex > #st.probeQueue then
-    leviSetup.earringAutoFinish()
-    return
-  end
-
-  local id = st.probeQueue[st.probeIndex]
-  st.probeCapture = {}
-  st.capturingProbe = true
-
-  -- Clean old probe triggers
-  for _, tid in ipairs(st.triggers) do
-    killTrigger(tid)
-  end
-  st.triggers = {}
-  if st.endTimer then killTimer(st.endTimer); st.endTimer = nil end
-
-  -- Capture all lines during probe
-  local capTrig = tempRegexTrigger(
-    [[^.+$]],
-    function()
-      if not leviSetup.earringAuto or not leviSetup.earringAuto.capturingProbe then return end
-      table.insert(leviSetup.earringAuto.probeCapture, matches[1])
-      -- Reset end timer on each line
-      if leviSetup.earringAuto.endTimer then killTimer(leviSetup.earringAuto.endTimer) end
-      leviSetup.earringAuto.endTimer = tempTimer(1.5, function()
-        leviSetup.earringAutoProcessProbe()
-      end)
-    end
-  )
-  table.insert(st.triggers, capTrig)
-
-  -- "It weighs" end marker
-  local weightTrig = tempRegexTrigger(
-    [[^It weighs]],
-    function()
-      if not leviSetup.earringAuto or not leviSetup.earringAuto.capturingProbe then return end
-      table.insert(leviSetup.earringAuto.probeCapture, matches[1])
-      -- End probe shortly after weight line
-      if leviSetup.earringAuto.endTimer then killTimer(leviSetup.earringAuto.endTimer) end
-      leviSetup.earringAuto.endTimer = tempTimer(0.3, function()
-        leviSetup.earringAutoProcessProbe()
-      end)
-    end
-  )
-  table.insert(st.triggers, weightTrig)
-
-  -- Fallback timeout
-  st.endTimer = tempTimer(3.0, function()
-    if leviSetup.earringAuto and leviSetup.earringAuto.capturingProbe then
-      leviSetup.earringAutoProcessProbe()
-    end
-  end)
-
-  send("PROBE " .. id, false)
-end
-
-function leviSetup.earringAutoProcessProbe()
-  local st = leviSetup.earringAuto
-  if not st then return end
-
-  st.capturingProbe = false
-  local id = st.probeQueue[st.probeIndex]
-  local text = table.concat(st.probeCapture, "\n")
-
-  -- Extract location from "paired with another held by <Name>"
-  local holder = text:match("paired with another held by (%w+)")
-  if holder then
-    local loc = holder:lower()
-    if earringKnownLocations[loc] then
-      st.results[loc] = id
-    end
-  end
-
-  -- Delay before next probe
-  if st.endTimer then killTimer(st.endTimer); st.endTimer = nil end
-  st.endTimer = tempTimer(0.7, function()
-    leviSetup.earringAutoProbeNext()
-  end)
+  send("EARRINGS", false)
 end
 
 function leviSetup.earringAutoFinish()
@@ -644,22 +525,6 @@ function leviSetup.earringAutoFinish()
   else
     cecho("\n  " .. R .. "No earring locations detected.")
     hint("  Set manually: ataxia setup earrings <location> <earringID>")
-  end
-
-  -- Report unmatched earrings
-  local matched = {}
-  for _, id in pairs(st.results) do
-    matched[id] = true
-  end
-  local unmatched = {}
-  for _, item in ipairs(st.discovered) do
-    if not matched[item.id] then
-      table.insert(unmatched, item.id)
-    end
-  end
-  if #unmatched > 0 then
-    cecho("\n\n  " .. D .. "Unmatched earrings: " .. table.concat(unmatched, ", "))
-    hint("  These may not be travel earrings or probe format was unexpected.")
   end
 
   cecho("\n")

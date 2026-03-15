@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-03-14 — Add auto parry mode to SLC
+
+### Added: `scripts/.../self_limb_tracking/003_Parrying.lua`, `002_Track_The_Damage.lua`
+
+**Motivation:** The existing parry modes (stand, defend, manual, randomarm, randomleg) each use a single static strategy. An `auto` mode dynamically adapts based on enemy class and attack patterns — parrying focused limbs against limb classes (Knights, Monk, Blademaster, etc.) while defaulting to leg bias against affliction classes.
+
+**Changes:**
+- New `auto` parry mode: class-aware strategy using `classDetect.state.attackerClass` and hit-pattern detection
+- Added `selfLimbDamage.hitHistory` — rolling window of last 6 hits for focus detection
+- Added `ataxia_detectLimbFocus()` — analyzes last 4 hits to identify leg/arm/head focus
+- Added `ataxia_autoParry()` — computes weighted parry with dynamic bias based on enemy class
+- Anti-Shikudo still takes priority in auto mode (delegates to `ataxia_shikudoParry()`)
+- Fixed `parryy` alias to use `validModes` table instead of missing `ataxia.parrying.modes`
+- Updated `slc parry` and `parryy` help text to include auto mode
+- Use: `slc parry auto` or `parryy auto`
+
+---
+
 ## 2026-03-14 — Fix armour paragon swap skipping pry/insert
 
 ### Fixed: `scripts/.../gear_system/002_Armour_Paragons.lua`
@@ -10,6 +28,21 @@
 
 **Changes:**
 - Removed the unreliable `needsSwap` check from `swap()` — profile swaps now always send pry + insert commands (idempotent in Achaea, no downside)
+
+---
+
+## 2026-03-14 — Align magi offense with xMagi reference logic
+
+### Fixed: `scripts/.../mage/004_Magi_Offense.lua`
+
+**Motivation:** Multiple logic differences from the xMagi reference system were reducing offense effectiveness.
+
+**Changes:**
+- Removed `mode ~= "fire"` gate from glaciate check (Priority 3) — fires whenever hypothermia + dual resonance are met
+- Removed `mode ~= "fire"` gate from hypothermia cast (Priority 7) — fires whenever frozen + dual resonance are met
+- Removed `mode ~= "fire"` gate from freeze check (Priority 10) — fires whenever shivering + mending pressure conditions are met
+- Renamed `countBrokenLimbs()` → `countMendingAffs()` — now counts ALL mending-consuming afflictions (broken limbs + burns + calcified torso/skull), not just broken limbs. Magi is a salve pressure class; freeze is stronger when the target's mending balance is already occupied by burns or calcification
+- Erode fallback uses `MAINTAIN` argument to preserve resonance levels when stripping shield (previously used `shield`; ERODE without MAINTAIN drops all resonance by 1)
 
 ---
 

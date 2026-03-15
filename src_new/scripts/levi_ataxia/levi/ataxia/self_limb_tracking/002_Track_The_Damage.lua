@@ -99,6 +99,7 @@ end
 
 selfLimbDamage.timers = selfLimbDamage.timers or {}
 selfLimbDamage.lasthit = selfLimbDamage.lasthit or "none"
+selfLimbDamage.hitHistory = selfLimbDamage.hitHistory or {}
 
 -------------------------------------------------------------------
 -- CORE FUNCTIONS
@@ -187,6 +188,11 @@ function ataxia_raiseLimbDamage(limb, num)
 	end
 
 	selfLimbDamage.lasthit = limb
+
+	-- Track hit history for auto-parry focus detection (rolling window of 6)
+	local hist = selfLimbDamage.hitHistory
+	hist[#hist + 1] = limb
+	if #hist > 6 then table.remove(hist, 1) end
 
 	-- Update damage data
 	selfLimbDamage[limb].lastHit = num
@@ -279,6 +285,7 @@ function ataxia_clearAllLimbDamage()
 	for _, limb in ipairs(LIMB_LIST) do
 		ataxia_clearLimbDamage(limb)
 	end
+	selfLimbDamage.hitHistory = {}
 	cecho("\n<DodgerBlue> -= All self limb damage cleared =-")
 end
 
