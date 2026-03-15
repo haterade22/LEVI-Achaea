@@ -13,7 +13,7 @@ command: ''
 packageName: ''
 ]]--
 
-if not ataxia.settings or not ataxia.settings.defences then ataxiaEcho("Settings not loaded yet.") return end
+if not ataxia.settings or not ataxia.settings.defences then return end
 local profile = matches[3]
 local option = matches[2]
 
