@@ -211,7 +211,8 @@ function ls.finish()
     end
     local delay = math.floor((i - 1) / chunkSize) * 0.5
     tempTimer(delay, function()
-      send(table.concat(chunk, "::"))
+      local sep = (ataxia and ataxia.settings and ataxia.settings.separator) or ";"
+      send(table.concat(chunk, sep))
     end)
   end
 end
