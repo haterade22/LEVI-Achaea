@@ -37,6 +37,7 @@ function supportedDefence(def)
 end
 
 function addToDefup(defence)
+	if not ataxia.settings or not ataxia.settings.defences then return end
 	local cur = ataxia.settings.defences.current
 	if cur == "" then
 		ataxiaEcho("Not currently in a defup profile. Please fix it.")
@@ -52,6 +53,7 @@ function addToDefup(defence)
 end
 
 function addToKeepup(defence)
+	if not ataxia.settings or not ataxia.settings.defences then return end
 	local cur = ataxia.settings.defences.current
 	if cur == "" then
 		ataxiaEcho("Not currently in a defup profile. Please fix it.")
@@ -69,6 +71,7 @@ function addToKeepup(defence)
 end
 
 function toggleKeepup(defence, option)
+	if not ataxia.settings or not ataxia.settings.defences then return end
 	local cur = ataxia.settings.defences.current
 	if cur == "" then
 		ataxiaEcho("Not currently in a defup profile. Please fix it.")
@@ -92,6 +95,7 @@ function toggleKeepup(defence, option)
 end
 
 function gotDef()
+	if not ataxia.settings or not ataxia.settings.defences then return end
 	local def = trueDef(gmcp.Char.Defences.Add.name)
 	local cur = ataxia.settings.defences.current
 

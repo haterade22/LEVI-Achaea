@@ -13,6 +13,7 @@ command: ''
 packageName: ''
 ]]--
 
+if not ataxia.settings or not ataxia.settings.defences then ataxiaEcho("Settings not loaded yet.") return end
 local profile = ataxia.settings.defences.current
 
 if profile == "none" or profile == nil then
