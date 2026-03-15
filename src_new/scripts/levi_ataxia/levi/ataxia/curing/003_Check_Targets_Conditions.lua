@@ -72,7 +72,7 @@ function tarIsTempered()
 end
 
 function restoreLastKelp()
-	local kelps = {"hypochondria", "parasite", "weariness", "healthleech", "clumsiness", "sensitivity"}
+	local kelps = {"parasite", "weariness", "healthleech", "clumsiness", "sensitivity"}
 	if lastKelp and lastKelp == "asthma" then
 		-- They smoked, proving asthma is still there
 		tAffs.asthma = true

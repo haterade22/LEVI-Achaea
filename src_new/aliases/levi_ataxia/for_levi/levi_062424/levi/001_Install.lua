@@ -13,9 +13,7 @@ command: ''
 packageName: ''
 ]]--
 
-ataxiaBasher = {}
-
-ataxiaBasher = {
+local defaults = {
 	confOpt = {["True"] = true, yes = true, yep = true, y = true,
 				["False"] = false, nope = false, no = false, n = false,},
 
@@ -34,7 +32,14 @@ ataxiaBasher = {
 	rageraze = false,
 }
 
-ataxiaBasherPaths = {},
+ataxiaBasher = ataxiaBasher or {}
+for k, v in pairs(defaults) do
+	if ataxiaBasher[k] == nil then
+		ataxiaBasher[k] = v
+	end
+end
+
+ataxiaBasherPaths = ataxiaBasherPaths or {}
 
 ataxiaEcho("Bashing systems engaged and ready.")
 send(" ")

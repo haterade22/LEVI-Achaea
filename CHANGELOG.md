@@ -2,6 +2,30 @@
 
 ---
 
+## 2026-03-15 — Hypochondria cure changed: kelp/aurum → lobelia/argentum
+
+### Changed: Hypochondria cure reassignment
+
+**Motivation:** Hypochondria is now cured by lobelia/argentum, NOT kelp/aurum. Updated all cure tables, herb removal priority, kelp stack checks, priority swaps, affliction colouring, and documentation to reflect this change.
+
+**Updates:**
+- V2/V3 cure tables updated (afflictions.yaml, venoms.yaml)
+- Herb removal priority and kelp stack checks updated in 10+ offense files
+- brSlick priority swap updated
+- Affliction colouring updated
+- `_groups.yaml` inline tables updated
+
+**Files affected:**
+- `afflictions.yaml`, `venoms.yaml`
+- `001_Core.lua`, `007_Branching_State_Tracker.lua`, `002_Herb_Cures.lua`
+- `_groups.yaml`
+- `002_Serpent_Offense.lua`, `003_Priority_Swaps.lua`, `008_Affliction_Colouring.lua`
+- `001_Default_Curing_Prios.lua`
+- 10 offense priority files
+- Documentation: `CLAUDE.md`, `serpent.md`, `lock_types.md`
+
+---
+
 ## 2026-03-15 — Magi offense: xmagi deep review cleanup
 
 ### Deleted: Legacy duplicate resonance triggers (11 files)

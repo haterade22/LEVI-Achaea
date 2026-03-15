@@ -105,7 +105,7 @@ function ataxia_defaultCuringPrios()
     -----------------------------------------------------------
     -- PRIORITY 5: Important combat / balance-free
     -----------------------------------------------------------
-    ["hypochondria"] = 5,     -- Aff amplifier. Kelp.
+    ["hypochondria"] = 5,     -- Aff amplifier. Lobelia.
     ["crushedthroat"] = 5,    -- Eventually kills. Salve.
     ["itching"] = 5,          -- Forces scratching (lose bal). Salve.
     ["mycalium"] = 5,         -- Magi mechanic. Ginseng.

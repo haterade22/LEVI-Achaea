@@ -42,9 +42,8 @@ packageName: ''
     Verifiable ones last (we can confirm via signals, so keep tracking)
 ]]--
 herbRemovalPriority = {
-    -- KELP/AURUM: asthma, clumsiness, sensitivity, weariness, healthleech, hypochondria, parasite
+    -- KELP/AURUM: asthma, clumsiness, sensitivity, weariness, healthleech, parasite
     kelp = {
-        "hypochondria",  -- Can't verify, low combat impact
         "parasite",      -- Can't verify
         "weariness",     -- Can't easily verify (passive cure block)
         "healthleech",   -- Can't easily verify
@@ -91,7 +90,7 @@ herbRemovalPriority = {
         "pacifism",      -- Can verify via refusing attack
     },
 
-    -- LOBELIA/ARGENTUM: agoraphobia, claustrophobia, loneliness, masochism, recklessness, vertigo, hypochondria, fratricide
+    -- LOBELIA/ARGENTUM: agoraphobia, claustrophobia, loneliness, masochism, recklessness, vertigo, fratricide, hypochondria
     lobelia = {
         "fratricide",    -- Serpent specific, timed
         "hypochondria",  -- Fake affs, can't verify

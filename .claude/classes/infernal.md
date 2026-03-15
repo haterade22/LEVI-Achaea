@@ -642,10 +642,10 @@ belch:
 #### Cure Herb Reference
 | Herb | Afflictions Cured |
 |------|-------------------|
-| **kelp** | clumsiness, healthleech, weariness, asthma, sensitivity, hypochondria, parasite |
+| **kelp** | clumsiness, healthleech, weariness, asthma, sensitivity, parasite |
 | **ginseng** | nausea, haemophilia, addiction, darkshade, flushings, lethargy, scytherus |
 | **goldenseal** | stupidity, impatience, depression, sandfever, epilepsy, dizziness, dissonance, shyness |
-| **lobelia** | recklessness, vertigo, spiritburn, tenderskin, loneliness, claustrophobia, masochism, agoraphobia |
+| **lobelia** | recklessness, vertigo, spiritburn, tenderskin, loneliness, claustrophobia, masochism, agoraphobia, hypochondria |
 | **ash** | confusion, hypersomnia, hallucinations, paranoia, dementia, crescendo |
 | **bellwort** | timeloop, justice, lovers, peace, pacified, generosity, indifference, diminished |
 | **bloodroot** | paralysis |

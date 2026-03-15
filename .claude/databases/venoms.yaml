@@ -52,8 +52,8 @@ venoms:
   epteth:
     affliction: hypochondria
     cure_method: eat
-    cure_herb: kelp
-    cure_mineral: aurum
+    cure_herb: lobelia
+    cure_mineral: argentum
     effect: "Fake afflictions appear in diagnose"
     priority: low
 

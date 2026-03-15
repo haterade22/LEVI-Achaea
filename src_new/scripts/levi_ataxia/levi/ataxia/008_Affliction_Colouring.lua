@@ -52,13 +52,15 @@ function populate_aff_colours()
 		vertigo = {"yellow", "ver"}, 
 
 		--Kelp Afflictions
-		asthma = {"purple", "AST"}, 
-		clumsiness = {"purple", "clu"}, 
-		healthleech = {"purple", "hleech"}, 
-		hypochondria = {"purple", "hyp"}, 
-		parasite = {"purple", "par"}, 
-		sensitivity = {"purple", "sen"}, 
+		asthma = {"purple", "AST"},
+		clumsiness = {"purple", "clu"},
+		healthleech = {"purple", "hleech"},
+		parasite = {"purple", "par"},
+		sensitivity = {"purple", "sen"},
 		weariness = {"purple", "WEA"},
+
+		--Lobelia Afflictions
+		hypochondria = {"magenta", "hyp"},
 
 		--Ginseng Afflictions
 		addiction = {"green", "add"}, 

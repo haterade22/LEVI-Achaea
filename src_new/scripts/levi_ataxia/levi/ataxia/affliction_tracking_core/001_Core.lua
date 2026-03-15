@@ -176,7 +176,7 @@ focusCurableAffsV2 = {
 
 -- Kelp/Aurum-curable afflictions
 kelpCurableAffsV2 = {
-    "asthma", "clumsiness", "hypochondria", "sensitivity", "weariness",
+    "asthma", "clumsiness", "sensitivity", "weariness",
     "healthleech", "parasite"
 }
 

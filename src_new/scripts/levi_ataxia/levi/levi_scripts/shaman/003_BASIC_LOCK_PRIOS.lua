@@ -31,14 +31,14 @@ if checkAffList({"anorexia", "asthma", "slickness", "bloodfire"},3) then
 
 	end
   
-if checkAffList({"healthleech", "asthma", "weariness", "sensitivity", "clumsiness", "hypochondria", "parasite", "rebbies"},3) then
+if checkAffList({"healthleech", "asthma", "weariness", "sensitivity", "clumsiness", "parasite", "rebbies"},3) then
 		kelpstack = true
   else
   kelpstack = false
 
 	end
   
-if checkAffList({"healthleech", "asthma", "weariness", "sensitivity", "clumsiness", "hypochondria", "parasite", "rebbies"},2) then
+if checkAffList({"healthleech", "asthma", "weariness", "sensitivity", "clumsiness", "parasite", "rebbies"},2) then
 		kelpstack2 = true
   else
   kelpstack2 = false

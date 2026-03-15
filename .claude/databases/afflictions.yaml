@@ -97,8 +97,8 @@ afflictions:
 
   hypochondria:
     cure_method: eat
-    cure_herb: kelp
-    cure_mineral: aurum
+    cure_herb: lobelia
+    cure_mineral: argentum
     effect: "Fake afflictions appear in DIAGNOSE"
     delivered_by: [epteth, class_abilities]
     priority: 5

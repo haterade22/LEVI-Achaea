@@ -797,8 +797,7 @@ function leviSetup.setupInstall(rest)
     return
   elseif rest == "basher" or rest == "ab" then
     ataxiaEcho("Running " .. W .. "abinstall" .. V .. " — initialising basher system...")
-    ataxiaBasher = {}
-    ataxiaBasher = {
+    local defaults = {
       confOpt = {["True"] = true, yes = true, yep = true, y = true,
                  ["False"] = false, nope = false, no = false, n = false},
       enabled = false,
@@ -814,7 +813,13 @@ function leviSetup.setupInstall(rest)
       noShieldBreak = {mobs = {}, threshold = 0},
       rageraze = false,
     }
-    ataxiaBasherPaths = {}
+    ataxiaBasher = ataxiaBasher or {}
+    for k, v in pairs(defaults) do
+      if ataxiaBasher[k] == nil then
+        ataxiaBasher[k] = v
+      end
+    end
+    ataxiaBasherPaths = ataxiaBasherPaths or {}
     ataxiaEcho("Bashing systems engaged and ready.")
     save()
     return

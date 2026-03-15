@@ -426,7 +426,7 @@ local EKANELIA_TABLE = {
         conditionals = {"hypersomnia", "masochism"},
         trivials = {"masochism"},
         result = "hypochondria",
-        priority = 4, -- kelp stack pressure
+        priority = 4, -- lobelia pressure
     },
     {
         trigger = "scytherus",
@@ -870,7 +870,7 @@ end
 
 function countKelpStack()
     local count = 0
-    local kelpAffs = {"asthma", "clumsiness", "hypochondria", "sensitivity", "weariness", "healthleech", "parasite"}
+    local kelpAffs = {"asthma", "clumsiness", "sensitivity", "weariness", "healthleech", "parasite"}
     for _, aff in ipairs(kelpAffs) do
         if tAffs[aff] then count = count + 1 end
     end

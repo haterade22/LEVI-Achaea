@@ -52,8 +52,14 @@ if type(target) == "number" and ataxiaBasher.enabled then
 	ataxiaTemp.mobhealth = 0
 end
 
+if ataxiaBasher.enabled and matches[2] then
 	local area = gmcp.Room.Info.area
+	ataxiaBasher.targetList = ataxiaBasher.targetList or {}
+	if not ataxiaBasher.targetList[area] then
+		ataxiaBasher.targetList[area] = {}
+	end
 	if not table.contains(ataxiaBasher.targetList[area], matches[2]) then
 		ataxiaBasher_addmob(matches[2])
 	end
+end
 

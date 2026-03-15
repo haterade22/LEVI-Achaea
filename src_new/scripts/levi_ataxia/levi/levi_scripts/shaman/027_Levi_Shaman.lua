@@ -35,7 +35,7 @@ else
 end
 
 --Define Kelp Stack
-if checkAffList({"hypochondria", "parasite", "weariness",  "asthma", "healthleech", "clumsiness", "sensitivity"},3) then
+if checkAffList({"parasite", "weariness",  "asthma", "healthleech", "clumsiness", "sensitivity"},3) then
   tAffs.kelpstack = true
 else
   tAffs.kelpstack = false
@@ -87,7 +87,7 @@ end
 
 
 --Define Kelp Stack
-if checkAffList({"hypochondria", "parasite", "weariness",  "asthma", "healthleech", "clumsiness", "sensitivity"},3) then
+if checkAffList({"parasite", "weariness",  "asthma", "healthleech", "clumsiness", "sensitivity"},3) then
   tAffs.kelpstack = true
 else
   tAffs.kelpstack = false

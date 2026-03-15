@@ -29,7 +29,7 @@ if checkAffList({"anorexia", "asthma", "slickness", "bloodfire"},3) then
    hardlock = false
   end
 	
-if tAffs.asthma and checkAffList({"healthleech", "weariness", "sensitivity", "clumsiness", "hypochondria", "parasite", "rebbies"},3) then
+if tAffs.asthma and checkAffList({"healthleech", "weariness", "sensitivity", "clumsiness", "parasite", "rebbies"},3) then
 		kelpstack = true
   else
   kelpstack = false

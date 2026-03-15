@@ -262,7 +262,7 @@ Different classes need additional afflictions to block their passive cures:
 
 ```yaml
 kelp_aurum:
-  cures: [asthma, clumsiness, hypochondria, sensitivity, weariness, healthleech, parasite, rebbies]
+  cures: [asthma, clumsiness, sensitivity, weariness, healthleech, parasite, rebbies]
 
 bloodroot_magnesium:
   cures: [paralysis, slickness, pyramides]
@@ -274,7 +274,7 @@ goldenseal_plumbum:
   cures: [dizziness, epilepsy, impatience, shyness, stupidity, depression, shadowmadness, mycalium, sandfever, horror, fulminated]
 
 lobelia:
-  cures: [agoraphobia, guilt, spiritburn, tenderskin, claustrophobia, loneliness, masochism, recklessness, vertigo]
+  cures: [agoraphobia, guilt, spiritburn, tenderskin, claustrophobia, hypochondria, loneliness, masochism, recklessness, vertigo]
 
 ash:
   cures: [confusion, dementia, hallucinations, hypersomnia, paranoia]

@@ -397,8 +397,8 @@ groups:
       script: "curingTable = {\n\tgoldenseal = {\"depression\", \"sandfever\", \"stupidity\", \"epilepsy\", \"dizziness\"\
         , \"dissonance\", \"shyness\", \"impatience\", \"unweavingmind\", \"fulminated\"},\n\tlobelia = {\"fratricide\", \"\
         recklessness\", \"vertigo\", \"spiritburn\", \"tenderskin\", \"loneliness\", \"claustrophobia\", \"masochism\", \"\
-        agoraphobia\"},\n\tbellwort = {\"timeloop\", \"justice\", \"lovers\", \"peace\", \"pacified\", \"generosity\", \"\
-        indifference\",\"diminished\"},\n\tkelp = {\"hypochondria\", \"parasite\", \"weariness\",  \"asthma\", \"healthleech\"\
+        agoraphobia\", \"hypochondria\"},\n\tbellwort = {\"timeloop\", \"justice\", \"lovers\", \"peace\", \"pacified\", \"generosity\", \"\
+        indifference\",\"diminished\"},\n\tkelp = {\"parasite\", \"weariness\",  \"asthma\", \"healthleech\"\
         , \"clumsiness\", \"sensitivity\"},\n\tash = {\"confusion\", \"hypersomnia\", \"hallucinations\", \"paranoia\", \"\
         dementia\",\"crescendo\",},\n\tginseng = {\"flushings\", \"lethargy\", \"haemophilia\", \"addiction\", \"nausea\"\
         , \"scytherus\", \"darkshade\", \"unweavingbody\"},\n}\n\nfunction haveSmokeAff()\n\tlocal smoke = false\n\tlocal\
@@ -559,9 +559,9 @@ groups:
     script: "--Algedonic.AffCount = Algedonic.Count_My_affs()  \n--Algedonic.Stack_My_Affs(false, aff)\n--Algedonic.Prioritize()\n\
       \n-- Add the above to the functions gotAff() and lostAff() at the bottom.  Add only the FIRST line to afflictionList()\
       \ at the end\n\n\n\nAlgedonic = Algedonic or {}\n\nAlgedonic.whatcures = {\n    [\"kelp\"] = {\"asthma\", \"clumsiness\"\
-      , \"hypochondria\", \"sensitivity\", \"weariness\", \"healthleech\", \"parasite\", \"rebbies\"},\n    [\"lobelia\"]\
+      , \"sensitivity\", \"weariness\", \"healthleech\", \"parasite\", \"rebbies\"},\n    [\"lobelia\"]\
       \ = {\"agoraphobia\", \"guilt\", \"spiritburn\", \"tenderskin\", \"claustrophobia\", \"loneliness\", \"masochism\",\
-      \ \"recklessness\", \"vertigo\"},\n    [\"ash\"] = {\"confusion\", \"dementia\", \"hallucinations\", \"hypersomnia\"\
+      \ \"recklessness\", \"vertigo\", \"hypochondria\"},\n    [\"ash\"] = {\"confusion\", \"dementia\", \"hallucinations\", \"hypersomnia\"\
       , \"paranoia\"},\n    [\"bellwort\"] = {\"retribution\",\"timeloop\", \"peace\",\"justice\",\"lovers\",\"generosity\"\
       ,\"dminished\"},\n    [\"goldenseal\"] = {\"dizziness\", \"epilepsy\", \"impatience\", \"shyness\", \"stupidity\", \"\
       depression\", \"shadowmadness\", \"mycalium\", \"sandfever\", \"horror\", \"fulminated\",},\n    [\"bloodroot\"] = {\"\
@@ -770,7 +770,8 @@ groups:
   script: "ataxia = ataxia or {}\nataxiaTables = ataxiaTables or {}\nataxiaTemp = ataxiaTemp or {}\nataxiaTemp.addedHerbID\
     \ = 1\nataxiaTemp.removedHerbID = 2\nataxiagui = ataxiagui or {}\nataxiaVersion = \"4.6.0\"\t\t\t\t\t\t--last was 4.3\n\
     muteList = muteList or {}\n\nataxiaTables.limbTimers = ataxiaTables.limbTimers or {}\nataxiaTables.fractureTimers = ataxiaTables.fractureTimers\
-    \ or {}\n\nataxia.bals = ataxia.bals or {}\nataxia.bals.get = {\"bal\", \"eq\"}\nataxia.bals.used = ataxia.bals.used or\
+    \ or {}\n\nataxia.defences = ataxia.defences or {}\nataxia.afflictions = ataxia.afflictions or\
+    \ {}\nataxia.vitals = ataxia.vitals or {}\n\nataxia.bals = ataxia.bals or {}\nataxia.bals.get = {\"bal\", \"eq\"}\nataxia.bals.used = ataxia.bals.used or\
     \ {}\nataxia.bals.timestamps = ataxia.bals.timestamps or {}\n\n\nfunction ataxia_Echo(text)\n\tcecho(\"\\n<a_darkcyan>(<a_darkmagenta>LEVI<a_darkcyan>):\
     \ <NavajoWhite>\"..text)\nend\n\nfunction ataxiaEcho(text)\n\tcecho(\"\\n<a_darkcyan>(<a_darkmagenta>LEVI<a_darkcyan>):\
     \ <NavajoWhite>\"..text)\nend\n\n\n"

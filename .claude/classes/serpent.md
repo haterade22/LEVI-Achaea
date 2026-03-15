@@ -81,7 +81,7 @@ concept: |
 
 kelp_stack:
   description: "Most common and powerful stack - ENABLES IMPULSE"
-  afflictions: [asthma, clumsiness, hypochondria, sensitivity, weariness]
+  afflictions: [asthma, clumsiness, sensitivity, weariness]
   critical_note: |
     Asthma + Weariness together enables Impulse delivery.
     Both are kelp cures - victim can only cure ONE per eat balance.
@@ -486,10 +486,10 @@ notechis:
 
 # === VENOM CURE GROUPINGS (for affliction stacking) ===
 cure_groups:
-  kelp: [asthma, clumsiness, sensitivity, weariness, hypochondria, health_leech]
+  kelp: [asthma, clumsiness, sensitivity, weariness, health_leech]
+  lobelia: [agoraphobia, claustrophobia, hypochondria, loneliness, masochism, recklessness, vertigo]
   ginseng: [addiction, darkshade, haemophilia, lethargy, nausea, scytherus]
   goldenseal: [dizziness, epilepsy, impatience, shyness, stupidity, dissonance]
-  lobelia: [agoraphobia, claustrophobia, loneliness, masochism, recklessness, vertigo]
   bloodroot: [paralysis, slickness]
   epidermal: [anorexia, blindness, deafness]
   valerian_smoke: [disfigurement, slickness_alt]
@@ -546,7 +546,7 @@ ekanelia_transformations:
     bonus_effect: hypochondria
     consumes: hypersomnia
     total: "paralysis + hypochondria (hypersomnia consumed)"
-    notes: "Kelp stack + paralysis in one attack"
+    notes: "Lobelia + paralysis in one attack"
 
   voyria:
     conditionals: [anorexia, impatience, vertigo]
@@ -791,10 +791,10 @@ Edge cases:
 - Ekanelia loki becomes PREDICTABLE (nausea+para) with confusion+recklessness
 
 Venom cure groupings (same herb):
-- Kelp: asthma, clumsiness, hypochondria, sensitivity, weariness
+- Kelp: asthma, clumsiness, sensitivity, weariness
 - Ginseng: addiction, darkshade, haemophilia, lethargy, scytherus
 - Goldenseal: dissonance, dizziness, epilepsy, impatience, stupidity
-- Lobelia: agoraphobia, claustrophobia, loneliness, masochism, recklessness, vertigo
+- Lobelia: agoraphobia, claustrophobia, hypochondria, loneliness, masochism, recklessness, vertigo
 - Bloodroot: paralysis, slickness
 - Argentum: fratricide (IMPORTANT - cure early vs Serpent)
 

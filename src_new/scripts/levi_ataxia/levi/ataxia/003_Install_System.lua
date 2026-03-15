@@ -32,6 +32,8 @@ function ataxia_installSystem()
 	send("curing clotat 30")
 	send("config ragemsg off")
   send("curing fallback on")
+  send("config commandseparator ;")
+  send("config usequeueing yes")
 
 	ataxia_defaultSettings()
   

@@ -112,11 +112,11 @@ targetDefensesV3 = targetDefensesV3 or {}
 
 -- V3 cure tables (fallback if curingTable doesn't have an entry)
 curingTableV3 = {
-    kelp = {"hypochondria", "parasite", "weariness", "asthma", "healthleech", "clumsiness", "sensitivity", "rebbies"},
+    kelp = {"parasite", "weariness", "asthma", "healthleech", "clumsiness", "sensitivity", "rebbies"},
     ginseng = {"flushings", "lethargy", "haemophilia", "addiction", "nausea", "scytherus", "darkshade"},
     goldenseal = {"depression", "sandfever", "stupidity", "epilepsy", "dizziness", "dissonance", "shyness", "impatience", "fulminated"},
     ash = {"confusion", "hypersomnia", "hallucinations", "paranoia", "dementia", "crescendo"},
-    lobelia = {"fratricide", "recklessness", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia", "guilt", "horror"},
+    lobelia = {"fratricide", "recklessness", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia", "guilt", "horror", "hypochondria"},
     bellwort = {"timeloop", "justice", "retribution", "lovers", "peace", "pacified", "generosity", "indifference", "diminished", "pyre"},
     bloodroot = {"paralysis", "slickness"},
 }
@@ -1031,10 +1031,10 @@ cureGroupsV3 = {
         "crushedthroat", "stuttering",
         "brokenleftarm", "brokenrightarm", "brokenleftleg", "brokenrightleg",
     },
-    herb_kelp = {"clumsiness", "healthleech", "weariness", "asthma", "sensitivity", "hypochondria", "parasite"},
+    herb_kelp = {"clumsiness", "healthleech", "weariness", "asthma", "sensitivity", "parasite"},
     herb_ginseng = {"nausea", "haemophilia", "addiction", "darkshade", "flushings", "lethargy", "scytherus"},
     herb_goldenseal = {"stupidity", "impatience", "depression", "sandfever", "epilepsy", "dizziness", "dissonance", "shyness"},
-    herb_lobelia = {"recklessness", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia"},
+    herb_lobelia = {"recklessness", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia", "hypochondria"},
     herb_ash = {"confusion", "hypersomnia", "hallucinations", "paranoia", "dementia", "crescendo"},
     herb_bellwort = {"timeloop", "justice", "retribution", "lovers", "peace", "pacified", "generosity", "indifference", "diminished"},
     herb_bloodroot = {"paralysis", "slickness"},

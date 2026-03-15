@@ -105,7 +105,7 @@ function targetAte(herb)
             kelpDisambiguateTimer = tempTimer(2, function()
                 if lastKelpAffs then
                     -- No smoke = still have asthma, cure highest priority non-asthma
-                    local kelps = {"hypochondria", "parasite", "weariness", "healthleech", "clumsiness", "sensitivity"}
+                    local kelps = {"parasite", "weariness", "healthleech", "clumsiness", "sensitivity"}
                     for i=1, #kelps do
                         if lastKelpAffs[kelps[i]] then
                             erAff(kelps[i])

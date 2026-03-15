@@ -132,7 +132,7 @@ function ataxia_swapBrSlick(event, affliction)
   if not ataxia.prioritySwaps then ataxia_resetSwaps() end
 	if not ataxia.prioritySwaps.brSlick.active then return end
 	if event == "aff gained" then
-		if (affed("sensitivity") or affed("clumsiness") or affed("weariness") or affed("hypochondria")) and affed("asthma") and affed("slickness") and not affed("anorexia") and ataxia_getPrio("slickness") ~= 1 then 
+		if (affed("sensitivity") or affed("clumsiness") or affed("weariness")) and affed("asthma") and affed("slickness") and not affed("anorexia") and ataxia_getPrio("slickness") ~= 1 then
 			ataxia_setAffPrio("slickness", 1)
 		end
 	end
@@ -142,7 +142,7 @@ function ataxia_restoreBrSlick(event, affliction)
   if not ataxia.prioritySwaps then ataxia_resetSwaps() end
 	if not ataxia.prioritySwaps.brSlick.active then return end
   if event == "aff cured" then
-    if (ataxia_defaultPrioAff("slickness") ~= ataxia_getPrio("slickness")) and not affed("asthma") and not (affed("sensitivity") or affed("clumsiness") or affed("weariness") or affed("hypochondria")) then
+    if (ataxia_defaultPrioAff("slickness") ~= ataxia_getPrio("slickness")) and not affed("asthma") and not (affed("sensitivity") or affed("clumsiness") or affed("weariness")) then
       ataxia_restorePrio("slickness")
     end
   end
