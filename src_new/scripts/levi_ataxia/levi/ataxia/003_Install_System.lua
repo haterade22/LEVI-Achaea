@@ -41,6 +41,17 @@ function ataxia_installSystem()
 	ataxiaEcho("Configure your herb and mineral precaching below. Use (+) and (-) to adjust:")
 	ataxia_precacheShow()
 
+	-- Prompt user about parry modes
+	cecho("\n")
+	ataxiaEcho("Set your parry mode with: <green>parryy <mode>")
+	cecho("\n  <white>AUTO       <green>Class-aware auto parry (adapts to enemy attack patterns)")
+	cecho("\n  <white>STAND      <green>Focus on parrying what will get/keep you standing")
+	cecho("\n  <white>DEFEND     <green>Focus on parrying what's closest to breaking, with weights")
+	cecho("\n  <white>MANUAL     <green>Manually set your parrying")
+	cecho("\n  <white>RANDOMARM  <green>Parries a random arm (2.5s cooldown between swaps)")
+	cecho("\n  <white>RANDOMLEG  <green>Parries a random leg (2.5s cooldown between swaps)")
+	cecho("\n  <DimGrey>  e.g.: parryy auto\n")
+
 	-- Prompt user to create a defence profile
 	cecho("\n")
 	ataxiaEcho("Set up a defence profile to manage your defences:")
