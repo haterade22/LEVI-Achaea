@@ -367,46 +367,32 @@ function ataxia.armour.swap(profileName)
     end
   end
 
-  -- 3. Pry + insert with 2s delay
+  -- 3. Pry + insert with 2s delay (always send — can't verify game state without probe)
   if profile.slots and #profile.slots > 0 then
-    -- Check if swap is actually needed
-    local needsSwap = false
-    for i = 1, 3 do
-      if ataxia.armour.state.currentSlots[i] ~= (profile.slots[i] or nil) then
-        needsSwap = true
-        break
-      end
-    end
-
-    if needsSwap then
-      tempTimer(2, function()
-        local cmds = {}
-        -- Pry all first
-        table.insert(cmds, "pry armour embrasure 1")
-        table.insert(cmds, "pry armour embrasure 2")
-        table.insert(cmds, "pry armour embrasure 3")
-        -- Insert new
-        for i, paragonId in ipairs(profile.slots) do
-          if paragonId and paragonId ~= "" then
-            table.insert(cmds, "insert " .. paragonId .. " into armour embrasure " .. i)
-          end
+    tempTimer(2, function()
+      local cmds = {}
+      -- Pry all first
+      table.insert(cmds, "pry armour embrasure 1")
+      table.insert(cmds, "pry armour embrasure 2")
+      table.insert(cmds, "pry armour embrasure 3")
+      -- Insert new
+      for i, paragonId in ipairs(profile.slots) do
+        if paragonId and paragonId ~= "" then
+          table.insert(cmds, "insert " .. paragonId .. " into armour embrasure " .. i)
         end
-        send(table.concat(cmds, ";"))
+      end
+      send(table.concat(cmds, ";"))
 
-        -- Update state
-        ataxia.armour.state.currentSlots = {
-          profile.slots[1] or nil,
-          profile.slots[2] or nil,
-          profile.slots[3] or nil,
-        }
-        ataxia.armour.state.swapping = false
-        ataxia.armour.save()
-        ataxia.armour.echo("Swapped to profile: <white>" .. profileName)
-      end)
-    else
+      -- Update state
+      ataxia.armour.state.currentSlots = {
+        profile.slots[1] or nil,
+        profile.slots[2] or nil,
+        profile.slots[3] or nil,
+      }
       ataxia.armour.state.swapping = false
-      ataxia.armour.echo("Paragons already match profile '<white>" .. profileName .. "<plum>'. Traits sent.")
-    end
+      ataxia.armour.save()
+      ataxia.armour.echo("Swapped to profile: <white>" .. profileName)
+    end)
   else
     ataxia.armour.state.swapping = false
     ataxia.armour.echo("Profile '<white>" .. profileName .. "<plum>' has no paragon slots. Traits sent.")

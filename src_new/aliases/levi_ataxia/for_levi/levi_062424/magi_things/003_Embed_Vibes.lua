@@ -17,7 +17,12 @@ packageName: ''
 if not ataxia_isClass("magi") then
 	ataxiaEcho("Class is not currently magi.")
 	return
-elseif not ataxia.magi.vibes or #ataxia.magi.vibes < 1 then
+end
+
+ataxia.magi = ataxia.magi or {}
+ataxia.magi.vibes = ataxia.magi.vibes or {}
+
+if #ataxia.magi.vibes < 1 then
 	ataxiaEcho("No vibes currently set to call.")
 	return
 end
