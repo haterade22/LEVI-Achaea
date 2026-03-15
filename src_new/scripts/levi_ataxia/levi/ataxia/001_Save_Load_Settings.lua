@@ -17,8 +17,8 @@ packageName: ''
 
 function ataxia_saveSettings(disp)
 	if not ataxia.settings then
-		ataxia_Echo("System settings not found; won't save anything.") 
-		return false 
+		ataxia_Echo("System settings not found; won't save anything.")
+		return false
 	end
 
 	local separator = string.char(getMudletHomeDir():byte()) == "/" and "/" or "\\"
@@ -28,18 +28,40 @@ function ataxia_saveSettings(disp)
 	local ndb_loc = getMudletHomeDir()..separator.."andb"
   local ext_loc = getMudletHomeDir()..separator.."extractLocations"
 
+	-- Rotate backups: copy current disk file to .bak before overwriting
+	local function rotateBackup(path)
+		if io.exists(path) then
+			local src = io.open(path, "r")
+			if src then
+				local data = src:read("*a")
+				src:close()
+				if data and #data > 10 then
+					local dst = io.open(path .. ".bak", "w")
+					if dst then dst:write(data); dst:close() end
+				end
+			end
+		end
+	end
+
+	rotateBackup(file_loc)
 	table.save(file_loc, ataxia)
 
 	if ataxiaBasher then
+		rotateBackup(bash_loc)
 		table.save(bash_loc, ataxiaBasher)
-		if ataxiaBasherPaths then table.save(paths_loc, ataxiaBasherPaths) end
+		if ataxiaBasherPaths then
+			rotateBackup(paths_loc)
+			table.save(paths_loc, ataxiaBasherPaths)
+		end
 	end
 
 	if ataxiaNDB then
+		rotateBackup(ndb_loc)
 		table.save(ndb_loc, ataxiaNDB)
 	end
-  
+
   if ataxiaExtraction then
+    rotateBackup(ext_loc)
     table.save(ext_loc, ataxiaExtraction)
   end
 
@@ -133,8 +155,18 @@ function ataxia_loadSettings()
 		deepMerge(loaded, target)
 	end
 
-	if not io.exists(file_loc) then
-    -- Try profile backup before giving up
+	-- Try primary file, then .bak, then profile backup
+	local function findFile(path)
+		if io.exists(path) then return path end
+		if io.exists(path .. ".bak") then
+			ataxia_Echo("Primary save missing, using backup: " .. path .. ".bak")
+			return path .. ".bak"
+		end
+		return nil
+	end
+
+	local ataxia_file = findFile(file_loc)
+	if not ataxia_file then
     if _ataxia_backup and _ataxia_backup.ataxia then
       ataxia_Echo("Disk save not found -- restoring from profile backup.")
       for k, v in pairs(_ataxia_backup.ataxia) do ataxia[k] = v end
@@ -143,12 +175,13 @@ function ataxia_loadSettings()
       return
     end
 	else
-    mergeLoad(file_loc, ataxia)
+    mergeLoad(ataxia_file, ataxia)
   end
 	ataxia_Echo("I suppose I can lend you my aid. Go and annihilate our foes.")
 	ataxia.loaded = true
 
-	if not io.exists(bash_loc) then
+	local bash_file = findFile(bash_loc)
+	if not bash_file then
     if _ataxia_backup and _ataxia_backup.basher then
       ataxiaBasher = deepcopy(_ataxia_backup.basher)
       ataxia_Echo("Bashing systems restored from profile backup.")
@@ -157,10 +190,10 @@ function ataxia_loadSettings()
     end
 	else
 		if ataxiaBasher then
-			mergeLoad(bash_loc, ataxiaBasher)
+			mergeLoad(bash_file, ataxiaBasher)
 		else
 			ataxiaBasher = {}
-			table.load(bash_loc, ataxiaBasher)
+			table.load(bash_file, ataxiaBasher)
 		end
 		ataxia_Echo("Bashing systems enabled, go and lay waste.")
 	end
@@ -170,7 +203,8 @@ function ataxia_loadSettings()
   end
 
   if ataxiaBasher then
-    if not io.exists(paths_loc) then
+    local paths_file = findFile(paths_loc)
+    if not paths_file then
       if _ataxia_backup and _ataxia_backup.basherpaths then
         ataxiaBasherPaths = deepcopy(_ataxia_backup.basherpaths)
         ataxia_Echo("Paths restored from profile backup.")
@@ -181,20 +215,22 @@ function ataxia_loadSettings()
     else
       ataxia_Echo("Paths have been acquired for bashing.")
       ataxiaBasherPaths = {}
-      table.load(paths_loc, ataxiaBasherPaths)
+      table.load(paths_file, ataxiaBasherPaths)
     end
   end
 
-  if io.exists(ext_loc) then
+  local ext_file = findFile(ext_loc)
+  if ext_file then
     ataxiaExtraction = {}
-    table.load(ext_loc, ataxiaExtraction)
+    table.load(ext_file, ataxiaExtraction)
     ataxiaEcho("Loaded extraction database.")
   elseif _ataxia_backup and _ataxia_backup.extraction then
     ataxiaExtraction = deepcopy(_ataxia_backup.extraction)
     ataxiaEcho("Extraction database restored from profile backup.")
   end
 
-	if not io.exists(ndb_loc) then
+	local ndb_file = findFile(ndb_loc)
+	if not ndb_file then
     if _ataxia_backup and _ataxia_backup.ndb then
       ataxiaNDB = deepcopy(_ataxia_backup.ndb)
       ataxiaEcho("Name database restored from profile backup.")
@@ -204,7 +240,7 @@ function ataxia_loadSettings()
     end
 	else
 		ataxiaNDB = {}
-		table.load(ndb_loc, ataxiaNDB)
+		table.load(ndb_file, ataxiaNDB)
 		-- Migrate array tables to hash tables (one-time)
 		local function migrateArrayToHash(tbl)
 			if not tbl or not tbl[1] then return tbl or {} end
