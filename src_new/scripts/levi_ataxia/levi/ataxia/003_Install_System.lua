@@ -40,6 +40,15 @@ function ataxia_installSystem()
 	-- Show precache config so user can set herb/mineral outrift amounts
 	ataxiaEcho("Configure your herb and mineral precaching below. Use (+) and (-) to adjust:")
 	ataxia_precacheShow()
+
+	-- Prompt user to create a defence profile
+	cecho("\n")
+	ataxiaEcho("Set up a defence profile to manage your defences:")
+	cecho("\n  <NavajoWhite>1. Create a profile:    <green>aconfig profile create <name>")
+	cecho("\n  <NavajoWhite>2. Switch to it:        <green>defswitch <name>")
+	cecho("\n  <NavajoWhite>3. Add defences:        <green>defs valid <DimGrey>— shows clickable [D]efup/[K]eepup toggles")
+	cecho("\n  <NavajoWhite>4. View your profile:   <green>ashow defup")
+	cecho("\n  <DimGrey>  e.g.: aconfig profile create pvp\n")
 end
 
 function ataxia_updateApplied(_, name)
