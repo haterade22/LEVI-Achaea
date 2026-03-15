@@ -66,7 +66,6 @@ local voyriaBlock = ((pariah and pariah.latency) and true or false)
 
 if isTargeted(matches[2]) then
   if haveAff("voyria") and not voyriaBlock then
-    erAff("voyria")
     onClassCureV3({"voyria"})
   else
     ataxiaTemp.randomCure = 1

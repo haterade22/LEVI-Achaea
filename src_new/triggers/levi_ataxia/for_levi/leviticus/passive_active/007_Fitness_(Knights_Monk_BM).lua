@@ -38,8 +38,6 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-	erAff("asthma")
-	erAff("weariness")
 	onClassCureV3({"asthma", "weariness"})
 	fg("DarkSlateGrey")
 	targetIshere = true

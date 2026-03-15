@@ -41,7 +41,6 @@ local name = matches[2]
 local class = (ataxiaNDB_getClass(name) or "Unknown")
 
 if isTargeted(matches[2]) and (class == "Druid" or class == "Sentinel") then
-  erAff("prone")
 	ataxiaTemp.randomCure = 1
 	onClassCureV3({"prone"}, 1)
 	selectString(line,1)

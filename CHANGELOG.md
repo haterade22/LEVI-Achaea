@@ -34,6 +34,26 @@
 - Replaced dead V2 stubs (`removeAffV2`, `reduceRandomAffCertaintyV2`) with `onClassCureV3()` calls
 - All class-specific cures now properly integrate with V3 branching engine
 
+### Fixed: Double `erAff()` calls across 18 class cure triggers
+
+**Motivation:** `onClassCureV3()` internally calls `erAff()` for each specific affliction, but 18 trigger files also called `erAff()` explicitly before `onClassCureV3()`. This caused double event firing (`"target cured aff"`), double GUI refresh, and triple `removeAffV3()` calls per cure.
+
+**Changes (18 files in `triggers/.../passive_active/`):**
+- Removed redundant explicit `erAff()` calls from: Accelerate, Alleviate, Bloodboil, Dragonheal, Expunge, Fitness, Fool, Might, Purification, Purify, Rage, Salt, Shrugging, Slough, Continuation, Priest Healing, Sylvan Root, and Passives
+- `onClassCureV3()` is now the single entry point for all class cure processing
+
+### Fixed: `021_Waking_Up.lua` — missed V3 migration
+
+- Replaced legacy `erAff("sleep")` with `onClassCureV3({"sleep"})` — this file was skipped during the original V3 migration
+
+### Fixed: `010_Phoenix_(BM).lua` — removed dead V2 code
+
+- Removed residual `if resetAffsV2 then resetAffsV2() end` — redundant with `resetStatesV3()` on the next line
+
+### Fixed: `006_Expunge_(Psion).lua` — duplicate affliction in priority list
+
+- Removed duplicate `"stuttering"` entry (appeared at both position 1 and position 20 in eAffs list)
+
 ---
 
 ## 2026-03-14 — Fix serpent flay wasting gecko (slickness) without asthma

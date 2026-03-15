@@ -44,16 +44,13 @@ patterns:
 local name = multimatches[1][2]
 if isTargeted(name) then
 	if multimatches[3][1] == name .. " gives a sigh of relief." then
-		erAff("retribution")
 		onClassCureV3({"retribution"})
 	elseif multimatches[3][1] == name .. " shakes his head and a look of clarity returns to his eyes."
 		or multimatches[3][1] == name .. " shakes her head and a look of clarity returns to her eyes." then
-			erAff("lovers")
 			onClassCureV3({"lovers"})
 	else
 		taRaged()
 		-- Rage also cures paralysis (taRaged handles group affs, not paralysis)
-		erAff("paralysis")
 		onClassCureV3({"paralysis"})
 	end
 	targetIshere = true

@@ -41,17 +41,14 @@ local name = matches[2]
 local class = (ataxiaNDB_getClass(name) or "Unknown")
 
 if isTargeted(matches[2]) and class == "Psion" then
-  erAff("confusion")
   if haveAff("impatience") then
-    erAff("impatience")
     onClassCureV3({"confusion", "impatience"})
   else
   	local eAffs = {"stuttering", "stupidity", "recklessness", "hallucinations", "epilepsy", "confusion", "dizziness", "vertigo", "anorexia",
-		"masochism", "agoraphobia", "claustrophobia", "dementia", "generosity", "loneliness", "lovers", "pacified", "paranoia", "shyness", "stuttering",}
+		"masochism", "agoraphobia", "claustrophobia", "dementia", "generosity", "loneliness", "lovers", "pacified", "paranoia", "shyness",}
     local secondAff = nil
     for _, aff in pairs(eAffs) do
       if haveAff(aff) then
-        erAff(aff)
         secondAff = aff
         break
       end

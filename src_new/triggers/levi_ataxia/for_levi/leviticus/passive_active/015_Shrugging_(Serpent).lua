@@ -39,7 +39,6 @@ patterns:
 
 if isTargeted(matches[2]) then
   -- Shrugging: cures weariness + 1 random affliction
-  erAff("weariness")
   ataxiaTemp.randomCure = 1
   onClassCureV3({"weariness"}, 1)
   selectString(line,1)

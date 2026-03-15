@@ -42,7 +42,6 @@ local name = matches[2]
 local class = (ataxiaNDB_getClass(name) or "Unknown")
 
 if isTargeted(matches[2]) then
-  erAff("paralysis")
 	if class == "Jester" or class == "Occultist" then
 		ataxiaTemp.randomCure = 3
 		onClassCureV3({"paralysis"}, 3)

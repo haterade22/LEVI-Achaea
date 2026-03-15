@@ -40,7 +40,6 @@ patterns:
 local name = matches[2]
 
 if isTargeted(matches[2]) then
-  erAff("recklessness"); erAff("weariness")
 	ataxiaTemp.randomCure = 3
 	onClassCureV3({"recklessness", "weariness"}, 3)
 	selectString(line,1)

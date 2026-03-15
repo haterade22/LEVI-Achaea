@@ -43,7 +43,6 @@ local class = (ataxiaNDB_getClass(name) or "Unknown")
 if isTargeted(name) and class == "Priest" then
   -- Priest healing cures voyria if present, else 1 random
   if haveAff("voyria") then
-    erAff("voyria")
     onClassCureV3({"voyria"})
   else
     ataxiaTemp.randomCure = 1

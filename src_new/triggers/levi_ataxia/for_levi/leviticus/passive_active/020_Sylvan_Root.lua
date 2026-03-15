@@ -42,7 +42,6 @@ local class = (ataxiaNDB_getClass(name) or "Unknown")
 
 if isTargeted(name) and class == "Sylvan" then
   -- Sylvan root cures haemophilia + 1 random
-  erAff("haemophilia")
   ataxiaTemp.randomCure = 1
   onClassCureV3({"haemophilia"}, 1)
   selectString(line,1)

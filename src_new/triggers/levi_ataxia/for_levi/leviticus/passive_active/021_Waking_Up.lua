@@ -42,7 +42,7 @@ patterns:
 local name = matches[2]
 
 if isTargeted(name) then
-  erAff("sleep")
+  onClassCureV3({"sleep"})
   selectString(line, 1)
   fg("NavajoWhite")
   resetFormat()

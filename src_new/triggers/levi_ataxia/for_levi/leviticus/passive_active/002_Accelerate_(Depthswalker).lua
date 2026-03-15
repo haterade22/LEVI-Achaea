@@ -45,7 +45,6 @@ local name = multimatches[1][2]
 local class = (ataxiaNDB_getClass(name) or "Unknown")
 
 if isTargeted(name) and class == "Depthswalker" then
-  erAff("recklessness")
 	if multimatches[3][1] == name.." grows older before your eyes." and not haveAff("prone") then
     ataxiaTemp.randomCure = 2
 		onClassCureV3({"recklessness"}, 2)

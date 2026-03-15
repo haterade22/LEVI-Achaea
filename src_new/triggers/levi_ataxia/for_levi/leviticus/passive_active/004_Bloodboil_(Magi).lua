@@ -41,7 +41,6 @@ local name = matches[2]
 local class = (ataxiaNDB_getClass(name) or "Unknown")
 
 if isTargeted(matches[2]) and class == "Magi" then
-  erAff("haemophilia")
 	ataxiaTemp.randomCure = 1
 	onClassCureV3({"haemophilia"}, 1)
 	selectString(line,1)
