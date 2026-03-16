@@ -348,32 +348,36 @@ function ataxiaBasher_assembleAttack()
 	if ataxiaBasher.nicator and not haveDef("nicatorlegend") then command = command.."legenddeck draw nicator"..sp end
 
   -- Blood Maiden cloak: activate bloodshield on 4+ targetable mobs or bosses
-  -- Only activates once per room (tracked by bloodshieldActivatedRoom)
-  if ataxiaBasher.bloodMaiden and ataxiaTemp.bloodshieldReady then
+  -- After first activation, cloak stays active for 3 minutes (free re-activations)
+  if ataxiaBasher.bloodMaiden and (ataxiaTemp.bloodshieldReady or ataxiaTemp.bloodshieldActive) then
     local area = gmcp.Room.Info and gmcp.Room.Info.area
-    local roomId = gmcp.Room.Info and gmcp.Room.Info.num
-    if ataxiaTemp.bloodshieldActivatedRoom ~= roomId then
-      local targets = area and ataxiaBasher.targetList[area]
-      local targetCount = 0
-      local hasBoss = false
-      local bosses = ataxiaBasher.bloodMaidenBosses or {}
-      for _, name in pairs(ataxia.denizensHere) do
-        if targets then
-          for mobKey, mobVal in pairs(targets) do
-            local mobName = type(mobKey) == "number" and mobVal or mobKey
-            if type(mobName) == "string" and mobName ~= "keyword" and name:lower() == mobName:lower() then
-              targetCount = targetCount + 1
-              break
-            end
+    local targets = area and ataxiaBasher.targetList[area]
+    local targetCount = 0
+    local hasBoss = false
+    local bosses = ataxiaBasher.bloodMaidenBosses or {}
+    for _, name in pairs(ataxia.denizensHere) do
+      if targets then
+        for mobKey, mobVal in pairs(targets) do
+          local mobName = type(mobKey) == "number" and mobVal or mobKey
+          if type(mobName) == "string" and mobName ~= "keyword" and name:lower() == mobName:lower() then
+            targetCount = targetCount + 1
+            break
           end
         end
-        if bosses[name] then hasBoss = true end
       end
-      if targetCount >= 4 or hasBoss then
-        command = command.."activate bloodshield"..sp
-        ataxiaTemp.bloodshieldReady = nil
-        ataxiaTemp.bloodshieldActivatedRoom = roomId
+      if bosses[name] then hasBoss = true end
+    end
+    local threshold = ataxiaTemp.bloodshieldActive and 3 or 4
+    if targetCount >= threshold or hasBoss then
+      command = command.."activate bloodshield"..sp
+      if ataxiaTemp.bloodshieldReady and not ataxiaTemp.bloodshieldActive then
+        ataxiaTemp.bloodshieldActive = true
+        ataxiaTemp.bloodshieldTimer = tempTimer(180, function()
+          ataxiaTemp.bloodshieldActive = nil
+          ataxiaTemp.bloodshieldTimer = nil
+        end)
       end
+      ataxiaTemp.bloodshieldReady = nil
     end
   end
 
