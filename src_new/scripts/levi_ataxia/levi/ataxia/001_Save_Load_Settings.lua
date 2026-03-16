@@ -196,6 +196,7 @@ function ataxia_loadSettings()
 	ataxia.settings.fishing = ataxia.settings.fishing or {}
 	ataxia.settings.weapons = ataxia.settings.weapons or {}
 	ataxia.settings.user = ataxia.settings.user or {}
+	ataxia.curingprio = ataxia.curingprio or {}
 
 	ataxia_Echo("I suppose I can lend you my aid. Go and annihilate our foes.")
 	ataxia.loaded = true

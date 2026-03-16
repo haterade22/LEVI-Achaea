@@ -357,8 +357,9 @@ function ataxiaBasher_assembleAttack()
     local bosses = ataxiaBasher.bloodMaidenBosses or {}
     for _, name in pairs(ataxia.denizensHere) do
       if targets then
-        for mobName, _ in pairs(targets) do
-          if mobName ~= "keyword" and name:lower() == mobName:lower() then
+        for mobKey, mobVal in pairs(targets) do
+          local mobName = type(mobKey) == "number" and mobVal or mobKey
+          if type(mobName) == "string" and mobName ~= "keyword" and name:lower() == mobName:lower() then
             targetCount = targetCount + 1
             break
           end
