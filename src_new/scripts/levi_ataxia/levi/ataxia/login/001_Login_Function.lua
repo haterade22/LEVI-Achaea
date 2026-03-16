@@ -48,8 +48,9 @@ dwbparrying = false
 dwbexpendtorso = false
 DWBWhirlDamage = DWBWhirlDamage or 0
 
-if parrying == nil then parrying = "randomleg" end
-expandAlias("parry randomleg")
+if parrying == nil then parrying = "auto" end
+ataxia.settings.use.parry = true
+ataxia.parry = "auto"
 if ataxiaTemp.parriedLimb == nil then ataxiaTemp.parriedLimb = "none" end
 tempTimer(10, [[send("queue add free get 50 ink from palette")]])
 tempTimer(12, [[send("queue add inr all")]])

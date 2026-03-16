@@ -90,7 +90,7 @@ end
 
 function ataxia_updateApplied(_, name)
 	if name:find("Ataxia") or name:find("ataxia") then
-		ataxiaEcho("System package has been successfully installed.")
+		ataxiaEcho("System package v" .. (ataxiaVersion or "?") .. " has been successfully installed.")
 		checkedMissingVariables = false
 		ataxiaCheckForMissing()
 		system_packageName = name

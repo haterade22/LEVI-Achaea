@@ -23,6 +23,12 @@ function ataxiaCheckForMissing()
     sp = ataxia.settings.separator
   end
   
+  if not ataxia.settings.defences then
+    ataxia.settings.defences = { current = "", defup = {}, keepup = {} }
+    ataxiaEcho("Defence profiles not found. Initialised empty profiles.")
+    ataxiaEcho("<green>aconfig profile create <name> <NavajoWhite>to create one.")
+  end
+
   if ataxia.settings.highlighting == nil then
     ataxia.settings.highlighting = {}
     ataxiaEcho("Highlight settings not found. Changed to default.")
