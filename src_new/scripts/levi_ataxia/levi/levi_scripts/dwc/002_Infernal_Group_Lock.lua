@@ -123,6 +123,17 @@ infernalGroupLock.config = {
     weapon2 = (ataxia.settings.weapons and ataxia.settings.weapons.weapon2) or "scimitar",
 }
 
+-- Refresh weapons from ataxia.settings after settings are loaded (fixes load-order race)
+function infernalGroupLock.refreshWeapons()
+  if ataxia.settings and ataxia.settings.weapons then
+    local w = ataxia.settings.weapons
+    if w.weapon1 then infernalGroupLock.config.weapon1 = w.weapon1 end
+    if w.weapon2 then infernalGroupLock.config.weapon2 = w.weapon2 end
+  end
+end
+
+registerAnonymousEventHandler("ataxia system loaded", "infernalGroupLock.refreshWeapons")
+
 -- State tracking (minimal for group combat)
 infernalGroupLock.state = {
     lastLockLevel = nil,  -- Track lock level changes for debug output

@@ -296,6 +296,15 @@ function ataxia.confirmWeapons()
     if suggested.weapon2 then infernalDWC.config.weapon2 = suggested.weapon2 end
     if suggested.battleaxe then infernalDWC.config.battleaxe = suggested.battleaxe end
   end
+  if infernalGroupLock and infernalGroupLock.config then
+    if suggested.weapon1 then infernalGroupLock.config.weapon1 = suggested.weapon1 end
+    if suggested.weapon2 then infernalGroupLock.config.weapon2 = suggested.weapon2 end
+  end
+  if infernalDWC2L and infernalDWC2L.config then
+    if suggested.weapon1 then infernalDWC2L.config.weapon1 = suggested.weapon1 end
+    if suggested.weapon2 then infernalDWC2L.config.weapon2 = suggested.weapon2 end
+    if suggested.battleaxe then infernalDWC2L.config.battleaxe = suggested.battleaxe end
+  end
 
   ataxia_saveSettings(false)
   ataxia_Echo("Saved " .. count .. " weapon assignments.")

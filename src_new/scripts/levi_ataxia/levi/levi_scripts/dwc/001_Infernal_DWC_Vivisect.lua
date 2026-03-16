@@ -258,6 +258,18 @@ infernalDWC.config = {
     damageKillThreshold = 40,   -- Below this health %, use quash + arc instead of vivisect
 }
 
+-- Refresh weapons from ataxia.settings after settings are loaded (fixes load-order race)
+function infernalDWC.refreshWeapons()
+  if ataxia.settings and ataxia.settings.weapons then
+    local w = ataxia.settings.weapons
+    if w.weapon1 then infernalDWC.config.weapon1 = w.weapon1 end
+    if w.weapon2 then infernalDWC.config.weapon2 = w.weapon2 end
+    if w.battleaxe then infernalDWC.config.battleaxe = w.battleaxe end
+  end
+end
+
+registerAnonymousEventHandler("ataxia system loaded", "infernalDWC.refreshWeapons")
+
 -------------------------------------------------------------------------------
 -- LIMB DAMAGE HELPERS
 -------------------------------------------------------------------------------

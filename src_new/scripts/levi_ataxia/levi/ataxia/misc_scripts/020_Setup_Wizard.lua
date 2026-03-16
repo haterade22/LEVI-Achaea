@@ -244,6 +244,15 @@ function leviSetup.setupWeapons(rest)
       if slot == "weapon2" then infernalDWC.config.weapon2 = id end
       if slot == "battleaxe" then infernalDWC.config.battleaxe = id end
     end
+    if infernalGroupLock and infernalGroupLock.config then
+      if slot == "weapon1" then infernalGroupLock.config.weapon1 = id end
+      if slot == "weapon2" then infernalGroupLock.config.weapon2 = id end
+    end
+    if infernalDWC2L and infernalDWC2L.config then
+      if slot == "weapon1" then infernalDWC2L.config.weapon1 = id end
+      if slot == "weapon2" then infernalDWC2L.config.weapon2 = id end
+      if slot == "battleaxe" then infernalDWC2L.config.battleaxe = id end
+    end
 
     -- Also update pending scan suggestions if active
     if ataxia.setWeaponSlotPending then
