@@ -275,18 +275,19 @@ function ataxiaBasher_jesterBashing()
 	local command, sp = "", ataxia.settings.separator
 	local brage = ataxiaBasher_assembleBattlerage()
 	local raze = ataxiaBasher.battlerage.Jester.raze
-	
+	local wield = "wield blackjack;wield shield"..sp
+
 	if ataxiaBasher.shielded then
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-			command = raze..sp.."bop "..target
+			command = wield..raze..sp.."bop "..target
 		else
-			command = "badjoke "..target..sp..brage
+			command = wield.."badjoke "..target..sp..brage
 		end
 	else
-		command = brage..sp.."bop "..target
+		command = wield..brage..sp.."bop "..target
 	end
-	    
-	return command   
+
+	return command
 end
 
 function ataxiaBasher_magiBashing()
