@@ -51,7 +51,7 @@ function combatQueue()
    
    
    
-	if ataxia.settings.use.parry and ataxia.parry ~= "manual" then
+	if ataxia.settings and ataxia.settings.use and ataxia.settings.use.parry and ataxia.parry ~= "manual" then
 		if ataxia.parrying.shouldparry ~= ataxia.parrying.limb then
 			t = t.." " ..sp.." parry " ..ataxia.parrying.shouldparry..sp
 		end
@@ -81,7 +81,7 @@ function depthswalkerQueue()
 	local sp = ataxia.settings.separator
 	local t = "stand"..sp
 
-	if ataxia.settings.use.parry and ataxia.parry ~= "manual" then
+	if ataxia.settings and ataxia.settings.use and ataxia.settings.use.parry and ataxia.parry ~= "manual" then
 		if ataxia.parrying.shouldparry ~= ataxia.parrying.limb then
 			t = t.."parry "..ataxia.parrying.shouldparry..sp
 		end

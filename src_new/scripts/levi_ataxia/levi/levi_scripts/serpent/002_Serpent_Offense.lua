@@ -387,7 +387,15 @@ end
     Priority: clumsiness > nausea > hypersomnia > addiction > anorexia
 ]]--
 function selectHypnoLockSuggestions()
-    return {"hypochondria", "disrupt", "generosity"}
+    local pool = {"hypochondria", "disrupt", "generosity"}
+    local suggestions = {}
+    for _, aff in ipairs(pool) do
+        if not haveAff(aff) then
+            table.insert(suggestions, aff)
+        end
+    end
+    if #suggestions == 0 then return pool end
+    return suggestions
 end
 
 -- =============================================================================
@@ -562,6 +570,7 @@ local function impatienceConditionsMet()
         or haveAff("hypochondria")
         or haveAff("scytherus")
         or haveAff("slickness")
+        or (haveAff("anorexia") and tBals.focus == false)
 end
 
 -- Relaxed impatience check for relapse_lock: asthma+weariness is sufficient.
