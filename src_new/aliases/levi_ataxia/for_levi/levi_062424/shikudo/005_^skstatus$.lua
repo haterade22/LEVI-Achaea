@@ -17,6 +17,7 @@ packageName: ''
 cecho("\n<white>--- Shikudo Status ---")
 cecho("\n<cyan>Form: " .. (ataxia.vitals.form or "nil") .. " | Kata: " .. (ataxia.vitals.kata or 0))
 cecho("\n<cyan>Target: " .. (target or "nil"))
-cecho("\n<yellow>Limbs - H:" .. (tLimbs.H or 0) .. " LL:" .. (tLimbs.LL or 0) .. " RL:" .. (tLimbs.RL or 0))
+local _h = (lb and lb[target] and lb[target].hits) or {}
+cecho("\n<yellow>Limbs - H:" .. (_h["head"] or 0) .. " LL:" .. (_h["left leg"] or 0) .. " RL:" .. (_h["right leg"] or 0))
 cecho("\n<yellow>Prone: " .. tostring(tAffs.prone) .. " | Windpipe: " .. tostring(tAffs.damagedwindpipe or tAffs.crushedthroat))
 cecho("\n<green>Dispatch Ready: " .. tostring(shikudo.checkDispatchReady()))

@@ -30,6 +30,17 @@ LIMB DAMAGE LEVELS:
   Level 2: 100-199% - Broken/Crippled (major impairment)
   Level 3: 200%+    - Mangled (cannot use Restore)
 
+PER-HIT DAMAGE CAP:
+  A single hit crossing 100% only brings the limb to exactly 100% (excess lost).
+  Subsequent hits on already-broken limbs stack normally up to 200% max.
+  Pattern: if oldDmg < 100 and newDmg > 100 then newDmg = 100 end
+           newDmg = math.min(newDmg, 200)
+
+RESTORATION HEALING:
+  - Takes 4.0 seconds after application
+  - Always heals LEFT limb first when both sides of a pair are broken
+  - Offense strategy: break RIGHT limbs last (they stay broken longer)
+
 TEMPLATE USAGE:
 1. Copy this file to your class offense directory
 2. Customize damage values for your class attacks

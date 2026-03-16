@@ -2,6 +2,86 @@
 
 ---
 
+## 2026-03-16 — Removed legacy tLimbs system, consolidated on lb
+
+### Removed: tLimbs limb tracking system
+
+The legacy `tLimbs` system used hardcoded lookup tables to estimate limb damage. The custom `lb` system reads actual damage values from game output and is strictly superior. All actively-used offense systems already used `lb`. This change removes `tLimbs` entirely.
+
+**Why:** tLimbs predicted damage from lookup tables that drifted from actual game values, causing inconsistent break thresholds (97-99.99% across classes), no per-target persistence, no salve/restoration tracking, and no event system. `lb` reads the game's actual "dealt X% damage" output and has none of these problems.
+
+**Deleted (~80 files):**
+- `limb_management/` — 9 class-specific tLimbs files (Bard, Dragon/Elord, Magi, Priest, Psion, Knight, Sentinel, Sylvan, core lookup tables)
+- `monk/001_Tekura_Limb_Counter.lua`, `monk/002_Shikudo_Limb_Counter.lua` — lookup table damage trackers
+- `s_n_b/`, `i_snb/`, `earth_lord/`, `backbreaker/`, `scythe/`, `leviticus/`, `two_handed/` — inactive offense systems
+- `levi_scripts/001-013`, `023`, `024`, `032` — old numbered limb attack scripts
+- `triggers/` — 26 DIAGNOSE limb status triggers that only wrote to tLimbs
+
+**Edited (~20 files):**
+- `shikudo/006`, `shikudo/008` — removed tLimbs init/reads, now fully on `lb`
+- `dwc_runie/004_Head_Prep.lua` — replaced 5 tLimbs reads with `lb[target].hits`
+- `dwc_runie/001_RIFT.lua`, `002_BASIC_2.lua` — replaced 10 tLimbs reads each
+- `016_Targeting_Functions.lua` — removed tLimbs reset, replaced `magi_resetLimbs()` with `lb.resetAll()`
+- `login/001_Login_Function.lua` — removed `ataxia_resetLimbTable()` call
+- `632_Add_Limb_Damage.lua` — removed tLimbs branch, kept lb-based highlighting
+- `_groups.yaml` — replaced Limb Management inline script with lb-delegating stubs
+- `012_Prompt_Substitution.lua` — `%tlimbs%`/`%nlimbs%` now use `lb.prompt()`
+- `007_Target_Applied_Somewhere.lua` — `target_resetLimb()` calls → `lb.resetLimb()`
+- Various triggers — removed dead `bard_addLimbDamage`, `knight_dwbAddHit` calls
+
+---
+
+## 2026-03-16 — Limb damage mechanics corrections
+
+### Fixed: Restoration timer 3.7s → 4.0s
+
+All restoration healing timers were using 3.7s instead of the correct 4.0s game mechanic. The 300ms error could cause the system to assume a limb healed before it actually did.
+
+**Files:** `levi_scripts/limb/002_limb_management.lua` (`lb.salve()`), `ataxia/limb_management/007_Target_Applied_Somewhere.lua` (`target_appliedTo()` — 4 instances)
+
+### Added: Per-hit 100% damage cap on all limb tracking
+
+A single hit that would push a limb above 100% now only brings it to exactly 100% (excess lost). Subsequent hits on already-broken limbs stack normally up to 200% max.
+
+```lua
+-- Pattern applied to all damage functions:
+local oldDmg = tLimbs[code]
+tLimbs[code] = tLimbs[code] + damage
+if oldDmg < 100 and tLimbs[code] > 100 then tLimbs[code] = 100 end
+tLimbs[code] = math.min(tLimbs[code], 200)
+```
+
+**tLimbs systems (5 files):**
+- `ataxia/monk/001_Tekura_Limb_Counter.lua` — `tekura_addDamage()`
+- `ataxia/monk/002_Shikudo_Limb_Counter.lua` — `shikudo_addDamage()`
+- `ataxia/limb_management/008_Knight_Limbcounting.lua` — `knight_addLimbDamage()`, `knight_dwbAddHit()`
+- `ataxia/limb_management/006_Psion_Limb_Tracking.lua` — `psion_hitLimb()`
+- `ataxia/limb_management/004_Magi-Specific.lua` — `magi_staffStrike()`
+
+**lb system:** `levi_scripts/limb/002_limb_management.lua` — `lb.addHit()`
+
+### Added: SLC 200% damage stacking + restoration indicator
+
+Self Limb Counter now tracks damage up to 200% (was hard-capped at 100%). GUI shows firebrick color for over-broken limbs with `[Nx REST]` indicator showing how many restoration applications are needed.
+
+New helper: `ataxia_selfRestorationsNeeded(limb)` — returns `math.ceil(damage / 100)`.
+
+**File:** `ataxia/self_limb_tracking/002_Track_The_Damage.lua`
+
+### Added: TK6 right-limb tiebreaker in findSafeLimb()
+
+When two limbs have equal damage, `findSafeLimb()` now prefers right limbs. This means left limbs get prepped first → heal first on restoration → right stays broken longer.
+
+**File:** `levi_scripts/tekura/002_Tekura_6Limb_Offense.lua`
+
+### New documentation
+
+- `docs/limb-damage-mechanics.md` — Comprehensive reference: damage levels, per-hit cap, restoration timing, left-limb-first priority, tracking systems, class-specific thresholds
+- `docs/limb-prep-classes.md` — Per-class limb offense reference: TK6, TKD, DWC, DWB-Runie, Blademaster, Apostate, Shikudo, Psion, Magi
+- `.claude/templates/limb_tracking_template.lua` — Updated header with mechanics reference
+
+---
+
 ## 2026-03-16 — Tekura break guards + kai mode config
 
 ### Fixed: TK6 parry bypass breaking limbs during PREP

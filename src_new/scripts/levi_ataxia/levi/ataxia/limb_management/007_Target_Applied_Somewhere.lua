@@ -57,7 +57,7 @@ function target_appliedTo(where)
 			ataxiaTemp.mendingWait = tempTimer(2, [[ ataxiaTemp.mendingWait = nil ]])
 			ataxiaTemp.checkBreak = tempTimer(4.0, [[
 				target_curedLimb("leftarm");
-				target_resetLimb("left arm")
+				lb.resetLimb(target, "left arm")
 			]])
       target_salveBal(4)
       
@@ -65,7 +65,7 @@ function target_appliedTo(where)
 			ataxiaTemp.mendingWait = tempTimer(2, [[ ataxiaTemp.mendingWait = nil ]])
 			ataxiaTemp.checkBreak = tempTimer(4.0, [[
 				target_curedLimb("rightarm");
-				target_resetLimb("right arm")
+				lb.resetLimb(target, "right arm")
 			]])
 			target_salveBal(4)
       
@@ -96,7 +96,7 @@ function target_appliedTo(where)
 			ataxiaTemp.mendingWait = tempTimer(2, [[ ataxiaTemp.mendingWait = nil ]])
 			ataxiaTemp.checkBreak = tempTimer(4.0, [[
 				target_curedLimb("leftleg");
-				target_resetLimb("left leg")
+				lb.resetLimb(target, "left leg")
 			]])
       target_salveBal(4)
       
@@ -104,7 +104,7 @@ function target_appliedTo(where)
 			ataxiaTemp.mendingWait = tempTimer(2, [[ ataxiaTemp.mendingWait = nil ]])
 			ataxiaTemp.checkBreak = tempTimer(4.0, [[
 				target_curedLimb("rightleg");
-				target_resetLimb("right leg")
+				lb.resetLimb(target, "right leg")
 			]])
 			target_salveBal(4)
       

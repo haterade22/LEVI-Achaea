@@ -279,7 +279,7 @@ All combat systems in `src_new/scripts/levi_ataxia/levi/levi_scripts/`:
 ### Ataxia Combat System
 - **Affliction Tracking**: 100+ afflictions with color-coded display
 - **Target Affliction Tracking**: V3 branching probability engine — single source of truth (see below)
-- **Limb Tracking**: `selfLimbDamage` for damage percentages, `tLimbs` for enemy tracking
+- **Limb Tracking**: `selfLimbDamage` for own limb damage, `lb` for target limb tracking (per-target, event-driven, trigger-fed from actual game damage)
 - **Fracture Management**: Two-handed combat tracking
 - **Defense Management**: Automatic parrying, SSC integration
 - **Basher**: `ataxiaBasher` for automated hunting (see details below)

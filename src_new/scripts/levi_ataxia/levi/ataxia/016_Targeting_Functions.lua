@@ -33,7 +33,7 @@ function switchTarget(who)
 	possible_targets = ataxiaTemp.enemies or {}
 
 	local found_target = false
-  if who ~= target then ataxia_resetLimbTable() end
+  if who ~= target and lb and lb.resetAll then lb.resetAll(target) end
 	if ataxia.playersHere and type(ataxia.playersHere) == "table" then
 		for i,v in pairs(ataxia.playersHere) do
 			if string.find(v, tName) then
@@ -110,9 +110,7 @@ function switchTarget(who)
     targetresetafflictionslevi()
     tBals = {tree = true, focus = true, plant = true, salve = true, timers = {}, passive = true}
     ataxiaTemp.bleeding = 0
-    if ataxia_isClass("magi") then
-      magi_resetLimbs()
-    end
+    if lb and lb.resetAll then lb.resetAll(target) end
     readAuraAffs = { count = 0, list = {} }
     if ataxia_isClass("sentinel") then sAnimals = sAnimals or {} end
     if ataxia_isClass("serpent") then

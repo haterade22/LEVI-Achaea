@@ -360,38 +360,12 @@ groups:
           ))\n      else\n        cecho(\"<DimGrey>\"..tekStr..\".\")\n      end\n    end\n  end\nend"
         directory: levi_ataxia/levi/ataxia/monk
       - name: Limb Management
-        script: "function target_limbBroke(limb)\n\tlocal brk = \"damaged\"..string.gsub(limb, \" \", \"\")\n\tlocal mend\
-          \ = \"broken\"..string.gsub(limb, \" \", \"\")\n\ttAffs[brk] = true\n--\terAff(mend)\nend\n\nfunction targetLimbs_updateTimers(limbhit)\n\
-          \tataxiaTables.limbTimers = ataxiaTables.limbTimers or {}\n\n\tif ataxiaTables.limbTimers[limbhit] then killTimer(\
-          \ ataxiaTables.limbTimers[limbhit] ) end\n\tataxiaTables.limbTimers[limbhit] = tempTimer(180, [[ target_resetLimb(\"\
-          ]]..limbhit..[[\")]])\n\nend\n\nfunction target_resetLimb(limbhit)\n  local lco = ataxia_shortLimb(limbhit)\n\t\
-          tLimbs[lco] = 0\n\tcecho(\"\\n<a_brown>( Limb damage on target's <a_red>\"..limbhit..\"<a_brown> has been reset\
-          \ )\")\n\t\n\tif limbhit == \"head\" or limbhit == \"torso\" then\n\t\terAff(\"damaged\"..limbhit)\n\tend\n\t\n\t\
-          if ataxiaTables.limbTimers[limb] then \n\t\tkillTimer( ataxiaTables.limbTimers[limb] )\n\t\tataxiaTables.limbTimers[limb]\
-          \ = nil\n\tend\nend\n\nfunction limbCounter_textTag()\n\tlocal zero = 0\n\tfor limb, num in pairs(tLimbs) do\n\t\
-          \tif limb ~= \"BP\" and limb ~= \"staff\" and limb ~= \"airstrike\" and type(num) == \"number\" and num > 0 then\n\
-          \t\t\tzero = zero + 1\n\t\tend\n\tend\n\tif zero == 0 then return \"\" end\n\n\tlocal str = \" <a_brown>[\"\n\t\
-          local limbs = {\"LL\", \"RL\", \"LA\", \"RA\", \"T\", \"H\"}\n\tfor i=1, #limbs do\n\t\tlocal colour = \"\"\n\t\t\
-          if tLimbs[limbs[i]] >= 99 then\n\t\t\tcolour = \"<a_darkred>\"\n\t\telseif tLimbs[limbs[i]] >= 90 then\n\t\t\tcolour\
-          \ = \"<a_red>\"\n\t\telseif tLimbs[limbs[i]] >= 80 then\n\t\t\tcolour = \"<OrangeRed>\"\n\t\telseif tLimbs[limbs[i]]\
-          \ >= 70 then\n\t\t\tcolour = \"<dark_orange>\"\n\t\telseif tLimbs[limbs[i]] >= 60 then\n\t\t\tcolour = \"<orange>\"\
-          \n\t\telseif tLimbs[limbs[i]] >= 50 then\n\t\t\tcolour = \"<coral>\"\n\t\telseif tLimbs[limbs[i]] >= 40 then\n\t\
-          \t\tcolour = \"<goldenrod>\"\n\t\telseif tLimbs[limbs[i]] >= 30 then\n\t\t\tcolour = \"<yellow>\"\n\t\telseif tLimbs[limbs[i]]\
-          \ >= 20 then\n\t\t\tcolour = \"<LightGoldenrod>\"\n\t\telse\n\t\t\tcolour = \"<DimGrey>\"\n\t\tend\n\t\t\n\t\tif\
-          \ limbs[i] ~= limbs[#limbs] then\n\t\t\tstr = str..colour..limbs[i]..\"<a_brown>.\"\n\t\telse\n\t\t\tstr = str..colour..limbs[i]..\"\
-          <a_brown>] \"\n\t\tend\n\tend\n\n\treturn str\nend\n\nfunction limbCounter_numberTag()\n\n\tlocal zero = 0\n\tfor\
-          \ limb, num in pairs(tLimbs) do\n\t\tif limb ~= \"BP\" and limb ~= \"staff\" and limb ~= \"airstrike\" and type(num)\
-          \ == \"number\" and num > 0 then\n\t\t\tzero = zero + 1\n\t\tend\n\tend\n\tif zero == 0 then return \"\" end\n\n\
-          \tlocal str = \" <a_brown>[\"\n\tlocal limbs = {\"LL\", \"RL\", \"LA\", \"RA\", \"T\", \"H\"}\n  local val = 0\n\
-          \tfor i=1, #limbs do\n\t\tlocal colour = \"\"\n\t\tif tLimbs[limbs[i]] >= 99 then\n\t\t\tcolour = \"<a_darkred>\"\
-          \n\t\telseif tLimbs[limbs[i]] >= 90 then\n\t\t\tcolour = \"<a_red>\"\n\t\telseif tLimbs[limbs[i]] >= 80 then\n\t\
-          \t\tcolour = \"<OrangeRed>\"\n\t\telseif tLimbs[limbs[i]] >= 70 then\n\t\t\tcolour = \"<dark_orange>\"\n\t\telseif\
-          \ tLimbs[limbs[i]] >= 60 then\n\t\t\tcolour = \"<orange>\"\n\t\telseif tLimbs[limbs[i]] >= 50 then\n\t\t\tcolour\
-          \ = \"<coral>\"\n\t\telseif tLimbs[limbs[i]] >= 40 then\n\t\t\tcolour = \"<goldenrod>\"\n\t\telseif tLimbs[limbs[i]]\
-          \ >= 30 then\n\t\t\tcolour = \"<yellow>\"\n\t\telseif tLimbs[limbs[i]] >= 20 then\n\t\t\tcolour = \"<LightGoldenrod>\"\
-          \n\t\telse\n\t\t\tcolour = \"<DimGrey>\"\n\t\tend\n\t\t\n\t\tif limbs[i] ~= limbs[#limbs] then\n\t\t\tstr = str..colour..tLimbs[limbs[i]]..\"\
-          <NavajoWhite>|\"\n\t\telse\n\t\t\tstr = str..colour..tLimbs[limbs[i]]..\"<a_brown>] \"\n\t\tend\n\tend\n\n\treturn\
-          \ str\nend"
+        script: "function target_limbBroke(limb)\n\tlocal brk = \"damaged\"..string.gsub(limb,\
+          \ \" \", \"\")\n\ttAffs[brk] = true\nend\n\nfunction targetLimbs_updateTimers(limbhit)\n\
+          end\n\nfunction target_resetLimb(limbhit)\n\tif lb and lb.resetLimb then\
+          \ lb.resetLimb(target, limbhit) end\nend\n\nfunction limbCounter_textTag()\n\
+          \treturn lb and lb.prompt and lb.prompt() or \"\"\nend\n\nfunction limbCounter_numberTag()\n\
+          \treturn lb and lb.prompt and lb.prompt() or \"\"\nend"
         directory: levi_ataxia/levi/ataxia/limb_management
     - name: Curing
       script: "curingTable = {\n\tgoldenseal = {\"depression\", \"sandfever\", \"stupidity\", \"epilepsy\", \"dizziness\"\

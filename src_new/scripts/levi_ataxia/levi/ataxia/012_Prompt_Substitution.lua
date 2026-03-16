@@ -127,8 +127,8 @@ ataxiaPromptTags = {
 			return defStr
 		end,
 	["metawake"] = function() if ataxia.defences.metawake then return "<pink>MW" end end,
-	["tlimbs"] = function() return limbCounter_textTag() end,
-  ["nlimbs"] = function() return limbCounter_numberTag() end,
+	["tlimbs"] = function() return lb and lb.prompt and lb.prompt() or "" end,
+  ["nlimbs"] = function() return lb and lb.prompt and lb.prompt() or "" end,
   ["tarbals"] = function()
     local balStr = ""
     balStr = balStr.."<green>"..(tBals.plant and "H" or "_")

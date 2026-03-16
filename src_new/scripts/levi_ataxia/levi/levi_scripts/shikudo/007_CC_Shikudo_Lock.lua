@@ -475,7 +475,6 @@ function shikudoLock.dispatch()
   ataxia.settings = ataxia.settings or {}
   ataxia.settings.separator = ataxia.settings.separator or ";"
   ataxiaTemp = ataxiaTemp or {}
-  tLimbs = tLimbs or {H = 0, T = 0, LL = 0, RL = 0, LA = 0, RA = 0}
   tAffs = tAffs or {}
 
   -- Update current phase

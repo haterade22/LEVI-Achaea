@@ -63,7 +63,7 @@ if isTargeted(person) then
       cecho("<green> -> "..ataxiaTemp.parriedLimb)
     end      
 	else
-		bard_addLimbDamage(multimatches[1][3])
+		-- bard_addLimbDamage removed (lb.addHit from triggers handles damage)
 		if next(envenomList) then
 			moveCursor(0, getLineNumber()-1)
 			tarAffed(envenomList[1])

@@ -45,7 +45,7 @@ local person = multimatches[1][2]
 if isTargeted(person) then
 	if multimatches[3][1] ~= "Your blow strikes "..person.." but is robbed of much of its impact by your faulty technique." then
 		moveCursor(0, getLineNumber()-1)
-		if tLimbs.H >= 75 or lb[target].hits["head"] >= 75 then
+		if lb[target].hits["head"] >= 75 then
 			tarAffed("impatience", "stupidity", "prone")
     elseif haveAff("prone") then
       tarAffed("impatience")

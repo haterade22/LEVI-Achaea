@@ -58,11 +58,10 @@ tdeliverance = false
       salvetimer = 3.5
       target_salveBal(4)
     end
-  elseif tLimbs.T >= 98 then
-    tempTimer(4, [[ target_resetLimb("torso")]])
+  elseif lb[target].hits["torso"] >= 98 then
     salvetimer = 3.5
     target_salveBal(4)
-   else 
+  else
     target_salveBal(4)
   end
   

@@ -49,17 +49,6 @@ if isTargeted(tar) then
   -- Assault raises damage level (+100%)
   lb[tar].hits[limb] = lb[tar].hits[limb] + 100
 
-  -- Update tLimbs for limb highlighting
-  local shortMap = {
-    head = "H", torso = "T",
-    ["left leg"] = "LL", ["right leg"] = "RL",
-    ["left arm"] = "LA", ["right arm"] = "RA",
-  }
-  local short = shortMap[limb]
-  if short and tLimbs then
-    tLimbs[short] = lb[tar].hits[limb]
-  end
-
   -- Track damage/mangle affs based on new damage level
   local limbNoSpace = limb:gsub(" ", "")
   if lb[tar].hits[limb] >= 200 then

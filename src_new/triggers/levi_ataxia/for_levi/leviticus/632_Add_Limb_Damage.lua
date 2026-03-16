@@ -86,7 +86,7 @@ if isTargeted(tar) then
   if ataxia.settings.highlighting and ataxia.settings.highlighting.limbs then
     local lbHits = lb[target] and lb[target].hits and lb[target].hits[limb] or 0
     selectString(line,1)
-    if limbPrepped(limb, lastLimbAttack) then
+    if lbHits + (mylimbattackpercentage or 0) >= 100 then
       fg("red")
     elseif lbHits >= 80 then
       fg("orange")

@@ -258,7 +258,7 @@ function tprio.switchTo(name)
     if resetStatesV3 then resetStatesV3() end
     if setafflictionstackslevi then setafflictionstackslevi() end
     if targetresetafflictionslevi then targetresetafflictionslevi() end
-    if ataxia_resetLimbTable then ataxia_resetLimbTable() end
+    if lb and lb.resetAll then lb.resetAll(normalized) end
     php = 100
     targetHealth = 100
     pm = 100
@@ -272,11 +272,7 @@ function tprio.switchTo(name)
     if magi and magi.offense and magi.offense.state then magi.offense.state.burns = 0 end
     tBals = {tree = true, focus = true, plant = true, salve = true, timers = {}, passive = true}
     if ataxiaTemp then ataxiaTemp.bleeding = 0 end
-    if ataxia_isClass and ataxia_isClass("magi") and magi_resetLimbs then
-      magi_resetLimbs()
-    elseif tLimbs then
-      tLimbs = {H=0, T=0, RL=0, LL=0, RA=0, LA=0}
-    end
+    if lb and lb.resetAll then lb.resetAll(normalized) end
     raiseEvent("changed target")
     ataxiaEcho("Priority target: <white>" .. normalized .. "<plum>.")
   else

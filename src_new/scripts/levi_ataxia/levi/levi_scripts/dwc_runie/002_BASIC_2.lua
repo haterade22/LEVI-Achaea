@@ -183,7 +183,7 @@ end
 
 
 
-if tAffs.impaled and tLimbs.T >= 100 then
+if tAffs.impaled and (lb[target].hits["torso"] or 0) >= 100 then
 disembowel = true
 else
 disembowel = false
@@ -199,28 +199,28 @@ else
 add_dedication = false
 end
 
-if (tLimbs.RL + scimdamage >= 100) and (tLimbs.RL + axedamage < 100) and targetlimb == "right leg" then
+if ((lb[target].hits["right leg"] or 0) + scimdamage >= 100) and ((lb[target].hits["right leg"] or 0) + axedamage < 100) and targetlimb == "right leg" then
 
 need_raze2 = true
 else
 need_raze2 = false
 end
 
-if (tLimbs.RA + scimdamage >= 100) and (tLimbs.RA + axedamage < 100) and targetlimb == "right arm" then
+if ((lb[target].hits["right arm"] or 0) + scimdamage >= 100) and ((lb[target].hits["right arm"] or 0) + axedamage < 100) and targetlimb == "right arm" then
 
 need_raze2 = true
 else
 need_raze2 = false
 end
 
-if (tLimbs.LL + scimdamage >= 100) and (tLimbs.LL + axedamage < 100) and targetlimb == "left leg" then
+if ((lb[target].hits["left leg"] or 0) + scimdamage >= 100) and ((lb[target].hits["left leg"] or 0) + axedamage < 100) and targetlimb == "left leg" then
 
 need_raze3 = true
 else
 need_raze3 = false
 end
 
-if (tLimbs.LA + scimdamage >= 100) and (tLimbs.LA + axedamage < 100) and targetlimb == "left arm" then
+if ((lb[target].hits["left arm"] or 0) + scimdamage >= 100) and ((lb[target].hits["left arm"] or 0) + axedamage < 100) and targetlimb == "left arm" then
 
 need_raze3 = true
 else
@@ -246,32 +246,32 @@ else
 need_shieldraze = false
 end
 
-if  tLimbs.LL + scimdamage >= 100 and not tAffs.damagedleftleg then 
+if  (lb[target].hits["left leg"] or 0) + scimdamage >= 100 and not tAffs.damagedleftleg then
 prepped_leftleg = true else
 prepped_leftleg = false
 
 end
 
-if  tLimbs.RL + scimdamage >= 100 and not tAffs.damagedrightleg then 
+if  (lb[target].hits["right leg"] or 0) + scimdamage >= 100 and not tAffs.damagedrightleg then
 prepped_rightleg = true else
 prepped_rightleg = false
 
 end
 
-if  tLimbs.RA + scimdamage >= 100 and not tAffs.damagedrightarm then 
+if  (lb[target].hits["right arm"] or 0) + scimdamage >= 100 and not tAffs.damagedrightarm then
 prepped_rightarm = true else
 prepped_rightarm = false
 
 end
 
-if  tLimbs.LA + scimdamage >= 100 and not tAffs.damagedleftarm then 
+if  (lb[target].hits["left arm"] or 0) + scimdamage >= 100 and not tAffs.damagedleftarm then
 prepped_leftarm = true else
 prepped_leftarm = false
 
 end
 
 
-if  tLimbs.H + scimdamage >= 100 and not tAffs.damagedhead then 
+if  (lb[target].hits["head"] or 0) + scimdamage >= 100 and not tAffs.damagedhead then
 prepped_head = true else
 prepped_head = false
 

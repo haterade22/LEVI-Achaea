@@ -46,20 +46,12 @@ tdeliverance = false
 	erAff("slickness")
 	if haveAff("crushedthroat") then
 		erAff("crushedthroat")
-	elseif tLimbs.H >= 98 and tLimbs.H < 200 then
-		tempTimer(4, [[target_resetLimb("head");erAff("damagedhead")]])
-    target_salveBal(4)
-  elseif lb[target].hits["head"] >= 100 and lb[target].hits["head"] < 200 then
+	elseif lb[target].hits["head"] >= 100 and lb[target].hits["head"] < 200 then
     tempTimer(4, [[erAff("damagedhead")]])
     target_salveBal(4)
   elseif lb[target].hits["head"] >= 200 then
     tempTimer(4, [[erAff("mangledhead")]])
     target_salveBal(4)
-  elseif tLimbs.H >= 200 then
-		tempTimer(4, [[tLimbs.H = 100]])
-    tempTimer(4, [[erAff("mangledhead")]])
-    target_salveBal(4)
-   
   elseif vodunCheck then
     target_salveBal(4)
     vodunCheck = nil
