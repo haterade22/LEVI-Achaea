@@ -145,8 +145,10 @@ function ataxia_loadSettings()
 				if type(v) == "table" then
 					if type(dst[k]) == "table" then
 						deepMerge(v, dst[k])
+					elseif dst[k] == nil then
+						dst[k] = v  -- no runtime object to protect, safe to load
 					end
-					-- skip: don't inject stale serialized tables into runtime
+					-- skip if dst[k] is a non-table (function, userdata, etc.)
 				else
 					dst[k] = v
 				end

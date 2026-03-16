@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-03-16 — Fix deepMerge dropping settings sub-tables on load (v4.7.5)
+
+### Fixed: `ataxia.settings.defences` (and all other settings sub-tables) nil after login
+
+The `deepMerge` function in `ataxia_loadSettings()` was too conservative — it skipped loading any saved table that didn't already exist in the runtime destination. Since `ataxia.settings` is pre-initialized as `{}` (empty) by `001_Core.lua`, all sub-tables (`defences`, `have`, `use`, `sipping`, etc.) were silently dropped during load.
+
+This caused `aconfig profile create` and other defence profile commands to silently fail (guard clause exits on nil `ataxia.settings.defences`).
+
+**Fix:** `deepMerge` now injects saved tables when `dst[k]` is nil (no runtime object to protect). It still skips when `dst[k]` is a non-table type (function, userdata) to preserve live objects.
+
+**File:** `001_Save_Load_Settings.lua` (lines 143–155, `deepMerge` function)
+
+---
+
 ## 2026-03-15 — Fix login GMCP race conditions (v4.7.1)
 
 ### Fixed: nil errors on login from GMCP events firing before settings load
