@@ -46,6 +46,7 @@ tekura6.state = {
 tekura6.config = {
   breakThreshold = 100,
   debugEcho = true,
+  kaiMode = "surge",  -- "surge" (31 kai, 3.2s eq) or "cripple" (41 kai, 4s eq, L1 breaks all)
 }
 
 tekura6.PHASES = {
@@ -339,12 +340,17 @@ function tekura6.dispatch.buildPrepAttack()
   -- Within each list: non-parried first, then parried
   local function findSafeLimb(preferred, fallback, atkDmg)
     -- Sort both lists by simulated damage ascending (lowest first)
-    table.sort(preferred, function(a, b)
-      return (simDmg[a] or 0) < (simDmg[b] or 0)
-    end)
-    table.sort(fallback, function(a, b)
-      return (simDmg[a] or 0) < (simDmg[b] or 0)
-    end)
+    -- Tiebreaker: prefer right limbs when damage is equal (right gets prepped last,
+    -- so restoration heals left first and right stays broken longer)
+    local function limbSort(a, b)
+      local da, db = (simDmg[a] or 0), (simDmg[b] or 0)
+      if da == db then
+        return a:find("right") and not b:find("right")
+      end
+      return da < db
+    end
+    table.sort(preferred, limbSort)
+    table.sort(fallback, limbSort)
 
     -- Pass 1: non-parried preferred (unprepped)
     for _, limb in ipairs(preferred) do
@@ -417,18 +423,43 @@ function tekura6.dispatch.buildPrepAttack()
 end
 
 -- PARRY BYPASS: Kai surge (dismount) + sweep (prone) + punch last limb
+-- Break guard: if 2 punches would break, use 1 real punch + overflow/filler
 function tekura6.dispatch.buildParryBypassAttack(parriedLimb)
   local cmd = ""
+  local punchDmg = tekura6.state.punchDamage
+  local breakAt = tekura6.config.breakThreshold
+  local currentDmg = tekura6.getLimbDamage(parriedLimb)
 
-  -- Kai surge to dismount if mounted (required for sweep)
+  -- Kai dismount if mounted (required for sweep)
   if tekura6.isMounted() then
-    cmd = "kai surge " .. target .. ";"
+    cmd = "kai " .. tekura6.config.kaiMode .. " " .. target .. ";"
   end
 
-  -- Sweep prones target (prone = can't parry), then 2 punches on last limb
   local punch = tekura6.LIMB_ATTACKS[parriedLimb].punch
 
-  cmd = cmd .. "combo " .. target .. " swk " .. punch .. " " .. punch
+  -- Check if TWO punches would break the limb
+  if (currentDmg + 2 * punchDmg) >= breakAt then
+    -- Only 1 punch on the parried limb; find overflow for 2nd punch
+    local overflow = nil
+    for _, limb in ipairs(tekura6.ALL_LIMBS) do
+      if limb ~= parriedLimb and not tekura6.isLimbBroken(limb)
+         and (tekura6.getLimbDamage(limb) + punchDmg) < breakAt then
+        overflow = limb
+        break
+      end
+    end
+
+    if overflow then
+      -- Sweep prones (no parry), so real punch first, overflow second
+      cmd = cmd .. "combo " .. target .. " swk " .. punch .. " " .. tekura6.LIMB_ATTACKS[overflow].punch
+    else
+      -- No safe overflow — use filler for 2nd punch
+      cmd = cmd .. "combo " .. target .. " swk " .. punch .. " jbp"
+    end
+  else
+    -- Safe to double-punch (won't break)
+    cmd = cmd .. "combo " .. target .. " swk " .. punch .. " " .. punch
+  end
 
   return cmd
 end
@@ -463,6 +494,29 @@ end
 -- KILL: Backbreaker in Bear stance
 function tekura6.dispatch.buildKillAttack()
   return "bbt " .. target
+end
+
+-- Safe raze punches: during PREP, pick punch targets that won't break any limb
+function tekura6.dispatch.safeRazePunches()
+  if tekura6.dispatch.getPhase() ~= tekura6.PHASES.PREP then
+    return "hkp", "hkp"
+  end
+  local punchDmg = tekura6.state.punchDamage
+  local breakAt = tekura6.config.breakThreshold
+  local simDmg = {}
+  for _, limb in ipairs(tekura6.ALL_LIMBS) do
+    simDmg[limb] = tekura6.getLimbDamage(limb)
+  end
+  local function safePunch()
+    for _, limb in ipairs(tekura6.ALL_LIMBS) do
+      if not tekura6.isLimbBroken(limb) and (simDmg[limb] + punchDmg) < breakAt then
+        simDmg[limb] = simDmg[limb] + punchDmg
+        return tekura6.LIMB_ATTACKS[limb].punch
+      end
+    end
+    return "jbp"
+  end
+  return safePunch(), safePunch()
 end
 
 --------------------------------------------------------------------------------
@@ -534,9 +588,10 @@ function tekura6.dispatch.run()
     cmd = combatQueue()
   end
 
-  -- REBOUNDING CHECK: raze with RHK
+  -- REBOUNDING CHECK: raze with RHK (break-guarded punches during PREP)
   if tekura6.checkRebounding() then
-    cmd = cmd .. "unwield all;dismount;combo " .. target .. " rhk hkp hkp"
+    local p1, p2 = tekura6.dispatch.safeRazePunches()
+    cmd = cmd .. "unwield all;dismount;combo " .. target .. " rhk " .. p1 .. " " .. p2
     tekura6.sendAttack(cmd)
     if tekura6.shouldEcho() then
       cecho("\n<yellow>[TK6] RAZING REBOUNDING")
@@ -544,9 +599,10 @@ function tekura6.dispatch.run()
     return
   end
 
-  -- SHIELD CHECK: raze with RHK
+  -- SHIELD CHECK: raze with RHK (break-guarded punches during PREP)
   if tekura6.checkShield() then
-    cmd = cmd .. "unwield all;dismount;combo " .. target .. " rhk hkp hkp"
+    local p1, p2 = tekura6.dispatch.safeRazePunches()
+    cmd = cmd .. "unwield all;dismount;combo " .. target .. " rhk " .. p1 .. " " .. p2
     tekura6.sendAttack(cmd)
     if tekura6.shouldEcho() then
       cecho("\n<yellow>[TK6] RAZING SHIELD")

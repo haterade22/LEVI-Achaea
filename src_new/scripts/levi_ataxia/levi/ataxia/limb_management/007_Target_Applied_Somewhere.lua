@@ -55,7 +55,7 @@ function target_appliedTo(where)
 		end
 		if haveAff("damagedleftarm") or haveAff("mangledleftarm") then
 			ataxiaTemp.mendingWait = tempTimer(2, [[ ataxiaTemp.mendingWait = nil ]])
-			ataxiaTemp.checkBreak = tempTimer(3.7, [[
+			ataxiaTemp.checkBreak = tempTimer(4.0, [[
 				target_curedLimb("leftarm");
 				target_resetLimb("left arm")
 			]])
@@ -63,7 +63,7 @@ function target_appliedTo(where)
       
 		elseif haveAff("damagedrightarm") or haveAff("mangledrightarm") then
 			ataxiaTemp.mendingWait = tempTimer(2, [[ ataxiaTemp.mendingWait = nil ]])
-			ataxiaTemp.checkBreak = tempTimer(3.7, [[
+			ataxiaTemp.checkBreak = tempTimer(4.0, [[
 				target_curedLimb("rightarm");
 				target_resetLimb("right arm")
 			]])
@@ -94,7 +94,7 @@ function target_appliedTo(where)
 		end
 		if haveAff("damagedleftleg") or haveAff("mangledleftleg") then
 			ataxiaTemp.mendingWait = tempTimer(2, [[ ataxiaTemp.mendingWait = nil ]])
-			ataxiaTemp.checkBreak = tempTimer(3.7, [[
+			ataxiaTemp.checkBreak = tempTimer(4.0, [[
 				target_curedLimb("leftleg");
 				target_resetLimb("left leg")
 			]])
@@ -102,7 +102,7 @@ function target_appliedTo(where)
       
 		elseif haveAff("damagedrightleg") or haveAff("mangledrightleg") then
 			ataxiaTemp.mendingWait = tempTimer(2, [[ ataxiaTemp.mendingWait = nil ]])
-			ataxiaTemp.checkBreak = tempTimer(3.7, [[
+			ataxiaTemp.checkBreak = tempTimer(4.0, [[
 				target_curedLimb("rightleg");
 				target_resetLimb("right leg")
 			]])

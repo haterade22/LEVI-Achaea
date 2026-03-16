@@ -13,6 +13,7 @@ packageName: ''
 
 if gmcp.Char.Status.class == "Monk" then
   if ataxia.vitals.stance then
+    tekura6.config.kaiMode = "surge"
     tekura6.dispatch.run()
   else
     shikudo.dispatch()

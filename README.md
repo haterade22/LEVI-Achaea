@@ -492,7 +492,7 @@ After installing, `ataxia setup guide` shows every configurable option across al
 | `ataxia setup` | Main menu — all setup categories |
 | `ataxia setup class` | Set your class |
 | `ataxia setup separator` | Set command separator (default `;`) |
-| `ataxia setup weapons` | Configure weapon IDs |
+| `ataxia setup weapons` | Configure weapon IDs (auto-scan via `ataxia setup weapons scan`, or manual `set <slot> <id>`) |
 | `ataxia setup basher` | Basher settings |
 | `ataxia setup sipping` | Health/mana sip thresholds |
 | `ataxia setup tracking` | Affliction tracking settings |

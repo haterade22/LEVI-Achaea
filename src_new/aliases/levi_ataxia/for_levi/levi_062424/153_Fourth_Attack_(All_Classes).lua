@@ -21,6 +21,15 @@ if gmcp.Char.Status.class == "Serpent" then
   serp_ekanelia_offense()
 end
 
+if gmcp.Char.Status.class == "Monk" then
+  if ataxia.vitals.stance then
+    tekura6.config.kaiMode = "cripple"
+    tekura6.dispatch.run()
+  else
+    shikudo.dispatch()
+  end
+end
+
 if gmcp.Char.Status.class == "Blademaster" then
   bmbs()
 end

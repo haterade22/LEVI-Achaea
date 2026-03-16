@@ -31,8 +31,12 @@ function tekura_addDamage(attack, limb)
   else
     local x = tekura_limbDamage[attack]
   
+    local oldDmg = tLimbs[l]
     tLimbs[l] = tLimbs[l] + x
-    
+    -- Per-hit cap: single hit can't push past 100%, subsequent hits stack to 200%
+    if oldDmg < 100 and tLimbs[l] > 100 then tLimbs[l] = 100 end
+    tLimbs[l] = math.min(tLimbs[l], 200)
+
     if tLimbs[l] > 99.99 then
       cecho("\n<red> -= "..limb.." broke! =-")
       if limb == "head" then tAffs.stupidity = true end

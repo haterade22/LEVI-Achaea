@@ -26,12 +26,16 @@ function psion_hitLimb(limb)
 	}
 	local lco = toLimb[limb]
 	
+	local oldDmg = tLimbs[lco]
 	if lco == "RL" or lco == "LL" then
 		tLimbs[lco] = tLimbs[lco] + 20
 	else
 		tLimbs[lco] = tLimbs[lco] + 25
 	end
-	
+	-- Per-hit cap: single hit can't push past 100%, subsequent hits stack to 200%
+	if oldDmg < 100 and tLimbs[lco] > 100 then tLimbs[lco] = 100 end
+	tLimbs[lco] = math.min(tLimbs[lco], 200)
+
 	if tLimbs[lco] >= 98 then
 		cecho("\n<a_red> >> [ <a_darkcyan>"..target:upper().."'S "..limb:upper().." HAS BEEN BROKEN <a_red> ] <<")
 		target_limbBroke(limb)

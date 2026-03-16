@@ -80,8 +80,12 @@ function knight_addLimbDamage(limbhit)
 		["left arm"] = "LA",
 	}
 	local lco = toLimb[limbhit]
+	local oldDmg = tLimbs[lco]
 	tLimbs[lco] = tLimbs[lco] + ataxiaTemp.swordHit
-	
+	-- Per-hit cap: single hit can't push past 100%, subsequent hits stack to 200%
+	if oldDmg < 100 and tLimbs[lco] > 100 then tLimbs[lco] = 100 end
+	tLimbs[lco] = math.min(tLimbs[lco], 200)
+
 	if tLimbs[lco] >= 97 then
 		cecho("\n<a_red> >> [ <a_darkcyan>"..target:upper().."'S "..limbhit:upper().." HAS BEEN BROKEN <a_red> ] <<")
 		target_limbBroke(limbhit)
@@ -100,8 +104,12 @@ function knight_dwbAddHit(limbhit)
 		["left arm"] = "LA",
 	}
 	local lco = toLimb[limbhit]
+	local oldDmg = tLimbs[lco]
 	tLimbs[lco] = tLimbs[lco] + ataxiaTemp.maceHit
-	
+	-- Per-hit cap: single hit can't push past 100%, subsequent hits stack to 200%
+	if oldDmg < 100 and tLimbs[lco] > 100 then tLimbs[lco] = 100 end
+	tLimbs[lco] = math.min(tLimbs[lco], 200)
+
 	if tLimbs[lco] >= 98 then
 		cecho("\n<a_red> >> [ <a_darkcyan>"..target:upper().."'S "..limbhit:upper().." HAS BEEN BROKEN <a_red> ] <<")
 		target_limbBroke(limbhit)

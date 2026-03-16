@@ -347,61 +347,118 @@ end
 --------------------------------------------------------------------------------
 
 -- PHASE 1: Torso Prep - SDK HKP HKP (or handle parry)
+-- Break guard: simulated damage prevents accidental breaks within a single combo
 function tekura.dispatch.buildTorsoPrepAttack()
   local parried = tekura.dispatch.getParried()
+  local breakAt = tekura.config.breakThreshold
 
-  -- If they're parrying torso, prep legs instead
-  if parried == "torso" then
-    -- Use SWK to bypass any leg parry, then HFP both legs
-    return "combo " .. target .. " swk hfp left hfp right"
+  -- If they're parrying torso or a leg, prep legs with SWK + break-guarded punches
+  if parried == "torso" or parried == "left leg" or parried == "right leg" then
+    local p1 = tekura.wouldBreakLimb("left leg", 14) and "jbp" or "hfp left"
+    local p2 = tekura.wouldBreakLimb("right leg", 14) and "jbp" or "hfp right"
+    return "combo " .. target .. " swk " .. p1 .. " " .. p2
   end
 
-  -- If they're parrying a leg, use SWK to bypass and still prep legs
-  if parried == "left leg" or parried == "right leg" then
-    -- SWK bypasses parry (kick balance only), then punches hit unparried legs
-    return "combo " .. target .. " swk hfp left hfp right"
+  -- Normal torso prep with simulated damage guard
+  local sim = tekura.dispatch.getLimbDamage("torso")
+
+  -- SDK (25% to torso)
+  local kickStr
+  if (sim + 25) < breakAt then
+    kickStr = "sdk"
+    sim = sim + 25
+  else
+    kickStr = "rhk"
   end
 
-  -- Normal torso prep: SDK (sidekick) = 25% to torso, HKP (hook punch) = 14% each
-  return "combo " .. target .. " sdk hkp hkp"
+  -- HKP punch 1 (14% to torso)
+  local p1Str
+  if (sim + 14) < breakAt then
+    p1Str = "hkp"
+    sim = sim + 14
+  else
+    p1Str = "jbp"
+  end
+
+  -- HKP punch 2 (14% to torso)
+  local p2Str
+  if (sim + 14) < breakAt then
+    p2Str = "hkp"
+  else
+    p2Str = "jbp"
+  end
+
+  return "combo " .. target .. " " .. kickStr .. " " .. p1Str .. " " .. p2Str
 end
 
 -- PHASE 2: Leg Prep - SNK HFP HFP (or handle parry)
+-- Break guard: simulated damage prevents accidental breaks within a single combo
 function tekura.dispatch.buildLegPrepAttack()
   local parried = tekura.dispatch.getParried()
   local focus = tekura.dispatch.getFocusLeg()
   local other = tekura.dispatch.getOtherLeg(focus)
+  local focusLimb = focus .. " leg"
+  local otherLimb = other .. " leg"
+  local breakAt = tekura.config.breakThreshold
 
-  -- If parrying a leg, use SWK instead - only uses kick balance, still get 2 punches
+  -- If parrying a leg, use SWK with break-guarded punches
   if parried == "left leg" or parried == "right leg" then
-    -- SWK (sweep) uses kick balance, then HFP both legs with punches
-    return "combo " .. target .. " swk hfp left hfp right"
+    local p1 = tekura.wouldBreakLimb("left leg", 14) and "jbp" or "hfp left"
+    local p2 = tekura.wouldBreakLimb("right leg", 14) and "jbp" or "hfp right"
+    return "combo " .. target .. " swk " .. p1 .. " " .. p2
   end
 
-  -- If parrying torso, legs are open - prep them normally
-  -- (torso parry doesn't affect leg attacks)
+  -- Normal leg prep with simulated damage guard
+  local simFocus = tekura.dispatch.getLimbDamage(focusLimb)
+  local simOther = tekura.dispatch.getLimbDamage(otherLimb)
 
-  -- Normal leg prep: SNK + HFP + HFP on focus leg, some on other to balance
-  return "combo " .. target .. " snk " .. focus .. " hfp " .. focus .. " hfp " .. other
+  -- SNK kick (25% damage) — pick safe target, prefer focus
+  local kickStr
+  if (simFocus + 25) < breakAt then
+    kickStr = "snk " .. focus
+    simFocus = simFocus + 25
+  elseif (simOther + 25) < breakAt then
+    kickStr = "snk " .. other
+    simOther = simOther + 25
+  else
+    kickStr = "rhk"
+  end
+
+  -- HFP punch 1 (14% damage) — prefer focus
+  local p1Str
+  if (simFocus + 14) < breakAt then
+    p1Str = "hfp " .. focus
+    simFocus = simFocus + 14
+  elseif (simOther + 14) < breakAt then
+    p1Str = "hfp " .. other
+    simOther = simOther + 14
+  else
+    p1Str = "jbp"
+  end
+
+  -- HFP punch 2 (14% damage) — prefer other for balance
+  local p2Str
+  if (simOther + 14) < breakAt then
+    p2Str = "hfp " .. other
+  elseif (simFocus + 14) < breakAt then
+    p2Str = "hfp " .. focus
+  else
+    p2Str = "jbp"
+  end
+
+  return "combo " .. target .. " " .. kickStr .. " " .. p1Str .. " " .. p2Str
 end
 
 -- PHASE 3: Torso Break - SDK HKP HKP;HRS (break torso, switch to Horse)
 function tekura.dispatch.buildTorsoBreakAttack()
   local parried = tekura.dispatch.getParried()
 
-  -- If they're parrying torso, attack legs to force parry switch
+  -- If they're parrying torso, sweep to prone (can't parry) then break torso
   if parried == "torso" then
-    -- SWK + HFP + HFP on legs - forces them to consider parrying legs
-    return "combo " .. target .. " swk hfp left hfp right"
+    return "combo " .. target .. " swk hkp hkp;hrs"
   end
 
-  -- If parrying legs, they've switched - break torso now!
-  if parried == "left leg" or parried == "right leg" then
-    -- They switched to leg parry, hit torso and switch to Horse
-    return "combo " .. target .. " sdk hkp hkp;hrs"
-  end
-
-  -- Normal torso break: SDK combo then switch to Horse stance for WRT
+  -- Normal / leg parry: break torso and switch to Horse
   return "combo " .. target .. " sdk hkp hkp;hrs"
 end
 

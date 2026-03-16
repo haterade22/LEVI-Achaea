@@ -256,7 +256,7 @@ All combat systems in `src_new/scripts/levi_ataxia/levi/levi_scripts/`:
 | **shaman** | 1 (028) | **Documented** | Tzantza, locks, bleed | `shaman/` |
 | **snipe** | 1 | **Documented** | Class-agnostic snipe system | `snipe/` |
 | **shikudo** | ~5 | **Documented** | V1/V2/Lock | `shikudo/` |
-| **tekura** | ~3 | Undocumented | Monk unarmed | `tekura/` |
+| **tekura** | ~3 | **Documented** | 6-limb backbreaker (TK6), 3-limb legacy (TKD) | `tekura/` |
 | **two_handed** | 1 | Undocumented | 2H knight | `two_handed/` |
 | **wildwalker** | 8 | Undocumented | Navigation/utility | `wildwalker/` |
 
@@ -321,7 +321,7 @@ Automated target selection and attack execution for PvE hunting. Supports 20+ cl
 
 **Full documentation**: See `memory/basher.md` (dispatch chain, gates, danger levels, flee logic, room arrival flow, attack gate affliction checks, PvP auto-flee, stormhammer caching)
 
-**Core Files:** `basher/001_Bashing_Functions.lua` (attack dispatch), `basher/002_Class_Bashing.lua` (20+ classes), `genrunning/001-004` (API, targets, enable/disable, main loop)
+**Core Files:** `basher/001_Bashing_Functions.lua` (attack dispatch), `basher/002_Class_Bashing.lua` (20+ classes), `basher/007_Mob_Damage_DB.lua` (damage tracking), `genrunning/001-004` (API, targets, enable/disable, main loop)
 
 **Key Config:** `ataxiaBasher.enabled`, `.paused`, `.manual`, `.areabash`, `.targetList[area]`, `.ldeckRules`, `.goldPack`, `.fleeTimeout` (20s), `.shieldTimers`
 
@@ -329,6 +329,32 @@ Automated target selection and attack execution for PvE hunting. Supports 20+ cl
 - **Attack gate**: Blocks attacks during disabling afflictions (paralysis, aeon, peace, transfixation, webbed, impaled, constricted, deepsleep, entangled, unconsciousness, snared)
 - **PvP auto-flee**: On `"attacker class detected"` event, disables basher and navigates to Mhaldor (`genrunning/001_Bashing_API.lua`)
 - **PvE target switching**: `switchTarget()` skips all PvP state resets when basher is enabled
+
+### Mob Damage Tracking (`mob_damage_db`)
+
+SQLite database tracking non-critical damage per mob, keyed by class + primary stat + mob name. Crit hits are excluded via a flag set in the crit trigger and checked in the damage trigger.
+
+**Key Files:**
+| File | Purpose |
+|------|---------|
+| `basher/007_Mob_Damage_DB.lua` | DB schema, class-stat mapping, record/query/delete |
+| `aliases/.../zdata/003_(ataxiaDmg).lua` | `ataxiadmg` alias |
+| `triggers/.../334_Crits.lua` | Sets `bashStats.lastHitWasCrit` flag |
+| `triggers/.../350_Damage_Dealt.lua` | Records non-crit hits to DB |
+| `windows/001_Limb_Counter_Window.lua` | Live display in `tarc` window |
+
+**DB Schema** (`mob_damage_db.hits`): `class`, `stat` (e.g., "str 16"), `mob`, `area`, `min_damage`, `max_damage`, `hit_count`, `when`
+
+**Class-Stat Mapping** (`ataxia.data.classPrimaryStat`): Maps each class to its primary bashing stat (str/dex/int). Multi-stat classes (Monk, Psion, Dragon) use highest priority stat.
+
+**Commands:**
+| Command | Purpose |
+|---------|---------|
+| `ataxiadmg` | Show all records |
+| `ataxiadmg <class>` | Filter by class |
+| `ataxiadmg <mob/area>` | Filter by mob name or area |
+| `ataxiadmg delete <filter>` | Delete matching records |
+| `ataxiadmg reset` | Clear all records |
 
 ### GUI System (ataxiagui)
 
@@ -505,7 +531,7 @@ All system state is saved to disk files in `getMudletHomeDir()` via `table.save(
 **Profile Backup Keys** (in `_ataxia_backup`):
 `ataxia`, `basher`, `basherpaths`, `ndb`, `extraction`, `slcconfig`, `shaman`, `legenddeck`, `legenddeck_config`, `classDetect`, `gearaudit`, `armourconfig`, `itemcatalog`, `bars_config`
 
-**Other Storage**: SQLite `exp_db` (hunting stats via Mudlet `db` API), `ataxiaNDB/*.json` (temp API downloads).
+**Other Storage**: SQLite `exp_db` (hunting stats via Mudlet `db` API), SQLite `mob_damage_db` (per-mob non-crit damage tracking via `db` API), `ataxiaNDB/*.json` (temp API downloads).
 
 **Event Hooks**: `sysDisconnectionEvent` → `ataxia_saveSettings()`, `sysLoadEvent` → `ataxia_loadSettings()`
 
@@ -1248,6 +1274,22 @@ Dual-slot curse engine via DEADEYES. 6 modes: lock (default), mental, group, cor
 **Full documentation**: See `memory/apostate.md` (curse priority engine, lock progression, corrupt calculator, kill routes, config)
 
 **Key file:** `apostate/015_CC_Apostate.lua`. **Namespace:** `apostate`. **Class docs:** `.claude/classes/apostate.md`
+
+---
+
+## Tekura Monk Combat System
+
+Two Tekura systems: TK6 (6-limb backbreaker, primary) and TKD (3-limb legacy). Both use `combo target <kick> <punch1> <punch2>` format with break-guarded prep phases.
+
+**Full documentation**: See `memory/tekura.md` (phases, break guards, kai modes, candidate pools, limb attack mapping, config)
+
+**Key files:** `tekura/002_Tekura_6Limb_Offense.lua` (TK6), `tekura/001_Tekura_Offense.lua` (TKD). **Namespace:** `tekura6` / `tekura`.
+
+**Aliases:** `zz` = TK6 with kai surge, `xx` = legacy TKD, `vv` = TK6 with kai cripple.
+
+**Kill route (TK6):** Prep all 6 limbs to 86%+ → Break arms+torso (Horse stance) → Wrench torso + break legs (Bear stance) → Backbreaker.
+
+**Kai modes:** `tekura6.config.kaiMode` — `"surge"` (31 kai, 3.2s eq, dismount) or `"cripple"` (41 kai, 4s eq, dismount + L1 breaks all limbs).
 
 ---
 

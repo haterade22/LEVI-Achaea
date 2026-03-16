@@ -21,7 +21,13 @@ function lb.addHit(name, ltar, amount)
     cecho("<red>(!) Limb not found: " .. tostring(ltar) .. ".\n")
     return
   end
+  local oldDmg = lb[name].hits[ltar]
   lb[name].hits[ltar] = lb[name].hits[ltar] + amount
+  -- Per-hit cap: single hit can't push past 100%, subsequent hits stack to 200%
+  if oldDmg < 100 and lb[name].hits[ltar] > 100 then
+    lb[name].hits[ltar] = 100
+  end
+  lb[name].hits[ltar] = math.min(lb[name].hits[ltar], 200)
   if lb[name].t[ltar] then killTimer(lb[name].t[ltar]) end
   lb[name].t[ltar] = tempTimer(180, [[
     lb.resetLimb("]] .. name .. [[", "]] .. ltar .. [[")
@@ -58,7 +64,7 @@ function lb.resetLimb(name, ltar)
 end
 
 function lb.salve(name, area)
-  lb[name].t.cure = tempTimer(3.7, [[
+  lb[name].t.cure = tempTimer(4.0, [[
     local convert = {
       head = {"head"},
       torso = {"torso"},

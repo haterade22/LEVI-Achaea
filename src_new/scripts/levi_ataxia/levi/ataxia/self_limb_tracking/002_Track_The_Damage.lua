@@ -132,6 +132,15 @@ function ataxia_selfHitsToBreak(limb)
 	return math.ceil(remaining / lastHit)
 end
 
+-- Estimate how many restorations needed to heal (damage > 100 = multiple applications)
+function ataxia_selfRestorationsNeeded(limb)
+	limb = limb:lower()
+	if not selfLimbDamage[limb] then return 0 end
+	local dmg = selfLimbDamage[limb].damage
+	if dmg <= 0 then return 0 end
+	return math.ceil(dmg / 100)
+end
+
 -- Compute threshold state from hits-to-break
 local function computeThreshold(hitsLeft)
 	local cfg = selfLimbDamage.config
@@ -197,11 +206,14 @@ function ataxia_raiseLimbDamage(limb, num)
 	-- Update damage data
 	selfLimbDamage[limb].lastHit = num
 	selfLimbDamage[limb].hitCount = (selfLimbDamage[limb].hitCount or 0) + 1
+	local oldDmg = selfLimbDamage[limb].damage
 	selfLimbDamage[limb].damage = selfLimbDamage[limb].damage + num
 
-	-- Cap at 100
-	if selfLimbDamage[limb].damage > 100 then
+	-- Per-hit cap: single hit can't push past 100%, subsequent hits stack to 200%
+	if oldDmg < 100 and selfLimbDamage[limb].damage > 100 then
 		selfLimbDamage[limb].damage = 100
+	elseif selfLimbDamage[limb].damage > 200 then
+		selfLimbDamage[limb].damage = 200
 	end
 
 	-- Reset timer (180s auto-decay)
@@ -479,7 +491,9 @@ function ataxia_updateSelfLimbWindow()
 		local status = ataxia_selfLimbStatus(limb)
 		if status then
 			local color
-			if status.broken then
+			if status.damage > 100 then
+				color = "firebrick"
+			elseif status.broken then
 				color = "dark_red"
 			elseif status.threshold == "critical" then
 				color = "red"
@@ -493,7 +507,10 @@ function ataxia_updateSelfLimbWindow()
 
 			-- Status indicator
 			local indicator = ""
-			if status.broken then
+			if status.damage > 100 then
+				local restores = math.ceil(status.damage / 100)
+				indicator = string.format(" <firebrick>[%dx REST]", restores)
+			elseif status.broken then
 				indicator = " <dark_red>BROKEN"
 			elseif status.threshold == "critical" then
 				indicator = " <red>[!!]"

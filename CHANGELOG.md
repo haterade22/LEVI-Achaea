@@ -2,6 +2,140 @@
 
 ---
 
+## 2026-03-16 — Tekura break guards + kai mode config
+
+### Fixed: TK6 parry bypass breaking limbs during PREP
+
+When only 1 unprepped limb remained and it was parried, `buildParryBypassAttack()` sent two punches to the same limb with no break prevention. If `currentDmg + 2*punchDmg >= 100`, the limb broke prematurely instead of getting prepped.
+
+**Root cause:** The parry bypass path short-circuited before the main `simDmg`-based break prevention logic.
+
+**Fix:** Added break guard — checks if two punches would break the limb; if so, uses 1 real punch + overflow/filler for the 2nd slot.
+
+### Fixed: TK6 raze breaking torso during PREP
+
+Rebounding/shield raze used hardcoded `rhk hkp hkp`, which puts 2x punch damage on torso. If torso was already prepped (86%+), this would break it.
+
+**Fix:** New `safeRazePunches()` helper iterates all limbs with simulated damage to find safe punch targets during PREP phase. Falls back to `jbp` fillers when no safe targets exist.
+
+### Fixed: Legacy TKD had zero break guards in all prep builders
+
+The legacy 3-limb system (`tekura` namespace) had `wouldBreakLimb()` defined but never used it in combo builders:
+
+- `buildTorsoPrepAttack()`: `sdk hkp hkp` (53% per combo) would break torso on the 2nd combo. Added simulated damage tracking per attack slot.
+- `buildLegPrepAttack()`: `snk focus hfp focus hfp other` could break focus leg if > 61%. Added full simDmg approach with kick/punch redirect to safe targets.
+- `buildTorsoBreakAttack()`: Parry fallback sent `swk hfp left hfp right` which broke prepped legs. Changed to `swk hkp hkp;hrs` (sweep prones target, then break torso as intended).
+
+### Added: Kai mode configuration for TK6
+
+New `tekura6.config.kaiMode` setting (`"surge"` or `"cripple"`) controls which kai ability is used when dismounting a mounted target during parry bypass.
+
+- `zz` (First Attack) sets `kaiMode = "surge"` — 31 kai, 3.2s eq, dismount only
+- `vv` (Fourth Attack) sets `kaiMode = "cripple"` — 41 kai, 4.0s eq, dismount + level 1 breaks all limbs
+
+**Files:** `tekura/002_Tekura_6Limb_Offense.lua`, `tekura/001_Tekura_Offense.lua`, `152_First_Attack_(All_Classes).lua`, `153_Fourth_Attack_(All_Classes).lua`
+
+---
+
+## 2026-03-16 — Jester bashing + mob damage tracking DB (v4.7.12)
+
+### New: Mob Damage Tracking Database
+
+SQLite-backed system that records non-critical damage dealt to mobs, tracking min/max damage per class, primary stat value, and mob name.
+
+- Crit trigger sets a flag; damage trigger skips recording when flag is set
+- Uses existing class-to-stat mapping (e.g., Serpent→dex, Magi→int)
+- Records update in-place: min/max damage and hit count per unique (class, stat, mob) combo
+- Displayed live in the limb counter window during bashing (below DPS stats)
+- Queryable via `ataxiadmg` alias with filtering, deletion, and reset
+
+**New Files:**
+- `basher/007_Mob_Damage_DB.lua` — DB schema, class-stat mapping, record/display/delete/reset
+- `aliases/.../zdata/003_(ataxiaDmg).lua` — `ataxiadmg` alias
+
+**Modified Files:**
+- `334_Crits.lua` — sets `bashStats.lastHitWasCrit` flag
+- `350_Damage_Dealt.lua` — records non-crit hits via `ataxia.data.db.recordMobDamage()`
+- `001_Limb_Counter_Window.lua` — shows mob damage stats in `tarc` window
+
+**Commands:**
+| Command | Purpose |
+|---------|---------|
+| `ataxiadmg` | Show all records |
+| `ataxiadmg <class>` | Filter by class |
+| `ataxiadmg <mob/area>` | Filter by mob name or area |
+| `ataxiadmg delete <filter>` | Delete matching records |
+| `ataxiadmg reset` | Clear all records |
+
+### Improved: Jester Bashing
+
+- Auto-wields blackjack + shield before every attack
+- Uses `gallowshumour` instead of `bop` when mob HP drops below 50%
+
+**File:** `basher/002_Class_Bashing.lua`
+
+---
+
+## 2026-03-16 — DWC weapon config fix + combined DSL party callouts (v4.7.12)
+
+### Fixed: DWC systems not wielding configured weapons after login
+
+All 3 DWC systems (vivisect, 2-limb, group lock) initialized their weapon config at script load time, before `ataxia_loadSettings()` ran. This caused `ataxia.settings.weapons` to be `nil`, falling back to the generic type name `"scimitar"` instead of the actual weapon ID (e.g., `scimitar405398`). Result: `wield right scimitar;wield left scimitar` tried to wield the same weapon in both hands, leaving one hand empty and failing DSL/RSL with "You must be wielding two scimitars or battleaxes."
+
+Additionally, `ataxia setup weapons set` and `ataxia setup weapons confirm` only synced `infernalDWC.config` — the group lock and 2-limb configs were never updated.
+
+**Fix:**
+- Added `refreshWeapons()` to all 3 DWC namespaces, registered on `"ataxia system loaded"` event to reload weapon IDs from `ataxia.settings.weapons` after settings load
+- Extended weapon sync in setup wizard (`020_Setup_Wizard.lua`) and weapon detect confirm (`023_Weapon_Detect.lua`) to also update `infernalGroupLock.config` and `infernalDWC2L.config`
+
+**Files:** `dwc/001_Infernal_DWC_Vivisect.lua`, `dwc/002_Infernal_Group_Lock.lua`, `dwc/002_Infernal_DWC_Vivisect_2L.lua`, `020_Setup_Wizard.lua`, `023_Weapon_Detect.lua`
+
+### Fixed: DSL party callouts now on a single line
+
+DSL (double slash) attacks send two venoms — one per weapon hit. Each hit's venom confirmation trigger independently sent a separate party message, producing two lines:
+```
+(Party): You say, "Pharaus: paralysis."
+(Party): You say, "Pharaus: asthma."
+```
+
+Added `dslPartyRelay()` helper function that defers hit 1's callout and combines it with hit 2 into a single message:
+```
+(Party): You say, "Pharaus: paralysis asthma"
+```
+
+**Files:** `017_Affliction_Management.lua` (new `dslPartyRelay` function), all 9 `double_slash/` trigger files (001–006, 008–010)
+
+---
+
+## 2026-03-16 — Fix combatQueue nil crash + serpent improvements (v4.7.11)
+
+### Fixed: `combatQueue()` crash when pressing `xx` before settings load
+
+Pressing `xx` (Second Attack alias) before `ataxia_loadSettings()` completes caused:
+```
+attempt to index field 'use' (a nil value)
+```
+`ataxia.settings.use` was nil because the queueing functions accessed `.use.parry` without nil guards. Same issue existed in `depthswalkerQueue()`.
+
+**Fix:** Added nil guards matching the existing defensive pattern from `010_Prompt_Running.lua`:
+```lua
+if ataxia.settings and ataxia.settings.use and ataxia.settings.use.parry ...
+```
+
+**File:** `003_Queueing_Related.lua` (lines 54, 84)
+
+### Improved: Serpent hypno lock suggestions skip already-applied affs
+
+`selectHypnoLockSuggestions()` now filters out afflictions the target already has, avoiding wasted hypnosis stacks.
+
+### Improved: Serpent impatience delivery condition
+
+Added `anorexia + no focus balance` as a valid condition for impatience delivery via Impulse, expanding the window for lock completion.
+
+**File:** `002_Serpent_Offense.lua`
+
+---
+
 ## 2026-03-16 — Fix deepMerge dropping settings sub-tables on load (v4.7.5)
 
 ### Fixed: `ataxia.settings.defences` (and all other settings sub-tables) nil after login
