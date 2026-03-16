@@ -179,6 +179,24 @@ function ataxia_loadSettings()
 	else
     mergeLoad(ataxia_file, ataxia)
   end
+
+	-- Self-healing: ensure critical settings sub-tables exist after load
+	-- (protects against corrupted save files missing these keys)
+	ataxia.settings = ataxia.settings or {}
+	if not ataxia.settings.defences then
+		ataxia.settings.defences = { current = "", defup = {}, keepup = {} }
+	end
+	ataxia.settings.have = ataxia.settings.have or {}
+	ataxia.settings.use = ataxia.settings.use or {}
+	ataxia.settings.sipping = ataxia.settings.sipping or {}
+	ataxia.settings.precache = ataxia.settings.precache or {}
+	ataxia.settings.highlighting = ataxia.settings.highlighting or {}
+	ataxia.settings.prompt = ataxia.settings.prompt or {}
+	ataxia.settings.raid = ataxia.settings.raid or {}
+	ataxia.settings.fishing = ataxia.settings.fishing or {}
+	ataxia.settings.weapons = ataxia.settings.weapons or {}
+	ataxia.settings.user = ataxia.settings.user or {}
+
 	ataxia_Echo("I suppose I can lend you my aid. Go and annihilate our foes.")
 	ataxia.loaded = true
 

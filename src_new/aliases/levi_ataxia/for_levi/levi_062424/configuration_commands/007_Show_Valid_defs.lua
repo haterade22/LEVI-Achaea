@@ -14,9 +14,13 @@ packageName: ''
 ]]--
 
 if not ataxia.settings or not ataxia.settings.defences then return end
+local cur = ataxia.settings.defences.current
+if not cur or cur == "" or not ataxia.settings.defences.defup[cur] then
+	ataxiaEcho("No active profile. Create one with: aconfig profile create <name>, then: defswitch <name>")
+	return
+end
 buildDefsTable()
 sortedDefenceShow()
-local cur = ataxia.settings.defences.current
 local defTable = {}
 local ourClass = gmcp.Char.Status.class:lower()
 
