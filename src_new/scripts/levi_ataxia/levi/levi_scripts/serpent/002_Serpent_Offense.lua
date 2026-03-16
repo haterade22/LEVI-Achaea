@@ -669,12 +669,21 @@ local function pickVenom(exclude)
     local hasAst = haveAff("asthma")
 
     if not haveAff("paralysis") and exclude ~= "curare" then return "curare" end
-    if not hasWea and exclude ~= "vernalius" then return "vernalius" end
-    if not hasAst and hasWea and exclude ~= "kalmia" then return "kalmia" end
+
+    if wantClumsiness() then
+        -- clumsiness > asthma > weariness
+        if not hasClu and exclude ~= "xentio" then return "xentio" end
+        if not hasAst and exclude ~= "kalmia" then return "kalmia" end
+        if not hasWea and exclude ~= "vernalius" then return "vernalius" end
+    else
+        -- asthma > weariness (clumsiness is wasted on these classes)
+        if not hasAst and exclude ~= "kalmia" then return "kalmia" end
+        if not hasWea and exclude ~= "vernalius" then return "vernalius" end
+    end
+
     if not haveAff("darkshade") and hasLightwall() and exclude ~= "darkshade" then return "darkshade" end
     if not haveAff("slickness") and hasAst and exclude ~= "gecko" then return "gecko" end
     if slikeGateMet() and exclude ~= "slike" then return "slike" end
-    if not hasClu and wantClumsiness() and exclude ~= "xentio" then return "xentio" end
     if exclude ~= "curare" then return "curare" end
     return "vernalius"
 end
@@ -684,8 +693,8 @@ local function pickVenomRelapse(exclude)
     local hasAst = haveAff("asthma")
 
     if not haveAff("paralysis") and exclude ~= "curare" then return "curare" end
+    if not hasAst and exclude ~= "kalmia" then return "kalmia" end
     if not hasWea and exclude ~= "vernalius" then return "vernalius" end
-    if not hasAst and hasWea and exclude ~= "kalmia" then return "kalmia" end
     if not haveAff("slickness") and hasAst and exclude ~= "gecko" then return "gecko" end
     if not haveAff("anorexia") and exclude ~= "slike" then return "slike" end
     if exclude ~= "curare" then return "curare" end
@@ -1095,8 +1104,8 @@ function selectVenoms()
         if not haveAff("paralysis") then
             v1 = "curare"
         elseif not haveAff("impatience") then
-            if not haveAff("weariness") then v1 = "vernalius"
-            elseif not haveAff("asthma") then v1 = "kalmia"
+            if not haveAff("asthma") then v1 = "kalmia"
+            elseif not haveAff("weariness") then v1 = "vernalius"
             else v1 = pickVenom(nil) end
         elseif not haveAff("slickness") and haveAff("asthma") then
             v1 = "gecko"
@@ -1116,8 +1125,8 @@ function selectVenoms()
         if not haveAff("paralysis") then
             v1 = "curare"
         elseif not haveAff("impatience") then
-            if not haveAff("weariness") then v1 = "vernalius"
-            elseif not haveAff("asthma") then v1 = "kalmia"
+            if not haveAff("asthma") then v1 = "kalmia"
+            elseif not haveAff("weariness") then v1 = "vernalius"
             else v1 = pickVenom(nil) end
         else
             v1 = pickVenom(nil)
