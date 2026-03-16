@@ -276,15 +276,18 @@ function ataxiaBasher_jesterBashing()
 	local brage = ataxiaBasher_assembleBattlerage()
 	local raze = ataxiaBasher.battlerage.Jester.raze
 	local wield = "wield blackjack;wield shield"..sp
+	local rawhp = (gmcp.IRE.Target.Info.hpperc or "100"):gsub("%%", "")
+	local mobhp = tonumber(rawhp) or 100
+	local attack = (mobhp < 50) and "gallowshumour " or "bop "
 
 	if ataxiaBasher.shielded then
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-			command = wield..raze..sp.."bop "..target
+			command = wield..raze..sp..attack..target
 		else
 			command = wield.."badjoke "..target..sp..brage
 		end
 	else
-		command = wield..brage..sp.."bop "..target
+		command = wield..brage..sp..attack..target
 	end
 
 	return command

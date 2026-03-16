@@ -47,6 +47,8 @@ if type(target) == "number" and ataxiaBasher.enabled then
 	end
 end
 
+bashStats.lastHitWasCrit = true
+
 if not ataxiaTemp.ignoreCrits then
 	for mult, level in pairs(critTypes) do
 		if critFind:find(level) then

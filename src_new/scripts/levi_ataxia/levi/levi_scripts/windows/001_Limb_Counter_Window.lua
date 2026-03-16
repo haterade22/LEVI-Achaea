@@ -194,6 +194,26 @@ function tarc.write()
         tarc:cecho("   <white>Avg:  <yellow>" .. sDPS .. "/s<reset>\n")
         tarc:cecho("   <white>Total:<green> " .. bashStats.totalDamage .. "<reset>\n")
       end
+      -- Mob damage records for current target
+      if secondTarget and secondTarget ~= "" and ataxia.data and ataxia.data.db and ataxia.data.db.mobdmgdb then
+        local class = gmcp.Char.Status.class or ""
+        local statName, statValue = ataxia.data.db.getPrimaryStat()
+        local stat = statName .. " " .. statValue
+        local rows = db:fetch(ataxia.data.db.mobdmgdb.hits,
+          db:AND(
+            db:eq(ataxia.data.db.mobdmgdb.hits.class, class),
+            db:eq(ataxia.data.db.mobdmgdb.hits.stat, stat),
+            db:eq(ataxia.data.db.mobdmgdb.hits.mob, secondTarget)
+          )
+        )
+        if rows and #rows > 0 then
+          local row = rows[1]
+          tarc:cecho("\n   <cyan>--- Mob Dmg ---<reset>\n")
+          tarc:cecho("   <white>Min:  <yellow>" .. row.min_damage .. "<reset>\n")
+          tarc:cecho("   <white>Max:  <green>" .. row.max_damage .. "<reset>\n")
+          tarc:cecho("   <white>Hits: <purple>" .. row.hit_count .. "<reset>\n")
+        end
+      end
     end
   
    else 

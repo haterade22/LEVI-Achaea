@@ -44,4 +44,12 @@ if bashStats then
   bashStats.currentBalanceDamage = (bashStats.currentBalanceDamage or 0) + amount
   if not bashStats.damageByType then bashStats.damageByType = {} end
   bashStats.damageByType[dtype] = (bashStats.damageByType[dtype] or 0) + amount
+
+  -- Record non-crit damage to mob damage DB
+  if not bashStats.lastHitWasCrit then
+    if ataxia.data and ataxia.data.db and ataxia.data.db.recordMobDamage then
+      ataxia.data.db.recordMobDamage(amount)
+    end
+  end
+  bashStats.lastHitWasCrit = false
 end
