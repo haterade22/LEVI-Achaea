@@ -60,7 +60,5 @@ if isTargeted(person) then
       ataxiaTemp.parriedLimb = ataxiaTemp.lastLimbHit
       cecho("<green> -> "..ataxiaTemp.parriedLimb)
     end 
-	else
-		smoteLimb(multimatches[1][3])
 	end
 end

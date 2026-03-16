@@ -49,7 +49,6 @@ if isTargeted(person) then
 			tarAffed("blackout")
 			tempTimer(3.5, [[erAff("blackout")]])
 		end
-		psion_hitLimb("head")
 		send("contemplate "..target,false)		
 		moveCursorEnd()	
 	end

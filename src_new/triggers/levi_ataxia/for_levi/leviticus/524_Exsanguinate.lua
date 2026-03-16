@@ -50,8 +50,6 @@ if isTargeted(person) then
 		else
 			tarAffed("nausea")
 		end
-		psion_hitLimb("torso")
-	
 		send("contemplate "..target,false)		
 		moveCursorEnd()
 		psion_bleedAdd("30")	

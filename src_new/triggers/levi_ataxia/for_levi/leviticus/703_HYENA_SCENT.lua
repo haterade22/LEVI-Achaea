@@ -48,7 +48,6 @@ if type(target) == "string" then
 		deleteLine()
 		cecho("\n<red> +[<NavajoWhite>"..target.."<red>] HP: <SeaGreen>[<green>"..string.rep("=", hpb)..string.rep(" ", 20-hpb).."<SeaGreen>] <red>"..php.."% -- <NavajoWhite>"..hp.."/"..mhp.." ")
 		if ataxia_isClass("magi") then
-			magi_setBreakpoint(mhp)
 			magi_setDestroy(php)
 		end
     

@@ -52,8 +52,6 @@ if isTargeted(person) then
 		else
 			tarAffed("stupidity", "prone")
 		end
-		psion_hitLimb("head")
-	
 		send("contemplate "..target,false)		
 		moveCursorEnd()	
 		

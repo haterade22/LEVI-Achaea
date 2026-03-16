@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-03-16 — TK6 Parry avoidance fix + attack spread
+
+### Fixed: PREP phase ignoring known parried limb
+
+`buildPrepAttack()` used `getEffectiveParry()` which checks `canTargetParry()` (prone/paralysis). If V3/V1 affliction tracking had stale prone data, `getEffectiveParry()` returned `"none"` — disabling all parry avoidance. The system would then hit the known-parried limb in all 3 attack slots, wasting entire combos.
+
+**Fix:** PREP now uses `getParried()` (raw parry data) instead of `getEffectiveParry()`. During PREP there's zero cost to always avoiding the parried limb — we just prep a different limb. Debug echo also uses raw parry so PARRY status always displays.
+
+**Files:** `tekura/002_Tekura_6Limb_Offense.lua` — `buildPrepAttack()`, `dispatch.run()` echo
+
+### Added: Attack spread across limbs during PREP
+
+Previously `findSafeLimb()` always picked the lowest-damage limb, causing all 3 attacks (kick + 2 punches) to stack on the same limb when it was far behind. Opponent exploited this by parrying that one limb.
+
+**Fix:** Added `skipLimb` parameter to `findSafeLimb()`. Kick selects normally, punch1 skips the kick limb, punch2 skips the punch1 limb. Skip is soft — if no alternative exists, the skipped limb is used via fallback passes. This spreads attacks across 2-3 different limbs per combo, so opponent can only parry 1 of 3.
+
+`findSafeLimb()` now has 6 passes: non-parried non-skipped → non-parried skipped → parried (for both unprepped and overflow pools).
+
+**Files:** `tekura/002_Tekura_6Limb_Offense.lua` — `findSafeLimb()`, `buildPrepAttack()` punch selection
+
+---
+
 ## 2026-03-16 — Removed legacy tLimbs system, consolidated on lb
 
 ### Removed: tLimbs limb tracking system

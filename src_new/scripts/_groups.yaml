@@ -617,7 +617,6 @@ groups:
         script: wildernessLocations = wildernessLocations or {}
         directory: levi_ataxia/levi/levi_scripts/wildwalker
   - name: Leviticus
-    directory: levi_ataxia/levi/levi_scripts/leviticus
     children:
     - name: BARD
       directory: levi_ataxia/levi/levi_scripts/bard
@@ -627,12 +626,8 @@ groups:
       directory: levi_ataxia/levi/levi_scripts/defence
     - name: MONK
       children:
-      - name: SCYTHE
-        directory: levi_ataxia/levi/levi_scripts/scythe
       - name: Tekura
         directory: levi_ataxia/levi/levi_scripts/tekura
-      - name: BACKBREAKER
-        directory: levi_ataxia/levi/levi_scripts/backbreaker
       - name: SHIKUDO
         children:
         - name: TELEPATHY
@@ -692,24 +687,10 @@ groups:
       directory: levi_ataxia/levi/levi_scripts/global_script
     - name: Mage
       directory: levi_ataxia/levi/levi_scripts/mage
-    - name: EARTH LORD
-      directory: levi_ataxia/levi/levi_scripts/earth_lord
     - name: INFERNAL
       children:
-      - name: I SNB
-        directory: levi_ataxia/levi/levi_scripts/i_snb
-      - name: Infernal 2H
-        children:
-        - name: TWO HANDED
-          directory: levi_ataxia/levi/levi_scripts/two_handed
       - name: DWC
         directory: levi_ataxia/levi/levi_scripts/dwc
-      - name: INFERNAL
-        children:
-        - name: TWO HANDED
-          directory: levi_ataxia/levi/levi_scripts/two_handed
-        - name: S n B
-          directory: levi_ataxia/levi/levi_scripts/s_n_b
       - name: DWB
         directory: levi_ataxia/levi/levi_scripts/dwb
     - name: Shikudo Script - Levi

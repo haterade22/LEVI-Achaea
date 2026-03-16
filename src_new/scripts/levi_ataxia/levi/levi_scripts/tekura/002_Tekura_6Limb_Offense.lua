@@ -303,8 +303,11 @@ end
 -- PREP: Dynamic combo builder with parry avoidance and overflow prevention
 -- RULE: Never break a limb before all 6 are prepped.
 -- Priority: non-parried unprepped > parried unprepped > non-parried prepped (safe overflow) > parried prepped
+-- SPREAD: Kick and punches target different limbs when possible (opponent can only parry 1 of 3)
 function tekura6.dispatch.buildPrepAttack()
-  local parried = tekura6.getEffectiveParry()
+  -- Use raw parry (not effective parry) during PREP — always avoid the parried limb
+  -- regardless of prone/paralysis tracking. Zero cost: we just prep a different limb instead.
+  local parried = tekura6.getParried()
   local unprepped = tekura6.getUnpreppedLimbs()
   local kickDmg = tekura6.state.kickDamage
   local punchDmg = tekura6.state.punchDamage
@@ -338,7 +341,8 @@ function tekura6.dispatch.buildPrepAttack()
   -- Helper: find the best safe limb for an attack of given damage
   -- Searches preferred list first, then fallback list
   -- Within each list: non-parried first, then parried
-  local function findSafeLimb(preferred, fallback, atkDmg)
+  -- skipLimb: optional limb to deprioritize (for attack spread)
+  local function findSafeLimb(preferred, fallback, atkDmg, skipLimb)
     -- Sort both lists by simulated damage ascending (lowest first)
     -- Tiebreaker: prefer right limbs when damage is equal (right gets prepped last,
     -- so restoration heals left first and right stays broken longer)
@@ -352,25 +356,41 @@ function tekura6.dispatch.buildPrepAttack()
     table.sort(preferred, limbSort)
     table.sort(fallback, limbSort)
 
-    -- Pass 1: non-parried preferred (unprepped)
+    -- Pass 1: non-parried, non-skipped preferred (best targets)
     for _, limb in ipairs(preferred) do
-      if limb ~= parried and (simDmg[limb] or 0) + atkDmg < breakAt then
+      if limb ~= parried and limb ~= skipLimb and (simDmg[limb] or 0) + atkDmg < breakAt then
         return limb
       end
     end
-    -- Pass 2: parried preferred (better to waste than break)
+    -- Pass 2: non-parried, skipped preferred (spread failed, same limb is ok)
+    if skipLimb then
+      for _, limb in ipairs(preferred) do
+        if limb ~= parried and limb == skipLimb and (simDmg[limb] or 0) + atkDmg < breakAt then
+          return limb
+        end
+      end
+    end
+    -- Pass 3: parried preferred (better to waste on parried than break)
     for _, limb in ipairs(preferred) do
       if limb == parried and (simDmg[limb] or 0) + atkDmg < breakAt then
         return limb
       end
     end
-    -- Pass 3: non-parried overflow (prepped, safe waste)
+    -- Pass 4: non-parried, non-skipped overflow (prepped, safe waste)
     for _, limb in ipairs(fallback) do
-      if limb ~= parried and (simDmg[limb] or 0) + atkDmg < breakAt then
+      if limb ~= parried and limb ~= skipLimb and (simDmg[limb] or 0) + atkDmg < breakAt then
         return limb
       end
     end
-    -- Pass 4: parried overflow
+    -- Pass 5: non-parried, skipped overflow
+    if skipLimb then
+      for _, limb in ipairs(fallback) do
+        if limb ~= parried and limb == skipLimb and (simDmg[limb] or 0) + atkDmg < breakAt then
+          return limb
+        end
+      end
+    end
+    -- Pass 6: parried overflow
     for _, limb in ipairs(fallback) do
       if limb == parried and (simDmg[limb] or 0) + atkDmg < breakAt then
         return limb
@@ -390,16 +410,23 @@ function tekura6.dispatch.buildPrepAttack()
     kickStr = "rhk"
   end
 
-  -- PUNCHES: Find two safe punch targets, then order with JBP first (disables parry for next punch)
+  -- PUNCHES: Find two safe punch targets, spread across different limbs than kick
+  -- skipLimb = kickLimb forces punches to different limbs when alternatives exist
   local punchA, punchB  -- raw targets (nil = filler)
 
-  local punchALimb = findSafeLimb(unprepCandidates, overflowCandidates, punchDmg)
+  local punchALimb = findSafeLimb(unprepCandidates, overflowCandidates, punchDmg, kickLimb)
   if punchALimb then
     punchA = tekura6.LIMB_ATTACKS[punchALimb].punch
     simDmg[punchALimb] = (simDmg[punchALimb] or 0) + punchDmg
   end
 
-  local punchBLimb = findSafeLimb(unprepCandidates, overflowCandidates, punchDmg)
+  -- Second punch also tries to avoid kick limb AND first punch limb for max spread
+  local skipForPunchB = kickLimb
+  if punchALimb and punchALimb ~= kickLimb then
+    -- First punch already spread from kick — try to spread from punch1 too
+    skipForPunchB = punchALimb
+  end
+  local punchBLimb = findSafeLimb(unprepCandidates, overflowCandidates, punchDmg, skipForPunchB)
   if punchBLimb then
     punchB = tekura6.LIMB_ATTACKS[punchBLimb].punch
   end
@@ -555,8 +582,8 @@ function tekura6.dispatch.run()
   local phase = tekura6.dispatch.getPhase()
   local phaseName = tekura6.dispatch.getPhaseName(phase)
 
-  -- Get parry status
-  local parried = tekura6.getEffectiveParry()
+  -- Get parry status (raw parry — always show what opponent is parrying)
+  local parried = tekura6.getParried()
 
   -- Debounced echo (0.3s guard prevents spam on rapid mashing)
   if tekura6.config.debugEcho and tekura6.shouldEcho() then

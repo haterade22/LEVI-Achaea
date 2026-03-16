@@ -59,7 +59,6 @@ if isTargeted(person) then
 			end
 		end
 
-		psion_hitLimb(multimatches[1][2].." leg")
 		send("contemplate "..target,false)		
 		moveCursorEnd()
 		psion_bleedAdd("20")	
