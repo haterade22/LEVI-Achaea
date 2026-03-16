@@ -62,34 +62,34 @@ if ataxiaTemp.hitCount == 1 then
     aff1 = "weariness"
     aff3 = "paranoia"
     if partyrelay and not ataxia.afflictions.aeon then
-      send("pt " ..target..": " ..aff1.. " " ..aff3)
+      dslPartyRelay(aff1 .. " " .. aff3)
     end
   elseif envenomList[1] == "torment" then
     tarAffed("healthleech")
     aff1 = "healthleech"
     aff3 = nil
     if partyrelay and not ataxia.afflictions.aeon then
-      send("pt " ..target..": " ..aff1)
+      dslPartyRelay(aff1)
     end
   elseif envenomList[1] == "torture" then
     tarAffed("haemophilia")
     aff1 = "haemophilia"
     aff3 = nil
     if partyrelay and not ataxia.afflictions.aeon then
-      send("pt " ..target..": " ..aff1)
+      dslPartyRelay(aff1)
     end
   elseif envenomList[1] == "punishment" then
     aff1 = "punishment"
     aff3 = nil
     if partyrelay and not ataxia.afflictions.aeon then
-      send("pt " ..target..": " ..aff1)
+      dslPartyRelay(aff1)
     end
   else
      aff1 = venom_to_aff(envenomList[1])
      if aff1 then
        tarAffed(aff1)
        if partyrelay and not ataxia.afflictions.aeon then
-        send("pt " ..target..": " ..aff1)
+        dslPartyRelay(aff1)
        end
      end
   end
@@ -102,14 +102,14 @@ elseif ataxiaTemp.hitCount == 2 then
     aff2 = "weariness"
     aff3 = "paranoia"
     if partyrelay and not ataxia.afflictions.aeon then
-      send("pt " ..target..": " ..aff2.. " " ..aff3)
+      dslPartyRelay(aff2 .. " " .. aff3)
     end
   elseif envenomListTwo[1] == "torment" then
     tarAffed("healthleech")
     aff2 = "healthleech"
     aff3 = nil
     if partyrelay and not ataxia.afflictions.aeon then
-      send("pt " ..target..": " ..aff2)
+      dslPartyRelay(aff2)
     end
 
   elseif envenomListTwo[1] == "torture" then
@@ -117,20 +117,20 @@ elseif ataxiaTemp.hitCount == 2 then
     aff2 = "haemophilia"
     aff3 = nil
     if partyrelay and not ataxia.afflictions.aeon then
-      send("pt " ..target..": " ..aff2)
+      dslPartyRelay(aff2)
     end
   elseif envenomListTwo[1] == "punishment" then
     aff2 = "punishment"
     aff3 = nil
     if partyrelay and not ataxia.afflictions.aeon then
-      send("pt " ..target..": " ..aff2)
+      dslPartyRelay(aff2)
     end
   else
      aff2 = venom_to_aff(envenomListTwo[1])
      if aff2 then
        tarAffed(aff2)
        if partyrelay and not ataxia.afflictions.aeon then
-        send("pt " ..target..": " ..aff2)
+        dslPartyRelay(aff2)
        end
      end
   end

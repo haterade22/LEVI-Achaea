@@ -156,6 +156,20 @@ function tarGained(event, affList )
 end
 registerAnonymousEventHandler("tar afflicted", "tarGained")
 
+-- DSL party relay: defers hit 1 callout and combines with hit 2 into a single line
+function dslPartyRelay(affStr)
+  if not partyrelay or (ataxia.afflictions and ataxia.afflictions.aeon) then return end
+  if ataxiaTemp.hitCount == 1 then
+    ataxiaTemp.pendingPtAff = affStr
+  else
+    local parts = {}
+    if ataxiaTemp.pendingPtAff then table.insert(parts, ataxiaTemp.pendingPtAff) end
+    table.insert(parts, affStr)
+    send("pt " .. target .. ": " .. table.concat(parts, " "))
+    ataxiaTemp.pendingPtAff = nil
+  end
+end
+
 function erAff(what)
     -- Special numeric tracking
     if what == "haemophilia" then
