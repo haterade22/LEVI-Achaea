@@ -177,8 +177,6 @@ itemCatalog.kb = {
   ["oval mask"]                         = { type="artefact", category="utility", power="lifevision", credits=350, effect="See health percentages of everyone in room" },
   ["hood of the sphinx"]                = { type="artefact", category="utility", power="sphinx", credits=400, effect="FULLSENSE (see all adventurers in area) + expanded FARSEE" },
   ["glittering fishscale tunic"]        = { type="artefact", category="utility", power="breathe_underwater", credits=400, effect="Permanent underwater breathing" },
-  ["miniature toolkit"]                 = { type="artefact", category="utility", power="trapmaster", credits=500, effect="TRAPS and DISARM abilities" },
-
   -- Class Switch
   ["stone of the lesser lorewarden"]    = { type="artefact", category="utility", power="class_switch_reduction", tier=1, credits=250, effect="Reduced class switch cooldown" },
   ["stone of lesser lorewarden"]        = { type="artefact", category="utility", power="class_switch_reduction", tier=1, credits=250, effect="Reduced class switch cooldown" },
@@ -273,6 +271,19 @@ itemCatalog.kb = {
   ["shar'ilian lightspire"]             = { type="artefact", category="class_specific", power="illusion", tier=2, credits=700, effect="1000 char limit, color, area/continent illusions" },
   ["staff of illusion"]                 = { type="artefact", category="class_specific", power="illusion", tier=3, credits=1400, effect="2000 char limit, full features" },
 
+  -- Jester
+  ["miniature toolkit"]                 = { type="artefact", category="class_specific", power="trapmaster", credits=500, effect="Access TRAPS/DISARM; Jester/Sentinel DISARM never fails" },
+  ["prankster's blackjack"]             = { type="artefact", category="class_specific", power="jester_blackjack", tier=1, credits=350, effect="Artefact blackjack 66/220/220" },
+  ["carnivalis blackjack"]              = { type="artefact", category="class_specific", power="jester_blackjack", tier=2, credits=800, effect="Artefact blackjack 69/230/230" },
+  ["pandora's blackjack"]               = { type="artefact", category="class_specific", power="jester_blackjack", tier=3, credits=1600, effect="Artefact blackjack 72/240/240" },
+  ["small wheel of nimickian farmstead cheese"] = { type="artefact", category="class_specific", power="mouse_lure", tier=1, credits=100, effect="+1 suicide mice capacity" },
+  ["wedge of shamtotan cheddar"]        = { type="artefact", category="class_specific", power="mouse_lure", tier=2, credits=300, effect="+2 suicide mice capacity" },
+  ["compact chunk of creamy combatia cheese"] = { type="artefact", category="class_specific", power="mouse_lure", tier=3, credits=500, effect="+3 suicide mice capacity" },
+  ["gloves of serendipity"]             = { type="artefact", category="class_specific", power="bomb_duplication", credits=250, effect="Occasionally duplicate a bomb when constructing" },
+  ["quill of inscribing"]               = { type="artefact", category="class_specific", power="faster_inscribe", credits=250, effect="2x tarot inscribe speed, 40 at a time (up from 20)" },
+  ["golden cube"]                       = { type="artefact", category="class_specific", power="jester_props", credits=350, effect="Removes gold cost of Jester PROPS" },
+  ["mote in a jar"]                     = { type="artefact", category="class_specific", power="tenacious_tarot", credits=450, effect="Increased Sun and Tower tarot duration" },
+
   -- =========================================================================
   -- SHOP OF WONDERS (Mayan Crown items)
   -- =========================================================================
@@ -287,6 +298,32 @@ itemCatalog.kb = {
   ["cleverly packed tent"]              = { type="artefact", category="shop_of_wonders", power="regen_tent", effect="Assemble for increased wp/end regen" },
   ["obfuscated crystal vial"]           = { type="artefact", category="shop_of_wonders", power="daily_refill", effect="Refills sips daily, random fluid if empty" },
   ["glazed runic vial"]                 = { type="artefact", category="shop_of_wonders", power="bonus_elixirs", effect="Bonus elixirs (XP, crit, stats) for 12hr, 5 sips" },
+  ["album of preservation"]             = { type="artefact", category="shop_of_wonders", power="photo_album", effect="Eternally preserve up to 5 Obsidian disc images" },
+  ["pitted ankh"]                       = { type="artefact", category="shop_of_wonders", power="anti_chameleon", effect="Prevents chameleon when worn" },
+  ["badge of returning"]                = { type="artefact", category="shop_of_wonders", power="reset_reduction", effect="50% mount/pet reset time reduction (consumed on use)" },
+  ["massive war beetle"]                = { type="artefact", category="shop_of_wonders", power="war_mount", effect="Innately collared mount, returns after death" },
+  ["chain of black iron"]               = { type="artefact", category="shop_of_wonders", power="karma_boost", effect="Increased karma recovery from karmic items" },
+  ["bloodsteel chain"]                  = { type="artefact", category="shop_of_wonders", power="essence_boost", effect="Increased life essence daily recovery" },
+  ["chain of burnished gold"]           = { type="artefact", category="shop_of_wonders", power="devotion_boost", effect="Increased devotion daily recovery" },
+  ["clasp of vocal intensity"]          = { type="artefact", category="shop_of_wonders", power="wind_resist", effect="Voice not drowned out in blustery conditions" },
+  ["crest of the crafting council"]     = { type="artefact", category="shop_of_wonders", power="remote_design", effect="DESIGN SUBMIT/VIEW/LIST/pickup from anywhere" },
+  ["golden honeycomb"]                  = { type="artefact", category="shop_of_wonders", power="hive_boost", effect="HARVEST from grove hive twice as often" },
+  ["humgii-shaped deconstructor"]       = { type="artefact", category="shop_of_wonders", power="deconstruct", effect="DECONSTRUCT crafted items for ~50% commodities back" },
+  ["drop of yen-sorte's blood"]         = { type="artefact", category="shop_of_wonders", power="weapon_mastery", effect="Base mastery of all public weapon proficiencies (consumed)" },
+  ["stone flowerpot"]                   = { type="artefact", category="shop_of_wonders", power="flowers", effect="Grows 10 flowers/month, customisable" },
+  ["greater viewing glass"]             = { type="artefact", category="shop_of_wonders", power="view_equipment", effect="View person's location + worn equipment" },
+  ["chrono gyre"]                       = { type="artefact", category="shop_of_wonders", power="reset_delay", effect="WAVE over artefact to delay reset by 1 day" },
+  ["jar of silt"]                       = { type="artefact", category="shop_of_wonders", power="harbour_attune", effect="Charybdis tokens deposit at chosen harbour (24hr CD)" },
+  ["grisly carving knife"]              = { type="artefact", category="shop_of_wonders", power="ear_slice", effect="SLICE EAR FROM decapitated head for keepsake" },
+  ["maritime ledger"]                   = { type="artefact", category="shop_of_wonders", power="trade_info", effect="READ for current ship trading deals at ports" },
+  ["crude gut cord necklace"]           = { type="artefact", category="shop_of_wonders", power="trophy_necklace", effect="Thread heads/ears, 30 month decay" },
+  ["golden quill nib"]                  = { type="artefact", category="shop_of_wonders", power="tarot_copy", effect="50% chance to copy tarot inscription to blank card" },
+  ["shimmering tetracontakaidigonal prism"] = { type="artefact", category="shop_of_wonders", power="squint", effect="SQUINT around one corner (e.g. SQUINT SOUTH WEST)" },
+  ["blood-soaked record"]               = { type="artefact", category="shop_of_wonders", power="kill_record", effect="Record up to 50 adventurer kills with details" },
+  ["golden slingshot"]                  = { type="artefact", category="shop_of_wonders", power="firecrackers", effect="SLINGSHOT lit firecrackers, visible area-wide" },
+  ["bronze token of charybdis"]         = { type="artefact", category="shop_of_wonders", power="ship_token", effect="Halve SHIPRETURN time or free SHIP RESCUE ME (1/day)" },
+  ["petite ceramic urn"]                = { type="artefact", category="shop_of_wonders", power="spectral_mount", effect="RUB for 24hr spectral mount, ORDER GO HOME for travel" },
+  ["dwarven drinking horn"]             = { type="artefact", category="shop_of_wonders", power="totem_bypass", effect="DRINK for 30s totem/rune immunity (25min CD)" },
 
   -- =========================================================================
   -- PROMOTIONAL ITEMS

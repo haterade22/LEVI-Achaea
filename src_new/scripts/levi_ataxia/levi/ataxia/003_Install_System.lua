@@ -60,6 +60,32 @@ function ataxia_installSystem()
 	cecho("\n  <NavajoWhite>3. Add defences:        <green>defs valid <DimGrey>— shows clickable [D]efup/[K]eepup toggles")
 	cecho("\n  <NavajoWhite>4. View your profile:   <green>ashow defup")
 	cecho("\n  <DimGrey>  e.g.: aconfig profile create pvp\n")
+
+	-- Run catalog scan to detect artefacts and talismans
+	cecho("\n")
+	ataxiaEcho("Scanning artefacts, talismans, and special items to understand what you own...")
+	cecho("\n  <DimGrey>This helps the system know your artefact powers, talisman effects, and promo items.")
+	cecho("\n  <DimGrey>Results saved automatically. View anytime with: <green>catalog show\n")
+	tempTimer(2, function()
+		if itemCatalog and itemCatalog.startScan then
+			itemCatalog.startScan()
+		else
+			expandAlias("catalog scan")
+		end
+	end)
+
+	-- Auto-detect earrings
+	cecho("\n")
+	ataxiaEcho("Detecting earring locations for instant travel...")
+	cecho("\n  <DimGrey>Earrings let the system warp you to specific locations instantly.")
+	cecho("\n  <DimGrey>Results saved automatically. View with: <green>ataxia setup earrings\n")
+	tempTimer(4, function()
+		if leviSetup and leviSetup.earringAutoStart then
+			leviSetup.earringAutoStart()
+		else
+			expandAlias("ataxia setup earrings auto")
+		end
+	end)
 end
 
 function ataxia_updateApplied(_, name)
