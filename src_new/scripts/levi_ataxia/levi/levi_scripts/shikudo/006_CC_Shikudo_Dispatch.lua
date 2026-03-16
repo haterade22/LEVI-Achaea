@@ -1273,7 +1273,6 @@ function shikudo.dispatch()
   ataxia.settings.separator = ataxia.settings.separator or ";"
   ataxia.playersHere = ataxia.playersHere or {}
   ataxiaTemp = ataxiaTemp or {}
-  tLimbs = tLimbs or {H = 0, T = 0, LL = 0, RL = 0, LA = 0, RA = 0}
   tAffs = tAffs or {}
 
   -- Debug: Show what we have
@@ -1371,7 +1370,6 @@ end
 
 function shikudo.status()
   -- Initialize if missing
-  tLimbs = tLimbs or {H = 0, T = 0, LL = 0, RL = 0, LA = 0, RA = 0}
   tAffs = tAffs or {}
   ataxia = ataxia or {}
   ataxia.vitals = ataxia.vitals or {}

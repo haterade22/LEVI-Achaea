@@ -72,37 +72,32 @@ tarAffed("concussion")
 end
 
 
-local toDam, tar, limb
+local tar, limb
 
 if tonumber(matches[2]) then
-  toDam, tar, limb = tonumber(matches[2]), matches[3], matches[4]
+  tar, limb = matches[3], matches[4]
 else
-  toDam, tar, limb = tonumber(matches[3]), matches[2], matches[5]
+  tar, limb = matches[2], matches[5]
 end
-local toLimb = ataxia_shortLimb(limb)
 
 if not lastLimbAttack then echo("?") return end
 if isTargeted(tar) then
-  if ataxiaTables.limbData[lastLimbAttack] ~= toDam then
-    ataxia_updateLimbHit(lastLimbAttack, toDam)
-  end
-  ataxia_addLimbDamage(lastLimbAttack, limb)
-
   --Colour the line as per the highlighting option.
   if ataxia.settings.highlighting and ataxia.settings.highlighting.limbs then
+    local lbHits = lb[target] and lb[target].hits and lb[target].hits[limb] or 0
     selectString(line,1)
     if limbPrepped(limb, lastLimbAttack) then
       fg("red")
-    elseif tLimbs[toLimb] >= 80 then
+    elseif lbHits >= 80 then
       fg("orange")
-    elseif tLimbs[toLimb] >= 60 then
+    elseif lbHits >= 60 then
       fg("yellow")
-    elseif tLimbs[toLimb] >= 40 then
+    elseif lbHits >= 40 then
       fg("GreenYellow")
     else
       fg("powder_blue")
     end
-    cecho(" <purple>(<NavajoWhite>"..tLimbs[toLimb].."<purple>%)")
+    cecho(" <purple>(<NavajoWhite>"..lbHits.."<purple>%)")
   end
   
   if lastLimbAttack == "bmSlash" then

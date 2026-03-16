@@ -117,39 +117,9 @@ shikudo.maxKata = {
 }
 
 --------------------------------------------------------------------------------
--- LIMB DAMAGE TRACKING (from 002_Shikudo_Limb_Counter.lua)
+-- LIMB DAMAGE TRACKING
+-- NOTE: shikudo_addDamage() removed — lb.addHit() from triggers handles damage tracking
 --------------------------------------------------------------------------------
-
-function shikudo_addDamage(attack, limb)
-  local limbs = {
-    ["head"] = "H", ["torso"] = "T",
-    ["left leg"] = "LL", ["right leg"] = "RL",
-    ["left arm"] = "LA", ["right arm"] = "RA",
-  }
-  local l = limbs[limb]
-  if not l then return end
-
-  if not shikudo_limbDamage or not shikudo_limbDamage[attack] then
-    ataxiaEcho("Formula for " .. attack .. " not calculated?")
-    return
-  end
-
-  local x = shikudo_limbDamage[attack]
-  if ataxia.defences.hyperfocus and ataxiaTemp.hyperLimb == limb then
-    x = x / 2
-  end
-
-  tLimbs[l] = tLimbs[l] + x
-
-  if tLimbs[l] > 99.8 then
-    cecho("\n<red> -= " .. limb .. " broke! =-")
-    if limb == "head" then tAffs.stupidity = true end
-    target_limbBroke(limb)
-    targetLimbs_updateTimers(limb)
-  else
-    targetLimbs_updateTimers(limb)
-  end
-end
 
 function shikudo_breakPoint(health)
   shikudo_limbDamage = {}
@@ -858,7 +828,6 @@ function shikudo.dispatch()
   ataxia.settings.separator = ataxia.settings.separator or ";"
   ataxiaTemp = ataxiaTemp or {}
   tAffs = tAffs or {}
-  tLimbs = tLimbs or {H = 0, T = 0, LL = 0, RL = 0, LA = 0, RA = 0}
 
   local form = ataxia.vitals.form or "Oak"
   local kata = ataxia.vitals.kata or 0

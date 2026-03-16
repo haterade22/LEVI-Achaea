@@ -112,8 +112,6 @@ function switchTarget(who)
     ataxiaTemp.bleeding = 0
     if ataxia_isClass("magi") then
       magi_resetLimbs()
-    else
-      tLimbs = {H=0, T=0, RL=0, LL=0, RA=0, LA=0}
     end
     readAuraAffs = { count = 0, list = {} }
     if ataxia_isClass("sentinel") then sAnimals = sAnimals or {} end
@@ -157,7 +155,6 @@ function switchTarget(who)
     ataxiaTemp.lastLimbHit = "none"
     ataxiaTemp.parriedLimb = "none"
     affTimers = {}
-    tLimbs.BP = tLimbs.BP or 100
     disableTimer("Battlefury Perceive")
     raiseEvent("changed target")
 

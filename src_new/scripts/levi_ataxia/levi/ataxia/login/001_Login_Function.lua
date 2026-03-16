@@ -29,7 +29,6 @@ ataxiaTemp.me = gmcp.Char.Status.name
 battleRage_Timers = {}
 mmp.startup()
 resetBashingStats()
-ataxia_resetLimbTable()
 load_Combat_Tables()
 ataxia_createParry()
 ataxiaCheckForMissing()

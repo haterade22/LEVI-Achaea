@@ -247,31 +247,31 @@ need_shieldraze = false
 end
 
 
-if  tLimbs.LL + scimdamage >= 100 and not tAffs.damagedleftleg then 
+if  lb[target].hits["left leg"] + scimdamage >= 100 and not tAffs.damagedleftleg then
 prepped_leftleg = true else
 prepped_leftleg = false
 
 end
 
-if  tLimbs.RL + scimdamage >= 100 and not tAffs.damagedrightleg then 
+if  lb[target].hits["right leg"] + scimdamage >= 100 and not tAffs.damagedrightleg then
 prepped_rightleg = true else
 prepped_rightleg = false
 
 end
 
-if  tLimbs.RA + scimdamage >= 100 and not tAffs.damagedrightarm then 
+if  lb[target].hits["right arm"] + scimdamage >= 100 and not tAffs.damagedrightarm then
 prepped_rightarm = true else
 prepped_rightarm = false
 
 end
 
-if  tLimbs.LA + scimdamage >= 100 and not tAffs.damagedleftarm then 
+if  lb[target].hits["left arm"] + scimdamage >= 100 and not tAffs.damagedleftarm then
 prepped_leftarm = true else
 prepped_leftarm = false
 
 end
 
-if  tLimbs.H + scimdamage >= 100 and not tAffs.damagedhead then 
+if  lb[target].hits["head"] + scimdamage >= 100 and not tAffs.damagedhead then
 prepped_head = true else
 prepped_head = false
 
