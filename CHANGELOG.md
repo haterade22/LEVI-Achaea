@@ -2,6 +2,22 @@
 
 ---
 
+## 2026-03-16 — tLimbs removal cleanup: broken function calls + orphaned YAML
+
+### Fixed: 11 broken function calls from tLimbs deletion
+
+Deep dive verification found 11 trigger files still calling deleted tLimbs functions, which would crash at runtime:
+
+- `psion_hitLimb()` — 8 triggers (517_Overhand through 525_Blackout). Removed calls; lb.addHit() from damage trigger already tracks limb damage.
+- `magi_setBreakpoint()` — 2 triggers (698_Assess, 703_HYENA_SCENT). Removed calls; `magi_setDestroy()` and surrounding logic preserved.
+- `smoteLimb()` — 1 trigger (001_Priest-Smite). Removed else branch; miss/dodge/parry handling preserved.
+
+### Fixed: 8 orphaned _groups.yaml entries
+
+Removed directory entries in `src_new/scripts/_groups.yaml` pointing to deleted folders: leviticus, scythe, backbreaker, earth_lord, i_snb, two_handed (x2), s_n_b. YAML validated after removal.
+
+---
+
 ## 2026-03-16 — TK6 Parry avoidance fix + attack spread
 
 ### Fixed: PREP phase ignoring known parried limb
