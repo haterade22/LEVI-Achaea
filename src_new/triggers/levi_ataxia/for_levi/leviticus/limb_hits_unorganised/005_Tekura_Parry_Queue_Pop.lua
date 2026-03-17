@@ -9,10 +9,8 @@ hierarchy:
 - Combat/Aff Tracking
 - Add Afflictions
 - Affs Post Queue - Gated
-- Classes K-S
-- Monk
-- Tekura Limbs
-- Kicks
+- Limb Got Hit
+- Limb Hits Unorganised
 attributes:
   isActive: 'yes'
   isFolder: 'no'
