@@ -49,6 +49,9 @@ if isTargeted(matches[2]) then
     if infernalDWC2L and infernalDWC2L.onParry then
         infernalDWC2L.onParry()
     end
+    if tekura and tekura.parry and tekura.parry.onParry then
+        tekura.parry.onParry()
+    end
 	tAffs.paralysis = nil
 	tAffs.prone = nil
   tAffs.numbedleftarm = nil

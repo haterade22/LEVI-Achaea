@@ -18,6 +18,10 @@ packageName: ''
 --  Tracks non-crit damage per class/stat/mob   --
 -------------------------------------------------
 
+ataxia = ataxia or {}
+ataxia.data = ataxia.data or {}
+ataxia.data.db = ataxia.data.db or {}
+
 db:create("mob_damage_db",
   {
     hits = {
@@ -108,7 +112,8 @@ function ataxia.data.db.recordMobDamage(amount)
     local newMin = math.min(tonumber(row.min_damage), amount)
     local newMax = math.max(tonumber(row.max_damage), amount)
     local newCount = tonumber(row.hit_count) + 1
-    db:update(ataxia.data.db.mobdmgdb.hits, row._row_id, {
+    db:update(ataxia.data.db.mobdmgdb.hits, {
+      _row_id = row._row_id,
       min_damage = newMin,
       max_damage = newMax,
       hit_count = newCount,

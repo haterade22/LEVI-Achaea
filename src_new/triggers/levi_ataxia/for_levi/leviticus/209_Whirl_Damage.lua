@@ -39,6 +39,7 @@ patterns:
 ]]--
 
 DWBWhirlDamage = tonumber(matches[2])
+ataxiaTables.limbData = ataxiaTables.limbData or {}
 ataxiaTables.limbData.dwbWhirl = tonumber(matches[2])
 
 if wieldweapons == "morningstars" then

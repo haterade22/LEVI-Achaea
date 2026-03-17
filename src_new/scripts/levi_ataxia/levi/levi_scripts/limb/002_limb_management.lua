@@ -37,13 +37,14 @@ function lb.addHit(name, ltar, amount)
             .. ((lb[name].hits[ltar] > 100 and "<orange_red>") or "<yellow>") .. lb[name].hits[ltar] .. "%"
             .. ((lb[name].hits[ltar] > 100 and "<firebrick>") or "<yellow>") .. ")")    
   
-if lb[name].hits[ltar] < 100 and (lb[name].hits[ltar] + mylimbattackpercentage) >= 100 then
+local _lap = mylimbattackpercentage or 0
+if lb[name].hits[ltar] < 100 and (lb[name].hits[ltar] + _lap) >= 100 then
 singleHitPrepped = true
-elseif lb[name].hits[ltar] < 100 and (lb[name].hits[ltar] + mylimbattackpercentage) < 100 then
+elseif lb[name].hits[ltar] < 100 and (lb[name].hits[ltar] + _lap) < 100 then
 singleHitPrepped = false
-elseif lb[name].hits[ltar] < 100 and (lb[name].hits[ltar] + 2*mylimbattackpercentage) > 100 then 
+elseif lb[name].hits[ltar] < 100 and (lb[name].hits[ltar] + 2*_lap) > 100 then
 dualHitPrepped = true
-elseif lb[name].hits[ltar] < 100 and (lb[name].hits[ltar] + 2*mylimbattackpercentage) < 100 then 
+elseif lb[name].hits[ltar] < 100 and (lb[name].hits[ltar] + 2*_lap) < 100 then
 dualHitPrepped = false
 end
   

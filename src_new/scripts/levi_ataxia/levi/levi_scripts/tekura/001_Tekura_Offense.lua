@@ -712,7 +712,7 @@ end
 tekura.parry = tekura.parry or {}
 tekura.parry.attackQueue = {}    -- Queue of limbs we're attacking
 tekura.parry.pendingLimb = nil   -- The limb we're currently waiting for result on
-tekura.parry.triggers = {}       -- Store trigger IDs for cleanup
+tekura.parry.triggers = tekura.parry.triggers or {}  -- Preserve IDs so killTriggers() can clean up old triggers on reload
 
 -- Parse combo to build attack queue (in order!)
 function tekura.parry.parseCombo(comboStr)
@@ -822,6 +822,13 @@ function tekura.parry.parseCombo(comboStr)
   for _, atk in ipairs(attacks) do
     table.insert(tekura.parry.attackQueue, atk.limb)
   end
+
+  -- Debug: show combo string and resulting queue
+  if tekura6 and tekura6.config and tekura6.config.debugEcho then
+    local queueStr = table.concat(tekura.parry.attackQueue, ", ")
+    cecho("\n<yellow>[TKD DBG]<reset> Combo: <cyan>" .. comboStr .. "<reset>")
+    cecho("\n<yellow>[TKD DBG]<reset> Queue: <cyan>" .. queueStr .. "<reset>")
+  end
 end
 
 -- Called when we see an attack message (before we know if hit or parried)
@@ -855,141 +862,23 @@ function tekura.parry.clear()
   ataxiaTemp.parriedLimb = nil
 end
 
--- Kill all registered triggers
+-- Legacy temp trigger cleanup (remove any orphaned triggers from previous loads)
 function tekura.parry.killTriggers()
-  for name, id in pairs(tekura.parry.triggers) do
-    if id then killTrigger(id) end
+  if tekura.parry.triggers then
+    for _, id in pairs(tekura.parry.triggers) do
+      if id then killTrigger(id) end
+    end
   end
   tekura.parry.triggers = {}
 end
 
--- Register triggers (call once on load)
+-- Register triggers is now a no-op: parry tracking uses permanent triggers
+-- Attack messages: src_new/triggers/.../kicks/011_Tekura_Parry_Queue_Pop.lua
+-- Parry message:   src_new/triggers/.../limb_hits_unorganised/002_Parried.lua
 function tekura.parry.registerTriggers()
+  -- Kill any leftover temp triggers from before the conversion
   tekura.parry.killTriggers()
-
-  -- ATTACK MESSAGES (fire onAttack to pop from queue)
-
-  -- Snap kick: "You let fly at X with a snap kick."
-  tekura.parry.triggers.snk = tempRegexTrigger(
-    "^You let fly at .+ with a snap kick\\.$",
-    function() tekura.parry.onAttack() end
-  )
-
-  -- Side kick: "You pump out at X with a powerful side kick."
-  tekura.parry.triggers.sdk = tempRegexTrigger(
-    "^You pump out at .+ with a powerful side kick\\.$",
-    function() tekura.parry.onAttack() end
-  )
-
-  -- Hammerfist: "You ball up one fist and hammerfist X."
-  tekura.parry.triggers.hfp = tempRegexTrigger(
-    "^You ball up one fist and hammerfist .+\\.$",
-    function() tekura.parry.onAttack() end
-  )
-
-  -- Hook: "You unleash a powerful hook towards X."
-  tekura.parry.triggers.hkp = tempRegexTrigger(
-    "^You unleash a powerful hook towards .+\\.$",
-    function() tekura.parry.onAttack() end
-  )
-
-  -- Sweep: "You lash out at X with a vicious sweep."
-  tekura.parry.triggers.swk = tempRegexTrigger(
-    "^You lash out at .+ with a vicious sweep\\.$",
-    function() tekura.parry.onAttack() end
-  )
-
-  -- Roundhouse: "You twist your torso and send a roundhouse towards X."
-  tekura.parry.triggers.rhk = tempRegexTrigger(
-    "^You twist your torso and send a roundhouse towards .+\\.$",
-    function() tekura.parry.onAttack() end
-  )
-
-  -- Wrench: "You wrench X's arm|torso|head|leg viciously."
-  tekura.parry.triggers.wrt = tempRegexTrigger(
-    "^You wrench .+'s (left arm|right arm|torso|head|left leg|right leg) viciously\\.$",
-    function() tekura.parry.onAttack() end
-  )
-
-  -- Jab punch: "You jab at X's arms."
-  tekura.parry.triggers.jbp = tempRegexTrigger(
-    "^You jab at .+'s arms\\.$",
-    function() tekura.parry.onAttack() end
-  )
-
-  -- Axe kick: "You raise your leg high and bring it down on X."
-  tekura.parry.triggers.axk = tempRegexTrigger(
-    "^You raise your leg high and bring it down on .+\\.$",
-    function() tekura.parry.onAttack() end
-  )
-
-  -- Palm strike: "You throw your force behind a forward palmstrike at X's face."
-  tekura.parry.triggers.pmp = tempRegexTrigger(
-    "^You throw your force behind a forward palmstrike at .+'s face\\.$",
-    function() tekura.parry.onAttack() end
-  )
-
-  -- Moon kick: "You hurl yourself towards X with a lightning-fast moon kick."
-  tekura.parry.triggers.mnk = tempRegexTrigger(
-    "^You hurl yourself towards .+ with a lightning-fast moon kick\\.$",
-    function() tekura.parry.onAttack() end
-  )
-
-  -- Spear punch: "You form a spear hand and stab out towards X."
-  tekura.parry.triggers.spp = tempRegexTrigger(
-    "^You form a spear hand and stab out towards .+\\.$",
-    function() tekura.parry.onAttack() end
-  )
-
-  -- Uppercut (UCP): "You launch a powerful uppercut at X."
-  tekura.parry.triggers.ucp = tempRegexTrigger(
-    "^You launch a powerful uppercut at .+\\.$",
-    function() tekura.parry.onAttack() end
-  )
-
-  -- Whirlwind kick (WWK): "You spin into the air and throw a whirlwind kick towards X."
-  tekura.parry.triggers.wwk = tempRegexTrigger(
-    "^You spin into the air and throw a whirlwind kick towards .+\\.$",
-    function() tekura.parry.onAttack() end
-  )
-
-  -- Bladehand: "You whip your hand in a vicious bladehand at the neck of X."
-  tekura.parry.triggers.blp = tempRegexTrigger(
-    "^You whip your hand in a vicious bladehand at the neck of .+\\.$",
-    function() tekura.parry.onAttack() end
-  )
-
-  -- Backbreaker: "You grab X and haul them over your knee."
-  tekura.parry.triggers.bbt = tempRegexTrigger(
-    "^You grab .+ and haul them over your knee\\.$",
-    function() tekura.parry.onAttack() end
-  )
-
-  -- PARRY MESSAGE
-  tekura.parry.triggers.parry = tempRegexTrigger(
-    "^\\w+ parries the attack with a deft manoeuvre\\.$",
-    function() tekura.parry.onParry() end
-  )
-
-  -- DAMAGE MESSAGE (attack hit - clear pending)
-  tekura.parry.triggers.damage = tempRegexTrigger(
-    "damage to .+'s (left leg|right leg|left arm|right arm|head|torso)",
-    function()
-      local limb = matches[2]
-      tekura.parry.onHit(limb)
-    end
-  )
-
-  -- Also clear pending on combo-specific damage messages
-  tekura.parry.triggers.damage2 = tempRegexTrigger(
-    "(left leg|right leg|left arm|right arm|head|torso) has taken",
-    function()
-      local limb = matches[2]
-      tekura.parry.onHit(limb)
-    end
-  )
-
-  cecho("\n<yellow>[TKD] Parry tracking triggers registered<reset>")
+  cecho("\n<yellow>[TKD] Parry tracking active (permanent triggers)<reset>")
 end
 
 --------------------------------------------------------------------------------

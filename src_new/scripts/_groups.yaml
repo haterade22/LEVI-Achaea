@@ -724,7 +724,7 @@ groups:
         directory: levi_ataxia/levi/levi_scripts/limb
   script: "ataxia = ataxia or {}\nataxiaTables = ataxiaTables or {}\nataxiaTemp = ataxiaTemp or {}\nataxiaTemp.addedHerbID\
     \ = 1\nataxiaTemp.removedHerbID = 2\nataxiagui = ataxiagui or {}\nataxiaVersion = \"4.7.15\"\t\t\t\t\t\t--last was 4.3\n\
-    muteList = muteList or {}\n\nataxiaTables.limbTimers = ataxiaTables.limbTimers or {}\nataxiaTables.fractureTimers = ataxiaTables.fractureTimers\
+    muteList = muteList or {}\n\nataxiaTables.limbData = ataxiaTables.limbData or {}\nataxiaTables.limbTimers = ataxiaTables.limbTimers or {}\nataxiaTables.fractureTimers = ataxiaTables.fractureTimers\
     \ or {}\n\nataxia.defences = ataxia.defences or {}\nataxia.afflictions = ataxia.afflictions or\
     \ {}\nataxia.vitals = ataxia.vitals or {}\n\nataxia.bals = ataxia.bals or {}\nataxia.bals.get = {\"bal\", \"eq\"}\nataxia.bals.used = ataxia.bals.used or\
     \ {}\nataxia.bals.timestamps = ataxia.bals.timestamps or {}\n\n\nfunction ataxia_Echo(text)\n\tcecho(\"\\n<a_darkcyan>(<a_darkmagenta>LEVI<a_darkcyan>):\
