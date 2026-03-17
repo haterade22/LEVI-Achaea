@@ -55,7 +55,7 @@ function ataxiaPrompt_getTag(tag)
     end
   local th = ataxiaPromptTags[theTag]
   if type(th) == "function" then
-    return _G["ataxiaPromptTags"][theTag]() .. tailEnd
+    return (_G["ataxiaPromptTags"][theTag]() or "") .. tailEnd
   elseif type(th) == "string" then
     return _G["ataxiaPromptTags"][theTag] .. tailEnd
   end

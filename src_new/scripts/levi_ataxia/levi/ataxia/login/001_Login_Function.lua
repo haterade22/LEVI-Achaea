@@ -56,7 +56,7 @@ tempTimer(12, [[send("queue add inr all")]])
 
 tempTimer(30, [[setafflictionstackslevi()]])
 tempTimer(30, [[targetresetafflictionslevi()]])
-tempTimer(15, [[send("queue add avoid physical")]])
+tempTimer(15, [[send("queue add freestand avoid physical")]])
 
 
 slow = 0
