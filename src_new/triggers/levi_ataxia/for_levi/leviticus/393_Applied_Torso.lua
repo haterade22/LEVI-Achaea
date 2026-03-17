@@ -67,7 +67,7 @@ tdeliverance = false
   
   
   if lb[target].hits["torso"] >= 100 and lb[target].hits["torso"] < 200 then
-    tempTimer(4, [[erAff("mildtrauma");ataxia_boxEcho("they cured TORSO", "DodgerBlue")]])
+    tempTimer(4, [[erAff("mildtrauma");ataxia_boxEcho("they RESTORED TORSO", "DodgerBlue")]])
     target_salveBal(4)
   elseif lb[target].hits["torso"] >= 200 then
     tempTimer(4, [[erAff("serioustrauma")]])

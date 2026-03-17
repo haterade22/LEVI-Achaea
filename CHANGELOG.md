@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-03-17 — Fix Weathering, Toughness, Mindnet not raised during defup/keepup
+
+### Fixed: `isDefenceForCurrentClass()` short-circuit bug
+
+The function iterated class tables with `pairs()` (non-deterministic order) and returned `false` the moment it found a defense in any non-matching class table — without checking if it also existed in the player's own class or a universal category. Defenses appearing in multiple tables (e.g., toughness in both `blademaster` and `monk`) were randomly blocked depending on iteration order.
+
+**Fix:** Two-pass logic — first check if the defense belongs to the current class or a universal category (return `true`), then only block if found exclusively in other class tables.
+
+**Cleanup:** Removed `toughness`, `mindnet`, `weathering`, `consciousness` from `blademaster` table — these are Monk (Kaido) and shared skills, not blademaster-exclusive. Eliminates the duplicate entries that triggered the bug.
+
+**File:** `deffing/004_Defence_Sorting_-_Cleaner.lua`
+
+---
+
 ## 2026-03-16 — tLimbs removal cleanup: broken function calls + orphaned YAML
 
 ### Fixed: 11 broken function calls from tLimbs deletion

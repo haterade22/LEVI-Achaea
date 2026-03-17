@@ -76,6 +76,8 @@ patterns:
   type: 1
 - pattern: ^As your blow cuts deeply into the leg of (\w+), you drive savagely forward, taking \w+ clean off\w+ feet\.$
   type: 1
+- pattern: ^You step inside the wide open guard of (\w+), .+ casting \w+ ruthlessly to the ground\.$
+  type: 1
 ]]--
 
 if isTargeted(matches[2]) then

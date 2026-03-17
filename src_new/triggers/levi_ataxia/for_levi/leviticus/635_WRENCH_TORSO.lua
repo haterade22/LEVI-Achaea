@@ -30,17 +30,17 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^Stepping inside the guard of (\w+), you lock your hands behind (her|him) before savagely wrenching (her|him) forward,
-    driving your knee up beneath (her|his) ribs.$
+- pattern: ^You step inside the wide open guard of (\w+), .+ brutal strike to \w+ floating ribs before casting \w+ ruthlessly to the ground\.$
   type: 1
 ]]--
 
 
 if isTargeted(matches[2]) then
-	
 	bruisedribs = true
-  tempTimer(30, [[bruisedribs = false]])
+	tempTimer(30, [[bruisedribs = false]])
+	tarAffed("prone")
+	confirmAffV2("prone")
 
-   if partyrelay then send("pt "..target..": bruisedribs")
-      end
+	if partyrelay then send("pt "..target..": bruisedribs")
+	end
 end

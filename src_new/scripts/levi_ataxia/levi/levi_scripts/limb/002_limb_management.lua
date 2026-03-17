@@ -69,6 +69,7 @@ function lb.salve(name, area)
     local convert = {
       head = {"head"},
       torso = {"torso"},
+      body = {"torso"},
       arms = {[1] = "left arm", [2] = "right arm"},
       legs = {[1] = "left leg", [2] = "right leg"},
     }

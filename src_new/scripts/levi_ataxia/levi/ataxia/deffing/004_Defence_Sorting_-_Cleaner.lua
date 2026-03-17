@@ -25,13 +25,16 @@ function isDefenceForCurrentClass(defName)
   local myClass = (gmcp.Char.Status.class or ""):lower()
   local universal = { curatives = true, shared = true, tattoos = true, endgame = true }
 
+  local foundInOtherClass = false
   for className, defTable in pairs(ataxiaTables.classDefences) do
-    if not universal[className] then
-      if defTable[defName] and className ~= myClass then
-        return false
+    if defTable[defName] then
+      if universal[className] or className == myClass then
+        return true
       end
+      foundInOtherClass = true
     end
   end
+  if foundInOtherClass then return false end
   return true
 end
 
@@ -92,10 +95,9 @@ function sortedDefenceShow()
 		shinbinding = "shinbinding",
 		shintrance = "shintrance",
 		retaliation = "retaliation",
-    toughness = "toughness",
-    mindnet = "mindnet",
-    weathering = "weathering",
-
+		toughness = "toughness",
+		mindnet = "mindnet",
+		weathering = "weathering",
 	},
 	
 	 depthswalker = {
