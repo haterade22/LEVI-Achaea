@@ -49,6 +49,13 @@ if isTargeted(matches[2]) then
     if infernalDWC2L and infernalDWC2L.onParry then
         infernalDWC2L.onParry()
     end
+    -- Direct TK6 parry detection: bypass fragile attack queue system
+    if tekura6 and tekura6.state and tekura6.state.lastKickLimb then
+        ataxiaTemp = ataxiaTemp or {}
+        ataxiaTemp.parriedLimb = tekura6.state.lastKickLimb
+        cecho("\n<yellow>[TK6] <red>PARRIED: <white>" .. tekura6.state.lastKickLimb .. "<reset>")
+        tekura6.state.lastKickLimb = nil  -- Consume: only first parry per combo matters
+    end
     if tekura and tekura.parry and tekura.parry.onParry then
         tekura.parry.onParry()
     end

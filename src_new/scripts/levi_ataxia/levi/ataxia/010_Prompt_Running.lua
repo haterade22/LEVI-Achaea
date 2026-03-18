@@ -37,7 +37,7 @@ function ataxia_promptCommands()
 	if ataxia.settings and ataxia.settings.use and ataxia.settings.use.parry and ataxia.parrying and ataxia.parry ~= "manual" then
 		ataxia_parryCheck()
 		if canParry() and ataxia.parrying.shouldparry ~= ataxia.parrying.limb and not parryAttempted then
-      if ataxia_isClass("monk") and gmcp.Char.Vitals.charstats[3] == "Tekura" then
+      if ataxia_isClass("monk") and ataxia.vitals.stance then
         send("guard "..ataxia.parrying.shouldparry)
       else
 			 send("parry "..ataxia.parrying.shouldparry)

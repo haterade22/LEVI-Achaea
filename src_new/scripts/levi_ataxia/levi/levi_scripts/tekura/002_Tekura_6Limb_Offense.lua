@@ -41,6 +41,7 @@ tekura6.state = {
   attackInFlight = false,     -- Anti-desync: true while off-balance (DWC pattern)
   lastTarget = nil,           -- Target-change detection (DWB pattern)
   lastEchoTime = nil,         -- Debounced echo timestamp (DWB pattern)
+  lastKickLimb = nil,         -- Direct parry tracking: stores kick target for parry trigger
 }
 
 tekura6.config = {
@@ -405,9 +406,11 @@ function tekura6.dispatch.buildPrepAttack()
   if kickLimb then
     kickStr = tekura6.LIMB_ATTACKS[kickLimb].kick
     simDmg[kickLimb] = (simDmg[kickLimb] or 0) + kickDmg
+    tekura6.state.lastKickLimb = kickLimb  -- Direct parry tracking (bypasses queue)
   else
     -- No safe kick target (all limbs would break) — use RHK as filler (no limb damage)
     kickStr = "rhk"
+    tekura6.state.lastKickLimb = nil
   end
 
   -- PUNCHES: Find two safe punch targets, spread across different limbs than kick
@@ -462,6 +465,8 @@ function tekura6.dispatch.buildParryBypassAttack(parriedLimb)
     cmd = "kai " .. tekura6.config.kaiMode .. " " .. target .. ";"
   end
 
+  tekura6.state.lastKickLimb = nil  -- Sweep doesn't target a specific limb
+
   local punch = tekura6.LIMB_ATTACKS[parriedLimb].punch
 
   -- Check if TWO punches would break the limb
@@ -509,17 +514,20 @@ function tekura6.dispatch.buildBreakUpperAttack()
   end
 
   -- MNK arm (25% = breaks), SPP other arm (14% = breaks if prepped), HKP torso (14% = breaks if prepped)
+  tekura6.state.lastKickLimb = kickArm .. " arm"
   return "combo " .. target .. " mnk " .. kickArm .. " spp " .. punchArm .. " hkp;hrs"
 end
 
 -- BREAK_LOWER: Wrench torso (prones) + break both legs, switch to Bear stance
 function tekura6.dispatch.buildBreakLowerAttack()
   -- WRT torso (Horse stance, prones target) + HFP left + HFP right (break both legs)
+  tekura6.state.lastKickLimb = "torso"
   return "combo " .. target .. " wrt torso hfp left hfp right;brs"
 end
 
 -- KILL: Backbreaker in Bear stance
 function tekura6.dispatch.buildKillAttack()
+  tekura6.state.lastKickLimb = nil  -- No combo kick
   return "bbt " .. target
 end
 
@@ -619,6 +627,7 @@ function tekura6.dispatch.run()
   if tekura6.checkRebounding() then
     local p1, p2 = tekura6.dispatch.safeRazePunches()
     cmd = cmd .. "unwield all;dismount;combo " .. target .. " rhk " .. p1 .. " " .. p2
+    tekura6.state.lastKickLimb = nil  -- RHK raze, no limb target
     tekura6.sendAttack(cmd)
     if tekura6.shouldEcho() then
       cecho("\n<yellow>[TK6] RAZING REBOUNDING")
@@ -630,6 +639,7 @@ function tekura6.dispatch.run()
   if tekura6.checkShield() then
     local p1, p2 = tekura6.dispatch.safeRazePunches()
     cmd = cmd .. "unwield all;dismount;combo " .. target .. " rhk " .. p1 .. " " .. p2
+    tekura6.state.lastKickLimb = nil  -- RHK raze, no limb target
     tekura6.sendAttack(cmd)
     if tekura6.shouldEcho() then
       cecho("\n<yellow>[TK6] RAZING SHIELD")
