@@ -104,7 +104,14 @@ function ataxia_Room_Update()
 		end
 	end
 
-	if ataxiaTemp.bashFlee and ataxiaBasher_path then
+	if ataxiaTemp.fleeReturning and ataxiaTemp.fleeOriginRoom then
+		if tonumber(gmcp.Room.Info.num) == ataxiaTemp.fleeOriginRoom then
+			ataxiaTemp.fleeOriginRoom = nil
+			ataxiaTemp.fleeReturning = nil
+			if ataxiaTemp.fleeReturnTimer then killTimer(ataxiaTemp.fleeReturnTimer); ataxiaTemp.fleeReturnTimer = nil end
+			ataxiaEcho("Returned to bashing room. Resuming.")
+		end
+	elseif ataxiaTemp.bashFlee and ataxiaBasher_path then
 		if not table.contains(ataxiaBasher_path, gPreviousRoom) then
 			table.insert(ataxiaBasher_path, 1, gPreviousRoom)
 		end

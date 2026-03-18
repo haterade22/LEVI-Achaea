@@ -165,9 +165,12 @@ function ataxiaBasher_onDeath()
 
   -- Kill any active timers that could restart movement/attacks
   if ataxiaTemp.fleeCircuitBreaker then killTimer(ataxiaTemp.fleeCircuitBreaker); ataxiaTemp.fleeCircuitBreaker = nil end
+  if ataxiaTemp.fleeReturnTimer then killTimer(ataxiaTemp.fleeReturnTimer); ataxiaTemp.fleeReturnTimer = nil end
   if ataxiaTemp.stuckTimer then killTimer(ataxiaTemp.stuckTimer); ataxiaTemp.stuckTimer = nil end
   if ataxiaBasher_atkTimer then killTimer(ataxiaBasher_atkTimer); ataxiaBasher_atkTimer = nil end
   ataxiaBasher_atk = false
+  ataxiaTemp.fleeOriginRoom = nil
+  ataxiaTemp.fleeReturning = nil
 
   -- Stop mapper movement
   if mmp and mmp.pause then mmp.pause("on") end
@@ -232,6 +235,9 @@ function ataxiaBasher_onAttacked(_, attackerName, attackerClass)
   ataxiaBasher.paused = false
   ataxiaBasher.areabash = false
   ataxiaBasher_atk = false
+  ataxiaTemp.fleeOriginRoom = nil
+  ataxiaTemp.fleeReturning = nil
+  if ataxiaTemp.fleeReturnTimer then killTimer(ataxiaTemp.fleeReturnTimer); ataxiaTemp.fleeReturnTimer = nil end
   raiseEvent("basher disabled")
 
   -- Navigate to Mhaldor
@@ -393,9 +399,12 @@ function ataxiaBasher_onDeath()
 
   -- Kill any active timers that could restart movement/attacks
   if ataxiaTemp.fleeCircuitBreaker then killTimer(ataxiaTemp.fleeCircuitBreaker); ataxiaTemp.fleeCircuitBreaker = nil end
+  if ataxiaTemp.fleeReturnTimer then killTimer(ataxiaTemp.fleeReturnTimer); ataxiaTemp.fleeReturnTimer = nil end
   if ataxiaTemp.stuckTimer then killTimer(ataxiaTemp.stuckTimer); ataxiaTemp.stuckTimer = nil end
   if ataxiaBasher_atkTimer then killTimer(ataxiaBasher_atkTimer); ataxiaBasher_atkTimer = nil end
   ataxiaBasher_atk = false
+  ataxiaTemp.fleeOriginRoom = nil
+  ataxiaTemp.fleeReturning = nil
 
   -- Stop mapper movement
   if mmp and mmp.pause then mmp.pause("on") end
@@ -460,6 +469,9 @@ function ataxiaBasher_onAttacked(_, attackerName, attackerClass)
   ataxiaBasher.paused = false
   ataxiaBasher.areabash = false
   ataxiaBasher_atk = false
+  ataxiaTemp.fleeOriginRoom = nil
+  ataxiaTemp.fleeReturning = nil
+  if ataxiaTemp.fleeReturnTimer then killTimer(ataxiaTemp.fleeReturnTimer); ataxiaTemp.fleeReturnTimer = nil end
   raiseEvent("basher disabled")
 
   -- Navigate to Mhaldor

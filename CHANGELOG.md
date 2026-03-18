@@ -2,6 +2,22 @@
 
 ---
 
+## 2026-03-18 — Basher flee-heal-return loop
+
+### Feature: Auto-return to combat room after fleeing
+
+Previously the basher fled to a safe room and resumed bashing there after recovering to 70% HP, never returning to finish killing mobs. Now the basher saves the room it fled from, heals to 100% HP, auto-navigates back, and resumes attacking. The cycle repeats if HP drops again, continuing until the room is cleared.
+
+**New state:** `ataxiaTemp.fleeOriginRoom`, `ataxiaTemp.fleeReturning`, `ataxiaTemp.fleeReturnTimer` (15s safety timeout).
+
+**Files:**
+- `basher/001_Bashing_Functions.lua` — Save origin room in `executeFlee()`, rewrite `checkFleeRecovery()` for 100% HP + return navigation
+- `update_stuff/002_ataxia_Room_Update.lua` — Detect arrival at origin room, clear return state
+- `genrunning/004_Autobashing_Functions.lua` — Add `fleeReturning` gate to `tryAttack()` and `patterns()`, cleanup in `areaoff()`
+- `genrunning/001_Bashing_API.lua` — Cleanup in `onDeath()` and `onAttacked()`
+
+---
+
 ## 2026-03-17 — Fix Weathering, Toughness, Mindnet not raised during defup/keepup
 
 ### Fixed: `isDefenceForCurrentClass()` short-circuit bug

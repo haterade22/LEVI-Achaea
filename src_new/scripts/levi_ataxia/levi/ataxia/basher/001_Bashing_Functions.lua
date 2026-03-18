@@ -209,6 +209,7 @@ end
 function ataxiaBasher_executeFlee()
   ataxiaTemp.bashFlee = true
   ataxiaBasher.paused = true
+  ataxiaTemp.fleeOriginRoom = tonumber(gmcp.Room.Info.num)
   ataxiaBasher_startFleeTimer()
   send("cq all")
   ataxiagui_updateVitals()
@@ -256,8 +257,9 @@ function ataxiaBasher_checkFleeRecovery()
   if ataxiaTemp.bashFlee ~= true then return end
 
   ataxiaBasher_initThresholds()
-  local safeConfig = ataxiaBasher_getAreaSafeRoom()
-  local recoveryPct = (safeConfig and safeConfig.recoveryPct) or ataxiaBasher.fleeRecoveryPct or 70
+
+  -- Wait for 100% HP before returning to the combat room
+  local recoveryPct = 100
 
   if (ataxia.vitals.hpp or 0) >= recoveryPct then
     ataxiaTemp.bashFlee = false
@@ -266,8 +268,31 @@ function ataxiaBasher_checkFleeRecovery()
       killTimer(ataxiaTemp.fleeCircuitBreaker)
       ataxiaTemp.fleeCircuitBreaker = nil
     end
-    ataxiaEcho("HP recovered to " .. math.floor(ataxia.vitals.hpp) .. "%. Resuming bashing.")
-    search_targets()
+
+    -- Navigate back to the room we fled from
+    if ataxiaTemp.fleeOriginRoom
+       and ataxiaTemp.fleeOriginRoom ~= tonumber(gmcp.Room.Info.num) then
+      ataxiaEcho("HP recovered to 100%. Returning to room v" .. ataxiaTemp.fleeOriginRoom .. ".")
+      ataxiaTemp.fleeReturning = true
+      if mmp.paused then mmp.pause("off") end
+      expandAlias("goto " .. ataxiaTemp.fleeOriginRoom)
+      -- Safety timeout for return navigation
+      ataxiaTemp.fleeReturnTimer = tempTimer(15, function()
+        if ataxiaTemp.fleeReturning then
+          ataxiaEcho("Return to flee room timed out. Resuming normal bashing.")
+          ataxiaTemp.fleeOriginRoom = nil
+          ataxiaTemp.fleeReturning = nil
+          ataxiaTemp.fleeReturnTimer = nil
+          search_targets()
+        end
+      end)
+    else
+      -- Already in the origin room or no origin saved
+      ataxiaTemp.fleeOriginRoom = nil
+      ataxiaTemp.fleeReturning = nil
+      ataxiaEcho("HP recovered to 100%. Resuming bashing.")
+      search_targets()
+    end
     ataxiagui_updateVitals()
   end
 end

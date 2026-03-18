@@ -108,9 +108,10 @@ function ataxiaBasher_tryAttack()
   -- Hard gate: cooldown active
   if ataxiaBasher_atk then return false end
 
-  -- Hard gate: fleeing or paused
+  -- Hard gate: fleeing, paused, or returning to flee room
   if ataxiaTemp.bashFlee then return false end
   if ataxiaBasher.paused then return false end
+  if ataxiaTemp.fleeReturning then return false end
 
   -- Hard gate: balance/standing
   if not canBals() or not canStand() then return false end
@@ -162,6 +163,7 @@ function ataxiaBasher_patterns()
   if not ataxiaBasher.enabled then return end
   if ataxiaTemp.bashFlee then return end
   if ataxiaBasher.paused then return end
+  if ataxiaTemp.fleeReturning then return end
 
   if not ataxiaBasher.paused and (mmp.speedWalkCounter < 1 or mmp.paused == true) and not autoHarvesting and not autoExtracting then
     if not ataxiaBasher_skipRoom then
@@ -240,6 +242,9 @@ function ataxiaBasher_manual()
 		ataxiaBasher.paused = false
 		ataxiaBasher.manual = false
 		ataxiaBasher.areabash = false
+		ataxiaTemp.fleeOriginRoom = nil
+		ataxiaTemp.fleeReturning = nil
+		if ataxiaTemp.fleeReturnTimer then killTimer(ataxiaTemp.fleeReturnTimer); ataxiaTemp.fleeReturnTimer = nil end
 		ataxiaEcho("Bashing systems disengaged.")
 		raiseEvent("basher disabled")
 	end
@@ -269,6 +274,9 @@ function ataxiaBasher_areaoff()
 	ataxiaBasher.paused = false
 	ataxiaBasher.manual = false
 	ataxiaBasher.areabash = false
+	ataxiaTemp.fleeOriginRoom = nil
+	ataxiaTemp.fleeReturning = nil
+	if ataxiaTemp.fleeReturnTimer then killTimer(ataxiaTemp.fleeReturnTimer); ataxiaTemp.fleeReturnTimer = nil end
 	ataxiaEcho("Bashing systems disengaged.")
 	raiseEvent("basher disabled")
 end
