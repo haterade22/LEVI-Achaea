@@ -16,17 +16,17 @@ packageName: ''
 
 -- Channel color map for decho (GMCP text only has white ANSI, so we colorize by channel)
 local channelColors = {
-  ct = "<0,200,0>",           -- city tell: green
-  armytell = "<0,200,0>",     -- army: green
+  ct = "<255,100,100>",        -- city tell: red
+  armytell = "<255,100,100>", -- army: red
   ht = "<200,200,0>",         -- house tell: yellow
   hts = "<200,200,0>",
   hnt = "<200,200,0>",
   ot = "<180,100,255>",       -- order: purple
   clt = "<200,100,50>",       -- clan: orange
   party = "<0,200,200>",      -- party: cyan
-  tell = "<200,0,200>",       -- tells: magenta
+  tell = "<255,255,0>",        -- tells: yellow
   market = "<0,180,180>",     -- market: teal
-  says = "<200,200,200>",     -- says: light gray
+  says = "<0,200,200>",        -- says: cyan
   shout = "<255,100,100>",    -- shout: red
   yell = "<255,100,100>",     -- yell: red
   newbie = "<255,255,0>",     -- newbie: yellow
