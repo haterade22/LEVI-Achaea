@@ -43,7 +43,7 @@ function ataxia_resetSwaps()
 		magi = {active = false, desc = "Automatic handling for burns and frozen status."},
     psionBleed = {active = false, desc = "Elevate haemophilia once bleed is stacked up."},
     -- impSnap removed: Serpents no longer deliver impatience via SNAP, they use Impulse instead
-    parshield = {active = false, desc = "Temporarily ignore paralysis when shielding."},
+    parshield = {active = true, desc = "Temporarily ignore paralysis when shielding."},
     WATER = {active = false, desc = "Don't get latched."},
     paraAst = {active = true, desc = "Prioritise paralysis over slickness when asthma blocks smoking."},
     astWear = {active = true, desc = "Prioritise asthma to prevent impulse when weariness present vs Serpent."},
