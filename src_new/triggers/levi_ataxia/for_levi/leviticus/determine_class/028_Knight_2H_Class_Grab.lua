@@ -50,3 +50,4 @@ if knownClass and knownClass ~= "Unknown" then
 else
   classDetect.setAttackerClass(attacker, "Runewarden")
 end
+classDetect.state.attackerSpec = "2H"

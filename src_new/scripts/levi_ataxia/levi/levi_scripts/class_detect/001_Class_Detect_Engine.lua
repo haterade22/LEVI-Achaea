@@ -27,6 +27,7 @@ classDetect.state = classDetect.state or {
   enabled = true,
   attackerClass = nil,
   attackerName = nil,
+  attackerSpec = nil,
   attackers = {},
   currentCuringset = "normal",
   lastSwitchTime = 0,
@@ -214,6 +215,7 @@ function classDetect.resetToNormal()
     -- Still clear state even if already on normal
     classDetect.state.attackerClass = nil
     classDetect.state.attackerName = nil
+    classDetect.state.attackerSpec = nil
     classDetect.state.attackers = {}
     if classDetect.state.combatTimeout then
       killTimer(classDetect.state.combatTimeout)
@@ -225,6 +227,7 @@ function classDetect.resetToNormal()
   classDetect.state.currentCuringset = "normal"
   classDetect.state.attackerClass = nil
   classDetect.state.attackerName = nil
+  classDetect.state.attackerSpec = nil
   classDetect.state.attackers = {}
   if classDetect.state.combatTimeout then
     killTimer(classDetect.state.combatTimeout)
@@ -272,6 +275,11 @@ function classDetect.setAttackerClass(attackerName, className)
     return
   end
 
+  -- Clear spec when attacker changes (will be re-set by spec-specific triggers)
+  if classDetect.state.attackerName ~= attackerName then
+    classDetect.state.attackerSpec = nil
+  end
+
   -- Store in NDB for persistence
   if ataxiaNDB and ataxiaNDB.players then
     ataxiaNDB.players[attackerName] = ataxiaNDB.players[attackerName] or {}
@@ -287,6 +295,7 @@ function classDetect.setAttackerClass(attackerName, className)
       classDetect.state.currentCuringset = "normal"
       classDetect.state.attackerClass = nil
       classDetect.state.attackerName = nil
+      classDetect.state.attackerSpec = nil
       send("curingset switch normal", false)
       if classDetect.config.echoSwitches then
         classDetect.echo("<red>Multiple attackers detected — staying on <white>normal<plum> curingset")

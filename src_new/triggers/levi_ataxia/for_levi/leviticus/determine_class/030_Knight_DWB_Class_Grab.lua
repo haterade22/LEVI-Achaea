@@ -46,3 +46,4 @@ else
   -- Generic knight — API lookup will refine later
   classDetect.setAttackerClass(attacker, "Runewarden")
 end
+classDetect.state.attackerSpec = "DWB"

@@ -49,6 +49,14 @@ function ataxia_parryCheck()
 		return
 	end
 
+	-- Anti-2H: always parry head against Two-Handed knights
+	if cfg.anti2H
+		and classDetect and classDetect.state
+		and classDetect.state.attackerSpec == "2H" then
+		ataxia.parrying.shouldparry = "head"
+		return
+	end
+
 	-- Anti-Shikudo: override mode when fighting a Shikudo monk
 	local isShikudo = cfg.antiShikudo
 		and classDetect and classDetect.state
@@ -249,6 +257,14 @@ end
 function ataxia_autoParry()
 	local cfg = selfLimbDamage.config
 	local pw = cfg.parryWeights
+
+	-- Anti-2H takes highest priority
+	if cfg.anti2H
+		and classDetect and classDetect.state
+		and classDetect.state.attackerSpec == "2H" then
+		ataxia.parrying.shouldparry = "head"
+		return
+	end
 
 	-- Anti-Shikudo takes priority (same check as standard modes)
 	local isShikudo = cfg.antiShikudo

@@ -106,6 +106,14 @@ elseif args == "shikudo off" then
 	cfg.antiShikudo = false
 	cecho("\n<DodgerBlue>[SLC] <white>Anti-Shikudo Parry: <red>OFF")
 
+elseif args == "2h on" then
+	cfg.anti2H = true
+	cecho("\n<DodgerBlue>[SLC] <white>Anti-2H Parry (head): <green>ON")
+
+elseif args == "2h off" then
+	cfg.anti2H = false
+	cecho("\n<DodgerBlue>[SLC] <white>Anti-2H Parry (head): <red>OFF")
+
 elseif args == "reset" then
 	ataxia_clearAllLimbDamage()
 
@@ -126,6 +134,7 @@ else
 	cecho("\n  <cyan>slc warn on/off")
 	cecho("\n  <cyan>slc crit on/off")
 	cecho("\n  <cyan>slc shikudo on/off <dim_gray>- Anti-Shikudo dynamic parry")
+	cecho("\n  <cyan>slc 2h on/off      <dim_gray>- Anti-2H parry (always head)")
 	cecho("\n  <cyan>slc parry <mode> <dim_gray>- auto/stand/defend/manual/randomarm/randomleg")
 	cecho("\n  <cyan>slc reset      <dim_gray>- Clear all limb damage")
 	cecho("\n  <cyan>slc gui        <dim_gray>- Toggle GUI window")

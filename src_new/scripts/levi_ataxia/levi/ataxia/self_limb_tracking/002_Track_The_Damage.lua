@@ -42,6 +42,7 @@ local defaultConfig = {
 	-- Parry mode
 	parryMode = "stand",
 	antiShikudo = true,
+	anti2H = true,
 
 	-- Parry weight tuning
 	parryWeights = {
@@ -392,8 +393,9 @@ function ataxia_showSelfLimbStatus()
 		cfg.parryMode,
 		cfg.warningAlerts and "green" or "red", cfg.warningAlerts and "ON" or "OFF",
 		cfg.criticalAlerts and "green" or "red", cfg.criticalAlerts and "ON" or "OFF"))
-	cecho(string.format("\n  <white>Anti-Shikudo: <%s>%s<white> | GUI: <%s>%s",
+	cecho(string.format("\n  <white>Anti-Shikudo: <%s>%s<white> | Anti-2H: <%s>%s<white> | GUI: <%s>%s",
 		cfg.antiShikudo and "green" or "red", cfg.antiShikudo and "ON" or "OFF",
+		cfg.anti2H and "green" or "red", cfg.anti2H and "ON" or "OFF",
 		cfg.guiWindow and "green" or "red", cfg.guiWindow and "ON" or "OFF"))
 end
 
