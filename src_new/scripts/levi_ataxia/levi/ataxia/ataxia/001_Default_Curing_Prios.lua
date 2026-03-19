@@ -155,7 +155,7 @@ function ataxia_defaultCuringPrios()
     -----------------------------------------------------------
     -- PRIORITY 9: Lower urgency
     -----------------------------------------------------------
-    ["darkshade"] = 9,        -- dShade swap handles urgent cases. Ginseng.
+    ["darkshade"] = 9,        -- darkshadeTracker auto-prioritizes after threshold. Ginseng.
     ["hypersomnia"] = 9,      -- Ash.
     ["hallucinations"] = 9,   -- Ash.
     ["fratricide"] = 25,      -- fratLock swap boosts to 4 when approaching lock. Lobelia. Deprioritized.

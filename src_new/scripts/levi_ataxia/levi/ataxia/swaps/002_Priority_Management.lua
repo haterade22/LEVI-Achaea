@@ -39,7 +39,6 @@ function ataxia_resetSwaps()
 		astImp = {active = true, desc = "Impatience prio swap for alchemist and serpents."},
 		brSlick = {active = true, desc = "Raise slickness prio if kelp stacked."},
 		hypoImp = {active = true, desc = "Prio hypochondria over impatience if stacked."},
-		dShade = {active = true, desc = "Manage darkshade when it's about to complete."},
 		ravaged = {active = false, desc = "Automatically prio mana sipping while ravagedmind is active."},
 		magi = {active = false, desc = "Automatic handling for burns and frozen status."},
     psionBleed = {active = false, desc = "Elevate haemophilia once bleed is stacked up."},

@@ -175,49 +175,6 @@ end
 registerAnonymousEventHandler("aff gained", "ataxia_swapHypoImp")
 registerAnonymousEventHandler("aff cured", "ataxia_restoreHypoImp")
 
---Darkshade functions
-function ataxia_swapDarkshade(event, affliction)
-  if not ataxia.prioritySwaps then ataxia_resetSwaps() end
-	if not ataxia.prioritySwaps.dShade.active then return end
-  if event == "aff gained" and affliction == "darkshade" then
-    if ataxia.lightwall then
-			if ataxia_getPrio("darkshade") > 3 then
-				ataxia_setAffPrio("darkshade", 3 )
-			end
-			ataxia_darkshadeTimer(true)
-    else
-      ataxia_darkshadeTimer(false)
-    end
-  end
-end
-
-function ataxia_restoreDarkshade(event, affliction)
-  if not ataxia.prioritySwaps then ataxia_resetSwaps() end
-	if not ataxia.prioritySwaps.dShade.active then return end
-  if event == "aff cured" then
-    if affliction == "darkshade" then
-			if ataxia_getPrio("darkshade") ~= ataxia_defaultPrioAff("darkshade") then
-      	ataxia_restorePrio("darkshade")
-			end
-		end
-		if ataxiaTemp.darkshadeTimer then killTimer(tostring(ataxiaTemp.darkshadeTimer)) end
-		ataxiaTemp.darkshadeTimer = nil
-  end
-end
-registerAnonymousEventHandler("aff gained", "ataxia_swapDarkshade")
-registerAnonymousEventHandler("aff cured", "ataxia_restoreDarkshade")
-
-
-function ataxia_darkshadeTimer(set)
-  if ataxiaTemp.darkshadeTimer then killTimer(tostring(ataxiaTemp.darkshadeTimer)) end
-  if ataxia.lightwall then
-    ataxiaTemp.darkshadeTimer = tempTimer(15, [[ataxiaTemp.darkshadeTimer = nil; send("curing prioaff darkshade")]])
-
-  else
-    ataxiaTemp.darkshadeTimer = tempTimer(50, [[ataxiaTemp.darkshadeTimer = nil; send("curing prioaff darkshade")]])
-  end
-end
-
 function ataxia_ravagedMindSwap(event, affliction)
   if not ataxia.prioritySwaps then ataxia_resetSwaps() end
 	if not ataxia.prioritySwaps.ravaged or not ataxia.prioritySwaps.ravaged.active or affliction ~= "mindravaged" then return end
