@@ -14,7 +14,304 @@ packageName: ''
 
 -- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Levi  Scripts > Algedonic Defense 1.0 > Anti Priorities
 
---These are just examples, some are good, some are bad!
+-- ============================================================================
+-- CORE FUNCTIONS (moved from _groups.yaml inline script)
+-- ============================================================================
+
+function Algedonic.Stack_My_Affs(adding, aff)
+  local stack = "default"
+  for i, j in pairs(Algedonic.whatcures) do
+    if table.contains(j, aff) then
+      stack = i
+      break
+    end
+  end
+  if stack == "default" then return end
+  if adding == true then
+    Algedonic.mystack[stack] = Algedonic.mystack[stack] + 1
+  else
+    Algedonic.mystack[stack] = Algedonic.mystack[stack] - 1
+  end
+end
+
+function Algedonic.Echo(thing)
+  cecho("\n<light_cyan>[Levi]: <white>"..thing)
+end
+
+function Algedonic.Count_My_Affs()
+  local count = 0
+  for _, v in pairs(ataxia.afflictions) do
+    if v then
+      count = count + 1
+    end
+  end
+  return count
+end
+
+-- ============================================================================
+-- DISPATCHER — table-driven, calls class-specific Anti* handler
+-- ============================================================================
+
+Algedonic._handlers = {
+  Apostate = "AntiApostate",
+  Alchemist = "AntiAlchemist",
+  Bard = "AntiBard",
+  Blademaster = "Blademaster",
+  Serpent = "AntiSerpent",
+  Shaman = "AntiShaman",
+  Magi = "AntiMagi",
+  Sylvan = "AntiSylvan",
+  Unnameable = "AntiUnnameable",
+  Psion = "AntiPsion",
+  Priest = "AntiPriest",
+  Sentinel = "AntiSentinel",
+  Pariah = "AntiPariah",
+  Occultist = "AntiOccultist",
+  Druid = "AntiDruid",
+  Depthswalker = "AntiDepthswalker",
+  Airlord = "AntiAirlord",
+  Waterlord = "AntiWaterlord",
+  Firelord = "AntiFirelord",
+  Paladin = "AntiPaladin",
+  Infernal = "AntiInfernal",
+}
+
+function Algedonic.Prioritize()
+  local targetclass = ataxiaNDB_getClass(target)
+  local handlerName = Algedonic._handlers[targetclass]
+  if handlerName and Algedonic[handlerName] then
+    Algedonic[handlerName]()
+  end
+end
+
+-- ============================================================================
+-- GENERIC SWAPS — unified from Priority Swaps (003) + Class Specific (001)
+-- All gated by ataxia.prioritySwaps toggles (aconfig prios)
+-- ============================================================================
+
+function Algedonic.ApplySwaps(aff)
+  if not ataxia.prioritySwaps then ataxia_resetSwaps() end
+  local ps = ataxia.prioritySwaps
+  local tc = ataxiaNDB_Exists(target) and ataxiaNDB_getClass(target) or nil
+
+  -- scyPara: boost scytherus if paralyzed
+  if ps.scyPara and ps.scyPara.active then
+    if affed("scytherus") and affed("paralysis") and ataxia_getPrio("scytherus") ~= 2 then
+      ataxia_setAffPrio("scytherus", 2)
+    end
+  end
+
+  -- conDis: boost confusion if disrupted+impatient
+  if ps.conDis and ps.conDis.active then
+    if affed("confusion") and affed("disrupted") and affed("impatience")
+       and not affed("whisperingmadness") and ataxia_getPrio("confusion") ~= 2 then
+      ataxia_setAffPrio("confusion", 2)
+    end
+  end
+
+  -- astImp: impatience prio vs Alchemist/Serpent when para+asthma
+  if ps.astImp and ps.astImp.active and tc then
+    if affed("paralysis") and affed("asthma")
+       and (tc == "Alchemist" or tc == "Serpent")
+       and ataxia_getPrio("impatience") ~= 1 then
+      ataxia_setAffPrio("impatience", 1)
+    end
+  end
+
+  -- WATER: boost nausea vs Blademaster
+  if ps.WATER and ps.WATER.active and tc then
+    if affed("nausea") and (affed("asthma") or affed("weariness"))
+       and tc == "Blademaster" then
+      ataxia_setAffPrio("nausea", 1)
+    end
+  end
+
+  -- brSlick: boost slickness when kelp stacked
+  if ps.brSlick and ps.brSlick.active then
+    if (affed("sensitivity") or affed("clumsiness") or affed("weariness"))
+       and affed("asthma") and affed("slickness") and not affed("anorexia")
+       and ataxia_getPrio("slickness") ~= 1 then
+      ataxia_setAffPrio("slickness", 1)
+    end
+  end
+
+  -- hypoImp: prio hypochondria over impatience
+  if ps.hypoImp and ps.hypoImp.active then
+    if (affed("lethargy") or affed("nausea") or affed("addiction"))
+       and affed("hypochondria") and ataxia_getPrio("hypochondria") ~= 1 then
+      ataxia_setAffPrio("impatience", 4)
+      ataxia_setAffPrio("hypochondria", 1)
+    end
+  end
+
+  -- ravaged: swap sipping priority on mindravaged
+  if ps.ravaged and ps.ravaged.active and aff == "mindravaged" then
+    if ataxia.settings.priohealth then
+      ataxia_sendCuringPriority("curing priority mana", false)
+    end
+  end
+
+  -- paraAst: prio paralysis when asthma blocks smoking
+  if ps.paraAst and ps.paraAst.active then
+    if affed("asthma") and affed("paralysis") and affed("slickness") then
+      ataxia_setAffPrio("paralysis", 1)
+    end
+  end
+
+  -- astWear: boost asthma vs Serpent when weariness present
+  if ps.astWear and ps.astWear.active and tc then
+    if affed("asthma") and affed("weariness") and tc == "Serpent" then
+      ataxia_setAffPrio("asthma", 3)
+    end
+  end
+
+  -- fratLock: boost fratricide when approaching softlock
+  if ps.fratLock and ps.fratLock.active then
+    if affed("fratricide") and affed("asthma") and affed("slickness") then
+      ataxia_setAffPrio("fratricide", 4)
+    end
+  end
+
+  -- psionBleed: boost haemophilia when bleed >= 125
+  if ps.psionBleed and ps.psionBleed.active then
+    if affed("haemophilia") and ataxia.vitals.bleed >= 125
+       and ataxia_getPrio("haemophilia") > 2 then
+      ataxia_setAffPrio("haemophilia", 2)
+    end
+  end
+
+  -- magi: handle burns/frozen/dehydrated
+  if ps.magi and ps.magi.active then
+    if (aff == "dehydrated" or (aff == "burning" and affed("dehydrated")))
+       and ataxia_getPrio("dehydrated") > 1 then
+      ataxia_sendCuringPriority("curing priority burning 1", false)
+    elseif aff == "hypothermia" then
+      ataxia_sendCuringPriority("curing priority shivering 20;curing priority frozen 20", false)
+    end
+    if affed("frozen") or (affed("shivering") and ataxia_getPrio("frozen") ~= 2) then
+      ataxia_sendCuringPriority("curing priority frozen 2 shivering 2;curing priority defence insulation 2", false)
+    end
+  end
+
+  -- scaldTimeflux: deprioritize scalded during timeflux (always runs)
+  if aff == "timeflux" then
+    if ataxia_getPrio("scalded") < 26 and affed("timeflux") then
+      ataxia_sendCuringPriority("curing priority scalded 26")
+    end
+  end
+end
+
+-- ============================================================================
+-- RESTORE SWAPS — undo persistent prio changes when triggering aff is cured
+-- ============================================================================
+
+function Algedonic.RestoreSwaps(aff)
+  if not ataxia.prioritySwaps then return end
+  local ps = ataxia.prioritySwaps
+
+  -- scyPara restore
+  if ps.scyPara and ps.scyPara.active and aff == "scytherus" then
+    if ataxia_getPrio("scytherus") ~= ataxia_defaultPrioAff("scytherus") then
+      ataxia_restorePrio("scytherus")
+    end
+  end
+
+  -- conDis restore
+  if ps.conDis and ps.conDis.active and aff == "confusion" then
+    if ataxia_getPrio("confusion") ~= ataxia_defaultPrioAff("confusion") then
+      ataxia_restorePrio("confusion")
+    end
+  end
+
+  -- astImp restore
+  if ps.astImp and ps.astImp.active then
+    if not (affed("paralysis") and affed("asthma")) then
+      if ataxia_defaultPrioAff("impatience") ~= ataxia_getPrio("impatience") then
+        ataxia_restorePrio("impatience")
+      end
+    end
+  end
+
+  -- brSlick restore
+  if ps.brSlick and ps.brSlick.active then
+    if not affed("asthma") and not (affed("sensitivity") or affed("clumsiness") or affed("weariness")) then
+      if ataxia_defaultPrioAff("slickness") ~= ataxia_getPrio("slickness") then
+        ataxia_restorePrio("slickness")
+      end
+    end
+  end
+
+  -- hypoImp restore
+  if ps.hypoImp and ps.hypoImp.active and aff == "hypochondria" then
+    ataxia_restorePrio("hypochondria")
+    ataxia_restorePrio("impatience")
+  end
+
+  -- ravaged restore
+  if ps.ravaged and ps.ravaged.active and aff == "mindravaged" then
+    ataxia_sendCuringPriority("curing priority health", false)
+  end
+
+  -- paraAst restore
+  if ps.paraAst and ps.paraAst.active and (aff == "paralysis" or aff == "asthma") then
+    if ataxia_getPrio("paralysis") ~= ataxia_defaultPrioAff("paralysis") then
+      ataxia_restorePrio("paralysis")
+    end
+  end
+
+  -- astWear restore
+  if ps.astWear and ps.astWear.active and (aff == "asthma" or aff == "weariness") then
+    if ataxia_getPrio("asthma") ~= ataxia_defaultPrioAff("asthma") then
+      ataxia_restorePrio("asthma")
+    end
+  end
+
+  -- fratLock restore
+  if ps.fratLock and ps.fratLock.active
+     and (aff == "fratricide" or aff == "asthma" or aff == "slickness") then
+    if ataxia_getPrio("fratricide") ~= ataxia_defaultPrioAff("fratricide") then
+      ataxia_restorePrio("fratricide")
+    end
+  end
+
+  -- psionBleed restore
+  if ps.psionBleed and ps.psionBleed.active and aff == "haemophilia" then
+    if ataxia_getPrio("haemophilia") ~= ataxia_defaultPrioAff("haemophilia") then
+      ataxia_restorePrio("haemophilia")
+    end
+  end
+
+  -- magi restore
+  if ps.magi and ps.magi.active then
+    if aff == "hypothermia" then
+      if affed("frozen") or affed("shivering") then
+        ataxia_sendCuringPriority("curing priority frozen 2 shivering 2;curing priority defence insulation 2", false)
+      else
+        if ataxia_getPrio("frozen") ~= ataxia_defaultPrioAff("frozen") then ataxia_restorePrio("frozen") end
+        if ataxia_getPrio("shivering") ~= ataxia_defaultPrioAff("shivering") then
+          ataxia_restorePrio("shivering")
+          ataxia_sendCuringPriority("curing priority defence insulation 20", false)
+        end
+      end
+    elseif aff == "dehydrated" then
+      if ataxia_getPrio("burning") ~= ataxia_defaultPrioAff("burning") then
+        if ataxia.afflictions.burning then ataxia.afflictions.burning = 1 end
+        ataxia_restorePrio("burning")
+      end
+    end
+  end
+
+  -- scaldTimeflux restore (always runs)
+  if aff == "timeflux" then
+    if ataxia_getPrio("scalded") ~= ataxia_defaultPrioAff("scalded") then
+      ataxia_restorePrio("scalded")
+    end
+  end
+end
+
+-- ============================================================================
+-- CLASS-SPECIFIC ANTI-PRIORITY FUNCTIONS
+-- ============================================================================
 
 function Algedonic.AntiAirlord()
    if ataxia.afflictions.pressure ~= nil then
@@ -408,4 +705,8 @@ function Algedonic.AntiWaterlord()
       return
     end
   end
+end
+
+function Algedonic.AntiFirelord()
+  -- TODO: implement fire lord defense priorities
 end

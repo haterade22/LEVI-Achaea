@@ -530,44 +530,24 @@ groups:
           ] = \"na\",                                                         \n}\n\n-- Backward-compat shim\nzData = ataxia.data"
         directory: levi_ataxia/levi/ataxia/zdata
   - name: Algedonic Defense 1.0
-    script: "--Algedonic.AffCount = Algedonic.Count_My_affs()  \n--Algedonic.Stack_My_Affs(false, aff)\n--Algedonic.Prioritize()\n\
-      \n-- Add the above to the functions gotAff() and lostAff() at the bottom.  Add only the FIRST line to afflictionList()\
-      \ at the end\n\n\n\nAlgedonic = Algedonic or {}\n\nAlgedonic.whatcures = {\n    [\"kelp\"] = {\"asthma\", \"clumsiness\"\
-      , \"sensitivity\", \"weariness\", \"healthleech\", \"parasite\", \"rebbies\"},\n    [\"lobelia\"]\
-      \ = {\"agoraphobia\", \"guilt\", \"spiritburn\", \"tenderskin\", \"claustrophobia\", \"loneliness\", \"masochism\",\
-      \ \"recklessness\", \"vertigo\", \"hypochondria\"},\n    [\"ash\"] = {\"confusion\", \"dementia\", \"hallucinations\", \"hypersomnia\"\
-      , \"paranoia\"},\n    [\"bellwort\"] = {\"retribution\",\"timeloop\", \"peace\",\"justice\",\"lovers\",\"generosity\"\
-      ,\"dminished\"},\n    [\"goldenseal\"] = {\"dizziness\", \"epilepsy\", \"impatience\", \"shyness\", \"stupidity\", \"\
-      depression\", \"shadowmadness\", \"mycalium\", \"sandfever\", \"horror\", \"fulminated\",},\n    [\"bloodroot\"] = {\"\
-      paralysis\", \"slickness\", \"pyramides\"},\n    [\"ginseng\"] = {\"addiction\", \"darkshade\", \"haemophilia\", \"\
-      lethargy\", \"nausea\", \"scytherus\", \"flushings\"},\n    [\"pear\"] = {\"pressure\"},\n  }\n\n  Algedonic.mystack\
-      \ = Algedonic.mystack or {\n    [\"kelp\"] = 0,\n    [\"lobelia\"] = 0,\n    [\"ash\"] = 0,\n    [\"bellwort\"] = 0,\n\
-      \    [\"goldenseal\"] = 0,\n    [\"bloodroot\"] = 0,\n    [\"ginseng\"] = 0,\n  }\n\n  Algedonic.AffCount = Algedonic.AffCount\
-      \ or 0\n\nfunction Algedonic.Stack_My_Affs(adding, aff)\n    local stack = \"default\"\n    for i, j in pairs(Algedonic.whatcures)\
-      \ do \n      if table.contains(j, aff) then\n        stack = i\n        break\n      end\n    end\n    if stack == \"\
-      default\" then return end\n    if adding == true then\n      Algedonic.mystack[stack] = Algedonic.mystack[stack] + 1\n\
-      \    else\n      Algedonic.mystack[stack] = Algedonic.mystack[stack] - 1\n    end\n  end\n\n  function Algedonic.Echo(thing)\n\
-      \    cecho(\"\\n<light_cyan>[Levi]: <white>\"..thing)\nend\n\nfunction Algedonic.Prioritize()\n    local targetclass\
-      \ = ataxiaNDB_getClass(target)\n    if targetclass == \"Apostate\" then\n        Algedonic.AntiApostate()\n    elseif\
-      \ targetclass == \"Alchemist\" then\n        Algedonic.AntiAlchemist()\n    elseif targetclass == \"Bard\" then\n  \
-      \      Algedonic.AntiBard()\n    elseif targetclass == \"Blademaster\" then\n        Algedonic.Blademaster()\n    elseif\
-      \ targetclass == \"Serpent\" then\n        Algedonic.AntiSerpent()\n    elseif targetclass == \"Shaman\" then\n    \
-      \    Algedonic.AntiShaman()\n    elseif targetclass == \"Magi\" then\n        Algedonic.AntiMagi()\n    elseif targetclass\
-      \ == \"Sylvan\" then\n        Algedonic.AntiSylvan()\n    elseif targetclass == \"Unnameable\" then\n        Algedonic.AntiUnnameable()\n\
-      \    elseif targetclass == \"Psion\" then\n        Algedonic.AntiPsion()\n    elseif targetclass == \"Priest\" then\n\
-      \        Algedonic.AntiPriest()\n    elseif targetclass == \"Sentinel\" then\n        Algedonic.AntiSentinel()\n   \
-      \ elseif targetclass == \"Pariah\" then\n        Algedonic.AntiPariah()\n    elseif targetclass == \"Occultist\" then\n\
-      \      Algedonic.AntiOccultist()\n    elseif targetclass == \"Druid\" then\n        Algedonic.AntiDruid()\n    elseif\
-      \ targetclass == \"Depthswalker\" then\n        Algedonic.AntiDepthswalker()\n    elseif targetclass == \"Airlord\"\
-      \ then\n        Algedonic.AntiAirlord()\n    elseif targetclass == \"Waterlord\" then\n        Algedonic.AntiWaterlord()\n\
-      \    elseif targetclass == \"Firelord\" then\n        Algedonic.AntiFirelord()\n    end\nend\n\nfunction Algedonic.ClassSwap()\n\
-      \    local targetclass = ataxiaNDB_getClass(target)\n    if targetclass == \"Apostate\" then\n        Algedonic.ApostateSwap()\n\
-      \    elseif targetclass == \"Alchemist\" then\n        Algedonic.AlchemistSwap()\n    elseif targetclass == \"Bard\"\
-      \ then\n        Algedonic.AntiBard()    \n    elseif targetclass == \"Blademaster\" then\n        Algedonic.Blademaster()\n\
-      \    elseif targetclass == \"Depthswalker\" then\n        Algedonic.Depthswalker() \n    elseif targetclass == \"Pariah\"\
-      \ then\n        Algedonic.AntiPariah()    \n    --etc\n    end\nend\n\nfunction Algedonic.Count_My_Affs()\n    local\
-      \ count = 0\n    for _, v in pairs(ataxia.afflictions) do\n        if v then\n            count = count + 1\n      \
-      \  end\n    end\n    return count\nend"
+    script: "-- Algedonic Defense namespace bootstrap (data only)\n-- All functions moved\
+      \ to 001_Anti_Priorities.lua\n\nAlgedonic = Algedonic or {}\n\nAlgedonic.whatcures\
+      \ = {\n    [\"kelp\"] = {\"asthma\", \"clumsiness\", \"sensitivity\", \"weariness\"\
+      , \"healthleech\", \"parasite\", \"rebbies\"},\n    [\"lobelia\"] = {\"agoraphobia\"\
+      , \"guilt\", \"spiritburn\", \"tenderskin\", \"claustrophobia\", \"loneliness\"\
+      , \"masochism\", \"recklessness\", \"vertigo\", \"hypochondria\"},\n    [\"ash\"\
+      ] = {\"confusion\", \"dementia\", \"hallucinations\", \"hypersomnia\", \"paranoia\"\
+      },\n    [\"bellwort\"] = {\"retribution\",\"timeloop\", \"peace\",\"justice\"\
+      ,\"lovers\",\"generosity\",\"dminished\"},\n    [\"goldenseal\"] = {\"dizziness\"\
+      , \"epilepsy\", \"impatience\", \"shyness\", \"stupidity\", \"depression\",\
+      \ \"shadowmadness\", \"mycalium\", \"sandfever\", \"horror\", \"fulminated\"\
+      },\n    [\"bloodroot\"] = {\"paralysis\", \"slickness\", \"pyramides\"},\n \
+      \   [\"ginseng\"] = {\"addiction\", \"darkshade\", \"haemophilia\", \"lethargy\"\
+      , \"nausea\", \"scytherus\", \"flushings\"},\n    [\"pear\"] = {\"pressure\"\
+      },\n}\n\nAlgedonic.mystack = Algedonic.mystack or {\n    [\"kelp\"] = 0,\n\
+      \    [\"lobelia\"] = 0,\n    [\"ash\"] = 0,\n    [\"bellwort\"] = 0,\n    [\"\
+      goldenseal\"] = 0,\n    [\"bloodroot\"] = 0,\n    [\"ginseng\"] = 0,\n}\n\n\
+      Algedonic.AffCount = Algedonic.AffCount or 0"
     directory: levi_ataxia/levi/levi_scripts/algedonic_defense_1.0
   - name: Gear System
     directory: levi_ataxia/levi/levi_scripts/gear_system

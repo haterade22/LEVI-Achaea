@@ -137,9 +137,7 @@ function gotAff()
 		send("touch friends")
   elseif aff == "paralysis" then
    send("endure")
-  elseif aff == "haemophilia" then
-    sentinel_swaphaemophilia()
- elseif aff == "prone" and not ataxia.afflictions.aeon then
+  elseif aff == "prone" and not ataxia.afflictions.aeon then
   --Smoke for Rebounding - Serverside doesn't put it up
     send("smoke malachite") 
   ---AUTO TUMBLER
@@ -235,9 +233,10 @@ function gotAff()
 	raiseEvent("aff gained", aff)
   if zgui then zgui.showAffs() end
 
---If facing a specific class, call out priorities to ensure we are curing correctly
+-- Generic swaps first (persistent prio changes), then class-specific (one-shot prioaff)
+Algedonic.ApplySwaps(aff)
 Algedonic.Prioritize()
--- Calulate Stacks (Kelp/Goldenseal/Bloodroot/etc)
+-- Calculate Stacks (Kelp/Goldenseal/Bloodroot/etc)
 Algedonic.Stack_My_Affs(true, aff)
 end
 
@@ -297,6 +296,7 @@ function lostAff()
 
 	raiseEvent("aff cured", aff[1])
   if zgui then zgui.showAffs() end
+Algedonic.RestoreSwaps(aff[1])
 Algedonic.Prioritize()
 Algedonic.Stack_My_Affs(false, aff)
 end
