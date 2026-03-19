@@ -565,17 +565,7 @@ function tekura.dispatch.run()
     cmd = combatQueue()
   end
 
-  -- Handle rebounding (raze with RHK - roundhouse kick)
-  if tekura.dispatch.checkRebounding() then
-    cmd = cmd .. "unwield all;dismount;combo " .. target .. " rhk hkp hkp"
-    tekura.sendAttack(cmd)
-    if tekura.shouldEcho() then
-      cecho("\n<yellow>[TKD] RAZING REBOUNDING")
-    end
-    return
-  end
-
-  -- Handle shield (raze with RHK - roundhouse kick)
+  -- Handle shield (raze with RHK - roundhouse kick; monk bypasses rebounding)
   if tekura.dispatch.checkShield() then
     cmd = cmd .. "unwield all;dismount;combo " .. target .. " rhk hkp hkp"
     tekura.sendAttack(cmd)

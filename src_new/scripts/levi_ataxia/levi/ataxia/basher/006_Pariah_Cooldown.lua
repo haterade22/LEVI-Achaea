@@ -64,25 +64,5 @@ function ataxiaBasher_swarmDevourReady()
 	end
 end
 
--- Trigger for swarm devour attack detection (sets cooldown)
--- Pattern: "You direct your swarm to devour"
-if exists("Pariah Swarm Devour Cooldown", "trigger") == 0 then
-	permRegexTrigger("Pariah Swarm Devour Cooldown", "", {[[^You direct your swarm to devour]]}, [[ataxiaBasher_swarmDevourCooldown()]])
-end
-
--- Trigger for swarm devour kill (resets cooldown immediately)
--- Pattern: "With a chorus of chittering mandibles, the swarm rips away from the corpse of..."
-if exists("Pariah Swarm Devour Kill Reset", "trigger") == 0 then
-	permRegexTrigger("Pariah Swarm Devour Kill Reset", "", {[[^With a chorus of chittering mandibles, the swarm rips away from the corpse of]]}, [[ataxiaBasher_swarmDevourReady()]])
-end
-
--- Trigger for swarm devour on cooldown (safety check)
--- Pattern varies - add if you see a specific cooldown message
-if exists("Pariah Swarm Devour On Cooldown", "trigger") == 0 then
-	permRegexTrigger("Pariah Swarm Devour On Cooldown", "", {[[^Your swarm is still digesting]]}, [[ataxiaBasher_swarmDevourCooldown()]])
-end
-
--- Trigger for swarm devour ready message (40 second cooldown expired)
-if exists("Pariah Swarm Devour Ready Message", "trigger") == 0 then
-	permRegexTrigger("Pariah Swarm Devour Ready Message", "", {[[^You may command a swarm to devour another foe\.$]]}, [[ataxiaBasher_swarmDevourReady()]])
-end
+-- Triggers for swarm devour are now permanent triggers (370-373)
+-- Orphaned permRegexTrigger cleanup is handled in 005_Falcon_Cooldowns.lua

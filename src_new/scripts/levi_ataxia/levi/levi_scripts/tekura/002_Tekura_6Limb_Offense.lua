@@ -623,19 +623,7 @@ function tekura6.dispatch.run()
     cmd = combatQueue()
   end
 
-  -- REBOUNDING CHECK: raze with RHK (break-guarded punches during PREP)
-  if tekura6.checkRebounding() then
-    local p1, p2 = tekura6.dispatch.safeRazePunches()
-    cmd = cmd .. "unwield all;dismount;combo " .. target .. " rhk " .. p1 .. " " .. p2
-    tekura6.state.lastKickLimb = nil  -- RHK raze, no limb target
-    tekura6.sendAttack(cmd)
-    if tekura6.shouldEcho() then
-      cecho("\n<yellow>[TK6] RAZING REBOUNDING")
-    end
-    return
-  end
-
-  -- SHIELD CHECK: raze with RHK (break-guarded punches during PREP)
+  -- SHIELD CHECK: raze with RHK (break-guarded punches during PREP; monk bypasses rebounding)
   if tekura6.checkShield() then
     local p1, p2 = tekura6.dispatch.safeRazePunches()
     cmd = cmd .. "unwield all;dismount;combo " .. target .. " rhk " .. p1 .. " " .. p2

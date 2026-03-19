@@ -31,20 +31,18 @@ function ataxiaBasher_hyenaMaulReady()
 	ataxiaBasher.hyenaMaulReady = true
 end
 
--- Trigger for hyena attack detection (sets cooldown)
--- Pattern: "A daemonic hyena snarls as she hurls herself at"
-if exists("Infernal Hyena Maul Cooldown", "trigger") == 0 then
-	permRegexTrigger("Infernal Hyena Maul Cooldown", "", {[[^A daemonic hyena snarls as she hurls herself at]]}, [[ataxiaBasher_hyenaMaulCooldown()]])
-end
-
--- Trigger for hyena cooldown reset
--- Pattern: "You may command your hyena to maul your foes once more."
-if exists("Infernal Hyena Maul Ready", "trigger") == 0 then
-	permRegexTrigger("Infernal Hyena Maul Ready", "", {[[^You may command your hyena to maul your foes once more\.$]]}, [[ataxiaBasher_hyenaMaulReady()]])
-end
-
--- Trigger for hyena on cooldown (safety check)
--- Pattern: "You cannot yet order your hyena to maul another foe."
-if exists("Infernal Hyena Maul On Cooldown", "trigger") == 0 then
-	permRegexTrigger("Infernal Hyena Maul On Cooldown", "", {[[^You cannot yet order your hyena to maul another foe\.$]]}, [[ataxiaBasher_hyenaMaulCooldown()]])
+-- One-time cleanup: remove orphaned permRegexTrigger-created triggers
+-- (now handled by permanent triggers 367-369). Can be removed after one session.
+for _, name in ipairs({
+	"Infernal Hyena Maul Cooldown",
+	"Infernal Hyena Maul Ready",
+	"Infernal Hyena Maul On Cooldown",
+	"Pariah Swarm Devour Cooldown",
+	"Pariah Swarm Devour Kill Reset",
+	"Pariah Swarm Devour On Cooldown",
+	"Pariah Swarm Devour Ready Message",
+}) do
+	if exists(name, "trigger") > 0 then
+		killTrigger(name)
+	end
 end

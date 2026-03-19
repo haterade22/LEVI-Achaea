@@ -34,6 +34,8 @@ patterns:
   type: 1
 - pattern: ^You cannot yet order your hyena to maul another foe\.$
   type: 1
+- pattern: ^A daemonic hyena snarls as she hurls herself at
+  type: 1
 ]]--
 
 ataxiaBasher_hyenaMaulCooldown()

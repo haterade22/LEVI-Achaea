@@ -136,6 +136,8 @@ patterns:
   type: 1
 - pattern: ^The magical shield surrounding (.+) fades away\.$
   type: 1
+- pattern: ^You twist your torso and send a roundhouse towards (.+)\.$
+  type: 1
 ]]--
 
 ataxiaBasher.shielded = false
