@@ -23,7 +23,7 @@ packageName: ''
 ataxia.vultureTalon = ataxia.vultureTalon or {
   onCooldown = false,
   cooldownTimer = nil,
-  cooldownDuration = 20,  -- seconds; adjust after in-game testing
+  cooldownDuration = 180,  -- 3 minutes; adjust after in-game testing
 }
 
 function ataxia_tryVultureTalon()
