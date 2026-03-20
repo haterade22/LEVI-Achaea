@@ -29,6 +29,7 @@ function ataxia_initUserConfig()
   u.artefacts.bracelet = u.artefacts.bracelet or nil
   u.artefacts.belt = u.artefacts.belt or nil
   u.artefacts.ring = u.artefacts.ring or nil
+  u.artefacts.talon = u.artefacts.talon or false  -- Vulture's talon: SCRATCH MYSELF WITH TALON for caloric
   u.artefacts.earrings = u.artefacts.earrings or {}
 
   -- Ensure weapons table exists with all slots

@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: Salve Bal
+name: Salve Bal Lost
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -31,9 +31,8 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: You may apply another salve or balm to yourself.
-  type: 3
+- pattern: ^You take out some salve and rub it on your .+\.$
+  type: 1
 ]]--
 
-ataxia.bals.used.salve = true
-ataxia_heartseedFake()
+ataxia.bals.used.salve = false

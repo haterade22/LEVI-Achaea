@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-03-20 — Vulture's Talon artefact integration
+
+### Feature: Auto-use Vulture's Talon for caloric defense vs Blademaster/Magi
+
+When fighting Blademaster or Magi, if we gain shivering/frozen while off salve balance, the system automatically sends `SCRATCH MYSELF WITH TALON` to restore caloric defense. This bypasses salve balance, giving an extra cure channel when SSC can't apply salves.
+
+**Toggle:** `ataxia.settings.user.artefacts.talon = true` (default: `false`, disabled for users without the artefact).
+
+**Also added:** Self salve balance tracking (`ataxia.bals.used.salve`) — tracks when own salve balance is up/down via text triggers.
+
+**Files:**
+- `misc_scripts/022_User_Config.lua` — Added `talon` to artefacts config
+- `swaps/005_Vulture_Talon.lua` — **New** — `ataxia_tryVultureTalon()` with 5 gates (artefact, cooldown, aff, class, salve bal)
+- `004_Aff_gains_losses.lua` — Hook shivering/frozen gain to talon check
+- `algedonic_defense_1.0/001_Anti_Priorities.lua` — Secondary hook in `Blademaster()` and `AntiMagi()`
+- `curing_bals/005_Salve_Bal.lua` — Set `ataxia.bals.used.salve = true` on regain
+- `curing_bals/010_Salve_Bal_Lost.lua` — **New** — Set salve bal false on self-salve application
+- `curing_bals/011_Vulture_Talon.lua` — **New** — Placeholder trigger for success/cooldown text (inactive, needs in-game testing)
+- `_groups.yaml` — Init `ataxia.bals.used.salve = true`
+
+---
+
 ## 2026-03-18 — Basher flee-heal-return loop
 
 ### Feature: Auto-return to combat room after fleeing

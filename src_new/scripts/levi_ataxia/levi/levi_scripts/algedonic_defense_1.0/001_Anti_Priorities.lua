@@ -369,6 +369,7 @@ end
 
 
 function Algedonic.Blademaster()
+  ataxia_tryVultureTalon()
 end
 
 function Algedonic.AntiDruid()
@@ -410,7 +411,7 @@ function Algedonic.AntiMagi()
   elseif not ataxia.afflictions.asthma and not ataxia.afflictions.paralysis and ataxia.afflictions.healthleech then
     send("curing prioaff healthleech")
   end
-    --Your conditions here
+  ataxia_tryVultureTalon()
 end
   
 function Algedonic.AntiPariah()

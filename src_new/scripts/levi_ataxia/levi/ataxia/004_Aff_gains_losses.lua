@@ -227,6 +227,8 @@ function gotAff()
             ataxia_boxEcho("Darkshade persisting - prioritizing cure", "yellow")
         end
     end)
+  elseif aff == "shivering" or aff == "frozen" then
+    ataxia_tryVultureTalon()
 	end
   --Are we close to being locked where we need to hit our active ability?
 	ataxia_lockBreak()

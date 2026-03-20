@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: Salve Bal
+name: Vulture Talon
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -9,7 +9,7 @@ hierarchy:
 - Curing Stuff
 - Curing Bals
 attributes:
-  isActive: 'yes'
+  isActive: 'no'
   isFolder: 'no'
   isTempTrigger: 'no'
   isMultiline: 'no'
@@ -31,9 +31,20 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: You may apply another salve or balm to yourself.
+- pattern: TODO_REPLACE_WITH_TALON_SUCCESS_TEXT
+  type: 3
+- pattern: TODO_REPLACE_WITH_TALON_COOLDOWN_TEXT
   type: 3
 ]]--
 
-ataxia.bals.used.salve = true
-ataxia_heartseedFake()
+-- TODO: Replace patterns above with actual game text after in-game testing.
+-- Success pattern: confirm cooldown started, erase shivering/frozen.
+-- Cooldown pattern: talon on cooldown, keep flag set.
+--
+-- Example success handler:
+--   erAff("shivering")
+--   erAff("frozen")
+--   erAff("nocaloric")
+--
+-- Example cooldown handler:
+--   ataxia.vultureTalon.onCooldown = true

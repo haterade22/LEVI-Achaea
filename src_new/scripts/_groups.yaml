@@ -707,7 +707,7 @@ groups:
     muteList = muteList or {}\n\nataxiaTables.limbData = ataxiaTables.limbData or {}\nataxiaTables.limbTimers = ataxiaTables.limbTimers or {}\nataxiaTables.fractureTimers = ataxiaTables.fractureTimers\
     \ or {}\n\nataxia.defences = ataxia.defences or {}\nataxia.afflictions = ataxia.afflictions or\
     \ {}\nataxia.vitals = ataxia.vitals or {}\n\nataxia.bals = ataxia.bals or {}\nataxia.bals.get = {\"bal\", \"eq\"}\nataxia.bals.used = ataxia.bals.used or\
-    \ {}\nataxia.bals.timestamps = ataxia.bals.timestamps or {}\n\n\nfunction ataxia_Echo(text)\n\tcecho(\"\\n<a_darkcyan>(<a_darkmagenta>LEVI<a_darkcyan>):\
+    \ {}\nataxia.bals.used.salve = true\nataxia.bals.timestamps = ataxia.bals.timestamps or {}\n\n\nfunction ataxia_Echo(text)\n\tcecho(\"\\n<a_darkcyan>(<a_darkmagenta>LEVI<a_darkcyan>):\
     \ <NavajoWhite>\"..text)\nend\n\nfunction ataxiaEcho(text)\n\tcecho(\"\\n<a_darkcyan>(<a_darkmagenta>LEVI<a_darkcyan>):\
     \ <NavajoWhite>\"..text)\nend\n\n\n"
 - name: My_Package
