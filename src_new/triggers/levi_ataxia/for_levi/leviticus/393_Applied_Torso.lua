@@ -39,46 +39,95 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-tdeliverance = false
+  -- restore passive cures if needed
   if passiveFailsafe then restorePassiveCure() end
-  -- V3 integration: torso salve cure branching
-  if onSalveCureV3 then onSalveCureV3("torso") end
+
+  -- slickness and bloodfire always applied
   erAff("slickness")
-	erAff("bloodfire")
-  erAff("selarnia")
-  erAff("frostbite")
-  
+  erAff("bloodfire")
+
+  -- Central crushedthroat check (head apply could have been pending)
+  if ataxiaTemp.crushedCheck and ataxiaTemp.crushedCheck.pending then
+      local now = os.clock()
+      if now - ataxiaTemp.crushedCheck.lastApply < 1.2 then
+          if haveAff("crushedthroat") then
+              erAff("crushedthroat")
+          end
+          killTimer(ataxiaTemp.crushedCheck.timer)
+          ataxiaTemp.crushedCheck.pending = false
+          ataxiaTemp.crushedCheck.timer = nil
+          target_salveBal(1.1)
+      end
+  end
+
   local salvetimer = false
+
+  -- Hypothermia logic
   if haveAff("hypothermia") then
-    if haveAff("timeflux") then
-      tempTimer(6.5, [[ erAff("hypothermia"); ataxia_boxEcho("they cured hypothermia", "DodgerBlue") ]])
+      if haveAff("timeflux") then
+          tempTimer(6.5, function()
+              erAff("hypothermia")
+              ataxia_boxEcho("they cured hypothermia", "DodgerBlue")
+          end)
+          salvetimer = 6.5
+      else
+          tempTimer(3.5, function()
+              erAff("hypothermia")
+              ataxia_boxEcho("they cured hypothermia", "DodgerBlue")
+          end)
+          salvetimer = 3.5
+      end
+
+  -- Scalded + Calcified Torso
+  elseif haveAff("scalded") and haveAff("calcifiedtorso") and tLimbs.T <= 199 then
+      tempTimer(6.5, function()
+          erAff("calcifiedtorso")
+          target_resetLimb("torso")
+          ataxia_boxEcho("they cured Torso Damage", "DodgerBlue")
+      end)
       salvetimer = 6.5
-    else
-      tempTimer(3.5, [[ erAff("hypothermia"); ataxia_boxEcho("they cured hypothermia", "DodgerBlue") ]])
+  elseif haveAff("scalded") and haveAff("calcifiedtorso") and tLimbs.T >= 200 then
+      tempTimer(6.5, function()
+          erAff("calcifiedtorso")
+          tLimbs.T = 100
+          ataxia_boxEcho("they cured ******* Lvl 2 Torso *****", "DodgerBlue")
+      end)
+      salvetimer = 6.5
+
+  -- Calcified torso only (no scald)
+  elseif haveAff("calcifiedtorso") and not haveAff("scalded") and tLimbs.T <= 199 then
+      tempTimer(4, function()
+          erAff("calcifiedtorso")
+          target_resetLimb("torso")
+          ataxia_boxEcho("they cured Torso Damage", "DodgerBlue")
+      end)
       salvetimer = 3.5
-      target_salveBal(4)
-    end
-  elseif lb[target].hits["torso"] >= 98 then
-    salvetimer = 3.5
-    target_salveBal(4)
-  else
-    target_salveBal(4)
+  elseif haveAff("calcifiedtorso") and not haveAff("scalded") and tLimbs.T >= 200 then
+      tempTimer(4, function()
+          erAff("calcifiedtorso")
+          tLimbs.T = 100
+          ataxia_boxEcho("they cured ******* Lvl 2 Torso *****", "DodgerBlue")
+      end)
+      salvetimer = 3.5
+
+  -- Normal torso break checks
+  elseif tLimbs.T >= 98 and tLimbs.T < 200 then
+      tempTimer(4, function()
+          target_resetLimb("torso")
+      end)
+      salvetimer = 3.5
+  elseif tLimbs.T >= 200 then
+      tempTimer(4, function()
+          tLimbs.T = 100
+      end)
+      salvetimer = 3.5
   end
-  
-  
-  if lb[target].hits["torso"] >= 100 and lb[target].hits["torso"] < 200 then
-    tempTimer(4, [[erAff("mildtrauma");ataxia_boxEcho("they RESTORED TORSO", "DodgerBlue")]])
-    target_salveBal(4)
-  elseif lb[target].hits["torso"] >= 200 then
-    tempTimer(4, [[erAff("serioustrauma")]])
-    target_salveBal(4)
-  else 
-    target_salveBal(4)
-  end
+
+  -- Apply salve balance if any timer was set
   if salvetimer ~= false then
-    target_salveBal(salvetimer)
+      target_salveBal(salvetimer)
   end
-  
-	erAff("bloodfire")
-	targetIshere = true
+
+  -- Target still present
+  targetIshere = true
 end

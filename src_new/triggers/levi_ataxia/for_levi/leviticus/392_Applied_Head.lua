@@ -37,43 +37,58 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-tdeliverance = false
-  if passiveFailsafe then restorePassiveCure() end
-	-- V2 tracking support: head salve cures slickness and other affs
-	if onTargetSalveHeadV2 then onTargetSalveHeadV2(matches[2]) end
-	-- V3 integration: head salve cure branching
-	if onSalveCureV3 then onSalveCureV3("head") end
-	erAff("slickness")
-	if haveAff("crushedthroat") then
-		erAff("crushedthroat")
-	elseif lb[target].hits["head"] >= 100 and lb[target].hits["head"] < 200 then
-    tempTimer(4, [[erAff("damagedhead")]])
-    target_salveBal(4)
-  elseif lb[target].hits["head"] >= 200 then
-    tempTimer(4, [[erAff("mangledhead")]])
-    target_salveBal(4)
-  elseif vodunCheck then
-    target_salveBal(4)
-    vodunCheck = nil
-  else
-    --check epidermal stuff
-    for _, aff in pairs({ "blindness", "scalded", "epidermal" }) do
-      if haveAff(aff) then
-        erAff(aff)
-        break
-      end
-    end
-	end
-	erAff("bloodfire")
-	targetIshere = true
-end
+    if passiveFailsafe then restorePassiveCure() end
+    erAff("slickness")
 
-if isTargeted(matches[2]) then 
-  if magi.calcifying_head or lb[target].hits["head"] > 100 then
-    magi.calficy_resto = true
-    if resto_timer then
-      killTimer(resto_timer)
+    -- ==== CRUSHEDTHROAT TRACKING ====
+    local now = os.clock()
+    if ataxiaTemp.crushedCheck.pending then
+        if now - ataxiaTemp.crushedCheck.lastApply < 1.2 then
+            -- confirmed mending, cure crushedthroat
+            if haveAff("crushedthroat") then
+                erAff("crushedthroat")
+            end
+            -- cancel pending timer
+            if ataxiaTemp.crushedCheck.timer then killTimer(ataxiaTemp.crushedCheck.timer) end
+            ataxiaTemp.crushedCheck.pending = false
+            ataxiaTemp.crushedCheck.timer = nil
+            target_salveBal(1.1)
+        end
     end
-    resto_timer = tempTimer(4, [[magi.calcify_resto = false]])
+
+    -- record this head apply as pending
+    ataxiaTemp.crushedCheck.pending = true
+    ataxiaTemp.crushedCheck.lastApply = now
+    if ataxiaTemp.crushedCheck.timer then killTimer(ataxiaTemp.crushedCheck.timer) end
+    ataxiaTemp.crushedCheck.timer = tempTimer(1.5, function()
+        ataxiaTemp.crushedCheck.pending = false
+        ataxiaTemp.crushedCheck.timer = nil
+    end)
+
+    -- ==== HEAD BREAK HANDLING ====
+    local salvetimer = false
+    if tLimbs.H >= 100 and tLimbs.H < 200 then
+        -- lvl 2 break
+        tempTimer(4, function()
+            target_resetLimb("head")
+            erAff("mangledhead")
+            ataxia_boxEcho("they cured Head Damage (lvl 2)", "DodgerBlue")
+        end)
+        salvetimer = 4
+    elseif tLimbs.H >= 200 then
+        -- lvl 3 break
+        tempTimer(4, function()
+            tLimbs.H = 100
+            erAff("mangledhead")
+            ataxia_boxEcho("they cured Head Damage (lvl 3 -> lvl 2)", "DodgerBlue")
+        end)
+        salvetimer = 4
     end
+
+    if salvetimer then
+        target_salveBal(salvetimer)
+    end
+
+    erAff("bloodfire")
+    targetIshere = true
 end

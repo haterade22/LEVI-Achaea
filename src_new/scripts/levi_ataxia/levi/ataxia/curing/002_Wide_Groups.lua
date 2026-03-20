@@ -14,6 +14,61 @@ attributes:
 packageName: ''
 ]]--
 
+curingTable = {
+    goldenseal = {"depression", "sandfever", "stupidity", "epilepsy", "dizziness", "dissonance", "shyness", "impatience", "unweavingmind", "fulminated"},
+    lobelia = {"hypochondria", "recklessness", "fratricide", "vertigo", "spiritburn", "tenderskin", "loneliness", "claustrophobia", "masochism", "agoraphobia"},
+    bellwort = {"timeloop", "justice", "lovers", "peace", "pacified", "generosity", "indifference"},
+    kelp = {"parasite", "weariness",  "asthma", "healthleech", "clumsiness", "sensitivity"},
+    ash = {"confusion", "hypersomnia", "hallucinations", "paranoia", "dementia"},
+    ginseng = {"flushings", "lethargy", "haemophilia", "addiction", "nausea", "scytherus", "darkshade", "unweavingbody"},
+}
+
+-- Global-ish table to track pending crushedthroat applies
+ataxiaTemp = ataxiaTemp or {}
+ataxiaTemp.crushedCheck = {
+    pending = false,
+    timer = nil,
+    lastApply = 0
+}
+
+function haveSmokeAff()
+    local smoke = false
+    local sAffs = {"deadening", "tension",
+        "disloyalty", "hellsight", "manaleech", "slickness", "unweavingspirit"}
+
+    for i=1, #sAffs do
+        if haveAff(sAffs[i]) then
+            smoke = true
+            break
+        end
+    end
+
+    return smoke
+end
+
+function hasSalveAff()
+  local salve = false
+  local sAffs = {"frozen", "shivering", "anorexia", "burns", "ablaze", "selarnia",
+    "damagedleftleg", "damagedrightleg", "mangledleftleg", "mangledrightleg",
+    "damagedleftarm", "damagedrightarm", "mangledleftarm", "mangledrightarm",
+    "brokenleftarm", "brokenrightarm", "brokenleftleg", "brokenrightleg"}
+
+  for i=1, #sAffs do
+    if haveAff(sAffs[i]) then
+      salve = true
+      break
+    end
+  end
+
+  return salve
+end
+
+function restorePassiveCure()
+  cecho("\n<green>+ "..passiveFailsafe.." +")
+  tAffs[passiveFailsafe] = true
+  passiveFailsafe = nil
+end
+
 function taRaged()
 	if tAffs.retribution then erAff("retribution") end
 	local gAffs = {"timeloop", "justice", "lovers", "peace", "pacified", "generosity", "indifference",}

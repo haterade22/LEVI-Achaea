@@ -697,6 +697,28 @@ local function pickVenom(exclude)
     return "vernalius"
 end
 
+local function pickVenomGroup(exclude)
+    -- 1. Paralysis first (blocks tree)
+    if not haveAff("paralysis") and exclude ~= "curare" then return "curare" end
+    -- 2. Asthma (blocks smoking, enables impulse)
+    if not haveAff("asthma") and exclude ~= "kalmia" then return "kalmia" end
+    -- 3. If asthma stuck -> slickness (blocks salves)
+    if haveAff("asthma") and not haveAff("slickness") and exclude ~= "gecko" then return "gecko" end
+    -- 4. Weariness (blocks fitness, enables impulse)
+    if not haveAff("weariness") and exclude ~= "vernalius" then return "vernalius" end
+    -- 5. Anorexia when impatience + slickness + asthma (blocks eating)
+    if haveAff("impatience") and haveAff("slickness") and haveAff("asthma")
+       and not haveAff("anorexia") and exclude ~= "slike" then return "slike" end
+    -- 6. Fill remaining lock gaps
+    if not haveAff("paralysis") and exclude ~= "curare" then return "curare" end
+    if not haveAff("slickness") and exclude ~= "gecko" then return "gecko" end
+    if not haveAff("weariness") and exclude ~= "vernalius" then return "vernalius" end
+    if not haveAff("asthma") and exclude ~= "kalmia" then return "kalmia" end
+    -- Default
+    if exclude ~= "curare" then return "curare" end
+    return "kalmia"
+end
+
 local function pickVenomRelapse(exclude)
     local hasWea = haveAff("weariness")
     local hasAst = haveAff("asthma")
@@ -1329,9 +1351,9 @@ function selectVenoms()
 
     -- ===== GROUP =====
     if serpStrategy == "group" then
-        local v1 = pickVenom(nil)
+        local v1 = pickVenomGroup(nil)
         table.insert(envenomList, v1)
-        table.insert(envenomListTwo, pickVenom(v1))
+        table.insert(envenomListTwo, pickVenomGroup(v1))
         return
     end
 
@@ -1585,6 +1607,14 @@ function serp_ekanelia_attack()
        and not useBite and not eqAction and not haveAff("scytherus") then
         impulsePair = {suggestion = selectImpulse(nil), venom = "scytherus", label = "camus"}
         useImpulse = true
+
+    -- Group mode: impulse impatience when weariness + asthma stuck, impatience missing
+    elseif serpOffenseMode == "group" and not eqAction and checkImpulseEligible()
+       and not haveAff("impatience") then
+        impulsePair = selectImpulsePair()
+        if impulsePair then
+            useImpulse = true
+        end
 
     -- Normal impulse for impatience (gated by shouldDeliverImpatience)
     elseif not eqAction and not haveAff("impatience") and checkImpulseEligible() then
@@ -1921,7 +1951,7 @@ function serp_setmode_group()
         serpent.state.voyriaSent = false
         serpOffenseMode = "group"
         cecho("\n<cyan>Serpent offense: GROUP mode<reset>\n")
-        cecho("<dim_grey>  Priority: Reactive gap-filling — asthma > paralysis > lock pieces > impulse monkshood > voyria<reset>\n")
+        cecho("<dim_grey>  Priority: Fast lock — paralysis > asthma > slickness > weariness > impulse impatience > anorexia<reset>\n")
     end
     serpOffenseMode = "group"
 end
