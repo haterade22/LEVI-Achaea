@@ -48,3 +48,5 @@ target = matches[2]:lower():title()
 if gmcp.Char.Status.race == "Undead" then
 send("ct target: "..target)
 end
+
+ataxiaNDB_Acquire(matches[2]:title(),false)
