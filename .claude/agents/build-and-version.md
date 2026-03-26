@@ -34,7 +34,12 @@ Read all 3 locations and report whether they are in sync. If not, report the dis
 3. Report the results — do NOT commit or push unless explicitly asked
 
 ## Constraints
-- Only one build at a time
+- Only one build at a time — a hook blocks concurrent builds automatically
 - Never edit files in `muddler_project/src/` (generated)
 - Source of truth is always `src_new/`
 - Preserve JSON structure in `mfile` (don't lose package/title/author fields)
+
+## Quality Gates
+- **Concurrent build prevention**: An inline hook blocks `muddle.bat`/`convert_to_muddler.py` if another is running
+- **lint-before-commit.sh**: Validates Lua syntax before `git commit` — fix errors and re-stage if blocked
+- **protect-config.sh**: Blocks edits to `.claude/settings*.json` — use `/update-config` or ask the user

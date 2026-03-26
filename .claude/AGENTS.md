@@ -105,3 +105,18 @@ When modifying `leviSetup` (misc_scripts/020_Setup_Wizard.lua):
 | `.claude/classes/<class>.md` | Per-class kill routes and mechanics (26 classes) |
 | `CLAUDE.md` | Main project documentation |
 | `docs/ai-includes/agent-teams.md` | Multi-agent team coordination guide |
+
+---
+
+## Quality Gates (Hooks)
+
+Hooks in `.claude/hooks/` run automatically and block operations that fail validation:
+
+| Hook | Blocks on |
+|------|-----------|
+| `lint-before-commit.sh` | Lua syntax errors in staged `.lua` files (runs `luac -p`) |
+| `protect-config.sh` | Write/Edit to `.claude/settings*.json` files |
+| `block-git-bypass.sh` | Dangerous git flags (`--no-verify`, `--force`, `--hard`) |
+| *(inline)* | Concurrent `muddle.bat` or `convert_to_muddler.py` processes |
+
+When blocked (exit 2), fix the issue and retry. Never attempt to bypass hooks.

@@ -40,6 +40,13 @@ All offense systems MUST use the V3 tracking API:
 - Use `ataxia.balances` for balance tracking
 - Use `ataxia.limb` for limb damage tracking where applicable
 
+## Quality Gates
+
+Hooks run automatically — you don't need to invoke them:
+- **lint-before-commit.sh** validates Lua syntax on staged files before `git commit`. Fix syntax errors and re-stage if blocked.
+- **protect-config.sh** blocks edits to `.claude/settings*.json`. Use `/update-config` or ask the user.
+- **block-git-bypass.sh** blocks `--no-verify`, `--force`, `--hard` on git commands.
+
 ## After Creating/Modifying
 
 1. Verify the system integrates with the existing combat dispatch

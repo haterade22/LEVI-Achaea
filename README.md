@@ -2,6 +2,25 @@
 
 A comprehensive [Mudlet](https://www.mudlet.org/) automation and combat system for [Achaea](https://www.achaea.com/), an Iron Realms Entertainment MUD.
 
+## Download
+
+Get the latest release:
+
+**[Download Levi_Ataxia.mpackage](https://github.com/haterade22/LEVI-Achaea/releases/latest/download/Levi_Ataxia.mpackage)**
+
+See all versions on the [Releases page](https://github.com/haterade22/LEVI-Achaea/releases).
+
+### Installation
+
+1. Download `Levi_Ataxia.mpackage` from the link above
+2. In Mudlet, go to **Package Manager** (toolbox icon)
+3. Click **Install** and select the downloaded `.mpackage` file
+4. Connect to Achaea — the system will load automatically
+
+### Auto-Update
+
+Once installed, the system checks for updates on login. When a new version is available, type `SYSUPDATE` in-game to download and install it automatically.
+
 ## Credits
 
 The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enhanced and extended with additional features including namespace migration, configurable vital bars, channel-colored chat, and movable window management.

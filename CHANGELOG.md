@@ -2,6 +2,34 @@
 
 ---
 
+## 2026-03-26 — Claude Code hooks and model routing
+
+### Feature: Automated quality gates and context preservation hooks
+
+Added 5 hook scripts to `.claude/hooks/` for development workflow safety, sourced from a review of `toukanno/claude-code-game-studios` and `affaan-m/everything-claude-code` repos.
+
+**New hooks:**
+- **`session-start.sh`** — Enhanced session startup context: shows branch, version, last 5 commits, uncommitted changes (replaces previous inline command)
+- **`pre-compact.sh`** — Preserves working state (branch, version, staged/unstaged changes, WIP markers) to stderr before context compaction, so it survives into the post-compact context window
+- **`protect-config.sh`** — Blocks AI Write/Edit to `.claude/settings*.json` files, preventing accidental permission weakening
+- **`block-git-bypass.sh`** — Blocks dangerous git flags (`--no-verify`, `--force`, `--hard`, `--no-gpg-sign`, `git clean -f`)
+- **`lint-before-commit.sh`** — Validates Lua syntax via `luac -p` on all staged `.lua` files before `git commit`, with YAML front matter stripping
+
+**Configuration:** Updated `.claude/settings.local.json` with SessionStart, Notification (compact), and PreToolUse (Bash/Write/Edit) hook entries.
+
+**Documentation:** Added "Model Routing Guidance" and "Hooks" sections to `CLAUDE.md` — documents when to use Opus/Sonnet/Haiku and describes all active hooks.
+
+**Files:**
+- `.claude/hooks/session-start.sh` — **New**
+- `.claude/hooks/pre-compact.sh` — **New**
+- `.claude/hooks/protect-config.sh` — **New**
+- `.claude/hooks/block-git-bypass.sh` — **New**
+- `.claude/hooks/lint-before-commit.sh` — **New**
+- `.claude/settings.local.json` — Updated hook configuration
+- `CLAUDE.md` — Added Model Routing Guidance and Hooks sections
+
+---
+
 ## 2026-03-20 — Vulture's Talon artefact integration
 
 ### Feature: Auto-use Vulture's Talon for caloric defense vs Blademaster/Magi

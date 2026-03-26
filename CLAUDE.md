@@ -1433,6 +1433,48 @@ Claude Code agent teams enable parallel development across isolated combat subsy
 
 ---
 
+## Model Routing Guidance
+
+Different tasks benefit from different model tiers. The `build-and-version` agent already routes to Haiku for efficiency.
+
+| Task Type | Recommended Model | Rationale |
+|-----------|------------------|-----------|
+| Architecture design, complex offense systems, lock strategy | Opus | Deep combat mechanic reasoning, multi-file coordination |
+| Standard development (features, bug fixes, triggers) | Sonnet | Good balance of speed and capability for typical coding |
+| Builds, version bumps, syntax checks | Haiku | Mechanical tasks with clear steps, speed over reasoning |
+| Code review, documentation updates | Sonnet | Benefits from context understanding without deep planning |
+| Multi-class parallel development (team agent) | Sonnet per worker, Opus for lead | Workers follow patterns; lead coordinates strategy |
+
+**Current agent model assignments:**
+- `build-and-version`: `haiku` (configured)
+- `offense-system`: default (Sonnet recommended)
+- `team-class-offense`: default (Sonnet for workers)
+
+**When to escalate to Opus:**
+- Designing new combat system architecture from scratch
+- Debugging subtle cross-system interactions (e.g., V3 affliction tracking + class offense)
+- Refactoring shared `ataxia/` core modules
+- Planning multi-session development arcs
+
+---
+
+## Hooks
+
+The project uses Claude Code hooks for automated quality gates and context preservation. All hook scripts live in `.claude/hooks/`.
+
+| Hook | Event | Purpose |
+|------|-------|---------|
+| `session-start.sh` | SessionStart | Shows branch, version, recent commits, uncommitted changes |
+| `pre-compact.sh` | Notification (compact) | Dumps working state to stderr before context compaction |
+| `protect-config.sh` | PreToolUse (Write/Edit) | Blocks AI edits to `.claude/settings*.json` files |
+| `block-git-bypass.sh` | PreToolUse (Bash) | Blocks `--no-verify`, `--force`, `--hard` on git commands |
+| `lint-before-commit.sh` | PreToolUse (Bash) | Validates Lua syntax on staged files before `git commit` |
+| *(inline)* | PreToolUse (Bash) | Prevents concurrent build processes |
+
+**Exit codes:** 0 = allow, 2 = block tool use. All hooks have jq-with-grep fallbacks for portability.
+
+---
+
 ## Documentation Requirements
 
 **MANDATORY**: After every code change, you MUST update all relevant documentation before considering the task complete. This is not optional.

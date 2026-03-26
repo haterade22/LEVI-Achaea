@@ -39,5 +39,7 @@ Run the full build pipeline for the Levi_Ataxia Mudlet package.
 - Python 3 with no extra dependencies
 
 ## Important
-- Only one build may run at a time
+- Only one build may run at a time — a hook automatically blocks concurrent builds
+- Before committing, `lint-before-commit.sh` validates Lua syntax on staged `.lua` files
+- Git safety hooks block `--no-verify`, `--force`, and `--hard` flags
 - The source of truth is always `src_new/` — never edit files in `muddler_project/src/`

@@ -358,6 +358,22 @@ grep -r "functionName" src_new/
 | `.github/workflows/build.yml` | CI/CD: syntax check, version check, tests, release builds |
 | `.claude/skills/` | `/build` and `/version-bump` slash commands for Claude Code |
 | `.claude/agents/` | Custom subagents for offense development, builds, and team work |
+| `.claude/hooks/` | Automated quality gates (see below) |
+
+## Claude Code Hooks
+
+The project uses hooks (configured in `.claude/settings.local.json`) to enforce quality gates automatically:
+
+| Hook | Trigger | What it does |
+|------|---------|-------------|
+| `session-start.sh` | Session start | Shows branch, version, recent commits, uncommitted changes |
+| `pre-compact.sh` | Context compaction | Saves working state to stderr so it survives into post-compact context |
+| `lint-before-commit.sh` | `git commit` | Validates Lua syntax on staged `.lua` files (strips YAML headers) |
+| `protect-config.sh` | Write/Edit | Blocks AI edits to `.claude/settings*.json` |
+| `block-git-bypass.sh` | Bash (git) | Blocks `--no-verify`, `--force`, `--hard`, `--no-gpg-sign` |
+| *(inline)* | Bash (build) | Prevents concurrent build processes |
+
+Exit codes: **0** = allow, **2** = block. If a hook blocks your commit, fix the issue and retry.
 
 ## Further Documentation
 
