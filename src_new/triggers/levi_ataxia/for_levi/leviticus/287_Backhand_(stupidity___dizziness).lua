@@ -36,17 +36,17 @@ patterns:
 ]]--
 
 if tprepare == "disruption" then
-send("pt " ..target..": Stupidity and Dizziness and Paralysis")
+send("pt " ..target..": Stupidity Dizziness Paralysis")
 elseif tprepare == "laceration" then
-send("pt " ..target..": Stupidity and Dizziness and Haemophilia")
+send("pt " ..target..": Stupidity Dizziness Haemophilia")
 elseif tprepare == "dazzle" then
-send("pt " ..target..": Stupidity and Dizziness and Clumsiness")
+send("pt " ..target..": Stupidity Dizziness Clumsiness")
 elseif tprepare == "rattle" then
-send("pt " ..target..": Stupidity and Dizziness and Epilepsy")
+send("pt " ..target..": Stupidity Dizziness Epilepsy")
 elseif tprepare == "vapours" then
-send("pt " ..target..": Stupidity and Dizziness and Asthma")
+send("pt " ..target..": Stupidity Dizziness Asthma")
 else
-send("pt " ..target..": Stupidity and Dizziness")
+send("pt " ..target..": Stupidity Dizziness")
 end
 
 

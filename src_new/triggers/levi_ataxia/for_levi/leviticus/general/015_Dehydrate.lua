@@ -73,7 +73,7 @@ if target == matches[2] then
     tarAffed("nausea")
     cecho(" <DimGrey>[<red>"..tburns.."/5<DimGrey>]")
   end
-  if partyrelay and not ataxia.afflictions.aeon then send("pt " ..target.. ": weariness and nausea") end
+  if partyrelay and not ataxia.afflictions.aeon then send("pt " ..target.. ": weariness nausea") end
 end
 
 

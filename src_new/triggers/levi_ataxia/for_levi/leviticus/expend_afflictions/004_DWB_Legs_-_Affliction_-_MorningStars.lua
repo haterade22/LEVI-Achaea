@@ -42,7 +42,7 @@ if target == matches[2] then
   if wieldweapons == "morningstars" then
       if not tAffs.lethargic then
         tarAffed("lethargy")
-       if partyrelay then send("pt "..target..": prone and lethargy") end
+       if partyrelay then send("pt "..target..": prone lethargy") end
    
       end
       tarAffed("prone")

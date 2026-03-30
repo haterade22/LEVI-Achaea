@@ -44,12 +44,12 @@ if isTargeted(matches[2]) then
 
     if not haveAff("clumsiness") then
         tarAffed("clumsiness")
-        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " and clumsiness") end
-        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop and clumsiness") end
+        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " clumsiness") end
+        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop clumsiness") end
     elseif tAffs.clumsiness and not tAffs.weariness then
         tarAffed("weariness")
-        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " and weariness") end
-        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop and weariness") end
+        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " weariness") end
+        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop weariness") end
     elseif tAffs.clumsiness and tAffs.weariness and not tAffs.paralysis then
         tarAffed("paralysis")
     end

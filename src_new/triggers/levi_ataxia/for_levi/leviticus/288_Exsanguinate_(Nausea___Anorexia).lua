@@ -38,15 +38,15 @@ patterns:
 
 
 if tprepare == "disruption" then
-send("pt " ..target..": Nausea and Paralysis")
+send("pt " ..target..": Nausea Paralysis")
 elseif tprepare == "laceration" then
-send("pt " ..target..": Nausea and Haemophilia")
+send("pt " ..target..": Nausea Haemophilia")
 elseif tprepare == "dazzle" then
-send("pt " ..target..": Nausea and Clumsiness")
+send("pt " ..target..": Nausea Clumsiness")
 elseif tprepare == "rattle" then
-send("pt " ..target..": Nausea and Epilepsy")
+send("pt " ..target..": Nausea Epilepsy")
 elseif tprepare == "vapours" then
-send("pt " ..target..": Nausea and Asthma")
+send("pt " ..target..": Nausea Asthma")
 else
 send("pt " ..target..": Nausea")
 end

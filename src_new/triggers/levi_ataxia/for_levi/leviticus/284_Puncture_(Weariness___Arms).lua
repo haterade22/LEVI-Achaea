@@ -39,15 +39,15 @@ patterns:
 
 
 if tprepare == "disruption" then
-send("pt " ..target..": Weariness and Paralysis")
+send("pt " ..target..": Weariness Paralysis")
 elseif tprepare == "laceration" then
-send("pt " ..target..": Weariness and Haemophilia")
+send("pt " ..target..": Weariness Haemophilia")
 elseif tprepare == "dazzle" then
-send("pt " ..target..": Weariness and Clumsiness")
+send("pt " ..target..": Weariness Clumsiness")
 elseif tprepare == "rattle" then
-send("pt " ..target..": Weariness and Epilepsy")
+send("pt " ..target..": Weariness Epilepsy")
 elseif tprepare == "vapours" then
-send("pt " ..target..": Weariness and Asthma")
+send("pt " ..target..": Weariness Asthma")
 else
 send("pt " ..target..": Weariness")
 end

@@ -63,6 +63,6 @@ end
 if tAffs.prone then
 send("pt " ..target.. ": impatience")
 else 
-send("pt " ..target.. ": prone and stupidity")
+send("pt " ..target.. ": prone stupidity")
 end
 

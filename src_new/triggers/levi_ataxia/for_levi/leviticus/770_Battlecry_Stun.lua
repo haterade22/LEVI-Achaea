@@ -1,15 +1,12 @@
 --[[mudlet
 type: trigger
-name: Full Retribution
+name: BATTLECRY STUN
 hierarchy:
 - Levi_Ataxia
 - For Levi
 - leviticus
-- Ataxia
-- Combat/Aff Tracking
-- Add Afflictions
-- Classes A-J
-- Depthwalker
+- LeviAtax
+- Leviticus
 attributes:
   isActive: 'yes'
   isFolder: 'no'
@@ -33,14 +30,11 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^The white flame leaps from the scythe to (\w+), blazing with a terrible intensity before guttering out\.$
+- pattern: ^(\w+) falls to (?:his|her) knees and clutches (?:his|her) ears as the shaft of sound strikes (?:him|her)\.$
   type: 1
 ]]--
 
-tarAffed("justice")
-tarAffed("retribution")
-
-if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..envenomList[1].. " retribution justice") end
-if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop retribution justice") end
-
-		
+selectCurrentLine() fg("a_yellow") bg("black")
+replace(matches[2] .. " [STUNNED+PRONE]")
+tarAffed("prone", "stun")
+send("pt " .. matches[2] .. ": Stunned Proned")

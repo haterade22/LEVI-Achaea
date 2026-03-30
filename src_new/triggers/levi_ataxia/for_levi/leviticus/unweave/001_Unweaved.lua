@@ -53,39 +53,39 @@ end
 
 
 if pprepare == "disruption" and matches[4] == "mind" then
-send("pt " ..target..": Unweavemind and Paralysis ")
+send("pt " ..target..": Unweavemind Paralysis")
 elseif  pprepare == "laceration" and matches[4] == "mind" then
-send("pt " ..target..": Unweavemind and Haemophilia")
+send("pt " ..target..": Unweavemind Haemophilia")
 elseif  pprepare == "dazzle" and matches[4] == "mind" then
-send("pt " ..target..": Unweavemind and Clumsiness")
+send("pt " ..target..": Unweavemind Clumsiness")
 elseif  pprepare == "rattle" and matches[4] == "mind" then
-send("pt " ..target..": Unweavemind and Epilepsy")
+send("pt " ..target..": Unweavemind Epilepsy")
 elseif  pprepare == "vapours" and matches[4] == "mind" then
-send("pt " ..target..": Unweavemind and Asthma")
+send("pt " ..target..": Unweavemind Asthma")
 end
 
 if  pprepare == "disruption" and matches[4] == "spirit" then
-send("pt " ..target..": Unweavespirit and Paralysis ")
+send("pt " ..target..": Unweavespirit Paralysis")
 elseif  pprepare == "laceration" and matches[4] == "spirit" then
-send("pt " ..target..": Unweavespirit and Haemophilia")
+send("pt " ..target..": Unweavespirit Haemophilia")
 elseif  pprepare == "dazzle" and matches[4] == "spirit" then
-send("pt " ..target..": Unweavespirit and Clumsiness")
+send("pt " ..target..": Unweavespirit Clumsiness")
 elseif  pprepare == "rattle" and matches[4] == "spirit" then
-send("pt " ..target..": Unweavespirit and Epilepsy")
+send("pt " ..target..": Unweavespirit Epilepsy")
 elseif  pprepare == "vapours" and matches[4] == "spirit" then
-send("pt " ..target..": Unweavespirit and Asthma")
+send("pt " ..target..": Unweavespirit Asthma")
 end
 
 if  pprepare == "disruption" and matches[4] == "body" then
-send("pt " ..target..": Unweavebody and Paralysis ")
+send("pt " ..target..": Unweavebody Paralysis")
 elseif  pprepare == "laceration" and matches[4] == "body" then
-send("pt " ..target..": Unweavebody and Haemophilia")
+send("pt " ..target..": Unweavebody Haemophilia")
 elseif  pprepare == "dazzle" and matches[4] == "body" then
-send("pt " ..target..": Unweavebody and Clumsiness")
+send("pt " ..target..": Unweavebody Clumsiness")
 elseif  pprepare == "rattle" and matches[4] == "body" then
-send("pt " ..target..": Unweavebody and Epilepsy")
+send("pt " ..target..": Unweavebody Epilepsy")
 elseif  pprepare == "vapours" and matches[4] == "body" then
-send("pt " ..target..": Unweavebody and Asthma")
+send("pt " ..target..": Unweavebody Asthma")
 end
 
 

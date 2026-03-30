@@ -44,16 +44,16 @@ if isTargeted(matches[2]) then
 
     if not haveAff("shadowmadness") then
         tarAffed("shadowmadness")
-        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " and shadowmadness") end
-        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop and shadowmadness") end
+        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " shadowmadness") end
+        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop shadowmadness") end
     elseif not haveAff("vertigo") then
         tarAffed("vertigo")
-        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " and vertigo") end
-        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop and vertigo") end
+        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " vertigo") end
+        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop vertigo") end
     else
         tarAffed("hallucinations")
-        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " and hallucinations") end
-        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop and hallucinations") end
+        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " hallucinations") end
+        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop hallucinations") end
     end
 end
 

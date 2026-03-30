@@ -44,16 +44,16 @@ if isTargeted(matches[2]) then
 
     if not haveAff("parasite") then
         tarAffed("parasite")
-        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " and parasite") end
-        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop and parasite") end
+        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " parasite") end
+        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop parasite") end
     elseif not haveAff("healthleech") then
         tarAffed("healthleech")
-        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " and healthleech") end
-        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop and healthleech") end
+        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " healthleech") end
+        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop healthleech") end
     elseif not haveAff("manaleech") then
         tarAffed("manaleech")
-        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " and manaleech") end
-        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop and manaleech") end
+        if partyrelay and tloop == false and tloop2 == false then send("pt "..target..": " ..venomName.. " manaleech") end
+        if partyrelay and (tloop == true or tloop2 == true) then send("pt "..target..": timeloop manaleech") end
     else
         tarAffed("parasite", "healthleech", "manaleech")
     end

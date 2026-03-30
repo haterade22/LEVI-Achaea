@@ -52,5 +52,5 @@ if isTargeted(person) then
 end
 
 
-send("pt " ..target.. ": stupidity and dizziness")
+send("pt " ..target.. ": stupidity dizziness")
 
