@@ -55,7 +55,7 @@ if target == matches[2] then
          twohanded_headHit()
         end
          if partyrelay and not ataxia.afflictions.aeon  then send("pt "..target..": prone") end
-         if partyrelay and not ataxia.afflictions.aeon  then send("pt "..target..": unblind and " ..ataxiaTemp.fractures.skullfractures.. " skullfractures") end
+         if partyrelay and not ataxia.afflictions.aeon  then send("pt "..target..": unblind " ..ataxiaTemp.fractures.skullfractures.. " skullfractures") end
       end
   end
 end

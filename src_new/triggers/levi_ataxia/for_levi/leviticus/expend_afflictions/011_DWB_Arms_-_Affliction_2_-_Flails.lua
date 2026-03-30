@@ -47,6 +47,6 @@ else
 end
 tarAffed("paralysis")
 
-if partyrelay then send("pt "..target..": paralysis and " ..ataxiaTemp.fractures.wristfractures.. " wristfractures") end
+if partyrelay then send("pt "..target..": paralysis " ..ataxiaTemp.fractures.wristfractures.. " wristfractures") end
 
 tempTimer(2.5, [[tarAffed("paralysis")]])

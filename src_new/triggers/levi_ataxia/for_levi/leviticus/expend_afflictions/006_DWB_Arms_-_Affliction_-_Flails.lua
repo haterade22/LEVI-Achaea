@@ -46,7 +46,7 @@ if tAffs.paralysis then
     ataxiaTemp.fractures.wristfractures =  ataxiaTemp.fractures.wristfractures + 1
     twohanded_armsHit()
   end
-   if partyrelay then send("pt "..target..": paralysis and " ..ataxiaTemp.fractures.wristfractures.. " wristfractures") end
+   if partyrelay then send("pt "..target..": paralysis " ..ataxiaTemp.fractures.wristfractures.. " wristfractures") end
    
 else
   tarAffed("paralysis")

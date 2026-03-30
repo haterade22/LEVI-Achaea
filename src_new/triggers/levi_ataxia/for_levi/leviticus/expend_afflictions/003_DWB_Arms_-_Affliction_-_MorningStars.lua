@@ -55,7 +55,7 @@ if target == matches[3] then
          ataxiaTemp.fractures.wristfractures =  ataxiaTemp.fractures.wristfractures + 1
          twohanded_armsHit()
         end
-      if partyrelay then send("pt "..target..": weariness and " ..ataxiaTemp.fractures.wristfractures.. " wristfractures") end
+      if partyrelay then send("pt "..target..": weariness " ..ataxiaTemp.fractures.wristfractures.. " wristfractures") end
       end
     elseif matches[2] == "left" then
       if not tAffs.clumsiness then
@@ -71,7 +71,7 @@ if target == matches[3] then
           ataxiaTemp.fractures.wristfractures =  ataxiaTemp.fractures.wristfractures + 1
           twohanded_armsHit()
         end
-          if partyrelay then send("pt "..target..": clumsiness and " ..ataxiaTemp.fractures.wristfractures.. " wristfractures") end
+          if partyrelay then send("pt "..target..": clumsiness " ..ataxiaTemp.fractures.wristfractures.. " wristfractures") end
       end 
     end
   end
