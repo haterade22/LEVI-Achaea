@@ -1,6 +1,6 @@
 import os, re, sys
 
-src = 'c:/Users/mikew/source/repos/Achaea/LEVI-Achaea/src_new'
+src = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src_new'))
 delete = '--delete' in sys.argv
 
 seen = {}  # key -> list of (path, content)

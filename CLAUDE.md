@@ -971,6 +971,33 @@ send("curing priority defence list reset", false)
 
 ## Development Guidelines
 
+### Naming Conventions
+
+**Functions** — use `snake_case` with the owning namespace as a prefix:
+
+| Namespace | Prefix | Example |
+|-----------|--------|---------|
+| Core system | `ataxia_` | `ataxia_saveSettings()`, `ataxia_promptAffs()` |
+| Basher | `ataxiaBasher_` | `ataxiaBasher_getTarget()` |
+| NDB | `ataxiaNDB_` | `ataxiaNDB_getClass()` |
+| GUI | `ataxiagui_` | `ataxiagui_buildWindow()` |
+| MMP | `mmp.*` | `mmp.gotoRoom()` |
+
+**Module tables** — `camelCase` no underscore: `ataxia`, `ataxiaNDB`, `ataxiaBasher`, `ataxiaTables`, `mmp`.
+
+**Private / module-internal helpers** — declare `local`, no prefix required.
+
+**Files** — `NNN_Descriptive_Name.lua` (three-digit numeric prefix for load order).
+
+**Directories** — `snake_case`.
+
+**What to avoid**:
+- camelCase public functions (`ataxiaCheckForMissing` → prefer `ataxia_checkForMissing`)
+- Unprefixed globals (`haveDef`, `needToSalt`) — make `local` or add namespace prefix
+- Mixed conventions within a single file
+
+Migration is gradual: apply the standard to new code and any file touched significantly.
+
 ### Namespace Pattern
 ```lua
 -- All system code under namespaces
