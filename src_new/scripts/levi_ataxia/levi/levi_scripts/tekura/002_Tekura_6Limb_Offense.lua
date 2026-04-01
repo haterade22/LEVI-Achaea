@@ -314,6 +314,13 @@ function tekura6.dispatch.buildPrepAttack()
   local punchDmg = tekura6.state.punchDamage
   local breakAt = tekura6.config.breakThreshold
 
+  -- KAI SURGE WINDOW: target can't remount for 15s — sweep + double-punch the parried limb
+  -- Parry bypassed because sweep prones them; use the window to prep the stuck limb.
+  ataxiaTemp = ataxiaTemp or {}
+  if ataxiaTemp.kaiSurgeWindow and parried ~= "none" then
+    return tekura6.dispatch.buildParryBypassAttack(parried)
+  end
+
   -- EDGE CASE: Only 1 unprepped limb and it's parried
   if #unprepped == 1 and unprepped[1] == parried then
     return tekura6.dispatch.buildParryBypassAttack(unprepped[1])
@@ -496,26 +503,12 @@ function tekura6.dispatch.buildParryBypassAttack(parriedLimb)
   return cmd
 end
 
--- BREAK_UPPER: Break both arms + torso, switch to Horse stance
+-- BREAK_UPPER: Break torso + both arms in Scorpion stance, then switch to Horse
+-- SDK (torso kick) + SPP left + SPP right: all 3 upper limbs break in one combo.
+-- Stay in Scorpion stance for the combo — hrs fires after to transition.
 function tekura6.dispatch.buildBreakUpperAttack()
-  local parried = tekura6.getEffectiveParry()
-
-  -- Default: kick left arm, punch right arm
-  local kickArm = "left"
-  local punchArm = "right"
-
-  -- If parrying left arm, kick right instead (guaranteed break with 25%)
-  if parried == "left arm" then
-    kickArm = "right"
-    punchArm = "left"
-  elseif parried == "right arm" then
-    kickArm = "left"
-    punchArm = "right"
-  end
-
-  -- MNK arm (25% = breaks), SPP other arm (14% = breaks if prepped), HKP torso (14% = breaks if prepped)
-  tekura6.state.lastKickLimb = kickArm .. " arm"
-  return "combo " .. target .. " mnk " .. kickArm .. " spp " .. punchArm .. " hkp;hrs"
+  tekura6.state.lastKickLimb = "torso"
+  return "combo " .. target .. " sdk spp left spp right;hrs"
 end
 
 -- BREAK_LOWER: Wrench torso (prones) + break both legs, switch to Bear stance

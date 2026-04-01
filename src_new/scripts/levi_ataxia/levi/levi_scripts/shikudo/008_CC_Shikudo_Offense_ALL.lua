@@ -650,6 +650,28 @@ function shikudo.selectGaitalStaff(slot)
     ataxiaTemp.slot1Target = nil
   end
 
+  -- Kai Surge window: target can't remount for 15s, attack the parried limb
+  local parriedLimb = ataxiaTemp.parriedLimb or "none"
+  if ataxiaTemp.kaiSurgeWindow and parriedLimb ~= "none" then
+    local isLeg = (parriedLimb == "left leg" or parriedLimb == "right leg")
+    local side = isLeg and (parriedLimb == "left leg" and "left" or "right") or nil
+    if not tAffs.prone then
+      -- Sweep to re-prone, then attack parried limb
+      if slot == 1 then
+        ataxiaTemp.slot1Target = "sweep"
+        return "sweep"
+      else
+        return isLeg and ("kuro " .. side) or "needle"
+      end
+    else
+      -- Already prone (parry disabled), hammer the parried limb
+      if slot == 1 then
+        ataxiaTemp.slot1Target = parriedLimb
+      end
+      return isLeg and ("kuro " .. side) or "needle"
+    end
+  end
+
   -- Sweep when ready
   if not tAffs.prone and bothLegsPrepped and headPrepped then
     if slot == 1 then

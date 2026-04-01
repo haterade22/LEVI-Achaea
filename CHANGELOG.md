@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-04-01 — Kai Surge trigger + mount lockout window + TK6 break upper fix
+
+### Feature: Monk Kai Surge detection + 15s mount lockout offense window
+
+Added trigger to detect Kai Surge usage and a 15s offense window that capitalizes on the target's mount lockout.
+
+**Why:** The system had no trigger for the Kai Surge output line, so prone was never registered. More importantly, Kai Surge prevents the target from remounting for 15 seconds — during this window Shikudo (Gaital) should sweep to maintain prone and attack the limb the target was parrying, which can't normally be prepped.
+
+**Trigger** (`002_Kai_Surge.lua`): Registers prone on target, sets `shikudo.state.kaiSurgeWindow = true`, clears it after 15s with an echo.
+
+**Shikudo Gaital** (`008_CC_Shikudo_Offense_ALL.lua`): `selectGaitalStaff` now checks `kaiSurgeWindow` first. If there's a tracked parried limb, it prioritizes sweep (to re-prone if they stand) + `kuro <parried-leg>` in slot 2. Falls through to normal logic when window is inactive or no parried limb is known.
+
+**Window flag**: moved from `shikudo.state.kaiSurgeWindow` to `ataxiaTemp.kaiSurgeWindow` so both TK6 and Shikudo share the same flag.
+
+**TK6 `buildBreakUpperAttack`** (`002_Tekura_6Limb_Offense.lua`): replaced `mnk <arm> spp <arm> hkp;hrs` with `sdk spp left spp right;hrs`. Root cause: `;hrs` fires on free-balance before the combo lands when eq is off, switching to Horse stance prematurely while `mnk` (arm kick) is queued. Fix stays in Scorpion stance for the combo — `sdk` breaks torso, `spp left`/`spp right` break both arms, `hrs` transitions after.
+
+**TK6 `buildPrepAttack`** (`002_Tekura_6Limb_Offense.lua`): Kai Surge window check added before all other logic — when `ataxiaTemp.kaiSurgeWindow` and a parried limb is tracked, delegates to the existing `buildParryBypassAttack` (sweep + double-punch parried limb) until the window expires or the limb is prepped.
+
+**Files:**
+- `src_new/triggers/levi_ataxia/for_levi/leviticus/monk/002_Kai_Surge.lua` — sets `ataxiaTemp.kaiSurgeWindow`
+- `src_new/scripts/levi_ataxia/levi/levi_scripts/shikudo/008_CC_Shikudo_Offense_ALL.lua` — reads `ataxiaTemp.kaiSurgeWindow` in `selectGaitalStaff`
+- `src_new/scripts/levi_ataxia/levi/levi_scripts/tekura/002_Tekura_6Limb_Offense.lua` — break upper fix + Kai Surge window in prep
+
+---
+
 ## 2026-03-26 — Claude Code hooks and model routing
 
 ### Feature: Automated quality gates and context preservation hooks
