@@ -239,6 +239,7 @@ end
 infernalDWC.state = {
     phase = "NAUSEA_SETUP",     -- Legacy field (getPhase() is dynamic now)
     executeStep = 0,            -- 0=undercut left leg, 1=DSL right arm
+    legBroken = false,          -- Persists through lb timer resets (lb.salve race condition fix)
     focusArm = "left",          -- Dynamically set to lowest damage arm during PREP
     focusLeg = "left",          -- Which leg to prep/break (default: left)
     lastPhase = nil,            -- Track phase changes for debugging
@@ -387,6 +388,7 @@ function infernalDWC.isFocusLegPrepped()
 end
 
 function infernalDWC.isFocusLegBroken()
+    if infernalDWC.state.legBroken then return true end  -- Survives lb.salve() timer reset
     return infernalDWC.isLegBroken(infernalDWC.state.focusLeg)
 end
 
@@ -851,13 +853,14 @@ end
 ]]--
 
 -- Call this BEFORE selecting venoms/limbs to advance step based on previous attack results
-function infernalDWC.advanceExecuteStep()
-    local phase = infernalDWC.getPhase()
+function infernalDWC.advanceExecuteStep(phase)
+    phase = phase or infernalDWC.getPhase()  -- Use caller's captured phase to avoid stale re-evaluation
 
     -- Reset step if we're NOT in EXECUTE (coming from PREP or target changed)
     if phase ~= "EXECUTE" then
         if infernalDWC.state.executeStep ~= 0 then
             infernalDWC.state.executeStep = 0
+            infernalDWC.state.legBroken = false
             infernalDWC.state.focusArm = nil  -- Clear focusArm so it gets re-selected
         end
         return
@@ -869,6 +872,7 @@ function infernalDWC.advanceExecuteStep()
         -- Step 0 → 1: Check if leg broke from undercut
         if infernalDWC.isFocusLegBroken() then
             infernalDWC.state.executeStep = 1
+            infernalDWC.state.legBroken = true  -- Persist break across lb.salve() timer resets
             cecho("\n<green>[INF DWC]<reset> Leg BROKEN (4s salve lock)! DSL right arm with epteth/epseth.")
         end
     end
@@ -1041,7 +1045,7 @@ function infernalDWCVivisect()
     -- PRIORITY 4: EXECUTE - Break limbs in sequence
     --------------------------------------------------------------------------
     -- Advance EXECUTE step if previous attack broke a limb
-    infernalDWC.advanceExecuteStep()
+    infernalDWC.advanceExecuteStep(phase)
 
     -- EXECUTE STEP 0: Undercut with battleaxe
     if phase == "EXECUTE" and infernalDWC.state.executeStep == 0 then
@@ -1329,6 +1333,7 @@ end
 function infernalDWCReset()
     infernalDWC.state.phase = "NAUSEA_SETUP"
     infernalDWC.state.executeStep = 0
+    infernalDWC.state.legBroken = false
     infernalDWC.state.focusArm = "left"
     infernalDWC.state.focusLeg = "left"
     infernalDWC.state.lastPhase = nil

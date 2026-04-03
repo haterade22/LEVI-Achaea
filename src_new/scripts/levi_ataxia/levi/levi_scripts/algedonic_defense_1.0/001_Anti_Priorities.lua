@@ -451,7 +451,7 @@ function Algedonic.AntiPsion()
     send("curing prioaff unweavingmind")
   elseif ataxia.afflictions.unweavingbody and ataxia.afflictions.unweavingbody >= 2 then
     send("curing prioaff unweavingbody")
-  elseif ataxia.afflictions.unweavingspirit and ataxia.afflictions.asthma then
+  elseif ataxia.afflictions.unweavingspirit and ataxia.afflictions.asthma and not ataxia.afflictions.paralysis then
     send("curing prioaff asthma")
   end
 end
