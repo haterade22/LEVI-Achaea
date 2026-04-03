@@ -32,7 +32,7 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^You see that (\w+) is at (.+)\.$
+- pattern: ^You see that (\w+) is located at (.+)\.$
   type: 1
 ]]--
 
