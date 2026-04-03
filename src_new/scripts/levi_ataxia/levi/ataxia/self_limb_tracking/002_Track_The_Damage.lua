@@ -57,6 +57,13 @@ local defaultConfig = {
 
 	-- Class-specific defensive abilities
 	classDefenses = {},
+
+	-- Both-arms-broken flee config
+	bothArmsFlee = true,        -- Enable flee reaction when both arms are broken
+	fleeDir = "n",              -- Cardinal direction to flee (n/s/e/w/nw/etc.)
+	fleeRooms = 3,              -- Rooms to run per flee burst
+	fleeBurstDelay = 0.5,       -- Seconds between each room move in a burst
+	fleeRepeatInterval = 4,     -- Seconds between re-flee checks (handles monk following)
 }
 
 selfLimbDamage.config = selfLimbDamage.config or {}
@@ -101,6 +108,10 @@ end
 selfLimbDamage.timers = selfLimbDamage.timers or {}
 selfLimbDamage.lasthit = selfLimbDamage.lasthit or "none"
 selfLimbDamage.hitHistory = selfLimbDamage.hitHistory or {}
+
+-- Both-arms-broken flee state
+selfLimbDamage.bothArmsFlee = selfLimbDamage.bothArmsFlee or false
+selfLimbDamage._fleeTimerID = selfLimbDamage._fleeTimerID or nil
 
 -------------------------------------------------------------------
 -- CORE FUNCTIONS
@@ -320,7 +331,10 @@ function ataxia_brokenLimbFound(event, affliction)
 			if not affed("damagedleftarm") and not affed("damagedrightarm") and ataxiaTemp.salvelockWait then
 				killTimer(ataxiaTemp.salvelockWait)
 				ataxiaTemp.salvelockWait = nil
-				send("queue addclear free restore", false)
+				local cls = ataxiaNDB_getClass(target)
+				if cls == "Infernal" or cls == "Apostate" then
+					send("queue addclear free restore", false)
+				end
 			end
 		elseif affliction == "damagedrightleg" or affliction == "mangledrightleg" then
 			ataxia_clearLimbDamage("right leg")
@@ -328,7 +342,10 @@ function ataxia_brokenLimbFound(event, affliction)
 			if not affed("damagedleftarm") and not affed("damagedrightarm") and ataxiaTemp.salvelockWait then
 				killTimer(ataxiaTemp.salvelockWait)
 				ataxiaTemp.salvelockWait = nil
-				send("queue addclear eqbal restore", false)
+				local cls = ataxiaNDB_getClass(target)
+				if cls == "Infernal" or cls == "Apostate" then
+					send("queue addclear eqbal restore", false)
+				end
 			end
 		elseif affliction == "damagedhead" or affliction == "mangledhead" then
 			ataxia_clearLimbDamage("head")

@@ -927,6 +927,13 @@ function infernalDWC2LVivisect()
         return
     end
 
+    --------------------------------------------------------------------------
+    -- FLEE GATE: Both arms broken - stop attacking, SLC handles fleeing/parry
+    --------------------------------------------------------------------------
+    if ataxia_selfLimbBroken and ataxia_selfLimbBroken("left arm") and ataxia_selfLimbBroken("right arm") then
+        return
+    end
+
     -- Use global 'target' variable (set by "t <name>" command)
     if not target or target == "" then
         cecho("\n<red>[INF DWC 2L]<reset> No target set! Use: t <name>")

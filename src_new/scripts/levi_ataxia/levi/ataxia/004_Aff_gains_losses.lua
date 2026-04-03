@@ -132,7 +132,10 @@ function gotAff()
     elseif ataxia.afflictions.damagedrightleg and ataxia.afflictions.damagedleftleg and ataxiaNDB_getClass(target) == "Blademaster" then
     expandAlias("hh")
     elseif ataxia.afflictions.brokenrightarm and ataxia.afflictions.brokenleftarm then
-    send("restore")    
+    local cls = ataxiaNDB_getClass(target)
+    if cls == "Infernal" or cls == "Apostate" then
+      send("restore")
+    end
     end
   --Sentinel Restore to Prevent Rift Lock
   --elseif aff == "brokenrightarm" or aff == "brokenleftarm" and ataxia.afflictions.prone and ataxiaNDB_getClass(target) == "Sentinel" then

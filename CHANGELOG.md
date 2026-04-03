@@ -2,6 +2,42 @@
 
 ---
 
+## 2026-04-03 — Both-arms-broken flee logic (class-agnostic)
+
+### Feature: SLC — auto-flee + leg parry when both arms are broken
+
+Added a general defensive reaction that triggers whenever both of our own arms are broken, regardless of class or active offense system.
+
+**Why:** When a Tekura monk breaks both arms the system kept spamming DWC attacks that require intact arms ("both arms must be whole and unbound"). More critically, staying in range lets the monk break legs next, enabling backbreaker/vivisect. The correct response is to flee 3+ rooms and fly immediately.
+
+**What changed:**
+
+- **`002_Track_The_Damage.lua`**: Added flee config fields to `selfLimbDamage.config` (`bothArmsFlee`, `fleeDir`, `fleeRooms`, `fleeBurstDelay`, `fleeRepeatInterval`) and flee state fields (`bothArmsFlee`, `_fleeTimerID`) to the namespace.
+
+- **`004_Defensive_Reactions.lua`**: Added `handleBothArmsBrokenFlee()` hooked into the existing `onThresholdChange` dispatcher. When both arms reach "broken" threshold:
+  - Sets `selfLimbDamage.bothArmsFlee = true`
+  - Parries the less-damaged leg (`ataxia.parrying.shouldparry`)
+  - Sends `tumble <dir>` + N raw movement commands + `fly`
+  - Starts a repeating timer (default 4s) to re-flee if monk follows
+  - Stops automatically when both arms are no longer broken
+
+- **`002_Infernal_DWC_Vivisect_2L.lua`**: Added a gate at the top of `infernalDWC2LVivisect()` — returns immediately if both arms are broken, stopping attack spam.
+
+**Configuration** (defaults — user-adjustable at runtime):
+```lua
+selfLimbDamage.config.fleeDir = "n"           -- flee direction
+selfLimbDamage.config.fleeRooms = 3           -- rooms per burst
+selfLimbDamage.config.fleeRepeatInterval = 4  -- re-flee interval (seconds)
+selfLimbDamage.config.bothArmsFlee = false    -- disable feature
+```
+
+**Files:**
+- `src_new/scripts/levi_ataxia/levi/ataxia/self_limb_tracking/002_Track_The_Damage.lua`
+- `src_new/scripts/levi_ataxia/levi/ataxia/self_limb_tracking/004_Defensive_Reactions.lua`
+- `src_new/scripts/levi_ataxia/levi/levi_scripts/dwc/002_Infernal_DWC_Vivisect_2L.lua`
+
+---
+
 ## 2026-04-03 — Bard offense system namespace refactor
 
 ### Refactor: `001_LeviBard.lua` — new offense system pattern
