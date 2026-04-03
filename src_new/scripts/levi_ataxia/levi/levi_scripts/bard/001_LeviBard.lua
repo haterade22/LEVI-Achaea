@@ -226,7 +226,7 @@ function bard.combatEcho()
   local atk = bard.state.lastAttack  or ""
 
   -- Extract readable command name from the attack string
-  local cmd = atk:match("blade (%a+)") or atk:match(";(%a+)") or "?"
+  local cmd = atk:match("blade (%a+)") or (atk:find(";jab ") and "jab") or atk:match(";(%a+)") or "?"
 
   -- Tempo display
   local tempoStr = ""
@@ -298,7 +298,7 @@ function bard.dispatchOne()
     atk = atk .. "blade flick " .. target .. ";finale " .. target
 
   elseif bardsunset == true then
-    atk = atk .. "wield right fang;wipe fang;envenom fang with slike;jab " .. target
+    atk = atk .. "wield right fang;wipe rapier;envenom fang with slike;jab " .. target
 
   -- NOTE: `or bardsunrise == true` at end — Lua precedence makes bardsunrise alone
   -- able to trigger these branches. Preserved from original (intentional behavior).

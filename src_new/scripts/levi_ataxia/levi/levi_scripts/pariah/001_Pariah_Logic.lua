@@ -57,7 +57,7 @@ local function selectLogograph(mode)
       table.insert(trace, "bear")
     elseif haveAff("flushings") then
       table.insert(trace, "bear")
-    elseif haveAff("clumsiness") and not haveAff("haemophilia") then
+    elseif haveAff("clumsiness") and (mode == "scourge" or not haveAff("haemophilia")) then
       table.insert(trace, "bear")
     else
       table.insert(trace, "scales")
@@ -210,7 +210,10 @@ function pariah.dispatch(mode)
     atk = atk .. "swarm scourge pyramides " .. target .. ";trace " .. logographtrace[1] .. " " .. target
 
   elseif e >= 3 and pariah.state.expose then
-    if not haveAff("burrow") then
+    if mode == "latency" and haveAff("burrow") and tlatency and e >= 4 then
+      -- Latency kill setup: swarm has burrow, 3+ plagues active, epitaph deep enough
+      atk = atk .. "swarm latency pyramides;trace scorpion " .. target
+    elseif not haveAff("burrow") then
       atk = atk .. "swarm burrow pyramides " .. target .. ";trace " .. logographtrace[1] .. " " .. target
     elseif mode == "scourge" and haveAff("burrow") and tAffs.bleed >= 200 then
       atk = atk .. "swarm sting " .. myswarmsting[1] .. " " .. target .. ";trace scorpion " .. target
@@ -219,9 +222,6 @@ function pariah.dispatch(mode)
     else
       atk = atk .. "swarm sting " .. myswarmsting[1] .. " " .. target .. ";trace " .. logographtrace[1] .. " " .. target
     end
-
-  elseif mode == "latency" and haveAff("burrow") and tlatency and pariah.state.expose and e >= 4 then
-    atk = atk .. "swarm latency pyramides;trace scorpion " .. target
 
   elseif e <= 2 then
     if myheartbeats[1] ~= "0" then
