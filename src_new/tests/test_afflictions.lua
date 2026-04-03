@@ -2,6 +2,8 @@
 -- Tests for affliction tracking helpers in 004_Aff_gains_losses.lua.
 -- Exercises: affed(), setStackAff(), gotAff(), lostAff()
 
+local mock = require("mock_mudlet")
+
 -- table.contains is a Mudlet extension not in stock Lua 5.1
 table.contains = table.contains or function(t, val)
   for _, v in pairs(t) do
@@ -162,7 +164,7 @@ describe("gotAff() — basic state tracking", function()
     gotAff()
     local found = false
     for _, e in ipairs(mock.raised_events) do
-      if e == "aff gained" then found = true end
+      if e.name == "aff gained" then found = true end
     end
     expect(found).toBeTrue()
   end)
@@ -212,7 +214,7 @@ describe("lostAff() — affliction removal", function()
     lostAff()
     local found = false
     for _, e in ipairs(mock.raised_events) do
-      if e == "aff cured" then found = true end
+      if e.name == "aff cured" then found = true end
     end
     expect(found).toBeTrue()
   end)
