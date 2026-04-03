@@ -35,8 +35,15 @@ patterns:
   type: 1
 - pattern: ^You whip Matsuhama's morningstar toward the \w+ of \w+.$
   type: 1
+- pattern: ^(\w+) lets out a groan as \w+ life is siphoned by the might of Evil\.$
+  type: 1
 ]]--
 
+-- Pattern 1/2: 2H morningstar attack (gated on toppression)
 if toppression == "torment" then
-tarAffed("healthleech")
+  tarAffed("healthleech")
+end
+-- Pattern 3: DWC first healthleech application (target name in capture)
+if matches[2] and isTargeted(matches[2]) then
+  tarAffed("healthleech")
 end
