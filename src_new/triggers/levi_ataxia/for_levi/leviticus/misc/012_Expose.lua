@@ -45,7 +45,7 @@ if ataxiaBasher.enabled then
     deleteFull()
   end
 else
-  pariah.expose = true
+  pariah.state.expose = true
 
   deselect()
   resetFormat()

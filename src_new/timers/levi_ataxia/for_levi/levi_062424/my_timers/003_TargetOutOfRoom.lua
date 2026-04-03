@@ -53,8 +53,8 @@ else
       if resetStatesV3 then resetStatesV3() end
       affTimers = {}
 			if ataxiaTemp.hypnoseal then tAffs.hypnoseal = true end
-      if pariah and pariah.ensorcell then tAffs.ensorcelled = true end
-      if pariah and pariah.burrow then tAffs.burrow = true end
+      if pariah and pariah.state.ensorcellTimer then tAffs.ensorcelled = true end
+      if pariah and pariah.state.burrow then tAffs.burrow = true end
 			if bmFistTimer then tAffs.airfist = true end
 			disableTimer("TargetOutOfRoom")
 		end

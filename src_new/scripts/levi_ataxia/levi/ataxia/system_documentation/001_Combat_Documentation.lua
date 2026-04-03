@@ -38,18 +38,18 @@ packageName: ''
   pariah_canVirulence()         - These two functions work in tandem, the first checks if 3 plagues are present
   pariah_doVirulence()            the second checks the 4th needed to lock with.
   
-  pariah_canGraph("xxx")        - will return true if you can use the specific logograph.
-                                - eg: pariah_canGraph("nest") will return true if you used serpent last
-  pariah.bladePrepared          - will track if you have blood on your blade. THIS RESETS ON TARGET CHANGE.
+  pariah.canGraph("xxx")        - will return true if you can use the specific logograph.
+                                - eg: pariah.canGraph("nest") will return true if you used serpent last
+  pariah.state.bladePrepared    - will track if you have blood on your blade. THIS RESETS ON TARGET CHANGE.
                                 - also clears on transpose, and the 'blood used up' lines as well.
-                                  
-  pariah.lastLogograph          - kind of speaks for itself, really.
+
+  pariah.state.lastLogograph    - kind of speaks for itself, really.
   ataxia.vitals.epitaph         - tracks your current epitaph length.
   tAffs.burrow                  - will track if you have burrow active. Clears on infest/extract usage.
                                 - I strongly suggest reading how burrow works, as well.
                                 - while the affliction will clear on target change, you still need to recall your swarm.
-                                  
-  pariah.latency                - if this is active, it means you used latency recently.
-  pariah.ensorcell              - another one that speaks for itself.
-  pariah.infest                 - active when infest is up.
+
+  pariah.state.latencyTimer     - if this is non-nil, it means latency is active on the target.
+  pariah.state.ensorcellTimer   - another one that speaks for itself.
+  pariah.state.infestTimer      - active (non-nil) when infest is up.
 ]]

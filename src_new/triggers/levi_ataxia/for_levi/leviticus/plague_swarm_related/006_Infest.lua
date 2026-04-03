@@ -39,10 +39,10 @@ patterns:
 ]]--
 
   erAff("burrow")
-  pariah.burrow = false
+  pariah.state.burrow = false
 
-if pariah.infest then killTimer(pariah.infest) end
-pariah.infest = tempTimer(13, [[ pariah.infest = nil ]])
+if pariah.state.infestTimer then killTimer(pariah.state.infestTimer) end
+pariah.state.infestTimer = tempTimer(13, [[ pariah.state.infestTimer = nil ]])
 
 
   selectString(line,1)

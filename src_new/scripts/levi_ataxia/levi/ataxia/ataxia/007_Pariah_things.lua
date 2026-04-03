@@ -14,20 +14,51 @@ attributes:
 packageName: ''
 ]]--
 
-function ataxia_resetPariah()
-  if pariah then
-    if pariah.infest then killTimer(pariah.infest) end
-    if pariah.ensorcell then killTimer(pariah.ensorcell) end
-  end 
-  pariah = {
-    bladePrepared = false,
-    burrow = false
-  }
-  ataxia_Echo("Reset pariah variables.")
-  send("swarms",false)
+--------------------------------------------------------------------------------
+-- Pariah namespace initialization
+-- Loads before levi_scripts/ so pariah.state is ready when 001_Pariah_Logic runs.
+--------------------------------------------------------------------------------
+
+pariah = pariah or {}
+
+pariah.state = {
+  lastLogograph  = nil,    -- string: current logograph ("nest","bear", etc.) or nil
+  bladePrepared  = false,  -- bool: knife has blood for ensorcell/crux
+  burrow         = false,  -- string|false: swarm plague name burrowed (e.g. "pyramides")
+  infestTimer    = nil,    -- tempTimer handle
+  virulenceTimer = nil,    -- tempTimer handle
+  latencyTimer   = nil,    -- tempTimer handle (non-nil = latency active on target)
+  ensorcellTimer = nil,    -- tempTimer handle
+  expose         = false,  -- bool: expose window is open
+}
+
+pariah.config = {
+  plagueStackThreshold = 2,
+  latencyThreshold     = 3,
+}
+
+function pariah.echo(text)
+  cecho("\n<cyan>[Pariah] " .. text)
 end
 
-function pariah_canGraph(logo)
+function pariah.reset()
+  if pariah.state.infestTimer    then killTimer(pariah.state.infestTimer)    end
+  if pariah.state.virulenceTimer then killTimer(pariah.state.virulenceTimer) end
+  if pariah.state.latencyTimer   then killTimer(pariah.state.latencyTimer)   end
+  if pariah.state.ensorcellTimer then killTimer(pariah.state.ensorcellTimer) end
+  pariah.state.lastLogograph  = nil
+  pariah.state.bladePrepared  = false
+  pariah.state.burrow         = false
+  pariah.state.infestTimer    = nil
+  pariah.state.virulenceTimer = nil
+  pariah.state.latencyTimer   = nil
+  pariah.state.ensorcellTimer = nil
+  pariah.state.expose         = false
+  ataxia_Echo("Reset pariah variables.")
+  send("swarms", false)
+end
+
+function pariah.canGraph(logo)
   local graphs = {
     serpent = {"nest", "skein"},
     bear = {"jackal", "scarab"},
@@ -44,27 +75,27 @@ function pariah_canGraph(logo)
     else
       return false
     end
-  elseif not pariah.lastLogograph then
+  elseif not pariah.state.lastLogograph then
     return true
-  elseif table.contains(graphs[pariah.lastLogograph], logo) then
+  elseif table.contains(graphs[pariah.state.lastLogograph], logo) then
     return true
   else
     return false
   end
 end
 
-function pariah_canVirulence()
+function pariah.canVirulence()
   if checkAffList({"rebbies", "sandfever", "flushings", "pyramides"}, 3) then
     return true
   else
     return false
   end
-end  
+end
 
-function pariah_doVirulence()   
+function pariah.doVirulence()
   local need = {"rebbies", "sandfever", "flushings", "pyramides"}
   local plague = false
-  
+
   for _, aff in pairs(need) do
     if not haveAff(aff) then
       plague = aff
@@ -75,5 +106,8 @@ function pariah_doVirulence()
   return plague
 end
 
-
-
+-- Backward-compat stubs
+function ataxia_resetPariah()  pariah.reset()               end
+function pariah_canGraph(logo) return pariah.canGraph(logo)  end
+function pariah_canVirulence() return pariah.canVirulence()  end
+function pariah_doVirulence()  return pariah.doVirulence()   end

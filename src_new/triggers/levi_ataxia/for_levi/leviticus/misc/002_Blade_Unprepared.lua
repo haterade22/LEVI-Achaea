@@ -42,4 +42,4 @@ patterns:
   type: 1
 ]]--
 
-pariah.bladePrepared = false
+pariah.state.bladePrepared = false

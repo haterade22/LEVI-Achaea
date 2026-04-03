@@ -47,10 +47,10 @@ else
   selectString(line, 1)
   if ataxia.vitals.epitaph < 2 then
     fg("DimGrey")
-    pariah.expose = false
+    pariah.state.expose = false
   else
     fg("DarkSlateGrey")
-    pariah.expose = true
+    pariah.state.expose = true
   end
   deselect()
   resetFormat()

@@ -39,8 +39,8 @@ patterns:
   type: 1
 ]]--
 
-pariah.bladePrepared = true
+pariah.state.bladePrepared = true
 tarAffed("ensorcelled")
 
-if pariah.ensorcell then killTimer(pariah.ensorcell) end
-pariah.ensorcell = tempTimer(21, [[ erAff("ensorcelled")]])
+if pariah.state.ensorcellTimer then killTimer(pariah.state.ensorcellTimer) end
+pariah.state.ensorcellTimer = tempTimer(21, [[ erAff("ensorcelled") ]])

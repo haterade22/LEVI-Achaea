@@ -92,7 +92,7 @@ function switchTarget(who)
     preventriftlock = false
     tdeliverance = false
     tBals.passive = true
-    if pariah then pariah.burrow = false end
+    if pariah then pariah.state.burrow = false end
     taccelerates = 0
     tAffs.criticalspirit = false
     tAffs.criticalmind = false

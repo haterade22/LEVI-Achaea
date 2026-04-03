@@ -38,4 +38,4 @@ patterns:
   type: 3
 ]]--
 
-pariah.bladePrepared = true
+pariah.state.bladePrepared = true

@@ -38,4 +38,4 @@ patterns:
   type: 1
 ]]--
 
-if not pariah.ensorcell then erAff("ensorcelled") end
+if not pariah.state.ensorcellTimer then erAff("ensorcelled") end

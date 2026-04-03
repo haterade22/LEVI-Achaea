@@ -38,12 +38,12 @@ patterns:
   type: 1
 ]]--
 
-if pariah.expose then
-  pariah.expose = false
+if pariah.state.expose then
+  pariah.state.expose = false
 end
 
-if pariah.virulence then killTimer(pariah.virulence) end
-pariah.virulence = tempTimer(10, [[ pariah.virulence = nil ]])
+if pariah.state.virulenceTimer then killTimer(pariah.state.virulenceTimer) end
+pariah.state.virulenceTimer = tempTimer(10, [[ pariah.state.virulenceTimer = nil ]])
 
 selectString(line,1)
 fg("DarkOrchid")

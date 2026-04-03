@@ -39,7 +39,7 @@ patterns:
 
 local name = matches[2]
 
-local voyriaBlock = ((pariah and pariah.latency) and true or false)
+local voyriaBlock = ((pariah and pariah.state and pariah.state.latencyTimer) and true or false)
 
 if isTargeted(name) then
   if haveAff("voyria") and not voyriaBlock then

@@ -44,6 +44,6 @@ patterns:
   type: 2
 ]]--
 
-if pariah.expose then
-  pariah.expose = false
+if pariah.state.expose then
+  pariah.state.expose = false
 end

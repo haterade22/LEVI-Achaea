@@ -41,7 +41,7 @@ patterns:
 if isTargeted(matches[2]) then
 	tarAffed("voyria")
   
-  if pariah and pariah.latency then
+  if pariah and pariah.state and pariah.state.latencyTimer then
     ataxia_boxEcho("TARGET PRIMED FOR DEATH", "DimGrey")
   end  
 end

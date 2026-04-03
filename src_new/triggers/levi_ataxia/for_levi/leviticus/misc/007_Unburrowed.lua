@@ -43,7 +43,7 @@ patterns:
 ]]--
 
 tAffs.burrow = nil
-pariah.burrow = false
+pariah.state.burrow = false
 
 selectString(line,1)
 fg("green")

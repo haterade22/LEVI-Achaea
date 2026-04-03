@@ -41,7 +41,7 @@ tdeliverance = false
   if passiveFailsafe then restorePassiveCure() end
 	erAff("anorexia")
 
-	if haveAff("voyria") and (pariah and not pariah.latency) then
+	if haveAff("voyria") and (pariah and not pariah.state.latencyTimer) then
 		erAff("voyria")
 	end
 

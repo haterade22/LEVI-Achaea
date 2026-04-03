@@ -44,5 +44,5 @@ if matches[5] == "Burrowed" then
   deselect()
   resetFormat()
   
-  pariah.burrow = matches[2]
+  pariah.state.burrow = matches[2]
 end

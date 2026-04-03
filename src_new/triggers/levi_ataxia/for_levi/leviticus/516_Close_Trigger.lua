@@ -40,6 +40,6 @@ patterns:
 
 setTriggerStayOpen("Swarm Tracking", 0)
 
-if pariah and pariah.burrow then
+if pariah and pariah.state.burrow then
   tarAffed("burrow")
 end

@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-04-03 — Bard offense system namespace refactor
+
+### Refactor: `001_LeviBard.lua` — new offense system pattern
+
+Restructured the Bard blade attack script to match the `psion`/`dwc`/`tekura` namespace pattern.
+
+**Why:** The file contained two bare global functions with ~40 lines of duplicated prep/refrain logic, loose globals scattered throughout, and `levibardtwo` was missing the `reboundHold.gate()` call that `levibardone` already had.
+
+**What changed:**
+- `bard` namespace with `bard.state` and `bard.config` tables
+- `bard.calcPreps()` — limb prep calculation extracted and deduplicated (was copy-pasted verbatim into both functions)
+- `bard.selectRefrain()` — refrain priority selection extracted and deduplicated
+- `bard.preDispatch()` — shared preamble (getLockingAffliction, checkTargetLocks, flick check, envenomList reset)
+- `bard.dispatchOne()` / `bard.dispatchTwo()` — replace function bodies; `levibardone`/`levibardtwo` kept as one-line wrappers
+- **Bug fix:** `reboundHold.gate()` added to `bard.dispatchTwo()` (was missing from `levibardtwo`)
+- `bard.combatEcho()`, `bard.status()`, `bard.reset()` — new utility functions
+- Alias registration with reload-safe cleanup: `bardstatus`, `bardreset`, `barddebug`, `bardecho`
+- Bare globals owned by triggers (`bardtempostance`, `bardsunset`, `bardsunrise`, `bladefinale`, `bardtemposequence`, `bardtempo`) left bare — triggers write them directly
+- `rapierdamage` bare global preserved — `008_Sunrise.lua` and `009_SunSet.lua` read it to update `lb[target].hits`
+
+**Files:**
+- `src_new/scripts/levi_ataxia/levi/levi_scripts/bard/001_LeviBard.lua` — full refactor
+
+---
+
 ## 2026-04-01 — Kai Surge trigger + mount lockout window + TK6 break upper fix
 
 ### Feature: Monk Kai Surge detection + 15s mount lockout offense window
