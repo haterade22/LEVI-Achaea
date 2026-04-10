@@ -46,7 +46,11 @@ local function selectLogograph(mode)
     table.insert(trace, (mode == "scourge") and "bear" or "serpent")
 
   elseif logo == "serpent" then
-    if haveAff("weariness") and not haveAff("impatience") then
+    if ataxia_wantClumsiness() and not haveAff("clumsiness") then
+      table.insert(trace, "scales")
+    elseif not haveAff("weariness") then
+      table.insert(trace, "nest")
+    elseif (haveAff("clumsiness") or haveAff("weariness")) and not haveAff("impatience") then
       table.insert(trace, "skein")
     else
       table.insert(trace, "nest")
@@ -60,14 +64,16 @@ local function selectLogograph(mode)
     elseif haveAff("clumsiness") and (mode == "scourge" or not haveAff("haemophilia")) then
       table.insert(trace, "bear")
     else
-      table.insert(trace, "scales")
+      table.insert(trace, "skein")
     end
 
   elseif logo == "scales" then
-    table.insert(trace, "skein")
+    table.insert(trace, "bear")
 
   elseif logo == "skein" then
-    if haveAff("impatience") or (haveAff("sandfever") and not haveAff("epilepsy")) then
+    if haveAff("impatience") and (haveAff("sandfever") or haveAff("mycalium")) and not haveAff("addiction") then
+      table.insert(trace, "scarab")
+    elseif haveAff("impatience") or (haveAff("sandfever") and not haveAff("epilepsy")) then
       table.insert(trace, "sun")
     elseif haveAff("flushings") and not haveAff("addiction") then
       table.insert(trace, "scarab")
@@ -98,6 +104,9 @@ local function selectLogograph(mode)
         table.insert(trace, "jackal")
       end
     end
+
+  elseif logo == "scarab" then
+    table.insert(trace, "jackal")
 
   elseif logo == "sun" or logo == "scorpion" or logo == "jackal" then
     table.insert(trace, "serpent")

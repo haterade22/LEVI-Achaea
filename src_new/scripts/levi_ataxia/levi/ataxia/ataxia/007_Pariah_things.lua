@@ -58,16 +58,33 @@ function pariah.reset()
   send("swarms", false)
 end
 
+-- Shared class-aware clumsiness check: returns true if target class is impacted by clumsiness.
+-- Used by both pariah (logograph routing) and serpent (ekanelia venom selection).
+function ataxia_wantClumsiness()
+  local class = tarClass or ""
+  return class ~= "air"
+      and class ~= "fire"
+      and class ~= "magi"
+      and class ~= "sylvan"
+      and class ~= "occultist"
+      and class ~= "bard"
+      and class ~= "jester"
+      and class ~= "blademaster"
+      and class ~= "water"
+      and class ~= "druid"
+      and class ~= "sentinel"
+end
+
 function pariah.canGraph(logo)
   local graphs = {
-    serpent = {"nest", "skein"},
-    bear = {"jackal", "scarab"},
-    sun = {"serpent"},
-    nest = {"bear", "scales"},
-    scales = {"skein"},
-    skein = {"scarab"},
-    scarab = {"jackal", "scales"},
-    jackal = {"serpent"},
+    serpent = {"nest", "scales", "skein"},
+    bear    = {"jackal", "scarab"},
+    sun     = {"serpent"},
+    nest    = {"bear", "skein"},
+    scales  = {"bear"},
+    skein   = {"scarab", "sun"},
+    scarab  = {"jackal"},
+    jackal  = {"serpent"},
   }
   if logo == "scorpion" then
     if ataxia.vitals.epitaph >= 4 then

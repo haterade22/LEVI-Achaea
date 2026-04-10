@@ -635,18 +635,7 @@ end
 -- =============================================================================
 
 local function wantClumsiness()
-    local class = tarClass or ""
-    return class ~= "air"
-        and class ~= "fire"
-        and class ~= "magi"
-        and class ~= "sylvan"
-        and class ~= "occultist"
-        and class ~= "bard"
-        and class ~= "jester"
-        and class ~= "blademaster"
-        and class ~= "water"
-        and class ~= "druid"
-        and class ~= "sentinel"
+    return ataxia_wantClumsiness()
 end
 
 -- =============================================================================

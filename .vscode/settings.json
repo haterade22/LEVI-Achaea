@@ -104,5 +104,6 @@
   "[lua]": {
     "editor.tabSize": 2,
     "editor.insertSpaces": false
-  }
+  },
+  "chat.tools.terminal.backgroundNotifications": true
 }

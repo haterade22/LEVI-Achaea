@@ -76,6 +76,50 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/check-changelog.sh",
+            "timeout": 5000,
+            "statusMessage": "Checking CHANGELOG..."
+          }
+        ]
+      }
+    ],
+    "PermissionDenied": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/log-permission-denied.sh",
+            "timeout": 5000
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/set-session-title.sh",
+            "timeout": 5000,
+            "statusMessage": "Setting session title..."
+          }
+        ]
+      }
     ]
+  },
+  "showThinkingSummaries": true,
+  "env": {
+    "API_TIMEOUT_MS": "600000"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "branch=$(git branch --show-current 2>/dev/null); version=$(cat version.txt 2>/dev/null | tr -d '[:space:]'); dirty=$(git diff --shortstat 2>/dev/null | sed 's/ file.*/f/' | sed 's/^ //'); echo \"v${version:-?} ${branch:-detached}${dirty:+ ($dirty)}\"",
+    "refreshInterval": 30
   }
 }

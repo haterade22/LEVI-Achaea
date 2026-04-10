@@ -206,12 +206,37 @@ Open the `LEVI-Achaea/` folder in VS Code. Recommended extensions are in `.vscod
 - **Build Levi_Test** — Build the test/distribution package
 
 **Hooks** (`.claude/settings.local.json`):
-- **SessionStart** — Prints version and recent git changes on session start
-- **PreToolUse** — Prevents concurrent builds
+
+| Hook | Event | Purpose |
+|------|-------|---------|
+| `session-start.sh` | SessionStart | Prints version, branch, recent commits on startup |
+| `lint-before-commit.sh` | PreToolUse (Bash) | Blocks `git commit` if Lua syntax errors exist |
+| `block-git-bypass.sh` | PreToolUse (Bash) | Prevents `--no-verify`, `--force`, `--hard` flags |
+| `protect-config.sh` | PreToolUse (Edit\|Write) | Blocks edits to `.claude/settings*.json` |
+| `pre-compact.sh` | Notification (compact) | Saves working context before compaction |
+| `check-changelog.sh` | Stop | Reminds to update CHANGELOG.md if Lua files changed |
+| `log-permission-denied.sh` | PermissionDenied | Audit logs blocked tool calls to `.claude/logs/` |
+| `set-session-title.sh` | UserPromptSubmit | Auto-sets session title to `LEVI: <branch> (v<version>)` |
 
 **Claude Code skills**:
-- `/build` — Run the full build pipeline
-- `/version-bump <version>` — Sync version across all 3 tracked locations
+
+| Command | Purpose |
+|---------|---------|
+| `/build` | Run the full build pipeline |
+| `/version-bump <version>` | Sync version across all 3 tracked locations |
+| `/verify [quick\|full]` | Build + test + version check + git status report |
+| `/build-fix` | Fix build/lint errors one at a time, minimal diffs |
+| `/deep-review [system]` | Launch 4 parallel agents: Lua quality, combat correctness, triggers, completeness |
+| `/codex-verify [system]` | Dispatch independent Codex verification in background |
+| `/review-codex` | Auto-detect changes, write Codex prompt, dispatch, verify results |
+| `/deslop [path]` | Regression-safe Lua bloat cleanup: deletion-first, tests-first |
+| `/scope-check [change]` | Assess whether a proposed change fits current work context |
+| `/commit-split` | Group changed files by concern and commit each group atomically |
+| `/issue [bug\|feature\|crash] [desc]` | Create GitHub issue with structured sections |
+| `/new-adr [name]` | Scaffold a new Architecture Decision Record |
+| `/tooling-review` | Review last 2 weeks of Claude Code + VS Code updates for improvements |
+
+Use `/reload-plugins` to pick up new or modified skills without restarting Claude Code.
 
 **Custom subagents** (`.claude/agents/`):
 - `offense-system` — Enforces project patterns when creating class offense systems
