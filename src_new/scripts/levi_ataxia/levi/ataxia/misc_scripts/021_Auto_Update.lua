@@ -43,17 +43,13 @@ function ataxia.updater.onDownloadDone(_, filename)
       end
     end
   elseif filename == ataxia.updater.packageFile then
-    -- capture path locally before uninstalling the package that contains this script
-    local packagePath = ataxia.updater.packageFile
     ataxia_Echo("Download complete. Removing old package...")
+    -- Store path in a global so string-lambda tempTimers can reference it.
+    -- Function closures get destroyed with uninstallPackage; string lambdas survive.
+    ataxia.updater._pendingInstall = ataxia.updater.packageFile
     uninstallPackage("Levi_Ataxia")
-    ataxia_Echo("Installing new package...")
-    tempTimer(2, function()
-      installPackage(packagePath)
-      tempTimer(1, function()
-        os.remove(packagePath)
-      end)
-    end)
+    tempTimer(2, [[ installPackage(ataxia.updater._pendingInstall) ]])
+    tempTimer(4, [[ if ataxia and ataxia.updater and ataxia.updater._pendingInstall then os.remove(ataxia.updater._pendingInstall) ataxia.updater._pendingInstall = nil end ]])
   end
 end
 
