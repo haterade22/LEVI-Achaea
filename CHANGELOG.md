@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-04-13 — Psion rebounding removal + alias wiring
+
+### Fix: Remove rebounding handling from Psion offense
+
+Psion attacks no longer blocked by rebounding in Achaea. Removed all rebounding detection and stripping logic from the offense system.
+
+**What changed:**
+
+- **`001_Levi_Psion_Logic.lua`**: Removed `psion.hasRebounding()`, `weaveBypassesRebounding()`, and Priority 3 rebounding strip block from `buildAttack()`. Shield strip via `weave cleave` retained. Defensive `reboundHold.gate()` in dispatch kept (holds our own rebounding).
+
+- **`152_First_Attack_(All_Classes).lua`**: Psion `zz` now explicitly sets mind mode before dispatch.
+
+- **`155_Second_Attack_(All_Classes).lua`**: Added Psion entry — `xx` sets flurry mode + dispatch.
+
+- **`153_Fourth_Attack_(All_Classes).lua`**: Added Psion entry — `vv` sets mind mode + dispatch.
+
+---
+
 ## 2026-04-03 — Both-arms-broken flee logic (class-agnostic)
 
 ### Feature: SLC — auto-flee + leg parry when both arms are broken
