@@ -97,13 +97,14 @@ function ataxiaBasher_attack()
   local class = gmcp.Char.Status.class:title():gsub(" Lady", ""):gsub(" Lord", "")
 
   -- If shielded, wait until HP recovers before dropping shield to attack
+  -- Standing/leg checks removed: server-side "freestand stand" handles this in PvE.
   if ataxia.defences.shield then
-    if ataxia.vitals.hpp >= 70 and ataxiaBasher_bashingFuncs[class] and canStand() then
+    if ataxia.vitals.hpp >= 70 and ataxiaBasher_bashingFuncs[class] then
       ataxiaBasher_assembleAttack()
     end
-  elseif ataxiaBasher_bashingFuncs[class] and canStand() then
+  elseif ataxiaBasher_bashingFuncs[class] then
     ataxiaBasher_assembleAttack()
-  elseif not ataxiaBasher_bashingFuncs[class] and canStand() then
+  elseif not ataxiaBasher_bashingFuncs[class] then
     ataxiaEcho(class.." isn't supported yet, sorry!")
   end
 end

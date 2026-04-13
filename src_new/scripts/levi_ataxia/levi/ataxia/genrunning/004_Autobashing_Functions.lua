@@ -86,7 +86,9 @@ function ataxiaBasher_throttleCheck()
     ataxiaBasher_cmdCount = 0
   end
   ataxiaBasher_cmdCount = ataxiaBasher_cmdCount + 1
-  if ataxiaBasher_cmdCount > 5 then
+  -- Pre-queuing sends harmless queue-replace commands every 0.3s, plus GMCP dispatch
+  -- fires on vitals changes. 12/sec is safe — server queue only executes 1 per balance.
+  if ataxiaBasher_cmdCount > 12 then
     ataxiaEcho("THROTTLE: Excessive attack rate detected (" .. ataxiaBasher_cmdCount .. " in 1s)! Pausing for safety.")
     ataxiaBasher_atk = true
     if ataxiaBasher_atkTimer then killTimer(ataxiaBasher_atkTimer) end
@@ -104,24 +106,60 @@ end
 -- This is the ONLY function that calls ataxiaBasher_attack().
 -- The ataxiaBasher_atk flag is ONLY reset by the timer callback.
 -- ============================================================================
+ataxiaBasher_debug = false  -- toggle with: lua ataxiaBasher_debug = true
+
 function ataxiaBasher_tryAttack()
-  -- Hard gate: cooldown active
-  if ataxiaBasher_atk then return false end
+  local dbg = ataxiaBasher_debug and ataxiaBasher.enabled
+
+  -- Hard gate: cooldown active (0.3s re-queue timer)
+  if ataxiaBasher_atk then
+    -- Only log once per stuck period to avoid spam (>2s means timer callback likely failed)
+    if dbg and ataxiaBasher_atkTimer == nil then
+      ataxiaEcho("[DBG] blocked: atk flag STUCK (no timer)")
+    end
+    return false
+  end
 
   -- Hard gate: fleeing, paused, or returning to flee room
-  if ataxiaTemp.bashFlee then return false end
-  if ataxiaBasher.paused then return false end
-  if ataxiaTemp.fleeReturning then return false end
+  if ataxiaTemp.bashFlee then
+    if dbg then ataxiaEcho("[DBG] blocked: bashFlee") end
+    return false
+  end
+  if ataxiaBasher.paused then
+    if dbg then ataxiaEcho("[DBG] blocked: paused") end
+    return false
+  end
+  if ataxiaTemp.fleeReturning then
+    if dbg then ataxiaEcho("[DBG] blocked: fleeReturning") end
+    return false
+  end
 
-  -- Hard gate: paused/standing (balance gated server-side via queue freestand)
-  if ataxia_paused() then return false end
-  if not canStand() then return false end
+  -- Hard gate: system paused
+  if ataxia_paused() then
+    if dbg then ataxiaEcho("[DBG] blocked: ataxia_paused") end
+    return false
+  end
+
+  -- Hard gate: movement-blocking afflictions only.
+  -- Leg damage and prone are handled server-side by "queue addclearfull freestand stand".
+  -- Only block on afflictions that prevent ANY action (impale, web, sleep, stun, entangle).
+  if affed("impaled") or affed("transfixation") or affed("webbed")
+     or affed("entangled") or affed("sleep") or affed("stun") then
+    if dbg then
+      ataxiaEcho("[DBG] blocked: hard affliction (impale/web/sleep/stun/entangle)")
+    end
+    return false
+  end
 
   -- Hard gate: skip room
-  if ataxiaBasher_skipRoom then return false end
+  if ataxiaBasher_skipRoom then
+    if dbg then ataxiaEcho("[DBG] blocked: skipRoom") end
+    return false
+  end
 
   -- Hard gate: no target — advance to next room if in auto mode
   if not found_target then
+    if dbg then ataxiaEcho("[DBG] blocked: no target") end
     if not ataxiaBasher.manual then
       if mmp.paused then
         ataxiaBasher_roomBashed()
@@ -158,6 +196,22 @@ function ataxiaBasher_tryAttack()
 end
 
 -- ============================================================================
+-- GMCP-triggered dispatch: attempt attack on any vitals change (not just prompts).
+-- Complements the prompt-based dispatch in ataxiaBasher_patterns().
+-- The anti-spam timer prevents excessive firing.
+-- ============================================================================
+function ataxiaBasher_gmcpDispatch()
+  if not ataxiaBasher.enabled then return end
+  if ataxiaTemp.bashFlee or ataxiaBasher.paused or ataxiaTemp.fleeReturning then return end
+  ataxiaBasher_tryAttack()
+end
+
+if ataxiaBasher_gmcpDispatchHandler then
+  killAnonymousEventHandler(ataxiaBasher_gmcpDispatchHandler)
+end
+ataxiaBasher_gmcpDispatchHandler = registerAnonymousEventHandler("gmcp.Char.Vitals", "ataxiaBasher_gmcpDispatch")
+
+-- ============================================================================
 -- Main patterns loop (thin wrapper around tryAttack)
 -- ============================================================================
 function ataxiaBasher_patterns()
@@ -169,6 +223,9 @@ function ataxiaBasher_patterns()
   if not ataxiaBasher.paused and (mmp.speedWalkCounter < 1 or mmp.paused == true) and not autoHarvesting and not autoExtracting then
     if not ataxiaBasher_skipRoom then
       ataxiaBasher_tryAttack()
+    -- Debug: log when mapper gate blocks prompt-based dispatch
+    elseif ataxiaBasher_debug then
+      ataxiaEcho("[DBG] patterns: skipRoom active")
     elseif not ataxiaBasher.manual then
       if mmp.paused then
         ataxiaBasher_roomBashed()
@@ -190,6 +247,8 @@ function ataxiaBasher_patterns()
     else
       ataxiaBasher_nextRoom()
     end
+  elseif ataxiaBasher_debug then
+    ataxiaEcho("[DBG] patterns: mapper walking (swc=" .. (mmp.speedWalkCounter or "?") .. " paused=" .. tostring(mmp.paused) .. ")")
   end
 
   -- Single stormhammer refresh per prompt cycle (dirty-flag gated)
