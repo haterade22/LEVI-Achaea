@@ -57,5 +57,6 @@ if gmcp.Char.Status.class == "Magi" then
 end
 
 if gmcp.Char.Status.class == "Psion" then
+  psion.setMode("mind")
   psion.dispatch()
 end

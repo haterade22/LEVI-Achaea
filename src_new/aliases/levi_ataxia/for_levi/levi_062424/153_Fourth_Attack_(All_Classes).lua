@@ -42,3 +42,8 @@ if gmcp.Char.Status.class == "Magi" then
   magi.offense.setMode("water")
   magi.offense.dispatch()
 end
+
+if gmcp.Char.Status.class == "Psion" then
+  psion.setMode("mind")
+  psion.dispatch()
+end

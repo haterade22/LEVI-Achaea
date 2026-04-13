@@ -30,8 +30,8 @@ attributes:
 packageName: ''
 ]]--
 
--- Anti-spam delay (seconds): prevents double-sends during the network round-trip
--- before GMCP reports balance lost. canBals() handles actual balance gating.
+-- Re-queue interval (seconds): controls how often we refresh the server-side queue
+-- while off-balance. Server queue (freestand) handles actual balance gating.
 local ANTI_SPAM_DELAY = 0.3
 
 -- ============================================================================
@@ -113,8 +113,9 @@ function ataxiaBasher_tryAttack()
   if ataxiaBasher.paused then return false end
   if ataxiaTemp.fleeReturning then return false end
 
-  -- Hard gate: balance/standing
-  if not canBals() or not canStand() then return false end
+  -- Hard gate: paused/standing (balance gated server-side via queue freestand)
+  if ataxia_paused() then return false end
+  if not canStand() then return false end
 
   -- Hard gate: skip room
   if ataxiaBasher_skipRoom then return false end
@@ -144,8 +145,8 @@ function ataxiaBasher_tryAttack()
 
   ataxiaBasher_attack()
 
-  -- Anti-spam cooldown: short timer prevents double-sends during network round-trip.
-  -- canBals() (line 134) is the real balance gate via GMCP.
+  -- Re-queue cooldown: limits how often we refresh the server-side queue entry.
+  -- Server-side freestand is the real balance gate.
   ataxiaBasher_atk = true
   if ataxiaBasher_atkTimer then killTimer(ataxiaBasher_atkTimer) end
   ataxiaBasher_atkTimer = tempTimer(ANTI_SPAM_DELAY, function()

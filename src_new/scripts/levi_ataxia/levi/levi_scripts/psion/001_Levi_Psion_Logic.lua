@@ -35,10 +35,8 @@ packageName: ''
     - mind   : Primary mode — unweave pressure + mana kill via psi blast/excise
     - flurry : Damage mode — invert unweaves to spirit, then flurry for burst damage
 
-    REBOUNDING (recent change):
-    - Regular weave attacks ARE blocked by rebounding
-    - Unweaves, Entwine, Finishers (Deconstruct) BYPASS rebounding
-    - When rebounding detected + non-bypass weave needed → cleave to strip
+    REBOUNDING: All Psion weave attacks bypass rebounding. Only shield
+    requires stripping (weave cleave).
 
     ALIASES (via tempAlias):
     - psmind   : Mind mode + dispatch
@@ -102,13 +100,6 @@ function psion.decho(text)
   end
 end
 
---- V1 fallback for rebounding on TARGET
---- GMCP timing gap: balance fires before text triggers in same data chunk,
---- so haveAff() may return false for a frame. V1 fallback prevents missed strips.
-function psion.hasRebounding()
-  return haveAff("rebounding") or (tAffs and tAffs.rebounding)
-end
-
 --- V1 fallback for shield on TARGET (same GMCP timing gap)
 function psion.hasShield()
   return haveAff("shield") or (tAffs and tAffs.shield)
@@ -141,12 +132,6 @@ function psion.isHeadDoublePrepped()
   if not lb or not target or not lb[target] or not lb[target].hits then return false end
   local weavesDmg = ataxiaTables and ataxiaTables.limbData and ataxiaTables.limbData.psionweaves or 25
   return (lb[target].hits["head"] or 0) + (weavesDmg * 2) >= 100
-end
-
---- Check if a weave command bypasses rebounding
-local function weaveBypassesRebounding(weave)
-  return weave == "unweave mind" or weave == "unweave body" or weave == "unweave spirit"
-      or weave == "deconstruct"
 end
 
 -- =============================================================================
@@ -294,7 +279,6 @@ function psion.buildAttack()
   local prepare = psion.selectPrepare()
   local weave = psion.selectWeave(prepare)
   local transcend = psion.selectTranscend()
-  local hasRebounding = psion.hasRebounding()
   local hasShield = psion.hasShield()
 
   -- Store selections for combat echo
@@ -315,15 +299,7 @@ function psion.buildAttack()
       .. sp .. "psi excise " .. target
   end
 
-  -- Priority 3: Rebounding strip (cleave) — only for non-bypass weaves
-  if hasRebounding and not weaveBypassesRebounding(weave) then
-    psion.decho("Rebounding up — cleaving to strip")
-    return atk .. "psi transcend " .. transcend .. " " .. target
-      .. sp .. "weave prepare " .. prepare
-      .. sp .. "weave cleave " .. target
-  end
-
-  -- Priority 4: [Flurry mode] Invert conditions
+  -- Priority 3: [Flurry mode] Invert conditions
   if psion.state.mode == "flurry" then
     local isInverted = inverted or false
     if isInverted and (psion.hasAff("unweavingspirit") or psion.hasAff("criticalspirit")) then
@@ -339,7 +315,7 @@ function psion.buildAttack()
     end
   end
 
-  -- Priority 5: Normal attack — transcend + prepare + weave
+  -- Priority 4: Normal attack — transcend + prepare + weave
   local weaveCmd
   if weave == "unweave mind" then
     weaveCmd = "weave unweave " .. target .. " mind"

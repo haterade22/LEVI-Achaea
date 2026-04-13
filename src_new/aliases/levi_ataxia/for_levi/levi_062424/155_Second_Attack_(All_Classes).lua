@@ -49,3 +49,8 @@ if gmcp.Char.Status.class == "Magi" then
   magi.offense.setMode("fire")
   magi.offense.dispatch()
 end
+
+if gmcp.Char.Status.class == "Psion" then
+  psion.setMode("flurry")
+  psion.dispatch()
+end
