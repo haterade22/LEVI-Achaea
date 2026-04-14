@@ -65,7 +65,7 @@ shikudo = shikudo or {}
 shikudo.mode = shikudo.mode or "dispatch"  -- Default mode
 
 function shikudo.setMode(mode)
-  local validModes = {dispatch = true, lock = true, riftlock = true}
+  local validModes = {dispatch = true, lock = true, riftlock = true, godmode = true}
   if validModes[mode] then
     shikudo.mode = mode
     cecho("\n<cyan>[Shikudo] Mode set to: <yellow>" .. mode:upper())
@@ -866,6 +866,16 @@ function shikudo.dispatch()
     return
   end
 
+  -- GOD MODE: Delegate to dedicated handler
+  if mode == "godmode" then
+    if shikudo.godmode and shikudo.godmode.run then
+      return shikudo.godmode.run()
+    else
+      cecho("\n<red>[Shikudo] God Mode not loaded! Check 009_CC_Shikudo_GodMode.lua")
+      return
+    end
+  end
+
   local cmd = ""
   if combatQueue then
     cmd = combatQueue()
@@ -956,6 +966,13 @@ function shikudo.status()
   cecho("\n<cyan>║ <white>Target: <yellow>" .. tostring(target or "None"))
   cecho("\n<cyan>║ <white>Form: <green>" .. form .. " <grey>(" .. kata .. "/" .. maxKata .. " kata)")
   cecho("\n<cyan>║ <white>Hyperfocus: " .. (shikudo.state.hyperfocus and shikudo.state.hyperfocus or "none"))
+
+  if mode == "godmode" then
+    if shikudo.godmode and shikudo.godmode.status then
+      shikudo.godmode.status()
+      return
+    end
+  end
 
   if mode == "dispatch" then
     cecho("\n<cyan>╠══════════════════════════════════════════════╣")
@@ -1068,3 +1085,5 @@ end
 function srlreset()
   shikudo.reset()
 end
+
+-- God Mode convenience aliases defined in 009_CC_Shikudo_GodMode.lua

@@ -47,6 +47,28 @@ Hooks run automatically — you don't need to invoke them:
 - **protect-config.sh** blocks edits to `.claude/settings*.json`. Use `/update-config` or ask the user.
 - **block-git-bypass.sh** blocks `--no-verify`, `--force`, `--hard` on git commands.
 
+## Porting Foreign Code
+
+When porting logic from another player's combat system:
+
+1. **Verify data layer compatibility**: For every global table the foreign code reads, grep for WRITE sites in our triggers:
+   ```bash
+   grep -r "tableName" src_new/triggers/ --include="*.lua"
+   ```
+   If no writes exist, the table is dead — map to our canonical source instead.
+
+2. **Canonical data sources in our codebase**:
+   - Limb damage: `lb[target].hits["left leg"]` (NOT `tLimbs` — it's rarely written)
+   - Target afflictions: `tAffs` for direct observations, `haveAff()` for probabilistic V3
+   - Limb damage constants: `ataxiaTables.limbData.shikKuro` etc. (written by attack triggers)
+   - Kata/form: `ataxia.vitals.kata`, `ataxia.vitals.form` (written by GMCP)
+
+3. **File-scope state tables**: If using a module-local table for per-tick state, reset it (`table = {}`) at the top of the per-tick entry point. Stale sentinel strings from prior ticks cause phantom actions.
+
+4. **Threshold invariants**: When two functions must agree (e.g., `executeReady` and form transition `allPrepped`), verify they use identical flags. Don't mix the source system's conventions with ours.
+
+5. **Incremental writing**: For files >200 lines, write namespace + core calc first, build, then add each form/phase one at a time with a build between each.
+
 ## After Creating/Modifying
 
 1. Verify the system integrates with the existing combat dispatch

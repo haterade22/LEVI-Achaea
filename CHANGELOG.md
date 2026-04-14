@@ -2,6 +2,30 @@
 
 ---
 
+## 2026-04-14 — Shikudo God Mode (5-Limb Dispatch)
+
+### Feature: New "godmode" dispatch mode for Shikudo monks
+
+Ported Pharaus' 5-limb dispatch strategy. Preps ALL 5 limbs (both legs, both arms, head) to 92%+ before a devastating 3-combo execute sequence that breaks everything simultaneously.
+
+**What changed:**
+
+- **`009_CC_Shikudo_GodMode.lua`** (NEW): Full godmode offense — `shikudo.godmode` namespace with calcLimbs(), light attack system with cumulative damage simulation, form-specific priorities (Rain/Oak/Willow/Gaital/Tykonos/Maelstrom), stateless 3-combo Gaital execute, condition-based form transitions, lock fork fallback, low HP Maelstrom override, status display.
+
+- **`008_CC_Shikudo_Offense_ALL.lua`**: Added `godmode` to valid modes, dispatch branch delegates to `shikudo.godmode.run()`, status display routes to godmode status.
+
+- **`153_Fourth_Attack_(All_Classes).lua`**: `^vv$` alias now sets godmode for Shikudo monks.
+
+**Key mechanics:**
+- 3-combo execute: sweep+flashheel (prone+break leg) → ruku+ruku+flashheel (break arms+leg) → needle+staff+flashheel (break head+crushedthroat)
+- Light attacks prevent premature limb breaks during build phase
+- Lock fork: if crushedthroat cured but arms broken + 3 lock affs → Rain for riftlock
+- Reads limb data from `lb[target].hits` (canonical trigger-fed source)
+
+**Usage:** `shikudo.setMode("godmode")` or `skgodmode()` or press `vv`
+
+---
+
 ## 2026-04-13 — Psion rebounding removal + alias wiring
 
 ### Fix: Remove rebounding handling from Psion offense

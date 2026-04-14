@@ -1483,6 +1483,33 @@ Claude Code agent teams enable parallel development across isolated combat subsy
 
 **Build contention**: Only one agent may run `convert_to_muddler.py` or `muddle.bat` at a time.
 
+### Porting Foreign Combat Scripts
+
+**Problem**: When porting logic from another player's combat system, global table names may look identical but have completely different write sources in our codebase.
+
+**Root cause (2026-04-14 Shikudo God Mode)**: Pharaus' script reads `tLimbs.LL` for limb damage. Our codebase has `tLimbs` as a table, but no trigger ever writes to it — our canonical limb data lives in `lb[target].hits["left leg"]`. The ported code silently ran on permanent zeros.
+
+**Prevention checklist for ported code:**
+1. For every global table the foreign code READS, grep for WRITE sites in `src_new/triggers/`: `grep -r "tableName\s*=" src_new/triggers/`
+2. If no writes found, the table is dead — map to the canonical source (usually `lb[target].hits` for limb data, `tAffs` for afflictions)
+3. For file-scope `local` state tables, verify they are reset at the top of the per-tick entry point — stale sentinels from prior ticks cause phantom actions
+4. When two functions must agree on a threshold (e.g., `executeReady` and form transition `allPrepped`), verify they use identical flags — don't mix conventions from the source and destination systems
+5. Never write a new offense file (>200 lines) in a single pass — write namespace + calc first, build, then add each form's logic incrementally
+
+```lua
+-- BAD: Assumed tLimbs was populated (it wasn't)
+local tl = tLimbs
+gm.llFLASH = (tl.LL + ld.shikFlashheel >= 100)
+
+-- GOOD: Read from canonical trigger-fed source
+local function getLimb(key)
+  if not target or not lb or not lb[target] or not lb[target].hits then return 0 end
+  return lb[target].hits[LIMB_NAMES[key]] or 0
+end
+gm.LL = getLimb("LL")
+gm.llFLASH = (gm.LL + ld.shikFlashheel >= 100)
+```
+
 ---
 
 ## Model Routing Guidance

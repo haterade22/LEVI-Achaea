@@ -26,6 +26,7 @@ if gmcp.Char.Status.class == "Monk" then
     tekura6.config.kaiMode = "cripple"
     tekura6.dispatch.run()
   else
+    shikudo.setMode("godmode")
     shikudo.dispatch()
   end
 end
