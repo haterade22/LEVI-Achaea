@@ -375,7 +375,9 @@ function ataxiaBasher_assembleAttack()
 
   -- Blood Maiden cloak: activate bloodshield on 4+ targetable mobs or bosses
   -- After first activation, cloak stays active for 3 minutes (free re-activations)
-  if ataxiaBasher.bloodMaiden and (ataxiaTemp.bloodshieldReady or ataxiaTemp.bloodshieldActive) then
+  -- Cooldown gate: only include in command once per 3s to avoid spamming EQ with pre-queuing
+  if ataxiaBasher.bloodMaiden and (ataxiaTemp.bloodshieldReady or ataxiaTemp.bloodshieldActive)
+     and not ataxiaTemp.bloodshieldCooldown then
     local area = gmcp.Room.Info and gmcp.Room.Info.area
     local targets = area and ataxiaBasher.targetList[area]
     local targetCount = 0
@@ -396,6 +398,12 @@ function ataxiaBasher_assembleAttack()
     local threshold = ataxiaTemp.bloodshieldActive and 3 or 4
     if targetCount >= threshold or hasBoss then
       command = command.."activate bloodshield"..sp
+      ataxiaTemp.bloodshieldCooldown = true
+      if ataxiaTemp.bloodshieldCooldownTimer then killTimer(ataxiaTemp.bloodshieldCooldownTimer) end
+      ataxiaTemp.bloodshieldCooldownTimer = tempTimer(3, function()
+        ataxiaTemp.bloodshieldCooldown = nil
+        ataxiaTemp.bloodshieldCooldownTimer = nil
+      end)
       if ataxiaTemp.bloodshieldReady and not ataxiaTemp.bloodshieldActive then
         ataxiaTemp.bloodshieldActive = true
         ataxiaTemp.bloodshieldTimer = tempTimer(180, function()
