@@ -14,15 +14,20 @@ packageName: ''
 ]]--
 
 --[[
-  OFFENSIVE SYSTEM - Pariah
+  OFFENSIVE SYSTEM - Pariah (Adaptive)
 
   REQUIRED READING before modifying:
   - .claude/classes/lock_types.md (lock definitions)
   - .claude/classes/pariah.md (class mechanics)
 
-  Kill routes:
-    "latency" mode: Voyria kill — stack plagues, trigger latency, accelerate finish
-    "scourge" mode: Scourge kill — pyramides + scytherus + haemophilia + bleed >= 200
+  Single adaptive dispatch — no manual mode selection needed.
+  Always starts with bear (haemophilia) to build toward scourge.
+  Dynamically selects kill route based on what afflictions stick:
+
+  Kill routes (checked in priority order):
+    Scourge:   haemophilia + scytherus + pyramides + burrow + bleed >= 200
+    Latency:   3+ plagues + burrow + epitaph >= 4 → voyria + accelerate
+    Virulence: 3+ plagues + asthma stuck → sting + virulence (combo afflictions)
 
   Logograph tree determines trace ability per round.
   Swarm sting/burrow/infest apply plagues.
@@ -35,15 +40,15 @@ packageName: ''
 -- Helpers (local to this file)
 --------------------------------------------------------------------------------
 
-local function selectLogograph(mode)
+local function selectLogograph()
   local trace = {}
   local logo  = pariah.state.lastLogograph
 
   if haveAff("shield") then
     table.insert(trace, "fissure")
   elseif not logo then
-    -- Starting logograph differs by kill route
-    table.insert(trace, (mode == "scourge") and "bear" or "serpent")
+    -- Always start with bear for haemophilia
+    table.insert(trace, "bear")
 
   elseif logo == "serpent" then
     if ataxia_wantClumsiness() and not haveAff("clumsiness") then
@@ -61,7 +66,7 @@ local function selectLogograph(mode)
       table.insert(trace, "bear")
     elseif haveAff("flushings") then
       table.insert(trace, "bear")
-    elseif haveAff("clumsiness") and (mode == "scourge" or not haveAff("haemophilia")) then
+    elseif haveAff("clumsiness") and not haveAff("haemophilia") then
       table.insert(trace, "bear")
     else
       table.insert(trace, "skein")
@@ -86,7 +91,8 @@ local function selectLogograph(mode)
     end
 
   elseif logo == "bear" then
-    if mode == "scourge" then
+    -- If haemophilia is stuck, stack ginseng to protect it; otherwise kelp pressure
+    if haveAff("haemophilia") then
       if haveAff("flushings") and not haveAff("addiction") then
         table.insert(trace, "scarab")
       elseif not haveAff("asthma") then
@@ -95,7 +101,6 @@ local function selectLogograph(mode)
         table.insert(trace, "scarab")
       end
     else
-      -- latency mode
       if not haveAff("asthma") then
         table.insert(trace, "jackal")
       elseif haveAff("flushings") and not haveAff("addiction") then
@@ -128,12 +133,15 @@ local function selectHeartbeats(e)
   return hb
 end
 
-local function selectSwarmSting(mode)
+local function selectSwarmSting()
   local sting = {}
-  if mode == "scourge" then
-    if not haveAff("pyramides") and not haveAff("burrow") then
-      table.insert(sting, "pyramides")
-    elseif not haveAff("flushings") then
+  local hasHaemo = haveAff("haemophilia")
+
+  if not haveAff("pyramides") and not haveAff("burrow") then
+    table.insert(sting, "pyramides")
+  elseif hasHaemo then
+    -- Haemophilia sticking: ginseng pressure to protect it
+    if not haveAff("flushings") then
       table.insert(sting, "flushings")
     elseif not haveAff("mycalium") then
       table.insert(sting, "mycalium")
@@ -145,10 +153,8 @@ local function selectSwarmSting(mode)
       table.insert(sting, "pyramides")
     end
   else
-    -- latency mode
-    if not haveAff("pyramides") and not haveAff("burrow") then
-      table.insert(sting, "pyramides")
-    elseif not haveAff("sandfever") and not haveAff("impatience") then
+    -- Haemophilia not sticking: goldenseal pressure, build plagues for latency
+    if not haveAff("sandfever") and not haveAff("impatience") then
       table.insert(sting, "sandfever")
     elseif not haveAff("rebbies") then
       table.insert(sting, "rebbies")
@@ -164,11 +170,10 @@ local function selectSwarmSting(mode)
 end
 
 --------------------------------------------------------------------------------
--- Main dispatch
+-- Main dispatch (adaptive — no mode argument)
 --------------------------------------------------------------------------------
 
-function pariah.dispatch(mode)
-  -- mode = "latency" or "scourge"
+function pariah.dispatch()
   if reboundHold and reboundHold.gate(pariah.dispatch) then return end
   local atk = combatQueue()
   local e   = ataxia.vitals.epitaph
@@ -177,20 +182,18 @@ function pariah.dispatch(mode)
   getLockingAffliction()
   checkTargetLocks()
 
-  -- Kelp stack (haemophilia added for scourge mode)
-  local kelpList = (mode == "scourge")
-    and {"paralysis", "asthma", "epilepsy", "clumsiness", "impatience", "addiction", "relapsing", "haemophilia"}
-    or  {"paralysis", "asthma", "epilepsy", "clumsiness", "impatience", "addiction", "relapsing"}
-  tAffs.logostack = checkAffList(kelpList, 3)
+  -- Kelp stack — always include haemophilia to track if it's stuck
+  tAffs.logostack = checkAffList(
+    {"paralysis", "asthma", "epilepsy", "clumsiness", "impatience", "addiction", "relapsing", "haemophilia"}, 3)
 
-  -- Plague stack (local — not global): 3+ plagues active triggers latency route
+  -- Plague stack: 3+ plagues active enables latency/virulence
   local tlatency = checkAffList({"mycalium", "rebbies", "sandfever", "flushings", "pyramides"}, 3)
 
-  local logographtrace = selectLogograph(mode)
+  local logographtrace = selectLogograph()
   local myheartbeats   = selectHeartbeats(e)
-  local myswarmsting   = selectSwarmSting(mode)
+  local myswarmsting   = selectSwarmSting()
 
-  -- Attack dispatch
+  -- Attack dispatch (priority order)
   if haveAff("shield") then
     if haveAff("voyria") and taccelerates < 2 then
       atk = atk .. ";trace fissure " .. target .. ";blood accelerate " .. target
@@ -212,22 +215,31 @@ function pariah.dispatch(mode)
   elseif pariah.state.latencyTimer and not haveAff("voyria") and pariah.state.lastLogograph == "scorpion" then
     atk = atk .. "trace serpent " .. target .. ";crux transpose voyria;blood accelerate " .. target
 
-  elseif mode == "scourge"
-      and tAffs.bleed >= 200
+  -- Scourge kill: all conditions met
+  elseif tAffs.bleed >= 200
       and haveAff("scytherus") and haveAff("haemophilia")
       and haveAff("pyramides") and haveAff("burrow") then
     atk = atk .. "swarm scourge pyramides " .. target .. ";trace " .. logographtrace[1] .. " " .. target
 
   elseif e >= 3 and pariah.state.expose then
-    if mode == "latency" and haveAff("burrow") and tlatency and e >= 4 then
-      -- Latency kill setup: swarm has burrow, 3+ plagues active, epitaph deep enough
+    -- Latency kill: 3+ plagues, burrowed, epitaph deep enough
+    if haveAff("burrow") and tlatency and e >= 4 then
       atk = atk .. "swarm latency pyramides;trace scorpion " .. target
+
+    -- Virulence: 3+ plagues + asthma stuck + exposed → sting + virulence (free) + trace
+    elseif pariah.canVirulence() and haveAff("asthma") then
+      atk = atk .. "swarm sting " .. myswarmsting[1] .. " " .. target .. ";virulence " .. target .. ";trace " .. logographtrace[1] .. " " .. target
+
+    -- Scourge prep: haemophilia + burrow + high bleed → get scytherus via scorpion
+    elseif haveAff("haemophilia") and haveAff("burrow") and tAffs.bleed >= 200 then
+      atk = atk .. "swarm sting " .. myswarmsting[1] .. " " .. target .. ";trace scorpion " .. target
+
     elseif not haveAff("burrow") then
       atk = atk .. "swarm burrow pyramides " .. target .. ";trace " .. logographtrace[1] .. " " .. target
-    elseif mode == "scourge" and haveAff("burrow") and tAffs.bleed >= 200 then
-      atk = atk .. "swarm sting " .. myswarmsting[1] .. " " .. target .. ";trace scorpion " .. target
+
     elseif haveAff("burrow") and not pariah.state.infestTimer then
       atk = atk .. "swarm infest pyramides " .. target .. ";trace " .. logographtrace[1] .. " " .. target
+
     else
       atk = atk .. "swarm sting " .. myswarmsting[1] .. " " .. target .. ";trace " .. logographtrace[1] .. " " .. target
     end
@@ -243,6 +255,6 @@ function pariah.dispatch(mode)
   send("queue addclearfull freestand wield left knife;unwield right;" .. atk)
 end
 
--- Backward-compat wrappers
-function levipariahlatencytest() pariah.dispatch("latency") end
-function levipariahscourgetest() pariah.dispatch("scourge") end
+-- Backward-compat wrappers (both call the same adaptive dispatch)
+function levipariahlatencytest() pariah.dispatch() end
+function levipariahscourgetest() pariah.dispatch() end
