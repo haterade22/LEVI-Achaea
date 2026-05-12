@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-05-12 — Apostate deadeye party callout + rbhold default off
+
+### Fix: Drop comma from affliction party callout
+
+The apostate deadeye buffer was announcing afflictions to party with a comma separator (`Tabethys: asthma, paralysis`), inconsistent with the DSL relay which already used spaces.
+
+**What changed:**
+
+- **`462_NEW_DEADEYES.lua`**: Line 91 — changed `table.concat(deadeye_buffer, ", ")` to `table.concat(deadeye_buffer, " ")`. Party callout now reads `Tabethys: asthma paralysis`, matching the DSL relay format in `017_Affliction_Management.lua:168`.
+
+Magi target-priority list (`pt Targets: A, B, C`) intentionally kept comma-separated — those are player names, not afflictions.
+
+### Fix: Force rbhold off on every login
+
+Apostate (and other class) dispatches silently abort when `reboundHold.gate()` is active. The previous init guard (`if reboundHold.config.enabled == nil then ... = false end`) only set the default on first load — a persisted `enabled = true` value would carry across sessions and silently block attacks (e.g. pressing `sr` as Apostate produced no attack with no echo).
+
+**What changed:**
+
+- **`006_Rebound_Hold.lua`**: Line 42 — replaced the `nil`-guarded default with an unconditional `reboundHold.config.enabled = false`. Rbhold now defaults off on every script load / login. Re-enable per-session with `rbhold on`.
+
+---
+
 ## 2026-04-14 — Shikudo God Mode (5-Limb Dispatch)
 
 ### Feature: New "godmode" dispatch mode for Shikudo monks

@@ -39,7 +39,7 @@ reboundHold.state = reboundHold.state or {}
 -- CONFIGURATION
 --------------------------------------------------------------------------------
 
-if reboundHold.config.enabled == nil then reboundHold.config.enabled = false end
+reboundHold.config.enabled = false
 reboundHold.config.REBOUND_RECOVERY = reboundHold.config.REBOUND_RECOVERY or 8.5
 reboundHold.config.HOLD_WINDOW = reboundHold.config.HOLD_WINDOW or 1.0
 reboundHold.config.STRIP_WAIT = reboundHold.config.STRIP_WAIT or 1.5

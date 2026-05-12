@@ -88,7 +88,7 @@ if matches[2] == "sleep" and tAffs.hypersomnia and tarInsomnia == true then tarI
     if deadeye_timer then killTimer(deadeye_timer) end
     deadeye_timer = tempTimer(0, function()
       if deadeye_buffer and #deadeye_buffer > 0 then
-        send("pt " .. target .. ": " .. table.concat(deadeye_buffer, ", "))
+        send("pt " .. target .. ": " .. table.concat(deadeye_buffer, " "))
         deadeye_buffer = {}
       end
       deadeye_timer = nil
