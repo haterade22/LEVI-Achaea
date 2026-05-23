@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-05-23 — Sentinel phantom-mount whip 4-limb-break tracking
+
+### Feature: Track all 4 limb breaks from "whip mount into a fury"
+
+The Sentinel skirmishing ability that whips a phantom mount into a fury produces 4 sequential break lines (both legs, both arms) on a single target, but had no trigger feeding the affliction tracker. After a successful whip, `tAffs.brokenleftleg` / `brokenrightleg` / `brokenleftarm` / `brokenrightarm` / `prone` stayed false, so downstream offense decisions ran on stale state right after a major 4-limb-break attack.
+
+**What changed:**
+
+- **`008_Phantom_Mount_Whip.lua`** (NEW) in `triggers/.../targeted_strikes/`: multiline trigger anchored on `^You whip (.+) into a fury...` plus the four subsequent break lines (`breaks the left leg`, `crushes the right leg`, `pulverises the left arm`, `smashes the right arm`). Mount name and target are regex-captured so it generalizes across phantom mount types (ankheg, grizzly, etc.) and any target. On match, calls `tarAffed("brokenleftleg", "brokenrightleg", "brokenleftarm", "brokenrightarm", "prone")` when `isTargeted(target)` matches, fanning out to `tAffs` and V3 via the standard wrappers — same pattern used by the existing DWB break triggers (`579_Arms_1.lua`, `580_Legs_1.lua`).
+
+First-person only (anchored on `^You whip`) — won't fire from other players' whips. No `lb.addHit()` update since the game text doesn't report damage percentages for this ability and the existing dealt-damage trigger expects a `%` line.
+
+---
+
 ## 2026-05-12 — Apostate deadeye party callout + rbhold default off
 
 ### Fix: Drop comma from affliction party callout
