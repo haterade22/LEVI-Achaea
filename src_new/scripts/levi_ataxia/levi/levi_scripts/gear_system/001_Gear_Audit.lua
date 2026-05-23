@@ -861,23 +861,31 @@ end
 
 function gearAudit.setupListingTriggers()
   -- Trigger for gear list item lines
-  -- Format: ID     Name                                     Rarity       Months left
-  -- Example: 1667   a Moghedan helmet of recovery            common       68
-  -- More flexible regex: uses \s+ instead of \s{2,} and no end anchor
+  -- Format: [*]ID    Name                          Rarity   Slot     Set         Months
+  -- Example: 109     Moghedan gauntlets of piercing common   hands    moghedu     6
+  -- Example: *3546   a fallen adventurer's cuirass  common   chest    adventurer  1
+  -- Leading "*" marks currently worn/equipped items.
   local t1 = tempRegexTrigger(
-    [[^(\d+)\s+(.+?)\s+(common|rare|remnant)\s+(\d+)]],
+    [[^(\*?)(\d+)\s+(.+?)\s+(common|rare|remnant|artifact|epic|legendary)\s+(\w+)\s+(\w+)\s+(\d+)\s*$]],
     function()
-      local id = tonumber(matches[2])
-      local name = matches[3]:match("^%s*(.-)%s*$")  -- trim
-      local rarity = matches[4]
-      local monthsLeft = tonumber(matches[5])
+      local worn = (matches[2] == "*")
+      local id = tonumber(matches[3])
+      local name = matches[4]:match("^%s*(.-)%s*$")
+      local rarity = matches[5]
+      local slot = matches[6]
+      local setCode = matches[7]
+      local monthsLeft = tonumber(matches[8])
 
       if id then
         gearAudit.data[id] = gearAudit.data[id] or {}
-        gearAudit.data[id].id = id
-        gearAudit.data[id].name = name
-        gearAudit.data[id].rarity = rarity
-        gearAudit.data[id].monthsLeft = monthsLeft
+        local g = gearAudit.data[id]
+        g.id = id
+        g.name = name
+        g.rarity = rarity
+        g.slot = slot
+        g.setCode = setCode
+        g.monthsLeft = monthsLeft
+        g.worn = worn
 
         table.insert(gearAudit.state.probeQueue, id)
       end
