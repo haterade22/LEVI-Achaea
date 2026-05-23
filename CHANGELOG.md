@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-05-23 — Gear listing trigger updated for new GEAR LIST ALL format
+
+### Fix: Capture slot, set, worn-status, and extended rarities
+
+The `gearAudit.setupListingTriggers()` regex only matched the old 4-column GEAR LIST ALL format (`id name rarity months`) with rarities limited to common/rare/remnant. The current game format adds slot and set columns, prefixes worn items with `*`, and exposes additional rarities (artifact/epic/legendary), so most modern gear rows silently failed to parse and never reached the probe queue.
+
+**What changed:**
+
+- **`001_Gear_Audit.lua`**: `setupListingTriggers()` regex rewritten to `^(\*?)(\d+)\s+(.+?)\s+(common|rare|remnant|artifact|epic|legendary)\s+(\w+)\s+(\w+)\s+(\d+)\s*$`. Captures worn-flag, slot, and setCode in addition to the existing fields; populates `g.slot`, `g.setCode`, and `g.worn` on each `gearAudit.data[id]` entry.
+
+---
+
 ## 2026-05-23 — Sentinel phantom-mount whip 4-limb-break tracking
 
 ### Feature: Track all 4 limb breaks from "whip mount into a fury"
