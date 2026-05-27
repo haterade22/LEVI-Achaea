@@ -2,6 +2,36 @@
 
 ---
 
+## 2026-05-27 — Serpent offense: Gavai-inspired tempo + bite payload + opportunistic ekanelias
+
+### Feature: Round-1 burst, bite-stacking, shield-break, class-aware routing, underused ekanelias
+
+After reviewing a combat log of Gavai (one of the top-tier serpents in Achaea), audited Levi's serpent offense and identified six tactical gaps. The existing engine is strong at lock completion via Ekanelia + impulse + fratricide-relapse, but lacked the pressure/tempo and room-control overlays that make Gavai's offense feel inescapable. This change layers those overlays on top of the existing lock engine without disturbing the strategy chain.
+
+**What changed (all in `002_Serpent_Offense.lua`):**
+
+- **Round-1 opener (Track 1)**: New `serpent.state.firstAttack` flag set on `tar changed`; `serp_sendAttack()` prepends a `buildOpener()` prefix on the first attack of a fight. Opener can include a bow swap + pinshot (consumes `tpinshot` set by `triggers/.../serpent/002_Pinshot.lua`) and sigil deployment (incandescent + monolith). All three opener pieces are config-gated via `serpent.config.useOpener / useBowOpener / useSigils` so the user can toggle per-fight.
+
+- **Bite payload expansion (Track 2)**: New `selectBiteVenom()` helper picks bite venom based on target state — preserves scytherus-camus loop when scytherus is stuck, but also delivers monkshood (impatience via ekanelia, no EQ cost), kalmia, curare, loki, or aconite depending on which ekanelia is ready. New mode `bitepayload` with `ekbite` alias activates a bite-centric sustained-pressure round. Replaces hardcoded `biteVenom = "scytherus"` at the old line ~1546.
+
+- **Defensive denial (Track 3)**: `serp_sendAttack()` rotates `block <direction>` through `gmcp.Room.Info.exits` with 5s per-direction throttling and a 5s global throttle. Config-gated via `serpent.config.useExitBlock` (default OFF). Sigils handled inline in `buildOpener()`. **Shield-break pressure**: when the target shields, the flay-shield path (PRIORITY 1) now chains monkshood impulse on EQ alongside the flay on BAL, keeping impatience landing to force shield touch-failures (the Gavai "TOUCH SHIELD - IMPATIENCE" cheese).
+
+- **Class-aware venom routing (Track 4)**: New local `CLASS_LOCK_VENOM` table maps target class to its weakest-cure-path venom (apostate→voyria, monk→vernalius, magi/sylvan→notechis, knights→xentio, psion/alchemist→aconite, depthswalker→eurypteria, druid/sentinel→kalmia). `pickVenom()` now checks `getClassLockAff()` after paralysis is locked and prefers the class-specific lock aff when its target aff is missing.
+
+- **Ekanelia expansion (Track 5)**: New `selectOpportunisticEkanelia()` helper fires loki (confusion+recklessness → nausea+paralysis), aconite (deadening+dementia → stupidity+paranoia), or curare-ek (hypersomnia+masochism → paralysis+hypochondria) when normal impatience delivery isn't available. Wired into the impulse-case chain as a fallback before dropping to dstab.
+
+- **State plumbing**: New state fields `serpent.state.firstAttack`, `pinshotSentAt`, `sigilDeployed`, `blockedExits`, `lastBlockSentAt` all initialized at file load and reset on `tar changed`. New config fields `useOpener`, `useBowOpener`, `bowName`, `useExitBlock`, `useSigils` added to `serpent.config`.
+
+- **Test coverage**: New `src_new/tests/test_serpent_helpers.lua` adds 13 tests covering `selectBiteVenom()` (8 cases) and `selectOpportunisticEkanelia()` (5 cases). All 82 project tests pass.
+
+**Why this matters:** Gavai's combat tempo is "shroud → pinshot → adder → block exit → dstab/bite loop → sigil if threatening flee → execute when locked" with 3–4 distinct denial actions packed into one balance round. Levi's existing engine had the lock engine but none of the tempo/denial scaffolding. These changes close the gap without rewriting the strategy chain.
+
+**Game-side commands NOT verified live**: `pinshot <target>` syntax assumes archery default; `block <direction>` balance behavior assumes free-action (throttled fallback to standalone `send`); sigils require user-side inventory. Defaults are conservative — bow opener is ON, exit-block and sigils are OFF, so live behavior change vs. prior is limited to: (a) longer opening command on first attack, (b) shield-break impatience chain. Anti-magic (per-round `point finger`) explicitly NOT added — that's a multiclass ability Gavai has, not a serpent native.
+
+**Aliases**: `ek`, `eklock`, `ekdark`, `ekhyp`, `ekauto`, `ekstatus`, `ekhypstatus`, `ekhl`, `ekgroup`, `ekscyth`, **`ekbite` (NEW)**.
+
+---
+
 ## 2026-05-23 — Phantom-mount whip trigger now covers 3rd-person observations
 
 ### Feature: Track 3rd-person phantom-mount whip 4-limb breaks

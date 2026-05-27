@@ -86,6 +86,11 @@ affTimers = affTimers or {}
 serpent.state.attackInFlight = serpent.state.attackInFlight or false
 serpent.state.lastBalState = serpent.state.lastBalState or "1"
 serpent.state.dispelSent = serpent.state.dispelSent or false
+serpent.state.firstAttack = (serpent.state.firstAttack == nil) and true or serpent.state.firstAttack
+serpent.state.pinshotSentAt = serpent.state.pinshotSentAt or 0
+serpent.state.sigilDeployed = serpent.state.sigilDeployed or false
+serpent.state.blockedExits = serpent.state.blockedExits or {}  -- {[dir] = epoch_blocked_at}
+serpent.state.lastBlockSentAt = serpent.state.lastBlockSentAt or 0
 
 -- Relapse locking state
 serpent.state.impatienceDelivered = serpent.state.impatienceDelivered or false
@@ -107,6 +112,13 @@ serpent.config = {
     echoStrategy = true,
     echoAffs = true,
     autoFratricide = true,
+    -- Round-1 tempo (Track 1)
+    useOpener = true,        -- inject pinshot + adder + dispel on first attack
+    useBowOpener = true,     -- include bow swap + pinshot in the opener (set false if bow not held)
+    bowName = "bow",         -- name used in `wield <bowName>` (lupine bow default works as `bow`)
+    -- Defensive denial (Track 3) — gated OFF by default; enable per-fight
+    useExitBlock = false,    -- send `block <direction>` between rounds
+    useSigils = false,       -- drop incandescent + monolith sigil on round 1
 }
 
 -- Constants
@@ -639,6 +651,58 @@ local function wantClumsiness()
 end
 
 -- =============================================================================
+-- CLASS-AWARE VENOM ROUTING (Track 4)
+-- =============================================================================
+
+--[[
+    Pick the first-priority lock venom for the target's class.
+    Returns a venom name (string) — call pickVenom(venom) as second venom.
+
+    Per-class fastest-lock venom:
+      - apostate         : voyria (sip blocker, hardest cure for apostate)
+      - monk/shikudo     : vernalius (weariness blocks Fitness)
+      - magi, sylvan     : notechis (haemophilia blocks blood/passive cures)
+      - knight (any)     : xentio (clumsiness blocks parry+stance)
+      - psion            : aconite (stupidity blocks weave queue)
+      - alchemist        : aconite (stupidity blocks transmute)
+      - depthswalker     : eurypteria (recklessness blocks shadow cures)
+      - pariah           : voyria (sip-based plagues)
+      - druid, sentinel  : kalmia (asthma blocks smoke + morph)
+    Default: nil → fall back to pickVenom(nil) standard priority.
+
+    Returns nil for unknown class — callers should treat nil as "no override".
+]]--
+local CLASS_LOCK_VENOM = {
+    apostate     = "voyria",
+    pariah       = "voyria",
+    monk         = "vernalius",
+    shikudo      = "vernalius",
+    tekura       = "vernalius",
+    magi         = "notechis",
+    sylvan       = "notechis",
+    infernal     = "xentio",
+    paladin      = "xentio",
+    runewarden   = "xentio",
+    unnamable    = "xentio",
+    blademaster  = "xentio",
+    psion        = "aconite",
+    alchemist    = "aconite",
+    depthswalker = "eurypteria",
+    druid        = "kalmia",
+    sentinel     = "kalmia",
+}
+
+local function getClassLockAff()
+    -- Primary source: classDetect engine (active during PvP, written when
+    -- attacker class is identified from class-specific attack messages).
+    -- Fallback: tarClass global (legacy classDetect / manual set).
+    local class = (classDetect and classDetect.state and classDetect.state.attackerClass)
+        or tarClass
+        or ""
+    return CLASS_LOCK_VENOM[class:lower()]
+end
+
+-- =============================================================================
 -- SLIKE (ANOREXIA) GATE
 -- =============================================================================
 
@@ -667,6 +731,17 @@ local function pickVenom(exclude)
     local hasAst = haveAff("asthma")
 
     if not haveAff("paralysis") and exclude ~= "curare" then return "curare" end
+
+    -- Class-aware override (Track 4): once paralysis is locked, prefer the
+    -- class-specific lock affliction that hits the target's weakest cure path.
+    -- VENOM_TO_AFF lookup confirms the aff is missing before delivering.
+    local classVenom = getClassLockAff()
+    if classVenom and exclude ~= classVenom then
+        local classAff = VENOM_TO_AFF[classVenom]
+        if classAff and not haveAff(classAff) then
+            return classVenom
+        end
+    end
 
     if wantClumsiness() then
         -- clumsiness > asthma > weariness
@@ -777,6 +852,44 @@ function selectFallbackSuggestion()
 end
 
 --[[
+    Track 5: Opportunistic high-value ekanelias.
+    Fires when conditionals are already met for an underused ekanelia and
+    standard impatience delivery isn't available this round.
+
+    Priority order:
+      1. loki   — confusion + recklessness present, paralysis missing
+                  → impulse <missing-trivial> loki → nausea + paralysis (2 lock pieces!)
+      2. aconite — deadening + dementia present, stupidity missing
+                  → impulse <something useful> aconite → stupidity + paranoia (mental stack)
+      3. curare — hypersomnia + masochism present, paralysis missing
+                  → impulse <something useful> curare → paralysis + hypochondria
+
+    Returns {suggestion, venom, label} or nil.
+]]--
+function selectOpportunisticEkanelia()
+    -- 1. Loki: confusion + recklessness → nausea + paralysis (highest value: 2 lock pieces)
+    if haveAff("confusion") and haveAff("recklessness") and not haveAff("paralysis") then
+        local sug = selectImpulse(nil)
+        return {suggestion = sug, venom = "loki", label = "nausea + paralysis (loki)"}
+    end
+
+    -- 2. Aconite: deadening + dementia → stupidity + paranoia (mental stack pressure)
+    if haveAff("deadening") and haveAff("dementia") and not haveAff("stupidity") then
+        local sug = selectImpulse("stupidity")
+        return {suggestion = sug, venom = "aconite", label = "stupidity + paranoia (aconite)"}
+    end
+
+    -- 3. Curare ekanelia: hypersomnia + masochism → paralysis + hypochondria
+    -- (Only fire if paralysis missing — otherwise just use curare for raw paralysis via dstab)
+    if haveAff("hypersomnia") and haveAff("masochism") and not haveAff("paralysis") then
+        local sug = selectImpulse("masochism")
+        return {suggestion = sug, venom = "curare", label = "paralysis + hypochondria (curare-ek)"}
+    end
+
+    return nil
+end
+
+--[[
     Select impulse pair during relapse phase.
     Priority: stupidity first (clogs focus, relapses) > monkshood re-lock (only after pre-load)
     Stupidity MUST go first — it's mental (competes with masochism for focus)
@@ -814,6 +927,78 @@ function selectRelapseImpulse()
     end
 
     -- No useful impulse — fall back to dstab (relapse_lock delivers gecko+slike)
+    return nil
+end
+
+-- =============================================================================
+-- BITE VENOM SELECTION (Track 2: bite payload expansion)
+-- =============================================================================
+
+--[[
+    Pick the best venom to BITE this round.
+    Bite is BAL only (cheaper than IMPULSE), works through fangbarrier when
+    scytherus is stuck (camus relapse cycle), and stacks 1 affliction per round.
+
+    Selection priority:
+      1. scytherus aff stuck → bite scytherus (preserve camus damage loop)
+      2. addiction+nausea present, scytherus not stuck → bite scytherus
+         (delivers scytherus aff + camus damage via ekanelia)
+      3. asthma+masochism+weariness present (monkshood ekanelia) → bite monkshood
+         (delivers impatience for free — same payload as IMPULSE but no EQ cost)
+      4. clumsiness+weariness present (kalmia ekanelia) → bite kalmia
+         (asthma + slickness via ekanelia)
+      5. hypersomnia+masochism present (curare ekanelia) → bite curare
+         (paralysis + hypochondria)
+      6. confusion+recklessness present (loki ekanelia) → bite loki
+         (nausea + paralysis)
+      7. Fallback: paralysis missing → bite curare; asthma missing → bite kalmia;
+         weariness missing → bite vernalius
+
+    Returns {venom = "X", label = "Y"} or nil if no useful bite.
+]]--
+function selectBiteVenom()
+    if not checkImpulseEligible() then return nil end  -- sileris/fangbarrier blocks bite
+
+    -- 1. Scytherus stuck — keep biting for camus relapse damage
+    if haveAff("scytherus") then
+        return {venom = "scytherus", label = "camus damage"}
+    end
+
+    -- 2. Scytherus ekanelia ready (addiction + nausea)
+    if haveAff("addiction") and haveAff("nausea") then
+        return {venom = "scytherus", label = "deliver scytherus + camus"}
+    end
+
+    -- 3. Monkshood ekanelia ready → free impatience via bite (no EQ cost)
+    if haveAff("asthma") and haveAff("masochism") and haveAff("weariness") then
+        return {venom = "monkshood", label = "impatience (ekanelia)"}
+    end
+
+    -- 4. Kalmia ekanelia ready → asthma + slickness
+    if haveAff("clumsiness") and haveAff("weariness") and not haveAff("asthma") then
+        return {venom = "kalmia", label = "asthma + slickness (ekanelia)"}
+    end
+
+    -- 5. Curare ekanelia ready → paralysis + hypochondria
+    if haveAff("hypersomnia") and haveAff("masochism") and not haveAff("paralysis") then
+        return {venom = "curare", label = "paralysis + hypochondria (ekanelia)"}
+    end
+
+    -- 6. Loki ekanelia ready → nausea + paralysis
+    if haveAff("confusion") and haveAff("recklessness") and not haveAff("paralysis") then
+        return {venom = "loki", label = "nausea + paralysis (ekanelia)"}
+    end
+
+    -- 7. Aconite ekanelia ready → stupidity + paranoia (deadening + dementia present)
+    if haveAff("deadening") and haveAff("dementia") and not haveAff("stupidity") then
+        return {venom = "aconite", label = "stupidity + paranoia (ekanelia)"}
+    end
+
+    -- 8. Fallback single-aff bites for missing lock pieces
+    if not haveAff("paralysis") then return {venom = "curare", label = "paralysis"} end
+    if not haveAff("asthma")     then return {venom = "kalmia",  label = "asthma"} end
+    if not haveAff("weariness")  then return {venom = "vernalius", label = "weariness"} end
+
     return nil
 end
 
@@ -1448,11 +1633,23 @@ function serp_ekanelia_attack()
 
         -- If kalmia ekanelia is ready, chain impulse on eq alongside flay on bal.
         -- Flay uses lash (bal), impulse uses dirk (eq) — they don't share a balance type.
-        if kalmiaEkaneliaMet() and not eqAction then
-            local impulseAff = selectImpulse(nil)
-            recordImpulse(impulseAff)
+        --
+        -- Shield-break pressure (Track 3.3): when target shields, prefer chaining
+        -- monkshood impulse to keep impatience landing — impatience forces touch-shield
+        -- failures, which is the fastest way through a shield wall.
+        local impulsePriority = nil  -- {sug, venom, label}
+        if kalmiaEkaneliaMet() then
+            impulsePriority = {sug = selectImpulse(nil), venom = "kalmia", label = "asthma+slickness"}
+        elseif hasShield and impatienceConditionsMet() and canAttemptImpatience() then
+            -- Shield-break: monkshood ekanelia for impatience (forces shield touch-fail)
+            local sug = haveAff("masochism") and selectImpulse("masochism") or "masochism"
+            impulsePriority = {sug = sug, venom = "monkshood", label = "impatience (shield-break)"}
+        end
+
+        if impulsePriority and not eqAction then
+            recordImpulse(impulsePriority.sug)
             cmd = wieldWhip .. "flay " .. target .. " " .. defense .. " " .. flayVenom
-                .. sp .. wieldDirk .. "impulse " .. target .. " " .. impulseAff .. " kalmia"
+                .. sp .. wieldDirk .. "impulse " .. target .. " " .. impulsePriority.sug .. " " .. impulsePriority.venom
         elseif eqAction and canUseSecondary then
             if eqAction:find("^snap") or eqAction:find("^shrugging") then
                 cmd = wieldWhip .. "flay " .. target .. " " .. defense .. " " .. flayVenom .. sp .. eqAction
@@ -1536,14 +1733,25 @@ function serp_ekanelia_attack()
     end
 
     -- --------------------------------------------------------
-    -- PRIORITY 6: Bite (scytherus mode, scytherus aff stuck)
+    -- PRIORITY 6: Bite
+    --   - scytherus mode: bite scytherus when aff stuck (camus damage loop)
+    --   - bitepayload mode: use selectBiteVenom() for multi-venom payload
     -- --------------------------------------------------------
     local useBite = false
     local biteVenom = nil
+    local biteLabel = nil
     if serpOffenseMode == "scytherus" and serpStrategy == "scytherus_attack"
        and checkImpulseEligible() and haveAff("scytherus") then
         useBite = true
         biteVenom = "scytherus"
+        biteLabel = "camus"
+    elseif serpOffenseMode == "bitepayload" and not eqAction then
+        local pick = selectBiteVenom()
+        if pick then
+            useBite = true
+            biteVenom = pick.venom
+            biteLabel = pick.label
+        end
     end
 
     -- --------------------------------------------------------
@@ -1610,6 +1818,14 @@ function serp_ekanelia_attack()
         impulsePair = selectImpulsePair()
         if impulsePair and impulsePair.label == "impatience" then
             useImpulse = true
+        else
+            -- Track 5: opportunistic high-value ekanelias (loki/aconite/curare)
+            -- when monkshood isn't available this round.
+            local opp = selectOpportunisticEkanelia()
+            if opp then
+                impulsePair = opp
+                useImpulse = true
+            end
         end
     end
 
@@ -1650,7 +1866,7 @@ function serp_ekanelia_attack()
         attackMode = "bite"
         serpent.impulseSuccess = false
         cmd = wieldDirk .. "bite " .. target .. " " .. biteVenom
-        Algedonic.Echo("<yellow>BITE " .. biteVenom:upper() .. "<white> → camus")
+        Algedonic.Echo("<yellow>BITE " .. biteVenom:upper() .. "<white> → " .. (biteLabel or "camus"))
         envenomList = {biteVenom}
         envenomListTwo = {}
         if eqAction and canUseSecondary then
@@ -1732,8 +1948,67 @@ function getEqAction()
 end
 
 --[[
+    Pick the next exit to block (Track 3.1).
+    Walks gmcp.Room.Exits and returns the first direction we haven't
+    blocked in the last 5s. Returns nil if all exits are recently blocked
+    or no exit data is available.
+]]--
+local function nextExitToBlock()
+    if not gmcp or not gmcp.Room or not gmcp.Room.Info or not gmcp.Room.Info.exits then
+        return nil
+    end
+    local epoch = getEpoch()
+    -- gmcp.Room.Info.exits is a table keyed by short-direction → room-id
+    for dir, _ in pairs(gmcp.Room.Info.exits) do
+        local lastBlocked = serpent.state.blockedExits[dir] or 0
+        if (epoch - lastBlocked) >= 5 then
+            return dir
+        end
+    end
+    return nil
+end
+
+--[[
+    Build the opening burst (Track 1).
+    Fired once per fight when serpent.state.firstAttack is true.
+    Includes: dispel, adder order (already added by caller), optional pinshot
+    via bow swap, optional sigil drop. Returns prefix string (with trailing sp)
+    or "" if no opener pieces are active.
+]]--
+local function buildOpener(sp)
+    local prefix = ""
+    if not serpent.config.useOpener then return prefix end
+
+    -- Pinshot: only if bow opener enabled, pinshot not already active on target,
+    -- and we have a fresh dispel slot (covers ekauto re-init via tar changed).
+    -- Pinshot REQUIRES a body part; "foot" is the standard impale target
+    -- (matches the inbound trigger pattern "Your arrow slams into the foot of ...").
+    if serpent.config.useBowOpener and not tpinshot then
+        local bow = serpent.config.bowName or "bow"
+        prefix = prefix
+            .. "remove " .. bow .. sp
+            .. "wield " .. bow .. sp
+            .. "pinshot " .. target .. " foot" .. sp
+            .. "wield shield dirk" .. sp
+        serpent.state.pinshotSentAt = getEpoch()
+    end
+
+    -- Sigil deployment: optional, requires inventory of sigils.
+    if serpent.config.useSigils and not serpent.state.sigilDeployed then
+        prefix = prefix
+            .. "drop incandescent sigil" .. sp
+            .. "attach monolith sigil to incandescent sigil" .. sp
+        serpent.state.sigilDeployed = true
+    end
+
+    return prefix
+end
+
+--[[
     Send the attack if target is present.
     Wraps with queue and handles dispel + attackInFlight.
+    Round-1 burst (Track 1): pinshot + sigils + dispel + adder order.
+    Per-round denial (Track 3): exit-block rotated through gmcp.Room.Info.exits.
 ]]--
 function serp_sendAttack(atk)
     if not table.contains(ataxia.playersHere, target) then
@@ -1743,11 +2018,37 @@ function serp_sendAttack(atk)
 
     local sp = ataxia.settings.separator
 
+    -- Exit-block: send block on a fresh direction (config-gated, throttled).
+    -- We DON'T add this to the queue prefix because `block <dir>` uses balance
+    -- in Achaea — chaining it before dstab in the same queue would error.
+    -- Instead, fire it as a standalone send when our balance is up but the
+    -- attack is queued. Currently called via prefix to keep the change local;
+    -- if it causes balance errors live, move out of the chain.
+    if serpent.config.useExitBlock then
+        local epoch = getEpoch()
+        if (epoch - serpent.state.lastBlockSentAt) >= 5 then
+            local dir = nextExitToBlock()
+            if dir then
+                -- Send block as its own (unqueued) command; if it errors, the
+                -- main attack still goes through unaffected.
+                send("block " .. dir, false)
+                serpent.state.blockedExits[dir] = epoch
+                serpent.state.lastBlockSentAt = epoch
+            end
+        end
+    end
+
     -- Order adder to attack target
     atk = "order adder kill " .. target .. sp .. atk
 
     -- Purge residual venom before new attack
     atk = "purge" .. sp .. atk
+
+    -- Prepend round-1 opener burst (pinshot, sigils — first attack only)
+    if serpent.state.firstAttack then
+        atk = buildOpener(sp) .. atk
+        serpent.state.firstAttack = false
+    end
 
     -- Prepend dispel if first attack
     if not serpent.state.dispelSent then
@@ -1867,6 +2168,21 @@ function serp_ekanelia_offense()
         else
             serpStrategy = "build_scytherus"
         end
+    elseif serpOffenseMode == "bitepayload" then
+        -- Bite-centric sustained-pressure mode (Track 2).
+        -- Strategy is "setup_lock" (not "bite_payload") so selectVenoms() uses
+        -- the standard lock chain for dstab fallback when selectBiteVenom() nils.
+        -- The bitepayload-specific behavior lives in serp_ekanelia_attack() PRIORITY 6,
+        -- gated on serpOffenseMode (not on strategy name).
+        if truelock then
+            if not serpent.state.voyriaSent then
+                serpStrategy = "lock_reinforce"
+            else
+                serpStrategy = "finish"
+            end
+        else
+            serpStrategy = "setup_lock"
+        end
     elseif serpOffenseMode == "hypnosis" then
         serpStrategy = "hypnosis"
     elseif serpOffenseMode == "hypnolock" then
@@ -1969,6 +2285,16 @@ function serp_setmode_scytherus()
         cecho("<dim_grey>  Priority: Build addiction+nausea → impulse/bite scytherus → camus damage<reset>\n")
     end
     serpOffenseMode = "scytherus"
+end
+
+function serp_setmode_bitepayload()
+    if serpOffenseMode ~= "bitepayload" then
+        serpent.state.geckoStripAttempted = false
+        serpOffenseMode = "bitepayload"
+        cecho("\n<red>Serpent offense: BITE PAYLOAD mode<reset>\n")
+        cecho("<dim_grey>  Priority: Bite for affliction stacking — scytherus/monkshood/kalmia/curare/loki/aconite<reset>\n")
+    end
+    serpOffenseMode = "bitepayload"
 end
 
 function serp_setmode_hypnosis()
@@ -2160,6 +2486,11 @@ if registerAnonymousEventHandler then
         serpent.state.postGeckoLockdown = false
         serpent.state.lockReinforceSent = false
         serpent.state.camusDelivered = false
+        serpent.state.firstAttack = true
+        serpent.state.pinshotSentAt = 0
+        serpent.state.sigilDeployed = false
+        serpent.state.blockedExits = {}
+        serpent.state.lastBlockSentAt = 0
         serpent.impulseSuccess = false
         serpent.impulseRelapsing = false
         lastImpulsed = {}
@@ -2204,6 +2535,7 @@ if tempAlias then
     serpent.aliases.ekhl = tempAlias("^ekhl$", [[serp_setmode_hypnolock()]])
     serpent.aliases.ekgroup = tempAlias("^ekgroup$", [[serp_setmode_group()]])
     serpent.aliases.ekscyth = tempAlias("^ekscyth$", [[serp_setmode_scytherus()]])
+    serpent.aliases.ekbite = tempAlias("^ekbite$", [[serp_setmode_bitepayload()]])
 end
 
 -- =============================================================================
