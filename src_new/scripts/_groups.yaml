@@ -703,7 +703,7 @@ groups:
       - name: Limb
         directory: levi_ataxia/levi/levi_scripts/limb
   script: "ataxia = ataxia or {}\nataxiaTables = ataxiaTables or {}\nataxiaTemp = ataxiaTemp or {}\nataxiaTemp.addedHerbID\
-    \ = 1\nataxiaTemp.removedHerbID = 2\nataxiagui = ataxiagui or {}\nataxiaVersion = \"4.7.30\"\t\t\t\t\t\t--last was 4.3\n\
+    \ = 1\nataxiaTemp.removedHerbID = 2\nataxiagui = ataxiagui or {}\nataxiaVersion = \"4.7.31\"\t\t\t\t\t\t--last was 4.3\n\
     muteList = muteList or {}\n\nataxiaTables.limbData = ataxiaTables.limbData or {}\nataxiaTables.limbTimers = ataxiaTables.limbTimers or {}\nataxiaTables.fractureTimers = ataxiaTables.fractureTimers\
     \ or {}\n\nataxia.defences = ataxia.defences or {}\nataxia.afflictions = ataxia.afflictions or\
     \ {}\nataxia.vitals = ataxia.vitals or {}\n\nataxia.bals = ataxia.bals or {}\nataxia.bals.get = {\"bal\", \"eq\"}\nataxia.bals.used = ataxia.bals.used or\

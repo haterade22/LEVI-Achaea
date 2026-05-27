@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: Phantom Mount Whip
+name: Phantom Mount Whip (1st + 3rd Person)
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -36,7 +36,7 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^You whip (.+) into a fury, bucking and racing dangerously in a circle, trampling the ground in a frenzy\.$
+- pattern: ^(?:You whip|\w+ whips) (.+) into a fury, bucking and racing dangerously in a circle, trampling the ground in a frenzy\.$
   type: 1
 - pattern: ^.+ breaks the left leg of (\w+)\.$
   type: 1

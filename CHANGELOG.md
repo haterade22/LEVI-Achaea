@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-05-23 — Phantom-mount whip trigger now covers 3rd-person observations
+
+### Feature: Track 3rd-person phantom-mount whip 4-limb breaks
+
+The v4.7.29 phantom-mount whip trigger only matched the 1st-person opening line (`^You whip ...`). When an ally or any other player whipped a phantom mount at our current target, the four subsequent break lines scrolled past with no update to `tAffs` — so any downstream offense decision read stale `brokenleftleg` / `prone` / etc. flags after a major 4-limb-break event delivered by someone else.
+
+**What changed:**
+
+- **`008_Phantom_Mount_Whip.lua`**: line-0 pattern rewritten to `^(?:You whip|\w+ whips) (.+) into a fury, bucking and racing dangerously in a circle, trampling the ground in a frenzy\.$`. The non-capturing alternation matches both "You whip ..." and "<Attacker> whips ..."; the `\w+` cap on the attacker name keeps the match anchored to a single-word player name. Mount capture moves nowhere (still `multimatches[1][2]`), target capture stays at `multimatches[2][2]`, body unchanged. Trigger renamed to `Phantom Mount Whip (1st + 3rd Person)` to reflect the broader scope. `isTargeted()` guard in the body silently no-ops when a phantom whip lands on someone we don't care about, so adding 3rd-person doesn't risk noisy false-positives.
+
+---
+
 ## 2026-05-23 — Gear listing trigger updated for new GEAR LIST ALL format
 
 ### Fix: Capture slot, set, worn-status, and extended rarities
