@@ -113,6 +113,7 @@ ataxia.armour.config = ataxia.armour.config or {
 
 ataxia.armour.state = ataxia.armour.state or {
   swapping = false,
+  swapStartTime = 0,    -- os.time() when the current swap began (for stuck-flag recovery)
   currentSlots = {nil, nil, nil},
   eventHandlers = {},
   scanning = false,     -- true during ii paragon scan
@@ -328,6 +329,11 @@ end
 -- SWAP EXECUTION
 --------------------------------------------------------------------------------
 
+-- Max seconds a swap may hold the `swapping` guard before it is treated as
+-- stuck. Comfortably above the 2s insert timer + command round-trip; os.time()
+-- has 1s granularity so a 5s window is safe.
+local SWAP_TIMEOUT = 5
+
 function ataxia.armour.swap(profileName)
   local profile = ataxia.armour.config.profiles[profileName]
   if not profile then
@@ -336,11 +342,17 @@ function ataxia.armour.swap(profileName)
   end
 
   if ataxia.armour.state.swapping then
-    ataxia.armour.echo("Already swapping. Please wait.")
-    return
+    if os.time() - (ataxia.armour.state.swapStartTime or 0) >= SWAP_TIMEOUT then
+      -- Stale flag from an interrupted prior swap — recover instead of blocking.
+      ataxia.armour.state.swapping = false
+    else
+      ataxia.armour.echo("Already swapping. Please wait.")
+      return
+    end
   end
 
   ataxia.armour.state.swapping = true
+  ataxia.armour.state.swapStartTime = os.time()
   local sp = ataxia.settings and ataxia.settings.separator or "::"
 
   -- 1. Send traits immediately (no balance cost)
@@ -369,6 +381,17 @@ function ataxia.armour.swap(profileName)
 
   -- 3. Pry + insert with 2s delay (always send — can't verify game state without probe)
   if profile.slots and #profile.slots > 0 then
+    -- Watchdog: force-clear the guard if the insert timer never clears it (e.g. an
+    -- error inside its callback). Keyed on swapStartTime so a later legitimate swap
+    -- is never cancelled by an earlier swap's watchdog.
+    local startedAt = ataxia.armour.state.swapStartTime
+    tempTimer(SWAP_TIMEOUT, function()
+      if ataxia.armour.state.swapping and ataxia.armour.state.swapStartTime == startedAt then
+        ataxia.armour.state.swapping = false
+        ataxia.armour.echo("<yellow>Swap watchdog cleared a stuck swap flag.")
+      end
+    end)
+
     tempTimer(2, function()
       local cmds = {}
       -- Pry all first

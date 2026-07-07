@@ -99,7 +99,10 @@ function ataxiaBasher_attack()
   -- If shielded, wait until HP recovers before dropping shield to attack
   -- Standing/leg checks removed: server-side "freestand stand" handles this in PvE.
   if ataxia.defences.shield then
-    if ataxia.vitals.hpp >= 70 and ataxiaBasher_bashingFuncs[class] then
+    -- In no-flee areas (e.g. Mnemosyne) keep attacking through the shield instead
+    -- of waiting for HP recovery — the shield drops on the next attack.
+    local canAttackShielded = ataxia.vitals.hpp >= 70 or ataxiaBasher_isNoFleeArea()
+    if canAttackShielded and ataxiaBasher_bashingFuncs[class] then
       ataxiaBasher_assembleAttack()
     end
   elseif ataxiaBasher_bashingFuncs[class] then
@@ -177,9 +180,16 @@ function ataxiaBasher_dangerLevel()
 
   ataxiaBasher_initThresholds()
 
-  local inWorldTree = gmcp.Room.Info.area == "the Fathomless Expanse of the World Tree"
-
-  if not inWorldTree then
+  if ataxiaBasher_isNoFleeArea(gmcp.Room.Info.area) then
+    -- No-flee area (World Tree, Mnemosyne): never run. Raise a shield on a damage
+    -- spike as a one-cycle guard, but keep attacking (the shield drops next attack).
+    if ataxiaBasher_isDamageRateExtreme()
+       and ataxiaBasher_canShield and ataxiaBasher_canShield()
+       and not ataxia.defences.shield then
+      ataxiaEcho("DANGER: Extreme incoming damage in no-flee area! Shielding.")
+      return "shield"
+    end
+  else
     local fleePct = ataxiaBasher.fleeThresholdPct or 25
     if hpp <= fleePct then return "flee" end
 
@@ -202,6 +212,16 @@ function ataxiaBasher_getAreaSafeRoom(area)
   area = area or (gmcp.Room.Info and gmcp.Room.Info.area)
   if not area or not ataxiaBasher.safeRooms then return nil end
   return ataxiaBasher.safeRooms[area]
+end
+
+-- Areas where fleeing is impossible: the World Tree, and the Mnemosyne tower climb,
+-- which is an unmapped instance (gmcp.Room.Info.area is "") flagged via its SURVEY
+-- line — see the 351_Mnemosyne_Survey trigger and ataxia_Room_Update() for set/clear.
+function ataxiaBasher_isNoFleeArea(area)
+  area = area or (gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.area) or ""
+  if area == "the Fathomless Expanse of the World Tree" then return true end
+  if ataxiaBasher.inMnemosyne then return true end
+  return false
 end
 
 -- ============================================================================

@@ -2,6 +2,42 @@
 
 ---
 
+## 2026-07-07 — Basher no-flee rules for Mnemosyne (v4.7.33)
+
+### Feature: Mnemosyne tower-climb is now a no-flee bashing area
+
+**What changed:**
+
+- New trigger `triggers/.../leviticus/351_Mnemosyne_Survey.lua` — matches the SURVEY line (`^You are in .*Mnemosyne`) and sets `ataxiaBasher.inMnemosyne = true`. Mnemosyne is an unmapped instance (`gmcp.Room.Info.area` is `""`), so it cannot be detected from GMCP — the SURVEY line is the reliable signal.
+- `ataxia_Room_Update()` (`update_stuff/002_ataxia_Room_Update.lua`) clears the flag when you enter any real (mapped, non-empty `area`) room. Inside the tower `area` stays `""`, so the flag persists across floors.
+- New helper `ataxiaBasher_isNoFleeArea(area)` in `basher/001_Bashing_Functions.lua` generalizes the existing World Tree no-flee check and adds the Mnemosyne flag.
+- `ataxiaBasher_dangerLevel()` no longer returns `"flee"` in no-flee areas. Instead, an extreme incoming-damage spike raises a shield as a one-cycle guard (`Shielding.` instead of `Fleeing.`), and low HP shields at the normal threshold — the basher never tries an impossible `goto`.
+- `ataxiaBasher_attack()` keeps attacking through the shield in no-flee areas (drops the HP≥70 re-attack gate), so it shields reactively but does not pause the attack loop.
+- `inMnemosyne` defaults to `false` in `002_Check_For_Any_Missing_Variables.lua`.
+
+**Why:** Mnemosyne is a tower-climbing PvE mod where fleeing is impossible. The danger system was firing `DANGER: Extreme incoming damage rate detected! Fleeing.` and wasting cycles trying to retreat with nowhere to go.
+
+**Tests:** `src_new/tests/test_basher_noflee.lua` — 8 cases covering shield-instead-of-flee in Mnemosyne and the normal-area flee regression (full suite 90/90).
+
+---
+
+## 2026-07-07 — Armour swap guard no longer gets permanently stuck
+
+### Bug fix: Self-healing swap guard + watchdog in `ataxia.armour`
+
+**What changed (all in `gear_system/002_Armour_Paragons.lua`):**
+
+- Added `swapStartTime` to `ataxia.armour.state` and a module constant `SWAP_TIMEOUT = 5`.
+- `ataxia.armour.swap()` now stamps `swapStartTime = os.time()` when it sets the `swapping` guard.
+- The guard check is now staleness-aware: if `swapping` is set but older than `SWAP_TIMEOUT`, it is treated as a stuck flag from an interrupted prior swap and cleared, letting the swap proceed instead of blocking forever.
+- Added a watchdog `tempTimer(SWAP_TIMEOUT, ...)` in the slots branch that force-clears the guard if the 2s insert-timer callback never did (keyed on `swapStartTime` so a later legitimate swap is never cancelled by an earlier swap's watchdog).
+
+**Why:** The `swapping` guard was a plain boolean cleared only by the fire-and-forget `tempTimer(2, ...)` insert callback (or the traits-only `else` branch). If anything interrupted that clear — a Lua error in the synchronous body before the timer was scheduled, or an error inside the callback before the clear (e.g. the `send()`), or the timer being lost — the flag stuck `true` for the rest of the session. Every subsequent swap then printed `[Armour]: Already swapping. Please wait.` and returned early, which also silently broke auto-swap on basher enable/disable (both handlers route through `swap()`).
+
+**How:** The timestamp-based staleness check guarantees the flag can never permanently block (the next swap after 5s clears it), and the watchdog proactively unsticks it so auto-swaps recover without a manual retry. `swapping`/`swapStartTime` live in non-persisted `ataxia.armour.state`, so no persistence changes were needed.
+
+---
+
 ## 2026-05-27 — Serpent offense: Gavai-inspired tempo + bite payload + opportunistic ekanelias
 
 ### Feature: Round-1 burst, bite-stacking, shield-break, class-aware routing, underused ekanelias

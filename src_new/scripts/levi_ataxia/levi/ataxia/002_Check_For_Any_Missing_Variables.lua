@@ -75,7 +75,13 @@ function ataxiaCheckForMissing()
 		ataxiaEcho("Auto-learn denizens option not found; defaulting to on.")
 		ataxiaEcho("<green>ataxia setup basher autolearn on/off <NavajoWhite>to change.")
 	end
-	
+
+	-- No-flee flag for the Mnemosyne tower climb (set/cleared by its SURVEY trigger
+	-- and ataxia_Room_Update). Default off; nil is already falsy but init for hygiene.
+	if ataxiaBasher.inMnemosyne == nil then
+		ataxiaBasher.inMnemosyne = false
+	end
+
 	if ataxia.prioritySwaps and ataxia.prioritySwaps.ravaged == nil then
 		ataxia.prioritySwaps.ravaged = {active = false, desc = "Automatically prio mana sipping while ravagedmind is active."}
 		ataxiaEcho("Ravagedmind priority swap not found. Added it to swaps; default is off.")

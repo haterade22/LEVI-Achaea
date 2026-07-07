@@ -38,6 +38,13 @@ function ataxia_Room_Update()
  ataxiaBasher_invalidateStormhammer()
 	if not gmcp.Room.Info then return end
 
+  -- Leaving Mnemosyne: any real (mapped, non-empty) area clears the no-flee flag.
+  -- Inside the tower area stays "" so the flag persists across floors.
+  if gmcp.Room.Info.area and gmcp.Room.Info.area ~= "" and ataxiaBasher.inMnemosyne then
+    ataxiaBasher.inMnemosyne = false
+    ataxiaEcho("Left Mnemosyne — no-flee mode OFF.")
+  end
+
   -- Clear mindnet area players on area change
   ataxia.playersInArea = ataxia.playersInArea or {}
   ataxia._lastMindnetArea = ataxia._lastMindnetArea or ""
