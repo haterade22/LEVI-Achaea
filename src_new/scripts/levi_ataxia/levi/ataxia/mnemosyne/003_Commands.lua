@@ -32,7 +32,7 @@ function M.status()
   cecho("\n  <NavajoWhite>URL:        <grey>" .. M._baseUrl())
   cecho("\n  <NavajoWhite>Token:      " .. (M._hasToken() and "<green>set" or "<indian_red>not set"))
   cecho("\n  <NavajoWhite>Auto:       " .. (c.enabled and "<green>ON" or "<grey>off"))
-  cecho("\n  <NavajoWhite>Contemplate:" .. (c.contemplate and " <green>ON <grey>(enrichment pending)" or " <grey>off"))
+  cecho("\n  <NavajoWhite>Contemplate:" .. (c.contemplate and " <green>ON" or " <grey>off"))
   local r = M.run or {}
   cecho("\n  <NavajoWhite>Run:        "
     .. (r.active and ("<green>active <grey>(ripple " .. tostring(r.ripple or 0)
@@ -45,7 +45,7 @@ function M.help()
     { "mnem status", "Show config + current run state" },
     { "mnem token <token>", "Save your API token" },
     { "mnem on | off", "Toggle automatic reporting" },
-    { "mnem contemplate", "Toggle boon enrichment (BOON CONTEMPLATE) -- pending" },
+    { "mnem contemplate", "Toggle boon enrichment via BOON CONTEMPLATE" },
     { "mnem test", "Ping /health to check connectivity" },
     { "mnem debug", "Toggle verbose debug echoes" },
     { "mnem start | end", "Manually start / end a run" },

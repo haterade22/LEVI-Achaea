@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-07-08 — Mnemosyne: boss/monsters auto-detect + boon enrichment (v4.7.35)
+
+### Feature: complete the Mnemosyne Run Tracker auto-reporting
+
+**What changed (all under `ataxia.mnemosyne`):**
+
+- **Boss** now auto-detected from the WADE STATUS `Objective:` line — a boss ripple reads `defeat <boss>` (e.g. "defeat Seasone the Industrious") vs a normal `defeat N waves of enemies`. New trigger `triggers/.../mnemosyne/008_Objective.lua` → `onObjective()` → `/boss` (fires after `/ripple_level`, so ordering holds).
+- **Monsters** now captured by POSITION instead of flavour wording: the mob spawn line is always the single line between the countdown `0` and `GO!`, so `onGo()` reads the line directly above `GO!` (via `getLines`) and buffers it. Removed the fragile `005_Monsters.lua` "joins the fray" trigger (spawn wording varies per mob). Added a pure, tested `_pickMobLine()`.
+- **Boon enrichment** implemented: when `contemplate` is on, each offered boon is probed with `BOON CONTEMPLATE <name>` and `_parseContemplate()` extracts rarity / echoes (`Can echo` Yes→1 / No→0) / description / quote, so `/boons_offered` is sent fully populated. Sequential probe with a small inter-boon delay.
+
+**Why:** finish the auto-reporting the tracker needs — boss fights, the actual mobs per wave, and complete boon metadata for the community boon DB.
+
+**Still manual:** `/run_end` (via `mnem end`) until the run-completion line is captured.
+
+**Tests:** `test_mnemosyne.lua` — added onObjective (boss/wave), `_parseContemplate`, and `_pickMobLine` cases. Full suite 118/118.
+
+---
+
 ## 2026-07-08 — Mnemosyne Run Tracker reporting (`ataxia.mnemosyne`)
 
 ### Feature: automatic run telemetry to the Mnemosyne Run Tracker API

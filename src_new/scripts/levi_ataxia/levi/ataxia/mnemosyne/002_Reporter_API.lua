@@ -32,7 +32,7 @@ ataxia.mnemosyne = ataxia.mnemosyne or {}
 local M = ataxia.mnemosyne
 
 M.run = M.run or { active = false, publicId = nil, ripple = 0 }
-M.run.pendingMonsters = M.run.pendingMonsters or {} -- buffered "joins the fray" spawns
+M.run.pendingMonsters = M.run.pendingMonsters or {} -- buffered mob spawn lines
 M.run.lastOffered = M.run.lastOffered or {} -- canonical names from the last boons-offered block
 
 -- Reset all per-run buffers/counters. Called synchronously at run start/end so a

@@ -132,12 +132,58 @@ function M.onRipple(n)
   M._flushMonsters()
 end
 
--- "GO!" -- a new wave has begun. Auto-send WADE STATUS so its output drives the
--- ripple-level and effects reporting. Gated on _auto() (not _inRun) so it can
--- bootstrap the run if the run-start line was missed; a stray GO! outside a run
--- just sends a harmless status command that produces no report.
+-- Given the lines immediately preceding GO! (nearest first), pick the mob spawn
+-- line. The wave always prints "<0>\n<mob spawn line>\n<GO!>", so the mob line
+-- is the first non-empty, non-countdown-number line above GO!.
+function M._pickMobLine(prior)
+  for _, ln in ipairs(prior) do
+    if type(ln) == "string" then
+      local t = ln:gsub("^%s+", ""):gsub("%s+$", "")
+      if t == "GO!" or t == "" then
+        -- skip
+      elseif t:match("^%d+$") then
+        return nil -- reached the countdown without a mob line
+      else
+        return t
+      end
+    end
+  end
+  return nil
+end
+
+-- "GO!" -- a new wave has begun. The mob spawn line is the line directly above
+-- GO! (between the countdown "0" and "GO!"); capture it by position rather than
+-- by wording, since each mob has different flavour text. Then auto-send WADE
+-- STATUS so its output drives the ripple-level and effects reporting.
+-- Gated on _auto() (not _inRun) so it can bootstrap the run if the run-start
+-- line was missed; a stray GO! outside a run just sends a harmless status.
 function M.onGo()
-  if M._auto() then send("wade status", false) end
+  if not M._auto() then return end
+  if M._inRun() then
+    local n = getLineNumber()
+    local prior = {}
+    for i = 1, 3 do
+      local ok, lns = pcall(getLines, n - i, n - i)
+      prior[i] = (ok and lns and lns[1]) or ""
+    end
+    local mob = M._pickMobLine(prior)
+    if mob then M.onMonsters(mob) end
+  end
+  send("wade status", false)
+end
+
+-- "Objective:  defeat <X>" from the WADE STATUS block. A boss ripple names the
+-- boss ("defeat Seasone the Industrious"); a normal ripple says "defeat N waves
+-- of enemies". Report only the boss case. Fires after onRipple within the same
+-- WADE STATUS output, so /ripple_level still precedes /boss.
+function M.onObjective(text)
+  if not M._inRun() then return end
+  if type(text) ~= "string" then return end
+  text = text:gsub("^%s+", ""):gsub("%s+$", "")
+  local target = text:match("^defeat (.+)$")
+  if not target then return end
+  if target:match("^%d+ waves? of enemies") then return end -- normal wave, not a boss
+  M.reportBoss(target)
 end
 
 -- "Ongoing effects:" (inside the ripple status block). Skip the immediate
@@ -195,9 +241,9 @@ function M.onBoonsOffered()
   })
 end
 
--- "In a <flash>, a host of <X> joins the fray." Buffer (accumulate) monster
--- spawns; they arrive just BEFORE the "GO!" that triggers WADE STATUS, and are
--- flushed after /ripple_level in onRipple. We keep the full phrase incl. article.
+-- Buffer (accumulate, de-duped) a mob spawn line captured by onGo. Spawns arrive
+-- just before the "GO!" that triggers WADE STATUS, so they're flushed after
+-- /ripple_level in onRipple. The whole spawn line is kept.
 function M.onMonsters(str)
   if not M._inRun() then return end
   if type(str) ~= "string" then return end
@@ -231,9 +277,94 @@ function M.onBoonClaim(name)
   M.reportBoonsSelected(canonical)
 end
 
--- Enrichment hook: when the BOON CONTEMPLATE <name> output format is known,
--- probe each offered boon here to fill quote/rarity/num_echoes_possible before
--- reporting. For now we send name + description (already valid per schema).
+-- Enrichment: when `contemplate` is enabled, BOON CONTEMPLATE each offered boon
+-- to fill rarity/quote/num_echoes_possible before reporting; otherwise send the
+-- name + description straight through.
 function M._reportBoonsOfferedEnriched(list)
-  M.reportBoonsOffered(list)
+  if not M._cfg().contemplate then
+    return M.reportBoonsOffered(list)
+  end
+  M._contemplateNext(list, 1)
+end
+
+-- Sequentially BOON CONTEMPLATE each boon, merge the parsed detail into the
+-- entry, then send the fully-populated /boons_offered.
+function M._contemplateNext(list, i)
+  if i > #list then
+    return M.reportBoonsOffered(list)
+  end
+  local boon = list[i]
+  M._captureContemplate(function(info)
+    if info then
+      if info.rarity then boon.rarity = info.rarity end
+      if info.quote then boon.quote = info.quote end
+      if info.num_echoes_possible ~= nil then boon.num_echoes_possible = info.num_echoes_possible end
+      if info.description and info.description ~= "" then boon.description = info.description end
+    end
+    tempTimer(0.5, function() M._contemplateNext(list, i + 1) end)
+  end)
+  send("boon contemplate " .. boon.name, false)
+end
+
+-- Capture one BOON CONTEMPLATE block (skip the "<name>:" header + opening
+-- divider; stop at the closing divider) and hand parsed detail to cb.
+function M._captureContemplate(cb)
+  local seenDash, called = false, false
+  M._captureLines({
+    timeout = 2,
+    onLine = function(ln)
+      if isDivider(ln) then
+        if seenDash then return "stop" end
+        seenDash = true
+        return "skip"
+      end
+      if not seenDash then return "skip" end -- header line before the first divider
+      return nil
+    end,
+    onDone = function(lines)
+      if called then return end
+      called = true
+      cb(M._parseContemplate(lines))
+    end,
+  })
+end
+
+-- Parse a captured CONTEMPLATE block into { rarity, num_echoes_possible,
+-- description, quote }. Layout: "Rarity: <r>", "Can echo: <Yes/No>", the
+-- description paragraph, a blank line, then the quote in double quotes.
+function M._parseContemplate(lines)
+  local info = {}
+  local descParts, quoteParts = {}, {}
+  local section = "meta" -- meta -> desc -> quote
+  for _, ln in ipairs(lines) do
+    local rar = ln:match("^Rarity:%s+(.+)$")
+    local echo = ln:match("^Can echo:%s+(.+)$")
+    if rar then
+      info.rarity = rar:gsub("%s+$", "")
+    elseif echo then
+      echo = echo:gsub("%s+$", ""):lower()
+      if echo == "no" then
+        info.num_echoes_possible = 0
+      elseif echo == "yes" then
+        info.num_echoes_possible = 1
+      else
+        info.num_echoes_possible = tonumber(echo)
+      end
+    elseif ln:match("^%s*$") then
+      if section == "desc" then section = "quote" end
+    else
+      local t = ln:gsub("^%s+", ""):gsub("%s+$", "")
+      if section == "meta" then section = "desc" end
+      if section == "desc" then
+        table.insert(descParts, t)
+      else
+        table.insert(quoteParts, t)
+      end
+    end
+  end
+  if #descParts > 0 then info.description = table.concat(descParts, " ") end
+  if #quoteParts > 0 then
+    info.quote = (table.concat(quoteParts, " "):gsub('^"', ""):gsub('"$', ""))
+  end
+  return info
 end

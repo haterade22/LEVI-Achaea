@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: Mnemosyne Monsters
+name: Mnemosyne Objective
 hierarchy:
 - Levi_Ataxia
 - Ataxia
@@ -28,8 +28,8 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ([^,]+) joins? the fray
+- pattern: '^Objective:\s+(.+)$'
   type: 1
 ]]--
 
-ataxia.mnemosyne.onMonsters(matches[2])
+ataxia.mnemosyne.onObjective(matches[2])

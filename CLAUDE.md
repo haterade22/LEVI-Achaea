@@ -537,13 +537,13 @@ Reports Mnemosyne (tides-of-memory) run progress to an external REST tracker as 
 
 **Key files:** `scripts/.../mnemosyne/001_HTTP_Client.lua` (serial POST queue), `002_Reporter_API.lua` (per-endpoint fns + run state), `003_Commands.lua` (`mnem` dispatch), `004_Parsers.lua` (effects/boons parsers, monster buffering). Triggers `triggers/.../mnemosyne/001-007`. Aliases `aliases/.../mnemosyne/001-002`.
 
-**Flow:** `GO!` → auto `WADE STATUS` → `/ripple_level` + `/effects`; monsters (`… joins the fray`) buffered before `GO!`, flushed after `/ripple_level`. Serial queue enforces ordering (ripple_level first; boons_offered before boons_selected). `_auto()` gates run-start/GO/ripple; `_inRun()` gates monsters/effects/boons/death so generic phrases can't report outside a tracked run.
+**Flow:** `GO!` → capture the mob spawn line (the line directly above `GO!`, positional — spawn wording varies per mob) → auto `WADE STATUS` → `/ripple_level`, `/boss` (from the `Objective: defeat <boss>` line), `/effects`; buffered monsters flush after `/ripple_level`. Serial queue enforces ordering (ripple_level first; boons_offered before boons_selected). `_auto()` gates run-start/GO/ripple; `_inRun()` gates monsters/effects/boons/boss/death so generic phrases can't report outside a tracked run. Boon enrichment: with `contemplate` on, each offered boon is `BOON CONTEMPLATE`d to fill rarity/quote/echoes.
 
 **Commands:** `mnem status|token <t>|on|off|contemplate|debug|test|start|end|check|ripple <n>|boss <name>|monsters <text>|death [killer]`. Also `ataxia setup reporting`.
 
 **Persistence:** `ataxia.settings.reporting` (`enabled`, `contemplate`, `token`, `url`) — saved inside the main `ataxia` file / `_ataxia_backup.ataxia`, no new disk file. Run state is in-memory (re-synced via `/run_exists` on load).
 
-**Pending:** `/boss` and `/run_end` are manual (`mnem boss` / `mnem end`) until their game lines are wired; BOON CONTEMPLATE enrichment of `/boons_offered` (quote/rarity/echoes) is stubbed.
+**Pending:** `/run_end` is manual (`mnem end`) until the run-completion line is captured.
 
 ### Data Persistence & Profile Backup
 

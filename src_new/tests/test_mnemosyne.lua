@@ -263,3 +263,64 @@ describe("onBoonClaim", function()
     expect(#sent).toBe(0)
   end)
 end)
+
+-- ─── Boss objective ──────────────────────────────────────────────────────────
+
+describe("onObjective", function()
+  it("reports the boss when the objective is 'defeat <name>'", function()
+    reset(true)
+    M.onObjective("defeat Seasone the Industrious")
+    expect(#sent).toBe(1)
+    expect(sent[1].url).toContain("/boss")
+    expect(sent[1].payload.boss).toBe("Seasone the Industrious")
+  end)
+
+  it("does not report a boss for a normal wave objective", function()
+    reset(true)
+    M.onObjective("defeat 1 waves of enemies (0/1)")
+    expect(#sent).toBe(0)
+  end)
+end)
+
+-- ─── Boon contemplate parsing (pure) ─────────────────────────────────────────
+
+describe("M._parseContemplate()", function()
+  it("extracts rarity, echoes, description, and quote", function()
+    local info = M._parseContemplate({
+      "Rarity:                 rare",
+      "Can echo:               No",
+      "You can no longer move normally, but when tumbling into a room, you will deal significant damage to all denizens",
+      "present.",
+      "",
+      '"Some unstoppable forces have yet to meet their immovable object. But Heroes do not have time for metaphors."',
+    })
+    expect(info.rarity).toBe("rare")
+    expect(info.num_echoes_possible).toBe(0)
+    expect(info.description).toBe("You can no longer move normally, but when tumbling into a room, you will deal significant damage to all denizens present.")
+    expect(info.quote).toBe("Some unstoppable forces have yet to meet their immovable object. But Heroes do not have time for metaphors.")
+  end)
+
+  it("maps 'Can echo: Yes' to 1", function()
+    local info = M._parseContemplate({ "Rarity:  legendary", "Can echo:  Yes", "Desc.", "", '"Q."' })
+    expect(info.num_echoes_possible).toBe(1)
+    expect(info.rarity).toBe("legendary")
+  end)
+end)
+
+-- ─── Mob-line picker (pure) ──────────────────────────────────────────────────
+
+describe("M._pickMobLine()", function()
+  it("returns the mob spawn line directly above GO!", function()
+    local mob = M._pickMobLine({ "In a dull flash of grey-tinged light, a host of malagmae joins the fray." })
+    expect(mob).toBe("In a dull flash of grey-tinged light, a host of malagmae joins the fray.")
+  end)
+
+  it("skips a blank line then returns the mob line", function()
+    local mob = M._pickMobLine({ "", "Leaves fall softly as a group of dryad handmaidens step out." })
+    expect(mob).toBe("Leaves fall softly as a group of dryad handmaidens step out.")
+  end)
+
+  it("returns nil when it reaches the countdown number with no mob line", function()
+    expect(M._pickMobLine({ "0" })).toBeNil()
+  end)
+end)
