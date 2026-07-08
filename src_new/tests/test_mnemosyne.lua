@@ -5,15 +5,12 @@
 
 -- ─── Mocks ───────────────────────────────────────────────────────────────────
 
-cecho = function() end
-send = function() end
-tempTimer = function(_, _) return 1 end          -- never auto-fires (watchdog inert)
-tempRegexTrigger = function(_, _) return 1 end
-killTimer = function() end
-killTrigger = function() end
-registerAnonymousEventHandler = function() return 1 end
-killAnonymousEventHandler = function() end
-ataxia_saveSettings = function() end
+-- test_runner already loads mock_mudlet, which provides send/cecho/tempTimer
+-- (stores callbacks; does NOT auto-fire) / tempRegexTrigger / killTimer /
+-- killTrigger / registerAnonymousEventHandler. Do NOT override those -- doing so
+-- leaks no-op stubs into other test files and breaks them (test ordering differs
+-- across platforms). Only postHTTP/getHTTP/yajl are missing from the mock, and
+-- no other test uses them, so define just those.
 
 local sent = {}          -- list of { url, payload } from postHTTP
 local lastPayload        -- table most recently handed to yajl.to_string
@@ -27,7 +24,8 @@ yajl = {
 postHTTP = function(_, url, _) table.insert(sent, { url = url, payload = lastPayload }) end
 getHTTP = function(url, _) table.insert(sent, { url = url, payload = "GET" }) end
 
-ataxia = { settings = {} }
+ataxia = ataxia or {}
+ataxia.settings = ataxia.settings or {}
 
 dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/001_HTTP_Client.lua")
 dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/002_Reporter_API.lua")
