@@ -137,11 +137,15 @@ A draggable grid mini-map. `MAP.build()` wraps an `Adjustable.Container` named `
 
 `MAP.render()` draws **VISITED rooms only** (`at[x..","..y]` is keyed from `r.visited` rooms), clamped to a `GRID_MAX = 11` window centred on the current room when the map is larger, with `+y` (north) at the top:
 
-| Cell state | Style | Content |
-|------------|-------|---------|
-| Current room (`r.num == MAP.current`) | green (`STYLE.current`) | empty |
-| Has unexplored exits (`hasUnexplored`) | gold-bordered (`STYLE.unexplored`) | `"?"` |
-| Otherwise | grey (`STYLE.room`) | empty |
+A cell's **style** is a priority branch (`r.num == MAP.current` → `elseif hasUnexplored` → else), so the current room is always green even when it has unwalked exits:
+
+| Priority | Room | Style |
+|----------|------|-------|
+| 1 | Current room (`r.num == MAP.current`) | green (`STYLE.current`) |
+| 2 | Room with unexplored exits (`hasUnexplored`) | gold-bordered (`STYLE.unexplored`) |
+| 3 | Otherwise | grey (`STYLE.room`) |
+
+The `"?"` marker is set **separately** — `lbl:echo(MAP.hasUnexplored(r.num) and "?" or "")` runs unconditionally, independent of the style branch. So any room with a reported-but-unwalked exit shows `?`, **including the green current room** (which is the common case — you've just arrived and haven't walked its other exits yet); a fully-explored room shows nothing.
 
 Each cell's tooltip is the room name; each `setClickCallback(function() MAP.walkTo(r.num) end)` uses a **direct function** (not a name-string callback) so it always resolves.
 
