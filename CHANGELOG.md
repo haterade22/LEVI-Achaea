@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-07-08 — Mnemosyne map: fix blank map on a new level + robustness (v4.7.43)
+
+- **New level was blank:** the per-ripple reset fires (from the ripple line) while you're already standing in the new level's first room, wiping it. `onRipple` now re-seeds the current room from `gmcp.Room.Info` immediately after the reset, so the new level's map shows straight away.
+- **Robuster "in Mnemosyne" gate:** `MAP.inMnem()` now accepts an active telemetry run as well as `ataxiaBasher.inMnemosyne` (the survey flag is set opportunistically and can be missed between floors).
+- **Click-to-walk:** replaced the name-based click callback with a direct function reference (a dotted/nested name may not resolve), so clicking a room actually walks you there; `setToolTip` wrapped in `pcall`.
+- Added `mnem map status` — diagnostic echo (inMnem / enabled / rooms / current / ripple / bounds).
+- Tests: +1 re-seed case (full suite 142/142).
+
+---
+
 ## 2026-07-08 — Mnemosyne: per-ripple room mini-map widget (v4.7.42)
 
 ### Feature: `ataxia.mnemosyne.map` ripple mapper

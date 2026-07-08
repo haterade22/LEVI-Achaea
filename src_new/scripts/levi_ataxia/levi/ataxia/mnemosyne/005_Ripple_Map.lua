@@ -202,6 +202,13 @@ function MAP.onRipple(n)
   if n ~= nil and n ~= MAP._ripple then
     MAP.reset()
     MAP._ripple = n
+    -- The ripple line fires while you're already standing in the new level's
+    -- first room, so re-seed it -- otherwise the map is blank until you move.
+    if MAP.inMnem() and gmcp and gmcp.Room and gmcp.Room.Info then
+      local ri = gmcp.Room.Info
+      MAP.onRoom(ri.num, ri.name, ri.exits, nil)
+    end
+    if MAP.render then MAP.render() end
   end
 end
 
@@ -209,8 +216,12 @@ end
 -- Runtime hooks
 -- ---------------------------------------------------------------------------
 
-local function inMnem()
-  return ataxiaBasher ~= nil and ataxiaBasher.inMnemosyne == true
+-- In a Mnemosyne context: the survey flag OR an active telemetry run (the flag
+-- is set opportunistically by the SURVEY line and can be missed between floors,
+-- so accept either signal).
+function MAP.inMnem()
+  return (ataxiaBasher ~= nil and ataxiaBasher.inMnemosyne == true)
+    or (ataxia.mnemosyne.run ~= nil and ataxia.mnemosyne.run.active == true)
 end
 
 -- Capture the direction of movement from the outgoing command (movement aliases
@@ -218,7 +229,7 @@ end
 -- the last movement command before the room changes).
 if MAP._sendHandler then killAnonymousEventHandler(MAP._sendHandler) end
 MAP._sendHandler = registerAnonymousEventHandler("sysDataSendRequest", function(_, cmd)
-  if not inMnem() or type(cmd) ~= "string" then return end
+  if not MAP.inMnem() or type(cmd) ~= "string" then return end
   local last = cmd:match("(%a+)%s*$")
   if last and MAP.normDir(last) then MAP._lastMoveDir = MAP.normDir(last) end
 end)
@@ -227,7 +238,7 @@ end)
 -- starts a clean map; while inside, record the room and refresh.
 if MAP._roomHandler then killAnonymousEventHandler(MAP._roomHandler) end
 MAP._roomHandler = registerAnonymousEventHandler("gmcp.Room", function()
-  local here = inMnem()
+  local here = MAP.inMnem()
   if here and not MAP._wasInMnem then
     MAP.reset()
     MAP._ripple = nil

@@ -409,6 +409,22 @@ describe("ripple map graph", function()
     expect(MAP.rooms[1]).toBeNil()
   end)
 
+  it("re-seeds the current room from gmcp after a ripple reset", function()
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = true
+    gmcp = gmcp or {}
+    gmcp.Room = { Info = { num = 500, name = "New level", exits = {} } }
+    MAP.reset()
+    MAP._ripple = 1
+    MAP.onRoom(1, "old room", {}, nil)
+    MAP.onRipple(2) -- reset + re-seed the current room from gmcp
+    expect(MAP.rooms[1]).toBeNil() -- old level wiped
+    expect(MAP.rooms[500] ~= nil).toBeTrue() -- current room re-seeded
+    expect(MAP.current).toBe(500)
+    gmcp.Room = nil
+    ataxiaBasher.inMnemosyne = false
+  end)
+
   it("normalises and shortens directions", function()
     expect(MAP.normDir("n")).toBe("north")
     expect(MAP.normDir("NORTHEAST")).toBe("northeast")

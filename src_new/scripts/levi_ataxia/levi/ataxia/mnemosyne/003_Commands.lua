@@ -48,7 +48,7 @@ function M.help()
     { "mnem contemplate", "Toggle boon enrichment via BOON CONTEMPLATE" },
     { "mnem test", "Ping /health to check connectivity" },
     { "mnem debug", "Toggle verbose debug echoes" },
-    { "mnem map [on|off]", "Toggle the per-ripple mini-map widget" },
+    { "mnem map [on|off|status]", "Toggle / diagnose the per-ripple mini-map" },
     { "mnem start | end", "Manually start / end a run" },
     { "mnem check", "Re-sync with an in-progress run (/run_exists)" },
     { "mnem ripple <n>", "Manually report ripple level" },
@@ -94,9 +94,13 @@ function M.command(rest)
     c.debug = not c.debug
     M.echo("Debug " .. (c.debug and "<green>ON" or "<grey>off") .. ".")
   elseif cmd == "map" then
-    if ataxia.mnemosyne.map and ataxia.mnemosyne.map.toggle then
-      local state = (arg == "on") and true or (arg == "off") and false or nil
-      ataxia.mnemosyne.map.toggle(state)
+    if ataxia.mnemosyne.map then
+      if arg == "status" and ataxia.mnemosyne.map.status then
+        ataxia.mnemosyne.map.status()
+      elseif ataxia.mnemosyne.map.toggle then
+        local state = (arg == "on") and true or (arg == "off") and false or nil
+        ataxia.mnemosyne.map.toggle(state)
+      end
     end
   elseif cmd == "test" or cmd == "health" then
     M.testHealth()

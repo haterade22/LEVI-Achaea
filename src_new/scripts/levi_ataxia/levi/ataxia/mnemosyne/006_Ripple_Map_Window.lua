@@ -126,8 +126,8 @@ function MAP.render()
         end
         lbl:setStyleSheet(st)
         lbl:echo(MAP.hasUnexplored(r.num) and "?" or "")
-        lbl:setClickCallback("ataxia.mnemosyne.map.onCellClick", r.num)
-        lbl:setToolTip(tostring(r.name or ("#" .. tostring(r.num))))
+        lbl:setClickCallback(function() MAP.walkTo(r.num) end) -- direct fn, always resolves
+        pcall(function() lbl:setToolTip(tostring(r.name or ("#" .. tostring(r.num)))) end)
         lbl:show()
       end
     end
@@ -167,6 +167,17 @@ function MAP.autoShow()
   else
     MAP.window:hide()
   end
+end
+
+function MAP.status()
+  local n = 0
+  for _ in pairs(MAP.rooms or {}) do n = n + 1 end
+  local minx, maxx, miny, maxy = MAP.bounds()
+  ataxia.mnemosyne.echo("<gold>Ripple map:<reset> inMnem=" .. tostring(MAP.inMnem())
+    .. " enabled=" .. tostring(MAP._enabled())
+    .. " rooms=" .. n .. " current=" .. tostring(MAP.current)
+    .. " ripple=" .. tostring(MAP._ripple)
+    .. " bounds=" .. tostring(minx) .. "," .. tostring(maxx) .. "," .. tostring(miny) .. "," .. tostring(maxy))
 end
 
 function MAP.toggle(state)
