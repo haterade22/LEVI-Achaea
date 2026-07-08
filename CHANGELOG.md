@@ -2,6 +2,12 @@
 
 ---
 
+## 2026-07-08 — Mnemosyne: trim monster spawn to the mob phrase (v4.7.36)
+
+The mob spawn line captured by `onGo` is now trimmed to just the `a/an <quantifier> of <mob>` phrase (e.g. "a host of malagmae", "a group of dryad handmaidens") via the new pure `_extractMob()` in `mnemosyne/004_Parsers.lua` — quantifier + verb word-sets, stopping the mob name at the verb / comma / sentence end, falling back to the whole line when the structure isn't matched. Tests: +3 `_extractMob` cases (full suite 121/121).
+
+---
+
 ## 2026-07-08 — Mnemosyne: boss/monsters auto-detect + boon enrichment (v4.7.35)
 
 ### Feature: complete the Mnemosyne Run Tracker auto-reporting

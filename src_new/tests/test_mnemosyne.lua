@@ -324,3 +324,21 @@ describe("M._pickMobLine()", function()
     expect(M._pickMobLine({ "0" })).toBeNil()
   end)
 end)
+
+-- ─── Mob phrase extraction (pure) ────────────────────────────────────────────
+
+describe("M._extractMob()", function()
+  it("trims flavour and the verb, keeping 'a <quantifier> of <mob>' (single word)", function()
+    local mob = M._extractMob("In a dull flash of grey-tinged light, a host of malagmae joins the fray.")
+    expect(mob).toBe("a host of malagmae")
+  end)
+
+  it("keeps a multi-word mob and stops at the verb", function()
+    local mob = M._extractMob("Leaves fall softly on warm winds as a group of dryad handmaidens step out of the forest with a giggle.")
+    expect(mob).toBe("a group of dryad handmaidens")
+  end)
+
+  it("returns nil when there is no 'a <quantifier> of <mob>' phrase", function()
+    expect(M._extractMob("The boss glares at you menacingly.")).toBeNil()
+  end)
+end)

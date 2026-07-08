@@ -151,6 +151,68 @@ function M._pickMobLine(prior)
   return nil
 end
 
+-- Mob spawn phrasing is "<flavour> a/an <quantifier> of <mob> <verb>...". These
+-- sets anchor the "a <quantifier> of <mob>" extraction.
+local MOB_QUANTIFIERS = {
+  host = true, group = true, pack = true, swarm = true, horde = true,
+  legion = true, band = true, throng = true, mob = true, cluster = true,
+  flock = true, pride = true, colony = true, gaggle = true, troop = true,
+  army = true, gathering = true, crowd = true, mass = true, multitude = true,
+  drove = true, cloud = true, school = true, brood = true, litter = true,
+  nest = true, coven = true, company = true, squad = true, warband = true,
+}
+local MOB_VERBS = {
+  join = true, joins = true, step = true, steps = true, emerge = true,
+  emerges = true, appear = true, appears = true, arrive = true, arrives = true,
+  march = true, marches = true, charge = true, charges = true, rush = true,
+  rushes = true, pour = true, pours = true, spill = true, spills = true,
+  descend = true, descends = true, crawl = true, crawls = true, slither = true,
+  slithers = true, stalk = true, stalks = true, creep = true, creeps = true,
+  swarm = true, swarms = true, burst = true, bursts = true, move = true,
+  moves = true, walk = true, walks = true, scuttle = true, scuttles = true,
+  prowl = true, prowls = true, advance = true, advances = true, approach = true,
+  approaches = true, form = true, forms = true, gather = true, gathers = true,
+  flood = true, floods = true, rise = true, rises = true, fall = true,
+  falls = true, drop = true, drops = true, fly = true, flies = true,
+  swoop = true, swoops = true, lumber = true, lumbers = true, shamble = true,
+  shambles = true, slink = true, slinks = true, pad = true, pads = true,
+  bound = true, bounds = true, leap = true, leaps = true, spring = true,
+  springs = true, come = true, comes = true, enter = true, enters = true,
+  stride = true, strides = true, saunter = true, saunters = true, wander = true,
+  wanders = true, materialise = true, materialises = true, materialize = true,
+  materializes = true, stream = true, streams = true, file = true, files = true,
+  slide = true, slides = true, roll = true, rolls = true, tumble = true,
+  tumbles = true, stomp = true, stomps = true, trot = true, trots = true,
+  gallop = true, gallops = true, skitter = true, skitters = true, glide = true,
+  glides = true, sweep = true, sweeps = true, spawn = true, spawns = true,
+}
+
+-- Extract the "a/an <quantifier> of <mob>" phrase from a full spawn line, or nil
+-- if the structure isn't present. Mob words are collected after "of" until a
+-- verb, a comma, or sentence-ending punctuation (capped at 4 words for safety).
+function M._extractMob(str)
+  if type(str) ~= "string" then return nil end
+  local words = {}
+  for w in str:gmatch("%S+") do words[#words + 1] = w end
+  local function clean(w) return (w:lower():gsub("%p+", "")) end
+  for i = 1, #words - 2 do
+    local a = clean(words[i])
+    if (a == "a" or a == "an") and MOB_QUANTIFIERS[clean(words[i + 1])] and clean(words[i + 2]) == "of" then
+      local mob = {}
+      for j = i + 3, #words do
+        local w = words[j]
+        if MOB_VERBS[w:lower():gsub("%p+$", "")] then break end
+        table.insert(mob, (w:gsub("%p+$", "")))
+        if w:match("[%.,;:!?]$") or #mob >= 4 then break end
+      end
+      if #mob > 0 then
+        return words[i] .. " " .. words[i + 1] .. " " .. words[i + 2] .. " " .. table.concat(mob, " ")
+      end
+    end
+  end
+  return nil
+end
+
 -- "GO!" -- a new wave has begun. The mob spawn line is the line directly above
 -- GO! (between the countdown "0" and "GO!"); capture it by position rather than
 -- by wording, since each mob has different flavour text. Then auto-send WADE
@@ -167,7 +229,7 @@ function M.onGo()
       prior[i] = (ok and lns and lns[1]) or ""
     end
     local mob = M._pickMobLine(prior)
-    if mob then M.onMonsters(mob) end
+    if mob then M.onMonsters(M._extractMob(mob) or mob) end
   end
   send("wade status", false)
 end
