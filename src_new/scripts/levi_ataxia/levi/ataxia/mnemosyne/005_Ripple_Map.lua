@@ -129,23 +129,9 @@ function MAP.onRoom(num, name, exits, moveDir)
     dir = MAP.normDir(MAP._lastMoveDir)
   end
 
-  -- Assign coordinates. First choice: follow the path we just walked (relative
-  -- to `from`). Otherwise anchor to ANY already-placed neighbour via our own
-  -- exit graph -- this is what lets the grid bootstrap from the origin without a
-  -- known move direction or forward-populated exits.
-  if MAP.origin == nil then
-    MAP.origin = num
-    room.x, room.y = 0, 0
-  elseif room.x == nil then
-    if from and from.x ~= nil and dir and MAP.OFFSETS[dir] then
-      room.x = from.x + MAP.OFFSETS[dir][1]
-      room.y = from.y + MAP.OFFSETS[dir][2]
-    else
-      MAP._anchor(room)
-    end
-  end
-
-  -- Record the traversed edge both ways (only the pair we actually walked).
+  -- Record the traversed edge both ways (only the pair we actually walked). This
+  -- is WALKED connectivity, used by MAP.path for click-to-walk -- kept separate
+  -- from grid coordinates (which are derived from the exit graph in relayout).
   if from and num ~= from.num and dir then
     from.edges[dir] = num
     local opp = MAP.OPPOSITE[dir]
@@ -153,55 +139,68 @@ function MAP.onRoom(num, name, exits, moveDir)
   end
   if from and num ~= from.num then MAP._prev = from.num end -- for `mnem map status`
 
-  -- Topology propagation: the game reports each room's exits as dir->neighbour
-  -- num, so once a room is placed we can position its neighbours straight from
-  -- the exit graph -- no need to have captured which way we moved. This is what
-  -- makes the grid fill in reliably even when the movement direction is unknown.
-  MAP._propagate(room)
-
+  if MAP.origin == nil then MAP.origin = num end
   MAP.current = num
   MAP._lastMoveDir = nil
+
+  -- Re-derive every room's coordinate from the exit graph now that this room and
+  -- its exits are recorded (see MAP.relayout).
+  MAP.relayout()
 end
 
--- Place `room` next to any neighbour that ALREADY has coordinates, using room's
--- own exit graph: an exit `d` to a placed neighbour means the neighbour lies `d`
--- of us, so we lie OPPOSITE[d] of it. This is the primary bootstrap -- a freshly
--- entered room's exits reliably carry real nums for the (visited) rooms around
--- it, even when we couldn't tell which way we moved. Returns true if placed.
-function MAP._anchor(room)
-  if not room or room.x ~= nil then return false end
-  for d, dest in pairs(room.exits) do
-    local opp = MAP.OPPOSITE[d]
-    local off = opp and MAP.OFFSETS[opp]
-    local nb = (type(dest) == "number") and MAP.rooms[dest] or nil
-    if off and nb and nb.x ~= nil and dest ~= room.num then
-      room.x = nb.x + off[1]
-      room.y = nb.y + off[2]
-      return true
+-- Recompute EVERY room's grid coordinate from scratch by BFS over the
+-- bidirectional exit graph. Run on every arrival, so it always uses the latest
+-- exits from ALL rooms -- gmcp fills a real exit dest only for rooms it already
+-- knows, so a pair A<->B becomes linkable as soon as EITHER side reports the
+-- other, and a room that couldn't be placed on arrival gets placed on a later
+-- pass once a neighbour's exit back to it is known. Placing per-arrival (the old
+-- approach) got stuck: if `from` wasn't placed yet, nothing downstream could be.
+--
+-- Anchored on the origin so coordinates stay stable as you walk; if the origin's
+-- component doesn't reach the room you're standing in (a not-yet-known link),
+-- re-anchor the whole layout on the current room so it's always visible.
+function MAP.relayout()
+  local rooms = MAP.rooms or {}
+
+  -- Undirected planar adjacency from every known exit edge (both directions):
+  -- an exit `d` from A to a known room B means B sits `d` of A, and A sits
+  -- OPPOSITE[d] of B. Non-planar exits (up/down/in/out) carry no 2-D offset.
+  local adj = {}
+  local function link(a, b, dx, dy)
+    adj[a] = adj[a] or {}
+    adj[a][#adj[a] + 1] = { to = b, dx = dx, dy = dy }
+  end
+  for n, r in pairs(rooms) do
+    for d, dest in pairs(r.exits) do
+      local off = MAP.OFFSETS[d]
+      if off and type(dest) == "number" and dest ~= n and rooms[dest] then
+        link(n, dest, off[1], off[2])
+        link(dest, n, -off[1], -off[2])
+      end
     end
   end
-  return false
-end
 
--- Place a room's not-yet-positioned exit neighbours from the exit graph.
--- Neighbours are created as unvisited stubs (coords only); each gains a name,
--- its own exits, and starts rendering once it's actually visited.
-function MAP._propagate(room)
-  if not room or room.x == nil then return end
-  for d, dest in pairs(room.exits) do
-    local off = MAP.OFFSETS[d]
-    if off and type(dest) == "number" and dest > 0 and dest ~= room.num then
-      local nb = MAP.rooms[dest]
-      if not nb then
-        nb = { num = dest, exits = {}, edges = {}, visited = false }
-        MAP.rooms[dest] = nb
-        table.insert(MAP.order, dest)
-      end
-      if nb.x == nil then
-        nb.x = room.x + off[1]
-        nb.y = room.y + off[2]
+  local function bfs(anchor)
+    for _, r in pairs(rooms) do r.x, r.y = nil, nil end
+    if not (anchor and rooms[anchor]) then return end
+    rooms[anchor].x, rooms[anchor].y = 0, 0
+    local q, head = { anchor }, 1
+    while head <= #q do
+      local cur = q[head]; head = head + 1
+      local cr = rooms[cur]
+      for _, e in ipairs(adj[cur] or {}) do
+        local nb = rooms[e.to]
+        if nb and nb.x == nil then
+          nb.x, nb.y = cr.x + e.dx, cr.y + e.dy
+          q[#q + 1] = e.to
+        end
       end
     end
+  end
+
+  bfs(MAP.origin)
+  if MAP.current and rooms[MAP.current] and rooms[MAP.current].x == nil then
+    bfs(MAP.current) -- guarantee the room we're in is on the grid
   end
 end
 

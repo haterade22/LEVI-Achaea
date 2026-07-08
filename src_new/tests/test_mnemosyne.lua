@@ -370,16 +370,16 @@ describe("ripple map graph", function()
     expect(MAP.rooms[2].y).toBe(1)
   end)
 
-  it("positions neighbours from the exit graph before they're visited", function()
+  it("places rooms on a later pass once a neighbour's exit back becomes known", function()
     MAP.reset()
-    MAP.onRoom(400, "Start", { east = 500 }, nil) -- origin at 0,0 -> east exit places 500
-    expect(MAP.rooms[500] ~= nil).toBeTrue()
-    expect(MAP.rooms[500].x).toBe(1) -- placed purely from 400's exit graph
+    MAP.onRoom(400, "A", { east = 0 }, nil) -- origin; gmcp doesn't know the neighbour yet
+    MAP.onRoom(500, "B", { west = 0 }, nil) -- link still unknown both ways
+    expect(MAP.rooms[500].x).toBe(0) -- current room is always anchored/visible
+    -- re-enter A; gmcp now knows B, so A reports east->500 and relayout links them.
+    MAP.onRoom(400, "A", { east = 500 }, nil)
+    expect(MAP.rooms[400].x).toBe(0)
+    expect(MAP.rooms[500].x).toBe(1)
     expect(MAP.rooms[500].y).toBe(0)
-    expect(MAP.rooms[500].visited).toBeFalse() -- a stub: known to exist, not walked into yet
-    MAP.onRoom(500, "East", { west = 400 }, nil) -- now actually arrive
-    expect(MAP.rooms[500].visited).toBeTrue()
-    expect(MAP.rooms[500].x).toBe(1) -- keeps the propagated coordinate
   end)
 
   it("coerces string exit dest ids so exits-dest inference still matches", function()

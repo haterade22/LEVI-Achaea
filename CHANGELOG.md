@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-07-08 — Mnemosyne map: re-layout the whole graph each step (v4.7.48)
+
+The v4.7.46 per-arrival placement still left the map as a single square: `mnem map status` showed `rooms=11 visited=11 placed=1 … bounds=0,0,0,0`, with the current room's exits pointing at real but `[unplaced,visited]` neighbours. Root cause: placing a room *at arrival, relative to a placed `from`* is a chain that can't bootstrap — the first move off the origin never got placed (its `from`↔`here` link wasn't known yet), so every room behind it stayed unplaced and there was never a placed neighbour to anchor to.
+
+Fix (`005_Ripple_Map.lua`): replaced the per-arrival coordinate logic (and the old `_propagate`/`_anchor` helpers) with **`MAP.relayout()`** — on every arrival it rebuilds a **bidirectional** adjacency from *all* rooms' currently-known exits and BFS-assigns coordinates from the origin. Because it re-derives everything from the full accumulated graph each step, a room that couldn't be placed on arrival is placed on a later pass as soon as either side of a link becomes known — and since each room's back-exit is populated the moment you arrive in it, the whole walked chain connects. Anchored on the origin for stable coordinates, with a fallback re-anchor on the current room so the room you're standing in is always on the grid.
+
+Walked edges (for click-to-walk `MAP.path`) are still recorded per-step and kept separate from coordinates. `mnem map status` diagnostics (v4.7.46) unchanged.
+
+Tests: replaced the propagation test with a later-pass placement case; full suite 150/150. Known limitation unchanged: purely non-planar (`up`/`down`/`in`/`out`) links can't be gridded.
+
+---
+
 ## 2026-07-08 — Dragon: weave breath BLAST into the incantation/gut bash
 
 ### Feature: `bash blast on/off` — blast alongside incantation when breath is up
