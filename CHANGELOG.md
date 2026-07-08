@@ -2,6 +2,12 @@
 
 ---
 
+## 2026-07-08 — Mnemosyne: automatic run-end on true death / release (v4.7.38)
+
+Wires `/run_end`: new trigger `mnemosyne/009_Run_End.lua` fires on `"The Mnemosyne releases its hold, weaving N shimmering threads into your possession."` — the run's conclusion (Mnemosyne is an endless climb with no victory; it ends on true death or `WADE LEAVE`) — calling `onRunEnd()` → `endRun()`. A normal life-loss death still just reports `/death` and continues the run. This completes the automatic reporting chain: run start · ripple · effects · boss · monsters · boons offered/selected · death · run end. Tests: +2 onRunEnd cases (full suite 123/123).
+
+---
+
 ## 2026-07-08 — Serpent: finisher-safety + rebounding-reapply pre-empt (v4.7.37)
 
 ### Serpent offense (`serpent/002_Serpent_Offense.lua`)

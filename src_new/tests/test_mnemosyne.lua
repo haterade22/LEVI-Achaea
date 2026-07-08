@@ -282,6 +282,23 @@ describe("onObjective", function()
   end)
 end)
 
+-- ─── Run end (true death / release) ──────────────────────────────────────────
+
+describe("onRunEnd", function()
+  it("ends the run when in a run", function()
+    reset(true)
+    M.onRunEnd()
+    expect(sent[1].url).toContain("/run_end")
+    expect(M.run.active).toBeFalse()
+  end)
+
+  it("does nothing when not in a run", function()
+    reset(false)
+    M.onRunEnd()
+    expect(#sent).toBe(0)
+  end)
+end)
+
 -- ─── Boon contemplate parsing (pure) ─────────────────────────────────────────
 
 describe("M._parseContemplate()", function()

@@ -122,6 +122,14 @@ function M.onRunStart()
   if M._auto() then M.startRun() end
 end
 
+-- "The Mnemosyne releases its hold, weaving N shimmering threads into your
+-- possession." -- the run has ended (Mnemosyne is an endless climb with no
+-- victory; it ends on true death or WADE LEAVE, and this reward line marks the
+-- conclusion). A normal life-loss death (the /death trigger) keeps the run going.
+function M.onRunEnd()
+  if M._inRun() then M.endRun() end
+end
+
 -- "You wade N ripples deep into the tides of memory:" (WADE STATUS output).
 -- Seeing this proves we're in a run, so (re)assert active, set the ripple
 -- first, then flush any buffered monsters so /ripple_level precedes /monsters.
