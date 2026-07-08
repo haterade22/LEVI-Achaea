@@ -390,6 +390,16 @@ notes: "Gut is primary hunting attack, Rend for PvP"
 battlerage_abilities:
   - gut: "Primary bashing damage"
   - rend: "Alternative attack"
+
+basher_toggles:
+  bash incant on/off: "Use INCANTATION (willpower) instead of GUT as the primary bash attack"
+  bash blast on/off:
+    default: on
+    effect: |
+      Weaves a breath BLAST into the incantation/gut rotation when dragonbreath is summoned:
+      breath up -> "blast <tar>;summon <ele>;<incant/gut> <tar>"; breath down -> "summon <ele>;<incant/gut> <tar>".
+      Element per colour via getDragonBreath() (Blue = ice). Turn off for trash mobs / low willpower.
+      Gate: ataxia.defences.dragonbreath. Shielded hits always blast to break the shield regardless of this toggle.
 ```
 
 ## Fighting Against This Class

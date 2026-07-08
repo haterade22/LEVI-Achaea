@@ -70,6 +70,12 @@ function ataxiaCheckForMissing()
 		ataxiaEcho("<green>bash rageraze on/off <NavajoWhite>to change.")
 	end
 
+	if ataxiaBasher.dragonBlast == nil then
+		ataxiaBasher.dragonBlast = true
+		ataxiaEcho("Dragon blast-weave option not found; defaulting to on.")
+		ataxiaEcho("<green>bash blast on/off <NavajoWhite>to change.")
+	end
+
 	if ataxiaBasher.autoLearn == nil then
 		ataxiaBasher.autoLearn = true
 		ataxiaEcho("Auto-learn denizens option not found; defaulting to on.")

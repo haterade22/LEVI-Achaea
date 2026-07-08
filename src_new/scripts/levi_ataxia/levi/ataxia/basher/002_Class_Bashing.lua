@@ -33,50 +33,47 @@ function ataxiaBasher_dragonBashing()
   local brage = ataxiaBasher_assembleBattlerage()
   local colour = string.match(gmcp.Char.Status.class, "%w+")
   local raze = ataxiaBasher.battlerage[colour.." Dragon"].raze
+  -- Element to summon for this dragon colour (Blue = ice, Silver = lightning, ...)
+  local ele = getDragonBreath() or "ice"
+
+  -- The bal primary only (no breath weave): jab / whip / incantation / gut
+  local function balAttack()
+    if ataxiaBasher.jabBash then
+      return "jab " ..target
+    elseif ataxiaBasher.wotBash then
+      return "whip " ..target
+    elseif ataxiaBasher.dragonIncant then
+      return "incantation " ..target
+    else
+      return "gut " ..target
+    end
+  end
+
+  -- Normal-rotation primary. When the blast weave is enabled (bash blast on) and we're using a
+  -- real primary (incantation/gut, not the low-wp jab or wotBash whip), fold in a breath blast:
+  --   breath up   -> blast (eq, damage + breaks shields/lyres) ; re-summon ; bal attack
+  --   breath down -> summon so it's ready next hit ; bal attack
+  local function primary()
+    local weaveable = not ataxiaBasher.jabBash and not ataxiaBasher.wotBash
+    if ataxiaBasher.dragonBlast and weaveable then
+      if ataxia.defences.dragonbreath then
+        return "blast " ..target.. ";summon " ..ele.. ";" ..balAttack()
+      else
+        return "summon " ..ele.. ";" ..balAttack()
+      end
+    end
+    return balAttack()
+  end
 
   if ataxiaBasher.shielded then
     if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-      command = command..raze..sp
-      if not ataxiaBasher.jabBash and not ataxiaBasher.wotBash then
-        if ataxiaBasher.dragonIncant then
-          command = command.."incantation " ..target
-        else
-          command = command.."gut " ..target
-        end
-      elseif ataxiaBasher.wotBash then
-        command = command.."whip " ..target
-      else
-        command = command.."jab " ..target
-      end
-      --Black = "acid", Blue = "ice", Gold = "psi", Green = "venom", Red = "dragonfire", Silver = "lightning",
-    elseif gmcp.Char.Status.class == "Blue Dragon" then
-      command = command..sp.."blast " ..target..";summon ice"..sp..brage
-    elseif gmcp.Char.Status.class == "Red Dragon" then
-      command = command..sp.."blast " ..target..";summon dragonfire"..sp..brage
-    elseif gmcp.Char.Status.class == "Green Dragon" then
-      command = command..sp.."blast " ..target..";summon venom"..sp..brage
-    elseif gmcp.Char.Status.class == "Black Dragon" then
-      command = command..sp.."blast " ..target..";summon acid"..sp..brage
-    elseif gmcp.Char.Status.class == "Golden Dragon" then
-      command = command..sp.."blast " ..target..";summon psi"..sp..brage
-    elseif gmcp.Char.Status.class == "Silver Dragon" then
-      command = command..sp.."blast " ..target..";summon lightning"..sp..brage
+      command = command..raze..sp..primary()
     else
-      command = command..sp.."blast " ..target..sp..brage
+      -- Shield MUST be broken: blast unconditionally, re-summon breath, then add bal damage.
+      command = command..sp.."blast " ..target.. ";summon " ..ele.. ";" ..balAttack()..sp..brage
     end
   else
-    command = command..sp..brage..sp
-    if not ataxiaBasher.jabBash and not ataxiaBasher.wotBash then
-      if ataxiaBasher.dragonIncant then
-        command = command.."incantation " ..target
-      else
-        command = command.."gut " ..target
-      end
-    elseif ataxiaBasher.wotBash then
-      command = command.."whip " ..target
-    else
-      command = command.."jab " ..target
-    end
+    command = command..sp..brage..sp..primary()
   end
   return command
 end

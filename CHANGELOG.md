@@ -2,6 +2,41 @@
 
 ---
 
+## 2026-07-08 — Dragon: weave breath BLAST into the incantation/gut bash
+
+### Feature: `bash blast on/off` — blast alongside incantation when breath is up
+
+`ataxiaBasher_dragonBashing()` (`basher/002_Class_Bashing.lua`) previously used BLAST only as a
+shield-breaker; the normal (unshielded) rotation sent just `incantation <target>` (or `gut`), wasting
+the breath (equilibrium) attack. It now folds a breath blast into the primary attack when dragonbreath
+is summoned.
+
+**Why:** BLAST deals damage and breaks shields/lyres on eq while incantation/gut hit on bal, so weaving
+it in is free extra output as long as breath is available.
+
+**How:**
+- Rewrote the function around two local helpers: `balAttack()` (jab/whip/incantation/gut, unchanged
+  selection) and `primary()` (weaves the blast). When `ataxiaBasher.dragonBlast` is on and the primary is
+  a real attack (not the ≤5%-willpower `jab` fallback or `wotBash` whip):
+  - breath up (`ataxia.defences.dragonbreath`) → `blast <tar>;summon <ele>;<incant/gut> <tar>`
+  - breath down → `summon <ele>;<incant/gut> <tar>` (rebuilds breath for the next hit)
+- Element now comes from `getDragonBreath()` (Blue = ice, Silver = lightning, …), collapsing the old
+  per-colour `blast;summon acid/ice/venom/…` chain in the shielded branch. The shielded branch still
+  blasts unconditionally to break the shield (independent of the toggle) and now also appends the bal
+  attack for extra damage.
+- New toggle `ataxiaBasher.dragonBlast`, **default ON** (initialised in
+  `002_Check_For_Any_Missing_Variables.lua`); alias `bash blast on/off`
+  (`aliases/.../configs/010_Blast_Bash.lua`, mirrors `bash rageraze`).
+
+**Breath tracking (reused, not new):** `ataxia.defences.dragonbreath` is the defence set true on
+defence-add/list (`deffing/001_Defence_API.lua`) and cleared when consumed by blast or by the
+"You have not summoned your breath weapon." trigger (`341_No_Breath.lua`).
+
+**Files:** `basher/002_Class_Bashing.lua`, `002_Check_For_Any_Missing_Variables.lua`,
+`aliases/.../configs/010_Blast_Bash.lua`.
+
+---
+
 ## 2026-07-08 — Mnemosyne map: anchor rooms from the exit graph so the grid fills in (v4.7.46)
 
 Reported symptom: after walking 14 rooms, the map showed a single grey square; `mnem map status` showed `rooms=14 visited=14 placed=1 … bounds=0,0,0,0` with `gmcp exits: se->71057`.
