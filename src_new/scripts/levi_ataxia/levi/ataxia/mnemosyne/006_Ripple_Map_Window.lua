@@ -104,7 +104,7 @@ function MAP.render()
 
   local at = {}
   for _, r in pairs(MAP.rooms) do
-    if r.x ~= nil then at[r.x .. "," .. r.y] = r end
+    if r.x ~= nil and r.visited then at[r.x .. "," .. r.y] = r end -- only rooms we've been in
   end
 
   local cw, ch = 100 / cols, 100 / rows
@@ -170,14 +170,31 @@ function MAP.autoShow()
 end
 
 function MAP.status()
-  local n = 0
-  for _ in pairs(MAP.rooms or {}) do n = n + 1 end
+  local n, visited, placed = 0, 0, 0
+  for _, r in pairs(MAP.rooms or {}) do
+    n = n + 1
+    if r.visited then visited = visited + 1 end
+    if r.x ~= nil then placed = placed + 1 end
+  end
   local minx, maxx, miny, maxy = MAP.bounds()
   ataxia.mnemosyne.echo("<gold>Ripple map:<reset> inMnem=" .. tostring(MAP.inMnem())
     .. " enabled=" .. tostring(MAP._enabled())
-    .. " rooms=" .. n .. " current=" .. tostring(MAP.current)
+    .. " rooms=" .. n .. " visited=" .. visited .. " placed=" .. placed
+    .. " current=" .. tostring(MAP.current)
+    .. " lastMove=" .. tostring(MAP._lastMoveDir)
     .. " ripple=" .. tostring(MAP._ripple)
     .. " bounds=" .. tostring(minx) .. "," .. tostring(maxx) .. "," .. tostring(miny) .. "," .. tostring(maxy))
+  -- Dump the current gmcp exits so we can see whether dest ids are real room
+  -- nums (usable for topology placement) or unmapped placeholders.
+  if gmcp and gmcp.Room and gmcp.Room.Info and type(gmcp.Room.Info.exits) == "table" then
+    local parts = {}
+    for d, dest in pairs(gmcp.Room.Info.exits) do
+      parts[#parts + 1] = tostring(d) .. "->" .. tostring(dest)
+    end
+    ataxia.mnemosyne.echo("<gold>  gmcp exits:<reset> " .. (#parts > 0 and table.concat(parts, ", ") or "(none)"))
+  else
+    ataxia.mnemosyne.echo("<gold>  gmcp exits:<reset> (no gmcp.Room.Info.exits)")
+  end
 end
 
 function MAP.toggle(state)

@@ -96,14 +96,16 @@ function MAP.onRoom(num, name, exits, moveDir)
     MAP.rooms[num] = room
     table.insert(MAP.order, num)
   end
+  room.visited = true -- arriving here (vs being a propagation stub) means we've been in it
   if name and name ~= "" then room.name = name end
 
-  -- Record the room's exits (normalise the direction keys).
+  -- Record the room's exits (normalise dir keys; coerce dest ids to numbers so
+  -- they compare against room nums -- gmcp reports exit dests as strings).
   room.exits = {}
   if type(exits) == "table" then
     for d, dest in pairs(exits) do
       local nd = MAP.normDir(d)
-      if nd then room.exits[nd] = dest end
+      if nd then room.exits[nd] = tonumber(dest) or dest end
     end
   end
 
@@ -134,8 +136,36 @@ function MAP.onRoom(num, name, exits, moveDir)
     if opp then room.edges[opp] = from.num end
   end
 
+  -- Topology propagation: the game reports each room's exits as dir->neighbour
+  -- num, so once a room is placed we can position its neighbours straight from
+  -- the exit graph -- no need to have captured which way we moved. This is what
+  -- makes the grid fill in reliably even when the movement direction is unknown.
+  MAP._propagate(room)
+
   MAP.current = num
   MAP._lastMoveDir = nil
+end
+
+-- Place a room's not-yet-positioned exit neighbours from the exit graph.
+-- Neighbours are created as unvisited stubs (coords only); each gains a name,
+-- its own exits, and starts rendering once it's actually visited.
+function MAP._propagate(room)
+  if not room or room.x == nil then return end
+  for d, dest in pairs(room.exits) do
+    local off = MAP.OFFSETS[d]
+    if off and type(dest) == "number" and dest > 0 and dest ~= room.num then
+      local nb = MAP.rooms[dest]
+      if not nb then
+        nb = { num = dest, exits = {}, edges = {}, visited = false }
+        MAP.rooms[dest] = nb
+        table.insert(MAP.order, dest)
+      end
+      if nb.x == nil then
+        nb.x = room.x + off[1]
+        nb.y = room.y + off[2]
+      end
+    end
+  end
 end
 
 -- Exits the game reports that we haven't walked yet.
@@ -184,11 +214,12 @@ function MAP.path(fromNum, toNum)
   return nil
 end
 
--- Grid extent over placed rooms.
+-- Grid extent over VISITED rooms (propagation stubs carry coords too, but they
+-- aren't drawn, so they must not stretch the grid).
 function MAP.bounds()
   local minx, maxx, miny, maxy
   for _, r in pairs(MAP.rooms or {}) do
-    if r.x ~= nil then
+    if r.x ~= nil and r.visited then
       minx = math.min(minx or r.x, r.x); maxx = math.max(maxx or r.x, r.x)
       miny = math.min(miny or r.y, r.y); maxy = math.max(maxy or r.y, r.y)
     end

@@ -370,6 +370,26 @@ describe("ripple map graph", function()
     expect(MAP.rooms[2].y).toBe(1)
   end)
 
+  it("positions neighbours from the exit graph before they're visited", function()
+    MAP.reset()
+    MAP.onRoom(400, "Start", { east = 500 }, nil) -- origin at 0,0 -> east exit places 500
+    expect(MAP.rooms[500] ~= nil).toBeTrue()
+    expect(MAP.rooms[500].x).toBe(1) -- placed purely from 400's exit graph
+    expect(MAP.rooms[500].y).toBe(0)
+    expect(MAP.rooms[500].visited).toBeFalse() -- a stub: known to exist, not walked into yet
+    MAP.onRoom(500, "East", { west = 400 }, nil) -- now actually arrive
+    expect(MAP.rooms[500].visited).toBeTrue()
+    expect(MAP.rooms[500].x).toBe(1) -- keeps the propagated coordinate
+  end)
+
+  it("coerces string exit dest ids so exits-dest inference still matches", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { north = "2" }, nil) -- gmcp reports dests as strings
+    MAP.onRoom(2, "B", { south = "1" }, nil) -- no moveDir; must still resolve via A.exits.north
+    expect(MAP.rooms[2].x).toBe(0)
+    expect(MAP.rooms[2].y).toBe(1)
+  end)
+
   it("marks exits reported but not walked as unexplored", function()
     MAP.reset()
     MAP.onRoom(1, "A", { north = 2, east = 9 }, nil)

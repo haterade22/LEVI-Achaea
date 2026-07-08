@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-07-08 — Mnemosyne map: place rooms from the exit graph (v4.7.44)
+
+Reported symptom: after moving through 4 rooms, `mnem map status` showed `rooms=4 … bounds=0,0,0,0` — every room recorded, but only the origin ever got grid coordinates, so nothing meaningful drew. (Click-to-walk on the lone origin cell did work.)
+
+Two root causes in `MAP.onRoom`, both fixed:
+- **String vs number exit ids:** gmcp reports exit destinations as strings (`"67701"`), but they were compared against the numeric room num (`"67701" == 67700` is always false), so the exits-dest direction inference never matched. Exit dests are now coerced with `tonumber`.
+- **Over-reliance on capturing keypresses:** placement leaned on the movement direction from `sysDataSendRequest`, which is fragile. Now **topology propagation** — once a room is placed, its neighbours are positioned directly from the game's own `dir → neighbour-num` exit graph. Neighbours are created as unvisited *stubs* (coordinates only) and only render once actually visited; `bounds()`/render draw visited rooms only, so stubs don't stretch or clutter the grid. The grid fills in reliably even when the move direction is unknown.
+- `mnem map status` now also reports `visited`/`placed`/`lastMove` and **dumps the current gmcp exits** (`dir->dest`), so if a level still won't map, the output shows whether the game is handing us real neighbour room-nums.
+- Tests: +2 cases (topology placement of an unvisited neighbour; string-dest coercion). Full suite 144/144.
+
+---
+
 ## 2026-07-08 — Mnemosyne map: fix blank map on a new level + robustness (v4.7.43)
 
 - **New level was blank:** the per-ripple reset fires (from the ripple line) while you're already standing in the new level's first room, wiping it. `onRipple` now re-seeds the current room from `gmcp.Room.Info` immediately after the reset, so the new level's map shows straight away.
