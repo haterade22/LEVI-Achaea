@@ -1,55 +1,75 @@
-# Commands
+# Commands & Boon-Claim Intercept
 
-## `mnem` alias
+The `mnem` alias is the operator surface for the run tracker: config toggles, a map control, and a manual override for every reporter endpoint. A second alias silently intercepts the player's own `BOON CLAIM` and auto-reports the selection. Run lifecycle and payloads live in [01-architecture.md](01-architecture.md) and [02-reporting.md](02-reporting.md); this doc is just the command layer.
 
-Alias `001_Mnemosyne.lua` (regex `^mnem(?:osyne)?(?:\s+(.*))?$`) forwards the argument to `ataxia.mnemosyne.command(rest)` in `003_Commands.lua`, which splits `<cmd> <arg>` and dispatches. Bare `mnem` (or `mnem status`) shows status.
+## The alias layer
+
+Alias `001_Mnemosyne.lua` (regex `^mnem(?:osyne)?(?:\s+(.*))?$`) matches `mnem` or `mnemosyne` and forwards the captured remainder into the dispatcher:
+
+```lua
+ataxia.mnemosyne.command(matches[2])
+```
+
+`M.command(rest)` (in `003_Commands.lua`) trims the line, splits it into `<cmd> <arg>` via `^(%S*)%s*(.-)$`, lowercases `cmd`, and runs one big `if/elseif` chain. Bare `mnem` (or `mnem status`) shows status; any unrecognised subcommand falls through to `M.help()`.
+
+## `mnem` subcommands
+
+Every row below is a branch that `M.command` actually dispatches — nothing else is a command.
 
 ### Config
 
 | Command | Effect |
 |---------|--------|
-| `mnem status` | Show URL, token set?, auto on/off, contemplate on/off, and current run state (active, ripple, id) |
-| `mnem token <token>` | Save the API token; persists via `ataxia_saveSettings(false)` |
-| `mnem on` | Enable auto-reporting, then `runExists()` to resync in case you enabled mid-run |
-| `mnem off` | Disable auto-reporting |
-| `mnem contemplate` | Toggle boon enrichment via `BOON CONTEMPLATE` |
-| `mnem debug` | Toggle verbose debug echoes (`M.decho`) |
-| `mnem test` (or `mnem health`) | Ping `GET /health` to check connectivity |
-| `mnem help` | Command reference (any unknown subcommand also shows help) |
+| `mnem status` (or bare `mnem`) | `M.status()` — echoes URL, token set?, auto on/off, contemplate on/off, and current run state (active, ripple, id) |
+| `mnem token <token>` | Save `cfg.token`; persists via `ataxia_saveSettings(false)`. Empty arg prints usage |
+| `mnem on` | `cfg.enabled = true`, save, then `M.runExists()` to resync in case you enabled mid-run |
+| `mnem off` | `cfg.enabled = false`, save |
+| `mnem contemplate` | Toggle `cfg.contemplate` (boon enrichment via `BOON CONTEMPLATE`), save |
+| `mnem debug` | Toggle `cfg.debug` (verbose `M.decho` echoes) — **not persisted** |
+| `mnem test` (or `mnem health`) | `M.testHealth()` — ping `GET /health` for connectivity |
+| `mnem help` | Any unknown subcommand also lands here — prints the command reference |
 
 ### Ripple map
 
-| Command | Effect |
-|---------|--------|
-| `mnem map` | Toggle the mini-map (`MAP.toggle()`) |
-| `mnem map on` / `mnem map off` | Force the map on/off (persists `mapEnabled`) |
-| `mnem map status` | Diagnostic echo — see [04-ripple-map.md](04-ripple-map.md#diagnostics) |
-
-### Run lifecycle & manual overrides
-
-These call the Reporter API directly (they only require a token, not `_auto`/`_inRun`), so they double as test tools and a fallback when game wording changes.
+Guarded by `if ataxia.mnemosyne.map then`; see [04-ripple-map.md](04-ripple-map.md).
 
 | Command | Effect |
 |---------|--------|
-| `mnem start` | `startRun()` → `POST /run_start` |
-| `mnem end` | `endRun()` → flush monsters + `POST /run_end` |
-| `mnem check` | `runExists()` → `POST /run_exists`, resync with an in-progress run |
-| `mnem ripple <n>` | `setRipple(n)` → `POST /ripple_level` (guarded: only if `n > run.ripple`) |
-| `mnem boss <name>` | `reportBoss(name)` → `POST /boss` |
-| `mnem monsters <text>` | `reportMonsters(text)` → `POST /monsters` |
-| `mnem death [killer]` | `reportDeath(killer)` → `POST /death` (defaults killer to `"unknown"`) |
+| `mnem map` | `map.toggle(nil)` — flip the mini-map |
+| `mnem map on` / `mnem map off` | `map.toggle(true)` / `map.toggle(false)` — force state (persists `mapEnabled`) |
+| `mnem map status` | `map.status()` — diagnostic echo |
+
+### Manual endpoint overrides
+
+These call the Reporter API directly. The API functions guard only on `M._hasToken()` — **not** `_auto()`/`_inRun()` — so they work as a manual fallback and test tool even when auto-reporting is off (or when game wording drifts and a trigger stops firing). Payload shapes are in [02-reporting.md](02-reporting.md#reporter-api-002_reporter_apilua).
+
+| Command | Dispatch | Endpoint |
+|---------|----------|----------|
+| `mnem start` | `M.startRun()` | `POST /run_start` |
+| `mnem end` | `M.endRun()` | flush monsters + `POST /run_end` |
+| `mnem check` | `M.runExists()` | `POST /run_exists` — resync with an in-progress run |
+| `mnem ripple <n>` | `M.setRipple(tonumber(arg))` | `POST /ripple_level` (guarded: only if `n > run.ripple`) |
+| `mnem boss <name>` | `M.reportBoss(arg)` | `POST /boss` |
+| `mnem monsters <text>` | `M.reportMonsters(arg)` | `POST /monsters` |
+| `mnem death [killer]` | `M.reportDeath(arg)` | `POST /death` (killer defaults to `"unknown"`) |
+
+### Notable behaviours
+
+- **`ripple`/`boss`/`monsters` require an argument** — an empty arg prints a `Usage:` line instead of posting. `death` accepts an empty arg (falls through to the `"unknown"` default).
+- **`debug` is session-only.** Unlike `token`/`on`/`off`/`contemplate`, the `debug` toggle does not call `ataxia_saveSettings`, so it resets on reload.
+- **`on` and `check` both resync.** Enabling mid-run (`mnem on`) fires `runExists()` so an already-live server run is picked up without restarting it.
 
 ## `BOON CLAIM <name>` intercept
 
-Alias `002_Boon_Claim.lua` (regex `^(?i)boon claim (.+)$`) is a passthrough intercept, **not** a `mnem` subcommand:
+Alias `002_Boon_Claim.lua` (regex `^(?i)boon claim (.+)$`) is a passthrough intercept of the player's *own* command, **not** a `mnem` subcommand — so playing normally auto-reports boon choices:
 
 ```lua
-send("boon claim " .. matches[2])          -- forward the real command
+send("boon claim " .. matches[2])          -- forward the real game command
 ataxia.mnemosyne.onBoonClaim(matches[2])   -- then report the selection
 ```
 
-`onBoonClaim` reports `/boons_selected` only if the name matches a boon from the last offered set (see [03-parsing-triggers.md](03-parsing-triggers.md#onboonclaimname-from-alias-002)), so playing the game normally auto-reports your boon choices.
+`M.onBoonClaim(name)` (in `004_Parsers.lua`) gates on `_inRun()`, trims the name, then case-insensitively matches it against `M.run.lastOffered` — the canonical boon names captured from the last boons-offered block. On a match it calls `M.reportBoonsSelected(canonical)` with the game's exact spelling; on no match it `decho`s a diagnostic and reports nothing, so a typo or stale claim never posts a bogus selection. The matching source and how `lastOffered` is populated are covered in [03-parsing-triggers.md](03-parsing-triggers.md#onboonclaimname-from-alias-002).
 
-## Setup wizard
+## Setup wizard entry point
 
-`ataxia setup reporting` (in the setup wizard, `misc_scripts/020_Setup_Wizard.lua`) exposes the same token / auto on-off / test controls as a guided menu.
+`ataxia setup reporting` (in `misc_scripts/020_Setup_Wizard.lua`, `leviSetup.setupReporting`) is the guided front door to the same controls — token, auto on/off, and the `/health` test — for players who don't want to learn the raw `mnem` verbs.

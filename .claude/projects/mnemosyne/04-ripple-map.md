@@ -1,85 +1,182 @@
-# Ripple Mini-Map
+# Ripple Map
 
-A per-ripple room mini-map, independent of telemetry. Each Mnemosyne ripple is a fresh room layout, so the map builds a room graph as you walk and wipes it each ripple. Mnemosyne is an unmapped instance (`gmcp.Room.Info.area == ""`), but `num`/`name`/`exits` still arrive, so rooms are plotted on a self-managed grid. Data model lives in `005_Ripple_Map.lua` (`ataxia.mnemosyne.map`, aliased `MAP`); the widget in `006_Ripple_Map_Window.lua`.
+Every Mnemosyne ripple ("level") is a fresh room layout, so the map builds a per-ripple room graph as you walk and wipes it whenever the ripple changes. Mnemosyne is an **unmapped instance** (`gmcp.Room.Info.area == ""`) so Mudlet's own mapper draws nothing — but `num`/`name`/`exits` still arrive over gmcp, so we plot rooms on a self-managed grid. Two files: `005_Ripple_Map.lua` is the pure graph + runtime hooks; `006_Ripple_Map_Window.lua` is the draggable grid widget. Everything hangs off `ataxia.mnemosyne.map` (aliased `local MAP`).
 
-## Room Record
+## Data model
 
-```lua
-{ num, name, x, y,
-  exits = {dir = dest|true},   -- every exit the game reports (dir -> dest id/true)
-  edges = {dir = nbNum},       -- exits we've actually WALKED (dir -> neighbour num)
-  visited = bool }             -- true once we've arrived (vs. a propagation stub)
+Each room is a record keyed by its gmcp room `num`:
+
+| Field | Type | Meaning |
+|-------|------|---------|
+| `num` | number | Room id (coerced to number — see below) |
+| `name` | string | Room name from gmcp |
+| `x`, `y` | number/nil | Grid coordinate (`+y` = north); `nil` until placed |
+| `exits` | table | `dir -> dest` for **every** exit the game REPORTS |
+| `edges` | table | `dir -> nbNum` for exits we've actually WALKED |
+| `visited` | bool | `true` on a real arrival; `false` on a propagation stub |
+
+The `exits`/`edges` split is the core of the model. **`exits`** is everything gmcp advertises for the room (used to detect unexplored exits and to place neighbours); **`edges`** is only the connections we've traversed (used for pathfinding, so BFS never routes through a door we haven't confirmed by walking it). A **`visited` room** is one we've physically arrived in via `onRoom`; an **unvisited stub** is a neighbour created coords-only by topology propagation — it exists on the grid but isn't drawn until we walk into it.
+
+Direction handling is table-driven:
+
+| Table | Maps | Use |
+|-------|------|-----|
+| `MAP.OFFSETS` | `dir -> {dx, dy}` | Planar placement (`north {0,1}`, `southeast {1,-1}`, …). `up`/`down`/`in`/`out` are non-planar: absent here, so they're tracked only as edges and never get a grid coord |
+| `MAP.OPPOSITE` | `dir -> reverse dir` | Records the reverse walked edge; includes `up/down`, `in/out` |
+| `DIRNORM` (`MAP.normDir`) | short/long/any-case -> canonical long form | e.g. `n`/`NORTH` -> `north`; returns `nil` for non-directions |
+| `DIRSHORT` (`MAP.shortDir`) | long form -> short form | `north` -> `n`, `southwest` -> `sw`; used when queueing movement commands |
+
+## onRoom flow
+
+`MAP.onRoom(num, name, exits, moveDir)` records an arrival. Order of operations:
+
+```
+onRoom(num, name, exits, moveDir):
+  num = tonumber(num) or num                 -- normalise the id
+  from = rooms[current]                       -- room we came from (if any)
+  create rooms[num] if absent, push onto order[]
+  room.visited = true                         -- a real arrival, not a stub
+  if name: room.name = name
+
+  -- 1. Record REPORTED exits (rebuilt fresh each visit)
+  room.exits = {}
+  for d, dest in gmcp exits:
+    nd = normDir(d)
+    if nd: room.exits[nd] = tonumber(dest) or dest   -- coerce string dest -> number
+
+  -- 2. Resolve which direction we moved to get here
+  dir = normDir(moveDir)                              -- (a) explicit move dir
+  if not dir and from: for d,dest in from.exits: if dest==num then dir=d   -- (b) exits-dest match
+  if not dir and from and _lastMoveDir: dir = normDir(_lastMoveDir)        -- (c) fallback
+
+  -- 3. Assign coordinates
+  if origin == nil: origin = num; room.x, room.y = 0, 0     -- first room anchors at (0,0)
+  elseif room.x == nil and from placed and dir known:
+    room.x, room.y = from.x + OFFSETS[dir][1], from.y + OFFSETS[dir][2]
+  -- else: keep whatever coord propagation already assigned
+
+  -- 4. Record the walked edge BOTH ways
+  if from and dir: from.edges[dir] = num; room.edges[OPPOSITE[dir]] = from.num
+
+  -- 5. Fill in neighbours from the exit graph
+  _propagate(room)
+
+  current = num; _lastMoveDir = nil
 ```
 
-`exits` vs `edges` distinguishes reported-but-unexplored exits from walked ones — used both for the gold "unexplored" markers and for BFS pathfinding over `edges` only.
+### Notable behaviours
 
-## Direction Handling
+- **String-dest coercion (step 1).** gmcp reports exit destinations as **strings** (`exits = { north = "67701" }`). They are run through `tonumber` so they compare against numeric room `num`s. Without this, `"67701" == 67700` is always false and neither the exits-dest fallback (step 2b) nor propagation (step 5) ever matches anything.
+- **Direction resolution is a three-tier fallback (step 2).** Prefer the explicit `moveDir`; else find the exit in the previous room whose dest equals this room's num; else fall back to the last movement direction captured from `sysDataSendRequest`. Only a resolved direction with an entry in `OFFSETS` yields movement-based coordinates.
+- **Coordinates are sticky (step 3).** If a room already has an `x` (assigned by propagation before we walked in), `onRoom` keeps it rather than recomputing — so a stub's position doesn't jump when it's finally visited.
+- **Edges are bidirectional (step 4).** Walking `north` from A to B records `A.edges.north = B` and `B.edges.south = A`, so BFS can route the return trip.
 
-| Table | Purpose |
-|-------|---------|
-| `MAP.OFFSETS` | Planar `dir → {dx, dy}` (+y = north). up/down/in/out are non-planar — tracked as edges, not placed on the grid |
-| `MAP.OPPOSITE` | `dir → reverse dir` (records the back-edge on arrival) |
-| `DIRNORM` | Any form (short/long) → canonical long form; via `MAP.normDir(d)` |
-| `DIRSHORT` | Long → short form for sending moves; via `MAP.shortDir(d)` |
+## Topology propagation — `MAP._propagate`
 
-## Building the Graph (`MAP.onRoom`)
+This is the load-bearing mechanism (added v4.7.44). Because the game hands us each room's full exit graph as `dir -> neighbour num`, once a room is placed we can position all of its neighbours **directly from the exit graph**, without ever having captured which way we moved:
 
-Called on each room arrival with `(num, name, exits, moveDir)`:
-
-1. Create the room record if new (append to `MAP.order`); mark `visited=true`; update `name`.
-2. Rebuild `room.exits` from the gmcp exits table (normalise dir keys; coerce dest ids to numbers so they compare against room nums).
-3. **Determine the move direction** from `from` to here, in priority: explicit `moveDir` → gmcp exits-dest fallback (which `from` exit points at this num) → `MAP._lastMoveDir` (last movement command).
-4. **Assign coordinates:** the first room becomes `origin` at `(0,0)`; otherwise `x/y = from + OFFSETS[dir]` when a direction and placed `from` exist.
-5. **Record the traversed edge both ways** (`from.edges[dir]=num`, `room.edges[opp]=from.num`).
-6. **`MAP._propagate(room)`** — the key trick.
-
-### Topology propagation (`_propagate`)
-
-The game reports each room's exits as `dir → neighbour num`. So once a room is placed, its neighbours can be positioned straight from the exit graph — **without knowing which way you moved**. `_propagate` creates each numbered exit-dest neighbour as an unvisited **stub** (coords only) at `room + OFFSETS[dir]`. Stubs gain a name/exits and start rendering only once actually visited. This is what makes the grid fill in reliably even when the movement direction is unknown (the fix in v4.7.44 — previously only the origin ever got coordinates).
-
-## Pathfinding & Bounds
-
-- **`MAP.path(fromNum, toNum)`** — BFS over **walked edges** only; returns a list of short-form direction steps, or nil if unreachable. Used by click-to-walk.
-- **`MAP.unexploredExits(num)` / `hasUnexplored(num)`** — exits present in `exits` but not `edges`.
-- **`MAP.bounds()`** — grid extent over **visited** rooms only (propagation stubs carry coords but must not stretch the grid).
-
-## Per-Ripple Reset
-
-| Hook | Trigger |
-|------|---------|
-| `MAP.reset()` | Clears `rooms`, `order`, `current`, `origin`, `_lastMoveDir` |
-| `MAP.onRipple(n)` | On ripple change: `reset()`, set `_ripple=n`, **re-seed** the current gmcp room (the ripple line fires while you already stand in the new level's first room), then `render()` |
-
-`onRipple` is called from the telemetry `onRipple` handler (`004_Parsers.lua`), independent of whether reporting is on.
-
-## Runtime Hooks (`005`)
-
-| Handler | Event | Behaviour |
-|---------|-------|-----------|
-| `MAP._sendHandler` | `sysDataSendRequest` | While `inMnem()`, capture the trailing direction word of outgoing commands into `MAP._lastMoveDir` (movement aliases send `".. <dir>"`); self-correcting |
-| `MAP._roomHandler` | `gmcp.Room` | On a fresh Mnemosyne entry (`inMnem` newly true) reset; then `autoShow()`; while inside, `onRoom(...)` + `render()` |
-
-**`MAP.inMnem()`** — true when `ataxiaBasher.inMnemosyne` is set **OR** a telemetry run is active. The survey flag is set opportunistically by the SURVEY line and can be missed between floors, so either signal counts.
-
-## The Widget (`006_Ripple_Map_Window.lua`)
-
-Draggable `Adjustable.Container` grid (`ataxia.mnemosyne.map.window`), position auto-persists (name-keyed). Built once at load and again on `sysLoadEvent` if `main` wasn't ready.
-
-- **`GRID_MAX = 11`** cells per side; if the map is larger the view windows onto the current room.
-- **Cell colours** (`STYLE`): current room green, rooms with unexplored exits gold-bordered with a `?`, others grey.
-- **`MAP.render()`** — computes bounds, clamps to the `GRID_MAX` window centred on the current room, places one Geyser label per **visited** room (north/higher-y at the top), sets style/tooltip (room name), and a click callback.
-- **Show/hide (`MAP.autoShow`)** — visible only when `MAP._enabled()` (config `mapEnabled`, default true) AND `inMnem()`. Note `autoShow` uses a local `inMnem()` that checks **only** `ataxiaBasher.inMnemosyne` (stricter than `MAP.inMnem()`).
-
-### Click-to-walk (`MAP.walkTo`)
-
-```lua
-local steps = MAP.path(MAP.current, num)   -- BFS over walked edges
-send("queue addclear free " .. steps[1])
-for i = 2, #steps do send("queue add free " .. steps[i]) end
+```
+_propagate(room):
+  if room unplaced (room.x == nil): return
+  for d, dest in room.exits:
+    off = OFFSETS[d]
+    if off and dest is a positive number and dest ~= room.num:
+      nb = rooms[dest] or new stub { exits={}, edges={}, visited=false }
+      if nb.x == nil:
+        nb.x, nb.y = room.x + off[1], room.y + off[2]
 ```
 
-Queues moves via the game's **free queue** (same mechanism the movement aliases use) so they execute one per balance, in order. No known path → echoes an error (you may not have walked a route there yet).
+Neighbours are created as **unvisited stubs** — coordinates only, no name or exits — and only start rendering (and gain their own exits) once they're actually visited via `onRoom`. This is what makes the grid fill in reliably even when the captured movement direction is unknown or wrong.
 
-## Diagnostics
+### The bug it fixed
 
-`mnem map status` → `MAP.status()`: echoes `inMnem`, `enabled`, room/visited/placed counts, `current`, `lastMove`, `ripple`, `bounds`, and **dumps the current gmcp exits** (`dir->dest`) so you can see whether the game is handing back real neighbour room-nums (usable for placement) or unmapped placeholders.
+Before propagation coerced dest ids, exit destinations (strings) were compared against numeric room nums, so `"67701" == 67700` was always false. No room past the origin ever received coordinates: only the origin got `(0,0)`, every other room stayed `x == nil`, and `mnem map status` reported `bounds=0,0,0,0` with a blank grid. Coercing dests to numbers (in both `onRoom` step 1 and the `type(dest) == "number"` guard here) is what lets propagation place real neighbours.
+
+## Derived queries
+
+| Function | Returns | Notes |
+|----------|---------|-------|
+| `MAP.unexploredExits(num)` | list of dirs REPORTED but not in `edges` | The exits we know about but haven't walked |
+| `MAP.hasUnexplored(num)` | bool | `#unexploredExits > 0`; drives the gold "?" cell style |
+| `MAP.path(fromNum, toNum)` | list of SHORT-dir steps, or `nil` | **BFS over WALKED `edges` only**; `{}` if already there, `nil` if unreachable |
+| `MAP.bounds()` | `minx, maxx, miny, maxy` | **VISITED rooms only**, so unplaced/stub coords don't stretch the grid |
+
+`MAP.path` walks the `edges` graph (never `exits`), reconstructs the route via a `from_of` predecessor map, and emits each hop through `shortDir` so the result is directly sendable (e.g. `{"w","s"}`). Restricting `bounds` to `r.visited` keeps the drawn window tight even though stubs carry coordinates.
+
+## Reset & re-seed
+
+The map's lifecycle is driven by two events, both independent of telemetry reporting:
+
+| Event | Handler | Effect |
+|-------|---------|--------|
+| Ripple number changes | `MAP.onRipple(n)` | `MAP.reset()` (wipe graph), set `_ripple = n`, **re-seed** the current room from gmcp, `render()` |
+| Fresh Mnemosyne entry | `gmcp.Room` handler | `MAP.reset()` + clear `_ripple` on the `inMnem()` rising edge (`_wasInMnem` tracks it) |
+
+```
+onRipple(n):
+  if n ~= nil and n ~= _ripple:
+    reset()
+    _ripple = n
+    if inMnem() and gmcp.Room.Info:            -- RE-SEED
+      onRoom(Info.num, Info.name, Info.exits, nil)
+    render()
+```
+
+`MAP.reset()` clears `rooms`, `order`, `current`, `origin`, and `_lastMoveDir`. The **re-seed is essential**: the "You wade N ripples deep…" line fires while you are *already standing* in the new level's first room, so a bare reset would leave the map blank until you took a step. Re-seeding from `gmcp.Room.Info` immediately plots (and propagates) the arrival room.
+
+### Notable behaviours
+
+- **`MAP.inMnem()` gate.** True when `ataxiaBasher.inMnemosyne` is set **OR** a telemetry run is active (`ataxia.mnemosyne.run.active`). The survey flag is set opportunistically and can be missed between floors, so either signal counts — the map works with reporting fully off.
+- **Movement capture (`sysDataSendRequest`).** While `inMnem()`, the outgoing command's trailing word is matched (`(%a+)%s*$`), normalised, and stored in `MAP._lastMoveDir` — the movement aliases send `".. <dir>"`, so this recovers the direction the exits-dest fallback and step-2c use. It's self-correcting: the last movement command before the room change wins.
+- **Room hook (`gmcp.Room`).** On every room change it resets on a fresh Mnemosyne entry, calls `autoShow()`, then (if `inMnem()`) `onRoom(Info.num, Info.name, Info.exits, _lastMoveDir)` + `render()`.
+- **WADE STATUS drives the reset.** `M.onGo()` (trigger 006) fires for telemetry OR just for the map — it's gated `M._auto() or ataxiaBasher.inMnemosyne` and always issues `send("wade status", false)`. That pulls the ripple line even with reporting off, so `M.onRipple(n)` (which calls `map.onRipple(n)` *before* its own `_auto()` gate) still drives the per-ripple wipe. See [01-architecture.md](01-architecture.md) for the full run/GO! lifecycle.
+
+## Widget — `006_Ripple_Map_Window.lua`
+
+A draggable grid mini-map. `MAP.build()` wraps an `Adjustable.Container` named `ataxia.mnemosyne.map.window` (position auto-persists by that name) holding a `Geyser.Container`; `MAP._cell(id)` lazily creates the per-cell `Geyser.Label`s. Build is wrapped in `pcall` and retried on `sysLoadEvent` in case `main` wasn't ready.
+
+`MAP.render()` draws **VISITED rooms only** (`at[x..","..y]` is keyed from `r.visited` rooms), clamped to a `GRID_MAX = 11` window centred on the current room when the map is larger, with `+y` (north) at the top:
+
+| Cell state | Style | Content |
+|------------|-------|---------|
+| Current room (`r.num == MAP.current`) | green (`STYLE.current`) | empty |
+| Has unexplored exits (`hasUnexplored`) | gold-bordered (`STYLE.unexplored`) | `"?"` |
+| Otherwise | grey (`STYLE.room`) | empty |
+
+Each cell's tooltip is the room name; each `setClickCallback(function() MAP.walkTo(r.num) end)` uses a **direct function** (not a name-string callback) so it always resolves.
+
+### Click-to-walk
+
+`MAP.walkTo(num)` computes `MAP.path(current, num)`. On `nil` it echoes `No known path to that room` (you haven't walked a route there yet); on a non-empty path it queues the moves through the game's **free queue** — `send("queue addclear free <first>")` then `send("queue add free <step>")` for the rest — the same mechanism the movement aliases use, so moves execute one per balance in order.
+
+### Show / hide & diagnostics
+
+| Function | Purpose |
+|----------|---------|
+| `MAP.autoShow()` | Shows the window when `_enabled()` and `inMnem()`, else hides it. Called from the room hook and on load. Note: 006's local `inMnem()` checks **only** `ataxiaBasher.inMnemosyne`, stricter than `MAP.inMnem()` |
+| `MAP.toggle(state)` | Flips `ataxia.settings.reporting.mapEnabled` (`mnem map on\|off`), saves settings, re-runs `autoShow()` |
+| `MAP._enabled()` | Reads `mapEnabled` from `_cfg()`, defaulting to `true` |
+| `MAP.status()` | `mnem map status` diagnostic — echoes `inMnem`/`enabled`/`rooms`/`visited`/`placed`/`current`/`lastMove`/`ripple`/`bounds`, **and** dumps the raw `gmcp.Room.Info.exits` (`dir->dest`) so you can tell at a glance whether the game hands real neighbour room-nums (usable for propagation) or unmapped placeholders |
+
+## Testing
+
+The widget (006) needs `Geyser`/`main` and Adjustable containers, so it isn't unit-tested. The pure graph in 005 is covered in [`test_mnemosyne.lua`](../../../src_new/tests/test_mnemosyne.lua) under the `describe("ripple map graph")` block. Locked-in behaviours:
+
+| Test | Locks in |
+|------|----------|
+| assigns grid coordinates by direction of travel | movement-based placement from a known `moveDir` |
+| infers direction from the previous room's exits when moveDir is nil | the exits-dest fallback (step 2b) |
+| positions neighbours from the exit graph before they're visited | `_propagate` creates placed unvisited stubs; the stub keeps its coord on arrival |
+| coerces string exit dest ids so exits-dest inference still matches | the `tonumber` dest coercion (the propagation bug fix) |
+| marks exits reported but not walked as unexplored | `unexploredExits` / `hasUnexplored` (exits minus edges) |
+| pathfinds back through walked edges as short directions | BFS over `edges` returning `{"w","s"}` |
+| returns nil for an unreachable room | islanded room with no edges -> `nil` path |
+| resets the graph only when the ripple number changes | `onRipple` keeps on same `n`, wipes on new `n` |
+| re-seeds the current room from gmcp after a ripple reset | reset + `onRoom` from `gmcp.Room.Info` (current becomes the new room) |
+| normalises and shortens directions | `normDir` / `shortDir` |
+
+All Mudlet I/O is mocked; the graph is exercised by calling `MAP.onRoom` / `MAP.onRipple` / `MAP.path` directly.
+
+---
+
+See also: [01-architecture.md](01-architecture.md) (run lifecycle, gating, event flow), [02-reporting.md](02-reporting.md) (HTTP queue + Reporter API), [03-parsing-triggers.md](03-parsing-triggers.md) (trigger→handler wiring).
