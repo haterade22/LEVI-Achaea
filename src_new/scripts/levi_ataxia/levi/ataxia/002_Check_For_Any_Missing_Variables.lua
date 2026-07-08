@@ -82,6 +82,14 @@ function ataxiaCheckForMissing()
 		ataxiaBasher.inMnemosyne = false
 	end
 
+	-- "Our" denizens: pet/ally/summon name keywords (case-insensitive substrings) that
+	-- are never auto-learned or targeted by the basher. Manage with 'bash mine'.
+	if ataxiaBasher.ownDenizens == nil then
+		ataxiaBasher.ownDenizens = {"falcon", "baalzadeen"}
+		ataxiaEcho("Own-denizen ignore list not found; seeded with <white>falcon<NavajoWhite>, <white>baalzadeen<NavajoWhite>.")
+		ataxiaEcho("<green>bash mine <NavajoWhite>to view/add/remove your own denizens.")
+	end
+
 	if ataxia.prioritySwaps and ataxia.prioritySwaps.ravaged == nil then
 		ataxia.prioritySwaps.ravaged = {active = false, desc = "Automatically prio mana sipping while ravagedmind is active."}
 		ataxiaEcho("Ravagedmind priority swap not found. Added it to swaps; default is off.")

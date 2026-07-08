@@ -58,7 +58,8 @@ if ataxiaBasher.enabled and matches[2] then
 	if not ataxiaBasher.targetList[area] then
 		ataxiaBasher.targetList[area] = {}
 	end
-	if not table.contains(ataxiaBasher.targetList[area], matches[2]) then
+	if not table.contains(ataxiaBasher.targetList[area], matches[2])
+	   and not ataxiaBasher_isOwnDenizen(matches[2]) then
 		ataxiaBasher_addmob(matches[2])
 	end
 end

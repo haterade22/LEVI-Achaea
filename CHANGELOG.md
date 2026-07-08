@@ -2,6 +2,29 @@
 
 ---
 
+## 2026-07-08 — Mnemosyne: handle more mob spawn structures (v4.7.40)
+
+Reworked `_extractMob` to handle `the <mob> of <place>` (e.g. "the trolls of Riagath", where the creature noun is *before* "of") in addition to `a/an [adj] <quantifier> of <mob>` ("a host of malagmae", "a ghastly horde of the restless dead"). It anchors on `of`, walks left to the article beginning the subject noun phrase (stopping at `as`/comma), and accepts the phrase only when a mob verb immediately follows the object — capturing the mob whichever side of "of" the creature noun sits. Dropped the `MOB_QUANTIFIERS` set; added `wade/surge/swell/teem/...` verbs. Best-effort: an unrecognised action verb falls back to the whole line. Tests: +1 (full suite 133/133).
+
+---
+
+## 2026-07-08 — Basher: exclude your own denizens (pets/allies) from auto-add & targeting (v4.7.40)
+
+### Feature: `ataxiaBasher.ownDenizens` ignore list
+
+**What changed:**
+
+- New keyword list `ataxiaBasher.ownDenizens` — case-insensitive **substrings** matched against denizen names via `ataxiaBasher_isOwnDenizen(name)` (`basher/001_Bashing_Functions.lua`). `falcon` covers "a razor-beaked falcon" and any variant; `baalzadeen` covers Baalzadeen. Seeded with `{"falcon", "baalzadeen"}`.
+- Matches are excluded from auto-learn (`update_stuff/003_ataxia_RoomContents_Update.lua`), slain auto-add (`triggers/.../340_Slain.lua`), target selection (`search_targets()` + `shieldedTarget()` in `genrunning/002_search_targets.lua`), and the `bash add` display.
+- Unlike `mobIgnore`, a match does **not** skip the room — the basher keeps killing everything else while your pet is present.
+- New `bash mine` alias (`aliases/.../lists/012_Own_Denizens.lua`): `bash mine` lists (click-to-remove), `bash mine add <keyword>`, `bash mine rem <keyword>`. Adding a keyword also purges already-learned matches from every `targetList` via `ataxiaBasher_purgeOwnFromTargets()`.
+
+**Why:** With auto-learn on, friendly denizens sharing the room's denizen list (hunting falcons, the Baalzadeen ally) were being learned as bash targets — so the basher would attack your own pets.
+
+**Tests:** `src_new/tests/test_basher_owndenizens.lua` — 9 cases covering keyword matching, target-list purge, and add-with-purge (full suite 132/132).
+
+---
+
 ## 2026-07-08 — Mnemosyne: fix monster capture (deterministic + adjectives) (v4.7.39)
 
 Fixes monsters not being reported. The previous approach read the line above `GO!` via `getLines()`, which wasn't reliably returning it. Replaced with a deterministic capture: a new trigger on the countdown `0` (`mnemosyne/005_Countdown.lua` → `onCountdownZero`) arms a one-shot capture of the next (mob spawn) line into `M._mobCandidate`, which `onGo` commits when `GO!` follows. Also made `_extractMob` handle an adjective between the article and the quantifier, so e.g. `"…as a ghastly horde of the restless dead rises…"` → `"a ghastly horde of the restless dead"` (previously only `a <quantifier> of <mob>` matched). Removed the `getLines`-based `_pickMobLine`. Tests: full suite 132/132.

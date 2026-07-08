@@ -96,7 +96,8 @@ function ataxia_RoomContents_Update(event)
 				ataxiaBasher.targetList[area] = {}
 			end
 			for _, name in pairs(ataxia.denizensHere) do
-				if not table.contains(ataxiaBasher.targetList[area], name) then
+				if not table.contains(ataxiaBasher.targetList[area], name)
+				   and not ataxiaBasher_isOwnDenizen(name) then
 					table.insert(ataxiaBasher.targetList[area], name)
 				end
 			end

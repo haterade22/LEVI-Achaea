@@ -12,10 +12,13 @@ Returns one of: `"attack"`, `"shield"`, `"flee"`, `"wait"`
 1. bashFlee == true?                → "wait"
 2. hpp == 0?                        → "wait" (invalid state)
 3. aeon, paralysis, or peace?       → "wait" (can't act)
-4. hpp ≤ fleeThresholdPct (25%)?    → "flee" (except World Tree)
-5. Extreme damage rate detected?    → "flee"
-6. hpp ≤ shieldThresholdPct (40%)?  → "shield" (if can shield)
-7. Otherwise                        → "attack"
+4. No-flee area (World Tree/Mnemosyne)?
+     ├─ extreme damage + can shield → "shield" (one-cycle guard, keep attacking)
+     └─ else                        → skip both flee checks below
+5. hpp ≤ fleeThresholdPct (25%)?    → "flee"
+6. Extreme damage rate detected?    → "flee"
+7. hpp ≤ shieldThresholdPct (40%)?  → "shield" (if can shield)
+8. Otherwise                        → "attack"
 ```
 
 ### Extreme Damage Rate Detection
@@ -23,6 +26,27 @@ Returns one of: `"attack"`, `"shield"`, `"flee"`, `"wait"`
 Function: `ataxiaBasher_isDamageRateExtreme()` — returns true if total damage in last 5 seconds exceeds 60% of max HP.
 
 Damage recorded via `ataxiaBasher_recordDamage(amount)` as `{timestamp, amount}` tuples in a rolling window.
+
+### No-Flee Areas
+
+Function: `ataxiaBasher_isNoFleeArea(area)` in `basher/001_Bashing_Functions.lua`
+
+Some areas cannot be fled — there is nowhere to `goto`. In these areas the danger
+level **never returns `"flee"`**: an extreme-damage spike or low HP shields instead,
+and the attack loop keeps swinging through the shield (the HP≥70 re-attack gate in
+`ataxiaBasher_attack()` is dropped for no-flee areas, so it guards reactively rather
+than pausing).
+
+| Area | Detection |
+|------|-----------|
+| the Fathomless Expanse of the World Tree | exact `gmcp.Room.Info.area` match |
+| Mnemosyne (tower-climb mod) | `ataxiaBasher.inMnemosyne` flag |
+
+**Mnemosyne detection.** Mnemosyne is an unmapped instance — `gmcp.Room.Info.area`
+is `""`, so it cannot be matched from GMCP. Instead the `351_Mnemosyne_Survey`
+trigger (`^You are in .*Mnemosyne`) sets `ataxiaBasher.inMnemosyne = true`, and
+`ataxia_Room_Update()` clears the flag on entering any real (non-empty `area`) room.
+Inside the tower `area` stays `""`, so the flag persists across floors.
 
 ## Flee Execution
 
@@ -83,6 +107,24 @@ Sets `ataxiaBasher_skipRoom = true` when:
 - Mob in `ataxiaBasher.mobIgnore` is present
 - Dangerous mob count exceeds `ataxiaBasher.dangerCount`
 - Non-ignored player present (except Mhaldor)
+
+## Own Denizens (pets/allies — never targeted, room NOT skipped)
+
+Function: `ataxiaBasher_isOwnDenizen(name)` in `basher/001_Bashing_Functions.lua`
+
+`ataxiaBasher.ownDenizens` is a list of **case-insensitive substring keywords** for
+denizens that belong to you (falcons, Baalzadeen, summons). Unlike `mobIgnore`, a
+match does **not** skip the room — the basher keeps killing everything else while
+your pet stands there. Matches are excluded from:
+
+- auto-learn (`update_stuff/003_ataxia_RoomContents_Update.lua`)
+- slain auto-add (`triggers/.../340_Slain.lua`)
+- target selection (`search_targets()` and `shieldedTarget()` in `genrunning/002_search_targets.lua`)
+- the `bash add` manual candidate list
+
+Seeded with `{"falcon", "baalzadeen"}`. Managed via `bash mine` (see configuration
+doc); adding a keyword also purges already-learned matches from every target list via
+`ataxiaBasher_purgeOwnFromTargets()`.
 
 ## Attack Gate Afflictions
 

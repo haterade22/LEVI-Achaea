@@ -116,7 +116,7 @@ function search_targets()
 		for num,npc in pairs(ataxiaBasher.targetList[gmcp.Room.Info.area]) do
 			if num ~= "keyword" then
 				for id,mob in pairs(ataxia.denizensHere) do
-					if mob:lower() == npc:lower() then
+					if mob:lower() == npc:lower() and not ataxiaBasher_isOwnDenizen(mob) then
 						target=tonumber(id)
 						secondTarget = mob
 						found_target = true
@@ -188,7 +188,7 @@ function ataxiaBasher_shieldedTarget()
   for num, npc in pairs(ataxiaBasher.targetList[gmcp.Room.Info.area]) do
     if num ~= "keyword" and not found_target then
       for id, mob in pairs(ataxia.denizensHere) do
-        if mob:lower() == npc:lower() then
+        if mob:lower() == npc:lower() and not ataxiaBasher_isOwnDenizen(mob) then
           if target ~= tonumber(id) then
             ataxiaTemp.retarget = target
             ataxiaTemp.retargetsecond = secondTarget
@@ -315,7 +315,7 @@ function search_targets()
 		for num,npc in pairs(ataxiaBasher.targetList[gmcp.Room.Info.area]) do
 			if num ~= "keyword" then
 				for id,mob in pairs(ataxia.denizensHere) do
-					if mob:lower() == npc:lower() then
+					if mob:lower() == npc:lower() and not ataxiaBasher_isOwnDenizen(mob) then
 						target=tonumber(id)
 						secondTarget = mob
 						found_target = true
@@ -387,7 +387,7 @@ function ataxiaBasher_shieldedTarget()
   for num, npc in pairs(ataxiaBasher.targetList[gmcp.Room.Info.area]) do
     if num ~= "keyword" and not found_target then
       for id, mob in pairs(ataxia.denizensHere) do
-        if mob:lower() == npc:lower() then
+        if mob:lower() == npc:lower() and not ataxiaBasher_isOwnDenizen(mob) then
           if target ~= tonumber(id) then
             ataxiaTemp.retarget = target
             ataxiaTemp.retargetsecond = secondTarget

@@ -140,16 +140,9 @@ function M.onRipple(n)
   M._flushMonsters()
 end
 
--- Mob spawn phrasing is "<flavour> a/an [adjectives] <quantifier> of <mob>
--- <verb>...". These sets anchor the "a ... <quantifier> of <mob>" extraction.
-local MOB_QUANTIFIERS = {
-  host = true, group = true, pack = true, swarm = true, horde = true,
-  legion = true, band = true, throng = true, mob = true, cluster = true,
-  flock = true, pride = true, colony = true, gaggle = true, troop = true,
-  army = true, gathering = true, crowd = true, mass = true, multitude = true,
-  drove = true, cloud = true, school = true, brood = true, litter = true,
-  nest = true, coven = true, company = true, squad = true, warband = true,
-}
+-- Verbs a mob group's spawn line uses right after the subject noun phrase
+-- ("...a host of malagmae JOINS...", "...the trolls of Riagath WADE..."). Used to
+-- bound the "of"-phrase extraction below.
 local MOB_VERBS = {
   join = true, joins = true, step = true, steps = true, emerge = true,
   emerges = true, appear = true, appears = true, arrive = true, arrives = true,
@@ -174,40 +167,54 @@ local MOB_VERBS = {
   tumbles = true, stomp = true, stomps = true, trot = true, trots = true,
   gallop = true, gallops = true, skitter = true, skitters = true, glide = true,
   glides = true, sweep = true, sweeps = true, spawn = true, spawns = true,
+  wade = true, wades = true, surge = true, surges = true, swell = true,
+  swells = true, teem = true, teems = true, pool = true, pools = true,
+  spread = true, spreads = true, coalesce = true, coalesces = true,
 }
 
--- Extract the "a/an [adjectives] <quantifier> of <mob>" phrase from a full spawn
--- line, or nil if the structure isn't present. Finds "<quantifier> of", walks
--- back to the nearest "a"/"an" (allowing up to 2 adjectives between), then
--- collects mob words after "of" until a verb / comma / sentence end (capped 4).
+-- Extract the mob's noun phrase from a spawn line, or nil. The subject is a noun
+-- phrase containing "of" -- "a host of malagmae", "the trolls of Riagath", "a
+-- ghastly horde of the restless dead" -- and is followed by a verb. Anchor on each
+-- "of": walk left to the article that begins the phrase (stopping at "as"/comma),
+-- collect the object to the right, and accept the phrase only when a mob verb
+-- immediately follows the object (i.e. it is the sentence subject, not flavour).
 function M._extractMob(str)
   if type(str) ~= "string" then return nil end
   local words = {}
   for w in str:gmatch("%S+") do words[#words + 1] = w end
   local function bare(w) return (w:lower():gsub("%p", "")) end
   local function trimp(w) return (w:gsub("%p+$", "")) end
-  for j = 2, #words - 1 do
-    if MOB_QUANTIFIERS[bare(words[j])] and bare(words[j + 1]) == "of" then
-      local startI
-      for k = j - 1, math.max(1, j - 3), -1 do
-        local b = bare(words[k])
-        if b == "a" or b == "an" then
-          startI = k
-          break
-        end
+  local function isArticle(w)
+    local b = bare(w)
+    return b == "a" or b == "an" or b == "the"
+  end
+
+  for o = 2, #words - 1 do
+    if bare(words[o]) == "of" then
+      -- Walk left to the outermost article before an "as"/comma clause boundary.
+      local leftStart
+      for k = o - 1, math.max(1, o - 6), -1 do
+        if bare(words[k]) == "as" then break end
+        if isArticle(words[k]) then leftStart = k end
+        if words[k]:match(",$") then break end
       end
-      if startI then
-        local mob = {}
-        for m = j + 2, #words do
+      if leftStart then
+        -- Collect the object after "of"; must be followed by a mob verb.
+        local obj, verbAfter = {}, false
+        for m = o + 1, math.min(#words, o + 5) do
           local w = words[m]
-          if MOB_VERBS[w:lower():gsub("%p+$", "")] then break end
-          table.insert(mob, trimp(w))
-          if w:match("[%.,;:!?]$") or #mob >= 4 then break end
+          if MOB_VERBS[w:lower():gsub("%p+$", "")] then
+            verbAfter = true
+            break
+          end
+          table.insert(obj, trimp(w))
+          if w:match("[%.,;:!?]$") then break end
         end
-        if #mob > 0 then
+        if verbAfter and #obj > 0 then
           local parts = {}
-          for p = startI, j + 1 do parts[#parts + 1] = trimp(words[p]) end
-          return table.concat(parts, " ") .. " " .. table.concat(mob, " ")
+          for p = leftStart, o do parts[#parts + 1] = trimp(words[p]) end
+          for _, x in ipairs(obj) do parts[#parts + 1] = x end
+          return table.concat(parts, " ")
         end
       end
     end

@@ -33,6 +33,21 @@ ataxiaBasher.targetList = {
 }
 ```
 
+## Auto-Learn & Own Denizens
+
+| Key | Type | Default | Purpose |
+|-----|------|---------|---------|
+| `autoLearn` | bool | true | Auto-add room denizens to the current area's `targetList` on entry |
+| `ownDenizens` | table | `{"falcon","baalzadeen"}` | Case-insensitive substring keywords for pets/allies to never auto-add or target |
+
+`autoLearn` (toggle with `ataxia setup basher autolearn on/off`) means you no longer
+hand-build a `targetList` per area — walking through populates it. `ownDenizens`
+carves out the exceptions: any denizen whose name contains one of these keywords
+(e.g. `falcon` matches "a razor-beaked falcon") is skipped by auto-learn, slain
+auto-add, target selection, and `bash add`, **without** skipping the room (contrast
+`mobIgnore`). Adding a keyword via `bash mine add <kw>` also purges existing matches
+from every `targetList`. See safety-systems doc for the exclusion points.
+
 ## Safe Rooms
 
 Per-area flee destinations with optional recovery threshold:
@@ -42,6 +57,15 @@ ataxiaBasher.safeRooms = {
   ["The Alcazar"] = { room = 53454, recoveryPct = 100 },
 }
 ```
+
+## No-Flee Areas
+
+| Key | Type | Default | Purpose |
+|-----|------|---------|---------|
+| `inMnemosyne` | bool | false | Set by the Mnemosyne SURVEY trigger; marks the current instance as no-flee |
+
+Areas where fleeing is impossible (World Tree, Mnemosyne) shield instead of fleeing
+and keep attacking. Detection and behavior are covered in the safety-systems doc.
 
 ## Pathfinding
 
@@ -119,7 +143,14 @@ ataxiaBasher.ldeckRules = {
 | `abr` | Toggle auto-bash rotation |
 | `bash pause` | Pause/unpause |
 | `bash threshold <hp>` | Set flee HP threshold |
+| `bash add` | Show room denizens not in the target list; click to add |
+| `bash ignore` / `bash unignore` | Manage `mobIgnore` (mobs that cause room skip) |
+| `bash mine` | List own denizens (pets/allies); click to remove |
+| `bash mine add <keyword>` | Add an own-denizen keyword + purge existing matches from target lists |
+| `bash mine rem <keyword>` | Remove an own-denizen keyword |
+| `bsi <name>` / `bsi all` | Manage the player `ignore` list (allow in room) |
 | `ataxia setup basher` | Setup wizard |
+| `ataxia setup basher autolearn <on\|off>` | Toggle auto-learning denizens |
 | `ataxiadmg [filter]` | Mob damage database query |
 | `resetbashstats` | Reset session kill stats |
 | `showbashstats` | Display session stats |

@@ -363,6 +363,11 @@ describe("M._extractMob()", function()
     expect(mob).toBe("a ghastly horde of the restless dead")
   end)
 
+  it("handles 'the <mob> of <place>' (mob before 'of')", function()
+    local mob = M._extractMob("Heavy splashing echoes through the caverns as the trolls of Riagath wade in from the dark ahead.")
+    expect(mob).toBe("the trolls of Riagath")
+  end)
+
   it("returns nil when there is no 'a <quantifier> of <mob>' phrase", function()
     expect(M._extractMob("The boss glares at you menacingly.")).toBeNil()
   end)

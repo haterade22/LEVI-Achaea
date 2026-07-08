@@ -4,6 +4,8 @@
 
 When the basher flees a room due to low health, it saves the combat room, heals to 100% HP, auto-navigates back, and resumes attacking. The cycle repeats until the room is cleared.
 
+> **No-flee areas** (World Tree, Mnemosyne) bypass this loop entirely — `ataxiaBasher_dangerLevel()` never returns `"flee"` there, so `executeFlee()` is never called. See [05-safety-systems.md](05-safety-systems.md#no-flee-areas) for the shield-instead-of-flee behavior.
+
 ## State Variables
 
 | Variable | Type | Purpose | Set In | Cleared In |

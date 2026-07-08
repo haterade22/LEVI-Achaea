@@ -224,6 +224,71 @@ function ataxiaBasher_isNoFleeArea(area)
   return false
 end
 
+-- "Our" denizens — pets/allies/summons (falcons, Baalzadeen, etc.) that share the
+-- room's denizen list but must never be auto-learned or targeted. Matched by
+-- case-insensitive substring so "falcon" covers "a razor-beaked falcon" and any
+-- variant. Managed via the `bash mine` alias; seeded in the missing-variables init.
+-- Note: unlike ataxiaBasher.mobIgnore this does NOT skip the room — we still bash
+-- everything else present.
+function ataxiaBasher_isOwnDenizen(name)
+  if type(name) ~= "string" or not ataxiaBasher.ownDenizens then return false end
+  local lname = name:lower()
+  for _, kw in pairs(ataxiaBasher.ownDenizens) do
+    if type(kw) == "string" and kw ~= "" and lname:find(kw:lower(), 1, true) then
+      return true
+    end
+  end
+  return false
+end
+
+-- Remove any already-learned target-list entries (across every area) that match an
+-- own-denizen keyword. Returns the count removed. The non-numeric "keyword" key on
+-- each area list is skipped by the numeric loop.
+function ataxiaBasher_purgeOwnFromTargets()
+  local removed = 0
+  if type(ataxiaBasher.targetList) ~= "table" then return 0 end
+  for _, list in pairs(ataxiaBasher.targetList) do
+    if type(list) == "table" then
+      for i = #list, 1, -1 do
+        if ataxiaBasher_isOwnDenizen(list[i]) then
+          table.remove(list, i)
+          removed = removed + 1
+        end
+      end
+    end
+  end
+  return removed
+end
+
+function ataxiaBasher_addOwnDenizen(kw)
+  kw = tostring(kw or ""):lower():gsub("^%s+", ""):gsub("%s+$", "")
+  if kw == "" then return end
+  ataxiaBasher.ownDenizens = ataxiaBasher.ownDenizens or {}
+  if table.contains(ataxiaBasher.ownDenizens, kw) then
+    ataxiaEcho("'" .. kw .. "' is already on your own-denizen list.")
+    return
+  end
+  table.insert(ataxiaBasher.ownDenizens, kw)
+  local purged = ataxiaBasher_purgeOwnFromTargets()
+  ataxiaEcho("Added '" .. kw .. "' to your own denizens — it won't be auto-added or targeted."
+    .. (purged > 0 and (" Removed " .. purged .. " existing match(es) from target lists.") or ""))
+  ataxia_saveSettings(false)
+end
+
+function ataxiaBasher_removeOwnDenizen(kw)
+  kw = tostring(kw or ""):lower()
+  ataxiaBasher.ownDenizens = ataxiaBasher.ownDenizens or {}
+  for i, v in ipairs(ataxiaBasher.ownDenizens) do
+    if v:lower() == kw then
+      table.remove(ataxiaBasher.ownDenizens, i)
+      ataxiaEcho("Removed '" .. v .. "' from your own denizens.")
+      ataxia_saveSettings(false)
+      return
+    end
+  end
+  ataxiaEcho("'" .. kw .. "' is not on your own-denizen list.")
+end
+
 -- ============================================================================
 -- Flee execution with movement validation
 -- ============================================================================

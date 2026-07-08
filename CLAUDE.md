@@ -543,7 +543,7 @@ Reports Mnemosyne (tides-of-memory) run progress to an external REST tracker as 
 
 **Persistence:** `ataxia.settings.reporting` (`enabled`, `contemplate`, `token`, `url`) — saved inside the main `ataxia` file / `_ataxia_backup.ataxia`, no new disk file. Run state is in-memory (re-synced via `/run_exists` on load).
 
-**Pending:** `/run_end` is manual (`mnem end`) until the run-completion line is captured.
+**Run end:** `/run_end` fires automatically on `"The Mnemosyne releases its hold, weaving N shimmering threads into your possession."` (true death or `WADE LEAVE` — Mnemosyne has no victory). All events now auto-report; manual `mnem` overrides remain.
 
 ### Data Persistence & Profile Backup
 
