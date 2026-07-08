@@ -43,6 +43,8 @@ local function reset(active)
   M._capturing = false
   M.run = { active = active and true or false, publicId = nil, ripple = 0,
             pendingMonsters = {}, lastOffered = {} }
+  M._mobCandidate = nil
+  M._mobTrig = nil
   sent = {}
   lastPayload = nil
   decodeNext = nil
@@ -324,21 +326,22 @@ describe("M._parseContemplate()", function()
   end)
 end)
 
--- ─── Mob-line picker (pure) ──────────────────────────────────────────────────
+-- ─── Monster capture (onGo commits the countdown-captured candidate) ─────────
 
-describe("M._pickMobLine()", function()
-  it("returns the mob spawn line directly above GO!", function()
-    local mob = M._pickMobLine({ "In a dull flash of grey-tinged light, a host of malagmae joins the fray." })
-    expect(mob).toBe("In a dull flash of grey-tinged light, a host of malagmae joins the fray.")
+describe("onGo monster capture", function()
+  it("commits the captured mob candidate on GO!, trimmed", function()
+    reset(true)
+    M._mobCandidate = "Grave-soil erupts across Azdun as a ghastly horde of the restless dead rises, drawn forth by dark magics."
+    M.onGo()
+    expect(#M.run.pendingMonsters).toBe(1)
+    expect(M.run.pendingMonsters[1]).toBe("a ghastly horde of the restless dead")
+    expect(M._mobCandidate).toBeNil()
   end)
 
-  it("skips a blank line then returns the mob line", function()
-    local mob = M._pickMobLine({ "", "Leaves fall softly as a group of dryad handmaidens step out." })
-    expect(mob).toBe("Leaves fall softly as a group of dryad handmaidens step out.")
-  end)
-
-  it("returns nil when it reaches the countdown number with no mob line", function()
-    expect(M._pickMobLine({ "0" })).toBeNil()
+  it("does nothing when there is no candidate", function()
+    reset(true)
+    M.onGo()
+    expect(#M.run.pendingMonsters).toBe(0)
   end)
 end)
 
@@ -353,6 +356,11 @@ describe("M._extractMob()", function()
   it("keeps a multi-word mob and stops at the verb", function()
     local mob = M._extractMob("Leaves fall softly on warm winds as a group of dryad handmaidens step out of the forest with a giggle.")
     expect(mob).toBe("a group of dryad handmaidens")
+  end)
+
+  it("keeps an adjective between the article and the quantifier", function()
+    local mob = M._extractMob("Grave-soil erupts across Azdun as a ghastly horde of the restless dead rises, drawn forth by dark magics.")
+    expect(mob).toBe("a ghastly horde of the restless dead")
   end)
 
   it("returns nil when there is no 'a <quantifier> of <mob>' phrase", function()

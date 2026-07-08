@@ -140,27 +140,8 @@ function M.onRipple(n)
   M._flushMonsters()
 end
 
--- Given the lines immediately preceding GO! (nearest first), pick the mob spawn
--- line. The wave always prints "<0>\n<mob spawn line>\n<GO!>", so the mob line
--- is the first non-empty, non-countdown-number line above GO!.
-function M._pickMobLine(prior)
-  for _, ln in ipairs(prior) do
-    if type(ln) == "string" then
-      local t = ln:gsub("^%s+", ""):gsub("%s+$", "")
-      if t == "GO!" or t == "" then
-        -- skip
-      elseif t:match("^%d+$") then
-        return nil -- reached the countdown without a mob line
-      else
-        return t
-      end
-    end
-  end
-  return nil
-end
-
--- Mob spawn phrasing is "<flavour> a/an <quantifier> of <mob> <verb>...". These
--- sets anchor the "a <quantifier> of <mob>" extraction.
+-- Mob spawn phrasing is "<flavour> a/an [adjectives] <quantifier> of <mob>
+-- <verb>...". These sets anchor the "a ... <quantifier> of <mob>" extraction.
 local MOB_QUANTIFIERS = {
   host = true, group = true, pack = true, swarm = true, horde = true,
   legion = true, band = true, throng = true, mob = true, cluster = true,
@@ -195,50 +176,72 @@ local MOB_VERBS = {
   glides = true, sweep = true, sweeps = true, spawn = true, spawns = true,
 }
 
--- Extract the "a/an <quantifier> of <mob>" phrase from a full spawn line, or nil
--- if the structure isn't present. Mob words are collected after "of" until a
--- verb, a comma, or sentence-ending punctuation (capped at 4 words for safety).
+-- Extract the "a/an [adjectives] <quantifier> of <mob>" phrase from a full spawn
+-- line, or nil if the structure isn't present. Finds "<quantifier> of", walks
+-- back to the nearest "a"/"an" (allowing up to 2 adjectives between), then
+-- collects mob words after "of" until a verb / comma / sentence end (capped 4).
 function M._extractMob(str)
   if type(str) ~= "string" then return nil end
   local words = {}
   for w in str:gmatch("%S+") do words[#words + 1] = w end
-  local function clean(w) return (w:lower():gsub("%p+", "")) end
-  for i = 1, #words - 2 do
-    local a = clean(words[i])
-    if (a == "a" or a == "an") and MOB_QUANTIFIERS[clean(words[i + 1])] and clean(words[i + 2]) == "of" then
-      local mob = {}
-      for j = i + 3, #words do
-        local w = words[j]
-        if MOB_VERBS[w:lower():gsub("%p+$", "")] then break end
-        table.insert(mob, (w:gsub("%p+$", "")))
-        if w:match("[%.,;:!?]$") or #mob >= 4 then break end
+  local function bare(w) return (w:lower():gsub("%p", "")) end
+  local function trimp(w) return (w:gsub("%p+$", "")) end
+  for j = 2, #words - 1 do
+    if MOB_QUANTIFIERS[bare(words[j])] and bare(words[j + 1]) == "of" then
+      local startI
+      for k = j - 1, math.max(1, j - 3), -1 do
+        local b = bare(words[k])
+        if b == "a" or b == "an" then
+          startI = k
+          break
+        end
       end
-      if #mob > 0 then
-        return words[i] .. " " .. words[i + 1] .. " " .. words[i + 2] .. " " .. table.concat(mob, " ")
+      if startI then
+        local mob = {}
+        for m = j + 2, #words do
+          local w = words[m]
+          if MOB_VERBS[w:lower():gsub("%p+$", "")] then break end
+          table.insert(mob, trimp(w))
+          if w:match("[%.,;:!?]$") or #mob >= 4 then break end
+        end
+        if #mob > 0 then
+          local parts = {}
+          for p = startI, j + 1 do parts[#parts + 1] = trimp(words[p]) end
+          return table.concat(parts, " ") .. " " .. table.concat(mob, " ")
+        end
       end
     end
   end
   return nil
 end
 
--- "GO!" -- a new wave has begun. The mob spawn line is the line directly above
--- GO! (between the countdown "0" and "GO!"); capture it by position rather than
--- by wording, since each mob has different flavour text. Then auto-send WADE
--- STATUS so its output drives the ripple-level and effects reporting.
--- Gated on _auto() (not _inRun) so it can bootstrap the run if the run-start
--- line was missed; a stray GO! outside a run just sends a harmless status.
+-- The wave prints "<countdown 0>\n<mob spawn line>\n<GO!>". On the "0", arm a
+-- one-shot capture of the next (mob) line into M._mobCandidate; onGo commits it
+-- when GO! follows. Deterministic -- unlike reading back with getLines.
+function M.onCountdownZero()
+  if not M._inRun() then return end
+  M._mobCandidate = nil
+  if M._mobTrig then pcall(killTrigger, M._mobTrig); M._mobTrig = nil end
+  M._mobTrig = tempRegexTrigger([[^.*$]], function()
+    local ln = (line or ""):gsub("^%s+", ""):gsub("%s+$", "")
+    if ln == "" then return end -- skip blanks, keep waiting for the mob line
+    if M._mobTrig then pcall(killTrigger, M._mobTrig); M._mobTrig = nil end
+    if ln == "GO!" or ln:match("^%d+$") then return end -- no mob line this wave
+    M._mobCandidate = ln
+  end)
+end
+
+-- "GO!" -- a new wave has begun. Commit the mob line captured after the "0"
+-- (trimmed to the mob phrase), then auto-send WADE STATUS so its output drives
+-- ripple-level/effects reporting. Gated on _auto() (not _inRun) for the wade
+-- status so it can bootstrap a run whose start line was missed.
 function M.onGo()
   if not M._auto() then return end
-  if M._inRun() then
-    local n = getLineNumber()
-    local prior = {}
-    for i = 1, 3 do
-      local ok, lns = pcall(getLines, n - i, n - i)
-      prior[i] = (ok and lns and lns[1]) or ""
-    end
-    local mob = M._pickMobLine(prior)
-    if mob then M.onMonsters(M._extractMob(mob) or mob) end
+  if M._mobTrig then pcall(killTrigger, M._mobTrig); M._mobTrig = nil end
+  if M._inRun() and M._mobCandidate then
+    M.onMonsters(M._extractMob(M._mobCandidate) or M._mobCandidate)
   end
+  M._mobCandidate = nil
   send("wade status", false)
 end
 

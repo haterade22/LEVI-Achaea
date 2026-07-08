@@ -2,6 +2,12 @@
 
 ---
 
+## 2026-07-08 — Mnemosyne: fix monster capture (deterministic + adjectives) (v4.7.39)
+
+Fixes monsters not being reported. The previous approach read the line above `GO!` via `getLines()`, which wasn't reliably returning it. Replaced with a deterministic capture: a new trigger on the countdown `0` (`mnemosyne/005_Countdown.lua` → `onCountdownZero`) arms a one-shot capture of the next (mob spawn) line into `M._mobCandidate`, which `onGo` commits when `GO!` follows. Also made `_extractMob` handle an adjective between the article and the quantifier, so e.g. `"…as a ghastly horde of the restless dead rises…"` → `"a ghastly horde of the restless dead"` (previously only `a <quantifier> of <mob>` matched). Removed the `getLines`-based `_pickMobLine`. Tests: full suite 132/132.
+
+---
+
 ## 2026-07-08 — Mnemosyne: automatic run-end on true death / release (v4.7.38)
 
 Wires `/run_end`: new trigger `mnemosyne/009_Run_End.lua` fires on `"The Mnemosyne releases its hold, weaving N shimmering threads into your possession."` — the run's conclusion (Mnemosyne is an endless climb with no victory; it ends on true death or `WADE LEAVE`) — calling `onRunEnd()` → `endRun()`. A normal life-loss death still just reports `/death` and continues the run. This completes the automatic reporting chain: run start · ripple · effects · boss · monsters · boons offered/selected · death · run end. Tests: +2 onRunEnd cases (full suite 123/123).
