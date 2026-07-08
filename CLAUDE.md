@@ -344,14 +344,16 @@ V3 is the **single source of truth** for target affliction tracking. It models m
 
 Automated target selection and attack execution for PvE hunting. Supports 20+ classes, manual/areabash modes, integrates with mapper, GMCP, battlerage, and GUI.
 
-**Full documentation**: See `memory/basher.md` (dispatch chain, gates, danger levels, flee logic, room arrival flow, attack gate affliction checks, PvP auto-flee, stormhammer caching)
+**Full documentation**: See `memory/basher.md` and the `.claude/projects/basher/` doc set (dispatch chain, gates, danger levels, flee logic, no-flee areas, own-denizen exclusion, room arrival flow, attack gate affliction checks, PvP auto-flee, stormhammer caching)
 
-**Core Files:** `basher/001_Bashing_Functions.lua` (attack dispatch), `basher/002_Class_Bashing.lua` (20+ classes), `basher/007_Mob_Damage_DB.lua` (damage tracking), `genrunning/001-004` (API, targets, enable/disable, main loop)
+**Core Files:** `basher/001_Bashing_Functions.lua` (attack dispatch, danger levels, no-flee + own-denizen helpers), `basher/002_Class_Bashing.lua` (20+ classes), `basher/005_Falcon_Cooldowns.lua` (Infernal hyena maul + Runewarden falcon rake cooldowns), `basher/007_Mob_Damage_DB.lua` (damage tracking), `genrunning/001-004` (API, targets, enable/disable, main loop)
 
-**Key Config:** `ataxiaBasher.enabled`, `.paused`, `.manual`, `.areabash`, `.targetList[area]`, `.ldeckRules`, `.goldPack`, `.fleeTimeout` (20s), `.shieldTimers`
+**Key Config:** `ataxiaBasher.enabled`, `.paused`, `.manual`, `.areabash`, `.targetList[area]`, `.autoLearn`, `.ownDenizens`, `.inMnemosyne`, `.ldeckRules`, `.goldPack`, `.fleeTimeout` (20s), `.shieldTimers`
 
 **Safety Features:**
 - **Attack gate**: Blocks attacks during disabling afflictions (paralysis, aeon, peace, transfixation, webbed, impaled, constricted, deepsleep, entangled, unconsciousness, snared)
+- **No-flee areas** (`ataxiaBasher_isNoFleeArea()`): World Tree + Mnemosyne (`inMnemosyne` flag) never flee — shield on damage spike and keep attacking
+- **Own denizens** (`ataxiaBasher.ownDenizens` / `bash mine`): pet/ally name keywords excluded from auto-learn and targeting without skipping the room
 - **PvP auto-flee**: On `"attacker class detected"` event, disables basher and navigates to Mhaldor (`genrunning/001_Bashing_API.lua`)
 - **PvE target switching**: `switchTarget()` skips all PvP state resets when basher is enabled
 
@@ -531,19 +533,21 @@ In-game configuration wizard accessed via `ataxia setup`.
 
 Reports Mnemosyne (tides-of-memory) run progress to an external REST tracker as you play. HTTP POST with the token in the JSON body (no auth header). This is the *telemetry* system — distinct from the in-game Mnemosyne bashing area no-flee rules.
 
-**Full documentation**: See `memory/mnemosyne.md` (namespace/file map, serial-queue design, gating model, buffering flow, endpoints, pending work).
+**Full documentation**: See the `.claude/projects/mnemosyne/` doc set (architecture, reporting/endpoints, parsing & triggers, ripple map, commands) and `memory/mnemosyne.md` (concise index).
 
 **Namespace:** `ataxia.mnemosyne`. **Aliases:** `mnem` (+ `mnemosyne`), plus an intercept of `BOON CLAIM <name>`.
 
-**Key files:** `scripts/.../mnemosyne/001_HTTP_Client.lua` (serial POST queue), `002_Reporter_API.lua` (per-endpoint fns + run state), `003_Commands.lua` (`mnem` dispatch), `004_Parsers.lua` (effects/boons parsers, monster buffering). Triggers `triggers/.../mnemosyne/001-007`. Aliases `aliases/.../mnemosyne/001-002`.
+**Key files:** `scripts/.../mnemosyne/001_HTTP_Client.lua` (serial POST queue), `002_Reporter_API.lua` (per-endpoint fns + run state), `003_Commands.lua` (`mnem` dispatch), `004_Parsers.lua` (effects/boons parsers, monster buffering), `005_Ripple_Map.lua` + `006_Ripple_Map_Window.lua` (per-ripple room mini-map). Triggers `triggers/.../mnemosyne/001-009`. Aliases `aliases/.../mnemosyne/001-002`.
 
 **Flow:** `GO!` → capture the mob spawn line (the line directly above `GO!`, positional — spawn wording varies per mob) → auto `WADE STATUS` → `/ripple_level`, `/boss` (from the `Objective: defeat <boss>` line), `/effects`; buffered monsters flush after `/ripple_level`. Serial queue enforces ordering (ripple_level first; boons_offered before boons_selected). `_auto()` gates run-start/GO/ripple; `_inRun()` gates monsters/effects/boons/boss/death so generic phrases can't report outside a tracked run. Boon enrichment: with `contemplate` on, each offered boon is `BOON CONTEMPLATE`d to fill rarity/quote/echoes.
 
-**Commands:** `mnem status|token <t>|on|off|contemplate|debug|test|start|end|check|ripple <n>|boss <name>|monsters <text>|death [killer]`. Also `ataxia setup reporting`.
+**Commands:** `mnem status|token <t>|on|off|contemplate|debug|test|start|end|check|ripple <n>|boss <name>|monsters <text>|death [killer]|map [on|off|status]`. Also `ataxia setup reporting`.
 
 **Persistence:** `ataxia.settings.reporting` (`enabled`, `contemplate`, `token`, `url`) — saved inside the main `ataxia` file / `_ataxia_backup.ataxia`, no new disk file. Run state is in-memory (re-synced via `/run_exists` on load).
 
 **Run end:** `/run_end` fires automatically on `"The Mnemosyne releases its hold, weaving N shimmering threads into your possession."` (true death or `WADE LEAVE` — Mnemosyne has no victory). All events now auto-report; manual `mnem` overrides remain.
+
+**Ripple mini-map (`ataxia.mnemosyne.map`, files 005/006):** draggable per-ripple grid widget (`Adjustable.Container`, position auto-persists). Builds a room graph from `gmcp.Room` arrivals in Mnemosyne and **places rooms from the game's own exit graph** — each room's `exits` give `dir → neighbour-num` (coerced with `tonumber`; gmcp reports them as strings), so `MAP._propagate` positions neighbours at `coord + dir-offset` and the grid fills in without depending on captured movement direction. Only rooms actually visited are drawn (exit-neighbours are positioned as unvisited stubs); rooms with un-walked exits are gold-bordered; click a cell to auto-walk there (BFS over walked edges → `queue add free`). Wipes each ripple and re-seeds the current room from `gmcp.Room.Info` (`onRipple → MAP.onRipple`). Toggle `mnem map on|off` (`ataxia.settings.reporting.mapEnabled`, default on); `mnem map status` prints diagnostics incl. the raw gmcp exits. GUI (006) needs Geyser/`main` so it's not unit-tested; the pure graph in 005 is (`test_mnemosyne.lua`).
 
 ### Data Persistence & Profile Backup
 

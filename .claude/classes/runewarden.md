@@ -188,6 +188,14 @@ attack_skill: Weaponmastery
 battlerage_abilities:
   - slash: "Basic damage"
   - rend: "Additional damage"
+
+# Falcon rake (ataxiaBasher)
+# Free pet attack prepended to the bash when off cooldown (mirrors Infernal hyena maul).
+falcon_rake:
+  command: "FALCON RAKE <target>"
+  cooldown: "30s (ataxiaBasher.falconRakeCooldownSec)"
+  behavior: "Prepended to the spec bash string when ataxiaBasher.falconRakeReady is true"
+  tracking: "basher/005_Falcon_Cooldowns.lua (triggers 370/371, timer fallback)"
 ```
 
 ## Fighting Against This Class

@@ -56,9 +56,11 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 
 | Feature | Description |
 |---------|-------------|
-| **20+ Class Support** | Class-specific attack builders with optimal ability selection |
+| **20+ Class Support** | Class-specific attack builders with optimal ability selection (incl. Infernal hyena maul / Runewarden falcon rake pet attacks) |
 | **Area Pathing** | Mapper-integrated speedwalking through configured target lists |
+| **Auto-Learn** | Adds room denizens to the area target list on entry; `bash mine` excludes your own pets/allies (falcons, etc.) without skipping the room |
 | **Safety System** | Layered danger levels (shield/flee/wait), death recovery with safe-room retreat, stuck detection |
+| **No-Flee Areas** | World Tree & Mnemosyne shield instead of fleeing (nowhere to run) and keep attacking |
 | **Battlerage** | Generic and crowd-control handlers with rage conservation |
 | **Stormhammer** | Dirty-flag cached AoE target list for multi-target rooms |
 | **Legend Deck** | Data-driven pre-combat card draws for dangerous rooms |

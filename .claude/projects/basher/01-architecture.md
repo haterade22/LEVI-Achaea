@@ -37,7 +37,7 @@ Prompt (GMCP vitals)
      └─ ataxiaBasher_patterns()       [genrunning/004:162]
         └─ ataxiaBasher_tryAttack()   [genrunning/004:107]
            └─ ataxiaBasher_attack()   [basher/001:70]
-              ├─ dangerLevel()        → "flee" → executeFlee()
+              ├─ dangerLevel()        → "flee" → executeFlee()  (never in no-flee areas)
               ├─ dangerLevel()        → "shield" → touch shield
               ├─ dangerLevel()        → "wait" → return
               └─ dangerLevel()        → "attack" → assembleAttack()
@@ -73,9 +73,11 @@ All attack requests flow through `tryAttack()`. This is the ONLY function that c
    b. If fleeReturning + arrived at fleeOriginRoom → clear return state
    c. Else if bashFlee → re-insert previous room into path
 3. gmcp.Char.Items.List event → populate ataxia.denizensHere
+   - Auto-learn (if enabled): add new denizens to targetList[area], skipping own denizens
+     (`ataxiaBasher_isOwnDenizen`) — pets/allies like falcons/Baalzadeen
 4. Next prompt:
    a. scanRoom() → clears need_roomCheck, checks for danger/players
-   b. search_targets() → finds target in denizensHere
+   b. search_targets() → finds target in denizensHere (own denizens excluded)
    c. patterns() → tryAttack() → attack()
 ```
 

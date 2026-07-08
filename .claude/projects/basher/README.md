@@ -2,7 +2,7 @@
 
 ## Overview
 
-Automated PvE hunting system for Achaea. Handles target selection, attack dispatch, pathfinding, danger detection, flee-heal-return loops, and 22+ class-specific attack implementations.
+Automated PvE hunting system for Achaea. Handles target selection, auto-learning of area denizens (with own-denizen exclusion for pets/allies), attack dispatch, pathfinding, danger detection, flee-heal-return loops (with no-flee areas that shield instead), and 22+ class-specific attack implementations.
 
 ## Key Files
 
@@ -11,7 +11,7 @@ Automated PvE hunting system for Achaea. Handles target selection, attack dispat
 | `basher/001_Bashing_Functions.lua` | Attack dispatch, danger levels, flee/recovery, battlerage, emergencies |
 | `basher/002_Class_Bashing.lua` | 22+ class-specific attack commands |
 | `basher/003_Bash_Stats_Functions.lua` | Session kill/XP statistics |
-| `basher/005_Falcon_Cooldowns.lua` | Infernal hyena maul cooldown |
+| `basher/005_Falcon_Cooldowns.lua` | Knight pet cooldowns: Infernal hyena maul + Runewarden falcon rake (~30s each) |
 | `basher/006_Pariah_Cooldown.lua` | Pariah swarm devour cooldown |
 | `basher/007_Mob_Damage_DB.lua` | SQLite per-mob damage tracking |
 | `genrunning/001_Bashing_API.lua` | Path generation, death/PvP handlers, events |
@@ -19,7 +19,8 @@ Automated PvE hunting system for Achaea. Handles target selection, attack dispat
 | `genrunning/003_Engaged_Disengage.lua` | Enable/disable handlers, auto-rotation |
 | `genrunning/004_Autobashing_Functions.lua` | Attack gates, throttle, patterns loop, manual/areabash toggle |
 | `010_Prompt_Running.lua` | Prompt dispatch (calls basher functions) |
-| `update_stuff/002_ataxia_Room_Update.lua` | Room change handler, flee return detection |
+| `update_stuff/002_ataxia_Room_Update.lua` | Room change handler, flee return detection, Mnemosyne no-flee flag clear |
+| `update_stuff/003_ataxia_RoomContents_Update.lua` | Denizen list population, auto-learn (skips own denizens) |
 
 All paths relative to `src_new/scripts/levi_ataxia/levi/ataxia/`.
 

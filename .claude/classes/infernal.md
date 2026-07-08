@@ -214,7 +214,7 @@ maul:
   cooldown: "30 seconds"
   syntax: "ORDER HYENA MAUL <target>"
   usage: "PVE ONLY - not effective in PVP combat"
-  tracking: "Implemented in 013_Infernal_Hyena_PVE.lua"
+  tracking: "Cooldown tracked in basher/005_Falcon_Cooldowns.lua (ataxiaBasher.hyenaMaulReady)"
   triggers:
     cooldown_start: "A daemonic hyena snarls as she hurls herself at"
     cooldown_end: "You may command your hyena to maul your foes once more."
@@ -1151,8 +1151,9 @@ armor_channels:
 hyena:
   maul:
     cooldown: "30 seconds"
-    syntax: "ORDER HYENA MAUL <target>"
-    tracking: "Implemented in 013_Infernal_Hyena_PVE.lua"
+    syntax: "HYENA MAUL <target>"
+    behavior: "Free pet attack auto-prepended to the spec bash string when ataxiaBasher.hyenaMaulReady is true"
+    tracking: "basher/005_Falcon_Cooldowns.lua (triggers 367-369, message-driven)"
   slay:
     syntax: "ORDER HYENA SLAY <target>"
     note: "Continuous attack mode"
