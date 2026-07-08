@@ -77,6 +77,7 @@ function leviSetup.dispatch(args)
   elseif cmd == "status"     then leviSetup.showStatus()
   elseif cmd == "install"    then leviSetup.setupInstall(rest)
   elseif cmd == "guide"      then leviSetup.setupGuide(rest)
+  elseif cmd == "reporting" or cmd == "report" then leviSetup.setupReporting(rest)
   else
     ataxiaEcho("Unknown setup command: " .. W .. cmd)
     cecho("\n  " .. V .. "Type " .. HL .. "ataxia setup" .. V .. " for a list of commands.")
@@ -106,6 +107,7 @@ function leviSetup.showMenu()
     {"ataxia setup ndb",       "Name Database highlighting colours"},
     {"ataxia setup install",   "First-time install (atinstall, abinstall, aninstall)"},
     {"ataxia setup guide",     "Post-install config guide (ataxia, basher, ndb)"},
+    {"ataxia setup reporting", "Mnemosyne run tracker (token, auto on/off)"},
     {"ataxia setup status",    "Show all current settings at a glance"},
   }
 
@@ -116,6 +118,51 @@ function leviSetup.showMenu()
   end
 
   hint("\n  Settings auto-save on disconnect. Manual save: ataxia setup save")
+  cecho("\n")
+end
+
+-- ═══════════════════════════════════════════════════════════════════════
+-- MNEMOSYNE RUN TRACKER
+-- ═══════════════════════════════════════════════════════════════════════
+function leviSetup.setupReporting(rest)
+  -- Always operate on the persistent config table so token/toggle edits save.
+  ataxia.settings = ataxia.settings or {}
+  ataxia.settings.reporting = ataxia.settings.reporting
+    or { enabled = false, contemplate = true, url = "http://104.128.56.238:8000" }
+  local c = ataxia.settings.reporting
+  local sub = (rest:match("^(%S+)") or ""):lower()
+  local val = rest:match("^%S+%s+(.+)$") or ""
+
+  if sub == "token" then
+    if val == "" then
+      ataxiaEcho("Usage: ataxia setup reporting token <token>")
+    else
+      c.token = val
+      save()
+      ataxiaEcho("Mnemosyne token saved.")
+    end
+    return
+  elseif sub == "on" then
+    c.enabled = true; save(); ataxiaEcho("Mnemosyne auto-reporting ON.")
+    return
+  elseif sub == "off" then
+    c.enabled = false; save(); ataxiaEcho("Mnemosyne auto-reporting OFF.")
+    return
+  elseif sub == "test" then
+    if ataxia.mnemosyne then ataxia.mnemosyne.testHealth() end
+    return
+  end
+
+  header("Mnemosyne Run Tracker")
+  row("Server", c.url or "-")
+  row("Token", c.token and "set" or "not set")
+  row("Auto reporting", boolStr(c.enabled))
+  row("Auto-contemplate", boolStr(c.contemplate))
+  cecho("\n")
+  hint("ataxia setup reporting token <token>   Save your API token")
+  hint("ataxia setup reporting on | off        Toggle automatic reporting")
+  hint("ataxia setup reporting test            Ping the server (/health)")
+  hint("Or use the mnem alias: mnem token <t>, mnem on, mnem status, mnem test")
   cecho("\n")
 end
 

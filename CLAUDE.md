@@ -525,6 +525,25 @@ In-game configuration wizard accessed via `ataxia setup`.
 | `ataxia setup install` | Guided install walkthrough (atinstall/abinstall/aninstall) |
 | `ataxia setup status` | One-page settings overview |
 | `ataxia setup guide` | Configuration guides (ataxia/basher/ndb) |
+| `ataxia setup reporting` | Mnemosyne run tracker (token, auto on/off, test) |
+
+### Mnemosyne Run Tracker (`ataxia.mnemosyne`)
+
+Reports Mnemosyne (tides-of-memory) run progress to an external REST tracker as you play. HTTP POST with the token in the JSON body (no auth header). This is the *telemetry* system — distinct from the in-game Mnemosyne bashing area no-flee rules.
+
+**Full documentation**: See `memory/mnemosyne.md` (namespace/file map, serial-queue design, gating model, buffering flow, endpoints, pending work).
+
+**Namespace:** `ataxia.mnemosyne`. **Aliases:** `mnem` (+ `mnemosyne`), plus an intercept of `BOON CLAIM <name>`.
+
+**Key files:** `scripts/.../mnemosyne/001_HTTP_Client.lua` (serial POST queue), `002_Reporter_API.lua` (per-endpoint fns + run state), `003_Commands.lua` (`mnem` dispatch), `004_Parsers.lua` (effects/boons parsers, monster buffering). Triggers `triggers/.../mnemosyne/001-007`. Aliases `aliases/.../mnemosyne/001-002`.
+
+**Flow:** `GO!` → auto `WADE STATUS` → `/ripple_level` + `/effects`; monsters (`… joins the fray`) buffered before `GO!`, flushed after `/ripple_level`. Serial queue enforces ordering (ripple_level first; boons_offered before boons_selected). `_auto()` gates run-start/GO/ripple; `_inRun()` gates monsters/effects/boons/death so generic phrases can't report outside a tracked run.
+
+**Commands:** `mnem status|token <t>|on|off|contemplate|debug|test|start|end|check|ripple <n>|boss <name>|monsters <text>|death [killer]`. Also `ataxia setup reporting`.
+
+**Persistence:** `ataxia.settings.reporting` (`enabled`, `contemplate`, `token`, `url`) — saved inside the main `ataxia` file / `_ataxia_backup.ataxia`, no new disk file. Run state is in-memory (re-synced via `/run_exists` on load).
+
+**Pending:** `/boss` and `/run_end` are manual (`mnem boss` / `mnem end`) until their game lines are wired; BOON CONTEMPLATE enrichment of `/boons_offered` (quote/rarity/echoes) is stubbed.
 
 ### Data Persistence & Profile Backup
 

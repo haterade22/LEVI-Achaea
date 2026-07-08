@@ -196,6 +196,7 @@ function ataxia_loadSettings()
 	ataxia.settings.fishing = ataxia.settings.fishing or {}
 	ataxia.settings.weapons = ataxia.settings.weapons or {}
 	ataxia.settings.user = ataxia.settings.user or {}
+	ataxia.settings.reporting = ataxia.settings.reporting or { enabled = false, contemplate = true, url = "http://104.128.56.238:8000" }
 	ataxia.curingprio = ataxia.curingprio or {}
 
 	ataxia_Echo("I suppose I can lend you my aid. Go and annihilate our foes.")
@@ -391,6 +392,14 @@ function ataxia_defaultSettings()
 			ring = nil,
 			earrings = {},
 		},
+	}
+
+	-- Mnemosyne Run Tracker reporting (token entered in-game via `mnem token`)
+	ataxia.settings.reporting = {
+		enabled = false,
+		contemplate = true,
+		token = nil,
+		url = "http://104.128.56.238:8000",
 	}
 
 	--ataxia_resetPrios()

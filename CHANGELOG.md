@@ -2,6 +2,32 @@
 
 ---
 
+## 2026-07-08 — Mnemosyne Run Tracker reporting (`ataxia.mnemosyne`)
+
+### Feature: automatic run telemetry to the Mnemosyne Run Tracker API
+
+**What changed:**
+
+- New `ataxia.mnemosyne` module reporting run progress to the Mnemosyne Run Tracker REST API (`http://104.128.56.238:8000`; token in the JSON body, no auth header).
+  - `scripts/.../mnemosyne/001_HTTP_Client.lua` — serial POST queue (one request in flight; endpoint-specific response matching; per-request watchdog; idempotent-only retry; anonymous handlers that survive `uninstallPackage`).
+  - `002_Reporter_API.lua` — one function per endpoint (`/run_start`, `/run_exists`, `/ripple_level`, `/monsters`, `/boss`, `/effects`, `/boons_offered`, `/boons_selected`, `/death`, `/run_end`) + in-memory run state with synchronous reset on start/end.
+  - `003_Commands.lua` — `mnem` alias dispatch (`token/on/off/contemplate/debug/test/start/end/check/ripple/boss/monsters/death`, plus `status`/`help`).
+  - `004_Parsers.lua` — parsers for the effects and boons-offered blocks (dashed-divider capture + wrapped-line join), monster buffering, boon-claim canonicalization.
+- New triggers `triggers/.../mnemosyne/001-007`: run start, ripple level, effects, boons offered, monsters (`… joins the fray`), `GO!` → auto `WADE STATUS`, and death (`You have been slain by …`).
+- New aliases `aliases/.../mnemosyne/001_Mnemosyne.lua` (`mnem`) and `002_Boon_Claim.lua` (intercepts `BOON CLAIM <name>`).
+- `001_Save_Load_Settings.lua` — new persisted `ataxia.settings.reporting` (`enabled`, `contemplate`, `token`, `url`), default + load-time self-heal; rides in the main `ataxia` save file / `_ataxia_backup.ataxia` (no new disk file).
+- `misc_scripts/020_Setup_Wizard.lua` — new `ataxia setup reporting` page (token / on-off / test).
+
+**Why:** report each Mnemosyne (tides-of-memory) run — ripple depth, monsters, boss, ongoing effects, boons offered/selected, deaths — to the community run tracker automatically as you play.
+
+**Flow:** on `GO!` the system auto-sends `WADE STATUS`; its output drives `/ripple_level` and `/effects`. Monsters spawn just before `GO!`, so they're buffered and flushed after `/ripple_level` (keeping ripple-level first, per the API's ordering rule). The serial queue guarantees `/ripple_level` precedes monsters/effects/boons and `/boons_offered` precedes `/boons_selected`. `_auto()` gates run-start/GO/ripple; `_inRun()` gates the generic-phrase handlers (monsters/effects/boons/death) so they can't report outside a tracked run.
+
+**Still manual (pending game text):** `/boss` and `/run_end` (via `mnem boss` / `mnem end`); BOON CONTEMPLATE enrichment of `/boons_offered` (quote/rarity/echoes) is stubbed.
+
+**Tests:** `src_new/tests/test_mnemosyne.lua` — 21 cases (parser, config, serial-queue ordering + endpoint matching, monster buffering/flush, ripple guard, run-lifecycle reset, boon-claim membership). Full suite 111/111.
+
+---
+
 ## 2026-07-07 — Basher no-flee rules for Mnemosyne (v4.7.33)
 
 ### Feature: Mnemosyne tower-climb is now a no-flee bashing area
