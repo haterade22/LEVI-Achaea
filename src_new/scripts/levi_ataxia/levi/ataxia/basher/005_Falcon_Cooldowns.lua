@@ -31,6 +31,27 @@ function ataxiaBasher_hyenaMaulReady()
 	ataxiaBasher.hyenaMaulReady = true
 end
 
+-- Runewarden Falcon Rake PVE cooldown (mirror of the hyena maul above)
+-- 'falcon rake <target>' is a free pet attack on a ~30s cooldown. Set false when it
+-- fires (or is rejected as still on CD) via trigger 370, reset by the game's
+-- "ready again" line via trigger 371. The falconRakeCooldownSec timer is a safety net
+-- in case that line is ever missed. Adjust ataxiaBasher.falconRakeCooldownSec to tune.
+if ataxiaBasher and ataxiaBasher.falconRakeReady == nil then
+	ataxiaBasher.falconRakeReady = true
+end
+ataxiaBasher.falconRakeCooldownSec = ataxiaBasher.falconRakeCooldownSec or 30
+
+function ataxiaBasher_falconRakeCooldown()
+	ataxiaBasher.falconRakeReady = false
+	if ataxiaBasher_falconRakeTimer then killTimer(ataxiaBasher_falconRakeTimer) end
+	ataxiaBasher_falconRakeTimer = tempTimer(ataxiaBasher.falconRakeCooldownSec, [[ataxiaBasher_falconRakeReady()]])
+end
+
+function ataxiaBasher_falconRakeReady()
+	ataxiaBasher.falconRakeReady = true
+	if ataxiaBasher_falconRakeTimer then killTimer(ataxiaBasher_falconRakeTimer); ataxiaBasher_falconRakeTimer = nil end
+end
+
 -- One-time cleanup: remove orphaned permRegexTrigger-created triggers
 -- (now handled by permanent triggers 367-369). Can be removed after one session.
 for _, name in ipairs({

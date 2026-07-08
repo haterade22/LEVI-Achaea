@@ -571,18 +571,22 @@ function ataxiaBasher_runewardenBashing()
 	local brage = ataxiaBasher_assembleBattlerage()
 	local braze = ataxiaBasher.battlerage.Runewarden.raze
 
+	-- Falcon rake: free pet attack on a 30s cooldown (mirrors the Infernal hyena maul).
+	-- Prepended to the bash when ready; cooldown tracked in 005_Falcon_Cooldowns.lua.
+	local falcon = (ataxiaBasher.falconRakeReady and ("falcon rake "..target..sp)) or ""
+
 	if spec == "Dual Cutting" then
 		raze = "rsl "..target
-		bash = "dsl "..target
+		bash = falcon.."dsl "..target
 	elseif spec == "Two Handed" then
 		raze = "battlefury focus speed"..sp.."carve "..target
-		bash = "battlefury focus speed"..sp.."slaughter "..target
+		bash = "battlefury focus speed"..sp..falcon.."slaughter "..target
 	elseif spec == "Dual Blunt" then
 		raze = "fracture "..target
-		bash = "doublewhirl "..target
+		bash = falcon.."doublewhirl "..target
 	else
 		raze = "combination "..target.." raze smash"
-		bash = "combination "..target.." slice smash"
+		bash = falcon.."combination "..target.." slice smash"
 	end
 
 	if ataxiaBasher.shielded then

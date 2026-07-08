@@ -89,6 +89,16 @@ Paths stored in `ataxiaBasherPaths[areaName] = {room1, room2, ...}`. Persisted t
 | `rageraze` | bool | false | Raze during battlerage |
 | `rageConserveThreshold` | number | nil | Skip rage if mob HP ≤ this % |
 
+### Knight Pet Attacks (cooldown-tracked)
+
+Free pet hits prepended to the bash when off cooldown, tracked via message triggers in
+`basher/005_Falcon_Cooldowns.lua`:
+
+| Class | Command | Ready flag | Cooldown |
+|-------|---------|-----------|----------|
+| Infernal | `hyena maul <target>` | `hyenaMaulReady` | ~30s (message-driven, triggers 367–369) |
+| Runewarden | `falcon rake <target>` | `falconRakeReady` | `falconRakeCooldownSec` (default 30s), message-driven via triggers 370–371 with a timer fallback |
+
 ## Safety Options
 
 | Key | Type | Default | Purpose |

@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-07-08 — Runewarden falcon rake in PVE bashing (v4.7.45)
+
+### Feature: `falcon rake <target>` on a tracked cooldown
+
+Mirrors the Infernal hyena maul. `ataxiaBasher_runewardenBashing()`
+(`basher/002_Class_Bashing.lua`) now prepends `falcon rake <target>` to the bash in
+all four specs when the falcon is off cooldown — a free pet hit added to every attack.
+
+- Cooldown state `ataxiaBasher.falconRakeReady` + `ataxiaBasher_falconRakeCooldown()` /
+  `ataxiaBasher_falconRakeReady()` in `basher/005_Falcon_Cooldowns.lua`; a 30s
+  `falconRakeCooldownSec` timer is a safety net. Initialized on load in
+  `001_Save_Load_Settings.lua`.
+- Triggers `370_Runewarden_Falcon_Rake_Cooldown` (on "You whistle to your falcon,
+  commanding it to assail…" and "You cannot yet order your falcon to rake another
+  foe.") and `371_Runewarden_Falcon_Rake_Ready` (on "You may command your falcon to
+  rake your foes once more.").
+
+**Tests:** `src_new/tests/test_basher_falconrake.lua` — 4 cases (full suite 148/148).
+
+---
+
 ## 2026-07-08 — Mnemosyne map: place rooms from the exit graph (v4.7.44)
 
 Reported symptom: after moving through 4 rooms, `mnem map status` showed `rooms=4 … bounds=0,0,0,0` — every room recorded, but only the origin ever got grid coordinates, so nothing meaningful drew. (Click-to-walk on the lone origin cell did work.)

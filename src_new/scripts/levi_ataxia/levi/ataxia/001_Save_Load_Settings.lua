@@ -223,6 +223,10 @@ function ataxia_loadSettings()
   if ataxiaBasher and ataxiaBasher.hyenaMaulReady == nil then
     ataxiaBasher.hyenaMaulReady = true
   end
+  -- Initialize falcon rake cooldown for Runewarden PVE (30s cooldown, starts ready)
+  if ataxiaBasher and ataxiaBasher.falconRakeReady == nil then
+    ataxiaBasher.falconRakeReady = true
+  end
 
   if ataxiaBasher then
     local paths_file = findFile(paths_loc)
