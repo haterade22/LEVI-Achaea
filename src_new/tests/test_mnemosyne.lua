@@ -390,6 +390,33 @@ describe("ripple map graph", function()
     expect(MAP.rooms[2].y).toBe(1)
   end)
 
+  it("places a new room from its back-exit when the forward exit is still 0", function()
+    MAP.reset()
+    -- gmcp reports 0 for a neighbour it doesn't know yet, so the origin's forward
+    -- exit to 200 is 0: no forward match, no moveDir, no capture.
+    MAP.onRoom(100, "Start", { east = 0 }, nil) -- origin at 0,0
+    expect(MAP.rooms[100].x).toBe(0)
+    -- but 200 reports a west exit back to the (now known) origin -> reverse infer.
+    MAP.onRoom(200, "East room", { west = 100 }, nil)
+    expect(MAP.rooms[200].x).toBe(1)
+    expect(MAP.rooms[200].y).toBe(0)
+    -- and the walked edge is derived in reverse, so pathfinding still works.
+    local steps = MAP.path(200, 100)
+    expect(#steps).toBe(1)
+    expect(steps[1]).toBe("w")
+  end)
+
+  it("anchors to any already-placed neighbour, not just the room we came from", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { east = 2 }, nil) -- origin 0,0
+    MAP.onRoom(2, "B", { west = 1 }, nil) -- placed at 1,0 via its back-exit
+    -- Arrive in 3 from 2, but 3 has no exit back to 2 (one-way) -- only a south
+    -- exit to the already-placed room 1. It must anchor off 1.
+    MAP.onRoom(3, "C", { south = 1 }, nil)
+    expect(MAP.rooms[3].x).toBe(0)
+    expect(MAP.rooms[3].y).toBe(1) -- 1 is south of 3, so 3 is north of 1
+  end)
+
   it("marks exits reported but not walked as unexplored", function()
     MAP.reset()
     MAP.onRoom(1, "A", { north = 2, east = 9 }, nil)

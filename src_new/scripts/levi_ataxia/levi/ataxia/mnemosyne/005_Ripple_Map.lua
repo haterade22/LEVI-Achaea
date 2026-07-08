@@ -109,32 +109,49 @@ function MAP.onRoom(num, name, exits, moveDir)
     end
   end
 
-  -- Work out which direction we moved from `from` to here.
+  -- Work out which direction we moved from `from` to here. gmcp only fills a
+  -- real exit dest for neighbours it already knows (visited rooms) and reports
+  -- 0 otherwise, so on first arrival the FORWARD exit (from -> here) is still 0
+  -- while the REVERSE exit (here -> from) already carries from's real num. Try:
+  -- explicit moveDir, then forward, then reverse, then the captured send.
   local dir = MAP.normDir(moveDir)
   if not dir and from and num ~= from.num then
-    for d, dest in pairs(from.exits) do -- gmcp exits-dest fallback
+    for d, dest in pairs(from.exits) do -- forward: from's exit that points here
       if dest == num then dir = d break end
+    end
+  end
+  if not dir and from and num ~= from.num then
+    for d, dest in pairs(room.exits) do -- reverse: our exit that points back to from
+      if dest == from.num then dir = MAP.OPPOSITE[d] break end
     end
   end
   if not dir and from and num ~= from.num and MAP._lastMoveDir then
     dir = MAP.normDir(MAP._lastMoveDir)
   end
 
-  -- Assign coordinates.
+  -- Assign coordinates. First choice: follow the path we just walked (relative
+  -- to `from`). Otherwise anchor to ANY already-placed neighbour via our own
+  -- exit graph -- this is what lets the grid bootstrap from the origin without a
+  -- known move direction or forward-populated exits.
   if MAP.origin == nil then
     MAP.origin = num
     room.x, room.y = 0, 0
-  elseif room.x == nil and from and from.x ~= nil and dir and MAP.OFFSETS[dir] then
-    room.x = from.x + MAP.OFFSETS[dir][1]
-    room.y = from.y + MAP.OFFSETS[dir][2]
+  elseif room.x == nil then
+    if from and from.x ~= nil and dir and MAP.OFFSETS[dir] then
+      room.x = from.x + MAP.OFFSETS[dir][1]
+      room.y = from.y + MAP.OFFSETS[dir][2]
+    else
+      MAP._anchor(room)
+    end
   end
 
-  -- Record the traversed edge both ways.
+  -- Record the traversed edge both ways (only the pair we actually walked).
   if from and num ~= from.num and dir then
     from.edges[dir] = num
     local opp = MAP.OPPOSITE[dir]
     if opp then room.edges[opp] = from.num end
   end
+  if from and num ~= from.num then MAP._prev = from.num end -- for `mnem map status`
 
   -- Topology propagation: the game reports each room's exits as dir->neighbour
   -- num, so once a room is placed we can position its neighbours straight from
@@ -144,6 +161,26 @@ function MAP.onRoom(num, name, exits, moveDir)
 
   MAP.current = num
   MAP._lastMoveDir = nil
+end
+
+-- Place `room` next to any neighbour that ALREADY has coordinates, using room's
+-- own exit graph: an exit `d` to a placed neighbour means the neighbour lies `d`
+-- of us, so we lie OPPOSITE[d] of it. This is the primary bootstrap -- a freshly
+-- entered room's exits reliably carry real nums for the (visited) rooms around
+-- it, even when we couldn't tell which way we moved. Returns true if placed.
+function MAP._anchor(room)
+  if not room or room.x ~= nil then return false end
+  for d, dest in pairs(room.exits) do
+    local opp = MAP.OPPOSITE[d]
+    local off = opp and MAP.OFFSETS[opp]
+    local nb = (type(dest) == "number") and MAP.rooms[dest] or nil
+    if off and nb and nb.x ~= nil and dest ~= room.num then
+      room.x = nb.x + off[1]
+      room.y = nb.y + off[2]
+      return true
+    end
+  end
+  return false
 end
 
 -- Place a room's not-yet-positioned exit neighbours from the exit graph.

@@ -2,6 +2,23 @@
 
 ---
 
+## 2026-07-08 — Mnemosyne map: anchor rooms from the exit graph so the grid fills in (v4.7.46)
+
+Reported symptom: after walking 14 rooms, the map showed a single grey square; `mnem map status` showed `rooms=14 visited=14 placed=1 … bounds=0,0,0,0` with `gmcp exits: se->71057`.
+
+Root cause: gmcp fills a *real* exit destination only for neighbours it already knows (rooms you've **visited**) and reports `0` otherwise. So on first arrival in room B (from A), A's forward exit to B is still `0`, while B's exit **back to A** already carries A's real number. The placement logic only did *forward* inference (`from.exits[dir] == num`) — the value that's still `0` — so no room past the origin ever got coordinates, and `_propagate` (which only runs on already-placed rooms) had no second seed.
+
+Fix (all in `005_Ripple_Map.lua` `MAP.onRoom`):
+- **Reverse inference:** when the forward exit doesn't resolve, look at the *new* room's exits for the one pointing back to `from` and take its opposite. This resolves on first arrival and drives both coordinate placement and walked-edge recording (so click-to-walk pathing works without movement capture).
+- **Anchor placement (`MAP._anchor`):** if the move direction still can't be determined, position the room next to **any** already-placed neighbour via its own exit graph. Together these bootstrap the whole grid from the origin using the one signal that's reliably populated — exits back to visited rooms.
+- Existing signals (explicit `moveDir`, forward inference, `sysDataSendRequest` capture, `_propagate`) are kept as fallbacks.
+- `mnem map status` now dumps the current room's **recorded** exits annotated per-dest (`se->71057 [placed,visited]`, `n->0 [unknown]`, `u->… [nonplanar]`) plus `prev=`, so any remaining miss is self-diagnosing.
+- Tests: +2 (reverse back-exit placement; anchoring to a non-`from` neighbour). Full suite 150/150.
+
+Known limitation: rooms joined only by non-planar exits (`up`/`down`/`in`/`out`) still can't be grid-placed.
+
+---
+
 ## 2026-07-08 — Runewarden falcon rake in PVE bashing (v4.7.45)
 
 ### Feature: `falcon rake <target>` on a tracked cooldown

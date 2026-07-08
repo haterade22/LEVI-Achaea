@@ -184,16 +184,35 @@ function MAP.status()
     .. " lastMove=" .. tostring(MAP._lastMoveDir)
     .. " ripple=" .. tostring(MAP._ripple)
     .. " bounds=" .. tostring(minx) .. "," .. tostring(maxx) .. "," .. tostring(miny) .. "," .. tostring(maxy))
-  -- Dump the current gmcp exits so we can see whether dest ids are real room
-  -- nums (usable for topology placement) or unmapped placeholders.
-  if gmcp and gmcp.Room and gmcp.Room.Info and type(gmcp.Room.Info.exits) == "table" then
+  -- Dump the current room's RECORDED exits, each annotated with its dest's
+  -- state, so one status after a move explains any miss: a real dest already
+  -- `placed` should have anchored us; `unknown` = gmcp still reports 0 (neighbour
+  -- not known yet); `nonplanar` (up/down/in/out) can't be gridded.
+  local cur = MAP.rooms and MAP.current and MAP.rooms[MAP.current]
+  if cur and cur.exits and next(cur.exits) then
+    local parts = {}
+    for d, dest in pairs(cur.exits) do
+      local tag
+      if type(dest) ~= "number" or dest <= 0 then
+        tag = "unknown"
+      else
+        local nb = MAP.rooms[dest]
+        tag = ((nb and nb.x ~= nil) and "placed" or "unplaced")
+          .. ((nb and nb.visited) and ",visited" or "")
+          .. (MAP.OFFSETS[d] and "" or ",nonplanar")
+      end
+      parts[#parts + 1] = d .. "->" .. tostring(dest) .. " [" .. tag .. "]"
+    end
+    ataxia.mnemosyne.echo("<gold>  exits:<reset> " .. table.concat(parts, ", ")
+      .. "  <gold>prev=<reset>" .. tostring(MAP._prev))
+  elseif gmcp and gmcp.Room and gmcp.Room.Info and type(gmcp.Room.Info.exits) == "table" then
     local parts = {}
     for d, dest in pairs(gmcp.Room.Info.exits) do
       parts[#parts + 1] = tostring(d) .. "->" .. tostring(dest)
     end
     ataxia.mnemosyne.echo("<gold>  gmcp exits:<reset> " .. (#parts > 0 and table.concat(parts, ", ") or "(none)"))
   else
-    ataxia.mnemosyne.echo("<gold>  gmcp exits:<reset> (no gmcp.Room.Info.exits)")
+    ataxia.mnemosyne.echo("<gold>  exits:<reset> (no current room / gmcp exits)")
   end
 end
 
