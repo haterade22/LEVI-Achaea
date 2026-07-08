@@ -31,6 +31,7 @@ dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/001_HTTP_Client.lua")
 dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/002_Reporter_API.lua")
 dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/003_Commands.lua")
 dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/004_Parsers.lua")
+dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/005_Ripple_Map.lua")
 
 local M = ataxia.mnemosyne
 
@@ -341,6 +342,78 @@ describe("M._applyContemplate()", function()
     expect(boon.rarity).toBe("common")
     expect(boon.quote).toBe("q")
     expect(boon.num_echoes_possible).toBe(1)
+  end)
+end)
+
+-- ─── Ripple map graph (pure) ─────────────────────────────────────────────────
+
+describe("ripple map graph", function()
+  local MAP = ataxia.mnemosyne.map
+
+  it("assigns grid coordinates by direction of travel", function()
+    MAP.reset()
+    MAP.onRoom(100, "Start", { north = 200 }, nil) -- origin -> (0,0)
+    MAP.onRoom(200, "North room", { south = 100, east = 300 }, "north")
+    expect(MAP.rooms[100].x).toBe(0)
+    expect(MAP.rooms[100].y).toBe(0)
+    expect(MAP.rooms[200].x).toBe(0)
+    expect(MAP.rooms[200].y).toBe(1)
+    MAP.onRoom(300, "East room", { west = 200 }, "east")
+    expect(MAP.rooms[300].x).toBe(1)
+    expect(MAP.rooms[300].y).toBe(1)
+  end)
+
+  it("infers direction from the previous room's exits when moveDir is nil", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { north = 2 }, nil)
+    MAP.onRoom(2, "B", { south = 1 }, nil) -- no moveDir; A.exits.north == 2
+    expect(MAP.rooms[2].y).toBe(1)
+  end)
+
+  it("marks exits reported but not walked as unexplored", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { north = 2, east = 9 }, nil)
+    MAP.onRoom(2, "B", { south = 1 }, "north")
+    expect(MAP.hasUnexplored(1)).toBeTrue()
+    local un = MAP.unexploredExits(1)
+    expect(#un).toBe(1)
+    expect(un[1]).toBe("east")
+    expect(MAP.hasUnexplored(2)).toBeFalse() -- only the south we came from
+  end)
+
+  it("pathfinds back through walked edges as short directions", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { north = 2 }, nil)
+    MAP.onRoom(2, "B", { south = 1, east = 3 }, "north")
+    MAP.onRoom(3, "C", { west = 2 }, "east")
+    local steps = MAP.path(3, 1)
+    expect(#steps).toBe(2)
+    expect(steps[1]).toBe("w")
+    expect(steps[2]).toBe("s")
+  end)
+
+  it("returns nil for an unreachable room", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", {}, nil)
+    MAP.rooms[99] = { num = 99, exits = {}, edges = {} } -- island, no edges
+    expect(MAP.path(1, 99)).toBeNil()
+  end)
+
+  it("resets the graph only when the ripple number changes", function()
+    MAP.reset()
+    MAP._ripple = 5
+    MAP.onRoom(1, "A", {}, nil)
+    MAP.onRipple(5) -- same ripple: keep
+    expect(MAP.rooms[1] ~= nil).toBeTrue()
+    MAP.onRipple(6) -- new ripple: wipe
+    expect(MAP.rooms[1]).toBeNil()
+  end)
+
+  it("normalises and shortens directions", function()
+    expect(MAP.normDir("n")).toBe("north")
+    expect(MAP.normDir("NORTHEAST")).toBe("northeast")
+    expect(MAP.shortDir("north")).toBe("n")
+    expect(MAP.shortDir("southwest")).toBe("sw")
   end)
 end)
 

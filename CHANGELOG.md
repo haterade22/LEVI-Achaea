@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-07-08 — Mnemosyne: per-ripple room mini-map widget (v4.7.42)
+
+### Feature: `ataxia.mnemosyne.map` ripple mapper
+
+New draggable grid mini-map for Mnemosyne. Each ripple ("level") is a fresh layout, so it builds a room graph as you walk and wipes it each ripple.
+
+- `mnemosyne/005_Ripple_Map.lua` — per-ripple room graph. On each `gmcp.Room` arrival inside Mnemosyne (`ataxiaBasher.inMnemosyne`), records the room's `num`/`name`/`exits`; direction of travel is captured from `sysDataSendRequest` (movement aliases send `.. <dir>`) with a gmcp exits-dest fallback, and rooms are placed on a grid via a `dir → offset` walk. Tracks *walked* edges (for pathfinding) vs *reported* exits (for unexplored detection). `MAP.path()` is a BFS over walked edges; `MAP.unexploredExits()` = reported minus walked.
+- `mnemosyne/006_Ripple_Map_Window.lua` — draggable `Adjustable.Container` grid (position auto-persists). Current room green, rooms with unexplored exits gold-bordered (`?`), others grey. Click a room to auto-walk there (queues the path via the game's free queue). Shows only while in Mnemosyne.
+- Reset: on Mnemosyne entry and on ripple change (`onRipple → MAP.onRipple`). `onGo` now sends `WADE STATUS` while in Mnemosyne even with reporting off, so the ripple line drives the reset. Toggle: `mnem map [on|off]` (`ataxia.settings.reporting.mapEnabled`, default on).
+
+**Tests:** `test_mnemosyne.lua` +7 graph cases (coordinates, unexplored-exit detection, BFS pathfinding, per-ripple reset, direction normalisation). Full suite 141/141.
+
+---
+
 ## 2026-07-08 — Mnemosyne: fix first boon's description showing "BOON CLAIM" (v4.7.41)
 
 The first offered boon was reported with description `"BOON CLAIM <boon name> to pick one of the options."` (the offered-block footer) instead of its real text. Cause: the `BOON CONTEMPLATE` enrichment overwrote each boon's description with the contemplated one, and the *first* boon's contemplate is armed right beside that footer line, capturing it. Fix: enrichment now applies only rarity/quote/echoes (new `_applyContemplate`) and keeps the description from the authoritative offered block; the contemplate capture also skips any `BOON CLAIM` line defensively. Tests: +1 (full suite 134/134).

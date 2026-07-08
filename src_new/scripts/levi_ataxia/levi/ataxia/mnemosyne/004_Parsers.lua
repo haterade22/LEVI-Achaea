@@ -134,6 +134,8 @@ end
 -- Seeing this proves we're in a run, so (re)assert active, set the ripple
 -- first, then flush any buffered monsters so /ripple_level precedes /monsters.
 function M.onRipple(n)
+  -- Reset the ripple map on level change (independent of telemetry reporting).
+  if ataxia.mnemosyne.map and ataxia.mnemosyne.map.onRipple then ataxia.mnemosyne.map.onRipple(n) end
   if not M._auto() then return end
   M.run.active = true
   M.setRipple(n)
@@ -243,7 +245,10 @@ end
 -- ripple-level/effects reporting. Gated on _auto() (not _inRun) for the wade
 -- status so it can bootstrap a run whose start line was missed.
 function M.onGo()
-  if not M._auto() then return end
+  -- Fire for telemetry OR just for the ripple map (so WADE STATUS -> the ripple
+  -- line drives the per-ripple map reset even with reporting off).
+  local mnem = ataxiaBasher and ataxiaBasher.inMnemosyne
+  if not (M._auto() or mnem) then return end
   if M._mobTrig then pcall(killTrigger, M._mobTrig); M._mobTrig = nil end
   if M._inRun() and M._mobCandidate then
     M.onMonsters(M._extractMob(M._mobCandidate) or M._mobCandidate)
