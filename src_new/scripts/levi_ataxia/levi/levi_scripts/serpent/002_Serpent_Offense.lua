@@ -70,6 +70,11 @@ serpent.state = serpent.state or {}
 -- Every impulse call goes through recordImpulse() and selectImpulse() respects the window.
 lastImpulsed = lastImpulsed or {}
 
+-- Timestamp (os.clock) of when the target's rebounding was last observed to drop.
+-- Rebounding reapplies ~8.5s after being stripped; we pre-empt that reapply with an
+-- impulse instead of eating a reflected hit. 0 = disarmed. Reset on target change.
+lastReboundingFlay = lastReboundingFlay or 0
+
 -- Impatience delivery cooldown (2.5s).
 -- Stamped by the ekanelia confirm trigger, NOT on send.
 lastImpatienceAttempt = lastImpatienceAttempt or 0
@@ -81,6 +86,24 @@ attackMode = attackMode or "dstab"
 ekaneliaReady = ekaneliaReady or {}
 impulseReady = false
 affTimers = affTimers or {}
+
+-- Confidence-tier wrappers over the V3 branching tracker (P0 finisher-safety).
+-- LEVI's tracker exposes graded probabilities; these give the lock/finisher
+-- logic the same semantic tiers inferno uses (locked = 0.90 for the kill gate,
+-- tactical = 0.70 for lock pieces) instead of the flat 0.30 that haveAff() uses.
+-- haveAffV3 is a global from 007_Branching_State_Tracker.lua; fall back to
+-- haveAff() only if the tracker isn't loaded yet (partial-reload safety).
+-- NOTE: explicit if-form, not `haveAffV3 and haveAffV3(a,x) or haveAff(a)` —
+-- the and/or idiom would wrongly return the fallback whenever the graded check
+-- is legitimately false.
+local function haveAff_locked(aff)
+    if haveAffV3 then return haveAffV3(aff, 0.90) end
+    return haveAff(aff)
+end
+local function haveAff_tactical(aff)
+    if haveAffV3 then return haveAffV3(aff, 0.70) end
+    return haveAff(aff)
+end
 
 -- Attack state tracking
 serpent.state.attackInFlight = serpent.state.attackInFlight or false
@@ -98,6 +121,8 @@ serpent.state.stupidityImpulseSent = serpent.state.stupidityImpulseSent or false
 serpent.state.relapsePhase = serpent.state.relapsePhase or false
 serpent.state.voyriaSent = serpent.state.voyriaSent or false
 serpent.state.geckoStripAttempted = serpent.state.geckoStripAttempted or false
+-- Target rebounding presence last tick, to detect the present->absent drop.
+serpent.state.lastRebounding = serpent.state.lastRebounding or false
 serpent.state.postGeckoLockdown = serpent.state.postGeckoLockdown or false
 serpent.state.lockReinforceSent = serpent.state.lockReinforceSent or false
 serpent.state.camusDelivered = serpent.state.camusDelivered or false
@@ -1586,6 +1611,14 @@ function serp_ekanelia_attack()
     local hasRebounding = haveAff("rebounding") or (tAffs and tAffs.rebounding) or Rebounding
     local hasShield = haveAff("shield") or (tAffs and tAffs.shield) or Shielded
 
+    -- Rebounding-reapply prediction: when the target's rebounding drops (present->absent
+    -- between ticks), stamp the clock so the PRIORITY 1.5 block below can pre-empt the
+    -- ~8.5s reapply. Stamped here every tick; fired once when the reapply window opens.
+    if serpent.state.lastRebounding and not hasRebounding then
+        lastReboundingFlay = now()
+    end
+    serpent.state.lastRebounding = hasRebounding
+
     -- Weapon wielding prefixes (single command, game assigns hands)
     local wieldWhip = "wield shield whip" .. sp
     local wieldDirk = "wield shield dirk" .. sp
@@ -1676,11 +1709,36 @@ function serp_ekanelia_attack()
             -- Prone: behead immediately regardless of strategy
             serp_sendAttack(preAtk .. "wield shield scimitar" .. sp .. "behead " .. target)
             return
-        elseif serpStrategy == "finish" then
+        elseif serpStrategy == "finish"
+            and (not getStateProbabilityV3
+                or getStateProbabilityV3({"anorexia", "asthma", "slickness", "impatience", "paralysis"}) >= 0.90) then
+            -- Joint-probability gate: only commit the irreversible execute when all
+            -- five lock affs are >=90% likely to be present together in one tracker
+            -- branch. If truelock is per-aff true but jointly shaky, fall through to
+            -- the lock_reinforce burst instead of gambling the kill on a bluff.
             serp_sendAttack(preAtk .. "execute " .. target)
             return
         end
         -- Otherwise fall through to lock_reinforce burst finish sequence
+    end
+
+    -- --------------------------------------------------------
+    -- PRIORITY 1.5: Rebounding-reapply pre-empt. Rebounding returns ~8.5s after it
+    -- was stripped; fire one impulse+bite through the gap just before it reapplies,
+    -- instead of eating a reflected hit next round. Reaching here guarantees no
+    -- shield/rebounding is up (the flay block above returns first). Placed AFTER the
+    -- finisher so a ready kill always wins. Fires once per drop (disarms the timer).
+    -- --------------------------------------------------------
+    if lastReboundingFlay > 0
+        and (now() - lastReboundingFlay) >= 8.15
+        and checkImpulseEligible() then
+        local impAff = selectImpulse(nil) or "masochism"
+        local bite = selectBiteVenom()
+        local biteVenom = (bite and bite.venom) or pickVenom(nil)
+        recordImpulse(impAff)
+        lastReboundingFlay = 0  -- fire once per reapply cycle
+        serp_sendAttack(preAtk .. wieldDirk .. "impulse " .. target .. " " .. impAff .. " " .. biteVenom)
+        return
     end
 
     local eqAction = getEqAction()
@@ -2094,6 +2152,24 @@ function serp_ekanelia_offense()
     -- Get target lock status
     checkTargetLocks()
 
+    -- P0 finisher-safety: recompute locks at graded confidence, overwriting the
+    -- shared 0.30 boolean values from checkTargetLocks(). Same lock *definition*
+    -- (3-of-4 soft pieces; impatience/sandfever for hard), only the confidence
+    -- bar is raised — paralysis must read 0.90 before we call it a truelock, so a
+    -- finisher never fires on an aff the target may have already cured.
+    do
+        softlock, hardlock, truelock = false, false, false
+        local softPieces = 0
+        for _, a in ipairs({"anorexia", "asthma", "slickness", "bloodfire"}) do
+            if haveAff_tactical(a) then softPieces = softPieces + 1 end
+        end
+        if softPieces >= 3 then softlock = true end
+        if softlock and (haveAff_tactical("impatience") or haveAff_tactical("sandfever")) then
+            hardlock = true
+        end
+        if hardlock and haveAff_locked("paralysis") then truelock = true end
+    end
+
     -- Check for Ekanelia opportunities
     checkEkaneliaOpportunities()
 
@@ -2495,6 +2571,8 @@ if registerAnonymousEventHandler then
         serpent.impulseRelapsing = false
         lastImpulsed = {}
         lastImpatienceAttempt = 0
+        lastReboundingFlay = 0
+        serpent.state.lastRebounding = false
         hSuggActive = ""
     end)
 

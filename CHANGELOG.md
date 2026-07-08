@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-07-08 — Serpent: finisher-safety + rebounding-reapply pre-empt (v4.7.37)
+
+### Serpent offense (`serpent/002_Serpent_Offense.lua`)
+
+- **Graded-confidence lock/finisher gating (P0 finisher-safety):** new `haveAff_locked` (0.90) / `haveAff_tactical` (0.70) wrappers over the V3 branching tracker replace the flat 0.30 `haveAff()` bar for lock/finisher decisions. `serp_ekanelia_offense()` recomputes softlock/hardlock/truelock at graded confidence (3-of-4 soft pieces tactical; paralysis must read 0.90 for truelock), and the `execute` finisher is additionally gated on a joint probability (`getStateProbabilityV3` of all five lock affs together ≥ 0.90) so it never fires on an aff the target may have already cured. Falls back to `haveAff()` / no-gate when the V3 tracker isn't loaded.
+- **Rebounding-reapply pre-empt (PRIORITY 1.5):** detect when the target's rebounding drops (`lastRebounding` present→absent) and stamp `lastReboundingFlay`; ~8.15s later (just before rebounding reapplies ~8.5s after strip) fire one impulse+bite through the gap instead of eating a reflected hit. Fires once per drop, and is placed after the finisher so a ready kill always wins. New state resets on target change.
+
+Build + full suite 121/121.
+
+---
+
 ## 2026-07-08 — Mnemosyne: trim monster spawn to the mob phrase (v4.7.36)
 
 The mob spawn line captured by `onGo` is now trimmed to just the `a/an <quantifier> of <mob>` phrase (e.g. "a host of malagmae", "a group of dryad handmaidens") via the new pure `_extractMob()` in `mnemosyne/004_Parsers.lua` — quantifier + verb word-sets, stopping the mob name at the verb / comma / sentence end, falling back to the whole line when the structure isn't matched. Tests: +3 `_extractMob` cases (full suite 121/121).
