@@ -2,6 +2,12 @@
 
 ---
 
+## 2026-07-08 — Mnemosyne: fix first boon's description showing "BOON CLAIM" (v4.7.41)
+
+The first offered boon was reported with description `"BOON CLAIM <boon name> to pick one of the options."` (the offered-block footer) instead of its real text. Cause: the `BOON CONTEMPLATE` enrichment overwrote each boon's description with the contemplated one, and the *first* boon's contemplate is armed right beside that footer line, capturing it. Fix: enrichment now applies only rarity/quote/echoes (new `_applyContemplate`) and keeps the description from the authoritative offered block; the contemplate capture also skips any `BOON CLAIM` line defensively. Tests: +1 (full suite 134/134).
+
+---
+
 ## 2026-07-08 — Mnemosyne: handle more mob spawn structures (v4.7.40)
 
 Reworked `_extractMob` to handle `the <mob> of <place>` (e.g. "the trolls of Riagath", where the creature noun is *before* "of") in addition to `a/an [adj] <quantifier> of <mob>` ("a host of malagmae", "a ghastly horde of the restless dead"). It anchors on `of`, walks left to the article beginning the subject noun phrase (stopping at `as`/comma), and accepts the phrase only when a mob verb immediately follows the object — capturing the mob whichever side of "of" the creature noun sits. Dropped the `MOB_QUANTIFIERS` set; added `wade/surge/swell/teem/...` verbs. Best-effort: an unrecognised action verb falls back to the whole line. Tests: +1 (full suite 133/133).

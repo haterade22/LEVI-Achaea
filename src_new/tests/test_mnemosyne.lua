@@ -326,6 +326,24 @@ describe("M._parseContemplate()", function()
   end)
 end)
 
+-- ─── Contemplate merge keeps the offered description ──────────────────────────
+
+describe("M._applyContemplate()", function()
+  it("applies rarity/quote/echoes but never overwrites the offered description", function()
+    local boon = { name = "Fae-Lapse", description = "There is a 5% chance you give the denizen amnesia." }
+    -- Even if contemplate mis-parsed a description (e.g. the BOON CLAIM footer),
+    -- the offered description must be preserved.
+    M._applyContemplate(boon, {
+      rarity = "common", quote = "q", num_echoes_possible = 1,
+      description = "BOON CLAIM <boon name> to pick one of the options.",
+    })
+    expect(boon.description).toBe("There is a 5% chance you give the denizen amnesia.")
+    expect(boon.rarity).toBe("common")
+    expect(boon.quote).toBe("q")
+    expect(boon.num_echoes_possible).toBe(1)
+  end)
+end)
+
 -- ─── Monster capture (onGo commits the countdown-captured candidate) ─────────
 
 describe("onGo monster capture", function()

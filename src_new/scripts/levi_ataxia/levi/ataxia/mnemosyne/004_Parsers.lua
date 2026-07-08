@@ -375,15 +375,22 @@ function M._contemplateNext(list, i)
   end
   local boon = list[i]
   M._captureContemplate(function(info)
-    if info then
-      if info.rarity then boon.rarity = info.rarity end
-      if info.quote then boon.quote = info.quote end
-      if info.num_echoes_possible ~= nil then boon.num_echoes_possible = info.num_echoes_possible end
-      if info.description and info.description ~= "" then boon.description = info.description end
-    end
+    M._applyContemplate(boon, info)
     tempTimer(0.5, function() M._contemplateNext(list, i + 1) end)
   end)
   send("boon contemplate " .. boon.name, false)
+end
+
+-- Merge contemplate detail into an offered boon: rarity/quote/echoes ONLY. The
+-- description is kept from the offered block (authoritative, already wrap-joined).
+-- We deliberately do NOT take contemplate's description: it is redundant, and the
+-- first boon's contemplate is armed right beside the "BOON CLAIM ..." offered
+-- footer, which was corrupting the first boon's description.
+function M._applyContemplate(boon, info)
+  if not info then return end
+  if info.rarity then boon.rarity = info.rarity end
+  if info.quote then boon.quote = info.quote end
+  if info.num_echoes_possible ~= nil then boon.num_echoes_possible = info.num_echoes_possible end
 end
 
 -- Capture one BOON CONTEMPLATE block (skip the "<name>:" header + opening
@@ -393,6 +400,7 @@ function M._captureContemplate(cb)
   M._captureLines({
     timeout = 2,
     onLine = function(ln)
+      if ln:find("BOON CLAIM", 1, true) then return "skip" end -- never capture the offered footer
       if isDivider(ln) then
         if seenDash then return "stop" end
         seenDash = true
