@@ -33,8 +33,9 @@ function ataxiaBasher_dragonBashing()
   local brage = ataxiaBasher_assembleBattlerage()
   local colour = string.match(gmcp.Char.Status.class, "%w+")
   local raze = ataxiaBasher.battlerage[colour.." Dragon"].raze
-  -- Element to summon for this dragon colour (Blue = ice, Silver = lightning, ...)
-  local ele = getDragonBreath() or "ice"
+  -- Breath element is derived from the dragon's colour (Blue = ice, Silver = lightning,
+  -- Red = dragonfire, Green = venom, Black = acid, Golden = psi). No hardcoded default.
+  local ele = getDragonBreath()
 
   -- The bal primary only (no breath weave): jab / whip / incantation / gut
   local function balAttack()
@@ -55,7 +56,7 @@ function ataxiaBasher_dragonBashing()
   --   breath down -> summon so it's ready next hit ; bal attack
   local function primary()
     local weaveable = not ataxiaBasher.jabBash and not ataxiaBasher.wotBash
-    if ataxiaBasher.dragonBlast and weaveable then
+    if ataxiaBasher.dragonBlast and weaveable and ele then
       if ataxia.defences.dragonbreath then
         return "blast " ..target.. ";summon " ..ele.. ";" ..balAttack()
       else
@@ -69,8 +70,9 @@ function ataxiaBasher_dragonBashing()
     if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
       command = command..raze..sp..primary()
     else
-      -- Shield MUST be broken: blast unconditionally, re-summon breath, then add bal damage.
-      command = command..sp.."blast " ..target.. ";summon " ..ele.. ";" ..balAttack()..sp..brage
+      -- Shield MUST be broken: blast unconditionally, re-summon the colour's breath, add bal damage.
+      local reblast = ele and ("blast " ..target.. ";summon " ..ele.. ";") or ("blast " ..target.. ";")
+      command = command..sp..reblast..balAttack()..sp..brage
     end
   else
     command = command..sp..brage..sp..primary()

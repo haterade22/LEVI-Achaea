@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-07-09 — Dragon: breath summon strictly colour-based (v4.7.49)
+
+### Fix: drop the hardcoded `ice` fallback in the blast weave
+
+`ataxiaBasher_dragonBashing()` (`basher/002_Class_Bashing.lua`) derived the summon element from
+`getDragonBreath()` (Blue = ice, Silver = lightning, Red = dragonfire, Green = venom, Black = acid,
+Golden = psi) but fell back to a literal `"ice"` if that ever returned nil — a Blue-specific default that
+isn't correct for other colours.
+
+- `local ele = getDragonBreath()` now with **no hardcoded default**; the summoned breath is always the
+  dragon's own colour.
+- Guarded so a nil element can never inject the wrong breath: the normal-rotation weave only blasts/summons
+  when `ele` is set, and the shielded shield-break blasts without a summon rather than summoning `ice`.
+
+**File:** `basher/002_Class_Bashing.lua`.
+
+---
+
 ## 2026-07-08 — Mnemosyne map: re-layout the whole graph each step (v4.7.48)
 
 The v4.7.46 per-arrival placement still left the map as a single square: `mnem map status` showed `rooms=11 visited=11 placed=1 … bounds=0,0,0,0`, with the current room's exits pointing at real but `[unplaced,visited]` neighbours. Root cause: placing a room *at arrival, relative to a placed `from`* is a chain that can't bootstrap — the first move off the origin never got placed (its `from`↔`here` link wasn't known yet), so every room behind it stayed unplaced and there was never a placed neighbour to anchor to.
