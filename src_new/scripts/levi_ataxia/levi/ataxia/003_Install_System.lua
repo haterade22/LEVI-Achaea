@@ -91,6 +91,14 @@ end
 function ataxia_updateApplied(_, name)
 	if name:find("Ataxia") or name:find("ataxia") then
 		ataxiaEcho("System package v" .. (ataxiaVersion or "?") .. " has been successfully installed.")
+		-- installPackage / self-update fire sysInstallPackage but NOT sysLoadEvent,
+		-- and ataxia_loadSettings (the only thing that assigns ataxiaNDB, basher,
+		-- paths, etc.) is registered only on sysLoadEvent. Without this, everything
+		-- stays nil until the next reconnect -- e.g. qwp reporting the name database
+		-- as not loaded right after installing/updating. Load now if not already done.
+		if ataxia and not ataxia.loaded and ataxia_loadSettings then
+			ataxia_loadSettings()
+		end
 		checkedMissingVariables = false
 		ataxiaCheckForMissing()
 		system_packageName = name

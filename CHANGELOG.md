@@ -2,6 +2,64 @@
 
 ---
 
+## 2026-07-09 — Fix: `qwp` "Name database not currently loaded" (real cause: loader stack overflow)
+
+### Root cause (confirmed from a live client via `pcall(ataxia_loadSettings)` = `stack overflow`)
+
+`qwp` prints the message only when the global `ataxiaNDB` is `nil` (`aliases/.../181_Parse_QWHO.lua`),
+and `ataxiaNDB` is assigned **only** inside `ataxia_loadSettings()` (`ataxia/001_Save_Load_Settings.lua`).
+The loader was **crashing every run before it reached the NDB block**:
+
+- **Primary cause — `deepMerge` stack overflow.** The `mergeLoad` helper used to load the main `ataxia`
+  save deep-merges saved data into the live `ataxia` table via a recursive `deepMerge` with **no cycle
+  guard**. When the saved data contains a cyclic/self-referential table (a stray back-reference stored
+  into `ataxia` and serialized), `deepMerge` recursed forever → **stack overflow**, aborting the whole
+  loader at the *first* step — before basher/paths/extraction/**NDB**. This is why the affected client
+  showed `ataxia.settings.class` populated (merged before the overflow) but `ataxia.loaded = nil` and
+  `ataxiaNDB = nil`, and why reconnecting never helped (it overflowed identically every time).
+- **Secondary gap — loader only bound to `sysLoadEvent`.** `ataxia_loadSettings` was registered *only*
+  on `sysLoadEvent`, which fires on profile connect — **not** on `installPackage`. So installing or
+  self-updating the package left everything (NDB included) nil until the next reconnect.
+
+Two earlier red herrings, now corrected: it was **not** primarily a corrupt-sub-load-file issue, and
+**not** primarily the duplicate `qwp` aliases (that only multiplied the message ×3 — see below).
+
+### Fix
+
+- **`ataxia/001_Save_Load_Settings.lua`**
+  - `deepMerge` now takes a `seen` set and returns on re-entry of a source table — **cycle-safe**, so a
+    cyclic save can never overflow the loader again. *(This is the actual bug fix.)*
+  - The main-settings load is now wrapped in its own `pcall` (and the early `return` when no save file /
+    no backup exists was removed) — a failure there warns and falls through to defaults + the remaining
+    sub-loads, so nothing before the NDB block can strand it. Defense-in-depth on top of the cycle fix.
+  - (From the prior pass, retained) each sub-load (basher, paths, extraction, NDB, SLC, itemCatalog,
+    legend deck) is `pcall`-isolated; `ataxia.loaded = true` is set at the **end**; the NDB block loads
+    into a temp table and commits only on success; an NDB load-throw with a present file prefers the
+    profile backup instead of `ataxiaNDB_Install()` (which would save an empty DB over the good file).
+- **`ataxia/003_Install_System.lua`** — `ataxia_updateApplied` (on `sysInstallPackage`) now runs
+  `if ataxia and not ataxia.loaded and ataxia_loadSettings then ataxia_loadSettings() end`, so installing
+  or self-updating the package loads settings immediately — no reconnect required, and the auto-updater
+  no longer leaves the system unloaded.
+- **`tools/convert_to_muddler.py`** — wipes each package's `src/<type>/<package>/` output dir
+  (`shutil.rmtree`) before writing, so orphaned collision-renamed files from prior runs can't accumulate.
+- **`tests/test_settings.lua`** — `ataxia_loadSettings()` suite now includes: **loads without
+  stack-overflowing on cyclic saved data**, main-settings load throwing still lets NDB load, clean load
+  populates `ataxiaNDB`/sets `ataxia.loaded`, earlier sub-load throw still loads NDB, corrupt `andb` not
+  overwritten with an empty install. Suite **155/155**.
+
+### The ×3 (separate, already resolved)
+
+The message appeared three times because the user's profile had three duplicate `qwp` aliases (old
+build / reinstall without uninstall). A clean build has exactly one (verified: built `Levi_Ataxia.xml`
+contains the alias once); uninstalling the old package before installing collapses it back to one.
+
+### User action
+
+Install the rebuilt package. Because of the `sysInstallPackage` auto-load above, it loads immediately;
+if you installed before that fix landed, a reconnect (or `lua ataxia_loadSettings()`) also works.
+
+---
+
 ## 2026-07-09 — Dragon: breath summon strictly colour-based (v4.7.49)
 
 ### Fix: drop the hardcoded `ice` fallback in the blast weave

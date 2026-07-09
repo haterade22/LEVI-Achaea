@@ -140,11 +140,18 @@ function ataxia_loadSettings()
 	local function mergeLoad(path, target)
 		local loaded = {}
 		table.load(path, loaded)
-		local function deepMerge(src, dst)
+		-- `seen` guards against cyclic/self-referential tables in the saved data
+		-- (e.g. a stray back-reference stored into `ataxia`). Without it, a cycle
+		-- makes deepMerge recurse forever -> stack overflow, which aborts the whole
+		-- loader before the NDB/basher blocks and leaves ataxiaNDB nil.
+		local function deepMerge(src, dst, seen)
+			seen = seen or {}
+			if seen[src] then return end
+			seen[src] = true
 			for k, v in pairs(src) do
 				if type(v) == "table" then
 					if type(dst[k]) == "table" then
-						deepMerge(v, dst[k])
+						deepMerge(v, dst[k], seen)
 					elseif dst[k] == nil then
 						dst[k] = v  -- no runtime object to protect, safe to load
 					end
@@ -167,18 +174,27 @@ function ataxia_loadSettings()
 		return nil
 	end
 
-	local ataxia_file = findFile(file_loc)
-	if not ataxia_file then
-    if _ataxia_backup and _ataxia_backup.ataxia then
-      ataxia_Echo("Disk save not found -- restoring from profile backup.")
-      for k, v in pairs(_ataxia_backup.ataxia) do ataxia[k] = v end
-    else
-      ataxia_Echo("I don't believe I recognise you. If you want my abilities, fix that.")
-      return
-    end
-	else
-    mergeLoad(ataxia_file, ataxia)
-  end
+	-- Isolate the main-settings load: a failure here (e.g. a stack overflow from a
+	-- cyclic save merged by deepMerge) must NOT abort the whole loader, or every
+	-- later block -- basher, paths, extraction, and critically the NDB block that
+	-- assigns ataxiaNDB -- never runs. On failure we warn and fall through to the
+	-- self-healing defaults below and the remaining sub-loads.
+	local ok_main, err_main = pcall(function()
+		local ataxia_file = findFile(file_loc)
+		if not ataxia_file then
+			if _ataxia_backup and _ataxia_backup.ataxia then
+				ataxia_Echo("Disk save not found -- restoring from profile backup.")
+				for k, v in pairs(_ataxia_backup.ataxia) do ataxia[k] = v end
+			else
+				ataxia_Echo("I don't believe I recognise you. If you want my abilities, fix that.")
+			end
+		else
+			mergeLoad(ataxia_file, ataxia)
+		end
+	end)
+	if not ok_main then
+		ataxia_Echo("Warning: main settings failed to load ("..tostring(err_main).."). Continuing with defaults; other systems will still load.")
+	end
 
 	-- Self-healing: ensure critical settings sub-tables exist after load
 	-- (protects against corrupted save files missing these keys)
@@ -200,8 +216,8 @@ function ataxia_loadSettings()
 	ataxia.curingprio = ataxia.curingprio or {}
 
 	ataxia_Echo("I suppose I can lend you my aid. Go and annihilate our foes.")
-	ataxia.loaded = true
 
+	local ok_bash, err_bash = pcall(function()
 	local bash_file = findFile(bash_loc)
 	if not bash_file then
     if _ataxia_backup and _ataxia_backup.basher then
@@ -219,6 +235,10 @@ function ataxia_loadSettings()
 		end
 		ataxia_Echo("Bashing systems enabled, go and lay waste.")
 	end
+	end)
+	if not ok_bash then
+		ataxia_Echo("Warning: bashing systems failed to load ("..tostring(err_bash)..").")
+	end
   -- Initialize hyena maul cooldown for Infernal PVE (30s cooldown, starts ready)
   if ataxiaBasher and ataxiaBasher.hyenaMaulReady == nil then
     ataxiaBasher.hyenaMaulReady = true
@@ -229,6 +249,7 @@ function ataxia_loadSettings()
   end
 
   if ataxiaBasher then
+    local ok_paths, err_paths = pcall(function()
     local paths_file = findFile(paths_loc)
     if not paths_file then
       if _ataxia_backup and _ataxia_backup.basherpaths then
@@ -243,8 +264,13 @@ function ataxia_loadSettings()
       ataxiaBasherPaths = {}
       table.load(paths_file, ataxiaBasherPaths)
     end
+    end)
+    if not ok_paths then
+      ataxia_Echo("Warning: bashing paths failed to load ("..tostring(err_paths)..").")
+    end
   end
 
+  local ok_ext, err_ext = pcall(function()
   local ext_file = findFile(ext_loc)
   if ext_file then
     ataxiaExtraction = {}
@@ -254,37 +280,63 @@ function ataxia_loadSettings()
     ataxiaExtraction = deepcopy(_ataxia_backup.extraction)
     ataxiaEcho("Extraction database restored from profile backup.")
   end
+  end)
+  if not ok_ext then
+    ataxia_Echo("Warning: extraction database failed to load ("..tostring(err_ext)..").")
+  end
 
-	local ndb_file = findFile(ndb_loc)
-	if not ndb_file then
-    if _ataxia_backup and _ataxia_backup.ndb then
-      ataxiaNDB = deepcopy(_ataxia_backup.ndb)
-      ataxiaEcho("Name database restored from profile backup.")
-    else
-      ataxiaEcho("Name database not initialised. Loading default settings.")
-      ataxiaNDB_Install()
-    end
-	else
-		ataxiaNDB = {}
-		table.load(ndb_file, ataxiaNDB)
-		-- Migrate array tables to hash tables (one-time)
-		local function migrateArrayToHash(tbl)
-			if not tbl or not tbl[1] then return tbl or {} end
-			local hash = {}
-			for _, v in ipairs(tbl) do hash[v] = true end
-			return hash
+	local ok_ndb, err_ndb = pcall(function()
+		local ndb_file = findFile(ndb_loc)
+		if not ndb_file then
+			if _ataxia_backup and _ataxia_backup.ndb then
+				ataxiaNDB = deepcopy(_ataxia_backup.ndb)
+				ataxiaEcho("Name database restored from profile backup.")
+			else
+				ataxiaEcho("Name database not initialised. Loading default settings.")
+				ataxiaNDB_Install()
+			end
+		else
+			-- Load into a temp table first; only commit to ataxiaNDB once the load AND
+			-- migration have succeeded. If table.load throws on a corrupt/locked file,
+			-- ataxiaNDB is left untouched (nil) rather than a half-populated {} that a
+			-- later save would write back over the still-good on-disk file.
+			local loaded = {}
+			table.load(ndb_file, loaded)
+			-- Migrate array tables to hash tables (one-time)
+			local function migrateArrayToHash(tbl)
+				if not tbl or not tbl[1] then return tbl or {} end
+				local hash = {}
+				for _, v in ipairs(tbl) do hash[v] = true end
+				return hash
+			end
+			loaded.notPlayers = migrateArrayToHash(loaded.notPlayers)
+			loaded.divine = migrateArrayToHash(loaded.divine)
+			ataxiaNDB = loaded
+			ataxiaEcho("Name database loaded in.")
 		end
-		ataxiaNDB.notPlayers = migrateArrayToHash(ataxiaNDB.notPlayers)
-		ataxiaNDB.divine = migrateArrayToHash(ataxiaNDB.divine)
-		ataxiaEcho("Name database loaded in.")
+	end)
+	if not ok_ndb then
+		-- Do NOT ataxiaNDB_Install() on a load throw: that calls ataxia_saveSettings()
+		-- and would overwrite a present-but-unreadable `andb` with an empty DB,
+		-- destroying the user's data. Prefer the in-memory profile backup; otherwise
+		-- leave ataxiaNDB nil so the on-disk file survives for manual recovery.
+		ataxiaEcho("Warning: name database failed to load ("..tostring(err_ndb)..").")
+		if not ataxiaNDB and _ataxia_backup and _ataxia_backup.ndb then
+			ataxiaNDB = deepcopy(_ataxia_backup.ndb)
+			ataxiaEcho("Name database restored from profile backup instead.")
+		end
 	end
 
   -- Load Legend Deck Manager state
   if ldm and ldm.load then
-    ldm.load()
+    local ok_ldm, err_ldm = pcall(ldm.load)
+    if not ok_ldm then
+      ataxia_Echo("Warning: legend deck failed to load ("..tostring(err_ldm)..").")
+    end
   end
 
   -- Load SLC config
+  local ok_slc, err_slc = pcall(function()
   local slc_loc = getMudletHomeDir() .. separator .. "slcconfig"
   if io.exists(slc_loc) then
     local saved = {}
@@ -301,11 +353,26 @@ function ataxia_loadSettings()
       selfLimbDamage.config[k] = v
     end
   end
+  end)
+  if not ok_slc then
+    ataxia_Echo("Warning: SLC config failed to load ("..tostring(err_slc)..").")
+  end
 
   -- Load Item Catalog state
   if itemCatalog and itemCatalog.load then
-    itemCatalog.load()
+    local ok_cat, err_cat = pcall(itemCatalog.load)
+    if not ok_cat then
+      ataxia_Echo("Warning: item catalog failed to load ("..tostring(err_cat)..").")
+    end
   end
+
+  -- Mark fully loaded only after every subsystem above has been attempted, so an
+  -- interrupted load is retried on the next sysLoadEvent instead of being
+  -- permanently short-circuited by the `if ataxia.loaded then return` guard at the
+  -- top of this function. (ataxiaNDB and the other globals are only assigned inside
+  -- the pcall-isolated blocks above; committing this flag too early is what left
+  -- ataxiaNDB nil, which is what made qwp wrongly report the NDB as not loaded.)
+  ataxia.loaded = true
 
   raiseEvent("ataxia system loaded")
 	ataxia_saveSettings(false)

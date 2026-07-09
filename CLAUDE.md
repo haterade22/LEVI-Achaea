@@ -581,7 +581,7 @@ All system state is saved to disk files in `getMudletHomeDir()` via `table.save(
 
 **Other Storage**: SQLite `exp_db` (hunting stats via Mudlet `db` API), SQLite `mob_damage_db` (per-mob non-crit damage tracking via `db` API), `ataxiaNDB/*.json` (temp API downloads).
 
-**Event Hooks**: `sysDisconnectionEvent` → `ataxia_saveSettings()`, `sysLoadEvent` → `ataxia_loadSettings()`
+**Event Hooks**: `sysDisconnectionEvent` → `ataxia_saveSettings()`, `sysLoadEvent` → `ataxia_loadSettings()`, and `sysInstallPackage` → `ataxia_updateApplied()` which calls `ataxia_loadSettings()` when not already loaded (so install/self-update loads settings without needing a reconnect). `ataxia_loadSettings()` is fault-isolated: the main-settings load and each sub-load (basher/paths/extraction/NDB/SLC/itemCatalog/ldm) are `pcall`-wrapped, its `deepMerge` is cycle-safe, and `ataxia.loaded` is set only at the very end.
 
 **Setup**: User must add `_ataxia_backup` as a saved variable in Mudlet's Variables panel (one-time, type: table).
 

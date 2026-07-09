@@ -15,6 +15,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -795,6 +796,14 @@ class MuddlerConverter:
                 continue
 
             type_dir = self.output_dir / "src" / TYPE_DIRS[pkg_type] / self.package_name
+            # Wipe the per-package output dir before writing so orphaned files from
+            # previous runs (e.g. collision-renamed alias variants that were later
+            # merged/renamed in source) can't linger and get baked into the build.
+            # Muddler builds from the fresh <type>.json manifest we write below, but
+            # stale .lua files here are a persistent source of "duplicate alias"
+            # confusion, so keep the directory in lock-step with the current source.
+            if type_dir.exists():
+                shutil.rmtree(type_dir, ignore_errors=True)
             type_dir.mkdir(parents=True, exist_ok=True)
 
             # Collect all Lua files from the tree (recursively)
