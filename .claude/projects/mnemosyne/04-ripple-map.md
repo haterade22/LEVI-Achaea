@@ -135,19 +135,20 @@ onRipple(n):
 
 A draggable grid mini-map. `MAP.build()` wraps an `Adjustable.Container` named `ataxia.mnemosyne.map.window` (position auto-persists by that name) holding a `Geyser.Container`; `MAP._cell(id)` lazily creates the per-cell `Geyser.Label`s. Build is wrapped in `pcall` and retried on `sysLoadEvent` in case `main` wasn't ready.
 
-`MAP.render()` draws **VISITED rooms only** (`at[x..","..y]` is keyed from `r.visited` rooms), clamped to a `GRID_MAX = 11` window centred on the current room when the map is larger, with `+y` (north) at the top:
+`MAP.render()` draws a **fixed `LEVEL = 4` × 4 grid** — every Mnemosyne ripple is a 4×4 room layout, so the whole frame is shown rather than auto-sizing to visited rooms. `+y` (north) is at the top. The frame extent is the bounds of the visited rooms **plus the "frontier"** (grid positions of unvisited rooms that a visited room's unwalked exit points at — `r.x/r.y + OFFSETS[unexploredExit]`), so it aligns toward where real rooms are; `fit()` then pads each axis up to 4, or windows on the current room if the graph ever spans wider than 4 (loop/inconsistency).
 
-A cell's **style** is a priority branch (`r.num == MAP.current` → `elseif hasUnexplored` → else), so the current room is always green even when it has unwalked exits:
+Every one of the (usually 16) cells is drawn. A **visited** room's cell uses a priority style branch (`r.num == MAP.current` → `elseif hasUnexplored` → else), so the current room is always green even when it has unwalked exits:
 
-| Priority | Room | Style |
-|----------|------|-------|
-| 1 | Current room (`r.num == MAP.current`) | green (`STYLE.current`) |
-| 2 | Room with unexplored exits (`hasUnexplored`) | gold-bordered (`STYLE.unexplored`) |
-| 3 | Otherwise | grey (`STYLE.room`) |
+| Cell | Style |
+|------|-------|
+| Current room (`r.num == MAP.current`) | green (`STYLE.current`) |
+| Visited room with unexplored exits (`hasUnexplored`) | gold-bordered (`STYLE.unexplored`) |
+| Other visited room | grey (`STYLE.room`) |
+| **Unvisited grid position** | dim (`STYLE.placeholder`) |
 
-The `"?"` marker is set **separately** — `lbl:echo(MAP.hasUnexplored(r.num) and "?" or "")` runs unconditionally, independent of the style branch. So any room with a reported-but-unwalked exit shows `?`, **including the green current room** (which is the common case — you've just arrived and haven't walked its other exits yet); a fully-explored room shows nothing.
+The `"?"` marker is set **separately** — `lbl:echo(MAP.hasUnexplored(r.num) and "?" or "")` runs unconditionally for visited cells, independent of the style branch. So any room with a reported-but-unwalked exit shows `?`, **including the green current room** (the common case — you've just arrived and haven't walked its other exits yet); a fully-explored room shows nothing.
 
-Each cell's tooltip is the room name; each `setClickCallback(function() MAP.walkTo(r.num) end)` uses a **direct function** (not a name-string callback) so it always resolves.
+A visited cell's tooltip is the room name, and its `setClickCallback(function() MAP.walkTo(r.num) end)` uses a **direct function** (not a name-string callback) so it always resolves. Placeholder cells are inert — a no-op click callback and an `"unexplored"` tooltip.
 
 ### Click-to-walk
 

@@ -29,10 +29,11 @@ ataxia.mnemosyne = ataxia.mnemosyne or {}
 ataxia.mnemosyne.map = ataxia.mnemosyne.map or {}
 local MAP = ataxia.mnemosyne.map
 
-local GRID_MAX = 11 -- max cells rendered per side (window on current room if larger)
+local LEVEL = 4 -- every Mnemosyne ripple is a fixed 4x4 room grid; render that whole frame
 
 local STYLE = {
   empty = "background-color: rgba(0,0,0,0); border: 0px;",
+  placeholder = "background-color: rgba(45,45,45,120); border: 1px solid #2b2b2b;", -- unvisited slot
   room = "background-color: rgba(70,70,70,255); border: 1px solid #303030; qproperty-alignment: AlignCenter; color: #bbbbbb; font-size: 7pt;",
   unexplored = "background-color: rgba(95,80,20,255); border: 2px solid #d4b000; qproperty-alignment: AlignCenter; color: #ffffff; font-size: 7pt;",
   current = "background-color: rgba(0,150,0,255); border: 2px solid #33ff33; qproperty-alignment: AlignCenter; color: #ffffff; font-size: 7pt;",
@@ -88,24 +89,58 @@ end
 
 function MAP.render()
   if not MAP.window then return end
-  local minx, maxx, miny, maxy = MAP.bounds()
-  if not minx then
+
+  -- Visited rooms by grid position.
+  local at, hasAny = {}, false
+  for _, r in pairs(MAP.rooms or {}) do
+    if r.x ~= nil and r.visited then
+      at[r.x .. "," .. r.y] = r
+      hasAny = true
+    end
+  end
+  if not hasAny then
     for _, lbl in pairs(MAP.cells or {}) do lbl:hide() end
     return
   end
 
-  -- Clamp to a GRID_MAX window, centred on the current room if the map is larger.
-  local cx = (MAP.current and MAP.rooms[MAP.current] and MAP.rooms[MAP.current].x) or math.floor((minx + maxx) / 2)
-  local cy = (MAP.current and MAP.rooms[MAP.current] and MAP.rooms[MAP.current].y) or math.floor((miny + maxy) / 2)
-  local half = math.floor(GRID_MAX / 2)
-  if (maxx - minx + 1) > GRID_MAX then minx, maxx = cx - half, cx + half end
-  if (maxy - miny + 1) > GRID_MAX then miny, maxy = cy - half, cy + half end
-  local cols, rows = maxx - minx + 1, maxy - miny + 1
-
-  local at = {}
-  for _, r in pairs(MAP.rooms) do
-    if r.x ~= nil and r.visited then at[r.x .. "," .. r.y] = r end -- only rooms we've been in
+  -- Extent = visited rooms plus the "frontier" (grid positions of unvisited rooms
+  -- we know exist because a visited room has an unwalked exit pointing there), so
+  -- the fixed frame lines up with where real rooms are rather than padding blind.
+  local minx, maxx, miny, maxy
+  local function span(x, y)
+    minx = math.min(minx or x, x); maxx = math.max(maxx or x, x)
+    miny = math.min(miny or y, y); maxy = math.max(maxy or y, y)
   end
+  for _, r in pairs(at) do span(r.x, r.y) end
+  for _, r in pairs(MAP.rooms or {}) do
+    if r.x ~= nil and r.visited then
+      for _, d in ipairs(MAP.unexploredExits(r.num)) do
+        local off = MAP.OFFSETS[d]
+        if off and not at[(r.x + off[1]) .. "," .. (r.y + off[2])] then
+          span(r.x + off[1], r.y + off[2])
+        end
+      end
+    end
+  end
+
+  -- Fixed LEVELxLEVEL frame: pad the extent up to 4 cells per side; if somehow
+  -- larger (graph loop/inconsistency), window on the current room instead.
+  local cur = MAP.current and MAP.rooms[MAP.current]
+  local cx = (cur and cur.x) or math.floor((minx + maxx) / 2)
+  local cy = (cur and cur.y) or math.floor((miny + maxy) / 2)
+  local function fit(lo, hi, c)
+    local n = hi - lo + 1
+    if n < LEVEL then
+      local addHi = math.ceil((LEVEL - n) / 2)
+      lo = lo - (LEVEL - n - addHi); hi = hi + addHi
+    elseif n > LEVEL then
+      lo = c - math.floor(LEVEL / 2); hi = lo + LEVEL - 1
+    end
+    return lo, hi
+  end
+  minx, maxx = fit(minx, maxx, cx)
+  miny, maxy = fit(miny, maxy, cy)
+  local cols, rows = maxx - minx + 1, maxy - miny + 1
 
   local cw, ch = 100 / cols, 100 / rows
   for _, lbl in pairs(MAP.cells or {}) do lbl:hide() end
@@ -114,10 +149,10 @@ function MAP.render()
       local gx = minx + (col - 1)
       local gy = maxy - (row - 1) -- invert so north (higher y) is at the top
       local r = at[gx .. "," .. gy]
+      local lbl = MAP._cell(row .. "_" .. col)
+      lbl:move((col - 1) * cw .. "%", (row - 1) * ch .. "%")
+      lbl:resize(cw .. "%", ch .. "%")
       if r then
-        local lbl = MAP._cell(row .. "_" .. col)
-        lbl:move((col - 1) * cw .. "%", (row - 1) * ch .. "%")
-        lbl:resize(cw .. "%", ch .. "%")
         local st = STYLE.room
         if r.num == MAP.current then
           st = STYLE.current
@@ -128,8 +163,13 @@ function MAP.render()
         lbl:echo(MAP.hasUnexplored(r.num) and "?" or "")
         lbl:setClickCallback(function() MAP.walkTo(r.num) end) -- direct fn, always resolves
         pcall(function() lbl:setToolTip(tostring(r.name or ("#" .. tostring(r.num)))) end)
-        lbl:show()
+      else
+        lbl:setStyleSheet(STYLE.placeholder) -- unvisited slot in the 4x4
+        lbl:echo("")
+        lbl:setClickCallback(function() end)
+        pcall(function() lbl:setToolTip("unexplored") end)
       end
+      lbl:show()
     end
   end
 end

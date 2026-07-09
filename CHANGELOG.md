@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-07-09 — Mnemosyne map: fixed 4×4 grid with unexplored slots (v4.7.50)
+
+Every Mnemosyne ripple is a fixed 4×4 room grid, so the map now renders that whole frame instead of auto-sizing to just the rooms you've entered.
+
+- `006_Ripple_Map_Window.lua` — `render()` now draws a stable **4×4 grid**: visited rooms are coloured (current green, unexplored-exit gold `?`, others grey) and every not-yet-visited position shows as a **dim placeholder cell**, so the whole level and its gaps are visible at a glance. The frame is aligned using the "frontier" (grid positions of unvisited rooms a visited room's unwalked exit points at) and padded up to 4×4; if the graph ever spans wider (loop/inconsistency) it windows on the current room. Replaces the old auto-sizing `GRID_MAX` window.
+- Placeholder cells aren't clickable; visited rooms keep click-to-walk. No changes to the graph model (`005`) — coordinates still come from `MAP.relayout()`.
+
+*(Released together with the `qwp`/loader-crash fix below.)*
+
+---
+
 ## 2026-07-09 — Fix: `qwp` "Name database not currently loaded" (real cause: loader stack overflow)
 
 ### Root cause (confirmed from a live client via `pcall(ataxia_loadSettings)` = `stack overflow`)
