@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-07-10 — Mnemosyne tracker: reliability hardening + local history (v4.7.52)
+
+Hardening informed by reviewing an alternate community tracker, plus a new local-history feature. Test suite **174/174**; the changes were adversarially reviewed before release (which caught the watchdog, `bardWarmarch`, and toggle bugs below).
+
+- **`/run_start` failure recovery.** The HTTP client gained an `onError` path; `startRun` now clears `run.active` when `/run_start` fails — by a 500 (the reported error) **or** a timeout / dropped response (the watchdog now also fires `onError`). Previously a failed start left the client POSTing `ripple`/`monsters`/`boss`/`effects`/`boons` at a run the server never created.
+- **Run-end false-positive guard.** The "releases its hold, weaving N threads" reward line also prints when re-reading the Achaea message mid-run, so it no longer ends the run on its own — it waits for the `"You just received message #N from Achaea."` confirmation. `bardWarmarch` now clears only on that confirmed end (moved out of the trigger), so a mid-run re-read can't drop a Bard's paean bonus.
+- **Accurate echo count.** `_parseContemplate` reads the real `Maximum echoes: N` (was hardcoding 1 for echo-capable boons; the line also no longer leaks into the description).
+- **Boon claim resolution.** `boon claim <n>` (slot number) and unique name prefixes now resolve, not just exact names.
+- **Ripple context guard.** A wade line only bootstraps a run while actually in Mnemosyne (an active run still advances if the survey flag flickers between floors), so a stray/re-read wade line can't spawn a phantom run.
+- **Local history + reports** (new `mnemosyne/007_History.lua`). Records offers/claims/affixes per run to `mnemosyne_history.lua`; `mnem boons | affixes | library` review this run's claims, its active affixes, and the all-time affix catalogue; `mnem quiet [on|off]` silences the automatic boon/affix echoes (still records). Bootstrapped runs get their own history bucket.
+- Fixed the `mnem quiet off` and pre-existing `mnem map off` toggles (an `x and false or y` chain fell through to a toggle instead of forcing off).
+
+---
+
 ## 2026-07-10 — Fix: `gmcp.Room` handler crashes after the loader was un-stuck (GUI objects in the save)
 
 ### Root cause (same underlying issue as the stack overflow)

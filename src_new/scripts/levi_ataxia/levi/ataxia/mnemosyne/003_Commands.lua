@@ -49,6 +49,10 @@ function M.help()
     { "mnem test", "Ping /health to check connectivity" },
     { "mnem debug", "Toggle verbose debug echoes" },
     { "mnem map [on|off|status]", "Toggle / diagnose the per-ripple mini-map" },
+    { "mnem boons", "This run's claimed boons (local history)" },
+    { "mnem affixes", "This run's active affixes (ongoing effects)" },
+    { "mnem library", "All-time affix catalogue" },
+    { "mnem quiet [on|off]", "Silence auto boon/affix echoes (still records)" },
     { "mnem start | end", "Manually start / end a run" },
     { "mnem check", "Re-sync with an in-progress run (/run_exists)" },
     { "mnem ripple <n>", "Manually report ripple level" },
@@ -59,6 +63,15 @@ function M.help()
   for _, row in ipairs(rows) do
     cecho("\n  <a_darkmagenta>" .. row[1] .. "  <grey>-- <NavajoWhite>" .. row[2])
   end
+end
+
+-- Resolve an on|off|<other> argument to a boolean: "on" -> true, "off" -> false,
+-- anything else -> a plain toggle of `current`. (Avoids the `x and false or y`
+-- trap where an "off" branch silently falls through to the toggle.)
+function M._toggleState(arg, current)
+  if arg == "on" then return true end
+  if arg == "off" then return false end
+  return not current
 end
 
 function M.command(rest)
@@ -98,7 +111,8 @@ function M.command(rest)
       if arg == "status" and ataxia.mnemosyne.map.status then
         ataxia.mnemosyne.map.status()
       elseif ataxia.mnemosyne.map.toggle then
-        local state = (arg == "on") and true or (arg == "off") and false or nil
+        local state -- nil => toggle
+        if arg == "on" then state = true elseif arg == "off" then state = false end
         ataxia.mnemosyne.map.toggle(state)
       end
     end
@@ -118,6 +132,16 @@ function M.command(rest)
     if arg == "" then M.echo("Usage: mnem monsters <text>") else M.reportMonsters(arg) end
   elseif cmd == "death" then
     M.reportDeath(arg)
+  elseif cmd == "boons" then
+    M.reportBoons()
+  elseif cmd == "affixes" then
+    M.reportAffixes()
+  elseif cmd == "library" then
+    M.reportLibrary()
+  elseif cmd == "quiet" then
+    c.quiet = M._toggleState(arg, M._quiet())
+    ataxia_saveSettings(false)
+    M.echo("Quiet mode " .. (c.quiet and "<green>ON <grey>(auto boon/affix echoes silenced; still recording)" or "<grey>off") .. ".")
   else
     M.help()
   end

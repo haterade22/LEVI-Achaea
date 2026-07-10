@@ -32,6 +32,7 @@ dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/002_Reporter_API.lua")
 dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/003_Commands.lua")
 dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/004_Parsers.lua")
 dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/005_Ripple_Map.lua")
+dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/007_History.lua")
 
 local M = ataxia.mnemosyne
 
@@ -201,13 +202,23 @@ end)
 describe("onRipple", function()
   it("asserts run.active and flushes buffered monsters after the ripple", function()
     reset(false)
+    ataxiaBasher = { inMnemosyne = true } -- in a dive: onRipple may (re)assert the run
     M.run.active = true                 -- pretend startRun already ran
     M.onMonsters("a host of orcs")
-    M.run.active = false                -- onRipple must re-assert it
+    M.run.active = false                -- onRipple must re-assert it (we're in Mnemosyne)
     M.onRipple(3)
     expect(M.run.active).toBeTrue()
     -- ripple 3 (>0) enqueued, monsters flushed behind it
     expect(sent[1].url).toContain("/ripple_level")
+    ataxiaBasher = nil
+  end)
+
+  it("does not bootstrap a phantom run from a stray wade line outside Mnemosyne", function()
+    reset(false)
+    ataxiaBasher = nil                  -- not in a dive
+    M.onRipple(7)
+    expect(M.run.active).toBeFalse()    -- no phantom run
+    expect(#sent).toBe(0)               -- nothing pushed
   end)
 
   it("skips /ripple_level when n <= current ripple", function()
@@ -320,10 +331,18 @@ describe("M._parseContemplate()", function()
     expect(info.quote).toBe("Some unstoppable forces have yet to meet their immovable object. But Heroes do not have time for metaphors.")
   end)
 
-  it("maps 'Can echo: Yes' to 1", function()
+  it("maps 'Can echo: Yes' to 1 when no Maximum echoes line follows", function()
     local info = M._parseContemplate({ "Rarity:  legendary", "Can echo:  Yes", "Desc.", "", '"Q."' })
     expect(info.num_echoes_possible).toBe(1)
     expect(info.rarity).toBe("legendary")
+  end)
+
+  it("reads the real 'Maximum echoes: N' count, overriding the Yes floor", function()
+    local info = M._parseContemplate({
+      "Rarity:  rare", "Can echo:  Yes", "Maximum echoes:  3", "A description.", "", '"Q."',
+    })
+    expect(info.num_echoes_possible).toBe(3)
+    expect(info.description).toBe("A description.") -- the meta line must not leak into desc
   end)
 end)
 
@@ -342,6 +361,139 @@ describe("M._applyContemplate()", function()
     expect(boon.rarity).toBe("common")
     expect(boon.quote).toBe("q")
     expect(boon.num_echoes_possible).toBe(1)
+  end)
+end)
+
+-- ─── startRun failure recovery (#1) ──────────────────────────────────────────
+
+describe("startRun failure handling", function()
+  it("resets run.active when /run_start errors so later pushes don't fire", function()
+    reset(false)
+    M.startRun()
+    expect(M.run.active).toBeTrue() -- optimistic
+    expect(M._queue[1].endpoint).toBe("/run_start")
+    -- the server 500s the start
+    M._onError(nil, "Internal Server Error", M._baseUrl() .. "/run_start")
+    expect(M.run.active).toBeFalse() -- undone by the onError callback
+    expect(M._inRun()).toBeFalse() -- so no ripple/monsters/etc. gate through afterwards
+  end)
+
+  it("also resets run.active when /run_start times out (watchdog path)", function()
+    reset(false)
+    M.startRun()
+    expect(M.run.active).toBeTrue()
+    expect(M._busy).toBeTrue()
+    M._onTimeout() -- watchdog fires: dropped response / POST silently redirected to GET
+    expect(M.run.active).toBeFalse() -- onError ran via the watchdog too
+    expect(M._busy).toBeFalse() -- queue advanced
+  end)
+end)
+
+describe("M._toggleState()", function()
+  it("forces on/off and toggles for anything else (no ternary fall-through)", function()
+    expect(M._toggleState("on", false)).toBeTrue()
+    expect(M._toggleState("on", true)).toBeTrue()
+    expect(M._toggleState("off", true)).toBeFalse()
+    expect(M._toggleState("off", false)).toBeFalse() -- the bug: must stay off, not toggle
+    expect(M._toggleState("", false)).toBeTrue() -- bare arg => toggle
+    expect(M._toggleState("", true)).toBeFalse()
+  end)
+end)
+
+describe("run-end confirmation", function()
+  it("clears bardWarmarch only when onRunEnd commits, not on the deferred maybe", function()
+    reset(true)
+    bardWarmarch = true
+    M.onRunEndMaybe() -- arms the confirmation window; must NOT clear the flag yet
+    expect(bardWarmarch).toBeTrue()
+    M.onRunEnd() -- confirmation fired
+    expect(bardWarmarch).toBeFalse()
+  end)
+end)
+
+-- ─── Boon claim resolution (#4) ──────────────────────────────────────────────
+
+describe("M._resolveClaim()", function()
+  local offered = { "Aurum Scales", "Boulder", "Hammer and Nail" }
+
+  it("resolves a slot number to the offered boon at that index", function()
+    expect(M._resolveClaim("2", offered)).toBe("Boulder")
+  end)
+
+  it("resolves an exact case-insensitive name", function()
+    expect(M._resolveClaim("boulder", offered)).toBe("Boulder")
+  end)
+
+  it("resolves a unique case-insensitive prefix", function()
+    expect(M._resolveClaim("ham", offered)).toBe("Hammer and Nail")
+  end)
+
+  it("returns nil for an ambiguous prefix", function()
+    expect(M._resolveClaim("a", { "Argent", "Aurum" })).toBeNil()
+  end)
+
+  it("returns nil for an out-of-range slot or an unknown name", function()
+    expect(M._resolveClaim("9", offered)).toBeNil()
+    expect(M._resolveClaim("nope", offered)).toBeNil()
+  end)
+end)
+
+-- ─── Local run history (#6) ──────────────────────────────────────────────────
+
+describe("local run history", function()
+  local function freshHistory()
+    M.history = { run = 0, claims = {}, offers = {}, affixes = {}, library = {} }
+    ataxia.settings = { reporting = { enabled = true, token = "T", url = M.DEFAULT_URL, quiet = true } }
+    M.run = { active = true, ripple = 4, pendingMonsters = {}, lastOffered = {} }
+  end
+
+  it("borrows rarity/description from recorded offers and counts echoes per run", function()
+    freshHistory()
+    M._historyNewRun() -- run 1
+    M._recordOffers({ { name = "Boulder", description = "Roll for damage.", rarity = "rare" } })
+    M._recordClaim("Boulder")
+    M._recordClaim("Boulder") -- stack an echo
+    expect(#M.history.claims).toBe(2)
+    expect(M.history.claims[1].rarity).toBe("rare")
+    expect(M.history.claims[1].description).toBe("Roll for damage.")
+    expect(M.history.claims[1].echoes).toBe(1)
+    expect(M.history.claims[2].echoes).toBe(2)
+    expect(M.history.claims[1].run).toBe(1)
+  end)
+
+  it("dedupes affixes per run and grows the all-time library", function()
+    freshHistory()
+    M._historyNewRun() -- run 1
+    M._recordAffixes({ { name = "Frostbite", description = "Chills." }, { name = "Ember", description = "Burns." } })
+    M._recordAffixes({ { name = "Frostbite", description = "Chills." } }) -- repeat within the same run
+    local run1 = 0
+    for _, a in ipairs(M.history.affixes) do if a.run == 1 then run1 = run1 + 1 end end
+    expect(run1).toBe(2) -- Frostbite recorded once despite two sightings
+    expect(M.history.library["Frostbite"]).toBe("Chills.")
+    expect(M.history.library["Ember"]).toBe("Burns.")
+  end)
+
+  it("scopes reports to the current run and doesn't error", function()
+    freshHistory()
+    M._historyNewRun() -- run 1
+    M._recordOffers({ { name = "A", description = "d", rarity = "common" } })
+    M._recordClaim("A")
+    M._historyNewRun() -- run 2: run 1's claims are out of scope now
+    local run2 = 0
+    for _, c in ipairs(M.history.claims) do if c.run == M.history.run then run2 = run2 + 1 end end
+    expect(run2).toBe(0)
+    M.reportBoons() -- smoke: must not error
+    M.reportAffixes()
+    M.reportLibrary()
+  end)
+
+  it("bumps the history run when onRipple bootstraps a run (missed start line)", function()
+    M.history = { run = 0, claims = {}, offers = {}, affixes = {}, library = {} }
+    reset(false)
+    ataxiaBasher = { inMnemosyne = true }
+    M.onRipple(3) -- start line was missed -> onRipple bootstraps the run
+    expect(M.history.run).toBe(1) -- got its own bucket, not run 0
+    ataxiaBasher = nil
   end)
 end)
 

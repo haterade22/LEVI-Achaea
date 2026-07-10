@@ -123,10 +123,35 @@ function M.onRunStart()
 end
 
 -- "The Mnemosyne releases its hold, weaving N shimmering threads into your
--- possession." -- the run has ended (Mnemosyne is an endless climb with no
--- victory; it ends on true death or WADE LEAVE, and this reward line marks the
--- conclusion). A normal life-loss death (the /death trigger) keeps the run going.
+-- possession." -- marks the run's end (Mnemosyne is an endless climb with no
+-- victory; it ends on true death or WADE LEAVE). BUT this exact reward text ALSO
+-- prints verbatim when you re-read the stored Achaea message mid-run, so on its
+-- own it can't be trusted -- ending on a re-read would falsely stop telemetry. A
+-- real run-end is immediately followed by "You just received message #N from
+-- Achaea."; arm a short confirmation window and only commit the end if it fires.
+-- Armed regardless of telemetry state: a confirmed run-end both clears bard
+-- boons (bardWarmarch) and, if a run is being tracked, ends it -- so the bard
+-- flag isn't wrongly cleared on a mid-run re-read either.
+function M.onRunEndMaybe()
+  if M._runEndTrig then pcall(killTrigger, M._runEndTrig); M._runEndTrig = nil end
+  if M._runEndTimer then pcall(killTimer, M._runEndTimer); M._runEndTimer = nil end
+  M._runEndTrig = tempRegexTrigger([[^You just received message #\d+ from Achaea\.$]], function()
+    if M._runEndTrig then pcall(killTrigger, M._runEndTrig); M._runEndTrig = nil end
+    if M._runEndTimer then pcall(killTimer, M._runEndTimer); M._runEndTimer = nil end
+    M.onRunEnd()
+  end)
+  M._runEndTimer = tempTimer(2, function()
+    -- No confirmation within 2s -> it was a re-read, not a real end. Drop it.
+    if M._runEndTrig then pcall(killTrigger, M._runEndTrig); M._runEndTrig = nil end
+    M._runEndTimer = nil
+  end)
+end
+
+-- Commit the run end (called only once the confirmation above has fired). Clear
+-- bard boons unconditionally (independent of telemetry); end the tracked run only
+-- if one is active. A normal life-loss death (the /death trigger) keeps it going.
 function M.onRunEnd()
+  bardWarmarch = false -- boons gone on a confirmed run-end
   if M._inRun() then M.endRun() end
 end
 
@@ -137,6 +162,13 @@ function M.onRipple(n)
   -- Reset the ripple map on level change (independent of telemetry reporting).
   if ataxia.mnemosyne.map and ataxia.mnemosyne.map.onRipple then ataxia.mnemosyne.map.onRipple(n) end
   if not M._auto() then return end
+  -- Context guard: a stray/re-read "You wade N deep" seen outside a dive must not
+  -- BOOTSTRAP a phantom run. Require in-Mnemosyne context to first assert active;
+  -- once a run is genuinely active, later ripples advance normally (robust to the
+  -- inMnemosyne survey flag flickering between floors). The map reset above is
+  -- deliberately NOT gated on this.
+  if not M.run.active and not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  if not M.run.active and M._historyNewRun then M._historyNewRun() end -- bootstrapped run (start line missed) gets its own history bucket
   M.run.active = true
   M.setRipple(n)
   M._flushMonsters()
@@ -291,7 +323,10 @@ function M.onEffectsHeader()
     end,
     onDone = function(lines)
       local list = M._parseNamedBlock(lines)
-      if #list > 0 then M.reportEffects(list) end
+      if #list > 0 then
+        if M._recordAffixes then M._recordAffixes(list) end -- local history (#6)
+        M.reportEffects(list)
+      end
     end,
   })
 end
@@ -349,17 +384,35 @@ function M.onBoonClaim(name)
   if type(name) ~= "string" then return end
   name = name:gsub("^%s+", ""):gsub("%s+$", "")
   if name == "" then return end
-  local canonical
-  for _, off in ipairs(M.run.lastOffered or {}) do
-    if off:lower() == name:lower() then
-      canonical = off
-      break
+  local canonical = M._resolveClaim(name, M.run.lastOffered)
+  if not canonical then
+    return M.decho("BOON CLAIM '" .. name .. "' not resolvable against last offered set; not reporting.")
+  end
+  if M._recordClaim then M._recordClaim(canonical) end -- local history (#6)
+  M.reportBoonsSelected(canonical)
+end
+
+-- Resolve a "boon claim <arg>" argument to a canonical offered name: a slot
+-- NUMBER (boon claim 2 -> the 2nd offered boon), an exact case-insensitive name,
+-- or a UNIQUE case-insensitive prefix (boon claim hammer). Returns nil if
+-- unresolved or if a prefix is ambiguous (matches more than one offered boon).
+function M._resolveClaim(name, offered)
+  offered = offered or {}
+  local n = name:match("^%d+$")
+  if n then return offered[tonumber(n)] end -- slot number (array is in offer order)
+  local lower = name:lower()
+  for _, off in ipairs(offered) do -- exact, case-insensitive
+    if off:lower() == lower then return off end
+  end
+  local match, count = nil, 0 -- unique case-insensitive prefix
+  for _, off in ipairs(offered) do
+    if off:lower():sub(1, #lower) == lower then
+      match = off
+      count = count + 1
     end
   end
-  if not canonical then
-    return M.decho("BOON CLAIM '" .. name .. "' not in last offered set; not reporting.")
-  end
-  M.reportBoonsSelected(canonical)
+  if count == 1 then return match end
+  return nil
 end
 
 -- Enrichment: when `contemplate` is enabled, BOON CONTEMPLATE each offered boon
@@ -367,6 +420,7 @@ end
 -- name + description straight through.
 function M._reportBoonsOfferedEnriched(list)
   if not M._cfg().contemplate then
+    if M._recordOffers then M._recordOffers(list) end -- local history (#6)
     return M.reportBoonsOffered(list)
   end
   M._contemplateNext(list, 1)
@@ -376,6 +430,7 @@ end
 -- entry, then send the fully-populated /boons_offered.
 function M._contemplateNext(list, i)
   if i > #list then
+    if M._recordOffers then M._recordOffers(list) end -- local history (#6), now enriched
     return M.reportBoonsOffered(list)
   end
   local boon = list[i]
@@ -432,14 +487,20 @@ function M._parseContemplate(lines)
   for _, ln in ipairs(lines) do
     local rar = ln:match("^Rarity:%s+(.+)$")
     local echo = ln:match("^Can echo:%s+(.+)$")
+    local maxe = ln:match("^Maximum echoes:%s+(%d+)")
     if rar then
       info.rarity = rar:gsub("%s+$", "")
+    elseif maxe then
+      -- Authoritative echo count (printed only for echo-capable boons); overrides
+      -- the "Can echo: Yes" floor of 1 regardless of which line arrives first.
+      info.num_echoes_possible = tonumber(maxe)
     elseif echo then
       echo = echo:gsub("%s+$", ""):lower()
       if echo == "no" then
         info.num_echoes_possible = 0
       elseif echo == "yes" then
-        info.num_echoes_possible = 1
+        -- Floor of 1; a "Maximum echoes: N" line, if present, refines this to N.
+        info.num_echoes_possible = info.num_echoes_possible or 1
       else
         info.num_echoes_possible = tonumber(echo)
       end

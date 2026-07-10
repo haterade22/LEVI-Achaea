@@ -32,4 +32,6 @@ patterns:
   type: 1
 ]]--
 
-ataxia.mnemosyne.onRunEnd()
+-- Confirms via the "received message from Achaea" line before ending; onRunEnd
+-- clears bardWarmarch on the confirmed end (not on a mid-run message re-read).
+ataxia.mnemosyne.onRunEndMaybe()

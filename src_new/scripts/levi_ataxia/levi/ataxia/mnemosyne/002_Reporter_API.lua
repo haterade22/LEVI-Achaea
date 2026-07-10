@@ -63,6 +63,7 @@ function M.startRun()
   -- Optimistic, synchronous local reset (don't wait for the async response).
   M.run.active = true
   M._resetRun()
+  if M._historyNewRun then M._historyNewRun() end -- bump the local run counter for history
   M._enqueue("/run_start", {}, function(parsed)
     if parsed and parsed.public_id then
       M.run.publicId = parsed.public_id
@@ -70,6 +71,12 @@ function M.startRun()
     else
       M.echo("Run started, but response had no public_id.")
     end
+  end, function(err)
+    -- /run_start failed (e.g. HTTP 500): undo the optimistic active flag so we
+    -- don't keep firing ripple/monsters/boss/effects/boons at a run the server
+    -- never created. The next run's /run_start (or a reload's runExists) recovers.
+    M.run.active = false
+    M.echo("<indian_red>Run start failed<reset> (" .. tostring(err) .. "); reporting paused until the next run.")
   end)
 end
 

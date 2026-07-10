@@ -104,10 +104,10 @@ M._busy = false
 
 -- Enqueue a POST. `payload` gets `token` stamped on automatically.
 -- `onOk(parsed, rawBody)` is called with the decoded JSON response on success.
-function M._enqueue(endpoint, payload, onOk)
+function M._enqueue(endpoint, payload, onOk, onError)
   payload = payload or {}
   payload.token = M._cfg().token
-  table.insert(M._queue, { endpoint = endpoint, payload = payload, onOk = onOk, tries = 0 })
+  table.insert(M._queue, { endpoint = endpoint, payload = payload, onOk = onOk, onError = onError, tries = 0 })
   M._pump()
 end
 
@@ -132,13 +132,29 @@ function M._pump()
 
   M._busy = true
   M._clearWatchdog()
-  M._watchdog = tempTimer(M.REQUEST_TIMEOUT, function()
-    if M._busy then
-      M.echo("<indian_red>Request timed out<reset>: " .. (M._queue[1] and M._queue[1].endpoint or "?"))
-      M._finish()
-    end
-  end)
+  M._watchdog = tempTimer(M.REQUEST_TIMEOUT, function() M._onTimeout() end)
   postHTTP(data, M._baseUrl() .. req.endpoint, { ["Content-Type"] = "application/json" })
+end
+
+-- Invoke a request's onError callback (guarded). Used by BOTH the error event and
+-- the watchdog, so a stuck/dropped request also triggers recovery (e.g. resetting
+-- run.active after a /run_start whose response never arrives).
+function M._fireError(req, err)
+  if req and req.onError then
+    local cok, cerr = pcall(req.onError, err)
+    if not cok then M.decho("onError callback error (" .. tostring(req.endpoint) .. "): " .. tostring(cerr)) end
+  end
+end
+
+-- Watchdog fired: the in-flight request never completed (dropped response, or a
+-- POST silently redirected to GET). Treat it as a failure so onError runs, then
+-- force the queue forward.
+function M._onTimeout()
+  if not M._busy then return end
+  local req = M._queue[1]
+  M.echo("<indian_red>Request timed out<reset>: " .. (req and req.endpoint or "?"))
+  M._fireError(req, "timeout")
+  M._finish()
 end
 
 -- Drop the finished head request and advance the queue.
@@ -195,6 +211,7 @@ function M._onError(_, err, url)
   end
 
   M.echo("<indian_red>Request failed<reset>: " .. (req and req.endpoint or "?") .. " (" .. tostring(err) .. ")")
+  M._fireError(req, err)
   M._finish()
 end
 
