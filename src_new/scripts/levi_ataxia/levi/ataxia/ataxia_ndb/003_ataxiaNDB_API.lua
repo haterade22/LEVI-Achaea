@@ -114,6 +114,12 @@ function ataxiaNDB_SortOnline(filepath)
     return
   end
 
+  if type(t.characters) ~= "table" then
+    cecho("\n<red>Online data missing 'characters' field (download truncated or unexpected format).")
+    os.remove(filepath)
+    return
+  end
+
   local onlineSet = {}
   ataxiaNDB._onlineFound = {}
   local apiNeedUpdate = {}

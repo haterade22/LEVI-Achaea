@@ -43,8 +43,40 @@ function ataxia_saveSettings(disp)
 		end
 	end
 
+	-- Strip live GUI objects (Geyser/Adjustable windows, labels, ...) from the data
+	-- before serializing. Some live in the saved `ataxia` namespace
+	-- (ataxia.mnemosyne.map.window, ataxia.data.hunter.window, vital bars, chat); they
+	-- carry circular refs and, if reloaded, deserialize into methodless tables that
+	-- crash Geyser (container:hide/show, label:hide). Detected reliably here because
+	-- these are LIVE objects whose hide/show are functions.
+	local function sanitizeForSave(v, seen)
+		if type(v) ~= "table" then
+			return (type(v) == "function") and nil or v
+		end
+		-- getmetatable/rawget ONLY -- never index v.hide/v.show: for a Mudlet `db`
+		-- proxy stored under ataxia that fires __index -> "access sheet 'hide'".
+		-- Live GUI/db/runtime objects carry metatables; methodless GUI snapshots are
+		-- caught by their raw windowList/nestedLabels fields.
+		if getmetatable(v) ~= nil
+			or rawget(v, "windowList") ~= nil or rawget(v, "nestedLabels") ~= nil then
+			return nil
+		end
+		seen = seen or {}
+		if seen[v] then return nil end
+		seen[v] = true
+		local out = {}
+		for k, val in pairs(v) do
+			local tk = type(k)
+			if tk == "string" or tk == "number" or tk == "boolean" then
+				local cleaned = sanitizeForSave(val, seen)
+				if cleaned ~= nil then out[k] = cleaned end
+			end
+		end
+		return out
+	end
+
 	rotateBackup(file_loc)
-	table.save(file_loc, ataxia)
+	table.save(file_loc, sanitizeForSave(ataxia))
 
 	if ataxiaBasher then
 		rotateBackup(bash_loc)
@@ -140,6 +172,50 @@ function ataxia_loadSettings()
 	local function mergeLoad(path, target)
 		local loaded = {}
 		table.load(path, loaded)
+		-- A live Geyser/Adjustable GUI object (window, container, label, etc.) carries
+		-- methods and a metatable; a serialized snapshot from table.save never does.
+		-- GUI objects get serialized because some live in the saved `ataxia` namespace
+		-- (e.g. ataxia.mnemosyne.map.window, ataxia.data.hunter.window). We must NOT
+		-- merge a stale snapshot into the live object: recursing pollutes its internal
+		-- state -- notably adding plain-table children to a container's windowList, so
+		-- a later container:hide() (on gmcp.Room) crashes with "attempt to call method
+		-- 'hide' (a nil value)". Leave any such live object entirely as-is.
+		-- Detect via getmetatable ONLY -- never index t.hide/t.show. Live Geyser
+		-- objects have metatables, and so do other runtime objects like Mudlet `db`
+		-- proxies; indexing `.hide` on a db proxy fires its __index and errors with
+		-- "access sheet 'hide' that does not exist". getmetatable has no side effects.
+		local function isRuntimeObject(t)
+			return getmetatable(t) ~= nil
+		end
+		-- A *serialized* Geyser snapshot (functions stripped by table.save, so
+		-- isRuntimeObject can't catch it) restored into a fresh/empty key would
+		-- become a methodless table that later crashes container:hide()/show() or
+		-- label:move(). Recognise the GUI-internal fields Geyser objects carry.
+		local function looksLikeSerializedGui(t)
+			local ty = rawget(t, "type")
+			return rawget(t, "windowList") ~= nil or rawget(t, "nestedLabels") ~= nil
+				or rawget(t, "windowname") ~= nil
+				or (type(ty) == "string" and (rawget(t, "container") ~= nil or rawget(t, "stylesheet") ~= nil))
+		end
+		-- Recursively drop serialized GUI snapshots from the loaded data BEFORE merging.
+		-- Per-key checks in deepMerge miss GUI objects nested inside a subtree that gets
+		-- assigned wholesale (e.g. ataxia.bars = { name = { window = <snapshot> } } when
+		-- ataxia.bars doesn't exist yet). Stripping the whole loaded tree first guarantees
+		-- no methodless GUI table is ever merged/assigned, at any depth.
+		local function stripGui(t, seen)
+			seen = seen or {}
+			if seen[t] then return end
+			seen[t] = true
+			for k, v in pairs(t) do
+				if type(v) == "table" then
+					if looksLikeSerializedGui(v) then
+						t[k] = nil
+					else
+						stripGui(v, seen)
+					end
+				end
+			end
+		end
 		-- `seen` guards against cyclic/self-referential tables in the saved data
 		-- (e.g. a stray back-reference stored into `ataxia`). Without it, a cycle
 		-- makes deepMerge recurse forever -> stack overflow, which aborts the whole
@@ -151,9 +227,12 @@ function ataxia_loadSettings()
 			for k, v in pairs(src) do
 				if type(v) == "table" then
 					if type(dst[k]) == "table" then
-						deepMerge(v, dst[k], seen)
-					elseif dst[k] == nil then
-						dst[k] = v  -- no runtime object to protect, safe to load
+						if not isRuntimeObject(dst[k]) then
+							deepMerge(v, dst[k], seen)
+						end
+						-- else: keep the live GUI/runtime object untouched
+					elseif dst[k] == nil and not looksLikeSerializedGui(v) then
+						dst[k] = v  -- plain data with no runtime object to protect
 					end
 					-- skip if dst[k] is a non-table (function, userdata, etc.)
 				else
@@ -161,6 +240,7 @@ function ataxia_loadSettings()
 				end
 			end
 		end
+		stripGui(loaded)
 		deepMerge(loaded, target)
 	end
 
@@ -449,7 +529,7 @@ function ataxia_defaultSettings()
     }
 	}
 	ataxia.curingprio = {}
-	ataxia.bardStuff = {symphony = false, harmsList = {}, ariaBash = false, bashHarms = false, instrument = "lyre"}
+	ataxia.bardStuff = {symphony = false, harmsList = {}, ariaBash = false, bashHarms = false, instrument = "lyre", bashTempo = "moderato", bashCompose = "paean prelude scherzo sonata maqam", bashPunctuate = false}
 	ataxia.sylvanStuff = {propagateList = {arms = false, legs = false, head = false, body = false}}
 
 	-- User-configurable weapons, mount, artefacts (populated via Setup Wizard)
@@ -481,3 +561,18 @@ end
 
 registerAnonymousEventHandler("sysDisconnectionEvent", "ataxia_saveSettings", true)
 registerAnonymousEventHandler("sysLoadEvent", "ataxia_loadSettings")
+
+-- Guarantee ataxia.bardStuff exists with all fields at package load. Many scripts, triggers,
+-- and aliases index ataxia.bardStuff.* directly (instrument, symphony, ariaBash, tunesmith,
+-- bashTempo, bashCompose, bashPunctuate); if a save predates a field -- or the loader hasn't
+-- populated it yet -- those would nil-error (e.g. Queue Scanning, bashpunctuate). This backfills
+-- missing fields WITHOUT clobbering saved values, and runs before sysLoadEvent merges the save.
+ataxia = ataxia or {}
+ataxia.bardStuff = ataxia.bardStuff or {}
+for k, v in pairs({
+	symphony = false, harmsList = {}, ariaBash = false, bashHarms = false,
+	instrument = "lyre", bashTempo = "moderato",
+	bashCompose = "paean prelude scherzo sonata maqam", bashPunctuate = false,
+}) do
+	if ataxia.bardStuff[k] == nil then ataxia.bardStuff[k] = v end
+end

@@ -2,6 +2,65 @@
 
 ---
 
+## 2026-07-10 — Fix: `gmcp.Room` handler crashes after the loader was un-stuck (GUI objects in the save)
+
+### Root cause (same underlying issue as the stack overflow)
+
+Live Geyser/Adjustable GUI objects are stored under the **saved** `ataxia` namespace — e.g.
+`ataxia.mnemosyne.map.window` / `.container` / `.cells` (`mnemosyne/006_Ripple_Map_Window.lua`) and
+`ataxia.data.hunter.window`. `ataxia_saveSettings` serializes all of `ataxia`, so these GUI objects
+(which are full of circular references) get written to disk. That circular structure is exactly what
+overflowed `deepMerge` before. With the overflow fixed, the loader now *completes* and `mergeLoad`
+**merges the stale serialized snapshot into the live Geyser object**, polluting a container's
+`windowList` with plain-table (methodless) children. The next `gmcp.Room` → `MAP.window:hide()` /
+`:show()` walks that list and dies: `GeyserContainer.lua:139/167: attempt to call method 'hide'/'show'
+(a nil value)`.
+
+### Fix (v4.7.52 — robust, after per-key guards proved insufficient)
+
+Per-key guards inside `deepMerge` missed GUI objects nested inside a subtree assigned **wholesale**
+(e.g. `ataxia.bars = { hp = { window = <snapshot> } }` when `ataxia.bars` doesn't exist yet → the whole
+thing is assigned at once, nested window included → `GeyserLabel:493` crashes). The real fix works on the
+whole tree:
+
+- **`ataxia/001_Save_Load_Settings.lua`**
+  - **Load — `stripGui(loaded)`**: recursively removes serialized GUI snapshots from the loaded data at
+    *any depth* BEFORE merging (detected by GUI-internal fields: `windowList`/`nestedLabels`/`windowname`,
+    or a `type` tag with `container`/`stylesheet`). Nothing GUI ever gets merged or assigned. `deepMerge`
+    also still refuses to recurse into a live runtime object (metatable / `hide`/`show` method).
+  - **Save — `sanitizeForSave(ataxia)`**: strips live GUI objects (reliably: their `hide`/`show` are
+    functions, or they have `windowList`/`nestedLabels`) from a data-only copy before `table.save`, so
+    files stop accumulating GUI objects at all. Cycle-guarded.
+- **`tests/test_settings.lua`** — added "strips GUI snapshots nested inside a wholesale-assigned subtree"
+  and "saveSettings strips live GUI objects from the serialized data" (plus the earlier live-object /
+  empty-key cases). Suite **159/159**.
+- **Version bumped 4.7.51 → 4.7.52** so the running build is verifiable in-game via `lua ataxiaVersion`.
+
+### User action (important)
+
+The currently-loaded session's Geyser containers may already be polluted, and a reinstall alone won't
+rebuild them (`MAP.build()` early-returns when `MAP.window` already exists). After installing, **restart
+Mudlet** so the GUI rebuilds clean; the fixed loader/`stripGui` then keep it clean, and the next save
+writes a GUI-free file. Verify with `lua ataxiaVersion` → `4.7.52`.
+
+---
+
+## 2026-07-09 — Bard bashing: tempo-aware flick for back-position bonus damage (v4.7.51)
+
+Achaea's FOOTWORK change makes bladedance attacks deal **bonus damage from the back position** against denizens, but PvE bashing started every fight in **allegro**, spammed a fixed `blade jab <target> torso`, and re-composed its performance on every attack. This reworks the Bard bashing loop around the new mechanics.
+
+- **Tempo & compose at bash start** (`ataxia/genrunning/003_Engaged_Disengage.lua`, `basher_engaged`): selects **moderato** tempo (config `ataxia.bardStuff.bashTempo`) and composes **`paean prelude scherzo sonata maqam`** (config `bashCompose`) once — via the new shared `ataxiaBasher_bardCompose()` helper, which wields the lyre first (you can't perform without your instrument), ends any prior performance, composes, and arms the 15-minute timer.
+- **Attack** (`basher/002_Class_Bashing.lua`, `ataxiaBasher_bardBashing`): now `blade flick <target>` (psychic damage, back-boosted) — or `blade punctuate <target> paean` (punctuate is the raze; paean the song) when the `bashpunctuate` toggle is on, for denizens that resist psychic. **Compose was removed from the per-attack path** (it doesn't belong on every swing). Also fixed two wield bugs (double-space in the shielded branch; the `bardNeedRapierWield` branch wielding the shield in the right hand).
+- **Battlerage** (`basher/001_Bashing_Functions.lua`, `ataxiaBasher_bardBattlerage`): custom rotation — culling blade (reap, handled globally) → charm the 2nd denizen (2+ denizens, ≥32 rage) → trill the target (2+ denizens, ≥28, off its ~42s cooldown) → howlslash (≥36) → moulinet (≥14). The shield-break branch now razes with `blade punctuate <target> paean` (punctuate is our raze) instead of a jab.
+- **Warmarch (Mnemosyne)** — while the Warmarch boon is active (`bardWarmarch`; set on boon claim or from the `BOONS` list, cleared on run start/end), the flick becomes `blade flick <target> paean` (Warmarch makes the paean refrain hit denizens for +100% psychic). New trigger `mnemosyne/010_Warmarch.lua`.
+- **15-minute refresh** (`timers/.../004_Bard_Performance.lua`): when the performance expires, the timer re-runs `ataxiaBasher_bardCompose()` (wield lyre → compose → re-arm) instead of just flagging it down; disengage disables the timer so it never fires while idle. If it lapses early, the `You can hardly manipulate a grand performance…` line also re-composes (`performance_tracking/005`).
+- **Config** (`ataxia/001_Save_Load_Settings.lua`): new `ataxia.bardStuff.bashCompose` (default `paean prelude scherzo sonata maqam`) and `bashPunctuate` (default false); existing saves fall back to the defaults.
+- **Aliases**: `bashtempo <adagio|moderato|allegro|none>` (`009`) picks tempo per area (Moderato = best steady-state back share, 2 of every 7 hits; Allegro reaches back fastest for squishy mobs); `bashpunctuate` (`010`) toggles flick↔punctuate for psychic-resistant denizens.
+- **Build**: fixed `build.sh` (hardcoded, now-missing `JAVA_HOME=E:/Java`) to resolve a valid Java home, with a clear error if none is found.
+- Docs: corrected the `.claude/classes/bard.md` Bashing (PvE) section (previously — and wrongly — listed `BATTLERAGE SLASH <target>`).
+
+---
+
 ## 2026-07-09 — Mnemosyne map: fixed 4×4 grid with unexplored slots (v4.7.50)
 
 Every Mnemosyne ripple is a fixed 4×4 room grid, so the map now renders that whole frame instead of auto-sizing to just the rooms you've entered.

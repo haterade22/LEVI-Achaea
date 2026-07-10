@@ -268,4 +268,92 @@ describe("ataxia_loadSettings()", function()
     expect(type(ataxiaNDB)).toBe("table")
     expect(ataxiaNDB.players.Survivor.city).toBe("Eleusis")
   end)
+
+  it("does not pollute a live GUI object with a stale serialized snapshot", function()
+    -- GUI objects (e.g. ataxia.mnemosyne.map.window) live in the saved `ataxia`
+    -- namespace, so a stale serialized snapshot is on disk. deepMerge must leave the
+    -- live Geyser object untouched -- merging the snapshot pollutes its windowList
+    -- with plain-table children, so container:hide()/show() later crashes.
+    freshLoadState()
+    ataxia = { afflictions = {}, vitals = { bleed = 0 } }
+    local liveWindow = setmetatable(
+      { windowList = { realChild = { name = "real" } }, hide = function() end, show = function() end },
+      {})
+    ataxia.gui = { window = liveWindow }
+    _saved[ATAXIA] = { gui = { window = { windowList = { staleChild = { name = "stale" } } } } }
+    _saved[ANDB]   = { installed = true, players = {} }
+
+    local realSave = table.save
+    table.save = function() end
+    ataxia_loadSettings()
+    table.save = realSave
+
+    expect(ataxia.gui.window).toBe(liveWindow)                 -- same object, not replaced
+    expect(ataxia.gui.window.windowList.staleChild).toBeNil()  -- not polluted
+    expect(ataxia.gui.window.windowList.realChild.name).toBe("real")
+    expect(ataxia.loaded).toBeTrue()
+  end)
+
+  it("does not restore a serialized GUI snapshot into a fresh/empty key", function()
+    -- Cells (labels) start as an empty {} at load, so a saved snapshot would hit the
+    -- assign branch and become a methodless table. It must be skipped; plain sibling
+    -- data must still load normally (no false positive).
+    freshLoadState()
+    ataxia = { afflictions = {}, vitals = { bleed = 0 } }
+    ataxia.map = { cells = {} }
+    _saved[ATAXIA] = { map = {
+      cells = { cell1 = { type = "label", stylesheet = "x", container = { name = "c" } } },
+      cfg   = { zoom = 3 },
+    } }
+    _saved[ANDB] = { installed = true, players = {} }
+
+    local realSave = table.save
+    table.save = function() end
+    ataxia_loadSettings()
+    table.save = realSave
+
+    expect(ataxia.map.cells.cell1).toBeNil()   -- GUI snapshot skipped
+    expect(ataxia.map.cfg.zoom).toBe(3)        -- plain data still loaded
+  end)
+
+  it("strips GUI snapshots nested inside a wholesale-assigned subtree", function()
+    -- ataxia.bars doesn't exist at load, so the whole subtree is assigned at once;
+    -- the recursive pre-strip must still remove the nested window snapshot while
+    -- keeping sibling data (the per-key deepMerge guard alone would miss this).
+    freshLoadState()
+    ataxia = { afflictions = {}, vitals = { bleed = 0 } }
+    _saved[ATAXIA] = { bars = {
+      hp = { window = { nestedLabels = { l1 = { name = "x" } } }, max = 100 },
+    } }
+    _saved[ANDB] = { installed = true, players = {} }
+
+    local realSave = table.save
+    table.save = function() end
+    ataxia_loadSettings()
+    table.save = realSave
+
+    expect(ataxia.bars.hp.window).toBeNil()   -- nested GUI snapshot stripped
+    expect(ataxia.bars.hp.max).toBe(100)      -- sibling data kept
+  end)
+
+  it("saveSettings strips live GUI objects from the serialized data", function()
+    _saved = {}
+    _ataxia_backup = {}
+    ataxiaBasher, ataxiaNDB, ataxiaExtraction, selfLimbDamage, itemCatalog, ldm = nil, nil, nil, nil, nil, nil
+    ataxia = { settings = { class = "Serpent" }, mnemosyne = { map = {} } }
+    ataxia.mnemosyne.map.window = setmetatable(
+      { windowList = {}, hide = function() end, show = function() end }, {})
+    ataxia.mnemosyne.map.rooms = { r1 = { num = 1 } }
+
+    ataxia_saveSettings()
+
+    local savedAtaxia
+    for path, data in pairs(_saved) do
+      if path:find("ataxia") and not path:find("andb") then savedAtaxia = data end
+    end
+    expect(type(savedAtaxia)).toBe("table")
+    expect(savedAtaxia.mnemosyne.map.window).toBeNil()      -- live GUI object stripped
+    expect(savedAtaxia.mnemosyne.map.rooms.r1.num).toBe(1)  -- data kept
+    expect(savedAtaxia.settings.class).toBe("Serpent")
+  end)
 end)

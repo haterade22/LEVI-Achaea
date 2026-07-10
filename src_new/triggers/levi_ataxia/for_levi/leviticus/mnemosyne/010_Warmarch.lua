@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: Mnemosyne Run Start
+name: Mnemosyne Warmarch
 hierarchy:
 - Levi_Ataxia
 - Ataxia
@@ -28,9 +28,11 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^You begin to wade out into the depths of the Mnemosyne
+- pattern: ^Warmarch\s+\d+\s+\w+
   type: 1
 ]]--
 
-ataxia.mnemosyne.onRunStart()
-bardWarmarch = false  -- boons reset each run
+-- A row in the BOONS list (name / echoes / rarity) confirms Warmarch is active: enable
+-- paean-refrain flick (Warmarch makes the paean refrain hit denizens for +100% psychic).
+-- Cleared on Mnemosyne run start/end. Type BOONS to re-sync if needed.
+bardWarmarch = true

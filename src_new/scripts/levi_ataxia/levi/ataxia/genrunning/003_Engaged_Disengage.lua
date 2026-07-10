@@ -77,6 +77,7 @@ function basher_disengaged()
 	
 	if gmcp.Char.Status.class == "Bard" then
 		send("wield rapier shield",false)
+		disableTimer("Bard Performance")
 		if ataxia.bardStuff.ariaBash then
 			ataxia_sendCuringPriority("curing priority defence aria reset", false)
 			
@@ -190,14 +191,20 @@ function basher_engaged()
     send("epitaph focus serpent nest scales skein scarab jackal serpent;crux let me",false)
     send("unwield left;unwield right;wield right shield")
 	elseif ataxia_isClass("Bard") then
-    send("remove lyre;wield left lyre")
-    tempTimer(.1, [[send("performance end")]])
-    tempTimer(.2, [[send("compose gusheh sonata scherzo maqam prelude")]])
-    tempTimer(1, [[send("tempo allegro")]])
+    ataxiaBasher_bardCompose()
+    tempTimer(1, function()
+      local t = (ataxia.bardStuff and ataxia.bardStuff.bashTempo) or "moderato"
+      if t ~= "none" then
+        send("tempo "..t)
+        ataxiaEcho("<green>Bard bash:<reset> tempo set to <cyan>"..t)
+      else
+        ataxiaEcho("<green>Bard bash:<reset> <yellow>tempo unmanaged (none)")
+      end
+    end)
     
 		bardNeedRapierWield = false
 		
-		--sonata maqam prelude scherzo
+		--tempo + compose set here at bash start (compose via ataxiaBasher_bardCompose; config bashCompose)
   elseif gmcp.Char.Status.class == "Blue Dragon" or gmcp.Char.Status.class == "Golden Dragon" or gmcp.Char.Status.class == "Silver Dragon" or gmcp.Char.Status.class == "Green Dragon" or gmcp.Char.Status.class == "Red Dragon" then
     send("unwield left;unwield right;wield left fang;wield right shield")
   elseif gmcp.Char.Status.class == "Runewarden" then

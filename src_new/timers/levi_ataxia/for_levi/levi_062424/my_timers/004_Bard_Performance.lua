@@ -19,3 +19,9 @@ packageName: ''
 ]]--
 
 bardperformance = false
+
+-- 15-min performance expired: renew it if we're still bashing (helper wields the lyre
+-- first, recomposes, and re-arms this timer). The next blade attack re-wields the rapier.
+if gmcp and gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class == "Bard" and ataxiaBasher_bardCompose then
+   ataxiaBasher_bardCompose()
+end

@@ -573,6 +573,26 @@ local function ataxiaBasher_crowdControlBattlerage(class, specialCmd, level, sp,
   return command
 end
 
+-- Bard battlerage: culling blade (reap) is handled globally above. Then, with 2+ denizens,
+-- charm the 2nd denizen at >=32 rage, else trill the target at >=28 (when off its ~42s cd);
+-- otherwise the big single hit howlslash at >=36, then the cheap moulinet at >=14.
+-- Charm is intentionally not cooldown-gated (fires whenever eligible; self-limits on rage).
+local function ataxiaBasher_bardBattlerage(sp)
+  local rage = ataxia.vitals.rage
+  local twoPlus = ataxiaBasher_validTargets() >= 2  -- also refreshes stormhammerTargets
+
+  if twoPlus and rage >= 32 then
+    return "play charm at "..(stormhammerTargets[2] or target)..sp
+  elseif twoPlus and rage >= 28 and not battleRage_Timers.special then
+    return "play trill at "..target..sp
+  elseif rage >= 36 and not battleRage_Timers.large then
+    return "howlslash "..target..sp
+  elseif rage >= 14 and not battleRage_Timers.small then
+    return "moulinet "..target..sp
+  end
+  return ""
+end
+
 function ataxiaBasher_assembleBattlerage()
 	local command = ""
 	local class = gmcp.Char.Status.class:title():gsub(" Lady", ""):gsub(" Lord", "")
@@ -619,6 +639,9 @@ function ataxiaBasher_assembleBattlerage()
 	elseif gmcp.Char.Status.class == "Shaman" then
 		local specialCmd = " invoke korkma "..(stormhammerTargets[3] or target)
 		command = ataxiaBasher_crowdControlBattlerage(class, specialCmd, level, sp, smallRage, bigRage)
+	-- Bard: charm (2+ denizens, >=32) -> trill (2+ denizens, >=28) -> howlslash (>=36) -> moulinet (>=14)
+	elseif gmcp.Char.Status.class == "Bard" then
+		command = ataxiaBasher_bardBattlerage(sp)
 	-- Standard pattern: check if class has a known specialRage threshold
 	elseif ataxiaBasher_specialRageThresholds[class] then
 		command = ataxiaBasher_standardBattlerage(class, ataxiaBasher_specialRageThresholds[class], level, sp)

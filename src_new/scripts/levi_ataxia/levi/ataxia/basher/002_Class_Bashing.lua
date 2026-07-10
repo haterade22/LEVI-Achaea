@@ -168,23 +168,41 @@ function ataxiaBasher_apostateBashing()
 	return command	
 end
 
+-- Wield the lyre and (re)compose the bash performance, then (re)start the 15-min
+-- "Bard Performance" timer. Needs the instrument in hand, so it wields the lyre first
+-- (the next blade attack re-wields the left shield; the rapier stays in the right hand).
+-- Called once at bash start (basher_engaged) and again when the 15-min timer expires.
+function ataxiaBasher_bardCompose()
+   local c = (ataxia.bardStuff and ataxia.bardStuff.bashCompose) or "paean prelude scherzo sonata maqam"
+   send("remove lyre;wield left lyre;performance end;compose "..c)
+   enableTimer("Bard Performance")
+   ataxiaEcho("<green>Bard bash:<reset> composed <cyan>"..c)
+end
+
 function ataxiaBasher_bardBashing()
    local command = ""
    if bardNeedRapierWield then
       bardNeedRapierWield = false
-      command = command.."wield right rapier;wield right shield"..ataxia.settings.separator
-   end
-   if bardperformance == false then
-    command = command.."wield left lyre;compose gusheh sonata scherzo maqam prelude;"
-    enableTimer("Bard Performance")
+      command = command.."wield right rapier;wield left shield"..ataxia.settings.separator
    end
    if ataxiaBasher.shielded then
-      command = command.."wield right rapier;wield left shield;blade jab  "..target.. " torso nomos;"
+      command = command.."wield right rapier;wield left shield;blade punctuate "..target.. " paean;"
    end
-    command = command..ataxiaBasher_assembleBattlerage()  
-    command = command.."wield right rapier;wield left shield;blade jab " ..target.. " torso"
+    command = command..ataxiaBasher_assembleBattlerage()
 
-   return command   
+    -- Attack: flick (psychic) by default; punctuate for psychic-resistant denizens
+    -- (manual 'bashpunctuate' toggle). Compose/tempo are handled at bash start + timer.
+    local atk
+    if ataxia.bardStuff and ataxia.bardStuff.bashPunctuate then
+       atk = "blade punctuate "..target.." paean"
+    elseif bardWarmarch then
+       atk = "blade flick "..target.." paean"  -- Warmarch boon: paean refrain now hits denizens (+100% psychic)
+    else
+       atk = "blade flick "..target
+    end
+    command = command.."wield right rapier;wield left shield;"..atk
+
+   return command
 end
 
 function ataxiaBasher_blademasterBashing()
