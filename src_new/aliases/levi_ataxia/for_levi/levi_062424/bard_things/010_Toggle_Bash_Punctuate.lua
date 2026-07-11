@@ -22,8 +22,8 @@ end
 ataxia.bardStuff = ataxia.bardStuff or {}
 ataxia.bardStuff.bashPunctuate = not ataxia.bardStuff.bashPunctuate
 if ataxia.bardStuff.bashPunctuate then
-	ataxiaEcho("Bash attack: <cyan>blade punctuate <target> paean<reset> (psychic-resistant mode ON).")
+	ataxiaEcho("Bash attack: <cyan>blade punctuate <target> nomos<reset> (psychic-resistant mode ON).")
 else
-	ataxiaEcho("Bash attack: <cyan>blade flick <target><reset> (psychic-resistant mode OFF).")
+	ataxiaEcho("Bash attack: <cyan>blade flick <target> nomos<reset> (psychic-resistant mode OFF).")
 end
 ataxia_saveSettings(false)

@@ -22,7 +22,13 @@ function ataxiaCheckForMissing()
     end
     sp = ataxia.settings.separator
   end
-  
+
+  -- Older basher saves predate noShieldBreak; ataxiaBasher_canShield() indexes
+  -- `.noShieldBreak.mobs` directly, so a missing field spams index errors every prompt.
+  if ataxiaBasher and not ataxiaBasher.noShieldBreak then
+    ataxiaBasher.noShieldBreak = { mobs = {}, threshold = 0 }
+  end
+
   if not ataxia.settings.defences then
     ataxia.settings.defences = { current = "", defup = {}, keepup = {} }
     ataxiaEcho("Defence profiles not found. Initialised empty profiles.")

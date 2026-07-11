@@ -33,6 +33,7 @@ dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/003_Commands.lua")
 dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/004_Parsers.lua")
 dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/005_Ripple_Map.lua")
 dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/007_History.lua")
+dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/008_Explorer.lua")
 
 local M = ataxia.mnemosyne
 
@@ -494,6 +495,41 @@ describe("local run history", function()
     M.onRipple(3) -- start line was missed -> onRipple bootstraps the run
     expect(M.history.run).toBe(1) -- got its own bucket, not run 0
     ataxiaBasher = nil
+  end)
+end)
+
+-- ─── Explorer (auto-sweep) ───────────────────────────────────────────────────
+
+describe("mnem explore", function()
+  local MAP = ataxia.mnemosyne.map
+
+  it("reads room-clear from ataxia.denizensHere (ground truth)", function()
+    ataxia.denizensHere = {}
+    expect(M._roomHasDenizens()).toBeFalse()
+    ataxia.denizensHere = { [123] = "a snarling wolf" }
+    expect(M._roomHasDenizens()).toBeTrue()
+    ataxia.denizensHere = {}
+  end)
+
+  it("steps through an unexplored exit of the current room", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { north = 0, east = 0 }, nil) -- origin; two unwalked exits
+    local dir = M._nextExploreStep()
+    expect(dir == "n" or dir == "e").toBeTrue()
+  end)
+
+  it("returns nil when the reachable grid is fully swept", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { east = 2 }, nil)
+    MAP.onRoom(2, "B", { west = 1 }, nil) -- both exits now walked
+    expect(M._nextExploreStep()).toBeNil()
+  end)
+
+  it("backtracks toward the nearest room that still has an unexplored exit", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { east = 2, north = 0 }, nil) -- A keeps an unexplored north
+    MAP.onRoom(2, "B", { west = 1 }, nil) -- standing in B, nothing unexplored here
+    expect(M._nextExploreStep()).toBe("w") -- step back west toward A
   end)
 end)
 

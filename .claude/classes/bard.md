@@ -163,7 +163,7 @@ notes: "Bard is affliction/resonance-based, not limb-based"
 
 ## Bashing (PvE)
 ```yaml
-attack_command: "blade flick <target>"   # flick's raze (nomos) is baked into the composition, so no refrain needed; OR 'blade punctuate <target> paean' (punctuate IS the raze; paean is the song) when the bashPunctuate toggle is on (psychic-resistant denizens)
+attack_command: "blade flick <target> nomos"   # default; 'blade punctuate <target> nomos' when the bashPunctuate toggle is on (psychic-resistant denizens); 'blade flick <target> paean' while the Warmarch boon is active
 attack_skill: Bladedance
 warmarch: "Mnemosyne 'Warmarch' boon makes the paean refrain hit denizens (+100% psychic). While bardWarmarch is set, flick becomes 'blade flick <target> paean'. Set on boon claim / seeing it in the BOONS list; cleared on Mnemosyne run start/end (triggers 001/009/010)."
 mechanic:
@@ -172,7 +172,7 @@ mechanic:
 battlerage: "ataxiaBasher_bardBattlerage() (basher/001). Priority: culling blade (reap, if off cooldown) > charm 2nd denizen (2+ denizens, >=32 rage) > trill target (2+ denizens, >=28, off ~42s cd) > howlslash (>=36) > moulinet (>=14)."
 lifecycle:
   bash_start: "basher_engaged() (genrunning/003) sets tempo (bashTempo) and calls ataxiaBasher_bardCompose() ONCE."
-  compose: "ataxiaBasher_bardCompose() (basher/002) wields the lyre (required to perform), ends any prior performance, composes bashCompose, and arms the 15-min 'Bard Performance' timer. Compose is NOT done per attack."
+  compose: "ataxiaBasher_bardCompose() (basher/002) wields the lyre (required to perform), composes bashCompose, and arms the 15-min 'Bard Performance' timer. Compose is NOT done per attack, and only ever runs when not performing (bash start / timer expiry / 'not performing' trigger), so no 'performance end' is needed. Debounced to one compose per 2s."
   refresh: "The performance lasts 15 min. On timer expiry the Bard Performance timer (timers/004) re-runs ataxiaBasher_bardCompose(); disengage disables the timer so it never fires while idle. If it lapses early, the 'You can hardly manipulate a grand performance...' line (performance_tracking/005) also re-composes while bashing."
 config:
   bashTempo: "ataxia.bardStuff.bashTempo (default 'moderato'). Sent as 'TEMPO <name>' at bash start. Alias: 'bashtempo <adagio|moderato|allegro|none>'. 'none' = unmanaged."

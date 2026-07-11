@@ -33,3 +33,4 @@ patterns:
 ]]--
 
 ataxia.mnemosyne.onBoonsOffered()
+if ataxia.mnemosyne.onBoonScreen then ataxia.mnemosyne.onBoonScreen() end -- explorer: ripple done

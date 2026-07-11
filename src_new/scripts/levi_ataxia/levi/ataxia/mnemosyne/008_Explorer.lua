@@ -1,0 +1,323 @@
+--[[mudlet
+type: script
+name: Mnemosyne Explorer
+hierarchy:
+- Levi_Ataxia
+- Ataxia
+- Mnemosyne
+attributes:
+  isActive: 'yes'
+  isFolder: 'no'
+packageName: ''
+]]--
+
+--[[
+    ============================================================================
+    MNEMOSYNE AUTO-EXPLORER  (mnem explore)
+    ============================================================================
+    Sweeps the per-ripple 4x4 room grid, clearing denizens in each room, and
+    stops when the boon-selection screen appears (ripple complete). MVP: it
+    sweeps to the boon screen then hands back -- you pick the boon and wade.
+
+    Division of labour (reuses existing systems, no new combat logic):
+      * COMBAT is the autobasher in MANUAL mode. Manual mode attacks whatever is
+        in the room but never auto-moves (its auto-move is Mudlet-mapper based and
+        can't work in the unmapped tower). Mnemosyne's no-flee/shield behaviour is
+        already handled by ataxiaBasher.inMnemosyne.
+      * NAVIGATION is this module. "Room clear" = ataxia.denizensHere empty of
+        non-own denizens (GMCP ground truth). Movement is `queue addclear free
+        <dir>` (the only thing that routes in an unmapped area). The 4x4 graph,
+        unexplored-exit detection and BFS pathfinding are reused from the ripple
+        map (005_Ripple_Map.lua, namespace MAP).
+
+    Loop (event-driven): on each room-clear, step through an unexplored exit of
+    the current room, or the first step toward the nearest visited room that
+    still has one -- a DFS sweep with backtracking. Stop on the boon screen,
+    leaving Mnemosyne, a fully-swept grid, or `mnem explore off`.
+
+    Depends on 001 (echo), 002 (run state) and 005 (MAP). Loads after them.
+    ============================================================================
+]]--
+
+ataxia.mnemosyne = ataxia.mnemosyne or {}
+local M = ataxia.mnemosyne
+local MAP = ataxia.mnemosyne.map
+
+M.explore = M.explore or { on = false, moving = false, failed = {} }
+
+local TICK_DELAY = 0.5 -- let room contents settle after an event before deciding
+local MOVE_TIMEOUT = 5 -- a move that produces no arrival -> retry / unstick
+local MOVE_RETRIES = 1 -- re-send a stalled move this many times before condemning the exit
+local WATCHDOG = 30 -- seconds of no progress (no arrival / no denizen change) before a soft nudge
+
+-- Check for STARTING: must be physically in the tower. Mnemosyne rooms are an
+-- unmapped instance (area == ""), and we require that directly so a telemetry run
+-- that outlived your presence (e.g. a missed /run_end) can't start a sweep in a
+-- real area off a stale map.
+local function canStart()
+  return MAP and MAP.inMnem and MAP.inMnem()
+    and gmcp and gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.area == ""
+end
+
+-- Strict physical check for the RUNNING loop: the room-update clears
+-- ataxiaBasher.inMnemosyne the instant you enter any real (mapped) area, so this
+-- guarantees the explorer stops walking/fighting the moment you leave the tower.
+local function inMnem()
+  return ataxiaBasher ~= nil and ataxiaBasher.inMnemosyne == true
+end
+
+function M._exploreEcho(msg)
+  M.echo("<gold>[explore]<reset> " .. tostring(msg))
+end
+
+-- ---------------------------------------------------------------------------
+-- Room state
+-- ---------------------------------------------------------------------------
+
+-- True if `name` is one of our own pets/summons (never a kill target). Guarded:
+-- ataxiaBasher_isOwnDenizen indexes ataxiaBasher, so skip it if that's absent and
+-- never let it error -- an unrecognised name safely counts as a real denizen.
+local function isOwnDenizen(name)
+  if not (ataxiaBasher and ataxiaBasher_isOwnDenizen) then return false end
+  local ok, res = pcall(ataxiaBasher_isOwnDenizen, name)
+  return ok and res == true
+end
+
+-- Ground truth: does the current room still hold denizens to kill? Own
+-- denizens (pets/summons) don't count.
+function M._roomHasDenizens()
+  local dz = ataxia.denizensHere
+  if type(dz) ~= "table" then return false end
+  for _, name in pairs(dz) do
+    if not isOwnDenizen(name) then return true end
+  end
+  return false
+end
+
+-- Unexplored exits of `num` the sweep can actually use: reported-but-unwalked,
+-- PLANAR (the 4x4 is flat -- never wander up/down/in/out off the level, which
+-- would skip the boon screen), and not recorded as failed this session. Used for
+-- BOTH the current-room pick and backtrack candidacy, so a room whose only
+-- unexplored exits are failed/non-planar counts as swept (no infinite backtrack).
+local function usableUnexplored(num)
+  local failed = (M.explore.failed and M.explore.failed[num]) or {}
+  local out = {}
+  for _, d in ipairs(MAP.unexploredExits(num) or {}) do
+    if MAP.OFFSETS and MAP.OFFSETS[d] and not failed[d] then out[#out + 1] = d end
+  end
+  return out
+end
+
+-- Next single-step short direction to sweep the grid: a usable unexplored exit of
+-- the current room, else the first step toward the nearest visited room that has
+-- one. nil when the reachable grid is fully swept.
+function M._nextExploreStep()
+  if not (MAP and MAP.current and MAP.rooms and MAP.rooms[MAP.current]) then return nil end
+  local cur = MAP.current
+
+  local un = usableUnexplored(cur)
+  if #un > 0 then return MAP.shortDir(un[1]) end
+
+  -- Backtrack: BFS (over walked edges) to the nearest room that still has a
+  -- usable unexplored exit; take the first step of that path.
+  local best
+  for num, r in pairs(MAP.rooms) do
+    if r.visited and num ~= cur and #usableUnexplored(num) > 0 then
+      local steps = MAP.path(cur, num)
+      if steps and #steps > 0 and (not best or #steps < #best) then best = steps end
+    end
+  end
+  if best then return best[1] end
+  return nil
+end
+
+-- ---------------------------------------------------------------------------
+-- Movement + tick loop
+-- ---------------------------------------------------------------------------
+
+function M._exploreMove(dir, isRetry)
+  M.explore.moving = true
+  M.explore.fromRoom = MAP and MAP.current
+  M.explore.fromDir = dir
+  if not isRetry then M.explore.tries = 0 end
+  -- Stand as part of the move: after clearing a room you're frequently prone, and
+  -- a bare "free <dir>" would silently fail. Mirrors the basher's stand-first queue.
+  local sep = (ataxia.settings and ataxia.settings.separator) or ";"
+  send("queue addclear free stand" .. sep .. dir)
+  if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
+  M._explMoveT = tempTimer(MOVE_TIMEOUT, function()
+    M._explMoveT = nil
+    if not (M.explore.on and M.explore.moving) then return end
+    -- Still in the room we left -> the move didn't take.
+    if MAP and MAP.current == M.explore.fromRoom and M.explore.fromRoom then
+      if (M.explore.tries or 0) < MOVE_RETRIES then
+        M.explore.tries = (M.explore.tries or 0) + 1
+        return M._exploreMove(dir, true) -- retry the same exit (lag / transient prone)
+      end
+      -- Give up on this exit for the session so we don't retry a wall forever.
+      local nd = MAP.normDir and MAP.normDir(dir)
+      if nd then
+        M.explore.failed[M.explore.fromRoom] = M.explore.failed[M.explore.fromRoom] or {}
+        M.explore.failed[M.explore.fromRoom][nd] = true
+      end
+    end
+    M.explore.moving = false
+    M._exploreTick()
+  end)
+end
+
+function M._scheduleTick()
+  if M._explTickT then pcall(killTimer, M._explTickT); M._explTickT = nil end
+  M._explTickT = tempTimer(TICK_DELAY, function()
+    M._explTickT = nil
+    M._exploreTick()
+  end)
+end
+
+-- Stall watchdog: if nothing progresses (no arrival, no denizen change) for
+-- WATCHDOG seconds while running, nudge/notify rather than sit silently forever --
+-- a room that never clears (a wandered-in unlearned mob, a hard affliction, the
+-- basher switched off underneath) would otherwise park the sweep. Re-armed on
+-- every progress event; never hard-stops on its own.
+function M._armWatchdog()
+  if M._explWatchT then pcall(killTimer, M._explWatchT); M._explWatchT = nil end
+  M._explWatchT = tempTimer(WATCHDOG, function()
+    M._explWatchT = nil
+    if not M.explore.on then return end
+    if M._roomHasDenizens() then
+      M._exploreEcho("still on this room after " .. WATCHDOG .. "s -- the basher may be mid-fight; <a_darkmagenta>mnem explore off<reset> if it's stuck.")
+    else
+      M._exploreTick() -- clear but somehow parked: nudge a decision
+    end
+    M._armWatchdog() -- keep watching
+  end)
+end
+
+function M._exploreTick()
+  if not M.explore.on then return end
+  if not inMnem() then return M._exploreStop("left Mnemosyne") end
+  if M.explore.moving then return end -- awaiting arrival
+  if M._roomHasDenizens() then return end -- basher is clearing this room; wait
+  local dir = M._nextExploreStep()
+  if dir then
+    M._exploreMove(dir)
+  else
+    M._exploreEcho("swept the whole reachable grid; no more rooms to reach.")
+    M._exploreStop("grid fully swept")
+  end
+end
+
+-- ---------------------------------------------------------------------------
+-- Start / stop
+-- ---------------------------------------------------------------------------
+
+function M.exploreOn()
+  if M.explore.on then return M._exploreEcho("already running.") end
+  if not canStart() then
+    return M.echo("<indian_red>[explore]<reset> not in Mnemosyne -- nothing to sweep.")
+  end
+  -- Drive combat with the autobasher in MANUAL mode (attacks in place, no
+  -- mapper-move) + auto-learn (so Mnemosyne denizens populate targetList[""]) +
+  -- no-flee. Save prior state to restore on stop.
+  ataxiaBasher = ataxiaBasher or {}
+  M.explore._prevBasher = {
+    enabled = ataxiaBasher.enabled, manual = ataxiaBasher.manual,
+    areabash = ataxiaBasher.areabash, autoLearn = ataxiaBasher.autoLearn,
+  }
+  M.explore._raisedBasher = not ataxiaBasher.enabled
+  ataxiaBasher.enabled = true
+  ataxiaBasher.manual = true
+  ataxiaBasher.areabash = false
+  ataxiaBasher.autoLearn = true
+  ataxiaBasher.inMnemosyne = true
+  if M.explore._raisedBasher and raiseEvent then raiseEvent("basher enabled") end
+
+  M.explore.on = true
+  M.explore.moving = false
+  M.explore.failed = {}
+  M._exploreEcho("<green>ON<reset> -- sweeping the 4x4 and clearing to the boon screen. (<a_darkmagenta>mnem explore off<reset> to stop)")
+  M._scheduleTick()
+  M._armWatchdog()
+end
+
+function M._exploreStop(reason)
+  if not M.explore.on then return end
+  M.explore.on = false
+  M.explore.moving = false
+  if M._explTickT then pcall(killTimer, M._explTickT); M._explTickT = nil end
+  if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
+  if M._explWatchT then pcall(killTimer, M._explWatchT); M._explWatchT = nil end
+  -- Restore the basher to how we found it.
+  local p = M.explore._prevBasher
+  if p and ataxiaBasher then
+    ataxiaBasher.manual = p.manual
+    ataxiaBasher.areabash = p.areabash
+    ataxiaBasher.autoLearn = p.autoLearn
+    if M.explore._raisedBasher then
+      ataxiaBasher.enabled = p.enabled
+      if raiseEvent then raiseEvent("basher disabled") end
+    end
+  end
+  M.explore._prevBasher = nil
+  M._exploreEcho("<grey>off<reset>" .. (reason and (" (" .. reason .. ")") or "") .. ".")
+end
+
+function M.exploreOff()
+  if not M.explore.on then return M._exploreEcho("not running.") end
+  M._exploreStop("stopped")
+end
+
+function M.exploreToggle()
+  if M.explore.on then M.exploreOff() else M.exploreOn() end
+end
+
+function M.exploreStatus()
+  M.echo("<gold>[explore]<reset> " .. (M.explore.on and "<green>ON" or "<grey>off")
+    .. "<reset> inMnem=" .. tostring(inMnem())
+    .. " denizens=" .. tostring(M._roomHasDenizens())
+    .. " moving=" .. tostring(M.explore.moving)
+    .. " next=" .. tostring(M._nextExploreStep()))
+end
+
+-- The ripple is complete when the boon-offer screen appears; stop sweeping and
+-- hand back. Called from the boon-offer trigger regardless of telemetry state.
+function M.onBoonScreen()
+  if M.explore.on then
+    M._exploreEcho("<green>boon screen up<reset> -- ripple swept. Pick a boon and wade deeper.")
+    M._exploreStop("boon screen")
+  end
+end
+
+-- ---------------------------------------------------------------------------
+-- Event hooks
+-- ---------------------------------------------------------------------------
+
+-- Arrival: the map (005) records the room first (loads earlier), then we clear
+-- the moving flag and (debounced) decide the next step. Arrival is progress.
+if M._explRoomH then killAnonymousEventHandler(M._explRoomH) end
+M._explRoomH = registerAnonymousEventHandler("gmcp.Room", function()
+  if not M.explore.on then return end
+  M.explore.moving = false
+  if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
+  M._scheduleTick()
+  M._armWatchdog()
+end)
+
+-- Denizen change (killed / left / arrived): re-decide once things settle. Also
+-- progress, so re-arm the watchdog.
+if M._explTgtH then killAnonymousEventHandler(M._explTgtH) end
+M._explTgtH = registerAnonymousEventHandler("targets updated", function()
+  if not M.explore.on then return end
+  M._scheduleTick()
+  M._armWatchdog()
+end)
+
+-- Reload / auto-update: M (and M.explore) persist across an uninstall→install but
+-- the timers don't, so a running sweep would be left half-alive with the basher
+-- force-mutated. Start clean: mark it off (the user re-issues `mnem explore on`).
+if M._explLoadH then killAnonymousEventHandler(M._explLoadH) end
+M._explLoadH = registerAnonymousEventHandler("sysLoadEvent", function()
+  M.explore.on = false
+  M.explore.moving = false
+  M.explore._prevBasher = nil
+end)

@@ -49,6 +49,7 @@ function M.help()
     { "mnem test", "Ping /health to check connectivity" },
     { "mnem debug", "Toggle verbose debug echoes" },
     { "mnem map [on|off|status]", "Toggle / diagnose the per-ripple mini-map" },
+    { "mnem explore [on|off|status]", "Auto-sweep the 4x4, clear rooms, stop at the boon screen" },
     { "mnem boons", "This run's claimed boons (local history)" },
     { "mnem affixes", "This run's active affixes (ongoing effects)" },
     { "mnem library", "All-time affix catalogue" },
@@ -132,6 +133,11 @@ function M.command(rest)
     if arg == "" then M.echo("Usage: mnem monsters <text>") else M.reportMonsters(arg) end
   elseif cmd == "death" then
     M.reportDeath(arg)
+  elseif cmd == "explore" then
+    if arg == "off" then M.exploreOff()
+    elseif arg == "status" then M.exploreStatus()
+    elseif arg == "on" then M.exploreOn()
+    else M.exploreToggle() end
   elseif cmd == "boons" then
     M.reportBoons()
   elseif cmd == "affixes" then

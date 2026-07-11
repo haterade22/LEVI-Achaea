@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-07-10 — Fix: self-inflicted `db`-proxy crashes from the GUI stripper; exposed init gaps (v4.7.53)
+
+Once the loader was un-stuck (v4.7.52) the GUI-object crashes stopped, but the GUI stripper introduced a
+new one and the now-completing load surfaced older latent bugs:
+
+- **Root regression — never index `.hide`/`.show` on arbitrary tables.** `isRuntimeObject`/`sanitizeForSave`
+  probed `type(t.hide)`. For a Mudlet **`db` proxy** stored under `ataxia` (the `exp_db` hunting DB) that
+  fires the proxy's `__index` → `DB.lua:1669: attempt to access sheet 'hide' … does not exist`, and since
+  `ataxia_saveSettings` runs at end-of-load and on `basher enabled`/Mnemosyne events, it spammed everywhere
+  (and interrupting those handlers garbled GMCP). Fix (`ataxia/001_Save_Load_Settings.lua`): detect runtime
+  objects with **`getmetatable`** only (Geyser AND db proxies carry metatables — no side effects), and use
+  **`rawget`** for the GUI-field checks. Zero `.hide`/`.show` indexing remains.
+- **`ataxiaNDB API`** — guarded `pairs(t.characters)`: a truncated/garbled online download now echoes a
+  message instead of `bad argument #1 to 'pairs' (table expected, got nil)`.
+- **`Check For Any Missing Variables`** — self-heal `ataxiaBasher.noShieldBreak = {mobs={}, threshold=0}`
+  for older basher saves; `ataxiaBasher_canShield()` indexed it directly and spammed index errors each
+  prompt once the basher actually loaded.
+- Test suite **174/174**. Version 4.7.52 → **4.7.53** (verify in-game: `lua ataxiaVersion`).
+
+Still open (pre-existing, likely GMCP-corruption downstream): `Prompt Substitution … field 'IRE'` and the
+GMCP JSON decode errors — re-assess after this build, as several were fed by the `db`-proxy save-throw
+interrupting GMCP processing.
+
+---
+
 ## 2026-07-10 — Mnemosyne tracker: reliability hardening + local history (v4.7.52)
 
 Hardening informed by reviewing an alternate community tracker, plus a new local-history feature. Test suite **174/174**; the changes were adversarially reviewed before release (which caught the watchdog, `bardWarmarch`, and toggle bugs below).
@@ -63,8 +88,8 @@ writes a GUI-free file. Verify with `lua ataxiaVersion` → `4.7.52`.
 
 Achaea's FOOTWORK change makes bladedance attacks deal **bonus damage from the back position** against denizens, but PvE bashing started every fight in **allegro**, spammed a fixed `blade jab <target> torso`, and re-composed its performance on every attack. This reworks the Bard bashing loop around the new mechanics.
 
-- **Tempo & compose at bash start** (`ataxia/genrunning/003_Engaged_Disengage.lua`, `basher_engaged`): selects **moderato** tempo (config `ataxia.bardStuff.bashTempo`) and composes **`paean prelude scherzo sonata maqam`** (config `bashCompose`) once — via the new shared `ataxiaBasher_bardCompose()` helper, which wields the lyre first (you can't perform without your instrument), ends any prior performance, composes, and arms the 15-minute timer.
-- **Attack** (`basher/002_Class_Bashing.lua`, `ataxiaBasher_bardBashing`): now `blade flick <target>` (psychic damage, back-boosted) — or `blade punctuate <target> paean` (punctuate is the raze; paean the song) when the `bashpunctuate` toggle is on, for denizens that resist psychic. **Compose was removed from the per-attack path** (it doesn't belong on every swing). Also fixed two wield bugs (double-space in the shielded branch; the `bardNeedRapierWield` branch wielding the shield in the right hand).
+- **Tempo & compose at bash start** (`ataxia/genrunning/003_Engaged_Disengage.lua`, `basher_engaged`): selects **moderato** tempo (config `ataxia.bardStuff.bashTempo`) and composes **`paean prelude scherzo sonata maqam`** (config `bashCompose`) once — via the new shared `ataxiaBasher_bardCompose()` helper, which wields the lyre first (you can't perform without your instrument), composes, and arms the 15-minute timer (debounced to one compose per 2s).
+- **Attack** (`basher/002_Class_Bashing.lua`, `ataxiaBasher_bardBashing`): now `blade flick <target> nomos` (psychic damage, back-boosted) — `blade punctuate <target> nomos` when the `bashpunctuate` toggle is on (psychic-resistant denizens), and `blade flick <target> paean` while the Warmarch boon is active. **Compose was removed from the per-attack path** (it doesn't belong on every swing). Also fixed two wield bugs (double-space in the shielded branch; the `bardNeedRapierWield` branch wielding the shield in the right hand).
 - **Battlerage** (`basher/001_Bashing_Functions.lua`, `ataxiaBasher_bardBattlerage`): custom rotation — culling blade (reap, handled globally) → charm the 2nd denizen (2+ denizens, ≥32 rage) → trill the target (2+ denizens, ≥28, off its ~42s cooldown) → howlslash (≥36) → moulinet (≥14). The shield-break branch now razes with `blade punctuate <target> paean` (punctuate is our raze) instead of a jab.
 - **Warmarch (Mnemosyne)** — while the Warmarch boon is active (`bardWarmarch`; set on boon claim or from the `BOONS` list, cleared on run start/end), the flick becomes `blade flick <target> paean` (Warmarch makes the paean refrain hit denizens for +100% psychic). New trigger `mnemosyne/010_Warmarch.lua`.
 - **15-minute refresh** (`timers/.../004_Bard_Performance.lua`): when the performance expires, the timer re-runs `ataxiaBasher_bardCompose()` (wield lyre → compose → re-arm) instead of just flagging it down; disengage disables the timer so it never fires while idle. If it lapses early, the `You can hardly manipulate a grand performance…` line also re-composes (`performance_tracking/005`).

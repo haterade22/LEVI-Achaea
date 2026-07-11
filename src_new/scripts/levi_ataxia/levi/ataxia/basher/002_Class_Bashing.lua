@@ -173,8 +173,13 @@ end
 -- (the next blade attack re-wields the left shield; the rapier stays in the right hand).
 -- Called once at bash start (basher_engaged) and again when the 15-min timer expires.
 function ataxiaBasher_bardCompose()
+   -- Debounce: rapid "not performing" lines (repeated battlerage 'play' commands fire before the
+   -- compose lands) can call this several times; the extras are just redundant. Allow one per 2s.
+   if bardComposePending then return end
+   bardComposePending = true
+   tempTimer(2, [[bardComposePending = false]])
    local c = (ataxia.bardStuff and ataxia.bardStuff.bashCompose) or "paean prelude scherzo sonata maqam"
-   send("remove lyre;wield left lyre;performance end;compose "..c)
+   send("remove lyre;wield left lyre;compose "..c)
    enableTimer("Bard Performance")
    ataxiaEcho("<green>Bard bash:<reset> composed <cyan>"..c)
 end
@@ -194,11 +199,11 @@ function ataxiaBasher_bardBashing()
     -- (manual 'bashpunctuate' toggle). Compose/tempo are handled at bash start + timer.
     local atk
     if ataxia.bardStuff and ataxia.bardStuff.bashPunctuate then
-       atk = "blade punctuate "..target.." paean"
+       atk = "blade punctuate "..target.." nomos"
     elseif bardWarmarch then
        atk = "blade flick "..target.." paean"  -- Warmarch boon: paean refrain now hits denizens (+100% psychic)
     else
-       atk = "blade flick "..target
+       atk = "blade flick "..target.. " nomos"
     end
     command = command.."wield right rapier;wield left shield;"..atk
 
