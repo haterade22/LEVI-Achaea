@@ -65,7 +65,7 @@ A single status line, not a block. `Objective:  defeat <X>` is trimmed and match
 
 ### `onBoonsOffered` (trigger 004)
 
-Fires on `flickers of power that may aide you`. Capture runs with `timeout = 3`; lines before the first divider are skipped, the opening divider is skipped, and capture **stops** at the second divider or the `BOON CLAIM` footer (whichever comes first). The parsed list's names are recorded into `M.run.lastOffered` (so a later `BOON CLAIM` can resolve the game's exact spelling), then handed to `_reportBoonsOfferedEnriched`.
+Fires on `flickers of power that may aide you`. Capture runs with `timeout = 3`; lines before the first divider are skipped, the opening divider is skipped, and capture **stops** at the second divider or the `BOON CLAIM` footer (whichever comes first). The parsed list's names are recorded into `M.run.lastOffered` (so a later `BOON CLAIM` can resolve the game's exact spelling), then handed to `_reportBoonsOfferedEnriched`. The trigger *also* calls `onBoonScreen()` unconditionally (outside the `_inRun` telemetry gate): this line is the de-facto **ripple-complete** marker, and it's the signal the auto-explorer keys on to stop sweeping — see [07-explorer.md](07-explorer.md).
 
 ### The `BOON CONTEMPLATE` enrichment state machine
 
@@ -86,12 +86,12 @@ _contemplateNext(list, i)
 ```
 
 - **`_captureContemplate(cb)`** captures with `timeout = 2`. It **never** captures a `BOON CLAIM` line (returns `"skip"`), skips the `<name>:` header and opening divider, and **stops** at the closing divider. `onDone` is one-shot (`called` latch) and passes `_parseContemplate(lines)` to `cb`.
-- **`_parseContemplate(lines)`** returns `{ rarity, num_echoes_possible, description, quote }`. It reads `Rarity: <r>` and `Can echo: <…>` (`Yes` → `1`, `No` → `0`, else `tonumber`), then advances through sections `meta → desc → quote`: non-blank lines after the meta rows build the description paragraph, a blank line switches to the quote section, and the trailing double-quoted line becomes `quote` (surrounding `"` stripped).
+- **`_parseContemplate(lines)`** returns `{ rarity, num_echoes_possible, description, quote }`. It reads `Rarity: <r>`, the authoritative **`Maximum echoes: N`** line (printed only for echo-capable boons → `num_echoes_possible = N`), and `Can echo: <Yes/No>` (`No` → `0`, `Yes` → a floor of `1` that a `Maximum echoes` line refines to `N`) — so an echo-capable boon reports its real cap, not a flat `1`, and the `Maximum echoes` line is consumed as meta rather than leaking into the description. It then advances through sections `meta → desc → quote`: non-blank lines after the meta rows build the description paragraph, a blank line switches to the quote section, and the trailing double-quoted line becomes `quote` (surrounding `"` stripped).
 - **`_applyContemplate(boon, info)`** merges **only `rarity`, `quote`, and `num_echoes_possible`** onto the offered entry. It deliberately does **not** take contemplate's `description`: the offered-block description is authoritative and already wrap-joined, and the first boon's contemplate is armed right beside the `BOON CLAIM` offered footer, which was corrupting the first boon's description.
 
 ### `onBoonClaim(name)`
 
-Called from the alias. `name` is matched case-insensitively against `M.run.lastOffered`; on a hit, `reportBoonsSelected` is sent with the **canonical** offered spelling. A typo or stale claim (not in the offered set) reports nothing and only `decho`s — see [05-commands.md](05-commands.md).
+Called from the alias. `name` is resolved against `M.run.lastOffered` by `_resolveClaim(name, offered)` — a **slot number** (`boon claim 2` → `offered[2]`), an exact case-insensitive name, or a **unique case-insensitive prefix**. On a hit the claim is recorded to local history (`_recordClaim`, see [06-history.md](06-history.md)) and `reportBoonsSelected` is sent with the **canonical** offered spelling. A typo, an ambiguous prefix, or a stale claim reports nothing and only `decho`s — see [05-commands.md](05-commands.md).
 
 ## Deterministic monster capture
 

@@ -77,7 +77,9 @@ boons offer: "...flickers of power that may aide you..."   [trig 004]
   └─ _inRun? → reportDeath(killer) → POST /death   (run CONTINUES — Mnemosyne
                                                     death loses a life, not the run)
 "The Mnemosyne releases its hold, weaving N ... threads..."[trig 009]
-  └─ onRunEnd() → _flushMonsters() → POST /run_end → run.active=false, _resetRun()
+  └─ onRunEndMaybe() → arm 2s wait for "You just received message #N from Achaea."
+       └─ (confirmed) onRunEnd() → _flushMonsters() → POST /run_end
+                                 → run.active=false, _resetRun(); clears bardWarmarch
 ```
 
 ### Key ordering guarantees
@@ -89,6 +91,10 @@ boons offer: "...flickers of power that may aide you..."   [trig 004]
 ## Death vs. Run End
 
 Mnemosyne is an endless climb with **no win condition**. A "slain by" line (trigger 007) is an in-run life loss and reports `/death` but keeps `run.active` true. The run only closes on the reward line *"The Mnemosyne releases its hold, weaving N shimmering threads into your possession."* (trigger 009), which fires on true death or `WADE LEAVE`.
+
+**Run-end false-positive guard.** That reward line *also* prints verbatim when you re-read the stored Achaea message mid-run, so trigger 009 routes to `onRunEndMaybe()`, which arms a 2s window for the follow-up `"You just received message #N from Achaea."` and only calls `onRunEnd()` (the real end) if it fires — a mid-run re-read otherwise times out harmlessly. `bardWarmarch` is cleared inside the confirmed `onRunEnd()` (not eagerly in the trigger), so a re-read can't drop a Bard's paean bonus. See [03-parsing-triggers.md](03-parsing-triggers.md).
+
+**Start-failure recovery.** `startRun()` sets `run.active = true` optimistically; its `onError` callback resets it if `/run_start` fails (500 or timeout), so the client never keeps posting at a run the server never created — see [02-reporting.md](02-reporting.md).
 
 ## Resume-on-load
 

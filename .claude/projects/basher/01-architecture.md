@@ -83,7 +83,7 @@ All attack requests flow through `tryAttack()`. This is the ONLY function that c
 
 ## Supported Classes (22+)
 
-All class bashing functions in `basher/002_Class_Bashing.lua`:
+All class bashing attack functions in `basher/002_Class_Bashing.lua` (a few classes add custom helpers elsewhere — e.g. Bard's `ataxiaBasher_bardBattlerage` lives in `basher/001`, and its `ataxiaBasher_bardCompose` performance helper in `002`):
 
 Alchemist, Apostate, Bard, Blademaster, Depthswalker, Druid, Infernal, Jester, Magi, Monk, Occultist, Paladin, Pariah, Priest, Psion, Runewarden, Sentinel, Serpent, Shaman, Sylvan, Unnamable, Air/Fire/Water/Earth Elemental, Blue/Black/Green/Gold/Red/Silver Dragon
 

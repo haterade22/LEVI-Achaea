@@ -24,15 +24,15 @@ Two files: `001_HTTP_Client.lua` (transport — a serial POST queue) and `002_Re
 Requests are sent **one at a time** — the next only fires after `sysPostHttpDone`/`sysPostHttpError` for the previous — so endpoint ordering is guaranteed (`/ripple_level` before its monsters/boss/effects; `/boons_offered` before `/boons_selected`).
 
 ```
-M._enqueue(endpoint, payload, onOk)
+M._enqueue(endpoint, payload, onOk, onError)
   ├─ stamp payload.token
-  ├─ table.insert(M._queue, {endpoint, payload, onOk, tries=0})
+  ├─ table.insert(M._queue, {endpoint, payload, onOk, onError, tries=0})
   └─ M._pump()
 
 M._pump()                    (no-op if M._busy or queue empty)
   ├─ yajl.to_string(payload)  (drop request on encode failure)
   ├─ M._busy = true
-  ├─ arm watchdog: tempTimer(REQUEST_TIMEOUT=20s, → _finish if still busy)
+  ├─ arm watchdog: tempTimer(REQUEST_TIMEOUT=20s, → M._onTimeout)
   └─ postHTTP(json, baseUrl..endpoint, {Content-Type: application/json})
 
 sysPostHttpDone  → M._onDone(_, url, body)
@@ -44,8 +44,13 @@ sysPostHttpDone  → M._onDone(_, url, body)
 sysPostHttpError → M._onError(_, err, url)
   ├─ ignore unless M._busy AND _matchesHead(url)
   ├─ retry ONCE if req.tries<1 and endpoint in M._IDEMPOTENT
-  └─ else echo failure, M._finish()
+  └─ else echo failure, M._fireError(req, err), M._finish()
+
+M._onTimeout()               (watchdog fired: dropped response / POST→GET)
+  └─ M._fireError(req, "timeout"), M._finish()   (same recovery as an error)
 ```
+
+**Error recovery.** `M._fireError(req, err)` invokes the request's `onError(err)` callback (pcall-guarded), reached from BOTH the error event and the watchdog — so a failed request can undo optimistic local state. `startRun()` uses this: it sets `run.active = true` optimistically before `/run_start`, and its `onError` resets `run.active = false`, so a `/run_start` that 500s **or** times out doesn't leave the client firing `ripple`/`monsters`/`boss`/`effects`/`boons` at a run the server never created (recovery would otherwise wait for the next `/run_end` or reload's `runExists`).
 
 ### Safety features
 

@@ -166,6 +166,7 @@ The project uses [Muddler](https://github.com/demonnic/muddler) to build Mudlet 
 - If newer: shows notification, prompts user to type `SYSUPDATE`
 - `sysupdate` alias: downloads `.mpackage` → `uninstallPackage` → `installPackage` → cleanup
 - Uses `sysDownloadDone`/`sysDownloadError` events (same pattern as mudlet-mapper), not `tempTimer`
+- **Install triggers a load**: `sysInstallPackage` → `ataxia_updateApplied` → `ataxia_loadSettings()` (when not already loaded), so an install/self-update loads settings immediately — no reconnect required
 
 **Conversion script** (`tools/convert_to_muddler.py`):
 - Strips YAML headers from Lua files, outputs pure Lua
@@ -264,7 +265,7 @@ All combat systems in `src_new/scripts/levi_ataxia/levi/levi_scripts/`:
 | System | Files | Status | Kill Route | Location |
 |--------|-------|--------|------------|----------|
 | **apostate** | 1 (015) | **Documented** | Lock, corrupt, vivisect, sleep, mental | `apostate/` |
-| **bard** | 10 | Undocumented | Voicecraft, affliction | `bard/` |
+| **bard** | 10 | **Documented** | Voyria lock; Composition/Bladedance affliction; PvE footwork bashing | `bard/` |
 | **blademaster** | ~10 | **Documented** | Lightning/Ice, Brokenstar | `blademaster/` |
 | **depthswalker** | 1 | Undocumented | Shadow/time | `depthswalker/` |
 | **dwb** | 1 | Undocumented | Breakpoint/rift | `dwb/` |
@@ -533,28 +534,43 @@ In-game configuration wizard accessed via `ataxia setup`.
 
 Reports Mnemosyne (tides-of-memory) run progress to an external REST tracker as you play. HTTP POST with the token in the JSON body (no auth header). This is the *telemetry* system — distinct from the in-game Mnemosyne bashing area no-flee rules.
 
-**Full documentation**: See the `.claude/projects/mnemosyne/` doc set (architecture, reporting/endpoints, parsing & triggers, ripple map, commands) and `memory/mnemosyne.md` (concise index).
+**Full documentation**: See the `.claude/projects/mnemosyne/` doc set (architecture, reporting/endpoints, parsing & triggers, ripple map, commands, local history, auto-explorer) and `memory/mnemosyne.md` (concise index).
 
 **Namespace:** `ataxia.mnemosyne`. **Aliases:** `mnem` (+ `mnemosyne`), plus an intercept of `BOON CLAIM <name>`.
 
-**Key files:** `scripts/.../mnemosyne/001_HTTP_Client.lua` (serial POST queue), `002_Reporter_API.lua` (per-endpoint fns + run state), `003_Commands.lua` (`mnem` dispatch), `004_Parsers.lua` (effects/boons parsers, monster buffering), `005_Ripple_Map.lua` + `006_Ripple_Map_Window.lua` (per-ripple room mini-map). Triggers `triggers/.../mnemosyne/001-009`. Aliases `aliases/.../mnemosyne/001-002`.
+**Key files:** `scripts/.../mnemosyne/001_HTTP_Client.lua` (serial POST queue + error recovery), `002_Reporter_API.lua` (per-endpoint fns + run state), `003_Commands.lua` (`mnem` dispatch), `004_Parsers.lua` (effects/boons parsers, monster buffering), `005_Ripple_Map.lua` + `006_Ripple_Map_Window.lua` (per-ripple room mini-map), `007_History.lua` (local run history + reports), `008_Explorer.lua` (auto-sweep the 4×4). Triggers `triggers/.../mnemosyne/001-009`. Aliases `aliases/.../mnemosyne/001-002`.
 
 **Flow:** `GO!` → capture the mob spawn line (the line directly above `GO!`, positional — spawn wording varies per mob) → auto `WADE STATUS` → `/ripple_level`, `/boss` (from the `Objective: defeat <boss>` line), `/effects`; buffered monsters flush after `/ripple_level`. Serial queue enforces ordering (ripple_level first; boons_offered before boons_selected). `_auto()` gates run-start/GO/ripple; `_inRun()` gates monsters/effects/boons/boss/death so generic phrases can't report outside a tracked run. Boon enrichment: with `contemplate` on, each offered boon is `BOON CONTEMPLATE`d to fill rarity/quote/echoes.
 
-**Commands:** `mnem status|token <t>|on|off|contemplate|debug|test|start|end|check|ripple <n>|boss <name>|monsters <text>|death [killer]|map [on|off|status]`. Also `ataxia setup reporting`.
+**Commands:** `mnem status|token <t>|on|off|contemplate|debug|quiet [on|off]|test|start|end|check|ripple <n>|boss <name>|monsters <text>|death [killer]|map [on|off|status]|boons|affixes|library|explore [on|off|status]`. Also `ataxia setup reporting`.
 
-**Persistence:** `ataxia.settings.reporting` (`enabled`, `contemplate`, `token`, `url`) — saved inside the main `ataxia` file / `_ataxia_backup.ataxia`, no new disk file. Run state is in-memory (re-synced via `/run_exists` on load).
+**Persistence:** `ataxia.settings.reporting` (`enabled`, `contemplate`, `token`, `url`, `mapEnabled`, `quiet`) — saved inside the main `ataxia` file / `_ataxia_backup.ataxia`. Run state is in-memory (re-synced via `/run_exists` on load). The **local history** (`ataxia.mnemosyne.history`) is the one thing on its own disk file, `<profile>/mnemosyne_history.lua`.
 
-**Run end:** `/run_end` fires automatically on `"The Mnemosyne releases its hold, weaving N shimmering threads into your possession."` (true death or `WADE LEAVE` — Mnemosyne has no victory). All events now auto-report; manual `mnem` overrides remain.
+**Run end:** `/run_end` fires on `"The Mnemosyne releases its hold, weaving N shimmering threads into your possession."` — but only after a **confirmation** (`onRunEndMaybe` waits ~2s for `"You just received message #N from Achaea."`), because that reward line also prints on a mid-run message re-read. `bardWarmarch` is cleared only on the confirmed end. `startRun` also self-recovers: its `onError` resets `run.active` if `/run_start` 500s or times out. All events auto-report; manual `mnem` overrides remain.
 
 **Ripple mini-map (`ataxia.mnemosyne.map`, files 005/006):** draggable per-ripple grid widget (`Adjustable.Container`, position auto-persists). Builds a room graph from `gmcp.Room` arrivals in Mnemosyne. **Coordinates come from `MAP.relayout()`** — on every arrival it rebuilds a bidirectional adjacency from all rooms' known exits (`dir → neighbour-num`, coerced with `tonumber`; gmcp reports them as strings and `0` for unknown dests) and BFS-assigns coordinates from the origin. Re-deriving from the full accumulated graph each step is what makes it robust: a room unplaceable on arrival is placed on a later pass once either side of a link is known (per-arrival placement couldn't bootstrap). Anchored on the origin, falling back to the current room so it's always shown. Walked edges (for click-to-walk `MAP.path` BFS → `queue add free`) are recorded separately. Render (006) draws a **fixed 4×4 grid** (every ripple is a 4×4): visited rooms coloured (current green, un-walked-exit gold `?`, else grey), unvisited positions as dim placeholders. Wipes each ripple and re-seeds the current room from `gmcp.Room.Info` (`onRipple → MAP.onRipple`). Toggle `mnem map on|off` (`ataxia.settings.reporting.mapEnabled`, default on); `mnem map status` prints diagnostics incl. per-exit state. GUI (006) needs Geyser/`main` so it's not unit-tested; the pure graph in 005 is (`test_mnemosyne.lua`).
+
+**Local history (`ataxia.mnemosyne.history`, file 007):** a persisted local mirror of what each run parses — `offers`/`claims`/`affixes` per run plus an all-time `library` of affixes — recorded at the parser hooks (`_recordOffers`/`_recordClaim`/`_recordAffixes`) whenever a tracked run is on. `mnem boons` / `mnem affixes` / `mnem library` review this run's claims, its affixes, and the catalogue; `mnem quiet` silences the auto per-claim/affix echoes (still records). Bootstrapped runs (missed start line) get their own bucket via `onRipple` bumping the counter. Persistence (`table.save`/`load` to `mnemosyne_history.lua`) is guarded so a bare/test env never errors.
+
+**Auto-explorer (`ataxia.mnemosyne.explore`, file 008):** `mnem explore on` auto-sweeps the ripple's 4×4 — it drives the **basher in manual mode** (combat + no-flee, never mapper-moving) and handles *navigation* itself: room clear (`ataxia.denizensHere` empty) → step through a usable unexplored exit (planar, non-failed) or backtrack via `MAP.path` to the nearest room with one, moving with `queue addclear free stand;<dir>` (stands first — you're often prone post-fight). Event-driven (`gmcp.Room` + `"targets updated"` → debounced tick, `moving` guard). **Stops** at the boon screen (`onBoonScreen`, the ripple-complete marker), on leaving Mnemosyne (strict `ataxiaBasher.inMnemosyne`), when fully swept, or `mnem explore off`. Safety: start-guard (`area==""`), stall watchdog, basher save/restore, `sysLoadEvent` reset. Pure logic (`_nextExploreStep`/`_roomHasDenizens`) is unit-tested; the timer/event machine is validated in-game.
 
 ### Data Persistence & Profile Backup
 
 All system state is saved to disk files in `getMudletHomeDir()` via `table.save()`/`table.load()`. A profile backup system provides redundancy by also storing data in the `_ataxia_backup` global (Mudlet saved variable).
 
-**Save flow**: Every save writes to disk AND copies into `_ataxia_backup`.
-**Load flow**: Load from disk (primary). If disk file missing, fall back to `_ataxia_backup`.
+**Save flow**: Every save rotates a `.bak`, writes to disk, AND copies into `_ataxia_backup`. `ataxia` is
+passed through `sanitizeForSave()` first — it strips **live GUI/runtime objects** (Geyser windows, Mudlet
+`db` proxies) so they never hit disk. Detection is `getmetatable`/`rawget` only — **never index
+`.hide`/`.show`** (a `db` proxy's `__index` errors "access sheet 'hide'"). This matters because GUI objects
+are — as a known TODO — stored under the saved `ataxia` namespace (`ataxia.mnemosyne.map.window`,
+`ataxia.data.hunter.window`, vital bars, chat).
+
+**Load flow** (`ataxia_loadSettings`, on `sysLoadEvent` **and** `sysInstallPackage`): fault-isolated — the
+main-settings load and each sub-load (basher/paths/extraction/NDB/SLC/itemCatalog/ldm) are `pcall`-wrapped
+so one corrupt file can't strand the rest; `ataxia.loaded` is set only at the end (an interrupted load
+retries); and `deepMerge` is **cycle-safe** (`seen` set) and **GUI-safe** (`stripGui(loaded)` recursively
+drops serialized GUI snapshots before merge, and it never merges into a live runtime object). Each file
+falls back primary → `.bak` → `_ataxia_backup`.
 
 **Disk Files** (all relative to `getMudletHomeDir()`):
 
@@ -1603,7 +1619,7 @@ The project uses Claude Code hooks for automated quality gates and context prese
 
 ---
 
-**Last Updated**: 2026-03-11
+**Last Updated**: 2026-07-11
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia

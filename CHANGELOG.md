@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-07-11 — Mnemosyne: `mnem explore` auto-sweeper for the 4×4 (shipped in v4.7.53)
+
+New `008_Explorer.lua` (`mnem explore on|off|status`): auto-sweeps a ripple's 4×4 room grid, clearing each room, and stops at the boon screen for you to pick a boon and wade. It reuses the existing systems rather than adding combat logic:
+
+- **Combat = the autobasher in manual mode** (attacks in place, keeps Mnemosyne's shield-don't-flee, never mapper-walks — the mapper can't route the unmapped tower). The explorer saves/restores your basher state around the sweep.
+- **Navigation = this module.** Room-clear is `ataxia.denizensHere` empty (GMCP ground truth); it steps through a usable unexplored exit (planar, non-failed) or backtracks via the ripple-map's BFS `MAP.path` to the nearest room with one, moving with `queue addclear free stand;<dir>` (stands first — you're often prone after a fight). Event-driven (`gmcp.Room` + `"targets updated"` → debounced tick, one move per clear).
+- **Stops** at the boon screen (the `flickers of power` line, now also an explorer signal), on leaving the tower, when fully swept, or `mnem explore off`.
+- Hardened after an adversarial review: planar-only sweep (no walking off-level), stand-first move + retry, failed-exit tracking that also kills a two-room backtrack ping-pong, a start-guard requiring `area == ""`, a stall watchdog, and a reload reset. Pure logic unit-tested (suite 178/178); the timer/event machine is validated in-game.
+
+Docs: new [.claude/projects/mnemosyne/07-explorer.md](.claude/projects/mnemosyne/07-explorer.md) and [06-history.md](.claude/projects/mnemosyne/06-history.md).
+
+---
+
 ## 2026-07-10 — Fix: self-inflicted `db`-proxy crashes from the GUI stripper; exposed init gaps (v4.7.53)
 
 Once the loader was un-stuck (v4.7.52) the GUI-object crashes stopped, but the GUI stripper introduced a
@@ -20,6 +33,7 @@ new one and the now-completing load surfaced older latent bugs:
   for older basher saves; `ataxiaBasher_canShield()` indexed it directly and spammed index errors each
   prompt once the basher actually loaded.
 - Test suite **174/174**. Version 4.7.52 → **4.7.53** (verify in-game: `lua ataxiaVersion`).
+- Architecture recorded in [docs/adrs/001-no-gui-objects-in-saved-state.md](docs/adrs/001-no-gui-objects-in-saved-state.md).
 
 Still open (pre-existing, likely GMCP-corruption downstream): `Prompt Substitution … field 'IRE'` and the
 GMCP JSON decode errors — re-assess after this build, as several were fed by the `db`-proxy save-throw

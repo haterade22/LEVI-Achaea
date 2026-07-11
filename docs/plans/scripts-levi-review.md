@@ -145,7 +145,7 @@ A comprehensive combat automation, affliction tracking, and defense management s
 
 #### 8. **Class-Specific Modules**
 - **Pariah**: Swarm management, logograph chaining, plague tracking
-- **Bard**: Limb counter, symphony tracking
+- **Bard**: Footwork-tempo PvE bashing (flick/punctuate refrains, Warmarch boon, custom battlerage rotation, compose lifecycle — see `.claude/classes/bard.md`); symphony/harmonics; Composition/Bladedance offense
 - **Monk**: Tekura limb tracking, guard instead of parry
 - **Magi**: Staff/elemental combat
 - **Two-Handed**: Fracture relapses

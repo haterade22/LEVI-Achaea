@@ -21,7 +21,7 @@ cd muddler_project
 
 Output: `muddler_project/build/Levi_Ataxia.mpackage`
 
-Install in Mudlet via Package Manager, then reconnect to Achaea.
+Install in Mudlet via Package Manager. **One-time:** add a saved variable `_ataxia_backup` (type: table) in Mudlet's Variables panel — it's the profile-backup fallback the resilient loader uses if a disk save goes missing. Installing loads your settings automatically; reconnect to Achaea for GMCP.
 
 ### 2. Verify GMCP is Enabled
 

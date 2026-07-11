@@ -234,7 +234,7 @@ Defaults: health, mana, and cape enabled; willpower and endurance off. Drag bars
 | **Setup Wizard** | `ataxia setup` — guided configuration for all subsystems |
 | **Per-System Install** | `atinstall`, `abinstall`, `aninstall` for targeted setup |
 | **Config Guides** | `ataxia setup guide ataxia/basher/ndb` for comprehensive option walkthrough |
-| **Settings Persistence** | All settings saved to disk via `table.save`/`table.load` |
+| **Settings Persistence** | Fault-isolated resilient loader (cycle-safe, GUI-safe); per-file `.bak` rotation + `_ataxia_backup` profile-backup fallback; `table.save`/`table.load` |
 
 ## Affliction Tracker (V3 Branching Probability Engine)
 
@@ -471,8 +471,12 @@ Output: `muddler_project/build/Levi_Ataxia.mpackage`
 
 1. Open Mudlet → Package Manager
 2. Install `muddler_project/build/Levi_Ataxia.mpackage`
-3. Reconnect to Achaea (GMCP must be enabled under Settings → Protocols)
-4. Run the in-game setup wizard (see below)
+3. **One-time:** add a saved variable `_ataxia_backup` (type: table) in Mudlet's Variables panel. Settings
+   live per-profile on disk; `_ataxia_backup` is the redundancy layer the resilient loader falls back to if
+   a disk file goes missing or corrupt — add it before configuring anything.
+4. Reconnect to Achaea (GMCP must be enabled under Settings → Protocols). Installing already loads your
+   settings automatically (no reconnect needed just to load) — reconnecting is for GMCP.
+5. Run the in-game setup wizard (see below)
 
 ---
 

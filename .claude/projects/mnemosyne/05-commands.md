@@ -26,8 +26,11 @@ Every row below is a branch that `M.command` actually dispatches — nothing els
 | `mnem off` | `cfg.enabled = false`, save |
 | `mnem contemplate` | Toggle `cfg.contemplate` (boon enrichment via `BOON CONTEMPLATE`), save |
 | `mnem debug` | Toggle `cfg.debug` (verbose `M.decho` echoes) — **not persisted** |
+| `mnem quiet [on\|off]` | Toggle/force `cfg.quiet` (silences the automatic boon/affix history echoes; still records), save. See [06-history.md](06-history.md) |
 | `mnem test` (or `mnem health`) | `M.testHealth()` — ping `GET /health` for connectivity |
 | `mnem help` | Any unknown subcommand also lands here — prints the command reference |
+
+`on`/`off`/`quiet` (and the map/explore toggles below) resolve their argument through `M._toggleState(arg, current)` — `"on"→true`, `"off"→false`, anything else → a plain toggle — so `mnem quiet off` genuinely forces off rather than toggling.
 
 ### Ripple map
 
@@ -38,6 +41,22 @@ Guarded by `if ataxia.mnemosyne.map then`; see [04-ripple-map.md](04-ripple-map.
 | `mnem map` | `map.toggle(nil)` — flip the mini-map |
 | `mnem map on` / `mnem map off` | `map.toggle(true)` / `map.toggle(false)` — force state (persists `mapEnabled`) |
 | `mnem map status` | `map.status()` — diagnostic echo |
+
+### Local history (see [06-history.md](06-history.md))
+
+| Command | Effect |
+|---------|--------|
+| `mnem boons` | `M.reportBoons()` — this run's claimed boons (rarity, echoes, ripple, description) |
+| `mnem affixes` | `M.reportAffixes()` — this run's active affixes (ongoing effects) |
+| `mnem library` | `M.reportLibrary()` — the all-time affix catalogue |
+
+### Auto-explorer (see [07-explorer.md](07-explorer.md))
+
+| Command | Effect |
+|---------|--------|
+| `mnem explore` | `M.exploreToggle()` — start/stop the 4×4 auto-sweep |
+| `mnem explore on` / `mnem explore off` | `M.exploreOn()` / `M.exploreOff()` — force state |
+| `mnem explore status` | `M.exploreStatus()` — diagnostic (`inMnem`/denizens/moving/next step) |
 
 ### Manual endpoint overrides
 
@@ -68,7 +87,7 @@ send("boon claim " .. matches[2])          -- forward the real game command
 ataxia.mnemosyne.onBoonClaim(matches[2])   -- then report the selection
 ```
 
-`M.onBoonClaim(name)` (in `004_Parsers.lua`) gates on `_inRun()`, trims the name, then case-insensitively matches it against `M.run.lastOffered` — the canonical boon names captured from the last boons-offered block. On a match it calls `M.reportBoonsSelected(canonical)` with the game's exact spelling; on no match it `decho`s a diagnostic and reports nothing, so a typo or stale claim never posts a bogus selection. The matching source and how `lastOffered` is populated are covered in [03-parsing-triggers.md](03-parsing-triggers.md#onboonclaimname-from-alias-002).
+`M.onBoonClaim(name)` (in `004_Parsers.lua`) gates on `_inRun()`, trims the name, then resolves it against `M.run.lastOffered` (the canonical boon names from the last offered block) via `M._resolveClaim(name, offered)` — a **slot number** (`boon claim 2` → the 2nd offered boon), an exact case-insensitive name, or a **unique case-insensitive prefix** (`boon claim ham`). On a match it records the claim to local history (`M._recordClaim`, see [06-history.md](06-history.md)) and calls `M.reportBoonsSelected(canonical)` with the game's exact spelling; on no match (or an ambiguous prefix) it `decho`s a diagnostic and reports nothing, so a typo or stale claim never posts a bogus selection. The resolution ladder and how `lastOffered` is populated are covered in [03-parsing-triggers.md](03-parsing-triggers.md#onboonclaimname-from-alias-002).
 
 ## Setup wizard entry point
 
