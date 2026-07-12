@@ -543,6 +543,18 @@ describe("mnem explore", function()
     MAP.onRoom(10, "grid", { north = 0, down = 0 }, nil) -- planar exit + a deeper down
     expect(M._nextExploreStep()).toBe("n") -- planar taken; the down is ignored
   end)
+
+  it("patrols visited rooms once the grid is swept (to hunt a boss-ripple boss)", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { east = 2 }, nil)
+    MAP.onRoom(2, "B", { west = 1, east = 3 }, "east")
+    MAP.onRoom(3, "C", { west = 2 }, "east") -- standing in 3; all exits walked
+    expect(M._nextExploreStep()).toBeNil() -- nothing unexplored -> would have stopped before
+    M.explore.patrolQueue = nil
+    M.explore.patrolLoops = 0
+    expect(M._nextPatrolStep()).toBe("w") -- re-visits a prior room instead of quitting
+    expect(M.explore.patrolLoops).toBe(1) -- one refill = one loop counted
+  end)
 end)
 
 -- ─── Ripple map graph (pure) ─────────────────────────────────────────────────

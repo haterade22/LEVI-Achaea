@@ -49,6 +49,7 @@ local TICK_DELAY = 0.5 -- let room contents settle after an event before decidin
 local MOVE_TIMEOUT = 5 -- a move that produces no arrival -> retry / unstick
 local MOVE_RETRIES = 1 -- re-send a stalled move this many times before condemning the exit
 local WATCHDOG = 30 -- seconds of no progress (no arrival / no denizen change) before a soft nudge
+local MAX_PATROL_LOOPS = 3 -- fruitless full patrol loops (hunting the boss) before giving up
 
 -- Check for STARTING: must be physically in the tower. Mnemosyne rooms are an
 -- unmapped instance (area == ""), and we require that directly so a telemetry run
@@ -153,6 +154,36 @@ function M._nextExploreStep()
   return nil
 end
 
+-- Patrol step (boss hunt). Once the grid is swept there are no unexplored exits,
+-- but a boss ripple (every 5th) spawns the boss at the end in some already-cleared
+-- room -- so we re-visit visited rooms round-robin (a refilling, sorted queue) and
+-- let the basher clear whatever we find. Returns the first walked-edge step toward
+-- the next room to re-check, or nil if nothing is reachable. Bumps `patrolLoops`
+-- each time the queue refills (a full loop), which caps the fruitless hunt.
+function M._nextPatrolStep()
+  if not (MAP and MAP.current and MAP.rooms) then return nil end
+  local cur = MAP.current
+  if not M.explore.patrolQueue or #M.explore.patrolQueue == 0 then
+    M.explore.patrolQueue = {}
+    for num, r in pairs(MAP.rooms) do
+      if r.visited and num ~= cur then table.insert(M.explore.patrolQueue, num) end
+    end
+    table.sort(M.explore.patrolQueue)
+    M.explore.patrolLoops = (M.explore.patrolLoops or 0) + 1
+  end
+  while #M.explore.patrolQueue > 0 do
+    local t = M.explore.patrolQueue[1]
+    if t == cur or not (MAP.rooms[t] and MAP.rooms[t].visited) then
+      table.remove(M.explore.patrolQueue, 1) -- reached it / it's gone: advance
+    else
+      local steps = MAP.path(cur, t)
+      if steps and #steps > 0 then return steps[1] end
+      table.remove(M.explore.patrolQueue, 1) -- unreachable: skip
+    end
+  end
+  return nil
+end
+
 -- ---------------------------------------------------------------------------
 -- Movement + tick loop
 -- ---------------------------------------------------------------------------
@@ -225,7 +256,9 @@ function M._exploreTick()
   if not inMnem() then return M._exploreStop("left Mnemosyne") end
   if M.explore.moving then return end -- awaiting arrival
   if M._roomHasDenizens() then
-    -- basher is clearing this room; wait. Announce once per room, not every tick.
+    -- basher is clearing this room; wait. Finding denizens is progress, so reset the
+    -- boss-hunt counter. Announce once per room, not every tick.
+    M.explore.patrolLoops = 0
     if M.explore.fightingRoom ~= MAP.current then
       M.explore.fightingRoom = MAP.current
       M._exploreEcho("clearing this room (" .. denizenCount() .. " denizen(s)) -- basher on it.")
@@ -233,12 +266,34 @@ function M._exploreTick()
     return
   end
   M.explore.fightingRoom = nil
+
   local dir = M._nextExploreStep()
-  if dir then
-    M._exploreMove(dir)
+  if dir then -- still sweeping new ground
+    M.explore.hunting = false
+    M.explore.patrolLoops = 0
+    M.explore.patrolQueue = nil
+    return M._exploreMove(dir)
+  end
+
+  -- Grid fully swept. Don't stop: on a boss ripple (every 5th) the boss spawns at
+  -- the end in some already-cleared room, so PATROL the grid to find + clear it and
+  -- stop on the boon screen. Give up only after MAX_PATROL_LOOPS fruitless loops
+  -- (reset whenever we find something to fight, so a real boss keeps us going).
+  if not M.explore.hunting then
+    M.explore.hunting = true
+    M.explore.patrolLoops = 0
+    M.explore.patrolQueue = nil
+    M._exploreEcho("grid swept -- patrolling for a boss / straggler until the boon screen.")
+  end
+  if (M.explore.patrolLoops or 0) > MAX_PATROL_LOOPS then
+    M._exploreEcho("no boss / straggler found after patrolling; stopping.")
+    return M._exploreStop("nothing left")
+  end
+  local pdir = M._nextPatrolStep()
+  if pdir then
+    M._exploreMove(pdir)
   else
-    M._exploreEcho("swept the whole reachable grid; no more rooms to reach.")
-    M._exploreStop("grid fully swept")
+    M._exploreStop("nowhere left to patrol")
   end
 end
 
@@ -270,7 +325,10 @@ function M.exploreOn()
   M.explore.on = true
   M.explore.moving = false
   M.explore.failed = {}
-  M._exploreEcho("<green>ON<reset> -- sweeping the 4x4 and clearing to the boon screen. (<a_darkmagenta>mnem explore off<reset> to stop)")
+  M.explore.hunting = false
+  M.explore.patrolQueue = nil
+  M.explore.patrolLoops = 0
+  M._exploreEcho("<green>ON<reset> -- sweeping the 4x4, clearing to the boon screen (patrols for the boss on boss ripples). (<a_darkmagenta>mnem explore off<reset> to stop)")
   M._scheduleTick()
   M._armWatchdog()
 end

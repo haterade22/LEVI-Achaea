@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-07-11 — Mnemosyne explorer: hunt the boss on boss ripples (v4.7.55)
+
+On a **boss ripple** (every 5th) the boss spawns *at the end*, after the regular waves are cleared, in any one of the already-swept 4×4 rooms — so "no unexplored exit left" is not the end of the ripple. v4.7.54 stopped there and the boss was never engaged (the boon screen never came).
+
+- When `_nextExploreStep()` returns `nil` (grid swept), the explorer no longer stops — it **patrols** (`_nextPatrolStep`): re-visits the visited rooms round-robin (a refilling, sorted queue) and lets the basher clear whatever it finds. The boon screen is still the real terminus; the patrol is capped at `MAX_PATROL_LOOPS` (3) *fruitless* full loops, and `patrolLoops` resets to 0 whenever a room has denizens, so a genuine boss fight keeps it going.
+- Sweeping new ground exits patrol; finding denizens resets the cap.
+
+Tests: +1 (patrol re-visits a prior room + counts loops); suite 181/181. Docs: [07-explorer.md](.claude/projects/mnemosyne/07-explorer.md) "Boss hunt (patrol)".
+
+---
+
 ## 2026-07-11 — Mnemosyne: explorer enters the grid + live echoes; full spawn line reported (v4.7.54)
 
 Fixes and refinements after the first in-game test of `mnem explore`:

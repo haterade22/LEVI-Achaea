@@ -104,13 +104,27 @@ _nextExploreStep():
 
 The vertical-exit rule reduces to: take `up`/`down`/`in`/`out` **only from a pure-vertical room** (the holding room), never from a 4×4 room (which always has planar exits). The same `usableUnexplored` gates both the current-room pick **and** backtrack candidacy, so "does this visited room still have somewhere to go?" has exactly one definition. Backtracking uses `MAP.path`, which is BFS over **walked edges only**, so the explorer only ever routes back through doors it has confirmed by walking.
 
+### Boss hunt (patrol)
+
+On a **boss ripple** (every 5th) the boss spawns *at the end* — after the regular waves are cleared — in one of the already-swept rooms, so "no unexplored exit left" is **not** the end of the ripple. When `_nextExploreStep()` returns `nil`, the explorer therefore does **not** stop; it enters **patrol** (`explore.hunting`) and calls `M._nextPatrolStep()`:
+
+```
+_nextPatrolStep():
+  if patrolQueue empty:
+    refill with all visited rooms (sorted, != current); patrolLoops += 1
+  target = front of queue; drop it if it's current / gone
+  return first step of MAP.path(current, target); else advance / nil
+```
+
+It re-visits rooms round-robin and lets the basher clear whatever it finds (the boss, or a straggler). The **boon screen is still the real terminus**; the patrol is only capped at `MAX_PATROL_LOOPS` *fruitless* full loops — `patrolLoops` resets to `0` whenever a room has denizens (so a real boss fight keeps it going), and finding new ground to sweep exits patrol entirely.
+
 ## Stop conditions
 
 | Trigger | Path | Notes |
 |---------|------|-------|
 | Boon screen appears | `M.onBoonScreen()` → `_exploreStop("boon screen")` | The ripple is complete. Called straight from the boon-offer trigger **regardless of telemetry state**, so it stops even with reporting off |
 | Left Mnemosyne | `_exploreTick` → `_exploreStop("left Mnemosyne")` | `inMnem()` is the **strict** check `ataxiaBasher.inMnemosyne == true`; the room-update clears that flag the instant you enter any real (mapped) area, so the sweep stops walking/fighting immediately |
-| Grid fully swept | `_nextExploreStep()` returns `nil` → `_exploreStop("grid fully swept")` | No reachable room has a usable unexplored exit |
+| Patrol exhausted | `MAX_PATROL_LOOPS` fruitless patrol loops → `_exploreStop("nothing left")` | The grid is swept **and** no boss/straggler turned up after patrolling (see [Boss hunt](#boss-hunt-patrol)); or the patrol has nowhere reachable left |
 | Manual off | `mnem explore off` → `M.exploreOff()` | |
 | Reload / auto-update | `sysLoadEvent` handler marks it off | See [Reload safety](#reload-safety) |
 
@@ -165,6 +179,7 @@ The sweep narrates itself (`M._exploreEcho`, prefix `[explore]`) so you can foll
 | `MOVE_TIMEOUT` | `5` | A move producing no arrival within this → retry / unstick |
 | `MOVE_RETRIES` | `1` | Re-send a stalled move this many times before condemning the exit |
 | `WATCHDOG` | `30` | Seconds of no progress before a soft nudge / notify |
+| `MAX_PATROL_LOOPS` | `3` | Fruitless full boss-hunt patrol loops before giving up |
 
 ## Commands
 
