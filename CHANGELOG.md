@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-07-11 — Mnemosyne explorer: keep moving through icy rooms (v4.7.56)
+
+Some rooms are icy: leaving can print **"You slip and fall on the ice as you try to leave."** — the move fails (you fall prone) but the *exit is fine*. The explorer's normal move-timeout retry (1) would give up and mark that good exit as failed after a couple of slips.
+
+- New trigger `011_Ice_Slip.lua` → `M.onIceSlip()`: while a sweep move is in flight, it **re-sends the stand+move and re-arms the timeout**, without charging the failed-exit budget — so the explorer keeps trying until it actually leaves. Capped at `MAX_ICE_SLIPS` (15) re-sends before condemning the exit, so a permanently stuck exit still yields. `explore.iceSlips` resets on each fresh move. The internal timeout/ice re-sends are now silent (only the deliberate "slipped on the ice — up and going again" echoes).
+
+Suite 181/181. Docs: [07-explorer.md](.claude/projects/mnemosyne/07-explorer.md) "Icy rooms".
+
+---
+
 ## 2026-07-11 — Mnemosyne explorer: hunt the boss on boss ripples (v4.7.55)
 
 On a **boss ripple** (every 5th) the boss spawns *at the end*, after the regular waves are cleared, in any one of the already-swept 4×4 rooms — so "no unexplored exit left" is not the end of the ripple. v4.7.54 stopped there and the boss was never engaged (the boon screen never came).

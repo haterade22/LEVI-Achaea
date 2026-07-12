@@ -171,6 +171,10 @@ The sweep narrates itself (`M._exploreEcho`, prefix `[explore]`) so you can foll
 - once per occupied room (tracked by `explore.fightingRoom`, not every tick): `clearing this room (N denizen(s)) -- basher on it.` — `N` from `denizenCount()` (killable, own-denizen-excluded);
 - the start / stop / boon-screen / fully-swept transitions each announce themselves.
 
+### Icy rooms
+
+Some rooms are icy: leaving can print **"You slip and fall on the ice as you try to leave."** — the move fails (you fall prone) but the *exit is fine*. Trigger `011_Ice_Slip.lua` calls `M.onIceSlip()`, which (while a sweep move is in flight) re-sends the stand+move and re-arms the move timeout, **without** touching the failed-exit budget — so the explorer keeps trying until it actually leaves rather than condemning a good exit. Capped at `MAX_ICE_SLIPS` re-sends (then the exit is marked failed, so a permanently stuck exit still yields). `explore.iceSlips` resets on each fresh move.
+
 ## Tuning constants
 
 | Constant | Value | Meaning |
@@ -180,6 +184,7 @@ The sweep narrates itself (`M._exploreEcho`, prefix `[explore]`) so you can foll
 | `MOVE_RETRIES` | `1` | Re-send a stalled move this many times before condemning the exit |
 | `WATCHDOG` | `30` | Seconds of no progress before a soft nudge / notify |
 | `MAX_PATROL_LOOPS` | `3` | Fruitless full boss-hunt patrol loops before giving up |
+| `MAX_ICE_SLIPS` | `15` | Re-send a move this many times after an ice slip before condemning the exit |
 
 ## Commands
 

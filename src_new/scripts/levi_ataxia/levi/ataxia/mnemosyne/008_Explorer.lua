@@ -50,6 +50,7 @@ local MOVE_TIMEOUT = 5 -- a move that produces no arrival -> retry / unstick
 local MOVE_RETRIES = 1 -- re-send a stalled move this many times before condemning the exit
 local WATCHDOG = 30 -- seconds of no progress (no arrival / no denizen change) before a soft nudge
 local MAX_PATROL_LOOPS = 3 -- fruitless full patrol loops (hunting the boss) before giving up
+local MAX_ICE_SLIPS = 15 -- re-send a move this many times after slipping on ice before giving up on the exit
 
 -- Check for STARTING: must be physically in the tower. Mnemosyne rooms are an
 -- unmapped instance (area == ""), and we require that directly so a telemetry run
@@ -194,10 +195,9 @@ function M._exploreMove(dir, isRetry)
   M.explore.fromDir = dir
   if not isRetry then
     M.explore.tries = 0
+    M.explore.iceSlips = 0
     M._exploreEcho("room clear -> moving <cyan>" .. dir .. "<reset>.")
-  else
-    M._exploreEcho("<grey>retrying <cyan>" .. dir .. "<reset><grey> (no arrival).")
-  end
+  end -- internal retries (timeout / ice) re-send silently
   -- Stand as part of the move: after clearing a room you're frequently prone, and
   -- a bare "free <dir>" would silently fail. Mirrors the basher's stand-first queue.
   local sep = (ataxia.settings and ataxia.settings.separator) or ";"
@@ -222,6 +222,29 @@ function M._exploreMove(dir, isRetry)
     M.explore.moving = false
     M._exploreTick()
   end)
+end
+
+-- "You slip and fall on the ice as you try to leave." An icy room fails the move
+-- (you fall prone) but the EXIT is fine, so keep re-sending the stand+move until we
+-- actually leave -- never count it against the exit as failed, and re-arm the move
+-- timeout so it doesn't fire mid-struggle. Capped at MAX_ICE_SLIPS so a permanently
+-- stuck exit still yields eventually.
+function M.onIceSlip()
+  if not (M.explore.on and M.explore.moving and M.explore.fromDir) then return end
+  M.explore.iceSlips = (M.explore.iceSlips or 0) + 1
+  if M.explore.iceSlips > MAX_ICE_SLIPS then
+    M._exploreEcho("<indian_red>stuck on the ice<reset> after " .. MAX_ICE_SLIPS .. " tries -- skipping this exit.")
+    if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
+    local nd = MAP.normDir and MAP.normDir(M.explore.fromDir)
+    if nd and M.explore.fromRoom then
+      M.explore.failed[M.explore.fromRoom] = M.explore.failed[M.explore.fromRoom] or {}
+      M.explore.failed[M.explore.fromRoom][nd] = true
+    end
+    M.explore.moving = false
+    return M._exploreTick()
+  end
+  M._exploreEcho("<grey>slipped on the ice -- up and going again.")
+  M._exploreMove(M.explore.fromDir, true) -- re-send (silent; keeps tries, re-arms timeout)
 end
 
 function M._scheduleTick()
@@ -328,6 +351,7 @@ function M.exploreOn()
   M.explore.hunting = false
   M.explore.patrolQueue = nil
   M.explore.patrolLoops = 0
+  M.explore.iceSlips = 0
   M._exploreEcho("<green>ON<reset> -- sweeping the 4x4, clearing to the boon screen (patrols for the boss on boss ripples). (<a_darkmagenta>mnem explore off<reset> to stop)")
   M._scheduleTick()
   M._armWatchdog()
