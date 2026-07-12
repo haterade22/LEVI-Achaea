@@ -2,6 +2,23 @@
 
 ---
 
+## 2026-07-11 — Sysupdate hardening: verify the install, cross-check the version (v4.7.57)
+
+A `sysupdate` reported "System package v4.7.53 has been successfully installed" while the repo was at 4.7.56, and the Package Manager window (open during the update) showed no Levi_Ataxia at all. Diagnosis: the install itself *had* succeeded (the success echo only fires from the `sysInstallPackage` event) — but two real gaps surfaced:
+
+1. **Wrong version installed silently.** Tags v4.7.54–56 were pushed ~a day after those versions were built, and even after the push GitHub's `releases/latest/download/` redirect stayed CDN-cached on the old asset for several minutes — so `sysupdate` fetched and installed 4.7.53 as a "success".
+2. **No failure path.** If `installPackage` failed after `uninstallPackage`, the system was left uninstalled, the `.mpackage` was deleted by the blind t=4s cleanup, and nothing was echoed.
+
+Changes (`misc_scripts/021_Auto_Update.lua`):
+
+- **Version cross-check**: the login version check now stores `ataxia.updater.latestKnown`; a new anonymous `sysInstallPackage` handler (`onInstalled`, same survive-uninstall pattern as the download handlers) compares the freshly loaded `ataxiaVersion` against it and warns "installed vX but latest is vY — GitHub may still be propagating; retry SYSUPDATE" on mismatch.
+- **Failure watchdog**: the blind t=4s `os.remove` is replaced by a t=6s `finishInstall()` — deletes the mpackage only when `_installOk` was confirmed by the event; otherwise keeps the file and tells the user to retry or install it manually.
+- **Package Manager hint**: after a self-update install, echoes that an open Package Manager window must be closed/reopened to show the change (Mudlet's list doesn't refresh live — the source of tonight's false alarm).
+
+Process guard (`.claude/hooks/session-start.sh`): session start now warns when `version.txt`'s version has no tag on origin (checked via `git ls-remote`, skipped silently offline) — the drift that let version.txt run ahead of the published release.
+
+---
+
 ## 2026-07-11 — Mnemosyne explorer: keep moving through icy rooms (v4.7.56)
 
 Some rooms are icy: leaving can print **"You slip and fall on the ice as you try to leave."** — the move fails (you fall prone) but the *exit is fine*. The explorer's normal move-timeout retry (1) would give up and mark that good exit as failed after a couple of slips.
