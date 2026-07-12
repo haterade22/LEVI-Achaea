@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-07-11 — Mnemosyne: explorer enters the grid + live echoes; full spawn line reported (v4.7.54)
+
+Fixes and refinements after the first in-game test of `mnem explore`:
+
+- **Explorer now enters the grid.** A ripple's entry is a *holding room whose only exit is `down`* into the 4×4, but the v4.7.53 explorer refused all non-planar exits (to avoid walking off-level) and so instantly declared "grid fully swept" and quit. `usableUnexplored` now allows a non-planar exit **only from a room that has no planar exit at all** (the holding room's `down`) — a grid room's *deeper* `down`/`up` (which sits alongside planar exits) is still never taken, so it descends into the grid without wandering off-level.
+- **Live progress echoes.** The sweep now announces each step (`room clear -> moving <dir>`) and, once per room, `clearing this room (N denizen(s)) -- basher on it.`, so you can follow it.
+- **Monsters reported as the full spawn line.** `onGo` now reports the whole spawn line verbatim (e.g. "Mandibles clatter… as a swarm of Rapo'kir horkval closes in…") — the community-tracker convention — instead of the trimmed noun phrase. `_extractMob`/`MOB_VERBS` are retained as a utility but no longer wired into reporting.
+
+Tests: +3 (holding-room entry, grid-room deeper-exit ignored, full-line monster commit); suite 180/180.
+
+---
+
 ## 2026-07-11 — Mnemosyne: `mnem explore` auto-sweeper for the 4×4 (shipped in v4.7.53)
 
 New `008_Explorer.lua` (`mnem explore on|off|status`): auto-sweeps a ripple's 4×4 room grid, clearing each room, and stops at the boon screen for you to pick a boon and wade. It reuses the existing systems rather than adding combat logic:

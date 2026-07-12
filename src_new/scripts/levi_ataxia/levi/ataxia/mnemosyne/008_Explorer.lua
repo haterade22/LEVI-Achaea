@@ -94,16 +94,38 @@ function M._roomHasDenizens()
   return false
 end
 
+-- Count of killable denizens in the current room (for progress echoes).
+local function denizenCount()
+  local n, dz = 0, ataxia.denizensHere
+  if type(dz) == "table" then
+    for _, name in pairs(dz) do
+      if not isOwnDenizen(name) then n = n + 1 end
+    end
+  end
+  return n
+end
+
 -- Unexplored exits of `num` the sweep can actually use: reported-but-unwalked,
--- PLANAR (the 4x4 is flat -- never wander up/down/in/out off the level, which
--- would skip the boon screen), and not recorded as failed this session. Used for
--- BOTH the current-room pick and backtrack candidacy, so a room whose only
--- unexplored exits are failed/non-planar counts as swept (no infinite backtrack).
+-- not recorded as failed this session, and PLANAR unless the room has no planar
+-- exit at all. The planar rule keeps the sweep on the flat 4x4 (a grid room's
+-- deeper `down`/`up` sits alongside planar exits and is never taken, so we can't
+-- wander off-level and skip the boon) -- BUT the ripple's holding room has only a
+-- `down` into the grid, so a room with no planar exit is allowed its non-planar
+-- one to enter. Used for both the current-room pick and backtrack candidacy.
 local function usableUnexplored(num)
   local failed = (M.explore.failed and M.explore.failed[num]) or {}
+  local room = MAP.rooms and MAP.rooms[num]
+  local hasPlanar = false
+  if room and room.exits then
+    for d in pairs(room.exits) do
+      if MAP.OFFSETS and MAP.OFFSETS[d] then hasPlanar = true; break end
+    end
+  end
   local out = {}
   for _, d in ipairs(MAP.unexploredExits(num) or {}) do
-    if MAP.OFFSETS and MAP.OFFSETS[d] and not failed[d] then out[#out + 1] = d end
+    if not failed[d] and ((MAP.OFFSETS and MAP.OFFSETS[d]) or not hasPlanar) then
+      out[#out + 1] = d
+    end
   end
   return out
 end
@@ -139,7 +161,12 @@ function M._exploreMove(dir, isRetry)
   M.explore.moving = true
   M.explore.fromRoom = MAP and MAP.current
   M.explore.fromDir = dir
-  if not isRetry then M.explore.tries = 0 end
+  if not isRetry then
+    M.explore.tries = 0
+    M._exploreEcho("room clear -> moving <cyan>" .. dir .. "<reset>.")
+  else
+    M._exploreEcho("<grey>retrying <cyan>" .. dir .. "<reset><grey> (no arrival).")
+  end
   -- Stand as part of the move: after clearing a room you're frequently prone, and
   -- a bare "free <dir>" would silently fail. Mirrors the basher's stand-first queue.
   local sep = (ataxia.settings and ataxia.settings.separator) or ";"
@@ -197,7 +224,15 @@ function M._exploreTick()
   if not M.explore.on then return end
   if not inMnem() then return M._exploreStop("left Mnemosyne") end
   if M.explore.moving then return end -- awaiting arrival
-  if M._roomHasDenizens() then return end -- basher is clearing this room; wait
+  if M._roomHasDenizens() then
+    -- basher is clearing this room; wait. Announce once per room, not every tick.
+    if M.explore.fightingRoom ~= MAP.current then
+      M.explore.fightingRoom = MAP.current
+      M._exploreEcho("clearing this room (" .. denizenCount() .. " denizen(s)) -- basher on it.")
+    end
+    return
+  end
+  M.explore.fightingRoom = nil
   local dir = M._nextExploreStep()
   if dir then
     M._exploreMove(dir)

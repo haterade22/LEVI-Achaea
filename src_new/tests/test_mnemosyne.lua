@@ -531,6 +531,18 @@ describe("mnem explore", function()
     MAP.onRoom(2, "B", { west = 1 }, nil) -- standing in B, nothing unexplored here
     expect(M._nextExploreStep()).toBe("w") -- step back west toward A
   end)
+
+  it("takes a room's only exit even if non-planar (the holding room's `down`)", function()
+    MAP.reset()
+    MAP.onRoom(1, "holding", { down = 0 }, nil) -- ripple holding room: only exit is down into the 4x4
+    expect(M._nextExploreStep()).toBe("d")
+  end)
+
+  it("never takes a grid room's deeper non-planar exit when planar ones exist", function()
+    MAP.reset()
+    MAP.onRoom(10, "grid", { north = 0, down = 0 }, nil) -- planar exit + a deeper down
+    expect(M._nextExploreStep()).toBe("n") -- planar taken; the down is ignored
+  end)
 end)
 
 -- ─── Ripple map graph (pure) ─────────────────────────────────────────────────
@@ -671,12 +683,12 @@ end)
 -- ─── Monster capture (onGo commits the countdown-captured candidate) ─────────
 
 describe("onGo monster capture", function()
-  it("commits the captured mob candidate on GO!, trimmed", function()
+  it("commits the FULL captured spawn line on GO! (tracker convention)", function()
     reset(true)
     M._mobCandidate = "Grave-soil erupts across Azdun as a ghastly horde of the restless dead rises, drawn forth by dark magics."
     M.onGo()
     expect(#M.run.pendingMonsters).toBe(1)
-    expect(M.run.pendingMonsters[1]).toBe("a ghastly horde of the restless dead")
+    expect(M.run.pendingMonsters[1]).toBe("Grave-soil erupts across Azdun as a ghastly horde of the restless dead rises, drawn forth by dark magics.")
     expect(M._mobCandidate).toBeNil()
   end)
 

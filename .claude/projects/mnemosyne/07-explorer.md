@@ -98,10 +98,11 @@ _nextExploreStep():
 
 | Kept | Rejected | Why |
 |------|----------|-----|
-| in `MAP.OFFSETS` (planar: n/s/e/w and diagonals) | `up`/`down`/`in`/`out` | Non-planar exits walk *off the level* and skip the boon screen — the 4×4 is flat |
+| planar (`MAP.OFFSETS`: n/s/e/w + diagonals) | a non-planar `up`/`down`/`in`/`out` **when the room also has a planar exit** | A grid room's *deeper* vertical exit would walk off the level and skip the boon — the 4×4 is flat |
+| the sole exit of a room with **no planar exit at all** (even if non-planar) | — | The ripple's entry is a *holding room whose only exit is `down`* into the 4×4; without this exception the sweep couldn't even descend into the grid (it instantly reported "fully swept") |
 | not in `explore.failed[num]` | condemned exits | So a timed-out wall isn't retried, and a room whose only unexplored exits are failed counts as swept (no infinite backtrack) |
 
-The same `usableUnexplored` gates both the current-room pick **and** backtrack candidacy, so "does this visited room still have somewhere to go?" has exactly one definition. Backtracking uses `MAP.path`, which is BFS over **walked edges only**, so the explorer only ever routes back through doors it has confirmed by walking.
+The vertical-exit rule reduces to: take `up`/`down`/`in`/`out` **only from a pure-vertical room** (the holding room), never from a 4×4 room (which always has planar exits). The same `usableUnexplored` gates both the current-room pick **and** backtrack candidacy, so "does this visited room still have somewhere to go?" has exactly one definition. Backtracking uses `MAP.path`, which is BFS over **walked edges only**, so the explorer only ever routes back through doors it has confirmed by walking.
 
 ## Stop conditions
 
@@ -147,6 +148,14 @@ It never hard-stops on its own; it re-arms and keeps watching.
 ### Reload safety
 
 `M` and `M.explore` persist across an uninstall→install, but the tempTimers do not — so a live sweep would be left half-alive with the basher still force-mutated. The `sysLoadEvent` handler zeroes `explore.on`/`explore.moving` and drops `_prevBasher`, so a reload never resurrects a partial sweep; you re-issue `mnem explore on`.
+
+### Progress echoes
+
+The sweep narrates itself (`M._exploreEcho`, prefix `[explore]`) so you can follow it live:
+
+- each step: `room clear -> moving <dir>.` (a stalled retry echoes `retrying <dir> (no arrival)`);
+- once per occupied room (tracked by `explore.fightingRoom`, not every tick): `clearing this room (N denizen(s)) -- basher on it.` — `N` from `denizenCount()` (killable, own-denizen-excluded);
+- the start / stop / boon-screen / fully-swept transitions each announce themselves.
 
 ## Tuning constants
 

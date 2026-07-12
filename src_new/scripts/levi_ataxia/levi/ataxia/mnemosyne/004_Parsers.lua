@@ -272,10 +272,12 @@ function M.onCountdownZero()
   end)
 end
 
--- "GO!" -- a new wave has begun. Commit the mob line captured after the "0"
--- (trimmed to the mob phrase), then auto-send WADE STATUS so its output drives
--- ripple-level/effects reporting. Gated on _auto() (not _inRun) for the wade
--- status so it can bootstrap a run whose start line was missed.
+-- "GO!" -- a new wave has begun. Commit the mob line captured after the "0" (the
+-- FULL spawn line, e.g. "Mandibles clatter... as a swarm of Rapo'kir horkval
+-- closes in..." -- the tracker convention is the whole line, not a trimmed
+-- phrase), then auto-send WADE STATUS so its output drives ripple-level/effects
+-- reporting. Gated on _auto() (not _inRun) for the wade status so it can bootstrap
+-- a run whose start line was missed. (M._extractMob is retained as a utility.)
 function M.onGo()
   -- Fire for telemetry OR just for the ripple map (so WADE STATUS -> the ripple
   -- line drives the per-ripple map reset even with reporting off).
@@ -283,7 +285,7 @@ function M.onGo()
   if not (M._auto() or mnem) then return end
   if M._mobTrig then pcall(killTrigger, M._mobTrig); M._mobTrig = nil end
   if M._inRun() and M._mobCandidate then
-    M.onMonsters(M._extractMob(M._mobCandidate) or M._mobCandidate)
+    M.onMonsters(M._mobCandidate) -- the whole spawn line, verbatim
   end
   M._mobCandidate = nil
   send("wade status", false)

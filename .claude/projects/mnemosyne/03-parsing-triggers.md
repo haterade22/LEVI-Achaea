@@ -106,13 +106,13 @@ GO!                  ← trigger 006  (onGo)
 Reading the spawn line back with `getLines()` at `GO!` was unreliable — word-wrap and prompt timing made "the line above" ambiguous. Instead the middle line is captured **positionally**, as the next physical line the game emits after the `0`:
 
 1. **`onCountdownZero()`** (gate `_inRun`) clears `M._mobCandidate`, kills any stale `M._mobTrig`, and arms a one-shot `tempRegexTrigger([[^.*$]], …)`. That trigger trims the line, ignores blanks (staying armed), and on the first non-blank line kills itself. If that line is `GO!` or all-digits, no mob spawned this wave; otherwise it stores the line in `M._mobCandidate`.
-2. **`onGo()`** (gate `_auto` OR `ataxiaBasher.inMnemosyne`) kills the candidate trigger and, when `_inRun()` and a candidate exists, commits it via `onMonsters(M._extractMob(cand) or cand)`. It then always `send("wade status", false)` to pull the status block that drives ripple / objective / effects reporting.
+2. **`onGo()`** (gate `_auto` OR `ataxiaBasher.inMnemosyne`) kills the candidate trigger and, when `_inRun()` and a candidate exists, commits it via `onMonsters(cand)` — the **full spawn line, verbatim** (the community-tracker convention is the whole line, not a trimmed phrase). It then always `send("wade status", false)` to pull the status block that drives ripple / objective / effects reporting.
 
 Because `onGo` also runs for the mini-map (`inMnemosyne`) even with reporting off, `WADE STATUS` is still issued; monster *reporting* inside it stays gated on `_inRun()`. `onMonsters` trims, drops empties, and appends to `M.run.pendingMonsters` de-duped — buffered, not sent, so it can be flushed after `/ripple_level` (see [01-architecture.md](01-architecture.md)).
 
 ### `_extractMob` — spawn-phrase trimming
 
-`_extractMob(str)` trims a spawn sentence down to the mob's noun phrase, or returns `nil` (the caller then falls back to the whole line — `_extractMob(cand) or cand`). The subject is a noun phrase built around **"of"** and closed by a **mob verb**:
+`_extractMob(str)` trims a spawn sentence down to the mob's noun phrase, or returns `nil`. **It is retained as a utility but is no longer wired into reporting** — `onGo` sends the full spawn line (above). When it was the reporting path it worked as follows: the subject is a noun phrase built around **"of"** and closed by a **mob verb**:
 
 | Spawn line | Extracted phrase |
 |------------|------------------|
