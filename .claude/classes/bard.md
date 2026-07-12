@@ -169,7 +169,7 @@ warmarch: "Mnemosyne 'Warmarch' boon makes the paean refrain hit denizens (+100%
 mechanic:
   footwork_tempo: "The dance auto-cycles front -> side -> back -> loop as you attack. Tempo/stance sets attacks-per-position before you're carried onward: Adagio 4/4/3, Moderato 3/2/2, Allegro 2/1/1, none 5/2/1. Tracked by bardtempo/bardtempostance/bardtemposequence (tempo triggers)."
   back_bonus: "Bladedance attacks vs denizens deal BONUS DAMAGE from the back position (AB FOOTWORK). The bashing goal is to maximize back-position uptime."
-battlerage: "ataxiaBasher_bardBattlerage() (basher/001). Priority: culling blade (reap, if off cooldown) > charm 2nd denizen (2+ denizens, >=32 rage) > trill target (2+ denizens, >=28, off ~42s cd) > howlslash (>=36) > moulinet (>=14)."
+battlerage: "ataxiaBasher_bardBattlerage() (basher/001). Priority: culling blade (reap, off cooldown + >=36 rage; Bard is excluded from the global culling check and owns it here) > charm 2nd denizen (2+ denizens, >=32 rage) > trill target (2+ denizens, >=28, off ~42s cd) > howlslash (>=36) > moulinet (>=14)."
 lifecycle:
   bash_start: "basher_engaged() (genrunning/003) sets tempo (bashTempo) and calls ataxiaBasher_bardCompose() ONCE."
   compose: "ataxiaBasher_bardCompose() (basher/002) wields the lyre (required to perform), composes bashCompose, and arms the 15-min 'Bard Performance' timer. Compose is NOT done per attack, and only ever runs when not performing (bash start / timer expiry / 'not performing' trigger), so no 'performance end' is needed. Debounced to one compose per 2s."

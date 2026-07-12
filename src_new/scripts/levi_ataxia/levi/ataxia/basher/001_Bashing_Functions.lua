@@ -573,14 +573,22 @@ local function ataxiaBasher_crowdControlBattlerage(class, specialCmd, level, sp,
   return command
 end
 
--- Bard battlerage: culling blade (reap) is handled globally above. Then, with 2+ denizens,
--- charm the 2nd denizen at >=32 rage, else trill the target at >=28 (when off its ~42s cd);
--- otherwise the big single hit howlslash at >=36, then the cheap moulinet at >=14.
+-- Bard battlerage. Bard is excluded from the global culling-blade check below and owns culling
+-- here, so it fires at our own 36-rage threshold (not bigRage, which is 54 under rageraze) and
+-- doesn't hit the global "culling available but unaffordable -> no battlerage" skip. Priority:
+-- culling blade (reap, off cd + >=36) > charm 2nd denizen (2+ denizens, >=32) > trill target
+-- (2+ denizens, >=28, off its ~42s cd) > howlslash (>=36) > moulinet (>=14).
 -- Charm is intentionally not cooldown-gated (fires whenever eligible; self-limits on rage).
 local function ataxiaBasher_bardBattlerage(sp)
   local rage = ataxia.vitals.rage
-  local twoPlus = ataxiaBasher_validTargets() >= 2  -- also refreshes stormhammerTargets
 
+  -- Culling blade first, above everything else: usage toggled on, off cooldown, >=36 rage.
+  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown
+     and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" and rage >= 36 then
+    return "reap "..target..sp
+  end
+
+  local twoPlus = ataxiaBasher_validTargets() >= 2  -- also refreshes stormhammerTargets
   if twoPlus and rage >= 32 then
     return "play charm at "..(stormhammerTargets[2] or target)..sp
   elseif twoPlus and rage >= 28 and not battleRage_Timers.special then
@@ -612,9 +620,11 @@ function ataxiaBasher_assembleBattlerage()
 		end
 	end
 
-	-- Culling Blade check (applies before any class-specific logic)
+	-- Culling Blade check (applies before class-specific logic; Bard is excluded -- it owns
+	-- culling inside ataxiaBasher_bardBattlerage so it fires at 36 rage, not bigRage).
 	if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown
-		and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" then
+		and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree"
+		and gmcp.Char.Status.class ~= "Bard" then
 		if ataxia.vitals.rage >= bigRage then
 			command = command.."reap "..target..sp
 		end
