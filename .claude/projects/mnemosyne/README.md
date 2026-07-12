@@ -19,7 +19,7 @@ This is distinct from the basher's Mnemosyne handling: the basher treats Mnemosy
 | `mnemosyne/007_History.lua` | Local per-run history + reports (boons/affixes/library) |
 | `mnemosyne/008_Explorer.lua` | Auto-sweep the 4×4 (drives the basher in manual mode) |
 
-Script paths relative to `src_new/scripts/levi_ataxia/levi/ataxia/`. Triggers live in `src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/` (`001`–`009`); aliases in `src_new/aliases/levi_ataxia/for_levi/levi_062424/mnemosyne/` (`001`–`002`).
+Script paths relative to `src_new/scripts/levi_ataxia/levi/ataxia/`. Triggers live in `src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/` (`001`–`009` + `011_Ice_Slip`); aliases in `src_new/aliases/levi_ataxia/for_levi/levi_062424/mnemosyne/` (`001`–`002`).
 
 ## Documentation
 
