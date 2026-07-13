@@ -37,3 +37,9 @@ patterns:
 if ataxia.mnemosyne._inRun() then
   ataxia.mnemosyne.reportDeath(matches[2])
 end
+
+-- Stop the auto-explorer when slain -- independent of telemetry (the sweep runs
+-- off ataxiaBasher.inMnemosyne, not the tracked run). No-op if not sweeping.
+if ataxia.mnemosyne.exploreOnDeath then
+  ataxia.mnemosyne.exploreOnDeath(matches[2])
+end

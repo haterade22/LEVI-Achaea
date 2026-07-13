@@ -426,6 +426,15 @@ function M.onBoonScreen()
   end
 end
 
+-- Slain in the tower: death boots you out of the ripple (you respawn elsewhere),
+-- so a running sweep must stop -- otherwise it keeps trying to walk/fight from the
+-- wrong place. No-op if not sweeping. Called from the Mnemosyne death trigger.
+function M.exploreOnDeath(killer)
+  if not M.explore.on then return end
+  M._exploreEcho("<indian_red>slain" .. ((type(killer) == "string" and killer ~= "") and (" by " .. killer) or "") .. "<reset> -- stopping the sweep.")
+  M._exploreStop("slain")
+end
+
 -- ---------------------------------------------------------------------------
 -- Event hooks
 -- ---------------------------------------------------------------------------

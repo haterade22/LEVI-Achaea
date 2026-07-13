@@ -125,6 +125,7 @@ It re-visits rooms round-robin and lets the basher clear whatever it finds (the 
 | Boon screen appears | `M.onBoonScreen()` → `_exploreStop("boon screen")` | The ripple is complete. Called straight from the boon-offer trigger **regardless of telemetry state**, so it stops even with reporting off |
 | Left Mnemosyne | `_exploreTick` → `_exploreStop("left Mnemosyne")` | `inMnem()` is the **strict** check `ataxiaBasher.inMnemosyne == true`; the room-update clears that flag the instant you enter any real (mapped) area, so the sweep stops walking/fighting immediately |
 | Patrol exhausted | `MAX_PATROL_LOOPS` fruitless patrol loops → `_exploreStop("nothing left")` | The grid is swept **and** no boss/straggler turned up after patrolling (see [Boss hunt](#boss-hunt-patrol)); or the patrol has nowhere reachable left |
+| Slain | `007_Death.lua` → `M.exploreOnDeath(killer)` → `_exploreStop("slain")` | Death boots you out of the ripple (you respawn elsewhere), so a running sweep would walk/fight from the wrong place. Fires **regardless of telemetry** (the sweep runs off `inMnemosyne`, not the tracked run); no-op if not sweeping |
 | Manual off | `mnem explore off` → `M.exploreOff()` | |
 | Reload / auto-update | `sysLoadEvent` handler marks it off | See [Reload safety](#reload-safety) |
 

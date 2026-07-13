@@ -2,6 +2,12 @@
 
 ---
 
+## 2026-07-13 — Mnemosyne explorer: stop the sweep when slain (v4.7.60)
+
+Being slain in the tower ("You have been slain by Chief Constable Beck.") boots you out of the ripple — you respawn elsewhere — but the auto-explorer kept running, trying to walk and fight from the wrong place. The Mnemosyne death trigger (`mnemosyne/007_Death.lua`) now also calls `ataxia.mnemosyne.exploreOnDeath(killer)`, which stops a running sweep (restoring the basher to its pre-sweep state via `_exploreStop`). It's independent of telemetry — the sweep runs off `ataxiaBasher.inMnemosyne`, not the tracked run, so the stop fires even with reporting off — and no-ops when the explorer isn't running. Suite 192/192.
+
+---
+
 ## 2026-07-13 — Mnemosyne: fix monster reporting; QL to resync stale rooms (v4.7.59)
 
 **Monsters were never reported.** The spawn line ("A multitude of sibilant voices chant… as ormyrr warriors and priests march across Krenindala.") is captured by a one-shot trigger armed on the countdown "0". That `^.*$` trigger is armed *while the "0" is being processed* and Mudlet fires it on that very "0" — which is exactly why the code had an all-digit guard — but the guard ran **after** the `killTrigger`, so on the "0" the trigger killed itself and never lived to see the spawn line on the next line. The capture decision is now extracted to `M._mobCaptureLine()`, which **survives** blank and countdown-digit lines (returns "keep waiting") and only stops once it captures the first real prose line (or hits GO! with no spawn that wave). `onCountdownZero` also arms on `_auto()`/in-Mnemosyne rather than strict `_inRun()` (arming just fills a local; `onGo` still re-checks `_inRun` before reporting). The whole spawn line is sent verbatim.

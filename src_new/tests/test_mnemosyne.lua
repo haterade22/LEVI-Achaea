@@ -626,6 +626,19 @@ describe("mnem explore", function()
     M.explore.on = false
     M.explore.moving = false
   end)
+
+  it("stops the sweep when slain", function()
+    M.explore.on = true
+    M.exploreOnDeath("Chief Constable Beck")
+    expect(M.explore.on).toBeFalse()
+  end)
+
+  it("death is a no-op when not sweeping", function()
+    M.explore.on = false
+    local ok = pcall(M.exploreOnDeath, "some mob") -- also tolerates a nil/empty killer
+    expect(ok).toBeTrue()
+    expect(M.explore.on).toBeFalse()
+  end)
 end)
 
 -- ─── Ripple map graph (pure) ─────────────────────────────────────────────────
