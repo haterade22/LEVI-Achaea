@@ -256,19 +256,35 @@ function M._extractMob(str)
   return nil
 end
 
--- The wave prints "<countdown 0>\n<mob spawn line>\n<GO!>". On the "0", arm a
--- one-shot capture of the next (mob) line into M._mobCandidate; onGo commits it
--- when GO! follows. Deterministic -- unlike reading back with getLines.
+-- Decide what a post-countdown line means for mob capture. The wave prints
+-- "<countdown 0>\n<mob spawn line>\n<GO!>", so after the "0" we want the first real
+-- prose line. Returns true when the one-shot capture should STOP (it consumed a
+-- meaningful line), false to keep waiting. Crucially it must SURVIVE blank and
+-- all-digit lines: the `^.*$` trigger is armed while the "0" is being processed and
+-- Mudlet fires it on that very "0" (and any further countdown digits), so treating
+-- a digit as "done" -- as the old code did by killing before this check -- killed
+-- the trigger on the "0" and it never lived to see the spawn line. That was the bug
+-- that stopped monsters from ever being reported.
+function M._mobCaptureLine(ln)
+  ln = tostring(ln or ""):gsub("^%s+", ""):gsub("%s+$", "")
+  if ln == "" or ln:match("^%d+$") then return false end -- blank / countdown digit: keep waiting
+  if ln ~= "GO!" then M._mobCandidate = ln end -- first real line = the full spawn line
+  return true -- GO! (no mob this wave) or captured: one-shot is done either way
+end
+
+-- On the "0", arm a one-shot capture of the spawn line into M._mobCandidate; onGo
+-- commits it when GO! follows. Deterministic -- unlike reading back with getLines.
+-- Gate on _auto()/inMnemosyne (not strict _inRun): arming just fills a local var,
+-- and onGo re-checks _inRun before it actually reports.
 function M.onCountdownZero()
-  if not M._inRun() then return end
+  local mnem = ataxiaBasher and ataxiaBasher.inMnemosyne
+  if not (M._auto() or mnem) then return end
   M._mobCandidate = nil
   if M._mobTrig then pcall(killTrigger, M._mobTrig); M._mobTrig = nil end
   M._mobTrig = tempRegexTrigger([[^.*$]], function()
-    local ln = (line or ""):gsub("^%s+", ""):gsub("%s+$", "")
-    if ln == "" then return end -- skip blanks, keep waiting for the mob line
-    if M._mobTrig then pcall(killTrigger, M._mobTrig); M._mobTrig = nil end
-    if ln == "GO!" or ln:match("^%d+$") then return end -- no mob line this wave
-    M._mobCandidate = ln
+    if M._mobCaptureLine(line) then
+      if M._mobTrig then pcall(killTrigger, M._mobTrig); M._mobTrig = nil end
+    end
   end)
 end
 

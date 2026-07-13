@@ -152,12 +152,16 @@ _exploreStop restores manual / areabash / autoLearn
 
 ### Stall watchdog
 
-`M._armWatchdog()` arms `M._explWatchT` for `WATCHDOG` seconds and is **re-armed on every progress event** (arrival, denizen change). If it ever actually fires, nothing progressed for that long:
+`M._armWatchdog()` arms `M._explWatchT` for `WATCHDOG` seconds and is **re-armed on every progress event** (arrival, denizen change). If it ever actually fires, nothing progressed for that long — and the usual cause is a **stale GMCP snapshot**: we actually moved, or the room actually cleared, but Achaea never pushed a fresh `Room.Info` / `Char.Items`, so no event ever woke the machine. The fire body is extracted to `M._watchdogNudge()` (so it's unit-testable without a live timer), which:
 
-- room still has denizens → echo a hint that the basher may be mid-fight (`mnem explore off` if stuck) — a wandered-in unlearned mob or a hard affliction can park a room;
-- room is clear but somehow parked → nudge `_exploreTick` to re-decide.
+- **no-ops while a move is in flight** (`M.explore.moving`) — the move machinery owns that: `MOVE_TIMEOUT` for a lost move, `onIceSlip`'s `MAX_ICE_SLIPS` cap for a stuck icy exit. A `ql` here would be seen by the arrival handler as an arrival and reset the ice-slip counter, livelocking the sweep on one exit (an adversarial-review finding);
+- otherwise sends **`ql`** (quicklook — the codebase idiom for a room/denizen refresh, needs no balance) to force the server to re-push room + contents. That fires `gmcp.Room` / `"targets updated"` — the events the explorer already listens on — which re-arm and re-tick it on fresh data, unsticking a stale-GMCP park;
+- calls `_scheduleTick()` directly too, so it re-decides even if the `ql` yields no event (clear-but-parked room → the tick moves on);
+- if denizens are still present, also echoes the mid-fight hint (`mnem explore off` if stuck) — a wandered-in unlearned mob or a hard affliction can genuinely park a room.
 
 It never hard-stops on its own; it re-arms and keeps watching.
+
+The **arrival handler** (`M._onExploreRoom`, extracted for testing) closes the other half of that livelock: `gmcp.Room` fires for *any* room re-push, not just a move, so it only ends a move (`moving=false`, kills the move timeout) on a **genuine arrival** — "moving AND the room actually changed from `explore.fromRoom`". A same-room re-push (our watchdog `ql`, the target-not-here `ql`, a stray re-send) is treated as *not arrived yet*, leaving the in-flight move / ice-slip loop intact.
 
 ### Reload safety
 

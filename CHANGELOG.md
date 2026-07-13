@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-07-13 — Mnemosyne: fix monster reporting; QL to resync stale rooms (v4.7.59)
+
+**Monsters were never reported.** The spawn line ("A multitude of sibilant voices chant… as ormyrr warriors and priests march across Krenindala.") is captured by a one-shot trigger armed on the countdown "0". That `^.*$` trigger is armed *while the "0" is being processed* and Mudlet fires it on that very "0" — which is exactly why the code had an all-digit guard — but the guard ran **after** the `killTrigger`, so on the "0" the trigger killed itself and never lived to see the spawn line on the next line. The capture decision is now extracted to `M._mobCaptureLine()`, which **survives** blank and countdown-digit lines (returns "keep waiting") and only stops once it captures the first real prose line (or hits GO! with no spawn that wave). `onCountdownZero` also arms on `_auto()`/in-Mnemosyne rather than strict `_inRun()` (arming just fills a local; `onGo` still re-checks `_inRun` before reporting). The whole spawn line is sent verbatim.
+
+**QL to resync stale room contents.** A **stale GMCP snapshot** — a denizen has died/left (or we've moved) but Achaea hasn't pushed a fresh `Room.Info` / `Char.Items`, so `ataxia.denizensHere` lists a phantom and the basher swings at nothing. A **QL** (quicklook — the codebase idiom for a room/denizen refresh, free of balance) forces a re-push that resyncs `denizensHere`.
+
+- **Target-not-here reflex (basher-wide).** `denizen_attacks_misc_lines/003_Target_Not_Here.lua` caught the "not here" replies ("You cannot see that being here.", "I do not recognise anything called that here.", etc.) but only `deleteFull()`d in *auto* mode — in **manual / Mnemosyne** mode it just echoed "Target is gone!" and left the stale target. It now sends a **debounced `ql`** whenever the basher is on (one per burst via `ataxiaBasher._targetGoneQL` + a 1.5s tempTimer).
+- **Mnemosyne explorer stall watchdog.** On a 30s stall `M._armWatchdog` runs `M._watchdogNudge()`, which sends `ql` (forcing the `gmcp.Room` / `"targets updated"` refresh the explorer already listens on) and `_scheduleTick()`s to re-decide on fresh data. Extracted so it's unit-testable.
+- **Ice-slip livelock guard (adversarial-review finding).** A watchdog `ql` fired *during* the ice-slip retry loop would be seen by the arrival handler as an arrival, aborting the loop and resetting the `MAX_ICE_SLIPS` counter — livelocking the sweep on one stuck icy exit. Fixed two ways: `_watchdogNudge` no-ops while a move is in flight, and the arrival handler (`M._onExploreRoom`, extracted) now treats "still in the room we left" as *not arrived*, so a same-room `ql`/re-push never aborts an in-flight move.
+
+Suite 190/190.
+
+---
+
 ## 2026-07-12 — Mnemosyne: only `down` is a valid non-planar move + fix `gmcp.Room` crash (v4.7.58)
 
 Two fixes from live explorer testing:

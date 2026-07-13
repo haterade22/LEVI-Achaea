@@ -256,22 +256,42 @@ function M._scheduleTick()
   end)
 end
 
--- Stall watchdog: if nothing progresses (no arrival, no denizen change) for
--- WATCHDOG seconds while running, nudge/notify rather than sit silently forever --
--- a room that never clears (a wandered-in unlearned mob, a hard affliction, the
--- basher switched off underneath) would otherwise park the sweep. Re-armed on
+-- Stall nudge (extracted from the watchdog timer so it's unit-testable without a
+-- live timer). Nothing has progressed for WATCHDOG seconds -- no arrival, no
+-- denizen change. The usual cause is a STALE GMCP snapshot: we actually moved, or
+-- the room actually cleared, but Achaea never pushed a fresh Room.Info /
+-- Char.Items, so no event ever woke us. A QUICKLOOK forces the server to re-send
+-- both -- that fires gmcp.Room / "targets updated", which re-arms us and re-ticks
+-- on fresh data. ql is free (no balance) so it's cheap and safe to do every stall.
+-- Then schedule a tick anyway, so we re-decide even if the ql yields no event.
+function M._watchdogNudge()
+  if not M.explore.on then return end
+  -- A move / ice-slip is in flight: its own machinery owns this (MOVE_TIMEOUT for a
+  -- lost move; onIceSlip's MAX_ICE_SLIPS cap for a stuck icy exit). A ql here would
+  -- fire gmcp.Room, be mistaken for an arrival, clear `moving`, kill the ice-slip
+  -- retry chain and reset its counter -- livelocking the sweep on one exit. Leave it.
+  if M.explore.moving then return end
+  if M._roomHasDenizens() then
+    M._exploreEcho("no progress for " .. WATCHDOG .. "s -- <cyan>QL<reset> to refresh (basher may be mid-fight; <a_darkmagenta>mnem explore off<reset> if stuck).")
+  else
+    M._exploreEcho("<grey>no progress for " .. WATCHDOG .. "s -- <cyan>QL<reset> to refresh the room.")
+  end
+  send("ql")
+  M._scheduleTick()
+end
+
+-- Stall watchdog: if nothing progresses for WATCHDOG seconds while running, refresh
+-- the room (QL) and re-decide rather than sit silently forever -- a room that never
+-- clears (a wandered-in unlearned mob, a hard affliction, the basher switched off
+-- underneath) or a stale GMCP snapshot would otherwise park the sweep. Re-armed on
 -- every progress event; never hard-stops on its own.
 function M._armWatchdog()
   if M._explWatchT then pcall(killTimer, M._explWatchT); M._explWatchT = nil end
   M._explWatchT = tempTimer(WATCHDOG, function()
     M._explWatchT = nil
     if not M.explore.on then return end
-    if M._roomHasDenizens() then
-      M._exploreEcho("still on this room after " .. WATCHDOG .. "s -- the basher may be mid-fight; <a_darkmagenta>mnem explore off<reset> if it's stuck.")
-    else
-      M._exploreTick() -- clear but somehow parked: nudge a decision
-    end
-    M._armWatchdog() -- keep watching
+    M._watchdogNudge() -- ql-refresh + re-tick on fresh data
+    M._armWatchdog()   -- keep watching
   end)
 end
 
@@ -410,16 +430,34 @@ end
 -- Event hooks
 -- ---------------------------------------------------------------------------
 
--- Arrival: the map (005) records the room first (loads earlier), then we clear
--- the moving flag and (debounced) decide the next step. Arrival is progress.
-if M._explRoomH then killAnonymousEventHandler(M._explRoomH) end
-M._explRoomH = registerAnonymousEventHandler("gmcp.Room", function()
+-- Arrival handler body (extracted so it's unit-testable). The map (005) records the
+-- room first (loads earlier, registers first, so MAP.current is already updated when
+-- we run), then we clear the moving flag and (debounced) decide the next step.
+--
+-- Only a REAL arrival -- the room actually changed -- ends a move. A same-room
+-- Room.Info re-push must NOT be mistaken for an arrival: several things re-push the
+-- current room without our having moved (our own stall-watchdog `ql`, the
+-- target-not-here `ql` reflex, a stray server re-send). If we cleared `moving` on
+-- those, an in-flight move -- specifically the ice-slip retry loop, the one thing
+-- that keeps `moving` true past the move timeout -- would be aborted: onIceSlip's
+-- `moving` guard would then drop subsequent slips and the next tick would re-issue
+-- the exit as a fresh move, resetting the MAX_ICE_SLIPS counter and livelocking the
+-- sweep on a stuck icy exit. So treat "moving AND still in the room we left" as
+-- "not arrived yet" and leave the move/ice machinery alone.
+function M._onExploreRoom()
   if not M.explore.on then return end
-  M.explore.moving = false
-  if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
+  local sameRoom = M.explore.moving and MAP and MAP.current ~= nil
+    and MAP.current == M.explore.fromRoom
+  if not sameRoom then -- a genuine arrival (or we weren't moving): end the move
+    M.explore.moving = false
+    if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
+  end
   M._scheduleTick()
   M._armWatchdog()
-end)
+end
+
+if M._explRoomH then killAnonymousEventHandler(M._explRoomH) end
+M._explRoomH = registerAnonymousEventHandler("gmcp.Room", function() M._onExploreRoom() end)
 
 -- Denizen change (killed / left / arrived): re-decide once things settle. Also
 -- progress, so re-arm the watchdog.

@@ -564,6 +564,68 @@ describe("mnem explore", function()
     expect(M._nextPatrolStep()).toBe("w") -- re-visits a prior room instead of quitting
     expect(M.explore.patrolLoops).toBe(1) -- one refill = one loop counted
   end)
+
+  it("watchdog nudge issues a QL to refresh a stalled room", function()
+    ataxia.denizensHere = {}
+    M.explore.on = true
+    M.explore.moving = false
+    local captured, realSend = {}, send
+    send = function(cmd) captured[#captured + 1] = cmd end
+    local ok = pcall(M._watchdogNudge) -- restore send even if it throws
+    send = realSend
+    expect(ok).toBeTrue()
+    local sawQL = false
+    for _, c in ipairs(captured) do if c == "ql" then sawQL = true end end
+    expect(sawQL).toBeTrue()
+    M.explore.on = false
+  end)
+
+  it("watchdog nudge is a no-op when the explorer is off (no stray QL)", function()
+    M.explore.on = false
+    local captured, realSend = {}, send
+    send = function(cmd) captured[#captured + 1] = cmd end
+    pcall(M._watchdogNudge)
+    send = realSend
+    expect(#captured).toBe(0)
+  end)
+
+  it("watchdog nudge does NOT QL while a move is in flight (protects the ice-slip loop)", function()
+    ataxia.denizensHere = {}
+    M.explore.on = true
+    M.explore.moving = true -- e.g. mid ice-slip: MAX_ICE_SLIPS must own this, not a ql
+    local captured, realSend = {}, send
+    send = function(cmd) captured[#captured + 1] = cmd end
+    pcall(M._watchdogNudge)
+    send = realSend
+    expect(#captured).toBe(0)
+    M.explore.on = false
+    M.explore.moving = false
+  end)
+
+  it("arrival handler ends the move only when the room actually changed", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { east = 0 }, nil) -- MAP.current = 1
+    M.explore.on = true
+    M.explore.moving = true
+    M.explore.fromRoom = 1                 -- we left room 1...
+    MAP.onRoom(2, "B", { west = 1 }, "east") -- ...and arrived in 2; MAP.current = 2
+    M._onExploreRoom()
+    expect(M.explore.moving).toBeFalse()   -- genuine arrival: the move ends
+    M.explore.on = false
+    M.explore.moving = false
+  end)
+
+  it("arrival handler ignores a same-room re-push (ql) mid-move -- keeps `moving`", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { east = 0 }, nil) -- MAP.current = 1
+    M.explore.on = true
+    M.explore.moving = true
+    M.explore.fromRoom = 1 -- still in the room we're leaving (ice-slipping); a ql re-pushes room 1
+    M._onExploreRoom()
+    expect(M.explore.moving).toBeTrue() -- not an arrival: the ice-slip loop is left intact
+    M.explore.on = false
+    M.explore.moving = false
+  end)
 end)
 
 -- ─── Ripple map graph (pure) ─────────────────────────────────────────────────
@@ -717,6 +779,34 @@ describe("onGo monster capture", function()
     reset(true)
     M.onGo()
     expect(#M.run.pendingMonsters).toBe(0)
+  end)
+end)
+
+-- ─── Post-countdown spawn-line capture (the one-shot trigger's decision) ──────
+
+describe("M._mobCaptureLine()", function()
+  it("survives the '0' the trigger self-fires on, then grabs the spawn line", function()
+    M._mobCandidate = nil
+    -- The `^.*$` trigger is armed while the "0" is being processed and fires on it.
+    expect(M._mobCaptureLine("0")).toBeFalse()   -- countdown digit: keep waiting, DON'T stop
+    expect(M._mobCandidate).toBeNil()
+    expect(M._mobCaptureLine("")).toBeFalse()      -- a blank: keep waiting too
+    local spawn = "A multitude of sibilant voices chant in unison as ormyrr warriors and priests march across Krenindala."
+    expect(M._mobCaptureLine(spawn)).toBeTrue()    -- first real line: capture + stop
+    expect(M._mobCandidate).toBe(spawn)            -- the WHOLE line, verbatim
+  end)
+
+  it("stops on GO! (no spawn line this wave) without capturing anything", function()
+    M._mobCandidate = nil
+    expect(M._mobCaptureLine("0")).toBeFalse()
+    expect(M._mobCaptureLine("GO!")).toBeTrue()    -- GO! straight after 0: done, nothing captured
+    expect(M._mobCandidate).toBeNil()
+  end)
+
+  it("trims surrounding whitespace from the captured spawn line", function()
+    M._mobCandidate = nil
+    expect(M._mobCaptureLine("   Mandibles clatter as a swarm closes in.  ")).toBeTrue()
+    expect(M._mobCandidate).toBe("Mandibles clatter as a swarm closes in.")
   end)
 end)
 

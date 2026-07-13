@@ -45,9 +45,21 @@ patterns:
   type: 3
 ]]--
 
-if type(target) == "number" and ataxiaBasher.enabled then
-	bashConsoleEcho("denizen", "Target is gone!")
-	if not ataxiaBasher.manual then
-		deleteFull()
+if ataxiaBasher and ataxiaBasher.enabled then
+	if type(target) == "number" then
+		bashConsoleEcho("denizen", "Target is gone!")
+		if not ataxiaBasher.manual then
+			deleteFull()
+		end
+	end
+	-- The room contents are stale: we swung at a denizen that's already dead/gone
+	-- but GMCP still lists it in ataxia.denizensHere. A QL forces Achaea to re-push
+	-- the room so denizensHere resyncs -- otherwise (especially in MANUAL / Mnemosyne
+	-- mode, where deleteFull() is skipped) we keep swinging at a phantom. Debounced
+	-- so a burst of these on one target = a single QL.
+	if not ataxiaBasher._targetGoneQL then
+		ataxiaBasher._targetGoneQL = true
+		send("ql")
+		tempTimer(1.5, function() ataxiaBasher._targetGoneQL = false end)
 	end
 end
