@@ -99,10 +99,10 @@ _nextExploreStep():
 | Kept | Rejected | Why |
 |------|----------|-----|
 | planar (`MAP.OFFSETS`: n/s/e/w + diagonals) | a non-planar `up`/`down`/`in`/`out` **when the room also has a planar exit** | A grid room's *deeper* vertical exit would walk off the level and skip the boon — the 4×4 is flat |
-| the sole exit of a room with **no planar exit at all** (even if non-planar) | — | The ripple's entry is a *holding room whose only exit is `down`* into the 4×4; without this exception the sweep couldn't even descend into the grid (it instantly reported "fully swept") |
+| a `down` exit from a room with **no planar exit at all** | any `up`/`in`/`out`, and any `down` from a room that *does* have a planar exit | The ripple's entry is a *holding room whose only exit is `down`* into the 4×4 — the one non-planar move in Mnemosyne. `up`/`in`/`out` don't exist here, so they're never taken |
 | not in `explore.failed[num]` | condemned exits | So a timed-out wall isn't retried, and a room whose only unexplored exits are failed counts as swept (no infinite backtrack) |
 
-The vertical-exit rule reduces to: take `up`/`down`/`in`/`out` **only from a pure-vertical room** (the holding room), never from a 4×4 room (which always has planar exits). The same `usableUnexplored` gates both the current-room pick **and** backtrack candidacy, so "does this visited room still have somewhere to go?" has exactly one definition. Backtracking uses `MAP.path`, which is BFS over **walked edges only**, so the explorer only ever routes back through doors it has confirmed by walking.
+The rule reduces to: **only `down`, and only from a pure-vertical room** (the holding room) — never `up`/`in`/`out`, and never a `down` from a 4×4 room (which always has planar exits). This closes a v4.7.56 bug where a room reporting a spurious `up` exit made the explorer loop on `moving u`. The same `usableUnexplored` gates both the current-room pick **and** backtrack candidacy, so "does this visited room still have somewhere to go?" has exactly one definition. Backtracking uses `MAP.path`, which is BFS over **walked edges only**, so the explorer only ever routes back through doors it has confirmed by walking.
 
 ### Boss hunt (patrol)
 

@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-07-12 — Mnemosyne: only `down` is a valid non-planar move + fix `gmcp.Room` crash (v4.7.58)
+
+Two fixes from live explorer testing:
+
+1. **Explorer looped on `moving u`.** A room reported a spurious `up` exit, and v4.7.56's non-planar allowance ("any non-planar exit from a room with no planar exit") let the sweeper take it — then bounce back — forever. **There is no `up` in Mnemosyne: only the entry holding room has a non-planar move, and it is always `down`.** `usableUnexplored` (`008_Explorer.lua`) now allows a non-planar exit *only when it is `down`* — `up`/`in`/`out` are never taken, and a 4×4 room's deeper `down` still isn't taken (it always has planar exits). New test asserts an `up`-only / `out`-only room yields no move.
+
+2. **`attempt to index field 'Room' (a nil value)` spam.** `search_targets()` runs every prompt and indexed `gmcp.Room.Info.area` unguarded; `gmcp.Room` is briefly nil during Mnemosyne transitions (GO!/wade, boon screen, between-room hops), so the prompt trigger flooded the error console. Added a `hasRoomInfo()` guard to every function in `002_search_targets.lua` that reads `gmcp.Room.Info` (`search_targets`, `preCombatLdeck`, `stormhammer`, `shieldedTarget`). Also **de-duplicated** that file — its entire body had been accidentally pasted twice.
+
+Suite 182/182. Docs: [07-explorer.md](.claude/projects/mnemosyne/07-explorer.md), CLAUDE.md, memory.
+
+---
+
 ## 2026-07-11 — Sysupdate hardening: verify the install, cross-check the version (v4.7.57)
 
 A `sysupdate` reported "System package v4.7.53 has been successfully installed" while the repo was at 4.7.56, and the Package Manager window (open during the update) showed no Levi_Ataxia at all. Diagnosis: the install itself *had* succeeded (the success echo only fires from the `sysInstallPackage` event) — but two real gaps surfaced:

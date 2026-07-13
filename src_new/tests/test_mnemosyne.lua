@@ -544,6 +544,15 @@ describe("mnem explore", function()
     expect(M._nextExploreStep()).toBe("n") -- planar taken; the down is ignored
   end)
 
+  it("never takes an up/in/out exit -- only `down` is a valid non-planar move", function()
+    MAP.reset()
+    MAP.onRoom(1, "up-only", { up = 0 }, nil) -- only an up exit; Mnemosyne has no `up`
+    expect(M._nextExploreStep()).toBeNil()
+    MAP.reset()
+    MAP.onRoom(2, "out-only", { out = 0 }, nil) -- likewise no `in`/`out`
+    expect(M._nextExploreStep()).toBeNil()
+  end)
+
   it("patrols visited rooms once the grid is swept (to hunt a boss-ripple boss)", function()
     MAP.reset()
     MAP.onRoom(1, "A", { east = 2 }, nil)

@@ -108,12 +108,12 @@ local function denizenCount()
 end
 
 -- Unexplored exits of `num` the sweep can actually use: reported-but-unwalked,
--- not recorded as failed this session, and PLANAR unless the room has no planar
--- exit at all. The planar rule keeps the sweep on the flat 4x4 (a grid room's
--- deeper `down`/`up` sits alongside planar exits and is never taken, so we can't
--- wander off-level and skip the boon) -- BUT the ripple's holding room has only a
--- `down` into the grid, so a room with no planar exit is allowed its non-planar
--- one to enter. Used for both the current-room pick and backtrack candidacy.
+-- not recorded as failed this session, and PLANAR (n/s/e/w + diagonals) -- the 4x4
+-- is flat and there is no `up`/`in`/`out` in Mnemosyne. The ONE non-planar move
+-- is the ripple's holding room's `down` into the grid, so `down` is allowed only
+-- from a room that has no planar exit at all (the holding room); `up`/`in`/`out`
+-- are never used, and a grid room's deeper `down` (alongside planar exits) is not
+-- taken either. Used for both the current-room pick and backtrack candidacy.
 local function usableUnexplored(num)
   local failed = (M.explore.failed and M.explore.failed[num]) or {}
   local room = MAP.rooms and MAP.rooms[num]
@@ -125,7 +125,8 @@ local function usableUnexplored(num)
   end
   local out = {}
   for _, d in ipairs(MAP.unexploredExits(num) or {}) do
-    if not failed[d] and ((MAP.OFFSETS and MAP.OFFSETS[d]) or not hasPlanar) then
+    local planar = MAP.OFFSETS and MAP.OFFSETS[d]
+    if not failed[d] and (planar or (not hasPlanar and d == "down")) then
       out[#out + 1] = d
     end
   end
