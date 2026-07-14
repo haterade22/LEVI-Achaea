@@ -41,13 +41,11 @@ send("queue addclear free stand" .. sep .. dir)
 
 ## State machine
 
-The loop is event-driven, not polled. Handlers on `gmcp.Room` (arrival) and `targets updated` (a denizen killed / left / arrived) fire a **debounced** `_scheduleTick`, which waits `TICK_DELAY` for the room contents to settle and then runs the single decision function `_exploreTick`.
+The loop is event-driven, not polled. Handlers on `gmcp.Room` (arrival) and `targets updated` (a denizen killed / left / arrived) fire a **debounced** `_scheduleTick(delay)`, which waits `delay` and then runs the single decision function `_exploreTick`. The delay depends on the event: an **arrival** waits `TICK_DELAY` (0.5s) so the new room's `Char.Items` (denizens) can load before we decide — otherwise we could walk past a room whose mobs hadn't arrived; a **denizen change** (the "killed the last mob → move on" case) uses `FAST_TICK` (0.15s), because `denizensHere` is already current when `targets updated` fires, so there's nothing to wait for.
 
 ```
-gmcp.Room / targets updated
-      │
-      ▼
-_scheduleTick()  ── tempTimer(TICK_DELAY) ──▶  _exploreTick()
+gmcp.Room (arrival) ── _scheduleTick(TICK_DELAY 0.5s) ──▶  _exploreTick()
+targets updated (kill) ── _scheduleTick(FAST_TICK 0.15s) ──▶  _exploreTick()
 ```
 
 ```
@@ -118,6 +116,8 @@ _nextPatrolStep():
 
 It re-visits rooms round-robin and lets the basher clear whatever it finds (the boss, or a straggler). The **boon screen is still the real terminus**; the patrol is only capped at `MAX_PATROL_LOOPS` *fruitless* full loops — `patrolLoops` resets to `0` whenever a room has denizens (so a real boss fight keeps it going), and finding new ground to sweep exits patrol entirely.
 
+The patrol queue is built from visited **grid** rooms only: `roomHasPlanarExit` excludes the pure-vertical entry **holding room** (its only exit is `down`), because the boss spawns in the 4×4, never there — and, crucially, `MAP.path` back to the holding room returns the `up` edge, which is how the sweep used to walk `up` out of the grid. As a second guard, both patrol and backtrack reject any path whose **first step is non-planar** (`planarStep`), so `up`/`in`/`out`/`down` are never *walked* as a routing step. (The one legitimate non-planar move — the initial `down` from the holding room into the grid — is a `usableUnexplored` pick, not a path step, so it's unaffected.)
+
 ## Stop conditions
 
 | Trigger | Path | Notes |
@@ -184,7 +184,8 @@ Some rooms are icy: leaving can print **"You slip and fall on the ice as you try
 
 | Constant | Value | Meaning |
 |----------|-------|---------|
-| `TICK_DELAY` | `0.5` | Debounce; let room contents settle after an event before deciding |
+| `TICK_DELAY` | `0.5` | Debounce on **arrival**; let the new room's `Char.Items` (denizens) load before deciding |
+| `FAST_TICK` | `0.15` | Debounce on a **denizen change** (a kill); `denizensHere` is already current, so react fast |
 | `MOVE_TIMEOUT` | `5` | A move producing no arrival within this → retry / unstick |
 | `MOVE_RETRIES` | `1` | Re-send a stalled move this many times before condemning the exit |
 | `WATCHDOG` | `30` | Seconds of no progress before a soft nudge / notify |

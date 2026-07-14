@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-07-13 — Mnemosyne explorer: snappier moves + never walk `up` (v4.7.61)
+
+Two live-testing fixes:
+
+- **Faster off the last kill.** The decision tick had a single 0.5s debounce used for both arrivals and denizen changes. Split it: arrivals still wait `TICK_DELAY` (0.5s) so the new room's `Char.Items` can load before deciding (don't walk past a room whose mobs hadn't arrived), but a **denizen change** now schedules `FAST_TICK` (0.15s) — `denizensHere` is already current when `"targets updated"` fires, so "killed the last mob → move on" no longer eats the full settle delay.
+- **Never walk `up`.** The 4×4 is planar; the only non-planar walked edge is the entry holding room's `down`/`up`. `MAP.path` (BFS over walked edges) would happily return the `up` back to the holding room, so **patrol** (which queued *all* visited rooms, including the holding room) walked `up` out of the grid. Fixed: the patrol queue now excludes pure-vertical rooms (`roomHasPlanarExit`), and both patrol and backtrack reject any non-planar first step (`planarStep`). The forward descent `down` into the grid is unaffected (it's a `usableUnexplored` pick, not a path step).
+
+Suite 194/194.
+
+---
+
 ## 2026-07-13 — Mnemosyne explorer: stop the sweep when slain (v4.7.60)
 
 Being slain in the tower ("You have been slain by Chief Constable Beck.") boots you out of the ripple — you respawn elsewhere — but the auto-explorer kept running, trying to walk and fight from the wrong place. The Mnemosyne death trigger (`mnemosyne/007_Death.lua`) now also calls `ataxia.mnemosyne.exploreOnDeath(killer)`, which stops a running sweep (restoring the basher to its pre-sweep state via `_exploreStop`). It's independent of telemetry — the sweep runs off `ataxiaBasher.inMnemosyne`, not the tracked run, so the stop fires even with reporting off — and no-ops when the explorer isn't running. Suite 192/192.

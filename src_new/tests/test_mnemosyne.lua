@@ -565,6 +565,29 @@ describe("mnem explore", function()
     expect(M.explore.patrolLoops).toBe(1) -- one refill = one loop counted
   end)
 
+  it("never patrols UP out of the grid to the holding room", function()
+    MAP.reset()
+    MAP.onRoom(1, "holding", { down = 2 }, nil)          -- entry holding room: only `down`
+    MAP.onRoom(2, "entry", { up = 1, east = 3 }, "down") -- descend into the 4x4 (walked edge up<->down)
+    MAP.onRoom(3, "B", { west = 2 }, "east")             -- one grid room over; grid fully walked
+    expect(M._nextExploreStep()).toBeNil()               -- nothing unexplored -> would patrol
+    M.explore.patrolQueue = nil
+    M.explore.patrolLoops = 0
+    local step = M._nextPatrolStep()
+    expect(step).toBe("w")        -- re-visits grid room 2 via WEST, never `up` toward holding
+    -- the pure-vertical holding room (1) is excluded from the patrol queue entirely
+    for _, num in ipairs(M.explore.patrolQueue) do expect(num).toBe(2) end
+  end)
+
+  it("backtracks toward unexplored via a planar step, never `up`", function()
+    MAP.reset()
+    MAP.onRoom(1, "holding", { down = 2 }, nil)
+    MAP.onRoom(2, "entry", { up = 1, east = 3, north = 0 }, "down") -- entry keeps an unexplored NORTH
+    MAP.onRoom(3, "dead", { west = 2 }, "east")                     -- dead-end grid room; nothing unexplored here
+    -- Standing in 3 (no unexplored): backtrack to 2 (which has the unexplored north).
+    expect(M._nextExploreStep()).toBe("w") -- first step of the backtrack path 3->2, planar; never `up`
+  end)
+
   it("watchdog nudge issues a QL to refresh a stalled room", function()
     ataxia.denizensHere = {}
     M.explore.on = true
@@ -625,6 +648,26 @@ describe("mnem explore", function()
     expect(M.explore.moving).toBeTrue() -- not an arrival: the ice-slip loop is left intact
     M.explore.on = false
     M.explore.moving = false
+  end)
+
+  it("opens a settle window on arrival and closes it on the first tick", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { east = 0 }, nil)
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = true
+    M.explore.on = true
+    M.explore.moving = true
+    M.explore.fromRoom = 1
+    MAP.onRoom(2, "B", { west = 1 }, "east") -- genuine arrival in B
+    M._onExploreRoom()
+    expect(M.explore.settling).toBeTrue()  -- arrival -> keep the full TICK_DELAY (don't walk past a late-loading mob)
+    ataxia.denizensHere = { [1] = "a mob" } -- room has a denizen -> the settle tick waits, not moves
+    M._exploreTick()
+    expect(M.explore.settling).toBeFalse() -- settle done; subsequent kills now react with FAST_TICK
+    M.explore.on = false
+    M.explore.moving = false
+    ataxia.denizensHere = {}
+    ataxiaBasher.inMnemosyne = false
   end)
 
   it("stops the sweep when slain", function()

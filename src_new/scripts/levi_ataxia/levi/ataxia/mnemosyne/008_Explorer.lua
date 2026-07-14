@@ -45,7 +45,8 @@ local MAP = ataxia.mnemosyne.map
 
 M.explore = M.explore or { on = false, moving = false, failed = {} }
 
-local TICK_DELAY = 0.5 -- let room contents settle after an event before deciding
+local TICK_DELAY = 0.5 -- on ARRIVAL: let the new room's denizens (Char.Items) load before deciding, so we don't walk past a room whose mobs hadn't arrived yet
+local FAST_TICK = 0.15 -- on a DENIZEN change (a kill): denizensHere is already current, so react quickly -- snappier "killed the last mob -> move on"
 local MOVE_TIMEOUT = 5 -- a move that produces no arrival -> retry / unstick
 local MOVE_RETRIES = 1 -- re-send a stalled move this many times before condemning the exit
 local WATCHDOG = 30 -- seconds of no progress (no arrival / no denizen change) before a soft nudge
@@ -107,6 +108,17 @@ local function denizenCount()
   return n
 end
 
+-- Does the room have any planar (grid) exit? A room with NONE is the ripple's entry
+-- holding room (only `down`), not part of the 4x4 -- never a sweep or patrol goal.
+local function roomHasPlanarExit(num)
+  local room = MAP.rooms and MAP.rooms[num]
+  if not (room and room.exits) then return false end
+  for d in pairs(room.exits) do
+    if MAP.OFFSETS and MAP.OFFSETS[d] then return true end
+  end
+  return false
+end
+
 -- Unexplored exits of `num` the sweep can actually use: reported-but-unwalked,
 -- not recorded as failed this session, and PLANAR (n/s/e/w + diagonals) -- the 4x4
 -- is flat and there is no `up`/`in`/`out` in Mnemosyne. The ONE non-planar move
@@ -116,13 +128,7 @@ end
 -- taken either. Used for both the current-room pick and backtrack candidacy.
 local function usableUnexplored(num)
   local failed = (M.explore.failed and M.explore.failed[num]) or {}
-  local room = MAP.rooms and MAP.rooms[num]
-  local hasPlanar = false
-  if room and room.exits then
-    for d in pairs(room.exits) do
-      if MAP.OFFSETS and MAP.OFFSETS[d] then hasPlanar = true; break end
-    end
-  end
+  local hasPlanar = roomHasPlanarExit(num)
   local out = {}
   for _, d in ipairs(MAP.unexploredExits(num) or {}) do
     local planar = MAP.OFFSETS and MAP.OFFSETS[d]
@@ -131,6 +137,17 @@ local function usableUnexplored(num)
     end
   end
   return out
+end
+
+-- A path step (short dir, e.g. "n"/"u") we're willing to WALK during backtrack /
+-- patrol: planar only. The grid is flat and planar-connected; the ONE non-planar
+-- walked edge is the holding room's down/up (the ripple entry). MAP.path is BFS over
+-- walked edges and happily returns the `up` back to the holding room -- climbing out
+-- of the grid. That was the "explorer went up" bug. Reject u/d/in/out here (the
+-- forward descent `down` is handled by usableUnexplored, not by a path step).
+local function planarStep(shortD)
+  local nd = MAP.normDir and MAP.normDir(shortD)
+  return nd ~= nil and MAP.OFFSETS ~= nil and MAP.OFFSETS[nd] ~= nil
 end
 
 -- Next single-step short direction to sweep the grid: a usable unexplored exit of
@@ -144,12 +161,13 @@ function M._nextExploreStep()
   if #un > 0 then return MAP.shortDir(un[1]) end
 
   -- Backtrack: BFS (over walked edges) to the nearest room that still has a
-  -- usable unexplored exit; take the first step of that path.
+  -- usable unexplored exit; take the first step of that path -- but never a
+  -- non-planar step (that would climb `up` out of the grid to the holding room).
   local best
   for num, r in pairs(MAP.rooms) do
     if r.visited and num ~= cur and #usableUnexplored(num) > 0 then
       local steps = MAP.path(cur, num)
-      if steps and #steps > 0 and (not best or #steps < #best) then best = steps end
+      if steps and #steps > 0 and planarStep(steps[1]) and (not best or #steps < #best) then best = steps end
     end
   end
   if best then return best[1] end
@@ -168,7 +186,11 @@ function M._nextPatrolStep()
   if not M.explore.patrolQueue or #M.explore.patrolQueue == 0 then
     M.explore.patrolQueue = {}
     for num, r in pairs(MAP.rooms) do
-      if r.visited and num ~= cur then table.insert(M.explore.patrolQueue, num) end
+      -- Only re-visit 4x4 grid rooms; skip the pure-vertical holding room (a boss
+      -- never spawns there, and pathing to it is what tried to walk `up`).
+      if r.visited and num ~= cur and roomHasPlanarExit(num) then
+        table.insert(M.explore.patrolQueue, num)
+      end
     end
     table.sort(M.explore.patrolQueue)
     M.explore.patrolLoops = (M.explore.patrolLoops or 0) + 1
@@ -179,8 +201,10 @@ function M._nextPatrolStep()
       table.remove(M.explore.patrolQueue, 1) -- reached it / it's gone: advance
     else
       local steps = MAP.path(cur, t)
-      if steps and #steps > 0 then return steps[1] end
-      table.remove(M.explore.patrolQueue, 1) -- unreachable: skip
+      -- Skip a target whose first step is non-planar: that's the holding room (up
+      -- out of the grid). The boss spawns in the 4x4, never the entry holding room.
+      if steps and #steps > 0 and planarStep(steps[1]) then return steps[1] end
+      table.remove(M.explore.patrolQueue, 1) -- unreachable / non-planar first step: skip
     end
   end
   return nil
@@ -248,9 +272,11 @@ function M.onIceSlip()
   M._exploreMove(M.explore.fromDir, true) -- re-send (silent; keeps tries, re-arms timeout)
 end
 
-function M._scheduleTick()
+-- delay defaults to TICK_DELAY (the arrival settle time). Pass FAST_TICK after a
+-- denizen change, where denizensHere is already current and we want to move on fast.
+function M._scheduleTick(delay)
   if M._explTickT then pcall(killTimer, M._explTickT); M._explTickT = nil end
-  M._explTickT = tempTimer(TICK_DELAY, function()
+  M._explTickT = tempTimer(delay or TICK_DELAY, function()
     M._explTickT = nil
     M._exploreTick()
   end)
@@ -299,6 +325,10 @@ function M._exploreTick()
   if not M.explore.on then return end
   if not inMnem() then return M._exploreStop("left Mnemosyne") end
   if M.explore.moving then return end -- awaiting arrival
+  -- A tick ran in a decidable state, so the post-arrival settle window is over: the
+  -- room's denizens have had the full TICK_DELAY of quiet to load (each load re-armed
+  -- the tick while `settling`). From here, denizen changes (kills) may react fast.
+  M.explore.settling = false
   if M._roomHasDenizens() then
     -- basher is clearing this room; wait. Finding denizens is progress, so reset the
     -- boss-hunt counter. Announce once per room, not every tick.
@@ -373,6 +403,7 @@ function M.exploreOn()
   M.explore.patrolQueue = nil
   M.explore.patrolLoops = 0
   M.explore.iceSlips = 0
+  M.explore.settling = true -- treat the starting room like an arrival: let its denizens settle first
   M._exploreEcho("<green>ON<reset> -- sweeping the 4x4, clearing to the boon screen (patrols for the boss on boss ripples). (<a_darkmagenta>mnem explore off<reset> to stop)")
   M._scheduleTick()
   M._armWatchdog()
@@ -460,6 +491,9 @@ function M._onExploreRoom()
   if not sameRoom then -- a genuine arrival (or we weren't moving): end the move
     M.explore.moving = false
     if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
+    -- Open the settle window: the new room's Char.Items (denizens) will land in a
+    -- following "targets updated"; keep the full TICK_DELAY until they've settled.
+    M.explore.settling = true
   end
   M._scheduleTick()
   M._armWatchdog()
@@ -468,12 +502,17 @@ end
 if M._explRoomH then killAnonymousEventHandler(M._explRoomH) end
 M._explRoomH = registerAnonymousEventHandler("gmcp.Room", function() M._onExploreRoom() end)
 
--- Denizen change (killed / left / arrived): re-decide once things settle. Also
--- progress, so re-arm the watchdog.
+-- Denizen change (killed / left / arrived): re-decide. The "killed the last mob ->
+-- move on" case wants FAST_TICK -- denizensHere is already current. BUT arriving in a
+-- room ALSO raises "targets updated" (the new room's Char.Items load), and a mob can
+-- load a beat AFTER the room does; while `settling` (set on arrival, cleared by the
+-- first tick) we must keep the full TICK_DELAY so we don't decide the room is empty
+-- and walk past a late-loading denizen. Each load during settling re-arms TICK_DELAY,
+-- so the tick only fires after the contents have been quiet for the settle window.
 if M._explTgtH then killAnonymousEventHandler(M._explTgtH) end
 M._explTgtH = registerAnonymousEventHandler("targets updated", function()
   if not M.explore.on then return end
-  M._scheduleTick()
+  M._scheduleTick(M.explore.settling and TICK_DELAY or FAST_TICK)
   M._armWatchdog()
 end)
 
