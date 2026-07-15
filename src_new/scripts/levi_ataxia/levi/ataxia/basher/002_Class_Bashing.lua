@@ -214,18 +214,24 @@ function ataxiaBasher_blademasterBashing()
 	local command, sp = "", ataxia.settings.separator
 	local brage = ataxiaBasher_assembleBattlerage()
 	local raze = ataxiaBasher.battlerage.Blademaster.raze
-	
+
+	-- White Heaven's Shattered Star boon (Mnemosyne): multislash strikes 3 EXTRA times
+	-- (6 total), so it out-damages the single drawslash -- swap to it while the boon is up.
+	-- Straight verb swap (same "sternum" target part): bmShatteredStar is set by the BOONS-list
+	-- trigger / boon-claim alias and reset each run (mirrors bardWarmarch); nil/false -> drawslash.
+	local slash = bmShatteredStar and ("multislash "..target.." sternum") or ("drawslash "..target.." sternum")
+
 	if ataxiaBasher.shielded then
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-			command = raze..sp.."infuse fire " ..sp.." drawslash "..target.. " sternum"
+			command = raze..sp.."infuse fire "..sp.." "..slash
 		else
 			command = "raze "..target..sp..brage
 		end
 	else
-		command = brage..sp.."infuse fire " ..sp.." drawslash "..target.. " sternum"
+		command = brage..sp.."infuse fire "..sp.." "..slash
 	end
-	    
-	return command   
+
+	return command
 end
 
 function ataxiaBasher_depthswalkerBashing()

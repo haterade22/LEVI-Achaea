@@ -405,6 +405,11 @@ strategy: |
 ```yaml
 attack_command: "SLASH <target>" or stance-appropriate attacks
 attack_skill: TwoArts
+# Basher melee (ataxiaBasher_blademasterBashing, basher/002): "infuse fire ; drawslash <t> sternum"
+# (razes first on a shielded mob). Mnemosyne "White Heaven's Shattered Star" boon buffs multislash
+# (+3 strikes = 6 total); while bmShatteredStar is set the basher swaps the verb to
+# "multislash <t> sternum". Flag set on boon claim / the BOONS-list row (trigger mnemosyne/012),
+# cleared on Mnemosyne run start + confirmed run-end -- mirrors the Bard Warmarch boon (bardWarmarch).
 # Battlerage kit (commands/costs verified vs basher/001 ataxiaBasher_blademasterBattlerage
 # and _groups.yaml get_Battlerage Blademaster config). Blademaster OWNS its battlerage:
 # it is EXCLUDED from the shared culling check and spends rage by priority so it never idles.

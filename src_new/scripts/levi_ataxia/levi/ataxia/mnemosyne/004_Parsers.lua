@@ -152,6 +152,7 @@ end
 -- if one is active. A normal life-loss death (the /death trigger) keeps it going.
 function M.onRunEnd()
   bardWarmarch = false -- boons gone on a confirmed run-end
+  bmShatteredStar = false -- boons gone on a confirmed run-end
   if M._inRun() then M.endRun() end
 end
 

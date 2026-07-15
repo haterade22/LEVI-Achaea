@@ -18,3 +18,5 @@ send("boon claim " .. matches[2])
 ataxia.mnemosyne.onBoonClaim(matches[2])
 -- Warmarch makes the paean refrain hit denizens (+100% psychic); flip bard bashing to paean.
 if matches[2]:lower():find("warmarch") then bardWarmarch = true end
+-- White Heaven's Shattered Star buffs multislash (+3 strikes); flip blademaster bashing to multislash.
+if matches[2]:lower():find("shattered star") then bmShatteredStar = true end

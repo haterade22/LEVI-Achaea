@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-07-15 — Basher: Blademaster multislash on the Shattered Star boon (v4.7.66)
+
+Mnemosyne boon-aware bashing for Blademaster, mirroring the existing Bard Warmarch pattern.
+
+- **White Heaven's Shattered Star** (legendary Mnemosyne boon) makes **multislash strike 3 extra times** (6 total), out-damaging the single drawslash. When the boon is active, `ataxiaBasher_blademasterBashing()` swaps its melee verb `drawslash <t> sternum` → `multislash <t> sternum` (both drawslash paths; the plain shielded-raze path is unchanged).
+- Detection mirrors `bardWarmarch`: a new global `bmShatteredStar` set by the BOONS-list trigger (`mnemosyne/012_Shattered_Star.lua`) and the boon-claim alias, reset each run on run-start and confirmed run-end. Mnemosyne-scoped and reset per run, so it never leaks to normal bashing.
+- Tests: `test_basher_blademaster.lua` (6 cases — swap on/off across the not-shielded and rageraze+shielded paths, plain-raze path untouched, infuse-fire preserved) + a `bmShatteredStar` onRunEnd reset case. Suite **240/240**. Two-agent adversarial review — reset parity verified 1:1 with `bardWarmarch`, drawslash path byte-identical; renamed the trigger 011→012 to avoid a prefix collision with `011_Ice_Slip.lua`.
+
+---
+
 ## 2026-07-15 — Basher: BR affliction echoes/highlighting + stun/weakness capture (v4.7.65)
 
 Visibility pass on the Blademaster basher, plus more affliction capture — driven by live Mnemosyne combat logs.

@@ -410,6 +410,15 @@ describe("run-end confirmation", function()
     M.onRunEnd() -- confirmation fired
     expect(bardWarmarch).toBeFalse()
   end)
+
+  it("clears bmShatteredStar (multislash boon) on the confirmed onRunEnd", function()
+    reset(true)
+    bmShatteredStar = true
+    M.onRunEndMaybe() -- deferred maybe must NOT clear the boon yet
+    expect(bmShatteredStar).toBeTrue()
+    M.onRunEnd() -- confirmation fired -> boons gone
+    expect(bmShatteredStar).toBeFalse()
+  end)
 end)
 
 -- ─── Boon claim resolution (#4) ──────────────────────────────────────────────
