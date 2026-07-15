@@ -49,11 +49,17 @@ local function reset()
   ataxia.vitals.rage = 0
   battleRage_Timers = {}
   ataxiaBasher.cullingBlade = false
+  ataxiaBasher.inMnemosyne = false
   ataxiaTemp.bladeCooldown = nil
   ataxiaTemp.bmHeadstrikeReadyAt = nil
+  ataxiaTemp.bmNerveslashReadyAt = nil
+  ataxiaTemp.brGlobalReadyAt = nil
   exploitReturn = nil
   gmcp.Room.Info.area = ""
 end
+
+-- Blademaster config exposes specialafflict = Nerveslash (weakness)
+ataxiaBasher.battlerage.Blademaster.specialafflict = "nsl 1"
 
 describe("ataxiaBasher_blademasterBattlerage — rage never idles", function()
   it("spends flush rage on Spinslash (never returns empty when able)", function()
@@ -89,11 +95,53 @@ describe("ataxiaBasher_blademasterBattlerage — rage never idles", function()
     expect(ataxiaBasher_blademasterBattlerage(";")).toBe("spinslash 1;")
   end)
 
-  it("respects the Headstrike 25-rage gate (24 -> Leapstrike, 25 -> Headstrike)", function()
-    reset(); exploitReturn = "headstrike"; ataxia.vitals.rage = 24
-    expect(ataxiaBasher_blademasterBattlerage(";")).toBe("leapstrike 1;") -- Headstrike unaffordable
+  it("respects the Headstrike 25-rage gate (20 -> Leapstrike, 25 -> Headstrike)", function()
+    reset(); exploitReturn = "headstrike"; ataxia.vitals.rage = 20 -- < 22 (Nerveslash) & < 25 (Headstrike)
+    expect(ataxiaBasher_blademasterBattlerage(";")).toBe("leapstrike 1;")
     reset(); exploitReturn = "headstrike"; ataxia.vitals.rage = 25
     expect(ataxiaBasher_blademasterBattlerage(";")).toBe("strike 1 head;")
+  end)
+
+  it("in Mnemosyne, Stun (Daze) is fired BEFORE damage (survival > speed)", function()
+    reset(); ataxia.vitals.rage = 103; ataxiaBasher.inMnemosyne = true
+    expect(ataxiaBasher_blademasterBattlerage(";")).toBe("shin daze 1;") -- mitigation first
+    -- ...but Culling still outranks it (fresh reset -- the prior call armed the global cooldown)
+    reset(); ataxia.vitals.rage = 103; ataxiaBasher.inMnemosyne = true; ataxiaBasher.cullingBlade = true
+    expect(ataxiaBasher_blademasterBattlerage(";")).toBe("reap 1;")
+  end)
+
+  it("outside Mnemosyne, damage (Spinslash) is fired before Stun", function()
+    reset(); ataxia.vitals.rage = 103 -- inMnemosyne false
+    expect(ataxiaBasher_blademasterBattlerage(";")).toBe("spinslash 1;")
+  end)
+
+  it("fires Nerveslash (Weakness) as an other-affliction when damage is on cooldown, arming its cooldown", function()
+    reset(); ataxia.vitals.rage = 103
+    battleRage_Timers.large = 1; battleRage_Timers.special = 1 -- Spinslash + Daze on CD
+    expect(ataxiaBasher_blademasterBattlerage(";")).toBe("nsl 1;")
+    expect(ataxiaTemp.bmNerveslashReadyAt ~= nil).toBeTrue() -- timestamp cooldown armed
+  end)
+
+  it("skips Nerveslash while its client cooldown is up, falling to Leapstrike", function()
+    reset(); ataxia.vitals.rage = 103
+    battleRage_Timers.large = 1; battleRage_Timers.special = 1 -- Spinslash + Daze on CD
+    ataxiaTemp.bmNerveslashReadyAt = getEpoch() + 100 -- Nerveslash on client cooldown
+    expect(ataxiaBasher_blademasterBattlerage(";")).toBe("leapstrike 1;")
+  end)
+
+  it("does NOT queue a battlerage while the global ~1s cooldown is up", function()
+    reset(); ataxia.vitals.rage = 103
+    ataxiaTemp.brGlobalReadyAt = getEpoch() + 5 -- global cooldown active
+    expect(ataxiaBasher_blademasterBattlerage(";")).toBe("")
+  end)
+
+  it("arms the global cooldown after firing a battlerage, not after an empty result", function()
+    reset(); ataxia.vitals.rage = 103
+    ataxiaBasher_blademasterBattlerage(";")
+    expect(ataxiaTemp.brGlobalReadyAt ~= nil).toBeTrue()
+    reset(); ataxia.vitals.rage = 10 -- nothing affordable -> ""
+    ataxiaBasher_blademasterBattlerage(";")
+    expect(ataxiaTemp.brGlobalReadyAt).toBeNil() -- not armed on empty
   end)
 
   it("is safe and still spends rage when dsExploit is unavailable (008 not loaded)", function()

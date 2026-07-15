@@ -617,30 +617,56 @@ end
 function ataxiaBasher_blademasterBattlerage(sp)
   local br = ataxiaBasher.battlerage and ataxiaBasher.battlerage["Blademaster"]
   if not br or type(target) ~= "number" then return "" end
+  -- Global ~1s battlerage cooldown (after ANY BR ability): queuing another BR while it is
+  -- up gets it rejected ("You must wait a short time...") and that cycle's rage goes unspent,
+  -- so skip BR until it clears. TIMESTAMP -> reload-safe (a stale value just expires, never
+  -- strands). Armed below on our own fire AND by the reactive "must wait" trigger (which also
+  -- catches BR abilities fired outside this function, e.g. a shielded shin-shatter).
+  if getEpoch() < (ataxiaTemp.brGlobalReadyAt or 0) then return "" end
   local rage = ataxia.vitals.rage or 0
 
-  -- 1. Culling Blade (reap) -- own it here (Blademaster is excluded from the global check).
-  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown
-     and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree"
-     and rage >= 36 then
-    return "reap "..target..sp
+  local function choose()
+    local inMnem = ataxiaBasher.inMnemosyne == true
+
+    -- 1. Culling reap -- AoE; clearing the room is itself the best mitigation. (Owned here;
+    -- Blademaster is excluded from the shared culling check.)
+    if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown
+       and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree"
+       and rage >= 36 then
+      return "reap "..target..sp
+    end
+
+    -- 2. In Mnemosyne (no-flee, dangerous), HIT-PREVENTION beats damage: Daze -> Stun (mob does
+    -- nothing 4s). Blademaster's only hit-prevention affliction (Amnesia/Aeon/Clumsy belong to
+    -- other classes). Uses the shared `special` cooldown (tracked by trigger 332).
+    if inMnem and br.special and not battleRage_Timers.special and rage >= 26 then return br.special..sp end
+
+    -- 3. Damage battlerages: Headstrike (bonus damage on a reckless/feared target) then Spinslash.
+    -- Timestamp cooldowns (reload-safe -- a stale timestamp just expires; a stuck timer id would
+    -- skip the ability forever); Headstrike/Nerveslash have no fire-line trigger to track them.
+    if br.specialuse and rage >= 25 and getEpoch() >= (ataxiaTemp.bmHeadstrikeReadyAt or 0)
+       and ataxiaBasher_dsExploit and ataxiaBasher_dsExploit(target) == "headstrike" then
+      ataxiaTemp.bmHeadstrikeReadyAt = getEpoch() + 23
+      return br.specialuse..sp
+    end
+    if br.large and not battleRage_Timers.large and rage >= 36 then return br.large..sp end -- Spinslash
+
+    -- 4. Other afflictions: Daze -> Stun when NOT in Mnemosyne (spends surplus + still mitigates),
+    -- and Nerveslash -> Weakness (mob deals 66% damage for 7s).
+    if not inMnem and br.special and not battleRage_Timers.special and rage >= 26 then return br.special..sp end
+    if br.specialafflict and rage >= 22 and getEpoch() >= (ataxiaTemp.bmNerveslashReadyAt or 0) then
+      ataxiaTemp.bmNerveslashReadyAt = getEpoch() + 31
+      return br.specialafflict..sp
+    end
+
+    -- 5. Small damage: Leapstrike (cheap filler -- spends whatever rage is left, so it never idles).
+    if br.small and not battleRage_Timers.small and rage >= 14 then return br.small..sp end
+    return ""
   end
 
-  -- 2. Headstrike does bonus damage to a reckless/feared denizen -- cash it in while up.
-  -- Optimistic ~23s cooldown as a TIMESTAMP (not a tempTimer id): a value that survives a
-  -- package reload safely -- a stale timestamp just expires, whereas a stale timer id would
-  -- stick non-nil and permanently skip the bonus. (No fire-line trigger tracks Headstrike.)
-  if br.specialuse and rage >= 25 and getEpoch() >= (ataxiaTemp.bmHeadstrikeReadyAt or 0)
-     and ataxiaBasher_dsExploit and ataxiaBasher_dsExploit(target) == "headstrike" then
-    ataxiaTemp.bmHeadstrikeReadyAt = getEpoch() + 23
-    return br.specialuse..sp
-  end
-
-  -- 3-5. Spend rage by value so it never strands.
-  if br.large and not battleRage_Timers.large and rage >= 36 then return br.large..sp end     -- Spinslash
-  if br.small and not battleRage_Timers.small and rage >= 14 then return br.small..sp end      -- Leapstrike
-  if br.special and not battleRage_Timers.special and rage >= 26 then return br.special..sp end -- Daze (stun)
-  return ""
+  local cmd = choose()
+  if cmd ~= "" then ataxiaTemp.brGlobalReadyAt = getEpoch() + 1 end -- arm the ~1s global cooldown
+  return cmd
 end
 
 function ataxiaBasher_assembleBattlerage()

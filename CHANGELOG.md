@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-07-15 — Basher: mitigation-first rotation + global BR cooldown + PvE docs (v4.7.64)
+
+Refines the Blademaster battlerage rotation (Stage 2) with the player's priority spec and the global battlerage cooldown.
+
+- **Global ~1s battlerage cooldown** is now respected: queuing a second BR inside the window gets it rejected (`You must wait a short time…`) and wastes the cycle's rage. The rotation skips a BR while a **reload-safe timestamp** (`ataxiaTemp.brGlobalReadyAt`) is up, armed on our own fire and by the new reactive trigger `329` (which also backstops a BR fired outside the rotation).
+- **Mitigation-first priority in Mnemosyne** (survival > speed — *any rage ability that stops a denizen hitting us is critical* on the no-flee climb): **Culling → Stun (Daze) → damage battlerages (Headstrike/Spinslash) → other afflictions (Nerveslash = Weakness) → small damage (Leapstrike)**. Outside Mnemosyne it's damage-forward. Gated on `ataxiaBasher.inMnemosyne`. Added **Nerveslash** (Weakness) to the rotation with a reload-safe timestamp cooldown.
+- **New doc: [`battlerage-pve.md`](.claude/projects/basher/battlerage-pve.md)** — rage mechanics + the global cooldown, all 10 denizen afflictions (what each does + tactical/defensive value, mitigation-first), how the rotation uses them, and Blademaster's kit.
+- Tests: 17 rotation cases (both mnem/non-mnem priority, global-cooldown skip+arm, Nerveslash cooldown). Suite **230/230**. Adversarial-reviewed — no CRITICAL/HIGH; one narrow LOW noted (a rageraze+shielded bash that discards the computed `brage` can phantom-arm Headstrike/Nerveslash — to be resolved once we capture their fire-lines and track cooldowns from real fires).
+
+---
+
 ## 2026-07-15 — Basher: Blademaster rage-rotation fix (Stage 2) (v4.7.63)
 
 Fixes the observed bug where **100+ battlerage rage sat unused** while abilities were off cooldown (and `The surge of terrible rage leaves you.` fired repeatedly). **Isolated to Blademaster** — every other class flows through `assembleBattlerage` byte-identically (deep-review-proven), so nothing else can regress.

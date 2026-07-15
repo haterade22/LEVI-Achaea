@@ -34,4 +34,5 @@ All paths relative to `src_new/scripts/levi_ataxia/levi/ataxia/`.
 | [03-flee-heal-return.md](03-flee-heal-return.md) | Flee-heal-return loop, state vars, edge cases |
 | [04-pathfinding.md](04-pathfinding.md) | Area bash, path generation, stuck detection |
 | [05-safety-systems.md](05-safety-systems.md) | Danger levels, PvP detection, death handling, circuit breakers |
+| [battlerage-pve.md](battlerage-pve.md) | **Battlerage for PvE** — rage mechanics + global cooldown, all 10 denizen afflictions (what each does + tactical value, mitigation-first), how the rotation uses them, Blademaster's kit |
 | [denizen-lines-catalog.md](denizen-lines-catalog.md) | Better-Blademaster-basher overhaul: our-attack / battlerage / denizen-affliction line catalog + BR spec; per-denizen state model; staged rollout |
