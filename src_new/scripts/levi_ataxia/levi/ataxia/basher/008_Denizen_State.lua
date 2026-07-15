@@ -63,7 +63,9 @@ ataxiaBasher_BR_AFFS = {
   clumsy       = { dur = 7,   role = "safe",     exploitedBy = nil,   apply = nil, ends = nil },
   feared       = { dur = 8,   role = "fleerisk", exploitedBy = "headstrike", apply = nil, ends = nil },
   sensitivity  = { dur = 8,   role = "burst",    exploitedBy = "burst",      apply = nil, ends = nil },
-  recklessness = { dur = 15,  role = "noshield", exploitedBy = "headstrike", apply = nil, ends = nil },
+  recklessness = { dur = 15,  role = "noshield", exploitedBy = "headstrike",
+                   apply = "puffs up their chest and rushes headlong into danger",
+                   ends  = "Caution returns to" },
   inhibit      = { dur = 9,   role = "burst",    exploitedBy = "burst",      apply = nil, ends = nil },
   amnesia      = { dur = nil, role = "safe",     exploitedBy = nil,   apply = nil, ends = nil },
 }

@@ -40,11 +40,11 @@ The first 10 rows are the battlerage afflictions in the data-driven `ataxiaBashe
 | State | Dur | Source(s) | exploitedBy | apply line | ends line |
 |---|---|---|---|---|---|
 | **charm** | 5s | Wayward Heir proc / BR | swap (keep alive) | `Your foe's eyes glaze over as they stay their hand against you, their wrath slowly shifting toward others nearby.` | `With a snarl, <mob> forces clarity back into their mind and turns their wrath upon you once more.` |
-| recklessness | 15s | Haskor's Bravado / BR | **Headstrike** | TODO-line | TODO-line |
+| **recklessness** | 15s | Haskor's Bravado / BR | **Headstrike** | `Your foe puffs up their chest and rushes headlong into danger.` (current target) | `Caution returns to <mob>.` |
 | feared | 8s | BR | **Headstrike** | TODO-line | TODO-line |
 | sensitivity | 8s | BR | **burst** | TODO-line | TODO-line |
 | inhibit | 9s | BR | burst | TODO-line | TODO-line |
-| aeon | 6s | Temporal Anomaly proc / BR | — (mitigation) | TODO-line | TODO-line |
+| **aeon** | 6s | Temporal Anomaly proc / BR | — (mitigation) | `Your foe blurs and begins to move slower in time.` (current target) | `<mob> returns to normal speed.` |
 | weakness | 7s | Nerveslash / BR | — (mitigation) | TODO-line | TODO-line |
 | stun | 4s | Daze / BR | — (mitigation) | `You hurl a precise blast of Shin energy at <mob>'s eyes.` (our Daze cast → stun; any-source mob-stunned line still TODO) | TODO-line |
 | clumsy | 7s | BR | — (mitigation) | TODO-line | TODO-line |
@@ -58,6 +58,6 @@ Affliction **resisted** (bosses): `<mob> sneers at your feeble attempt to afflic
 **Proc-boons that afflict denizens** (Mnemosyne wade-status "Ongoing effects"): Wayward Heir / Child of Chaos (10% random BR aff — charm source), Haskor's Bravado (5% recklessness), Temporal Anomaly (5% aeon, once/5s). Afflictions are tracked from **any** source (our BR, boons, groupmates).
 
 ## Status capture stages
-- **Stage 1 (done):** `008_Denizen_State.lua` module + tests; lifecycle sync in `update_stuff/003`; HP feed in `010`; **charm** apply/end triggers (`denizen_attacks_misc_lines/011,012`). `ataxiaBasher_dsStatus()` dumps live state.
-- Stage 2: rage-rotation rewrite (spend rage by priority, cash in affs for bonus damage), game-truth cooldown tracking, Shin management.
-- Stage 3: charm-swap targeting. Stage 4: first-hit auto-parry.
+- **Stage 1 (done, v4.7.62):** `008_Denizen_State.lua` module + tests; lifecycle sync in `update_stuff/003`; HP feed in `010`; **charm** apply/end triggers (`011,012`). `ataxiaBasher_dsStatus()` dumps live state.
+- **Stage 2 (done):** `ataxiaBasher_blademasterBattlerage` — Blademaster owns its battlerage (excluded from the shared culling check), spends rage by priority so it never idles (fixes the 100+-rage-unused bug), and cashes in a reckless/feared target with **Headstrike** for bonus damage. **recklessness** + **aeon** capture triggers (`013-016`). Isolated to Blademaster (no other class touched). Tests `test_basher_battlerage.lua`.
+- Stage 3: charm-swap targeting. Stage 4: first-hit auto-parry. Remaining aff lines (feared/sensitivity/stun-on-mob/…) still TODO-line.

@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-07-15 — Basher: Blademaster rage-rotation fix (Stage 2) (v4.7.63)
+
+Fixes the observed bug where **100+ battlerage rage sat unused** while abilities were off cooldown (and `The surge of terrible rage leaves you.` fired repeatedly). **Isolated to Blademaster** — every other class flows through `assembleBattlerage` byte-identically (deep-review-proven), so nothing else can regress.
+
+- **`ataxiaBasher_blademasterBattlerage()`** — Blademaster now owns its battlerage (excluded from the shared culling check, like Bard), so the two rage-stranding defects are gone: culling no longer suppresses the class rotation below `bigRage`, and cheap abilities are no longer gated behind `special` being on cooldown. It **spends rage by priority so it never idles**: Culling reap → **Headstrike on a reckless/feared target (bonus damage)** → Spinslash → Leapstrike → Daze (surplus/stun), using the shared `battleRage_Timers` (330/331/332) cooldowns + a reload-safe **timestamp** cooldown for Headstrike (no fire-line trigger exists for it).
+- **Denizen affliction capture** for the exploit: **recklessness** (`013`/`014`) closes the Headstrike loop; **aeon** (`015`/`016`) is tracked (mitigation). Both from real game lines.
+- Tests: `test_basher_battlerage.lua` (12 cases — rage-never-idle guarantee, priority, culling/World-Tree, Headstrike gate + cooldown, dsExploit-nil safety, stranding boundary). Suite **224/224**. Passed a 3-agent deep review (cross-class regression / rotation correctness / trigger correctness) — no CRITICAL/HIGH; the one MEDIUM (reload-stuck Headstrike cooldown) fixed with a timestamp.
+
+---
+
 ## 2026-07-15 — Basher: per-denizen combat-state capture (Stage 1) (v4.7.62)
 
 Foundation for a smarter tower-climber basher: a live per-denizen combat-state layer so the basher can see what our (and others') attacks have done to each mob and act on it. **Additive and behaviour-neutral** — it only *populates* state this stage; nothing reads it to change combat yet.

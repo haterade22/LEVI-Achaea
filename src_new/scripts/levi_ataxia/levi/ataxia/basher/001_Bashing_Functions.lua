@@ -601,6 +601,48 @@ local function ataxiaBasher_bardBattlerage(sp)
   return ""
 end
 
+-- Blademaster owns its own battlerage (like Bard), so it is EXCLUDED from the global
+-- culling check in assembleBattlerage and drives culling here. Two goals: (1) actually
+-- SPEND rage -- the shared standardBattlerage stranded it (culling suppressed the class
+-- rotation below bigRage; small/large were gated behind special being on cooldown), and
+-- (2) cash afflictions in for BONUS DAMAGE. Config (get_Battlerage, Blademaster):
+--   small = leapstrike (14r/16s)   large = spinslash (36r/23s)   special = shin daze (26r/33s, stun)
+--   specialuse = strike ... head (Headstrike, 25r/23s -- BONUS vs reckless/feared)   raze = shin shatter
+-- Cooldowns for small/large/special come from the shared battleRage_Timers (triggers
+-- 330/331/332 match the fire lines); Headstrike has no fire-line trigger so we use an
+-- optimistic client-side timer. Priority (spend the highest value that's affordable and
+-- off cooldown, so rage never idles):
+--   1. Culling reap (AoE finisher)   2. Headstrike while target is reckless/feared (bonus)
+--   3. Spinslash (big)   4. Leapstrike (filler)   5. Daze (spend surplus + stun/mitigate)
+function ataxiaBasher_blademasterBattlerage(sp)
+  local br = ataxiaBasher.battlerage and ataxiaBasher.battlerage["Blademaster"]
+  if not br or type(target) ~= "number" then return "" end
+  local rage = ataxia.vitals.rage or 0
+
+  -- 1. Culling Blade (reap) -- own it here (Blademaster is excluded from the global check).
+  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown
+     and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree"
+     and rage >= 36 then
+    return "reap "..target..sp
+  end
+
+  -- 2. Headstrike does bonus damage to a reckless/feared denizen -- cash it in while up.
+  -- Optimistic ~23s cooldown as a TIMESTAMP (not a tempTimer id): a value that survives a
+  -- package reload safely -- a stale timestamp just expires, whereas a stale timer id would
+  -- stick non-nil and permanently skip the bonus. (No fire-line trigger tracks Headstrike.)
+  if br.specialuse and rage >= 25 and getEpoch() >= (ataxiaTemp.bmHeadstrikeReadyAt or 0)
+     and ataxiaBasher_dsExploit and ataxiaBasher_dsExploit(target) == "headstrike" then
+    ataxiaTemp.bmHeadstrikeReadyAt = getEpoch() + 23
+    return br.specialuse..sp
+  end
+
+  -- 3-5. Spend rage by value so it never strands.
+  if br.large and not battleRage_Timers.large and rage >= 36 then return br.large..sp end     -- Spinslash
+  if br.small and not battleRage_Timers.small and rage >= 14 then return br.small..sp end      -- Leapstrike
+  if br.special and not battleRage_Timers.special and rage >= 26 then return br.special..sp end -- Daze (stun)
+  return ""
+end
+
 function ataxiaBasher_assembleBattlerage()
 	local command = ""
 	local class = gmcp.Char.Status.class:title():gsub(" Lady", ""):gsub(" Lord", "")
@@ -624,7 +666,7 @@ function ataxiaBasher_assembleBattlerage()
 	-- culling inside ataxiaBasher_bardBattlerage so it fires at 36 rage, not bigRage).
 	if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown
 		and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree"
-		and gmcp.Char.Status.class ~= "Bard" then
+		and gmcp.Char.Status.class ~= "Bard" and gmcp.Char.Status.class ~= "Blademaster" then
 		if ataxia.vitals.rage >= bigRage then
 			command = command.."reap "..target..sp
 		end
@@ -652,6 +694,10 @@ function ataxiaBasher_assembleBattlerage()
 	-- Bard: charm (2+ denizens, >=32) -> trill (2+ denizens, >=28) -> howlslash (>=36) -> moulinet (>=14)
 	elseif gmcp.Char.Status.class == "Bard" then
 		command = ataxiaBasher_bardBattlerage(sp)
+	-- Blademaster: owns culling; spends rage by value so it never idles; cashes in a
+	-- reckless/feared target with Headstrike for bonus damage (see ataxiaBasher_blademasterBattlerage)
+	elseif gmcp.Char.Status.class == "Blademaster" then
+		command = ataxiaBasher_blademasterBattlerage(sp)
 	-- Standard pattern: check if class has a known specialRage threshold
 	elseif ataxiaBasher_specialRageThresholds[class] then
 		command = ataxiaBasher_standardBattlerage(class, ataxiaBasher_specialRageThresholds[class], level, sp)
