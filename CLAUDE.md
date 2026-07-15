@@ -345,9 +345,9 @@ V3 is the **single source of truth** for target affliction tracking. It models m
 
 Automated target selection and attack execution for PvE hunting. Supports 20+ classes, manual/areabash modes, integrates with mapper, GMCP, battlerage, and GUI.
 
-**Full documentation**: See `memory/basher.md` and the `.claude/projects/basher/` doc set (dispatch chain, gates, danger levels, flee logic, no-flee areas, own-denizen exclusion, room arrival flow, attack gate affliction checks, PvP auto-flee, stormhammer caching)
+**Full documentation**: See `memory/basher.md` and the `.claude/projects/basher/` doc set (dispatch chain, gates, danger levels, flee logic, no-flee areas, own-denizen exclusion, room arrival flow, attack gate affliction checks, PvP auto-flee, stormhammer caching). Ongoing **better-Blademaster-basher overhaul** (rage-waste fix, per-denizen affliction capture + charm-swap, Shin/Infuse-Fire, first-hit parry): plan in `~/.claude/plans/i-was-given-this-refactored-sunbeam.md`, line/regex + BR spec in `.claude/projects/basher/denizen-lines-catalog.md`, and `memory/basher-overhaul.md`.
 
-**Core Files:** `basher/001_Bashing_Functions.lua` (attack dispatch, danger levels, no-flee + own-denizen helpers), `basher/002_Class_Bashing.lua` (20+ classes), `basher/005_Falcon_Cooldowns.lua` (Infernal hyena maul + Runewarden falcon rake cooldowns), `basher/007_Mob_Damage_DB.lua` (damage tracking), `genrunning/001-004` (API, targets, enable/disable, main loop)
+**Core Files:** `basher/001_Bashing_Functions.lua` (attack dispatch, danger levels, no-flee + own-denizen helpers), `basher/002_Class_Bashing.lua` (20+ classes), `basher/005_Falcon_Cooldowns.lua` (Infernal hyena maul + Runewarden falcon rake cooldowns), `basher/007_Mob_Damage_DB.lua` (damage tracking), `basher/008_Denizen_State.lua` (per-denizen combat-state: `ataxiaTemp.denizenState[id]` + `ataxiaBasher_BR_AFFS` affliction model, PvP-inert — Stage 1 of the overhaul), `genrunning/001-004` (API, targets, enable/disable, main loop)
 
 **Key Config:** `ataxiaBasher.enabled`, `.paused`, `.manual`, `.areabash`, `.targetList[area]`, `.autoLearn`, `.ownDenizens`, `.inMnemosyne`, `.ldeckRules`, `.goldPack`, `.fleeTimeout` (20s), `.shieldTimers`
 

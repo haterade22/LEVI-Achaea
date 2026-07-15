@@ -14,6 +14,7 @@ Automated PvE hunting system for Achaea. Handles target selection, auto-learning
 | `basher/005_Falcon_Cooldowns.lua` | Knight pet cooldowns: Infernal hyena maul + Runewarden falcon rake (~30s each) |
 | `basher/006_Pariah_Cooldown.lua` | Pariah swarm devour cooldown |
 | `basher/007_Mob_Damage_DB.lua` | SQLite per-mob damage tracking |
+| `basher/008_Denizen_State.lua` | Per-denizen combat state (`ataxiaTemp.denizenState[id]`) + `ataxiaBasher_BR_AFFS` battlerage-affliction model; PvP-inert. Fed by charm triggers `denizen_attacks_misc_lines/011,012` and the `010` HP feed / `003` sync. Stage 1 of the [basher overhaul](denizen-lines-catalog.md) |
 | `genrunning/001_Bashing_API.lua` | Path generation, death/PvP handlers, events |
 | `genrunning/002_search_targets.lua` | Target selection, stormhammer, legend deck |
 | `genrunning/003_Engaged_Disengage.lua` | Enable/disable handlers, auto-rotation |
@@ -33,3 +34,4 @@ All paths relative to `src_new/scripts/levi_ataxia/levi/ataxia/`.
 | [03-flee-heal-return.md](03-flee-heal-return.md) | Flee-heal-return loop, state vars, edge cases |
 | [04-pathfinding.md](04-pathfinding.md) | Area bash, path generation, stuck detection |
 | [05-safety-systems.md](05-safety-systems.md) | Danger levels, PvP detection, death handling, circuit breakers |
+| [denizen-lines-catalog.md](denizen-lines-catalog.md) | Better-Blademaster-basher overhaul: our-attack / battlerage / denizen-affliction line catalog + BR spec; per-denizen state model; staged rollout |

@@ -150,6 +150,9 @@ function ataxia_RoomContents_Update(event)
 		ataxiaTemp._targetsUpdatePending = true
 		tempTimer(0, function()
 			ataxiaTemp._targetsUpdatePending = nil
+			-- Reconcile the per-denizen combat-state table with the room (add newcomers,
+			-- drop the departed/dead) before anyone reacts to "targets updated".
+			if ataxiaBasher_dsSync then ataxiaBasher_dsSync() end
 			raiseEvent("targets updated")
 			ataxia_Update_RoomContents()
 		end)

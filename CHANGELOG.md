@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-07-15 — Basher: per-denizen combat-state capture (Stage 1) (v4.7.62)
+
+Foundation for a smarter tower-climber basher: a live per-denizen combat-state layer so the basher can see what our (and others') attacks have done to each mob and act on it. **Additive and behaviour-neutral** — it only *populates* state this stage; nothing reads it to change combat yet.
+
+- New `basher/008_Denizen_State.lua`: `ataxiaTemp.denizenState[id]` (under `ataxiaTemp` — transient, never serialized) plus a **data-driven `ataxiaBasher_BR_AFFS`** spec of the 10 battlerage afflictions with real durations, `role`, and `exploitedBy` (which battlerage ability gains bonus damage from each). Afflictions **auto-expire on their duration** (lazy on read), so state self-heals if an "ends" line is missed. Pure functions (`dsSync/dsSetAff/dsHasAff/dsExploit/dsResolveNameToId/dsPickAlt/…`), fully **PvP-inert** (keys off numeric denizen ids only; players are strings). `ataxiaBasher_dsStatus()` dumps live state.
+- Wired in: lifecycle reconcile in `update_stuff/003` (synced with `ataxia.denizensHere`), current-target HP% feed in `010`, and **charm** capture — `denizen_attacks_misc_lines/011` (applied) + `012` (ended) — the headline case (a charmed mob fights the others for us).
+- Reference: [.claude/projects/basher/denizen-lines-catalog.md](.claude/projects/basher/denizen-lines-catalog.md). Tests: `test_denizen_state.lua` (17 cases). Suite 212/212. Passed a 4-agent deep review (Lua standards / combat correctness / trigger correctness / completeness) — no CRITICAL/HIGH; consensus fix applied (`dsSetAff` auto-creates so an affliction is never dropped before sync).
+
+Next stages (planned): rage-rotation rewrite so battlerage rage is actually spent by priority (the "100+ rage sitting unused" bug) and afflictions are cashed in for bonus damage; charm-swap targeting; first-hit auto-parry.
+
+---
+
 ## 2026-07-13 — Mnemosyne explorer: snappier moves + never walk `up` (v4.7.61)
 
 Two live-testing fixes:
