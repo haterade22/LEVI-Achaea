@@ -48,6 +48,12 @@ trigger (`^You are in .*Mnemosyne`) sets `ataxiaBasher.inMnemosyne = true`, and
 `ataxia_Room_Update()` clears the flag on entering any real (non-empty `area`) room.
 Inside the tower `area` stays `""`, so the flag persists across floors.
 
+**Mitigation-first battlerage supports the no-flee climb.** Since Mnemosyne can't be
+fled, hit-prevention matters more than kill speed. When `inMnemosyne` is set, the
+Blademaster battlerage rotation reprioritises to fire Daze (→ Stun, mob does nothing
+4s) above its damage abilities, reducing incoming damage during the shield-and-swing
+survival loop. See [battlerage-pve.md](battlerage-pve.md).
+
 ## Flee Execution
 
 Function: `ataxiaBasher_executeFlee()` in `basher/001_Bashing_Functions.lua`

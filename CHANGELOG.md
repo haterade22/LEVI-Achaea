@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-07-15 — Basher: BR affliction echoes/highlighting + stun/weakness capture (v4.7.65)
+
+Visibility pass on the Blademaster basher, plus more affliction capture — driven by live Mnemosyne combat logs.
+
+- **In-game alerts for battlerage afflictions.** New `ataxiaBasher_dsAlert(msg, colour)` highlights the triggering game line and echoes a coloured `(BR):` tag to the console so what our attacks are doing to the mob stands out in the combat spam. Wired into charm (cyan), recklessness (orange), aeon (yellow), weakness (green), and stun (magenta). Toggle with `ataxiaBasher.brAlerts` (default on). The `cecho` is pcall-guarded so a bad colour name can never throw.
+- **Stun + Weakness capture from real lines.** Our **Daze → Stun** (`019` applied, `020` ended: `… is no longer stunned.`) and **Nerveslash → Weakness** (`017` applied, `018` ended: `… stands up straight, having overcome the weakness …`), both duration-tracked in `BR_AFFS` (stun 4s, weakness 7s) with the ended-triggers as a safety net.
+- **Reverted the "reserve rage for Daze" tweak.** Live logs proved Daze already fires ~every 33s (its cooldown ceiling) under the mitigation-first priority, so reserving rage would only cost Nerveslash/Leapstrike damage for no mitigation gain. Rotation behaviour is unchanged from v4.7.64.
+- Tests: added stun/weakness duration + capitalised-ended-line name-resolution cases. Suite **233/233**. Two-agent deep review — one MEDIUM fixed (invalid `ansi_*` colour names on the stun/aeon alerts → valid `magenta`/`yellow`, plus the pcall guard); revert verified clean (no dangling `spendCheap`, rage never stranded).
+
+---
+
 ## 2026-07-15 — Basher: mitigation-first rotation + global BR cooldown + PvE docs (v4.7.64)
 
 Refines the Blademaster battlerage rotation (Stage 2) with the player's priority spec and the global battlerage cooldown.

@@ -57,8 +57,12 @@ ataxiaBasher_BR_AFFS = {
   charm        = { dur = 5,   role = "swap",     exploitedBy = nil,
                    apply = "eyes glaze over as they stay their hand",
                    ends  = "forces clarity back into their mind" },
-  stun         = { dur = 4,   role = "safe",     exploitedBy = nil,   apply = nil, ends = nil },
-  weakness     = { dur = 7,   role = "safe",     exploitedBy = nil,   apply = nil, ends = nil },
+  stun         = { dur = 4,   role = "safe",     exploitedBy = nil,
+                   apply = "hurl a precise blast of Shin energy at",
+                   ends  = "is no longer stunned" },
+  weakness     = { dur = 7,   role = "safe",     exploitedBy = nil,
+                   apply = "in several key locations with your blade, causing",
+                   ends  = "stands up straight, having overcome the weakness" },
   aeon         = { dur = 6,   role = "safe",     exploitedBy = nil,   apply = nil, ends = nil },
   clumsy       = { dur = 7,   role = "safe",     exploitedBy = nil,   apply = nil, ends = nil },
   feared       = { dur = 8,   role = "fleerisk", exploitedBy = "headstrike", apply = nil, ends = nil },
@@ -224,6 +228,26 @@ function ataxiaBasher_dsPickAlt(denizens, excludeId, excludeCharmed, now)
     end
   end
   return nil
+end
+
+-- Visibility: colour the current triggering game line and echo a short tag to the bash
+-- console, so what our attacks are doing to the mob (charm, recklessness, weakness, …)
+-- stands out in the combat spam. Gated on ataxiaBasher.brAlerts (default on) so it can be
+-- toggled off. All Mudlet UI calls are guarded so it's a no-op in the test harness.
+ataxiaBasher = ataxiaBasher or {}
+if ataxiaBasher.brAlerts == nil then ataxiaBasher.brAlerts = true end
+
+function ataxiaBasher_dsAlert(msg, colour)
+  if not ataxiaBasher.brAlerts then return end
+  colour = colour or "yellow"
+  if selectString and fg and resetFormat and type(line) == "string" and line ~= "" then
+    pcall(function() selectString(line, 1); fg(colour); resetFormat() end)
+  end
+  -- pcall-guarded: cecho throws on an unknown colour tag, and a single typo'd colour
+  -- name would otherwise error on EVERY alert (stun/Daze fires constantly in Mnemosyne).
+  if cecho then
+    pcall(cecho, "\n<a_darkcyan>(<a_darkmagenta>BR<a_darkcyan>): <" .. colour .. ">" .. tostring(msg))
+  end
 end
 
 -- Debug/validation: dump the live per-denizen state so you can watch capture work.

@@ -652,11 +652,13 @@ function ataxiaBasher_blademasterBattlerage(sp)
     if br.large and not battleRage_Timers.large and rage >= 36 then return br.large..sp end -- Spinslash
 
     -- 4. Other afflictions: Daze -> Stun when NOT in Mnemosyne (spends surplus + still mitigates),
-    -- and Nerveslash -> Weakness (mob deals 66% damage for 7s).
+    -- and Nerveslash -> Weakness (mob deals 66% damage for 7s). In Mnemosyne, Daze is checked at
+    -- tier 2 and fires near its cooldown ceiling on its own -- no need to starve the cheaper
+    -- abilities to feed it (verified in-game: Daze fires ~every 33s regardless).
     if not inMnem and br.special and not battleRage_Timers.special and rage >= 26 then return br.special..sp end
     if br.specialafflict and rage >= 22 and getEpoch() >= (ataxiaTemp.bmNerveslashReadyAt or 0) then
       ataxiaTemp.bmNerveslashReadyAt = getEpoch() + 31
-      return br.specialafflict..sp
+      return br.specialafflict..sp -- Nerveslash (Weakness)
     end
 
     -- 5. Small damage: Leapstrike (cheap filler -- spends whatever rage is left, so it never idles).

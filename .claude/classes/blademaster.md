@@ -405,9 +405,25 @@ strategy: |
 ```yaml
 attack_command: "SLASH <target>" or stance-appropriate attacks
 attack_skill: TwoArts
+# Battlerage kit (commands/costs verified vs basher/001 ataxiaBasher_blademasterBattlerage
+# and _groups.yaml get_Battlerage Blademaster config). Blademaster OWNS its battlerage:
+# it is EXCLUDED from the shared culling check and spends rage by priority so it never idles.
 battlerage_abilities:
-  - slash: "Basic damage"
-  - multislash: "Multiple hits"
+  - leapstrike:  { command: "LEAPSTRIKE <t>",   rage: 14, cooldown: "16s", role: "cheap damage filler / execute (yaml small)" }
+  - shatter:     { command: "SHIN SHATTER <t>",  rage: 17, cooldown: "~global", role: "shield breaker (yaml raze)" }
+  - nerveslash:  { command: "NSL <t>",           rage: 22, cooldown: "31s", role: "afflicts Weakness (yaml specialafflict)" }
+  - headstrike:  { command: "STRIKE <t> HEAD",   rage: 25, cooldown: "23s", role: "CONDITIONAL bonus damage vs reckless/feared (yaml specialuse)" }
+  - daze:        { command: "SHIN DAZE <t>",     rage: 26, cooldown: "33s", role: "afflicts Stun - key mitigation (yaml special)" }
+  - spinslash:   { command: "SPINSLASH <t>",     rage: 36, cooldown: "23s", role: "big single-target dump (yaml large)" }
+  - reap:        { command: "REAP <t>",          rage: 36, role: "Culling Blade AoE finisher (owned by this rotation, not the shared check)" }
+  - provoke:     { command: "PROVOKE <t>",       rage: 32, cooldown: "20s", role: "level-100 taunt (inverse of charm); NOT wired into the basher rotation" }
+priority: |
+  In Mnemosyne (no-flee): Culling -> Daze/Stun -> Headstrike/Spinslash -> Nerveslash/Weakness -> Leapstrike.
+  Outside Mnemosyne: damage-forward, spending surplus rage down the list so it never idles.
+  Respects the global ~1s battlerage cooldown (ataxiaTemp.brGlobalReadyAt).
+see_also: |
+  PvE battlerage usage and the denizen-affliction rotation are documented in
+  .claude/projects/basher/battlerage-pve.md and .claude/projects/basher/denizen-lines-catalog.md.
 ```
 
 ## Fighting Against This Class

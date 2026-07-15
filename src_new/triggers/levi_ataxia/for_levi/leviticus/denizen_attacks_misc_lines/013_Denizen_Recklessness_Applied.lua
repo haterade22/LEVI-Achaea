@@ -42,4 +42,7 @@ patterns:
 -- rotation cashes it in (exploitedBy = "headstrike"). Denizen + basher only.
 if type(target) == "number" and ataxiaBasher and ataxiaBasher.enabled and ataxiaBasher_dsSetAff then
   ataxiaBasher_dsSetAff(target, "recklessness")
+  if ataxiaBasher_dsAlert then
+    ataxiaBasher_dsAlert("RECKLESSNESS on " .. tostring(target) .. " -- Headstrike for bonus damage", "orange")
+  end
 end

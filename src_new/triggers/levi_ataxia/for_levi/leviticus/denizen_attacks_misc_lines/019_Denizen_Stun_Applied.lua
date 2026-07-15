@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: Denizen Charm Applied
+name: Denizen Stun Applied
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -33,18 +33,18 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: Your foe's eyes glaze over as they stay their hand against you, their wrath slowly shifting toward others nearby.
-  type: 3
+- pattern: ^You hurl a precise blast of Shin energy at (.+)'s eyes\.$
+  type: 1
 ]]--
 
--- A battlerage CHARM procced on our current target (the line says "your foe" -- no
--- name -- so it is always the current `target`). A charmed denizen attacks the OTHER
--- denizens for us for ~5s. Record it (auto-expires after 5s or on the charm-end line)
--- so the basher can exploit it (swap to another mob, keep this one alive). Denizen +
--- basher only -- numeric target guards it out of PvP.
+-- Our Daze landed -> the current denizen is Stunned (does nothing for 4s -- the key
+-- hit-prevention aff in Mnemosyne). The line names the mob but it is always the current
+-- `target`, so set it there directly (no name-resolution ambiguity across same-named mobs).
+-- Trigger 332 also matches this line to stamp the shared `special` cooldown -- both fire.
+-- Denizen + basher only (numeric target guards it out of PvP).
 if type(target) == "number" and ataxiaBasher and ataxiaBasher.enabled and ataxiaBasher_dsSetAff then
-  ataxiaBasher_dsSetAff(target, "charm")
+  ataxiaBasher_dsSetAff(target, "stun")
   if ataxiaBasher_dsAlert then
-    ataxiaBasher_dsAlert("CHARM on " .. tostring(target) .. " -- it fights the others for us", "cyan")
+    ataxiaBasher_dsAlert("STUN on " .. tostring(target) .. " -- mob does nothing (4s)", "magenta")
   end
 end

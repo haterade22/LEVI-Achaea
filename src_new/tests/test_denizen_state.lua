@@ -91,6 +91,23 @@ describe("affliction set / has / expiry", function()
     ataxiaBasher_dsSetAff(10, "amnesia", 1000)
     expect(ataxiaBasher_dsHasAff(10, "amnesia", 999999)).toBeTrue()
   end)
+
+  -- Newly-captured lines (v4.7.65): our Nerveslash -> weakness (7s, trigger 017),
+  -- our Daze -> stun (4s, trigger 019); durations come from BR_AFFS so the "ended"
+  -- triggers (018/020) are just a safety net over the lazy timer.
+  it("weakness lasts 7s (Nerveslash) then lazily expires", function()
+    reset()
+    ataxiaBasher_dsSetAff(10, "weakness", 1000) -- endsAt = 1007
+    expect(ataxiaBasher_dsHasAff(10, "weakness", 1006)).toBeTrue()
+    expect(ataxiaBasher_dsHasAff(10, "weakness", 1007)).toBeFalse()
+  end)
+
+  it("stun lasts 4s (Daze) then lazily expires", function()
+    reset()
+    ataxiaBasher_dsSetAff(10, "stun", 1000) -- endsAt = 1004
+    expect(ataxiaBasher_dsHasAff(10, "stun", 1003)).toBeTrue()
+    expect(ataxiaBasher_dsHasAff(10, "stun", 1004)).toBeFalse()
+  end)
 end)
 
 -- ─── Exploit mapping (bonus-damage priority) ─────────────────────────────────
@@ -132,6 +149,18 @@ describe("ataxiaBasher_dsResolveNameToId", function()
     ataxiaBasher_dsAdd(10, "a fire wyrm"); ataxiaBasher_dsAdd(11, "a fire wyrm")
     ataxiaBasher_dsSetAff(11, "charm", 1000)
     expect(ataxiaBasher_dsResolveNameToId("a fire wyrm", dz, "charm", 1001)).toBe(11)
+  end)
+
+  -- The stun/weakness "ended" triggers (018/020) resolve the named mob, preferring the
+  -- one still carrying that aff -- and the "A <mob> ..." lines capitalise the article,
+  -- so resolution must be case-insensitive against the lowercase room names.
+  it("resolves a Capitalised ended-line name and prefers the afflicted mob", function()
+    reset()
+    local dz = { [10] = "a ferocious manticore", [11] = "a ferocious manticore" }
+    ataxiaBasher_dsAdd(10, "a ferocious manticore"); ataxiaBasher_dsAdd(11, "a ferocious manticore")
+    ataxiaBasher_dsSetAff(11, "stun", 1000)
+    -- trigger 020 captures "A ferocious manticore" (capital A) from "... is no longer stunned."
+    expect(ataxiaBasher_dsResolveNameToId("A ferocious manticore", dz, "stun", 1001)).toBe(11)
   end)
 end)
 

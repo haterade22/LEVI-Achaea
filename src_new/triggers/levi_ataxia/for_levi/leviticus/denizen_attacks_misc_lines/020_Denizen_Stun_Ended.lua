@@ -1,6 +1,6 @@
 --[[mudlet
 type: trigger
-name: Denizen Aeon Applied
+name: Denizen Stun Ended
 hierarchy:
 - Levi_Ataxia
 - For Levi
@@ -33,15 +33,12 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: Your foe blurs and begins to move slower in time.
-  type: 3
+- pattern: ^(.+) is no longer stunned\.$
+  type: 1
 ]]--
 
--- Aeon landed on our current target ("your foe") -- the denizen attacks at 66% speed
--- for 6s (a mitigation aff; no bonus-damage exploit). Record it. Denizen + basher only.
-if type(target) == "number" and ataxiaBasher and ataxiaBasher.enabled and ataxiaBasher_dsSetAff then
-  ataxiaBasher_dsSetAff(target, "aeon")
-  if ataxiaBasher_dsAlert then
-    ataxiaBasher_dsAlert("AEON on " .. tostring(target) .. " -- mob attacks slower", "yellow")
-  end
+-- Stun (Daze) wore off the named denizen.
+if ataxiaBasher and ataxiaBasher.enabled and ataxiaBasher_dsResolveNameToId then
+  local id = ataxiaBasher_dsResolveNameToId(matches[2], nil, "stun")
+  if id then ataxiaBasher_dsClearAff(id, "stun") end
 end

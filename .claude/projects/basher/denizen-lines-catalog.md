@@ -24,7 +24,7 @@ Reference for the per-denizen combat-state layer (`basher/008_Denizen_State.lua`
 |---|---|---|---|---|---|
 | Leapstrike | `LEAPSTRIKE <t>` | 14 | 16s | damage/execute | — |
 | Shatter | `SHIN SHATTER <t>` | 17 | ~global | shield-break | shielded |
-| Nerveslash | `NERVESLASH <t>` | 22 | 31s | afflict **Weakness** | — |
+| Nerveslash | `NSL <t>` | 22 | 31s | afflict **Weakness** | — |
 | Headstrike | `STRIKE <t> HEAD` | 25 | 23s | **conditional dmg** | **reckless / feared** |
 | Daze | `SHIN DAZE <t>` | 26 | 33s | afflict **Stun** | — |
 | Spinslash | `SPINSLASH <t>` | 36 | 23s | damage dump | — |
@@ -45,8 +45,8 @@ The first 10 rows are the battlerage afflictions in the data-driven `ataxiaBashe
 | sensitivity | 8s | BR | **burst** | TODO-line | TODO-line |
 | inhibit | 9s | BR | burst | TODO-line | TODO-line |
 | **aeon** | 6s | Temporal Anomaly proc / BR | — (mitigation) | `Your foe blurs and begins to move slower in time.` (current target) | `<mob> returns to normal speed.` |
-| weakness | 7s | Nerveslash / BR | — (mitigation) | TODO-line | TODO-line |
-| stun | 4s | Daze / BR | — (mitigation) | `You hurl a precise blast of Shin energy at <mob>'s eyes.` (our Daze cast → stun; any-source mob-stunned line still TODO) | TODO-line |
+| weakness | 7s | Nerveslash / BR | — (mitigation) | `You lightly stab <mob> in several key locations with your blade, causing <them> to slump weakly.` (our Nerveslash cast → current target) | `<mob> stands up straight, having overcome the weakness that afflicted <him>.` |
+| stun | 4s | Daze / BR | — (mitigation) | `You hurl a precise blast of Shin energy at <mob>'s eyes.` (our Daze cast → current target) | `<mob> is no longer stunned.` |
 | clumsy | 7s | BR | — (mitigation) | TODO-line | TODO-line |
 | amnesia | (2-3 hits) | BR | — (mitigation) | TODO-line | TODO-line |
 | **shielded** | — | mob | **Shatter** | `A nearly invisible magical shield forms around <mob>.` (`336_Mob_Shielded`) | raze / death |
@@ -60,4 +60,5 @@ Affliction **resisted** (bosses): `<mob> sneers at your feeble attempt to afflic
 ## Status capture stages
 - **Stage 1 (done, v4.7.62):** `008_Denizen_State.lua` module + tests; lifecycle sync in `update_stuff/003`; HP feed in `010`; **charm** apply/end triggers (`011,012`). `ataxiaBasher_dsStatus()` dumps live state.
 - **Stage 2 (done):** `ataxiaBasher_blademasterBattlerage` — Blademaster owns its battlerage (excluded from the shared culling check), spends rage by priority so it never idles (fixes the 100+-rage-unused bug), and cashes in a reckless/feared target with **Headstrike** for bonus damage. **recklessness** + **aeon** capture triggers (`013-016`). Isolated to Blademaster (no other class touched). Tests `test_basher_battlerage.lua`.
-- Stage 3: charm-swap targeting. Stage 4: first-hit auto-parry. Remaining aff lines (feared/sensitivity/stun-on-mob/…) still TODO-line.
+- **Stage 2.1 (done, v4.7.65):** in-game verification confirmed Daze (Stun) already fires ~every 33s (its cooldown ceiling) under the Mnemosyne priority, so the rotation is unchanged. Added visibility: `ataxiaBasher_dsAlert(msg,colour)` highlights the triggering line + echoes a `(BR):` tag (toggle `ataxiaBasher.brAlerts`, default on), wired into charm/recklessness/aeon/weakness/stun applies. Captured **weakness** apply (`017`, Nerveslash cast) + end (`018`) and **stun** apply (`019`, Daze cast) + end (`020`).
+- Stage 3: charm-swap targeting. Stage 4: first-hit auto-parry. Remaining aff lines (feared/sensitivity/clumsy/inhibit/amnesia/…) still TODO-line.

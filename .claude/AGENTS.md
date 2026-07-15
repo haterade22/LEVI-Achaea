@@ -38,7 +38,7 @@ All script paths relative to `src_new/scripts/levi_ataxia/levi/levi_scripts/`.
 - Serpent → `memory/serpent.md` | Shaman → `memory/shaman.md` | Magi → `memory/magi.md`
 - Apostate → `memory/apostate.md` | Blademaster → `memory/blademaster.md` | Tekura → `memory/tekura.md`
 - Snipe → `memory/snipe.md` | DWB Runie → `memory/dwb-runie.md` | SLC → `memory/slc.md`
-- Basher → `memory/basher.md` | Affliction Tracking → `memory/affliction-tracking.md`
+- Basher → `memory/basher.md` | Basher Overhaul → `memory/basher-overhaul.md` | Affliction Tracking → `memory/affliction-tracking.md`
 - Bug Patterns → `memory/bug-patterns.md` | Codebase Structure → `memory/codebase-structure.md`
 
 ---

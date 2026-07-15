@@ -88,6 +88,7 @@ Paths stored in `ataxiaBasherPaths[areaName] = {room1, room2, ...}`. Persisted t
 | `gemCloaking` | bool | false | Gemcloaking (Moghedu) |
 | `rageraze` | bool | false | Raze during battlerage |
 | `rageConserveThreshold` | number | nil | Skip rage if mob HP ≤ this % |
+| `brAlerts` | bool | true | Highlight battlerage effects (charm/recklessness/aeon/weakness/stun) on the game line and echo a `(BR):` tag to the bash console |
 
 ### Knight Pet Attacks (cooldown-tracked)
 

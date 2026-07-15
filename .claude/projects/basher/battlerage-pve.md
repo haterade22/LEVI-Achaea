@@ -32,7 +32,7 @@ Ordered by **defensive value** — *any rage ability that stops a denizen hittin
 | **Sensitivity** | takes **+33%** damage | 8s | offense — **burst** it while up |
 | **Recklessness** | **can't shield** | 15s | offense — enables Conditional-Damage abilities (e.g. Headstrike) + no shields to break |
 
-Afflictions arrive from **any** source — our battlerage, proc-boons (Wayward Heir → random BR aff / charm, Haskor's Bravado → recklessness, Temporal Anomaly → aeon), or groupmates — and LEVI captures them all in `ataxiaTemp.denizenState[id].affs` (see `08_Denizen_State`).
+Afflictions arrive from **any** source — our battlerage, proc-boons (Wayward Heir → random BR aff / charm, Haskor's Bravado → recklessness, Temporal Anomaly → aeon), or groupmates — and LEVI captures them into `ataxiaTemp.denizenState[id].affs` (see `008_Denizen_State`). **Capture status:** **charm, recklessness, aeon, weakness, stun** are captured from real game lines (triggers `011`–`020`, applied/ended pairs); **feared, sensitivity, clumsy, inhibit, amnesia** are not yet captured.
 
 ## How the LEVI basher uses this
 - **Per-denizen state** (`basher/008_Denizen_State.lua`): each mob's afflictions/HP tracked with real durations (lazy-expiring), PvP-inert. `ataxiaBasher_dsExploit(id)` returns the ability that cashes in the mob's current state (shielded→shatter, reckless/feared→headstrike, sensitivity/inhibit→burst, ablaze→fire).
@@ -40,14 +40,16 @@ Afflictions arrive from **any** source — our battlerage, proc-boons (Wayward H
 
   **Culling Blade → Stun/Amnesia/Aeon/Clumsy (hit-prevention) → damage battlerages → other afflictions → small damage**
 
-  Outside Mnemosyne it's damage-forward (mitigation drops below the damage abilities). Cooldowns come from the shared `battleRage_Timers` (triggers 330–333) where tracked, else a reload-safe **timestamp** cooldown.
+  Outside Mnemosyne it's damage-forward (mitigation drops below the damage abilities). Cooldowns come from the shared `battleRage_Timers` (fire-line triggers `330` Leapstrike / `331` Spinslash / `332` Daze — trigger `333` exists but is Shaman-only) where tracked, else a reload-safe **timestamp** cooldown (Headstrike, Nerveslash — no fire-line trigger).
+- **No rage-reserving for Daze.** In-game logs confirm Daze fires roughly **every ~33s** (its cooldown ceiling) on its own under this priority, so LEVI does **not** starve the cheaper abilities to feed it. A short-lived "hold rage for Daze" tweak was reverted (v4.7.65) because it only cost Nerveslash/Leapstrike damage for zero extra mitigation.
+- **Visibility** (`ataxiaBasher_dsAlert`): when one of our attacks lands a captured affliction, LEVI highlights the triggering game line and echoes a coloured `(BR):` tag to the console (charm cyan, recklessness orange, aeon yellow, weakness green, stun magenta) so the rotation is visible in the combat spam. Toggle with `ataxiaBasher.brAlerts` (default on).
 
 ## Blademaster's six (this character)
 | Ability | Cmd | Rage | CD | Type | Aff / note |
 |---|---|---|---|---|---|
 | Leapstrike | `LEAPSTRIKE` | 14 | 16s | damage/execute | cheap filler |
 | Shatter | `SHIN SHATTER` | 17 | ~global | shield breaker | on a shielded mob |
-| Nerveslash | `NERVESLASH` | 22 | 31s | afflicting | **Weakness** |
+| Nerveslash | `NSL <t>` | 22 | 31s | afflicting | **Weakness** |
 | Headstrike | `STRIKE … HEAD` | 25 | 23s | **conditional dmg** | bonus vs **reckless / feared** |
 | Daze | `SHIN DAZE` | 26 | 33s | afflicting | **Stun** — the key mitigation |
 | Spinslash | `SPINSLASH` | 36 | 23s | damage | big single-target dump |
