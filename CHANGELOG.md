@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-07-16 — Basher: Shaman uses swiftcurse regardless of binding (+ two latent bugs) (v4.7.84)
+
+- **Swiftcurse no longer requires the aelkesh binding.** `ataxiaBasher_shamanBashing` gated its swiftcurse branch on `shaman.spiritisbound("aelkesh")`; that check is gone, so swiftcurse is used whether or not the spirit is bound.
+- **The default bashType was a typo — `"swiftcure"`, not `"swiftcurse"`.** It never equalled the `bash_type == "swiftcurse"` branch, so the *default* silently fell through to jinx/curse and **swiftcurse was never actually the default**, binding or no binding. Fixed.
+- **`curseCharge <= 1` could kill the whole attack.** `curseCharge` is a plain global with no initialiser — nil until the first charge is observed — so a bare compare throws `attempt to compare nil with number`, and `ataxiaBasher_shamanBashing` returns nothing. Now `(curseCharge or 0)`, matching how `genrunning/004:61` already guards it. This mattered more after the two fixes above, which make the swiftcurse branch the common path.
+- Also scoped `atk` to a local (it was an implicit global).
+
+Suite **281/281**.
+
+### Noted, not yet changed: the swiftcurse recharge fires twice
+`curseCharge` has three writers — `shaman/011` (the real *"You weave your fingers together…"* line → 14), `shaman/012` (the authoritative *"empowered with another N curses"* → N), and `ataxiaBasher_detectSwiftcurseCharge` (`genrunning/004`), which **infers** the charge from **two** consecutive EQ-only recoveries (`eqOnlyCount >= 2`). Since each bare `swiftcurse` is exactly one EQ-only recovery, that heuristic cannot conclude the charge landed until it has been cast twice — while `011` already knows from the first line. Nothing anywhere decrements `curseCharge`. Pending in-game confirmation of `curseCharge` after a single weave before removing the heuristic.
+
+---
+
 ## 2026-07-16 — Basher: transmute tops up to 99% (v4.7.83)
 
 - **`transmuteto` 90 → 99**. With `transmuteat` at 70, a gap-filler transmute now refills essentially to full rather than leaving you at 90%. Safe to push: the sip-balance gate means it only ever spends mana in the window server-side sipping can't cover, so a higher ceiling costs nothing while sip balance is up.

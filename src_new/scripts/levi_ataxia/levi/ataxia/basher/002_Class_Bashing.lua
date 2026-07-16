@@ -709,16 +709,27 @@ local healhealth = tonumber(math.floor((ataxia.vitals.hp/ataxia.vitals.maxhp)*10
 	local brage = ataxiaBasher_assembleBattlerage()
 	local raze = ataxiaBasher.battlerage.Shaman.raze
   
-  if not shaman.spiritlore.bashType then shaman.spiritlore.bashType = "swiftcure" end
+  -- Default was "swiftcure" -- a typo. It never equalled the "swiftcurse" branch below, so the
+  -- default bashType silently fell through to jinx/curse and swiftcurse was never actually the
+  -- default. Set via `aconfig bashtype <type>` (shaman_system/005).
+  if not shaman.spiritlore.bashType then shaman.spiritlore.bashType = "swiftcurse" end
 	local bash_type = shaman.spiritlore.bashType
-  
-  
- if healhealth < 60 then
-          atk = "stand;wield shield;invoke regeneration"
+
+  local atk
+  if healhealth < 60 then
+    atk = "stand;wield shield;invoke regeneration"
   elseif bash_type == "arius" and shaman.spiritisbound("arius") then
     atk = "invoke roar "..target
-  elseif bash_type == "swiftcurse" and shaman.spiritisbound("aelkesh") then
-    if curseCharge <= 1 then
+  elseif bash_type == "swiftcurse" then
+    -- No spirit-binding check: swiftcurse is used regardless of whether aelkesh is bound.
+    --
+    -- `curseCharge or 0`: it is a plain global with three writers -- shaman/011 (the real
+    -- "You weave your fingers together..." line -> 14), shaman/012 (the authoritative "empowered
+    -- with another N curses" -> N), and the ataxiaBasher_detectSwiftcurseCharge heuristic
+    -- (genrunning/004). None run before the first charge of a session, so it is nil until then,
+    -- and a bare `curseCharge <= 1` throws "attempt to compare nil with number", killing the
+    -- whole attack. 004:61 already guards it the same way.
+    if (curseCharge or 0) <= 1 then
       atk = "stand;wield shield;swiftcurse"
     else
       atk = "stand;wield shield;swiftcurse "..target.." bleed"
