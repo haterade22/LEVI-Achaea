@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-07-16 — Basher: Shikudo never changed form — the kata < 5 livelock (v4.7.68)
+
+In game the Shikudo rotation never transitioned: every combo was chased by a rejected `TRANSITION`, and the rejection reset the kata chain, so it could never grow to the 5 a transition needs.
+
+- **Root cause.** `leaveAt = 2` bet on the queued combo's 3 actions landing *before* the transition was evaluated (2 + 3 = 5). In game the transition resolved while the chain was still **3**, the game rejected it (`A kata of at least 5 must be performed in order to flow from the Live Oak to another.`), and `shikudo/002_Reset_Failsafe` zeroes `ataxia.vitals.kata` on that very line — so the next pass rebuilt the same doomed command. An infinite fail loop: the basher never left its starting form, and the intended 4:2:2 Willow split never happened.
+- **Fix 1 — gate on a chain that is already legal.** `leaveAt` is now the kata the chain must **already** be at, and it is `>= 5` for every transit form (Rain/Oak/Tykonos/Gaital/Maelstrom); Willow keeps 9. A transition is then legal on its own, whatever the queued combo contributes, so the loop cannot form. This matches the rule the existing PvP code already encodes — `shikudo.shouldTransition()`: `if kata < 5 then return nil -- Need at least 5 kata to transition`.
+- **Fix 2 — use COMBO's inline TRANSITION.** Per `AB SHIKUDO COMBO` the syntax is `COMBO <target> <attack1> [limb] [attack2] [limb] [attack3] [limb] [TRANSITION <form>]`. The transition is now emitted as that inline suffix (`combo <t> hiru hiraku flashheel left transition rain`) instead of a separate `transition to the <form> form` command racing the three attacks that build the chain it depends on.
+- Combos are 3 actions, so the chain steps 0,3,6,9,12 and first satisfies `>= 5` at **6** → 4 combos in Willow, 3 in each of Rain/Oak (~40% Willow — versus the 50% the old table aimed for but never achieved, since it never transitioned at all).
+- Tests: no-transition-below-5 asserted across all five transit forms × kata {0,2,3,4} (the livelock guard), plus the inline-suffix shape. Suite **251/251**.
+- **Needs in-game confirmation:** the exact inline form-name spelling — `transition rain` (assumed, from `TRANSITION <form>`) vs `transition to the rain form`.
+
+---
+
 ## 2026-07-16 — Basher: fix Shikudo silent no-attack + rebuild the form rotation around Willow (v4.7.67)
 
 Shikudo autobashing sent no attacks at all: the basher engaged, armour swapped to `stickpve`, and you stood there taking hits with no error message.

@@ -349,20 +349,29 @@ function ataxiaBasher_magiBashing()
 end
 
 
--- Willow is the damage form, and Willow -> Rain -> Oak -> Willow is the shortest legal cycle
--- back to it (see shikudo.transitions), so ride Willow to its 12-kata cap and leave Rain and
--- Oak the moment TRANSITION becomes legal. Per HELP KATA a transition needs a chain of 5
--- actions and resets it; each combo below is 3 actions, so kata steps 0,3,6,9,12 and leaveAt
--- is compared *before* the combo lands. leaveAt 2 (not 3) keeps "one more combo is enough"
--- true even if a combo is ever not exactly 3 actions.
+-- Willow is the damage form (speed is king), and Willow -> Rain -> Oak -> Willow is the
+-- shortest legal cycle back to it (see shikudo.transitions), so ride Willow to its 12-kata
+-- cap and leave Rain/Oak as soon as a transition is LEGAL.
+--
+-- leaveAt is the kata the chain must ALREADY be at, read *before* this combo is sent.
+-- A TRANSITION needs a chain of at least 5 ("A kata of at least 5 must be performed in order
+-- to flow from the Live Oak to another") and a REJECTED transition RESETS the chain to 0.
+-- That reset is why leaveAt must be >= 5 and not 2: the old value bet on the queued combo's
+-- 3 actions landing first (2+3=5), but in game the transition was evaluated while the chain
+-- was still 3, got rejected, reset the chain, and the next pass repeated it -- an infinite
+-- fail loop that never transitioned at all. Gate on a chain that is legal on its own and the
+-- loop cannot form, whatever the combo contributes.
+--
+-- Combos are 3 actions, so the chain steps 0,3,6,9,12 and first satisfies >= 5 at 6.
+-- That gives 4 combos in Willow (0,3,6,9) and 3 in each of Rain/Oak (0,3,6) -- ~40% Willow.
 -- Tykonos is where a stumble dumps you, and it transitions straight back to Willow.
 local SHIKUDO_BASH_ROTATION = {
   Willow    = {nextForm = "Rain",   leaveAt = 9},
-  Rain      = {nextForm = "Oak",    leaveAt = 2},
-  Oak       = {nextForm = "Willow", leaveAt = 2},
-  Tykonos   = {nextForm = "Willow", leaveAt = 2},
-  Gaital    = {nextForm = "Rain",   leaveAt = 2},
-  Maelstrom = {nextForm = "Oak",    leaveAt = 2},
+  Rain      = {nextForm = "Oak",    leaveAt = 5},
+  Oak       = {nextForm = "Willow", leaveAt = 5},
+  Tykonos   = {nextForm = "Willow", leaveAt = 5},
+  Gaital    = {nextForm = "Rain",   leaveAt = 5},
+  Maelstrom = {nextForm = "Oak",    leaveAt = 5},
 }
 
 -- shieldbreak variants swap a hit for shatter. Gaital/Maelstrom combos are built from
@@ -393,12 +402,16 @@ local function shikudoBashCombo(tar, useShieldbreak)
   end
   shikudoWarnedForm = nil
 
-  local cmd = "combo "..tar.." "..(useShieldbreak and combos.shieldbreak or combos.normal).."; "
-  -- kata is absent from charstats until a chain is started, hence the `or 0`.
+  local cmd = "combo "..tar.." "..(useShieldbreak and combos.shieldbreak or combos.normal)
+  -- COMBO takes an inline TRANSITION suffix -- per AB SHIKUDO COMBO:
+  --   COMBO <target> <attack1> [limb] [attack2] [limb] [attack3] [limb] [TRANSITION <form>]
+  -- Use that rather than a separate `transition to the <form> form` command: the inline form
+  -- resolves inside the combo's own flow instead of racing the three attacks that build the
+  -- chain it depends on. kata is absent from charstats until a chain starts, hence `or 0`.
   if (ataxia.vitals.kata or 0) >= rot.leaveAt then
-    cmd = cmd.."transition to the "..rot.nextForm:lower().." form; "
+    cmd = cmd.." transition "..rot.nextForm:lower()
   end
-  return cmd
+  return cmd.."; "
 end
 
 function ataxiaBasher_monkBashing2()

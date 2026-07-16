@@ -80,14 +80,35 @@ describe("ataxiaBasher_monkBashing2 — Shikudo form rotation", function()
     reset(); ataxia.vitals.kata = 0
     expect(has(ataxiaBasher_monkBashing2(), "transition")).toBeFalse()
     reset(); ataxia.vitals.kata = 9
-    expect(has(ataxiaBasher_monkBashing2(), "transition to the rain form")).toBeTrue()
+    expect(has(ataxiaBasher_monkBashing2(), "transition rain")).toBeTrue()
   end)
 
-  it("leaves Rain and Oak as soon as a transition is legal (Willow -> Rain -> Oak -> Willow)", function()
-    reset(); ataxia.vitals.form, ataxia.vitals.kata = "Rain", 2
-    expect(has(ataxiaBasher_monkBashing2(), "transition to the oak form")).toBeTrue()
-    reset(); ataxia.vitals.form, ataxia.vitals.kata = "Oak", 2
-    expect(has(ataxiaBasher_monkBashing2(), "transition to the willow form")).toBeTrue()
+  -- Per AB SHIKUDO COMBO the transition is an inline suffix of COMBO itself, not a separate
+  -- command -- a separate one races the three attacks that build the chain it needs.
+  it("emits the transition inline in the combo, not as a separate command", function()
+    reset(); ataxia.vitals.kata = 9
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "combo " .. target .. " hiru hiraku flashheel left transition rain")).toBeTrue()
+    expect(has(cmd, "transition to the")).toBeFalse()
+  end)
+
+  -- The game rejects a TRANSITION below a chain of 5 and the rejection RESETS the chain, so
+  -- transitioning early is not merely wasted -- it livelocks the rotation (chain 0 -> 3 ->
+  -- rejected -> 0 -> ...), which is exactly what was seen in game. Never gate below 5.
+  it("never transitions below a kata of 5 (a rejected transition resets the chain)", function()
+    for _, form in ipairs({"Rain", "Oak", "Tykonos", "Gaital", "Maelstrom"}) do
+      for _, k in ipairs({0, 2, 3, 4}) do
+        reset(); ataxia.vitals.form, ataxia.vitals.kata = form, k
+        expect(has(ataxiaBasher_monkBashing2(), "transition")).toBeFalse()
+      end
+    end
+  end)
+
+  it("leaves Rain and Oak once the chain is legal (Willow -> Rain -> Oak -> Willow)", function()
+    reset(); ataxia.vitals.form, ataxia.vitals.kata = "Rain", 6
+    expect(has(ataxiaBasher_monkBashing2(), "transition oak")).toBeTrue()
+    reset(); ataxia.vitals.form, ataxia.vitals.kata = "Oak", 6
+    expect(has(ataxiaBasher_monkBashing2(), "transition willow")).toBeTrue()
   end)
 
   it("tolerates a nil kata (absent from charstats until a chain starts)", function()
