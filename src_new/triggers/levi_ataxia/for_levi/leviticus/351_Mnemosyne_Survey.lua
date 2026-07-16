@@ -41,8 +41,4 @@ patterns:
 -- reports the truth while DEMENTIA is hallucinating a real environment/area around us, so it
 -- both sets the flag and cancels a pending "did we leave?" window opened by ataxia_Room_Update
 -- when it saw a (possibly hallucinated) non-empty area. ataxiaBasher_isNoFleeArea() reads it.
-if ataxiaBasher_mnemStillHere then ataxiaBasher_mnemStillHere() end
-if not ataxiaBasher.inMnemosyne then
-  ataxiaBasher.inMnemosyne = true
-  ataxiaEcho("Mnemosyne detected — no-flee mode ON (shield instead of flee).")
-end
+if ataxiaBasher_mnemHere then ataxiaBasher_mnemHere("survey") end

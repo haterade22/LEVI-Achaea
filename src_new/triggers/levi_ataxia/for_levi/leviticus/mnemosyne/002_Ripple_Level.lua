@@ -32,4 +32,10 @@ patterns:
   type: 1
 ]]--
 
+-- "You wade N ripples deep..." only prints inside a wade, so it proves we are in it whatever
+-- gmcp claims (Creville's Legacy / incurable dementia fakes the room wholesale). Assert BEFORE
+-- onRipple: its context guard requires in-Mnemosyne context to bootstrap a run, so without
+-- this a missed run-start (e.g. reconnecting mid-climb) could never recover.
+if ataxiaBasher_mnemHere then ataxiaBasher_mnemHere("wade status") end
+
 ataxia.mnemosyne.onRipple(tonumber(matches[2]))

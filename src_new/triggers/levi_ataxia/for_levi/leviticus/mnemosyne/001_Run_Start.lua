@@ -41,7 +41,4 @@ bmShatteredStar = false  -- boons reset each run
 -- 20% faster, INCURABLE dementia, echoes 3x) fakes gmcp.Room.Info wholesale, so the area/num/
 -- exits can all name a real place while we are still inside. Set unconditionally (independent
 -- of telemetry), mirroring the boon flags above. SURVEY (351/352) re-syncs on demand.
-if ataxiaBasher and not ataxiaBasher.inMnemosyne then
-  ataxiaBasher.inMnemosyne = true
-  ataxiaEcho("Mnemosyne wade started — no-flee mode ON (shield instead of flee).")
-end
+if ataxiaBasher_mnemHere then ataxiaBasher_mnemHere("wade started") end

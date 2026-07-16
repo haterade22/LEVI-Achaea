@@ -215,3 +215,34 @@ describe("Mnemosyne presence verification (dementia / stale flag)", function()
   end)
 
 end)
+
+-- Any unambiguous Mnemosyne marker (wade start, wade status, boon screen, SURVEY) asserts
+-- presence. Creville's Legacy grants INCURABLE dementia, so gmcp is a lie for the whole run --
+-- these lines are the only truth, and asserting from all of them self-heals a missed run-start.
+describe("ataxiaBasher_mnemHere — lifecycle markers assert presence", function()
+  it("asserts presence from any marker, whatever gmcp claims", function()
+    baseline(); mock.reset()
+    setArea("the Northern Ithmia")          -- dementia's fake area
+    ataxiaBasher_mnemHere("wade status")
+    expect(ataxiaBasher.inMnemosyne).toBeTrue()
+    expect(ataxiaBasher_isNoFleeArea()).toBeTrue()  -- no-flee ON despite the fake area
+  end)
+
+  it("cancels a pending 'did we leave?' ask (dementia can't eject us)", function()
+    baseline(); mock.reset()
+    ataxiaBasher.inMnemosyne = true
+    ataxiaBasher_mnemLeftMaybe()            -- fake area opened a window
+    ataxiaBasher_mnemHere("boon screen")    -- an authoritative yes lands
+    expect(ataxiaBasher.inMnemosyne).toBeTrue()
+    ataxiaBasher_mnemLeftFor("the Northern Ithmia") -- a late reply must not eject us
+    expect(ataxiaBasher.inMnemosyne).toBeTrue()
+  end)
+
+  it("is idempotent (markers repeat every ripple)", function()
+    baseline(); mock.reset()
+    ataxiaBasher_mnemHere("wade started")
+    ataxiaBasher_mnemHere("wade status")
+    ataxiaBasher_mnemHere("boon screen")
+    expect(ataxiaBasher.inMnemosyne).toBeTrue()
+  end)
+end)

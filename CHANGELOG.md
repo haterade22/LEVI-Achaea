@@ -2,6 +2,21 @@
 
 ---
 
+## 2026-07-16 — Basher: Mnemosyne presence is owned by the wade/ripple lifecycle (v4.7.73)
+
+Completes the incurable-dementia work. The principle: **we already know, from triggers, when a wade starts, when each ripple starts, and when we stop wading — so presence should be driven by those, never inferred from gmcp**, which `Creville's Legacy` fakes wholesale for the entire run.
+
+- **New `ataxiaBasher_mnemHere(why)`** — one place that asserts presence and cancels any pending "did we leave?" ask. Wired to every unambiguous Mnemosyne marker, each of which only ever prints inside a wade and which dementia cannot fake away:
+  - **wade start** (`001_Run_Start`) — "You begin to wade out into the depths of the Mnemosyne"
+  - **wade status / ripple** (`002_Ripple_Level`) — "You wade N ripples deep into the tides of memory:"
+  - **boon screen** (`004_Boons_Offered`) — "...flickers of power that may aide you..." (observed printing under a hallucinated `Tangled forest.`)
+  - **SURVEY** (`351`) — "You are in wading the Mnemosyne."
+- **Self-heals a missed run-start.** Previously a missed wade-start line (reconnecting mid-climb, a gagged line) left the flag off for the whole run — and `onRipple`'s context guard *requires* in-Mnemosyne context to bootstrap a run, so it could never recover. Any later ripple or boon screen now re-asserts, and both markers assert *before* the handlers run so those see the correct context.
+- **Only two things clear it:** the *confirmed* `onRunEnd()` (the real "we stopped wading"), or a SURVEY that names a real place (`352`). Never the area.
+- Tests: +3 (asserts through a fake area, an authoritative yes cancels a pending ask and a late reply can't eject us, idempotent across repeated markers). Suite **269/269**.
+
+---
+
 ## 2026-07-16 — Basher: the wade lifecycle + SURVEY own Mnemosyne presence (incurable dementia) (v4.7.72)
 
 Follow-up to v4.7.71, now that the cause is fully understood: the boon **Creville's Legacy** ("You attack 20% faster but you have incurable dementia", common, echoes 3x) makes dementia a **permanent condition of the run** — so this can never be cured or waited out, and every Mnemosyne system has to work through it.

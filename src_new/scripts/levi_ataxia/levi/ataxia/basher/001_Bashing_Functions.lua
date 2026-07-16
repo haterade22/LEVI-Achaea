@@ -269,6 +269,19 @@ function ataxiaBasher_mnemLeftConfirm()
   ataxiaEcho("Left Mnemosyne (no SURVEY reply) — no-flee mode OFF.")
 end
 
+-- Any UNAMBIGUOUS Mnemosyne marker proves we are inside, whatever gmcp claims: the wade-start
+-- line, the wade-status ("You wade N ripples deep..."), the boon screen ("...flickers of power
+-- that may aide you..."), or SURVEY. Creville's Legacy (incurable dementia) fakes the room
+-- wholesale -- it rewrote the boon-screen room to "Tangled forest" -- but it cannot fake these
+-- lines away, so each is a truth source. Asserting from all of them also self-heals a missed
+-- run-start (e.g. reconnecting mid-run), which otherwise left the flag off for the whole climb.
+function ataxiaBasher_mnemHere(why)
+  ataxiaBasher_mnemStillHere() -- an authoritative "yes" closes any pending "did we leave?" ask
+  if ataxiaBasher.inMnemosyne then return end
+  ataxiaBasher.inMnemosyne = true
+  ataxiaEcho("Mnemosyne confirmed (" .. tostring(why) .. ") — no-flee mode ON (shield, don't flee).")
+end
+
 -- SURVEY named the Mnemosyne (trigger 351): we are still inside, whatever the area claims.
 -- Also the "answer received" path — closes the window and consumes the pending ask.
 function ataxiaBasher_mnemStillHere()

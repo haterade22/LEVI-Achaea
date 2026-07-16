@@ -32,5 +32,11 @@ patterns:
   type: 1
 ]]--
 
+-- The boon screen only ever prints inside a wade, so it is proof we are still in it -- even
+-- when Creville's Legacy (incurable dementia) has rewritten the room around it (observed: the
+-- boon screen printed under "Tangled forest."). Assert BEFORE the handlers below, so they see
+-- the correct in-Mnemosyne context.
+if ataxiaBasher_mnemHere then ataxiaBasher_mnemHere("boon screen") end
+
 ataxia.mnemosyne.onBoonsOffered()
 if ataxia.mnemosyne.onBoonScreen then ataxia.mnemosyne.onBoonScreen() end -- explorer: ripple done
