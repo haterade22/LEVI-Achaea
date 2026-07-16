@@ -147,6 +147,25 @@ function M._recordAffixes(list)
   M._historySave()
 end
 
+-- Is `name` one of THIS run's ongoing effects? Affixes are recorded per-run by
+-- _recordAffixes above, so a match on the current run counter means it is live now.
+-- Case-insensitive substring, so "sanguine" finds "Sanguine Restoration".
+--
+-- Combat reads this: the "Sanguine Restoration" affix ("Pools of blood shall heal nearby
+-- denizens.") is exactly when Inhibit earns its rage, since Inhibit stops a denizen healing.
+-- See ataxiaBasher_monkBattlerage.
+function M.hasAffix(name)
+  if type(name) ~= "string" or name == "" then return false end
+  local want = name:lower()
+  local run = M.history and M.history.run
+  for _, a in ipairs((M.history and M.history.affixes) or {}) do
+    if a.run == run and type(a.name) == "string" and a.name:lower():find(want, 1, true) then
+      return true
+    end
+  end
+  return false
+end
+
 -- ---------------------------------------------------------------------------
 -- Reports (mnem boons | affixes | library)
 -- ---------------------------------------------------------------------------

@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-07-16 — Basher: Monk rotation — spend Inhibit where healing actually happens (v4.7.76)
+
+Delivers the parked Ripplestrike/Inhibit work, now that the trigger condition is known: the wade affix **Sanguine Restoration** — *"Pools of blood shall heal nearby denizens."*
+
+- **New `ataxiaBasher_monkBattlerage()`.** Monk previously fell through to `ataxiaBasher_standardBattlerage`, which only ever fires `small`/`large`/`special` — so the `rpst`/`mind blast` entries added in v4.7.67 were dead config and **Ripplestrike never fired at all**. Monk now owns its rotation (like Bard/Blademaster); no other class is touched.
+- **Priority:** (1) **Ripplestrike → Inhibit**, but *only where healing is real* — the `Sanguine Restoration` affix, or a denizen matched by the new `ataxiaBasher.healerDenizens` list. Inhibit stops a denizen healing, so it's dead rage against a mob that never heals. Skipped if the mob already has Inhibit (`dsHasAff`, lazily expiring). (2) damage — `tnk` then `sbp` filler, so rage never idles. (3) surplus → `mind scramble` (Clumsy, mob misses 33%) as mitigation on the no-flee climb.
+- **Mindblast is deliberately not prioritised.** Its bonus wants Weakness or Sensitivity and **nothing in Monk's kit applies either** (Scramble = Clumsy, Ripplestrike = Inhibit), so it can never self-enable — it's a flat 25-rage hit unless a boon or groupmate supplies one.
+- **`spk` stays unreachable** — both specs break shields free (`shatter` / `rhk`), per v4.7.67.
+- **New `ataxia.mnemosyne.hasAffix(name)`** — case-insensitive query over the current run's recorded ongoing effects.
+- New `ataxiaBasher.healerDenizens` (empty default, backfilled) — name substrings worth an Inhibit outside Mnemosyne.
+- Tests: 7 cases (fires on the affix, doesn't waste it when nothing heals, skips an already-inhibited mob, surplus → Clumsy, `spk` unreachable, cheap-filler fallback, PvP-inert). Suite **279/279**.
+
+---
+
 ## 2026-07-16 — Basher: capture the REAL exits from text (dementia-proof adjacency) (v4.7.75)
 
 Groundwork for a self-mapping 4x4. The breakthrough: **the exit line is true even under incurable dementia** — only gmcp lies.

@@ -752,6 +752,56 @@ function ataxiaBasher_blademasterBattlerage(sp)
   return cmd
 end
 
+-- Monk battlerage. Kit (AB BATTLERAGE): Spinningbackfist SBP 14 (damage), Scramble MIND
+-- SCRAMBLE 22 (Clumsy), Splinterkick SPK 17 (shield break), Mindblast MIND BLAST 25
+-- (conditional damage), Ripplestrike RPST 25 (Inhibit), Tornadokick TNK 36 (damage).
+--
+-- Priority:
+--  1. RIPPLESTRIKE -> Inhibit, but ONLY where healing is actually happening. Inhibit stops a
+--     denizen healing, so it is dead rage against a mob that never heals -- and gold against
+--     the "Sanguine Restoration" affix ("Pools of blood shall heal nearby denizens."). Also
+--     fires on a denizen flagged as a healer. Skipped once the mob already has Inhibit.
+--  2. Damage: TNK (large) then SBP (small filler), so rage never idles.
+--  3. SCRAMBLE -> Clumsy (mob misses 33%) with surplus rage; mitigation on the no-flee climb.
+--
+-- MIND BLAST is deliberately NOT prioritised: its bonus wants Weakness or Sensitivity, and
+-- NOTHING in Monk's own kit applies either (Scramble = Clumsy, Ripplestrike = Inhibit), so it
+-- is only a flat 25-rage hit unless a boon/groupmate supplied one. SPK is never used: both
+-- specs break shields free (shatter / rhk) -- see ataxiaBasher_monkBashing2.
+function ataxiaBasher_monkBattlerage(sp)
+  local br = ataxiaBasher.battlerage and ataxiaBasher.battlerage["Monk"]
+  if not br or type(target) ~= "number" then return "" end
+  local rage = ataxia.vitals.rage or 0
+
+  -- Healing to shut down? The run-wide affix, or this specific denizen being a known healer.
+  local healing = false
+  local mnem = ataxia.mnemosyne
+  if mnem and mnem.hasAffix and ataxiaBasher.inMnemosyne and mnem.hasAffix("Sanguine Restoration") then
+    healing = true
+  elseif ataxiaBasher.healerDenizens and ataxia.denizensHere then
+    local name = ataxia.denizensHere[target]
+    if type(name) == "string" then
+      for k in pairs(ataxiaBasher.healerDenizens) do
+        if name:lower():find(tostring(k):lower(), 1, true) then healing = true break end
+      end
+    end
+  end
+
+  -- 1. Inhibit the healing (skip if it is already inhibited -- dsHasAff lazily expires).
+  if healing and br.specialafflict and rage >= 25 and not battleRage_Timers.specialafflict then
+    local already = ataxiaBasher_dsHasAff and ataxiaBasher_dsHasAff(target, "inhibit")
+    if not already then return br.specialafflict..sp end
+  end
+
+  -- 2. Damage, biggest affordable first.
+  if br.large and not battleRage_Timers.large and rage >= 36 then return br.large..sp end
+  if br.small and not battleRage_Timers.small and rage >= 14 then return br.small..sp end
+
+  -- 3. Surplus -> Clumsy (hit-prevention).
+  if br.special and not battleRage_Timers.special and rage >= 22 then return br.special..sp end
+  return ""
+end
+
 function ataxiaBasher_assembleBattlerage()
 	local command = ""
 	local class = gmcp.Char.Status.class:title():gsub(" Lady", ""):gsub(" Lord", "")
@@ -807,6 +857,12 @@ function ataxiaBasher_assembleBattlerage()
 	-- reckless/feared target with Headstrike for bonus damage (see ataxiaBasher_blademasterBattlerage)
 	elseif gmcp.Char.Status.class == "Blademaster" then
 		command = ataxiaBasher_blademasterBattlerage(sp)
+
+	-- Monk owns its rotation so Ripplestrike -> Inhibit can be spent where healing is actually
+	-- happening (the "Sanguine Restoration" affix / known healer denizens) instead of never --
+	-- standardBattlerage only ever fires small/large/special, so rpst was dead config.
+	elseif gmcp.Char.Status.class == "Monk" then
+		command = ataxiaBasher_monkBattlerage(sp)
 	-- Standard pattern: check if class has a known specialRage threshold
 	elseif ataxiaBasher_specialRageThresholds[class] then
 		command = ataxiaBasher_standardBattlerage(class, ataxiaBasher_specialRageThresholds[class], level, sp)

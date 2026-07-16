@@ -176,3 +176,73 @@ describe("ataxiaBasher_blademasterBattlerage — rage never idles", function()
     expect(ataxiaBasher_blademasterBattlerage(";")).toBe("")
   end)
 end)
+
+-- ── Monk: Ripplestrike -> Inhibit, spent only where healing actually happens ──────────────
+-- Inhibit stops a denizen healing, so it is dead rage against a mob that never heals -- and
+-- gold against the "Sanguine Restoration" affix ("Pools of blood shall heal nearby denizens").
+-- Mindblast is deliberately not prioritised: nothing in Monk's kit applies Weakness or
+-- Sensitivity (Scramble = Clumsy, Ripplestrike = Inhibit), so its bonus can never self-enable.
+describe("ataxiaBasher_monkBattlerage", function()
+
+  local function monkReset(affix)
+    reset()
+    gmcp.Char.Status.class = "Monk"
+    ataxiaBasher.battlerage = ataxiaBasher.battlerage or {}
+    ataxiaBasher.battlerage["Monk"] = {
+      small = "sbp " .. target, large = "tnk " .. target,
+      raze = "spk " .. target, special = "mind scramble " .. target,
+      specialafflict = "rpst " .. target, specialuse = "mind blast " .. target,
+    }
+    ataxiaBasher.healerDenizens = {}
+    ataxiaBasher.inMnemosyne = true
+    ataxia.mnemosyne = { hasAffix = function(n) return affix == true end }
+  end
+
+  it("fires Ripplestrike when Sanguine Restoration is up (pools heal denizens)", function()
+    monkReset(true); ataxia.vitals.rage = 100
+    expect(ataxiaBasher_monkBattlerage("::")).toBe("rpst " .. target .. "::")
+  end)
+
+  it("does NOT waste Ripplestrike when nothing is healing", function()
+    monkReset(false); ataxia.vitals.rage = 100
+    local cmd = ataxiaBasher_monkBattlerage("::")
+    expect(cmd:find("rpst", 1, true)).toBeNil()
+    expect(cmd).toBe("tnk " .. target .. "::")   -- biggest affordable damage instead
+  end)
+
+  -- The denizen-state module isn't loaded here, so stub the reader the rotation guards on
+  -- (production nil-guards it: `ataxiaBasher_dsHasAff and ataxiaBasher_dsHasAff(...)`).
+  it("does not re-apply Inhibit to an already-inhibited denizen", function()
+    monkReset(true); ataxia.vitals.rage = 100
+    local prev = ataxiaBasher_dsHasAff
+    ataxiaBasher_dsHasAff = function(_, aff) return aff == "inhibit" end
+    local cmd = ataxiaBasher_monkBattlerage("::")
+    ataxiaBasher_dsHasAff = prev
+    expect(cmd:find("rpst", 1, true)).toBeNil()
+    expect(cmd).toBe("tnk " .. target .. "::")   -- damage instead, not wasted rage
+  end)
+
+  it("spends surplus on Scramble (Clumsy) when damage is on cooldown", function()
+    monkReset(false); ataxia.vitals.rage = 100
+    battleRage_Timers.large, battleRage_Timers.small = 1, 1
+    expect(ataxiaBasher_monkBattlerage("::")).toBe("mind scramble " .. target .. "::")
+  end)
+
+  it("never spends rage on shields (spk is unreachable)", function()
+    monkReset(true); ataxia.vitals.rage = 100
+    ataxiaBasher.shielded = true
+    expect(ataxiaBasher_monkBattlerage("::"):find("spk", 1, true)).toBeNil()
+  end)
+
+  it("falls to the cheap filler rather than idling rage", function()
+    monkReset(false); ataxia.vitals.rage = 20   -- under tnk's 36
+    expect(ataxiaBasher_monkBattlerage("::")).toBe("sbp " .. target .. "::")
+  end)
+
+  it("is PvP-inert (string target)", function()
+    monkReset(true); ataxia.vitals.rage = 100
+    target = "Penwize"
+    expect(ataxiaBasher_monkBattlerage("::")).toBe("")
+    target = 12345
+  end)
+end)

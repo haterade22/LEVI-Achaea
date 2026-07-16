@@ -108,6 +108,14 @@ function ataxiaCheckForMissing()
 
 	-- "Our" denizens: pet/ally/summon name keywords (case-insensitive substrings) that
 	-- are never auto-learned or targeted by the basher. Manage with 'bash mine'.
+	-- Denizens worth spending an Inhibit on (name substrings). Inhibit stops a denizen healing,
+	-- so it is dead rage against anything that never heals -- the Mnemosyne "Sanguine
+	-- Restoration" affix is handled separately and needs no list. Empty by default; add with
+	-- Lua until there is an alias. Read by ataxiaBasher_monkBattlerage.
+	if ataxiaBasher.healerDenizens == nil then
+		ataxiaBasher.healerDenizens = {}
+	end
+
 	if ataxiaBasher.ownDenizens == nil then
 		ataxiaBasher.ownDenizens = {"falcon", "baalzadeen"}
 		ataxiaEcho("Own-denizen ignore list not found; seeded with <white>falcon<NavajoWhite>, <white>baalzadeen<NavajoWhite>.")
