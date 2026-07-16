@@ -507,6 +507,9 @@ function ataxia_defaultSettings()
 		},
 		--Other stuff that doesn't fall into above categories.
 		aeoncommandblock = true,
+		-- Monk bashing: false = Shikudo staff combos / Tekura, true = mind crush + DRS.
+		-- Must be a real boolean, never nil: ataxiaBasher_monkBashing2 branches on it.
+		crushbash = false,
 		gagclot = true,
     highlighting = {guards = true, sigils = true, totems = true, runes = true, bals = true, limbs = true},
 		class = "Unknown",

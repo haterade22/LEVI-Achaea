@@ -349,12 +349,66 @@ function ataxiaBasher_magiBashing()
 end
 
 
+-- Willow is the damage form, and Willow -> Rain -> Oak -> Willow is the shortest legal cycle
+-- back to it (see shikudo.transitions), so ride Willow to its 12-kata cap and leave Rain and
+-- Oak the moment TRANSITION becomes legal. Per HELP KATA a transition needs a chain of 5
+-- actions and resets it; each combo below is 3 actions, so kata steps 0,3,6,9,12 and leaveAt
+-- is compared *before* the combo lands. leaveAt 2 (not 3) keeps "one more combo is enough"
+-- true even if a combo is ever not exactly 3 actions.
+-- Tykonos is where a stumble dumps you, and it transitions straight back to Willow.
+local SHIKUDO_BASH_ROTATION = {
+  Willow    = {nextForm = "Rain",   leaveAt = 9},
+  Rain      = {nextForm = "Oak",    leaveAt = 2},
+  Oak       = {nextForm = "Willow", leaveAt = 2},
+  Tykonos   = {nextForm = "Willow", leaveAt = 2},
+  Gaital    = {nextForm = "Rain",   leaveAt = 2},
+  Maelstrom = {nextForm = "Oak",    leaveAt = 2},
+}
+
+-- shieldbreak variants swap a hit for shatter. Gaital/Maelstrom combos are built from
+-- shikudo.formAttacks rather than copied from known-good code — verify in game.
+local SHIKUDO_BASH_COMBOS = {
+  Willow    = {normal = "hiru hiraku flashheel left",             shieldbreak = "shatter hiru flashheel left"},
+  Rain      = {normal = "ruku torso kuro left frontkick left",    shieldbreak = "shatter hiru frontkick left"},
+  Oak       = {normal = "livestrike nervestrike risingkick head", shieldbreak = "shatter livestrike risingkick head"},
+  Tykonos   = {normal = "thrust head thrust head risingkick head", shieldbreak = "shatter thrust head risingkick head"},
+  Gaital    = {normal = "ruku torso kuro left dawnkick left",     shieldbreak = "shatter ruku dawnkick left"},
+  Maelstrom = {normal = "ruku torso livestrike risingkick head",  shieldbreak = "shatter ruku risingkick head"},
+}
+
+-- These fire from the attack path, which runs on every prompt — latch them so an
+-- unrecognised form or spec warns once rather than flooding the screen.
+local shikudoWarnedForm = nil
+local monkWarnedNoSpec = false
+
+local function shikudoBashCombo(tar, useShieldbreak)
+  local form = ataxia.vitals.form
+  local combos, rot = SHIKUDO_BASH_COMBOS[form], SHIKUDO_BASH_ROTATION[form]
+  if not combos or not rot then
+    if shikudoWarnedForm ~= form then
+      shikudoWarnedForm = form
+      ataxiaEcho("Shikudo: don't know how to bash in '"..tostring(form).."' form.")
+    end
+    return ""
+  end
+  shikudoWarnedForm = nil
+
+  local cmd = "combo "..tar.." "..(useShieldbreak and combos.shieldbreak or combos.normal).."; "
+  -- kata is absent from charstats until a chain is started, hence the `or 0`.
+  if (ataxia.vitals.kata or 0) >= rot.leaveAt then
+    cmd = cmd.."transition to the "..rot.nextForm:lower().." form; "
+  end
+  return cmd
+end
+
 function ataxiaBasher_monkBashing2()
 	local command, sp = "", ataxia.settings.separator
 	local brage = ataxiaBasher_assembleBattlerage()
-	local raze = ataxiaBasher.battlerage.Monk.raze
-  local tekura = gmcp.Char.Vitals.charstats[4]:find("Stance") == 1
-  local shikudo = gmcp.Char.Vitals.charstats[4]:find("Form") == 1
+  -- Resolve the spec by charstats *key* via the vitals parser, not by the positional
+  -- index charstats[4]: a shifted index silently made both flags false (= no attack).
+  -- ataxia.vitals.stance is reset to false every vitals tick, so it is a safe discriminator.
+  local tekura = ataxia.vitals.stance and true or false
+  local shikudo = not tekura and ataxia.vitals.form ~= nil
 
    --Transmute logic; transmute to 75%, keep mana above 45%.
 	local xmute = math.ceil(ataxia.vitals.maxhp * 0.90)
@@ -369,84 +423,33 @@ function ataxiaBasher_monkBashing2()
 		end
 	end
 
-	if ataxiaBasher.shielded then
-		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-			command = command..raze..sp
-      if ataxia.settings.crushbash then
-        command = command.." mind crush " ..target.. ";"
-      elseif tekura then
-          command = command.."unwield all"..sp.."combo "..target.. " sdk ucp ucp; "
-      elseif shikudo then
-        if ataxia.vitals.form == "Rain" and ataxia.vitals.kata >= 20 then
-          command = command.."combo "..target.. " ruku torso kuro left frontkick left;transition to the oak form; "
-        elseif ataxia.vitals.form == "Rain" and ataxia.vitals.kata < 20 then
-          command = command.."combo "..target.. " ruku torso kuro left frontkick left; "
-        elseif ataxia.vitals.form == "Oak" and ataxia.vitals.kata >= 8 then
-          command = command.."combo "..target.. " livestrike nervestrike risingkick head;transition to the willow form; "
-        elseif ataxia.vitals.form == "Oak" and ataxia.vitals.kata < 8 then
-          command = command.."combo "..target.. " livestrike nervestrike risingkick head; "
-        elseif ataxia.vitals.form == "Willow" and ataxia.vitals.kata >= 6 then
-          command = command.."combo "..target.. " hiru hiraku flashheel left;transition to the rain form; "
-        elseif ataxia.vitals.form == "Willow" and ataxia.vitals.kata < 6 then
-          command = command.."combo "..target.. " hiru hiraku flashheel left; "
-        elseif ataxia.vitals.form == "Tykonos" and ataxia.vitals.kata < 5 then
-          command = command.."combo "..target.. " thrust head thrust head risingkick head; "
-        elseif ataxia.vitals.form == "Tykonos" and ataxia.vitals.kata >= 5 then
-          command = command.."combo "..target.. " thrust head thrust head risingkick head;transition to the willow form; "
-        end
-      end
-    elseif not ataxiaBasher.rageraze then
-      if ataxia.settings.crushbash then
-        command = command.." mind crush " ..target..";"
-      elseif tekura then
-        command = command.."unwield all"..sp.."combo "..target.. " rhk ucp ucp; "
-      elseif shikudo and ataxia.settings.crushbash == false then
-        if ataxia.vitals.form == "Rain" and ataxia.vitals.kata >= 19 then
-          command = command.."combo "..target.. " shatter hiru frontkick left;transition to the oak form; "
-        elseif ataxia.vitals.form == "Rain" and ataxia.vitals.kata < 19 then
-          command = command.."combo "..target.. " shatter hiru frontkick left; "
-        elseif ataxia.vitals.form == "Oak" and ataxia.vitals.kata >= 7 then
-          command = command.."combo "..target.. " shatter livestrike risingkick head;transition to the willow form; "
-        elseif ataxia.vitals.form == "Oak" and ataxia.vitals.kata < 7 then
-          command = command.."combo "..target.. " shatter livestrike risingkick head; "
-        elseif ataxia.vitals.form == "Willow" and ataxia.vitals.kata >= 6 then
-          command = command.."combo "..target.. " shatter hiru flashheel left;transition to the rain form; "
-        elseif ataxia.vitals.form == "Willow" and ataxia.vitals.kata < 6 then
-          command = command.."combo "..target.. " shatter hiru flashheel left; "
-        elseif ataxia.vitals.form == "Tykonos" and ataxia.vitals.kata < 5 then
-          command = command.."combo "..target.. " shatter thrust head risingkick head; "
-        elseif ataxia.vitals.form == "Tykonos" and ataxia.vitals.kata >= 5 then
-          command = command.."combo "..target.. " shatter thrust head risingkick head;transition to the willow form; "
-        end
-       end
-      end
- else
-		command = command..brage..sp
-     if ataxia.settings.crushbash then
-       command = command.."mind crush " ..target..";"
-     elseif tekura then
-       command = command.."unwield all"..sp.."combo "..target.. " sdk ucp ucp; "
-     elseif shikudo and ataxia.settings.crushbash == false then
-        if ataxia.vitals.form == "Rain" and ataxia.vitals.kata >= 20 then
-          command = command.."combo "..target.. " ruku torso kuro left frontkick left;transition to the oak form; "
-        elseif ataxia.vitals.form == "Rain" and ataxia.vitals.kata < 20 then
-          command = command.."combo "..target.. " ruku torso kuro left frontkick left; "
-        elseif ataxia.vitals.form == "Oak" and ataxia.vitals.kata >= 8 then
-          command = command.."combo "..target.. " livestrike nervestrike risingkick head;transition to the willow form; "
-        elseif ataxia.vitals.form == "Oak" and ataxia.vitals.kata < 8 then
-          command = command.."combo "..target.. " livestrike nervestrike risingkick head; "
-        elseif ataxia.vitals.form == "Willow" and ataxia.vitals.kata >= 6 then
-          command = command.."combo "..target.. " hiru hiraku flashheel left;transition to the rain form; "
-        elseif ataxia.vitals.form == "Willow" and ataxia.vitals.kata < 6 then
-          command = command.."combo "..target.. " hiru hiraku flashheel left; "
-        elseif ataxia.vitals.form == "Tykonos" and ataxia.vitals.kata < 5 then
-          command = command.."combo "..target.. " thrust head thrust head risingkick head; "
-        elseif ataxia.vitals.form == "Tykonos" and ataxia.vitals.kata >= 5 then
-          command = command.."combo "..target.. " thrust head thrust head risingkick head;transition to the willow form; "
-        end
-       end    
-	end
-  
+  -- Monk NEVER spends rage to break a denizen shield: both specs carry a free shield breaker
+  -- (Shikudo `shatter` -- uniquely usable in the flow of ANY form -- and Tekura `rhk`), so the
+  -- 17-rage Splinterkick raze (battlerage.Monk.raze = "spk") is always the worse trade; that
+  -- rage is worth more on damage/afflictions. `ataxiaBasher.rageraze` is deliberately ignored
+  -- here -- it still governs every other class. Shielded => skip battlerage and let the combo
+  -- break the shield itself.
+  -- CAVEAT: the crushbash branch below ignores useShieldbreak -- `mind crush` neither breaks a
+  -- shield nor spends rage, so a shielded mob in crushbash mode is only handled if mind crush
+  -- (being mental) bypasses shielding. Pre-existing; unconfirmed in game.
+  local useShieldbreak = ataxiaBasher.shielded and true or false
+  if not useShieldbreak then
+    command = command..brage..sp
+  end
+
+  if ataxia.settings.crushbash then
+    command = command.."mind crush "..target.."; "
+  elseif tekura then
+    monkWarnedNoSpec = false
+    command = command.."unwield all"..sp.."combo "..target..(useShieldbreak and " rhk ucp ucp; " or " sdk ucp ucp; ")
+  elseif shikudo then
+    monkWarnedNoSpec = false
+    command = command..shikudoBashCombo(target, useShieldbreak)
+  elseif not monkWarnedNoSpec then
+    monkWarnedNoSpec = true
+    ataxiaEcho("Monk: no Stance or Form in charstats — can't tell Tekura from Shikudo, not bashing.")
+  end
+
 	return command   
 end
 

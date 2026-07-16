@@ -29,6 +29,12 @@ function ataxiaCheckForMissing()
     ataxiaBasher.noShieldBreak = { mobs = {}, threshold = 0 }
   end
 
+  -- crushbash was only ever written by the `aconfig monk` toggle, so saves from before it
+  -- was defaulted have no key at all. `== nil` and not `not ...` — false is a real value here.
+  if ataxia.settings.crushbash == nil then
+    ataxia.settings.crushbash = false
+  end
+
   if not ataxia.settings.defences then
     ataxia.settings.defences = { current = "", defup = {}, keepup = {} }
     ataxiaEcho("Defence profiles not found. Initialised empty profiles.")

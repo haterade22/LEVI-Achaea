@@ -263,10 +263,13 @@ function basher_engaged()
         send("scs")
       end
     else
-      if ataxia.vitals.form ~= "Rain" or ataxia.vitals.form ~= "Oak" or ataxia.vitals.form ~= "Willow" then
+      -- `or` here was always true (any form differs from at least one of the three), so every
+      -- bash start re-wielded and re-adopted Rain, resetting the kata chain. Only adopt when
+      -- actually outside the Willow/Rain/Oak rotation.
+      if ataxia.vitals.form ~= "Rain" and ataxia.vitals.form ~= "Oak" and ataxia.vitals.form ~= "Willow" then
         send("wield "..ataxia.getWeapon("staff2")..";adopt rain form")
       end
-    end    
+    end
 	elseif ataxia_isClass("Apostate") then
 		send("summon daegger")	
 	end
