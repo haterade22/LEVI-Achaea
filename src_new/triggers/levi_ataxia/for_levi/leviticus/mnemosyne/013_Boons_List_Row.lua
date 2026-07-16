@@ -47,6 +47,13 @@ if not (mnem and mnem._learnBoon) then return end
 
 name = name:gsub("%s+$", "")
 local rec = mnem._learnBoon(name, nil, rarity) or {}
+
+-- Remember what we OWN (the library is everything we've ever been offered, which is a
+-- different set). `mnem boonfill` reads this to CONTEMPLATE the ones with no description --
+-- the only way to learn a boon claimed before the catalogue existed. ataxiaTemp: not
+-- serialized, rebuilt every time BOONS scrolls past.
+ataxiaTemp.boonsOwned = ataxiaTemp.boonsOwned or {}
+ataxiaTemp.boonsOwned[name] = rarity
 -- _learnBoon only mutates the in-memory table; every other _historySave caller sits behind a
 -- telemetry gate, so without this the back-filled rarity would die with the session. Debounced,
 -- because this trigger fires once per row of the list.

@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-07-16 — Mnemosyne: `mnem boonfill` — learn what boons you already own (v4.7.80)
+
+The catalogue only learns a boon when its **offer screen** goes past — so everything claimed before v4.7.77 existed was unknowable, and the descriptions were gone for good. Except they aren't: `BOON CONTEMPLATE` re-prints the full detail on demand.
+
+- **New `mnem boonfill`** — `BOON CONTEMPLATE`s every owned boon that has no description yet, and writes what it learns into the catalogue. Run `BOONS` first (that's what tells us which boons you own), then `mnem boonfill`. Reports how many it will fetch and roughly how long, then how many it learned.
+- Reuses the existing enrichment machinery rather than duplicating it: `_captureContemplate` → `_parseContemplate` already returns `{ rarity, num_echoes_possible, description, quote }`. Sequential with the same 0.5s spacing as the offer-screen path — deliberately not parallel, since each CONTEMPLATE is a captured block and concurrent ones would interleave.
+- Trigger `013` now records owned boons into `ataxiaTemp.boonsOwned` as the BOONS list scrolls (not serialised; rebuilt each time). Note the *library* is everything ever **offered**, which is a different set from what you **own** — boonfill is the bridge.
+- Only fetches what's missing: re-running it once the catalogue is complete says so and sends nothing.
+
+Suite **279/279**.
+
+---
+
 ## 2026-07-16 — Basher: finish the areaKey migration for real + fix the boon library (v4.7.79)
 
 An adversarial deep review (21 findings raised, 11 confirmed, 10 refuted) caught that the areaKey migration was **still** incomplete after two "final" sweeps — and that the v4.7.77 boon library never worked at all on a default install.

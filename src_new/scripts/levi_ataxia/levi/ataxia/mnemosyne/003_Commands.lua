@@ -51,6 +51,7 @@ function M.help()
     { "mnem map [on|off|status]", "Toggle / diagnose the per-ripple mini-map" },
     { "mnem explore [on|off|status]", "Auto-sweep the 4x4, clear rooms, stop at the boon screen" },
     { "mnem boons", "This run's claimed boons (local history)" },
+    { "mnem boonfill", "BOON CONTEMPLATE owned boons with no description yet (run BOONS first)" },
     { "mnem affixes", "This run's active affixes (ongoing effects)" },
     { "mnem library", "All-time affix catalogue" },
     { "mnem quiet [on|off]", "Silence auto boon/affix echoes (still records)" },
@@ -140,6 +141,8 @@ function M.command(rest)
     else M.exploreToggle() end
   elseif cmd == "boons" then
     M.reportBoons()
+  elseif cmd == "boonfill" then
+    M.boonFill()
   elseif cmd == "affixes" then
     M.reportAffixes()
   elseif cmd == "library" then

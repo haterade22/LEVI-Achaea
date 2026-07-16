@@ -484,6 +484,53 @@ function M._contemplateNext(list, i)
   send("boon contemplate " .. boon.name, false)
 end
 
+-- Backfill the boon catalogue: BOON CONTEMPLATE everything we own but have no description for.
+--
+-- The BOONS list gives name/echoes/rarity but never a description, and the offer screen -- the
+-- only place a description is ever shown -- is long gone for anything claimed before the
+-- catalogue existed. CONTEMPLATE re-prints the full detail on demand, so we can recover them
+-- all: it is the one way to learn a boon you already hold.
+--
+-- Names come from ataxiaTemp.boonsOwned, filled by trigger 013 as the BOONS list scrolls past,
+-- so BOONS must be run first. Sequential with the same 0.5s spacing as the offer-screen
+-- enrichment -- deliberately not parallel, since each CONTEMPLATE is a captured block and they
+-- would interleave.
+function M.boonFill()
+  local owned = (ataxiaTemp and ataxiaTemp.boonsOwned) or {}
+  local seen, todo = 0, {}
+  for name in pairs(owned) do
+    seen = seen + 1
+    local rec = M.boonInfo and M.boonInfo(name)
+    if not (rec and rec.description and rec.description ~= "") then todo[#todo + 1] = name end
+  end
+  table.sort(todo)
+  if seen == 0 then
+    return M.echo("No boons seen yet -- run <cyan>BOONS<grey> first, then <cyan>mnem boonfill<grey>.")
+  end
+  if #todo == 0 then
+    return M.echo("Boon catalogue already complete for all <cyan>" .. seen .. "<grey> owned boon(s).")
+  end
+  M.echo("Contemplating <cyan>" .. #todo .. "<grey> boon(s) to learn what they do (~" ..
+         string.format("%.0f", #todo * 0.6) .. "s)...")
+  M._boonFillNext(todo, 1, 0)
+end
+
+function M._boonFillNext(todo, i, learned)
+  if i > #todo then
+    M._historySave()
+    return M.echo("Boon catalogue updated: <cyan>" .. learned .. "<grey> learned. Run <cyan>BOONS<grey> to see them.")
+  end
+  local name = todo[i]
+  M._captureContemplate(function(info)
+    if info and info.description and info.description ~= "" and M._learnBoon then
+      M._learnBoon(name, info.description, info.rarity, info.num_echoes_possible)
+      learned = learned + 1
+    end
+    tempTimer(0.5, function() M._boonFillNext(todo, i + 1, learned) end)
+  end)
+  send("boon contemplate " .. name, false)
+end
+
 -- Merge contemplate detail into an offered boon: rarity/quote/echoes ONLY. The
 -- description is kept from the offered block (authoritative, already wrap-joined).
 -- We deliberately do NOT take contemplate's description: it is redundant, and the
