@@ -19,7 +19,7 @@ function ataxiaBasher_canShield()
 	local canShield = true
 	
 	for num, thing in pairs(ataxia.denizensHere) do
-		if not ataxiaBasher.noShieldBreak.mobs[thing] and table.contains(ataxiaBasher.targetList[gmcp.Room.Info.area], thing) then
+		if not ataxiaBasher.noShieldBreak.mobs[thing] and table.contains(ataxiaBasher.targetList[ataxiaBasher_areaKey()], thing) then
 			canShield = false
 		end
 	end

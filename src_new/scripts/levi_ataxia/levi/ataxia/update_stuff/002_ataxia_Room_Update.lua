@@ -91,10 +91,14 @@ function ataxia_Room_Update()
 	end
 	room_exitstr = table.concat(room_exits, ", ")
 
+	-- Keyed via ataxiaBasher_areaKey(): in Mnemosyne that pins to "" so the incurable-dementia
+	-- boon's hallucinated area cannot spawn a bogus "Added the Northern Ithmia to areas." entry
+	-- on every room change. The tower's own list ("") is created silently.
 	if ataxiaBasher.targetList then
-		if not ataxiaBasher.targetList[gmcp.Room.Info.area] then
-			ataxiaBasher.targetList[gmcp.Room.Info.area] = {}
-			ataxiaEcho("Added "..gmcp.Room.Info.area.." to areas.")
+		local areaKey = ataxiaBasher_areaKey and ataxiaBasher_areaKey() or gmcp.Room.Info.area
+		if not ataxiaBasher.targetList[areaKey] then
+			ataxiaBasher.targetList[areaKey] = {}
+			if areaKey ~= "" then ataxiaEcho("Added "..areaKey.." to areas.") end
 		end
 	end
 

@@ -269,6 +269,19 @@ function ataxiaBasher_mnemLeftConfirm()
   ataxiaEcho("Left Mnemosyne (no SURVEY reply) — no-flee mode OFF.")
 end
 
+-- The key a room's denizens are filed under in ataxiaBasher.targetList (auto-learn) and looked
+-- up by (search_targets, the list aliases). Normally just the gmcp area -- but the Mnemosyne is
+-- an unmapped instance whose real area is "", and the boon "Creville's Legacy" (attack 20%
+-- faster, INCURABLE dementia) makes gmcp report a hallucinated REAL area for the whole climb
+-- (observed: "the Northern Ithmia"). Keying off that would both scatter tower denizens into a
+-- genuine hunting list (persisted to disk) AND make target lookup miss the tower's own list --
+-- i.e. the basher finds nothing to attack. Pin it to "" while inside: the key the tower has
+-- always used, so existing lists keep working. inMnemosyne is owned by the wade lifecycle.
+function ataxiaBasher_areaKey()
+  if ataxiaBasher.inMnemosyne then return "" end
+  return (gmcp and gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.area) or ""
+end
+
 -- Any UNAMBIGUOUS Mnemosyne marker proves we are inside, whatever gmcp claims: the wade-start
 -- line, the wade-status ("You wade N ripples deep..."), the boon screen ("...flickers of power
 -- that may aide you..."), or SURVEY. Creville's Legacy (incurable dementia) fakes the room

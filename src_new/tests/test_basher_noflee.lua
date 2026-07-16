@@ -246,3 +246,26 @@ describe("ataxiaBasher_mnemHere — lifecycle markers assert presence", function
     expect(ataxiaBasher.inMnemosyne).toBeTrue()
   end)
 end)
+
+-- targetList must be keyed on a STABLE key. Creville's Legacy (incurable dementia) makes gmcp
+-- report a hallucinated real area for the whole climb, which would both scatter tower denizens
+-- into a genuine hunting list AND make search_targets miss the tower's list (= nothing to
+-- attack). Pin to "" inside -- the key the tower has always used.
+describe("ataxiaBasher_areaKey", function()
+  it("returns the real area when not in Mnemosyne", function()
+    baseline(); setArea("Test Bashing Area")
+    expect(ataxiaBasher_areaKey()).toBe("Test Bashing Area")
+  end)
+
+  it("pins to \"\" in Mnemosyne even when dementia fakes a real area", function()
+    baseline(); ataxiaBasher.inMnemosyne = true
+    setArea("the Northern Ithmia")   -- the hallucination
+    expect(ataxiaBasher_areaKey()).toBe("")
+  end)
+
+  it("still pins to \"\" for the tower's genuine empty area", function()
+    baseline(); ataxiaBasher.inMnemosyne = true
+    setArea("")
+    expect(ataxiaBasher_areaKey()).toBe("")
+  end)
+end)

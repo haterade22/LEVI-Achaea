@@ -93,7 +93,7 @@ function search_targets()
 	found_target = false
 	if ataxiaBasher_skipRoom then return false end
 	if not hasRoomInfo() then return false end
-	if not ataxiaBasher.targetList[gmcp.Room.Info.area] then return false end
+	if not ataxiaBasher.targetList[ataxiaBasher_areaKey()] then return false end
 
   for i,v in pairs(ataxia.denizensHere) do
 		if tonumber(i) == target then
@@ -104,7 +104,7 @@ function search_targets()
   end
 
 	if not found_target then
-		for num,npc in pairs(ataxiaBasher.targetList[gmcp.Room.Info.area]) do
+		for num,npc in pairs(ataxiaBasher.targetList[ataxiaBasher_areaKey()]) do
 			if num ~= "keyword" then
 				for id,mob in pairs(ataxia.denizensHere) do
 					if mob:lower() == npc:lower() and not ataxiaBasher_isOwnDenizen(mob) then
@@ -145,9 +145,9 @@ function ataxiaBasher_stormhammer(forceRefresh)
   if not forceRefresh and not ataxiaBasher_stormhammerDirty then return end
   stormhammerTargets = {}
   if not hasRoomInfo() then return end
-  if not ataxiaBasher.targetList[gmcp.Room.Info.area] then return end
+  if not ataxiaBasher.targetList[ataxiaBasher_areaKey()] then return end
   for k,v in pairs(ataxia.denizensHere) do
-    if (table.contains(ataxiaBasher.targetList[gmcp.Room.Info.area], v)) then
+    if (table.contains(ataxiaBasher.targetList[ataxiaBasher_areaKey()], v)) then
       table.insert(stormhammerTargets, tostring(k))
     end
   end
@@ -178,7 +178,7 @@ function ataxiaBasher_shieldedTarget()
 
   found_target = false
   if not hasRoomInfo() then return end
-  for num, npc in pairs(ataxiaBasher.targetList[gmcp.Room.Info.area]) do
+  for num, npc in pairs(ataxiaBasher.targetList[ataxiaBasher_areaKey()]) do
     if num ~= "keyword" and not found_target then
       for id, mob in pairs(ataxia.denizensHere) do
         if mob:lower() == npc:lower() and not ataxiaBasher_isOwnDenizen(mob) then

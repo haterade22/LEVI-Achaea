@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-07-16 — Basher: pin the targetList key in Mnemosyne (restores auto-add + targeting under dementia) (v4.7.74)
+
+Fixes a regression from v4.7.72 and the real cause of "auto-add stopped working" in the tower.
+
+- **v4.7.72 gated auto-learn off entirely while in Mnemosyne.** Wrong call: the tower *needs* auto-learn — that is how the basher learns what to attack there. Reverted.
+- **The actual bug is the KEY, not the gate.** Both auto-learn and lookup use `ataxiaBasher.targetList[gmcp.Room.Info.area]`, and `Creville's Legacy` (incurable dementia) makes gmcp report a hallucinated **real** area for the whole climb. That does two bad things at once: tower denizens get filed into a genuine hunting list (`targetList["the Northern Ithmia"]`, persisted to disk), **and** `search_targets` then looks *up* under that same fake area — so the basher finds nothing to attack. It also spammed "Added the Northern Ithmia to areas." on every room change.
+- **New `ataxiaBasher_areaKey()`** — the single key both sides use. Returns the gmcp area normally, but pins to **`""`** while in Mnemosyne: the key the tower has always used (its real area is `""`), so existing lists keep working and the hallucinated area can never be a key. Applied to auto-learn (`update_stuff/003`), the area-registration echo (`update_stuff/002`), `genrunning/002_search_targets` (5 sites — the lookup that actually finds targets), and `can(x)/002_Misc_CanDo`.
+- Tests: +3 (real area passthrough, pins through a hallucinated area, pins for the genuine empty area). Suite **272/272**.
+
+---
+
 ## 2026-07-16 — Basher: Mnemosyne presence is owned by the wade/ripple lifecycle (v4.7.73)
 
 Completes the incurable-dementia work. The principle: **we already know, from triggers, when a wade starts, when each ripple starts, and when we stop wading — so presence should be driven by those, never inferred from gmcp**, which `Creville's Legacy` fakes wholesale for the entire run.
