@@ -35,10 +35,17 @@ function ataxiaCheckForMissing()
     ataxia.settings.crushbash = false
   end
 
-  -- transmuteat gates the Monk gap-filler transmute (fire only at/below this HP% while sip
-  -- balance is down). New key, so saves from before it have nothing — backfill the default.
-  if ataxia.settings.sipping and ataxia.settings.sipping.transmuteat == nil then
-    ataxia.settings.sipping.transmuteat = 50
+  -- Monk gap-filler transmute thresholds: fire at/below transmuteat% while sip balance is down,
+  -- top back up to transmuteto%. Backfill when absent AND migrate the v4.7.70 defaults --
+  -- transmuteat 50 -> 70 (start covering earlier) and transmuteto 70 -> 90 (somewhere worth
+  -- going: firing at 70 and topping up to 70 would heal essentially nothing).
+  -- Rewriting rather than only backfilling is safe here: `ataxia setup sipping <key> <value>`
+  -- is advertised by the wizard but has no setter (the panel is display-only), so a stored
+  -- 50/70 can only be the old shipped default — it cannot be a deliberate choice.
+  local sip = ataxia.settings.sipping
+  if sip then
+    if sip.transmuteat == nil or sip.transmuteat == 50 then sip.transmuteat = 70 end
+    if sip.transmuteto == nil or sip.transmuteto == 70 then sip.transmuteto = 90 end
   end
 
   if not ataxia.settings.defences then

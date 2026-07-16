@@ -436,8 +436,8 @@ function ataxiaBasher_monkBashing2()
   -- to 90% on every single balance (the old behaviour) just burned the mana that Regeneration
   -- converts into health anyway, plus everything else that needs mana. Only fire in the window
   -- sipping cannot cover: sip balance DOWN and actually low on health.
-  --   transmuteat : hp% at/below which transmute may fire  (default 50)
-  --   transmuteto : hp% to top back up to                  (default 70)
+  --   transmuteat : hp% at/below which transmute may fire  (default 70)
+  --   transmuteto : hp% to top back up to                  (default 90)
   --   manause     : mp% floor we never spend past          (default 30)
   -- `sipbal == false` and NOT `not sipbal`: ataxia.vitals is reset to {} on login and only the
   -- sip triggers (balances/002,003) ever set it, so it is nil until the first sip of a session
@@ -445,8 +445,8 @@ function ataxiaBasher_monkBashing2()
   local sip = ataxia.settings.sipping or {}
   local maxhp, maxmp = ataxia.vitals.maxhp or 0, ataxia.vitals.maxmp or 0
   if ataxia.vitals.sipbal == false and maxhp > 0
-     and (ataxia.vitals.hp / maxhp * 100) <= (sip.transmuteat or 50) then
-    local xmute = math.ceil(maxhp * ((sip.transmuteto or 70) / 100))
+     and (ataxia.vitals.hp / maxhp * 100) <= (sip.transmuteat or 70) then
+    local xmute = math.ceil(maxhp * ((sip.transmuteto or 90) / 100))
     local mpl = ataxia.vitals.mp - (maxmp * ((sip.manause or 30) / 100))
     local hpl = xmute - ataxia.vitals.hp
     if hpl > 1 then

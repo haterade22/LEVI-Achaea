@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-07-16 — Basher: transmute earlier — fire at 70% health, top up to 90% (v4.7.82)
+
+- **`transmuteat` 50 → 70**: the Monk gap-filler transmute now starts covering at 70% health (while sip balance is down), rather than waiting until you're half dead.
+- **`transmuteto` 70 → 90**: raised alongside it out of necessity. `transmuteat` and `transmuteto` cannot both be 70 — you'd fire at 69% and heal back to 70%, i.e. heal nothing. 90% is where the pre-v4.7.70 code topped up to, so this restores that ceiling while keeping the sip-balance gate that stopped it burning mana every balance.
+- **Migrated, not just re-defaulted.** The values are serialized, and the backfill only fills `nil`, so changing the default alone would never reach an existing save. `ataxiaCheckForMissing` now rewrites the old shipped defaults (50→70, 70→90). Safe because `ataxia setup sipping <key> <value>` is advertised but has **no setter** — the panel is display-only — so a stored 50/70 can only be the old default, never a deliberate choice. A hand-tuned value (e.g. 65/85) is left untouched.
+- Aligned the rotation's inline fallbacks and the wizard's displayed defaults so all three sources agree — the class of drift that had the old code doing 90/15 while its comment claimed 75/45.
+
+Suite **281/281**.
+
+---
+
 ## 2026-07-16 — Basher: capture Ripplestrike/Inhibit + fix its phantom cooldown gate (v4.7.81)
 
 The Ripplestrike fire-line (`You quickly strike <mob> with the tips of your fingers, targeting specific nerves.`) wasn't captured — which surfaced a real bug in the v4.7.76 Monk rotation.

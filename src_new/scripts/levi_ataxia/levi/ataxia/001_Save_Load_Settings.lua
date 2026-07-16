@@ -502,8 +502,8 @@ function ataxia_defaultSettings()
 			-- Monk transmute (Kaido) is a gap-filler for when sip balance is DOWN: fire only at
 			-- or below transmuteat% health, top back up to transmuteto%, never spending mana
 			-- past the manause% floor. See ataxiaBasher_monkBashing2.
-			transmuteat = 50,
-			transmuteto = 70,
+			transmuteat = 70,
+			transmuteto = 90,
 			usemoss = true,
 		},
 		--Precaching herbs.
