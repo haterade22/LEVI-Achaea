@@ -694,7 +694,7 @@ function leviSetup.setupSipping(rest)
   row("aeonmana", (sip.aeonmana or 40) .. "%", "sip mana in aeon")
   row("manause", (sip.manause or 30) .. "%", "transmute mana floor")
   row("transmuteat", (sip.transmuteat or 70) .. "%", "transmute below this HP% (off sip bal)")
-  row("transmuteto", (sip.transmuteto or 90) .. "%", "transmute until HP%")
+  row("transmuteto", (sip.transmuteto or 99) .. "%", "transmute until HP%")
 
   cecho("\n\n  " .. V .. "Set a threshold:")
   cecho("\n  " .. HL .. "ataxia setup sipping <key> <value>")

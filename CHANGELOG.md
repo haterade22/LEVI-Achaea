@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-07-16 — Basher: transmute tops up to 99% (v4.7.83)
+
+- **`transmuteto` 90 → 99**. With `transmuteat` at 70, a gap-filler transmute now refills essentially to full rather than leaving you at 90%. Safe to push: the sip-balance gate means it only ever spends mana in the window server-side sipping can't cover, so a higher ceiling costs nothing while sip balance is up.
+- **The migration now covers every default this key has shipped with** — v4.7.70 shipped `transmuteto = 70` and v4.7.82 migrated it to `90`, so a save can legitimately hold either; both now move to `99`. A hand-tuned value is still left alone.
+- Default, the rotation's inline fallback, its doc comment, and the wizard display all updated together.
+- In practice at 12160 max health: drop to 69% with sip balance down → `transmute 3500` → back to ~98%.
+
+Suite **281/281**.
+
+---
+
 ## 2026-07-16 — Basher: transmute earlier — fire at 70% health, top up to 90% (v4.7.82)
 
 - **`transmuteat` 50 → 70**: the Monk gap-filler transmute now starts covering at 70% health (while sip balance is down), rather than waiting until you're half dead.

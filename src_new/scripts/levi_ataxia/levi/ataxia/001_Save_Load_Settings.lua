@@ -503,7 +503,7 @@ function ataxia_defaultSettings()
 			-- or below transmuteat% health, top back up to transmuteto%, never spending mana
 			-- past the manause% floor. See ataxiaBasher_monkBashing2.
 			transmuteat = 70,
-			transmuteto = 90,
+			transmuteto = 99,
 			usemoss = true,
 		},
 		--Precaching herbs.

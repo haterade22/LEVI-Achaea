@@ -42,10 +42,14 @@ function ataxiaCheckForMissing()
   -- Rewriting rather than only backfilling is safe here: `ataxia setup sipping <key> <value>`
   -- is advertised by the wizard but has no setter (the panel is display-only), so a stored
   -- 50/70 can only be the old shipped default — it cannot be a deliberate choice.
+  -- Migrate every default this key has shipped with, not just the newest: v4.7.70 shipped
+  -- transmuteto = 70 and v4.7.82 migrated it to 90, so a save can legitimately hold either.
   local sip = ataxia.settings.sipping
   if sip then
     if sip.transmuteat == nil or sip.transmuteat == 50 then sip.transmuteat = 70 end
-    if sip.transmuteto == nil or sip.transmuteto == 70 then sip.transmuteto = 90 end
+    if sip.transmuteto == nil or sip.transmuteto == 70 or sip.transmuteto == 90 then
+      sip.transmuteto = 99
+    end
   end
 
   if not ataxia.settings.defences then
