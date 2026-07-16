@@ -240,20 +240,39 @@ end
 function ataxiaBasher_mnemLeftMaybe()
   if not ataxiaBasher.inMnemosyne then return end
   if ataxiaTemp.mnemLeftTimer then return end -- already asking; don't spam SURVEY
+  -- Marks that WE asked, so the survey-reply triggers (351/352) only act on our own answer
+  -- and can't be fooled by unrelated "You are in ..." text.
+  ataxiaTemp.mnemSurveyPending = true
   send("survey", false)
   ataxiaTemp.mnemLeftTimer = tempTimer(2, [[ ataxiaBasher_mnemLeftConfirm() ]])
 end
 
--- Nothing claimed we are still in the tower inside the window -> we really did leave.
-function ataxiaBasher_mnemLeftConfirm()
-  ataxiaTemp.mnemLeftTimer = nil
+-- SURVEY named a REAL location (trigger 352): that is the only thing that takes us out of the
+-- Mnemosyne. The area can never do it -- the permanent-dementia boon fakes gmcp.Room.Info
+-- wholesale (area/num/exits/desc all a plausible real room), so SURVEY is the sole authority.
+function ataxiaBasher_mnemLeftFor(where)
+  if not ataxiaTemp.mnemSurveyPending then return end -- not our survey; ignore
+  ataxiaBasher_mnemStillHere() -- close the window; we have a definitive answer
+  ataxiaTemp.mnemSurveyPending = nil
   if not ataxiaBasher.inMnemosyne then return end
   ataxiaBasher.inMnemosyne = false
-  ataxiaEcho("Left Mnemosyne (SURVEY confirmed) — no-flee mode OFF.")
+  ataxiaEcho("Left Mnemosyne (SURVEY: " .. tostring(where) .. ") — no-flee mode OFF.")
+end
+
+-- Fallback only: the SURVEY answer never arrived (gagged, swallowed, lost). Trigger 352 is the
+-- normal way out. Without this a missed reply would strand the flag ON in the real world.
+function ataxiaBasher_mnemLeftConfirm()
+  ataxiaTemp.mnemLeftTimer = nil
+  ataxiaTemp.mnemSurveyPending = nil
+  if not ataxiaBasher.inMnemosyne then return end
+  ataxiaBasher.inMnemosyne = false
+  ataxiaEcho("Left Mnemosyne (no SURVEY reply) — no-flee mode OFF.")
 end
 
 -- SURVEY named the Mnemosyne (trigger 351): we are still inside, whatever the area claims.
+-- Also the "answer received" path — closes the window and consumes the pending ask.
 function ataxiaBasher_mnemStillHere()
+  ataxiaTemp.mnemSurveyPending = nil
   if ataxiaTemp.mnemLeftTimer then
     killTimer(ataxiaTemp.mnemLeftTimer)
     ataxiaTemp.mnemLeftTimer = nil

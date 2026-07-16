@@ -153,6 +153,16 @@ end
 function M.onRunEnd()
   bardWarmarch = false -- boons gone on a confirmed run-end
   bmShatteredStar = false -- boons gone on a confirmed run-end
+  -- The wade lifecycle brackets our presence in the tower, so the confirmed end is the
+  -- authoritative "we are out" -- never gmcp's area, which Creville's Legacy (incurable
+  -- dementia) can fake into a real place while we are still inside. Cleared here rather than
+  -- on the deferred maybe, so a mid-run message re-read cannot drop no-flee. Unconditional
+  -- (independent of telemetry), like the boon flags above.
+  if ataxiaBasher and ataxiaBasher.inMnemosyne then
+    ataxiaBasher.inMnemosyne = false
+    if ataxiaBasher_mnemStillHere then ataxiaBasher_mnemStillHere() end -- drop any pending ask
+    ataxiaEcho("Mnemosyne wade ended — no-flee mode OFF.")
+  end
   if M._inRun() then M.endRun() end
 end
 

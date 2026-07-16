@@ -35,3 +35,13 @@ patterns:
 ataxia.mnemosyne.onRunStart()
 bardWarmarch = false  -- boons reset each run
 bmShatteredStar = false  -- boons reset each run
+
+-- The wade lifecycle is the AUTHORITY on being in the tower -- this line and the confirmed
+-- run-end bracket it exactly. Do not infer it from gmcp: the boon "Creville's Legacy" (attack
+-- 20% faster, INCURABLE dementia, echoes 3x) fakes gmcp.Room.Info wholesale, so the area/num/
+-- exits can all name a real place while we are still inside. Set unconditionally (independent
+-- of telemetry), mirroring the boon flags above. SURVEY (351/352) re-syncs on demand.
+if ataxiaBasher and not ataxiaBasher.inMnemosyne then
+  ataxiaBasher.inMnemosyne = true
+  ataxiaEcho("Mnemosyne wade started — no-flee mode ON (shield instead of flee).")
+end

@@ -185,4 +185,33 @@ describe("Mnemosyne presence verification (dementia / stale flag)", function()
     expect(#mock.sent_commands).toBe(2)
   end)
 
+  -- Creville's Legacy (attack 20% faster, INCURABLE dementia) fakes gmcp.Room.Info wholesale,
+  -- so only a SURVEY naming a real place may take us out -- trigger 352 -> mnemLeftFor().
+  it("SURVEY naming a real place takes us out (trigger 352)", function()
+    baseline(); mock.reset()
+    ataxiaBasher.inMnemosyne = true
+    ataxiaBasher_mnemLeftMaybe()                  -- arms the ask
+    ataxiaBasher_mnemLeftFor("the Northern Ithmia")
+    expect(ataxiaBasher.inMnemosyne).toBeFalse()
+    expect(armedCount()).toBe(0)                  -- definitive answer closes the window
+  end)
+
+  -- The blast-radius guard: an unrelated "You are in ..." line must never eject us mid-climb.
+  it("ignores a survey answer we did not ask for", function()
+    baseline(); mock.reset()
+    ataxiaBasher.inMnemosyne = true               -- no mnemLeftMaybe() -> nothing pending
+    ataxiaBasher_mnemLeftFor("the Northern Ithmia")
+    expect(ataxiaBasher.inMnemosyne).toBeTrue()
+    expect(ataxiaBasher_isNoFleeArea("the Northern Ithmia")).toBeTrue()
+  end)
+
+  it("consumes the pending ask, so a stale reply cannot eject us later", function()
+    baseline(); mock.reset()
+    ataxiaBasher.inMnemosyne = true
+    ataxiaBasher_mnemLeftMaybe()
+    ataxiaBasher_mnemStillHere()                  -- 351 answered: still inside
+    ataxiaBasher_mnemLeftFor("the Northern Ithmia") -- a late/duplicate line
+    expect(ataxiaBasher.inMnemosyne).toBeTrue()
+  end)
+
 end)

@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-07-16 — Basher: the wade lifecycle + SURVEY own Mnemosyne presence (incurable dementia) (v4.7.72)
+
+Follow-up to v4.7.71, now that the cause is fully understood: the boon **Creville's Legacy** ("You attack 20% faster but you have incurable dementia", common, echoes 3x) makes dementia a **permanent condition of the run** — so this can never be cured or waited out, and every Mnemosyne system has to work through it.
+
+- **Dementia fakes `gmcp.Room.Info` wholesale.** Captured in a ripple: `area = "the Northern Ithmia"`, `num = 774`, `exits = {n=773, nw=797, sw=775, w=798}`, real `coords`/`map`/`desc`, `environment = "Forest"`. Not garbage — a *coherent, plausible real room*. GMCP is not a truth source in the tower, ever.
+- **Presence is now owned by the wade lifecycle**, which brackets it exactly: the run-start line sets `inMnemosyne`, and the *confirmed* `onRunEnd()` clears it (alongside the boon flags, and deliberately not on the deferred maybe, so a mid-run message re-read cannot drop no-flee). Both are unconditional — independent of telemetry.
+- **SURVEY is the re-sync authority** (free, and truthful through dementia). A non-empty area no longer clears anything by itself: it only *asks*. Trigger `351` keeps the flag; new trigger **`352`** clears it only when SURVEY names a *real* place. Gated on `ataxiaTemp.mnemSurveyPending`, so only the answer to **our** survey counts — an unrelated "You are in ..." line can never eject us mid-climb. The old timeout remains as a fallback for a lost reply.
+- **Auto-learn no longer pollutes real hunting lists.** It filed by `gmcp.Room.Info.area` with no Mnemosyne gate, so under dementia tower denizens were written into `targetList["the Northern Ithmia"]` — a genuine area list, persisted to disk. Now skipped entirely while in Mnemosyne (an instance whose denizens belong to no area).
+- Tests: 9 cases covering asks-not-assumes, no-flee held during the window, no SURVEY spam, 351 keeps / 352 clears, unsolicited-answer ignored, pending-ask consumed, and the timeout fallback. Suite **266/266**.
+- **Still open:** whether the fake room ids are *stable per real room*. If dementia maps each tower room to a consistent fake, the explorer's graph is topologically the real 4x4 and the sweep works as-is now that it can start. If the fake is re-rolled per look, the ripple map accretes phantom rooms and the sweep needs a different anchor.
+
+---
+
 ## 2026-07-16 — Basher: Mnemosyne presence is SURVEY-verified (dementia + stale no-flee flag) (v4.7.71)
 
 Dementia hallucinates a real location while you are still in the tower, which broke every Mnemosyne system at once — and the same flag could be stale-**on** out in the world.

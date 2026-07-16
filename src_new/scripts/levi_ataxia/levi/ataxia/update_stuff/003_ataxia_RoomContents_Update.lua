@@ -88,8 +88,13 @@ function ataxia_RoomContents_Update(event)
 			end
 		end
 
-		-- Auto-learn: when basher is active, add new denizens to this area's targetList
-		if ataxiaBasher.enabled and ataxiaBasher.autoLearn and gmcp.Room and gmcp.Room.Info then
+		-- Auto-learn: when basher is active, add new denizens to this area's targetList.
+		-- NEVER while in Mnemosyne: it is an instance, so its denizens belong to no real area's
+		-- list -- and the permanent-dementia boon makes gmcp report a hallucinated REAL area
+		-- (e.g. "the Northern Ithmia"), so auto-learning there would file tower mobs into a
+		-- genuine hunting list and persist it to disk. inMnemosyne is SURVEY-verified.
+		if ataxiaBasher.enabled and ataxiaBasher.autoLearn and gmcp.Room and gmcp.Room.Info
+		   and not ataxiaBasher.inMnemosyne then
 			local area = gmcp.Room.Info.area
 			ataxiaBasher.targetList = ataxiaBasher.targetList or {}
 			if not ataxiaBasher.targetList[area] then
