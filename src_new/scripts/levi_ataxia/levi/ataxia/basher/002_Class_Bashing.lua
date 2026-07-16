@@ -431,18 +431,33 @@ function ataxiaBasher_monkBashing2()
   local tekura = ataxia.vitals.stance and true or false
   local shikudo = not tekura and ataxia.vitals.form ~= nil
 
-   --Transmute logic; transmute to 75%, keep mana above 45%.
-	local xmute = math.ceil(ataxia.vitals.maxhp * 0.90)
-	local mpl = (ataxia.vitals.mp - (ataxia.vitals.maxmp * 0.15))
-	local hpl = (xmute - ataxia.vitals.hp)
-	local tomute = 0
-
-	if hpl > 1 then
-		tomute = (hpl < mpl and hpl or mpl)
-		if tomute > 100 then
-			command = command.."transmute "..tomute..ataxia.settings.separator
-		end
-	end
+  -- Transmute is a GAP-FILLER, not a top-up. Health sipping is server-side (CURING SIPHEALTH,
+  -- default 80), so while sip balance is UP the server is already healing us -- transmuting back
+  -- to 90% on every single balance (the old behaviour) just burned the mana that Regeneration
+  -- converts into health anyway, plus everything else that needs mana. Only fire in the window
+  -- sipping cannot cover: sip balance DOWN and actually low on health.
+  --   transmuteat : hp% at/below which transmute may fire  (default 50)
+  --   transmuteto : hp% to top back up to                  (default 70)
+  --   manause     : mp% floor we never spend past          (default 30)
+  -- `sipbal == false` and NOT `not sipbal`: ataxia.vitals is reset to {} on login and only the
+  -- sip triggers (balances/002,003) ever set it, so it is nil until the first sip of a session
+  -- -- nil must not read as "off balance" or we would transmute with sip balance in hand.
+  local sip = ataxia.settings.sipping or {}
+  local maxhp, maxmp = ataxia.vitals.maxhp or 0, ataxia.vitals.maxmp or 0
+  if ataxia.vitals.sipbal == false and maxhp > 0
+     and (ataxia.vitals.hp / maxhp * 100) <= (sip.transmuteat or 50) then
+    local xmute = math.ceil(maxhp * ((sip.transmuteto or 70) / 100))
+    local mpl = ataxia.vitals.mp - (maxmp * ((sip.manause or 30) / 100))
+    local hpl = xmute - ataxia.vitals.hp
+    if hpl > 1 then
+      -- floor(): the mana floor is fractional, so the min can be too, and `transmute 1234.5`
+      -- is not a valid command.
+      local tomute = math.floor(hpl < mpl and hpl or mpl)
+      if tomute > 100 then
+        command = command.."transmute "..tomute..ataxia.settings.separator
+      end
+    end
+  end
 
   -- Monk NEVER spends rage to break a denizen shield: both specs carry a free shield breaker
   -- (Shikudo `shatter` -- uniquely usable in the flow of ANY form -- and Tekura `rhk`), so the

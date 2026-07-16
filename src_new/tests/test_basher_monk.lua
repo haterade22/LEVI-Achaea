@@ -9,9 +9,12 @@ require("mock_mudlet")
 -- Globals the Monk bashing path reads at call time.
 target = "manticore"
 ataxia = {
-  settings = { separator = ";", crushbash = false },
-  -- hp == maxhp so the transmute preamble stays out of the assembled command.
-  vitals = { form = "Willow", kata = 0, stance = false, rage = 100,
+  settings = {
+    separator = ";", crushbash = false,
+    sipping = { transmuteat = 50, transmuteto = 70, manause = 30 },
+  },
+  -- sipbal nil + hp == maxhp keeps the transmute preamble out of the assembled command.
+  vitals = { form = "Willow", kata = 0, stance = false, rage = 100, sipbal = nil,
              hp = 5000, maxhp = 5000, mp = 5000, maxmp = 5000 },
 }
 ataxiaBasher = {
@@ -34,7 +37,11 @@ local function has(cmd, needle) return cmd:find(needle, 1, true) ~= nil end
 local function reset()
   ataxia.vitals.form, ataxia.vitals.kata, ataxia.vitals.stance = "Willow", 0, false
   ataxia.vitals.rage = 100
+  ataxia.vitals.sipbal = nil
+  ataxia.vitals.hp, ataxia.vitals.maxhp = 5000, 5000
+  ataxia.vitals.mp, ataxia.vitals.maxmp = 5000, 5000
   ataxia.settings.crushbash = false
+  ataxia.settings.sipping = { transmuteat = 50, transmuteto = 70, manause = 30 }
   ataxiaBasher.shielded, ataxiaBasher.rageraze = false, false
 end
 
@@ -72,6 +79,48 @@ describe("ataxiaBasher_monkBashing2 — never spends rage on denizen shields", f
     expect(has(ataxiaBasher_monkBashing2(), "BRAGE")).toBeFalse()
     reset()
     expect(has(ataxiaBasher_monkBashing2(), "BRAGE")).toBeTrue()
+  end)
+end)
+
+-- Transmute is a gap-filler for the window server-side sipping cannot cover: sip balance
+-- DOWN and actually low. Firing it every balance to top up just burns the mana Regeneration
+-- converts back into health.
+describe("ataxiaBasher_monkBashing2 — transmute is a gap-filler", function()
+  it("does not transmute while sip balance is UP, even at low health", function()
+    reset(); ataxia.vitals.sipbal = true; ataxia.vitals.hp = 1000 -- 20%
+    expect(has(ataxiaBasher_monkBashing2(), "transmute")).toBeFalse()
+  end)
+
+  -- ataxia.vitals = {} on login and only the sip triggers set sipbal, so it is nil until the
+  -- first sip. nil must NOT read as "off balance" (`== false`, not `not sipbal`).
+  it("does not transmute when sipbal is nil (no sip yet this session)", function()
+    reset(); ataxia.vitals.sipbal = nil; ataxia.vitals.hp = 1000
+    expect(has(ataxiaBasher_monkBashing2(), "transmute")).toBeFalse()
+  end)
+
+  it("does not transmute off sip balance while above transmuteat", function()
+    reset(); ataxia.vitals.sipbal = false; ataxia.vitals.hp = 3000 -- 60% > 50%
+    expect(has(ataxiaBasher_monkBashing2(), "transmute")).toBeFalse()
+  end)
+
+  it("transmutes off sip balance at/below transmuteat, topping up to transmuteto", function()
+    reset(); ataxia.vitals.sipbal = false; ataxia.vitals.hp = 2000 -- 40% <= 50%
+    -- target ceil(5000*0.70)=3500; deficit 1500; spendable 5000-1500=3500 -> min = 1500
+    expect(has(ataxiaBasher_monkBashing2(), "transmute 1500;")).toBeTrue()
+  end)
+
+  it("never spends mana past the manause floor", function()
+    reset(); ataxia.vitals.sipbal = false; ataxia.vitals.hp = 2000
+    ataxia.vitals.mp = 1800 -- spendable 1800-1500=300, less than the 1500 deficit
+    expect(has(ataxiaBasher_monkBashing2(), "transmute 300;")).toBeTrue()
+  end)
+
+  it("emits an integer amount (the mana floor can be fractional)", function()
+    reset(); ataxia.vitals.sipbal = false; ataxia.vitals.hp = 2000
+    ataxia.vitals.maxmp, ataxia.vitals.mp = 5001, 1800 -- floor 1500.3 -> spendable 299.7
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "transmute 299;")).toBeTrue()
+    expect(cmd:find("transmute %d+%.")).toBeNil() -- never a fractional command
   end)
 end)
 

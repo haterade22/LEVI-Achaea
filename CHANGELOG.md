@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-07-16 — Basher: Monk transmute is now a gap-filler, not a constant mana drain (v4.7.70)
+
+The Monk bash prepended a transmute to **every** attack, topping health back to 90% of max — burning mana non-stop for health the server's own curing was already sipping back, and starving Regeneration (which converts that same mana into health).
+
+- **New behaviour.** Transmute fires only in the window server-side sipping cannot cover: **sip balance DOWN** (`ataxia.vitals.sipbal == false`) **and** health at or below **`transmuteat`** (new, default **50%**). It then tops up to **`transmuteto`** (70%), never spending mana past the **`manause`** floor (30%). Health sipping itself is server-side (`CURING SIPHEALTH`, 80) — LEVI never decided it.
+- **Wired up settings that were dead.** `sipping.transmuteto` (70) and `sipping.manause` (30) already existed and were advertised in `ataxia setup sipping`, but **nothing read them** — the code hardcoded 90%/15%, while its comment claimed 75%/45%. Three sets of numbers, none agreeing. All three values now come from config; new `sipping.transmuteat` defaulted and backfilled for existing saves.
+- **nil-safety:** the gate tests `sipbal == false`, not `not sipbal`. `ataxia.vitals` is reset to `{}` on login and only `balances/002,003` ever set `sipbal`, so it is **nil until the first sip of a session** — nil must not read as "off balance", or we would transmute with sip balance in hand.
+- **Latent bug fixed:** the mana floor is fractional, so the transmute amount could be too — `transmute 1234.5` is not a valid command. Now floored.
+- Tests: 6 cases (sip-up, sipbal-nil, above threshold, fires + tops to `transmuteto`, mana floor respected, integer output). Suite **257/257**.
+- **Known gap (pre-existing):** `ataxia setup sipping <key> <value>` is advertised by the wizard, but no code assigns `ataxia.settings.sipping[key]` — the sipping panel is display-only. Tune via Lua for now.
+
+---
+
 ## 2026-07-16 — Basher: stop the wasted transition after every Shikudo form change + capture Clumsy (v4.7.69)
 
 Live-log follow-up to v4.7.68, which fixed the wrong half of the problem.

@@ -35,6 +35,12 @@ function ataxiaCheckForMissing()
     ataxia.settings.crushbash = false
   end
 
+  -- transmuteat gates the Monk gap-filler transmute (fire only at/below this HP% while sip
+  -- balance is down). New key, so saves from before it have nothing — backfill the default.
+  if ataxia.settings.sipping and ataxia.settings.sipping.transmuteat == nil then
+    ataxia.settings.sipping.transmuteat = 50
+  end
+
   if not ataxia.settings.defences then
     ataxia.settings.defences = { current = "", defup = {}, keepup = {} }
     ataxiaEcho("Defence profiles not found. Initialised empty profiles.")
