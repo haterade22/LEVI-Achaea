@@ -36,7 +36,18 @@ local M = ataxia.mnemosyne
 
 -- run: local run counter (bumped by startRun). claims/offers/affixes: flat
 -- per-record lists tagged with `run`. library: [affixName] = description.
-M.history = M.history or { run = 0, claims = {}, offers = {}, affixes = {}, library = {} }
+M.history = M.history or { run = 0, claims = {}, offers = {}, affixes = {}, library = {}, boonLibrary = {} }
+
+-- Rarity -> colour, used wherever boons are shown (the BOONS-list annotation, reports).
+-- Names verified against misc_scripts/007_Custom_Colour_Table (which wholesale-replaces
+-- color_table -- there is no ansi_* namespace here).
+M.RARITY_COLOUR = {
+  common = "grey", uncommon = "green", rare = "cyan",
+  legendary = "orange", mythical = "magenta",
+}
+function M.rarityColour(r)
+  return M.RARITY_COLOUR[tostring(r or ""):lower()] or "white"
+end
 
 -- ---------------------------------------------------------------------------
 -- Persistence (guarded so tests / bare environments don't error)
@@ -56,6 +67,7 @@ function M._historyLoad()
   M.history.offers = M.history.offers or {}
   M.history.affixes = M.history.affixes or {}
   M.history.library = M.history.library or {}
+  M.history.boonLibrary = M.history.boonLibrary or {} -- name -> {description, rarity, maxEchoes}
 end
 
 function M._historySave()
@@ -100,9 +112,37 @@ function M._recordOffers(list, ripple)
         run = M.history.run, ripple = ripple, name = b.name,
         description = b.description or "", rarity = b.rarity or "",
       })
+      M._learnBoon(b.name, b.description, b.rarity) -- all-time catalogue (#boonLibrary)
     end
   end
   M._historySave()
+end
+
+-- All-time boon catalogue: name -> { description, rarity, maxEchoes }.
+--
+-- Why it exists: the OFFER screen tells you what a boon does ("Iron Throat: Gain 25%
+-- resistance to asphyxiation damage.") but the BOONS list -- the one you read to see what you
+-- already own -- is only `Boon | Echoes | Rarity`, with no description at all. Learning every
+-- boon we are ever offered lets us join the two and annotate BOONS with what each one does.
+--
+-- Merges rather than overwrites: the offer screen supplies the description, the BOONS list
+-- supplies rarity, and the BOON <name> detail screen supplies maxEchoes -- each fills in the
+-- fields it knows and never blanks a field another source already filled.
+function M._learnBoon(name, description, rarity, maxEchoes)
+  if type(name) ~= "string" or name == "" then return end
+  M.history.boonLibrary = M.history.boonLibrary or {}
+  local rec = M.history.boonLibrary[name] or {}
+  if type(description) == "string" and description ~= "" then rec.description = description end
+  if type(rarity) == "string" and rarity ~= "" then rec.rarity = rarity:lower() end
+  if tonumber(maxEchoes) then rec.maxEchoes = tonumber(maxEchoes) end
+  M.history.boonLibrary[name] = rec
+  return rec
+end
+
+-- What do we know about `name`? nil when we have never been offered it.
+function M.boonInfo(name)
+  if type(name) ~= "string" then return nil end
+  return (M.history.boonLibrary or {})[name]
 end
 
 -- Record one claimed boon; echoes = how many times we've claimed it this run.

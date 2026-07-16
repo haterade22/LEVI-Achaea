@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-07-16 — Mnemosyne: boon library — see what your boons actually DO (v4.7.77)
+
+The BOONS list tells you what you own but never what any of it does — it's only `Boon | Echoes | Rarity`. Only the *offer* screen carries descriptions, and once you claim, that text is gone. So we learn every boon we're ever offered and join the two.
+
+- **New all-time boon catalogue** `ataxia.mnemosyne.history.boonLibrary` — `name -> { description, rarity, maxEchoes }`, persisted with the rest of the local history. Populated automatically from every offer screen (`_recordOffers` already parsed `name`/`description`; it now also calls `_learnBoon`). **Merges rather than overwrites**, because each source knows different fields: the offer screen supplies the description, the BOONS list supplies rarity, and the `BOON <name>` detail screen supplies maxEchoes — none may blank a field another filled.
+- **BOONS rows are now annotated** (`mnemosyne/013_Boons_List_Row`): each `<name>  <echoes>  <rarity>` row is coloured by rarity and followed by what that boon does, pulled from the library. Rows you've never been offered say so explicitly rather than printing a confusing blank. Rarity back-fills into the library from these rows. Pattern is anchored on the rarity word, verified to match every real row (including multi-word names like `White Heaven's Shattered Star`) and to reject the header, prose, offer lines, and `BOON CLAIM ...`.
+- **Rarity colours** `ataxia.mnemosyne.RARITY_COLOUR` / `rarityColour(r)` — common grey, uncommon green, rare cyan, legendary orange, mythical magenta. Names verified against `misc_scripts/007_Custom_Colour_Table` (which wholesale-replaces `color_table` — no `ansi_*` namespace).
+- New `ataxia.mnemosyne.boonInfo(name)` for anything that wants to reason about a boon.
+- Suite **279/279**.
+
+Note: the catalogue only knows boons this character has been *offered* since the update — it fills in as you climb.
+
+---
+
 ## 2026-07-16 — Basher: Monk rotation — spend Inhibit where healing actually happens (v4.7.76)
 
 Delivers the parked Ripplestrike/Inhibit work, now that the trigger condition is known: the wade affix **Sanguine Restoration** — *"Pools of blood shall heal nearby denizens."*
