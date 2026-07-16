@@ -443,15 +443,15 @@ groups:
         \ = \"overwhelm \"..target,\n      large = \"dragonblaze \"..target,\n      raze = \"melt \"..target,\n    },\n  \
         \  \n    [\"Golden Dragon\"] = {\n      small = \"overwhelm \"..target,\n      large = \"psiblast \"..target,\n  \
         \    raze = \"psishatter \"..target,\n    },   \n\t}\nend\n\nfunction ataxiaBasher_elevatemob(mob)\n\tlocal area =\
-        \ gmcp.Room.Info.area\n\ttable.remove(ataxiaBasher.targetList[area], table.index_of(ataxiaBasher.targetList[area],\
+        \ ataxiaBasher_areaKey()\n\ttable.remove(ataxiaBasher.targetList[area], table.index_of(ataxiaBasher.targetList[area],\
         \ mob))\n\ttable.insert(ataxiaBasher.targetList[area], 1, mob)\n\tataxiaEcho(\"Elevated priority of \"..mob..\".\"\
-        )\n\tataxia_saveSettings(false)\nend\n\nfunction ataxiaBasher_addmob(mob)\n\tlocal area = gmcp.Room.Info.area\n\t\
+        )\n\tataxia_saveSettings(false)\nend\n\nfunction ataxiaBasher_addmob(mob)\n\tlocal area = ataxiaBasher_areaKey()\n\t\
         if not table.contains(ataxiaBasher.targetList[area], mob) then\n\t\ttable.insert(ataxiaBasher.targetList[area], mob)\n\
-        \t\tataxiaEcho(\"Added \"..mob..\" to \"..area..\"'s target list.\")\n\telse\n\t\tataxiaEcho(\"That mob is already\
-        \ on the list.\")\n\tend\n\tataxia_saveSettings(false)\nend\n\nfunction ataxiaBasher_remmob(mob)\n\tlocal area = gmcp.Room.Info.area\n\
+        \t\tataxiaEcho(\"Added \"..mob..\" to \"..(area ~= \"\" and area or \"the Mnemosyne\")..\"'s target list.\")\n\telse\n\t\tataxiaEcho(\"That mob is already\
+        \ on the list.\")\n\tend\n\tataxia_saveSettings(false)\nend\n\nfunction ataxiaBasher_remmob(mob)\n\tlocal area = ataxiaBasher_areaKey()\n\
         \tif table.contains(ataxiaBasher.targetList[area], mob) then\n\t\tfor i,v in pairs(ataxiaBasher.targetList[area])\
         \ do\n\t\t\tif v == mob then\n\t\t\t\ttable.remove(ataxiaBasher.targetList[area], i)\n\t\t\t\tbreak\n\t\t\tend\n\t\
-        \tend\n\t\tataxiaEcho(\"Removed \"..mob..\" from \"..area..\"'s target list.\")\n\telse\n\t\tataxiaEcho(\"That mob\
+        \tend\n\t\tataxiaEcho(\"Removed \"..mob..\" from \"..(area ~= \"\" and area or \"the Mnemosyne\")..\"'s target list.\")\n\telse\n\t\tataxiaEcho(\"That mob\
         \ is not on the list.\")\n\tend\n\tataxia_saveSettings(false)\nend\n\nfunction ataxiaBasher_ignoremob(mob)\n\tif not\
         \ table.contains(ataxiaBasher.mobIgnore, mob) then\n\t\ttable.insert(ataxiaBasher.mobIgnore, mob)\n\t\tataxiaEcho(\"\
         Added \"..mob..\" to ignore list.\")\n\telse\n\t\tataxiaEcho(\"That mob is already on the list.\")\n\tend\n\tataxia_saveSettings(false)\n\
@@ -703,7 +703,7 @@ groups:
       - name: Limb
         directory: levi_ataxia/levi/levi_scripts/limb
   script: "ataxia = ataxia or {}\nataxiaTables = ataxiaTables or {}\nataxiaTemp = ataxiaTemp or {}\nataxiaTemp.addedHerbID\
-    \ = 1\nataxiaTemp.removedHerbID = 2\nataxiagui = ataxiagui or {}\nataxiaVersion = \"4.7.78\"\t\t\t\t\t\t--last was 4.3\n\
+    \ = 1\nataxiaTemp.removedHerbID = 2\nataxiagui = ataxiagui or {}\nataxiaVersion = \"4.7.79\"\t\t\t\t\t\t--last was 4.3\n\
     muteList = muteList or {}\n\nataxiaTables.limbData = ataxiaTables.limbData or {}\nataxiaTables.limbTimers = ataxiaTables.limbTimers or {}\nataxiaTables.fractureTimers = ataxiaTables.fractureTimers\
     \ or {}\n\nataxia.defences = ataxia.defences or {}\nataxia.afflictions = ataxia.afflictions or\
     \ {}\nataxia.vitals = ataxia.vitals or {}\n\nataxia.bals = ataxia.bals or {}\nataxia.bals.get = {\"bal\", \"eq\"}\nataxia.bals.used = ataxia.bals.used or\

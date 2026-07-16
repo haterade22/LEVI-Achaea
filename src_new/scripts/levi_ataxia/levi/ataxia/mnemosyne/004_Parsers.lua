@@ -362,8 +362,13 @@ end
 
 -- "As the Mnemosyne stretches ever on... you see flickers of power..."
 -- Content sits between two dividers and ends at "BOON CLAIM ...".
+-- NOT gated on _inRun(). The boon LIBRARY is local data, but _inRun() = _auto() and run.active,
+-- and _auto() = cfg().enabled and _hasToken() -- and the shipped default is reporting disabled
+-- with no token. Gating the whole handler meant the catalogue never learned a single description
+-- for anyone not running the remote tracker, i.e. for the default install: every BOONS row then
+-- printed "no description learned yet" forever. So: always capture and learn locally; gate only
+-- the telemetry POST below.
 function M.onBoonsOffered()
-  if not M._inRun() then return end
   local seenDash = false
   M._captureLines({
     timeout = 3,
@@ -379,13 +384,22 @@ function M.onBoonsOffered()
     end,
     onDone = function(lines)
       local list = M._parseNamedBlock(lines)
-      if #list > 0 then
-        -- Remember canonical names so a later BOON CLAIM can be reported
-        -- with the exact spelling the game used.
-        M.run.lastOffered = {}
-        for _, b in ipairs(list) do table.insert(M.run.lastOffered, b.name) end
-        M._reportBoonsOfferedEnriched(list)
+      if #list == 0 then return end
+
+      -- Local catalogue FIRST and unconditionally: the offer screen is the only place a boon's
+      -- description is ever shown, so if we don't take it here it is gone the moment you claim.
+      if M._learnBoon then
+        for _, b in ipairs(list) do M._learnBoon(b.name, b.description) end
+        M._historySave()
       end
+
+      -- Everything below is telemetry.
+      if not M._inRun() then return end
+      -- Remember canonical names so a later BOON CLAIM can be reported
+      -- with the exact spelling the game used.
+      M.run.lastOffered = {}
+      for _, b in ipairs(list) do table.insert(M.run.lastOffered, b.name) end
+      M._reportBoonsOfferedEnriched(list)
     end,
   })
 end

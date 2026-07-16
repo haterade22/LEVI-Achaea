@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-07-16 — Basher: finish the areaKey migration for real + fix the boon library (v4.7.79)
+
+An adversarial deep review (21 findings raised, 11 confirmed, 10 refuted) caught that the areaKey migration was **still** incomplete after two "final" sweeps — and that the v4.7.77 boon library never worked at all on a default install.
+
+**Why the sweeps kept missing sites:** they grepped `targetList[gmcp...`, which only finds *direct* indexing. Every site doing `local area = gmcp.Room.Info.area` and then `targetList[area]` was invisible — as was all of `_groups.yaml`, whose inline Lua isn't a `.lua` file.
+
+- **CRITICAL — `340_Slain.lua:56`**: the single highest-traffic `targetList` writer (every kill) still keyed on the raw area. Under dementia it created a bogus `targetList["the Northern Ithmia"]`, filed tower denizens into a genuine hunting list, and disagreed with `search_targets` (which reads `""`). The bogus entry also made `ataxiaBasher_areabash()`'s `if targetList[curArea]` truthy.
+- **HIGH — `_groups.yaml` inline `ataxiaBasher_addmob` / `elevatemob` / `remmob`**: the canonical write path, called from `340_Slain` on every kill. Missed by *both* prior sweeps because `_groups.yaml` holds embedded Lua. This also created a read/write split: `bash room` listed `targetList[areaKey()]` while its own `[E]`/`[R]` links mutated `targetList[<fake area>]` — clicking `[R]` said "not on the list", and `[E]` called `table.remove(t, nil)` → **error**. Echoes now name the tower instead of printing `"Added X to 's target list."`.
+- **MEDIUM — `001_Bashing_Functions.lua:547`** (Blood Maiden cloak): a missed consumer *in the file the migration edited*. `targetCount` stayed 0 in Mnemosyne, so bloodshield never fired.
+- **LOW — `007_Mob_Damage_DB.lua:99`**: hits recorded against the hallucinated area. Also `or "Unknown"` never fired for the tower — `""` is truthy in Lua — so the empty key now gets a real label.
+
+**Boon library (v4.7.77) — it was dead on arrival:**
+- **`onBoonsOffered` was gated on `_inRun()`**, which requires the *remote tracker* enabled **and** tokened (`_auto() = cfg().enabled and _hasToken()`; the shipped default is `enabled = false`). So on a default install the catalogue never learned a single description, and every BOONS row printed the "not learned yet" fallback — forever, with a promise that could never come true. Learning is local data, so it now happens **before** the gate; only the telemetry POST stays gated.
+- **`_learnBoon` never persisted** — every other `_historySave()` caller sits behind a telemetry gate, so rarity back-filled from the BOONS list died with the session. New debounced `_historySaveSoon()` (a BOONS list calls `_learnBoon` once per row; this coalesces 30 writes into one).
+- **The fallback line is gone** — unknown boons are simply rarity-coloured with no annotation, instead of doubling a 30-row list with placeholders.
+
+Suite **279/279**.
+
+---
+
 ## 2026-07-16 — Basher: finish the areaKey migration — aliases + triggers (v4.7.78)
 
 v4.7.74 introduced `ataxiaBasher_areaKey()` but only converted the **scripts**. Everything else still read `gmcp.Room.Info.area` directly — which the incurable-dementia boon fakes — so half the system was keyed on a hallucinated area while the other half used `""`. The two never agreed.

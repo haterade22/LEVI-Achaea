@@ -544,8 +544,12 @@ function ataxiaBasher_assembleAttack()
   -- Cooldown gate: only include in command once per 3s to avoid spamming EQ with pre-queuing
   if ataxiaBasher.bloodMaiden and (ataxiaTemp.bloodshieldReady or ataxiaTemp.bloodshieldActive)
      and not ataxiaTemp.bloodshieldCooldown then
-    local area = gmcp.Room.Info and gmcp.Room.Info.area
-    local targets = area and ataxiaBasher.targetList[area]
+    -- areaKey(), not gmcp's area: under the incurable-dementia boon gmcp names a hallucinated
+    -- real area, so this would read that area's list (or nil) instead of the tower's, never
+    -- match a tower denizen, and leave targetCount at 0 -- bloodshield would never fire in
+    -- Mnemosyne. areaKey never returns nil, so the `area and` guard is gone with it.
+    local area = ataxiaBasher_areaKey()
+    local targets = ataxiaBasher.targetList[area]
     local targetCount = 0
     local hasBoss = false
     local bosses = ataxiaBasher.bloodMaidenBosses or {}

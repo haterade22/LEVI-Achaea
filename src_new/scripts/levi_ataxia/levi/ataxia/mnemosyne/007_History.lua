@@ -76,6 +76,20 @@ function M._historySave()
   pcall(table.save, fn, M.history)
 end
 
+-- Debounced save. A BOONS list calls _learnBoon once PER ROW (30+ rows is normal), and a
+-- table.save of the whole history per row would be absurd -- coalesce to one write next tick.
+-- Without this the rarity back-filled from the BOONS list is purely in-memory and dies with
+-- the session, since every other _historySave caller sits behind a telemetry gate.
+function M._historySaveSoon()
+  if M._histSavePending then return end
+  M._histSavePending = true
+  if type(tempTimer) ~= "function" then M._histSavePending = nil; return M._historySave() end
+  tempTimer(0, function()
+    M._histSavePending = nil
+    M._historySave()
+  end)
+end
+
 function M._quiet()
   return M._cfg and M._cfg().quiet == true
 end

@@ -47,6 +47,10 @@ if not (mnem and mnem._learnBoon) then return end
 
 name = name:gsub("%s+$", "")
 local rec = mnem._learnBoon(name, nil, rarity) or {}
+-- _learnBoon only mutates the in-memory table; every other _historySave caller sits behind a
+-- telemetry gate, so without this the back-filled rarity would die with the session. Debounced,
+-- because this trigger fires once per row of the list.
+if mnem._historySaveSoon then mnem._historySaveSoon() end
 
 local colour = mnem.rarityColour and mnem.rarityColour(rarity) or "white"
 
@@ -55,14 +59,12 @@ if selectString and fg and resetFormat and type(line) == "string" and line ~= ""
   pcall(function() selectString(line, 1); fg(colour); resetFormat() end)
 end
 
--- Then say what it does. Unknown = we have never been offered it (so never saw a
--- description); say so rather than printing a confusing blank.
-if cecho then
-  local desc = rec.description
+-- Then say what it does -- but ONLY if we actually know. A boon is only learned when its offer
+-- screen goes by, so early on most rows are unknown; printing a placeholder under every one of
+-- them would double the list's length and bury the table it is annotating. Silence is the
+-- honest default: the row is still rarity-coloured, and the description appears once learned.
+local desc = rec.description
+if cecho and desc and desc ~= "" then
   local echoStr = (echoes and echoes > 1) and (" <grey>x" .. echoes) or ""
-  if desc and desc ~= "" then
-    pcall(cecho, "\n     <" .. colour .. ">|<grey> " .. desc .. echoStr)
-  else
-    pcall(cecho, "\n     <" .. colour .. ">|<grey> (no description learned yet -- seen on an offer screen it will be recorded)" .. echoStr)
-  end
+  pcall(cecho, "\n     <" .. colour .. ">|<grey> " .. desc .. echoStr)
 end

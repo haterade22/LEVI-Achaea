@@ -53,7 +53,12 @@ if type(target) == "number" and ataxiaBasher.enabled then
 end
 
 if ataxiaBasher.enabled and matches[2] then
-	local area = gmcp.Room.Info.area
+	-- ataxiaBasher_areaKey(), never gmcp's area: this is the highest-traffic targetList writer
+	-- (every kill), and the Mnemosyne boon "Creville's Legacy" (incurable dementia) makes gmcp
+	-- name a hallucinated REAL area for the whole climb. Keying here on that would create a bogus
+	-- targetList["the Northern Ithmia"], file tower denizens into a genuine hunting list, and
+	-- disagree with search_targets (which reads the "" key) -- so nothing would ever be targeted.
+	local area = ataxiaBasher_areaKey()
 	ataxiaBasher.targetList = ataxiaBasher.targetList or {}
 	if not ataxiaBasher.targetList[area] then
 		ataxiaBasher.targetList[area] = {}

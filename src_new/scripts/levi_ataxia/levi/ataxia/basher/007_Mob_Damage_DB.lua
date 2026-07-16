@@ -96,7 +96,12 @@ function ataxia.data.db.recordMobDamage(amount)
   local statName, statValue = ataxia.data.db.getPrimaryStat()
   local stat = statName .. " " .. statValue
   local mob = secondTarget
-  local area = gmcp.Room.Info.area or "Unknown"
+  -- areaKey(), not gmcp's area: under the Mnemosyne "Creville's Legacy" boon (incurable
+  -- dementia) gmcp names a hallucinated real area, so tower hits would be recorded against a
+  -- genuine area and be indistinguishable from real data. Note `or "Unknown"` never fired for
+  -- the tower anyway -- "" is truthy in Lua -- so label the empty key properly here.
+  local area = ataxiaBasher_areaKey and ataxiaBasher_areaKey() or (gmcp.Room.Info.area or "Unknown")
+  if area == "" then area = ataxiaBasher.inMnemosyne and "the Mnemosyne" or "Unknown" end
 
   -- Check if we already have a record for this class/stat/mob combo
   local existing = db:fetch(ataxia.data.db.mobdmgdb.hits,
