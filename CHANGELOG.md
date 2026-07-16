@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-07-16 — Basher: capture Ripplestrike/Inhibit + fix its phantom cooldown gate (v4.7.81)
+
+The Ripplestrike fire-line (`You quickly strike <mob> with the tips of your fingers, targeting specific nerves.`) wasn't captured — which surfaced a real bug in the v4.7.76 Monk rotation.
+
+- **Ripplestrike had NO cooldown tracking.** `ataxiaBasher_monkBattlerage` gated on `battleRage_Timers.specialafflict` — **which nothing ever sets**. The shared fire-line triggers (`330`/`331`/`332`) only cover `small`/`large`/`special`, so that gate was permanently `false` → with healing up, RPST re-fired on *every* attack, burning 25 rage against a 27s cooldown it couldn't see. Now gated on a reload-safe **timestamp** (`ataxiaTemp.monkRipplestrikeReadyAt`) stamped by the real fire, matching how Headstrike/Nerveslash already work.
+- **New trigger `023_Denizen_Inhibit_Applied`** — sets **Inhibit** (9s, mob cannot heal) on the current target, stamps the 27s cooldown, and gives it the standard line-highlight + `(BR):` echo (orange-red) that charm/recklessness/aeon/weakness/stun/clumsy already had. `inhibit.apply` in `ataxiaBasher_BR_AFFS` was the last `nil` among the hit-prevention/burst afflictions.
+- Tests: +2 (respects the cooldown timestamp instead of re-firing; fires again once elapsed). Suite **281/281**. Catalog updated.
+
+---
+
 ## 2026-07-16 — Mnemosyne: `mnem boonfill` — learn what boons you already own (v4.7.80)
 
 The catalogue only learns a boon when its **offer screen** goes past — so everything claimed before v4.7.77 existed was unknowable, and the descriptions were gone for good. Except they aren't: `BOON CONTEMPLATE` re-prints the full detail on demand.

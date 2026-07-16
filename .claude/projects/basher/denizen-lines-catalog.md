@@ -43,7 +43,7 @@ The first 10 rows are the battlerage afflictions in the data-driven `ataxiaBashe
 | **recklessness** | 15s | Haskor's Bravado / BR | **Headstrike** | `Your foe puffs up their chest and rushes headlong into danger.` (current target) | `Caution returns to <mob>.` |
 | feared | 8s | BR | **Headstrike** | TODO-line | TODO-line |
 | sensitivity | 8s | BR | **burst** | TODO-line | TODO-line |
-| inhibit | 9s | BR | burst | TODO-line | TODO-line |
+| **inhibit** | 9s | Ripplestrike (Monk BR) / BR | burst | `You quickly strike <mob> with the tips of your fingers, targeting specific nerves.` (our Ripplestrike → current target, `023`) | TODO-line |
 | **aeon** | 6s | Temporal Anomaly proc / BR | — (mitigation) | `Your foe blurs and begins to move slower in time.` (current target) | `<mob> returns to normal speed.` |
 | weakness | 7s | Nerveslash / BR | — (mitigation) | `You lightly stab <mob> in several key locations with your blade, causing <them> to slump weakly.` (our Nerveslash cast → current target) | `<mob> stands up straight, having overcome the weakness that afflicted <him>.` |
 | stun | 4s | Daze / Great Bard boon / BR | — (mitigation) | `You hurl a precise blast of Shin energy at <mob>'s eyes.` (our Daze → current target, `019`); `An echo of the Great Bard forms in the wake of your strike, ensnaring all presence with His stunning charisma.` (Mnemosyne boon proc → **AoE** stun on all denizens, `021`) | `<mob> is no longer stunned.` |

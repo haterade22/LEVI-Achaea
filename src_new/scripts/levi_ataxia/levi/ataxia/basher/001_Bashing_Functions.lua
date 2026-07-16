@@ -791,8 +791,13 @@ function ataxiaBasher_monkBattlerage(sp)
     end
   end
 
-  -- 1. Inhibit the healing (skip if it is already inhibited -- dsHasAff lazily expires).
-  if healing and br.specialafflict and rage >= 25 and not battleRage_Timers.specialafflict then
+  -- 1. Inhibit the healing (skip if already inhibited -- dsHasAff lazily expires).
+  -- The cooldown is a reload-safe TIMESTAMP stamped by trigger 023 from the REAL fire-line.
+  -- It cannot use battleRage_Timers.specialafflict: nothing ever sets that (330/331/332 cover
+  -- only small/large/special), so gating on it never blocks and we would re-fire Ripplestrike
+  -- on every attack while healing was up, burning rage against a 27s cooldown we cannot see.
+  if healing and br.specialafflict and rage >= 25
+     and getEpoch() >= (ataxiaTemp.monkRipplestrikeReadyAt or 0) then
     local already = ataxiaBasher_dsHasAff and ataxiaBasher_dsHasAff(target, "inhibit")
     if not already then return br.specialafflict..sp end
   end

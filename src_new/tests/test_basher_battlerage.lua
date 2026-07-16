@@ -203,6 +203,26 @@ describe("ataxiaBasher_monkBattlerage", function()
     expect(ataxiaBasher_monkBattlerage("::")).toBe("rpst " .. target .. "::")
   end)
 
+  -- Ripplestrike's 27s cooldown has no shared battleRage_Timers entry (330/331/332 only cover
+  -- small/large/special), so trigger 023 stamps a reload-safe timestamp from the real fire.
+  -- Gating on the never-set battleRage_Timers.specialafflict would never block -> RPST every
+  -- attack, burning rage on a cooldown we cannot see.
+  it("respects Ripplestrike's cooldown timestamp instead of re-firing every attack", function()
+    monkReset(true); ataxia.vitals.rage = 100
+    ataxiaTemp.monkRipplestrikeReadyAt = getEpoch() + 27   -- just fired
+    local cmd = ataxiaBasher_monkBattlerage("::")
+    expect(cmd:find("rpst", 1, true)).toBeNil()
+    expect(cmd).toBe("tnk " .. target .. "::")             -- damage instead of a wasted RPST
+    ataxiaTemp.monkRipplestrikeReadyAt = nil
+  end)
+
+  it("fires Ripplestrike again once the timestamp expires", function()
+    monkReset(true); ataxia.vitals.rage = 100
+    ataxiaTemp.monkRipplestrikeReadyAt = getEpoch() - 1    -- elapsed
+    expect(ataxiaBasher_monkBattlerage("::")).toBe("rpst " .. target .. "::")
+    ataxiaTemp.monkRipplestrikeReadyAt = nil
+  end)
+
   it("does NOT waste Ripplestrike when nothing is healing", function()
     monkReset(false); ataxia.vitals.rage = 100
     local cmd = ataxiaBasher_monkBattlerage("::")

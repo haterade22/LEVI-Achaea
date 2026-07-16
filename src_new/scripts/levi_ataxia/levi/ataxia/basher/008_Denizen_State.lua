@@ -72,7 +72,9 @@ ataxiaBasher_BR_AFFS = {
   recklessness = { dur = 15,  role = "noshield", exploitedBy = "headstrike",
                    apply = "puffs up their chest and rushes headlong into danger",
                    ends  = "Caution returns to" },
-  inhibit      = { dur = 9,   role = "burst",    exploitedBy = "burst",      apply = nil, ends = nil },
+  inhibit      = { dur = 9,   role = "burst",    exploitedBy = "burst",
+                   apply = "with the tips of your fingers, targeting specific nerves",
+                   ends  = nil },
   amnesia      = { dur = nil, role = "safe",     exploitedBy = nil,   apply = nil, ends = nil },
 }
 
