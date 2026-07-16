@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-07-16 — Basher: capture the REAL exits from text (dementia-proof adjacency) (v4.7.75)
+
+Groundwork for a self-mapping 4x4. The breakthrough: **the exit line is true even under incurable dementia** — only gmcp lies.
+
+- Observed in one ripple room: it rendered as `Within the hills.` with a Neraeos/ocean description, and gmcp reported `exits = {n=773, nw=797, sw=775, w=798}` (a real Northern Ithmia room) — while the text said **`You see exits leading north and south.`**, which is what actually existed. So `gmcp.Room.Info.exits` is **not** a usable adjacency source in the tower; the text is.
+- That explains the stall: the explorer reads `MAP.rooms[num].exits` (built from gmcp), so it was pathing over phantom Ithmia rooms and walking exits that don't exist — `[explore] room clear -> moving ne.` in a room whose real exits were `north and south`. It wasn't lost; it was walking into walls.
+- **New trigger `353_Real_Exits`** parses the line into `ataxiaTemp.realExits` (normalised `n/s/e/w/ne/nw/se/sw/up/down/in/out`, never serialised — it describes only the room we're standing in). Verified against every form seen in the logs: `down`, `north and south`, `east and southeast`, `northeast and northwest`, `southeast and west`, and the 3-exit `north, east and southwest`.
+- This also removes the need for a failed-move detector: with real adjacency we only ever walk exits that exist, so moves succeed and dead-reckoning stays honest.
+- Suite **272/272**.
+- **Next:** point the explorer's `usableUnexplored`/room-pick at `realExits` and dead-reckon our own x/y over a self-owned 4x4, so room identity (`num`) is never trusted inside a ripple.
+
+---
+
 ## 2026-07-16 — Basher: pin the targetList key in Mnemosyne (restores auto-add + targeting under dementia) (v4.7.74)
 
 Fixes a regression from v4.7.72 and the real cause of "auto-add stopped working" in the tower.
