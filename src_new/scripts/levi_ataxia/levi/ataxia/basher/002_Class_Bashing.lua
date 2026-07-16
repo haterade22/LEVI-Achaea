@@ -730,7 +730,21 @@ local healhealth = tonumber(math.floor((ataxia.vitals.hp/ataxia.vitals.maxhp)*10
     -- and a bare `curseCharge <= 1` throws "attempt to compare nil with number", killing the
     -- whole attack. 004:61 already guards it the same way.
     if (curseCharge or 0) <= 1 then
-      atk = "stand;wield shield;swiftcurse"
+      -- Recharge -- and only ONE at a time. `swiftcursing` is an in-flight guard: shaman/011
+      -- ("You weave your fingers together...") and shaman/012 ("empowered with another N
+      -- curses") both clear it, but NOTHING ever set it and nothing ever read it, so the guard
+      -- was dead. The recharge therefore re-fired on the next prompt before the confirm-line
+      -- landed -- weaving twice and paying a balance for each. Set it here (the missing half)
+      -- and skip while a weave is outstanding.
+      -- Paired with a TIMESTAMP so a swallowed/gagged confirm-line cannot strand the shaman
+      -- unable to ever recharge again: after 3s we assume the weave was lost and retry.
+      if swiftcursing and getEpoch() < (ataxiaTemp.swiftcurseSentAt or 0) + 3 then
+        atk = "" -- weave already in flight; don't buy a second one
+      else
+        swiftcursing = true
+        ataxiaTemp.swiftcurseSentAt = getEpoch()
+        atk = "stand;wield shield;swiftcurse"
+      end
     else
       atk = "stand;wield shield;swiftcurse "..target.." bleed"
     end
@@ -743,8 +757,10 @@ local healhealth = tonumber(math.floor((ataxia.vitals.hp/ataxia.vitals.maxhp)*10
   end
   
 	
-  if brage == "" then
-  		command = atk
+  -- atk is "" while a swiftcurse weave is in flight -- send the battlerage alone rather than
+  -- `brage..sp..""`, which would trail a bare separator onto the queued command.
+  if brage == "" or atk == "" then
+  		command = (brage ~= "" and brage or atk)
 
   else
 		command = brage..sp..atk

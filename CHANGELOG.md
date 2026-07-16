@@ -2,6 +2,21 @@
 
 ---
 
+## 2026-07-16 — Basher: stop double-weaving the swiftcurse recharge (v4.7.85)
+
+The swiftcurse recharge was firing twice in a row, **costing a balance each time**.
+
+- **Root cause: a dead in-flight guard.** `swiftcursing` is set to `false` by `shaman/011` ("You weave your fingers together…") and `shaman/012` ("empowered with another N curses") — but **nothing ever set it to `true`, and nothing ever read it**. The two resets are the only references in the entire codebase. The intent is obvious from them: *mark a weave outstanding when you send it, let the confirm-line clear it* — but the "set" and "check" halves were never written. With no guard, `ataxiaBasher_shamanBashing` re-issued `stand;wield shield;swiftcurse` on the next prompt, before the first weave's confirm-line had landed.
+- **Fixed by writing the missing halves**: set `swiftcursing` when the recharge is sent, and skip while one is outstanding. `011`/`012` already clear it, so the existing triggers complete the loop untouched.
+- **Paired with a timestamp** (`ataxiaTemp.swiftcurseSentAt`, 3s): a gagged or swallowed confirm-line must not strand the shaman permanently unable to recharge — after 3s we assume the weave was lost and retry. Note `011`/`012` both call `deleteFull()`, so those lines *are* gagged while bashing, making a lost confirm a real possibility rather than a theoretical one.
+- Guarded the command assembly so an in-flight skip sends the battlerage alone instead of trailing a bare separator (`brage..sp..""`).
+
+Suite **281/281**.
+
+**Still redundant** (unchanged): `ataxiaBasher_detectSwiftcurseCharge` (`genrunning/004`) infers the charge from two consecutive EQ-only recoveries, which structurally cannot conclude until the recharge has been cast twice — the exact behaviour just fixed. With the in-flight guard in place it should never be the deciding writer, but it's still guessing at something `011`/`012` observe directly.
+
+---
+
 ## 2026-07-16 — Basher: Shaman uses swiftcurse regardless of binding (+ two latent bugs) (v4.7.84)
 
 - **Swiftcurse no longer requires the aelkesh binding.** `ataxiaBasher_shamanBashing` gated its swiftcurse branch on `shaman.spiritisbound("aelkesh")`; that check is gone, so swiftcurse is used whether or not the spirit is bound.
