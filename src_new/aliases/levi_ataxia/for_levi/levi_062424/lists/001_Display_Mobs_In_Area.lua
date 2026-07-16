@@ -14,7 +14,7 @@ command: ''
 packageName: ''
 ]]--
 
-local area = gmcp.Room.Info.area
+local area = ataxiaBasher_areaKey()
 if ataxiaBasher.targetList[area] then
 	ataxiaEcho("Displaying valid targets for this area.")
 	for i,v in pairs(ataxiaBasher.targetList[area]) do

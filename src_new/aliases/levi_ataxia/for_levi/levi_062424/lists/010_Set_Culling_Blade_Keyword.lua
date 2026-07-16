@@ -14,7 +14,11 @@ command: ''
 packageName: ''
 ]]--
 
+-- Report the key we actually wrote to, not gmcp's area: in Mnemosyne the key is "" (and
+-- under the incurable-dementia boon gmcp names a hallucinated real area), so echoing the
+-- raw area would claim we configured somewhere we didn't touch.
 local key = matches[2]:lower()
-ataxiaBasher.targetList[gmcp.Room.Info.area].keyword = key
-ataxia_Echo("Set the keyword for denizens in "..gmcp.Room.Info.area.." to "..key..".")
+local areaKey = ataxiaBasher_areaKey()
+ataxiaBasher.targetList[areaKey].keyword = key
+ataxia_Echo("Set the keyword for denizens in "..(areaKey ~= "" and areaKey or "the Mnemosyne").." to "..key..".")
 ataxia_saveSettings(false)

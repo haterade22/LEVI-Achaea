@@ -40,7 +40,7 @@ patterns:
 local linefind = matches[2]:lower()
 local xyz = ""
 linefind = linefind:gsub("-", " ")
-for _, mob in pairs(ataxiaBasher.targetList[gmcp.Room.Info.area]) do
+for _, mob in pairs(ataxiaBasher.targetList[ataxiaBasher_areaKey()]) do
 	xyz = mob:lower()
 	xyz = xyz:gsub("-", " ")
 	if linefind:find(xyz) and not haveBeenHit then

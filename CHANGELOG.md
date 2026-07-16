@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-07-16 — Basher: finish the areaKey migration — aliases + triggers (v4.7.78)
+
+v4.7.74 introduced `ataxiaBasher_areaKey()` but only converted the **scripts**. Everything else still read `gmcp.Room.Info.area` directly — which the incurable-dementia boon fakes — so half the system was keyed on a hallucinated area while the other half used `""`. The two never agreed.
+
+- **Aliases (11 sites)** — `lists/001_Display_Mobs_In_Area`, `002_Display_Mobs_To_Add`, `004_Ignore_Mobs`, `006_Dangerous_Mobs`, `009_Set_Mobs_That_Don't_Break_Shield`, `010_Set_Culling_Blade_Keyword`. This is the reported symptom: the add/list commands read `targetList["the Northern Ithmia"]` (empty) instead of the tower's `""` list, so **nothing showed up to add**.
+- **Triggers (4 sites)** — `ataxia_chat_capture/002_Capture_Msg`, `denizen_attacks_misc_lines/004_Denizen_Emotes`, `007_Denizen_Attack_Find`. The last two fire in combat and index `targetList[area]` unguarded.
+- `010_Set_Culling_Blade_Keyword` also echoed the raw area while writing to the real key — it claimed to configure somewhere it never touched. Now reports the key it actually wrote (`the Mnemosyne` for `""`).
+- **Every `targetList` consumer in the codebase now goes through `ataxiaBasher_areaKey()`** — verified by sweep. Suite **279/279**.
+
+---
+
 ## 2026-07-16 — Mnemosyne: boon library — see what your boons actually DO (v4.7.77)
 
 The BOONS list tells you what you own but never what any of it does — it's only `Boon | Echoes | Rarity`. Only the *offer* screen carries descriptions, and once you claim, that text is gone. So we learn every boon we're ever offered and join the two.
