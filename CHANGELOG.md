@@ -2,6 +2,21 @@
 
 ---
 
+## 2026-07-16 — Basher: Mnemosyne presence is SURVEY-verified (dementia + stale no-flee flag) (v4.7.71)
+
+Dementia hallucinates a real location while you are still in the tower, which broke every Mnemosyne system at once — and the same flag could be stale-**on** out in the world.
+
+- **Root cause.** `ataxia_Room_Update()` treated any non-empty `gmcp.Room.Info.area` as *proof* we had left, and cleared `ataxiaBasher.inMnemosyne`. Inside the tower `area` is `""`, so that single check was the entire basis for "am I in Mnemosyne" — and dementia's hallucinated area tripped it. Everything downstream gates on that flag: **no-flee turned OFF (the basher tries to flee an instance you cannot flee — a death)**, the explorer stopped mid-sweep, the ripple map hid, telemetry gated off, and auto-learn filed tower denizens into the hallucinated area's `targetList`.
+- **The mirror bug.** `ataxiaBasher` is serialized, so `inMnemosyne` survives logout — quitting mid-climb left no-flee **on** in the open world until the next room change, suppressing flee where we want it. Confirmed in game: `inMnem = true` while standing in the Shamtota Hills.
+- **Fix — ask, don't assume.** `SURVEY` is free and still reports the truth while demented:
+  `You have no idea where you are.` / `Your environment conforms to that of Forest.` / **`You are in wading the Mnemosyne.`**
+  A non-empty area now only *opens a confirmation window*: send a free `survey`; trigger `351` cancels it if we are still inside; otherwise the window expires and we clear. Mirrors the proven `onRunEndMaybe`/`onRunEnd` pattern, and fixes **both** directions — dementia can no longer drop no-flee, and a stale flag self-clears on the first room change.
+- **The explorer starts under dementia again.** `canStart()` hard-required `area == ""`, so a hallucinated area blocked the sweep outright; it now uses the SURVEY-verified flag, which is the better authority (and a stale flag self-clears rather than starting a phantom sweep).
+- Tests: 6 cases — asks instead of clearing, **no-flee held during the window**, no SURVEY spam, `351` keeps the flag, window-expiry clears, re-arms afterwards. Suite **263/263**.
+- **Still open:** whether dementia also falsifies `gmcp.Room.Info.num`/`exits`. If it does, guaranteeing the 4×4 sweep needs dead-reckoning (track our own x/y from the moves we issue). A `display(gmcp.Room.Info)` taken *while demented* settles it.
+
+---
+
 ## 2026-07-16 — Basher: Monk transmute is now a gap-filler, not a constant mana drain (v4.7.70)
 
 The Monk bash prepended a transmute to **every** attack, topping health back to 90% of max — burning mana non-stop for health the server's own curing was already sipping back, and starving Regeneration (which converts that same mana into health).

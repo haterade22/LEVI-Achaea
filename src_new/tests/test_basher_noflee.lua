@@ -40,6 +40,7 @@ local function baseline()
   ataxia.afflictions = {}
   ataxia.defences = {}
   ataxiaTemp.bashFlee = false
+  ataxiaTemp.mnemLeftTimer = nil
   ataxiaBasher.inMnemosyne = false
   ataxiaBasher.fleeThresholdPct = 25
   ataxiaBasher.shieldThresholdPct = 40
@@ -111,6 +112,77 @@ describe("ataxiaBasher_dangerLevel — no-flee behavior", function()
     setArea("")
     ataxia.vitals.hpp = 90
     expect(ataxiaBasher_dangerLevel()).toBe("attack")
+  end)
+
+end)
+
+-- ── Mnemosyne presence is SURVEY-verified, never inferred from the area ──────────────────
+-- A non-empty area is only a hint. DEMENTIA hallucinates a real environment/area while we are
+-- still in the tower, and believing it drops no-flee mid-climb -- a death in an instance you
+-- cannot flee. The flag is also serialized with ataxiaBasher, so it can be stale-ON in the real
+-- world (suppressing flee where we want it). A free SURVEY settles both: trigger 351 confirms
+-- ("You are in wading the Mnemosyne."), otherwise the window expires and we really did leave.
+describe("Mnemosyne presence verification (dementia / stale flag)", function()
+
+  local function armedCount()
+    local n = 0
+    for _ in pairs(mock.active_timers) do n = n + 1 end
+    return n
+  end
+
+  it("asks SURVEY rather than clearing the flag on a possibly-hallucinated area", function()
+    baseline(); mock.reset()
+    ataxiaBasher.inMnemosyne = true
+    ataxiaBasher_mnemLeftMaybe()
+    expect(table.contains(mock.sent_commands, "survey")).toBeTrue()
+    expect(ataxiaBasher.inMnemosyne).toBeTrue()                -- never cleared on a guess
+    expect(ataxiaBasher_isNoFleeArea("Forest")).toBeTrue()     -- no-flee HELD during the window
+  end)
+
+  it("is a no-op when we are not flagged as in Mnemosyne", function()
+    baseline(); mock.reset()
+    ataxiaBasher.inMnemosyne = false
+    ataxiaBasher_mnemLeftMaybe()
+    expect(#mock.sent_commands).toBe(0)
+  end)
+
+  it("does not spam SURVEY while a window is already open", function()
+    baseline(); mock.reset()
+    ataxiaBasher.inMnemosyne = true
+    ataxiaBasher_mnemLeftMaybe()
+    ataxiaBasher_mnemLeftMaybe()
+    ataxiaBasher_mnemLeftMaybe()
+    expect(#mock.sent_commands).toBe(1)
+  end)
+
+  it("KEEPS the flag when SURVEY confirms the Mnemosyne (the dementia case)", function()
+    baseline(); mock.reset()
+    ataxiaBasher.inMnemosyne = true
+    ataxiaBasher_mnemLeftMaybe()
+    expect(armedCount()).toBe(1)
+    ataxiaBasher_mnemStillHere()                  -- trigger 351 saw the truth line
+    expect(armedCount()).toBe(0)                  -- pending clear cancelled
+    expect(ataxiaBasher.inMnemosyne).toBeTrue()
+    expect(ataxiaBasher_isNoFleeArea("Forest")).toBeTrue()
+  end)
+
+  it("clears the flag when nothing confirms in the window (really left / stale flag)", function()
+    baseline(); mock.reset()
+    ataxiaBasher.inMnemosyne = true
+    ataxiaBasher_mnemLeftMaybe()
+    ataxiaBasher_mnemLeftConfirm()                -- window expired, no 351
+    expect(ataxiaBasher.inMnemosyne).toBeFalse()
+    expect(ataxiaBasher_isNoFleeArea("Test Bashing Area")).toBeFalse()
+  end)
+
+  it("can ask again after a window closes", function()
+    baseline(); mock.reset()
+    ataxiaBasher.inMnemosyne = true
+    ataxiaBasher_mnemLeftMaybe()
+    ataxiaBasher_mnemLeftConfirm()
+    ataxiaBasher.inMnemosyne = true               -- back inside
+    ataxiaBasher_mnemLeftMaybe()
+    expect(#mock.sent_commands).toBe(2)
   end)
 
 end)

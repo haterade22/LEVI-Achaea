@@ -224,6 +224,42 @@ function ataxiaBasher_isNoFleeArea(area)
   return false
 end
 
+-- ── Mnemosyne presence: verified by SURVEY, never inferred from the area ─────────
+-- A non-empty gmcp area is only a HINT that we left the tower, never proof. DEMENTIA
+-- hallucinates a real environment/area while we are still inside it, and clearing the flag
+-- there drops no-flee mid-climb -- a death in an instance you cannot flee. Conversely the
+-- flag is serialized with ataxiaBasher, so it can also be stale-ON in the real world after a
+-- logout mid-climb, which suppresses fleeing where we DO want it.
+--
+-- SURVEY settles both: it costs nothing and still reports the truth while demented --
+--   You have no idea where you are.              <- the dementia tell
+--   Your environment conforms to that of Forest. <- the lie
+--   You are in wading the Mnemosyne.             <- the truth (trigger 351 matches this)
+-- So on a suspicious area we ASK rather than believe, and only clear if nothing confirms.
+-- Mirrors the proven onRunEndMaybe/onRunEnd confirmation window in the mnemosyne module.
+function ataxiaBasher_mnemLeftMaybe()
+  if not ataxiaBasher.inMnemosyne then return end
+  if ataxiaTemp.mnemLeftTimer then return end -- already asking; don't spam SURVEY
+  send("survey", false)
+  ataxiaTemp.mnemLeftTimer = tempTimer(2, [[ ataxiaBasher_mnemLeftConfirm() ]])
+end
+
+-- Nothing claimed we are still in the tower inside the window -> we really did leave.
+function ataxiaBasher_mnemLeftConfirm()
+  ataxiaTemp.mnemLeftTimer = nil
+  if not ataxiaBasher.inMnemosyne then return end
+  ataxiaBasher.inMnemosyne = false
+  ataxiaEcho("Left Mnemosyne (SURVEY confirmed) — no-flee mode OFF.")
+end
+
+-- SURVEY named the Mnemosyne (trigger 351): we are still inside, whatever the area claims.
+function ataxiaBasher_mnemStillHere()
+  if ataxiaTemp.mnemLeftTimer then
+    killTimer(ataxiaTemp.mnemLeftTimer)
+    ataxiaTemp.mnemLeftTimer = nil
+  end
+end
+
 -- "Our" denizens — pets/allies/summons (falcons, Baalzadeen, etc.) that share the
 -- room's denizen list but must never be auto-learned or targeted. Matched by
 -- case-insensitive substring so "falcon" covers "a razor-beaked falcon" and any

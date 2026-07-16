@@ -36,9 +36,12 @@ patterns:
   type: 1
 ]]--
 
--- Mnemosyne is an unmapped tower-climb instance (gmcp.Room.Info.area is ""), so we
--- flag it from its SURVEY line. Cleared on entering a real mapped room in
--- ataxia_Room_Update(). ataxiaBasher_isNoFleeArea() reads this flag.
+-- Mnemosyne is an unmapped tower-climb instance (gmcp.Room.Info.area is ""), so we flag it
+-- from its SURVEY line. This line is the AUTHORITY on where we are: SURVEY is free and still
+-- reports the truth while DEMENTIA is hallucinating a real environment/area around us, so it
+-- both sets the flag and cancels a pending "did we leave?" window opened by ataxia_Room_Update
+-- when it saw a (possibly hallucinated) non-empty area. ataxiaBasher_isNoFleeArea() reads it.
+if ataxiaBasher_mnemStillHere then ataxiaBasher_mnemStillHere() end
 if not ataxiaBasher.inMnemosyne then
   ataxiaBasher.inMnemosyne = true
   ataxiaEcho("Mnemosyne detected — no-flee mode ON (shield instead of flee).")

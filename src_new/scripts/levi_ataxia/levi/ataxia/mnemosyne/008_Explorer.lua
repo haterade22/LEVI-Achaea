@@ -53,13 +53,17 @@ local WATCHDOG = 30 -- seconds of no progress (no arrival / no denizen change) b
 local MAX_PATROL_LOOPS = 3 -- fruitless full patrol loops (hunting the boss) before giving up
 local MAX_ICE_SLIPS = 15 -- re-send a move this many times after slipping on ice before giving up on the exit
 
--- Check for STARTING: must be physically in the tower. Mnemosyne rooms are an
--- unmapped instance (area == ""), and we require that directly so a telemetry run
--- that outlived your presence (e.g. a missed /run_end) can't start a sweep in a
--- real area off a stale map.
+-- Check for STARTING: must be physically in the tower. This used to also require
+-- gmcp.Room.Info.area == "" as direct proof, so a telemetry run that outlived your presence
+-- (e.g. a missed /run_end) couldn't start a sweep in a real area off a stale map. But DEMENTIA
+-- hallucinates a real area while we are still inside the tower, and that blocked the sweep
+-- outright -- the explorer simply refused to start. ataxiaBasher.inMnemosyne (= MAP.inMnem) is
+-- now SURVEY-verified rather than inferred from the area (see ataxiaBasher_mnemLeftMaybe):
+-- SURVEY is free and still tells the truth while demented, and a stale flag now self-clears on
+-- the next room change instead of lingering. So the verified flag is the better authority, and
+-- the raw-area check only re-introduced the dementia blind spot.
 local function canStart()
   return MAP and MAP.inMnem and MAP.inMnem()
-    and gmcp and gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.area == ""
 end
 
 -- Strict physical check for the RUNNING loop: the room-update clears

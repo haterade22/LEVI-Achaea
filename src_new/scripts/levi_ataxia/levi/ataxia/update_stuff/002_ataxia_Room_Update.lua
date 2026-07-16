@@ -38,11 +38,14 @@ function ataxia_Room_Update()
  ataxiaBasher_invalidateStormhammer()
 	if not gmcp.Room.Info then return end
 
-  -- Leaving Mnemosyne: any real (mapped, non-empty) area clears the no-flee flag.
-  -- Inside the tower area stays "" so the flag persists across floors.
-  if gmcp.Room.Info.area and gmcp.Room.Info.area ~= "" and ataxiaBasher.inMnemosyne then
-    ataxiaBasher.inMnemosyne = false
-    ataxiaEcho("Left Mnemosyne — no-flee mode OFF.")
+  -- Leaving Mnemosyne: a real (mapped, non-empty) area is only a HINT, not proof -- dementia
+  -- hallucinates one while we are still in the tower, and clearing here would drop no-flee
+  -- mid-climb. Verify with a free SURVEY instead (it tells the truth even while demented);
+  -- trigger 351 keeps the flag if we are still inside, otherwise the window clears it.
+  -- Inside the tower area stays "" so we never even ask.
+  if gmcp.Room.Info.area and gmcp.Room.Info.area ~= "" and ataxiaBasher.inMnemosyne
+     and ataxiaBasher_mnemLeftMaybe then
+    ataxiaBasher_mnemLeftMaybe()
   end
 
   -- Clear mindnet area players on area change
