@@ -410,6 +410,14 @@ local function shikudoBashCombo(tar, useShieldbreak)
   -- chain it depends on. kata is absent from charstats until a chain starts, hence `or 0`.
   if (ataxia.vitals.kata or 0) >= rot.leaveAt then
     cmd = cmd.." transition "..rot.nextForm:lower()
+    -- A successful TRANSITION resets the chain to 0, but charstats keeps reporting the OLD
+    -- kata for a tick. Without zeroing it here the very next prompt still reads the pre-
+    -- transition kata (e.g. 6), re-appends a transition, and that one resolves against a
+    -- chain of only 3 -> "A kata of at least 5 must be performed..." -> a wasted attempt after
+    -- every single form change. Zero it optimistically; charstats re-reports the true value on
+    -- its next tick, and 002_Reset_Failsafe also zeroes it if the transition is rejected, so a
+    -- wrong guess here self-corrects within one tick either way.
+    ataxia.vitals.kata = 0
   end
   return cmd.."; "
 end

@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-07-16 — Basher: stop the wasted transition after every Shikudo form change + capture Clumsy (v4.7.69)
+
+Live-log follow-up to v4.7.68, which fixed the wrong half of the problem.
+
+- **Corrected diagnosis.** A rejected `TRANSITION` does **not** reset the game's kata chain — the log shows `chain of 3` → rejected → next combo → `chain of 6` → transition succeeds. The `-= reset kata =-` echo is only our own `shikudo/002_Reset_Failsafe` trigger zeroing `ataxia.vitals.kata`; the real chain keeps climbing. So it was never a livelock, and raising `leaveAt` to 5 (v4.7.68) did not address the actual cause.
+- **The real bug: stale kata after a form change.** A *successful* transition resets the chain to 0, but charstats keeps reporting the pre-transition kata for a tick. The next prompt therefore reads the old kata (e.g. 6), re-appends a transition, and that one resolves against a chain of only 3 → `A kata of at least 5 must be performed…` — one wasted attempt after **every** form change. Fixed by zeroing `ataxia.vitals.kata` optimistically when we emit a transition; charstats re-reports the truth on its next tick, and `002_Reset_Failsafe` also zeroes it on a rejection, so a wrong guess self-corrects within one tick either way.
+- **Clumsy is now captured** (`denizen_attacks_misc_lines/022`) — it was the last `apply = nil` hit-prevention affliction in `ataxiaBasher_BR_AFFS`. Our **Scramble** battlerage (`MIND SCRAMBLE`, 22 rage) fire-line (`You rummage quickly through <mob>'s mind, finding the link to fine motor control…`) sets **Clumsy** (7s, mob misses 33% of attacks) on the current target, with the standard line-highlight + `(BR):` echo. Pattern mirrors `332_Battlerage_Special`, which matches the same line for the shared `special` cooldown — both fire, no shared mutable state.
+- Confirmed from the log that Monk's battlerage cooldowns are all tracked already: `sbp` (Spinningbackfist) in `330`, `tnk` (Tornadokick) in `331`, `mind scramble` in `332`. Suite **251/251**.
+
+---
+
 ## 2026-07-16 — Basher: Shikudo never changed form — the kata < 5 livelock (v4.7.68)
 
 In game the Shikudo rotation never transitioned: every combo was chased by a rejected `TRANSITION`, and the rejection reset the kata chain, so it could never grow to the 5 a transition needs.

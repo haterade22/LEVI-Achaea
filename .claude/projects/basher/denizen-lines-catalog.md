@@ -47,7 +47,7 @@ The first 10 rows are the battlerage afflictions in the data-driven `ataxiaBashe
 | **aeon** | 6s | Temporal Anomaly proc / BR | — (mitigation) | `Your foe blurs and begins to move slower in time.` (current target) | `<mob> returns to normal speed.` |
 | weakness | 7s | Nerveslash / BR | — (mitigation) | `You lightly stab <mob> in several key locations with your blade, causing <them> to slump weakly.` (our Nerveslash cast → current target) | `<mob> stands up straight, having overcome the weakness that afflicted <him>.` |
 | stun | 4s | Daze / Great Bard boon / BR | — (mitigation) | `You hurl a precise blast of Shin energy at <mob>'s eyes.` (our Daze → current target, `019`); `An echo of the Great Bard forms in the wake of your strike, ensnaring all presence with His stunning charisma.` (Mnemosyne boon proc → **AoE** stun on all denizens, `021`) | `<mob> is no longer stunned.` |
-| clumsy | 7s | BR | — (mitigation) | TODO-line | TODO-line |
+| **clumsy** | 7s | Scramble (Monk BR) / BR | — (mitigation) | `You rummage quickly through <mob>'s mind, finding the link to fine motor control before exerting a small amount of psychic force and deadening it.` (our Scramble → current target, `022`) | TODO-line |
 | amnesia | (2-3 hits) | BR | — (mitigation) | TODO-line | TODO-line |
 | **shielded** | — | mob | **Shatter** | `A nearly invisible magical shield forms around <mob>.` (`336_Mob_Shielded`) | raze / death |
 | **ablaze** | — | Infuse Fire | fire (bonus, keep up) | `Flames engulf <mob>, scorching him in a fiery blaze.` | TODO-line |
