@@ -383,14 +383,12 @@ Catharsis Threshold:
 ## CC_Apostate System (015_CC_Apostate.lua)
 
 ### Architecture
-The Apostate offensive system was consolidated from 14 legacy files into a single `apostate` namespace following the Blademaster pattern. Files 001-013 are all disabled (`isActive: 'no'`). File 014 retains backward-compat wrappers and daemon utility functions.
+The Apostate offensive system was consolidated into a single `apostate` namespace following the Blademaster pattern. `015_CC_Apostate.lua` is the **sole** file in the apostate script dir — there are no 001-014 files. Everything (namespace, state, V3 routing, curse engine, attack builder, dispatch, backward-compat wrappers, and daemon utilities) lives inside 015.
 
 ### File Map
 | File | Purpose |
 |------|---------|
-| `015_CC_Apostate.lua` | Complete unified system — namespace, state, V3 routing, curse engine, attack builder, dispatch |
-| `014_Levi_Apostate.lua` | Backward-compat wrappers (all old function names → `apostate.dispatch()`) + daemon utilities |
-| `001-013_*.lua` | Legacy files, all disabled |
+| `015_CC_Apostate.lua` | Complete unified system — namespace, state, V3 routing, curse engine, attack builder, dispatch, backward-compat wrappers (`015:860-946`), daemon utilities (`015:948-1045`). The only file in the dir. |
 
 ### Entry Point
 ```lua
@@ -412,7 +410,7 @@ apostate.dispatch()
 ```lua
 apostate = apostate or {}
 apostate.state = {
-  mode = "lock",              -- "lock", "corrupt", "vivisect", "sleep", "group"
+  mode = "lock",              -- "lock", "corrupt", "vivisect", "sleep", "group", "mental"
   corrupted = false,          -- corrupt has been fired (awaiting catharsis)
   lastCorruptTime = 0,        -- corrupt cooldown tracking
   daeggerhere = false,        -- daegger summoned
@@ -420,6 +418,8 @@ apostate.state = {
   fiendthing = "nightmare",   -- preferred lesser daemon
   wantDisloyalty = false,     -- disfigure toggle
   disfigureSent = false,      -- disfigure spam protection (once per asthma round)
+  disfigureTrigger = nil,     -- one-shot tempTrigger ID for disfigure on deadeyes text
+  pendingDisfigure = false,   -- flag: disfigure should fire with next deadeyes
   asthmaConfirmTimer = nil,   -- timer: confirm asthma if target doesn't smoke after manaleech
   baalzadeenSummoned = false, -- summon sent, awaiting GMCP confirmation (prevents spam)
   partyrelay = true,          -- relay to party
@@ -434,14 +434,15 @@ apostate.config = {
 }
 ```
 
-### Kill Routes (5 Modes)
+### Kill Routes (6 Modes)
 | Mode | Command | Description |
 |------|---------|-------------|
 | **lock** | `apostate.setMode("lock")` | DEADEYES curse delivery with kelp stack + asthma-conditional branching toward truelock |
+| **mental** | `apostate.setMode("mental")` | Flood goldenseal/lobelia mentals: impatience → stupid → dizzy → vertigo (all 25% deliver-once), paralysis-first on curse 2; transitions to lock selectors once `mentalReady()` (impatience 100% + 2 of stupidity/dizziness/vertigo at 25%). `015:410-464`, routed in `selectCurses` `015:501-505` |
 | **group** | `apostate.setMode("group")` | Pure lock pieces only — no hinder (clumsiness/weariness), no probability gates |
 | **corrupt** | `apostate.setMode("corrupt")` | Stack afflictions → `demon corrupt` for damage / catharsis setup |
 | **vivisect** | `apostate.setMode("vivisect")` | Truelock → prone → shrivel 4 limbs → vivisect |
-| **sleep** | `apostate.setMode("sleep")` | Build asthma + impatience + hypersomnia → sleep curse |
+| **sleep** | `apostate.setMode("sleep")` | Wrapper-only mode (`levisleepapo()`); `selectCurses()` has **no** sleep branch, so it falls through to the lock curse selectors (no hypersomnia/sleep-specific curse logic — `015:468-511`) |
 
 ### Dual-Slot Curse Priority Engine
 DEADEYES delivers 2 curses per action (2.3s balance). Each slot has an independent priority chain.
@@ -488,14 +489,18 @@ No probability gates, no hinder afflictions — pure lock pieces for coordinated
 - Curseward detected → breach + secondary (all modes)
 - Truelock >= 70% → class lock aff + secondary (all modes)
 - Group mode → group curse selectors (no hinder)
+- Mental mode → mental curse selectors (goldenseal/lobelia flood, then transition to lock)
 - Lock mode → lock curse selectors (asthma-conditional branching)
+- No `sleep` branch — sleep mode uses the default lock selectors.
+
+**Class-lock curse mapping:** at every class-lock selection point the class affliction from `getLockingAffliction()` is passed through `toEvileyeCurse()` / `EVILEYE_CURSE_MAP` (`015:225-231`), which translates `paralyse` → `paralysis` (Jester/Occultist/Shaman) to match the Evileye curse name.
 
 ### Disfigure Integration
-Disfigure fires **inline** with the DEADEYES that delivers asthma (`;` separator for same-tick execution on EQ):
-- Only in lock mode, once per asthma round (`disfigureSent` flag)
+Disfigure is **NOT** inlined with `;`. The code deliberately avoids `;` (a server-side `;` would consume EQ before deadeyes fires — see inline comment `015:664-673`). Instead, on an asthma round `buildAttack` sets `pendingDisfigure`, and after the queued DEADEYES is sent, `dispatch()` arms a **one-shot `tempTrigger`** on the literal game text `"curse of asthma"` (`015:759`) that then sends `disfigure <target>` and self-kills:
+- Only in lock (or mental) mode, once per asthma round (`disfigureSent` flag)
 - Acts as an **asthma probe**: if target smokes before next balance, asthma was cured → skip manaleech
 - If they don't smoke → asthma confirmed → safe to push manaleech next round
-- Flag resets when asthma is no longer selected as a curse
+- Flag resets and the stale trigger is killed when asthma is no longer selected as a curse (`015:712-719`); trigger is also killed on mode change (`015:846-849`)
 
 ### Asthma Confirmation Timer (V3)
 When manaleech is delivered and asthma probability is between 0 and 1.0:
@@ -520,7 +525,9 @@ Kill condition checks in order:
 5. `needCorrupt()` — Corrupt damage >= assessed health, or pushes mana to catharsis range
 6. Corrupt followup — Corrupt already fired + no shield → demon catharsis
 7. `needShrivel()` — Vivisect mode, truelocked, prone, limbs remaining → shrivel next limb
-8. Default: DEADEYES dual-curse delivery (+ inline disfigure on asthma rounds + contemplate)
+8. Default: DEADEYES dual-curse delivery (arms `pendingDisfigure` on asthma rounds — fired later via one-shot trigger, not inline — + contemplate)
+
+**Note:** `needSap()` / `sapThreshold` (60%) are defined (`015:570-572`) but **never consumed** by `buildAttack` (`015:636-681`) — a dead gate.
 
 ### Corrupt Damage Calculator
 ```lua
@@ -543,15 +550,17 @@ Same routing pattern as Blademaster:
 ### Commands
 | Alias | Regex | Action |
 |-------|-------|--------|
-| `cath` | `^cath$` | `apostate.dispatch()` (lock mode) |
-| `KELP STACK` | `^kel$` | `apostate.dispatch()` (lock mode, class-conditional) |
-| `Group Attack` | `^yy$` | `apostate.dispatch()` (group mode) |
-| `Levi Lock Apo` | `^ll$` | `apostate.dispatch()` (lock mode) |
-| `Vivisect` | `^viv$` | `apostate.dispatch()` (vivisect mode) |
-| `SLEEP` | `^slee$` | `apostate.dispatch()` (sleep mode) |
-| `Corrupt` | `^corr$` | `apostate.dispatch()` (corrupt mode) |
+| `cath` | `^cath$` | `apostate_lock()` → lock mode |
+| `KELP STACK` | `^kel$` | class-conditional: `apostate_weari()` vs `apostate_kelp()` (Occultist/Pariah/Priest targets get weari branch) — lock mode |
+| `apo` | `^apo$` | class-conditional: `apostate_weari()` vs `apostate_clumsy()` (Occultist/Pariah/Priest → weari) — lock mode |
+| `MENTAL AFFS` | `^men$` | `apostate_mental()` → mental mode |
+| `Illusion Curse` | `^kee$` | `apostate_clumsyillusion()` → lock mode |
+| `Group Attack` | `^yy$` | `apostate_group()` (group mode) — **DISABLED** (`isActive: 'no'`) |
+| `VIVISECT` | `^viv$` | **BROKEN** — calls undefined `apostate_viviprio()` (the defined wrapper is `apostate_vivisect()`); alias currently no-ops |
 
-### Backward Compatibility (014_Levi_Apostate.lua)
+> Note: `^ll$` is the **Monk LEFT LEG** alias (sets `targetlimb` + `dwcprep()`), not an Apostate lock command. No `^slee$` or `^corr$` aliases exist — sleep mode is reachable only via `levisleepapo()`, corrupt mode only via `corruptKill()` / `cathCorrupt()`.
+
+### Backward Compatibility (in 015, `015:860-946`)
 | Legacy Function | Mode Set |
 |-----------------|----------|
 | `leviclumsapo()` | lock |
@@ -564,26 +573,26 @@ Same routing pattern as Blademaster:
 | `apostate_clumsy()` | lock |
 | `apostate_vivisect()` | vivisect |
 | `apostate_weari()` | lock |
-| `apostate_mental()` | lock |
+| `apostate_mental()` | mental (`setMode("mental")`, `015:909-912`) |
 | `apostate_kelp()` | lock |
 | `apostate_group()` | group |
 | `apostate_clumsyillusion()` | lock |
 
 Legacy global wrappers kept: `corruptDmg()`, `corruptKill()`, `cathCorrupt()`
 
-### Daemon Utilities (014_Levi_Apostate.lua)
-These functions remain in 014 and are called by the attack builder:
+### Daemon Utilities (in 015, `015:948-1045`)
+Mostly **presence-check predicates and a predictor**, not summoners (except `bloodPact`). Global functions called by dispatch, the attack builder, and triggers:
 
 | Function | Purpose |
 |----------|---------|
-| `bloodPact()` | Bloodpact setup (fresh blood + no pentagram) |
-| `bloodworm()` | Summon bloodworms (post-attack) |
-| `baalzadeen()` | Ensure Baalzadeen summoned |
-| `apopentagram()` | Pentagram setup |
-| `demon()` | Summon preferred lesser daemon |
-| `daemonite()` | Summon daemonite entity |
-| `fiend()` | Summon fiend entity |
-| `nightmare()` | Summon nightmare entity |
+| `bloodPact()` | Bloodpact setup (summons daegger / manages pentagram) — the one that actually issues commands |
+| `bloodworm()` | Presence check: true if a bloodworm is in `ataxia.denizensHere` |
+| `baalzadeen()` | Presence check: true if Baalzadeen is in `ataxia.denizensHere` |
+| `apopentagram()` | Room-item check: true if "a floating silver pentagram" is in `zgui.roomItemList` |
+| `demon()` | Returns the **current** lesser-daemon type string ("daemonite"/"nightmare"/"fiend", else "") |
+| `daemonite()` | Presence check: true if a daemonite is present |
+| `fiend()` | Presence check: true if a razor fiend is present |
+| `nightmare()` | Timer-based hellsight/dementia affliction **prediction** (not a summon) — `015:1034-1045` |
 
 ### Pre/Post Attack Actions
 **Pre-attack:**
@@ -595,8 +604,8 @@ These functions remain in 014 and are called by the attack builder:
 - Daemon resummon (when wrong daemon type present)
 - Disfigure for disloyalty (when asthma is held and `wantDisloyalty` enabled)
 
-**Inline with DEADEYES:**
-- Disfigure on asthma rounds (`;` separator, EQ-based, probes asthma presence)
+**Disfigure (one-shot trigger, NOT inline):**
+- On asthma rounds, `buildAttack` sets `pendingDisfigure`; after the queued DEADEYES is sent, `dispatch()` arms a one-shot `tempTrigger("curse of asthma", ...)` that sends `disfigure <target>` (`015:759`). A `;` separator is deliberately avoided (it would consume EQ before deadeyes fires).
 
 **Design decision:** Daegger hunt was intentionally removed from commands — it slows offense when seconds matter.
 
@@ -632,12 +641,12 @@ apostate.status()
 - Dual-slot curse engine with sicken cascade
 - Removed daegger hunt from attack commands
 - Added corrupt damage calculator with V3 weighting
-- Backward-compat wrappers in 014 for all legacy function names
+- Backward-compat wrappers (in 015, `015:860-946`) for all legacy function names
 - **v1.1** (Mar 2025): Kelp stack + asthma-conditional branching
 - Curse 1 rewritten: clumsy+weariness before asthma (kelp stack), skip clumsy once asthma lands
 - Anorexia gated behind slickness (no point blocking eating if they can still apply)
 - Slickness gated behind impatience (blocks focus cure of anorexia)
-- Disfigure moved inline with asthma deadeyes (probes asthma, `;` separator)
+- Disfigure fired via one-shot `tempTrigger("curse of asthma")` after the queued deadeyes (probes asthma; `;` deliberately avoided so it doesn't consume EQ before deadeyes)
 - Added asthma confirm timer (2.5s V3 collapse after manaleech delivery)
 - Added baalzadeen summon dedup (`baalzadeenSummoned` flag)
 - Added group mode with pure lock pieces (no hinder, no probability gates)

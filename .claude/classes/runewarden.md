@@ -36,110 +36,129 @@ SnB (Sword and Board):
   strength: Best damage, passive para cure, strips rebounding/shield
 ```
 
-## Kill Routes
+> **Implementation note**: Only **Dual Blunt (DWB)** has an implemented dispatch offense
+> (`dwbRunie`, `dwb_runie/001_DWB_Runie_Logic.lua`). The `zz`/attack aliases gate it on
+> `gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt"`
+> (`aliases/.../152_First_Attack_(All_Classes).lua:23-26`). DWC / SnB / 2H specs have no
+> RW-specific offense — they only run through the shared basher (see Bashing below).
 
-### Primary Kill: Disembowel (Limb-Based)
+## Kill Routes (DWB — `dwbRunie`)
+
+The implemented offense (`dwb_runie/001_DWB_Runie_Logic.lua`) has **three modes**, selected via
+`dwbRunie.setMode(...)` (aliases `rwtorso` / `rwpulp` / `rwgroup`). All kills are momentum-fuelled
+damage, not disembowel/behead. Shared finishers (checked in `dispatch()` before mode routing):
+**BISECT** at low health and **PULP** on a mangled head or 5+ skull fractures while prone.
+
+### Mode: Torso Damage (`rwtorso`, default)
 ```yaml
-type: limb
-summary: Break both legs and an arm, then disembowel for instant kill
-
-prerequisites:
-  - Target must be prone
-  - Both legs broken (level 2)
-  - One arm broken (level 2)
-
+type: limb + damage
+summary: Break both legs (expend → prone) + torso, then assault the torso with flails
 steps:
-  1: "Prep limbs - focus legs first, then arm"
-  2: "Knock target prone"
-  3: "DISEMBOWEL <target>"
-
-required_limbs:
-  left_leg: 2
-  right_leg: 2
-  left_arm: 2  # or right_arm
+  1: "Prep left leg, right leg, torso (doublewhirl, lower-damage limb first)"
+  2: "whirl right leg expend  → prone"
+  3: "doublewhirl left leg torso  → break both"
+  4: "assault <target> torso (flails) when momentum ≥3, doubled at ≥6"
+  5: "morningstar doublewhirl torso pressure to rebuild momentum between assaults"
+fork: "If target RESTOREs torso while legs still broken → pivot to skull fractures → PULP"
+evidence: "dwb_runie:475-533"
 ```
 
-### Alternative Kill: Behead (Limb-Based)
+### Mode: Head Pulp (`rwpulp`)
 ```yaml
-type: limb
-summary: Break head to level 3 (mangled), then behead
-
+type: limb + execute
+summary: Break legs (prone) + head, assault head to mangle, build skull fractures, PULP
 steps:
-  1: "Focus all damage on head"
-  2: "Get head to 200% (level 3 mangled)"
-  3: "BEHEAD <target>"
-
-required_limbs:
-  head: 3
+  1: "Prep left leg, right leg, head, torso (torso prepped for fork options)"
+  2: "whirl right leg expend → prone; doublewhirl left leg head → break both"
+  3: "assault <target> head at momentum ≥7 (mangles head)"
+  4: "skull-fracture loop (doublewhirl head head [expend]) toward 5 fractures"
+  5: "dismount;pulp <target> once head mangled OR 5+ skull fractures + prone"
+fork: "Tumble fork — if target escapes prone → pivot to torso (already prepped)"
+evidence: "dwb_runie:539-612"
 ```
 
-### Alternative Kill: Rune-Enhanced Lock
+### Mode: Group (`rwgroup`)
 ```yaml
-type: affliction
-summary: Use runelore to supplement venom lock strategy
-
-steps:
-  1: "Apply runes for room control"
-  2: "Stack lock afflictions with dual venoms (DWC)"
-  3: "Use wunjo rune for additional affliction pressure"
-  4: "Complete true lock, then damage to death"
-
-notes: "Runelore provides utility but main kill is still limb/venom based"
+type: limb + damage (team)
+summary: Prone + torso damage with party callouts for pile-on coordination
+notes: "Same break/execute shape as torso; sends 'pt <target> PRONE + TORSO BROKEN - PILE ON' via partyrelay"
+evidence: "dwb_runie:618-654"
 ```
 
-## Offensive Abilities
+### Shared finishers (dispatch, all modes)
 ```yaml
-# Weaponmastery
-slash:
-  skill: Weaponmastery
-  balance: bal
-  effect: "Basic attack with cutting weapon"
-  damage_type: cutting
-  syntax: "SLASH <target>"
+bisect:  "assess <= 34 (config.bisectThreshold) and no shield → wield bastard;bisect <target>"
+pulp:    "prone + (head mangled: 200% or concussion) OR skull fractures >= 5 → dismount;pulp <target>"
+evidence: "dwb_runie:230-232,205-212,716-728"
+```
 
-raze:
-  skill: Weaponmastery
-  balance: bal
-  effect: "Strip shield or rebounding"
-  syntax: "RAZE <target>"
+## Momentum (core resource)
+```yaml
+# dwbRunie.getMomentum() = tonumber(ataxia.vitals.class)  (dwb_runie:189-204)
+source: ataxia.vitals.class
+thresholds:
+  assault_torso:        ">= 3   (canAssaultTorso)"
+  double_assault_torso: ">= 6   (canDoubleAssaultTorso — two torso assaults in one action)"
+  assault_head:         ">= 7   (canAssaultHead — mangles head instantly)"
+notes: |
+  Momentum drives every mode. Morningstar doublewhirl builds it; flail assault spends it.
+  Parry response and skull-fracture loops branch on 2+ / 1 / 0 momentum.
+```
 
-impale:
-  skill: Weaponmastery
-  balance: bal
-  effect: "Impale target, prevents movement"
-  syntax: "IMPALE <target>"
-  notes: "SnB spec"
+## Mode Aliases
+```yaml
+# aliases/.../dual_blunt/009_DWB_Runie_Mode.lua (regex ^rw(torso|pulp|group|status)$)
+rwtorso:  "dwbRunie.setMode('torso')"
+rwpulp:   "dwbRunie.setMode('pulp')"
+rwgroup:  "dwbRunie.setMode('group')"
+rwstatus: "dwbRunie.status()  — echoes mode, momentum, per-limb damage, skull fractures/cracked ribs"
+# attack keys (152_First_Attack): zz → setMode('torso') + dispatch(); gated on Spec: Dual Blunt
+```
 
-disembowel:
-  skill: Weaponmastery
-  balance: bal
-  effect: "Instant kill if legs and arm broken, target prone"
-  syntax: "DISEMBOWEL <target>"
+## Offensive Abilities (DWB — actual fire commands)
+```yaml
+# These are the commands dwbRunie actually issues (dwb_runie:442-448,485-488,566,718,725,732)
+whirl:
+  effect: "Single-weapon limb hit (e.g. break a leg with 'expend')"
+  syntax: "whirl <target> <limb> [expend]"
 
-# Runelore
-sketch:
-  skill: Runelore
-  balance: eq
-  effect: "Draw a rune on the ground or an item"
-  syntax: "SKETCH <rune> ON GROUND"
+doublewhirl:
+  effect: "Both weapons; prep or break one/two limbs. 'expend' consumes momentum"
+  syntax: "doublewhirl <target> <limb> [expend] [<limb2> [expend]]"
 
-wunjo:
-  skill: Runelore
-  balance: eq
-  effect: "Rune that causes affliction on touch"
-  syntax: "SKETCH WUNJO"
+assault:
+  effect: "Flail/morningstar momentum-damage strike; torso ≥3 mom (≥6 doubled), head ≥7 mom (mangles)"
+  syntax: "assault <target> torso | head"
 
-algiz:
-  skill: Runelore
-  balance: eq
-  effect: "Alarm rune, alerts on movement"
-  syntax: "SKETCH ALGIZ"
+pulp:
+  effect: "Head execute — mangled head or 5+ skull fractures while prone"
+  syntax: "dismount;pulp <target>"
 
-lagul:
-  skill: Runelore
-  balance: eq
-  effect: "Anti-movement rune"
-  syntax: "SKETCH LAGUL"
+bisect:
+  effect: "Low-health finish (assess <= 34, no shield); wields a bastard sword first"
+  syntax: "wield bastard;bisect <target>"
+
+fracture:
+  effect: "Used in the raze/strip path to remove rebounding/shield"
+  syntax: "falcon track <target>;falcon slay <target>;fracture <target>"
+
+falcon:
+  effect: "Falcon companion — slay (prepended to assaults), track/rake, plus 'falcon rake' bash pet hit"
+  syntax: "falcon slay | track | rake <target>"
+
+# Runes are applied as WEAPON EMPOWERMENT, not standalone sketches (see below)
+empower:
+  effect: "Sets the rune empower priority on wielded weapons before attacking"
+  syntax: "empower priority set isaz wunjo sowulu"
+```
+
+### Rune / weapon setup
+```yaml
+# dwb_runie:36-44,56-69,254-281 — runes here are weapon empowerment, NOT ground sketches / touch effects
+loadout: "Dual morningstar + dual flail (per-weapon wield IDs in dwbRunie.config.weapons)"
+per_weapon: "sketch nairat on each weapon; sketch configuration wielded isaz wunjo sowulu"
+empower:    "'empower priority set isaz wunjo sowulu' sent once on weapon-type switch (anti-spam)"
+switching:  "morningstar for prep/breaks/head; flail for torso assault"
 ```
 
 ## Defensive Abilities
@@ -153,8 +172,9 @@ fitness:
 
 sowulu:
   skill: Runelore
-  effect: "Healing rune"
-  syntax: "TOUCH SOWULU"
+  effect: "Weapon-empower rune in this system (part of the isaz/wunjo/sowulu empower set), not a self-heal"
+  syntax: "empower priority set isaz wunjo sowulu"
+  note: "isaz, wunjo and nairat are likewise applied here as offensive weapon runes, not touch/ground effects"
 
 thurisaz:
   skill: Runelore
@@ -173,21 +193,45 @@ fitness:
 ## Limb Strategy
 ```yaml
 enabled: true
-target_order: [left_leg, right_leg, left_arm]  # for disembowel
-break_requirements:
-  left_leg: 2
-  right_leg: 2
-  left_arm: 2
-finisher: "DISEMBOWEL <target>"
+# DWB prep set depends on mode (dwb_runie:476,540,620)
+prep_set:
+  torso_mode: [left leg, right leg, torso]
+  pulp_mode:  [left leg, right leg, head, torso]
+break_sequence: "whirl right leg expend (→ prone), then doublewhirl left leg + <torso|head>"
+finisher: "assault torso / PULP head / BISECT (see Kill Routes) — no DISEMBOWEL exists in code"
+
+## Parry Handling (dwb_runie:218-228,367-383)
+parried_limb_source: "ataxiaTemp.parriedLimb ('none' when clear)"
+disable_parry: "doublewhirl ... left arm expend  → applies 'numbedleftarm' (isParryDisabled)"
+parry_response_by_momentum:
+  "2+": "doublewhirl <primary> expend left arm expend  (disable + progress)"
+  "1":  "doublewhirl left arm expend <unprepped non-parried limb>"
+  "0":  "untargeted doublewhirl to generate momentum"
+
+## Restoration forks
+torso_mode: "torso RESTOREd while legs broken → pivot to skull fractures → PULP (dwb_runie:502-504)"
+pulp_mode:  "head RESTOREd or target stands (tumble) → pivot to torso assault (dwb_runie:546-560,574-584)"
+
+## Misc gates (dwb_runie:441,708-714,730-735)
+clumsiness: "auto-cured with 'discipline' before breaking legs"
+anti_serpent: "shield on impatience vs Serpent until cured"
+instant_cath: "myinstantcath → touch shield"
+raze_path: "rebounding/shield → falcon track;falcon slay;fracture <target>"
 ```
 
 ## Bashing (PvE)
 ```yaml
-attack_command: "BATTLERAGE SLASH <target>" or spec-specific
+# ataxiaBasher_runewardenBashing() is spec-branched on ataxia.vitals.knight
+# (basher/002_Class_Bashing.lua:658-693)
 attack_skill: Weaponmastery
-battlerage_abilities:
-  - slash: "Basic damage"
-  - rend: "Additional damage"
+spec_branches:
+  Dual Cutting: { raze: "rsl <target>",                         bash: "dsl <target>" }
+  Two Handed:   { raze: "battlefury focus speed;carve <target>", bash: "battlefury focus speed;slaughter <target>" }
+  Dual Blunt:   { raze: "fracture <target>",                     bash: "doublewhirl <target>" }
+  else (SnB):   { raze: "combination <target> raze smash",       bash: "combination <target> slice smash" }
+battlerage:
+  raze: "ataxiaBasher.battlerage.Runewarden.raze (used when shielded + rageraze + rage >= 17)"
+  # There is no 'slash'/'rend' battlerage — that was fictional.
 
 # Falcon rake (ataxiaBasher)
 # Free pet attack prepended to the bash when off cooldown (mirrors Infernal hyena maul).
@@ -238,22 +282,22 @@ access_pattern:
   head: 'lb[target].hits["head"]'
   torso: 'lb[target].hits["torso"]'
 
+# dwbRunie thresholds (config, dwb_runie:65-68,179-183)
 break_levels:
-  0-99: "Healthy"
-  100-149: "Broken (Level 1) - damaged"
-  150-199: "Broken (Level 2) - mangled"
-  200+: "Broken (Level 3) - destroyed"
+  prep:    "prepThreshold 99.9 — isPrepped: one/two whirl hits would reach this (not yet broken)"
+  break:   "breakThreshold 100 — isBroken: damage >= 100 OR the 'damaged<limb>' aff"
+  mangled: "200 — isMangled: damage >= 200 (or 'concussion' aff for head)"
 
-disembowel_check: |
-  lb[target].hits["left leg"] >= 100
-  AND lb[target].hits["right leg"] >= 100
-  AND (lb[target].hits["left arm"] >= 100 OR lb[target].hits["right arm"] >= 100)
-  AND tAffs.prone
-  → DISEMBOWEL
+pulp_check: |
+  hasAff("prone")
+  AND ( isMangled("head")  -- head >= 200% or concussion aff
+        OR ataxiaTemp.fractures.skullfractures >= 5 )  -- config.skullFracturesForPulp
+  → dismount;pulp <target>
 
-behead_check: |
-  lb[target].hits["head"] >= 200
-  → BEHEAD
+bisect_check: |
+  ataxiaTemp.lastAssess <= 34  -- config.bisectThreshold
+  AND not hasAff("shield")
+  → wield bastard;bisect <target>
 ```
 
 ## Implementation Notes

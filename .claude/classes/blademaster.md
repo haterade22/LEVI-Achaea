@@ -536,9 +536,9 @@ Lightning prep → double-break both legs → Ice damage (mangle) phase
 3. **AIRFIST** - When target parries our leg (requires 25 shin: 20 + 5 for infuse, NO cooldown)
 4. **HAMSTRING** - Always keep up to prevent fleeing (10 second duration, timestamp-tracked)
 5. **KNEES** - When ANY leg is about to break (will hit 100% on next hit), prone on same hit as break
-6. **PARRY BYPASS** - If parrying and no shin for airfist, use CENTRESLASH UP (hits torso/head)
+6. **PARRY BYPASS** - AIRFIST is the only parry bypass (needs 25 shin); no centreslash-up fallback exists
 7. **INFUSE ICE + STERNUM** - After ANY leg broken, switch to ice for damage
-8. **MANGLE STRATEGY** - After double-break, hit the leg with HIGHER % for level 3 break
+8. **MANGLE STRATEGY** - While PRONE, legslash RIGHT leg to 200% (mangle), then LEFT (curing applies left first)
 9. **COMPASSSLASH** - Used to balance legs ONLY during prep (no broken legs)
 10. **MOUNT-AWARE DISMOUNT** - When target is mounted + hamstrung + final prep hit, use KNEES to dismount BEFORE double-break
 
@@ -546,7 +546,7 @@ Lightning prep → double-break both legs → Ice damage (mangle) phase
 - Breaking BOTH legs simultaneously is critical vs experienced players
 - After double-break, stay in ICE phase even if one leg heals
 - MANGLE (level 3 break) requires 2 restoration applications to heal = huge advantage
-- Always hit the HIGHER % broken leg when going for mangle
+- Mangle order is fixed RIGHT-first to 200%, then LEFT (curing applies to left leg first)
 - **MOUNTED TARGETS**: KNEES on mounted target DISMOUNTS but doesn't PRONE. Must dismount first, then double-break for prone.
 
 ### Commands
@@ -561,8 +561,50 @@ bmstatusq: Display quad-prep status (blademaster.dispatch.statusQuadPrep())
 
 # Strategy 3: Brokenstar (Upper + Legs + Kill)
 bmbs: Brokenstar dispatch - upper + legs + impale route (blademaster.dispatch.runBrokenstar())
-bmreset: Reset brokenstar state (blademaster.resetBrokenstarState())
+
+# Strategy 4: Group (Pommelstrike Lock)
+bmgroup: Pommelstrike affliction-lock dispatch (blademaster.dispatch.runGroup())
+
+# Reset
+bmreset: Full state reset - mode->double, flamefist, prone timer, brokenstar state (blademaster.fullReset())
 ```
+
+Each mode also exposes an equivalent global-function wrapper alias: `bmdispatch` (double),
+`bmdispatchquad` (quad), `bmdispatchbs` (brokenstar) - thin wrappers that set the mode and call
+`blademaster.run()`, same as `bmd`/`bmdq`/`bmbs`.
+
+### Strategy 2: Quad-Prep (Arms + Legs) phase notes
+6-phase `getPhaseQuadPrep()`: arm_prep -> leg_prep -> flamefist -> arm_break -> leg_break -> mangle.
+- **FLAMEFIST gate**: arm_break is only entered after FLAMEFIST has been sent (`state.flamefistDone`).
+  When all 4 limbs are prepped and flamefist is not yet done, the phase is `flamefist` (send flamefist,
+  raze if shielded) before any break.
+- **Always RIGHT**: both `leg_break` and `mangle` always `legslash right` - curing applies to the left
+  leg first, so the right stays broken longer. Mangle also adds STERNUM.
+- Like double-prep, `mangle` is entered on PRONE alone.
+
+### Strategy 4: Group (Pommelstrike Lock)
+Affliction-lock mode driven entirely by POMMELSTRIKE + `infuse ice`. `selectStrikeGroup()` picks the
+strike by fixed priority (fill the first missing lock aff):
+1. hamstring
+2. paralysis (neck)
+3. asthma (throat)
+4. slickness (underarm)
+5. anorexia (stomach) - only if impatience AND slickness already present
+6. class locking affliction via `getLockingAffliction()` mapped through `blademaster.lockAffToStrike`
+   (paralyse->neck, weariness->shoulder, plague->eyes, stupid->temple, reckless->groin)
+7. hypochondria (chest)
+8. sternum (all lock affs present - pump damage / maintain lock)
+
+### Shared Dispatch Plumbing (all modes)
+`blademaster.run()` is the single entry point; every mode passes through the same guards before
+delegating to its `run*` function:
+- **attackInFlight gate**: re-dispatch blocked until the previous attack resolves. The flag is set in
+  `sendAttack()` and cleared by a `gmcp.Char.Vitals` handler when balance returns (`bal == 1`).
+- **Aeon gate**: returns early while `ataxia.afflictions.aeon` is set.
+- **Rebound hold**: `reboundHold.gate(blademaster.run)` delays the attack until rebounding drops.
+- **Target-change reset**: on a new `target`, clears `flamefistDone`, brokenstar state, and prone timer.
+- **Lock-break shortcut**: `sendAttack()` defers to `ataxia_lockBreak()` when `ataxia_needLockBreak()` is true.
+- **Echo debounce**: `shouldEcho()` throttles status echoes to once per 0.3s during rapid mashing.
 
 ### Combat Phases
 
@@ -584,18 +626,21 @@ bmreset: Reset brokenstar state (blademaster.resetBrokenstarState())
 
 #### Phase 3: Ice Damage / Mangle
 ```
+- Mangle phase is entered on PRONE alone (getPhaseDoublePrep returns "mangle" whenever prone,
+  no leg-broken condition)
 - INFUSE ICE only while PRONE (switch to lightning when they stand)
-- If PRONE + any leg broken: LEGSLASH the OFF-LEG (targeted second) + STERNUM
+- While PRONE: LEGSLASH RIGHT leg to 200% (mangle), then LEGSLASH LEFT + STERNUM
 - Goal: MANGLE (level 3 break) = 2 restoration applications to heal
 - If they STAND UP: Switch to LIGHTNING, continue hitting broken leg
 - Target is frozen + leg broken = massive damage
-- MULTISLASH burst when HP < 30%
 ```
+(Note: `killHealthThreshold = 30` is defined in config but never read - there is no low-HP
+MULTISLASH burst branch in the dispatch.)
 
-**Mangle Strategy**: After double-break:
-- While PRONE: Stay in ICE phase, hit OFF-LEG (targeted second), STERNUM
+**Mangle Strategy**: While PRONE:
+- Stay in ICE phase; legslash RIGHT leg until 200% (mangle), then legslash LEFT + STERNUM
+- Fixed right-first order because curing applies to the left leg first, so the right stays broken longer
 - If they STAND UP: Switch to LIGHTNING, continue hitting broken leg
-- One leg broken: Always hit the broken leg for mangle
 
 ### Strike Priority (All Phases)
 | Priority | Strike | Affliction | Condition |
@@ -615,14 +660,14 @@ bmreset: Reset brokenstar state (blademaster.resetBrokenstarState())
 | Condition | Attack | Direction |
 |-----------|--------|-----------|
 | Shield/Rebounding | RAZE | - |
-| Parrying leg + no shin for airfist + other leg prepped | CENTRESLASH | UP (torso/head) |
-| Both legs broken (ice phase) | LEGSLASH | OFF-LEG (targeted second) |
-| One leg broken | LEGSLASH | Broken leg |
-| Gap too big (prep phase only) | COMPASSSLASH | Lower leg (SE/SW) |
-| Normal prep | LEGSLASH | Lower leg |
+| Mangle (PRONE), right leg < 200% | LEGSLASH | RIGHT (mangle to 200%) |
+| Mangle (PRONE), right leg >= 200% | LEGSLASH | LEFT |
+| Normal prep | LEGSLASH | Lower leg (getFocusLeg) |
 
 **NOTE**: BALANCESLASH is never used - always LEGSLASH in ice phase for mangle.
-**NOTE**: After double-break, hit the OFF-LEG (the leg that got secondary damage). It was "targeted second" in the legslash.
+**NOTE**: In the mangle (prone) phase the dispatch hits the RIGHT leg to 200% then the LEFT - a fixed
+right-first order (curing applies left first). `selectAttackDoublePrep()` only ever returns airfist or
+legslash; there is no centreslash-up parry-bypass fallback in the double-prep path.
 
 ### Shin Mechanics
 - **Generation**: 8 per strike normally, 12 in Sanya stance
@@ -654,17 +699,16 @@ Helper functions:
 - `blademaster.getTorso()` - Shorthand for torso
 - `blademaster.getHead()` - Shorthand for head
 
-Affliction tracking helpers (V3 compatible):
-- `blademaster.hasAff(aff)` - Check if target has affliction (routes V3 → V2 → V1)
-- `blademaster.getAffProb(aff)` - Get affliction probability (V3: 0.0-1.0, V2/V1: binary 0 or 1.0)
-- `blademaster.getTrackingSystem()` - Returns "V3", "V2", or "V1" based on active system
+Affliction tracking helpers (V3-only):
+- `blademaster.hasAff(aff)` - Check if target has affliction (calls global `haveAff(aff)`)
+- `blademaster.getAffProb(aff)` - Get affliction probability 0.0-1.0 (via `getAffProbabilityV3`, else 0)
+- `blademaster.getTrackingSystem()` - Always returns "V3"
 
 Leg check functions:
-- `blademaster.checkDoubleBreakReady()` - Both legs at 90%+
+- `blademaster.checkBothLegsPrepped()` - Both legs effectively prepped (90%+, or would break on next hit)
 - `blademaster.checkBothLegsBroken()` - Both legs at 100%+
 - `blademaster.checkAnyLegBroken()` - At least one leg at 100%+
-- `blademaster.checkLegAboutToBreak()` - Either leg will hit 100% on next hit
-- `blademaster.checkWillDoubleBreak()` - BOTH legs will break on next hit (causes prone)
+- `blademaster.checkWillDoubleBreakLegs()` - BOTH legs will break on next hit (causes prone)
 - `blademaster.checkWillPrepBothLegs()` - BOTH legs will reach 90%+ on next hit
 - `blademaster.getFocusLeg()` - Returns "left" or "right" based on which leg is lower
 
@@ -675,15 +719,12 @@ Upper body check functions (Brokenstar):
 - `blademaster.checkWillBreakUpper()` - BOTH torso and head will break on next centreslash
 - `blademaster.getCentreslashDirection()` - Returns "up" or "down" based on which limb is lower
 
-Other functions:
-- `blademaster.shouldSwitchToBody()` - Parry bypass logic (no shin for airfist)
-
 ### Status Display
 ```
 +============================================+
 |     BLADEMASTER DOUBLE-PREP DISPATCH      |
 +============================================+
-| Target: <name> (HP: X%) | Track: V1/V2/V3
+| Target: <name> (HP: X%) | Track: V3
 | Phase: LIGHTNING (prep) / ICE (damage)
 | Focus Leg: left/right (alternating to keep even)
 | Parried: <limb>

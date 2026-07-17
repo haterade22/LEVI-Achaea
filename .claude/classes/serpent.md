@@ -15,21 +15,113 @@ Hypnosis: Mental manipulation through suggestions (including Impulse)
 
 ---
 
+## Offense Modes & Aliases (002_Serpent_Offense.lua)
+
+```yaml
+# Aliases (registered ~line 2606-2616)
+aliases:
+  ek:          "serp_ekanelia_offense()  # fire one attack round"
+  ekauto:      "auto mode"
+  eklock:      "lock mode"
+  ekgroup:     "group mode"
+  ekdark:      "darkshade mode"
+  ekscyth:     "scytherus mode"
+  ekbite:      "bitepayload mode"
+  ekhyp:       "hypnosis mode"
+  ekhl:        "hypnolock mode"
+  ekstatus:    "serp_status()"
+  ekhypstatus: "serpent.hypnosis.status()"
+
+# Eight strategy modes drive selection
+modes: [auto, lock, group, darkshade, scytherus, bitepayload, hypnosis, hypnolock]
+
+# Every attack round is prefixed:
+adder_pet:  "order adder kill <target>   # serpent uses an adder pet (~line 2100)"
+purge:      "purge  # residual venom cleared before each attack"
+
+# Round-1 opener burst (buildOpener, config-gated, ~2036-2063)
+opener:
+  useOpener:    "master toggle"
+  useBowOpener: "remove/wield bow; pinshot <target> foot; wield shield dirk"
+  dispel:       "dispel <target>"
+  useSigils:    "drop incandescent sigil; attach monolith sigil to incandescent sigil"
+
+# Per-round denial (config useExitBlock, ~2085-2097)
+exit_block: "rotates `block <dir>` across gmcp room exits between rounds (throttled 5s)"
+```
+
+### Class-Aware Venom Routing (CLASS_LOCK_VENOM, ~700-728)
+Once paralysis is stuck, the second lock venom is chosen per target class:
+
+| Target class | First lock venom | Blocks |
+|--------------|------------------|--------|
+| apostate, pariah | voyria | sip-based healing/plagues |
+| monk, shikudo, tekura | vernalius | weariness → Fitness |
+| magi, sylvan | notechis | haemophilia → blood/passive cures |
+| infernal, paladin, runewarden, unnamable, blademaster | xentio | clumsiness → parry+stance |
+| psion, alchemist | aconite | stupidity → weave queue / transmute |
+| depthswalker | eurypteria | recklessness → shadow cures |
+| druid, sentinel | kalmia | asthma → smoke + morph |
+
+Class comes from `classDetect.state.attackerClass` (fallback `tarClass`); unknown class → standard priority.
+
+### Advanced Mid-Fight Behaviors
+```yaml
+lock_reinforce_burst: |
+  Post-truelock burst-finish (serpStrategy == "lock_reinforce", ~1438-1481) run
+  before execute: paralysis maintain (curare) → voyria reinforcement (+eurypteria
+  for recklessness) → vardrax+euphorbia (addiction+nausea) → scytherus/camus damage.
+
+relapse_lock: |
+  Fires after impatience delivered (~926-956): pre-load gecko+slike when
+  asthma+weariness stacked, stupidity impulse, then monkshood re-lock — timed to the
+  fratricide ~3s relapse window.
+
+bitepayload_ladder: |
+  selectBiteVenom (~984-1028) — a BAL-only alternative to impulse. Priority:
+  scytherus/camus loop → monkshood/kalmia/curare/loki/aconite Ekanelia →
+  single-aff lock-piece bites (curare/kalmia/vernalius).
+
+rebounding_reapply_preempt: |
+  When target rebounding drops it stamps a clock and fires one impulse+bite through
+  the ~8.15s gap before rebounding returns (~1726-1742).
+
+gecko_strip: |
+  Strips sileris/fangbarrier for impulse via a gecko bite (geckoStripAttempted +
+  postGeckoLockdown one-shot), then slams curare+slike to seal the lock (~1890-1907).
+  This is how sileris/fangbarrier is cleared — NOT flay.
+
+cure_tracking: |
+  Counts kelp/ginseng/bloodroot/focus cures in a 6s window (~1242-1257) and forks
+  between ginseng_pressure (target fears darkshade) and lock push.
+
+execute_safety: |
+  V3 confidence tiers haveAff_locked (0.90) / haveAff_tactical (0.70) recompute
+  soft/hard/truelock; execute is gated behind getStateProbabilityV3 of all 5 lock
+  affs >= 0.90 so a kill never fires on an already-cured aff (~2160-2171).
+```
+
+---
+
 ## CRITICAL: Impulse Mechanics (Updated 2024)
 
 **Impulse is the primary method Serpents use to deliver mental afflictions.**
 
 ```yaml
 impulse_requirements:
-  description: "Impulse SUGGEST only works when ALL conditions are met"
+  description: "Impulse eligibility (checkImpulseEligible) is gated ONLY on the bite landing"
   conditions:
-    - "Victim has NO sileris/fangbarrier defense"
-    - "Victim HAS asthma affliction"
-    - "Victim HAS weariness affliction"
+    - "Victim has NO sileris AND NO fangbarrier defense (bite must land)"
+  note_on_asthma_weariness: |
+    asthma + weariness is NOT an impulse gate. It is the conditional set for the
+    monkshood-Ekanelia impatience path (impatienceConditionsMet, 002_Serpent_Offense.lua:601-611),
+    a SEPARATE check. Impulse itself only needs no sileris/fangbarrier.
 
   delivery: |
-    Once requirements met, Serpent uses IMPULSE <target> SUGGEST <affliction>
-    This delivers mental afflictions like impatience, anorexia instantly.
+    Command is `impulse <target> <suggestion> <venom>` (no SUGGEST keyword).
+    It ALWAYS pairs a hypnosis suggestion with a bite venom to trigger an Ekanelia
+    transform. Impatience specifically comes from `impulse <target> masochism monkshood`
+    (monkshood Ekanelia), not from impulsing 'impatience' directly.
 
   note: "SNAP from hypnosis does NOT deliver impatience anymore - use Impulse instead"
 
@@ -127,13 +219,13 @@ prerequisites:
 attack_sequence_from_combat_log:
   phase_1_kelp_setup:
     - "DST target kalmia vernalius"   # asthma + weariness (BOTH kelp cures)
-    - "Flay sileris/rebounding"       # Remove defenses blocking impulse
-    - "Target now vulnerable to Impulse"
+    - "Flay strips only shield/rebounding — NOT sileris/fangbarrier"
+    - "dstab lands through sileris/fangbarrier; only impulse/bite is blocked"
 
   phase_2_impulse_delivery:
-    - "IMPULSE target SUGGEST impatience"  # Blocks focus
-    - "IMPULSE target SUGGEST anorexia"    # Blocks eating (after slickness)
-    - "Fratricide applied via hypnosis"    # Causes impulse affs to RELAPSE
+    - "impulse target masochism monkshood"  # monkshood Ekanelia -> impatience (blocks focus)
+    - "impulse target <suggestion> slike"    # anorexia via bite (after slickness)
+    - "Fratricide applied via hypnosis"      # Causes impulse affs to RELAPSE
 
   phase_3_lock_completion:
     - "DST target curare gecko"       # paralysis + slickness (BOTH bloodroot)
@@ -142,10 +234,10 @@ attack_sequence_from_combat_log:
 
 actual_combat_example:
   round_1: "Doublestab kalmia vernalius → asthma + weariness"
-  round_2: "Flay sileris → removes fangbarrier"
-  round_3: "Impulse impatience → victim can't focus"
+  round_2: "Flay shield/rebounding (sileris/fangbarrier NOT flayed - dstab works through it)"
+  round_3: "impulse masochism monkshood → impatience, victim can't focus"
   round_4: "Doublestab curare gecko → paralysis + slickness"
-  round_5: "Impulse anorexia → victim can't eat"
+  round_5: "impulse <suggestion> slike → anorexia, victim can't eat"
   result: "TRUE LOCK - victim cannot cure anything"
 
 required_afflictions:
@@ -174,9 +266,9 @@ steps:
   2: "SUGGEST <target> fratricide"     # Sets up relapse mechanic
   3: "SNAP to trigger fratricide"
   4: "Apply asthma + weariness (kelp stack)"
-  5: "IMPULSE <target> SUGGEST impatience"  # Now relapses due to fratricide
+  5: "impulse <target> masochism monkshood"  # impatience via monkshood Ekanelia; relapses due to fratricide
   6: "Apply paralysis + slickness"
-  7: "IMPULSE <target> SUGGEST anorexia"
+  7: "impulse <target> <suggestion> slike"   # anorexia via bite
   8: "Target locked with relapsing impatience"
 
 key_insight: |
@@ -216,22 +308,26 @@ required_afflictions:
   - sensitivity: "50% more damage taken"
 ```
 
-### Alternative Kill: Garrote
+### Finisher: Execute / Behead (truelock)
 ```yaml
 type: execute
-summary: Strangle target from behind for execute
-
-prerequisites:
-  - Must be hidden (HIDE)
-  - Must be behind target
-  - Target must not be alert
+summary: PvP lock finisher — the offense file's actual kill commands
 
 steps:
-  1: "HIDE to enter stealth"
-  2: "Position behind target"
-  3: "GARROTE <target>"
+  1: "If target is prone: wield shield scimitar; behead <target>"
+  2: "Else (finish strategy): execute <target>"
 
-notes: "Can be blocked by alertness/vigilance defenses"
+joint_probability_gate: |
+  execute only fires when getStateProbabilityV3 of all 5 lock affs
+  (anorexia, asthma, slickness, impatience, paralysis) >= 0.90.
+  If truelock is per-aff true but jointly shaky, it falls through to the
+  lock_reinforce burst instead of gambling the kill on a bluff.
+  (002_Serpent_Offense.lua:1707-1720, 2160-2171)
+
+notes: |
+  GARROTE is NOT a PvP kill route — the PvP offense file never sends it.
+  garrote is the PvE basher attack only (ataxiaBasher_serpentBashing,
+  002_Class_Bashing.lua:710-724).
 ```
 
 ## Offensive Abilities
@@ -506,7 +602,10 @@ ekanelia_overview:
   description: |
     Ekanelia is a Serpent skill that ADDS bonus afflictions to BITE attacks
     when specific conditionals are present on the target.
-    IMPORTANT: Only works with BITE, not DOUBLESTAB.
+    IMPORTANT: Delivered by BITE and IMPULSE (impulse = suggestion + bite), NOT
+    by DOUBLESTAB. In the lock rotation the PRIMARY delivery is via impulse
+    (selectImpulsePair), not a raw bite. File header: "EKANELIA TRANSFORMATIONS
+    (BITE/IMPULSE only)" (002_Serpent_Offense.lua:30).
 
   mechanic: |
     When biting with an Ekanelia-enhanced venom, if the target has ALL
@@ -609,11 +708,14 @@ notes: "Serpent is affliction-based, not limb-based"
 
 ## Bashing (PvE)
 ```yaml
-attack_command: "BATTLERAGE BITE <target>"
+# ataxiaBasher_serpentBashing (002_Class_Bashing.lua:710-724)
+attack_command: "garrote <target>"   # the actual basher attack (NOT "BATTLERAGE BITE")
 attack_skill: Subterfuge
-battlerage_abilities:
-  - bite: "Basic damage"
-  - envenom: "Additional damage"
+sequence:
+  - "If shielded: flay <target> shield"   # strip shield first
+  - "Assembled battlerage (ataxiaBasher_assembleBattlerage)"
+  - "If not shielded: garrote <target>"
+notes: "There is no BATTLERAGE BITE and no 'envenom' battlerage ability."
 ```
 
 ## Fighting Against This Class
@@ -676,7 +778,7 @@ ekanelia_defense:
     - "Cure masochism early - blocks 2 Ekanelia transformations"
     - "Don't let clumsiness + weariness stack (enables kalmia→slickness)"
     - "Track conditional combos to predict incoming afflictions"
-    - "Ekanelia only works with BITE (not DST) - serpent sacrifices double venom"
+    - "Ekanelia fires on BITE and IMPULSE (not DST) - impulse is the primary lock-rotation delivery"
 
 priority_cures:
   - asthma: "HIGHEST vs Serpent - blocks impulse AND smoking"
@@ -694,9 +796,9 @@ dangerous_abilities:
   - impulse: "Delivers mental afflictions INSTANTLY when asthma+weariness present"
   - fratricide: "Causes impulse mental affs to RELAPSE after cure"
   - hypnosis: "Sets up fratricide via SUGGEST/SNAP"
-  - garrote: "Instant kill from stealth"
   - phase: "Makes them untargetable"
-  - flay: "Strips sileris/rebounding - opens you to impulse"
+  - flay: "Strips shield or rebounding (NOT sileris/fangbarrier - dstab works through those)"
+  - execute/behead: "PvP lock finisher (behead when prone); gated by V3 joint-probability >=0.90"
 
 avoid:
   - "Letting asthma + weariness stack (enables impulse)"
@@ -723,8 +825,9 @@ recommended_strategy: |
   4. PARALYSIS OVER SLICKNESS: When asthma blocks smoking, bloodroot must
      cure both para and slick. Prioritize paralysis - it blocks ALL actions.
 
-  5. MAINTAIN SILERIS: Sileris/fangbarrier blocks impulse entirely.
-     Serpent will flay it - re-apply immediately.
+  5. MAINTAIN SILERIS: Sileris/fangbarrier blocks impulse/bite entirely (dstab still
+     lands through it). Serpent clears it via the gecko-strip path (NOT flay) - re-apply
+     quicksilver immediately when stripped.
 
   6. KELP STACK AWARENESS: Track your kelp stack. If kelp is depleted
      and you have asthma + weariness, you're in serious danger.
@@ -772,7 +875,7 @@ Priority Swap Triggers (implemented in 029_Priority_Swaps.lua):
 - astWear: asthma + weariness vs Serpent → boost asthma to prio 3
 - fratLock: fratricide + asthma + slickness → boost fratricide to prio 4
 
-AntiSerpent Function (299_Anti_Priorities.lua):
+AntiSerpent Function (001_Anti_Priorities.lua):
 - Tree when: canTree AND approachingLock (asthma + slickness + imp/ano)
 - Impulse prevention: boost asthma when asthma + weariness present
 - Fratricide handling: boost fratricide when asthma + slickness present
@@ -783,7 +886,7 @@ Edge cases:
 - Hypnosis suggestions fire with 4s delay (SNAP)
 - IMPULSE delivers instantly when asthma + weariness + no sileris
 - Phase makes them untargetable but they can't attack
-- Garrote requires hidden AND behind target
+- Garrote is the PvE basher attack only, NOT a PvP finisher (execute/behead handle PvP)
 - Paralysis and slickness COMPETE for bloodroot cure
 - Asthma and weariness COMPETE for kelp cure
 - Ekanelia BITE can deliver 2-3 affs when conditionals met (check tAffs)

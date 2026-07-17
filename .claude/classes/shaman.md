@@ -15,23 +15,21 @@ Spiritlore: Spirit binding and shamanic powers
 
 ## Kill Routes
 
-### Primary Kill: Vodun Puppet Lock
+### Primary Kill: Truelock (lock / group / bleed modes)
 ```yaml
 type: affliction
-summary: Use vodun doll to stack afflictions faster than target can cure
+summary: Stack afflictions via curse/swiftcurse/jinx faster than target can cure, then finish
 
 prerequisites:
-  - Must have target's doll fashioned (FASHION DOLL FOR <target>)
-  - Doll must have hair/blood (BIND <target> TO DOLL)
+  - Doll is fashioned automatically on first non-group attack ("fashion doll of <target>", 028:665)
+    — no separate BIND step; it takes eq, offense starts next press.
 
 steps:
-  1: "FASHION DOLL FOR <target>"
-  2: "BIND <target> TO DOLL (requires hair or blood)"
-  3: "CURSE DOLL WITH <affliction> to apply afflictions"
-  4: "Stack toward true lock: asthma, anorexia, slickness"
-  5: "Apply paralysis to block tree"
-  6: "Apply impatience to block focus"
-  7: "Damage to death through lock"
+  1: "Doll auto-fashions (fashion doll of <target>)"
+  2: "Stack truelock affs: asthma + anorexia + slickness + impatience + paralysis (TRUELOCK_AFFS, 028:171)"
+  3: "computeStrategy → 'classlock' if class lock aff missing, else 'finish' (028:220-272)"
+  4: "Finish: party callout 'pt TRUELOCK on <t> -- EXECUTE', then jinx sleep sleep (if prone/canJinx)"
+  5: "  or 'curse <target> plague invoke soulscourge' (marak) / 'curse <target> plague' (028:680-694)"
 
 required_afflictions:
   - asthma: "blocks smoking"
@@ -40,31 +38,29 @@ required_afflictions:
   - paralysis: "blocks tree"
   - impatience: "blocks focus"
 
-notes: "Shaman doesn't need extra lock aff - paralysis in lock is sufficient"
+notes: "Shaman doesn't need extra lock aff - paralysis in lock is sufficient (paralysis is base lock)"
 ```
 
-### Alternative Kill: Curse Stack
+### Alternative Kill: Tzantza (tzantza mode, `shtz`)
 ```yaml
 type: affliction
-summary: Use Curses skill to directly apply afflictions
+summary: Stack mental afflictions, then execute with the tzantza curse
 
 steps:
-  1: "CURSE <target> <curse> to apply afflictions"
-  2: "Stack curses for affliction pressure"
-  3: "Combine with vodun for faster stacking"
-  4: "Work toward lock or damage kill"
+  1: "tzantza_build: swiftcurse/jinx/curse mental affs until getTzantzaAffs() >= 6 (028:264-271)"
+  2: "tzantza_execute: 'jinx amnesia tzantza <target>' (canJinx)"
+  3: "  or 'swiftcurse <target> tzantza' (charge>1)"
+  4: "  or 'curse <target> tzantza invoke soulscourge vodun bind' (marak) (028:942-955)"
 ```
 
-### Alternative Kill: Spiritlore Spirits
+### Alternative Kill: Bleed / Damage (bleed & damage modes)
 ```yaml
-type: damage
-summary: Use bound spirits for damage and utility
+type: affliction+damage
+summary: Haemophilia-first pressure with passive bleed (teraile) and aggressive bloodlet
 
 steps:
-  1: "Bind spirits for combat"
-  2: "Command spirits to attack"
-  3: "Combine spirit damage with affliction pressure"
-  4: "Kill through accumulated damage"
+  1: "bleed mode: haemophilia-first lock, teraile bleeds on each curse, bloodlet fires aggressively (028:842-904)"
+  2: "damage mode: haemophilia → bloodlet → coagulation(bleed>=200)→slickness → pressure curse + soulscourge (028:909-937)"
 ```
 
 ## Offensive Abilities
@@ -73,86 +69,73 @@ steps:
 fashion:
   skill: Vodun
   balance: eq
-  effect: "Create a vodun doll for target"
-  syntax: "FASHION DOLL FOR <target>"
-  notes: "Required before doll attacks"
+  effect: "Create a vodun doll for target (auto on first non-group attack, no separate BIND step)"
+  syntax: "fashion doll of <target>"
+  notes: "Fires automatically once per new target; takes eq, offense begins next press (028:663-666)"
 
-bind:
-  skill: Vodun
-  balance: eq
-  effect: "Bind target to doll using hair or blood"
-  syntax: "BIND <target> TO DOLL"
-  notes: "Must have their hair/blood"
-
-curse_doll:
-  skill: Vodun
-  balance: eq
-  effect: "Apply affliction through doll"
-  syntax: "CURSE DOLL WITH <affliction>"
-  afflictions_available:
-    - asthma
-    - anorexia
-    - slickness
-    - paralysis
-    - impatience
-    - many_more
-
-pincushion:
-  skill: Vodun
-  balance: eq
-  effect: "Damage through doll"
-  syntax: "PINCUSHION DOLL"
-
-decay:
-  skill: Vodun
-  balance: eq
-  effect: "Cause limb damage through doll"
-  syntax: "DECAY <limb>"
-
-# Curses
+# Curses — three delivery methods with distinct speeds and gating
 curse:
   skill: Curses
-  balance: eq
-  effect: "Apply curse affliction"
-  syntax: "CURSE <target> <curse>"
-
-jinx:
-  skill: Curses
-  balance: eq
-  effect: "Apply jinx debuff"
-  syntax: "JINX <target>"
+  balance: eq (~2.2s)
+  effect: "Apply one curse + optional invoke bonus action; charges jinx for next balance"
+  syntax: "curse <target> <curse> [invoke <ability>]"
+  notes: "PRIMARY delivery. Only a regular curse charges jinx (swiftcurse does not). (028:760)"
 
 swiftcurse:
   skill: Curses
-  balance: eq
-  effect: "Fast curse application"
-  syntax: "SWIFTCURSE <target> <curse>"
+  balance: eq (~0.8s)
+  effect: "Fast single curse — filler between cooldowns"
+  syntax: "swiftcurse <target> <curse>  (bare 'swiftcurse' recharges)"
+  notes: "Gated by curseCharge > 1; does NOT charge jinx (028:740-755)"
 
-# Spiritlore
-bind_spirit:
-  skill: Spiritlore
-  balance: eq
-  effect: "Bind a spirit for combat"
-  syntax: "SPIRITBIND <spirit>"
+jinx:
+  skill: Curses
+  balance: eq (~2.3s)
+  effect: "Deliver TWO curses in one balance (on different cure paths)"
+  syntax: "jinx <curse1> <curse2> <target>"
+  notes: "Gated by ataxiaTemp.canJinx, charged only by a prior regular curse (028:747, 811)"
 
-command_spirit:
-  skill: Spiritlore
+# Curseward counter
+breach:
+  skill: Curses
   balance: eq
-  effect: "Command bound spirit"
-  syntax: "SPIRIT <command>"
+  effect: "Strip target's curseward — always top priority when present"
+  syntax: "curse <target> breach"
+  notes: "Fires before any other strategy when target has curseward (028:672-675)"
 ```
 
-## Defensive Abilities
-```yaml
-spiritshield:
-  skill: Spiritlore
-  effect: "Spirit-based defense"
-  syntax: "SPIRITSHIELD"
+## Modes
+Offense is mode-driven; `setMode` selects, `computeStrategy` derives the strategy each balance (028:1118-1128, 220-272).
 
-ancestors:
-  skill: Spiritlore
-  effect: "Call upon ancestors for protection"
-  syntax: "ANCESTORS"
+| Mode | Alias | Purpose |
+|------|-------|---------|
+| group | `shgroup` | Reactive gap-filling for group truelock (swiftcurse-first, speed) |
+| lock | `shlock` | Solo lock progression with invoke support (curse→jinx→swift cycle) |
+| bleed | `shbleed` | Haemophilia-first lock, teraile passive bleed + aggressive bloodlet |
+| damage | `shdmg` | Pure haemophilia/bleed damage pressure |
+| tzantza | `shtz` | Mental-aff stack → tzantza execute |
+
+Utility aliases: `shstatus` (status), `shreset` (reset to group), `shspirits` (spirit-binding guide) (028:1211-1268).
+
+## Invoke Abilities (bonus action on a curse)
+Selected by `selectInvoke` priority; each requires a bound combat spirit (028:599-650).
+```yaml
+bloodlet:    { spirit: teraile, effect: "haemophilia + start bleeding",  syntax: "invoke bloodlet <target>" }
+coagulation: { spirit: aspar,   effect: "convert bleed>=200 into an affliction", syntax: "invoke coagulation <aff>" }
+relapse:     { spirit: syvis,   effect: "force aff to relapse after cure (paralysis is #1 target; skipped vs tree)", syntax: "invoke relapse <aff>" }
+soulscourge: { spirit: marak,   effect: "mana damage", syntax: "invoke soulscourge" }
+soulrend:    { spirit: maligus, effect: "higher mana damage; gated on manaleech/confusion/shyness/paranoia/dementia", syntax: "invoke soulrend" }
+```
+
+## Spiritlore — Required Combat Spirit Profile
+```yaml
+# Spirits are NOT commanded to attack; they enable the invoke bonus actions above.
+# Managed via 'sp create combat binds ...' / 'sp combat'; queried with shaman.spiritisbound().
+# On startup the offense warns if any required binding is missing (028:1076-1091).
+required_bindings: [marak, teraile, aspar, syvis, maligus]
+create: "sp create combat binds marak teraile aspar syvis maligus attunes marak teraile maligus tether anthius"
+load:   "sp combat"
+guide:  "shspirits"   # prints the profile + current bound/missing state (028:1240-1268)
 ```
 
 ## Passive Cures
@@ -163,20 +146,22 @@ ancestors:
 
 ## Limb Strategy
 ```yaml
-enabled: partial
-target_order: [head, torso]  # decay can target limbs
-break_requirements:
-  head: 2  # for concussion effects
-notes: "Decay ability can damage limbs through doll but main focus is afflictions"
+enabled: false
+notes: "Shaman offense is pure affliction/lock/bleed — no limb-damage logic exists in the code (028)."
 ```
 
 ## Bashing (PvE)
 ```yaml
-attack_command: "BATTLERAGE PINCUSHION"
-attack_skill: Vodun
-battlerage_abilities:
-  - pincushion: "Basic damage through doll"
-  - spirits: "Spirit attacks"
+# ataxiaBasher_shamanBashing (002_Class_Bashing.lua:727-792)
+bash_type: swiftcurse   # default; set via `aconfig bashtype <type>` (shaman.spiritlore.bashType)
+curse_used: bleed
+rotation:
+  - "hp < 60%: 'stand;wield shield;invoke regeneration' (self-heal)"
+  - "swiftcurse (charge>1): 'swiftcurse <target> bleed'; else recharge with bare 'swiftcurse'"
+  - "arius bashType (arius bound): 'invoke roar <target>'"
+  - "else canJinx: 'jinx bleed bleed <target>'; else 'curse <target> bleed'"
+battlerage:
+  - "invoke korkma <3rd target>: crowd-control on 3+ mobs (001_Bashing_Functions.lua:1013-1015)"
 ```
 
 ## Fighting Against This Class
@@ -190,9 +175,10 @@ priority_cures:
 
 dangerous_abilities:
   - vodun_doll: "Remote affliction application"
-  - swiftcurse: "Fast curse stacking"
-  - decay: "Remote limb damage"
-  - spirits: "Additional damage/utility"
+  - swiftcurse: "Fast 0.8s curse stacking (gated by curse charges)"
+  - jinx: "Two afflictions in one balance"
+  - relapse: "Forces a cured aff (usually paralysis) to return"
+  - bloodlet_bleed: "Haemophilia + accumulating bleed (teraile), coagulated into affs"
 
 avoid:
   - "Letting them get your hair/blood for doll"
@@ -211,11 +197,9 @@ recommended_strategy: |
 ## Implementation Notes
 ```
 Triggers to watch for:
-- "fashions a small doll" - they created a doll
-- "binds * to the doll" - doll now linked
-- "curses the doll" - affliction incoming
-- "jabs pins into" - pincushion damage
-- Various curse messages
+- "fashions a small doll" - they created a doll (auto-fashioned; no separate bind step)
+- Curse / swiftcurse / jinx affliction messages
+- Bleed accumulation (haemophilia + teraile passive bleed)
 
 GMCP considerations:
 - Track gmcp.Char.Afflictions for current affs

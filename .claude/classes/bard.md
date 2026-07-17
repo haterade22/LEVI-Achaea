@@ -30,31 +30,53 @@ Woe:
 
 ## Kill Routes
 
-### Primary Kill: Runeblade Resonance
+> Implemented in `bard/001_LeviBard.lua` via `bard.dispatchOne()` / `bard.dispatchTwo()`
+> (backward-compat globals `levibardone()` / `levibardtwo()`). There is NO "resonance"
+> mechanic anywhere in the offense code — the routes below are what the dispatch chain
+> actually does with rapier `blade <move>` attacks.
+
+### Primary Kill: Limb-Prep Sunrise / Sunset
 ```yaml
-type: damage
-summary: Build resonance through songs and attacks, culminating in burst damage
+type: limb
+summary: Prep all four limb groups with rapier hits, then fire sunrise/sunset
 
 prerequisites:
-  - Must build resonance on target
-  - Resonance built through rapier attacks and songs
+  - head + arm + torso + leg all "prepped" (bard.calcPreps: hits + rapierdamage >= 100)
+  - rapierdamage = ataxiaTables.limbData.bardRapier
 
 steps:
-  1: "Apply songs for affliction pressure"
-  2: "Use bladedance attacks to build resonance"
-  3: "Stack resonance to high levels"
-  4: "Trigger resonance for burst damage kill"
+  1: "Progressive limb prep — highsun (head/arm), jab (torso), heelsnap (legs)"
+  2: "Each blade move also delivers a refrain (see selectRefrain priority table)"
+  3: "Once head+arm+torso+leg prepped: 'blade sunrise <target> <left|right> <refrain>'"
+  4: "bardsunset flag routes to 'blade sunset <target> <side>' (envenom-fang variant)"
 
-notes: "Resonance damage scales with buildup"
+notes: "dispatchOne owns the sunrise kill chain; dispatchTwo is tempo-gated sunset."
+```
+
+### Alternative Kill: Crescendo / Finale Burst
+```yaml
+type: damage
+summary: Build crescendo, then trigger finale for the burst kill
+
+prerequisites:
+  - tAffs.crescendo built on target (crescendo is a Bard aff, cured by ash)
+  - bladefinale flag set (finale is ready)
+
+steps:
+  1: "Attacks build crescendo (tracked via tAffs.crescendo)"
+  2: "When bladefinale == true, dispatchOne fires 'blade flick <target>;finale <target>'"
+  3: "dispatchTwo fires 'finale <target>' directly"
+
+notes: "combatEcho shows [CRES:n] while building, [FINALE] when bladefinale set."
 ```
 
 ### Alternative Kill: Affliction Lock
 ```yaml
 type: affliction
-summary: Use composition and bladedance for affliction stacking
+summary: Deliver refrains via blade moves to stack afflictions toward a lock
 
 steps:
-  1: "Apply afflictions through songs"
+  1: "Each blade move carries a refrain from the priority table (selectRefrain)"
   2: "Use bladedance venoms for additional pressure"
   3: "Stack toward true lock"
   4: "Apply voyria to block immunity sip"
@@ -69,69 +91,77 @@ required_afflictions:
   - voyria: "blocks immunity elixir (class-specific)"
 ```
 
-### Alternative Kill: Song Damage
-```yaml
-type: damage
-summary: Use song damage abilities for sustained output
-
-steps:
-  1: "Apply sensitivity"
-  2: "Use damaging songs"
-  3: "Combine with bladedance attacks"
-  4: "Kill through accumulated damage"
-```
-
 ## Offensive Abilities
+
+The offense uses a single command family — `blade <move> <target> [<limb>] <refrain>` — plus
+`finale <target>`. There is no SING/TUNE/SLASH/THRUST/RIPOSTE/RECITE in the code.
+
 ```yaml
-# Composition
-song:
-  skill: Composition
-  balance: eq
-  effect: "Play a song with various effects"
-  syntax: "SING <song>"
-  songs:
-    - lament: "Damage over time"
-    - cantata: "Affliction application"
-    - requiem: "Devastating effect at high resonance"
-
-tune:
-  skill: Composition
-  balance: eq
-  effect: "Tune instrument for different effects"
-  syntax: "TUNE <tuning>"
-
-dissonance:
-  skill: Composition
-  balance: eq
-  effect: "Apply dissonance affliction"
-  syntax: "SING DISSONANCE AT <target>"
-
-# Bladedance
-slash:
+# Bladedance — the one attack family (bard/001_LeviBard.lua)
+blade:
   skill: Bladedance
   balance: bal
-  effect: "Slash with rapier, can apply venom"
-  syntax: "SLASH <target> <venom>"
+  effect: "Rapier strike; also delivers a refrain and preps a limb"
+  syntax: "blade <move> <target> [<limb>] <refrain>"
+  moves:
+    - highsun: "head / arm prep"
+    - jab: "torso prep"
+    - heelsnap: "leg prep"
+    - flick: "refrain delivery / crescendo build (default PvE attack)"
+    - punctuate: "shield/rebounding bypass (used when target shielded or rebounding)"
+    - sunset: "limb finisher (bardsunset routes to envenom-fang jab variant)"
+    - sunrise: "kill finisher once head+arm+torso+leg prepped"
 
-thrust:
-  skill: Bladedance
-  balance: bal
-  effect: "Thrust attack"
-  syntax: "THRUST <target>"
+finale:
+  skill: Composition
+  effect: "Crescendo burst kill"
+  syntax: "finale <target>"
+  gate: "fires when bladefinale flag is set (tAffs.crescendo built)"
 
-riposte:
-  skill: Bladedance
-  balance: bal
-  effect: "Counter-attack"
-  syntax: "RIPOSTE <target>"
+# Refrain -> affliction priority table (selectRefrain, REFRAIN_AFFS)
+# First entry whose aff the target LACKS is chosen; fallback = paean.
+refrains:
+  - paean: paralysis
+  - ode: asthma
+  - ghazal: slickness
+  - elegy: lethargy
+  - prosodion: sensitivity
+  - bhajan: dizziness
+  - gusheh: addiction
+  fallback: paean
 
-# Sagas
-recite:
-  skill: Sagas
-  balance: eq
-  effect: "Recite a saga for effect"
-  syntax: "RECITE <saga>"
+# Dispatch / commands (bard/001_LeviBard.lua)
+dispatch:
+  entry_points:
+    - "bard.dispatchOne()  (alias/global: levibardone) — sunrise kill route"
+    - "bard.dispatchTwo()  (alias/global: levibardtwo) — tempo-gated sunset route"
+  offense_aliases:
+    - bardstatus: "status display (preps, tempo, crescendo, refrain)"
+    - bardreset: "reset dispatch state + bare globals"
+    - barddebug: "toggle bard.config.debug echo"
+    - bardecho: "toggle bard.config.echoStrategy per-attack echo"
+
+# Rebounding / shield counter
+punctuate_gate:
+  effect: "Both dispatchers switch to 'blade punctuate <target> <refrain>' when the target has shield or rebounding — punctuate bypasses rebound (bard.hasShield()/bard.hasRebounding())"
+
+# Bardflick gate
+bardflick:
+  effect: "Each dispatch sets global bardflick via checkAffList(FLICK_AFF_LIST, FLICK_AFF_THRESHOLD): true when target has >=3 of the 14-aff FLICK_AFF_LIST"
+
+# Sunset envenom mechanic
+sunset_envenom:
+  effect: "When bardsunset set, dispatchOne wields a fang, envenoms with slike, and jabs (queues 'slike' into envenomList) instead of the lyre/rapier prefix"
 ```
+
+**Tempo / footwork also drives PvP routing:** `bardtempo` (back/side), `bardtempostance`
+(Adagio/Moderato/Allegro), and `bardtemposequence` select `sunset` vs `flick` inside
+`dispatchTwo` — not just the bashing footwork loop (see Bashing).
+
+**Symphony / harmonics:** when `ataxia.bardStuff.symphony` is set and `bardHarmsInRoom`, the
+system wields the instrument and sends `play symphony`; missing harmonics trigger
+`call harmonics` / `whistle for songbird`. Toggles live under `ataxia.bardStuff`
+(`instrument`, `symphony`, etc.) — see `030_ATTACK.lua` and `010_Prompt_Running.lua`.
 
 ## Defensive Abilities
 ```yaml
@@ -157,8 +187,10 @@ fitness:
 
 ## Limb Strategy
 ```yaml
-enabled: false
-notes: "Bard is affliction/resonance-based, not limb-based"
+enabled: true
+notes: "The PRIMARY kill route is limb-based. bard.calcPreps() marks a limb 'prepped' when
+  hits + rapierdamage (ataxiaTables.limbData.bardRapier) >= 100. Prep head+arm+torso+leg,
+  then 'blade sunrise' / 'blade sunset' finishes. Refrains ride along each blade move."
 ```
 
 ## Bashing (PvE)
@@ -177,7 +209,7 @@ lifecycle:
 config:
   bashTempo: "ataxia.bardStuff.bashTempo (default 'moderato'). Sent as 'TEMPO <name>' at bash start. Alias: 'bashtempo <adagio|moderato|allegro|none>'. 'none' = unmanaged."
   bashCompose: "ataxia.bardStuff.bashCompose (default 'paean prelude scherzo sonata maqam') = paean song + prelude/scherzo(regen)/sonata(cleanse)/maqam(crit)."
-  bashPunctuate: "ataxia.bardStuff.bashPunctuate (default false). Toggle with the 'bashpunctuate' alias; true -> attack becomes 'blade punctuate <target> paean' for psychic-resistant denizens."
+  bashPunctuate: "ataxia.bardStuff.bashPunctuate (default false). Toggle with the 'bashpunctuate' alias; true -> attack becomes 'blade punctuate <target> nomos' for psychic-resistant denizens (002_Class_Bashing.lua:202)."
 tempo_choice:
   moderato: "Best steady-state back share (2 of every 7 hits); default. First back attack at hit #6."
   allegro: "Reaches back fastest (hit #4) -> more back hits per kill on squishy denizens that die before Moderato ever reaches back."
@@ -193,18 +225,19 @@ priority_cures:
   - dissonance: "Cure song afflictions"
 
 dangerous_abilities:
-  - resonance_burst: "High burst damage"
-  - songs: "Affliction pressure and damage"
-  - bladedance: "Venom application with rapier"
+  - finale_burst: "Crescendo -> finale high burst damage (cure crescendo with ash)"
+  - refrains: "Affliction pressure delivered by blade moves"
+  - bladedance: "Rapier limb prep toward sunrise/sunset"
 
 avoid:
-  - "Letting resonance build high"
-  - "Ignoring song afflictions"
+  - "Letting crescendo build toward finale"
+  - "Ignoring refrain afflictions"
   - "Letting lock afflictions stack"
+  - "Letting all four limb groups get prepped (sunrise/sunset kill)"
 
 recommended_strategy: |
-  Track resonance buildup and pressure them.
-  Cure song-based afflictions quickly.
+  Cure crescendo (ash) before finale lands.
+  Cure refrain afflictions quickly.
   Prioritize curing lock afflictions.
   Apply weariness to block their Fitness.
   Rebounding helps slow their attacks.
@@ -213,20 +246,22 @@ recommended_strategy: |
 
 ## Implementation Notes
 ```
-Triggers to watch for:
-- "sings a * at you" - song effect incoming
-- "slashes at you with a rapier" - bladedance attack
-- Resonance level messages
-- Song effect messages
+Offense entry points (bard/001_LeviBard.lua):
+- bard.dispatchOne() / levibardone()  — sunrise kill route, sunset tempo
+- bard.dispatchTwo() / levibardtwo()  — tempo-gated sunset, shorter chain
+- Shared preamble bard.preDispatch(): sets bardflick, clears envenomList, runs calcPreps.
 
-GMCP considerations:
-- Track gmcp.Char.Afflictions for afflictions
-- Resonance may need message parsing
+State machine:
+- Crescendo builds via tAffs.crescendo; bladefinale flag => finale burst.
+- bardflick set when target has >=3 of FLICK_AFF_LIST (14 affs), threshold 3.
+- Refrain chosen by bard.selectRefrain() from REFRAIN_AFFS priority list (fallback paean).
+- Rebounding/shield => 'blade punctuate' (bypasses rebound).
+- Bare globals owned by triggers: bardtempo/bardtempostance/bardtemposequence,
+  bardsunset, bardsunrise, bladefinale, rapierdamage, envenomList.
 
 Edge cases:
 - Voyria is their class-specific lock aff
-- Bladedance allows venom application
-- Resonance builds and can burst
-- Different songs have different effects
+- Bladedance allows venom application (sunset envenom-fang jab, slike)
+- Crescendo builds and can burst via finale
 - Sagas vs Woe have different abilities
 ```

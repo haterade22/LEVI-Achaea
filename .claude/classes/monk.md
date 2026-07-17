@@ -32,41 +32,42 @@ Shikudo:
 
 ## Kill Routes
 
-### Primary Kill: Throatchop (Limb-Based)
+### Primary Kill: Backbreaker (Tekura, Limb-Based)
 ```yaml
 type: limb
-summary: Break throat to level 3, then throatchop for instant kill
+summary: Prep all 6 limbs, break arms+torso then legs, finish with Backbreaker
+implementation:
+  primary: "tekura6 (002_Tekura_6Limb_Offense.lua) - 6-limb, tekura6.dispatch.run()"
+  legacy: "tekura (001_Tekura_Offense.lua) - 3-limb, tekura.dispatch.run()"
 
-prerequisites:
-  - Throat must be at 200% damage (level 3 mangled)
-  - Target must be prone or unable to parry
+phases (TK6):
+  1_prep: "PREP - all 6 limbs to 86%+ (one punch, HFP ~14%, from break)"
+  2_break_upper: "BREAK_UPPER - combo <tar> mnk <arm> spp <arm> hkp; HRS (Horse stance, breaks arms+torso)"
+  3_break_lower: "BREAK_LOWER - combo <tar> wrt torso hfp left hfp right; BRS (Bear stance, wrenches torso + breaks legs, prones)"
+  4_kill: "KILL - BBT <tar> (Backbreaker, in Bear stance)"
 
-steps:
-  1: "Focus attacks on throat/head"
-  2: "Use combination attacks for limb damage"
-  3: "Get throat to level 3 (200%)"
-  4: "THROATCHOP <target> when throat mangled"
+parry_avoidance: "During PREP skip parried limb; if last limb parried -> kai surge (dismount) -> sweep (prones) -> punch last limb"
 
-required_limbs:
-  throat: 3
+kai_modes:
+  surge: "31 kai, 3.2s eq, dismount (tekura6.config.kaiMode = 'surge')"
+  cripple: "41 kai, 4s eq, dismount + L1 break all limbs ('cripple')"
 ```
 
-### Alternative Kill: SSK (Super Side Kick) - Damage
+### Alternative Kill: Scythe (Tekura TKD, Telepathy)
 ```yaml
 type: damage
-summary: High damage kick when target is prone with broken legs
+summary: Legacy 3-limb (tekura) system's alternative finisher via Telepathy
+implementation: "001_Tekura_Offense.lua - tekura.PHASES.SCYTHE (phase 6)"
+notes: "Set via tekura.state.preferScythe; a Telepathy-based kill, not a kick finisher"
+```
 
-prerequisites:
-  - Target must be prone
-  - Both legs broken
-
-steps:
-  1: "Break both legs with leg-targeting attacks"
-  2: "Knock target prone"
-  3: "SSK <target> for massive damage"
-  4: "Repeat until dead"
-
-notes: "SSK does huge damage to prone targets with broken legs"
+### Attack Aliases (driver)
+```yaml
+# aliases/.../levi_062424/
+first_attack:  "152 - tekura6.dispatch.run()"   # TK6 6-limb Backbreaker
+fourth_attack: "153 - tekura6.dispatch.run()"   # TK6
+second_attack: "155 - tekura.dispatch.run()"    # legacy TKD 3-limb
+kai:  "kaido/001,006 -> 'kai surge <target>' ; kaido/003 -> 'kai cripple <target>'"
 ```
 
 ### Alternative Kill: Shikudo Lock Route (Affliction-Based)
@@ -102,7 +103,7 @@ form_strategy:
 kill_method: "Pure damage pressure through staff attacks + Telepathy once truelocked"
 
 implementation:
-  file: "010_Shikudo_Offense.lua"
+  file: "008_CC_Shikudo_Offense_ALL.lua"
   mode: "lock"
   activate: "sklock() or shikudolock()"
   dispatch: "shikudo.dispatch() (after mode set)"
@@ -207,27 +208,24 @@ kick:
 combination:
   skill: Tekura
   balance: bal
-  effect: "Execute a combo of attacks"
-  syntax: "<combo> <target>"
-  combos:
-    - smp: "Side Punch + Mid Punch"
-    - sdk: "Side Kick + Double Kick"
-    - ucp: "Upper Cut Punch"
-    - hfk: "High Front Kick"
-    - many_more: "See COMBO LIST"
+  effect: "Execute a combo (kick + 2 punches): COMBO <target> <kick> <punch1> <punch2>"
+  syntax: "COMBO <target> <kick> <punch> <punch>"
+  # Implemented TK6 limb->attack map (tekura6.LIMB_ATTACKS):
+  limb_attacks:
+    head: "wwk (kick) / ucp (punch)"
+    torso: "sdk (kick) / hkp (punch)"
+    arms: "mnk left|right (kick) / spp left|right (punch)"
+    legs: "snk left|right (kick) / hfp left|right (punch)"
 
-ssk:
+break_and_kill:
   skill: Tekura
   balance: bal
-  effect: "Super Side Kick - massive damage to prone target"
-  syntax: "SSK <target>"
-  notes: "Huge damage if both legs broken and prone"
-
-throatchop:
-  skill: Tekura
-  balance: bal
-  effect: "Instant kill when throat is mangled (level 3)"
-  syntax: "THROATCHOP <target>"
+  effect: "Backbreaker kill sequence stance/break moves"
+  moves:
+    - hrs: "Horse stance - break arms + torso"
+    - brs: "Bear stance - wrench torso + break legs (prones)"
+    - wrt: "Wrench torso (used with leg break)"
+    - bbt: "Backbreaker - the kill (Bear stance)"
 
 # Shikudo (Staff) - Alternative spec
 # Shikudo uses COMBO syntax: COMBO <target> <kick> <staff1> <staff2>
@@ -398,50 +396,62 @@ fitness:
 ## Limb Strategy
 ```yaml
 enabled: true
-target_order: [throat, left_leg, right_leg]  # for throatchop or SSK
-break_requirements:
-  throat: 3  # for throatchop
-  left_leg: 2  # for SSK
-  right_leg: 2  # for SSK
+# Tekura (TK6): prep ALL 6 limbs, then break upper (arms+torso) and lower (legs), then Backbreaker
+tekura_target_order: [head, torso, left_arm, right_arm, left_leg, right_leg]
+tekura_break_requirements: {all_six_limbs: "86%+ prep -> break"}
+# Shikudo (dispatch): prep legs + head + windpipe (via NEEDLE), then DISPATCH
+shikudo_target_order: [left_leg, right_leg, head, windpipe]
 finisher_options:
-  - "THROATCHOP <target>"  # throat level 3
-  - "SSK <target>"  # legs broken + prone
+  - "BBT <target>"       # Tekura Backbreaker (all limbs broken, prone)
+  - "DISPATCH <target>"  # Shikudo (legs + head + windpipe, prone)
 ```
 
 ## Bashing (PvE)
 ```yaml
-attack_command: "BATTLERAGE PUNCH <target>" or combos
-attack_skill: Tekura
-battlerage_abilities:
-  - punch: "Basic damage"
-  - kick: "Basic damage"
+# Entry point: ataxiaBasher_monkBashing2 (basher/002_Class_Bashing.lua). Spec resolved from
+# charstats: Tekura if vitals.stance present, else Shikudo if vitals.form present.
+tekura_attack: "unwield all; combo <tar> sdk ucp ucp"   # rhk instead of sdk when shieldbreak needed
+shikudo_attack: "per-form COMBOs via shikudoBashCombo, riding Willow(leaveAt 9) -> Rain(5) -> Oak(5)"
+shikudo_notes: "inline TRANSITION suffix on the combo; shatter variant for shieldbreak; kata self-zeroed after transition to avoid a fail loop"
+transmute_gapfiller: "transmute to top up HP ONLY when sip balance is down and HP <= transmuteat (default 70)"
+crushbash: "if ataxia.settings.crushbash set, sends 'mind crush <target>' instead"
+shield: "Monk never spends rage on Splinterkick (spk) to raze - both specs break denizen shields free (shatter / rhk)"
+
+# Battlerage (ataxiaBasher_monkBattlerage). Kit: SBP 14 (small dmg), MIND SCRAMBLE 22 (Clumsy),
+# SPK 17 (shieldbreak, never used), MIND BLAST 25 (conditional), RPST 25 (Inhibit), TNK 36 (large dmg).
+battlerage_priority:
+  1: "RPST (Ripplestrike) -> Inhibit, ONLY vs healer denizens or the 'Sanguine Restoration' Mnemosyne affix"
+  2: "TNK (Tornadokick, large) then SBP (Spinningbackfist, small) for damage"
+  3: "MIND SCRAMBLE -> Clumsy (mob misses ~33%) with surplus rage (>=22)"
+  note: "MIND BLAST deliberately not prioritised (its bonus wants Weakness/Sensitivity, not in Monk kit)"
 ```
 
 ## Fighting Against This Class
 ```yaml
 priority_cures:
   - weariness: "Restores your Fitness if you have it"
-  - broken_limbs: "Prevent throatchop/SSK setup"
-  - prone: "Stand up immediately"
+  - broken_limbs: "Prevent Backbreaker (Tekura) / Dispatch (Shikudo) setup"
+  - prone: "Stand up immediately (Sweep prones for Dispatch/Backbreaker)"
+  - windpipe: "Mend/restore head-throat - Dispatch needs damagedwindpipe (from NEEDLE)"
   - mental_affs: "Telepathy can stack mental afflictions"
 
 dangerous_abilities:
-  - throatchop: "Instant kill if throat mangled"
-  - ssk: "Massive damage when legs broken and prone"
-  - combinations: "Fast limb damage accumulation"
-  - kai_abilities: "Self-healing and utility"
+  - backbreaker: "Tekura BBT - instant kill once all 6 limbs broken and prone"
+  - dispatch: "Shikudo - instant kill with legs + head broken, windpipe damaged, prone"
+  - combinations: "Fast limb damage accumulation (COMBO kick + punches/staff)"
+  - kai_abilities: "Self-healing, and Kai Surge to dismount you"
 
 avoid:
-  - "Letting throat get to level 3"
-  - "Being prone with both legs broken"
+  - "Letting all limbs (or legs+head) reach break threshold"
+  - "Being proned by Sweep with legs broken"
   - "Letting them combo freely"
   - "Ignoring mental afflictions from Telepathy"
 
 recommended_strategy: |
-  Parry throat/head to slow throatchop route.
-  Parry legs if they're going SSK route.
-  Keep restoration salve ready for limb damage.
-  Track their kai balance for timing.
+  Parry legs/head to slow the Backbreaker/Dispatch setup.
+  Restore your windpipe to deny the Shikudo Dispatch condition.
+  Keep restoration salve ready for limb damage; stand up out of prone fast.
+  Track their kai balance (Kai Surge dismount / Cripple).
   Cure mental afflictions from Telepathy.
   Apply weariness to block their Fitness.
 ```
@@ -528,30 +538,44 @@ transition_map:
 # UNIFIED OFFENSE SYSTEM
 # All Shikudo offense modes consolidated into single file
 
-primary_file: "010_Shikudo_Offense.lua"
-  description: "Unified Shikudo offense with mode selector"
+primary_file: "008_CC_Shikudo_Offense_ALL.lua"
+  header: "Shikudo Offense (Unified)"
+  description: "Unified Shikudo offense with mode selector (shikudo.dispatch/status/setMode)"
   includes:
     - "Dispatch mode (limb-based kill)"
     - "Lock mode (affliction lock)"
     - "Riftlock mode (blackout burst + lock - Mystor strategy)"
-    - "Limb damage tracking (from 002_Shikudo_Limb_Counter.lua)"
-    - "Form transition helpers (from 003_Shikudo_Extras.lua)"
+    - "God Mode (delegates to 009_CC_Shikudo_GodMode.lua)"
 
-# Legacy files (deprecated - functionality moved to unified file)
-legacy_files:
-  006_CC_Shikudo.lua: "Old dispatch (use 010 instead)"
-  007_CC_Shikudo_Lock.lua: "Old lock (use 010 instead)"
-  008_CC_Shikudo_RiftLock.lua: "Old riftlock (use 010 instead)"
-  002_Shikudo_Limb_Counter.lua: "Old limb counter (integrated into 010)"
-  003_Shikudo_Extras.lua: "Old form helpers (integrated into 010)"
-  200_Shikudo.lua: "V1 Dispatch system (obsolete)"
-  201_Shikudo_V2.lua: "V2 Dispatch system (obsolete)"
+# On-disk files (shikudo/ dir holds 001-009):
+files:
+  001_Shikudo.lua: ""
+  002_Shikudo_R2.lua: ""
+  003_Dispatch_Dat_Hoe.lua: ""
+  004_Levi_Dispatch.lua: ""
+  005_Shikudo_Needle_Logic.lua: ""
+  006_CC_Shikudo_Dispatch.lua: "Standalone dispatch"
+  007_CC_Shikudo_Lock.lua: "Standalone lock"
+  008_CC_Shikudo_Offense_ALL.lua: "UNIFIED offense (all modes) - PRIMARY"
+  009_CC_Shikudo_GodMode.lua: "God Mode handler (shikudo.godmode.run/status)"
 
 # Mode Selection
 mode_system:
   current_mode: "shikudo.mode"
   set_mode: "shikudo.setMode(mode)"
-  available_modes: [dispatch, lock, riftlock]
+  available_modes: [dispatch, lock, riftlock, godmode]
+
+# God Mode (4th mode): setMode('godmode') -> shikudo.dispatch() delegates to
+# shikudo.godmode.run() (009_CC_Shikudo_GodMode.lua). Own calcLimbs/formswap logic,
+# PREP_THRESHOLD 92, lock-fork + low-HP (Maelstrom) branches.
+
+# Dispatch behaviour specifics (008_CC_Shikudo_Offense_ALL.lua)
+dispatch_specifics:
+  staff: "Every attack prepends 'wield staff489282' (artifact staff)"
+  mhaldorian_safety: "On a Mhaldorian target, sends INCAPACITATE instead of DISPATCH (friendly-fire safety)"
+  kai_surge_dismount: "Auto 'kai surge' (>=31 kai) to dismount a mounted target while in Rain"
+  gaital_kai_window: "Kai Surge window in Gaital (ataxiaTemp.kaiSurgeWindow) sweeps to re-prone + hammers the parried limb (~15s no-remount)"
+  shield: "If target shielded, combo with 'shatter' to break it"
 
 # Quick Commands (mode shortcuts)
 quick_commands:
@@ -574,8 +598,9 @@ commands:
     dispatch: "shikudo.setMode('dispatch')"
     lock: "shikudo.setMode('lock')"
     riftlock: "shikudo.setMode('riftlock')"
+    godmode: "shikudo.setMode('godmode')"
 
-# Current dispatch system (006_CC_Shikudo.lua)
+# Current dispatch system (008_CC_Shikudo_Offense_ALL.lua)
 current_system:
   description: "Dynamic threshold-based dispatch with leg protection"
 
@@ -796,9 +821,9 @@ blackout_psychology:
   - "They waste time with DIAGNOSE while you transition to Oak"
 ```
 
-### Riftlock Implementation (Unified 010_Shikudo_Offense.lua)
+### Riftlock Implementation (Unified 008_CC_Shikudo_Offense_ALL.lua)
 ```yaml
-file: "010_Shikudo_Offense.lua"
+file: "008_CC_Shikudo_Offense_ALL.lua"
 mode: "riftlock"
 commands:
   activate: "skriftlock() or shikudoriftlock()"
@@ -1044,10 +1069,10 @@ Mystor: "But then I lose out on all the hinderance from oak."
 ## Implementation Notes
 ```
 Triggers to watch for:
-- Combination attack patterns (SMP, SDK, etc.)
+- Combination attack patterns (COMBO kick + punches: sdk/ucp/hkp/mnk/spp/snk/hfp etc.)
 - "Your * is damaged/broken/mangled" - track limb state
-- "executes a super side kick" - SSK incoming
-- "chops at your throat" - throatchop attempt
+- Backbreaker (BBT) / break-stance moves (HRS/BRS/WRT) - Tekura kill sequence
+- Dispatch messages - Shikudo instant kill
 - Telepathy ability messages
 
 Shikudo-specific triggers:
@@ -1075,8 +1100,8 @@ Edge cases:
 - Kai abilities use separate kai balance
 - Shikudo requires Trans Tekura to unlock
 - Combinations can hit multiple body parts
-- SSK damage scales with leg breaks + prone
-- Throatchop requires level 3 throat specifically
+- Tekura Backbreaker (BBT) requires all 6 limbs broken + prone (TK6); TKD alt kill is Scythe via Telepathy
+- Shikudo Dispatch requires legs + head broken, windpipe damaged, and prone
 - Mental afflictions from Telepathy can add lock pressure
 - SPINKICK behavior changes based on target state:
   - Standing: hits TORSO

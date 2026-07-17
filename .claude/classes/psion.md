@@ -35,13 +35,39 @@ unweaving_system:
     body: "Ferrum afflictions (ferrum blocked)"
 
 transcendence:
-  description: "Resource for special combos"
-  free_shield_break: "Every 5 attacks grants free shield break"
-  cost: "Burns transcendence, locks out other useful combos"
+  description: "Resource spent every balance via `psi transcend <blast|excise|muddle|shatter> <target>`"
+  spend_types: "blast (mind ravaged), excise (mana kill), muddle (muddled), shatter (fallback/flurry setup)"
+  note: "Shield is NOT a transcend function — it is stripped via `weave cleave <target>`"
 
 impatience_delivery:
   requirement: "Target must be PRONE or have DAMAGED HEAD"
   note: "They will hit you with both simultaneously"
+```
+
+## Modes & Commands (our offense)
+```yaml
+# psion namespace — psion/001_Levi_Psion_Logic.lua
+modes:
+  mind:   "Primary — unweave pressure + mana kill via psi blast/excise (default)"
+  flurry: "Damage — invert unweaves to spirit, then flurry for burst damage"
+
+aliases:
+  psmind:   "Set mind mode + dispatch"
+  psflurry: "Set flurry mode + dispatch"
+  psstatus: "Status display (unweave/critical levels, kill conditions, transcendence, target mana)"
+  psreset:  "Reset combat state"
+  psdebug:  "Toggle debug echoes"
+dispatch: "zz — main attack dispatch (152_First_Attack); psion.setMode() / psion.dispatch()"
+
+attack_wrapper:
+  prefix: "wield right shield"
+  suffix: "enact lightbind <target> (if not active) :: assess <target> :: contemplate <target>"
+  note: "contemplate feeds target mana% into the `pm` global gating psi excise at 30%"
+
+filler_afflictions:  # once both unweaves (mind+body) applied
+  sever:   "clumsiness"
+  puncture: "weariness"
+  priority: "Priest/Occultist/Pariah get weariness first (blocks Fitness); others get clumsiness first"
 ```
 
 ## Kill Routes
@@ -129,10 +155,17 @@ prerequisites:
 
 steps:
   1: "Apply asthma to block smoke cure"
-  2: "Apply Unweaving Spirit"
+  2: "Apply Unweaving Spirit (or invert an existing critical mind/body unweave to spirit)"
   3: "Let UWS level up (auto-levels every 4s)"
   4: "At high level (4-5), FLURRY for massive burst"
   5: "Follow up with damage to finish"
+
+flurry_mode_mechanics: |
+  In flurry mode the system converts critical unweaves to spirit before flurrying:
+  - `weave invert <target> mind spirit` (when criticalmind, no criticalspirit)
+  - `weave invert <target> body spirit` (when criticalbody, no criticalspirit)
+  Once inverted + spirit unweave present: `psi transcend shatter <target>` then
+  `weave flurry <target>`.
 
 counters:
   - "Shield"
@@ -190,8 +223,7 @@ most_effective:
 
 shield:
   effect: "Significantly slows their offense"
-  weakness: "Transcend gives free shield break every 5 attacks"
-  note: "Burns their transcendence, locks them out of combos"
+  weakness: "Stripped with `weave cleave <target>` (prioritized when shielded), not transcend"
 
 reflections:
   effect: "TREMENDOUSLY shuts down their offense"
@@ -216,8 +248,25 @@ weave:
   skill: Weaving
   balance: eq
   effect: "Primary attack with weave prep affliction"
-  syntax: "WEAVE <target> <prep>"
-  notes: "Can combo with preps for affliction delivery"
+  syntax: "weave prepare <prep> :: weave <attack> <target>"
+  notes: |
+    Split into two queued sub-commands: `weave prepare <prep>` (free aff)
+    then `weave <attack> <target>` (attack = overhand/backhand/deathblow/
+    unweave/deconstruct/flurry/cleave). Prep is the free affliction on
+    every attack.
+  weave_prepare_affs:
+    disruption: paralysis
+    laceration: haemophilia/bleed
+    vapours: asthma
+    rattle: epilepsy
+  prepare_priority: |
+    laceration if mind-ravaged (bleed pressure) → disruption (paralysis)
+    → laceration (haemophilia) → vapours (asthma) → rattle (epilepsy/fallback).
+    Flurry mode: rattle when impatience present but no epilepsy.
+  head_attacks:
+    overhand: "Break head + deliver impatience (needs damaged head OR prone)"
+    backhand: "Break head + deliver stupidity/dizziness"
+    deathblow: "Break head + deliver asthma + bleed"
 
 weave_launch:
   skill: Weaving
@@ -230,7 +279,8 @@ lightbind:
   skill: Weaving
   balance: eq
   effect: "Hinder target from leaving"
-  syntax: "LIGHTBIND <target>"
+  syntax: "enact lightbind <target>"
+  applied_as: "Suffix on every attack when lightbind not already active"
   range: "Works 1 room away - must move 2 rooms to escape"
   cooldown: "~4 second window after falling before can reapply"
   note: "Watch for when it falls to escape"
@@ -246,7 +296,8 @@ flurry:
   skill: Weaving
   balance: eq
   effect: "Burst damage scaled by spirit unweave level"
-  syntax: "FLURRY <target>"
+  syntax: "weave flurry <target>"
+  setup: "Preceded by `psi transcend shatter <target>`; flurry mode inverts unweaves to spirit first (weave invert <target> mind|body spirit)"
   damage: "Level 5 UWS = ~90% max health"
 
 # Psionics
@@ -254,24 +305,24 @@ psi_blast:
   skill: Psionics
   balance: eq
   effect: "Apply mind ravaged (every hit saps mana)"
-  syntax: "PSI BLAST <target>"
+  syntax: "psi transcend blast <target>"
   requirement: "3 of: unweavingmind, blackout, epilepsy, stupidity, impatience, dizziness"
-  notes: "Key to mana kill route"
+  notes: "Key to mana kill route. Blast is one of the psi transcend spend types."
 
 psi_excise:
   skill: Psionics
   balance: eq
   effect: "Instant kill at 30% mana"
-  syntax: "PSI EXCISE <target>"
-  requirement: "Target at 30% mana or below"
-  notes: "Main mana execute"
+  syntax: "psi excise <target>"
+  requirement: "Target at 30% mana or below (target mana% tracked via `contemplate` suffix → `pm` global)"
+  notes: "Main mana execute; transcend spends `psi transcend excise <target>` when mana <= 30%"
 
 # Unweaving
 unweave_mind:
   skill: Weaving
   balance: eq
   effect: "Apply unweaving mind (auto-levels, mana drain)"
-  syntax: "UNWEAVE MIND <target>"
+  syntax: "weave unweave <target> mind"
   cure: "Eat goldenseal/plumbum herb"
   blocked_by: [impatience, stupidity, dizziness, epilepsy]
 
@@ -279,7 +330,7 @@ unweave_body:
   skill: Weaving
   balance: eq
   effect: "Apply unweaving body (auto-levels)"
-  syntax: "UNWEAVE BODY <target>"
+  syntax: "weave unweave <target> body"
   cure: "Eat ferrum herb"
   blocked_by: [addiction, haemophilia, lethargy]
 
@@ -287,7 +338,7 @@ unweave_spirit:
   skill: Weaving
   balance: eq
   effect: "Apply unweaving spirit (auto-levels, setup for flurry)"
-  syntax: "UNWEAVE SPIRIT <target>"
+  syntax: "weave unweave <target> spirit"
   cure: "Smoke valerian (ONE level at a time)"
   blocked_by: [asthma]
   special: "Cures one level per smoke, not all at once"
@@ -296,15 +347,27 @@ deconstruct:
   skill: Weaving
   balance: eq
   effect: "Instant kill when 2 unweaves at level 3+"
-  syntax: "DECONSTRUCT <target>"
-  requirement: "Any TWO unweave types at level 3 or higher"
+  syntax: "weave deconstruct <target>"
+  requirement: "Any TWO unweave types at level 3+ (readiness detected via the criticalmind/criticalbody/criticalspirit afflictions, >= 2 present)"
 
-transcend:
+psi_transcend:
+  skill: Psionics
+  balance: eq
+  effect: "Resource spend, chosen every balance"
+  syntax: "psi transcend <blast|excise|muddle|shatter> <target>"
+  types:
+    excise: "Mana execute (<= 30% mana)"
+    blast: "Apply mind ravaged (psi blast condition met, not yet ravaged)"
+    muddle: "Apply muddled (when not already muddled)"
+    shatter: "Fallback / flurry setup"
+  note: "There is no bare TRANSCEND command. Shield is stripped separately via `weave cleave <target>`."
+
+weave_cleave:
   skill: Weaving
   balance: eq
-  effect: "Free shield break every 5 attacks"
-  syntax: "TRANSCEND"
-  cost: "Burns transcendence, locks out other combos"
+  effect: "Strip target's shield"
+  syntax: "weave cleave <target>"
+  note: "Prioritized when target is shielded"
 ```
 
 ## Defensive Abilities
@@ -369,11 +432,13 @@ notes: |
 
 ## Bashing (PvE)
 ```yaml
-attack_command: "WEAVE <target>"
+attack_command: "weave deathblow <target>"
 attack_skill: Weaving
+shield_strip: "weave cleave <target> (when denizen shielded)"
+full_transcendence: "psi shatter <target> then weave deathblow (transcendence == 100)"
 battlerage_abilities:
-  - weave: "Primary damage"
-  - psi_blast: "Mental damage"
+  note: "Rage assembled generically via ataxiaBasher_assembleBattlerage() — no psi_blast in the bashing rotation"
+  raze: "Psion-specific rage entry, used only for shielded targets"
 ```
 
 ## Fighting Against This Class
@@ -468,7 +533,7 @@ Edge cases:
 - ~4 second window after lightbind falls to run
 - Expunge cures impatience FIRST (blocked by confusion)
 - Reflections almost completely shut them down
-- Transcend = free shield break every 5 attacks
+- Transcend = resource spent every balance (blast/excise/muddle/shatter); shield stripped via weave cleave
 - Wavesurge = 1-3 rooms random direction (2 min CD)
 - Psi Projection blocked by monolith
 

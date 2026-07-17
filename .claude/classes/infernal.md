@@ -212,7 +212,8 @@ utility:
 ```yaml
 maul:
   cooldown: "30 seconds"
-  syntax: "ORDER HYENA MAUL <target>"
+  syntax: "ORDER HYENA MAUL <target>"  # manual/pet-command form
+  basher_form: "hyena maul <target>  # NO 'ORDER' prefix — prepended to the spec bash string when ataxiaBasher.hyenaMaulReady (002_Class_Bashing.lua:263-264)"
   usage: "PVE ONLY - not effective in PVP combat"
   tracking: "Cooldown tracked in basher/005_Falcon_Cooldowns.lua (ataxiaBasher.hyenaMaulReady)"
   triggers:
@@ -419,6 +420,48 @@ finisher:
   effect: "Instant kill, bypasses starburst tattoo resurrection"
 ```
 
+#### DWC Dispatch & Systems
+```yaml
+# All gate on gmcp.Char.Vitals.charstats[4] == "Spec: Dual Cutting"
+systems:
+  infernalDWCVivisect:
+    alias: "zz (First Attack)"
+    scope: "3-limb: both arms + focus leg"
+    file: "dwc/001_Infernal_DWC_Vivisect.lua"
+  infernalDWC2LVivisect:
+    alias: "xx (Second Attack)"
+    scope: "2-limb: right arm + left leg only (faster execute)"
+    file: "dwc/002_Infernal_DWC_Vivisect_2L.lua"
+    flee_gate: "Halts entirely when BOTH of the player's own arms are broken (ataxia_selfLimbBroken) so SLC handles fleeing/parry (002:933-935)"
+  infernalGroupLockAttack:
+    alias: "Group (154_Group)"
+    scope: "Group true-lock: pure dsl v1/v2, class-aware final lock aff via getLockingAffliction()"
+    file: "dwc/002_Infernal_Group_Lock.lua"
+  infernalPFOffense:
+    alias: "Prefarar (dwc/001_Prefarar alias)"
+    scope: "Deafness/damage offense: RAZE -> UNDEAF -> KILL via rsl/dsl prefarar + battlecry/arc"
+    file: "dwc/004_Infernal_Prefarar.lua"
+
+# Main-dispatch priority order (infernalDWCVivisect, 001:955-1063) — fixed:
+dispatch_priority:
+  1: "VIVISECT - all 4 limbs broken (level 1+) -> dismount;vivisect"
+  2: "DAMAGE KILL - target health <=40% -> quash <t>;arc <t> (config.damageKillThreshold=40, uses ataxiaTemp.lastAssess). Overrides EXECUTE/PREP/RIFTLOCK."
+  3: "RIFTLOCK - target used RESTORE -> lock down (anorexia/slickness/addiction + curare)"
+  4: "EXECUTE - undercut (prone+break) -> DSL right arm epteth/epseth"
+  5: "PREP - build limb damage + PREP cascade afflictions"
+
+rebounding_shield_razing:
+  behavior: "Before any DSL, if target has rebounding or shield the system razes via 'rsl <t> <venom>' (or 'raze <t>' if no legal venom) and returns (001:1095-1160)"
+  hellforge_rule: "RSL cannot carry hellforge investments (exploit/torture/torment) — falls back to a regular venom (usually curare)"
+
+nausea_gated_prep:
+  rule: "No limb is targeted during PREP until nausea is stuck (parry bypass). selectLimbTarget() returns nil without nausea."
+  on_parry: "A parry (infernalDWC.onParry) clears nausea and re-selects the limb target (001:781-808,935-944)"
+
+knight_send_helper:
+  fn: "knightSendAttack(cmd) — shared knight send; gates on target being in ataxia.playersHere, appends ';engage <target>' on first attack (engaged flag), uses 'queue addclear freestand' (001:227-236)"
+```
+
 #### Understanding Break Levels
 ```yaml
 level_1_break:
@@ -467,9 +510,10 @@ execute_sequence:
     investment: "HELLFORGE INVEST EXPLOIT"
     effects:
       - "Breaks left leg (level 2)"
+      - "Prones target"
       - "4 second salve lock (forces restoration, blocks mending)"
       - "Target is effectively locked for 4 seconds"
-    note: "Undercut does NOT prone, but 4s salve lock is better"
+    note: "EXECUTE step-0 undercut is treated as prone + break + 4s salve lock (code header 001_Infernal_DWC_Vivisect.lua:62; dispatch echo prints '[prone + break]')"
 
   step_1:
     weapon: "Scimitars (DSL)"
@@ -555,22 +599,18 @@ riftlock_goal:
   - "Maintain paralysis (prevents tree)"
 
 execute_sequence:
+  # If left arm not broken yet: DSL left arm with kalmia/vardrax (break arm + asthma + addiction)
+  # Once left arm broken: ALWAYS pair curare on v2, cycling v1 through the affliction_priority below.
   step_1:
     action: "DSL left arm with kalmia/vardrax"
-    effect: "Prep arm + asthma + addiction"
+    effect: "Break left arm + asthma + addiction"
 
-  step_2:
-    action: "DSL left arm with slike/gecko"
-    effect: "Break arm + weariness + slickness"
-
-  step_3:
-    action: "DSL right arm with euphorbia/curare"
-    effect: "Prep arm + anorexia + paralysis"
-
-  step_4:
-    action: "Continue pressure until locked"
+  step_2_onward:
+    action: "DSL with v1 = slike -> gecko -> vardrax, v2 = curare (always)"
+    effect: "Stick anorexia, then slickness, then addiction; maintain paralysis"
 
 affliction_priority:
+  # Once left arm broken, v1 cascades (whichever is not yet stuck):
   v1_choices:
     - "slike (anorexia) - blocks eating"
     - "gecko (slickness) - blocks applying"
@@ -601,15 +641,12 @@ access_pattern:
   torso: 'lb[target].hits["torso"]'
 
 damage_percentage: "lb[target].hits['<limb>'] tracks 0-100%+"
-level_1_break: "100% damage = level 1 (withered/damaged)"
-prep_ready: "d2prepped = one DSL will break the limb"
+break_threshold: "100% damage = level 2 BREAK/broken (config.breakThreshold=100; isArmBroken/isLegBroken return true at >=100)"
+prep_threshold: "90% = prepped/ready (config.prepThreshold=90)"
+near_break_detect: "infernalDWC.wouldBreakLimb(limb): damage + 2*slashDamage >= breakThreshold (treats near-break limbs as prepped to avoid accidental breaks)"
 
-disembowel_check: |
-  lb[target].hits["left leg"] >= 100
-  AND lb[target].hits["right leg"] >= 100
-  AND (lb[target].hits["left arm"] >= 100 OR lb[target].hits["right arm"] >= 100)
-  AND tAffs.prone
-  → DISEMBOWEL
+# NOTE: DWC's only limb kill route in code is VIVISECT (all 4 limbs level 1+).
+# The disembowel route is a 2H/standard-limb path and is NOT part of the DWC dispatch.
 ```
 
 ## Combat Preparation
@@ -689,27 +726,23 @@ Investments **replace venoms** on weapons with Oppression effects. Only the main
 | **INVEST PUNISHMENT** | scaling damage | n/a | More damage on wounded targets |
 
 ### Focus Lock Venom Strategy (PREP Phase)
-The focus lock strategy alternates kelp/ginseng afflictions to overwhelm curing, then baits focus with goldenseal:
+Implemented cascade in `infernalDWC.selectVenoms()` / `selectVenomsV3()` (001_Infernal_DWC_Vivisect.lua:554-631,687-760). **Curare is always on v2**; v1 cascades. Nausea is FIRST (parry bypass gate — no limb targeting until nausea sticks). torture/haemophilia is NOT used in prep.
 
-**Phase 1: Kelp/Ginseng Stack (with curare)**
-1. xentio → clumsiness (**kelp**)
-2. euphorbia → nausea (**ginseng**)
-3. torment → healthleech (**kelp**) - hellforge
-4. torture → haemophilia (**ginseng**) - hellforge
-5. kalmia → asthma (**kelp**)
+**PREP Cascade (v2 = curare always)** — v1 advances as each stalls:
+1. euphorbia → nausea (target 51%)
+2. xentio → clumsiness (target 33%)
+3. torment → healthleech (target 33%) - hellforge
+4. kalmia → asthma (target 33%)
+5. gecko → slickness (target 50%)
 
-**Phase 2: Focus Bait (once asthma stuck)**
-- aconite/exploit → stupidity (**goldenseal**) + weariness + paranoia (**kelp + ash**)
-- They'll want to FOCUS to clear stupidity, but exploit adds 2 more affs
+**FOCUS LOCK (once slickness ≥50%)**
+- v1 = slike (anorexia), v2 = exploit (weariness + paranoia, hellforge)
 
-**Phase 3: Lock Layer (ONLY if asthma still stuck)**
-- gecko/slike → slickness + anorexia (both **kelp**)
-- **IMPORTANT**: Only enter this phase if asthma is stuck! Slickness can be cured by smoking valerian if asthma is cured.
-- Stacks on existing kelp affs, overwhelms kelp curing
-- Slickness blocks apply, anorexia blocks eating
+**STUPIDITY PUSH (once anorexia + weariness stuck)**
+- v1 = aconite (stupidity, **goldenseal**), v2 = exploit
 
-**Phase 4: Riftlock Transition**
-- Once addiction + slickness stuck → epteth/epteth to break limbs
+**GOLDENSEAL STACK (once stupidity stuck)**
+- v1 = eurypteria (recklessness), v2 = larkspar (dizziness)
 
 ### Venom Strategy by Goal
 ```yaml
@@ -1122,11 +1155,24 @@ standard_strategy:
 
 ## Bashing (PvE)
 ```yaml
-attack_command: "BATTLERAGE SLASH <target>" or spec-specific
+# Basher builds spec-specific attack strings (basher/002_Class_Bashing.lua:261-285)
+# via ataxiaBasher_infernalBashing(), keyed on ataxia.vitals.knight (spec):
 attack_skill: Weaponmastery
-battlerage_abilities:
-  - slash: "Basic damage"
-  - rend: "Additional damage"
+spec_bash_strings:
+  Dual Cutting:
+    raze: "rsl <target>"
+    bash: "dsl <target>"          # prepend "hyena maul <target>" when hyenaMaulReady
+  Two Handed:
+    raze: "battlefury focus speed;splinter <target>"
+    bash: "battlefury focus speed;slaughter <target>"  # hyena maul inserted before slaughter when ready
+  Dual Blunt:
+    raze: "fracture <target>"
+    bash: "doublewhirl <target>"
+  SnB (else):
+    raze: "combination <target> raze smash"
+    bash: "combination <target> slice smash"  # prepend "hyena maul <target>" when ready
+# NOTE: there is no "BATTLERAGE SLASH"/rend path — battlerage is assembled separately
+#       via ataxiaBasher_assembleBattlerage() and prepended/appended by shield state.
 
 # Pre-Combat Legend Deck (ataxiaBasher)
 # Automatically draws cards before attacking dangerous multi-target rooms
