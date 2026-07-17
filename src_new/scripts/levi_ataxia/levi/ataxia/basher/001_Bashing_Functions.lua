@@ -811,6 +811,98 @@ function ataxiaBasher_monkBattlerage(sp)
   return ""
 end
 
+-- Magi battlerage. Kit (AB BATTLERAGE): Windlash 14 (damage), Dilation 35 (Aeon -- mob 66%
+-- speed), Disintegrate 17 (DENIZEN shield break), Squeeze 36 (damage), Firefall 25 (conditional
+-- -- bonus vs a clumsy/reckless target), Stormbolt 25 (Sensitivity -- +33% damage taken). Config
+-- (get_Battlerage, Magi): small=windlash large=squeeze special=dilation specialafflict=stormbolt
+-- specialuse=firefall raze=disintegrate.
+--
+-- Magi OWNS culling (excluded from the shared check, like Bard/Blademaster). Priority -- spend
+-- the highest value that's affordable and off cooldown, so rage never idles:
+--   1. Culling reap (>=36, AoE finisher)
+--   2. In Mnemosyne: Dilation -> Aeon (mob slower -- mitigation on the no-flee climb)
+--   3. Firefall on a clumsy/reckless target (bonus damage, from ANY source)
+--   4. Stormbolt -> Sensitivity when not yet sensitive (sets up the burst)
+--   5. Squeeze (big damage -- lands harder while the Sensitivity from 4 is up)
+--   6. Dilation (surplus, outside Mnemosyne)
+--   7. Windlash (cheap filler)
+-- Disintegrate is NEVER fired: magiBashing casts the free `erode` shield strip when shielded,
+-- so 17 rage on Disintegrate is the worse trade (the Monk shatter-over-spk rule).
+--
+-- Cooldowns (from AB BATTLERAGE): Windlash 16s, Dilation 35s, Squeeze 23s, Firefall 23s,
+-- Stormbolt 27s. Squeeze uses the shared battleRage_Timers.large (trigger 331 tracks "vice-like
+-- squeeze"). The rest have NO fire-line trigger (not in 330/332), so they use reload-safe
+-- TIMESTAMPS (ataxiaTemp.magi*ReadyAt). Dilation/Stormbolt ALSO gate on their affliction
+-- (Aeon via trigger 015 / Sensitivity -- no capture yet) so they skip when the aff is already up
+-- from another source (a boon/groupmate). Cast syntax confirmed vs AB: all `cast X at <t>`
+-- except Squeeze (`cast squeeze <t>`, no "at").
+function ataxiaBasher_magiBattlerage(sp)
+  local br = ataxiaBasher.battlerage and ataxiaBasher.battlerage["Magi"]
+  if not br or type(target) ~= "number" then return "" end
+  -- Global ~1s battlerage cooldown (as Blademaster): skip while it's up so a queued BR isn't
+  -- rejected and its rage wasted. Reload-safe timestamp; armed below on our own fire.
+  if getEpoch() < (ataxiaTemp.brGlobalReadyAt or 0) then return "" end
+  local rage = ataxia.vitals.rage or 0
+  local function has(a) return ataxiaBasher_dsHasAff and ataxiaBasher_dsHasAff(target, a) end
+
+  local function choose()
+    local inMnem = ataxiaBasher.inMnemosyne == true
+
+    -- 1. Culling reap (owned here; Magi is excluded from the shared culling check).
+    if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown
+       and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree"
+       and rage >= 36 then
+      return "reap "..target..sp
+    end
+
+    -- 2. Mnemosyne mitigation: Dilation -> Aeon (mob attacks slower). Gate on the aff (no
+    -- fire-line cooldown for special) + a short in-flight bridge until the Aeon line lands.
+    if inMnem and br.special and rage >= 35 and not has("aeon")
+       and getEpoch() >= (ataxiaTemp.magiDilationReadyAt or 0) then
+      ataxiaTemp.magiDilationReadyAt = getEpoch() + 35 -- Dilation cd (AB); aff-gate (015) also skips if aeon up
+      return br.special..sp
+    end
+
+    -- 3. Firefall: bonus damage on a clumsy/reckless target (from ANY source -- Magi's own kit
+    -- applies neither, so this only fires off a boon/groupmate). ESTIMATED cooldown.
+    if br.specialuse and rage >= 25 and getEpoch() >= (ataxiaTemp.magiFirefallReadyAt or 0)
+       and (has("clumsy") or has("recklessness")) then
+      ataxiaTemp.magiFirefallReadyAt = getEpoch() + 23 -- Firefall cooldown (AB)
+      return br.specialuse..sp
+    end
+
+    -- 4. Stormbolt -> Sensitivity (+33% dmg taken), when not already sensitive -- sets up Squeeze.
+    -- Same aff-gate + bridge as Dilation (prevents re-casting before the Sensitivity line lands).
+    if br.specialafflict and rage >= 25 and not has("sensitivity")
+       and getEpoch() >= (ataxiaTemp.magiStormboltReadyAt or 0) then
+      ataxiaTemp.magiStormboltReadyAt = getEpoch() + 27 -- Stormbolt cooldown (AB); no Sensitivity capture yet
+      return br.specialafflict..sp
+    end
+
+    -- 5. Squeeze (big damage; hits harder while Sensitivity is up). Real cooldown via 331.
+    if br.large and not battleRage_Timers.large and rage >= 36 then return br.large..sp end
+
+    -- 6. Dilation surplus outside Mnemosyne (spend + Aeon).
+    if not inMnem and br.special and rage >= 35 and not has("aeon")
+       and getEpoch() >= (ataxiaTemp.magiDilationReadyAt or 0) then
+      ataxiaTemp.magiDilationReadyAt = getEpoch() + 35 -- Dilation cd (AB); aff-gate (015) also skips if aeon up
+      return br.special..sp
+    end
+
+    -- 7. Windlash (cheap filler -- spends whatever rage is left). 16s cooldown, untracked (not
+    -- in 330), so a timestamp -- else it re-fires a doomed cast every prompt for 16s.
+    if br.small and rage >= 14 and getEpoch() >= (ataxiaTemp.magiWindlashReadyAt or 0) then
+      ataxiaTemp.magiWindlashReadyAt = getEpoch() + 16
+      return br.small..sp
+    end
+    return ""
+  end
+
+  local cmd = choose()
+  if cmd ~= "" then ataxiaTemp.brGlobalReadyAt = getEpoch() + 1 end -- arm the ~1s global cooldown
+  return cmd
+end
+
 function ataxiaBasher_assembleBattlerage()
 	local command = ""
 	local class = gmcp.Char.Status.class:title():gsub(" Lady", ""):gsub(" Lord", "")
@@ -830,11 +922,13 @@ function ataxiaBasher_assembleBattlerage()
 		end
 	end
 
-	-- Culling Blade check (applies before class-specific logic; Bard is excluded -- it owns
-	-- culling inside ataxiaBasher_bardBattlerage so it fires at 36 rage, not bigRage).
+	-- Culling Blade check (applies before class-specific logic). Bard/Blademaster/Magi are
+	-- excluded -- they own culling inside their own battlerage functions so it fires at 36 rage,
+	-- not bigRage (54 under rageraze), and their whole rotation isn't suppressed below bigRage.
 	if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown
 		and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree"
-		and gmcp.Char.Status.class ~= "Bard" and gmcp.Char.Status.class ~= "Blademaster" then
+		and gmcp.Char.Status.class ~= "Bard" and gmcp.Char.Status.class ~= "Blademaster"
+		and gmcp.Char.Status.class ~= "Magi" then
 		if ataxia.vitals.rage >= bigRage then
 			command = command.."reap "..target..sp
 		end
@@ -872,6 +966,12 @@ function ataxiaBasher_assembleBattlerage()
 	-- standardBattlerage only ever fires small/large/special, so rpst was dead config.
 	elseif gmcp.Char.Status.class == "Monk" then
 		command = ataxiaBasher_monkBattlerage(sp)
+
+	-- Magi owns its rotation (excluded from the shared culling check): completes its kit
+	-- (Stormbolt/Firefall/Disintegrate were dead config under standardBattlerage), owns culling,
+	-- and runs the Stormbolt->Sensitivity->Squeeze combo. See ataxiaBasher_magiBattlerage.
+	elseif gmcp.Char.Status.class == "Magi" then
+		command = ataxiaBasher_magiBattlerage(sp)
 	-- Standard pattern: check if class has a known specialRage threshold
 	elseif ataxiaBasher_specialRageThresholds[class] then
 		command = ataxiaBasher_standardBattlerage(class, ataxiaBasher_specialRageThresholds[class], level, sp)

@@ -412,7 +412,7 @@ groups:
         \ \"spike \"..target,\n      raze = \"shiver \"..target, special = \"soulshield\",\n    },\n\t\t\n\t\tJester = {\n\
         \t\t\tsmall = \"noogie \"..target, large = \"ensconce firecracker on \"..target,\n\t\t\traze = \"throw jacks at \"\
         ..target,\n\t\t},\n\t\t\n\t\tMagi = {\n\t\t\tsmall = \"cast windlash at \"..target, large = \"cast squeeze \"..target,\n\
-        \      special = \"cast dilation at \"..target,\n\t\t},\n\t\t\n\t\tMonk = { \n\t\t\tsmall = \"sbp \"..target,\t\t\t\
+        \      special = \"cast dilation at \"..target,\n      specialafflict = \"cast stormbolt at \"..target, specialuse = \"cast firefall at \"..target,\n      raze = \"cast disintegrate at \"..target,\n      --Kit: Windlash(small,14) Dilation(special,35=aeon) Disintegrate(raze,17=DENIZEN shield)\n      --  Squeeze(large,36) Firefall(specialuse,25=bonus vs clumsy/reckless) Stormbolt(specialafflict,25=sensitivity).\n      --raze(disintegrate) is NOT fired -- magiBashing casts the free erode; see ataxiaBasher_magiBattlerage.\n      --Cast syntax for stormbolt/firefall/disintegrate assumed \"cast X at\" -- confirm in-game.\n\t\t},\n\t\t\n\t\tMonk = { \n\t\t\tsmall = \"sbp \"..target,\t\t\t\
         \tlarge = \"tnk \"..target,\n      raze = \"spk \"..target, special = \"mind scramble \" ..target,\n      specialafflict = \"rpst \"..target, specialuse = \"mind blast \"..target,\n      --Spinningbackfist (SBP) - Small - 14 Rage | 16s CD\n      --Splinterkick (SPK) - Shield break - 17 Rage | NOT used: Monk breaks shields with\n      --  the FREE shatter (Shikudo, works in any form) / rhk (Tekura). See monkBashing2.\n      --Scramble (MIND SCRAMBLE) - Gives Clumsiness - 22 Rage | 31s CD\n      --Mindblast (MIND BLAST) - Uses Weakness or Sensitivity - 25 Rage | 23s CD\n      --Ripplestrike (RPST) - Gives Inhibit (stops denizen healing) - 25 Rage | 27s CD\n      --NOTE: specialafflict/specialuse are INERT until a Monk-specific rotation reads\n      --  them - ataxiaBasher_standardBattlerage only fires small/large/special.\n\t\t},\n\t\tOccultist\
         \ = {\n\t\t\tsmall = \"harry \"..target,\t\t\tlarge = \"chaosgate \"..target\n\t\t},\n    \n    Pariah = {\n     \
         \ small = \"blood boil \"..target,  large = \"swarm feast \"..target,\n      raze = \"accursed scour \"..target, specialuse\
@@ -703,7 +703,7 @@ groups:
       - name: Limb
         directory: levi_ataxia/levi/levi_scripts/limb
   script: "ataxia = ataxia or {}\nataxiaTables = ataxiaTables or {}\nataxiaTemp = ataxiaTemp or {}\nataxiaTemp.addedHerbID\
-    \ = 1\nataxiaTemp.removedHerbID = 2\nataxiagui = ataxiagui or {}\nataxiaVersion = \"4.7.85\"\t\t\t\t\t\t--last was 4.3\n\
+    \ = 1\nataxiaTemp.removedHerbID = 2\nataxiagui = ataxiagui or {}\nataxiaVersion = \"4.7.86\"\t\t\t\t\t\t--last was 4.3\n\
     muteList = muteList or {}\n\nataxiaTables.limbData = ataxiaTables.limbData or {}\nataxiaTables.limbTimers = ataxiaTables.limbTimers or {}\nataxiaTables.fractureTimers = ataxiaTables.fractureTimers\
     \ or {}\n\nataxia.defences = ataxia.defences or {}\nataxia.afflictions = ataxia.afflictions or\
     \ {}\nataxia.vitals = ataxia.vitals or {}\n\nataxia.bals = ataxia.bals or {}\nataxia.bals.get = {\"bal\", \"eq\"}\nataxia.bals.used = ataxia.bals.used or\

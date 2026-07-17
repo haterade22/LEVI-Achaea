@@ -266,3 +266,101 @@ describe("ataxiaBasher_monkBattlerage", function()
     target = 12345
   end)
 end)
+
+-- ── Magi: owns culling; Stormbolt->Sensitivity->Squeeze; Firefall on clumsy/reckless ──────
+-- Kit: Windlash 14 (small), Dilation 35 (special->aeon), Squeeze 36 (large), Stormbolt 25
+-- (specialafflict->sensitivity), Firefall 25 (specialuse, bonus vs clumsy/reckless). Disintegrate
+-- (raze, shield break) is NEVER fired -- magiBashing casts the free `erode`. Dilation/Stormbolt
+-- gate on their own aff (aeon/sensitivity) plus a short in-flight bridge.
+describe("ataxiaBasher_magiBattlerage", function()
+
+  local magiAffs = {}
+  local function magiReset()
+    reset()
+    target = 1                       -- a prior block's PvP-inert test can leave this non-1
+    gmcp.Char.Status.class = "Magi"
+    ataxiaBasher.battlerage = ataxiaBasher.battlerage or {}
+    ataxiaBasher.battlerage["Magi"] = {
+      small = "cast windlash at 1", large = "cast squeeze 1", special = "cast dilation at 1",
+      specialafflict = "cast stormbolt at 1", specialuse = "cast firefall at 1",
+      raze = "cast disintegrate at 1",
+    }
+    magiAffs = {}
+    ataxiaBasher_dsHasAff = function(_, a) return magiAffs[a] == true end
+    ataxiaTemp.magiDilationReadyAt = nil
+    ataxiaTemp.magiStormboltReadyAt = nil
+    ataxiaTemp.magiFirefallReadyAt = nil
+    ataxiaTemp.magiWindlashReadyAt = nil
+  end
+
+  it("owns culling: reap at >=36 when cullingBlade is on", function()
+    magiReset(); ataxiaBasher.cullingBlade = true; ataxia.vitals.rage = 100
+    expect(ataxiaBasher_magiBattlerage(";")).toBe("reap 1;")
+  end)
+
+  it("Mnemosyne: Dilation (aeon) is the mitigation priority", function()
+    magiReset(); ataxiaBasher.inMnemosyne = true; ataxia.vitals.rage = 100
+    expect(ataxiaBasher_magiBattlerage(";")).toBe("cast dilation at 1;")
+  end)
+
+  it("does not re-apply Dilation once the target is already aeon'd", function()
+    magiReset(); ataxiaBasher.inMnemosyne = true; ataxia.vitals.rage = 100
+    magiAffs.aeon = true
+    local cmd = ataxiaBasher_magiBattlerage(";")
+    expect(cmd:find("dilation", 1, true)).toBeNil()
+    expect(cmd).toBe("cast stormbolt at 1;")     -- moves on to the Sensitivity setup
+  end)
+
+  it("Firefall when the target is clumsy or reckless (from any source)", function()
+    magiReset(); ataxia.vitals.rage = 100; magiAffs.recklessness = true  -- BR_AFFS key is 'recklessness'
+    expect(ataxiaBasher_magiBattlerage(";")).toBe("cast firefall at 1;")
+    magiReset(); ataxia.vitals.rage = 100; magiAffs.clumsy = true
+    expect(ataxiaBasher_magiBattlerage(";")).toBe("cast firefall at 1;")
+  end)
+
+  it("Stormbolt->Sensitivity when not sensitive, then Squeeze once sensitive", function()
+    magiReset(); ataxia.vitals.rage = 100
+    expect(ataxiaBasher_magiBattlerage(";")).toBe("cast stormbolt at 1;")
+    magiReset(); ataxia.vitals.rage = 100; magiAffs.sensitivity = true
+    expect(ataxiaBasher_magiBattlerage(";")).toBe("cast squeeze 1;")
+  end)
+
+  it("bridges Stormbolt so it doesn't re-cast before the Sensitivity line lands", function()
+    magiReset(); ataxia.vitals.rage = 100
+    ataxiaBasher_magiBattlerage(";")             -- fires stormbolt, arms bridge + global cd
+    ataxiaTemp.brGlobalReadyAt = nil             -- clear the 1s global to isolate the bridge
+    local cmd = ataxiaBasher_magiBattlerage(";")
+    expect(cmd:find("stormbolt", 1, true)).toBeNil()   -- bridge holds
+    expect(cmd).toBe("cast squeeze 1;")
+  end)
+
+  it("never fires Disintegrate/raze (erode strips shields for free)", function()
+    magiReset(); ataxia.vitals.rage = 100; magiAffs.sensitivity = true
+    battleRage_Timers.large = 1                  -- squeeze on cd
+    expect(ataxiaBasher_magiBattlerage(";"):find("disintegrate", 1, true)).toBeNil()
+  end)
+
+  it("falls to Windlash filler rather than idling rage", function()
+    magiReset(); ataxia.vitals.rage = 20; magiAffs.sensitivity = true  -- under squeeze's 36
+    expect(ataxiaBasher_magiBattlerage(";")).toBe("cast windlash at 1;")
+  end)
+
+  it("does not re-fire Windlash while its 16s cooldown is up (returns empty)", function()
+    magiReset(); ataxia.vitals.rage = 20; magiAffs.sensitivity = true
+    ataxiaBasher_magiBattlerage(";")            -- fires windlash, arms its cd + global
+    ataxiaTemp.brGlobalReadyAt = nil            -- isolate the windlash cd from the 1s global
+    expect(ataxiaBasher_magiBattlerage(";")).toBe("")   -- nothing else affordable, windlash on cd
+  end)
+
+  it("respects the ~1s global BR cooldown", function()
+    magiReset(); ataxia.vitals.rage = 100
+    ataxiaTemp.brGlobalReadyAt = getEpoch() + 1
+    expect(ataxiaBasher_magiBattlerage(";")).toBe("")
+  end)
+
+  it("is PvP-inert (string target)", function()
+    magiReset(); ataxia.vitals.rage = 100; target = "Penwize"
+    expect(ataxiaBasher_magiBattlerage(";")).toBe("")
+    target = 1
+  end)
+end)

@@ -322,30 +322,29 @@ function ataxiaBasher_jesterBashing()
 end
 
 function ataxiaBasher_magiBashing()
-
    local command, sp = "", ataxia.settings.separator
-	 local brage = ataxiaBasher_assembleBattlerage()
-	 local raze = ataxiaBasher.battlerage.Magi.raze
-    -- GUI updates only when room contents have changed (dirty flag set by stormhammer invalidation)
-    if ataxiaBasher_stormhammerDirty then
+   -- ONE assemble: this was called twice (the second result was discarded), which now that
+   -- Magi owns a rotation would double-arm its cooldowns / global-BR guard. The dead
+   -- `local raze = ataxiaBasher.battlerage.Magi.raze` (never used) is gone too.
+   local brage = ataxiaBasher_assembleBattlerage()
+   -- GUI updates only when room contents have changed (dirty flag set by stormhammer invalidation)
+   if ataxiaBasher_stormhammerDirty then
       ataxia_Update_RoomContents()
       if zgui then zgui.showRoomInfo() end
-    end
-    ataxiaBasher_stormhammer()
-   if ataxiaBasher.shielded then
-      command = command.."cast erode at "..target..ataxia.settings.separator
    end
-   
-   command = command..ataxiaBasher_assembleBattlerage()
+   ataxiaBasher_stormhammer()
 
-   if not ataxiaBasher.shielded then
-    if ataxiaBasher.stormhammer and ataxiaBasher_validTargets() > 2 and #stormhammerTargets >= 3 then
+   if ataxiaBasher.shielded then
+      -- erode is Magi's free shield strip (why Disintegrate is never fired -- see magiBattlerage).
+      -- Strip FIRST, then battlerage -- a still-up denizen shield absorbs the BR otherwise
+      -- (matches blademasterBashing's raze..sp..brage order).
+      command = "cast erode at "..target..sp..brage
+   elseif ataxiaBasher.stormhammer and ataxiaBasher_validTargets() > 2 and #stormhammerTargets >= 3 then
       command = brage..sp.."cast stormhammer at "..stormhammerTargets[1].. " and " ..stormhammerTargets[2].. " and " ..stormhammerTargets[3]
-    else
+   else
       command = brage..sp.."staff cast horripilation at "..target
-    end
    end
-   return command   
+   return command
 end
 
 

@@ -2,6 +2,23 @@
 
 ---
 
+## 2026-07-16 — Basher: Magi battlerage rotation — completes the kit + owns culling (v4.7.86)
+
+Magi gets a real rotation, following the Blademaster/Monk pattern. Before this, Magi fell through to `standardBattlerage` (fires only small/large/special), so **Disintegrate, Firefall, and Stormbolt were dead config**, and the shared culling check suppressed the whole rotation.
+
+- **Completed the config** (`_groups.yaml` Magi): added `specialafflict = "cast stormbolt at <t>"` (Sensitivity), `specialuse = "cast firefall at <t>"` (conditional), `raze = "cast disintegrate at <t>"` (denizen shield break). **Cast syntax confirmed vs AB:** all `cast X at <t>` except `squeeze` (no "at").
+- **New `ataxiaBasher_magiBattlerage`** — priority: **culling reap (≥36)** → **Mnemosyne Dilation→Aeon** (mob slower, mitigation) → **Firefall on a clumsy/reckless target** (bonus, from any source) → **Stormbolt→Sensitivity** when not sensitive (sets up the burst) → **Squeeze** (+33% while sensitive) → Dilation surplus → **Windlash filler** so rage never idles. Respects the ~1s global BR cooldown.
+- **Never fires Disintegrate** — `magiBashing` casts the free `erode` shield strip, so 17 rage on Disintegrate is the worse trade (the Monk shatter-over-spk rule).
+- **Magi owns culling** — excluded from the shared culling check (`class ~= "Magi"`, `P and true` for every other class) and reaps at 36 in its own rotation.
+- **Cleaned up `magiBashing`** — `assembleBattlerage()` was called **twice** (the second result discarded — a double-arm now that a rotation stamps cooldowns) and had a dead `raze` local; both fixed. Shielded path strips (`erode`) **before** battlerage so a still-up shield doesn't absorb it.
+- **Cooldowns confirmed via AB:** Windlash 16s, Dilation 35s, Squeeze 23s, Firefall 23s, Stormbolt 27s. Squeeze uses the real `battleRage_Timers.large` (trigger 331); the rest have no fire-line trigger so they use reload-safe timestamps (incl. Windlash — without a gate it would re-fire a doomed cast for 16s). Dilation/Stormbolt also gate on their affliction so they skip when it is already up from another source.
+- Tests: `test_basher_battlerage.lua` +10 Magi cases (culling, Mnemosyne mitigation, Firefall on clumsy/recklessness, Stormbolt→Squeeze, never-Disintegrate, filler, global-cd, PvP-inert). Suite **292/292**.
+- **Two-agent adversarial review** caught and fixed: the Sensitivity aff-gate was inert (no capture trigger) → made the fallback timestamp the aff duration; Firefall checked the wrong key `reckless` → `recklessness`; the shielded branch reordered brage-before-erode → restored erode-first.
+
+**Still needs in-game capture (like the other classes):** the **Stormbolt Sensitivity land-line** (to add the capture so the rotation skips Stormbolt when Sensitivity is already up); whether Dilation prints the existing aeon line (trigger 015); that `erode` reliably strips denizen shields. Cast syntax and cooldowns are now confirmed from AB.
+
+---
+
 ## 2026-07-16 — Basher: stop double-weaving the swiftcurse recharge (v4.7.85)
 
 The swiftcurse recharge was firing twice in a row, **costing a balance each time**.
