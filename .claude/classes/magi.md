@@ -578,11 +578,49 @@ Registered via `registerAnonymousEventHandler("ataxia target changed", ...)` wit
 
 ---
 
-## Bashing (PvE)
-```yaml
-attack_command: "STAFFCAST FIRE <target>"
-attack_skill: Elementalism
-```
+## Bashing (PvE) — the basher (`ataxiaBasher_magi*`)
+
+The PvE hunting path is **separate** from the `magi.offense` PvP system above. It runs through the shared `ataxiaBasher` engine, dispatched by class. Two layers fire each cycle: the **equilibrium attack** (`ataxiaBasher_magiBashing`, `basher/002_Class_Bashing.lua`) and the **battlerage rotation** (`ataxiaBasher_magiBattlerage`, `basher/001_Bashing_Functions.lua`), which use different balances (eq vs Rage) and so fire together.
+
+### Equilibrium attack — `ataxiaBasher_magiBashing()` (`basher/002`)
+Priority order (first match wins; all except Bloodboil append the battlerage prefix `brage`):
+
+1. **Bloodboil** (top priority) — `cast bloodboil` when `ataxiaBasher_magiShouldBloodboil()` holds. It's a **main skill** (Elementalism, 75 mana, 4s eq), NOT a battlerage — it takes the eq slot from the staff bash while battlerage (Rage) still fires; `addclearfull`-queued so it self-dedups until eq returns. Two independent reasons, both requiring mana ≥ 75 and not haemophilic (the cast fails under it):
+   - **CURE** — 3+ **real** afflictions while **our own** tree tattoo is on balance (`ataxiaTemp.usedTree`). Set on **both** tree-fire lines — "You touch the tree of life tattoo." (`curing_bals/003`, a successful cure) **and** "Your tree of life tattoo glows faintly… leaving you unchanged." (`curing_bals/001`, a cooldown-consuming fire that cured nothing) — and cleared on "You may utilise the tree tattoo again." (`curing_bals/004`). The 001 line is the one SSC actually emits during bashing, so without it latching `usedTree` the whole cure branch was dead (found in review). **Not `tBals.tree`** — that tracks the *target's* tree and is reset to `true` on every denizen target-change/kill. The count skips `incoming_*` predictions and cured-to-0 stacks; blindness/deafness/insomnia are never stored so bashing blind/deaf doesn't inflate it.
+   - **HEAL** — with the **Hot Springs boon** (Mnemosyne), Bloodboil also heals **25% max health + 5% willpower** (the boon has its own 30s internal cooldown) — a bashing heal like the Shaman's `invoke regeneration`. Fires purely on **HP% < 60**, with **no client-side cooldown**: a self-managed cd would flip the branch off mid-eq-wait and let the 0.3s `addclearfull` re-queue clobber the pending `cast bloodboil` before it lands (consuming the cd without healing). The HP threshold self-regulates; casts that land while the boon's own cd is up still cure an affliction. Flag `magiHotSprings`, wired 1:1 with the other Mnemosyne boons.
+2. **Shielded** → `cast erode at <t>` — Erode is Magi's *free* shield strip (all-four utility spell), which is why the battlerage **never fires Disintegrate** (17 Rage on a shield break is the worse trade — the Monk shatter-over-spk rule). Strip FIRST, then battlerage, so a still-up shield doesn't absorb the BR.
+3. **Aspect of Kkractle boon** (Mnemosyne) → `elemental surge` — with this boon, Elemental Surge (normally the ashbeast's water-construct destroyer) becomes an **AoE fire nuke on every denizen in the room** (no target). Flag `magiKkractle` set by the BOONS-list trigger + boon-claim alias, reset each run — wired 1:1 with `bmShatteredStar`. Requires a summoned ashbeast up.
+4. **Stormhammer AoE** — `cast stormhammer at <t1> and <t2> and <t3>` when `ataxiaBasher_validTargets() > 2` and `#stormhammerTargets >= 3` (3-target cap).
+5. **Single target** → `staff cast horripilation at <t>` (default).
+
+`ataxiaBasher_magiStormPrep()` (stormhammer targeting + GUI) is split out and pre-called once by the autobash loop (`genrunning/004`); `magiBashing` is invoked twice per cycle (that pre-call + the real send), so the prep must NOT run the battlerage — see the double-call note in AGENTS.md.
+
+### Battlerage rotation — `ataxiaBasher_magiBattlerage(sp)` (`basher/001`)
+Rage-powered; Magi **owns culling** (excluded from the shared culling check so `reap` fires here, not over the rotation). PvP-inert (`type(target) ~= "number"` early return); respects the ~1s global BR cooldown. Priority:
+
+| # | Ability | Rage | Gate | Cast syntax |
+|---|---------|------|------|-------------|
+| 1 | **Culling reap** | 36 | `cullingBlade` on, off-cd, not World Tree | `reap <t>` |
+| 2 | **Dilation → Aeon** | 35 | in Mnemosyne, target not aeon'd (mitigation — mob attacks slower) | `cast dilation at <t>` |
+| 3 | **Firefall** | 25 | target clumsy or recklessness (from ANY source — Magi applies neither) | `cast firefall at <t>` |
+| 4 | **Stormbolt → Sensitivity** | 25 | target not already sensitive (+33% dmg taken; sets up Squeeze) | `cast stormbolt at <t>` |
+| 5 | **Squeeze** | 36 | off-cd (hits harder while Sensitivity up) | `cast squeeze <t>` |
+| 6 | **Dilation surplus** | 35 | outside Mnemosyne, not aeon'd | `cast dilation at <t>` |
+| 7 | **Windlash** (filler) | 14 | off-cd — spends leftover Rage so it never idles | `cast windlash at <t>` |
+
+**Cast syntax:** all `cast X at <t>` **except Squeeze** (`cast squeeze <t>`, no "at"). Confirmed vs AB.
+**Cooldowns (AB-confirmed):** Windlash 16s, Dilation 35s, Squeeze 23s, Firefall 23s, Stormbolt 27s. Squeeze uses the real shared `battleRage_Timers.large` (trigger 331 tracks "vice-like squeeze"); the rest have no fire-line trigger, so they use reload-safe timestamps `ataxiaTemp.magi*ReadyAt` (Windlash included — without a gate it re-fires a doomed cast every prompt for 16s). Dilation/Stormbolt also gate on their affliction so they skip when it's already up from another source.
+**Never fires Disintegrate** (`raze` slot is config-complete but dead — Erode strips shields for free).
+
+### Ashbeast (do-not-kill)
+Magi's Artificing fire summon shows in "Denizens Here" as **"a blazing ashbeast"**. It is on the basher `ownDenizens` ignore list (`002_Check_For_Any_Missing_Variables.lua`) so it's never auto-learned or targeted (seeded default + back-filled into old saves).
+
+### Reload-safety
+`battleRage_Timers`, `tBals`, and `bashStats` are created only inside `levilogin()`, so a SYSUPDATE/reload that doesn't re-fire login left them nil and crashed the always-live bashing path. All now have load-time idempotent inits at the top of `basher/001` (and `basher/003` for bashStats). See AGENTS.md → "Reload-safety".
+
+### Still needs in-game capture
+- **Stormbolt Sensitivity land-line** (apply: `…inciting sensitive nerves across his skin`; fade: `The lightning cracking around <denizen>'s sensitive skin fades away`) — to add the denizen-state capture so the rotation skips Stormbolt when Sensitivity is already up.
+- Confirm Dilation prints the existing aeon line (trigger 015) vs a new one.
 
 ---
 

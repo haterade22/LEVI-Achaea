@@ -22,3 +22,5 @@ if matches[2]:lower():find("warmarch") then bardWarmarch = true end
 if matches[2]:lower():find("shattered star") then bmShatteredStar = true end
 -- Aspect of Kkractle makes ELEMENTAL SURGE an AoE fire nuke on all denizens; flip magi bashing to it.
 if matches[2]:lower():find("kkractle") then magiKkractle = true end
+-- Hot Springs makes BLOODBOIL also heal 25% max hp + 5% willpower (30s cd); magi uses it as a heal.
+if matches[2]:lower():find("hot springs") then magiHotSprings = true end

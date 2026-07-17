@@ -342,6 +342,15 @@ function ataxiaBasher_magiBashing()
    local brage = ataxiaBasher_assembleBattlerage()
    ataxiaBasher_magiStormPrep()
 
+   -- Active self-cure (Bloodboil) takes the equilibrium slot when afflictions have piled up (3+)
+   -- and the Tree of Life tattoo -- the passive cure -- is on balance. It is a main skill, not a
+   -- battlerage, so it replaces the eq staff-bash for this cycle; battlerage (rage) still fires
+   -- alongside. addclearfull-queued, so it self-dedups and just waits for eq. See
+   -- ataxiaBasher_magiShouldBloodboil (basher/001).
+   if ataxiaBasher_magiShouldBloodboil() then
+      return brage..sp.."cast bloodboil"
+   end
+
    if ataxiaBasher.shielded then
       -- erode is Magi's free shield strip (why Disintegrate is never fired -- see magiBattlerage).
       -- Strip FIRST, then battlerage -- a still-up denizen shield absorbs the BR otherwise

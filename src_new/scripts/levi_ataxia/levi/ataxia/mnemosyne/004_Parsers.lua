@@ -117,9 +117,28 @@ end
 -- Handlers (called by trigger bodies)
 -- ---------------------------------------------------------------------------
 
+-- "You whisper to the Mnemosyne and beseech that it grow still for a time."
+-- PAUSE: this suspends the current run WITHOUT ending it server-side -- the next wade re-enters
+-- the SAME wade. Mark it so onRunStart RESUMES (via /run_exists) instead of minting a brand-new
+-- run (which would orphan all the paused run's progress under a fresh public_id). Set the flag
+-- unconditionally (like the boon flags); onRunStart consumes it under the _auto() gate.
+function M.onRunPause()
+  M.run.paused = true
+  M.decho("Run paused (beseeched still) -- next wade resumes the same run.")
+end
+
 -- "You begin to wade out into the depths of the Mnemosyne..."
 function M.onRunStart()
-  if M._auto() then M.startRun() end
+  if not M._auto() then return end
+  if M.run.paused then
+    -- Re-entering a run we PAUSED: it's the same wade, so resume the existing server run rather
+    -- than starting a new one. /run_exists re-syncs active + ripple (and safely no-ops to inactive
+    -- if the server no longer has it).
+    M.run.paused = nil
+    M.runExists()
+  else
+    M.startRun()
+  end
 end
 
 -- "The Mnemosyne releases its hold, weaving N shimmering threads into your
@@ -154,6 +173,13 @@ function M.onRunEnd()
   bardWarmarch = false -- boons gone on a confirmed run-end
   bmShatteredStar = false -- boons gone on a confirmed run-end
   magiKkractle = false -- boons gone on a confirmed run-end
+  magiHotSprings = false -- boons gone on a confirmed run-end
+  -- Clear the pause flag UNCONDITIONALLY (like the boon flags above), not only via the
+  -- _inRun()-gated endRun()->_resetRun(): with telemetry off (the shipped default) that path
+  -- never runs, so a paused-then-ended run would leave paused=true and misfire the NEXT fresh
+  -- wade into a resume (runExists) that never /run_start's the new run. onRunEnd fires only on the
+  -- confirmed end, never between a pause and its same-wade re-wade, so this can't break a resume.
+  M.run.paused = nil
   -- The wade lifecycle brackets our presence in the tower, so the confirmed end is the
   -- authoritative "we are out" -- never gmcp's area, which Creville's Legacy (incurable
   -- dementia) can fake into a real place while we are still inside. Cleared here rather than

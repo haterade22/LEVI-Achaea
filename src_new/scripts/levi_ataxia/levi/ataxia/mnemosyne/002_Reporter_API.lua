@@ -43,6 +43,7 @@ function M._resetRun()
   M.run.publicId = nil
   M.run.pendingMonsters = {}
   M.run.lastOffered = {}
+  M.run.paused = nil -- a genuine start/end clears any pending pause-resume
 end
 
 -- Send any buffered monster spawns as one combined string, then clear.

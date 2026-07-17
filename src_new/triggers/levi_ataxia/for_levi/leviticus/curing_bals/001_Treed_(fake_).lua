@@ -36,3 +36,10 @@ patterns:
 ]]--
 
 ataxiaTemp.canTree = false
+-- This "glows faintly...leaving you unchanged" line is a REAL tree fire that consumed tree balance
+-- but cured nothing -- the regain line "You may utilise the tree tattoo again." (004_Got_Tree_Bal,
+-- which clears usedTree) follows it. So the tree IS now on cooldown: mark it, exactly like the
+-- successful-cure line (003_Tree_Touched). Without this, usedTree never latches during bashing
+-- (SSC emits this "unchanged" variant, not "You touch the tree of life tattoo."), which left the
+-- Magi Bloodboil "off tree balance" gate (ataxiaBasher_magiShouldBloodboil) permanently dead.
+ataxiaTemp.usedTree = true

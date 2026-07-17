@@ -36,6 +36,7 @@ ataxia.mnemosyne.onRunStart()
 bardWarmarch = false  -- boons reset each run
 bmShatteredStar = false  -- boons reset each run
 magiKkractle = false  -- boons reset each run
+magiHotSprings = false  -- boons reset each run
 
 -- The wade lifecycle is the AUTHORITY on being in the tower -- this line and the confirmed
 -- run-end bracket it exactly. Do not infer it from gmcp: the boon "Creville's Legacy" (attack

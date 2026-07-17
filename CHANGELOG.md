@@ -2,6 +2,23 @@
 
 ---
 
+## 2026-07-17 — Basher: reload-safety hardening + Magi Bloodboil (cure & Hot Springs heal) + Mnemosyne pause (v4.7.88)
+
+**Reload-safety — three more nil-crash globals.** Following the `battleRage_Timers` live crash, an audit of everything `levilogin()` alone initializes (43 globals) found the same "nil after a SYSUPDATE/reload that didn't re-fire login" pattern in two more that always-live code indexes: **`tBals`** (prompt `@tarbals` tag, focus-knock, Anti_Priorities) and **`shape`** (an Earth Lord magma-seethe trigger does `shape = shape + 1`). All three now get load-time idempotent inits at the top of `basher/001_Bashing_Functions.lua` (`X = X or <default>`; `tBals` uses its full shape since `.timers` is indexed). Six other candidates were cleared as guarded/safe.
+
+**Magi Bloodboil — active self-cure + heal, woven into the bash loop.** Bloodboil (Elementalism main skill, 75 mana, 4s eq) now fires from `magiBashing`'s equilibrium slot (battlerage still fires alongside — it is NOT a battlerage). Two reasons:
+- **CURE** — 3+ real afflictions while **our own** tree tattoo is on balance. Gated on `ataxiaTemp.usedTree`, which is now set on **both** tree-fire lines (the successful "You touch the tree of life tattoo." *and* the cure-nothing "…glows faintly… leaving you unchanged.", `curing_bals/001`), so it actually latches during bashing (SSC emits the latter). *Not* the target's `tBals.tree`. The count skips `incoming_*` predictions and cured-to-0 stacks.
+- **HEAL** — with the **Hot Springs** Mnemosyne boon, Bloodboil also heals 25% max HP + 5% willpower; the basher fires it at **HP% < 60** (like the Shaman's `invoke regeneration`), with no client-side cooldown so the `addclearfull` re-queue can't clobber the pending cast.
+- New Hot Springs boon flag (`magiHotSprings`) wired 1:1 with the other Mnemosyne boons (BOONS-list trigger + boon-claim alias + run-start/run-end resets).
+
+**Mnemosyne pause/resume.** `WHISPER … beseech that it grow still` ("You whisper to the Mnemosyne and beseech that it grow still for a time.") pauses a run without ending it server-side — the next wade is the **same** wade. The tracker now resumes via `/run_exists` instead of minting a new `public_id` with `/run_start`. The pause flag clears **unconditionally** on a confirmed run-end (found in review — otherwise a paused-then-ended run with telemetry off would hijack the next fresh wade into a resume that never registers the new run).
+
+**Reviewed** (two adversarial agents): fixed the stale-`paused` run-end bug (HIGH) and the heal-cooldown queue-clobber (MEDIUM). Suite **309/309**.
+
+**Needs one in-game confirmation:** that the "…glows faintly… leaving you unchanged." tree line does put the tree on cooldown (the regain line follows it) — the Bloodboil cure gate assumes so; log evidence supports it.
+
+---
+
 ## 2026-07-17 — Basher: crash fixes (eq/balance bars + bashStats) + Magi ashbeast/Kkractle (v4.7.87)
 
 Four fixes from live Magi bashing — two class-agnostic crashes plus two Magi-specific additions.

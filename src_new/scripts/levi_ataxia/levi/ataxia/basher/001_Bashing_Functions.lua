@@ -30,6 +30,22 @@ packageName: ''
 
 -- unnamed > For Levi > Levi_062424 > leviticus > LeviAtaxia > Ataxia-DownloadThis > Basher > Bashing > Bashing Functions
 
+-- Load-time (reload-safe) inits for combat globals that are otherwise created ONLY inside
+-- levilogin() (login/001). A package reinstall/reload (e.g. SYSUPDATE) does NOT re-fire the
+-- "logged in" event, so these stay nil, and always-live code -- prompt triggers, gmcp.Char.Vitals
+-- handlers, the attack loop -- then indexes/arith them and crashes. Each is idempotent (`or`), so a
+-- live value is preserved mid-session (cooldowns/counts not wiped) and only a genuine nil is
+-- seeded. This file loads at package load, before any trigger fires. Same pattern as bashStats
+-- (basher/003). Confirmed sinks:
+--   battleRage_Timers.small/large/special  -- every battlerage rotation (crashed live, v4.7.87)
+--   tBals.tree/plant/focus/timers          -- prompt @tarbals tag (012), focus-knock, Anti_Priorities,
+--                                             and Magi's Bloodboil gate (magiShouldBloodboil). FULL
+--                                             shape required -- tBals.timers is indexed.
+--   shape (Earth Lord)                     -- 121_SHAPE_PLUS does `shape = shape + 1` unguarded
+battleRage_Timers = battleRage_Timers or {}
+tBals = tBals or {tree = true, focus = true, plant = true, salve = true, timers = {}, passive = true}
+shape = shape or 0
+
 -- Dispatch table: initialized once at script load time instead of every attack
 ataxiaBasher_bashingFuncs = {
   --Elementals
@@ -901,6 +917,50 @@ function ataxiaBasher_magiBattlerage(sp)
   local cmd = choose()
   if cmd ~= "" then ataxiaTemp.brGlobalReadyAt = getEpoch() + 1 end -- arm the ~1s global cooldown
   return cmd
+end
+
+-- Bloodboil is Magi's ACTIVE self-cure (Elementalism main skill: 75 mana, 4s equilibrium; clears one
+-- affliction, two with major Fire+Water resonance). It is NOT a battlerage -- it takes the
+-- equilibrium slot in magiBashing, same as the staff bash (see 002_Class_Bashing). Two independent
+-- reasons to fire; everything read here is nil-guarded so the predicate is reload-safe:
+--   HEAL -- with the Hot Springs boon (Mnemosyne) bloodboil ALSO heals 25% max health + 5% willpower
+--           on a 30s cooldown, making it a bashing heal like the Shaman's invoke-regeneration
+--           (shamanBashing healhealth < 60). Fire when HP is low and that 30s heal is off cooldown.
+--   CURE -- 3+ afflictions while OUR OWN tree tattoo is on balance. `ataxiaTemp.usedTree` is set on
+--           "You touch the tree of life tattoo." and cleared on "You may utilise the tree tattoo
+--           again." (curing_bals/003,004) -- OUR tree. NOT tBals.tree: that tracks the TARGET's tree
+--           and is reset to true on every denizen target-change/kill, so it never means "our tree is
+--           down" while bashing (the feature was inert against it).
+-- Skipped under haemophilia (the cast just fails) and when mana can't cover the 75.
+function ataxiaBasher_magiShouldBloodboil()
+  if gmcp.Char.Status.class ~= "Magi" then return false end
+  local affs = ataxia.afflictions or {}
+  if affs.haemophilia then return false end
+  if (tonumber(ataxia.vitals and ataxia.vitals.mp) or 0) < 75 then return false end
+
+  -- HEAL: with the Hot Springs boon bloodboil heals 25% max HP + 5% willpower. Fire at low HP, like
+  -- the Shaman's invoke-regeneration. NO client-side cooldown on purpose: the returned command must
+  -- stay STABLE across the 0.3s `queue addclearfull` re-queue loop. A self-managed cd would flip this
+  -- branch off after one decision while HP is still < 60, so the next cycle's normal attack would
+  -- addclearfull-clobber the still-pending (not-yet-on-eq) `cast bloodboil` -- consuming the cd
+  -- without ever healing. Gating purely on HP self-regulates (a landed heal lifts HP out of range),
+  -- and any cast that lands while the boon's own 30s internal cd is up still CURES an affliction.
+  if magiHotSprings and (tonumber(ataxia.vitals and ataxia.vitals.hpp) or 100) < 60 then
+    return true
+  end
+
+  -- CURE: 3+ REAL afflictions while our tree is on balance. Skip incoming_* predictions and cured
+  -- stacks left at 0 -- both inflate a raw key count (blindness/deafness/insomnia are already never
+  -- stored in ataxia.afflictions, so bashing blind/deaf doesn't count).
+  if ataxiaTemp.usedTree then
+    local count = 0
+    for k, v in pairs(affs) do
+      if v and v ~= 0 and type(k) == "string" and not k:find("^incoming_") then count = count + 1 end
+    end
+    if count >= 3 then return true end
+  end
+
+  return false
 end
 
 function ataxiaBasher_assembleBattlerage()

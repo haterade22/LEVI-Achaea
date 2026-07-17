@@ -257,6 +257,46 @@ describe("run lifecycle", function()
     expect(M.run.active).toBeFalse()
     expect(#M.run.pendingMonsters).toBe(0)
   end)
+
+  it("a fresh wade (no pause) starts a NEW run", function()
+    reset(false)
+    M.onRunStart()
+    expect(sent[1].url).toContain("/run_start")
+  end)
+
+  it("onRunPause marks the run; the next wade RESUMES (run_exists), not a new run_start", function()
+    reset(true)
+    M.run.ripple = 3
+    M.onRunPause()
+    expect(M.run.paused).toBeTrue()
+    M.onRunStart()                                  -- re-enter the same wade
+    expect(sent[1].url).toContain("/run_exists")    -- resume, not /run_start
+    for _, s in ipairs(sent) do
+      if s.url:find("/run_start") then error("paused re-wade must not start a new run") end
+    end
+    expect(M.run.paused).toBeNil()                  -- flag consumed
+  end)
+
+  it("a genuine startRun/endRun clears a stale pause flag", function()
+    reset(true)
+    M.run.paused = true
+    M.startRun()                                    -- _resetRun clears it
+    expect(M.run.paused).toBeNil()
+  end)
+
+  it("onRunEnd clears a stale pause flag even with telemetry OFF (no /run_exists on next fresh wade)", function()
+    reset(true)
+    ataxia.settings.reporting.enabled = false        -- telemetry off (the shipped default)
+    M.run.paused = true
+    M.onRunEnd()                                      -- _inRun() false -> endRun/_resetRun never run
+    expect(M.run.paused).toBeNil()                    -- ...but the unconditional clear still fires
+    ataxia.settings.reporting.enabled = true          -- re-enable, then a brand-new dive
+    M.onRunStart()
+    expect(sent[1].url).toContain("/run_start")       -- fresh run, NOT a resume
+    for _, s in ipairs(sent) do
+      if s.url:find("/run_exists") then error("a fresh wade after a real end must not resume") end
+    end
+  end)
 end)
 
 -- ─── Boon claim ──────────────────────────────────────────────────────────────

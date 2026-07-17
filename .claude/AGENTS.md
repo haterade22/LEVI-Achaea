@@ -108,6 +108,21 @@ When modifying `leviSetup` (misc_scripts/020_Setup_Wizard.lua):
 
 ---
 
+## Basher Pitfalls (learned the hard way)
+
+### Reload-safety: login-only globals crash the always-live path
+Many combat globals are created **only inside `levilogin()`** (`login/001_Login_Function.lua`), which fires on the "logged in" event. A **package reinstall/reload (SYSUPDATE) does NOT re-fire login**, so those globals stay nil — and always-live code (prompt triggers, `gmcp.Char.Vitals` handlers, the attack loop) then indexes/arithmetics them and crashes. Confirmed victims: `bashStats`, `battleRage_Timers`, `tBals`, `shape` (an Earth Lord magma-seethe trigger did `shape = shape + 1`).
+
+**Rule:** any global a prompt/combat trigger or the bashing path reads must have a **load-time (module-scope) idempotent init** — `X = X or <default>` at the top of a script that loads at package load (see the block at the top of `basher/001_Bashing_Functions.lua`). Use `or` so a live value survives mid-session; use the **full shape** when subfields are indexed (`tBals.timers`), not bare `{}`. To find siblings, grep `levilogin` for its assignments and check each against unguarded index/arith on an always-live path — don't trust that "it's set at login."
+
+### Battlerage double-call: pre-call arming eats the real fire
+`ataxiaBasher_magiBashing` (and any class whose autobash loop pre-calls its bashing function for setup) is invoked **twice per cycle** — once discarded (stormhammer/GUI prep in `genrunning/004`), once for the real send. This was harmless while the class used `standardBattlerage` (a pure read), but a **custom `*Battlerage` that ARMS cooldowns on fire** will arm them on the discarded pre-call, so the real call returns `""` and **no battlerage is ever sent**. Fix: the pre-call must run setup ONLY (e.g. `ataxiaBasher_magiStormPrep()`), never the battlerage.
+
+### eq/balance timers: nil stopwatch aborts the EQUILIBRIUM trigger
+`stopStopWatch(nil)` throws. On a fresh session the eq/bal stopwatch globals are nil, so `endEQTimer`/`endBalTimer` threw and aborted the EQUILIBRIUM trigger **before `EQHighlight()` ran** — the on-screen eq/bal bars silently vanished. Guard stopwatch stops with `if <id> then ... end`.
+
+---
+
 ## Quality Gates (Hooks)
 
 Hooks in `.claude/hooks/` run automatically and block operations that fail validation:

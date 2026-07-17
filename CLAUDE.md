@@ -14,6 +14,27 @@ This repository contains the **"For Levi" Mudlet package**, a comprehensive comb
 
 ---
 
+## Documentation-First Knowledge Base (MANDATORY)
+
+**Goal: build a world-class, code-accurate knowledge base on Achaea and everything in it.** The docs are a first-class deliverable, not an afterthought — they must stay in lock-step with the code.
+
+**On completing ANY task** (a feature, a fix, a research finding, a confirmed game mechanic), before considering it done, update every piece of documentation it touches:
+
+- **Class docs** (`.claude/classes/<class>.md`) — kill routes, ability lists, cast syntax, cooldowns, bashing/basher rotations, and anything newly confirmed from AB screenshots or combat logs. If a section is a stub or is now wrong, rewrite it.
+- **Cross-cutting conventions** (`this file` + `.claude/AGENTS.md`) — new patterns, invariants, pitfalls, or architectural rules that apply beyond one class (e.g. reload-safety inits, the battlerage double-call trap).
+- **Memory files** (`memory/<system>.md` + `memory/MEMORY.md` index) — durable per-system knowledge and hard-won lessons.
+- **CHANGELOG.md** — every shipped version.
+
+**Rules of the knowledge base:**
+1. **Code-accurate over aspirational** — document what the code actually does *now*, with `file:line` anchors. If you can't verify it against the code or a game log, mark it as unconfirmed.
+2. **Capture the "why"** — game mechanics learned from AB/logs, and the reasoning behind non-obvious code, are the highest-value entries. A future reader must not have to re-derive them.
+3. **No orphaned knowledge** — if you learned something this session (a fire-line, a cooldown, a boon effect, a crash class), it goes into the right doc before the task is closed.
+4. **Prune what's wrong** — delete or correct stale/incorrect docs rather than leaving them to mislead.
+
+Treat "the tests pass and it builds" as *necessary but not sufficient*. A task is complete only when the knowledge base reflects it.
+
+---
+
 ## Technical Context
 
 ### What is Achaea?

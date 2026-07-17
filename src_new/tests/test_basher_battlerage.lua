@@ -364,3 +364,96 @@ describe("ataxiaBasher_magiBattlerage", function()
     target = 1
   end)
 end)
+
+describe("ataxiaBasher_magiShouldBloodboil", function()
+  -- Bloodboil fires from magiBashing's equilibrium slot for two independent reasons:
+  --   CURE  -- 3+ real afflictions while OUR tree tattoo is on balance (ataxiaTemp.usedTree).
+  --   HEAL  -- Hot Springs boon + low HP + the boon's 30s heal off cooldown.
+  local function bloodboilReset()
+    gmcp.Char.Status.class = "Magi"
+    ataxiaTemp.usedTree = true                -- OUR tree tattoo is on balance (down)
+    magiHotSprings = false                    -- heal boon off unless a test enables it
+    ataxia.vitals.mp = 1000                   -- plenty of mana
+    ataxia.vitals.hpp = 100                   -- full HP unless a test lowers it
+    ataxia.afflictions = { asthma = true, slickness = true, clumsiness = true }  -- 3 affs
+  end
+
+  -- CURE branch --------------------------------------------------------------
+  it("cures at 3+ affs while OUR tree is on balance", function()
+    bloodboilReset()
+    expect(ataxiaBasher_magiShouldBloodboil()).toBe(true)
+  end)
+
+  it("holds while OUR tree tattoo is up (passive cure handles it)", function()
+    bloodboilReset(); ataxiaTemp.usedTree = nil
+    expect(ataxiaBasher_magiShouldBloodboil()).toBe(false)
+  end)
+
+  it("holds below 3 afflictions", function()
+    bloodboilReset(); ataxia.afflictions = { asthma = true, slickness = true }
+    expect(ataxiaBasher_magiShouldBloodboil()).toBe(false)
+  end)
+
+  it("counts only real affs -- ignores incoming_* predictions and cured (0) stacks", function()
+    bloodboilReset()
+    ataxia.afflictions = { asthma = true, slickness = true, incoming_paralysis = true, crescendo = 0 }
+    expect(ataxiaBasher_magiShouldBloodboil()).toBe(false)   -- only 2 real affs
+  end)
+
+  it("does not cast while haemophilic (the spell just fails)", function()
+    bloodboilReset(); ataxia.afflictions.haemophilia = true  -- now 4 affs but blood too thin
+    expect(ataxiaBasher_magiShouldBloodboil()).toBe(false)
+  end)
+
+  it("holds when mana can't cover the 75 cost", function()
+    bloodboilReset(); ataxia.vitals.mp = 40
+    expect(ataxiaBasher_magiShouldBloodboil()).toBe(false)
+  end)
+
+  it("is Magi-only (class guard)", function()
+    bloodboilReset(); gmcp.Char.Status.class = "Blademaster"
+    expect(ataxiaBasher_magiShouldBloodboil()).toBe(false)
+    gmcp.Char.Status.class = "Magi"
+  end)
+
+  -- HEAL branch (Hot Springs boon) -------------------------------------------
+  it("heals on the Hot Springs boon at low HP, even with tree up and no affs", function()
+    bloodboilReset()
+    magiHotSprings = true; ataxia.vitals.hpp = 45
+    ataxiaTemp.usedTree = nil; ataxia.afflictions = {}   -- no cure reason
+    expect(ataxiaBasher_magiShouldBloodboil()).toBe(true)
+  end)
+
+  it("keeps returning true across cycles while HP stays low (no self-cd -> no addclearfull clobber)", function()
+    bloodboilReset()
+    magiHotSprings = true; ataxia.vitals.hpp = 45
+    ataxiaTemp.usedTree = nil; ataxia.afflictions = {}
+    -- Must stay stable so the re-queued `cast bloodboil` isn't clobbered before eq fires it.
+    expect(ataxiaBasher_magiShouldBloodboil()).toBe(true)
+    expect(ataxiaBasher_magiShouldBloodboil()).toBe(true)
+    expect(ataxiaBasher_magiShouldBloodboil()).toBe(true)
+  end)
+
+  it("does not heal at healthy HP even with the boon", function()
+    bloodboilReset()
+    magiHotSprings = true; ataxia.vitals.hpp = 85
+    ataxiaTemp.usedTree = nil; ataxia.afflictions = {}
+    expect(ataxiaBasher_magiShouldBloodboil()).toBe(false)
+  end)
+
+  it("does not heal on low HP without the boon", function()
+    bloodboilReset()
+    magiHotSprings = false; ataxia.vitals.hpp = 30
+    ataxiaTemp.usedTree = nil; ataxia.afflictions = {}
+    expect(ataxiaBasher_magiShouldBloodboil()).toBe(false)
+  end)
+
+  it("is reload-safe: nil afflictions do not crash even past the mana guard (exercises the cure loop)", function()
+    bloodboilReset()
+    ataxia.vitals = { mp = 1000, hpp = 100 }   -- mana passes the guard so we reach the cure loop
+    ataxiaTemp.usedTree = true                  -- force into the cure path
+    ataxia.afflictions = nil                    -- `affs or {}` must keep pairs() from crashing
+    expect(ataxiaBasher_magiShouldBloodboil()).toBe(false)
+    ataxia.vitals = { rage = 0, mp = 1000, hpp = 100 }  -- restore for later blocks
+  end)
+end)
