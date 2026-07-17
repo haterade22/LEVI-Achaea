@@ -419,6 +419,15 @@ describe("run-end confirmation", function()
     M.onRunEnd() -- confirmation fired -> boons gone
     expect(bmShatteredStar).toBeFalse()
   end)
+
+  it("clears magiKkractle (elemental-surge boon) on the confirmed onRunEnd", function()
+    reset(true)
+    magiKkractle = true
+    M.onRunEndMaybe() -- deferred maybe must NOT clear the boon yet
+    expect(magiKkractle).toBeTrue()
+    M.onRunEnd() -- confirmation fired -> boons gone
+    expect(magiKkractle).toBeFalse()
+  end)
 end)
 
 -- ─── Boon claim resolution (#4) ──────────────────────────────────────────────

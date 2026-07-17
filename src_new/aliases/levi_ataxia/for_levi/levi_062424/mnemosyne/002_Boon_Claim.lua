@@ -20,3 +20,5 @@ ataxia.mnemosyne.onBoonClaim(matches[2])
 if matches[2]:lower():find("warmarch") then bardWarmarch = true end
 -- White Heaven's Shattered Star buffs multislash (+3 strikes); flip blademaster bashing to multislash.
 if matches[2]:lower():find("shattered star") then bmShatteredStar = true end
+-- Aspect of Kkractle makes ELEMENTAL SURGE an AoE fire nuke on all denizens; flip magi bashing to it.
+if matches[2]:lower():find("kkractle") then magiKkractle = true end

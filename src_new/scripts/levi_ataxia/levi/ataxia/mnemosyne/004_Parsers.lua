@@ -153,6 +153,7 @@ end
 function M.onRunEnd()
   bardWarmarch = false -- boons gone on a confirmed run-end
   bmShatteredStar = false -- boons gone on a confirmed run-end
+  magiKkractle = false -- boons gone on a confirmed run-end
   -- The wade lifecycle brackets our presence in the tower, so the confirmed end is the
   -- authoritative "we are out" -- never gmcp's area, which Creville's Legacy (incurable
   -- dementia) can fake into a real place while we are still inside. Cleared here rather than

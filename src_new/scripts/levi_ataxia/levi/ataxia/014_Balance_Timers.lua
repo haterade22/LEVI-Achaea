@@ -26,8 +26,13 @@ function startEQTimer()
 end
 
 function endEQTimer()
-  ataxiaEQTime = stopStopWatch(ataxiaEQStopwatch)
-  resetStopWatch(ataxiaEQStopwatch)
+  -- Guard the stopwatch: on a fresh/reloaded session ataxiaEQStopwatch is nil (globals aren't
+  -- persisted), so stopStopWatch(nil) threw -- and that error aborted the EQUILIBRIUM trigger
+  -- BEFORE EQHighlight() ran, which is why the eq/balance bars vanished while bashing.
+  if ataxiaEQStopwatch then
+    ataxiaEQTime = stopStopWatch(ataxiaEQStopwatch)
+    resetStopWatch(ataxiaEQStopwatch)
+  end
   ataxiaEQStopwatchStarted = false
 end
 
@@ -57,8 +62,10 @@ function startBalTimer()
 end
 
 function endBalTimer()
-  ataxiaBalTime = stopStopWatch(ataxiaBalStopwatch)
-  resetStopWatch(ataxiaBalStopwatch)
+  if ataxiaBalStopwatch then           -- same nil guard as endEQTimer (fresh/reloaded session)
+    ataxiaBalTime = stopStopWatch(ataxiaBalStopwatch)
+    resetStopWatch(ataxiaBalStopwatch)
+  end
   ataxiaBalStopwatchStarted = false
 end
 

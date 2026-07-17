@@ -128,9 +128,16 @@ function ataxiaCheckForMissing()
 	end
 
 	if ataxiaBasher.ownDenizens == nil then
-		ataxiaBasher.ownDenizens = {"falcon", "baalzadeen"}
-		ataxiaEcho("Own-denizen ignore list not found; seeded with <white>falcon<NavajoWhite>, <white>baalzadeen<NavajoWhite>.")
+		ataxiaBasher.ownDenizens = {"falcon", "baalzadeen", "ashbeast"}
+		ataxiaEcho("Own-denizen ignore list not found; seeded with <white>falcon<NavajoWhite>, <white>baalzadeen<NavajoWhite>, <white>ashbeast<NavajoWhite>.")
 		ataxiaEcho("<green>bash mine <NavajoWhite>to view/add/remove your own denizens.")
+	end
+
+	-- Backfill the Magi ashbeast (Artificing summon -- appears in "Denizens Here" as "a blazing
+	-- ashbeast" and must never be attacked/auto-learned). New to the default, so existing saves
+	-- have only falcon/baalzadeen -- add it if missing.
+	if ataxiaBasher.ownDenizens and not table.contains(ataxiaBasher.ownDenizens, "ashbeast") then
+		table.insert(ataxiaBasher.ownDenizens, "ashbeast")
 	end
 
 	if ataxia.prioritySwaps and ataxia.prioritySwaps.ravaged == nil then

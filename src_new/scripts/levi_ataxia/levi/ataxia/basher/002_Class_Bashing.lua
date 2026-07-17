@@ -321,24 +321,39 @@ function ataxiaBasher_jesterBashing()
 	return command
 end
 
-function ataxiaBasher_magiBashing()
-   local command, sp = "", ataxia.settings.separator
-   -- ONE assemble: this was called twice (the second result was discarded), which now that
-   -- Magi owns a rotation would double-arm its cooldowns / global-BR guard. The dead
-   -- `local raze = ataxiaBasher.battlerage.Magi.raze` (never used) is gone too.
-   local brage = ataxiaBasher_assembleBattlerage()
+-- Stormhammer/GUI prep, split out of magiBashing. The autobash loop pre-calls this once BEFORE
+-- the attack (genrunning/004) so stormhammerTargets/GUI are current. It must NOT run the
+-- battlerage: magiBashing is invoked twice per cycle (that pre-call + the real assembleAttack
+-- call), and now that magiBattlerage ARMS its cooldowns on fire, a full pre-call would arm them
+-- and the real call would then return "" -- Magi would send no battlerage at all. So the pre-call
+-- does prep only; the send-path magiBashing does prep + battlerage. Cache-gated, so running the
+-- prep in both is cheap.
+function ataxiaBasher_magiStormPrep()
    -- GUI updates only when room contents have changed (dirty flag set by stormhammer invalidation)
    if ataxiaBasher_stormhammerDirty then
       ataxia_Update_RoomContents()
       if zgui then zgui.showRoomInfo() end
    end
    ataxiaBasher_stormhammer()
+end
+
+function ataxiaBasher_magiBashing()
+   local command, sp = "", ataxia.settings.separator
+   local brage = ataxiaBasher_assembleBattlerage()
+   ataxiaBasher_magiStormPrep()
 
    if ataxiaBasher.shielded then
       -- erode is Magi's free shield strip (why Disintegrate is never fired -- see magiBattlerage).
       -- Strip FIRST, then battlerage -- a still-up denizen shield absorbs the BR otherwise
       -- (matches blademasterBashing's raze..sp..brage order).
       command = "cast erode at "..target..sp..brage
+   elseif magiKkractle then
+      -- Aspect of Kkractle boon (Mnemosyne): ELEMENTAL SURGE deals fire to ALL denizens in the
+      -- room (AoE, no target), out-clearing single-target horripilation and stormhammer's 3-cap.
+      -- Set by the BOONS-list trigger / boon-claim alias, reset each run (mirrors bmShatteredStar).
+      -- Same eq-cast slot horripilation used, so no extra spam vs the old unconditional attack.
+      -- Needs a summoned ashbeast up (kept off the target list via ownDenizens = ...ashbeast).
+      command = brage..sp.."elemental surge"
    elseif ataxiaBasher.stormhammer and ataxiaBasher_validTargets() > 2 and #stormhammerTargets >= 3 then
       command = brage..sp.."cast stormhammer at "..stormhammerTargets[1].. " and " ..stormhammerTargets[2].. " and " ..stormhammerTargets[3]
    else

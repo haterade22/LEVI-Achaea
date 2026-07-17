@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-07-17 — Basher: crash fixes (eq/balance bars + bashStats) + Magi ashbeast/Kkractle (v4.7.87)
+
+Four fixes from live Magi bashing — two class-agnostic crashes plus two Magi-specific additions.
+
+- **eq/balance bars restored** (`014_Balance_Timers.lua`) — on a fresh/reloaded session the stopwatch globals are nil, so `stopStopWatch(nil)` in `endEQTimer`/`endBalTimer` threw and **aborted the EQUILIBRIUM trigger before `EQHighlight()` ran** — the timers vanished mid-bash. Both now guard `if ataxiaEQStopwatch then … end` / `if ataxiaBalStopwatch then …`. The bars show `0.000` for the first cycle, then correct once the stopwatch is created.
+- **`bashStats` never nil** (`003_Bash_Stats_Functions.lua`) — combat triggers indexed `bashStats` before it existed (`attempt to index global 'bashStats' (a nil value)`). `resetBashingStats` now builds a **complete** default (all 15 fields + the `criticals` subtable) and takes a `silent` flag, with a load-time `if not bashStats then resetBashingStats(true) end`. A live table survives SYSUPDATE (the guard skips re-init, so counts aren't clobbered); `loginGold` reads gmcp defensively at load.
+- **Ashbeast on the do-not-kill list** (`002_Check_For_Any_Missing_Variables.lua`) — "a blazing ashbeast" is the Magi's own Artificing summon and was showing as a target. Added to the `ownDenizens` default **and** back-filled into existing saves.
+- **Aspect of Kkractle boon → ELEMENTAL SURGE** (Mnemosyne) — with this boon, Elemental Surge becomes an AoE fire nuke on every denizen in the room. New `magiKkractle` flag (set by the BOONS-list trigger + boon-claim alias, reset at run-start and confirmed run-end — 1:1 with `bmShatteredStar`); `magiBashing` sends `elemental surge` (no target) when it's up, after the `erode` shield-strip and before stormhammer/horripilation.
+- **Magi battlerage double-call fix** — `magiBashing` is invoked twice per cycle (a discarded stormhammer/GUI pre-call in the autobash loop, then the real send). Harmless while Magi used `standardBattlerage` (a pure read), but `magiBattlerage` **arms its cooldowns on fire** — the pre-call would arm them and the real call would send **no battlerage at all**. Split the prep into `ataxiaBasher_magiStormPrep()`; the pre-call runs prep only, the send path runs prep + battlerage.
+- Suite **293/293**. Reviewed (single-agent adversarial pass — clean on all four; the double-call was surfaced by an informational note and fixed).
+
+---
+
 ## 2026-07-16 — Basher: Magi battlerage rotation — completes the kit + owns culling (v4.7.86)
 
 Magi gets a real rotation, following the Blademaster/Monk pattern. Before this, Magi fell through to `standardBattlerage` (fires only small/large/special), so **Disintegrate, Firefall, and Stormbolt were dead config**, and the shared culling check suppressed the whole rotation.

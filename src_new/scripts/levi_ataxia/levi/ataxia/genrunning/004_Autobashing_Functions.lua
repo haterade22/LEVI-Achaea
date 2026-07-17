@@ -176,9 +176,12 @@ function ataxiaBasher_tryAttack()
   if not ataxiaBasher_throttleCheck() then return false end
 
   -- All gates passed: fire the attack
-  -- Magi needs pre-attack stormhammer/GUI setup
+  -- Magi needs pre-attack stormhammer/GUI setup. Call ONLY the prep here, not the full
+  -- magiBashing: the send path (assembleAttack) calls magiBashing again, and magiBattlerage
+  -- now arms its cooldowns on fire -- a full pre-call would arm them and the real call would
+  -- then send no battlerage.
   if gmcp.Char.Status.class == "Magi" then
-    ataxiaBasher_magiBashing()
+    ataxiaBasher_magiStormPrep()
   end
 
   ataxiaBasher_attack()
