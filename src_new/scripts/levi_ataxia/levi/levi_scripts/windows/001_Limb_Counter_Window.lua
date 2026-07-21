@@ -54,15 +54,54 @@ tarc.window:show()
 function tarc:cecho(text) tarc.console:cecho(text) end
 function tarc:clear() tarc.console:clear() end
 
+-- ── HUD helpers: coloured text bars for vitals ─────────────────────────────
+local BAR_W = 10
+local function _clampPct(p)
+  p = tonumber(p) or 0
+  if p < 0 then return 0 elseif p > 100 then return 100 else return p end
+end
+-- health-style colour: green high, yellow mid, red low
+local function _pctColour(p)
+  if p >= 66 then return "green" elseif p >= 33 then return "yellow" else return "red" end
+end
+-- % from cur/max, nil-safe (nil when it can't be computed -> caller skips the row)
+local function _pct(cur, max)
+  cur, max = tonumber(cur), tonumber(max)
+  if not (cur and max and max > 0) then return nil end
+  return math.floor(cur / max * 100)
+end
+-- a coloured bar: filled portion in `colr` (default = health colour), rest dim
+local function _bar(p, colr)
+  p = _clampPct(p)
+  local f = math.floor(p / 100 * BAR_W + 0.5)
+  colr = colr or _pctColour(p)
+  return "<" .. colr .. ">" .. string.rep("█", f) .. "<gray>" .. string.rep("░", BAR_W - f) .. "<reset>"
+end
+-- one labelled vital row: "HP  ██████░░░░  63%" (nil pct -> nil so the caller can skip)
+local function _vitalRow(label, pct, colr)
+  if pct == nil then return nil end
+  pct = _clampPct(pct)
+  colr = colr or _pctColour(pct)
+  return string.format("   <white>%-4s<reset> ", label) .. _bar(pct, colr)
+    .. string.format(" <%s>%3d%%<reset>", colr, pct)
+end
+
 function tarc.write()
   tarc:clear()
   
   --if target and target ~= "" and target ~= "None" and target ~= "none" and lb[target] then
   if target and target ~= "" and target ~= "None" and target ~= "none" then
-   tarc:cecho("   Target: " .. target .. "\n")
+   local _dz = ataxia.denizensHere
+   local _tname = (type(target) == "number" and type(_dz) == "table" and _dz[target]) or nil
+   if _tname then
+     tarc:cecho("   <white>" .. _tname .. "<reset> <gray>#" .. target .. "<reset>\n")
+   else
+     tarc:cecho("   Target: " .. target .. "\n")
+   end
 
-    -- V3 Affliction Display (probability-based)
-    if affConfigV3 and affConfigV3.enabled then
+    -- V3 Affliction Display (probability-based) -- PvP targets only; a denizen (numeric id) gets
+    -- the clean bashing panel below instead of the lock/aff readout.
+    if type(target) ~= "number" and affConfigV3 and affConfigV3.enabled then
       local lockAffs = {"anorexia", "slickness", "asthma", "paralysis"}
       local shortNames = {
         anorexia = "ANO", slickness = "SLI", asthma = "AST", paralysis = "PAR",
@@ -116,7 +155,7 @@ function tarc.write()
       tarc:cecho("   <gray>[V3: " .. #afflictionStatesV3 .. " branches]<reset>\n")
 
     -- V2 Affliction Display (binary system - fallback)
-    elseif tAffsV2 then
+    elseif type(target) ~= "number" and tAffsV2 then
       local lockAffs = {"anorexia", "slickness", "asthma", "paralysis", "stupidity"}
       local shortNames = {
         anorexia = "ANO", slickness = "SLI", asthma = "AST", paralysis = "PAR", stupidity = "STU",
@@ -168,18 +207,26 @@ function tarc.write()
     tarc:cecho("\n")
 
     if ataxiaBasher.enabled and gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info then
-      tarc:cecho("   Mob Health: " .. gmcp.IRE.Target.Info.hpperc .. "\n")
-      tarc:cecho("   BattleR:    " ..ataxia.vitals.rage.. "\n")
-      tarc:cecho("   Our Health: "..ataxia.vitals.hp..  "\n")
-      tarc:cecho("   Our Willpo: "..ataxia.vitals.wp..  "\n")
-      tarc:cecho("   Our Endur:  "..ataxia.vitals.ep..  "\n")
-      tarc:cecho("   Our EXP:    "..ataxia.vitals.xp..  "\n")
-      if gmcp.Char.Status.class == "Magi" or gmcp.Char.Status.class == "Blue Dragon" then
-      tarc:cecho("   Our Willpow: "..ataxia.vitals.wp..  "\n")
-      elseif gmcp.Char.Status.class == "Shaman" then
-      tarc:cecho("   Our SwiftC: " ..curseCharge.."\n")     
+      local v = ataxia.vitals or {}
+      -- Mob health bar (from GMCP hpperc, e.g. "76%")
+      local mobStr = tostring(gmcp.IRE.Target.Info.hpperc or "0"):gsub("%%", "")
+      tarc:cecho((_vitalRow("Mob", _clampPct(mobStr)) or "   Mob  ??") .. "\n\n")
+      -- Our vitals as bars (nil-safe: skip any bar we can't compute a % for)
+      local rowHP = _vitalRow("HP", (v.hpp ~= nil) and v.hpp or _pct(v.hp, v.maxhp))
+      local rowWP = _vitalRow("WP", _pct(v.wp, v.maxwp))
+      local rowEP = _vitalRow("EP", _pct(v.ep, v.maxep))
+      if rowHP then tarc:cecho(rowHP .. "\n") end
+      if rowWP then tarc:cecho(rowWP .. "\n") end
+      if rowEP then tarc:cecho(rowEP .. "\n") end
+      -- Rage + XP-to-level, one compact line
+      tarc:cecho(string.format("   <white>Rage<reset> <orange>%s<reset>", tostring(v.rage or 0)))
+      if v.xp then tarc:cecho(string.format("    <white>XP<reset> <cyan>%s%%<reset>", tostring(v.xp))) end
+      tarc:cecho("\n")
+      -- Class-specific resource (willpower is already the WP bar above)
+      if gmcp.Char.Status.class == "Shaman" then
+        tarc:cecho("   <white>SwiftC<reset> <cyan>" .. tostring(curseCharge or 0) .. "<reset>\n")
       elseif gmcp.Char.Status.class == "Pariah" then
-      tarc:cecho("Our Epitaph Number: "..ataxia.vitals.epitaph..  "\n")
+        tarc:cecho("   <white>Epitaph<reset> <cyan>" .. tostring(v.epitaph or 0) .. "<reset>\n")
       end
       if bashStats and bashStats_getDPS then
         if not bashStats.totalDamage then bashStats.totalDamage = 0 end
@@ -189,10 +236,10 @@ function tarc.write()
         if not bashStats.lastBalanceDamage then bashStats.lastBalanceDamage = 0 end
         if not bashStats.currentBalanceDamage then bashStats.currentBalanceDamage = 0 end
         local sDPS, bDPS = bashStats_getDPS()
-        tarc:cecho("\n   <cyan>--- DPS ---<reset>\n")
-        tarc:cecho("   <white>Bal:  <cyan>" .. bDPS .. "/s<reset>\n")
-        tarc:cecho("   <white>Avg:  <yellow>" .. sDPS .. "/s<reset>\n")
-        tarc:cecho("   <white>Total:<green> " .. bashStats.totalDamage .. "<reset>\n")
+        tarc:cecho("\n   <cyan>── DPS ──────────<reset>\n")
+        tarc:cecho(string.format("   <white>Now  <reset> <cyan>%s<reset>/s\n", tostring(bDPS)))
+        tarc:cecho(string.format("   <white>Avg  <reset> <yellow>%s<reset>/s\n", tostring(sDPS)))
+        tarc:cecho(string.format("   <white>Total<reset> <green>%s<reset>\n", tostring(bashStats.totalDamage)))
       end
       -- Mob damage records for current target
       if secondTarget and secondTarget ~= "" and ataxia.data and ataxia.data.db and ataxia.data.db.mobdmgdb then
@@ -208,7 +255,7 @@ function tarc.write()
         )
         if rows and #rows > 0 then
           local row = rows[1]
-          tarc:cecho("\n   <cyan>--- Mob Dmg ---<reset>\n")
+          tarc:cecho("\n   <cyan>── Mob Dmg ──────<reset>\n")
           tarc:cecho("   <white>Min:  <yellow>" .. row.min_damage .. "<reset>\n")
           tarc:cecho("   <white>Max:  <green>" .. row.max_damage .. "<reset>\n")
           tarc:cecho("   <white>Hits: <purple>" .. row.hit_count .. "<reset>\n")
@@ -268,9 +315,13 @@ function tarc.write()
       local count = 0
       for _ in pairs(ataxia.denizensHere) do count = count + 1 end
       if count > 0 then
-        tarc:cecho("\n   <yellow>Denizens Here:<reset>\n")
+        tarc:cecho("\n   <yellow>Denizens (" .. count .. ")<reset>\n")
         for id, name in pairs(ataxia.denizensHere) do
-          tarc:cecho("     " .. name .. "\n")
+          if id == target then
+            tarc:cecho("   <green>> " .. name .. "<reset>\n")   -- current target
+          else
+            tarc:cecho("     <gray>" .. name .. "<reset>\n")
+          end
         end
       end
     end

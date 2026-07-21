@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-07-17 — Bashing HUD: health bars, target names, decluttered (v4.7.90)
+
+Reworked the bashing panel in the Limb Counter window (`windows/001_Limb_Counter_Window.lua`) from a raw-number dump into a scannable HUD.
+
+- **Target name** — shows `a HaHaHa lancer  #625689` (from `ataxia.denizensHere[target]`) instead of a bare numeric id.
+- **Colored health bars** — the mob and your HP/WP/EP now render as `██████░░░░ 76%` bars, colored green→yellow→red by %, using the `maxhp/maxwp/maxep` GMCP fields. A basher can read "kill imminent" / "getting low" at a glance instead of parsing five raw numbers. All nil-safe — a bar that can't be computed is skipped, never errors.
+- **Rage + XP** collapsed onto one line; the redundant Magi/Blue-Dragon willpower echo removed (the WP bar covers it); Shaman `SwiftC` / Pariah `Epitaph` kept.
+- **Decluttered** — the PvP lock/affliction readout (`[V3: N branches]`, `[LOCK:%]`) is now suppressed when the target is a denizen (numeric id); the full PvP view is unchanged for player targets.
+- **Cleaner sections** — consistent `──` headers, denizen count in the header, and the current target marked in the denizen list.
+
+Bars use block glyphs (`█`/`░`); if a client's font lacks them they can be swapped to ASCII. Syntax-checked; suite 312/312.
+
+---
+
 ## 2026-07-17 — Mnemosyne explorer: boon screen pauses (basher stays on) instead of stopping (v4.7.89)
 
 `mnem explore` used to fully **stop** at the ripple's boon screen and, if it had raised the basher, turn it back **off** — so after picking a boon and wading you had to re-enable the basher *and* re-run explore.
