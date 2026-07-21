@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-07-17 — Mnemosyne: fix boons never reaching the API tracker (v4.7.91)
+
+The tracker showed monsters for every ripple but the boons stayed on "No boons offered yet." Cause: `_reportBoonsOfferedEnriched` gated the `/boons_offered` POST behind a **BOON CONTEMPLATE enrichment chain** (`contemplate` is ON by default) — one sequential contemplate per offered boon at ~2.5s each. That chain races the *next* ripple's line captures for the single shared `_capturing` slot; when it loses (routine with `mnem explore` sweeping fast), it **stalls and the whole `/boons_offered` is silently dropped**. Even on success it could post after you'd waded, landing the boons on the wrong ripple.
+
+- **Fix:** `onBoonsOffered` now posts `/boons_offered` **immediately** with the name + description read straight off the offer screen — no enrichment gate, no race, correct ripple. That's exactly what the tracker displays.
+- Rarity / echo-count / quote were the only things the contemplate enrichment added; they're optional on the API and are still learned locally from the BOONS list (trigger 013) and `mnem boonfill`.
+- Test: `test_mnemosyne.lua` pins that `/boons_offered` fires immediately even with `contemplate` ON. Suite **313/313**.
+
+---
+
 ## 2026-07-17 — Bashing HUD: health bars, target names, decluttered (v4.7.90)
 
 Reworked the bashing panel in the Limb Counter window (`windows/001_Limb_Counter_Window.lua`) from a raw-number dump into a scannable HUD.

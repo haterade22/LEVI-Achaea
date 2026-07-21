@@ -489,11 +489,15 @@ end
 -- to fill rarity/quote/num_echoes_possible before reporting; otherwise send the
 -- name + description straight through.
 function M._reportBoonsOfferedEnriched(list)
-  if not M._cfg().contemplate then
-    if M._recordOffers then M._recordOffers(list) end -- local history (#6)
-    return M.reportBoonsOffered(list)
-  end
-  M._contemplateNext(list, 1)
+  -- Post the offer to the API IMMEDIATELY, with the name+description straight off the offer screen.
+  -- The old design gated the report behind a slow (~2.5s/boon) BOON CONTEMPLATE enrichment chain,
+  -- which (a) races the NEXT ripple's captures for the single `_capturing` slot -- when it loses, the
+  -- chain STALLS and the ENTIRE /boons_offered is silently dropped (the reported bug: monsters posted,
+  -- boons never did), and (b) even when it completes it can post AFTER the player has waded, landing
+  -- the boons on the wrong ripple. Name+description is what the tracker shows; rarity/echoes are
+  -- optional and are still learned locally from the BOONS list (trigger 013) + `mnem boonfill`.
+  if M._recordOffers then M._recordOffers(list) end -- local history (#6)
+  M.reportBoonsOffered(list)
 end
 
 -- Sequentially BOON CONTEMPLATE each boon, merge the parsed detail into the

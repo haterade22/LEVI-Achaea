@@ -319,6 +319,22 @@ describe("onBoonClaim", function()
   end)
 end)
 
+-- ─── Boons offered ───────────────────────────────────────────────────────────
+
+describe("boons offered reporting", function()
+  it("posts /boons_offered IMMEDIATELY even with contemplate ON (not gated on the slow chain)", function()
+    reset(true)
+    ataxia.settings.reporting.contemplate = true    -- enrichment ON -- must NOT block the post
+    M._reportBoonsOfferedEnriched({
+      { name = "Azure Scales", description = "Gain 25% resistance to cold damage." },
+      { name = "Iron Throat", description = "Gain 25% resistance to asphyxiation damage." },
+    })
+    expect(sent[1].url).toContain("/boons_offered")
+    expect(sent[1].payload.offered[1].name).toBe("Azure Scales")
+    expect(sent[1].payload.offered[2].name).toBe("Iron Throat")
+  end)
+end)
+
 -- ─── Boss objective ──────────────────────────────────────────────────────────
 
 describe("onObjective", function()
