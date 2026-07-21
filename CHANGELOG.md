@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-07-17 — Mnemosyne explorer: boon screen pauses (basher stays on) instead of stopping (v4.7.89)
+
+`mnem explore` used to fully **stop** at the ripple's boon screen and, if it had raised the basher, turn it back **off** — so after picking a boon and wading you had to re-enable the basher *and* re-run explore.
+
+Now the boon screen **pauses** the sweep: navigation halts (so you pick a boon and wade) but the basher stays **on**, fully in explore mode (manual / autoLearn / no-flee). `mnem explore on` **resumes** the sweep for the next ripple.
+
+- Implemented as a `explore.pausedAtBoon` flag with `on` kept `true`, so the existing lifecycle still cleanly restores your original basher settings on the *real* stop — leaving the tower, dying, or `mnem explore off` all restore correctly (the tick's leave-tower check runs before the pause gate). No leak of manual/no-flee mode after Mnemosyne.
+- The resume path re-asserts the explore-mode basher flags (guards `inMnemosyne` flickering between floors) and resets sweep progress (`hunting`/`patrolQueue`) for the new ripple, **without** re-saving the original pre-sweep state.
+- The pause is independent of the run-lifecycle pause (`WHISPER … grow still`) added in v4.7.88.
+- `mnem explore status` shows `paused (boon screen)`. The watchdog goes quiet during the pause (no stray `ql`).
+- Reviewed (adversarial trace of the state machine: clean, no basher-restore holes; 3 LOW hygiene items fixed). Tests: `test_mnemosyne.lua` +3 (pause / resume-no-leak / paused-tick-still-detects-leave). Suite **312/312**.
+
+---
+
 ## 2026-07-17 — Basher: reload-safety hardening + Magi Bloodboil (cure & Hot Springs heal) + Mnemosyne pause (v4.7.88)
 
 **Reload-safety — three more nil-crash globals.** Following the `battleRage_Timers` live crash, an audit of everything `levilogin()` alone initializes (43 globals) found the same "nil after a SYSUPDATE/reload that didn't re-fire login" pattern in two more that always-live code indexes: **`tBals`** (prompt `@tarbals` tag, focus-knock, Anti_Priorities) and **`shape`** (an Earth Lord magma-seethe trigger does `shape = shape + 1`). All three now get load-time idempotent inits at the top of `basher/001_Bashing_Functions.lua` (`X = X or <default>`; `tBals` uses its full shape since `.timers` is indexed). Six other candidates were cleared as guarded/safe.

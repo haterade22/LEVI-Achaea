@@ -740,6 +740,67 @@ describe("mnem explore", function()
     expect(ok).toBeTrue()
     expect(M.explore.on).toBeFalse()
   end)
+
+  it("boon screen PAUSES the sweep and leaves the basher on (no longer disables it)", function()
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.enabled = true; ataxiaBasher.manual = true
+    M.explore.on = true
+    M.explore.pausedAtBoon = false
+    M.explore._prevBasher = { enabled = false, manual = false } -- basher was OFF before the sweep
+    M.explore._raisedBasher = true
+    M.onBoonScreen()
+    expect(M.explore.pausedAtBoon).toBeTrue()   -- paused, not stopped
+    expect(M.explore.on).toBeTrue()             -- lifecycle stays live (leave-tower/death still restore)
+    expect(ataxiaBasher.enabled).toBeTrue()     -- basher NOT turned off
+    expect(ataxiaBasher.manual).toBeTrue()      -- still in explore mode
+    expect(type(M.explore._prevBasher)).toBe("table") -- original preserved for the real stop
+    M.onBoonScreen()                            -- idempotent: a re-read doesn't re-pause/echo-spam
+    expect(M.explore.pausedAtBoon).toBeTrue()
+    M.explore.on = false; M.explore.pausedAtBoon = false; M.explore._prevBasher = nil
+  end)
+
+  it("mnem explore on resumes a boon pause: keeps ORIGINAL basher state, re-asserts explore mode, resets progress", function()
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.enabled = true; ataxiaBasher.manual = true -- currently in explore mode
+    ataxiaBasher.inMnemosyne = false            -- flickered false between floors: resume must re-assert
+    M.explore.on = true
+    M.explore.pausedAtBoon = true
+    M.explore.hunting = true                     -- stale sweep progress from the prior ripple
+    M.explore.patrolQueue = { 99 }
+    M.explore.patrolLoops = 3
+    M.explore._prevBasher = { enabled = false, manual = false } -- the real pre-sweep state
+    M.exploreOn()                               -- resume / un-pause
+    expect(M.explore.pausedAtBoon).toBeFalse()  -- un-paused
+    expect(M.explore.on).toBeTrue()
+    expect(M.explore._prevBasher.enabled).toBeFalse() -- NOT re-saved from the current explore-mode state
+    expect(ataxiaBasher.inMnemosyne).toBeTrue() -- explore mode re-asserted
+    expect(M.explore.hunting).toBeFalse()       -- progress reset for the new ripple
+    expect(M.explore.patrolQueue).toBeNil()
+    expect(M.explore.patrolLoops).toBe(0)
+    M.explore.on = false; M.explore._prevBasher = nil; ataxiaBasher.inMnemosyne = false
+  end)
+
+  it("a paused tick does not navigate, but still stops + restores when the tower is left", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { north = 0 }, nil)      -- an unexplored exit a running tick WOULD take
+    ataxia.denizensHere = {}
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = true             -- inMnem() true
+    ataxiaBasher.enabled = true; ataxiaBasher.manual = true
+    M.explore.on = true
+    M.explore.pausedAtBoon = true
+    M.explore.moving = false
+    M.explore._prevBasher = { enabled = false, manual = false }
+    M.explore._raisedBasher = true
+    M._exploreTick()                            -- paused + in tower: must not start a move
+    expect(M.explore.moving).toBeFalse()
+    expect(M.explore.pausedAtBoon).toBeTrue()
+    ataxiaBasher.inMnemosyne = false            -- leave the tower
+    M._exploreTick()                            -- a paused tick STILL detects the leave and stops
+    expect(M.explore.on).toBeFalse()            -- stopped
+    expect(ataxiaBasher.enabled).toBeFalse()    -- basher restored to the original (off)
+    M.explore.on = false; M.explore.pausedAtBoon = false; M.explore._prevBasher = nil
+  end)
 end)
 
 -- ─── Ripple map graph (pure) ─────────────────────────────────────────────────

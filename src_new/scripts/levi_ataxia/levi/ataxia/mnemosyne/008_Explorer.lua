@@ -295,7 +295,7 @@ end
 -- on fresh data. ql is free (no balance) so it's cheap and safe to do every stall.
 -- Then schedule a tick anyway, so we re-decide even if the ql yields no event.
 function M._watchdogNudge()
-  if not M.explore.on then return end
+  if not M.explore.on or M.explore.pausedAtBoon then return end
   -- A move / ice-slip is in flight: its own machinery owns this (MOVE_TIMEOUT for a
   -- lost move; onIceSlip's MAX_ICE_SLIPS cap for a stuck icy exit). A ql here would
   -- fire gmcp.Room, be mistaken for an arrival, clear `moving`, kill the ice-slip
@@ -319,7 +319,7 @@ function M._armWatchdog()
   if M._explWatchT then pcall(killTimer, M._explWatchT); M._explWatchT = nil end
   M._explWatchT = tempTimer(WATCHDOG, function()
     M._explWatchT = nil
-    if not M.explore.on then return end
+    if not M.explore.on or M.explore.pausedAtBoon then return end
     M._watchdogNudge() -- ql-refresh + re-tick on fresh data
     M._armWatchdog()   -- keep watching
   end)
@@ -328,6 +328,7 @@ end
 function M._exploreTick()
   if not M.explore.on then return end
   if not inMnem() then return M._exploreStop("left Mnemosyne") end
+  if M.explore.pausedAtBoon then return end -- paused at the boon screen: leave-tower handled above; don't navigate
   if M.explore.moving then return end -- awaiting arrival
   -- A tick ran in a decidable state, so the post-arrival settle window is over: the
   -- room's denizens have had the full TICK_DELAY of quiet to load (each load re-armed
@@ -380,6 +381,31 @@ end
 -- ---------------------------------------------------------------------------
 
 function M.exploreOn()
+  if M.explore.on and M.explore.pausedAtBoon then
+    -- Resuming after a boon-screen pause. Re-assert the explore-mode basher config (idempotent;
+    -- guards a flag that flickered during the pause -- notably inMnemosyne, which can be missed
+    -- between floors) and reset sweep progress, mirroring the fresh-start path so the next ripple
+    -- starts clean. _prevBasher is deliberately NOT re-saved -- it still holds the original
+    -- pre-sweep state for the eventual real stop (so the basher restores correctly).
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.enabled = true
+    ataxiaBasher.manual = true
+    ataxiaBasher.areabash = false
+    ataxiaBasher.autoLearn = true
+    ataxiaBasher.inMnemosyne = true
+    M.explore.pausedAtBoon = false
+    M.explore.moving = false
+    M.explore.failed = {}
+    M.explore.hunting = false
+    M.explore.patrolQueue = nil
+    M.explore.patrolLoops = 0
+    M.explore.iceSlips = 0
+    M.explore.settling = true -- treat the current room like an arrival: let denizens settle first
+    M._exploreEcho("<green>resuming<reset> the sweep.")
+    M._scheduleTick()
+    M._armWatchdog()
+    return
+  end
   if M.explore.on then return M._exploreEcho("already running.") end
   if not canStart() then
     return M.echo("<indian_red>[explore]<reset> not in Mnemosyne -- nothing to sweep.")
@@ -416,6 +442,7 @@ end
 function M._exploreStop(reason)
   if not M.explore.on then return end
   M.explore.on = false
+  M.explore.pausedAtBoon = false
   M.explore.moving = false
   if M._explTickT then pcall(killTimer, M._explTickT); M._explTickT = nil end
   if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
@@ -445,20 +472,28 @@ function M.exploreToggle()
 end
 
 function M.exploreStatus()
-  M.echo("<gold>[explore]<reset> " .. (M.explore.on and "<green>ON" or "<grey>off")
+  M.echo("<gold>[explore]<reset> " .. (M.explore.on and (M.explore.pausedAtBoon and "<cyan>paused (boon screen)" or "<green>ON") or "<grey>off")
     .. "<reset> inMnem=" .. tostring(inMnem())
     .. " denizens=" .. tostring(M._roomHasDenizens())
     .. " moving=" .. tostring(M.explore.moving)
     .. " next=" .. tostring(M._nextExploreStep()))
 end
 
--- The ripple is complete when the boon-offer screen appears; stop sweeping and
--- hand back. Called from the boon-offer trigger regardless of telemetry state.
+-- The ripple is complete when the boon-offer screen appears. PAUSE the sweep (stop navigating so
+-- you can pick a boon + wade) but leave the basher exactly as the sweep set it -- enabled + manual
+-- + autoLearn + no-flee. We no longer stop/restore/disable the basher here: it stays on through the
+-- boon pick and into the next ripple, and `mnem explore on` un-pauses to sweep again. `on` stays
+-- true so the normal lifecycle (leave-tower, death, `mnem explore off`) still restores the basher on
+-- the real stop, and `_prevBasher` is preserved so that restore uses the original pre-sweep state.
+-- Called from the boon-offer trigger regardless of telemetry state.
 function M.onBoonScreen()
-  if M.explore.on then
-    M._exploreEcho("<green>boon screen up<reset> -- ripple swept. Pick a boon and wade deeper.")
-    M._exploreStop("boon screen")
-  end
+  if not M.explore.on or M.explore.pausedAtBoon then return end
+  M.explore.pausedAtBoon = true
+  M.explore.moving = false
+  if M._explTickT then pcall(killTimer, M._explTickT); M._explTickT = nil end
+  if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
+  if M._explWatchT then pcall(killTimer, M._explWatchT); M._explWatchT = nil end
+  M._exploreEcho("<green>boon screen up<reset> -- ripple swept. Pick a boon and wade; basher stays on (<a_darkmagenta>mnem explore on<reset> to resume, <a_darkmagenta>off<reset> to stop).")
 end
 
 -- Slain in the tower: death boots you out of the ripple (you respawn elsewhere),
@@ -526,6 +561,7 @@ end)
 if M._explLoadH then killAnonymousEventHandler(M._explLoadH) end
 M._explLoadH = registerAnonymousEventHandler("sysLoadEvent", function()
   M.explore.on = false
+  M.explore.pausedAtBoon = false
   M.explore.moving = false
   M.explore._prevBasher = nil
 end)
