@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-07-17 — Bashing HUD polish: session stats + readable numbers (v4.7.92)
+
+Follow-up polish to the v4.7.90 bashing HUD (`windows/001_Limb_Counter_Window.lua`):
+
+- **Thousand separators** on the DPS `Total` (and other counts) — `9737013` → `9,737,013`.
+- **New Session block** under DPS: `Kills` / `Crits`, `Gold` gained, and `Time` + kills-per-hour — all read from `bashStats` (`slain`/`crits`/`gainedGold`/`dpsSessionStart`).
+- **Class lines restyled** to match the bars — Blademaster `Shin`/`Stance`, Monk `Kai`/`Kata`/`Form`, Runewarden/Infernal `Momentum` now use the same coloured-label, single-line format instead of the old ragged `Label: value` style.
+- Added `_fmtNum` (thousand separators) and `_fmtTime` (compact `8m03s` / `1h02m`) helpers.
+
+Syntax-checked; suite 313/313.
+
+---
+
 ## 2026-07-17 — Mnemosyne: fix boons never reaching the API tracker (v4.7.91)
 
 The tracker showed monsters for every ripple but the boons stayed on "No boons offered yet." Cause: `_reportBoonsOfferedEnriched` gated the `/boons_offered` POST behind a **BOON CONTEMPLATE enrichment chain** (`contemplate` is ON by default) — one sequential contemplate per offered boon at ~2.5s each. That chain races the *next* ripple's line captures for the single shared `_capturing` slot; when it loses (routine with `mnem explore` sweeping fast), it **stalls and the whole `/boons_offered` is silently dropped**. Even on success it could post after you'd waded, landing the boons on the wrong ripple.

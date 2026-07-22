@@ -85,6 +85,25 @@ local function _vitalRow(label, pct, colr)
   return string.format("   <white>%-4s<reset> ", label) .. _bar(pct, colr)
     .. string.format(" <%s>%3d%%<reset>", colr, pct)
 end
+-- integer with thousand separators: 9737013 -> "9,737,013"
+local function _fmtNum(n)
+  local s = string.format("%d", math.floor(tonumber(n) or 0))
+  local sign = ""
+  if s:sub(1, 1) == "-" then sign = "-"; s = s:sub(2) end
+  s = s:reverse()
+  s = s:gsub("(%d%d%d)", "%1,")
+  s = s:reverse()
+  s = s:gsub("^,", "")
+  return sign .. s
+end
+-- seconds -> compact duration: "45s", "8m03s", "1h02m"
+local function _fmtTime(sec)
+  sec = math.floor(tonumber(sec) or 0)
+  if sec < 60 then return sec .. "s" end
+  local m = math.floor(sec / 60)
+  if m < 60 then return string.format("%dm%02ds", m, sec % 60) end
+  return string.format("%dh%02dm", math.floor(m / 60), m % 60)
+end
 
 function tarc.write()
   tarc:clear()
@@ -239,7 +258,16 @@ function tarc.write()
         tarc:cecho("\n   <cyan>── DPS ──────────<reset>\n")
         tarc:cecho(string.format("   <white>Now  <reset> <cyan>%s<reset>/s\n", tostring(bDPS)))
         tarc:cecho(string.format("   <white>Avg  <reset> <yellow>%s<reset>/s\n", tostring(sDPS)))
-        tarc:cecho(string.format("   <white>Total<reset> <green>%s<reset>\n", tostring(bashStats.totalDamage)))
+        tarc:cecho(string.format("   <white>Total<reset> <green>%s<reset>\n", _fmtNum(bashStats.totalDamage)))
+
+        -- Session summary (kills / crits / gold / time + kills-per-hour)
+        local elapsed = getEpoch() - (bashStats.dpsSessionStart or getEpoch())
+        local kph = (elapsed > 60) and math.floor((bashStats.slain or 0) / elapsed * 3600) or 0
+        tarc:cecho("\n   <cyan>── Session ──────<reset>\n")
+        tarc:cecho(string.format("   <white>Kills<reset> <green>%s<reset>   <white>Crits<reset> <yellow>%s<reset>\n",
+          _fmtNum(bashStats.slain or 0), _fmtNum(bashStats.crits or 0)))
+        tarc:cecho(string.format("   <white>Gold <reset> <yellow>%s<reset>\n", _fmtNum(bashStats.gainedGold or 0)))
+        tarc:cecho(string.format("   <white>Time <reset> <cyan>%s<reset>  <gray>%s/h<reset>\n", _fmtTime(elapsed), tostring(kph)))
       end
       -- Mob damage records for current target
       if secondTarget and secondTarget ~= "" and ataxia.data and ataxia.data.db and ataxia.data.db.mobdmgdb then
@@ -273,26 +301,22 @@ function tarc.write()
     end
     end
     if gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class == "Monk" then
-    tarc:cecho("          Kai: " .. (ataxia.vitals.class or 0))
-    tarc:cecho("\n         Kata: " .. (katachain or 0) .. "")
-      if ataxia.vitals.form then
-        tarc:cecho("\n       Form: " .. ataxia.vitals.form .. "\n")
-      elseif ataxia.vitals.stance then
-        tarc:cecho("\n       Stance: " .. ataxia.vitals.stance .. "\n")
-      else
-        tarc:cecho("\n       Stance: unknown\n")
-      end
+    tarc:cecho(string.format("\n   <white>Kai<reset> <cyan>%s<reset>   <white>Kata<reset> <cyan>%s<reset>\n",
+      tostring(ataxia.vitals.class or 0), tostring(katachain or 0)))
+    local flabel = ataxia.vitals.form and "Form" or "Stance"
+    local fval = ataxia.vitals.form or ataxia.vitals.stance or "unknown"
+    tarc:cecho(string.format("   <white>%s<reset> <cyan>%s<reset>\n", flabel, tostring(fval)))
     end
     if gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class == "Blademaster" then
     local shin = blademaster and blademaster.getShin and blademaster.getShin() or (ataxia.vitals.class or 0)
-    tarc:cecho("     Shin: " .. shin .. "\n")
+    tarc:cecho(string.format("\n   <white>Shin<reset> <cyan>%s<reset>", tostring(shin)))
     if ataxia.vitals.stance then
-      tarc:cecho("     Stance: " .. ataxia.vitals.stance .. "\n")
+      tarc:cecho(string.format("   <white>Stance<reset> <cyan>%s<reset>", tostring(ataxia.vitals.stance)))
     end
     tarc:cecho("\n")
     end
     if gmcp.Char and gmcp.Char.Status and gmcp.Char.Vitals and (gmcp.Char.Status.class == "Runewarden" or gmcp.Char.Status.class == "Infernal") and (gmcp.Char.Vitals.charstats and (gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" or gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt")) then 
-    tarc:cecho("\n      Momentum: " ..(mymomentum or 0).. "\n\n")
+    tarc:cecho(string.format("\n   <white>Momentum<reset> <cyan>%s<reset>\n", tostring(mymomentum or 0)))
     end
     --if ataxiaNDB.players[target] then
      --tarc:cecho(" Self Limb Counter\n")
