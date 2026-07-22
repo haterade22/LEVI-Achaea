@@ -38,9 +38,9 @@ packageName: ''
 -- seeded. This file loads at package load, before any trigger fires. Same pattern as bashStats
 -- (basher/003). Confirmed sinks:
 --   battleRage_Timers.small/large/special  -- every battlerage rotation (crashed live, v4.7.87)
---   tBals.tree/plant/focus/timers          -- prompt @tarbals tag (012), focus-knock, Anti_Priorities,
---                                             and Magi's Bloodboil gate (magiShouldBloodboil). FULL
---                                             shape required -- tBals.timers is indexed.
+--   tBals.tree/plant/focus/timers          -- prompt @tarbals tag (012), focus-knock, Anti_Priorities.
+--                                             FULL shape required -- tBals.timers is indexed. (Note:
+--                                             Magi's Bloodboil gate uses ataxiaTemp.usedTree, NOT tBals.)
 --   shape (Earth Lord)                     -- 121_SHAPE_PLUS does `shape = shape + 1` unguarded
 battleRage_Timers = battleRage_Timers or {}
 tBals = tBals or {tree = true, focus = true, plant = true, salve = true, timers = {}, passive = true}

@@ -70,7 +70,9 @@ WADE STATUS output:
 
 boons offer: "...flickers of power that may aide you..."   [trig 004]
   └─ onBoonsOffered() → capture block → lastOffered set
-       └─ (contemplate on) BOON CONTEMPLATE each → enrich → POST /boons_offered
+       └─ POST /boons_offered IMMEDIATELY (name+description off the offer screen;
+          v4.7.91 — no longer gated behind the slow per-boon BOON CONTEMPLATE chain,
+          which raced the _capturing slot and could stall + drop the whole report)
 "BOON CLAIM <name>"                          [alias 002, user command]
   └─ onBoonClaim(name) → match against lastOffered → POST /boons_selected
 
@@ -90,7 +92,8 @@ boons offer: "...flickers of power that may aide you..."   [trig 004]
                                                     death loses a life, not the run)
 "The Mnemosyne releases its hold, weaving N ... threads..."[trig 009]
   └─ onRunEndMaybe() → arm 2s wait for "You just received message #N from Achaea."
-       └─ (confirmed) onRunEnd() → clears bardWarmarch / bmShatteredStar +
+       └─ (confirmed) onRunEnd() → clears the boon flags bardWarmarch /
+                                    bmShatteredStar / magiKkractle / magiHotSprings +
                                     run.paused (all UNconditionally); then if
                                     _inRun(): endRun() → _flushMonsters() →
                                     POST /run_end → run.active=false, _resetRun()
