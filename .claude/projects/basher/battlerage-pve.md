@@ -55,4 +55,36 @@ Afflictions arrive from **any** source — our battlerage, proc-boons (Wayward H
 | Spinslash | `SPINSLASH` | 36 | 23s | damage | big single-target dump |
 | Provoke | `PROVOKE` | 32 | 20s | taunt (lvl 100) | forces the mob onto you (inverse of charm; costs 2.5s bal/eq) |
 
+## Magi's six (`ataxiaBasher_magiBattlerage`, basher/001)
+
+Magi has its own rotation (`ataxiaBasher_magiBattlerage`), invoked from `magiBashing` (basher/002). Like Bard/Blademaster it **owns culling** (excluded from the shared culling check, so `reap` fires from inside the rotation). Cast syntax is `cast X at <t>` for everything **except Squeeze** (`cast squeeze <t>`, no "at").
+
+| Ability | Cmd | Rage | CD | Type | Aff / note |
+|---|---|---|---|---|---|
+| Windlash | `cast windlash at <t>` | 14 | 16s | damage | cheap filler |
+| Disintegrate | `cast disintegrate at <t>` | 17 | — | shield breaker | **never fired** (see below) |
+| Firefall | `cast firefall at <t>` | 25 | 23s | **conditional dmg** | bonus vs **clumsy / reckless** |
+| Stormbolt | `cast stormbolt at <t>` | 25 | 27s | afflicting | **Sensitivity** (+33% dmg taken) |
+| Dilation | `cast dilation at <t>` | 35 | 35s | afflicting | **Aeon** — the key mitigation |
+| Squeeze | `cast squeeze <t>` | 36 | 23s | damage | big single-target dump |
+
+Culling: `reap <t>` (36 rage, AoE finisher).
+
+**Priority** (spend the highest affordable, off-cooldown value so rage never idles):
+1. **Culling reap** (rage ≥ 36; owned here, blocked in the World Tree area).
+2. **In Mnemosyne — Dilation → Aeon** (mob attacks at 66% speed = mitigation on the no-flee climb), when not already aeon'd.
+3. **Firefall** on a clumsy / reckless target (bonus damage — Magi's own kit applies neither, so this only cashes an aff from a boon/groupmate).
+4. **Stormbolt → Sensitivity** when the mob isn't sensitive yet — sets up the Squeeze burst.
+5. **Squeeze** (big damage, lands harder while that Sensitivity is up).
+6. **Dilation** surplus, outside Mnemosyne (spend + Aeon).
+7. **Windlash** (cheap 14-rage filler).
+
+**Disintegrate is never fired.** `magiBashing` casts the free `erode` shield strip when the mob is shielded, so spending 17 rage on Disintegrate is the worse trade (same rule as Monk shatter-over-spinkick).
+
+**Cooldowns.** Squeeze uses the shared `battleRage_Timers.large` (real, from fire-line trigger `331` "vice-like squeeze"). The rest have **no** fire-line trigger (they aren't in 330/332), so they use reload-safe **timestamp** cooldowns (`ataxiaTemp.magiWindlashReadyAt` / `magiDilationReadyAt` / `magiFirefallReadyAt` / `magiStormboltReadyAt`) — else a doomed cast would re-fire every prompt until the cooldown lapsed. Dilation and Stormbolt **also** gate on their affliction (Aeon via trigger `015`; Sensitivity has no capture yet) so they skip when the aff is already up from another source. The rotation respects the shared ~1s global BR cooldown (`ataxiaTemp.brGlobalReadyAt`) and arms it on its own fire.
+
+**Bloodboil is NOT a battlerage.** It's an Elementalism **main skill** (75 mana, 4s equilibrium) that takes the **equilibrium slot** in `magiBashing`, alongside — not instead of — the battlerage. `ataxiaBasher_magiShouldBloodboil` (basher/001) fires it to **cure** (3+ real afflictions while OUR own tree tattoo is on balance, via `ataxiaTemp.usedTree`) or to **heal** (with the Hot Springs Mnemosyne boon it also restores 25% max HP + 5% willpower at HP% < 60, like the Shaman's invoke-regeneration; flag `magiHotSprings`, no client-side cooldown).
+
+**Reload-safety note:** `battleRage_Timers` (and `tBals`, `shape`) get idempotent load-time inits (`X = X or …`) at the top of basher/001, and `bashStats` in basher/003. These were previously created only in `levilogin()`, so a SYSUPDATE/reload that didn't re-fire login left them nil and the always-live rotation code crashed.
+
 Line catalog + capture status: [denizen-lines-catalog.md](denizen-lines-catalog.md).

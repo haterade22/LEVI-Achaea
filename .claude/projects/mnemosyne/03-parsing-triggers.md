@@ -17,8 +17,17 @@ Patterns are Mudlet regex (`type: 1`), quoted verbatim from each trigger file.
 | 007 | Death | `^You have been slain by (.+?)\.?$` | `reportDeath(matches[2])` | inline `_inRun` check in trigger body |
 | 008 | Objective | `^Objective:\s+(.+)$` | `onObjective(matches[2])` | `_inRun` |
 | 009 | Run End | `^The Mnemosyne releases its hold` | `onRunEnd()` → `endRun()` | `_inRun` |
+| 016 | Run Pause | `^You whisper to the Mnemosyne and beseech that it grow still for a time\.$` | `onRunPause()` | none (flag set unconditionally) |
 
 The gate is enforced *inside* each handler (see the gating model in [01-architecture.md](01-architecture.md)); only trigger 007 does its `_inRun()` check in the trigger body before calling the API directly. `onRipple` is the exception to the auto-gate: it first drives the mini-map (`map.onRipple(n)`, unconditional) and only then gates telemetry on `_auto()`.
+
+Trigger 006 (`GO!`) also calls `ataxia.mnemosyne.exploreOnGo()` after `onGo()` — the auto-explorer's resume hook (a no-op unless it was paused at a boon screen); see the [monster-capture](#deterministic-monster-capture) and [07-explorer.md](07-explorer.md) notes.
+
+## Pause / resume — `onRunPause` + `onRunStart` (triggers 016, 001)
+
+`WADE STILL` — "You whisper to the Mnemosyne and beseech that it grow still for a time." — suspends the current run **without ending it server-side**: the next wade re-enters the *same* wade, not a fresh one. `onRunPause` (trigger 016) sets `M.run.paused = true` unconditionally (mirroring the boon flags — the `_auto` gate is applied later, when the flag is consumed).
+
+`onRunStart` (trigger 001, gated on `_auto`) then branches on that flag: if `M.run.paused`, it clears the flag and calls `runExists()` (`/run_exists`, re-syncs `active` + ripple, and safely no-ops to inactive if the server no longer holds the run) instead of `startRun()` (`/run_start`) — so a resumed wade doesn't orphan the paused run's progress under a brand-new `public_id`. `onRunEnd` clears `M.run.paused` **unconditionally** (not only via the `_inRun`-gated `endRun`), because with telemetry off — the shipped default — that gated path never runs, and a leftover `paused=true` would misfire the *next* fresh wade into a resume that never `/run_start`s it.
 
 `BOON CLAIM <name>` is not a trigger but an alias intercept (`002_Boon_Claim`, regex `^(?i)boon claim (.+)$`) that passes the real command through and then calls `onBoonClaim(name)` — detail in [05-commands.md](05-commands.md).
 
@@ -32,16 +41,19 @@ opts.timeout      -> seconds of silence before an automatic flush (backstop)
 opts.onDone(lines)                              -- pcall-guarded
 
 M._captureLines(opts)
-  ├─ if M._capturing: decho + no-op  (reentrancy guard — one block at a time)
+  ├─ if M._capturing and M._captureForceFinish: pcall(M._captureForceFinish)  (force-finish a wedged prior capture)
   ├─ M._capturing = true
+  ├─ M._captureForceFinish = finish   (exposed so the NEXT capture can flush a stuck one)
   ├─ tid = tempRegexTrigger([[^.*$]], per-line body)   -- catch-all
   │     res = opts.onLine(line)
   │     res=="stop" -> finish();  res~="skip" -> table.insert(lines, line);  bump()
   ├─ bump(): kill + re-arm tempTimer(opts.timeout, finish)   -- resets each line
-  └─ finish(): guard done → M._capturing=false, killTrigger, killTimer, onDone(lines)
+  └─ finish(): guard done → M._capturing=false, M._captureForceFinish=nil, killTrigger, killTimer, onDone(lines)
 ```
 
 `bump()` restarts the silence timer on every captured line, so a block that stops emitting (no explicit terminator) still flushes after `timeout` seconds. `finish()` is idempotent (`done` guard) and always clears `M._capturing`, so a parse error in `onDone` can't wedge the guard shut and block the next capture.
+
+**Force-finish a wedged capture (v4.7.93).** The old single-slot lock silently *ignored* a new capture while one was active — so if a prior capture ever wedged (e.g. a steady stream of lines kept resetting its silence `timeout` so `finish` never fired), every later boon/effects capture was dropped and its report never posted. Now, before taking the slot, `_captureLines` flushes any stale in-flight capture via `M._captureForceFinish` (the previous capture's own `finish`, published on `M` while it holds the slot). `finish` nils `M._captureForceFinish` on completion, so a cleanly-finished capture leaves nothing to force. The new block then always runs.
 
 ### Continuation-line joining — `_parseNamedBlock`
 
@@ -67,23 +79,21 @@ A single status line, not a block. `Objective:  defeat <X>` is trimmed and match
 
 Fires on `flickers of power that may aide you`. Capture runs with `timeout = 3`; lines before the first divider are skipped, the opening divider is skipped, and capture **stops** at the second divider or the `BOON CLAIM` footer (whichever comes first). The parsed list's names are recorded into `M.run.lastOffered` (so a later `BOON CLAIM` can resolve the game's exact spelling), then handed to `_reportBoonsOfferedEnriched`. The trigger *also* calls `onBoonScreen()` unconditionally (outside the `_inRun` telemetry gate): this line is the de-facto **ripple-complete** marker, and it's the signal the auto-explorer keys on to stop sweeping — see [07-explorer.md](07-explorer.md).
 
-### The `BOON CONTEMPLATE` enrichment state machine
+### `_reportBoonsOfferedEnriched` — posts immediately (v4.7.91)
 
-When `cfg.contemplate` is on, each offered boon is `BOON CONTEMPLATE`d to attach rarity/quote/echo detail before the payload goes out. The walk is strictly sequential — one contemplate block in flight at a time, matching the `_captureLines` reentrancy guard:
+`_reportBoonsOfferedEnriched(list)` records the offer to local history and `reportBoonsOffered(list)`s it **straight away**, with the name+description taken directly off the offer screen:
 
 ```
 _reportBoonsOfferedEnriched(list)
-  ├─ contemplate off? → reportBoonsOffered(list)          (name+description as-is)
-  └─ contemplate on?  → _contemplateNext(list, 1)
-
-_contemplateNext(list, i)
-  ├─ i > #list → reportBoonsOffered(list)                 (fully enriched → POST)
-  └─ else:
-       _captureContemplate(cb)                            (arm block capture)
-       send("boon contemplate " .. list[i].name)          (issue the command)
-       cb(info): _applyContemplate(list[i], info)
-                 tempTimer(0.5, → _contemplateNext(list, i+1))
+  ├─ _recordOffers(list)          (local history #6)
+  └─ reportBoonsOffered(list)     (name+description as-is → immediate POST)
 ```
+
+The old design gated this POST behind a slow (~2.5s/boon) per-boon `BOON CONTEMPLATE` enrichment chain, which **raced the next ripple's captures for the single `_capturing` slot** — on a lost race the chain stalled and the entire `/boons_offered` was silently dropped (the reported bug: monsters posted, boons never did) — and even when it completed it could post *after* the player had waded, landing the boons on the wrong ripple. Name+description is what the tracker shows; rarity/echoes are optional and are still learned locally from the BOONS list (trigger 013) + `mnem boonfill`.
+
+### The `BOON CONTEMPLATE` enrichment state machine (now backfill-only)
+
+The sequential contemplate walk **is no longer on the offer path** — `_reportBoonsOfferedEnriched` posts immediately (above). The machinery is retained and now drives only `boonFill` (the `mnem boonfill` backfill of already-owned boons whose description was never captured). It is still strictly sequential — one contemplate block in flight at a time, matching the `_captureLines` guard — `_contemplateNext` walking `send("boon contemplate <name>")` → `_captureContemplate(cb)` → `_applyContemplate` → `tempTimer(0.5, next)`.
 
 - **`_captureContemplate(cb)`** captures with `timeout = 2`. It **never** captures a `BOON CLAIM` line (returns `"skip"`), skips the `<name>:` header and opening divider, and **stops** at the closing divider. `onDone` is one-shot (`called` latch) and passes `_parseContemplate(lines)` to `cb`.
 - **`_parseContemplate(lines)`** returns `{ rarity, num_echoes_possible, description, quote }`. It reads `Rarity: <r>`, the authoritative **`Maximum echoes: N`** line (printed only for echo-capable boons → `num_echoes_possible = N`), and `Can echo: <Yes/No>` (`No` → `0`, `Yes` → a floor of `1` that a `Maximum echoes` line refines to `N`) — so an echo-capable boon reports its real cap, not a flat `1`, and the `Maximum echoes` line is consumed as meta rather than leaking into the description. It then advances through sections `meta → desc → quote`: non-blank lines after the meta rows build the description paragraph, a blank line switches to the quote section, and the trailing double-quoted line becomes `quote` (surrounding `"` stripped).

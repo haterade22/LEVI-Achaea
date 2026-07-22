@@ -9,7 +9,7 @@ Two files: `001_HTTP_Client.lua` (transport — a serial POST queue) and `002_Re
 | Key | Default | Purpose |
 |-----|---------|---------|
 | `enabled` | false | Master auto-report toggle (`mnem on/off`) |
-| `contemplate` | true | Enrich offered boons via `BOON CONTEMPLATE` |
+| `contemplate` | true | Stored boon-enrichment toggle (`BOON CONTEMPLATE`). **No longer gates `/boons_offered`** — offers post immediately now (see Notable behaviours); the enrichment chain (`_contemplateNext`) is retained but off the offer path |
 | `url` | `M.DEFAULT_URL` | Tracker base URL |
 | `token` | nil | API token (`mnem token <t>`) |
 | `debug` | nil | Verbose `M.decho` echoes |
@@ -86,7 +86,9 @@ Each function guards on `M._hasToken()` and enqueues. Payload shapes:
 
 - **`setRipple(n)` guard.** Skips locally if `n <= run.ripple` (the API errors on a lower ripple and no-ops on equal). `run.ripple` is only advanced inside the success callback.
 - **`startRun()` optimism.** Sets `run.active = true` and calls `_resetRun()` *synchronously* before the async POST, so the first wave isn't lost while waiting for the response.
+- **Pause / resume (no new `public_id`).** A "beseech that it grow still" pause sets `run.paused` (`onRunPause`, `004_Parsers.lua`) **without** ending the run server-side. The next wade's `onRunStart` then resumes via **`runExists()`** (`/run_exists`) instead of `startRun()`, so no fresh `/run_start` fires and **no new `public_id` is minted** — the resumed run keeps its server-side identity, and `/run_exists` re-syncs `run.active` + `run.ripple`. `run.paused` is cleared unconditionally in `_resetRun()` (hence on any genuine `startRun`/`endRun`) and in `onRunEnd`, so a telemetry-off end can't hijack the next fresh wade into a resume.
 - **`endRun()`** flushes any final-wave monsters (`_flushMonsters()`) before enqueuing `/run_end`, then resets locally immediately (the run is over regardless of the response).
+- **`reportBoonsOffered` is posted immediately.** `_reportBoonsOfferedEnriched(list)` (`004_Parsers.lua`) records local history and calls `reportBoonsOffered(list)` **right away**, with the `name`+`description` scraped straight off the offer screen — it is **not** gated behind the per-boon `BOON CONTEMPLATE` enrichment chain. (The old design contemplated each boon (~0.5s apiece) to fill `rarity`/`quote`/`num_echoes_possible` *before* posting; that chain competed with the next ripple's captures for the single `_capturing` slot and, on a lost race, stalled and silently dropped the whole `/boons_offered`, and even on success could post after the player had already waded onto the next ripple.) Name+description is all the tracker needs; the optional enrichment fields are learned locally instead (BOONS list via trigger 013 + `mnem boonfill`), which is why the `/boons_offered` payload lists them as optional (`?`).
 - **`reportBoonsSelected`** accepts a string or array; a bare string is wrapped to `{ str }`.
 - **`reportDeath`** defaults `killer` to `"unknown"` when empty.
 

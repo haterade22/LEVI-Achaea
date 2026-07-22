@@ -81,9 +81,20 @@ All attack requests flow through `tryAttack()`. This is the ONLY function that c
    c. patterns() → tryAttack() → attack()
 ```
 
+## Reload Safety (Load-Time Inits)
+
+Several combat globals were created **only** inside `levilogin()` (login/001). A package reinstall/reload (e.g. `SYSUPDATE`) does **not** re-fire the "logged in" event, so on a reload they stayed `nil` while always-live code — prompt triggers, `gmcp.Char.Vitals` handlers, the attack loop — indexed or incremented them, crashing on the first prompt/attack. Each is now seeded **idempotently** (`X = X or …`) at script **load**, before any trigger fires, so a genuine `nil` is filled while a live mid-session value is preserved (cooldowns/counts not wiped):
+
+| Global | Seeded in | Crashing sink |
+|--------|-----------|---------------|
+| `battleRage_Timers` | top of `basher/001` | every battlerage rotation reads `.small`/`.large`/`.special` |
+| `tBals` (full shape: `tree`/`focus`/`plant`/`salve`/`timers`/`passive`) | top of `basher/001` | prompt `@tarbals` tag (012), focus-knock, Anti_Priorities, Magi bloodboil gate — `tBals.timers` is indexed |
+| `shape` | top of `basher/001` | Earth Lord `121_SHAPE_PLUS` does `shape = shape + 1` unguarded |
+| `bashStats` (full shape incl. DPS/damage fields) | bottom of `basher/003` | combat/DPS triggers increment `totalDamage`/`slain`/… on the first hit |
+
 ## Supported Classes (22+)
 
-All class bashing attack functions in `basher/002_Class_Bashing.lua` (a few classes add custom helpers elsewhere — e.g. Bard's `ataxiaBasher_bardBattlerage` and Blademaster's `ataxiaBasher_blademasterBattlerage` both live in `basher/001`, and Bard's `ataxiaBasher_bardCompose` performance helper in `002`):
+All class bashing attack functions in `basher/002_Class_Bashing.lua` (a few classes add custom helpers elsewhere — e.g. Bard's `ataxiaBasher_bardBattlerage` and Blademaster's `ataxiaBasher_blademasterBattlerage` both live in `basher/001`, and Bard's `ataxiaBasher_bardCompose` performance helper in `002`; Magi's `ataxiaBasher_magiShouldBloodboil` (`basher/001`) is a self-cure gate — **not** a battlerage — that `magiBashing` fires from its **EQUILIBRIUM slot** (the staff-bash slot) at 3+ real affs while our own tree tattoo is on balance, or as a low-HP heal under the Hot Springs Mnemosyne boon):
 
 Alchemist, Apostate, Bard, Blademaster, Depthswalker, Druid, Infernal, Jester, Magi, Monk, Occultist, Paladin, Pariah, Priest, Psion, Runewarden, Sentinel, Serpent, Shaman, Sylvan, Unnamable, Air/Fire/Water/Earth Elemental, Blue/Black/Green/Gold/Red/Silver Dragon
 
@@ -102,3 +113,7 @@ Alchemist, Apostate, Bard, Blademaster, Depthswalker, Druid, Infernal, Jester, M
 - `"attacker class detected"` → `ataxiaBasher_onAttacked()`
 - `"basher enabled"` → `basher_engaged()` (GUI, armour swap, legend deck)
 - `"basher disabled"` → `basher_disengaged()` (GUI, armour swap)
+
+## Live Bashing HUD (`tarc`)
+
+`windows/001_Limb_Counter_Window.lua` (`tarc.write`) doubles as the basher HUD. For a **denizen** target (numeric id) it shows the mob NAME (`ataxia.denizensHere[target]`), colored HP/WP/EP + Mob-health BARS (from `ataxia.vitals` max fields), a Rage + XP line, DPS Now/Avg/Total, and a SESSION block (Kills/Crits/Gold/Time + kills-per-hour, from `bashStats`). The PvP lock/aff readout is suppressed for numeric targets. The whole panel is gated on **`ataxiaBasher.enabled`** (not `gmcp.IRE.Target.Info`, which hid it inside Mnemosyne); only the Mob bar stays conditional on the target's hp% being exposed.

@@ -1,6 +1,6 @@
 # Auto-Explorer
 
-`mnem explore` sweeps a Mnemosyne ripple hands-free: it walks the fixed 4×4 room grid, lets the autobasher clear the denizens in each room, and **stops the instant the boon-selection screen appears** so you pick a boon and wade deeper. It writes no attack logic — it only navigates. One file: `008_Explorer.lua`, everything hanging off `ataxia.mnemosyne` (`local M`) and reusing the ripple map's graph API (`local MAP = ataxia.mnemosyne.map`).
+`mnem explore` sweeps a Mnemosyne ripple hands-free: it walks the fixed 4×4 room grid, lets the autobasher clear the denizens in each room, and **pauses the instant the boon-selection screen appears** so you pick a boon and wade deeper. The pause keeps the basher fully on (`explore.on` stays `true`), and picking a boon + wading auto-resumes the sweep on the next wave (see [Boon-screen pause](#boon-screen-pause)). It writes no attack logic — it only navigates. One file: `008_Explorer.lua`, everything hanging off `ataxia.mnemosyne` (`local M`) and reusing the ripple map's graph API (`local MAP = ataxia.mnemosyne.map`).
 
 ## Division of labour
 
@@ -10,7 +10,7 @@ The explorer deliberately owns nothing about combat. Two existing systems do the
 |---------|-------|-----|
 | **Combat** | the autobasher in **MANUAL** mode | Manual mode attacks whatever is in the room but never mapper-moves (its auto-move is Mudlet-mapper based and can't route the unmapped tower). No-flee/shield is already handled by `ataxiaBasher.inMnemosyne` — see the [basher no-flee doc](../basher/05-safety-systems.md#no-flee-areas) |
 | **Mapping** | the ripple map (`005_Ripple_Map.lua`, `MAP`) | The 4×4 room graph, unexplored-exit detection and BFS pathfinding are all reused, not reimplemented — see [04-ripple-map.md](04-ripple-map.md) |
-| **Navigation** | this module | One move per room-clear, toward the nearest unwalked exit; stop on the boon screen |
+| **Navigation** | this module | One move per room-clear, toward the nearest unwalked exit; pause on the boon screen |
 
 Depends on `001` (echo), `002` (run state) and `005` (`MAP`), and loads after them.
 
@@ -51,7 +51,8 @@ targets updated (kill) ── _scheduleTick(FAST_TICK 0.15s) ──▶  _explore
 ```
 _exploreTick():
   not explore.on            -> return
-  not inMnem()              -> _exploreStop("left Mnemosyne")
+  not inMnem()              -> _exploreStop("left Mnemosyne")   -- leave-tower check runs BEFORE the pause gate
+  explore.pausedAtBoon      -> return          -- paused at the boon screen; don't navigate
   explore.moving            -> return          -- one move per clear; await arrival
   _roomHasDenizens()        -> return          -- basher is clearing; wait
   dir = _nextExploreStep()
@@ -114,7 +115,7 @@ _nextPatrolStep():
   return first step of MAP.path(current, target); else advance / nil
 ```
 
-It re-visits rooms round-robin and lets the basher clear whatever it finds (the boss, or a straggler). The **boon screen is still the real terminus**; the patrol is only capped at `MAX_PATROL_LOOPS` *fruitless* full loops — `patrolLoops` resets to `0` whenever a room has denizens (so a real boss fight keeps it going), and finding new ground to sweep exits patrol entirely.
+It re-visits rooms round-robin and lets the basher clear whatever it finds (the boss, or a straggler). The **boon screen is still the real per-ripple terminus** (which now *pauses* rather than stops — see [Boon-screen pause](#boon-screen-pause)); the patrol is only capped at `MAX_PATROL_LOOPS` *fruitless* full loops — `patrolLoops` resets to `0` whenever a room has denizens (so a real boss fight keeps it going), and finding new ground to sweep exits patrol entirely.
 
 The patrol queue is built from visited **grid** rooms only: `roomHasPlanarExit` excludes the pure-vertical entry **holding room** (its only exit is `down`), because the boss spawns in the 4×4, never there — and, crucially, `MAP.path` back to the holding room returns the `up` edge, which is how the sweep used to walk `up` out of the grid. As a second guard, both patrol and backtrack reject any path whose **first step is non-planar** (`planarStep`), so `up`/`in`/`out`/`down` are never *walked* as a routing step. (The one legitimate non-planar move — the initial `down` from the holding room into the grid — is a `usableUnexplored` pick, not a path step, so it's unaffected.)
 
@@ -122,12 +123,28 @@ The patrol queue is built from visited **grid** rooms only: `roomHasPlanarExit` 
 
 | Trigger | Path | Notes |
 |---------|------|-------|
-| Boon screen appears | `M.onBoonScreen()` → `_exploreStop("boon screen")` | The ripple is complete. Called straight from the boon-offer trigger **regardless of telemetry state**, so it stops even with reporting off |
 | Left Mnemosyne | `_exploreTick` → `_exploreStop("left Mnemosyne")` | `inMnem()` is the **strict** check `ataxiaBasher.inMnemosyne == true`; the room-update clears that flag the instant you enter any real (mapped) area, so the sweep stops walking/fighting immediately |
 | Patrol exhausted | `MAX_PATROL_LOOPS` fruitless patrol loops → `_exploreStop("nothing left")` | The grid is swept **and** no boss/straggler turned up after patrolling (see [Boss hunt](#boss-hunt-patrol)); or the patrol has nowhere reachable left |
 | Slain | `007_Death.lua` → `M.exploreOnDeath(killer)` → `_exploreStop("slain")` | Death boots you out of the ripple (you respawn elsewhere), so a running sweep would walk/fight from the wrong place. Fires **regardless of telemetry** (the sweep runs off `inMnemosyne`, not the tracked run); no-op if not sweeping |
 | Manual off | `mnem explore off` → `M.exploreOff()` | |
 | Reload / auto-update | `sysLoadEvent` handler marks it off | See [Reload safety](#reload-safety) |
+
+The **boon screen is deliberately not in this table** — it *pauses*, it doesn't stop (see below).
+
+### Boon-screen pause
+
+The boon-offer screen marks the ripple swept, but it no longer **stops** the sweep — it **pauses** it. `M.onBoonScreen()` (called straight from the boon-offer trigger **regardless of telemetry state**) sets `explore.pausedAtBoon = true`, clears `moving`, and kills the tick / move / watchdog timers — but it leaves `explore.on = true` and the basher exactly as the sweep set it (**enabled + manual + autoLearn + no-flee**). Nothing is restored or disabled here: the basher stays on through the boon pick and into the next ripple. `_prevBasher` is preserved so the eventual real stop still restores the *original* pre-sweep basher state.
+
+While paused, `_exploreTick` short-circuits on the `explore.pausedAtBoon` gate — but that gate sits **after** the `inMnem()` leave-tower check, so leaving the tower, dying, or `mnem explore off` during the pause still runs the normal lifecycle and restores the basher. `_watchdogNudge` / `_armWatchdog` also bail while `pausedAtBoon`, so a paused sweep never `ql`-nudges.
+
+**Resume** is shared in `M._exploreResume(reason)`: it re-asserts the explore-mode basher config (idempotent — guards a flag that flickered during the pause, notably `inMnemosyne` missed between floors), clears `pausedAtBoon`, resets the per-ripple progress (`failed`, `hunting`, `patrolQueue`, `patrolLoops`, `iceSlips`) and opens the settle window, then schedules a tick and re-arms the watchdog — mirroring the fresh-start path so the next ripple starts clean. It does **not** re-save `_prevBasher`.
+
+Two things resume:
+
+| Path | Trigger | Behaviour |
+|------|---------|-----------|
+| **GO auto-resume** | `006_Go.lua` (`^GO!$`) → `M.exploreOnGo()` | No-op unless `pausedAtBoon`. Sends `look` first (to re-establish the ripple's holding room — its only exit is `down` into the 4×4, and dementia can otherwise leave a stale room around us), then `_exploreResume("GO")`. So picking a boon + wading continues the sweep hands-free |
+| **Manual** | `mnem explore on` → `M.exploreOn()` | If already `on` **and** `pausedAtBoon`, it un-pauses via `_exploreResume()` instead of complaining "already running" |
 
 ### Start guard
 
@@ -149,6 +166,8 @@ _exploreStop restores manual / areabash / autoLearn
 
 `autoLearn=true` lets Mnemosyne denizens populate `targetList[""]`; `manual=true` keeps the basher attacking-in-place; `areabash=false` stops it trying to route. The **asymmetric enable** matters: it only raises `basher enabled` if the basher was off (`_raisedBasher`), and on stop only lowers it back if it was the one that raised it — so an already-running basher is left running when the sweep ends.
 
+This save/restore is tied to the *real* stop only. The [boon-screen pause](#boon-screen-pause) restores **nothing** — it holds `_prevBasher` untouched and re-asserts the forced config on resume — so the basher keeps fighting across the boon pick and every ripple until the sweep truly stops.
+
 ## Safety extras
 
 ### Stall watchdog
@@ -166,7 +185,7 @@ The **arrival handler** (`M._onExploreRoom`, extracted for testing) closes the o
 
 ### Reload safety
 
-`M` and `M.explore` persist across an uninstall→install, but the tempTimers do not — so a live sweep would be left half-alive with the basher still force-mutated. The `sysLoadEvent` handler zeroes `explore.on`/`explore.moving` and drops `_prevBasher`, so a reload never resurrects a partial sweep; you re-issue `mnem explore on`.
+`M` and `M.explore` persist across an uninstall→install, but the tempTimers do not — so a live sweep would be left half-alive with the basher still force-mutated. The `sysLoadEvent` handler zeroes `explore.on`/`explore.pausedAtBoon`/`explore.moving` and drops `_prevBasher`, so a reload never resurrects a partial sweep (or a leftover boon-screen pause); you re-issue `mnem explore on`.
 
 ### Progress echoes
 
@@ -174,7 +193,7 @@ The sweep narrates itself (`M._exploreEcho`, prefix `[explore]`) so you can foll
 
 - each step: `room clear -> moving <dir>.` (a stalled retry echoes `retrying <dir> (no arrival)`);
 - once per occupied room (tracked by `explore.fightingRoom`, not every tick): `clearing this room (N denizen(s)) -- basher on it.` — `N` from `denizenCount()` (killable, own-denizen-excluded);
-- the start / stop / boon-screen / fully-swept transitions each announce themselves.
+- the start / stop / boon-screen pause / resume / fully-swept transitions each announce themselves (the boon-screen echo says the basher stays on and to `mnem explore on` to resume; resume echoes `resuming the sweep (<reason>)`).
 
 ### Icy rooms
 
@@ -198,9 +217,9 @@ Dispatched from `003_Commands.lua`; a bare `mnem explore` toggles.
 
 | Command | Function | Effect |
 |---------|----------|--------|
-| `mnem explore on` | `M.exploreOn()` | Start (guarded by `canStart`) |
+| `mnem explore on` | `M.exploreOn()` | Start (guarded by `canStart`), **or resume** if paused at a boon (`_exploreResume`) |
 | `mnem explore off` | `M.exploreOff()` | Stop and restore the basher |
-| `mnem explore status` | `M.exploreStatus()` | Echo `on/off`, `inMnem`, `denizens`, `moving`, `next` |
+| `mnem explore status` | `M.exploreStatus()` | Echo `ON` / `paused (boon screen)` / `off`, `inMnem`, `denizens`, `moving`, `next` |
 | `mnem explore` | `M.exploreToggle()` | Flip on/off |
 
 See [05-commands.md](05-commands.md) for the full `mnem` dispatch.
