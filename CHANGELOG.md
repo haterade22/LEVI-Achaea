@@ -2,6 +2,14 @@
 
 ---
 
+## 2026-07-18 — Mnemosyne explorer auto-resumes on GO + HUD shows in the tower (v4.7.94)
+
+- **GO auto-resumes the sweep.** After you pick a boon and wade, the new wave's `GO!` now auto-resumes a boon-screen pause: the GO trigger → `exploreOnGo` sends `look` (the ripple's holding room, whose only exit is `down` into the 4x4 — and dementia can otherwise leave a stale room around you), then un-pauses the sweep. So a full dive runs hands-free through the boon screens; `mnem explore on` still resumes manually. Resume logic is now shared via `_exploreResume()`.
+- **Bashing HUD now shows in Mnemosyne.** The vitals/DPS/session panel was gated on `gmcp.IRE.Target.Info`, which isn't reliably set in the tower — so the panel (HP/WP/EP bars, DPS, Session) vanished while bashing there, leaving only the target name + class line + denizens. It's now gated on `ataxiaBasher.enabled`; only the **Mob** bar (which genuinely needs the target's hp%) is conditional, so everything else renders regardless.
+- Tests: `exploreOnGo` (LOOK + un-pause, no-op when not paused). Suite **315/315**.
+
+---
+
 ## 2026-07-18 — Mnemosyne: harden the line-capture so boons can't be dropped (v4.7.93)
 
 Follow-up to v4.7.91. The boon (and effects) capture uses a single-slot lock (`_capturing`): while one capture is active, a new one was **silently ignored**. If a prior capture ever wedged — a stream of lines can keep resetting its silence-timeout so `finish` never fires — every later boon/effects capture was dropped and the report never posted.

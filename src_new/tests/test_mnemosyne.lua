@@ -830,6 +830,31 @@ describe("mnem explore", function()
     expect(ataxiaBasher.enabled).toBeFalse()    -- basher restored to the original (off)
     M.explore.on = false; M.explore.pausedAtBoon = false; M.explore._prevBasher = nil
   end)
+
+  it("GO auto-resumes a boon pause: LOOKs then un-pauses; no-op when not paused", function()
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = true
+    M.explore.on = true
+    M.explore.pausedAtBoon = true
+    M.explore._prevBasher = { enabled = false, manual = false }
+    local captured, realSend = {}, send
+    send = function(c) captured[#captured + 1] = c end
+    M.exploreOnGo()
+    send = realSend
+    expect(M.explore.pausedAtBoon).toBeFalse()  -- un-paused
+    expect(M.explore.on).toBeTrue()
+    local sawLook = false
+    for _, c in ipairs(captured) do if c == "look" then sawLook = true end end
+    expect(sawLook).toBeTrue()                  -- LOOK sent to establish the holding room
+    -- and it's a no-op when not paused (never resumes an explorer that isn't at a boon)
+    M.explore.pausedAtBoon = false
+    local c2, rs2 = {}, send
+    send = function(c) c2[#c2 + 1] = c end
+    M.exploreOnGo()
+    send = rs2
+    expect(#c2).toBe(0)
+    M.explore.on = false; M.explore._prevBasher = nil; ataxiaBasher.inMnemosyne = false
+  end)
 end)
 
 -- ─── Ripple map graph (pure) ─────────────────────────────────────────────────

@@ -380,31 +380,42 @@ end
 -- Start / stop
 -- ---------------------------------------------------------------------------
 
+-- Resume a paused sweep. Re-assert the explore-mode basher config (idempotent; guards a flag that
+-- flickered during the pause -- notably inMnemosyne, missed between floors) and reset per-ripple
+-- progress, mirroring the fresh-start path so the next ripple starts clean. _prevBasher is
+-- deliberately NOT re-saved -- it still holds the original pre-sweep state for the eventual real stop.
+function M._exploreResume(reason)
+  ataxiaBasher = ataxiaBasher or {}
+  ataxiaBasher.enabled = true
+  ataxiaBasher.manual = true
+  ataxiaBasher.areabash = false
+  ataxiaBasher.autoLearn = true
+  ataxiaBasher.inMnemosyne = true
+  M.explore.pausedAtBoon = false
+  M.explore.moving = false
+  M.explore.failed = {}
+  M.explore.hunting = false
+  M.explore.patrolQueue = nil
+  M.explore.patrolLoops = 0
+  M.explore.iceSlips = 0
+  M.explore.settling = true -- treat the current room like an arrival: let denizens settle first
+  M._exploreEcho("<green>resuming<reset> the sweep" .. (reason and (" (" .. reason .. ")") or "") .. ".")
+  M._scheduleTick()
+  M._armWatchdog()
+end
+
+-- On GO (the new wave, after you pick a boon and wade), auto-resume a boon-screen pause: LOOK first
+-- to establish the ripple's holding room (its only exit is `down` into the 4x4, and dementia can
+-- otherwise leave a stale room around us), then resume the sweep. No-op unless paused at a boon.
+function M.exploreOnGo()
+  if not M.explore.pausedAtBoon then return end
+  send("look")
+  M._exploreResume("GO")
+end
+
 function M.exploreOn()
   if M.explore.on and M.explore.pausedAtBoon then
-    -- Resuming after a boon-screen pause. Re-assert the explore-mode basher config (idempotent;
-    -- guards a flag that flickered during the pause -- notably inMnemosyne, which can be missed
-    -- between floors) and reset sweep progress, mirroring the fresh-start path so the next ripple
-    -- starts clean. _prevBasher is deliberately NOT re-saved -- it still holds the original
-    -- pre-sweep state for the eventual real stop (so the basher restores correctly).
-    ataxiaBasher = ataxiaBasher or {}
-    ataxiaBasher.enabled = true
-    ataxiaBasher.manual = true
-    ataxiaBasher.areabash = false
-    ataxiaBasher.autoLearn = true
-    ataxiaBasher.inMnemosyne = true
-    M.explore.pausedAtBoon = false
-    M.explore.moving = false
-    M.explore.failed = {}
-    M.explore.hunting = false
-    M.explore.patrolQueue = nil
-    M.explore.patrolLoops = 0
-    M.explore.iceSlips = 0
-    M.explore.settling = true -- treat the current room like an arrival: let denizens settle first
-    M._exploreEcho("<green>resuming<reset> the sweep.")
-    M._scheduleTick()
-    M._armWatchdog()
-    return
+    return M._exploreResume() -- manual `mnem explore on` also un-pauses
   end
   if M.explore.on then return M._exploreEcho("already running.") end
   if not canStart() then

@@ -225,11 +225,15 @@ function tarc.write()
     end
     tarc:cecho("\n")
 
-    if ataxiaBasher.enabled and gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info then
+    if ataxiaBasher.enabled then
       local v = ataxia.vitals or {}
-      -- Mob health bar (from GMCP hpperc, e.g. "76%")
-      local mobStr = tostring(gmcp.IRE.Target.Info.hpperc or "0"):gsub("%%", "")
-      tarc:cecho((_vitalRow("Mob", _clampPct(mobStr)) or "   Mob  ??") .. "\n\n")
+      -- Mob health bar -- ONLY when the game exposes the target's hp%. It isn't always set in
+      -- Mnemosyne, but our own vitals / DPS / session below don't depend on it, so show those
+      -- regardless (was gated on gmcp.IRE.Target.Info, which hid the whole panel in the tower).
+      if gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info and gmcp.IRE.Target.Info.hpperc then
+        local mobStr = tostring(gmcp.IRE.Target.Info.hpperc):gsub("%%", "")
+        tarc:cecho((_vitalRow("Mob", _clampPct(mobStr)) or "   Mob  ??") .. "\n\n")
+      end
       -- Our vitals as bars (nil-safe: skip any bar we can't compute a % for)
       local rowHP = _vitalRow("HP", (v.hpp ~= nil) and v.hpp or _pct(v.hp, v.maxhp))
       local rowWP = _vitalRow("WP", _pct(v.wp, v.maxwp))

@@ -33,3 +33,6 @@ patterns:
 ]]--
 
 ataxia.mnemosyne.onGo()
+-- Auto-resume the explorer on the new wave: after picking a boon + wading, GO marks the next
+-- ripple starting, so LOOK (holding-room down exit) and un-pause the sweep. No-op if not paused.
+if ataxia.mnemosyne.exploreOnGo then ataxia.mnemosyne.exploreOnGo() end
