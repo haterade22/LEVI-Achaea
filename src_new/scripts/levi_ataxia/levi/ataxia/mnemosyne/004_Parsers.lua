@@ -55,10 +55,12 @@ end
 -- Reentrancy-guarded: only one capture runs at a time.
 -- ---------------------------------------------------------------------------
 function M._captureLines(opts)
-  if M._capturing then
-    M.decho("capture already in progress; ignoring new block")
-    return function() end
-  end
+  -- Force-finish a prior capture that is somehow still "in progress" instead of DROPPING this new
+  -- block. The single-slot lock used to silently IGNORE a new capture while one was active; if the
+  -- prior one ever wedged (e.g. a stream of lines kept resetting its silence timeout so `finish`
+  -- never fired), every later boon/effects capture was lost and the report never posted. Flushing
+  -- the stale one first guarantees this capture actually runs.
+  if M._capturing and M._captureForceFinish then pcall(M._captureForceFinish) end
   M._capturing = true
 
   local lines, tid, timer = {}, nil, nil
@@ -68,11 +70,13 @@ function M._captureLines(opts)
     if done then return end
     done = true
     M._capturing = false
+    M._captureForceFinish = nil
     if tid then pcall(killTrigger, tid) end
     if timer then pcall(killTimer, timer) end
     local ok, err = pcall(opts.onDone, lines)
     if not ok then M.echo("Parse error: " .. tostring(err)) end
   end
+  M._captureForceFinish = finish
 
   local function bump()
     if timer then killTimer(timer) end

@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-07-18 — Mnemosyne: harden the line-capture so boons can't be dropped (v4.7.93)
+
+Follow-up to v4.7.91. The boon (and effects) capture uses a single-slot lock (`_capturing`): while one capture is active, a new one was **silently ignored**. If a prior capture ever wedged — a stream of lines can keep resetting its silence-timeout so `finish` never fires — every later boon/effects capture was dropped and the report never posted.
+
+- **Fix:** `_captureLines` now **force-finishes** any still-active prior capture (`M._captureForceFinish`) before starting the new one, instead of dropping it. Boons/effects can no longer be lost to a wedged lock.
+- Combined with v4.7.91 (post `/boons_offered` immediately, not gated on the slow contemplate chain), boon reporting is now robust end-to-end.
+- **Note:** auto-update applies at *login* — a long continuous session keeps whatever version it started on, so this fix (and v4.7.91) only take effect after a re-login. Confirm with `lua ataxiaVersion`.
+- Test pins the force-finish behavior. Suite **314/314**.
+
+---
+
 ## 2026-07-17 — Bashing HUD polish: session stats + readable numbers (v4.7.92)
 
 Follow-up polish to the v4.7.90 bashing HUD (`windows/001_Limb_Counter_Window.lua`):

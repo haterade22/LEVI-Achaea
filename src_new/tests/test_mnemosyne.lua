@@ -333,6 +333,19 @@ describe("boons offered reporting", function()
     expect(sent[1].payload.offered[1].name).toBe("Azure Scales")
     expect(sent[1].payload.offered[2].name).toBe("Iron Throat")
   end)
+
+  it("force-finishes a wedged prior capture instead of dropping the new boon capture", function()
+    reset(true)
+    -- Simulate a wedged capture still holding the single-slot lock.
+    local flushed = false
+    M._capturing = true
+    M._captureForceFinish = function() flushed = true; M._capturing = false; M._captureForceFinish = nil end
+    -- A new capture must flush the stale one and proceed, not be silently ignored.
+    M._captureLines({ timeout = 1, onLine = function() return "stop" end, onDone = function() end })
+    expect(flushed).toBeTrue()        -- the wedged capture was flushed
+    expect(M._capturing).toBeTrue()   -- ...and this capture is now active (not dropped)
+    if M._captureForceFinish then M._captureForceFinish() end -- cleanup
+  end)
 end)
 
 -- ─── Boss objective ──────────────────────────────────────────────────────────
