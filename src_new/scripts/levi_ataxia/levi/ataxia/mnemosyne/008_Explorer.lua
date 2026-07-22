@@ -170,7 +170,9 @@ function M._nextExploreStep()
   local best
   for num, r in pairs(MAP.rooms) do
     if r.visited and num ~= cur and #usableUnexplored(num) > 0 then
-      local steps = MAP.path(cur, num)
+      -- Prefer the walked path; fall back to the known-room graph so a walked-graph gap
+      -- (dropped edge in the demented tower) can't strand a placed, unexplored room.
+      local steps = MAP.path(cur, num) or (MAP.pathKnown and MAP.pathKnown(cur, num))
       if steps and #steps > 0 and planarStep(steps[1]) and (not best or #steps < #best) then best = steps end
     end
   end
@@ -204,7 +206,7 @@ function M._nextPatrolStep()
     if t == cur or not (MAP.rooms[t] and MAP.rooms[t].visited) then
       table.remove(M.explore.patrolQueue, 1) -- reached it / it's gone: advance
     else
-      local steps = MAP.path(cur, t)
+      local steps = MAP.path(cur, t) or (MAP.pathKnown and MAP.pathKnown(cur, t))
       -- Skip a target whose first step is non-planar: that's the holding room (up
       -- out of the grid). The boss spawns in the 4x4, never the entry holding room.
       if steps and #steps > 0 and planarStep(steps[1]) then return steps[1] end
@@ -372,6 +374,18 @@ function M._exploreTick()
   if pdir then
     M._exploreMove(pdir)
   else
+    -- Before giving up: if we've blacklisted any exits this ripple, give them ONE second
+    -- chance (a spurious move-timeout / lingering prone shouldn't permanently strand a real
+    -- exit). Clear the failed set and re-decide once per ripple; if it's a genuine wall it
+    -- just re-fails and we quit next time.
+    local hasFailed = false
+    for _ in pairs(M.explore.failed or {}) do hasFailed = true; break end
+    if hasFailed and not M.explore._retriedFailed then
+      M.explore._retriedFailed = true
+      M.explore.failed = {}
+      M._exploreEcho("<grey>clearing failed exits and retrying before giving up.")
+      return M._exploreTick()
+    end
     M._exploreStop("nowhere left to patrol")
   end
 end
@@ -394,6 +408,7 @@ function M._exploreResume(reason)
   M.explore.pausedAtBoon = false
   M.explore.moving = false
   M.explore.failed = {}
+  M.explore._retriedFailed = nil -- fresh one-shot failed-exit retry for this ripple
   M.explore.hunting = false
   M.explore.patrolQueue = nil
   M.explore.patrolLoops = 0
@@ -440,6 +455,7 @@ function M.exploreOn()
   M.explore.on = true
   M.explore.moving = false
   M.explore.failed = {}
+  M.explore._retriedFailed = nil
   M.explore.hunting = false
   M.explore.patrolQueue = nil
   M.explore.patrolLoops = 0

@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-07-18 — Mnemosyne explorer: stop quitting while a `?` room is still reachable (v4.7.95)
+
+The auto-sweep would give up ("nowhere left to patrol") with an unexplored room (a gold `?` on the mini-map) still on the grid — and couldn't route back to it. Cause: the map places every room from the **exit graph** (so it renders + shows `?`), but the explorer routed only over the **walked-edge graph**, which needs each move's direction to be determinable. In the demented tower (Creville's Legacy fakes gmcp exits) that determination can fail, so a visited room's walked edge is silently dropped — fragmenting the walked graph so BFS can't reach the room.
+
+- **Known-graph routing fallback.** New `MAP.pathKnown` — BFS over the known-exit graph (∪ walked edges), the same graph `relayout` uses to place every room. Backtrack and patrol now try `MAP.path` (walked) first, then `MAP.pathKnown`, so a walked-graph gap can't strand a placed, unexplored room. A wrong (faked) exit just fails the move, which marks it failed and self-corrects.
+- **One-shot failed-exit retry.** Before quitting, if any exit was blacklisted this ripple, the sweep clears `explore.failed` and re-decides once (`_retriedFailed`) — a spurious move-timeout or lingering prone shouldn't permanently strand a real exit. Reset per ripple.
+- Test: `MAP.pathKnown` routes over the exit graph when the walked graph is fragmented. Suite **316/316**.
+
+---
+
 ## 2026-07-18 — Mnemosyne explorer auto-resumes on GO + HUD shows in the tower (v4.7.94)
 
 - **GO auto-resumes the sweep.** After you pick a boon and wade, the new wave's `GO!` now auto-resumes a boon-screen pause: the GO trigger → `exploreOnGo` sends `look` (the ripple's holding room, whose only exit is `down` into the 4x4 — and dementia can otherwise leave a stale room around you), then un-pauses the sweep. So a full dive runs hands-free through the boon screens; `mnem explore on` still resumes manually. Resume logic is now shared via `_exploreResume()`.

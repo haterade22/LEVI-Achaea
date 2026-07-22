@@ -958,6 +958,17 @@ describe("ripple map graph", function()
     expect(MAP.path(1, 99)).toBeNil()
   end)
 
+  it("pathKnown routes over the exit graph when the WALKED graph is fragmented", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { east = 2 }, nil) -- A reports an east exit to 2 (but we never walked it)
+    -- 2 is placed/known (a neighbour reported it) but has NO walked edge back to 1 -- the demented
+    -- tower dropped it. MAP.path (walked-only) can't reach it; pathKnown (known-exit graph) can.
+    MAP.rooms[2] = { num = 2, name = "B", exits = { west = 1 }, edges = {}, visited = true }
+    expect(MAP.path(1, 2)).toBeNil()          -- walked graph is fragmented
+    local steps = MAP.pathKnown(1, 2)
+    expect(steps and steps[1]).toBe("e")      -- ...but the known-exit graph routes east to B
+  end)
+
   it("resets the graph only when the ripple number changes", function()
     MAP.reset()
     MAP._ripple = 5

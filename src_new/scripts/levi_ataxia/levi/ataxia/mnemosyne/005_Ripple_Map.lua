@@ -250,6 +250,59 @@ function MAP.path(fromNum, toNum)
   return nil
 end
 
+-- BFS over the KNOWN-room graph (every reported exit whose dest is a real known room,
+-- both directions) UNION the walked edges -- a superset of MAP.path. Used as a routing
+-- fallback: the map places all rooms from the exit graph (relayout), so a room can be on
+-- the grid (and show `?`) while the WALKED graph doesn't reach it -- dementia (Creville's
+-- Legacy) fakes gmcp exits, so a move's direction can't always be determined and its walked
+-- edge is dropped, fragmenting MAP.path's graph. Routing over the known graph still reaches
+-- it; a wrong (faked) exit just fails the move, which marks it failed and self-corrects.
+-- Returns a list of SHORT direction steps, or nil if unreachable.
+function MAP.pathKnown(fromNum, toNum)
+  fromNum = tonumber(fromNum) or fromNum
+  toNum = tonumber(toNum) or toNum
+  if not (MAP.rooms and MAP.rooms[fromNum] and MAP.rooms[toNum]) then return nil end
+  if fromNum == toNum then return {} end
+  local adj = {}
+  local function add(a, dir, b)
+    if not (MAP.rooms[b] and b ~= a) then return end
+    adj[a] = adj[a] or {}
+    adj[a][#adj[a] + 1] = { dir = dir, to = b }
+  end
+  for n, r in pairs(MAP.rooms) do
+    for dir, dest in pairs(r.exits) do
+      if type(dest) == "number" then
+        add(n, dir, dest)
+        local opp = MAP.OPPOSITE[dir]
+        if opp then add(dest, opp, n) end -- reverse, in case only one side reported the link
+      end
+    end
+    for dir, dest in pairs(r.edges) do add(n, dir, dest) end -- keep walked connectivity too
+  end
+  local queue, seen, head = { fromNum }, { [fromNum] = true }, 1
+  local from_of = {}
+  while head <= #queue do
+    local cur = queue[head]; head = head + 1
+    for _, e in ipairs(adj[cur] or {}) do
+      if not seen[e.to] then
+        seen[e.to] = true
+        from_of[e.to] = { room = cur, dir = e.dir }
+        if e.to == toNum then
+          local steps, node = {}, toNum
+          while node ~= fromNum do
+            local p = from_of[node]
+            table.insert(steps, 1, MAP.shortDir(p.dir))
+            node = p.room
+          end
+          return steps
+        end
+        queue[#queue + 1] = e.to
+      end
+    end
+  end
+  return nil
+end
+
 -- Grid extent over VISITED rooms (propagation stubs carry coords too, but they
 -- aren't drawn, so they must not stretch the grid).
 function MAP.bounds()
