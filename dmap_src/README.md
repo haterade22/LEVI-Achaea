@@ -70,3 +70,18 @@ Source lives under `dmap_src/` (`scripts/`, `triggers/`, `aliases/`) — same YA
 Muddler pipeline as LEVI, built with `--package-name Dementia_Mapper`. The dementia-tolerant
 map + explorer are ports of LEVI's `mnemosyne/005_Ripple_Map` + `008_Explorer`, decoupled from
 the basher (navigation only; combat via the hook above).
+
+### Releasing
+
+CI (`.github/workflows/dmap.yml`) builds the `.mpackage` and publishes a GitHub Release on any
+`dmap-v*` tag — a separate namespace from LEVI's `v*`, so the two never cross-trigger. To cut a
+release users can download directly:
+
+```
+# 1. bump the version
+echo 0.1.1 > dmap_version.txt          # must match the tag
+git commit -am "dmap 0.1.1"
+# 2. tag + push (CI validates version==tag, builds, and attaches Dementia_Mapper.mpackage)
+git tag dmap-v0.1.1
+git push origin main dmap-v0.1.1
+```

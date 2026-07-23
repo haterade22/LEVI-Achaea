@@ -1,0 +1,110 @@
+name: Dementia Mapper Build & Release
+
+# Standalone Dementia Mapper package (built from dmap_src/). Kept separate from the LEVI
+# workflow (build.yml). Releases fire on `dmap-v*` tags -- a distinct namespace from LEVI's
+# `v*`, so the two never cross-trigger. To cut a release:
+#   1. bump dmap_version.txt   2. git tag dmap-vX.Y.Z   3. git push origin dmap-vX.Y.Z
+on:
+  push:
+    branches: [main]
+    tags: ['dmap-v*']
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    name: Validate dmap Lua & Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Lua 5.1
+        run: sudo apt-get update && sudo apt-get install -y lua5.1
+
+      - name: Syntax check dmap Lua files
+        run: |
+          echo "=== Checking dmap Lua syntax ==="
+          errors=0
+          while IFS= read -r file; do
+            if ! luac5.1 -p "$file" 2>/dev/null; then
+              echo "SYNTAX ERROR: $file"
+              luac5.1 -p "$file" || true
+              errors=$((errors + 1))
+            fi
+          done < <(find dmap_src -name '*.lua' -type f)
+          echo "=== Checked $(find dmap_src -name '*.lua' -type f | wc -l) files, $errors errors ==="
+          if [ $errors -gt 0 ]; then exit 1; fi
+
+      - name: Run dmap unit tests
+        run: |
+          echo "=== Running dmap unit tests ==="
+          lua5.1 dmap_src/tests/test_dmap.lua
+
+  build:
+    name: Build & Release Dementia Mapper
+    runs-on: ubuntu-latest
+    needs: validate
+    if: startsWith(github.ref, 'refs/tags/dmap-v')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+
+      - name: Download Muddler
+        run: |
+          curl -L -o muddler.zip https://github.com/demonnic/muddler/releases/download/1.1.0/muddle-shadow-1.1.0.zip
+          unzip muddler.zip -d muddler-bin
+          chmod +x muddler-bin/muddle-shadow-1.1.0/bin/muddle
+
+      - name: Install Python dependencies
+        run: pip install pyyaml --quiet
+
+      - name: Derive + check version
+        id: ver
+        run: |
+          VERSION="${GITHUB_REF_NAME#dmap-v}"
+          FILEVER="$(cat dmap_version.txt | tr -d '[:space:]')"
+          echo "tag version:      $VERSION"
+          echo "dmap_version.txt: $FILEVER"
+          if [ "$VERSION" != "$FILEVER" ]; then
+            echo "ERROR: tag ($VERSION) != dmap_version.txt ($FILEVER) -- bump dmap_version.txt before tagging."
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Convert dmap source to Muddler format
+        run: |
+          python tools/convert_to_muddler.py --src dmap_src --output dmap_project \
+            --package-name Dementia_Mapper --package-title "Dementia Mapper (Achaea Mnemosyne)" \
+            --package-version "${{ steps.ver.outputs.version }}" --package-author Leviticus \
+            --include-roots Dementia_Mapper
+
+      - name: Build with Muddler
+        run: |
+          cd dmap_project
+          ../muddler-bin/muddle-shadow-1.1.0/bin/muddle
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Dementia_Mapper-${{ github.ref_name }}
+          path: dmap_project/build/Dementia_Mapper.mpackage
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Dementia Mapper ${{ steps.ver.outputs.version }}
+          files: dmap_project/build/Dementia_Mapper.mpackage
+          generate_release_notes: true
