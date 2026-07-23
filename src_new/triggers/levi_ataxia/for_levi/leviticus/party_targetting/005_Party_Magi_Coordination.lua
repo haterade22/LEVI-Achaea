@@ -43,8 +43,10 @@ patterns:
 
 -- Gate: only when playing Magi
 if gmcp.Char.Status.class ~= "Magi" then return end
--- Don't react to our own callouts
-if matches[2] == gmcp.Char.Name then return end
+-- Don't react to our own callouts. gmcp.Char.Name is an object {name, fullname};
+-- compare against the .name string (matching a name string vs the whole table never
+-- matched, so this self-guard never fired).
+if matches[2] == gmcp.Char.Name.name then return end
 
 local tgt = matches[3]
 

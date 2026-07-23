@@ -33,7 +33,9 @@ function zgui.updateroomitems()
   zgui.roomItemList = {}
   zgui.roomDenizenList = {}
   for k,v in pairs(gmcp.Char.Items.List.items) do
-    if v.attrib == "m" then
+    -- attrib is a flag-set: a live monster has 'm' (possibly with t/x too, e.g. "mt"/"mx");
+    -- 'd' marks a corpse. Membership test so combos aren't mis-bucketed and corpses aren't shown as denizens.
+    if v.attrib and v.attrib:find("m") and not v.attrib:find("d") then
       if not table.contains(zgui.roomDenizenList, v.id) then
         zgui.roomDenizenList[v.id] = v.name
       end
@@ -58,7 +60,7 @@ function zgui.addroomitem()
   --check if item was added to room
   if gmcp.Char.Items.Add.location == "room" then
     --check if item is already in roomitems table
-    if gmcp.Char.Items.Add.item.attrib == "m" then
+    if gmcp.Char.Items.Add.item.attrib and gmcp.Char.Items.Add.item.attrib:find("m") and not gmcp.Char.Items.Add.item.attrib:find("d") then
       if not table.contains(zgui.roomDenizenList, gmcp.Char.Items.Add.item.id) then
         zgui.roomDenizenList[gmcp.Char.Items.Add.item.id] = gmcp.Char.Items.Add.item.name
       end

@@ -47,8 +47,10 @@ local function findTargetsCity()
   local targetCity = ataxiaNDB_getCitizenship(target)
   if not targetCity or targetCity == "" then return candidates end
   for _, person in pairs(ataxia.playersHere) do
+    -- gmcp.Char.Name is an object {name, fullname}; compare against .name so self is
+    -- actually excluded (a name string never equals the whole table -> guard was inert).
     if ataxiaNDB_getCitizenship(person) == targetCity
-       and person ~= gmcp.Char.Name
+       and person ~= gmcp.Char.Name.name
        and table.contains(ataxiaTemp.enemies, person) then
       table.insert(candidates, person)
     end
@@ -61,7 +63,7 @@ local function findTargetsAll()
   local candidates = {}
   if not ataxia.playersHere or type(ataxia.playersHere) ~= "table" then return candidates end
   for _, person in pairs(ataxia.playersHere) do
-    if person ~= gmcp.Char.Name
+    if person ~= gmcp.Char.Name.name
        and table.contains(ataxiaTemp.enemies, person) then
       table.insert(candidates, person)
     end
@@ -78,7 +80,7 @@ local function findTargetsPriority()
   -- Build a lookup of enemies currently in room
   local inRoom = {}
   for _, person in pairs(ataxia.playersHere) do
-    if person ~= gmcp.Char.Name
+    if person ~= gmcp.Char.Name.name
        and table.contains(ataxiaTemp.enemies, person) then
       inRoom[person] = true
     end

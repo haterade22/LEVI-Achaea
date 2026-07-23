@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-07-23 — GMCP targeting safety + Splinterbark tree-curing (v4.7.98)
+
+Three fixes from the GMCP capability audit, plus a Mnemosyne self-harm safety.
+
+- **Denizen targeting honours the `attrib` flag set.** `Char.Items` `attrib` is a set of characters (`m`=monster, `d`=dead, `t`=takeable, `x`=should-not-be-targeted/loyal-to-city-or-player), but `003_ataxia_RoomContents_Update.lua` matched it by whole-string equality. Now it tests membership: it excludes `x` (protected/loyal NPCs — previously they leaked into `ataxia.denizensHere` **and** got written to the persistent auto-learn `targetList`) and `d` (corpses). The `Char.Items.Add` path additionally never checked `d` and lacked a nil-guard, so a corpse added to the room became an attackable "denizen" — both fixed. Mirrored in the `002_showRoomItems` display list.
+- **`Char.Name` self-exclusion bug.** `Stormhammer_Targeting.lua` and `Party_Magi_Coordination.lua` compared a name **string** against the `gmcp.Char.Name` **object** `{name, fullname}` — never equal, so Stormhammer could auto-target the caster and the Magi-coordination self-check never fired. Now compare against `gmcp.Char.Name.name`.
+- **Splinterbark tree-curing safety (Mnemosyne).** With the `Splinterbark` ongoing effect active, every tree-tattoo touch bleeds you and inflicts a random malady. The bot now sends `curing tree off` the moment the status screen shows Splinterbark (transition-guarded, gated on being in a run) and `curing tree on` when the run ends. Telemetry-independent (plain status-screen trigger). 4 new tests.
+
+---
+
 ## 2026-07-23 — Bashing HUD: live mob health bar (v4.7.97)
 
 The Mob health bar now renders reliably and tracks the fight live. It reads the denizen's HP% from the denizen-state layer (`ds.hpp`), which we feed every prompt from `gmcp.IRE.Target.Info.hpperc` — so it survives the render moment when the raw GMCP field is briefly nil right after a retarget (the reason the bar never appeared in Mnemosyne). It falls back to the live GMCP field for a freshly-acquired target the prompt hasn't fed yet, and is skipped only when neither source has a value. The HUD now also refreshes on `gmcp.IRE.Target.Info` (pushed each combat round), so the Mob bar — and the other live bars — update as the fight progresses instead of only on room/target changes. Refresh handlers are guarded so they no longer stack up on a SYSUPDATE reload.

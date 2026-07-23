@@ -18,6 +18,7 @@ Patterns are Mudlet regex (`type: 1`), quoted verbatim from each trigger file.
 | 008 | Objective | `^Objective:\s+(.+)$` | `onObjective(matches[2])` | `_inRun` |
 | 009 | Run End | `^The Mnemosyne releases its hold` | `onRunEnd()` → `endRun()` | `_inRun` |
 | 016 | Run Pause | `^You whisper to the Mnemosyne and beseech that it grow still for a time\.$` | `onRunPause()` | none (flag set unconditionally) |
+| 017 | Splinterbark | `^Splinterbark:\s+Your tree tattoo is tainted with fell magic` | `onSplinterbarkSeen()` | none (handler self-gates on `ataxiaBasher.inMnemosyne`) |
 
 The gate is enforced *inside* each handler (see the gating model in [01-architecture.md](01-architecture.md)); only trigger 007 does its `_inRun()` check in the trigger body before calling the API directly. `onRipple` is the exception to the auto-gate: it first drives the mini-map (`map.onRipple(n)`, unconditional) and only then gates telemetry on `_auto()`.
 
@@ -68,6 +69,10 @@ Result is `{ {name, description}, … }`, with trailing whitespace trimmed off b
 ### `onEffectsHeader` (trigger 003)
 
 Fires on `Ongoing effects:`. It captures with `timeout = 1.5`, skips the one divider immediately under the header (a `skippedDash` latch), and **stops** on the first blank line or the closing divider. The collected lines go through `_parseNamedBlock`; a non-empty list is sent via `reportEffects`.
+
+### `onSplinterbarkSeen` / `restoreTreeCuring` (trigger 017) — self-harm safety
+
+The `Splinterbark` ongoing effect taints the tree tattoo: every touch by the game's curing bleeds you and inflicts a random malady. Trigger 017 matches the effect's status-screen line and calls `onSplinterbarkSeen()`, which sends `curing tree off` — **transition-guarded** by `M._treeCuringOff` so it fires only once per OFF flip, not on every status re-read, and **gated on `ataxiaBasher.inMnemosyne`** so a `mnem affixes`/library read outside a run can't toggle curing. `onRunEnd` calls `restoreTreeCuring()` (`curing tree on`, no-op unless we'd turned it off). Deliberately a plain status-screen trigger, **not** hung off the `_inRun`-gated `onEffectsHeader` affix parse, so the safety works even with telemetry off. Reload-safe: `M._treeCuringOff` resets to nil, and the next Splinterbark line re-asserts `curing tree off` idempotently.
 
 ### `onObjective` (trigger 008)
 

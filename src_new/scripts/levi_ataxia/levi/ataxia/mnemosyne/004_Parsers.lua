@@ -194,7 +194,34 @@ function M.onRunEnd()
     if ataxiaBasher_mnemStillHere then ataxiaBasher_mnemStillHere() end -- drop any pending ask
     ataxiaEcho("Mnemosyne wade ended — no-flee mode OFF.")
   end
+  M.restoreTreeCuring() -- Splinterbark over -> tattoo untainted, turn game tree curing back on
   if M._inRun() then M.endRun() end
+end
+
+-- Splinterbark ongoing-effect safety (telemetry-INDEPENDENT: driven by a plain status-screen
+-- trigger, not the _inRun()-gated affix parse). The "Splinterbark" affix taints our tree tattoo
+-- so every touch by the game's curing bleeds us and inflicts a random malady. While it is active
+-- we keep the game's tree curing OFF; onRunEnd restores it. Called by the Splinterbark trigger
+-- each time the status screen shows the effect; the M._treeCuringOff guard means we send the
+-- command only on the OFF transition, not on every status re-read. Gated on inMnemosyne so a
+-- `mnem affixes`/library read outside a run cannot toggle curing.
+function M.onSplinterbarkSeen()
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  if M._treeCuringOff then return end
+  M._treeCuringOff = true
+  send("curing tree off")
+  if not M._quiet() then
+    M.echo("<red>Splinterbark<reset> active — <red>curing tree off<reset> (tree touch bleeds/afflicts)")
+  end
+end
+
+-- Restore game tree curing iff Splinterbark had forced it off. Called from onRunEnd (run over ->
+-- untainted). No-op unless we turned it off, so it never spuriously re-enables curing.
+function M.restoreTreeCuring()
+  if not M._treeCuringOff then return end
+  M._treeCuringOff = nil
+  send("curing tree on")
+  if not M._quiet() then M.echo("Splinterbark cleared — <green>curing tree on<reset>") end
 end
 
 -- "You wade N ripples deep into the tides of memory:" (WADE STATUS output).

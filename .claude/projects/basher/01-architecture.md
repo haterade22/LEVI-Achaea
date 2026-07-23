@@ -72,9 +72,14 @@ All attack requests flow through `tryAttack()`. This is the ONLY function that c
    a. Remove current room from ataxiaBasher_path (areabash)
    b. If fleeReturning + arrived at fleeOriginRoom → clear return state
    c. Else if bashFlee → re-insert previous room into path
-3. gmcp.Char.Items.List event → populate ataxia.denizensHere
+3. gmcp.Char.Items.List event → populate ataxia.denizensHere (`003_ataxia_RoomContents_Update.lua`)
+   - The item `attrib` field is a flag-SET string, tested by **membership** (not whole-string
+     equality): a room item enters `denizensHere` only if attrib lacks `x` (should-not-be-targeted —
+     loyal to city/player) and `d` (dead monster/corpse), isn't a plain takeable (`t`), and isn't a
+     guard icon. Applies to both the `List` loop and the `Add` path (which also nil-guards attrib).
    - Auto-learn (if enabled): add new denizens to targetList[area], skipping own denizens
-     (`ataxiaBasher_isOwnDenizen`) — pets/allies like falcons/Baalzadeen
+     (`ataxiaBasher_isOwnDenizen`) — pets/allies like falcons/Baalzadeen. Because the `x` filter runs
+     first, loyal/protected NPCs never reach the persistent targetList.
 4. Next prompt:
    a. scanRoom() → clears need_roomCheck, checks for danger/players
    b. search_targets() → finds target in denizensHere (own denizens excluded)

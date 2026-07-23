@@ -383,6 +383,65 @@ describe("onRunEnd", function()
   end)
 end)
 
+-- ─── Splinterbark tree curing (self-harm safety) ─────────────────────────────
+
+describe("Splinterbark tree curing", function()
+  -- Capture game commands (send), not HTTP (sent). Restores send even on failure.
+  local function captureSend(fn)
+    local captured, realSend = {}, send
+    send = function(cmd) captured[#captured + 1] = cmd end
+    local ok, err = pcall(fn, captured)
+    send = realSend
+    if not ok then error(err) end
+  end
+
+  it("does nothing when not in a Mnemosyne run", function()
+    reset(false)
+    ataxiaBasher = nil
+    M._treeCuringOff = nil
+    captureSend(function(captured)
+      M.onSplinterbarkSeen()
+      expect(#captured).toBe(0)
+    end)
+    expect(M._treeCuringOff).toBeNil()
+  end)
+
+  it("turns tree curing off once when seen in a run (transition-guarded)", function()
+    reset(false)
+    ataxiaBasher = { inMnemosyne = true }
+    M._treeCuringOff = nil
+    captureSend(function(captured)
+      M.onSplinterbarkSeen()
+      M.onSplinterbarkSeen() -- second status re-read must NOT re-send
+      expect(#captured).toBe(1)
+      expect(captured[1]).toBe("curing tree off")
+    end)
+    expect(M._treeCuringOff).toBeTrue()
+    ataxiaBasher = nil
+  end)
+
+  it("restoreTreeCuring re-enables once, only if it was off", function()
+    reset(false)
+    M._treeCuringOff = true
+    captureSend(function(captured)
+      M.restoreTreeCuring()
+      M.restoreTreeCuring() -- no-op the second time
+      expect(#captured).toBe(1)
+      expect(captured[1]).toBe("curing tree on")
+    end)
+    expect(M._treeCuringOff).toBeNil()
+  end)
+
+  it("restoreTreeCuring is a no-op when curing was never turned off", function()
+    reset(false)
+    M._treeCuringOff = nil
+    captureSend(function(captured)
+      M.restoreTreeCuring()
+      expect(#captured).toBe(0)
+    end)
+  end)
+end)
+
 -- ─── Boon contemplate parsing (pure) ─────────────────────────────────────────
 
 describe("M._parseContemplate()", function()

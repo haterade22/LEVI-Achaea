@@ -62,7 +62,13 @@ function ataxia_RoomContents_Update(event)
         ataxia.lightwall = true 
       elseif v.name:find("monolith") then
         ataxiaTemp.monolith = true
-			elseif v.attrib and v.attrib ~= "t" and v.attrib ~= "mdt" and v.icon ~= "guard" then
+			-- attrib is a flag-SET string (m=monster, d=dead, t=takeable, x=should-not-be-targeted,
+			-- loyal to city/player...), so test membership, not whole-string equality. Exclude x
+			-- (protected/loyal NPCs -- attacking them draws aggro/bounties and the auto-learn block
+			-- below would write them to the persistent targetList) and d (corpses). `not find("d")`
+			-- supersedes the old exact `~= "mdt"`, which missed d/md/dt combos.
+			elseif v.attrib and not v.attrib:find("x") and not v.attrib:find("d")
+			   and v.attrib ~= "t" and v.icon ~= "guard" then
 				ataxia.denizensHere[tonumber(v.id)] = v.name
 				
 				if (v.name == "a guarded firewall" or v.name == "an audacious guardsman" or v.name == "a Vault guardian") and not table.contains(waterGuards, v.id) and #waterGuards < 10 and beckonGuards then
@@ -132,7 +138,12 @@ function ataxia_RoomContents_Update(event)
 		
 	--Add the denizen.
 	else
-		if gmcp.Char.Items.Add.location == "room" and gmcp.Char.Items.Add.item.attrib ~= "t" and gmcp.Char.Items.Add.item.icon ~= "guard" then
+		-- Same flag-set membership as the List loop above: require attrib (nil-guard the List loop
+		-- had but this Add path lacked), exclude x (loyal/protected) and d (dead -- the Add path
+		-- never checked d before, so a corpse Added to the room became an attackable "denizen").
+		if gmcp.Char.Items.Add.location == "room" and gmcp.Char.Items.Add.item.attrib
+		   and not gmcp.Char.Items.Add.item.attrib:find("x") and not gmcp.Char.Items.Add.item.attrib:find("d")
+		   and gmcp.Char.Items.Add.item.attrib ~= "t" and gmcp.Char.Items.Add.item.icon ~= "guard" then
 			ataxia.denizensHere[gmcp.Char.Items.Add.item.id] = gmcp.Char.Items.Add.item.name
 			atempDenizens[gmcp.Char.Items.Add.item.id] = gmcp.Char.Items.Add.item.name
 		end
