@@ -67,12 +67,14 @@ if ataxiaBasher.enabled then
     -- because the debounced "targets updated" event fires NEXT cycle.
     search_targets()
 
-    -- Feed the current server target's HP% into per-denizen state. Only the current
-    -- target exposes hpperc via GMCP; numeric-id guard keeps this denizen-only (PvP-inert).
+    -- Feed the current server target's HP% into per-denizen state. hpperc describes the server's
+    -- authoritative target (Info.id), so only write it when that id AGREES with our `target` --
+    -- otherwise (retarget lag, mid-round death, illusion) we'd attribute the server target's HP to
+    -- the wrong denizen's row. numeric-id guard keeps this denizen-only (PvP-inert).
+    local _tinfo = gmcp and gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info
     if type(target) == "number" and ataxiaBasher_dsSetHp
-       and gmcp and gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info
-       and gmcp.IRE.Target.Info.hpperc then
-      ataxiaBasher_dsSetHp(target, (tostring(gmcp.IRE.Target.Info.hpperc):gsub("%%", "")))
+       and _tinfo and _tinfo.hpperc and tonumber(_tinfo.id) == target then
+      ataxiaBasher_dsSetHp(target, (tostring(_tinfo.hpperc):gsub("%%", "")))
     end
 
     -- Flee recovery check (percentage-based, replaces buggy operator-precedence line)

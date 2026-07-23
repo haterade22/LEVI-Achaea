@@ -2,6 +2,15 @@
 
 ---
 
+## 2026-07-23 — Explorer Room.WrongDir + denizen-HP attribution guard (v4.7.99)
+
+Two more GMCP-audit items, both in the Mnemosyne/bashing path.
+
+- **`Room.WrongDir` — instant failed-exit detection.** The server sends `Room.WrongDir` (the non-existent direction) the moment you try to move through a wall. A new handler condemns that exit and prunes it from the ripple-map's known-exit graph immediately, instead of waiting out the ~10s `MOVE_TIMEOUT` + retry. Because `WrongDir` fires *only* for a genuinely nonexistent exit, it cleanly separates a wall from an ice-slip/prone/lag (which keep their own retry paths), and pruning the dementia-faked exit stops `pathKnown`/relayout re-routing through it — the routing fragmentation behind the explorer's "nowhere left to patrol / just quits" dead-ends. Only acts on an in-flight explorer move. 2 new tests.
+- **Denizen HP attribution guard.** `010_Prompt_Running` fed `gmcp.IRE.Target.Info.hpperc` into the per-denizen state keyed by our `target`. But `hpperc` describes the server's authoritative target (`Info.id`), so on retarget-lag/illusion (when `Info.id != target`) it wrote the server target's HP onto the wrong denizen's row. Now it feeds only when `Info.id` agrees with `target`, consuming the previously-ignored `Info.id` field.
+
+---
+
 ## 2026-07-23 — GMCP targeting safety + Splinterbark tree-curing (v4.7.98)
 
 Three fixes from the GMCP capability audit, plus a Mnemosyne self-harm safety.

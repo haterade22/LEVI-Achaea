@@ -657,6 +657,33 @@ describe("mnem explore", function()
     ataxia.denizensHere = {}
   end)
 
+  it("onWrongDir condemns + prunes the exit and ends the move (server wall)", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { north = 2, east = 0 }, nil) -- in room A; north is a (faked) exit
+    M.explore.on = true
+    M.explore.moving = true
+    M.explore.fromRoom = 1
+    M.explore.fromDir = "n"
+    M.explore.failed = {}
+    M.onWrongDir("n") -- server sends the short dir; normDir -> "north" (long-form keys)
+    expect(M.explore.failed[1]["north"]).toBeTrue() -- exit condemned for the session
+    expect(MAP.rooms[1].exits["north"]).toBeNil()    -- faked exit pruned from the known graph
+    expect(M.explore.moving).toBeFalse()             -- move ended now, not after MOVE_TIMEOUT
+    M.explore.on = false
+  end)
+
+  it("onWrongDir is a no-op when no explorer move is in flight", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { north = 2 }, nil)
+    M.explore.on = true
+    M.explore.moving = false -- nothing in flight
+    M.explore.failed = {}
+    M.onWrongDir("n")
+    expect(MAP.rooms[1].exits["north"]).toBe(2) -- exit untouched
+    expect(next(M.explore.failed)).toBeNil()     -- nothing condemned
+    M.explore.on = false
+  end)
+
   it("steps through an unexplored exit of the current room", function()
     MAP.reset()
     MAP.onRoom(1, "A", { north = 0, east = 0 }, nil) -- origin; two unwalked exits

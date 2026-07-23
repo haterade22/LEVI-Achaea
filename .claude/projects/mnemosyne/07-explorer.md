@@ -76,6 +76,10 @@ after MOVE_TIMEOUT:
 
 A condemned exit is recorded per-room in `explore.failed` (keyed by canonical `MAP.normDir`) so the sweep never retries a wall forever and never re-picks it.
 
+### `Room.WrongDir` — server-authoritative wall (v4.7.99)
+
+The `MOVE_TIMEOUT` path above is the *fallback*. When the server knows the direction doesn't exist it sends `gmcp.Room.WrongDir` (body = the direction), and `M.onWrongDir(dir)` condemns it **instantly** instead of eating the ~10s timeout+retry: it marks `explore.failed[fromRoom][normDir(dir)] = true`, **prunes the exit from `MAP.rooms[fromRoom].exits`** (so `pathKnown`/relayout stop routing through a dementia-faked exit — the fragmentation behind "nowhere left to patrol"), kills `_explMoveT`, clears `moving`, and `_scheduleTick`s. It only acts on an in-flight explorer move (`explore.on and explore.moving`) and normalises the server's short-form direction (`"n"` → `"north"`). Because `WrongDir` fires *only* for a genuinely nonexistent exit, it never fires for an ice-slip/prone/lag (which keep `onIceSlip`/`MOVE_TIMEOUT`), so condemning outright is safe. Handler registered reload-safe (`M._explWrongDirH`, kill-before-register).
+
 ## Navigation
 
 `M._nextExploreStep()` returns the next single **short** direction to send, or `nil` when the reachable grid is fully swept. It is a DFS sweep with BFS backtracking:

@@ -278,6 +278,33 @@ function M.onIceSlip()
   M._exploreMove(M.explore.fromDir, true) -- re-send (silent; keeps tries, re-arms timeout)
 end
 
+-- gmcp Room.WrongDir: the server tells us the direction we just tried does not exist -- an
+-- AUTHORITATIVE wall signal. Condemn the exit immediately instead of waiting out MOVE_TIMEOUT
+-- (~10s with the one retry), and PRUNE it from the reported-exit graph so MAP.pathKnown/relayout
+-- stop routing through a dementia-faked exit (005 otherwise leaves faked exits in .exits and the
+-- sweep dead-ends "nowhere left to patrol"). Only acts on an in-flight explorer move; the failed
+-- direction comes straight from the server body, not our reconstructed move-dir. Distinct from an
+-- ice slip (move failed but exit is real -> onIceSlip re-sends) -- WrongDir fires ONLY for a truly
+-- nonexistent exit, so it's safe to condemn outright.
+function M.onWrongDir(dir)
+  if not (M.explore.on and M.explore.moving) then return end
+  local nd = MAP and MAP.normDir and MAP.normDir(dir)
+  if not nd then return end
+  local from = M.explore.fromRoom or (MAP and MAP.current)
+  if from then
+    M.explore.failed[from] = M.explore.failed[from] or {}
+    M.explore.failed[from][nd] = true
+    if MAP.rooms and MAP.rooms[from] and MAP.rooms[from].exits then
+      MAP.rooms[from].exits[nd] = nil -- drop the non-existent exit from the known graph
+    end
+  end
+  if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
+  M.explore.moving = false
+  if MAP then MAP._lastMoveDir = nil end
+  M._exploreEcho("<red>wall<reset> (" .. tostring(dir) .. ", server) -> condemned; rerouting.")
+  M._scheduleTick()
+end
+
 -- delay defaults to TICK_DELAY (the arrival settle time). Pass FAST_TICK after a
 -- denizen change, where denizensHere is already current and we want to move on fast.
 function M._scheduleTick(delay)
@@ -580,6 +607,13 @@ M._explTgtH = registerAnonymousEventHandler("targets updated", function()
   if not M.explore.on then return end
   M._scheduleTick(M.explore.settling and TICK_DELAY or FAST_TICK)
   M._armWatchdog()
+end)
+
+-- Server-authoritative wall: gmcp Room.WrongDir (body = the non-existent direction). Condemns
+-- the exit instantly instead of waiting out MOVE_TIMEOUT and prunes it from the known graph.
+if M._explWrongDirH then killAnonymousEventHandler(M._explWrongDirH) end
+M._explWrongDirH = registerAnonymousEventHandler("gmcp.Room.WrongDir", function()
+  M.onWrongDir(gmcp and gmcp.Room and gmcp.Room.WrongDir)
 end)
 
 -- Reload / auto-update: M (and M.explore) persist across an uninstall→install but
