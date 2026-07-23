@@ -2,6 +2,12 @@
 
 ---
 
+## 2026-07-18 — Bashing HUD: read HP/WP/EP straight from GMCP (v4.7.96)
+
+The HUD's HP/WP/EP bars now compute from `gmcp.Char.Vitals` (hp/maxhp, wp/maxwp, ep/maxep) directly, and XP from `gmcp.Char.Vitals.nl`, instead of the derived `ataxia.vitals` copy — the live GMCP values, with no dependence on the vitals-update pipeline having run. Rage still comes from `ataxia.vitals` (it's parsed out of `charstats`, not a top-level GMCP field). Nil-safe as before (a bar it can't compute is skipped).
+
+---
+
 ## 2026-07-18 — Mnemosyne explorer: stop quitting while a `?` room is still reachable (v4.7.95)
 
 The auto-sweep would give up ("nowhere left to patrol") with an unexplored room (a gold `?` on the mini-map) still on the grid — and couldn't route back to it. Cause: the map places every room from the **exit graph** (so it renders + shows `?`), but the explorer routed only over the **walked-edge graph**, which needs each move's direction to be determinable. In the demented tower (Creville's Legacy fakes gmcp exits) that determination can fail, so a visited room's walked edge is silently dropped — fragmenting the walked graph so BFS can't reach the room.

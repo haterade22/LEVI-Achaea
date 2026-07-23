@@ -234,16 +234,18 @@ function tarc.write()
         local mobStr = tostring(gmcp.IRE.Target.Info.hpperc):gsub("%%", "")
         tarc:cecho((_vitalRow("Mob", _clampPct(mobStr)) or "   Mob  ??") .. "\n\n")
       end
-      -- Our vitals as bars (nil-safe: skip any bar we can't compute a % for)
-      local rowHP = _vitalRow("HP", (v.hpp ~= nil) and v.hpp or _pct(v.hp, v.maxhp))
-      local rowWP = _vitalRow("WP", _pct(v.wp, v.maxwp))
-      local rowEP = _vitalRow("EP", _pct(v.ep, v.maxep))
+      -- Our vitals as bars, read STRAIGHT from GMCP (Char.Vitals) so they're always the live
+      -- values, never the derived ataxia.vitals copy. Nil-safe: skip any bar we can't compute.
+      local gv = (gmcp.Char and gmcp.Char.Vitals) or {}
+      local rowHP = _vitalRow("HP", _pct(gv.hp, gv.maxhp))
+      local rowWP = _vitalRow("WP", _pct(gv.wp, gv.maxwp))
+      local rowEP = _vitalRow("EP", _pct(gv.ep, gv.maxep))
       if rowHP then tarc:cecho(rowHP .. "\n") end
       if rowWP then tarc:cecho(rowWP .. "\n") end
       if rowEP then tarc:cecho(rowEP .. "\n") end
-      -- Rage + XP-to-level, one compact line
+      -- Rage (charstats-parsed into ataxia.vitals) + XP-to-level (GMCP nl), one compact line
       tarc:cecho(string.format("   <white>Rage<reset> <orange>%s<reset>", tostring(v.rage or 0)))
-      if v.xp then tarc:cecho(string.format("    <white>XP<reset> <cyan>%s%%<reset>", tostring(v.xp))) end
+      if gv.nl then tarc:cecho(string.format("    <white>XP<reset> <cyan>%s%%<reset>", tostring(gv.nl))) end
       tarc:cecho("\n")
       -- Class-specific resource (willpower is already the WP bar above)
       if gmcp.Char.Status.class == "Shaman" then
