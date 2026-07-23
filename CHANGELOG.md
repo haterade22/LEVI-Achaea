@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-07-23 — GMCP field captures: affliction cures + defence descriptions (v4.7.101)
+
+Two more audit fields we were dropping, now captured as reference tables (additive, no behaviour change):
+
+- **`Char.Afflictions.cure`** → `ataxia.affCures[aff] = "<cure command>"` (e.g. `"EAT GOLDENSEAL"`), accumulated in `004_Aff_gains_losses` (List + Add). The server's authoritative cure command per affliction, available for the manual-cure paths instead of re-deriving from the hardcoded herb table.
+- **`Char.Defences.desc`** → `ataxia.defenceDescs[def] = "<description>"`, accumulated in `001_Defence_API` (List + Add). Authoritative "what this defence does" text, no client-side table to maintain.
+
+Wiring these into the manual-cure branches / a `def info`-style display is a follow-up (needs live verification); this ships the data layer.
+
+**Deliberately skipped** (stay in backlog, need live verification): `IRE.Target.Set` retarget integration (touches the basher's target-gone handling — risky blind, and the server target id is already available via `IRE.Target.Info.id`); `Room.Info.details` helper (the ~44 call sites are almost all inside the bundled third-party mudlet-mapper, which shouldn't be churned — LEVI-core has only ~2, so the dedup value isn't there).
+
+---
+
 ## 2026-07-23 — GMCP consumers: chat, skills, time, status, disconnect (v4.7.100)
 
 A batch of GMCP-audit items, all additive/low-risk data plumbing.

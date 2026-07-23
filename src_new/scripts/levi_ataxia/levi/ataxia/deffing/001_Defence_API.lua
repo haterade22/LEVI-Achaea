@@ -103,6 +103,10 @@ function gotDef()
 		cecho("\n<green>+ ( def <NavajoWhite>"..def:lower().."<green> ) +")
 	end
 	ataxia.defences[def:lower()] = true
+	if gmcp.Char.Defences.Add.desc then
+		ataxia.defenceDescs = ataxia.defenceDescs or {}
+		ataxia.defenceDescs[gmcp.Char.Defences.Add.name:lower()] = gmcp.Char.Defences.Add.desc
+	end
 
 	if cur ~= "" and not def:find("parrying") and not def:find("blocking") then
 		if not ataxia.settings.defences.keepup[cur][def] and not ataxiaBasher.enabled then
@@ -144,9 +148,11 @@ end
 function defenceList()
 	local defs = gmcp.Char.Defences.List
 	ataxia.defences = {}
+	ataxia.defenceDescs = ataxia.defenceDescs or {} -- reference: server's description per defence (Char.Defences.desc)
 
 	for _, def in pairs(defs) do
 		ataxia.defences[def.name:lower()] = true
+		if def.desc then ataxia.defenceDescs[def.name:lower()] = def.desc end
 	end
 end
 

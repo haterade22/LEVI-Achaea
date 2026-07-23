@@ -85,8 +85,10 @@ function afflictionList()
 	ataxia.afflictions = {}
 	sent_diagnose = nil
 
+	ataxia.affCures = ataxia.affCures or {} -- reference: server's cure command per affliction (Char.Afflictions.cure)
 	for _, affl in pairs(affs) do
 		local aff = affl.name
+		if affl.cure then ataxia.affCures[aff:lower()] = affl.cure end
 		if not table.contains(ignore, aff:lower()) then
 			if tonumber( string.sub(aff:lower(), -2, -2) ) then
 				setStackAff(aff:lower())
@@ -105,6 +107,10 @@ end
 function gotAff()
 	local ignore = {"blindness", "deafness", "insomnia"}
 	local aff = gmcp.Char.Afflictions.Add.name
+	if gmcp.Char.Afflictions.Add.cure then
+		ataxia.affCures = ataxia.affCures or {}
+		ataxia.affCures[aff:lower()] = gmcp.Char.Afflictions.Add.cure
+	end
 	if not table.contains(ignore, aff) then
   	if tonumber( string.sub(aff, -2, -2) ) then
 			setStackAff(aff)
