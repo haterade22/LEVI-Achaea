@@ -23,7 +23,7 @@ if gmcp.Char.Status.class == "Blademaster" then
   bmdq()
 end
 
-if gmcp.Char.Status.class == "Runewarden" and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" then
+if gmcp.Char.Status.class == "Runewarden" and ataxia.vitals.knight == "Dual Blunt" then
   dwbRunie.setMode("pulp")
   dwbRunie.dispatch()
 end
@@ -32,7 +32,7 @@ if gmcp.Char.Status.class == "Depthswalker" then
   depthswalker.dispatch()
 end
 
-if gmcp.Char.Status.class == "Infernal" and gmcp.Char.Vitals.charstats[4] == "Spec: Dual Cutting" then
+if gmcp.Char.Status.class == "Infernal" and ataxia.vitals.knight == "Dual Cutting" then
   infernalDWC2LVivisect()
 end
 

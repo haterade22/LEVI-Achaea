@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-07-23 — charstats: order-independent knight weapon-spec reads (v4.7.102)
+
+The final GMCP-audit item. `004_ataxia_Vitals_Update` already parses `Char.Vitals.charstats` by name into `ataxia.vitals.knight` (the weapon Spec, unprefixed), but **33 combat sites** re-read it positionally with exact strings — `gmcp.Char.Vitals.charstats[3]/[4] == "Spec: Dual Blunt"`. The `charstats` array order isn't guaranteed (Runewarden's Spec lands at `[3]`, Infernal's at `[4]`), so the code duplicated both indices to cope, and `Login_Function:176` compared `charstats[3] == "Dual Cutting"` **without** the `"Spec: "` prefix every sibling used — a permanently-dead branch (Runewarden Dual-Cutting auto-wield never fired).
+
+All 33 sites now read the order-independent `ataxia.vitals.knight == "X"`: the five attack aliases (152–156), `Engaged_Disengage`, `Login_Function`, `Limb_Counter_Window`, `276_Limb_Prompt`, `637_Target_Left`, and `004_dealt_limb_damage`. The `[3]`-vs-`[4]` hedges collapse to a single check, and the dead login branch is fixed. Behaviour-identical otherwise; a server-side charstat reorder can no longer silently disable knight weapon-spec dispatch.
+
+**Login timing fix:** `levilogin()` resets `ataxia.vitals = {}` and runs its wield branches synchronously, before the first `Char.Vitals` event repopulates `knight` via the parser — so login now seeds `ataxia.vitals.knight` from the live charstats (order-independent scan) before those branches. In-combat callers already have it populated.
+
+Deferred (still positional, need parser additions + intent analysis): the Form/Stance/Kata/Age reads (`shikudo`, `depthswalker`, `Engaged_Disengage`/`Login` stance-vs-form detection) and two display-only debug echoes. Tracked in the backlog.
+
+---
+
 ## 2026-07-23 — GMCP field captures: affliction cures + defence descriptions (v4.7.101)
 
 Two more audit fields we were dropping, now captured as reference tables (additive, no behaviour change):

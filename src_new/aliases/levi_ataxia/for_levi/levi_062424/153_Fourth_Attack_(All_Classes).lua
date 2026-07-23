@@ -35,7 +35,7 @@ if gmcp.Char.Status.class == "Blademaster" then
   bmbs()
 end
 
-if gmcp.Char.Status.class == "Runewarden" and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" then
+if gmcp.Char.Status.class == "Runewarden" and ataxia.vitals.knight == "Dual Blunt" then
   dwbRunie.dispatch()
 end
 

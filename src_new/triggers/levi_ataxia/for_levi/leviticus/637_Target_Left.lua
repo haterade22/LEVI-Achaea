@@ -110,7 +110,7 @@ if isTargeted(matches[2]) then
 
 	if not chasing_Targets then cecho("<red>           -= Target chasing is currently disabled =-") return end
   
-  if gmcp.Char.Status.class == "Infernal" and gmcp.Char.Vitals.charstats[4] ~= "Spec: Dual Blunt" then
+  if gmcp.Char.Status.class == "Infernal" and ataxia.vitals.knight ~= "Dual Blunt" then
   send("queue addclear free lunge "..target..";tyranny")
 elseif jumping and jumping == true then
 	sendAll("cq all", "queue addclear free mountjump "..dir_left)

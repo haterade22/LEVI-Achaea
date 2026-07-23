@@ -24,6 +24,16 @@ ataxiaToggle("on")
 ataxia.defences = {}
 ataxia.afflictions = {}
 ataxia.vitals = {}
+-- The knight weapon-spec wield branches below run synchronously, BEFORE the first gmcp.Char.Vitals
+-- event repopulates ataxia.vitals.knight via ataxia_Vitals_Update. Seed it now from the live
+-- charstats (order-independent scan, replacing the old positional charstats[3]/[4] reads) so those
+-- branches see the current spec. In-combat callers already have knight populated by the parser.
+if gmcp.Char.Vitals and gmcp.Char.Vitals.charstats then
+	for _, s in ipairs(gmcp.Char.Vitals.charstats) do
+		local spec = tostring(s):match("^Spec: (.+)$")
+		if spec then ataxia.vitals.knight = spec; break end
+	end
+end
 ataxiaTemp.class = gmcp.Char.Status.class
 ataxiaTemp.me = gmcp.Char.Status.name
 battleRage_Timers = {}
@@ -160,20 +170,20 @@ send("curingset switch normal")
 end
 
 if gmcp.Char.Status.class == "Runewarden" then
-  if gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" then 
+  if ataxia.vitals.knight == "Dual Blunt" then 
     send("wield left "..ataxia.getWeapon("mstar1").."; wield right "..ataxia.getWeapon("mstar2"))
     expandAlias("defswitch rdwb")
     expandAlias("defup rdwb")
   end
 
-  if gmcp.Char.Vitals.charstats[3] == "Spec: Sword and Shield" then 
+  if ataxia.vitals.knight == "Sword and Shield" then 
     send("wield left longsword;wield right shield")
     send("queue add free empower priority set isaz sleizak inguz")
     expandAlias("defswitch rdwc")
     expandAlias("defup rdwc")
     end
 
-  if gmcp.Char.Vitals.charstats[3] == "Dual Cutting" then 
+  if ataxia.vitals.knight == "Dual Cutting" then 
     send("wield left "..ataxia.getWeapon("weapon1")..";wield right "..ataxia.getWeapon("weapon2"))
     send("empower priority set isaz sleizak kena")
     expandAlias("defswitch rdwc")
@@ -181,7 +191,7 @@ if gmcp.Char.Status.class == "Runewarden" then
   end
 
 
-  if gmcp.Char.Vitals.charstats[3] == "Spec: Two Handed" then 
+  if ataxia.vitals.knight == "Two Handed" then 
     send("wield bastard")
     send("empower priority set isaz sleizak tiwaz")
     expandAlias("defswitch rdwc")
@@ -191,23 +201,23 @@ send("falcon recall")
 end
 
 if ataxia_isClass("infernal") then
-	if gmcp.Char.Vitals.charstats[4] == "Spec: Sword and Shield" then 
+	if ataxia.vitals.knight == "Sword and Shield" then 
   send("wield left longsword;wield right shield")
   expandAlias("defswitch isnb")
   expandAlias("defup isnb")
   send("mastery on;hyena recall;order hyena follow me")
   end
-  if gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt" then 
+  if ataxia.vitals.knight == "Dual Blunt" then 
     send("wield left "..ataxia.getWeapon("mstar1").."; wield right "..ataxia.getWeapon("mstar2"))
     expandAlias("defswitch idwb")
     expandAlias("defup idwb")
   end
-if gmcp.Char.Vitals.charstats[4] == "Spec: Dual Cutting" then 
+if ataxia.vitals.knight == "Dual Cutting" then 
     send("unwield left;unwield right;wield left "..ataxia.getWeapon("weapon1").."; wield right "..ataxia.getWeapon("weapon2"))
     expandAlias("defswitch idwc")
     expandAlias("defup idwc")
 end
-if gmcp.Char.Vitals.charstats[4] == "Spec: Two Handed" then 
+if ataxia.vitals.knight == "Two Handed" then 
   send("wield bastard")
   expandAlias("defswitch i2h")
   expandAlias("defup i2h")

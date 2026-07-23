@@ -208,23 +208,23 @@ function basher_engaged()
   elseif gmcp.Char.Status.class == "Blue Dragon" or gmcp.Char.Status.class == "Golden Dragon" or gmcp.Char.Status.class == "Silver Dragon" or gmcp.Char.Status.class == "Green Dragon" or gmcp.Char.Status.class == "Red Dragon" then
     send("unwield left;unwield right;wield left fang;wield right shield")
   elseif gmcp.Char.Status.class == "Runewarden" then
-    if gmcp.Char.Vitals.charstats[3] == "Spec: Dual Cutting" then
+    if ataxia.vitals.knight == "Dual Cutting" then
       send("unwield left;unwield right;wield left "..ataxia.getWeapon("weapon1")..";wield right "..ataxia.getWeapon("weapon2"))
-    elseif gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt" then
+    elseif ataxia.vitals.knight == "Dual Blunt" then
       send("unwield left;unwield right;wield left "..ataxia.getWeapon("mstar1")..";wield right "..ataxia.getWeapon("mstar2"))
-    elseif gmcp.Char.Vitals.charstats[3] == "Spec: Sword and Shield" then
+    elseif ataxia.vitals.knight == "Sword and Shield" then
       send("unwield left;unwield right;wield left "..ataxia.getWeapon("longsword")..";wield right shield")
-    elseif gmcp.Char.Vitals.charstats[3] == "Spec: Two Handed" then
+    elseif ataxia.vitals.knight == "Two Handed" then
       send("unwield left;unwield right;wield "..ataxia.getWeapon("bastard"))
     end
     elseif gmcp.Char.Status.class == "Infernal" then
-    if gmcp.Char.Vitals.charstats[4] == "Spec: Dual Cutting" then
+    if ataxia.vitals.knight == "Dual Cutting" then
       send("unwield left;unwield right;wield left "..ataxia.getWeapon("weapon1")..";wield right "..ataxia.getWeapon("weapon2"))
-    elseif gmcp.Char.Vitals.charstats[4] == "Spec: Dual Blunt" then
+    elseif ataxia.vitals.knight == "Dual Blunt" then
       send("unwield left;unwield right;wield left "..ataxia.getWeapon("mstar1")..";wield right "..ataxia.getWeapon("mstar2"))
-    elseif gmcp.Char.Vitals.charstats[4] == "Spec: Sword and Shield" then
+    elseif ataxia.vitals.knight == "Sword and Shield" then
       send("unwield left;unwield right;wield left "..ataxia.getWeapon("longsword")..";wield right shield")
-    elseif gmcp.Char.Vitals.charstats[4] == "Spec: Two Handed" then
+    elseif ataxia.vitals.knight == "Two Handed" then
       send("unwield left;unwield right;wield "..ataxia.getWeapon("warhammer"))
     end
   elseif gmcp.Char.Status.class == "Serpent" then

@@ -42,20 +42,20 @@ if partyrelay and not ataxia.afflictions.aeon then
 send("pt Hit " ..matches.name.." "..matches.limb.. " for "..matches.amount.."%")
 end
 
-if gmcp.Char.Status.class == "Runewarden" and gmcp.Char.Vitals.charstats[3] == "Spec: Dual Cutting" then
+if gmcp.Char.Status.class == "Runewarden" and ataxia.vitals.knight == "Dual Cutting" then
 ataxiaTables.limbData.dwcSlash = tonumber(matches.amount)
 end
 
-if gmcp.Char.Status.class == "Runewarden" and gmcp.Char.Vitals.charstats[3] == "Spec: Sword and Shield" then
+if gmcp.Char.Status.class == "Runewarden" and ataxia.vitals.knight == "Sword and Shield" then
 ataxiaTables.limbData.snbSlice = tonumber(matches.amount)
 end
 
-if gmcp.Char.Status.class == "Infernal" and gmcp.Char.Vitals.charstats[4] == "Spec: Dual Cutting" then
+if gmcp.Char.Status.class == "Infernal" and ataxia.vitals.knight == "Dual Cutting" then
 ataxiaTables.limbData.dwcSlash = tonumber(matches.amount)
 end
 
 
-if gmcp.Char.Status.class == "Infernal" and gmcp.Char.Vitals.charstats[4] == "Spec: Sword and Shield" then
+if gmcp.Char.Status.class == "Infernal" and ataxia.vitals.knight == "Sword and Shield" then
 ataxiaTables.limbData.snbSlice = tonumber(matches.amount)
 end
 
