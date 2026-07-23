@@ -67,3 +67,21 @@ end
 function dmap.echo(msg)
   cecho("\n<deep_sky_blue>[dmap]<reset> " .. tostring(msg))
 end
+
+-- One-time welcome on install, so the package needs no external instructions: it explains what it
+-- does + the ONE thing people miss (combat is opt-in). Guarded so it prints at most once.
+function dmap._welcome()
+  if dmap._welcomed then return end
+  dmap._welcomed = true
+  cecho("\n<deep_sky_blue>═══ Dementia Mapper installed ═══<reset>")
+  cecho("\n<deep_sky_blue>[dmap]<reset> Maps + auto-explores the Mnemosyne — it starts automatically once you wade in.")
+  cecho("\n   <cyan>dmap explore on<reset>  auto-sweep the ripple      <cyan>dmap help<reset>  all commands")
+  cecho("\n   <yellow>Combat is opt-in:<reset> by default the sweep WAITS for you to clear each room.")
+  cecho("\n   For hands-free clearing set your attack, e.g. <cyan>dmap attack curse @id<reset>  (<cyan>dmap attack off<reset> = map-only).")
+end
+
+-- Fire the welcome when THIS package is installed (Mudlet raises sysInstall with the package name).
+if dmap._installH then pcall(killAnonymousEventHandler, dmap._installH) end
+dmap._installH = registerAnonymousEventHandler("sysInstall", function(_, pkg)
+  if pkg == "Dementia_Mapper" then dmap._welcome() end
+end)
