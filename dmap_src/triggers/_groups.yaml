@@ -1,0 +1,6 @@
+version: 1
+packageType: triggers
+groups:
+- name: Dementia_Mapper
+  packageName: Dementia_Mapper
+  directory: dementia_mapper

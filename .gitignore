@@ -15,3 +15,6 @@ tools/__pycache__/
 
 # Legacy backups
 old_structure_backup/
+
+# Generated Dementia Mapper muddler project (built from dmap_src/ by dmap_build.sh)
+dmap_project/

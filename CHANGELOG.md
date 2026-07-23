@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-07-23 — New: standalone Dementia Mapper package (dmap 0.1.0)
+
+A second, self-contained Mudlet package in this repo (`dmap_src/` → `dmap_build.sh` →
+`Dementia_Mapper.mpackage`) that maps + auto-explores the Mnemosyne with **no LEVI dependency**.
+The dementia-tolerant map (BFS relayout, known-exit-graph routing, `Room.WrongDir` wall
+condemnation, ice-slip handling) and the auto-explorer are ported from `mnemosyne/005_Ripple_Map`
++ `008_Explorer` into a `dmap` namespace, **decoupled from the basher**: navigation only, with
+combat as an optional pluggable hook (`dmap attack <cmd>`; default is map-only — the sweep waits
+for you to clear each room). Own denizen tracking from `gmcp.Char.Items` (correct `attrib`
+flag-set). Commands: `dmap map|show|hide|status|explore|attack`. 18 ported-logic unit tests
+(`lua dmap_src/tests/test_dmap.lua`). See `dmap_src/README.md`. Does not touch the LEVI package.
+
+---
+
 ## 2026-07-23 — charstats: order-independent knight weapon-spec reads (v4.7.102)
 
 The final GMCP-audit item. `004_ataxia_Vitals_Update` already parses `Char.Vitals.charstats` by name into `ataxia.vitals.knight` (the weapon Spec, unprefixed), but **33 combat sites** re-read it positionally with exact strings — `gmcp.Char.Vitals.charstats[3]/[4] == "Spec: Dual Blunt"`. The `charstats` array order isn't guaranteed (Runewarden's Spec lands at `[3]`, Infernal's at `[4]`), so the code duplicated both indices to cope, and `Login_Function:176` compared `charstats[3] == "Dual Cutting"` **without** the `"Spec: "` prefix every sibling used — a permanently-dead branch (Runewarden Dual-Cutting auto-wield never fired).

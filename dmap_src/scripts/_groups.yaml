@@ -1,0 +1,7 @@
+version: 1
+packageType: scripts
+groups:
+- name: Dementia_Mapper
+  packageName: Dementia_Mapper
+  directory: dementia_mapper
+  script: 'dmap = dmap or {}'
