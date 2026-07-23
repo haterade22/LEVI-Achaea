@@ -62,8 +62,11 @@ end
 
 function zgui.showChat()
   local chatWindow = false
+  -- Channel id: prefer the (still-sent) deprecated Start so behaviour is byte-identical today;
+  -- fall back to the non-deprecated Text.channel if the server ever drops Start.
+  local channel = gmcp.Comm.Channel.Start or (gmcp.Comm.Channel.Text and gmcp.Comm.Channel.Text.channel) or ""
   local text = ansi2string(gmcp.Comm.Channel.Text.text)  -- strip ANSI (GMCP only sends white)
-  local color = getChannelColor(gmcp.Comm.Channel.Start)
+  local color = getChannelColor(channel)
   local person = gmcp.Comm.Channel.Text.talker:title()
 
   local chatChannels = {
@@ -84,7 +87,7 @@ function zgui.showChat()
     }
 
   for chan, wind in pairs(chatChannels) do
-    if string.starts(gmcp.Comm.Channel.Start, chan) then
+    if string.starts(channel, chan) then
       chatWindow = wind
       break
     end
@@ -92,7 +95,7 @@ function zgui.showChat()
 
   -- Override for "says" - check if it's actually a city/party tell based on text
   local detectedFromText = false
-  if gmcp.Comm.Channel.Start == "says" then
+  if channel == "says" then
     local detectedChannel = detectChannelFromText(gmcp.Comm.Channel.Text.text)
     if detectedChannel then
       chatWindow = detectedChannel
@@ -114,7 +117,7 @@ function zgui.showChat()
   local alwaysShowChannels = {"ct", "ht", "hts", "hnt", "ot", "clt", "party", "tell", "market", "armytell", "newbie", "shout", "yell"}
   local isDirectChannel = false
   for _, chan in ipairs(alwaysShowChannels) do
-    if string.starts(gmcp.Comm.Channel.Start, chan) then
+    if string.starts(channel, chan) then
       isDirectChannel = true
       break
     end
@@ -138,19 +141,19 @@ function zgui.showChat()
       decho("All", coloredText .. "\n")
     end
   elseif report then
-    if gmcp.Comm.Channel.Start == "shout" then
+    if channel == "shout" then
       cecho(chatWindow, "<cyan> " .. person .. "<red>: ")
     end
     decho(chatWindow, coloredText .. "\n")
 
     if not only_to_misc and chatWindow ~= "All" then
-      if gmcp.Comm.Channel.Start == "shout" then
+      if channel == "shout" then
         cecho("All", "<cyan> " .. gmcp.Comm.Channel.Text.talker .. "<red>: ")
       end
       decho("All", coloredText .. "\n")
     end
 
-    if string.find(gmcp.Comm.Channel.Start:lower(), "tell") and not string.find(gmcp.Comm.Channel.Start:lower(), "army") and not muteList[person] and person ~= "You" then
+    if string.find(channel:lower(), "tell") and not string.find(channel:lower(), "army") and not muteList[person] and person ~= "You" then
       ataxiaBasher_alert("Normal")
     end
 
@@ -160,4 +163,7 @@ function zgui.showChat()
   enableTrigger("Ataxia Chat Capture")
 end
 
-registerAnonymousEventHandler("gmcp.Comm.Channel.Start", "zgui.showChat")
+-- Register on the non-deprecated Comm.Channel.Text (carries channel+talker+text atomically);
+-- Comm.Channel.Start/End are deprecated. The handler reads `channel` (Start-preferred, Text.channel
+-- fallback) so behaviour is identical while the server still sends Start, and survives if it stops.
+registerAnonymousEventHandler("gmcp.Comm.Channel.Text", "zgui.showChat")

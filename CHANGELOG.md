@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-07-23 — GMCP consumers: chat, skills, time, status, disconnect (v4.7.100)
+
+A batch of GMCP-audit items, all additive/low-risk data plumbing.
+
+- **New `030_GMCP_Consumers.lua`** registers passive handlers (reload-safe, kill-before-register) that stash server data into `ataxia.*`, none changing combat: **`Core.Goodbye`** → `ataxia.lastGoodbye` + a loud echo, so an unattended basher records *why* it dropped (idle-kick vs death vs boot); **`IRE.Time`** → `ataxia.time` (was negotiated but never read); **`Char.StatusVars`** → `ataxia.statusVars` caption map; **`Char.Skills.Groups`** → `ataxia.skills` `{skillset = rank}` (requested once at login via `Char.Skills.Get {}`) so future gating can check real skill rank; **`Comm.Channel.List`** → `ataxia.channels` authoritative channel→caption map.
+- **Chat off the deprecated `Comm.Channel.Start` event.** The active handler (`update_windows/001_showChat`) now registers on the non-deprecated `Comm.Channel.Text` and reads the channel as `Start or Text.channel` — byte-identical behaviour while the server still sends `Start`, and it survives if the server drops it. (The legacy `003_Chat_Capture_Things` handler was already disabled dead code, left untouched.)
+
+**Deliberately skipped:** `Comm.Channel.Players[].channels` for NDB citizenship — it only lists orgs *shared with you*, mixed city/guild/clan with no reliable way to tell which is the city, and the NDB drives enemy highlighting/targeting, so the corruption risk outweighed the marginal gain. Stays in the backlog.
+
+---
+
 ## 2026-07-23 — Explorer Room.WrongDir + denizen-HP attribution guard (v4.7.99)
 
 Two more GMCP-audit items, both in the Mnemosyne/bashing path.

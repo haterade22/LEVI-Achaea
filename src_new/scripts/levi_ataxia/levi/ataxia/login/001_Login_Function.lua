@@ -246,6 +246,7 @@ end
 
 
 sendGMCP("IRE.Rift.Request")
+sendGMCP("Char.Skills.Get {}") -- request Char.Skills.Groups -> ataxiaGmcpConsumers caches ataxia.skills
 
 if ataxia.settings.autogallop then
 	mmp.settings:setOption("gallop", false)
