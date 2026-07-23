@@ -121,6 +121,12 @@ Many combat globals are created **only inside `levilogin()`** (`login/001_Login_
 ### eq/balance timers: nil stopwatch aborts the EQUILIBRIUM trigger
 `stopStopWatch(nil)` throws. On a fresh session the eq/bal stopwatch globals are nil, so `endEQTimer`/`endBalTimer` threw and aborted the EQUILIBRIUM trigger **before `EQHighlight()` ran** — the on-screen eq/bal bars silently vanished. Guard stopwatch stops with `if <id> then ... end`.
 
+### GMCP field shapes (2026-07-23 audit — see [[gmcp-backlog]])
+- **`gmcp.Char.Name` is an OBJECT `{name, fullname}`, not a string** — compare `gmcp.Char.Name.name`. A string-vs-table compare silently never matches (bug: Stormhammer could self-target; Magi-coord self-check never fired).
+- **`Char.Items` item `attrib` is a flag-SET string** (`m`=monster, `d`=dead, `t`=takeable, `x`=should-not-be-targeted/loyal) — test membership (`attrib:find("x")`), never whole-string equality. Brittle exact matches leaked loyal NPCs + corpses into `denizensHere`.
+- **Knight weapon spec: use `ataxia.vitals.knight == "X"`** (parsed unprefixed by `ataxia_Vitals_Update`), NOT positional `charstats[3]/[4] == "Spec: X"` (order isn't guaranteed: RW at `[3]`, Infernal at `[4]`). **`levilogin` gotcha:** it resets `ataxia.vitals = {}` and runs wield branches SYNCHRONOUSLY before the parser repopulates `knight` — seed it from live `charstats` first (login does an inline `^Spec: (.+)$` scan). Same trap for any parser-derived `ataxia.vitals.*` read inside `levilogin`.
+- **GMCP consumers**: passive server-data handlers live in `misc_scripts/030_GMCP_Consumers.lua` (reload-safe kill-before-register). Register new ones there.
+
 ---
 
 ## Quality Gates (Hooks)

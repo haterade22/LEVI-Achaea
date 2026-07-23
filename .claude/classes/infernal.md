@@ -422,7 +422,7 @@ finisher:
 
 #### DWC Dispatch & Systems
 ```yaml
-# All gate on gmcp.Char.Vitals.charstats[4] == "Spec: Dual Cutting"
+# All gate on ataxia.vitals.knight == "Dual Cutting" (v4.7.102; was positional charstats[4] == "Spec: Dual Cutting")
 systems:
   infernalDWCVivisect:
     alias: "zz (First Attack)"

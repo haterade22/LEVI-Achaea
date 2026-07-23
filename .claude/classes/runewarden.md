@@ -38,9 +38,12 @@ SnB (Sword and Board):
 
 > **Implementation note**: Only **Dual Blunt (DWB)** has an implemented dispatch offense
 > (`dwbRunie`, `dwb_runie/001_DWB_Runie_Logic.lua`). The `zz`/attack aliases gate it on
-> `gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt"`
-> (`aliases/.../152_First_Attack_(All_Classes).lua:23-26`). DWC / SnB / 2H specs have no
-> RW-specific offense — they only run through the shared basher (see Bashing below).
+> `ataxia.vitals.knight == "Dual Blunt"`
+> (`aliases/.../152_First_Attack_(All_Classes).lua:23-26`). **`ataxia.vitals.knight` is the
+> canonical weapon-spec read** (parsed unprefixed by `ataxia_Vitals_Update` from `charstats`);
+> the old positional `gmcp.Char.Vitals.charstats[3] == "Spec: Dual Blunt"` was replaced in v4.7.102
+> because charstats order isn't guaranteed (RW Spec at `[3]`, Infernal at `[4]`). DWC / SnB / 2H
+> specs have no RW-specific offense — they only run through the shared basher (see Bashing below).
 
 ## Kill Routes (DWB — `dwbRunie`)
 
@@ -112,7 +115,7 @@ rwtorso:  "dwbRunie.setMode('torso')"
 rwpulp:   "dwbRunie.setMode('pulp')"
 rwgroup:  "dwbRunie.setMode('group')"
 rwstatus: "dwbRunie.status()  — echoes mode, momentum, per-limb damage, skull fractures/cracked ribs"
-# attack keys (152_First_Attack): zz → setMode('torso') + dispatch(); gated on Spec: Dual Blunt
+# attack keys (152_First_Attack): zz → setMode('torso') + dispatch(); gated on ataxia.vitals.knight == "Dual Blunt"
 ```
 
 ## Offensive Abilities (DWB — actual fire commands)

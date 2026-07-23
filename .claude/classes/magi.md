@@ -493,7 +493,7 @@ magi.offense = {
 |------|---------|
 | `scripts/.../mage/001_Resonance.lua` | Creates `magi` table, `get_resonance()` reads GMCP charstats |
 | `scripts/.../mage/004_Magi_Offense.lua` | Unified offense system (dispatch, decision tree, all modes) |
-| `scripts/.../mage/005_Stormhammer_Targeting.lua` | Smart multi-target stormhammer with city filtering |
+| `scripts/.../mage/005_Stormhammer_Targeting.lua` | Smart multi-target stormhammer with city filtering. Self-exclusion compares `person ~= gmcp.Char.Name.name` (v4.7.98 fix — `gmcp.Char.Name` is a `{name, fullname}` object; comparing the whole table never matched, so the caster could be auto-targeted) |
 | `triggers/.../general/015_Dehydrate.lua` | Dehydrate success — weariness/nausea/frozen chain + burns |
 | `triggers/.../general/021_Spell_Outcomes.lua` | Spell success detection (magma, dehydrate, fulminate, bombard, firelash, mudslide) |
 | `triggers/.../general/021_Freeze.lua` | Freeze spell — frozen/shivering/caloric chain |
