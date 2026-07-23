@@ -227,12 +227,22 @@ function tarc.write()
 
     if ataxiaBasher.enabled then
       local v = ataxia.vitals or {}
-      -- Mob health bar -- ONLY when the game exposes the target's hp%. It isn't always set in
-      -- Mnemosyne, but our own vitals / DPS / session below don't depend on it, so show those
-      -- regardless (was gated on gmcp.IRE.Target.Info, which hid the whole panel in the tower).
-      if gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info and gmcp.IRE.Target.Info.hpperc then
-        local mobStr = tostring(gmcp.IRE.Target.Info.hpperc):gsub("%%", "")
-        tarc:cecho((_vitalRow("Mob", _clampPct(mobStr)) or "   Mob  ??") .. "\n\n")
+      -- Mob health bar. Prefer the denizen-state HP (ds.hpp): we feed it every prompt from
+      -- gmcp.IRE.Target.Info.hpperc (see 010_Prompt_Running), so it survives the render moment
+      -- (HUD refreshes on "targets updated") when the raw GMCP field is briefly nil right after
+      -- a retarget -- which is why the bar never showed in Mnemosyne. Fall back to the live GMCP
+      -- field for a fresh target the prompt hasn't fed yet. Skip only when we have neither.
+      local mobPct
+      if type(target) == "number" and ataxiaBasher_dsGet then
+        local ds = ataxiaBasher_dsGet(target)
+        if ds and ds.hpp then mobPct = ds.hpp end
+      end
+      if not mobPct and gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info
+         and gmcp.IRE.Target.Info.hpperc then
+        mobPct = tostring(gmcp.IRE.Target.Info.hpperc):gsub("%%", "")
+      end
+      if mobPct then
+        tarc:cecho(_vitalRow("Mob", _clampPct(mobPct)) .. "\n\n")
       end
       -- Our vitals as bars, read STRAIGHT from GMCP (Char.Vitals) so they're always the live
       -- values, never the derived ataxia.vitals copy. Nil-safe: skip any bar we can't compute.
@@ -368,5 +378,13 @@ function tarc.write()
 
 end
 
--- Register for room content updates
-registerAnonymousEventHandler("targets updated", tarc.write)
+-- Refresh the HUD on room/target changes AND on live target-info pushes: the server sends
+-- gmcp.IRE.Target.Info (with the mob's hpperc) each combat round -- it's what we compose the
+-- prompt's |(id|hp%)| from -- so refreshing on it makes the Mob bar track the fight live, not
+-- just jump on room changes. Wrappers call the current tarc.write (late-bound via the persistent
+-- tarc table); the flag stops handlers stacking up each time this file re-sources on a reload.
+if not tarc._refreshHandlers then
+  tarc._refreshHandlers = true
+  registerAnonymousEventHandler("targets updated", function() tarc.write() end)
+  registerAnonymousEventHandler("gmcp.IRE.Target.Info", function() tarc.write() end)
+end

@@ -2,6 +2,12 @@
 
 ---
 
+## 2026-07-23 — Bashing HUD: live mob health bar (v4.7.97)
+
+The Mob health bar now renders reliably and tracks the fight live. It reads the denizen's HP% from the denizen-state layer (`ds.hpp`), which we feed every prompt from `gmcp.IRE.Target.Info.hpperc` — so it survives the render moment when the raw GMCP field is briefly nil right after a retarget (the reason the bar never appeared in Mnemosyne). It falls back to the live GMCP field for a freshly-acquired target the prompt hasn't fed yet, and is skipped only when neither source has a value. The HUD now also refreshes on `gmcp.IRE.Target.Info` (pushed each combat round), so the Mob bar — and the other live bars — update as the fight progresses instead of only on room/target changes. Refresh handlers are guarded so they no longer stack up on a SYSUPDATE reload.
+
+---
+
 ## 2026-07-18 — Bashing HUD: read HP/WP/EP straight from GMCP (v4.7.96)
 
 The HUD's HP/WP/EP bars now compute from `gmcp.Char.Vitals` (hp/maxhp, wp/maxwp, ep/maxep) directly, and XP from `gmcp.Char.Vitals.nl`, instead of the derived `ataxia.vitals` copy — the live GMCP values, with no dependence on the vitals-update pipeline having run. Rage still comes from `ataxia.vitals` (it's parsed out of `charstats`, not a top-level GMCP field). Nil-safe as before (a bar it can't compute is skipped).
