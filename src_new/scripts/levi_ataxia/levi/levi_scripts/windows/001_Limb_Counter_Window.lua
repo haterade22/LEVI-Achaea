@@ -227,23 +227,6 @@ function tarc.write()
 
     if ataxiaBasher.enabled then
       local v = ataxia.vitals or {}
-      -- Mob health bar. Prefer the denizen-state HP (ds.hpp): we feed it every prompt from
-      -- gmcp.IRE.Target.Info.hpperc (see 010_Prompt_Running), so it survives the render moment
-      -- (HUD refreshes on "targets updated") when the raw GMCP field is briefly nil right after
-      -- a retarget -- which is why the bar never showed in Mnemosyne. Fall back to the live GMCP
-      -- field for a fresh target the prompt hasn't fed yet. Skip only when we have neither.
-      local mobPct
-      if type(target) == "number" and ataxiaBasher_dsGet then
-        local ds = ataxiaBasher_dsGet(target)
-        if ds and ds.hpp then mobPct = ds.hpp end
-      end
-      if not mobPct and gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info
-         and gmcp.IRE.Target.Info.hpperc then
-        mobPct = tostring(gmcp.IRE.Target.Info.hpperc):gsub("%%", "")
-      end
-      if mobPct then
-        tarc:cecho(_vitalRow("Mob", _clampPct(mobPct)) .. "\n\n")
-      end
       -- Our vitals as bars, read STRAIGHT from GMCP (Char.Vitals) so they're always the live
       -- values, never the derived ataxia.vitals copy. Nil-safe: skip any bar we can't compute.
       local gv = (gmcp.Char and gmcp.Char.Vitals) or {}
@@ -373,6 +356,31 @@ function tarc.write()
         local color = "white"
         if ataxiaNDB_getColour then color = ataxiaNDB_getColour(player) or "white" end
         tarc:cecho("     <" .. color .. ">" .. player .. "<reset>\n")
+      end
+    end
+
+    -- Mob health bar, anchored at the BOTTOM of the panel. Data: denizen-state hpp (fed
+    -- each prompt from gmcp.IRE.Target.Info by 010_Prompt_Running, id-guarded) with a
+    -- live-GMCP fallback for a fresh target the prompt hasn't fed yet. hpperc "-1" / a
+    -- negative hpp means "no live reading" (dead or no server target), not 0% -- render
+    -- the row as "??" then, never hide it: an always-?? bar is the visible symptom that
+    -- the server target isn't set (settarget) and hp data isn't streaming.
+    if ataxiaBasher and ataxiaBasher.enabled and type(target) == "number" then
+      local mobPct
+      if ataxiaBasher_dsGet then
+        local ds = ataxiaBasher_dsGet(target)
+        if ds and ds.hpp and ds.hpp >= 0 then mobPct = ds.hpp end
+      end
+      if not mobPct and gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info
+         and gmcp.IRE.Target.Info.hpperc then
+        local raw = tostring(gmcp.IRE.Target.Info.hpperc):gsub("%%", "")
+        if raw ~= "-1" then mobPct = raw end
+      end
+      tarc:cecho("\n")
+      if mobPct then
+        tarc:cecho(_vitalRow("Mob", _clampPct(mobPct)) .. "\n")
+      else
+        tarc:cecho("   <white>Mob <reset> <gray>" .. string.rep("░", BAR_W) .. "  ??<reset>\n")
       end
     end
 

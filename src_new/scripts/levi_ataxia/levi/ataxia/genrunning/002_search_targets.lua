@@ -111,7 +111,9 @@ function search_targets()
 						target=tonumber(id)
 						secondTarget = mob
 						found_target = true
-						send("st "..target)
+						-- settarget, not "st": st only works as a personal server-side alias. settarget
+						-- is what makes the server stream IRE.Target.Info (hpperc) for the HUD/prompt.
+						send("settarget "..target, false)
 						if ataxiaBasher.manual then
 							ataxiaEcho("Now targeting: "..target)
               send("pt Target: " ..target)
@@ -171,7 +173,7 @@ function ataxiaBasher_retargetShielded()
   if ataxiaBasher.manual then
     ataxiaEcho("Unshielded, changing back to: "..target)
   end
-  send("st "..target,false)
+  send("settarget "..target,false)
 end
 
 function ataxiaBasher_shieldedTarget()
@@ -188,7 +190,7 @@ function ataxiaBasher_shieldedTarget()
             target = tonumber(id)
             secondTarget = mob
             found_target = true
-            send("st "..target,false)
+            send("settarget "..target,false)
 						if ataxiaBasher.manual then
 							ataxiaEcho("Shielded, changing to: "..target)
 						end

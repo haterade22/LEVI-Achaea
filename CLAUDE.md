@@ -390,7 +390,7 @@ SQLite database tracking non-critical damage per mob, keyed by class + primary s
 | `aliases/.../zdata/003_(ataxiaDmg).lua` | `ataxiadmg` alias |
 | `triggers/.../334_Crits.lua` | Sets `bashStats.lastHitWasCrit` flag |
 | `triggers/.../350_Damage_Dealt.lua` | Records non-crit hits to DB |
-| `windows/001_Limb_Counter_Window.lua` | The `tarc` HUD — redesigned bashing panel (v4.7.90/92/94): target name, colored HP/WP/EP + Mob health bars, DPS + Session (kills/crits/gold/time) block; renders in Mnemosyne (gated on `ataxiaBasher.enabled`, not a live game target) |
+| `windows/001_Limb_Counter_Window.lua` | The `tarc` HUD — redesigned bashing panel (v4.7.90/92/94): target name, colored HP/WP/EP, DPS + Session (kills/crits/gold/time) block; renders in Mnemosyne (gated on `ataxiaBasher.enabled`, not a live game target). Mob health bar is anchored at the panel BOTTOM (v4.7.103) and always renders with a numeric target — dim `??` row when no hp reading (denizen-state `hpp` nil/negative AND no live `hpperc`); an always-`??` bar means the server target isn't set. Requires the basher to send `settarget` (not the personal `st` alias) so the server streams `IRE.Target.Info` |
 
 **DB Schema** (`mob_damage_db.hits`): `class`, `stat` (e.g., "str 16"), `mob`, `area`, `min_damage`, `max_damage`, `hit_count`, `when`
 

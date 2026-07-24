@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-07-24 — Bashing HUD: Mob bar moved to the bottom + basher settarget fix (v4.7.103)
+
+The Mob health bar (v4.7.97) had never rendered once in live play. Root cause: all three basher
+retarget sites (`search_targets`, shield-swap, `ataxiaBasher_retargetShielded` in
+`genrunning/002_search_targets.lua`) sent `st <id>` — which is not a game command, only a
+personal server-side alias — while the PvP `t` alias pointedly follows its `st` with a real
+`settarget` (`016_Targeting_Functions.lua:75`). With no server target set while bashing, the
+server never streams `gmcp.IRE.Target.Info` (`hpperc`), so the HUD bar, the prompt's target-hp%
+segment (gated on `ataxiaTemp.mobhealth`, set by the gagged "Your target is now" confirmation),
+and the rage-conserve mob-hp checks all silently ran without data — no errors, because every
+consumer is nil-guarded.
+
+- **All three basher retarget sites now send `settarget <id>`** (quiet). The "Your target is
+  now" confirmation stays gagged while bashing, so no new spam.
+- **Mob bar anchored at the BOTTOM of the panel** (user request) — after the Denizens list —
+  instead of above HP/WP/EP.
+- **The bar no longer hides when it has no reading**: with a numeric target it always renders,
+  showing a dim `??` row when neither denizen-state `hpp` nor live GMCP has a value (and treating
+  `hpperc == "-1"` / negative `hpp` as no-reading, not 0%). An always-`??` bar is now the visible
+  symptom of "server target not set / hp not streaming" instead of an invisible absence.
+
+Files: `windows/001_Limb_Counter_Window.lua`, `genrunning/002_search_targets.lua`. Suite 322/322.
+
+---
+
 ## 2026-07-24 — README overhaul: Mnemosyne suite, Dementia Mapper, bashing HUD (docs only)
 
 The GitHub README had fallen behind the last two months of work — no mention of the Mnemosyne
