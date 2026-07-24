@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-07-24 — GMCP: re-assert the IRE.Target module on login/reconnect/reload (v4.7.107)
+
+**The actual root cause of "the Mob bar never showed once."** Live probe: `gmcp.IRE.Target`
+was **nil** mid-session — the IRE.Target module was not negotiated, so the server silently
+ignored `IRE.Target.Set` (v4.7.106) and never streamed `Info`/`hpperc`. The only
+`Core.Supports.Add ["IRE.Target 1"]` lived inside `levilogin()`, which covers just the
+original login: Mudlet renegotiates its default module set (no IRE.Target) on every
+reconnect, and a SYSUPDATE reload never re-runs login — so any reconnected or mid-updated
+session ran with the module off forever, with zero errors (every consumer nil-guards).
+
+Fix in `misc_scripts/030_GMCP_Consumers.lua` (the reload-safe GMCP home):
+`ataxiaGmcpConsumers_enableIreTarget()` sends the `Core.Supports.Add` and — when a denizen
+target is live — immediately re-sends `IRE.Target.Set` so the stream starts without waiting
+for the next retarget. Registered on `gmcp.Char.Name` (fires on login AND reconnect,
+kill-before-register) and invoked at file load when already connected (mid-session update).
+The levilogin Add stays (harmless). Chain now: module negotiated (030) → server target set
+per retarget (002_search_targets, v4.7.106) → `Info.hpperc` streams → prompt `(id|hp%)` +
+HUD Mob bar (v4.7.103). Suite 323/323.
+
+---
+
 ## 2026-07-24 — Basher: set the server target via GMCP IRE.Target.Set (v4.7.106)
 
 Live test after v4.7.103: the Mob bar still showed `??` and the prompt still showed `(394817)`

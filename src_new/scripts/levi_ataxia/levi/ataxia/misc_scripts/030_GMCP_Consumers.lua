@@ -88,3 +88,21 @@ _reg("gmcp.IRE.Time.Update", "ataxiaGmcpConsumers_onTime")
 _reg("gmcp.Char.StatusVars", "ataxiaGmcpConsumers_onStatusVars")
 _reg("gmcp.Char.Skills.Groups", "ataxiaGmcpConsumers_onSkillGroups")
 _reg("gmcp.Comm.Channel.List", "ataxiaGmcpConsumers_onChannelList")
+
+-- IRE.Target module negotiation. The Core.Supports.Add in levilogin() covers only the
+-- ORIGINAL login of a session: Mudlet renegotiates its default module set (no IRE.Target)
+-- on every reconnect, and a SYSUPDATE reload never re-runs login — verified live 2026-07-24:
+-- gmcp.IRE.Target was nil mid-session, so IRE.Target.Set was silently ignored and hpperc
+-- never streamed (Mob bar "??" + no |hp%| on the prompt). Re-assert the module wherever a
+-- session can (re)start: every gmcp.Char.Name (fires on login AND reconnect), plus right
+-- now at file load when already connected (mid-session package update). After enabling,
+-- re-Set the current denizen target so the Info stream starts without waiting for the
+-- next retarget.
+function ataxiaGmcpConsumers_enableIreTarget()
+  sendGMCP('Core.Supports.Add ["IRE.Target 1"]')
+  if type(target) == "number" and ataxiaBasher and ataxiaBasher.enabled then
+    sendGMCP('IRE.Target.Set "'..target..'"')
+  end
+end
+_reg("gmcp.Char.Name", "ataxiaGmcpConsumers_enableIreTarget")
+if gmcp and gmcp.Char and gmcp.Char.Name and sendGMCP then ataxiaGmcpConsumers_enableIreTarget() end
