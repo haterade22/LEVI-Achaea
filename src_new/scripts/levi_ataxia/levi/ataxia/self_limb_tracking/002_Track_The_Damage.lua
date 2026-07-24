@@ -215,6 +215,9 @@ function ataxia_raiseLimbDamage(limb, num)
 	hist[#hist + 1] = limb
 	if #hist > 6 then table.remove(hist, 1) end
 
+	-- Feed the denizen-pattern parry predictor (005) -- name-keyed, basher-gated, swing-deduped
+	if ataxia_denizenParryObserve then ataxia_denizenParryObserve(limb) end
+
 	-- Update damage data
 	selfLimbDamage[limb].lastHit = num
 	selfLimbDamage[limb].hitCount = (selfLimbDamage[limb].hitCount or 0) + 1

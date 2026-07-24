@@ -2,6 +2,33 @@
 
 ---
 
+## 2026-07-24 — SLC: predictive parry vs fixed-cycle denizens (v4.7.109)
+
+Live logs showed the Mnemosyne **axe-wielding revenant** swings a fixed rotation — right leg
+x2 → left leg x2 → torso x2, repeating (each swing lands as TWO "dealt 30.0% damage to your
+<limb>" perceive lines). Damage-weighted parry only reacts after damage lands; the new
+predictive layer parries the limb the NEXT swing will hit.
+
+New `self_limb_tracking/005_Denizen_Parry_Patterns.lua`:
+- `selfLimbDamage.denizenPatterns[name] = { cycle, hitsPer }` — data-driven; the revenant is
+  the first entry, more mobs can be added as their cycles are observed.
+- `ataxia_denizenParryObserve(limb)` — fed from `ataxia_raiseLimbDamage` (002), attacker
+  taken as the basher's `secondTarget` (name-keyed). Dedupes the two same-swing perceive
+  lines (1s window) and resets stale streaks (>12s) so a re-engaged same-named respawn
+  doesn't inherit the old count (the unit tests caught exactly that bug).
+- `ataxia_denizenParryPredict()` — unobserved/stale → the cycle opener (first-hit parry);
+  fewer than `hitsPer` swings seen on the current limb → same limb; otherwise the next limb
+  in the cycle. Off-pattern jumps resync on the next observed hit.
+- Consumed at the top of `ataxia_parryCheck` (003): wins over every parry mode except
+  `manual`; the predictor is basher-gated so PvP parry (incl. anti-2H/anti-Shikudo) is
+  untouched.
+
+Tests: new `test_denizen_parry.lua` (10 cases — opener, pair-repeat, swing dedupe, full
+cycle + wrap, third-swing drift, staleness, off-pattern mob, basher-off, resync). Suite
+**340/340**.
+
+---
+
 ## 2026-07-24 — Mnemosyne: Bladed Reflexes boon — BM keeps SHIN AUGMENT up (v4.7.108)
 
 The Bladed Reflexes boon grants **20% reduced damage while your reflexes are augmented with

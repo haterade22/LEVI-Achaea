@@ -43,6 +43,16 @@ function ataxia_parryCheck()
 	local mode = cfg.parryMode
 	if mode == "manual" then return end
 
+	-- Denizen pattern parry (005): while bashing a mob with a known fixed swing cycle,
+	-- parry the PREDICTED next limb -- damage-weighted parry only reacts after damage has
+	-- already landed. Basher-gated inside the predictor, so PvP parry is never touched.
+	-- Wins over every mode except manual.
+	local predicted = ataxia_denizenParryPredict and ataxia_denizenParryPredict()
+	if predicted then
+		ataxia.parrying.shouldparry = predicted
+		return
+	end
+
 	-- Auto mode: class-aware + hit-pattern parry
 	if mode == "auto" then
 		ataxia_autoParry()
