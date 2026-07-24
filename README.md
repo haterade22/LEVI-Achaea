@@ -10,6 +10,8 @@ Get the latest release:
 
 See all versions on the [Releases page](https://github.com/haterade22/LEVI-Achaea/releases).
 
+Also in this repo: **[Dementia Mapper](#dementia-mapper-standalone-package)** — a standalone Mnemosyne map + auto-explorer package with no LEVI dependency (released under `dmap-v*` tags).
+
 ### Installation
 
 1. Download `Levi_Ataxia.mpackage` from the link above
@@ -60,12 +62,26 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 | **Area Pathing** | Mapper-integrated speedwalking through configured target lists |
 | **Auto-Learn** | Adds room denizens to the area target list on entry; `bash mine` excludes your own pets/allies (falcons, etc.) without skipping the room |
 | **Safety System** | Layered danger levels (shield/flee/wait), death recovery with safe-room retreat, stuck detection |
+| **Bashing HUD** | Live combat panel — target name, mob health bar, colored HP/WP/EP read straight from GMCP, DPS and session stats (kills/crits/gold/time) |
 | **No-Flee Areas** | World Tree & Mnemosyne shield instead of fleeing (nowhere to run) and keep attacking |
 | **Battlerage** | Generic and crowd-control handlers with rage conservation |
 | **Stormhammer** | Dirty-flag cached AoE target list for multi-target rooms |
 | **Legend Deck** | Data-driven pre-combat card draws for dangerous rooms |
 | **Shield Retarget** | Per-mob configurable shield durations with target swapping |
 | **Armour Paragons** | Profile-based paragon/trait swapping with auto-swap on basher enable/disable |
+
+### Mnemosyne Suite (`mnem`)
+
+Full tooling for **the Mnemosyne**, Achaea's endless tower-climb PvE challenge — see the [deep dive](#mnemosyne-suite) below.
+
+| Feature | Description |
+|---------|-------------|
+| **Run Telemetry** | Reports ripples, monsters, bosses, affixes, boons, and deaths to a community run tracker (opt-in, off by default) |
+| **Ripple Mini-Map** | Per-ripple 4×4 grid map with click-to-walk — the Mnemosyne is invisible to Mudlet's own mapper |
+| **Run History** | Local record of every boon offered/claimed and every affix seen, plus an all-time affix library |
+| **Auto-Explorer** | `mnem explore` sweeps each ripple hands-free: clears rooms, hunts the boss, pauses at boon screens |
+| **Boon Integration** | `BOON CLAIM` intercept auto-reports your pick and adapts class basher rotations to claimed boons |
+| **Dementia Mapper** | Standalone `dmap` package — the map + explorer with no LEVI dependency |
 
 ### Gear & Equipment
 
@@ -405,6 +421,105 @@ V3 is the single source of truth. The legacy boolean table (`tAffs`) is maintain
 
 ---
 
+## Mnemosyne Suite
+
+The Mnemosyne ("tides of memory") is Achaea's endless tower-climb PvE challenge: each **ripple** (level) is a fresh 4×4 room layout you fight through wave by wave, choosing **boons** between waves, until you die out of lives or wade away — there is no win condition, only depth. The `ataxia.mnemosyne` subsystem gives the climb full tooling: run telemetry, a live mini-map, local run history, and a hands-free explorer.
+
+### Run Telemetry (Community Run Tracker)
+
+Reports run progress to an external community run tracker as you play: ripple depth, monster waves, bosses, ongoing effects (affixes), boons offered and selected, and deaths. **Opt-in and off by default** — nothing is sent until you set a token and enable it:
+
+```
+mnem token <your-token>
+mnem on
+```
+
+(or use the guided `ataxia setup reporting`). The tracker URL is configurable in settings, and `mnem test` pings the server to verify connectivity.
+
+The reporting layer is built for reliability:
+
+| Mechanism | What it does |
+|-----------|-------------|
+| **Serial POST queue** | One request in flight at a time — guarantees event ordering (a ripple always lands before its monsters, boss, and effects) |
+| **Gated reporting** | Run events only fire during a tracked run, so Mnemosyne-flavoured text elsewhere in the game can never post |
+| **Error recovery** | A 20s watchdog force-advances stuck requests, idempotent endpoints retry once, and a failed run-start rolls back cleanly |
+| **Lifecycle-aware** | Death ≠ run end (you lose a life, the run continues); run-end is confirmation-guarded against false positives; pausing the Mnemosyne suspends the run and the next wade resumes it — no duplicate runs |
+| **Reload-safe** | HTTP handlers survive package updates mid-run; run state re-syncs from the server on load |
+
+### Per-Ripple Mini-Map (`mnem map`)
+
+The Mnemosyne is an unmapped instance — Mudlet's own mapper draws nothing there. The suite builds its own: every GMCP room arrival feeds a per-ripple room graph, coordinates are re-derived each step by BFS over the accumulated exit graph (so rooms that couldn't be placed on arrival snap into position once a connecting link is known), and a draggable widget renders the fixed 4×4 grid:
+
+- **Green** — your current room
+- **Gold `?`** — visited room with unexplored exits
+- **Grey** — fully explored room
+- **Dim placeholder** — unvisited grid position
+
+**Click any cell to auto-walk there** (BFS over walked edges). The map wipes and re-seeds on every ripple change, since each ripple is a fresh layout. Works independently of telemetry.
+
+### Run History & Reports
+
+A local, persisted record of everything each run surfaces — no server required:
+
+| Command | Shows |
+|---------|-------|
+| `mnem boons` | This run's claimed boons with rarity, echo counts, ripple, and description |
+| `mnem affixes` | This run's active affixes (ongoing effects) |
+| `mnem library` | The all-time affix catalogue — every affix ever seen, with descriptions |
+
+History lives in its own profile file (`mnemosyne_history.lua`) and survives package updates. `mnem quiet` silences the automatic per-claim/per-affix echoes while still recording.
+
+### Auto-Explorer (`mnem explore`)
+
+Hands-free ripple sweeping. The explorer drives the basher in manual mode for combat and handles navigation itself: when a room is clear it steps through an unexplored exit, or backtracks to the nearest room that still has one. On a fully swept boss ripple it **patrols** cleared rooms to find the late-spawning boss. It pauses at the boon screen (basher stays on), **auto-resumes on `GO!`**, refuses to give up while an unexplored room is still reachable, handles ice-slip rooms, and restores your saved basher state when it stops.
+
+### Boon → Class Integration
+
+A passthrough intercept of `BOON CLAIM <name>` forwards your command, auto-reports the selection, and flips class-specific combat flags so the basher rotation adapts to the boons you take — Bard **Warmarch**, Blademaster **Shattered Star**, and Magi **Aspect of Kkractle** / **Hot Springs** all reshape their class's attack logic for the rest of the run.
+
+### Command Reference
+
+| Command | Action |
+|---------|--------|
+| `mnem` / `mnem status` | Show tracker URL, token/auto/contemplate state, and current run state |
+| `mnem token <t>` | Save your API token (persisted) |
+| `mnem on` / `mnem off` | Master auto-report toggle (`on` also re-syncs a live run) |
+| `mnem map [on\|off\|status]` | Toggle or diagnose the ripple mini-map |
+| `mnem boons` / `mnem affixes` / `mnem library` | Run history reports (see above) |
+| `mnem explore [on\|off\|status]` | Start/stop/inspect the auto-sweep |
+| `mnem contemplate` | Toggle boon-description enrichment (`BOON CONTEMPLATE`) |
+| `mnem quiet [on\|off]` | Silence automatic boon/affix echoes (still records) |
+| `mnem test` / `mnem health` | Ping the tracker to verify connectivity |
+| `mnem start` / `end` / `check` / `ripple <n>` / `boss <name>` / `monsters <text>` / `death [killer]` | Manual reporting overrides (work even with auto-report off) |
+| `mnem debug` | Verbose diagnostics (session-only) |
+| `mnem help` | Command reference |
+
+**Key files** (`src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/`):
+- `001_HTTP_Client.lua` — serial POST queue, gating, error recovery
+- `002_Reporter_API.lua` — per-endpoint reporting functions + run state
+- `003_Commands.lua` — `mnem` command dispatch
+- `004_Parsers.lua` — game-text parsers, monster buffering, boon capture
+- `005_Ripple_Map.lua` / `006_Ripple_Map_Window.lua` — room graph + grid widget
+- `007_History.lua` — local run history + reports
+- `008_Explorer.lua` — auto-sweep state machine
+
+**Full documentation**: [.claude/projects/mnemosyne/](.claude/projects/mnemosyne/) — architecture, reporting endpoints, parsing triggers, ripple map, commands, history, and explorer, each in its own doc.
+
+### Dementia Mapper (Standalone Package)
+
+The Mnemosyne map + explorer is also available as **Dementia Mapper**, a second, fully self-contained Mudlet package built from this repo — **no LEVI dependency**. It carries its own denizen tracking, a dementia-tolerant map (BFS relayout, known-exit-graph routing, instant wall detection via `Room.WrongDir`, ice-slip handling), and an auto-sweep where combat is an optional pluggable hook: by default it waits for *you* to clear each room, or plug in any attack with `dmap attack <cmd>`.
+
+| Command | Action |
+|---------|--------|
+| `dmap map` / `show` / `hide` | Toggle the 4×4 mini-map |
+| `dmap explore` | Start/stop the auto-sweep |
+| `dmap attack <cmd>` | Plug in an attack command (optional) |
+| `dmap status` | Diagnostics |
+
+Download `Dementia_Mapper.mpackage` from [Releases](https://github.com/haterade22/LEVI-Achaea/releases) (`dmap-v*` tags) or build with `./dmap_build.sh`. See [dmap_src/README.md](dmap_src/README.md).
+
+---
+
 ## Quick Install
 
 **Option A** — Download the latest release:
@@ -681,6 +796,8 @@ LEVI-Achaea/
 │   └── triggers/               #   Game text pattern matching (1800+ triggers)
 ├── muddler_project/            # Generated Muddler build project (build/ gitignored)
 │   └── mfile                   #   Package metadata
+├── dmap_src/                   # Dementia Mapper standalone package source
+│   └── README.md               #   dmap documentation
 ├── tools/
 │   ├── convert_to_muddler.py  #   Source → Muddler project converter
 │   ├── flatten_groups.py       #   Flatten intermediate wrapper groups in _groups.yaml
@@ -695,11 +812,14 @@ LEVI-Achaea/
 ├── .claude/
 │   ├── agents/                 # Custom subagents (offense-system, build-and-version, team)
 │   ├── classes/                # 26 class mechanic files + lock_types.md
+│   ├── projects/               # Per-system deep-dive docs (mnemosyne, basher, ...)
 │   └── skills/                 # Slash commands (/build, /version-bump)
 ├── .github/workflows/          # CI/CD (syntax check, tests, tagged release builds)
 ├── .vscode/tasks.json          # VS Code build/test tasks (Ctrl+Shift+B)
 ├── build.sh                    # One-command build script
+├── dmap_build.sh               # Dementia Mapper build script
 ├── version.txt                 # Package version (fetched by auto-updater on login)
+├── dmap_version.txt            # Dementia Mapper package version
 ├── .gitignore                  # Excludes build artifacts, .vs/, __pycache__
 ├── .gitattributes              # LF line endings, binary markers
 ├── .luacheckrc                 # Lua 5.1 linter config
@@ -763,7 +883,12 @@ Build tasks are in `.vs/tasks.vs.json`. Right-click the root folder in Solution 
 | [GETTING_STARTED.md](GETTING_STARTED.md) | Setup guide, system overview, common tasks |
 | [CLAUDE.md](CLAUDE.md) | Full technical reference (architecture, APIs, combat mechanics, development guidelines) |
 | [CHANGELOG.md](CHANGELOG.md) | Change history with dates and details |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guidelines |
 | [docs/legend-deck.md](docs/legend-deck.md) | Legend Deck card reference and PVE guide |
+| [docs/artefacts-reference.md](docs/artefacts-reference.md) | Achaea artefact effects reference |
+| [docs/limb-damage-mechanics.md](docs/limb-damage-mechanics.md) | Limb damage thresholds and mechanics |
+| [.claude/projects/mnemosyne/](.claude/projects/mnemosyne/) | Mnemosyne suite deep-dive (architecture, reporting, map, explorer) |
+| [dmap_src/README.md](dmap_src/README.md) | Dementia Mapper standalone package |
 | [.claude/classes/](.claude/classes/) | Per-class combat mechanic documentation (26 classes) |
 | [.claude/agents/](.claude/agents/) | Custom subagent definitions for Claude Code |
 | [.claude/skills/](.claude/skills/) | Slash command skills (`/build`, `/version-bump`) |

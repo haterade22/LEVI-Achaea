@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-07-24 — README overhaul: Mnemosyne suite, Dementia Mapper, bashing HUD (docs only)
+
+The GitHub README had fallen behind the last two months of work — no mention of the Mnemosyne
+systems at all. Added a **Mnemosyne Suite** feature table plus a full deep-dive section (run
+telemetry with the serial-queue/gating/error-recovery design, per-ripple 4×4 mini-map,
+run history + affix library, auto-explorer, `BOON CLAIM` class integration, `mnem` command
+reference), a **Dementia Mapper** standalone-package section with download pointer, a
+**Bashing HUD** row in the basher feature table, and refreshed the repository-structure tree
+and documentation index (`dmap_src/`, `.claude/projects/mnemosyne/`, CONTRIBUTING, artefacts +
+limb-mechanics references). No code or version change — README/CHANGELOG only.
+
+---
+
 ## 2026-07-23 — New: standalone Dementia Mapper package (dmap 0.1.0)
 
 A second, self-contained Mudlet package in this repo (`dmap_src/` → `dmap_build.sh` →
