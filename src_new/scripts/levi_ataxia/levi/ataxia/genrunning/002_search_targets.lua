@@ -87,6 +87,15 @@ function ataxiaBasher_preCombatLdeck()
   return false
 end
 
+-- Set the SERVER-side target for a denizen. Verified live (2026-07-24): the text command
+-- alone left gmcp.IRE.Target.Info silent (no hpperc on the prompt or the HUD Mob bar even
+-- mid-fight), so pair it with the GMCP protocol set — IRE.Target.Set is the documented
+-- trigger for the server to send and keep updating IRE.Target.Info (id/short_desc/hpperc).
+function ataxiaBasher_setServerTarget(id)
+  send("settarget "..id, false)
+  if sendGMCP then sendGMCP('IRE.Target.Set "'..tostring(id)..'"') end
+end
+
 function search_targets()
 	if (not ataxiaBasher.enabled) or need_roomCheck then return false end
   if autoHarvesting or autoExtracting then return false end
@@ -111,9 +120,7 @@ function search_targets()
 						target=tonumber(id)
 						secondTarget = mob
 						found_target = true
-						-- settarget, not "st": st only works as a personal server-side alias. settarget
-						-- is what makes the server stream IRE.Target.Info (hpperc) for the HUD/prompt.
-						send("settarget "..target, false)
+						ataxiaBasher_setServerTarget(target)
 						if ataxiaBasher.manual then
 							ataxiaEcho("Now targeting: "..target)
               send("pt Target: " ..target)
@@ -173,7 +180,7 @@ function ataxiaBasher_retargetShielded()
   if ataxiaBasher.manual then
     ataxiaEcho("Unshielded, changing back to: "..target)
   end
-  send("settarget "..target,false)
+  ataxiaBasher_setServerTarget(target)
 end
 
 function ataxiaBasher_shieldedTarget()
@@ -190,7 +197,7 @@ function ataxiaBasher_shieldedTarget()
             target = tonumber(id)
             secondTarget = mob
             found_target = true
-            send("settarget "..target,false)
+            ataxiaBasher_setServerTarget(target)
 						if ataxiaBasher.manual then
 							ataxiaEcho("Shielded, changing to: "..target)
 						end

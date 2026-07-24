@@ -2,6 +2,19 @@
 
 ---
 
+## 2026-07-24 — Basher: set the server target via GMCP IRE.Target.Set (v4.7.106)
+
+Live test after v4.7.103: the Mob bar still showed `??` and the prompt still showed `(394817)`
+with no `|hp%` while actively fighting — the text `settarget` alone was not starting the
+`gmcp.IRE.Target.Info` stream. New `ataxiaBasher_setServerTarget(id)` (in
+`genrunning/002_search_targets.lua`) sends the text command AND the GMCP protocol set,
+`IRE.Target.Set "<id>"` — the documented client→server message the IRE.Target module pairs with
+its Info stream (id/short_desc/hpperc, updated per combat round). Used at all three retarget
+sites (search_targets, shield-swap, retargetShielded). This was the deferred "IRE.Target.Set
+integration" backlog item, now done with live verification pending in-game. Suite 323/323.
+
+---
+
 ## 2026-07-24 — Mnemosyne: boon rarity recolour — rare purple, common light goldenrod (v4.7.105)
 
 Display-only tweak to `M.RARITY_COLOUR` (`mnemosyne/007_History.lua`), the single map behind
