@@ -565,6 +565,15 @@ describe("run-end confirmation", function()
     M.onRunEnd() -- confirmation fired -> boons gone
     expect(mnemHammerAnvil).toBeFalse()
   end)
+
+  it("clears bmBladedReflexes (shin-augment boon) on the confirmed onRunEnd", function()
+    reset(true)
+    bmBladedReflexes = true
+    M.onRunEndMaybe() -- deferred maybe must NOT clear the boon yet
+    expect(bmBladedReflexes).toBeTrue()
+    M.onRunEnd() -- confirmation fired -> boons gone
+    expect(bmBladedReflexes).toBeFalse()
+  end)
 end)
 
 -- ─── Boon claim resolution (#4) ──────────────────────────────────────────────

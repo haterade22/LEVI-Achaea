@@ -76,3 +76,58 @@ describe("ataxiaBasher_blademasterBashing — Shattered Star (multislash) boon",
     expect(has(cmd, "drawslash")).toBeFalse()
   end)
 end)
+
+describe("ataxiaBasher_blademasterBashing — Bladed Reflexes (shin augment) boon", function()
+  local function reset(shin)
+    bmShatteredStar = false
+    bmBladedReflexes = true
+    ataxiaBasher.shielded = false
+    ataxiaBasher.rageraze = false
+    ataxiaTemp = {}
+    ataxia.defences = {}
+    ataxia.vitals.class = shin -- shin count (blademaster.getShin fallback source)
+  end
+
+  it("prepends shin augment 1 with the boon on, shin >= 1, and no bodyaugment up", function()
+    reset(1)
+    local cmd = ataxiaBasher_blademasterBashing()
+    expect(has(cmd, "shin augment 1")).toBeTrue()
+    expect(cmd:find("shin augment 1", 1, true)).toBe(1) -- augment leads the chain
+    expect(has(cmd, "drawslash " .. target .. " sternum")).toBeTrue() -- attack intact
+  end)
+
+  it("does NOT augment with 0 shin (augment needs the shin to spend)", function()
+    reset(0)
+    local cmd = ataxiaBasher_blademasterBashing()
+    expect(has(cmd, "shin augment")).toBeFalse()
+  end)
+
+  it("does NOT augment while the bodyaugment defence is already up", function()
+    reset(3)
+    ataxia.defences.bodyaugment = true
+    local cmd = ataxiaBasher_blademasterBashing()
+    expect(has(cmd, "shin augment")).toBeFalse()
+  end)
+
+  it("does NOT re-send during the attempt-hold (channel wind-up)", function()
+    reset(3)
+    ataxiaTemp.bmAugmentAttempted = true
+    local cmd = ataxiaBasher_blademasterBashing()
+    expect(has(cmd, "shin augment")).toBeFalse()
+  end)
+
+  it("arms the attempt-hold when it sends, so the NEXT swing skips the augment", function()
+    reset(2)
+    local first = ataxiaBasher_blademasterBashing()
+    expect(has(first, "shin augment 1")).toBeTrue()
+    local second = ataxiaBasher_blademasterBashing()
+    expect(has(second, "shin augment")).toBeFalse()
+  end)
+
+  it("does NOT augment when the boon is off", function()
+    reset(3)
+    bmBladedReflexes = false
+    local cmd = ataxiaBasher_blademasterBashing()
+    expect(has(cmd, "shin augment")).toBeFalse()
+  end)
+end)

@@ -2,6 +2,25 @@
 
 ---
 
+## 2026-07-24 — Mnemosyne: Bladed Reflexes boon — BM keeps SHIN AUGMENT up (v4.7.108)
+
+The Bladed Reflexes boon grants **20% reduced damage while your reflexes are augmented with
+Shin energy** (Shindo AUGMENT). New `bmBladedReflexes` flag (claim alias + BOONS-row trigger
+`mnemosyne/019_Bladed_Reflexes.lua`, reset on run start + confirmed run end — 1:1 with
+`bmShatteredStar`): while set, `ataxiaBasher_blademasterBashing()` prepends **`shin augment 1`**
+to the attack chain when ALL of: shin >= 1 (augment with 0 shin just fails — and infuse fire
+competes for the same resource, hence the minimum spend), the **`bodyaugment` defence is down**
+(GMCP defence tracking handles expiry — no duration guessing), and a 5s attempt-hold
+(`ataxiaTemp.bmAugmentAttempted`) has cleared so the channel wind-up ("You are already
+beginning the process...") isn't respammed every swing.
+
+AB knowledge captured in `.claude/classes/blademaster.md`: `SHIN AUGMENT <ALL|amount>`,
+start/busy/complete lines, `bodyaugment` defence mapping (deffing keep-map alongside the other
+Shindo defs). Tests: 6 bashing-builder cases (incl. the 0-shin gate) + onRunEnd clear,
+suite **330/330**.
+
+---
+
 ## 2026-07-24 — GMCP: re-assert the IRE.Target module on login/reconnect/reload (v4.7.107)
 
 **The actual root cause of "the Mob bar never showed once."** Live probe: `gmcp.IRE.Target`

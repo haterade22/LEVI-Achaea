@@ -26,3 +26,5 @@ if matches[2]:lower():find("kkractle") then magiKkractle = true end
 if matches[2]:lower():find("hot springs") then magiHotSprings = true end
 -- Hammer and Anvil: attacks bypass denizen shields; basher skips razing and shield-swaps.
 if matches[2]:lower():find("hammer and anvil") then mnemHammerAnvil = true; ataxiaBasher.shielded = false end
+-- Bladed Reflexes: 20% reduced damage while the Shindo augment (bodyaugment) is up; BM basher keeps it up via SHIN AUGMENT 1.
+if matches[2]:lower():find("bladed reflexes") then bmBladedReflexes = true end

@@ -221,14 +221,32 @@ function ataxiaBasher_blademasterBashing()
 	-- trigger / boon-claim alias and reset each run (mirrors bardWarmarch); nil/false -> drawslash.
 	local slash = bmShatteredStar and ("multislash "..target.." sternum") or ("drawslash "..target.." sternum")
 
+	-- Bladed Reflexes boon (Mnemosyne): 20% reduced damage while the Shindo AUGMENT state is
+	-- up. SHIN AUGMENT <ALL|amount> channels shin into the reflex augment (tracked as the
+	-- bodyaugment defence); spend the MINIMUM (1) -- augment with 0 shin just fails, and
+	-- infuse fire competes for the same resource. Gated on the GMCP-tracked defence (expiry
+	-- arrives via Char.Defences.Remove, no duration guessing) plus a short attempt-hold so
+	-- the channel wind-up ("beginning the process...") isn't respammed every swing. Flag
+	-- mirrors bmShatteredStar (claim alias + BOONS row trigger 019, reset each run).
+	if bmBladedReflexes and not (ataxia.defences and ataxia.defences.bodyaugment)
+		 and not ataxiaTemp.bmAugmentAttempted then
+		local shin = (blademaster and blademaster.getShin and blademaster.getShin())
+			or (ataxia.vitals and tonumber(ataxia.vitals.class)) or 0
+		if shin >= 1 then
+			ataxiaTemp.bmAugmentAttempted = true
+			tempTimer(5, [[ataxiaTemp.bmAugmentAttempted = nil]])
+			command = "shin augment 1"..sp
+		end
+	end
+
 	if ataxiaBasher.shielded then
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-			command = raze..sp.."infuse fire "..sp.." "..slash
+			command = command..raze..sp.."infuse fire "..sp.." "..slash
 		else
-			command = "raze "..target..sp..brage
+			command = command.."raze "..target..sp..brage
 		end
 	else
-		command = brage..sp.."infuse fire "..sp.." "..slash
+		command = command..brage..sp.."infuse fire "..sp.." "..slash
 	end
 
 	return command

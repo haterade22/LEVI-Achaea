@@ -410,6 +410,17 @@ attack_skill: TwoArts
 # (+3 strikes = 6 total); while bmShatteredStar is set the basher swaps the verb to
 # "multislash <t> sternum". Flag set on boon claim / the BOONS-list row (trigger mnemosyne/012),
 # cleared on Mnemosyne run start + confirmed run-end -- mirrors the Bard Warmarch boon (bardWarmarch).
+# Shindo AUGMENT (AB verified 2026-07-24): "SHIN AUGMENT <ALL|amount>", resource Shin energy --
+# channels shin into augmented reflexes (deflect limb blows even when prone; conjunction with
+# parry). Lines: start "You focus inward, drawing upon your reserves of shin energy.", busy
+# "You are already beginning the process of augmenting your body with shin energy.", complete
+# "You channel your accumulated shin energy into enhancing your defensive bladework." Tracked
+# as the `bodyaugment` defence (deffing keep-map, with the other Shindo defs blur/disperse/
+# durability). Mnemosyne "Bladed Reflexes" boon = 20% reduced damage while augmented: with
+# bmBladedReflexes set (claim alias / BOONS row trigger mnemosyne/019, reset each run) the
+# basher prepends "shin augment 1" (minimum spend -- infuse fire competes for shin) whenever
+# shin >= 1, bodyaugment is down, and the 5s attempt-hold (ataxiaTemp.bmAugmentAttempted)
+# has cleared.
 # Battlerage kit (commands/costs verified vs basher/001 ataxiaBasher_blademasterBattlerage
 # and _groups.yaml get_Battlerage Blademaster config). Blademaster OWNS its battlerage:
 # it is EXCLUDED from the shared culling check and spends rage by priority so it never idles.
