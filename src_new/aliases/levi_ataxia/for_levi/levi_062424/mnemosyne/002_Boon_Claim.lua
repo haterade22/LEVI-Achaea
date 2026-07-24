@@ -24,3 +24,5 @@ if matches[2]:lower():find("shattered star") then bmShatteredStar = true end
 if matches[2]:lower():find("kkractle") then magiKkractle = true end
 -- Hot Springs makes BLOODBOIL also heal 25% max hp + 5% willpower (30s cd); magi uses it as a heal.
 if matches[2]:lower():find("hot springs") then magiHotSprings = true end
+-- Hammer and Anvil: attacks bypass denizen shields; basher skips razing and shield-swaps.
+if matches[2]:lower():find("hammer and anvil") then mnemHammerAnvil = true; ataxiaBasher.shielded = false end

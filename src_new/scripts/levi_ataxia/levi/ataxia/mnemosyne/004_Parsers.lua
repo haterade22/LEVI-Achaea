@@ -178,6 +178,7 @@ function M.onRunEnd()
   bmShatteredStar = false -- boons gone on a confirmed run-end
   magiKkractle = false -- boons gone on a confirmed run-end
   magiHotSprings = false -- boons gone on a confirmed run-end
+  mnemHammerAnvil = false -- boons gone on a confirmed run-end
   -- Clear the pause flag UNCONDITIONALLY (like the boon flags above), not only via the
   -- _inRun()-gated endRun()->_resetRun(): with telemetry off (the shipped default) that path
   -- never runs, so a paused-then-ended run would leave paused=true and misfire the NEXT fresh

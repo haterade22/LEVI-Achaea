@@ -475,7 +475,7 @@ Hands-free ripple sweeping. The explorer drives the basher in manual mode for co
 
 ### Boon → Class Integration
 
-A passthrough intercept of `BOON CLAIM <name>` forwards your command, auto-reports the selection, and flips class-specific combat flags so the basher rotation adapts to the boons you take — Bard **Warmarch**, Blademaster **Shattered Star**, and Magi **Aspect of Kkractle** / **Hot Springs** all reshape their class's attack logic for the rest of the run.
+A passthrough intercept of `BOON CLAIM <name>` forwards your command, auto-reports the selection, and flips combat flags so the basher adapts to the boons you take — Bard **Warmarch**, Blademaster **Shattered Star**, and Magi **Aspect of Kkractle** / **Hot Springs** reshape their class's attack logic, and the class-agnostic **Hammer and Anvil** (attacks bypass denizen shields) turns off razing and shield-swapping entirely for the rest of the run.
 
 ### Command Reference
 

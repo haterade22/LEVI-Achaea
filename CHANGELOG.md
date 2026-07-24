@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-07-24 — Mnemosyne: Hammer and Anvil boon — stop razing, attacks bypass shields (v4.7.104)
+
+The Hammer and Anvil boon ("The Smith's raw strength allows your attacks to bypass denizen
+shields") makes the basher's entire shield reaction wasted motion. New class-agnostic boon flag
+`mnemHammerAnvil`, wired 1:1 with `bmShatteredStar`:
+
+- **Set** by the `BOON CLAIM` intercept (`aliases/.../mnemosyne/002_Boon_Claim.lua`, also clears
+  any live `ataxiaBasher.shielded`) and by a new BOONS-list row trigger
+  (`triggers/.../mnemosyne/018_Hammer_And_Anvil.lua`) so a resumed/bootstrapped run re-syncs via
+  `BOONS`. **Reset** on run start (trigger 001) and the confirmed run end (`004_Parsers.onRunEnd`).
+- **Gate**: `336_Mob_Shielded.lua`'s basher branch is skipped entirely while the flag is up — no
+  `ataxiaBasher.shielded = true` (which flips every class's raze/blast attack path in
+  `002_Class_Bashing`), no shield-swap (`ataxiaBasher_shieldedTarget`), no shield timers. The
+  PvP `isTargeted` branch of the trigger is untouched.
+
+Docs: mnemosyne `01-architecture.md` / `03-parsing-triggers.md`, CLAUDE.md, README boon list.
+Tests: onRunEnd clear case added, suite **323/323**.
+
+---
+
 ## 2026-07-24 — Bashing HUD: Mob bar moved to the bottom + basher settarget fix (v4.7.103)
 
 The Mob health bar (v4.7.97) had never rendered once in live play. Root cause: all three basher

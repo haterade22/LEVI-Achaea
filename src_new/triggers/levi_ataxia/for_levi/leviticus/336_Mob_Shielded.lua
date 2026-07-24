@@ -44,7 +44,9 @@ patterns:
 
 local tar = matches[2]:lower()
 
-if type(target) == "number" and ataxiaBasher.enabled and tar == secondTarget:lower() then
+-- Hammer and Anvil (Mnemosyne boon): our attacks bypass denizen shields entirely, so a
+-- shielding mob needs NO reaction — no raze path (ataxiaBasher.shielded), no shield-swap.
+if type(target) == "number" and ataxiaBasher.enabled and not mnemHammerAnvil and tar == secondTarget:lower() then
   bashConsoleEcho("denizen", "Coward shielded!")
   local argFound = false
   

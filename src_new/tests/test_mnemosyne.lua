@@ -556,6 +556,15 @@ describe("run-end confirmation", function()
     M.onRunEnd() -- confirmation fired -> boons gone
     expect(magiKkractle).toBeFalse()
   end)
+
+  it("clears mnemHammerAnvil (shield-bypass boon) on the confirmed onRunEnd", function()
+    reset(true)
+    mnemHammerAnvil = true
+    M.onRunEndMaybe() -- deferred maybe must NOT clear the boon yet
+    expect(mnemHammerAnvil).toBeTrue()
+    M.onRunEnd() -- confirmation fired -> boons gone
+    expect(mnemHammerAnvil).toBeFalse()
+  end)
 end)
 
 -- ─── Boon claim resolution (#4) ──────────────────────────────────────────────

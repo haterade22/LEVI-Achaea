@@ -93,8 +93,8 @@ boons offer: "...flickers of power that may aide you..."   [trig 004]
 "The Mnemosyne releases its hold, weaving N ... threads..."[trig 009]
   └─ onRunEndMaybe() → arm 2s wait for "You just received message #N from Achaea."
        └─ (confirmed) onRunEnd() → clears the boon flags bardWarmarch /
-                                    bmShatteredStar / magiKkractle / magiHotSprings +
-                                    run.paused (all UNconditionally); then if
+                                    bmShatteredStar / magiKkractle / magiHotSprings /
+                                    mnemHammerAnvil + run.paused (all UNconditionally); then if
                                     _inRun(): endRun() → _flushMonsters() →
                                     POST /run_end → run.active=false, _resetRun()
 ```
