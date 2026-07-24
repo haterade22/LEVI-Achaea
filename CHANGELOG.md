@@ -2,6 +2,16 @@
 
 ---
 
+## 2026-07-24 — Mnemosyne: boon rarity recolour — rare purple, common light goldenrod (v4.7.105)
+
+Display-only tweak to `M.RARITY_COLOUR` (`mnemosyne/007_History.lua`), the single map behind
+every boon rarity colour (BOONS-list annotation, `mnem boons`, claim echoes): `rare` cyan →
+**purple**, `common` grey → **light_goldenrod**. Both names verified against
+`misc_scripts/007_Custom_Colour_Table` (which wholesale-replaces `color_table`). Uncommon/
+legendary/mythical unchanged. Suite 323/323.
+
+---
+
 ## 2026-07-24 — Mnemosyne: Hammer and Anvil boon — stop razing, attacks bypass shields (v4.7.104)
 
 The Hammer and Anvil boon ("The Smith's raw strength allows your attacks to bypass denizen

@@ -42,7 +42,7 @@ M.history = M.history or { run = 0, claims = {}, offers = {}, affixes = {}, libr
 -- Names verified against misc_scripts/007_Custom_Colour_Table (which wholesale-replaces
 -- color_table -- there is no ansi_* namespace here).
 M.RARITY_COLOUR = {
-  common = "grey", uncommon = "green", rare = "cyan",
+  common = "light_goldenrod", uncommon = "green", rare = "purple",
   legendary = "orange", mythical = "magenta",
 }
 function M.rarityColour(r)
