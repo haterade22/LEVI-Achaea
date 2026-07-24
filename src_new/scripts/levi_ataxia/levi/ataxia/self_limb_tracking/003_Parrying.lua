@@ -43,13 +43,10 @@ function ataxia_parryCheck()
 	local mode = cfg.parryMode
 	if mode == "manual" then return end
 
-	-- Denizen pattern parry (005): while bashing a mob with a known fixed swing cycle,
-	-- parry the PREDICTED next limb -- damage-weighted parry only reacts after damage has
-	-- already landed. Basher-gated inside the predictor, so PvP parry is never touched.
-	-- Wins over every mode except manual.
-	local predicted = ataxia_denizenParryPredict and ataxia_denizenParryPredict()
-	if predicted then
-		ataxia.parrying.shouldparry = predicted
+	-- Bashing mode: PvE parry. Auto-engaged when the basher turns on and restored when it
+	-- turns off (ataxia_bashingParryOn/Off below), so the PvP modes never carry PvE bias.
+	if mode == "bashing" then
+		ataxia_bashingParry()
 		return
 	end
 
@@ -392,3 +389,61 @@ function ataxia_autoParry()
 
 	ataxia.parrying.weights = weights
 end
+
+-------------------------------------------------------------------
+-- BASHING PARRY MODE — PvE, auto-engaged with the basher
+-------------------------------------------------------------------
+
+-- PvE parry selection, in descending confidence:
+--   1) a known fixed-cycle denizen (005) -> the PREDICTED next swing's limb, incl. the
+--      cycle opener before its first hit ever lands;
+--   2) an unknown mob -> follow its focus: denizens overwhelmingly repeat-hit one limb,
+--      so the most recent (unbroken) hit is the best guess for the next swing;
+--   3) nothing observed yet -> keep a leg covered (prone gates most class attacks).
+function ataxia_bashingParry()
+	local predicted = ataxia_denizenParryPredict and ataxia_denizenParryPredict()
+	if predicted then
+		ataxia.parrying.shouldparry = predicted
+		return
+	end
+
+	local last = selfLimbDamage.lasthit
+	if last and last ~= "none" and selfLimbDamage[last] and not ataxia_selfLimbBroken(last) then
+		ataxia.parrying.shouldparry = last
+		return
+	end
+
+	for _, limb in ipairs({"right leg", "left leg", "torso"}) do
+		if not ataxia_selfLimbBroken(limb) then
+			ataxia.parrying.shouldparry = limb
+			return
+		end
+	end
+	ataxia.parrying.shouldparry = "torso"
+end
+
+-- Auto-switch: basher on -> remember the current mode and go "bashing"; basher off ->
+-- restore it. Manual mode is never hijacked (the user drives), and cfg.bashingParryAuto
+-- = false opts out entirely (`slc bashparry off`; nil counts as ON).
+function ataxia_bashingParryOn()
+	local cfg = selfLimbDamage and selfLimbDamage.config
+	if not cfg or cfg.bashingParryAuto == false then return end
+	if cfg.parryMode == "bashing" or cfg.parryMode == "manual" then return end
+	cfg.parryModeSaved = cfg.parryMode
+	cfg.parryMode = "bashing"
+	ataxia.parry = "bashing"
+end
+
+function ataxia_bashingParryOff()
+	local cfg = selfLimbDamage and selfLimbDamage.config
+	if not cfg or cfg.parryMode ~= "bashing" then return end
+	cfg.parryMode = cfg.parryModeSaved or "stand"
+	cfg.parryModeSaved = nil
+	ataxia.parry = cfg.parryMode
+end
+
+selfLimbDamage = selfLimbDamage or {}
+if selfLimbDamage._bashParryOnH then killAnonymousEventHandler(selfLimbDamage._bashParryOnH) end
+selfLimbDamage._bashParryOnH = registerAnonymousEventHandler("basher enabled", "ataxia_bashingParryOn")
+if selfLimbDamage._bashParryOffH then killAnonymousEventHandler(selfLimbDamage._bashParryOffH) end
+selfLimbDamage._bashParryOffH = registerAnonymousEventHandler("basher disabled", "ataxia_bashingParryOff")

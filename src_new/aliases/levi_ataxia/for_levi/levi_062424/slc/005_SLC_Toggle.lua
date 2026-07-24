@@ -89,14 +89,23 @@ elseif args == "crit off" then
 
 elseif args:find("^parry ") then
 	local mode = args:match("^parry (.+)")
-	local validModes = {stand = true, defend = true, manual = true, randomarm = true, randomleg = true, auto = true}
+	local validModes = {stand = true, defend = true, manual = true, randomarm = true, randomleg = true, auto = true, bashing = true}
 	if validModes[mode] then
 		cfg.parryMode = mode
 		ataxia.parry = mode
 		cecho("\n<DodgerBlue>[SLC] <white>Parry Mode: <cyan>" .. mode)
 	else
-		cecho("\n<DodgerBlue>[SLC] <red>Invalid mode. Use: stand, defend, manual, randomarm, randomleg, auto")
+		cecho("\n<DodgerBlue>[SLC] <red>Invalid mode. Use: stand, defend, manual, randomarm, randomleg, auto, bashing")
 	end
+
+elseif args == "bashparry on" then
+	cfg.bashingParryAuto = true
+	cecho("\n<DodgerBlue>[SLC] <white>Bashing Parry Auto-Switch: <green>ON")
+
+elseif args == "bashparry off" then
+	cfg.bashingParryAuto = false
+	if cfg.parryMode == "bashing" and ataxia_bashingParryOff then ataxia_bashingParryOff() end
+	cecho("\n<DodgerBlue>[SLC] <white>Bashing Parry Auto-Switch: <red>OFF")
 
 elseif args == "shikudo on" then
 	cfg.antiShikudo = true
@@ -135,7 +144,8 @@ else
 	cecho("\n  <cyan>slc crit on/off")
 	cecho("\n  <cyan>slc shikudo on/off <dim_gray>- Anti-Shikudo dynamic parry")
 	cecho("\n  <cyan>slc 2h on/off      <dim_gray>- Anti-2H parry (always head)")
-	cecho("\n  <cyan>slc parry <mode> <dim_gray>- auto/stand/defend/manual/randomarm/randomleg")
+	cecho("\n  <cyan>slc parry <mode> <dim_gray>- auto/stand/defend/manual/randomarm/randomleg/bashing")
+	cecho("\n  <cyan>slc bashparry on/off <dim_gray>- Auto-switch to bashing parry with the basher")
 	cecho("\n  <cyan>slc reset      <dim_gray>- Clear all limb damage")
 	cecho("\n  <cyan>slc gui        <dim_gray>- Toggle GUI window")
 end

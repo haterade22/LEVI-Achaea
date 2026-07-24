@@ -1355,7 +1355,7 @@ Tracks exact limb damage percentages from combat text with automated defensive r
 
 **Full documentation**: See `memory/slc.md` (thresholds, events, parry modes, defensive reactions, config)
 
-**Namespace:** `selfLimbDamage` (global). **Alias:** `slc`. **Files:** `self_limb_tracking/002-005`, `aliases/.../slc/005_SLC_Toggle.lua`. PvE predictive layer (005, v4.7.109): `selfLimbDamage.denizenPatterns[name]` holds fixed swing cycles (e.g. the Mnemosyne axe-wielding revenant: right leg x2 → left leg x2 → torso x2); `ataxia_denizenParryPredict()` overrides every parry mode except manual while bashing a patterned mob — parries the NEXT swing's limb, including the cycle opener before the first hit lands.
+**Namespace:** `selfLimbDamage` (global). **Alias:** `slc`. **Files:** `self_limb_tracking/002-005`, `aliases/.../slc/005_SLC_Toggle.lua`. PvE predictive layer (005, v4.7.109): `selfLimbDamage.denizenPatterns[name]` holds fixed swing cycles (e.g. the Mnemosyne axe-wielding revenant: right leg x2 → left leg x2 → torso x2); `ataxia_denizenParryPredict()` parries the NEXT swing's limb, including the cycle opener before the first hit lands. Lives inside the **`bashing` parry mode** (v4.7.110), which auto-engages on `basher enabled` (saving the prior mode) and restores on `basher disabled` — ladder: pattern prediction → focus-follow (lasthit) → unbroken leg; `manual` never hijacked, opt-out `slc bashparry off`.
 
 ---
 

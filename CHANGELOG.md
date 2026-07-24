@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-07-24 — SLC: new "bashing" parry mode, auto-engaged with the basher (v4.7.110)
+
+Follow-up to v4.7.109: the denizen-pattern prediction is now the top rung of an explicit
+**`bashing` parry mode** instead of a global override, and the mode engages itself.
+
+- **`slc parry bashing`** — PvE selection ladder in `ataxia_bashingParry()` (003):
+  (1) fixed-cycle denizen → the predicted NEXT swing's limb (005, incl. the cycle opener);
+  (2) unknown mob → follow its focus (most recent unbroken hit limb — denizens
+  overwhelmingly repeat-hit one limb); (3) nothing observed → unbroken leg (right → left →
+  torso; prone gates most class attacks).
+- **Auto-switch**: `ataxia_bashingParryOn/Off` on the `basher enabled`/`basher disabled`
+  events (same hooks as the armour auto-swap, reload-safe kill-before-register). Enabling
+  the basher remembers the current mode and switches to `bashing`; disabling restores it.
+  `manual` is never hijacked; a mode picked by hand mid-bash sticks (Off only restores when
+  the mode is still `bashing`). Opt out with **`slc bashparry off`** (`cfg.bashingParryAuto`,
+  nil counts as ON).
+- The PvP modes (stand/defend/auto/anti-2H/anti-Shikudo) no longer carry any PvE logic —
+  the v4.7.109 top-of-parryCheck override is gone.
+
+Tests: new `test_bashing_parry.lua` (11 cases — selection ladder incl. broken-limb
+fallbacks, switch/restore semantics, manual respect, idempotent enable, mid-bash mode
+change, opt-out). Suite **351/351**.
+
+---
+
 ## 2026-07-24 — SLC: predictive parry vs fixed-cycle denizens (v4.7.109)
 
 Live logs showed the Mnemosyne **axe-wielding revenant** swings a fixed rotation — right leg
