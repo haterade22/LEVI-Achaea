@@ -390,9 +390,13 @@ effect row "Defeating a denizen causes you to bleed significantly and your mana 
 increased by 20%." (trigger 029 → `onHaemophiliacSeen`, Splinterbark's shape:
 inMnemosyne-gated, transition-guarded, cleared run start/confirmed end) bleeds THOUSANDS
 per kill. While `mnemHaemophiliac` is set, `_exploreTick` holds post-clear navigation
-until `hpp >= 90` (`M._haemoHold`, pure/tested; 1.5s re-checks; one echo per wait) — the
-bleed settles before the next room's fight. Mid-fight behavior (swarm pulls, attacks) is
-deliberately untouched: the bleed comes from KILLS, and pacing belongs between rooms.
+until the bleed is **CLOTTED** (user spec) — `ataxia.vitals.bleed < 50` (live per prompt
+from gmcp charstats; SSC's `curing clotat 30` does the actual clotting, at the affix's
++20% mana cost — our job is standing still while it works) — AND `hpp >= 90`
+(`M._haemoHold`, pure/tested; 1.5s re-checks; one echo per wait, with the bleed value).
+A missing bleed reading counts as 0, so the hold can never wedge. Mid-fight behavior
+(swarm pulls, attacks) is deliberately untouched: the bleed comes from KILLS, and pacing
+belongs between rooms.
 
 Pure logic (threshold, `_backDir`, the state machine, decorator, resets) is unit-tested in
 `test_swarm_tactics.lua`; timer-fired paths are validated in-game.

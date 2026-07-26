@@ -632,14 +632,20 @@ describe("Haemophiliac wade-slower pacing", function()
     ataxiaBasher.inMnemosyne = false
   end)
 
-  it("_haemoHold holds navigation only with the affix up and HP below the bar", function()
+  it("_haemoHold holds until the bleed is CLOTTED and HP is back", function()
     mnemHaemophiliac = false
-    ataxia.vitals = { hpp = 50 }
+    ataxia.vitals = { hpp = 50, bleed = 900 }
     expect(M._haemoHold()).toBeFalse() -- no affix: never hold
     mnemHaemophiliac = true
-    expect(M._haemoHold()).toBeTrue()  -- bleeding down: hold
-    ataxia.vitals = { hpp = 95 }
-    expect(M._haemoHold()).toBeFalse() -- recovered: move on
+    expect(M._haemoHold()).toBeTrue()  -- low HP AND bleeding: hold
+    ataxia.vitals = { hpp = 95, bleed = 400 }
+    expect(M._haemoHold()).toBeTrue()  -- HP fine but STILL BLEEDING: keep clotting (user spec)
+    ataxia.vitals = { hpp = 60, bleed = 0 }
+    expect(M._haemoHold()).toBeTrue()  -- clotted but HP still down: recover first
+    ataxia.vitals = { hpp = 95, bleed = 10 }
+    expect(M._haemoHold()).toBeFalse() -- clotted + healed: move on
+    ataxia.vitals = { hpp = 95 }       -- no bleed reading at all (charstats missing)
+    expect(M._haemoHold()).toBeFalse() -- treated as 0, never wedges
     mnemHaemophiliac = false
   end)
 

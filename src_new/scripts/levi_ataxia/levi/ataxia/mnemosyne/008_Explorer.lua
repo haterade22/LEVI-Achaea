@@ -51,6 +51,7 @@ local MOVE_TIMEOUT = 5 -- a move that produces no arrival -> retry / unstick
 local MOVE_RETRIES = 1 -- re-send a stalled move this many times before condemning the exit
 local WATCHDOG = 30 -- seconds of no progress (no arrival / no denizen change) before a soft nudge
 local HAEMO_MOVE_HP = 90 -- Haemophiliac affix: hold navigation below this HP% (kills bleed thousands)
+local HAEMO_MOVE_BLEED = 50 -- ...and while bleeding above this (SSC clots it down; we stand still meanwhile)
 local MAX_PATROL_LOOPS = 3 -- fruitless full patrol loops (hunting the boss) before giving up
 local MAX_ICE_SLIPS = 15 -- re-send a move this many times after slipping on ice before giving up on the exit
 
@@ -438,12 +439,19 @@ function M._armWatchdog()
   end)
 end
 
--- Haemophiliac affix pacing predicate: TRUE while post-clear navigation should hold.
+-- Haemophiliac affix pacing predicate: TRUE while post-clear navigation should hold --
+-- the kill's bleed must be CLOTTED before moving on (user spec), not just outlasted:
+-- SSC's `curing clotat` (installed at 30) does the clotting, spending the affix's +20%
+-- mana; our job is to stand still while it works. `ataxia.vitals.bleed` is live per
+-- prompt (gmcp charstats "Bleed: N"). Hold while bleeding OR while HP is still down.
 -- Pure (globals only); unit-tested. The flag is set by trigger 029 via
 -- onHaemophiliacSeen (004) and cleared on run start / confirmed run end.
 function M._haemoHold()
   if not mnemHaemophiliac then return false end
-  return (tonumber(ataxia and ataxia.vitals and ataxia.vitals.hpp) or 100) < HAEMO_MOVE_HP
+  local v = ataxia and ataxia.vitals
+  local bleed = tonumber(v and v.bleed) or 0
+  local hp = tonumber(v and v.hpp) or 100
+  return bleed >= HAEMO_MOVE_BLEED or hp < HAEMO_MOVE_HP
 end
 
 function M._exploreTick()
@@ -481,7 +489,9 @@ function M._exploreTick()
   if M._haemoHold() then
     if not M.explore._haemoWait then
       M.explore._haemoWait = true
-      M._exploreEcho("<indian_red>Haemophiliac<reset> -- letting the bleed settle before moving on.")
+      local bleed = tonumber(ataxia and ataxia.vitals and ataxia.vitals.bleed) or 0
+      M._exploreEcho("<indian_red>Haemophiliac<reset> -- clotting the bleed down before moving on"
+        .. (bleed > 0 and (" (bleeding " .. bleed .. ")") or "") .. ".")
     end
     M._scheduleTick(1.5)
     return

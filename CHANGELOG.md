@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-07-26 — Haemophiliac hold gates on BLEEDING, not just HP (v4.7.120)
+
+User refinement: the massive post-kill bleed must be CLOTTED before moving on — waiting
+on HP alone released the hold at 90% HP with hundreds of bleed still ticking (SSC's
+`curing clotat 30` clots it down at the affix's +20% mana cost; our job is to stand
+still while it works). `M._haemoHold` now holds while `ataxia.vitals.bleed >= 50`
+(live per prompt from gmcp charstats) OR `hpp < 90`; a missing bleed reading counts as
+0 so the hold can never wedge. The wait echo now shows the bleed value. Suite
+**439/439** (bleed-gate cases added).
+
+---
+
 ## 2026-07-26 — Icewall stays up + wall-leap navigation + Bloodscent recon (v4.7.119)
 
 User-directed: "We dont need to take down the icewall, all we have to do is LEAP out of
