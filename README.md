@@ -80,6 +80,7 @@ Full tooling for **the Mnemosyne**, Achaea's endless tower-climb PvE challenge �
 | **Ripple Mini-Map** | Per-ripple 4×4 grid map with click-to-walk — the Mnemosyne is invisible to Mudlet's own mapper |
 | **Run History** | Local record of every boon offered/claimed and every affix seen, plus an all-time affix library |
 | **Auto-Explorer** | `mnem explore` sweeps each ripple hands-free: clears rooms, hunts the boss, pauses at boon screens |
+| **Swarm Tactics** | Crowded rooms (3+ mobs) get pulled, walled, or kited instead of stood in — plus a low-HP fly-to-recover escape ladder |
 | **Boon Integration** | `BOON CLAIM` intercept auto-reports your pick and adapts class basher rotations to claimed boons |
 | **Dementia Mapper** | Standalone `dmap` package — the map + explorer with no LEVI dependency |
 
@@ -477,6 +478,32 @@ Hands-free ripple sweeping. The explorer drives the basher in manual mode for co
 
 A passthrough intercept of `BOON CLAIM <name>` forwards your command, auto-reports the selection, and flips combat flags so the basher adapts to the boons you take — Bard **Warmarch**, Blademaster **Shattered Star** / **Bladed Reflexes** (keeps the Shindo augment up for 20% damage reduction), and Magi **Aspect of Kkractle** / **Hot Springs** reshape their class's attack logic, and the class-agnostic **Hammer and Anvil** (attacks bypass denizen shields) turns off razing and shield-swapping entirely for the rest of the run.
 
+### Swarm Tactics & Low-HP Escape (`mnem swarm`)
+
+Deep ripples pack 3-4+ roaming denizens per room. Instead of standing in the swarm, the
+explorer fights on chosen ground:
+
+- **Pull & funnel**: at 3+ mobs (`mnem swarm assess <n>`, depth-scalable via
+  `mnem swarm deep <ripple> <n>`), swing once and step back to the just-cleared room as one
+  atomic queued line, kill what follows, re-enter, repeat (3 pulls per room max).
+- **Indoors**: the escape also raises an **icewall** on the door (Bracers of Frost) and
+  **leaps** it (chitin greaves); re-entry melts the wall first (Bracers of Flame). Without
+  the Maklak's Promise boon denizens walk through walls — the wall paces the fight; with it,
+  they're impeded.
+- **Outdoors swarm-followed**: **fly-kite** — `FLY`, then every attack becomes
+  `land;attack;fly`, touching ground only for the swing; lands when the pack thins.
+- **Roll Hide panic** (boon): at panic HP, tumble out — sheds all pursuers.
+- **Low-HP escape ladder** (any mob count, default 35%): outdoors fly and hover untouchable
+  — works with every limb broken, unlike `touch shield` — landing only when FULLY healed
+  (95%+ and affliction-free); indoors retreat to the cleared room; shield stays as the last
+  resort.
+- **Sleuth recon** (boon): `fullsense` on each GO reveals every denizen in the ripple
+  (`mnem sense` to re-scan).
+
+Tactical moves never blacklist real exits, and a server-side hold protects every queued
+escape from being overwritten by the attack loop. The standalone Dementia Mapper mirrors the
+pull/funnel core via `dmap swarm <n|off>`.
+
 ### Command Reference
 
 | Command | Action |
@@ -487,6 +514,11 @@ A passthrough intercept of `BOON CLAIM <name>` forwards your command, auto-repor
 | `mnem map [on\|off\|status]` | Toggle or diagnose the ripple mini-map |
 | `mnem boons` / `mnem affixes` / `mnem library` | Run history reports (see above) |
 | `mnem explore [on\|off\|status]` | Start/stop/inspect the auto-sweep |
+| `mnem swarm` | Swarm-tactics status (state, thresholds, branch toggles, recon) |
+| `mnem swarm assess <n>` / `deep <r> <n>` | Pull threshold (default 3) / depth-scaled threshold |
+| `mnem swarm icewall\|kite\|panic\|escape on\|off` | Per-branch toggles |
+| `mnem swarm panicat\|escapeat\|recoverat <hp%>` | Panic (40) / escape (35) / recovery-land (95) thresholds |
+| `mnem sense` | Manual fullsense recon (Sleuth boon reveals all denizens) |
 | `mnem contemplate` | Toggle boon-description enrichment (`BOON CONTEMPLATE`) |
 | `mnem quiet [on\|off]` | Silence automatic boon/affix echoes (still records) |
 | `mnem test` / `mnem health` | Ping the tracker to verify connectivity |

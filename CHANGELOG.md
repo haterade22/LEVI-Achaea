@@ -2,6 +2,25 @@
 
 ---
 
+## 2026-07-26 — Documentation sweep for swarm tactics v4.7.111-115 (docs only, no release)
+
+Full knowledge-base sync for the swarm-tactics arc — no code changes, no version bump:
+
+- **README.md**: Swarm Tactics feature row, new "Swarm Tactics & Low-HP Escape (`mnem swarm`)"
+  deep-dive section (pull/funnel, icewall walk-through caveat, fly-kite, Roll Hide panic,
+  low-HP escape ladder, Sleuth recon), and command-reference rows for the full `mnem swarm`
+  / `mnem sense` surface.
+- **CLAUDE.md**: swarm paragraph updated to v4.7.111-115 — 8s hold gating BOTH attack entry
+  points, hold-protected panic tumble, low-HP escape ladder with the 95%-AND-aff-free landing
+  rule, and the live-validated icewall facts (chain drains across bal+eq ~7s; denizens walk
+  through walls without Maklak's Promise). Boon line: `SHIN AUGMENT <n>` default 3.
+- **Project docs**: 07-explorer.md (recoverAt 95% + aff-free), 05-commands.md (all swarm
+  branches LIVE + panicat/escapeat/recoverat rows), basher/05-safety-systems.md (low-HP
+  escape supersedes shield-in-place; SLC both-arms flee inert in the tower).
+- **Class docs**: blademaster.md augment comment — spend 3 default, 12ms dissipate finding.
+
+---
+
 ## 2026-07-26 — Recovery = FULLY healed; icewall live-validated; augment spend fix (v4.7.115)
 
 - **Recovery hover lands only when FULLY healed** (user spec): `recoverAt` HP (default now

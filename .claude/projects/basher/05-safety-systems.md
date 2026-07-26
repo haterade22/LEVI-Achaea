@@ -45,6 +45,13 @@ ladder still applies, and none of the flee state (`bashFlee`/`fleeOriginRoom`/`f
 is used. The tactic's own gate is `ataxiaTemp.swarmHold` (attack-dispatch hold while a pull
 chain is queued), with its own timeout and reload-safety clears.
 
+**At low HP the swarm module also supersedes shield-in-place** (v4.7.114+): at
+`swarm.escapeAt`% (default 35, HP-gated only) it flies to hover outdoors / retreats one room
+indoors instead of shielding — `touch shield` needs a working arm, which is exactly what a
+chip-down death takes first. The shield ladder remains the fallback when no escape route
+exists, and SLC's both-arms-broken flee is inert inside the tower (fixed-direction blind
+runs; the swarm module owns tower escapes).
+
 | Area | Detection |
 |------|-----------|
 | the Fathomless Expanse of the World Tree | exact `gmcp.Room.Info.area` match |

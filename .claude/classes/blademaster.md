@@ -418,7 +418,9 @@ attack_skill: TwoArts
 # as the `bodyaugment` defence (deffing keep-map, with the other Shindo defs blur/disperse/
 # durability). Mnemosyne "Bladed Reflexes" boon = 20% reduced damage while augmented: with
 # bmBladedReflexes set (claim alias / BOONS row trigger mnemosyne/019, reset each run) the
-# basher prepends "shin augment 1" (minimum spend -- infuse fire competes for shin) whenever
+# basher prepends "shin augment <n>" (n = ataxiaBasher.bmAugmentAmount, default 3 -- LIVE LOG
+# 2026-07-26: a 1-shin augment channels and DISSIPATES ~12ms later, twice observed; duration
+# scales with the spend, and infuse fire competes for the same shin) whenever
 # shin >= 1, bodyaugment is down, and the 5s attempt-hold (ataxiaTemp.bmAugmentAttempted)
 # has cleared.
 # Battlerage kit (commands/costs verified vs basher/001 ataxiaBasher_blademasterBattlerage

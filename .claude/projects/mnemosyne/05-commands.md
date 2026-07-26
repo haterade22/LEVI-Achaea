@@ -61,7 +61,10 @@ Guarded by `if ataxia.mnemosyne.map then`; see [04-ripple-map.md](04-ripple-map.
 | `mnem swarm on` / `off` | Toggle multi-mob tactics (persisted, `swarm.enabled`) |
 | `mnem swarm assess <n>` | Pull threshold (default 3) |
 | `mnem swarm deep <ripple> <n>` / `deep off` | Depth-scaled threshold at/past a ripple |
-| `mnem swarm icewall on\|off` / `kite on\|off` | Stage-2 branch toggles (branches unwired in stage 1) |
+| `mnem swarm icewall on\|off` / `kite on\|off` / `panic on\|off` / `escape on\|off` | Per-branch toggles (all branches LIVE) |
+| `mnem swarm panicat <hp%>` | Roll Hide panic threshold (default 40) |
+| `mnem swarm escapeat <hp%>` | Low-HP escape threshold (default 35) |
+| `mnem swarm recoverat <hp%>` | Recovery hover lands at this HP (default 95; also requires aff-free) |
 | `mnem sense` | `M.swarm.sense()` — manual fullsense recon (Sleuth boon reveals all denizens) |
 
 ### Manual endpoint overrides
