@@ -67,8 +67,21 @@ Also in this release — **parry upgrades** (hand-tuned from live logs):
   prints no perceive line, which blinded focus-follow and the cycle tracker exactly while the
   parry worked — the success line now refreshes focus, counts the swing, and heals
   `ataxia.parrying.limb` desync.
-- **`lasthit` freshness stamp** (`lasthitAt`, 002): bashing-parry focus-follow ignores a stale
-  previous mob's focus.
+- **`lasthit` freshness stamp** (`lasthitAt`, 002): bashing-parry focus-follow only follows a
+  hit ≤12s old (mirrors 005's `STALE_AFTER`), and an un-stamped `lasthit` is never followed —
+  a previous mob's focus can no longer pin the parry across kills/rooms.
+- **Seed bug fixed**: the Self Limb Tracking group init seeded `lasthit = "left leg"`
+  (`_groups.yaml`), which made the ladder's default rung unreachable and silently pinned
+  unknown-mob parry to left leg (the only reason the Death Knight log looked right — that
+  tactic is now the intentional fixed entry above). Seed is `"none"`; regression test mirrors
+  the old timestamp-less seed shape the test stub used to mask.
+- **Head default** (user preference): with no pattern and no fresh focus, the ladder now
+  covers head → right leg → left leg → torso (was right leg → left → torso) — a head break
+  is the worst one to eat.
+- Log audit of the other Mnemosyne swamp denizens found NO parryable attacks (hellspawn:
+  impale names no limb, flurry unblockable; rotskull demon: all poison-typed; mindless
+  thrall: gnaw names no limb) — no entries needed, head default applies; recorded in
+  `denizen-lines-catalog.md`.
 
 CI/test hygiene: `test_runner` now SORTS discovered files (Windows `dir` vs CI `find`
 returned different orders, so an order-dependent leak passed locally and failed CI);
@@ -79,7 +92,8 @@ is where SYSUPDATE downloads `Levi_Ataxia.mpackage` from.
 
 Tests: `test_swarm_tactics.lua` (37 cases — threshold/deep scaling, back-route validation,
 full state-machine walk incl. wall/kite/panic branches, decorator consumption + hold hygiene
-+ room-check, resets, recon, onGo gating) + fixed-parry cases in `test_denizen_parry.lua`.
++ room-check, resets, recon, onGo gating) + fixed-parry cases in `test_denizen_parry.lua` + staleness / head-default /
+seed-regression / `ataxia_parrySuccess` cases in `test_bashing_parry.lua`.
 LEVI suite **399/399**, dmap **33/33**.
 
 ---

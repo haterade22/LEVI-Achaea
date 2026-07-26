@@ -57,6 +57,27 @@ Affliction **resisted** (bosses): `<mob> sneers at your feeble attempt to afflic
 
 **Proc-boons that afflict denizens** (Mnemosyne wade-status "Ongoing effects"): Wayward Heir / Child of Chaos (10% random BR aff — charm source), Haskor's Bravado (5% recklessness), Temporal Anomaly (5% aeon, once/5s). Afflictions are tracked from **any** source (our BR, boons, groupmates).
 
+## Parry intel (SLC bashing mode)
+
+**Parry-success line** (first-person, limb-bearing — confirmed from 2026-07-25 live log):
+`You parry the assault to your <limb> with a deft maneouvre.` — the game spells it "man**eo**uvre" here, while the third-person PvP lines use "man**oe**uvre"; trigger `highlighting/027_Parry_Success` tolerates both, highlights bold spring_green, and feeds `ataxia_parrySuccess(limb)` (a parried swing prints NO perceive line, so this is the only signal the tracker gets while the parry is working).
+
+**Per-mob parry entries** (`selfLimbDamage.denizenPatterns`, 005):
+| Mob | Entry | Why (from logs) |
+|---|---|---|
+| an axe-wielding revenant | cycle: right leg x2 → left leg x2 → torso x2 | fixed swing rotation, two perceive lines per swing |
+| a steel-encased Death Knight | **fixed: left leg** | knee-snap is the parryable attack (all observed parries = left leg); torso stomp / head slam / arm crush / throat slash are accepted (user-confirmed tactic) |
+| a ravager of the Infernal Legion | **fixed: torso** | torso cleave is her only limb-targeted attack (perceive "dealt 30.0% damage to your torso" x2/swing); dive names no limb, shoulder-charge impale is unblockable |
+
+**Audited, NO parryable attacks** (head default applies — don't re-audit):
+| Mob | Attacks seen |
+|---|---|
+| an Infernal hellspawn | bone-appendage impale (physical cutting, no limb named, leaves IMPALED+prone); whirling flurry (**unblockable**); corpse explodes on death |
+| a rotskull demon | miasmic breath / claw lurch / jaw bite — all poison-typed, no limb named (bite adds a cutting component + strips skin coating) |
+| a mindless thrall | grasp/frenzy lines do no damage (disrupt focus/countermeasures); gnaw (physical cutting, no limb, applies haemophilia) |
+
+**Open non-parry observations** (2026-07-25 log): Infernal Legion corpses explode for 2500 unblockable after the kill (basher/explorer currently just eats it); the hellspawn impale caused ~30 spammed `You are impaled and must writhe off before you may do that.` / `…both of your arms must be whole and unbound.` failure lines — something keeps re-sending commands while IMPALED.
+
 ## Status capture stages
 - **Stage 1 (done, v4.7.62):** `008_Denizen_State.lua` module + tests; lifecycle sync in `update_stuff/003`; HP feed in `010`; **charm** apply/end triggers (`011,012`). `ataxiaBasher_dsStatus()` dumps live state.
 - **Stage 2 (done):** `ataxiaBasher_blademasterBattlerage` — Blademaster owns its battlerage (excluded from the shared culling check), spends rage by priority so it never idles (fixes the 100+-rage-unused bug), and cashes in a reckless/feared target with **Headstrike** for bonus damage. **recklessness** + **aeon** capture triggers (`013-016`). Isolated to Blademaster (no other class touched). Tests `test_basher_battlerage.lua`.
