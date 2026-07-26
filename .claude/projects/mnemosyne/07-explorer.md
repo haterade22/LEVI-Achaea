@@ -267,6 +267,14 @@ this tick). Stage 1 = the **pull & funnel** loop:
   only for the swing). Below threshold → `land` and finish grounded. If FLY needs balance the
   trailing fly is simply rejected that round — degrades to grounded fighting, never wedges.
   Flight is landed on every reset (boon screen / stop / death) so it can't leak into a wade.
+  **Live-confirmed 2026-07-26** (ring of flying): fly line `The ring of shining metal carries
+  you up into the skies.`; land lines `You begin to descend, the wind whistling past you...`
+  + `You land easily, back on the ground again.` While airborne, melee cannot reach us and
+  our passive psychic damage keeps ticking; the grounded swing window absorbs one round
+  (observed: thrall hinder + treemite leg break) — the kite's designed price. Still open:
+  whether the TRAILING fly fires after the swing consumes balance (watch for "carries you
+  up" after every swing round; two consecutive grounded rounds = balance-gated → switch to
+  the dispatch-gated fallback).
 - **Roll Hide panic** (`swarm.panic`, default on, needs the `mnemRollHide` boon): at
   `swarm.panicAt`% HP (default 40) mid-funnel, tumble out through a non-swarm exit — the boon
   sheds ALL pursuers — then full reset (10s cooldown).
