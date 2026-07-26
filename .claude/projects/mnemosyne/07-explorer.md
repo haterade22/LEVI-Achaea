@@ -294,10 +294,42 @@ this tick). Stage 1 = the **pull & funnel** loop:
   `swarm.panicAt`% HP (default 40) mid-funnel, tumble out through a non-swarm exit — the boon
   sheds ALL pursuers — then full reset (10s cooldown).
 
+**Vitals-driven emergency wake-up (`S.onVitals`, v4.7.116)**: the explorer tick is
+EVENT-driven (arrivals, target-list changes, a 30s watchdog) — a stationary slugfest
+generates almost none. The Pinnacle death (2026-07-26, 3 angelic razers + a roamed-in
+inquisitor angel) crossed the 35% escape threshold and died ~3s later with the single
+tick-driven evaluation landing on a potash heal bounce. A `gmcp.Char.Vitals` handler now
+runs the panic/escape gates on EVERY prompt: reads HP fresh from the gmcp payload (the
+shared `ataxia.vitals` may be one prompt stale — same event, registration order),
+`hp <= 0` is treated as blackout-unknown (never "dying"), 2s cooldown between actions,
+and — unlike the tick path — it acts even while a pull is in flight (the explorer
+`moving` guard blinded the old path for the pull's full 8s): `M._disarmMove()` releases
+the move machinery without condemning, the escape's reset `cq all`s the doomed chain.
+The recovery hover also self-ticks now (`_scheduleTick(RECOVER_TICK)` at hover start,
+not just in the loop) so landing never waits on an outside event.
+
+**Pull retry after a lost move (v4.7.116)**: razer stupidity replaces queued commands
+with involuntary actions ("You pull down your pants and moon the world" — that ate the
+Pinnacle step-out). `_tacticalArm` clobbers `explore.fromRoom/fromDir` with the pull
+itself, so a lost pull used to make the reassess find "no valid pull route" and latch
+`noTactics` on exactly the room that most needs tactics. `onMoveFailed` now restores the
+anchor from the tactic's own saved route (`S.funnelRoom`/`S.fwdShort`, only when still in
+the swarm room; `_backDir` re-validates against the exit graph) so the reassess re-pulls;
+`MAX_PULLS` still bounds it.
+
+**Flight confirmation (v4.7.116)**: the escape's own fly can be eaten too. `S.flying` is
+the MODE flag (optimistic); `S.flightConfirmed` is the last confirmed physical state, fed
+by trigger `022_Flight_Lines` ("The ring of shining metal carries you up into the skies."
+/ "You land easily, back on the ground again."). The recovery hover re-sends
+`queue addclear free stand;fly` each 2s tick until confirmed — grounded-but-gated is the
+worst of both worlds. Unknown fly sources just re-send harmlessly ("You are already
+flying."). Kiting flaps the flag freely; only the hover consumes it.
+
 **Tactical moves never condemn exits**: `M._tacticalArm(dir)` sets `explore.moving` +
 `explore.tacticalMove`; the three condemn paths (move-timeout give-up, ice-slip cap,
 `Room.WrongDir`) skip the `explore.failed` write when the flag is up — these are WALKED edges,
 condemning them would poison the sweep — and notify `swarm.onMoveFailed()` instead.
+`M._disarmMove()` is the no-callback cancel (emergency escape owns the teardown).
 
 **Resets** (`swarm.reset`): boon screen (every ripple ends there), `_exploreStop`
 (death/leave-tower/off), `basher disabled`, `sysLoadEvent` (plus load-time clears of

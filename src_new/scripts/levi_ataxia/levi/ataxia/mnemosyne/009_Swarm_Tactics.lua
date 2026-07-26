@@ -67,6 +67,7 @@ local SENSE_DELAY = 3.0     -- on GO: wait out the wade-status/look burst (their
 local PANIC_COOLDOWN = 10   -- min seconds between Roll Hide panic tumbles
 local RECOVER_TICK = 2      -- while hovering to recover, re-check HP this often
 local RECOVER_MAX = 60      -- hard cap on a recovery hover (then land and hand back)
+local EMERGENCY_COOLDOWN = 2 -- min seconds between vitals-driven emergency actions
 
 -- Reload-safety: ataxiaTemp persists across a SYSUPDATE reload; a stranded hold or
 -- armed decorator would silently gate the whole basher / decorate a random attack.
@@ -120,6 +121,16 @@ end
 
 local function hpp()
   return (ataxia and ataxia.vitals and tonumber(ataxia.vitals.hpp)) or 100
+end
+
+-- Fresh HP% straight from the GMCP payload. The vitals handler below fires on the
+-- same event that UPDATES ataxia.vitals -- registration order could hand hpp() the
+-- PREVIOUS prompt's value, and the emergency path can't afford a stale read.
+local function hppFresh()
+  local v = gmcp and gmcp.Char and gmcp.Char.Vitals
+  local hp, max = tonumber(v and v.hp), tonumber(v and v.maxhp)
+  if hp and max and max > 0 then return math.floor(hp / max * 100) end
+  return hpp()
 end
 
 -- "Fully healed" for the recovery hover = aff-free too (user spec): broken limbs ARE
@@ -340,10 +351,11 @@ function S._panicDir()
   return fallback
 end
 
-function S._maybePanic()
+function S._maybePanic(hpNow)
+  local hp = tonumber(hpNow) or hpp()
   local s = S._cfg()
   if s.panic == false or not mnemRollHide then return false end
-  if hpp() > s.panicAt then return false end
+  if hp > s.panicAt then return false end
   if S._lastPanicAt and (now() - S._lastPanicAt) < PANIC_COOLDOWN then return false end
   local dir = S._panicDir()
   if not dir then return false end
@@ -371,7 +383,7 @@ function S._maybePanic()
   end)
   local sep = (ataxia.settings and ataxia.settings.separator) or ";"
   send("queue addclear free stand" .. sep .. "tumble " .. dir)
-  S._echo("<indian_red>PANIC (" .. hpp() .. "% hp)<reset> -- Roll Hide tumble <cyan>" .. dir .. "<reset> sheds all pursuers.")
+  S._echo("<indian_red>PANIC (" .. hp .. "% hp)<reset> -- Roll Hide tumble <cyan>" .. dir .. "<reset> sheds all pursuers.")
   return true
 end
 
@@ -402,6 +414,9 @@ function S._beginEscape()
     local sep = (ataxia.settings and ataxia.settings.separator) or ";"
     send("queue addclear free stand" .. sep .. "fly")
     S._armRecoverHold()
+    -- The hover loop is SELF-ticking; without this kick the next evaluation would
+    -- wait on an outside event -- the exact starvation that killed the Pinnacle run.
+    if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
     S._echo("<indian_red>LOW HP (" .. hpp() .. "%)<reset> -- <cyan>flying to recover<reset> (land at " .. s.recoverAt .. "%).")
     return true
   end
@@ -414,6 +429,17 @@ function S._beginEscape()
   S.peakFollowers, S.announcedFollow = 0, false
   S._tacticalGo(shortBack, "<indian_red>LOW HP (" .. hpp() .. "%)<reset> -- retreating to recover")
   return true
+end
+
+-- Already airborne (kiting): convert to a recovery hover in place -- no land/fly churn.
+function S._convertToHover(hp)
+  S.state = "recovering"
+  S.recoverStarted = now()
+  S._armRecoverHold()
+  -- Kick the self-tick loop (see _beginEscape): a hover must never depend on
+  -- outside events to notice it has healed -- or that its fly never happened.
+  if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
+  S._echo("<indian_red>LOW HP (" .. hp .. "%)<reset> -- staying airborne to recover.")
 end
 
 -- Explorer tick delegation. Returns true when the tick is consumed (the explorer
@@ -451,6 +477,16 @@ function S.onTick()
         or "<grey>recover cap hit -- landing and handing back.")
       return false -- normal flow (fight/assess) resumes this very tick
     end
+    -- The escape's fly can be eaten just like the Pinnacle pull was (stupidity
+    -- replaces queued commands with involuntary actions): S.flying is optimistic
+    -- until the flight line confirms (trigger 022 -> S.onFlightUp). Grounded-but-
+    -- gated is the worst of both worlds, so re-send each tick until we're really
+    -- up. If this fly source's confirm line is unknown, the extra sends are
+    -- harmless ("You are already flying.").
+    if S.flying and not S.flightConfirmed then
+      local sep = (ataxia.settings and ataxia.settings.separator) or ";"
+      send("queue addclear free stand" .. sep .. "fly")
+    end
     S._armRecoverHold()
     if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
     return true
@@ -462,10 +498,7 @@ function S.onTick()
     local s = S._cfg()
     if s.escape ~= false and hpp() <= s.escapeAt then
       if S.flying then
-        S.state = "recovering"
-        S.recoverStarted = now()
-        S._armRecoverHold()
-        S._echo("<indian_red>LOW HP (" .. hpp() .. "%)<reset> -- staying airborne to recover.")
+        S._convertToHover(hpp())
         return true
       end
       if S.state ~= "idle" then S.reset("low-hp escape") end
@@ -556,10 +589,49 @@ function S.onTick()
   return S._beginPull(shortBack, longBack, shortFwd, n, mode)
 end
 
+-- Vitals-driven emergency wake-up. The explorer tick is EVENT-driven (arrivals,
+-- target-list changes, a 30s watchdog): a stationary slugfest generates almost none,
+-- and the Pinnacle death crossed the escape threshold and died between ticks -- the
+-- single evaluation in the final seconds landed on a potash heal bounce. This runs
+-- on every prompt instead, and unlike the tick path it acts even while a pull is in
+-- flight (the explorer `moving` guard blinded the old path for the pull's full 8s).
+function S.onVitals()
+  if S.state == "recovering" then return end -- the hover loop owns it (self-ticking)
+  if not S._enabled() then return end
+  local s = S._cfg()
+  local hp = hppFresh()
+  if hp <= 0 then return end -- blackout sentinel: vitals unknown, never "dying"
+  local wantPanic = s.panic ~= false and mnemRollHide and hp <= s.panicAt
+  local wantEscape = s.escape ~= false and hp <= s.escapeAt
+  if not (wantPanic or wantEscape) then return end
+  if S._lastEmergencyAt and (now() - S._lastEmergencyAt) < EMERGENCY_COOLDOWN then return end
+  S._lastEmergencyAt = now()
+  if wantPanic and S._maybePanic(hp) then
+    if M._disarmMove then M._disarmMove() end -- a stale in-flight move must not gate the aftermath
+    return
+  end
+  if not wantEscape then return end
+  if M._disarmMove then M._disarmMove() end -- an in-flight pull dies with the escape's reset
+  if S.flying then return S._convertToHover(hp) end
+  if S.state ~= "idle" then S.reset("low-hp escape") end
+  S._beginEscape()
+end
+
 -- The explorer's tactical-move timeout gave up (arrival never came).
 function S.onMoveFailed()
   S._clearHold()
   if S.state == "pulling" then
+    -- The step-out was eaten (the Pinnacle death: razer stupidity replaces queued
+    -- commands with involuntary actions) but the route is still GOOD -- we never
+    -- left. _tacticalArm clobbered explore.fromRoom/fromDir with the pull itself,
+    -- so without this restore the reassess finds "no valid pull route" and latches
+    -- noTactics on exactly the room that most needs tactics. _backDir re-validates
+    -- the restored anchor against the exit graph, and MAX_PULLS bounds the retries.
+    if M.explore and S.funnelRoom and S.fwdShort
+       and M.map and M.map.current == S.swarmRoom then
+      M.explore.fromRoom = S.funnelRoom
+      M.explore.fromDir = S.fwdShort
+    end
     S._echo("<grey>pull move lost -- reassessing.")
     S.state = "idle"
   elseif S.state == "reenter" then
@@ -567,6 +639,13 @@ function S.onMoveFailed()
     S.state = "idle"
   end
 end
+
+-- Fed by trigger 022_Flight_Lines: the last CONFIRMED physical airborne state.
+-- Distinct from S.flying, the tactic's mode flag -- kiting keeps S.flying true
+-- across the per-swing land/fly churn while this flag flaps with the actual game
+-- lines. Only the recovery hover's fly re-send consumes it.
+function S.onFlightUp() S.flightConfirmed = true end
+function S.onFlightDown() S.flightConfirmed = nil end
 
 -- Single teardown. Ripple boundaries are covered by the boon screen (every ripple
 -- ends there) + run start; death/leave-tower via _exploreStop; reloads via
@@ -580,6 +659,7 @@ function S.reset(reason)
     send("land") -- never carry flight into a boon screen / wade / the next context
     S.flying = nil
   end
+  S.flightConfirmed = nil
   if wasActive then
     send("cq all") -- a queued pull chain must not fire into the new context
     S._echo("<grey>reset" .. (reason and (" (" .. reason .. ")") or "") .. ".")
@@ -643,6 +723,11 @@ function S.status()
     .. " hold=" .. tostring(ataxiaTemp.swarmHold or false)
     .. " recon=" .. (S.recon and (#(S.recon.lines or {}) .. " lines @r" .. tostring(S.recon.ripple)) or "none"))
 end
+
+-- Every prompt: the emergency escape/panic check (see S.onVitals). Cheap fast paths
+-- out; guarded by _enabled so it is inert outside an exploring tower run.
+if S._vitalsH then pcall(killAnonymousEventHandler, S._vitalsH) end
+S._vitalsH = registerAnonymousEventHandler("gmcp.Char.Vitals", function() pcall(S.onVitals) end)
 
 -- Manual `bash` toggle mid-tactic: the basher going away invalidates everything.
 if S._bashOffH then pcall(killAnonymousEventHandler, S._bashOffH) end

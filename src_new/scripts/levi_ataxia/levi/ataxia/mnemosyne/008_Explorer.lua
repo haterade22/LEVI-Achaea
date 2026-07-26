@@ -286,6 +286,16 @@ function M._tacticalArm(dir, timeout)
   end)
 end
 
+-- Cancel an in-flight move WITHOUT any failure/condemn callback: the swarm module is
+-- seizing control (emergency escape at crash HP) and a stale `moving` flag would gate
+-- every later tick -- including the recovery hover's own self-tick loop. A genuine
+-- explorer move that gets disarmed is simply re-decided on the next decidable tick.
+function M._disarmMove()
+  if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
+  M.explore.moving = false
+  M.explore.tacticalMove = false
+end
+
 -- "You slip and fall on the ice as you try to leave." An icy room fails the move
 -- (you fall prone) but the EXIT is fine, so keep re-sending the stand+move until we
 -- actually leave -- never count it against the exit as failed, and re-arm the move

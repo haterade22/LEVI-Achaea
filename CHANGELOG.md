@@ -2,6 +2,52 @@
 
 ---
 
+## 2026-07-26 — Emergency escape hardening after the Pinnacle death (v4.7.116)
+
+A live death at the Pinnacle (3 angelic razers + a roamed-in inquisitor angel, ~3,000 HP/s
+incoming at peak) exposed three stacked failures — the razers' psychic attack applies
+STUPIDITY, which randomly replaces queued commands with involuntary actions ("You pull down
+your pants and moon the world"), and that single mechanic defeated the pull, the reassess,
+and (indirectly) the escape:
+
+- **Vitals-driven emergency wake-up** (`swarm.onVitals` on `gmcp.Char.Vitals`): the
+  panic/escape gates were only evaluated on explorer ticks, which are event-driven
+  (arrivals, target changes, 30s watchdog) — a stationary slugfest generates almost none.
+  HP crossed the 35% escape threshold ~3s before death and the single evaluation in that
+  window landed on a potash heal bounce above the trigger. The gates now run on EVERY
+  prompt: HP read fresh from the gmcp payload (the shared vitals table can be one prompt
+  stale — same event, registration order), `hp <= 0` treated as blackout-unknown, 2s
+  cooldown, and the handler acts even while a pull chain is in flight (the explorer
+  `moving` guard blinded the tick path for the pull's full 8s) — `M._disarmMove()`
+  releases the move machinery with no condemn callback, the escape's reset kills the
+  doomed chain. Recovery hovers also self-tick from birth now (previously the first
+  post-escape evaluation waited on an outside event too).
+- **Pull retry after a lost move**: `_tacticalArm` overwrites `explore.fromRoom/fromDir`
+  with the pull itself, so when stupidity ate the step-out, the reassess found "no valid
+  pull route" and permanently latched `noTactics` on the room — with a known-good route
+  still saved and 2 of 3 pulls unspent. `onMoveFailed` now restores the anchor from the
+  tactic's own saved route (adjacency re-validated by `_backDir`; only when still in the
+  swarm room) so the reassess re-pulls; MAX_PULLS still bounds it.
+- **Flight confirmation** (new trigger `022_Flight_Lines`): the escape's own `fly` can be
+  eaten the same way, and `S.flying` was optimistic — grounded-but-gated (attacks held
+  while standing in the crowd) is the worst of both worlds. `S.flightConfirmed` now tracks
+  the confirmed physical state via the ring-of-flying up-line / land line, and the
+  recovery hover re-sends the fly each 2s tick until confirmed (harmless "You are already
+  flying." for unknown fly sources).
+
+Knowledge captured: angelic razer psychic = stupidity applicator (~1,000–1,250/hit),
+wing-charge = prone; inquisitor angel = ~1,000 bleed rounds + 1,993 fire sweep; mobs roam
+in mid-fight. Shin augment: default-3 spend lasted ~2.0s under that fire with a ~6s
+re-augment cooldown ("...so soon would be fatal.") — working theory: augment is ABLATIVE
+(absorbs damage ∝ shin spent), see `.claude/classes/blademaster.md`.
+
+Files: `mnemosyne/009_Swarm_Tactics.lua` (onVitals, _convertToHover, pull-retry restore,
+flight confirm, hover self-tick), `mnemosyne/008_Explorer.lua` (`M._disarmMove`),
+`triggers/.../mnemosyne/022_Flight_Lines.lua` (new), `test_swarm_tactics.lua` (+9 cases).
+Suite **419/419**.
+
+---
+
 ## 2026-07-26 — Documentation sweep for swarm tactics v4.7.111-115 (docs only, no release)
 
 Full knowledge-base sync for the swarm-tactics arc — no code changes, no version bump:

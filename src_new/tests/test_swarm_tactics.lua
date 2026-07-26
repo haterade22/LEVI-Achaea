@@ -43,6 +43,7 @@ function MAP.normDir(d) return LONG[d] or (SHORT[d] and d) or nil end
 function MAP.shortDir(d) return SHORT[d] or d end
 
 local mobs = 0
+local disarmed = 0
 ataxia = { settings = { separator = ";" }, vitals = { hpp = 100 } }
 ataxia.mnemosyne = {
   map = MAP,
@@ -53,6 +54,7 @@ ataxia.mnemosyne = {
   _denizenCount = function() return mobs end,
   _scheduleTick = function(d) table.insert(scheduled, d or 0.5) end,
   _tacticalArm = function(dir) table.insert(armed, dir) end,
+  _disarmMove = function() disarmed = disarmed + 1 end,
   _exploreEcho = function() end,
   echo = function() end,
   _captureLines = function(opts) opts.onDone({ "line one", "line two" }) end,
@@ -74,6 +76,9 @@ local function fixture(count)
   sent, armed, scheduled = {}, {}, {}
   ataxiaTemp = {}
   clock = 10000
+  disarmed = 0
+  S._lastEmergencyAt = nil
+  gmcp.Char = nil
   mobs = count or 3
   MAP.current = 200
   MAP.rooms = {
@@ -562,6 +567,134 @@ describe("swarm reset + lifecycle", function()
     ataxiaBasher.inMnemosyne = true
     expect(S.onGo()).toBeTrue() -- scheduled (delayed past the GO burst)
     mnemSleuth = false
+  end)
+end)
+
+describe("vitals-driven emergency wake-up", function()
+  local function findCmd(needle)
+    for i, c in ipairs(sent) do if c == needle then return i end end
+    return nil
+  end
+
+  it("fires the escape mid-pull, killing the in-flight move and the queued chain", function()
+    fixture(3)
+    S.onTick(); S.decorate("attack", ";") -- pull chain queued, hold armed, move in flight
+    gmcp.Char = { Vitals = { hp = "3000", maxhp = "10000" } }
+    S.onVitals()
+    expect(S.state).toBe("recovering")
+    expect(S.flying).toBeTrue()
+    expect(disarmed > 0).toBeTrue() -- explorer move machinery released, no condemn
+    expect(findCmd("cq all") ~= nil).toBeTrue() -- the queued pull chain is dead
+    expect(findCmd("queue addclear free stand;fly") ~= nil).toBeTrue()
+    expect(ataxiaTemp.swarmHold).toBeTrue()
+  end)
+
+  it("reads the FRESH gmcp payload, not the possibly-stale shared vitals", function()
+    fixture(2)
+    ataxia.vitals = { hpp = 100 } -- the shared table has not been updated yet
+    gmcp.Char = { Vitals = { hp = "2800", maxhp = "11500" } }
+    S.onVitals()
+    expect(S.state).toBe("recovering")
+  end)
+
+  it("prefers the Roll Hide panic over the escape when the boon is up", function()
+    fixture(4)
+    S.noTactics[200] = true -- fight-in-place: the exact Pinnacle situation
+    MAP.rooms[200].exits.east = 60
+    mnemRollHide = true
+    S._lastPanicAt = nil
+    gmcp.Char = { Vitals = { hp = "3000", maxhp = "10000" } }
+    S.onVitals()
+    local sawTumble = false
+    for _, c in ipairs(sent) do if c:find("tumble", 1, true) then sawTumble = true end end
+    expect(sawTumble).toBeTrue()
+    expect(S.state).toBe("idle") -- panic resets; no hover started
+  end)
+
+  it("rate-limits repeat firings", function()
+    fixture(2)
+    gmcp.Char = { Vitals = { hp = "3000", maxhp = "10000" } }
+    S.onVitals()
+    S.reset("test")
+    local n = #sent
+    S.onVitals() -- same clock: inside EMERGENCY_COOLDOWN
+    expect(#sent).toBe(n)
+    expect(S.state).toBe("idle")
+  end)
+
+  it("stays quiet when healthy, blacked out, or disabled", function()
+    fixture(2)
+    gmcp.Char = { Vitals = { hp = "9000", maxhp = "10000" } }
+    S.onVitals()
+    expect(S.state).toBe("idle") -- healthy
+    gmcp.Char = { Vitals = { hp = "0", maxhp = "10000" } }
+    S.onVitals()
+    expect(S.state).toBe("idle") -- blackout sentinel: hp 0 is "unknown", not "dying"
+    gmcp.Char = { Vitals = { hp = "3000", maxhp = "10000" } }
+    M.explore.on = false
+    S.onVitals()
+    expect(S.state).toBe("idle") -- disabled
+  end)
+end)
+
+describe("pull retry after a lost move", function()
+  it("restores the route anchor so the reassess can pull again", function()
+    fixture(3)
+    S.onTick(); S.decorate("attack", ";") -- pull #1 armed + consumed
+    -- The tactical arm clobbered the explorer's anchor with the pull itself:
+    M.explore.fromRoom, M.explore.fromDir = 200, "s"
+    S.onMoveFailed() -- the step-out was eaten (stupidity); we never left room 200
+    expect(S.state).toBe("idle")
+    expect(M.explore.fromRoom).toBe(100) -- anchor restored from the tactic's own route
+    expect(M.explore.fromDir).toBe("n")
+    expect(S.onTick()).toBeTrue() -- reassess: pull #2, not a noTactics latch
+    expect(S.state).toBe("pulling")
+    expect(S.pulls[200]).toBe(2)
+    expect(S.noTactics[200]).toBe(nil)
+  end)
+
+  it("still latches no-tactics once MAX_PULLS is spent on eaten moves", function()
+    fixture(3)
+    for _ = 1, 3 do
+      expect(S.onTick()).toBeTrue()
+      S.decorate("attack", ";")
+      M.explore.fromRoom, M.explore.fromDir = 200, "s"
+      S.onMoveFailed()
+    end
+    expect(S.onTick()).toBeFalse()
+    expect(S.noTactics[200]).toBeTrue()
+  end)
+
+  it("does not restore the anchor if a forced move took us elsewhere", function()
+    fixture(3)
+    S.onTick(); S.decorate("attack", ";")
+    MAP.current = 300 -- forced move mid-chain
+    M.explore.fromRoom, M.explore.fromDir = 300, "e"
+    S.onMoveFailed()
+    expect(M.explore.fromRoom).toBe(300) -- left alone: the saved route is for room 200
+  end)
+end)
+
+describe("flight confirmation for the recovery hover", function()
+  local function flyCount()
+    local n = 0
+    for _, c in ipairs(sent) do if c == "queue addclear free stand;fly" then n = n + 1 end end
+    return n
+  end
+
+  it("re-sends the fly each recovery tick until the flight line confirms", function()
+    fixture(2)
+    ataxia.vitals = { hpp = 30 }
+    S.onTick() -- recovering; first fly sent
+    expect(flyCount()).toBe(1)
+    S.onTick() -- still unconfirmed: the fly was eaten -> re-send
+    expect(flyCount()).toBe(2)
+    S.onFlightUp() -- "The ring of shining metal carries you up into the skies."
+    S.onTick()
+    expect(flyCount()).toBe(2) -- confirmed: no more re-sends
+    S.onFlightDown() -- forced/incidental landing mid-hover
+    S.onTick()
+    expect(flyCount()).toBe(3) -- grounded again -> re-send
   end)
 end)
 

@@ -423,6 +423,14 @@ attack_skill: TwoArts
 # scales with the spend, and infuse fire competes for the same shin) whenever
 # shin >= 1, bodyaugment is down, and the 5s attempt-hold (ataxiaTemp.bmAugmentAttempted)
 # has cleared.
+# LIVE LOG 2026-07-26 (Pinnacle death, ~3k HP/s incoming): the default-3 augment lasted
+# ~2.0s exactly, and the immediate re-up was refused with "Regardless of your skill,
+# augmenting yourself with shin energy so soon would be fatal." (a re-augment COOLDOWN,
+# recovery line "You may augment yourself with shin energy once again.", ~6s). Working
+# theory: augment is ABLATIVE -- it absorbs damage proportional to shin spent rather than
+# holding a fixed duration (12ms at 1 shin vs 2s at 3 under fire fits; an out-of-combat
+# duration check would falsify). Under boss-tier fire the keeper buys ~2s of 20% DR per
+# cooldown cycle -- thin; consider raising bmAugmentAmount or dropping the keeper there.
 # Battlerage kit (commands/costs verified vs basher/001 ataxiaBasher_blademasterBattlerage
 # and _groups.yaml get_Battlerage Blademaster config). Blademaster OWNS its battlerage:
 # it is EXCLUDED from the shared culling check and spends rage by priority so it never idles.
