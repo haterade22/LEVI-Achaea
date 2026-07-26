@@ -76,8 +76,9 @@ ataxiaTemp.swarmHold = nil
 ataxiaTemp.swarmPullDir = nil
 
 S.state = "idle" -- idle | pulling | funnel | reenter
-S.pulls = S.pulls or {}       -- [roomNum] = pull count this ripple
+S.pulls = S.pulls or {}       -- [roomNum] = UNPRODUCTIVE pull count this ripple (progress refunds it)
 S.noTactics = S.noTactics or {} -- [roomNum] = true -> fight in place (gave up)
+S.entrySnap = S.entrySnap or {} -- [roomNum] = { n, id, hp } at the last pull, for the progress check
 S.recon = S.recon or nil      -- { at=<epoch>, ripple=<n>, lines={...} } last fullsense
 
 local function now()
@@ -151,6 +152,25 @@ function S._afflicted()
     end
   end
   return false
+end
+
+-- Current server target's id + live hp% for the hit-and-run progress check.
+-- Same data chain as the bashing HUD's mob bar: denizen-state hpp (fed per prompt
+-- from gmcp.IRE.Target.Info, id-guarded) with a live-GMCP fallback; negative /
+-- "-1" readings mean "no data", not 0%.
+function S._targetHp()
+  if type(target) ~= "number" then return nil, nil end
+  if ataxiaBasher_dsGet then
+    local ds = ataxiaBasher_dsGet(target)
+    local hp = ds and tonumber(ds.hpp)
+    if hp and hp >= 0 then return target, hp end
+  end
+  local info = gmcp and gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info
+  if info and info.hpperc then
+    local hp = tonumber(tostring(info.hpperc):gsub("%%", ""))
+    if hp and hp >= 0 then return target, hp end
+  end
+  return target, nil
 end
 
 -- Threshold, optionally depth-scaled: at/past ripple `deepAt`, use `deepThreshold`.
@@ -228,6 +248,12 @@ function S._beginPull(shortBack, longBack, shortFwd, count, mode)
     S._echo("<indian_red>" .. MAX_PULLS .. " pulls spent here<reset> -- fighting this room in place.")
     S.state = "idle"
     return false
+  end
+  -- Snapshot for the hit-and-run progress check on the NEXT assess of this room:
+  -- pre-swing count + focused target hp (both improve when the cycle achieves anything).
+  do
+    local id, hp = S._targetHp()
+    S.entrySnap[cur] = { n = count, id = id, hp = hp }
   end
   S.state = "pulling"
   S.mode = mode or "pull"
@@ -573,6 +599,24 @@ function S.onTick()
   if cur and S.noTactics[cur] then return false end
   local n = (M._denizenCount and M._denizenCount()) or 0
   if n < S.threshold() then return false end
+  -- Hit-and-run continuation (user doctrine, Putoran-wildcat log 2026-07-26: nothing
+  -- follows, so each cycle is one safe swing -- "continue hit and run until the room
+  -- is cleared or below 3 denizens"). A re-entry showing PROGRESS since the last pull
+  -- -- fewer denizens (a kill), or the SAME focused target chipped lower -- REFUNDS
+  -- the pull budget: the loop is working, keep cycling. Only unproductive cycles
+  -- (nothing died, no chip -- e.g. a soldier "tending his wounds" back to full while
+  -- we funnel) spend budget, so a true stalemate still caps and fights in place.
+  local snap = cur and S.entrySnap[cur]
+  if snap and (S.pulls[cur] or 0) > 0 then
+    local id, hp = S._targetHp()
+    local chipped = id and hp and snap.id == id and snap.hp and hp < snap.hp
+    if n < snap.n or chipped then
+      S.pulls[cur] = 0
+      S._echo("progress since last pull ("
+        .. (n < snap.n and (snap.n .. "->" .. n .. " denizens") or ("target " .. snap.hp .. "%->" .. hp .. "%"))
+        .. ") -- <green>hit-and-run continues<reset>.")
+    end
+  end
   local shortBack, longBack, shortFwd = S._backDir()
   if not shortBack then
     -- No valid pull route (first grid room, stale fromDir): fight in place.
@@ -675,6 +719,7 @@ end
 function S.onRipple()
   S.pulls = {}
   S.noTactics = {}
+  S.entrySnap = {}
   S.reset("new ripple")
 end
 

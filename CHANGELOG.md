@@ -2,6 +2,37 @@
 
 ---
 
+## 2026-07-26 — Hit-and-run continues while it works (v4.7.117)
+
+Live Putoran-wildcat log (Mnemosyne themed ripple): the pull & funnel loop ran perfectly —
+three clean pulls, safe funnels — but **nothing followed** (wildcats don't chase; "peak
+followers: 0" every cycle), so each cycle was one free swing that chipped the focused
+soldier 94%→83%→78%→71% and killed one. Then the fixed 3-pull budget expired and the
+system parked in a 5-mob room; HP yo-yoed 30-50% on potash until the user manually bailed
+(bash off + ring fly). User doctrine: "continue hit and run until the room is cleared or
+below 3 denizens."
+
+- **Progress refunds the pull budget**: each pull snapshots the room's denizen count and
+  the focused target's hp% (`S.entrySnap`, same data chain as the HUD mob bar:
+  denizen-state `hpp` / `IRE.Target.Info.hpperc`). On the next assess of that room, a
+  DROP in either — a kill, or the same target chipped lower — resets the budget to 0 and
+  echoes "hit-and-run continues". Only unproductive cycles (nothing died, no chip — e.g.
+  a soldier "tending his wounds" back to full while we funnel) spend budget, so a true
+  regen stalemate still caps at MAX_PULLS and fights in place (where the v4.7.116 escape
+  ladder is the backstop).
+
+Knowledge captured: wildcat servants/soldiers do not pursue through exits; denizens
+regen while you funnel ("A wildcat soldier ceases tending to his wounds"); flying renames
+the GMCP room to "Flying above <room>" (the prompt trigger's "YOU ARE FLYING" echo keys
+on it). The mid-crisis "Bashing systems disengaged" in the log was the user's own manual
+toggle (`ataxiaBasher_manual()`), not a system action — on v4.7.115 the tick-starved
+escape couldn't fire; v4.7.116's vitals-driven escape would have flown at 32% unprompted.
+
+Files: `mnemosyne/009_Swarm_Tactics.lua` (`_targetHp`, `entrySnap`, refund in the assess),
+`test_swarm_tactics.lua` (+3 cases). Suite **422/422**.
+
+---
+
 ## 2026-07-26 — Emergency escape hardening after the Pinnacle death (v4.7.116)
 
 A live death at the Pinnacle (3 angelic razers + a roamed-in inquisitor angel, ~3,000 HP/s

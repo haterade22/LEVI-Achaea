@@ -294,6 +294,19 @@ this tick). Stage 1 = the **pull & funnel** loop:
   `swarm.panicAt`% HP (default 40) mid-funnel, tumble out through a non-swarm exit — the boon
   sheds ALL pursuers — then full reset (10s cooldown).
 
+**Hit-and-run continuation (v4.7.117)**: the pull budget (`MAX_PULLS` 3) exists to stop
+POINTLESS ping-pong — but the Putoran-wildcat log showed non-chasing mobs ("peak
+followers: 0" every cycle) where each cycle was one free swing chipping the soldier
+94→83→78→71% with a kill on cycle two. Doctrine: "continue hit and run until the room is
+cleared or below 3 denizens." Each pull snapshots `entrySnap[room] = {n, id, hp}` (count +
+focused-target hp via `S._targetHp()` — denizen-state `hpp` / `IRE.Target.Info.hpperc`,
+the HUD mob-bar chain). On the next assess, count dropped OR same-target hp dropped →
+`pulls[room] = 0` ("hit-and-run continues" echo). Only unproductive cycles spend budget —
+denizens REGEN while we funnel ("a wildcat soldier ceases tending to his wounds"), so a
+true stalemate still caps and fights in place, with the escape ladder as backstop. Also
+learned: flying renames the GMCP room to "Flying above <room>" (same room otherwise —
+watch that the room NUM stays stable for the kite/hover room guards).
+
 **Vitals-driven emergency wake-up (`S.onVitals`, v4.7.116)**: the explorer tick is
 EVENT-driven (arrivals, target-list changes, a 30s watchdog) — a stationary slugfest
 generates almost none. The Pinnacle death (2026-07-26, 3 angelic razers + a roamed-in

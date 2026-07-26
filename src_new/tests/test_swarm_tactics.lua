@@ -79,6 +79,8 @@ local function fixture(count)
   disarmed = 0
   S._lastEmergencyAt = nil
   gmcp.Char = nil
+  target = nil            -- basher's current-target global (progress check)
+  ataxiaBasher_dsGet = nil
   mobs = count or 3
   MAP.current = 200
   MAP.rooms = {
@@ -672,6 +674,51 @@ describe("pull retry after a lost move", function()
     M.explore.fromRoom, M.explore.fromDir = 300, "e"
     S.onMoveFailed()
     expect(M.explore.fromRoom).toBe(300) -- left alone: the saved route is for room 200
+  end)
+end)
+
+describe("hit-and-run continuation (progress refunds the pull budget)", function()
+  -- One full pull cycle ending back in the swarm room, ready to re-assess.
+  local function pullCycle()
+    S.onTick()                 -- (re)assess -> pull begins
+    S.decorate("attack", ";")
+    MAP.current = 100; mobs = 0
+    S.onTick()                 -- funnel
+    clock = clock + 10
+    S.onTick()                 -- reenter
+    MAP.current = 200
+  end
+
+  it("refunds the budget when a kill dropped the count", function()
+    fixture(4)
+    pullCycle()                -- snapshot: n=4
+    mobs = 3                   -- one died to the pull swing
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("pulling")
+    expect(S.pulls[200]).toBe(1) -- refreshed, not 2: the loop keeps going
+  end)
+
+  it("refunds when the same focused target got chipped lower", function()
+    fixture(3)
+    target = 777
+    ataxiaBasher_dsGet = function(id) return id == 777 and { hpp = 94 } or nil end
+    pullCycle()                -- snapshot: n=3, id=777, hp=94
+    mobs = 3                   -- nobody died...
+    ataxiaBasher_dsGet = function(id) return id == 777 and { hpp = 71 } or nil end
+    expect(S.onTick()).toBeTrue() -- ...but the soldier is 23% lower: progress
+    expect(S.pulls[200]).toBe(1)
+    target = nil; ataxiaBasher_dsGet = nil
+  end)
+
+  it("spends budget on unproductive cycles and still caps at MAX_PULLS", function()
+    fixture(3)
+    for _ = 1, 3 do
+      pullCycle()              -- no kills, no target data: nothing improved
+      mobs = 3
+    end
+    expect(S.pulls[200]).toBe(3)
+    expect(S.onTick()).toBeFalse() -- budget spent -> fight in place
+    expect(S.noTactics[200]).toBeTrue()
   end)
 end)
 
