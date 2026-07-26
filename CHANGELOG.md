@@ -2,6 +2,38 @@
 
 ---
 
+## 2026-07-26 — Reaper boon kill counter: running "+N% damage total" (v4.7.118)
+
+The Reaper boon (legendary: "Each kill on a denizen permanently increases your damage
+dealt by 1%.") announces every kill with "You reap a tithe of power from your fallen
+foe." — but the game never shows the running total. User request: additive tracking,
+"You now have X increased damage total."
+
+- **Tithe counter** (`M.onReaperTithe`, trigger `023_Reaper_Tithe`): every tithe line
+  increments `ataxiaTemp.reaperKills` (ataxiaTemp survives a SYSUPDATE reload, so a
+  mid-run update keeps the tally) and echoes
+  `(MNEM): Reaper: you now have +N% damage total (N kills this run).`
+  The tithe line only prints with the boon up, so it is its own proof — seeing it also
+  sets `mnemReaper`, and a missed claim/BOONS row can't desync the count.
+- **Standard boon-flag lifecycle**: `mnemReaper` set by the `BOON CLAIM` intercept
+  (frontier `%f[%a]reaper` so a hypothetical "Soulreaper" can't false-match) and the
+  BOONS-list row trigger (`024_Reaper`); flag AND tally reset on run start
+  (`001_Run_Start`) and the confirmed run-end (`onRunEnd`) with the other eight flags.
+- **Pause/resume keeps the tally** (adversarial-review catch): the run-start trigger
+  also fires on the resume-after-pause wade (`WADE STILL` → wade back in), which
+  re-enters the SAME server-side run — an unconditional reset there would silently
+  understate the total forever (the game never prints it, so the count is
+  unrecoverable). `M.reaperOnWade()` runs BEFORE `onRunStart()` (which consumes
+  `run.paused` on a resume) and only resets the tally on a genuinely fresh wade.
+- Trigger catalog (`03-parsing-triggers.md`) updated with rows 022-024 (022 was a
+  pre-existing gap from v4.7.116).
+
+Files: `mnemosyne/004_Parsers.lua`, triggers `023_Reaper_Tithe.lua` + `024_Reaper.lua`
+(new), `aliases/.../002_Boon_Claim.lua`, `triggers/.../001_Run_Start.lua`,
+`test_mnemosyne.lua` (+5 cases). Suite **427/427**.
+
+---
+
 ## 2026-07-26 — Hit-and-run continues while it works (v4.7.117)
 
 Live Putoran-wildcat log (Mnemosyne themed ripple): the pull & funnel loop ran perfectly —

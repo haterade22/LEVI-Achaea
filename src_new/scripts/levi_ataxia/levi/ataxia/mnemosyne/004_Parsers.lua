@@ -182,6 +182,8 @@ function M.onRunEnd()
   bmBladedReflexes = false -- boons gone on a confirmed run-end
   mnemSleuth = false -- boons gone on a confirmed run-end
   mnemRollHide = false -- boons gone on a confirmed run-end
+  mnemReaper = false -- boons gone on a confirmed run-end
+  if ataxiaTemp then ataxiaTemp.reaperKills = nil end -- the +1%/kill tally dies with the run
   -- Clear the pause flag UNCONDITIONALLY (like the boon flags above), not only via the
   -- _inRun()-gated endRun()->_resetRun(): with telemetry off (the shipped default) that path
   -- never runs, so a paused-then-ended run would leave paused=true and misfire the NEXT fresh
@@ -200,6 +202,37 @@ function M.onRunEnd()
   end
   M.restoreTreeCuring() -- Splinterbark over -> tattoo untainted, turn game tree curing back on
   if M._inRun() then M.endRun() end
+end
+
+-- Reaper boon (legendary): each denizen kill permanently (for the run) adds +1%
+-- damage dealt, announced by "You reap a tithe of power from your fallen foe."
+-- (trigger 023). The game never shows the running total, so count the tithes and
+-- echo the cumulative bonus after each kill (user spec: "You now have X increased
+-- damage total"). The tithe line only prints with Reaper up, so it is its own
+-- proof -- seeing it also sets mnemReaper, and a missed claim/BOONS row can't
+-- desync the tally. Counter lives in ataxiaTemp so a SYSUPDATE reload mid-run
+-- keeps it; reset on run start (trigger 001) + the confirmed run-end above.
+function M.onReaperTithe()
+  mnemReaper = true
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.reaperKills = (tonumber(ataxiaTemp.reaperKills) or 0) + 1
+  local n = ataxiaTemp.reaperKills
+  M.echo("<orange>Reaper<reset>: you now have <green>+" .. n .. "%<reset> damage total ("
+    .. n .. " kill" .. (n == 1 and "" or "s") .. " this run).")
+end
+
+-- Wade-start hook for the Reaper tally, called by trigger 001 BEFORE onRunStart()
+-- (which CONSUMES run.paused on a resume). A resume-after-pause wade (WADE STILL ->
+-- wade back in) re-enters the SAME server-side run, so the +1%/kill tally must
+-- survive it -- the game never prints a running total, so a wiped count is
+-- unrecoverable (adversarial-review catch, v4.7.118). Only a genuinely fresh wade
+-- resets it. Telemetry-independent, like the boon-flag resets: run.paused is SET
+-- unconditionally by onRunPause and cleared unconditionally by the confirmed
+-- onRunEnd, so it is a reliable resume marker in both telemetry modes here.
+function M.reaperOnWade()
+  local resuming = (M.run and M.run.paused) and true or false
+  if not resuming and ataxiaTemp then ataxiaTemp.reaperKills = nil end
+  return resuming
 end
 
 -- Splinterbark ongoing-effect safety (telemetry-INDEPENDENT: driven by a plain status-screen

@@ -23,6 +23,9 @@ Patterns are Mudlet regex (`type: 1`), quoted verbatim from each trigger file.
 | 019 | Bladed Reflexes | `^Bladed Reflexes\s+\d+\s+\w+` (BOONS-list row) | sets `bmBladedReflexes = true` (BM basher keeps `SHIN AUGMENT 1` up) | none (flag set unconditionally; reset on run start/end) |
 | 020 | Sleuth | `^Sleuth\s+\d+\s+\w+` (BOONS-list row) | sets `mnemSleuth = true` (swarm recon: fullsense on GO) | none (flag set unconditionally; reset on run start/end) |
 | 021 | Roll Hide | `^Roll Hide\s+\d+\s+\w+` (BOONS-list row) | sets `mnemRollHide = true` (stage-2 panic tumble) | none (flag set unconditionally; reset on run start/end) |
+| 022 | Flight Lines | `^The ring of shining metal carries you up into the skies\.` / `^You land easily, back on the ground again\.` | `swarm.onFlightUp()` / `swarm.onFlightDown()` (confirmed airborne state for the recovery hover's fly re-send) | none (pure state flag) |
+| 023 | Reaper Tithe | `^You reap a tithe of power from your fallen foe\.` | `onReaperTithe()` — increments `ataxiaTemp.reaperKills`, sets `mnemReaper` (the line is its own proof of the boon), echoes the running `+N% damage total` | none (line only prints with the boon up) |
+| 024 | Reaper | `^Reaper\s+\d+\s+\w+` (BOONS-list row) | sets `mnemReaper = true` (tally itself is driven by trigger 023) | none (flag set unconditionally; reset on run start/end) |
 
 The gate is enforced *inside* each handler (see the gating model in [01-architecture.md](01-architecture.md)); only trigger 007 does its `_inRun()` check in the trigger body before calling the API directly. `onRipple` is the exception to the auto-gate: it first drives the mini-map (`map.onRipple(n)`, unconditional) and only then gates telemetry on `_auto()`.
 
@@ -33,6 +36,8 @@ Trigger 006 (`GO!`) also calls `ataxia.mnemosyne.exploreOnGo()` after `onGo()` �
 `WADE STILL` — "You whisper to the Mnemosyne and beseech that it grow still for a time." — suspends the current run **without ending it server-side**: the next wade re-enters the *same* wade, not a fresh one. `onRunPause` (trigger 016) sets `M.run.paused = true` unconditionally (mirroring the boon flags — the `_auto` gate is applied later, when the flag is consumed).
 
 `onRunStart` (trigger 001, gated on `_auto`) then branches on that flag: if `M.run.paused`, it clears the flag and calls `runExists()` (`/run_exists`, re-syncs `active` + ripple, and safely no-ops to inactive if the server no longer holds the run) instead of `startRun()` (`/run_start`) — so a resumed wade doesn't orphan the paused run's progress under a brand-new `public_id`. `onRunEnd` clears `M.run.paused` **unconditionally** (not only via the `_inRun`-gated `endRun`), because with telemetry off — the shipped default — that gated path never runs, and a leftover `paused=true` would misfire the *next* fresh wade into a resume that never `/run_start`s it.
+
+**Ordering constraint in trigger 001's body**: `reaperOnWade()` must run **before** `onRunStart()` — it reads `run.paused` to decide whether the wade is a resume (Reaper kill tally survives; it's the same server-side run and the count is unrecoverable) or a fresh run (tally reset), and `onRunStart` consumes that flag on the resume path.
 
 `BOON CLAIM <name>` is not a trigger but an alias intercept (`002_Boon_Claim`, regex `^(?i)boon claim (.+)$`) that passes the real command through and then calls `onBoonClaim(name)` — detail in [05-commands.md](05-commands.md).
 

@@ -574,6 +574,65 @@ describe("run-end confirmation", function()
     M.onRunEnd() -- confirmation fired -> boons gone
     expect(bmBladedReflexes).toBeFalse()
   end)
+
+  it("clears mnemReaper AND the kill tally on the confirmed onRunEnd", function()
+    reset(true)
+    mnemReaper = true
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.reaperKills = 42
+    M.onRunEndMaybe() -- deferred maybe must NOT clear the boon yet
+    expect(mnemReaper).toBeTrue()
+    expect(ataxiaTemp.reaperKills).toBe(42)
+    M.onRunEnd() -- confirmation fired -> boons gone, tally dies with the run
+    expect(mnemReaper).toBeFalse()
+    expect(ataxiaTemp.reaperKills).toBeNil()
+  end)
+end)
+
+-- ─── Reaper tithe counter ────────────────────────────────────────────────────
+
+describe("M.onReaperTithe()", function()
+  it("counts each tithe and sets the boon flag (the line is its own proof)", function()
+    reset(true)
+    mnemReaper = false
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.reaperKills = nil
+    M.onReaperTithe()
+    expect(mnemReaper).toBeTrue()
+    expect(ataxiaTemp.reaperKills).toBe(1)
+    M.onReaperTithe()
+    M.onReaperTithe()
+    expect(ataxiaTemp.reaperKills).toBe(3) -- additive: +3% damage total
+  end)
+
+  it("resumes an existing tally (ataxiaTemp survives a SYSUPDATE reload)", function()
+    reset(true)
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.reaperKills = "17" -- persisted values can come back as strings
+    M.onReaperTithe()
+    expect(ataxiaTemp.reaperKills).toBe(18)
+  end)
+end)
+
+describe("M.reaperOnWade()", function()
+  it("resets the tally on a genuinely fresh wade", function()
+    reset(true)
+    M.run.paused = nil
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.reaperKills = 12
+    expect(M.reaperOnWade()).toBeFalse()
+    expect(ataxiaTemp.reaperKills).toBeNil()
+  end)
+
+  it("preserves the tally on a resume-after-pause wade (same server-side run)", function()
+    reset(true)
+    M.run.paused = true -- WADE STILL happened; the next wade re-enters the SAME run
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.reaperKills = 20
+    expect(M.reaperOnWade()).toBeTrue()
+    expect(ataxiaTemp.reaperKills).toBe(20) -- +20% is server-side truth; the count must survive
+    M.run.paused = nil
+  end)
 end)
 
 -- ─── Boon claim resolution (#4) ──────────────────────────────────────────────
