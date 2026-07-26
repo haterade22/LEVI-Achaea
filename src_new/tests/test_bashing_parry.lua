@@ -6,8 +6,9 @@
 require("mock_mudlet")
 
 -- Controllable clock: 003's freshness check and ataxia_parrySuccess read getEpoch() at call
--- time. NOTE: the override outlives this file (shared test state) -- keep it a large fixed
--- epoch so later files see sane values.
+-- time. Restored at the end of the file (shared test state -- a frozen clock leaking into
+-- later suites is the same defect class as the test_swarm_tactics send leak).
+local realGetEpoch = getEpoch
 local now = 100000
 function getEpoch() return now end
 
@@ -207,3 +208,7 @@ describe("ataxia_bashingParryOn/Off — basher auto-switch", function()
     ataxia_bashingParryOff()
   end)
 end)
+
+-- Hand the shared test state a live clock back (frozen-clock leaks fail later suites the
+-- same way the unrestored send override did in test_swarm_tactics).
+getEpoch = realGetEpoch or os.time
