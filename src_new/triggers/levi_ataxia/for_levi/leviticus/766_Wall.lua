@@ -55,7 +55,14 @@ end
 end
 walkblocked = true
 
-if mmp.autowalking == false and not tChaseTimer then
+-- During a Mnemosyne auto-sweep the explorer owns wall recovery (mnemosyne/025 ->
+-- onWallBlocked leaps the in-flight direction). These manual-walk branches would
+-- fire `leap <command>` where `command` is our own queue string -- garbage that
+-- ALSO addclearfull-wipes the explorer's queued leap. Skip them while exploring.
+local _mnemExploring = ataxia.mnemosyne and ataxia.mnemosyne.explore
+  and ataxia.mnemosyne.explore.on
+
+if mmp.autowalking == false and not tChaseTimer and not _mnemExploring then
 if ataxiaTemp.class == "Silver Dragon" or gmcp.Char.Status.race == "Undead" or ataxiaTemp.class == "Black Dragon" or ataxiaTemp.me == "Leviticus" or ataxiaTemp.class == "Blue Dragon" or ataxiaTemp.class == "Red Dragon" or ataxiaTemp.class == "Green Dragon" or ataxiaTemp.class == "Golden Dragon" then
 send("queue addclearfull freestand leap "..command)
 else
@@ -63,7 +70,7 @@ send("queue addclearfull freestand mountjump "..command)
 end
 end
 
-if mmp.autowalking == false and tChaseTimer then
+if mmp.autowalking == false and tChaseTimer and not _mnemExploring then
 if ataxiaTemp.class == "Silver Dragon" or gmcp.Char.Status.race == "Undead" or ataxiaTemp.class == "Black Dragon" or ataxiaTemp.me == "Leviticus" or ataxiaTemp.class == "Blue Dragon" or ataxiaTemp.class == "Red Dragon" or ataxiaTemp.class == "Green Dragon" or ataxiaTemp.class == "Golden Dragon" then
 send("queue addclearfull freestand leap "..dir_left)
 else

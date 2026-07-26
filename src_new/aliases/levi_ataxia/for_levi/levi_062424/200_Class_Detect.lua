@@ -38,7 +38,7 @@ elseif cmd == "set" and parts[2] and parts[3] then
   local setName = parts[3]:lower()
   classDetect.curingsetMap[className] = setName
   classDetect.save()
-  classDetect.echo("Mapped <yellow>" .. className .. "<plum> → curingset <white>" .. setName)
+  classDetect.echo("Mapped <yellow>" .. className .. "<plum> -> curingset <white>" .. setName)
 
 elseif cmd == "switch" and parts[2] then
   local className = parts[2]:title()
@@ -64,19 +64,19 @@ elseif cmd == "map" then
   for k in pairs(classDetect.curingsetMap) do table.insert(sorted, k) end
   table.sort(sorted)
   for _, className in ipairs(sorted) do
-    cecho("\n<cyan>| <yellow>" .. className .. string.rep(" ", 16 - #className) .. "<plum>→ <white>" .. classDetect.curingsetMap[className])
+    cecho("\n<cyan>| <yellow>" .. className .. string.rep(" ", 16 - #className) .. "<plum>-> <white>" .. classDetect.curingsetMap[className])
   end
   cecho("\n<cyan>+==========================================+\n")
 
 else
   classDetect.echo("<white>Usage:")
-  cecho("\n  <yellow>csd status<plum>         — Show current state")
-  cecho("\n  <yellow>csd on<plum>/<yellow>off<plum>          — Enable/disable")
-  cecho("\n  <yellow>csd reset<plum>          — Reset to normal curingset")
-  cecho("\n  <yellow>csd set <class> <set><plum> — Override curingset mapping")
-  cecho("\n  <yellow>csd switch <class><plum>  — Manually switch curingset")
-  cecho("\n  <yellow>csd setup<plum>          — Bulk create curingsets in-game")
-  cecho("\n  <yellow>csd map<plum>            — Show class→curingset mapping")
-  cecho("\n  <yellow>csd save<plum>/<yellow>load<plum>      — Save/load config")
+  cecho("\n  <yellow>csd status<plum>         -- Show current state")
+  cecho("\n  <yellow>csd on<plum>/<yellow>off<plum>          -- Enable/disable")
+  cecho("\n  <yellow>csd reset<plum>          -- Reset to normal curingset")
+  cecho("\n  <yellow>csd set <class> <set><plum> -- Override curingset mapping")
+  cecho("\n  <yellow>csd switch <class><plum>  -- Manually switch curingset")
+  cecho("\n  <yellow>csd setup<plum>          -- Bulk create curingsets in-game")
+  cecho("\n  <yellow>csd map<plum>            -- Show class->curingset mapping")
+  cecho("\n  <yellow>csd save<plum>/<yellow>load<plum>      -- Save/load config")
   echo("\n")
 end

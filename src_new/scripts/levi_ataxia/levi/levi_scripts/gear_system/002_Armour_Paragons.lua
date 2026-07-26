@@ -379,7 +379,7 @@ function ataxia.armour.swap(profileName)
     end
   end
 
-  -- 3. Pry + insert with 2s delay (always send — can't verify game state without probe)
+  -- 3. Pry + insert with 2s delay (always send -- can't verify game state without probe)
   if profile.slots and #profile.slots > 0 then
     -- Watchdog: force-clear the guard if the insert timer never clears it (e.g. an
     -- error inside its callback). Keyed on swapStartTime so a later legitimate swap
@@ -672,7 +672,7 @@ function ataxia.armour.onBasherEnabled()
   if not ataxia.armour.config.autoSwap then return end
   if not ataxia.armour.config.bashProfile then return end
   if not ataxia.armour.config.profiles[ataxia.armour.config.bashProfile] then return end
-  ataxia.armour.echo("Basher enabled — swapping to '<white>" .. ataxia.armour.config.bashProfile .. "<plum>'")
+  ataxia.armour.echo("Basher enabled -- swapping to '<white>" .. ataxia.armour.config.bashProfile .. "<plum>'")
   ataxia.armour.swap(ataxia.armour.config.bashProfile)
 end
 
@@ -680,7 +680,7 @@ function ataxia.armour.onBasherDisabled()
   if not ataxia.armour.config.autoSwap then return end
   if not ataxia.armour.config.pvpProfile then return end
   if not ataxia.armour.config.profiles[ataxia.armour.config.pvpProfile] then return end
-  ataxia.armour.echo("Basher disabled — swapping to '<white>" .. ataxia.armour.config.pvpProfile .. "<plum>'")
+  ataxia.armour.echo("Basher disabled -- swapping to '<white>" .. ataxia.armour.config.pvpProfile .. "<plum>'")
   ataxia.armour.swap(ataxia.armour.config.pvpProfile)
 end
 

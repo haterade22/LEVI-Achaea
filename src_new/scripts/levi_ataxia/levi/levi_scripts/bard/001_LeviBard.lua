@@ -288,7 +288,7 @@ function bard.dispatchOne()
   -- -------------------------------------------------------------------------
   -- Attack selection chain (priority-ordered)
   -- NOTE: Known bugs in conditions below are preserved verbatim from original.
-  -- Do not "fix" mildtramua/mildtraumna typos or bardsunrise precedence — see plan.
+  -- Do not "fix" mildtramua/mildtraumna typos or bardsunrise precedence -- see plan.
   -- -------------------------------------------------------------------------
 
   if bard.hasShield() or bard.hasRebounding() then
@@ -490,7 +490,7 @@ function bard.status()
       .. "<reset>")
     bard.echo("Rapier dmg: <white>" .. tostring(bard._rapierdamage or "?") .. "<reset>")
   else
-    bard.echo("<dim_grey>No target — limb preps unavailable.")
+    bard.echo("<dim_grey>No target -- limb preps unavailable.")
   end
 
   -- Refrain (read-only call, no side effects beyond state.lastRefrain)

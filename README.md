@@ -487,9 +487,10 @@ explorer fights on chosen ground:
   `mnem swarm deep <ripple> <n>`), swing once and step back to the just-cleared room as one
   atomic queued line, kill what follows, re-enter, repeat (3 pulls per room max).
 - **Indoors**: the escape also raises an **icewall** on the door (Bracers of Frost) and
-  **leaps** it (chitin greaves); re-entry melts the wall first (Bracers of Flame). Without
-  the Maklak's Promise boon denizens walk through walls — the wall paces the fight; with it,
-  they're impeded.
+  **leaps** it (chitin greaves). The wall then STAYS — re-entry just leaps back over it,
+  and later escapes skip the re-cast entirely (faster exits); it's only melted (Bracers of
+  Flame) once the room is cleared. Without the Maklak's Promise boon denizens walk through
+  walls — the wall paces the fight; with it, they're impeded.
 - **Outdoors swarm-followed**: **fly-kite** — `FLY`, then every attack becomes
   `land;attack;fly`, touching ground only for the swing; lands when the pack thins.
 - **Roll Hide panic** (boon): at panic HP, tumble out — sheds all pursuers.

@@ -89,7 +89,7 @@ local function cleanupScan()
 end
 
 --- Extract the weapon type from a full item ID.
--- e.g. "staff569815" → "staff",  "morningstar511732" → "morningstar"
+-- e.g. "staff569815" -> "staff",  "morningstar511732" -> "morningstar"
 local function parseType(fullId)
   return fullId:match("^(%a+)%d+$")
 end
@@ -160,7 +160,7 @@ local function presentResults()
       for slot, sid in pairs(suggested) do
         if sid == w.id then
           local hint = SLOT_HINTS[slot] or ""
-          cecho("  <green>→ " .. slot)
+          cecho("  <green>-> " .. slot)
           if hint ~= "" then cecho(" <dim_grey>(" .. hint .. ")") end
           break
         end
@@ -325,7 +325,7 @@ function ataxia.swapWeaponSlots(slot1, slot2)
   suggested[slot1] = suggested[slot2]
   suggested[slot2] = tmp
 
-  ataxia_Echo("Swapped " .. slot1 .. " ↔ " .. slot2)
+  ataxia_Echo("Swapped " .. slot1 .. " <-> " .. slot2)
   if suggested[slot1] then
     ataxia_Echo("  " .. slot1 .. " = " .. suggested[slot1])
   end

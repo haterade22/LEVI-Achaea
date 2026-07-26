@@ -27,7 +27,7 @@ if arg == "" then
   if #ataxiaBasher.ownDenizens == 0 then
     ataxiaEcho("No own-denizen keywords set. Add one with: <white>bash mine add <keyword>")
   else
-    ataxiaEcho("Your denizens (never auto-added or targeted) — click to remove:")
+    ataxiaEcho("Your denizens (never auto-added or targeted) -- click to remove:")
     for _, kw in ipairs(ataxiaBasher.ownDenizens) do
       cecho("\n  <red>- ")
       fg("white")

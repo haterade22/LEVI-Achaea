@@ -711,7 +711,7 @@ function leviSetup.setupTracking(rest)
 
   row("Current system", "V3 (probability-based)")
   cecho("\n\n  " .. V .. "V3 affliction tracking is always active.")
-  cecho("\n  " .. V .. "V2 has been removed — V2 stubs route to V3 automatically.")
+  cecho("\n  " .. V .. "V2 has been removed -- V2 stubs route to V3 automatically.")
   cecho("\n")
 end
 
@@ -794,8 +794,8 @@ function leviSetup.setupGui(rest)
   cecho("\n    " .. HL .. "Chat" .. V .. ", " .. HL .. "Map" .. V .. ", " .. HL .. "Bash Window" .. V .. ", " .. HL .. "Limb Counter" .. V .. ", " .. HL .. "Hunter")
   cecho("\n")
   cecho("\n  " .. V .. "The full Geyser GUI (borders, vitals bars, gauges) is separate:")
-  cecho("\n  " .. HL .. "ataxia setup gui on" .. V .. "  — Enable full Geyser GUI")
-  cecho("\n  " .. HL .. "ataxia setup gui off" .. V .. " — Disable full Geyser GUI (recommended)")
+  cecho("\n  " .. HL .. "ataxia setup gui on" .. V .. "  -- Enable full Geyser GUI")
+  cecho("\n  " .. HL .. "ataxia setup gui off" .. V .. " -- Disable full Geyser GUI (recommended)")
   cecho("\n")
 end
 
@@ -857,12 +857,12 @@ end
 -- ═══════════════════════════════════════════════════════════════════════
 function leviSetup.setupInstall(rest)
   if rest == "ataxia" or rest == "at" then
-    ataxiaEcho("Running " .. W .. "atinstall" .. V .. " — this will reset Ataxia system settings.")
+    ataxiaEcho("Running " .. W .. "atinstall" .. V .. " -- this will reset Ataxia system settings.")
     ataxiaEcho("Configures server-side curing, prompt, screen width, and loads defaults.")
     ataxiaEcho("Type " .. HL .. "atinstall" .. V .. " again within 5 seconds to confirm.")
     return
   elseif rest == "basher" or rest == "ab" then
-    ataxiaEcho("Running " .. W .. "abinstall" .. V .. " — initialising basher system...")
+    ataxiaEcho("Running " .. W .. "abinstall" .. V .. " -- initialising basher system...")
     local defaults = {
       confOpt = {["True"] = true, yes = true, yep = true, y = true,
                  ["False"] = false, nope = false, no = false, n = false},
@@ -891,7 +891,7 @@ function leviSetup.setupInstall(rest)
     save()
     return
   elseif rest == "ndb" or rest == "an" then
-    ataxiaEcho("Running " .. W .. "aninstall" .. V .. " — initialising Name Database...")
+    ataxiaEcho("Running " .. W .. "aninstall" .. V .. " -- initialising Name Database...")
     if ataxiaNDB_Install then
       ataxiaNDB_Install()
       ataxiaEcho("NDB installed successfully.")
@@ -902,7 +902,7 @@ function leviSetup.setupInstall(rest)
   elseif rest == "all" then
     ataxiaEcho("Running full system install: Ataxia + Basher + NDB")
     cecho("\n")
-    ataxiaEcho("Step 1: Ataxia core — type " .. HL .. "atinstall" .. V .. " twice (confirm within 5s)")
+    ataxiaEcho("Step 1: Ataxia core -- type " .. HL .. "atinstall" .. V .. " twice (confirm within 5s)")
     leviSetup.setupInstall("basher")
     cecho("\n")
     leviSetup.setupInstall("ndb")
@@ -931,10 +931,10 @@ function leviSetup.setupInstall(rest)
   cecho("\n  " .. D .. "  name highlighting, enemy tracking, and player notes.")
 
   cecho("\n\n  " .. V .. "Or run them from here:")
-  cecho("\n  " .. HL .. "ataxia setup install all" .. V .. "     — Install basher + NDB (Ataxia still needs manual confirm)")
-  cecho("\n  " .. HL .. "ataxia setup install ataxia" .. V .. "  — Guidance for atinstall")
-  cecho("\n  " .. HL .. "ataxia setup install basher" .. V .. "  — Run abinstall directly")
-  cecho("\n  " .. HL .. "ataxia setup install ndb" .. V .. "     — Run aninstall directly")
+  cecho("\n  " .. HL .. "ataxia setup install all" .. V .. "     -- Install basher + NDB (Ataxia still needs manual confirm)")
+  cecho("\n  " .. HL .. "ataxia setup install ataxia" .. V .. "  -- Guidance for atinstall")
+  cecho("\n  " .. HL .. "ataxia setup install basher" .. V .. "  -- Run abinstall directly")
+  cecho("\n  " .. HL .. "ataxia setup install ndb" .. V .. "     -- Run aninstall directly")
 
   cecho("\n\n  " .. D .. "After installing, use " .. HL .. "ataxia setup guide" .. D .. " to learn what to configure.")
   cecho("\n")
@@ -960,9 +960,9 @@ function leviSetup.setupGuide(rest)
   cecho("\n  " .. V .. "After installing, configure each subsystem to your playstyle.")
   cecho("\n  " .. V .. "Pick a section below to see what you can change:\n")
 
-  cecho("\n  " .. HL .. "ataxia setup guide ataxia" .. V .. "  — Core system (separator, prompt, defences, highlights, etc.)")
-  cecho("\n  " .. HL .. "ataxia setup guide basher" .. V .. "  — Hunting (target lists, flee, danger, gold, shields)")
-  cecho("\n  " .. HL .. "ataxia setup guide ndb" .. V .. "     — Player database (city colours, enemy formatting, notes)")
+  cecho("\n  " .. HL .. "ataxia setup guide ataxia" .. V .. "  -- Core system (separator, prompt, defences, highlights, etc.)")
+  cecho("\n  " .. HL .. "ataxia setup guide basher" .. V .. "  -- Hunting (target lists, flee, danger, gold, shields)")
+  cecho("\n  " .. HL .. "ataxia setup guide ndb" .. V .. "     -- Player database (city colours, enemy formatting, notes)")
 
   cecho("\n\n  " .. D .. "Or jump straight into any setting with " .. HL .. "ataxia setup <section>" .. D .. ".")
   cecho("\n")
@@ -992,14 +992,14 @@ function leviSetup.guideAtaxia()
 
   cecho("\n  " .. W .. "4. Defence Profiles (defup/keep)")
   cecho("\n  " .. D .. "   Set which defences to automatically maintain.")
-  cecho("\n  " .. V .. "   Commands: " .. G .. "defup" .. V .. "          — Raise all kept defences")
-  cecho("\n  " .. V .. "             " .. G .. "defadd <def>" .. V .. "   — Add defence to keep list")
-  cecho("\n  " .. V .. "             " .. G .. "defremove <def>" .. V .. " — Remove from keep list")
-  cecho("\n  " .. V .. "             " .. G .. "deflist" .. V .. "        — Show current keep list")
+  cecho("\n  " .. V .. "   Commands: " .. G .. "defup" .. V .. "          -- Raise all kept defences")
+  cecho("\n  " .. V .. "             " .. G .. "defadd <def>" .. V .. "   -- Add defence to keep list")
+  cecho("\n  " .. V .. "             " .. G .. "defremove <def>" .. V .. " -- Remove from keep list")
+  cecho("\n  " .. V .. "             " .. G .. "deflist" .. V .. "        -- Show current keep list")
 
   cecho("\n\n  " .. W .. "5. Curing Priorities")
   cecho("\n  " .. D .. "   Reorder which afflictions get cured first.")
-  cecho("\n  " .. V .. "   Command:  " .. G .. "aconfig prios" .. V .. " — View/set priorities")
+  cecho("\n  " .. V .. "   Command:  " .. G .. "aconfig prios" .. V .. " -- View/set priorities")
 
   cecho("\n\n  " .. HL .. "DISPLAY & QUALITY OF LIFE" .. "\n")
 
@@ -1010,7 +1010,7 @@ function leviSetup.guideAtaxia()
 
   cecho("\n\n  " .. W .. "7. Sipping Thresholds")
   cecho("\n  " .. D .. "   Control when health/mana potions are sipped.")
-  cecho("\n  " .. V .. "   Command:  " .. G .. "hh <percent>" .. V .. "  — Set health sip %")
+  cecho("\n  " .. V .. "   Command:  " .. G .. "hh <percent>" .. V .. "  -- Set health sip %")
   cecho("\n  " .. V .. "   Wizard:   " .. G .. "ataxia setup sipping")
 
   cecho("\n\n  " .. W .. "8. Room Shortening")
@@ -1051,10 +1051,10 @@ function leviSetup.guideBasher()
 
   cecho("\n\n  " .. W .. "2. Add Targets for an Area")
   cecho("\n  " .. D .. "   Tell the basher what to attack in the current area.")
-  cecho("\n  " .. V .. "   Commands: " .. G .. "bash room" .. V .. "          — Add everything in this room")
-  cecho("\n  " .. V .. "             " .. G .. "bash add <mob>" .. V .. "     — Add a specific mob")
-  cecho("\n  " .. V .. "             " .. G .. "bash remove <mob>" .. V .. "  — Remove a mob")
-  cecho("\n  " .. V .. "             " .. G .. "bash list" .. V .. "          — Show target list for this area")
+  cecho("\n  " .. V .. "   Commands: " .. G .. "bash room" .. V .. "          -- Add everything in this room")
+  cecho("\n  " .. V .. "             " .. G .. "bash add <mob>" .. V .. "     -- Add a specific mob")
+  cecho("\n  " .. V .. "             " .. G .. "bash remove <mob>" .. V .. "  -- Remove a mob")
+  cecho("\n  " .. V .. "             " .. G .. "bash list" .. V .. "          -- Show target list for this area")
 
   cecho("\n\n  " .. HL .. "SAFETY & FLEE" .. "\n")
 
@@ -1065,15 +1065,15 @@ function leviSetup.guideBasher()
   cecho("\n  " .. D .. "   Default: ~25% HP to flee, ~40% HP to shield")
 
   cecho("\n\n  " .. W .. "4. Danger Mobs")
-  cecho("\n  " .. D .. "   Mark mobs as dangerous — basher flees if too many are present.")
-  cecho("\n  " .. V .. "   Commands: " .. G .. "bash danger <mob>" .. V .. "   — Mark as dangerous")
-  cecho("\n  " .. V .. "             " .. G .. "bash undanger <mob>" .. V .. " — Unmark")
-  cecho("\n  " .. V .. "             " .. G .. "bash dangercount <n>" .. V .. " — Max dangerous mobs before flee")
+  cecho("\n  " .. D .. "   Mark mobs as dangerous -- basher flees if too many are present.")
+  cecho("\n  " .. V .. "   Commands: " .. G .. "bash danger <mob>" .. V .. "   -- Mark as dangerous")
+  cecho("\n  " .. V .. "             " .. G .. "bash undanger <mob>" .. V .. " -- Unmark")
+  cecho("\n  " .. V .. "             " .. G .. "bash dangercount <n>" .. V .. " -- Max dangerous mobs before flee")
 
   cecho("\n\n  " .. W .. "5. Ignore List")
   cecho("\n  " .. D .. "   NPCs the basher should never attack.")
-  cecho("\n  " .. V .. "   Commands: " .. G .. "bash ignore <mob>" .. V .. "   — Add to ignore list")
-  cecho("\n  " .. V .. "             " .. G .. "bash unignore <mob>" .. V .. " — Remove from ignore list")
+  cecho("\n  " .. V .. "   Commands: " .. G .. "bash ignore <mob>" .. V .. "   -- Add to ignore list")
+  cecho("\n  " .. V .. "             " .. G .. "bash unignore <mob>" .. V .. " -- Remove from ignore list")
 
   cecho("\n\n  " .. HL .. "QUALITY OF LIFE" .. "\n")
 
@@ -1142,9 +1142,9 @@ function leviSetup.guideNdb()
 
   cecho("\n  " .. W .. "4. Enemy Name Format")
   cecho("\n  " .. D .. "   How enemy names appear (bold, italic, underline).")
-  cecho("\n  " .. V .. "   Commands: " .. G .. "aneh b" .. V .. " — bold")
-  cecho("\n  " .. V .. "             " .. G .. "aneh i" .. V .. " — italic")
-  cecho("\n  " .. V .. "             " .. G .. "aneh u" .. V .. " — underline")
+  cecho("\n  " .. V .. "   Commands: " .. G .. "aneh b" .. V .. " -- bold")
+  cecho("\n  " .. V .. "             " .. G .. "aneh i" .. V .. " -- italic")
+  cecho("\n  " .. V .. "             " .. G .. "aneh u" .. V .. " -- underline")
 
   cecho("\n\n  " .. HL .. "PLAYER DATA" .. "\n")
 
@@ -1156,8 +1156,8 @@ function leviSetup.guideNdb()
 
   cecho("\n\n  " .. W .. "6. Whois / Honours Lookup")
   cecho("\n  " .. D .. "   Quickly check a player's info from the database.")
-  cecho("\n  " .. V .. "   Commands: " .. G .. "an <name>" .. V .. "      — Show stored player data")
-  cecho("\n  " .. V .. "             " .. G .. "anw <name>" .. V .. "     — Whois lookup")
+  cecho("\n  " .. V .. "   Commands: " .. G .. "an <name>" .. V .. "      -- Show stored player data")
+  cecho("\n  " .. V .. "             " .. G .. "anw <name>" .. V .. "     -- Whois lookup")
 
   cecho("\n\n  " .. W .. "7. Settings Display")
   cecho("\n  " .. D .. "   View all NDB settings at once.")
@@ -1276,7 +1276,7 @@ function leviSetup.setupSlc(rest)
   end
 
   if rest == "" then
-    header("SLC — Self Limb Counter")
+    header("SLC -- Self Limb Counter")
     cecho("\n  " .. V .. "Current configuration:\n")
 
     local toggles = {

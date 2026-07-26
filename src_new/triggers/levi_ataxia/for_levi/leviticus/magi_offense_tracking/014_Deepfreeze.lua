@@ -46,6 +46,6 @@ if target and target ~= "" then
     magi.offense.ptRelay(target .. ": Deepfreeze (frozen)")
   end
   if magi.offense.debugEcho then
-    magi.offense.debugEcho("Deepfreeze → frozen on " .. target)
+    magi.offense.debugEcho("Deepfreeze -> frozen on " .. target)
   end
 end

@@ -46,8 +46,8 @@ ataxiaBasherPaths = ataxiaBasherPaths or {}
 
 ataxiaEcho("Bashing systems engaged and ready.")
 ataxiaEcho("Configure room description condensing for bashing:")
-cecho("\n  <NavajoWhite>aconfig roomshorten off       <DimGrey>— Full room descriptions always")
-cecho("\n  <NavajoWhite>aconfig roomshorten normal    <DimGrey>— Shorten while bashing (recommended)")
-cecho("\n  <NavajoWhite>aconfig roomshorten notmanual <DimGrey>— Shorten only in auto mode\n")
+cecho("\n  <NavajoWhite>aconfig roomshorten off       <DimGrey>-- Full room descriptions always")
+cecho("\n  <NavajoWhite>aconfig roomshorten normal    <DimGrey>-- Shorten while bashing (recommended)")
+cecho("\n  <NavajoWhite>aconfig roomshorten notmanual <DimGrey>-- Shorten only in auto mode\n")
 send(" ")
 ataxia_saveSettings(false)

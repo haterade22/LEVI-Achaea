@@ -1251,7 +1251,7 @@ function infernalDWCStatus()
     local healthColor = targetHealth <= infernalDWC.config.damageKillThreshold and "<red>" or "<green>"
     cecho("\n<cyan>[INF DWC]<reset> Target HP: " .. healthColor .. targetHealth .. "%<reset>")
     if infernalDWC.shouldDamageKill() then
-        cecho(" <red>→ DAMAGE KILL (quash+arc)<reset>")
+        cecho(" <red>-> DAMAGE KILL (quash+arc)<reset>")
     end
 
     cecho("\n<cyan>[INF DWC]<reset> Phase: <yellow>" .. phase .. "<reset>")

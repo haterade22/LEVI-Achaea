@@ -314,7 +314,7 @@ function tekura6.dispatch.buildPrepAttack()
   local punchDmg = tekura6.state.punchDamage
   local breakAt = tekura6.config.breakThreshold
 
-  -- KAI SURGE WINDOW: target can't remount for 15s — sweep + double-punch the parried limb
+  -- KAI SURGE WINDOW: target can't remount for 15s -- sweep + double-punch the parried limb
   -- Parry bypassed because sweep prones them; use the window to prep the stuck limb.
   ataxiaTemp = ataxiaTemp or {}
   if ataxiaTemp.kaiSurgeWindow and parried ~= "none" then

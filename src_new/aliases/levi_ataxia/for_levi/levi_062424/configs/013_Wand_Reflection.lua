@@ -25,7 +25,7 @@ end
 
 if not ataxiaBasher.wandReflection then
 	ataxiaBasher.wandReflection = true
-	ataxiaEcho("Enabled wand of reflection emergency usage." .. (ataxiaBasher.wandId and (" Wand ID: " .. ataxiaBasher.wandId) or " (no wand ID set — use 'abwand <id>' to set)"))
+	ataxiaEcho("Enabled wand of reflection emergency usage." .. (ataxiaBasher.wandId and (" Wand ID: " .. ataxiaBasher.wandId) or " (no wand ID set -- use 'abwand <id>' to set)"))
 else
 	ataxiaBasher.wandReflection = false
 	ataxia.wandReflectionActive = nil

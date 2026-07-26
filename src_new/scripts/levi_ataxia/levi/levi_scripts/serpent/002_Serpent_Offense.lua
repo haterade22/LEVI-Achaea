@@ -621,7 +621,7 @@ end
 -- =============================================================================
 -- canUseSecondary / getPostAction
 -- Prevents snap/shrug from colliding with ekanelia delivery.
--- kalmia and impatience conditions override this — they can't wait.
+-- kalmia and impatience conditions override this -- they can't wait.
 -- =============================================================================
 
 local function getPostAction()
@@ -695,7 +695,7 @@ end
       - druid, sentinel  : kalmia (asthma blocks smoke + morph)
     Default: nil → fall back to pickVenom(nil) standard priority.
 
-    Returns nil for unknown class — callers should treat nil as "no override".
+    Returns nil for unknown class -- callers should treat nil as "no override".
 ]]--
 local CLASS_LOCK_VENOM = {
     apostate     = "voyria",
@@ -917,7 +917,7 @@ end
 --[[
     Select impulse pair during relapse phase.
     Priority: stupidity first (clogs focus, relapses) > monkshood re-lock (only after pre-load)
-    Stupidity MUST go first — it's mental (competes with masochism for focus)
+    Stupidity MUST go first -- it's mental (competes with masochism for focus)
     and relapses via fratricide, creating the window for monkshood re-lock.
     Monkshood only fires after slickness+anorexia are pre-loaded on target,
     so the lock is sealed when impatience lands.
@@ -925,7 +925,7 @@ end
 ]]--
 function selectRelapseImpulse()
     -- Priority 1: Monkshood re-lock — if softlock present, deliver impatience NOW
-    -- Anorexia blocks eating → target can't goldenseal → impatience sticks
+    -- Anorexia blocks eating -> target can't goldenseal -> impatience sticks
     -- Don't waste the softlock window on stupidity when herbs are already blocked
     if haveAff("slickness") and haveAff("anorexia") then
         local monkshoodPair = selectImpulsePair()
@@ -1150,7 +1150,7 @@ function serpent.trackCure(herbType)
     if herbType == "kelp" then
         serpent.cureTracking.kelpCures = serpent.cureTracking.kelpCures + 1
     elseif herbType == "ginseng" then
-        -- Only count if target has a kelp aff — proves they're prioritizing ginseng over kelp
+        -- Only count if target has a kelp aff -- proves they're prioritizing ginseng over kelp
         if countKelpStack() > 0 then
             serpent.cureTracking.ginsengCures = serpent.cureTracking.ginsengCures + 1
         end
@@ -1246,7 +1246,7 @@ function determineStrategy()
     if ct.ginsengCures > 2 and countGinsengStack() < 3 then
         -- Target eating ginseng + stack not deep enough yet
         if serpent.config.debug then
-            Algedonic.Echo("<cyan>ADAPTIVE: <white>Target eating ginseng — stacking (" .. countGinsengStack() .. "/3)")
+            Algedonic.Echo("<cyan>ADAPTIVE: <white>Target eating ginseng -- stacking (" .. countGinsengStack() .. "/3)")
         end
         serpStrategy = "ginseng_pressure"
         return
@@ -1665,7 +1665,7 @@ function serp_ekanelia_attack()
         local cmd
 
         -- If kalmia ekanelia is ready, chain impulse on eq alongside flay on bal.
-        -- Flay uses lash (bal), impulse uses dirk (eq) — they don't share a balance type.
+        -- Flay uses lash (bal), impulse uses dirk (eq) -- they don't share a balance type.
         --
         -- Shield-break pressure (Track 3.3): when target shields, prefer chaining
         -- monkshood impulse to keep impatience landing — impatience forces touch-shield
@@ -1889,7 +1889,7 @@ function serp_ekanelia_attack()
 
     -- Gecko override: strip sileris to enable impulse next round.
     -- Only fires once per rotation. Don't fire if monkshood conditionals
-    -- aren't actually ready yet — no point stripping sileris prematurely.
+    -- aren't actually ready yet -- no point stripping sileris prematurely.
     if not useImpulse and not eqAction and not haveAff("impatience")
        and not serpent.state.geckoStripAttempted
        and serpOffenseMode ~= "scytherus"
@@ -1924,7 +1924,7 @@ function serp_ekanelia_attack()
         attackMode = "bite"
         serpent.impulseSuccess = false
         cmd = wieldDirk .. "bite " .. target .. " " .. biteVenom
-        Algedonic.Echo("<yellow>BITE " .. biteVenom:upper() .. "<white> → " .. (biteLabel or "camus"))
+        Algedonic.Echo("<yellow>BITE " .. biteVenom:upper() .. "<white> -> " .. (biteLabel or "camus"))
         envenomList = {biteVenom}
         envenomListTwo = {}
         if eqAction and canUseSecondary then
@@ -1940,7 +1940,7 @@ function serp_ekanelia_attack()
         -- Record impulse timestamp for per-aff fratricide cooldown
         recordImpulse(impulsePair.suggestion)
         cmd = wieldDirk .. "impulse " .. target .. " " .. impulsePair.suggestion .. " " .. impulsePair.venom
-        Algedonic.Echo("<yellow>IMPULSE " .. impulsePair.suggestion:upper() .. " + " .. impulsePair.venom:upper() .. "<white> → " .. impulsePair.label)
+        Algedonic.Echo("<yellow>IMPULSE " .. impulsePair.suggestion:upper() .. " + " .. impulsePair.venom:upper() .. "<white> -> " .. impulsePair.label)
         envenomList = {impulsePair.venom}
         envenomListTwo = {}
 
@@ -2175,7 +2175,7 @@ function serp_ekanelia_offense()
 
     -- Track relapse phase (lock mode)
     -- impatienceDelivered is set by 016_Ekanelia_Success trigger (event-driven)
-    -- Once impatience was delivered, we're in relapse phase — target will cure it,
+    -- Once impatience was delivered, we're in relapse phase -- target will cure it,
     -- and we need to immediately start stupidity+curare then gecko+slike
     serpent.state.relapsePhase = serpent.state.impatienceDelivered
 
@@ -2332,7 +2332,7 @@ function serp_setmode_group()
         serpent.state.voyriaSent = false
         serpOffenseMode = "group"
         cecho("\n<cyan>Serpent offense: GROUP mode<reset>\n")
-        cecho("<dim_grey>  Priority: Fast lock — paralysis > asthma > slickness > weariness > impulse impatience > anorexia<reset>\n")
+        cecho("<dim_grey>  Priority: Fast lock -- paralysis > asthma > slickness > weariness > impulse impatience > anorexia<reset>\n")
     end
     serpOffenseMode = "group"
 end
@@ -2358,7 +2358,7 @@ function serp_setmode_scytherus()
         serpent.state.camusDelivered = false
         serpOffenseMode = "scytherus"
         cecho("\n<red>Serpent offense: SCYTHERUS mode<reset>\n")
-        cecho("<dim_grey>  Priority: Build addiction+nausea → impulse/bite scytherus → camus damage<reset>\n")
+        cecho("<dim_grey>  Priority: Build addiction+nausea -> impulse/bite scytherus -> camus damage<reset>\n")
     end
     serpOffenseMode = "scytherus"
 end
@@ -2368,7 +2368,7 @@ function serp_setmode_bitepayload()
         serpent.state.geckoStripAttempted = false
         serpOffenseMode = "bitepayload"
         cecho("\n<red>Serpent offense: BITE PAYLOAD mode<reset>\n")
-        cecho("<dim_grey>  Priority: Bite for affliction stacking — scytherus/monkshood/kalmia/curare/loki/aconite<reset>\n")
+        cecho("<dim_grey>  Priority: Bite for affliction stacking -- scytherus/monkshood/kalmia/curare/loki/aconite<reset>\n")
     end
     serpOffenseMode = "bitepayload"
 end
@@ -2472,7 +2472,7 @@ function serp_status()
     end
 
     if impPair then
-        cecho("<white>Impulse Pair: <green>impulse " .. target .. " " .. impPair.suggestion .. " " .. impPair.venom .. " → " .. impPair.label .. "<reset>\n")
+        cecho("<white>Impulse Pair: <green>impulse " .. target .. " " .. impPair.suggestion .. " " .. impPair.venom .. " -> " .. impPair.label .. "<reset>\n")
     else
         cecho("<white>Impulse Pair: <dim_grey>None available<reset>\n")
     end
@@ -2511,9 +2511,9 @@ function serp_status()
     cecho("  <white>Focus: <yellow>" .. serpent.cureTracking.focusCures .. "<reset>\n")
 
     if serpent.cureTracking.ginsengCures > serpent.cureTracking.kelpCures + 2 then
-        cecho("<green>ADAPTIVE: <white>Target fears darkshade → pushing LOCK<reset>\n")
+        cecho("<green>ADAPTIVE: <white>Target fears darkshade -> pushing LOCK<reset>\n")
     elseif serpent.cureTracking.kelpCures > serpent.cureTracking.ginsengCures + 2 then
-        cecho("<magenta>ADAPTIVE: <white>Target fears lock → pushing DARKSHADE<reset>\n")
+        cecho("<magenta>ADAPTIVE: <white>Target fears lock -> pushing DARKSHADE<reset>\n")
     else
         cecho("<dim_grey>ADAPTIVE: <white>Balanced curing - standard progression<reset>\n")
     end
@@ -2712,7 +2712,7 @@ if tempRegexTrigger then
         [[
             if serpent and serpent.hypnosis and serpent.hypnosis.reset then
                 serpent.hypnosis.reset()
-                Algedonic.Echo("<red>HYPNOSIS: <white>Lost control — state reset")
+                Algedonic.Echo("<red>HYPNOSIS: <white>Lost control -- state reset")
             end
         ]]
     )
@@ -2722,7 +2722,7 @@ if tempRegexTrigger then
         [[
             if serpent and serpent.hypnosis and serpent.hypnosis.reset then
                 serpent.hypnosis.reset()
-                Algedonic.Echo("<red>HYPNOSIS: <white>Target noticed — state reset")
+                Algedonic.Echo("<red>HYPNOSIS: <white>Target noticed -- state reset")
             end
         ]]
     )
@@ -2732,7 +2732,7 @@ if tempRegexTrigger then
         [[
             if serpent and serpent.hypnosis and serpent.hypnosis.reset then
                 serpent.hypnosis.reset()
-                Algedonic.Echo("<red>HYPNOSIS: <white>Too perceptive — state reset")
+                Algedonic.Echo("<red>HYPNOSIS: <white>Too perceptive -- state reset")
             end
         ]]
     )

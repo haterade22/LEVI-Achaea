@@ -79,6 +79,7 @@ S.state = "idle" -- idle | pulling | funnel | reenter
 S.pulls = S.pulls or {}       -- [roomNum] = UNPRODUCTIVE pull count this ripple (progress refunds it)
 S.noTactics = S.noTactics or {} -- [roomNum] = true -> fight in place (gave up)
 S.entrySnap = S.entrySnap or {} -- [roomNum] = { n, id, hp } at the last pull, for the progress check
+S.wallRaised = S.wallRaised or {} -- [roomNum] = true -> our icewall stands on its funnel edge
 S.recon = S.recon or nil      -- { at=<epoch>, ripple=<n>, lines={...} } last fullsense
 
 local function now()
@@ -220,7 +221,13 @@ function S._tacticalGo(dirShort, why)
   if not (M._tacticalArm and dirShort) then return S.reset("no tactical mover") end
   M._tacticalArm(dirShort)
   local sep = (ataxia.settings and ataxia.settings.separator) or ";"
-  send("queue addclear free stand" .. sep .. dirShort)
+  -- LEAP, never walk (review CRITICAL): a tactical retreat can cross our OWN
+  -- standing icewall -- the indoor low-HP escape retreats through the walled
+  -- funnel edge, where a plain walk silently fails and the anti-death ladder
+  -- livelocks at crash HP. A chitin-greaves leap clears any wall (ours or an
+  -- affix's) and is plain movement when there is none. Eq-gated; the tactical
+  -- timeout still hands back to assess if the jump never lands.
+  send("queue addclear free stand" .. sep .. "leap " .. dirShort)
   if why then S._echo(why .. " -> <cyan>" .. dirShort .. "<reset>.") end
 end
 
@@ -230,9 +237,26 @@ end
 --          we came through, then LEAP over our own wall (chitin greaves; the manual
 --          ragepull alias proves leap-over-own-wall works). One queue entry keeps the
 --          order: swing -> wall -> leap, all on the same balance.
+-- The wall PERSISTS across cycles (user-confirmed: LEAP clears our own wall in both
+-- directions, so re-entry never melts it) -- follow-up escapes skip the point and go
+-- leap-only, which fires a full balance-round sooner (point waits for balance, leap
+-- only for eq). If the wall broke/expired the leap-only escape degrades to a plain
+-- unwalled pull -- acceptable: denizens walk through icewalls anyway without
+-- Maklak's Promise. S.wallRaised[room] tracks it, optimistic at send time; cleared
+-- by the end-of-room melt (onTick) and each new ripple.
 function S._escapeSuffix(sep)
   local s = S._cfg()
   if S.mode == "wall" then
+    S.wallRaised = S.wallRaised or {}
+    if S.swarmRoom and S.wallRaised[S.swarmRoom] then
+      return sep .. "leap " .. S.backShort
+    end
+    if S.swarmRoom then
+      -- Remember WHICH edge is walled (the LONG back dir): the panic tumble
+      -- avoids it, and the memory only wipes on a genuine ripple boundary.
+      S.wallRaised[S.swarmRoom] = S.backLong
+      S._wallsRipple = (M.run and tonumber(M.run.ripple)) or 0
+    end
     return sep .. "point " .. s.bracersId .. " " .. S.backLong .. sep .. "leap " .. S.backShort
   end
   return sep .. S.backShort
@@ -342,16 +366,18 @@ function S._beginReenter()
   local followers = S.peakFollowers or 0
   if S.flying then send("land"); S.flying = nil end
   if S.mode == "wall" then
-    -- Our own icewall may still block the way back: melt it first (Bracers of Flame --
-    -- the fli alias shape), then walk. If the wall already broke, the melt is a harmless
-    -- miss and the walk proceeds; if the WALK still fails, the tactical-move timeout
-    -- hands us back to assess without condemning the edge.
+    -- The icewall STAYS (user-confirmed): chitin-greaves LEAP clears our own wall
+    -- in BOTH directions, so re-entry is a single eq-gated jump -- no melt, no walk.
+    -- The standing wall keeps pacing the swarm (a real barrier with Maklak's
+    -- Promise) and lets follow-up escapes go leap-only (see _escapeSuffix). It is
+    -- melted only when the tactic is done with the room (onTick's empty-room
+    -- cleanup) so normal navigation can walk the edge again. If the wall already
+    -- broke, the leap still lands -- it is plain movement without an obstacle.
     if not (M._tacticalArm and S.fwdShort) then return S.reset("no tactical mover") end
     M._tacticalArm(S.fwdShort)
     local sep = (ataxia.settings and ataxia.settings.separator) or ";"
-    local s = S._cfg()
-    send("queue addclear free point " .. s.meltId .. " at icewall" .. sep .. "stand" .. sep .. S.fwdShort)
-    S._echo("trickle over (peak followers: " .. followers .. ") -- melting our wall and re-entering -> <cyan>" .. S.fwdShort .. "<reset>.")
+    send("queue addclear free stand" .. sep .. "leap " .. S.fwdShort)
+    S._echo("trickle over (peak followers: " .. followers .. ") -- leaping our wall back in -> <cyan>" .. S.fwdShort .. "<reset>.")
     return true
   end
   S._tacticalGo(S.fwdShort, "trickle over (peak followers: " .. followers .. ") -- re-entering")
@@ -367,10 +393,14 @@ function S._panicDir()
   local room = MAP and MAP.rooms and MAP.current and MAP.rooms[MAP.current]
   if not (room and room.exits) then return nil end
   local fwd = S.fwdShort and MAP.normDir and MAP.normDir(S.fwdShort)
+  -- Also avoid tumbling INTO our own standing icewall (fight-in-place panic in a
+  -- walled room): wallRaised stores the walled edge's LONG dir for this room.
+  local walled = S.wallRaised and MAP.current and S.wallRaised[MAP.current]
+  walled = (type(walled) == "string" and MAP.normDir and MAP.normDir(walled)) or nil
   local fallback
   for d in pairs(room.exits) do
     if MAP.OFFSETS and MAP.OFFSETS[d] then
-      if d ~= fwd then return MAP.shortDir(d) end
+      if d ~= fwd and d ~= walled then return MAP.shortDir(d) end
       fallback = MAP.shortDir(d)
     end
   end
@@ -595,7 +625,39 @@ function S.onTick()
   end
 
   -- idle: assess the room we're standing in
-  if not (M._roomHasDenizens and M._roomHasDenizens()) then return false end
+  if not (M._roomHasDenizens and M._roomHasDenizens()) then
+    -- Room done. If our icewall from the wall tactic still stands on the funnel
+    -- edge, melt it before handing the tick back -- an intact wall makes every
+    -- later plain walk on that edge fail (the 008 wall-leap reflex recovers, but
+    -- a melted edge walks free). Hardened per review: the melt is balance-gated
+    -- and sits in the free queue for a round, so (a) HOLD attack dispatch (a
+    -- roamer's arrival would addclearfull the melt away), (b) clear the memory
+    -- only on CONFIRMATION (trigger 026 -> onWallMelted) -- a wiped/whiffed melt
+    -- re-sends on the next empty assess -- and (c) bound the retries: after 4,
+    -- leave the wall to the leap reflex. Consume the tick each attempt so the
+    -- explorer's own `queue addclear free` move cannot wipe the queued melt.
+    if cur and S.wallRaised and S.wallRaised[cur] then
+      S._meltTries = (S._meltRoom == cur) and ((S._meltTries or 0) + 1) or 1
+      S._meltRoom = cur
+      if S._meltTries > 4 then
+        S.wallRaised[cur] = nil
+        S._meltRoom, S._meltTries = nil, nil
+        S._echo("<grey>wall didn't melt after 4 tries -- leaving it (walks will leap it).")
+        return false
+      end
+      ataxiaTemp.swarmHold = true
+      if S._holdT then pcall(killTimer, S._holdT) end
+      S._holdT = tempTimer(4, function() S._holdT = nil; ataxiaTemp.swarmHold = nil end)
+      local s = S._cfg()
+      send("queue addclear free point " .. s.meltId .. " at icewall")
+      if M._scheduleTick then M._scheduleTick(2) end
+      if S._meltTries == 1 then
+        S._echo("room done -- melting our wall so the sweep can walk that edge again.")
+      end
+      return true
+    end
+    return false
+  end
   if cur and S.noTactics[cur] then return false end
   local n = (M._denizenCount and M._denizenCount()) or 0
   if n < S.threshold() then return false end
@@ -691,6 +753,19 @@ end
 function S.onFlightUp() S.flightConfirmed = true end
 function S.onFlightDown() S.flightConfirmed = nil end
 
+-- "You send a lash of fire to strike the icewall to the <dir>, and it quickly
+-- melts." (trigger 026): a melt LANDED in this room -- ours or a manual one;
+-- either way the wall here is gone, so the memory clears (this is the only
+-- non-boundary clear: the melt branch above re-sends until this confirms).
+function S.onWallMelted()
+  local cur = M.map and M.map.current
+  if cur and S.wallRaised then S.wallRaised[cur] = nil end
+  S._meltRoom, S._meltTries = nil, nil
+  -- Release the melt hold -- but never a hold that belongs to a live tactic
+  -- (a manual melt mid-pull must not expose the queued chain to a wipe).
+  if S.state == "idle" then S._clearHold() end
+end
+
 -- Single teardown. Ripple boundaries are covered by the boon screen (every ripple
 -- ends there) + run start; death/leave-tower via _exploreStop; reloads via
 -- sysLoadEvent; manual `bash` toggle via the "basher disabled" event.
@@ -715,11 +790,23 @@ function S.reset(reason)
   S.peakFollowers, S.announcedFollow = nil, nil
 end
 
--- Fresh ripple: new layout, new pull budgets.
+-- Fresh ripple / sweep (re)start: new pull budgets. Called both at GENUINE ripple
+-- boundaries (GO resume, ripple line) and on a mid-ripple `mnem explore on`
+-- restart -- budgets refresh either way, but WALLS ARE PHYSICAL: wipe the wall
+-- memory only when the layout actually changed (review catch: a mid-ripple
+-- restart wiped `wallRaised` while the wall still stood, so it could never be
+-- melted and the sweep walked into it). If the ripple counter is stale the wipe
+-- is skipped -- safe: stale memory degrades to leap-only escapes and a bounded
+-- melt whiff, both harmless.
 function S.onRipple()
   S.pulls = {}
   S.noTactics = {}
   S.entrySnap = {}
+  local ripple = (M.run and tonumber(M.run.ripple)) or 0
+  if S._wallsRipple ~= ripple then
+    S.wallRaised = {}
+    S._wallsRipple = ripple
+  end
   S.reset("new ripple")
 end
 
@@ -740,6 +827,59 @@ function S.sense(why)
         .. (why and (" (" .. why .. ")") or "") .. " -- stored unparsed (the parser learns from your logs).")
     end,
   })
+end
+
+-- ---------------------------------------------------------------------------
+-- Bloodscent recon ("You sense out your prey upon entering a ripple.")
+-- The boon prints, unprompted on every ripple entry:
+--   You sense out the location of your prey...
+--   You sense a shadowy basilisk (#371988) at Beneath an ancient tree.
+--   ... (one row per denizen in the ripple)
+-- Trigger 028 feeds the rows here; a short quiet-window commits the batch into
+-- S.recon as PARSED data ({name,id,room} + per-room counts) -- the format the
+-- Sleuth raw capture was waiting on. Self-gated on the tower (the "You sense"
+-- shape could exist elsewhere).
+-- ---------------------------------------------------------------------------
+function S.onSenseStart()
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  S._senseRows = {}
+end
+
+function S.onSenseRow(name, id, room)
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  S._senseRows = S._senseRows or {}
+  S._senseRows[#S._senseRows + 1] = { name = name, id = tostring(id), room = room }
+  if S._senseT then pcall(killTimer, S._senseT) end
+  S._senseT = tempTimer(1.5, function()
+    S._senseT = nil
+    S._senseCommit()
+  end)
+end
+
+-- Commit the batch (quiet window elapsed). Pure aside from the echo; unit-tested.
+function S._senseCommit()
+  local rows = S._senseRows
+  S._senseRows = nil
+  if not rows or #rows == 0 then return end
+  local byRoom, order = {}, {}
+  for _, r in ipairs(rows) do
+    if not byRoom[r.room] then byRoom[r.room] = 0; order[#order + 1] = r.room end
+    byRoom[r.room] = byRoom[r.room] + 1
+  end
+  S.recon = {
+    at = now(),
+    ripple = (M.run and M.run.ripple) or 0,
+    mobs = rows, byRoom = byRoom, rooms = order,
+  }
+  local thr = S.threshold()
+  local hot = {}
+  for _, room in ipairs(order) do
+    if byRoom[room] >= thr then hot[#hot + 1] = room .. " (" .. byRoom[room] .. ")" end
+  end
+  S._echo("recon: <yellow>" .. #rows .. "<reset> denizens across <yellow>" .. #order
+    .. "<reset> rooms" .. (#hot > 0
+      and (" -- <indian_red>crowded:<reset> " .. table.concat(hot, ", "))
+      or " -- <green>no crowded rooms<reset>") .. ".")
 end
 
 -- GO = a new wave. With the Sleuth boon up, recon the ripple before the sweep gets deep.
@@ -766,7 +906,10 @@ function S.status()
     .. " panic=" .. tostring(s.panic) .. "@" .. tostring(s.panicAt) .. "%"
     .. " escape=" .. tostring(s.escape) .. "@" .. tostring(s.escapeAt) .. "%->" .. tostring(s.recoverAt) .. "%"
     .. " hold=" .. tostring(ataxiaTemp.swarmHold or false)
-    .. " recon=" .. (S.recon and (#(S.recon.lines or {}) .. " lines @r" .. tostring(S.recon.ripple)) or "none"))
+    .. " recon=" .. (S.recon and (
+      (S.recon.mobs and (#S.recon.mobs .. " mobs/" .. #(S.recon.rooms or {}) .. " rooms")
+        or (#(S.recon.lines or {}) .. " raw lines"))
+      .. " @r" .. tostring(S.recon.ripple)) or "none"))
 end
 
 -- Every prompt: the emergency escape/panic check (see S.onVitals). Cheap fast paths

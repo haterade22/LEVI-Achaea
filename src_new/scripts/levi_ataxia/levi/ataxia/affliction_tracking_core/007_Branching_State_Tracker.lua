@@ -1377,7 +1377,7 @@ end
 function onNegativeConfirmExpiredV3(guess)
     if not guess or not guess.candidates then return end
 
-    v3Echo("Neg-confirm timeout — unfolding branch for: " .. table.concat(guess.candidates, ", "))
+    v3Echo("Neg-confirm timeout -- unfolding branch for: " .. table.concat(guess.candidates, ", "))
 
     -- Re-add all candidates across all branches that had them removed
     local newStates = {}
@@ -1392,7 +1392,7 @@ function onNegativeConfirmExpiredV3(guess)
         end
 
         if #missingCandidates == 0 then
-            -- All candidates present — this branch wasn't affected
+            -- All candidates present -- this branch wasn't affected
             table.insert(newStates, state)
         elseif #missingCandidates == 1 then
             -- Exactly one candidate missing — this is a branch from the guess

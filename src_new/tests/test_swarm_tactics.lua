@@ -81,6 +81,11 @@ local function fixture(count)
   gmcp.Char = nil
   target = nil            -- basher's current-target global (progress check)
   ataxiaBasher_dsGet = nil
+  -- onRipple deliberately preserves wall memory within a ripple, so tests must
+  -- clear it explicitly for isolation.
+  S.wallRaised = {}
+  S._wallsRipple = nil
+  S._meltRoom, S._meltTries = nil, nil
   mobs = count or 3
   MAP.current = 200
   MAP.rooms = {
@@ -232,7 +237,7 @@ describe("swarm funnel phase", function()
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("reenter")
     expect(armed[#armed]).toBe("n") -- forward = original entry direction
-    expect(sent[#sent]).toBe("queue addclear free stand;n")
+    expect(sent[#sent]).toBe("queue addclear free stand;leap n") -- tactical moves always LEAP (wall-safe)
   end)
   it("resets if we somehow end up in a third room", function()
     pullAndArrive()
@@ -285,7 +290,7 @@ describe("swarm stage 2 — icewall (indoors)", function()
     expect(S.state).toBe("funnel")
   end)
 
-  it("melts our own wall on re-entry", function()
+  it("re-enters by LEAPING our own wall -- the icewall stays up", function()
     fixture(3)
     gmcp.Room.Info.details = { "indoors" }
     S.onTick(); S.decorate("attack", ";")
@@ -293,7 +298,101 @@ describe("swarm stage 2 — icewall (indoors)", function()
     clock = clock + 20 -- past WALL_WINDOW
     S.onTick()
     expect(S.state).toBe("reenter")
-    expect(sent[#sent]).toBe("queue addclear free point bracers151113 at icewall;stand;n")
+    expect(sent[#sent]).toBe("queue addclear free stand;leap n")
+    expect(S.wallRaised[200]).toBe("south") -- wall memory (the walled edge) survives the cycle
+  end)
+
+  it("goes leap-only on the next escape while our wall still stands", function()
+    fixture(3)
+    gmcp.Room.Info.details = { "indoors" }
+    S.onTick()
+    expect(S.decorate("attack", ";")).toBe("attack;point bracers417868 south;leap s")
+    MAP.current = 100; mobs = 0; S.onTick()  -- funnel
+    clock = clock + 20; S.onTick()           -- reenter (leap back in)
+    MAP.current = 200; mobs = 3
+    S.onTick()                                -- re-assess: pull #2, wall still up
+    expect(S.decorate("attack", ";")).toBe("attack;leap s") -- no point: eq-only escape
+  end)
+
+  it("melts the wall once the room is done: hold armed, cleared only on CONFIRMATION", function()
+    fixture(3)
+    gmcp.Room.Info.details = { "indoors" }
+    S.onTick(); S.decorate("attack", ";")
+    MAP.current = 100; mobs = 0; S.onTick()
+    clock = clock + 20; S.onTick()           -- reenter
+    MAP.current = 200; mobs = 0              -- back in, everything is dead
+    expect(S.onTick()).toBeTrue()            -- consumed: the melt must not be wiped by a nav move
+    expect(sent[#sent]).toBe("queue addclear free point bracers151113 at icewall")
+    expect(ataxiaTemp.swarmHold).toBeTrue()  -- a roamer's addclearfull must not wipe the queued melt
+    expect(S.wallRaised[200]).toBe("south")  -- NOT cleared optimistically (review HIGH)
+    S.onWallMelted()                          -- "You send a lash of fire..." landed
+    expect(S.wallRaised[200]).toBe(nil)
+    expect(ataxiaTemp.swarmHold).toBe(nil)
+    expect(S.onTick()).toBeFalse()           -- next tick hands navigation back
+  end)
+
+  it("re-sends a wiped/whiffed melt, then gives up after bounded retries", function()
+    fixture(0)
+    S.wallRaised[200] = "south"
+    MAP.current = 200
+    local melts = 0
+    for _ = 1, 4 do
+      expect(S.onTick()).toBeTrue()          -- each attempt consumes the tick + re-sends
+    end
+    for _, c in ipairs(sent) do
+      if c == "queue addclear free point bracers151113 at icewall" then melts = melts + 1 end
+    end
+    expect(melts).toBe(4)
+    expect(S.onTick()).toBeFalse()           -- budget spent: leave it to the wall-leap reflex
+    expect(S.wallRaised[200]).toBe(nil)
+  end)
+
+  it("never melts from a DIFFERENT room (memory retained)", function()
+    fixture(0)
+    S.wallRaised[200] = "south"
+    MAP.current = 100
+    expect(S.onTick()).toBeFalse()
+    expect(S.wallRaised[200]).toBe("south")
+    local sawMelt = false
+    for _, c in ipairs(sent) do if c:find("bracers151113", 1, true) then sawMelt = true end end
+    expect(sawMelt).toBeFalse()
+  end)
+
+  it("reset PRESERVES wall memory (the wall is physical)", function()
+    fixture(3)
+    S.wallRaised[200] = "south"
+    S.state = "funnel"
+    S.reset("test")
+    expect(S.wallRaised[200]).toBe("south")
+  end)
+
+  it("keeps wall memory on a same-ripple restart, wipes on a genuine new ripple", function()
+    fixture(3)
+    S.wallRaised[200] = "south"
+    S._wallsRipple = 1                        -- raised during ripple 1
+    S.onRipple()                              -- mnem explore off/on mid-ripple (still ripple 1)
+    expect(S.wallRaised[200]).toBe("south")
+    M.run.ripple = 2
+    S.onRipple()                              -- genuine boundary: fresh layout
+    expect(S.wallRaised[200]).toBe(nil)
+  end)
+
+  it("panic tumble avoids the walled edge in a fight-in-place room", function()
+    fixture(4)
+    S.noTactics[200] = true                   -- pulls exhausted; wall on the south edge
+    S.wallRaised[200] = "south"
+    MAP.rooms[200].exits.east = 60
+    mnemRollHide = true
+    S._lastPanicAt = nil
+    ataxia.vitals = { hpp = 30 }
+    expect(S.onTick()).toBeTrue()
+    local sawEast, sawSouth = false, false
+    for _, c in ipairs(sent) do
+      if c:find("tumble e", 1, true) then sawEast = true end
+      if c:find("tumble s", 1, true) then sawSouth = true end
+    end
+    expect(sawEast).toBeTrue()                -- never tumble INTO our own wall
+    expect(sawSouth).toBeFalse()
   end)
 end)
 
@@ -472,14 +571,16 @@ describe("swarm low-HP escape ladder", function()
     expect(S.flying).toBe(nil)
   end)
 
-  it("retreats to the cleared room indoors (no fly available)", function()
+  it("retreats to the cleared room indoors (no fly available) -- by LEAP", function()
     fixture(2)
     gmcp.Room.Info.details = { "indoors" }
     ataxia.vitals = { hpp = 30 }
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("pulling")
     expect(ataxiaTemp.swarmPullDir).toBe(nil) -- plain retreat, no swing decorator
-    expect(sent[#sent]).toBe("queue addclear free stand;s")
+    -- LEAP, not walk: the retreat may cross our OWN standing icewall (review
+    -- CRITICAL -- a walk silently fails there and the escape ladder livelocks).
+    expect(sent[#sent]).toBe("queue addclear free stand;leap s")
   end)
 
   it("leaves shield-in-place as the fallback indoors with no route", function()
@@ -719,6 +820,35 @@ describe("hit-and-run continuation (progress refunds the pull budget)", function
     expect(S.pulls[200]).toBe(3)
     expect(S.onTick()).toBeFalse() -- budget spent -> fight in place
     expect(S.noTactics[200]).toBeTrue()
+  end)
+end)
+
+describe("Bloodscent recon parser", function()
+  it("parses sense rows into per-room counts (crowded-room detection)", function()
+    fixture(0)
+    ataxiaBasher.inMnemosyne = true
+    S.onSenseStart()
+    S.onSenseRow("a shadowy basilisk", "371988", "Beneath an ancient tree")
+    S.onSenseRow("a fearsome lion", "419157", "Beneath an ancient tree")
+    S.onSenseRow("a savage boar", "476131", "Among moss-coated trees")
+    S.onSenseRow("a fearsome lion", "441807", "Beneath an ancient tree")
+    S._senseCommit()
+    expect(#S.recon.mobs).toBe(4)
+    expect(S.recon.byRoom["Beneath an ancient tree"]).toBe(3) -- >= threshold: crowded
+    expect(S.recon.byRoom["Among moss-coated trees"]).toBe(1)
+    expect(S.recon.ripple).toBe(1)
+    ataxiaBasher.inMnemosyne = false
+  end)
+
+  it("ignores sense lines outside the tower", function()
+    fixture(0)
+    ataxiaBasher.inMnemosyne = false
+    S.onSenseStart()
+    S.onSenseRow("a rat", "1", "Somewhere")
+    expect(S._senseRows).toBe(nil)
+    S.recon = nil
+    S._senseCommit()
+    expect(S.recon).toBe(nil)
   end)
 end)
 

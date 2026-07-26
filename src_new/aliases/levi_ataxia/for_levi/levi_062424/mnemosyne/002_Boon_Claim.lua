@@ -37,3 +37,6 @@ if matches[2]:lower():find("%f[%a]roll hide") then mnemRollHide = true end
 -- tithe trigger (023) counts kills and echoes the running total. Frontier pattern
 -- so a boon named e.g. "Soulreaper" can't false-match.
 if matches[2]:lower():find("%f[%a]reaper") then mnemReaper = true end
+-- Bloodscent: senses out every denizen (name/#id/room) on entering a ripple; the
+-- sense-line trigger (028) parses it into the swarm module's recon.
+if matches[2]:lower():find("bloodscent") then mnemBloodscent = true end

@@ -46,6 +46,8 @@ mnemReaper = false  -- boons reset each run (re-latches from the next tithe/BOON
 bmBladedReflexes = false  -- boons reset each run
 mnemSleuth = false  -- boons reset each run
 mnemRollHide = false  -- boons reset each run
+mnemBloodscent = false  -- boons reset each run
+mnemHaemophiliac = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
 
 -- The wade lifecycle is the AUTHORITY on being in the tower -- this line and the confirmed
 -- run-end bracket it exactly. Do not infer it from gmcp: the boon "Creville's Legacy" (attack

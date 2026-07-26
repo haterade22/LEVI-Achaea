@@ -182,7 +182,7 @@ function pariah.dispatch()
   getLockingAffliction()
   checkTargetLocks()
 
-  -- Kelp stack — always include haemophilia to track if it's stuck
+  -- Kelp stack -- always include haemophilia to track if it's stuck
   tAffs.logostack = checkAffList(
     {"paralysis", "asthma", "epilepsy", "clumsiness", "impatience", "addiction", "relapsing", "haemophilia"}, 3)
 

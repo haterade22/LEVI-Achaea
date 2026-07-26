@@ -58,5 +58,5 @@ if magi.offense.ptRelay then
   magi.offense.ptRelay(target .. ": Scintilla spark (4s)")
 end
 if magi.offense.debugEcho then
-  magi.offense.debugEcho("Scintilla spark → 4s timer")
+  magi.offense.debugEcho("Scintilla spark -> 4s timer")
 end

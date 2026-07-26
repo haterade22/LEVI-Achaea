@@ -211,7 +211,7 @@ function ataxia_shikudoParry()
 		-- If they hyperfocus head (hit through our parry), they bypass parry entirely
 		-- on that limb — switch to legs instead (secondary threat).
 		if hyperLimb == "head" then
-			-- They're hyperfocusing head — parrying head is useless, protect legs
+			-- They're hyperfocusing head -- parrying head is useless, protect legs
 			local llHits = ataxia_selfHitsToBreak("left leg")
 			local rlHits = ataxia_selfHitsToBreak("right leg")
 			local llDmg = (selfLimbDamage["left leg"] and selfLimbDamage["left leg"].damage or 0)

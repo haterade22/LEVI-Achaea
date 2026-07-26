@@ -528,7 +528,7 @@ function ataxiaBasher_monkBashing2()
     command = command..shikudoBashCombo(target, useShieldbreak)
   elseif not monkWarnedNoSpec then
     monkWarnedNoSpec = true
-    ataxiaEcho("Monk: no Stance or Form in charstats — can't tell Tekura from Shikudo, not bashing.")
+    ataxiaEcho("Monk: no Stance or Form in charstats -- can't tell Tekura from Shikudo, not bashing.")
   end
 
 	return command   

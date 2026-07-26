@@ -407,7 +407,7 @@ end
 -- Transition gate (mentalReady): impatience(100%) + 2 of {stupidity, dizziness, vertigo}(25%) → lock
 --------------------------------------------------------------------------------
 
--- Count how many mental stack affs are stuck (excludes impatience — that's the gate)
+-- Count how many mental stack affs are stuck (excludes impatience -- that's the gate)
 function apostate.mentalStackCount()
   local count = 0
   local mentals = {"stupidity", "dizziness", "vertigo"}
@@ -453,7 +453,7 @@ function apostate.selectSecondaryCurseMental(c1)
   end
 
   -- Paralysis stuck — fill missing mental pieces (skipping c1)
-  -- All at 25% delivery threshold (same as primary — flood cures, don't loop)
+  -- All at 25% delivery threshold (same as primary -- flood cures, don't loop)
   if apostate.getAffProb("impatience") < 0.25 and c1 ~= "impatience" then return "impatience" end
   if apostate.getAffProb("stupidity") < 0.25 and c1 ~= "stupid" then return "stupid" end
   if apostate.getAffProb("dizziness") < 0.25 and c1 ~= "dizzy" then return "dizzy" end

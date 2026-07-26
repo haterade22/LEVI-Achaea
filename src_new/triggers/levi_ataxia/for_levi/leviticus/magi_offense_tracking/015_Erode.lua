@@ -76,5 +76,5 @@ if magi.offense.ptRelay then
   magi.offense.ptRelay(msg)
 end
 if magi.offense.debugEcho then
-  magi.offense.debugEcho("Erode → shield" .. (defense and (" + " .. defense) or ""))
+  magi.offense.debugEcho("Erode -> shield" .. (defense and (" + " .. defense) or ""))
 end

@@ -59,7 +59,7 @@ if magi.offense.ptRelay then
   magi.offense.ptRelay(target .. ": Scintilla ignition (burning, burns:" .. magi.offense.state.burns .. ")")
 end
 if magi.offense.debugEcho then
-  magi.offense.debugEcho("Scintilla ignition → burning, burns:" .. magi.offense.state.burns)
+  magi.offense.debugEcho("Scintilla ignition -> burning, burns:" .. magi.offense.state.burns)
 end
 
 -- Burns counter display

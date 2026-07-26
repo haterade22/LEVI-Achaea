@@ -45,5 +45,5 @@ if magi.offense.ptRelay then
   magi.offense.ptRelay(target .. ": Transfix (writhing)")
 end
 if magi.offense.debugEcho then
-  magi.offense.debugEcho("Transfix hit → writhing")
+  magi.offense.debugEcho("Transfix hit -> writhing")
 end

@@ -50,6 +50,7 @@ local FAST_TICK = 0.15 -- on a DENIZEN change (a kill): denizensHere is already 
 local MOVE_TIMEOUT = 5 -- a move that produces no arrival -> retry / unstick
 local MOVE_RETRIES = 1 -- re-send a stalled move this many times before condemning the exit
 local WATCHDOG = 30 -- seconds of no progress (no arrival / no denizen change) before a soft nudge
+local HAEMO_MOVE_HP = 90 -- Haemophiliac affix: hold navigation below this HP% (kills bleed thousands)
 local MAX_PATROL_LOOPS = 3 -- fruitless full patrol loops (hunting the boss) before giving up
 local MAX_ICE_SLIPS = 15 -- re-send a move this many times after slipping on ice before giving up on the exit
 
@@ -323,6 +324,38 @@ function M.onIceSlip()
   M._exploreMove(M.explore.fromDir, true) -- re-send (silent; keeps tries, re-arms timeout)
 end
 
+-- "A wall blocks your way." / "A wall bars your path." (trigger 025): an icewall --
+-- ours from the swarm tactic, or any affix/denizen wall -- rejects a WALK but not a
+-- chitin-greaves LEAP (user-directed: leap it). The exit is REAL, so like the ice
+-- slip this must never condemn it: replace the in-flight move with a leap and let
+-- the already-armed move timer keep watching (its walk-retry just earns another
+-- wall line -> another leap). Shares the ice-slip budget so a wall that somehow
+-- defeats the leap still yields eventually.
+function M.onWallBlocked()
+  if not (M.explore.on and M.explore.moving and M.explore.fromDir) then return end
+  M.explore.iceSlips = (M.explore.iceSlips or 0) + 1
+  if M.explore.iceSlips > MAX_ICE_SLIPS then
+    M._exploreEcho("<indian_red>wall would not yield<reset> after " .. MAX_ICE_SLIPS .. " leaps -- giving up on this exit.")
+    if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
+    local nd = MAP.normDir and MAP.normDir(M.explore.fromDir)
+    if nd and M.explore.fromRoom and not M.explore.tacticalMove then -- never condemn a walked tactical edge
+      M.explore.failed[M.explore.fromRoom] = M.explore.failed[M.explore.fromRoom] or {}
+      M.explore.failed[M.explore.fromRoom][nd] = true
+    end
+    M.explore.moving = false
+    if M.explore.tacticalMove then
+      M.explore.tacticalMove = false
+      if M.swarm and M.swarm.onMoveFailed then pcall(M.swarm.onMoveFailed) end
+    end
+    return M._exploreTick()
+  end
+  local nd = (MAP.normDir and MAP.normDir(M.explore.fromDir)) or M.explore.fromDir
+  local short = (MAP.shortDir and MAP.shortDir(nd)) or M.explore.fromDir
+  local sep = (ataxia.settings and ataxia.settings.separator) or ";"
+  send("queue addclear free stand" .. sep .. "leap " .. short)
+  M._exploreEcho("<grey>a wall blocks the way -- <cyan>leaping it<reset>.")
+end
+
 -- gmcp Room.WrongDir: the server tells us the direction we just tried does not exist -- an
 -- AUTHORITATIVE wall signal. Condemn the exit immediately instead of waiting out MOVE_TIMEOUT
 -- (~10s with the one retry), and PRUNE it from the reported-exit graph so MAP.pathKnown/relayout
@@ -405,6 +438,14 @@ function M._armWatchdog()
   end)
 end
 
+-- Haemophiliac affix pacing predicate: TRUE while post-clear navigation should hold.
+-- Pure (globals only); unit-tested. The flag is set by trigger 029 via
+-- onHaemophiliacSeen (004) and cleared on run start / confirmed run end.
+function M._haemoHold()
+  if not mnemHaemophiliac then return false end
+  return (tonumber(ataxia and ataxia.vitals and ataxia.vitals.hpp) or 100) < HAEMO_MOVE_HP
+end
+
 function M._exploreTick()
   if not M.explore.on then return end
   if not inMnem() then return M._exploreStop("left Mnemosyne") end
@@ -432,6 +473,20 @@ function M._exploreTick()
     return
   end
   M.explore.fightingRoom = nil
+
+  -- Haemophiliac affix pacing (user-directed: "wade significantly slower"): the room
+  -- is clear but the kill's bleed is still draining -- thousands of HP per kill.
+  -- Charging into the next room mid-bleed stacks the next fight onto a draining
+  -- pool, so hold navigation until HP recovers, re-checking on a short timer.
+  if M._haemoHold() then
+    if not M.explore._haemoWait then
+      M.explore._haemoWait = true
+      M._exploreEcho("<indian_red>Haemophiliac<reset> -- letting the bleed settle before moving on.")
+    end
+    M._scheduleTick(1.5)
+    return
+  end
+  M.explore._haemoWait = nil
 
   local dir = M._nextExploreStep()
   if dir then -- still sweeping new ground

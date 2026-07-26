@@ -614,6 +614,43 @@ describe("M.onReaperTithe()", function()
   end)
 end)
 
+-- ─── Haemophiliac affix pacing ───────────────────────────────────────────────
+
+describe("Haemophiliac wade-slower pacing", function()
+  it("onHaemophiliacSeen arms the flag only inside the tower", function()
+    reset(true)
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = false
+    mnemHaemophiliac = false
+    M.onHaemophiliacSeen()
+    expect(mnemHaemophiliac).toBeFalse() -- a `mnem affixes` read outside a run must not arm it
+    ataxiaBasher.inMnemosyne = true
+    M.onHaemophiliacSeen()
+    expect(mnemHaemophiliac).toBeTrue()
+    M.onHaemophiliacSeen() -- transition-guarded: a status re-read is a no-op
+    expect(mnemHaemophiliac).toBeTrue()
+    ataxiaBasher.inMnemosyne = false
+  end)
+
+  it("_haemoHold holds navigation only with the affix up and HP below the bar", function()
+    mnemHaemophiliac = false
+    ataxia.vitals = { hpp = 50 }
+    expect(M._haemoHold()).toBeFalse() -- no affix: never hold
+    mnemHaemophiliac = true
+    expect(M._haemoHold()).toBeTrue()  -- bleeding down: hold
+    ataxia.vitals = { hpp = 95 }
+    expect(M._haemoHold()).toBeFalse() -- recovered: move on
+    mnemHaemophiliac = false
+  end)
+
+  it("clears on the confirmed run end", function()
+    reset(true)
+    mnemHaemophiliac = true
+    M.onRunEnd()
+    expect(mnemHaemophiliac).toBeFalse()
+  end)
+end)
+
 describe("M.reaperOnWade()", function()
   it("resets the tally on a genuinely fresh wade", function()
     reset(true)

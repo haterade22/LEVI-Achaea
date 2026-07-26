@@ -183,6 +183,8 @@ function M.onRunEnd()
   mnemSleuth = false -- boons gone on a confirmed run-end
   mnemRollHide = false -- boons gone on a confirmed run-end
   mnemReaper = false -- boons gone on a confirmed run-end
+  mnemBloodscent = false -- boons gone on a confirmed run-end
+  mnemHaemophiliac = false -- affixes gone on a confirmed run-end (pacing back to normal)
   if ataxiaTemp then ataxiaTemp.reaperKills = nil end -- the +1%/kill tally dies with the run
   -- Clear the pause flag UNCONDITIONALLY (like the boon flags above), not only via the
   -- _inRun()-gated endRun()->_resetRun(): with telemetry off (the shipped default) that path
@@ -198,7 +200,7 @@ function M.onRunEnd()
   if ataxiaBasher and ataxiaBasher.inMnemosyne then
     ataxiaBasher.inMnemosyne = false
     if ataxiaBasher_mnemStillHere then ataxiaBasher_mnemStillHere() end -- drop any pending ask
-    ataxiaEcho("Mnemosyne wade ended — no-flee mode OFF.")
+    ataxiaEcho("Mnemosyne wade ended -- no-flee mode OFF.")
   end
   M.restoreTreeCuring() -- Splinterbark over -> tattoo untainted, turn game tree curing back on
   if M._inRun() then M.endRun() end
@@ -248,7 +250,23 @@ function M.onSplinterbarkSeen()
   M._treeCuringOff = true
   send("curing tree off")
   if not M._quiet() then
-    M.echo("<red>Splinterbark<reset> active — <red>curing tree off<reset> (tree touch bleeds/afflicts)")
+    M.echo("<red>Splinterbark<reset> active -- <red>curing tree off<reset> (tree touch bleeds/afflicts)")
+  end
+end
+
+-- Haemophiliac ongoing-effect pacing (same telemetry-INDEPENDENT shape as Splinterbark:
+-- a plain status-screen trigger, 029). The affix -- "Defeating a denizen causes you to
+-- bleed significantly and your mana costs are increased by 20%." -- bleeds THOUSANDS
+-- after every kill (live report 2026-07-26). While the flag is set the explorer wades
+-- slower: after a room clears, navigation holds until HP recovers (008 _haemoHold).
+-- Transition-guarded echo; gated on inMnemosyne so a `mnem affixes` read outside a run
+-- cannot arm it. Cleared on run start (trigger 001) + the confirmed run end.
+function M.onHaemophiliacSeen()
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  if mnemHaemophiliac then return end
+  mnemHaemophiliac = true
+  if not M._quiet() then
+    M.echo("<red>Haemophiliac<reset> active -- kills bleed heavily; wading slower (moves hold until HP recovers)")
   end
 end
 
@@ -258,7 +276,7 @@ function M.restoreTreeCuring()
   if not M._treeCuringOff then return end
   M._treeCuringOff = nil
   send("curing tree on")
-  if not M._quiet() then M.echo("Splinterbark cleared — <green>curing tree on<reset>") end
+  if not M._quiet() then M.echo("Splinterbark cleared -- <green>curing tree on<reset>") end
 end
 
 -- "You wade N ripples deep into the tides of memory:" (WADE STATUS output).

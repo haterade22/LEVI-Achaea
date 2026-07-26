@@ -129,7 +129,7 @@ function ataxiaNDB_drainHonoursQueue()
 	local queue = ataxiaNDB._honoursQueue
 	ataxiaNDB._honoursQueue = nil
 
-	ataxiaEcho(#queue .. " player(s) have hidden cities — auto-honouring to update.")
+	ataxiaEcho(#queue .. " player(s) have hidden cities -- auto-honouring to update.")
 
 	-- Use the refresh queue mechanism so capture triggers are properly enabled
 	ataxiaNDB._refreshQueue = queue
@@ -181,7 +181,7 @@ function ataxiaNDB_processRefreshQueue()
 	-- Safety timeout: if Close Capturing doesn't fire within 8s, clear and move on
 	ataxiaNDB._refreshPollTimer = tempTimer(8, function()
 		if ataxiaNDB._honoursPerson ~= nil then
-			-- Close Capturing didn't fire — clean up manually
+			-- Close Capturing didn't fire -- clean up manually
 			ataxiaNDB._honoursPerson = nil
 			ataxiaNDB._armyRank = nil
 			ataxiaNDB._mark = nil

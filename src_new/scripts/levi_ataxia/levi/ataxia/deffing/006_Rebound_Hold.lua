@@ -126,12 +126,12 @@ function reboundHold.gate(dispatchFn)
   reboundHold.state.heldDispatchFn = dispatchFn
   reboundHold.state.reboundReturnedWhileHolding = false
 
-  debugEcho("<cyan>HOLDING<reset> attack — waiting for rebounding")
+  debugEcho("<cyan>HOLDING<reset> attack -- waiting for rebounding")
 
   -- Safety timeout
   reboundHold.state.holdTimerId = tempTimer(reboundHold.config.MAX_HOLD_TIMEOUT, function()
     reboundHold.state.holdTimerId = nil
-    debugEcho("<red>MAX_HOLD_TIMEOUT<reset> expired — firing anyway")
+    debugEcho("<red>MAX_HOLD_TIMEOUT<reset> expired -- firing anyway")
     reboundHold.fire()
   end)
 
@@ -146,7 +146,7 @@ function reboundHold.fire()
     if gmcp.Char.Vitals.bal == "1" then
       fn()
     else
-      debugEcho("<red>Lost balance during hold<reset> — attack dropped")
+      debugEcho("<red>Lost balance during hold<reset> -- attack dropped")
     end
   end
 end
@@ -164,7 +164,7 @@ function reboundHold.onReboundGained()
   if not reboundHold.state.holding then return end
 
   reboundHold.state.reboundReturnedWhileHolding = true
-  debugEcho("Rebounding <green>UP<reset> while holding — waiting for enemy strip")
+  debugEcho("Rebounding <green>UP<reset> while holding -- waiting for enemy strip")
 
   -- Cancel safety timeout (rebounding came back, entering strip-wait)
   reboundHold.cancelTimer("holdTimerId")
@@ -173,7 +173,7 @@ function reboundHold.onReboundGained()
   -- If it stays up, fire anyway (attacking with rebounding is fine)
   reboundHold.state.stripWaitTimerId = tempTimer(reboundHold.config.STRIP_WAIT, function()
     reboundHold.state.stripWaitTimerId = nil
-    debugEcho("Strip-wait expired (rebounding still up) — firing")
+    debugEcho("Strip-wait expired (rebounding still up) -- firing")
     reboundHold.fire()
   end)
 end
@@ -183,7 +183,7 @@ function reboundHold.onReboundStrippedDuringWait()
   if not reboundHold.state.reboundReturnedWhileHolding then return end
 
   reboundHold.cancelTimer("stripWaitTimerId")
-  debugEcho("<green>Enemy stripped rebounding<reset> — firing immediately (wasted action)")
+  debugEcho("<green>Enemy stripped rebounding<reset> -- firing immediately (wasted action)")
   reboundHold.fire()
 end
 
@@ -222,7 +222,7 @@ end)
 -- Cancel hold if we move rooms
 reboundHold._handlers.roomChange = registerAnonymousEventHandler("gmcp.Room.Info", function()
   if reboundHold.state.holding then
-    debugEcho("<red>Room changed<reset> — cancelling hold")
+    debugEcho("<red>Room changed<reset> -- cancelling hold")
     reboundHold.reset()
   end
 end)
@@ -231,7 +231,7 @@ end)
 reboundHold._handlers.roomPlayers = registerAnonymousEventHandler("gmcp.Room.Players", function()
   if reboundHold.state.holding and target then
     if ataxia and ataxia.playersHere and not table.contains(ataxia.playersHere, target) then
-      debugEcho("<red>Target left room<reset> — cancelling hold")
+      debugEcho("<red>Target left room<reset> -- cancelling hold")
       reboundHold.reset()
     end
   end

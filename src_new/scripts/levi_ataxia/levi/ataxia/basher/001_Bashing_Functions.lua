@@ -279,7 +279,7 @@ function ataxiaBasher_mnemLeftFor(where)
   ataxiaTemp.mnemSurveyPending = nil
   if not ataxiaBasher.inMnemosyne then return end
   ataxiaBasher.inMnemosyne = false
-  ataxiaEcho("Left Mnemosyne (SURVEY: " .. tostring(where) .. ") — no-flee mode OFF.")
+  ataxiaEcho("Left Mnemosyne (SURVEY: " .. tostring(where) .. ") -- no-flee mode OFF.")
 end
 
 -- Fallback only: the SURVEY answer never arrived (gagged, swallowed, lost). Trigger 352 is the
@@ -289,7 +289,7 @@ function ataxiaBasher_mnemLeftConfirm()
   ataxiaTemp.mnemSurveyPending = nil
   if not ataxiaBasher.inMnemosyne then return end
   ataxiaBasher.inMnemosyne = false
-  ataxiaEcho("Left Mnemosyne (no SURVEY reply) — no-flee mode OFF.")
+  ataxiaEcho("Left Mnemosyne (no SURVEY reply) -- no-flee mode OFF.")
 end
 
 -- The key a room's denizens are filed under in ataxiaBasher.targetList (auto-learn) and looked
@@ -315,11 +315,11 @@ function ataxiaBasher_mnemHere(why)
   ataxiaBasher_mnemStillHere() -- an authoritative "yes" closes any pending "did we leave?" ask
   if ataxiaBasher.inMnemosyne then return end
   ataxiaBasher.inMnemosyne = true
-  ataxiaEcho("Mnemosyne confirmed (" .. tostring(why) .. ") — no-flee mode ON (shield, don't flee).")
+  ataxiaEcho("Mnemosyne confirmed (" .. tostring(why) .. ") -- no-flee mode ON (shield, don't flee).")
 end
 
 -- SURVEY named the Mnemosyne (trigger 351): we are still inside, whatever the area claims.
--- Also the "answer received" path — closes the window and consumes the pending ask.
+-- Also the "answer received" path -- closes the window and consumes the pending ask.
 function ataxiaBasher_mnemStillHere()
   ataxiaTemp.mnemSurveyPending = nil
   if ataxiaTemp.mnemLeftTimer then
@@ -328,7 +328,7 @@ function ataxiaBasher_mnemStillHere()
   end
 end
 
--- "Our" denizens — pets/allies/summons (falcons, Baalzadeen, etc.) that share the
+-- "Our" denizens -- pets/allies/summons (falcons, Baalzadeen, etc.) that share the
 -- room's denizen list but must never be auto-learned or targeted. Matched by
 -- case-insensitive substring so "falcon" covers "a razor-beaked falcon" and any
 -- variant. Managed via the `bash mine` alias; seeded in the missing-variables init.
@@ -374,7 +374,7 @@ function ataxiaBasher_addOwnDenizen(kw)
   end
   table.insert(ataxiaBasher.ownDenizens, kw)
   local purged = ataxiaBasher_purgeOwnFromTargets()
-  ataxiaEcho("Added '" .. kw .. "' to your own denizens — it won't be auto-added or targeted."
+  ataxiaEcho("Added '" .. kw .. "' to your own denizens -- it won't be auto-added or targeted."
     .. (purged > 0 and (" Removed " .. purged .. " existing match(es) from target lists.") or ""))
   ataxia_saveSettings(false)
 end

@@ -46,5 +46,5 @@ if magi.offense.ptRelay then
   magi.offense.ptRelay(target .. ": Staffcast freeze (horripilation)")
 end
 if magi.offense.debugEcho then
-  magi.offense.debugEcho("Staffcast freeze → horripilation")
+  magi.offense.debugEcho("Staffcast freeze -> horripilation")
 end

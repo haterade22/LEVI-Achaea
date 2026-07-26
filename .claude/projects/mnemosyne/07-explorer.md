@@ -256,18 +256,41 @@ this tick). Stage 1 = the **pull & funnel** loop:
   follows (followers arrive via `Char.Items.Add` -> "targets updated"; one `ql` re-Lists for
   never-Listed spawns). Fighting refreshes the 4s follow window; when it expires empty ->
   **re-enter** and re-assess. `MAX_PULLS` (3) per room, then the room is fought in place.
-- **Indoors route** (`swarm.icewall`, default on): the escape suffix becomes
+- **Indoors route** (`swarm.icewall`, default on): the first escape suffix is
   `;point <bracersId> <LONG back>;leap <back>` — swing, WALL the door we came through, LEAP
   over our own wall, all one queue entry (order preserved; a split send could wall the wrong
-  edge from the wrong room). Hold behind the wall with the longer `WALL_WINDOW`; re-entry
-  MELTS the wall first (`point <meltId> at icewall`, the fli-alias shape) then walks — a
-  missing wall makes the melt a harmless whiff. **Live-validated 2026-07-26** (3-troll room,
-  no deaths). Lines: leap "You bunch your powerful muscles and launch yourself in a majestic
-  leap <dir>wards."; melt "You send a lash of fire to strike the icewall to the <dir>, and it
-  quickly melts." NOT atomic: `point` fires on the NEXT balance, `leap` on equilibrium (~7s
-  escape; the 8s swarmHold covered it). **Without Maklak's Promise denizens WALK THROUGH
-  icewalls** — the wall paces the fight rather than barring it; with the boon it should
-  actually impede (still to observe).
+  edge from the wrong room). Hold behind the wall with the longer `WALL_WINDOW`. **The wall
+  STAYS UP across cycles** (v4.7.119, user-confirmed: chitin-greaves LEAP clears our own
+  wall in BOTH directions): re-entry is a single eq-gated `leap <fwd>` — no melt, no walk —
+  and while `S.wallRaised[room]` is set, follow-up escapes go **leap-only** (skip the
+  point), firing a full balance-round sooner. A broken/expired wall degrades leap-only to a
+  plain unwalled pull — acceptable, since denizens walk through walls anyway without the
+  boon. The wall is melted (`point <meltId> at icewall`) only when the room is DONE — the
+  assess sees zero denizens, consumes the tick so the explorer's own `queue addclear free`
+  move can't wipe the queued melt, arms a short `swarmHold` (a roamer's `addclearfull`
+  can't wipe it either), and — review HIGH — clears the memory only on the melt
+  CONFIRMATION line (trigger 026 → `onWallMelted`); unconfirmed melts re-send on later
+  empty assesses, bounded at 4 tries, after which the wall is left to the leap reflex.
+  `wallRaised` stores the walled edge's LONG dir (the panic tumble avoids it) and is wiped
+  only on a GENUINE ripple change (`S._wallsRipple`) — a mid-ripple `mnem explore off/on`
+  restart keeps it (review MEDIUM: walls are physical). ALL tactical moves LEAP
+  (`_tacticalGo` sends `stand;leap <dir>`, review CRITICAL: the indoor low-HP retreat
+  crosses the walled funnel edge — a plain walk livelocked the anti-death ladder).
+
+**Wall-leap navigation** (`M.onWallBlocked`, trigger 025, v4.7.119, user-directed): "A
+wall blocks your way." / "A wall bars your path." during an in-flight explorer move —
+ANY wall, ours or an affix's — replaces the walk with `stand;leap <dir>`. The exit is
+real, so it is never condemned; the already-armed move timer keeps watching (its
+walk-retry just earns another wall line → another leap), and the ice-slip budget bounds
+it. The legacy `766_Wall` manual-walk branches are gated off while exploring — they
+leapt the raw `command` string and `addclearfull`-wiped the explorer's queue.
+  **Live-validated 2026-07-26** (3-troll room, no deaths, melt-era cycle). Lines: leap "You
+  bunch your powerful muscles and launch yourself in a majestic leap <dir>wards."; melt
+  "You send a lash of fire to strike the icewall to the <dir>, and it quickly melts." NOT
+  atomic: `point` fires on the NEXT balance, `leap` on equilibrium (~7s escape; the 8s
+  swarmHold covered it; leap-only cycles are faster). **Without Maklak's Promise denizens
+  WALK THROUGH icewalls** — the wall paces the fight rather than barring it; with the boon
+  it should actually impede (still to observe).
 - **Outdoors swarm-followed** (`swarm.kite`, default on): followers >= threshold in the
   funnel → `fly`; the decorator turns every attack into `land;<attack>;fly` (ground contact
   only for the swing). Below threshold → `land` and finish grounded. If FLY needs balance the
@@ -349,11 +372,27 @@ condemning them would poison the sweep — and notify `swarm.onMoveFailed()` ins
 `ataxiaTemp.swarmHold`/`swarmPullDir` — they'd otherwise survive a SYSUPDATE and silently gate
 the basher). `swarm.onRipple` (exploreOn/_exploreResume) wipes per-ripple pull budgets.
 
-**Sleuth recon**: with the `mnemSleuth` boon flag up, GO fires `fullsense` (the boon reveals
-ALL denizens in the ripple) captured raw via `_captureLines` into `swarm.recon` — format is
-being learned from live logs; unparsed recon changes nothing. `mnem sense` re-scans (denizens
-ROAM; recon is a snapshot — per-arrival assess stays authoritative). `mnemRollHide` (tumble
-sheds pursuers) is captured for the stage-2 panic abort.
+**Recon — Bloodscent (parsed) + Sleuth (raw)**: the **Bloodscent** boon ("You sense out
+your prey upon entering a ripple.", flag `mnemBloodscent`) prints, unprompted per ripple
+entry, one `You sense <mob> (#id) at <room>.` row per denizen (live-captured 2026-07-26 —
+the parsed format the recon system was waiting for). Trigger 028 feeds
+`swarm.onSenseStart/onSenseRow`; a 1.5s quiet window commits `swarm.recon = { mobs =
+{{name,id,room}}, byRoom, rooms, ripple, at }` and echoes a summary with **crowded-room
+callouts** (rooms holding >= the swarm threshold). Both handlers self-gate on
+`ataxiaBasher.inMnemosyne`. With **Sleuth** (`mnemSleuth`), GO fires `fullsense` captured
+raw via `_captureLines`; if its rows share the sense-line shape they feed the same parser.
+`mnem sense` re-scans manually (denizens ROAM; recon is a snapshot — per-arrival assess
+stays authoritative). Recon-driven ROUTING remains stage 3+. `mnemRollHide` (tumble sheds
+pursuers) is captured for the panic abort.
+
+**Haemophiliac pacing** (affix, v4.7.119, user-directed "wade significantly slower"): the
+effect row "Defeating a denizen causes you to bleed significantly and your mana costs are
+increased by 20%." (trigger 029 → `onHaemophiliacSeen`, Splinterbark's shape:
+inMnemosyne-gated, transition-guarded, cleared run start/confirmed end) bleeds THOUSANDS
+per kill. While `mnemHaemophiliac` is set, `_exploreTick` holds post-clear navigation
+until `hpp >= 90` (`M._haemoHold`, pure/tested; 1.5s re-checks; one echo per wait) — the
+bleed settles before the next room's fight. Mid-fight behavior (swarm pulls, attacks) is
+deliberately untouched: the bleed comes from KILLS, and pacing belongs between rooms.
 
 Pure logic (threshold, `_backDir`, the state machine, decorator, resets) is unit-tested in
 `test_swarm_tactics.lua`; timer-fired paths are validated in-game.

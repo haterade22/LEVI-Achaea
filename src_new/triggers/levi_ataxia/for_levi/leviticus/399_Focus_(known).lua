@@ -49,7 +49,7 @@ onTargetFocusV3()
 			erAff("lovers")
 			erAff("impatience")
 	else
-		-- Focus cured something other than impatience → target doesn't have impatience
+		-- Focus cured something other than impatience -> target doesn't have impatience
 		erAff("impatience")
 		tFocused()
 	end

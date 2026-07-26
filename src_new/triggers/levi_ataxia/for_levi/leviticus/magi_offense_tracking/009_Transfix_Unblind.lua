@@ -45,5 +45,5 @@ if magi.offense.ptRelay then
   magi.offense.ptRelay(target .. ": Transfix failed (cured blindness)")
 end
 if magi.offense.debugEcho then
-  magi.offense.debugEcho("Transfix unblind → erAff blindness")
+  magi.offense.debugEcho("Transfix unblind -> erAff blindness")
 end

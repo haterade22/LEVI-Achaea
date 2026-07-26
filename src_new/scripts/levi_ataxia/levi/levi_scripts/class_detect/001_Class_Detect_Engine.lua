@@ -298,7 +298,7 @@ function classDetect.setAttackerClass(attackerName, className)
       classDetect.state.attackerSpec = nil
       send("curingset switch normal", false)
       if classDetect.config.echoSwitches then
-        classDetect.echo("<red>Multiple attackers detected — staying on <white>normal<plum> curingset")
+        classDetect.echo("<red>Multiple attackers detected -- staying on <white>normal<plum> curingset")
       end
     end
     return
@@ -419,7 +419,7 @@ function classDetect.onRoomChanged()
 
   local newRoom = gmcp.Room.Info.num
   if classDetect.state.lastRoomNum and newRoom ~= classDetect.state.lastRoomNum then
-    -- We moved rooms — reset unless we're actively engaged (chasing)
+    -- We moved rooms -- reset unless we're actively engaged (chasing)
     if not engaged then
       classDetect.resetToNormal()
     end
@@ -452,7 +452,7 @@ function classDetect.status()
   cecho("\n<cyan>| <white>Curingset:   <green>" .. classDetect.state.currentCuringset)
   cecho("\n<cyan>| <white>Timeout:     <grey>" .. classDetect.config.combatTimeoutSeconds .. "s")
   local n = countAttackers()
-  cecho("\n<cyan>| <white>Attackers:   " .. (n > 1 and "<red>" or "<green>") .. n .. (n > 1 and " (multi — normal)" or ""))
+  cecho("\n<cyan>| <white>Attackers:   " .. (n > 1 and "<red>" or "<green>") .. n .. (n > 1 and " (multi -- normal)" or ""))
   cecho("\n<cyan>+==========================================+\n")
 end
 

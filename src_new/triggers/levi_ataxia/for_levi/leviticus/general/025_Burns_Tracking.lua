@@ -49,7 +49,7 @@ if line:find("fiery efreeti spins into") then
   local tgt = matches[2]
   if tgt == target then
     magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
-    magi.offense.debugEcho("Efreeti burn → burns:" .. magi.offense.state.burns)
+    magi.offense.debugEcho("Efreeti burn -> burns:" .. magi.offense.state.burns)
     cecho(" <DimGrey>[<red>" .. magi.offense.state.burns .. "/5<DimGrey>]")
   end
 
@@ -78,7 +78,7 @@ elseif line:find("fires consuming") then
       erAff("burning")
       magi.offense.state.conflagrated = false
     end
-    magi.offense.debugEcho("Burns diminishing → burns:" .. magi.offense.state.burns)
+    magi.offense.debugEcho("Burns diminishing -> burns:" .. magi.offense.state.burns)
     cecho(" <DimGrey>[<red>" .. magi.offense.state.burns .. "/5<DimGrey>]")
   end
 end

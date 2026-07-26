@@ -2,6 +2,62 @@
 
 ---
 
+## 2026-07-26 — Icewall stays up + wall-leap navigation + Bloodscent recon (v4.7.119)
+
+User-directed: "We dont need to take down the icewall, all we have to do is LEAP out of
+the room and into the room. Icewall can stay." + "when doing mnem explore and walking
+around, if there is an icewall you should LEAP it." Chitin-greaves LEAP clears walls in
+BOTH directions, so melting on every re-entry was wasted rounds — and a leap answers any
+wall the tower puts up.
+
+- **Re-entry leaps the standing wall**: a single eq-gated `stand;leap <fwd>` replaces
+  melt (balance) + walk. The wall keeps pacing the swarm between cycles (a real barrier
+  with Maklak's Promise).
+- **Leap-only follow-up escapes**: `S.wallRaised[room]` remembers our standing wall (and
+  WHICH edge); while set, the escape suffix drops the `point` and goes straight to
+  `leap <back>` — the escape fires a full balance-round sooner. A broken/expired wall
+  degrades to a plain unwalled pull (mobs walk through walls anyway without the boon).
+- **Wall-leap navigation reflex** (`M.onWallBlocked`, trigger `025_Wall_Blocked` on
+  "A wall blocks your way." / "A wall bars your path." — the long-sought walk-into-wall
+  lines, live-captured): ANY wall that rejects an explorer walk — ours, an affix's, a
+  denizen's — gets leapt instead of condemned; shares the ice-slip budget. The legacy
+  `766_Wall` manual-walk branches are gated off during explore (they leapt the raw
+  `command` string and their `addclearfull` wiped the explorer's own queue).
+- **Adversarial-review fixes** (4-agent verify on the wall-stays diff, 6 confirmed):
+  - CRITICAL: the low-HP indoor retreat walked a plain move into our own standing wall —
+    livelocking the anti-death ladder at crash HP. ALL tactical moves now LEAP
+    (`_tacticalGo` sends `stand;leap <dir>`), and the panic tumble avoids the walled edge.
+  - HIGH: the end-of-room melt was cleared optimistically at send and could be wiped
+    (FAST_TICK preemption / slow balance / a roamer's `addclearfull`) leaving a standing
+    wall with no memory. Now: hold-armed for the melt window, cleared only on the melt
+    CONFIRMATION line (trigger `026_Wall_Melted`), re-sent while unconfirmed, bounded at
+    4 tries (then the leap reflex owns it).
+  - MEDIUMs: wall memory survives `mnem explore off/on` mid-ripple (wiped only on a
+    genuine ripple change); reset() preserving wall memory and melt-only-from-the-walled-
+    room are now pinned by tests.
+- **Bloodscent recon parser** (new boon, live-captured): "You sense out your prey upon
+  entering a ripple." prints one `You sense <mob> (#id) at <room>.` row per denizen —
+  THE parsed recon format the Sleuth raw capture was waiting for. Trigger `028_Sense_Lines`
+  batches the rows into `swarm.recon` ({name,id,room} + per-room counts) and echoes a
+  summary with crowded-room callouts (`>= threshold`). Flag `mnemBloodscent`, standard
+  boon lifecycle (claim intercept, BOONS row `027_Bloodscent`, run start/end resets).
+- **Haemophiliac wade-slower pacing** (user-reported: the affix — "Defeating a denizen
+  causes you to bleed significantly and your mana costs are increased by 20%." — bleeds
+  THOUSANDS after every kill): new status-row trigger `029_Haemophiliac` arms
+  `mnemHaemophiliac` (Splinterbark's telemetry-independent shape: inMnemosyne-gated,
+  transition-guarded, cleared on run start/confirmed end). While set, the explorer holds
+  post-clear navigation until HP is back above 90% (`M._haemoHold`, 1.5s re-checks) —
+  the bleed settles before the next room's fight starts. Combat itself is untouched.
+- **Encoding cleanup** (user-reported "â€"" mojibake on the Splinterbark echo): all
+  typographic characters (em-dashes, arrows, ellipses, curly quotes) swept out of
+  string-bearing lines across the shipped source — 140 replacements in 37 files. Echoes
+  are now pure ASCII; decorative box-drawing UI borders left as-is.
+
+Files: `mnemosyne/009_Swarm_Tactics.lua`, `008_Explorer.lua`, triggers 025-028 (new),
+`766_Wall.lua`, `test_swarm_tactics.lua` (13 new/updated cases). Suite **436/436**.
+
+---
+
 ## 2026-07-26 — Reaper boon kill counter: running "+N% damage total" (v4.7.118)
 
 The Reaper boon (legendary: "Each kill on a denizen permanently increases your damage

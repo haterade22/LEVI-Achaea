@@ -348,14 +348,14 @@ function shikudo.shouldTransition()
       end
       -- If stuck in Gaital kill phase too long, cycle out
       if kata >= 9 then
-        return "Maelstrom"  -- Maelstrom → Oak → back to Gaital
+        return "Maelstrom"  -- Maelstrom -> Oak -> back to Gaital
       end
       return nil  -- Stay and keep trying for kill
     end
 
     -- NOT ready for kill - shouldn't be in Gaital, cycle out
     if kata >= 9 then
-      return "Maelstrom"  -- Maelstrom → Oak to continue prep
+      return "Maelstrom"  -- Maelstrom -> Oak to continue prep
     end
     return nil
   end
@@ -1027,7 +1027,7 @@ function shikudo.selectGaitalStaff(slot, parried)
     end
   end
 
-  -- PHASE 0: Not prone and limbs need prep → prep first, don't sweep yet
+  -- PHASE 0: Not prone and limbs need prep -> prep first, don't sweep yet
   -- Only sweep when BOTH legs AND head are prepped
   if not tAffs.prone and not isMounted and (not bothLegsPrepped or not headPrepped) then
     local leftPreppedNow = shikudo.isLegPrepped("left")

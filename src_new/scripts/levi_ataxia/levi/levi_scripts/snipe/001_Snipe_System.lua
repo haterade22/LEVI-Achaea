@@ -26,7 +26,7 @@ packageName: ''
 -- AUTO-SCAN FLOW:
 --   1. Build direction queue (cached dir first, then room exits)
 --   2. Send snipe for first direction
---   3. On failure ("You don't see your target") → try next direction
+--   3. On failure ("You don't see your target") -> try next direction
 --   4. On success → cache direction, party callout, stop
 -- =============================================================================
 

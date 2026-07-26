@@ -62,10 +62,10 @@ if line:find("bubbling magma") then
   if magi.offense.setScalded then magi.offense.setScalded() end
   tempTimer(20, [[erAff("scalded")]])
   magi.offense.ptRelay(target .. ": Magma (scalded)")
-  magi.offense.debugEcho("Magma hit → scalded")
+  magi.offense.debugEcho("Magma hit -> scalded")
 
 -- Dehydrate cast line — outcome tracked by separate triggers (015, 021_Frozen, 022_Burning)
--- Do NOT increment burns here — we don't know the outcome yet
+-- Do NOT increment burns here -- we don't know the outcome yet
 elseif line:find("rip the excess water") then
   magi.offense.ptRelay(target .. ": Dehydrate")
   magi.offense.debugEcho("Dehydrate cast")
@@ -84,13 +84,13 @@ elseif line:find("lightning strikes from the air") then
   end
   magi.offense.state.burns = math.min((magi.offense.state.burns or 0) + 1, 5)
   tburns = magi.offense.state.burns
-  magi.offense.debugEcho("Fulminate hit → burns:" .. magi.offense.state.burns)
+  magi.offense.debugEcho("Fulminate hit -> burns:" .. magi.offense.state.burns)
 
 -- Bombard -> clumsiness (from 016_Bombard)
 elseif line:find("flurry of rocks to bombard") then
   tarAffed("clumsiness")
   magi.offense.ptRelay(target .. ": Bombard (clumsiness)")
-  magi.offense.debugEcho("Bombard hit → clumsiness")
+  magi.offense.debugEcho("Bombard hit -> clumsiness")
 
 -- Firelash -> burning + burns increment (from 018_Firelash)
 elseif line:find("lash of fire") then
@@ -100,14 +100,14 @@ elseif line:find("lash of fire") then
   tarAffed("burning")
   selectCurrentLine() fg("red")
   magi.offense.ptRelay(target .. ": Firelash (burning, burns:" .. magi.offense.state.burns .. ")")
-  magi.offense.debugEcho("Firelash hit → burning, burns:" .. magi.offense.state.burns)
+  magi.offense.debugEcho("Firelash hit -> burning, burns:" .. magi.offense.state.burns)
 
 -- Mudslide -> slickness + prone (from 011_Mudslide)
 elseif line:find("torrent of thick mud") then
   tarAffed("slickness")
   tarAffed("prone")
   magi.offense.ptRelay(target .. ": Mudslide (slickness + prone)")
-  magi.offense.debugEcho("Mudslide hit → slickness + prone")
+  magi.offense.debugEcho("Mudslide hit -> slickness + prone")
 end
 
 -- Burns counter display (only for spells that actually affect burns)
