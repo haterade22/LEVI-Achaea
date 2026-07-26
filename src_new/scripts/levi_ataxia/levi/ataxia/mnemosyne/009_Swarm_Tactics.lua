@@ -329,12 +329,23 @@ function S._maybePanic()
     send("land")
     S.flying = nil
   end
+  -- Tear down BEFORE queueing the escape: reset() flushes the queue when a tactic was
+  -- active, and that flush must never land on top of our tumble.
+  S.reset("panic tumble")
   -- Free-queued, not raw: at panic HP the balance is usually spent mid-round, and a raw
-  -- tumble would be rejected. The free queue fires it the instant we're able.
+  -- tumble would be rejected. The free queue fires it the instant we're able -- and the
+  -- hold is re-armed so the next attack dispatch's `queue addclearfull` (sub-second via
+  -- gmcp vitals) cannot wipe the queued tumble while we wait. Self-clears in HOLD_TIMEOUT;
+  -- a few gated swings while fleeing at panic HP is a feature, not a cost.
+  ataxiaTemp.swarmHold = true
+  if S._holdT then pcall(killTimer, S._holdT) end
+  S._holdT = tempTimer(HOLD_TIMEOUT, function()
+    S._holdT = nil
+    ataxiaTemp.swarmHold = nil
+  end)
   local sep = (ataxia.settings and ataxia.settings.separator) or ";"
   send("queue addclear free stand" .. sep .. "tumble " .. dir)
   S._echo("<indian_red>PANIC (" .. hpp() .. "% hp)<reset> -- Roll Hide tumble <cyan>" .. dir .. "<reset> sheds all pursuers.")
-  S.reset("panic tumble")
   return true
 end
 

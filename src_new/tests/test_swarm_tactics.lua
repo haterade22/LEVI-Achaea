@@ -355,6 +355,8 @@ describe("swarm stage 2 — Roll Hide panic", function()
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("idle")
     expect(findCmd(TUMBLE) ~= nil).toBeTrue()
+    -- The hold must guard the queued tumble from the next attack's addclearfull.
+    expect(ataxiaTemp.swarmHold).toBeTrue()
   end)
 
   it("LANDS before tumbling when the panic fires mid-kite", function()

@@ -2,6 +2,21 @@
 
 ---
 
+## 2026-07-26 — Swarm: the panic tumble is hold-protected like the pull (v4.7.113)
+
+User-spotted gap: the Roll Hide panic free-queues its tumble, but at panic HP the balance is
+down — and the next attack dispatch (sub-second, via gmcp vitals) sends
+`queue addclearfull`, wiping the queued tumble before it could fire. The panic now re-arms
+`ataxiaTemp.swarmHold` AFTER its teardown (`reset` runs first so its own queue flush can't
+land on the tumble), gating every attack path for up to HOLD_TIMEOUT while the escape waits
+for balance — a few gated swings while fleeing at panic HP is a feature. For the record, the
+other tactics were already safe by construction: pull/wall escapes ARE the attack line
+(nothing separate to overwrite, then swarmHold gates until arrival); re-entry/melt/fallback
+moves fire from an empty room (no target -> no attack is ever sent); the kite's fly/land
+ride inside each attack line so every re-queue replaces itself. Suite 403/403.
+
+---
+
 ## 2026-07-26 — Swarm tactics review-2 fixes: panic everywhere + grounded first (v4.7.112)
 
 A second focused deep review over the post-stage-1 diff (stage-2 branches, dmap mirror,
