@@ -135,6 +135,15 @@ describe("fixed-parry entries — one parryable attack, park the cover there", f
     expect(ataxia_denizenParryPredict()).toBe("right leg")
   end)
 
+  it("returns nil (never errors) for a malformed entry with neither fixed nor cycle", function()
+    freshMob()
+    selfLimbDamage.denizenPatterns["a malformed entry"] = {}
+    secondTarget = "a malformed entry"
+    expect(ataxia_denizenParryPredict()).toBe(nil)
+    selfLimbDamage.denizenPatterns["a malformed entry"] = nil
+    secondTarget = "an axe-wielding revenant"
+  end)
+
   it("returns nil for fixed entries too when the basher is disabled", function()
     freshMob()
     secondTarget = "a steel-encased Death Knight"

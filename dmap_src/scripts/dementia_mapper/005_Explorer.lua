@@ -239,6 +239,7 @@ function dmap._swarmTick()
       return true -- hold navigation while we wait for followers
     end
     sw.state = "reenter"
+    if not sw.fwdShort then dmap._swarmReset("no re-entry route"); return false end
     dmap._exploreEcho("<orange>[swarm]<reset> trickle over -- re-entering.")
     dmap._tacticalMove(sw.fwdShort)
     return true

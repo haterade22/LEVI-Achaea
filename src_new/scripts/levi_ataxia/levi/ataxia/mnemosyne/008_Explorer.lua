@@ -265,9 +265,10 @@ end
 
 -- Arm the in-flight machinery for a SWARM-TACTICS move whose actual send rides the
 -- attack chain (or is sent by 009 itself). Same guards as _exploreMove -- one move in
--- flight, MOVE_TIMEOUT recovery -- but flagged so no failure path ever condemns the
--- walked edge into explore.failed.
-function M._tacticalArm(dir)
+-- flight, timeout recovery -- but flagged so no failure path ever condemns the walked
+-- edge into explore.failed. `timeout` overrides MOVE_TIMEOUT for moves that wait on a
+-- queued balance chain (the pull) so the hold isn't cleared under a still-live chain.
+function M._tacticalArm(dir, timeout)
   M.explore.moving = true
   M.explore.tacticalMove = true
   M.explore.fromRoom = MAP and MAP.current
@@ -275,7 +276,7 @@ function M._tacticalArm(dir)
   M.explore.tries = 0
   M.explore.iceSlips = 0
   if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
-  M._explMoveT = tempTimer(MOVE_TIMEOUT, function()
+  M._explMoveT = tempTimer(timeout or MOVE_TIMEOUT, function()
     M._explMoveT = nil
     if not M.explore.moving then return end
     M.explore.moving = false

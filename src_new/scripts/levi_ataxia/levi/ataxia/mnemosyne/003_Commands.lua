@@ -50,7 +50,7 @@ function M.help()
     { "mnem debug", "Toggle verbose debug echoes" },
     { "mnem map [on|off|status]", "Toggle / diagnose the per-ripple mini-map" },
     { "mnem explore [on|off|status]", "Auto-sweep the 4x4, clear rooms, stop at the boon screen" },
-    { "mnem swarm [on|off|assess <n>|deep <r> <n>|icewall|kite]", "Multi-mob tactics: pull crowded rooms back to cleared ground" },
+    { "mnem swarm [on|off|assess <n>|deep <r> <n>|icewall|kite|panic|panicat <hp%>]", "Multi-mob tactics: pull crowded rooms back to cleared ground" },
     { "mnem sense", "Fullsense recon of the ripple (Sleuth boon reveals all denizens)" },
     { "mnem boons", "This run's claimed boons (local history)" },
     { "mnem boonfill", "BOON CONTEMPLATE owned boons with no description yet (run BOONS first)" },
@@ -179,6 +179,15 @@ function M.command(rest)
         sc[sub] = M._toggleState(rest2, sc[sub])
         ataxia_saveSettings(false)
         M.echo(sub .. " " .. (sc[sub] and "<green>ON" or "<grey>off") .. ".")
+      elseif sub == "panicat" then
+        local n = tonumber(rest2)
+        if n and n >= 5 and n <= 90 then
+          sc.panicAt = n
+          ataxia_saveSettings(false)
+          M.echo("Roll Hide panic threshold: <cyan>" .. n .. "%<reset> hp.")
+        else
+          M.echo("Usage: mnem swarm panicat <hp%>  (5-90)")
+        end
       else
         S.status()
       end

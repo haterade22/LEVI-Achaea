@@ -91,6 +91,7 @@ function ataxia_denizenParryPredict()
 	-- Fixed-parry mob: one parryable attack, park the cover there unconditionally
 	-- (even mid-break -- the parry still fires on a just-broken limb).
 	if pat.fixed then return pat.fixed end
+	if not pat.cycle then return nil end -- malformed entry (neither fixed nor cycle): never error in the prompt path
 	if state.mob ~= mob or not state.limb then return pat.cycle[1] end
 	if (_now() - state.at) > STALE_AFTER then return pat.cycle[1] end
 	if state.count < (pat.hitsPer or 2) then return state.limb end

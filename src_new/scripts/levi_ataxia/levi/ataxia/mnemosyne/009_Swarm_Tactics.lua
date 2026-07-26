@@ -228,8 +228,10 @@ function S._onPullSent()
     ataxiaTemp.swarmHold = nil -- self-clear: a cq all (death/attacked) can destroy the chain
   end)
   -- The move rides the attack chain; arm the explorer's in-flight machinery so ticks
-  -- hold and a lost move times out WITHOUT condemning the walked edge.
-  if M._tacticalArm and S.backShort then M._tacticalArm(S.backShort) end
+  -- hold and a lost move times out WITHOUT condemning the walked edge. HOLD_TIMEOUT (not
+  -- the default 5s): the chain fires on balance regain, and a slow round must not have
+  -- the timeout clear the hold while the chain is still legitimately queued.
+  if M._tacticalArm and S.backShort then M._tacticalArm(S.backShort, HOLD_TIMEOUT) end
   -- Stale-target hygiene for the room change (re-derived next prompt)...
   found_target = false
   -- ...and the shield-retarget timer must not re-settarget the old mob cross-room.
@@ -249,7 +251,8 @@ function S.decorate(command, sep)
     S._onPullSent()
     return decorated
   end
-  if S.flying and S.state == "funnel" then
+  if S.flying and S.state == "funnel"
+     and M.map and M.map.current == S.funnelRoom then -- same guard as the pull: no stale wraps after a forced move
     return "land" .. sep .. command .. sep .. "fly"
   end
   return command
@@ -320,7 +323,16 @@ function S._maybePanic()
   if not dir then return false end
   S._lastPanicAt = now()
   send("cq all")
-  send("tumble " .. dir)
+  if S.flying then
+    -- TUMBLE is a ground action: land FIRST or the tumble is rejected mid-kite and the
+    -- panic (plus its cooldown) is wasted exactly when it matters most.
+    send("land")
+    S.flying = nil
+  end
+  -- Free-queued, not raw: at panic HP the balance is usually spent mid-round, and a raw
+  -- tumble would be rejected. The free queue fires it the instant we're able.
+  local sep = (ataxia.settings and ataxia.settings.separator) or ";"
+  send("queue addclear free stand" .. sep .. "tumble " .. dir)
   S._echo("<indian_red>PANIC (" .. hpp() .. "% hp)<reset> -- Roll Hide tumble <cyan>" .. dir .. "<reset> sheds all pursuers.")
   S.reset("panic tumble")
   return true
@@ -336,6 +348,16 @@ function S.onTick()
     return false
   end
 
+  -- Roll Hide panic covers EVERY crowded situation, not just the funnel -- the worst HP
+  -- floors are hit in the fight-in-place fallback (no-route / MAX_PULLS rooms) and
+  -- mid-kite. Gated inside _maybePanic (boon, config, HP, cooldown, a valid exit).
+  if (S.state ~= "idle"
+      or ((M._roomHasDenizens and M._roomHasDenizens())
+          and ((M._denizenCount and M._denizenCount()) or 0) >= S.threshold()))
+     and S._maybePanic() then
+    return true
+  end
+
   if S.state == "pulling" then
     if cur == S.funnelRoom then
       S._enterFunnel()
@@ -349,7 +371,6 @@ function S.onTick()
 
   if S.state == "funnel" then
     if cur ~= S.funnelRoom then S.reset("left the funnel room"); return false end
-    if S._maybePanic() then return true end -- Roll Hide: tumble out at panic HP
     if M._roomHasDenizens and M._roomHasDenizens() then
       local n = (M._denizenCount and M._denizenCount()) or 0
       if n > (S.peakFollowers or 0) then S.peakFollowers = n end

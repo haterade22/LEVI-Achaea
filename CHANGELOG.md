@@ -2,6 +2,33 @@
 
 ---
 
+## 2026-07-26 — Swarm tactics review-2 fixes: panic everywhere + grounded first (v4.7.112)
+
+A second focused deep review over the post-stage-1 diff (stage-2 branches, dmap mirror,
+parry upgrades) found one HIGH and several hardening items — all fixed:
+
+- **Panic tumbled while flying** (HIGH): TUMBLE is a ground action; mid-kite the panic was
+  rejected in the air, its 10s cooldown burned, and reset landed us into the swarm at <=40%
+  HP with no retry. `_maybePanic` now LANDS first, and the tumble is free-queued
+  (`queue addclear free stand;tumble <dir>`) instead of raw — at panic HP the balance is
+  usually spent and a raw send would bounce.
+- **Panic now covers every crowded state**, not just the funnel: it runs at the top of the
+  swarm tick, so the fight-in-place fallback (no-route / MAX_PULLS rooms — where the HP
+  floor is actually hit) and mid-kite are protected. New `mnem swarm panicat <hp%>`.
+- **Pull hold honors its 8s**: `M._tacticalArm` takes a timeout; the pull arms it with
+  HOLD_TIMEOUT so the 5s move-timeout can no longer clear the hold while the chain is
+  still legitimately queued on a slow balance round (the documented invariant was false).
+- **Kite wrap room guard**: `land;<attack>;fly` only wraps while actually in the funnel
+  room (same guard the pull decorator already had).
+- **Malformed parry entries can't error the prompt path**: a `denizenPatterns` entry with
+  neither `fixed` nor `cycle` now predicts nil instead of indexing nil.
+- dmap: nil-guard on the re-entry route; `mnem swarm` help lists `panic`/`panicat`.
+
+Suites: LEVI **403/403** (panic-while-flying ordering, fight-in-place coverage, kite room
+guard, free-queued tumble, malformed-entry cases), dmap **33/33**.
+
+---
+
 ## 2026-07-25 — Mnemosyne swarm tactics: pull & funnel, icewall+leap, fly-kite, panic (v4.7.111)
 
 Deep ripples pack 3-4+ ROAMING denizens per room; standing in the swarm broke arms faster

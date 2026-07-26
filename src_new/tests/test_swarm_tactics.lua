@@ -337,7 +337,14 @@ describe("swarm stage 2 — fly-kite (outdoors)", function()
 end)
 
 describe("swarm stage 2 — Roll Hide panic", function()
-  it("tumbles out at panic HP with the boon up, then resets", function()
+  local TUMBLE = "queue addclear free stand;tumble w"
+
+  local function findCmd(needle)
+    for i, c in ipairs(sent) do if c == needle then return i end end
+    return nil
+  end
+
+  it("tumbles out (free-queued) at panic HP with the boon up, then resets", function()
     fixture(3)
     S.onTick(); S.decorate("attack", ";")
     MAP.current = 100; mobs = 2; S.onTick() -- funnel, fighting followers
@@ -347,8 +354,37 @@ describe("swarm stage 2 — Roll Hide panic", function()
     S._lastPanicAt = nil
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("idle")
+    expect(findCmd(TUMBLE) ~= nil).toBeTrue()
+  end)
+
+  it("LANDS before tumbling when the panic fires mid-kite", function()
+    fixture(3)
+    S.onTick(); S.decorate("attack", ";")
+    MAP.current = 100; mobs = 0; S.onTick() -- funnel
+    mobs = 3; S.onTick()                    -- swarm followed outdoors -> flying
+    expect(S.flying).toBeTrue()
+    MAP.rooms[100].exits.west = 50
+    mnemRollHide = true
+    ataxia.vitals = { hpp = 30 }
+    S._lastPanicAt = nil
+    expect(S.onTick()).toBeTrue()
+    expect(S.flying).toBe(nil)
+    local landAt, tumbleAt = findCmd("land"), findCmd(TUMBLE)
+    expect(landAt ~= nil).toBeTrue()
+    expect(tumbleAt ~= nil).toBeTrue()
+    expect(landAt < tumbleAt).toBeTrue() -- ground FIRST, tumble second
+  end)
+
+  it("covers the fight-in-place fallback (idle state, crowded no-tactics room)", function()
+    fixture(4)
+    S.noTactics[200] = true -- pulls exhausted: we are standing in the crowd
+    MAP.rooms[200].exits.east = 60 -- an escape exit
+    mnemRollHide = true
+    ataxia.vitals = { hpp = 30 }
+    S._lastPanicAt = nil
+    expect(S.onTick()).toBeTrue()
     local sawTumble = false
-    for _, c in ipairs(sent) do if c == "tumble w" then sawTumble = true end end
+    for _, c in ipairs(sent) do if c:find("tumble", 1, true) then sawTumble = true end end
     expect(sawTumble).toBeTrue()
   end)
 
@@ -363,6 +399,19 @@ describe("swarm stage 2 — Roll Hide panic", function()
     ataxia.vitals = { hpp = 90 } -- boon but healthy
     S.onTick()
     expect(S.state).toBe("funnel")
+  end)
+end)
+
+describe("swarm stage 2 — kite wrap room guard", function()
+  it("does not wrap attacks after a forced move left the funnel room", function()
+    fixture(3)
+    S.onTick(); S.decorate("attack", ";")
+    MAP.current = 100; mobs = 0; S.onTick()
+    mobs = 3; S.onTick() -- flying in the funnel
+    MAP.current = 300    -- forced/manual move elsewhere
+    expect(S.decorate("attack", ";")).toBe("attack")
+    MAP.current = 100
+    expect(S.decorate("attack", ";")).toBe("land;attack;fly")
   end)
 end)
 
