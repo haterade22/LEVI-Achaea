@@ -65,6 +65,8 @@ local SENSE_TIMEOUT = 2.0   -- fullsense capture: seconds of silence before flus
 local SENSE_DELAY = 3.0     -- on GO: wait out the wade-status/look burst (their captures
                             -- would force-finish ours and recon would store the wrong block)
 local PANIC_COOLDOWN = 10   -- min seconds between Roll Hide panic tumbles
+local RECOVER_TICK = 2      -- while hovering to recover, re-check HP this often
+local RECOVER_MAX = 60      -- hard cap on a recovery hover (then land and hand back)
 
 -- Reload-safety: ataxiaTemp persists across a SYSUPDATE reload; a stranded hold or
 -- armed decorator would silently gate the whole basher / decorate a random attack.
@@ -97,6 +99,9 @@ function S._cfg()
   if s.kite == nil then s.kite = true end       -- outdoors swarm-followed: fly/land/hit
   if s.panic == nil then s.panic = true end     -- Roll Hide boon: tumble out at low HP
   s.panicAt = tonumber(s.panicAt) or 40         -- HP% that triggers the panic tumble
+  if s.escape == nil then s.escape = true end   -- low-HP escape ladder (fly / retreat) instead of shield-in-place
+  s.escapeAt = tonumber(s.escapeAt) or 35       -- HP% that triggers the escape
+  s.recoverAt = tonumber(s.recoverAt) or 75     -- HP% at which a recovery hover lands and resumes
   s.bracersId = s.bracersId or "bracers417868"  -- Bracers of Frost (ICEWALL)
   s.meltId = s.meltId or "bracers151113"        -- Bracers of Flame (melt own wall)
   return s
@@ -349,6 +354,47 @@ function S._maybePanic()
   return true
 end
 
+-- Keep the attack-dispatch hold alive while we hover to recover -- refreshed every
+-- recovery tick so the HOLD_TIMEOUT self-clear can't expose us mid-hover.
+function S._armRecoverHold()
+  ataxiaTemp.swarmHold = true
+  if S._holdT then pcall(killTimer, S._holdT) end
+  S._holdT = tempTimer(HOLD_TIMEOUT, function()
+    S._holdT = nil
+    ataxiaTemp.swarmHold = nil
+  end)
+end
+
+-- Low-HP escape ladder (user-driven design after the cave-bat death: at low HP the
+-- no-flee "shield in place" answer FAILS -- touch shield needs an arm, and broken arms
+-- are exactly what a chip-down death looks like). Outdoors: FLY and hover untouchable
+-- while curing (works with every limb broken); indoors: retreat to the previous cleared
+-- room and cure while fighting the trickle. No route indoors -> the old shield behavior
+-- stands. Triggers on HP alone -- the cave-bat death had only TWO mobs (below the swarm
+-- threshold), so mob count must not gate this.
+function S._beginEscape()
+  local s = S._cfg()
+  if not S._indoors() then
+    S.state = "recovering"
+    S.recoverStarted = now()
+    S.flying = true
+    local sep = (ataxia.settings and ataxia.settings.separator) or ";"
+    send("queue addclear free stand" .. sep .. "fly")
+    S._armRecoverHold()
+    S._echo("<indian_red>LOW HP (" .. hpp() .. "%)<reset> -- <cyan>flying to recover<reset> (land at " .. s.recoverAt .. "%).")
+    return true
+  end
+  local shortBack, longBack, shortFwd = S._backDir()
+  if not shortBack then return false end -- indoors with no route: shield-in-place remains the fallback
+  S.state = "pulling"
+  S.mode = "pull"
+  S.swarmRoom, S.funnelRoom = (M.map and M.map.current), M.explore.fromRoom
+  S.backShort, S.backLong, S.fwdShort = shortBack, longBack, shortFwd
+  S.peakFollowers, S.announcedFollow = 0, false
+  S._tacticalGo(shortBack, "<indian_red>LOW HP (" .. hpp() .. "%)<reset> -- retreating to recover")
+  return true
+end
+
 -- Explorer tick delegation. Returns true when the tick is consumed (the explorer
 -- must not navigate/announce this tick); false hands back to the normal flow.
 function S.onTick()
@@ -367,6 +413,41 @@ function S.onTick()
           and ((M._denizenCount and M._denizenCount()) or 0) >= S.threshold()))
      and S._maybePanic() then
     return true
+  end
+
+  -- Recovery hover: stay airborne and gated until healed (or the hard cap).
+  if S.state == "recovering" then
+    local s = S._cfg()
+    if hpp() >= s.recoverAt or (now() - (S.recoverStarted or 0)) > RECOVER_MAX then
+      local healed = hpp() >= s.recoverAt
+      S.flying = nil
+      send("land")
+      S._clearHold()
+      S.state = "idle"
+      S._echo(healed and "<green>recovered<reset> -- landing and resuming."
+        or "<grey>recover cap hit -- landing and handing back.")
+      return false -- normal flow (fight/assess) resumes this very tick
+    end
+    S._armRecoverHold()
+    if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
+    return true
+  end
+
+  -- Low-HP escape (HP-gated only; see _beginEscape). Already-airborne (kiting) just
+  -- converts in place -- no land/fly churn.
+  do
+    local s = S._cfg()
+    if s.escape ~= false and hpp() <= s.escapeAt then
+      if S.flying then
+        S.state = "recovering"
+        S.recoverStarted = now()
+        S._armRecoverHold()
+        S._echo("<indian_red>LOW HP (" .. hpp() .. "%)<reset> -- staying airborne to recover.")
+        return true
+      end
+      if S.state ~= "idle" then S.reset("low-hp escape") end
+      if S._beginEscape() then return true end
+    end
   end
 
   if S.state == "pulling" then
@@ -535,6 +616,7 @@ function S.status()
     .. (s.deepAt and (" (deep: >=r" .. tostring(s.deepAt) .. " -> " .. tostring(s.deepThreshold) .. ")") or "")
     .. " icewall=" .. tostring(s.icewall) .. " kite=" .. tostring(s.kite)
     .. " panic=" .. tostring(s.panic) .. "@" .. tostring(s.panicAt) .. "%"
+    .. " escape=" .. tostring(s.escape) .. "@" .. tostring(s.escapeAt) .. "%->" .. tostring(s.recoverAt) .. "%"
     .. " hold=" .. tostring(ataxiaTemp.swarmHold or false)
     .. " recon=" .. (S.recon and (#(S.recon.lines or {}) .. " lines @r" .. tostring(S.recon.ripple)) or "none"))
 end

@@ -50,7 +50,7 @@ function M.help()
     { "mnem debug", "Toggle verbose debug echoes" },
     { "mnem map [on|off|status]", "Toggle / diagnose the per-ripple mini-map" },
     { "mnem explore [on|off|status]", "Auto-sweep the 4x4, clear rooms, stop at the boon screen" },
-    { "mnem swarm [on|off|assess <n>|deep <r> <n>|icewall|kite|panic|panicat <hp%>]", "Multi-mob tactics: pull crowded rooms back to cleared ground" },
+    { "mnem swarm [on|off|assess <n>|deep <r> <n>|icewall|kite|panic|escape|panicat|escapeat|recoverat]", "Multi-mob tactics + low-HP escape (fly/retreat instead of shield-in-place)" },
     { "mnem sense", "Fullsense recon of the ripple (Sleuth boon reveals all denizens)" },
     { "mnem boons", "This run's claimed boons (local history)" },
     { "mnem boonfill", "BOON CONTEMPLATE owned boons with no description yet (run BOONS first)" },
@@ -175,7 +175,7 @@ function M.command(rest)
         else
           M.echo("Usage: mnem swarm deep <ripple> <n>  |  mnem swarm deep off")
         end
-      elseif sub == "icewall" or sub == "kite" or sub == "panic" then
+      elseif sub == "icewall" or sub == "kite" or sub == "panic" or sub == "escape" then
         sc[sub] = M._toggleState(rest2, sc[sub])
         ataxia_saveSettings(false)
         M.echo(sub .. " " .. (sc[sub] and "<green>ON" or "<grey>off") .. ".")
@@ -187,6 +187,24 @@ function M.command(rest)
           M.echo("Roll Hide panic threshold: <cyan>" .. n .. "%<reset> hp.")
         else
           M.echo("Usage: mnem swarm panicat <hp%>  (5-90)")
+        end
+      elseif sub == "escapeat" then
+        local n = tonumber(rest2)
+        if n and n >= 5 and n <= 90 then
+          sc.escapeAt = n
+          ataxia_saveSettings(false)
+          M.echo("Low-HP escape threshold: <cyan>" .. n .. "%<reset> hp.")
+        else
+          M.echo("Usage: mnem swarm escapeat <hp%>  (5-90)")
+        end
+      elseif sub == "recoverat" then
+        local n = tonumber(rest2)
+        if n and n >= 30 and n <= 100 then
+          sc.recoverAt = n
+          ataxia_saveSettings(false)
+          M.echo("Recovery hover lands at: <cyan>" .. n .. "%<reset> hp.")
+        else
+          M.echo("Usage: mnem swarm recoverat <hp%>  (30-100)")
         end
       else
         S.status()

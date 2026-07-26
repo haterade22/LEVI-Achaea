@@ -2,6 +2,32 @@
 
 ---
 
+## 2026-07-26 — Low-HP escape ladder: fly/retreat instead of shield-in-place (v4.7.114)
+
+Driven by a live death (earth wyrm + wandered-in lithic cave bat): at low HP the no-flee
+answer — shield and keep swinging — FAILED because both arms were broken (`touch shield`
+needs an arm), and the chip-down happened in OUTDOOR rooms where flight was available the
+whole time. Two mobs only, below the swarm threshold, so the new trigger is HP-alone.
+
+- **`swarm.escape`** (default on, `escapeAt` 35%): outdoors → `fly` and HOVER — untouchable
+  while curing, works with every limb broken; attacks are hold-gated for the duration
+  (state `recovering`, re-checked every 2s); land + resume at `recoverAt` (75%) or the 60s
+  hard cap. Already-airborne (kiting) converts in place — no land/fly churn. Indoors →
+  retreat to the previous cleared room (validated route, no swing — at low HP the point is
+  OUT) and cure while fighting the trickle. Indoors with no route → the old shield behavior
+  stands. Roll Hide panic keeps top priority when the boon is up.
+- Commands: `mnem swarm escape on|off`, `escapeat <hp%>`, `recoverat <hp%>`; status shows
+  `escape=true@35%->75%`.
+- **SLC both-arms flee is now inert in the Mnemosyne** (004_Defensive_Reactions): it flees a
+  FIXED configured direction — blind runs into unexplored tower rooms — and competes with
+  the explorer/swarm; the tower escape now belongs to the swarm module.
+
+Tests: 7 new escape cases (HP-alone trigger below threshold count, hover/land cycle, hard
+cap, indoors retreat, no-route fallback, kite conversion, config off) + panic-gate test
+adjusted to the new ladder. Suite **410/410**, dmap **33/33**.
+
+---
+
 ## 2026-07-26 — Swarm: the panic tumble is hold-protected like the pull (v4.7.113)
 
 User-spotted gap: the Roll Hide panic free-queues its tumble, but at panic HP the balance is

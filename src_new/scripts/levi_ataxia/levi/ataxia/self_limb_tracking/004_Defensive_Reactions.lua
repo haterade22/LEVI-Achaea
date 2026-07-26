@@ -213,6 +213,10 @@ end
 local function handleBothArmsBrokenFlee(limb, threshold)
 	local cfg = selfLimbDamage.config
 	if not cfg.bothArmsFlee then return end
+	-- Never inside the Mnemosyne: this flees a FIXED direction (blind runs into unexplored
+	-- tower rooms) and fights the explorer/swarm machinery. The swarm module's low-HP
+	-- escape (mnemosyne/009) owns tower escapes -- fly/retreat with validated routes.
+	if ataxiaBasher and ataxiaBasher.inMnemosyne then return end
 	-- Only react when an arm reaches broken
 	if limb ~= "left arm" and limb ~= "right arm" then return end
 	if threshold ~= "broken" then return end

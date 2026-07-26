@@ -275,6 +275,13 @@ this tick). Stage 1 = the **pull & funnel** loop:
   whether the TRAILING fly fires after the swing consumes balance (watch for "carries you
   up" after every swing round; two consecutive grounded rounds = balance-gated → switch to
   the dispatch-gated fallback).
+- **Low-HP escape** (`swarm.escape`, default on, `escapeAt` 35% / `recoverAt` 75%):
+  HP-gated ONLY (a two-mob chip-down killed below the swarm threshold). Outdoors -> fly and
+  hover (state `recovering`, attacks hold-gated, 2s re-checks, 60s cap) -- flight works with
+  every limb broken, unlike `touch shield`; land + resume when healed. Indoors -> plain
+  retreat to the cleared room (no swing) and cure while fighting the trickle; no route ->
+  shield-in-place remains. SLC's both-arms flee is inert in the tower (fixed-direction blind
+  runs); the swarm module owns tower escapes.
 - **Roll Hide panic** (`swarm.panic`, default on, needs the `mnemRollHide` boon): at
   `swarm.panicAt`% HP (default 40) mid-funnel, tumble out through a non-swarm exit — the boon
   sheds ALL pursuers — then full reset (10s cooldown).

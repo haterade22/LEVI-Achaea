@@ -394,7 +394,9 @@ describe("swarm stage 2 — Roll Hide panic", function()
     fixture(3)
     S.onTick(); S.decorate("attack", ";")
     MAP.current = 100; mobs = 2; S.onTick()
-    ataxia.vitals = { hpp = 30 } -- low HP but no boon
+    -- 38%: inside panic's 40% window but ABOVE the 35% escape ladder, so this isolates
+    -- the boon gate (at <=35% the low-HP escape correctly takes over regardless).
+    ataxia.vitals = { hpp = 38 } -- low-ish HP but no boon
     S.onTick()
     expect(S.state).toBe("funnel")
     mnemRollHide = true
@@ -414,6 +416,91 @@ describe("swarm stage 2 — kite wrap room guard", function()
     expect(S.decorate("attack", ";")).toBe("attack")
     MAP.current = 100
     expect(S.decorate("attack", ";")).toBe("land;attack;fly")
+  end)
+end)
+
+describe("swarm low-HP escape ladder", function()
+  local function findCmd(needle)
+    for i, c in ipairs(sent) do if c == needle then return i end end
+    return nil
+  end
+
+  it("flies to recover outdoors at escape HP (any mob count) and gates attacks", function()
+    fixture(2) -- BELOW the swarm threshold: the cave-bat death had only two mobs
+    ataxia.vitals = { hpp = 30 }
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")
+    expect(S.flying).toBeTrue()
+    expect(findCmd("queue addclear free stand;fly") ~= nil).toBeTrue()
+    expect(ataxiaTemp.swarmHold).toBeTrue()
+  end)
+
+  it("keeps hovering below recoverAt, lands and resumes once healed", function()
+    fixture(2)
+    ataxia.vitals = { hpp = 30 }
+    S.onTick() -- recovering
+    ataxia.vitals = { hpp = 60 } -- still below recoverAt 75
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")
+    ataxia.vitals = { hpp = 80 }
+    expect(S.onTick()).toBeFalse() -- hands the tick back to the normal flow
+    expect(S.state).toBe("idle")
+    expect(S.flying).toBe(nil)
+    expect(findCmd("land") ~= nil).toBeTrue()
+    expect(ataxiaTemp.swarmHold).toBe(nil)
+  end)
+
+  it("lands at the hard cap even if never healed", function()
+    fixture(2)
+    ataxia.vitals = { hpp = 30 }
+    S.onTick()
+    clock = clock + 120 -- past RECOVER_MAX
+    expect(S.onTick()).toBeFalse()
+    expect(S.state).toBe("idle")
+    expect(S.flying).toBe(nil)
+  end)
+
+  it("retreats to the cleared room indoors (no fly available)", function()
+    fixture(2)
+    gmcp.Room.Info.details = { "indoors" }
+    ataxia.vitals = { hpp = 30 }
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("pulling")
+    expect(ataxiaTemp.swarmPullDir).toBe(nil) -- plain retreat, no swing decorator
+    expect(sent[#sent]).toBe("queue addclear free stand;s")
+  end)
+
+  it("leaves shield-in-place as the fallback indoors with no route", function()
+    fixture(2)
+    gmcp.Room.Info.details = { "indoors" }
+    M.explore.fromDir = "d" -- no valid back-route
+    ataxia.vitals = { hpp = 30 }
+    expect(S.onTick()).toBeFalse()
+    expect(S.state).toBe("idle")
+  end)
+
+  it("converts an active kite to a hover without land/fly churn", function()
+    fixture(3)
+    S.onTick(); S.decorate("attack", ";")
+    MAP.current = 100; mobs = 0; S.onTick()
+    mobs = 3; S.onTick() -- kiting
+    local flyCount = 0
+    for _, c in ipairs(sent) do if c == "queue addclear free stand;fly" then flyCount = flyCount + 1 end end
+    ataxia.vitals = { hpp = 30 }
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")
+    expect(S.flying).toBeTrue()
+    local flyCount2 = 0
+    for _, c in ipairs(sent) do if c == "queue addclear free stand;fly" then flyCount2 = flyCount2 + 1 end end
+    expect(flyCount2).toBe(flyCount) -- no second fly sent
+  end)
+
+  it("does nothing when escape is configured off", function()
+    fixture(2)
+    cfg.swarm.escape = false
+    ataxia.vitals = { hpp = 30 }
+    expect(S.onTick()).toBeFalse()
+    expect(S.state).toBe("idle")
   end)
 end)
 
