@@ -2,6 +2,30 @@
 
 ---
 
+## 2026-07-26 — Recovery = FULLY healed; icewall live-validated; augment spend fix (v4.7.115)
+
+- **Recovery hover lands only when FULLY healed** (user spec): `recoverAt` HP (default now
+  **95%**, migrated from 75) AND affliction-free — broken limbs are afflictions, so
+  restoration cycles finish before we drop back in. Kept defences (blindness/deafness/
+  curseward/insomnia) never hold the hover.
+- **Icewall tactic validated end-to-end in live play** (3-troll room, zero deaths): wall →
+  leap → funnel → melt → re-enter → sweep resumed. Knowledge captured: leap line ("You
+  bunch your powerful muscles and launch yourself in a majestic leap <dir>wards."), melt
+  line ("You send a lash of fire to strike the icewall... it quickly melts."). The chain is
+  NOT atomic — `point` waits for the next balance and `leap` for equilibrium (~7s total
+  escape; the 8s hold covered it — the review fix that raised it from 5s was load-bearing).
+  **Without Maklak's Promise, denizens WALK THROUGH icewalls** (all three followed): the
+  wall is pacing, not a barrier, unless the boon is up. Eq-bounced re-entry walks self-heal
+  via the queue.
+- **Bladed Reflexes augment spend fix**: live log showed `shin augment 1` channeling and
+  DISSIPATING 12ms later (twice) — one shin buys ~zero duration, the 20% DR was never up.
+  Default spend is now **3** (`ataxiaBasher.bmAugmentAmount` to tune); the keeper waits
+  until it holds that much shin.
+
+Suite **410/410**, dmap **33/33**.
+
+---
+
 ## 2026-07-26 — Low-HP escape ladder: fly/retreat instead of shield-in-place (v4.7.114)
 
 Driven by a live death (earth wyrm + wandered-in lithic cave bat): at low HP the no-flee

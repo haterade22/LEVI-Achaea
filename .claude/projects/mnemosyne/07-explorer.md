@@ -261,7 +261,13 @@ this tick). Stage 1 = the **pull & funnel** loop:
   over our own wall, all one queue entry (order preserved; a split send could wall the wrong
   edge from the wrong room). Hold behind the wall with the longer `WALL_WINDOW`; re-entry
   MELTS the wall first (`point <meltId> at icewall`, the fli-alias shape) then walks — a
-  missing wall makes the melt a harmless whiff.
+  missing wall makes the melt a harmless whiff. **Live-validated 2026-07-26** (3-troll room,
+  no deaths). Lines: leap "You bunch your powerful muscles and launch yourself in a majestic
+  leap <dir>wards."; melt "You send a lash of fire to strike the icewall to the <dir>, and it
+  quickly melts." NOT atomic: `point` fires on the NEXT balance, `leap` on equilibrium (~7s
+  escape; the 8s swarmHold covered it). **Without Maklak's Promise denizens WALK THROUGH
+  icewalls** — the wall paces the fight rather than barring it; with the boon it should
+  actually impede (still to observe).
 - **Outdoors swarm-followed** (`swarm.kite`, default on): followers >= threshold in the
   funnel → `fly`; the decorator turns every attack into `land;<attack>;fly` (ground contact
   only for the swing). Below threshold → `land` and finish grounded. If FLY needs balance the

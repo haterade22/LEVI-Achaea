@@ -88,16 +88,21 @@ describe("ataxiaBasher_blademasterBashing — Bladed Reflexes (shin augment) boo
     ataxia.vitals.class = shin -- shin count (blademaster.getShin fallback source)
   end
 
-  it("prepends shin augment 1 with the boon on, shin >= 1, and no bodyaugment up", function()
-    reset(1)
+  it("prepends the configurable augment spend with the boon on and enough shin", function()
+    reset(3)
     local cmd = ataxiaBasher_blademasterBashing()
-    expect(has(cmd, "shin augment 1")).toBeTrue()
-    expect(cmd:find("shin augment 1", 1, true)).toBe(1) -- augment leads the chain
+    expect(has(cmd, "shin augment 3")).toBeTrue() -- default spend: 1 shin dissipates instantly (live log)
+    expect(cmd:find("shin augment 3", 1, true)).toBe(1) -- augment leads the chain
     expect(has(cmd, "drawslash " .. target .. " sternum")).toBeTrue() -- attack intact
+    reset(5)
+    ataxiaBasher.bmAugmentAmount = 5
+    local cmd2 = ataxiaBasher_blademasterBashing()
+    expect(has(cmd2, "shin augment 5")).toBeTrue()
+    ataxiaBasher.bmAugmentAmount = nil
   end)
 
-  it("does NOT augment with 0 shin (augment needs the shin to spend)", function()
-    reset(0)
+  it("does NOT augment below the spend amount (augment needs the shin)", function()
+    reset(2) -- below the default spend of 3
     local cmd = ataxiaBasher_blademasterBashing()
     expect(has(cmd, "shin augment")).toBeFalse()
   end)
@@ -117,9 +122,9 @@ describe("ataxiaBasher_blademasterBashing — Bladed Reflexes (shin augment) boo
   end)
 
   it("arms the attempt-hold when it sends, so the NEXT swing skips the augment", function()
-    reset(2)
+    reset(4)
     local first = ataxiaBasher_blademasterBashing()
-    expect(has(first, "shin augment 1")).toBeTrue()
+    expect(has(first, "shin augment 3")).toBeTrue()
     local second = ataxiaBasher_blademasterBashing()
     expect(has(second, "shin augment")).toBeFalse()
   end)

@@ -89,6 +89,7 @@ local function fixture(count)
   ataxiaBasher.manual = true
   gmcp.Room.Info.details = {}
   ataxia.vitals = { hpp = 100 }
+  ataxia.afflictions = {}
   mnemRollHide = false
 end
 
@@ -435,14 +436,18 @@ describe("swarm low-HP escape ladder", function()
     expect(ataxiaTemp.swarmHold).toBeTrue()
   end)
 
-  it("keeps hovering below recoverAt, lands and resumes once healed", function()
+  it("keeps hovering until FULLY healed (95%+ AND aff-free), then lands", function()
     fixture(2)
     ataxia.vitals = { hpp = 30 }
     S.onTick() -- recovering
-    ataxia.vitals = { hpp = 60 } -- still below recoverAt 75
+    ataxia.vitals = { hpp = 80 } -- healthier but below the 95% bar
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("recovering")
-    ataxia.vitals = { hpp = 80 }
+    ataxia.vitals = { hpp = 96 }
+    ataxia.afflictions = { crippledrightarm = true } -- healed HP, limb still broken
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering") -- restoration must finish first
+    ataxia.afflictions = { blindness = true, deafness = true } -- kept defences never hold us
     expect(S.onTick()).toBeFalse() -- hands the tick back to the normal flow
     expect(S.state).toBe("idle")
     expect(S.flying).toBe(nil)

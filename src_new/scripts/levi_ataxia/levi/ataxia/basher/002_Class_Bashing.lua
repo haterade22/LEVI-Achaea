@@ -232,10 +232,14 @@ function ataxiaBasher_blademasterBashing()
 		 and not ataxiaTemp.bmAugmentAttempted then
 		local shin = (blademaster and blademaster.getShin and blademaster.getShin())
 			or (ataxia.vitals and tonumber(ataxia.vitals.class)) or 0
-		if shin >= 1 then
+		-- Live log 2026-07-26: "shin augment 1" channeled and DISSIPATED 12ms later, twice --
+		-- one shin buys ~zero duration, so the boon's 20% DR was never actually up. Spend a
+		-- real chunk (duration appears to scale with the amount); tune via bmAugmentAmount.
+		local amt = tonumber(ataxiaBasher.bmAugmentAmount) or 3
+		if shin >= amt then
 			ataxiaTemp.bmAugmentAttempted = true
 			tempTimer(5, [[ataxiaTemp.bmAugmentAttempted = nil]])
-			command = "shin augment 1"..sp
+			command = "shin augment "..amt..sp
 		end
 	end
 

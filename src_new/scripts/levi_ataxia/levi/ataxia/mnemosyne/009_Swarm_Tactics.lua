@@ -101,7 +101,8 @@ function S._cfg()
   s.panicAt = tonumber(s.panicAt) or 40         -- HP% that triggers the panic tumble
   if s.escape == nil then s.escape = true end   -- low-HP escape ladder (fly / retreat) instead of shield-in-place
   s.escapeAt = tonumber(s.escapeAt) or 35       -- HP% that triggers the escape
-  s.recoverAt = tonumber(s.recoverAt) or 75     -- HP% at which a recovery hover lands and resumes
+  s.recoverAt = tonumber(s.recoverAt) or 95     -- HP% at which a recovery hover may land (also needs aff-free)
+  if s.recoverAt == 75 then s.recoverAt = 95 end -- migrate the short-lived v4.7.114 default
   s.bracersId = s.bracersId or "bracers417868"  -- Bracers of Frost (ICEWALL)
   s.meltId = s.meltId or "bracers151113"        -- Bracers of Flame (melt own wall)
   return s
@@ -119,6 +120,26 @@ end
 
 local function hpp()
   return (ataxia and ataxia.vitals and tonumber(ataxia.vitals.hpp)) or 100
+end
+
+-- "Fully healed" for the recovery hover = aff-free too (user spec): broken limbs ARE
+-- afflictions, so restoration cycles finish before we drop back in. Blindness/deafness/
+-- curseward are deliberately KEPT as defences while bashing -- never hold the hover for
+-- them (we'd float forever).
+local AFF_IGNORE = { blindness = true, deafness = true, curseward = true, insomnia = true }
+function S._afflicted()
+  local a = ataxia and ataxia.afflictions
+  if type(a) ~= "table" then return false end
+  for k, v in pairs(a) do
+    if not AFF_IGNORE[k] then
+      if k == "unknown" then
+        if type(v) == "number" and v > 0 then return true end
+      elseif v == true then
+        return true
+      end
+    end
+  end
+  return false
 end
 
 -- Threshold, optionally depth-scaled: at/past ripple `deepAt`, use `deepThreshold`.
@@ -415,16 +436,18 @@ function S.onTick()
     return true
   end
 
-  -- Recovery hover: stay airborne and gated until healed (or the hard cap).
+  -- Recovery hover: stay airborne and gated until FULLY healed -- recoverAt% (default 95)
+  -- AND affliction-free (user spec: broken limbs must finish their restoration cycles
+  -- before we drop back in) -- or the hard cap.
   if S.state == "recovering" then
     local s = S._cfg()
-    if hpp() >= s.recoverAt or (now() - (S.recoverStarted or 0)) > RECOVER_MAX then
-      local healed = hpp() >= s.recoverAt
+    local healed = hpp() >= s.recoverAt and not S._afflicted()
+    if healed or (now() - (S.recoverStarted or 0)) > RECOVER_MAX then
       S.flying = nil
       send("land")
       S._clearHold()
       S.state = "idle"
-      S._echo(healed and "<green>recovered<reset> -- landing and resuming."
+      S._echo(healed and "<green>fully recovered<reset> (" .. hpp() .. "%, aff-free) -- landing and resuming."
         or "<grey>recover cap hit -- landing and handing back.")
       return false -- normal flow (fight/assess) resumes this very tick
     end
