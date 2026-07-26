@@ -2,6 +2,67 @@
 
 ---
 
+## 2026-07-25 — Mnemosyne swarm tactics: pull & funnel, icewall+leap, fly-kite, panic (v4.7.111)
+
+Deep ripples pack 3-4+ ROAMING denizens per room; standing in the swarm broke arms faster
+than curing (live logs). New `mnemosyne/009_Swarm_Tactics.lua` (`ataxia.mnemosyne.swarm`,
+`mnem swarm`), designed from a 3-agent code survey + adversarial review + the user's manual
+hit-and-run logs:
+
+- **Assess** on every settled arrival (explorer tick delegates to `swarm.onTick()`; a
+  consumed tick blocks navigation — without that gate the sweep walked off mid-funnel).
+  Threshold `mnem swarm assess <n>` (default 3), depth-scaled via `mnem swarm deep <r> <n>`.
+  Back-route VALIDATED (planar + adjacency vs the reported-exit graph) — never "up" into the
+  holding room, never a stale fromDir; no route → fight in place.
+- **Pull**: one-shot decorator in `ataxiaBasher_assembleAttack` turns the next attack into
+  `"<attack>;<backdir>"` — swing + step-out as ONE queued line (atomic on balance; the
+  user's manual `ragepull` alias shape). Consumption arms `ataxiaTemp.swarmHold` (new gate in
+  `ataxiaBasher_tryAttack` so the next dispatch's `queue addclearfull` can't wipe the chain;
+  5s self-clear + load-time reload-safety clear), clears stale `found_target`, kills
+  `mobshieldtimer`. No swing within 2.5s → walk out plain.
+- **Funnel**: fight followers on chosen ground (they're already targetable — names learned
+  from the swarm room's Items.List; one belt-and-braces `ql`); 4s follow window refreshed by
+  combat; empty window → re-enter and re-assess; `MAX_PULLS` 3/room then fight in place.
+- **Tactical moves never condemn exits**: `M._tacticalArm` + `explore.tacticalMove` guard
+  all three condemn paths (move-timeout, ice-slip cap, `Room.WrongDir`) — walked edges must
+  never land in `explore.failed`.
+- **Resets**: single `swarm.reset` (queue flush) wired into boon screen, `_exploreStop`
+  (death/leave-tower), `basher disabled`, sysLoad; `swarm.onRipple` wipes per-ripple budgets.
+- **Sleuth/Roll Hide boons**: `mnemSleuth` (triggers 020 + claim alias) → `fullsense` recon
+  on GO, captured raw into `swarm.recon` (`mnem sense` manual; format learned from live
+  logs); `mnemRollHide` (021) captured for the stage-2 panic tumble. Standard flag lifecycle.
+- **Indoors icewall+leap** (`swarm.icewall`, default on): the escape suffix becomes
+  `;point bracers417868 <LONG back>;leap <back>` — swing, wall the door, leap our own wall in
+  ONE queue entry (a split send could wall the wrong edge from the wrong room); longer hold
+  window behind the wall; re-entry MELTS first (`point bracers151113 at icewall`, harmless
+  whiff if the wall already broke) then walks.
+- **Outdoors fly-kite** (`swarm.kite`, default on): swarm follows the pull → `fly`; every
+  attack becomes `land;<attack>;fly` (ground contact only for the swing); lands below
+  threshold. If FLY needs balance the trailing fly is rejected that round — degrades to
+  grounded fighting, never wedges. Flight is landed on EVERY reset so it can't leak into a
+  boon screen or wade.
+- **Roll Hide panic** (`swarm.panic` on, `panicAt` 40%): with the boon, tumble out through a
+  non-swarm exit at panic HP — sheds all pursuers — then full reset (10s cooldown).
+- **dmap 0.2.0**: the standalone Dementia Mapper gets the pull/funnel core (`dmap swarm
+  <n|off>`, default off — no basher, so the funnel waits on the user/attack-hook), with the
+  same tactical-move never-condemn guard. dmap suite 33/33.
+- **Review hardening** (4-agent deep review + fixes): swarmHold gate moved INTO
+  `ataxiaBasher_attack()` (several triggers call it directly — stun-gone, blackout, manual
+  key — bypassing tryAttack); decorate verifies we are still in the swarm room; HOLD_TIMEOUT
+  8s (slow class balance); `S._enabled` requires manual mode (areabash would mapper-move);
+  on-GO fullsense delayed 3s past the wade-status/look burst and gated on the tower
+  (capture-slot collision stored the wrong block); boon-claim "roll hide" uses a frontier
+  pattern (a "Troll Hide" boon must not false-arm the flag).
+- **Pre-req chore**: `genrunning/001_Bashing_API.lua` was a verbatim DOUBLE of itself
+  (two headers, every handler registered twice — onDeath/onAttacked fired 2x per event).
+  Deduped 484→243 lines + kill-before-register handler registry.
+
+Tests: new `test_swarm_tactics.lua` (36 cases — threshold/deep scaling, back-route
+validation, full state-machine walk incl. wall/kite/panic branches, decorator consumption +
+hold hygiene + room-check, resets, recon, onGo gating). LEVI suite **387/387**, dmap **33/33**.
+
+---
+
 ## 2026-07-24 — SLC: new "bashing" parry mode, auto-engaged with the basher (v4.7.110)
 
 Follow-up to v4.7.109: the denizen-pattern prediction is now the top rung of an explicit

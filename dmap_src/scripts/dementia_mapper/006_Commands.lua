@@ -26,6 +26,7 @@ function dmap.command(args)
     cecho("\n   <cyan>dmap status<reset>            dump map state (rooms, bounds, current)")
     cecho("\n   <cyan>dmap explore [on|off|status]<reset>  auto-sweep the ripple")
     cecho("\n   <cyan>dmap attack <command><reset>  set the auto-explore combat command (@id/@name), or 'off'")
+    cecho("\n   <cyan>dmap swarm <n|off><reset>     at n+ denizens, retreat to the cleared room and funnel (off by default)")
   elseif cmd == "map" then
     if map.toggle then map.toggle(rest == "on" and true or rest == "off" and false or nil) end
   elseif cmd == "show" then
@@ -45,6 +46,19 @@ function dmap.command(args)
   elseif cmd == "attack" then
     -- Everything after "attack" is the raw command template (case preserved via the alias arg).
     dmap.echo("Use the alias form: the raw template is set from your typed command. Set 'off' to clear.")
+  elseif cmd == "swarm" then
+    if rest == "off" or rest == "" then
+      dmap.config.swarmThreshold = nil
+      dmap.echo("Swarm-lite <grey>off<reset> (crowded rooms are fought in place).")
+    else
+      local n = tonumber(rest)
+      if n and n >= 2 then
+        dmap.config.swarmThreshold = n
+        dmap.echo("Swarm-lite <green>ON<reset>: at <cyan>" .. n .. "+<reset> denizens, retreat to the cleared room and funnel.")
+      else
+        dmap.echo("Usage: dmap swarm <n>  (n >= 2)  |  dmap swarm off")
+      end
+    end
   else
     dmap.echo("unknown command '<red>" .. cmd .. "<reset>' — try <cyan>dmap help<reset>.")
   end

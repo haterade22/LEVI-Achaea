@@ -28,3 +28,8 @@ if matches[2]:lower():find("hot springs") then magiHotSprings = true end
 if matches[2]:lower():find("hammer and anvil") then mnemHammerAnvil = true; ataxiaBasher.shielded = false end
 -- Bladed Reflexes: 20% reduced damage while the Shindo augment (bodyaugment) is up; BM basher keeps it up via SHIN AUGMENT 1.
 if matches[2]:lower():find("bladed reflexes") then bmBladedReflexes = true end
+-- Sleuth: FULLSENSE reveals all denizens in the ripple; swarm module recons each wave on GO.
+if matches[2]:lower():find("sleuth") then mnemSleuth = true end
+-- Roll Hide: tumbling out of a room sheds all pursuers; swarm panic-abort (stage 2).
+-- Frontier pattern: a plain find("roll hide") would also match inside "Troll Hide".
+if matches[2]:lower():find("%f[%a]roll hide") then mnemRollHide = true end

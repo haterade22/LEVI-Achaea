@@ -37,6 +37,14 @@ and the attack loop keeps swinging through the shield (the HP≥70 re-attack gat
 `ataxiaBasher_attack()` is dropped for no-flee areas, so it guards reactively rather
 than pausing).
 
+**Swarm-retreat is NOT flee.** The Mnemosyne swarm tactics (`mnemosyne/009_Swarm_Tactics.lua`)
+deliberately step one room back from a 3+-mob room to funnel followers — a TACTIC, executed
+via the explorer's tactical-move machinery (`M._tacticalArm`), never via `executeFlee`.
+`dangerLevel()` is untouched: it still never returns `"flee"` in a no-flee area, the shield
+ladder still applies, and none of the flee state (`bashFlee`/`fleeOriginRoom`/`fleeReturning`)
+is used. The tactic's own gate is `ataxiaTemp.swarmHold` (attack-dispatch hold while a pull
+chain is queued), with its own timeout and reload-safety clears.
+
 | Area | Detection |
 |------|-----------|
 | the Fathomless Expanse of the World Tree | exact `gmcp.Room.Info.area` match |

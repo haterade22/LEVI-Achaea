@@ -57,6 +57,12 @@ Guarded by `if ataxia.mnemosyne.map then`; see [04-ripple-map.md](04-ripple-map.
 | `mnem explore` | `M.exploreToggle()` — start/stop the 4×4 auto-sweep |
 | `mnem explore on` / `mnem explore off` | `M.exploreOn()` / `M.exploreOff()` — force state |
 | `mnem explore status` | `M.exploreStatus()` — diagnostic (`inMnem`/denizens/moving/next step) |
+| `mnem swarm` | `M.swarm.status()` — swarm-tactics state/threshold/recon |
+| `mnem swarm on` / `off` | Toggle multi-mob tactics (persisted, `swarm.enabled`) |
+| `mnem swarm assess <n>` | Pull threshold (default 3) |
+| `mnem swarm deep <ripple> <n>` / `deep off` | Depth-scaled threshold at/past a ripple |
+| `mnem swarm icewall on\|off` / `kite on\|off` | Stage-2 branch toggles (branches unwired in stage 1) |
+| `mnem sense` | `M.swarm.sense()` — manual fullsense recon (Sleuth boon reveals all denizens) |
 
 ### Manual endpoint overrides
 

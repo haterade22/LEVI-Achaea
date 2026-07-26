@@ -36,3 +36,6 @@ ataxia.mnemosyne.onGo()
 -- Auto-resume the explorer on the new wave: after picking a boon + wading, GO marks the next
 -- ripple starting, so LOOK (holding-room down exit) and un-pause the sweep. No-op if not paused.
 if ataxia.mnemosyne.exploreOnGo then ataxia.mnemosyne.exploreOnGo() end
+-- Sleuth boon recon: fullsense reveals ALL denizens in the ripple -- scan it from the
+-- holding room before the sweep drops in. No-op unless mnemSleuth is set (009).
+if ataxia.mnemosyne.swarm and ataxia.mnemosyne.swarm.onGo then ataxia.mnemosyne.swarm.onGo() end

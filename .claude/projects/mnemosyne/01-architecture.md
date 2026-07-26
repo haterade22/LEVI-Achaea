@@ -94,7 +94,8 @@ boons offer: "...flickers of power that may aide you..."   [trig 004]
   └─ onRunEndMaybe() → arm 2s wait for "You just received message #N from Achaea."
        └─ (confirmed) onRunEnd() → clears the boon flags bardWarmarch /
                                     bmShatteredStar / magiKkractle / magiHotSprings /
-                                    mnemHammerAnvil / bmBladedReflexes + run.paused
+                                    mnemHammerAnvil / bmBladedReflexes /
+                                    mnemSleuth / mnemRollHide + run.paused
                                     (all UNconditionally); then if
                                     _inRun(): endRun() → _flushMonsters() →
                                     POST /run_end → run.active=false, _resetRun()

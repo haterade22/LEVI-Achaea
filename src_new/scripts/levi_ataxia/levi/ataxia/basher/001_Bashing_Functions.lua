@@ -84,6 +84,13 @@ ataxiaBasher_bashingFuncs = {
 }
 
 function ataxiaBasher_attack()
+  -- Swarm-tactics hold (mnemosyne/009): a pull chain ("<attack>;<backdir>") is queued
+  -- server-side and ANY attack's `queue addclearfull` would wipe it before balance. The
+  -- gate lives HERE (not only in tryAttack) because several triggers call this function
+  -- directly -- stun-gone (723), the blackout balance branches (006/007), the manual bash
+  -- key, the shikudo-error retry -- and every caller must respect the hold.
+  if ataxiaTemp.swarmHold then return end
+
   -- Determine danger level (flee/shield/attack/wait) — single check, no redundant logic
   local danger = ataxiaBasher_dangerLevel()
 
@@ -603,10 +610,18 @@ function ataxiaBasher_assembleAttack()
 
   if not ataxiaTemp.bashFlee and not ataxia.afflictions.paralysis and not ataxia.afflictions.aeon and not ataxia.afflictions.peace and not ataxia.afflictions.transfixation and not ataxia.afflictions.webbed and not ataxia.afflictions.impaled and not ataxia.afflictions.constricted and not ataxia.afflictions.deepsleep and not ataxia.afflictions.entangled and not ataxia.afflictions.unconsciousness and not ataxia.afflictions.snared then
     command = command.._G[ataxiaBasher_bashingFuncs[class]]()
+    -- Mnemosyne swarm tactics (mnemosyne/009): one-shot decorators ride the assembled
+    -- chain (e.g. the pull appends ";<backdir>" so the swing and the step out are ONE
+    -- queued line). Consumption also arms the swarmHold gate -- see S.decorate.
+    local swarm = ataxia.mnemosyne and ataxia.mnemosyne.swarm
+    if swarm and swarm.decorate then
+      local ok, decorated = pcall(swarm.decorate, command, sp)
+      if ok and type(decorated) == "string" then command = decorated end
+    end
     send("queue addclearfull freestand stand"..sp..command)
-	
+
   end
-	  
+
 end
 
 -- Per-class special rage thresholds for the standard battlerage pattern

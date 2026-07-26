@@ -39,6 +39,12 @@ local WATCHDOG = 30       -- seconds of no progress before a soft ql nudge
 local MAX_PATROL_LOOPS = 3 -- fruitless full patrol loops (boss hunt) before giving up
 local MAX_ICE_SLIPS = 15  -- re-send a move this many times after ice before giving up on the exit
 local ATTACK_EVERY = 1.5  -- while a room has denizens + a combat hook is set, re-send the attack this often
+local SWARM_WINDOW = 4    -- swarm-lite funnel: seconds to wait for followers once the room empties
+local SWARM_MAX_PULLS = 3 -- pulls per room before fighting it in place
+-- Swarm-lite is OFF unless dmap.config.swarmThreshold is set (`dmap swarm <n|off>`):
+-- at N+ denizens on arrival, retreat to the previous (cleared) room and deal with
+-- what follows there, instead of standing in the crowd. Mirror of the LEVI package's
+-- mnemosyne swarm tactics, minus the attack-chain decorators (dmap has no basher).
 
 local EXP = dmap.explore
 
@@ -154,6 +160,130 @@ function dmap._startAttacking()
 end
 
 -- ---------------------------------------------------------------------------
+-- Swarm-lite: pull & funnel for crowded rooms (dmap.config.swarmThreshold)
+-- ---------------------------------------------------------------------------
+
+local function swNow() return (getEpoch and getEpoch()) or os.time() end
+
+-- Validated direction back to the just-cleared room: planar + adjacency-verified
+-- (never "up" out of the holding room; never a stale fromDir after a manual move).
+function dmap._swarmBackDir()
+  if not (MAP and EXP.fromRoom and EXP.fromDir and MAP.current) then return nil end
+  if EXP.fromRoom == MAP.current then return nil end
+  local fwd = MAP.normDir and MAP.normDir(EXP.fromDir)
+  local back = fwd and MAP.OPPOSITE and MAP.OPPOSITE[fwd]
+  if not back then return nil end
+  if not (MAP.OFFSETS and MAP.OFFSETS[back]) then return nil end
+  local room = MAP.rooms and MAP.rooms[MAP.current]
+  if not (room and room.exits and room.exits[back] == EXP.fromRoom) then return nil end
+  return MAP.shortDir(back), MAP.shortDir(fwd)
+end
+
+function dmap._swarmReset(reason)
+  local sw = EXP.swarm
+  if sw and sw.state and sw.state ~= "idle" and reason then
+    dmap._exploreEcho("<grey>swarm reset (" .. reason .. ").")
+  end
+  EXP.swarm = { state = "idle", pulls = (sw and sw.pulls) or {}, noTactics = (sw and sw.noTactics) or {} }
+end
+
+-- A tactical (swarm) move: same machinery as a sweep move, but flagged so no failure
+-- path ever condemns the walked edge into EXP.failed.
+function dmap._tacticalMove(dir)
+  EXP.tacticalMove = true
+  dmap._exploreMove(dir)
+end
+
+function dmap._swarmMoveFailed()
+  local sw = EXP.swarm
+  if sw and sw.state ~= "idle" then
+    dmap._exploreEcho("<grey>swarm move lost -- reassessing.")
+    sw.state = "idle"
+  end
+end
+
+-- Tick delegation (true = tick consumed: no normal navigation this tick).
+function dmap._swarmTick()
+  local thr = tonumber(dmap.config and dmap.config.swarmThreshold)
+  EXP.swarm = EXP.swarm or { state = "idle", pulls = {}, noTactics = {} }
+  local sw = EXP.swarm
+  local cur = MAP and MAP.current
+  if not thr then
+    if sw.state ~= "idle" then dmap._swarmReset("disabled") end
+    return false
+  end
+
+  if sw.state == "pulling" then
+    if cur == sw.funnelRoom then
+      sw.state = "funnel"
+      sw.at = swNow()
+      dmap._exploreEcho("<orange>[swarm]<reset> in the funnel room -- handling what follows (window " .. SWARM_WINDOW .. "s).")
+      send("ql")
+      return true
+    elseif cur ~= sw.swarmRoom then
+      dmap._swarmReset("lost mid-pull")
+      return false
+    end
+    return true
+  end
+
+  if sw.state == "funnel" then
+    if cur ~= sw.funnelRoom then dmap._swarmReset("left the funnel room"); return false end
+    if dmap.roomHasDenizens() then
+      sw.at = swNow() -- fighting counts as activity
+      return false    -- the normal denizens branch fights/attacks here (it never navigates)
+    end
+    local remain = (sw.at or 0) + SWARM_WINDOW - swNow()
+    if remain > 0 then
+      dmap._scheduleTick(remain + 0.1)
+      return true -- hold navigation while we wait for followers
+    end
+    sw.state = "reenter"
+    dmap._exploreEcho("<orange>[swarm]<reset> trickle over -- re-entering.")
+    dmap._tacticalMove(sw.fwdShort)
+    return true
+  end
+
+  if sw.state == "reenter" then
+    if cur == sw.swarmRoom then
+      sw.state = "idle" -- fall through to a fresh assess below
+    elseif cur ~= sw.funnelRoom then
+      dmap._swarmReset("lost mid-reenter")
+      return false
+    else
+      return true
+    end
+  end
+
+  -- idle: assess
+  if not dmap.roomHasDenizens() then return false end
+  if cur and sw.noTactics[cur] then return false end
+  local n = dmap.denizenCount()
+  if n < thr then return false end
+  local backShort, fwdShort = dmap._swarmBackDir()
+  if not backShort then
+    if cur then
+      sw.noTactics[cur] = true
+      dmap._exploreEcho("<orange>[swarm]<reset> " .. n .. " denizens but no valid pull route -- staying.")
+    end
+    return false
+  end
+  sw.pulls[cur] = (sw.pulls[cur] or 0) + 1
+  if sw.pulls[cur] > SWARM_MAX_PULLS then
+    sw.noTactics[cur] = true
+    dmap._exploreEcho("<orange>[swarm]<reset> " .. SWARM_MAX_PULLS .. " pulls spent here -- staying.")
+    return false
+  end
+  sw.state = "pulling"
+  sw.swarmRoom, sw.funnelRoom = cur, EXP.fromRoom
+  sw.backShort, sw.fwdShort = backShort, fwdShort
+  dmap._exploreEcho("<orange>[swarm]<reset> <yellow>" .. n .. " denizens<reset> (>= " .. thr
+    .. ") -- pulling back (" .. sw.pulls[cur] .. "/" .. SWARM_MAX_PULLS .. ").")
+  dmap._tacticalMove(backShort)
+  return true
+end
+
+-- ---------------------------------------------------------------------------
 -- Movement + tick loop
 -- ---------------------------------------------------------------------------
 
@@ -179,12 +309,16 @@ function dmap._exploreMove(dir, isRetry)
         return dmap._exploreMove(dir, true)
       end
       local nd = MAP.normDir and MAP.normDir(dir)
-      if nd then
+      if nd and not EXP.tacticalMove then -- never condemn a walked swarm-tactics edge
         EXP.failed[EXP.fromRoom] = EXP.failed[EXP.fromRoom] or {}
         EXP.failed[EXP.fromRoom][nd] = true
       end
     end
     EXP.moving = false
+    if EXP.tacticalMove then
+      EXP.tacticalMove = false
+      dmap._swarmMoveFailed()
+    end
     dmap._exploreTick()
   end)
 end
@@ -197,11 +331,15 @@ function dmap.exploreIceSlip()
     dmap._exploreEcho("<indian_red>stuck on the ice<reset> after " .. MAX_ICE_SLIPS .. " tries -- skipping this exit.")
     if EXP._moveT then pcall(killTimer, EXP._moveT); EXP._moveT = nil end
     local nd = MAP.normDir and MAP.normDir(EXP.fromDir)
-    if nd and EXP.fromRoom then
+    if nd and EXP.fromRoom and not EXP.tacticalMove then -- walked swarm edges never condemned
       EXP.failed[EXP.fromRoom] = EXP.failed[EXP.fromRoom] or {}
       EXP.failed[EXP.fromRoom][nd] = true
     end
     EXP.moving = false
+    if EXP.tacticalMove then
+      EXP.tacticalMove = false
+      dmap._swarmMoveFailed()
+    end
     return dmap._exploreTick()
   end
   dmap._exploreEcho("<grey>slipped on the ice -- up and going again.")
@@ -214,7 +352,7 @@ function dmap._onWrongDir(dir)
   local nd = MAP and MAP.normDir and MAP.normDir(dir)
   if not nd then return end
   local from = EXP.fromRoom or (MAP and MAP.current)
-  if from then
+  if from and not EXP.tacticalMove then -- a tactical move walks a KNOWN edge; never condemn/prune it
     EXP.failed[from] = EXP.failed[from] or {}
     EXP.failed[from][nd] = true
     if MAP.rooms and MAP.rooms[from] and MAP.rooms[from].exits then
@@ -223,6 +361,10 @@ function dmap._onWrongDir(dir)
   end
   if EXP._moveT then pcall(killTimer, EXP._moveT); EXP._moveT = nil end
   EXP.moving = false
+  if EXP.tacticalMove then
+    EXP.tacticalMove = false
+    dmap._swarmMoveFailed()
+  end
   if MAP then MAP._lastMoveDir = nil end
   dmap._exploreEcho("<red>wall<reset> (" .. tostring(dir) .. ", server) -> condemned; rerouting.")
   dmap._scheduleTick()
@@ -260,6 +402,9 @@ function dmap._exploreTick()
   if EXP.pausedAtBoon then return end
   if EXP.moving then return end
   EXP.settling = false
+
+  -- Swarm-lite gets first look (assess crowded rooms, hold the funnel, drive re-entry).
+  if dmap._swarmTick and dmap._swarmTick() then return end
 
   if dmap.roomHasDenizens() then
     EXP.patrolLoops = 0
@@ -316,6 +461,7 @@ end
 
 local function resetSweepState()
   EXP.moving = false
+  EXP.tacticalMove = false
   EXP.failed = {}
   EXP._retriedFailed = nil
   EXP.hunting = false
@@ -323,6 +469,7 @@ local function resetSweepState()
   EXP.patrolLoops = 0
   EXP.iceSlips = 0
   EXP.settling = true -- treat the current room like an arrival: let denizens settle first
+  EXP.swarm = { state = "idle", pulls = {}, noTactics = {} } -- fresh ripple, fresh budgets
 end
 
 function dmap._exploreResume(reason)
@@ -362,6 +509,8 @@ function dmap.exploreStop(reason)
   EXP.on = false
   EXP.pausedAtBoon = false
   EXP.moving = false
+  EXP.tacticalMove = false
+  dmap._swarmReset(nil)
   dmap._stopAttacking()
   if EXP._tickT then pcall(killTimer, EXP._tickT); EXP._tickT = nil end
   if EXP._moveT then pcall(killTimer, EXP._moveT); EXP._moveT = nil end
@@ -374,7 +523,10 @@ function dmap.exploreStatus()
     .. "<reset> inMnem=" .. tostring(inMnem())
     .. " denizens=" .. tostring(dmap.roomHasDenizens())
     .. " combat=" .. (dmap.config.attack and "on" or "off (map-only)")
-    .. " moving=" .. tostring(EXP.moving)
+    .. " moving=" .. tostring(EXP.moving) .. (EXP.tacticalMove and " (tactical)" or "")
+    .. " swarm=" .. (dmap.config.swarmThreshold
+      and (tostring(dmap.config.swarmThreshold) .. "+/" .. tostring(EXP.swarm and EXP.swarm.state or "idle"))
+      or "off")
     .. " next=" .. tostring(dmap._nextExploreStep()))
 end
 
@@ -384,6 +536,8 @@ function dmap.exploreOnBoonScreen()
   if not EXP.on or EXP.pausedAtBoon then return end
   EXP.pausedAtBoon = true
   EXP.moving = false
+  EXP.tacticalMove = false
+  dmap._swarmReset(nil) -- every ripple ends here
   dmap._stopAttacking()
   if EXP._tickT then pcall(killTimer, EXP._tickT); EXP._tickT = nil end
   if EXP._moveT then pcall(killTimer, EXP._moveT); EXP._moveT = nil end
@@ -408,6 +562,7 @@ function dmap._onExploreRoom()
   local sameRoom = EXP.moving and MAP and MAP.current ~= nil and MAP.current == EXP.fromRoom
   if not sameRoom then
     EXP.moving = false
+    EXP.tacticalMove = false
     if EXP._moveT then pcall(killTimer, EXP._moveT); EXP._moveT = nil end
     EXP.settling = true
   end
@@ -436,5 +591,7 @@ reg("sysLoadEvent", function()
   EXP.on = false
   EXP.pausedAtBoon = false
   EXP.moving = false
+  EXP.tacticalMove = false
+  EXP.swarm = { state = "idle", pulls = {}, noTactics = {} }
   dmap._stopAttacking()
 end)

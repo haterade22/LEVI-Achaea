@@ -85,3 +85,11 @@ git commit -am "dmap 0.1.1"
 git tag dmap-v0.1.1
 git push origin main dmap-v0.1.1
 ```
+
+## Swarm-lite (v0.2.0)
+
+`dmap swarm <n|off>` (default off): at `n`+ denizens on a settled arrival, the explorer
+retreats to the just-cleared room (a *tactical* move that never blacklists the walked exit),
+waits a short window for followers, and re-enters when the trickle stops — 3 pulls per room,
+then it stays and fights. Mirrors the LEVI package's Mnemosyne swarm tactics, minus the
+attack-chain decorators (no basher here: combat stays with you or your `dmap attack` hook).

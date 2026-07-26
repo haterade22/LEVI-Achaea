@@ -234,4 +234,62 @@ The **pure logic** is unit-tested — `M._nextExploreStep` and `M._roomHasDenize
 
 ---
 
+## Swarm tactics (multi-mob rooms) — `009_Swarm_Tactics.lua`
+
+Deep ripples pack 3-4+ roaming denizens per room. On every decidable tick the explorer
+delegates first to `ataxia.mnemosyne.swarm.onTick()` (a consumed tick = no navigation/announce
+this tick). Stage 1 = the **pull & funnel** loop:
+
+- **Assess** (idle, settled arrival): killable count (`M._denizenCount()`) >= threshold
+  (`mnem swarm assess <n>`, default 3; optional depth scaling `mnem swarm deep <ripple> <n>`)
+  AND a **validated back-route**: planar + adjacency-verified
+  (`MAP.rooms[cur].exits[OPPOSITE[fromDir]] == fromRoom`) — never "up" out of the first grid
+  room, never a stale `fromDir`. No route -> fight in place (room marked no-tactics).
+- **Pull**: arm a ONE-SHOT decorator (`ataxiaTemp.swarmPullDir`); the next
+  `ataxiaBasher_assembleAttack` send becomes `"<attack>;<backdir>"` — swing + step-out as one
+  queued line, atomic on balance (the manual ragepull shape). Consumption arms
+  `ataxiaTemp.swarmHold` (gates `ataxiaBasher_tryAttack` so the next `queue addclearfull`
+  can't wipe the chain; self-clears after 5s), clears `found_target` (stale-target race) and
+  kills `ataxiaTemp.mobshieldtimer` (cross-room re-settarget). If no swing comes within 2.5s
+  (shield branch, no target), the fallback walks out plain.
+- **Funnel**: arrival in the previous room -> hold navigation; the basher fights whatever
+  follows (followers arrive via `Char.Items.Add` -> "targets updated"; one `ql` re-Lists for
+  never-Listed spawns). Fighting refreshes the 4s follow window; when it expires empty ->
+  **re-enter** and re-assess. `MAX_PULLS` (3) per room, then the room is fought in place.
+- **Indoors route** (`swarm.icewall`, default on): the escape suffix becomes
+  `;point <bracersId> <LONG back>;leap <back>` — swing, WALL the door we came through, LEAP
+  over our own wall, all one queue entry (order preserved; a split send could wall the wrong
+  edge from the wrong room). Hold behind the wall with the longer `WALL_WINDOW`; re-entry
+  MELTS the wall first (`point <meltId> at icewall`, the fli-alias shape) then walks — a
+  missing wall makes the melt a harmless whiff.
+- **Outdoors swarm-followed** (`swarm.kite`, default on): followers >= threshold in the
+  funnel → `fly`; the decorator turns every attack into `land;<attack>;fly` (ground contact
+  only for the swing). Below threshold → `land` and finish grounded. If FLY needs balance the
+  trailing fly is simply rejected that round — degrades to grounded fighting, never wedges.
+  Flight is landed on every reset (boon screen / stop / death) so it can't leak into a wade.
+- **Roll Hide panic** (`swarm.panic`, default on, needs the `mnemRollHide` boon): at
+  `swarm.panicAt`% HP (default 40) mid-funnel, tumble out through a non-swarm exit — the boon
+  sheds ALL pursuers — then full reset (10s cooldown).
+
+**Tactical moves never condemn exits**: `M._tacticalArm(dir)` sets `explore.moving` +
+`explore.tacticalMove`; the three condemn paths (move-timeout give-up, ice-slip cap,
+`Room.WrongDir`) skip the `explore.failed` write when the flag is up — these are WALKED edges,
+condemning them would poison the sweep — and notify `swarm.onMoveFailed()` instead.
+
+**Resets** (`swarm.reset`): boon screen (every ripple ends there), `_exploreStop`
+(death/leave-tower/off), `basher disabled`, `sysLoadEvent` (plus load-time clears of
+`ataxiaTemp.swarmHold`/`swarmPullDir` — they'd otherwise survive a SYSUPDATE and silently gate
+the basher). `swarm.onRipple` (exploreOn/_exploreResume) wipes per-ripple pull budgets.
+
+**Sleuth recon**: with the `mnemSleuth` boon flag up, GO fires `fullsense` (the boon reveals
+ALL denizens in the ripple) captured raw via `_captureLines` into `swarm.recon` — format is
+being learned from live logs; unparsed recon changes nothing. `mnem sense` re-scans (denizens
+ROAM; recon is a snapshot — per-arrival assess stays authoritative). `mnemRollHide` (tumble
+sheds pursuers) is captured for the stage-2 panic abort.
+
+Pure logic (threshold, `_backDir`, the state machine, decorator, resets) is unit-tested in
+`test_swarm_tactics.lua`; timer-fired paths are validated in-game.
+
+---
+
 See also: [04-ripple-map.md](04-ripple-map.md) (the `MAP` graph API this reuses), [05-commands.md](05-commands.md) (`mnem` dispatch), [01-architecture.md](01-architecture.md) (run lifecycle / gating).

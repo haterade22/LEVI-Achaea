@@ -21,6 +21,8 @@ Patterns are Mudlet regex (`type: 1`), quoted verbatim from each trigger file.
 | 017 | Splinterbark | `^Splinterbark:\s+Your tree tattoo is tainted with fell magic` | `onSplinterbarkSeen()` | none (handler self-gates on `ataxiaBasher.inMnemosyne`) |
 | 018 | Hammer and Anvil | `^Hammer and Anvil\s+\d+\s+\w+` (BOONS-list row) | sets `mnemHammerAnvil = true`, clears `ataxiaBasher.shielded` | none (flag set unconditionally; reset on run start/end) |
 | 019 | Bladed Reflexes | `^Bladed Reflexes\s+\d+\s+\w+` (BOONS-list row) | sets `bmBladedReflexes = true` (BM basher keeps `SHIN AUGMENT 1` up) | none (flag set unconditionally; reset on run start/end) |
+| 020 | Sleuth | `^Sleuth\s+\d+\s+\w+` (BOONS-list row) | sets `mnemSleuth = true` (swarm recon: fullsense on GO) | none (flag set unconditionally; reset on run start/end) |
+| 021 | Roll Hide | `^Roll Hide\s+\d+\s+\w+` (BOONS-list row) | sets `mnemRollHide = true` (stage-2 panic tumble) | none (flag set unconditionally; reset on run start/end) |
 
 The gate is enforced *inside* each handler (see the gating model in [01-architecture.md](01-architecture.md)); only trigger 007 does its `_inRun()` check in the trigger body before calling the API directly. `onRipple` is the exception to the auto-gate: it first drives the mini-map (`map.onRipple(n)`, unconditional) and only then gates telemetry on `_auto()`.
 

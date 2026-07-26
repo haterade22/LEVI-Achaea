@@ -94,5 +94,80 @@ ok(dmap.explore.on == true, "exploreStart runs inside a ripple (basher-free)")
 dmap.exploreStop("test")
 ok(dmap.explore.on == false, "exploreStop stops the sweep")
 
+-- 9. swarm-lite: assess -> pull -> funnel -> reenter (dmap swarm <n>)
+do
+  local sentCmds = {}
+  local realSend = send
+  send = function(c) table.insert(sentCmds, c) end
+  local realHas, realCount = dmap.roomHasDenizens, dmap.denizenCount
+  local mobs = 0
+  dmap.roomHasDenizens = function() return mobs > 0 end
+  dmap.denizenCount = function() return mobs end
+
+  MAP.reset()
+  MAP.onRoom(100, "Funnel", { north = 200 }, nil)
+  MAP.onRoom(200, "Swarm", { south = 100 }, "n") -- walked north into the crowd
+  dmap.explore.on = true
+  dmap.explore.moving = false
+  dmap.explore.fromRoom = 100 -- the sweep move that brought us here
+  dmap.explore.fromDir = "n"
+  dmap.explore.failed = {}
+  dmap.explore.swarm = { state = "idle", pulls = {}, noTactics = {} }
+  dmap.config.swarmThreshold = 3
+
+  mobs = 3
+  ok(dmap._swarmTick() == true, "swarm assess consumes the tick at threshold")
+  ok(dmap.explore.swarm.state == "pulling", "swarm state -> pulling")
+  ok(dmap.explore.tacticalMove == true, "retreat is a tactical move")
+  ok(sentCmds[#sentCmds] == "queue addclear free stand;s", "retreat move sent south")
+
+  -- arrival in the funnel room
+  MAP.current = 100
+  dmap.explore.moving = false
+  dmap.explore.tacticalMove = false
+  mobs = 0
+  ok(dmap._swarmTick() == true, "funnel entry consumes the tick")
+  ok(dmap.explore.swarm.state == "funnel", "swarm state -> funnel")
+
+  -- followers present: normal denizens branch fights (tick NOT consumed)
+  mobs = 2
+  ok(dmap._swarmTick() == false, "fighting followers hands back to the normal branch")
+
+  -- empty + window expired -> re-enter
+  mobs = 0
+  dmap.explore.swarm.at = 0 -- far in the past
+  ok(dmap._swarmTick() == true, "expired window consumes the tick to re-enter")
+  ok(dmap.explore.swarm.state == "reenter", "swarm state -> reenter")
+  ok(sentCmds[#sentCmds] == "queue addclear free stand;n", "re-entry move sent north")
+
+  -- back in the (now thinner) swarm room -> idle, below threshold -> normal flow
+  MAP.current = 200
+  dmap.explore.moving = false
+  dmap.explore.tacticalMove = false
+  mobs = 2
+  ok(dmap._swarmTick() == false, "thinned room hands back to the normal fight")
+  ok(dmap.explore.swarm.state == "idle", "swarm state -> idle")
+
+  -- tactical-move failure never condemns the walked edge
+  dmap.explore.swarm = { state = "idle", pulls = {}, noTactics = {} }
+  mobs = 3
+  dmap._swarmTick() -- pulling again (pull #? budget separate room key)
+  dmap.explore.failed = {}
+  dmap.explore.fromRoom = 200
+  dmap.explore.fromDir = "s"
+  dmap._onWrongDir("s") -- server wall on a tactical move
+  ok(next(dmap.explore.failed) == nil, "tactical WrongDir never condemns the edge")
+  ok(dmap.explore.swarm.state == "idle", "tactical move failure returns swarm to idle")
+
+  -- disabled -> no assess
+  dmap.config.swarmThreshold = nil
+  mobs = 5
+  ok(dmap._swarmTick() == false, "swarm off -> normal flow")
+
+  send = realSend
+  dmap.roomHasDenizens, dmap.denizenCount = realHas, realCount
+  dmap.explore.on = false
+end
+
 print(string.format("\n=== dmap: %d passed, %d failed ===", pass, fail))
 os.exit(fail == 0 and 0 or 1)

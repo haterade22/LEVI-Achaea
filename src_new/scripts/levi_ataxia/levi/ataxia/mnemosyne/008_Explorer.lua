@@ -101,8 +101,9 @@ function M._roomHasDenizens()
   return false
 end
 
--- Count of killable denizens in the current room (for progress echoes).
-local function denizenCount()
+-- Count of killable denizens in the current room (progress echoes + the swarm
+-- module's assess threshold -- public so 009 and the tests can read it).
+function M._denizenCount()
   local n, dz = 0, ataxia.denizensHere
   if type(dz) == "table" then
     for _, name in pairs(dz) do
@@ -111,6 +112,7 @@ local function denizenCount()
   end
   return n
 end
+local denizenCount = M._denizenCount
 
 -- Does the room have any planar (grid) exit? A room with NONE is the ripple's entry
 -- holding room (only `down`), not part of the 4x4 -- never a sweep or patrol goal.
@@ -243,15 +245,43 @@ function M._exploreMove(dir, isRetry)
         M.explore.tries = (M.explore.tries or 0) + 1
         return M._exploreMove(dir, true) -- retry the same exit (lag / transient prone)
       end
-      -- Give up on this exit for the session so we don't retry a wall forever.
+      -- Give up on this exit for the session so we don't retry a wall forever --
+      -- UNLESS this was a swarm-tactics move: those walk KNOWN edges (we just came
+      -- through them), and condemning a real exit would poison the sweep.
       local nd = MAP.normDir and MAP.normDir(dir)
-      if nd then
+      if nd and not M.explore.tacticalMove then
         M.explore.failed[M.explore.fromRoom] = M.explore.failed[M.explore.fromRoom] or {}
         M.explore.failed[M.explore.fromRoom][nd] = true
       end
     end
     M.explore.moving = false
+    if M.explore.tacticalMove then
+      M.explore.tacticalMove = false
+      if M.swarm and M.swarm.onMoveFailed then pcall(M.swarm.onMoveFailed) end
+    end
     M._exploreTick()
+  end)
+end
+
+-- Arm the in-flight machinery for a SWARM-TACTICS move whose actual send rides the
+-- attack chain (or is sent by 009 itself). Same guards as _exploreMove -- one move in
+-- flight, MOVE_TIMEOUT recovery -- but flagged so no failure path ever condemns the
+-- walked edge into explore.failed.
+function M._tacticalArm(dir)
+  M.explore.moving = true
+  M.explore.tacticalMove = true
+  M.explore.fromRoom = MAP and MAP.current
+  M.explore.fromDir = dir
+  M.explore.tries = 0
+  M.explore.iceSlips = 0
+  if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
+  M._explMoveT = tempTimer(MOVE_TIMEOUT, function()
+    M._explMoveT = nil
+    if not M.explore.moving then return end
+    M.explore.moving = false
+    M.explore.tacticalMove = false
+    if M.swarm and M.swarm.onMoveFailed then pcall(M.swarm.onMoveFailed) end
+    M._scheduleTick()
   end)
 end
 
@@ -267,11 +297,15 @@ function M.onIceSlip()
     M._exploreEcho("<indian_red>stuck on the ice<reset> after " .. MAX_ICE_SLIPS .. " tries -- skipping this exit.")
     if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
     local nd = MAP.normDir and MAP.normDir(M.explore.fromDir)
-    if nd and M.explore.fromRoom then
+    if nd and M.explore.fromRoom and not M.explore.tacticalMove then -- never condemn a walked tactical edge
       M.explore.failed[M.explore.fromRoom] = M.explore.failed[M.explore.fromRoom] or {}
       M.explore.failed[M.explore.fromRoom][nd] = true
     end
     M.explore.moving = false
+    if M.explore.tacticalMove then
+      M.explore.tacticalMove = false
+      if M.swarm and M.swarm.onMoveFailed then pcall(M.swarm.onMoveFailed) end
+    end
     return M._exploreTick()
   end
   M._exploreEcho("<grey>slipped on the ice -- up and going again.")
@@ -291,7 +325,7 @@ function M.onWrongDir(dir)
   local nd = MAP and MAP.normDir and MAP.normDir(dir)
   if not nd then return end
   local from = M.explore.fromRoom or (MAP and MAP.current)
-  if from then
+  if from and not M.explore.tacticalMove then -- a tactical move walks a KNOWN edge; never condemn it
     M.explore.failed[from] = M.explore.failed[from] or {}
     M.explore.failed[from][nd] = true
     if MAP.rooms and MAP.rooms[from] and MAP.rooms[from].exits then
@@ -300,8 +334,14 @@ function M.onWrongDir(dir)
   end
   if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
   M.explore.moving = false
+  if M.explore.tacticalMove then
+    M.explore.tacticalMove = false
+    if M.swarm and M.swarm.onMoveFailed then pcall(M.swarm.onMoveFailed) end
+    M._exploreEcho("<red>wall<reset> (" .. tostring(dir) .. ", server) on a tactical move -- reassessing.")
+  else
+    M._exploreEcho("<red>wall<reset> (" .. tostring(dir) .. ", server) -> condemned; rerouting.")
+  end
   if MAP then MAP._lastMoveDir = nil end
-  M._exploreEcho("<red>wall<reset> (" .. tostring(dir) .. ", server) -> condemned; rerouting.")
   M._scheduleTick()
 end
 
@@ -363,6 +403,13 @@ function M._exploreTick()
   -- room's denizens have had the full TICK_DELAY of quiet to load (each load re-armed
   -- the tick while `settling`). From here, denizen changes (kills) may react fast.
   M.explore.settling = false
+  -- Swarm tactics (009) get first look at every decidable tick: assess a crowded
+  -- room, hold navigation while pulling/funneling, drive re-entry. Consumed tick =
+  -- the sweep must neither announce nor navigate. Loads after us, hence the guard.
+  if M.swarm and M.swarm.onTick then
+    local ok, consumed = pcall(M.swarm.onTick)
+    if ok and consumed then return end
+  end
   if M._roomHasDenizens() then
     -- basher is clearing this room; wait. Finding denizens is progress, so reset the
     -- boss-hunt counter. Announce once per room, not every tick.
@@ -441,6 +488,7 @@ function M._exploreResume(reason)
   M.explore.patrolLoops = 0
   M.explore.iceSlips = 0
   M.explore.settling = true -- treat the current room like an arrival: let denizens settle first
+  if M.swarm and M.swarm.onRipple then pcall(M.swarm.onRipple) end -- fresh ripple: new pull budgets
   M._exploreEcho("<green>resuming<reset> the sweep" .. (reason and (" (" .. reason .. ")") or "") .. ".")
   M._scheduleTick()
   M._armWatchdog()
@@ -488,6 +536,7 @@ function M.exploreOn()
   M.explore.patrolLoops = 0
   M.explore.iceSlips = 0
   M.explore.settling = true -- treat the starting room like an arrival: let its denizens settle first
+  if M.swarm and M.swarm.onRipple then pcall(M.swarm.onRipple) end -- fresh sweep: fresh tactics state
   M._exploreEcho("<green>ON<reset> -- sweeping the 4x4, clearing to the boon screen (patrols for the boss on boss ripples). (<a_darkmagenta>mnem explore off<reset> to stop)")
   M._scheduleTick()
   M._armWatchdog()
@@ -495,9 +544,11 @@ end
 
 function M._exploreStop(reason)
   if not M.explore.on then return end
+  if M.swarm and M.swarm.reset then pcall(M.swarm.reset, reason) end -- covers death + leave-tower
   M.explore.on = false
   M.explore.pausedAtBoon = false
   M.explore.moving = false
+  M.explore.tacticalMove = false
   if M._explTickT then pcall(killTimer, M._explTickT); M._explTickT = nil end
   if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
   if M._explWatchT then pcall(killTimer, M._explWatchT); M._explWatchT = nil end
@@ -529,7 +580,8 @@ function M.exploreStatus()
   M.echo("<gold>[explore]<reset> " .. (M.explore.on and (M.explore.pausedAtBoon and "<cyan>paused (boon screen)" or "<green>ON") or "<grey>off")
     .. "<reset> inMnem=" .. tostring(inMnem())
     .. " denizens=" .. tostring(M._roomHasDenizens())
-    .. " moving=" .. tostring(M.explore.moving)
+    .. " moving=" .. tostring(M.explore.moving) .. (M.explore.tacticalMove and " (tactical)" or "")
+    .. " swarm=" .. tostring(M.swarm and M.swarm.state or "n/a")
     .. " next=" .. tostring(M._nextExploreStep()))
 end
 
@@ -542,8 +594,10 @@ end
 -- Called from the boon-offer trigger regardless of telemetry state.
 function M.onBoonScreen()
   if not M.explore.on or M.explore.pausedAtBoon then return end
+  if M.swarm and M.swarm.reset then pcall(M.swarm.reset, "boon screen") end -- every ripple ends here
   M.explore.pausedAtBoon = true
   M.explore.moving = false
+  M.explore.tacticalMove = false
   if M._explTickT then pcall(killTimer, M._explTickT); M._explTickT = nil end
   if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
   if M._explWatchT then pcall(killTimer, M._explWatchT); M._explWatchT = nil end
@@ -583,6 +637,7 @@ function M._onExploreRoom()
     and MAP.current == M.explore.fromRoom
   if not sameRoom then -- a genuine arrival (or we weren't moving): end the move
     M.explore.moving = false
+    M.explore.tacticalMove = false
     if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
     -- Open the settle window: the new room's Char.Items (denizens) will land in a
     -- following "targets updated"; keep the full TICK_DELAY until they've settled.
@@ -624,5 +679,6 @@ M._explLoadH = registerAnonymousEventHandler("sysLoadEvent", function()
   M.explore.on = false
   M.explore.pausedAtBoon = false
   M.explore.moving = false
+  M.explore.tacticalMove = false
   M.explore._prevBasher = nil
 end)

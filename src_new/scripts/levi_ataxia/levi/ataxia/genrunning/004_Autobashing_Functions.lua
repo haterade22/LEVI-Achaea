@@ -102,8 +102,11 @@ function ataxiaBasher_throttleCheck()
 end
 
 -- ============================================================================
--- UNIFIED DISPATCH GATE: All attack requests route through here.
--- This is the ONLY function that calls ataxiaBasher_attack().
+-- UNIFIED DISPATCH GATE: the primary attack dispatch path (prompt + gmcp vitals).
+-- NOTE: a handful of triggers call ataxiaBasher_attack() DIRECTLY (stun-gone 723,
+-- the blackout balance branches, the manual bash key, the shikudo-error retry) --
+-- gates that must bind EVERY caller (e.g. the swarm-tactics hold) live inside
+-- ataxiaBasher_attack() itself; the copies here are just the cheap fast path.
 -- The ataxiaBasher_atk flag is ONLY reset by the timer callback.
 -- ============================================================================
 ataxiaBasher_debug = false  -- toggle with: lua ataxiaBasher_debug = true
@@ -154,6 +157,14 @@ function ataxiaBasher_tryAttack()
   -- Hard gate: skip room
   if ataxiaBasher_skipRoom then
     if dbg then ataxiaEcho("[DBG] blocked: skipRoom") end
+    return false
+  end
+
+  -- Hard gate: swarm-tactics hold. A pull chain ("<attack>;<backdir>") is queued
+  -- server-side; another attack's `queue addclearfull` would wipe it before balance.
+  -- Set/cleared by mnemosyne/009 (arrival, timeout, and a self-clearing backstop).
+  if ataxiaTemp.swarmHold then
+    if dbg then ataxiaEcho("[DBG] blocked: swarmHold") end
     return false
   end
 
