@@ -10,7 +10,11 @@ require("mock_mudlet")
 local clock = 10000
 function getEpoch() return clock end
 
--- Recording stubs
+-- Recording stubs. The mock's own `send` (with its capture buffer that test_example
+-- asserts on) is restored at the END of this file -- test files share one Lua state and
+-- discovery order differs between Windows (dir) and CI (find), so a leaked override
+-- breaks whoever runs after us.
+local _mockSend = send
 local sent = {}
 function send(cmd) table.insert(sent, cmd) end
 local armed = {}
@@ -417,3 +421,6 @@ describe("swarm reset + lifecycle", function()
     mnemSleuth = false
   end)
 end)
+
+-- Restore the mock send for whoever runs after us (see the note at the top).
+send = _mockSend

@@ -108,3 +108,7 @@ jobs:
           name: Dementia Mapper ${{ steps.ver.outputs.version }}
           files: dmap_project/build/Dementia_Mapper.mpackage
           generate_release_notes: true
+          # Never claim releases/latest: the LEVI auto-updater downloads
+          # releases/latest/download/Levi_Ataxia.mpackage, and a dmap release
+          # holding "latest" would 404 every SYSUPDATE.
+          make_latest: false

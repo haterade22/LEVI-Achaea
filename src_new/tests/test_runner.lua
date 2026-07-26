@@ -110,6 +110,11 @@ if handle then
   handle:close()
 end
 
+-- Deterministic order on every platform: `find` (CI) and `dir` (Windows) return
+-- different orders, and test files share one Lua state -- an order-dependent leak
+-- must fail the same way everywhere.
+table.sort(test_files)
+
 if #test_files == 0 then
   print("\nNo test files found (test_*.lua in src_new/tests/)")
   print("Create test files like: src_new/tests/test_example.lua")

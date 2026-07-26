@@ -30,10 +30,19 @@ packageName: ''
 selfLimbDamage = selfLimbDamage or {}
 
 -- name -> { cycle = ordered limb list, hitsPer = swings per limb before advancing }
+--      or { fixed = limb } for mobs with exactly one parryable attack: park the parry
+--      there permanently and accept everything else (no observation needed).
 selfLimbDamage.denizenPatterns = selfLimbDamage.denizenPatterns or {}
 selfLimbDamage.denizenPatterns["an axe-wielding revenant"] = {
 	cycle = { "right leg", "left leg", "torso" }, hitsPer = 2,
 }
+-- Death Knights' parryable attack is the knee-snap; always cover the left leg and
+-- accept the torso/head/arm hits (user-confirmed tactic, 2026-07-25 log).
+selfLimbDamage.denizenPatterns["a steel-encased Death Knight"] = { fixed = "left leg" }
+-- The ravager's only limb-targeted attack is the torso cleave (perceive: "dealt 30.0%
+-- damage to your torso" x2 per swing); her dive names no limb and the shoulder-charge
+-- impale is unblockable, so torso cover is free value (2026-07-25 swamp log).
+selfLimbDamage.denizenPatterns["a ravager of the Infernal Legion"] = { fixed = "torso" }
 
 local state = { mob = nil, limb = nil, count = 0, at = 0 }
 local SAME_SWING_WINDOW = 1.0  -- two perceive lines of one swing land inside this
@@ -50,12 +59,13 @@ local function _nextInCycle(cycle, limb)
 	return nil
 end
 
--- Fed from ataxia_raiseLimbDamage on every incoming limb hit.
+-- Fed from ataxia_raiseLimbDamage (perceive lines) and ataxia_parrySuccess (parried
+-- swings emit no perceive line) on every incoming limb hit.
 function ataxia_denizenParryObserve(limb)
 	if not (ataxiaBasher and ataxiaBasher.enabled) then return end
 	local mob = secondTarget
 	local pat = mob and selfLimbDamage.denizenPatterns[mob]
-	if not pat then return end
+	if not pat or pat.fixed then return end
 	local now = _now()
 	if state.mob == mob and state.limb == limb and (now - state.at) < SAME_SWING_WINDOW then
 		state.at = now -- second perceive line of the SAME swing -- don't double-count
@@ -78,6 +88,9 @@ function ataxia_denizenParryPredict()
 	local mob = secondTarget
 	local pat = mob and selfLimbDamage.denizenPatterns[mob]
 	if not pat then return nil end
+	-- Fixed-parry mob: one parryable attack, park the cover there unconditionally
+	-- (even mid-break -- the parry still fires on a just-broken limb).
+	if pat.fixed then return pat.fixed end
 	if state.mob ~= mob or not state.limb then return pat.cycle[1] end
 	if (_now() - state.at) > STALE_AFTER then return pat.cycle[1] end
 	if state.count < (pat.hitsPer or 2) then return state.limb end

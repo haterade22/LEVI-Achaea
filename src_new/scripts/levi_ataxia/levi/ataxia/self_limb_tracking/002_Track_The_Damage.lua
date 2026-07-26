@@ -209,6 +209,9 @@ function ataxia_raiseLimbDamage(limb, num)
 	end
 
 	selfLimbDamage.lasthit = limb
+	-- Timestamp for the bashing-parry freshness check (003): an un-stamped or stale
+	-- lasthit is ignored so a previous mob's focus can't pin the parry.
+	selfLimbDamage.lasthitAt = (getEpoch and getEpoch()) or os.time()
 
 	-- Track hit history for auto-parry focus detection (rolling window of 6)
 	local hist = selfLimbDamage.hitHistory

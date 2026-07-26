@@ -57,9 +57,30 @@ hit-and-run logs:
   (two headers, every handler registered twice — onDeath/onAttacked fired 2x per event).
   Deduped 484→243 lines + kill-before-register handler registry.
 
-Tests: new `test_swarm_tactics.lua` (36 cases — threshold/deep scaling, back-route
-validation, full state-machine walk incl. wall/kite/panic branches, decorator consumption +
-hold hygiene + room-check, resets, recon, onGo gating). LEVI suite **387/387**, dmap **33/33**.
+Also in this release — **parry upgrades** (hand-tuned from live logs):
+- **Fixed-parry patterns**: `selfLimbDamage.denizenPatterns[name] = { fixed = <limb> }` for
+  mobs with exactly ONE parryable attack — park the cover there permanently, no observation
+  needed. First entries: a steel-encased Death Knight (left leg), a ravager of the Infernal
+  Legion (torso).
+- **`ataxia_parrySuccess(limb)`** (003) fed by the new trigger `highlighting/027_Parry_Success`
+  (`^You parry the assault to your <limb>...`, both manoeuvre spellings): a PARRIED swing
+  prints no perceive line, which blinded focus-follow and the cycle tracker exactly while the
+  parry worked — the success line now refreshes focus, counts the swing, and heals
+  `ataxia.parrying.limb` desync.
+- **`lasthit` freshness stamp** (`lasthitAt`, 002): bashing-parry focus-follow ignores a stale
+  previous mob's focus.
+
+CI/test hygiene: `test_runner` now SORTS discovered files (Windows `dir` vs CI `find`
+returned different orders, so an order-dependent leak passed locally and failed CI);
+`test_swarm_tactics` restores the mock `send` it overrides (the leak that broke
+`test_example`'s send-capture cases on CI). The dmap release workflow sets
+`make_latest: false` — a Dementia Mapper release must never claim `releases/latest`, which
+is where SYSUPDATE downloads `Levi_Ataxia.mpackage` from.
+
+Tests: `test_swarm_tactics.lua` (37 cases — threshold/deep scaling, back-route validation,
+full state-machine walk incl. wall/kite/panic branches, decorator consumption + hold hygiene
++ room-check, resets, recon, onGo gating) + fixed-parry cases in `test_denizen_parry.lua`.
+LEVI suite **399/399**, dmap **33/33**.
 
 ---
 

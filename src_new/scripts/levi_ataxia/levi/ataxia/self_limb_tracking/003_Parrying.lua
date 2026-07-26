@@ -394,12 +394,21 @@ end
 -- BASHING PARRY MODE — PvE, auto-engaged with the basher
 -------------------------------------------------------------------
 
+-- Focus-follow staleness: a lasthit older than this belongs to a previous engagement
+-- (mob dead / room changed) -- fall through to the head default instead of chasing it.
+-- Mirrors 005's STALE_AFTER; same clock source.
+local LASTHIT_STALE_AFTER = 12
+
+local function _now()
+	return (getEpoch and getEpoch()) or os.time()
+end
+
 -- PvE parry selection, in descending confidence:
---   1) a known fixed-cycle denizen (005) -> the PREDICTED next swing's limb, incl. the
---      cycle opener before its first hit ever lands;
+--   1) a known denizen (005) -> its fixed parry limb, or the PREDICTED next swing's limb
+--      for cycle mobs, incl. the cycle opener before its first hit ever lands;
 --   2) an unknown mob -> follow its focus: denizens overwhelmingly repeat-hit one limb,
---      so the most recent (unbroken) hit is the best guess for the next swing;
---   3) nothing observed yet -> keep a leg covered (prone gates most class attacks).
+--      so the most recent (unbroken, fresh) hit is the best guess for the next swing;
+--   3) nothing observed yet -> cover the head (worst break to eat; user preference).
 function ataxia_bashingParry()
 	local predicted = ataxia_denizenParryPredict and ataxia_denizenParryPredict()
 	if predicted then
@@ -407,19 +416,38 @@ function ataxia_bashingParry()
 		return
 	end
 
+	-- Focus-follow only while FRESH: no timestamp (seed/old-save shape) or one older than
+	-- LASTHIT_STALE_AFTER means it belongs to a previous mob -- fall to the head default.
 	local last = selfLimbDamage.lasthit
-	if last and last ~= "none" and selfLimbDamage[last] and not ataxia_selfLimbBroken(last) then
+	local lastAt = selfLimbDamage.lasthitAt
+	if last and last ~= "none" and lastAt and (_now() - lastAt) <= LASTHIT_STALE_AFTER
+		and selfLimbDamage[last] and not ataxia_selfLimbBroken(last) then
 		ataxia.parrying.shouldparry = last
 		return
 	end
 
-	for _, limb in ipairs({"right leg", "left leg", "torso"}) do
+	for _, limb in ipairs({"head", "right leg", "left leg", "torso"}) do
 		if not ataxia_selfLimbBroken(limb) then
 			ataxia.parrying.shouldparry = limb
 			return
 		end
 	end
-	ataxia.parrying.shouldparry = "torso"
+	ataxia.parrying.shouldparry = "head"
+end
+
+-- Server-confirmed self-parry ("You parry the assault to your <limb> ...", trigger
+-- highlighting/027). A parried swing produces NO "dealt N% damage" perceive line, so
+-- without this feed focus-follow goes blind exactly while the parry is working. The mob
+-- just swung at <limb>: refresh focus-follow and count the swing.
+function ataxia_parrySuccess(limb)
+	if not selfLimbDamage or not selfLimbDamage.config or not selfLimbDamage.config.enabled then return end
+	if not selfLimbDamage[limb] then return end
+	selfLimbDamage.lasthit = limb
+	selfLimbDamage.lasthitAt = _now()
+	-- The line is also server truth about WHERE our parry currently sits -- heal any
+	-- desync (the "will now attempt to parry" confirm line is gagged by 006_GAG).
+	if ataxia and ataxia.parrying then ataxia.parrying.limb = limb end
+	if ataxia_denizenParryObserve then ataxia_denizenParryObserve(limb) end
 end
 
 -- Auto-switch: basher on -> remember the current mode and go "bashing"; basher off ->

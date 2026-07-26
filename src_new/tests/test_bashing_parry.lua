@@ -1,8 +1,15 @@
 --- test_bashing_parry.lua — "bashing" parry mode + basher auto-switch (self_limb_tracking/003)
--- Covers ataxia_bashingParry()'s selection ladder (pattern prediction -> focus-follow ->
--- leg default) and the ataxia_bashingParryOn/Off mode swap semantics.
+-- Covers ataxia_bashingParry()'s selection ladder (pattern prediction -> fresh focus-follow ->
+-- head default), the ataxia_parrySuccess feed, and the ataxia_bashingParryOn/Off mode swap
+-- semantics.
 
 require("mock_mudlet")
+
+-- Controllable clock: 003's freshness check and ataxia_parrySuccess read getEpoch() at call
+-- time. NOTE: the override outlives this file (shared test state) -- keep it a large fixed
+-- epoch so later files see sane values.
+local now = 100000
+function getEpoch() return now end
 
 -- Globals 003 reads at load/call time.
 ataxia = { parrying = { limb = "none", shouldparry = "right leg" }, parry = "stand" }
@@ -34,37 +41,115 @@ describe("ataxia_bashingParry — PvE selection ladder", function()
   it("follows the mob's focus (last hit limb) when no pattern applies", function()
     predictedLimb = nil
     selfLimbDamage.lasthit = "left arm"
+    selfLimbDamage.lasthitAt = now
     selfLimbDamage["left arm"] = { damage = 30 }
     ataxia_bashingParry()
     expect(ataxia.parrying.shouldparry).toBe("left arm")
   end)
 
-  it("does not follow a BROKEN focus limb -- falls to an unbroken leg", function()
+  it("does not follow a BROKEN focus limb -- falls to the head default", function()
     predictedLimb = nil
     selfLimbDamage.lasthit = "left arm"
+    selfLimbDamage.lasthitAt = now
     brokenLimbs = { ["left arm"] = true }
     ataxia_bashingParry()
-    expect(ataxia.parrying.shouldparry).toBe("right leg")
+    expect(ataxia.parrying.shouldparry).toBe("head")
     brokenLimbs = {}
   end)
 
-  it("defaults to right leg before anything is observed", function()
+  it("ignores a STALE focus limb -- falls to the head default", function()
     predictedLimb = nil
-    selfLimbDamage.lasthit = "none"
+    selfLimbDamage.lasthit = "left arm"
+    selfLimbDamage.lasthitAt = now - 13 -- past LASTHIT_STALE_AFTER
     ataxia_bashingParry()
-    expect(ataxia.parrying.shouldparry).toBe("right leg")
+    expect(ataxia.parrying.shouldparry).toBe("head")
   end)
 
-  it("skips broken legs in the default ladder (right -> left -> torso)", function()
+  it("still follows a focus limb exactly at the freshness boundary (<= 12s)", function()
+    predictedLimb = nil
+    selfLimbDamage.lasthit = "left arm"
+    selfLimbDamage.lasthitAt = now - 12
+    ataxia_bashingParry()
+    expect(ataxia.parrying.shouldparry).toBe("left arm")
+  end)
+
+  it("ignores a timestamp-less lasthit (the old group-init seed shape)", function()
+    -- Regression: _groups.yaml used to seed lasthit = "left leg" with no timestamp,
+    -- pinning the parry there forever. Un-stamped lasthit must never be followed.
+    predictedLimb = nil
+    selfLimbDamage.lasthit = "left leg"
+    selfLimbDamage.lasthitAt = nil
+    selfLimbDamage["left leg"] = { damage = 0 }
+    ataxia_bashingParry()
+    expect(ataxia.parrying.shouldparry).toBe("head")
+  end)
+
+  it("defaults to head before anything is observed", function()
     predictedLimb = nil
     selfLimbDamage.lasthit = "none"
-    brokenLimbs = { ["right leg"] = true }
+    selfLimbDamage.lasthitAt = nil
+    ataxia_bashingParry()
+    expect(ataxia.parrying.shouldparry).toBe("head")
+  end)
+
+  it("skips broken limbs in the default ladder (head -> right leg -> left leg -> torso)", function()
+    predictedLimb = nil
+    selfLimbDamage.lasthit = "none"
+    selfLimbDamage.lasthitAt = nil
+    brokenLimbs = { ["head"] = true }
+    ataxia_bashingParry()
+    expect(ataxia.parrying.shouldparry).toBe("right leg")
+    brokenLimbs = { ["head"] = true, ["right leg"] = true }
     ataxia_bashingParry()
     expect(ataxia.parrying.shouldparry).toBe("left leg")
-    brokenLimbs = { ["right leg"] = true, ["left leg"] = true }
+    brokenLimbs = { ["head"] = true, ["right leg"] = true, ["left leg"] = true }
     ataxia_bashingParry()
     expect(ataxia.parrying.shouldparry).toBe("torso")
     brokenLimbs = {}
+  end)
+end)
+
+describe("ataxia_parrySuccess — confirmed-parry feed", function()
+  it("refreshes focus-follow and syncs the confirmed parry limb", function()
+    selfLimbDamage["torso"] = { damage = 0 }
+    ataxia.parrying.limb = "none"
+    ataxia_parrySuccess("torso")
+    expect(selfLimbDamage.lasthit).toBe("torso")
+    expect(selfLimbDamage.lasthitAt).toBe(now)
+    expect(ataxia.parrying.limb).toBe("torso")
+  end)
+
+  it("feeds the denizen-pattern observer", function()
+    local observed = nil
+    function ataxia_denizenParryObserve(limb) observed = limb end
+    selfLimbDamage["torso"] = { damage = 0 }
+    ataxia_parrySuccess("torso")
+    expect(observed).toBe("torso")
+    ataxia_denizenParryObserve = nil
+  end)
+
+  it("ignores unknown limb text (defensive against wording drift)", function()
+    selfLimbDamage.lasthit = "none"
+    ataxia_parrySuccess("left hand")
+    expect(selfLimbDamage.lasthit).toBe("none")
+  end)
+
+  it("no-ops when SLC is disabled", function()
+    selfLimbDamage.config.enabled = false
+    selfLimbDamage.lasthit = "none"
+    selfLimbDamage["torso"] = { damage = 0 }
+    ataxia_parrySuccess("torso")
+    expect(selfLimbDamage.lasthit).toBe("none")
+    selfLimbDamage.config.enabled = true
+  end)
+
+  it("a parried swing steers the next bashing-parry pick (integration)", function()
+    predictedLimb = nil
+    selfLimbDamage["left arm"] = { damage = 0 }
+    brokenLimbs = {}
+    ataxia_parrySuccess("left arm")
+    ataxia_bashingParry()
+    expect(ataxia.parrying.shouldparry).toBe("left arm")
   end)
 end)
 

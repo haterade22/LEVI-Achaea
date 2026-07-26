@@ -107,3 +107,40 @@ describe("ataxia_denizenParryPredict — axe-wielding revenant cycle", function(
     expect(ataxia_denizenParryPredict()).toBe("right leg")
   end)
 end)
+
+describe("fixed-parry entries — one parryable attack, park the cover there", function()
+  it("always predicts the fixed limb, no observation needed", function()
+    freshMob()
+    secondTarget = "a steel-encased Death Knight"
+    expect(ataxia_denizenParryPredict()).toBe("left leg")
+    secondTarget = "a ravager of the Infernal Legion"
+    expect(ataxia_denizenParryPredict()).toBe("torso")
+  end)
+
+  it("keeps predicting the fixed limb regardless of observed hits or staleness", function()
+    freshMob()
+    secondTarget = "a steel-encased Death Knight"
+    ataxia_denizenParryObserve("right arm") -- no-op for fixed entries
+    expect(ataxia_denizenParryPredict()).toBe("left leg")
+    now = now + 60 -- staleness never applies to a fixed entry
+    expect(ataxia_denizenParryPredict()).toBe("left leg")
+  end)
+
+  it("observing a fixed-entry mob does not disturb a cycle mob's streak", function()
+    freshMob()
+    swing("right leg") -- revenant: 1 swing observed -> next prediction repeats right leg
+    secondTarget = "a steel-encased Death Knight"
+    ataxia_denizenParryObserve("torso") -- ignored: fixed entry
+    secondTarget = "an axe-wielding revenant"
+    expect(ataxia_denizenParryPredict()).toBe("right leg")
+  end)
+
+  it("returns nil for fixed entries too when the basher is disabled", function()
+    freshMob()
+    secondTarget = "a steel-encased Death Knight"
+    ataxiaBasher.enabled = false
+    expect(ataxia_denizenParryPredict()).toBe(nil)
+    ataxiaBasher.enabled = true
+    secondTarget = "an axe-wielding revenant"
+  end)
+end)

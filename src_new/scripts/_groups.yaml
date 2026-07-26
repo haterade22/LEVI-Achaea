@@ -262,7 +262,7 @@ groups:
     - name: Self Limb Tracking
       script: "--Initialise the tables.\nselfLimbDamage = selfLimbDamage or {\n\t[\"head\"] = {damage = 0},\n\t[\"torso\"\
         ] = {damage = 0},\n\t[\"left arm\"] = {damage = 0},\n\t[\"right arm\"] = {damage = 0},\n\t[\"left leg\"] = {damage\
-        \ = 0},\n\t[\"right leg\"] = {damage = 0},\n\t\n\ttimers = {},\n\tlasthit = \"left leg\",\t\n}\n\nfunction resetMissLines()\n\
+        \ = 0},\n\t[\"right leg\"] = {damage = 0},\n\t\n\ttimers = {},\n\tlasthit = \"none\",\t\n}\n\nfunction resetMissLines()\n\
         \tataxiaTables.missLines = {}\n\tataxiaTables.missLines = {\n\t\t\"You parry the attack with a deft manoeuvre.\",\
         \ \n\t\t\"The attack rebounds back onto %w+!\", \n\t\t\"The attack rebounds onto %w+!\", \n\t\t\"The attack rebounds\
         \ off your rebounding aura!\", \n\t\t\"%w+ misses you with \", \n\t\t\"You dodge nimbly out of the way.\", \n\t\t\"\
