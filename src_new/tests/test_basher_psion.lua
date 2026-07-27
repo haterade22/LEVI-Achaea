@@ -87,14 +87,29 @@ end)
 describe("ataxiaBasher_psionBattlerage -- timer-free rotation", function()
   it("fires Devastate > Whirlwind > Barbedblade by priority, honoring cooldown stamps", function()
     reset(); ataxia.vitals.rage = 100
+    -- One pick per simulated balance round (the in-flight hold replays within ~3s).
     expect(has(ataxiaBasher_psionBattlerage(";"), "psi devastate")).toBeTrue()
+    clock = clock + 4
     expect(has(ataxiaBasher_psionBattlerage(";"), "weave whirlwind")).toBeTrue()
+    clock = clock + 4
     expect(has(ataxiaBasher_psionBattlerage(";"), "weave barbedblade")).toBeTrue()
-    expect(ataxiaBasher_psionBattlerage(";")).toBe("") -- everything on cooldown
-    clock = clock + 17 -- barbedblade (16s) back first
-    expect(has(ataxiaBasher_psionBattlerage(";"), "weave barbedblade")).toBeTrue()
-    clock = clock + 7 -- 24s total: devastate + whirlwind (23s) back
+    clock = clock + 4 -- t12: everything stamped (t0/t4/t8) and on cooldown
+    expect(ataxiaBasher_psionBattlerage(";")).toBe("")
+    clock = clock + 13 -- t25: barbedblade (t8 + 16s) AND devastate (t0 + 23s) back -> priority wins
     expect(has(ataxiaBasher_psionBattlerage(";"), "psi devastate")).toBeTrue()
+    clock = clock + 4 -- t29: whirlwind (t4 + 23s) back
+    expect(has(ataxiaBasher_psionBattlerage(";"), "weave whirlwind")).toBeTrue()
+  end)
+
+  it("replays the SAME pick across the 0.3s re-queue loop (v4.7.129: no phantom burn)", function()
+    reset(); ataxia.vitals.rage = 100
+    local first = ataxiaBasher_psionBattlerage(";")
+    expect(has(first, "psi devastate")).toBeTrue()
+    clock = clock + 1
+    expect(ataxiaBasher_psionBattlerage(";")).toBe(first)
+    expect(ataxiaTemp.psionBrAt.whirlwind).toBe(nil) -- the rotation did NOT advance
+    clock = clock + 4 -- hold expired: next pick
+    expect(has(ataxiaBasher_psionBattlerage(";"), "weave whirlwind")).toBeTrue()
   end)
 
   it("respects rage floors (14 barbedblade / 25 whirlwind / 36 devastate)", function()

@@ -2,6 +2,54 @@
 
 ---
 
+## 2026-07-27 — Golden Dragon battlerage: aeon/amnesia control rotation (v4.7.129)
+
+User AB dump of the Golden Dragon Attainment kit: DEADEN (24 rage, 35s cd, denizen
+**Aeon**), PSIDAZE (28, 41s, denizen **Amnesia**), OVERWHELM (14, 16s, damage),
+PSIBLAST (36, 23s, damage). Aeon/amnesia on denizens gut their output — control is the
+new priority. The audit also found the old wiring broken the same way as Psion's:
+trigger 330 has no Golden Overwhelm fire-line, so `battleRage_Timers.small` never set —
+Overwhelm was re-sent into its own 16s cooldown every swing AND the fallback's `elseif`
+meant Psiblast could NEVER fire; Deaden/Psidaze were wired nowhere.
+
+- **Golden Dragon owns its battlerage** (`ataxiaBasher_goldenDragonBattlerage`,
+  `GDRAGON_BR` — the Psion v4.7.128 pattern): timer-free send-side epoch stamps
+  (`ataxiaTemp.gdragonBrAt`) with the AB cooldowns. Priority: rage-conserve → culling
+  reap (36+) → **Deaden** → **Psidaze** → Psiblast → Overwhelm.
+- **Banking rule** (new vs the Psion shape): a control cast off cooldown but
+  unaffordable returns `""` — the damage fillers are skipped so rage banks toward the
+  aeon/amnesia cast instead of Overwhelm starving it 14 rage at a time.
+- `ataxiaBasher_dragonBashing` routes only Golden to the new rotation; the other five
+  colours keep the generic assembler unchanged (incl. Black's dragonfear crowd branch).
+
+Adversarial review confirmed two defects in the send-side stamp pattern (both fixed
+here, and the fixes back-ported to the v4.7.128 Psion rotation in the same file):
+
+- **In-flight pick replay** (review HIGH): the basher REBUILDS the attack command every
+  prompt/vitals event (0.3s `addclearfull` re-queue loop) while balance is down, and
+  each rebuild wiped the previously queued line — stamping a fresh pick per rebuild
+  burned the whole rotation phantom-style (controls stamped-then-wiped, only the last
+  rebuild's filler fired: priority inversion on exactly the aeon/amnesia casts). A pick
+  now stays PENDING (`ataxiaTemp.gdragonBrPending`/`psionBrPending`) for ~one balance
+  round and is replayed verbatim (the bloodboil command-stability rule); the rotation
+  advances only after the hold expires. Rage-conserve clears the pending so a stale
+  cast can't resume on the next mob.
+- **Lazy battlerage on shielded rounds** (review MEDIUM): `dragonBashing`'s
+  shielded+rageraze branch (and `psionBashing`'s whole shielded branch) computed the
+  battlerage eagerly, then discarded it — burning a 35-41s control stamp unsent on
+  exactly the shield-break round. Both class functions now compute the battlerage only
+  on branches that actually send it.
+
+Files: `basher/002_Class_Bashing.lua`, `test_basher_dragon.lua` (NEW, 10 cases incl.
+replay-stability + shielded-no-burn regressions), `test_basher_psion.lua` (+ replay
+regression), `.claude/classes/dragon.md` (breath mapping corrected to the
+code-confirmed `getDragonBreath` table; battlerage section added). Suite **486/486**.
+Live-capture wishlist: the four fire lines (for confirmation-based cooldowns +
+denizen-state capture — trigger 331:80's draconic-gaze line is likely Psiblast) and
+actual denizen aeon/amnesia durations.
+
+---
+
 ## 2026-07-27 — Psion PvE overhaul: rotation, shields, Roth, keepers (v4.7.128)
 
 Implements the wiki audit's tier-one picks, plus a structural fix the review exposed:

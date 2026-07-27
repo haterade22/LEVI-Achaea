@@ -14,34 +14,35 @@ Draconic Skills: Varies by dragon color (6 colors available)
 
 ## Dragon Colors
 ```yaml
+# Breath element per colour is code-confirmed (getDragonBreath(), deffing/005_Dragon_Breath.lua)
 red:
   description: "Fire-focused dragon"
-  breath_weapon: "Fire breath"
+  breath_weapon: "Dragonfire breath"
   strength: "High fire damage, ablaze application"
 
 black:
-  description: "Acid/Poison-focused dragon"
+  description: "Acid-focused dragon"
   breath_weapon: "Acid breath"
-  strength: "Damage over time, corrosion"
+  strength: "Damage over time, corrosion; dragonfear crowd control (battlerage)"
 
 silver:
-  description: "Ice-focused dragon"
-  breath_weapon: "Ice breath"
-  strength: "Freezing, control"
-
-gold:
   description: "Lightning-focused dragon"
   breath_weapon: "Lightning breath"
   strength: "High burst damage"
 
+golden:
+  description: "Psi-focused dragon"
+  breath_weapon: "Psi breath"
+  strength: "Psychic damage + denizen control battlerage (Aeon/Amnesia -- see Bashing)"
+
 blue:
-  description: "Water-focused dragon"
-  breath_weapon: "Water breath"
-  strength: "Drowning, water control"
+  description: "Ice-focused dragon"
+  breath_weapon: "Ice breath"
+  strength: "Freezing, control"
 
 green:
-  description: "Poison/Nature-focused dragon"
-  breath_weapon: "Poison breath"
+  description: "Venom-focused dragon"
+  breath_weapon: "Venom breath"
   strength: "Affliction stacking, venoms"
 ```
 
@@ -390,6 +391,41 @@ notes: "Gut is primary hunting attack, Rend for PvP"
 battlerage_abilities:
   - gut: "Primary bashing damage"
   - rend: "Alternative attack"
+
+golden_dragon_battlerage:  # v4.7.129 -- ataxiaBasher_goldenDragonBattlerage (basher/002, GDRAGON_BR)
+  ab_data:  # Attainment, confirmed in-game 2026-07-27
+    deaden:    { rage: 24, cooldown: 35.00, effect: "denizen AEON -- mental clamp, slows ALL their actions" }
+    psidaze:   { rage: 28, cooldown: 41.00, effect: "denizen AMNESIA -- recurring forgets from psi sparkles" }
+    psiblast:  { rage: 36, cooldown: 23.00, effect: "damage (psychic sear)" }
+    overwhelm: { rage: 14, cooldown: 16.00, effect: "damage (body slam)" }
+  rotation: |
+    Timer-free send-side epoch stamps (ataxiaTemp.gdragonBrAt), the Psion v4.7.128 pattern.
+    Priority: rage-conserve check -> in-flight pick replay -> culling reap (36+, off cd,
+    not World Tree) -> DEADEN > PSIDAZE > PSIBLAST > OVERWHELM, each gated on rage floor
+    + AB cooldown. CONTROL FIRST (user-directed): denizen aeon/amnesia gut incoming damage.
+    BANKING rule: a control cast off cooldown but unaffordable returns "" -- the damage
+    fillers are skipped so rage banks toward it (Overwhelm must not starve Aeon 14r at a time).
+  stability: |
+    Review-hardened (v4.7.129): (1) a pick stays PENDING (ataxiaTemp.gdragonBrPending,
+    ~3s) and is replayed verbatim across the basher's 0.3s addclearfull re-queue loop --
+    stamping per rebuild burned the rotation phantom-style with only the last rebuild's
+    filler firing; the rotation advances only after the hold expires. (2) dragonBashing
+    computes the battlerage LAZILY per branch -- the shielded+rageraze round spends rage
+    on the raze and sends no battlerage, so an eager call burned a control stamp unsent.
+    Both fixes are mirrored in the Psion rotation (psionBrPending + lazy brage in
+    psionBashing).
+  history: |
+    Pre-4.7.129 Golden fell through to the generic small/large fallback: trigger 330 has no
+    Golden Overwhelm fire-line, so battleRage_Timers.small never set -> Overwhelm re-sent into
+    its own 16s cd every swing AND the elseif meant Psiblast NEVER fired; Deaden/Psidaze were
+    wired nowhere. Same disease + cure as the Psion battlerage (class owns a timer-free rotation).
+    Other colours still ride battleRage_Timers from triggers 330-332 -- audit fire-line coverage
+    per colour when one becomes the active bashing class (Black keeps its dragonfear crowd branch
+    in the assembler; only Golden bypasses it).
+  live_capture_wishlist:
+    - "Deaden/Psidaze/Overwhelm/Psiblast fire lines (for confirmation-based cooldowns + denizen-state affliction capture)"
+    - "Actual denizen aeon/amnesia duration (assumed ~= cooldown)"
+    - "331_Battlerage_Large.lua:80 draconic-gaze psychic line -- likely Psiblast; verify colour"
 
 basher_toggles:
   bash incant on/off: "Use INCANTATION (willpower) instead of GUT as the primary bash attack"

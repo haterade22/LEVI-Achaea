@@ -453,6 +453,13 @@ battlerage: |
   Regrowth (anti-heal vines, 24 rage, 35s): OPT-IN via ataxiaBasher.psionRegrowth
   (lua-set flag, no alias yet) — priority when enabled; for self-healing denizen
   areas ("tending his wounds" mobs).
+  v4.7.129 hardening (found by the Golden Dragon review of this same pattern):
+  (1) a pick stays PENDING (ataxiaTemp.psionBrPending, ~3s) and replays verbatim
+  across the basher's 0.3s addclearfull re-queue loop — stamping per rebuild burned
+  the rotation phantom-style (only the last rebuild's pick ever fired); the rotation
+  advances only after the hold expires. (2) psionBashing computes the battlerage
+  LAZILY after the shielded early-return — the shielded branch sends no battlerage,
+  so the eager call burned the pick's cooldown stamp unsent every shielded round.
 
 eq_riders: |
   enact roth  — below 50% HP, 185s send stamp; rides eq beside the balance swing,

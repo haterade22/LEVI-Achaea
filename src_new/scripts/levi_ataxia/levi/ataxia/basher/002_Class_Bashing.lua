@@ -30,7 +30,18 @@ packageName: ''
 
 function ataxiaBasher_dragonBashing()
   local command, sp = "", ataxia.settings.separator
-  local brage = ataxiaBasher_assembleBattlerage()
+  -- Golden Dragon owns its battlerage (aeon/amnesia control rotation below); the other
+  -- colours still go through the generic assembler. LAZY on purpose (review MEDIUM):
+  -- the golden rotation stamps cooldowns when it picks, so it must only be called on
+  -- branches that actually SEND the pick -- the shielded+rageraze round spends its
+  -- rage on the raze and emits no battlerage, and an eager call there would burn a
+  -- 35-41s control stamp unsent.
+  local function brage()
+    if gmcp.Char.Status.class == "Golden Dragon" then
+      return ataxiaBasher_goldenDragonBattlerage(sp)
+    end
+    return ataxiaBasher_assembleBattlerage()
+  end
   local colour = string.match(gmcp.Char.Status.class, "%w+")
   local raze = ataxiaBasher.battlerage[colour.." Dragon"].raze
   -- Breath element is derived from the dragon's colour (Blue = ice, Silver = lightning,
@@ -72,12 +83,73 @@ function ataxiaBasher_dragonBashing()
     else
       -- Shield MUST be broken: blast unconditionally, re-summon the colour's breath, add bal damage.
       local reblast = ele and ("blast " ..target.. ";summon " ..ele.. ";") or ("blast " ..target.. ";")
-      command = command..sp..reblast..balAttack()..sp..brage
+      command = command..sp..reblast..balAttack()..sp..brage()
     end
   else
-    command = command..sp..brage..sp..primary()
+    command = command..sp..brage()..sp..primary()
   end
   return command
+end
+
+-- Golden Dragon OWNS its battlerage (the Psion lesson, v4.7.128): the generic
+-- fallback gates small behind battleRage_Timers.small, which trigger 330 never sets
+-- for Golden Dragon (no Overwhelm fire-line) -- so Overwhelm was re-sent into its own
+-- 16s cooldown every swing AND, because small always won the elseif, Psiblast could
+-- NEVER fire. Deaden/Psidaze weren't wired at all. Timer-free send-side epoch stamps
+-- with the AB cooldowns. Priority is CONTROL first (user-directed -- denizen aeon and
+-- amnesia gut incoming damage): Deaden 24r/35s (AEON: every action slowed) >
+-- Psidaze 28r/41s (AMNESIA: recurring forgets) > Psiblast 36r/23s > Overwhelm
+-- 14r/16s filler. When a control cast is off cooldown but rage can't cover it yet,
+-- the damage fillers are SKIPPED so the rage banks toward the control cast instead
+-- of Overwhelm starving it 14 rage at a time.
+local GDRAGON_BR = {
+  { key = "deaden",    cmd = "deaden",    rage = 24, cd = 35, control = true },
+  { key = "psidaze",   cmd = "psidaze",   rage = 28, cd = 41, control = true },
+  { key = "psiblast",  cmd = "psiblast",  rage = 36, cd = 23 },
+  { key = "overwhelm", cmd = "overwhelm", rage = 14, cd = 16 },
+}
+function ataxiaBasher_goldenDragonBattlerage(sp)
+  local rage = tonumber(ataxia.vitals.rage) or 0
+  -- Rage conservation: same rule the generic assembler applies. Clears any in-flight
+  -- pick so a stale cast can't resume on the NEXT mob.
+  if ataxiaBasher.rageConserveThreshold then
+    local mobhp = tonumber(((gmcp.IRE.Target.Info.hpperc or "100"):gsub("%%", ""))) or 100
+    if mobhp > 0 and mobhp <= ataxiaBasher.rageConserveThreshold then
+      ataxiaTemp.gdragonBrPending = nil
+      return ""
+    end
+  end
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  -- In-flight pick REPLAY (review HIGH): the basher REBUILDS this command every
+  -- prompt/vitals event (0.3s addclearfull re-queue loop) while a swing's balance is
+  -- down, and each rebuild wipes the previously queued line. Stamping a fresh pick
+  -- per rebuild burned the whole rotation phantom-style -- the top-priority controls
+  -- got stamped-then-wiped and only the LAST rebuild's filler ever fired (priority
+  -- inversion). So a pick stays PENDING for ~one balance round and is replayed
+  -- verbatim (the bloodboil stability rule: the returned command must stay stable
+  -- across the re-queue loop); the rotation only advances once the hold expires.
+  local pend = ataxiaTemp.gdragonBrPending
+  if pend and pend.verb and (nowT - (tonumber(pend.at) or 0)) < 3 then
+    return pend.verb.." "..target..sp
+  end
+  ataxiaTemp.gdragonBrPending = nil
+  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and rage >= 36
+     and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" then
+    return "reap "..target..sp
+  end
+  ataxiaTemp.gdragonBrAt = ataxiaTemp.gdragonBrAt or {}
+  for _, ab in ipairs(GDRAGON_BR) do
+    if (nowT - (tonumber(ataxiaTemp.gdragonBrAt[ab.key]) or 0)) >= ab.cd then
+      if rage >= ab.rage then
+        ataxiaTemp.gdragonBrAt[ab.key] = nowT
+        ataxiaTemp.gdragonBrPending = { verb = ab.cmd, at = nowT }
+        return ab.cmd.." "..target..sp
+      elseif ab.control then
+        return "" -- bank rage for the pending aeon/amnesia cast
+      end
+    end
+  end
+  return ""
 end
 
 function ataxiaBasher_fEleBashing()
@@ -703,21 +775,37 @@ local PSION_BR = {
 }
 function ataxiaBasher_psionBattlerage(sp)
   local rage = tonumber(ataxia.vitals.rage) or 0
-  -- Rage conservation: same rule the generic assembler applies.
+  -- Rage conservation: same rule the generic assembler applies. Clears any in-flight
+  -- pick so a stale cast can't resume on the NEXT mob.
   if ataxiaBasher.rageConserveThreshold then
     local mobhp = tonumber(((gmcp.IRE.Target.Info.hpperc or "100"):gsub("%%", ""))) or 100
-    if mobhp > 0 and mobhp <= ataxiaBasher.rageConserveThreshold then return "" end
+    if mobhp > 0 and mobhp <= ataxiaBasher.rageConserveThreshold then
+      ataxiaTemp.psionBrPending = nil
+      return ""
+    end
   end
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  -- In-flight pick REPLAY (v4.7.129 review HIGH, found on the Golden Dragon copy of
+  -- this pattern): the basher rebuilds this command every prompt/vitals event while
+  -- balance is down, and each rebuild's addclearfull wipes the previously queued
+  -- line -- stamping per rebuild burned the rotation phantom-style. A pick stays
+  -- pending ~one balance round and is replayed verbatim (command stability across
+  -- the 0.3s re-queue loop); the rotation advances only after the hold expires.
+  local pend = ataxiaTemp.psionBrPending
+  if pend and pend.verb and (nowT - (tonumber(pend.at) or 0)) < 3 then
+    return pend.verb.." "..target..sp
+  end
+  ataxiaTemp.psionBrPending = nil
   if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and rage >= 36
      and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" then
     return "reap "..target..sp
   end
-  local nowT = (getEpoch and getEpoch()) or os.time()
   ataxiaTemp.psionBrAt = ataxiaTemp.psionBrAt or {}
   for _, ab in ipairs(PSION_BR) do
     if (not ab.optIn or ataxiaBasher.psionRegrowth) and rage >= ab.rage
        and (nowT - (tonumber(ataxiaTemp.psionBrAt[ab.key]) or 0)) >= ab.cd then
       ataxiaTemp.psionBrAt[ab.key] = nowT
+      ataxiaTemp.psionBrPending = { verb = ab.cmd, at = nowT }
       return ab.cmd.." "..target..sp
     end
   end
@@ -726,7 +814,10 @@ end
 
 function ataxiaBasher_psionBashing()
   local command, sp = "", ataxia.settings.separator
-  local brage = ataxiaBasher_psionBattlerage(sp)
+  -- NOTE: the battlerage is computed LAZILY below, after the shielded early-return
+  -- (v4.7.129 review): psionBattlerage stamps cooldowns when it picks, and the
+  -- shielded branch emits no battlerage -- an eager call there burned the pick's
+  -- cooldown stamp unsent every shielded round.
 
   -- Panoply boon (Mnemosyne, legendary): "The damage dealt by your weaving flurry
   -- ability scales directly to the number of strikes landed, randomly dealing 60% to
@@ -768,6 +859,10 @@ function ataxiaBasher_psionBashing()
     end
     return command
   end
+
+  -- Battlerage only from here down -- every remaining branch sends it, so the pick's
+  -- cooldown stamp can no longer burn unsent.
+  local brage = ataxiaBasher_psionBattlerage(sp)
 
   -- Secondskin keeper: resistance to ALL damage types; it drops rarely, so spending
   -- one round's balance re-weaving it (3.00s bal -- it REPLACES the swing) is cheap
