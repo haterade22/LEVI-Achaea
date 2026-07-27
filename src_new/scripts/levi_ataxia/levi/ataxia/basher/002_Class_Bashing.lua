@@ -691,6 +691,15 @@ function ataxiaBasher_psionBashing()
   local brage = ataxiaBasher_assembleBattlerage()
   local raze = ataxiaBasher.battlerage.Psion.raze
 
+  -- Panoply boon (Mnemosyne, legendary): "The damage dealt by your weaving flurry
+  -- ability scales directly to the number of strikes landed, randomly dealing 60% to
+  -- 200% of its damage with each attack." AB Flurry (ID 2704): WEAVE FLURRY <target>,
+  -- works on denizens, 2.60s of balance. With the boon up it out-damages the deathblow
+  -- bash, so it becomes the primary (user-directed). Straight verb swap mirroring
+  -- bmShatteredStar (claim alias + BOONS row trigger 034, reset each run); cleave
+  -- keeps the shield-break role, psi shatter keeps its transcendence slot.
+  local weave = psionPanoply and ("weave flurry "..target) or ("weave deathblow "..target)
+
   if ataxiaBasher.shielded then
     if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
       command = command..raze..sp
@@ -698,10 +707,10 @@ function ataxiaBasher_psionBashing()
     end
   elseif ataxiaTemp.transcendence and ataxiaTemp.transcendence == 100 then
   command = command..sp..brage..sp
-    command = command.."psi shatter "..target..sp.."weave deathblow "..target
+    command = command.."psi shatter "..target..sp..weave
   else
     command = command..sp..brage..sp
-    command = command.."weave deathblow "..target
+    command = command..weave
     --Deathblow does 3 percent to elite mhun keeper
   end
   return command

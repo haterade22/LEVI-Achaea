@@ -46,3 +46,6 @@ if matches[2]:lower():find("kai unleashed") then mnemKaiUnleashed = true end
 -- Senseless Flurry: balance recovers 30% faster while the numbness defence is up;
 -- the Shikudo basher keeps NUMB up in Rain form (eq rider, choke outranks it).
 if matches[2]:lower():find("senseless flurry") then mnemSenselessFlurry = true end
+-- Panoply: WEAVE FLURRY scales with strikes landed (60-200% per attack); the Psion
+-- basher swaps its deathblow bash to flurry while it's up.
+if matches[2]:lower():find("panoply") then psionPanoply = true end

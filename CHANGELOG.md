@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-07-27 — Panoply: Psion bashes with WEAVE FLURRY (v4.7.126)
+
+New Mnemosyne boon (user-directed): "The damage dealt by your weaving flurry ability
+scales directly to the number of strikes landed, randomly dealing 60% to 200% of its
+damage with each attack." AB Flurry (ID 2704): `WEAVE FLURRY <target>`, works on
+denizens, 2.60s of balance.
+
+- **`ataxiaBasher_psionBashing`**: with `psionPanoply` up, the damage weave swaps
+  `weave deathblow` → `weave flurry` (straight verb swap, the `bmShatteredStar`
+  pattern). `weave cleave` keeps the shield-break role and `psi shatter` keeps its
+  transcendence-100 slot.
+- **Standard boon lifecycle** (13th flag): claim intercept, BOONS row trigger
+  `034_Panoply`, run start/end resets.
+
+Files: `basher/002_Class_Bashing.lua`, `aliases/.../002_Boon_Claim.lua`, trigger
+`034_Panoply.lua` (new), `001_Run_Start.lua`, `004_Parsers.lua`,
+`test_basher_psion.lua` (new, 4 cases). Suite **461/461**.
+
+---
+
 ## 2026-07-27 — Landing blindness: touch down settling, not deciding (v4.7.125)
 
 **First full live run of the escape ladder** (Blazing rocky mountainside, both arms
