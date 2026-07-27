@@ -614,6 +614,85 @@ describe("M.onReaperTithe()", function()
   end)
 end)
 
+-- ─── Boss tactics: Seasone tree reserve ──────────────────────────────────────
+
+describe("Seasone tree reserve", function()
+  local function captureSend(fn)
+    local captured, realSend = {}, send
+    send = function(cmd) captured[#captured + 1] = cmd end
+    local ok, err = pcall(fn, captured)
+    send = realSend
+    if not ok then error(err) end
+  end
+
+  local function bossReset()
+    reset(false)
+    ataxiaBasher = { inMnemosyne = true }
+    M._treeReserved, M._treeCuringOff = nil, nil
+  end
+
+  it("reserves the tree once when Seasone is the objective (any run state)", function()
+    bossReset()
+    captureSend(function(captured)
+      M.onObjective("defeat Seasone the Industrious")
+      M.onObjective("defeat Seasone the Industrious") -- status re-read: no re-send
+      expect(#captured).toBe(1)
+      expect(captured[1]).toBe("curing tree off")
+    end)
+    expect(M._treeReserved).toBeTrue()
+    ataxiaBasher = nil
+  end)
+
+  it("ignores non-reserve bosses and wave objectives, and gates on the tower", function()
+    bossReset()
+    captureSend(function(captured)
+      M.onObjective("defeat a colossal magma elemental")
+      M.onObjective("defeat 3 waves of enemies")
+      ataxiaBasher = nil -- outside the tower: even Seasone must not toggle curing
+      M.onObjective("defeat Seasone the Industrious")
+      expect(#captured).toBe(0)
+    end)
+    expect(M._treeReserved).toBeNil()
+  end)
+
+  it("releases the tree the moment the phials fly, once", function()
+    bossReset()
+    M._treeReserved = true
+    captureSend(function(captured)
+      M.onSeasonePhials()
+      M.onSeasonePhials() -- a second burst with no reserve is a no-op
+      expect(#captured).toBe(1)
+      expect(captured[1]).toBe("curing tree on")
+    end)
+    expect(M._treeReserved).toBeNil()
+    ataxiaBasher = nil
+  end)
+
+  it("never re-enables a Splinterbark-tainted tree", function()
+    bossReset()
+    M._treeReserved, M._treeCuringOff = true, true
+    captureSend(function(captured)
+      M.onSeasonePhials()
+      expect(#captured).toBe(0) -- reserve cleared, but the tainted tree stays off
+    end)
+    expect(M._treeReserved).toBeNil()
+    M._treeCuringOff = nil
+    ataxiaBasher = nil
+  end)
+
+  it("releaseTreeReserve restores on ripple/run boundaries, no-op otherwise", function()
+    bossReset()
+    M._treeReserved = true
+    captureSend(function(captured)
+      M.releaseTreeReserve()
+      M.releaseTreeReserve()
+      expect(#captured).toBe(1)
+      expect(captured[1]).toBe("curing tree on")
+    end)
+    ataxiaBasher = nil
+  end)
+end)
+
 -- ─── Haemophiliac affix pacing ───────────────────────────────────────────────
 
 describe("Haemophiliac wade-slower pacing", function()

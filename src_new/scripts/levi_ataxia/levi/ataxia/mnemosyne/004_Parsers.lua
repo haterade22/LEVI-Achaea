@@ -207,6 +207,7 @@ function M.onRunEnd()
     if ataxiaBasher_mnemStillHere then ataxiaBasher_mnemStillHere() end -- drop any pending ask
     ataxiaEcho("Mnemosyne wade ended -- no-flee mode OFF.")
   end
+  M.releaseTreeReserve() -- a boss tree-reserve must not outlive the run
   M.restoreTreeCuring() -- Splinterbark over -> tattoo untainted, turn game tree curing back on
   if M._inRun() then M.endRun() end
 end
@@ -290,6 +291,8 @@ end
 function M.onRipple(n)
   -- Reset the ripple map on level change (independent of telemetry reporting).
   if ataxia.mnemosyne.map and ataxia.mnemosyne.map.onRipple then ataxia.mnemosyne.map.onRipple(n) end
+  -- A tree reserve must never outlive its boss ripple (telemetry-independent).
+  M.releaseTreeReserve()
   if not M._auto() then return end
   -- Context guard: a stray/re-read "You wade N deep" seen outside a dive must not
   -- BOOTSTRAP a phantom run. Require in-Mnemosyne context to first assert active;
@@ -441,13 +444,66 @@ end
 -- of enemies". Report only the boss case. Fires after onRipple within the same
 -- WADE STATUS output, so /ripple_level still precedes /boss.
 function M.onObjective(text)
-  if not M._inRun() then return end
   if type(text) ~= "string" then return end
   text = text:gsub("^%s+", ""):gsub("%s+$", "")
   local target = text:match("^defeat (.+)$")
   if not target then return end
   if target:match("^%d+ waves? of enemies") then return end -- normal wave, not a boss
+  -- Boss tactics fire regardless of telemetry (Splinterbark's independence rule):
+  -- a reserve-boss objective arms the tree reserve even with reporting off.
+  M.reserveTreeForBoss(target)
+  if not M._inRun() then return end
   M.reportBoss(target)
+end
+
+-- ---------------------------------------------------------------------------
+-- Boss tactics: tree reserve (Seasone the Industrious)
+-- ---------------------------------------------------------------------------
+-- Seasone throws "a handful of fragile glass phials ... in a venom-filled
+-- explosion of kalmia, gecko, slike and more" -- a DENIZEN-dealt truelock (live
+-- log 2026-07-27: IMP SLI AST ANO, locks soft+hard, with the tree on cooldown
+-- from routine curing -- the exact failure this prevents; user doctrine: "save
+-- tree until this happens"). While her boss ripple is up the tree is RESERVED
+-- (curing tree off, so SSC can't burn it on incidental afflictions); the phial
+-- line (trigger 032) RELEASES it (curing tree on -> SSC spends it on the lock
+-- immediately). Splinterbark always wins: a tainted tree is never re-enabled.
+-- Telemetry-independent (called from onObjective BEFORE its _inRun gate),
+-- inMnemosyne-gated; released on ripple change / confirmed run end.
+M.TREE_RESERVE_BOSSES = { seasone = true }
+
+function M.reserveTreeForBoss(boss)
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  if type(boss) ~= "string" then return end
+  local lower = boss:lower()
+  local hit = false
+  for key in pairs(M.TREE_RESERVE_BOSSES) do
+    if lower:find(key, 1, true) then hit = true; break end
+  end
+  if not hit then return end
+  if M._treeReserved or M._treeCuringOff then return end
+  M._treeReserved = true
+  send("curing tree off")
+  if not M._quiet() then
+    M.echo("<yellow>" .. boss .. "<reset> -- TREE RESERVED for the phial lock (curing tree off)")
+  end
+end
+
+function M.onSeasonePhials()
+  if not M._treeReserved then return end
+  M._treeReserved = nil
+  if M._treeCuringOff then return end -- Splinterbark: the tree is tainted, leave it off
+  send("curing tree on")
+  if not M._quiet() then
+    M.echo("<indian_red>PHIAL BURST<reset> -- tree released (curing tree on): break that lock")
+  end
+end
+
+-- Ripple boundary / run end: a reserve must never outlive the boss fight.
+function M.releaseTreeReserve()
+  if not M._treeReserved then return end
+  M._treeReserved = nil
+  if M._treeCuringOff then return end
+  send("curing tree on")
 end
 
 -- "Ongoing effects:" (inside the ripple status block). Skip the immediate

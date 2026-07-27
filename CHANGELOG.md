@@ -2,6 +2,32 @@
 
 ---
 
+## 2026-07-27 — Seasone boss: tree reserved for the phial truelock (v4.7.123)
+
+Live log: the Mnemosyne boss **Seasone the Industrious** throws "a handful of fragile
+glass phials ... in a venom-filled explosion of kalmia, gecko, slike and more" — a
+denizen-dealt TRUELOCK (prompt showed IMP SLI AST ANO, locks soft+hard) — and the tree
+tattoo was on cooldown from routine curing when it landed. User doctrine: "save tree
+until this happens when fighting this boss."
+
+- **Tree reserve** (`reserveTreeForBoss`, `TREE_RESERVE_BOSSES = { seasone }`): when the
+  boss objective names a reserve-boss, `curing tree off` — SSC can't burn the tattoo on
+  incidental afflictions while closing on her. Telemetry-independent (fires from the
+  `Objective:` line BEFORE onObjective's `_inRun` gate), inMnemosyne-gated,
+  transition-guarded.
+- **Release on the burst** (trigger `032_Seasone_Phials`): the phial line flips
+  `curing tree on` — SSC spends the tattoo on the lock immediately, exactly when it
+  matters. Reserve also releases on ripple change and the confirmed run end, so it can
+  never outlive the fight; a Splinterbark-tainted tree is never re-enabled.
+
+Boss knowledge captured: Seasone also strips the protective covering (sileris) before
+the venoms land, and her bee-swarm hum hit 2,866 poison.
+
+Files: `mnemosyne/004_Parsers.lua`, trigger `032_Seasone_Phials.lua` (new),
+`test_mnemosyne.lua` (+5 cases). Suite **450/450**.
+
+---
+
 ## 2026-07-27 — Kai Unleashed corrected per AB + live capture (v4.7.122)
 
 The AB Kaichoke file (ID 896) and a live burst capture corrected two v4.7.121 assumptions:
