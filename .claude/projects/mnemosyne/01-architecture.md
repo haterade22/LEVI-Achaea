@@ -95,8 +95,10 @@ boons offer: "...flickers of power that may aide you..."   [trig 004]
        └─ (confirmed) onRunEnd() → clears the boon flags bardWarmarch /
                                     bmShatteredStar / magiKkractle / magiHotSprings /
                                     mnemHammerAnvil / bmBladedReflexes /
-                                    mnemSleuth / mnemRollHide + run.paused
-                                    (all UNconditionally); then if
+                                    mnemSleuth / mnemRollHide / mnemReaper /
+                                    mnemBloodscent, the affix flag mnemHaemophiliac,
+                                    the Reaper tally ataxiaTemp.reaperKills,
+                                    + run.paused (all UNconditionally); then if
                                     _inRun(): endRun() → _flushMonsters() →
                                     POST /run_end → run.active=false, _resetRun()
 ```

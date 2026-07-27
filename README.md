@@ -80,8 +80,9 @@ Full tooling for **the Mnemosyne**, Achaea's endless tower-climb PvE challenge �
 | **Ripple Mini-Map** | Per-ripple 4×4 grid map with click-to-walk — the Mnemosyne is invisible to Mudlet's own mapper |
 | **Run History** | Local record of every boon offered/claimed and every affix seen, plus an all-time affix library |
 | **Auto-Explorer** | `mnem explore` sweeps each ripple hands-free: clears rooms, hunts the boss, pauses at boon screens |
-| **Swarm Tactics** | Crowded rooms (3+ mobs) get pulled, walled, or kited instead of stood in — plus a low-HP fly-to-recover escape ladder |
-| **Boon Integration** | `BOON CLAIM` intercept auto-reports your pick and adapts class basher rotations to claimed boons |
+| **Swarm Tactics** | Crowded rooms (3+ mobs) get pulled, walled, or kited instead of stood in — hit-and-run continues while it works, walls get leapt, plus a vitals-driven low-HP escape ladder |
+| **Boon Integration** | `BOON CLAIM` intercept auto-reports your pick and adapts to claimed boons — class rotations, a live Reaper +1%/kill damage counter, Bloodscent per-ripple recon |
+| **Affix Handling** | Splinterbark turns tree curing off; Haemophiliac slows the sweep until post-kill bleeds are clotted |
 | **Dementia Mapper** | Standalone `dmap` package — the map + explorer with no LEVI dependency |
 
 ### Gear & Equipment
@@ -476,7 +477,7 @@ Hands-free ripple sweeping. The explorer drives the basher in manual mode for co
 
 ### Boon → Class Integration
 
-A passthrough intercept of `BOON CLAIM <name>` forwards your command, auto-reports the selection, and flips combat flags so the basher adapts to the boons you take — Bard **Warmarch**, Blademaster **Shattered Star** / **Bladed Reflexes** (keeps the Shindo augment up for 20% damage reduction), and Magi **Aspect of Kkractle** / **Hot Springs** reshape their class's attack logic, and the class-agnostic **Hammer and Anvil** (attacks bypass denizen shields) turns off razing and shield-swapping entirely for the rest of the run.
+A passthrough intercept of `BOON CLAIM <name>` forwards your command, auto-reports the selection, and flips combat flags so the basher adapts to the boons you take — Bard **Warmarch**, Blademaster **Shattered Star** / **Bladed Reflexes** (keeps the Shindo augment up for 20% damage reduction), and Magi **Aspect of Kkractle** / **Hot Springs** reshape their class's attack logic, and the class-agnostic **Hammer and Anvil** (attacks bypass denizen shields) turns off razing and shield-swapping entirely for the rest of the run. **Reaper** (+1% damage per kill) gets a live counter — every tithe line echoes your running total (`Reaper: you now have +23% damage total`), surviving even a mid-run system update and a pause/resume wade. **Bloodscent** turns each ripple entry into parsed recon (below). The **Haemophiliac** affix (kills bleed thousands) automatically slows the sweep: after each room clears, movement holds until the bleed is clotted and HP recovers.
 
 ### Swarm Tactics & Low-HP Escape (`mnem swarm`)
 
@@ -485,7 +486,11 @@ explorer fights on chosen ground:
 
 - **Pull & funnel**: at 3+ mobs (`mnem swarm assess <n>`, depth-scalable via
   `mnem swarm deep <ripple> <n>`), swing once and step back to the just-cleared room as one
-  atomic queued line, kill what follows, re-enter, repeat (3 pulls per room max).
+  atomic queued line, kill what follows, re-enter, repeat. **Hit-and-run continues as long
+  as it works**: any cycle that kills a mob or chips the target refunds the pull budget, so
+  non-chasing packs get whittled down one free swing at a time until the room is cleared or
+  below threshold — only truly stalled cycles (mobs healing back up between visits) spend
+  the 3-pull budget and fall back to fighting in place.
 - **Indoors**: the escape also raises an **icewall** on the door (Bracers of Frost) and
   **leaps** it (chitin greaves). The wall then STAYS — re-entry just leaps back over it,
   and later escapes skip the re-cast entirely (faster exits); it's only melted (Bracers of
@@ -498,12 +503,20 @@ explorer fights on chosen ground:
   — works with every limb broken, unlike `touch shield` — landing only when FULLY healed
   (95%+ and affliction-free); indoors retreat to the cleared room; shield stays as the last
   resort.
+- **Bloodscent recon** (boon): every ripple entry senses out all denizens — the rows are
+  parsed into per-room counts with crowded rooms called out before you take a step
+  (`recon: 8 denizens across 6 rooms -- crowded: Beneath an ancient tree (3)`).
 - **Sleuth recon** (boon): `fullsense` on each GO reveals every denizen in the ripple
   (`mnem sense` to re-scan).
+- **Haemophiliac pacing** (affix): kills bleed thousands, so after each room clears the
+  sweep stands still while the bleed clots and HP recovers, then moves on.
 
-Tactical moves never blacklist real exits, and a server-side hold protects every queued
-escape from being overwritten by the attack loop. The standalone Dementia Mapper mirrors the
-pull/funnel core via `dmap swarm <n|off>`.
+Any icewall that blocks a walk — yours or the tower's — is simply **leapt** (chitin
+greaves), so walls never derail navigation. Tactical moves never blacklist real exits, a
+server-side hold protects every queued escape from being overwritten by the attack loop,
+and a vitals-driven watchdog fires the panic/escape ladder on the very prompt your HP
+crosses the threshold. The standalone Dementia Mapper mirrors the pull/funnel core via
+`dmap swarm <n|off>`.
 
 ### Command Reference
 

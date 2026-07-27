@@ -255,7 +255,9 @@ this tick). Stage 1 = the **pull & funnel** loop:
 - **Funnel**: arrival in the previous room -> hold navigation; the basher fights whatever
   follows (followers arrive via `Char.Items.Add` -> "targets updated"; one `ql` re-Lists for
   never-Listed spawns). Fighting refreshes the 4s follow window; when it expires empty ->
-  **re-enter** and re-assess. `MAX_PULLS` (3) per room, then the room is fought in place.
+  **re-enter** and re-assess. `MAX_PULLS` (3) per room counts only UNPRODUCTIVE cycles —
+  progress refunds the budget (hit-and-run continuation, v4.7.117 below) — then the room
+  is fought in place.
 - **Indoors route** (`swarm.icewall`, default on): the first escape suffix is
   `;point <bracersId> <LONG back>;leap <back>` — swing, WALL the door we came through, LEAP
   over our own wall, all one queue entry (order preserved; a split send could wall the wrong

@@ -65,7 +65,7 @@ Guarded by `if ataxia.mnemosyne.map then`; see [04-ripple-map.md](04-ripple-map.
 | `mnem swarm panicat <hp%>` | Roll Hide panic threshold (default 40) |
 | `mnem swarm escapeat <hp%>` | Low-HP escape threshold (default 35) |
 | `mnem swarm recoverat <hp%>` | Recovery hover lands at this HP (default 95; also requires aff-free) |
-| `mnem sense` | `M.swarm.sense()` — manual fullsense recon (Sleuth boon reveals all denizens) |
+| `mnem sense` | `M.swarm.sense()` — manual fullsense recon (Sleuth boon reveals all denizens; Bloodscent auto-recons every ripple entry unprompted — trigger 028 parses either source's `You sense <mob> (#id) at <room>.` rows into per-room counts) |
 
 ### Manual endpoint overrides
 
