@@ -96,11 +96,15 @@ boons offer: "...flickers of power that may aide you..."   [trig 004]
                                     bmShatteredStar / magiKkractle / magiHotSprings /
                                     mnemHammerAnvil / bmBladedReflexes /
                                     mnemSleuth / mnemRollHide / mnemReaper /
-                                    mnemBloodscent, the affix flag mnemHaemophiliac,
-                                    the Reaper tally ataxiaTemp.reaperKills,
-                                    + run.paused (all UNconditionally); then if
-                                    _inRun(): endRun() → _flushMonsters() →
-                                    POST /run_end → run.active=false, _resetRun()
+                                    mnemBloodscent / mnemKaiUnleashed /
+                                    mnemSenselessFlurry / psionPanoply, the affix
+                                    flag mnemHaemophiliac, the ataxiaTemp stamps
+                                    (reaperKills, kaiUnleashedAt, kaiChokePendingAt),
+                                    releases any boss tree-reserve
+                                    (releaseTreeReserve), + run.paused (all
+                                    UNconditionally); then if _inRun(): endRun() →
+                                    _flushMonsters() → POST /run_end →
+                                    run.active=false, _resetRun()
 ```
 
 ### Key ordering guarantees

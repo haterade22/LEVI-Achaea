@@ -183,3 +183,13 @@ paralysis, aeon, peace, transfixation, webbed, impaled, constricted, deepsleep, 
 | Damage rate window | 5s | No |
 | Throttle pause | 2s | No |
 | Max attacks/sec | 5 | No |
+
+**Vitals-pinning effects vs the safety ladder (v4.7.124):** the Senseless Flurry numb
+keeper is CROWD-GATED because numbness defers damage — HP pins while it is up, which
+silently blinds every HP-based safety (the damage-rate watchdog records nothing, danger
+levels never trip, the swarm escape ladder's vitals watchdog reads a flat line) until
+the deferred lump lands as one −40% blow. In a swarm-threshold room that lump can
+exceed max HP. The keeper therefore only numbs in thin rooms (< swarm threshold, no
+tactic running), where the lump is survivable and the next prompt's hp-delta trips the
+rate-shield normally. General rule: any effect that pins or fakes vitals must be gated
+away from exactly the situations these safeties exist for.

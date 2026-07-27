@@ -434,12 +434,68 @@ notes: |
 ```yaml
 attack_command: "weave deathblow <target>"
 attack_skill: Weaving
+panoply_boon: "weave flurry <target> replaces deathblow while psionPanoply (Mnemosyne, v4.7.126 — flurry damage scales 60-200% per strike landed)"
 shield_strip: "weave cleave <target> (when denizen shielded)"
-full_transcendence: "psi shatter <target> then weave deathblow (transcendence == 100)"
+full_transcendence: "psi shatter <target> then weave (transcendence == 100)"
 battlerage_abilities:
   note: "Rage assembled generically via ataxiaBasher_assembleBattlerage() — no psi_blast in the bashing rotation"
   raze: "Psion-specific rage entry, used only for shielded targets"
 ```
+
+## PvE Ability Audit (2026-07-27, full wiki review: Psion/Weaving/Psionics/Emulation)
+
+Four-page sweep, every ability categorized for denizen hunting. Wiki caveats: no skill
+ranks or mana/willpower costs render on any page (only balance/eq times); `PSI SHATTER`
+and the Panoply boon post-date the wiki entirely (shatter is presumably the newer
+transcendence-100 spender). Weaving costs BALANCE (2.2–2.6s); Psionics/Emulation cost
+EQUILIBRIUM — the two channels interleave, and at transcendence 100 one psionics action
+fires off-eq at zero cost.
+
+### In use by the basher today
+| Ability | Why |
+|---|---|
+| `WEAVE DEATHBLOW` (2.20s bal) | Fastest single-target damage weave — the default bash |
+| `WEAVE FLURRY` (2.60s bal) | The bash under the Panoply boon (60–200% per strike) |
+| `WEAVE CLEAVE` (2.30s bal) | Strips shield AND rebounding, prones — the shield answer |
+| `PSI TRANSCEND` / `PSI SHATTER` | Bashing weaves charge transcendence to 100 → free off-eq shatter |
+| Battlerage raze | Shielded targets only |
+
+### Should wire next (priority order)
+| Ability | Cost | PvE case |
+|---|---|---|
+| `ENACT ROTH` | 1.30s eq, 3-min cd, needs HP<50% | Emergency heal + free clarity/rupture defs — belongs in the danger/heal ladder before any flee |
+| `WEAVE SECONDSKIN` | 3.00s bal, defence | Resistance to ALL damage types — belongs in defence keepup |
+| Battlerage rotation | rage | Barbedblade 14 (DoT opener) → Whirlwind 25 → Devastate 36 (nuke); **Pulverise 17 = rage-cost shieldbreak** (saves the cleave balance); Regrowth 24 vs self-healing denizens ("tending his wounds"!); skip Terror (fear scatters mobs) |
+| `WEAVE RALLY` | 2.30s bal | Self-heal that OVERHEALS — costs a swing, so: pre-pull overheal + low-HP alternative to fleeing |
+| `PSI EXPAND` | 3.00s eq | Mana top-up between pulls (big under Haemophiliac's +20% mana costs) |
+| `PSI MANIPULATE` | 3.30s eq | Act THROUGH paralysis — synergy with the basher's attack-gate (paralysing denizens) |
+
+### Test in game before wiring
+| Ability | Question |
+|---|---|
+| `WEAVE MIRIAD` | Copies mirror every attack at 50% damage onto RANDOM room targets — free cleave in Mnemosyne swarm rooms IF they hit denizens without pulling extra aggro |
+| `ENACT INDOMITABILITY` | Absorb-images (3 hits each), Self-targeted with no adventurers-only flag — if they block denizen swings, refresh between pulls |
+| `PSI SPLINTER` (2.00s eq, denizen-legal) | Eq-based shieldbreak — as the transcendence-100 spender it could strip shields for FREE without touching weave balance |
+| `ENACT GUIDEDSTRIKE` | Crit buff — but does NOT stack with a paragon artefact; redundant for us (armour system runs paragons) unless a profile drops them |
+| `ENACT CLARITY` | Faster eq recovery — helps the eq-side utility cadence; Roth grants it free |
+| `WEAVE PREPARE INSUBSTANTIAL` | Page hints at a rebounding/reflection-bypass mode — AB check needed |
+
+### Utility (situational)
+`PSI PROJECTION` (safe-room anchor: pre-place, swap back after a flee — 3 swaps),
+`ENACT COMPANION` Aklan (remote room-content scouting — recon synergy with Bloodscent),
+`ENACT BARTER` (gold → endurance on marathons), `ENACT WAVESURGE` (random-direction
+panic teleport — last resort only), `PSI EXPUNGE` (self mental-cure, impatience first),
+`PSI VANISH` (slip past aggro — unverified vs denizens).
+
+### PvP-only (no PvE value — do not wire into the basher)
+All affliction weaves (overhand, backhand, hamstring, entwine, lightsteal, puncture,
+sever, exsanguinate, launch, prepare's affliction modes), the entire unweave kill route
+(unweave, invert, deconstruct, sensitivity), the mana-kill chain (psi blast, excise,
+contemplation), psi combustion/foresight/muddle/radiate/link/perception/insertion/
+ironwill/breakthrough, and Emulation's destruction/imposition/painshift (all flagged
+adventurers-only), lightbind, lifebond, soulmark, reprise, discordance, upheaval
+(blocks our own escape routes), rupture (denizen bleed value marginal; Roth grants it
+free anyway).
 
 ## Fighting Against This Class
 ```yaml

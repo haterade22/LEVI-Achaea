@@ -1119,3 +1119,32 @@ Edge cases:
 - LIGHT modifier only works for STAFF attacks, not kicks
 - Willow's flashheel can only hit legs - uses isLegSafe() to avoid premature breaks
 ```
+
+## Mnemosyne Boons (Shikudo bashing, v4.7.121-124)
+
+```yaml
+kai_unleashed:  # legendary — kai choke bursts magic damage on ALL denizens in the room
+  flag: mnemKaiUnleashed
+  behavior: "KAI CHOKE <target> PREPENDS to the Rain-form combo at 2+ denizens"
+  ability_facts: "AB Kaichoke 896: 4.00s of EQUILIBRIUM (idle during balance combos —
+    both land the same round); vs DENIZENS consumes NO kai, only 50 mana (250-mana
+    floor); bonus damage vs damaged/mangled head/torso or mind clamp"
+  cooldown: "30s on the boon's burst, CONFIRMATION-based: the burst line ('Your
+    surroundings ripple like a lake's surface struck...') starts it via trigger 031;
+    an eaten choke retries after 6s instead of forfeiting the window"
+  live_numbers: "choke 3338→6369 asphyx (coalescence-empowered); burst 8472→25560
+    magical (scales; one burst one-shot the primary); eq spend observed ~2.97s"
+
+senseless_flurry:  # balance recovers 30% faster while the numbness defence is up
+  flag: mnemSenselessFlurry
+  behavior: "NUMB prepends to the Rain-form combo when the numbness defence is down
+    (GMCP-tracked, 5s attempt-hold); fires on shielded rounds (self-targeted);
+    Kai Choke OUTRANKS it — one eq spender per round"
+  ability_facts: "AB Numbness 894: self-only, 3.00s eq; DEFERS incoming damage,
+    delivered later in one blow at -40%. Fire line: 'You grit your teeth and will
+    your pain out of existence.'"
+  crowd_gate: "NEVER numbs at >= the swarm threshold or mid-swarm-tactic: deferral
+    pins HP, blinding the damage-rate watchdog, danger levels, and the escape
+    ladder until the lump lands — in a crowd that lump can exceed max HP (death
+    from 'full HP' with every alarm silent). Thin rooms only."
+```
