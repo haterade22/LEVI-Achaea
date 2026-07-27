@@ -69,6 +69,12 @@ function ataxiaBasher_dragonBashing()
     local weaveable = not ataxiaBasher.jabBash and not ataxiaBasher.wotBash
     if ataxiaBasher.dragonBlast and weaveable and ele then
       if ataxia.defences.dragonbreath then
+        -- Might of Sycaerunax (Mnemosyne boon): +25% blast damage AND the breath
+        -- weapon PERSISTS through BLAST (AB Blast: "Requires summoned breath") --
+        -- the re-summon is pure waste while it's up.
+        if dragonMightSycaerunax then
+          return "blast " ..target.. ";" ..balAttack()
+        end
         return "blast " ..target.. ";summon " ..ele.. ";" ..balAttack()
       else
         return "summon " ..ele.. ";" ..balAttack()
@@ -82,7 +88,13 @@ function ataxiaBasher_dragonBashing()
       command = command..raze..sp..primary()
     else
       -- Shield MUST be broken: blast unconditionally, re-summon the colour's breath, add bal damage.
-      local reblast = ele and ("blast " ..target.. ";summon " ..ele.. ";") or ("blast " ..target.. ";")
+      -- Under Might of Sycaerunax the breath persists -- skip the re-summon here too.
+      local reblast
+      if dragonMightSycaerunax then
+        reblast = "blast " ..target.. ";"
+      else
+        reblast = ele and ("blast " ..target.. ";summon " ..ele.. ";") or ("blast " ..target.. ";")
+      end
       command = command..sp..reblast..balAttack()..sp..brage()
     end
   else

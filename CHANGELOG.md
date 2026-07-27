@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-07-27 — Might of Sycaerunax: blast weave stops re-summoning (v4.7.130)
+
+New Mnemosyne boon (the 14th flag, `dragonMightSycaerunax`): "Your draconic blast
+ability does 25% more damage, and your breath weapon persists and will not need to be
+resummoned upon use." AB Blast (1544): 4.00s of equilibrium, strips shield and/or
+lyre, requires summoned breath.
+
+- `ataxiaBasher_dragonBashing` drops the `;summon <ele>` from BOTH the blast weave
+  (breath up → `blast <t>;<primary>`) and the shielded reblast (`blast <t>;<bal>`)
+  while the boon is up. Breath fully down still summons once — the boon keeps it from
+  there. Colour-agnostic.
+- Standard boon-flag lifecycle: `BOON CLAIM` intercept (`sycaerunax`), BOONS-row
+  re-latch trigger `035_Might_Of_Sycaerunax`, reset on run start, cleared on the
+  confirmed run end.
+
+Files: `basher/002_Class_Bashing.lua`, `mnemosyne/004_Parsers.lua`,
+`triggers/.../mnemosyne/035_Might_Of_Sycaerunax.lua` (NEW), `001_Run_Start.lua`,
+`aliases/.../mnemosyne/002_Boon_Claim.lua`, `test_basher_dragon.lua` (+4 cases).
+Suite **490/490**.
+
+---
+
 ## 2026-07-27 — Golden Dragon battlerage: aeon/amnesia control rotation (v4.7.129)
 
 User AB dump of the Golden Dragon Attainment kit: DEADEN (24 rage, 35s cd, denizen

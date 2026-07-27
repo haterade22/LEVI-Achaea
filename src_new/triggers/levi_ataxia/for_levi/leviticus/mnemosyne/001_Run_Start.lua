@@ -50,6 +50,7 @@ mnemBloodscent = false  -- boons reset each run
 mnemKaiUnleashed = false  -- boons reset each run
 mnemSenselessFlurry = false  -- boons reset each run
 psionPanoply = false  -- boons reset each run
+dragonMightSycaerunax = false  -- boons reset each run
 mnemHaemophiliac = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
 
 -- The wade lifecycle is the AUTHORITY on being in the tower -- this line and the confirmed

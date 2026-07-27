@@ -49,3 +49,6 @@ if matches[2]:lower():find("senseless flurry") then mnemSenselessFlurry = true e
 -- Panoply: WEAVE FLURRY scales with strikes landed (60-200% per attack); the Psion
 -- basher swaps its deathblow bash to flurry while it's up.
 if matches[2]:lower():find("panoply") then psionPanoply = true end
+-- Might of Sycaerunax: draconic BLAST +25% damage and the breath weapon PERSISTS;
+-- the dragon basher drops the re-summon from its blast weave while it's up.
+if matches[2]:lower():find("sycaerunax") then dragonMightSycaerunax = true end

@@ -34,7 +34,8 @@ getEpoch = function() return clock end
 local _assemble = ataxiaBasher_assembleBattlerage
 local _breath = getDragonBreath
 function ataxiaBasher_assembleBattlerage() return "GENERIC_BRAGE;" end
-function getDragonBreath() return nil end
+local breath = nil -- per-test breath element (nil disables the blast weave)
+function getDragonBreath() return breath end
 
 local file = "src_new/scripts/levi_ataxia/levi/ataxia/basher/002_Class_Bashing.lua"
 local ok, err = pcall(dofile, file)
@@ -45,11 +46,15 @@ local function has(cmd, needle) return cmd:find(needle, 1, true) ~= nil end
 local function reset()
   ataxiaBasher.shielded, ataxiaBasher.rageraze = false, false
   ataxiaBasher.cullingBlade, ataxiaBasher.rageConserveThreshold = nil, nil
+  ataxiaBasher.dragonBlast = nil
   ataxia.vitals.rage = 0
+  ataxia.defences = {}
   ataxiaTemp = {}
   gmcp.IRE.Target.Info = {}
   gmcp.Room.Info.area = ""
   gmcp.Char.Status.class = "Golden Dragon"
+  dragonMightSycaerunax = false
+  breath = nil
   clock = 700000
 end
 
@@ -158,7 +163,42 @@ describe("ataxiaBasher_dragonBashing -- per-colour battlerage routing", function
   end)
 end)
 
+describe("ataxiaBasher_dragonBashing -- Might of Sycaerunax blast weave", function()
+  it("drops the re-summon while the boon is up (breath persists through BLAST)", function()
+    reset(); ataxiaBasher.dragonBlast = true; breath = "psi"
+    ataxia.defences.dragonbreath = true; dragonMightSycaerunax = true
+    local cmd = ataxiaBasher_dragonBashing()
+    expect(has(cmd, "blast " .. target)).toBeTrue()
+    expect(has(cmd, "summon")).toBeFalse()
+    expect(has(cmd, "gut " .. target)).toBeTrue() -- the bal primary still swings
+  end)
+
+  it("still summons ONCE when breath is down (the boon keeps it thereafter)", function()
+    reset(); ataxiaBasher.dragonBlast = true; breath = "psi"
+    dragonMightSycaerunax = true -- breath def NOT up
+    local cmd = ataxiaBasher_dragonBashing()
+    expect(has(cmd, "summon psi")).toBeTrue()
+    expect(has(cmd, "blast")).toBeFalse()
+  end)
+
+  it("without the boon the blast weave re-summons (unchanged)", function()
+    reset(); ataxiaBasher.dragonBlast = true; breath = "psi"
+    ataxia.defences.dragonbreath = true
+    local cmd = ataxiaBasher_dragonBashing()
+    expect(has(cmd, "blast " .. target .. ";summon psi")).toBeTrue()
+  end)
+
+  it("shielded reblast skips the re-summon with the boon", function()
+    reset(); ataxiaBasher.shielded = true; breath = "psi"
+    dragonMightSycaerunax = true
+    local cmd = ataxiaBasher_dragonBashing()
+    expect(has(cmd, "blast " .. target)).toBeTrue() -- shield still gets blasted
+    expect(has(cmd, "summon")).toBeFalse()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 getEpoch = _epoch
 ataxiaBasher_assembleBattlerage = _assemble
 getDragonBreath = _breath
+dragonMightSycaerunax = false

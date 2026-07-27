@@ -436,6 +436,17 @@ basher_toggles:
       breath up -> "blast <tar>;summon <ele>;<incant/gut> <tar>"; breath down -> "summon <ele>;<incant/gut> <tar>".
       Element per colour via getDragonBreath() (Blue = ice). Turn off for trash mobs / low willpower.
       Gate: ataxia.defences.dragonbreath. Shielded hits always blast to break the shield regardless of this toggle.
+
+mnemosyne_boons:
+  might_of_sycaerunax:  # v4.7.130, dragonMightSycaerunax flag (trigger 035 + BOON CLAIM intercept)
+    effect: "Draconic BLAST does +25% damage and the breath weapon PERSISTS -- no resummon needed after use"
+    ab_blast: "BLAST <target>: 4.00s of equilibrium, strips shield and/or lyre, requires summoned breath (AB 1544)"
+    basher: |
+      ataxiaBasher_dragonBashing drops the ";summon <ele>" from BOTH the blast weave
+      (breath up -> "blast <t>;<primary>") and the shielded reblast ("blast <t>;<bal>")
+      while the flag is up. Breath fully down still summons once -- the boon keeps it
+      from there. Colour-agnostic (any dragon in the tower). Standard boon-flag
+      lifecycle: claim intercept / BOONS-row trigger re-latch / cleared on run start+end.
 ```
 
 ## Fighting Against This Class
