@@ -531,7 +531,16 @@ function S.onTick()
       S.state = "idle"
       S._echo(healed and "<green>fully recovered<reset> (" .. hpp() .. "%, aff-free) -- landing and resuming."
         or "<grey>recover cap hit -- landing and handing back.")
-      return false -- normal flow (fight/assess) resumes this very tick
+      -- LANDING BLINDNESS (live catch 2026-07-27): while airborne, gmcp Char.Items
+      -- reflects the SKY, so denizensHere is EMPTY. Handing this tick straight back
+      -- made the explorer read the mob-filled ground room as "room clear" and queue
+      -- a move that walked OUT of the fight the moment we touched down. Treat the
+      -- landing like an ARRIVAL instead: consume the tick, open the settle window,
+      -- and let the land's own Room/Items re-push drive the next decision on real
+      -- ground data (the scheduled tick is the no-event backstop -- never wedges).
+      if M.explore then M.explore.settling = true end
+      if M._scheduleTick then M._scheduleTick() end
+      return true
     end
     -- The escape's fly can be eaten just like the Pinnacle pull was (stupidity
     -- replaces queued commands with involuntary actions): S.flying is optimistic

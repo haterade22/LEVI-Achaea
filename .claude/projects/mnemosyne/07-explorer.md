@@ -311,7 +311,14 @@ leapt the raw `command` string and `addclearfull`-wiped the explorer's queue.
   kept defences blindness/deafness/curseward/insomnia never hold the hover):
   HP-gated ONLY (a two-mob chip-down killed below the swarm threshold). Outdoors -> fly and
   hover (state `recovering`, attacks hold-gated, 2s re-checks, 60s cap) -- flight works with
-  every limb broken, unlike `touch shield`; land + resume when healed. Indoors -> plain
+  every limb broken, unlike `touch shield`; land + resume when healed. **LIVE-VALIDATED
+  end-to-end 2026-07-27** (Blazing mountainside: 19% -> fly -> hover-heal to 99% through the
+  smoke -> land -> resume). **Landing settles, never decides** (v4.7.125): airborne gmcp
+  Char.Items reflects the SKY (denizensHere empty), so the landing tick is CONSUMED and the
+  arrival settle window opened -- the land's Room/Items re-push supplies real ground data;
+  handing the tick back immediately walked out of a still-mob-filled room as "clear".
+  Blazing affix: ~725 fire on grounded entry, ~511 asphyxiation per ~5s while hovering (the
+  hover still out-heals it). Indoors -> plain
   retreat to the cleared room (no swing) and cure while fighting the trickle; no route ->
   shield-in-place remains. SLC's both-arms flee is inert in the tower (fixed-direction blind
   runs); the swarm module owns tower escapes.

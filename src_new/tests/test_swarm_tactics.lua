@@ -554,21 +554,29 @@ describe("swarm low-HP escape ladder", function()
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("recovering") -- restoration must finish first
     ataxia.afflictions = { blindness = true, deafness = true } -- kept defences never hold us
-    expect(S.onTick()).toBeFalse() -- hands the tick back to the normal flow
+    -- Landing CONSUMES the tick and settles (live catch 2026-07-27: airborne gmcp
+    -- Items reflect the SKY, so denizensHere is empty -- deciding now would read a
+    -- mob-filled ground room as "clear" and walk out of the fight on touchdown).
+    expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("idle")
     expect(S.flying).toBe(nil)
     expect(findCmd("land") ~= nil).toBeTrue()
     expect(ataxiaTemp.swarmHold).toBe(nil)
+    expect(M.explore.settling).toBeTrue() -- the land's Room/Items push decides next
+    expect(#scheduled > 0).toBeTrue()     -- no-event backstop tick armed
+    M.explore.settling = false
   end)
 
-  it("lands at the hard cap even if never healed", function()
+  it("lands at the hard cap even if never healed -- also settling, never deciding blind", function()
     fixture(2)
     ataxia.vitals = { hpp = 30 }
     S.onTick()
     clock = clock + 120 -- past RECOVER_MAX
-    expect(S.onTick()).toBeFalse()
+    expect(S.onTick()).toBeTrue() -- consumed: settle on real ground data first
     expect(S.state).toBe("idle")
     expect(S.flying).toBe(nil)
+    expect(M.explore.settling).toBeTrue()
+    M.explore.settling = false
   end)
 
   it("retreats to the cleared room indoors (no fly available) -- by LEAP", function()

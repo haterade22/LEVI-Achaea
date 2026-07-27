@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-07-27 — Landing blindness: touch down settling, not deciding (v4.7.125)
+
+**First full live run of the escape ladder** (Blazing rocky mountainside, both arms
+broken + throat lacerated in one round, shard-storm AoE ~3k): HP hit 19% → the vitals
+watchdog flew instantly → hover healed 19%→99% through the smoke → landed → resumed.
+One flaw surfaced at the very end:
+
+- **Landing blindness**: while airborne, gmcp `Char.Items` reflects the SKY, so
+  `denizensHere` is empty. The landing tick handed control straight back to the
+  explorer, which read the still-mob-filled ground room as "room clear" and queued a
+  move — walking OUT of the fight the moment we touched down. The landing now
+  CONSUMES its tick, opens the arrival settle window, and lets the land's own
+  Room/Items re-push drive the next decision on real ground data (scheduled backstop
+  tick, so it can never wedge).
+
+Knowledge captured: the **Blazing** affix burns grounded entries (~725 fire) AND smokes
+hovering flyers (~511 asphyxiation per ~5s — the hover still out-heals it); "a
+miniature storm of shards" is a room-hazard denizen hitting ~3k unblockable AoE and
+counts toward the swarm threshold.
+
+Files: `mnemosyne/009_Swarm_Tactics.lua`, `test_swarm_tactics.lua` (2 tests updated).
+Suite **457/457**.
+
+---
+
 ## 2026-07-27 — Senseless Flurry: keep NUMB up in Rain form (v4.7.124)
 
 New Mnemosyne boon (user-directed): "Your balance recovers 30% faster while you have
