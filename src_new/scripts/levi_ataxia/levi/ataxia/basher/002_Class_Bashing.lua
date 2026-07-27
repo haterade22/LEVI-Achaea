@@ -473,6 +473,41 @@ function ataxiaBasher_kaiUnleashedBurst()
   ataxiaTemp.kaiChokePendingAt = nil
 end
 
+-- Senseless Flurry boon (Mnemosyne): "Your balance recovers 30% faster while you
+-- have the numbness defence." AB Numbness (ID 894): NUMB, self-only, 3.00s of
+-- EQUILIBRIUM -- the same idle-during-combos channel Kai Choke rides -- and it
+-- DEFERS incoming damage (delivered later in one blow at -40%: strictly good while
+-- bashing, and the swarm module's per-prompt vitals watchdog already covers the
+-- deferred hit landing). User doctrine: keep numbness up in RAIN form. Gated on
+-- the GMCP-tracked defence (expiry arrives via Char.Defences.Remove -- no duration
+-- guessing; fire line "You grit your teeth and will your pain out of existence."
+-- live-captured 2026-07-27) + the bmAugment-style 5s attempt-hold against respam.
+-- Kai Choke OUTRANKS it for a round's eq (see the call site): the 30s AoE burst
+-- is worth more than a numb refresh. Self-targeted, so shielded rounds still numb.
+function ataxiaBasher_senselessFlurryNumb()
+  if not mnemSenselessFlurry then return nil end
+  if ataxia.vitals.form ~= "Rain" then return nil end
+  if ataxia.defences and ataxia.defences.numbness then return nil end
+  -- CROWD GATE (review HIGH): while numb is up HP does not move, so EVERY HP-based
+  -- safety goes blind -- the damage-rate watchdog records nothing, danger levels
+  -- never trip, and the swarm escape ladder (HP-gated) stays silent -- then the
+  -- deferred lump lands as ONE blow (-40%) that in a deep-ripple crowd can exceed
+  -- max HP: death from "full HP" with every alarm quiet. Numb only in THIN rooms,
+  -- where the lump is survivable and the next prompt's huge hp-delta trips the
+  -- rate-shield normally; in swarm-threshold crowds (or mid-tactic) live HP data
+  -- is worth more than 30% balance.
+  local M = ataxia.mnemosyne
+  local n = (M and M._denizenCount and M._denizenCount()) or 0
+  local thr = (M and M.swarm and M.swarm.threshold and M.swarm.threshold()) or 3
+  if n >= thr then return nil end
+  if M and M.swarm and M.swarm.state and M.swarm.state ~= "idle" then return nil end
+  ataxiaTemp = ataxiaTemp or {}
+  if ataxiaTemp.numbAttempted then return nil end
+  ataxiaTemp.numbAttempted = true
+  tempTimer(5, [[ataxiaTemp.numbAttempted = nil]])
+  return "numb; "
+end
+
 -- These fire from the attack path, which runs on every prompt — latch them so an
 -- unrecognised form or spec warns once rather than flooding the screen.
 local shikudoWarnedForm = nil
@@ -568,10 +603,11 @@ function ataxiaBasher_monkBashing2()
     command = command.."unwield all"..sp.."combo "..target..(useShieldbreak and " rhk ucp ucp; " or " sdk ucp ucp; ")
   elseif shikudo then
     monkWarnedNoSpec = false
-    -- Kai Unleashed AoE rides ALONGSIDE the combo when its gates pass (boon up,
-    -- Rain form, 2+ denizens, 30s burst cooldown elapsed): the choke spends 4s of
-    -- EQUILIBRIUM -- idle during balance-based combos -- so both land this round.
-    command = command..(ataxiaBasher_kaiUnleashedChoke(useShieldbreak) or "")
+    -- EQ riders alongside the balance combo (both land the same round). One eq
+    -- spender per round: Kai Unleashed's 30s AoE burst outranks the Senseless
+    -- Flurry numb refresh when both are eligible.
+    local choke = ataxiaBasher_kaiUnleashedChoke(useShieldbreak)
+    command = command..(choke or ataxiaBasher_senselessFlurryNumb() or "")
     command = command..shikudoBashCombo(target, useShieldbreak)
   elseif not monkWarnedNoSpec then
     monkWarnedNoSpec = true

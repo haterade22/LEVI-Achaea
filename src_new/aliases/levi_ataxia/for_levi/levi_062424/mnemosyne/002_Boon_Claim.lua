@@ -43,3 +43,6 @@ if matches[2]:lower():find("bloodscent") then mnemBloodscent = true end
 -- Kai Unleashed: kai choking a denizen bursts magic damage on ALL denizens in the
 -- room (30s cooldown); the Shikudo basher fires KAI CHOKE in Rain form at 2+ mobs.
 if matches[2]:lower():find("kai unleashed") then mnemKaiUnleashed = true end
+-- Senseless Flurry: balance recovers 30% faster while the numbness defence is up;
+-- the Shikudo basher keeps NUMB up in Rain form (eq rider, choke outranks it).
+if matches[2]:lower():find("senseless flurry") then mnemSenselessFlurry = true end

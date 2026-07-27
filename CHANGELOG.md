@@ -2,6 +2,37 @@
 
 ---
 
+## 2026-07-27 — Senseless Flurry: keep NUMB up in Rain form (v4.7.124)
+
+New Mnemosyne boon (user-directed): "Your balance recovers 30% faster while you have
+the numbness defence." AB Numbness (ID 894): NUMB, self-only, 3.00s of equilibrium —
+the same idle-during-combos eq channel Kai Choke rides — and it defers incoming damage
+(delivered later in one blow at −40%, strictly good while bashing; the swarm module's
+per-prompt vitals watchdog already covers the deferred hit landing).
+
+- **`ataxiaBasher_senselessFlurryNumb`** (basher/002): with the boon up, in Rain form,
+  when the GMCP-tracked `numbness` defence is down, prepend `numb;` to the combo —
+  gated by the Bladed-Reflexes-style 5s attempt-hold so the channel isn't respammed.
+  Fires on shielded rounds too (self-targeted). Fire line live-captured: "You grit
+  your teeth and will your pain out of existence."
+- **One eq spender per round**: Kai Unleashed's 30s AoE burst outranks the numb
+  refresh when both are eligible; numb fills the other Rain rounds.
+- **Crowd-gated** (adversarial-review HIGH): while numb is up HP does not move —
+  damage is DEFERRED — so every HP-based safety (damage-rate watchdog, danger levels,
+  the swarm escape ladder) goes blind, and in a deep-ripple crowd the −40% lump can
+  exceed max HP: death from "full HP" with every alarm silent. The keeper therefore
+  never numbs at >= the swarm threshold or while a swarm tactic is running — numbness
+  is for THIN rooms, where the lump is survivable and the next prompt's hp-delta
+  trips the rate-shield normally.
+- **Standard boon lifecycle** (12th flag): claim intercept, BOONS row trigger
+  `033_Senseless_Flurry`, run start/end resets.
+
+Files: `basher/002_Class_Bashing.lua`, `aliases/.../002_Boon_Claim.lua`, trigger
+`033_Senseless_Flurry.lua` (new), `001_Run_Start.lua`, `004_Parsers.lua`,
+`test_basher_monk.lua` (+5 cases). Suite **455/455**.
+
+---
+
 ## 2026-07-27 — Seasone boss: tree reserved for the phial truelock (v4.7.123)
 
 Live log: the Mnemosyne boss **Seasone the Industrious** throws "a handful of fragile

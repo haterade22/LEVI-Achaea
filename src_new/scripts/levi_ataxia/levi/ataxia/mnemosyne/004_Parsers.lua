@@ -185,6 +185,7 @@ function M.onRunEnd()
   mnemReaper = false -- boons gone on a confirmed run-end
   mnemBloodscent = false -- boons gone on a confirmed run-end
   mnemKaiUnleashed = false -- boons gone on a confirmed run-end
+  mnemSenselessFlurry = false -- boons gone on a confirmed run-end
   mnemHaemophiliac = false -- affixes gone on a confirmed run-end (pacing back to normal)
   if ataxiaTemp then
     ataxiaTemp.reaperKills = nil -- the +1%/kill tally dies with the run

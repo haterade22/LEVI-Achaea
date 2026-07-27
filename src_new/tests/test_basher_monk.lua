@@ -257,3 +257,81 @@ describe("ataxiaBasher_monkBashing2 -- Kai Unleashed AoE choke", function()
   ataxia.mnemosyne = nil
   getEpoch = _epoch
 end)
+
+-- Senseless Flurry boon: keep the NUMB defence up in Rain form (balance recovers
+-- 30% faster while numb). NUMB is self-only, 3s of eq -- the same idle channel as
+-- Kai Choke, which OUTRANKS it for a round's eq. Gated on the GMCP-tracked
+-- numbness defence + the bmAugment-style 5s attempt-hold.
+describe("ataxiaBasher_monkBashing2 -- Senseless Flurry numb keeper", function()
+  local function numbReset()
+    reset()
+    ataxia.vitals.form = "Rain"
+    ataxia.defences = nil
+    ataxia.mnemosyne = { _denizenCount = function() return 1 end }
+    ataxiaTemp = {}
+    mnemSenselessFlurry = true
+    mnemKaiUnleashed = false
+  end
+
+  it("prepends numb to the combo in Rain when the defence is down", function()
+    numbReset()
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "numb; ")).toBeTrue()
+    expect(has(cmd, "combo")).toBeTrue() -- eq rider: the combo still swings
+  end)
+
+  it("skips numb while the defence is up, outside Rain, or without the boon", function()
+    numbReset(); ataxia.defences = { numbness = true }
+    expect(has(ataxiaBasher_monkBashing2(), "numb")).toBeFalse()
+    numbReset(); ataxia.vitals.form = "Willow"
+    expect(has(ataxiaBasher_monkBashing2(), "numb")).toBeFalse()
+    numbReset(); mnemSenselessFlurry = false
+    expect(has(ataxiaBasher_monkBashing2(), "numb")).toBeFalse()
+  end)
+
+  it("attempt-hold stops respam while the numb channel is in flight", function()
+    numbReset()
+    expect(has(ataxiaBasher_monkBashing2(), "numb")).toBeTrue()
+    expect(has(ataxiaBasher_monkBashing2(), "numb")).toBeFalse() -- held
+  end)
+
+  it("Kai Choke outranks the numb refresh for the round's eq", function()
+    numbReset()
+    mnemKaiUnleashed = true
+    ataxia.mnemosyne = { _denizenCount = function() return 3 end }
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "kai choke")).toBeTrue()
+    expect(has(cmd, "numb")).toBeFalse() -- one eq spender per round
+  end)
+
+  it("still numbs on a shielded round (numb is self-targeted)", function()
+    numbReset(); ataxiaBasher.shielded = true
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "shatter")).toBeTrue()
+    expect(has(cmd, "numb; ")).toBeTrue()
+  end)
+
+  -- Review HIGH: numbness DEFERS damage, pinning HP -- the rate watchdog, danger
+  -- levels, and the HP-gated escape ladder all go blind, then the lump lands as one
+  -- blow that can exceed max HP in a crowd. Never numb in swarm-threshold rooms or
+  -- mid-tactic: live HP data outranks 30% balance there.
+  it("never numbs in a swarm-threshold crowd (HP-safety gates must stay live)", function()
+    numbReset()
+    ataxia.mnemosyne = { _denizenCount = function() return 3 end } -- no choke boon: crowd gate alone
+    expect(has(ataxiaBasher_monkBashing2(), "numb")).toBeFalse()
+  end)
+
+  it("never numbs while a swarm tactic is running", function()
+    numbReset()
+    ataxia.mnemosyne = {
+      _denizenCount = function() return 1 end,
+      swarm = { state = "funnel", threshold = function() return 3 end },
+    }
+    expect(has(ataxiaBasher_monkBashing2(), "numb")).toBeFalse()
+  end)
+
+  -- Restore shared state for whoever runs after us.
+  mnemSenselessFlurry = false
+  ataxia.mnemosyne = nil
+  ataxia.defences = nil
+end)
