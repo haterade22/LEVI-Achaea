@@ -433,27 +433,44 @@ local SHIKUDO_BASH_COMBOS = {
 -- Kai Unleashed boon (Mnemosyne, legendary): "Kai choking a denizen deals a burst of
 -- magic damage to all denizens in its location, including itself. This effect has a
 -- 30 seconds cooldown before it can trigger again." User doctrine: RAIN form only,
--- off cooldown, and it takes PRIORITY over the normal combo when 2+ denizens share
--- the room (the burst hits them all). The choke replaces the round's combo (it takes
--- its own balance; the rotation re-visits Rain every cycle, so no form-forcing is
--- needed). Cooldown stamped at send into ataxiaTemp (survives a SYSUPDATE reload).
--- Kai-gated (kai lands in ataxia.vitals.class for a Monk) so a kai-dry round falls
--- back to the combo instead of wasting a swing on a refused choke.
-local KAI_UNLEASHED_CD = 30
+-- off cooldown, priority when 2+ denizens share the room (the burst hits them all).
+-- AB Kaichoke (ID 896) facts: KAI CHOKE <target>, 4.00s of EQUILIBRIUM, 10 kai +
+-- 50 mana -- but **against a denizen it requires and consumes NO kai** (same-room
+-- only, which bashing always is), so there is no kai gate here, just a small mana
+-- floor. Because it rides EQ -- idle while Shikudo combos spend balance -- the choke
+-- PREPENDS to the round's combo rather than replacing it: burst and swing land
+-- together. The rotation re-visits Rain every cycle, so no form-forcing. Cooldown
+-- (the BOON's 30s burst, not the ability's 4s eq) stamped at send into ataxiaTemp
+-- (survives a SYSUPDATE reload; cleared on run end).
+local KAI_UNLEASHED_CD = 30 -- the boon burst's cooldown, from the CONFIRMED burst line
+local KAI_CHOKE_RETRY = 6   -- unconfirmed choke (eaten/wiped/no proc): retry this often
 function ataxiaBasher_kaiUnleashedChoke(useShieldbreak)
   if not mnemKaiUnleashed then return nil end
-  if useShieldbreak then return nil end -- break the shield first; the burst can wait a round
+  if useShieldbreak then return nil end -- shielded target: let shatter land first
   if ataxia.vitals.form ~= "Rain" then return nil end
-  local kai = tonumber(ataxia.vitals.class)
-  if not kai or kai < (tonumber(ataxiaBasher.kaiChokeCost) or 20) then return nil end
+  if (tonumber(ataxia.vitals.mp) or 9999) < 250 then return nil end -- 50-mana cost; never scrape a dry pool
   local M = ataxia.mnemosyne
   local n = (M and M._denizenCount and M._denizenCount()) or 0
   if n < 2 then return nil end
   local nowT = (getEpoch and getEpoch()) or os.time()
   ataxiaTemp = ataxiaTemp or {}
   if (nowT - (tonumber(ataxiaTemp.kaiUnleashedAt) or 0)) < KAI_UNLEASHED_CD then return nil end
-  ataxiaTemp.kaiUnleashedAt = nowT
+  if (nowT - (tonumber(ataxiaTemp.kaiChokePendingAt) or 0)) < KAI_CHOKE_RETRY then return nil end
+  ataxiaTemp.kaiChokePendingAt = nowT
   return "kai choke "..target.."; "
+end
+
+-- Burst CONFIRMED (trigger 031, live-captured 2026-07-27): "Your surroundings ripple
+-- like a lake's surface struck as a transparent wave of kai energy surges outwards
+-- from <mob>, wracking mind and body." (8472 magical in the capture). The line only
+-- prints with the boon up (self-proving, like the Reaper tithe), so it also sets the
+-- flag. The REAL 30s cooldown starts HERE, not at send -- an eaten/wiped choke must
+-- not lock the burst out; it just retries after KAI_CHOKE_RETRY.
+function ataxiaBasher_kaiUnleashedBurst()
+  mnemKaiUnleashed = true
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.kaiUnleashedAt = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp.kaiChokePendingAt = nil
 end
 
 -- These fire from the attack path, which runs on every prompt — latch them so an
@@ -551,14 +568,11 @@ function ataxiaBasher_monkBashing2()
     command = command.."unwield all"..sp.."combo "..target..(useShieldbreak and " rhk ucp ucp; " or " sdk ucp ucp; ")
   elseif shikudo then
     monkWarnedNoSpec = false
-    -- Kai Unleashed AoE takes the round over the combo when its gates pass
-    -- (boon up, Rain form, 2+ denizens, kai in hand, 30s cooldown elapsed).
-    local choke = ataxiaBasher_kaiUnleashedChoke(useShieldbreak)
-    if choke then
-      command = command..choke
-    else
-      command = command..shikudoBashCombo(target, useShieldbreak)
-    end
+    -- Kai Unleashed AoE rides ALONGSIDE the combo when its gates pass (boon up,
+    -- Rain form, 2+ denizens, 30s burst cooldown elapsed): the choke spends 4s of
+    -- EQUILIBRIUM -- idle during balance-based combos -- so both land this round.
+    command = command..(ataxiaBasher_kaiUnleashedChoke(useShieldbreak) or "")
+    command = command..shikudoBashCombo(target, useShieldbreak)
   elseif not monkWarnedNoSpec then
     monkWarnedNoSpec = true
     ataxiaEcho("Monk: no Stance or Form in charstats -- can't tell Tekura from Shikudo, not bashing.")

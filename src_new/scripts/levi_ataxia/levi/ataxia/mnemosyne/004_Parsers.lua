@@ -188,7 +188,8 @@ function M.onRunEnd()
   mnemHaemophiliac = false -- affixes gone on a confirmed run-end (pacing back to normal)
   if ataxiaTemp then
     ataxiaTemp.reaperKills = nil -- the +1%/kill tally dies with the run
-    ataxiaTemp.kaiUnleashedAt = nil -- the choke cooldown stamp dies with it
+    ataxiaTemp.kaiUnleashedAt = nil -- the burst cooldown stamp dies with it
+    ataxiaTemp.kaiChokePendingAt = nil -- ...and the unconfirmed-choke retry guard
   end
   -- Clear the pause flag UNCONDITIONALLY (like the boon flags above), not only via the
   -- _inRun()-gated endRun()->_resetRun(): with telemetry off (the shipped default) that path

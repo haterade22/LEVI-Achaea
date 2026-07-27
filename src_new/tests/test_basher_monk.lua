@@ -173,10 +173,11 @@ describe("ataxiaBasher_monkBashing2 — Shikudo form rotation", function()
   end)
 end)
 
--- Kai Unleashed boon (Mnemosyne): RAIN-form KAI CHOKE takes the round over the combo
--- at 2+ denizens, off the boon's 30s AoE-burst cooldown. Gates: boon flag, Rain form,
--- no shield to break, kai in hand (vitals.class), denizen count, cooldown stamp in
--- ataxiaTemp (survives a SYSUPDATE reload).
+-- Kai Unleashed boon (Mnemosyne): RAIN-form KAI CHOKE rides ALONGSIDE the combo at
+-- 2+ denizens, off the boon's 30s AoE-burst cooldown. Per AB Kaichoke (ID 896): the
+-- choke spends 4s of EQUILIBRIUM (idle during balance combos, so both land) and
+-- against a DENIZEN consumes NO kai -- only 50 mana, hence a small mana floor
+-- instead of a kai gate. Cooldown stamp in ataxiaTemp (survives a SYSUPDATE reload).
 describe("ataxiaBasher_monkBashing2 -- Kai Unleashed AoE choke", function()
   local mobs = 2
   local clock = 100000
@@ -186,7 +187,6 @@ describe("ataxiaBasher_monkBashing2 -- Kai Unleashed AoE choke", function()
   local function kaiReset(n)
     reset()
     ataxia.vitals.form = "Rain"
-    ataxia.vitals.class = 80 -- kai% (Kai/Shin land in vitals.class)
     ataxia.mnemosyne = { _denizenCount = function() return mobs end }
     ataxiaTemp = { kaiUnleashedAt = nil }
     mnemKaiUnleashed = true
@@ -194,20 +194,35 @@ describe("ataxiaBasher_monkBashing2 -- Kai Unleashed AoE choke", function()
     clock = 100000
   end
 
-  it("fires kai choke instead of the combo in Rain with 2+ denizens", function()
+  it("prepends kai choke to the combo in Rain with 2+ denizens (eq rides balance)", function()
     kaiReset(3)
     local cmd = ataxiaBasher_monkBashing2()
     expect(has(cmd, "kai choke " .. target)).toBeTrue()
-    expect(has(cmd, "combo")).toBeFalse() -- the choke replaces the round's combo
-    expect(ataxiaTemp.kaiUnleashedAt).toBe(100000) -- cooldown stamped at send
+    expect(has(cmd, "combo")).toBeTrue() -- the combo still swings this round
+    expect(cmd:find("kai choke", 1, true) < cmd:find("combo", 1, true)).toBeTrue()
+    expect(ataxiaTemp.kaiChokePendingAt).toBe(100000) -- pending, NOT the 30s stamp
+    expect(ataxiaTemp.kaiUnleashedAt).toBe(nil) -- the burst line starts the real cooldown
   end)
 
-  it("respects the 30s cooldown, then fires again", function()
+  it("retries an UNCONFIRMED choke after the retry window (eaten/wiped send)", function()
     kaiReset(2)
-    ataxiaBasher_monkBashing2() -- stamps the cooldown
-    clock = clock + 10
+    ataxiaBasher_monkBashing2() -- sends; no burst line ever comes
+    clock = clock + 3
+    expect(has(ataxiaBasher_monkBashing2(), "kai choke")).toBeFalse() -- inside retry guard
+    clock = clock + 5 -- 8s since the send
+    expect(has(ataxiaBasher_monkBashing2(), "kai choke")).toBeTrue() -- retried
+  end)
+
+  it("starts the 30s cooldown only when the burst line CONFIRMS", function()
+    kaiReset(2)
+    ataxiaBasher_monkBashing2()
+    clock = clock + 2
+    ataxiaBasher_kaiUnleashedBurst() -- the live-captured surge line fired
+    expect(ataxiaTemp.kaiUnleashedAt).toBe(100002)
+    expect(ataxiaTemp.kaiChokePendingAt).toBe(nil)
+    clock = clock + 20 -- 22s after the burst: still cooling down
     expect(has(ataxiaBasher_monkBashing2(), "kai choke")).toBeFalse()
-    clock = clock + 25 -- 35s since the stamp
+    clock = clock + 15 -- 37s after the burst
     expect(has(ataxiaBasher_monkBashing2(), "kai choke")).toBeTrue()
   end)
 
@@ -218,12 +233,12 @@ describe("ataxiaBasher_monkBashing2 -- Kai Unleashed AoE choke", function()
     expect(has(cmd, "combo")).toBeTrue()
   end)
 
-  it("needs 2+ denizens, the boon flag, and kai in hand", function()
+  it("needs 2+ denizens, the boon flag, and a non-dry mana pool", function()
     kaiReset(1)
     expect(has(ataxiaBasher_monkBashing2(), "kai choke")).toBeFalse()
     kaiReset(2); mnemKaiUnleashed = false
     expect(has(ataxiaBasher_monkBashing2(), "kai choke")).toBeFalse()
-    kaiReset(2); ataxia.vitals.class = 10 -- kai-dry: fall back to the combo, save the window
+    kaiReset(2); ataxia.vitals.mp = 100 -- scraping bottom: skip the 50-mana choke
     local cmd = ataxiaBasher_monkBashing2()
     expect(has(cmd, "kai choke")).toBeFalse()
     expect(has(cmd, "combo")).toBeTrue()

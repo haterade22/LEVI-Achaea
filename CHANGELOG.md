@@ -2,6 +2,29 @@
 
 ---
 
+## 2026-07-27 — Kai Unleashed corrected per AB + live capture (v4.7.122)
+
+The AB Kaichoke file (ID 896) and a live burst capture corrected two v4.7.121 assumptions:
+
+- **The choke rides EQUILIBRIUM (4s), not balance** — eq is idle while Shikudo combos
+  spend balance, so the choke now PREPENDS to the round's combo instead of replacing it:
+  burst and swing land in the same round, zero combo cost.
+- **Against a denizen the choke requires and consumes NO kai** — the kai gate
+  (`kaiChokeCost`) is gone; the only resource is 50 mana, guarded by a 250-mana floor.
+- **Confirmation-based cooldown** (live capture: "Your surroundings ripple like a lake's
+  surface struck as a transparent wave of kai energy surges outwards from <mob>, wracking
+  mind and body." — 8,472 magical AoE; choke itself hit 3,338 asphyxiation): the 30s
+  burst cooldown now starts from that line (new trigger `031_Kai_Burst` →
+  `ataxiaBasher_kaiUnleashedBurst`, self-proving so it also sets the flag), not from the
+  send — an eaten/wiped choke retries after a 6s guard instead of silently forfeiting
+  the window. Both stamps cleared on the confirmed run end.
+
+Files: `basher/002_Class_Bashing.lua`, trigger `031_Kai_Burst.lua` (new),
+`mnemosyne/004_Parsers.lua`, `test_basher_monk.lua` (retry + confirm cases).
+Suite **445/445**.
+
+---
+
 ## 2026-07-27 — Kai Unleashed: Shikudo Rain-form AoE choke (v4.7.121)
 
 New Mnemosyne boon (user-directed): "Kai choking a denizen deals a burst of magic
