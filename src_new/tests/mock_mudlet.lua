@@ -324,4 +324,7 @@ function M.was_raised(event_name)
   return false
 end
 
+-- Mudlet's string extension: Title-case the first letter (used by class routing).
+function string.title(s) return (s:gsub("^%l", string.upper)) end
+
 return M

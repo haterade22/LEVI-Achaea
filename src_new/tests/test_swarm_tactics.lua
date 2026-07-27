@@ -831,6 +831,20 @@ describe("hit-and-run continuation (progress refunds the pull budget)", function
   end)
 end)
 
+describe("S._targetHp gmcp fallback", function()
+  it("parses a percent-suffixed live hpperc (gsub multi-return trap regression)", function()
+    fixture(3)
+    target = 777
+    ataxiaBasher_dsGet = nil -- no denizen-state: force the live-GMCP fallback path
+    gmcp.IRE = { Target = { Info = { hpperc = "66%" } } }
+    local id, hp = S._targetHp()
+    expect(id).toBe(777)
+    expect(hp).toBe(66) -- tonumber(str, count) would have thrown "base out of range"
+    gmcp.IRE = nil
+    target = nil
+  end)
+end)
+
 describe("Bloodscent recon parser", function()
   it("parses sense rows into per-room counts (crowded-room detection)", function()
     fixture(0)

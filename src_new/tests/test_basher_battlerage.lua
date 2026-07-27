@@ -457,3 +457,43 @@ describe("ataxiaBasher_magiShouldBloodboil", function()
     ataxia.vitals = { rage = 0, mp = 1000, hpp = 100 }  -- restore for later blocks
   end)
 end)
+
+-- Regression: gsub returns (string, COUNT) -- an unparenthesized gsub call as
+-- tonumber's argument expands to tonumber(str, count), and count is read as a BASE
+-- ("base out of range"). This killed the ENTIRE attack dispatch on every prompt for
+-- a live Psion (first class whose battlerage branch parses hpperc). The fix wraps
+-- the gsub in truncating parens; these tests feed live-shaped "NN%" strings.
+describe("ataxiaBasher_assembleBattlerage -- hpperc parsing (multi-return trap)", function()
+  local function psionReset()
+    gmcp.Char.Status.class = "Psion"
+    gmcp.Char.Status.level = "80 "
+    gmcp.IRE.Target.Info = { hpperc = "66%" } -- live shape: string WITH the percent sign
+    battleRage_Timers = {}
+    ataxia.vitals.rage = 100
+    ataxiaBasher.cullingBlade = nil
+    ataxiaBasher.rageraze = nil
+    ataxiaBasher.rageConserveThreshold = nil
+    ataxiaBasher.battlerage.Psion = {
+      small = "weave barbedblade 1", large = "weave whirlwind 1",
+      special = "enact regrowth 1", raze = "weave pulverise 1",
+    }
+  end
+
+  it("parses a percent-suffixed hpperc without erroring (Psion branch)", function()
+    psionReset()
+    local ok, cmd = pcall(ataxiaBasher_assembleBattlerage)
+    expect(ok).toBeTrue()
+    expect(cmd:find("enact regrowth", 1, true) ~= nil).toBeTrue() -- 66% >= 40 + rage -> special first
+  end)
+
+  it("rage conservation reads hpperc strings without erroring", function()
+    psionReset()
+    ataxiaBasher.rageConserveThreshold = 15
+    gmcp.IRE.Target.Info.hpperc = "10%"
+    local ok, cmd = pcall(ataxiaBasher_assembleBattlerage)
+    expect(ok).toBeTrue()
+    expect(cmd).toBe("") -- nearly dead mob: rage conserved
+    ataxiaBasher.rageConserveThreshold = nil
+    gmcp.Char.Status.class = "Blademaster" -- restore for any later blocks
+  end)
+end)

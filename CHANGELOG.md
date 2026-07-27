@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-07-27 — Psion attack dispatch fixed: gsub count leaked into tonumber (v4.7.127)
+
+Live failure (error spam on every prompt, NO attacks fired): `Bashing Functions:997:
+bad argument #2 to 'tonumber' (base out of range)`. Root cause: `tonumber(
+hpperc:gsub("%%",""))` — an unparenthesized `gsub` call as the argument expands to BOTH
+its returns, so `tonumber(str, count)` reads the substitution COUNT as a numeric BASE
+and throws. The Psion battlerage branch is the first hpperc consumer to run live (the
+class only became bashable this week), so the whole attack dispatch died the moment a
+Psion engaged.
+
+- Fixed all three instances with truncating parens: the rage-conservation read and the
+  Psion branch in `basher/001_Bashing_Functions.lua`, plus a latent copy in the swarm
+  module's `S._targetHp` live-GMCP fallback (`mnemosyne/009`).
+- Regression tests feed live-shaped `"66%"` strings through the Psion battlerage branch,
+  rage conservation, and the swarm fallback; `string.title` added to the test mock.
+
+Files: `basher/001_Bashing_Functions.lua`, `mnemosyne/009_Swarm_Tactics.lua`,
+`test_basher_battlerage.lua` (+2), `test_swarm_tactics.lua` (+1), `mock_mudlet.lua`.
+Suite **464/464**.
+
+---
+
 ## 2026-07-27 — Panoply: Psion bashes with WEAVE FLURRY (v4.7.126)
 
 New Mnemosyne boon (user-directed): "The damage dealt by your weaving flurry ability

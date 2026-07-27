@@ -168,7 +168,9 @@ function S._targetHp()
   end
   local info = gmcp and gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info
   if info and info.hpperc then
-    local hp = tonumber(tostring(info.hpperc):gsub("%%", ""))
+    -- Parens truncate gsub's count return -- tonumber(str, count) reads it as a BASE
+    -- and errors (the live Psion battlerage failure; same trap, latent copy).
+    local hp = tonumber((tostring(info.hpperc):gsub("%%", "")))
     if hp and hp >= 0 then return target, hp end
   end
   return target, nil

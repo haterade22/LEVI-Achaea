@@ -991,7 +991,10 @@ function ataxiaBasher_assembleBattlerage()
 	-- Set ataxiaBasher.rageConserveThreshold (e.g., 15) to enable.
 	-- Culling Blade (reap) is exempt since it's a finisher.
 	if ataxiaBasher.rageConserveThreshold then
-		local mobhp = tonumber((gmcp.IRE.Target.Info.hpperc or "100"):gsub("%%", "")) or 100
+		-- Extra parens truncate gsub's second return (the substitution COUNT): without
+		-- them tonumber(str, count) reads count as a BASE -> "base out of range" error
+		-- on every prompt, killing the whole attack dispatch (live Psion failure).
+		local mobhp = tonumber(((gmcp.IRE.Target.Info.hpperc or "100"):gsub("%%", ""))) or 100
 		if mobhp > 0 and mobhp <= ataxiaBasher.rageConserveThreshold then
 			return ""
 		end
@@ -1009,7 +1012,8 @@ function ataxiaBasher_assembleBattlerage()
 		end
 	-- Psion: unique logic — special requires mobhealth >= 40, rage >= 40, and small NOT on CD; large at 25 rage
 	elseif gmcp.Char.Status.class == "Psion" then
-		local mobhp = tonumber((gmcp.IRE.Target.Info.hpperc or "0"):gsub("%%", "")) or 0
+		-- Same multi-return truncation as the rageConserve read above.
+		local mobhp = tonumber(((gmcp.IRE.Target.Info.hpperc or "0"):gsub("%%", ""))) or 0
 		local brData = ataxiaBasher.battlerage[class]
 		if brData then
 			if not battleRage_Timers.special and mobhp >= 40 and ataxia.vitals.rage >= 40 and not battleRage_Timers.small then
