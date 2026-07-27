@@ -430,16 +430,40 @@ notes: |
   Impatience only given if prone OR damaged head.
 ```
 
-## Bashing (PvE)
+## Bashing (PvE) — v4.7.128 overhaul
 ```yaml
 attack_command: "weave deathblow <target>"
 attack_skill: Weaving
 panoply_boon: "weave flurry <target> replaces deathblow while psionPanoply (Mnemosyne, v4.7.126 — flurry damage scales 60-200% per strike landed)"
-shield_strip: "weave cleave <target> (when denizen shielded)"
 full_transcendence: "psi shatter <target> then weave (transcendence == 100)"
-battlerage_abilities:
-  note: "Rage assembled generically via ataxiaBasher_assembleBattlerage() — no psi_blast in the bashing rotation"
-  raze: "Psion-specific rage entry, used only for shielded targets"
+
+shielded: |
+  rageraze + rage>=17: "weave pulverise <t>;<weave>" — pulverise breaks on RAGE (no
+  balance), so the damage weave lands the SAME round. Otherwise: "weave cleave <t>"
+  always (the pre-128 branch could build an EMPTY command without rageraze, or
+  double-break with it).
+
+battlerage: |
+  Psion OWNS its battlerage (ataxiaBasher_psionBattlerage, 002) — triggers 330-332
+  have no Psion fire-lines, so the old assembler branch (gated on
+  battleRage_Timers.special) was Regrowth-only forever. Timer-free send-side epoch
+  stamps (ataxiaTemp.psionBrAt) with wiki cooldowns. Priority:
+    reap (culling, 36 rage) > psi devastate (36, 23s) > weave whirlwind (25, 23s)
+    > weave barbedblade (14, 16s filler).
+  Regrowth (anti-heal vines, 24 rage, 35s): OPT-IN via ataxiaBasher.psionRegrowth
+  (lua-set flag, no alias yet) — priority when enabled; for self-healing denizen
+  areas ("tending his wounds" mobs).
+
+eq_riders: |
+  enact roth  — below 50% HP, 185s send stamp; rides eq beside the balance swing,
+                fires even on shielded rounds (heal first). Grants clarity+rupture.
+  psi transcend — re-upped when the GMCP psitranscend defence drops (10s hold);
+                the shatter loop previously assumed it active with NO maintenance.
+
+keepers: |
+  weave secondskin — re-woven when the defence drops; BALANCE-based (3.0s) so it
+  REPLACES that round's swing; skipped while shielded (break the shield first).
+  Defence name map (v4.7.128) also recognizes indomitability + clarity now.
 ```
 
 ## PvE Ability Audit (2026-07-27, full wiki review: Psion/Weaving/Psionics/Emulation)

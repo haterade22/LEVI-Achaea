@@ -2,6 +2,40 @@
 
 ---
 
+## 2026-07-27 — Psion PvE overhaul: rotation, shields, Roth, keepers (v4.7.128)
+
+Implements the wiki audit's tier-one picks, plus a structural fix the review exposed:
+triggers 330-332 have NO Psion fire-lines, so `battleRage_Timers` never set for Psion —
+Barbedblade and Whirlwind (gated behind "special on cooldown") had NEVER fired; the
+rage rotation was Regrowth-only.
+
+- **Psion owns its battlerage** (`ataxiaBasher_psionBattlerage`, the Blademaster/Magi
+  pattern; the assembler's dead Psion branch removed, Psion excluded from generic
+  culling). Timer-FREE: send-side epoch stamps with the wiki cooldowns. Priority:
+  reap (culling, 36) > **Devastate** (36, 23s — the nuke the old table lacked) >
+  Whirlwind (25, 23s) > Barbedblade (14, 16s filler). **Regrowth is now opt-in**
+  (`ataxiaBasher.psionRegrowth = true`, priority when enabled) for self-healing
+  denizen areas — on ordinary mobs its 24 rage bought nothing.
+- **Shielded branch fixed** (review): it could build an EMPTY command (no fallback
+  without rageraze) or double-break (pulverise + cleave). Now: rageraze + 17 rage →
+  `weave pulverise` (rage break) + the damage weave in the SAME round; otherwise
+  always `weave cleave`.
+- **Roth in the danger ladder**: below 50% HP, `enact roth` (1.30s eq — rides beside
+  the balance swing, grants clarity+rupture free) on a 185s send stamp; fires on
+  shielded rounds too.
+- **Keepers**: `psi transcend` re-upped when its GMCP defence drops (eq rider, 10s
+  attempt-hold — the shatter loop previously assumed it was active with nothing
+  maintaining it); `weave secondskin` re-woven when it drops (replaces that round's
+  swing; skipped while shielded).
+- **Defence name map** gains `indomitability` and `clarity` (Emulation defences the
+  map predated).
+
+Files: `basher/002_Class_Bashing.lua`, `basher/001_Bashing_Functions.lua`,
+`_groups.yaml` (def map), `test_basher_psion.lua` (rewritten, 14 cases),
+`test_basher_battlerage.lua`. Suite **475/475**.
+
+---
+
 ## 2026-07-27 — Psion attack dispatch fixed: gsub count leaked into tonumber (v4.7.127)
 
 Live failure (error spam on every prompt, NO attacks fired): `Bashing Functions:997:

@@ -686,31 +686,103 @@ function ataxiaBasher_paladinBashing()
 	return command
 end
 
+-- Psion OWNS its battlerage (the Blademaster/Magi pattern): the generic assembler's
+-- old Psion branch gated Barbedblade/Whirlwind behind `battleRage_Timers.special`,
+-- but triggers 330-332 have NO Psion fire-lines -- the timers were never set, so the
+-- rotation was Regrowth-only forever. This is timer-FREE: send-side epoch stamps with
+-- the wiki cooldowns (Devastate/Whirlwind 23s, Barbedblade 16s, Regrowth 35s), so it
+-- depends on nothing unwired. Priority: reap (culling) > Devastate (the 36-rage nuke
+-- the old table lacked) > Whirlwind > Barbedblade filler. Regrowth (anti-heal vines)
+-- only pays vs self-healing denizens ("tending his wounds"), so it is OPT-IN via
+-- `ataxiaBasher.psionRegrowth` and takes priority when enabled.
+local PSION_BR = {
+  { key = "regrowth",   cmd = "enact regrowth",   rage = 24, cd = 35, optIn = true },
+  { key = "devastate",  cmd = "psi devastate",    rage = 36, cd = 23 },
+  { key = "whirlwind",  cmd = "weave whirlwind",  rage = 25, cd = 23 },
+  { key = "barbedblade", cmd = "weave barbedblade", rage = 14, cd = 16 },
+}
+function ataxiaBasher_psionBattlerage(sp)
+  local rage = tonumber(ataxia.vitals.rage) or 0
+  -- Rage conservation: same rule the generic assembler applies.
+  if ataxiaBasher.rageConserveThreshold then
+    local mobhp = tonumber(((gmcp.IRE.Target.Info.hpperc or "100"):gsub("%%", ""))) or 100
+    if mobhp > 0 and mobhp <= ataxiaBasher.rageConserveThreshold then return "" end
+  end
+  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and rage >= 36
+     and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" then
+    return "reap "..target..sp
+  end
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp.psionBrAt = ataxiaTemp.psionBrAt or {}
+  for _, ab in ipairs(PSION_BR) do
+    if (not ab.optIn or ataxiaBasher.psionRegrowth) and rage >= ab.rage
+       and (nowT - (tonumber(ataxiaTemp.psionBrAt[ab.key]) or 0)) >= ab.cd then
+      ataxiaTemp.psionBrAt[ab.key] = nowT
+      return ab.cmd.." "..target..sp
+    end
+  end
+  return ""
+end
+
 function ataxiaBasher_psionBashing()
   local command, sp = "", ataxia.settings.separator
-  local brage = ataxiaBasher_assembleBattlerage()
-  local raze = ataxiaBasher.battlerage.Psion.raze
+  local brage = ataxiaBasher_psionBattlerage(sp)
 
   -- Panoply boon (Mnemosyne, legendary): "The damage dealt by your weaving flurry
   -- ability scales directly to the number of strikes landed, randomly dealing 60% to
   -- 200% of its damage with each attack." AB Flurry (ID 2704): WEAVE FLURRY <target>,
   -- works on denizens, 2.60s of balance. With the boon up it out-damages the deathblow
   -- bash, so it becomes the primary (user-directed). Straight verb swap mirroring
-  -- bmShatteredStar (claim alias + BOONS row trigger 034, reset each run); cleave
-  -- keeps the shield-break role, psi shatter keeps its transcendence slot.
+  -- bmShatteredStar; psi shatter keeps its transcendence slot.
   local weave = psionPanoply and ("weave flurry "..target) or ("weave deathblow "..target)
 
+  -- EQ riders (equilibrium is idle while weaves spend balance -- the Kai Choke lesson):
+  -- Roth is the sub-50% emergency heal (AB: 1.30s eq, 3-min cooldown, grants clarity +
+  -- rupture free) -- it belongs BEFORE any shield/flee response fires.
+  ataxiaTemp.psionRothAt = ataxiaTemp.psionRothAt or 0
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  if (tonumber(ataxia.vitals.hpp) or 100) < 50
+     and (nowT - (tonumber(ataxiaTemp.psionRothAt) or 0)) >= 185 then
+    ataxiaTemp.psionRothAt = nowT
+    command = command.."enact roth"..sp
+  end
+  -- Transcendence keeper: the shatter loop assumes PSI TRANSCEND is active, but
+  -- nothing ever re-upped it after a drop/death. The psitranscend defence is
+  -- GMCP-tracked; re-up on eq (rides the swing) with a 10s attempt-hold.
+  if not (ataxia.defences and ataxia.defences.psitranscend)
+     and not ataxiaTemp.psionTranscendAttempted then
+    ataxiaTemp.psionTranscendAttempted = true
+    tempTimer(10, [[ataxiaTemp.psionTranscendAttempted = nil]])
+    command = command.."psi transcend"..sp
+  end
+
   if ataxiaBasher.shielded then
-    if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-      command = command..raze..sp
+    -- Review fix: this branch could build an EMPTY command (no cleave fallback
+    -- without rageraze) or DOUBLE-break (pulverise + cleave, wasting the balance).
+    -- Pulverise breaks on RAGE -- no balance -- so pair it with the damage weave in
+    -- the same round; otherwise cleave (balance) is the always-available breaker.
+    if ataxiaBasher.rageraze and (tonumber(ataxia.vitals.rage) or 0) >= 17 then
+      command = command.."weave pulverise "..target..sp..weave
+    else
       command = command.."weave cleave "..target
     end
-  elseif ataxiaTemp.transcendence and ataxiaTemp.transcendence == 100 then
-  command = command..sp..brage..sp
-    command = command.."psi shatter "..target..sp..weave
+    return command
+  end
+
+  -- Secondskin keeper: resistance to ALL damage types; it drops rarely, so spending
+  -- one round's balance re-weaving it (3.00s bal -- it REPLACES the swing) is cheap
+  -- insurance. Skipped on shielded rounds above (break the shield first).
+  if not (ataxia.defences and ataxia.defences.secondskin)
+     and not ataxiaTemp.psionSecondskinAttempted then
+    ataxiaTemp.psionSecondskinAttempted = true
+    tempTimer(10, [[ataxiaTemp.psionSecondskinAttempted = nil]])
+    return command..brage.."weave secondskin"
+  end
+
+  if ataxiaTemp.transcendence and ataxiaTemp.transcendence == 100 then
+    command = command..brage.."psi shatter "..target..sp..weave
   else
-    command = command..sp..brage..sp
-    command = command..weave
+    command = command..brage..weave
     --Deathblow does 3 percent to elite mhun keeper
   end
   return command

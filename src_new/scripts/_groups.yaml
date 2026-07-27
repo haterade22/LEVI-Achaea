@@ -169,7 +169,9 @@ groups:
         \ = \"enduranceblessing\",\n\t\tthermalshield = \"thermalshield\",\n\t\tfrostshield = \"frostshield\",\n\t\tearthshield\
         \ = \"earthshield\",\n\n\t\t--Psion\n\t\tguidedstrike = \"guidedstrike\",\n\t\tpsitranscend = \"psitranscend\",\n\t\
         \tsecondskin = \"secondskin\",\n\t\trupturesight = \"rupturesight\",\n    psicomprehend = \"psicomprehend\",\n   \
-        \ psibreakthrough = \"psibreakthrough\",\n\n\t\t--Sentinel\n\t\taffinity = \"affinity\",\n\t\tbarkskin = \"barkskin\"\
+        \ psibreakthrough = \"psibreakthrough\",
+    indomitability = \"indomitability\",
+    clarity = \"clarity\",\n\n\t\t--Sentinel\n\t\taffinity = \"affinity\",\n\t\tbarkskin = \"barkskin\"\
         ,\n\t\tfirstaid = \"firstaid\",\n\t\tstealth = \"stealth\",\n    scouting = \"scouting\",\n    fleetness = \"fleetness\"\
         ,\n    \n\n\t\t--Serpent\n     ghost = \"ghost\",\n     lipreading = \"lipreading\",\n     pacing = \"pacing\",\n\
         \     scales = \"scales\",\n     weaving = \"weaving\",\n     secondsight = \"secondsight\",\n     hide = \"hiding\"\
@@ -703,7 +705,7 @@ groups:
       - name: Limb
         directory: levi_ataxia/levi/levi_scripts/limb
   script: "ataxia = ataxia or {}\nataxiaTables = ataxiaTables or {}\nataxiaTemp = ataxiaTemp or {}\nataxiaTemp.addedHerbID\
-    \ = 1\nataxiaTemp.removedHerbID = 2\nataxiagui = ataxiagui or {}\nataxiaVersion = \"4.7.127\"\t\t\t\t\t\t--last was 4.3\n\
+    \ = 1\nataxiaTemp.removedHerbID = 2\nataxiagui = ataxiagui or {}\nataxiaVersion = \"4.7.128\"\t\t\t\t\t\t--last was 4.3\n\
     muteList = muteList or {}\n\nataxiaTables.limbData = ataxiaTables.limbData or {}\nataxiaTables.limbTimers = ataxiaTables.limbTimers or {}\nataxiaTables.fractureTimers = ataxiaTables.fractureTimers\
     \ or {}\n\nataxia.defences = ataxia.defences or {}\nataxia.afflictions = ataxia.afflictions or\
     \ {}\nataxia.vitals = ataxia.vitals or {}\n\nataxia.bals = ataxia.bals or {}\nataxia.bals.get = {\"bal\", \"eq\"}\nataxia.bals.used = ataxia.bals.used or\

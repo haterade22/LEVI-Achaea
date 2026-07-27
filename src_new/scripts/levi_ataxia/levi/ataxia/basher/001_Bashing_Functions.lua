@@ -1000,29 +1000,19 @@ function ataxiaBasher_assembleBattlerage()
 		end
 	end
 
-	-- Culling Blade check (applies before class-specific logic). Bard/Blademaster/Magi are
-	-- excluded -- they own culling inside their own battlerage functions so it fires at 36 rage,
-	-- not bigRage (54 under rageraze), and their whole rotation isn't suppressed below bigRage.
+	-- Culling Blade check (applies before class-specific logic). Bard/Blademaster/Magi/
+	-- Psion are excluded -- they own culling inside their own battlerage functions so it
+	-- fires at 36 rage, not bigRage (54 under rageraze), and their whole rotation isn't
+	-- suppressed below bigRage. (Psion's old branch here gated Barbedblade/Whirlwind
+	-- behind battleRage_Timers.special, which triggers 330-332 NEVER set for Psion --
+	-- the rotation was Regrowth-only; ataxiaBasher_psionBattlerage in 002 replaces it
+	-- with timer-free send-side cooldown stamps.)
 	if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown
 		and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree"
 		and gmcp.Char.Status.class ~= "Bard" and gmcp.Char.Status.class ~= "Blademaster"
-		and gmcp.Char.Status.class ~= "Magi" then
+		and gmcp.Char.Status.class ~= "Magi" and gmcp.Char.Status.class ~= "Psion" then
 		if ataxia.vitals.rage >= bigRage then
 			command = command.."reap "..target..sp
-		end
-	-- Psion: unique logic — special requires mobhealth >= 40, rage >= 40, and small NOT on CD; large at 25 rage
-	elseif gmcp.Char.Status.class == "Psion" then
-		-- Same multi-return truncation as the rageConserve read above.
-		local mobhp = tonumber(((gmcp.IRE.Target.Info.hpperc or "0"):gsub("%%", ""))) or 0
-		local brData = ataxiaBasher.battlerage[class]
-		if brData then
-			if not battleRage_Timers.special and mobhp >= 40 and ataxia.vitals.rage >= 40 and not battleRage_Timers.small then
-				command = brData.special..sp
-			elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
-				command = brData.small..sp
-			elseif not battleRage_Timers.large and ataxia.vitals.rage >= 25 and battleRage_Timers.special and level > 35 then
-				command = brData.large..sp
-			end
 		end
 	-- Black Dragon: dragonfear on 3rd target when 3+ mobs present
 	elseif gmcp.Char.Status.class == "Black Dragon" then

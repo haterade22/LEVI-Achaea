@@ -479,11 +479,13 @@ describe("ataxiaBasher_assembleBattlerage -- hpperc parsing (multi-return trap)"
     }
   end
 
-  it("parses a percent-suffixed hpperc without erroring (Psion branch)", function()
+  it("survives a percent-suffixed hpperc for any class (Psion routes to 002 now)", function()
     psionReset()
-    local ok, cmd = pcall(ataxiaBasher_assembleBattlerage)
+    -- v4.7.128: the assembler's Psion branch moved to ataxiaBasher_psionBattlerage
+    -- (002, timer-free); the assembler must still parse hpperc safely for the
+    -- rage-conservation path shared by every class.
+    local ok = pcall(ataxiaBasher_assembleBattlerage)
     expect(ok).toBeTrue()
-    expect(cmd:find("enact regrowth", 1, true) ~= nil).toBeTrue() -- 66% >= 40 + rage -> special first
   end)
 
   it("rage conservation reads hpperc strings without erroring", function()
