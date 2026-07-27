@@ -172,3 +172,73 @@ describe("ataxiaBasher_monkBashing2 — Shikudo form rotation", function()
     expect(has(cmd, "combo")).toBeFalse()
   end)
 end)
+
+-- Kai Unleashed boon (Mnemosyne): RAIN-form KAI CHOKE takes the round over the combo
+-- at 2+ denizens, off the boon's 30s AoE-burst cooldown. Gates: boon flag, Rain form,
+-- no shield to break, kai in hand (vitals.class), denizen count, cooldown stamp in
+-- ataxiaTemp (survives a SYSUPDATE reload).
+describe("ataxiaBasher_monkBashing2 -- Kai Unleashed AoE choke", function()
+  local mobs = 2
+  local clock = 100000
+  local _epoch = getEpoch
+  getEpoch = function() return clock end -- restored at the end of this describe
+
+  local function kaiReset(n)
+    reset()
+    ataxia.vitals.form = "Rain"
+    ataxia.vitals.class = 80 -- kai% (Kai/Shin land in vitals.class)
+    ataxia.mnemosyne = { _denizenCount = function() return mobs end }
+    ataxiaTemp = { kaiUnleashedAt = nil }
+    mnemKaiUnleashed = true
+    mobs = n or 2
+    clock = 100000
+  end
+
+  it("fires kai choke instead of the combo in Rain with 2+ denizens", function()
+    kaiReset(3)
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "kai choke " .. target)).toBeTrue()
+    expect(has(cmd, "combo")).toBeFalse() -- the choke replaces the round's combo
+    expect(ataxiaTemp.kaiUnleashedAt).toBe(100000) -- cooldown stamped at send
+  end)
+
+  it("respects the 30s cooldown, then fires again", function()
+    kaiReset(2)
+    ataxiaBasher_monkBashing2() -- stamps the cooldown
+    clock = clock + 10
+    expect(has(ataxiaBasher_monkBashing2(), "kai choke")).toBeFalse()
+    clock = clock + 25 -- 35s since the stamp
+    expect(has(ataxiaBasher_monkBashing2(), "kai choke")).toBeTrue()
+  end)
+
+  it("only fires in Rain form (the rotation re-visits Rain every cycle)", function()
+    kaiReset(3); ataxia.vitals.form = "Willow"
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "kai choke")).toBeFalse()
+    expect(has(cmd, "combo")).toBeTrue()
+  end)
+
+  it("needs 2+ denizens, the boon flag, and kai in hand", function()
+    kaiReset(1)
+    expect(has(ataxiaBasher_monkBashing2(), "kai choke")).toBeFalse()
+    kaiReset(2); mnemKaiUnleashed = false
+    expect(has(ataxiaBasher_monkBashing2(), "kai choke")).toBeFalse()
+    kaiReset(2); ataxia.vitals.class = 10 -- kai-dry: fall back to the combo, save the window
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "kai choke")).toBeFalse()
+    expect(has(cmd, "combo")).toBeTrue()
+    expect(ataxiaTemp.kaiUnleashedAt).toBe(nil) -- cooldown NOT spent on a refused gate
+  end)
+
+  it("breaks a shield first -- shatter wins over the choke", function()
+    kaiReset(3); ataxiaBasher.shielded = true
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "shatter")).toBeTrue()
+    expect(has(cmd, "kai choke")).toBeFalse()
+  end)
+
+  -- Restore shared state for whoever runs after us (files share one Lua state).
+  mnemKaiUnleashed = false
+  ataxia.mnemosyne = nil
+  getEpoch = _epoch
+end)

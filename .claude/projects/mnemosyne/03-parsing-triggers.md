@@ -31,6 +31,7 @@ Patterns are Mudlet regex (`type: 1`), quoted verbatim from each trigger file.
 | 027 | Bloodscent | `^Bloodscent\s+\d+\s+\w+` (BOONS-list row) | sets `mnemBloodscent = true` (per-ripple auto-recon; rows parsed by 028) | none (flag set unconditionally; reset on run start/end) |
 | 028 | Sense Lines | `^You sense out the location of your prey` / `^You sense (.+) \(#(\d+)\) at (.+)\.$` | `swarm.onSenseStart()` / `swarm.onSenseRow(name, id, room)` — batches rows, commits parsed recon (per-room counts, crowded-room callout) | self-gated on `ataxiaBasher.inMnemosyne` |
 | 029 | Haemophiliac | `^Haemophiliac:\s+Defeating a denizen causes you to bleed` (status-screen effect row) | `onHaemophiliacSeen()` — arms wade-slower pacing (post-clear explorer moves hold until bleeding < 50 AND HP >= 90%, `M._haemoHold`; SSC `curing clotat` does the clotting) | inline `inMnemosyne` gate + transition guard (mirrors Splinterbark) |
+| 030 | Kai Unleashed | `^Kai Unleashed\s+\d+\s+\w+` (BOONS-list row) | sets `mnemKaiUnleashed = true` (Shikudo basher: Rain-form `KAI CHOKE` AoE at 2+ denizens, 30s cooldown — `ataxiaBasher_kaiUnleashedChoke`) | none (flag set unconditionally; reset on run start/end) |
 
 The gate is enforced *inside* each handler (see the gating model in [01-architecture.md](01-architecture.md)); only trigger 007 does its `_inRun()` check in the trigger body before calling the API directly. `onRipple` is the exception to the auto-gate: it first drives the mini-map (`map.onRipple(n)`, unconditional) and only then gates telemetry on `_auto()`.
 

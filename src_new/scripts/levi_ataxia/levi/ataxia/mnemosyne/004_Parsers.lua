@@ -184,8 +184,12 @@ function M.onRunEnd()
   mnemRollHide = false -- boons gone on a confirmed run-end
   mnemReaper = false -- boons gone on a confirmed run-end
   mnemBloodscent = false -- boons gone on a confirmed run-end
+  mnemKaiUnleashed = false -- boons gone on a confirmed run-end
   mnemHaemophiliac = false -- affixes gone on a confirmed run-end (pacing back to normal)
-  if ataxiaTemp then ataxiaTemp.reaperKills = nil end -- the +1%/kill tally dies with the run
+  if ataxiaTemp then
+    ataxiaTemp.reaperKills = nil -- the +1%/kill tally dies with the run
+    ataxiaTemp.kaiUnleashedAt = nil -- the choke cooldown stamp dies with it
+  end
   -- Clear the pause flag UNCONDITIONALLY (like the boon flags above), not only via the
   -- _inRun()-gated endRun()->_resetRun(): with telemetry off (the shipped default) that path
   -- never runs, so a paused-then-ended run would leave paused=true and misfire the NEXT fresh

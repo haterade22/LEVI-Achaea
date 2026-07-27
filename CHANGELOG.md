@@ -2,6 +2,30 @@
 
 ---
 
+## 2026-07-27 — Kai Unleashed: Shikudo Rain-form AoE choke (v4.7.121)
+
+New Mnemosyne boon (user-directed): "Kai choking a denizen deals a burst of magic
+damage to all denizens in its location, including itself. This effect has a 30 seconds
+cooldown before it can trigger again."
+
+- **`ataxiaBasher_kaiUnleashedChoke`** (basher/002): with `mnemKaiUnleashed` up, the
+  Shikudo basher fires `KAI CHOKE <target>` as the round's attack — replacing the combo —
+  when ALL gates pass: **Rain form** (the Willow→Rain→Oak rotation re-visits Rain every
+  cycle, so no form-forcing), **2+ denizens** in the room (the burst hits them all — the
+  user-specified priority), **kai in hand** (`vitals.class` >= `ataxiaBasher.kaiChokeCost`,
+  default 20 — a kai-dry round falls back to the combo WITHOUT spending the window), and
+  the **30s cooldown** elapsed (`ataxiaTemp.kaiUnleashedAt`, stamped at send, survives a
+  SYSUPDATE reload, cleared on run end). A shielded target's shatter round wins over the
+  choke.
+- **Standard boon lifecycle**: claim intercept ("kai unleashed"), BOONS row trigger
+  `030_Kai_Unleashed`, run start/end resets with the other ten flags.
+
+Files: `basher/002_Class_Bashing.lua`, `aliases/.../002_Boon_Claim.lua`, trigger
+`030_Kai_Unleashed.lua` (new), `001_Run_Start.lua`, `004_Parsers.lua`,
+`test_basher_monk.lua` (+5 cases). Suite **444/444**.
+
+---
+
 ## 2026-07-26 — Haemophiliac hold gates on BLEEDING, not just HP (v4.7.120)
 
 User refinement: the massive post-kill bleed must be CLOTTED before moving on — waiting

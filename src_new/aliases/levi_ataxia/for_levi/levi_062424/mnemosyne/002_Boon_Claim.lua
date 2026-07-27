@@ -40,3 +40,6 @@ if matches[2]:lower():find("%f[%a]reaper") then mnemReaper = true end
 -- Bloodscent: senses out every denizen (name/#id/room) on entering a ripple; the
 -- sense-line trigger (028) parses it into the swarm module's recon.
 if matches[2]:lower():find("bloodscent") then mnemBloodscent = true end
+-- Kai Unleashed: kai choking a denizen bursts magic damage on ALL denizens in the
+-- room (30s cooldown); the Shikudo basher fires KAI CHOKE in Rain form at 2+ mobs.
+if matches[2]:lower():find("kai unleashed") then mnemKaiUnleashed = true end

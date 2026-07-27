@@ -430,6 +430,32 @@ local SHIKUDO_BASH_COMBOS = {
   Maelstrom = {normal = "ruku torso livestrike risingkick head",  shieldbreak = "shatter ruku risingkick head"},
 }
 
+-- Kai Unleashed boon (Mnemosyne, legendary): "Kai choking a denizen deals a burst of
+-- magic damage to all denizens in its location, including itself. This effect has a
+-- 30 seconds cooldown before it can trigger again." User doctrine: RAIN form only,
+-- off cooldown, and it takes PRIORITY over the normal combo when 2+ denizens share
+-- the room (the burst hits them all). The choke replaces the round's combo (it takes
+-- its own balance; the rotation re-visits Rain every cycle, so no form-forcing is
+-- needed). Cooldown stamped at send into ataxiaTemp (survives a SYSUPDATE reload).
+-- Kai-gated (kai lands in ataxia.vitals.class for a Monk) so a kai-dry round falls
+-- back to the combo instead of wasting a swing on a refused choke.
+local KAI_UNLEASHED_CD = 30
+function ataxiaBasher_kaiUnleashedChoke(useShieldbreak)
+  if not mnemKaiUnleashed then return nil end
+  if useShieldbreak then return nil end -- break the shield first; the burst can wait a round
+  if ataxia.vitals.form ~= "Rain" then return nil end
+  local kai = tonumber(ataxia.vitals.class)
+  if not kai or kai < (tonumber(ataxiaBasher.kaiChokeCost) or 20) then return nil end
+  local M = ataxia.mnemosyne
+  local n = (M and M._denizenCount and M._denizenCount()) or 0
+  if n < 2 then return nil end
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp = ataxiaTemp or {}
+  if (nowT - (tonumber(ataxiaTemp.kaiUnleashedAt) or 0)) < KAI_UNLEASHED_CD then return nil end
+  ataxiaTemp.kaiUnleashedAt = nowT
+  return "kai choke "..target.."; "
+end
+
 -- These fire from the attack path, which runs on every prompt — latch them so an
 -- unrecognised form or spec warns once rather than flooding the screen.
 local shikudoWarnedForm = nil
@@ -525,7 +551,14 @@ function ataxiaBasher_monkBashing2()
     command = command.."unwield all"..sp.."combo "..target..(useShieldbreak and " rhk ucp ucp; " or " sdk ucp ucp; ")
   elseif shikudo then
     monkWarnedNoSpec = false
-    command = command..shikudoBashCombo(target, useShieldbreak)
+    -- Kai Unleashed AoE takes the round over the combo when its gates pass
+    -- (boon up, Rain form, 2+ denizens, kai in hand, 30s cooldown elapsed).
+    local choke = ataxiaBasher_kaiUnleashedChoke(useShieldbreak)
+    if choke then
+      command = command..choke
+    else
+      command = command..shikudoBashCombo(target, useShieldbreak)
+    end
   elseif not monkWarnedNoSpec then
     monkWarnedNoSpec = true
     ataxiaEcho("Monk: no Stance or Form in charstats -- can't tell Tekura from Shikudo, not bashing.")
