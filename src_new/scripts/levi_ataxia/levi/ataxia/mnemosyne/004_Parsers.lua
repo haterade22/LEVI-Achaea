@@ -190,6 +190,7 @@ function M.onRunEnd()
   dragonMightSycaerunax = false -- boons gone on a confirmed run-end
   dragonRampage = false -- boons gone on a confirmed run-end
   mnemHaemophiliac = false -- affixes gone on a confirmed run-end (pacing back to normal)
+  mnemDeluge = false -- affixes gone on a confirmed run-end (flight available again)
   if ataxiaTemp then
     ataxiaTemp.reaperKills = nil -- the +1%/kill tally dies with the run
     ataxiaTemp.kaiUnleashedAt = nil -- the burst cooldown stamp dies with it
@@ -277,6 +278,20 @@ function M.onHaemophiliacSeen()
   mnemHaemophiliac = true
   if not M._quiet() then
     M.echo("<red>Haemophiliac<reset> active -- kills bleed heavily; wading slower (moves hold until HP recovers)")
+  end
+end
+
+-- Deluge affix ("All rooms are underwater."): FLY is impossible underwater, so the
+-- swarm module's escape ladder and fly-kite must take their GROUNDED branches
+-- (retreat / shield) instead of wedging on a rejected fly (user report 2026-07-28).
+-- Same telemetry-independent shape as Haemophiliac: status-row trigger, inMnemosyne
+-- gate, transition guard; reset on run start, cleared on the confirmed run end.
+function M.onDelugeSeen()
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  if mnemDeluge then return end
+  mnemDeluge = true
+  if not M._quiet() then
+    M.echo("<red>Deluge<reset> active -- rooms are UNDERWATER: no flying (escape ladder goes grounded)")
   end
 end
 

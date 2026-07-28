@@ -463,9 +463,15 @@ end
 -- room and cure while fighting the trickle. No route indoors -> the old shield behavior
 -- stands. Triggers on HP alone -- the cave-bat death had only TWO mobs (below the swarm
 -- threshold), so mob count must not gate this.
+-- Deluge affix: every room is underwater -- FLY is impossible, so the escape ladder
+-- and the fly-kite must take their GROUNDED branches instead of wedging on a
+-- rejected fly (queued fly fails silently; the "recovering" state would then hover
+-- on the ground, attack-gated, until the 60s cap).
+function S._canFly() return not mnemDeluge end
+
 function S._beginEscape()
   local s = S._cfg()
-  if not S._indoors() then
+  if not S._indoors() and S._canFly() then
     S.state = "recovering"
     S.recoverStarted = now()
     S.flying = true
@@ -590,7 +596,7 @@ function S.onTick()
       local n = (M._denizenCount and M._denizenCount()) or 0
       if n > (S.peakFollowers or 0) then S.peakFollowers = n end
       local s = S._cfg()
-      if n >= S.threshold() and s.kite and not S.flying
+      if n >= S.threshold() and s.kite and not S.flying and S._canFly()
          and S.mode ~= "wall" and not S._indoors() then
         -- The swarm followed us outdoors: fly-kite. The decorator turns every attack
         -- into land;<attack>;fly -- we touch ground only for the swing.

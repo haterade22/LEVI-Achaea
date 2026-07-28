@@ -600,6 +600,18 @@ describe("swarm low-HP escape ladder", function()
     expect(S.state).toBe("idle")
   end)
 
+  it("Deluge (underwater): the OUTDOOR escape goes grounded -- retreat, never fly", function()
+    fixture(2)
+    mnemDeluge = true -- "All rooms are underwater." -- FLY is impossible (v4.7.140)
+    ataxia.vitals = { hpp = 30 }
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("pulling") -- the grounded retreat branch, outdoors
+    expect(S.flying).toBe(nil)
+    expect(findCmd("queue addclear free stand;fly")).toBe(nil)
+    expect(sent[#sent]).toBe("queue addclear free stand;leap s")
+    mnemDeluge = false
+  end)
+
   it("converts an active kite to a hover without land/fly churn", function()
     fixture(3)
     S.onTick(); S.decorate("attack", ";")

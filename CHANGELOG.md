@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-07-28 — Deluge affix: no flying underwater (v4.7.140)
+
+User report from the affix screen: "Deluge: All rooms are underwater." — FLY cannot
+work, but the swarm module's low-HP escape ladder (outdoor fly+hover recovery) and
+the fly-kite assume it can. A queued `fly` fails silently, leaving the "recovering"
+state grounded and attack-gated until its 60s cap — blind exactly at low HP.
+
+- New affix flag `mnemDeluge` (trigger `037_Deluge` on the status row — the
+  Haemophiliac shape: telemetry-independent, `inMnemosyne` gate, transition guard;
+  reset on run start, cleared on the confirmed run end).
+- `S._canFly()` gates both flight decisions in `009_Swarm_Tactics`: the escape
+  ladder's outdoor branch now falls through to the grounded retreat (or the shield
+  fallback with no route), and the kite entry never arms underwater.
+
+Files: `mnemosyne/004_Parsers.lua`, `009_Swarm_Tactics.lua`,
+`triggers/.../mnemosyne/037_Deluge.lua` (NEW), `001_Run_Start.lua`,
+`test_swarm_tactics.lua` (+1 grounded-escape regression). Suite **500/500**.
+
+---
+
 ## 2026-07-28 — Venomous breath echo highlight (v4.7.139)
 
 Fourth breath echo captured live: "An echo of venomous breath rots the corpse of
