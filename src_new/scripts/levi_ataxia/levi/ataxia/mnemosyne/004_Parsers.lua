@@ -493,12 +493,31 @@ function M.reserveTreeForBoss(boss)
 end
 
 function M.onSeasonePhials()
-  if not M._treeReserved then return end
+  -- v4.7.138 (live Seasone truelock, 2026-07-28): two fixes. (1) This used to
+  -- early-return when the reserve hadn't armed (missed Objective line) -- the
+  -- phial burst did NOTHING and the truelock sat for 25s+. The counter no longer
+  -- depends on the reserve. (2) `curing tree on` alone proved too slow -- SSC
+  -- never touched tree while locked; the class heal is itself lock-blocked
+  -- ("mind and body are too disjointed"). So TOUCH TREE directly (tree works
+  -- prone and through a truelock), re-touching while the lock signature holds
+  -- (tree balance may be down on the early attempts; bounded).
+  local reserved = M._treeReserved
   M._treeReserved = nil
-  if M._treeCuringOff then return end -- Splinterbark: the tree is tainted, leave it off
-  send("curing tree on")
+  if M._treeCuringOff then return end -- Splinterbark: the tree is tainted, leave it alone
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  if reserved then send("curing tree on") end
+  send("touch tree")
+  if tempTimer then
+    for _, delay in ipairs({3, 6, 10}) do
+      tempTimer(delay, function()
+        local a = (ataxia and ataxia.afflictions) or {}
+        if a.asthma and a.anorexia then send("touch tree") end
+      end)
+    end
+  end
   if not M._quiet() then
-    M.echo("<indian_red>PHIAL BURST<reset> -- tree released (curing tree on): break that lock")
+    M.echo("<indian_red>PHIAL BURST<reset> -- touching tree to break the lock"
+      .. (reserved and " (reserve released)" or ""))
   end
 end
 

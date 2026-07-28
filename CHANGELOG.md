@@ -2,6 +2,29 @@
 
 ---
 
+## 2026-07-28 — Seasone phial counter: touch tree DIRECTLY (v4.7.138)
+
+Second live Seasone truelock (as Golden Dragon) exposed two failures in the v4.7.123
+counter: (1) `onSeasonePhials` early-returned when the reserve hadn't armed — a
+missed `Objective:` line made the phial burst a complete NO-OP; (2) even released,
+`curing tree on` only *permits* SSC to tree, and SSC never did while the truelock
+sat for 25+ seconds (the dragon class heal is itself lock-blocked: "Your mind and
+body are too disjointed"). User directive: the phial line is when we TOUCH TREE.
+
+- The phial-line counter now sends **`touch tree` directly** (the tattoo works
+  prone and through a truelock), with bounded re-touches at 3/6/10s while the lock
+  signature (asthma + anorexia) persists — tree balance may be down on the first
+  attempt.
+- The counter is **reserve-independent**: it fires whether or not the Objective
+  line armed `curing tree off`. The reserve release (`curing tree on`) still
+  happens when armed, and the Splinterbark taint still wins (a tainted tree is
+  never touched).
+
+Files: `mnemosyne/004_Parsers.lua`, `test_mnemosyne.lua` (phial tests rewritten:
+direct-touch + no-reserve regression). Suite **499/499**.
+
+---
+
 ## 2026-07-28 — Golden Dragon control casts join the (BR) alert + denizen-state system (v4.7.137)
 
 User request: echo the Golden Dragon battlerage casts like the other classes'

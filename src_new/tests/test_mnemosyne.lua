@@ -655,16 +655,26 @@ describe("Seasone tree reserve", function()
     expect(M._treeReserved).toBeNil()
   end)
 
-  it("releases the tree the moment the phials fly, once", function()
+  it("phial burst touches tree DIRECTLY and releases the reserve (v4.7.138)", function()
     bossReset()
     M._treeReserved = true
     captureSend(function(captured)
       M.onSeasonePhials()
-      M.onSeasonePhials() -- a second burst with no reserve is a no-op
-      expect(#captured).toBe(1)
-      expect(captured[1]).toBe("curing tree on")
+      expect(#captured).toBe(2)
+      expect(captured[1]).toBe("curing tree on") -- reserve released for SSC...
+      expect(captured[2]).toBe("touch tree")     -- ...but we break the lock OURSELVES
     end)
     expect(M._treeReserved).toBeNil()
+    ataxiaBasher = nil
+  end)
+
+  it("the counter no longer depends on the reserve (missed Objective line)", function()
+    bossReset()
+    captureSend(function(captured)
+      M.onSeasonePhials() -- v4.7.138 regression: this used to be a NO-OP -> 25s+ truelock
+      expect(#captured).toBe(1)
+      expect(captured[1]).toBe("touch tree")
+    end)
     ataxiaBasher = nil
   end)
 
