@@ -331,6 +331,17 @@ trample:
 
 ## Defensive Abilities
 ```yaml
+dragonflex:  # wired v4.7.134
+  skill: Dragoncraft
+  balance: bal (2.00s, AB 1534)
+  effect: "Snap through bindings with sheer bulk"
+  syntax: "DRAGONFLEX"
+  automation: |
+    On gaining entangled/webbed in any Dragon class, 004_Aff_gains_losses prepends
+    "dragonflex" to the eqbal queue (the prone -> stand idiom) -- one action instead
+    of repeated writhes; SSC writhing still backstops it. (Webbed coverage assumed
+    from "snap through binds" -- confirm live.)
+
 pierce_the_veil:
   skill: Dragoncraft
   effect: "Escape to Parthren Gare"

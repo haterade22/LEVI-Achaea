@@ -2,6 +2,22 @@
 
 ---
 
+## 2026-07-28 — DRAGONFLEX: snap bindings instead of writhing (v4.7.134)
+
+AB Flex (1534): DRAGONFLEX, self, 2.00s of balance — "snap through those feeble
+attempts to bind."
+
+- On gaining **entangled or webbed** in any Dragon class, the affliction-gained
+  handler (`004_Aff_gains_losses.lua`, the existing Bard/Pariah escape branch) now
+  prepends `dragonflex` to the eqbal queue (the prone → stand idiom) — one balance
+  action instead of repeated writhes; SSC writhing still backstops it if the flex
+  gets eaten. Webbed coverage is assumed from the AB wording ("binds") — confirm
+  live; entangled is the user-confirmed case.
+
+Files: `004_Aff_gains_losses.lua`, `.claude/classes/dragon.md`. Suite **497/497**.
+
+---
+
 ## 2026-07-28 — Draconic Rampage: trample AoE at 2+ denizens (v4.7.133)
 
 New Mnemosyne boon (the 15th flag, `dragonRampage`): "Your draconic trample now deals

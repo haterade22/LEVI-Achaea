@@ -185,7 +185,12 @@ function gotAff()
 		send("curing clotat 9999",false)
 		ataxia_boxEcho("CORRUPTION ON US - MANUAL CLOT", "a_darkred")
 	elseif (aff == "entangled" or aff == "webbed") then
-    if ataxia_isClass("bard") then
+    if (gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class or ""):find("Dragon") then
+      -- DRAGONFLEX (AB 1534: self, 2.00s balance) snaps through bindings -- one
+      -- action instead of repeated writhes. Prepend so it fires the instant balance
+      -- allows (the prone -> stand idiom); SSC writhing still backstops it.
+      send("queue prepend eqbal dragonflex", false)
+    elseif ataxia_isClass("bard") then
 		  send("queue addclear class recite haidar",false)
     elseif ataxia_isClass("pariah") then
       send("accursed reconstitute", false)
