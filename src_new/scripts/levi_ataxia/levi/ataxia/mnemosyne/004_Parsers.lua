@@ -188,6 +188,7 @@ function M.onRunEnd()
   mnemSenselessFlurry = false -- boons gone on a confirmed run-end
   psionPanoply = false -- boons gone on a confirmed run-end
   dragonMightSycaerunax = false -- boons gone on a confirmed run-end
+  dragonRampage = false -- boons gone on a confirmed run-end
   mnemHaemophiliac = false -- affixes gone on a confirmed run-end (pacing back to normal)
   if ataxiaTemp then
     ataxiaTemp.reaperKills = nil -- the +1%/kill tally dies with the run

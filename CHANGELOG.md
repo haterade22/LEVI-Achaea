@@ -2,6 +2,32 @@
 
 ---
 
+## 2026-07-28 — Draconic Rampage: trample AoE at 2+ denizens (v4.7.133)
+
+New Mnemosyne boon (the 15th flag, `dragonRampage`): "Your draconic trample now deals
+a large amount of cutting damage to all denizens in your room. This effect has a 40
+seconds cooldown." AB Trample (1564): room-wide, 2.75s of balance; off-proc it only
+hits prone targets.
+
+- `ataxiaBasher_dragonRampagePick` (basher/002): at 2+ denizens (Mnemosyne
+  `_denizenCount`, the Kai Choke gate) with the proc ready, the round's balance swing
+  becomes `trample` (user-directed). The eq blast weave and the battlerage still ride
+  beside it; shield-break rounds skip it. Send-side 40s stamp + the v4.7.129
+  in-flight hold (the trample round replays verbatim across the re-queue loop).
+- **Proc line confirmed live** ("Iron-sharp claws rip and tear into all around
+  you...") — trigger `highlighting/033` highlights it bold orange_red and
+  `ataxiaBasher_dragonRampageProc()` restamps the 40s cooldown from the LANDED
+  moment, releasing the trample hold.
+- Standard boon-flag lifecycle: claim intercept (`%f[%a]rampage`), BOONS-row trigger
+  `036_Draconic_Rampage`, reset on run start, cleared on the confirmed run end.
+
+Files: `basher/002_Class_Bashing.lua` (rampage pick + proc confirm; `primary()` takes
+a balance-override), `mnemosyne/036_Draconic_Rampage.lua` (NEW),
+`highlighting/033_Rampage_Proc.lua` (NEW), `001_Run_Start.lua`, `004_Parsers.lua`,
+`002_Boon_Claim.lua`, `test_basher_dragon.lua` (+6 cases). Suite **497/497**.
+
+---
+
 ## 2026-07-28 — Golden Dragon fire lines: Deaden + Overwhelm confirmed, recovery + DoT highlights (v4.7.132)
 
 Live captures (user): three more Golden Dragon lines land the confirmation upgrade,

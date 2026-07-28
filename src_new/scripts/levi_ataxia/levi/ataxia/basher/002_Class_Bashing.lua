@@ -65,7 +65,10 @@ function ataxiaBasher_dragonBashing()
   -- real primary (incantation/gut, not the low-wp jab or wotBash whip), fold in a breath blast:
   --   breath up   -> blast (eq, damage + breaks shields/lyres) ; re-summon ; bal attack
   --   breath down -> summon so it's ready next hit ; bal attack
-  local function primary()
+  -- balOverride swaps the balance swing (e.g. the Draconic Rampage trample) while the
+  -- eq-based blast weave still rides beside it.
+  local function primary(balOverride)
+    local bal = balOverride or balAttack()
     local weaveable = not ataxiaBasher.jabBash and not ataxiaBasher.wotBash
     if ataxiaBasher.dragonBlast and weaveable and ele then
       if ataxia.defences.dragonbreath then
@@ -73,14 +76,14 @@ function ataxiaBasher_dragonBashing()
         -- weapon PERSISTS through BLAST (AB Blast: "Requires summoned breath") --
         -- the re-summon is pure waste while it's up.
         if dragonMightSycaerunax then
-          return "blast " ..target.. ";" ..balAttack()
+          return "blast " ..target.. ";" ..bal
         end
-        return "blast " ..target.. ";summon " ..ele.. ";" ..balAttack()
+        return "blast " ..target.. ";summon " ..ele.. ";" ..bal
       else
-        return "summon " ..ele.. ";" ..balAttack()
+        return "summon " ..ele.. ";" ..bal
       end
     end
-    return balAttack()
+    return bal
   end
 
   if ataxiaBasher.shielded then
@@ -98,9 +101,46 @@ function ataxiaBasher_dragonBashing()
       command = command..sp..reblast..balAttack()..sp..brage()
     end
   else
-    command = command..sp..brage()..sp..primary()
+    -- Draconic Rampage (Mnemosyne boon): at 2+ denizens, off the 40s proc cooldown,
+    -- the balance swing becomes TRAMPLE (room-wide cutting nuke). Shield-break
+    -- rounds skip it -- break the shield first, like the Kai Choke rule.
+    command = command..sp..brage()..sp..primary(ataxiaBasher_dragonRampagePick())
   end
   return command
+end
+
+-- Draconic Rampage pick: "Your draconic trample now deals a large amount of cutting
+-- damage to all denizens in your room. This effect has a 40 seconds cooldown." AB
+-- Trample (1564): TRAMPLE, room, 2.75s of balance. Off the proc, plain trample only
+-- hits prone targets -- so the swing is spent ONLY when the proc is ready and 2+
+-- denizens share the room (user-directed). Send-side stamp with the v4.7.129
+-- in-flight hold (the trample round replays verbatim across the 0.3s re-queue loop);
+-- upgrade to a confirmed proc line once captured.
+-- Rampage proc CONFIRMED (trigger highlighting/033, "Iron-sharp claws rip and tear
+-- into all around you..."): restart the 40s proc cooldown from the LANDED moment
+-- (the queued trample can land seconds after the pick's send stamp) and release the
+-- in-flight trample hold.
+function ataxiaBasher_dragonRampageProc()
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.dragonRampageAt = nowT
+  ataxiaTemp.dragonRampagePendingAt = nil
+end
+
+function ataxiaBasher_dragonRampagePick()
+  if not dragonRampage then return nil end
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp = ataxiaTemp or {}
+  local pend = ataxiaTemp.dragonRampagePendingAt
+  if pend and (nowT - (tonumber(pend) or 0)) < 3 then return "trample" end
+  ataxiaTemp.dragonRampagePendingAt = nil
+  local M = ataxia.mnemosyne
+  local n = (M and M._denizenCount and M._denizenCount()) or 0
+  if n < 2 then return nil end
+  if (nowT - (tonumber(ataxiaTemp.dragonRampageAt) or 0)) < 40 then return nil end
+  ataxiaTemp.dragonRampageAt = nowT
+  ataxiaTemp.dragonRampagePendingAt = nowT
+  return "trample"
 end
 
 -- Golden Dragon OWNS its battlerage (the Psion lesson, v4.7.128): the generic

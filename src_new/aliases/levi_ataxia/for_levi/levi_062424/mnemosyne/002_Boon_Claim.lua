@@ -52,3 +52,6 @@ if matches[2]:lower():find("panoply") then psionPanoply = true end
 -- Might of Sycaerunax: draconic BLAST +25% damage and the breath weapon PERSISTS;
 -- the dragon basher drops the re-summon from its blast weave while it's up.
 if matches[2]:lower():find("sycaerunax") then dragonMightSycaerunax = true end
+-- Draconic Rampage: TRAMPLE deals a large room-wide cutting nuke on a 40s proc;
+-- the dragon basher spends the balance swing on it at 2+ denizens, off cooldown.
+if matches[2]:lower():find("%f[%a]rampage") then dragonRampage = true end

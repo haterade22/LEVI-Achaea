@@ -37,6 +37,11 @@ function ataxiaBasher_assembleBattlerage() return "GENERIC_BRAGE;" end
 local breath = nil -- per-test breath element (nil disables the blast weave)
 function getDragonBreath() return breath end
 
+-- Controllable denizen count for the Draconic Rampage gate (the basher reads the
+-- Mnemosyne explorer's killable-count helper, like the Kai Choke).
+local denizens = 0
+ataxia.mnemosyne = { _denizenCount = function() return denizens end }
+
 local file = "src_new/scripts/levi_ataxia/levi/ataxia/basher/002_Class_Bashing.lua"
 local ok, err = pcall(dofile, file)
 if not ok then error("Failed to load class-bashing file: " .. tostring(err)) end
@@ -54,7 +59,9 @@ local function reset()
   gmcp.Room.Info.area = ""
   gmcp.Char.Status.class = "Golden Dragon"
   dragonMightSycaerunax = false
+  dragonRampage = false
   breath = nil
+  denizens = 0
   clock = 700000
 end
 
@@ -209,8 +216,64 @@ describe("ataxiaBasher_dragonBashing -- Might of Sycaerunax blast weave", functi
   end)
 end)
 
+describe("ataxiaBasher_dragonBashing -- Draconic Rampage trample", function()
+  it("spends the balance swing on TRAMPLE at 2+ denizens off the 40s proc", function()
+    reset(); dragonRampage = true; denizens = 3
+    local cmd = ataxiaBasher_dragonBashing()
+    expect(has(cmd, "trample")).toBeTrue()
+    expect(has(cmd, "gut")).toBeFalse()
+  end)
+
+  it("stays on the normal swing solo or while the proc is down", function()
+    reset(); dragonRampage = true; denizens = 1
+    expect(has(ataxiaBasher_dragonBashing(), "gut " .. target)).toBeTrue()
+    reset(); dragonRampage = true; denizens = 3
+    ataxiaTemp.dragonRampageAt = clock - 10 -- proc spent 10s ago
+    expect(has(ataxiaBasher_dragonBashing(), "gut " .. target)).toBeTrue()
+    clock = clock + 31 -- 41s since the proc: ready again
+    expect(has(ataxiaBasher_dragonBashing(), "trample")).toBeTrue()
+  end)
+
+  it("replays the trample round across the re-queue loop, then returns to gut", function()
+    reset(); dragonRampage = true; denizens = 2
+    expect(has(ataxiaBasher_dragonBashing(), "trample")).toBeTrue()
+    clock = clock + 1
+    expect(has(ataxiaBasher_dragonBashing(), "trample")).toBeTrue() -- in-flight hold
+    clock = clock + 4 -- hold expired, proc on cooldown
+    expect(has(ataxiaBasher_dragonBashing(), "gut " .. target)).toBeTrue()
+  end)
+
+  it("rides beside the eq blast weave (blast + trample the same round)", function()
+    reset(); dragonRampage = true; denizens = 2
+    ataxiaBasher.dragonBlast = true; breath = "psi"
+    ataxia.defences.dragonbreath = true; dragonMightSycaerunax = true
+    expect(has(ataxiaBasher_dragonBashing(), "blast " .. target .. ";trample")).toBeTrue()
+  end)
+
+  it("never trades a shield-break round for the trample", function()
+    reset(); dragonRampage = true; denizens = 3
+    ataxiaBasher.shielded = true; breath = "psi"
+    local cmd = ataxiaBasher_dragonBashing()
+    expect(has(cmd, "trample")).toBeFalse()
+    expect(has(cmd, "blast " .. target)).toBeTrue() -- the shield still gets broken
+  end)
+
+  it("proc confirmation restamps the 40s cooldown and releases the trample hold", function()
+    reset(); dragonRampage = true; denizens = 3
+    expect(has(ataxiaBasher_dragonBashing(), "trample")).toBeTrue()
+    clock = clock + 2 -- the queued trample lands (trigger highlighting/033 fires)
+    ataxiaBasher_dragonRampageProc()
+    expect(ataxiaTemp.dragonRampagePendingAt).toBe(nil)
+    expect(ataxiaTemp.dragonRampageAt).toBe(clock) -- cooldown from the LANDED proc
+    expect(has(ataxiaBasher_dragonBashing(), "gut " .. target)).toBeTrue() -- back to swinging
+    clock = clock + 41 -- proc ready again
+    expect(has(ataxiaBasher_dragonBashing(), "trample")).toBeTrue()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 getEpoch = _epoch
 ataxiaBasher_assembleBattlerage = _assemble
 getDragonBreath = _breath
 dragonMightSycaerunax = false
+dragonRampage = false

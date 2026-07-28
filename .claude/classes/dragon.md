@@ -441,6 +441,14 @@ golden_dragon_battlerage:  # v4.7.129 -- ataxiaBasher_goldenDragonBattlerage (ba
     apply: "<target>'s form begins to atrophy as your attack kindles ethereal mist to
             consign him to only memory."
     tick:  "Time wreaks ruin upon <target>, deteriorating before your eyes."
+  trample_lines: |  # live-captured 2026-07-28
+    action (flavor, untriggered): "Contracting your powerful hindquarters and extending
+      your wings backward, you raise your front legs, towering over your surroundings.
+      You slam your feet back upon the ground, recklessly crushing everyone in your path."
+    rampage_proc: "Iron-sharp claws rip and tear into all around you as your draconic
+      bulk tramples over your puny lessers in a monstrous frenzy."
+      -> trigger highlighting/033: bold orange_red + ataxiaBasher_dragonRampageProc()
+         restamps the 40s proc cd from the LANDED moment and releases the trample hold.
   live_capture_wishlist:
     - "Psiblast fire line (wire into ataxiaBasher_gdragonConfirm; 331_Battlerage_Large.lua:80's
        draconic-gaze psychic line is likely it -- verify in Golden form, then move it to a
@@ -470,6 +478,16 @@ mnemosyne_boons:
       while the flag is up. Breath fully down still summons once -- the boon keeps it
       from there. Colour-agnostic (any dragon in the tower). Standard boon-flag
       lifecycle: claim intercept / BOONS-row trigger re-latch / cleared on run start+end.
+  draconic_rampage:  # v4.7.133, dragonRampage flag (trigger 036 + BOON CLAIM intercept)
+    effect: "TRAMPLE deals a large amount of cutting damage to ALL denizens in the room; 40s proc cooldown"
+    ab_trample: "TRAMPLE: room-wide, 2.75s of balance (AB 1564); off-proc it only hits prone targets"
+    basher: |
+      ataxiaBasher_dragonRampagePick (basher/002): at 2+ denizens (Mnemosyne
+      _denizenCount, the Kai Choke gate) with the 40s proc ready, the round's balance
+      swing becomes TRAMPLE -- the eq blast weave still rides beside it, the
+      battlerage still rides, and shield-break rounds skip it (break the shield
+      first). Send-side 40s stamp + the v4.7.129 in-flight hold; the proc line
+      (trigger highlighting/033) restamps the cooldown from the LANDED moment.
 ```
 
 ## Fighting Against This Class
