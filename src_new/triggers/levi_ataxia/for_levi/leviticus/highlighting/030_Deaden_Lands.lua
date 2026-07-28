@@ -49,3 +49,11 @@ resetFormat()
 if ataxiaBasher_gdragonConfirm then
 	ataxiaBasher_gdragonConfirm("deaden")
 end
+
+-- Denizen-state capture + (BR) echo, the battlerage-alert idiom (008_Denizen_State).
+if type(target) == "number" and ataxiaBasher and ataxiaBasher.enabled and ataxiaBasher_dsSetAff then
+	ataxiaBasher_dsSetAff(target, "aeon")
+	if ataxiaBasher_dsAlert then
+		ataxiaBasher_dsAlert("AEON on " .. tostring(target) .. " -- Deaden landed, mob acts slower", "yellow")
+	end
+end

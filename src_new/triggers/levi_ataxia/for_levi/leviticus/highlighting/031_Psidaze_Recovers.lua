@@ -51,3 +51,10 @@ if ataxiaTemp and ataxiaTemp.gdragonBrAt and ataxiaTemp.gdragonBrAt.psidaze then
 		ataxiaEcho("Psidaze amnesia lasted ~" .. math.floor(dur + 0.5) .. "s (cooldown 41s).")
 	end
 end
+
+-- Precise denizen-state clear: the wear-off line names the mob, so resolve it to an
+-- id (preferring one actually carrying amnesia) and drop the aff.
+if ataxiaBasher and ataxiaBasher.enabled and ataxiaBasher_dsResolveNameToId and ataxiaBasher_dsClearAff then
+	local id = ataxiaBasher_dsResolveNameToId(matches[2], nil, "amnesia")
+	if id then ataxiaBasher_dsClearAff(id, "amnesia") end
+end

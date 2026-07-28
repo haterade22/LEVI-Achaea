@@ -2,6 +2,32 @@
 
 ---
 
+## 2026-07-28 — Golden Dragon control casts join the (BR) alert + denizen-state system (v4.7.137)
+
+User request: echo the Golden Dragon battlerage casts like the other classes'
+battlerage skills. That idiom is the `(BR):` console alert + per-denizen affliction
+capture (`008_Denizen_State`, the v4.7.62 overhaul layer).
+
+- **Deaden** (trigger `highlighting/030`): records `aeon` on the target's denizen
+  state and echoes `(BR): AEON on <id> -- Deaden landed, mob acts slower`.
+- **Psidaze** (trigger `highlighting/028`): records `amnesia` (new `BR_AFFS` entry,
+  30s lazy-expiry backstop) and echoes `(BR): AMNESIA on <id> -- Psidaze landed...`.
+  The wear-off line (trigger 031) now also resolves the mob name to its id and
+  clears the amnesia PRECISELY — plus keeps the measured-uptime echo for tuning the
+  backstop. `BR_AFFS` already had a deliberate `amnesia = {dur=nil}` (persist until
+  cleared, pinned by a test); with the precise wear-off clear in place it's replaced
+  by the 30s self-healing backstop — the persistence test now pins `shielded` (the
+  real nil-duration state) and a new case pins amnesia's backstop + precise clear.
+- Overwhelm stays echo-quiet deliberately — it applies no affliction and fires every
+  16s; its bold highlight already marks it.
+- Alerts are gated the standard way: numeric server target + basher enabled +
+  `ataxiaBasher.brAlerts` (default on).
+
+Files: `basher/008_Denizen_State.lua`, `highlighting/028/030/031`,
+`.claude/classes/dragon.md`.
+
+---
+
 ## 2026-07-28 — Atrophy DoT recolour: orange is reserved (v4.7.136)
 
 User request: orange is already in use elsewhere in their setup, so the crit-proc

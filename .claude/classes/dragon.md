@@ -434,7 +434,11 @@ golden_dragon_battlerage:  # v4.7.129 -- ataxiaBasher_goldenDragonBattlerage (ba
     per colour when one becomes the active bashing class (Black keeps its dragonfear crowd branch
     in the assembler; only Golden bypasses it).
   fire_lines:  # all live-captured 2026-07-28; each landed line -> highlight + ataxiaBasher_gdragonConfirm
-               # (restamps the cd from the LANDED moment, releases the in-flight pick hold)
+               # (restamps the cd from the LANDED moment, releases the in-flight pick hold).
+               # v4.7.137: the control casts also record DENIZEN-STATE + emit the (BR) alert echo
+               # (the battlerage-alert idiom): Deaden -> dsSetAff aeon + "AEON on <id> -- Deaden
+               # landed"; Psidaze -> dsSetAff amnesia (BR_AFFS dur 30 backstop) + "AMNESIA on <id>";
+               # the wear-off line resolves the mob name and dsClearAff's amnesia precisely.
     deaden: |    # trigger highlighting/030, bold gold (control family)
       "You psychically slam your mind into <target>'s, deadening his reactions."
     psidaze: |   # trigger highlighting/028, bold gold

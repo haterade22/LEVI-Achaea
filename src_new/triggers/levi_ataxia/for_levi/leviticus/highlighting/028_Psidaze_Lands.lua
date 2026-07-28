@@ -50,3 +50,11 @@ resetFormat()
 if ataxiaBasher_gdragonConfirm then
 	ataxiaBasher_gdragonConfirm("psidaze")
 end
+
+-- Denizen-state capture + (BR) echo, the battlerage-alert idiom (008_Denizen_State).
+if type(target) == "number" and ataxiaBasher and ataxiaBasher.enabled and ataxiaBasher_dsSetAff then
+	ataxiaBasher_dsSetAff(target, "amnesia")
+	if ataxiaBasher_dsAlert then
+		ataxiaBasher_dsAlert("AMNESIA on " .. tostring(target) .. " -- Psidaze landed, mob forgets its actions", "gold")
+	end
+end

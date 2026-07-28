@@ -64,6 +64,12 @@ ataxiaBasher_BR_AFFS = {
                    apply = "in several key locations with your blade, causing",
                    ends  = "stands up straight, having overcome the weakness" },
   aeon         = { dur = 6,   role = "safe",     exploitedBy = nil,   apply = nil, ends = nil },
+  amnesia      = { dur = 30,  role = "safe",     exploitedBy = nil,
+                   -- Golden Dragon Psidaze (trigger highlighting/028). dur is a lazy-expiry
+                   -- backstop only -- the wear-off line (031) clears it precisely; tune from
+                   -- the measured-uptime echo.
+                   apply = "sparkles of psi energy around",
+                   ends  = "cease their distracting dance" },
   clumsy       = { dur = 7,   role = "safe",     exploitedBy = nil,
                    apply = "finding the link to fine motor control",
                    ends  = nil },
@@ -75,7 +81,6 @@ ataxiaBasher_BR_AFFS = {
   inhibit      = { dur = 9,   role = "burst",    exploitedBy = "burst",
                    apply = "with the tips of your fingers, targeting specific nerves",
                    ends  = nil },
-  amnesia      = { dur = nil, role = "safe",     exploitedBy = nil,   apply = nil, ends = nil },
 }
 
 -- Non-affliction states also tracked per denizen (same `affs` table, no duration --

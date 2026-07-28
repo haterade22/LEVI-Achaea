@@ -85,11 +85,24 @@ describe("affliction set / has / expiry", function()
     expect(ataxiaBasher_dsGet("Penwize")).toBeNil()
   end)
 
-  it("a nil-duration aff (amnesia) persists until cleared", function()
+  it("a nil-duration state (shielded) persists until cleared", function()
     reset()
     ataxiaBasher_dsAdd(10, "a mob")
-    ataxiaBasher_dsSetAff(10, "amnesia", 1000)
-    expect(ataxiaBasher_dsHasAff(10, "amnesia", 999999)).toBeTrue()
+    ataxiaBasher_dsSetAff(10, "shielded", 1000)
+    expect(ataxiaBasher_dsHasAff(10, "shielded", 999999)).toBeTrue()
+  end)
+
+  -- v4.7.137: amnesia is the Golden Dragon Psidaze capture -- the wear-off line
+  -- (highlighting/031) clears it precisely, and the 30s BR_AFFS duration is a
+  -- lazy-expiry BACKSTOP so a missed line can't strand stale state.
+  it("amnesia (Psidaze) backstops at 30s and clears precisely on the wear-off", function()
+    reset()
+    ataxiaBasher_dsSetAff(10, "amnesia", 1000) -- endsAt = 1030
+    expect(ataxiaBasher_dsHasAff(10, "amnesia", 1029)).toBeTrue()
+    expect(ataxiaBasher_dsHasAff(10, "amnesia", 1030)).toBeFalse()
+    ataxiaBasher_dsSetAff(10, "amnesia", 2000)
+    ataxiaBasher_dsClearAff(10, "amnesia") -- the wear-off line names the mob
+    expect(ataxiaBasher_dsHasAff(10, "amnesia", 2001)).toBeFalse()
   end)
 
   -- Newly-captured lines (v4.7.65): our Nerveslash -> weakness (7s, trigger 017),
