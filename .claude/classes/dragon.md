@@ -464,6 +464,8 @@ golden_dragon_battlerage:  # v4.7.129 -- ataxiaBasher_goldenDragonBattlerage (ba
       <target>, scorching him and inhibiting his natural healing."
     frigid (bold cyan, denizen AEON): "An echo of frigid breath chills <target>,
       slowing her movements to a crawl."
+    venomous (bold green_yellow, plague of WEAKNESS): "An echo of venomous breath rots
+      the corpse of <target>, afflicting her with a plague of weakness."
   trample_lines: |  # live-captured 2026-07-28
     action (flavor, untriggered): "Contracting your powerful hindquarters and extending
       your wings backward, you raise your front legs, towering over your surroundings.

@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-07-28 — Venomous breath echo highlight (v4.7.139)
+
+Fourth breath echo captured live: "An echo of venomous breath rots the corpse of
+<target>, afflicting her with a plague of weakness." Added to
+`highlighting/034_Breath_Echoes` in bold **green_yellow** (sickly green, venom
+family; user-directed) alongside psionic/orchid, flaming/tomato, frigid/cyan.
+
+Files: `highlighting/034_Breath_Echoes.lua`, `.claude/classes/dragon.md`.
+
+---
+
 ## 2026-07-28 — Seasone phial counter: touch tree DIRECTLY (v4.7.138)
 
 Second live Seasone truelock (as Golden Dragon) exposed two failures in the v4.7.123
