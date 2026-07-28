@@ -40,9 +40,10 @@ patterns:
 -- Crit-proc atrophy DoT (live capture 2026-07-28, source unconfirmed -- boon/affix/
 -- gear?): a critical strike kindles the mist ("consign to only memory", pattern 1),
 -- then "Time wreaks ruin..." ticks the decay (pattern 2). Highlight both so the
--- proc and its ticks read at a glance.
+-- proc and its ticks read at a glance. deep_sky_blue (spectral-mist blue) -- the
+-- user reserves orange for something else (v4.7.136).
 selectString(line,1)
 setBold(true)
-fg("dark_orange")
+fg("deep_sky_blue")
 deselect()
 resetFormat()

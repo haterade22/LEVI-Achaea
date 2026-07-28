@@ -446,8 +446,8 @@ golden_dragon_battlerage:  # v4.7.129 -- ataxiaBasher_goldenDragonBattlerage (ba
     overwhelm: | # trigger highlighting/032, bold orange_red (damage family)
       "You charge quickly at <target>, throwing your mighty form into him and sending
        him staggering back."
-  crit_proc_dot: |  # trigger highlighting/029, bold dark_orange (both lines; source
-                    # unconfirmed -- boon/affix/gear?)
+  crit_proc_dot: |  # trigger highlighting/029, bold deep_sky_blue (both lines; the
+                    # user reserves orange -- v4.7.136; source unconfirmed: boon/affix/gear?)
     Critical strikes kindle an atrophy DoT:
     apply: "<target>'s form begins to atrophy as your attack kindles ethereal mist to
             consign him to only memory."

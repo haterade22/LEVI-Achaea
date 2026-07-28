@@ -2,6 +2,17 @@
 
 ---
 
+## 2026-07-28 — Atrophy DoT recolour: orange is reserved (v4.7.136)
+
+User request: orange is already in use elsewhere in their setup, so the crit-proc
+atrophy DoT lines (apply + tick, trigger `highlighting/029`) move from bold
+dark_orange to bold **deep_sky_blue** (spectral-mist blue; distinct from the frigid
+echo's cyan and everything else in the highlight palette).
+
+Files: `highlighting/029_Atrophy_Dot.lua`, `.claude/classes/dragon.md`.
+
+---
+
 ## 2026-07-28 — Breath-echo proc highlights (v4.7.135)
 
 Live captures (user): dragon breath attacks echo with per-element riders on the
