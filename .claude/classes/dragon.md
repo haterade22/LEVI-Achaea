@@ -422,18 +422,33 @@ golden_dragon_battlerage:  # v4.7.129 -- ataxiaBasher_goldenDragonBattlerage (ba
     Other colours still ride battleRage_Timers from triggers 330-332 -- audit fire-line coverage
     per colour when one becomes the active bashing class (Black keeps its dragonfear crowd branch
     in the assembler; only Golden bypasses it).
-  fire_lines:
-    psidaze: |  # CAPTURED live 2026-07-28; trigger highlighting/028 highlights (bold gold) +
-                # confirms: restamps the 41s cd from the LANDED moment and releases the pick hold
-                # (ataxiaBasher_gdragonConfirm).
+  fire_lines:  # all live-captured 2026-07-28; each landed line -> highlight + ataxiaBasher_gdragonConfirm
+               # (restamps the cd from the LANDED moment, releases the in-flight pick hold)
+    deaden: |    # trigger highlighting/030, bold gold (control family)
+      "You psychically slam your mind into <target>'s, deadening his reactions."
+    psidaze: |   # trigger highlighting/028, bold gold
       "You summon sparkles of psi energy around <target>, causing her to forget her
        actions as the sparkles distract her."
+    psidaze_wears_off: |  # trigger highlighting/031, dim_grey + echoes the measured
+                          # amnesia uptime vs the 41s cd (the coverage-gap question)
+      "Sparkles of psi energy cease their distracting dance around <target>'s vision."
+    overwhelm: | # trigger highlighting/032, bold orange_red (damage family)
+      "You charge quickly at <target>, throwing your mighty form into him and sending
+       him staggering back."
+  crit_proc_dot: |  # trigger highlighting/029, bold dark_orange (both lines; source
+                    # unconfirmed -- boon/affix/gear?)
+    Critical strikes kindle an atrophy DoT:
+    apply: "<target>'s form begins to atrophy as your attack kindles ethereal mist to
+            consign him to only memory."
+    tick:  "Time wreaks ruin upon <target>, deteriorating before your eyes."
   live_capture_wishlist:
-    - "Deaden/Overwhelm/Psiblast fire lines (wire into ataxiaBasher_gdragonConfirm like Psidaze)"
-    - "Actual denizen aeon/amnesia duration (assumed ~= cooldown)"
-    - "331_Battlerage_Large.lua:80 draconic-gaze psychic line -- likely Psiblast; verify colour"
-    - "332_Battlerage_Special.lua:55 'rummage...deadening it' line -- flavour fits Deaden but its
-       body dispatch attributes it to Psion; verify which class fires it before wiring"
+    - "Psiblast fire line (wire into ataxiaBasher_gdragonConfirm; 331_Battlerage_Large.lua:80's
+       draconic-gaze psychic line is likely it -- verify in Golden form, then move it to a
+       confirm trigger)"
+    - "Deaden aeon wear-off line (measure aeon uptime like the psidaze recovery does)"
+    - "Atrophy DoT source (which boon/affix/gear grants the crit proc?) + tick damage size"
+    - "RESOLVED: 332's 'rummage...deadening it' line is Psion's -- Golden's Deaden line differs
+       (captured above), so 332's Psion dispatch stands"
 
 basher_toggles:
   bash incant on/off: "Use INCANTATION (willpower) instead of GUT as the primary bash attack"

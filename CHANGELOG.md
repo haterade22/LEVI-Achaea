@@ -2,6 +2,32 @@
 
 ---
 
+## 2026-07-28 — Golden Dragon fire lines: Deaden + Overwhelm confirmed, recovery + DoT highlights (v4.7.132)
+
+Live captures (user): three more Golden Dragon lines land the confirmation upgrade,
+plus two extras worth highlighting.
+
+- **Deaden fire line** ("You psychically slam your mind into <t>'s, deadening his
+  reactions.") — trigger `highlighting/030`, bold gold + `gdragonConfirm("deaden")`
+  (35s cd from the landed moment). This also settles the 332 question: the
+  "rummage...deadening it" line there is Psion's, not Golden's.
+- **Overwhelm fire line** ("You charge quickly at <t>, throwing your mighty form...")
+  — trigger `highlighting/032`, bold orange_red + `gdragonConfirm("overwhelm")`
+  (16s cd). Only Psiblast's line remains uncaptured (331:80 is the likely suspect).
+- **Psidaze wear-off** ("Sparkles of psi energy cease their distracting dance...") —
+  trigger `highlighting/031`, dim_grey + a one-line echo of the MEASURED amnesia
+  uptime vs the 41s cooldown (delta from the landed stamp) — answers the
+  coverage-gap question from live data.
+- **Crit-proc atrophy DoT** (apply: "...kindles ethereal mist to consign him to only
+  memory."; tick: "Time wreaks ruin upon <t>, deteriorating before your eyes.") —
+  trigger `highlighting/029`, bold dark_orange on both. Source unconfirmed
+  (boon/affix/gear?) — noted on the wishlist.
+
+Files: `highlighting/029-032` (NEW x4), `.claude/classes/dragon.md` (fire-line
+ledger). Suite **491/491**.
+
+---
+
 ## 2026-07-28 — Psidaze fire line: highlight + confirmed cooldown (v4.7.131)
 
 Live capture (user): "You summon sparkles of psi energy around a sturdy troll woman,
