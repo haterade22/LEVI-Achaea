@@ -132,6 +132,18 @@ describe("ataxiaBasher_goldenDragonBattlerage -- control-first rotation", functi
     gmcp.IRE.Target.Info.hpperc = "10%" -- live shape (gsub multi-return regression)
     expect(ataxiaBasher_goldenDragonBattlerage(";")).toBe("")
   end)
+
+  it("fire-line confirmation restamps the cooldown and releases the pick hold", function()
+    reset(); ataxia.vitals.rage = 100
+    ataxiaTemp.gdragonBrAt = { deaden = clock } -- deaden down: psidaze picks first
+    expect(has(ataxiaBasher_goldenDragonBattlerage(";"), "psidaze")).toBeTrue()
+    clock = clock + 2 -- the cast lands mid-hold (trigger highlighting/028 fires)
+    ataxiaBasher_gdragonConfirm("psidaze")
+    expect(ataxiaTemp.gdragonBrPending).toBe(nil)
+    expect(ataxiaTemp.gdragonBrAt.psidaze).toBe(clock) -- cooldown from the LANDED moment
+    -- The next rebuild advances immediately instead of replaying the landed cast.
+    expect(has(ataxiaBasher_goldenDragonBattlerage(";"), "psiblast")).toBeTrue()
+  end)
 end)
 
 describe("ataxiaBasher_dragonBashing -- per-colour battlerage routing", function()

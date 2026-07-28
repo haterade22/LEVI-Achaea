@@ -2,6 +2,25 @@
 
 ---
 
+## 2026-07-28 — Psidaze fire line: highlight + confirmed cooldown (v4.7.131)
+
+Live capture (user): "You summon sparkles of psi energy around a sturdy troll woman,
+causing her to forget her actions as the sparkles distract her." — the Golden Dragon
+PSIDAZE fire line, first of the four on the wishlist.
+
+- New trigger `highlighting/028_Psidaze_Lands` (pronoun-tolerant pattern): highlights
+  the line bold gold, then calls `ataxiaBasher_gdragonConfirm("psidaze")`.
+- `ataxiaBasher_gdragonConfirm(key)` (basher/002, the Monk-ripplestrike direction):
+  restamps the cooldown from the LANDED moment (send stamps are pick-time — the
+  queued cast can fire seconds later) and releases the in-flight pick hold, so the
+  rotation may advance on the next rebuild instead of re-sending a landed cast.
+  Deaden/Overwhelm/Psiblast wire in the same way once their lines are captured.
+
+Files: `basher/002_Class_Bashing.lua`, `highlighting/028_Psidaze_Lands.lua` (NEW),
+`test_basher_dragon.lua` (+1 case). Suite **491/491**.
+
+---
+
 ## 2026-07-27 — Might of Sycaerunax: blast weave stops re-summoning (v4.7.130)
 
 New Mnemosyne boon (the 14th flag, `dragonMightSycaerunax`): "Your draconic blast

@@ -120,6 +120,20 @@ local GDRAGON_BR = {
   { key = "psiblast",  cmd = "psiblast",  rage = 36, cd = 23 },
   { key = "overwhelm", cmd = "overwhelm", rage = 14, cd = 16 },
 }
+-- Fire-line confirmation (the Monk-ripplestrike direction): a captured fire line
+-- proves the cast LANDED, so (a) the cooldown restarts from the confirmed moment
+-- (send stamps are pick-time -- the queued cast can fire seconds later) and (b) the
+-- in-flight pick hold is released early, letting the rotation advance on the next
+-- rebuild instead of re-sending a cast that already fired. Wired so far: PSIDAZE
+-- (trigger highlighting/028). Wire the other three as their lines are captured.
+function ataxiaBasher_gdragonConfirm(key)
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp.gdragonBrAt = ataxiaTemp.gdragonBrAt or {}
+  ataxiaTemp.gdragonBrAt[key] = nowT
+  local pend = ataxiaTemp.gdragonBrPending
+  if pend and pend.verb == key then ataxiaTemp.gdragonBrPending = nil end
+end
+
 function ataxiaBasher_goldenDragonBattlerage(sp)
   local rage = tonumber(ataxia.vitals.rage) or 0
   -- Rage conservation: same rule the generic assembler applies. Clears any in-flight

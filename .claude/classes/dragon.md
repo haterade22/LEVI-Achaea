@@ -422,10 +422,18 @@ golden_dragon_battlerage:  # v4.7.129 -- ataxiaBasher_goldenDragonBattlerage (ba
     Other colours still ride battleRage_Timers from triggers 330-332 -- audit fire-line coverage
     per colour when one becomes the active bashing class (Black keeps its dragonfear crowd branch
     in the assembler; only Golden bypasses it).
+  fire_lines:
+    psidaze: |  # CAPTURED live 2026-07-28; trigger highlighting/028 highlights (bold gold) +
+                # confirms: restamps the 41s cd from the LANDED moment and releases the pick hold
+                # (ataxiaBasher_gdragonConfirm).
+      "You summon sparkles of psi energy around <target>, causing her to forget her
+       actions as the sparkles distract her."
   live_capture_wishlist:
-    - "Deaden/Psidaze/Overwhelm/Psiblast fire lines (for confirmation-based cooldowns + denizen-state affliction capture)"
+    - "Deaden/Overwhelm/Psiblast fire lines (wire into ataxiaBasher_gdragonConfirm like Psidaze)"
     - "Actual denizen aeon/amnesia duration (assumed ~= cooldown)"
     - "331_Battlerage_Large.lua:80 draconic-gaze psychic line -- likely Psiblast; verify colour"
+    - "332_Battlerage_Special.lua:55 'rummage...deadening it' line -- flavour fits Deaden but its
+       body dispatch attributes it to Psion; verify which class fires it before wiring"
 
 basher_toggles:
   bash incant on/off: "Use INCANTATION (willpower) instead of GUT as the primary bash attack"
