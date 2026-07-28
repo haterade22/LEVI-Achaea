@@ -2,6 +2,23 @@
 
 ---
 
+## 2026-07-28 — Breath-echo proc highlights (v4.7.135)
+
+Live captures (user): dragon breath attacks echo with per-element riders on the
+denizen — psionic echo = clumsiness ("...forcing him to stumble clumsily around."),
+flaming echo = natural-healing inhibition ("...scorching him and inhibiting his
+natural healing."), frigid echo = aeon ("...slowing her movements to a crawl.").
+Source unconfirmed (boon/affix?).
+
+- New trigger `highlighting/034_Breath_Echoes` (three patterns, pronoun-tolerant):
+  psionic echo bold orchid (control family), flaming echo bold tomato (burn
+  family), frigid echo bold cyan (ice family).
+
+Files: `highlighting/034_Breath_Echoes.lua` (NEW), `.claude/classes/dragon.md`.
+Suite **497/497**.
+
+---
+
 ## 2026-07-28 — DRAGONFLEX: snap bindings instead of writhing (v4.7.134)
 
 AB Flex (1534): DRAGONFLEX, self, 2.00s of balance — "snap through those feeble

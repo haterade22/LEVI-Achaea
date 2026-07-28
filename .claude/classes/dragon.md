@@ -452,6 +452,14 @@ golden_dragon_battlerage:  # v4.7.129 -- ataxiaBasher_goldenDragonBattlerage (ba
     apply: "<target>'s form begins to atrophy as your attack kindles ethereal mist to
             consign him to only memory."
     tick:  "Time wreaks ruin upon <target>, deteriorating before your eyes."
+  breath_echoes: |  # trigger highlighting/034 (live-captured 2026-07-28; source
+                    # unconfirmed -- boon/affix?). Breath attacks echo with a rider:
+    psionic (bold orchid, denizen CLUMSINESS): "An echo of psionic breath assails
+      <target>, forcing him to stumble clumsily around."
+    flaming (bold tomato, denizen heal-INHIBIT): "An echo of flaming breath strikes
+      <target>, scorching him and inhibiting his natural healing."
+    frigid (bold cyan, denizen AEON): "An echo of frigid breath chills <target>,
+      slowing her movements to a crawl."
   trample_lines: |  # live-captured 2026-07-28
     action (flavor, untriggered): "Contracting your powerful hindquarters and extending
       your wings backward, you raise your front legs, towering over your surroundings.
