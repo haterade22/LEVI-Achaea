@@ -88,3 +88,69 @@ Culling: `reap <t>` (36 rage, AoE finisher).
 **Reload-safety note:** `battleRage_Timers` (and `tBals`, `shape`) get idempotent load-time inits (`X = X or …`) at the top of basher/001, and `bashStats` in basher/003. These were previously created only in `levilogin()`, so a SYSUPDATE/reload that didn't re-fire login left them nil and the always-live rotation code crashed.
 
 Line catalog + capture status: [denizen-lines-catalog.md](denizen-lines-catalog.md).
+
+---
+
+## Rage floor — threshold gear (v4.7.141)
+
+Some gear pays a flat damage bonus **while battlerage stays at or above a threshold**
+(live example: *"Your attacks will deal 23% bonus damage so long as you have 40
+battlerage or more."*). Spending down through that line silently forfeits the bonus on
+every attack until rage rebuilds, which makes "spend freely" vs "hold the line" an
+economics question rather than a style choice.
+
+**Policy.** `ataxiaBasher.rageFloor = N` (command `bash floor <n|off>`) makes every
+rotation spend only the SURPLUS: an ability costing C fires at `C + N`. One helper does
+it all — `ataxiaBasher_rageAfford(rage, cost)` (basher/001) — wired into the generic
+assembler, `standardBattlerage`, `crowdControlBattlerage`, and the class-owned
+bard/blademaster/magi/monk (001) + Golden Dragon/Psion (002) rotations.
+
+- **nil / 0 = off**, and provably behaviour-identical (the pre-existing battlerage suites
+  pass unmodified — that's the regression guarantee).
+- **Culling reap is never floored.** An execute that ends the fight outright dominates a
+  per-swing multiplier, and flooring it (76 rage at floor 40) would idle the cooldown.
+- **Clamped to 46.** Rage caps at 100 and the priciest gated ability costs 54 (rageraze
+  `bigRage`); above a 46 floor that ability could never be afforded, and a rotation that
+  *banks* for an unaffordable cast (Golden Dragon's control-first rule) would stop
+  producing battlerage entirely.
+- Golden Dragon's banking rule composes cleanly — a control just banks until `cost +
+  floor`. The in-flight pick replay is deliberately NOT re-checked against the floor: the
+  pick was floor-validated when chosen, and command stability across the 0.3s
+  `addclearfull` re-queue loop outranks re-litigating it mid-flight.
+
+**Blademaster costs** (the class this shipped against): reap 36 (exempt), spinslash 36,
+daze 26, headstrike 25, nerveslash 22, leapstrike 14. At floor 40 the whole kit stays
+reachable (leapstrike from 54, spinslash from 76).
+
+## Rage probe — measuring the bonus (`bash probe`)
+
+`basher/009_Rage_Probe.lua` answers "does the bonus exist, does it apply to our bash
+attacks, and how big is it" from ordinary play — no A/B protocol needed, because rage
+oscillates across the threshold naturally while bashing.
+
+**Method.** One hook in trigger `350_Damage_Dealt` (placed BEFORE the crit flag resets)
+records each **non-crit** damage line as `{rage, damage, mob, class}`. Crits are counted
+but excluded — the 16x/32x/64x tail swamps a 23% signal. Samples are keyed by mob **and**
+class (denizen armour differs; a class switch would blend two damage profiles) and
+FIFO-capped at 1500 so the saved `ataxiaBasher` table stays bounded.
+
+| Command | Purpose |
+|---|---|
+| `bash probe on` / `off` | start/stop recording (samples are kept when off) |
+| `bash probe report [filter]` | per-mob mean hit at `>= threshold` vs `<`, plus the ratio — a real +23% reads as **~1.23** |
+| `bash probe bands [filter]` | mean per 10-rage band — locates the REAL breakpoint instead of assuming 40 |
+| `bash probe at <n>` | move the threshold and re-analyse the same samples |
+| `bash probe dump [n]` | raw recent samples for offline analysis |
+| `bash probe clear` / `status` | reset / show state |
+
+**Reading it honestly.** Hits with rage inside a **±4 band** around the threshold are
+discarded: `ataxia.vitals.rage` is last-prompt (pre-attack) data, so boundary hits
+misclassify. Trust a ratio only with **≥30 non-crit hits per bucket on the same mob** —
+the report flags thin rows. The per-mob rows are the answer; the TOTAL row mixes mobs and
+is only a sanity check.
+
+**Deferred:** a full A/B trial harness (labelled windows accumulating `bashStats` deltas,
+kills/hr + non-crit dmg/min, ABBA interleaving, corruption guards for stats-reset/death/
+SYSUPDATE) is designed but intentionally NOT built — the probe is expected to settle the
+question first. Note if it is ever built: **Mnemosyne is disqualified as a trial venue**
+(Reaper's +1%/kill drift, per-run boon rosters, ripple-scaled mob mixes).

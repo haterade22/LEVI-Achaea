@@ -639,6 +639,22 @@ ataxiaBasher_specialRageThresholds = {
   Monk = 22,
 }
 
+-- RAGE FLOOR (v4.7.141). Some gear pays a flat damage bonus while battlerage is at or
+-- above a threshold (live example: "+23% damage so long as you have 40 battlerage or
+-- more"). Spending down through that line silently forfeits the bonus on EVERY attack
+-- until rage rebuilds, so `ataxiaBasher.rageFloor = N` makes the rotations spend only
+-- the SURPLUS: an ability costing C fires only at C + N rage.
+--
+-- nil/0 = off and provably behaviour-identical to the pre-floor code (the existing
+-- battlerage suites run unmodified). Culling reap is deliberately NEVER floored -- an
+-- execute that ends the fight outright beats a per-swing multiplier, and flooring it
+-- would idle the culling cooldown. Set via `bash floor <n|off>`; persists with
+-- ataxiaBasher.
+function ataxiaBasher_rageAfford(rage, cost)
+  local floor = tonumber(ataxiaBasher and ataxiaBasher.rageFloor) or 0
+  return (tonumber(rage) or 0) >= ((tonumber(cost) or 0) + floor)
+end
+
 -- Generic battlerage handler for the standard pattern:
 -- With 2+ targets: try special → small → large
 -- With <2 targets: try small → large
@@ -648,17 +664,17 @@ local function ataxiaBasher_standardBattlerage(class, specialRage, level, sp)
   if not brData then return "" end
 
   if ataxiaBasher_validTargets() >= 2 then
-    if not battleRage_Timers.special and ataxia.vitals.rage >= specialRage then
+    if not battleRage_Timers.special and ataxiaBasher_rageAfford(ataxia.vitals.rage, specialRage) then
       command = brData.special..sp
-    elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
+    elseif not battleRage_Timers.small and ataxiaBasher_rageAfford(ataxia.vitals.rage, 14) and battleRage_Timers.special then
       command = brData.small..sp
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and battleRage_Timers.special and level > 35 then
+    elseif not battleRage_Timers.large and ataxiaBasher_rageAfford(ataxia.vitals.rage, 36) and battleRage_Timers.special and level > 35 then
       command = brData.large..sp
     end
   else
-    if not battleRage_Timers.small and ataxia.vitals.rage >= 14 then
+    if not battleRage_Timers.small and ataxiaBasher_rageAfford(ataxia.vitals.rage, 14) then
       command = brData.small..sp
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and level > 35 then
+    elseif not battleRage_Timers.large and ataxiaBasher_rageAfford(ataxia.vitals.rage, 36) and level > 35 then
       command = brData.large..sp
     end
   end
@@ -672,17 +688,17 @@ local function ataxiaBasher_crowdControlBattlerage(class, specialCmd, level, sp,
   if not brData then return "" end
 
   if #stormhammerTargets >= 3 then
-    if not battleRage_Timers.special and ataxia.vitals.rage >= 29 then
+    if not battleRage_Timers.special and ataxiaBasher_rageAfford(ataxia.vitals.rage, 29) then
       command = specialCmd..sp
-    elseif not battleRage_Timers.small and ataxia.vitals.rage >= 14 and battleRage_Timers.special then
+    elseif not battleRage_Timers.small and ataxiaBasher_rageAfford(ataxia.vitals.rage, 14) and battleRage_Timers.special then
       command = brData.small..sp
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= 36 and battleRage_Timers.special and level > 35 then
+    elseif not battleRage_Timers.large and ataxiaBasher_rageAfford(ataxia.vitals.rage, 36) and battleRage_Timers.special and level > 35 then
       command = brData.large..sp
     end
   else
-    if not battleRage_Timers.small and ataxia.vitals.rage >= smallRage then
+    if not battleRage_Timers.small and ataxiaBasher_rageAfford(ataxia.vitals.rage, smallRage) then
       command = brData.small..sp
-    elseif not battleRage_Timers.large and ataxia.vitals.rage >= bigRage and level > 35 then
+    elseif not battleRage_Timers.large and ataxiaBasher_rageAfford(ataxia.vitals.rage, bigRage) and level > 35 then
       command = brData.large..sp
     end
   end
@@ -705,13 +721,13 @@ local function ataxiaBasher_bardBattlerage(sp)
   end
 
   local twoPlus = ataxiaBasher_validTargets() >= 2  -- also refreshes stormhammerTargets
-  if twoPlus and rage >= 32 then
+  if twoPlus and ataxiaBasher_rageAfford(rage, 32) then
     return "play charm at "..(stormhammerTargets[2] or target)..sp
-  elseif twoPlus and rage >= 28 and not battleRage_Timers.special then
+  elseif twoPlus and ataxiaBasher_rageAfford(rage, 28) and not battleRage_Timers.special then
     return "play trill at "..target..sp
-  elseif rage >= 36 and not battleRage_Timers.large then
+  elseif ataxiaBasher_rageAfford(rage, 36) and not battleRage_Timers.large then
     return "howlslash "..target..sp
-  elseif rage >= 14 and not battleRage_Timers.small then
+  elseif ataxiaBasher_rageAfford(rage, 14) and not battleRage_Timers.small then
     return "moulinet "..target..sp
   end
   return ""
@@ -755,30 +771,30 @@ function ataxiaBasher_blademasterBattlerage(sp)
     -- 2. In Mnemosyne (no-flee, dangerous), HIT-PREVENTION beats damage: Daze -> Stun (mob does
     -- nothing 4s). Blademaster's only hit-prevention affliction (Amnesia/Aeon/Clumsy belong to
     -- other classes). Uses the shared `special` cooldown (tracked by trigger 332).
-    if inMnem and br.special and not battleRage_Timers.special and rage >= 26 then return br.special..sp end
+    if inMnem and br.special and not battleRage_Timers.special and ataxiaBasher_rageAfford(rage, 26) then return br.special..sp end
 
     -- 3. Damage battlerages: Headstrike (bonus damage on a reckless/feared target) then Spinslash.
     -- Timestamp cooldowns (reload-safe -- a stale timestamp just expires; a stuck timer id would
     -- skip the ability forever); Headstrike/Nerveslash have no fire-line trigger to track them.
-    if br.specialuse and rage >= 25 and getEpoch() >= (ataxiaTemp.bmHeadstrikeReadyAt or 0)
+    if br.specialuse and ataxiaBasher_rageAfford(rage, 25) and getEpoch() >= (ataxiaTemp.bmHeadstrikeReadyAt or 0)
        and ataxiaBasher_dsExploit and ataxiaBasher_dsExploit(target) == "headstrike" then
       ataxiaTemp.bmHeadstrikeReadyAt = getEpoch() + 23
       return br.specialuse..sp
     end
-    if br.large and not battleRage_Timers.large and rage >= 36 then return br.large..sp end -- Spinslash
+    if br.large and not battleRage_Timers.large and ataxiaBasher_rageAfford(rage, 36) then return br.large..sp end -- Spinslash
 
     -- 4. Other afflictions: Daze -> Stun when NOT in Mnemosyne (spends surplus + still mitigates),
     -- and Nerveslash -> Weakness (mob deals 66% damage for 7s). In Mnemosyne, Daze is checked at
     -- tier 2 and fires near its cooldown ceiling on its own -- no need to starve the cheaper
     -- abilities to feed it (verified in-game: Daze fires ~every 33s regardless).
-    if not inMnem and br.special and not battleRage_Timers.special and rage >= 26 then return br.special..sp end
-    if br.specialafflict and rage >= 22 and getEpoch() >= (ataxiaTemp.bmNerveslashReadyAt or 0) then
+    if not inMnem and br.special and not battleRage_Timers.special and ataxiaBasher_rageAfford(rage, 26) then return br.special..sp end
+    if br.specialafflict and ataxiaBasher_rageAfford(rage, 22) and getEpoch() >= (ataxiaTemp.bmNerveslashReadyAt or 0) then
       ataxiaTemp.bmNerveslashReadyAt = getEpoch() + 31
       return br.specialafflict..sp -- Nerveslash (Weakness)
     end
 
     -- 5. Small damage: Leapstrike (cheap filler -- spends whatever rage is left, so it never idles).
-    if br.small and not battleRage_Timers.small and rage >= 14 then return br.small..sp end
+    if br.small and not battleRage_Timers.small and ataxiaBasher_rageAfford(rage, 14) then return br.small..sp end
     return ""
   end
 
@@ -827,18 +843,18 @@ function ataxiaBasher_monkBattlerage(sp)
   -- It cannot use battleRage_Timers.specialafflict: nothing ever sets that (330/331/332 cover
   -- only small/large/special), so gating on it never blocks and we would re-fire Ripplestrike
   -- on every attack while healing was up, burning rage against a 27s cooldown we cannot see.
-  if healing and br.specialafflict and rage >= 25
+  if healing and br.specialafflict and ataxiaBasher_rageAfford(rage, 25)
      and getEpoch() >= (ataxiaTemp.monkRipplestrikeReadyAt or 0) then
     local already = ataxiaBasher_dsHasAff and ataxiaBasher_dsHasAff(target, "inhibit")
     if not already then return br.specialafflict..sp end
   end
 
   -- 2. Damage, biggest affordable first.
-  if br.large and not battleRage_Timers.large and rage >= 36 then return br.large..sp end
-  if br.small and not battleRage_Timers.small and rage >= 14 then return br.small..sp end
+  if br.large and not battleRage_Timers.large and ataxiaBasher_rageAfford(rage, 36) then return br.large..sp end
+  if br.small and not battleRage_Timers.small and ataxiaBasher_rageAfford(rage, 14) then return br.small..sp end
 
   -- 3. Surplus -> Clumsy (hit-prevention).
-  if br.special and not battleRage_Timers.special and rage >= 22 then return br.special..sp end
+  if br.special and not battleRage_Timers.special and ataxiaBasher_rageAfford(rage, 22) then return br.special..sp end
   return ""
 end
 
@@ -888,7 +904,7 @@ function ataxiaBasher_magiBattlerage(sp)
 
     -- 2. Mnemosyne mitigation: Dilation -> Aeon (mob attacks slower). Gate on the aff (no
     -- fire-line cooldown for special) + a short in-flight bridge until the Aeon line lands.
-    if inMnem and br.special and rage >= 35 and not has("aeon")
+    if inMnem and br.special and ataxiaBasher_rageAfford(rage, 35) and not has("aeon")
        and getEpoch() >= (ataxiaTemp.magiDilationReadyAt or 0) then
       ataxiaTemp.magiDilationReadyAt = getEpoch() + 35 -- Dilation cd (AB); aff-gate (015) also skips if aeon up
       return br.special..sp
@@ -896,7 +912,7 @@ function ataxiaBasher_magiBattlerage(sp)
 
     -- 3. Firefall: bonus damage on a clumsy/reckless target (from ANY source -- Magi's own kit
     -- applies neither, so this only fires off a boon/groupmate). ESTIMATED cooldown.
-    if br.specialuse and rage >= 25 and getEpoch() >= (ataxiaTemp.magiFirefallReadyAt or 0)
+    if br.specialuse and ataxiaBasher_rageAfford(rage, 25) and getEpoch() >= (ataxiaTemp.magiFirefallReadyAt or 0)
        and (has("clumsy") or has("recklessness")) then
       ataxiaTemp.magiFirefallReadyAt = getEpoch() + 23 -- Firefall cooldown (AB)
       return br.specialuse..sp
@@ -904,17 +920,17 @@ function ataxiaBasher_magiBattlerage(sp)
 
     -- 4. Stormbolt -> Sensitivity (+33% dmg taken), when not already sensitive -- sets up Squeeze.
     -- Same aff-gate + bridge as Dilation (prevents re-casting before the Sensitivity line lands).
-    if br.specialafflict and rage >= 25 and not has("sensitivity")
+    if br.specialafflict and ataxiaBasher_rageAfford(rage, 25) and not has("sensitivity")
        and getEpoch() >= (ataxiaTemp.magiStormboltReadyAt or 0) then
       ataxiaTemp.magiStormboltReadyAt = getEpoch() + 27 -- Stormbolt cooldown (AB); no Sensitivity capture yet
       return br.specialafflict..sp
     end
 
     -- 5. Squeeze (big damage; hits harder while Sensitivity is up). Real cooldown via 331.
-    if br.large and not battleRage_Timers.large and rage >= 36 then return br.large..sp end
+    if br.large and not battleRage_Timers.large and ataxiaBasher_rageAfford(rage, 36) then return br.large..sp end
 
     -- 6. Dilation surplus outside Mnemosyne (spend + Aeon).
-    if not inMnem and br.special and rage >= 35 and not has("aeon")
+    if not inMnem and br.special and ataxiaBasher_rageAfford(rage, 35) and not has("aeon")
        and getEpoch() >= (ataxiaTemp.magiDilationReadyAt or 0) then
       ataxiaTemp.magiDilationReadyAt = getEpoch() + 35 -- Dilation cd (AB); aff-gate (015) also skips if aeon up
       return br.special..sp
@@ -922,7 +938,7 @@ function ataxiaBasher_magiBattlerage(sp)
 
     -- 7. Windlash (cheap filler -- spends whatever rage is left). 16s cooldown, untracked (not
     -- in 330), so a timestamp -- else it re-fires a doomed cast every prompt for 16s.
-    if br.small and rage >= 14 and getEpoch() >= (ataxiaTemp.magiWindlashReadyAt or 0) then
+    if br.small and ataxiaBasher_rageAfford(rage, 14) and getEpoch() >= (ataxiaTemp.magiWindlashReadyAt or 0) then
       ataxiaTemp.magiWindlashReadyAt = getEpoch() + 16
       return br.small..sp
     end
@@ -1046,9 +1062,9 @@ function ataxiaBasher_assembleBattlerage()
 		command = ataxiaBasher_standardBattlerage(class, ataxiaBasher_specialRageThresholds[class], level, sp)
 	-- Fallback for unknown classes: just use small/large
 	elseif ataxiaBasher.battlerage[class] then
-		if not battleRage_Timers.small and ataxia.vitals.rage >= smallRage then
+		if not battleRage_Timers.small and ataxiaBasher_rageAfford(ataxia.vitals.rage, smallRage) then
 			command = ataxiaBasher.battlerage[class].small..sp
-		elseif not battleRage_Timers.large and ataxia.vitals.rage >= bigRage and level > 35 then
+		elseif not battleRage_Timers.large and ataxiaBasher_rageAfford(ataxia.vitals.rage, bigRage) and level > 35 then
 			command = ataxiaBasher.battlerage[class].large..sp
 		end
 	end

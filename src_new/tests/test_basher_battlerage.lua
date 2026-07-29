@@ -499,3 +499,60 @@ describe("ataxiaBasher_assembleBattlerage -- hpperc parsing (multi-return trap)"
     gmcp.Char.Status.class = "Blademaster" -- restore for any later blocks
   end)
 end)
+
+-- ─── Rage floor (v4.7.141) ───────────────────────────────────────────
+-- Gear pays a damage bonus while rage stays at/above a threshold, so
+-- `ataxiaBasher.rageFloor = N` makes every rotation spend only the SURPLUS: an
+-- ability costing C fires at C + N. Culling reap is deliberately exempt -- an
+-- execute that ends the fight beats a per-swing multiplier. Blademaster costs:
+-- reap 36 (exempt), spinslash 36, daze 26, headstrike 25, nerveslash 22,
+-- leapstrike 14. NOTE: each successful call arms the ~1s global BR cooldown, so
+-- every assertion below re-resets (reset() clears brGlobalReadyAt).
+describe("rage floor -- spend only the surplus", function()
+  local function floorReset(floor)
+    reset()
+    gmcp.Char.Status.class = "Blademaster"
+    ataxiaBasher.rageFloor = floor
+  end
+
+  it("is OFF by default -- rageAfford is a plain >= then", function()
+    floorReset(nil)
+    expect(ataxiaBasher_rageAfford(14, 14)).toBeTrue()
+    expect(ataxiaBasher_rageAfford(13, 14)).toBeFalse()
+  end)
+
+  it("requires cost + floor once set", function()
+    floorReset(40)
+    expect(ataxiaBasher_rageAfford(53, 14)).toBeFalse() -- leapstrike needs 54
+    expect(ataxiaBasher_rageAfford(54, 14)).toBeTrue()
+    expect(ataxiaBasher_rageAfford(75, 36)).toBeFalse() -- spinslash needs 76
+    expect(ataxiaBasher_rageAfford(76, 36)).toBeTrue()
+    floorReset(nil)
+  end)
+
+  it("holds the line: 53 rage buys NOTHING at floor 40", function()
+    floorReset(nil); ataxia.vitals.rage = 53
+    expect(ataxiaBasher_blademasterBattlerage(";")).toBe("spinslash 1;") -- floor off: spends
+    floorReset(40); ataxia.vitals.rage = 53
+    expect(ataxiaBasher_blademasterBattlerage(";")).toBe("") -- nothing affordable above the floor
+    floorReset(nil)
+  end)
+
+  it("spends the surplus once it covers an ability", function()
+    floorReset(40); ataxia.vitals.rage = 54
+    expect(ataxiaBasher_blademasterBattlerage(";")).toBe("leapstrike 1;") -- 14 + 40
+    floorReset(40); ataxia.vitals.rage = 76
+    expect(ataxiaBasher_blademasterBattlerage(";")).toBe("spinslash 1;")  -- 36 + 40
+    floorReset(nil)
+  end)
+
+  it("NEVER floors culling reap -- the execute outranks the multiplier", function()
+    floorReset(40); ataxiaBasher.cullingBlade = true
+    ataxia.vitals.rage = 36 -- exactly reap's cost, far below reap + floor
+    expect(ataxiaBasher_blademasterBattlerage(";")).toBe("reap 1;")
+    floorReset(40); ataxiaBasher.cullingBlade = true
+    ataxia.vitals.rage = 39
+    expect(ataxiaBasher_blademasterBattlerage(";")).toBe("reap 1;")
+    floorReset(nil)
+  end)
+end)

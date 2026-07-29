@@ -206,7 +206,10 @@ function ataxiaBasher_goldenDragonBattlerage(sp)
   ataxiaTemp.gdragonBrAt = ataxiaTemp.gdragonBrAt or {}
   for _, ab in ipairs(GDRAGON_BR) do
     if (nowT - (tonumber(ataxiaTemp.gdragonBrAt[ab.key]) or 0)) >= ab.cd then
-      if rage >= ab.rage then
+      -- Rage floor (v4.7.141): with ataxiaBasher.rageFloor = N an ability costing C
+      -- needs C + N, so gear paying a bonus above N keeps paying. Composes with the
+      -- banking rule below: a control simply banks until cost + floor.
+      if ataxiaBasher_rageAfford(rage, ab.rage) then
         ataxiaTemp.gdragonBrAt[ab.key] = nowT
         ataxiaTemp.gdragonBrPending = { verb = ab.cmd, at = nowT }
         return ab.cmd.." "..target..sp
@@ -868,7 +871,8 @@ function ataxiaBasher_psionBattlerage(sp)
   end
   ataxiaTemp.psionBrAt = ataxiaTemp.psionBrAt or {}
   for _, ab in ipairs(PSION_BR) do
-    if (not ab.optIn or ataxiaBasher.psionRegrowth) and rage >= ab.rage
+    -- Rage floor (v4.7.141): see ataxiaBasher_rageAfford (001).
+    if (not ab.optIn or ataxiaBasher.psionRegrowth) and ataxiaBasher_rageAfford(rage, ab.rage)
        and (nowT - (tonumber(ataxiaTemp.psionBrAt[ab.key]) or 0)) >= ab.cd then
       ataxiaTemp.psionBrAt[ab.key] = nowT
       ataxiaTemp.psionBrPending = { verb = ab.cmd, at = nowT }

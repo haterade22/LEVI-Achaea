@@ -51,5 +51,13 @@ if bashStats then
       ataxia.data.db.recordMobDamage(amount)
     end
   end
+
+  -- Rage probe (basher/009): pairs this hit with the rage we had, to measure a
+  -- rage-threshold damage bonus from live play. MUST run before the crit flag is
+  -- reset below -- the probe excludes crits from its means.
+  if ataxiaBasher_rageProbeHit then
+    pcall(ataxiaBasher_rageProbeHit, amount, dtype, bashStats.lastHitWasCrit)
+  end
+
   bashStats.lastHitWasCrit = false
 end

@@ -2,6 +2,52 @@
 
 ---
 
+## 2026-07-29 — Rage floor + rage-threshold damage probe (v4.7.141)
+
+User gear: **"+23% damage so long as you have 40 battlerage or more."** Every battlerage
+cast that dips below 40 forfeits that bonus on every attack until rage rebuilds — so
+spend-freely vs hold-the-floor is an empirical question, not a theoretical one. This
+ships the policy knob and the measurement to settle it.
+
+- **Rage floor** (`ataxiaBasher.rageFloor`, `bash floor <n|off>`): with a floor of N an
+  ability costing C fires only at C + N rage — the rotations spend only the SURPLUS.
+  New pure helper `ataxiaBasher_rageAfford(rage, cost)` (basher/001) wired into EVERY
+  rotation: the generic assembler + `standardBattlerage` + `crowdControlBattlerage`, and
+  the class-owned bard / **blademaster** / magi / monk (001) and Golden Dragon / Psion
+  (002) rotations. **nil/0 = off and provably behaviour-identical** — the whole existing
+  suite passes unmodified.
+  - **Culling reap is NEVER floored**: an execute that ends the fight outright beats a
+    per-swing multiplier, and flooring it (76 rage at floor 40) would idle the cooldown.
+  - The alias **clamps the floor to 46** (100-rage cap minus the priciest gated ability,
+    54 under rageraze) — above that, an ability could never be afforded, and a rotation
+    that banks for an unaffordable cast would stop producing battlerage entirely.
+  - Golden Dragon's banking rule composes: a control simply banks until cost + floor.
+    The in-flight pick replay is untouched (the pick was floor-validated when chosen;
+    command stability across the 0.3s re-queue loop still rules).
+- **Rage probe** (`basher/009_Rage_Probe.lua` NEW, `bash probe ...`): records every
+  NON-CRIT damage line with the rage we had at the time (one hook in
+  `350_Damage_Dealt.lua`, before the crit flag resets). Crits are counted but excluded —
+  their heavy tail swamps a 23% signal. Samples are keyed by mob AND class, FIFO-capped
+  at 1500.
+  - `bash probe report` — mean hit at >= threshold vs < threshold per mob, plus the
+    ratio (a real +23% shows as ~1.23). Hits inside a +/-4 ambiguity band are skipped:
+    `ataxia.vitals.rage` is last-prompt (pre-attack) data, so boundary hits misclassify.
+  - `bash probe bands` — mean per 10-rage band, which locates the REAL breakpoint
+    instead of assuming 40 (and would catch a second breakpoint from other gear).
+  - Also `on|off|at <n>|dump [n]|clear|status`. Ordinary bashing produces both arms
+    (rage oscillates naturally), so 15-30 minutes answers the question with no protocol.
+
+The full A/B trial harness (labelled windows, kills/hr vs dmg/min, ABBA interleaving) is
+deliberately deferred until the probe confirms the buff is real and worth chasing.
+
+Files: `basher/001_Bashing_Functions.lua`, `basher/002_Class_Bashing.lua`,
+`basher/009_Rage_Probe.lua` (NEW), `triggers/.../350_Damage_Dealt.lua`,
+`aliases/.../configs/016_Rage_Floor.lua` + `017_Rage_Probe.lua` (NEW),
+`test_rage_probe.lua` (NEW, 15 cases), floor cases in `test_basher_battlerage.lua` +
+`test_basher_dragon.lua`. Suite **521/521**.
+
+---
+
 ## 2026-07-28 — Deluge affix: no flying underwater (v4.7.140)
 
 User report from the affix screen: "Deluge: All rooms are underwater." — FLY cannot

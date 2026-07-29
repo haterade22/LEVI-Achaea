@@ -51,7 +51,7 @@ local function has(cmd, needle) return cmd:find(needle, 1, true) ~= nil end
 local function reset()
   ataxiaBasher.shielded, ataxiaBasher.rageraze = false, false
   ataxiaBasher.cullingBlade, ataxiaBasher.rageConserveThreshold = nil, nil
-  ataxiaBasher.dragonBlast = nil
+  ataxiaBasher.dragonBlast, ataxiaBasher.rageFloor = nil, nil
   ataxia.vitals.rage = 0
   ataxia.defences = {}
   ataxiaTemp = {}
@@ -131,6 +131,20 @@ describe("ataxiaBasher_goldenDragonBattlerage -- control-first rotation", functi
     expect(has(ataxiaBasher_goldenDragonBattlerage(";"), "reap " .. target)).toBeTrue()
     ataxiaTemp.bladeCooldown = true
     expect(has(ataxiaBasher_goldenDragonBattlerage(";"), "deaden")).toBeTrue()
+  end)
+
+  it("rage floor: banking still banks, and picks need cost + floor (v4.7.141)", function()
+    reset(); ataxiaBasher.rageFloor = 40
+    ataxia.vitals.rage = 60 -- deaden needs 24 + 40 = 64: bank, don't spend on fillers
+    expect(ataxiaBasher_goldenDragonBattlerage(";")).toBe("")
+    reset(); ataxiaBasher.rageFloor = 40
+    ataxia.vitals.rage = 64
+    expect(has(ataxiaBasher_goldenDragonBattlerage(";"), "deaden")).toBeTrue()
+    -- Reap is exempt: it fires at its own 36 even though 36 < 36 + floor.
+    reset(); ataxiaBasher.rageFloor = 40
+    ataxiaBasher.cullingBlade = true; ataxia.vitals.rage = 36
+    expect(has(ataxiaBasher_goldenDragonBattlerage(";"), "reap " .. target)).toBeTrue()
+    ataxiaBasher.rageFloor = nil
   end)
 
   it("conserves rage on nearly-dead mobs, parsing percent-suffixed hpperc", function()
