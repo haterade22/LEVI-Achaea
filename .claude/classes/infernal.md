@@ -209,6 +209,22 @@ utility:
 ```
 
 ### Maul Attack
+
+**It rides EVERY round (v4.7.152).** HYENA MAUL is a *pet order* -- it costs none of our
+balance or equilibrium, so the only thing limiting it is its own cooldown. It used to be
+baked INSIDE each spec's swing string, which meant every round that replaces the swing
+silently dropped it: Tyranny rounds, Arc rounds, shielded-without-rageraze rounds, and
+**Dual Blunt, which never had it at all**. It is now hoisted into its own rider prefixed
+to every branch.
+
+The single exception is a **shielded** denizen: the maul would splash off the shield and
+burn the full 30s cooldown for nothing, so it holds the ~3s until the shield lapses --
+skipping there is what *maximises* landed mauls.
+
+Cooldown starts from **our own command line** (`You command your hyena to maul <target>.`)
+as well as the hyena's attack line, so a missed pet line cannot desync it; the safety
+timer added in v4.7.148 is the final backstop.
+
 ```yaml
 maul:
   cooldown: "30 seconds"

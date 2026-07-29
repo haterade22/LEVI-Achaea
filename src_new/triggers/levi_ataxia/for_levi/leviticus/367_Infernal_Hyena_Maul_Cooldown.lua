@@ -36,6 +36,8 @@ patterns:
   type: 1
 - pattern: ^A daemonic hyena snarls as she hurls herself at (?!you,)
   type: 1
+- pattern: ^You command your hyena to maul (.+)\.$
+  type: 1
 ]]--
 
 -- The negative lookahead matters: when the pet turns on its OWNER the line reads

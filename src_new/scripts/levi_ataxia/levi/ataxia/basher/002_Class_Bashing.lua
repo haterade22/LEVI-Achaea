@@ -721,35 +721,36 @@ function ataxiaBasher_infernalBashing()
 	-- attack keeps inhibiting denizen healing. Prefixed to whatever the round does.
 	local aura = ataxiaBasher_infDeathaura(sp)
 
+	-- HYENA MAUL is a PET order -- it costs us no balance and no equilibrium, so the only
+	-- thing limiting it is its own cooldown. It used to be baked INSIDE each spec's swing
+	-- string, which meant every round that replaces the swing silently dropped it:
+	-- Tyranny rounds, Arc rounds, shielded-without-rageraze rounds, and Dual Blunt (which
+	-- never had it at all). Hoisted into its own rider so it rides EVERY round (user:
+	-- "hyena maul should be used as much as it can be").
+	--
+	-- The one exception is a shielded denizen: the maul would splash off the shield and
+	-- burn the full cooldown for nothing, so we hold it the ~3s until the shield lapses.
+	-- Skipping there is what MAXIMISES landed mauls.
+	local maul = ""
+	if ataxiaBasher.hyenaMaulReady and not ataxiaBasher.shielded then
+		maul = "hyena maul "..target..sp
+	end
+
 	if spec == "Dual Cutting" then
 		-- RAZESLASH, spelled out (user, v4.7.151): `rsl` is a personal server-side alias,
 		-- not a game command -- the same class of bug as the old `st` vs `settarget`
 		-- retarget failure, which silently did nothing for months.
 		raze = "razeslash "..target
-		if ataxiaBasher.hyenaMaulReady then
-			bash = "hyena maul "..target..sp.."dsl "..target..sp
-		else
-			bash = "dsl "..target..sp
-		end
+		bash = "dsl "..target..sp
 	elseif spec == "Two Handed" then
 		raze = "battlefury focus speed"..sp.."splinter "..target
-		-- Add hyena maul before slaughter if ready (30s cooldown)
-		if ataxiaBasher.hyenaMaulReady then
-			bash = "battlefury focus speed"..sp.."hyena maul "..target..sp.."slaughter "..target..sp
-		else
-			bash = "battlefury focus speed"..sp.."slaughter "..target..sp
-		end
+		bash = "battlefury focus speed"..sp.."slaughter "..target..sp
 	elseif spec == "Dual Blunt" then
 		raze = "fracture "..target
 		bash = "doublewhirl "..target
 	else
 		raze = "combination "..target.." raze smash"
-		if ataxiaBasher.hyenaMaulReady then
-			bash = "hyena maul "..target..sp.."combination "..target.." slice smash"
-		else
-			bash = "combination "..target.." slice smash"
-		end
-
+		bash = "combination "..target.." slice smash"
 	end
 	
 	if ataxiaBasher.shielded then
@@ -764,13 +765,14 @@ function ataxiaBasher_infernalBashing()
 	elseif graveHands ~= "" then
 		-- TYRANNY spends 3.00s of BALANCE, so it IS the round -- it cannot ride alongside
 		-- the swing the way an eq ability would. The battlerage still goes with it (rage
-		-- is its own resource). One-time, so it only pre-empts the swing once.
-		command = aura..brage..graveHands:gsub(sp.."$", "")
+		-- is its own resource). One-time, so it only pre-empts the swing once. The maul
+		-- still rides: it is a pet order, not one of OUR balances.
+		command = aura..maul..brage..graveHands:gsub(sp.."$", "")
 	else
 		-- ARC (Indiscriminate boon) likewise spends balance and so replaces the swing --
 		-- one 4.75s room-wide hit instead of several single-target ones.
 		local arc = ataxiaBasher_infArc(sp)
-		command = aura..brage..sp..((arc ~= "") and arc or bash)
+		command = aura..maul..brage..sp..((arc ~= "") and arc or bash)
 	end
 
 	return command

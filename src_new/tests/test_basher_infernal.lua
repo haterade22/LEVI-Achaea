@@ -66,6 +66,44 @@ describe("ataxiaBasher_infernalBashing -- Dual Wield Cutting", function()
   end)
 end)
 
+-- v4.7.152: the maul is a PET order (no balance, no eq of ours), so its only limit is
+-- its own cooldown. It used to live INSIDE each spec's swing string, so every round that
+-- replaced the swing silently dropped it.
+describe("hyena maul rides EVERY round (it costs us nothing)", function()
+  it("rides a Tyranny round", function()
+    reset(); infArmyOfDead = true; denizens = 3
+    local cmd = ataxiaBasher_infernalBashing()
+    expect(has(cmd, "tyranny")).toBeTrue()
+    expect(has(cmd, "hyena maul 42")).toBeTrue()
+  end)
+
+  it("rides an Arc round", function()
+    reset(); infIndiscriminate = true; denizens = 3
+    local cmd = ataxiaBasher_infernalBashing()
+    expect(has(cmd, "arc")).toBeTrue()
+    expect(has(cmd, "hyena maul 42")).toBeTrue()
+  end)
+
+  it("rides Dual Blunt, which never had it at all", function()
+    reset(); ataxia.vitals.knight = "Dual Blunt"
+    local cmd = ataxiaBasher_infernalBashing()
+    expect(has(cmd, "doublewhirl 42")).toBeTrue()
+    expect(has(cmd, "hyena maul 42")).toBeTrue()
+  end)
+
+  it("rides Sword and Board and Two Handed", function()
+    reset(); ataxia.vitals.knight = "Sword and Board"
+    expect(has(ataxiaBasher_infernalBashing(), "hyena maul 42")).toBeTrue()
+    reset(); ataxia.vitals.knight = "Two Handed"
+    expect(has(ataxiaBasher_infernalBashing(), "hyena maul 42")).toBeTrue()
+  end)
+
+  it("HOLDS on a shielded denizen -- a mauled shield burns the whole cooldown", function()
+    reset(); ataxiaBasher.shielded = true
+    expect(has(ataxiaBasher_infernalBashing(), "hyena maul")).toBeFalse()
+  end)
+end)
+
 describe("Army of the Dead -- TYRANNY, a one-time summon", function()
   it("does nothing without the boon", function()
     reset(); denizens = 3

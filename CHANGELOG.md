@@ -2,6 +2,35 @@
 
 ---
 
+## 2026-07-29 — Hyena maul rides every round (v4.7.152)
+
+User: *"hyena maul should be used as much as it can be."* It wasn't — and my own recent
+work had made it worse.
+
+HYENA MAUL is a **pet order**: it costs none of our balance or equilibrium, so the only
+thing limiting it is its own cooldown. But it lived **inside each spec's swing string**,
+so every branch that *replaces* the swing silently dropped it:
+
+- **Tyranny** rounds (v4.7.149) — swing replaced, maul gone.
+- **Arc** rounds (v4.7.150) — swing replaced, maul gone.
+- **Shielded without rageraze** — that branch emits the razer + battlerage, no swing.
+- **Dual Blunt** — never had the maul at all, in any round.
+
+It's now hoisted into its own rider prefixed to every branch, exactly like the deathaura
+and quash riders. The one deliberate exception is a **shielded** denizen: a maul splashes
+off the shield and burns the whole 30s cooldown for nothing, so it holds the ~3s until the
+shield lapses — skipping there is what *maximises* landed mauls.
+
+Also: the cooldown now starts from **our own command line** (`You command your hyena to
+maul <target>.`) as well as the hyena's attack line, so a missed pet line can't desync it.
+The v4.7.148 safety timer remains the final backstop.
+
+Files: `basher/002_Class_Bashing.lua`, `367_Infernal_Hyena_Maul_Cooldown.lua`,
+`test_basher_infernal.lua` (+5 cases covering each previously-dropping branch),
+`.claude/classes/infernal.md`. Suite **581/581**.
+
+---
+
 ## 2026-07-29 — Necrotic Aura + razeslash spelled out (v4.7.151)
 
 **Necrotic Aura** (the 20th boon flag, `infNecroticAura`): *"While you are empowered by an
