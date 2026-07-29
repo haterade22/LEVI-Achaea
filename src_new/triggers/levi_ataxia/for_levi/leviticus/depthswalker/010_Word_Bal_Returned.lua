@@ -36,3 +36,7 @@ patterns:
 ]]--
 
 ataxiaTables.depthswalker.wordBal = true
+
+-- `dw setup` queues the one-time Terminus buffs and sends them ONE PER WORD BALANCE --
+-- this line is the pacing signal, so the game's own rate drives the chain (v4.7.144).
+if ataxia_dwIntoneNext then ataxia_dwIntoneNext() end

@@ -38,13 +38,26 @@ end
 table.sort(defTable)
 local supportedDefs = 0
 local linecount = 0
+
+-- Column width follows the WIDEST label so the grid stays aligned once the
+-- raising-command suffixes are added (Depthswalker's "Bodyaugment (mainaas)" is 21
+-- chars against a bare "Blur"); wider labels also mean fewer columns per row.
+local labelWidth, perLine = 0, 4
+for _, defence in pairs(defTable) do
+	local word = ataxia_defenceWord and ataxia_defenceWord(defence) or nil
+	local len = string.len(defence) + (word and (string.len(word) + 3) or 0)
+	if len > labelWidth then labelWidth = len end
+end
+labelWidth = labelWidth + 2
+if labelWidth > 18 then perLine = 3 end
+
 ataxiaEcho("Valid defences to defup with are:")
 echo("\n\n")
 
 for _, defence in pairs(defTable) do
 	linecount = linecount + 1
 	supportedDefs = supportedDefs + 1
-	if linecount > 4 then
+	if linecount > perLine then
 		linecount = 1
 		echo("\n")
 	end
@@ -64,9 +77,14 @@ for _, defence in pairs(defTable) do
 		echoLink("[K]", [[expandAlias("keepremove ]]..defence..[[")]], "Remove "..defence.." from "..cur.."'s keepup list.", true)
 	end
 
-	cecho("<NavajoWhite> "..defence:title().." ")
-	echo(string.rep(" ", 18-string.len(defence)))
-	
+	-- Show the command that RAISES the defence beside its protocol name, where the two
+	-- differ (Depthswalker: "Precision (trusad)" -- nothing about the SSC name tells you
+	-- to INTONE TRUSAD). Display only; defadd/keepadd still use the protocol name.
+	local word = ataxia_defenceWord and ataxia_defenceWord(defence) or nil
+	local labelLen = string.len(defence) + (word and (string.len(word) + 3) or 0)
+	cecho("<NavajoWhite> "..defence:title()..(word and ("<DimGrey> ("..word..")") or "").." ")
+	echo(string.rep(" ", math.max(1, labelWidth - labelLen)))
+
 end
 echo("\n")
 ataxiaEcho("Total supported defences: "..supportedDefs)

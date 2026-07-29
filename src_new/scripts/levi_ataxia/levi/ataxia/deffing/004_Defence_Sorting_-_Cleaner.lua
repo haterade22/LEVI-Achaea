@@ -109,6 +109,9 @@ function sortedDefenceShow()
 			shadowveil = "shadowveil",
       antiforce = "antiforce",
 	 },
+	 -- NOTE: the keys above are the GMCP/SSC defence names and must never be renamed --
+	 -- `defadd`, `keepadd` and `curing priority defence <def> 25` all key off them. The
+	 -- HUMAN-FACING label is separate: see ataxiaTables.defenceWords below.
 	 
 	 infernal = {
 			deathaura = "deathaura",
@@ -264,4 +267,31 @@ function sortedDefenceShow()
       mosstattoo = "mosstattoo",
    }
 	}
+end
+-- Human-facing labels for defences whose GMCP/SSC name says nothing about the command
+-- that raises them (v4.7.144). The KEYS above are protocol names and can never change --
+-- `defadd`, `keepadd` and `curing priority defence <def> 25` all key off them -- so this
+-- is display only: `defs valid` renders "Precision (trusad)" for a Depthswalker.
+--
+-- Depthswalker is the motivating case: nothing about "precision" or "bodyaugment" tells
+-- you to INTONE TRUSAD or INTONE MAINAAS. Mappings marked (?) are INFERRED from the AB
+-- text, not yet confirmed against a live DEF -- correct them here if a def turns out to
+-- belong to a different word.
+ataxiaTables.defenceWords = {
+  depthswalker = {
+    precision   = "trusad",    -- AB: "Your precision is without compare" (crit vs denizens)
+    durability  = "tsuura",    -- (?) AB: defence reducing damage from denizens
+    bodyaugment = "mainaas",   -- AB: augment own skin vs cutting/blunt
+    antiforce   = "gaiartha",  -- (?) AB: blocks the next forced action (Dominion tree)
+    -- blur / disperse / shadowveil are Shadowmancy, not intoned words.
+    disperse    = "shadow disperse",
+    shadowveil  = "shadow veil",
+  },
+}
+
+-- The command/word that raises `defName` for the current class, or nil.
+function ataxia_defenceWord(defName)
+  if not (gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class) then return nil end
+  local byClass = ataxiaTables.defenceWords[gmcp.Char.Status.class:lower()]
+  return byClass and byClass[defName] or nil
 end

@@ -507,24 +507,23 @@ function ataxiaBasher_dwBattlerage(sp)
   return ""
 end
 
--- Terminus PvE buffs (user's live AB TERMINUS, 2026-07-29): these are self-buffs bought
--- with the WORD balance -- a separate resource from attack balance/equilibrium, so they
--- are free damage/survivability while the scythe swings. Only the words the character
--- actually knows are attempted (`haveWord` reads the AB TERMINUS scrape). They yield to
--- the nakail shield-break, which shares that one word balance.
+-- Terminus PvE buffs (user's live AB TERMINUS, 2026-07-29). Terminus words are almost
+-- all ONE-TIME defences -- you intone them once and they persist (only the ones with a
+-- "Works against" field, e.g. Laiad vs denizens, are repeatable actions). So this is NOT
+-- a rotation rider that re-asserts on a timer: it re-ups a buff only when GMCP says the
+-- defence actually DROPPED. Raising them in the first place is `dw setup`, which chains
+-- the full list off the word-balance-returned line.
+--
+-- Only GMCP-tracked words belong here, because only they can be observed to have fallen:
 --   trusad   -- raises critical-hit chance vs DENIZENS   (defence: precision)
 --   tsuura   -- reduces damage taken from DENIZENS       (defence: durability)
 --   mainaas  -- augments skin vs cutting/blunt           (defence: bodyaugment)
---   mainaad  -- scythe cutting edge (+damage)            no defence flag known
---   balateth -- scythe speed (faster attacks)            no defence flag known
--- The three defence-flagged words self-heal from GMCP; the two weapon augments have no
--- known flag, so they use a long attempt-hold and are re-asserted rarely.
+-- The weapon augments (mainaad/balateth) have no defence flag to watch, so re-asserting
+-- them mid-bash would be blind spam -- they live in `dw setup` only.
 local DW_KEEPERS = {
-  { word = "trusad",   cmd = "intone trusad",           def = "precision" },
-  { word = "tsuura",   cmd = "intone tsuura",           def = "durability" },
-  { word = "mainaas",  cmd = "intone mainaas",          def = "bodyaugment" },
-  { word = "mainaad",  cmd = "intone mainaad scythe",   hold = 1800 },
-  { word = "balateth", cmd = "intone balateth scythe",  hold = 1800 },
+  { word = "trusad",   cmd = "intone trusad",  def = "precision" },
+  { word = "tsuura",   cmd = "intone tsuura",  def = "durability" },
+  { word = "mainaas",  cmd = "intone mainaas", def = "bodyaugment" },
 }
 
 function ataxiaBasher_dwKeeper(sp)

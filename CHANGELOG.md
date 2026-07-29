@@ -2,6 +2,46 @@
 
 ---
 
+## 2026-07-29 — Terminus buffs are one-time defences; `defs valid` shows the raising word (v4.7.144)
+
+Two user corrections to the Depthswalker work.
+
+**1. `defs valid` now names the command that raises each defence.** Nothing about the
+protocol name `precision` tells you to `INTONE TRUSAD`. New per-class map
+`ataxiaTables.defenceWords` + `ataxia_defenceWord(def)` (`deffing/004`), rendered as
+`Precision (trusad)` in dim grey. The protocol names are untouched — `defadd`, `keepadd`
+and `curing priority defence <def> 25` all key off them; this is display only. Column
+width now follows the widest label (3 per row when labels are long) so the grid stays
+aligned. Depthswalker mapping: precision→trusad, durability→tsuura(?),
+bodyaugment→mainaas(?), antiforce→gaiartha(?), plus disperse/shadowveil→`shadow …`. The
+`(?)` entries are inferred from AB text — correct them in that one table if a live `DEF`
+disagrees.
+
+**2. Terminus words are ONE-TIME defences** ("used once unless it says works against"),
+so re-asserting them on a timer was wrong:
+
+- `ataxiaBasher_dwKeeper` no longer carries the flagless weapon augments
+  (mainaad/balateth) on a 30-minute hold. It keeps only the three GMCP-tracked words and
+  re-ups one **solely when its defence actually dropped** — with all three standing it
+  emits nothing.
+- New **`dw setup`** (`class_things/003_Depthswalker_Setup.lua`) raises the full one-time
+  list — trusad, tsuura, mainaas, mainaad scythe, balateth scythe, tah'maal, ukhia,
+  qamad, dalem — **one per word balance**, chained off the game's own
+  `You may intone another word of power.` line (trigger `depthswalker/010`), since all
+  intoned words share one balance and can't be batched. Denizen-facing buffs go first so
+  an interrupted run still lands the ones that matter. `dw setup force` re-intones
+  standing defences; `dw setup stop` clears the queue. Excluded on purpose: **Kail**
+  (prismatic barrier stops *us* attacking), **Laiad/Hailad** (denizen-targeted actions,
+  not defences), **Tooros** (damages the caster).
+
+Files: `deffing/004_Defence_Sorting_-_Cleaner.lua`,
+`configuration_commands/007_Show_Valid_defs.lua`,
+`class_things/003_Depthswalker_Setup.lua` (NEW), `depthswalker/010_Word_Bal_Returned.lua`,
+`aliases/.../depthswalker/025_DW_Setup.lua` (NEW), `basher/002_Class_Bashing.lua`,
+`test_basher_depthswalker.lua`, `.claude/classes/depthswalker.md`. Suite **540/540**.
+
+---
+
 ## 2026-07-29 — Rage is never spent on shields (v4.7.143)
 
 User doctrine: *"we don't ever really want to use battlerage to strip shields."* That is

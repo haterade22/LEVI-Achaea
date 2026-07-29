@@ -202,13 +202,18 @@ describe("ataxiaBasher_dwKeeper -- Terminus buffs on the word balance", function
     expect(ataxiaBasher_dwKeeper(";")).toBe("intone tsuura;") -- next one down
   end)
 
-  it("skips a buff whose GMCP defence is already up", function()
+  it("goes quiet once every tracked defence is up (one-time buffs, not a timer)", function()
     reset(); ataxiaBasher.dwKeepers = true
     ataxia.defences = { precision = true, durability = true, bodyaugment = true }
-    local cmd = ataxiaBasher_dwKeeper(";")
-    expect(has(cmd, "trusad")).toBeFalse()
-    expect(has(cmd, "tsuura")).toBeFalse()
-    expect(cmd).toBe("intone mainaad scythe;") -- the weapon augments have no def flag
+    -- Terminus words persist once intoned, so with all three standing there is nothing
+    -- to re-assert -- the keeper must NOT spam the weapon augments on a timer.
+    expect(ataxiaBasher_dwKeeper(";")).toBe("")
+  end)
+
+  it("re-ups only the defence that actually dropped", function()
+    reset(); ataxiaBasher.dwKeepers = true
+    ataxia.defences = { precision = true, bodyaugment = true } -- durability fell
+    expect(ataxiaBasher_dwKeeper(";")).toBe("intone tsuura;")
   end)
 
   it("never spends the word balance while a shield is standing (nakail outranks it)", function()
@@ -223,7 +228,7 @@ describe("ataxiaBasher_dwKeeper -- Terminus buffs on the word balance", function
     -- A scraped AB TERMINUS list that lacks a word must skip it (user's live list has
     -- trusad/tsuura/mainaas/mainaad/balateth but NOT laiad).
     reset(); ataxiaBasher.dwKeepers = true
-    ataxiaTables.depthswalker.abilities = { tsuura = true }
+    ataxiaTables.depthswalker.abilities = { tsuura = true } -- trusad not researched
     expect(ataxiaBasher_dwKeeper(";")).toBe("intone tsuura;")
   end)
 

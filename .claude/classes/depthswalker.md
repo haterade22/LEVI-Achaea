@@ -559,28 +559,49 @@ echo (`Imbuing your voice with power, you intone, "nakail".`, trigger
 `depthswalker/009_Word_Bal_Used`) is the one line guaranteed to print, so it clears the
 flag and emits a `(BR)` alert.
 
-### Terminus buffs — the PvE keeper (`ataxiaBasher_dwKeeper`, DW_KEEPERS)
+### Terminus buffs — one-time defences (`dw setup` + a drop-only keeper)
 
-`intone` words spend the **word balance**, a resource separate from attack
-balance/equilibrium — so these are free damage and survivability while the scythe swings.
-Keepers yield to nakail (shared word balance) and are skipped when their GMCP defence is
-already up. From the character's live `AB TERMINUS`:
+**Terminus words are almost all ONE-TIME defences**: intone once and they persist. The
+exceptions are the ones with a "Works against" field (Laiad/Hailad target denizens) —
+those are repeatable actions, not defences. So raising them is a setup chore, not
+something the bashing rotation re-asserts.
+
+`intone` spends the **word balance**, a resource separate from attack balance/equilibrium
+— and all words share that one balance, so they can't be batched.
+
+**`dw setup`** (`class_things/003_Depthswalker_Setup.lua`) queues the one-time buffs and
+sends **one per word balance**, chained off the game's own
+`You may intone another word of power.` line (trigger `depthswalker/010`), so it
+self-paces exactly. Denizen-facing buffs go first, so an interrupted run still lands the
+ones that matter for bashing. `dw setup force` re-intones even standing defences;
+`dw setup stop` clears the queue.
 
 | Word | Effect | Defence flag |
 |---|---|---|
-| `intone trusad` | **raises critical-hit chance vs DENIZENS** | `precision` (assumed) |
-| `intone tsuura` | **reduces damage taken from DENIZENS** | `durability` (assumed) |
-| `intone mainaas` | augments skin vs cutting/blunt | `bodyaugment` (assumed) |
-| `intone mainaad scythe` | scythe cutting edge (+damage) | none known (30m hold) |
-| `intone balateth scythe` | scythe speed (faster attacks) | none known (30m hold) |
+| `intone trusad` | **raises critical-hit chance vs DENIZENS** | `precision` |
+| `intone tsuura` | **reduces damage taken from DENIZENS** | `durability` (?) |
+| `intone mainaas` | augments skin vs cutting/blunt | `bodyaugment` (?) |
+| `intone mainaad scythe` | scythe cutting edge (+damage) | none |
+| `intone balateth scythe` | scythe speed | none |
+| `intone tah'maal` | cloak fire resist + rebirth recovery | none |
+| `intone ukhia` | clot without spending willpower | none |
+| `intone qamad` | deeper meditation regen | none |
+| `intone dalem` | +5 phylactery shadows | none |
 
-The three defence-name mappings are **inferred**, not confirmed — verify with `DEF` and
-correct `DW_KEEPERS` if wrong (a wrong mapping only means a redundant re-intone).
+Deliberately excluded: **Kail** raises a prismatic barrier, which stops *us* attacking
+too (emergency command, not a standing buff); **Laiad/Hailad** are denizen-targeted
+actions; **Tooros** damages the caster.
 
-**Not researched on this character** (worth buying — direct PvE value): **Laiad**
-(`INTONE LAIAD <denizen>`, 2s word balance, Works: Denizens — inhibits denizen danger
-sense *and increases scythe attack damage*) and **Hailad**. Laiad would slot into the
-keeper as a per-target opener.
+**The bashing keeper** (`ataxiaBasher_dwKeeper`) only re-ups a buff when GMCP reports the
+defence actually **dropped** — and therefore only covers the three with defence flags.
+The flagless words can't be observed, so re-asserting them mid-bash would be blind spam;
+they live in `dw setup` only. The keeper yields the word balance whenever a shield is
+standing.
+
+The `(?)` mappings are **inferred** from the AB text, not confirmed against a live `DEF`
+— correct them in `ataxiaTables.defenceWords` (`deffing/004`) if wrong. `defs valid` now
+prints the raising command beside the protocol name (`Precision (trusad)`) so the mapping
+is visible in game.
 
 ### Toggles
 
