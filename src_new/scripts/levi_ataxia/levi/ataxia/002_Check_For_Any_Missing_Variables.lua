@@ -99,6 +99,13 @@ function ataxiaCheckForMissing()
 		ataxiaEcho("<green>bash rageraze on/off <NavajoWhite>to change.")
 	end
 
+	-- Depthswalker PvE options (v4.7.142). Boinad spends 32 rage AND the shared word
+	-- balance for a 5s charm, so it is opt-in; cull-vs-reap is unmeasured (see the class
+	-- doc A/B note), so the fast swing stays default; the Terminus buff keepers are on.
+	if ataxiaBasher.dwBoinad == nil then ataxiaBasher.dwBoinad = false end
+	if ataxiaBasher.dwCull == nil then ataxiaBasher.dwCull = false end
+	if ataxiaBasher.dwKeepers == nil then ataxiaBasher.dwKeepers = true end
+
 	if ataxiaBasher.dragonBlast == nil then
 		ataxiaBasher.dragonBlast = true
 		ataxiaEcho("Dragon blast-weave option not found; defaulting to on.")

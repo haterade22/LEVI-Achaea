@@ -475,8 +475,132 @@ enabled: false
 notes: "Depthswalker is affliction-based, not limb-based"
 ```
 
-## Bashing (PvE)
+## Bashing (PvE) — v4.7.142 overhaul
+
+The old entry here ("BATTLERAGE SHADOWSTRIKE") was wrong; the basher has always swung
+`shadow reap`. Rewritten from a wiki audit (Depthswalker / Aeonics / Shadowmancy /
+Terminus) + a code audit, 2026-07-29.
+
 ```yaml
-attack_command: "BATTLERAGE SHADOWSTRIKE <target>"
-attack_skill: Shadowmancy
+primary_swing: "shadow reap <target>"     # fast/low damage; `shadow cull` is slow/high
+alternate_swing: "shadow cull <target>"   # `bash dw cull on` -- UNMEASURED, see A/B note
+entry_point: ataxiaBasher_depthswalkerBashing   # basher/002_Class_Bashing.lua
+```
+
+### The whole battlerage kit is denizen-legal
+
+Unusual among classes: **all six** DW battlerage abilities read "Works on: Denizens"
+(AB), so nothing in the kit is wasted in PvE.
+
+| Ability | Cmd | Rage | CD | PvE effect |
+|---|---|---|---|---|
+| Curse | `chrono curse <t>` | 24 | 35s | **denizen AEON** — every mob action slowed |
+| Erasure | `chrono erasure <t>` | 25 | 23s | CONSUMES weakness/amnesia for a damage spike |
+| Boinad | `intone boinad <t>` | 32 | 38s | **denizen CHARM** 5s — mob fights its allies |
+| Lash | `shadow lash <t>` | 36 | 23s | big direct damage |
+| Drain | `shadow drain <t>` | 14 | 16s | DoT filler |
+| Nakail | `intone nakail <t>` | 17 | — | **shield break** (needs Terminus) |
+
+### Rotation (`ataxiaBasher_dwBattlerage`, DW_BR — timer-free, the Psion/GDragon pattern)
+
+Culling reap (36, owned, floor-exempt) → **Erasure** (only when the mob carries
+weakness/amnesia) → **Curse** (skipped if aeon is already up; BANKS rage when off
+cooldown but unaffordable) → **Boinad** (opt-in) → **Lash** → **Drain**.
+
+- **Erasure is group-only by construction.** It consumes weakness or amnesia and DW can
+  apply neither, so solo it never fires and costs nothing; it lights up beside a
+  Blademaster's Nerveslash (weakness) or a Golden Dragon's Psidaze (amnesia).
+- **Boinad charms the mob we are NOT killing** (`stormhammerTargets[2]`, the Bard rule)
+  and records `ataxiaTemp.brCharmTgt` so the denizen-state layer attributes the charm to
+  the right id.
+- Send-side epoch stamps in `ataxiaTemp.dwBrAt`, a 3s in-flight pick replay in
+  `ataxiaTemp.dwBrPending` (the 0.3s `queue addclearfull` re-queue loop would otherwise
+  burn cooldowns unsent), the shared ~1s global BR gate, and `ataxiaBasher_rageAfford`
+  on everything except reap.
+
+### What was actually broken (three defects, all fixed)
+
+1. **SHIELD STALL.** The shielded branch only razed when `ataxiaBasher.rageraze` was on —
+   and it defaults **off** — so a shielded denizen bounced forever. Nakail is now sent
+   whenever rage >= 17 and the word balance is free, gated on neither the rageraze toggle
+   nor the rage floor: breaking the shield *is* the round.
+2. **CULLING SUPPRESSION** (the real dead-rotation cause — *not* the Psion/GDragon
+   missing-fire-line bug; DW's fire-lines exist at triggers 330:43 and 331:43). The shared
+   culling branch in `001_Bashing_Functions` heads the elseif chain and excluded only
+   Bard/Blademaster/Magi/Psion, so with culling on DW returned `""` every round below
+   36/54 rage and neither drain nor lash ever fired. DW is now excluded there and owns
+   culling itself.
+3. **SEPARATOR CORRUPTION.** `brage..sp` on a battlerage that already ended in `sp`
+   produced `shadow drain 7;;shadow reap 7`, or a leading `;` when empty.
+
+**Do NOT add a `special` key to the Depthswalker config in `_groups.yaml`** — trigger 332
+has no Depthswalker block, so `battleRage_Timers.special` is never set and a config
+`special` would reproduce the Psion v4.7.128 dead-rotation bug verbatim. New abilities go
+in `DW_BR`, which is timer-free.
+
+### Nakail shield-clear (no fire-line exists)
+
+`intone nakail` has no capturable fire-line, and the shielded round deliberately emits no
+battlerage, so 330/331/332 never run and `ataxiaBasher.shielded` would never clear —
+nakail would re-fire every round, burning 17 rage *and* the word balance. The word-balance
+echo (`Imbuing your voice with power, you intone, "nakail".`, trigger
+`depthswalker/009_Word_Bal_Used`) is the one line guaranteed to print, so it clears the
+flag and emits a `(BR)` alert.
+
+### Terminus buffs — the PvE keeper (`ataxiaBasher_dwKeeper`, DW_KEEPERS)
+
+`intone` words spend the **word balance**, a resource separate from attack
+balance/equilibrium — so these are free damage and survivability while the scythe swings.
+Keepers yield to nakail (shared word balance) and are skipped when their GMCP defence is
+already up. From the character's live `AB TERMINUS`:
+
+| Word | Effect | Defence flag |
+|---|---|---|
+| `intone trusad` | **raises critical-hit chance vs DENIZENS** | `precision` (assumed) |
+| `intone tsuura` | **reduces damage taken from DENIZENS** | `durability` (assumed) |
+| `intone mainaas` | augments skin vs cutting/blunt | `bodyaugment` (assumed) |
+| `intone mainaad scythe` | scythe cutting edge (+damage) | none known (30m hold) |
+| `intone balateth scythe` | scythe speed (faster attacks) | none known (30m hold) |
+
+The three defence-name mappings are **inferred**, not confirmed — verify with `DEF` and
+correct `DW_KEEPERS` if wrong (a wrong mapping only means a redundant re-intone).
+
+**Not researched on this character** (worth buying — direct PvE value): **Laiad**
+(`INTONE LAIAD <denizen>`, 2s word balance, Works: Denizens — inhibits denizen danger
+sense *and increases scythe attack damage*) and **Hailad**. Laiad would slot into the
+keeper as a per-target opener.
+
+### Toggles
+
+`bash dw boinad on|off` (default off — 32 rage + the shared word balance for a 5s charm),
+`bash dw cull on|off` (default off), `bash dw keepers on|off` (default on).
+
+### Open questions (live capture needed)
+
+- **reap vs cull**: the wiki gives no damage and no balance figures for either. Use
+  `bash probe on` and compare — this is the single biggest DPS unknown.
+- **Aeon uptime**: `BR_AFFS.aeon.dur` is 6s against Curse's 35s cooldown. If that is
+  accurate the control-banking rule may not pay; capture the aeon wear-off line and
+  measure. Dropping `control = true` from the Curse row disables banking with no other
+  change.
+- **Erasure's inputs**: does *aeon* also satisfy it? The AB text names only weakness and
+  amnesia. If aeon counts, Curse → Erasure becomes a self-sufficient solo combo and the
+  whole priority order changes.
+- **Nakail**: real cooldown (the AB cooldown field is present but empty), and the
+  shield-destruction line, to replace the intone-echo proxy.
+- **332:53** (`You hold out one hand towards <t> as something made of shadow and ice
+  rises...`) is unattributed and shadow-flavoured — likely `chrono curse`. Confirm, then
+  wire `ataxiaBasher_dwConfirm("curse")` + `dsSetAff(target, "aeon")`; that would finally
+  fill `BR_AFFS.aeon.apply`, which is nil for every class today.
+- **Phylactery**: do denizen kills yield shadows? If not, the whole Assimilate/Mutilate
+  tier is dead weight in PvE and should be documented as such.
+```yaml
+deferred_not_worth_wiring:
+  chrono_deteriorate: "only Aeonics ability whose works-against names denizens, but the
+    effect is -1 INT per affliction + increased depression damage -- an INT debuff and a
+    PvP curse multiplier, neither converts to denizen kill speed. 300 age for nothing."
+  shadowmancy_instills: "pure affliction ladders (degeneration/depression/madness/
+    retribution/leach) -- denizens ignore them"
+  dictate_kill_route: "executes below 40% max MANA -- irrelevant to denizens"
+  tooros: "AoE that damages the caster too, and Works: Adventurers"
 ```

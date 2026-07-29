@@ -397,22 +397,185 @@ function ataxiaBasher_blademasterBashing()
 	return command
 end
 
+-- Depthswalker OWNS its battlerage (the Psion/Golden Dragon pattern). Unlike those two
+-- this was NOT the missing-fire-line bug -- triggers 330:43 and 331:43 do carry the
+-- Shadow Drain / Shadow Lash lines. The rotation was dead for a different reason: the
+-- SHARED culling branch (001_Bashing_Functions) heads the elseif chain and excludes only
+-- Bard/Blademaster/Magi/Psion, so with `bash culling on` Depthswalker returned "" on
+-- every round below 36 rage and neither drain nor lash ever fired. Owning the rotation
+-- (plus excluding DW there) fixes that, and wires the FOUR denizen-legal abilities the
+-- old two-ability config never touched.
+--
+-- Every ability in the DW battlerage kit is "Works on: Denizens" (AB) -- unusually, the
+-- whole kit is PvE-legal:
+--   Drain 14r/16s  Nakail 17r (raze)  Curse 24r/35s (AEON)  Erasure 25r/23s
+--   Boinad 32r/38s (CHARM 5s)  Lash 36r/23s
+--
+-- Priority: culling reap > Erasure (only when the mob actually carries weakness/amnesia
+-- -- it CONSUMES one for a damage spike, and DW can apply neither itself, so solo it
+-- costs nothing and never fires; it lights up beside a Blademaster's Nerveslash or a
+-- Golden Dragon's Psidaze) > Curse (denizen AEON = every mob action slowed = the biggest
+-- incoming-damage cut in the kit) > Boinad (opt-in crowd charm) > Lash > Drain filler.
+local DW_BR = {
+  { key = "erasure", cmd = "chrono erasure", rage = 25, cd = 23, needsAff = true },
+  { key = "curse",   cmd = "chrono curse",   rage = 24, cd = 35, control = true, skipIfAff = "aeon" },
+  { key = "boinad",  cmd = "intone boinad",  rage = 32, cd = 38, optIn = true, word = true, multi = true, skipIfAff = "charm" },
+  { key = "lash",    cmd = "shadow lash",    rage = 36, cd = 23 },
+  { key = "drain",   cmd = "shadow drain",   rage = 14, cd = 16 },
+}
+
+-- Confirmation hook (the gdragonConfirm shape): a captured fire line restarts the
+-- cooldown from the LANDED moment and releases the in-flight hold.
+function ataxiaBasher_dwConfirm(key)
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp.dwBrAt = ataxiaTemp.dwBrAt or {}
+  ataxiaTemp.dwBrAt[key] = nowT
+  local pend = ataxiaTemp.dwBrPending
+  if pend and pend.verb == key then ataxiaTemp.dwBrPending = nil end
+end
+
+local function dwHasAff(aff)
+  return ataxiaBasher_dsHasAff and ataxiaBasher_dsHasAff(target, aff) or false
+end
+
+function ataxiaBasher_dwBattlerage(sp)
+  local rage = tonumber(ataxia.vitals.rage) or 0
+  -- Rage conservation: same rule the generic assembler applies; clears any in-flight
+  -- pick so a stale cast can't resume on the NEXT mob.
+  if ataxiaBasher.rageConserveThreshold then
+    local mobhp = tonumber(((gmcp.IRE.Target.Info.hpperc or "100"):gsub("%%", ""))) or 100
+    if mobhp > 0 and mobhp <= ataxiaBasher.rageConserveThreshold then
+      ataxiaTemp.dwBrPending = nil
+      return ""
+    end
+  end
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  -- In-flight pick REPLAY (v4.7.129 lesson): the basher rebuilds this command every
+  -- prompt/vitals event and each rebuild's `queue addclearfull` wipes the previously
+  -- queued line, so a pick stays pending ~one balance round and is replayed verbatim.
+  local pend = ataxiaTemp.dwBrPending
+  if pend and pend.cmd and (nowT - (tonumber(pend.at) or 0)) < 3 then
+    return pend.cmd
+  end
+  ataxiaTemp.dwBrPending = nil
+  -- Shared ~1s global battlerage cooldown (as Blademaster/Magi): queueing another BR
+  -- while it is up gets it rejected and the rage goes unspent. AFTER the replay so a
+  -- held command stays byte-stable.
+  if getEpoch and getEpoch() < (ataxiaTemp.brGlobalReadyAt or 0) then return "" end
+
+  -- Culling reap, owned here (never floored -- an execute beats a per-swing multiplier).
+  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and rage >= 36
+     and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" then
+    ataxiaTemp.brGlobalReadyAt = (getEpoch and getEpoch() or 0) + 1
+    return "reap "..target..sp
+  end
+
+  ataxiaTemp.dwBrAt = ataxiaTemp.dwBrAt or {}
+  for _, ab in ipairs(DW_BR) do
+    local ready = (nowT - (tonumber(ataxiaTemp.dwBrAt[ab.key]) or 0)) >= ab.cd
+    local gated = false
+    if ab.optIn and not ataxiaBasher.dwBoinad then gated = true end
+    -- Erasure consumes an existing weakness/amnesia; without one it is wasted rage.
+    if ab.needsAff and not (dwHasAff("weakness") or dwHasAff("amnesia")) then gated = true end
+    if ab.skipIfAff and dwHasAff(ab.skipIfAff) then gated = true end
+    -- Intoned words share ONE word balance with the nakail shield-break, which always
+    -- outranks them: never spend it on a charm while a shield is standing.
+    if ab.word then
+      if ataxiaBasher.shielded then gated = true end
+      if ataxiaTables and ataxiaTables.depthswalker
+         and ataxiaTables.depthswalker.wordBal == false then gated = true end
+    end
+    -- Crowd abilities want a SECOND denizen, and charm the one we are not killing.
+    local tgt = target
+    if ab.multi then
+      if not (ataxiaBasher_validTargets and ataxiaBasher_validTargets() >= 2) then gated = true end
+      tgt = (stormhammerTargets and stormhammerTargets[2]) or target
+    end
+    if ready and not gated then
+      if ataxiaBasher_rageAfford(rage, ab.rage) then
+        local cmd = ab.cmd.." "..tgt..sp
+        ataxiaTemp.dwBrAt[ab.key] = nowT
+        ataxiaTemp.dwBrPending = { verb = ab.key, cmd = cmd, at = nowT }
+        ataxiaTemp.brGlobalReadyAt = (getEpoch and getEpoch() or 0) + 1
+        if ab.key == "boinad" then ataxiaTemp.brCharmTgt = tgt end
+        return cmd
+      elseif ab.control then
+        return "" -- bank rage for the pending aeon cast instead of trickling it away
+      end
+    end
+  end
+  return ""
+end
+
+-- Terminus PvE buffs (user's live AB TERMINUS, 2026-07-29): these are self-buffs bought
+-- with the WORD balance -- a separate resource from attack balance/equilibrium, so they
+-- are free damage/survivability while the scythe swings. Only the words the character
+-- actually knows are attempted (`haveWord` reads the AB TERMINUS scrape). They yield to
+-- the nakail shield-break, which shares that one word balance.
+--   trusad   -- raises critical-hit chance vs DENIZENS   (defence: precision)
+--   tsuura   -- reduces damage taken from DENIZENS       (defence: durability)
+--   mainaas  -- augments skin vs cutting/blunt           (defence: bodyaugment)
+--   mainaad  -- scythe cutting edge (+damage)            no defence flag known
+--   balateth -- scythe speed (faster attacks)            no defence flag known
+-- The three defence-flagged words self-heal from GMCP; the two weapon augments have no
+-- known flag, so they use a long attempt-hold and are re-asserted rarely.
+local DW_KEEPERS = {
+  { word = "trusad",   cmd = "intone trusad",           def = "precision" },
+  { word = "tsuura",   cmd = "intone tsuura",           def = "durability" },
+  { word = "mainaas",  cmd = "intone mainaas",          def = "bodyaugment" },
+  { word = "mainaad",  cmd = "intone mainaad scythe",   hold = 1800 },
+  { word = "balateth", cmd = "intone balateth scythe",  hold = 1800 },
+}
+
+function ataxiaBasher_dwKeeper(sp)
+  if ataxiaBasher.dwKeepers == false then return "" end
+  if ataxiaBasher.shielded then return "" end -- the word balance belongs to nakail
+  local dw = ataxiaTables and ataxiaTables.depthswalker
+  if not dw or dw.wordBal == false then return "" end
+  -- Fail CLOSED on an unknown word list is wrong (ataxia_depthswalkerReset wipes it and
+  -- only the `Ab terminus` scrape refills it), but a word we KNOW we lack is skipped.
+  local known = dw.abilities
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp.dwKeepAt = ataxiaTemp.dwKeepAt or {}
+  for _, k in ipairs(DW_KEEPERS) do
+    local haveIt = (not known) or known[k.word] == true
+    local upAlready = k.def and ataxia.defences and ataxia.defences[k.def]
+    local held = (nowT - (tonumber(ataxiaTemp.dwKeepAt[k.word]) or 0)) < (k.hold or 20)
+    if haveIt and not upAlready and not held then
+      ataxiaTemp.dwKeepAt[k.word] = nowT
+      return k.cmd..sp
+    end
+  end
+  return ""
+end
+
 function ataxiaBasher_depthswalkerBashing()
 	local command, sp = "", ataxia.settings.separator
-	local brage = ataxiaBasher_assembleBattlerage()
-	local raze = ataxiaBasher.battlerage.Depthswalker.raze
-	
+	-- `shadow cull` is the slow/high-damage swing, `shadow reap` the fast/low one; the
+	-- wiki gives numbers for neither, so reap stays the default until measured
+	-- (`bash dwcull on` flips it -- see the A/B note in the class doc).
+	local primary = (ataxiaBasher.dwCull and "shadow cull " or "shadow reap ")..target
+
 	if ataxiaBasher.shielded then
-		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-			command = raze..sp.."shadow reap "..target
-		else
-			command = "shadow reap "..target..sp..brage
+		-- SHIELD FIX: the old branch emitted NO razer unless `rageraze` was on (it
+		-- defaults OFF), so a shielded denizen bounced forever. Nakail is the class
+		-- razer: 17 rage + the shared WORD balance, so it is gated on neither the
+		-- rageraze toggle nor the rage floor -- breaking the shield IS the round.
+		local rage = tonumber(ataxia.vitals.rage) or 0
+		local dw = ataxiaTables and ataxiaTables.depthswalker
+		if rage >= 17 and not (dw and dw.wordBal == false) then
+			return "intone nakail "..target..sp..primary
 		end
-	else
-		command = brage..sp.."shadow reap "..target
+		-- No word balance or not enough rage: swing anyway so the round isn't wasted
+		-- (the basher's own shield-swap / skip handling covers the rest).
+		return primary
 	end
-	    
-	return command  
+
+	-- Battlerage computed LAZILY, only on branches that SEND it (the Psion rule): the
+	-- rotation stamps cooldowns when it picks, and the shielded branch above emits no
+	-- battlerage -- an eager call there would burn a 23-38s stamp unsent.
+	command = ataxiaBasher_dwKeeper(sp)..ataxiaBasher_dwBattlerage(sp)..primary
+	return command
 end
 
 function ataxiaBasher_infernalBashing()

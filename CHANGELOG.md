@@ -2,6 +2,53 @@
 
 ---
 
+## 2026-07-29 — Depthswalker PvE overhaul: owned rotation, shield fix, Terminus keepers (v4.7.142)
+
+Switched to Depthswalker; audited the class against the wiki (Depthswalker / Aeonics /
+Shadowmancy / Terminus) and the code. The basher was 17 lines that wired 2 of the class's
+**6 denizen-legal** battlerage abilities and carried three independent defects.
+
+- **SHIELD STALL fixed.** The shielded branch only razed when `ataxiaBasher.rageraze` was
+  on — and it defaults OFF — so a shielded denizen bounced forever with no razer at all.
+  `intone nakail` (17 rage + the shared word balance) now fires whenever it's affordable,
+  gated on neither the rageraze toggle nor the rage floor.
+- **CULLING SUPPRESSION fixed** — the actual dead-rotation cause, and *not* the
+  Psion/Golden-Dragon missing-fire-line bug (DW's fire-lines exist at triggers 330:43 and
+  331:43). The shared culling branch heads the elseif chain and excluded only
+  Bard/Blademaster/Magi/Psion, so with culling on Depthswalker returned `""` every round
+  below 36/54 rage and neither shadow drain nor shadow lash ever fired. DW is excluded
+  there now and owns culling in its own rotation.
+- **Depthswalker owns its battlerage** (`DW_BR` + `ataxiaBasher_dwBattlerage`, the
+  timer-free pattern): culling reap → **Erasure** (gated on the mob actually carrying
+  weakness/amnesia, which it consumes — solo it never fires and costs nothing; it lights
+  up beside a Blademaster's Nerveslash or a Golden Dragon's Psidaze) → **Curse** (denizen
+  AEON, skipped when aeon is up, banks rage when off cooldown but unaffordable) →
+  **Boinad** (opt-in denizen CHARM on the mob we are *not* killing) → **Lash** → **Drain**.
+  Real AB costs/cooldowns, send-side stamps, 3s in-flight pick replay, rage-floor aware.
+- **Nakail shield-clear**: nakail has no fire-line, and a shielded round emits no
+  battlerage, so 330/331/332 never ran and `ataxiaBasher.shielded` never cleared — nakail
+  re-fired every round burning 17 rage and the word balance. The intone echo (trigger
+  `depthswalker/009_Word_Bal_Used`) now clears the flag and emits a `(BR)` alert.
+- **Terminus buff keepers** (`ataxiaBasher_dwKeeper`, from the character's live
+  `AB TERMINUS`): `trusad` (crit chance **vs denizens**), `tsuura` (damage reduction
+  **from denizens**), `mainaas` (skin resist), `mainaad`/`balateth` (scythe damage/speed).
+  These spend the **word balance** — a separate resource from attack balance/eq — so they
+  are free uptime while the scythe swings. They yield to nakail and skip when their GMCP
+  defence is already up.
+- **Separator corruption fixed** (`shadow drain 7;;shadow reap 7`, and a leading `;` when
+  the battlerage was empty), battlerage computed lazily past the shielded early-return,
+  and the unguarded `ataxiaBasher.battlerage.Depthswalker.raze` dereference removed.
+- Toggles: `bash dw boinad|cull|keepers on|off`.
+
+Files: `basher/002_Class_Bashing.lua`, `basher/001_Bashing_Functions.lua` (culling
+exclusion), `triggers/.../depthswalker/009_Word_Bal_Used.lua`,
+`002_Check_For_Any_Missing_Variables.lua`, `aliases/.../configs/018_Depthswalker_Bashing.lua`
+(NEW), `test_basher_depthswalker.lua` (NEW, 18 cases), `.claude/classes/depthswalker.md`
+(bashing section rewritten — the old stub claimed a command the basher never sent).
+Suite **539/539**.
+
+---
+
 ## 2026-07-29 — Rage floor + rage-threshold damage probe (v4.7.141)
 
 User gear: **"+23% damage so long as you have 40 battlerage or more."** Every battlerage

@@ -288,7 +288,7 @@ All combat systems in `src_new/scripts/levi_ataxia/levi/levi_scripts/`:
 | **apostate** | 1 (015) | **Documented** | Lock, corrupt, vivisect, sleep, mental | `apostate/` |
 | **bard** | 10 | **Documented** | Voyria lock; Composition/Bladedance affliction; PvE footwork bashing | `bard/` |
 | **blademaster** | ~10 | **Documented** | Lightning/Ice, Brokenstar | `blademaster/` |
-| **depthswalker** | 1 | Undocumented | Shadow/time | `depthswalker/` |
+| **depthswalker** | 1 | **Documented** | Shadow/time; PvE = owned battlerage (all 6 abilities denizen-legal) + Terminus word-balance keepers | `depthswalker/` |
 | **dwb** | 1 | Undocumented | Breakpoint/rift | `dwb/` |
 | **dwb_runie** | 1 | Undocumented | DWB + runelore | `dwb_runie/` |
 | **dwc** | 3 | **Documented** | Vivisect, damage kill | `dwc/` |
