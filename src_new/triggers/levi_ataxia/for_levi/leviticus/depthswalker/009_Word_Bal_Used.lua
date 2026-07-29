@@ -33,7 +33,17 @@ colorTriggerBgColor: '#000000'
 patterns:
 - pattern: ^Imbuing your voice with power, you intone, "(.+)".$
   type: 1
+- pattern: ^Taking a steadying breath, you turn your focus inward and proclaim, "(.+)"\.$
+  type: 1
 ]]--
+
+-- TWO wordings, ONE balance (live capture 2026-07-29). Outward-facing words print
+-- "Imbuing your voice with power, you intone, ..."; self-buffs from the Augmentation
+-- tree print "Taking a steadying breath, you turn your focus inward and proclaim, ...".
+-- The second form was previously unmatched, so `wordBal` stayed TRUE after e.g. Mainaas
+-- and the next word would be sent into a balance we didn't have. It IS the same balance:
+-- Mainaas proclaimed at 12:15:06.4 and "You may intone another word of power." printed at
+-- 12:15:12.5 -- 6.1s, matching Mainaas's 6.50s word balance.
 
 if matches[2] ~= "Thir" then
 	ataxiaTables.depthswalker.wordBal = false

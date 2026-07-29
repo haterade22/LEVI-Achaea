@@ -42,6 +42,11 @@ if not ok then error("Failed to load class-bashing file: " .. tostring(err)) end
 
 local function has(cmd, needle) return cmd:find(needle, 1, true) ~= nil end
 
+-- Danger level drives the keeper gate (a standing buff is not worth a round while we
+-- are losing the fight); default to the healthy state for every other test.
+local dangerLevel = "attack"
+function ataxiaBasher_dangerLevel() return dangerLevel end
+
 local function reset()
   ataxiaBasher.shielded, ataxiaBasher.rageraze = false, false
   ataxiaBasher.cullingBlade, ataxiaBasher.rageConserveThreshold = nil, nil
@@ -53,6 +58,7 @@ local function reset()
   ataxiaTemp = {}
   ataxiaTables.depthswalker = { wordBal = true, age = 0, abilities = nil }
   denizenAffs = {}
+  dangerLevel = "attack"
   validTargets = 1
   stormhammerTargets = {}
   gmcp.IRE.Target.Info = {}
@@ -109,9 +115,11 @@ describe("ataxiaBasher_dwBattlerage -- owned rotation", function()
     expect(has(ataxiaBasher_dwBattlerage(";"), "chrono curse 7")).toBeTrue()
     reset(); ataxia.vitals.rage = 30; denizenAffs.aeon = true
     expect(has(ataxiaBasher_dwBattlerage(";"), "shadow drain")).toBeTrue() -- aeon up: skip
-    -- Banking: curse off cooldown but unaffordable must NOT trickle into drain.
+    -- v4.7.145 (MEASURED: aeon lasted ~5.6s against curse's 35s cd, ~16% uptime):
+    -- curse no longer BANKS. At 20 rage it is unaffordable, so the cheap filler fires
+    -- rather than the round being wasted holding rage for a 5-second window.
     reset(); ataxia.vitals.rage = 20
-    expect(ataxiaBasher_dwBattlerage(";")).toBe("")
+    expect(has(ataxiaBasher_dwBattlerage(";"), "shadow drain")).toBeTrue()
   end)
 
   it("Boinad is opt-in, needs a second denizen, and yields the word balance", function()
@@ -230,6 +238,16 @@ describe("ataxiaBasher_dwKeeper -- Terminus buffs on the word balance", function
     reset(); ataxiaBasher.dwKeepers = true
     ataxiaTables.depthswalker.abilities = { tsuura = true } -- trusad not researched
     expect(ataxiaBasher_dwKeeper(";")).toBe("intone tsuura;")
+  end)
+
+  it("does not spend a round on buffs while we are in danger (v4.7.145)", function()
+    reset(); ataxiaBasher.dwKeepers = true
+    dangerLevel = "shield"
+    expect(ataxiaBasher_dwKeeper(";")).toBe("")
+    dangerLevel = "flee"
+    expect(ataxiaBasher_dwKeeper(";")).toBe("")
+    dangerLevel = "attack"
+    expect(ataxiaBasher_dwKeeper(";")).toBe("intone trusad;")
   end)
 
   it("is off entirely when disabled", function()

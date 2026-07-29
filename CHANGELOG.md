@@ -2,6 +2,44 @@
 
 ---
 
+## 2026-07-29 — Depthswalker: lessons from a live log (v4.7.145)
+
+A Mnemosyne bashing log (Death Knight + soldier of Osterrych) settled three open
+questions and exposed two mistakes.
+
+- **Denizen AEON measured at ~5.6s** (landed 12:15:14.0, expired 12:15:19.7) against
+  Chrono Curse's **35s cooldown** — ~16% uptime. **Curse no longer banks rage**: holding
+  24 rage back and skipping the cheap filler to guarantee a five-second mitigation window
+  loses more damage than it saves. It fires when affordable and yields otherwise. (This
+  was the exact risk flagged when the rotation shipped; now it's measured, not guessed.)
+- **Curse fire line + wear-off captured and wired** —
+  `Bending your formidable will upon <t>, you slow the passage of time about him to a
+  crawl.` and `<t> abruptly begins to move at normal speed again.` Added to the existing
+  denizen-aeon triggers (015/016), which now also confirm the cast
+  (`ataxiaBasher_dwConfirm("curse")` restarts the cooldown from the landed moment). This
+  is the **first confirmed denizen-aeon apply line in the system** — `BR_AFFS.aeon.apply`
+  had been nil for every class.
+- **A second intone wording existed and was unmatched.** Augmentation self-buffs print
+  `Taking a steadying breath, you turn your focus inward and proclaim, "X".` rather than
+  `Imbuing your voice with power, you intone, "X".`, so `wordBal` stayed TRUE after e.g.
+  Mainaas and the next word would be sent into a balance we didn't have. It is the same
+  balance (Mainaas 12:15:06.4 → word-balance-returned 12:15:12.5 = 6.1s ≈ its 6.50s
+  cost). Both wordings now match.
+- **The keeper stopped buffing while we're losing.** It intoned Mainaas at 12% HP, prone,
+  with two mobs on us; it is now gated on `ataxiaBasher_dangerLevel() == "attack"`.
+
+Also recorded in the class doc: reap damage samples (base non-crit 2515 with 2x/4x/10x
+crits), Shadow Drain's tick/end lines and ~9s duration, confirmation that the atrophy DoT
+is **gear, not class** (it fired here on DW after first appearing on Golden Dragon), and
+the shield-bounce cost (~5 rounds across three shields — `shieldswap` is the lever, since
+rage deliberately isn't spent on shields).
+
+Files: `basher/002_Class_Bashing.lua`, `denizen_attacks_misc_lines/015` + `016`,
+`depthswalker/009_Word_Bal_Used.lua`, `test_basher_depthswalker.lua`,
+`.claude/classes/depthswalker.md`. Suite **541/541**.
+
+---
+
 ## 2026-07-29 — Terminus buffs are one-time defences; `defs valid` shows the raising word (v4.7.144)
 
 Two user corrections to the Depthswalker work.

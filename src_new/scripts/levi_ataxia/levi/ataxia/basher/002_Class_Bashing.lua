@@ -418,7 +418,11 @@ end
 -- incoming-damage cut in the kit) > Boinad (opt-in crowd charm) > Lash > Drain filler.
 local DW_BR = {
   { key = "erasure", cmd = "chrono erasure", rage = 25, cd = 23, needsAff = true },
-  { key = "curse",   cmd = "chrono curse",   rage = 24, cd = 35, control = true, skipIfAff = "aeon" },
+  -- NO banking for curse (v4.7.145, measured): the live log timed denizen aeon at ~5.6s
+  -- against curse's 35s cooldown -- about 16% uptime. Holding 24 rage back and skipping
+  -- the cheap filler to guarantee that window loses more damage than the mitigation
+  -- saves, so curse fires when affordable and otherwise yields to Lash/Drain.
+  { key = "curse",   cmd = "chrono curse",   rage = 24, cd = 35, skipIfAff = "aeon" },
   { key = "boinad",  cmd = "intone boinad",  rage = 32, cd = 38, optIn = true, word = true, multi = true, skipIfAff = "charm" },
   { key = "lash",    cmd = "shadow lash",    rage = 36, cd = 23 },
   { key = "drain",   cmd = "shadow drain",   rage = 14, cd = 16 },
@@ -529,6 +533,15 @@ local DW_KEEPERS = {
 function ataxiaBasher_dwKeeper(sp)
   if ataxiaBasher.dwKeepers == false then return "" end
   if ataxiaBasher.shielded then return "" end -- the word balance belongs to nakail
+  -- Not while we're in trouble (v4.7.145, live log): the keeper intoned MAINAAS at 12%
+  -- HP, prone, with two mobs on us. A standing buff is worth having BEFORE a fight, not
+  -- during the part where we are losing one -- and in a no-flee area every action spent
+  -- not-killing is an action that prolongs the damage. `dangerLevel()` already encodes
+  -- the shield/flee thresholds.
+  if ataxiaBasher_dangerLevel then
+    local ok, lvl = pcall(ataxiaBasher_dangerLevel)
+    if ok and lvl and lvl ~= "attack" then return "" end
+  end
   local dw = ataxiaTables and ataxiaTables.depthswalker
   if not dw or dw.wordBal == false then return "" end
   -- Fail CLOSED on an unknown word list is wrong (ataxia_depthswalkerReset wipes it and

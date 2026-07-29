@@ -608,6 +608,54 @@ is visible in game.
 `bash dw boinad on|off` (default off — 32 rage + the shared word balance for a 5s charm),
 `bash dw cull on|off` (default off), `bash dw keepers on|off` (default on).
 
+### Live-log findings (2026-07-29, Mnemosyne, Death Knight + soldier of Osterrych)
+
+**Confirmed fire lines** (all now wired):
+- **Chrono Curse** → `Bending your formidable will upon <t>, you slow the passage of time
+  about him to a crawl.` — the first confirmed denizen-AEON *apply* line in the whole
+  system (`BR_AFFS.aeon.apply` was nil for every class). Trigger
+  `denizen_attacks_misc_lines/015`, which also calls `ataxiaBasher_dwConfirm("curse")`.
+- **Curse wear-off** → `<t> abruptly begins to move at normal speed again.` (trigger 016).
+- **Shadow Drain** → `You command the shadow of <t> to begin siphoning away the life of
+  its host.` (already matched by trigger 330); ticks as `<t> grows paler as her shadow
+  grows more opaque.`; ends `The shadow of <t> is no longer siphoning away her life.`
+  Observed duration ~9s, ticking 239 → 512 → 2048 → 128 → 32 (unblockable).
+
+**MEASURED: denizen aeon lasts ~5.6s** (landed 12:15:14.0, expired 12:15:19.7) against
+curse's **35s cooldown** — about 16% uptime. That killed the rage-banking rule: holding 24
+rage and skipping the filler to guarantee a 5-second mitigation window loses more damage
+than it saves. Curse now fires when affordable and yields otherwise.
+
+**Two intone wordings, one balance.** Outward words print `Imbuing your voice with power,
+you intone, "X".`; Augmentation self-buffs print `Taking a steadying breath, you turn your
+focus inward and proclaim, "X".` The second was unmatched, so `wordBal` stayed TRUE after
+Mainaas and the next word would be sent into a balance we didn't have. Same balance,
+confirmed by timing: Mainaas at 12:15:06.4 → `You may intone another word of power.` at
+12:15:12.5 = 6.1s ≈ its 6.50s cost.
+
+**Reap damage samples** (Agith'maal's ire, psychic): base non-crit vs the Death Knight
+**2515**, with crits at 5030 (2x), 10060 (4x) and one 25180 vs the soldier. A second
+cluster of **599/750/786** hits appeared under conditions not yet identified — use
+`bash probe on` to separate them rather than guessing.
+
+**The atrophy DoT is gear, not class.** `<t>'s form begins to atrophy as your attack
+kindles ethereal mist...` + `Time wreaks ruin upon <t>...` (~178/tick, decaying to 88/92/5)
+fired here on Depthswalker, having first been seen on Golden Dragon — so the
+`highlighting/029` trigger is correctly class-agnostic.
+
+**Problems seen, worth watching:**
+- HP rode at **1-3% for ~15 seconds** while the basher kept swinging. This was a
+  Mnemosyne (no-flee) fight, so fleeing was off the table, but nothing shielded either.
+- The keeper intoned **Mainaas at 12% HP while prone** — fixed in v4.7.145 by gating the
+  keeper on `dangerLevel() == "attack"`.
+- **Shield bounces cost ~5 rounds** (`A dizzying beam of energy strikes you as your attack
+  rebounds off...`), across three separate shields of ~2.5-3s each. Rage deliberately
+  isn't spent on shields; with a second denizen present, `shieldswap` retargeting is the
+  lever worth checking.
+- Three `You must wait a short time before you can use a battlerage ability again.`
+  rejections — trigger 329 arms the global cooldown reactively, so this self-corrects,
+  but it means the 1s gate is occasionally optimistic.
+
 ### Open questions (live capture needed)
 
 - **reap vs cull**: the wiki gives no damage and no balance figures for either. Use
