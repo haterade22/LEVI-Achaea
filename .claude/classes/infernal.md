@@ -1160,7 +1160,13 @@ standard_strategy:
 attack_skill: Weaponmastery
 spec_bash_strings:
   Dual Cutting:
-    raze: "rsl <target>"
+    raze: "razeslash <target>"   # v4.7.151: spelled out -- `rsl` is a personal
+                                 # server-side alias, not a game command (same class of
+                                 # bug as the old `st` vs `settarget` retarget failure).
+                                 # Applied to every knight DWC branch in the basher
+                                 # (Infernal/Paladin/knight/Runewarden). NOTE the PvP
+                                 # dwc/ files still send `rsl <target> <venom>` -- left
+                                 # alone deliberately, but verify they actually fire.
     bash: "dsl <target>"          # prepend "hyena maul <target>" when hyenaMaulReady
   Two Handed:
     raze: "battlefury focus speed;splinter <target>"
@@ -1253,6 +1259,24 @@ mnemosyne_boons:
       The crowd gate is the whole point: at 4.75s versus a ~2s dsl, one arc costs more
       than two normal swings, so it only pays with enough denizens standing in it.
       Yields on shielded rounds (break the shield first).
+
+  necrotic_aura:
+    text: "While you are empowered by an aura of death, your attacks will infect the body of your enemy, inhibiting them from healing."
+    flag: infNecroticAura   # trigger mnemosyne/042 + BOON CLAIM intercept
+    basher: |
+      The "aura of death" is the **DEATHAURA** defence (GMCP-tracked, raised by the bare
+      `deathaura` command), so the boon turns an ordinary standing defence into a damage
+      multiplier against every self-healing denizen -- exactly the mobs that otherwise
+      out-heal a slow kill ("...ceases tending to his wounds").
+      ataxiaBasher_infDeathaura re-raises it ONLY when GMCP says it dropped (10s
+      attempt-hold), prefixed to every round including shielded ones. Not danger-gated:
+      unlike a word-balance buff it is what makes our attacks land harder and costs
+      nothing per swing once standing.
+    proc_line: |
+      "Your sickening aura of death empowers your attack, denying vitality from suffusing
+      your foe." -> trigger denizen_attacks_misc_lines/024: highlights it and records
+      `inhibit` on the denizen (the same state Monk's Ripplestrike applies), so a second
+      inhibit is never spent on a mob that already has one.
 
 # QUASH -- the PvE shield answer (v4.7.149)
 quash:

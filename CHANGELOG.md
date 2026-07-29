@@ -2,6 +2,37 @@
 
 ---
 
+## 2026-07-29 — Necrotic Aura + razeslash spelled out (v4.7.151)
+
+**Necrotic Aura** (the 20th boon flag, `infNecroticAura`): *"While you are empowered by an
+aura of death, your attacks will infect the body of your enemy, inhibiting them from
+healing."*
+
+- The "aura of death" is the **DEATHAURA** defence (GMCP-tracked, raised by the bare
+  `deathaura` command), so the boon turns an ordinary standing defence into a damage
+  multiplier against every self-healing denizen — exactly the mobs that otherwise out-heal
+  a slow kill. `ataxiaBasher_infDeathaura` re-raises it **only when GMCP says it dropped**
+  (10s attempt-hold), prefixed to every round including shielded ones.
+- **The proc line is captured**: *"Your sickening aura of death empowers your attack,
+  denying vitality from suffusing your foe."* → new trigger
+  `denizen_attacks_misc_lines/024` highlights it and records **`inhibit`** on the denizen
+  — the same state Monk's Ripplestrike applies, so the denizen-state layer already models
+  it and a second inhibit is never spent on a mob that already has one.
+
+**`rsl` → `razeslash`** (user): the shield raze is `razeslash <target>`. `rsl` is a
+personal server-side alias rather than a game command — the same class of bug as the old
+`st` vs `settarget` retarget failure, which silently did nothing for months. Fixed in all
+four knight DWC branches of the basher (Infernal, Paladin, generic knight, Runewarden).
+**Not** changed in the PvP `dwc/` files, which send `rsl <target> <venom>` — left alone
+deliberately, but worth verifying they actually fire.
+
+Files: `basher/002_Class_Bashing.lua`, `mnemosyne/042_Necrotic_Aura.lua` (NEW),
+`denizen_attacks_misc_lines/024_Denizen_Necrotic_Inhibit.lua` (NEW), boon claim/reset
+wiring, `test_basher_infernal.lua` (+5 cases), `.claude/classes/infernal.md`, trigger
+catalog, `CLAUDE.md`. Suite **576/576**.
+
+---
+
 ## 2026-07-29 — Indiscriminate: Arc as a denizen AoE (v4.7.150)
 
 New Mnemosyne boon (the 19th flag, `infIndiscriminate`): *"Your Arc is now effective

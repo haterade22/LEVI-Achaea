@@ -56,6 +56,7 @@ dwFlashforward = false  -- boons reset each run
 infArmyOfDead = false  -- boons reset each run
 infDaemonJaws = false  -- boons reset each run
 infIndiscriminate = false  -- boons reset each run
+infNecroticAura = false  -- boons reset each run
 mnemHaemophiliac = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
 mnemDeluge = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
 

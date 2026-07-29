@@ -7,7 +7,7 @@
 require("mock_mudlet")
 
 target = 42
-ataxia = { settings = { separator = ";" }, vitals = { rage = 0, knight = "Dual Cutting" } }
+ataxia = { settings = { separator = ";" }, vitals = { rage = 0, knight = "Dual Cutting" }, defences = {} }
 ataxiaBasher = {
   shielded = false, rageraze = false,
   battlerage = { Infernal = { small = "ravage 42", large = "spike 42", raze = "shiver 42" } },
@@ -43,6 +43,8 @@ local function reset()
   ataxia.vitals.rage, ataxia.vitals.knight = 0, "Dual Cutting"
   ataxiaTemp = {}
   infArmyOfDead, infDaemonJaws, infIndiscriminate = false, false, false
+  infNecroticAura = false
+  ataxia.defences = {}
   ataxiaBasher.infArcAt = nil
   denizens = 0
   clock = clock + 100
@@ -130,6 +132,40 @@ describe("Army of the Dead -- TYRANNY, a one-time summon", function()
   end)
 end)
 
+describe("Necrotic Aura -- keep the deathaura defence up", function()
+  it("does nothing without the boon", function()
+    reset()
+    expect(ataxiaBasher_infDeathaura(";")).toBe("")
+  end)
+
+  it("raises deathaura when the boon is up and the defence is down", function()
+    reset(); infNecroticAura = true
+    expect(ataxiaBasher_infDeathaura(";")).toBe("deathaura;")
+  end)
+
+  it("leaves it alone while the defence is standing", function()
+    reset(); infNecroticAura = true
+    ataxia.defences = { deathaura = true }
+    expect(ataxiaBasher_infDeathaura(";")).toBe("")
+    ataxia.defences = {}
+  end)
+
+  it("holds off re-sending while the defence line lands", function()
+    reset(); infNecroticAura = true
+    expect(ataxiaBasher_infDeathaura(";")).toBe("deathaura;")
+    expect(ataxiaBasher_infDeathaura(";")).toBe("")
+    clock = clock + 11
+    expect(ataxiaBasher_infDeathaura(";")).toBe("deathaura;")
+  end)
+
+  it("prefixes every round, shielded included", function()
+    reset(); infNecroticAura = true
+    expect(has(ataxiaBasher_infernalBashing(), "deathaura")).toBeTrue()
+    reset(); infNecroticAura = true; ataxiaBasher.shielded = true
+    expect(has(ataxiaBasher_infernalBashing(), "deathaura")).toBeTrue()
+  end)
+end)
+
 describe("Indiscriminate -- ARC as a denizen AoE", function()
   it("does nothing without the boon", function()
     reset(); denizens = 4
@@ -191,7 +227,7 @@ describe("QUASH -- the eq-based shield strip (works on denizens)", function()
     reset(); ataxiaBasher.shielded = true
     local cmd = ataxiaBasher_infernalBashing()
     expect(has(cmd, "quash 42")).toBeTrue()
-    expect(has(cmd, "rsl 42")).toBeTrue()   -- the weapon raze still swings
+    expect(has(cmd, "razeslash 42")).toBeTrue() -- the weapon raze still swings
     expect(has(cmd, "shiver")).toBeFalse()  -- ...and no battlerage razer (rageraze off)
   end)
 
@@ -234,4 +270,5 @@ end)
 -- Restore shared state for whoever runs after us (files share one Lua state).
 getEpoch = _epoch
 infArmyOfDead, infDaemonJaws, infIndiscriminate = false, false, false
+infNecroticAura = false
 target = nil

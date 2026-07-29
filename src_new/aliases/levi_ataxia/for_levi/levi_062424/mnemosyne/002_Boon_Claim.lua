@@ -66,3 +66,6 @@ if matches[2]:lower():find("daemon jaws") then infDaemonJaws = true end
 -- Indiscriminate: ARC works on denizens; the Infernal basher swings the room-wide arc
 -- instead of its single-target attack at 2+ denizens.
 if matches[2]:lower():find("indiscriminate") then infIndiscriminate = true end
+-- Necrotic Aura: attacks inhibit denizen healing while the DEATHAURA defence is up;
+-- the Infernal basher keeps that defence raised.
+if matches[2]:lower():find("necrotic aura") then infNecroticAura = true end

@@ -650,6 +650,28 @@ function ataxiaBasher_infGravehands(sp)
 	return cmd..sp
 end
 
+-- Necrotic Aura (Mnemosyne boon): "While you are empowered by an aura of death, your
+-- attacks will infect the body of your enemy, inhibiting them from healing."
+--
+-- The "aura of death" is the DEATHAURA defence (GMCP-tracked, `ataxia.defences.deathaura`,
+-- raised by the bare `deathaura` command). So the boon turns an ordinary standing defence
+-- into a damage multiplier against every self-healing denizen -- exactly the mobs that
+-- otherwise out-heal a slow kill ("...ceases tending to his wounds"). Keep it up.
+--
+-- Defence-gated, so it re-ups ONLY when GMCP says it actually dropped, with a 10s
+-- attempt-hold for the defence line to land. Not gated on danger level: unlike a word-
+-- balance buff this is the thing making our attacks land harder, and it costs nothing
+-- per swing once standing.
+function ataxiaBasher_infDeathaura(sp)
+	if not infNecroticAura then return "" end
+	if ataxia.defences and ataxia.defences.deathaura then return "" end
+	local nowT = (getEpoch and getEpoch()) or os.time()
+	ataxiaTemp = ataxiaTemp or {}
+	if (nowT - (tonumber(ataxiaTemp.infDeathauraAt) or 0)) < 10 then return "" end
+	ataxiaTemp.infDeathauraAt = nowT
+	return "deathaura"..sp
+end
+
 -- Indiscriminate (Mnemosyne boon): "Your Arc is now effective against denizens."
 --
 -- ARC (Weaponmastery, general -- all four specs) normally reads "Works on: Adventurers
@@ -695,9 +717,15 @@ function ataxiaBasher_infernalBashing()
 	local braze = ataxiaBasher.battlerage.Infernal.raze
 	-- Boon-gated room nuke; rides ahead of the swing (see above).
 	local graveHands = ataxiaBasher_infGravehands(sp)
+	-- Necrotic Aura keeper: re-raises the deathaura defence when it drops, so every
+	-- attack keeps inhibiting denizen healing. Prefixed to whatever the round does.
+	local aura = ataxiaBasher_infDeathaura(sp)
 
 	if spec == "Dual Cutting" then
-		raze = "rsl "..target
+		-- RAZESLASH, spelled out (user, v4.7.151): `rsl` is a personal server-side alias,
+		-- not a game command -- the same class of bug as the old `st` vs `settarget`
+		-- retarget failure, which silently did nothing for months.
+		raze = "razeslash "..target
 		if ataxiaBasher.hyenaMaulReady then
 			bash = "hyena maul "..target..sp.."dsl "..target..sp
 		else
@@ -729,20 +757,20 @@ function ataxiaBasher_infernalBashing()
 		-- denizens) while the balance razer does its own job -- see ataxiaBasher_infQuash.
 		local quash = ataxiaBasher_infQuash(sp)
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-			command = quash..braze..sp..bash
+			command = aura..quash..braze..sp..bash
 		else
-			command = quash..raze..sp..brage
+			command = aura..quash..raze..sp..brage
 		end
 	elseif graveHands ~= "" then
 		-- TYRANNY spends 3.00s of BALANCE, so it IS the round -- it cannot ride alongside
 		-- the swing the way an eq ability would. The battlerage still goes with it (rage
 		-- is its own resource). One-time, so it only pre-empts the swing once.
-		command = brage..graveHands:gsub(sp.."$", "")
+		command = aura..brage..graveHands:gsub(sp.."$", "")
 	else
 		-- ARC (Indiscriminate boon) likewise spends balance and so replaces the swing --
 		-- one 4.75s room-wide hit instead of several single-target ones.
 		local arc = ataxiaBasher_infArc(sp)
-		command = brage..sp..((arc ~= "") and arc or bash)
+		command = aura..brage..sp..((arc ~= "") and arc or bash)
 	end
 
 	return command
@@ -1087,7 +1115,7 @@ function ataxiaBasher_paladinBashing()
 	local braze = ataxiaBasher.battlerage.Paladin.raze
 
 	if spec == "Dual Cutting" then
-		raze = "rsl "..target
+		raze = "razeslash "..target
 		bash = "dsl "..target
 	elseif spec == "Two Handed" then
 		raze = "battlefury focus speed"..sp.."carve "..target
@@ -1266,7 +1294,7 @@ function ataxiaBasher_knightBashing()
 	local braze = ataxiaBasher.battlerage[ataxiaTemp.class].raze
 
 	if spec == "Dual Cutting" then
-		raze = "rsl "..target
+		raze = "razeslash "..target
 		bash = "dsl "..target
 	elseif spec == "Two Handed" then
 		raze = "battlefury focus speed"..sp.."carve "..target
@@ -1303,7 +1331,7 @@ function ataxiaBasher_runewardenBashing()
 	local falcon = (ataxiaBasher.falconRakeReady and ("falcon rake "..target..sp)) or ""
 
 	if spec == "Dual Cutting" then
-		raze = "rsl "..target
+		raze = "razeslash "..target
 		bash = falcon.."dsl "..target
 	elseif spec == "Two Handed" then
 		raze = "battlefury focus speed"..sp.."carve "..target
