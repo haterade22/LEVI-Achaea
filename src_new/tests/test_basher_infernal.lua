@@ -15,7 +15,7 @@ ataxiaBasher = {
 ataxiaTemp = {}
 gmcp = {
   Room = { Info = { area = "" } },
-  Char = { Status = { class = "Infernal", level = "80 " } },
+  Char = { Status = { class = "Infernal", level = "80 " }, Vitals = { ep = 100, maxep = 100 } },
   IRE = { Target = { Info = {} } },
 }
 function ataxiaEcho() end
@@ -43,7 +43,8 @@ local function reset()
   ataxia.vitals.rage, ataxia.vitals.knight = 0, "Dual Cutting"
   ataxiaTemp = {}
   infArmyOfDead, infDaemonJaws, infIndiscriminate = false, false, false
-  infNecroticAura = false
+  infNecroticAura, infFuryOfAges = false, false
+  gmcp.Char.Vitals = { ep = 100, maxep = 100 }
   ataxia.defences = {}
   ataxiaBasher.infArcAt = nil
   denizens = 0
@@ -167,6 +168,61 @@ describe("Army of the Dead -- TYRANNY, a one-time summon", function()
     reset(); infArmyOfDead = true; denizens = 3
     ataxiaBasher.shielded = true
     expect(has(ataxiaBasher_infernalBashing(), "tyranny")).toBeFalse()
+  end)
+end)
+
+describe("Fury of Ages -- hold FURY while endurance allows", function()
+  local function ep(pct)
+    gmcp.Char.Vitals = { ep = pct, maxep = 100 }
+  end
+
+  it("does nothing without the boon", function()
+    reset(); ep(100)
+    expect(ataxiaBasher_infFury(";")).toBe("")
+  end)
+
+  it("turns fury ON once endurance is healthy", function()
+    reset(); infFuryOfAges = true; ep(80)
+    expect(ataxiaBasher_infFury(";")).toBe("fury on;")
+    expect(ataxiaTemp.infFuryOn).toBeTrue()
+  end)
+
+  it("will not turn on at low endurance -- the cost is quadrupled", function()
+    reset(); infFuryOfAges = true; ep(40) -- below the 60% on-threshold
+    expect(ataxiaBasher_infFury(";")).toBe("")
+    expect(ataxiaTemp.infFuryOn).toBe(nil)
+  end)
+
+  it("drops fury before endurance strands us", function()
+    reset(); infFuryOfAges = true; ep(80)
+    expect(ataxiaBasher_infFury(";")).toBe("fury on;")
+    clock = clock + 31
+    ep(24) -- under the 25% off-threshold
+    expect(ataxiaBasher_infFury(";")).toBe("fury off;")
+    expect(ataxiaTemp.infFuryOn).toBe(nil)
+  end)
+
+  it("holds in the hysteresis band -- no flapping (each activation may cost 500 wp)", function()
+    reset(); infFuryOfAges = true; ep(80)
+    expect(ataxiaBasher_infFury(";")).toBe("fury on;")
+    clock = clock + 31
+    ep(40) -- between off(25) and on(60): stays ON, no toggle
+    expect(ataxiaBasher_infFury(";")).toBe("")
+    expect(ataxiaTemp.infFuryOn).toBeTrue()
+  end)
+
+  it("enforces a 30s minimum between toggles", function()
+    reset(); infFuryOfAges = true; ep(80)
+    expect(ataxiaBasher_infFury(";")).toBe("fury on;")
+    ep(10)
+    expect(ataxiaBasher_infFury(";")).toBe("") -- too soon to toggle back off
+    clock = clock + 31
+    expect(ataxiaBasher_infFury(";")).toBe("fury off;")
+  end)
+
+  it("rides the round alongside the swing", function()
+    reset(); infFuryOfAges = true; ep(80)
+    expect(has(ataxiaBasher_infernalBashing(), "fury on")).toBeTrue()
   end)
 end)
 
@@ -308,5 +364,5 @@ end)
 -- Restore shared state for whoever runs after us (files share one Lua state).
 getEpoch = _epoch
 infArmyOfDead, infDaemonJaws, infIndiscriminate = false, false, false
-infNecroticAura = false
+infNecroticAura, infFuryOfAges = false, false
 target = nil

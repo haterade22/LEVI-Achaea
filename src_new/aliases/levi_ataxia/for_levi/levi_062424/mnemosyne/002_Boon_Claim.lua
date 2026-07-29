@@ -69,3 +69,6 @@ if matches[2]:lower():find("indiscriminate") then infIndiscriminate = true end
 -- Necrotic Aura: attacks inhibit denizen healing while the DEATHAURA defence is up;
 -- the Infernal basher keeps that defence raised.
 if matches[2]:lower():find("necrotic aura") then infNecroticAura = true end
+-- Fury of Ages: FURY becomes near-permanent (+8 str, +20% balance) at the cost of
+-- quadrupled endurance; the basher holds it on while EP allows.
+if matches[2]:lower():find("fury of ages") then infFuryOfAges = true end

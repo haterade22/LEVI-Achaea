@@ -2,6 +2,42 @@
 
 ---
 
+## 2026-07-29 — Fury of Ages + hyena out-of-range recovery (v4.7.153)
+
+**Hyena out of range.** `Your hyena is too far away for you to command like that.` → new
+trigger `373_Hyena_Too_Far` sends `hyena recall;order hyena follow me` (10s debounce), so
+she comes back and stays with us. It also **releases the maul cooldown**: that order never
+landed, and we optimistically arm the cooldown from our own command line, so charging a
+full 30s for a maul that never happened would waste real uptime.
+
+**Fury of Ages** (the 21st boon flag, `infFuryOfAges`): *"You can now use your fury ability
+for 45 minutes out of every hour, and it grants an additional 8 strength and 20% faster
+balance recovery, but endurance costs are quadrupled under its effect."*
+
+Base FURY is deliberately never automated — +2 strength for 500 willpower after the first
+daily use, capped at 4 uses per Achaean day. This boon changes the economics entirely, so
+the basher now holds it up — while respecting the one real cost:
+
+- **ON** at EP ≥ 60% (`ataxiaBasher.infFuryOnAt`), **OFF** below 25%
+  (`infFuryOffAt`). The gap is deliberate hysteresis, backed by a **30s floor between
+  toggles** — flapping would be worse than not using it at all, because each activation may
+  still cost 500 willpower.
+- Endurance is exactly what the boon quadruples and exactly what runs out on a long grind,
+  which is why EP (not HP) is the gate.
+- On a confirmed run-end the flag clears **and `fury off` is sent**, so fury is never left
+  running with a quadrupled EP cost and no payoff.
+
+Live capture still wanted: the fury on/off game lines (to confirm state rather than assume
+it — state is currently optimistic), and whether the 500-willpower activation cost still
+applies under the boon. If it doesn't, the 30s toggle floor can be relaxed.
+
+Files: `basher/002_Class_Bashing.lua`, `373_Hyena_Too_Far.lua` (NEW),
+`mnemosyne/043_Fury_Of_Ages.lua` (NEW), boon claim/reset wiring (+ run-end `fury off`),
+`test_basher_infernal.lua` (+7 cases), `.claude/classes/infernal.md`, trigger catalog,
+`CLAUDE.md`. Suite **588/588**.
+
+---
+
 ## 2026-07-29 — Hyena maul rides every round (v4.7.152)
 
 User: *"hyena maul should be used as much as it can be."* It wasn't — and my own recent

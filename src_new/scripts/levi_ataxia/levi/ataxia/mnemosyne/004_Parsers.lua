@@ -194,6 +194,13 @@ function M.onRunEnd()
   infDaemonJaws = false -- boons gone on a confirmed run-end
   infIndiscriminate = false -- boons gone on a confirmed run-end
   infNecroticAura = false -- boons gone on a confirmed run-end
+  infFuryOfAges = false -- boons gone on a confirmed run-end
+  if ataxiaTemp and ataxiaTemp.infFuryOn then
+    -- The boon is gone but FURY may still be running with its quadrupled endurance
+    -- cost and no payoff. Turn it off rather than leaving it draining EP.
+    ataxiaTemp.infFuryOn = nil
+    send("fury off", false)
+  end
   mnemHaemophiliac = false -- affixes gone on a confirmed run-end (pacing back to normal)
   mnemDeluge = false -- affixes gone on a confirmed run-end (flight available again)
   if ataxiaTemp then

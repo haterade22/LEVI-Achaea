@@ -650,6 +650,44 @@ function ataxiaBasher_infGravehands(sp)
 	return cmd..sp
 end
 
+-- Fury of Ages (Mnemosyne boon): "You can now use your fury ability for 45 minutes out of
+-- every hour, and it grants an additional 8 strength and 20% faster balance recovery, but
+-- endurance costs are quadrupled under its effect."
+--
+-- Base FURY is +2 strength, 500 willpower after the first daily use, capped at 4 uses per
+-- Achaean day -- which is why it is deliberately NOT automated normally. The boon changes
+-- the economics completely: 45 minutes of every hour, +8 more strength and 20% faster
+-- balance. That is a bashing buff worth holding up almost permanently.
+--
+-- The catch is QUADRUPLED ENDURANCE. Endurance is what runs out on a long grind, so this
+-- watches EP and drops fury before it strands us:
+--   * ON  at EP >= infFuryOnAt   (default 60%)
+--   * OFF at EP <  infFuryOffAt  (default 25%)
+-- The gap between the two is hysteresis on purpose -- flapping would be worse than not
+-- using it, because each activation may cost 500 willpower. A 30s minimum between toggles
+-- backs that up. State is optimistic (`ataxiaTemp.infFuryOn`) because no fury on/off game
+-- line has been captured yet -- if one shows up, confirm from it instead.
+function ataxiaBasher_infFury(sp)
+	if not infFuryOfAges then return "" end
+	local gv = (gmcp.Char and gmcp.Char.Vitals) or {}
+	local ep, maxep = tonumber(gv.ep), tonumber(gv.maxep)
+	if not ep or not maxep or maxep <= 0 then return "" end
+	local pct = (ep / maxep) * 100
+	local nowT = (getEpoch and getEpoch()) or os.time()
+	ataxiaTemp = ataxiaTemp or {}
+	if (nowT - (tonumber(ataxiaTemp.infFuryAt) or 0)) < 30 then return "" end
+	local onAt = tonumber(ataxiaBasher.infFuryOnAt) or 60
+	local offAt = tonumber(ataxiaBasher.infFuryOffAt) or 25
+	if not ataxiaTemp.infFuryOn and pct >= onAt then
+		ataxiaTemp.infFuryOn, ataxiaTemp.infFuryAt = true, nowT
+		return "fury on"..sp
+	elseif ataxiaTemp.infFuryOn and pct < offAt then
+		ataxiaTemp.infFuryOn, ataxiaTemp.infFuryAt = nil, nowT
+		return "fury off"..sp
+	end
+	return ""
+end
+
 -- Necrotic Aura (Mnemosyne boon): "While you are empowered by an aura of death, your
 -- attacks will infect the body of your enemy, inhibiting them from healing."
 --
@@ -719,7 +757,7 @@ function ataxiaBasher_infernalBashing()
 	local graveHands = ataxiaBasher_infGravehands(sp)
 	-- Necrotic Aura keeper: re-raises the deathaura defence when it drops, so every
 	-- attack keeps inhibiting denizen healing. Prefixed to whatever the round does.
-	local aura = ataxiaBasher_infDeathaura(sp)
+	local aura = ataxiaBasher_infDeathaura(sp)..ataxiaBasher_infFury(sp)
 
 	-- HYENA MAUL is a PET order -- it costs us no balance and no equilibrium, so the only
 	-- thing limiting it is its own cooldown. It used to be baked INSIDE each spec's swing

@@ -221,6 +221,11 @@ The single exception is a **shielded** denizen: the maul would splash off the sh
 burn the full 30s cooldown for nothing, so it holds the ~3s until the shield lapses --
 skipping there is what *maximises* landed mauls.
 
+**Out of range**: `Your hyena is too far away for you to command like that.` -> trigger
+`373_Hyena_Too_Far` sends `hyena recall;order hyena follow me` (10s debounce) AND releases
+the maul cooldown -- the order never landed, so charging a full 30s for it would waste
+uptime.
+
 Cooldown starts from **our own command line** (`You command your hyena to maul <target>.`)
 as well as the hyena's attack line, so a missed pet line cannot desync it; the safety
 timer added in v4.7.148 is the final backstop.
@@ -1275,6 +1280,26 @@ mnemosyne_boons:
       The crowd gate is the whole point: at 4.75s versus a ~2s dsl, one arc costs more
       than two normal swings, so it only pays with enough denizens standing in it.
       Yields on shielded rounds (break the shield first).
+
+  fury_of_ages:
+    text: "You can now use your fury ability for 45 minutes out of every hour, and it grants an additional 8 strength and 20% faster balance recovery, but endurance costs are quadrupled under its effect."
+    flag: infFuryOfAges   # trigger mnemosyne/043 + BOON CLAIM intercept
+    basher: |
+      Base FURY (+2 str, 500 willpower after the first daily use, 4 uses/Achaean day) is
+      deliberately never automated. This boon changes the economics: 45 minutes of every
+      hour, +8 more strength and 20% faster balance -- worth holding up almost permanently.
+      ataxiaBasher_infFury watches ENDURANCE, since that is what the boon quadruples and
+      what runs out on a long grind:
+        ON  at EP >= ataxiaBasher.infFuryOnAt  (default 60%)
+        OFF at EP <  ataxiaBasher.infFuryOffAt (default 25%)
+      The gap is deliberate hysteresis and there is a 30s floor between toggles -- flapping
+      would be worse than not using it, because each activation may cost 500 willpower.
+      State is optimistic (ataxiaTemp.infFuryOn); on a confirmed run-end the boon clears AND
+      `fury off` is sent, so we never leave it draining EP with no payoff.
+    live_capture_needed: |
+      The fury on/off game lines (to confirm state instead of assuming it), and whether the
+      500-willpower activation cost still applies under the boon -- if it does not, the 30s
+      toggle floor could be relaxed.
 
   necrotic_aura:
     text: "While you are empowered by an aura of death, your attacks will infect the body of your enemy, inhibiting them from healing."
