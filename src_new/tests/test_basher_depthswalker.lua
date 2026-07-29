@@ -58,6 +58,8 @@ local function reset()
   ataxiaTemp = {}
   ataxiaTables.depthswalker = { wordBal = true, age = 0, abilities = nil }
   denizenAffs = {}
+  dwFlashforward = false
+  ataxiaBasher.dwAgeCap = 400
   dangerLevel = "attack"
   validTargets = 1
   stormhammerTargets = {}
@@ -256,7 +258,50 @@ describe("ataxiaBasher_dwKeeper -- Terminus buffs on the word balance", function
   end)
 end)
 
+describe("Flashforward boon -- keep chrono blur up", function()
+  it("does nothing without the boon", function()
+    reset()
+    expect(ataxiaBasher_dwFlashforward(";")).toBe("")
+  end)
+
+  it("re-ups chrono blur while the boon is up and blur is down", function()
+    reset(); dwFlashforward = true
+    expect(ataxiaBasher_dwFlashforward(";")).toBe("chrono blur;")
+  end)
+
+  it("leaves it alone when the blur defence is already standing", function()
+    reset(); dwFlashforward = true
+    ataxia.defences.blur = true
+    expect(ataxiaBasher_dwFlashforward(";")).toBe("")
+  end)
+
+  it("holds off re-sending while the defence line lands", function()
+    reset(); dwFlashforward = true
+    expect(ataxiaBasher_dwFlashforward(";")).toBe("chrono blur;")
+    expect(ataxiaBasher_dwFlashforward(";")).toBe("") -- 8s attempt-hold
+    clock = clock + 9
+    expect(ataxiaBasher_dwFlashforward(";")).toBe("chrono blur;")
+  end)
+
+  it("respects the age cap -- bashing must not price out the chrono kit", function()
+    reset(); dwFlashforward = true
+    ataxiaTables.depthswalker.age = 401
+    expect(ataxiaBasher_dwFlashforward(";")).toBe("")
+    ataxiaTables.depthswalker.age = 400
+    expect(ataxiaBasher_dwFlashforward(";")).toBe("chrono blur;")
+  end)
+
+  it("rides every round -- including shielded ones (the buff is on US)", function()
+    reset(); dwFlashforward = true; ataxia.vitals.rage = 100
+    expect(has(ataxiaBasher_depthswalkerBashing(), "chrono blur;")).toBeTrue()
+    reset(); dwFlashforward = true; ataxiaBasher.shielded = true
+    local cmd = ataxiaBasher_depthswalkerBashing()
+    expect(cmd).toBe("chrono blur;shadow reap 7")
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
+dwFlashforward = false
 getEpoch = _epoch
 target = nil
 stormhammerTargets = {}

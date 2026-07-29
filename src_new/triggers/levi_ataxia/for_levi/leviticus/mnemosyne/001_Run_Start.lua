@@ -52,6 +52,7 @@ mnemSenselessFlurry = false  -- boons reset each run
 psionPanoply = false  -- boons reset each run
 dragonMightSycaerunax = false  -- boons reset each run
 dragonRampage = false  -- boons reset each run
+dwFlashforward = false  -- boons reset each run
 mnemHaemophiliac = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
 mnemDeluge = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
 

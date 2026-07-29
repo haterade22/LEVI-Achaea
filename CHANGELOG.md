@@ -2,6 +2,29 @@
 
 ---
 
+## 2026-07-29 — Flashforward: keep chrono blur up for +20% damage (v4.7.146)
+
+New Mnemosyne boon (the 16th flag, `dwFlashforward`): *"You deal 20% bonus damage while
+you possess the chrono blur defence."*
+
+- `ataxiaBasher_dwFlashforward` (basher/002) re-ups `CHRONO BLUR` whenever the boon is
+  claimed and the GMCP `blur` defence is down. It is an **equilibrium rider paid in AGE**
+  — not the word balance — so it never competes with nakail or the Terminus buffs, and it
+  rides shielded rounds too (the buff is on *us*, and a shield round still ends in a
+  swing).
+- **Age-capped** by `ataxiaBasher.dwAgeCap` (default 400 — the yellow/orange boundary in
+  `getAgeColour`): age is the class's PvP currency and bashing must not price out the
+  chrono kit. 8s attempt-hold so the defence line has time to land.
+- Standard boon lifecycle: claim intercept (`flashforward`), BOONS-row trigger
+  `mnemosyne/038_Flashforward`, reset on run start, cleared on the confirmed run end.
+
+Files: `basher/002_Class_Bashing.lua`, `mnemosyne/038_Flashforward.lua` (NEW),
+`002_Boon_Claim.lua`, `001_Run_Start.lua`, `mnemosyne/004_Parsers.lua`,
+`002_Check_For_Any_Missing_Variables.lua`, `test_basher_depthswalker.lua` (+6 cases),
+`.claude/classes/depthswalker.md`, trigger catalog. Suite **547/547**.
+
+---
+
 ## 2026-07-29 — Depthswalker: lessons from a live log (v4.7.145)
 
 A Mnemosyne bashing log (Death Knight + soldier of Osterrych) settled three open

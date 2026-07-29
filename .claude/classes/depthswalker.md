@@ -608,6 +608,23 @@ is visible in game.
 `bash dw boinad on|off` (default off — 32 rage + the shared word balance for a 5s charm),
 `bash dw cull on|off` (default off), `bash dw keepers on|off` (default on).
 
+### Mnemosyne boon: Flashforward (v4.7.146)
+
+> *"You deal 20% bonus damage while you possess the chrono blur defence."*
+
+`blur` is one of the GMCP-tracked Depthswalker defences, so this is a keep-it-up job --
+but `CHRONO BLUR` is an **Aeonics** command paid in **age and equilibrium**, not the word
+balance, so it rides beside the balance swing and never competes with nakail or the
+Terminus buffs. It fires on shielded rounds too: the buff is on *us*, and a shield round
+still ends with a swing.
+
+`ataxiaBasher_dwFlashforward` (basher/002) re-ups only while `dwFlashforward` is set and
+`ataxia.defences.blur` is down, with an 8s attempt-hold for the defence line to land, and
+capped by `ataxiaBasher.dwAgeCap` (default **400** -- the yellow/orange boundary in
+`getAgeColour`) so bashing can never price out the chrono kit. Standard boon lifecycle:
+claim intercept, BOONS-row trigger `mnemosyne/038_Flashforward`, cleared on run
+start/end.
+
 ### Live-log findings (2026-07-29, Mnemosyne, Death Knight + soldier of Osterrych)
 
 **Confirmed fire lines** (all now wired):

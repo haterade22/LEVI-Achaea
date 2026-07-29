@@ -561,8 +561,33 @@ function ataxiaBasher_dwKeeper(sp)
   return ""
 end
 
+-- Flashforward (Mnemosyne boon): "You deal 20% bonus damage while you possess the chrono
+-- blur defence." `blur` is GMCP-tracked, so this is a straight keep-it-up job -- but
+-- CHRONO BLUR is an Aeonics command paid in AGE and equilibrium, NOT the word balance, so
+-- it rides beside the balance swing instead of competing with nakail and the Terminus
+-- buffs. It fires on shielded rounds too: the buff is on US, and a shield round still
+-- ends with a swing.
+--
+-- Age is the class's PvP currency, so the re-up is capped (`ataxiaBasher.dwAgeCap`,
+-- default 400 = the yellow/orange boundary in getAgeColour) -- bashing must not price out
+-- the chrono kit. The 8s attempt-hold covers the lag before the defence line lands.
+function ataxiaBasher_dwFlashforward(sp)
+  if not dwFlashforward then return "" end
+  if ataxia.defences and ataxia.defences.blur then return "" end
+  local dw = ataxiaTables and ataxiaTables.depthswalker
+  local age = tonumber(dw and dw.age) or 0
+  if age > (tonumber(ataxiaBasher.dwAgeCap) or 400) then return "" end
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp = ataxiaTemp or {}
+  if (nowT - (tonumber(ataxiaTemp.dwBlurAt) or 0)) < 8 then return "" end
+  ataxiaTemp.dwBlurAt = nowT
+  return "chrono blur"..sp
+end
+
 function ataxiaBasher_depthswalkerBashing()
 	local command, sp = "", ataxia.settings.separator
+	-- Equilibrium rider: rides every round, shielded or not (see above).
+	local ff = ataxiaBasher_dwFlashforward(sp)
 	-- `shadow cull` is the slow/high-damage swing, `shadow reap` the fast/low one; the
 	-- wiki gives numbers for neither, so reap stays the default until measured
 	-- (`bash dwcull on` flips it -- see the A/B note in the class doc).
@@ -580,16 +605,16 @@ function ataxiaBasher_depthswalkerBashing()
 			local rage = tonumber(ataxia.vitals.rage) or 0
 			local dw = ataxiaTables and ataxiaTables.depthswalker
 			if rage >= 17 and not (dw and dw.wordBal == false) then
-				return "intone nakail "..target..sp..primary
+				return ff.."intone nakail "..target..sp..primary
 			end
 		end
-		return primary
+		return ff..primary
 	end
 
 	-- Battlerage computed LAZILY, only on branches that SEND it (the Psion rule): the
 	-- rotation stamps cooldowns when it picks, and the shielded branch above emits no
 	-- battlerage -- an eager call there would burn a 23-38s stamp unsent.
-	command = ataxiaBasher_dwKeeper(sp)..ataxiaBasher_dwBattlerage(sp)..primary
+	command = ff..ataxiaBasher_dwKeeper(sp)..ataxiaBasher_dwBattlerage(sp)..primary
 	return command
 end
 

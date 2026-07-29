@@ -105,6 +105,9 @@ function ataxiaCheckForMissing()
 	if ataxiaBasher.dwBoinad == nil then ataxiaBasher.dwBoinad = false end
 	if ataxiaBasher.dwCull == nil then ataxiaBasher.dwCull = false end
 	if ataxiaBasher.dwKeepers == nil then ataxiaBasher.dwKeepers = true end
+	-- Age ceiling for chrono re-ups paid in age (Flashforward's chrono blur). 400 is the
+	-- yellow/orange boundary in getAgeColour -- bashing must not price out the PvP kit.
+	if ataxiaBasher.dwAgeCap == nil then ataxiaBasher.dwAgeCap = 400 end
 
 	if ataxiaBasher.dragonBlast == nil then
 		ataxiaBasher.dragonBlast = true
