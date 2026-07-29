@@ -75,6 +75,12 @@ function ataxia_Vitals_Update()
         ataxia.vitals.epitaph = tonumber(val)
 			elseif key == "Rage" then
 				ataxia.vitals.rage = tonumber(val)
+			-- Necromancy LIFE ESSENCE (Infernal/Apostate). Matched loosely because the
+			-- charstats key wording isn't pinned ("Essence" / "Life Essence"), and the
+			-- value may carry a % sign. Truncating parens on the gsub -- an unparenthesised
+			-- gsub leaks its COUNT into tonumber as a base and throws (v4.7.127).
+			elseif key:lower():find("essence") then
+				ataxia.vitals.essence = tonumber((tostring(val):gsub("%%", "")))
 			elseif key == "Kai" or key == "Shin" then
 				ataxia.vitals.class = tonumber( string.match(val, "%d+") )
 			elseif key == "Wellspring" then

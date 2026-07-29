@@ -2,6 +2,44 @@
 
 ---
 
+## 2026-07-29 — Tyranny corrected, QUASH wired, life essence tracked (v4.7.149)
+
+Three corrections to yesterday's Army of the Dead work, from the user plus the Oppression
+wiki.
+
+- **It's TYRANNY, not "summon hands of the grave"** — that phrasing is the *Apostate*
+  branch (the existing gravehands alias already forks on class). The basher now sends the
+  right command per class.
+- **It's a ONE-TIME summon, and it costs 3% life essence.** The first cut re-cast it on a
+  20s rotation cooldown, which would have burned essence continuously — and Hellforge
+  users regain essence at *reduced* rates. It is now cast once, gated on a life-essence
+  floor (`ataxiaBasher.infEssenceFloor`, 20%), with a long 600s re-arm that exists only as
+  a backstop for a lost summon.
+- **It spends 3.00s of BALANCE, so it replaces the swing** rather than riding alongside
+  `dsl` — the two would otherwise fight over the same balance.
+- **Life essence is now parsed** (`ataxia.vitals.essence`, loosely matched in the
+  charstats parser since the key wording isn't pinned) and shown on the bashing HUD in a
+  new **Infernal block**: Essence % (green/yellow/red), hyena Maul ready/cd, and any
+  active Infernal boons.
+- **QUASH is wired as the PvE shield answer.** The Oppression wiki lists it as "Adventurers
+  **and denizens**", 4.00s of *equilibrium*, dealing damage *and* stripping magical
+  shields. Equilibrium is idle while every Infernal attack spends balance, so it strips
+  the shield without spending rage (the standing doctrine) and without costing the swing —
+  the balance razer still runs in the same round. Shielded rounds only, 4s attempt-hold,
+  `ataxiaBasher.infQuash = false` to disable.
+
+Malignity audit (for the record): **no denizen-capable offence at all** — every offensive
+ability there is Adventurers-only, including the whole hyena command suite. Its PvE value
+is self-buffs (Weathering/Resistance/Gripping, already in the shared defence list) plus
+**FURY** (+2 strength), which is deliberately *not* automated: 500 willpower after the
+first daily use and capped at 4 uses per Achaean day.
+
+Files: `update_stuff/004_ataxia_Vitals_Update.lua`, `basher/002_Class_Bashing.lua`,
+`windows/001_Limb_Counter_Window.lua`, `test_basher_infernal.lua`,
+`.claude/classes/infernal.md`. Suite **565/565**.
+
+---
+
 ## 2026-07-29 — Infernal: stop attacking your own hyena, + two boons (v4.7.148)
 
 **The basher was killing your pet.** "a daemonic hyena" was never in the seeded

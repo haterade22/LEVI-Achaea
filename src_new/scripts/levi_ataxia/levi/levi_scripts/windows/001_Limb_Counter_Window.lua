@@ -245,6 +245,26 @@ function tarc.write()
         tarc:cecho("   <white>SwiftC<reset> <cyan>" .. tostring(curseCharge or 0) .. "<reset>\n")
       elseif gmcp.Char.Status.class == "Pariah" then
         tarc:cecho("   <white>Epitaph<reset> <cyan>" .. tostring(v.epitaph or 0) .. "<reset>\n")
+      elseif gmcp.Char.Status.class == "Infernal" then
+        -- Life essence is the Necromancy resource TYRANNY spends (3% a summon), so it
+        -- belongs on the panel where the cost is visible before it is paid. Hyena maul
+        -- readiness sits beside it -- it is a free hit we otherwise only learn about by
+        -- watching the combat spam.
+        local ess = tonumber(v.essence)
+        if ess then
+          local eCol = (ess < 20 and "red") or (ess < 50 and "yellow") or "green"
+          tarc:cecho(string.format("   <white>Essence<reset> <%s>%d%%<reset>", eCol, ess))
+        else
+          tarc:cecho("   <white>Essence<reset> <DimGrey>??<reset>")
+        end
+        tarc:cecho(string.format("   <white>Maul<reset> %s\n",
+          ataxiaBasher.hyenaMaulReady and "<green>ready<reset>" or "<DimGrey>cd<reset>"))
+        if infArmyOfDead or infDaemonJaws then
+          local bits = {}
+          if infArmyOfDead then bits[#bits + 1] = "<cyan>Army of the Dead<reset>" end
+          if infDaemonJaws then bits[#bits + 1] = "<cyan>Daemon Jaws<reset>" end
+          tarc:cecho("   " .. table.concat(bits, " <gray>|<reset> ") .. "\n")
+        end
       elseif gmcp.Char.Status.class == "Depthswalker" then
         -- Age + word balance are the two DW resources the basher actually spends, and
         -- the buff chips answer "am I getting my damage?" at a glance: green = standing,

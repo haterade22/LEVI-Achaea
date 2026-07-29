@@ -37,7 +37,9 @@ local function has(cmd, needle) return cmd:find(needle, 1, true) ~= nil end
 local function reset()
   ataxiaBasher.shielded, ataxiaBasher.rageraze = false, false
   ataxiaBasher.hyenaMaulReady = true
-  ataxiaBasher.infGravehandsCd = nil
+  ataxiaBasher.infGravehandsCd, ataxiaBasher.infTyrannyCd = nil, nil
+  ataxiaBasher.infEssenceFloor, ataxiaBasher.infQuash = nil, nil
+  ataxia.vitals.essence = nil
   ataxia.vitals.rage, ataxia.vitals.knight = 0, "Dual Cutting"
   ataxiaTemp = {}
   infArmyOfDead, infDaemonJaws = false, false
@@ -61,36 +63,101 @@ describe("ataxiaBasher_infernalBashing -- Dual Wield Cutting", function()
   end)
 end)
 
-describe("Army of the Dead -- gravehands room nuke", function()
+describe("Army of the Dead -- TYRANNY, a one-time summon", function()
   it("does nothing without the boon", function()
     reset(); denizens = 3
     expect(ataxiaBasher_infGravehands(";")).toBe("")
   end)
 
-  it("needs a crowd: solo denizens are not worth the summon", function()
+  it("needs a crowd: solo denizens are not worth 3% essence", function()
     reset(); infArmyOfDead = true; denizens = 1
     expect(ataxiaBasher_infGravehands(";")).toBe("")
   end)
 
-  it("summons at 2+ denizens, then holds its cooldown", function()
+  it("casts TYRANNY for Infernal -- not the Apostate wording", function()
     reset(); infArmyOfDead = true; denizens = 2
-    expect(ataxiaBasher_infGravehands(";")).toBe("summon hands of the grave;")
-    expect(ataxiaBasher_infGravehands(";")).toBe("") -- stamped
-    clock = clock + 21
-    expect(ataxiaBasher_infGravehands(";")).toBe("summon hands of the grave;")
+    expect(ataxiaBasher_infGravehands(";")).toBe("tyranny;")
   end)
 
-  it("rides ahead of the swing in the assembled command", function()
+  it("uses the Apostate command when the class is Apostate", function()
+    reset(); infArmyOfDead = true; denizens = 2
+    gmcp.Char.Status.class = "Apostate"
+    expect(ataxiaBasher_infGravehands(";")).toBe("summon hands of the grave;")
+    gmcp.Char.Status.class = "Infernal"
+  end)
+
+  it("is ONE-TIME -- the hands persist, so it does not re-cast on a rotation cd", function()
+    reset(); infArmyOfDead = true; denizens = 2
+    expect(ataxiaBasher_infGravehands(";")).toBe("tyranny;")
+    expect(ataxiaBasher_infGravehands(";")).toBe("")
+    clock = clock + 120 -- two minutes later: still summoned, still silent
+    expect(ataxiaBasher_infGravehands(";")).toBe("")
+    clock = clock + 500 -- past the long backstop re-arm
+    expect(ataxiaBasher_infGravehands(";")).toBe("tyranny;")
+  end)
+
+  it("respects the life-essence floor (3% a cast)", function()
+    reset(); infArmyOfDead = true; denizens = 2
+    ataxia.vitals.essence = 19 -- below the default floor of 20
+    expect(ataxiaBasher_infGravehands(";")).toBe("")
+    ataxia.vitals.essence = 20
+    expect(ataxiaBasher_infGravehands(";")).toBe("tyranny;")
+    ataxia.vitals.essence = nil
+  end)
+
+  it("REPLACES the swing -- tyranny costs 3s of balance, so it IS the round", function()
     reset(); infArmyOfDead = true; denizens = 3
     local cmd = ataxiaBasher_infernalBashing()
-    expect(has(cmd, "summon hands of the grave")).toBeTrue()
+    expect(has(cmd, "tyranny")).toBeTrue()
+    expect(has(cmd, "dsl 42")).toBeFalse() -- both would fight over the same balance
+    expect(cmd:sub(-1)).toBe("y")          -- no dangling separator
+  end)
+
+  it("goes back to the normal swing once it is summoned", function()
+    reset(); infArmyOfDead = true; denizens = 3
+    ataxiaBasher_infernalBashing() -- summons
+    clock = clock + 5
+    local cmd = ataxiaBasher_infernalBashing()
+    expect(has(cmd, "tyranny")).toBeFalse()
     expect(has(cmd, "dsl 42")).toBeTrue()
   end)
 
   it("never spends a shield-break round on it", function()
     reset(); infArmyOfDead = true; denizens = 3
     ataxiaBasher.shielded = true
-    expect(has(ataxiaBasher_infernalBashing(), "summon hands of the grave")).toBeFalse()
+    expect(has(ataxiaBasher_infernalBashing(), "tyranny")).toBeFalse()
+  end)
+end)
+
+describe("QUASH -- the eq-based shield strip (works on denizens)", function()
+  it("only fires while a shield is up", function()
+    reset()
+    expect(ataxiaBasher_infQuash(";")).toBe("")
+    reset(); ataxiaBasher.shielded = true
+    expect(ataxiaBasher_infQuash(";")).toBe("quash 42;")
+  end)
+
+  it("holds briefly -- it costs 4s of equilibrium, one per round at most", function()
+    reset(); ataxiaBasher.shielded = true
+    expect(ataxiaBasher_infQuash(";")).toBe("quash 42;")
+    expect(ataxiaBasher_infQuash(";")).toBe("")
+    clock = clock + 5
+    expect(ataxiaBasher_infQuash(";")).toBe("quash 42;")
+  end)
+
+  it("rides the shielded round WITHOUT displacing the balance razer or spending rage", function()
+    reset(); ataxiaBasher.shielded = true
+    local cmd = ataxiaBasher_infernalBashing()
+    expect(has(cmd, "quash 42")).toBeTrue()
+    expect(has(cmd, "rsl 42")).toBeTrue()   -- the weapon raze still swings
+    expect(has(cmd, "shiver")).toBeFalse()  -- ...and no battlerage razer (rageraze off)
+  end)
+
+  it("can be switched off", function()
+    reset(); ataxiaBasher.shielded = true
+    ataxiaBasher.infQuash = false
+    expect(ataxiaBasher_infQuash(";")).toBe("")
+    ataxiaBasher.infQuash = nil
   end)
 end)
 

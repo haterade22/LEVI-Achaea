@@ -1216,11 +1216,19 @@ mnemosyne_boons:
     text: "When summoning the hands of the grave, you will deal damage to all denizens in the location."
     flag: infArmyOfDead   # trigger mnemosyne/039 + BOON CLAIM intercept
     basher: |
-      ataxiaBasher_infGravehands (basher/002) casts SUMMON HANDS OF THE GRAVE at 2+
-      denizens, ahead of the swing; skipped on shield-break rounds. The real cooldown is
-      NOT in the boon text and has not been captured, so it uses a conservative 20s
-      send-side stamp (`ataxiaBasher.infGravehandsCd`) -- capture the refusal/ready lines
-      and tune it.
+      For INFERNAL the ability is **TYRANNY**, not the literal "summon hands of the grave"
+      (that phrasing is the APOSTATE branch -- see aliases/.../118_GRAVEHANDS, which
+      forks on class). AB Tyranny: 3.00s of BALANCE, costs **3% life essence**, calls
+      gravehands and prones non-Mhaldorians.
+      Two consequences the first cut got wrong (fixed v4.7.149):
+        * It is a ONE-TIME summon -- the hands persist, so it is cast once, not re-cast on
+          a rotation cooldown. `ataxiaBasher.infTyrannyCd` (600s) is only a backstop for a
+          lost summon; capture the hands-expire line to make it precise.
+        * It spends BALANCE, so it REPLACES the swing that round -- it cannot ride
+          alongside `dsl` the way an equilibrium ability can.
+      Gated on 2+ denizens (the boon's damage wants targets) and a life-essence floor
+      (`ataxiaBasher.infEssenceFloor`, default 20%) -- Hellforge users regain essence at
+      reduced rates, so 3% a cast is genuinely expensive.
   daemon_jaws:
     text: "The cooldown for commanding your hyena to maul a denizen is reduced by 66%."
     flag: infDaemonJaws   # trigger mnemosyne/040 + BOON CLAIM intercept
@@ -1231,6 +1239,18 @@ mnemosyne_boons:
       forever and we would silently never maul again. basher/005 now arms one
       (`ataxiaBasher.hyenaMaulCooldownSec`, 30s) and scales it to ~10.2s under the boon,
       so the backstop can never become the thing gating us.
+
+# QUASH -- the PvE shield answer (v4.7.149)
+quash:
+  works_against: "Adventurers and denizens"   # verbatim, Oppression wiki
+  cost: "4.00 seconds of EQUILIBRIUM"
+  effect: "Deals damage and strips magical shields"
+  basher: |
+    ataxiaBasher_infQuash (basher/002) fires it on shielded rounds only, with a 4s
+    attempt-hold. It costs EQUILIBRIUM -- idle while every Infernal attack spends balance
+    -- so it strips the shield without spending rage (the standing doctrine: never use
+    battlerage to strip shields) and without costing the swing. The balance razer (rsl for
+    DWC) still runs in the same round. Toggle off with `ataxiaBasher.infQuash = false`.
 
 # Hyena Usage
 hyena:

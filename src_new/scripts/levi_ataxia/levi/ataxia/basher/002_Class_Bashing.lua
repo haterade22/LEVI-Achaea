@@ -619,24 +619,51 @@ function ataxiaBasher_depthswalkerBashing()
 end
 
 -- Army of the Dead (Mnemosyne boon): "When summoning the hands of the grave, you will
--- deal damage to all denizens in the location." SUMMON HANDS OF THE GRAVE is an
--- Oppression summon that normally just hinders; with the boon it becomes a room nuke, so
--- it is worth a cast whenever 2+ denizens share the room.
+-- deal damage to all denizens in the location."
 --
--- The real cooldown is UNKNOWN (not in the boon text and not captured live), so this uses
--- a conservative send-side stamp and a crowd gate rather than firing it every round --
--- tune `ataxiaBasher.infGravehandsCd` once the refusal/ready lines are captured.
+-- IMPORTANT (user, v4.7.149): for INFERNAL the ability is **TYRANNY**, not the literal
+-- "summon hands of the grave" (that phrasing is the APOSTATE command -- see the two
+-- branches in aliases/.../118_GRAVEHANDS). And it is a **ONE-TIME** summon: the hands
+-- persist, so it is cast once rather than re-cast on a cooldown. It costs **3% life
+-- essence**, which is a slowly-recovering resource -- spamming it is genuinely expensive,
+-- which is exactly what the first cut of this function did.
+--
+-- So: cast once, gated on a crowd being present (the boon's damage wants targets), an
+-- essence floor, and a long re-arm that only exists as a backstop in case the summon is
+-- lost. Capture the "hands expire/die" line to make the re-arm precise.
 function ataxiaBasher_infGravehands(sp)
 	if not infArmyOfDead then return "" end
 	local M = ataxia.mnemosyne
 	local n = (M and M._denizenCount and M._denizenCount()) or 0
 	if n < 2 then return "" end
+	-- 3% life essence a cast: never dip below the floor for a bashing nicety.
+	local essence = tonumber(ataxia.vitals and ataxia.vitals.essence)
+	local floor = tonumber(ataxiaBasher.infEssenceFloor) or 20
+	if essence and essence < floor then return "" end
 	local nowT = (getEpoch and getEpoch()) or os.time()
 	ataxiaTemp = ataxiaTemp or {}
-	local cd = tonumber(ataxiaBasher.infGravehandsCd) or 20
-	if (nowT - (tonumber(ataxiaTemp.infGravehandsAt) or 0)) < cd then return "" end
-	ataxiaTemp.infGravehandsAt = nowT
-	return "summon hands of the grave"..sp
+	-- Long re-arm, NOT a rotation cooldown -- the summon persists.
+	local cd = tonumber(ataxiaBasher.infTyrannyCd) or 600
+	if (nowT - (tonumber(ataxiaTemp.infTyrannyAt) or 0)) < cd then return "" end
+	ataxiaTemp.infTyrannyAt = nowT
+	local cmd = (gmcp.Char.Status.class == "Apostate") and "summon hands of the grave" or "tyranny"
+	return cmd..sp
+end
+
+-- QUASH (Oppression): "Adventurers and denizens", 4.00 seconds of EQUILIBRIUM, deals
+-- damage and strips magical shields. That makes it the right answer to a shielded denizen
+-- for Infernal -- it costs equilibrium, which is otherwise idle while every Infernal
+-- attack spends balance, so it strips the shield WITHOUT spending rage (the standing
+-- doctrine) and without costing us the swing. Shielded rounds only; short attempt-hold
+-- because the eq cost means one per round at most.
+function ataxiaBasher_infQuash(sp)
+	if not ataxiaBasher.shielded then return "" end
+	if ataxiaBasher.infQuash == false then return "" end
+	local nowT = (getEpoch and getEpoch()) or os.time()
+	ataxiaTemp = ataxiaTemp or {}
+	if (nowT - (tonumber(ataxiaTemp.infQuashAt) or 0)) < 4 then return "" end
+	ataxiaTemp.infQuashAt = nowT
+	return "quash "..target..sp
 end
 
 function ataxiaBasher_infernalBashing()
@@ -676,13 +703,21 @@ function ataxiaBasher_infernalBashing()
 	end
 	
 	if ataxiaBasher.shielded then
+		-- QUASH rides the equilibrium here (strips the shield + damages, works on
+		-- denizens) while the balance razer does its own job -- see ataxiaBasher_infQuash.
+		local quash = ataxiaBasher_infQuash(sp)
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-			command = braze..sp..bash
+			command = quash..braze..sp..bash
 		else
-			command = raze..sp..brage
+			command = quash..raze..sp..brage
 		end
+	elseif graveHands ~= "" then
+		-- TYRANNY spends 3.00s of BALANCE, so it IS the round -- it cannot ride alongside
+		-- the swing the way an eq ability would. The battlerage still goes with it (rage
+		-- is its own resource).
+		command = brage..graveHands:gsub(sp.."$", "")
 	else
-		command = graveHands..brage..sp..bash
+		command = brage..sp..bash
 	end
 
 	return command
