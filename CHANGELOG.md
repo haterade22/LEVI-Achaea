@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-07-29 — Depthswalker block on the bashing HUD (v4.7.147)
+
+The `tarc` bashing panel now has a Depthswalker section beside the existing Shaman
+(swiftcurse) and Pariah (epitaph) class blocks, so the state the rotation spends is
+visible instead of inferred:
+
+- **Age**, colour-coded on the same 250/400/600 thresholds as `getAgeColour` — the same
+  ceiling the Flashforward re-up respects (`dwAgeCap`, 400), so you can see when bashing
+  is approaching it.
+- **Word** balance: `ready` or `spent` — the resource nakail and the Terminus buffs share.
+- **Buff chips** — Blur / Trusad / Tsuura / Mainaas — **green** when the defence is
+  standing, **grey** when down, and **RED when down while Flashforward is paying +20%
+  damage for it**. A `Flashforward +20% dmg while Blur` line shows while the boon is
+  claimed.
+
+Files: `windows/001_Limb_Counter_Window.lua`, `.claude/classes/depthswalker.md`,
+`CLAUDE.md`. (The HUD needs Geyser so it is not unit-tested; the block's colour/state
+logic was simulated across all three states before shipping.) Suite **547/547**.
+
+---
+
 ## 2026-07-29 — Flashforward: keep chrono blur up for +20% damage (v4.7.146)
 
 New Mnemosyne boon (the 16th flag, `dwFlashforward`): *"You deal 20% bonus damage while

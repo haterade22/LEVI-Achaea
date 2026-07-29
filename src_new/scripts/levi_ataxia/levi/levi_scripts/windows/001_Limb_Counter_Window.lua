@@ -245,6 +245,38 @@ function tarc.write()
         tarc:cecho("   <white>SwiftC<reset> <cyan>" .. tostring(curseCharge or 0) .. "<reset>\n")
       elseif gmcp.Char.Status.class == "Pariah" then
         tarc:cecho("   <white>Epitaph<reset> <cyan>" .. tostring(v.epitaph or 0) .. "<reset>\n")
+      elseif gmcp.Char.Status.class == "Depthswalker" then
+        -- Age + word balance are the two DW resources the basher actually spends, and
+        -- the buff chips answer "am I getting my damage?" at a glance: green = standing,
+        -- grey = down, RED = down while a boon is paying us to have it up.
+        local dw = (ataxiaTables and ataxiaTables.depthswalker) or {}
+        local age = tonumber(dw.age) or 0
+        local ageCol = "DimGrey"
+        if age > 600 then ageCol = "red"
+        elseif age > 400 then ageCol = "orange"
+        elseif age > 250 then ageCol = "yellow" end
+        tarc:cecho(string.format("   <white>Age<reset> <%s>%d<reset>   <white>Word<reset> %s\n",
+          ageCol, age,
+          (dw.wordBal == false) and "<DimGrey>spent<reset>" or "<green>ready<reset>"))
+
+        local defs = ataxia.defences or {}
+        -- Blur is ordinary upkeep normally, but Flashforward pays +20% damage for it --
+        -- so when that boon is claimed and blur is DOWN, shout about it.
+        local chips = {
+          { label = "Blur", def = "blur", boon = dwFlashforward },
+          { label = "Trusad", def = "precision" },
+          { label = "Tsuura", def = "durability" },
+          { label = "Mainaas", def = "bodyaugment" },
+        }
+        local line = "   "
+        for _, c in ipairs(chips) do
+          local col = defs[c.def] and "green" or (c.boon and "red" or "DimGrey")
+          line = line .. "<" .. col .. ">" .. c.label .. "<reset> "
+        end
+        tarc:cecho(line .. "\n")
+        if dwFlashforward then
+          tarc:cecho("   <cyan>Flashforward<reset> <gray>+20% dmg while Blur<reset>\n")
+        end
       end
       if bashStats and bashStats_getDPS then
         if not bashStats.totalDamage then bashStats.totalDamage = 0 end

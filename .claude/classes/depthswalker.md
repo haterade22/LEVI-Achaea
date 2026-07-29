@@ -625,6 +625,13 @@ capped by `ataxiaBasher.dwAgeCap` (default **400** -- the yellow/orange boundary
 claim intercept, BOONS-row trigger `mnemosyne/038_Flashforward`, cleared on run
 start/end.
 
+**On the bashing HUD** (`tarc`): the Depthswalker block shows **Age** (colour-coded on the
+same 250/400/600 thresholds as `getAgeColour`) and whether the **Word** balance is ready
+or spent, then a row of buff chips -- Blur / Trusad / Tsuura / Mainaas -- **green when the
+defence is standing, grey when it is down, and RED when it is down while Flashforward is
+paying us to have it up**. A `Flashforward +20% dmg while Blur` line appears while the
+boon is claimed.
+
 ### Live-log findings (2026-07-29, Mnemosyne, Death Knight + soldier of Osterrych)
 
 **Confirmed fire lines** (all now wired):
