@@ -557,17 +557,20 @@ function ataxiaBasher_depthswalkerBashing()
 	local primary = (ataxiaBasher.dwCull and "shadow cull " or "shadow reap ")..target
 
 	if ataxiaBasher.shielded then
-		-- SHIELD FIX: the old branch emitted NO razer unless `rageraze` was on (it
-		-- defaults OFF), so a shielded denizen bounced forever. Nakail is the class
-		-- razer: 17 rage + the shared WORD balance, so it is gated on neither the
-		-- rageraze toggle nor the rage floor -- breaking the shield IS the round.
-		local rage = tonumber(ataxia.vitals.rage) or 0
-		local dw = ataxiaTables and ataxiaTables.depthswalker
-		if rage >= 17 and not (dw and dw.wordBal == false) then
-			return "intone nakail "..target..sp..primary
+		-- RAGE IS NEVER SPENT ON SHIELDS (user doctrine, v4.7.143; the same reason Magi
+		-- never fires Disintegrate and Monk never fires Splinterkick). Depthswalker's
+		-- only razer is NAKAIL, a 17-rage battlerage, so the default answer to a
+		-- shielded denizen is: keep swinging and let it lapse. Trigger 336 sets
+		-- `shielded` with a ~3.1s self-clearing timer and retargets outright when
+		-- `shieldswap` is on with another mob available, so nothing stalls.
+		-- `bash rageraze on` is the explicit opt-in for people who want the rage spent.
+		if ataxiaBasher.rageraze then
+			local rage = tonumber(ataxia.vitals.rage) or 0
+			local dw = ataxiaTables and ataxiaTables.depthswalker
+			if rage >= 17 and not (dw and dw.wordBal == false) then
+				return "intone nakail "..target..sp..primary
+			end
 		end
-		-- No word balance or not enough rage: swing anyway so the round isn't wasted
-		-- (the basher's own shield-swap / skip handling covers the rest).
 		return primary
 	end
 

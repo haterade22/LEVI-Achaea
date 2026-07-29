@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-07-29 — Rage is never spent on shields (v4.7.143)
+
+User doctrine: *"we don't ever really want to use battlerage to strip shields."* That is
+already the codebase convention — `ataxiaBasher.rageraze` defaults **off**, Magi never
+fires Disintegrate (it casts the free `erode`), Monk never fires Splinterkick (shatter is
+free) — but v4.7.142 made Depthswalker's **Nakail** (a 17-rage battlerage) fire at
+shielded denizens unconditionally.
+
+- Nakail is now behind `rageraze` again, like every other class's rage razer. The default
+  answer to a shielded denizen is to keep swinging: trigger 336 clears
+  `ataxiaBasher.shielded` on a ~3.1s timer, and with `shieldswap` on it retargets to
+  another mob instead.
+- **Correction to the v4.7.142 entry**, which called this a "shield stall": it wasn't. The
+  shield flag self-clears, so there was never an infinite bounce, and the absent razer was
+  the intended behaviour rather than a bug. The genuine v4.7.142 fixes stand (culling
+  suppression, separator corruption, the nakail shield-flag clear when rageraze *is* on).
+
+Files: `basher/002_Class_Bashing.lua`, `test_basher_depthswalker.lua`,
+`.claude/classes/depthswalker.md`. Suite **539/539**.
+
+---
+
 ## 2026-07-29 — Depthswalker PvE overhaul: owned rotation, shield fix, Terminus keepers (v4.7.142)
 
 Switched to Depthswalker; audited the class against the wiki (Depthswalker / Aeonics /

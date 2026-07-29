@@ -168,19 +168,24 @@ describe("ataxiaBasher_depthswalkerBashing -- assembly and the shield fix", func
     expect(cmd:sub(1, 1) == ";").toBeFalse() -- ...and a leading ";" with no battlerage
   end)
 
-  it("razes a shielded denizen with NAKAIL even though rageraze is off (the stall fix)", function()
-    reset(); ataxiaBasher.shielded = true; ataxia.vitals.rage = 40
+  it("NEVER spends rage on a shield by default -- just keeps swinging (v4.7.143)", function()
+    reset(); ataxiaBasher.shielded = true; ataxia.vitals.rage = 100
     local cmd = ataxiaBasher_depthswalkerBashing()
-    expect(cmd).toBe("intone nakail 7;shadow reap 7")
-    expect(has(cmd, "shadow lash")).toBeFalse() -- no battlerage on a shield round
-    expect(ataxiaTemp.dwBrAt).toBe(nil)         -- ...so no cooldown stamp is burned
+    expect(cmd).toBe("shadow reap 7")            -- no nakail: rage is for damage
+    expect(has(cmd, "chrono curse")).toBeFalse() -- no battlerage on a shield round
+    expect(ataxiaTemp.dwBrAt).toBe(nil)          -- ...so no cooldown stamp is burned
   end)
 
-  it("still swings when nakail is unaffordable or the word balance is spent", function()
-    reset(); ataxiaBasher.shielded = true; ataxia.vitals.rage = 16
+  it("razes with NAKAIL only when rageraze is explicitly opted in", function()
+    reset(); ataxiaBasher.shielded = true; ataxiaBasher.rageraze = true
+    ataxia.vitals.rage = 40
+    expect(ataxiaBasher_depthswalkerBashing()).toBe("intone nakail 7;shadow reap 7")
+    -- ...and even then only when it is affordable and the word balance is free.
+    reset(); ataxiaBasher.shielded = true; ataxiaBasher.rageraze = true
+    ataxia.vitals.rage = 16
     expect(ataxiaBasher_depthswalkerBashing()).toBe("shadow reap 7")
-    reset(); ataxiaBasher.shielded = true; ataxia.vitals.rage = 40
-    ataxiaTables.depthswalker.wordBal = false
+    reset(); ataxiaBasher.shielded = true; ataxiaBasher.rageraze = true
+    ataxia.vitals.rage = 40; ataxiaTables.depthswalker.wordBal = false
     expect(ataxiaBasher_depthswalkerBashing()).toBe("shadow reap 7")
   end)
 

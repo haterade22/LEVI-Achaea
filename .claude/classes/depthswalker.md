@@ -518,19 +518,31 @@ cooldown but unaffordable) → **Boinad** (opt-in) → **Lash** → **Drain**.
   burn cooldowns unsent), the shared ~1s global BR gate, and `ataxiaBasher_rageAfford`
   on everything except reap.
 
-### What was actually broken (three defects, all fixed)
+### Shielded denizens: never spend rage (v4.7.143)
 
-1. **SHIELD STALL.** The shielded branch only razed when `ataxiaBasher.rageraze` was on —
-   and it defaults **off** — so a shielded denizen bounced forever. Nakail is now sent
-   whenever rage >= 17 and the word balance is free, gated on neither the rageraze toggle
-   nor the rage floor: breaking the shield *is* the round.
-2. **CULLING SUPPRESSION** (the real dead-rotation cause — *not* the Psion/GDragon
+**Rage is for damage, not shields** — the same doctrine that keeps Magi off Disintegrate
+(it casts the free `erode`) and Monk off Splinterkick (shatter is free). Depthswalker's
+only razer is **Nakail, a 17-rage battlerage**, so the default answer to a shielded
+denizen is to keep swinging and let the shield lapse. Nothing stalls: trigger 336 sets
+`ataxiaBasher.shielded` with a ~3.1s self-clearing timer and, when `shieldswap` is on with
+another mob available, retargets outright instead. `bash rageraze on` is the explicit
+opt-in for spending the rage (and even then nakail needs 17 rage *and* a free word
+balance).
+
+> Correction to the v4.7.142 note: that release called the missing razer a "shield stall"
+> and made nakail unconditional. That was wrong on both counts — the shield flag
+> self-clears, so there was never an infinite bounce, and firing a battlerage at a shield
+> is exactly what `rageraze` exists to prevent by default.
+
+### What was actually broken (two defects, both fixed)
+
+1. **CULLING SUPPRESSION** (the real dead-rotation cause — *not* the Psion/GDragon
    missing-fire-line bug; DW's fire-lines exist at triggers 330:43 and 331:43). The shared
    culling branch in `001_Bashing_Functions` heads the elseif chain and excluded only
    Bard/Blademaster/Magi/Psion, so with culling on DW returned `""` every round below
    36/54 rage and neither drain nor lash ever fired. DW is now excluded there and owns
    culling itself.
-3. **SEPARATOR CORRUPTION.** `brage..sp` on a battlerage that already ended in `sp`
+2. **SEPARATOR CORRUPTION.** `brage..sp` on a battlerage that already ended in `sp`
    produced `shadow drain 7;;shadow reap 7`, or a leading `;` when empty.
 
 **Do NOT add a `special` key to the Depthswalker config in `_groups.yaml`** — trigger 332
