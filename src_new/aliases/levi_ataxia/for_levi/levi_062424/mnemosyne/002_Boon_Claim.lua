@@ -63,3 +63,6 @@ if matches[2]:lower():find("flashforward") then dwFlashforward = true end
 if matches[2]:lower():find("army of the dead") then infArmyOfDead = true end
 -- Daemon Jaws: hyena maul cooldown -66%; shrinks the maul safety timer to match.
 if matches[2]:lower():find("daemon jaws") then infDaemonJaws = true end
+-- Indiscriminate: ARC works on denizens; the Infernal basher swings the room-wide arc
+-- instead of its single-target attack at 2+ denizens.
+if matches[2]:lower():find("indiscriminate") then infIndiscriminate = true end

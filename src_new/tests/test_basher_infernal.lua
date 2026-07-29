@@ -42,7 +42,8 @@ local function reset()
   ataxia.vitals.essence = nil
   ataxia.vitals.rage, ataxia.vitals.knight = 0, "Dual Cutting"
   ataxiaTemp = {}
-  infArmyOfDead, infDaemonJaws = false, false
+  infArmyOfDead, infDaemonJaws, infIndiscriminate = false, false, false
+  ataxiaBasher.infArcAt = nil
   denizens = 0
   clock = clock + 100
 end
@@ -129,6 +130,47 @@ describe("Army of the Dead -- TYRANNY, a one-time summon", function()
   end)
 end)
 
+describe("Indiscriminate -- ARC as a denizen AoE", function()
+  it("does nothing without the boon", function()
+    reset(); denizens = 4
+    expect(ataxiaBasher_infArc(";")).toBe("")
+  end)
+
+  it("needs 2+ denizens -- a 4.75s arc costs more than two normal swings", function()
+    reset(); infIndiscriminate = true; denizens = 1
+    expect(ataxiaBasher_infArc(";")).toBe("")
+    reset(); infIndiscriminate = true; denizens = 2
+    expect(ataxiaBasher_infArc(";")).toBe("arc")
+  end)
+
+  it("swings the UNTARGETED room form, not the single-target one", function()
+    reset(); infIndiscriminate = true; denizens = 3
+    expect(ataxiaBasher_infArc(";")).toBe("arc") -- naming a target would hit only them
+  end)
+
+  it("REPLACES the single-target swing in the assembled command", function()
+    reset(); infIndiscriminate = true; denizens = 3
+    local cmd = ataxiaBasher_infernalBashing()
+    expect(has(cmd, "arc")).toBeTrue()
+    expect(has(cmd, "dsl 42")).toBeFalse() -- both spend the same balance
+  end)
+
+  it("yields to a shielded round -- break the shield first", function()
+    reset(); infIndiscriminate = true; denizens = 3
+    ataxiaBasher.shielded = true
+    expect(ataxiaBasher_infArc(";")).toBe("")
+  end)
+
+  it("honours a custom threshold", function()
+    reset(); infIndiscriminate = true; denizens = 2
+    ataxiaBasher.infArcAt = 3
+    expect(ataxiaBasher_infArc(";")).toBe("")
+    denizens = 3
+    expect(ataxiaBasher_infArc(";")).toBe("arc")
+    ataxiaBasher.infArcAt = nil
+  end)
+end)
+
 describe("QUASH -- the eq-based shield strip (works on denizens)", function()
   it("only fires while a shield is up", function()
     reset()
@@ -191,5 +233,5 @@ end)
 
 -- Restore shared state for whoever runs after us (files share one Lua state).
 getEpoch = _epoch
-infArmyOfDead, infDaemonJaws = false, false
+infArmyOfDead, infDaemonJaws, infIndiscriminate = false, false, false
 target = nil

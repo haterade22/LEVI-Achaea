@@ -2,6 +2,34 @@
 
 ---
 
+## 2026-07-29 — Indiscriminate: Arc as a denizen AoE (v4.7.150)
+
+New Mnemosyne boon (the 19th flag, `infIndiscriminate`): *"Your Arc is now effective
+against denizens."*
+
+ARC (Weaponmastery, general — all four specs) normally reads **"Works on: Adventurers and
+room"**, so it's dead weight in PvE; this boon is exactly what makes it hit denizens. Per
+AB, the **untargeted** form damages everyone in the room for **4.75s of balance**, while
+naming a target hits only them for 3.00s — we always want the room form.
+
+- `ataxiaBasher_infArc` swings `arc` **instead of** the single-target attack at **2+
+  denizens** (user-directed; tunable via `ataxiaBasher.infArcAt`). It spends balance, so
+  like Tyranny it replaces the swing rather than riding alongside it.
+- The crowd gate is the whole point: at 4.75s against a ~2s `dsl`, one arc costs more than
+  two normal swings — it only pays with enough denizens standing in it. At exactly 2 it's
+  roughly break-even, so raise `infArcAt` to 3 if it feels slow.
+- Yields on shielded rounds (break the shield first), and no venom is applied — denizens
+  ignore the affliction.
+
+Standard boon lifecycle: claim intercept, BOONS-row trigger `mnemosyne/041`, reset on run
+start, cleared on the confirmed run end.
+
+Files: `basher/002_Class_Bashing.lua`, `mnemosyne/041_Indiscriminate.lua` (NEW), boon
+claim/reset wiring, `test_basher_infernal.lua` (+6 cases), `.claude/classes/infernal.md`,
+trigger catalog, `CLAUDE.md`. Suite **571/571**.
+
+---
+
 ## 2026-07-29 — Tyranny corrected, QUASH wired, life essence tracked (v4.7.149)
 
 Three corrections to yesterday's Army of the Dead work, from the user plus the Oppression

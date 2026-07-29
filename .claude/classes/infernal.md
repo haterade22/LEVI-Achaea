@@ -1240,6 +1240,20 @@ mnemosyne_boons:
       (`ataxiaBasher.hyenaMaulCooldownSec`, 30s) and scales it to ~10.2s under the boon,
       so the backstop can never become the thing gating us.
 
+  indiscriminate:
+    text: "Your Arc is now effective against denizens."
+    flag: infIndiscriminate   # trigger mnemosyne/041 + BOON CLAIM intercept
+    basher: |
+      ARC (Weaponmastery, general -- all four specs) normally reads "Works on: Adventurers
+      and room", so it is dead weight in PvE; this boon is what makes it hit denizens.
+      AB: the UNTARGETED form damages everyone in the room for 4.75s of balance; naming a
+      target hits only them for 3.00s -- we always want the room form.
+      ataxiaBasher_infArc swings it INSTEAD of the single-target attack (it spends the
+      same balance) at 2+ denizens, user-directed, tunable via `ataxiaBasher.infArcAt`.
+      The crowd gate is the whole point: at 4.75s versus a ~2s dsl, one arc costs more
+      than two normal swings, so it only pays with enough denizens standing in it.
+      Yields on shielded rounds (break the shield first).
+
 # QUASH -- the PvE shield answer (v4.7.149)
 quash:
   works_against: "Adventurers and denizens"   # verbatim, Oppression wiki

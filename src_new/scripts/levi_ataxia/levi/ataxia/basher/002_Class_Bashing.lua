@@ -650,6 +650,28 @@ function ataxiaBasher_infGravehands(sp)
 	return cmd..sp
 end
 
+-- Indiscriminate (Mnemosyne boon): "Your Arc is now effective against denizens."
+--
+-- ARC (Weaponmastery, general -- all four specs) normally reads "Works on: Adventurers
+-- and room", so it is dead weight in PvE; the boon is what makes it hit denizens. The
+-- UNTARGETED form damages EVERYONE in the room for 4.75s of balance; naming a target
+-- hits only them for 3.00s. We always want the room form -- one wide swing instead of
+-- several narrow ones.
+--
+-- It spends BALANCE, so like Tyranny it REPLACES the round's swing rather than riding
+-- alongside it. That is also why the crowd gate matters: at 4.75s versus a ~2s dsl, one
+-- arc costs more than two normal swings, so it only pays with enough denizens standing
+-- in it. User-directed threshold: 2+ (tunable via ataxiaBasher.infArcAt).
+function ataxiaBasher_infArc(sp)
+	if not infIndiscriminate then return "" end
+	if ataxiaBasher.shielded then return "" end -- break the shield first
+	local M = ataxia.mnemosyne
+	local n = (M and M._denizenCount and M._denizenCount()) or 0
+	if n < (tonumber(ataxiaBasher.infArcAt) or 2) then return "" end
+	-- No venom: denizens ignore the affliction, and a venom-less arc keeps the line short.
+	return "arc"
+end
+
 -- QUASH (Oppression): "Adventurers and denizens", 4.00 seconds of EQUILIBRIUM, deals
 -- damage and strips magical shields. That makes it the right answer to a shielded denizen
 -- for Infernal -- it costs equilibrium, which is otherwise idle while every Infernal
@@ -714,10 +736,13 @@ function ataxiaBasher_infernalBashing()
 	elseif graveHands ~= "" then
 		-- TYRANNY spends 3.00s of BALANCE, so it IS the round -- it cannot ride alongside
 		-- the swing the way an eq ability would. The battlerage still goes with it (rage
-		-- is its own resource).
+		-- is its own resource). One-time, so it only pre-empts the swing once.
 		command = brage..graveHands:gsub(sp.."$", "")
 	else
-		command = brage..sp..bash
+		-- ARC (Indiscriminate boon) likewise spends balance and so replaces the swing --
+		-- one 4.75s room-wide hit instead of several single-target ones.
+		local arc = ataxiaBasher_infArc(sp)
+		command = brage..sp..((arc ~= "") and arc or bash)
 	end
 
 	return command
