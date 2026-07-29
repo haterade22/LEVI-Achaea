@@ -618,11 +618,34 @@ function ataxiaBasher_depthswalkerBashing()
 	return command
 end
 
+-- Army of the Dead (Mnemosyne boon): "When summoning the hands of the grave, you will
+-- deal damage to all denizens in the location." SUMMON HANDS OF THE GRAVE is an
+-- Oppression summon that normally just hinders; with the boon it becomes a room nuke, so
+-- it is worth a cast whenever 2+ denizens share the room.
+--
+-- The real cooldown is UNKNOWN (not in the boon text and not captured live), so this uses
+-- a conservative send-side stamp and a crowd gate rather than firing it every round --
+-- tune `ataxiaBasher.infGravehandsCd` once the refusal/ready lines are captured.
+function ataxiaBasher_infGravehands(sp)
+	if not infArmyOfDead then return "" end
+	local M = ataxia.mnemosyne
+	local n = (M and M._denizenCount and M._denizenCount()) or 0
+	if n < 2 then return "" end
+	local nowT = (getEpoch and getEpoch()) or os.time()
+	ataxiaTemp = ataxiaTemp or {}
+	local cd = tonumber(ataxiaBasher.infGravehandsCd) or 20
+	if (nowT - (tonumber(ataxiaTemp.infGravehandsAt) or 0)) < cd then return "" end
+	ataxiaTemp.infGravehandsAt = nowT
+	return "summon hands of the grave"..sp
+end
+
 function ataxiaBasher_infernalBashing()
 	local command, sp = "", ataxia.settings.separator
 	local raze, bash, spec = "", "", ataxia.vitals.knight
 	local brage = ataxiaBasher_assembleBattlerage()
 	local braze = ataxiaBasher.battlerage.Infernal.raze
+	-- Boon-gated room nuke; rides ahead of the swing (see above).
+	local graveHands = ataxiaBasher_infGravehands(sp)
 
 	if spec == "Dual Cutting" then
 		raze = "rsl "..target
@@ -659,10 +682,10 @@ function ataxiaBasher_infernalBashing()
 			command = raze..sp..brage
 		end
 	else
-		command = brage..sp..bash
+		command = graveHands..brage..sp..bash
 	end
-	    
-	return command 
+
+	return command
 end
 
 function ataxiaBasher_jesterBashing()

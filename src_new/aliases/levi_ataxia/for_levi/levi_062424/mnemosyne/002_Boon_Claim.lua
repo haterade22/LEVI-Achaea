@@ -58,3 +58,8 @@ if matches[2]:lower():find("%f[%a]rampage") then dragonRampage = true end
 -- Flashforward: +20% damage while the chrono blur defence is up; the Depthswalker
 -- basher keeps CHRONO BLUR up (eq rider, age-capped) while it's claimed.
 if matches[2]:lower():find("flashforward") then dwFlashforward = true end
+-- Army of the Dead: SUMMON HANDS OF THE GRAVE also damages every denizen in the room;
+-- the Infernal basher casts it at 2+ denizens.
+if matches[2]:lower():find("army of the dead") then infArmyOfDead = true end
+-- Daemon Jaws: hyena maul cooldown -66%; shrinks the maul safety timer to match.
+if matches[2]:lower():find("daemon jaws") then infDaemonJaws = true end

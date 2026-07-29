@@ -190,6 +190,8 @@ function M.onRunEnd()
   dragonMightSycaerunax = false -- boons gone on a confirmed run-end
   dragonRampage = false -- boons gone on a confirmed run-end
   dwFlashforward = false -- boons gone on a confirmed run-end
+  infArmyOfDead = false -- boons gone on a confirmed run-end
+  infDaemonJaws = false -- boons gone on a confirmed run-end
   mnemHaemophiliac = false -- affixes gone on a confirmed run-end (pacing back to normal)
   mnemDeluge = false -- affixes gone on a confirmed run-end (flight available again)
   if ataxiaTemp then

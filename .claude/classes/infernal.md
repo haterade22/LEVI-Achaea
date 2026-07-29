@@ -1193,10 +1193,49 @@ armor_channels:
   relentless: "Fear immunity - always useful"
   conqueror: "Regain balance/health on adventurer kills"
 
+# PET SAFETY (v4.7.148) -- the hyena must never be a target
+pet_safety:
+  problem: |
+    "a daemonic hyena" was NOT in the seeded ataxiaBasher.ownDenizens list, so it counted
+    as a legitimate denizen: it appeared under "Denizens (1)" and the basher attacked it
+    (seen live at 4% on the mob bar). A mauled pet turns on its owner --
+    "A daemonic hyena snarls as she hurls herself at you, raking her claws across your face."
+  fixes:
+    - "`hyena` added to the ownDenizens default AND back-filled into existing saves
+       (002_Check_For_Any_Missing_Variables), so it is excluded from targeting and auto-learn."
+    - "Trigger 372_Hyena_Turned_On_Us: on the at-YOU line, while the basher is enabled,
+       sends `order hyena passive` (10s debounce) -- an already-flipped pet keeps clawing
+       even after the list is fixed."
+    - "Trigger 367 (maul cooldown) gained a `(?!you,)` lookahead: the maul line for a real
+       foe opens identically, so the at-you form was ALSO putting the maul on cooldown for
+       a hit we never ordered."
+
+# Mnemosyne boons (v4.7.148)
+mnemosyne_boons:
+  army_of_the_dead:
+    text: "When summoning the hands of the grave, you will deal damage to all denizens in the location."
+    flag: infArmyOfDead   # trigger mnemosyne/039 + BOON CLAIM intercept
+    basher: |
+      ataxiaBasher_infGravehands (basher/002) casts SUMMON HANDS OF THE GRAVE at 2+
+      denizens, ahead of the swing; skipped on shield-break rounds. The real cooldown is
+      NOT in the boon text and has not been captured, so it uses a conservative 20s
+      send-side stamp (`ataxiaBasher.infGravehandsCd`) -- capture the refusal/ready lines
+      and tune it.
+  daemon_jaws:
+    text: "The cooldown for commanding your hyena to maul a denizen is reduced by 66%."
+    flag: infDaemonJaws   # trigger mnemosyne/040 + BOON CLAIM intercept
+    basher: |
+      The maul reset is line-driven (trigger 368), and the game simply sends that line
+      sooner -- so the boon needs no help in the normal path. What DID need fixing: there
+      was no safety timer at all, so a missed ready-line stranded hyenaMaulReady = false
+      forever and we would silently never maul again. basher/005 now arms one
+      (`ataxiaBasher.hyenaMaulCooldownSec`, 30s) and scales it to ~10.2s under the boon,
+      so the backstop can never become the thing gating us.
+
 # Hyena Usage
 hyena:
   maul:
-    cooldown: "30 seconds"
+    cooldown: "30 seconds (~10s under the Daemon Jaws boon)"
     syntax: "HYENA MAUL <target>"
     behavior: "Free pet attack auto-prepended to the spec bash string when ataxiaBasher.hyenaMaulReady is true"
     tracking: "basher/005_Falcon_Cooldowns.lua (triggers 367-369, message-driven)"

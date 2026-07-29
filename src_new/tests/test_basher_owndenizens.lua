@@ -44,6 +44,14 @@ describe("ataxiaBasher_isOwnDenizen — keyword substring match", function()
     expect(ataxiaBasher_isOwnDenizen("a mhun knight")).toBeFalse()
   end)
 
+  -- v4.7.148: the Infernal pet was NOT on the seeded list, so the basher targeted it
+  -- (seen live at 4% on the mob bar) -- and a mauled hyena turns on its owner.
+  it("matches 'a daemonic hyena' via the 'hyena' keyword", function()
+    ataxiaBasher.ownDenizens = { "falcon", "baalzadeen", "ashbeast", "hyena" }
+    expect(ataxiaBasher_isOwnDenizen("a daemonic hyena")).toBeTrue()
+    expect(ataxiaBasher_isOwnDenizen("A daemonic hyena")).toBeTrue()
+  end)
+
   it("returns false when the list is empty", function()
     ataxiaBasher.ownDenizens = {}
     expect(ataxiaBasher_isOwnDenizen("a razor-beaked falcon")).toBeFalse()

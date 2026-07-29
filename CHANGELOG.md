@@ -2,6 +2,45 @@
 
 ---
 
+## 2026-07-29 — Infernal: stop attacking your own hyena, + two boons (v4.7.148)
+
+**The basher was killing your pet.** "a daemonic hyena" was never in the seeded
+own-denizen list, so it counted as a legitimate denizen — it showed under "Denizens (1)"
+and got attacked down to 4% on the mob bar. A mauled hyena turns on its owner, which is
+exactly the line that followed: *"A daemonic hyena snarls as she hurls herself at you,
+raking her claws across your face."*
+
+- **`hyena` added to the ownDenizens default and back-filled into existing saves**, so it
+  is excluded from targeting and auto-learn (the same treatment the Magi ashbeast got).
+- **New trigger `372_Hyena_Turned_On_Us`**: on the at-YOU line, with the basher enabled,
+  sends `order hyena passive` (10s debounce) — a pet that has *already* flipped keeps
+  clawing even once the list is fixed.
+- **Trigger 367 gained a `(?!you,)` lookahead.** The maul line for a real foe opens
+  identically ("...hurls herself at a royal guard..."), so the at-you form was *also*
+  putting the maul on cooldown for a hit we never ordered.
+
+Two new Mnemosyne boons (flags 17 and 18):
+
+- **Army of the Dead** — "When summoning the hands of the grave, you will deal damage to
+  all denizens in the location." `ataxiaBasher_infGravehands` casts `summon hands of the
+  grave` at 2+ denizens, ahead of the swing, skipped on shield-break rounds. The real
+  cooldown isn't in the boon text and hasn't been captured, so it uses a conservative 20s
+  stamp (`ataxiaBasher.infGravehandsCd`) — worth tuning once the refusal line is seen.
+- **Daemon Jaws** — "The cooldown for commanding your hyena to maul a denizen is reduced
+  by 66%." The maul reset is line-driven and the game simply sends its ready-line sooner,
+  so the boon needs no help there. What it *did* expose: `basher/005` had **no safety
+  timer at all**, so a single missed ready-line stranded `hyenaMaulReady = false` forever
+  and the maul would silently never fire again. There's now a backstop (30s), scaled to
+  ~10.2s under the boon so it can never become the gate.
+
+Files: `002_Check_For_Any_Missing_Variables.lua`, `basher/002_Class_Bashing.lua`,
+`basher/005_Falcon_Cooldowns.lua`, `triggers/.../372_Hyena_Turned_On_Us.lua` (NEW),
+`367_Infernal_Hyena_Maul_Cooldown.lua`, `mnemosyne/039_Army_Of_The_Dead.lua` +
+`040_Daemon_Jaws.lua` (NEW), boon claim/reset wiring, `test_basher_infernal.lua` (NEW),
+`test_basher_owndenizens.lua`, `.claude/classes/infernal.md`. Suite **557/557**.
+
+---
+
 ## 2026-07-29 — Depthswalker block on the bashing HUD (v4.7.147)
 
 The `tarc` bashing panel now has a Depthswalker section beside the existing Shaman

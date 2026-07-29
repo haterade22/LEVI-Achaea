@@ -21,14 +21,34 @@ if ataxiaBasher and ataxiaBasher.hyenaMaulReady == nil then
 	ataxiaBasher.hyenaMaulReady = true
 end
 
--- Function to handle hyena attack cooldown
+-- Function to handle hyena attack cooldown.
+--
+-- The reset is normally line-driven (trigger 368, "You may command your hyena to maul
+-- your foes once more."), but a missed line would strand hyenaMaulReady = false FOREVER
+-- and we would silently never maul again. So arm a safety timer as well, mirroring the
+-- falcon.
+--
+-- DAEMON JAWS (Mnemosyne boon): "The cooldown for commanding your hyena to maul a denizen
+-- is reduced by 66%." The game sends its own ready-line sooner, so the boon needs no help
+-- in the normal path -- but the SAFETY timer must shrink to match, or it would be the
+-- thing gating us at 30s while the real cooldown is ~10s.
+ataxiaBasher.hyenaMaulCooldownSec = ataxiaBasher.hyenaMaulCooldownSec or 30
+
 function ataxiaBasher_hyenaMaulCooldown()
 	ataxiaBasher.hyenaMaulReady = false
+	local secs = ataxiaBasher.hyenaMaulCooldownSec or 30
+	if infDaemonJaws then secs = secs * 0.34 end -- -66%
+	if ataxiaBasher_hyenaMaulTimer then killTimer(ataxiaBasher_hyenaMaulTimer) end
+	ataxiaBasher_hyenaMaulTimer = tempTimer(secs, [[ataxiaBasher_hyenaMaulReady()]])
 end
 
 -- Function to handle hyena cooldown reset
 function ataxiaBasher_hyenaMaulReady()
 	ataxiaBasher.hyenaMaulReady = true
+	if ataxiaBasher_hyenaMaulTimer then
+		killTimer(ataxiaBasher_hyenaMaulTimer)
+		ataxiaBasher_hyenaMaulTimer = nil
+	end
 end
 
 -- Runewarden Falcon Rake PVE cooldown (mirror of the hyena maul above)

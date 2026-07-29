@@ -34,8 +34,12 @@ patterns:
   type: 1
 - pattern: ^You cannot yet order your hyena to maul another foe\.$
   type: 1
-- pattern: ^A daemonic hyena snarls as she hurls herself at
+- pattern: ^A daemonic hyena snarls as she hurls herself at (?!you,)
   type: 1
 ]]--
 
+-- The negative lookahead matters: when the pet turns on its OWNER the line reads
+-- "...hurls herself at you, raking her claws across your face." That is not a maul, and
+-- counting it as one put the maul on cooldown for a hit we never ordered. Trigger 372
+-- handles the at-you case (orders her passive).
 ataxiaBasher_hyenaMaulCooldown()
