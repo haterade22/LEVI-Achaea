@@ -68,6 +68,7 @@ Affliction **resisted** (bosses): `<mob> sneers at your feeble attempt to afflic
 | an axe-wielding revenant | cycle: right leg x2 → left leg x2 → torso x2 | fixed swing rotation, two perceive lines per swing |
 | a steel-encased Death Knight | **fixed: left leg** | knee-snap is the parryable attack (all observed parries = left leg); torso stomp / head slam / arm crush / throat slash are accepted (user-confirmed tactic) |
 | a ravager of the Infernal Legion | **fixed: torso** | torso cleave is her only limb-targeted attack (perceive "dealt 30.0% damage to your torso" x2/swing); dive names no limb, shoulder-charge impale is unblockable |
+| an unbound frost elemental | **fixed: torso** | ice-shard fist slam names the torso in both halves of the swing ("Shards of ice explode from ... as they slam into your torso with bone-chilling force." then "dealt 30.0% damage to your torso"); the frost-prickle / humour-tempering output targets no limb (2026-07-29) |
 
 **Audited, NO parryable attacks** (head default applies — don't re-audit):
 | Mob | Attacks seen |

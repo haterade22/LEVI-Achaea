@@ -43,6 +43,13 @@ selfLimbDamage.denizenPatterns["a steel-encased Death Knight"] = { fixed = "left
 -- damage to your torso" x2 per swing); her dive names no limb and the shoulder-charge
 -- impale is unblockable, so torso cover is free value (2026-07-25 swamp log).
 selfLimbDamage.denizenPatterns["a ravager of the Infernal Legion"] = { fixed = "torso" }
+-- The frost elemental's limb-targeted attack is the ice-shard fist slam, and it names the
+-- torso in both halves of the swing: "Shards of ice explode from an unbound frost
+-- elemental's fists as they slam into your torso with bone-chilling force." then
+-- "...dealt 30.0% damage to your torso." Its other output (the frost prickle / humour
+-- tempering) targets no limb, so parking the parry on the torso costs nothing
+-- (2026-07-29 log).
+selfLimbDamage.denizenPatterns["an unbound frost elemental"] = { fixed = "torso" }
 
 local state = { mob = nil, limb = nil, count = 0, at = 0 }
 local SAME_SWING_WINDOW = 1.0  -- two perceive lines of one swing land inside this

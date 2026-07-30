@@ -2,6 +2,23 @@
 
 ---
 
+## 2026-07-29 — Parry pattern: an unbound frost elemental (v4.7.160)
+
+New predictive-parry entry from a live log: **`an unbound frost elemental` -> fixed
+torso.** Its ice-shard fist slam names the torso in both halves of the swing ("Shards of
+ice explode from ... as they slam into your torso with bone-chilling force." then "dealt
+30.0% damage to your torso"), and its other output — the frost prickle and humour
+tempering — targets no limb at all. So parking the parry on the torso costs nothing and
+covers its only limb-targeted attack.
+
+Uses the `fixed` shape (same as the Death Knight and the Infernal Legion ravager): no
+observation needed, the parry just sits there from the first swing.
+
+Files: `self_limb_tracking/005_Denizen_Parry_Patterns.lua`,
+`.claude/projects/basher/denizen-lines-catalog.md`, memory.
+
+---
+
 ## 2026-07-29 — Deepfreeze: keep the PvP trackers out of the bashing loop (v4.7.159)
 
 The live cast line confirmed Winter's Heart works (`Damage dealt: 1312 (cold)`), but it
