@@ -196,6 +196,7 @@ function M.onRunEnd()
   infNecroticAura = false -- boons gone on a confirmed run-end
   infFuryOfAges = false -- boons gone on a confirmed run-end
   mnemWintersHeart = false -- boons gone on a confirmed run-end
+  mnemResourceful = false -- boons gone on a confirmed run-end
   if ataxiaTemp and ataxiaTemp.infFuryOn then
     -- The boon is gone but FURY may still be running with its quadrupled endurance
     -- cost and no payoff. Turn it off rather than leaving it draining EP.

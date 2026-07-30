@@ -45,8 +45,8 @@ local function reset()
   ataxiaTemp = {}
   infArmyOfDead, infDaemonJaws, infIndiscriminate = false, false, false
   infNecroticAura, infFuryOfAges = false, false
-  mnemWintersHeart = false
-  ataxiaBasher.deepfreezeAt = nil
+  mnemWintersHeart, mnemResourceful = false, false
+  ataxiaBasher.deepfreezeAt, ataxiaBasher.infTyrannyAt = nil, nil
   gmcp.Char.Vitals = { ep = 100, maxep = 100 }
   ataxia.defences = {}
   ataxiaBasher.infArcAt = nil
@@ -117,6 +117,38 @@ describe("Army of the Dead -- TYRANNY, a one-time summon", function()
   it("needs a crowd: solo denizens are not worth 3% essence", function()
     reset(); infArmyOfDead = true; denizens = 1
     expect(ataxiaBasher_infGravehands(";")).toBe("")
+  end)
+
+  -- v4.7.162: Resourceful refunds 10% of the class resource (life essence for Infernal)
+  -- per kill, against Tyranny's 3% -- so the crowd gate that existed to protect essence
+  -- stops applying and every room with a denizen gets gravehands.
+  it("with Resourceful, a SINGLE denizen is enough (kills refund the essence)", function()
+    reset(); infArmyOfDead = true; mnemResourceful = true; denizens = 1
+    expect(ataxiaBasher_infGravehands(";")).toBe("tyranny;")
+  end)
+
+  it("Resourceful alone does nothing without Army of the Dead", function()
+    reset(); mnemResourceful = true; denizens = 3
+    expect(ataxiaBasher_infGravehands(";")).toBe("")
+  end)
+
+  it("Resourceful lowers the essence floor too", function()
+    reset(); infArmyOfDead = true; denizens = 2
+    ataxia.vitals.essence = 12       -- under the normal 20% floor
+    expect(ataxiaBasher_infGravehands(";")).toBe("")
+    reset(); infArmyOfDead = true; mnemResourceful = true; denizens = 2
+    ataxia.vitals.essence = 12       -- ...but above the Resourceful floor of 10
+    expect(ataxiaBasher_infGravehands(";")).toBe("tyranny;")
+    ataxia.vitals.essence = nil
+  end)
+
+  it("an explicit infTyrannyAt still wins over both", function()
+    reset(); infArmyOfDead = true; mnemResourceful = true; denizens = 1
+    ataxiaBasher.infTyrannyAt = 3
+    expect(ataxiaBasher_infGravehands(";")).toBe("")
+    denizens = 3
+    expect(ataxiaBasher_infGravehands(";")).toBe("tyranny;")
+    ataxiaBasher.infTyrannyAt = nil
   end)
 
   it("casts TYRANNY for Infernal -- not the Apostate wording", function()
@@ -414,5 +446,5 @@ end)
 getEpoch = _epoch
 infArmyOfDead, infDaemonJaws, infIndiscriminate = false, false, false
 infNecroticAura, infFuryOfAges = false, false
-mnemWintersHeart = false
+mnemWintersHeart, mnemResourceful = false, false
 target = nil

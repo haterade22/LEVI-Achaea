@@ -1263,6 +1263,11 @@ mnemosyne_boons:
           alongside `dsl` the way an equilibrium ability can.
         * It is NOT a rotation cooldown (v4.7.148 re-cast every 20s, burning 3% essence
           each time).
+      **With RESOURCEFUL held too (v4.7.162)**: that boon restores 10% of the class
+      resource per denizen kill -- life essence for Infernal -- against Tyranny's 3%. The
+      essence economy that justified saving it for a crowd stops applying, so the crowd
+      gate drops to **1 denizen** (every room with anything in it) and the essence floor
+      drops from 20% to 10%. `ataxiaBasher.infTyrannyAt` overrides both if set.
       Cadence, corrected again in v4.7.161: **ONCE PER ROOM**. The gravehands belong to the
       room they were summoned in, so every new room can have its own -- neither once per
       session (the v4.7.149 cut used a 600s timer and skipped rooms) nor per-cooldown. The

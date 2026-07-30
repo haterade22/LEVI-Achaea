@@ -75,3 +75,7 @@ if matches[2]:lower():find("fury of ages") then infFuryOfAges = true end
 -- Winter's Heart: DEEPFREEZE works on denizens and hits the whole room with cold;
 -- cast at 2+ denizens (eq cast, so it rides free on balance-attack classes).
 if matches[2]:lower():find("winter's heart") or matches[2]:lower():find("winters heart") then mnemWintersHeart = true end
+-- Resourceful: -10% endurance/willpower costs, and each denizen kill restores 10% of the
+-- class resource (life essence for Infernal) -- which makes Tyranny effectively free, so
+-- the basher summons gravehands in every room with a denizen.
+if matches[2]:lower():find("resourceful") then mnemResourceful = true end

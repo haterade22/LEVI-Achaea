@@ -2,6 +2,30 @@
 
 ---
 
+## 2026-07-29 — Resourceful makes Tyranny free (v4.7.162)
+
+New Mnemosyne boon (the 23rd flag, `mnemResourceful`): *"Your endurance and willpower costs
+are reduced by 10% and defeating a denizen restores 10% of your class resources."*
+
+For **Infernal the class resource is LIFE ESSENCE** — so each kill refunds more than three
+Tyrannies cost (3% apiece). The whole reason Tyranny was crowd-gated was to protect a
+slowly-recovering resource, and that reason disappears when held alongside Army of the
+Dead:
+
+- Crowd gate drops from **2 denizens to 1** — gravehands in *every* room that has anything
+  in it (user-directed), still once per room.
+- Essence floor drops from **20% to 10%**, since kills top it back up.
+- `ataxiaBasher.infTyrannyAt` overrides the threshold if you want it back.
+
+Resourceful alone changes nothing — Army of the Dead is what makes the summon worth
+casting; Resourceful only removes its cost objection.
+
+Files: `basher/002_Class_Bashing.lua`, `mnemosyne/045_Resourceful.lua` (NEW), boon
+claim/reset wiring, `test_basher_infernal.lua` (+4 cases), `.claude/classes/infernal.md`,
+trigger catalog, `CLAUDE.md`. Suite **598/598**.
+
+---
+
 ## 2026-07-29 — Tyranny is once per ROOM (v4.7.161)
 
 User: *"Each room we enter can get hands of the grave with TYRANNY as Infernal."* The

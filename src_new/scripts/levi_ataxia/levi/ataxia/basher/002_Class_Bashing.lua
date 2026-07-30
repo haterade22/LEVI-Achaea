@@ -635,10 +635,17 @@ function ataxiaBasher_infGravehands(sp)
 	if not infArmyOfDead then return "" end
 	local M = ataxia.mnemosyne
 	local n = (M and M._denizenCount and M._denizenCount()) or 0
-	if n < 2 then return "" end
-	-- 3% life essence a cast: never dip below the floor for a bashing nicety.
+	-- RESOURCEFUL boon (user, v4.7.162): "defeating a denizen restores 10% of your class
+	-- resources" -- for Infernal that resource is LIFE ESSENCE, so every kill refunds more
+	-- than three Tyrannies cost. The essence economy that justified holding back for a
+	-- crowd stops applying: cast in EVERY room that has a denizen at all.
+	local need = tonumber(ataxiaBasher.infTyrannyAt)
+		or ((infArmyOfDead and mnemResourceful) and 1 or 2)
+	if n < need then return "" end
+	-- 3% life essence a cast: never dip below the floor for a bashing nicety. Resourceful
+	-- pays that back on every kill, so the floor drops with it.
 	local essence = tonumber(ataxia.vitals and ataxia.vitals.essence)
-	local floor = tonumber(ataxiaBasher.infEssenceFloor) or 20
+	local floor = tonumber(ataxiaBasher.infEssenceFloor) or (mnemResourceful and 10 or 20)
 	if essence and essence < floor then return "" end
 	ataxiaTemp = ataxiaTemp or {}
 	-- ONCE PER ROOM (user, v4.7.161): the gravehands belong to the room they were summoned
