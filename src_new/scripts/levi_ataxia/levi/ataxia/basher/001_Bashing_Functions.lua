@@ -536,9 +536,15 @@ function ataxiaBasher_assembleAttack()
     end
   end
 
-  -- Maran emergency barrier check
+  -- Maran emergency barrier check (OUT-OF-TOWER path only).
+  -- In Mnemosyne the card layer in basher/010 owns Maran along with five other
+  -- cards, and rides the assembled round instead of returning and forfeiting a
+  -- whole attack cycle -- running both would double-draw a 2-charge card.
+  local mnemCards = ataxiaBasher.inMnemosyne
+    and ataxiaBasher.mnemLdeck and ataxiaBasher.mnemLdeck.enabled
   if not ataxia.maranThreshold then ataxia.maranThreshold = 25 end
-  if ataxia.vitals.hpp < ataxia.maranThreshold
+  if not mnemCards
+     and ataxia.vitals.hpp < ataxia.maranThreshold
      and ataxia.vitals.hpp ~= 0
      and not ataxia.maranCooldown
      and ataxiaTables.ldeckcardscount
@@ -608,8 +614,17 @@ function ataxiaBasher_assembleAttack()
     end
   end
 
+  -- Mnemosyne legend deck (basher/010): a state-driven card draw riding the round.
+  -- Computed BEFORE the attack gate on purpose -- Morimbuul answers exactly the
+  -- bindings that gate closes, so a gated round still has to be able to send it.
+  local ldeckCmd = ""
+  if ataxiaBasher_mnemLdeck then
+    local ok, res = pcall(ataxiaBasher_mnemLdeck, sp)
+    if ok and type(res) == "string" then ldeckCmd = res end
+  end
+
   if not ataxiaTemp.bashFlee and not ataxia.afflictions.paralysis and not ataxia.afflictions.aeon and not ataxia.afflictions.peace and not ataxia.afflictions.transfixation and not ataxia.afflictions.webbed and not ataxia.afflictions.impaled and not ataxia.afflictions.constricted and not ataxia.afflictions.deepsleep and not ataxia.afflictions.entangled and not ataxia.afflictions.unconsciousness and not ataxia.afflictions.snared then
-    command = command.._G[ataxiaBasher_bashingFuncs[class]]()
+    command = command..ldeckCmd.._G[ataxiaBasher_bashingFuncs[class]]()
     -- Mnemosyne swarm tactics (mnemosyne/009): one-shot decorators ride the assembled
     -- chain (e.g. the pull appends ";<backdir>" so the swing and the step out are ONE
     -- queued line). Consumption also arms the swarmHold gate -- see S.decorate.
@@ -620,6 +635,12 @@ function ataxiaBasher_assembleAttack()
     end
     send("queue addclearfull freestand stand"..sp..command)
 
+  elseif ldeckCmd ~= "" and ataxiaBasher_mnemLdeckFree then
+    -- Gated (webbed/entangled/aeon/...): no attack goes out, but a card draw is
+    -- free and Morimbuul is what BREAKS this gate. Send it alone on the free
+    -- queue -- once per pick (the helper de-dupes; `queue add free` accumulates).
+    local bare = ataxiaBasher_mnemLdeckFree()
+    if bare then send("queue add free "..bare) end
   end
 
 end

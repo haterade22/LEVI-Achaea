@@ -2,6 +2,70 @@
 
 ---
 
+## 2026-07-30 — Legend deck cards in the Mnemosyne basher (v4.7.165)
+
+The basher's only legend-deck automation was **mob-name driven** —
+`ataxiaBasher.ldeckRules` in `genrunning/002_search_targets.lua` maps "3 elite mhun keepers
+in the room" to a draw list — which cannot work in Mnemosyne, where the denizen roster is
+different every ripple. New layer `basher/010_Mnemosyne_Legend_Deck.lua` keys off **state**
+instead, so it works on whatever the tower spawns:
+
+| Card | Condition | Effect |
+|---|---|---|
+| **Morimbuul** | while bound | shrug off denizen ropes/bindings, 5 min |
+| **Maran** | hp <= 20% | 5000hp barrier on the room, 60s |
+| **Seasone** | hp <= 35% | `FOR ELIXIR` — +10% health elixir, 5 min |
+| **Matic** | 3+ denizens | next attack is a guaranteed high-end crit |
+| **Covenant** | rage for the payoff | plants RECKLESSNESS |
+| **Xylthus** | rage for the payoff | plants STUN (never on a boss — it cannot bind one) |
+
+"Enough battlerage to do a battlerage attack that benefits from this" is resolved per
+class against the rotations that actually **read** the affliction — Blademaster Headstrike
+and Magi Firefall for recklessness, Runewarden Etch for stun, all 25 rage — through
+`ataxiaBasher_rageAfford`, so the rage floor composes. As a class with no such payoff
+(Psion, Depthswalker, Infernal…) neither card is ever drawn: planting an affliction nothing
+can spend would burn a charge for nothing.
+
+**Economy is the design constraint.** These cards hold 2-3 charges and regenerate **one per
+hour**, so every gate is deliberately conservative: at most ONE card per round, a per-card
+minimum interval (>= the effect duration, so a redraw only ever renews something lapsed),
+Matic additionally once per room, a hard `ldm.getCharges` check, and a skip when the
+denizen already carries the affliction.
+
+**In-flight replay**, as for the owned battlerage rotations: the basher rebuilds its command
+every prompt with `queue addclearfull`, which wipes the queued line — stamping the interval
+at build time would drop the draw from the very next rebuild, unsent (the v4.7.129 phantom
+cooldown). The pick is held pending and replayed verbatim until `ldm.onDraw` (fed by "You
+draw forth the power of X") confirms it landed, or the 4s window lapses.
+
+Details worth recording:
+- The layer is computed **before** the attack gate, because Morimbuul answers exactly the
+  bindings that gate closes. On a gated round it goes out alone on the free queue —
+  **once** per pick, since `queue add free` accumulates (unlike `addclearfull`, which
+  replaces); an unguarded resend at 0.3s would empty the card in seconds.
+- Xylthus's bind line is **not captured yet**, so the denizen-state layer would never see
+  the stun and Etch could not cash it on the round we paid a charge for. The draw records
+  `stun` optimistically; `BR_AFFS` lazily expires it in 4s if the bind whiffed. *Live
+  capture wanted.*
+- The pre-existing global Maran check in `assembleAttack` (hp < 25%, `return`s and forfeits
+  the whole attack cycle) now **stands down in Mnemosyne** — running both would double-draw
+  a 2-charge card.
+- `M.run.boss` is now remembered from the `Objective: defeat <X>` line (cleared on ripple
+  change and run end) so the Xylthus boss-skip has something to check.
+- Bindings default to the whole family (webbed, entangled, transfixation, constricted,
+  snared, roped), not webbed alone — the card covers "denizen ropes or bindings" and every
+  one of these stops the basher dead. Narrow via `ataxiaBasher.mnemLdeckBindings`.
+
+Command: `mnem cards [on|off|maran <hp%>|seasone <hp%>|matic <n>]`; bare `mnem cards` prints
+charges, intervals and whether this class has a payoff for Covenant/Xylthus.
+
+Files: `basher/010_Mnemosyne_Legend_Deck.lua` (NEW), `basher/001_Bashing_Functions.lua`,
+`legend_deck/003_Legend_Deck_Functions.lua`, `mnemosyne/003_Commands.lua`,
+`mnemosyne/004_Parsers.lua`, `tests/test_mnem_ldeck.lua` (NEW), `CHANGELOG.md`, `CLAUDE.md`,
+`docs/legend-deck.md`, memory. Suite **637/637**.
+
+---
+
 ## 2026-07-29 — Runewarden confirmations, bulwark highlight, and a correction (v4.7.164)
 
 **Correction to v4.7.163.** That entry claimed triggers 330/331 carry no Runewarden

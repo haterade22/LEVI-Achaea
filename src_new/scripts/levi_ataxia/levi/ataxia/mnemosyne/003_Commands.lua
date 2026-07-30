@@ -52,6 +52,7 @@ function M.help()
     { "mnem explore [on|off|status]", "Auto-sweep the 4x4, clear rooms, stop at the boon screen" },
     { "mnem swarm [on|off|assess <n>|deep <r> <n>|icewall|kite|panic|escape|panicat|escapeat|recoverat]", "Multi-mob tactics + low-HP escape (fly/retreat instead of shield-in-place)" },
     { "mnem sense", "Fullsense recon of the ripple (Sleuth boon reveals all denizens)" },
+    { "mnem cards [on|off|maran <hp%>|seasone <hp%>|matic <n>]", "Legend deck auto-draw (maran/seasone/morimbuul/matic/covenant/xylthus)" },
     { "mnem boons", "This run's claimed boons (local history)" },
     { "mnem boonfill", "BOON CONTEMPLATE owned boons with no description yet (run BOONS first)" },
     { "mnem affixes", "This run's active affixes (ongoing effects)" },
@@ -220,6 +221,41 @@ function M.command(rest)
     M.reportAffixes()
   elseif cmd == "library" then
     M.reportLibrary()
+  elseif cmd == "cards" then
+    -- Legend deck auto-draw (basher/010). Conditions are fixed by the card's
+    -- effect; only the three thresholds and the master switch are tunable.
+    local lc = ataxiaBasher and ataxiaBasher.mnemLdeck
+    if not lc then
+      M.echo("Legend deck layer not loaded.")
+    else
+      local sub, rest2 = arg:match("^(%S*)%s*(.-)$")
+      sub = (sub or ""):lower()
+      if sub == "on" or sub == "off" then
+        lc.enabled = (sub == "on")
+        ataxia_saveSettings(false)
+        M.echo("Legend deck auto-draw " .. (lc.enabled and "<green>ON" or "<indian_red>OFF") .. ".")
+      elseif sub == "maran" or sub == "seasone" then
+        local n = tonumber(rest2)
+        if n and n >= 5 and n <= 90 then
+          lc[sub .. "At"] = n
+          ataxia_saveSettings(false)
+          M.echo(sub .. " draws at <cyan>" .. n .. "%<reset> hp.")
+        else
+          M.echo("Usage: mnem cards " .. sub .. " <hp%>  (5-90)")
+        end
+      elseif sub == "matic" then
+        local n = tonumber(rest2)
+        if n and n >= 2 then
+          lc.maticAt = n
+          ataxia_saveSettings(false)
+          M.echo("matic draws at <cyan>" .. n .. "<reset>+ denizens.")
+        else
+          M.echo("Usage: mnem cards matic <n>  (n >= 2)")
+        end
+      elseif ataxiaBasher_mnemLdeckStatus then
+        ataxiaBasher_mnemLdeckStatus()
+      end
+    end
   elseif cmd == "quiet" then
     c.quiet = M._toggleState(arg, M._quiet())
     ataxia_saveSettings(false)

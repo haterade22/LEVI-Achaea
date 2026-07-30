@@ -230,6 +230,8 @@ function M.onRunEnd()
     ataxiaEcho("Mnemosyne wade ended -- no-flee mode OFF.")
   end
   M.releaseTreeReserve() -- a boss tree-reserve must not outlive the run
+  M.run.boss = nil
+  if ataxiaBasher_mnemLdeckReset then ataxiaBasher_mnemLdeckReset() end
   M.restoreTreeCuring() -- Splinterbark over -> tattoo untainted, turn game tree curing back on
   if M._inRun() then M.endRun() end
 end
@@ -329,6 +331,10 @@ function M.onRipple(n)
   if ataxia.mnemosyne.map and ataxia.mnemosyne.map.onRipple then ataxia.mnemosyne.map.onRipple(n) end
   -- A tree reserve must never outlive its boss ripple (telemetry-independent).
   M.releaseTreeReserve()
+  M.run.boss = nil -- re-learned from the new ripple's Objective line
+  -- Forget per-room / in-flight card state; the per-card intervals deliberately
+  -- survive (charges are global and regenerate hourly, not per ripple).
+  if ataxiaBasher_mnemLdeckReset then ataxiaBasher_mnemLdeckReset() end
   if not M._auto() then return end
   -- Context guard: a stray/re-read "You wade N deep" seen outside a dive must not
   -- BOOTSTRAP a phantom run. Require in-Mnemosyne context to first assert active;
@@ -485,6 +491,10 @@ function M.onObjective(text)
   local target = text:match("^defeat (.+)$")
   if not target then return end
   if target:match("^%d+ waves? of enemies") then return end -- normal wave, not a boss
+  -- Remember WHO the boss is (cleared at the ripple/run boundary below). The
+  -- legend-deck layer reads it: Xylthus cannot bind a boss, so a charge must
+  -- never be spent trying.
+  M.run.boss = target
   -- Boss tactics fire regardless of telemetry (Splinterbark's independence rule):
   -- a reserve-boss objective arms the tree reserve even with reporting off.
   M.reserveTreeForBoss(target)

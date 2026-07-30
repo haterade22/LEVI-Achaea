@@ -156,6 +156,13 @@ function ldm.onDraw(cardKey)
         end
         ldm.save()
     end
+    -- Confirmation feed for the Mnemosyne auto-draw layer (basher/010): stamp the
+    -- per-card interval from the moment the draw LANDED and release its in-flight
+    -- replay. Called for every card, including manual draws -- which is what we
+    -- want, since a hand-drawn Maran should also hold the auto layer off.
+    if ataxiaBasher_mnemLdeckConfirm then
+        ataxiaBasher_mnemLdeckConfirm(cardKey)
+    end
 end
 
 -- =============================================================================

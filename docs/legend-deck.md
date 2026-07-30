@@ -31,6 +31,47 @@ ataxia.wandReflectionRecovery = 70   -- HP% to resume attacks (default 70%)
 ataxia.maranThreshold = 25  -- HP% to trigger (default 25%)
 -- Draws Maran card for 5000hp barrier, requires card charges
 ```
+This out-of-tower path **stands down in Mnemosyne** — the card layer below owns Maran there
+(running both would double-draw a 2-charge card).
+
+### Mnemosyne Auto-Draw (v4.7.165)
+
+Located in `src_new/scripts/levi_ataxia/levi/ataxia/basher/010_Mnemosyne_Legend_Deck.lua`.
+The older `ataxiaBasher.ldeckRules` system (in `genrunning/002_search_targets.lua`) is
+**mob-name driven** and so useless in the tower, where the roster changes every ripple.
+This layer keys off state instead and rides the assembled attack round.
+
+| Card | Condition | Effect | Interval |
+|---|---|---|---|
+| **Morimbuul** | while bound | Shrug off denizen ropes/bindings, 5 min | 300s |
+| **Maran** | hp <= `maranAt` (20%) | 5000hp barrier on the room, 60s | 65s |
+| **Seasone** | hp <= `seasoneAt` (35%) | `FOR ELIXIR`: +10% health elixir, 5 min | 300s |
+| **Matic** | >= `maticAt` (3) denizens | Next attack is a guaranteed high-end crit | 45s + once/room |
+| **Covenant** | rage for the payoff | Plants RECKLESSNESS | 45s |
+| **Xylthus** | rage for the payoff | Plants STUN (never on a boss) | 45s |
+
+"Enough battlerage to do a battlerage attack that benefits from this" is resolved per class
+against the rotations that actually read the affliction, via `ataxiaBasher_rageAfford` (so
+the rage floor composes):
+
+| Class | Affliction | Cashed in by | Rage |
+|---|---|---|---|
+| Blademaster | recklessness | Headstrike | 25 |
+| Magi | recklessness | Firefall | 25 |
+| Runewarden | stun | Etch | 25 |
+
+Any other class draws neither card — planting an affliction nothing can spend wastes a
+charge. **These cards hold 2-3 charges and regenerate one per HOUR**, which is why every
+gate is conservative: one card per round, the per-card interval above, a hard charge check,
+and a skip when the denizen already carries the affliction.
+
+Commands: `mnem cards` (status: charges, intervals, this class's payoff),
+`mnem cards on|off`, `mnem cards maran <hp%>`, `mnem cards seasone <hp%>`,
+`mnem cards matic <n>`. Config lives in `ataxiaBasher.mnemLdeck` and
+`ataxiaBasher.mnemLdeckBindings`.
+
+**Known gap:** Xylthus's bind line is not captured, so the draw records `stun` on the
+denizen optimistically (lazily expired in 4s by `ataxiaBasher_BR_AFFS` if it whiffed).
 
 ### Card Tracking
 
