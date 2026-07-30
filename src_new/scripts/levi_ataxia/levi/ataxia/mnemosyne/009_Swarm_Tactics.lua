@@ -54,7 +54,9 @@ local M = ataxia.mnemosyne
 M.swarm = M.swarm or {}
 local S = M.swarm
 
-local FOLLOW_WINDOW = 4     -- seconds to wait in the funnel room for followers
+local FOLLOW_WINDOW = 3     -- seconds to wait in the funnel room for followers (user, v4.7.156:
+                            -- 4s was slower than the hit-and-run loop needed; the window is
+                            -- REFRESHED by combat, so a real fight still holds us there)
 local WALL_WINDOW = 8       -- behind our own icewall: leakers trickle slower, wait longer
 local MAX_PULLS = 3         -- pulls per room before giving up and fighting in place
 local PULL_ARM_TIMEOUT = 2.5 -- armed decorator never consumed (no swing came) -> act plain

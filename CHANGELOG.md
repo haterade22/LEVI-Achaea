@@ -2,6 +2,25 @@
 
 ---
 
+## 2026-07-29 — Swarm funnel window 4s -> 3s (v4.7.156)
+
+User: the funnel wait was slower than the hit-and-run loop needed. `FOLLOW_WINDOW` in
+`009_Swarm_Tactics.lua` drops from 4s to 3s — the time we sit in the funnel room waiting
+for followers before re-entering and re-assessing.
+
+Safe to shorten because the window is **refreshed by combat**: a mob that actually chased
+us keeps resetting it, so a real fight still holds us there. Only the empty case (nothing
+followed — the wildcat pattern) gets a second back per cycle. The indoors-behind-our-own-
+icewall window (`WALL_WINDOW`, 8s) is unchanged: leakers trickle through a wall slower.
+
+Every call site reads the constant, including the echo ("window 3s"), so nothing else
+changed. Suite **588/588** (the swarm tests step the clock by 5s and 10s, both still past
+the shorter window and inside the 8s wall window).
+
+Files: `mnemosyne/009_Swarm_Tactics.lua`, `CLAUDE.md`, memory.
+
+---
+
 ## 2026-07-29 — Auto-feed from the horn of plenty when starving (v4.7.155)
 
 **Starvation is a combat emergency, not a flavour message.** The 2026-07-29 jungle log
