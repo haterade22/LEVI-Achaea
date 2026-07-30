@@ -2,6 +2,39 @@
 
 ---
 
+## 2026-07-30 — "a slope-backed hyena" is a real denizen (v4.7.169)
+
+The own-denizen list matches by **case-insensitive substring** — that is what lets the
+keyword `falcon` cover "a razor-beaked falcon" without knowing every variant. It also
+means a real, killable denizen whose name merely contains a pet's word is silently
+shielded from targeting.
+
+`a slope-backed hyena` is exactly that: a genuine mob, protected by the `hyena` keyword
+seeded for the Infernal pet. Two consequences, and the second is the serious one:
+
+- `ataxiaBasher_purgeOwnFromTargets` would **delete it from the learned target list**,
+  across every area.
+- In the Mnemosyne this is a **hard stall, not lost xp**. The explorer counts it in
+  `ataxia.denizensHere` and waits for the room to clear; `search_targets` refuses to ever
+  pick it. The watchdog nudges forever and the sweep never advances.
+
+New `ataxiaBasher.notOwnDenizens`, checked **first** in `ataxiaBasher_isOwnDenizen` and
+winning over the pet keywords, so the pet ("a daemonic hyena") stays protected while the
+mob is targetable. Managed with `bash notmine [add|rem] <name>`, mirroring `bash mine`.
+
+Seeded via **backfill**, not a default — existing saves already carry the bare `hyena`
+keyword, so a fresh-install default would have fixed nobody who hit this.
+
+The obvious alternative — narrowing the seeded keyword to `daemonic hyena` — was rejected:
+it only helps fresh installs, and it does nothing for the next collision. The exemption
+list is general.
+
+Files: `basher/001_Bashing_Functions.lua`, `002_Check_For_Any_Missing_Variables.lua`,
+`aliases/.../lists/013_Not_Own_Denizens.lua` (NEW), `tests/test_basher_runewarden.lua`,
+`CHANGELOG.md`, `CLAUDE.md`, memory. Suite **662/662**.
+
+---
+
 ## 2026-07-30 — Denizens can drag us out of the sky (v4.7.168)
 
 > A tentacle shoots up from the ground, wraps itself around you, and drags you back to earth.

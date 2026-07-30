@@ -334,9 +334,26 @@ end
 -- variant. Managed via the `bash mine` alias; seeded in the missing-variables init.
 -- Note: unlike ataxiaBasher.mobIgnore this does NOT skip the room — we still bash
 -- everything else present.
+--
+-- THE SUBSTRING MATCH CUTS BOTH WAYS (v4.7.169, user report). "a slope-backed hyena"
+-- is a real, killable denizen, and it contains the pet keyword "hyena" -- so it was
+-- silently protected from targeting AND purged from the learned target list. In the
+-- Mnemosyne that is a HARD STALL, not just lost xp: the explorer counts it in
+-- `ataxia.denizensHere` and waits for the room to clear, while search_targets refuses
+-- to ever pick it. The watchdog nudges forever and the sweep never advances.
+--
+-- `ataxiaBasher.notOwnDenizens` is the escape hatch and it WINS: any denizen whose
+-- name matches an entry here is a legitimate target no matter which pet keyword it
+-- also happens to contain. Managed via `bash notmine`.
 function ataxiaBasher_isOwnDenizen(name)
   if type(name) ~= "string" or not ataxiaBasher.ownDenizens then return false end
   local lname = name:lower()
+  -- Exceptions first: a real denizen that merely shares a pet's word.
+  for _, ex in pairs(ataxiaBasher.notOwnDenizens or {}) do
+    if type(ex) == "string" and ex ~= "" and lname:find(ex:lower(), 1, true) then
+      return false
+    end
+  end
   for _, kw in pairs(ataxiaBasher.ownDenizens) do
     if type(kw) == "string" and kw ~= "" and lname:find(kw:lower(), 1, true) then
       return true
@@ -377,6 +394,38 @@ function ataxiaBasher_addOwnDenizen(kw)
   ataxiaEcho("Added '" .. kw .. "' to your own denizens -- it won't be auto-added or targeted."
     .. (purged > 0 and (" Removed " .. purged .. " existing match(es) from target lists.") or ""))
   ataxia_saveSettings(false)
+end
+
+-- Add a real denizen that a pet keyword would otherwise shadow. Auto-learn re-adds it
+-- to the area target list on the next sighting, so no un-purge is needed here.
+function ataxiaBasher_addNotOwnDenizen(name)
+  name = tostring(name or ""):lower():gsub("^%s+", ""):gsub("%s+$", "")
+  if name == "" then return false end
+  ataxiaBasher.notOwnDenizens = ataxiaBasher.notOwnDenizens or {}
+  if table.contains(ataxiaBasher.notOwnDenizens, name) then
+    ataxiaEcho("'" .. name .. "' is already exempt -- it is treated as a real target.")
+    return false
+  end
+  table.insert(ataxiaBasher.notOwnDenizens, name)
+  ataxiaEcho("'" .. name .. "' is a REAL denizen -- it will be targeted even though it "
+    .. "matches one of your pet keywords.")
+  ataxia_saveSettings(false)
+  return true
+end
+
+function ataxiaBasher_removeNotOwnDenizen(name)
+  name = tostring(name or ""):lower():gsub("^%s+", ""):gsub("%s+$", "")
+  local list = ataxiaBasher.notOwnDenizens or {}
+  for i = #list, 1, -1 do
+    if list[i] == name then
+      table.remove(list, i)
+      ataxiaEcho("'" .. name .. "' is no longer exempt.")
+      ataxia_saveSettings(false)
+      return true
+    end
+  end
+  ataxiaEcho("'" .. name .. "' is not on the exemption list.")
+  return false
 end
 
 function ataxiaBasher_removeOwnDenizen(kw)

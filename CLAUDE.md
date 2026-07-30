@@ -377,7 +377,7 @@ Automated target selection and attack execution for PvE hunting. Supports 20+ cl
 **Safety Features:**
 - **Attack gate**: Blocks attacks during disabling afflictions (paralysis, aeon, peace, transfixation, webbed, impaled, constricted, deepsleep, entangled, unconsciousness, snared)
 - **No-flee areas** (`ataxiaBasher_isNoFleeArea()`): World Tree + Mnemosyne (`inMnemosyne` flag) never flee — shield on damage spike and keep attacking
-- **Own denizens** (`ataxiaBasher.ownDenizens` / `bash mine`): pet/ally name keywords excluded from auto-learn and targeting without skipping the room
+- **Own denizens** (`ataxiaBasher.ownDenizens` / `bash mine`): pet/ally name keywords excluded from auto-learn and targeting without skipping the room. Matched by case-insensitive SUBSTRING, which cuts both ways: `ataxiaBasher.notOwnDenizens` / `bash notmine` (v4.7.169) exempts a REAL denizen whose name merely contains a pet's word and WINS over the keyword -- "a slope-backed hyena" was shielded by the `hyena` keyword seeded for the Infernal pet, which in Mnemosyne is a hard stall (the explorer waits for a room to clear while search_targets refuses to pick it), not just lost xp. Seeded by backfill, since existing saves already carry the bare keyword
 - **PvP auto-flee**: On `"attacker class detected"` event, disables basher and navigates to Mhaldor (`genrunning/001_Bashing_API.lua`)
 - **PvE target switching**: `switchTarget()` skips all PvP state resets when basher is enabled
 

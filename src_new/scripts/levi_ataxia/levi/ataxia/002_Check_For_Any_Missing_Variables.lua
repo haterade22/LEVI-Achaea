@@ -160,6 +160,24 @@ function ataxiaCheckForMissing()
 		end
 	end
 
+	-- ...and the INVERSE list. The own-denizen match is a case-insensitive SUBSTRING,
+	-- which is what makes "falcon" cover "a razor-beaked falcon" -- but it also means a
+	-- real denizen sharing a word with a pet is silently shielded. "a slope-backed
+	-- hyena" (user report 2026-07-30) is a genuine, killable mob that the "hyena"
+	-- keyword protected from targeting AND purged from the learned target list. In the
+	-- Mnemosyne that is a hard stall: the explorer counts it and waits for the room to
+	-- clear while search_targets refuses to pick it. Entries here WIN over the pet
+	-- keywords; manage with `bash notmine`. Backfilled (not just defaulted) because
+	-- existing saves already carry the bare "hyena" keyword.
+	ataxiaBasher.notOwnDenizens = ataxiaBasher.notOwnDenizens or {}
+	for _, real in ipairs({"a slope-backed hyena"}) do
+		if not table.contains(ataxiaBasher.notOwnDenizens, real) then
+			table.insert(ataxiaBasher.notOwnDenizens, real)
+			ataxiaEcho("<white>" .. real .. "<NavajoWhite> is a REAL denizen -- exempted from your pet keywords "
+				.. "(<green>bash notmine<NavajoWhite> to manage).")
+		end
+	end
+
 	if ataxia.prioritySwaps and ataxia.prioritySwaps.ravaged == nil then
 		ataxia.prioritySwaps.ravaged = {active = false, desc = "Automatically prio mana sipping while ravagedmind is active."}
 		ataxiaEcho("Ravagedmind priority swap not found. Added it to swaps; default is off.")

@@ -217,3 +217,44 @@ end)
 mnemHammerAndNail, mnemFalconersTactics = false, false
 getEpoch = _epoch
 target = nil
+
+-- ---------------------------------------------------------------------------
+-- Own-denizen matching: the substring rule cuts both ways (v4.7.169).
+-- ---------------------------------------------------------------------------
+describe("ataxiaBasher_isOwnDenizen -- pets vs real denizens that share a word", function()
+  local okOwn = pcall(dofile, "src_new/scripts/levi_ataxia/levi/ataxia/basher/001_Bashing_Functions.lua")
+
+  it("still shields the actual pets by keyword", function()
+    if not okOwn then return end
+    ataxiaBasher.ownDenizens = {"falcon", "baalzadeen", "ashbeast", "hyena"}
+    ataxiaBasher.notOwnDenizens = {}
+    expect(ataxiaBasher_isOwnDenizen("a razor-beaked falcon")).toBeTrue()
+    expect(ataxiaBasher_isOwnDenizen("a daemonic hyena")).toBeTrue()
+    expect(ataxiaBasher_isOwnDenizen("a blazing ashbeast")).toBeTrue()
+  end)
+
+  it("WOULD have shielded a real denizen -- this is the bug", function()
+    if not okOwn then return end
+    ataxiaBasher.ownDenizens = {"hyena"}
+    ataxiaBasher.notOwnDenizens = {}
+    expect(ataxiaBasher_isOwnDenizen("a slope-backed hyena")).toBeTrue() -- pre-fix behaviour
+  end)
+
+  it("the exemption WINS over the pet keyword", function()
+    if not okOwn then return end
+    ataxiaBasher.ownDenizens = {"hyena"}
+    ataxiaBasher.notOwnDenizens = {"a slope-backed hyena"}
+    expect(ataxiaBasher_isOwnDenizen("a slope-backed hyena")).toBeFalse() -- targetable again
+    expect(ataxiaBasher_isOwnDenizen("a daemonic hyena")).toBeTrue()      -- the pet is untouched
+  end)
+
+  it("an exempt denizen survives the target-list purge", function()
+    if not okOwn then return end
+    ataxiaBasher.ownDenizens = {"hyena"}
+    ataxiaBasher.notOwnDenizens = {"a slope-backed hyena"}
+    ataxiaBasher.targetList = { ["Mnemosyne"] = {"a slope-backed hyena", "a daemonic hyena"} }
+    local removed = ataxiaBasher_purgeOwnFromTargets()
+    expect(removed).toBe(1)
+    expect(ataxiaBasher.targetList["Mnemosyne"][1]).toBe("a slope-backed hyena")
+  end)
+end)
