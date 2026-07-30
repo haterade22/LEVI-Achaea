@@ -226,6 +226,17 @@ skipping there is what *maximises* landed mauls.
 the maul cooldown -- the order never landed, so charging a full 30s for it would waste
 uptime.
 
+**Highlighted** (v4.7.154, in trigger 367 itself -- these patterns already match there, so
+a separate highlight trigger would be a duplicate-pattern trap). Three states, three
+colours, none in the orange family (reserved):
+
+| Line | Colour |
+|---|---|
+| `You command your hyena to maul <t>.` | dark_sea_green (intent, nothing landed yet) |
+| `A daemonic hyena lets loose a wooping cackle as she lunges at <t>...` | **chartreuse bold** (the free damage) |
+| `A daemonic hyena snarls as she hurls herself at <t>...` | **chartreuse bold** (same, other variant) |
+| `You cannot yet order your hyena to maul another foe.` | dim_grey (still on cooldown) |
+
 Cooldown starts from **our own command line** (`You command your hyena to maul <target>.`)
 as well as the hyena's attack line, so a missed pet line cannot desync it; the safety
 timer added in v4.7.148 is the final backstop.

@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-07-29 — Hyena maul lines highlighted (v4.7.154)
+
+The maul pair is easy to lose in scrolling combat, so it is now coloured. The highlight
+lives inside trigger `367` rather than a new trigger, because those exact patterns already
+match there and a second copy would be a duplicate-pattern trap.
+
+Three states, three colours — deliberately avoiding the orange family, which is reserved:
+
+- `You command your hyena to maul <t>.` → **dark_sea_green** (our order; nothing has landed
+  yet)
+- `A daemonic hyena lets loose a wooping cackle as she lunges at <t>...` → **chartreuse
+  bold** (the free damage actually happening)
+- `A daemonic hyena snarls as she hurls herself at <t>...` → **chartreuse bold** (the other
+  maul variant, target form only — the at-you form is trigger 372's pet-turned-on-us case)
+- `You cannot yet order your hyena to maul another foe.` → **dim_grey** (still on cooldown,
+  nothing happened)
+
+Files: `367_Infernal_Hyena_Maul_Cooldown.lua`, `.claude/classes/infernal.md`.
+
+---
+
 ## 2026-07-29 — Fury of Ages + hyena out-of-range recovery (v4.7.153)
 
 **Hyena out of range.** `Your hyena is too far away for you to command like that.` → new

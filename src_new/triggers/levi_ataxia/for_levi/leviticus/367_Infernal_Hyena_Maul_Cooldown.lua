@@ -45,3 +45,22 @@ patterns:
 -- counting it as one put the maul on cooldown for a hit we never ordered. Trigger 372
 -- handles the at-you case (orders her passive).
 ataxiaBasher_hyenaMaulCooldown()
+
+-- HIGHLIGHT the maul pair so it stands out as combat scrolls (v4.7.154). The highlight
+-- lives here rather than in its own trigger because these exact patterns already match
+-- here -- a second copy would be a duplicate-pattern trap. Three states, three colours,
+-- and deliberately NOT the orange family (reserved by the user for something else):
+--   our order        -> dark_sea_green (muted: intent, nothing has landed yet)
+--   the maul landing -> chartreuse BOLD (the free damage actually happening)
+--   the refusal      -> dim_grey (still on cooldown; nothing happened)
+local col, bold = "chartreuse", true
+if line:find("^You command your hyena") then
+	col, bold = "dark_sea_green", false
+elseif line:find("^You cannot yet order") then
+	col, bold = "dim_grey", false
+end
+selectString(line, 1)
+if bold then setBold(true) end
+fg(col)
+deselect()
+resetFormat()
