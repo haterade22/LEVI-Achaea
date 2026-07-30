@@ -1406,14 +1406,119 @@ function ataxiaBasher_knightBashing()
 	return command
 end
 
+-- Hammer and Nail (Mnemosyne boon, Runewarden): "While a sowulu rune is present, your
+-- attacks will cause damage to another random denizen in the location." So the rune turns
+-- every ordinary swing into a two-target hit -- worth laying BEFORE we start attacking,
+-- and only worth it with something else in the room to splash onto.
+--
+-- ONCE PER ROOM, gated on the room number exactly like Tyranny: the rune sits on this
+-- room's ground, so a new room needs its own and re-entering a room re-sketches. Sketching
+-- is a FREE-queue action (see the rune aliases, `queue add free sketch ...`), so it costs
+-- no balance and can ride ahead of the swing.
+function ataxiaBasher_rwSowulu(sp)
+	if not mnemHammerAndNail then return "" end
+	if ataxiaBasher.shielded then return "" end -- break the shield first
+	local M = ataxia.mnemosyne
+	local n = (M and M._denizenCount and M._denizenCount()) or 0
+	if n < (tonumber(ataxiaBasher.sowuluAt) or 2) then return "" end
+	ataxiaTemp = ataxiaTemp or {}
+	local room = (gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num) or "unknown"
+	if ataxiaTemp.rwSowuluRoom == room then return "" end
+	ataxiaTemp.rwSowuluRoom = room
+	return "sketch sowulu on ground"..sp
+end
+
+-- Runewarden OWNS its battlerage (the Psion/Golden Dragon pattern). It had the same
+-- dead-rotation disease: `ataxiaBasher_standardBattlerage` gates on `battleRage_Timers`,
+-- and triggers 330/331 carry NO Runewarden fire-lines -- only 332 (the bulwark special)
+-- sets a timer. So `not battleRage_Timers.small` was permanently true, COLLIDE won the
+-- elseif on every round, and **ONSLAUGHT could never fire at all**; worse, BULWARK sat
+-- behind `validTargets() >= 2`, so the class's headline mitigation was skipped in every
+-- single-mob fight.
+--
+-- AB values (all "Works on/against: Denizens" except Bulwark, which is Self):
+--   Bulwark  28r / 45s cd -- negates 25% of ALL damage for 15s   <- the 15s is the
+--            DURATION, not the cooldown; 45s is as often as it can be held.
+--   Etch     25r / 23s -- ETCH RUNE AT <t>, "Afflictions Used: Aeon or Stun": bonus
+--            damage only when the mob cannot dodge, so it is gated on the denizen
+--            actually carrying one (the Depthswalker Erasure rule -- solo it simply
+--            never fires and costs nothing).
+--   Onslaught 36r / 23s -- big damage.
+--   Collide   14r / 16s -- filler.
+local RW_BR = {
+  { key = "bulwark",   cmd = "bulwark",       rage = 28, cd = 45, noTarget = true },
+  { key = "etch",      cmd = "etch rune at",  rage = 25, cd = 23, needsAff = { "aeon", "stun" } },
+  { key = "onslaught", cmd = "onslaught",     rage = 36, cd = 23 },
+  { key = "collide",   cmd = "collide",       rage = 14, cd = 16 },
+}
+
+-- Fire-line confirmation (trigger 332 already matches the bulwark line for Runewarden):
+-- restart the cooldown from the LANDED moment and release the in-flight hold.
+function ataxiaBasher_rwConfirm(key)
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp.rwBrAt = ataxiaTemp.rwBrAt or {}
+  ataxiaTemp.rwBrAt[key] = nowT
+  local pend = ataxiaTemp.rwBrPending
+  if pend and pend.verb == key then ataxiaTemp.rwBrPending = nil end
+end
+
+function ataxiaBasher_rwBattlerage(sp)
+  local rage = tonumber(ataxia.vitals.rage) or 0
+  if ataxiaBasher.rageConserveThreshold then
+    local mobhp = tonumber(((gmcp.IRE.Target.Info.hpperc or "100"):gsub("%%", ""))) or 100
+    if mobhp > 0 and mobhp <= ataxiaBasher.rageConserveThreshold then
+      ataxiaTemp.rwBrPending = nil
+      return ""
+    end
+  end
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  -- In-flight pick replay: the basher rebuilds this command every prompt while balance is
+  -- down and each rebuild's addclearfull wipes the queued line, so a pick is held ~one
+  -- balance round and replayed verbatim (see the v4.7.129 lesson).
+  local pend = ataxiaTemp.rwBrPending
+  if pend and pend.cmd and (nowT - (tonumber(pend.at) or 0)) < 3 then return pend.cmd end
+  ataxiaTemp.rwBrPending = nil
+  if getEpoch and getEpoch() < (ataxiaTemp.brGlobalReadyAt or 0) then return "" end
+
+  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and rage >= 36
+     and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" then
+    ataxiaTemp.brGlobalReadyAt = (getEpoch and getEpoch() or 0) + 1
+    return "reap "..target..sp
+  end
+
+  ataxiaTemp.rwBrAt = ataxiaTemp.rwBrAt or {}
+  for _, ab in ipairs(RW_BR) do
+    local ready = (nowT - (tonumber(ataxiaTemp.rwBrAt[ab.key]) or 0)) >= ab.cd
+    local gated = false
+    if ab.needsAff then
+      local got = false
+      for _, aff in ipairs(ab.needsAff) do
+        if ataxiaBasher_dsHasAff and ataxiaBasher_dsHasAff(target, aff) then got = true end
+      end
+      if not got then gated = true end
+    end
+    if ready and not gated and ataxiaBasher_rageAfford(rage, ab.rage) then
+      local cmd = ab.cmd..(ab.noTarget and "" or (" "..target))..sp
+      ataxiaTemp.rwBrAt[ab.key] = nowT
+      ataxiaTemp.rwBrPending = { verb = ab.key, cmd = cmd, at = nowT }
+      ataxiaTemp.brGlobalReadyAt = (getEpoch and getEpoch() or 0) + 1
+      return cmd
+    end
+  end
+  return ""
+end
+
 function ataxiaBasher_runewardenBashing()
 	local command, sp = "", ataxia.settings.separator
 	local raze, bash, spec = "", "", ataxia.vitals.knight
-	local brage = ataxiaBasher_assembleBattlerage()
+	local brage = ataxiaBasher_rwBattlerage(sp)
 	local braze = ataxiaBasher.battlerage.Runewarden.raze
+	-- Lay the Hammer and Nail rune before swinging (free queue, so it costs no balance).
+	local sowulu = ataxiaBasher_rwSowulu(sp)
 
-	-- Falcon rake: free pet attack on a 30s cooldown (mirrors the Infernal hyena maul).
-	-- Prepended to the bash when ready; cooldown tracked in 005_Falcon_Cooldowns.lua.
+	-- Falcon rake: free pet attack on a 30s cooldown (AB Rake 3264: "Works on/against:
+	-- Denizens", "Every 30 seconds"). Mirrors the Infernal hyena maul; cooldown tracked in
+	-- 005_Falcon_Cooldowns.lua and shortened by the Falconer's Tactics boon.
 	local falcon = (ataxiaBasher.falconRakeReady and ("falcon rake "..target..sp)) or ""
 
 	if spec == "Dual Cutting" then
@@ -1437,7 +1542,7 @@ function ataxiaBasher_runewardenBashing()
 			command = raze..sp..brage
 		end
 	else
-		command = brage..sp..bash
+		command = sowulu..brage..sp..bash
 	end
 
 	return command

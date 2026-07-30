@@ -1,0 +1,205 @@
+--- test_basher_runewarden.lua -- Runewarden PvE bashing + its Mnemosyne boons (v4.7.163)
+-- Covers the Hammer and NAIL sowulu rune (2+ denizens, once per room, free queue so it
+-- rides ahead of the swing) and the Falconer's Tactics falcon-rake cooldown scaling.
+-- The Homebound raido sketch lives in the explorer (mnemosyne/008) and is validated live.
+
+require("mock_mudlet")
+
+target = 7
+ataxia = {
+  settings = { separator = ";" },
+  vitals = { rage = 0, knight = "Sword and Board" },
+  defences = {},
+}
+ataxiaBasher = {
+  shielded = false, rageraze = false, falconRakeReady = true,
+  battlerage = { Runewarden = { raze = "shiver 7" } },
+}
+ataxiaTemp = {}
+gmcp = {
+  Room = { Info = { area = "", num = 5 } },
+  Char = { Status = { class = "Runewarden", level = "80 " }, Vitals = { ep = 100, maxep = 100 } },
+  IRE = { Target = { Info = {} } },
+}
+function ataxiaEcho() end
+function ataxiaBasher_assembleBattlerage() return "" end
+function ataxiaBasher_rageAfford(rage, cost)
+  return (tonumber(rage) or 0) >= (cost + (tonumber(ataxiaBasher.rageFloor) or 0))
+end
+local denizenAffs = {}
+function ataxiaBasher_dsHasAff(id, aff) return denizenAffs[aff] == true end
+local _epoch = getEpoch
+local clock = 800000
+getEpoch = function() return clock end
+
+local denizens = 0
+ataxia.mnemosyne = { _denizenCount = function() return denizens end }
+
+local ok = pcall(dofile, "src_new/scripts/levi_ataxia/levi/ataxia/basher/002_Class_Bashing.lua")
+if not ok then error("Failed to load class-bashing file") end
+
+local function has(cmd, needle) return cmd:find(needle, 1, true) ~= nil end
+
+local function reset()
+  ataxiaBasher.shielded, ataxiaBasher.rageraze = false, false
+  ataxiaBasher.falconRakeReady = true
+  ataxiaBasher.sowuluAt = nil
+  ataxia.vitals.rage, ataxia.vitals.knight = 0, "Sword and Board"
+  ataxiaTemp = {}
+  mnemHammerAndNail, mnemFalconersTactics = false, false
+  gmcp.Room.Info.num = 5
+  gmcp.Room.Info.area = ""
+  gmcp.IRE.Target.Info = {}
+  ataxiaBasher.cullingBlade, ataxiaBasher.rageConserveThreshold = nil, nil
+  ataxiaBasher.rageFloor = nil
+  denizenAffs = {}
+  denizens = 0
+  clock = clock + 200
+end
+
+describe("Hammer and Nail -- the sowulu splash rune", function()
+  it("does nothing without the boon", function()
+    reset(); denizens = 3
+    expect(ataxiaBasher_rwSowulu(";")).toBe("")
+  end)
+
+  it("needs a SECOND denizen -- the rune splashes onto another mob", function()
+    reset(); mnemHammerAndNail = true; denizens = 1
+    expect(ataxiaBasher_rwSowulu(";")).toBe("")
+    reset(); mnemHammerAndNail = true; denizens = 2
+    expect(ataxiaBasher_rwSowulu(";")).toBe("sketch sowulu on ground;")
+  end)
+
+  it("is once per ROOM -- the rune sits on this room's ground", function()
+    reset(); mnemHammerAndNail = true; denizens = 3
+    expect(ataxiaBasher_rwSowulu(";")).toBe("sketch sowulu on ground;")
+    expect(ataxiaBasher_rwSowulu(";")).toBe("")   -- already sketched here
+    gmcp.Room.Info.num = 6
+    expect(ataxiaBasher_rwSowulu(";")).toBe("sketch sowulu on ground;")
+  end)
+
+  it("is laid BEFORE the swing, and does not displace it", function()
+    reset(); mnemHammerAndNail = true; denizens = 3
+    local cmd = ataxiaBasher_runewardenBashing()
+    expect(has(cmd, "sketch sowulu on ground")).toBeTrue()
+    expect(has(cmd, "combination 7 slice smash")).toBeTrue() -- SnB swing still happens
+    expect(cmd:find("sketch") < cmd:find("combination")).toBeTrue()
+  end)
+
+  it("yields on a shielded round", function()
+    reset(); mnemHammerAndNail = true; denizens = 3
+    ataxiaBasher.shielded = true
+    expect(ataxiaBasher_rwSowulu(";")).toBe("")
+  end)
+
+  it("honours a custom threshold", function()
+    reset(); mnemHammerAndNail = true; denizens = 2
+    ataxiaBasher.sowuluAt = 3
+    expect(ataxiaBasher_rwSowulu(";")).toBe("")
+    denizens = 3
+    expect(ataxiaBasher_rwSowulu(";")).toBe("sketch sowulu on ground;")
+  end)
+end)
+
+describe("ataxiaBasher_rwBattlerage -- the owned rotation", function()
+  it("BULWARK first and with NO target gate -- it is Self, and the class's mitigation", function()
+    reset(); ataxia.vitals.rage = 100; denizens = 1
+    expect(ataxiaBasher_rwBattlerage(";")).toBe("bulwark;") -- solo mob: still fires
+  end)
+
+  it("ONSLAUGHT now fires at all -- it never could under the shared assembler", function()
+    reset(); ataxia.vitals.rage = 100
+    ataxiaTemp.rwBrAt = { bulwark = clock } -- bulwark held
+    expect(has(ataxiaBasher_rwBattlerage(";"), "onslaught 7")).toBeTrue()
+  end)
+
+  it("falls to COLLIDE when onslaught is unaffordable", function()
+    reset(); ataxia.vitals.rage = 20
+    ataxiaTemp.rwBrAt = { bulwark = clock }
+    expect(has(ataxiaBasher_rwBattlerage(";"), "collide 7")).toBeTrue()
+  end)
+
+  it("ETCH only when the denizen carries aeon or stun (it consumes one)", function()
+    reset(); ataxia.vitals.rage = 100
+    ataxiaTemp.rwBrAt = { bulwark = clock }
+    expect(has(ataxiaBasher_rwBattlerage(";"), "etch rune at")).toBeFalse()
+    reset(); ataxia.vitals.rage = 100; denizenAffs.aeon = true
+    ataxiaTemp.rwBrAt = { bulwark = clock }
+    expect(has(ataxiaBasher_rwBattlerage(";"), "etch rune at 7")).toBeTrue()
+    reset(); ataxia.vitals.rage = 100; denizenAffs.stun = true
+    ataxiaTemp.rwBrAt = { bulwark = clock }
+    expect(has(ataxiaBasher_rwBattlerage(";"), "etch rune at 7")).toBeTrue()
+  end)
+
+  it("honours the AB cooldowns (bulwark 45s, onslaught/etch 23s, collide 16s)", function()
+    reset(); ataxia.vitals.rage = 100
+    expect(has(ataxiaBasher_rwBattlerage(";"), "bulwark")).toBeTrue()
+    clock = clock + 4
+    expect(has(ataxiaBasher_rwBattlerage(";"), "onslaught")).toBeTrue()
+    clock = clock + 4
+    expect(has(ataxiaBasher_rwBattlerage(";"), "collide")).toBeTrue()
+    clock = clock + 4
+    expect(ataxiaBasher_rwBattlerage(";")).toBe("") -- all stamped
+    clock = clock + 20  -- collide (16s from t+8) and onslaught (23s from t+4) back
+    expect(has(ataxiaBasher_rwBattlerage(";"), "onslaught")).toBeTrue()
+    clock = clock + 30  -- 45s past the bulwark stamp
+    expect(has(ataxiaBasher_rwBattlerage(";"), "bulwark")).toBeTrue()
+  end)
+
+  it("owns culling: reap outranks the rotation and ignores the rage floor", function()
+    reset(); ataxia.vitals.rage = 36; ataxiaBasher.cullingBlade = true
+    ataxiaBasher.rageFloor = 40
+    expect(has(ataxiaBasher_rwBattlerage(";"), "reap 7")).toBeTrue()
+  end)
+
+  it("replays the pick across the re-queue loop", function()
+    reset(); ataxia.vitals.rage = 100
+    local first = ataxiaBasher_rwBattlerage(";")
+    clock = clock + 1
+    expect(ataxiaBasher_rwBattlerage(";")).toBe(first)
+    expect(ataxiaTemp.rwBrAt.onslaught).toBe(nil)
+  end)
+
+  it("fire-line confirmation restamps bulwark from the LANDED moment", function()
+    reset(); ataxia.vitals.rage = 100
+    expect(has(ataxiaBasher_rwBattlerage(";"), "bulwark")).toBeTrue()
+    clock = clock + 2
+    ataxiaBasher_rwConfirm("bulwark")
+    expect(ataxiaTemp.rwBrPending).toBe(nil)
+    expect(ataxiaTemp.rwBrAt.bulwark).toBe(clock)
+  end)
+end)
+
+describe("falcon rake -- rides every spec, and Falconer's Tactics shortens it", function()
+  it("prepends the rake while it is off cooldown", function()
+    reset()
+    expect(has(ataxiaBasher_runewardenBashing(), "falcon rake 7")).toBeTrue()
+    reset(); ataxiaBasher.falconRakeReady = false
+    expect(has(ataxiaBasher_runewardenBashing(), "falcon rake")).toBeFalse()
+  end)
+
+  it("scales the missed-line safety timer 30s -> ~10s under the boon", function()
+    local okc = pcall(dofile, "src_new/scripts/levi_ataxia/levi/ataxia/basher/005_Falcon_Cooldowns.lua")
+    expect(okc).toBeTrue()
+    if not okc then return end
+    local seen
+    local realTempTimer = tempTimer
+    tempTimer = function(secs, _) seen = secs; return 1 end
+
+    mnemFalconersTactics = false
+    ataxiaBasher_falconRakeCooldown()
+    expect(seen).toBe(30)
+
+    mnemFalconersTactics = true
+    ataxiaBasher_falconRakeCooldown()
+    expect(math.floor(seen * 10 + 0.5) / 10).toBe(10.2) -- 30 * 0.34, -66%
+
+    tempTimer = realTempTimer
+    mnemFalconersTactics = false
+  end)
+end)
+
+-- Restore shared state for whoever runs after us (files share one Lua state).
+mnemHammerAndNail, mnemFalconersTactics = false, false
+getEpoch = _epoch
+target = nil

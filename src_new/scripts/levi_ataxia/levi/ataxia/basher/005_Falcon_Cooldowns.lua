@@ -61,10 +61,17 @@ if ataxiaBasher and ataxiaBasher.falconRakeReady == nil then
 end
 ataxiaBasher.falconRakeCooldownSec = ataxiaBasher.falconRakeCooldownSec or 30
 
+-- FALCONER'S TACTICS (Mnemosyne boon): "The cooldown for commanding your falcon to rake a
+-- denizen is reduced by 66%." The Runewarden twin of Daemon Jaws -- the game's own ready
+-- line arrives sooner, so the boon needs no help there, but this safety timer must shrink
+-- to match or IT becomes the thing gating us at 30s while the real cooldown is ~10s.
+-- (AB Rake 3264 confirms the base: "Works on/against: Denizens", "Every 30 seconds".)
 function ataxiaBasher_falconRakeCooldown()
 	ataxiaBasher.falconRakeReady = false
+	local secs = ataxiaBasher.falconRakeCooldownSec or 30
+	if mnemFalconersTactics then secs = secs * 0.34 end -- -66%
 	if ataxiaBasher_falconRakeTimer then killTimer(ataxiaBasher_falconRakeTimer) end
-	ataxiaBasher_falconRakeTimer = tempTimer(ataxiaBasher.falconRakeCooldownSec, [[ataxiaBasher_falconRakeReady()]])
+	ataxiaBasher_falconRakeTimer = tempTimer(secs, [[ataxiaBasher_falconRakeReady()]])
 end
 
 function ataxiaBasher_falconRakeReady()

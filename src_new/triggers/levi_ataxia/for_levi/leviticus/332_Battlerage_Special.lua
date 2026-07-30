@@ -98,6 +98,9 @@ if partyrelay then
 end
 if gmcp.Char.Status.class == "Runewarden" then
 battleRage_Timers.special = tempTimer(46, [[battleRage_Timers.special = nil]])
+-- Runewarden owns its rotation now (RW_BR, basher/002), so restart BULWARK's 45s
+-- cooldown from the CONFIRMED line rather than the send stamp, and release the hold.
+if ataxiaBasher_rwConfirm then ataxiaBasher_rwConfirm("bulwark") end
 end
 
 if gmcp.Char.Status.class == "Infernal" then

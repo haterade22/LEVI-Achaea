@@ -1017,7 +1017,7 @@ function ataxiaBasher_assembleBattlerage()
 	end
 
 	-- Culling Blade check (applies before class-specific logic). Bard/Blademaster/Magi/
-	-- Psion/Depthswalker are excluded -- they own culling inside their own battlerage
+	-- Psion/Depthswalker/Runewarden are excluded -- they own culling inside their own battlerage
 	-- functions so it fires at 36 rage, not bigRage (54 under rageraze), and their whole
 	-- rotation isn't suppressed below bigRage. (Depthswalker, v4.7.142: this branch WAS
 	-- the DW dead-rotation -- with culling on it returned "" every round below 36/54 rage,
@@ -1029,7 +1029,8 @@ function ataxiaBasher_assembleBattlerage()
 		and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree"
 		and gmcp.Char.Status.class ~= "Bard" and gmcp.Char.Status.class ~= "Blademaster"
 		and gmcp.Char.Status.class ~= "Magi" and gmcp.Char.Status.class ~= "Psion"
-		and gmcp.Char.Status.class ~= "Depthswalker" then
+		and gmcp.Char.Status.class ~= "Depthswalker"
+		and gmcp.Char.Status.class ~= "Runewarden" then
 		if ataxia.vitals.rage >= bigRage then
 			command = command.."reap "..target..sp
 		end

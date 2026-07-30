@@ -236,7 +236,19 @@ function M._exploreMove(dir, isRetry)
   -- Stand as part of the move: after clearing a room you're frequently prone, and
   -- a bare "free <dir>" would silently fail. Mirrors the basher's stand-first queue.
   local sep = (ataxia.settings and ataxia.settings.separator) or ";"
-  send("queue addclear free stand" .. sep .. dir)
+  -- HOMEBOUND boon (Runewarden, v4.7.163): "Returning to your raido cures you of all
+  -- afflictions and restores you to full health. Not effective in the same location."
+  -- The raido has to be laid somewhere we will NOT be standing, and the holding room is
+  -- exactly that: we descend out of it and fight the whole 4x4 below. So sketch it on the
+  -- ground in the holding room immediately before the descent -- the one `down` that
+  -- leaves a room with no planar exits (see usableUnexplored). Once per ripple.
+  local pre = ""
+  if mnemHomebound and dir == "down" and not M._raidoRipple then
+    M._raidoRipple = true
+    pre = "sketch raido on ground" .. sep
+    M._exploreEcho("<cyan>Homebound<reset> -- raido sketched in the holding room.")
+  end
+  send("queue addclear free stand" .. sep .. pre .. dir)
   if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
   M._explMoveT = tempTimer(MOVE_TIMEOUT, function()
     M._explMoveT = nil
@@ -564,6 +576,7 @@ function M._exploreResume(reason)
   M.explore.patrolLoops = 0
   M.explore.iceSlips = 0
   M.explore.settling = true -- treat the current room like an arrival: let denizens settle first
+  M._raidoRipple = nil      -- new ripple, new holding room: the Homebound raido re-arms
   if M.swarm and M.swarm.onRipple then pcall(M.swarm.onRipple) end -- fresh ripple: new pull budgets
   M._exploreEcho("<green>resuming<reset> the sweep" .. (reason and (" (" .. reason .. ")") or "") .. ".")
   M._scheduleTick()

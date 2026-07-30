@@ -60,6 +60,9 @@ infNecroticAura = false  -- boons reset each run
 infFuryOfAges = false  -- boons reset each run
 mnemWintersHeart = false  -- boons reset each run
 mnemResourceful = false  -- boons reset each run
+mnemFalconersTactics = false  -- boons reset each run
+mnemHomebound = false  -- boons reset each run
+mnemHammerAndNail = false  -- boons reset each run
 mnemHaemophiliac = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
 mnemDeluge = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
 

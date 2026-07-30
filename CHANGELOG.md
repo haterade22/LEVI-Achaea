@@ -2,6 +2,55 @@
 
 ---
 
+## 2026-07-29 — Runewarden: owned battlerage + three boons (v4.7.163)
+
+Switched to Runewarden (Sword and Board). Auditing it turned up the **same dead-rotation
+bug** as Psion and Golden Dragon, plus a worse one:
+
+- `ataxiaBasher_standardBattlerage` gates on `battleRage_Timers`, and triggers 330/331
+  carry **no Runewarden fire-lines** — only 332 (the bulwark special) sets a timer. So
+  `not battleRage_Timers.small` was permanently true, **COLLIDE won every round, and
+  ONSLAUGHT could never fire at all**.
+- Worse: **BULWARK sat behind `validTargets() >= 2`**, so the class's headline mitigation
+  was skipped in every single-mob fight.
+
+**Runewarden now owns its battlerage** (`RW_BR`, timer-free, AB values): **Bulwark**
+(28r/45s, Self — first, and no target gate) → **Etch** (25r/23s, gated on the denizen
+actually carrying **aeon or stun**, which it consumes — the Depthswalker Erasure rule, so
+solo it never fires and costs nothing) → **Onslaught** (36r/23s) → **Collide** (14r/16s).
+Culling reap owned and floor-exempt; Runewarden added to the shared-culling exclusion list.
+Trigger 332's existing Runewarden block now also calls `ataxiaBasher_rwConfirm("bulwark")`,
+restarting the cooldown from the confirmed line.
+
+> **Correction worth noting:** Bulwark's **15 seconds is its DURATION** (25% damage
+> negation), not its cooldown — the cooldown is **45s**, so 45s is as often as it can
+> possibly be held.
+
+Three boons:
+
+- **Falconer's Tactics** — falcon rake cd −66%. The Runewarden twin of Daemon Jaws: the
+  game's ready-line comes sooner anyway, so this shrinks the missed-line **safety timer**
+  30s → ~10.2s, which would otherwise become the gate.
+- **Homebound** — "returning to your raido cures you of all afflictions and restores you to
+  full health. Not effective in the same location." The raido must sit somewhere we are
+  *not* standing, and the ripple's **holding room** is exactly that — so the explorer
+  sketches `raido on ground` immediately before the one `down` that leaves it, once per
+  ripple.
+- **Hammer and NAIL** (distinct from the existing Hammer and **Anvil**) — with a sowulu
+  rune down, attacks splash to a second denizen. The basher sketches `sowulu on ground` at
+  2+ denizens, once per room, ahead of the swing; sketching is a free-queue action so it
+  costs no balance.
+
+Also confirmed: **`a razor-beaked falcon` was already covered** by the `falcon` keyword in
+the own-denizen list (substring match), so the basher never targeted it.
+
+Files: `basher/002_Class_Bashing.lua`, `basher/001_Bashing_Functions.lua` (culling
+exclusion), `basher/005_Falcon_Cooldowns.lua`, `mnemosyne/008_Explorer.lua` (raido),
+`332_Battlerage_Special.lua`, `mnemosyne/046-048` (NEW), boon claim/reset wiring,
+`test_basher_runewarden.lua` (NEW, 15 cases). Suite **614/614**.
+
+---
+
 ## 2026-07-29 — Resourceful makes Tyranny free (v4.7.162)
 
 New Mnemosyne boon (the 23rd flag, `mnemResourceful`): *"Your endurance and willpower costs

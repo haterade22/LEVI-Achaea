@@ -79,3 +79,11 @@ if matches[2]:lower():find("winter's heart") or matches[2]:lower():find("winters
 -- class resource (life essence for Infernal) -- which makes Tyranny effectively free, so
 -- the basher summons gravehands in every room with a denizen.
 if matches[2]:lower():find("resourceful") then mnemResourceful = true end
+-- Falconer's Tactics: falcon rake cooldown -66% (Runewarden twin of Daemon Jaws).
+if matches[2]:lower():find("falconer") then mnemFalconersTactics = true end
+-- Homebound: returning to your raido cures + full-heals; the explorer sketches raido in
+-- the holding room before descending.
+if matches[2]:lower():find("homebound") then mnemHomebound = true end
+-- Hammer and NAIL (not Anvil): with a sowulu rune down, attacks splash to a second
+-- denizen; the Runewarden basher sketches sowulu at 2+ denizens.
+if matches[2]:lower():find("hammer and nail") then mnemHammerAndNail = true end
