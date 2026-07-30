@@ -101,6 +101,16 @@ battleRage_Timers.special = tempTimer(46, [[battleRage_Timers.special = nil]])
 -- Runewarden owns its rotation now (RW_BR, basher/002), so restart BULWARK's 45s
 -- cooldown from the CONFIRMED line rather than the send stamp, and release the hold.
 if ataxiaBasher_rwConfirm then ataxiaBasher_rwConfirm("bulwark") end
+-- BULWARK is 25% damage negation for 15s on a 45s cooldown -- the single most important
+-- thing to SEE land while bashing, so make it pop. Bold gold on the line itself (not a
+-- box echo: this fires mid-combat and a banner would bury the surrounding text).
+if line:find("runes on your armour flare brightly", 1, true) then
+	selectString(line, 1)
+	setBold(true)
+	fg("gold")
+	deselect()
+	resetFormat()
+end
 end
 
 if gmcp.Char.Status.class == "Infernal" then

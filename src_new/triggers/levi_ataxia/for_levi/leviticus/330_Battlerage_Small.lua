@@ -97,6 +97,14 @@ bashStats.attacks = bashStats.attacks + 1
 
 battleRage_Timers.small = tempTimer(17, [[battleRage_Timers.small = nil]])
 
+-- Runewarden owns its rotation (RW_BR, basher/002), which is timer-FREE -- so also
+-- restart COLLIDE's cooldown from this CONFIRMED line and release the in-flight hold.
+-- (The class-agnostic timer above still serves every class on the shared assembler.)
+if gmcp.Char.Status.class == "Runewarden" and ataxiaBasher_rwConfirm
+   and line:find("You charge at", 1, true) then
+	ataxiaBasher_rwConfirm("collide")
+end
+
 if type(target) == "number" and ataxiaBasher.enabled then
   bashConsoleEcho("battlerage", "Used Small battlerage")
 	if not ataxiaBasher.manual then

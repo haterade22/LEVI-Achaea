@@ -1428,13 +1428,23 @@ function ataxiaBasher_rwSowulu(sp)
 	return "sketch sowulu on ground"..sp
 end
 
--- Runewarden OWNS its battlerage (the Psion/Golden Dragon pattern). It had the same
--- dead-rotation disease: `ataxiaBasher_standardBattlerage` gates on `battleRage_Timers`,
--- and triggers 330/331 carry NO Runewarden fire-lines -- only 332 (the bulwark special)
--- sets a timer. So `not battleRage_Timers.small` was permanently true, COLLIDE won the
--- elseif on every round, and **ONSLAUGHT could never fire at all**; worse, BULWARK sat
--- behind `validTargets() >= 2`, so the class's headline mitigation was skipped in every
--- single-mob fight.
+-- Runewarden OWNS its battlerage (the Psion/Golden Dragon pattern).
+--
+-- CORRECTION (v4.7.164): this was NOT the missing-fire-line bug. Runewarden's lines DO
+-- exist and DO set the shared timers -- collide at 330:47 ("You charge at <t>, slamming
+-- into him and throwing him back.") and onslaught at 331:47 ("You unleash a ferocious
+-- onslaught on <t>...") -- their trigger bodies are class-AGNOSTIC. The v4.7.163 claim
+-- that onslaught could never fire was wrong; it came from grepping those files for the
+-- word "Runewarden", which only appears in class-gated blocks.
+--
+-- What was genuinely broken, and what this rotation buys:
+--   * BULWARK sat behind `validTargets() >= 2` in standardBattlerage, so the class's
+--     headline mitigation was skipped in every single-mob fight. It is Self-targeted --
+--     mob count is irrelevant.
+--   * ETCH was not wired AT ALL (the config only has small/large/raze/special), so its
+--     aeon/stun bonus damage was never taken.
+--   * Real AB cooldowns instead of the shared 17s/24s trigger timers, plus the rage
+--     floor, the in-flight pick replay, and owned culling.
 --
 -- AB values (all "Works on/against: Denizens" except Bulwark, which is Self):
 --   Bulwark  28r / 45s cd -- negates 25% of ALL damage for 15s   <- the 15s is the

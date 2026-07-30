@@ -2,17 +2,55 @@
 
 ---
 
+## 2026-07-29 — Runewarden confirmations, bulwark highlight, and a correction (v4.7.164)
+
+**Correction to v4.7.163.** That entry claimed triggers 330/331 carry no Runewarden
+fire-lines and that ONSLAUGHT could never fire. **That was wrong.** Both lines exist —
+collide at `330:47` ("You charge at <t>, slamming into him and throwing him back.") and
+onslaught at `331:47` ("You unleash a ferocious onslaught on <t>...") — and those trigger
+bodies are **class-agnostic**, so the shared timers were being set and the alternation
+worked. The mistake came from grepping those files for the word "Runewarden", which only
+appears inside the per-class `special` blocks. Corrected in the changelog, `CLAUDE.md`, the
+code comment, and memory (with the diagnostic rule: grep the ability's **fire text**, never
+the class name).
+
+The rotation is still worth owning, for the reasons that *were* real: **Bulwark** was
+gated behind `validTargets() >= 2` (it is Self-targeted — mob count is irrelevant), **Etch**
+was never wired at all, and the owned table uses real AB cooldowns plus the rage floor,
+in-flight pick replay and owned culling.
+
+Now that the lines are known, they are wired as **confirmations** for the timer-free
+rotation: 330 → `rwConfirm("collide")`, 331 → `rwConfirm("onslaught")`, 332 →
+`rwConfirm("bulwark")` — each restarting its cooldown from the moment it actually landed
+and releasing the in-flight hold. The class-agnostic timers still serve every other class.
+
+**Bulwark is highlighted** bold gold on its own line ("The runes on your armour flare
+brightly as you adopt a defensive stance.") — 25% damage negation for 15s is the one thing
+worth seeing land mid-fight. A line highlight rather than a box echo, so it doesn't bury
+the surrounding combat text.
+
+Files: `330_Battlerage_Small.lua`, `331_Battlerage_Large.lua`,
+`332_Battlerage_Special.lua`, `basher/002_Class_Bashing.lua` (comment), `CHANGELOG.md`,
+`CLAUDE.md`, memory. Suite **614/614**.
+
+---
+
 ## 2026-07-29 — Runewarden: owned battlerage + three boons (v4.7.163)
 
 Switched to Runewarden (Sword and Board). Auditing it turned up the **same dead-rotation
 bug** as Psion and Golden Dragon, plus a worse one:
 
-- `ataxiaBasher_standardBattlerage` gates on `battleRage_Timers`, and triggers 330/331
-  carry **no Runewarden fire-lines** — only 332 (the bulwark special) sets a timer. So
-  `not battleRage_Timers.small` was permanently true, **COLLIDE won every round, and
-  ONSLAUGHT could never fire at all**.
-- Worse: **BULWARK sat behind `validTargets() >= 2`**, so the class's headline mitigation
-  was skipped in every single-mob fight.
+- **BULWARK sat behind `validTargets() >= 2`**, so the class's headline mitigation was
+  skipped in every single-mob fight — it is Self-targeted, so mob count is irrelevant.
+- **ETCH was not wired at all** (the battlerage config only carries small/large/raze/
+  special), so its aeon/stun bonus damage was never taken.
+
+> **Corrected in v4.7.164:** this entry originally also claimed that triggers 330/331 carry
+> no Runewarden fire-lines and that ONSLAUGHT could never fire. **That was wrong** — both
+> lines exist (collide 330:47, onslaught 331:47) and their trigger bodies are
+> class-agnostic, so the shared timers were being set and the alternation worked. The
+> error came from grepping those files for the word "Runewarden", which only appears in
+> class-gated blocks. The rotation is still worth owning for the reasons above.
 
 **Runewarden now owns its battlerage** (`RW_BR`, timer-free, AB values): **Bulwark**
 (28r/45s, Self — first, and no target gate) → **Etch** (25r/23s, gated on the denizen
