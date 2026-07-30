@@ -160,6 +160,20 @@ describe("ataxiaBasher_rwBattlerage -- the owned rotation", function()
     expect(ataxiaTemp.rwBrAt.onslaught).toBe(nil)
   end)
 
+  it("ETCH's own fire line releases the replay -- it had none, and cost two cycles", function()
+    -- Live 2026-07-30: etch fired, then the 3s replay re-queued it twice and the
+    -- server rejected both ("You must wait a short time before you can use a
+    -- battlerage ability again."). Trigger 375 now confirms it from
+    -- "You trace the outline of a rune in the air with <weapon>."
+    reset(); ataxia.vitals.rage = 100; denizenAffs.stun = true
+    ataxiaTemp.rwBrAt = { bulwark = clock }
+    expect(has(ataxiaBasher_rwBattlerage(";"), "etch rune at 7")).toBeTrue()
+    clock = clock + 1
+    ataxiaBasher_rwConfirm("etch")
+    expect(ataxiaTemp.rwBrPending).toBe(nil)
+    expect(ataxiaTemp.rwBrAt.etch).toBe(clock)
+  end)
+
   it("fire-line confirmation restamps bulwark from the LANDED moment", function()
     reset(); ataxia.vitals.rage = 100
     expect(has(ataxiaBasher_rwBattlerage(";"), "bulwark")).toBeTrue()

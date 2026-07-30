@@ -235,6 +235,28 @@ spec_branches:
 battlerage:
   raze: "ataxiaBasher.battlerage.Runewarden.raze (used when shielded + rageraze + rage >= 17)"
   # There is no 'slash'/'rend' battlerage — that was fictional.
+  # PvE rotation is OWNED (RW_BR, basher/002) — timer-free, real AB cooldowns:
+  owned_rotation:
+    bulwark:   { rage: 28, cd: 45, target: self, note: "25% damage negation, 15s -- NOT mob-count gated" }
+    etch:      { rage: 25, cd: 23, needs: "aeon or stun on the denizen (it consumes one)" }
+    onslaught: { rage: 36, cd: 23 }
+    collide:   { rage: 14, cd: 16 }
+  # Fire lines (all confirm the pick and restamp the cooldown from the LANDED moment):
+  fire_lines:
+    collide:   "330:47 -- You charge at <t>, slamming into him and throwing him back."
+    onslaught: "331:47 -- You unleash a ferocious onslaught on <t>..."
+    bulwark:   "332 -- The runes on your armour flare brightly as you adopt a defensive stance."
+    etch:      |
+      trigger 375 (captured live 2026-07-30) -- "You trace the outline of a rune in the
+      air with <weapon>. The edges catch fire as it hurtles towards <target>, clipping
+      him slightly as it dissipates." Etch was the ONE ability with no fire line, so its
+      in-flight replay had nothing to release it: after the queued etch fired, the next
+      two rebuilds re-queued it and the server rejected both ("You must wait a short time
+      before you can use a battlerage ability again"). Two wasted cycles, live.
+    bulwark_end: "The runes on your armour cease to glare as your bulwark ends."
+  # Legend deck: XYLTHUS plants a battlerage-style STUN, which is what Etch cashes in.
+  # The Mnemosyne card layer (basher/010) draws it only when 25 rage is affordable AND
+  # Etch is off cooldown, and records the stun only once the draw is CONFIRMED.
 
 # Falcon rake (ataxiaBasher)
 # Free pet attack prepended to the bash when off cooldown (mirrors Infernal hyena maul).

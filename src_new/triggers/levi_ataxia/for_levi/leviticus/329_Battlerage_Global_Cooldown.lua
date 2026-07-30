@@ -42,3 +42,14 @@ patterns:
 -- (e.g. a shielded shin-shatter from the class bash) that the rotation didn't arm itself.
 ataxiaTemp = ataxiaTemp or {}
 ataxiaTemp.brGlobalReadyAt = getEpoch() + 1
+
+-- A REJECTED battlerage did not land, so replaying the held pick is exactly wrong:
+-- the rebuild loop would re-queue it and get rejected again, burning cycle after
+-- cycle (live log 2026-07-30 -- two back-to-back rejects while the Runewarden etch
+-- pick sat in its 3s replay window). Drop the in-flight hold on every owned rotation
+-- and let the next round re-decide, now gated by the timestamp above. The send-side
+-- cooldown stamp deliberately stays: it self-heals on its own timer, and clearing it
+-- here would let a rejected ability be retried instantly forever.
+for _, k in ipairs({"rwBrPending", "dwBrPending", "psionBrPending", "gdragonBrPending"}) do
+    ataxiaTemp[k] = nil
+end

@@ -2,6 +2,63 @@
 
 ---
 
+## 2026-07-30 — Card → confirmed → battlerage, and two live bugs (v4.7.166)
+
+Live log of v4.7.165 in the tower. Three faults, all visible in one 90-second stretch.
+
+**1. The ordering was wrong (user-reported).** The draw and the battlerage that cashes
+it in went out in the *same* queued line, with the affliction stamped optimistically at
+build time. When the draw failed, that stamp was a lie and Etch spent 25 rage on a
+phantom stun — the log shows exactly that, twice, while the rotation was rage-starved
+("Your Etch/Collide/Bulwark ability could be used again but you lack the necessary
+Rage"). The affliction is now recorded **on confirmation**, so the exploiting battlerage
+fires on the *following* round against a denizen that really carries it.
+
+**2. `ldm` charge counts are not trustworthy.** `ldm.initDeck()` seeds every card it has
+never seen at its **max**, so a deck that has never been `LDECK LIST`ed reports full
+charges for everything. The layer read "Xylthus: 3" and drew into a wall: *"A card
+depicting Xylthus, the Outcast currently lacks the power to invoke its stored
+potential."* New trigger `legenddeck_cards/008_LDeck_No_Charges.lua` treats that line as
+the ground truth — zeroes the count and calls `ataxiaBasher_mnemLdeckRejected`, which
+drops the in-flight replay (so it isn't re-sent) and stamps no affliction.
+
+Confirmation now also hooks the **generic charge line** ("A card depicting X may be used
+N more times...", trigger 001) as well as `ldm.onDraw`. The draw-success wording is not
+uniform — Seasone announces itself as "As you draw forth a card depicting Seasone, the
+Industrious..." — so the charge line is the reliable feed.
+
+The card is also skipped when its **payoff battlerage is on cooldown** (Etch 23s,
+`bmHeadstrikeReadyAt`, `magiFirefallReadyAt`). A charge spent on an affliction we cannot
+cash for another 20s is a charge thrown away, and these regenerate hourly.
+
+**3. Runewarden Etch had no fire-line trigger** (pre-existing, unrelated to the cards).
+It is the one ability in `RW_BR` whose in-flight pick replay had nothing to release it,
+so after the queued etch actually fired the next two rebuilds re-queued the *same* etch
+and the server rejected both: *"You must wait a short time before you can use a
+battlerage ability again."* — two wasted cycles back to back. The line is now captured:
+
+> You trace the outline of a rune in the air with <weapon>. The edges catch fire as it
+> hurtles towards <target>, clipping him slightly as it dissipates.
+
+Trigger `375_Runewarden_Etch_Landed.lua` → `ataxiaBasher_rwConfirm("etch")`. And
+`329_Battlerage_Global_Cooldown.lua` now also clears the in-flight hold on **every**
+owned rotation (rw/dw/psion/gdragon) — a *rejected* battlerage did not land, so
+replaying the held pick is exactly wrong. The send-side cooldown stamp deliberately
+stays; it self-heals on its own timer.
+
+Also fixed while writing this: the `ready` closures in `CARD_EXPLOIT` referenced `now`
+before its `local` declaration, so they would have captured a nil global (caught by the
+linter, never shipped in that state).
+
+Files: `basher/010_Mnemosyne_Legend_Deck.lua`, `basher/002_Class_Bashing.lua` (comment),
+`legenddeck_cards/001_Identify_Uses.lua`, `legenddeck_cards/008_LDeck_No_Charges.lua`
+(NEW), `329_Battlerage_Global_Cooldown.lua`, `375_Runewarden_Etch_Landed.lua` (NEW),
+`tests/test_mnem_ldeck.lua`, `tests/test_basher_runewarden.lua`, `CHANGELOG.md`,
+`CLAUDE.md`, `docs/legend-deck.md`, `.claude/classes/runewarden.md`, memory.
+Suite **640/640**.
+
+---
+
 ## 2026-07-30 — Legend deck cards in the Mnemosyne basher (v4.7.165)
 
 The basher's only legend-deck automation was **mob-name driven** —

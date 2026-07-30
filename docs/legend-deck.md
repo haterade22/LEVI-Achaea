@@ -70,8 +70,21 @@ Commands: `mnem cards` (status: charges, intervals, this class's payoff),
 `mnem cards matic <n>`. Config lives in `ataxiaBasher.mnemLdeck` and
 `ataxiaBasher.mnemLdeckBindings`.
 
-**Known gap:** Xylthus's bind line is not captured, so the draw records `stun` on the
-denizen optimistically (lazily expired in 4s by `ataxiaBasher_BR_AFFS` if it whiffed).
+**Ordering (v4.7.166): card -> CONFIRMED -> battlerage.** The affliction a card plants is
+recorded on the denizen only when the draw is confirmed, so the exploiting battlerage
+fires on the *following* round. Stamping it at send time was a lie whenever the draw
+failed -- and it did, live: Etch spent 25 rage on a phantom stun.
+
+**Charge counts from `ldm` are not trustworthy.** `ldm.initDeck()` seeds every unseen card
+at its max, so a deck that has never been `LDECK LIST`ed claims full charges for
+everything. The game's own rejection -- "A card depicting X currently lacks the power to
+invoke its stored potential." -- is the ground truth (trigger
+`legenddeck_cards/008_LDeck_No_Charges.lua`): it zeroes the count, drops the in-flight
+replay, and stamps nothing. Run `LDECK LIST` once to sync the real counts.
+
+**Known gap:** Xylthus's bind line is still uncaptured, so the stun is recorded from the
+draw confirmation rather than from the bind itself (lazily expired in 4s by
+`ataxiaBasher_BR_AFFS`).
 
 ### Card Tracking
 

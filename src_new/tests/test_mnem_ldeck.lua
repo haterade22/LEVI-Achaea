@@ -37,9 +37,17 @@ function ataxiaBasher_dsAlert() end
 local denizens = 0
 ataxia.mnemosyne._denizenCount = function() return denizens end
 
--- A minimal ldm stand-in: the layer only asks for charge counts.
-local charges = {}
-ldm = { getCharges = function(key) return charges[key] or 0 end }
+-- A minimal ldm stand-in. `deck` is the source of truth (the rejection path zeroes
+-- it, exactly as the real "lacks the power" trigger does).
+ldm = {
+  deck = {},
+  getCharges = function(key) return (ldm.deck[key] and ldm.deck[key].charges) or 0 end,
+  save = function() end,
+}
+local function setCharges(t)
+  ldm.deck = {}
+  for k, v in pairs(t) do ldm.deck[k] = { charges = v, max_charges = v } end
+end
 
 local _epoch = getEpoch
 local clock = 900000
@@ -64,7 +72,7 @@ local function reset()
   denizenAffs = {}
   setAffs = {}
   ataxiaTemp = {}
-  charges = { Maran = 2, Seasone = 3, Morimbuul = 3, Matic = 3, Covenant = 3, Xylthus = 3 }
+  setCharges({ Maran = 2, Seasone = 3, Morimbuul = 3, Matic = 3, Covenant = 3, Xylthus = 3 })
   clock = clock + 1000 -- well past every interval
 end
 
@@ -156,10 +164,29 @@ describe("COVENANT / XYLTHUS -- only with the rage to cash them in", function()
     expect(pick()).toBe("Xylthus")
   end)
 
-  it("stamps stun optimistically so Etch can cash it the SAME round", function()
+  it("card -> CONFIRMED -> battlerage: the stun lands on confirmation, not on send", function()
     reset(); ataxia.vitals.rage = 60
     expect(ataxiaBasher_mnemLdeck(";")).toBe("ldeck draw xylthus 7;")
-    expect(setAffs.stun).toBeTrue()
+    expect(setAffs.stun).toBe(nil)   -- Etch must NOT cash a phantom this round
+    ataxiaBasher_mnemLdeckConfirm("Xylthus")
+    expect(setAffs.stun).toBeTrue()  -- the draw landed: now it is real
+  end)
+
+  it("a REJECTED draw stamps nothing, zeroes the charges and drops the replay", function()
+    reset(); ataxia.vitals.rage = 60
+    ataxiaBasher_mnemLdeck(";")
+    ataxiaBasher_mnemLdeckRejected("Xylthus")
+    expect(setAffs.stun).toBe(nil)
+    expect(ataxiaTemp.mnemLdeckPending).toBe(nil) -- no re-send into the same wall
+    expect(ataxiaBasher_mnemLdeck(";")).toBe("")  -- charge gate now holds
+  end)
+
+  it("skips the card while its payoff battlerage is still on cooldown", function()
+    reset(); ataxia.vitals.rage = 60
+    ataxiaTemp.rwBrAt = { etch = clock }        -- Etch just fired, 23s to go
+    expect(pick()).toBe(nil)
+    ataxiaTemp.rwBrAt = { etch = clock - 25 }
+    expect(pick()).toBe("Xylthus")
   end)
 
   it("COVENANT is drawn by a class that can spend recklessness, and not otherwise", function()
@@ -179,9 +206,9 @@ end)
 
 describe("economics -- charges, intervals, one card per round", function()
   it("never draws a card with no charges left", function()
-    reset(); ataxia.vitals.hpp = 15; charges.Maran = 0
+    reset(); ataxia.vitals.hpp = 15; ldm.deck.Maran.charges = 0
     expect(pick()).toBe("Seasone") -- falls through to the next applicable card
-    charges.Seasone = 0
+    ldm.deck.Seasone.charges = 0
     expect(pick()).toBe(nil)
   end)
 
@@ -211,7 +238,7 @@ describe("economics -- charges, intervals, one card per round", function()
   end)
 
   it("stops replaying once the window lapses, and stamps so it cannot loop", function()
-    reset(); ataxia.vitals.hpp = 15; charges.Seasone = 0
+    reset(); ataxia.vitals.hpp = 15; ldm.deck.Seasone.charges = 0
     expect(ataxiaBasher_mnemLdeck(";")).toBe("ldeck draw maran;")
     clock = clock + 5 -- past the 4s pending window, no confirmation ever came
     expect(ataxiaBasher_mnemLdeck(";")).toBe("")

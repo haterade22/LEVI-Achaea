@@ -72,15 +72,29 @@ ataxiaBasher.mnemLdeckBindings = ataxiaBasher.mnemLdeckBindings or {
   "webbed", "entangled", "transfixation", "constricted", "snared", "roped",
 }
 
--- Which battlerage attack cashes in a card-planted affliction, and what it costs.
--- Only classes whose rotation actually READS the affliction are listed -- drawing
--- Covenant as, say, Psion would plant recklessness nothing can spend.
+local function now()
+  return getEpoch and getEpoch() or 0
+end
+
+-- Which battlerage attack cashes in a card-planted affliction, what it costs, and
+-- whether it is off cooldown RIGHT NOW. Only classes whose rotation actually READS
+-- the affliction are listed -- drawing Covenant as, say, Psion would plant
+-- recklessness nothing can spend.
 --   recklessness -> Blademaster Headstrike (001:776) / Magi Firefall (001:913)
 --   stun         -> Runewarden Etch (002 RW_BR, needsAff {aeon, stun})
+-- `ready` matters as much as the rage: a charge spent on an affliction we cannot
+-- cash for another 20s is a charge thrown away, and these regenerate hourly.
 local CARD_EXPLOIT = {
-  Blademaster = { recklessness = 25 },
-  Magi        = { recklessness = 25 },
-  Runewarden  = { stun         = 25 },
+  Blademaster = { recklessness = { rage = 25, ready = function()
+    return now() >= (ataxiaTemp.bmHeadstrikeReadyAt or 0)
+  end } },
+  Magi = { recklessness = { rage = 25, ready = function()
+    return now() >= (ataxiaTemp.magiFirefallReadyAt or 0)
+  end } },
+  Runewarden = { stun = { rage = 25, ready = function()
+    local at = (ataxiaTemp.rwBrAt or {}).etch
+    return (not at) or (now() - at) >= 23 -- Etch cooldown (AB)
+  end } },
 }
 
 -- key      = ldm.deck key (proper case -- charges live under it)
@@ -93,15 +107,15 @@ local MNEM_CARDS = {
   { key = "Maran",     cmd = "ldeck draw maran",              gap = 65  },
   { key = "Seasone",   cmd = "ldeck draw seasone for elixir", gap = 300 },
   { key = "Matic",     cmd = "ldeck draw matic",              gap = 45, perRoom = true },
+  -- `stampAff` records the affliction ON CONFIRMATION (see the confirm handler).
+  -- Covenant has none: it lands charm OR recklessness 50/50 and BOTH game lines are
+  -- already captured in BR_AFFS, so the real trigger records the truth. Xylthus's
+  -- bind line is not captured yet, hence the stamp. Live capture wanted.
   { key = "Covenant",  cmd = "ldeck draw covenant <t>",       gap = 45, aff = "recklessness" },
-  { key = "Xylthus",   cmd = "ldeck draw xylthus <t>",        gap = 45, aff = "stun" },
+  { key = "Xylthus",   cmd = "ldeck draw xylthus <t>",        gap = 45, aff = "stun", stampAff = "stun" },
 }
 
 local PENDING_WINDOW = 4 -- seconds a queued-but-unconfirmed draw is replayed
-
-local function now()
-  return getEpoch and getEpoch() or 0
-end
 
 local function charges(key)
   if ldm and ldm.getCharges then return ldm.getCharges(key) end
@@ -186,11 +200,12 @@ function ataxiaBasher_mnemLdeckPick(t, stamps)
       -- "Enough battlerage to do a battlerage attack that benefits from this."
       -- Also needs a live denizen target, and is pointless if the mob already
       -- carries the affliction (or, for Xylthus, cannot be bound at all).
-      local cost = exploit and exploit[card.aff]
-      want = cost ~= nil
+      local ex = exploit and exploit[card.aff]
+      want = ex ~= nil
         and type(target) == "number"
         and ataxiaBasher_rageAfford ~= nil
-        and ataxiaBasher_rageAfford(rage, cost)
+        and ataxiaBasher_rageAfford(rage, ex.rage)
+        and (not ex.ready or ex.ready() == true)
         and not (ataxiaBasher_dsHasAff and ataxiaBasher_dsHasAff(target, card.aff))
       if want and card.key == "Xylthus" and targetIsBoss() then want = false end
     end
@@ -230,18 +245,14 @@ function ataxiaBasher_mnemLdeck(sp)
   local key, cmd, card = ataxiaBasher_mnemLdeckPick(t)
   if not key then return "" end
 
-  ataxiaTemp.mnemLdeckPending = { key = key, cmd = cmd, at = t }
+  ataxiaTemp.mnemLdeckPending = {
+    key = key, cmd = cmd, at = t,
+    stampAff = card and card.stampAff,
+    target = (type(target) == "number") and target or nil,
+  }
   if card and card.perRoom then
     local room = (gmcp and gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num) or "unknown"
     ataxiaTemp.mnemLdeckRoom[key] = room
-  end
-
-  -- Xylthus plants a battlerage-style STUN, but its bind line is not captured
-  -- yet, so the denizen-state layer would never see it and Etch (which gates on
-  -- stun) would not cash it in on the very round we paid a charge for. Record it
-  -- optimistically -- BR_AFFS lazily expires it in 4s if the bind whiffed.
-  if key == "Xylthus" and ataxiaBasher_dsSetAff and type(target) == "number" then
-    ataxiaBasher_dsSetAff(target, "stun")
   end
 
   if ataxiaBasher_dsAlert then
@@ -263,15 +274,52 @@ function ataxiaBasher_mnemLdeckFree()
   return p.cmd
 end
 
--- Confirmation from ldm.onDraw (fed by the "You draw forth the power of X" line).
--- Stamps the interval from the moment the draw LANDED, and releases the pending
--- replay. Safe to call for cards this layer never asked for.
+-- CONFIRMATION. Fed by both draw-success lines: `ldm.onDraw` ("You draw forth the
+-- power of X") and the generic charge line ("A card depicting X may be used N more
+-- times..."), because the wording is not uniform across cards. Stamps the interval
+-- from the moment the draw LANDED and releases the pending replay. Safe to call for
+-- cards this layer never asked for -- a HAND-drawn card should hold it off too.
+--
+-- This is also where a card's affliction is recorded on the denizen: **card ->
+-- CONFIRMED -> battlerage**. Stamping it at build time (the first cut of v4.7.165)
+-- was a lie whenever the draw failed, and it did fail -- a stale `ldm` charge count
+-- sent a Xylthus the game rejected ("currently lacks the power to invoke its stored
+-- potential") while Etch spent 25 rage on the phantom stun in the very same queued
+-- line. Recording it here means the exploiting battlerage fires on the FOLLOWING
+-- round, against a denizen that really carries the affliction.
 function ataxiaBasher_mnemLdeckConfirm(key)
   if type(key) ~= "string" then return end
   ataxiaTemp.mnemLdeckAt = ataxiaTemp.mnemLdeckAt or {}
   local p = ataxiaTemp.mnemLdeckPending
-  if p and p.key == key then ataxiaTemp.mnemLdeckPending = nil end
+  if p and p.key == key then
+    if p.stampAff and p.target and ataxiaBasher_dsSetAff then
+      ataxiaBasher_dsSetAff(p.target, p.stampAff)
+    end
+    ataxiaTemp.mnemLdeckPending = nil
+  end
   ataxiaTemp.mnemLdeckAt[key] = now()
+end
+
+-- REJECTION. "A card depicting X ... currently lacks the power to invoke its stored
+-- potential." -- the game's own ground truth about charges, and the ONLY reliable
+-- one: `ldm.initDeck` seeds every unseen card at its MAX, so a deck that has never
+-- been LDECK LISTed claims full charges for everything and this layer will happily
+-- draw into a wall (live 2026-07-30). Zero the count so the charge gate holds, drop
+-- the pending replay so it isn't re-sent, and never stamp an affliction: nothing
+-- landed.
+function ataxiaBasher_mnemLdeckRejected(key)
+  if type(key) ~= "string" then return end
+  if ldm and ldm.deck and ldm.deck[key] then
+    ldm.deck[key].charges = 0
+    if ldm.save then pcall(ldm.save) end
+  end
+  local p = ataxiaTemp.mnemLdeckPending
+  if p and p.key == key then ataxiaTemp.mnemLdeckPending = nil end
+  ataxiaTemp.mnemLdeckAt = ataxiaTemp.mnemLdeckAt or {}
+  ataxiaTemp.mnemLdeckAt[key] = now()
+  if ataxiaBasher_dsAlert then
+    ataxiaBasher_dsAlert(key .. " has no charges -- held until the deck recharges", "indian_red")
+  end
 end
 
 -- Ripple / run boundaries: forget the per-room and in-flight state so a new
@@ -296,7 +344,8 @@ function ataxiaBasher_mnemLdeckStatus()
     local note = ""
     if card.aff then
       note = ex and ex[card.aff]
-        and (" -- " .. card.aff .. ", " .. ex[card.aff] .. " rage")
+        and (" -- " .. card.aff .. ", " .. ex[card.aff].rage .. " rage"
+             .. ((not ex[card.aff].ready or ex[card.aff].ready()) and "" or " <grey>(payoff on cooldown)<reset>"))
         or (" -- <grey>no " .. card.aff .. " payoff as " .. tostring(class) .. "<reset>")
     end
     out("  <white>" .. card.key .. "<reset>: <cyan>" .. charges(card.key)
