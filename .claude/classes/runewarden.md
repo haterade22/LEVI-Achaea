@@ -225,13 +225,15 @@ raze_path: "rebounding/shield → falcon track;falcon slay;fracture <target>"
 ## Bashing (PvE)
 ```yaml
 # ataxiaBasher_runewardenBashing() is spec-branched on ataxia.vitals.knight
-# (basher/002_Class_Bashing.lua:658-693)
+# (basher/002_Class_Bashing.lua:1521-1559)
 attack_skill: Weaponmastery
 spec_branches:
-  Dual Cutting: { raze: "rsl <target>",                         bash: "dsl <target>" }
+  Dual Cutting: { raze: "razeslash <target>",                    bash: "dsl <target>" }
   Two Handed:   { raze: "battlefury focus speed;carve <target>", bash: "battlefury focus speed;slaughter <target>" }
   Dual Blunt:   { raze: "fracture <target>",                     bash: "doublewhirl <target>" }
   else (SnB):   { raze: "combination <target> raze smash",       bash: "combination <target> slice smash" }
+  # `razeslash` is spelled out (v4.7.151, 002:1535) -- `rsl` is a personal server-side
+  # alias, not a game command. Corrected across every knight DWC branch in the basher.
 battlerage:
   raze: "ataxiaBasher.battlerage.Runewarden.raze (used when shielded + rageraze + rage >= 17)"
   # There is no 'slash'/'rend' battlerage — that was fictional.
@@ -241,22 +243,36 @@ battlerage:
     etch:      { rage: 25, cd: 23, needs: "aeon or stun on the denizen (it consumes one)" }
     onslaught: { rage: 36, cd: 23 }
     collide:   { rage: 14, cd: 16 }
-  # Fire lines (all confirm the pick and restamp the cooldown from the LANDED moment):
+  # Fire lines -- each calls ataxiaBasher_rwConfirm(key) (002:1467-1473), which restamps
+  # ataxiaTemp.rwBrAt[key] from the LANDED moment and releases the in-flight replay:
   fire_lines:
     collide:   "330:47 -- You charge at <t>, slamming into him and throwing him back."
     onslaught: "331:47 -- You unleash a ferocious onslaught on <t>..."
-    bulwark:   "332 -- The runes on your armour flare brightly as you adopt a defensive stance."
+    bulwark:   |
+      332:37 -- "The runes on your armour flare brightly as you adopt a defensive stance."
+      The Runewarden branch (332:99-113) calls rwConfirm("bulwark") and bolds the line in
+      gold -- 25% negation for 15s is the thing most worth SEEING land mid-bash.
     etch:      |
-      trigger 375 (captured live 2026-07-30) -- "You trace the outline of a rune in the
-      air with <weapon>. The edges catch fire as it hurtles towards <target>, clipping
-      him slightly as it dissipates." Etch was the ONE ability with no fire line, so its
-      in-flight replay had nothing to release it: after the queued etch fired, the next
-      two rebuilds re-queued it and the server rejected both ("You must wait a short time
-      before you can use a battlerage ability again"). Two wasted cycles, live.
-    bulwark_end: "The runes on your armour cease to glare as your bulwark ends."
-  # Legend deck: XYLTHUS plants a battlerage-style STUN, which is what Etch cashes in.
-  # The Mnemosyne card layer (basher/010) draws it only when 25 rage is affordable AND
-  # Etch is off cooldown, and records the stun only once the draw is CONFIRMED.
+      375_Runewarden_Etch_Landed.lua (captured live 2026-07-30) -- "You trace the outline
+      of a rune in the air with <weapon>. The edges catch fire as it hurtles towards
+      <target>, clipping him slightly as it dissipates." Matched as a SUBSTRING on the
+      opening clause (375:34, type 3), because the weapon name and the target both vary.
+      Etch was the ONE ability in RW_BR with no fire line, so
+      its in-flight replay had nothing to release it: after the queued etch fired, the
+      next two rebuilds re-queued the SAME etch and the server rejected both ("You must
+      wait a short time before you can use a battlerage ability again"). Two wasted
+      cycles back to back, live.
+    bulwark_end: |
+      "The runes on your armour cease to glare as your bulwark ends." -- captured from the
+      log but NOT handled anywhere (no trigger matches it as of v4.7.169). It marks the end
+      of the 15s DURATION, not the 45s cooldown, so nothing in the rotation needs it today;
+      it is the line to wire if we ever want true bulwark uptime measurement.
+  # Legend deck: XYLTHUS plants a battlerage-style STUN, which is what Etch cashes in --
+  # Etch's needsAff is {aeon, stun} (002:1460) and stun carries dur = 4s in
+  # ataxiaBasher_BR_AFFS (basher/008:60-62). The Mnemosyne card layer (basher/010) draws it
+  # only when 25 rage is affordable AND Etch is off cooldown (010:97-99, CARD_EXPLOIT), and
+  # records the stun only once the draw is CONFIRMED -- an optimistic stamp is what let Etch
+  # spend 25 rage on a phantom stun, twice, in the v4.7.165 live log.
 
 # Falcon rake (ataxiaBasher)
 # Free pet attack prepended to the bash when off cooldown (mirrors Infernal hyena maul).
@@ -265,6 +281,137 @@ falcon_rake:
   cooldown: "30s (ataxiaBasher.falconRakeCooldownSec)"
   behavior: "Prepended to the spec bash string when ataxiaBasher.falconRakeReady is true"
   tracking: "basher/005_Falcon_Cooldowns.lua (triggers 370/371, timer fallback)"
+```
+
+### Battlerage READY lines — the cooldown feed we were discarding (v4.7.167)
+
+The game names the exact ability coming off cooldown, and it does so in two wordings:
+
+> You can use Collide again.
+> Your Collide ability could be used again but you lack the necessary Rage.
+
+The second is the *same event* seen through an empty rage bar — the cooldown expired, we
+simply cannot pay for it yet. Both mean READY NOW. Trigger `328_Battlerage_Ready.lua:34-37`
+captures the verb from either form and hands it to `ataxiaBasher_brReady`
+(`basher/011_Battlerage_Ready_Lines.lua:91-116`), which lower-cases it, looks it up in
+`BR_READY_MAP` (`011:60-81`) and clears the owning rotation's send-side stamp — for
+Runewarden that is `ataxiaTemp.rwBrAt`, keyed `bulwark` / `etch` / `onslaught` / `collide`
+(`011:62-65`). It also drops the in-flight replay if the pending pick is that same verb
+(`011:110-113`): an ability the game just declared ready is by definition not still in flight,
+so replaying it would re-send a pick whose cooldown was already reset.
+
+Why this matters more than it sounds: until v4.7.167 `RW_BR` *guessed*, stamping an epoch at
+send time and comparing against a hardcoded `cd` (`002:1501`). That guess is wrong in both
+directions — too slow when a boon or gear shortens the real cooldown (the ability idles after
+it was actually available), and too fast when a stamped pick never executed (queue cleared,
+round refused for broken arms, target died), leaving the rotation believing an ability is
+spent that never fired. The server settles it for free. The handler is class-agnostic and an
+unknown verb is simply ignored, so it costs nothing for classes without an owned rotation.
+
+**Rage starvation is the live context.** The captured lines are Collide, Bulwark and Etch
+(plus Cullingblade, which is not an RW_BR slot) — Onslaught is not among them (`011:42-45`) —
+and the ones quoted in the v4.7.166 log are the second, rage-starved form. Which figures:
+28 (bulwark) + 36 (onslaught) + 25 (etch) + 14 (collide) is 103 rage for one pass of the
+rotation, so it spends long stretches with everything off cooldown and nothing affordable.
+Roughly ten free cooldown facts in three minutes, every one of them previously discarded.
+This is also why the legend-deck layer's `ataxiaBasher_rageAfford` floor matters: a card drawn
+for a payoff we cannot pay for is a wasted hourly charge.
+
+Numbered 328 so it sits immediately before 329 (`Battlerage_Global_Cooldown`, the "You must
+wait a short time..." rejection) — the same signal inverted. Together they bracket the true
+cooldown window from the server instead of from our client-side arithmetic.
+
+### The falcon turning on us (v4.7.167)
+
+The Runewarden twin of the daemonic hyena flip (Infernal, trigger 372). Trigger
+`376_Falcon_Turned_On_Us.lua` matches **both** of the falcon's attack lines in their
+second-person form:
+
+```
+^A razor-beaked falcon dives at you, raking your face with its talons\.$
+^A razor-beaked falcon rips out a chunk of your flesh with its beak\.$
+```
+
+Against a real foe those read "...dives at a revolting ghoul, raking **his** face..." and
+"...rips out a chunk of **a wraith's** flesh...", so the anchored second-person patterns
+cannot fire on a normal rake (`376:34-37`).
+
+The response is `order falcon passive`, sent directly with a 10s debounce (`376:59-67`). It is
+**free** — no balance, no equilibrium — so it can go out on any round, including a round we
+are attack-gated on. The debounce is the hyena's: a flipped pet keeps clawing every few
+seconds and one order is enough, but re-engagement re-issues rather than giving up.
+
+Note the *cause* differs from the hyena's. `falcon` has been on the seeded
+`ataxiaBasher.ownDenizens` defaults from the start (`002_Check_For_Any_Missing_Variables:146`
+— `{"falcon", "baalzadeen", "ashbeast", "hyena"}`), so the basher never targeted it; something
+else flipped it (an AoE clipping it, or a tower effect). The fix is the same either way, which
+is why the handler does not try to diagnose. See `infernal.md` for the flip side of that
+substring match — the `hyena` keyword shielding a real denizen, and the `notOwnDenizens`
+exemption list added in v4.7.169.
+
+### Sword and Board refusal lines (v4.7.167)
+
+SnB is the spec all the live Mnemosyne work was done on, and its `combination` has two hard
+prerequisites the game enforces with flat refusals. Both were previously unhandled or handled
+destructively — and a refusal costs a whole round, because the basher just re-queues the same
+command next prompt.
+
+```yaml
+disarmed:
+  line:    "You must be wielding both a sword and a shield to execute such an assault."
+  trigger: "377_Sword_And_Shield_Lost.lua"
+  fix:     "wield <sword>;wield shield;grip   (377:60-68, 5s debounce)"
+  why: |
+    THE DANGEROUS ONE: nothing in the KNIGHT bashing path re-wields -- basher/002 re-wields
+    only for Bard (:332,:349, the lyre swap) and Jester (:840), and the `wield ...;grip`
+    recovery prefix lives in the PvP aliases (2h/001_Hew, 146_Devastate, dwc_runie/006:20),
+    never in the RW bash. So once something knocks a weapon loose EVERY
+    subsequent round is refused and the failure persists FOREVER -- unlike the broken-arms
+    refusal, which at least heals itself as the limb does. GRIP is re-asserted in the
+    same breath because it is the defence that resists the disarm in the first place;
+    re-wielding without re-gripping just queues up the next disarm. WIELD costs no balance,
+    so the recovery rides any round.
+    Sent DIRECTLY, not queued -- the basher rebuilds with `queue addclearfull` every prompt,
+    which would wipe a queued recovery before it ran (the same reasoning as the pet passive
+    orders, triggers 372/376). The sword uses the configured `longsword` slot via
+    ataxia.getWeapon, which falls back to the literal "longsword" (022_User_Config:75,81);
+    plain "shield" is the idiom already used at login (login/001:138,180).
+
+both_arms_broken:
+  line:    "You cannot do that because both of your arms must be whole and unbound."
+  trigger: "344_Broken_Arms.lua"
+  fix:     "roll back the in-flight replay on every owned rotation (344:61-64)"
+  why: |
+    SnB combination needs both arms whole and unbound, which makes THE ARMS the limbs that
+    gate the entire offence -- and the iron malagma in the tower has TWO arm attacks (the
+    pick to the arm, the vice-like bone-snap) against ONE head attack, so a Mnemosyne sweep
+    pressures exactly the limbs that switch us off. That is why its parry prediction is
+    parked on an arm: self_limb_tracking/005_Denizen_Parry_Patterns.lua:53-66, `fixed` and
+    not `cycle` because neither arm line names a SIDE, so an unsynchronised cycle would
+    guard the wrong arm half the time. Covering one arm halves the rate at which BOTH break,
+    which is the only state that matters here.
+    The line is authoritative: "the round we just queued did NOT execute". The rotations stamp
+    their cooldown at SEND time and hold the pick for replay, so a refused round would
+    otherwise burn a client-side cooldown on an ability that never fired AND keep replaying
+    a command the game will refuse again. Same treatment 329 gives the "must wait" rejection.
+    The battlerage is a SEPARATE command in the same queued chain and is not necessarily
+    lost -- collide/onslaught need no arms. Only the weapon swing dies.
+    PRIOR BEHAVIOUR, now deleted: this trigger fired an unthrottled `diag`. Nothing in the
+    package parses our own DIAGNOSE output, so the sole effect was six lines of console spam
+    at the worst possible moment -- three times in 0.8s in the live log.
+
+both_legs_hindered:
+  line:    "Both of your legs must be free and unhindered to do that."
+  trigger: "345_Broken_Legs_Block.lua"
+  fix:     "same rotation rollback, plus M._disarmMove() (345:60-71)"
+  why: |
+    Also unhandled before v4.7.167. Its expensive victim is not a swing but LEAP: the
+    Mnemosyne swarm module moves with `stand;leap <dir>` (mnemosyne/009_Swarm_Tactics.lua:236
+    low-HP retreat, :258/:266 the wall-escape decorator, :385 the re-entry), and a refusal was
+    SILENT to that machinery -- the move sat "in flight" until the tactical arm's timeout
+    expired, stalling the low-HP escape ladder at the moment it was holding us alive.
+    One broken leg does not trip this; Achaea lets you stand and walk on one. The refusal
+    means BOTH -- which is also exactly when the swarm most needs to move.
 ```
 
 ## Fighting Against This Class

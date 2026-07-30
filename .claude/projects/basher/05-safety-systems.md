@@ -143,9 +143,43 @@ your pet stands there. Matches are excluded from:
 - target selection (`search_targets()` and `shieldedTarget()` in `genrunning/002_search_targets.lua`)
 - the `bash add` manual candidate list
 
-Seeded with `{"falcon", "baalzadeen"}`. Managed via `bash mine` (see configuration
-doc); adding a keyword also purges already-learned matches from every target list via
+Seeded with `{"falcon", "baalzadeen", "ashbeast", "hyena"}`
+(`002_Check_For_Any_Missing_Variables.lua:146`; `ashbeast`/`hyena` arrive by backfill so
+existing saves get them too). Managed via `bash mine` (see configuration doc); adding a
+keyword also purges already-learned matches from every target list via
 `ataxiaBasher_purgeOwnFromTargets()`.
+
+### The substring match cuts both ways — `notOwnDenizens` (v4.7.169)
+
+Substring matching is what lets one keyword cover a whole family of pet names without
+enumerating the variants, and it is also why a **real, killable denizen** whose name merely
+contains a pet's word is silently shielded. `a slope-backed hyena` is exactly that: a genuine
+mob, protected by the `hyena` keyword seeded for the Infernal pet, and
+`ataxiaBasher_purgeOwnFromTargets()` additionally **deleted it from the learned target list
+across every area**.
+
+Outside the tower that costs xp. Inside Mnemosyne it stalls the run, because the whole tower
+stack agrees with the mistake: the explorer filters own denizens through the same predicate
+in both of its room readings (`M._roomHasDenizens`, `mnemosyne/008_Explorer.lua:97`, and
+`M._denizenCount`, `008:108`), so a shielded mob is invisible to the sweep as well as
+unpickable by `search_targets`. The room reads *clear* while a live denizen stands in it: the
+explorer moves on, no boon screen arrives (a ripple ends only when its denizens are dead —
+`M.onBoonScreen`, `008:684`), and the grid-swept boss/straggler patrol burns its
+`MAX_PATROL_LOOPS` (3, `008:55`) hunting something it cannot see before giving up with
+"no boss / straggler found after patrolling; stopping" (`008:532`). The 30s stall watchdog
+(`008:52`) does not catch it either: it is re-armed on every progress event and the patrol
+keeps arriving in rooms, so it never trips — and when the patrol gives up, `_exploreStop`
+kills it outright (`008:643`). Nothing errors and nothing warns; the run simply ends on a
+ripple that was never cleared.
+
+`ataxiaBasher.notOwnDenizens` is the exemption list and it **wins**: it is scanned first in
+`ataxiaBasher_isOwnDenizen` (`basher/001_Bashing_Functions.lua:348-356`), so the pet
+("a daemonic hyena") stays protected while the mob is targetable again. Seeded by backfill
+rather than as a default (existing saves already carry the bare keyword), and managed with
+`bash notmine [add|rem] <name>`. Narrowing the seeded keyword to `daemonic hyena` was
+considered and rejected: it only helps fresh installs, and does nothing for the next
+collision. **When adding a pet keyword, prefer the most specific form that still covers the
+variants, and expect collisions — the exemption list is the general answer.**
 
 ## Attack Gate Afflictions
 
@@ -164,12 +198,29 @@ paralysis, aeon, peace, transfixation, webbed, impaled, constricted, deepsleep, 
 - Threshold: `ataxia.maranThreshold` (default 25% HP)
 - Requires: Maran card charge available
 - Command: `ldeck draw maran`
-- Cooldown: 65 seconds
+- Cooldown: 65 seconds (the barrier lasts 60)
+- **Stands down in Mnemosyne** (v4.7.165, `basher/001_Bashing_Functions.lua:588-606`): when
+  `inMnemosyne` and `mnemLdeck.enabled`, the tower card layer owns Maran along with five
+  other cards. This path `return`s and forfeits the whole attack cycle, the card layer rides
+  the assembled round instead — running both would double-draw a 2-charge card.
 
-### Blood Maiden Cloak
-- Trigger: 4+ targetable mobs or any boss (3+ after first activation)
-- Cooldown: 3 minutes (`ataxiaTemp.bloodshieldTimer`)
-- Bosses: configured in `ataxiaBasher.bloodMaidenBosses`
+### Blood Maiden Cloak (model corrected v4.7.167)
+- Trigger: 4+ mobs matching the area target list, **or** any mob in
+  `ataxiaBasher.bloodMaidenBosses` — and never while `prone`
+- Charge: `ataxiaTemp.bloodshieldReady`, one charge, set by `A cloak of the Blood Maiden
+  seems to grow hot against your skin.` (trigger `769_Blood_Maiden_Cloak.lua`, which also
+  gags the line while bashing) and **consumed by one `activate bloodshield`**
+- Guard: `ataxiaTemp.bloodshieldCooldown`, a 3-**second** anti-double-send flag, not a
+  cooldown on the cloak
+
+BLOODSHIELD blocks **the next attack**, once. The code used to read TALISMAN INFO's "failing
+to make a kill within 3 minutes will cause the blood reserves to deplete" as *"the cloak
+stays active for 3 minutes, so re-activation is free"*, and dropped the mob threshold from 4
+to 3 on that basis. Both halves were wrong — the 3 minutes is the depletion timer on the
+reserves, not an uptime — so a charge earned over five kills was spent and then re-spent
+every 3s against a cloak that had nothing left. One charge, one activation, spent only on a
+genuinely dangerous room. The prone exclusion is its own mechanic: under aggression aura the
+cloak refuses while prone, and has a 50% chance to eat the charge for nothing.
 
 ## Timing Summary
 

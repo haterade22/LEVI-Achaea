@@ -129,6 +129,140 @@ Many combat globals are created **only inside `levilogin()`** (`login/001_Login_
 
 ---
 
+## Game Lines vs Optimistic State (learned the hard way)
+
+The v4.7.165–169 legend-deck work and the live-log audit that followed it turned up the same
+family of fault over and over: client-side belief running ahead of what the game had actually
+said. Each entry below generalises a shipped fix; none of them is a style preference.
+
+### A resource counter that defaults to FULL is not evidence
+`ldm.initDeck` seeds every card it has never seen at its **max**, so a deck that has never
+been `LDECK LIST`ed reports full charges for everything. The Mnemosyne card layer read
+"Xylthus: 3" and drew into a wall, echoing "3 charge(s) left" on a card the game refused in
+the same breath. It stayed hidden because the feed that would have corrected the count was
+itself broken: `ldm.matchFullName` (`legend_deck/003_Legend_Deck_Functions.lua:579`) took
+`fullName:match("^(%S+)")`, so `"Xylthus, the Outcast"` yielded the token `"Xylthus,"` —
+with the comma — which matches no key, so `ldm.deck[card].charges` was never updated from
+the game at all. Cards whose key is the first bare word (Maran, Matic, Covenant) worked,
+which is exactly why nobody noticed.
+
+**Rule:** treat the game's refusal line as ground truth and an optimistic local counter as a
+hint. A counter whose unknown state is "full" must never be the sole gate on a spend — wire
+the refusal line first and let it zero the counter (`ataxiaBasher_mnemLdeckRejected`,
+`basher/010_Mnemosyne_Legend_Deck.lua:350`, off trigger
+`legenddeck_cards/008_LDeck_No_Charges.lua`). Corollary: a key-resolution helper that
+silently returns nil turns every downstream guard into a no-op, so unit-test it against the
+punctuated names, not the easy ones.
+
+### Stamp on the confirmation line — and a lapse is not a confirmation
+v4.7.165 recorded the affliction a card plants at *build* time, in the same queued line as
+the battlerage that cashes it in. When the draw failed the stamp was a lie and Etch spent 25
+rage on a phantom stun — twice in one 90-second log, while the rotation was rage-starved.
+The affliction is now recorded in `ataxiaBasher_mnemLdeckConfirm` (`basher/010:317`), fed by
+the game's own draw lines, so the exploiting battlerage fires on the *following* round
+against a denizen that really carries it.
+
+v4.7.166 then re-opened the same hole from the other end: the pending-window lapse path
+called Confirm, so an *unacknowledged* draw stamped the affliction anyway. A lapse means "we
+do not know", which is not "it landed" — `ataxiaBasher_mnemLdeckLapse` (`basher/010:335`)
+holds the card's interval and releases the replay, and stamps nothing.
+
+**Rule:** never let an optimistic state stamp authorise a resource spend in the same round.
+Confirmation, lapse and rejection are three different facts about the world and need three
+different functions; sharing one is how the fix re-introduces the bug.
+
+### Every owned timer-free rotation needs a fire line AND a refusal line
+Runewarden Etch was the one ability in `RW_BR` (`basher/002_Class_Bashing.lua:1458`) with no
+fire-line trigger, so its in-flight pick had nothing to release it: after the queued etch
+actually fired, the next two rebuilds re-queued the *same* etch and the server rejected both
+("You must wait a short time before you can use a battlerage ability again.") — two wasted
+cycles back to back. `375_Runewarden_Etch_Landed.lua` captures the fire text and calls
+`ataxiaBasher_rwConfirm("etch")`; the mirror is `329_Battlerage_Global_Cooldown.lua`, which
+now clears the in-flight hold on **every** owned rotation, because a *rejected* battlerage
+did not land and replaying the held pick is exactly wrong.
+
+Better still, the game names the ability coming off cooldown outright — `You can use Collide
+again.` and `Your Collide ability could be used again but you lack the necessary Rage.` (the
+same event seen through an empty rage bar). Every owned rotation instead *guessed*, with a
+send-side epoch stamp plus a hardcoded `cd`, which is wrong in both directions: too slow when
+a boon or gear shortens the real cooldown, too fast when a stamped pick never executed. Those
+lines are now consumed class-agnostically in `basher/011_Battlerage_Ready_Lines.lua`
+(trigger `328`), verb captured from the line, unknown verbs ignored.
+
+**Rule:** an ability holding an in-flight replay needs both a fire line to confirm it and a
+refusal line to cancel it. With neither it burns cycles invisibly. Where the server emits a
+ready or refusal line, prefer it to any client-side timer.
+
+### Refusal lines are state data, not noise
+Three were unhandled or handled destructively in a single log. `You cannot do that because
+both of your arms must be whole and unbound.` (`344_Broken_Arms.lua`) fired an *unthrottled*
+`diag` — and nothing in the package parses our own DIAGNOSE output, so the only effect was
+six lines of console spam at the worst possible moment, three times in 0.8s. What the line is
+actually worth is an authoritative "the queued round did not execute", so it now rolls back
+every owned rotation's in-flight replay. `Both of your legs must be free and unhindered to do
+that.` had no handler at all (`345_Broken_Legs_Block.lua`), and its expensive victim is not a
+lost swing but **`leap`**: the swarm escape ladder moves with `stand;leap <dir>`, so a silent
+refusal stalled the low-HP escape until the move timeout expired — the handler now rolls the
+replay back *and* calls `M._disarmMove()` so the explorer re-decides on the next tick. `You
+must be wielding both a sword and a shield to execute such an assault.` was the worst of the
+three, because nothing re-wielded and so every subsequent round was refused forever; it is the
+one where the rollback alone is not enough, and `377_Sword_And_Shield_Lost.lua` sends the
+repair (`wield <sword>;wield shield;grip`, 5s debounce).
+
+**Rule:** for each refusal line, ask two questions — what state does it prove, and who else
+was waiting on that command? The answer is usually a rollback plus a wake-up for some other
+machine, never a diagnostic dump.
+
+### A convenience-widening match needs an explicit deny list from day one
+`ataxiaBasher.ownDenizens` matches by case-insensitive substring, which is precisely what
+lets the single keyword `falcon` cover "a razor-beaked falcon" and every variant. The same
+widening silently shielded **"a slope-backed hyena"** — a real, killable denizen — behind the
+`hyena` keyword seeded for the Infernal pet, and `ataxiaBasher_purgeOwnFromTargets` deleted
+it from the learned target list across every area. `ataxiaBasher.notOwnDenizens` is the
+escape hatch, checked **first** and winning over the pet keywords
+(`basher/001_Bashing_Functions.lua:348`). Note how it was seeded: by **backfill**
+(`002_Check_For_Any_Missing_Variables.lua:172`), not a fresh-install default, because
+existing saves already carried the bare keyword and a default would have fixed nobody who
+actually hit the bug. Narrowing the seed to `daemonic hyena` was rejected for the same
+reason — it helps only new installs, and does nothing for the next collision.
+
+**Rule:** any convenience-widening match — substring, prefix, fuzzy, first-word — ships with
+an explicit deny list and a user command to extend it. The widening that serves the 95% is
+exactly what makes the 5% fail invisibly. And when the bad state is already persisted in
+users' saves, fix it with a backfill; a changed default reaches only new installs.
+
+### An optimistic flag needs a third input: "this can never happen"
+The Mnemosyne recovery hover keeps `S.flying` optimistically true until a flight line
+confirms — a deliberate guard, because stupidity can eat a queued `fly`. Then a denizen
+dragged us out of the air ("A tentacle shoots up from the ground, wraps itself around you,
+and drags you back to earth.") and the confirmation never arrived, so the hover re-sent `fly`
+every tick while the tentacle yanked us straight back down, holding us attack-**gated** at
+crash HP with the swarm still on us until `RECOVER_MAX` expired — strictly worse than never
+having flown. `S.onDraggedDown` (`mnemosyne/009_Swarm_Tactics.lua:807`, trigger
+`mnemosyne/050_Dragged_From_Sky.lua`) latches `S.grounded`, which `S._canFly` (`009:481`)
+honours alongside `mnemDeluge`, so both the escape ladder's outdoor branch and the fly-kite
+fall through to the grounded route.
+
+**Rule:** a flag cleared only by its confirmation line has two inputs (confirm, time-out) and
+needs three — the line that says the thing can *never* happen. Scope that third input to the
+right lifetime: `grounded` is per-ripple (`S.onRipple` clears it, `009:877`) because the
+denizen that dragged us lives on this ripple, and the next ripple is a different room set.
+
+### Prefer the game's own fire text to an affliction-name lookup
+`Your <limb> breaks with a loud crack.` had no handler anywhere — ~25 of them in 90 seconds
+of one live log. `ataxia_brokenLimbFound` (`self_limb_tracking/002_Track_The_Damage.lua:326`)
+only branches on the `damaged*`/`mangled*` affliction families, so a level-1 break never reset
+the accumulator: damage kept climbing past the real break, `ataxia_selfHitsToBreak` pinned at
+0, the threshold latched `critical` forever, and every one-shot reaction latch stayed set.
+Trigger `038_Limb_Broken_L1.lua` uses the game's own words, which name the limb **and** the
+side, and needs no GMCP key, no SSC affliction name and no telemetry.
+
+**Rule:** when the game names the thing directly, capture its fire text rather than inferring
+the state from an affliction-name lookup. It sidesteps the whole `crippled*` vs `broken*` vs
+`damaged*` naming question instead of picking a side in it.
+
+---
+
 ## Quality Gates (Hooks)
 
 Hooks in `.claude/hooks/` run automatically and block operations that fail validation:

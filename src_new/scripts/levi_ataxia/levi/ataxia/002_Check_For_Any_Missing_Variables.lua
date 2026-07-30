@@ -165,8 +165,10 @@ function ataxiaCheckForMissing()
 	-- real denizen sharing a word with a pet is silently shielded. "a slope-backed
 	-- hyena" (user report 2026-07-30) is a genuine, killable mob that the "hyena"
 	-- keyword protected from targeting AND purged from the learned target list. In the
-	-- Mnemosyne that is a hard stall: the explorer counts it and waits for the room to
-	-- clear while search_targets refuses to pick it. Entries here WIN over the pet
+	-- Mnemosyne the sweep then WALKS OUT of the room -- _roomHasDenizens filters own
+	-- denizens, so a room holding only the shadowed mob reads as clear -- leaving a live
+	-- aggressive denizen following us. (v4.7.169 called this a stall; corrected v4.7.170.)
+	-- Entries here WIN over the pet
 	-- keywords; manage with `bash notmine`. Backfilled (not just defaulted) because
 	-- existing saves already carry the bare "hyena" keyword.
 	ataxiaBasher.notOwnDenizens = ataxiaBasher.notOwnDenizens or {}

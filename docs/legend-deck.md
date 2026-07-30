@@ -46,9 +46,9 @@ This layer keys off state instead and rides the assembled attack round.
 | **Morimbuul** | while bound | Shrug off denizen ropes/bindings, 5 min | 300s |
 | **Maran** | hp <= `maranAt` (20%) | 5000hp barrier on the room, 60s | 65s |
 | **Seasone** | hp <= `seasoneAt` (35%) | `FOR ELIXIR`: +10% health elixir, 5 min | 300s |
-| **Matic** | >= `maticAt` (3) denizens | Next attack is a guaranteed high-end crit | 45s + once/room |
-| **Covenant** | rage for the payoff | Plants RECKLESSNESS | 45s |
-| **Xylthus** | rage for the payoff | Plants STUN (never on a boss) | 45s |
+| **Matic** | >= `maticAt` (3) denizens, mob above `conserveAt` | Next attack is a guaranteed high-end crit | 45s + once/room |
+| **Covenant** | payoff affordable AND off cooldown, mob above `conserveAt` | Plants RECKLESSNESS | 45s |
+| **Xylthus** | payoff affordable AND off cooldown, mob above `conserveAt` | Plants STUN (never on a boss) | 45s |
 
 "Enough battlerage to do a battlerage attack that benefits from this" is resolved per class
 against the rotations that actually read the affliction, via `ataxiaBasher_rageAfford` (so
@@ -64,6 +64,31 @@ Any other class draws neither card — planting an affliction nothing can spend 
 charge. **These cards hold 2-3 charges and regenerate one per HOUR**, which is why every
 gate is conservative: one card per round, the per-card interval above, a hard charge check,
 and a skip when the denizen already carries the affliction.
+
+Affording the payoff is only half of it: it must also be **off cooldown right now**. A
+charge spent on an affliction we cannot cash in for another 20s is a charge thrown away,
+so each row of the class table above carries a `ready()` predicate alongside its rage cost
+(`basher/010:90-101`) — Headstrike and
+Firefall against the timestamp cooldowns `ataxiaTemp.bmHeadstrikeReadyAt` /
+`magiFirefallReadyAt` (both armed with +23s at `basher/001:859` and `001:995`), Etch
+against `ataxiaTemp.rwBrAt.etch` plus its 23s AB cooldown. When this is what is holding a
+card back, `mnem cards` says so explicitly: `(payoff on cooldown)` (`basher/010:388`).
+
+**Offensive cards stand down on a dying mob (v4.7.167).** Matic, Covenant and Xylthus all
+skip when the target is at or below `ataxiaBasher.mnemLdeck.conserveAt` (default 25%) —
+`targetNearlyDead`, `basher/010:185-193`. This is the `rageConserveThreshold` idiom the
+battlerage rotations already use, and it applies *more* strongly here: rage refills in
+seconds, these charges refill once an hour, and a guaranteed crit on a mob at 5% is the
+purest waste in the layer. The defensive draws (Maran/Seasone/Morimbuul) are deliberately
+**not** gated on it — our own emergency does not care how healthy the mob is. There is no
+`mnem cards` subcommand for this one; set `ataxiaBasher.mnemLdeck.conserveAt` directly.
+
+The GMCP read inside that helper is **fully guarded**, unlike the equivalent reads in the
+rotations, and that is not defensive habit. `ataxiaBasher_mnemLdeck` is called under
+`pcall` from `assembleAttack` (`basher/001:679`), so an unguarded index into a
+not-yet-delivered `gmcp.IRE.Target.Info` would be swallowed there and would silently
+disable the **entire card layer** with nothing on the console to say why. A missing or
+zero reading is treated as "never block".
 
 Commands: `mnem cards` (status: charges, intervals, this class's payoff),
 `mnem cards on|off`, `mnem cards maran <hp%>`, `mnem cards seasone <hp%>`,
@@ -81,6 +106,42 @@ everything. The game's own rejection -- "A card depicting X currently lacks the 
 invoke its stored potential." -- is the ground truth (trigger
 `legenddeck_cards/008_LDeck_No_Charges.lua`): it zeroes the count, drops the in-flight
 replay, and stamps nothing. Run `LDECK LIST` once to sync the real counts.
+
+**The root cause, found by live-log audit (v4.7.167): `ldm.matchFullName` could not
+resolve a comma-suffixed card name.** It took `fullName:match("^(%S+)")`, so
+"Xylthus, the Outcast" yielded the token `Xylthus,` — *with the comma* — which matches no
+key in `ldm.db`. It returned nil for every such card, silently, and that killed both
+halves of the charge story at once:
+
+- `legenddeck_cards/001_Identify_Uses.lua:49` — the generic charge line "A card depicting
+  X may be used N more times..." — never resolved a key, so **`ldm.deck[card].charges` was
+  never updated from the game at all**. Since `initDeck` seeds every unseen card at its
+  MAX, the deck claimed full charges forever: that is where the "3 charge(s) left" echo on
+  a card the game then refused came from.
+- `008_LDeck_No_Charges.lua:53-54` early-returns on a nil key, so **the v4.7.166 fix that
+  was supposed to stop drawing into a wall never ran at all.** (`002_LDeck_Card_Out.lua:42`
+  was dead the same way.)
+
+Cards whose key *is* the first bare word — Maran, Matic, Covenant — resolved fine, which
+is why this survived so long. `ldm.matchFullName` (`legend_deck/003_Legend_Deck_Functions.lua:579-604`)
+now scans the name's tokens, strips punctuation from each and takes the earliest hit,
+which additionally resolves past a leading honorific ("Lord Nicator, The Chosen One" ->
+`Nicator`) that the first-word rule could never reach. Apostrophes are deliberately kept —
+several keys carry them. `LDECK LIST` parsing was never affected: `004_LDeck_List_Line.lua`
+matches `^(\S+)\s+(\d+)\s+(\d+)\s+(\d+)$` and so reads the bare key out of the first
+column rather than the flavour name, which is why a manual sync always worked while the
+live feed did not. Covered by
+`src_new/tests/test_legend_deck_match.lua`.
+
+**Lapse is not confirmation (v4.7.167).** The pending replay window is 4s
+(`basher/010:121`). When it runs out with no draw-success line, the layer calls
+`ataxiaBasher_mnemLdeckLapse` (`basher/010:335-341`), which holds the card's interval — so
+a silently-eaten draw cannot re-fire every round — releases the replay, and **stamps
+nothing on the denizen**. The v4.7.166 cut called `...Confirm` on that path, and Confirm
+stamps the affliction, so an *unacknowledged* draw still planted a phantom stun for Etch to
+buy at 25 rage: precisely the hole that release had been written to close. Three outcomes,
+three functions, and only one of them may touch denizen state — confirm (`:317`) stamps,
+lapse (`:335`) and rejected (`:350`) do not.
 
 **Known gap:** Xylthus's bind line is still uncaptured, so the stun is recorded from the
 draw confirmation rather than from the bind itself (lazily expired in 4s by

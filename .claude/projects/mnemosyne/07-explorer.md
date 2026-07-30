@@ -294,7 +294,8 @@ leapt the raw `command` string and `addclearfull`-wiped the explorer's queue.
   WALK THROUGH icewalls** — the wall paces the fight rather than barring it; with the boon
   it should actually impede (still to observe).
 - **Outdoors swarm-followed** (`swarm.kite`, default on): followers >= threshold in the
-  funnel → `fly`; the decorator turns every attack into `land;<attack>;fly` (ground contact
+  funnel, and `S._canFly()` (see *When flight is not an option* below) → `fly`; the
+  decorator turns every attack into `land;<attack>;fly` (ground contact
   only for the swing). Below threshold → `land` and finish grounded. If FLY needs balance the
   trailing fly is simply rejected that round — degrades to grounded fighting, never wedges.
   Flight is landed on every reset (boon screen / stop / death) so it can't leak into a wade.
@@ -309,9 +310,11 @@ leapt the raw `command` string and `addclearfull`-wiped the explorer's queue.
 - **Low-HP escape** (`swarm.escape`, default on, `escapeAt` 35%, land at `recoverAt` 95%
   AND affliction-free — broken limbs are afflictions, so restoration finishes airborne;
   kept defences blindness/deafness/curseward/insomnia never hold the hover):
-  HP-gated ONLY (a two-mob chip-down killed below the swarm threshold). Outdoors -> fly and
-  hover (state `recovering`, attacks hold-gated, 2s re-checks, 60s cap) -- flight works with
-  every limb broken, unlike `touch shield`; land + resume when healed. **LIVE-VALIDATED
+  HP-gated ONLY (a two-mob chip-down killed below the swarm threshold). Outdoors, and only
+  where hovering is actually viable (`S._canHover()` — see *When flight is not an option*
+  below) -> fly and hover (state `recovering`, attacks hold-gated, 2s re-checks, 60s cap) --
+  flight works with every limb broken, unlike `touch shield`; land + resume when healed.
+  **LIVE-VALIDATED
   end-to-end 2026-07-27** (Blazing mountainside: 19% -> fly -> hover-heal to 99% through the
   smoke -> land -> resume). **Landing settles, never decides** (v4.7.125): airborne gmcp
   Char.Items reflects the SKY (denizensHere empty), so the landing tick is CONSUMED and the
@@ -370,6 +373,54 @@ by trigger `022_Flight_Lines` ("The ring of shining metal carries you up into th
 worst of both worlds. Unknown fly sources just re-send harmlessly ("You are already
 flying."). Kiting flaps the flag freely; only the hover consumes it.
 
+**When flight is not an option (`S._canFly` / `S._canHover`)**: the escape ladder's outdoor
+branch and the fly-kite both go UP, so both need to know when up is a trap. `S._canFly()` is
+`not mnemDeluge and not S.grounded` — "we cannot get airborne at all"; `S._canHover()` is
+`_canFly()` plus `M.roomAblaze()` — "and even if we could, hanging there is no safer than the
+ground". Three things now feed them:
+
+- **Deluge** (affix, trigger 037, run-wide): all rooms are underwater, so FLY is simply
+  rejected — the ladder and the kite take their grounded branches.
+- **Dragged out of the air** (v4.7.168): *"A tentacle shoots up from the ground, wraps itself
+  around you, and drags you back to earth."* A DENIZEN can pull us down. This is the third way
+  flight fails, after Deluge and an eaten FLY, and the worst of the three because it was SILENT
+  to the state machine: the recovery hover keeps `S.flying` optimistically true until a flight
+  line confirms (the *Flight confirmation* guard above, which exists precisely because
+  stupidity eats queued commands) — and after a drag that confirmation never comes, so the
+  hover re-sent `fly` EVERY TICK while the tentacle yanked us straight back down, holding us
+  attack-GATED at crash HP with the swarm still on us until `RECOVER_MAX` (60s) expired.
+  Strictly worse than never having flown. `S.onDraggedDown()` (trigger `mnemosyne/050`,
+  `inMnemosyne`-gated) latches `S.grounded`, clears both flight flags to correct the state,
+  and — if a hover was already running — drops to `idle`, releases the attack hold and re-runs
+  `_beginEscape()`, which now falls through to the grounded retreat (`pulling`, or the
+  shield-in-place fallback with no route; a test that asserted it should land back in
+  `recovering` was the thing that was wrong). **Per-ripple, not per-run** (user call): the
+  denizen that dragged us lives on this ripple and will do it again, but the next ripple is a
+  different room set — `S.onRipple` clears `S.grounded`.
+- **Burning rooms** (v4.7.167): `The area is ablaze!` in the room text, then *"The roaring
+  inferno engulfs you as you fight to find a way out."* for ~800 every few seconds,
+  indefinitely — ~6% of max HP a tick on top of whatever the denizens are doing. `M.roomAblaze()`
+  (fed by trigger `mnemosyne/049` -> `M.onAblazeBurn`, in `004_Parsers.lua`) latches on the
+  **burn line, not the room description**: the description arrives mid-line ("The sky darkens
+  with the onset of night. The area is ablaze!"), and more importantly the burn line is the
+  thing that proves the fire is still hurting *us* — so a lazy `ABLAZE_STALE` (12s) expiry
+  clears it when we leave, with no "the fire goes out" line, which we have never captured. It
+  gates the **hover** only: flying up to heal is a fine plan in a normal room and a bad one
+  over a fire that follows you, since the hover then spends its whole budget out-healing the
+  floor and lands no better off. (Contrast the Blazing affix's ~511 asphyxiation per 5s, which
+  the hover was measured to out-heal — same mechanism, smaller number.) The **kite is
+  deliberately not gated**: it lands for every swing anyway, so it is not a way of avoiding the
+  ground, and grounding a kite mid-swarm is worse. The gate is on *going up* — an
+  already-airborne kite still converts to a hover in place (`_convertToHover`), the cheaper of
+  the two evils.
+
+**The general rule** the drag cost us, worth carrying forward: *an optimistic state flag
+cleared only by a CONFIRMATION line becomes a livelock the moment something makes that
+confirmation impossible.* `S.flying` was right to be optimistic (a queued fly can be eaten)
+and the re-send loop was right to keep trying — but between them they had no way to represent
+"this will never confirm". Such a flag needs a third input: the line that says the thing can
+never happen at all.
+
 **Tactical moves never condemn exits**: `M._tacticalArm(dir)` sets `explore.moving` +
 `explore.tacticalMove`; the three condemn paths (move-timeout give-up, ice-slip cap,
 `Room.WrongDir`) skip the `explore.failed` write when the flag is up — these are WALKED edges,
@@ -379,7 +430,8 @@ condemning them would poison the sweep — and notify `swarm.onMoveFailed()` ins
 **Resets** (`swarm.reset`): boon screen (every ripple ends there), `_exploreStop`
 (death/leave-tower/off), `basher disabled`, `sysLoadEvent` (plus load-time clears of
 `ataxiaTemp.swarmHold`/`swarmPullDir` — they'd otherwise survive a SYSUPDATE and silently gate
-the basher). `swarm.onRipple` (exploreOn/_exploreResume) wipes per-ripple pull budgets.
+the basher). `swarm.onRipple` (exploreOn/_exploreResume) wipes per-ripple pull budgets and the
+dragged-down `grounded` latch.
 
 **Recon — Bloodscent (parsed) + Sleuth (raw)**: the **Bloodscent** boon ("You sense out
 your prey upon entering a ripple.", flag `mnemBloodscent`) prints, unprompted per ripple

@@ -38,11 +38,15 @@ patterns:
 --[[
     THE MISSING MIDDLE OF THE SELF-LIMB TRIO (v4.7.167).
 
-    SLC already captures the two ends:
-      036_Limb_healed  "^Your (.*) feels stronger and healthier.$"       -> ataxia_clearLimbDamage
+    SLC nominally captured the two ends:
+      036_Limb_healed  "^Your (.*) feels stronger and healthier.$"        -> ataxia_clearLimbDamage
       037_mangled      "^Your (.*) is greatly damaged from the beating.$" -> SLC_broke
     but the LEVEL-1 break -- by far the most common of the three -- had no handler at
-    all. Verified by grepping four phrasings ("loud crack", "breaks with", "Your right
+    all. (And 037 was only nominally live: SLC_broke is defined solely in an INACTIVE
+    script, so it was a nil global that errored rather than tracking anything. Repointed
+    at the same V2 path as this trigger in v4.7.170, so the trio is now genuinely whole.)
+
+    Verified by grepping four phrasings ("loud crack", "breaks with", "Your right
     arm", ...): the only "loud crack" hit in the package is the TARGET's limb
     (general/022_Resonance_Afflictions).
 

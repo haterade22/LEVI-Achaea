@@ -7,7 +7,7 @@ Battlerage abilities are the **only** class-adjacent abilities in Achaea that ar
 - **Fades** after **15s** of not using or gaining rage (`The surge of terrible rage leaves you.`), so keep attacking.
 - **See it:** prompt `*R` (custom) / `R`; or `BR` / `SHOW RAGE`. LEVI reads it as `ataxia.vitals.rage`.
 - **Global cooldown:** there is a **~1-second global cooldown** on ALL battlerage abilities (`You must wait a short time before you can use a battlerage ability again.`). Queuing a second BR inside that window wastes it — LEVI tracks this (`ataxiaTemp.brGlobalReadyAt`, trigger `329`) and skips a BR while it's up.
-- Each ability also has its **own** cooldown + rage cost (`AB ATTAINMENT <ability>`).
+- Each ability also has its **own** cooldown + rage cost (`AB ATTAINMENT <ability>`). The game announces that cooldown expiring **by name**, which is authoritative and beats any client-side arithmetic — see *Cooldown truth — the game's own ready lines* below.
 
 ## Ability types
 1. **Damage** — straight / DoT / burst.
@@ -32,7 +32,7 @@ Ordered by **defensive value** — *any rage ability that stops a denizen hittin
 | **Sensitivity** | takes **+33%** damage | 8s | offense — **burst** it while up |
 | **Recklessness** | **can't shield** | 15s | offense — enables Conditional-Damage abilities (e.g. Headstrike) + no shields to break |
 
-Afflictions arrive from **any** source — our battlerage, proc-boons (Wayward Heir → random BR aff / charm, Haskor's Bravado → recklessness, Temporal Anomaly → aeon), or groupmates — and LEVI captures them into `ataxiaTemp.denizenState[id].affs` (see `008_Denizen_State`). **Capture status:** **charm, recklessness, aeon, weakness, stun** are captured from real game lines (triggers `011`–`020`, applied/ended pairs); **feared, sensitivity, clumsy, inhibit, amnesia** are not yet captured.
+Afflictions arrive from **any** source — our battlerage, proc-boons (Wayward Heir → random BR aff / charm, Haskor's Bravado → recklessness, Temporal Anomaly → aeon), or groupmates — and LEVI captures them into `ataxiaTemp.denizenState[id].affs` (see `008_Denizen_State`). **Capture status:** **charm, recklessness, aeon, weakness, stun** are captured from real game lines as applied/ended pairs (triggers `011`–`020`, plus `021` for the Bard-boon AoE stun and `030` for Golden Dragon Deaden → aeon); **amnesia** has both ends via Golden Dragon Psidaze (`highlighting/028` applies, `031` clears); **clumsy** (`022`) and **inhibit** (`023` Ripplestrike, `024` necrotic aura) have an apply line only and rely on lazy expiry from their `BR_AFFS` duration. Only **feared** and **sensitivity** are still uncaptured entirely.
 
 ## How the LEVI basher uses this
 - **Per-denizen state** (`basher/008_Denizen_State.lua`): each mob's afflictions/HP tracked with real durations (lazy-expiring), PvP-inert. `ataxiaBasher_dsExploit(id)` returns the ability that cashes in the mob's current state (shielded→shatter, reckless/feared→headstrike, sensitivity/inhibit→burst, ablaze→fire).
@@ -154,3 +154,89 @@ kills/hr + non-crit dmg/min, ABBA interleaving, corruption guards for stats-rese
 SYSUPDATE) is designed but intentionally NOT built — the probe is expected to settle the
 question first. Note if it is ever built: **Mnemosyne is disqualified as a trial venue**
 (Reaper's +1%/kill drift, per-run boon rosters, ripple-scaled mob mixes).
+
+## Cooldown truth — the game's own ready lines (v4.7.167)
+
+Any cooldown with no fire-line trigger behind it was a **guess**: the rotation stamped an
+epoch at send time (002:1512) and compared it against a hardcoded `cd` constant baked into
+the rotation table (`RW_BR` / `DW_BR` / `PSION_BR` / `GDRAGON_BR` in basher/002 — e.g.
+Etch's `cd = 23` at 002:1460, tested at 002:1501). That guess is wrong in **both**
+directions:
+
+- **too slow** when the real cooldown is shorter than the constant (boons, gear, stat
+  reductions), so the ability idles after the server had already made it available;
+- **too fast** when a stamped pick never executed — the `addclearfull` rebuild wiped the
+  queued line, the round was refused for broken arms, the target died — so the rotation
+  believes an ability is spent that never fired.
+
+The server settles it. Achaea names the exact ability coming off cooldown, in two
+wordings:
+
+> You can use Collide again.
+>
+> Your Collide ability could be used again but you lack the necessary Rage.
+
+The second is simply the first seen through an empty rage bar — the cooldown expired, we
+just cannot pay for it yet. **Both mean READY NOW.** Trigger `328_Battlerage_Ready.lua`
+matches both patterns (328:34-37) and calls `ataxiaBasher_brReady(verb)`
+(`basher/011_Battlerage_Ready_Lines.lua:91`), which is deliberately **class-agnostic**:
+the verb is captured from the line, lower-cased, stripped of non-letters, and looked up in
+`BR_READY_MAP` (011:60-81) to find the epoch table and key that own it. Clearing that
+stamp is what "ready" means to the rotation loops — they test `(now - stamp) >= cd`, so a
+nil stamp is unconditionally ready. An unknown verb is ignored, which is what makes it
+safe to leave the trigger on for every class.
+
+Two details are load-bearing:
+
+- **Culling blade routes elsewhere** (`BR_SHARED`, 011:85-87). It is gated on
+  `ataxiaTemp.bladeCooldown` — a flag owned by the culling trigger, not a rotation stamp —
+  so a `Cullingblade` ready line clears the flag instead.
+- **A ready ability is by definition not the one still in flight.** If a pending replay is
+  holding that same verb, `brReady` drops it (011:110-113) so the next round re-decides
+  rather than replaying a pick whose cooldown the game just reset.
+
+**Not yet wired for Blademaster or Magi.** `BR_READY_MAP` currently lists only the four
+rotations that keep their own epoch tables — Runewarden, Golden Dragon, Psion,
+Depthswalker. The Blademaster and Magi timestamp cooldowns described above
+(`bmHeadstrikeReadyAt`, `bmNerveslashReadyAt`, `magiWindlashReadyAt`,
+`magiDilationReadyAt`, `magiFirefallReadyAt`, `magiStormboltReadyAt`) have no entry, so
+those two rotations still run on the hardcoded constant. The trigger and the handler are
+already class-agnostic, so extending the feed is cheap — but note the shapes differ: a
+`BR_READY_MAP` entry is a `{table, field}` pair cleared as `ataxiaTemp[tbl][field] = nil`,
+whereas the Blademaster/Magi values are flat `ready-at` epochs in `ataxiaTemp`, so they
+would need a second branch (clearing the scalar) rather than a new row.
+
+Trigger `329_Battlerage_Global_Cooldown.lua` — "You must wait a short time before you can
+use a battlerage ability again." — is **the same signal inverted**: the server telling us
+an ability is *not* ready. 328 is numbered immediately before it on purpose. Together they
+bracket the true window from the server rather than from our arithmetic. 329 arms the ~1s
+global stamp (`ataxiaTemp.brGlobalReadyAt`, 329:44) and, because a *rejected* battlerage
+did not land, drops the in-flight hold on every owned rotation (329:53-55) so the replay is
+not re-sent straight back into the same rejection. Its send-side cooldown stamp
+deliberately stays — it self-heals on its own timer, and clearing it there would let a
+rejected ability be retried instantly, forever.
+
+Live evidence: the 2026-07-30 Runewarden Mnemosyne log announced Collide, Bulwark, Etch
+and Cullingblade this way repeatedly while the rotation sat rage-starved — roughly ten free
+cooldown facts in three minutes, every one discarded. The pre-existing gag
+(`006_GAG.lua:48-50`) hides only the **Chaosgate** forms of these lines, so adopting the
+generic forms cost no existing behaviour.
+
+### The general rule: every owned rotation needs a fire line AND a refusal line
+
+Any rotation that tracks its own cooldowns without a real timer needs **both**:
+
+- a **fire line** to confirm the ability actually went out — restart the cooldown from the
+  moment it landed, and release the in-flight pick replay; and
+- a **refusal line** to cancel a pick that did not — drop the replay so the next round
+  re-decides instead of re-sending a command the server just rejected.
+
+An ability with neither burns cycles invisibly, and the log will not obviously show it.
+That is exactly what happened to Runewarden **Etch**: the one entry in `RW_BR` with no
+fire-line trigger, so its ~3s pick replay (`ataxiaTemp.rwBrPending`, tested at 002:1489)
+had nothing to release it. After the queued etch really fired, the next two rebuilds
+re-queued the *same* etch and the server rejected both, back to back. `375_Runewarden_Etch_Landed.lua`
+now captures the fire line ("You trace the outline of a rune in the air with <weapon>...")
+and calls `ataxiaBasher_rwConfirm("etch")` (002:1467), which restamps the cooldown and
+clears the hold. The ready lines above are the third leg of the same structure: they cover
+every ability whose fire line we have not captured yet, and they cost nothing to add.

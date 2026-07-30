@@ -337,10 +337,13 @@ end
 --
 -- THE SUBSTRING MATCH CUTS BOTH WAYS (v4.7.169, user report). "a slope-backed hyena"
 -- is a real, killable denizen, and it contains the pet keyword "hyena" -- so it was
--- silently protected from targeting AND purged from the learned target list. In the
--- Mnemosyne that is a HARD STALL, not just lost xp: the explorer counts it in
--- `ataxia.denizensHere` and waits for the room to clear, while search_targets refuses
--- to ever pick it. The watchdog nudges forever and the sweep never advances.
+-- silently protected from targeting AND purged from the learned target list.
+--
+-- (CORRECTED v4.7.170: v4.7.169 called this a hard stall. It is not -- the explorer's `_roomHasDenizens` and `_denizenCount` (008_Explorer:97,108) BOTH filter own
+-- denizens, so a room holding ONLY the shadowed mob reads as CLEAR and the sweep walks out
+-- of it -- leaving a live, aggressive denizen behind us that follows and keeps hitting while
+-- we navigate.
+-- That is arguably worse than stalling, because it is silent.)
 --
 -- `ataxiaBasher.notOwnDenizens` is the escape hatch and it WINS: any denizen whose
 -- name matches an entry here is a legitimate target no matter which pet keyword it

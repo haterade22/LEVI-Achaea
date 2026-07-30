@@ -28,8 +28,12 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
+# type 0 = substring ANYWHERE. The game line opens with her name ("Seasone, the
+# Industrious reaches into her robes..."), so this fragment is mid-line and the
+# type 3 (EXACT MATCH) it shipped with could never fire -- the truelock counter
+# has been dead since v4.7.123. Found by an exact-match/fragment audit, v4.7.170.
 - pattern: reaches into her robes and withdraws a handful of fragile glass phials
-  type: 3
+  type: 0
 ]]--
 
 -- Seasone the Industrious's venom-phial burst (live log 2026-07-27: kalmia, gecko,

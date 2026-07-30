@@ -38,7 +38,8 @@ ataxiaBasher.targetList = {
 | Key | Type | Default | Purpose |
 |-----|------|---------|---------|
 | `autoLearn` | bool | true | Auto-add room denizens to the current area's `targetList` on entry |
-| `ownDenizens` | table | `{"falcon","baalzadeen"}` | Case-insensitive substring keywords for pets/allies to never auto-add or target |
+| `ownDenizens` | table | `{"falcon","baalzadeen","ashbeast","hyena"}` | Case-insensitive substring keywords for pets/allies to never auto-add or target |
+| `notOwnDenizens` | table | `{"a slope-backed hyena"}` (backfilled) | Real denizens exempted from the above — checked FIRST, wins over the pet keywords |
 
 `autoLearn` (toggle with `ataxia setup basher autolearn on/off`) means you no longer
 hand-build a `targetList` per area — walking through populates it. `ownDenizens`
@@ -47,6 +48,18 @@ carves out the exceptions: any denizen whose name contains one of these keywords
 auto-add, target selection, and `bash add`, **without** skipping the room (contrast
 `mobIgnore`). Adding a keyword via `bash mine add <kw>` also purges existing matches
 from every `targetList`. See safety-systems doc for the exclusion points.
+
+`notOwnDenizens` (v4.7.169) is the inverse list, and it is a full denizen name rather
+than a keyword. The substring match that makes one `hyena` keyword cover every pet
+variant also shields any **real** mob whose name happens to contain a pet's word;
+`ataxiaBasher_isOwnDenizen` (`basher/001_Bashing_Functions.lua:348`) therefore scans
+this list before the pet keywords and returns false on a hit. It is seeded by
+**backfill** in `002_Check_For_Any_Missing_Variables.lua:172`, not as a fresh-install
+default — existing saves already carry the bare `hyena` keyword, so a default would
+have fixed nobody who hit the bug. Managed with `bash notmine [add|rem] <name>`
+(alias `lists/013_Not_Own_Denizens.lua`), mirroring `bash mine`. No un-purge is
+needed after adding one: auto-learn re-adds the mob on the next sighting. See the
+safety-systems doc for why this is a hard stall in Mnemosyne rather than lost xp.
 
 ## Safe Rooms
 
@@ -146,6 +159,39 @@ ataxiaBasher.ldeckRules = {
 }
 ```
 
+## Mnemosyne Legend Deck (state-driven)
+
+`ldeckRules` above is **mob-name** driven, which cannot work in Mnemosyne — the denizen
+roster is different every ripple. `basher/010_Mnemosyne_Legend_Deck.lua` (v4.7.165) is the
+tower layer and keys off state instead: hp, denizen count, bindings, affordable battlerage.
+Gated to `ataxiaBasher.inMnemosyne`; at most one card per round.
+
+| Key | Type | Default | Purpose |
+|-----|------|---------|---------|
+| `mnemLdeck.enabled` | bool | true | Master switch for the card layer |
+| `mnemLdeck.maranAt` | number | 20 | HP % that draws Maran (5000hp room barrier, 60s) |
+| `mnemLdeck.seasoneAt` | number | 35 | HP % that draws Seasone `FOR ELIXIR` (+10% health elixir, 5 min) |
+| `mnemLdeck.maticAt` | number | 3 | Denizens in the room that draw Matic (guaranteed high-end crit) |
+| `mnemLdeck.conserveAt` | number | 25 | Mob-HP floor for the OFFENSIVE cards only (Matic/Covenant/Xylthus) |
+| `mnemLdeckBindings` | table | `{"webbed","entangled","transfixation","constricted","snared","roped"}` | Afflictions that draw Morimbuul |
+
+Morimbuul, Covenant and Xylthus have no threshold to tune: Morimbuul fires while any
+binding in `mnemLdeckBindings` is up, and Covenant/Xylthus fire when the class can
+**afford and immediately use** the battlerage that cashes in the affliction they plant
+(recklessness → Blademaster Headstrike / Magi Firefall, stun → Runewarden Etch, all 25
+rage). A class with no such payoff never draws them at all — planting an affliction
+nothing can spend burns an hourly-regenerating charge for nothing.
+
+`conserveAt` is the `rageConserveThreshold` idiom applied to charges, and it matters more
+here: rage refills in seconds, these charges refill once an hour, so a guaranteed crit on a
+mob at 5% is the purest waste in the layer. Defensive draws (Maran/Seasone/Morimbuul) are
+never gated on it. Set it to 0 to disable the check; a missing GMCP mob-HP reading also
+never blocks.
+
+`mnemLdeckBindings` defaults to the whole binding family rather than webbed alone — the
+card covers "denizen ropes or bindings" and every one of these is in the basher's attack
+gate. Narrow it by editing the table if a charge ever feels wasted.
+
 ## User Commands
 
 | Command | Purpose |
@@ -159,6 +205,10 @@ ataxiaBasher.ldeckRules = {
 | `bash mine` | List own denizens (pets/allies); click to remove |
 | `bash mine add <keyword>` | Add an own-denizen keyword + purge existing matches from target lists |
 | `bash mine rem <keyword>` | Remove an own-denizen keyword |
+| `bash notmine` | List real denizens exempted from the pet keywords; click to remove |
+| `bash notmine add <name>` | Exempt a real denizen that a pet keyword shadows |
+| `bash notmine rem <name>` | Drop an exemption |
+| `mnem cards [on\|off\|maran <hp%>\|seasone <hp%>\|matic <n>]` | Mnemosyne legend-deck auto-draw; bare form prints charges, intervals and whether this class has a Covenant/Xylthus payoff |
 | `bsi <name>` / `bsi all` | Manage the player `ignore` list (allow in room) |
 | `ataxia setup basher` | Setup wizard |
 | `ataxia setup basher autolearn <on\|off>` | Toggle auto-learning denizens |

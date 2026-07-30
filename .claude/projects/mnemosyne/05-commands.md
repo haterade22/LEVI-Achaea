@@ -67,6 +67,27 @@ Guarded by `if ataxia.mnemosyne.map then`; see [04-ripple-map.md](04-ripple-map.
 | `mnem swarm recoverat <hp%>` | Recovery hover lands at this HP (default 95; also requires aff-free) |
 | `mnem sense` | `M.swarm.sense()` — manual fullsense recon (Sleuth boon reveals all denizens; Bloodscent auto-recons every ripple entry unprompted — trigger 028 parses either source's `You sense <mob> (#id) at <room>.` rows into per-room counts) |
 
+### Legend deck auto-draw
+
+The state-keyed legend-deck layer lives in the basher (`basher/010_Mnemosyne_Legend_Deck.lua`, config table `ataxiaBasher.mnemLdeck`) and is driven from the attack build (`ataxiaBasher_mnemLdeck`, called out of `basher/001_Bashing_Functions.lua`); only its **operator surface** is here, since the layer only ever runs in the tower. The whole branch is guarded on that table existing — without it the command echoes `Legend deck layer not loaded.` and does nothing.
+
+| Command | Effect |
+|---------|--------|
+| `mnem cards` | `ataxiaBasher_mnemLdeckStatus()` — ON/OFF and the three thresholds, then one row per card: charges left (`ldm.getCharges`), its minimum redraw interval, and for the affliction cards whether this class has a battlerage payoff at all (`-- stun, 25 rage`, `(payoff on cooldown)`, or `-- no stun payoff as <class>`) |
+| `mnem cards on` / `mnem cards off` | `mnemLdeck.enabled` — the master switch (default on) |
+| `mnem cards maran <hp%>` | HP at or below which the 5000hp room barrier is drawn (default `20`; accepted `5`–`90`) |
+| `mnem cards seasone <hp%>` | HP at or below which `SEASONE FOR ELIXIR` (+10% health elixir) is drawn (default `35`; accepted `5`–`90`) |
+| `mnem cards matic <n>` | Denizen count at or above which the guaranteed-crit card is drawn (default `3`; accepted `n >= 2`) |
+
+Only the master switch and these three thresholds are tunable, because the remaining conditions are fixed by what the card *does*: Morimbuul is drawn while bound (the binding family is the table `ataxiaBasher.mnemLdeckBindings`, edited in code, not by command), and Covenant/Xylthus only when the class has a battlerage that reads the affliction *and* the rage to pay for it. All four setters persist via `ataxia_saveSettings(false)`.
+
+Two departures from the `mnem` house style, both deliberate:
+
+- **`cards` has no toggle form.** Unlike `on`/`off`/`quiet`/`map`/`explore` it does *not* go through `M._toggleState` — `on` and `off` are compared literally — so bare `mnem cards` prints the status block instead of flipping the switch. Status is the thing you actually want to read before spending a charge.
+- **An unrecognised sub-word does not reach `M.help()`.** `cards` is a matched top-level command, and anything after it that isn't `on`/`off`/`maran`/`seasone`/`matic` falls into the same status branch as the bare form.
+
+Card economy, the design constraint behind every gate above, is in [`docs/legend-deck.md`](../../../docs/legend-deck.md).
+
 ### Manual endpoint overrides
 
 These call the Reporter API directly. The API functions guard only on `M._hasToken()` — **not** `_auto()`/`_inRun()` — so they work as a manual fallback and test tool even when auto-reporting is off (or when game wording drifts and a trigger stops firing). Payload shapes are in [02-reporting.md](02-reporting.md#reporter-api-002_reporter_apilua).

@@ -2,6 +2,68 @@
 
 ---
 
+## 2026-07-30 — Documentation sync, and four bugs the doc pass found (v4.7.170)
+
+A full documentation sync across every surface for v4.7.165–169. Six agents each owned a
+disjoint file set, and each got an adversarial verifier that **opened every `file:line`
+anchor** written. Those verifiers found four real code bugs and one false claim of mine.
+
+### `type: 3` is EXACT MATCH, and three triggers used it on a fragment
+
+Mudlet's trigger enum, derived empirically from this repo's own 3,400 patterns: `0` =
+substring, `1` = regex, `2` = begin-of-line substring, **`3` = exact whole line**. A `type: 3`
+pattern that is only part of a line can never match.
+
+- **`375_Runewarden_Etch_Landed` — mine, from v4.7.166.** Pattern `You trace the outline of
+  a rune in the air with` is a fragment (the weapon name follows), shipped as `type: 3`. **It
+  never fired once.** The two-wasted-cycles fix it carries was dead on arrival. Now `type: 2`.
+- **`mnemosyne/032_Seasone_Phials` — pre-existing, and a boss safety.** The phial-burst
+  truelock counter keys on `reaches into her robes and withdraws a handful of fragile glass
+  phials`, which begins mid-line (her name precedes it), as `type: 3`. **The Seasone truelock
+  counter has been dead since v4.7.123.** Now `type: 0`.
+
+An audit of all 656 `type: 3` patterns turned up ~6 genuine fragments; the rest are real whole
+lines (headers, dividers) that merely lack terminal punctuation.
+
+### A live trigger calling a nil global
+
+**`037_mangled`** is `isActive: yes` and calls `SLC_broke(matches[2])` — but `SLC_broke` is
+defined *only* in `levi_scripts/slc/001_functions.lua`, which is `isActive: no`. At runtime it
+is a nil global, so the trigger **errored on every level-2 break** and fed the tracker nothing.
+So the self-limb "trio" v4.7.167 claimed to complete actually had one live end, not two.
+Repointed at the same V2 path as its level-1 sibling, with the legacy call guarded.
+
+### I described the v4.7.169 failure mode wrongly
+
+I called the shadowed-denizen bug a "hard stall" in four places. **It is not.** The explorer's
+`_roomHasDenizens` and `_denizenCount` (`008_Explorer:97,108`) *both* filter own denizens — so
+a room holding only the shadowed mob reads as **clear**, and the sweep walks straight out of
+it, trailing a live aggressive denizen. Silent, not stuck; arguably the worse of the two.
+
+I reasoned from "the explorer counts denizens" without checking that both of its counters
+filter. Corrected in the changelog, two code comments, the alias header, `CLAUDE.md` and
+memory. **Lesson recorded: when asserting a failure MODE, trace the actual consumer — do not
+infer it from the data the consumer reads.**
+
+### Documentation
+
+`CLAUDE.md` (new basher files, SLC level-1 break + refusal rollbacks + malagma parry patterns,
+swarm dragged-from-sky + burning rooms); **new `memory/runewarden.md`** — there was none
+despite five releases of Runewarden work — plus its `MEMORY.md` index entry;
+`.claude/classes/{runewarden,infernal}.md`; `memory/{slc,basher}.md`; `docs/legend-deck.md`;
+`.claude/projects/basher/{02,05,battlerage-pve,denizen-lines-catalog}.md`;
+`.claude/projects/mnemosyne/{03,05,07}.md`; `.claude/AGENTS.md` (the seven cross-cutting rules
+these releases produced).
+
+Verifier corrections applied inside those docs included fabricated evidence (a claim that all
+four RW_BR abilities announced themselves in the log — only three did), a falsifiable
+overstatement about re-wielding, and several anchor imprecisions. Bare trigger numbers are now
+avoided in prose: this repo has **23 duplicated trigger-number prefixes**.
+
+Suite **662/662**.
+
+---
+
 ## 2026-07-30 — "a slope-backed hyena" is a real denizen (v4.7.169)
 
 The own-denizen list matches by **case-insensitive substring** — that is what lets the
@@ -14,9 +76,12 @@ seeded for the Infernal pet. Two consequences, and the second is the serious one
 
 - `ataxiaBasher_purgeOwnFromTargets` would **delete it from the learned target list**,
   across every area.
-- In the Mnemosyne this is a **hard stall, not lost xp**. The explorer counts it in
-  `ataxia.denizensHere` and waits for the room to clear; `search_targets` refuses to ever
-  pick it. The watchdog nudges forever and the sweep never advances.
+- In the Mnemosyne this is worse than lost xp — **the sweep walks away from a live mob**.
+  ~~It counts as a denizen and stalls the room-clear test~~ *(corrected v4.7.170: the
+  explorer's `_roomHasDenizens` and `_denizenCount` both filter own denizens too, so a room
+  holding only the shadowed mob reads as **clear** and the explorer navigates straight out
+  of it, leaving an aggressive denizen following and hitting us. Silent rather than stuck —
+  arguably the worse of the two.)*
 
 New `ataxiaBasher.notOwnDenizens`, checked **first** in `ataxiaBasher_isOwnDenizen` and
 winning over the pet keywords, so the pet ("a daemonic hyena") stays protected while the

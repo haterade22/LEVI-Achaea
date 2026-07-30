@@ -32,7 +32,7 @@ colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
 - pattern: You trace the outline of a rune in the air with
-  type: 3
+  type: 2
 ]]--
 
 --[[
@@ -42,7 +42,9 @@ patterns:
        hellforged longsword. The edges catch fire as it hurtles towards a decaying
        zombie, clipping him slightly as it dissipates."
 
-    Substring match on the opening clause -- the weapon name and the target vary.
+    type 2 = BEGIN-OF-LINE substring; the weapon name and target vary so the rest of the
+    line cannot be pinned. Shipped as type 3 (EXACT MATCH) in v4.7.166, which meant this
+    trigger never fired even once -- the fix it carries was dead on arrival.
 
     Etch is the ONE ability in RW_BR with no fire-line trigger, so its in-flight pick
     replay (ataxiaTemp.rwBrPending, ~3s) had nothing to release it: after the queued

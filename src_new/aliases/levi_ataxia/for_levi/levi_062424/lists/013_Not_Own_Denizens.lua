@@ -18,8 +18,9 @@ packageName: ''
 -- one of your pet keywords. `bash mine` matches by case-insensitive substring, which
 -- is what lets "falcon" cover "a razor-beaked falcon" -- but it also means the real
 -- denizen "a slope-backed hyena" is silently shielded by the pet keyword "hyena".
--- That is not merely lost xp: in the Mnemosyne the explorer waits for the room to
--- clear while the basher refuses to ever target it, and the sweep stalls outright.
+-- That is not merely lost xp. In the Mnemosyne the explorer's room-clear test filters
+-- own denizens too, so a room holding only the shadowed mob reads as CLEAR and the sweep
+-- walks straight out of it -- leaving a live, aggressive denizen trailing us.
 --
 -- Entries here WIN over the pet keywords.
 --   bash notmine                  - list exemptions (click to remove)

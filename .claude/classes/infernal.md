@@ -1231,7 +1231,8 @@ armor_channels:
   relentless: "Fear immunity - always useful"
   conqueror: "Regain balance/health on adventurer kills"
 
-# PET SAFETY (v4.7.148) -- the hyena must never be a target
+# PET SAFETY (v4.7.148, extended v4.7.169) -- the hyena must never be a target,
+# but "hyena" is a SUBSTRING and not every hyena is ours
 pet_safety:
   problem: |
     "a daemonic hyena" was NOT in the seeded ataxiaBasher.ownDenizens list, so it counted
@@ -1247,6 +1248,36 @@ pet_safety:
     - "Trigger 367 (maul cooldown) gained a `(?!you,)` lookahead: the maul line for a real
        foe opens identically, so the at-you form was ALSO putting the maul on cooldown for
        a hit we never ordered."
+  substring_collision: |
+    THE KEYWORD IS A CASE-INSENSITIVE SUBSTRING (v4.7.169, ataxiaBasher_isOwnDenizen,
+    basher/001_Bashing_Functions.lua:348-363). That is what lets one word cover every
+    variant of a pet's name -- and it also means a REAL denizen whose name merely contains
+    that word is silently shielded.
+
+    "a slope-backed hyena" is exactly that: a genuine, killable mob protected by the `hyena`
+    keyword seeded for the pet (user report 2026-07-30). Verified damage, all three ways:
+      * search_targets will never pick it (genrunning/002_search_targets.lua:119,193).
+      * auto-learn will never re-add it (update_stuff/003_ataxia_RoomContents_Update:108-113).
+      * ataxiaBasher_purgeOwnFromTargets DELETES it from the learned target list across
+        every area on the next `bash mine` add (001:368-382, called at 001:393).
+    In the Mnemosyne the sweep also walks away from it: M._roomHasDenizens / M._denizenCount
+    (mnemosyne/008_Explorer.lua:97-116) both skip own denizens, so a room holding only this
+    mob reads CLEAR and the explorer navigates on, leaving a live aggressive denizen behind
+    us. (The v4.7.169 commit message and CHANGELOG describe the symptom instead as the
+    explorer COUNTING it and waiting forever while the watchdog nudges -- those two functions
+    filter, so that mechanism is not what the code does. The exact stall path is UNCONFIRMED;
+    the targeting damage above is not.)
+
+    `ataxiaBasher.notOwnDenizens` is the exemption list. It is checked FIRST and WINS over
+    the pet keywords (001:352-356), so "a daemonic hyena" stays protected while
+    "a slope-backed hyena" is targetable. Manage with `bash notmine [add|rem] <name>`
+    (aliases/.../lists/013_Not_Own_Denizens.lua), mirroring `bash mine`.
+
+    Seeded by BACKFILL, not a default (002_Check_For_Any_Missing_Variables:163-179): existing
+    saves already carry the bare `hyena` keyword, so a fresh-install default would have fixed
+    nobody who hit this. Narrowing the seeded keyword to "daemonic hyena" was rejected for the
+    same reason, and because it does nothing for the next collision -- the exemption list is
+    general.
 
 # Mnemosyne boons (v4.7.148)
 mnemosyne_boons:

@@ -30,7 +30,7 @@ Reference for the per-denizen combat-state layer (`basher/008_Denizen_State.lua`
 | Spinslash | `SPINSLASH <t>` | 36 | 23s | damage dump | — |
 | Provoke | `PROVOKE <t>` | 32 | 20s | taunt (mob→you) | — (costs 2.5s bal/eq) |
 
-Our battlerage resource/cooldown lines: `You can use <Ability> again.` (ready), `Your <Ability> ability could be used again but you lack the necessary Rage.` (ready + rage-gated), `The surge of terrible rage leaves you.` (rage faded).
+Our battlerage resource/cooldown lines: `You can use <Ability> again.` (ready), `Your <Ability> ability could be used again but you lack the necessary Rage.` (ready + rage-gated), `The surge of terrible rage leaves you.` (rage faded). The first two are the same event seen with and without rage to pay, and since v4.7.167 they are **consumed**, not just reference: trigger `328_Battlerage_Ready.lua` captures the ability name and `ataxiaBasher_brReady` (`basher/011_Battlerage_Ready_Lines.lua:91`) clears that verb's stamp in whichever owned rotation table holds it — an authoritative server cooldown in place of the send-side guess. Unknown verbs are ignored, so it is class-agnostic.
 
 Shin-energy (TwoArts/Shindo, distinct resource): `INFUSE FIRE` (5 Shin, blade fire enchant + ablaze), `SHIN HEALTHTRANS <amt>` / `SHIN MANATRANS <amt>` (burn Shin → health/mana; use ~10, not `ALL`).
 
@@ -69,6 +69,27 @@ Affliction **resisted** (bosses): `<mob> sneers at your feeble attempt to afflic
 | a steel-encased Death Knight | **fixed: left leg** | knee-snap is the parryable attack (all observed parries = left leg); torso stomp / head slam / arm crush / throat slash are accepted (user-confirmed tactic) |
 | a ravager of the Infernal Legion | **fixed: torso** | torso cleave is her only limb-targeted attack (perceive "dealt 30.0% damage to your torso" x2/swing); dive names no limb, shoulder-charge impale is unblockable |
 | an unbound frost elemental | **fixed: torso** | ice-shard fist slam names the torso in both halves of the swing ("Shards of ice explode from ... as they slam into your torso with bone-chilling force." then "dealt 30.0% damage to your torso"); the frost-prickle / humour-tempering output targets no limb (2026-07-29) |
+| an iron malagma | **fixed: right arm** | TWO arm attacks to one head attack, and broken arms *refuse* the Sword-and-Board swing outright — the arms gate the whole offence (2026-07-30) |
+| an invar malagma | **fixed: right leg** | the shovel leg-shatter is its only limb-targeted attack; the shoulder-charge knockdown names no limb, so leg cover is free (2026-07-30) |
+
+**Mine malagmae attack lines** (2026-07-30 Mnemosyne log, as abbreviated in the `005:53-70` comments — `...` marks elided text, either the mob-name position or an omitted middle; these are not full verbatim lines and are not safe to paste into a pattern):
+| Line | Limb |
+|---|---|
+| `Grabbing a pick from the floor of the mine, ... embeds the rusted head into your arm.` | iron malagma — **arm** (side unnamed) |
+| `Grabbing your arm in his vice-like hands, ... snaps the bone in two.` | iron malagma — **arm** (side unnamed) |
+| `... swings a partially rotted wooden shaft at your head` | iron malagma — head |
+| `... sweeps a shovel above the ground ... crashing into your leg and shattering the bone` | invar malagma — **leg** (side unnamed) |
+
+Two things follow from these, and both are the reason the iron malagma is the highest-value
+parry call in the tower. First, a broken pair of arms does not merely hurt: the game answers
+the swing with `You cannot do that because both of your arms must be whole and unbound.`
+(trigger `344_Broken_Arms.lua`), so the arms are the limbs gating our entire offence — the
+battlerage in the same queued chain still rides, since collide/onslaught need no arms.
+Second, `fixed` and not `cycle`: **neither arm line names a side**, so there is nothing to
+phase a cycle against, and an unsynchronised cycle would guard the wrong arm half the time.
+Covering one arm permanently halves the rate at which *both* end up broken, which is the
+state that actually matters. Level-1 breaks come in from these fast — ~25 `Your <limb>
+breaks with a loud crack.` in 90 seconds in that log (trigger `038_Limb_Broken_L1.lua`).
 
 **Audited, NO parryable attacks** (head default applies — don't re-audit):
 | Mob | Attacks seen |
@@ -77,7 +98,37 @@ Affliction **resisted** (bosses): `<mob> sneers at your feeble attempt to afflic
 | a rotskull demon | miasmic breath / claw lurch / jaw bite — all poison-typed, no limb named (bite adds a cutting component + strips skin coating) |
 | a mindless thrall | grasp/frenzy lines do no damage (disrupt focus/countermeasures); gnaw (physical cutting, no limb, applies haemophilia) |
 
-**Open non-parry observations** (2026-07-25 log): Infernal Legion corpses explode for 2500 unblockable after the kill (basher/explorer currently just eats it); the hellspawn impale caused ~30 spammed `You are impaled and must writhe off before you may do that.` / `…both of your arms must be whole and unbound.` failure lines — something keeps re-sending commands while IMPALED.
+**Open non-parry observations** (2026-07-25 log): Infernal Legion corpses explode for 2500 unblockable after the kill (basher/explorer currently just eats it); the hellspawn impale caused ~30 spammed `You are impaled and must writhe off before you may do that.` / `…both of your arms must be whole and unbound.` failure lines — something keeps re-sending commands while IMPALED. *Partly closed in v4.7.167:* the arms line now rolls back every owned rotation's in-flight replay instead of firing an unthrottled `diag` (trigger `344`), and its leg twin `Both of your legs must be free and unhindered to do that.` gained a handler (`345_Broken_Legs_Block.lua`) which also releases a `stand;leap <dir>` the explorer had in flight. The IMPALED re-send loop itself is still open.
+
+## Our own pets turning on us
+
+A mauled pet turns on its owner, and once flipped it keeps clawing every few seconds. Both
+knight pets have been caught doing it live. The response is the same and it is **free**:
+`ORDER <pet> PASSIVE` costs no balance and no equilibrium, so it can go out on any round,
+including a gated one. Sent **directly, not queued** — the basher rebuilds its command every
+prompt with `queue addclearfull`, which would wipe a queued recovery before it ran. 10s
+debounce on each, so a burst of claw lines issues one order but a genuine re-engage is
+answered again.
+
+| Line | Pet | Trigger |
+|---|---|---|
+| `A daemonic hyena snarls as she hurls herself at you,` | Infernal hyena | `372_Hyena_Turned_On_Us.lua` (2026-07-29) |
+| `A razor-beaked falcon dives at you, raking your face with its talons.` | Runewarden falcon | `376_Falcon_Turned_On_Us.lua` (2026-07-30) |
+| `A razor-beaked falcon rips out a chunk of your flesh with its beak.` | Runewarden falcon | `376_Falcon_Turned_On_Us.lua` (2026-07-30) |
+
+All three patterns are **anchored on the second-person form on purpose**. Against a real foe
+the same attacks read "...hurls herself at a royal guard...", "...dives at a revolting ghoul,
+raking his face..." and "...rips out a chunk of a wraith's flesh...", which are the pet's
+normal rake/maul lines and belong to the cooldown triggers (`367`, `370-371`). Only the
+"...at you" / "your flesh" forms name US, so these cannot fire on a working pet. Note the
+trailing `, ` in the hyena pattern — that comma is what separates "at you," from "at a royal
+guard".
+
+The two cases have different *causes*. The hyena flipped because "a daemonic hyena" was not
+on `ataxiaBasher.ownDenizens` and the basher was attacking it (seen at 4% on the mob bar);
+the keyword was added, and the trigger remains for a pet that has already flipped. `falcon`
+was already on the list, so the falcon was never targeted by us — something else flipped it
+(an AoE clipping it, or a tower effect). Same response either way.
 
 ## Status capture stages
 - **Stage 1 (done, v4.7.62):** `008_Denizen_State.lua` module + tests; lifecycle sync in `update_stuff/003`; HP feed in `010`; **charm** apply/end triggers (`011,012`). `ataxiaBasher_dsStatus()` dumps live state.
