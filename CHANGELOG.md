@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-07-29 — Deepfreeze: keep the PvP trackers out of the bashing loop (v4.7.159)
+
+The live cast line confirmed Winter's Heart works (`Damage dealt: 1312 (cold)`), but it
+also showed that two **existing PvP triggers** fire on that same line — and since the boon
+makes the basher cast deepfreeze at every crowd, they now run on every bashing round:
+
+- **`tarAffed()` was being fed denizen ids.** During bashing `target` is a numeric denizen
+  id, so `magi_offense_tracking/014` and `pummel-related/001` were writing `frozen` /
+  `nocaloric` / `shivering` into the **V3 player-affliction tracker** keyed on a denizen —
+  every round, in a crowd. Both are now guarded with `type(target) ~= "number"`, the same
+  numeric-id-means-denizen convention the denizen-state layer uses to stay PvP-inert.
+- **The "baby it's cold outside" banner was going to spam.** A full-width box echo per
+  round buries the combat text it sits in, so while the basher is enabled the cast line is
+  simply coloured cyan instead; the box is kept for PvP, where it fires once and means
+  something.
+
+Files: `magi_offense_tracking/014_Deepfreeze.lua`, `pummel-related/001_Deepfreeze.lua`.
+
+---
+
 ## 2026-07-29 — Winter's Heart: deepfreeze as a denizen AoE (v4.7.158)
 
 New Mnemosyne boon (the 22nd flag, `mnemWintersHeart`): *"Your deepfreeze spell can now be

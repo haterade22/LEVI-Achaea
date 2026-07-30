@@ -36,8 +36,13 @@ patterns:
   type: 3
 ]]--
 
--- Deepfreeze is AoE — applies frozen to current target if in same room
-if target and target ~= "" then
+-- Deepfreeze is AoE — applies frozen to current target if in same room.
+--
+-- PvP ONLY. Since the Winter's Heart boon (v4.7.158) the basher casts deepfreeze at
+-- denizen crowds, and during bashing `target` is a numeric denizen id -- feeding that to
+-- tarAffed() would pollute the V3 player-affliction tracker with denizen ids on every
+-- round. Numeric target = denizen, so skip.
+if target and target ~= "" and type(target) ~= "number" then
   tarAffed("frozen")
   selectCurrentLine() fg("cyan")
 

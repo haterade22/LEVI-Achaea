@@ -38,7 +38,10 @@ patterns:
   type: 3
 ]]--
 
-if targetIshere then
+-- PvP affliction tracking: numeric target = a denizen (see 014_Deepfreeze). Since the
+-- Winter's Heart boon the basher casts this at denizen crowds, and tarAffed() must never
+-- be fed a denizen id.
+if targetIshere and type(target) ~= "number" then
   if haveAff("nocaloric") then
     tarAffed("shivering", "frozen")
   else
@@ -46,4 +49,15 @@ if targetIshere then
   end
 end
 
-ataxia_boxEcho("~ baby it's cold outside ~", "black:a_blue")
+-- The full-width box is a PvP flourish. While bashing, deepfreeze fires roughly every
+-- round against a crowd, and a banner per round buries the combat text -- so colour the
+-- cast line instead and keep the box for PvP.
+if ataxiaBasher and ataxiaBasher.enabled then
+  selectString(line, 1)
+  setBold(true)
+  fg("cyan")
+  deselect()
+  resetFormat()
+else
+  ataxia_boxEcho("~ baby it's cold outside ~", "black:a_blue")
+end
