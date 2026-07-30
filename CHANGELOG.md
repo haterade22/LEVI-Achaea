@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-07-29 — Swarm funnel window 3s -> 2s (v4.7.157)
+
+User: *"they follow quite quickly."* `FOLLOW_WINDOW` drops again, 3s to 2s — chasers
+arrive fast, so anything longer only idles on mobs that were never coming.
+
+Still safe for the same reason as v4.7.156: the window is **refreshed by combat**, so a
+mob that did follow and is swinging keeps resetting it and a real fight holds us there
+regardless. `WALL_WINDOW` (8s, behind our own icewall) stays put — leakers trickle through
+a wall slower.
+
+Files: `mnemosyne/009_Swarm_Tactics.lua`, `CLAUDE.md`, memory. Suite **588/588**.
+
+---
+
 ## 2026-07-29 — Swarm funnel window 4s -> 3s (v4.7.156)
 
 User: the funnel wait was slower than the hit-and-run loop needed. `FOLLOW_WINDOW` in
