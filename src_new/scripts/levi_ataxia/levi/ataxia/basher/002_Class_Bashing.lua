@@ -640,12 +640,18 @@ function ataxiaBasher_infGravehands(sp)
 	local essence = tonumber(ataxia.vitals and ataxia.vitals.essence)
 	local floor = tonumber(ataxiaBasher.infEssenceFloor) or 20
 	if essence and essence < floor then return "" end
-	local nowT = (getEpoch and getEpoch()) or os.time()
 	ataxiaTemp = ataxiaTemp or {}
-	-- Long re-arm, NOT a rotation cooldown -- the summon persists.
-	local cd = tonumber(ataxiaBasher.infTyrannyCd) or 600
-	if (nowT - (tonumber(ataxiaTemp.infTyrannyAt) or 0)) < cd then return "" end
-	ataxiaTemp.infTyrannyAt = nowT
+	-- ONCE PER ROOM (user, v4.7.161): the gravehands belong to the room they were summoned
+	-- in, so every new room can have its own. Not once per session (the v4.7.149 cut used a
+	-- 600s timer, which skipped rooms) and not on a rotation cooldown (v4.7.148 re-cast
+	-- every 20s, burning 3% essence each time). The last-cast room IS the gate; walking
+	-- somewhere new re-arms it.
+	--
+	-- A nil room (gmcp blind) collapses to one "unknown" slot rather than casting every
+	-- round while we cannot tell rooms apart.
+	local room = (gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num) or "unknown"
+	if ataxiaTemp.infTyrannyRoom == room then return "" end
+	ataxiaTemp.infTyrannyRoom = room
 	local cmd = (gmcp.Char.Status.class == "Apostate") and "summon hands of the grave" or "tyranny"
 	return cmd..sp
 end

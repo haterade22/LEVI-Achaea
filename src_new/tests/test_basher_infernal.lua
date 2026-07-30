@@ -38,6 +38,7 @@ local function reset()
   ataxiaBasher.shielded, ataxiaBasher.rageraze = false, false
   ataxiaBasher.hyenaMaulReady = true
   ataxiaBasher.infGravehandsCd, ataxiaBasher.infTyrannyCd = nil, nil
+  gmcp.Room.Info.num = 1
   ataxiaBasher.infEssenceFloor, ataxiaBasher.infQuash = nil, nil
   ataxia.vitals.essence = nil
   ataxia.vitals.rage, ataxia.vitals.knight = 0, "Dual Cutting"
@@ -130,14 +131,24 @@ describe("Army of the Dead -- TYRANNY, a one-time summon", function()
     gmcp.Char.Status.class = "Infernal"
   end)
 
-  it("is ONE-TIME -- the hands persist, so it does not re-cast on a rotation cd", function()
+  it("is ONCE PER ROOM -- every new room can have its own gravehands", function()
     reset(); infArmyOfDead = true; denizens = 2
+    gmcp.Room.Info.num = 100
     expect(ataxiaBasher_infGravehands(";")).toBe("tyranny;")
+    expect(ataxiaBasher_infGravehands(";")).toBe("") -- same room: already summoned
+    clock = clock + 600                              -- ...and time does NOT re-arm it
     expect(ataxiaBasher_infGravehands(";")).toBe("")
-    clock = clock + 120 -- two minutes later: still summoned, still silent
-    expect(ataxiaBasher_infGravehands(";")).toBe("")
-    clock = clock + 500 -- past the long backstop re-arm
+    gmcp.Room.Info.num = 101                         -- walked next door
     expect(ataxiaBasher_infGravehands(";")).toBe("tyranny;")
+    gmcp.Room.Info.num = 100                         -- back again: that room has its own
+    expect(ataxiaBasher_infGravehands(";")).toBe("tyranny;")
+  end)
+
+  it("collapses to one slot while gmcp is blind (no room number)", function()
+    reset(); infArmyOfDead = true; denizens = 2
+    gmcp.Room.Info.num = nil
+    expect(ataxiaBasher_infGravehands(";")).toBe("tyranny;")
+    expect(ataxiaBasher_infGravehands(";")).toBe("") -- not once per round while blind
   end)
 
   it("respects the life-essence floor (3% a cast)", function()
@@ -157,9 +168,9 @@ describe("Army of the Dead -- TYRANNY, a one-time summon", function()
     expect(cmd:sub(-1)).toBe("y")          -- no dangling separator
   end)
 
-  it("goes back to the normal swing once it is summoned", function()
+  it("goes back to the normal swing once this room is summoned", function()
     reset(); infArmyOfDead = true; denizens = 3
-    ataxiaBasher_infernalBashing() -- summons
+    ataxiaBasher_infernalBashing() -- summons in this room
     clock = clock + 5
     local cmd = ataxiaBasher_infernalBashing()
     expect(has(cmd, "tyranny")).toBeFalse()

@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-07-29 — Tyranny is once per ROOM (v4.7.161)
+
+User: *"Each room we enter can get hands of the grave with TYRANNY as Infernal."* The
+gravehands belong to the room they were summoned in, so the cadence is **per room** — and
+both earlier cuts had it wrong:
+
+- v4.7.148 treated it as a 20s rotation cooldown → re-cast constantly, burning 3% life
+  essence each time.
+- v4.7.149 over-corrected to "one-time" with a 600s backstop → **skipped rooms**, which is
+  the actual value of the ability.
+
+Now the gate is the **room number** of the last cast: walking somewhere new re-arms it,
+and returning to a room later summons there again. A blind gmcp (no room number) collapses
+to a single "unknown" slot so it can never fire every round. The crowd gate (2+ denizens),
+the life-essence floor, and replaces-the-swing behaviour are unchanged.
+
+Files: `basher/002_Class_Bashing.lua`, `test_basher_infernal.lua` (per-room + gmcp-blind
+cases), `.claude/classes/infernal.md`, memory. Suite **594/594**.
+
+---
+
 ## 2026-07-29 — Parry pattern: an unbound frost elemental (v4.7.160)
 
 New predictive-parry entry from a live log: **`an unbound frost elemental` -> fixed

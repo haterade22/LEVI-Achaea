@@ -1259,11 +1259,15 @@ mnemosyne_boons:
       forks on class). AB Tyranny: 3.00s of BALANCE, costs **3% life essence**, calls
       gravehands and prones non-Mhaldorians.
       Two consequences the first cut got wrong (fixed v4.7.149):
-        * It is a ONE-TIME summon -- the hands persist, so it is cast once, not re-cast on
-          a rotation cooldown. `ataxiaBasher.infTyrannyCd` (600s) is only a backstop for a
-          lost summon; capture the hands-expire line to make it precise.
         * It spends BALANCE, so it REPLACES the swing that round -- it cannot ride
           alongside `dsl` the way an equilibrium ability can.
+        * It is NOT a rotation cooldown (v4.7.148 re-cast every 20s, burning 3% essence
+          each time).
+      Cadence, corrected again in v4.7.161: **ONCE PER ROOM**. The gravehands belong to the
+      room they were summoned in, so every new room can have its own -- neither once per
+      session (the v4.7.149 cut used a 600s timer and skipped rooms) nor per-cooldown. The
+      last-cast room number is the gate; walking somewhere new re-arms it, and a blind gmcp
+      (no room num) collapses to a single "unknown" slot so we never cast every round.
       Gated on 2+ denizens (the boon's damage wants targets) and a life-essence floor
       (`ataxiaBasher.infEssenceFloor`, default 20%) -- Hellforge users regain essence at
       reduced rates, so 3% a cast is genuinely expensive.
