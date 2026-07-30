@@ -911,3 +911,44 @@ end)
 
 -- Restore the mock send for whoever runs after us (see the note at the top).
 send = _mockSend
+
+describe("dragged out of the sky -- flight is a trap on this ripple", function()
+  it("latches grounded so the ladder stops trying to fly", function()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    expect(S._canFly()).toBeTrue()
+    S.onDraggedDown()
+    expect(S._canFly()).toBeFalse()
+    expect(S._canHover()).toBeFalse()
+  end)
+
+  it("aborts an in-progress hover instead of re-sending fly forever", function()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    S.state = "recovering"
+    S.flying = true
+    S.flightConfirmed = true
+    S.onDraggedDown()
+    expect(S.flying).toBe(nil)
+    expect(S.flightConfirmed).toBe(nil)
+    -- The ladder is re-run and, with flight now unavailable, takes the GROUNDED
+    -- retreat -- which is the whole point. It must not be left sitting in
+    -- "recovering", where it would re-send fly every tick while attack-gated.
+    expect(S.state).toBe("pulling")
+  end)
+
+  it("is per-RIPPLE -- the next ripple is a different room set", function()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    S.onDraggedDown()
+    expect(S.grounded).toBeTrue()
+    S.onRipple()
+    expect(S.grounded).toBe(nil)
+    expect(S._canFly()).toBeTrue()
+  end)
+
+  it("is inert outside the tower", function()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    ataxiaBasher.inMnemosyne = false
+    S.onDraggedDown()
+    expect(S.grounded).toBe(nil)
+    ataxiaBasher.inMnemosyne = true
+  end)
+end)

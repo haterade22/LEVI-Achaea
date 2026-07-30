@@ -2,6 +2,36 @@
 
 ---
 
+## 2026-07-30 — Denizens can drag us out of the sky (v4.7.168)
+
+> A tentacle shoots up from the ground, wraps itself around you, and drags you back to earth.
+
+A third way flight fails in the tower, after the Deluge affix and an eaten FLY — and the
+nastiest, because it was **silent to the state machine**. The recovery hover keeps
+`S.flying` optimistically true until a flight line confirms (that guard exists because
+stupidity can eat a queued fly), and after a drag that confirmation never arrives. So the
+hover would re-send `fly` *every tick* while a tentacle yanks us straight back down —
+holding us attack-**gated** at crash HP, with the swarm still on us, until `RECOVER_MAX`
+finally expired. Strictly worse than never having flown.
+
+`S.onDraggedDown()` (trigger `mnemosyne/050`) latches `S.grounded`, which `S._canFly()`
+now honours alongside `mnemDeluge` — so both the escape ladder's outdoor branch and the
+fly-kite fall through to the grounded route. It also corrects the flight state and, if a
+hover is already running, converts it into the grounded retreat rather than letting it
+spin.
+
+**Per-ripple, not per-run** (user call): the denizen that dragged us lives on this ripple
+and will do it again, but the next ripple is a different room set. `S.onRipple` clears it.
+
+A test asserted the aborted hover should land back in `recovering`; the code instead goes
+to `pulling`, which is correct — falling through to the grounded retreat is the entire
+point. The assertion was wrong, not the code.
+
+Files: `mnemosyne/009_Swarm_Tactics.lua`, `triggers/.../mnemosyne/050_Dragged_From_Sky.lua`
+(NEW), `tests/test_swarm_tactics.lua`, `CHANGELOG.md`, memory. Suite **658/658**.
+
+---
+
 ## 2026-07-30 — Live-log audit: limbs, cooldown feeds, burning rooms (v4.7.167)
 
 A six-lens adversarial audit of a live Mnemosyne Runewarden log (iron/invar malagmae,

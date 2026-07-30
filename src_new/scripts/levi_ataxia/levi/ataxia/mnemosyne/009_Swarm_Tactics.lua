@@ -471,7 +471,14 @@ end
 -- and the fly-kite must take their GROUNDED branches instead of wedging on a
 -- rejected fly (queued fly fails silently; the "recovering" state would then hover
 -- on the ground, attack-gated, until the 60s cap).
-function S._canFly() return not mnemDeluge end
+-- Two things make flight unavailable in the tower:
+--   * the DELUGE affix ("All rooms are underwater") -- run-wide;
+--   * a denizen that DRAGS US BACK DOWN ("A tentacle shoots up from the ground,
+--     wraps itself around you, and drags you back to earth.") -- per-ripple, because
+--     the thing that yanked us lives on this ripple and will do it again.
+-- Either way FLY is a trap rather than an escape, and the ladder must fall through
+-- to the grounded retreat instead of wedging on a fly that never sticks.
+function S._canFly() return not mnemDeluge and not S.grounded end
 
 -- HOVERING to heal is only a plan if the air is safer than the ground. In an ABLAZE
 -- room it is not: the fire keeps burning us at ~6% max HP a tick while we hang there
@@ -787,6 +794,34 @@ end
 -- Distinct from S.flying, the tactic's mode flag -- kiting keeps S.flying true
 -- across the per-swing land/fly churn while this flag flaps with the actual game
 -- lines. Only the recovery hover's fly re-send consumes it.
+-- "A tentacle shoots up from the ground, wraps itself around you, and drags you back
+-- to earth." A denizen on THIS RIPPLE can pull us out of the air, which makes the
+-- whole airborne branch of the escape ladder a liability: the recovery hover would
+-- keep re-sending `fly` every tick (S.flying stays optimistically true until the
+-- flight line confirms, and it never will), holding us attack-GATED at crash HP with
+-- the denizens still on us. That is strictly worse than never having flown.
+--
+-- So: latch grounded for the rest of the ripple (S.onRipple clears it), correct the
+-- flight state, and if a hover is in progress convert it to the grounded retreat
+-- rather than leaving it to spin until RECOVER_MAX.
+function S.onDraggedDown()
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  local wasHovering = (S.state == "recovering")
+  S.flying = nil
+  S.flightConfirmed = nil
+  if not S.grounded then
+    S.grounded = true
+    S._echo("<red>Dragged out of the air<reset> -- no flying on this ripple; escapes go grounded.")
+  end
+  if wasHovering then
+    -- We are on the ground, at low HP, gated. Release the hold and re-run the ladder,
+    -- which now takes the retreat branch (or the shield fallback with no route).
+    S.state = "idle"
+    S._clearHold()
+    S._beginEscape()
+  end
+end
+
 function S.onFlightUp() S.flightConfirmed = true end
 function S.onFlightDown() S.flightConfirmed = nil end
 
@@ -839,6 +874,7 @@ function S.onRipple()
   S.pulls = {}
   S.noTactics = {}
   S.entrySnap = {}
+  S.grounded = nil -- the denizen that dragged us down is left behind with its ripple
   local ripple = (M.run and tonumber(M.run.ripple)) or 0
   if S._wallsRipple ~= ripple then
     S.wallRaised = {}
