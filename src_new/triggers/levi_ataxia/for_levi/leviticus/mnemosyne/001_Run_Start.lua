@@ -58,6 +58,7 @@ infDaemonJaws = false  -- boons reset each run
 infIndiscriminate = false  -- boons reset each run
 infNecroticAura = false  -- boons reset each run
 infFuryOfAges = false  -- boons reset each run
+mnemWintersHeart = false  -- boons reset each run
 mnemHaemophiliac = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
 mnemDeluge = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
 

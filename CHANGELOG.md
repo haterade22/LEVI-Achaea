@@ -2,6 +2,32 @@
 
 ---
 
+## 2026-07-29 — Winter's Heart: deepfreeze as a denizen AoE (v4.7.158)
+
+New Mnemosyne boon (the 22nd flag, `mnemWintersHeart`): *"Your deepfreeze spell can now be
+used against denizens and deals cold damage to all denizens in the location."*
+
+- `ataxiaBasher_winterDeepfreeze` casts `deepfreeze` at **2+ denizens** (user-directed;
+  tunable via `ataxiaBasher.deepfreezeAt`), skipped on shielded rounds.
+- **Deliberately class-agnostic.** Deepfreeze is Elementalism, but the **Bracers of Frost**
+  grant it too — the same artefact the swarm module points for icewalls — so it is wired
+  into both the Magi and Infernal paths rather than assumed Magi-only.
+- **It is an equilibrium cast**, which is what makes it nearly free: on classes whose
+  attacks spend balance it rides *alongside* the swing (unlike Arc or Tyranny, which
+  replace it), and for Magi it takes the same eq slot horripilation/elemental surge would
+  have used. No client cooldown — one cast per equilibrium is its own limit, exactly as
+  Kkractle's elemental surge works.
+
+Standard boon lifecycle: claim intercept (matching both `winter's heart` and
+`winters heart`), BOONS-row trigger `mnemosyne/044`, reset on run start, cleared on the
+confirmed run end.
+
+Files: `basher/002_Class_Bashing.lua`, `mnemosyne/044_Winters_Heart.lua` (NEW), boon
+claim/reset wiring, `test_basher_infernal.lua` (+5 cases), trigger catalog, `CLAUDE.md`.
+Suite **593/593**.
+
+---
+
 ## 2026-07-29 — Swarm funnel window 3s -> 2s (v4.7.157)
 
 User: *"they follow quite quickly."* `FOLLOW_WINDOW` drops again, 3s to 2s — chasers

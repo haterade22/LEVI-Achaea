@@ -72,3 +72,6 @@ if matches[2]:lower():find("necrotic aura") then infNecroticAura = true end
 -- Fury of Ages: FURY becomes near-permanent (+8 str, +20% balance) at the cost of
 -- quadrupled endurance; the basher holds it on while EP allows.
 if matches[2]:lower():find("fury of ages") then infFuryOfAges = true end
+-- Winter's Heart: DEEPFREEZE works on denizens and hits the whole room with cold;
+-- cast at 2+ denizens (eq cast, so it rides free on balance-attack classes).
+if matches[2]:lower():find("winter's heart") or matches[2]:lower():find("winters heart") then mnemWintersHeart = true end

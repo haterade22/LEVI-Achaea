@@ -44,6 +44,8 @@ local function reset()
   ataxiaTemp = {}
   infArmyOfDead, infDaemonJaws, infIndiscriminate = false, false, false
   infNecroticAura, infFuryOfAges = false, false
+  mnemWintersHeart = false
+  ataxiaBasher.deepfreezeAt = nil
   gmcp.Char.Vitals = { ep = 100, maxep = 100 }
   ataxia.defences = {}
   ataxiaBasher.infArcAt = nil
@@ -168,6 +170,42 @@ describe("Army of the Dead -- TYRANNY, a one-time summon", function()
     reset(); infArmyOfDead = true; denizens = 3
     ataxiaBasher.shielded = true
     expect(has(ataxiaBasher_infernalBashing(), "tyranny")).toBeFalse()
+  end)
+end)
+
+describe("Winter's Heart -- DEEPFREEZE as a room-wide cold AoE", function()
+  it("does nothing without the boon", function()
+    reset(); denizens = 4
+    expect(ataxiaBasher_winterDeepfreeze(";")).toBe("")
+  end)
+
+  it("needs 2+ denizens -- a spread nuke beats one attack only on a crowd", function()
+    reset(); mnemWintersHeart = true; denizens = 1
+    expect(ataxiaBasher_winterDeepfreeze(";")).toBe("")
+    reset(); mnemWintersHeart = true; denizens = 2
+    expect(ataxiaBasher_winterDeepfreeze(";")).toBe("cast deepfreeze;")
+  end)
+
+  it("rides the round WITHOUT replacing the swing (it is an eq cast)", function()
+    reset(); mnemWintersHeart = true; denizens = 3
+    local cmd = ataxiaBasher_infernalBashing()
+    expect(has(cmd, "cast deepfreeze")).toBeTrue()
+    expect(has(cmd, "dsl 42")).toBeTrue() -- balance swing still happens
+  end)
+
+  it("yields on a shielded round", function()
+    reset(); mnemWintersHeart = true; denizens = 3
+    ataxiaBasher.shielded = true
+    expect(ataxiaBasher_winterDeepfreeze(";")).toBe("")
+  end)
+
+  it("honours a custom threshold", function()
+    reset(); mnemWintersHeart = true; denizens = 2
+    ataxiaBasher.deepfreezeAt = 4
+    expect(ataxiaBasher_winterDeepfreeze(";")).toBe("")
+    denizens = 4
+    expect(ataxiaBasher_winterDeepfreeze(";")).toBe("cast deepfreeze;")
+    ataxiaBasher.deepfreezeAt = nil
   end)
 end)
 
@@ -365,4 +403,5 @@ end)
 getEpoch = _epoch
 infArmyOfDead, infDaemonJaws, infIndiscriminate = false, false, false
 infNecroticAura, infFuryOfAges = false, false
+mnemWintersHeart = false
 target = nil

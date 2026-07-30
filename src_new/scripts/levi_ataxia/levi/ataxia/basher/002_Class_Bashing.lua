@@ -757,7 +757,11 @@ function ataxiaBasher_infernalBashing()
 	local graveHands = ataxiaBasher_infGravehands(sp)
 	-- Necrotic Aura keeper: re-raises the deathaura defence when it drops, so every
 	-- attack keeps inhibiting denizen healing. Prefixed to whatever the round does.
+	-- Winter's Heart deepfreeze rides here too: it is an EQUILIBRIUM cast (from the
+	-- Bracers of Frost, so it is not Magi-only) and every Infernal attack spends balance,
+	-- so the room-wide cold is free alongside the swing.
 	local aura = ataxiaBasher_infDeathaura(sp)..ataxiaBasher_infFury(sp)
+		..ataxiaBasher_winterDeepfreeze(sp)
 
 	-- HYENA MAUL is a PET order -- it costs us no balance and no equilibrium, so the only
 	-- thing limiting it is its own cooldown. It used to be baked INSIDE each spec's swing
@@ -854,6 +858,29 @@ function ataxiaBasher_magiStormPrep()
    ataxiaBasher_stormhammer()
 end
 
+-- Winter's Heart (Mnemosyne boon): "Your deepfreeze spell can now be used against denizens
+-- and deals cold damage to all denizens in the location."
+--
+-- DEEPFREEZE is Elementalism, but it is ALSO granted by the Bracers of Frost artefact --
+-- the same bracers the swarm module points for icewalls -- so this is not Magi-only and
+-- the helper is deliberately class-agnostic.
+--
+-- It is an equilibrium CAST, which is what makes it cheap here: for classes whose attacks
+-- spend balance it rides free alongside the swing, and for Magi it takes the same eq slot
+-- horripilation/elemental surge would have used. No client cooldown: one cast per
+-- equilibrium is its own limit, exactly as Kkractle's elemental surge works.
+--
+-- Crowd-gated at 2+ (user-directed): the whole value is hitting the room, and against a
+-- lone denizen an ordinary attack is better than a spread nuke.
+function ataxiaBasher_winterDeepfreeze(sp)
+  if not mnemWintersHeart then return "" end
+  if ataxiaBasher.shielded then return "" end -- break the shield first
+  local M = ataxia.mnemosyne
+  local n = (M and M._denizenCount and M._denizenCount()) or 0
+  if n < (tonumber(ataxiaBasher.deepfreezeAt) or 2) then return "" end
+  return "cast deepfreeze"..sp
+end
+
 function ataxiaBasher_magiBashing()
    local command, sp = "", ataxia.settings.separator
    local brage = ataxiaBasher_assembleBattlerage()
@@ -873,6 +900,12 @@ function ataxiaBasher_magiBashing()
       -- Strip FIRST, then battlerage -- a still-up denizen shield absorbs the BR otherwise
       -- (matches blademasterBashing's raze..sp..brage order).
       command = "cast erode at "..target..sp..brage
+   elseif ataxiaBasher_winterDeepfreeze(sp) ~= "" then
+      -- Winter's Heart boon: DEEPFREEZE hits every denizen in the room for cold. Same eq
+      -- slot as horripilation/elemental surge, and it outranks Kkractle only in that it is
+      -- checked first -- if you hold both, keep whichever you prefer by disabling the
+      -- other's flag. Crowd-gated inside the helper.
+      command = brage..sp.."cast deepfreeze"
    elseif magiKkractle then
       -- Aspect of Kkractle boon (Mnemosyne): ELEMENTAL SURGE deals fire to ALL denizens in the
       -- room (AoE, no target), out-clearing single-target horripilation and stormhammer's 3-cap.
