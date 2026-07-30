@@ -2,6 +2,114 @@
 
 ---
 
+## 2026-07-30 — Live-log audit: limbs, cooldown feeds, burning rooms (v4.7.167)
+
+A six-lens adversarial audit of a live Mnemosyne Runewarden log (iron/invar malagmae,
+`v4.7.165` client) against the codebase. Findings were each independently re-verified
+before being acted on; several of the first-pass claims were refuted and are not here.
+
+### The root cause behind the legend-deck failures
+
+**`ldm.matchFullName` could not resolve a comma-suffixed card name.** It took
+`fullName:match("^(%S+)")`, so `"Xylthus, the Outcast"` yielded the token `"Xylthus,"`
+— *with the comma* — which matches no key. Consequences, all live:
+
+- `001_Identify_Uses` ("A card depicting X may be used N more times…") never resolved a
+  key, so **`ldm.deck[card].charges` was never updated from the game**. `initDeck` seeds
+  unseen cards at their max, so the deck permanently claimed full charges — the
+  "3 charge(s) left" on a card the game then refused.
+- `008_LDeck_No_Charges`, the v4.7.166 rejection handler, early-returned on nil, so **the
+  fix that was supposed to stop drawing into a wall never ran at all.**
+
+Cards whose key is the first bare word (Maran, Matic, Covenant) worked, which is why this
+survived. Now a token scan that strips punctuation, which also handles a leading
+honorific (`Lord Nicator, The Chosen One`) the first-word rule could never reach.
+
+**And a bug of my own from v4.7.166:** the pending-window lapse path called
+`mnemLdeckConfirm`, which stamps the affliction — so an *unacknowledged* draw still
+planted a phantom stun for Etch to buy at 25 rage, exactly the hole that release closed.
+Split out `ataxiaBasher_mnemLdeckLapse`: it holds the interval and releases the replay,
+and stamps nothing.
+
+Offensive cards (Matic/Covenant/Xylthus) now also skip a mob that is about to die
+(`mnemLdeck.conserveAt`, 25%) — the `rageConserveThreshold` idiom, which matters *more*
+here since rage refills in seconds and these charges refill once an hour. The GMCP read
+is fully guarded: this function runs under `pcall`, so an unguarded index would be
+swallowed and would silently disable the whole card layer.
+
+### Limbs — the log's real damage
+
+**`Your <limb> breaks with a loud crack.` had no handler anywhere.** SLC captured both
+ends of the trio (`036_Limb_healed`, `037_mangled`) but not the level-1 break, by far the
+most common — ~25 of them in 90 seconds in this log. Because `ataxia_brokenLimbFound`
+only branches on the `damaged*`/`mangled*` families, a level-1 break never reset the
+accumulator: damage kept climbing past the real break, `selfHitsToBreak` pinned at 0, the
+threshold latched `critical` forever, and every one-shot reaction latch stayed set.
+New trigger `038_Limb_Broken_L1` — the game's own words, naming limb *and* side, which
+sidesteps the `crippled*` vs `broken*` vs `damaged*` naming ambiguity entirely.
+
+**Trigger 344 was firing an unthrottled `diag`** on `You cannot do that because both of
+your arms must be whole and unbound.` — and *nothing in the package parses our own
+DIAGNOSE output*. Six lines of console spam at the worst possible moment, three times in
+0.8s. Replaced with the rollback that line actually justifies: it is an authoritative
+"the queued round did not execute", so drop every owned rotation's in-flight replay.
+
+**New `345_Broken_Legs_Block`** for `Both of your legs must be free and unhindered to do
+that.` — which had no handler either, and whose expensive victim is not a lost swing but
+**`leap`**: the swarm escape ladder moves with `stand;leap <dir>`, and a refusal was
+silent to that machinery, stalling the low-HP escape until the move timeout expired.
+
+**Denizen parry patterns** for both malagmae. The iron malagma has two arm attacks to one
+head attack, and a broken pair of arms doesn't merely hurt — it *refuses the attack
+outright*, so the arms are the limbs gating the entire offence. `fixed` not `cycle`:
+neither arm line names a side, so an unsynchronised cycle would guard the wrong arm half
+the time.
+
+### The cooldown feed we were discarding
+
+The game names the exact ability coming off cooldown — `You can use Collide again.` and
+`Your Collide ability could be used again but you lack the necessary Rage.` (the same
+event seen through an empty rage bar). Every owned rotation instead *guessed* with a
+send-side stamp plus a hardcoded `cd`, which is wrong in both directions: too slow when
+boons/gear shorten the real cooldown, too fast when a stamped pick never executed. New
+`basher/011_Battlerage_Ready_Lines.lua` + trigger `328` — class-agnostic, verb captured
+from the line, unknown verbs ignored. (The pre-existing gag hides only the *Chaosgate*
+forms, so this costs no existing behaviour.)
+
+### Burning rooms
+
+`The area is ablaze!` plus `The roaring inferno engulfs you…` for ~800 every few seconds
+— about 6% of max HP per tick, indefinitely — matched by nothing. New `M.roomAblaze()`
+(latched on the burn line, not the room description, so it self-expires when we leave)
+gates the swarm escape ladder's **hover**: flying up to heal is a fine plan in a normal
+room and a bad one over a fire that follows you. The kite is deliberately *not* gated —
+it lands for every swing anyway.
+
+### Blood Maiden cloak — corrected against TALISMAN INFO
+
+The code read "failing to make a kill within 3 minutes will cause the blood reserves to
+deplete" as *"the cloak stays active for 3 minutes (free re-activations)"* and dropped the
+mob threshold from 4 to 3 on that basis. Both halves were wrong: BLOODSHIELD is a
+**one-shot block of the next attack**, and the 3 minutes is the depletion timer on the
+reserves. So a charge earned over five kills was spent and then re-spent every 3s against
+a cloak that had nothing left. Now one charge, one activation, consumed on use — and
+never while prone (the cloak refuses that under aggression aura, and has a 50% chance to
+eat the charge for nothing).
+
+### Also
+
+`376_Falcon_Turned_On_Us` (the Runewarden twin of the hyena flip — `order falcon passive`
+is free and balanceless) and `377_Sword_And_Shield_Lost` (`You must be wielding both a
+sword and a shield…` → re-wield + re-`grip`; the more dangerous of the two limb-style
+refusals, because nothing re-wields, so it would persist forever).
+
+Files: `legend_deck/003`, `basher/001`, `basher/010`, `basher/011` (NEW),
+`self_limb_tracking/005`, `mnemosyne/004`, `mnemosyne/009`, triggers `038`, `328`, `344`,
+`345`, `376`, `377`, `mnemosyne/049` (NEW), `tests/test_legend_deck_match.lua` (NEW),
+`tests/test_mnem_ldeck.lua`, docs, memory. Suite **654/654**.
+
+---
+
 ## 2026-07-30 — Card → confirmed → battlerage, and two live bugs (v4.7.166)
 
 Live log of v4.7.165 in the tower. Three faults, all visible in one 90-second stretch.

@@ -568,10 +568,22 @@ function ataxiaBasher_assembleAttack()
   end
 	if ataxiaBasher.nicator and not haveDef("nicatorlegend") then command = command.."legenddeck draw nicator"..sp end
 
-  -- Blood Maiden cloak: activate bloodshield on 4+ targetable mobs or bosses
-  -- After first activation, cloak stays active for 3 minutes (free re-activations)
-  -- Cooldown gate: only include in command once per 3s to avoid spamming EQ with pre-queuing
-  if ataxiaBasher.bloodMaiden and (ataxiaTemp.bloodshieldReady or ataxiaTemp.bloodshieldActive)
+  -- Blood Maiden cloak (TALISMAN INFO QUISALISCLOAK, corrected v4.7.167):
+  --   "Once it has drunk in enough blood (5 deaths, player kills are worth double) the
+  --    cloak will allow the owner to ACTIVATE BLOODSHIELD, providing a shield that will
+  --    block THE NEXT ATTACK against you."
+  --   "failing to make a kill within 3 minutes will cause the blood reserves to deplete"
+  --
+  -- The old model read that 3 minutes as "the cloak stays active for 3 minutes (free
+  -- re-activations)" and dropped the mob threshold from 4 to 3 on the strength of it.
+  -- Both halves were wrong: bloodshield is a ONE-SHOT block, and the 3 minutes is the
+  -- DEPLETION timer on the blood reserves, not an uptime. So a charge earned over five
+  -- kills was being spent, then re-spent every 3s against a cloak that had nothing left
+  -- -- and the lowered threshold made that happen sooner.
+  --
+  -- Correct model: `bloodshieldReady` is a single charge, set by the "grows hot against
+  -- your skin" line (trigger 769) and consumed by one ACTIVATE. No active window.
+  if ataxiaBasher.bloodMaiden and ataxiaTemp.bloodshieldReady
      and not ataxiaTemp.bloodshieldCooldown then
     -- areaKey(), not gmcp's area: under the incurable-dementia boon gmcp names a hallucinated
     -- real area, so this would read that area's list (or nil) instead of the tower's, never
@@ -594,23 +606,19 @@ function ataxiaBasher_assembleAttack()
       end
       if bosses[name] then hasBoss = true end
     end
-    local threshold = ataxiaTemp.bloodshieldActive and 3 or 4
-    if targetCount >= threshold or hasBoss then
+    -- One charge, one blocked attack: spend it on a genuinely dangerous room only.
+    -- (Also: the cloak refuses while PRONE under aggression aura, and under that aura
+    -- has a 50% chance to eat the charge for nothing -- so never burn it while prone.)
+    local prone = (ataxia.afflictions and ataxia.afflictions.prone) and true or false
+    if (targetCount >= 4 or hasBoss) and not prone then
       command = command.."activate bloodshield"..sp
+      ataxiaTemp.bloodshieldReady = nil -- the charge is spent; the next kill-streak re-earns it
       ataxiaTemp.bloodshieldCooldown = true
       if ataxiaTemp.bloodshieldCooldownTimer then killTimer(ataxiaTemp.bloodshieldCooldownTimer) end
       ataxiaTemp.bloodshieldCooldownTimer = tempTimer(3, function()
         ataxiaTemp.bloodshieldCooldown = nil
         ataxiaTemp.bloodshieldCooldownTimer = nil
       end)
-      if ataxiaTemp.bloodshieldReady and not ataxiaTemp.bloodshieldActive then
-        ataxiaTemp.bloodshieldActive = true
-        ataxiaTemp.bloodshieldTimer = tempTimer(180, function()
-          ataxiaTemp.bloodshieldActive = nil
-          ataxiaTemp.bloodshieldTimer = nil
-        end)
-      end
-      ataxiaTemp.bloodshieldReady = nil
     end
   end
 

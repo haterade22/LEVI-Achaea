@@ -50,6 +50,24 @@ selfLimbDamage.denizenPatterns["a ravager of the Infernal Legion"] = { fixed = "
 -- tempering) targets no limb, so parking the parry on the torso costs nothing
 -- (2026-07-29 log).
 selfLimbDamage.denizenPatterns["an unbound frost elemental"] = { fixed = "torso" }
+-- MINE MALAGMAE (2026-07-30 Mnemosyne log). The iron malagma has TWO arm attacks --
+-- "Grabbing a pick from the floor of the mine, ... embeds the rusted head into your arm."
+-- and "Grabbing your arm in his vice-like hands, ... snaps the bone in two." -- against
+-- one head attack ("swings a partially rotted wooden shaft at your head"). Parking the
+-- parry on an arm is the single highest-value limb call available against them: a broken
+-- pair of arms does not merely hurt, it REFUSES the Sword-and-Board attack outright
+-- ("You cannot do that because both of your arms must be whole and unbound.", trigger
+-- 344), so the arms are the limbs that gate our entire offence.
+--
+-- `fixed` rather than `cycle`: neither arm line names a SIDE, so we cannot observe the
+-- alternation to phase a cycle against it -- an unsynchronised cycle would parry the
+-- wrong arm half the time, which is worse than always covering one. Covering the right
+-- arm halves the rate at which BOTH end up broken, which is the state that matters.
+selfLimbDamage.denizenPatterns["an iron malagma"] = { fixed = "right arm" }
+-- The invar malagma's only limb-targeted attack is the shovel leg-shatter ("sweeps a
+-- shovel above the ground ... crashing into your leg and shattering the bone"); its
+-- other move is the shoulder-charge knockdown, which names no limb. Free cover.
+selfLimbDamage.denizenPatterns["an invar malagma"] = { fixed = "right leg" }
 
 local state = { mob = nil, limb = nil, count = 0, at = 0 }
 local SAME_SWING_WINDOW = 1.0  -- two perceive lines of one swing land inside this

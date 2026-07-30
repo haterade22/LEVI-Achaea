@@ -473,9 +473,25 @@ end
 -- on the ground, attack-gated, until the 60s cap).
 function S._canFly() return not mnemDeluge end
 
+-- HOVERING to heal is only a plan if the air is safer than the ground. In an ABLAZE
+-- room it is not: the fire keeps burning us at ~6% max HP a tick while we hang there
+-- doing nothing but regenerate, so the hover spends its whole budget out-healing the
+-- floor and lands no better off. (Contrast the Blazing affix, which smokes flyers for
+-- ~511 asphyx/5s -- the hover was measured to out-heal THAT.) Prefer the grounded
+-- retreat, which at least gets us out of the fire.
+--
+-- The kite is deliberately NOT gated on this: kiting lands for every swing anyway, so
+-- it is not a way of avoiding the ground, and grounding a kite mid-swarm is worse.
+function S._canHover()
+  if not S._canFly() then return false end
+  local M2 = ataxia and ataxia.mnemosyne
+  if M2 and M2.roomAblaze and M2.roomAblaze() then return false end
+  return true
+end
+
 function S._beginEscape()
   local s = S._cfg()
-  if not S._indoors() and S._canFly() then
+  if not S._indoors() and S._canHover() then
     S.state = "recovering"
     S.recoverStarted = now()
     S.flying = true

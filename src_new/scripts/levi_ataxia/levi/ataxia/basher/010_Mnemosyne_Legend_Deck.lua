@@ -62,6 +62,9 @@ do
   c.maranAt   = tonumber(c.maranAt)   or 20  -- hp% for the barrier
   c.seasoneAt = tonumber(c.seasoneAt) or 35  -- hp% for the elixir boost
   c.maticAt   = tonumber(c.maticAt)   or 3   -- denizens for the guaranteed crit
+  -- Mob-hp floor for the OFFENSIVE cards (Matic/Covenant/Xylthus): below this the
+  -- mob dies before the card pays for itself. Defensive draws are never gated on it.
+  c.conserveAt = tonumber(c.conserveAt) or 25
 end
 
 -- Bindings Morimbuul shrugs off. The user's rule named WEBBED; the card covers
@@ -168,6 +171,27 @@ local function targetIsBoss()
   return nm:lower():find(first, 1, true) ~= nil
 end
 
+-- Is the current target too nearly dead to be worth a card? The battlerage
+-- rotations already refuse to spend rage on a mob about to die
+-- (`ataxiaBasher.rageConserveThreshold`, five near-identical sites incl.
+-- 001:1030 and 002:1477); the same logic applies far MORE strongly here, because
+-- rage refills in seconds and these charges refill once an HOUR. A guaranteed
+-- crit (Matic) on a mob at 5% is the purest waste in the whole layer.
+--
+-- The GMCP read is fully guarded: unlike the rotation call sites, this function
+-- runs under pcall in assembleAttack (001:621), so an unguarded index on a
+-- not-yet-delivered Target.Info would be swallowed and would silently disable the
+-- ENTIRE card layer with no error surfaced.
+local function targetNearlyDead()
+  local floor = tonumber(ataxiaBasher.mnemLdeck and ataxiaBasher.mnemLdeck.conserveAt)
+  if not floor or floor <= 0 then return false end
+  local ti = gmcp and gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info
+  local raw = ti and ti.hpperc
+  local mobhp = tonumber((tostring(raw or ""):gsub("%%", "")))
+  if not mobhp or mobhp <= 0 then return false end -- no reading = never block
+  return mobhp <= floor
+end
+
 -- Pure-ish decision: the ONE card to draw right now, or nil. `stamps` is the
 -- per-card last-draw epoch table (injectable for tests).
 function ataxiaBasher_mnemLdeckPick(t, stamps)
@@ -195,7 +219,7 @@ function ataxiaBasher_mnemLdeckPick(t, stamps)
     elseif card.key == "Seasone" then
       want = hp ~= nil and hp <= (tonumber(cfg.seasoneAt) or 35)
     elseif card.key == "Matic" then
-      want = mobs >= (tonumber(cfg.maticAt) or 3)
+      want = mobs >= (tonumber(cfg.maticAt) or 3) and not targetNearlyDead()
     elseif card.aff then
       -- "Enough battlerage to do a battlerage attack that benefits from this."
       -- Also needs a live denizen target, and is pointless if the mob already
@@ -206,6 +230,7 @@ function ataxiaBasher_mnemLdeckPick(t, stamps)
         and ataxiaBasher_rageAfford ~= nil
         and ataxiaBasher_rageAfford(rage, ex.rage)
         and (not ex.ready or ex.ready() == true)
+        and not targetNearlyDead()
         and not (ataxiaBasher_dsHasAff and ataxiaBasher_dsHasAff(target, card.aff))
       if want and card.key == "Xylthus" and targetIsBoss() then want = false end
     end
@@ -237,9 +262,11 @@ function ataxiaBasher_mnemLdeck(sp)
   local p = ataxiaTemp.mnemLdeckPending
   if p then
     if (t - (p.at or 0)) < PENDING_WINDOW then return p.cmd .. sp end
-    -- Window lapsed with no confirmation: stamp it anyway so a silently-eaten
-    -- draw can't loop forever, and let the next round decide afresh.
-    ataxiaBasher_mnemLdeckConfirm(p.key)
+    -- Window lapsed with NO confirmation. Hold the interval so a silently-eaten
+    -- draw can't loop forever -- but this is emphatically NOT a confirmation, so
+    -- it must not stamp the affliction. Calling Confirm here (v4.7.166) re-opened
+    -- the exact phantom-stun hole that release was meant to close.
+    ataxiaBasher_mnemLdeckLapse(p.key)
   end
 
   local key, cmd, card = ataxiaBasher_mnemLdeckPick(t)
@@ -297,6 +324,19 @@ function ataxiaBasher_mnemLdeckConfirm(key)
     end
     ataxiaTemp.mnemLdeckPending = nil
   end
+  ataxiaTemp.mnemLdeckAt[key] = now()
+end
+
+-- LAPSE. The pending replay window ran out and no confirmation line ever arrived --
+-- the draw may or may not have happened, so the ONLY safe reading is "we do not know".
+-- Hold the card's interval (a silently-eaten draw must not re-fire every round) and
+-- release the replay, but stamp NOTHING on the denizen: an unacknowledged draw is
+-- exactly the phantom whose affliction cost Etch 25 rage in the first place.
+function ataxiaBasher_mnemLdeckLapse(key)
+  if type(key) ~= "string" then return end
+  ataxiaTemp.mnemLdeckAt = ataxiaTemp.mnemLdeckAt or {}
+  local p = ataxiaTemp.mnemLdeckPending
+  if p and p.key == key then ataxiaTemp.mnemLdeckPending = nil end
   ataxiaTemp.mnemLdeckAt[key] = now()
 end
 

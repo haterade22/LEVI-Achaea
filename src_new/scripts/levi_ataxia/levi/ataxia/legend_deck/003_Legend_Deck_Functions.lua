@@ -557,25 +557,47 @@ end
 --[[
     Match a full in-game card name to our db key.
     In-game: "Maran La'Saen, Seraph of Creation" -> "Maran"
-    Strategy: try the first word of the full name as the key.
+
+    v4.7.167 -- THIS WAS BROKEN FOR EVERY COMMA-SUFFIXED CARD, and it was the root
+    cause of a whole family of bugs. The old code took `fullName:match("^(%S+)")`,
+    which for "Xylthus, the Outcast" yields the token "Xylthus," -- WITH THE COMMA --
+    and no lookup ever matches that. Consequences, all live:
+      * 001_Identify_Uses ("A card depicting X may be used N more times...") never
+        resolved a key, so `ldm.deck[card].charges` was NEVER updated from the game.
+        `initDeck` seeds unseen cards at their MAX, so the deck permanently claimed
+        full charges for Xylthus/Seasone/Nicator/... -- the "3 charge(s) left" on a
+        card the game then refused.
+      * 008_LDeck_No_Charges (the v4.7.166 rejection handler) early-returned on nil,
+        so the fix that was supposed to stop drawing into a wall never ran at all.
+    Cards whose key IS the first bare word (Maran, Matic, Covenant) worked, which is
+    why this survived so long.
+
+    Strategy now: scan the name's tokens, stripping punctuation from each, and prefer
+    an earlier token. Also handles a leading honorific ("Lord Nicator, The Chosen
+    One" -> Nicator), which the first-word rule could never reach.
 ]]--
 function ldm.matchFullName(fullName)
     if not fullName then return nil end
 
-    -- Try exact match first
+    -- Try the whole string first (already-resolved keys pass straight through).
     if ldm.db[fullName] then return fullName end
 
-    -- Try first word (most card keys are the first word of the full name)
-    local firstWord = fullName:match("^(%S+)")
-    if firstWord then
-        -- Try exact case
-        if ldm.db[firstWord] then return firstWord end
-        -- Try case-insensitive
+    -- Case-insensitive lookup of one cleaned token.
+    local function lookup(word)
+        if word == "" then return nil end
+        if ldm.db[word] then return word end
         for key, _ in pairs(ldm.db) do
-            if key:lower() == firstWord:lower() then
-                return key
-            end
+            if key:lower() == word:lower() then return key end
         end
+        return nil
+    end
+
+    -- Token scan, earliest match wins. Apostrophes are kept -- several keys carry
+    -- them ("Maran La'Saen" style names) -- everything else non-alphanumeric goes.
+    for word in fullName:gmatch("[^%s]+") do
+        local cleaned = word:gsub("[^%w']", "")
+        local key = lookup(cleaned)
+        if key then return key end
     end
 
     return nil

@@ -275,6 +275,43 @@ describe("gates", function()
   end)
 end)
 
+
+-- ---------------------------------------------------------------------------
+-- v4.7.167 corrections, all driven by the live log of 2026-07-30.
+-- ---------------------------------------------------------------------------
+describe("v4.7.167 -- lapse is not confirmation, and dying mobs are not worth a card", function()
+  it("a LAPSED draw stamps NOTHING -- it is not a confirmation", function()
+    reset(); ataxia.vitals.rage = 60
+    expect(ataxiaBasher_mnemLdeck(";")).toBe("ldeck draw xylthus 7;")
+    clock = clock + 5                              -- past the 4s pending window
+    expect(ataxiaBasher_mnemLdeck(";")).toBe("")   -- replay released
+    expect(setAffs.stun).toBe(nil)                 -- and NO phantom stun for Etch to buy
+    expect(ataxiaTemp.mnemLdeckAt.Xylthus).toBe(clock) -- interval still held
+  end)
+
+  it("skips the offensive cards on a mob that is about to die", function()
+    reset(); ataxia.vitals.rage = 60
+    gmcp.IRE = { Target = { Info = { hpperc = "8%" } } }
+    expect(pick()).toBe(nil)
+    gmcp.IRE.Target.Info.hpperc = "60%"
+    expect(pick()).toBe("Xylthus")
+  end)
+
+  it("still draws the DEFENSIVE cards on a dying mob -- they protect US, not the kill", function()
+    reset(); ataxia.vitals.hpp = 15
+    gmcp.IRE = { Target = { Info = { hpperc = "3%" } } }
+    expect(pick()).toBe("Maran")
+  end)
+
+  it("never blocks on a missing or unreadable target reading", function()
+    reset(); ataxia.vitals.rage = 60
+    gmcp.IRE = nil                     -- GMCP not delivered yet
+    expect(pick()).toBe("Xylthus")
+    gmcp.IRE = { Target = { Info = {} } }
+    expect(pick()).toBe("Xylthus")
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 getEpoch = _epoch
 target, secondTarget = nil, nil

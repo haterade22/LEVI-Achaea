@@ -208,6 +208,7 @@ function M.onRunEnd()
   end
   mnemHaemophiliac = false -- affixes gone on a confirmed run-end (pacing back to normal)
   mnemDeluge = false -- affixes gone on a confirmed run-end (flight available again)
+  M.ablazeAt = nil   -- per-room burn state cannot outlive the run
   if ataxiaTemp then
     ataxiaTemp.reaperKills = nil -- the +1%/kill tally dies with the run
     ataxiaTemp.kaiUnleashedAt = nil -- the burst cooldown stamp dies with it
@@ -312,6 +313,43 @@ function M.onDelugeSeen()
   if not M._quiet() then
     M.echo("<red>Deluge<reset> active -- rooms are UNDERWATER: no flying (escape ladder goes grounded)")
   end
+end
+
+-- ABLAZE ROOM (v4.7.167, live 2026-07-30). The room description carries "The area is
+-- ablaze!" and the ground then burns us for ~800 every few seconds ("The roaring
+-- inferno engulfs you as you fight to find a way out.") for as long as we stand in it.
+--
+-- Unlike Splinterbark/Deluge this is a per-ROOM state, not a run-wide affix, so it is
+-- latched by the burn line itself rather than a status row and it EXPIRES: if no burn
+-- has landed for a while we have either left or it has gone out. Kept telemetry-
+-- independent for the same reason as the other three -- the safety must work with
+-- reporting off.
+--
+-- What reads it: the swarm low-HP escape ladder. Its outdoor branch flies up and HOVERS
+-- until fully healed, which is a fine plan in a normal room and a bad one over a fire
+-- we cannot out-heal. `S._canHover()` consults this so the ladder takes the grounded
+-- retreat instead.
+M.ABLAZE_STALE = 12 -- seconds without a burn tick -> assume we are clear of it
+
+function M.onAblazeBurn()
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  local first = not M.ablazeAt
+  M.ablazeAt = getEpoch and getEpoch() or 0
+  if first and not M._quiet() then
+    M.echo("<indian_red>The ground is BURNING<reset> -- hover-healing is off until we leave.")
+  end
+end
+
+-- True while the room is actively burning us. Lazy expiry so leaving the room clears it
+-- without needing a "the fire goes out" line we have never captured.
+function M.roomAblaze()
+  if not M.ablazeAt then return false end
+  local nowT = getEpoch and getEpoch() or 0
+  if (nowT - M.ablazeAt) > (M.ABLAZE_STALE or 12) then
+    M.ablazeAt = nil
+    return false
+  end
+  return true
 end
 
 -- Restore game tree curing iff Splinterbark had forced it off. Called from onRunEnd (run over ->
