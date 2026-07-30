@@ -99,6 +99,11 @@ function ataxiaCheckForMissing()
 		ataxiaEcho("<green>bash rageraze on/off <NavajoWhite>to change.")
 	end
 
+	-- Auto-feed from the horn of plenty when a starvation state is seen. Starvation
+	-- knocks you UNCONSCIOUS, which disables every other safety in the system, so this
+	-- defaults ON; `horn off` to disable.
+	if ataxia.settings.hornAuto == nil then ataxia.settings.hornAuto = true end
+
 	-- Depthswalker PvE options (v4.7.142). Boinad spends 32 rage AND the shared word
 	-- balance for a 5s charm, so it is opt-in; cull-vs-reap is unmeasured (see the class
 	-- doc A/B note), so the fast swing stays default; the Terminus buff keepers are on.

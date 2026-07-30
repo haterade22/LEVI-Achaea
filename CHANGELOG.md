@@ -2,6 +2,34 @@
 
 ---
 
+## 2026-07-29 — Auto-feed from the horn of plenty when starving (v4.7.155)
+
+**Starvation is a combat emergency, not a flavour message.** The 2026-07-29 jungle log
+shows exactly why: *"Your legs collapse from under you and consciousness leaves you as you
+pass out."* followed by a wall of *"You are unconscious and thus incapable of action."*
+while a puma, two cockatrices and our own hyena took ~10k health off us. While
+unconscious, **nothing** in this system can help — no curing, no flee, no attack, no
+escape ladder. SCORE confirmed the cause: `Hunger : starving to death`.
+
+- New `ataxia_hornFeed(reason, force)` (`misc_scripts/022_Horn_Of_Plenty.lua`):
+  `PROBE HORN` → capture the first item id from the listing → `GET <id> FROM HORN` →
+  `EAT <id>`. The id must be read from the probe because the contents are randomised
+  (`loaf545957`, `potpie268371`, `pork528142`…) and change as the horn refills.
+- New trigger `374_Starving` fires it on the SCORE hunger row (captured verbatim from the
+  log) and on the standing hunger warnings, with a box echo. 20s cooldown so a burst of
+  lines can't queue a dozen probes; a 3s backstop disarms the capture if no listing
+  arrives, so a catch-all regex is never left armed over combat text.
+- `horn` feeds now (manual, ignores the cooldown); `horn on|off` toggles the automatic
+  feed (default **on**, persisted); `horn auto` shows the setting.
+
+The horn holds 6 items and resets to us, so an unnecessary eat costs almost nothing while
+a missed one can cost the run — hence feeding eagerly rather than waiting for certainty.
+
+Files: `misc_scripts/022_Horn_Of_Plenty.lua` (NEW), `374_Starving.lua` (NEW),
+`configs/019_Horn_Of_Plenty.lua` (NEW), `002_Check_For_Any_Missing_Variables.lua`.
+
+---
+
 ## 2026-07-29 — Hyena maul lines highlighted (v4.7.154)
 
 The maul pair is easy to lose in scrolling combat, so it is now coloured. The highlight
