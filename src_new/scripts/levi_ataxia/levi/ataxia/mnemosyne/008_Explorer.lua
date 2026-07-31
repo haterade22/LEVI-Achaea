@@ -579,7 +579,10 @@ function M._exploreResume(reason)
   ataxiaBasher.manual = true
   ataxiaBasher.areabash = false
   ataxiaBasher.autoLearn = true
-  ataxiaBasher.inMnemosyne = true
+  -- Through the shared setter, not a direct write: it owns the transition guard and raises
+  -- "mnemosyne entered", which arms every tower-only mode. A direct write is silent, so a
+  -- resume that is the FIRST thing to notice we are inside would arm none of them.
+  if ataxiaBasher_mnemHere then ataxiaBasher_mnemHere("explore resume") else ataxiaBasher.inMnemosyne = true end
   M.explore.pausedAtBoon = false
   M.explore.moving = false
   M.explore.failed = {}
@@ -629,7 +632,7 @@ function M.exploreOn()
   ataxiaBasher.manual = true
   ataxiaBasher.areabash = false
   ataxiaBasher.autoLearn = true
-  ataxiaBasher.inMnemosyne = true
+  if ataxiaBasher_mnemHere then ataxiaBasher_mnemHere("explore on") else ataxiaBasher.inMnemosyne = true end
   if M.explore._raisedBasher and raiseEvent then raiseEvent("basher enabled") end
 
   M.explore.on = true

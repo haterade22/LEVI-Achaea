@@ -200,6 +200,83 @@ describe("bash curing profile -- switching", function()
   end)
 end)
 
+describe("bash curing profile -- held for the whole Mnemosyne wade", function()
+  local function reset(inTower)
+    mock.reset()
+    ataxia.settings.bashcuring = {
+      enabled = true, installed = true, setname = "bash", restoreTo = "normal", active = false,
+    }
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = inTower and true or false
+    classDetect = nil
+  end
+  local function lastSent() return mock.sent_commands[#mock.sent_commands] end
+
+  it("holds the set when the basher is disabled inside the tower", function()
+    -- The whole point. A tower DEATH raises "basher disabled" (twice: onDeath plus the
+    -- explorer's stop) while we are still standing in a hostile ripple -- flipping back to the
+    -- PvP table there is the worst possible timing, since we re-engage at low HP with limbs
+    -- broken. Seen live in the 2026-07-31 death log.
+    reset(true)
+    ataxia_bashProfileOn()
+    expect(lastSent()).toBe("curingset switch bash")
+    local n = #mock.sent_commands
+    ataxia_bashProfileOnBasherDisabled()
+    expect(#mock.sent_commands).toBe(n)          -- nothing sent
+    expect(ataxia_bashProfileActive()).toBeTrue() -- still on the PvE table
+  end)
+
+  it("survives the repeated disables a tower death actually produces", function()
+    reset(true)
+    ataxia_bashProfileOn()
+    local n = #mock.sent_commands
+    ataxia_bashProfileOnBasherDisabled()
+    ataxia_bashProfileOnBasherDisabled()
+    ataxia_bashProfileOnBasherDisabled()
+    expect(#mock.sent_commands).toBe(n)
+    expect(ataxia_bashProfileActive()).toBeTrue()
+  end)
+
+  it("releases only when we actually leave the tower", function()
+    reset(true)
+    ataxia_bashProfileOn()
+    ataxia_bashProfileOnBasherDisabled()
+    expect(ataxia_bashProfileActive()).toBeTrue()
+    ataxiaBasher.inMnemosyne = false  -- ataxiaBasher_mnemLeft would have done this
+    ataxia_bashProfileOff()           -- ...and raised "mnemosyne left"
+    expect(lastSent()).toBe("curingset switch normal")
+    expect(ataxia_bashProfileActive()).toBeFalse()
+  end)
+
+  it("arms on tower entry even with the basher off", function()
+    -- "mnemosyne entered" fires from the wade-start line, wade status, the boon screen or
+    -- SURVEY -- none of which imply the basher is running yet.
+    reset(true)
+    ataxiaBasher.enabled = false
+    ataxia_bashProfileOn()
+    expect(lastSent()).toBe("curingset switch bash")
+    expect(ataxia_bashProfileActive()).toBeTrue()
+  end)
+
+  it("still switches off on a normal out-of-tower basher stop", function()
+    reset(false)
+    ataxia_bashProfileOn()
+    ataxia_bashProfileOnBasherDisabled()
+    expect(lastSent()).toBe("curingset switch normal")
+    expect(ataxia_bashProfileActive()).toBeFalse()
+  end)
+
+  it("lets an explicit `aconfig bashcuring off` win even inside the tower", function()
+    -- Only the EVENT is suppressed, never the function -- an explicit user command and the
+    -- ataxia_sendDefaultPrios bail-out must both still be able to leave the set.
+    reset(true)
+    ataxia_bashProfileOn()
+    ataxia_bashProfileToggle("off")
+    expect(lastSent()).toBe("curingset switch normal")
+    expect(ataxia_bashProfileActive()).toBeFalse()
+  end)
+end)
+
 describe("bash curing profile -- stored-priority write guard", function()
   local function armed(on)
     mock.reset()
@@ -240,3 +317,4 @@ end)
 -- profile would silently arm the write guard for every test file sorted after this one.
 ataxia.settings.bashcuring.active = false
 classDetect = nil
+if ataxiaBasher then ataxiaBasher.inMnemosyne = false end

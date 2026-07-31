@@ -277,9 +277,7 @@ function ataxiaBasher_mnemLeftFor(where)
   if not ataxiaTemp.mnemSurveyPending then return end -- not our survey; ignore
   ataxiaBasher_mnemStillHere() -- close the window; we have a definitive answer
   ataxiaTemp.mnemSurveyPending = nil
-  if not ataxiaBasher.inMnemosyne then return end
-  ataxiaBasher.inMnemosyne = false
-  ataxiaEcho("Left Mnemosyne (SURVEY: " .. tostring(where) .. ") -- no-flee mode OFF.")
+  ataxiaBasher_mnemLeft("SURVEY: " .. tostring(where))
 end
 
 -- Fallback only: the SURVEY answer never arrived (gagged, swallowed, lost). Trigger 352 is the
@@ -287,9 +285,24 @@ end
 function ataxiaBasher_mnemLeftConfirm()
   ataxiaTemp.mnemLeftTimer = nil
   ataxiaTemp.mnemSurveyPending = nil
+  ataxiaBasher_mnemLeft("no SURVEY reply")
+end
+
+-- The single way OUT of the tower. There are three callers -- SURVEY named a real place, the
+-- SURVEY reply never came, and the confirmed wade-end (mnemosyne/004 onRunEnd) -- and before
+-- this existed each cleared the flag itself, so anything wanting to react to "we left" had
+-- three places to hook and no transition guard. Mirrors ataxiaBasher_mnemHere.
+--
+-- The event is what lets a subsystem hold a tower-only mode for the WHOLE wade rather than for
+-- as long as the basher happens to be enabled. That distinction is not cosmetic: a death raises
+-- "basher disabled" (twice, via onDeath and the explorer's stop) while we are still standing in
+-- a hostile ripple, so anything keyed only to the basher flips back to its out-of-tower profile
+-- at the worst possible moment. See ataxia/ataxia/008_Bash_Curing_Profile.lua.
+function ataxiaBasher_mnemLeft(why)
   if not ataxiaBasher.inMnemosyne then return end
   ataxiaBasher.inMnemosyne = false
-  ataxiaEcho("Left Mnemosyne (no SURVEY reply) -- no-flee mode OFF.")
+  ataxiaEcho("Left Mnemosyne (" .. tostring(why) .. ") -- no-flee mode OFF.")
+  raiseEvent("mnemosyne left")
 end
 
 -- The key a room's denizens are filed under in ataxiaBasher.targetList (auto-learn) and looked
@@ -316,6 +329,7 @@ function ataxiaBasher_mnemHere(why)
   if ataxiaBasher.inMnemosyne then return end
   ataxiaBasher.inMnemosyne = true
   ataxiaEcho("Mnemosyne confirmed (" .. tostring(why) .. ") -- no-flee mode ON (shield, don't flee).")
+  raiseEvent("mnemosyne entered")
 end
 
 -- SURVEY named the Mnemosyne (trigger 351): we are still inside, whatever the area claims.

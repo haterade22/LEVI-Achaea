@@ -283,6 +283,37 @@ function ataxia_bashProfileOff()
   if ataxiaEcho then ataxiaEcho("Curing -> <green>" .. (s.restoreTo or "normal") .. "<reset> (PvP priorities restored).") end
 end
 
+-- INSIDE THE TOWER THE PROFILE IS HELD FOR THE WHOLE WADE, not for as long as the basher
+-- happens to be enabled.
+--
+-- "basher disabled" is a poor proxy for "the fight is over" in Mnemosyne. It fires from at
+-- least three places mid-wade, all of them while we are still standing in a hostile ripple:
+--   * DEATH -- ataxiaBasher_onDeath (genrunning/001:162) raises it, and the tower death trigger
+--     drives _exploreStop which raises it AGAIN. Neither clears inMnemosyne. The 2026-07-31
+--     death log shows exactly this: `DEATH DETECTED! Basher disabled` with the wade still live.
+--   * the explorer stopping (`mnem explore off`, patrol cap, a stall) -- we are still inside.
+--   * an areaoff / manual toggle between ripples.
+-- Flipping back to the PvP table at any of those moments is the worst possible timing: it is
+-- precisely when we are about to re-engage at low HP with limbs broken.
+--
+-- So the tower owns the profile: it arms on entry (whatever the basher is doing) and releases
+-- only on the confirmed exit -- SURVEY naming a real place, the SURVEY timeout, or the wade's
+-- own run-end. All three funnel through ataxiaBasher_mnemLeft, which raises "mnemosyne left".
+--
+-- Deliberately a separate handler rather than a check inside ataxia_bashProfileOff: an explicit
+-- `aconfig bashcuring off` and the ataxia_sendDefaultPrios bail-out must still work in the
+-- tower. Only the EVENT is suppressed, never the function.
+function ataxia_bashProfileOnBasherDisabled()
+  if ataxiaBasher and ataxiaBasher.inMnemosyne then
+    local s = ataxia_bashCuringSettings()
+    if s.active and ataxiaEcho then
+      ataxiaEcho("Still in Mnemosyne -- <green>holding the bash curing set<reset> through the basher stop.")
+    end
+    return
+  end
+  ataxia_bashProfileOff()
+end
+
 function ataxia_bashProfileStatus()
   local s = ataxia_bashCuringSettings()
   if not ataxiaEcho then return end
@@ -330,4 +361,12 @@ local function _reg(event, fnName)
   ataxiaBashProfile[event] = registerAnonymousEventHandler(event, fnName)
 end
 _reg("basher enabled", "ataxia_bashProfileOn")
-_reg("basher disabled", "ataxia_bashProfileOff")
+_reg("basher disabled", "ataxia_bashProfileOnBasherDisabled")
+-- Mnemosyne brackets the profile independently of the basher (see the handler above).
+-- "mnemosyne entered" is raised by ataxiaBasher_mnemHere off any of its four truth sources
+-- (wade start, wade status, boon screen, SURVEY), so it also self-heals a reconnect mid-climb;
+-- "mnemosyne left" by ataxiaBasher_mnemLeft off all three exits. Both are telemetry-
+-- independent -- they ride ataxiaBasher.inMnemosyne, never M.run.active, which is permanently
+-- false when REST reporting is off.
+_reg("mnemosyne entered", "ataxia_bashProfileOn")
+_reg("mnemosyne left", "ataxia_bashProfileOff")

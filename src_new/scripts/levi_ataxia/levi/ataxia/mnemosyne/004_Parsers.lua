@@ -226,9 +226,18 @@ function M.onRunEnd()
   -- on the deferred maybe, so a mid-run message re-read cannot drop no-flee. Unconditional
   -- (independent of telemetry), like the boon flags above.
   if ataxiaBasher and ataxiaBasher.inMnemosyne then
-    ataxiaBasher.inMnemosyne = false
     if ataxiaBasher_mnemStillHere then ataxiaBasher_mnemStillHere() end -- drop any pending ask
-    ataxiaEcho("Mnemosyne wade ended -- no-flee mode OFF.")
+    -- Through the shared leave hook, not a direct write: it owns the transition guard and
+    -- raises "mnemosyne left", which is what releases every tower-only mode (curing profile,
+    -- no-flee). A direct clear here would strand them on for the rest of the session.
+    -- Nil-guarded like the call above -- it lives in basher/001 and this is a cross-file call;
+    -- the fallback still clears the flag so no-flee can never be stranded ON by a load order.
+    if ataxiaBasher_mnemLeft then
+      ataxiaBasher_mnemLeft("wade ended")
+    else
+      ataxiaBasher.inMnemosyne = false
+      ataxiaEcho("Mnemosyne wade ended -- no-flee mode OFF.")
+    end
   end
   M.releaseTreeReserve() -- a boss tree-reserve must not outlive the run
   M.run.boss = nil

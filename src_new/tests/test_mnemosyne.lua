@@ -381,6 +381,40 @@ describe("onRunEnd", function()
     M.onRunEnd()
     expect(#sent).toBe(0)
   end)
+
+  -- The confirmed wade-end is the NORMAL way out of the tower (the SURVEY paths are the
+  -- "walked out / stale flag" ones), and it is what releases every tower-only mode: no-flee,
+  -- and the PvE curing profile that is deliberately held across a mid-wade basher stop.
+  it("clears inMnemosyne and raises 'mnemosyne left' through the shared hook", function()
+    reset(true)
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = true
+    local raised = {}
+    local realRaise = raiseEvent
+    raiseEvent = function(e, ...) raised[#raised + 1] = e; return realRaise(e, ...) end
+    local ok, err = pcall(function()
+      dofile("src_new/scripts/levi_ataxia/levi/ataxia/basher/001_Bashing_Functions.lua")
+      M.onRunEnd()
+    end)
+    raiseEvent = realRaise
+    if not ok then error(err) end
+    expect(ataxiaBasher.inMnemosyne).toBeFalse()
+    expect(raised).toContain("mnemosyne left")
+  end)
+
+  -- basher/001 is a separate file, so this is a cross-file global call -- the crash class in
+  -- bug-patterns.md. It must degrade to clearing the flag rather than stranding no-flee ON.
+  it("still clears inMnemosyne if the shared hook is unavailable", function()
+    reset(true)
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = true
+    local realHook = ataxiaBasher_mnemLeft
+    ataxiaBasher_mnemLeft = nil
+    local ok, err = pcall(M.onRunEnd)
+    ataxiaBasher_mnemLeft = realHook
+    if not ok then error(err) end
+    expect(ataxiaBasher.inMnemosyne).toBeFalse()
+  end)
 end)
 
 -- ─── Splinterbark tree curing (self-harm safety) ─────────────────────────────

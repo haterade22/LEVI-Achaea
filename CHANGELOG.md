@@ -2,6 +2,87 @@
 
 ---
 
+## 2026-07-31 — The tower owns the curing set, not the basher (v4.7.176)
+
+v4.7.172 keyed the PvE curing profile to `"basher enabled"` / `"basher disabled"`. Inside
+Mnemosyne that is the wrong bracket, and the death log that motivated the profile in the
+first place shows why:
+
+```
+(LEVI): Bashing finished. ...
+[Armour]: Basher disabled -- swapping to 'pvp'
+(MNEM): [explore] [swarm] reset (basher disabled).
+(LEVI): DEATH DETECTED! Basher disabled. Queues cleared. Auto-rotation OFF.
+```
+
+Every one of those fired **while still standing in a hostile ripple**. `"basher disabled"` is
+a poor proxy for "the fight is over" in the tower — it fires from at least three places
+mid-wade:
+
+- **death** — `ataxiaBasher_onDeath` raises it, and the tower death trigger drives
+  `_exploreStop` which raises it **again**. Neither clears `inMnemosyne`.
+- **the explorer stopping** — `mnem explore off`, the patrol cap, a stall.
+- **an areaoff or a manual toggle** between ripples.
+
+Flipping back to the PvP table at any of those is the worst possible timing: it is precisely
+when we are about to re-engage at low HP with limbs broken. So the **wade** brackets the
+profile now, not the basher. It arms on entry whatever the basher is doing, and releases only
+on a confirmed exit.
+
+### Two new events, because there was no way to ask
+
+Nothing in the package raised anything on entering or leaving Mnemosyne — every consumer
+polled `ataxiaBasher.inMnemosyne` directly. Worse, *leaving* had **three** separate
+implementations that each cleared the flag inline, so there was no single place to hook and
+no transition guard:
+
+- `ataxiaBasher_mnemLeftFor()` — SURVEY named a real place
+- `ataxiaBasher_mnemLeftConfirm()` — the SURVEY reply never came
+- `M.onRunEnd()` — the confirmed wade end (the *normal* exit; the SURVEY paths are the
+  "walked out / stale flag" ones)
+
+All three now funnel through a new `ataxiaBasher_mnemLeft(why)` which owns the guard and
+raises **`"mnemosyne left"`**, mirroring `ataxiaBasher_mnemHere` which now raises
+**`"mnemosyne entered"`**. The explorer's two direct `inMnemosyne = true` writes
+(`_exploreResume`, `exploreOn`) were routed through `mnemHere` as well — a silent write is a
+write that arms no tower-only mode, and a resume can be the first thing to notice we are
+inside.
+
+Both events are **telemetry-independent**: they ride `ataxiaBasher.inMnemosyne`, never
+`M.run.active`, which is permanently false when REST reporting is off (`M._inRun()` is
+literally `_auto() and ...`, and every `run.active` assignment sits behind a token gate). And
+because `mnemHere` is fed by four independent truth sources — the wade-start line, wade
+status, the boon screen, and SURVEY — the entry event also self-heals a reconnect mid-climb.
+
+### Suppress the event, never the function
+
+The hold lives in a separate handler (`ataxia_bashProfileOnBasherDisabled`) rather than as a
+check inside `ataxia_bashProfileOff`. An explicit `aconfig bashcuring off` and the
+`ataxia_sendDefaultPrios` bail-out must still be able to leave the set from inside the tower;
+only the *event* is suppressed.
+
+`M.onRunEnd`'s call into `ataxiaBasher_mnemLeft` is cross-file, so it is nil-guarded and falls
+back to clearing the flag directly — the crash class in `bug-patterns.md`, and a stranded
+`inMnemosyne` would leave no-flee ON in the real world.
+
+### Tests
+
+Six new cases in `test_bash_curing_profile.lua`: the set holds through a basher stop inside
+the tower, survives the *repeated* disables a tower death actually produces, releases only on
+the real exit, arms on entry with the basher off, still switches off on a normal out-of-tower
+stop, and lets an explicit `off` win anywhere. Two in `test_mnemosyne.lua` cover the run-end
+exit — which was previously untested — including the nil-guard fallback. 696 pass.
+
+### Same latent issue, not fixed here
+
+**The armour profile and the bashing parry mode have exactly this bug.** Both subscribe to
+`"basher disabled"` with no Mnemosyne awareness, so a tower death still flips armour to the
+`pvp` paragon set (visible as `[Armour]: Basher disabled -- swapping to 'pvp'` in the log
+above) and drops the bashing parry mode. Both are now one `"mnemosyne left"` subscription
+away from being fixed.
+
+---
+
 ## 2026-07-31 — WEAR ARMOUR before a sweep (v4.7.175)
 
 `mnem explore on` now sends `WEAR ARMOUR` before it starts sweeping. Diving a ripple
