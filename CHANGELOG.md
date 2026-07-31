@@ -2,6 +2,59 @@
 
 ---
 
+## 2026-07-31 - Thunderclap: bisect becomes the crowd swing (v4.7.181)
+
+> Thunderclap: Your bisect ability now strikes a third time, dealing bonus electric damage
+> to all denizens in your location.
+
+BISECT stops being a single-target finisher and becomes a **room hit**, so
+`ataxiaBasher_rwBisect` swings it *instead of* `combination <t> slice smash` at 2+ denizens
+(`ataxiaBasher.bisectAt`).
+
+**Gated on the balance cost, not on "it is AoE".** AB Bisect spends **4.00s of balance**
+against the SnB combination's ~2s - roughly a double-length swing, so below the threshold it
+is a straight dps loss. Exactly the Infernal Arc trade (4.75s vs ~2s dsl, also 2+). It
+*replaces* the swing since both spend balance, but the **free falcon rake still rides** -
+dropping that with the swing would have quietly cost a free hit.
+
+**Three things from the AB entry that deliberately do not drive logic:**
+
+- The "slain outright at 20 percent health or lower" execute is **adventurers only**. No PvE
+  value, so there is no low-hp branch - the AoE is the entire point.
+- It **bypasses rebounding and reflections but leaves them intact**, so it needs no raze
+  handling and provides none. Shielded rounds still skip it: a denizen shield must be broken
+  first.
+- `BISECT <target> [venom]` takes an optional venom; unused for bashing.
+
+**An unmanaged prerequisite, by decision.** Bisect requires an edged runeblade with the
+**HUGALAZ** rune on the blade. The package had **zero** references to hugalaz, and the
+blade-sketch syntax (as opposed to `sketch <rune> on ground`) was never captured - inventing
+it would send garbage. Keeping it on the weapon is the user's setup. If the refusal line is
+ever captured, this can back off on its own. Note SnB needs no bastard re-wield: an edged
+longsword qualifies, confirmed live with Valafar.
+
+Fire line captured and highlighted (`highlighting/035`, deep_sky_blue bold - bisect is
+lightning-then-cutting):
+
+> Lightning follows the path of <weapon> as you sweep it at <target>, a clap of thunder
+> heralding your strike.
+
+### A latent test trap fixed while adding coverage
+
+`test_basher_runewarden.lua` ends with a shared-state teardown including `target = nil`, and
+appended `describe` blocks run **after** it - so two new tests saw a nil target and failed
+for a reason unrelated to what they were testing. The teardown now sits at the true end of
+the file. The same trap was hit in `test_mnem_ldeck.lua` earlier; worth knowing that in this
+suite **appending to a test file means moving the teardown**.
+
+Files: `basher/002_Class_Bashing.lua`, `triggers/.../mnemosyne/052_Thunderclap.lua` (NEW),
+`triggers/.../highlighting/035_Bisect_Thunderclap.lua` (NEW), `mnemosyne/001_Run_Start.lua`,
+`mnemosyne/004_Parsers.lua`, `aliases/.../mnemosyne/002_Boon_Claim.lua`,
+`tests/test_basher_runewarden.lua`, `CLAUDE.md`, `.claude/classes/runewarden.md`, memory.
+Suite **715/715**.
+
+---
+
 ## 2026-07-31 — Documentation sync for v4.7.174–179, and a count I had wrong (v4.7.180)
 
 Brought every doc surface in line with the releases since the last sync: mounts on the

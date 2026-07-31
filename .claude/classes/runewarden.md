@@ -140,6 +140,12 @@ pulp:
 bisect:
   effect: "Low-health finish (assess <= 34, no shield); wields a bastard sword first"
   syntax: "wield bastard;bisect <target>"
+  # AB (2026-07-31): "BISECT <target> [venom]" | works on adventurers AND DENIZENS |
+  # 4.00s of BALANCE. Requires an edged runeblade with HUGALAZ sketched on the blade.
+  # Multi-typed: lightning first, then cutting. Bypasses rebounding/reflections but
+  # LEAVES THEM INTACT. The "slain outright at <=20% health" clause is ADVENTURERS ONLY.
+  # SnB does NOT need the bastard re-wield -- an edged longsword qualifies (live: Valafar).
+  # PvE: see the Thunderclap boon below.
 
 fracture:
   effect: "Used in the raze/strip path to remove rebounding/shield"
@@ -222,6 +228,24 @@ gotcha:    "Until v4.7.171 only the enemy branch existed. isTargeted('you') is f
 not_tracked: "We still have no idea whether OUR dagaz is ready -- passiveCooldownsV3 is
             entirely enemy-side, and no ground rune in the package is tracked as a state
             (sowulu/raido/thurisaz are all send-only with room/ripple latches)."
+```
+
+### Thunderclap (Mnemosyne boon) -- bisect becomes the crowd swing
+```yaml
+# ataxiaBasher_rwBisect, basher/002. Flag mnemThunderclap (trigger mnemosyne/052).
+boon:      "Your bisect ability now strikes a third time, dealing bonus electric damage
+            to all denizens in your location."
+effect:    "BISECT stops being a single-target finisher and becomes a ROOM hit."
+gate:      "ataxiaBasher.bisectAt denizens (default 2). Gated on the BALANCE COST, not on
+            'it is AoE': 4.00s vs the SnB combination's ~2s is a double-length swing, so
+            below the threshold it is a straight dps loss. Same trade as Infernal Arc."
+replaces:  "the swing (both spend balance) -- but the FREE falcon rake still rides"
+skips:     "shielded rounds (bisect bypasses rebounding, NOT shields); non-numeric target"
+no_execute: "the <=20% slain-outright clause is ADVENTURERS ONLY -- no low-hp branch exists"
+prereq:    "an edged runeblade with HUGALAZ on the blade -- NOT managed by the system.
+            Nothing here knows hugalaz and the blade-sketch syntax was never captured."
+fire_line: "Lightning follows the path of <weapon> as you sweep it at <target>, a clap of
+            thunder heralding your strike.  -> highlighting/035, deep_sky_blue bold"
 ```
 
 ## Passive Cures

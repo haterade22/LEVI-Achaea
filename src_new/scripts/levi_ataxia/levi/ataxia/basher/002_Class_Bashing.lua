@@ -1518,6 +1518,40 @@ function ataxiaBasher_rwBattlerage(sp)
   return ""
 end
 
+-- THUNDERCLAP (Mnemosyne boon, v4.7.181): "Your bisect ability now strikes a third time,
+-- dealing bonus electric damage to ALL denizens in your location." That turns a
+-- single-target finisher into a room hit, so the boon makes BISECT a crowd swing.
+--
+-- Economics, and why it is crowd-gated rather than default: AB Bisect spends 4.00s of
+-- BALANCE against the SnB combination's ~2s, so it is roughly a double-length swing. It
+-- pays for itself only when the third strike lands on more than one mob. Same shape as the
+-- Infernal Arc gate (4.75s vs ~2s dsl, gated at 2+) -- `ataxiaBasher.bisectAt`, default 2.
+--
+-- It REPLACES the swing rather than riding alongside it: both spend balance.
+--
+-- Notes from the AB entry that deliberately do NOT appear in this logic:
+--   * The "slain outright at <=20% health" clause is ADVENTURERS ONLY. There is no execute
+--     value against denizens, so no low-hp branch here -- the boon's AoE is the whole point.
+--   * It bypasses rebounding and reflections but leaves them intact, so it needs no raze
+--     handling and gives none. The shielded branch is untouched: a shield must still be
+--     broken first.
+--   * `BISECT <target> [venom]` takes an optional venom; unused for bashing.
+--
+-- PREREQUISITE, deliberately unmanaged (user decision): bisect requires an edged runeblade
+-- with the HUGALAZ rune sketched on the blade. Nothing in this package knows hugalaz -- the
+-- sketch syntax for a BLADE rune was never captured, and inventing it would send garbage --
+-- so keeping it on the weapon is the user's setup. If it ever lapses, bisect is refused
+-- until re-sketched; capture that refusal line and this can back off on its own.
+function ataxiaBasher_rwBisect(sp)
+	if not mnemThunderclap then return nil end
+	if ataxiaBasher.shielded then return nil end -- break the shield first
+	if type(target) ~= "number" then return nil end
+	local M = ataxia.mnemosyne
+	local n = (M and M._denizenCount and M._denizenCount()) or 0
+	if n < (tonumber(ataxiaBasher.bisectAt) or 2) then return nil end
+	return "bisect "..target
+end
+
 function ataxiaBasher_runewardenBashing()
 	local command, sp = "", ataxia.settings.separator
 	local raze, bash, spec = "", "", ataxia.vitals.knight
@@ -1552,7 +1586,11 @@ function ataxiaBasher_runewardenBashing()
 			command = raze..sp..brage
 		end
 	else
-		command = sowulu..brage..sp..bash
+		-- Thunderclap: at a crowd the room-wide bisect replaces the single-target swing.
+		-- The falcon rake is folded back in because it is a FREE pet order, not part of the
+		-- balance swing -- dropping it with `bash` would quietly cost us a free hit.
+		local bisect = ataxiaBasher_rwBisect(sp)
+		command = sowulu..brage..sp..(bisect and (falcon..bisect) or bash)
 	end
 
 	return command

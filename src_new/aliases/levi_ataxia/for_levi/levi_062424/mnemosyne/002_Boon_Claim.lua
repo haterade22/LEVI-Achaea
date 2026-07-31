@@ -88,3 +88,4 @@ if matches[2]:lower():find("homebound") then mnemHomebound = true end
 -- denizen; the Runewarden basher sketches sowulu at 2+ denizens.
 if matches[2]:lower():find("hammer and nail") then mnemHammerAndNail = true end
 if matches[2]:lower():find("rage%-fuelled") then mnemRageFuelled = true end
+if matches[2]:lower():find("thunderclap") then mnemThunderclap = true end

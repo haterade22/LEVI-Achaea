@@ -47,6 +47,8 @@ local function reset()
   ataxia.vitals.rage, ataxia.vitals.knight = 0, "Sword and Board"
   ataxiaTemp = {}
   mnemHammerAndNail, mnemFalconersTactics = false, false
+  mnemThunderclap = false
+  ataxiaBasher.bisectAt = nil
   gmcp.Room.Info.num = 5
   gmcp.Room.Info.area = ""
   gmcp.IRE.Target.Info = {}
@@ -213,10 +215,6 @@ describe("falcon rake -- rides every spec, and Falconer's Tactics shortens it", 
   end)
 end)
 
--- Restore shared state for whoever runs after us (files share one Lua state).
-mnemHammerAndNail, mnemFalconersTactics = false, false
-getEpoch = _epoch
-target = nil
 
 -- ---------------------------------------------------------------------------
 -- Own-denizen matching: the substring rule cuts both ways (v4.7.169).
@@ -295,3 +293,59 @@ describe("mounts on the own-denizen list (v4.7.174)", function()
     expect(ataxiaBasher_isOwnDenizen("A war elephant")).toBeTrue()       -- the mount is safe
   end)
 end)
+
+describe("Thunderclap -- bisect becomes the crowd swing (v4.7.181)", function()
+  it("does nothing without the boon, however many denizens", function()
+    reset(); denizens = 5
+    expect(ataxiaBasher_rwBisect(";")).toBe(nil)
+  end)
+
+  it("needs a SECOND denizen -- the third strike is what pays for the 4s balance", function()
+    reset(); mnemThunderclap = true; denizens = 1
+    expect(ataxiaBasher_rwBisect(";")).toBe(nil)
+    reset(); mnemThunderclap = true; denizens = 2
+    expect(ataxiaBasher_rwBisect(";")).toBe("bisect 7")
+  end)
+
+  it("honours a custom threshold", function()
+    reset(); mnemThunderclap = true; denizens = 2
+    ataxiaBasher.bisectAt = 3
+    expect(ataxiaBasher_rwBisect(";")).toBe(nil)
+    denizens = 3
+    expect(ataxiaBasher_rwBisect(";")).toBe("bisect 7")
+  end)
+
+  it("yields on a shielded round -- bisect bypasses rebounding, not shields", function()
+    reset(); mnemThunderclap = true; denizens = 4
+    ataxiaBasher.shielded = true
+    expect(ataxiaBasher_rwBisect(";")).toBe(nil)
+  end)
+
+  it("is inert in PvP (non-numeric target)", function()
+    reset(); mnemThunderclap = true; denizens = 4
+    target = "Somebody"
+    expect(ataxiaBasher_rwBisect(";")).toBe(nil)
+    target = 7
+  end)
+
+  it("REPLACES the swing (both spend balance) but keeps the free falcon rake", function()
+    reset(); mnemThunderclap = true; denizens = 3
+    local cmd = ataxiaBasher_runewardenBashing()
+    expect(has(cmd, "bisect 7")).toBeTrue()
+    expect(has(cmd, "combination 7 slice smash")).toBeFalse() -- the swing is displaced
+    expect(has(cmd, "falcon rake 7")).toBeTrue()              -- a FREE pet order is not
+  end)
+
+  it("leaves the normal swing alone below the threshold", function()
+    reset(); mnemThunderclap = true; denizens = 1
+    local cmd = ataxiaBasher_runewardenBashing()
+    expect(has(cmd, "combination 7 slice smash")).toBeTrue()
+    expect(has(cmd, "bisect")).toBeFalse()
+  end)
+end)
+
+-- Restore shared state for whoever runs after us (files share one Lua state).
+mnemHammerAndNail, mnemFalconersTactics = false, false
+mnemThunderclap = false
+getEpoch = _epoch
+target = nil
