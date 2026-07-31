@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-07-31 — Mana on the bashing HUD (v4.7.177)
+
+The `tarc` bashing panel showed HP / WP / EP but not mana. Added an **MP** row directly
+under HP — the conventional vitals order — reading `gmcp.Char.Vitals.mp/maxmp` straight from
+GMCP like its siblings, and nil-safe in the same way (no reading, no row, rather than a
+misleading 0%).
+
+**It uses the same health-style colour ramp** (green >= 66, yellow >= 33, red below) rather
+than a flat mana-blue. On a combat HUD the useful signal is "this is getting dangerous", and
+running out of mana is a kill condition for us — Psion excise, the Kai Choke 250-mana floor —
+exactly as health is. A flat colour would show the number and hide the warning.
+
+No new helpers: `_vitalRow` / `_pct` / `_bar` already took a label and were nil-safe, so this
+is one declaration and one echo.
+
+Files: `windows/001_Limb_Counter_Window.lua`, `CHANGELOG.md`, 3 version files.
+Suite **696/696**.
+
+---
+
 ## 2026-07-31 — The tower owns the curing set, not the basher (v4.7.176)
 
 v4.7.172 keyed the PvE curing profile to `"basher enabled"` / `"basher disabled"`. Inside

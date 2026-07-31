@@ -231,9 +231,16 @@ function tarc.write()
       -- values, never the derived ataxia.vitals copy. Nil-safe: skip any bar we can't compute.
       local gv = (gmcp.Char and gmcp.Char.Vitals) or {}
       local rowHP = _vitalRow("HP", _pct(gv.hp, gv.maxhp))
+      -- MP sits directly under HP, the conventional vitals order. It keeps the SAME
+      -- health-style colour ramp as the other rows rather than a flat mana-blue: on a
+      -- combat HUD the useful signal is "this is getting dangerous", and running out of
+      -- mana is a kill condition for us (Psion excise, the Kai Choke 250-mana floor)
+      -- just as health is. A flat colour would show the number and hide the warning.
+      local rowMP = _vitalRow("MP", _pct(gv.mp, gv.maxmp))
       local rowWP = _vitalRow("WP", _pct(gv.wp, gv.maxwp))
       local rowEP = _vitalRow("EP", _pct(gv.ep, gv.maxep))
       if rowHP then tarc:cecho(rowHP .. "\n") end
+      if rowMP then tarc:cecho(rowMP .. "\n") end
       if rowWP then tarc:cecho(rowWP .. "\n") end
       if rowEP then tarc:cecho(rowEP .. "\n") end
       -- Rage (charstats-parsed into ataxia.vitals) + XP-to-level (GMCP nl), one compact line
