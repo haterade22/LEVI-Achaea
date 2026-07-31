@@ -2,6 +2,37 @@
 
 ---
 
+## 2026-07-31 — WEAR ARMOUR before a sweep (v4.7.175)
+
+`mnem explore on` now sends `WEAR ARMOUR` before it starts sweeping. Diving a ripple
+undressed is a silent, entirely avoidable damage multiplier, and armour comes off for
+ordinary reasons — a morph, a swap, a death.
+
+**Wired at both entry points, which matters more than it sounds.** `M.exploreOn()` is the
+explicit turn-on, but `M._exploreResume()` is the *per-ripple* one — `GO` calls it after
+every boon screen — so that is where the check actually earns its keep. Armour is now
+re-asserted before each dive, not only on the first `explore on`.
+
+Sent **directly, not queued**: the basher rebuilds its command every prompt with
+`queue addclearfull`, which wipes queued lines. Same reasoning as the hyena/falcon passive
+orders and the disarm recovery. `WEAR` costs no balance, so it rides any round, and
+re-wearing what is already on is a harmless no-op.
+
+Deliberately **not** gated on a "do we already have armour on?" check: there is no reliable
+worn-state to read, and the failure mode of the guess (skipping the wear because we wrongly
+believe it is on) is exactly the thing this exists to prevent. An unconditional free command
+is the right trade.
+
+One consequence worth stating: `"You are already wearing this item."` will now print once
+per ripple in the common case. I have **not** gagged it — it is a real refusal line, and
+hiding it would also hide the pre-existing login-path double-send the v4.7.167 audit found.
+Say the word if the noise is worse than the signal.
+
+Files: `mnemosyne/008_Explorer.lua` (`M._wearArmour` + both call sites),
+`tests/test_mnemosyne.lua`, `CHANGELOG.md`, 3 version files. Suite **688/688**.
+
+---
+
 ## 2026-07-31 — Mounts on the own-denizen list (v4.7.174)
 
 Five personal mounts added to `ataxiaBasher.ownDenizens` so the basher never targets them:

@@ -556,6 +556,19 @@ end
 -- Start / stop
 -- ---------------------------------------------------------------------------
 
+-- WEAR ARMOUR before a sweep starts (v4.7.175, user-directed). Diving a ripple without
+-- armour is a silent, entirely avoidable damage multiplier, and armour comes off for all
+-- sorts of ordinary reasons (a morph, a swap, a death). Cheap insurance: WEAR costs no
+-- balance, so this rides any round, and re-wearing what is already on is a harmless no-op
+-- ("You are already wearing this item.").
+--
+-- Sent DIRECTLY rather than queued: the basher rebuilds its command every prompt with
+-- `queue addclearfull`, which wipes queued lines -- the same reason the hyena/falcon
+-- passive orders and the disarm recovery bypass the queue.
+function M._wearArmour()
+  send("wear armour", false)
+end
+
 -- Resume a paused sweep. Re-assert the explore-mode basher config (idempotent; guards a flag that
 -- flickered during the pause -- notably inMnemosyne, missed between floors) and reset per-ripple
 -- progress, mirroring the fresh-start path so the next ripple starts clean. _prevBasher is
@@ -577,6 +590,9 @@ function M._exploreResume(reason)
   M.explore.iceSlips = 0
   M.explore.settling = true -- treat the current room like an arrival: let denizens settle first
   M._raidoRipple = nil      -- new ripple, new holding room: the Homebound raido re-arms
+  -- Resume is the per-RIPPLE entry point (GO calls it after every boon screen), so this is
+  -- also where armour gets re-checked before each dive -- not just on the first `explore on`.
+  M._wearArmour()
   if M.swarm and M.swarm.onRipple then pcall(M.swarm.onRipple) end -- fresh ripple: new pull budgets
   M._exploreEcho("<green>resuming<reset> the sweep" .. (reason and (" (" .. reason .. ")") or "") .. ".")
   M._scheduleTick()
@@ -625,6 +641,7 @@ function M.exploreOn()
   M.explore.patrolLoops = 0
   M.explore.iceSlips = 0
   M.explore.settling = true -- treat the starting room like an arrival: let its denizens settle first
+  M._wearArmour()           -- never start a sweep undressed
   if M.swarm and M.swarm.onRipple then pcall(M.swarm.onRipple) end -- fresh sweep: fresh tactics state
   M._exploreEcho("<green>ON<reset> -- sweeping the 4x4, clearing to the boon screen (patrols for the boss on boss ripples). (<a_darkmagenta>mnem explore off<reset> to stop)")
   M._scheduleTick()

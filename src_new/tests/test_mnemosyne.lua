@@ -1372,3 +1372,19 @@ describe("M._extractMob()", function()
     expect(M._extractMob("The boss glares at you menacingly.")).toBeNil()
   end)
 end)
+
+describe("explore wears armour before sweeping (v4.7.175)", function()
+  local M = ataxia.mnemosyne
+  it("sends WEAR ARMOUR, and directly rather than queued", function()
+    if not (M and M._wearArmour) then return end
+    local seen = {}
+    local realSend = send
+    send = function(cmd) table.insert(seen, cmd) end
+    M._wearArmour()
+    send = realSend
+    expect(#seen).toBe(1)
+    expect(seen[1]).toBe("wear armour")
+    -- Queued would be wiped by the basher's next `queue addclearfull`.
+    expect(seen[1]:find("queue", 1, true)).toBe(nil)
+  end)
+end)
