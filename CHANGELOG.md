@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-07-31 - The bisect correction missed one site (v4.7.183)
+
+v4.7.182 corrected the backwards bisect-economics framing in five places and I said so - but
+the boon trigger `mnemosyne/052_Thunderclap.lua` still carried the old *"roughly a
+double-length swing"* text. Caught by my own post-build check (`old framing: STILL PRESENT`),
+after the release had already gone out.
+
+Now corrected there too, and swept for both phrasings across `src_new/`, `.claude/`,
+`CLAUDE.md` and memory - clean outside the changelog, where the historical entries stay as
+written.
+
+Worth recording why it slipped: I corrected the sites I had *edited* when writing the
+feature, and the boon trigger was one I had *created*, so it was not on the mental list.
+**A correction sweep has to be a grep, not a recollection** - which is exactly what the
+post-build check was for, and it worked; I just shipped before reading it properly.
+
+No behaviour change - comments only. Suite **715/715**.
+
+---
+
 ## 2026-07-31 - Bisect economics: I had the reasoning backwards (v4.7.182)
 
 v4.7.181 justified the bisect crowd gate as *"gated on the balance cost, not on it being

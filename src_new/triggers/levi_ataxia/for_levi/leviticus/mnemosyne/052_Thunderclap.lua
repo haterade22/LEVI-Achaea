@@ -41,9 +41,13 @@ patterns:
 -- basher swings it instead of the normal attack at 2+ denizens (ataxiaBasher_rwBisect,
 -- basher/002 -- ataxiaBasher.bisectAt to tune).
 --
--- Crowd-gated rather than default because bisect spends 4.00s of BALANCE (AB) against the
--- SnB combination's ~2s: it is roughly a double-length swing and only pays for itself when
--- the third strike lands on more than one mob. Exactly the Infernal Arc trade.
+-- Crowd-gated because of the AoE -- the balance cost only sets where the crossover falls.
+-- Over a 4s window `combination` lands 2 swings on ONE mob; bisect lands 1 empowered strike
+-- on the target PLUS electric on EVERY denizen. Twice the balance for room-wide coverage.
+-- At 1 denizen there is nothing to splash to, which is the only case the gate excludes;
+-- from 2 upward bisect reaches what combination cannot, widening with each extra mob. And
+-- in the tower the objective is CLEARING THE ROOM, not killing one thing fastest, which is
+-- exactly when spread damage wins. Exactly the Infernal Arc trade.
 --
 -- Two things from the AB entry that deliberately do NOT drive logic: the "slain outright at
 -- <=20% health" execute is ADVENTURERS ONLY (no PvE value), and bisect bypasses rebounding
