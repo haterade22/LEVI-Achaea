@@ -181,8 +181,34 @@ sowulu:
 
 thurisaz:
   skill: Runelore
-  effect: "Defensive barrier rune"
-  syntax: "SKETCH THURISAZ"
+  effect: "OFFENSIVE line-of-sight damage, not a barrier (740_Rune_Found.lua:64 = 'LoS damage').
+           The alias sends it targeted -- you do not sketch a defensive barrier FOR someone."
+  syntax: "sketch thurisaz on ground for <target>   (aliases/.../137_thurisaz.lua:17)"
+  note: "Corrected v4.7.171; this file previously called it a defensive barrier rune."
+
+dagaz:
+  skill: Runelore
+  effect: "THE passive heal -- cures one affliction on its own timer. See the Dagaz section below."
+  line:   "A rune like a rising sun upon the ground flares, bathing you with healing magic."
+```
+
+### Dagaz - the passive heal (v4.7.171)
+```yaml
+# Ground rune (Runelore). Fires on its own timer and cures ONE affliction for free.
+line:      "A rune like a rising sun upon the ground flares, bathing you with healing magic."
+effect:    "cures affs" (740_Rune_Found.lua:62)
+interval:  "~12s -- passiveCooldownTimingsV3.passive_dagaz, affliction_tracking_core/007:1136.
+            That number is modelled for an ENEMY Runewarden; our own has never been measured."
+trigger:   "passive_active/027_Dagaz_(Runewarden).lua -- ONE trigger, BOTH sides. The capture
+            is (\w+): an enemy's rune yields their name and feeds the V3 target tracker; ours
+            yields the literal 'you'."
+gotcha:    "Until v4.7.171 only the enemy branch existed. isTargeted('you') is false, so on our
+            own proc the trigger fired and did NOTHING -- not even its highlight. The self
+            branch now highlights the line medium_sea_green (deliberately not spring_green,
+            which already means parry-success)."
+not_tracked: "We still have no idea whether OUR dagaz is ready -- passiveCooldownsV3 is
+            entirely enemy-side, and no ground rune in the package is tracked as a state
+            (sowulu/raido/thurisaz are all send-only with room/ripple latches)."
 ```
 
 ## Passive Cures
@@ -438,7 +464,11 @@ recommended_strategy: |
   If they're 2H spec, watch for high damage and passive para cure.
   If they're DWC spec, prioritize curing venoms quickly.
   Be aware of runes on the ground - they provide room control.
-  Watch for sowulu (healing) and thurisaz (defense) runes.
+  Watch for dagaz (the passive heal - cures one aff on a ~12s timer), thurisaz
+  (line-of-sight damage) and sowulu (damage/splash). NOTE: this file previously said
+  "sowulu (healing) and thurisaz (defense)" - wrong on both counts; the authoritative
+  rune->effect table is 740_Rune_Found.lua:45-65 (sowulu = "damage", thurisaz =
+  "LoS damage", dagaz = "cures affs").
 ```
 
 ## Limb Tracking

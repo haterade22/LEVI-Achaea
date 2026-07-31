@@ -37,6 +37,16 @@ patterns:
   type: 1
 ]]--
 
+-- DAGAZ (Runelore) -- the Runewarden passive heal: on its own ~12s timer the rune flares
+-- and cures ONE affliction for free (see passiveCooldownTimingsV3.passive_dagaz,
+-- affliction_tracking_core/007:1136).
+--
+-- The capture is `(\w+)`, so this ONE line covers both sides:
+--   * an ENEMY Runewarden's rune  -> name is their name  -> model it in the V3 target tracker
+--   * OUR rune                    -> name is literally "you"
+-- Until v4.7.171 only the first case was written. `isTargeted("you")` is false unless you
+-- happen to be targeting someone called "You", so on our own proc this trigger fired and did
+-- nothing at all -- not even the highlight below. The self branch is what was missing.
 local name = matches[2]
 local class = (ataxiaNDB_getClass(name) or "Unknown")
 
@@ -54,4 +64,20 @@ if isTargeted(name) and class == "Runewarden" then
   fg("NavajoWhite")
   resetFormat()
   targetIshere = true
+
+elseif name:lower() == "you" then
+  -- OUR dagaz fired. Highlight only (v4.7.171): a free cure we did not spend a balance on
+  -- is worth SEEING in combat spam, but there is nothing useful to record. Our own
+  -- affliction state is authoritative-from-GMCP and self-correcting -- lostAff()
+  -- (004_Aff_gains_losses:243-302) already nils the entry and raises "aff cured" -- so a
+  -- "dagaz cured one" signal would add no bookkeeping. (The real gap is that nothing knows
+  -- whether OUR passive is ready; passiveCooldownsV3 is entirely enemy-side. Left open.)
+  --
+  -- medium_sea_green, deliberately NOT spring_green: that already means parry-success /
+  -- our-proc (highlighting/027, /015) and the two must not be confusable mid-fight.
+  selectString(line, 1)
+  setBold(true)
+  fg("medium_sea_green")
+  deselect()
+  resetFormat()
 end

@@ -2,6 +2,59 @@
 
 ---
 
+## 2026-07-30 — Dagaz: the self branch that was never written (v4.7.171)
+
+> A rune like a rising sun upon the ground flares, bathing you with healing magic.
+
+Runewarden's **dagaz** rune is the passive heal — it fires on its own timer and cures one
+affliction for free. Worth seeing land in combat spam.
+
+**It turned out not to be "add a highlight".** The line was already matched, at
+`passive_active/027_Dagaz_(Runewarden).lua:36` — but its entire body sits inside
+`if isTargeted(name) and class == "Runewarden"`. The capture is `(\w+)`, so one trigger sees
+both sides: an enemy's rune yields their name, **ours yields the literal `"you"`**. And
+`isTargeted("you")` is false unless you happen to be targeting someone called "You" — so on
+our own proc the trigger fired and **did nothing at all**, not even its own
+`fg("NavajoWhite")` highlight. That trigger exists purely to model an *enemy* Runewarden in
+the V3 target tracker; all 28 files in `passive_active/` are built that way, and none has a
+self-side counterpart — **Fitness included**.
+
+Fixed with an additive `elseif name:lower() == "you"` branch, so the enemy path and its V3
+calls are untouched and cannot regress. One trigger keeps owning one game line rather than a
+second one being layered alongside it.
+
+Colour: `medium_sea_green` `{60,179,113}`, deliberately **not** `spring_green` `{0,255,127}`,
+which already means parry-success/our-proc (`highlighting/027`, `/015`) — the two must not be
+confusable mid-fight. Orange remains reserved.
+
+**Highlight only, by decision.** The larger options were declined for a reason worth
+recording: our own affliction state is authoritative-from-GMCP and self-correcting
+(`lostAff()`, `004_Aff_gains_losses:243-302`, already nils the entry and raises `"aff cured"`),
+so a "dagaz cured one" signal adds no bookkeeping. The real gap it *would* fill stays open —
+**nothing knows whether our own passive is ready**, because `passiveCooldownsV3` is entirely
+enemy-side and no ground rune in the package is tracked as a state at all (sowulu/raido/
+thurisaz are send-only with room or ripple latches).
+
+### Two class-doc facts were wrong
+
+Found while documenting this, and corrected against `740_Rune_Found.lua:45-65` (the
+authoritative rune→effect table) and the alias that sends each rune:
+
+- *"Watch for sowulu (healing) and thurisaz (defense) runes"* — **wrong on both counts.**
+  `sowulu` is the damage/nail rune; `thurisaz` is LoS damage; **dagaz** is the healing one.
+- `thurisaz: effect: "Defensive barrier rune"` — also wrong. The alias sends
+  `sketch thurisaz on ground **for** <target>` (`137_thurisaz.lua:17`); you do not sketch a
+  defensive barrier *for* someone.
+
+Lesson recorded: a rune's effect lives in the rune-found table and the alias that sends it,
+not in prose written from memory.
+
+Files: `passive_active/027_Dagaz_(Runewarden).lua`, `.claude/classes/runewarden.md`,
+`memory/runewarden.md`, `CHANGELOG.md`, 3 version files. Suite **662/662** (unchanged — no
+testable logic added).
+
+---
+
 ## 2026-07-30 — Documentation sync, and four bugs the doc pass found (v4.7.170)
 
 A full documentation sync across every surface for v4.7.165–169. Six agents each owned a
