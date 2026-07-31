@@ -2,6 +2,40 @@
 
 ---
 
+## 2026-07-31 — Falcon rake highlighted, like the hyena (v4.7.178)
+
+> You whistle to your falcon, commanding it to assail a xorani temple guard.
+> A razor-beaked falcon dives at a xorani temple guard, raking his face with its talons.
+
+Mirrors the Infernal hyena maul treatment exactly (trigger `367`), including *where* the
+highlight lives: **inside the cooldown trigger, not a separate file**. Those patterns already
+match there, and a second copy would be a duplicate-pattern trap. Same three states, same
+three colours, and deliberately not the orange family:
+
+| State | Colour | Why |
+|---|---|---|
+| our order | `dark_sea_green` | muted — intent; nothing has landed yet |
+| the rake landing | `chartreuse` **bold** | the free damage actually happening |
+| the refusal | `dim_grey` | still on cooldown; nothing happened |
+
+**The two landing lines were not matched at all before this.** Trigger `370` only had the
+order line and the refusal, so the falcon has two attack animations (talon dive, beak tear)
+and neither was tracked. Adding them also re-arms the cooldown from the moment the rake
+*landed* rather than from when it was ordered — the more accurate stamp, and idempotent since
+the safety timer is killed and recreated.
+
+**Negative lookaheads, the falcon twin of the hyena's.** When the pet turns on its owner the
+lines read *"...dives at **you**, raking **your** face..."* and *"...rips out a chunk of
+**your flesh**..."*. Counting those would put the rake on cooldown for a hit we never ordered
+— exactly the bug the hyena comment warns about. `(?!you,)` and `(?!your flesh)` keep them
+out; trigger `376` still owns the at-us case and orders the falcon passive. Verified all four
+lines against all four patterns: each matches exactly one.
+
+Files: `370_Runewarden_Falcon_Rake_Cooldown.lua`, `CHANGELOG.md`, 3 version files.
+Suite **696/696**.
+
+---
+
 ## 2026-07-31 — Mana on the bashing HUD (v4.7.177)
 
 The `tarc` bashing panel showed HP / WP / EP but not mana. Added an **MP** row directly
