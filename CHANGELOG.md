@@ -2,6 +2,50 @@
 
 ---
 
+## 2026-07-31 — Rage-Fuelled: a kill banks a free battlerage (v4.7.179)
+
+> Rage-Fuelled: When slaying a denizen, your next battlerage attack will cost no resource.
+
+A kill banks **one** free battlerage. That is a **state, not a timer** — the charge sits
+there until a battlerage actually goes out — so it is mirrored as
+`ataxiaTemp.brFreeCharge`, armed on the kill and spent on the send.
+
+**The whole payoff routes through one function.** `ataxiaBasher_rageAfford` is already the
+single gate every rotation's affordability check runs through — 40 call sites — so a banked
+charge short-circuiting it lands the boon on **every class at once**, with no per-rotation
+surgery. It short-circuits the **rage floor** as well: a free ability has no surplus to
+preserve.
+
+**Culling reap needed explicit handling.** It deliberately bypasses `rageAfford` to stay
+floor-exempt (7 sites testing `rage >= 36` directly), so it would have been the one path the
+boon missed — and a free AoE execute is the single best thing to spend a charge on. Now
+`rage >= 36 or ataxiaBasher_brFree()`.
+
+**Six commit points became one.** `ataxiaTemp.brGlobalReadyAt = ... + 1` appeared in six
+places, each marking "a rotation is committing to a battlerage". Arming the cooldown and
+spending the charge must stay in lockstep, and a seventh call site that remembered one but
+forgot the other would leak a free battlerage silently — so both now live in
+`ataxiaBasher_brSent()`.
+
+The charge is spent on **send**, not on a confirmed fire line, because several battlerage
+abilities have no fire line at all. The error directions are not symmetric: believing it
+spent when it was not costs one missed free cast and self-corrects on the next kill;
+believing it still banked costs a rejected command. Both mild, the former quieter.
+
+Lifecycle follows the established boon shape — BOONS-row trigger `mnemosyne/051`, the
+`BOON CLAIM` intercept, reset on run start, cleared on the confirmed run end (along with any
+charge it had banked). The kill arm lives in `340_Slain`, which is already denizen-gated on a
+numeric target, so it cannot fire off a player kill.
+
+Files: `basher/001_Bashing_Functions.lua`, `basher/002_Class_Bashing.lua`,
+`triggers/.../340_Slain.lua`, `triggers/.../mnemosyne/051_Rage_Fuelled.lua` (NEW),
+`mnemosyne/001_Run_Start.lua`, `mnemosyne/004_Parsers.lua`,
+`aliases/.../mnemosyne/002_Boon_Claim.lua`, `tests/test_rage_fuelled.lua` (NEW).
+Suite **708/708** — the pre-existing rotation suites pass unchanged, which is what confirms
+the six-site consolidation is behaviour-identical when the boon is absent.
+
+---
+
 ## 2026-07-31 — Falcon rake highlighted, like the hyena (v4.7.178)
 
 > You whistle to your falcon, commanding it to assail a xorani temple guard.

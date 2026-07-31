@@ -199,7 +199,7 @@ function ataxiaBasher_goldenDragonBattlerage(sp)
     return pend.verb.." "..target..sp
   end
   ataxiaTemp.gdragonBrPending = nil
-  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and rage >= 36
+  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and (rage >= 36 or ataxiaBasher_brFree())
      and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" then
     return "reap "..target..sp
   end
@@ -468,9 +468,9 @@ function ataxiaBasher_dwBattlerage(sp)
   if getEpoch and getEpoch() < (ataxiaTemp.brGlobalReadyAt or 0) then return "" end
 
   -- Culling reap, owned here (never floored -- an execute beats a per-swing multiplier).
-  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and rage >= 36
+  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and (rage >= 36 or ataxiaBasher_brFree())
      and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" then
-    ataxiaTemp.brGlobalReadyAt = (getEpoch and getEpoch() or 0) + 1
+    ataxiaBasher_brSent()
     return "reap "..target..sp
   end
 
@@ -500,7 +500,7 @@ function ataxiaBasher_dwBattlerage(sp)
         local cmd = ab.cmd.." "..tgt..sp
         ataxiaTemp.dwBrAt[ab.key] = nowT
         ataxiaTemp.dwBrPending = { verb = ab.key, cmd = cmd, at = nowT }
-        ataxiaTemp.brGlobalReadyAt = (getEpoch and getEpoch() or 0) + 1
+        ataxiaBasher_brSent()
         if ab.key == "boinad" then ataxiaTemp.brCharmTgt = tgt end
         return cmd
       elseif ab.control then
@@ -1265,7 +1265,7 @@ function ataxiaBasher_psionBattlerage(sp)
     return pend.verb.." "..target..sp
   end
   ataxiaTemp.psionBrPending = nil
-  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and rage >= 36
+  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and (rage >= 36 or ataxiaBasher_brFree())
      and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" then
     return "reap "..target..sp
   end
@@ -1490,9 +1490,9 @@ function ataxiaBasher_rwBattlerage(sp)
   ataxiaTemp.rwBrPending = nil
   if getEpoch and getEpoch() < (ataxiaTemp.brGlobalReadyAt or 0) then return "" end
 
-  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and rage >= 36
+  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and (rage >= 36 or ataxiaBasher_brFree())
      and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" then
-    ataxiaTemp.brGlobalReadyAt = (getEpoch and getEpoch() or 0) + 1
+    ataxiaBasher_brSent()
     return "reap "..target..sp
   end
 
@@ -1511,7 +1511,7 @@ function ataxiaBasher_rwBattlerage(sp)
       local cmd = ab.cmd..(ab.noTarget and "" or (" "..target))..sp
       ataxiaTemp.rwBrAt[ab.key] = nowT
       ataxiaTemp.rwBrPending = { verb = ab.key, cmd = cmd, at = nowT }
-      ataxiaTemp.brGlobalReadyAt = (getEpoch and getEpoch() or 0) + 1
+      ataxiaBasher_brSent()
       return cmd
     end
   end

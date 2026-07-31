@@ -65,6 +65,8 @@ mnemHomebound = false  -- boons reset each run
 mnemHammerAndNail = false  -- boons reset each run
 mnemHaemophiliac = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
 mnemDeluge = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
+mnemRageFuelled = false -- boons reset each run (re-latches from the BOONS row / claim)
+if ataxiaTemp then ataxiaTemp.brFreeCharge = nil end
 
 -- The wade lifecycle is the AUTHORITY on being in the tower -- this line and the confirmed
 -- run-end bracket it exactly. Do not infer it from gmcp: the boon "Creville's Legacy" (attack

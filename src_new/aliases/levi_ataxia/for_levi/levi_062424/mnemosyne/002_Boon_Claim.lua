@@ -87,3 +87,4 @@ if matches[2]:lower():find("homebound") then mnemHomebound = true end
 -- Hammer and NAIL (not Anvil): with a sowulu rune down, attacks splash to a second
 -- denizen; the Runewarden basher sketches sowulu at 2+ denizens.
 if matches[2]:lower():find("hammer and nail") then mnemHammerAndNail = true end
+if matches[2]:lower():find("rage%-fuelled") then mnemRageFuelled = true end

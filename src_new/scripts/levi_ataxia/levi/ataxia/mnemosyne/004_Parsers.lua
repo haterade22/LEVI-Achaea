@@ -200,6 +200,8 @@ function M.onRunEnd()
   mnemFalconersTactics = false -- boons gone on a confirmed run-end
   mnemHomebound = false -- boons gone on a confirmed run-end
   mnemHammerAndNail = false -- boons gone on a confirmed run-end
+  mnemRageFuelled = false   -- boons gone on a confirmed run-end
+  ataxiaTemp.brFreeCharge = nil -- ...and any charge it had banked
   if ataxiaTemp and ataxiaTemp.infFuryOn then
     -- The boon is gone but FURY may still be running with its quadrupled endurance
     -- cost and no payoff. Turn it off rather than leaving it draining EP.

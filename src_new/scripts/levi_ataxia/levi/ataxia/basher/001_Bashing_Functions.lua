@@ -745,7 +745,42 @@ ataxiaBasher_specialRageThresholds = {
 -- execute that ends the fight outright beats a per-swing multiplier, and flooring it
 -- would idle the culling cooldown. Set via `bash floor <n|off>`; persists with
 -- ataxiaBasher.
+-- RAGE-FUELLED (Mnemosyne boon, v4.7.179): "When slaying a denizen, your next battlerage
+-- attack will cost no resource." A kill banks ONE free battlerage; the charge sits there
+-- until a battlerage actually goes out, so it is a state to mirror, not a timer.
+--
+-- `brFreeCharge` lives on ataxiaTemp (transient, survives a SYSUPDATE reload, never
+-- serialized). Armed by the kill trigger (340_Slain) when the boon is up; spent by
+-- ataxiaBasher_brSent below, which is the moment a rotation commits to sending one.
+function ataxiaBasher_brFree()
+  return (ataxiaTemp and ataxiaTemp.brFreeCharge) == true
+end
+
+-- The moment a rotation COMMITS to sending a battlerage: arm the ~1s global cooldown and
+-- spend the free charge. Consolidated here so the two facts stay in lockstep -- they were
+-- six separate assignments before, and a seventh call site that forgot the charge would
+-- have leaked a free battlerage silently.
+--
+-- Deliberately spent on SEND, not on a confirmed fire line: several battlerage abilities
+-- have no fire line at all. The two error directions are not symmetric -- believing the
+-- charge is spent when it is not costs us one missed free cast (self-corrects on the next
+-- kill), while believing it is still banked costs a rejected command. Both are mild; the
+-- former is quieter.
+function ataxiaBasher_brSent()
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.brGlobalReadyAt = (getEpoch and getEpoch() or 0) + 1
+  ataxiaTemp.brFreeCharge = nil
+end
+
+-- RAGE FLOOR (v4.7.141). Some gear pays a flat damage bonus while battlerage is at or
+-- above a threshold. `ataxiaBasher.rageFloor = N` makes the rotations spend only the
+-- SURPLUS: an ability costing C fires only at C + N rage. nil/0 = off.
+--
+-- A banked Rage-Fuelled charge short-circuits BOTH the cost and the floor -- the ability
+-- is free, so there is no surplus to preserve and nothing to afford. This one function
+-- gates all 40 rotation call sites, so the boon lands on every class at once.
 function ataxiaBasher_rageAfford(rage, cost)
+  if ataxiaBasher_brFree() then return true end
   local floor = tonumber(ataxiaBasher and ataxiaBasher.rageFloor) or 0
   return (tonumber(rage) or 0) >= ((tonumber(cost) or 0) + floor)
 end
@@ -811,7 +846,7 @@ local function ataxiaBasher_bardBattlerage(sp)
 
   -- Culling blade first, above everything else: usage toggled on, off cooldown, >=36 rage.
   if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown
-     and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" and rage >= 36 then
+     and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" and (rage >= 36 or ataxiaBasher_brFree()) then
     return "reap "..target..sp
   end
 
@@ -859,7 +894,7 @@ function ataxiaBasher_blademasterBattlerage(sp)
     -- Blademaster is excluded from the shared culling check.)
     if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown
        and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree"
-       and rage >= 36 then
+       and (rage >= 36 or ataxiaBasher_brFree()) then
       return "reap "..target..sp
     end
 
@@ -894,7 +929,7 @@ function ataxiaBasher_blademasterBattlerage(sp)
   end
 
   local cmd = choose()
-  if cmd ~= "" then ataxiaTemp.brGlobalReadyAt = getEpoch() + 1 end -- arm the ~1s global cooldown
+  if cmd ~= "" then ataxiaBasher_brSent() end -- arm the ~1s global cooldown, spend any free charge
   return cmd
 end
 
@@ -993,7 +1028,7 @@ function ataxiaBasher_magiBattlerage(sp)
     -- 1. Culling reap (owned here; Magi is excluded from the shared culling check).
     if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown
        and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree"
-       and rage >= 36 then
+       and (rage >= 36 or ataxiaBasher_brFree()) then
       return "reap "..target..sp
     end
 
@@ -1041,7 +1076,7 @@ function ataxiaBasher_magiBattlerage(sp)
   end
 
   local cmd = choose()
-  if cmd ~= "" then ataxiaTemp.brGlobalReadyAt = getEpoch() + 1 end -- arm the ~1s global cooldown
+  if cmd ~= "" then ataxiaBasher_brSent() end -- arm the ~1s global cooldown, spend any free charge
   return cmd
 end
 

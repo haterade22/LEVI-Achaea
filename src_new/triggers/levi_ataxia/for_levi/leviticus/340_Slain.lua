@@ -50,6 +50,18 @@ if type(target) == "number" and ataxiaBasher.enabled then
 	end
 	
 	ataxiaTemp.mobhealth = 0
+
+	-- RAGE-FUELLED (Mnemosyne boon): "When slaying a denizen, your next battlerage attack
+	-- will cost no resource." Bank the free charge here -- this trigger is already
+	-- denizen-gated (numeric target), so it cannot arm off a player kill. Spent by
+	-- ataxiaBasher_brSent the moment a rotation commits to a battlerage; until then it
+	-- simply sits, exactly as the game's does.
+	if mnemRageFuelled then
+		ataxiaTemp.brFreeCharge = true
+		if ataxiaBasher_dsAlert then
+			ataxiaBasher_dsAlert("Rage-Fuelled: next battlerage is FREE", "chartreuse")
+		end
+	end
 end
 
 if ataxiaBasher.enabled and matches[2] then
