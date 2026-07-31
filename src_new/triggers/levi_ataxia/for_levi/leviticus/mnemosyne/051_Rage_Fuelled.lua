@@ -41,7 +41,7 @@ patterns:
 -- by the kill trigger (340_Slain, already denizen-gated on a numeric target) and spent by
 -- `ataxiaBasher_brSent()` at the moment a rotation commits to sending one.
 --
--- The payoff is entirely in `ataxiaBasher_rageAfford`, the single gate all 40 rotation
+-- The payoff is entirely in `ataxiaBasher_rageAfford`, the single gate all 37 rotation
 -- call sites already run through: a banked charge short-circuits both the cost AND the
 -- rage floor, so every class benefits from one change. Culling reap is handled separately
 -- (`rage >= 36 or ataxiaBasher_brFree()`) because it deliberately bypasses rageAfford to

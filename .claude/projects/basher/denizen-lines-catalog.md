@@ -171,3 +171,29 @@ the curing profile, not per-line tracking.
 - **Stage 2 (done):** `ataxiaBasher_blademasterBattlerage` — Blademaster owns its battlerage (excluded from the shared culling check), spends rage by priority so it never idles (fixes the 100+-rage-unused bug), and cashes in a reckless/feared target with **Headstrike** for bonus damage. **recklessness** + **aeon** capture triggers (`013-016`). Isolated to Blademaster (no other class touched). Tests `test_basher_battlerage.lua`.
 - **Stage 2.1 (done, v4.7.65):** in-game verification confirmed Daze (Stun) already fires ~every 33s (its cooldown ceiling) under the Mnemosyne priority, so the rotation is unchanged. Added visibility: `ataxiaBasher_dsAlert(msg,colour)` highlights the triggering line + echoes a `(BR):` tag (toggle `ataxiaBasher.brAlerts`, default on), wired into charm/recklessness/aeon/weakness/stun applies. Captured **weakness** apply (`017`, Nerveslash cast) + end (`018`) and **stun** apply (`019`, Daze cast) + end (`020`).
 - Stage 3: charm-swap targeting (remaining). **Stage 4 DONE (v4.7.109–111)**: first-hit auto-parry — see "Parry intel" above. Remaining aff lines (feared/sensitivity/clumsy/inhibit/amnesia/…) still TODO-line.
+
+## Our own pets (2026-07-31)
+
+Pet lines are catalogued here too: they share the combat stream, and the *turned-on-us*
+variants are the ones that must never be mistaken for a normal hit.
+
+### Runewarden falcon
+
+| Line | Meaning |
+|---|---|
+| `You whistle to your falcon, commanding it to assail <t>.` | our order (cooldown arms) |
+| `A razor-beaked falcon dives at <t>, raking his face with its talons.` | rake landed (talons) |
+| `A razor-beaked falcon rips out a chunk of <t>'s flesh with its beak.` | rake landed (beak) |
+| `You cannot yet order your falcon to rake another foe.` | refusal — still on cooldown |
+| `You may command your falcon to rake your foes once more.` | ready again |
+| `A razor-beaked falcon dives at **you**, raking **your** face with its talons.` | **turned on us** |
+| `A razor-beaked falcon rips out a chunk of **your flesh** with its beak.` | **turned on us** |
+
+The last two are excluded from the cooldown trigger by `(?!you,)` / `(?!your flesh)` —
+counting them would put the rake on cooldown for a hit we never ordered. Trigger `376`
+owns them and sends `order falcon passive`.
+
+### Infernal hyena
+
+Same shape, and the precedent the falcon copies: `367` carries the maul lines with an
+`(?!you,)` lookahead, `372` owns the turned-on-us case, `373` the too-far recall.

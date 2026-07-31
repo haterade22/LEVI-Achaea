@@ -146,8 +146,17 @@ fracture:
   syntax: "falcon track <target>;falcon slay <target>;fracture <target>"
 
 falcon:
-  effect: "Falcon companion — slay (prepended to assaults), track/rake, plus 'falcon rake' bash pet hit"
+  effect: "Falcon companion - slay (prepended to assaults), track/rake, plus 'falcon rake' bash pet hit"
   syntax: "falcon slay | track | rake <target>"
+  # Rake has TWO landing animations, both matched since v4.7.178 (trigger 370):
+  #   "A razor-beaked falcon dives at <t>, raking his face with its talons."
+  #   "A razor-beaked falcon rips out a chunk of <t>'s flesh with its beak."
+  # They re-arm the 30s cooldown from the LANDED moment, not from the order. Negative
+  # lookaheads (?!you,) / (?!your flesh) keep the turned-on-us forms out -- counting those
+  # would put the rake on cooldown for a hit we never ordered. Trigger 376 owns the at-us
+  # case and sends `order falcon passive` (free, no balance).
+  # Highlighted like the Infernal hyena maul: order = dark_sea_green, landing = chartreuse
+  # bold, refusal = dim_grey. Never the orange family (user-reserved).
 
 # Runes are applied as WEAPON EMPOWERMENT, not standalone sketches (see below)
 empower:

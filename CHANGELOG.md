@@ -2,6 +2,50 @@
 
 ---
 
+## 2026-07-31 — Documentation sync for v4.7.174–179, and a count I had wrong (v4.7.180)
+
+Brought every doc surface in line with the releases since the last sync: mounts on the
+own-denizen list, `WEAR ARMOUR` before a dive, mana on the HUD, the falcon rake wiring, and
+Rage-Fuelled.
+
+Updated: `CLAUDE.md` (boon roster → 27 flags, the HUD's MP row, the explorer's armour check,
+mounts on the own-denizen note); `memory/basher.md`, `memory/mnemosyne.md`,
+`memory/runewarden.md`, `memory/gui-windows.md`; `.claude/projects/basher/battlerage-pve.md`,
+`.claude/projects/basher/denizen-lines-catalog.md`,
+`.claude/projects/mnemosyne/07-explorer.md`; `.claude/classes/runewarden.md`.
+
+### The number I shipped wrong
+
+v4.7.179 said Rage-Fuelled rides *"the single gate all **40** rotation call sites already
+use"*. **It is 37.** The 40 came from `grep -c` on a mention count, which also swept up the
+function definition and four comment lines — the same class of mistake as the "version: OK"
+check that passed for the wrong reason two releases ago.
+
+Corrected in `CLAUDE.md`, `CHANGELOG.md` (the v4.7.179 entry in place), `battlerage-pve.md`,
+`memory/basher.md`, `memory/mnemosyne.md`, the code comment in `basher/001`, the boon
+trigger's comment, and the test file header. The real breakdown: **32** in `basher/001`
+(shared assembler + per-class handlers), **4** in `basher/002` (owned rotations), **1** in
+`basher/010` (the Mnemosyne card layer).
+
+### What counting properly turned up
+
+That 37th site — the card layer — is a real interaction nobody had looked at. `basher/010`
+uses `rageAfford` to ask *"can we afford the battlerage that cashes in this card's
+affliction?"* before spending a Covenant/Xylthus charge. A banked Rage-Fuelled charge makes
+that `true`, which is literally correct, but the two do not compose: the card plants its
+affliction on **confirmation**, a round later, by which point the free charge has usually
+been spent on whatever the rotation picked first.
+
+An inefficiency, not a bug, and partly guarded already — the card also requires its payoff to
+be **off cooldown**, so it will not draw into a payoff that cannot fire at all. Documented in
+`battlerage-pve.md` and deliberately left alone: fixing it means the card layer reasoning
+about charge ownership across rounds, which is a lot of coupling for a card that fires every
+45s.
+
+Suite **708/708** (docs and comments only).
+
+---
+
 ## 2026-07-31 — Rage-Fuelled: a kill banks a free battlerage (v4.7.179)
 
 > Rage-Fuelled: When slaying a denizen, your next battlerage attack will cost no resource.
@@ -11,7 +55,7 @@ there until a battlerage actually goes out — so it is mirrored as
 `ataxiaTemp.brFreeCharge`, armed on the kill and spent on the send.
 
 **The whole payoff routes through one function.** `ataxiaBasher_rageAfford` is already the
-single gate every rotation's affordability check runs through — 40 call sites — so a banked
+single gate every rotation's affordability check runs through — 37 call sites — so a banked
 charge short-circuiting it lands the boon on **every class at once**, with no per-rotation
 surgery. It short-circuits the **rage floor** as well: a free ability has no surplus to
 preserve.

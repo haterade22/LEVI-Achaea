@@ -4,7 +4,7 @@
 --
 -- A kill banks ONE free battlerage. The charge is a STATE, not a timer: it sits until a
 -- battlerage actually goes out. The whole payoff routes through ataxiaBasher_rageAfford --
--- the single gate all 40 rotation call sites already use -- so one bypass reaches every
+-- the single gate all 37 rotation call sites already use -- so one bypass reaches every
 -- class. Culling reap is the exception that needs explicit handling, because it
 -- deliberately sidesteps rageAfford to stay floor-exempt.
 

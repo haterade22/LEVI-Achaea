@@ -240,3 +240,93 @@ now captures the fire line ("You trace the outline of a rune in the air with <we
 and calls `ataxiaBasher_rwConfirm("etch")` (002:1467), which restamps the cooldown and
 clears the hold. The ready lines above are the third leg of the same structure: they cover
 every ability whose fire line we have not captured yet, and they cost nothing to add.
+
+
+## Rage-Fuelled: a kill banks a free battlerage (v4.7.179)
+
+Mnemosyne boon — *"When slaying a denizen, your next battlerage attack will cost no
+resource."* A kill banks **one** free battlerage. It is a **state, not a timer**: the charge
+sits in `ataxiaTemp.brFreeCharge` until a battlerage actually goes out, mirroring the game.
+
+### Why it is a two-line change and not a per-rotation rewrite
+
+`ataxiaBasher_rageAfford(rage, cost)` is already the **single** gate every rotation's
+affordability check runs through — 37 call sites across the shared assembler, the owned
+`GDRAGON_BR` / `PSION_BR` / `DW_BR` / `RW_BR` tables and the per-class handlers. So:
+
+```lua
+function ataxiaBasher_rageAfford(rage, cost)
+  if ataxiaBasher_brFree() then return true end   -- Rage-Fuelled: this one is free
+  local floor = tonumber(ataxiaBasher and ataxiaBasher.rageFloor) or 0
+  return (tonumber(rage) or 0) >= ((tonumber(cost) or 0) + floor)
+end
+```
+
+lands the boon on **every class at once**. It short-circuits the **rage floor** as well, which
+is correct rather than incidental: the floor exists to preserve a spendable surplus, and a
+free ability consumes no surplus.
+
+### The one path that needed explicit handling
+
+**Culling reap deliberately bypasses `rageAfford`** to stay floor-exempt (`basher/001:849,
+897, 1031`; `basher/002:202, 471, 1268, 1493` — seven sites testing `rage >= 36` directly).
+It would therefore have been the single path the boon missed — and a free AoE execute is the
+best thing a charge can buy. Now `(rage >= 36 or ataxiaBasher_brFree())`.
+
+### The commit point, and why it got consolidated
+
+`ataxiaTemp.brGlobalReadyAt = ... + 1` marked "a rotation is committing to a battlerage" in
+**six** separate places. Arming the ~1s global cooldown and spending the free charge have to
+stay in lockstep, and a seventh call site added later that remembered one but forgot the
+other would leak a free battlerage **silently** — no error, no refusal, just a charge that
+never gets spent. Both facts now live in one function:
+
+```lua
+function ataxiaBasher_brSent()
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.brGlobalReadyAt = (getEpoch and getEpoch() or 0) + 1
+  ataxiaTemp.brFreeCharge = nil
+end
+```
+
+The pre-existing rotation suites passing **unchanged** is what proves that consolidation
+behaviour-identical when the boon is absent — a stronger check than the new tests.
+
+### Spent on send, not on a fire line
+
+Several battlerage abilities have no fire-line trigger at all (Runewarden Etch had none until
+v4.7.166, and its trigger was then dead until v4.7.170), so a confirmation-based spend would
+silently never fire for them. The error directions are **not symmetric**:
+
+| We believe | Reality | Cost |
+|---|---|---|
+| spent | still banked | one missed free cast; self-corrects on the next kill |
+| banked | already spent | one rejected command |
+
+Both mild; send-based picks the quieter one.
+
+Armed in `340_Slain`, which is already denizen-gated on a numeric `target` — so it cannot arm
+off a player kill, and no new gating had to be written. Lifecycle is the standard boon shape:
+`mnemRageFuelled` from trigger `mnemosyne/051` + the `BOON CLAIM` intercept, reset on run
+start, cleared on the confirmed run end along with any banked charge.
+
+### One consequence found while counting the call sites
+
+The 37 sites are 32 in `basher/001` (shared assembler + per-class handlers), 4 in
+`basher/002` (the owned rotations) and **one in `basher/010`** — the Mnemosyne card layer,
+which uses `rageAfford` to ask *"can we afford the battlerage that cashes in this card's
+affliction?"* before spending a Covenant/Xylthus charge.
+
+A banked Rage-Fuelled charge makes that answer `true`, which is **literally correct** — the
+payoff really is free — but the two do not compose perfectly. The card plants its affliction
+on *confirmation*, a round later, by which point the free charge has usually been spent on
+whatever the rotation picked first. So the card can be drawn on the strength of a free cast
+it never actually gets.
+
+This is an inefficiency, not a bug, and the guard against it is already there in another
+form: the card also requires its payoff to be **off cooldown** (`ex.ready()`), so it will not
+draw into a payoff that cannot fire at all. Left alone deliberately — tightening it would
+mean the card layer reasoning about charge ownership across rounds, which is a lot of
+coupling for a card that fires every 45s.
+
+Tests: `src_new/tests/test_rage_fuelled.lua`.

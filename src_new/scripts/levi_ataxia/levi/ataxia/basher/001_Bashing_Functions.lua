@@ -778,7 +778,7 @@ end
 --
 -- A banked Rage-Fuelled charge short-circuits BOTH the cost and the floor -- the ability
 -- is free, so there is no surplus to preserve and nothing to afford. This one function
--- gates all 40 rotation call sites, so the boon lands on every class at once.
+-- gates all 37 rotation call sites, so the boon lands on every class at once.
 function ataxiaBasher_rageAfford(rage, cost)
   if ataxiaBasher_brFree() then return true end
   local floor = tonumber(ataxiaBasher and ataxiaBasher.rageFloor) or 0

@@ -465,3 +465,30 @@ Pure logic (threshold, `_backDir`, the state machine, decorator, resets) is unit
 ---
 
 See also: [04-ripple-map.md](04-ripple-map.md) (the `MAP` graph API this reuses), [05-commands.md](05-commands.md) (`mnem` dispatch), [01-architecture.md](01-architecture.md) (run lifecycle / gating).
+
+
+## Wearing armour before a dive (v4.7.175)
+
+`M._wearArmour()` sends `WEAR ARMOUR`, and is called from **both** explorer entry points:
+
+- `M.exploreOn()` — the explicit `mnem explore on`.
+- `M._exploreResume()` — the **per-ripple** entry. `GO` calls it after every boon screen.
+
+The second is the one that earns its keep. A run is 5–25 ripples, so wiring only the explicit
+turn-on would have covered a small fraction of the actual exposure. **General rule for this
+module: a start-of-work safety belongs on both — `exploreOn` is the session start,
+`_exploreResume` is the loop.**
+
+Sent **directly, not queued**: the basher rebuilds its command every prompt with
+`queue addclearfull`, which wipes queued lines — the same reason the hyena/falcon passive
+orders and the disarm recovery bypass the queue. `WEAR` costs no balance, so it rides any
+round.
+
+Deliberately **not** gated on a "already wearing?" check. There is no reliable worn-state to
+read, and the failure mode of guessing wrong — skipping the wear because we believe armour is
+on — is exactly the situation this exists to prevent. An unconditional free command is the
+better trade.
+
+Consequence: `"You are already wearing this item."` prints once per ripple in the common
+case. Left **ungagged** — it is a real refusal line, and silencing it would also bury the
+pre-existing login-path double-send found in the v4.7.167 audit.
