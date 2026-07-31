@@ -45,7 +45,7 @@ This layer keys off state instead and rides the assembled attack round.
 |---|---|---|---|
 | **Morimbuul** | while bound | Shrug off denizen ropes/bindings, 5 min | 300s |
 | **Maran** | hp <= `maranAt` (20%) | 5000hp barrier on the room, 60s | 65s |
-| **Seasone** | hp <= `seasoneAt` (35%) | `FOR ELIXIR`: +10% health elixir, 5 min | 300s |
+| **Seasone** | hp <= `seasoneAt` (35%) | elixir variant: +10% health elixir, 5 min | 300s |
 | **Matic** | >= `maticAt` (3) denizens, mob above `conserveAt` | Next attack is a guaranteed high-end crit | 45s + once/room |
 | **Covenant** | payoff affordable AND off cooldown, mob above `conserveAt` | Plants RECKLESSNESS | 45s |
 | **Xylthus** | payoff affordable AND off cooldown, mob above `conserveAt` | Plants STUN (never on a boss) | 45s |
@@ -142,6 +142,14 @@ stamps the affliction, so an *unacknowledged* draw still planted a phantom stun 
 buy at 25 rage: precisely the hole that release had been written to close. Three outcomes,
 three functions, and only one of them may touch denizen state — confirm (`:317`) stamps,
 lapse (`:335`) and rejected (`:350`) do not.
+
+**Command shape (v4.7.172):** the Seasone variant is a **bare argument** --
+`ldeck draw seasone elixir`. The card's help text reads *"DRAW FOR ELIXIR or FOR POISON"*,
+which reads like syntax but is English: `ldeck draw seasone for elixir` is refused with
+*"You must draw that card for either ELIXIR or POISON."* `ldm.draw`/`drawQueued` append
+arguments bare for the same reason. Trigger `legenddeck_cards/009_LDeck_Needs_Variant.lua`
+catches that refusal and lapses the pending pick, so a malformed draw costs one round
+rather than being re-sent for the whole 4s in-flight replay window.
 
 **Known gap:** Xylthus's bind line is still uncaptured, so the stun is recorded from the
 draw confirmation rather than from the bind itself (lazily expired in 4s by

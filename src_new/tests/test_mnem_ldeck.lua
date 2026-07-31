@@ -99,7 +99,7 @@ describe("threshold cards -- maran / seasone / morimbuul", function()
   it("draws the ELIXIR half of Seasone, not the room-poison half", function()
     reset(); ataxia.vitals.hpp = 30
     local _, cmd = ataxiaBasher_mnemLdeckPick()
-    expect(cmd).toBe("ldeck draw seasone for elixir")
+    expect(cmd).toBe("ldeck draw seasone elixir")
   end)
 
   it("treats an hpp of 0 as blackout/unknown, never as an emergency", function()
@@ -309,6 +309,19 @@ describe("v4.7.167 -- lapse is not confirmation, and dying mobs are not worth a 
     expect(pick()).toBe("Xylthus")
     gmcp.IRE = { Target = { Info = {} } }
     expect(pick()).toBe("Xylthus")
+  end)
+end)
+
+
+describe("a malformed draw must not replay for the whole pending window", function()
+  it("lapsing the pick releases the replay WITHOUT touching charges", function()
+    reset(); ataxia.vitals.hpp = 30
+    expect(ataxiaBasher_mnemLdeck(";")).toBe("ldeck draw seasone elixir;")
+    -- What trigger 009 does on "You must draw that card for either ELIXIR or POISON."
+    ataxiaBasher_mnemLdeckLapse(ataxiaTemp.mnemLdeckPending.key)
+    expect(ataxiaTemp.mnemLdeckPending).toBe(nil)   -- not re-sent every rebuild
+    expect(ldm.deck.Seasone.charges).toBe(3)        -- a refused draw spends nothing
+    expect(ataxiaBasher_mnemLdeck(";")).toBe("")    -- interval holds it off
   end)
 end)
 

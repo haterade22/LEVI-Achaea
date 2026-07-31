@@ -2,6 +2,43 @@
 
 ---
 
+## 2026-07-31 — Seasone draw syntax: the "for" was English, not syntax (v4.7.173)
+
+> You must draw that card for either ELIXIR or POISON.
+
+Seasone is the only two-variant card, and we were drawing it as
+`ldeck draw seasone **for** elixir` — taken literally from the card's own help text,
+*"DRAW FOR ELIXIR or FOR POISON"*. That text is prose. The variant is a **bare argument**:
+`ldeck draw seasone elixir`.
+
+The package's own `ldm.draw` / `ldm.drawQueued` already build parameterised draws that way
+(`003_Legend_Deck_Functions:112-115,129-132` — append the argument, no preposition), so the
+evidence was in the codebase the whole time.
+
+**Two sites had it**, and the older one was not mine: the `lsea` alias
+(`legenddeck/001_Season_(Elixir_Poison).lua:16`) has carried `for elixir` since long before
+the auto-draw layer, so that manual draw has never worked either.
+
+### Backstop for the next one
+
+New trigger `legenddeck_cards/009_LDeck_Needs_Variant.lua`. A refused draw spends no charge,
+so nothing about the deck changes — but the auto-draw layer holds its pick in a ~4s in-flight
+replay (it must, because the basher's `queue addclearfull` wipes the queued line every
+prompt), so a syntax error would be **re-sent on every rebuild for the whole window**. The
+trigger lapses the pending pick instead: replay released, interval held, one wasted round
+instead of a burst.
+
+Deliberately `Lapse` and not `Rejected` — `Rejected` zeroes the charge count, which is right
+for *"lacks the power to invoke its stored potential"* and wrong here. The card is fine; the
+command was not.
+
+Files: `basher/010_Mnemosyne_Legend_Deck.lua`,
+`aliases/.../legenddeck/001_Season_(Elixir_Poison).lua`,
+`triggers/.../legenddeck_cards/009_LDeck_Needs_Variant.lua` (NEW),
+`tests/test_mnem_ldeck.lua`, `docs/legend-deck.md`, 3 version files. Suite **684/684**.
+
+---
+
 ## 2026-07-31 — The curing table was answering the wrong fight (v4.7.172)
 
 > `[RIFT]: -1 Cuprum.` -- *The terrible sense of foreboding lifts.*

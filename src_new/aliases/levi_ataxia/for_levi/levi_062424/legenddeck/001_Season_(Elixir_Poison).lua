@@ -13,4 +13,7 @@ command: ''
 packageName: ''
 ]]--
 
-send("clearqueue all;queue add eqbal legenddeck draw seasone for elixir")
+-- The variant is a BARE argument. "legenddeck draw seasone FOR elixir" is rejected with
+-- "You must draw that card for either ELIXIR or POISON." -- the "for" in that sentence is
+-- English, not syntax (live 2026-07-31). Matches ldm.draw, which appends the argument bare.
+send("clearqueue all;queue add eqbal legenddeck draw seasone elixir")

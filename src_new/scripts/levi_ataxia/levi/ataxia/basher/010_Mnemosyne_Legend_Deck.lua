@@ -108,7 +108,11 @@ local CARD_EXPLOIT = {
 local MNEM_CARDS = {
   { key = "Morimbuul", cmd = "ldeck draw morimbuul",          gap = 300 },
   { key = "Maran",     cmd = "ldeck draw maran",              gap = 65  },
-  { key = "Seasone",   cmd = "ldeck draw seasone for elixir", gap = 300 },
+  -- NOTE on the Seasone command shape: the variant is a BARE argument. The card's own
+  -- help text reads "DRAW FOR ELIXIR or FOR POISON", which reads like syntax but is not --
+  -- "ldeck draw seasone for elixir" is rejected with "You must draw that card for either
+  -- ELIXIR or POISON." (live 2026-07-31). ldm.draw appends arguments bare for the same reason.
+  { key = "Seasone",   cmd = "ldeck draw seasone elixir",     gap = 300 },
   { key = "Matic",     cmd = "ldeck draw matic",              gap = 45, perRoom = true },
   -- `stampAff` records the affliction ON CONFIRMATION (see the confirm handler).
   -- Covenant has none: it lands charm OR recklessness 50/50 and BOTH game lines are
