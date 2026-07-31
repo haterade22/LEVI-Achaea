@@ -307,7 +307,17 @@ describe("Thunderclap -- bisect becomes the crowd swing (v4.7.181)", function()
     expect(ataxiaBasher_rwBisect(";")).toBe("bisect 7")
   end)
 
-  it("honours a custom threshold", function()
+  it("CLAMPS the threshold at 2 -- one denizen has nothing to splash to", function()
+    reset(); mnemThunderclap = true; denizens = 1
+    ataxiaBasher.bisectAt = 1          -- a setting that can never be right
+    expect(ataxiaBasher_rwBisect(";")).toBe(nil)
+    ataxiaBasher.bisectAt = 0
+    expect(ataxiaBasher_rwBisect(";")).toBe(nil)
+    denizens = 2                        -- ...and 2 still works with the same bad setting
+    expect(ataxiaBasher_rwBisect(";")).toBe("bisect 7")
+  end)
+
+  it("honours a custom threshold ABOVE the floor", function()
     reset(); mnemThunderclap = true; denizens = 2
     ataxiaBasher.bisectAt = 3
     expect(ataxiaBasher_rwBisect(";")).toBe(nil)

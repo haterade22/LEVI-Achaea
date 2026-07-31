@@ -240,8 +240,10 @@ gate:      "ataxiaBasher.bisectAt denizens (default 2). Over a 4s window combina
             2 swings on ONE mob; bisect lands 1 empowered strike on the target PLUS electric
             on EVERY denizen -- twice the balance for room-wide coverage. At 1 denizen there
             is nothing to splash to, the only case the gate excludes; from 2 upward bisect
-            covers ground combination cannot, widening with each extra mob. Set bisectAt=1
-            to make it unconditional. Same trade as Infernal Arc (4.75s vs ~2s dsl, 2+)."
+            covers ground combination cannot, widening with each extra mob. bisectAt tunes
+            UPWARD only -- 2 is a CLAMPED FLOOR, not a default (user rule): at one denizen
+            the third strike has nothing to splash to, so no setting makes it correct.
+            Same trade as Infernal Arc (4.75s vs ~2s dsl, 2+)."
 replaces:  "the swing (both spend balance) -- but the FREE falcon rake still rides"
 skips:     "shielded rounds (bisect bypasses rebounding, NOT shields); non-numeric target"
 no_execute: "the <=20% slain-outright clause is ADVENTURERS ONLY -- no low-hp branch exists"

@@ -1533,7 +1533,7 @@ end
 -- CLEARING THE ROOM, not killing one thing fastest, which is exactly the situation spread
 -- damage wins. Same shape as the Infernal Arc gate (4.75s vs ~2s dsl, also 2+).
 --
--- `ataxiaBasher.bisectAt`, default 2. Set it to 1 to make bisect the unconditional swing.
+-- `ataxiaBasher.bisectAt` tunes it UPWARD only -- the floor of 2 is enforced below.
 -- (An earlier comment framed this as "gated on the balance cost, not on it being AoE".
 -- That was backwards: it is gated on the AoE, and the balance cost only sets WHERE the
 -- crossover falls. Corrected 2026-07-31 -- user's point that bisect hits multiple.)
@@ -1559,7 +1559,12 @@ function ataxiaBasher_rwBisect(sp)
 	if type(target) ~= "number" then return nil end
 	local M = ataxia.mnemosyne
 	local n = (M and M._denizenCount and M._denizenCount()) or 0
-	if n < (tonumber(ataxiaBasher.bisectAt) or 2) then return nil end
+	-- FLOOR OF 2 IS A RULE, NOT A DEFAULT (user, 2026-07-31: "bisect should only be used if
+	-- it is 2 denizens plus"). At a single denizen there is nothing for the third strike to
+	-- splash to, so the extra 2s of balance buys literally nothing -- there is no
+	-- configuration in which that is correct, so it is CLAMPED rather than merely defaulted.
+	-- Same shape as `mnem swarm assess <n>`, which validates n >= 2 for the same reason.
+	if n < math.max(2, tonumber(ataxiaBasher.bisectAt) or 2) then return nil end
 	return "bisect "..target
 end
 

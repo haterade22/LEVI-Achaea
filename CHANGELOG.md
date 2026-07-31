@@ -2,6 +2,40 @@
 
 ---
 
+## 2026-07-31 - Bisect: 2+ denizens is a clamped floor, not a default (v4.7.184)
+
+User rule: *"bisect should only be used if it is 2 denizens plus."* It already defaulted to
+2, but a default is something you can turn off - and at one denizen the third strike has
+nothing to splash to, so the extra 2s of balance buys literally nothing. There is no
+configuration in which that is correct, so `ataxiaBasher.bisectAt` is now **clamped**:
+
+```lua
+if n < math.max(2, tonumber(ataxiaBasher.bisectAt) or 2) then return nil end
+```
+
+It tunes **upward** only. Same shape as `mnem swarm assess <n>`, which validates `n >= 2`
+for the same kind of reason.
+
+I had gone out of my way to advertise `bisectAt = 1` as "the lever to make bisect
+unconditional". That was surfacing a footgun as if it were a feature - removed from the code
+comment, `CLAUDE.md`, `.claude/classes/runewarden.md` and `memory/runewarden.md`.
+
+### A test that passed in the wrong place
+
+The clamp test first landed inside the **Hammer and Nail (sowulu)** describe, because
+`it("honours a custom threshold", ...)` appears in *two* blocks in that file and a
+first-match replace took the wrong one - which also renamed the sowulu test. It **passed**
+there, since `ataxiaBasher_rwBisect` is a global and the body set its own state, so nothing
+failed to flag it; only reading the runner output showed the Thunderclap block still had
+seven tests. Both blocks are now correct and named for what they cover.
+
+Worth recording: **a passing test in the wrong describe is invisible.** When a helper name
+recurs across blocks in one file, anchor edits on something unique to the block.
+
+Suite **716/716**.
+
+---
+
 ## 2026-07-31 - The bisect correction missed one site (v4.7.183)
 
 v4.7.182 corrected the backwards bisect-economics framing in five places and I said so - but
