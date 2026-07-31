@@ -24,7 +24,43 @@ ataxia.prioThrottle = ataxia.prioThrottle or {
   drainTimer = nil,
 }
 
+-- `curing priority <aff> <n>` writes a STORED priority into whichever curingset is
+-- active. While the PvE `bash` set is selected (ataxia/008_Bash_Curing_Profile.lua) any
+-- such write would permanently mutate that set -- and worse, ataxia_restorePrio would
+-- then put the PVP default back into the BASH set, so the profile silently rots one
+-- affliction at a time across a hunting session. Every PvP swap that reaches here
+-- (Damnation, the anti-class handlers, parshield, engage/disengage burning) is
+-- meaningless against denizens anyway, so dropping them while bashing costs nothing.
+--
+-- Only stored AFFLICTION priorities are dropped. `curing priority defence ...` and the
+-- health-vs-mana sip toggle (`curing priority health|mana`) still pass, and `curing
+-- prioaff <aff>` -- the TEMPORARY prioritisation used by SLC's defensive reactions --
+-- never routes through here at all.
+local function writesStoredAffPrio(cmd)
+  if type(cmd) ~= "string" then return false end
+  for part in cmd:gmatch("[^;]+") do
+    local aff = part:match("^%s*curing%s+priority%s+([%a]+)%s+%d+%s*$")
+    if aff then
+      aff = aff:lower()
+      if aff ~= "defence" and aff ~= "defense" and aff ~= "health" and aff ~= "mana" then
+        return true, aff
+      end
+    end
+  end
+  return false
+end
+
 function ataxia_sendCuringPriority(cmd, silent)
+  if ataxia_bashProfileActive and ataxia_bashProfileActive() then
+    local blocked, aff = writesStoredAffPrio(cmd)
+    if blocked then
+      if ataxiaBasher_debug and ataxiaEcho then
+        ataxiaEcho("[DBG] dropped stored priority write on the bash set: " .. tostring(aff))
+      end
+      return
+    end
+  end
+
   local now = getEpoch()
   local throttle = ataxia.prioThrottle
 

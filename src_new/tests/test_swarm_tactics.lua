@@ -63,6 +63,15 @@ ataxiaBasher = { enabled = true }
 ataxiaTemp = {}
 found_target = false
 
+-- S._afflicted consults the PvE curing profile to tell a PARKED affliction (one we have
+-- decided not to cure, so it must not hold the recovery hover) from a real one. Loaded
+-- explicitly rather than relying on test_bash_curing_profile.lua having run first --
+-- the runner sorts filenames, so that ordering is incidental, not a contract.
+if not ataxia_bashCuringPrios then
+  local okp = pcall(dofile, "src_new/scripts/levi_ataxia/levi/ataxia/ataxia/008_Bash_Curing_Profile.lua")
+  if not okp then error("Failed to load bash curing profile") end
+end
+
 local file = "src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/009_Swarm_Tactics.lua"
 local ok, err = pcall(dofile, file)
 if not ok then error("Failed to load swarm tactics file: " .. tostring(err)) end
@@ -565,6 +574,39 @@ describe("swarm low-HP escape ladder", function()
     expect(M.explore.settling).toBeTrue() -- the land's Room/Items push decides next
     expect(#scheduled > 0).toBeTrue()     -- no-event backstop tick armed
     M.explore.settling = false
+  end)
+
+  it("lands with PARKED afflictions up -- the bash curing profile decided not to cure them", function()
+    -- The PvE curing profile (ataxia/008) parks the junk mental spray at priority 25 so
+    -- it cannot outbid a potash for the eating balance. Those affs therefore stay up for
+    -- the rest of the fight -- and an unmodified aff-free test would hold every hover to
+    -- its RECOVER_MAX cap waiting on a paranoia nobody is curing. A parked affliction is
+    -- one we have DECIDED not to cure; only a REAL one may hold the hover.
+    fixture(2)
+    ataxia.vitals = { hpp = 30 }
+    S.onTick() -- recovering
+    ataxia.vitals = { hpp = 96 }
+    ataxia.settings.bashcuring = { active = true }
+    ataxia.afflictions = { paranoia = true, shyness = true, crippledrightarm = true }
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering") -- the BROKEN LIMB is real and still holds us
+    ataxia.afflictions = { paranoia = true, shyness = true } -- only parked affs left
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("idle")       -- lands rather than floating to the cap
+    expect(findCmd("land") ~= nil).toBeTrue()
+    ataxia.settings.bashcuring.active = false
+    M.explore.settling = false
+  end)
+
+  it("still holds the hover for parked affs when the bash profile is OFF (PvP unchanged)", function()
+    fixture(2)
+    ataxia.vitals = { hpp = 30 }
+    S.onTick()
+    ataxia.vitals = { hpp = 96 }
+    ataxia.settings.bashcuring = { active = false }
+    ataxia.afflictions = { paranoia = true }
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")
   end)
 
   it("lands at the hard cap even if never healed -- also settling, never deciding blind", function()

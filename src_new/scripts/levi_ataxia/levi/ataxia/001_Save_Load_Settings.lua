@@ -509,6 +509,16 @@ function ataxia_defaultSettings()
 		--Precaching herbs.
 		precache = {
 		},
+		-- PvE bashing curing profile (ataxia/008_Bash_Curing_Profile.lua). A server-side
+		-- curingset holding the PvE priority table -- limbs first, mental spray parked --
+		-- switched on "basher enabled" and back on "basher disabled". `installed` flips only
+		-- after the one-time `aconfig bashcuring install` finishes writing the set.
+		bashcuring = {
+			enabled = true,
+			installed = false,
+			setname = "bash",
+			restoreTo = "normal",
+		},
 		--Other stuff that doesn't fall into above categories.
 		aeoncommandblock = true,
 		-- Monk bashing: false = Shikudo staff combos / Tekura, true = mind crush + DRS.

@@ -2,6 +2,147 @@
 
 ---
 
+## 2026-07-31 — The curing table was answering the wrong fight (v4.7.172)
+
+> `[RIFT]: -1 Cuprum.` -- *The terrible sense of foreboding lifts.*
+> Fourteen seconds later: *You have been slain by an earth wyrm.*
+
+A Mnemosyne death log, Runewarden SnB against two earth wyrms. Max HP ~32,850 (derived: the
+swarm ladder printed `LOW HP (29%)` at a raw HP of 9,526). Thirteen seconds from full
+engagement to death, ~21,000 incoming -- roughly **1,600 HP/s**.
+
+Nothing was wrong with the rotation. The system died because
+`ataxia_defaultCuringPrios()` is tuned **entirely for PvP**, and it spent both scarce
+balances on afflictions that do nothing to a basher.
+
+**Potash and moss share the eating balance with every cure-mineral.** Seven eats in the final
+thirteen seconds; exactly ONE was potash:
+
+| Time | Eat | Cured |
+|---|---|---|
+| 38:633 | cuprum | paranoia |
+| 41:060 | cuprum | paranoia |
+| 43:746 | argentum | (mental) |
+| 45:376 | calamine | (mental) |
+| **46:221** | **potash** | **health + mana** |
+| 46:973 | cuprum | paranoia |
+| 48:827 | plumbum | shyness |
+
+`You may eat another bit of irid moss or potash.` printed at 07:45:36 and the next potash went
+down at 07:45:46 -- **ten seconds of heal balance spent on paranoia and shyness** while HP fell
+44% -> 25%.
+
+**Mending and restoration share the salve balance with cracked ribs.** `crackedribs` is prio 9,
+`brokenrightarm` is 10, so at 07:45:43 the salve went to the torso (`It becomes somewhat easier
+to draw breath.`, `Cr(2)` -> `Cr(1)`) while `ra1` was still broken. Cracked ribs are a damage
+modifier. A broken arm **refuses the entire SnB attack** -- and four rounds were sent and
+refused outright at 07:45:38/39/40/40 (`You cannot do that because both of your arms must be
+whole and unbound.`).
+
+The wyrm's kit is heavy damage, BOTH limbs of a pair broken per bite, impale, and a spray of
+cosmetic mental afflictions. The PvP table cures every one of those because in PvP they are
+lock components. In PvE nothing is locking us: **the table was answering a threat that was not
+present, using exactly the resources needed for the one that was.**
+
+### The bash curing profile
+
+New `ataxia/ataxia/008_Bash_Curing_Profile.lua` -- a server-side `bash` **curingset** holding
+the PvE ordering, switched on `"basher enabled"` and restored on `"basher disabled"`.
+
+Curingset rather than a priority overlay because `curing priority` is throttled at 4/sec
+(`002_Prio_Management.lua`, Announce #5450): pushing ~55 priorities would take ~15 seconds
+each way, which is useless as a combat profile switch. `CURINGSET SWITCH` is one command.
+Install clones the PvP set first and writes only the ~55 deltas, so anything unlisted keeps
+its PvP value.
+
+The ordering is close to the inverse of the PvP one:
+
+- **limbs to 4-6** (from 7-14) -- arms gate our offence and rifting, legs gate stand, tumble,
+  leap and fly, i.e. every rung of the escape ladder. Made **symmetric**: the PvP table has
+  `damagedleftarm` at 11 and `damagedrightarm` at 13 for no reason, and restoration always
+  heals the LEFT limb of a pair first anyway.
+- **cure-channel blockers stay ahead of them** -- anorexia (eating -> potash), slickness
+  (salves -> mending), paralysis (tree).
+- **the real damage math to 6** -- recklessness (+50% taken), sensitivity, hypochondria,
+  clumsiness (33% miss), healthleech.
+- **salve competitors parked at 20** -- crackedribs, skullfractures, torntendons,
+  wristfractures, concussion, both traumas, scalded. None may outbid a limb again.
+- **the junk mental spray parked at 25** -- paranoia, shyness, depression, masochism, the
+  phobias, dementia, stupidity, dizziness, the horror and tempered stacks, and the rest.
+
+Deliberately unchanged and recorded in the file so a future reader does not "fix" them: the
+whole writhe/incapacitation band, **asthma and weariness** (the Seasone phial truelock is
+asthma + anorexia, and the mnemosyne/004 counter re-touches tree only while both persist --
+demoting asthma would lengthen that lock), nausea (blocks parry, which the SLC bashing parry
+mode depends on), epilepsy, and the ticking-damage families.
+
+**Opt-in.** `installed` is false until `aconfig bashcuring install` writes the set, and
+`ataxia_bashProfileOn` returns early until then -- an update alone changes nothing.
+
+### Three guards, because parking an affliction has consequences
+
+Each is a direct consequence of the change, not a nicety:
+
+1. **The recovery hover would never land.** `S._afflicted()` (mnemosyne/009) returns true for
+   any aff outside `AFF_IGNORE`, and the escape ladder only lands at `recoverAt%` **and**
+   aff-free. Affs parked at 25 stay up for the rest of the fight, so every hover would burn
+   its full `RECOVER_MAX` cap waiting on a paranoia nobody is curing. A parked affliction is
+   one we have DECIDED not to cure and must not hold the hover -- only while the profile is
+   active, so PvP is untouched.
+2. **classDetect would clobber the switch.** It owns the only other `curingset switch`
+   (`:196`, `:237`, `:299`) and never switches back TO `bash`, so one PvP-class detection
+   mid-swarm would silently disarm the profile for the rest of the run. Suppressed while the
+   profile is active; combat state still clears so a later PvP fight starts clean.
+3. **Stored priority writes would rot the set one affliction at a time.** `curing priority
+   <aff> <n>` writes to whichever set is ACTIVE. Worse than the write itself,
+   `ataxia_restorePrio` would then put the **PvP** default back into the **bash** set. Guarded
+   at the choke point (`ataxia_sendCuringPriority`) rather than at ~15 call sites -- Damnation,
+   the anti-class handlers, parshield, engage/disengage burning all route through it, and all
+   are meaningless against denizens. `curing priority defence ...` and the health/mana sip
+   toggle still pass; `curing prioaff` (TEMPORARY, used by SLC's defensive reactions) never
+   routes through there at all. `ataxia_sendDefaultPrios` leaves the bash set before resetting,
+   or `reset prios` mid-bash would overwrite the profile with the PvP table and leave a
+   duplicate of `normal` that still "switches".
+
+### Commands
+
+`aconfig bashcuring [install|show|on|off|status]` -- `show` prints every delta as
+`pvp -> bash`, parked values in red.
+
+### Tests
+
+`test_bash_curing_profile.lua` (22 cases) asserts INVARIANTS, not numbers -- the numbers are a
+judgement call that will be tuned from live logs, the orderings are the point of the profile:
+every limb outranks every salve competitor; left/right pairs are symmetric; every delta names
+an aff the default table knows (the `crippled*`/`broken*`/`damaged*` naming split is one the
+codebase is genuinely inconsistent about, and a typo would write a priority for an aff that
+never fires); no delta repeats its default; nothing at prio <= 2 is ever demoted. Plus the
+switching lifecycle and the write guard. Two more in `test_swarm_tactics.lua` cover the hover
+landing with parked affs up, and that PvP behaviour is unchanged with the profile off. 683
+pass.
+
+### Recorded but NOT fixed here
+
+Found in the same log, left for follow-ups so they are not lost:
+
+1. **The escape ladder fires too late.** 29% HP with ~1,600 HP/s incoming is about six seconds
+   of life -- and by then both legs were broken, so the `stand;fly` it queued could not
+   execute. `escapeAt` is an HP budget where the situation needs a TIME budget;
+   `ataxiaBasher_dmgSamples` already computes the rate.
+2. **Broken arms are not in the attack gate** (`basher/001:686`), producing the four refused
+   rounds. Triggers 344/345 only echo; they could escalate the limb cure.
+3. **Not one health elixir sip in the whole log** despite `curing siphealth 80`, at 25-50% HP
+   for thirteen seconds. Related: `ataxia.settings.sipping.*` is written by the setup wizard
+   but **never sent to the server** -- install and `setNormalSip()` both hardcode literals and
+   disagree (80/80/70/70 vs 80/75/70/70 vs a default table saying 70), and nothing ever sends
+   `curing sipping on`.
+4. **Bleed is parsed positionally.** `update_stuff/004:118` reads `stats[1]` while every other
+   charstat uses the key-scan loop at `:42-90`. This is why `bld(389)` vanished 150ms later in
+   the log -- a parse miss, not a clot. It can also hand `nil` to arithmetic comparisons
+   (`001_Anti_Priorities:177`) and throws outright if `charstats` is empty.
+
+---
+
 ## 2026-07-30 — Dagaz: the self branch that was never written (v4.7.171)
 
 > A rune like a rising sun upon the ground flares, bathing you with healing magic.

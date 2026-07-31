@@ -903,6 +903,30 @@ Achaea provides built-in curing that simulates average latency. Custom systems c
 | `CURINGSET LIST` | List all curingsets |
 | `CURINGSET CLONE <from>` | Clone into current setup |
 
+**CRITICAL: `CURING PRIORITY <aff> <n>` writes a STORED priority into whichever curingset is
+ACTIVE.** Any code path that writes priorities while a non-default set is selected mutates
+that set permanently — and `ataxia_restorePrio()` will then write the *default* table's value
+into the *other* set, rotting it one affliction at a time. Route every priority write through
+`ataxia_sendCuringPriority()` (`ataxia/ataxia/002_Prio_Management.lua`), which throttles to
+4/sec (server limit 5/sec, Announce #5450) **and** drops stored affliction writes while the
+PvE bash set is active. `CURING PRIOAFF <aff>` is a *temporary* prioritisation, writes nothing
+stored, and is always safe.
+
+**PvE bashing curing profile** (`ataxia/ataxia/008_Bash_Curing_Profile.lua`, v4.7.172): the
+default table (`001_Default_Curing_Prios.lua`) is tuned entirely for PvP, which loses bashers.
+Two balances are contended and the PvP ordering spends both on afflictions that do nothing to
+a denizen: **potash/moss shares the EATING balance with every cure-mineral**, and **mending/
+restoration shares the SALVE balance with crackedribs/fractures/traumas**. So the PvE table
+inverts it — cure-channel blockers (anorexia/slickness/paralysis) > limbs at 4-6 (arms gate
+the attack, legs gate every escape) > damage math > salve competitors parked at 20 > junk
+mental spray parked at 25. Held in a server-side `bash` curingset so the swap is ONE command
+rather than ~55 throttled pushes (~15s). Switched on `"basher enabled"` / `"basher disabled"`;
+opt-in via `aconfig bashcuring install`. A priority at/above `ataxiaBashProfile.PARKED` (20)
+means SSC will not cure it, so it stays up for the whole fight — **anything testing
+"affliction-free" must treat a parked aff as not-an-affliction** (see `S._afflicted` in
+mnemosyne/009, whose recovery hover would otherwise never land). Full detail in
+`memory/curing.md`.
+
 **Manual Queue:**
 | Command | Description |
 |---------|-------------|

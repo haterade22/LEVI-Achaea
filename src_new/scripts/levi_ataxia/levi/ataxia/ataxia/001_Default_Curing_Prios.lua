@@ -20,6 +20,18 @@ packageName: ''
 -- Sends all default curing priorities to SSC, staggered to avoid flooding.
 -- Both resetOnLogin and resetPrios use the same table-driven approach.
 function ataxia_sendDefaultPrios()
+  -- `curing priority <aff> <n>` writes to whichever curingset is ACTIVE. If this ran
+  -- while the PvE `bash` set were selected (reset prios, or a login landing mid-bash)
+  -- it would overwrite that set with the PvP table and silently destroy it -- the
+  -- profile would still "switch", just to a duplicate of normal. Leave the bash set
+  -- first; ataxia_bashProfileOn re-arms on the next "basher enabled".
+  if ataxia_bashProfileActive and ataxia_bashProfileActive() then
+    if ataxia_bashProfileOff then ataxia_bashProfileOff() end
+    if ataxiaEcho then
+      ataxiaEcho("Left the bash curing set before resetting priorities -- re-enable the basher to switch back.")
+    end
+  end
+
   local prios = ataxia_defaultCuringPrios()
   -- Collect into array for deterministic batching
   local entries = {}

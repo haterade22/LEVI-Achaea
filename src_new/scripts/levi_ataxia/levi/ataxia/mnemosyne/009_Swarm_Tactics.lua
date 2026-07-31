@@ -144,11 +144,26 @@ end
 -- curseward are deliberately KEPT as defences while bashing -- never hold the hover for
 -- them (we'd float forever).
 local AFF_IGNORE = { blindness = true, deafness = true, curseward = true, insomnia = true }
+
+-- The bash curing profile (ataxia/008) PARKS the junk mental spray at priority 25 so it
+-- cannot outbid a potash for the eating balance. The consequence here is that those affs
+-- stay up indefinitely -- so an unmodified aff-free test would never pass and every hover
+-- would burn its full RECOVER_MAX cap instead of landing the moment we were healed. A
+-- parked affliction is one we have DECIDED not to cure; it must not hold the hover.
+-- Only while the profile is actually active, so PvP behaviour is untouched.
+local function parkedAff(k)
+  if not (ataxia_bashProfileActive and ataxia_bashProfileActive()) then return false end
+  if not ataxia_bashCuringPrios then return false end
+  local floor = (ataxiaBashProfile and ataxiaBashProfile.PARKED) or 20
+  local p = ataxia_bashCuringPrios()[k]
+  return type(p) == "number" and p >= floor
+end
+
 function S._afflicted()
   local a = ataxia and ataxia.afflictions
   if type(a) ~= "table" then return false end
   for k, v in pairs(a) do
-    if not AFF_IGNORE[k] then
+    if not AFF_IGNORE[k] and not parkedAff(k) then
       if k == "unknown" then
         if type(v) == "number" and v > 0 then return true end
       elseif v == true then

@@ -181,8 +181,20 @@ end
 -- CURINGSET SWITCHING (debounced)
 --------------------------------------------------------------------------------
 
+-- The PvE bash profile (ataxia/008_Bash_Curing_Profile.lua) owns the active curingset
+-- while the basher runs. classDetect must not switch out from under it: a switch here
+-- would drop us back onto a PvP table mid-swarm, and worse, classDetect never switches
+-- BACK to `bash` -- so the profile would stay silently disarmed for the rest of the run.
+-- The bash profile restores the pre-bash set itself on "basher disabled", and reads
+-- classDetect.state.currentCuringset to know where to restore TO, so leaving that state
+-- untouched here is exactly right.
+function classDetect.bashProfileOwnsCuringset()
+  return (ataxia_bashProfileActive and ataxia_bashProfileActive()) == true
+end
+
 function classDetect.switchCuringset(className)
   if not classDetect.state.enabled then return end
+  if classDetect.bashProfileOwnsCuringset() then return end
 
   local setName = classDetect.curingsetMap[className] or "normal"
   if not classDetect.validCuringsets[setName] then setName = "normal" end
@@ -211,6 +223,20 @@ end
 --------------------------------------------------------------------------------
 
 function classDetect.resetToNormal()
+  -- Combat state still clears while the bash profile owns the set (so a later PvP fight
+  -- starts clean) -- only the switch itself is suppressed. See bashProfileOwnsCuringset.
+  if classDetect.bashProfileOwnsCuringset() then
+    classDetect.state.attackerClass = nil
+    classDetect.state.attackerName = nil
+    classDetect.state.attackerSpec = nil
+    classDetect.state.attackers = {}
+    if classDetect.state.combatTimeout then
+      killTimer(classDetect.state.combatTimeout)
+      classDetect.state.combatTimeout = nil
+    end
+    return
+  end
+
   if classDetect.state.currentCuringset == "normal" then
     -- Still clear state even if already on normal
     classDetect.state.attackerClass = nil

@@ -130,6 +130,42 @@ the keyword was added, and the trigger remains for a pet that has already flippe
 was already on the list, so the falcon was never targeted by us — something else flipped it
 (an AoE clipping it, or a tower effect). Same response either way.
 
+## An earth wyrm (Mnemosyne) — captured 2026-07-31 from a death log
+
+The denizen that motivated the PvE curing profile (v4.7.172). Its whole design is
+resource-denial: it breaks **both limbs of a pair per bite**, impales, and sprays *cosmetic*
+mental afflictions that a PvP-tuned curing table dutifully spends the eating balance on.
+
+**Attacks**
+```
+Razor-sharp fangs and claws tear apart your flesh and bone as an earth wyrm latches onto you.
+  -> ~1,900-3,350 physical cutting
+  -> breaks BOTH arms or BOTH legs in the same hit
+  -> applies "Your own shadow betrays you, leaving your thoughts scattered and wan."
+     + one of the junk mental affs + "Your mind aches with a new malady." (unknown aff)
+
+Chittering loudly, an earth wyrm rushes forward and slams his onyx-plated bulk into you.
+  -> ~1,300-1,450 physical blunt
+
+Stilling for a moment with his tri-horned skull raised, an earth wyrm drives forward in your
+direction, impaling you in the stomach.
+  -> ~1,380 physical cutting, applies IMPALED (writhe) + prone
+  -> DoT: "Your health continues to drain away as your impaled body shudders on the end of
+     the weapon." ~1,100 per tick
+```
+
+Two wyrms sustained **~1,600 HP/s**. Bites land ~2.5s apart, so limb breaks arrive at ~0.8/s
+against a salve balance that cures ~1/s — **break-even at best**, and any salve spent on
+cracked ribs puts you permanently behind.
+
+**Affliction spray observed** (all cosmetic to a basher, all cost a mineral eat):
+paranoia (x3), shyness, claustrophobia, depression, masochism, confusion, sensitivity,
+retardation-family "Your mind is able to focus once again.", anorexia, hypochondria,
+deafness-strip ("Your hearing is suddenly restored."), plus repeated unnamed maladies.
+
+**Not yet captured as triggers.** Recorded here as intel; the counter shipped in v4.7.172 is
+the curing profile, not per-line tracking.
+
 ## Status capture stages
 - **Stage 1 (done, v4.7.62):** `008_Denizen_State.lua` module + tests; lifecycle sync in `update_stuff/003`; HP feed in `010`; **charm** apply/end triggers (`011,012`). `ataxiaBasher_dsStatus()` dumps live state.
 - **Stage 2 (done):** `ataxiaBasher_blademasterBattlerage` — Blademaster owns its battlerage (excluded from the shared culling check), spends rage by priority so it never idles (fixes the 100+-rage-unused bug), and cashes in a reckless/feared target with **Headstrike** for bonus damage. **recklessness** + **aeon** capture triggers (`013-016`). Isolated to Blademaster (no other class touched). Tests `test_basher_battlerage.lua`.
