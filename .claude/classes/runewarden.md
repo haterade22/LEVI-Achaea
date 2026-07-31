@@ -197,8 +197,12 @@ dagaz:
 # Ground rune (Runelore). Fires on its own timer and cures ONE affliction for free.
 line:      "A rune like a rising sun upon the ground flares, bathing you with healing magic."
 effect:    "cures affs" (740_Rune_Found.lua:62)
-interval:  "~12s -- passiveCooldownTimingsV3.passive_dagaz, affliction_tracking_core/007:1136.
-            That number is modelled for an ENEMY Runewarden; our own has never been measured."
+interval:  "12s (user-confirmed 2026-07-30). passiveCooldownTimingsV3.passive_dagaz,
+            affliction_tracking_core/007:1136. This is a GAME CONSTANT shared by 23 of the 27
+            tracked passives -- the table groups them under a literal '-- 12s cooldowns'
+            comment, dagaz and fitness among them. Only hallelujah (14s) and the tarot
+            passives suntarot/panacea/fool (20s) differ. An earlier note here called the
+            number an enemy-side model of unknown applicability to us; that was wrong."
 trigger:   "passive_active/027_Dagaz_(Runewarden).lua -- ONE trigger, BOTH sides. The capture
             is (\w+): an enemy's rune yields their name and feeds the V3 target tracker; ours
             yields the literal 'you'."
