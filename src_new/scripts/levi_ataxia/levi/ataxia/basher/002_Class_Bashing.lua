@@ -1522,10 +1522,21 @@ end
 -- dealing bonus electric damage to ALL denizens in your location." That turns a
 -- single-target finisher into a room hit, so the boon makes BISECT a crowd swing.
 --
--- Economics, and why it is crowd-gated rather than default: AB Bisect spends 4.00s of
--- BALANCE against the SnB combination's ~2s, so it is roughly a double-length swing. It
--- pays for itself only when the third strike lands on more than one mob. Same shape as the
--- Infernal Arc gate (4.75s vs ~2s dsl, gated at 2+) -- `ataxiaBasher.bisectAt`, default 2.
+-- Economics. The two swings are not comparable per-hit, because BISECT HITS MULTIPLE AND
+-- COMBINATION HITS ONE. Over a 4s window:
+--     combination -> 2 swings, both on ONE mob
+--     bisect      -> 1 empowered strike on the target, PLUS electric on EVERY denizen
+-- So the trade is "twice the balance for room-wide coverage". At 1 denizen there is nothing
+-- to splash to and the extra 2s buys nothing, which is the ONLY case the gate exists to
+-- exclude. From 2 upward bisect is already covering ground combination cannot reach, and
+-- the advantage widens with every additional mob -- and in the tower the objective is
+-- CLEARING THE ROOM, not killing one thing fastest, which is exactly the situation spread
+-- damage wins. Same shape as the Infernal Arc gate (4.75s vs ~2s dsl, also 2+).
+--
+-- `ataxiaBasher.bisectAt`, default 2. Set it to 1 to make bisect the unconditional swing.
+-- (An earlier comment framed this as "gated on the balance cost, not on it being AoE".
+-- That was backwards: it is gated on the AoE, and the balance cost only sets WHERE the
+-- crossover falls. Corrected 2026-07-31 -- user's point that bisect hits multiple.)
 --
 -- It REPLACES the swing rather than riding alongside it: both spend balance.
 --

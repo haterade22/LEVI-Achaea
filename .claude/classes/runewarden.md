@@ -236,9 +236,12 @@ not_tracked: "We still have no idea whether OUR dagaz is ready -- passiveCooldow
 boon:      "Your bisect ability now strikes a third time, dealing bonus electric damage
             to all denizens in your location."
 effect:    "BISECT stops being a single-target finisher and becomes a ROOM hit."
-gate:      "ataxiaBasher.bisectAt denizens (default 2). Gated on the BALANCE COST, not on
-            'it is AoE': 4.00s vs the SnB combination's ~2s is a double-length swing, so
-            below the threshold it is a straight dps loss. Same trade as Infernal Arc."
+gate:      "ataxiaBasher.bisectAt denizens (default 2). Over a 4s window combination lands
+            2 swings on ONE mob; bisect lands 1 empowered strike on the target PLUS electric
+            on EVERY denizen -- twice the balance for room-wide coverage. At 1 denizen there
+            is nothing to splash to, the only case the gate excludes; from 2 upward bisect
+            covers ground combination cannot, widening with each extra mob. Set bisectAt=1
+            to make it unconditional. Same trade as Infernal Arc (4.75s vs ~2s dsl, 2+)."
 replaces:  "the swing (both spend balance) -- but the FREE falcon rake still rides"
 skips:     "shielded rounds (bisect bypasses rebounding, NOT shields); non-numeric target"
 no_execute: "the <=20% slain-outright clause is ADVENTURERS ONLY -- no low-hp branch exists"

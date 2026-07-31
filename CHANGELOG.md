@@ -2,6 +2,39 @@
 
 ---
 
+## 2026-07-31 - Bisect economics: I had the reasoning backwards (v4.7.182)
+
+v4.7.181 justified the bisect crowd gate as *"gated on the balance cost, not on it being
+AoE"*. **That is backwards.** It is gated on the AoE; the balance cost only sets where the
+crossover falls. User's correction: **bisect hits multiple, combination hits one.**
+
+Over a 4-second window:
+
+| | swings | targets reached |
+|---|---|---|
+| `combination <t> slice smash` | 2 | **one** mob, twice |
+| `bisect <t>` (Thunderclap) | 1 | the target, **plus electric on every denizen** |
+
+So the trade is *twice the balance for room-wide coverage*, not *twice the balance for one
+strike*. At 1 denizen there is nothing to splash to and the extra 2s buys nothing - that is
+the **only** case the gate exists to exclude. From 2 upward bisect is already covering ground
+combination cannot reach, and the advantage widens with every additional mob.
+
+The framing mattered beyond wording: describing it as a per-swing dps comparison invites the
+conclusion that bisect is a *concession* one makes for AoE, when in the tower the objective
+is **clearing the room**, not killing one thing fastest - which is exactly the situation
+spread damage wins outright.
+
+No behaviour change: the threshold was already 2, which is the correct crossover. Setting
+`ataxiaBasher.bisectAt = 1` makes bisect the unconditional swing, and that lever is now
+documented rather than implied.
+
+Corrected in the code comment (`basher/002`), `CLAUDE.md`, `.claude/classes/runewarden.md`,
+`memory/runewarden.md` and `memory/mnemosyne.md` - including the "rule" I had recorded in
+memory, which was generalising the wrong lesson. Suite **715/715**.
+
+---
+
 ## 2026-07-31 - Thunderclap: bisect becomes the crowd swing (v4.7.181)
 
 > Thunderclap: Your bisect ability now strikes a third time, dealing bonus electric damage
