@@ -160,6 +160,30 @@ function ataxiaCheckForMissing()
 		end
 	end
 
+	-- MOUNTS (user's own, 2026-07-31). Mounts share the room's creature list exactly like
+	-- pets do, so the basher would happily target one.
+	--
+	-- Keywords are the FULL descriptive name, never the bare creature noun -- deliberately.
+	-- The match is a case-insensitive SUBSTRING, so "bear"/"wolf"/"worm"/"elephant" would
+	-- shadow half the bestiary and (per the slope-backed-hyena lesson below) the sweep would
+	-- silently walk out of rooms holding them. "lean grizzly bear" is narrow enough that only
+	-- a denizen sharing the whole phrase collides.
+	--
+	-- If a real denizen ever does match one of these, exempt it with `bash notmine add <name>`
+	-- rather than loosening the keyword.
+	for _, mount in ipairs({
+		"black dardanic stallion",
+		"lean grizzly bear",
+		"war elephant",
+		"massive dire wolf",
+		"withered crypt worm",
+	}) do
+		if ataxiaBasher.ownDenizens and not table.contains(ataxiaBasher.ownDenizens, mount) then
+			table.insert(ataxiaBasher.ownDenizens, mount)
+			ataxiaEcho("Mount <white>" .. mount .. "<NavajoWhite> added to your own denizens -- never targeted.")
+		end
+	end
+
 	-- ...and the INVERSE list. The own-denizen match is a case-insensitive SUBSTRING,
 	-- which is what makes "falcon" cover "a razor-beaked falcon" -- but it also means a
 	-- real denizen sharing a word with a pet is silently shielded. "a slope-backed

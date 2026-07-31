@@ -2,6 +2,37 @@
 
 ---
 
+## 2026-07-31 — Mounts on the own-denizen list (v4.7.174)
+
+Five personal mounts added to `ataxiaBasher.ownDenizens` so the basher never targets them:
+a black Dardanic stallion, a lean grizzly bear, a war elephant, a massive dire wolf, a
+withered crypt worm. Mounts share the room's creature list exactly as pets do, so without
+this the basher would happily attack one.
+
+**Keywords are the FULL descriptive name, never the bare creature noun** — and that is the
+whole design decision here. The own-denizen match is a case-insensitive *substring*, which
+is what lets `falcon` cover "a razor-beaked falcon". Seed `bear`, `wolf`, `worm` or
+`elephant` and you shadow half the bestiary — and per the slope-backed-hyena lesson
+(v4.7.169/170) the failure is silent: `_roomHasDenizens` filters own denizens too, so a room
+holding only the shadowed mob reads as *clear* and the sweep walks out of it, trailing a live
+aggressive denizen.
+
+So `lean grizzly bear`, not `bear`. Tests assert both directions — the mounts are shielded,
+and `a grizzly bear` / `a dire wolf` / `a crypt worm` / `a rabid wolf` / `a cave bear` are
+**not**.
+
+Backfilled rather than defaulted, so an existing save picks them up on next load with a
+one-line echo per mount.
+
+**Residual risk, stated plainly:** a wild denizen sharing a mount's *full* phrase would still
+be shielded. If that ever happens, `bash notmine add <name>` exempts it — do that rather than
+loosening the keyword. There is a test for exactly that path.
+
+Files: `002_Check_For_Any_Missing_Variables.lua`, `tests/test_basher_runewarden.lua`,
+`CHANGELOG.md`. Suite **687/687**.
+
+---
+
 ## 2026-07-31 — Seasone draw syntax: the "for" was English, not syntax (v4.7.173)
 
 > You must draw that card for either ELIXIR or POISON.

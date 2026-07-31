@@ -258,3 +258,40 @@ describe("ataxiaBasher_isOwnDenizen -- pets vs real denizens that share a word",
     expect(ataxiaBasher.targetList["Mnemosyne"][1]).toBe("a slope-backed hyena")
   end)
 end)
+
+describe("mounts on the own-denizen list (v4.7.174)", function()
+  local okOwn = pcall(dofile, "src_new/scripts/levi_ataxia/levi/ataxia/basher/001_Bashing_Functions.lua")
+  local MOUNTS = { "black dardanic stallion", "lean grizzly bear", "war elephant",
+                   "massive dire wolf", "withered crypt worm" }
+
+  it("shields every mount by its full name", function()
+    if not okOwn then return end
+    ataxiaBasher.ownDenizens = MOUNTS
+    ataxiaBasher.notOwnDenizens = {}
+    expect(ataxiaBasher_isOwnDenizen("A black Dardanic stallion")).toBeTrue()
+    expect(ataxiaBasher_isOwnDenizen("A lean grizzly bear")).toBeTrue()
+    expect(ataxiaBasher_isOwnDenizen("A war elephant")).toBeTrue()
+    expect(ataxiaBasher_isOwnDenizen("A massive dire wolf")).toBeTrue()
+    expect(ataxiaBasher_isOwnDenizen("A withered crypt worm")).toBeTrue()
+  end)
+
+  it("does NOT shadow the bestiary -- the whole reason the keywords are full names", function()
+    if not okOwn then return end
+    ataxiaBasher.ownDenizens = MOUNTS
+    ataxiaBasher.notOwnDenizens = {}
+    -- Bare creature nouns as keywords would have shielded all of these.
+    expect(ataxiaBasher_isOwnDenizen("a grizzly bear")).toBeFalse()
+    expect(ataxiaBasher_isOwnDenizen("a dire wolf")).toBeFalse()
+    expect(ataxiaBasher_isOwnDenizen("a crypt worm")).toBeFalse()
+    expect(ataxiaBasher_isOwnDenizen("a rabid wolf")).toBeFalse()
+    expect(ataxiaBasher_isOwnDenizen("a cave bear")).toBeFalse()
+  end)
+
+  it("stays exemptable if a real denizen ever does share a full name", function()
+    if not okOwn then return end
+    ataxiaBasher.ownDenizens = MOUNTS
+    ataxiaBasher.notOwnDenizens = { "a wild war elephant" }
+    expect(ataxiaBasher_isOwnDenizen("a wild war elephant")).toBeFalse() -- exemption wins
+    expect(ataxiaBasher_isOwnDenizen("A war elephant")).toBeTrue()       -- the mount is safe
+  end)
+end)
