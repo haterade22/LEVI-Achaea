@@ -2,6 +2,36 @@
 
 ---
 
+## 2026-07-31 - Bisect highlight: wrong colour family (v4.7.185)
+
+The bisect highlight shipped in v4.7.181 and its pattern does match the captured line - but
+I chose **deep_sky_blue**, reasoning from the ability (lightning damage) instead of from the
+palette. In this package **blue means a defence or a proc**:
+
+- `DodgerBlue` - "our defence is up": shield, paragon, transcendence, tree, daegger
+- `deep_sky_blue` - the crit-proc atrophy DoT
+
+So bisect read as something that happened *to* us rather than the room-clearing swing we had
+just thrown. Now **chartreuse bold**, the established "damage actually happening" colour used
+for the hyena maul and falcon rake landings. Bisect is our own swing rather than a pet's, but
+it is the same category of event and the same thing worth spotting mid-scroll.
+
+Deliberately **not** the `orange_red` used by the other AoE nukes (culling blade, rampage
+proc): that family is grandfathered only, since orange is reserved for the user.
+
+If you were not seeing any highlight at all rather than the wrong one, the trigger only
+exists from **v4.7.181** - `SYSUPDATE` first.
+
+The heralding line is the one distinctive line bisect emits; its damage output is the generic
+`Damage dealt: N (<type>).` already handled by `350_Damage_Dealt`. If the Thunderclap third
+strike prints something of its own when it splashes onto the other denizens, that line has
+not been captured yet and can be added.
+
+Files: `highlighting/035_Bisect_Thunderclap.lua`, `CLAUDE.md`,
+`.claude/classes/runewarden.md`, `memory/runewarden.md`. Suite **716/716**.
+
+---
+
 ## 2026-07-31 - Bisect: 2+ denizens is a clamped floor, not a default (v4.7.184)
 
 User rule: *"bisect should only be used if it is 2 denizens plus."* It already defaulted to

@@ -250,7 +250,7 @@ no_execute: "the <=20% slain-outright clause is ADVENTURERS ONLY -- no low-hp br
 prereq:    "an edged runeblade with HUGALAZ on the blade -- NOT managed by the system.
             Nothing here knows hugalaz and the blade-sketch syntax was never captured."
 fire_line: "Lightning follows the path of <weapon> as you sweep it at <target>, a clap of
-            thunder heralding your strike.  -> highlighting/035, deep_sky_blue bold"
+            thunder heralding your strike.  -> highlighting/035, chartreuse bold"
 ```
 
 ## Passive Cures

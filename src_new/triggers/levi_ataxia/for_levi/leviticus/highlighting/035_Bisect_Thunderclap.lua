@@ -43,11 +43,23 @@ patterns:
 -- string. Anchored regex (type 1) on purpose -- an exact-match type 3 on a partial line is
 -- what silently killed two triggers before v4.7.170.
 --
--- Coloured for the boon it belongs to: bisect is a LIGHTNING-then-cutting strike, and under
--- Thunderclap its third hit sprays electric damage across the room. deep_sky_blue is the
--- established "our proc landed" blue here and is not the health/damage orange-red family.
+-- CHARTREUSE BOLD: this is an ATTACK LANDING, and that is what the colour has to say.
+--
+-- v4.7.181 shipped it deep_sky_blue, reasoning from the ability (lightning damage) rather
+-- than from the palette. That was wrong: in this package BLUE means a defence or a proc --
+-- DodgerBlue is "our defence is up" (shield, paragon, transcendence, tree), deep_sky_blue
+-- is the crit-proc atrophy DoT -- so bisect read as something that happened TO us rather
+-- than the room-clearing swing we just threw. Corrected 2026-07-31 on the user's point that
+-- it should look like the other attacks.
+--
+-- chartreuse BOLD is the established "damage actually happening" colour, used for the
+-- hyena maul and falcon rake landings (367 / 370). Bisect is our own swing rather than a
+-- pet's, but it is the same category of event and the same thing worth spotting mid-scroll.
+--
+-- NOT the orange_red used by the other AoE nukes (culling blade 018, rampage 033): that
+-- family is grandfathered only, since the user reserves orange for their own use.
 selectString(line, 1)
 setBold(true)
-fg("deep_sky_blue")
+fg("chartreuse")
 deselect()
 resetFormat()
