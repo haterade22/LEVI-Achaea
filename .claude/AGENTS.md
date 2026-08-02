@@ -1,6 +1,6 @@
 # Agent Instructions for LEVI-Achaea Combat System
 
-## Pitfalls learned 2026-07-31 / 2026-08-01
+## Pitfalls learned 2026-07-31 / 2026-08-02
 
 - **One queued line is ONE queue entry.** `queue addclearfull stand;<a>;<b>` executes `<a>` and
   `<b>` back to back the instant it fires, so `<b>` gating on "do I have equilibrium / word

@@ -596,6 +596,19 @@ passed through `sanitizeForSave()` first — it strips **live GUI/runtime object
 are — as a known TODO — stored under the saved `ataxia` namespace (`ataxia.mnemosyne.map.window`,
 `ataxia.data.hunter.window`, vital bars, chat).
 
+**Transient state must NOT ride the saved namespace (v4.7.192/193/194).** Because the save is
+wholesale and `deepMerge` ends in an unconditional `dst[k] = v`, any flag that is *set true on
+use and cleared only by a `tempTimer`* comes back from disk stuck ON -- the timer that would
+clear it does not survive a relog or SYSUPDATE. The feature is then permanently disabled,
+silently. Four were built this way and are now reload-safe TIMESTAMPS on `ataxiaTemp`: the
+emergency wand of reflection (`wandReflectAt`, **1 hour** -- at that length an interrupted
+cooldown is the normal case), the Maran barrier (`maranAt`, 65s), the vulture talon
+(`vultureTalonAt`, 180s) and the darkshade auto-prioritise (`darkshadeTimer` /
+`darkshadePrioritized`). A missing stamp reads READY, so the failure direction is one early
+re-use rather than a lockout. Never serialize a `tempTimer` **id** either -- after a reload it
+names whatever timer inherited that integer, and `killTimer` cancels a stranger's. CONFIG
+(thresholds, durations, ids) does belong on `ataxia`; only the transient half moves.
+
 **Load flow** (`ataxia_loadSettings`, on `sysLoadEvent` **and** `sysInstallPackage`): fault-isolated — the
 main-settings load and each sub-load (basher/paths/extraction/NDB/SLC/itemCatalog/ldm) are `pcall`-wrapped
 so one corrupt file can't strand the rest; `ataxia.loaded` is set only at the end (an interrupted load
@@ -1680,7 +1693,7 @@ The project uses Claude Code hooks for automated quality gates and context prese
 
 ---
 
-**Last Updated**: 2026-08-01
+**Last Updated**: 2026-08-02
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia

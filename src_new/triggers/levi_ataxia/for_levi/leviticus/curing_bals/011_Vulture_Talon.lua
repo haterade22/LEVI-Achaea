@@ -37,14 +37,28 @@ patterns:
   type: 3
 ]]--
 
--- TODO: Replace patterns above with actual game text after in-game testing.
--- Success pattern: confirm cooldown started, erase shivering/frozen.
--- Cooldown pattern: talon on cooldown, keep flag set.
+-- INACTIVE SCAFFOLD -- blocked on live capture, deliberately not guessed at.
+--
+-- The patterns above are literal placeholders, so this trigger can never fire (and `type: 3`
+-- is EXACT WHOLE LINE, which is the wrong type for most fire lines anyway -- see AGENTS.md).
+-- It is kept rather than deleted because it records exactly what still needs capturing.
+--
+-- WHAT TO CAPTURE, in game, while wearing the talon:
+--   1. the SUCCESS line for SCRATCH MYSELF WITH TALON
+--   2. the REFUSAL line when the talon is still on cooldown
+-- Both are needed: every timer-free ability in this package wants a fire line to confirm
+-- and a refusal line to cancel (AGENTS.md). The refusal line would also settle the real
+-- cooldown, which `ataxia.vultureTalon.cooldownDuration` currently only GUESSES at 180s.
 --
 -- Example success handler:
 --   erAff("shivering")
 --   erAff("frozen")
 --   erAff("nocaloric")
+--   ataxiaTemp.vultureTalonAt = getEpoch()   -- restamp from the LANDED moment
 --
--- Example cooldown handler:
---   ataxia.vultureTalon.onCooldown = true
+-- Example cooldown/refusal handler:
+--   ataxiaTemp.vultureTalonAt = getEpoch()   -- it did not fire; hold and retry after the gap
+--
+-- NOTE the stamp is `ataxiaTemp.vultureTalonAt`, a reload-safe TIMESTAMP -- NOT the old
+-- `ataxia.vultureTalon.onCooldown` boolean, which was removed in v4.7.194 precisely because
+-- `ataxia` is serialized and a tempTimer is not, so it reloaded stuck on forever.

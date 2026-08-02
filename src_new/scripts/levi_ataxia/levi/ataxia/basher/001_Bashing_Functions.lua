@@ -46,6 +46,18 @@ battleRage_Timers = battleRage_Timers or {}
 tBals = tBals or {tree = true, focus = true, plant = true, salve = true, timers = {}, passive = true}
 shape = shape or 0
 
+-- One-release scrub of the transient keys that used to live on the SERIALIZED `ataxia`
+-- table (v4.7.194). Both were set true on use and cleared only by a tempTimer, which does
+-- not survive a relog or SYSUPDATE reload -- so a save taken mid-cooldown reloaded with the
+-- emergency permanently suppressed. They are no longer read (see ataxiaBasher_assembleAttack,
+-- which now uses ataxiaTemp.wandReflectAt / ataxiaTemp.maranAt timestamps); this clears the
+-- stale values already sitting in people's save files so nothing inspects them and believes
+-- the wand or the barrier is still on cooldown.
+if ataxia then
+  ataxia.wandReflectionActive, ataxia.wandReflectionCooldown = nil, nil
+  ataxia.maranCooldown = nil
+end
+
 -- Dispatch table: initialized once at script load time instead of every attack
 ataxiaBasher_bashingFuncs = {
   --Elementals
@@ -576,27 +588,40 @@ function ataxiaBasher_checkPlayerFlee()
 end
 
 function ataxiaBasher_assembleAttack()
+  -- Both emergency branches below now keep their transient state here rather than on the
+  -- serialized `ataxia` table, and both run before the first pre-existing unguarded read
+  -- (`ataxiaTemp.goldInRoom`), so the guard is hoisted to the top of the round.
+  ataxiaTemp = ataxiaTemp or {}
   -- Wand of Reflection emergency check (requires toggle + wand ID)
   if ataxiaBasher.wandReflection then
     if not ataxia.wandReflectionThreshold then ataxia.wandReflectionThreshold = 10 end
     if not ataxia.wandReflectionRecovery then ataxia.wandReflectionRecovery = 70 end
     local wandId = ataxiaBasher.wandId or "wand"
 
-    if ataxia.wandReflectionActive then
+    -- The ACTIVE latch and the cooldown are transient and live on ataxiaTemp (v4.7.194).
+    -- They used to sit on `ataxia`, which is serialized wholesale and deepMerged back with
+    -- an unconditional `dst[k] = v` -- while the tempTimer that clears them does not
+    -- survive a relog or SYSUPDATE reload. A save taken inside the hour-long cooldown
+    -- therefore reloaded with `wandReflectionCooldown = true` and nothing alive to reset
+    -- it, permanently disabling the emergency wand; an hour is long enough that being
+    -- interrupted mid-cooldown is the NORMAL case, not the edge one. (The `wandreflect off`
+    -- alias nils both by hand, which is the tell that this was already being worked around.)
+    -- Config -- threshold, recovery, wandId -- correctly stays on the saved namespace.
+    local wandReady = ((getEpoch and getEpoch() or 0) - (tonumber(ataxiaTemp.wandReflectAt) or -math.huge)) >= 3600
+    if ataxiaTemp.wandReflectActive then
       -- Currently waiting to recover HP
       if ataxia.vitals.hpp >= ataxia.wandReflectionRecovery then
-        ataxia.wandReflectionActive = false
+        ataxiaTemp.wandReflectActive = nil
         ataxiaEcho("HP recovered to " .. ataxia.wandReflectionRecovery .. "%, resuming attacks.")
       else
         return  -- Keep waiting, don't attack
       end
     elseif ataxia.vitals.hpp < ataxia.wandReflectionThreshold
        and ataxia.vitals.hpp ~= 0
-       and not ataxia.wandReflectionCooldown then
+       and wandReady then
       send("cq all;point " .. wandId .. " at me")
-      ataxia.wandReflectionActive = true
-      ataxia.wandReflectionCooldown = true
-      tempTimer(3600, [[ataxia.wandReflectionCooldown = false]])  -- 1 hour cooldown (wand is hourly)
+      ataxiaTemp.wandReflectActive = true
+      ataxiaTemp.wandReflectAt = (getEpoch and getEpoch()) or 0 -- 1 hour cooldown (wand is hourly)
       ataxiaEcho("EMERGENCY: HP below 10%! Using wand of reflection, pausing until 70% HP.")
       return  -- Skip attack this cycle
     end
@@ -609,16 +634,20 @@ function ataxiaBasher_assembleAttack()
   local mnemCards = ataxiaBasher.inMnemosyne
     and ataxiaBasher.mnemLdeck and ataxiaBasher.mnemLdeck.enabled
   if not ataxia.maranThreshold then ataxia.maranThreshold = 25 end
+  -- Cooldown on ataxiaTemp as a timestamp, same reason as the wand above (v4.7.194):
+  -- `ataxia.maranCooldown = true` was serialized, and the tempTimer that clears it is not,
+  -- so a save inside the 65s window reloaded with the emergency barrier permanently
+  -- suppressed. `ataxia.maranThreshold` is config and correctly stays where it is.
+  local maranReady = ((getEpoch and getEpoch() or 0) - (tonumber(ataxiaTemp.maranAt) or -math.huge)) >= 65
   if not mnemCards
      and ataxia.vitals.hpp < ataxia.maranThreshold
      and ataxia.vitals.hpp ~= 0
-     and not ataxia.maranCooldown
+     and maranReady
      and ataxiaTables.ldeckcardscount
      and ataxiaTables.ldeckcardscount.Maran
      and ataxiaTables.ldeckcardscount.Maran > 0 then
     send("cq all;ldeck draw maran")
-    ataxia.maranCooldown = true
-    tempTimer(65, [[ataxia.maranCooldown = false]])  -- 65s cooldown (barrier lasts 60s)
+    ataxiaTemp.maranAt = (getEpoch and getEpoch()) or 0 -- 65s cooldown (barrier lasts 60s)
     return  -- Skip normal attack this cycle
   end
 

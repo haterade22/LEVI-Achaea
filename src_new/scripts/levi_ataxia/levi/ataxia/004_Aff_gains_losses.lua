@@ -211,17 +211,29 @@ function gotAff()
     myaeon = true
   -- Darkshade duration tracking - auto-prioritize after threshold
   elseif aff == "darkshade" then
-    -- Kill existing timer if any
-    if ataxia.darkshadeTracker.timerId then
-        killTimer(ataxia.darkshadeTracker.timerId)
-    end
-    ataxia.darkshadeTracker.prioritized = false
+    -- `ataxia.darkshadeTracker` was NEVER created anywhere in the package (v4.7.194) -- the
+    -- only definitions were the two unit-test fixtures, which hand-build it. So on a real
+    -- profile this indexed a nil field and THREW, and because an error aborts the handler,
+    -- `ataxia_lockBreak()` and `raiseEvent("aff gained", aff)` at the bottom of affsAdd
+    -- never ran for darkshade either. Against a Serpent that is the affliction whose 26s
+    -- of uptime IS the kill route.
+    ataxia.darkshadeTracker = ataxia.darkshadeTracker or {}
+    local threshold = tonumber(ataxia.darkshadeTracker.threshold) or 17
+
+    -- The timer id and the one-shot latch are TRANSIENT and must not live under `ataxia`,
+    -- which is serialized wholesale and deepMerged back with `dst[k] = v` -- a saved
+    -- `prioritized = true` would come back true with no timer alive to ever reset it, and
+    -- a saved `timerId` would be a stale integer that `killTimer` might aim at somebody
+    -- else's timer. Only `threshold` (user config) belongs on the saved namespace.
+    ataxiaTemp = ataxiaTemp or {}
+    if ataxiaTemp.darkshadeTimer then killTimer(ataxiaTemp.darkshadeTimer) end
+    ataxiaTemp.darkshadePrioritized = nil
 
     -- Start timer to auto-prioritize after threshold
-    ataxia.darkshadeTracker.timerId = tempTimer(ataxia.darkshadeTracker.threshold, function()
-        if ataxia.afflictions.darkshade and not ataxia.darkshadeTracker.prioritized then
+    ataxiaTemp.darkshadeTimer = tempTimer(threshold, function()
+        if ataxia.afflictions.darkshade and not ataxiaTemp.darkshadePrioritized then
             send("curing prioaff darkshade")
-            ataxia.darkshadeTracker.prioritized = true
+            ataxiaTemp.darkshadePrioritized = true
             ataxia_boxEcho("Darkshade persisting - prioritizing cure", "yellow")
         end
     end)
@@ -285,13 +297,17 @@ function lostAff()
     ataxia.afflictions.unweavingspirit = 0
   elseif aff[1] == "crescendo" then
     ataxia.afflictions.crescendo = 0
-  -- Darkshade cleanup - stop timer when cured
+  -- Darkshade cleanup - stop timer when cured. Same nil-index crash as the gain path
+  -- (`ataxia.darkshadeTracker` was never created outside the two test fixtures), and here
+  -- it aborted `raiseEvent("aff cured", ...)` and `Algedonic.RestoreSwaps` below -- so the
+  -- anti-Serpent priority swaps darkshade had applied were never restored either.
   elseif aff[1] == "darkshade" then
-    if ataxia.darkshadeTracker.timerId then
-        killTimer(ataxia.darkshadeTracker.timerId)
-        ataxia.darkshadeTracker.timerId = nil
+    ataxiaTemp = ataxiaTemp or {}
+    if ataxiaTemp.darkshadeTimer then
+        killTimer(ataxiaTemp.darkshadeTimer)
+        ataxiaTemp.darkshadeTimer = nil
     end
-    ataxia.darkshadeTracker.prioritized = false
+    ataxiaTemp.darkshadePrioritized = nil
   end
 
 	raiseEvent("aff cured", aff[1])

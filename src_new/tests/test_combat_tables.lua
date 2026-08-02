@@ -45,7 +45,8 @@ ataxia = {
   afflictions    = {},
   vitals         = { hp = 5000, maxhp = 5000 },
   retardation    = false,
-  darkshadeTracker = { timerId = nil, threshold = 17, prioritized = false },
+  -- darkshadeTracker deliberately ABSENT (v4.7.194): the package never created it
+  -- either, and hand-building it here is what hid the nil-index crash.
 }
 ataxiaBasher = { enabled = false, treeblackout = false }
 gmcp = { Char = { Afflictions = { Add = { name = "" }, Remove = { "" }, List = {} } } }

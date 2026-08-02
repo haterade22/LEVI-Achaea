@@ -2,6 +2,95 @@
 
 ---
 
+## 2026-08-02 - Three emergency abilities that reloaded permanently disabled, and a crash nobody could see (v4.7.194)
+
+Follow-up sweep after the v4.7.193 Codex review. The v4.7.192 finding (`_boonsRelatched`
+stored on the serialized `ataxia` namespace) turned out to be one instance of a family, so I
+went looking for the rest of it. Four sites, all the same shape, none previously reported.
+
+### The shape
+
+`ataxia` is serialized wholesale (`table.save(file_loc, sanitizeForSave(ataxia))`) and merged
+back on load with an unconditional `dst[k] = v`. A `tempTimer` is **not** serialized and does
+not survive a relog or a SYSUPDATE package reload. So any flag that is
+
+> set true on use, and cleared **only** by a tempTimer,
+
+and that lives under `ataxia`, comes back from disk stuck ON with nothing alive to ever clear
+it. Not degraded -- **permanently disabled**, silently, until someone edits the save.
+
+### HIGH - three emergency abilities were built exactly that way
+
+| flag | window | what stopped working |
+|---|---|---|
+| `ataxia.wandReflectionCooldown` | **1 hour** | the emergency wand of reflection at <10% hp |
+| `ataxia.maranCooldown` | 65s | the emergency Maran 5000hp barrier at <=25% hp |
+| `ataxia.vultureTalon.onCooldown` | 180s | the caloric defence vs Blademaster/Magi |
+
+The wand is the worst of the three, and not because of severity: at an **hour**, being
+interrupted mid-cooldown is the *normal* case, not the edge case. Any relog, any crash, any
+SYSUPDATE inside that hour and the emergency never fires again.
+
+There is a tell that this was already being half-worked-around: the `wandreflect off` alias
+hand-nils `ataxia.wandReflectionActive` and `ataxia.wandReflectionCooldown`. Someone hit the
+stuck state and papered over it at the toggle rather than at the cause.
+
+All three now use the convention the battlerage rotations already standardised on -- a
+reload-safe **timestamp on `ataxiaTemp`** (`wandReflectAt`, `maranAt`, `vultureTalonAt`).
+Worst case after a reload is one early re-use; never a lockout. `ataxia.vultureTalon`
+additionally carried a serialized `cooldownTimer` **id**, so after a reload `killTimer` would
+have been aimed at whatever timer had since inherited that integer. Config -- thresholds,
+recovery %, wand id, `cooldownDuration` -- correctly stays on the saved namespace. Stale keys
+are scrubbed from existing saves at load.
+
+### HIGH - `ataxia.darkshadeTracker` was referenced twice and created nowhere
+
+`004_Aff_gains_losses.lua` indexes `ataxia.darkshadeTracker.timerId` on **both** the gain path
+and the cure path. Nothing in the package ever creates that table. The only definitions in the
+repo were the fixtures in `test_afflictions.lua` and `test_combat_tables.lua`, which
+hand-build it -- so the tests passed and the live path threw `attempt to index a nil value`
+on the first darkshade.
+
+And because an error aborts the handler, the damage was not confined to the tracker:
+
+- **gain path** -- `ataxia_lockBreak()` and `raiseEvent("aff gained", aff)` never ran
+- **cure path** -- `raiseEvent("aff cured", aff)` and `Algedonic.RestoreSwaps(aff)` never ran,
+  so the anti-Serpent priority swaps darkshade had applied were never restored
+
+Against a Serpent this is not a cosmetic tracker: darkshade held for 26 seconds **is** the
+kill route, and the feature meant to auto-prioritise its cure was dead on every profile.
+
+Fixed by initialising it, and by moving `timerId`/`prioritized` to `ataxiaTemp` (same trap as
+above -- a persisted `prioritized = true` would reload with no timer to reset it). `threshold`
+stays as saved config. **Both test fixtures were deleted**, so the suite now exercises the
+real uninitialised starting state; verified by restoring the old code and watching the four
+new tests fail with the exact nil-index.
+
+### Checked and deliberately NOT changed
+
+- **The orange family.** I had noted `highlighting/004_HIGHLIGHT_DEADEYES.lua:40` as "a
+  surviving violation of the orange reservation" and offered to recolour it. That was my own
+  misreading. The rule (CHANGELOG, v4.7.136) is that the existing orange family is
+  **grandfathered** and *new* code avoids it -- and orange appears at ~50 sites package-wide,
+  so there was never one stray violation to fix. No recolour.
+- **~50 bodyless triggers.** A sweep found many triggers with no script body, including the
+  two I had flagged (`011_Vulture_Talon`, `001_Warhammer_-_Devestate`). Bodyless does **not**
+  imply dead: Mudlet uses name-toggled gate triggers (`limb/002_open_limb_hit_gate` is one)
+  and filter-chain parents. Neither of my two is name-referenced, but neither are several
+  others whose intent I cannot establish, so mass-deleting on that heuristic would be a guess,
+  not a fix. Left alone pending a proper audit.
+- **The Vulture Talon trigger body.** Genuinely blocked on live capture -- its success and
+  refusal lines have never been seen, and inventing game text sends garbage. The scaffold is
+  kept and its comments rewritten to say exactly what to capture and to stop teaching the
+  now-removed `onCooldown` pattern.
+
+Files: `004_Aff_gains_losses.lua`, `swaps/005_Vulture_Talon.lua`,
+`basher/001_Bashing_Functions.lua`, `configs/013_Wand_Reflection.lua`,
+`curing_bals/011_Vulture_Talon.lua`, tests `test_afflictions.lua`, `test_combat_tables.lua`,
+new `test_reload_safe_cooldowns.lua`. Suite 780 -> **799**.
+
+---
+
 ## 2026-08-01 - Codex adversarial review: four ways one queued line eats itself (v4.7.193)
 
 Independent Codex review of v4.7.165-192, dispatched with the three v4.7.192 findings named

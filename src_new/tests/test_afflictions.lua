@@ -44,7 +44,8 @@ ataxia = {
   afflictions    = {},
   vitals         = { hp = 5000, maxhp = 5000, mp = 4000, maxmp = 4000 },
   retardation    = false,
-  darkshadeTracker = { timerId = nil, threshold = 17, prioritized = false },
+  -- darkshadeTracker deliberately ABSENT: the package never created it either, and
+  -- hand-building it here is what hid the nil-index crash until v4.7.194.
 }
 ataxiaBasher = { enabled = false, treeblackout = false }
 gmcp = {
@@ -217,5 +218,88 @@ describe("lostAff() — affliction removal", function()
       if e.name == "aff cured" then found = true end
     end
     expect(found).toBeTrue()
+  end)
+end)
+
+-- DARKSHADE TRACKER (v4.7.194). `ataxia.darkshadeTracker` was referenced by both the gain
+-- and the cure path but CREATED NOWHERE in the package -- the only definitions were these
+-- test fixtures, which hand-built it. On a real profile the first darkshade threw a
+-- nil-index, and because an error aborts the handler, everything after the branch was
+-- skipped too: `ataxia_lockBreak()` + `raiseEvent("aff gained")` on the way in, and
+-- `raiseEvent("aff cured")` + `Algedonic.RestoreSwaps` on the way out. Against a Serpent,
+-- darkshade staying up for 26s IS the kill route.
+describe("darkshade tracking survives an uninitialised namespace", function()
+  local function fresh()
+    ataxia.darkshadeTracker = nil   -- exactly what a real profile starts with
+    ataxiaTemp = {}
+    ataxia.afflictions = {}
+  end
+
+  it("does not throw when darkshade is gained on a virgin profile", function()
+    fresh()
+    gmcp.Char.Afflictions.Add = { name = "darkshade" }
+    expect(pcall(gotAff)).toBeTrue()
+  end)
+
+  it("still raises 'aff gained' -- the crash used to swallow it", function()
+    fresh()
+    mock.raised_events = {}
+    gmcp.Char.Afflictions.Add = { name = "darkshade" }
+    gotAff()
+    local found = false
+    for _, e in ipairs(mock.raised_events) do
+      if e.name == "aff gained" then found = true end
+    end
+    expect(found).toBeTrue()
+  end)
+
+  it("does not throw when darkshade is cured on a virgin profile", function()
+    fresh()
+    ataxia.afflictions = { darkshade = true }
+    gmcp.Char.Afflictions.Remove = { "darkshade" }
+    expect(pcall(lostAff)).toBeTrue()
+  end)
+
+  it("still raises 'aff cured' on the way out", function()
+    fresh()
+    mock.raised_events = {}
+    ataxia.afflictions = { darkshade = true }
+    gmcp.Char.Afflictions.Remove = { "darkshade" }
+    lostAff()
+    local found = false
+    for _, e in ipairs(mock.raised_events) do
+      if e.name == "aff cured" then found = true end
+    end
+    expect(found).toBeTrue()
+  end)
+
+  it("keeps the timer id and the one-shot latch OFF the serialized namespace", function()
+    fresh()
+    gmcp.Char.Afflictions.Add = { name = "darkshade" }
+    gotAff()
+    -- `ataxia` is saved wholesale and deepMerged back with an unconditional dst[k] = v,
+    -- so a persisted `prioritized = true` would reload with no timer alive to reset it.
+    expect(ataxia.darkshadeTracker.timerId).toBe(nil)
+    expect(ataxia.darkshadeTracker.prioritized).toBe(nil)
+    expect(ataxiaTemp.darkshadeTimer ~= nil).toBeTrue()
+  end)
+
+  it("clears the transient state again when the affliction is cured", function()
+    fresh()
+    gmcp.Char.Afflictions.Add = { name = "darkshade" }
+    gotAff()
+    ataxia.afflictions = { darkshade = true }
+    gmcp.Char.Afflictions.Remove = { "darkshade" }
+    lostAff()
+    expect(ataxiaTemp.darkshadeTimer).toBe(nil)
+    expect(ataxiaTemp.darkshadePrioritized).toBe(nil)
+  end)
+
+  it("honours a user-configured threshold if one was saved", function()
+    fresh()
+    ataxia.darkshadeTracker = { threshold = 9 }
+    gmcp.Char.Afflictions.Add = { name = "darkshade" }
+    gotAff()
+    expect(ataxia.darkshadeTracker.threshold).toBe(9) -- config survives, state does not
   end)
 end)
