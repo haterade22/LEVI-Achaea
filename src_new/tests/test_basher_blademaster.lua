@@ -172,9 +172,9 @@ describe("ataxiaBasher_blademasterBashing -- augment and thunderstorm never shar
     reset(40); bmBladedReflexes = true
     ataxiaBasher_blademasterBashing()
     -- The whole point: the stamp is inside the helper, so a suppressed round must not
-    -- have called it at all. If bmThunderstormAt were set here, the storm would be
+    -- have called it at all. If bmShinStormAt were set here, the storm would be
     -- locked out for 4s having never gone out.
-    expect(ataxiaTemp.bmThunderstormAt).toBe(nil)
+    expect(ataxiaTemp.bmShinStormAt).toBe(nil)
   end)
 
   it("lets the storm through on the NEXT round, once the augment attempt-hold is up", function()
@@ -194,7 +194,123 @@ describe("ataxiaBasher_blademasterBashing -- augment and thunderstorm never shar
   end)
 end)
 
+-- MIDNIGHT SNOW'S ICY HEART (v4.7.195). SHIN BLIZZARD is the exact twin of SHIN
+-- THUNDERSTORM -- AB 315 vs AB 314, both "Works on/against: Room", both 4.00s of
+-- EQUILIBRIUM, both 30 Shin energy. Only the damage type differs (cold vs electric). So
+-- they are ONE slot with a choice of type, not two riders: casting both would be 60 shin
+-- and two equilibrium spends in one queued line, and the second would be rejected.
+describe("shin storms -- one slot, two damage types", function()
+  local nulled
+  local function reset(shin, denizens)
+    bmShatteredStar, bmBladedReflexes = false, false
+    mnemDivineThunder, mnemIcyHeart = false, false
+    ataxiaBasher.shielded, ataxiaBasher.rageraze = false, false
+    ataxiaBasher.bmStormPrefs, ataxiaBasher.blizzardAt = nil, nil
+    ataxiaTemp = {}
+    ataxia.defences = {}
+    ataxia.vitals.class = shin or 40
+    nulled = {}
+    ataxia.mnemosyne = {
+      _denizenCount = function() return denizens or 4 end,
+      damageNulled = function(t) return nulled[t] == true end,
+    }
+  end
+
+  it("casts nothing without either boon", function()
+    reset()
+    expect(ataxiaBasher_bmShinStorm(";")).toBe("")
+  end)
+
+  it("casts the thunderstorm when only Divine Thunder is held", function()
+    reset(); mnemDivineThunder = true
+    expect(ataxiaBasher_bmShinStorm(";")).toBe("shin thunderstorm;")
+  end)
+
+  it("casts the blizzard when only Icy Heart is held", function()
+    reset(); mnemIcyHeart = true
+    expect(ataxiaBasher_bmShinStorm(";")).toBe("shin blizzard;")
+  end)
+
+  it("casts exactly ONE of them when both are held", function()
+    reset(); mnemDivineThunder, mnemIcyHeart = true, true
+    local cmd = ataxiaBasher_bmShinStorm(";")
+    expect(cmd == "shin thunderstorm;" or cmd == "shin blizzard;").toBeTrue()
+    -- the shared equilibrium slot is now stamped, so the round is spent
+    expect(ataxiaBasher_bmShinStorm(";")).toBe("")
+  end)
+
+  it("prefers the thunderstorm by default, so Divine-Thunder-only users are unaffected", function()
+    reset(); mnemDivineThunder, mnemIcyHeart = true, true
+    expect(ataxiaBasher_bmShinStorm(";")).toBe("shin thunderstorm;")
+  end)
+
+  -- The payoff for owning both: the affix nulls a damage TYPE, and we have two.
+  it("steps around ICEPROOF -- cold nulled, so it thunderstorms", function()
+    reset(); mnemDivineThunder, mnemIcyHeart = true, true
+    nulled.cold = true
+    expect(ataxiaBasher_bmShinStorm(";")).toBe("shin thunderstorm;")
+  end)
+
+  it("steps around an ELECTRIC-nulling ripple -- so it blizzards", function()
+    reset(); mnemDivineThunder, mnemIcyHeart = true, true
+    nulled.electricity = true
+    expect(ataxiaBasher_bmShinStorm(";")).toBe("shin blizzard;")
+  end)
+
+  it("still casts when BOTH types are nulled -- a 33% cut beats no AoE", function()
+    reset(); mnemDivineThunder, mnemIcyHeart = true, true
+    nulled.cold, nulled.electricity = true, true
+    expect(ataxiaBasher_bmShinStorm(";")).toBe("shin thunderstorm;")
+  end)
+
+  it("falls through to the other type when the preferred boon is not held", function()
+    reset(); mnemIcyHeart = true      -- no Divine Thunder
+    nulled.electricity = true          -- and lightning is nulled anyway
+    expect(ataxiaBasher_bmShinStorm(";")).toBe("shin blizzard;")
+  end)
+
+  it("honours an explicit preference order", function()
+    reset(); mnemDivineThunder, mnemIcyHeart = true, true
+    ataxiaBasher.bmStormPrefs = { "ice", "lightning" }
+    expect(ataxiaBasher_bmShinStorm(";")).toBe("shin blizzard;")
+  end)
+
+  it("respects the crowd gate and the shin floor, like its twin", function()
+    reset(40, 2); mnemIcyHeart = true            -- only 2 denizens, gate is 3
+    expect(ataxiaBasher_bmShinStorm(";")).toBe("")
+    reset(29, 4); mnemIcyHeart = true            -- 29 shin, blizzard needs 30
+    expect(ataxiaBasher_bmShinStorm(";")).toBe("")
+  end)
+
+  it("takes a separate blizzardAt when one is configured", function()
+    reset(40, 2); mnemIcyHeart = true
+    ataxiaBasher.blizzardAt = 2
+    expect(ataxiaBasher_bmShinStorm(";")).toBe("shin blizzard;")
+  end)
+
+  it("breaks the shield first -- neither storm fires on a shielded round", function()
+    reset(); mnemDivineThunder, mnemIcyHeart = true, true
+    ataxiaBasher.shielded = true
+    expect(ataxiaBasher_bmShinStorm(";")).toBe("")
+    expect(ataxiaTemp.bmShinStormAt).toBe(nil) -- and stamps nothing
+  end)
+
+  it("still yields the round to SHIN AUGMENT (the v4.7.193 rule)", function()
+    reset(); mnemIcyHeart = true; bmBladedReflexes = true
+    local cmd = ataxiaBasher_blademasterBashing()
+    expect(has(cmd, "shin augment 3")).toBeTrue()
+    expect(has(cmd, "shin blizzard")).toBeFalse()
+    expect(ataxiaTemp.bmShinStormAt).toBe(nil)
+  end)
+
+  it("rides the assembled round when nothing else claimed the shin", function()
+    reset(); mnemIcyHeart = true
+    expect(has(ataxiaBasher_blademasterBashing(), "shin blizzard")).toBeTrue()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 bmShatteredStar, bmBladedReflexes, mnemDivineThunder = false, false, false
+mnemIcyHeart = false
 ataxia.mnemosyne = nil
 ataxiaTemp = {}

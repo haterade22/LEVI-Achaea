@@ -448,10 +448,13 @@ function ataxiaBasher_blademasterBashing()
 	-- not: the storm's `shin >= 30` gate reads the pool BEFORE the augment spends from it,
 	-- so at 32 shin both pass their own gate and only the first can actually pay.
 	--
-	-- Worse, `bmThunderstormAt` is stamped on SEND, so the rejected cast still bought a 4s
+	-- Worse, `bmShinStormAt` is stamped on SEND, so the rejected cast still bought a 4s
 	-- cooldown. Skipping the call entirely (rather than discarding its result) is the point
 	-- -- the stamp lives inside the helper, so calling it at all is what costs us.
-	local storm = (not shinSpent) and ataxiaBasher_bmThunderstorm(sp) or ""
+	-- ONE shin/equilibrium spender per round (v4.7.193), and as of v4.7.195 the storm itself
+	-- is a CHOICE of damage type -- thunderstorm (electric) or blizzard (cold), identical in
+	-- cost, so the picker takes whichever the ripple is not suppressing.
+	local storm = (not shinSpent) and ataxiaBasher_bmShinStorm(sp) or ""
 
 	if ataxiaBasher.shielded then
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
@@ -1073,18 +1076,100 @@ function ataxiaBasher_bmThunderstorm(sp)
 
 	local nowT = (getEpoch and getEpoch()) or os.time()
 	ataxiaTemp = ataxiaTemp or {}
-	if nowT - (tonumber(ataxiaTemp.bmThunderstormAt) or 0) < 4 then return "" end
-	ataxiaTemp.bmThunderstormAt = nowT
+	if nowT - (tonumber(ataxiaTemp.bmShinStormAt) or 0) < 4 then return "" end
+	ataxiaTemp.bmShinStormAt = nowT
 	return "shin thunderstorm"..sp
+end
+
+-- MIDNIGHT SNOW'S ICY HEART (Mnemosyne boon, v4.7.195): "Your Shindo blizzard ability now
+-- deals cold damage to all denizens in your location." The exact twin of Divine Thunder
+-- Cataclysm, and AB BLIZZARD (315) confirms it down to the numbers -- SHIN BLIZZARD,
+-- "Works on/against: Room", 4.00s of EQUILIBRIUM, 30 Shin energy. Only the damage TYPE
+-- differs: cold, where the thunderstorm is electric.
+--
+-- Because every cost is identical, these two are not two riders -- they are ONE slot with a
+-- choice of damage type, which is why the picker below exists rather than a second copy of
+-- the crowd gate. Casting both in a round would be the v4.7.193 same-resource collision:
+-- 60 shin, two 4s equilibrium spends, one of them rejected outright.
+--
+-- Not modelled, deliberately: the AB says blizzard also "destroys any heat vibration" and
+-- leaves "a temporary obscuring snowstorm" in the room. Whether that snowstorm hinders our
+-- own targeting or denizen visibility has never been observed, so nothing here reads it --
+-- but it is the first thing to check if the basher starts losing track of mobs in rooms it
+-- has just blizzarded. (Heat-vibration destruction is a Magi crystalism concern, not ours.)
+function ataxiaBasher_bmBlizzard(sp)
+	if not mnemIcyHeart then return "" end
+	if ataxiaBasher.shielded then return "" end -- break the shield first
+	local M = ataxia.mnemosyne
+	local n = (M and M._denizenCount and M._denizenCount()) or 0
+	if n < (tonumber(ataxiaBasher.blizzardAt) or tonumber(ataxiaBasher.thunderstormAt) or 3) then return "" end
+
+	local shin = (blademaster and blademaster.getShin and blademaster.getShin())
+		or (ataxia.vitals and tonumber(ataxia.vitals.class)) or 0
+	if shin < (30 + (tonumber(ataxiaBasher.thunderstormReserve) or 0)) then return "" end
+
+	local nowT = (getEpoch and getEpoch()) or os.time()
+	ataxiaTemp = ataxiaTemp or {}
+	if nowT - (tonumber(ataxiaTemp.bmShinStormAt) or 0) < 4 then return "" end
+	ataxiaTemp.bmShinStormAt = nowT
+	return "shin blizzard"..sp
+end
+
+-- Damage-type synonyms, matching the BM_INFUSE table: the tower's suppression affixes name
+-- the TYPE in their sentence ("All cold damage you deal is reduced by 33%"), not the ability.
+local BM_STORM = {
+	lightning = { cmd = ataxiaBasher_bmThunderstorm, types = { "electricity", "electric", "lightning" } },
+	ice       = { cmd = ataxiaBasher_bmBlizzard,     types = { "cold", "ice", "frost" } },
+}
+-- Thunderstorm first so a player who only owns Divine Thunder behaves exactly as before.
+local BM_STORM_ORDER = { "lightning", "ice" }
+
+-- ONE shin room-nuke per round, choosing the damage type the ripple is NOT suppressing.
+--
+-- This is the payoff for owning both boons: Iceproof ("All cold damage you deal is reduced
+-- by 33%") makes us thunderstorm, and an electric-suppressing ripple makes us blizzard. It
+-- is the same trick ataxiaBasher_bmInfuse plays with the four infuses, and it works for the
+-- same reason -- the affix nulls a damage TYPE, and we happen to have two ways to deal it.
+--
+-- If both are suppressed, or neither, the preference order decides. Each helper self-gates
+-- (boon, shield, crowd, shin, cooldown) and stamps only when it actually returns a command,
+-- so calling them in order costs nothing on a round where the first says no.
+function ataxiaBasher_bmShinStorm(sp)
+	local M = ataxia and ataxia.mnemosyne
+	local order = ataxiaBasher.bmStormPrefs or BM_STORM_ORDER
+	local fallback
+	for _, element in ipairs(order) do
+		local entry = BM_STORM[element]
+		if entry then
+			fallback = fallback or entry
+			local suppressed = false
+			if M and M.damageNulled then
+				for _, t in ipairs(entry.types) do
+					if M.damageNulled(t) then suppressed = true; break end
+				end
+			end
+			if not suppressed then
+				local cmd = entry.cmd(sp)
+				if cmd ~= "" then return cmd end
+				-- That storm's own gate said no (boon not held, shin short, on cooldown);
+				-- try the next damage type rather than forfeiting the round's nuke.
+			end
+		end
+	end
+	-- Everything suppressed: a 33% reduction still beats no AoE at all, so cast anyway.
+	return (fallback and fallback.cmd(sp)) or ""
 end
 
 -- Fire-line confirmation for the storm (trigger 054, captured live 2026-08-01). Restamps the
 -- cooldown from the LANDED moment. Every owned rotation ability wants both a fire line to
 -- confirm and a refusal line to cancel; this is the confirm half. No refusal line has been
 -- seen yet -- the send-side stamp covers that gap in the meantime.
+-- Restamps the SHARED shin-storm slot: thunderstorm and blizzard cost the same 30 shin and
+-- the same 4s of equilibrium, so one stamp covers both (v4.7.195). No blizzard fire line has
+-- been captured yet -- when it is, point its trigger here too.
 function ataxiaBasher_bmThunderstormConfirm()
 	ataxiaTemp = ataxiaTemp or {}
-	ataxiaTemp.bmThunderstormAt = (getEpoch and getEpoch()) or os.time()
+	ataxiaTemp.bmShinStormAt = (getEpoch and getEpoch()) or os.time()
 end
 
 function ataxiaBasher_winterDeepfreeze(sp)

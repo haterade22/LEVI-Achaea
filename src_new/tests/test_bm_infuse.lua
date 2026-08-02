@@ -213,10 +213,12 @@ describe("Divine Thunder Cataclysm -- the EQ room nuke that rides the swing (v4.
     setup(4)
     expect(ataxiaBasher_bmThunderstorm(";")).toBe("shin thunderstorm;")
     expect(ataxiaBasher_bmThunderstorm(";")).toBe("")  -- still cooling
-    ataxiaTemp.bmThunderstormAt = (getEpoch() - 5)      -- window elapsed
+    -- Renamed to bmShinStormAt in v4.7.195: thunderstorm and blizzard cost the same 30
+    -- shin and the same 4s of equilibrium, so ONE stamp covers the shared slot.
+    ataxiaTemp.bmShinStormAt = (getEpoch() - 5)         -- window elapsed
     expect(ataxiaBasher_bmThunderstorm(";")).toBe("shin thunderstorm;")
     ataxiaBasher_bmThunderstormConfirm()                -- trigger 054's strike line
-    expect(ataxiaTemp.bmThunderstormAt).toBe(getEpoch())
+    expect(ataxiaTemp.bmShinStormAt).toBe(getEpoch())
   end)
 
   it("yields on a shielded round", function()

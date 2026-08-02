@@ -2,6 +2,66 @@
 
 ---
 
+## 2026-08-02 - Midnight Snow's Icy Heart: two damage types, one shin slot (v4.7.195)
+
+New Mnemosyne boon, captured live: *"Your Shindo blizzard ability now deals cold damage to
+all denizens in your location."*
+
+AB BLIZZARD (315) against AB THUNDERSTORM (314) is the same entry twice -- `SHIN BLIZZARD`,
+"Works on/against: Room", **4.00s of EQUILIBRIUM, 30 Shin energy**. The user's summary was
+exactly right: *same as thunderstorm but for cold damage.*
+
+### It is not a second rider -- it is the same slot
+
+Identical cost means these two boons compete for one thing, and putting both in a round is
+precisely the collision v4.7.193 was about: 60 shin, two 4s equilibrium spends in one queued
+line, the second rejected outright after stamping its cooldown. So instead of copying the
+crowd gate, `ataxiaBasher_bmShinStorm(sp)` **picks** between
+`ataxiaBasher_bmThunderstorm` and `ataxiaBasher_bmBlizzard`, and the shared equilibrium slot
+is stamped once -- `ataxiaTemp.bmThunderstormAt` renamed to **`bmShinStormAt`**, since a
+stamp named after one ability but guarding both is how the next reader gets misled.
+
+### Owning both is the payoff
+
+The tower's suppression affixes name a damage **type** in their sentence -- Iceproof is *"All
+cold damage you deal is reduced by 33%"*. With two types available the picker steps around
+whichever is nulled this ripple:
+
+- cold nulled -> thunderstorm
+- electric nulled -> blizzard
+- both nulled -> cast anyway (a 33% cut still beats no AoE)
+- neither -> preference order
+
+This is the second consumer of the `M.damageNulled` layer, and it works for the same reason
+`ataxiaBasher_bmInfuse` does: the affix suppresses a damage type, and we happen to have more
+than one way to deal damage. Preference is `ataxiaBasher.bmStormPrefs`, defaulting to
+`{lightning, ice}` so anyone holding only Divine Thunder sees no behaviour change at all.
+
+Crowd gate is `ataxiaBasher.blizzardAt`, falling back to `thunderstormAt`, default 3+ -- the
+binding resource is the 30 shin that infuse and the Bladed Reflexes SHIN AUGMENT also draw
+from, which is why the shin nukes gate at 3+ where the balance-spending crowd swings gate at
+2+. It still yields the round to SHIN AUGMENT under the v4.7.193 rule.
+
+### Captured, and deliberately not guessed at
+
+- **No blizzard fire line yet**, so there is no confirm trigger and the send-side stamp is
+  the only cooldown source. When it is captured, point it at
+  `ataxiaBasher_bmThunderstormConfirm` -- it restamps the shared slot, so it already covers
+  both. Inventing the line would send garbage.
+- **The "temporary obscuring snowstorm"** the AB leaves in the room is unmodelled. Nothing is
+  known about whether it hinders our own targeting or denizen visibility, so nothing reads
+  it -- but it is recorded as the first suspect if the basher ever starts losing track of
+  mobs in rooms it has just blizzarded.
+
+Boon flags now **30**. Counted, not grepped: the run-start reset block has 32 lines and two
+of them (`mnemHaemophiliac`, `mnemDeluge`) are AFFIXES.
+
+Files: `basher/002_Class_Bashing.lua`, new trigger `mnemosyne/055_Icy_Heart.lua`,
+`mnemosyne/001_Run_Start.lua`, `mnemosyne/002_Boon_Claim.lua`, tests
+`test_basher_blademaster.lua`, `test_bm_infuse.lua`. Suite 799 -> **814**.
+
+---
+
 ## 2026-08-02 - Three emergency abilities that reloaded permanently disabled, and a crash nobody could see (v4.7.194)
 
 Follow-up sweep after the v4.7.193 Codex review. The v4.7.192 finding (`_boonsRelatched`

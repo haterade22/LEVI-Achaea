@@ -68,6 +68,7 @@ mnemDeluge = false  -- affixes reset each run (re-latches from the next WADE STA
 mnemRageFuelled = false -- boons reset each run (re-latches from the BOONS row / claim)
 mnemThunderclap = false -- boons reset each run (re-latches from the BOONS row / claim)
 mnemDivineThunder = false -- boons reset each run (re-latches from the BOONS row / claim)
+mnemIcyHeart = false -- boons reset each run (re-latches from the BOONS row / claim)
 if ataxiaTemp then ataxiaTemp.mnemNulled = nil end -- damage-suppression affixes re-latch per ripple
 if ataxiaTemp then ataxiaTemp.mnemBoonsRelatched = nil end -- re-latch boons this run
 if ataxiaTemp then ataxiaTemp.brFreeCharge = nil end

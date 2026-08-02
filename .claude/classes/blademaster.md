@@ -1091,3 +1091,27 @@ round -- augment first, storm on the following round. The storm's helper is not 
 on an augment round, because `ataxiaTemp.bmThunderstormAt` is stamped inside it and a
 discarded return value would still buy a 4s lockout. `INFUSE` also draws shin but is cheap
 enough to ride alongside. See `ataxiaBasher_blademasterBashing`, basher/002.
+
+
+## PvE: the shin room-nuke is one slot with two damage types (v4.7.195)
+
+Two Mnemosyne boons grant a Shindo room nuke, and they are mechanically identical:
+
+| boon | ability | damage |
+|---|---|---|
+| Divine Thunder Cataclysm | `SHIN THUNDERSTORM` (AB 314) | electric |
+| Midnight Snow's Icy Heart | `SHIN BLIZZARD` (AB 315) | cold |
+
+Both are "Works on/against: Room", **4.00s of equilibrium, 30 Shin energy**. Identical cost
+means they share one slot -- `ataxiaBasher_bmShinStorm` casts exactly one per round (stamp
+`ataxiaTemp.bmShinStormAt`), and it still yields the round entirely to `SHIN AUGMENT`.
+
+Holding both is a genuine advantage rather than a redundancy: the ripple's suppression affix
+names a damage *type*, so the picker takes whichever is not nulled (Iceproof -> thunderstorm;
+an electric-nulling ripple -> blizzard; both -> cast anyway). Tune with
+`ataxiaBasher.bmStormPrefs` (default `{lightning, ice}`) and `ataxiaBasher.blizzardAt`
+(defaults to `thunderstormAt`, 3+).
+
+Blizzard's fire line is **uncaptured** -- no confirm trigger exists yet, so the send-side
+stamp is the only cooldown source. Its AB also leaves "a temporary obscuring snowstorm" in
+the room, which nothing models; check it first if mob tracking degrades after a blizzard.
