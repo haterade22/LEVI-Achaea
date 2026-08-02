@@ -709,3 +709,16 @@ deferred_not_worth_wiring:
   dictate_kill_route: "executes below 40% max MANA -- irrelevant to denizens"
   tooros: "AoE that damages the caster too, and Works: Adventurers"
 ```
+
+
+## PvE: one word balance, three claimants (v4.7.193)
+
+`NAKAIL` (shield break) > Terminus keepers (`intone trusad`/`tsuura`/`mainaas`) > `BOINAD`
+(the crowd charm battlerage). All three intone, and there is exactly one word balance -- and
+because the assembled round is a single queue entry, two intones in one chain means the second
+is rejected outright. `ataxiaBasher_dwBattlerage(sp, wordUsed)` therefore takes the caller's
+answer about what the round already claimed; a current-state read of
+`ataxiaTables.depthswalker.wordBal` cannot see it, since the keeper is still only a string in
+the buffer. The keeper wins the tie (it fires only when a GMCP-tracked defence actually
+dropped, and holds 20s between attempts) and goes quiet once all three defences are up,
+handing the word balance back to boinad.

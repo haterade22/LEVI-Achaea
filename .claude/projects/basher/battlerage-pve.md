@@ -349,3 +349,31 @@ mean the card layer reasoning about charge ownership across rounds, which is a l
 coupling for a card that fires every 45s.
 
 Tests: `src_new/tests/test_rage_fuelled.lua`.
+
+
+## v4.7.193 -- the eighth culling gate, and the replay-record convention
+
+**Culling reap has EIGHT gates, not seven.** v4.7.179 added `or ataxiaBasher_brFree()` to the
+seven owned ones (`001:868`, `001:916`, `001:1050`, `002:234`, `002:585`, `002:1433`,
+`002:1659`). The eighth is the SHARED branch inside `ataxiaBasher_assembleBattlerage`
+(`001:~1183`) -- the branch every class that does NOT own a rotation actually runs: Infernal,
+Paladin, Unnamable, Serpent, Apostate, Pariah, Alchemist, Jester, Occultist, Priest, Sentinel,
+Sylvan, Druid, the Elemental Lords, most Dragons. It compares `ataxia.vitals.rage >= bigRage`
+directly rather than calling `rageAfford`, which is exactly why a shape-based sweep skipped it.
+
+Nothing leaked -- the charge stayed banked and was spent on a cheaper battlerage further down
+the same function -- so it was silent. But a free AoE execute is the single best use of a
+charge, and the majority of the roster was declining it. Fixed to
+`rage >= bigRage or ataxiaBasher_brFree()`.
+
+**Replay records store the ROTATION KEY in `verb`.** `basher/011_Battlerage_Ready_Lines.lua`
+releases a held pick with `pend.verb == field`, where `field` is the `BR_READY_MAP` key. The
+canonical record is `{ verb = ab.key, cmd = <full command>, at = nowT }` -- Runewarden and
+Depthswalker always did this. Psion stored `verb = ab.cmd` and was never released (fixed).
+Golden Dragon also stores `ab.cmd` and works only because its four commands happen to equal
+their keys; that is a coincidence, not a design, so do not copy it into a fifth rotation.
+
+**One resource spender per assembled round.** The chain is a single queue entry, so a helper
+gating on current balance/word/shin state cannot see what an earlier element of the same chain
+already claimed. Blademaster now threads `shinSpent`; Depthswalker now threads `wordUsed`. When
+the cooldown stamp lives inside the helper, the caller must skip the CALL, not the result.

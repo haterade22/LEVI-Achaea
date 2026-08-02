@@ -401,6 +401,9 @@ function ataxiaBasher_blademasterBashing()
 	local command, sp = "", ataxia.settings.separator
 	local brage = ataxiaBasher_assembleBattlerage()
 	local raze = ataxiaBasher.battlerage.Blademaster.raze
+	-- Has something in this round already claimed the shin/equilibrium slot? See the
+	-- Divine Thunder block below for why one round may only ever hold one of them.
+	local shinSpent = false
 
 	-- White Heaven's Shattered Star boon (Mnemosyne): multislash strikes 3 EXTRA times
 	-- (6 total), so it out-damages the single drawslash -- swap to it while the boon is up.
@@ -427,6 +430,7 @@ function ataxiaBasher_blademasterBashing()
 			ataxiaTemp.bmAugmentAttempted = true
 			tempTimer(5, [[ataxiaTemp.bmAugmentAttempted = nil]])
 			command = "shin augment "..amt..sp
+			shinSpent = true
 		end
 	end
 
@@ -434,12 +438,20 @@ function ataxiaBasher_blademasterBashing()
 	-- swing and costs us nothing off it. Self-gates on the boon, the crowd, shin and its
 	-- own cooldown, returning "" whenever any of those says no.
 	--
-	-- NOTE it shares the equilibrium slot with the Bladed Reflexes SHIN AUGMENT above (and
-	-- they compete for shin as well). On a round where both fire, the storm sits queued
-	-- behind the augment channel and can be wiped by the next addclearfull. That is
-	-- tolerable rather than guarded: bmThunderstormAt is stamped on send, so a wipe reads as
-	-- an eaten cast and self-heals inside the 4s window -- we lose one storm, not the loop.
-	local storm = ataxiaBasher_bmThunderstorm(sp)
+	-- ONE SHIN SPENDER PER ROUND (v4.7.193, Codex). The previous note here said the storm
+	-- "sits queued behind the augment channel and can be wiped by the next addclearfull",
+	-- and called that tolerable. That model was wrong in a way that mattered: the whole
+	-- `;`-chain is ONE queue entry, so when it fires both commands execute back to back in
+	-- the same instant. `shin augment` takes the equilibrium and `amt` shin, and the storm
+	-- lands on the very next command with neither -- a DETERMINISTIC rejection, not a race
+	-- we sometimes lose. And the shin arithmetic fails even where the equilibrium would
+	-- not: the storm's `shin >= 30` gate reads the pool BEFORE the augment spends from it,
+	-- so at 32 shin both pass their own gate and only the first can actually pay.
+	--
+	-- Worse, `bmThunderstormAt` is stamped on SEND, so the rejected cast still bought a 4s
+	-- cooldown. Skipping the call entirely (rather than discarding its result) is the point
+	-- -- the stamp lives inside the helper, so calling it at all is what costs us.
+	local storm = (not shinSpent) and ataxiaBasher_bmThunderstorm(sp) or ""
 
 	if ataxiaBasher.shielded then
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
@@ -554,7 +566,15 @@ local function dwHasAff(aff)
   return ataxiaBasher_dsHasAff and ataxiaBasher_dsHasAff(target, aff) or false
 end
 
-function ataxiaBasher_dwBattlerage(sp)
+-- `wordUsed` says a keeper word has ALREADY been appended to this round's chain
+-- (v4.7.193, Codex). The intoned-word gate below reads `ataxiaTables.depthswalker.wordBal`,
+-- which is the word balance we hold RIGHT NOW -- and that is still true while the keeper is
+-- only a string in the buffer. The whole `;`-chain is one queue entry, so both intones run
+-- back to back the instant it fires: the keeper takes the word balance and boinad is
+-- rejected, having already stamped a 38s cooldown, armed the pending replay, armed the
+-- global battlerage cooldown and possibly spent a Rage-Fuelled charge. Current-state gates
+-- cannot see what the same round has already claimed; the caller has to tell us.
+function ataxiaBasher_dwBattlerage(sp, wordUsed)
   local rage = tonumber(ataxia.vitals.rage) or 0
   -- Rage conservation: same rule the generic assembler applies; clears any in-flight
   -- pick so a stale cast can't resume on the NEXT mob.
@@ -598,6 +618,7 @@ function ataxiaBasher_dwBattlerage(sp)
     -- outranks them: never spend it on a charm while a shield is standing.
     if ab.word then
       if ataxiaBasher.shielded then gated = true end
+      if wordUsed then gated = true end -- a keeper already claimed it in THIS chain
       if ataxiaTables and ataxiaTables.depthswalker
          and ataxiaTables.depthswalker.wordBal == false then gated = true end
     end
@@ -726,7 +747,12 @@ function ataxiaBasher_depthswalkerBashing()
 	-- Battlerage computed LAZILY, only on branches that SEND it (the Psion rule): the
 	-- rotation stamps cooldowns when it picks, and the shielded branch above emits no
 	-- battlerage -- an eager call there would burn a 23-38s stamp unsent.
-	command = ff..ataxiaBasher_dwKeeper(sp)..ataxiaBasher_dwBattlerage(sp)..primary
+	-- Keeper FIRST, and its result is passed on: whichever of the two claims the single
+	-- word balance, the other must stand down for this chain (see ataxiaBasher_dwBattlerage).
+	-- The keeper wins the tie because it only ever fires when a defence has actually
+	-- dropped, and it holds 20s between attempts -- boinad gets every other round.
+	local keeper = ataxiaBasher_dwKeeper(sp)
+	command = ff..keeper..ataxiaBasher_dwBattlerage(sp, keeper ~= "")..primary
 	return command
 end
 
@@ -745,6 +771,18 @@ end
 -- lost. Capture the "hands expire/die" line to make the re-arm precise.
 function ataxiaBasher_infGravehands(sp)
 	if not infArmyOfDead then return "" end
+	-- SHIELDED SELF-GUARD (v4.7.193, Codex). This is not a nicety, it is what keeps the
+	-- once-per-room latch honest. `ataxiaBasher_infernalBashing` calls this eagerly and
+	-- then DISCARDS the result on its shielded branch -- but the stamp below had already
+	-- burned `infTyrannyRoom` for this room. Because that latch is only ever overwritten
+	-- by a DIFFERENT room number and is never reset, one shielded first contact meant
+	-- Tyranny never fired in that room again for the whole session.
+	--
+	-- Every sibling helper already self-guards this way (rwSowulu, rwBisect,
+	-- bmThunderstorm, winterDeepfreeze); this one was the exception. The rule: a helper
+	-- that STAMPS must refuse on exactly the conditions its caller refuses on, because
+	-- the caller's branch is far away from the stamp.
+	if ataxiaBasher.shielded then return "" end
 	local M = ataxia.mnemosyne
 	local n = (M and M._denizenCount and M._denizenCount()) or 0
 	-- RESOURCEFUL boon (user, v4.7.162): "defeating a denizen restores 10% of your class
@@ -1425,8 +1463,8 @@ function ataxiaBasher_psionBattlerage(sp)
   -- pending ~one balance round and is replayed verbatim (command stability across
   -- the 0.3s re-queue loop); the rotation advances only after the hold expires.
   local pend = ataxiaTemp.psionBrPending
-  if pend and pend.verb and (nowT - (tonumber(pend.at) or 0)) < 3 then
-    return pend.verb.." "..target..sp
+  if pend and pend.cmd and (nowT - (tonumber(pend.at) or 0)) < 3 then
+    return pend.cmd
   end
   ataxiaTemp.psionBrPending = nil
   if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and (rage >= 36 or ataxiaBasher_brFree())
@@ -1439,7 +1477,15 @@ function ataxiaBasher_psionBattlerage(sp)
     if (not ab.optIn or ataxiaBasher.psionRegrowth) and ataxiaBasher_rageAfford(rage, ab.rage)
        and (nowT - (tonumber(ataxiaTemp.psionBrAt[ab.key]) or 0)) >= ab.cd then
       ataxiaTemp.psionBrAt[ab.key] = nowT
-      ataxiaTemp.psionBrPending = { verb = ab.cmd, at = nowT }
+      -- `verb` must be the ROTATION KEY, not the command (v4.7.193, Codex). The ready-line
+      -- feed (011) releases a held pick with `pend.verb == field`, where field is the map
+      -- key ("barbedblade"). Storing "weave barbedblade" here meant that comparison never
+      -- matched for ANY of the four Psion abilities, so a pick kept being replayed for the
+      -- rest of its 3s window after the game had already said the ability was ready again.
+      -- `cmd` is carried alongside so the replay stays byte-stable. Golden Dragon dodged
+      -- this only because its four commands happen to equal their keys; Runewarden and
+      -- Depthswalker always stored the key.
+      ataxiaTemp.psionBrPending = { verb = ab.key, cmd = ab.cmd.." "..target..sp, at = nowT }
       return ab.cmd.." "..target..sp
     end
   end

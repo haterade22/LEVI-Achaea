@@ -325,6 +325,65 @@ describe("a malformed draw must not replay for the whole pending window", functi
   end)
 end)
 
+-- A TARGETED REPLAY IS ONLY VALID FOR THE DENIZEN IT WAS DRAWN AT (v4.7.193). Covenant
+-- and Xylthus bake the numeric id into `cmd` via the <t> substitution, and the pending
+-- replay resends that string verbatim for up to 4s across the addclearfull rebuild loop.
+-- The basher retargets the instant a denizen dies -- so a kill inside the window had us
+-- redrawing an HOURLY-regenerating card at a mob that is no longer in the room. Found
+-- alongside the Codex review; Codex did not flag it.
+describe("in-flight replay is dropped when the target changes", function()
+  it("replays verbatim while the target is unchanged", function()
+    reset(); ataxia.vitals.rage = 60
+    local first = ataxiaBasher_mnemLdeck(";")
+    expect(first).toBe("ldeck draw xylthus 7;")
+    expect(ataxiaBasher_mnemLdeck(";")).toBe(first) -- byte-stable across the rebuild
+  end)
+
+  it("drops the pick when the basher retargets mid-window", function()
+    reset(); ataxia.vitals.rage = 60
+    expect(ataxiaBasher_mnemLdeck(";")).toBe("ldeck draw xylthus 7;")
+    target = 9 -- the mob died; the basher moved on
+    local cmd = ataxiaBasher_mnemLdeck(";")
+    expect(cmd:find("xylthus 7", 1, true)).toBe(nil) -- never redraw at the dead id
+  end)
+
+  it("holds the card's interval when it drops -- the first send may have landed", function()
+    reset(); ataxia.vitals.rage = 60
+    ataxiaBasher_mnemLdeck(";")
+    target = 9
+    ataxiaBasher_mnemLdeck(";")
+    expect(ataxiaTemp.mnemLdeckAt.Xylthus).toBe(clock) -- Lapse held it, as on a timeout
+  end)
+
+  it("stamps NO affliction on the drop -- an unacknowledged draw is a phantom", function()
+    reset(); ataxia.vitals.rage = 60
+    ataxiaBasher_mnemLdeck(";")
+    target = 9
+    ataxiaBasher_mnemLdeck(";")
+    expect(setAffs[7]).toBe(nil)
+    expect(setAffs[9]).toBe(nil)
+  end)
+
+  -- The guard keys on `targeted` (the card TEMPLATE contained <t>), not on `target`.
+  -- Every pending record carries `target` -- Confirm needs it to attribute stampAff --
+  -- so keying on that would drop the untargeted cards too, whose commands hold no id
+  -- that could have gone stale.
+  it("leaves UNTARGETED cards alone -- they carry no id to go stale", function()
+    reset(); ataxia.vitals.hpp = 30 -- Seasone (<=35, above Maran's 20); no <t> in its cmd
+    local first = ataxiaBasher_mnemLdeck(";")
+    expect(first).toBe("ldeck draw seasone elixir;")
+    expect(ataxiaTemp.mnemLdeckPending.targeted).toBeFalse()
+    target = 9
+    expect(ataxiaBasher_mnemLdeck(";")).toBe(first) -- still replays
+  end)
+
+  it("marks the targeted cards as such", function()
+    reset(); ataxia.vitals.rage = 60
+    ataxiaBasher_mnemLdeck(";")
+    expect(ataxiaTemp.mnemLdeckPending.targeted).toBeTrue()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 getEpoch = _epoch
 target, secondTarget = nil, nil

@@ -144,6 +144,49 @@ describe("the kill only banks a charge while the BOON is up", function()
   end)
 end)
 
+-- THE SHARED CULLING BRANCH (v4.7.193, Codex adversarial review). v4.7.179 put
+-- `or ataxiaBasher_brFree()` on the seven OWNED culling gates, because culling
+-- deliberately bypasses rageAfford to stay floor-exempt. It missed the EIGHTH -- the
+-- shared branch inside assembleBattlerage, which is the one every class that does NOT own
+-- a rotation actually runs (Infernal, Paladin, Serpent, Apostate, Pariah, Alchemist,
+-- Priest, Sentinel, the Elemental Lords...). So for most of the roster the free charge
+-- was banked and then declined for the single best thing to spend it on: a free AoE
+-- execute. Nothing leaked -- the charge stayed banked and went on a cheaper battlerage
+-- further down the same function -- which is exactly why no existing test caught it.
+describe("the free charge reaches the SHARED culling branch too", function()
+  -- Mirrors the gate at basher/001 inside ataxiaBasher_assembleBattlerage.
+  local function sharedCullGate(rage, bigRage)
+    return (rage >= bigRage) or ataxiaBasher_brFree()
+  end
+
+  it("still requires bigRage with no charge banked", function()
+    reset()
+    expect(sharedCullGate(35, 36)).toBeFalse()
+    expect(sharedCullGate(36, 36)).toBeTrue()
+  end)
+
+  it("reaps at ZERO rage while a charge is banked", function()
+    reset()
+    ataxiaTemp.brFreeCharge = true
+    expect(sharedCullGate(0, 36)).toBeTrue()
+    expect(sharedCullGate(0, 54)).toBeTrue() -- bigRage is 54 under rageraze
+  end)
+
+  it("goes back to normal economics once the charge is spent", function()
+    reset()
+    ataxiaTemp.brFreeCharge = true
+    expect(sharedCullGate(0, 36)).toBeTrue()
+    ataxiaBasher_brSent()
+    expect(sharedCullGate(0, 36)).toBeFalse()
+  end)
+
+  it("is NOT floored -- culling stays floor-exempt with or without a charge", function()
+    reset()
+    ataxiaBasher.rageFloor = 46
+    expect(sharedCullGate(36, 36)).toBeTrue() -- raw compare, floor never consulted
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 mnemRageFuelled = false
 getEpoch = _epoch

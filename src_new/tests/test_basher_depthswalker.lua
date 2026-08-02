@@ -300,6 +300,65 @@ describe("Flashforward boon -- keep chrono blur up", function()
   end)
 end)
 
+-- ONE WORD BALANCE PER CHAIN (v4.7.193, Codex adversarial review). The keeper and Boinad
+-- both spend the single word balance, and each checked `ataxiaTables.depthswalker.wordBal`
+-- -- the balance we hold RIGHT NOW, which is still true while the keeper is merely a
+-- string in the buffer. The whole `;`-chain is ONE queue entry, so both intones ran back
+-- to back the instant it fired: the keeper took the balance and Boinad was rejected,
+-- having already stamped a 38s cooldown, armed the pending replay, armed the global
+-- battlerage cooldown and possibly spent a Rage-Fuelled charge. A current-state gate
+-- cannot see what the same round has already claimed -- the caller has to say so.
+describe("keeper and Boinad never share the word balance in one chain", function()
+  local function armBoth()
+    reset()
+    ataxiaBasher.dwKeepers = true      -- trusad is down, so the keeper wants the word
+    ataxiaBasher.dwBoinad = true       -- boinad is opt-in
+    ataxia.vitals.rage = 100
+    validTargets = 2                   -- boinad is a crowd ability
+    stormhammerTargets = { 7, 9 }
+    denizenAffs.aeon = true            -- so `curse` (skipIfAff aeon) yields to boinad
+  end
+
+  it("boinad stands down when the keeper already claimed the word", function()
+    armBoth()
+    expect(ataxiaBasher_dwBattlerage(";", true)).toBe("shadow lash 7;") -- next non-word pick
+  end)
+
+  it("boinad still fires when no keeper word went out", function()
+    armBoth()
+    expect(ataxiaBasher_dwBattlerage(";", false)).toBe("intone boinad 9;")
+  end)
+
+  it("stamps NOTHING for boinad on the round it stood down", function()
+    armBoth()
+    ataxiaBasher_dwBattlerage(";", true)
+    expect((ataxiaTemp.dwBrAt or {}).boinad).toBe(nil)
+  end)
+
+  it("the assembled round carries at most ONE intone", function()
+    armBoth()
+    local cmd = ataxiaBasher_depthswalkerBashing()
+    local n = 0
+    for _ in cmd:gmatch("intone") do n = n + 1 end
+    expect(n <= 1).toBeTrue()
+    expect(cmd:find("intone trusad", 1, true) ~= nil).toBeTrue() -- keeper wins the tie
+  end)
+
+  it("boinad gets the word back once the keeper has nothing left to raise", function()
+    armBoth()
+    -- The keeper outranks boinad for as long as ANY of its three Terminus defences is
+    -- down -- it walks trusad -> tsuura -> mainaas, one per round. That is the intended
+    -- ordering (a dropped defence is rarer and more valuable than a charm), and it is
+    -- self-limiting: the words persist once intoned, so the keeper goes quiet and hands
+    -- the word balance back rather than holding it forever.
+    ataxia.defences = { precision = true, durability = true, bodyaugment = true }
+    expect(ataxiaBasher_dwKeeper(";")).toBe("") -- nothing to re-assert
+    local cmd = ataxiaBasher_depthswalkerBashing()
+    expect(cmd:find("intone boinad", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("intone trusad", 1, true)).toBe(nil)
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 dwFlashforward = false
 getEpoch = _epoch

@@ -1489,3 +1489,13 @@ Devastate Thresholds:
 - 4 fractures/tendons = Level 2 both limbs
 - 6+ fractures/tendons = Level 3 both limbs
 ```
+
+
+## PvE: Tyranny's room latch and shielded first contact (v4.7.193)
+
+`ataxiaBasher_infGravehands` summons the Army of the Dead gravehands ONCE PER ROOM, keyed on
+`ataxiaTemp.infTyrannyRoom`. That latch is only ever overwritten by a different room number and
+is never reset -- so it must not be stamped on a round that does not actually send the command.
+It now self-guards on `ataxiaBasher.shielded`, because `infernalBashing` calls it eagerly and
+then discards the result on its shielded branch: before the fix, arriving in a room to a
+shielded denizen meant Tyranny never fired there again for the rest of the session.

@@ -2,6 +2,35 @@
 
 ## Pitfalls learned 2026-07-31 / 2026-08-01
 
+- **One queued line is ONE queue entry.** `queue addclearfull stand;<a>;<b>` executes `<a>` and
+  `<b>` back to back the instant it fires, so `<b>` gating on "do I have equilibrium / word
+  balance / shin *right now*?" is reading a moment before `<a>` ran. Both pass, only the first
+  pays, the second is REJECTED -- after stamping its cooldown. Three live instances (Blademaster
+  shin, Depthswalker word, and the shin arithmetic that fails even when the eq would not). When
+  you add an ability to a rotation: name its resource, then grep the same function for anything
+  else spending it. Helper-by-helper correctness proves nothing. Fix by passing a flag
+  (`wordUsed`, `shinSpent`) -- no current-state read can substitute.
+- **Skip the CALL, not the result.** When a helper stamps its own cooldown, discarding its
+  return value still burns the stamp. `bmThunderstorm` bought a 4s lockout on rounds whose
+  output was thrown away.
+- **A helper that STAMPS must refuse on exactly the conditions its caller refuses on.**
+  `infGravehands` latched `infTyrannyRoom` and was then discarded by the shielded branch dozens
+  of lines later -- and that latch is only overwritten by a different room, never reset, so one
+  shielded first contact killed Tyranny in that room for the session. Its four sibling helpers
+  all self-guard on `shielded`; the exception is what breaks.
+- **Store the KEY in a replay record, never the command.** `basher/011` releases a held pick on
+  `pend.verb == <map key>`. Psion stored `"weave barbedblade"` and was never released; Golden
+  Dragon works only by the coincidence that its commands equal its keys. A coincidental match
+  between identifier and display string is a latent bug in whichever twin lacks it.
+- **Guard on the property that makes the cache wrong, not a correlated one.** The legend-deck
+  replay goes stale only for cards whose TEMPLATE contains `<t>`; keying the guard on the
+  `target` field (which every pending record carries, for `stampAff` attribution) also dropped
+  the four untargeted cards.
+- **A sweep finds the sites that LOOK like the others.** "The seven culling gates" were eight;
+  the missed one compares raw rage instead of calling `rageAfford`, which is exactly why the
+  shape-based sweep skipped it. Third count error this arc (37 not 40, 29 not 28, 8 not 7).
+  Count call sites, do not estimate them -- and expect the outlier to be the one that matters.
+
 - **Mudlet `type: 3` is EXACT WHOLE LINE.** A type-3 pattern that is a FRAGMENT never fires,
   silently. Two triggers shipped dead this way, one of them a boss safety inert for 60+
   releases. Fragments are `type: 2` (line start) or `type: 0` (anywhere). Enum: 0 substring,

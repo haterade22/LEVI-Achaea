@@ -442,6 +442,50 @@ describe("Daemon Jaws -- hyena maul cooldown", function()
   end)
 end)
 
+-- SHIELDED SELF-GUARD (v4.7.193, Codex adversarial review). infernalBashing calls
+-- infGravehands EAGERLY and then discards the result on its shielded branch -- but the
+-- helper had already stamped ataxiaTemp.infTyrannyRoom. That latch is only ever
+-- overwritten by a DIFFERENT room number and is never reset, so one shielded first
+-- contact meant Tyranny never fired in that room again for the rest of the session.
+describe("Army of the Dead -- the room latch must not burn on a discarded round", function()
+  it("refuses outright while the denizen is shielded", function()
+    reset(); infArmyOfDead = true; denizens = 3
+    ataxiaBasher.shielded = true
+    expect(ataxiaBasher_infGravehands(";")).toBe("")
+  end)
+
+  it("leaves the room UNSTAMPED when it refuses, so the room is still armed", function()
+    reset(); infArmyOfDead = true; denizens = 3
+    ataxiaBasher.shielded = true
+    ataxiaBasher_infGravehands(";")
+    expect((ataxiaTemp.infTyrannyRoom)).toBe(nil)
+  end)
+
+  it("fires in that same room the moment the shield drops", function()
+    reset(); infArmyOfDead = true; denizens = 3
+    ataxiaBasher.shielded = true
+    expect(ataxiaBasher_infGravehands(";")).toBe("") -- shielded contact
+    ataxiaBasher.shielded = false
+    expect(ataxiaBasher_infGravehands(";")).toBe("tyranny;") -- the regression: was ""
+  end)
+
+  it("full round: the shielded branch emits no tyranny, the next unshielded one does", function()
+    reset(); infArmyOfDead = true; denizens = 3
+    ataxiaBasher.shielded = true
+    expect(has(ataxiaBasher_infernalBashing(), "tyranny")).toBeFalse()
+    ataxiaBasher.shielded = false
+    expect(has(ataxiaBasher_infernalBashing(), "tyranny")).toBeTrue()
+  end)
+
+  it("still latches once per room on the normal unshielded path", function()
+    reset(); infArmyOfDead = true; denizens = 3
+    expect(ataxiaBasher_infGravehands(";")).toBe("tyranny;")
+    expect(ataxiaBasher_infGravehands(";")).toBe("") -- same room, already summoned
+    gmcp.Room.Info.num = 2
+    expect(ataxiaBasher_infGravehands(";")).toBe("tyranny;") -- new room re-arms
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 getEpoch = _epoch
 infArmyOfDead, infDaemonJaws, infIndiscriminate = false, false, false

@@ -2,6 +2,122 @@
 
 ---
 
+## 2026-08-01 - Codex adversarial review: four ways one queued line eats itself (v4.7.193)
+
+Independent Codex review of v4.7.165-192, dispatched with the three v4.7.192 findings named
+up front and excluded, to force it at what the internal review missed. Five findings, all
+five verified against source before being acted on; two of its quoted snippets were
+paraphrased wrongly (the `rageAfford` body, boinad's `rage = 32`) but both findings held.
+A sixth came out of the parallel pass done while it ran.
+
+Four of the six are the SAME bug wearing different clothes, and it is worth naming because
+nothing in the codebase had a name for it:
+
+> **A gate that reads current state cannot see what the same queued line has already
+> claimed.** `queue addclearfull <a>;<b>;<c>` is ONE queue entry -- when it fires, every
+> command in it executes back to back in the same instant. So `<b>` checking "do I have
+> equilibrium / word balance / shin right now?" is answering about a moment BEFORE `<a>`
+> ran. Both pass their own gate; only the first can pay; the second is rejected -- having
+> already stamped a cooldown, armed a replay, and possibly spent a Rage-Fuelled charge.
+
+### HIGH - Blademaster put SHIN AUGMENT and SHIN THUNDERSTORM in one line
+
+The previous comment in `blademasterBashing` said the storm "sits queued behind the augment
+channel and can be wiped by the next addclearfull", and called that tolerable. Wrong model,
+and the wrongness mattered: they are in the same queue entry, so the rejection is
+DETERMINISTIC, not a race we sometimes lose. The shin arithmetic fails independently of the
+equilibrium -- the storm's `shin >= 30` gate reads the pool BEFORE the augment spends from
+it, so at 32 shin both clear their own gate and only one can pay.
+
+And `bmThunderstormAt` is stamped on send, so the rejected cast still bought a 4s lockout.
+The fix skips the CALL, not the result: the stamp lives inside the helper, so calling it at
+all is what costs us. One shin/equilibrium spender per round, augment first.
+
+### HIGH - Infernal burned its once-per-room Tyranny latch on rounds it discarded
+
+`infernalBashing` calls `ataxiaBasher_infGravehands` eagerly and then throws the result away
+on its shielded branch -- but the helper had already stamped `ataxiaTemp.infTyrannyRoom`.
+That latch is only ever overwritten by a DIFFERENT room number and is never reset, so **one
+shielded first contact meant Tyranny never fired in that room again for the rest of the
+session.** Every sibling helper (`rwSowulu`, `rwBisect`, `bmThunderstorm`,
+`winterDeepfreeze`) already self-guards on `shielded`; this one was the exception.
+
+The rule that follows: **a helper that STAMPS must refuse on exactly the conditions its
+caller refuses on**, because the caller's branch is dozens of lines away from the stamp.
+
+### HIGH - Depthswalker's keeper and Boinad both spent the one word balance
+
+`command = ff..dwKeeper(sp)..dwBattlerage(sp)..primary`. Both intone. Both gated on
+`ataxiaTables.depthswalker.wordBal`, which is still true while the keeper is merely a string
+in the buffer. Boinad lost the race and was rejected after stamping a 38s cooldown, arming
+the pending replay, arming the global battlerage cooldown, and possibly spending a free
+charge. `dwBattlerage` now takes a `wordUsed` argument -- the caller has to say what the
+round already claimed, because no current-state read can. Keeper wins the tie (it fires only
+when a defence has actually dropped) and hands the word back once all three are up.
+
+Pre-existing since v4.7.147, outside the reviewed range; found under "anything else".
+
+### MEDIUM - the free battlerage charge never reached the SHARED culling branch
+
+v4.7.179 put `or ataxiaBasher_brFree()` on **seven** culling reap gates. There are **eight**.
+The one it missed is the shared branch inside `assembleBattlerage` -- which is the branch
+every class that does NOT own a rotation actually runs: Infernal, Paladin, Unnamable,
+Serpent, Apostate, Pariah, Alchemist, Jester, Occultist, Priest, Sentinel, Sylvan, Druid,
+the Elemental Lords, most Dragons. It compares raw rage rather than going through
+`rageAfford`, which is exactly why the v4.7.179 sweep did not see it.
+
+Nothing leaked -- the charge stayed banked and went on a cheaper battlerage further down the
+same function. That is why no test caught it, and why it is easy to under-rate: a free AoE
+execute is the single best thing a charge can buy, and the majority of the roster was
+declining it.
+
+### LOW - Psion's in-flight replay was never released by the ready line
+
+`basher/011` releases a held pick with `pend.verb == field`, where field is the BR_READY_MAP
+key (`"barbedblade"`). Psion stored the full command (`"weave barbedblade"`), so that
+comparison never matched for **any** of its four abilities: after the game said the ability
+was ready again, the stale pick kept being replayed for the rest of its 3s window. Runewarden
+and Depthswalker always stored the key; Golden Dragon dodged it only because its four
+commands happen to equal their keys. Now stores `key` in `verb` and the command in `cmd`,
+matching the other three rotations.
+
+### MEDIUM - the legend-deck replay could redraw at a dead denizen (found in parallel; Codex missed it)
+
+Covenant and Xylthus bake the numeric id into their command via the `<t>` substitution, and
+the pending replay resends that string verbatim for up to 4s across the rebuild loop. The
+basher retargets the instant a denizen dies -- so a kill inside the window had us drawing an
+**hourly-regenerating** card at a mob no longer in the room.
+
+The guard keys on a new `targeted` flag (the card TEMPLATE contained `<t>`), not on
+`p.target`: every pending record carries `target` because `Confirm` needs it to attribute
+`stampAff`, so keying on that would also have dropped Maran/Seasone/Morimbuul/Matic, whose
+commands hold no id that could go stale. My first cut did exactly that and the test caught it.
+
+### Suspects Codex checked and refuted
+
+`brCommit` not arming `brGlobalReadyAt` is correct, not a hole -- arming the global cooldown
+at assembly time would make the next `addclearfull` erase a battlerage that had been selected
+but not executed, and the rotations that do want send-side suppression still call `brSent`.
+The un-nilled `ataxiaTemp` stamps (`rwBrAt`, `dwBrAt`, `psionBrAt`, `gdragonBrAt`,
+`bmThunderstormAt`, `mnemLdeckAt`, `dragonRampageAt`, `infDeathauraAt`, `infQuashAt`,
+`kaiUnleashedAt`) are monotonic epochs whose staleness only ever reads as "ready";
+`mnemLdeckRoom` is reset on ripple/run end, `reaperKills` and `kaiUnleashedAt` on run end.
+`infTyrannyRoom` was the one genuinely-wrong lifetime, above. No new dead `type: 3` fragment
+in the changed trigger set.
+
+Also verified independently and NOT changed: the `;;` empty segment produced when both
+`sowulu` and `brage` are empty is the package-wide `brage..sp..X` idiom, present since well
+before this range -- not a regression.
+
+Report kept at `docs/reviews/codex-adversarial-basher-mnemosyne-2026-08-01.md`.
+
+Files: `basher/001_Bashing_Functions.lua`, `basher/002_Class_Bashing.lua`,
+`basher/010_Mnemosyne_Legend_Deck.lua`, tests `test_basher_blademaster.lua`,
+`test_basher_infernal.lua`, `test_basher_psion.lua`, `test_basher_depthswalker.lua`,
+`test_rage_fuelled.lua`, `test_mnem_ldeck.lua`. Suite 752 -> **780**.
+
+---
+
 ## 2026-08-01 - Deep review: a leaking free-battlerage charge, and a self-defeating guard (v4.7.192)
 
 Four-agent deep review of v4.7.165-190. Every finding below was independently re-verified

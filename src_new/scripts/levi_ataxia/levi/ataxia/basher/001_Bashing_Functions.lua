@@ -1180,7 +1180,14 @@ function ataxiaBasher_assembleBattlerage()
 		and gmcp.Char.Status.class ~= "Magi" and gmcp.Char.Status.class ~= "Psion"
 		and gmcp.Char.Status.class ~= "Depthswalker"
 		and gmcp.Char.Status.class ~= "Runewarden" then
-		if ataxia.vitals.rage >= bigRage then
+		-- Rage-Fuelled reaches this branch too (v4.7.193, Codex). The seven OWNED culling
+		-- gates got `or ataxiaBasher_brFree()` in v4.7.179; this SHARED one -- the branch
+		-- every class that does not own a rotation actually runs -- was not among them,
+		-- because it compares raw rage rather than going through ataxiaBasher_rageAfford.
+		-- So the majority of classes banked a free charge and then declined the single
+		-- best thing to spend it on: a free AoE execute. The charge was not lost (it stays
+		-- banked), it was spent on a cheaper battlerage further down this function instead.
+		if ataxia.vitals.rage >= bigRage or ataxiaBasher_brFree() then
 			command = command.."reap "..target..sp
 		end
 	-- Black Dragon: dragonfear on 3rd target when 3+ mobs present

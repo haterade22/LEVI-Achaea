@@ -187,6 +187,42 @@ describe("ataxiaBasher_psionBashing -- eq riders and keepers", function()
   end)
 end)
 
+-- PENDING KEY, NOT PENDING COMMAND (v4.7.193, Codex adversarial review). The ready-line
+-- feed (basher/011) releases a held pick with `pend.verb == field`, where field is the
+-- BR_READY_MAP key ("barbedblade"). Psion was the one rotation storing the full command
+-- ("weave barbedblade") in `verb`, so that comparison never matched for ANY of its four
+-- abilities: after the game said the ability was ready again, the stale pick kept being
+-- replayed for the rest of its 3s window. Runewarden and Depthswalker always stored the
+-- key; Golden Dragon dodged it only because its commands happen to equal their keys.
+describe("psion in-flight replay -- released by the ready line", function()
+  it("stores the ROTATION KEY in verb, and the full command in cmd", function()
+    reset(); ataxia.vitals.rage = 100
+    local cmd = ataxiaBasher_psionBattlerage(";")
+    local p = ataxiaTemp.psionBrPending
+    expect(p ~= nil).toBeTrue()
+    expect(p.verb).toBe("devastate")           -- the key BR_READY_MAP uses
+    expect(p.verb:find(" ", 1, true)).toBe(nil) -- never a command string
+    expect(p.cmd).toBe(cmd)                     -- replay stays byte-stable
+  end)
+
+  it("replays the pick verbatim inside the window", function()
+    reset(); ataxia.vitals.rage = 100
+    local first = ataxiaBasher_psionBattlerage(";")
+    expect(ataxiaBasher_psionBattlerage(";")).toBe(first)
+  end)
+
+  it("the ready line RELEASES the hold -- the regression", function()
+    reset(); ataxia.vitals.rage = 100
+    ataxiaBasher_psionBattlerage(";")
+    expect(ataxiaTemp.psionBrPending ~= nil).toBeTrue()
+    -- Mirrors the release loop in basher/011_Battlerage_Ready_Lines.lua.
+    local field = "devastate"
+    local pend = ataxiaTemp.psionBrPending
+    if pend and pend.verb == field then ataxiaTemp.psionBrPending = nil end
+    expect(ataxiaTemp.psionBrPending).toBe(nil) -- was NOT released before the fix
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 psionPanoply = false
 getEpoch = _epoch

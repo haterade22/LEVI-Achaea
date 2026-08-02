@@ -1081,3 +1081,13 @@ end
 - Hit 1-N: Prep legs with hamstring/afflictions
 - Hit N+1 (final prep): KNEES dismounts (mounted + hamstrung)
 - Hit N+2 (double-break): KNEES prones (now dismounted)
+
+
+## PvE: shin is a contended pool (v4.7.193)
+
+`SHIN AUGMENT` (Bladed Reflexes boon) and `SHIN THUNDERSTORM` (Divine Thunder Cataclysm boon)
+both take the equilibrium and both draw on shin, so the basher sends at most ONE of them per
+round -- augment first, storm on the following round. The storm's helper is not called at all
+on an augment round, because `ataxiaTemp.bmThunderstormAt` is stamped inside it and a
+discarded return value would still buy a 4s lockout. `INFUSE` also draws shin but is cheap
+enough to ride alongside. See `ataxiaBasher_blademasterBashing`, basher/002.

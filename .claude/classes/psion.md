@@ -642,3 +642,13 @@ Kill Thresholds:
 - Deconstruct: TWO unweaves at level 3+
 - Flurry: High spirit unweave (~90% HP at level 5)
 ```
+
+
+## PvE: the battlerage replay record stores the KEY (v4.7.193)
+
+`ataxiaTemp.psionBrPending` must be `{ verb = ab.key, cmd = <full command> }`. The ready-line
+feed (`basher/011`) releases a held pick by comparing `pend.verb` against the `BR_READY_MAP`
+key (`barbedblade`, `whirlwind`, `devastate`, `regrowth`). Storing the command string
+(`"weave barbedblade"`) there -- as this rotation did until v4.7.193 -- means the release never
+matches and a stale pick is replayed for the rest of its 3s window after the game has already
+said the ability is ready.

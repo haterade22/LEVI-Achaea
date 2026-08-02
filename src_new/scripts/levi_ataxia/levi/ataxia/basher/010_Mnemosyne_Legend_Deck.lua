@@ -265,7 +265,26 @@ function ataxiaBasher_mnemLdeck(sp)
   local t = now()
   local p = ataxiaTemp.mnemLdeckPending
   if p then
-    if (t - (p.at or 0)) < PENDING_WINDOW then return p.cmd .. sp end
+    -- A TARGETED card's replay is only valid for the denizen it was drawn at. Covenant and
+    -- Xylthus bake the numeric id into `cmd` via the <t> substitution, and the replay below
+    -- resends that string verbatim for up to PENDING_WINDOW seconds -- so a kill inside the
+    -- window (the basher retargets immediately) had us drawing an hourly-regenerating card
+    -- at a denizen that is no longer there. Drop the pick instead: `Lapse` also holds the
+    -- card's interval, which is right, because we genuinely do not know whether the first
+    -- send landed.
+    --
+    -- Keyed on `targeted`, NOT on `target`. Every pending record carries `target` -- the
+    -- untargeted cards need it too, because that is who `Confirm` attributes stampAff to --
+    -- so testing it here would also drop Maran/Seasone/Morimbuul/Matic on a retarget, and
+    -- those commands contain no id to have gone stale. `targeted` is set from the card
+    -- TEMPLATE actually containing <t>, which is exactly the condition that makes the
+    -- cached string wrong.
+    if p.targeted and target ~= p.target then
+      ataxiaBasher_mnemLdeckLapse(p.key)
+      p = nil
+    elseif (t - (p.at or 0)) < PENDING_WINDOW then return p.cmd .. sp end
+  end
+  if p then
     -- Window lapsed with NO confirmation. Hold the interval so a silently-eaten
     -- draw can't loop forever -- but this is emphatically NOT a confirmation, so
     -- it must not stamp the affliction. Calling Confirm here (v4.7.166) re-opened
@@ -280,6 +299,9 @@ function ataxiaBasher_mnemLdeck(sp)
     key = key, cmd = cmd, at = t,
     stampAff = card and card.stampAff,
     target = (type(target) == "number") and target or nil,
+    -- Did the card TEMPLATE bake the denizen id into the command? Only then does a
+    -- retarget invalidate the cached replay string (see the guard at the top).
+    targeted = (card and card.cmd and card.cmd:find("<t>", 1, true)) ~= nil,
   }
   if card and card.perRoom then
     local room = (gmcp and gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num) or "unknown"
