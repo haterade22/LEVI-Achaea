@@ -2,6 +2,59 @@
 
 ---
 
+## 2026-08-01 - Divine Thunder Cataclysm: thunderstorm as a crowd rider (v4.7.190)
+
+> Your Shindo thunderstorm ability now deals electric damage to all denizens in your location.
+
+`SHIN THUNDERSTORM` is already a room ability (AB 314, *"Works on/against: Room"*) - the boon
+is what makes it hurt **denizens**, turning it into free crowd damage while bashing. Cast at
+3+ denizens (`ataxiaBasher.thunderstormAt`).
+
+### It rides, it does not replace - and that is the whole design
+
+AB says **4.00s of EQUILIBRIUM**. The balance swing is untouched, so the storm is prefixed
+*alongside* and costs no attack.
+
+Contrast the Thunderclap **bisect** shipped four releases ago: 4s of **BALANCE**, so it
+*displaces* the swing and had to be justified on coverage-versus-focus. Same "crowd AoE"
+idea, wired oppositely, purely because the resource differs. **That is the first thing to
+check for any new AoE** - equilibrium, word-balance, pet orders and free-queue actions ride
+alongside; balance ones replace.
+
+### Why 3+ and not the usual 2+
+
+The balance-spending crowd swings gate at 2 because balance is what they contest. Here
+balance is free and the binding resource is **shin: 30 per cast**, from a pool that `infuse`
+and the Bladed Reflexes `SHIN AUGMENT` are also drawing on. At two mobs a room nuke does not
+repay emptying the pool the rest of the round depends on.
+`ataxiaBasher.thunderstormReserve` keeps a configurable buffer back for them.
+
+### Fire lines, captured mid-implementation
+
+I had written the cooldown as a send-side stamp with a comment saying the fire line had never
+been captured - and then it was, so it now **re-stamps from the confirmed strike**, and the
+4s runs from when the storm actually landed rather than from when it was queued. The
+send-side stamp stays as the backstop for an eaten cast.
+
+Both lines highlighted on the hyena/falcon convention: the wind-up
+(*"Wind swells about your form..."*) `dark_sea_green` for intent, the strike (*"A clap of
+thunder presages the unleashed storm..."*) `chartreuse` bold for damage landing.
+
+**Near-miss worth recording:** the Thunderclap bisect line *also* mentions a clap of thunder -
+*"...a clap of thunder heralding your strike."* Different opening, different tail, and
+verified non-overlapping in both directions before shipping.
+
+Not modelled: *"likely to jangle the nerves of those struck"* is presumably epilepsy on the
+denizens, but `ataxiaBasher_BR_AFFS` carries no epilepsy entry and the apply line is
+uncaptured.
+
+Files: `basher/002_Class_Bashing.lua`, `triggers/.../mnemosyne/054_Divine_Thunder.lua` (NEW),
+`triggers/.../highlighting/036_Thunderstorm.lua` (NEW), `mnemosyne/001_Run_Start.lua`,
+`mnemosyne/004_Parsers.lua`, `aliases/.../mnemosyne/002_Boon_Claim.lua`,
+`tests/test_bm_infuse.lua`, `memory/blademaster.md`. Suite **745/745**.
+
+---
+
 ## 2026-08-01 - Rage-Fuelled spends the charge on the dearest ability (v4.7.189)
 
 > we should always use the most expensive Battlerage of course

@@ -430,6 +430,11 @@ function ataxiaBasher_blademasterBashing()
 		end
 	end
 
+	-- Divine Thunder Cataclysm: an EQUILIBRIUM room nuke, so it rides ahead of the balance
+	-- swing and costs us nothing off it. Self-gates on the boon, the crowd, shin and its
+	-- own cooldown, returning "" whenever any of those says no.
+	local storm = ataxiaBasher_bmThunderstorm(sp)
+
 	if ataxiaBasher.shielded then
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
 			command = command..raze..sp.."infuse "..ataxiaBasher_bmInfuse().." "..sp.." "..slash
@@ -437,7 +442,7 @@ function ataxiaBasher_blademasterBashing()
 			command = command.."raze "..target..sp..brage
 		end
 	else
-		command = command..brage..sp.."infuse "..ataxiaBasher_bmInfuse().." "..sp.." "..slash
+		command = command..storm..brage..sp.."infuse "..ataxiaBasher_bmInfuse().." "..sp.." "..slash
 	end
 
 	return command
@@ -986,6 +991,58 @@ end
 --
 -- Crowd-gated at 2+ (user-directed): the whole value is hitting the room, and against a
 -- lone denizen an ordinary attack is better than a spread nuke.
+-- DIVINE THUNDER CATACLYSM (Mnemosyne boon, v4.7.190): "Your Shindo thunderstorm ability
+-- now deals electric damage to all denizens in your location." SHIN THUNDERSTORM is already
+-- a room ability (AB 314, "Works on/against: Room"); the boon is what makes it hurt
+-- DENIZENS, turning it into free crowd damage while we bash.
+--
+-- IT RIDES, IT DOES NOT REPLACE. AB says 4.00s of EQUILIBRIUM -- the balance swing is
+-- untouched, so unlike the Thunderclap bisect (4s BALANCE, which displaces the swing) this
+-- is prefixed alongside and costs us no attack. That resource-type distinction is the whole
+-- reason these two crowd abilities are wired so differently.
+--
+-- Gated at 3+ denizens (user rule), higher than the 2+ used for the balance-spending crowd
+-- swings, and the reason is the OTHER resource: 30 Shin energy is a large chunk of a pool
+-- that infuse and the Bladed Reflexes SHIN AUGMENT are both drawing on. At two mobs a
+-- room nuke does not repay emptying the pool the rest of the round depends on.
+--
+-- Cooldown is stamped on SEND and then RE-STAMPED from the confirmed strike line (trigger
+-- 054 -> ataxiaBasher_bmThunderstormConfirm), so the 4s runs from the moment it actually
+-- landed rather than from the moment we queued it. The send-side stamp is still the
+-- backstop: an eaten cast then costs us one window instead of jamming the loop.
+--
+-- Not modelled: "likely to jangle the nerves of those struck" is presumably epilepsy on the
+-- denizens, but ataxiaBasher_BR_AFFS carries no epilepsy entry and the apply line is
+-- uncaptured, so nothing reads it yet.
+function ataxiaBasher_bmThunderstorm(sp)
+	if not mnemDivineThunder then return "" end
+	if ataxiaBasher.shielded then return "" end -- break the shield first
+	local M = ataxia.mnemosyne
+	local n = (M and M._denizenCount and M._denizenCount()) or 0
+	if n < (tonumber(ataxiaBasher.thunderstormAt) or 3) then return "" end
+
+	-- 30 Shin, and the pool is contested (infuse, SHIN AUGMENT). `thunderstormReserve`
+	-- keeps a configurable buffer back for them; 0 by default, i.e. spend down to empty.
+	local shin = (blademaster and blademaster.getShin and blademaster.getShin())
+		or (ataxia.vitals and tonumber(ataxia.vitals.class)) or 0
+	if shin < (30 + (tonumber(ataxiaBasher.thunderstormReserve) or 0)) then return "" end
+
+	local nowT = (getEpoch and getEpoch()) or os.time()
+	ataxiaTemp = ataxiaTemp or {}
+	if nowT - (tonumber(ataxiaTemp.bmThunderstormAt) or 0) < 4 then return "" end
+	ataxiaTemp.bmThunderstormAt = nowT
+	return "shin thunderstorm"..sp
+end
+
+-- Fire-line confirmation for the storm (trigger 054, captured live 2026-08-01). Restamps the
+-- cooldown from the LANDED moment. Every owned rotation ability wants both a fire line to
+-- confirm and a refusal line to cancel; this is the confirm half. No refusal line has been
+-- seen yet -- the send-side stamp covers that gap in the meantime.
+function ataxiaBasher_bmThunderstormConfirm()
+	ataxiaTemp = ataxiaTemp or {}
+	ataxiaTemp.bmThunderstormAt = (getEpoch and getEpoch()) or os.time()
+end
+
 function ataxiaBasher_winterDeepfreeze(sp)
   if not mnemWintersHeart then return "" end
   if ataxiaBasher.shielded then return "" end -- break the shield first

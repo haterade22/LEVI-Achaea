@@ -202,6 +202,7 @@ function M.onRunEnd()
   mnemHammerAndNail = false -- boons gone on a confirmed run-end
   mnemRageFuelled = false   -- boons gone on a confirmed run-end
   mnemThunderclap = false   -- boons gone on a confirmed run-end
+  mnemDivineThunder = false -- boons gone on a confirmed run-end
   if ataxiaTemp then ataxiaTemp.mnemNulled = nil end -- affixes gone with the run
   ataxiaTemp.brFreeCharge = nil -- ...and any charge it had banked
   if ataxiaTemp and ataxiaTemp.infFuryOn then

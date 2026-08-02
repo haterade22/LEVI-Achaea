@@ -89,3 +89,4 @@ if matches[2]:lower():find("homebound") then mnemHomebound = true end
 if matches[2]:lower():find("hammer and nail") then mnemHammerAndNail = true end
 if matches[2]:lower():find("rage%-fuelled") then mnemRageFuelled = true end
 if matches[2]:lower():find("thunderclap") then mnemThunderclap = true end
+if matches[2]:lower():find("divine thunder") then mnemDivineThunder = true end

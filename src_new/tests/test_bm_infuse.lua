@@ -11,7 +11,8 @@ require("mock_mudlet")
 
 target = 7
 ataxia = { settings = { separator = ";" }, vitals = { rage = 0, class = 10 }, defences = {} }
-ataxiaBasher = { shielded = false, rageraze = false, battlerage = {} }
+ataxiaBasher = { shielded = false, rageraze = false,
+                 battlerage = { Blademaster = { raze = "shin shatter 7" } } }
 ataxiaTemp = {}
 gmcp = { Room = { Info = { area = "", num = 5 } },
          Char = { Status = { class = "Blademaster", level = "80 " } } }
@@ -174,7 +175,68 @@ describe("Bard flick vs punctuate under a psychic-nulling affix (v4.7.187)", fun
   end)
 end)
 
+
+describe("Divine Thunder Cataclysm -- the EQ room nuke that rides the swing (v4.7.190)", function()
+  local shin = 100
+  local function setup(n)
+    ataxiaTemp = {}
+    ataxiaBasher.shielded = false
+    ataxiaBasher.thunderstormAt, ataxiaBasher.thunderstormReserve = nil, nil
+    mnemDivineThunder = true
+    shin = 100
+    blademaster = { getShin = function() return shin end }
+    ataxia.mnemosyne._denizenCount = function() return n end
+  end
+
+  it("does nothing without the boon", function()
+    setup(5); mnemDivineThunder = false
+    expect(ataxiaBasher_bmThunderstorm(";")).toBe("")
+  end)
+
+  it("needs THREE denizens -- higher than the balance-spending crowd swings", function()
+    setup(2)
+    expect(ataxiaBasher_bmThunderstorm(";")).toBe("")
+    setup(3)
+    expect(ataxiaBasher_bmThunderstorm(";")).toBe("shin thunderstorm;")
+  end)
+
+  it("needs the 30 shin, and honours a reserve for infuse/augment", function()
+    setup(4); shin = 29
+    expect(ataxiaBasher_bmThunderstorm(";")).toBe("")
+    setup(4); shin = 30
+    expect(ataxiaBasher_bmThunderstorm(";")).toBe("shin thunderstorm;")
+    setup(4); shin = 30; ataxiaBasher.thunderstormReserve = 10
+    expect(ataxiaBasher_bmThunderstorm(";")).toBe("")
+  end)
+
+  it("honours its 4s cooldown, and the fire line restamps it from the LANDED moment", function()
+    setup(4)
+    expect(ataxiaBasher_bmThunderstorm(";")).toBe("shin thunderstorm;")
+    expect(ataxiaBasher_bmThunderstorm(";")).toBe("")  -- still cooling
+    ataxiaTemp.bmThunderstormAt = (getEpoch() - 5)      -- window elapsed
+    expect(ataxiaBasher_bmThunderstorm(";")).toBe("shin thunderstorm;")
+    ataxiaBasher_bmThunderstormConfirm()                -- trigger 054's strike line
+    expect(ataxiaTemp.bmThunderstormAt).toBe(getEpoch())
+  end)
+
+  it("yields on a shielded round", function()
+    setup(5); ataxiaBasher.shielded = true
+    expect(ataxiaBasher_bmThunderstorm(";")).toBe("")
+  end)
+
+  it("RIDES the swing rather than replacing it -- it is equilibrium, not balance", function()
+    setup(4)
+    gmcp.Char.Status.class = "Blademaster"
+    local cmd = ataxiaBasher_blademasterBashing()
+    expect(cmd:find("shin thunderstorm", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("drawslash", 1, true) ~= nil).toBeTrue()   -- the balance swing survives
+    expect(cmd:find("shin thunderstorm") < cmd:find("drawslash")).toBeTrue()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 target = nil
 ataxiaTemp = {}
 bardWarmarch = false
+mnemDivineThunder = false
+blademaster = nil
