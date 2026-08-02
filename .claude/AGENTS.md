@@ -2,6 +2,17 @@
 
 ## Pitfalls learned 2026-07-31 / 2026-08-02
 
+- **Do not overload an existing flag key with a second meaning.** `control` already meant
+  "BANK rage until affordable" in two rotations; reusing it for "prioritise this ability"
+  silently restored banking that v4.7.145 had MEASURED and rejected (aeon ~5.6s against a 35s
+  cooldown). A new meaning gets a new key (`slows`). The existing test caught it in one run --
+  which is the argument for writing the behaviour-pinning test when you make the measurement.
+- **An ordering test must exercise a case where the order actually differs.** Chrono Curse is
+  second in its table, so at full rage it fires with or without the new priority -- the test
+  proved nothing until it was rewritten around the Rage-Fuelled descending-cost sort, which is
+  the only thing that reorders that table. Before asserting on priority, check the baseline
+  would genuinely have picked something else.
+
 - **Clearing the state does not retract the COMMAND.** `queue addclearfull` means the basher's
   attack is already sitting server-side waiting on balance. Setting the flag that produced it
   (`ataxiaBasher.shielded = false`) only changes the NEXT rebuild -- and the rebuild is

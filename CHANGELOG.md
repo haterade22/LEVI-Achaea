@@ -2,6 +2,69 @@
 
 ---
 
+## 2026-08-02 - Control-first denizens: spend battlerage on their balance, not their health (v4.7.198)
+
+User: *"a manifested nightmare -- when facing this denizen we need to use as many battlerages
+that slow their attacks down as possible."*
+
+Some denizens hit hard enough that a battlerage spent on **its** balance is worth more than
+the same rage spent on our damage. `ataxiaBasher.controlMobs` is the list of them (seeded
+with `manifested nightmare`, managed with `bash control add|rem <name>`), and
+`ataxiaBasher_controlFirst()` is the predicate the rotations consult.
+
+**It only REORDERS abilities each class already owns -- it never adds one.** The affliction
+model already names the family: `ataxiaBasher_BR_AFFS` calls it `role = "safe"` (aeon, stun,
+weakness, amnesia, clumsy).
+
+| class | what control-first promotes |
+|---|---|
+| Blademaster | Daze (Stun 4s) **and** Nerveslash (Weakness, mob deals 66% damage) ahead of damage |
+| Magi | Dilation -> Aeon -- literally "the mob attacks slower" |
+| Depthswalker | Chrono Curse -> Aeon |
+| Golden Dragon | Deaden (Aeon), Psidaze (Amnesia) |
+| Runewarden | Bulwark -- see below |
+| Psion, Monk | nothing; neither owns an attack-slowing battlerage |
+
+**Runewarden -- worth being straight about, since it is the current class.** It has *no*
+battlerage that slows a denizen: Etch **consumes** aeon/stun rather than applying it, and
+onslaught and collide are pure damage. Bulwark (negate 25% of all damage for 15s) is the
+nearest equivalent, so it is flagged too -- which keeps it from being displaced by the
+Rage-Fuelled "spend the dearest first" rule that would otherwise pick onslaught (36r).
+
+### `slows`, not `control` -- and the test that caught it
+
+The first cut reused the existing `control` key. That key already means something else in
+`dwBattlerage` and `goldenDragonBattlerage`: **"bank rage until this is affordable"**. And
+v4.7.145 deliberately *removed* banking from Chrono Curse after measuring aeon at ~5.6s
+against a 35s cooldown -- ~16% uptime, where holding rage lost more damage than the
+mitigation was worth.
+
+So overloading the key silently resurrected a behaviour that had been measured and rejected.
+The existing Depthswalker test failed immediately, which is exactly what it was written for.
+The flag is now `slows`, and Golden Dragon's two abilities legitimately carry both -- they
+bank *and* they slow.
+
+### Composition with Rage-Fuelled
+
+The free-charge rule sorts DESCENDING BY COST so the charge lands on the dearest ability.
+Control-first is layered on top rather than replacing it: slowing abilities float to the
+front, and the dearest-first ordering still governs within each group. So with a charge
+banked against a nightmare, Depthswalker takes Chrono Curse (24) instead of Shadow Lash (36)
+-- and that is the case the ordering tests pin, because at plain full rage curse would have
+fired anyway and the test would have proved nothing.
+
+### Seeded once, so removal sticks
+
+`deepMerge` copies a saved table INTO the live one and can never delete a key, so a plain
+default list would resurrect `manifested nightmare` on every load no matter how often it was
+removed. It is seeded once behind `ataxiaBasher.controlMobsSeeded` instead.
+
+Files: `basher/001_Bashing_Functions.lua`, `basher/002_Class_Bashing.lua`,
+`002_Check_For_Any_Missing_Variables.lua`, new alias `lists/014_Control_Mobs.lua`, tests
+`test_rage_fuelled.lua`, `test_basher_depthswalker.lua`. Suite 827 -> **839**.
+
+---
+
 ## 2026-08-02 - The shield is down but the raze is already queued (v4.7.197)
 
 User report: *"The magical shield surrounding a ghostly deckhand fades away."* -- *"we tend

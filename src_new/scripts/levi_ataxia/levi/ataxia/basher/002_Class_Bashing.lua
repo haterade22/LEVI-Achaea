@@ -172,22 +172,44 @@ end
 -- Culling reap needs no help here: it is checked ahead of these loops and is already the
 -- joint-most-expensive thing most rotations own.
 local function brPickOrder(tbl)
-  if not (ataxiaBasher_brFree and ataxiaBasher_brFree()) then return tbl end
-  local ranked = {}
-  for i, ab in ipairs(tbl) do ranked[i] = { ab = ab, i = i } end
-  table.sort(ranked, function(a, b)
-    local ra, rb = tonumber(a.ab.rage) or 0, tonumber(b.ab.rage) or 0
-    if ra ~= rb then return ra > rb end
-    return a.i < b.i
-  end)
-  local out = {}
-  for i, e in ipairs(ranked) do out[i] = e.ab end
+  local base = tbl
+  if ataxiaBasher_brFree and ataxiaBasher_brFree() then
+    local ranked = {}
+    for i, ab in ipairs(tbl) do ranked[i] = { ab = ab, i = i } end
+    table.sort(ranked, function(a, b)
+      local ra, rb = tonumber(a.ab.rage) or 0, tonumber(b.ab.rage) or 0
+      if ra ~= rb then return ra > rb end
+      return a.i < b.i
+    end)
+    base = {}
+    for i, e in ipairs(ranked) do base[i] = e.ab end
+  end
+
+  -- CONTROL-FIRST DENIZENS (v4.7.198). Against a mob on `ataxiaBasher.controlMobs` the
+  -- threat is its own attacks, so float every `slows` ability to the front -- the ones that
+  -- spend ITS balance rather than its health.
+  --
+  -- `slows`, NOT `control`: in dwBattlerage and goldenDragonBattlerage `control` already
+  -- means "BANK rage until this is affordable", and v4.7.145 removed that from chrono curse
+  -- after measuring aeon at ~5.6s against a 35s cooldown (~16% uptime -- banking lost more
+  -- damage than the mitigation was worth). Overloading the key would have silently restored
+  -- it; the existing Depthswalker test caught exactly that.
+  --
+  -- Layered ON TOP of the free-charge sort rather than replacing it, and stable within each
+  -- group, so the two compose: with a Rage-Fuelled charge banked we still take the DEAREST
+  -- control ability, and only then fall through to the dearest damage one.
+  if not (ataxiaBasher_controlFirst and ataxiaBasher_controlFirst()) then return base end
+  local out, rest = {}, {}
+  for _, ab in ipairs(base) do
+    if ab.slows then out[#out + 1] = ab else rest[#rest + 1] = ab end
+  end
+  for _, ab in ipairs(rest) do out[#out + 1] = ab end
   return out
 end
 
 local GDRAGON_BR = {
-  { key = "deaden",    cmd = "deaden",    rage = 24, cd = 35, control = true },
-  { key = "psidaze",   cmd = "psidaze",   rage = 28, cd = 41, control = true },
+  { key = "deaden",    cmd = "deaden",    rage = 24, cd = 35, control = true, slows = true },
+  { key = "psidaze",   cmd = "psidaze",   rage = 28, cd = 41, control = true, slows = true },
   { key = "psiblast",  cmd = "psiblast",  rage = 36, cd = 23 },
   { key = "overwhelm", cmd = "overwhelm", rage = 14, cd = 16 },
 }
@@ -549,7 +571,9 @@ local DW_BR = {
   -- against curse's 35s cooldown -- about 16% uptime. Holding 24 rage back and skipping
   -- the cheap filler to guarantee that window loses more damage than the mitigation
   -- saves, so curse fires when affordable and otherwise yields to Lash/Drain.
-  { key = "curse",   cmd = "chrono curse",   rage = 24, cd = 35, skipIfAff = "aeon" },
+  -- `control`: chrono curse applies AEON -- the mob acts once per lengthy balance. The
+  -- archetypal attack-slower, so it leads the rotation against a control-first denizen.
+  { key = "curse",   cmd = "chrono curse",   rage = 24, cd = 35, skipIfAff = "aeon", slows = true },
   { key = "boinad",  cmd = "intone boinad",  rage = 32, cd = 38, optIn = true, word = true, multi = true, skipIfAff = "charm" },
   { key = "lash",    cmd = "shadow lash",    rage = 36, cd = 23 },
   { key = "drain",   cmd = "shadow drain",   rage = 14, cd = 16 },
@@ -1751,7 +1775,13 @@ end
 --   Onslaught 36r / 23s -- big damage.
 --   Collide   14r / 16s -- filler.
 local RW_BR = {
-  { key = "bulwark",   cmd = "bulwark",       rage = 28, cd = 45, noTarget = true },
+  -- `control` is a slight stretch here and deliberately so: Runewarden has NO battlerage
+  -- that slows a DENIZEN (etch CONSUMES aeon/stun rather than applying it, onslaught and
+  -- collide are pure damage). Bulwark is the nearest equivalent -- negate 25% of ALL
+  -- damage for 15s -- and against a control-first mob that mitigation must not be
+  -- displaced by the Rage-Fuelled "spend the dearest first" rule, which would otherwise
+  -- pick onslaught (36r) over it.
+  { key = "bulwark",   cmd = "bulwark",       rage = 28, cd = 45, noTarget = true, slows = true },
   { key = "etch",      cmd = "etch rune at",  rage = 25, cd = 23, needsAff = { "aeon", "stun" } },
   { key = "onslaught", cmd = "onslaught",     rage = 36, cd = 23 },
   { key = "collide",   cmd = "collide",       rage = 14, cd = 16 },

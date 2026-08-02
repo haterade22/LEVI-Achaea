@@ -247,6 +247,19 @@ function ataxiaCheckForMissing()
 		ataxiaEcho("If you're not a Sylvan then ignore this.")
 	end
 
+	-- Control-first denizens (v4.7.198): mobs whose own attacks are the threat, so the
+	-- battlerage rotations spend on slowing them (aeon/stun/weakness) before damage. Seeded
+	-- ONCE and remembered, so removing the seed sticks -- `deepMerge` copies a saved table
+	-- INTO the live one and can never delete a key, meaning a plain default list would come
+	-- back every load no matter how many times it was removed.
+	ataxiaBasher.controlMobs = ataxiaBasher.controlMobs or {}
+	if not ataxiaBasher.controlMobsSeeded then
+		ataxiaBasher.controlMobsSeeded = true
+		if not table.contains(ataxiaBasher.controlMobs, "manifested nightmare") then
+			table.insert(ataxiaBasher.controlMobs, "manifested nightmare")
+		end
+	end
+
 	-- Initialise user config (weapons, mount, artefacts, earrings)
 	if ataxia_initUserConfig then
 		ataxia_initUserConfig()

@@ -274,6 +274,64 @@ describe("ataxiaBasher_shieldDropped -- pull back the stale raze", function()
   end)
 end)
 
+-- CONTROL-FIRST DENIZENS (v4.7.198). User: "a manifested nightmare -- when facing this
+-- denizen we need to use as many battlerages that slow their attacks down as possible."
+-- Against a listed mob, the battlerages that spend ITS balance outrank the ones that spend
+-- its health. This only REORDERS abilities each class already owns.
+describe("ataxiaBasher_controlFirst -- which denizens get the slow treatment", function()
+  local function arm(name)
+    reset()
+    ataxiaBasher.controlMobs = { "manifested nightmare" }
+    target, secondTarget = 7, name
+  end
+
+  it("matches the seeded denizen by substring, as the game names it", function()
+    arm("a manifested nightmare")
+    expect(ataxiaBasher_controlFirst()).toBeTrue()
+  end)
+
+  it("is case-insensitive", function()
+    arm("A Manifested Nightmare")
+    expect(ataxiaBasher_controlFirst()).toBeTrue()
+  end)
+
+  it("leaves every other denizen on the normal damage-first rotation", function()
+    arm("a ghostly deckhand")
+    expect(ataxiaBasher_controlFirst()).toBeFalse()
+  end)
+
+  it("is inert in PvP -- a player target is never control-first", function()
+    arm("a manifested nightmare")
+    target = "someplayer"
+    expect(ataxiaBasher_controlFirst()).toBeFalse()
+  end)
+
+  it("tolerates a missing or empty mob name", function()
+    arm(nil)
+    expect(ataxiaBasher_controlFirst()).toBeFalse()
+    arm("")
+    expect(ataxiaBasher_controlFirst()).toBeFalse()
+  end)
+
+  it("is off entirely when the list is empty", function()
+    arm("a manifested nightmare")
+    ataxiaBasher.controlMobs = {}
+    expect(ataxiaBasher_controlFirst()).toBeFalse()
+  end)
+
+  it("add/remove round-trips, and removal actually sticks", function()
+    reset()
+    ataxiaBasher.controlMobs = {}
+    target, secondTarget = 7, "a howling revenant"
+    ataxiaBasher_addControlMob("howling revenant")
+    expect(ataxiaBasher_controlFirst()).toBeTrue()
+    ataxiaBasher_addControlMob("howling revenant") -- idempotent, no duplicate
+    expect(#ataxiaBasher.controlMobs).toBe(1)
+    ataxiaBasher_removeControlMob("howling revenant")
+    expect(ataxiaBasher_controlFirst()).toBeFalse()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 mnemRageFuelled = false
 getEpoch = _epoch

@@ -359,6 +359,64 @@ describe("keeper and Boinad never share the word balance in one chain", function
   end)
 end)
 
+-- CONTROL-FIRST ORDERING (v4.7.198). Against a denizen on ataxiaBasher.controlMobs, the
+-- abilities flagged `slows` float to the front of the pick order. Chrono Curse applies AEON
+-- -- the mob acts once per lengthy balance -- so it is Depthswalker's contribution.
+--
+-- `slows`, NOT `control`: in this rotation `control` already means "BANK rage until
+-- affordable", which v4.7.145 measured as a LOSS for curse (aeon ~5.6s against a 35s
+-- cooldown). Overloading the key silently restored that banking, and the existing curse test
+-- caught it -- hence the separate flag.
+describe("control-first denizens put the AEON ability ahead of damage", function()
+  local realControlFirst
+  local function arm(on)
+    reset()
+    ataxia.vitals.rage = 100 -- everything affordable, so ORDER is the only variable
+    realControlFirst = ataxiaBasher_controlFirst
+    ataxiaBasher_controlFirst = function() return on end
+  end
+  local function disarm() ataxiaBasher_controlFirst = realControlFirst end
+
+  -- Curse sits second in DW_BR, so at plain full rage it fires anyway; the ordering only
+  -- becomes observable where something else reorders the table. That something is the
+  -- Rage-Fuelled free charge, which sorts DESCENDING BY COST to spend the charge on the
+  -- dearest ability -- putting Shadow Lash (36) ahead of Curse (24). Control-first has to
+  -- compose with that, not fight it: float the slowing ability back to the front while
+  -- keeping the dearest-first rule among the rest.
+  it("with a free charge banked, cost-first normally wins and takes Shadow Lash", function()
+    arm(false)
+    ataxiaTemp.brFreeCharge = true
+    expect(has(ataxiaBasher_dwBattlerage(";"), "shadow lash")).toBeTrue()
+    disarm()
+  end)
+
+  it("control-first overrides that and takes Chrono Curse (AEON) instead", function()
+    arm(true)
+    ataxiaTemp.brFreeCharge = true
+    expect(has(ataxiaBasher_dwBattlerage(";"), "chrono curse 7")).toBeTrue()
+    disarm()
+  end)
+
+  it("and takes Curse at plain full rage too", function()
+    arm(true)
+    expect(has(ataxiaBasher_dwBattlerage(";"), "chrono curse 7")).toBeTrue()
+    disarm()
+  end)
+
+  it("still respects the aeon skip -- no point re-applying what is already up", function()
+    arm(true); denizenAffs.aeon = true
+    expect(has(ataxiaBasher_dwBattlerage(";"), "chrono curse")).toBeFalse()
+    disarm()
+  end)
+
+  it("does NOT re-enable rage banking (the v4.7.145 measurement stands)", function()
+    arm(true); ataxia.vitals.rage = 20 -- curse (24) unaffordable
+    -- Banking would return "" and waste the round holding rage for a ~5.6s aeon window.
+    expect(has(ataxiaBasher_dwBattlerage(";"), "shadow drain")).toBeTrue()
+    disarm()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 dwFlashforward = false
 getEpoch = _epoch

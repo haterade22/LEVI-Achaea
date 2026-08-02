@@ -147,6 +147,40 @@ function ataxiaBasher_attack()
   end
 end
 
+-- CONTROL-FIRST DENIZENS (v4.7.198, user-directed: "a manifested nightmare -- when facing
+-- this denizen we need to use as many battlerages that slow their attacks down as possible").
+--
+-- Some denizens hit hard enough or fast enough that a battlerage spent on ITS balance is
+-- worth more than the same rage spent on our damage. The rotations already know which of
+-- their abilities do that -- `ataxiaBasher_BR_AFFS` calls the family `role = "safe"`
+-- (aeon, stun, weakness, amnesia, clumsy) -- so this list is only the trigger for
+-- REORDERING what already exists, never a new ability.
+--
+-- Matched by case-insensitive SUBSTRING against the mob's descriptive name, the same rule
+-- `bash mine` uses -- so "manifested nightmare" covers "a manifested nightmare". That cuts
+-- both ways (see `bash notmine`), so keep entries specific: a bare noun would sweep in half
+-- the bestiary.
+-- Seeded ONCE in 002_Check_For_Any_Missing_Variables (guarded by `controlMobsSeeded`),
+-- not defaulted here: `deepMerge` cannot express "this list shrank", so a default list
+-- would resurrect an entry the user had deliberately removed on the very next load.
+ataxiaBasher.controlMobs = ataxiaBasher.controlMobs or {}
+
+-- Is the denizen we are fighting one of them?
+--
+-- Reads `secondTarget` (the descriptive name) rather than `target` (the numeric id), and
+-- requires the numeric id anyway so the whole layer is inert in PvP -- the same numId guard
+-- the denizen-state layer uses.
+function ataxiaBasher_controlFirst()
+  if type(target) ~= "number" then return false end
+  local nm = secondTarget
+  if type(nm) ~= "string" or nm == "" then return false end
+  nm = nm:lower()
+  for _, key in ipairs(ataxiaBasher.controlMobs or {}) do
+    if type(key) == "string" and key ~= "" and nm:find(key:lower(), 1, true) then return true end
+  end
+  return false
+end
+
 -- A denizen's shield just came down -- our raze landed, something else razed it, or it
 -- simply expired ("The magical shield surrounding <mob> fades away."). Trigger 335 owns
 -- every one of those lines and clears `ataxiaBasher.shielded`; this is the other half.
@@ -475,6 +509,37 @@ end
 
 -- Add a real denizen that a pet keyword would otherwise shadow. Auto-learn re-adds it
 -- to the area target list on the next sighting, so no un-purge is needed here.
+-- `bash control add/rem <name>` -- see ataxiaBasher_controlFirst.
+function ataxiaBasher_addControlMob(name)
+  name = tostring(name or ""):lower():gsub("^%s+", ""):gsub("%s+$", "")
+  if name == "" then return false end
+  ataxiaBasher.controlMobs = ataxiaBasher.controlMobs or {}
+  if table.contains(ataxiaBasher.controlMobs, name) then
+    ataxiaEcho("'" .. name .. "' already gets control-first battlerage.")
+    return false
+  end
+  table.insert(ataxiaBasher.controlMobs, name)
+  ataxiaEcho("'" .. name .. "' -- battlerage will go on SLOWING it (aeon/stun/weakness) "
+    .. "before damage.")
+  ataxia_saveSettings(false)
+  return true
+end
+
+function ataxiaBasher_removeControlMob(name)
+  name = tostring(name or ""):lower():gsub("^%s+", ""):gsub("%s+$", "")
+  ataxiaBasher.controlMobs = ataxiaBasher.controlMobs or {}
+  for i, nm in ipairs(ataxiaBasher.controlMobs) do
+    if nm == name then
+      table.remove(ataxiaBasher.controlMobs, i)
+      ataxiaEcho("'" .. name .. "' -- back to the normal damage-first rotation.")
+      ataxia_saveSettings(false)
+      return true
+    end
+  end
+  ataxiaEcho("'" .. name .. "' was not on the control-first list.")
+  return false
+end
+
 function ataxiaBasher_addNotOwnDenizen(name)
   name = tostring(name or ""):lower():gsub("^%s+", ""):gsub("%s+$", "")
   if name == "" then return false end
@@ -985,6 +1050,12 @@ function ataxiaBasher_blademasterBattlerage(sp)
 
   local function choose()
     local inMnem = ataxiaBasher.inMnemosyne == true
+    -- Control-first denizens (v4.7.198, user: "a manifested nightmare -- use as many
+    -- battlerages that slow their attacks down as possible"). This mob's own attacks ARE
+    -- the threat, so every battlerage that takes its balance away outranks every battlerage
+    -- that deals damage. Strictly stronger than the `inMnem` rule, which promotes only the
+    -- single best hit-preventer; see ataxiaBasher_controlFirst.
+    local ctrl = (ataxiaBasher_controlFirst and ataxiaBasher_controlFirst()) or false
 
     -- 1. Culling reap -- AoE; clearing the room is itself the best mitigation. (Owned here;
     -- Blademaster is excluded from the shared culling check.)
@@ -997,7 +1068,17 @@ function ataxiaBasher_blademasterBattlerage(sp)
     -- 2. In Mnemosyne (no-flee, dangerous), HIT-PREVENTION beats damage: Daze -> Stun (mob does
     -- nothing 4s). Blademaster's only hit-prevention affliction (Amnesia/Aeon/Clumsy belong to
     -- other classes). Uses the shared `special` cooldown (tracked by trigger 332).
-    if inMnem and br.special and not battleRage_Timers.special and ataxiaBasher_rageAfford(rage, 26) then return br.special..sp end
+    if (inMnem or ctrl) and br.special and not battleRage_Timers.special and ataxiaBasher_rageAfford(rage, 26) then return br.special..sp end
+
+    -- 2b. Control-first only: Nerveslash -> Weakness (mob deals 66% damage for 7s) ALSO beats
+    -- damage here. Deliberately not folded into the `inMnem` rule above: that ordering was
+    -- tuned in-game (Daze already fires at its cooldown ceiling, and starving the cheaper
+    -- abilities to feed it lost damage for no mitigation), so it is left exactly as measured.
+    if ctrl and br.specialafflict and ataxiaBasher_rageAfford(rage, 22)
+       and getEpoch() >= (ataxiaTemp.bmNerveslashReadyAt or 0) then
+      ataxiaTemp.bmNerveslashReadyAt = getEpoch() + 31
+      return br.specialafflict..sp
+    end
 
     -- 3. Damage battlerages: Headstrike (bonus damage on a reckless/feared target) then Spinslash.
     -- Timestamp cooldowns (reload-safe -- a stale timestamp just expires; a stuck timer id would
@@ -1013,7 +1094,7 @@ function ataxiaBasher_blademasterBattlerage(sp)
     -- and Nerveslash -> Weakness (mob deals 66% damage for 7s). In Mnemosyne, Daze is checked at
     -- tier 2 and fires near its cooldown ceiling on its own -- no need to starve the cheaper
     -- abilities to feed it (verified in-game: Daze fires ~every 33s regardless).
-    if not inMnem and br.special and not battleRage_Timers.special and ataxiaBasher_rageAfford(rage, 26) then return br.special..sp end
+    if not (inMnem or ctrl) and br.special and not battleRage_Timers.special and ataxiaBasher_rageAfford(rage, 26) then return br.special..sp end
     if br.specialafflict and ataxiaBasher_rageAfford(rage, 22) and getEpoch() >= (ataxiaTemp.bmNerveslashReadyAt or 0) then
       ataxiaTemp.bmNerveslashReadyAt = getEpoch() + 31
       return br.specialafflict..sp -- Nerveslash (Weakness)
@@ -1120,6 +1201,12 @@ function ataxiaBasher_magiBattlerage(sp)
 
   local function choose()
     local inMnem = ataxiaBasher.inMnemosyne == true
+    -- Control-first denizens (v4.7.198, user: "a manifested nightmare -- use as many
+    -- battlerages that slow their attacks down as possible"). This mob's own attacks ARE
+    -- the threat, so every battlerage that takes its balance away outranks every battlerage
+    -- that deals damage. Strictly stronger than the `inMnem` rule, which promotes only the
+    -- single best hit-preventer; see ataxiaBasher_controlFirst.
+    local ctrl = (ataxiaBasher_controlFirst and ataxiaBasher_controlFirst()) or false
 
     -- 1. Culling reap (owned here; Magi is excluded from the shared culling check).
     if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown
@@ -1130,7 +1217,7 @@ function ataxiaBasher_magiBattlerage(sp)
 
     -- 2. Mnemosyne mitigation: Dilation -> Aeon (mob attacks slower). Gate on the aff (no
     -- fire-line cooldown for special) + a short in-flight bridge until the Aeon line lands.
-    if inMnem and br.special and ataxiaBasher_rageAfford(rage, 35) and not has("aeon")
+    if (inMnem or ctrl) and br.special and ataxiaBasher_rageAfford(rage, 35) and not has("aeon")
        and getEpoch() >= (ataxiaTemp.magiDilationReadyAt or 0) then
       ataxiaTemp.magiDilationReadyAt = getEpoch() + 35 -- Dilation cd (AB); aff-gate (015) also skips if aeon up
       return br.special..sp
@@ -1156,7 +1243,7 @@ function ataxiaBasher_magiBattlerage(sp)
     if br.large and not battleRage_Timers.large and ataxiaBasher_rageAfford(rage, 36) then return br.large..sp end
 
     -- 6. Dilation surplus outside Mnemosyne (spend + Aeon).
-    if not inMnem and br.special and ataxiaBasher_rageAfford(rage, 35) and not has("aeon")
+    if not (inMnem or ctrl) and br.special and ataxiaBasher_rageAfford(rage, 35) and not has("aeon")
        and getEpoch() >= (ataxiaTemp.magiDilationReadyAt or 0) then
       ataxiaTemp.magiDilationReadyAt = getEpoch() + 35 -- Dilation cd (AB); aff-gate (015) also skips if aeon up
       return br.special..sp
