@@ -338,8 +338,23 @@ function ataxiaBasher_bardBashing()
 
     -- Attack: flick (psychic) by default; punctuate for psychic-resistant denizens
     -- (manual 'bashpunctuate' toggle). Compose/tempo are handled at bash start + timer.
+    --
+    -- v4.7.187: a Mnemosyne ripple can suppress a whole damage type --
+    --     Blank Mind:  All psychic damage you deal is reduced by 33%.
+    -- and FLICK is psychic while PUNCTUATE is not, so the branch that already existed for
+    -- psychic-resistant denizens is exactly the right response to the affix too. This is the
+    -- Bard twin of the Blademaster infuse picker: same query
+    -- (ataxia.mnemosyne.damageNulled), same idea -- most affixes are things to survive, a
+    -- damage-type suppression is a thing to route around.
+    --
+    -- Placed in the FIRST branch on purpose, so it also overrides the Warmarch flick below:
+    -- that boon's value is +100% PSYCHIC on the paean refrain, which is precisely what a
+    -- psychic-nulling ripple is taxing. The manual toggle stays authoritative by sitting
+    -- alongside it -- a user who asked for punctuate gets punctuate regardless.
+    local M = ataxia and ataxia.mnemosyne
+    local psychicNulled = (M and M.damageNulled and M.damageNulled("psychic")) and true or false
     local atk
-    if ataxia.bardStuff and ataxia.bardStuff.bashPunctuate then
+    if (ataxia.bardStuff and ataxia.bardStuff.bashPunctuate) or psychicNulled then
        atk = "blade punctuate "..target.." nomos"
     elseif bardWarmarch then
        atk = "blade flick "..target.." paean"  -- Warmarch boon: paean refrain now hits denizens (+100% psychic)

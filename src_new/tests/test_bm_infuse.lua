@@ -13,8 +13,15 @@ target = 7
 ataxia = { settings = { separator = ";" }, vitals = { rage = 0, class = 10 }, defences = {} }
 ataxiaBasher = { shielded = false, rageraze = false, battlerage = {} }
 ataxiaTemp = {}
-gmcp = { Room = { Info = { area = "", num = 5 } }, Char = { Status = { class = "Blademaster" } } }
+gmcp = { Room = { Info = { area = "", num = 5 } },
+         Char = { Status = { class = "Blademaster", level = "80 " } } }
 function ataxiaEcho() end
+-- The Bard path runs the shared battlerage assembler, which reads a pile of login-time
+-- globals we do not care about here. Stub it, exactly as test_basher_runewarden.lua does.
+-- Declared AFTER the dofile below would be too late for load order, so it is re-asserted
+-- there: an earlier test file dofile-ing 001_Bashing_Functions.lua replaces this stub with
+-- the real function, and files share one Lua state.
+function ataxiaBasher_assembleBattlerage() return "" end
 
 -- Minimal mnemosyne surface: the picker asks by damage TYPE, never by affix name.
 ataxia.mnemosyne = {
@@ -26,6 +33,9 @@ ataxia.mnemosyne = {
 
 local ok = pcall(dofile, "src_new/scripts/levi_ataxia/levi/ataxia/basher/002_Class_Bashing.lua")
 if not ok then error("Failed to load class-bashing file") end
+-- Re-assert after the load (see above): whichever test file ran first may have pulled in
+-- the real assembler, and we want the stub for the Bard command-shape assertions.
+function ataxiaBasher_assembleBattlerage() return "" end
 
 local function nullify(...)
   ataxiaTemp.mnemNulled = {}
@@ -114,6 +124,57 @@ describe("ataxiaBasher_bmInfuse -- stepping around a suppressed damage type", fu
   end)
 end)
 
+
+-- ---------------------------------------------------------------------------
+-- The Bard twin: FLICK is psychic, PUNCTUATE is not, so a psychic-nulling
+-- ripple should flip the same branch the manual toggle already used.
+-- ---------------------------------------------------------------------------
+describe("Bard flick vs punctuate under a psychic-nulling affix (v4.7.187)", function()
+  local function bardAtk()
+    gmcp.Char.Status.class = "Bard"
+    ataxia.bardStuff = ataxia.bardStuff or {}
+    return ataxiaBasher_bardBashing()
+  end
+  local function reset2()
+    ataxiaTemp = {}
+    ataxia.bardStuff = { bashPunctuate = false }
+    bardWarmarch = false
+    ataxiaBasher.shielded = false
+  end
+
+  it("flicks by default -- psychic is fine on a clean ripple", function()
+    reset2()
+    local cmd = bardAtk()
+    expect(cmd:find("blade flick", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("switches to PUNCTUATE when psychic damage is suppressed", function()
+    reset2(); nullify("psychic")
+    local cmd = bardAtk()
+    expect(cmd:find("blade punctuate", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("blade flick", 1, true)).toBe(nil)
+  end)
+
+  it("overrides the Warmarch flick, whose whole value is +100% PSYCHIC", function()
+    reset2(); bardWarmarch = true
+    expect(bardAtk():find("blade flick", 1, true) ~= nil).toBeTrue()
+    nullify("psychic")
+    expect(bardAtk():find("blade punctuate", 1, true) ~= nil).toBeTrue()
+    bardWarmarch = false
+  end)
+
+  it("ignores an affix suppressing some OTHER damage type", function()
+    reset2(); nullify("magic", "fire")
+    expect(bardAtk():find("blade flick", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("leaves the manual toggle authoritative", function()
+    reset2(); ataxia.bardStuff.bashPunctuate = true
+    expect(bardAtk():find("blade punctuate", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 target = nil
 ataxiaTemp = {}
+bardWarmarch = false

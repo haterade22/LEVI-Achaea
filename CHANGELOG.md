@@ -2,6 +2,48 @@
 
 ---
 
+## 2026-08-01 - Blank Mind, and the Bard twin of the infuse picker (v4.7.187)
+
+> Blank Mind:               All psychic damage you deal is reduced by 33%.
+
+**No parser change was needed** - v4.7.186 matches the effect *sentence* rather than the
+affix name, so a second member of the family was caught with zero code. That was the point
+of the design and it is nice to see it pay immediately.
+
+It also does **not** touch the Blademaster infuse pick, correctly: psychic is not one of the
+four infusable types (fire / magic / electricity / cold), so there is nothing to route
+around there.
+
+### What it did surface
+
+**Bard already branched on exactly this question.** `blade flick` is psychic; `blade
+punctuate` is not - and the basher already chose between them, on a manual `bashPunctuate`
+toggle meant for psychic-resistant denizens. A damage-suppression affix is the same question
+asked by the *environment* instead of by the *mob*, so it now drives the same branch through
+`ataxia.mnemosyne.damageNulled("psychic")`.
+
+Placed in the **first** branch deliberately, so it also overrides the Warmarch flick: that
+boon's entire value is **+100% psychic** on the paean refrain, which is precisely what a
+psychic-nulling ripple is taxing. The manual toggle sits alongside it, so anyone who asked
+for punctuate still gets punctuate.
+
+The generalisable bit, now in memory: **look for an existing damage-type branch before
+building a new one.** Bard needed no new mechanism at all - only a second reason to take a
+path it already had.
+
+### Still open
+
+The same screenshot carried `Mysterious: All denizens appear identical within their
+locations.` That one is **not** handled and I have not guessed at it - it plausibly affects
+name-based logic (own-denizen filtering, auto-learn, target-list matching), which is exactly
+the machinery that produced the slope-backed-hyena bug. Worth a look before it bites, but it
+needs observation rather than speculation.
+
+Files: `basher/002_Class_Bashing.lua`, `tests/test_bm_infuse.lua`, `memory/bard.md`,
+`CHANGELOG.md`. Suite **731/731**.
+
+---
+
 ## 2026-08-01 - Routing around damage-suppression affixes (v4.7.186)
 
 > Null Magic:              All magic damage you deal is reduced by 33%.
