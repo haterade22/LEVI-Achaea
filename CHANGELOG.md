@@ -2,6 +2,35 @@
 
 ---
 
+## 2026-08-02 - Gag the nomos refusal spam (v4.7.199)
+
+> The sundering note of the Nomos already keens forth from your blade.
+
+Added to the `GAG` trigger (pattern 51). **`type: 2`, not `type: 3`** -- the tail names the
+weapon, so an exact whole-line match would silently never fire, which is the trap that shipped
+two dead triggers earlier in this arc. Anchoring at the line head also keeps it from gagging
+somebody quoting the line over a channel, which a bare `type: 0` substring would.
+
+Safe to gag: nothing reads this line. The Nomos triggers that do matter are the shield-shatter
+and the whiffed-shatter (`335_Mob_Razed`, `composition/008`), and neither is this one.
+
+### Worth a look separately
+
+This is a REFUSAL line, and refusals are state data (AGENTS.md). It says the blade song is
+already sung -- so the Bard rotation is naming `nomos` on a blade that already has it, every
+swing. `ataxiaBasher_bardBashing` builds `blade flick <t> nomos` / `blade punctuate <t> nomos`
+(basher/002:411,415), which is the normal attack syntax rather than a separate re-application.
+
+What is not known, and what decides whether this matters: **when that line prints, does the
+flick still land?** If it does, gagging is the whole fix. If the refusal eats the attack, the
+basher is losing a swing every time and the rotation should stop naming the song once it is
+up. Gagged either way as asked -- the line is spam regardless -- but the answer is worth
+capturing, because the fix is very different in each case.
+
+Files: `006_GAG.lua`. Suite unchanged at **839** (a gag pattern has no extractable logic).
+
+---
+
 ## 2026-08-02 - Control-first denizens: spend battlerage on their balance, not their health (v4.7.198)
 
 User: *"a manifested nightmare -- when facing this denizen we need to use as many battlerages
