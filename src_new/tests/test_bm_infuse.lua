@@ -234,6 +234,31 @@ describe("Divine Thunder Cataclysm -- the EQ room nuke that rides the swing (v4.
   end)
 end)
 
+
+describe("the affix sentence pattern tolerates wording variation (v4.7.191)", function()
+  -- Mirrors trigger mnemosyne/053. Lua patterns cannot express the real PCRE regex, so this
+  -- asserts the DECISION the captured type drives, using the types the live rows yield.
+  it("STEEL SKIN suppresses physical -- and physical is not an infusable type", function()
+    reset(); nullify("physical")
+    -- None of fire/magic/electricity/cold is nulled, so the infuse pick is untouched.
+    expect(ataxiaBasher_bmInfuse()).toBe("fire")
+  end)
+
+  it("physical alongside an infusable type still moves the infuse", function()
+    reset(); nullify("physical", "fire")
+    expect(ataxiaBasher_bmInfuse()).toBe("lightning")
+  end)
+
+  it("records every member of the family independently", function()
+    reset(); nullify("magic", "psychic", "physical")
+    local M = ataxia.mnemosyne
+    expect(M.damageNulled("magic")).toBe(33)
+    expect(M.damageNulled("psychic")).toBe(33)
+    expect(M.damageNulled("physical")).toBe(33)
+    expect(M.damageNulled("fire")).toBe(nil)
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 target = nil
 ataxiaTemp = {}

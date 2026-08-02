@@ -2,6 +2,53 @@
 
 ---
 
+## 2026-08-01 - Steel Skin was being missed silently (v4.7.191)
+
+> Steel Skin:              All physical damage dealt is reduced by 33%.
+
+**The pattern did not match it.** Compare the three known members:
+
+| affix | text |
+|---|---|
+| Null Magic | All magic damage **you deal** is reduced by 33%. |
+| Blank Mind | All psychic damage **you deal** is reduced by 33%. |
+| Steel Skin | All physical damage **dealt** is reduced by 33%. |
+
+The first two both say "you deal", and v4.7.186 was written to that. Steel Skin says "dealt",
+so it was **missed silently** - no error, no echo, the affix simply invisible to the system.
+That is the exact failure mode the sentence-matching design was meant to prevent, reappearing
+one level down: matching the text instead of the affix name removed one brittleness, not all
+of them.
+
+The middle is now `(?: [a-z ]+?)?` - any lowercase filler between "damage" and "is reduced
+by" - so a third phrasing needs no third patch. The outer frame stays strict enough that
+unrelated rows still do not match; verified against `Tundral` and `Mysterious`.
+
+**Generalised lesson recorded:** in a sentence pattern, pin the frame and leave the variable
+part loose.
+
+**Residual risk, stated rather than hidden:** a wording with no damage type at all ("All
+damage you deal is reduced by...") would still be missed, because the frame requires a word
+before "damage". If a global damage-suppression affix exists it needs its own handling.
+
+### What physical suppression actually costs
+
+Nothing routes around this one, and it is worth being straight about why:
+
+- **Runewarden** - `combination <t> slice smash` is physical cutting plus physical blunt,
+  with no alternative damage type available. Steel Skin is a flat tax.
+- **Blademaster** - `ataxiaBasher_bmInfuse` is unaffected and correctly so: physical is not
+  one of the four infusable types (fire / magic / electricity / cold).
+- **Bard** - `blade flick` is psychic and is already the default, so the common case is
+  fine. Whether `punctuate` is specifically *physical* is **not confirmed** - the code only
+  documents it as the non-psychic option - so the inverse (prefer flick under Steel Skin) is
+  deliberately **not** wired on an assumption.
+
+Files: `triggers/.../mnemosyne/053_Damage_Nulled.lua`, `tests/test_bm_infuse.lua`,
+`memory/mnemosyne.md`. Suite **748/748**.
+
+---
+
 ## 2026-08-01 - Divine Thunder Cataclysm: thunderstorm as a crowd rider (v4.7.190)
 
 > Your Shindo thunderstorm ability now deals electric damage to all denizens in your location.
