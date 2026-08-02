@@ -2,6 +2,57 @@
 
 ---
 
+## 2026-08-02 - Last Word: hold the sweep at 90% before the next room (v4.7.196)
+
+New Mnemosyne affix, captured live from the Ongoing-effects block:
+
+> **Last Word:**  Denizens explode on death!
+
+User rule: with this affix up, be at **at least 90% health before moving on to a new room**.
+
+### Why this is pacing, not combat
+
+The explosion is not something we can dodge, cure, or out-gear -- so the only lever is *when
+we walk*. And the timing is unusually hostile: the damage lands at the exact moment the room
+goes quiet, which is the exact moment the sweep decides the room is clear and steps out. So
+the next room's fight would routinely open on a pool the last corpse had just bitten into.
+
+That is the same shape as Haemophiliac (v4.7.119), so it reuses the same post-clear hold in
+`_exploreTick` -- `M._lastWordHold()`, 1.5s re-checks, an echo when it engages, and the same
+90% threshold constant.
+
+**It does not reuse the bleed clause.** Haemophiliac also waits on `ataxia.vitals.bleed`
+because its damage is a bleed SSC has to clot down; an explosion is instantaneous, so there
+is nothing to clot and nothing to wait on but regeneration. A test pins that difference
+explicitly -- at 95% HP with 900 bleed, the haemophiliac hold holds and this one does not.
+
+Standard telemetry-independent affix shape: status-row trigger (`mnemosyne/056`, `type: 1`
+because the row is column-padded and an exact-whole-line match would silently never fire),
+`inMnemosyne` gate, transition guard, reset on run start, cleared on the confirmed run end.
+The trailing `!` is deliberately outside the pattern -- match the frame, not the punctuation.
+
+Either affix holding is sufficient; Haemophiliac is checked first only so its echo wins when
+both are up.
+
+### Captured in the same screenshot, NOT implemented
+
+Two more affixes were visible and are recorded so the wording is not lost, but neither was
+specified and neither is guessed at:
+
+- **Necromantic:** *Denizens may revive as mindless thralls.*
+- **Iceblood:** *Taking damage causes your blood to freeze.*
+
+Necromantic in particular looks like it may matter to the sweep -- a room that "clears" and
+then repopulates from its own corpses is exactly the state `_roomHasDenizens` is trusted for
+-- but what it actually does to the room, and whether the revived thrall is a fresh denizen
+id, has not been observed. Say the word and either can be wired.
+
+Files: `mnemosyne/004_Parsers.lua`, `mnemosyne/008_Explorer.lua`, new trigger
+`mnemosyne/056_Last_Word.lua`, `mnemosyne/001_Run_Start.lua`, test `test_mnemosyne.lua`.
+Suite 814 -> **820**.
+
+---
+
 ## 2026-08-02 - Midnight Snow's Icy Heart: two damage types, one shin slot (v4.7.195)
 
 New Mnemosyne boon, captured live: *"Your Shindo blizzard ability now deals cold damage to

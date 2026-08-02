@@ -64,6 +64,7 @@ mnemFalconersTactics = false  -- boons reset each run
 mnemHomebound = false  -- boons reset each run
 mnemHammerAndNail = false  -- boons reset each run
 mnemHaemophiliac = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
+mnemLastWord = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
 mnemDeluge = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
 mnemRageFuelled = false -- boons reset each run (re-latches from the BOONS row / claim)
 mnemThunderclap = false -- boons reset each run (re-latches from the BOONS row / claim)

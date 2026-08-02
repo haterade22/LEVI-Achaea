@@ -212,6 +212,7 @@ function M.onRunEnd()
     send("fury off", false)
   end
   mnemHaemophiliac = false -- affixes gone on a confirmed run-end (pacing back to normal)
+  mnemLastWord = false -- affixes gone on a confirmed run-end (pacing back to normal)
   mnemDeluge = false -- affixes gone on a confirmed run-end (flight available again)
   ataxiaTemp.mnemAblazeAt = nil   -- per-room burn state cannot outlive the run
   if ataxiaTemp then
@@ -312,6 +313,26 @@ function M.onHaemophiliacSeen()
   mnemHaemophiliac = true
   if not M._quiet() then
     M.echo("<red>Haemophiliac<reset> active -- kills bleed heavily; wading slower (moves hold until HP recovers)")
+  end
+end
+
+-- Last Word affix ("Denizens explode on death!"): the damage arrives at the exact moment
+-- the room goes quiet, which is precisely when the sweep wants to walk on. That makes it the
+-- same PACING problem as Haemophiliac and it reuses the same post-clear hold -- move only at
+-- >= 90% HP (user spec, 2026-08-02), so the next room's fight never starts on a pool the
+-- last room's corpse already took a bite out of.
+--
+-- Note the difference from Haemophiliac despite the shared threshold: haemophiliac damage is
+-- a BLEED that SSC clots down, so that hold also waits on `ataxia.vitals.bleed`. An explosion
+-- is instantaneous -- there is nothing to clot, only HP to regain. Same telemetry-independent
+-- shape as the others: status-row trigger, inMnemosyne gate, transition guard; reset on run
+-- start and cleared on the confirmed run end.
+function M.onLastWordSeen()
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  if mnemLastWord then return end
+  mnemLastWord = true
+  if not M._quiet() then
+    M.echo("<red>Last Word<reset> active -- denizens explode on death; holding each room until 90% HP")
   end
 end
 

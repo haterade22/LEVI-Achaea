@@ -780,6 +780,79 @@ describe("Haemophiliac wade-slower pacing", function()
   end)
 end)
 
+-- ─── Last Word affix pacing ──────────────────────────────────────────────────
+--
+-- "Denizens explode on death!" (captured live 2026-08-02). The damage lands at the exact
+-- moment the room goes quiet -- the moment the sweep would otherwise walk on -- so this is a
+-- PACING affix like Haemophiliac, and shares its 90% post-clear gate (user spec). It does NOT
+-- share the bleed clause: an explosion is instantaneous, so there is nothing for SSC to clot
+-- down and nothing to wait on but regeneration.
+
+describe("Last Word explode-on-death pacing", function()
+  it("onLastWordSeen arms the flag only inside the tower", function()
+    reset(true)
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = false
+    mnemLastWord = false
+    M.onLastWordSeen()
+    expect(mnemLastWord).toBeFalse() -- a `mnem affixes` read outside a run must not arm it
+    ataxiaBasher.inMnemosyne = true
+    M.onLastWordSeen()
+    expect(mnemLastWord).toBeTrue()
+    M.onLastWordSeen() -- transition-guarded: a status re-read is a no-op
+    expect(mnemLastWord).toBeTrue()
+    ataxiaBasher.inMnemosyne = false
+  end)
+
+  it("_lastWordHold holds the sweep below 90% HP", function()
+    mnemLastWord = false
+    ataxia.vitals = { hpp = 40 }
+    expect(M._lastWordHold()).toBeFalse() -- no affix: never hold
+    mnemLastWord = true
+    expect(M._lastWordHold()).toBeTrue()
+    ataxia.vitals = { hpp = 89 }
+    expect(M._lastWordHold()).toBeTrue()  -- just under the line: still hold
+    ataxia.vitals = { hpp = 90 }
+    expect(M._lastWordHold()).toBeFalse() -- "at least 90 percent" (user spec) -- 90 goes
+    ataxia.vitals = { hpp = 100 }
+    expect(M._lastWordHold()).toBeFalse()
+    mnemLastWord = false
+  end)
+
+  it("ignores the bleed -- an explosion is instantaneous, there is nothing to clot", function()
+    mnemLastWord = true
+    ataxia.vitals = { hpp = 95, bleed = 900 }
+    expect(M._lastWordHold()).toBeFalse() -- unlike _haemoHold, which would still hold here
+    mnemLastWord = false
+  end)
+
+  it("never wedges on a missing HP reading", function()
+    mnemLastWord = true
+    ataxia.vitals = {} -- blackout / no charstats yet
+    expect(M._lastWordHold()).toBeFalse() -- defaults to 100, so the sweep keeps moving
+    mnemLastWord = false
+  end)
+
+  it("is independent of Haemophiliac -- either one holding is enough", function()
+    mnemLastWord, mnemHaemophiliac = true, false
+    ataxia.vitals = { hpp = 50, bleed = 0 }
+    expect(M._lastWordHold()).toBeTrue()
+    expect(M._haemoHold()).toBeFalse()
+    mnemLastWord, mnemHaemophiliac = false, true
+    expect(M._lastWordHold()).toBeFalse()
+    expect(M._haemoHold()).toBeTrue()
+    mnemHaemophiliac = false
+  end)
+
+  it("clears on the confirmed run end", function()
+    reset(true)
+    mnemLastWord = true
+    M.onRunEnd()
+    expect(mnemLastWord).toBeFalse()
+  end)
+end)
+
+
 describe("M.reaperOnWade()", function()
   it("resets the tally on a genuinely fresh wade", function()
     reset(true)

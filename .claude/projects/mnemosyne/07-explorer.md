@@ -506,3 +506,22 @@ better trade.
 Consequence: `"You are already wearing this item."` prints once per ripple in the common
 case. Left **ungagged** — it is a real refusal line, and silencing it would also bury the
 pre-existing login-path double-send found in the v4.7.167 audit.
+
+
+## Post-clear pacing holds (v4.7.196)
+
+Two affixes make the moment a room goes quiet the *worst* moment to walk, so `_exploreTick`
+carries two post-clear holds. Both re-check every 1.5s, both echo once on engaging, and both
+gate on 90% HP (`HAEMO_MOVE_HP`). Either one holding is sufficient; Haemophiliac is evaluated
+first only so its echo wins when both are up.
+
+| affix | predicate | waits on |
+|---|---|---|
+| Haemophiliac | `M._haemoHold()` | bleed clotted (`< 50`) **AND** HP >= 90 |
+| Last Word | `M._lastWordHold()` | HP >= 90 only |
+
+The difference is the damage's shape, and it matters: haemophiliac damage is a **bleed** that
+SSC clots down (`curing clotat 30`), so standing still is doing work. A Last Word explosion is
+**instantaneous** -- there is nothing to clot, only HP to regain, so waiting on a bleed reading
+would just idle the sweep. At 95% HP with 900 bleed the haemophiliac hold holds and the Last
+Word hold does not.

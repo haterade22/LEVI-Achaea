@@ -458,6 +458,22 @@ end
 -- prompt (gmcp charstats "Bleed: N"). Hold while bleeding OR while HP is still down.
 -- Pure (globals only); unit-tested. The flag is set by trigger 029 via
 -- onHaemophiliacSeen (004) and cleared on run start / confirmed run end.
+-- Last Word affix pacing predicate ("Denizens explode on death!", user spec 2026-08-02):
+-- move to the next room only at >= 90% HP. The explosion lands at the exact moment the room
+-- goes quiet -- i.e. the moment the sweep wants to walk on -- so without this the next
+-- fight starts on a pool the last corpse already bit into.
+--
+-- Shares HAEMO_MOVE_HP with the Haemophiliac hold because the user set both to 90, but does
+-- NOT share the bleed clause: an explosion is instantaneous, so there is nothing for SSC to
+-- clot down and nothing to wait on but regeneration. Pure (globals only); unit-tested. The
+-- flag is set by trigger 056 via onLastWordSeen (004), reset on run start and cleared on the
+-- confirmed run end.
+function M._lastWordHold()
+  if not mnemLastWord then return false end
+  local hp = tonumber(ataxia and ataxia.vitals and ataxia.vitals.hpp) or 100
+  return hp < HAEMO_MOVE_HP
+end
+
 function M._haemoHold()
   if not mnemHaemophiliac then return false end
   local v = ataxia and ataxia.vitals
@@ -509,6 +525,23 @@ function M._exploreTick()
     return
   end
   M.explore._haemoWait = nil
+
+  -- Last Word affix pacing (user-directed, 2026-08-02): "Denizens explode on death!" -- the
+  -- damage lands exactly as the room goes quiet, which is exactly when we would otherwise
+  -- walk. Hold until 90% HP so the next room's fight does not open on a bitten-into pool.
+  -- Checked AFTER the haemophiliac hold purely so its echo wins when both affixes are up;
+  -- either one holding is sufficient, and both use the same 1.5s re-check.
+  if M._lastWordHold() then
+    if not M.explore._lastWordWait then
+      M.explore._lastWordWait = true
+      local hp = tonumber(ataxia and ataxia.vitals and ataxia.vitals.hpp) or 0
+      M._exploreEcho("<indian_red>Last Word<reset> -- denizens explode on death; healing to 90% before moving on"
+        .. " (at " .. hp .. "%).")
+    end
+    M._scheduleTick(1.5)
+    return
+  end
+  M.explore._lastWordWait = nil
 
   local dir = M._nextExploreStep()
   if dir then -- still sweeping new ground
