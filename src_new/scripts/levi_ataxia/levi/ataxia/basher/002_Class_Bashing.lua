@@ -386,15 +386,70 @@ function ataxiaBasher_blademasterBashing()
 
 	if ataxiaBasher.shielded then
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-			command = command..raze..sp.."infuse fire "..sp.." "..slash
+			command = command..raze..sp.."infuse "..ataxiaBasher_bmInfuse().." "..sp.." "..slash
 		else
 			command = command.."raze "..target..sp..brage
 		end
 	else
-		command = command..brage..sp.."infuse fire "..sp.." "..slash
+		command = command..brage..sp.."infuse "..ataxiaBasher_bmInfuse().." "..sp.." "..slash
 	end
 
 	return command
+end
+
+-- BLADEMASTER INFUSE PICKER (v4.7.186). Shindo INFUSE sets the damage type our slashes
+-- deal, and the tower can suppress a damage type for a whole ripple:
+--     Null Magic:   All magic damage you deal is reduced by 33%.
+-- Losing a third of our damage for the whole wave is a lot to pay for a hardcoded element,
+-- and unlike most affixes this one we can simply step around -- there are four infuses and
+-- the affix only nulls one type.
+--
+--   infuse fire      -> fire damage
+--   infuse void      -> MAGIC damage
+--   infuse lightning -> ELECTRICITY damage
+--   infuse ice       -> COLD damage
+--
+-- Note the two that do not match their own name: VOID deals magic and ICE deals cold, so a
+-- "Null Magic" ripple must move us off VOID, not off some element called magic. Mapping
+-- element -> damage type here rather than assuming they are the same word is the whole
+-- point of the function.
+--
+-- Synonyms are accepted per type because only the "magic" wording has been seen live; the
+-- others are inferred from the damage types Achaea uses, and a miss would silently leave us
+-- infusing the suppressed element.
+local BM_INFUSE = {
+  fire      = { "fire" },
+  lightning = { "electricity", "electric", "lightning" },
+  ice       = { "cold", "ice", "frost" },
+  void      = { "magic", "void" },
+}
+
+-- Preference order. `fire` stays first so an unaffected ripple behaves exactly as before
+-- (this replaced a hardcoded `infuse fire`); the rest are fallbacks, tunable via
+-- ataxiaBasher.bmInfusePrefs.
+local BM_INFUSE_ORDER = { "fire", "lightning", "ice", "void" }
+
+function ataxiaBasher_bmInfuse()
+  local M = ataxia and ataxia.mnemosyne
+  local nulled = M and M.damageNulled
+  local order = ataxiaBasher.bmInfusePrefs or BM_INFUSE_ORDER
+  local first
+  for _, element in ipairs(order) do
+    local types = BM_INFUSE[element]
+    if types then
+      first = first or element
+      local suppressed = false
+      if nulled then
+        for _, t in ipairs(types) do
+          if M.damageNulled(t) then suppressed = true; break end
+        end
+      end
+      if not suppressed then return element end
+    end
+  end
+  -- Every element suppressed (or a garbage prefs list): fall back to the first valid one
+  -- rather than returning nil, which would drop the infuse from the attack string entirely.
+  return first or "fire"
 end
 
 -- Depthswalker OWNS its battlerage (the Psion/Golden Dragon pattern). Unlike those two

@@ -67,6 +67,7 @@ mnemHaemophiliac = false  -- affixes reset each run (re-latches from the next WA
 mnemDeluge = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
 mnemRageFuelled = false -- boons reset each run (re-latches from the BOONS row / claim)
 mnemThunderclap = false -- boons reset each run (re-latches from the BOONS row / claim)
+if ataxiaTemp then ataxiaTemp.mnemNulled = nil end -- damage-suppression affixes re-latch per ripple
 if ataxiaTemp then ataxiaTemp.brFreeCharge = nil end
 
 -- The wade lifecycle is the AUTHORITY on being in the tower -- this line and the confirmed

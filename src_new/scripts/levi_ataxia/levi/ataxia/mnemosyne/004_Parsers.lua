@@ -202,6 +202,7 @@ function M.onRunEnd()
   mnemHammerAndNail = false -- boons gone on a confirmed run-end
   mnemRageFuelled = false   -- boons gone on a confirmed run-end
   mnemThunderclap = false   -- boons gone on a confirmed run-end
+  if ataxiaTemp then ataxiaTemp.mnemNulled = nil end -- affixes gone with the run
   ataxiaTemp.brFreeCharge = nil -- ...and any charge it had banked
   if ataxiaTemp and ataxiaTemp.infFuryOn then
     -- The boon is gone but FURY may still be running with its quadrupled endurance
@@ -364,6 +365,41 @@ function M.roomAblaze()
   return true
 end
 
+-- DAMAGE-TYPE SUPPRESSION AFFIXES (v4.7.186). The WADE STATUS "Ongoing effects:" block can
+-- carry rows like:
+--     Null Magic:              All magic damage you deal is reduced by 33%.
+-- and the affix NAME varies per damage type, but the effect TEXT always names the type
+-- itself. So this parses the sentence rather than the affix name -- one trigger covers every
+-- present and future member of the family without us having to learn their names.
+--
+-- Stored on ataxiaTemp (transient, never serialized -- `ataxia.mnemosyne` lives under the
+-- SAVED `ataxia` namespace, so a run-scoped fact must not go there or it would persist
+-- across sessions). Telemetry-independent, the Splinterbark/Deluge shape: a status-row
+-- trigger, inMnemosyne-gated, so the safety works with reporting off.
+--
+-- Cleared on RIPPLE CHANGE as well as run start/end: the effects block is re-read from each
+-- ripple's WADE STATUS, so re-latching per ripple is both correct and self-healing.
+function M.onDamageNulled(dtype, pct)
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  if type(dtype) ~= "string" or dtype == "" then return end
+  dtype = dtype:lower()
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.mnemNulled = ataxiaTemp.mnemNulled or {}
+  local was = ataxiaTemp.mnemNulled[dtype]
+  ataxiaTemp.mnemNulled[dtype] = tonumber(pct) or 33
+  if not was and not M._quiet() then
+    M.echo("<indian_red>" .. dtype:upper() .. " damage -" .. tostring(pct) ..
+      "%<reset> this ripple -- avoiding it where we can choose.")
+  end
+end
+
+-- Is this damage type suppressed right now? Class logic asks by TYPE, never by affix name.
+function M.damageNulled(dtype)
+  local t = ataxiaTemp and ataxiaTemp.mnemNulled
+  if not (t and type(dtype) == "string") then return nil end
+  return t[dtype:lower()]
+end
+
 -- Restore game tree curing iff Splinterbark had forced it off. Called from onRunEnd (run over ->
 -- untainted). No-op unless we turned it off, so it never spuriously re-enables curing.
 function M.restoreTreeCuring()
@@ -382,6 +418,9 @@ function M.onRipple(n)
   -- A tree reserve must never outlive its boss ripple (telemetry-independent).
   M.releaseTreeReserve()
   M.run.boss = nil -- re-learned from the new ripple's Objective line
+  -- Ongoing effects are re-read from each ripple's WADE STATUS, so damage-suppression
+  -- affixes re-latch per ripple rather than being assumed to persist.
+  if ataxiaTemp then ataxiaTemp.mnemNulled = nil end
   -- Forget per-room / in-flight card state; the per-card intervals deliberately
   -- survive (charges are global and regenerate hourly, not per ripple).
   if ataxiaBasher_mnemLdeckReset then ataxiaBasher_mnemLdeckReset() end

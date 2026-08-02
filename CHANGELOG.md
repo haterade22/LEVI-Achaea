@@ -2,6 +2,67 @@
 
 ---
 
+## 2026-08-01 - Routing around damage-suppression affixes (v4.7.186)
+
+> Null Magic:              All magic damage you deal is reduced by 33%.
+
+A whole ripple at -33% on one damage type. **Most affixes are things to survive; this one is
+a thing to route around** - Blademaster's Shindo INFUSE picks which damage type our slashes
+deal, and the affix only nulls one of the four.
+
+### Parsed by the sentence, not the affix name
+
+"Null Magic" is one member of a family, and the other members' names are unknown. But the
+effect *text* always names the damage type itself, so the trigger matches that:
+
+```
+All (\w+) damage you deal is reduced by (\d+)%\.
+```
+
+One pattern covers every present and future sibling, with no name table to go stale the
+moment the game adds one. Unanchored, because the row is `<Affix Name>:<padding>All ...`.
+
+### The mapping is the non-obvious part
+
+| infuse | damage type |
+|---|---|
+| `fire` | fire |
+| `void` | **magic** |
+| `lightning` | **electricity** |
+| `ice` | **cold** |
+
+**Two of the four do not match their own name.** A Null Magic ripple has to move us off
+**VOID** - not off some element called "magic", which does not exist. That is precisely why
+`ataxiaBasher_bmInfuse` maps element to damage type rather than comparing words.
+
+Preference `fire -> lightning -> ice -> void` (`ataxiaBasher.bmInfusePrefs`), fire first so a
+clean ripple behaves exactly as the hardcoded `infuse fire` this replaced. It never returns
+nil - an empty infuse would break the attack string - and it survives the mnemosyne module
+being absent entirely, for use outside the tower.
+
+Synonyms are accepted per type (electricity/electric/lightning, cold/ice/frost, magic/void)
+because only the "magic" wording has been seen live, and a miss would **silently** leave us
+infusing the suppressed element - the worst kind of failure here, since nothing on screen
+would say so.
+
+### Storage and lifetime
+
+`ataxiaTemp.mnemNulled`, deliberately **not** `ataxia.mnemosyne`: that namespace is
+serialized, and a run-scoped fact there would persist across sessions. Cleared on **ripple
+change** as well as run start/end, since the effects block is re-read from each ripple's
+WADE STATUS - so per-ripple re-latching is both correct and self-healing. Telemetry-
+independent status-row trigger, the Splinterbark/Deluge shape.
+
+`ataxia.mnemosyne.damageNulled(<type>)` is the query, so any class can use it - the infuse
+picker is just the first consumer.
+
+Files: `mnemosyne/004_Parsers.lua`, `mnemosyne/001_Run_Start.lua`,
+`triggers/.../mnemosyne/053_Damage_Nulled.lua` (NEW), `basher/002_Class_Bashing.lua`,
+`tests/test_bm_infuse.lua` (NEW), `CLAUDE.md`, `memory/mnemosyne.md`,
+`memory/blademaster.md`. Suite **726/726**.
+
+---
+
 ## 2026-07-31 - Bisect highlight: wrong colour family (v4.7.185)
 
 The bisect highlight shipped in v4.7.181 and its pattern does match the captured line - but
