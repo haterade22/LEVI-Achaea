@@ -147,6 +147,54 @@ function ataxiaBasher_attack()
   end
 end
 
+-- A denizen's shield just came down -- our raze landed, something else razed it, or it
+-- simply expired ("The magical shield surrounding <mob> fades away."). Trigger 335 owns
+-- every one of those lines and clears `ataxiaBasher.shielded`; this is the other half.
+--
+-- CLEARING THE FLAG IS NOT ENOUGH (user report, 2026-08-02: "we tend to waste razing a lot
+-- when their shield is down" -- "the problem is an already queued raze"). The flag only
+-- decides what the NEXT rebuild looks like. The raze we already sent is sitting in the
+-- SERVER-SIDE queue waiting on balance, and it will execute into a shield that is no longer
+-- there: a wasted swing, and for the rage-raze classes 17+ rage with it.
+--
+-- The basher's rebuild is prompt-driven, so between the shield-down line and the next prompt
+-- that stale raze has a whole balance window in which to fire. The only thing that can pull
+-- it back is another `queue addclearfull`, which REPLACES the queue outright -- so we send a
+-- fresh round immediately instead of waiting for the prompt.
+--
+-- Routed through ataxiaBasher_attack rather than assembleAttack directly, because that is
+-- where the safety gates live: swarm hold, danger level (flee/wait/shield) and the
+-- player-flee check. A shield dropping in the middle of a swarm pull or a flee must NOT
+-- yank us back into attacking. Note that `danger == "wait"` deliberately leaves the stale
+-- raze queued -- we are not acting at all in that state, so there is nothing better to put
+-- in its place.
+--
+-- Throttled to one re-send per second: trigger 335 carries ~25 patterns and a single shield
+-- can produce more than one of them in a round (our raze landing AND the fade line).
+function ataxiaBasher_shieldDropped()
+  ataxiaTemp = ataxiaTemp or {}
+
+  -- 336 arms an expiry timer to un-stick `shielded` if we never see the shield go down --
+  -- and we just did. Left armed it is worse than redundant: 336 OVERWRITES `removeShield`
+  -- on the next shield WITHOUT killing the old one, so this timer would outlive its shield
+  -- and clear the flag in the middle of a LATER one.
+  if removeShield then
+    pcall(killTimer, removeShield)
+    removeShield = nil
+  end
+
+  if type(target) ~= "number" then return end          -- PvE only; a player's shield is not ours
+  if not (ataxiaBasher and ataxiaBasher.enabled) then return end
+  if ataxiaBasher.paused then return end
+  if ataxiaTemp.swarmHold then return end              -- a pull chain is queued; do not wipe it
+
+  local nowT = (getEpoch and getEpoch()) or 0
+  if ataxiaTemp.shieldReattackAt == nowT then return end
+  ataxiaTemp.shieldReattackAt = nowT
+
+  if ataxiaBasher_attack then ataxiaBasher_attack() end
+end
+
 -- ============================================================================
 -- Damage tracking for extreme damage rate detection
 -- ============================================================================

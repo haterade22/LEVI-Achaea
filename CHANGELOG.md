@@ -2,6 +2,67 @@
 
 ---
 
+## 2026-08-02 - The shield is down but the raze is already queued (v4.7.197)
+
+User report: *"The magical shield surrounding a ghostly deckhand fades away."* -- *"we tend
+to waste razing a lot when their shield is down"*, and on the diagnosis: **"the problem is an
+already queued raze"**. Exactly right, and it is worth being precise about why, because the
+obvious suspect was innocent.
+
+### The flag was never the problem
+
+That fade line is already matched -- `335_Mob_Razed.lua:137` has owned it for a long time,
+and its body sets `ataxiaBasher.shielded = false` correctly. So shield *detection* was fine.
+
+What the flag controls is what the **next** rebuild looks like. It has no authority over the
+raze we have **already sent**, which is sitting in the SERVER-SIDE queue waiting on balance.
+When balance returns, that raze executes into a shield that is no longer there: a wasted
+swing, and for the rage-raze classes 17+ rage with it.
+
+And the window is not small. The basher's rebuild is **prompt-driven**, so between the
+shield-down line and the next prompt the stale raze has a whole balance round in which to
+fire. The only operation that can pull it back is another `queue addclearfull`, which
+replaces the queue outright -- so we now send a fresh round the moment the shield drops
+instead of waiting for the prompt.
+
+### `ataxiaBasher_shieldDropped()`
+
+New in `basher/001`, called from trigger 335 so all ~25 shield-down lines benefit, not just
+the fade one -- our raze landing has exactly the same stale-queue problem.
+
+Routed through `ataxiaBasher_attack` rather than `assembleAttack` directly, because that is
+where the safety gates live: **swarm hold** (a pull chain is queued as one entry and any
+`addclearfull` would wipe it -- the reason `swarmHold` exists at all), **danger level**, and
+the player-flee check. A shield dropping mid-pull or mid-flee must not yank us back into
+attacking. `danger == "wait"` deliberately leaves the stale raze queued: we are not acting in
+that state, so there is nothing better to put in its place.
+
+PvE only (numeric target), off while the basher is disabled or paused, and throttled to one
+re-send per second -- a single shield can produce more than one of 335's patterns in a round
+(our raze landing **and** the fade line).
+
+### A stale timer found on the way
+
+336 arms `removeShield` to un-stick `shielded` if the shield-down line is never seen. It is
+now killed here, and that is not just tidiness: **336 overwrites `removeShield` on the next
+shield without killing the old one**, so a timer left armed outlives its own shield and can
+clear the flag in the middle of a *later* one -- making us swing into a live shield, the
+mirror of the bug being fixed. Cleared even when the re-attack is gated off, since the two
+hazards are independent; a test pins that.
+
+### Noted, not changed
+
+335's body clears `ataxiaBasher.shielded` unconditionally, so a *different* mob's shield
+fading in the same room clears the flag for OUR target too. Pre-existing, and not safely
+fixable in this pass: several of the trigger's patterns capture no name at all (the `type: 2`
+and `type: 3` ones), so `matches[2]` is nil for them and a naive ownership check would break
+those paths. Wants its own change with the capture groups audited per-pattern.
+
+Files: `basher/001_Bashing_Functions.lua`, `335_Mob_Razed.lua`, test `test_rage_fuelled.lua`.
+Suite 820 -> **827**.
+
+---
+
 ## 2026-08-02 - Last Word: hold the sweep at 90% before the next room (v4.7.196)
 
 New Mnemosyne affix, captured live from the Ongoing-effects block:

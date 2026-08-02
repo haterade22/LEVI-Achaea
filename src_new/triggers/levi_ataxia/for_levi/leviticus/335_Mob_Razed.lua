@@ -143,6 +143,10 @@ patterns:
 ataxiaBasher.shielded = false
 ataxiaTemp.ignoreCrits = true
 
+-- The shield is down: re-assemble the round NOW so the raze we already QUEUED does not
+-- execute into a shield that is no longer there. See ataxiaBasher_shieldDropped (basher/001).
+if ataxiaBasher_shieldDropped then ataxiaBasher_shieldDropped() end
+
 if type(target) == "number" and ataxiaBasher.enabled then
 	if not bashRazeSub then
 		bashConsoleEcho("attack", "Razed that dirty bitch!")		

@@ -187,6 +187,93 @@ describe("the free charge reaches the SHARED culling branch too", function()
   end)
 end)
 
+-- SHIELD DOWN -> RE-ASSEMBLE (v4.7.197). User report: "we tend to waste razing a lot when
+-- their shield is down... the problem is an already queued raze". Clearing
+-- ataxiaBasher.shielded only decides what the NEXT rebuild looks like; the raze we already
+-- sent is in the SERVER-SIDE queue waiting on balance and will execute into a shield that is
+-- gone. Only another `queue addclearfull` can replace it, so trigger 335 now re-sends the
+-- round immediately rather than waiting for the prompt-driven rebuild.
+describe("ataxiaBasher_shieldDropped -- pull back the stale raze", function()
+  local calls, realAttack
+  local function arm()
+    reset()
+    calls = 0
+    realAttack = ataxiaBasher_attack
+    ataxiaBasher_attack = function() calls = calls + 1 end
+    ataxiaBasher.enabled, ataxiaBasher.paused = true, nil
+    target = 7
+    removeShield = nil
+  end
+  local function disarm() ataxiaBasher_attack = realAttack end
+
+  it("re-sends the round when a denizen's shield comes down", function()
+    arm()
+    ataxiaBasher_shieldDropped()
+    expect(calls).toBe(1)
+    disarm()
+  end)
+
+  it("throttles to one re-send per second (335 carries ~25 patterns)", function()
+    arm()
+    ataxiaBasher_shieldDropped()
+    ataxiaBasher_shieldDropped() -- our raze line AND the fade line in the same round
+    ataxiaBasher_shieldDropped()
+    expect(calls).toBe(1)
+    clock = clock + 1             -- next second: allowed again
+    ataxiaBasher_shieldDropped()
+    expect(calls).toBe(2)
+    disarm()
+  end)
+
+  it("is inert in PvP -- a player's shield is not ours to re-attack through", function()
+    arm(); target = "someplayer"
+    ataxiaBasher_shieldDropped()
+    expect(calls).toBe(0)
+    disarm()
+  end)
+
+  it("is inert while the basher is off or paused", function()
+    arm(); ataxiaBasher.enabled = false
+    ataxiaBasher_shieldDropped()
+    expect(calls).toBe(0)
+    arm(); ataxiaBasher.paused = true
+    ataxiaBasher_shieldDropped()
+    expect(calls).toBe(0)
+    disarm()
+  end)
+
+  -- The swarm pull queues "<attack>;<backdir>" as ONE entry; any addclearfull wipes it
+  -- before balance. That is the whole reason ataxiaTemp.swarmHold exists.
+  it("respects the swarm hold -- never wipes a queued pull chain", function()
+    arm(); ataxiaTemp.swarmHold = true
+    ataxiaBasher_shieldDropped()
+    expect(calls).toBe(0)
+    disarm()
+  end)
+
+  it("kills 336's pending expiry timer so it cannot outlive this shield", function()
+    arm()
+    local killed
+    local realKill = killTimer
+    killTimer = function(id) killed = id end
+    removeShield = 4242
+    ataxiaBasher_shieldDropped()
+    expect(killed).toBe(4242)
+    expect(removeShield).toBe(nil)
+    killTimer = realKill
+    disarm()
+  end)
+
+  it("still clears that timer even when the re-attack is gated off", function()
+    arm(); ataxiaBasher.enabled = false
+    removeShield = 99
+    ataxiaBasher_shieldDropped()
+    expect(removeShield).toBe(nil) -- the stale-timer hazard is independent of attacking
+    expect(calls).toBe(0)
+    disarm()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 mnemRageFuelled = false
 getEpoch = _epoch

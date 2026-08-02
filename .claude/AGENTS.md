@@ -2,6 +2,16 @@
 
 ## Pitfalls learned 2026-07-31 / 2026-08-02
 
+- **Clearing the state does not retract the COMMAND.** `queue addclearfull` means the basher's
+  attack is already sitting server-side waiting on balance. Setting the flag that produced it
+  (`ataxiaBasher.shielded = false`) only changes the NEXT rebuild -- and the rebuild is
+  prompt-driven, so the stale command gets a full balance round to fire. A wasted raze into a
+  dead shield costs a swing and 17+ rage. Anywhere a conditional action is pre-queued (raze,
+  shield-swap, card draw), the condition changing mid-flight needs an explicit re-send. Send it
+  through `ataxiaBasher_attack`, never `assembleAttack` -- the gates (swarm hold, danger level,
+  player-flee) live in the former, and a swarm pull chain is one queue entry that any
+  `addclearfull` would wipe.
+
 - **One queued line is ONE queue entry.** `queue addclearfull stand;<a>;<b>` executes `<a>` and
   `<b>` back to back the instant it fires, so `<b>` gating on "do I have equilibrium / word
   balance / shin *right now*?" is reading a moment before `<a>` ran. Both pass, only the first
