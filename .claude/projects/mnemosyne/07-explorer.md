@@ -467,6 +467,20 @@ Pure logic (threshold, `_backDir`, the state machine, decorator, resets) is unit
 See also: [04-ripple-map.md](04-ripple-map.md) (the `MAP` graph API this reuses), [05-commands.md](05-commands.md) (`mnem` dispatch), [01-architecture.md](01-architecture.md) (run lifecycle / gating).
 
 
+## Re-latching boon flags (v4.7.188, guard corrected v4.7.192)
+
+`M._relatchBoons()` sends `BOONS` once per run so every owned boon flag re-latches from the
+list rows. It exists because the two normal latch signals -- the `BOON CLAIM` alias and a
+BOONS row -- both miss a boon that was already owned before its handling shipped.
+
+Called from `M.onRipple` **and** both explorer entry points. The onRipple call is what covers
+manual-mode users, who never touch `mnem explore` and would otherwise never re-latch.
+
+The once-per-run guard is on **`ataxiaTemp`**. It was originally on `ataxia.mnemosyne`, which
+is serialized -- so after a reload the guard came back `true` from disk while the bare-global
+boon flags came back `nil`, and the relatch silently no-opped on precisely the path it was
+built for.
+
 ## Wearing armour before a dive (v4.7.175)
 
 `M._wearArmour()` sends `WEAR ARMOUR`, and is called from **both** explorer entry points:

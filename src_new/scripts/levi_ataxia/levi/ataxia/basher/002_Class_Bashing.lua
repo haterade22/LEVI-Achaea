@@ -38,7 +38,7 @@ function ataxiaBasher_dragonBashing()
   -- 35-41s control stamp unsent.
   local function brage()
     if gmcp.Char.Status.class == "Golden Dragon" then
-      return ataxiaBasher_goldenDragonBattlerage(sp)
+      return ataxiaBasher_brCommit(ataxiaBasher_goldenDragonBattlerage(sp))
     end
     return ataxiaBasher_assembleBattlerage()
   end
@@ -433,6 +433,12 @@ function ataxiaBasher_blademasterBashing()
 	-- Divine Thunder Cataclysm: an EQUILIBRIUM room nuke, so it rides ahead of the balance
 	-- swing and costs us nothing off it. Self-gates on the boon, the crowd, shin and its
 	-- own cooldown, returning "" whenever any of those says no.
+	--
+	-- NOTE it shares the equilibrium slot with the Bladed Reflexes SHIN AUGMENT above (and
+	-- they compete for shin as well). On a round where both fire, the storm sits queued
+	-- behind the augment channel and can be wiped by the next addclearfull. That is
+	-- tolerable rather than guarded: bmThunderstormAt is stamped on send, so a wipe reads as
+	-- an eaten cast and self-heals inside the 4s window -- we lose one storm, not the loop.
 	local storm = ataxiaBasher_bmThunderstorm(sp)
 
 	if ataxiaBasher.shielded then
@@ -1490,7 +1496,7 @@ function ataxiaBasher_psionBashing()
 
   -- Battlerage only from here down -- every remaining branch sends it, so the pick's
   -- cooldown stamp can no longer burn unsent.
-  local brage = ataxiaBasher_psionBattlerage(sp)
+  local brage = ataxiaBasher_brCommit(ataxiaBasher_psionBattlerage(sp))
 
   -- Secondskin keeper: resistance to ALL damage types; it drops rarely, so spending
   -- one round's balance re-weaving it (3.00s bal -- it REPLACES the swing) is cheap
@@ -1711,7 +1717,7 @@ end
 -- sketch syntax for a BLADE rune was never captured, and inventing it would send garbage --
 -- so keeping it on the weapon is the user's setup. If it ever lapses, bisect is refused
 -- until re-sketched; capture that refusal line and this can back off on its own.
-function ataxiaBasher_rwBisect(sp)
+function ataxiaBasher_rwBisect()
 	if not mnemThunderclap then return nil end
 	if ataxiaBasher.shielded then return nil end -- break the shield first
 	if type(target) ~= "number" then return nil end
@@ -1763,7 +1769,9 @@ function ataxiaBasher_runewardenBashing()
 		-- Thunderclap: at a crowd the room-wide bisect replaces the single-target swing.
 		-- The falcon rake is folded back in because it is a FREE pet order, not part of the
 		-- balance swing -- dropping it with `bash` would quietly cost us a free hit.
-		local bisect = ataxiaBasher_rwBisect(sp)
+		-- No separator argument: bisect is placed at the TAIL of the command, so unlike its
+		-- sibling helpers it returns a bare verb. Anything appended after it must add its own.
+		local bisect = ataxiaBasher_rwBisect()
 		command = sowulu..brage..sp..(bisect and (falcon..bisect) or bash)
 	end
 

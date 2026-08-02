@@ -259,6 +259,32 @@ describe("the affix sentence pattern tolerates wording variation (v4.7.191)", fu
   end)
 end)
 
+
+describe("the four affixes seen live, by name (v4.7.192)", function()
+  -- Null Magic (magic) / Blank Mind (psychic) / Steel Skin (physical) / Iceproof (cold).
+  -- Only two of the four touch an infusable damage type, and that asymmetry is the point.
+  it("ICEPROOF moves the infuse off ICE -- the first affix that actually hits the picker", function()
+    reset(); nullify("cold")
+    expect(ataxiaBasher_bmInfuse()).toBe("fire")     -- fire still first and unaffected
+    reset(); nullify("fire", "cold")
+    expect(ataxiaBasher_bmInfuse()).toBe("lightning")
+    reset(); nullify("fire", "electricity", "cold")
+    expect(ataxiaBasher_bmInfuse()).toBe("void")     -- must not fall back to the nulled ice
+  end)
+
+  it("NULL MAGIC moves it off VOID, not off some element named magic", function()
+    reset(); nullify("fire", "electricity", "cold", "magic")
+    expect(ataxiaBasher_bmInfuse()).toBe("fire")     -- everything nulled: falls back
+    reset(); nullify("fire", "electricity", "magic")
+    expect(ataxiaBasher_bmInfuse()).toBe("ice")
+  end)
+
+  it("STEEL SKIN and BLANK MIND do not touch the infuse -- neither type is infusable", function()
+    reset(); nullify("physical", "psychic")
+    expect(ataxiaBasher_bmInfuse()).toBe("fire")
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 target = nil
 ataxiaTemp = {}

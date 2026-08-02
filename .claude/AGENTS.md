@@ -1,5 +1,39 @@
 # Agent Instructions for LEVI-Achaea Combat System
 
+## Pitfalls learned 2026-07-31 / 2026-08-01
+
+- **Mudlet `type: 3` is EXACT WHOLE LINE.** A type-3 pattern that is a FRAGMENT never fires,
+  silently. Two triggers shipped dead this way, one of them a boss safety inert for 60+
+  releases. Fragments are `type: 2` (line start) or `type: 0` (anywhere). Enum: 0 substring,
+  1 regex, 2 begin-of-line, 3 exact, 4 lua, 5 spacer, 6 colour, 7 prompt.
+- **When you make a READ global, audit the WRITE globally.** Rage-Fuelled put its check in one
+  predicate used by 37 call sites, but wired the spend only where an existing line happened to
+  be replaced -- seven rotations then read a charge they never cleared. **A migration that
+  works by replacing an existing line silently skips every site that never had that line.**
+- **Spend/consume logic belongs at a wrapped consumption point, not at each `return`.**
+  Multi-exit functions guarantee an eventual miss.
+- **Transient state goes on `ataxiaTemp`, never `ataxia`.** `ataxia` is serialized wholesale
+  and `deepMerge` lets a disk value overwrite unconditionally, so a run-scoped guard stored
+  there survives a reload while the non-persisted globals it guards do not -- defeating itself
+  on exactly the path it exists for.
+- **A passing test in the wrong `describe` is invisible.** It inflates the count, exercises the
+  right function, and proves nothing about the block it claims to cover. When a helper name
+  recurs across blocks in a file, anchor edits on something unique to the block.
+- **Appending to a test file means moving the teardown.** Several files end with shared-state
+  restoration; describes appended after it run with the teardown already applied.
+- **Unit-testing primitives in isolation proves nothing about composition.** `brFree`,
+  `rageAfford` and `brSent` each had passing tests while the callers leaked the charge.
+- **Check the resource type first for any new AoE.** Equilibrium / word-balance / pet-order /
+  free-queue abilities RIDE alongside the swing; balance ones REPLACE it. Two crowd abilities
+  shipped days apart are wired oppositely for exactly this reason.
+- **Look for an existing damage-type branch before building a new one.** A suppression affix is
+  the same question a mob-resistance toggle already asks.
+- **Match the effect TEXT, not the affix NAME -- but pin only the frame.** Affix names vary per
+  member; the sentence carries the datum. The sentence varies too ("damage you deal" vs
+  "damage dealt"), so leave the middle loose.
+- **Verify counts, never `grep -c` them.** Claimed 40 rageAfford sites (really 37) and 28 boon
+  flags (really 29 -- the naive grep returns 31 because two `mnem*` flags are affixes).
+
 ## Before Coding Offensive Systems
 
 **You MUST read these files first:**

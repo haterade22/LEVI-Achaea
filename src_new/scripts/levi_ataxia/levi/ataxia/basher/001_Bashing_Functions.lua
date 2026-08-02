@@ -766,6 +766,25 @@ end
 -- charge is spent when it is not costs us one missed free cast (self-corrects on the next
 -- kill), while believing it is still banked costs a rejected command. Both are mild; the
 -- former is quieter.
+-- Spend the Rage-Fuelled charge if a rotation actually produced a battlerage, and return
+-- the command unchanged so this can WRAP a call rather than be threaded through every exit.
+--
+-- That wrapping is the point. v4.7.179 made the READ side global -- `ataxiaBasher_rageAfford`
+-- short-circuits to true for all 37 call sites while a charge is banked -- but wired the
+-- SPEND side only where an `ataxiaTemp.brGlobalReadyAt` assignment already existed to be
+-- replaced. Seven rotations (standard, crowd-control, bard, monk, the assembleBattlerage
+-- fallback, golden dragon, psion) never had one, so they read the charge and never cleared
+-- it: one kill made every battlerage free FOR THE REST OF THE RUN, rage floor included.
+-- Found by review, v4.7.192.
+--
+-- Wrapping the CONSUMPTION point rather than each `return` is deliberate -- those rotations
+-- have up to six exit points apiece, and patching each is exactly how the spend got missed
+-- the first time.
+function ataxiaBasher_brCommit(cmd)
+  if cmd and cmd ~= "" and ataxiaTemp then ataxiaTemp.brFreeCharge = nil end
+  return cmd
+end
+
 function ataxiaBasher_brSent()
   ataxiaTemp = ataxiaTemp or {}
   ataxiaTemp.brGlobalReadyAt = (getEpoch and getEpoch() or 0) + 1
@@ -1202,5 +1221,7 @@ function ataxiaBasher_assembleBattlerage()
 			command = ataxiaBasher.battlerage[class].large..sp
 		end
 	end
-	return command
+	-- One wrapper covers every rotation this dispatcher reaches. Blademaster/Magi also spend
+	-- via brSent internally; clearing an already-clear flag is a no-op.
+	return ataxiaBasher_brCommit(command)
 end

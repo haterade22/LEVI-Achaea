@@ -2,6 +2,107 @@
 
 ---
 
+## 2026-08-01 - Deep review: a leaking free-battlerage charge, and a self-defeating guard (v4.7.192)
+
+Four-agent deep review of v4.7.165-190. Every finding below was independently re-verified
+before being acted on; one agent claim was checked and rejected.
+
+### CRITICAL - the Rage-Fuelled charge leaked for seven of eleven rotations
+
+v4.7.179 put the READ side in `ataxiaBasher_rageAfford` - **one predicate, 37 call sites,
+every class at once** - and I wrote that up as the elegant part. The SPEND side was wired
+only where an `ataxiaTemp.brGlobalReadyAt = ...` assignment already existed to be replaced:
+Blademaster, Magi, DW, RW.
+
+**Seven rotations never had that assignment** - `standardBattlerage`,
+`crowdControlBattlerage`, `bardBattlerage`, `monkBattlerage`, the `assembleBattlerage`
+fallback, `goldenDragonBattlerage`, `psionBattlerage` - so they read the charge and never
+cleared it. One kill as Psion, Bard, Monk, Golden Dragon (or any standard-pattern class) and
+`brFreeCharge` stayed `true` **for the rest of the run**: every battlerage free, every
+`rageAfford` true, the rage floor permanently bypassed. The boon's *"your **next** battlerage
+attack"* became *"every battlerage attack, forever"*.
+
+Fixed with `ataxiaBasher_brCommit(cmd)` - spends on a non-empty return, passes the command
+through - applied at the **consumption** points (the `assembleBattlerage` dispatcher covers
+five rotations at once, plus the two direct call sites). Wrapping rather than patching each
+`return` is deliberate: those functions have up to six exits apiece, which is exactly how the
+spend got missed the first time.
+
+**Why the tests did not catch it:** `test_rage_fuelled.lua` exercises `brFree`, `rageAfford`
+and `brSent` in isolation, and they were all correct. Nothing tested whether the *callers*
+used them.
+
+### HIGH - the boon re-latch guard was stored where it defeats itself
+
+`_boonsRelatched` (v4.7.188) lived on `ataxia.mnemosyne`. `ataxia` is serialized wholesale,
+and `deepMerge` lets a non-table disk value overwrite unconditionally - while the boon flags
+it exists to restore are bare globals that do **not** persist. So after a reload mid-run the
+flags came back `nil` and the guard came back `true`: the relatch no-opped and the boons
+stayed inert, on the one path where the function was most needed, silently. Moved to
+`ataxiaTemp`, with a test asserting it is not on the serialized namespace.
+
+Same class, LOW: `M.ablazeAt` moved to `ataxiaTemp` (its own comment already said it must not
+outlive the run; it self-healed via a 12s staleness check, hence LOW).
+
+### Also fixed
+
+- `ataxiaBasher_rwBisect` took an `sp` parameter it never used - misleading signature, since
+  a future edit appending after it would silently miss a separator. Removed.
+- Documented that `bmThunderstorm` shares the equilibrium slot with `SHIN AUGMENT`.
+
+### Verified clean
+
+Triggers: no critical or high. The two triggers that shipped dead this session are now
+correct; the two "clap of thunder" lines and the falcon's third-person/turned-on-us patterns
+were proven non-overlapping **in both directions**; every `matches[N]` index correct; every
+new trigger `name:` globally unique despite duplicated number prefixes; **771** `type: 3`
+patterns swept repo-wide with no new dead ones. Combat: resource-type discipline correct
+(bisect replaces, thunderstorm rides), no two balance-spenders in one line, every new ability
+self-guards on `shielded` **inside** the helper so none can burn a cooldown on a discarded
+round, all crowd gates read the same own-denizen-filtered count.
+
+### One agent claim rejected
+
+Agent 3 reported that the duplicate `You must wait a short time...` pattern shared by `329`
+and `345_Gold_Pack` was "silently created" by the new trigger. `git log` shows that pattern
+was added in **v4.7.64**. The duplicate is real and worth a cross-reference; the attribution
+was not.
+
+### Fourth live affix
+
+`Iceproof: All cold damage you deal is reduced by 33%.` - parses, and is the first of the
+four to actually move the infuse picker (`ice` deals cold). Named regression tests added for
+all four: Null Magic, Blank Mind, Steel Skin, Iceproof.
+
+### MEDIUM - the re-latch never reached manual-mode users
+
+`M._relatchBoons()` was called only from the two auto-explorer entry points, so a basher who
+never runs `mnem explore on` got no automatic re-latch at all. Now also called from
+`M.onRipple`, which fires in every mode; the once-per-run guard keeps it to a single send.
+
+### Counts corrected, again
+
+`rageAfford` call sites: **37** - matches what v4.7.180 corrected it to. Boon flags: **29**,
+not the 28 the docs claimed. A naive grep of the run-start reset block returns **31** because
+two of the `mnem*` flags there (Haemophiliac, Deluge) are AFFIXES, not boons. Third time this
+session a count has been asserted rather than counted; the rule is now in `AGENTS.md`.
+
+### Documentation caught up
+
+`.claude/classes/blademaster.md` had no mention of Divine Thunder Cataclysm despite the boon
+living in that class; `.claude/projects/basher/battlerage-pve.md` was missing `brPickOrder`
+and the leak; `.claude/projects/mnemosyne/07-explorer.md` was missing `_relatchBoons`;
+`CLAUDE.md` was missing all three of v4.7.188-190 and still dated 2026-07-27. `.claude/AGENTS.md`
+now carries the eleven cross-cutting pitfalls this two-day range produced - the type-3 trap,
+global-read/local-write, transient state on `ataxiaTemp`, the invisible wrong-describe test,
+resource-type-first for AoEs, frame-not-phrase pattern matching, and verify-don't-grep counts.
+
+Files: `basher/001`, `basher/002`, `mnemosyne/004_Parsers.lua`, `mnemosyne/008_Explorer.lua`,
+`triggers/.../mnemosyne/001_Run_Start.lua`, `tests/test_mnemosyne.lua`,
+`tests/test_bm_infuse.lua`, `memory/bug-patterns.md`. Suite **752/752**.
+
+---
+
 ## 2026-08-01 - Steel Skin was being missed silently (v4.7.191)
 
 > Steel Skin:              All physical damage dealt is reduced by 33%.

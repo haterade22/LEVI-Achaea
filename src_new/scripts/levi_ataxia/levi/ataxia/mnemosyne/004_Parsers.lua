@@ -213,7 +213,7 @@ function M.onRunEnd()
   end
   mnemHaemophiliac = false -- affixes gone on a confirmed run-end (pacing back to normal)
   mnemDeluge = false -- affixes gone on a confirmed run-end (flight available again)
-  M.ablazeAt = nil   -- per-room burn state cannot outlive the run
+  ataxiaTemp.mnemAblazeAt = nil   -- per-room burn state cannot outlive the run
   if ataxiaTemp then
     ataxiaTemp.reaperKills = nil -- the +1%/kill tally dies with the run
     ataxiaTemp.kaiUnleashedAt = nil -- the burst cooldown stamp dies with it
@@ -347,8 +347,9 @@ M.ABLAZE_STALE = 12 -- seconds without a burn tick -> assume we are clear of it
 
 function M.onAblazeBurn()
   if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
-  local first = not M.ablazeAt
-  M.ablazeAt = getEpoch and getEpoch() or 0
+  ataxiaTemp = ataxiaTemp or {}
+  local first = not ataxiaTemp.mnemAblazeAt
+  ataxiaTemp.mnemAblazeAt = getEpoch and getEpoch() or 0
   if first and not M._quiet() then
     M.echo("<indian_red>The ground is BURNING<reset> -- hover-healing is off until we leave.")
   end
@@ -357,10 +358,10 @@ end
 -- True while the room is actively burning us. Lazy expiry so leaving the room clears it
 -- without needing a "the fire goes out" line we have never captured.
 function M.roomAblaze()
-  if not M.ablazeAt then return false end
+  if not ataxiaTemp.mnemAblazeAt then return false end
   local nowT = getEpoch and getEpoch() or 0
-  if (nowT - M.ablazeAt) > (M.ABLAZE_STALE or 12) then
-    M.ablazeAt = nil
+  if (nowT - ataxiaTemp.mnemAblazeAt) > (M.ABLAZE_STALE or 12) then
+    ataxiaTemp.mnemAblazeAt = nil
     return false
   end
   return true
@@ -419,6 +420,11 @@ function M.onRipple(n)
   -- A tree reserve must never outlive its boss ripple (telemetry-independent).
   M.releaseTreeReserve()
   M.run.boss = nil -- re-learned from the new ripple's Objective line
+  -- Re-latch owned boon flags. Called from HERE as well as the explorer because onRipple
+  -- fires in every mode, whereas the explorer entry points only exist for `mnem explore`
+  -- users -- a manual-mode basher would otherwise never get the re-latch at all (review
+  -- finding, v4.7.192). The once-per-run guard on ataxiaTemp keeps it to a single send.
+  if M._relatchBoons then M._relatchBoons() end
   -- Ongoing effects are re-read from each ripple's WADE STATUS, so damage-suppression
   -- affixes re-latch per ripple rather than being assumed to persist.
   if ataxiaTemp then ataxiaTemp.mnemNulled = nil end

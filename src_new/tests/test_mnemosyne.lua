@@ -1425,12 +1425,18 @@ end)
 
 describe("boon flags re-latch once per run (v4.7.188)", function()
   local M = ataxia.mnemosyne
+  -- The guard lives on ataxiaTemp, NOT on ataxia.mnemosyne: `ataxia` is serialized, and a
+  -- guard restored true from disk after a reload would silently defeat the whole function
+  -- (the boon flags it restores are bare globals that do NOT persist). Review finding,
+  -- fixed v4.7.192 -- these tests reset the same field the code reads, so they would have
+  -- kept passing against the buggy version had they used a private helper instead.
   it("sends BOONS once, then never again until the run resets", function()
     if not (M and M._relatchBoons) then return end
     local seen = {}
     local realSend = send
     send = function(cmd) table.insert(seen, cmd) end
-    M._boonsRelatched = nil
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.mnemBoonsRelatched = nil
     M._relatchBoons()
     M._relatchBoons()
     M._relatchBoons()
@@ -1444,11 +1450,24 @@ describe("boon flags re-latch once per run (v4.7.188)", function()
     local n = 0
     local realSend = send
     send = function() n = n + 1 end
-    M._boonsRelatched = nil
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.mnemBoonsRelatched = nil
     M._relatchBoons()
-    M._boonsRelatched = nil      -- what 001_Run_Start does
+    ataxiaTemp.mnemBoonsRelatched = nil   -- what 001_Run_Start does
     M._relatchBoons()
     send = realSend
     expect(n).toBe(2)
+  end)
+
+  it("the guard is NOT on the serialized ataxia namespace", function()
+    if not (M and M._relatchBoons) then return end
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.mnemBoonsRelatched = nil
+    local realSend = send
+    send = function() end
+    M._relatchBoons()
+    send = realSend
+    expect(ataxiaTemp.mnemBoonsRelatched).toBeTrue()
+    expect(M._boonsRelatched).toBe(nil)   -- would survive a reload and defeat the relatch
   end)
 end)

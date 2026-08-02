@@ -310,6 +310,25 @@ off a player kill, and no new gating had to be written. Lifecycle is the standar
 `mnemRageFuelled` from trigger `mnemosyne/051` + the `BOON CLAIM` intercept, reset on run
 start, cleared on the confirmed run end along with any banked charge.
 
+### Rage-Fuelled picks the DEAREST ready ability (v4.7.189)
+
+Each rotation table is ordered by value-per-rage -- cheap reliable fillers sit near the top
+*because* they are affordable. A free cast makes that the wrong question, so `brPickOrder`
+re-sorts descending by cost while a charge is banked and returns the table untouched
+otherwise. Ties break on the table's own index rather than being left to `table.sort`, which
+is **not stable in Lua**: several rotations carry two abilities at the same cost, and an
+unstable sort would make the pick vary between identical rounds -- which the in-flight replay
+would then faithfully repeat.
+
+### The charge leaked for seven of eleven rotations (v4.7.192, found by review)
+
+The READ side (`rageAfford`) was global from day one; the SPEND side was wired only where an
+`ataxiaTemp.brGlobalReadyAt` assignment already existed to be replaced. Seven rotations never
+had one, so they read the charge and never cleared it -- one kill made every battlerage free
+for the rest of the run. Fixed with `ataxiaBasher_brCommit(cmd)` wrapping the CONSUMPTION
+points. **Rule: when you make a read global, audit the write globally -- and a migration that
+works by replacing an existing line silently skips every site that never had that line.**
+
 ### One consequence found while counting the call sites
 
 The 37 sites are 32 in `basher/001` (shared assembler + per-class handlers), 4 in

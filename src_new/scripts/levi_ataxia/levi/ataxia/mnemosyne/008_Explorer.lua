@@ -585,9 +585,18 @@ end
 -- trick and is wrong here: descriptions also appear on the OFFER screen, listing boons we
 -- were shown and did not take. That is the opposite of the affix parser, where the
 -- ongoing-effects block only ever lists what is actually active.
+-- The guard lives on ataxiaTemp, NOT on M (= ataxia.mnemosyne), and that is load-bearing.
+-- `ataxia` is serialized wholesale (`table.save(file_loc, sanitizeForSave(ataxia))`,
+-- 001_Save_Load_Settings:79) and deepMerge lets a non-table disk value overwrite
+-- unconditionally (:239). The boon flags this exists to restore are bare globals that do NOT
+-- persist -- so after a reload they come back nil while a guard stored on M would come back
+-- TRUE from disk, the relatch would no-op, and the boons would stay inert. That is precisely
+-- the bug this function exists to prevent, reappearing through the one path (reload
+-- mid-run) where it matters most, and failing silently. Found by review, v4.7.192.
 function M._relatchBoons()
-  if M._boonsRelatched then return end
-  M._boonsRelatched = true
+  ataxiaTemp = ataxiaTemp or {}
+  if ataxiaTemp.mnemBoonsRelatched then return end
+  ataxiaTemp.mnemBoonsRelatched = true
   send("boons", false)
 end
 

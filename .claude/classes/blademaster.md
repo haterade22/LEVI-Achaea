@@ -1,5 +1,35 @@
 # Blademaster
 
+## Divine Thunder Cataclysm (Mnemosyne boon) -- thunderstorm as a crowd rider
+```yaml
+# ataxiaBasher_bmThunderstorm, basher/002. Flag mnemDivineThunder (trigger mnemosyne/054).
+boon:     "Your Shindo thunderstorm ability now deals electric damage to all denizens in
+           your location."
+ability:  "SHIN THUNDERSTORM -- AB 314, Works on/against: Room, 4.00s of EQUILIBRIUM,
+           30 Shin energy. Already a room ability; the boon is what makes it hit DENIZENS."
+rides:    "EQUILIBRIUM, so it is prefixed ALONGSIDE the balance swing and costs no attack.
+           Contrast the Runewarden Thunderclap bisect (4s BALANCE), which REPLACES the
+           swing. Same crowd-AoE idea, wired oppositely because the resource differs --
+           check the resource type first for any new AoE."
+gate:     "3+ denizens (ataxiaBasher.thunderstormAt), higher than the 2+ used for the
+           balance-spending crowd swings, because the binding resource is SHIN not balance:
+           30 per cast from a pool infuse and SHIN AUGMENT also draw on
+           (ataxiaBasher.thunderstormReserve keeps a buffer)."
+cooldown: "Stamped on send, RE-STAMPED from the confirmed strike line (trigger
+           highlighting/036 -> ataxiaBasher_bmThunderstormConfirm)."
+fire_lines: |
+  cast:   "Wind swells about your form as you build a tremendous galvanic charge..."
+  strike: "A clap of thunder presages the unleashed storm, forks of brilliant lightning..."
+  Highlighted cast=dark_sea_green (intent), strike=chartreuse bold (damage landing).
+  NEAR-MISS: the Thunderclap bisect line also says "a clap of thunder" -- that one is
+  "...heralding your strike." anchored on "Lightning follows the path of". Non-overlapping.
+caveat:   "Shares the equilibrium slot with the Bladed Reflexes SHIN AUGMENT; on a round
+           where both fire the storm queues behind it and can be wiped, self-healing inside
+           the 4s window."
+not_modelled: "'jangle the nerves' is presumably epilepsy on the denizens -- BR_AFFS has no
+           epilepsy entry and the apply line is uncaptured."
+```
+
 ## Metadata
 - **Type**: Base Class
 - **Combat Style**: Limb | Bleed | Affliction
