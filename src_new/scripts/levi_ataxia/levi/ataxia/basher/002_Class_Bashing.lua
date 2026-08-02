@@ -154,6 +154,37 @@ end
 -- 14r/16s filler. When a control cast is off cooldown but rage can't cover it yet,
 -- the damage fillers are SKIPPED so the rage banks toward the control cast instead
 -- of Overwhelm starving it 14 rage at a time.
+-- RAGE-FUELLED PICK ORDER (v4.7.189). Each owned rotation's table is ordered by VALUE PER
+-- RAGE -- cheap reliable fillers sit near the top precisely because they are affordable.
+-- With a Rage-Fuelled charge banked that ordering answers the wrong question: the ability is
+-- FREE, so cost stops being a constraint and the only thing that matters is getting the
+-- biggest ability we are actually allowed to fire. Spend the charge on the most EXPENSIVE
+-- ready ability; the cheap ones we can afford out of pocket anyway.
+--
+-- Returns the table UNTOUCHED when no charge is banked, so normal play is byte-identical --
+-- the pre-existing rotation suites are the proof of that.
+--
+-- Ties break on the table's own priority rather than being left to table.sort, which is NOT
+-- stable in Lua: several rotations have two abilities at the same cost (RW onslaught 36 vs
+-- culling's 36, PSION devastate 36), and an unstable sort would make the pick vary between
+-- otherwise identical rounds -- which the in-flight replay would then faithfully repeat.
+--
+-- Culling reap needs no help here: it is checked ahead of these loops and is already the
+-- joint-most-expensive thing most rotations own.
+local function brPickOrder(tbl)
+  if not (ataxiaBasher_brFree and ataxiaBasher_brFree()) then return tbl end
+  local ranked = {}
+  for i, ab in ipairs(tbl) do ranked[i] = { ab = ab, i = i } end
+  table.sort(ranked, function(a, b)
+    local ra, rb = tonumber(a.ab.rage) or 0, tonumber(b.ab.rage) or 0
+    if ra ~= rb then return ra > rb end
+    return a.i < b.i
+  end)
+  local out = {}
+  for i, e in ipairs(ranked) do out[i] = e.ab end
+  return out
+end
+
 local GDRAGON_BR = {
   { key = "deaden",    cmd = "deaden",    rage = 24, cd = 35, control = true },
   { key = "psidaze",   cmd = "psidaze",   rage = 28, cd = 41, control = true },
@@ -204,7 +235,7 @@ function ataxiaBasher_goldenDragonBattlerage(sp)
     return "reap "..target..sp
   end
   ataxiaTemp.gdragonBrAt = ataxiaTemp.gdragonBrAt or {}
-  for _, ab in ipairs(GDRAGON_BR) do
+  for _, ab in ipairs(brPickOrder(GDRAGON_BR)) do
     if (nowT - (tonumber(ataxiaTemp.gdragonBrAt[ab.key]) or 0)) >= ab.cd then
       -- Rage floor (v4.7.141): with ataxiaBasher.rageFloor = N an ability costing C
       -- needs C + N, so gear paying a bonus above N keeps paying. Composes with the
@@ -545,7 +576,7 @@ function ataxiaBasher_dwBattlerage(sp)
   end
 
   ataxiaTemp.dwBrAt = ataxiaTemp.dwBrAt or {}
-  for _, ab in ipairs(DW_BR) do
+  for _, ab in ipairs(brPickOrder(DW_BR)) do
     local ready = (nowT - (tonumber(ataxiaTemp.dwBrAt[ab.key]) or 0)) >= ab.cd
     local gated = false
     if ab.optIn and not ataxiaBasher.dwBoinad then gated = true end
@@ -1340,7 +1371,7 @@ function ataxiaBasher_psionBattlerage(sp)
     return "reap "..target..sp
   end
   ataxiaTemp.psionBrAt = ataxiaTemp.psionBrAt or {}
-  for _, ab in ipairs(PSION_BR) do
+  for _, ab in ipairs(brPickOrder(PSION_BR)) do
     -- Rage floor (v4.7.141): see ataxiaBasher_rageAfford (001).
     if (not ab.optIn or ataxiaBasher.psionRegrowth) and ataxiaBasher_rageAfford(rage, ab.rage)
        and (nowT - (tonumber(ataxiaTemp.psionBrAt[ab.key]) or 0)) >= ab.cd then
@@ -1567,7 +1598,7 @@ function ataxiaBasher_rwBattlerage(sp)
   end
 
   ataxiaTemp.rwBrAt = ataxiaTemp.rwBrAt or {}
-  for _, ab in ipairs(RW_BR) do
+  for _, ab in ipairs(brPickOrder(RW_BR)) do
     local ready = (nowT - (tonumber(ataxiaTemp.rwBrAt[ab.key]) or 0)) >= ab.cd
     local gated = false
     if ab.needsAff then

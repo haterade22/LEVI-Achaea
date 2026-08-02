@@ -2,6 +2,48 @@
 
 ---
 
+## 2026-08-01 - Rage-Fuelled spends the charge on the dearest ability (v4.7.189)
+
+> we should always use the most expensive Battlerage of course
+
+Right, and v4.7.179 did not do this - it only removed the affordability gate, so the rotation
+still took its normal **priority** pick and often spent a free cast on something cheap.
+
+Each rotation table is ordered by **value per rage**: cheap reliable fillers sit near the top
+*precisely because* they are affordable. A free cast makes that the wrong question. Cost stops
+being a constraint, so the only thing that matters is getting the biggest ability we are
+actually allowed to fire - the cheap ones we can pay for out of pocket anyway.
+
+`brPickOrder(tbl)` re-sorts descending by cost while a charge is banked, and returns the table
+**untouched** otherwise. Applied to all four owned rotations (`GDRAGON_BR`, `DW_BR`,
+`PSION_BR`, `RW_BR`).
+
+Concretely for Runewarden - bulwark 28, etch 25, onslaught 36, collide 14:
+
+| | pick |
+|---|---|
+| normal | **bulwark** (priority: mitigation first) |
+| charge banked | **onslaught** (36, the dearest ready one) |
+
+### Ties break on the table's own index, deliberately
+
+`table.sort` is **not stable in Lua**, and several rotations carry two abilities at the same
+cost. Left to the sort, equal-cost picks would vary between otherwise identical rounds - and
+the in-flight replay would then faithfully repeat whichever one it happened to land on. The
+comparator falls back to the original index so the table's own priority still decides ties.
+
+Gates are unchanged: cooldowns and affliction requirements still apply, so it is **dearest
+READY**, not dearest outright. Culling reap needs no help - it is checked ahead of these loops
+and is already joint-dearest in most rotations.
+
+The pre-existing rotation suites passing **unchanged** is the proof that no-charge play is
+byte-identical; that matters more here than the six new tests.
+
+Files: `basher/002_Class_Bashing.lua`, `tests/test_basher_runewarden.lua`,
+`memory/basher.md`. Suite **739/739**.
+
+---
+
 ## 2026-08-01 - Boon flags re-latch once per run (v4.7.188)
 
 Rage-Fuelled (v4.7.179) is working - user-confirmed live. Checking *why* it works turned up

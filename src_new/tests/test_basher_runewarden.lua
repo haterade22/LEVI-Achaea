@@ -354,6 +354,53 @@ describe("Thunderclap -- bisect becomes the crowd swing (v4.7.181)", function()
   end)
 end)
 
+
+describe("Rage-Fuelled spends the charge on the MOST EXPENSIVE ready ability (v4.7.189)", function()
+  -- RW_BR costs: bulwark 28, etch 25, onslaught 36, collide 14.
+  -- Priority order is bulwark first (mitigation); with a free charge, cost stops being a
+  -- constraint and onslaught (36) should win instead.
+  it("normally takes the PRIORITY pick, not the dearest", function()
+    reset(); ataxia.vitals.rage = 100
+    expect(has(ataxiaBasher_rwBattlerage(";"), "bulwark")).toBeTrue()
+  end)
+
+  it("takes ONSLAUGHT (36) over BULWARK (28) while a charge is banked", function()
+    reset(); ataxia.vitals.rage = 100
+    ataxiaTemp.brFreeCharge = true
+    expect(has(ataxiaBasher_rwBattlerage(";"), "onslaught 7")).toBeTrue()
+  end)
+
+  it("fires the dearest ability even at ZERO rage -- the charge pays for it", function()
+    reset(); ataxia.vitals.rage = 0
+    ataxiaTemp.brFreeCharge = true
+    expect(has(ataxiaBasher_rwBattlerage(";"), "onslaught 7")).toBeTrue()
+  end)
+
+  it("respects cooldowns -- dearest READY, not dearest outright", function()
+    reset(); ataxia.vitals.rage = 0
+    ataxiaTemp.brFreeCharge = true
+    ataxiaTemp.rwBrAt = { onslaught = clock }   -- the 36 is held
+    -- bulwark (28) is next dearest; etch (25) is aff-gated off, collide is 14.
+    expect(has(ataxiaBasher_rwBattlerage(";"), "bulwark")).toBeTrue()
+  end)
+
+  it("still honours the affliction gate -- etch needs aeon or stun", function()
+    reset(); ataxia.vitals.rage = 0
+    ataxiaTemp.brFreeCharge = true
+    ataxiaTemp.rwBrAt = { onslaught = clock, bulwark = clock }
+    expect(has(ataxiaBasher_rwBattlerage(";"), "etch")).toBeFalse() -- no aff: skipped
+    expect(has(ataxiaBasher_rwBattlerage(";"), "collide 7")).toBeTrue()
+  end)
+
+  it("is behaviour-identical with no charge -- the ordering is untouched", function()
+    reset(); ataxia.vitals.rage = 100
+    local withoutCharge = ataxiaBasher_rwBattlerage(";")
+    reset(); ataxia.vitals.rage = 100
+    ataxiaTemp.brFreeCharge = nil
+    expect(ataxiaBasher_rwBattlerage(";")).toBe(withoutCharge)
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 mnemHammerAndNail, mnemFalconersTactics = false, false
 mnemThunderclap = false
