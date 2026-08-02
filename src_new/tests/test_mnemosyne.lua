@@ -1422,3 +1422,33 @@ describe("explore wears armour before sweeping (v4.7.175)", function()
     expect(seen[1]:find("queue", 1, true)).toBe(nil)
   end)
 end)
+
+describe("boon flags re-latch once per run (v4.7.188)", function()
+  local M = ataxia.mnemosyne
+  it("sends BOONS once, then never again until the run resets", function()
+    if not (M and M._relatchBoons) then return end
+    local seen = {}
+    local realSend = send
+    send = function(cmd) table.insert(seen, cmd) end
+    M._boonsRelatched = nil
+    M._relatchBoons()
+    M._relatchBoons()
+    M._relatchBoons()
+    send = realSend
+    expect(#seen).toBe(1)          -- once per run, not per ripple
+    expect(seen[1]).toBe("boons")
+  end)
+
+  it("re-arms when a new run starts", function()
+    if not (M and M._relatchBoons) then return end
+    local n = 0
+    local realSend = send
+    send = function() n = n + 1 end
+    M._boonsRelatched = nil
+    M._relatchBoons()
+    M._boonsRelatched = nil      -- what 001_Run_Start does
+    M._relatchBoons()
+    send = realSend
+    expect(n).toBe(2)
+  end)
+end)

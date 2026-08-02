@@ -2,6 +2,48 @@
 
 ---
 
+## 2026-08-01 - Boon flags re-latch once per run (v4.7.188)
+
+Rage-Fuelled (v4.7.179) is working - user-confirmed live. Checking *why* it works turned up
+a gap worth closing anyway.
+
+Every boon flag latches from exactly two signals: the `BOON CLAIM` alias intercept at the
+moment you take it, or that boon's row in the `BOONS` list. **Neither fires for a boon you
+already owned before its handling shipped**, or for a claim made outside the alias. The boon
+would be live in the game and inert in the system, silently, with nothing on screen to say
+so - and since the payoff is "the rotation quietly does something better", its absence looks
+exactly like normal play.
+
+`BOONS` is authoritative for what we own and every boon trigger latches off its rows, so one
+send re-latches all of them. `M._relatchBoons()` fires **once per run** from whichever
+explorer entry point comes first, and re-arms on run start.
+
+Once per run, not per ripple: the flags only reset at run start, so repeating it would be
+pure output spam for no new information.
+
+### The obvious trick that would have been wrong
+
+The tempting fix is to latch from the boon's **description** - the text the user pasted -
+mirroring what v4.7.186 does for damage affixes. That is wrong here, and the asymmetry is
+worth recording:
+
+- an **affix** description appears in the ongoing-effects block, which lists only what is
+  **active**;
+- a **boon** description appears on the **offer screen**, which lists boons we were shown
+  and **did not take**.
+
+Latching a boon off its description would set flags for boons we declined. The two look like
+the same pattern and are not.
+
+Costs one `BOONS` output per run, which trigger `013_Boons_List_Row` already formats into a
+coloured what-each-boon-does summary - so it is arguably worth reading. Say the word if it is
+noise and it can go quiet or be dropped.
+
+Files: `mnemosyne/008_Explorer.lua`, `triggers/.../mnemosyne/001_Run_Start.lua`,
+`tests/test_mnemosyne.lua`. Suite **733/733**.
+
+---
+
 ## 2026-08-01 - Blank Mind, and the Bard twin of the infuse picker (v4.7.187)
 
 > Blank Mind:               All psychic damage you deal is reduced by 33%.

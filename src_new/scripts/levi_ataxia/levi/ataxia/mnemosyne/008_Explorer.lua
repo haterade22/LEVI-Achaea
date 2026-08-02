@@ -569,6 +569,28 @@ function M._wearArmour()
   send("wear armour", false)
 end
 
+-- RE-LATCH THE BOON FLAGS (v4.7.188). Every boon flag (mnemRageFuelled, mnemThunderclap,
+-- bardWarmarch, ...) is set by one of exactly two signals: the `BOON CLAIM` alias intercept
+-- at the moment you take it, or that boon's row in the BOONS list. Neither fires for a boon
+-- you ALREADY OWNED before its handling shipped, or when a claim happened outside the alias
+-- -- so a boon could be active in the game and inert in the system, silently, with nothing
+-- on screen to say so.
+--
+-- `BOONS` is authoritative for what we own, and every boon trigger latches off its rows, so
+-- one send re-latches ALL of them at once. Fired once per run (not per ripple -- the flags
+-- only reset at run start, so repeating it would be pure spam), from whichever explorer
+-- entry point comes first.
+--
+-- Deliberately NOT latched from the boon's DESCRIPTION text, which would be the obvious
+-- trick and is wrong here: descriptions also appear on the OFFER screen, listing boons we
+-- were shown and did not take. That is the opposite of the affix parser, where the
+-- ongoing-effects block only ever lists what is actually active.
+function M._relatchBoons()
+  if M._boonsRelatched then return end
+  M._boonsRelatched = true
+  send("boons", false)
+end
+
 -- Resume a paused sweep. Re-assert the explore-mode basher config (idempotent; guards a flag that
 -- flickered during the pause -- notably inMnemosyne, missed between floors) and reset per-ripple
 -- progress, mirroring the fresh-start path so the next ripple starts clean. _prevBasher is
@@ -596,6 +618,7 @@ function M._exploreResume(reason)
   -- Resume is the per-RIPPLE entry point (GO calls it after every boon screen), so this is
   -- also where armour gets re-checked before each dive -- not just on the first `explore on`.
   M._wearArmour()
+  M._relatchBoons()   -- once per run: re-latch boon flags we may have owned before load
   if M.swarm and M.swarm.onRipple then pcall(M.swarm.onRipple) end -- fresh ripple: new pull budgets
   M._exploreEcho("<green>resuming<reset> the sweep" .. (reason and (" (" .. reason .. ")") or "") .. ".")
   M._scheduleTick()
@@ -645,6 +668,7 @@ function M.exploreOn()
   M.explore.iceSlips = 0
   M.explore.settling = true -- treat the starting room like an arrival: let its denizens settle first
   M._wearArmour()           -- never start a sweep undressed
+  M._relatchBoons()   -- once per run: re-latch boon flags we may have owned before load
   if M.swarm and M.swarm.onRipple then pcall(M.swarm.onRipple) end -- fresh sweep: fresh tactics state
   M._exploreEcho("<green>ON<reset> -- sweeping the 4x4, clearing to the boon screen (patrols for the boss on boss ripples). (<a_darkmagenta>mnem explore off<reset> to stop)")
   M._scheduleTick()
