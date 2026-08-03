@@ -138,6 +138,12 @@ patterns:
 # starting at the line head keeps it from gagging someone quoting it over a channel.
 - pattern: The sundering note of the Nomos already keens forth
   type: 2
+# Bard paean refusal spam, the twin of the nomos one above: the refrain is already on the
+# blade, so naming it again on the next `blade flick <t> paean` prints this every swing.
+# type 2 -- the tail names the weapon ("your song blessed blade"), so type 3 would never fire,
+# and anchoring at the line head keeps it from gagging someone quoting it over a channel.
+- pattern: The paean already refrains from your
+  type: 2
 ]]--
 
 deleteFull()
