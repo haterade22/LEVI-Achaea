@@ -104,7 +104,11 @@ Automated gear inventory scanner and PvE Best-in-Slot scoring system. Collects a
 | `gearaudit scrap` | Scrap recommendations + copy-paste `GEAR SCRAP` commands |
 | `gearaudit scrap <set>` | Scrap recommendations for a specific set |
 
-**BiS scoring** ranks items by weighted stats: Additional Damage (10x), Celerity (8x), Burst Damage (7x), Ignore Resistance (6x), HP (3x), HP Regen (2.5x), Damage Reduction (2x), Resistance (1.5x). Conditional gear discounted 30-50%. Scrap threshold: items below 50% of set BiS.
+**BiS scoring** ranks items by weighted stats: Additional/Bonus Damage (10x), Celerity (8x), Burst Damage (7x), Ignore Resistance (6x), Crit Chance (5x), Crit Damage (4x), HP (3x), Battlerage Damage (3x), HP Regen (2.5x), Damage Reduction (2x), Rage Generation (2x), Bleed Damage (2x), Resistance (1.5x). Conditional gear discounted 30-50%. Scrap threshold: items below 50% of set BiS.
+
+**Display**: `gearaudit show` and `gearaudit bis` never truncate. Columns auto-size to the widest value and long effect text wraps onto continuation rows, fitted to the console width (`gearAudit.config.display` — `width` to pin it, `minEffects` for the narrowest Effects column). An effect the summarizer has no pattern for prints its full raw game text rather than a stub.
+
+> **`gearaudit scrap` is destructive** — it auto-sends `GEAR SCRAP <id> CONFIRM` for every recommendation, one per balance, with no confirmation prompt.
 
 #### Armour & Paragon Management (`armour`)
 

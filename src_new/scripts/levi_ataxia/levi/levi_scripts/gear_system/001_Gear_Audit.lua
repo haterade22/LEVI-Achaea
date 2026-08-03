@@ -43,17 +43,32 @@ gearAudit.config = {
   timeout = 300,            -- Timeout in seconds (5 minutes for large inventories)
   bisWeights = {
     addDmgPct       = 10.0,  -- +X% damage (best PvE stat)
+    bonusDmgPct     = 10.0,  -- "attacks deal X% bonus damage" - same thing as addDmgPct
     celerity         = 8.0,  -- attack speed
     burstEffective   = 7.0,  -- burst dmg normalized to per-attack value
     ignorePct        = 6.0,  -- ignore denizen resistance
+    critChancePct    = 5.0,  -- more crits = more damage, below flat damage%
+    critDmgPct       = 4.0,  -- only pays on the crit fraction
     hpPct            = 3.0,  -- HP increase
+    brDmgPct         = 3.0,  -- battlerage-only damage, a fraction of rounds
     hpRegenPct       = 2.5,  -- HP regen
     dmgReductionPct  = 2.0,  -- damage reduction
+    rageGenPct       = 2.0,  -- enables battlerage, deals no damage itself
+    brRageGenPct     = 2.0,  -- rage from battlerage abilities
+    bleedDmgPct      = 2.0,  -- conditional on sustaining bleed
     resistPct        = 1.5,  -- resistance
     wpRegenPct       = 1.0,  -- WP regen
     blackoutPct      = 1.0,  -- blackout reduction
     conditionalMult  = 0.5,  -- location-locked gear discounted 50%
     brMult           = 0.7,  -- battlerage-conditional discounted 30%
+  },
+  -- Table rendering. Columns auto-size to content; the Effects column takes whatever
+  -- width is left and wraps rather than truncating.
+  display = {
+    width      = nil,   -- nil = auto-detect console columns; set a number to pin it
+    maxWidth   = 200,   -- clamp for very wide consoles
+    fallback   = 120,   -- used when getColumnCount() is unavailable
+    minEffects = 40,    -- Effects column never narrower than this
   },
   keepPerSet = 3,             -- Keep top N items per slot per set, scrap the rest
   slotRules = {
@@ -71,6 +86,80 @@ gearAudit.config = {
 
 function gearAudit.echo(text)
   cecho("\n<dark_orchid>[<light_slate_blue>GearAudit<dark_orchid>]<lavender>: <plum>" .. text)
+end
+
+--------------------------------------------------------------------------------
+-- TABLE RENDERING HELPERS
+--------------------------------------------------------------------------------
+
+-- Usable console width in characters. getColumnCount() is not present in every
+-- Mudlet build (and not in the test mock), so it is pcall-guarded.
+function gearAudit.consoleWidth()
+  local d = gearAudit.config.display
+  if d.width then return d.width end
+
+  local ok, cols = pcall(getColumnCount)
+  if ok and type(cols) == "number" and cols > 40 then
+    return math.min(cols - 2, d.maxWidth)
+  end
+  return d.fallback
+end
+
+-- Wrap text to `width` columns on word boundaries. Words longer than the column are
+-- hard-split rather than overflowing the border. Always returns at least one line.
+function gearAudit.wrapText(text, width)
+  text = tostring(text or "")
+  width = math.max(1, tonumber(width) or 1)
+
+  local lines = {}
+  local line = ""
+
+  local function flush()
+    table.insert(lines, line)
+    line = ""
+  end
+
+  for word in text:gmatch("%S+") do
+    -- Hard-split anything that can never fit on a line of its own
+    while #word > width do
+      if line ~= "" then flush() end
+      table.insert(lines, word:sub(1, width))
+      word = word:sub(width + 1)
+    end
+
+    if line == "" then
+      line = word
+    elseif #line + 1 + #word <= width then
+      line = line .. " " .. word
+    else
+      flush()
+      line = word
+    end
+  end
+
+  if line ~= "" or #lines == 0 then flush() end
+  return lines
+end
+
+-- "+------+-----+" rule matching a widths array (one cell = width + 2 padding spaces)
+function gearAudit.tableRule(widths)
+  local parts = {}
+  for _, w in ipairs(widths) do
+    table.insert(parts, string.rep("-", w + 2))
+  end
+  return "+" .. table.concat(parts, "+") .. "+"
+end
+
+-- "| a | b |" row. `colors` is an optional parallel array of colour names; cells are
+-- left-aligned and padded to their column width.
+function gearAudit.tableRow(widths, cells, colors)
+  local out = "<cyan>|"
+  for i, w in ipairs(widths) do
+    local cell = tostring(cells[i] or "")
+    local color = (colors and colors[i]) or "light_grey"
+    out = out .. " <" .. color .. ">" .. cell .. string.rep(" ", w - #cell) .. " <cyan>|"
+  end
+  return out
 end
 
 function gearAudit.status()
@@ -223,7 +312,8 @@ function gearAudit.summarizeEffect(effects)
   end
 
   -- Ignore resistance: "ignore X% of a denizen's Y resistance"
-  local ignorePct, ignoreType = fullText:match("ignore (%d+)%% of a denizen's (.+) resistance")
+  -- Non-greedy: effects are concatenated, so (.+) would swallow every following sentence.
+  local ignorePct, ignoreType = fullText:match("ignore (%d+)%% of a denizen's (.-) resistance")
   if ignorePct and ignoreType then
     ignoreType = ignoreType:gsub("physical ", "Phys "):gsub("magical ", "Magic ")
     table.insert(summary, "Ignore " .. ignorePct .. "% " .. ignoreType)
@@ -238,7 +328,7 @@ function gearAudit.summarizeEffect(effects)
   -- Chance effect: "you have a X% chance"
   local chancePct, chanceEffect = fullText:match("you have a (%d+)%% chance to (.-)%.")
   if chancePct and chanceEffect then
-    chanceEffect = chanceEffect:gsub("recover ", "Recover "):sub(1, 20)
+    chanceEffect = chanceEffect:gsub("recover ", "Recover ")
     table.insert(summary, chancePct .. "% " .. chanceEffect)
   end
 
@@ -303,9 +393,91 @@ function gearAudit.summarizeEffect(effects)
     table.insert(summary, afflictPct .. "% " .. afflictType)
   end
 
-  -- If no patterns matched, return first 30 chars of first effect
+  -- Bonus damage: "Your attacks will deal X% bonus damage ..."
+  local bonusDmg = fullText:match("attacks will deal (%d+)%% bonus")
+  if bonusDmg then
+    table.insert(summary, "+" .. bonusDmg .. "% Bonus Dmg")
+  end
+
+  -- Rage generation. The "less" form must be tested FIRST or the generic
+  -- "generate (%d+)%%" below would label a penalty as a bonus.
+  local rageLess = fullText:match("generate (%d+)%% less")
+  if rageLess then
+    table.insert(summary, "-" .. rageLess .. "% Rage Gen")
+  else
+    local rageGen = fullText:match("attacks will generate (%d+)%%")
+    if rageGen then
+      table.insert(summary, "+" .. rageGen .. "% Rage Gen")
+    end
+  end
+
+  -- Battlerage ability modifiers
+  local brDmg = fullText:match("battlerage abilities will deal (%d+)%%")
+  if brDmg then
+    table.insert(summary, "+" .. brDmg .. "% BR Dmg")
+  end
+  local brRage = fullText:match("battlerage abilities will generate (%d+)%%")
+  if brRage then
+    table.insert(summary, "+" .. brRage .. "% BR Rage")
+  end
+
+  -- Critical hits
+  local critDmg = fullText:match("[Ii]ncreases the damage of your critical.-(%d+)%%")
+  if critDmg then
+    table.insert(summary, "+" .. critDmg .. "% Crit Dmg")
+  end
+  local critChance = fullText:match("[Ii]ncreases your chance to deal.-(%d+)%%")
+  if critChance then
+    table.insert(summary, "+" .. critChance .. "% Crit Chance")
+  end
+  -- The captured clause continues the game's own sentence, so the percent stays in
+  -- front of it: "Crit: 16% of the damage dealt is returned ..."
+  local onCritPct, onCritEffect = fullText:match("[Ww]hen you critically strike, (%d+)%%%s*(.-)%.")
+  if onCritPct and onCritEffect then
+    table.insert(summary, "Crit: " .. onCritPct .. "% " .. onCritEffect)
+  end
+
+  -- Stored-battlerage clause: "While you have any amount of stored battlerage, X."
+  local storedBR = fullText:match("[Ww]hile you have any amount of stored battlerage,%s*(.-)%.")
+  if storedBR then
+    table.insert(summary, "w/BR: " .. storedBR)
+  end
+
+  -- Bleed synergy: "When sustaining bleeding from X, ..."
+  local bleed = fullText:match("[Ww]hen sustaining bleeding from%s*(.-)%.")
+  if bleed then
+    table.insert(summary, "Bleed: " .. bleed)
+  end
+
+  -- Experience loss reduction
+  local xpLoss = fullText:match("lose (%d+)%% less experience")
+  if xpLoss then
+    table.insert(summary, "-" .. xpLoss .. "% XP Loss")
+  end
+
+  -- "Provides a X% chance to Y."
+  local providesPct, providesEffect = fullText:match("[Pp]rovides a (%d+)%% chance to (.-)%.")
+  if providesPct and providesEffect then
+    table.insert(summary, providesPct .. "% " .. providesEffect)
+  end
+
+  -- Execute-style: "When striking a denizen below X, ..."
+  local execute = fullText:match("[Ww]hen striking a denizen below%s*(.-)%.")
+  if execute then
+    table.insert(summary, "Execute: " .. execute)
+  end
+
+  -- Respawn modifier: "Denizens you slay will respawn X."
+  local respawn = fullText:match("[Dd]enizens you slay will respawn%s*(.-)%.")
+  if respawn then
+    table.insert(summary, "Respawn: " .. respawn)
+  end
+
+  -- No pattern matched: show the raw effect text IN FULL. The display wraps rather
+  -- than truncates, so an unrecognised effect stays readable (and its wording is what
+  -- a new pattern gets written from).
   if #summary == 0 then
-    return effects[1]:sub(1, 30) .. ".."
+    return table.concat(effects, " ")
   end
 
   return table.concat(summary, ", ") .. condition
@@ -385,6 +557,35 @@ function gearAudit.scoreEffect(effects)
   local blackout = fullText:match("[Bb]lackout.-will be (%d+)%% shorter")
   if blackout then scored.blackoutPct = tonumber(blackout) end
 
+  -- Bonus damage ("attacks will deal X% bonus damage")
+  local bonusDmg = fullText:match("attacks will deal (%d+)%% bonus")
+  if bonusDmg then scored.bonusDmgPct = tonumber(bonusDmg) end
+
+  -- Rage generation. "less" first, or the penalty scores as a bonus.
+  local rageLess = fullText:match("generate (%d+)%% less")
+  if rageLess then
+    scored.rageGenPct = -tonumber(rageLess)
+  else
+    local rageGen = fullText:match("attacks will generate (%d+)%%")
+    if rageGen then scored.rageGenPct = tonumber(rageGen) end
+  end
+
+  -- Battlerage ability modifiers
+  local brDmg = fullText:match("battlerage abilities will deal (%d+)%%")
+  if brDmg then scored.brDmgPct = tonumber(brDmg) end
+  local brRage = fullText:match("battlerage abilities will generate (%d+)%%")
+  if brRage then scored.brRageGenPct = tonumber(brRage) end
+
+  -- Critical hits
+  local critDmg = fullText:match("[Ii]ncreases the damage of your critical.-(%d+)%%")
+  if critDmg then scored.critDmgPct = tonumber(critDmg) end
+  local critChance = fullText:match("[Ii]ncreases your chance to deal.-(%d+)%%")
+  if critChance then scored.critChancePct = tonumber(critChance) end
+
+  -- Bleed synergy, only when it carries a number
+  local bleedPct = fullText:match("[Ww]hen sustaining bleeding from.-(%d+)%%")
+  if bleedPct then scored.bleedDmgPct = tonumber(bleedPct) end
+
   return scored
 end
 
@@ -424,9 +625,16 @@ function gearAudit.calculateScore(scored)
   end
 
   add("Ignore Resistance",    scored.ignorePct,        w.ignorePct)
+  add("Bonus Damage",         scored.bonusDmgPct,      w.bonusDmgPct)
+  add("Crit Chance",          scored.critChancePct,    w.critChancePct)
+  add("Crit Damage",          scored.critDmgPct,       w.critDmgPct)
   add("HP Increase",          scored.hpPct,            w.hpPct)
+  add("Battlerage Damage",    scored.brDmgPct,         w.brDmgPct)
   add("HP Regen",             scored.hpRegenPct,       w.hpRegenPct)
   add("Damage Reduction",     scored.dmgReductionPct,  w.dmgReductionPct)
+  add("Rage Generation",      scored.rageGenPct,       w.rageGenPct)
+  add("Battlerage Rage Gen",  scored.brRageGenPct,     w.brRageGenPct)
+  add("Bleed Damage",         scored.bleedDmgPct,      w.bleedDmgPct)
   add("Resistance",           scored.resistPct,        w.resistPct)
   add("WP Regen",             scored.wpRegenPct,       w.wpRegenPct)
   add("Blackout Reduction",   scored.blackoutPct,      w.blackoutPct)
@@ -670,13 +878,24 @@ function gearAudit.displayBis(slotFilter)
           for i, item in ipairs(setItems) do
             local tag = bisTag(i, keepN)
             local tagCol = bisTagColor(tag)
+            local rarity = rarityShort(item.gear.rarity)
             local effectStr = gearAudit.summarizeEffect(item.gear.effects)
-            if #effectStr > 35 then effectStr = effectStr:sub(1, 33) .. ".." end
+
+            -- Uncoloured twin of the row prefix, so continuation lines align under it
+            local prefix = string.format("      #%-2d %-5s %5.1f  [%s] %-6d ",
+              i, tag, item.score, rarity, item.gear.id or 0)
+            local effW = math.max(gearAudit.consoleWidth() - #prefix,
+                                  gearAudit.config.display.minEffects)
+            local lines = gearAudit.wrapText(effectStr, effW)
+
             cecho(string.format(
               "\n<cyan>      #%-2d %s%-5s <yellow>%5.1f  <DimGrey>[%s] <white>%-6d <light_grey>%s",
-              i, tagCol, tag, item.score, rarityShort(item.gear.rarity),
-              item.gear.id or 0, effectStr
+              i, tagCol, tag, item.score, rarity,
+              item.gear.id or 0, lines[1]
             ))
+            for k = 2, #lines do
+              cecho("\n<light_grey>" .. string.rep(" ", #prefix) .. lines[k])
+            end
           end
         end
       end
@@ -1168,27 +1387,48 @@ function gearAudit.display(filter)
     return
   end
 
-  -- Display header
-  cecho("\n<cyan>+--------+------------------------------+----------+----------------------------------------+")
-  cecho("\n<cyan>| <white>ID<cyan>     | <white>Set<cyan>                          | <white>Slot<cyan>     | <white>Effects<cyan>                                |")
-  cecho("\n<cyan>+--------+------------------------------+----------+----------------------------------------+")
+  -- Size the fixed columns to their widest actual value, then give whatever is left
+  -- to Effects. Nothing is truncated; long effect text wraps onto continuation rows.
+  local rows = {}
+  local idW, setW, slotW = 2, 3, 4
 
   for _, gear in ipairs(items) do
-    local effectStr = gearAudit.summarizeEffect(gear.effects)
-    if #effectStr > 40 then
-      effectStr = effectStr:sub(1, 38) .. ".."
-    end
-
-    cecho(string.format(
-      "\n<cyan>| <yellow>%-6d<cyan> | <green>%-28s<cyan> | <white>%-8s<cyan> | <light_grey>%-40s<cyan>|",
-      gear.id or 0,
-      ((gear.slot == "trinket") and "N/A" or (gear.set or "Unknown")):sub(1, 28),
-      (gear.slot or "?"):sub(1, 8),
-      effectStr
-    ))
+    local row = {
+      id   = tostring(gear.id or 0),
+      set  = (gear.slot == "trinket") and "N/A" or (gear.set or "Unknown"),
+      slot = gear.slot or "?",
+      effect = gearAudit.summarizeEffect(gear.effects),
+    }
+    idW   = math.max(idW,   #row.id)
+    setW  = math.max(setW,  #row.set)
+    slotW = math.max(slotW, #row.slot)
+    table.insert(rows, row)
   end
 
-  cecho("\n<cyan>+--------+------------------------------+----------+----------------------------------------+")
+  -- 4 borders + 8 padding spaces = 12 chars of frame around 4 columns
+  local effW = gearAudit.consoleWidth() - (idW + setW + slotW + 12)
+  effW = math.max(effW, gearAudit.config.display.minEffects)
+
+  local widths = {idW, setW, slotW, effW}
+  local rule = gearAudit.tableRule(widths)
+  local colors = {"yellow", "green", "white", "light_grey"}
+
+  cecho("\n<cyan>" .. rule)
+  cecho("\n" .. gearAudit.tableRow(widths, {"ID", "Set", "Slot", "Effects"},
+                                   {"white", "white", "white", "white"}))
+  cecho("\n<cyan>" .. rule)
+
+  for _, row in ipairs(rows) do
+    -- Wrapped two narrow so the continuation indent still fits the column
+    local lines = gearAudit.wrapText(row.effect, effW - 2)
+    cecho("\n" .. gearAudit.tableRow(widths, {row.id, row.set, row.slot, lines[1]}, colors))
+    -- Continuation rows: fixed columns blank, effect text indented two spaces
+    for i = 2, #lines do
+      cecho("\n" .. gearAudit.tableRow(widths, {"", "", "", "  " .. lines[i]}, colors))
+    end
+  end
+
+  cecho("\n<cyan>" .. rule)
   cecho("\n<grey>Total: " .. #items .. " items\n")
 end
 

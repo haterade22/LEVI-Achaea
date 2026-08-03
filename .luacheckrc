@@ -30,7 +30,7 @@ globals = {
   "setFgColor", "setBgColor", "resetFormat",
   "moveCursor", "moveCursorEnd", "getLineCount", "getLineNumber",
   "getCurrentLine", "getLastLineNumber",
-  "wrapLine", "setWindowWrap",
+  "wrapLine", "setWindowWrap", "getWindowWrap", "getColumnCount", "getRowCount",
   "display", "debugc",
   "showNotification",
   "playSoundFile", "stopSounds",

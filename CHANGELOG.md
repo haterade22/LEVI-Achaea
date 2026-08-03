@@ -2,6 +2,84 @@
 
 ---
 
+## 2026-08-03 - The gear table stops lying about what your gear does (v4.7.208)
+
+### Three separate truncations, and the worst one was invisible
+
+`gearaudit show` rendered a box table whose column widths were four hardcoded literal border
+strings. It cut text in three places, and only two of them left a `..` to tell you it had:
+
+- **Set column** -- `:sub(1, 28)` with **no ellipsis at all**, which is why every row read
+  `Death Knight's Steel Encasem` and `Dungeoneer's Accoutrements o`. Silent.
+- **Effects column** -- `> 40` chars became `sub(1, 38) .. ".."`.
+- **`summarizeEffect`'s fallback** -- `effects[1]:sub(1, 30) .. ".."`, and this was the real
+  damage. **Roughly half of a 147-item inventory hit that fallback**, because
+  `summarizeEffect` had no pattern for those effect families at all. What looked like a
+  cramped column was actually the summarizer giving up and printing a sentence fragment:
+  `Your attacks will deal 15% bon..`, `Increases the damage of your c..`,
+  `When sustaining bleeding from ..`.
+
+The table is now **auto-sized**: ID/Set/Slot take the width of their widest actual value,
+Effects takes whatever is left of the console (`getColumnCount()`, pcall-guarded, clamped to
+`config.display.maxWidth`, floored at `config.display.minEffects`), and long effect text
+**wraps onto indented continuation rows** instead of being cut. Nothing is truncated anywhere
+in `gearaudit show` / `set` / `slot` / `effect` any more. The four literal border strings that
+had to be kept in lockstep by hand collapsed into `gearAudit.tableRule()` /
+`gearAudit.tableRow()`, with `gearAudit.wrapText()` doing word-boundary wrapping (and
+hard-splitting any single word too long for the column, so a pathological effect string can't
+push the border out of alignment).
+
+`gearaudit bis` gets the same treatment -- its own `> 35` cut is gone, with continuation lines
+aligned under an uncoloured twin of the row prefix.
+
+`gearaudit scrap`'s 60-char summary and `gearaudit detail` (which always printed raw effects
+in full) are unchanged.
+
+### The effect families nothing could read
+
+The fallback was hiding the actual bug: `summarizeEffect` **and** `scoreEffect` were both
+missing ~10 whole families of gear effect. Because `scoreEffect` feeds `calculateScore`, that
+meant `gearaudit bis`, `gearaudit score` and `gearaudit scrap` were valuing crit damage, crit
+chance, rage generation and bonus denizen damage at **exactly zero** -- a hands slot full of
+crit gear ranked purely on whatever else the item happened to carry.
+
+Now summarized and scored: bonus damage (`bonusDmgPct`, 10.0 -- it is the same stat as
+`addDmgPct`), crit chance (5.0), crit damage (4.0), battlerage damage (3.0), rage generation
+(2.0, **negative for the "generate N% less rage" form**), battlerage rage generation (2.0) and
+bleed-conditional damage (2.0). Also summarized but deliberately **not** scored: on-crit
+clauses, stored-battlerage clauses, execute thresholds, respawn modifiers, and XP-loss
+reduction -- none of them are PvE damage output.
+
+The "generate N% **less**" pattern is tested before the generic "generate N%" one in both
+functions; reversed, a rage penalty scores as a bonus.
+
+Every new pattern is **safe-fail by construction**: a wrong guess about the tail of a sentence
+simply doesn't match, and the row then falls through to the full raw text -- which is now
+readable rather than a 30-char stub, and is exactly what a corrected pattern gets written
+from.
+
+### Two pattern bugs fixed
+
+- **`ignore (%d+)%% of a denizen's (.+) resistance`** -- effects are concatenated with a space
+  before matching, so the greedy `(.+)` swallowed every following sentence into the resistance
+  *type*. That is the `Ignore 8% Phys blunt resistance. Your ..` row. Now `(.-)`.
+- **`chanceEffect:sub(1, 20)`** -- a second truncation buried inside the summarizer, producing
+  `5% trigger a defence wh`. Removed; the display wraps instead.
+
+### Note on `gearaudit scrap`
+
+`displayScrap` builds `GEAR SCRAP <id> CONFIRM` for every recommendation and **auto-sends the
+queue immediately**, one per balance, with no confirmation prompt. Adding stats to the scoring
+changes which items fall below `scrapThreshold`, so it changes what gets destroyed. Review the
+new `gearaudit bis` ordering before running it.
+
+**Files:** `gear_system/001_Gear_Audit.lua` (config `display` block + 7 new `bisWeights`;
+`consoleWidth`/`wrapText`/`tableRule`/`tableRow` helpers; `summarizeEffect`, `scoreEffect`,
+`calculateScore`, `display`, `displayBis`), new `tests/test_gear_audit.lua` (47 tests),
+`.luacheckrc` + `.vscode/settings.json` (`getColumnCount` and friends as known Mudlet globals).
+
+---
+
 ## 2026-08-03 - DPS reworked, and what is hitting us tracked by type (v4.7.207)
 
 ### Both DPS numbers were misleading, each differently
