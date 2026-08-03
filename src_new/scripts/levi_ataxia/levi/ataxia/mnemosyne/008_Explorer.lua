@@ -623,7 +623,22 @@ function M._bardPerformanceCheck()
   if not (ataxiaBasher and ataxiaBasher.enabled) then return end
   ataxiaTemp = ataxiaTemp or {}
   ataxiaTemp.bardPerfProbe = true
-  send("performance", false)
+  -- `PERFORMANCE SHOW`, not bare `PERFORMANCE` (v4.7.209). The bare form is NOT a command --
+  -- the game answers it with its syntax help: PERFORMANCE SHOW / END / SUSPEND / RESUME.
+  --
+  -- This was worse than a no-op. Trigger 001 never saw an answer, so the probe ALWAYS timed
+  -- out and ALWAYS recomposed -- on every ripple entry, whether or not a performance was up.
+  -- A check added to "ensure our stuff is up" was instead forcing a redundant recompose at
+  -- every boon screen, and generating the "You are already performing" refusals that trigger
+  -- 006 then had to absorb.
+  --
+  -- Galling because this is the SECOND time in one day, and I wrote the rule down after the
+  -- first: v4.7.203 fixed exactly this in `M._relatchBoons` (bare `BOONS`, when the valid
+  -- forms are BOON CLAIMED / OPTIONS / CLAIM / CONTEMPLATE), and the lesson recorded in
+  -- AGENTS.md was "unexplained syntax help in a combat log is one of OUR commands being
+  -- rejected -- for any command the package sends only once, check the verb form against its
+  -- siblings". Then I shipped a bare-verb command in the very next feature.
+  send("performance show", false)
   tempTimer(2, function()
     if not ataxiaTemp.bardPerfProbe then return end -- trigger 001 answered: performance is up
     ataxiaTemp.bardPerfProbe = nil

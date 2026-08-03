@@ -872,9 +872,22 @@ describe("bard PERFORMANCE probe after the boon screen", function()
   end
   local function disarm() send, tempTimer = realSend, realTimer end
 
-  it("asks for PERFORMANCE as a bard", function()
+  -- `PERFORMANCE SHOW`: the bare verb is not a command (the game answers it with its syntax
+  -- help). This assertion previously pinned "performance" -- verifying WHAT we send with no
+  -- notion of whether it was real, exactly as the `boons` test did before v4.7.203. The
+  -- sub-verb assertion below is the part that would actually have caught it.
+  it("asks for PERFORMANCE SHOW as a bard", function()
     arm("Bard"); M._bardPerformanceCheck()
-    expect(sent[1]).toBe("performance")
+    expect(sent[1]).toBe("performance show")
+    disarm()
+  end)
+
+  it("sends a SUB-VERB, never the bare command", function()
+    arm("Bard"); M._bardPerformanceCheck()
+    -- Valid forms are SHOW / END / SUSPEND / RESUME. Bare `performance` returns syntax help,
+    -- which trigger 001 cannot parse -- so the probe would time out and recompose every time.
+    expect(sent[1] ~= "performance").toBeTrue()
+    expect(sent[1]:match("^performance %a+$") ~= nil).toBeTrue()
     disarm()
   end)
 
@@ -895,7 +908,7 @@ describe("bard PERFORMANCE probe after the boon screen", function()
     arm("Bard"); M._bardPerformanceCheck()
     ataxiaTemp.bardPerfProbe = nil   -- what trigger 001 does on the "shall last another N" line
     fired()
-    expect(table.concat(sent, ",")).toBe("performance")
+    expect(table.concat(sent, ",")).toBe("performance show") -- probe only, no recompose
     disarm()
   end)
 
