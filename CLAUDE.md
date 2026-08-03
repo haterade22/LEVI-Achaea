@@ -389,6 +389,12 @@ Automated target selection and attack execution for PvE hunting. Supports 20+ cl
 - **PvP auto-flee**: On `"attacker class detected"` event, disables basher and navigates to Mhaldor (`genrunning/001_Bashing_API.lua`)
 - **PvE target switching**: `switchTarget()` skips all PvP state resets when basher is enabled
 
+### Bashing DPS & damage-taken tracking (`bashStats`, v4.7.207)
+
+`bashStats_getDPS()` returns **Now** and **Avg**, both reworked because each was misleading. *Avg* was `totalDamage / wall clock since reset` -- idle time (walking, resting, hovering, the boon screen) divided it down, so it measured how long the client had been open rather than how hard we hit; it now divides by `bashStats.combatTime`, which accumulates only gaps between hits shorter than `bashStats_COMBAT_GAP` (10s). *Now* was a SINGLE balance's damage over that balance -- a crit spiked it, a miss zeroed it; it is now a rolling `bashStats_DPS_WINDOW` (10s), reusing the `ataxiaBasher_dmgSamples` shape from the incoming-damage watchdog, and divides by the whole window so it decays to 0 rather than showing the last burst forever. Fed by `bashStats_recordDamage()` from trigger 350.
+
+**Damage taken by type**: `Health lost: 1488 (physical cutting).` -> trigger `351_Health_Lost_By_Type` -> `bashStats_recordIncoming()`. Stored in `incomingByType`/`incomingTotal`/`incomingHits`, **deliberately separate from `bashStats.damageByType`, which is our OUTGOING damage**. The type is kept whole (category + subtype are different answers) and case-normalised. `bashStats_topIncoming()` gives type/amount/share and `bashStats_incomingRanked()` gives all of them, biggest first with stable alphabetical tie-breaking. The `tarc` HUD shows only the worst offender -- that is the figure you act on mid-hunt (resistance paragon, infuse to keep up, curing priorities); `bashstats` prints the full ranking.
+
 ### Mob Damage Tracking (`mob_damage_db`)
 
 SQLite database tracking non-critical damage per mob, keyed by class + primary stat + mob name. Crit hits are excluded via a flag set in the crit trigger and checked in the damage trigger.

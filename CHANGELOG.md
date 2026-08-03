@@ -2,6 +2,58 @@
 
 ---
 
+## 2026-08-03 - DPS reworked, and what is hitting us tracked by type (v4.7.207)
+
+### Both DPS numbers were misleading, each differently
+
+**"Avg" was `totalDamage / wall clock since the stats were reset`.** Every second spent not
+fighting divided it down -- walking to the next area, resting, hovering to heal, sitting on
+the boon screen, going AFK. It measured *how long the client had been open*, not how hard we
+hit. Reset your stats and idle an hour and a perfectly good session reads near zero.
+
+It now divides by **active combat seconds**: `bashStats.combatTime` accumulates only the gaps
+between hits that are short enough to still be a fight (`bashStats_COMBAT_GAP`, 10s). A test
+pins the difference -- 10,000 damage over 5 seconds of fighting followed by an hour idle now
+reads **2000.0/s**; the old figure was 2.8/s.
+
+**"Now" was a single balance's damage over that balance's duration.** One crit spiked it, one
+miss zeroed it. It flickered too hard to read mid-fight, which is the only time you'd look.
+
+It is now a rolling **10s window** -- the same shape the incoming-damage watchdog already used
+(`ataxiaBasher_dmgSamples`), so the pattern was proven in this codebase before being borrowed.
+Dividing by the whole window rather than by the span of the samples is deliberate: it decays
+to 0 when we stop hitting instead of showing the last burst forever.
+
+Both labels now say which is which (`10s`, `fighting`), because the numbers mean something
+different from what they used to and a stale reading of either is worse than none.
+
+### Damage taken, by type
+
+> Health lost: 1488 (physical cutting).
+
+New trigger `351_Health_Lost_By_Type` tallies incoming damage per type for the session.
+
+Deliberately **separate from `bashStats.damageByType`**, which is our *outgoing* damage -- the
+two would be trivially easy to conflate and the resulting panel would be nonsense. Incoming
+lives in `incomingByType` / `incomingTotal` / `incomingHits`.
+
+The type is kept **whole** ("physical cutting", not "cutting"): the game names a category and
+a subtype, and collapsing them would merge things that want different answers. Case and stray
+whitespace are normalised so one type stays one bucket.
+
+**The HUD shows only the worst offender**, with its share -- because that is the one figure you
+act on mid-hunt: it picks the resistance paragon, the Blademaster infuse to keep up, and which
+curing priorities matter. The full ranking is in `bashstats`, biggest first, ties broken
+alphabetically so the order is stable between calls.
+
+New `test_bash_stats.lua` (20 tests) covers both. Suite 903 -> **923**.
+
+Files: `basher/003_Bash_Stats_Functions.lua`, `350_Damage_Dealt.lua`, new
+`351_Health_Lost_By_Type.lua`, `windows/001_Limb_Counter_Window.lua`,
+`levi/003_Show_Bashing_Stats.lua`, new `tests/test_bash_stats.lua`.
+
+---
+
 ## 2026-08-03 - Bravado: the affix that takes our answers away (v4.7.206)
 
 > **Bravado:** You are perpetually reckless and unable to benefit from shields, prismatic

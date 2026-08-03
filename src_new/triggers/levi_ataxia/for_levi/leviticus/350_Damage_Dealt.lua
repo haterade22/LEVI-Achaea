@@ -45,6 +45,11 @@ if bashStats then
   if not bashStats.damageByType then bashStats.damageByType = {} end
   bashStats.damageByType[dtype] = (bashStats.damageByType[dtype] or 0) + amount
 
+  -- v4.7.207: feeds the reworked DPS -- the rolling 10s window for "Now" and the ACTIVE
+  -- combat clock for "Avg" (see bashStats_getDPS for why wall-clock was the wrong
+  -- denominator). Guarded so an older basher/003 in a half-updated package cannot crash here.
+  if bashStats_recordDamage then bashStats_recordDamage(amount) end
+
   -- Record non-crit damage to mob damage DB
   if not bashStats.lastHitWasCrit then
     if ataxia.data and ataxia.data.db and ataxia.data.db.recordMobDamage then

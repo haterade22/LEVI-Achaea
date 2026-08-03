@@ -63,5 +63,25 @@ if bashStats.totalDamage and bashStats.totalDamage > 0 then
 else
   cecho("\n <a_blue>|<DimGrey> No damage dealt yet.                     <a_blue>|")
 end
+
+-- INCOMING damage by type (v4.7.207). The full ranking lives here; the HUD shows only the
+-- worst offender, because that is the one number you act on mid-hunt -- it picks the
+-- resistance paragon, the infuse to keep up and which curing priorities matter.
+if bashStats_incomingRanked then
+  local ranked = bashStats_incomingRanked()
+  if #ranked > 0 then
+    local total = bashStats.incomingTotal or 0
+    cecho("\n <a_blue>+-------------------------------------------+")
+    cecho("\n <a_blue>|             <NavajoWhite>Damage Taken By Type           <a_blue>|")
+    cecho("\n <a_blue>+-------------------------------------------+")
+    atkLine = " Total   : "..total.."  ("..(bashStats.incomingHits or 0).." hits)"
+    cecho("\n <a_blue>|<indian_red>"..atkLine..string.rep(" ", math.max(0, 43-string.len(atkLine))).."<a_blue>|")
+    for _, row in ipairs(ranked) do
+      local pct = (total > 0) and string.format("%2.1f", (row[2] / total) * 100) or "0.0"
+      atkLine = "  "..row[1]..": "..row[2].." ("..pct.."%)"
+      cecho("\n <a_blue>|<white>"..atkLine..string.rep(" ", math.max(0, 43-string.len(atkLine))).."<a_blue>|")
+    end
+  end
+end
 cecho("\n <a_blue>+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+")
 send(" ")

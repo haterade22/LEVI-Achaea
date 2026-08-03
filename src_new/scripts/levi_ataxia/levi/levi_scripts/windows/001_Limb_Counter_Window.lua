@@ -314,9 +314,27 @@ function tarc.write()
         if not bashStats.currentBalanceDamage then bashStats.currentBalanceDamage = 0 end
         local sDPS, bDPS = bashStats_getDPS()
         tarc:cecho("\n   <cyan>── DPS ──────────<reset>\n")
-        tarc:cecho(string.format("   <white>Now  <reset> <cyan>%s<reset>/s\n", tostring(bDPS)))
-        tarc:cecho(string.format("   <white>Avg  <reset> <yellow>%s<reset>/s\n", tostring(sDPS)))
+        -- "Now" is a rolling 10s window and "Avg" is per ACTIVE combat second (v4.7.207) --
+        -- not one balance sample and not wall-clock. The labels say which, because the two
+        -- numbers now mean something different from what they used to, and a stale reading of
+        -- either is worse than no reading.
+        tarc:cecho(string.format("   <white>Now  <reset> <cyan>%s<reset>/s <gray>10s<reset>\n", tostring(bDPS)))
+        tarc:cecho(string.format("   <white>Avg  <reset> <yellow>%s<reset>/s <gray>fighting<reset>\n", tostring(sDPS)))
         tarc:cecho(string.format("   <white>Total<reset> <green>%s<reset>\n", _fmtNum(bashStats.totalDamage)))
+
+        -- What is actually hurting us this session. The most useful part is WHICH TYPE, not
+        -- how much: it is what picks the resistance paragon, the Blademaster infuse to keep
+        -- up, and which curing priorities matter -- and it is invisible in the scroll, where
+        -- every "Health lost" line is one of hundreds.
+        if bashStats_topIncoming then
+          local dtype, amt, share = bashStats_topIncoming()
+          if dtype then
+            tarc:cecho("\n   <cyan>── Taken ────────<reset>\n")
+            tarc:cecho(string.format("   <white>%s<reset>\n", dtype))
+            tarc:cecho(string.format("   <indian_red>%s<reset> <gray>%d%% of %s<reset>\n",
+              _fmtNum(amt), math.floor(share + 0.5), _fmtNum(bashStats.incomingTotal or 0)))
+          end
+        end
 
         -- Session summary (kills / crits / gold / time + kills-per-hour)
         local elapsed = getEpoch() - (bashStats.dpsSessionStart or getEpoch())
