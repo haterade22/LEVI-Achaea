@@ -2,6 +2,44 @@
 
 ---
 
+## 2026-08-03 - Paragons by name (game change, same day) (v4.7.205)
+
+> Paragons can now be referred to by the paragon name. For example, INSERT CRUCIOUS INTO
+> FULLPLATE will now work instead of having to know your crucious paragon's ID.
+
+This lands the day after the armour layer grew a feature that depended on knowing IDs, and it
+removes that layer's one real dead end.
+
+**A profile slot may now hold either form** -- a registered id (`paragon514466`) or a bare type
+keyword (`crucious`) -- so every reader has to cope with both. `ataxia.armour.paragonName`
+resolves in that order: a registered id wins (it is *proven* to exist on this character), then
+a known type keyword, then the raw string. `isBorrowedRedundant` inherits this, so a
+name-slotted profile is understood exactly like an id-slotted one.
+
+**Borrowed Power no longer gives up when nothing has been scanned.** It used to return "no
+willpower/shifting paragon known -- run `armour scan`" and do nothing, which meant the whole
+feature was inert on a character who had never scanned. A name works without a scan, so the
+fallback is now the type keyword `metalliferous`. A registered id is still preferred where we
+have one.
+
+### The stub that hid the bug
+
+Five tests failed against a *correct* implementation, because the test file stubbed
+`ataxia.armour.paragonName` with a one-liner that only read `config.paragons[id]` -- and that
+stub is precisely the function whose new name-resolution the tests existed to check. **A stub
+of the function under test proves nothing about it.**
+
+Fixed by slicing the real `PARAGON_TYPES` and `paragonName` out of the source alongside the
+Borrowed Power helpers, rather than reimplementing them in the fixture. Same lesson as the
+`darkshadeTracker` fixture in v4.7.194, from the other direction: there a fixture *invented*
+state production never created; here a stub *simplified away* behaviour production does have.
+Either way the fixture was the thing being tested.
+
+Files: `gear_system/002_Armour_Paragons.lua`, test `test_borrowed_power.lua`.
+Suite 885 -> **892**.
+
+---
+
 ## 2026-08-03 - Borrowed Power swaps the dead paragon out, and Bard checks its performance (v4.7.204)
 
 ### Borrowed Power

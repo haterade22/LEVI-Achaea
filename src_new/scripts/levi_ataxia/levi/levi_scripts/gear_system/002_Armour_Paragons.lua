@@ -239,9 +239,25 @@ end
 -- PARAGON NAME LOOKUP
 --------------------------------------------------------------------------------
 
-function ataxia.armour.paragonName(id)
-  if not id then return "(empty)" end
-  return ataxia.armour.config.paragons[id] or id
+-- v4.7.205: Achaea now accepts paragons BY NAME -- "INSERT CRUCIOUS INTO FULLPLATE" works
+-- without knowing the ID. So a profile slot may now hold either a registered id
+-- (`paragon514466`) or a bare type keyword (`crucious`), and every reader has to cope with
+-- both. Resolution order: a registered id wins (it is proven to exist on this character),
+-- then a known type keyword, then the raw string.
+function ataxia.armour.paragonName(ref)
+  if not ref then return "(empty)" end
+  local known = ataxia.armour.config.paragons[ref]
+  if known then return known end
+  local t = ataxia.armour.PARAGON_TYPES and ataxia.armour.PARAGON_TYPES[tostring(ref):lower()]
+  if t then return t end
+  return ref
+end
+
+-- Is this reference a bare paragon TYPE keyword rather than an id? Ids are `paragonNNNN`.
+function ataxia.armour.isParagonTypeName(ref)
+  if type(ref) ~= "string" then return false end
+  return ataxia.armour.PARAGON_TYPES ~= nil
+    and ataxia.armour.PARAGON_TYPES[ref:lower()] ~= nil
 end
 
 function ataxia.armour.resolveParagonName(rawName)
@@ -462,10 +478,15 @@ function ataxia.armour.borrowedReplacementId()
       if type(nm) == "string" and nm:lower():find(want, 1, true) then return id end
     end
   end
-  return nil
+  -- v4.7.205: nothing registered, but the game now takes the NAME directly, so we no longer
+  -- have to give up here. This used to be the layer's one real dead end -- "no
+  -- willpower/shifting paragon known, run armour scan" -- which meant Borrowed Power did
+  -- nothing at all on a character who had never scanned. A name works without a scan.
+  return "metalliferous"
 end
 
 -- Is this paragon id one the boon makes redundant?
+-- Accepts an id OR a bare type name in the slot (v4.7.205): paragonName resolves both.
 function ataxia.armour.isBorrowedRedundant(id)
   local nm = ataxia.armour.paragonName and ataxia.armour.paragonName(id)
   if type(nm) ~= "string" then return false end

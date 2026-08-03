@@ -21,21 +21,28 @@ ataxia.armour = {
 function ataxia.armour.echo() end
 function ataxia.armour.save() end
 function ataxia.armour.swap(name) swapped = name; return true end
-function ataxia.armour.paragonName(id) return ataxia.armour.config.paragons[id] end
 
 -- Slice out just the three Borrowed Power helpers: the file as a whole needs a live Mudlet
 -- (Geyser, timers, the alias dispatcher), but these are pure decision logic.
 local SRC = "src_new/scripts/levi_ataxia/levi/levi_scripts/gear_system/002_Armour_Paragons.lua"
 -- Sliced by plain offsets, not a newline-bearing pattern: this source is CRLF, so `.-\nend\n`
 -- silently fails to match.
+-- `paragonName` is SLICED rather than stubbed, deliberately. It was stubbed at first with a
+-- one-line version that only read config.paragons[id] -- and that stub silently masked the
+-- v4.7.205 name resolution these tests were written to check, so five of them failed against
+-- a correct implementation. A stub of the very function under test proves nothing about it.
 local body = io.open(SRC):read("*a")
-local from = body:find("ataxia.armour.config.borrowedRedundant", 1, true)
-local to = body:find("function ataxia.armour.addProfile", 1, true)
-assert(from and to and to > from,
-  "could not slice the Borrowed Power helpers out of " .. SRC)
 -- `loadstring` is 5.1-only; the runner may be on a newer Lua, where it is `load`.
 local loadfn = loadstring or load
-assert(loadfn(body:sub(from, to - 1)))()
+local function slice(startAnchor, endAnchor, what)
+  local from = body:find(startAnchor, 1, true)
+  local to = body:find(endAnchor, from or 1, true)
+  assert(from and to and to > from, "could not slice " .. what .. " out of " .. SRC)
+  assert(loadfn(body:sub(from, to - 1)))()
+end
+slice("ataxia.armour.PARAGON_TYPES = {", "function ataxia.armour.echo", "PARAGON_TYPES")
+slice("function ataxia.armour.paragonName", "function ataxia.armour.resolveParagonName", "paragonName")
+slice("ataxia.armour.config.borrowedRedundant", "function ataxia.armour.addProfile", "Borrowed Power helpers")
 
 local function reset()
   swapped = nil
@@ -90,10 +97,58 @@ describe("what goes in its place", function()
     expect(ataxia.armour.borrowedReplacementId()).toBe("p_serendip")
   end)
 
-  it("returns nothing when neither is known, rather than guessing", function()
+  -- v4.7.205 (game change): Achaea now accepts paragons BY NAME --
+  -- "INSERT CRUCIOUS INTO FULLPLATE" -- so not having scanned is no longer a dead end.
+  -- This assertion used to expect nil, which encoded a limitation that no longer exists.
+  it("falls back to the bare TYPE NAME when nothing is registered", function()
     reset()
     ataxia.armour.config.paragons = { ["p_crucious"] = "crucious (crit multiplier)" }
-    expect(ataxia.armour.borrowedReplacementId()).toBe(nil)
+    expect(ataxia.armour.borrowedReplacementId()).toBe("metalliferous")
+  end)
+
+  it("still prefers a REGISTERED id over the bare name -- it is proven to exist", function()
+    reset()
+    expect(ataxia.armour.borrowedReplacementId()).toBe("p_metal")
+  end)
+end)
+
+-- A profile slot may now hold either form, so every reader has to cope with both.
+describe("slots holding a NAME rather than an id (v4.7.205)", function()
+  it("resolves a bare type name to its display name", function()
+    reset()
+    expect(ataxia.armour.paragonName("crucious")).toBe("crucious (crit multiplier)")
+  end)
+
+  it("still resolves a registered id, and that wins", function()
+    reset()
+    expect(ataxia.armour.paragonName("p_crucious")).toBe("crucious (crit multiplier)")
+  end)
+
+  it("passes an unknown string through untouched", function()
+    reset()
+    expect(ataxia.armour.paragonName("something_else")).toBe("something_else")
+  end)
+
+  it("recognises a NAMED crit paragon as redundant, not just an id", function()
+    reset()
+    expect(ataxia.armour.isBorrowedRedundant("crucious")).toBeTrue()
+    expect(ataxia.armour.isBorrowedRedundant("metalliferous")).toBeFalse()
+  end)
+
+  it("swaps a name-slotted profile correctly", function()
+    reset()
+    ataxia.armour.config.profiles.bash.slots = { "icosagon", "serendipitous", "crucious" }
+    expect(ataxia.armour.borrowedPower(true)).toBeTrue()
+    local b = ataxia.armour.config.profiles.borrowed
+    expect(b.slots[1]).toBe("icosagon")  -- crit CHANCE still kept
+    expect(b.slots[3]).toBe("p_metal")   -- replaced with the registered id we do know
+  end)
+
+  it("knows which references are type names", function()
+    reset()
+    expect(ataxia.armour.isParagonTypeName("crucious")).toBeTrue()
+    expect(ataxia.armour.isParagonTypeName("p_crucious")).toBeFalse()
+    expect(ataxia.armour.isParagonTypeName(nil)).toBeFalse()
   end)
 end)
 
@@ -121,12 +176,12 @@ describe("the swap", function()
     expect(swapped).toBe(nil)
   end)
 
-  it("does nothing when no replacement paragon is known", function()
+  it("swaps by NAME on a character that has never scanned (v4.7.205)", function()
     reset()
     ataxia.armour.config.paragons.p_metal = nil
     ataxia.armour.config.paragons.p_serendip = nil
-    expect(ataxia.armour.borrowedPower(true)).toBeFalse()
-    expect(swapped).toBe(nil)
+    expect(ataxia.armour.borrowedPower(true)).toBeTrue()
+    expect(ataxia.armour.config.profiles.borrowed.slots[3]).toBe("metalliferous")
   end)
 
   it("respects the opt-out", function()
