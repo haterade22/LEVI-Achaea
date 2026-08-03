@@ -132,18 +132,6 @@ patterns:
   type: 3
 - pattern: '[System]'
   type: 2
-# Bard nomos refusal spam: the blade song is already sung, so re-specifying it on the next
-# `blade flick <t> nomos` prints this every swing. type 2 (begin-of-line substring), NOT 3:
-# the tail names the weapon, so an exact whole-line match would silently never fire, and
-# starting at the line head keeps it from gagging someone quoting it over a channel.
-- pattern: The sundering note of the Nomos already keens forth
-  type: 2
-# Bard paean refusal spam, the twin of the nomos one above: the refrain is already on the
-# blade, so naming it again on the next `blade flick <t> paean` prints this every swing.
-# type 2 -- the tail names the weapon ("your song blessed blade"), so type 3 would never fire,
-# and anchoring at the line head keeps it from gagging someone quoting it over a channel.
-- pattern: The paean already refrains from your
-  type: 2
 ]]--
 
 deleteFull()
