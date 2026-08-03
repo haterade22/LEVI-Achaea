@@ -2,6 +2,62 @@
 
 ---
 
+## 2026-08-03 - Songstep: a dance is a state, not a rider (v4.7.200)
+
+New legendary Bard boon:
+
+> **Songstep** -- Your dances gain additional bonuses. Hawkstep: Gain 25% resistance to
+> damage. Wavedance: Ignore 75% of a denizen's resistance. Harrying: Deal 50% bonus damage.
+
+### The cost is the whole design
+
+AB Hawkstep (3193) is **"3.00 seconds of BALANCE"**, and the AB says outright that *"you can
+only dance one thing at a time"*. Those two facts decide the entire shape.
+
+Every previous Mnemosyne rider in this package -- the Shindo storms, chrono blur, deathaura --
+spends EQUILIBRIUM, so it rides free beside the swing and can be re-asserted whenever the
+defence drops. A dance cannot. It spends the swing itself, and the dances are mutually
+exclusive, so this is a **state we switch**, not a buff we maintain. A naive "keep the right
+dance up" rider would have attacked *never*.
+
+So `ataxiaBasher_bardDance` returns `""` on almost every round. It sends a dance only when the
+wanted dance differs from what is actually up, and then holds for 8s so an unconfirmed dance
+cannot cost every balance from there on. On a switching round the dance **replaces** the
+attack (the battlerage still rides -- that is rage, not balance).
+
+### Which dance
+
+| dance | when | why |
+|---|---|---|
+| Wavedance | **bosses** | ignoring 75% resistance answers the one denizen whose resistance matters |
+| Hawkstep | higher ripples, or **any** room with 2+ denizens | 25% damage resistance; those are the rooms that kill |
+| Harrying | lower ripples -- the default | +50% damage when nothing is threatening |
+
+Boss beats crowd: a boss room may hold adds, but the boss is what the round is about. There is
+a test for exactly that, and its inverse -- an add in a boss room is not the boss.
+
+### Two honest gaps
+
+**The ripple number is mine, not yours.** You said "higher ripples" without one, so
+`ataxiaBasher.bardHawkstepRipple` defaults to **5** and wants tuning from play. The crowd
+threshold (`bardHawkstepAt`, 2) and the boss rule are exactly as specified.
+
+**`hawkstep` and `wavedance` as defence names are inferred.** `harrying` IS a GMCP-tracked
+defence (it is in the bard block of `deffing/004`), so the dances do surface as defences and
+that is the authority for "what am I already dancing". The other two are assumed to follow the
+same naming -- consistent, but not verified against a live capture. The attempt-hold is what
+makes that safe to ship: if a name is wrong we re-dance once per 8s instead of every round,
+which is visible and cheap rather than silent and ruinous. If a capture shows otherwise, only
+`BARD_DANCES` needs changing.
+
+Boon flags now **31**.
+
+Files: `basher/002_Class_Bashing.lua`, new trigger `mnemosyne/057_Songstep.lua`,
+`mnemosyne/001_Run_Start.lua`, `mnemosyne/002_Boon_Claim.lua`, `mnemosyne/004_Parsers.lua`,
+test `test_bm_infuse.lua`. Suite 839 -> **855**.
+
+---
+
 ## 2026-08-02 - Gag the nomos refusal spam (v4.7.199)
 
 > The sundering note of the Nomos already keens forth from your blade.

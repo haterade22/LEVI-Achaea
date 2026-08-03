@@ -95,3 +95,7 @@ if matches[2]:lower():find("divine thunder") then mnemDivineThunder = true end
 -- apostrophe in "Midnight Snow's" cannot break it -- the same reason the Winter's Heart
 -- check above accepts both spellings.
 if matches[2]:lower():find("icy heart") then mnemIcyHeart = true end
+-- Songstep (legendary): the three Bladedance dances gain bonuses. See trigger 057 --
+-- a dance costs BALANCE and they are mutually exclusive, so it is a state we switch,
+-- not a rider we re-assert.
+if matches[2]:lower():find("songstep") then mnemSongstep = true end

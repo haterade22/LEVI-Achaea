@@ -290,6 +290,135 @@ end)
 -- Restore shared state for whoever runs after us (files share one Lua state).
 target = nil
 ataxiaTemp = {}
+
+-- SONGSTEP (v4.7.200). Legendary bard boon: the three dances gain bonuses. AB Hawkstep
+-- (3193) is 3.00s of BALANCE and the dances are mutually exclusive, so a dance is a STATE
+-- and every switch costs an attack -- the rotation must switch RARELY, never re-assert.
+describe("Songstep -- which dance, and how seldom", function()
+  local function setup(opts)
+    opts = opts or {}
+    gmcp.Char.Status.class = "Bard"
+    ataxiaTemp = {}
+    ataxia.bardStuff = { bashPunctuate = false }
+    bardWarmarch = false
+    mnemSongstep = true
+    ataxiaBasher.shielded = false
+    ataxiaBasher.bardHawkstepAt, ataxiaBasher.bardHawkstepRipple = nil, nil
+    ataxia.defences = {}
+    target, secondTarget = 7, opts.mob or "a ghostly deckhand"
+    ataxia.mnemosyne = {
+      _denizenCount = function() return opts.denizens or 1 end,
+      run = { ripple = opts.ripple or 1, boss = opts.boss },
+    }
+  end
+
+  it("does nothing at all without the boon", function()
+    setup(); mnemSongstep = false
+    expect(ataxiaBasher_bardWantDance()).toBe(nil)
+    expect(ataxiaBasher_bardDance(";")).toBe("")
+  end)
+
+  it("HARRYING is the default -- lower ripple, one denizen, no boss", function()
+    setup()
+    expect(ataxiaBasher_bardWantDance()).toBe("harrying")
+  end)
+
+  it("HAWKSTEP in any room with multiple denizens (user rule)", function()
+    setup({ denizens = 2 })
+    expect(ataxiaBasher_bardWantDance()).toBe("hawkstep")
+  end)
+
+  it("HAWKSTEP on a higher ripple even solo", function()
+    setup({ ripple = 5 })
+    expect(ataxiaBasher_bardWantDance()).toBe("hawkstep")
+    setup({ ripple = 4 })
+    expect(ataxiaBasher_bardWantDance()).toBe("harrying")
+  end)
+
+  it("WAVEDANCE against the boss -- 75% resistance ignored", function()
+    setup({ boss = "Seasone the Industrious", mob = "Seasone, the Industrious" })
+    expect(ataxiaBasher_bardWantDance()).toBe("wavedance")
+  end)
+
+  it("boss BEATS the crowd rule -- the boss is what the round is about", function()
+    setup({ boss = "Seasone the Industrious", mob = "Seasone, the Industrious",
+            denizens = 4, ripple = 10 })
+    expect(ataxiaBasher_bardWantDance()).toBe("wavedance")
+  end)
+
+  it("an add in the boss room is NOT the boss", function()
+    setup({ boss = "Seasone the Industrious", mob = "a ghostly deckhand", denizens = 3 })
+    expect(ataxiaBasher_bardWantDance()).toBe("hawkstep")
+  end)
+
+  it("both thresholds are configurable", function()
+    setup({ denizens = 2 }); ataxiaBasher.bardHawkstepAt = 3
+    expect(ataxiaBasher_bardWantDance()).toBe("harrying")
+    setup({ ripple = 3 }); ataxiaBasher.bardHawkstepRipple = 3
+    expect(ataxiaBasher_bardWantDance()).toBe("hawkstep")
+  end)
+
+  -- The expensive half: a dance costs the swing, so it must fire once and then stop.
+  it("sends the dance once, then holds -- it must NOT cost every balance", function()
+    setup({ denizens = 2 })
+    expect(ataxiaBasher_bardDance(";")).toBe("dance hawkstep;")
+    expect(ataxiaBasher_bardDance(";")).toBe("") -- held
+    expect(ataxiaBasher_bardDance(";")).toBe("")
+  end)
+
+  it("stops immediately once the defence is actually up", function()
+    setup({ denizens = 2 })
+    ataxia.defences.hawkstep = true
+    expect(ataxiaBasher_bardDance(";")).toBe("")
+  end)
+
+  it("switches without waiting when the WANTED dance changes", function()
+    setup({ denizens = 2 })
+    expect(ataxiaBasher_bardDance(";")).toBe("dance hawkstep;")
+    -- room cleared down to one mob: harrying is now correct, and the hold must not block it
+    ataxia.mnemosyne._denizenCount = function() return 1 end
+    expect(ataxiaBasher_bardDance(";")).toBe("dance harrying;")
+  end)
+
+  it("breaks the shield first -- never spends the swing dancing at a shielded mob", function()
+    setup({ denizens = 2 }); ataxiaBasher.shielded = true
+    expect(ataxiaBasher_bardDance(";")).toBe("")
+  end)
+
+  it("is inert in PvP", function()
+    setup({ denizens = 2 }); target = "someplayer"
+    expect(ataxiaBasher_bardDance(";")).toBe("")
+  end)
+
+  -- Round composition: the dance REPLACES the swing (balance), it does not ride beside it.
+  it("a switching round dances INSTEAD of attacking", function()
+    setup({ denizens = 2 })
+    local cmd = ataxiaBasher_bardBashing()
+    expect(cmd:find("dance hawkstep", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("blade flick", 1, true)).toBe(nil)
+    expect(cmd:find("blade punctuate", 1, true)).toBe(nil)
+  end)
+
+  it("every other round attacks normally", function()
+    setup({ denizens = 2 })
+    ataxia.defences.hawkstep = true -- already dancing what we want
+    local cmd = ataxiaBasher_bardBashing()
+    expect(cmd:find("blade flick", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("dance ", 1, true)).toBe(nil)
+  end)
+
+  it("is completely inert for a bard without the boon", function()
+    setup(); mnemSongstep = false
+    local cmd = ataxiaBasher_bardBashing()
+    expect(cmd:find("dance ", 1, true)).toBe(nil)
+    expect(cmd:find("blade flick", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
+mnemSongstep = false
+ataxia.mnemosyne = nil
+
+bardWarmarch = false
 bardWarmarch = false
 mnemDivineThunder = false
 blademaster = nil

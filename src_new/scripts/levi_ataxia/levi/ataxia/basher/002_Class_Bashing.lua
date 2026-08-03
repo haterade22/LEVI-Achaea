@@ -378,6 +378,88 @@ function ataxiaBasher_bardCompose()
    ataxiaEcho("<green>Bard bash:<reset> composed <cyan>"..c)
 end
 
+-- SONGSTEP (Mnemosyne legendary boon, v4.7.200): "Your dances gain additional bonuses.
+-- Hawkstep: Gain 25% resistance to damage. Wavedance: Ignore 75% of a denizen's resistance.
+-- Harrying: Deal 50% bonus damage."
+--
+-- THE COST IS THE WHOLE DESIGN. AB Hawkstep (3193) is "3.00 seconds of BALANCE", and the AB
+-- spells out that "you can only dance one thing at a time" -- the dances are mutually
+-- exclusive. So a dance is not a rider like the thunderstorm (equilibrium, free alongside the
+-- swing); it is a STATE, and every switch costs a full attack. That makes the goal to switch
+-- RARELY and correctly, never to re-assert per round -- a naive "keep the right dance up"
+-- rider would simply never attack.
+--
+-- Which dance, per the user (2026-08-03):
+--   Wavedance  -- against BOSSES. Ignoring 75% of resistance is the answer to the one
+--                 denizen whose resistance actually matters.
+--   Hawkstep   -- higher ripples and ANY room with multiple denizens. 25% damage resistance
+--                 is a survival stat, and those are the rooms that kill.
+--   Harrying   -- lower ripples, i.e. the default. +50% damage when nothing is threatening.
+--
+-- Boss beats crowd: a boss room may hold adds, but the boss is what the round is about.
+--
+-- KNOWING WHAT IS ALREADY DANCED. `harrying` is a GMCP-tracked defence (see the bard block in
+-- deffing/004), so the dances surface as defences and that is the authority. `hawkstep` and
+-- `wavedance` are assumed to follow the same naming -- consistent with `harrying`, but NOT
+-- verified against a live capture, so an attempt-hold backs it up: if the defence never
+-- appears we still stop re-dancing after one try instead of burning a swing every round. If a
+-- capture shows different names, only DANCE_DEFENCE below needs changing.
+local BARD_DANCES = {
+  hawkstep  = { cmd = "dance hawkstep",  def = "hawkstep"  },
+  wavedance = { cmd = "dance wavedance", def = "wavedance" },
+  harrying  = { cmd = "dance harrying",  def = "harrying"  },
+}
+
+-- Which dance does the situation call for? Pure decision, unit-tested.
+function ataxiaBasher_bardWantDance()
+  if not mnemSongstep then return nil end
+  local M = ataxia and ataxia.mnemosyne
+
+  -- Boss first (most specific rule).
+  local boss = M and M.run and M.run.boss
+  local nm = secondTarget
+  if type(boss) == "string" and boss ~= "" and type(nm) == "string" and nm ~= "" then
+    local first = boss:lower():match("[%a]+")
+    if first and #first >= 4 and nm:lower():find(first, 1, true) then return "wavedance" end
+  end
+
+  -- Crowd, or a deep ripple. The crowd rule is the user's ("any room with multiple
+  -- denizens"); the ripple NUMBER is a guess -- they said "higher ripples" without one --
+  -- so it is configurable and wants tuning from play.
+  local n = (M and M._denizenCount and M._denizenCount()) or 0
+  if n >= (tonumber(ataxiaBasher.bardHawkstepAt) or 2) then return "hawkstep" end
+  local ripple = tonumber(M and M.run and M.run.ripple) or 0
+  if ripple >= (tonumber(ataxiaBasher.bardHawkstepRipple) or 5) then return "hawkstep" end
+
+  return "harrying"
+end
+
+-- The command to switch dance this round, or "" to just keep swinging.
+function ataxiaBasher_bardDance(sp)
+  if not mnemSongstep then return "" end
+  if ataxiaBasher.shielded then return "" end -- break the shield first
+  if type(target) ~= "number" then return "" end
+  local want = ataxiaBasher_bardWantDance()
+  if not want then return "" end
+  local d = BARD_DANCES[want]
+  if not d then return "" end
+
+  -- Already dancing it? Then there is nothing to buy and the swing stays ours.
+  if ataxia.defences and ataxia.defences[d.def] then return "" end
+
+  -- Attempt-hold: one try per window. Without it an unconfirmed dance (wrong defence name,
+  -- eaten command, a refusal we have not captured) would cost EVERY balance from here on.
+  ataxiaTemp = ataxiaTemp or {}
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  local hold = tonumber(ataxiaBasher.bardDanceHold) or 8
+  if ataxiaTemp.bardDanceWant == want and (nowT - (tonumber(ataxiaTemp.bardDanceAt) or 0)) < hold then
+    return ""
+  end
+  ataxiaTemp.bardDanceWant = want
+  ataxiaTemp.bardDanceAt = nowT
+  return d.cmd..sp
+end
+
 function ataxiaBasher_bardBashing()
    local command = ""
    if bardNeedRapierWield then
@@ -414,6 +496,14 @@ function ataxiaBasher_bardBashing()
     else
        atk = "blade flick "..target.. " nomos"
     end
+    -- Songstep: a dance costs 3s of BALANCE, so on a switching round it REPLACES the swing
+    -- (the battlerage above still rides -- that is rage, not balance). Returns "" on every
+    -- other round, which is almost all of them: the dance is a state we hold, not a rider.
+    local dance = ataxiaBasher_bardDance(ataxia.settings.separator)
+    if dance ~= "" then
+       return command..dance:gsub(ataxia.settings.separator.."$", "")
+    end
+
     command = command.."wield right rapier;wield left shield;"..atk
 
    return command
