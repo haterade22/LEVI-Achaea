@@ -2,6 +2,81 @@
 
 ---
 
+## 2026-08-03 - The boon re-latch has never worked, and the compose was on a timer (v4.7.203)
+
+Both found in one live log the user posted about a mis-timed recompose.
+
+### The re-latch sent a command that does not exist
+
+The log carried this, unprompted, in the middle of combat:
+
+```
+Syntax:
+   BOON CLAIMED
+   BOON OPTIONS
+   BOON CLAIM <boon name>
+   BOON CONTEMPLATE <boon name>
+```
+
+That is the game rejecting a command. `M._relatchBoons()` sends **`boons`** -- and `BOONS` is
+not one of the four valid forms. **So the boon re-latch has never re-latched anything since it
+shipped in v4.7.188.** It fired once per run, printed a syntax block into the combat scroll,
+and did nothing.
+
+Sobering, because the function was worked on three times without anyone checking the command
+existed: shipped in v4.7.188; "corrected" in v4.7.192 when its guard was moved off the
+serialized namespace (a real bug -- inside a no-op); and read by the Codex adversarial review.
+Every pass reasoned about *when* to send and never about *what*.
+
+The unit test made it worse rather than catching it: it asserted `expect(seen[1]).toBe("boons")`
+-- pinning the implementation string with no notion of whether it was a real command, so it
+passed for the feature's entire dead life. **A test that asserts what we send is not a test
+that we send something meaningful.** It now also asserts the `boon <verb>` form that every
+other boon command in the package already used -- `boon claim`, `boon contemplate` -- which was
+the tell sitting in plain sight the whole time.
+
+Now sends `boon claimed`: it lists owned boons as `<name>  <echoes>  <rarity>`, exactly the row
+`mnemosyne/013_Boons_List_Row` parses and exactly the shape of every per-boon flag trigger
+(`^Songstep\s+\d+\s+\w+`).
+
+### The compose was driven by a timer instead of the performance
+
+> (LEVI): Bard bash: composed paean prelude scherzo sonata maqam
+> **You are already performing, wordsmith.**
+> ...
+> **Your performance fades away into silence.**
+
+User: *"I think this happened too soon... we should've put it back up based on the
+performance."* Exactly right, and the log shows the full failure: the 15-minute timer fired
+while the song was still running (refused), and then the performance ended moments later with
+nothing to replace it -- leaving the bard performing **nothing** until some later command
+errored and trigger 005 finally noticed.
+
+A timer cannot stay in phase with the real thing. The package's own rule -- prefer the game's
+own line to a guess about timing -- just had not been applied here:
+
+- **`002_Performance_Ended`** ("Your performance fades away into silence.") now recomposes.
+  That is the authoritative end and the right moment to put a new one up.
+- **New `006_Already_Performing`** handles the refusal. It is not noise: it says the song is
+  still up, so it re-asserts `bardperformance` and pushes the backstop timer out from *now*
+  rather than letting it retry immediately -- which is what kept it out of phase.
+- The 15-minute timer stays as a backstop for a fade line we somehow miss; trigger 005 stays
+  as the last-resort catch.
+
+### Seen in the log, left alone
+
+`You aren't wearing a Lasallian lyre.` -- `ataxiaBasher_bardCompose` opens with
+`remove lyre;wield left lyre`, and the `remove` fails harmlessly when the lyre is not worn. I
+have not touched the sequence: the `remove` presumably exists for a reason I cannot see from
+one log, and guessing at it risks breaking the compose for the case it was added for. Worth a
+look if it bothers you.
+
+Files: `mnemosyne/008_Explorer.lua`, `performance_tracking/002_Performance_Ended.lua`, new
+`performance_tracking/006_Already_Performing.lua`, test `test_mnemosyne.lua`.
+Suite 864 -> **865**.
+
+---
+
 ## 2026-08-03 - Roll Hide: tumble at a real HP number, and go somewhere known-safe (v4.7.202)
 
 > **Roll Hide** (rare) -- Tumbling out of a room will cause you to lose all pursuing denizens.

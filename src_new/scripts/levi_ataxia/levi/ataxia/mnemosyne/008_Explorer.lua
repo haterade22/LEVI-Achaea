@@ -630,7 +630,22 @@ function M._relatchBoons()
   ataxiaTemp = ataxiaTemp or {}
   if ataxiaTemp.mnemBoonsRelatched then return end
   ataxiaTemp.mnemBoonsRelatched = true
-  send("boons", false)
+  -- `BOON CLAIMED`, not `BOONS` (v4.7.203). `BOONS` is not a command -- the game answers it
+  -- with its syntax help, which lists exactly four forms: BOON CLAIMED / OPTIONS /
+  -- CLAIM <name> / CONTEMPLATE <name>. So this function has NEVER re-latched anything since
+  -- it shipped in v4.7.188; it sent an invalid command once per run and printed a syntax
+  -- block into the middle of combat. Caught from a live log, 2026-08-03.
+  --
+  -- Sobering, because the function was touched three times without anyone checking the
+  -- command existed: shipped v4.7.188, "corrected" in v4.7.192 (its guard moved to
+  -- ataxiaTemp -- a real bug, but in a no-op), and read by the Codex review. Every pass
+  -- reasoned about WHEN to send and never about WHAT.
+  --
+  -- CLAIMED is the right form: it lists the boons we own as `<name>  <echoes>  <rarity>`,
+  -- which is exactly the row `mnemosyne/013_Boons_List_Row` parses and the shape of every
+  -- per-boon flag trigger (`^Songstep\s+\d+\s+\w+`). Every other boon command in the
+  -- package already uses the `boon <verb>` form -- `boon claim`, `boon contemplate`.
+  send("boon claimed", false)
 end
 
 -- Resume a paused sweep. Re-assert the explore-mode basher config (idempotent; guards a flag that

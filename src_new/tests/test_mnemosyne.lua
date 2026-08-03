@@ -1515,7 +1515,27 @@ describe("boon flags re-latch once per run (v4.7.188)", function()
     M._relatchBoons()
     send = realSend
     expect(#seen).toBe(1)          -- once per run, not per ripple
-    expect(seen[1]).toBe("boons")
+    -- `BOON CLAIMED`, not `BOONS` (v4.7.203). BOONS is not a command: the game answers it
+    -- with its syntax help, which lists exactly BOON CLAIMED / OPTIONS / CLAIM / CONTEMPLATE.
+    -- This assertion previously pinned "boons" -- it verified WHAT we send without any check
+    -- that the string was a real command, so it passed happily for the entire time the
+    -- feature was a no-op. Hence the second assertion below.
+    expect(seen[1]).toBe("boon claimed")
+  end)
+
+  it("uses the `boon <verb>` form every other boon command uses", function()
+    if not (M and M._relatchBoons) then return end
+    local seen = {}
+    local realSend = send
+    send = function(cmd) table.insert(seen, cmd) end
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.mnemBoonsRelatched = nil
+    M._relatchBoons()
+    send = realSend
+    -- The package's other boon commands are `boon claim <name>` and `boon contemplate <name>`.
+    -- A bare `boons` is the odd one out, and that was the tell.
+    expect(seen[1]:match("^boon ") ~= nil).toBeTrue()
+    expect(seen[1]).toBe("boon claimed")
   end)
 
   it("re-arms when a new run starts", function()
