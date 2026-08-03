@@ -328,11 +328,22 @@ describe("Songstep -- which dance, and how seldom", function()
     expect(ataxiaBasher_bardWantDance()).toBe("hawkstep")
   end)
 
-  it("HAWKSTEP on a higher ripple even solo", function()
-    setup({ ripple = 5 })
+  -- Ripple 25 is the user's number for where the tower's difficulty steps up. The original
+  -- guess of 5 came from the boss cadence and was wrong by a factor of five -- at 5 the bard
+  -- would have sat in defensive hawkstep for twenty ripples of easy rooms, trading away
+  -- Harrying's +50% damage for resistance it did not need.
+  it("HAWKSTEP from ripple 25 -- where the difficulty actually steps up", function()
+    setup({ ripple = 25 })
     expect(ataxiaBasher_bardWantDance()).toBe("hawkstep")
-    setup({ ripple = 4 })
+    setup({ ripple = 24 })
     expect(ataxiaBasher_bardWantDance()).toBe("harrying")
+  end)
+
+  it("stays on HARRYING through the easy ripples, boss cadence notwithstanding", function()
+    for _, r in ipairs({ 1, 5, 10, 15, 20 }) do
+      setup({ ripple = r })
+      expect(ataxiaBasher_bardWantDance()).toBe("harrying")
+    end
   end)
 
   it("WAVEDANCE against the boss -- 75% resistance ignored", function()

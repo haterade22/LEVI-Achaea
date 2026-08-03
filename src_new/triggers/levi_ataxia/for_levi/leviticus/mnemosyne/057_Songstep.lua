@@ -53,9 +53,10 @@ patterns:
 --   Harrying   lower ripples, the default -- +50% damage when nothing is threatening
 -- Boss beats crowd: a boss room may hold adds, but the boss is what the round is about.
 --
--- `ataxiaBasher.bardHawkstepRipple` (default 5) is a GUESS -- the user said "higher ripples"
--- without a number, so it is configurable and wants tuning from play. The crowd threshold
--- (`bardHawkstepAt`, 2) and the boss rule are theirs exactly.
+-- `ataxiaBasher.bardHawkstepRipple` defaults to 25: the user's number for where the tower's
+-- difficulty actually steps up (2026-08-03). The first cut guessed 5 off the boss cadence,
+-- which was the wrong reasoning -- boss frequency is not difficulty. All three thresholds
+-- (this, `bardHawkstepAt` 2, and the boss rule) are now the user's, not inferred.
 --
 -- Cleared on run start and on the confirmed run end.
 mnemSongstep = true

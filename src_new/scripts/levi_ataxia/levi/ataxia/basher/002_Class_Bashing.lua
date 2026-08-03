@@ -423,13 +423,16 @@ function ataxiaBasher_bardWantDance()
     if first and #first >= 4 and nm:lower():find(first, 1, true) then return "wavedance" end
   end
 
-  -- Crowd, or a deep ripple. The crowd rule is the user's ("any room with multiple
-  -- denizens"); the ripple NUMBER is a guess -- they said "higher ripples" without one --
-  -- so it is configurable and wants tuning from play.
+  -- Crowd, or a deep ripple. Both numbers are the user's: "any room with multiple denizens",
+  -- and RIPPLE 25 as the point where the tower's difficulty actually steps up (2026-08-03).
+  -- The first cut guessed 5 by anchoring on the boss cadence -- every 5th ripple is a boss --
+  -- which was the wrong reasoning entirely: boss frequency is not difficulty, and at 5 the
+  -- bard would have sat in defensive hawkstep for twenty ripples of easy rooms, giving up
+  -- Harrying's +50% damage for a resistance bonus against nothing.
   local n = (M and M._denizenCount and M._denizenCount()) or 0
   if n >= (tonumber(ataxiaBasher.bardHawkstepAt) or 2) then return "hawkstep" end
   local ripple = tonumber(M and M.run and M.run.ripple) or 0
-  if ripple >= (tonumber(ataxiaBasher.bardHawkstepRipple) or 5) then return "hawkstep" end
+  if ripple >= (tonumber(ataxiaBasher.bardHawkstepRipple) or 25) then return "hawkstep" end
 
   return "harrying"
 end

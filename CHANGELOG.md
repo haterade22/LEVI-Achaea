@@ -2,6 +2,36 @@
 
 ---
 
+## 2026-08-03 - Hawkstep at ripple 25, not 5 (v4.7.201)
+
+User, correcting yesterday's guess: *"Higher ripples at like 25 plus. That is when the
+difficulty increases."*
+
+`ataxiaBasher.bardHawkstepRipple` 5 -> **25**.
+
+I had anchored the guess on the boss cadence -- every 5th ripple is a boss -- and that was
+the wrong reasoning, not just the wrong number. **Boss frequency is not difficulty.** The
+practical cost of being wrong by a factor of five: the bard would have switched into
+defensive Hawkstep at ripple 5 and stayed there for twenty ripples of easy rooms, trading
+away Harrying's **+50% damage** for a resistance bonus against nothing much -- and paying a
+balance swing for the privilege of doing so.
+
+A second test now pins the easy range explicitly (ripples 1, 5, 10, 15, 20 all stay on
+Harrying), because "5" passing was exactly what a too-low threshold would look like.
+
+All three Songstep thresholds are now the user's numbers rather than inferred: ripple 25,
+2+ denizens, and bosses.
+
+**Recorded as general tower knowledge, not just a bard setting:** ripple ~25 is where
+Mnemosyne's difficulty steps up. That is the number to reach for anywhere depth-scaling is
+wanted -- notably `mnem swarm deep <r> <n>`, whose `deepAt` has no default and has been
+waiting for exactly this.
+
+Files: `basher/002_Class_Bashing.lua`, `mnemosyne/057_Songstep.lua`, test
+`test_bm_infuse.lua`. Suite 855 -> **856**.
+
+---
+
 ## 2026-08-03 - Songstep: a dance is a state, not a rider (v4.7.200)
 
 New legendary Bard boon:
