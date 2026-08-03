@@ -484,6 +484,8 @@ ataxia.armour.config.profiles["bash"] = {
 
 **Morph:** Sends `MORPHARMOUR armour INTO <type>`. Tracks cooldown (10min). `armourType = "auto"` resolves via `gmcp.Char.Status.class` → `classArmourType` lookup. Auto-detects current armour type from class on init if unknown.
 
+**Paragons are NAME-addressable (game change 2026-08-03, v4.7.205).** `INSERT CRUCIOUS INTO FULLPLATE` works without knowing the ID, so a profile slot may hold either a registered id (`paragon514466`) or a bare type keyword (`crucious`). `ataxia.armour.paragonName` resolves in that order -- registered id (proven to exist on this character) -> known type keyword -> raw string -- and `isBorrowedRedundant` inherits it, so name-slotted profiles behave exactly like id-slotted ones. **`armour scan` is now a convenience, not a prerequisite:** Borrowed Power used to be entirely inert on a character that had never scanned, because it could not name a replacement paragon; it now falls back to the type keyword. Not explored: the announcement's example targets the armour ITEM (`INTO FULLPLATE`) with no embrasure number, while the package still sends `insert <ref> into armour embrasure <n>` -- proven to work, and the announcement concerns the identifier rather than the target syntax.
+
 **Paragon Lookup:** `PARAGON_TYPES` table maps 24 paragon type keywords to clean display names with effects. `registerParagon()` resolves raw game names (e.g., "an aeneaous paragon") to display names (e.g., "aeneaous (absorption)"). Stale names re-resolved on load.
 
 **Persistence:** Self-contained `table.save/load` to `getMudletHomeDir()/armourconfig` with `_ataxia_backup` fallback.
