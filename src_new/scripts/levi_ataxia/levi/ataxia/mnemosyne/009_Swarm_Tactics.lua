@@ -112,6 +112,7 @@ function S._cfg()
   -- alone leaves an enormous buffer before it fires, and with a small one it fires far too
   -- early -- so whichever line is crossed FIRST wins. Set to 0 to use the percentage only.
   s.panicHp = tonumber(s.panicHp) or 3000
+  s.bravadoThreshold = tonumber(s.bravadoThreshold) or 2 -- Bravado affix: hit-and-run this early
   if s.escape == nil then s.escape = true end   -- low-HP escape ladder (fly / retreat) instead of shield-in-place
   s.escapeAt = tonumber(s.escapeAt) or 35       -- HP% that triggers the escape
   s.recoverAt = tonumber(s.recoverAt) or 95     -- HP% at which a recovery hover may land (also needs aff-free)
@@ -205,10 +206,18 @@ end
 function S.threshold()
   local s = S._cfg()
   local ripple = (M.run and tonumber(M.run.ripple)) or 0
+  local t = s.threshold
   if s.deepAt and s.deepThreshold and ripple >= tonumber(s.deepAt) then
-    return tonumber(s.deepThreshold)
+    t = tonumber(s.deepThreshold)
   end
-  return s.threshold
+  -- BRAVADO (v4.7.206, user rule): "we need to hit and run at two denizens instead of 3 as it
+  -- can get pretty wild". The affix strips shields, prismatic barriers and blood barriers, so
+  -- the hit-and-run IS the mitigation -- there is nothing else left to absorb a bad round, and
+  -- as the user put it, "we will never know our health pool". CLAMPS DOWN only: a threshold
+  -- already at 2 (or a deep-ripple 2) is left alone, and a higher one is pulled in rather than
+  -- overwritten, so the setting still means something the rest of the time.
+  if mnemBravado then t = math.min(tonumber(t) or 3, tonumber(s.bravadoThreshold) or 2) end
+  return t
 end
 
 function S._enabled()

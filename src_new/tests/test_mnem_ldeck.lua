@@ -384,6 +384,38 @@ describe("in-flight replay is dropped when the target changes", function()
   end)
 end)
 
+-- BRAVADO (v4.7.206): "unable to benefit from ... prismatic barriers". Maran IS a prismatic
+-- barrier, and its charges regenerate ONE PER HOUR -- so drawing one under this affix spends
+-- an hour of regeneration on literally nothing. The most wasteful draw the layer could make.
+describe("Bravado kills the Maran draw", function()
+  it("draws Maran normally at low hp", function()
+    reset(); mnemBravado = false; ataxia.vitals.hpp = 15
+    expect(pick()).toBe("Maran")
+  end)
+
+  -- At 15% hp BOTH Maran (<=20) and Seasone (<=35) qualify, so the right assertion is
+  -- "not Maran" rather than "nothing": Seasone is an ELIXIR, not a barrier, and Bravado has
+  -- no opinion about it. Asserting nil here was my sloppiness, not a bug.
+  it("refuses Maran while the affix is up, and takes the elixir instead", function()
+    reset(); mnemBravado = true; ataxia.vitals.hpp = 15
+    expect(pick()).toBe("Seasone")
+    mnemBravado = false
+  end)
+
+  it("refuses Maran even when it is the ONLY card that would qualify", function()
+    reset(); mnemBravado = true; ataxia.vitals.hpp = 15
+    setCharges({ Maran = 2 })   -- no Seasone/Morimbuul/etc to fall through to
+    expect(pick()).toBe(nil)
+    mnemBravado = false
+  end)
+
+  it("leaves the NON-barrier cards alone -- only prismatic is dead", function()
+    reset(); mnemBravado = true; ataxia.vitals.hpp = 30 -- Seasone: an elixir, not a barrier
+    expect(pick()).toBe("Seasone")
+    mnemBravado = false
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 getEpoch = _epoch
 target, secondTarget = nil, nil

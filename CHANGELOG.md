@@ -2,6 +2,70 @@
 
 ---
 
+## 2026-08-03 - Bravado: the affix that takes our answers away (v4.7.206)
+
+> **Bravado:** You are perpetually reckless and unable to benefit from shields, prismatic
+> barriers, or blood barriers.
+
+User: *"we need to be careful since we will never know our health pool. We need to hit and run
+at two denizens instead of 3 as it can get pretty wild."*
+
+### It removes answers rather than adding a threat -- which is worse
+
+Most affixes make something hurt more. This one silently turns **three** of the basher's
+defensive responses into no-ops, and each keeps costing us while returning nothing:
+
+| what | cost of the no-op |
+|---|---|
+| `touch shield` | the danger-level response **and** the escape ladder's fallback -- a whole round, and the basher then believes it is covered |
+| **Maran** | the emergency 5000hp *prismatic* barrier -- charges regenerate **one per hour** |
+| `activate bloodshield` | the Blood Maiden cloak's *blood* barrier -- one charge costs **five kills** |
+
+All three are now gated on `ataxiaBasher_bravado()` / `mnemBravado` at their spend sites, in
+both the out-of-tower path and the Mnemosyne card layer.
+
+The shield one is worth separating out, because skipping it is not a saving -- it is a
+**correction**. `danger == "shield"` used to spend the round on `touch shield` and return.
+Under Bravado that round bought nothing *and* the code carried on as though mitigated. It now
+falls through to the attack, because clearing the room is the only mitigation the affix leaves.
+
+### Hit and run a denizen earlier
+
+`S.threshold()` clamps to `swarm.bravadoThreshold` (default **2**) while the affix is up. It
+**clamps down only** -- a threshold already at 2 is untouched and a higher one is pulled in
+rather than overwritten, so the setting still means something the rest of the time. It clamps
+the deep-ripple threshold too, not just the base one.
+
+The user's framing is the right mental model and worth recording: *"we will never know our
+health pool."* With every mitigation off, the number on the prompt is all there is -- nothing
+absorbs the spike, nothing eats the burst -- so the swarm tactics become the only thing left
+standing between us and a bad round.
+
+### A sloppy assertion of mine
+
+The first Maran test asserted that nothing at all is drawn at 15% HP under Bravado. Wrong: at
+15% both Maran (<=20) and **Seasone** (<=35) qualify, and Seasone is an *elixir*, not a
+barrier -- Bravado has no opinion about it, so drawing it is correct. The assertion is now
+"not Maran, and the elixir instead", plus a second case where Maran is the only card that
+could qualify. The code was right; the test premise was not.
+
+Affix flags now **four** (`mnemHaemophiliac`, `mnemDeluge`, `mnemLastWord`, `mnemBravado`),
+so the run-start reset block is 32 boons + 4 affixes = 36 lines.
+
+Files: `basher/001_Bashing_Functions.lua`, `basher/010_Mnemosyne_Legend_Deck.lua`,
+`mnemosyne/009_Swarm_Tactics.lua`, `mnemosyne/004_Parsers.lua`, `mnemosyne/001_Run_Start.lua`,
+new trigger `mnemosyne/059_Bravado.lua`, tests `test_swarm_tactics.lua`, `test_mnemosyne.lua`,
+`test_mnem_ldeck.lua`. Suite 892 -> **903**.
+
+### Captured in the same screenshot, still NOT implemented
+
+- **Necromantic:** *Denizens may revive as mindless thralls.* (flagged since v4.7.196 -- the
+  one I would most want a capture of, since a room that clears and then repopulates from its
+  own corpses is exactly what `_roomHasDenizens` is trusted for)
+- **Meldscorned:** *Denizens cause additional Shadowmancy afflictions on their attacks.*
+
+---
+
 ## 2026-08-03 - Paragons by name (game change, same day) (v4.7.205)
 
 > Paragons can now be referred to by the paragon name. For example, INSERT CRUCIOUS INTO

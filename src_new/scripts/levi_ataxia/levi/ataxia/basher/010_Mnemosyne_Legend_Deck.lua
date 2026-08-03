@@ -219,7 +219,10 @@ function ataxiaBasher_mnemLdeckPick(t, stamps)
     if card.key == "Morimbuul" then
       want = bound
     elseif card.key == "Maran" then
-      want = hp ~= nil and hp <= (tonumber(cfg.maranAt) or 20)
+      -- BRAVADO ("unable to benefit from ... prismatic barriers", v4.7.206) makes Maran's
+      -- 5000hp barrier do nothing. These charges regenerate ONE PER HOUR, so this is the
+      -- single most wasteful draw the layer could make under that affix.
+      want = not mnemBravado and hp ~= nil and hp <= (tonumber(cfg.maranAt) or 20)
     elseif card.key == "Seasone" then
       want = hp ~= nil and hp <= (tonumber(cfg.seasoneAt) or 35)
     elseif card.key == "Matic" then

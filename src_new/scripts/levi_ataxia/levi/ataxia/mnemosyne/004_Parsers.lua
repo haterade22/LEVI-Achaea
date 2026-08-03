@@ -223,6 +223,7 @@ function M.onRunEnd()
   end
   mnemHaemophiliac = false -- affixes gone on a confirmed run-end (pacing back to normal)
   mnemLastWord = false -- affixes gone on a confirmed run-end (pacing back to normal)
+  mnemBravado = false -- affixes gone on a confirmed run-end (barriers work again)
   mnemDeluge = false -- affixes gone on a confirmed run-end (flight available again)
   ataxiaTemp.mnemAblazeAt = nil   -- per-room burn state cannot outlive the run
   if ataxiaTemp then
@@ -323,6 +324,23 @@ function M.onHaemophiliacSeen()
   mnemHaemophiliac = true
   if not M._quiet() then
     M.echo("<red>Haemophiliac<reset> active -- kills bleed heavily; wading slower (moves hold until HP recovers)")
+  end
+end
+
+-- Bravado affix: "You are perpetually reckless and unable to benefit from shields, prismatic
+-- barriers, or blood barriers." It removes answers rather than adding a threat, which is the
+-- more dangerous shape -- `touch shield`, the Maran prismatic barrier and the cloak's blood
+-- barrier all keep COSTING while returning nothing, and the basher goes on believing it is
+-- covered. Gated at their spend sites on `ataxiaBasher_bravado()`; the swarm hit-and-run
+-- threshold clamps to 2 (user rule -- with no mitigations left, "we will never know our
+-- health pool"). Same shape as the other affixes.
+function M.onBravadoSeen()
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  if mnemBravado then return end
+  mnemBravado = true
+  if not M._quiet() then
+    M.echo("<red>Bravado<reset> active -- shields/prismatic/blood barriers do NOTHING; "
+      .. "hit-and-run drops to 2 denizens")
   end
 end
 

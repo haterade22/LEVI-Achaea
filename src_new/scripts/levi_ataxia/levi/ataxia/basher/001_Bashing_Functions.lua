@@ -123,7 +123,10 @@ function ataxiaBasher_attack()
     return
   end
 
-  if danger == "shield" then
+  -- Under BRAVADO a shield does nothing (v4.7.206), so spending the action on one is strictly
+  -- worse than swinging: it costs a round AND leaves us believing we are covered. Fall
+  -- through to the attack -- clearing the room is the only mitigation the affix leaves us.
+  if danger == "shield" and not ataxiaBasher_bravado() then
     send("queue addclear freestand touch shield")
     return
   end
@@ -145,6 +148,25 @@ function ataxiaBasher_attack()
   elseif not ataxiaBasher_bashingFuncs[class] then
     ataxiaEcho(class.." isn't supported yet, sorry!")
   end
+end
+
+-- BRAVADO affix (Mnemosyne, v4.7.206): "You are perpetually reckless and unable to benefit
+-- from shields, prismatic barriers, or blood barriers."
+--
+-- Three of the basher's defensive answers become NO-OPS under this affix, and that is worse
+-- than losing them -- the code goes on spending actions and charges on them and goes on
+-- believing it is protected:
+--   * `touch shield`      the danger-level "shield" response and the escape ladder's fallback
+--   * Maran               the emergency 5000hp PRISMATIC barrier (both the out-of-tower draw
+--                         and the Mnemosyne card) -- and its charges regenerate ONE PER HOUR
+--   * `activate bloodshield`  the Blood Maiden cloak's BLOOD barrier, one charge per 5 kills
+--
+-- The user's summary is the right mental model: "we will never know our health pool". With
+-- every mitigation off, the number on the prompt is all there is -- no shield to absorb the
+-- spike, no barrier to eat the burst. Hence their rule to hit-and-run a ripple earlier
+-- (2 denizens, not 3): the swarm tactics become the ONLY mitigation left.
+function ataxiaBasher_bravado()
+  return mnemBravado == true
 end
 
 -- CONTROL-FIRST DENIZENS (v4.7.198, user-directed: "a manifested nightmare -- when facing
@@ -752,6 +774,9 @@ function ataxiaBasher_assembleAttack()
   -- so a save inside the 65s window reloaded with the emergency barrier permanently
   -- suppressed. `ataxia.maranThreshold` is config and correctly stays where it is.
   local maranReady = ((getEpoch and getEpoch() or 0) - (tonumber(ataxiaTemp.maranAt) or -math.huge)) >= 65
+  -- BRAVADO kills prismatic barriers (v4.7.206), and Maran charges regenerate ONE PER HOUR --
+  -- so drawing one under the affix spends an hour of regeneration on nothing at all.
+  if ataxiaBasher_bravado() then maranReady = false end
   if not mnemCards
      and ataxia.vitals.hpp < ataxia.maranThreshold
      and ataxia.vitals.hpp ~= 0
@@ -791,8 +816,10 @@ function ataxiaBasher_assembleAttack()
   --
   -- Correct model: `bloodshieldReady` is a single charge, set by the "grows hot against
   -- your skin" line (trigger 769) and consumed by one ACTIVATE. No active window.
+  -- BRAVADO kills blood barriers too (v4.7.206). The cloak's charge costs FIVE kills to earn,
+  -- so spending it on an affix that ignores it is the most expensive no-op available here.
   if ataxiaBasher.bloodMaiden and ataxiaTemp.bloodshieldReady
-     and not ataxiaTemp.bloodshieldCooldown then
+     and not ataxiaTemp.bloodshieldCooldown and not ataxiaBasher_bravado() then
     -- areaKey(), not gmcp's area: under the incurable-dementia boon gmcp names a hallucinated
     -- real area, so this would read that area's list (or nil) instead of the tower's, never
     -- match a tower denizen, and leave targetCount at 0 -- bloodshield would never fire in

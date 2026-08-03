@@ -908,6 +908,31 @@ describe("bard PERFORMANCE probe after the boon screen", function()
   end)
 end)
 
+describe("Bravado affix -- the mitigations that stop working", function()
+  it("onBravadoSeen arms the flag only inside the tower", function()
+    reset(true)
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = false
+    mnemBravado = false
+    M.onBravadoSeen()
+    expect(mnemBravado).toBeFalse()
+    ataxiaBasher.inMnemosyne = true
+    M.onBravadoSeen()
+    expect(mnemBravado).toBeTrue()
+    M.onBravadoSeen() -- transition-guarded: a status re-read is a no-op
+    expect(mnemBravado).toBeTrue()
+    ataxiaBasher.inMnemosyne = false
+    mnemBravado = false
+  end)
+
+  it("clears on the confirmed run end -- barriers work again outside", function()
+    reset(true)
+    mnemBravado = true
+    M.onRunEnd()
+    expect(mnemBravado).toBeFalse()
+  end)
+end)
+
 
 describe("M.reaperOnWade()", function()
   it("resets the tally on a genuinely fresh wade", function()

@@ -478,6 +478,51 @@ describe("Roll Hide panic -- tumble back into the cleared room", function()
   end)
 end)
 
+-- BRAVADO affix (v4.7.206): "perpetually reckless and unable to benefit from shields,
+-- prismatic barriers, or blood barriers". It removes our mitigations rather than adding a
+-- threat, so the hit-and-run becomes the ONLY one left -- user rule: pull at 2 denizens
+-- instead of 3, because "we will never know our health pool".
+describe("Bravado clamps the hit-and-run threshold", function()
+  it("leaves the threshold alone when the affix is off", function()
+    fixture(3); mnemBravado = false
+    local sc = S._cfg(); sc.threshold = 3; sc.deepAt, sc.deepThreshold = nil, nil
+    expect(S.threshold()).toBe(3)
+  end)
+
+  it("pulls 3 down to 2 while the affix is up", function()
+    fixture(3); mnemBravado = true
+    local sc = S._cfg(); sc.threshold = 3; sc.deepAt, sc.deepThreshold = nil, nil
+    expect(S.threshold()).toBe(2)
+    mnemBravado = false
+  end)
+
+  it("clamps DOWN only -- never raises a threshold already at 2", function()
+    fixture(3); mnemBravado = true
+    local sc = S._cfg(); sc.threshold = 2; sc.deepAt, sc.deepThreshold = nil, nil
+    expect(S.threshold()).toBe(2)
+    mnemBravado = false
+  end)
+
+  it("also clamps the DEEP-ripple threshold, not just the base one", function()
+    fixture(3); mnemBravado = true
+    local sc = S._cfg()
+    sc.threshold, sc.deepAt, sc.deepThreshold = 5, 25, 4
+    M.run.ripple = 30
+    expect(S.threshold()).toBe(2)
+    mnemBravado = false
+  end)
+
+  it("is configurable", function()
+    fixture(3); mnemBravado = true
+    local sc = S._cfg()
+    sc.threshold, sc.bravadoThreshold = 4, 3
+    sc.deepAt, sc.deepThreshold = nil, nil
+    expect(S.threshold()).toBe(3)
+    sc.bravadoThreshold = 2
+    mnemBravado = false
+  end)
+end)
+
 describe("swarm stage 2 — fly-kite (outdoors)", function()
   local function swarmFollowed()
     fixture(3)
