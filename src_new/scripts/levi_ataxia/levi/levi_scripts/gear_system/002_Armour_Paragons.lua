@@ -426,6 +426,108 @@ end
 -- PROFILE MANAGEMENT
 --------------------------------------------------------------------------------
 
+-- BORROWED POWER (Mnemosyne boon, v4.7.204): "Your critical hits can now reach plane-razing
+-- level without requiring paragons or the Psion class. THIS DOES NOT STACK with those
+-- effects, however."
+--
+-- That last sentence is the whole point: while the boon is up, the paragon that buys crit
+-- TIER is dead weight in an embrasure. The user's instruction (2026-08-03) is to put
+-- something useful there instead -- "either the will power or shifting damage one".
+--
+-- WHICH PARAGON IS REDUNDANT. Plane-razing is a crit TIER, so the dead one is `crucious`
+-- (crit multiplier). `icosagon` is crit CHANCE -- how OFTEN you crit, which the boon does not
+-- grant -- so it is deliberately left alone; the boon says it does not stack with the
+-- tier effect, not that it replaces the whole crit kit. `borrowedRedundant` holds that list
+-- if the reading turns out to be wrong.
+--
+-- HOW. Rather than prying slots by hand this builds a `borrowed` PROFILE from the bash one
+-- and hands it to ataxia.armour.swap, which already owns the pry/insert sequencing, the
+-- morph handling, the swap guard and its watchdog. The profile is a normal profile: it shows
+-- up in `armour show`, and can be edited with `armour set` like any other.
+--
+-- REVERTING MATTERS MORE THAN SWAPPING. The boon is per-RUN, so leaving the swap in place
+-- would silently cost the crit paragon everywhere OUTSIDE the tower. It reverts on the
+-- confirmed run end, and `armour borrowed off` forces it back by hand if a run ever ends
+-- without that confirmation.
+ataxia.armour.config.borrowedRedundant = ataxia.armour.config.borrowedRedundant or { "crucious" }
+
+function ataxia.armour.borrowedReplacementId()
+  local cfg = ataxia.armour.config
+  if cfg.borrowedReplacement and cfg.borrowedReplacement ~= "" then return cfg.borrowedReplacement end
+  -- Default preference: the "shifting damage" paragon, then the willpower one. Both were
+  -- named by the user; shifting goes first because the willpower paragon (serendipitous) is
+  -- usually already slotted, and doubling it would waste the embrasure a second time.
+  for _, want in ipairs({ "metalliferous", "serendipitous" }) do
+    for id, nm in pairs(cfg.paragons or {}) do
+      if type(nm) == "string" and nm:lower():find(want, 1, true) then return id end
+    end
+  end
+  return nil
+end
+
+-- Is this paragon id one the boon makes redundant?
+function ataxia.armour.isBorrowedRedundant(id)
+  local nm = ataxia.armour.paragonName and ataxia.armour.paragonName(id)
+  if type(nm) ~= "string" then return false end
+  nm = nm:lower()
+  for _, key in ipairs(ataxia.armour.config.borrowedRedundant or {}) do
+    if nm:find(tostring(key):lower(), 1, true) then return true end
+  end
+  return false
+end
+
+-- on == true  -> build + wear the `borrowed` profile
+-- on == false -> go back to the bash profile
+function ataxia.armour.borrowedPower(on)
+  local cfg = ataxia.armour.config
+  if cfg.borrowed == false then return false end -- `armour borrowed off` opt-out
+  local baseName = cfg.bashProfile or "bash"
+
+  if not on then
+    if not (cfg.profiles and cfg.profiles[baseName]) then return false end
+    ataxia.armour.echo("Borrowed Power gone -- restoring the <cyan>" .. baseName .. "<reset> paragons.")
+    return ataxia.armour.swap(baseName)
+  end
+
+  local base = cfg.profiles and cfg.profiles[baseName]
+  if not (base and base.slots) then
+    ataxia.armour.echo("<yellow>Borrowed Power: no '" .. baseName .. "' profile to build from.")
+    return false
+  end
+  local repl = ataxia.armour.borrowedReplacementId()
+  if not repl then
+    ataxia.armour.echo("<yellow>Borrowed Power: no willpower/shifting paragon known -- "
+      .. "run <white>armour scan<reset> or set one with <white>armour borrowed use <paragonID>")
+    return false
+  end
+
+  -- Already wearing it? Then the crit paragon is not in the armour and there is nothing to do.
+  local slots, swapped = {}, false
+  for i, id in ipairs(base.slots) do
+    if ataxia.armour.isBorrowedRedundant(id) and id ~= repl then
+      slots[i] = repl
+      swapped = true
+    else
+      slots[i] = id
+    end
+  end
+  if not swapped then
+    ataxia.armour.echo("Borrowed Power: no redundant crit paragon in <cyan>" .. baseName
+      .. "<reset> -- nothing to swap.")
+    return false
+  end
+
+  cfg.profiles.borrowed = {
+    slots = slots,
+    traits = base.traits,
+    armourType = base.armourType,
+  }
+  ataxia.armour.save()
+  ataxia.armour.echo("<green>Borrowed Power<reset> -- the crit paragon is dead weight, swapping in <cyan>"
+    .. (ataxia.armour.paragonName(repl) or repl) .. "<reset>.")
+  return ataxia.armour.swap("borrowed")
+end
+
 function ataxia.armour.addProfile(name)
   if not name or name == "" then
     ataxia.armour.echo("Usage: armour add <name>")
@@ -778,6 +880,40 @@ function ataxia.armour.dispatch(args)
       ataxia.armour.setArmourType(name, value:match("^%s*(.-)%s*$"))
     else
       ataxia.armour.echo("Unknown field: " .. field .. ". Use slot1/slot2/slot3/traits/armourtype.")
+    end
+  elseif cmd == "borrowed" then
+    -- Borrowed Power (Mnemosyne): plane-razing crits without a paragon, explicitly
+    -- NON-STACKING, so the crit-tier paragon is dead weight while the boon is up.
+    local a = rest:lower():match("^(%S*)")
+    local arg = rest:match("^%S+%s+(.+)$")
+    if a == "on" then
+      ataxia.armour.config.borrowed = true
+      ataxia.armour.save()
+      ataxia.armour.borrowedPower(true)
+    elseif a == "off" then
+      -- Restore FIRST, then latch the opt-out: `armour borrowed off` is exactly how you undo
+      -- a swap left stuck by a run that ended without a confirmed run-end line, so the
+      -- restore must not be blocked by the flag it is about to set.
+      ataxia.armour.config.borrowed = nil
+      ataxia.armour.borrowedPower(false)
+      ataxia.armour.config.borrowed = false
+      ataxia.armour.save()
+      ataxia.armour.echo("Borrowed-Power swapping <red>OFF<plum> (paragons restored).")
+    elseif a == "use" and arg then
+      ataxia.armour.config.borrowedReplacement = arg:match("^%s*(.-)%s*$")
+      ataxia.armour.save()
+      ataxia.armour.echo("Borrowed Power will slot <cyan>"
+        .. (ataxia.armour.paragonName(ataxia.armour.config.borrowedReplacement)
+            or ataxia.armour.config.borrowedReplacement) .. "<plum>.")
+    else
+      local repl = ataxia.armour.borrowedReplacementId()
+      ataxia.armour.echo("Borrowed Power swapping: "
+        .. (ataxia.armour.config.borrowed == false and "<red>OFF" or "<green>ON") .. "<plum>")
+      ataxia.armour.echo("  replaces: <white>"
+        .. table.concat(ataxia.armour.config.borrowedRedundant or {}, ", "))
+      ataxia.armour.echo("  slots in: <white>"
+        .. (repl and (ataxia.armour.paragonName(repl) or repl) or "(none known -- armour scan)"))
+      ataxia.armour.echo("  <grey>armour borrowed on|off|use <paragonID>")
     end
   elseif cmd == "auto" then
     if rest:lower() == "on" then

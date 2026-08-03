@@ -39,6 +39,10 @@ patterns:
   type: 1
 ]]--
 
+-- This line is also the ANSWER to the per-ripple PERFORMANCE probe (explorer
+-- M._bardPerformanceCheck): seeing it at all proves a performance is up, so clear the probe
+-- stamp. If nothing clears it, the probe's timer recomposes.
 bardperformance = true
+if ataxiaTemp then ataxiaTemp.bardPerfProbe = nil end
 
 bardperformancetimeleft = tonumber(matches.amount)

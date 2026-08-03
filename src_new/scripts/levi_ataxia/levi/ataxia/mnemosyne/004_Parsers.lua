@@ -176,6 +176,15 @@ end
 function M.onRunEnd()
   bardWarmarch = false -- boons gone on a confirmed run-end
   mnemSongstep = false -- boons gone on a confirmed run-end
+  -- Borrowed Power is per-RUN, and it swapped a paragon out of the armour. Putting it back is
+  -- the half that matters: left alone we would quietly bash the whole rest of the day without
+  -- the crit paragon. Guarded so it only fires when the boon was actually held.
+  if mnemBorrowedPower then
+    mnemBorrowedPower = false
+    if ataxia and ataxia.armour and ataxia.armour.borrowedPower then
+      pcall(ataxia.armour.borrowedPower, false)
+    end
+  end
   bmShatteredStar = false -- boons gone on a confirmed run-end
   magiKkractle = false -- boons gone on a confirmed run-end
   magiHotSprings = false -- boons gone on a confirmed run-end

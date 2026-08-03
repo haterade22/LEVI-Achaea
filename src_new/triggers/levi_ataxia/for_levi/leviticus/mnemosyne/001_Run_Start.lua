@@ -71,6 +71,7 @@ mnemThunderclap = false -- boons reset each run (re-latches from the BOONS row /
 mnemDivineThunder = false -- boons reset each run (re-latches from the BOONS row / claim)
 mnemIcyHeart = false -- boons reset each run (re-latches from the BOONS row / claim)
 mnemSongstep = false -- boons reset each run (re-latches from the BOONS row / claim)
+mnemBorrowedPower = false -- boons reset each run (re-latches from the BOONS row / claim)
 if ataxiaTemp then ataxiaTemp.mnemNulled = nil end -- damage-suppression affixes re-latch per ripple
 if ataxiaTemp then ataxiaTemp.mnemBoonsRelatched = nil end -- re-latch boons this run
 if ataxiaTemp then ataxiaTemp.brFreeCharge = nil end

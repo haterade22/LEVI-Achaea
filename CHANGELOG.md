@@ -2,6 +2,67 @@
 
 ---
 
+## 2026-08-03 - Borrowed Power swaps the dead paragon out, and Bard checks its performance (v4.7.204)
+
+### Borrowed Power
+
+> Your critical hits can now reach plane-razing level without requiring paragons or the Psion
+> class. **This does not stack with those effects, however.**
+
+That last sentence is the actionable part: while the boon is up, the paragon buying crit tier
+sits in an embrasure doing nothing. User instruction -- put the willpower or shifting-damage
+one there instead.
+
+**Which paragon is dead.** Plane-razing is a crit TIER, so it is `crucious` (crit multiplier).
+`icosagon` is crit CHANCE -- how *often* we crit, which the boon does not grant -- so it is
+deliberately left alone. The boon says it does not stack with the tier effect, not that it
+replaces the whole crit kit. `ataxia.armour.config.borrowedRedundant` holds that judgement if
+the reading proves wrong.
+
+**How.** Rather than prying slots by hand, it builds a `borrowed` PROFILE from the bash one and
+hands it to `ataxia.armour.swap`, which already owns the pry/insert sequencing, the morph
+handling, the swap guard and its watchdog. It is an ordinary profile: visible in `armour show`,
+editable with `armour set`.
+
+**Reverting matters more than swapping.** The boon is per-RUN. A swap left in place would
+quietly cost the crit paragon everywhere *outside* the tower, on every mob, indefinitely -- a
+far worse outcome than never swapping at all. It reverts on the confirmed run end, and
+`armour borrowed off` forces it back by hand for a run that ends without that confirmation.
+Three tests cover the revert specifically, including reverting to whatever `bashProfile`
+actually names rather than a hardcoded "bash".
+
+Timing: the swap runs from the `BOON CLAIM` intercept as well as the BOONS row, because
+claiming happens at the boon screen -- out of combat, explorer paused. That is when it is safe
+to be prying armour apart.
+
+`armour borrowed [on|off|use <paragonID>]` to inspect or override. Refuses safely and says so
+when no willpower/shifting paragon is known, rather than guessing at an ID.
+
+### Bard: ask PERFORMANCE after the boon screen
+
+User: *"When in Bard after selecting the boons, we should send the command PERFORMANCE to
+ensure we have our stuff up and running."*
+
+Everything else that knows about the bash performance is **reactive** -- the fade line (002),
+the "not in fact performing" error (005), the "already performing" refusal (006, new
+yesterday). Every one of them needs something to go wrong first. `PERFORMANCE` is the one cheap
+way to *ask*, and the boon screen is exactly the gap a performance can lapse across unseen.
+
+`M._bardPerformanceCheck()` runs from both explorer entry points, next to the armour re-wear --
+`_exploreResume` being the per-ripple one that GO calls after every boon screen. Trigger 001
+parses the answer and clears the probe stamp; if nothing clears it inside 2s the honest reading
+is "not performing", whatever the game actually said, so it recomposes. That covers a reply
+wording we have never captured **without guessing at it**.
+
+Boon flags now **32**.
+
+Files: `gear_system/002_Armour_Paragons.lua`, `mnemosyne/008_Explorer.lua`,
+`mnemosyne/004_Parsers.lua`, `mnemosyne/001_Run_Start.lua`, `mnemosyne/002_Boon_Claim.lua`,
+new trigger `mnemosyne/058_Borrowed_Power.lua`, `performance_tracking/001`, new test
+`test_borrowed_power.lua`, `test_mnemosyne.lua`. Suite 865 -> **885**.
+
+---
+
 ## 2026-08-03 - The boon re-latch has never worked, and the compose was on a timer (v4.7.203)
 
 Both found in one live log the user posted about a mis-timed recompose.

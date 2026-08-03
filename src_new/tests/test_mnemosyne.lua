@@ -852,6 +852,62 @@ describe("Last Word explode-on-death pacing", function()
   end)
 end)
 
+-- PER-RIPPLE PERFORMANCE PROBE (v4.7.204). Everything else that knows about the bard's bash
+-- performance is REACTIVE -- the fade line, the "not in fact performing" error, the "already
+-- performing" refusal -- and all of them need something to go wrong first. PERFORMANCE is the
+-- one cheap way to ASK, and the boon screen is exactly where a performance can lapse unseen.
+describe("bard PERFORMANCE probe after the boon screen", function()
+  local sent, realSend, realTimer, fired
+  local function arm(class)
+    sent, fired = {}, nil
+    realSend, realTimer = send, tempTimer
+    send = function(c) table.insert(sent, c) end
+    tempTimer = function(_, fn) fired = fn; return 1 end
+    gmcp = gmcp or {}; gmcp.Char = gmcp.Char or {}
+    gmcp.Char.Status = { class = class }
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.enabled = true
+    ataxiaTemp = {}
+    ataxiaBasher_bardCompose = function() table.insert(sent, "RECOMPOSED") end
+  end
+  local function disarm() send, tempTimer = realSend, realTimer end
+
+  it("asks for PERFORMANCE as a bard", function()
+    arm("Bard"); M._bardPerformanceCheck()
+    expect(sent[1]).toBe("performance")
+    disarm()
+  end)
+
+  it("is inert for every other class", function()
+    arm("Runewarden"); M._bardPerformanceCheck()
+    expect(#sent).toBe(0)
+    disarm()
+  end)
+
+  it("is inert while the basher is off", function()
+    arm("Bard"); ataxiaBasher.enabled = false
+    M._bardPerformanceCheck()
+    expect(#sent).toBe(0)
+    disarm()
+  end)
+
+  it("does NOT recompose when the performance answers", function()
+    arm("Bard"); M._bardPerformanceCheck()
+    ataxiaTemp.bardPerfProbe = nil   -- what trigger 001 does on the "shall last another N" line
+    fired()
+    expect(table.concat(sent, ",")).toBe("performance")
+    disarm()
+  end)
+
+  it("DOES recompose when nothing answers -- whatever the game said", function()
+    arm("Bard"); M._bardPerformanceCheck()
+    fired()                           -- window elapsed, probe never cleared
+    expect(sent[2]).toBe("RECOMPOSED")
+    expect(ataxiaTemp.bardPerfProbe).toBe(nil)
+    disarm()
+  end)
+end)
+
 
 describe("M.reaperOnWade()", function()
   it("resets the tally on a genuinely fresh wade", function()

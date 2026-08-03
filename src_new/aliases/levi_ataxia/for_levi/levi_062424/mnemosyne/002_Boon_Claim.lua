@@ -99,3 +99,11 @@ if matches[2]:lower():find("icy heart") then mnemIcyHeart = true end
 -- a dance costs BALANCE and they are mutually exclusive, so it is a state we switch,
 -- not a rider we re-assert.
 if matches[2]:lower():find("songstep") then mnemSongstep = true end
+-- Borrowed Power: plane-razing crits without a paragon, and explicitly NON-STACKING -- so the
+-- crit-tier paragon becomes dead weight. Swap it for the willpower/shifting one. Done HERE as
+-- well as from the BOONS row because claiming happens at the boon screen: out of combat, with
+-- the explorer paused, which is when prying armour apart is safe.
+if matches[2]:lower():find("borrowed power") then
+  mnemBorrowedPower = true
+  if ataxia and ataxia.armour and ataxia.armour.borrowedPower then ataxia.armour.borrowedPower(true) end
+end

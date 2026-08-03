@@ -602,6 +602,35 @@ function M._wearArmour()
   send("wear armour", false)
 end
 
+-- BARD: confirm the bash performance survived the ripple (user, 2026-08-03: "after selecting
+-- the boons, we should send the command PERFORMANCE to ensure we have our stuff up").
+--
+-- The boon screen is a natural gap -- the wave ends, you pick, you wade -- and a performance
+-- can lapse across it with nothing on screen to say so. Everything else that knows about the
+-- performance is REACTIVE: the fade line (trigger 002), the "not in fact performing" error
+-- (005), the "already performing" refusal (006). All of them need something to go wrong first.
+-- PERFORMANCE is the one cheap way to ASK, and the natural moment to ask is the same
+-- per-ripple entry that re-wears armour.
+--
+-- Trigger 001 parses the answer ("Your grand performance shall last another N minutes.") and
+-- clears the probe stamp. If nothing clears it inside the window the honest reading is "we are
+-- not performing" -- whatever the game actually said -- so recompose. That covers the reply
+-- wording we have never captured without guessing at it.
+--
+-- Sent DIRECTLY, like the armour: `queue addclearfull` would wipe it.
+function M._bardPerformanceCheck()
+  if (gmcp and gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class) ~= "Bard" then return end
+  if not (ataxiaBasher and ataxiaBasher.enabled) then return end
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.bardPerfProbe = true
+  send("performance", false)
+  tempTimer(2, function()
+    if not ataxiaTemp.bardPerfProbe then return end -- trigger 001 answered: performance is up
+    ataxiaTemp.bardPerfProbe = nil
+    if ataxiaBasher_bardCompose then ataxiaBasher_bardCompose() end
+  end)
+end
+
 -- RE-LATCH THE BOON FLAGS (v4.7.188). Every boon flag (mnemRageFuelled, mnemThunderclap,
 -- bardWarmarch, ...) is set by one of exactly two signals: the `BOON CLAIM` alias intercept
 -- at the moment you take it, or that boon's row in the BOONS list. Neither fires for a boon
@@ -675,6 +704,7 @@ function M._exploreResume(reason)
   -- Resume is the per-RIPPLE entry point (GO calls it after every boon screen), so this is
   -- also where armour gets re-checked before each dive -- not just on the first `explore on`.
   M._wearArmour()
+  M._bardPerformanceCheck() -- per-ripple: a performance can lapse across the boon screen
   M._relatchBoons()   -- once per run: re-latch boon flags we may have owned before load
   if M.swarm and M.swarm.onRipple then pcall(M.swarm.onRipple) end -- fresh ripple: new pull budgets
   M._exploreEcho("<green>resuming<reset> the sweep" .. (reason and (" (" .. reason .. ")") or "") .. ".")
@@ -725,6 +755,7 @@ function M.exploreOn()
   M.explore.iceSlips = 0
   M.explore.settling = true -- treat the starting room like an arrival: let its denizens settle first
   M._wearArmour()           -- never start a sweep undressed
+  M._bardPerformanceCheck() -- ...nor unperforming
   M._relatchBoons()   -- once per run: re-latch boon flags we may have owned before load
   if M.swarm and M.swarm.onRipple then pcall(M.swarm.onRipple) end -- fresh sweep: fresh tactics state
   M._exploreEcho("<green>ON<reset> -- sweeping the 4x4, clearing to the boon screen (patrols for the boss on boss ripples). (<a_darkmagenta>mnem explore off<reset> to stop)")
