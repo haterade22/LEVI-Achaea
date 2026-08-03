@@ -106,6 +106,12 @@ function S._cfg()
   if s.kite == nil then s.kite = true end       -- outdoors swarm-followed: fly/land/hit
   if s.panic == nil then s.panic = true end     -- Roll Hide boon: tumble out at low HP
   s.panicAt = tonumber(s.panicAt) or 40         -- HP% that triggers the panic tumble
+  -- ABSOLUTE HP floor (user, 2026-08-03: "we are entering critical health, like 3000").
+  -- Percent and absolute answer different questions and BOTH matter: 40% is "this fight is
+  -- going badly", 3000 is "the next hit can kill me". With a large max HP the percentage
+  -- alone leaves an enormous buffer before it fires, and with a small one it fires far too
+  -- early -- so whichever line is crossed FIRST wins. Set to 0 to use the percentage only.
+  s.panicHp = tonumber(s.panicHp) or 3000
   if s.escape == nil then s.escape = true end   -- low-HP escape ladder (fly / retreat) instead of shield-in-place
   s.escapeAt = tonumber(s.escapeAt) or 35       -- HP% that triggers the escape
   s.recoverAt = tonumber(s.recoverAt) or 95     -- HP% at which a recovery hover may land (also needs aff-free)
@@ -406,11 +412,33 @@ function S._beginReenter()
 end
 
 -- Roll Hide panic: at panic HP with the boon up, tumble out -- the boon sheds ALL
--- pursuers. Direction: any planar exit of the funnel room that is NOT back toward
--- the swarm room (falls back to the swarm-room direction if it's the only exit --
--- still better than dying in place).
+-- pursuers.
+--
+-- DIRECTION: back into the room we just CLEARED, first choice (user, 2026-08-03:
+-- "we should tumble out into the room we just cleared"). That room is the one place on
+-- the grid we know is empty, and since Roll Hide drops every pursuer we arrive there
+-- alone -- which is the whole point of tumbling rather than walking. `S._backDir()` is
+-- the validated route to it (planar, adjacency-checked against the reported-exit graph,
+-- never "up" into the holding room), and it is the same machinery the escape ladder's
+-- indoor retreat already uses.
+--
+-- Only if there is no validated back-route do we fall back to the old heuristic: any
+-- planar exit that is not toward the swarm room and not into our own icewall. That is
+-- strictly worse -- an unexplored room can hold anything -- but it still beats dying in
+-- place, which is what the fallback exists for.
 function S._panicDir()
   local MAP = M.map
+  -- The back edge is very often the WALLED one -- the indoor icewall tactic raises its wall
+  -- on exactly that edge and LEAPS over it, so a plain `tumble <back>` would walk into our
+  -- own ice and fail, wasting the panic and its 10s cooldown at the worst possible moment.
+  -- (Caught by the existing fight-in-place test, which is why it was written.) Check the
+  -- wall before preferring the cleared room; if it is walled, fall through to the heuristic
+  -- below, which already excludes it.
+  local walledLong = S.wallRaised and MAP and MAP.current and S.wallRaised[MAP.current]
+  local walledShort = (type(walledLong) == "string" and MAP and MAP.shortDir
+    and MAP.normDir and MAP.shortDir(MAP.normDir(walledLong))) or nil
+  local back = S._backDir and select(1, S._backDir())
+  if back and back ~= walledShort then return back end
   local room = MAP and MAP.rooms and MAP.current and MAP.rooms[MAP.current]
   if not (room and room.exits) then return nil end
   local fwd = S.fwdShort and MAP.normDir and MAP.normDir(S.fwdShort)
@@ -428,11 +456,26 @@ function S._panicDir()
   return fallback
 end
 
+-- Is HP into panic territory? EITHER line triggers -- see the panicHp note in _cfg.
+-- `hp` is a percentage; `ataxia.vitals.hp` is the absolute reading the floor compares.
+function S._panicHpHit(hp)
+  local s = S._cfg()
+  hp = tonumber(hp) or hpp()
+  if hp <= (tonumber(s.panicAt) or 40) then return true end
+  local floor = tonumber(s.panicHp) or 0
+  if floor <= 0 then return false end
+  local raw = tonumber(ataxia and ataxia.vitals and ataxia.vitals.hp)
+  -- A missing or blackout reading must never fake a panic: 0 here means "unknown", and
+  -- the percentage branch above is already the general safety net.
+  if not raw or raw <= 0 then return false end
+  return raw <= floor
+end
+
 function S._maybePanic(hpNow)
   local hp = tonumber(hpNow) or hpp()
   local s = S._cfg()
   if s.panic == false or not mnemRollHide then return false end
-  if hp > s.panicAt then return false end
+  if not S._panicHpHit(hp) then return false end
   if S._lastPanicAt and (now() - S._lastPanicAt) < PANIC_COOLDOWN then return false end
   local dir = S._panicDir()
   if not dir then return false end
@@ -766,7 +809,7 @@ function S.onVitals()
   local s = S._cfg()
   local hp = hppFresh()
   if hp <= 0 then return end -- blackout sentinel: vitals unknown, never "dying"
-  local wantPanic = s.panic ~= false and mnemRollHide and hp <= s.panicAt
+  local wantPanic = s.panic ~= false and mnemRollHide and S._panicHpHit(hp)
   local wantEscape = s.escape ~= false and hp <= s.escapeAt
   if not (wantPanic or wantEscape) then return end
   if S._lastEmergencyAt and (now() - S._lastEmergencyAt) < EMERGENCY_COOLDOWN then return end
@@ -992,6 +1035,7 @@ function S.status()
     .. (s.deepAt and (" (deep: >=r" .. tostring(s.deepAt) .. " -> " .. tostring(s.deepThreshold) .. ")") or "")
     .. " icewall=" .. tostring(s.icewall) .. " kite=" .. tostring(s.kite)
     .. " panic=" .. tostring(s.panic) .. "@" .. tostring(s.panicAt) .. "%"
+    .. ((tonumber(s.panicHp) or 0) > 0 and ("/" .. tostring(s.panicHp) .. "hp") or "")
     .. " escape=" .. tostring(s.escape) .. "@" .. tostring(s.escapeAt) .. "%->" .. tostring(s.recoverAt) .. "%"
     .. " hold=" .. tostring(ataxiaTemp.swarmHold or false)
     .. " recon=" .. (S.recon and (

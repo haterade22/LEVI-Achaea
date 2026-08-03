@@ -189,6 +189,23 @@ function M.command(rest)
         else
           M.echo("Usage: mnem swarm panicat <hp%>  (5-90)")
         end
+      elseif sub == "panichp" then
+        -- ABSOLUTE hp floor, alongside the percentage: 40% says "this fight is going badly",
+        -- a raw number says "the next hit can kill me". Whichever line is crossed first
+        -- triggers the tumble. 0/off uses the percentage alone.
+        local n = tonumber(rest2)
+        if rest2 and (rest2:lower() == "off" or n == 0) then
+          sc.panicHp = 0
+          ataxia_saveSettings(false)
+          M.echo("Roll Hide absolute hp floor: <grey>off<reset> (percentage only).")
+        elseif n and n > 0 then
+          sc.panicHp = n
+          ataxia_saveSettings(false)
+          M.echo("Roll Hide panic floor: <cyan>" .. n .. "<reset> hp (or <cyan>"
+            .. tostring(sc.panicAt) .. "%<reset>, whichever comes first).")
+        else
+          M.echo("Usage: mnem swarm panichp <hp|off>")
+        end
       elseif sub == "escapeat" then
         local n = tonumber(rest2)
         if n and n >= 5 and n <= 90 then

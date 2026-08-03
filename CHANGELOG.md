@@ -2,6 +2,57 @@
 
 ---
 
+## 2026-08-03 - Roll Hide: tumble at a real HP number, and go somewhere known-safe (v4.7.202)
+
+> **Roll Hide** (rare) -- Tumbling out of a room will cause you to lose all pursuing denizens.
+
+User: *"We are entering critical health, like 3000, we should tumble out into the room we
+just cleared."* Two changes to a boon that already worked.
+
+### An absolute HP floor beside the percentage
+
+`panicAt` was a percentage only (40%). Percent and absolute answer genuinely different
+questions and both matter: **40% means "this fight is going badly", 3000 means "the next hit
+can kill me".** With a large max HP the percentage alone leaves an enormous buffer before it
+fires; with a small one it fires far too early. So `swarm.panicHp` (default **3000**) sits
+alongside it and **whichever line is crossed first** triggers the tumble.
+
+`mnem swarm panichp <hp|off>` configures it; `off`/`0` restores percentage-only behaviour.
+A missing or blackout HP reading never fakes a panic -- 0 means "unknown", and the percentage
+branch is already the general safety net.
+
+Both the per-tick gate and the per-prompt `onVitals` gate now route through one predicate
+(`S._panicHpHit`) so the two can never drift apart.
+
+### Tumble into the room we just cleared
+
+The old direction rule was "any planar exit that is not back toward the swarm room" -- which
+means it deliberately preferred an **unexplored** room, and an unexplored room can hold
+anything. That is a poor destination at 3000 HP.
+
+The cleared room is the one square on the grid we know is empty, and since Roll Hide sheds
+every pursuer we arrive there **alone** -- which is the entire point of tumbling rather than
+walking. `S._backDir()` already computes the validated route to it (planar, adjacency-checked
+against the reported-exit graph, never "up" into the holding room); it is the same machinery
+the escape ladder's indoor retreat uses. The old heuristic remains as the fallback for when
+no validated back-route exists -- still better than dying in place.
+
+### The wall the test remembered
+
+The first cut preferred the back-route unconditionally, and a test failed immediately: **the
+indoor icewall tactic raises its wall on exactly that back edge and LEAPS over it.** A plain
+`tumble <back>` would have walked into our own ice and failed -- wasting the panic *and* its
+10s cooldown at the worst possible moment. The back-route is now checked against
+`S.wallRaised` first and falls through to the heuristic when the edge is walled.
+
+That test ("panic tumble avoids the walled edge in a fight-in-place room") was written for
+exactly this class of mistake, and it earned its keep on the first run.
+
+Files: `mnemosyne/009_Swarm_Tactics.lua`, `mnemosyne/003_Commands.lua`, test
+`test_swarm_tactics.lua`. Suite 856 -> **864**.
+
+---
+
 ## 2026-08-03 - Hawkstep at ripple 25, not 5 (v4.7.201)
 
 User, correcting yesterday's guess: *"Higher ripples at like 25 plus. That is when the

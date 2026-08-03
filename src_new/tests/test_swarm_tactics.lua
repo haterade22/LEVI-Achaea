@@ -405,6 +405,79 @@ describe("swarm stage 2 — icewall (indoors)", function()
   end)
 end)
 
+-- ROLL HIDE PANIC, v4.7.202. Two user-driven changes: an ABSOLUTE hp floor beside the
+-- percentage ("we are entering critical health, like 3000"), and tumbling specifically
+-- back into the room we just cleared ("we should tumble out into the room we just cleared")
+-- -- the one place on the grid known to be empty, and with Roll Hide shedding every pursuer
+-- we arrive there alone.
+describe("Roll Hide panic -- absolute hp floor", function()
+  it("fires on the PERCENTAGE as before", function()
+    fixture(4); mnemRollHide = true; S._lastPanicAt = nil
+    local sc = S._cfg(); sc.panicAt, sc.panicHp = 40, 0
+    ataxia.vitals = { hpp = 39, hp = 99999 }
+    expect(S._panicHpHit(39)).toBeTrue()
+    expect(S._panicHpHit(41)).toBeFalse()
+  end)
+
+  it("fires on the ABSOLUTE floor even while the percentage is comfortable", function()
+    fixture(4); local sc = S._cfg(); sc.panicAt, sc.panicHp = 40, 3000
+    -- 3000 of a 60k pool is 5% -- but a huge max HP means 40% is still 24000, so the
+    -- percentage alone would not fire until long after 3000 became lethal.
+    ataxia.vitals = { hpp = 80, hp = 2900 }
+    expect(S._panicHpHit(80)).toBeTrue()
+    ataxia.vitals = { hpp = 80, hp = 3100 }
+    expect(S._panicHpHit(80)).toBeFalse()
+  end)
+
+  it("either line is enough -- whichever is crossed first", function()
+    fixture(4); local sc = S._cfg(); sc.panicAt, sc.panicHp = 40, 3000
+    ataxia.vitals = { hpp = 20, hp = 50000 } -- percentage only
+    expect(S._panicHpHit(20)).toBeTrue()
+    ataxia.vitals = { hpp = 90, hp = 100 }   -- absolute only
+    expect(S._panicHpHit(90)).toBeTrue()
+  end)
+
+  it("a blackout/unknown hp reading never FAKES a panic", function()
+    fixture(4); local sc = S._cfg(); sc.panicAt, sc.panicHp = 40, 3000
+    ataxia.vitals = { hpp = 90, hp = 0 }
+    expect(S._panicHpHit(90)).toBeFalse()
+    ataxia.vitals = { hpp = 90 }
+    expect(S._panicHpHit(90)).toBeFalse()
+  end)
+
+  it("panicHp 0 disables the floor and leaves the percentage alone", function()
+    fixture(4); local sc = S._cfg(); sc.panicAt, sc.panicHp = 40, 0
+    ataxia.vitals = { hpp = 90, hp = 1 }
+    expect(S._panicHpHit(90)).toBeFalse()
+  end)
+end)
+
+describe("Roll Hide panic -- tumble back into the cleared room", function()
+  it("prefers the validated back-route, not just any exit", function()
+    fixture(4)
+    MAP.rooms[200].exits.east = 60      -- an unexplored alternative
+    mnemRollHide = true; S._lastPanicAt = nil
+    local back = select(1, S._backDir())
+    expect(back ~= nil).toBeTrue()
+    expect(S._panicDir()).toBe(back)    -- the cleared room wins over the unknown exit
+  end)
+
+  it("still refuses to tumble into our OWN icewall", function()
+    fixture(4)
+    local back, longBack = S._backDir()
+    S.wallRaised[200] = longBack        -- the icewall sits on exactly the back edge
+    MAP.rooms[200].exits.east = 60
+    expect(S._panicDir() ~= back).toBeTrue() -- falls through to the heuristic
+  end)
+
+  it("falls back to a heuristic exit when there is no back-route at all", function()
+    fixture(4)
+    M.explore.fromRoom = nil            -- no validated route home
+    MAP.rooms[200].exits.east = 60
+    expect(S._panicDir() ~= nil).toBeTrue()
+  end)
+end)
+
 describe("swarm stage 2 — fly-kite (outdoors)", function()
   local function swarmFollowed()
     fixture(3)
