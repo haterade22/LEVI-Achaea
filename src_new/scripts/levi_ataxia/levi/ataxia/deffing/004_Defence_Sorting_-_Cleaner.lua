@@ -125,7 +125,11 @@ function sortedDefenceShow()
 	 jester = {
 			slippery = "slippery",
 			balancing = "balancing",
-			acrobatics = "acrobatics",	 
+			-- ACROBATICS is a toggle (`ACROBATICS ON` / `ACROBATICS OFF`), never the bare verb.
+			-- The bard block above already had this right; this one did not. These values are
+			-- inert today -- only the KEYS are read, for class-membership checks -- but a wrong
+			-- command sitting in the table is a trap for whoever reads it next.
+			acrobatics = "acrobatics on",
 	 },
 	 
    endgame = {
@@ -278,6 +282,18 @@ end
 -- text, not yet confirmed against a live DEF -- correct them here if a def turns out to
 -- belong to a different word.
 ataxiaTables.defenceWords = {
+  -- Only defences whose raising command DIFFERS from the defence name belong here: the
+  -- display appends the word, so listing `aria = "aria"` would add a column of noise.
+  bard = {
+    -- ACROBATICS is a TOGGLE, not a bare verb: `ACROBATICS ON` raises it and `ACROBATICS OFF`
+    -- drops it (user, 2026-08-04). The bare word does neither. Only the raising form belongs
+    -- in this table -- nothing in the system lowers a defence by command (defupFailsafe tells
+    -- SSC to stop maintaining it with `curing priority defence <def> reset`) -- but the OFF
+    -- form is recorded here because it is the half you have to know when doing it by hand.
+    acrobatics = "acrobatics on",
+    tune       = "blade tune",     -- not `tune`
+    harrying   = "dance harrying", -- a Bladedance dance, not a bare defence word
+  },
   depthswalker = {
     precision   = "trusad",    -- AB: "Your precision is without compare" (crit vs denizens)
     durability  = "tsuura",    -- (?) AB: defence reducing damage from denizens
