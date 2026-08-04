@@ -2,6 +2,45 @@
 
 ---
 
+## 2026-08-03 - Docs: `gearaudit scrap` is not what three docs said it was
+
+### The docs described a safe command that isn't
+
+`README.md`, `CLAUDE.md` and `GETTING_STARTED.md` all described `gearaudit scrap` as producing
+"copy-paste `GEAR SCRAP` commands". It does not. `displayScrap` builds the queue and
+**auto-sends every command**, one per balance, with no confirmation prompt -- it destroys gear
+the moment you run it. Three docs, one wrong verb, and the one word that mattered was
+"copy-paste". All three now say AUTO-SENDS, and `GETTING_STARTED.md` carries an explicit
+warning block. `GETTING_STARTED.md` also gained the `show`/`detail` commands it never listed
+and a note on the new non-truncating display.
+
+### Never `git push --tags` in this repo
+
+Releasing v4.7.208 followed the documented flow -- and the documented flow was wrong.
+`git push --tags` pushes every local tag the remote lacks, and this clone carries stale ones
+(`v4.7.46`, `v4.7.66` from July). Each fired the `v*` release workflow, which built **that
+tag's old source** and published it. GitHub picks "Latest" by **publish time, not semver**, so
+the last stale release to finish became `/releases/latest` -- the exact URL `sysupdate`
+downloads from (`releases/latest/download/Levi_Ataxia.mpackage`).
+
+For a few minutes `sysupdate` would have installed a two-week-old package while `version.txt`
+on raw `main` still advertised 4.7.208. Only the `onInstalled` version cross-check (v4.7.57)
+stood between that and a silent downgrade. **The version CHECK reads raw `main`; the version
+DOWNLOAD reads `releases/latest`. They are different sources and they can disagree** -- "the
+updater is fine, it reads version.txt" is a half-truth.
+
+Repaired with `gh release edit v4.7.208 --latest`, then
+`gh release delete <stray> --yes --cleanup-tag=false` on both strays -- which drops the bogus
+release but keeps the tag, so the July commits stay referenceable.
+
+The instruction is corrected at both sites that carried it: the release-flow step in
+`CLAUDE.md` and step 4 of the `/build` skill now say `git push origin v<version>`, with the
+reasoning attached so it doesn't get "simplified" back.
+
+**Files:** `README.md`, `CLAUDE.md`, `GETTING_STARTED.md`, `.claude/skills/build/SKILL.md`.
+
+---
+
 ## 2026-08-03 - The gear table stops lying about what your gear does (v4.7.208)
 
 ### Three separate truncations, and the worst one was invisible

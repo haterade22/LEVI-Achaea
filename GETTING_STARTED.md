@@ -172,13 +172,19 @@ Audit your gear inventory and find Best-in-Slot items for PvE.
 
 ```lua
 gearaudit            -- Scan all gear (GEAR LIST ALL + GEAR PROBE)
+gearaudit show       -- Full table of every item and what it does
+gearaudit detail 1667 -- Every raw effect line for one item
 gearaudit bis        -- PvE Best-in-Slot analysis (per set + overall)
 gearaudit bis head   -- BiS for a specific slot
 gearaudit score 1667 -- Detailed score breakdown for an item
-gearaudit scrap      -- Items to scrap + copy-paste GEAR SCRAP commands
+gearaudit scrap      -- Items to scrap -- AUTO-SENDS the GEAR SCRAP commands
 ```
 
-Scoring prioritizes: damage % > celerity > burst > resistance penetration > survivability. Weights are configurable via `gearAudit.config.bisWeights`.
+Scoring prioritizes: damage % > celerity > burst > resistance penetration > crit > survivability. Weights are configurable via `gearAudit.config.bisWeights`.
+
+`gearaudit show` and `gearaudit bis` never truncate — columns size themselves to your data and long effect text wraps onto continuation rows, fitted to your console width. If an effect prints as a full raw game sentence rather than a short summary, that is a wording the summarizer has no pattern for yet.
+
+> **Warning:** `gearaudit scrap` is destructive and has no confirmation prompt. It queues `GEAR SCRAP <id> CONFIRM` for every recommendation and sends them, one per balance. Review `gearaudit bis` before running it.
 
 ### Custom GUI (ataxiagui)
 
@@ -254,8 +260,13 @@ Each item type has a `_groups.yaml` defining the folder tree in Mudlet. The conv
 **For developers releasing a new version**:
 1. Bump version: `/version-bump <new_version>` in Claude Code, or manually update `version.txt`, `muddler_project/mfile`, and `ataxiaVersion` in `_groups.yaml`
 2. Build: `./build.sh` or press `Ctrl+Shift+B` in VS Code
-3. Commit, tag, and push: `git tag v<version>` → `git push --tags`
+3. Commit, tag, and push: `git tag v<version>` → `git push && git push origin v<version>`
 4. CI/CD automatically creates a GitHub Release with the `.mpackage`
+
+> **Push the one tag by name — never `git push --tags`.** It pushes every stale local tag too,
+> and each one fires the release workflow against *that tag's old source*. GitHub picks
+> "Latest" by publish time rather than version number, so a stale release published last
+> hijacks `releases/latest/download/Levi_Ataxia.mpackage` — the URL `sysupdate` installs from.
 
 ### Rebuild After Editing
 

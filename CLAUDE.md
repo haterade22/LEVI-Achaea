@@ -177,10 +177,22 @@ The project uses [Muddler](https://github.com/demonnic/muddler) to build Mudlet 
 1. Use `/version-bump <new_version>` in Claude Code, OR manually update all 3 files
 2. Build with `/build` (or `./build.sh`)
 3. Commit all changes (version files + any code changes), tag with `v<new_version>`
-4. Push commit and tag: `git push && git push --tags`
+4. Push commit and tag: `git push && git push origin v<new_version>` — **push the ONE tag by name; never `git push --tags`** (see below)
 5. CI/CD automatically builds and creates a GitHub Release with the `.mpackage`
 
 **IMPORTANT**: When asked to rebuild the package, ALWAYS perform the full release flow: version bump → build → commit → tag → push. Do not just build locally — the user expects the new version to reach GitHub so the auto-updater can pick it up.
+
+**NEVER `git push --tags` (2026-08-03, learned the hard way).** It pushes every local tag the
+remote lacks, and this clone carries stale ones. Each stale tag fires the `v*` release workflow,
+which builds **that tag's old source** and publishes it as a release. GitHub then picks "Latest"
+by **publish time, not semver**, so the last stale release to finish becomes
+`/releases/latest` — the exact URL `sysupdate` downloads from
+(`releases/latest/download/Levi_Ataxia.mpackage`). Pushing `v4.7.208` this way re-pointed Latest
+at a two-week-old `v4.7.46` build while `version.txt` on raw `main` still advertised 4.7.208:
+`sysupdate` would have installed the old package and only the `onInstalled` version cross-check
+would have caught it. **The version CHECK (raw `main`) and the version DOWNLOAD
+(`releases/latest`) read different sources and can disagree.** Repair without losing history:
+`gh release edit v<version> --latest`, then `gh release delete <stray> --yes --cleanup-tag=false`.
 
 **Auto-update system** (`ataxia.updater` namespace, `misc_scripts/021_Auto_Update.lua`):
 - On `sysLoadEvent` (5s delay): downloads `version.txt` from GitHub raw, compares against `ataxiaVersion`
@@ -443,7 +455,7 @@ Automated gear inventory and PvE Best-in-Slot scoring system. Collects all gear 
 | `gearaudit bis` | PvE Best-in-Slot analysis (all slots, per-set + overall) |
 | `gearaudit bis <slot>` | BiS analysis for a specific slot |
 | `gearaudit score <id>` | Detailed score breakdown with weights |
-| `gearaudit scrap` | Scrap recommendations + copy-paste GEAR SCRAP commands |
+| `gearaudit scrap` | Scrap recommendations -- **AUTO-SENDS** `GEAR SCRAP <id> CONFIRM`, one per balance, unprompted |
 | `gearaudit scrap <set>` | Scrap recommendations for a specific set |
 | `gearaudit save/load` | Manual save/load |
 
@@ -1736,7 +1748,7 @@ The project uses Claude Code hooks for automated quality gates and context prese
 
 ---
 
-**Last Updated**: 2026-08-02
+**Last Updated**: 2026-08-03
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia

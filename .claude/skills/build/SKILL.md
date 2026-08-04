@@ -30,8 +30,13 @@ Run the full build pipeline for the Levi_Ataxia Mudlet package.
 4. **After a successful build, always complete the full release flow:**
    - Commit all pending changes (version files + any code changes)
    - Tag the commit: `git tag v<version>` (read version from `version.txt`)
-   - Push commit and tag: `git push && git push --tags`
+   - Push commit and tag: `git push && git push origin v<version>`
    - This ensures the auto-updater and GitHub Releases stay current
+   - **Never `git push --tags`.** It pushes every stale local tag, each of which fires the
+     `v*` release workflow against that tag's OLD source. GitHub picks "Latest" by publish
+     time, not semver, so the last stale release to finish hijacks
+     `/releases/latest/download/Levi_Ataxia.mpackage` — the URL `sysupdate` installs from.
+     Push the one tag by name. See the release-flow section of `CLAUDE.md`.
 
 ## Requirements
 - Java 8+ at `E:\Java`

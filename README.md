@@ -101,7 +101,7 @@ Automated gear inventory scanner and PvE Best-in-Slot scoring system. Collects a
 | `gearaudit bis` | PvE Best-in-Slot analysis (all slots, per-set + overall) |
 | `gearaudit bis <slot>` | BiS analysis for a specific slot |
 | `gearaudit score <id>` | Detailed score breakdown with weights |
-| `gearaudit scrap` | Scrap recommendations + copy-paste `GEAR SCRAP` commands |
+| `gearaudit scrap` | Scrap recommendations — **auto-sends** `GEAR SCRAP <id> CONFIRM`, one per balance |
 | `gearaudit scrap <set>` | Scrap recommendations for a specific set |
 
 **BiS scoring** ranks items by weighted stats: Additional/Bonus Damage (10x), Celerity (8x), Burst Damage (7x), Ignore Resistance (6x), Crit Chance (5x), Crit Damage (4x), HP (3x), Battlerage Damage (3x), HP Regen (2.5x), Damage Reduction (2x), Rage Generation (2x), Bleed Damage (2x), Resistance (1.5x). Conditional gear discounted 30-50%. Scrap threshold: items below 50% of set BiS.
