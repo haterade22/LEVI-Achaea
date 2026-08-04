@@ -2,6 +2,121 @@
 
 ---
 
+## 2026-08-04 - Tantrum, a top-10 damage-taken table, and the bard defence words (v4.7.209)
+
+Also documents the work that shipped inside v4.7.208 without a CHANGELOG entry: while that
+release was being prepared in a concurrent session, I deliberately kept out of `CHANGELOG.md`,
+`CLAUDE.md` and the version files to avoid clobbering it, and committed only explicitly-named
+source files. Those entries are folded in below, marked.
+
+### Tantrum -- a free battlerage once per ripple
+
+> Your first battlerage ability per ripple costs no rage.
+
+Mechanically this is **Rage-Fuelled with a different trigger**: that boon banks a free
+battlerage per KILL, this one per RIPPLE. Both are the same STATE -- "one battlerage is free
+right now" -- so both arm the same `ataxiaTemp.brFreeCharge`, and the whole payoff comes for
+nothing: `ataxiaBasher_brFree()` already short-circuits all 37 `rageAfford` call sites AND the
+eight culling-reap gates, and `brCommit`/`brSent` already spend it. The new code is one arming
+function and a flag. Holding both boons needs no special case; modelling it as a counter would
+be inventing a mechanic the text does not describe.
+
+**Armed once per ripple, guarded on the ripple NUMBER**, not merely fired from `onRipple` --
+the flag can be re-latched mid-ripple by `_relatchBoons`, a BOONS row or the claim alias, and
+re-arming on any of those would hand out a second free battlerage in a ripple whose first was
+already spent.
+
+*A test caught a real mistake here.* My first cut inserted the `onRipple` call by matching
+`ataxiaTemp.mnemNulled = nil` -- which appears **twice** in that file -- so it landed in
+`onRunEnd`, firing as the run ENDED rather than as a ripple began. Silent in play (both guards
+are false by then); Tantrum would simply never have armed. The fix relocates it by structural
+position rather than a string that happens to repeat.
+
+### HUD: top 10 damage taken, not just the worst
+
+The single worst offender tells you what to armour against. The **shape** of the list tells you
+something the leader alone cannot: whether one type dominates (worth a resistance paragon) or
+the damage is spread across five, where no single resistance helps and the answer is to kill
+faster or take fewer rounds.
+
+Render-only -- `bashStats_incomingRanked()` already returned the sorted table. Count is
+`ataxiaBasher.takenTop` (10), only rows that exist are drawn, and a `+N more` tail shows what
+was clipped rather than silently truncating. New `_fmtShort` keeps columns narrow (`867k`,
+`2.2M`), rounding rather than truncating, and names clip at 16 chars rather than wrapping,
+since a wrapped row would destroy the alignment the table exists for.
+
+### Bard defence words -- and a table I nearly broke
+
+User: *"for the bard defence acrobatics the command is acrobatics on and acrobatics off"*.
+
+**Three** tables use the word "acrobatics" and they do not mean the same thing:
+
+| table | meaning | acrobatics |
+|---|---|---|
+| `classDefences` | class membership; only KEYS are read | values are commands -- bard had `"acrobatics on"`, **jester had the bare verb** (fixed) |
+| `defenceWords` | what `ashow defs` DISPLAYS as the raising command | had only a depthswalker block, so a Bard was shown **nothing** (fixed) |
+| `ataxiaTables.defences` (in `_groups.yaml`) | client-side name -> **server-side name** | `"acrobatics"` is **CORRECT** and must not change |
+
+That third one is the interesting part: I had it queued as a bug and was about to "fix" it.
+`supportedDefence()` iterates it as `csd, ssd` -- changing the value to a command would have
+broken every `ataxia.defences[actual]` lookup. It was only caught by reading the consumer
+before editing.
+
+Two process notes from the same hunt. My `grep -rnE 'acrobatics\s*=\s*"acrobatics"'` returned
+nothing because **ERE has no `\s`** -- the pattern silently matched nothing rather than
+erroring, and I nearly concluded the entry did not exist. And a substring check reported the
+bare form as still present when it was only the prefix of `"acrobatics on"`. Both are the
+"verify, don't grep" rule again, in new clothes.
+
+The bard `defenceWords` block lists only the three defences whose command differs from the
+defence NAME -- `acrobatics on`, `blade tune`, `dance harrying`. Not aria/lay/songbird/
+heartsfury, whose command is their name and which would add a column of noise. Only the
+RAISING form is stored, since nothing lowers a defence by command (`defupFailsafe` tells SSC to
+stop maintaining it); the OFF form is recorded in the comment because it is the half you need
+by hand.
+
+---
+
+### Shipped inside v4.7.208, undocumented at the time
+
+**PERFORMANCE SHOW, not bare PERFORMANCE.** The bare verb is not a command -- the game answers
+with syntax help (SHOW / END / SUSPEND / RESUME). Worse than a no-op: trigger 001 never saw an
+answer, so the probe always timed out and **always recomposed, every ripple**. A check added to
+"ensure our stuff is up" was instead forcing a redundant recompose at every boon screen.
+
+**This was the second time in one day**, and I had written the rule down after the first
+(v4.7.203, bare `BOONS`). The test made it worse identically -- `toBe("performance")` pinned
+WHAT we send with no notion of whether it was real. It now also asserts the shape
+`^performance %a+$`.
+
+So: **`highlighting/042` makes the next one loud.** Any `Syntax:` block is now highlighted with
+an echo saying a command was rejected. Both bugs were found only because the user spotted one
+in a log; nothing in the package reacted to it, and a rejected command is otherwise perfectly
+silent -- no error, no missing state, just a feature that quietly does nothing forever.
+
+**Gag the bard refusals with `deleteLine()`, not `deleteFull()`.** `deleteFull` also arms a
+trigger to delete the FOLLOWING line if it is a prompt -- right for the ~50 command responses in
+`006_GAG`, wrong for these two, which fire mid-combat-round where the next prompt carries our
+vitals. Moved to their own trigger (`056`). I had added them to `006_GAG` twice without ever
+reading that trigger's body; the pattern list looked like the whole interface.
+
+**New highlights** (all colours validated against `007_Custom_Colour_Table`, which wholesale
+replaces Mudlet's -- a plausible-but-absent name makes `fg()` throw on every match, as
+`crimson` would have): clumsy proc (`037`, light_cyan, echo throttled to 3s since clumsy fires
+several times a second in a crowd), bloodshield raised/lost (`038`/`039`, firebrick -- the loss
+echoed because it arrives unannounced and means we are bare again), Sharp Mind (`040`,
+light_blue), sonata cleanse (`041`, medium_sea_green -- deliberately the same green as the
+dagaz passive heal, since both are "our passive cured us for free").
+
+**Necromantic thrall** (`mnemosyne/060`) -- the affix line wanted since v4.7.196. A thrall is a
+NEW DENIZEN IN A ROOM WE JUST CLEARED, which is exactly the state the auto-explorer trusts to
+decide it is finished; it now nudges a room re-read rather than letting the sweep walk out on a
+stale snapshot.
+
+Suite 923 -> **972**.
+
+---
+
 ## 2026-08-03 - Docs: `gearaudit scrap` is not what three docs said it was
 
 ### The docs described a safe command that isn't
