@@ -99,6 +99,14 @@ if matches[2]:lower():find("icy heart") then mnemIcyHeart = true end
 -- a dance costs BALANCE and they are mutually exclusive, so it is a state we switch,
 -- not a rider we re-assert.
 if matches[2]:lower():find("songstep") then mnemSongstep = true end
+-- Tantrum: "your first battlerage ability per ripple costs no rage" -- Rage-Fuelled's twin,
+-- banking the same ataxiaTemp.brFreeCharge on a per-RIPPLE trigger instead of per-kill.
+-- tantrumArm is guarded on the ripple number, so claiming mid-ripple cannot hand out a
+-- second free battlerage in a ripple whose first was already spent.
+if matches[2]:lower():find("tantrum") then
+  mnemTantrum = true
+  if ataxia and ataxia.mnemosyne and ataxia.mnemosyne.tantrumArm then ataxia.mnemosyne.tantrumArm() end
+end
 -- Borrowed Power: plane-razing crits without a paragon, and explicitly NON-STACKING -- so the
 -- crit-tier paragon becomes dead weight. Swap it for the willpower/shifting one. Done HERE as
 -- well as from the BOONS row because claiming happens at the boon screen: out of combat, with

@@ -213,7 +213,7 @@ function M.onRunEnd()
   mnemRageFuelled = false   -- boons gone on a confirmed run-end
   mnemThunderclap = false   -- boons gone on a confirmed run-end
   mnemDivineThunder = false -- boons gone on a confirmed run-end
-  if ataxiaTemp then ataxiaTemp.mnemNulled = nil end -- affixes gone with the run
+  if ataxiaTemp then ataxiaTemp.mnemNulled = nil end
   ataxiaTemp.brFreeCharge = nil -- ...and any charge it had banked
   if ataxiaTemp and ataxiaTemp.infFuryOn then
     -- The boon is gone but FURY may still be running with its quadrupled endurance
@@ -224,6 +224,8 @@ function M.onRunEnd()
   mnemHaemophiliac = false -- affixes gone on a confirmed run-end (pacing back to normal)
   mnemLastWord = false -- affixes gone on a confirmed run-end (pacing back to normal)
   mnemBravado = false -- affixes gone on a confirmed run-end (barriers work again)
+  mnemTantrum = false -- boons gone on a confirmed run-end
+  if ataxiaTemp then ataxiaTemp.tantrumRipple = nil end
   mnemDeluge = false -- affixes gone on a confirmed run-end (flight available again)
   ataxiaTemp.mnemAblazeAt = nil   -- per-room burn state cannot outlive the run
   if ataxiaTemp then
@@ -324,6 +326,34 @@ function M.onHaemophiliacSeen()
   mnemHaemophiliac = true
   if not M._quiet() then
     M.echo("<red>Haemophiliac<reset> active -- kills bleed heavily; wading slower (moves hold until HP recovers)")
+  end
+end
+
+-- TANTRUM boon: "Your first battlerage ability per ripple costs no rage."
+--
+-- Mechanically this is Rage-Fuelled with a different trigger. That one banks a free
+-- battlerage per KILL (trigger 340_Slain); this one banks it per RIPPLE. Both are the same
+-- STATE -- "one battlerage is free right now" -- so both arm the same
+-- `ataxiaTemp.brFreeCharge`, and the entire payoff comes for nothing: `ataxiaBasher_brFree()`
+-- already short-circuits all 37 `rageAfford` call sites AND the eight culling-reap gates, and
+-- `brCommit`/`brSent` already spend it. Holding BOTH boons is fine and needs no special case;
+-- one boolean correctly means "a free battlerage is banked", whichever granted it.
+--
+-- ARMED ONCE PER RIPPLE, guarded on the ripple NUMBER rather than just fired from onRipple.
+-- The flag can be (re-)latched mid-ripple -- `_relatchBoons`, a BOONS-list row, the claim
+-- alias -- and re-arming on any of those would hand out a SECOND free battlerage in a ripple
+-- where the first was already spent. The guard makes every path idempotent, so the flag
+-- handlers can call this freely.
+function M.tantrumArm()
+  if not mnemTantrum then return end
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  ataxiaTemp = ataxiaTemp or {}
+  local r = tonumber(M.run and M.run.ripple) or 0
+  if ataxiaTemp.tantrumRipple == r then return end
+  ataxiaTemp.tantrumRipple = r
+  ataxiaTemp.brFreeCharge = true
+  if not M._quiet() then
+    M.echo("<green>Tantrum<reset> -- first battlerage this ripple is free")
   end
 end
 
@@ -477,6 +507,9 @@ function M.onRipple(n)
   -- Ongoing effects are re-read from each ripple's WADE STATUS, so damage-suppression
   -- affixes re-latch per ripple rather than being assumed to persist.
   if ataxiaTemp then ataxiaTemp.mnemNulled = nil end
+  -- Tantrum: a fresh ripple re-banks the free battlerage. Placed BEFORE the `_auto()` gate
+  -- below on purpose -- like every other boon flag, it must work with reporting switched off.
+  if M.tantrumArm then M.tantrumArm() end
   -- Forget per-room / in-flight card state; the per-card intervals deliberately
   -- survive (charges are global and regenerate hourly, not per ripple).
   if ataxiaBasher_mnemLdeckReset then ataxiaBasher_mnemLdeckReset() end

@@ -946,6 +946,77 @@ describe("Bravado affix -- the mitigations that stop working", function()
   end)
 end)
 
+-- TANTRUM (v4.7.209): "Your first battlerage ability per ripple costs no rage." Rage-Fuelled's
+-- twin -- same ataxiaTemp.brFreeCharge state, armed per RIPPLE instead of per KILL -- so the
+-- entire payoff (rageAfford's 37 sites, the 8 culling gates, brCommit/brSent) comes for free.
+describe("Tantrum -- a free battlerage once per ripple", function()
+  local function arm(ripple)
+    reset(true)
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = true
+    ataxiaTemp = {}
+    mnemTantrum = true
+    M.run.ripple = ripple or 1
+  end
+
+  it("banks the charge on a fresh ripple", function()
+    arm(3); M.tantrumArm()
+    expect(ataxiaTemp.brFreeCharge).toBeTrue()
+  end)
+
+  it("does nothing without the boon", function()
+    arm(3); mnemTantrum = false; M.tantrumArm()
+    expect(ataxiaTemp.brFreeCharge).toBe(nil)
+  end)
+
+  it("is inert outside the tower", function()
+    arm(3); ataxiaBasher.inMnemosyne = false; M.tantrumArm()
+    expect(ataxiaTemp.brFreeCharge).toBe(nil)
+    ataxiaBasher.inMnemosyne = false
+  end)
+
+  -- The guard that matters: the flag can be re-latched mid-ripple (relatchBoons, a BOONS row,
+  -- the claim alias), and without this each of those would hand out ANOTHER free battlerage
+  -- in a ripple whose first was already spent.
+  it("does NOT re-bank within the same ripple after the charge was spent", function()
+    arm(3); M.tantrumArm()
+    ataxiaTemp.brFreeCharge = nil          -- spent on the first battlerage
+    M.tantrumArm()                          -- a BOONS re-read, say
+    expect(ataxiaTemp.brFreeCharge).toBe(nil)
+  end)
+
+  it("banks again on the NEXT ripple", function()
+    arm(3); M.tantrumArm()
+    ataxiaTemp.brFreeCharge = nil
+    M.run.ripple = 4
+    M.tantrumArm()
+    expect(ataxiaTemp.brFreeCharge).toBeTrue()
+  end)
+
+  it("onRipple arms it, and does so before the telemetry gate", function()
+    arm(5)
+    ataxiaTemp.brFreeCharge, ataxiaTemp.tantrumRipple = nil, nil
+    M.run.ripple = 5
+    M.onRipple(6)
+    expect(ataxiaTemp.brFreeCharge).toBeTrue()
+  end)
+
+  it("clears on the confirmed run end", function()
+    arm(3); M.tantrumArm()
+    M.onRunEnd()
+    expect(mnemTantrum).toBeFalse()
+    expect(ataxiaTemp.tantrumRipple).toBe(nil)
+  end)
+
+  it("coexists with Rage-Fuelled -- one boolean, either source", function()
+    arm(3)
+    mnemRageFuelled = true
+    M.tantrumArm()
+    expect(ataxiaTemp.brFreeCharge).toBeTrue()  -- not a counter; one charge is one charge
+    mnemRageFuelled = false
+  end)
+end)
+
 
 describe("M.reaperOnWade()", function()
   it("resets the tally on a genuinely fresh wade", function()

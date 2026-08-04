@@ -72,10 +72,12 @@ mnemThunderclap = false -- boons reset each run (re-latches from the BOONS row /
 mnemDivineThunder = false -- boons reset each run (re-latches from the BOONS row / claim)
 mnemIcyHeart = false -- boons reset each run (re-latches from the BOONS row / claim)
 mnemSongstep = false -- boons reset each run (re-latches from the BOONS row / claim)
+mnemTantrum = false -- boons reset each run (re-latches from the BOONS row / claim)
 mnemBorrowedPower = false -- boons reset each run (re-latches from the BOONS row / claim)
 if ataxiaTemp then ataxiaTemp.mnemNulled = nil end -- damage-suppression affixes re-latch per ripple
 if ataxiaTemp then ataxiaTemp.mnemBoonsRelatched = nil end -- re-latch boons this run
 if ataxiaTemp then ataxiaTemp.brFreeCharge = nil end
+if ataxiaTemp then ataxiaTemp.tantrumRipple = nil end -- Tantrum re-banks on the first ripple
 
 -- The wade lifecycle is the AUTHORITY on being in the tower -- this line and the confirmed
 -- run-end bracket it exactly. Do not infer it from gmcp: the boon "Creville's Legacy" (attack
