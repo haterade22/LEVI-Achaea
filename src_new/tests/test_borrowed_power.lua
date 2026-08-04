@@ -41,7 +41,7 @@ local function slice(startAnchor, endAnchor, what)
   assert(loadfn(body:sub(from, to - 1)))()
 end
 slice("ataxia.armour.PARAGON_TYPES = {", "function ataxia.armour.echo", "PARAGON_TYPES")
-slice("function ataxia.armour.paragonName", "function ataxia.armour.resolveParagonName", "paragonName")
+slice("function ataxia.armour.paragonName", "function ataxia.armour.resolveParagonName", "paragonName/paragonKey")
 slice("ataxia.armour.config.borrowedRedundant", "function ataxia.armour.addProfile", "Borrowed Power helpers")
 
 local function reset()
@@ -215,6 +215,79 @@ describe("reverting", function()
     reset()
     ataxia.armour.config.profiles.bash = nil
     expect(ataxia.armour.borrowedPower(false)).toBeFalse()
+  end)
+end)
+
+-- NEVER SLOT A PARAGON THE ARMOUR ALREADY WEARS (v4.7.211).
+--
+-- From a live failure. A paragon is a physical object and fits exactly one embrasure, so a
+-- profile naming the same one twice gets its second insert rejected ("That is not a valid
+-- paragon") -- leaving that embrasure EMPTY, which is worse than not swapping at all because
+-- the crit paragon has already been pried out by then.
+--
+-- The user's real profile was {icosagon, metalliferous, crucious}: replacing crucious chose
+-- metalliferous, which was already in slot 2. v4.7.204 shipped a COMMENT claiming this was
+-- handled and implemented only an ordering preference.
+describe("the replacement must not already be worn", function()
+  local function liveProfile()
+    reset()
+    -- exactly what the log showed in the armour
+    ataxia.armour.config.profiles.bash.slots = { "p_icosagon", "p_metal", "p_crucious" }
+  end
+
+  it("reproduces the live failure: does NOT slot metalliferous twice", function()
+    liveProfile()
+    local ok = ataxia.armour.borrowedPower(true)
+    if ok then
+      local sl = ataxia.armour.config.profiles.borrowed.slots
+      local seen = {}
+      for _, id in ipairs(sl) do
+        expect(seen[id]).toBe(nil)   -- no paragon appears twice
+        seen[id] = true
+      end
+    end
+  end)
+
+  it("falls to the willpower paragon when the shifting one is already worn", function()
+    liveProfile()
+    expect(ataxia.armour.borrowedPower(true)).toBeTrue()
+    expect(ataxia.armour.config.profiles.borrowed.slots[3]).toBe("p_serendip")
+  end)
+
+  it("REFUSES rather than emptying an embrasure when nothing is spare", function()
+    liveProfile()
+    -- both candidates already in the armour: there is nothing left to put in slot 3
+    ataxia.armour.config.profiles.bash.slots = { "p_serendip", "p_metal", "p_crucious" }
+    expect(ataxia.armour.borrowedPower(true)).toBeFalse()
+    expect(swapped).toBe(nil)   -- crit paragon stays; better than an empty slot
+  end)
+
+  it("matches by resolved NAME, so an id and a bare name collide correctly", function()
+    liveProfile()
+    -- slot 2 holds the bare name for the same physical paragon as p_metal
+    ataxia.armour.config.profiles.bash.slots = { "p_icosagon", "metalliferous", "p_crucious" }
+    expect(ataxia.armour.borrowedPower(true)).toBeTrue()
+    expect(ataxia.armour.config.profiles.borrowed.slots[3]).toBe("p_serendip")
+  end)
+
+  it("refuses an explicit choice that is already worn, rather than substituting", function()
+    liveProfile()
+    ataxia.armour.config.borrowedReplacement = "p_metal"  -- already in slot 2
+    expect(ataxia.armour.borrowedPower(true)).toBeFalse()
+  end)
+
+  it("honours an explicit choice that IS spare", function()
+    liveProfile()
+    ataxia.armour.config.borrowedReplacement = "p_serendip"
+    expect(ataxia.armour.borrowedPower(true)).toBeTrue()
+    expect(ataxia.armour.config.profiles.borrowed.slots[3]).toBe("p_serendip")
+  end)
+
+  -- A registered id is PROVEN to exist on this character; a bare name is only a hope.
+  it("prefers a known id over a guessed name across preferences", function()
+    reset()
+    ataxia.armour.config.paragons.p_metal = nil   -- no shifting id registered
+    expect(ataxia.armour.borrowedReplacementId({})).toBe("p_serendip")
   end)
 end)
 

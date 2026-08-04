@@ -253,6 +253,27 @@ function ataxia.armour.paragonName(ref)
   return ref
 end
 
+-- The canonical TYPE keyword behind any reference: an id, a bare name, or a display string
+-- all collapse to e.g. "metalliferous".
+--
+-- This is what "the same paragon" means for slotting purposes, and comparing display STRINGS
+-- instead is what let v4.7.211's first cut still double-slot: a registered id resolves to
+-- whatever `resolveParagonName` stored ("metalliferous (7.5% resist)") while the bare name
+-- resolves through PARAGON_TYPES ("metalliferous (7.5% shifting resist)"). Two spellings of
+-- one physical object, so a string compare says they are different and the armour ends up
+-- naming it twice.
+--
+-- Collapsing by TYPE also handles the case of owning two paragons of the same type: slotting
+-- the second buys nothing, so treating them as one is the answer we want anyway.
+function ataxia.armour.paragonKey(ref)
+  if not ref then return nil end
+  local nm = tostring(ataxia.armour.paragonName(ref) or ref):lower()
+  for keyword in pairs(ataxia.armour.PARAGON_TYPES or {}) do
+    if nm:find(keyword, 1, true) then return keyword end
+  end
+  return nm
+end
+
 -- Is this reference a bare paragon TYPE keyword rather than an id? Ids are `paragonNNNN`.
 function ataxia.armour.isParagonTypeName(ref)
   if type(ref) ~= "string" then return false end
@@ -467,22 +488,51 @@ end
 -- without that confirmation.
 ataxia.armour.config.borrowedRedundant = ataxia.armour.config.borrowedRedundant or { "crucious" }
 
-function ataxia.armour.borrowedReplacementId()
+-- `worn` is a set of paragon references ALREADY in the armour, keyed by resolved name.
+--
+-- v4.7.211, from a live failure. A paragon is a physical object: it can sit in exactly one
+-- embrasure. Picking a replacement that is already worn produces a profile naming the same
+-- paragon twice, and the second insert is rejected ("That is not a valid paragon") -- leaving
+-- that embrasure EMPTY. Worse than not swapping at all, because the crit paragon has already
+-- been pried out by then.
+--
+-- v4.7.204 shipped a comment claiming exactly this was handled ("shifting goes first because
+-- the willpower paragon is usually already slotted, and doubling it would waste the embrasure
+-- a second time") and then implemented only an ORDERING PREFERENCE, with no check. A comment
+-- describing a safeguard that does not exist is worse than no comment: it stopped me looking.
+function ataxia.armour.borrowedReplacementId(worn)
+  worn = worn or {}
   local cfg = ataxia.armour.config
-  if cfg.borrowedReplacement and cfg.borrowedReplacement ~= "" then return cfg.borrowedReplacement end
-  -- Default preference: the "shifting damage" paragon, then the willpower one. Both were
-  -- named by the user; shifting goes first because the willpower paragon (serendipitous) is
-  -- usually already slotted, and doubling it would waste the embrasure a second time.
-  for _, want in ipairs({ "metalliferous", "serendipitous" }) do
+  local function free(ref)
+    if not ref then return false end
+    local k = ataxia.armour.paragonKey(ref)
+    return k ~= nil and not worn[k]
+  end
+
+  -- An explicit choice still has to be wearable. If the user pinned one that is already in
+  -- the armour, refuse rather than silently substitute something they did not ask for.
+  if cfg.borrowedReplacement and cfg.borrowedReplacement ~= "" then
+    return free(cfg.borrowedReplacement) and cfg.borrowedReplacement or nil
+  end
+
+  -- Preference: shifting damage, then willpower. Both named by the user.
+  --
+  -- TWO PASSES, and the order between them matters. A REGISTERED id is proven to exist on
+  -- this character; a bare type name is only a hope that we own one. So exhaust the ids for
+  -- every preference first, and only then fall back to names -- otherwise a guessed
+  -- "metalliferous" would beat a serendipitous we are known to own. (Caught by the test that
+  -- pins exactly that fallback.)
+  local wants = { "metalliferous", "serendipitous" }
+  for _, want in ipairs(wants) do
     for id, nm in pairs(cfg.paragons or {}) do
-      if type(nm) == "string" and nm:lower():find(want, 1, true) then return id end
+      if type(nm) == "string" and nm:lower():find(want, 1, true) and free(id) then return id end
     end
   end
-  -- v4.7.205: nothing registered, but the game now takes the NAME directly, so we no longer
-  -- have to give up here. This used to be the layer's one real dead end -- "no
-  -- willpower/shifting paragon known, run armour scan" -- which meant Borrowed Power did
-  -- nothing at all on a character who had never scanned. A name works without a scan.
-  return "metalliferous"
+  -- v4.7.205: the game takes the NAME directly, so an unscanned character is not a dead end.
+  for _, want in ipairs(wants) do
+    if free(want) then return want end
+  end
+  return nil
 end
 
 -- Is this paragon id one the boon makes redundant?
@@ -515,14 +565,25 @@ function ataxia.armour.borrowedPower(on)
     ataxia.armour.echo("<yellow>Borrowed Power: no '" .. baseName .. "' profile to build from.")
     return false
   end
-  local repl = ataxia.armour.borrowedReplacementId()
+  -- Everything the profile ALREADY wears, minus the redundant slot we are about to free.
+  -- Keyed by resolved NAME so an id and a bare type name for the same paragon collide
+  -- correctly (paragon500167 and "metalliferous" are one object).
+  local worn = {}
+  for _, id in ipairs(base.slots) do
+    if id and id ~= "" and not ataxia.armour.isBorrowedRedundant(id) then
+      local k = ataxia.armour.paragonKey(id)
+      if k then worn[k] = true end
+    end
+  end
+
+  local repl = ataxia.armour.borrowedReplacementId(worn)
   if not repl then
-    ataxia.armour.echo("<yellow>Borrowed Power: no willpower/shifting paragon known -- "
-      .. "run <white>armour scan<reset> or set one with <white>armour borrowed use <paragonID>")
+    ataxia.armour.echo("<yellow>Borrowed Power: no spare willpower/shifting paragon to slot "
+      .. "(they may already be worn) -- keeping the crit paragon rather than emptying an "
+      .. "embrasure. <white>armour scan<reset>, or pick one with <white>armour borrowed use <paragonID>")
     return false
   end
 
-  -- Already wearing it? Then the crit paragon is not in the armour and there is nothing to do.
   local slots, swapped = {}, false
   for i, id in ipairs(base.slots) do
     if ataxia.armour.isBorrowedRedundant(id) and id ~= repl then

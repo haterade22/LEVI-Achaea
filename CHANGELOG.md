@@ -2,6 +2,72 @@
 
 ---
 
+## 2026-08-04 - Borrowed Power emptied an embrasure (v4.7.211)
+
+A live log, and the swap I shipped in v4.7.204 half-failed:
+
+```
+[Armour]: Borrowed Power -- the crit paragon is dead weight, swapping in metalliferous
+You pry out an auspicious icosagon paragon ...
+You pry out a resonate metalliferous paragon ...
+You pry out a crucious paragon ...
+You insert your paragon into the embrasure.
+You insert your paragon into the embrasure.
+That is not a valid paragon.          <-- third insert rejected
+...
+1: an auspicious icosagon paragon      2: a resonate metalliferous paragon      3: Empty.
+```
+
+### What went wrong
+
+**A paragon is a physical object: it fits exactly one embrasure.** The live profile was
+`{icosagon, metalliferous, crucious}` -- so when the swap replaced the redundant `crucious` it
+chose `metalliferous`, *which was already in slot 2*. The resulting profile named one object
+twice, the second insert was rejected, and slot 3 was left **empty**.
+
+That is worse than not swapping at all, because by then the crit paragon has already been
+pried out. The failure mode of a half-applied gear swap is strictly worse than the no-op it
+replaced.
+
+**And I had claimed this was handled.** v4.7.204 shipped a comment reading *"shifting goes
+first because the willpower paragon is usually already slotted, and doubling it would waste
+the embrasure a second time"* -- and then implemented only an ordering **preference**, with no
+check anywhere. A comment describing a safeguard that does not exist is worse than no comment:
+it is the reason I never went looking.
+
+### The fix
+
+`borrowedReplacementId(worn)` now takes the set the armour already wears and skips those
+candidates. If nothing is spare it returns nil and the swap **refuses**, keeping the crit
+paragon rather than emptying an embrasure. An explicit `armour borrowed use <id>` that is
+already worn is refused too, rather than silently substituting something else.
+
+### Comparing by TYPE, not by label
+
+The first cut still double-slotted, and the new tests caught it. Comparison was by display
+string, and one physical paragon has two spellings: a registered id resolves to whatever
+`resolveParagonName` stored (`"metalliferous (7.5% resist)"`) while a bare name resolves
+through `PARAGON_TYPES` (`"metalliferous (7.5% shifting resist)"`). A string compare calls
+those different.
+
+New `ataxia.armour.paragonKey()` collapses an id, a bare name or a display string to the
+canonical type keyword. That is what "the same paragon" actually means here -- and it also
+handles owning two paragons of one type, where slotting the second buys nothing anyway.
+
+A second test caught a regression on the way: folding the name-fallback into the preference
+loop made a *guessed* `metalliferous` beat a **known, owned** serendipitous. Registered ids
+are now exhausted across all preferences before any bare name is tried.
+
+Seven regression tests, built around the exact profile from the log. Suite 981 -> **988**.
+
+### Your armour right now
+
+Slot 3 is empty and the crucious paragon is in your inventory. `armour borrowed off` restores
+the bash profile and re-inserts it; `armour bash` does the same. This release stops it
+recurring.
+
+---
+
 ## 2026-08-04 - Bard: cyclone cashes in stun or clumsy (v4.7.210)
 
 User: *"bard should be using cyclone on mobs with stun or clumsy"*.
