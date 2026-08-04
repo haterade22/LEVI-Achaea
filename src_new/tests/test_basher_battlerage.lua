@@ -556,3 +556,89 @@ describe("rage floor -- spend only the surplus", function()
     floorReset(nil)
   end)
 end)
+
+-- ---------------------------------------------------------------------------
+-- Bard CYCLONE: cash in a denizen carrying STUN or CLUMSY (v4.7.210, user rule)
+-- ---------------------------------------------------------------------------
+-- Same shape as Runewarden's Etch and Blademaster's Headstrike -- an ability that spends an
+-- affliction already on the mob -- so it beats generic damage but yields to the crowd
+-- abilities, since charm removes a mob from the fight entirely.
+describe("bard cyclone -- exploits stun or clumsy", function()
+  local affs
+  local function setup(rage, denizens)
+    ataxiaTemp = {}
+    affs = {}
+    ataxia.vitals = ataxia.vitals or {}
+    ataxia.vitals.rage = rage or 100
+    target = 7
+    ataxiaBasher.cullingBlade = false
+    ataxiaBasher.bardCycloneRage, ataxiaBasher.bardCycloneCd = nil, nil
+    ataxiaBasher.bardCycloneCmd = nil
+    battleRage_Timers = { small = false, large = false, special = false }
+    ataxiaBasher_validTargets = function() return denizens or 1 end
+    stormhammerTargets = { 7, 9 }
+    ataxiaBasher_dsHasAff = function(_, a) return affs[a] == true end
+  end
+
+  it("does not fire on a clean denizen", function()
+    setup()
+    local cmd = ataxiaBasher_bardBattlerage(";")
+    expect(cmd:find("cyclone", 1, true)).toBe(nil)
+    expect(cmd:find("howlslash", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("fires on STUN", function()
+    setup(); affs.stun = true
+    expect(ataxiaBasher_bardBattlerage(";")).toBe("cyclone 7;")
+  end)
+
+  it("fires on CLUMSY", function()
+    setup(); affs.clumsy = true
+    expect(ataxiaBasher_bardBattlerage(";")).toBe("cyclone 7;")
+  end)
+
+  it("beats generic damage -- that is the whole point of an exploit", function()
+    setup(100); affs.stun = true
+    local cmd = ataxiaBasher_bardBattlerage(";")
+    expect(cmd:find("howlslash", 1, true)).toBe(nil)
+    expect(cmd:find("moulinet", 1, true)).toBe(nil)
+  end)
+
+  -- Charm takes a mob out of the fight; a bonus on one mob does not.
+  it("still yields to the crowd abilities at 2+ denizens", function()
+    setup(100, 2); affs.stun = true
+    expect(ataxiaBasher_bardBattlerage(";")).toBe("play charm at 9;")
+  end)
+
+  it("honours its own cooldown, then fires again", function()
+    setup(); affs.stun = true
+    expect(ataxiaBasher_bardBattlerage(";")).toBe("cyclone 7;")
+    expect(ataxiaBasher_bardBattlerage(";"):find("cyclone", 1, true)).toBe(nil) -- cooling
+    ataxiaTemp.bardCycloneAt = 0
+    expect(ataxiaBasher_bardBattlerage(";")).toBe("cyclone 7;")
+  end)
+
+  it("respects the rage cost, and the rage floor through rageAfford", function()
+    setup(24); affs.stun = true
+    expect(ataxiaBasher_bardBattlerage(";"):find("cyclone", 1, true)).toBe(nil)
+    setup(25); affs.stun = true
+    expect(ataxiaBasher_bardBattlerage(";")).toBe("cyclone 7;")
+  end)
+
+  -- The command, cost and cooldown are UNCONFIRMED game data, so all three are settings.
+  it("takes a configured command, cost and cooldown", function()
+    setup(30); affs.clumsy = true
+    ataxiaBasher.bardCycloneCmd = "play cyclone at"
+    ataxiaBasher.bardCycloneRage = 30
+    expect(ataxiaBasher_bardBattlerage(";")).toBe("play cyclone at 7;")
+    setup(29); affs.clumsy = true
+    ataxiaBasher.bardCycloneRage = 30
+    expect(ataxiaBasher_bardBattlerage(";"):find("cyclone", 1, true)).toBe(nil)
+  end)
+
+  it("is inert when the denizen-state layer is absent (PvP / no basher)", function()
+    setup(); affs.stun = true
+    ataxiaBasher_dsHasAff = nil
+    expect(ataxiaBasher_bardBattlerage(";"):find("cyclone", 1, true)).toBe(nil)
+  end)
+end)

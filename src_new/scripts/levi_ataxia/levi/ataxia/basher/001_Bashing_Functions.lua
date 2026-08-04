@@ -1029,7 +1029,10 @@ end
 -- culling blade (reap, off cd + >=36) > charm 2nd denizen (2+ denizens, >=32) > trill target
 -- (2+ denizens, >=28, off its ~42s cd) > howlslash (>=36) > moulinet (>=14).
 -- Charm is intentionally not cooldown-gated (fires whenever eligible; self-limits on rage).
-local function ataxiaBasher_bardBattlerage(sp)
+-- Global, like the other OWNED rotations (blademaster/monk/magi). It was the only one of that
+-- group still file-local, which meant it could not be unit-tested at all -- and the cyclone
+-- branch below is exactly the kind of conditional that wants a test.
+function ataxiaBasher_bardBattlerage(sp)
   local rage = ataxia.vitals.rage
 
   -- Culling blade first, above everything else: usage toggled on, off cooldown, >=36 rage.
@@ -1043,7 +1046,40 @@ local function ataxiaBasher_bardBattlerage(sp)
     return "play charm at "..(stormhammerTargets[2] or target)..sp
   elseif twoPlus and ataxiaBasher_rageAfford(rage, 28) and not battleRage_Timers.special then
     return "play trill at "..target..sp
-  elseif ataxiaBasher_rageAfford(rage, 36) and not battleRage_Timers.large then
+  end
+
+  -- CYCLONE on a mob carrying STUN or CLUMSY (user, 2026-08-04). Same shape as Runewarden's
+  -- Etch and Blademaster's Headstrike: an ability that CASHES IN an affliction already on the
+  -- denizen, so it outranks generic damage but yields to the crowd abilities above -- charm
+  -- takes a mob out of the fight entirely, which beats a bonus on one.
+  --
+  -- Both afflictions come from our own kit and are already tracked per-denizen
+  -- (`ataxiaBasher_BR_AFFS`: stun 4s from Daze-likes, clumsy 7s from Mind Scramble), so this
+  -- reads the same denizen-state layer every other exploit uses and is PvP-inert via the
+  -- numeric-id guard inside dsHasAff.
+  --
+  -- THREE VALUES BELOW ARE NOT CONFIRMED and are settings rather than constants, because
+  -- guessing them silently is how dead config gets written:
+  --   * the COMMAND. Bard battlerages in this rotation split between bare verbs (howlslash,
+  --     moulinet) and `play <x> at <t>` (charm, trill); which family cyclone belongs to has
+  --     not been observed. Default is the bare form.
+  --   * the RAGE cost, defaulted to 25 -- the tier every other affliction-cashing battlerage
+  --     in this package costs (Headstrike 25, Etch 25, Firefall 25).
+  --   * the COOLDOWN, defaulted to 23s, the same tier. Tracked as a send-side TIMESTAMP
+  --     because no fire line has been captured; a stale timestamp merely expires, whereas a
+  --     stuck timer id would skip the ability forever.
+  -- If the command is wrong the game answers with syntax help -- and highlighting/042 now
+  -- makes exactly that loud, so this will announce itself rather than failing silently.
+  local hasAff = ataxiaBasher_dsHasAff
+    and (ataxiaBasher_dsHasAff(target, "stun") or ataxiaBasher_dsHasAff(target, "clumsy"))
+  if hasAff and ataxiaBasher_rageAfford(rage, tonumber(ataxiaBasher.bardCycloneRage) or 25)
+     and getEpoch() >= (ataxiaTemp.bardCycloneAt or 0) then
+    ataxiaTemp.bardCycloneAt = getEpoch() + (tonumber(ataxiaBasher.bardCycloneCd) or 23)
+    local cmd = ataxiaBasher.bardCycloneCmd or "cyclone"
+    return cmd.." "..target..sp
+  end
+
+  if ataxiaBasher_rageAfford(rage, 36) and not battleRage_Timers.large then
     return "howlslash "..target..sp
   elseif ataxiaBasher_rageAfford(rage, 14) and not battleRage_Timers.small then
     return "moulinet "..target..sp

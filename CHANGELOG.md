@@ -2,6 +2,49 @@
 
 ---
 
+## 2026-08-04 - Bard: cyclone cashes in stun or clumsy (v4.7.210)
+
+User: *"bard should be using cyclone on mobs with stun or clumsy"*.
+
+Same shape as Runewarden's Etch and Blademaster's Headstrike -- an ability that spends an
+affliction **already on the denizen** -- so it reads the same per-denizen state layer
+(`ataxiaBasher_dsHasAff`, PvP-inert via its numeric-id guard). Both afflictions come from our
+own kit and are already modelled in `ataxiaBasher_BR_AFFS` (stun 4s, clumsy 7s).
+
+**Priority: after the crowd abilities, before generic damage.** An exploit beats howlslash and
+moulinet -- that is what makes it an exploit. It yields to charm and trill at 2+ denizens
+because charm removes a mob from the fight entirely, and a bonus on one mob does not. Both
+directions are tested.
+
+### Three unconfirmed values, made settings rather than silent guesses
+
+I do not know cyclone's command syntax, rage cost or cooldown, and this package has a habit of
+turning a plausible guess into config that quietly never works. So all three are overridable:
+
+| setting | default | why that default |
+|---|---|---|
+| `bardCycloneCmd` | `cyclone` | Bard battlerages here split between bare verbs (howlslash, moulinet) and `play <x> at <t>` (charm, trill); which family cyclone belongs to has not been observed |
+| `bardCycloneRage` | 25 | the tier every other affliction-cashing battlerage costs (Headstrike, Etch, Firefall) |
+| `bardCycloneCd` | 23s | same tier; tracked as a send-side TIMESTAMP since no fire line is captured -- a stale timestamp expires, a stuck timer id would skip the ability forever |
+
+**If the command is wrong, it will now say so.** The game answers an invalid command with syntax
+help, and `highlighting/042` (added yesterday, after the bare-`PERFORMANCE` and bare-`BOONS`
+bugs) makes exactly that loud. This is the first feature shipped since that detector existed,
+and it is precisely the case it was built for -- a guess that announces itself instead of
+failing silently for dozens of releases.
+
+### `ataxiaBasher_bardBattlerage` is no longer file-local
+
+It was the only OWNED rotation still declared `local` (blademaster, monk and magi are all
+global), which meant it could not be unit-tested at all -- and there were no bard battlerage
+tests. Now global, with nine covering the cyclone branch: each affliction, the ordering both
+ways, the cooldown, the rage gate, the configured overrides, and inertness when the
+denizen-state layer is absent.
+
+Suite 972 -> **981**.
+
+---
+
 ## 2026-08-04 - Tantrum, a top-10 damage-taken table, and the bard defence words (v4.7.209)
 
 Also documents the work that shipped inside v4.7.208 without a CHANGELOG entry: while that
