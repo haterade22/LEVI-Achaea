@@ -96,6 +96,20 @@ local function _fmtNum(n)
   s = s:gsub("^,", "")
   return sign .. s
 end
+-- Compact magnitude for narrow columns: 691 -> "691", 866964 -> "867k", 2193713 -> "2.2M".
+-- The comma'd _fmtNum is right for a single headline figure but far too wide for a ten-row
+-- table in a panel this narrow -- "866,964" alone is most of the available width.
+--
+-- Rounds rather than truncates: 866,964 is 867k, and flooring would under-report every row by
+-- up to a thousand for no reason.
+local function _fmtShort(n)
+  n = math.floor(tonumber(n) or 0)
+  if n >= 10000000 then return string.format("%dM", math.floor(n / 1000000 + 0.5)) end
+  if n >= 1000000 then return string.format("%.1fM", n / 1000000) end
+  if n >= 1000 then return string.format("%dk", math.floor(n / 1000 + 0.5)) end
+  return tostring(n)
+end
+
 -- seconds -> compact duration: "45s", "8m03s", "1h02m"
 local function _fmtTime(sec)
   sec = math.floor(tonumber(sec) or 0)
@@ -327,12 +341,32 @@ function tarc.write()
         -- up, and which curing priorities matter -- and it is invisible in the scroll, where
         -- every "Health lost" line is one of hundreds.
         if bashStats_topIncoming then
-          local dtype, amt, share = bashStats_topIncoming()
-          if dtype then
+          -- TOP N BY TYPE (user request 2026-08-04: "should be tracking at least top 10").
+          -- One line each, compact magnitudes. The single worst offender only tells you what
+          -- to armour against; the SHAPE of the list tells you whether one thing dominates
+          -- (worth a resistance paragon) or the damage is spread across five types, where no
+          -- single resistance helps and the answer is to kill faster or take fewer rounds.
+          -- That distinction is invisible when only the leader is shown.
+          local ranked = bashStats_incomingRanked and bashStats_incomingRanked() or {}
+          if #ranked > 0 then
+            local total = bashStats.incomingTotal or 0
+            local top = tonumber(ataxiaBasher and ataxiaBasher.takenTop) or 10
             tarc:cecho("\n   <cyan>── Taken ────────<reset>\n")
-            tarc:cecho(string.format("   <white>%s<reset>\n", dtype))
-            tarc:cecho(string.format("   <indian_red>%s<reset> <gray>%d%% of %s<reset>\n",
-              _fmtNum(amt), math.floor(share + 0.5), _fmtNum(bashStats.incomingTotal or 0)))
+            tarc:cecho(string.format("   <gray>total<reset> <indian_red>%s<reset>  <gray>%s hits<reset>\n",
+              _fmtNum(total), _fmtNum(bashStats.incomingHits or 0)))
+            -- Only rows that exist: early in a session this is one or two lines, not ten blanks.
+            for i = 1, math.min(top, #ranked) do
+              local dtype, amt = ranked[i][1], ranked[i][2]
+              local pct = (total > 0) and math.floor((amt / total) * 100 + 0.5) or 0
+              -- Names run to ~16 chars ("physical cutting"); clip rather than wrap, since a
+              -- wrapped row would break the column alignment the table exists for.
+              if #dtype > 16 then dtype = dtype:sub(1, 15) .. "." end
+              tarc:cecho(string.format("   <white>%-16s<reset> <indian_red>%5s<reset> <gray>%2d%%<reset>\n",
+                dtype, _fmtShort(amt), pct))
+            end
+            if #ranked > top then
+              tarc:cecho(string.format("   <gray>+%d more<reset>\n", #ranked - top))
+            end
           end
         end
 
