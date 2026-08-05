@@ -2,6 +2,38 @@
 
 ---
 
+## 2026-08-04 - Push the HUD panel to the top of its window (v4.7.214)
+
+User: *"Can we move this a bit up as we have the space."*
+
+There was no padding to remove -- the gap is Mudlet's MiniConsole behaviour. A console
+SCROLLS, so a buffer shorter than the window renders **bottom-anchored** and short content
+floats downward, leaving a dead band above it. The panel had been doing that since it was
+built; it only became obvious once the Taken table made the content long enough to notice the
+contrast.
+
+So `tarc:cecho` now counts the newlines it writes, and `tarc:padToTop()` appends blank lines
+below the content at the end of every render -- which pushes the real content up to the top.
+
+Derived from `getRowCount`, not a fixed number of blank lines, so it stays correct at any
+window size and after a drag-resize. `pcall`-guarded and a no-op on failure: that API returns
+nil for a console that is not laid out yet, and a HUD that errors is worse than one that sits
+low.
+
+### A near-miss worth recording
+
+The first edit wrote `
+` into the Lua source as a **literal newline**, producing
+`gsub("<newline>", "")` -- an unterminated string, which would have failed to load the entire
+window script. The unit tests cannot catch it (the window needs Geyser and is not covered), so
+the only things standing between that and a broken HUD were the CI Lua syntax check and my own
+`loadstring` check. Now a habit for this file: syntax-check it explicitly after any edit, since
+the suite does not.
+
+Files: `windows/001_Limb_Counter_Window.lua`. Suite unchanged at **1002**.
+
+---
+
 ## 2026-08-04 - Seasone killed us because we spent the tree too early (v4.7.213)
 
 A death log, and the user's read of it was exactly right: *"they are locking us. It has

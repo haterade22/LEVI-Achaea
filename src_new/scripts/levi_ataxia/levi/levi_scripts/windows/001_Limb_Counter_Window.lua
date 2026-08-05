@@ -50,9 +50,37 @@ tarc.console = Geyser.MiniConsole:new({
 
 tarc.window:show()
 
--- Forward tarc:cecho() and tarc:clear() to the console
-function tarc:cecho(text) tarc.console:cecho(text) end
-function tarc:clear() tarc.console:clear() end
+-- Forward tarc:cecho() and tarc:clear() to the console.
+--
+-- The line COUNT is tracked here so the panel can be pushed to the top of the window
+-- (v4.7.214). A Mudlet MiniConsole scrolls: a buffer shorter than the window renders
+-- BOTTOM-anchored, so short content floats downward and leaves a dead band above it --
+-- which is what the panel had been doing all along. Counting newlines as they are written
+-- is the cheap way to know how much to pad, and it costs one gsub per cecho on a render
+-- that already does dozens.
+function tarc:cecho(text)
+  tarc._lines = (tarc._lines or 0) + select(2, tostring(text):gsub("\n", ""))
+  tarc.console:cecho(text)
+end
+function tarc:clear()
+  tarc._lines = 0
+  tarc.console:clear()
+end
+
+-- Pad below the content so the panel sits at the TOP of the window rather than floating at
+-- the bottom (user, 2026-08-04: "can we move this a bit up as we have the space").
+--
+-- Derived from the console's actual row count, so it is correct at any window size and after
+-- a resize -- a fixed number of blank lines would be wrong the moment the panel is dragged
+-- taller. pcall-guarded and a no-op on failure: getRowCount is the kind of API that returns
+-- nil for a console that is not laid out yet, and a HUD that errors is worse than one that
+-- sits low.
+function tarc:padToTop()
+  local ok, rows = pcall(getRowCount, "tarc")
+  if not ok or type(rows) ~= "number" or rows <= 0 then return end
+  local pad = rows - (tarc._lines or 0) - 1
+  if pad > 0 then tarc.console:cecho(string.rep("\n", pad)) end
+end
 
 -- ── HUD helpers: coloured text bars for vitals ─────────────────────────────
 local BAR_W = 10
@@ -540,6 +568,8 @@ function tarc.write()
       end
     end
 
+  -- Last thing in every render: push what we just wrote to the top of the window.
+  tarc:padToTop()
 end
 
 -- Refresh the HUD on room/target changes AND on live target-info pushes: the server sends
