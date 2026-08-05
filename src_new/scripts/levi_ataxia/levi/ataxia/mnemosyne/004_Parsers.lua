@@ -712,31 +712,96 @@ function M.reserveTreeForBoss(boss)
   end
 end
 
+-- The lock signature the phials build (kalmia/gecko/slike "and more" -> AST/SLI/ANO/IMP).
+-- Any ONE of these blocks a cure CHANNEL, which is what makes the lock lethal.
+local PHIAL_LOCK = { "anorexia", "slickness", "asthma", "impatience" }
+
+function M._phialLocked()
+  local a = (ataxia and ataxia.afflictions) or {}
+  for _, aff in ipairs(PHIAL_LOCK) do
+    if a[aff] then return true end
+  end
+  return false
+end
+
+-- SPEND THE TREE WHEN IT MATTERS, NOT WHEN THE PHIALS LAND (v4.7.213).
+--
+-- From a death log, 2026-08-04. Seasone bursts REPEATEDLY -- twice in ~8 seconds -- and the
+-- old handler touched tree the instant the first burst landed. That burst was survivable
+-- (51% HP, and SSC was curing through it), so the tattoo was spent on a lock we were winning.
+-- Eight seconds later the second burst landed at 27% and the tree was still on cooldown:
+--     Your tree of life tattoo glows faintly for a moment then fades, leaving you unchanged.
+-- repeated until death. The user's read is exactly right -- "we should be saving the tree for
+-- the right time".
+--
+-- So the burst now ARMS a watcher rather than firing. The tree goes out when the lock is
+-- still up AND either
+--   * HP has fallen to `treeHp` (default 50%) -- the lock is actually killing us, or
+--   * `treeGrace` seconds have passed (default 5) -- SSC has had its chance and failed.
+-- If SSC breaks the lock on its own, the tattoo stays banked for the next burst. That is the
+-- whole point: against a boss that locks repeatedly, the tree is a limited resource and
+-- spending it on the first lock guarantees having none for the second.
+--
+-- Gated on `ataxiaTemp.usedTree` (the real cooldown flag, set by the touch/"unchanged" lines
+-- and cleared by "You may utilise the tree tattoo again."), so we no longer fire blind into a
+-- cooldown -- the old 3/6/10s timers did exactly that, three times per burst.
+function M._phialTreeTick()
+  if not ataxiaTemp or not ataxiaTemp.phialLockAt then return end
+  if M._treeCuringOff then return M._phialTreeStop() end       -- Splinterbark: tainted tree
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return M._phialTreeStop() end
+  if not M._phialLocked() then return M._phialTreeStop() end   -- SSC won; tree stays banked
+
+  local now = (getEpoch and getEpoch()) or 0
+  local waited = now - (tonumber(ataxiaTemp.phialLockAt) or now)
+  if waited > (tonumber(M.PHIAL_TREE_MAX) or 25) then return M._phialTreeStop() end
+
+  if ataxiaTemp.usedTree then return end -- on cooldown: wait for the ready line, do not spam
+
+  local hp = tonumber(ataxia and ataxia.vitals and ataxia.vitals.hpp) or 100
+  local hpGate = tonumber(ataxia.mnemosyne and ataxia.mnemosyne.treeHp) or 50
+  local grace = tonumber(ataxia.mnemosyne and ataxia.mnemosyne.treeGrace) or 5
+  if hp > hpGate and waited < grace then return end -- healthy and recent: let SSC work
+
+  send("touch tree")
+  if not M._quiet() then
+    M.echo("<indian_red>PHIAL LOCK<reset> -- spending the tree ("
+      .. (hp <= hpGate and (hp .. "% hp") or (math.floor(waited) .. "s locked")) .. ")")
+  end
+  M._phialTreeStop()
+end
+
+function M._phialTreeStop()
+  if ataxiaTemp then ataxiaTemp.phialLockAt = nil end
+  if M._phialTreeT then pcall(killTimer, M._phialTreeT); M._phialTreeT = nil end
+end
+
+-- Re-checked from the tree-ready line as well as the timer, so the instant the tattoo comes
+-- off cooldown mid-lock it goes straight out (trigger curing_bals/004).
+function M.onTreeReady()
+  if ataxiaTemp and ataxiaTemp.phialLockAt then M._phialTreeTick() end
+end
+
 function M.onSeasonePhials()
-  -- v4.7.138 (live Seasone truelock, 2026-07-28): two fixes. (1) This used to
-  -- early-return when the reserve hadn't armed (missed Objective line) -- the
-  -- phial burst did NOTHING and the truelock sat for 25s+. The counter no longer
-  -- depends on the reserve. (2) `curing tree on` alone proved too slow -- SSC
-  -- never touched tree while locked; the class heal is itself lock-blocked
-  -- ("mind and body are too disjointed"). So TOUCH TREE directly (tree works
-  -- prone and through a truelock), re-touching while the lock signature holds
-  -- (tree balance may be down on the early attempts; bounded).
   local reserved = M._treeReserved
   M._treeReserved = nil
   if M._treeCuringOff then return end -- Splinterbark: the tree is tainted, leave it alone
   if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  -- Hand the tattoo back to SSC (the reserve exists so it is available for exactly this),
+  -- but do NOT spend it yet -- see M._phialTreeTick.
   if reserved then send("curing tree on") end
-  send("touch tree")
+
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.phialLockAt = (getEpoch and getEpoch()) or 0
+  if M._phialTreeT then pcall(killTimer, M._phialTreeT) end
   if tempTimer then
-    for _, delay in ipairs({3, 6, 10}) do
-      tempTimer(delay, function()
-        local a = (ataxia and ataxia.afflictions) or {}
-        if a.asthma and a.anorexia then send("touch tree") end
-      end)
+    M._phialTreeT = tempTimer(1, function() M._phialTreeT = nil; M._phialTreeTick() end)
+    -- Re-arm each second until the lock clears, the tree is spent, or the window closes.
+    for _, d in ipairs({2, 3, 4, 5, 6, 8, 10, 13, 16, 20}) do
+      tempTimer(d, function() M._phialTreeTick() end)
     end
   end
   if not M._quiet() then
-    M.echo("<indian_red>PHIAL BURST<reset> -- touching tree to break the lock"
+    M.echo("<indian_red>PHIAL BURST<reset> -- lock armed; holding the tree until it counts"
       .. (reserved and " (reserve released)" or ""))
   end
 end

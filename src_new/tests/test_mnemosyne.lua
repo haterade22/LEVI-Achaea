@@ -689,26 +689,129 @@ describe("Seasone tree reserve", function()
     expect(M._treeReserved).toBeNil()
   end)
 
-  it("phial burst touches tree DIRECTLY and releases the reserve (v4.7.138)", function()
+  -- REQUIREMENT CHANGED, v4.7.213, from a death log. These two used to assert that the burst
+  -- touches tree IMMEDIATELY (v4.7.138). It does not any more, and the reason is a corpse:
+  -- Seasone bursts REPEATEDLY -- twice in ~8 seconds -- so spending the tattoo on the first
+  -- (survivable, 51% HP) lock left none for the second at 27%, which killed us. The burst now
+  -- ARMS a watcher; the tree goes out only when the lock is still up AND it is actually
+  -- dangerous. This is a deliberate behaviour change, not a test bent to pass.
+  it("phial burst RELEASES the reserve but BANKS the tree (v4.7.213)", function()
     bossReset()
     M._treeReserved = true
+    ataxia.vitals = { hpp = 90 }
     captureSend(function(captured)
       M.onSeasonePhials()
-      expect(#captured).toBe(2)
-      expect(captured[1]).toBe("curing tree on") -- reserve released for SSC...
-      expect(captured[2]).toBe("touch tree")     -- ...but we break the lock OURSELVES
+      expect(#captured).toBe(1)
+      expect(captured[1]).toBe("curing tree on") -- handed back to SSC...
+      -- ...but NOT spent: no "touch tree" while we are healthy and the lock is fresh.
     end)
     expect(M._treeReserved).toBeNil()
+    expect(ataxiaTemp.phialLockAt ~= nil).toBeTrue() -- watcher armed
+    M._phialTreeStop()
     ataxiaBasher = nil
   end)
 
-  it("the counter no longer depends on the reserve (missed Objective line)", function()
+  it("still arms without the reserve (missed Objective line)", function()
     bossReset()
+    ataxia.vitals = { hpp = 90 }
     captureSend(function(captured)
-      M.onSeasonePhials() -- v4.7.138 regression: this used to be a NO-OP -> 25s+ truelock
-      expect(#captured).toBe(1)
-      expect(captured[1]).toBe("touch tree")
+      M.onSeasonePhials() -- must not be a no-op: that was the v4.7.138 regression
+      expect(#captured).toBe(0)  -- nothing to release, nothing to spend yet
     end)
+    expect(ataxiaTemp.phialLockAt ~= nil).toBeTrue()
+    M._phialTreeStop()
+    ataxiaBasher = nil
+  end)
+
+  it("spends the tree at once when HP is already low", function()
+    bossReset()
+    ataxiaTemp = { usedTree = nil }
+    ataxia.vitals = { hpp = 27 }          -- the HP we actually died at
+    ataxia.afflictions = { anorexia = true, asthma = true }
+    captureSend(function(captured)
+      M.onSeasonePhials()
+      M._phialTreeTick()
+      expect(captured[#captured]).toBe("touch tree")
+    end)
+    ataxiaBasher = nil
+  end)
+
+  it("spends it after the grace period even at healthy HP", function()
+    bossReset()
+    ataxiaTemp = { usedTree = nil }
+    ataxia.vitals = { hpp = 95 }
+    ataxia.afflictions = { slickness = true }
+    captureSend(function(captured)
+      M.onSeasonePhials()
+      M._phialTreeTick()
+      expect(#captured).toBe(0)               -- healthy + fresh: SSC gets its chance
+      -- 10s: past the 5s grace, but inside the 25s window after which the watcher gives up
+      -- (30s here made it stand down, correctly -- my first value, not a code bug).
+      ataxiaTemp.phialLockAt = getEpoch() - 10 -- ...and failed
+      M._phialTreeTick()
+      expect(captured[#captured]).toBe("touch tree")
+    end)
+    ataxiaBasher = nil
+  end)
+
+  -- The banking only pays off if the tree survives a lock SSC handles itself.
+  it("keeps the tree banked when the lock clears on its own", function()
+    bossReset()
+    ataxiaTemp = { usedTree = nil }
+    ataxia.vitals = { hpp = 27 }
+    ataxia.afflictions = {}               -- SSC already broke it
+    captureSend(function(captured)
+      M.onSeasonePhials()
+      M._phialTreeTick()
+      expect(#captured).toBe(0)
+    end)
+    expect(ataxiaTemp.phialLockAt).toBe(nil) -- watcher stood down
+    ataxiaBasher = nil
+  end)
+
+  it("never fires into a cooldown -- that was the 'glows faintly' spam", function()
+    bossReset()
+    ataxiaTemp = { usedTree = true }      -- tattoo already spent
+    ataxia.vitals = { hpp = 10 }
+    ataxia.afflictions = { anorexia = true }
+    captureSend(function(captured)
+      M.onSeasonePhials()
+      M._phialTreeTick()
+      expect(#captured).toBe(0)
+    end)
+    expect(ataxiaTemp.phialLockAt ~= nil).toBeTrue() -- still waiting, not given up
+    M._phialTreeStop()
+    ataxiaBasher = nil
+  end)
+
+  it("fires the moment the tree comes off cooldown, via the ready line", function()
+    bossReset()
+    ataxiaTemp = { usedTree = true }
+    ataxia.vitals = { hpp = 10 }
+    ataxia.afflictions = { anorexia = true }
+    captureSend(function(captured)
+      M.onSeasonePhials()
+      M._phialTreeTick()
+      expect(#captured).toBe(0)
+      ataxiaTemp.usedTree = nil           -- "You may utilise the tree tattoo again."
+      M.onTreeReady()
+      expect(captured[#captured]).toBe("touch tree")
+    end)
+    ataxiaBasher = nil
+  end)
+
+  it("a tainted tree is never spent, however bad it gets", function()
+    bossReset()
+    M._treeCuringOff = true
+    ataxiaTemp = { usedTree = nil }
+    ataxia.vitals = { hpp = 5 }
+    ataxia.afflictions = { anorexia = true }
+    captureSend(function(captured)
+      M.onSeasonePhials()
+      M._phialTreeTick()
+      expect(#captured).toBe(0)
+    end)
+    M._treeCuringOff = nil
     ataxiaBasher = nil
   end)
 

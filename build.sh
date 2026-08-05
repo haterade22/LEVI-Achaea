@@ -33,7 +33,11 @@ echo "=== Building with Muddler ==="
 # Resolve a valid JAVA_HOME: honor a valid pre-set one, else fall back to known local installs.
 _java_ok() { [ -n "$1" ] && { [ -e "$1/bin/java.exe" ] || [ -e "$1/bin/java" ]; }; }
 if ! _java_ok "$JAVA_HOME"; then
-  for _cand in "E:/Java" "C:/Program Files/Java/jre1.8.0_491" "C:/Program Files/Java/jdk1.8.0_491"; do
+  # GLOB, do not pin versions. This list held jre1.8.0_491 and broke the moment Java
+  # auto-updated to _501 mid-session (2026-08-04) -- an exact version in a path is a build
+  # that expires on someone else's release schedule. "C:/Program Files/Java/latest" is
+  # Oracle's own stable alias and is tried first; the globs then catch any JDK/JRE present.
+  for _cand in "E:/Java"                "C:/Program Files/Java/latest"                "C:/Program Files/Java"/jdk*                "C:/Program Files/Java"/jre*                "C:/Program Files/Eclipse Adoptium"/jdk*                "C:/Program Files/Microsoft"/jdk*; do
     if _java_ok "$_cand"; then export JAVA_HOME="$_cand"; break; fi
   done
 fi

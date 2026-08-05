@@ -2,6 +2,76 @@
 
 ---
 
+## 2026-08-04 - Seasone killed us because we spent the tree too early (v4.7.213)
+
+A death log, and the user's read of it was exactly right: *"they are locking us. It has
+happened twice. We should be saving the tree for the right time."*
+
+### What the log shows
+
+Seasone bursts her phials **repeatedly** -- twice in about eight seconds:
+
+```
+07:50:19  PHIAL BURST -- touching tree to break the lock (reserve released)
+          You touch the tree of life tattoo.   -> cured anorexia, lock broken, 51% HP
+07:50:27  PHIAL BURST -- touching tree to break the lock
+          Your tree of life tattoo glows faintly for a moment then fades, leaving you unchanged.
+          ...repeated to death at 3% HP
+```
+
+The first burst was **survivable** -- 51% HP, SSC curing through it. We spent the tattoo on it
+anyway, because v4.7.138 made the burst touch tree immediately. Eight seconds later the second
+burst landed at 27% with the tree still cooling down, and there was nothing left to break the
+lock with.
+
+The old handler then made it worse: it re-touched at +3s, +6s and +10s regardless of cooldown,
+which is where all the "glows faintly... unchanged" spam comes from -- three blind sends per
+burst into a tattoo that could not fire.
+
+### Bank the tree until it counts
+
+The burst now **arms a watcher** instead of firing. The tree goes out when the lock is still up
+**and** either
+
+- HP has fallen to `treeHp` (default **50%**) -- the lock is actually killing us, or
+- `treeGrace` seconds have passed (default **5**) -- SSC has had its chance and failed.
+
+If SSC breaks the lock on its own, the tattoo **stays banked for the next burst**. Against a
+boss that locks repeatedly, the tree is a limited resource, and spending it on the first lock
+guarantees having none for the second. On this log the new logic holds at burst 1 (51% HP,
+lock clearing) and fires instantly at burst 2 (27%) -- with a tattoo that is actually ready.
+
+Gated on `ataxiaTemp.usedTree`, the real cooldown flag, so it never fires blind again. And
+hooked to the tree-ready line (`curing_bals/004`) as well as the timer, so the instant the
+tattoo comes off cooldown mid-lock it goes straight out -- during a truelock the seconds
+between ticks are the ones that kill.
+
+The lock test also widened from `asthma and anorexia` to **any** of anorexia / slickness /
+asthma / impatience: after the first tree cured anorexia the old condition stopped matching, so
+a still-locked character read as clear.
+
+### Two tests deliberately inverted
+
+Two existing tests asserted that the burst touches tree *immediately* -- the v4.7.138
+behaviour this death overturns. They now assert the banking instead. **That is a requirement
+change driven by a corpse, not a test bent to pass**, and it is called out as such in the test
+file, because the diff is indistinguishable from the illegitimate kind.
+
+Nine tests here now, including that a lock SSC handles itself leaves the tree banked, that a
+tainted tree is never spent however bad it gets, and that nothing is ever sent into a cooldown.
+
+Suite 996 -> **1002**.
+
+### Not fixed, and worth knowing
+
+The tree cures **one** affliction, and at the moment it fired in this log we were carrying
+fifteen. Even a perfectly-timed tattoo is one pull from a large bag. Banking it makes the pull
+happen when it matters; it does not make it hit. If Seasone keeps winning, the answer is
+probably to disengage on the second burst rather than to out-cure her -- say the word and I
+will wire that.
+
+---
+
 ## 2026-08-04 - Colour the damage-taken table, and stop prying every embrasure (v4.7.212)
 
 ### Damage taken, coloured by type

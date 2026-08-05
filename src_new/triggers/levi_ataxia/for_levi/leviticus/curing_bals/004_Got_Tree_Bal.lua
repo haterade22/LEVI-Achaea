@@ -36,3 +36,9 @@ patterns:
 ]]--
 
 ataxiaTemp.usedTree = nil
+-- The tattoo is available again. If a Seasone phial lock is being held open waiting for it,
+-- spend it NOW rather than on the next timer tick (v4.7.213) -- during a truelock the seconds
+-- between ticks are the ones that kill.
+if ataxia and ataxia.mnemosyne and ataxia.mnemosyne.onTreeReady then
+  ataxia.mnemosyne.onTreeReady()
+end
