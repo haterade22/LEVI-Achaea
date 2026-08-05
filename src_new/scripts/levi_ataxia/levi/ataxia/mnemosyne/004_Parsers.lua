@@ -225,7 +225,10 @@ function M.onRunEnd()
   mnemLastWord = false -- affixes gone on a confirmed run-end (pacing back to normal)
   mnemBravado = false -- affixes gone on a confirmed run-end (barriers work again)
   mnemTantrum = false -- boons gone on a confirmed run-end
-  if ataxiaTemp then ataxiaTemp.tantrumRipple = nil end
+  if ataxiaTemp then
+    ataxiaTemp.tantrumRipple = nil
+    ataxiaTemp.phialBursts = nil -- the boss phial tally dies with the run
+  end
   mnemDeluge = false -- affixes gone on a confirmed run-end (flight available again)
   ataxiaTemp.mnemAblazeAt = nil   -- per-room burn state cannot outlive the run
   if ataxiaTemp then
@@ -506,7 +509,12 @@ function M.onRipple(n)
   if M._relatchBoons then M._relatchBoons() end
   -- Ongoing effects are re-read from each ripple's WADE STATUS, so damage-suppression
   -- affixes re-latch per ripple rather than being assumed to persist.
-  if ataxiaTemp then ataxiaTemp.mnemNulled = nil end
+  if ataxiaTemp then
+    ataxiaTemp.mnemNulled = nil
+    -- Her phial bursts are counted PER RIPPLE: a new ripple is a new fight, so the
+    -- disengage threshold must not be pre-armed by the last boss.
+    ataxiaTemp.phialBursts = nil
+  end
   -- Tantrum: a fresh ripple re-banks the free battlerage. Placed BEFORE the `_auto()` gate
   -- below on purpose -- like every other boon flag, it must work with reporting switched off.
   if M.tantrumArm then M.tantrumArm() end
@@ -760,7 +768,10 @@ function M._phialTreeTick()
   local hp = tonumber(ataxia and ataxia.vitals and ataxia.vitals.hpp) or 100
   local hpGate = tonumber(ataxia.mnemosyne and ataxia.mnemosyne.treeHp) or 50
   local grace = tonumber(ataxia.mnemosyne and ataxia.mnemosyne.treeGrace) or 5
-  if hp > hpGate and waited < grace then return end -- healthy and recent: let SSC work
+  -- Banking ends the moment we decide to leave (phialSpendTree, set on the disengage burst).
+  -- The bank exists to keep a charge for the NEXT burst; once we are breaking off there is no
+  -- next burst to keep it for, and holding it then is just the old bug wearing a new hat.
+  if hp > hpGate and waited < grace and not ataxiaTemp.phialSpendTree then return end
 
   send("touch tree")
   if not M._quiet() then
@@ -771,7 +782,7 @@ function M._phialTreeTick()
 end
 
 function M._phialTreeStop()
-  if ataxiaTemp then ataxiaTemp.phialLockAt = nil end
+  if ataxiaTemp then ataxiaTemp.phialLockAt = nil; ataxiaTemp.phialSpendTree = nil end
   if M._phialTreeT then pcall(killTimer, M._phialTreeT); M._phialTreeT = nil end
 end
 
@@ -784,25 +795,77 @@ end
 function M.onSeasonePhials()
   local reserved = M._treeReserved
   M._treeReserved = nil
-  if M._treeCuringOff then return end -- Splinterbark: the tree is tainted, leave it alone
   if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
-  -- Hand the tattoo back to SSC (the reserve exists so it is available for exactly this),
-  -- but do NOT spend it yet -- see M._phialTreeTick.
-  if reserved then send("curing tree on") end
-
   ataxiaTemp = ataxiaTemp or {}
-  ataxiaTemp.phialLockAt = (getEpoch and getEpoch()) or 0
-  if M._phialTreeT then pcall(killTimer, M._phialTreeT) end
-  if tempTimer then
-    M._phialTreeT = tempTimer(1, function() M._phialTreeT = nil; M._phialTreeTick() end)
-    -- Re-arm each second until the lock clears, the tree is spent, or the window closes.
-    for _, d in ipairs({2, 3, 4, 5, 6, 8, 10, 13, 16, 20}) do
-      tempTimer(d, function() M._phialTreeTick() end)
+
+  -- SPLINTERBARK does NOT skip this handler, only the tattoo half of it (v4.7.215). The
+  -- affix taints the tree, so the escape ladder is the ONLY answer left to a phial lock --
+  -- the one situation where leaving matters most. The old early `return` sat above every
+  -- line in this function, so a Splinterbark Seasone got no tree AND no disengage.
+  local tainted = M._treeCuringOff and true or false
+  if not tainted then
+    -- Hand the tattoo back to SSC (the reserve exists so it is available for exactly this),
+    -- but do NOT spend it yet -- see M._phialTreeTick.
+    if reserved then send("curing tree on") end
+
+    ataxiaTemp.phialLockAt = (getEpoch and getEpoch()) or 0
+    if M._phialTreeT then pcall(killTimer, M._phialTreeT) end
+    if tempTimer then
+      M._phialTreeT = tempTimer(1, function() M._phialTreeT = nil; M._phialTreeTick() end)
+      -- Re-arm each second until the lock clears, the tree is spent, or the window closes.
+      for _, d in ipairs({2, 3, 4, 5, 6, 8, 10, 13, 16, 20}) do
+        tempTimer(d, function() M._phialTreeTick() end)
+      end
     end
   end
+  -- DISENGAGE ON THE SECOND BURST (v4.7.215).
+  --
+  -- v4.7.213 stopped us wasting the tattoo on burst one, but rationing a single charge only
+  -- ever buys ONE extra burst -- and the death log shows Seasone throwing more than two. The
+  -- honest read is that this fight is not winnable by out-curing her: each burst is a fresh
+  -- truelock and there is exactly one tattoo. So the second burst is not a cue to cure
+  -- harder, it is the cue to LEAVE -- while we can still act, rather than at escapeAt% with
+  -- a lock already up.
+  --
+  -- Counted per ripple (her boss ripple), on ataxiaTemp so a reload never resurrects a stale
+  -- count and a fresh ripple starts from zero. Set `ataxia.mnemosyne.phialDisengage` to 0 to
+  -- disable, or to 3+ to stand and fight longer.
+  ataxiaTemp.phialBursts = (tonumber(ataxiaTemp.phialBursts) or 0) + 1
+  local bursts = ataxiaTemp.phialBursts
+  local at = tonumber(ataxia.mnemosyne and ataxia.mnemosyne.phialDisengage) or 2
+  -- With the tree tainted there is no charge to ration, so the reasoning that makes burst
+  -- one survivable does not apply: leave on the first one.
+  if tainted and at > 1 then at = 1 end
+  local leaving = at > 0 and bursts >= at
+  if leaving then
+    -- Unbank the tattoo: we are conceding the room, so there is no later burst to save it
+    -- for, and the tree is what keeps us alive during the retreat. Set the flag and let the
+    -- ALREADY-ARMED watcher spend it (<=1s away) -- do NOT tick here. The afflictions arrive
+    -- by GMCP a beat after this line, so an immediate tick would see no lock, take the
+    -- `_phialTreeStop()` branch and tear down the whole watcher. That asynchrony is exactly
+    -- why the existing code arms at t+1 instead of firing at t+0.
+    if not tainted then ataxiaTemp.phialSpendTree = true end
+    local S = ataxia.mnemosyne and ataxia.mnemosyne.swarm
+    local out = S and S.disengage and S.disengage("phial burst #" .. bursts)
+    if not M._quiet() then
+      if out then
+        M.echo("<indian_red>PHIAL BURST #" .. bursts .. "<reset> -- <yellow>DISENGAGING<reset>"
+          .. " (one tattoo cannot answer repeat locks)"
+          .. (tainted and "; tree TAINTED." or "; tree unbanked."))
+      else
+        -- No route out: say so plainly. This is the case that killed us, and a silent
+        -- failure here would read exactly like a successful disengage.
+        M.echo("<indian_red>PHIAL BURST #" .. bursts .. "<reset> -- <indian_red>NO ESCAPE ROUTE"
+          .. "<reset>" .. (tainted and "; tree TAINTED" or "; tree unbanked") .. ", fighting it out.")
+      end
+    end
+    return
+  end
   if not M._quiet() then
-    M.echo("<indian_red>PHIAL BURST<reset> -- lock armed; holding the tree until it counts"
-      .. (reserved and " (reserve released)" or ""))
+    M.echo("<indian_red>PHIAL BURST<reset> -- "
+      .. (tainted and "tree TAINTED (Splinterbark) and disengage disabled -- on our own"
+          or ("lock armed; holding the tree until it counts"
+              .. (reserved and " (reserve released)" or ""))))
   end
 end
 

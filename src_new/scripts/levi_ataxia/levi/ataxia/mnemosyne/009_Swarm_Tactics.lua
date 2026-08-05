@@ -72,6 +72,7 @@ local PANIC_COOLDOWN = 10   -- min seconds between Roll Hide panic tumbles
 local RECOVER_TICK = 2      -- while hovering to recover, re-check HP this often
 local RECOVER_MAX = 60      -- hard cap on a recovery hover (then land and hand back)
 local EMERGENCY_COOLDOWN = 2 -- min seconds between vitals-driven emergency actions
+local DISENGAGE_COOLDOWN = 10 -- min seconds between forced tactical disengages
 
 -- Reload-safety: ataxiaTemp persists across a SYSUPDATE reload; a stranded hold or
 -- armed decorator would silently gate the whole basher / decorate a random attack.
@@ -598,6 +599,47 @@ function S._convertToHover(hp)
   -- outside events to notice it has healed -- or that its fly never happened.
   if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
   S._echo("<indian_red>LOW HP (" .. hp .. "%)<reset> -- staying airborne to recover.")
+end
+
+-- FORCED DISENGAGE (v4.7.215) -- leave the fight on a TACTICAL judgement, not an HP reading.
+--
+-- The escape ladder above is entirely reactive: it fires when HP is already low. That is the
+-- right default, but it cannot answer an enemy whose kill pattern is "apply an unsurvivable
+-- lock, then wait" -- by the time HP crosses escapeAt we are locked, and a locked character
+-- cannot be relied on to execute an escape at all. Seasone's repeat phial bursts are exactly
+-- that shape (see M.onSeasonePhials): burst one is survivable, burst two lands on a spent
+-- tattoo and kills. The only winning move there is to leave BEFORE the second lock matures.
+--
+-- So callers that can RECOGNISE a losing pattern get to say "get out now" while we are still
+-- healthy enough to obey. Everything downstream is the proven ladder -- fly-and-hover
+-- outdoors, pull back to the cleared room indoors -- including its recovery gate
+-- (recoverAt% AND affliction-free), which is what makes this a real disengage: we do not
+-- come back until the lock is actually gone.
+--
+-- Returns true when we are (or already were) out. False means the caller must handle it:
+-- disabled, on cooldown, or indoors with no route back -- and a caller that read the pattern
+-- as lethal should treat that as its last chance to spend an emergency cure.
+function S.disengage(reason)
+  if not S._enabled() then return false end
+  if S.state == "recovering" then return true end -- already out and healing; nothing to do
+  if S._lastDisengageAt and (now() - S._lastDisengageAt) < DISENGAGE_COOLDOWN then return false end
+  if S.flying then
+    -- Mid-kite: convert in place. A land/fly churn here would put us on the ground for a
+    -- round, which is the one thing a disengage exists to avoid.
+    S._lastDisengageAt = now()
+    S._convertToHover(hpp())
+    S._echo("<indian_red>DISENGAGE<reset>" .. (reason and (" (" .. reason .. ")") or "")
+      .. " -- holding altitude until clean.")
+    return true
+  end
+  if S.state ~= "idle" then S.reset(reason or "disengage") end
+  -- Stamp only on success: an indoor room with no validated route back returns false, and
+  -- that attempt must not burn the cooldown that a later, movable moment depends on.
+  if not S._beginEscape() then return false end
+  S._lastDisengageAt = now()
+  S._echo("<indian_red>DISENGAGE<reset>" .. (reason and (" (" .. reason .. ")") or "")
+    .. " -- breaking off rather than trading.")
+  return true
 end
 
 -- Explorer tick delegation. Returns true when the tick is consumed (the explorer

@@ -2,6 +2,58 @@
 
 ---
 
+## 2026-08-05 - Disengage from Seasone on the second phial burst (v4.7.215)
+
+User: *"try that"* -- accepting the offer made after v4.7.213.
+
+v4.7.213 stopped us wasting the tree tattoo on Seasone's first phial burst. That was right,
+but it was only half an answer: **rationing one charge buys exactly one extra burst**, and the
+death log has her throwing more than two. Each burst is a fresh truelock and there is one
+tattoo. The fight is not winnable by out-curing her, so the second burst is not a cue to cure
+harder -- it is the cue to leave.
+
+### What it does
+
+`M.onSeasonePhials` now counts bursts per ripple. On burst two (`ataxia.mnemosyne.phialDisengage`,
+default 2) it:
+
+1. **unbanks the tattoo** -- there is no burst three to save it for, and the tree is what keeps
+   us alive during the retreat; and
+2. calls the new **`S.disengage(reason)`**, which drives the proven escape ladder -- fly-and-hover
+   outdoors, pull back to the cleared room indoors.
+
+The recovery gate is what makes this a real disengage rather than a lap of the room: we do not
+return until `recoverAt`% **and affliction-free**, so the lock has to actually be gone.
+
+### Why a new entry point rather than reusing the ladder
+
+The existing ladder is entirely **reactive** -- it fires when HP is already low. That is the
+right default, and it is useless here. Against a kill pattern of "apply an unsurvivable lock,
+then wait", by the time HP crosses `escapeAt` we are locked, and a locked character cannot be
+relied on to execute an escape at all. `S.disengage` exists so a caller that can *recognise* a
+losing pattern can leave while we are still healthy enough to obey.
+
+It returns false rather than pretending: disabled, on cooldown, or indoors with no validated
+route. A failed attempt deliberately does **not** stamp the 10s cooldown -- the caller that
+read the fight as lethal gets to retry the moment a route exists.
+
+### The bug found on the way in
+
+Splinterbark took an early `return` that sat above *every* line of `onSeasonePhials`. The affix
+taints the tree, so a Splinterbark Seasone got **no tattoo and no disengage** -- the one case
+where leaving is the only answer left was the one case that did nothing. The gate now covers
+only the tattoo half, and with no charge to ration the disengage moves to the **first** burst.
+
+Also fixed in the test harness: `reset()` never cleared `ataxiaTemp`, so the burst tally leaked
+between the Seasone tests and the second one to run silently exercised the disengage branch
+instead of the banking branch it claimed to test. It still passed, which is what made it
+dangerous rather than merely untidy.
+
+Files: `mnemosyne/004_Parsers.lua`, `mnemosyne/009_Swarm_Tactics.lua`. Suite **1002 -> 1013**;
+all three regressions verified by breaking the code back.
+
+---
+
 ## 2026-08-04 - Push the HUD panel to the top of its window (v4.7.214)
 
 User: *"Can we move this a bit up as we have the space."*

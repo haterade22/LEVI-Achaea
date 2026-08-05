@@ -1069,6 +1069,75 @@ describe("flight confirmation for the recovery hover", function()
   end)
 end)
 
+describe("forced disengage (tactical, not HP-driven)", function()
+  local function lastLeap()
+    for i = #sent, 1, -1 do if sent[i]:find("leap ", 1, true) then return sent[i] end end
+  end
+
+  it("retreats to the cleared room and holds the attack dispatch", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    gmcp.Room.Info.details = { "indoors" } -- no hover: takes the pull branch
+    S._lastDisengageAt = nil
+    expect(S.disengage("phial burst #2")).toBeTrue()
+    expect(S.state).toBe("pulling")
+    -- Free-queued, never raw: at the moment we decide to leave the balance is normally
+    -- spent mid-round, and a raw leap would simply be rejected.
+    expect(lastLeap()).toBe("queue addclear free stand;leap s")
+  end)
+
+  it("does not need low HP -- that is the whole point", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    gmcp.Room.Info.details = { "indoors" }
+    S._lastDisengageAt = nil
+    ataxia.vitals = { hpp = 100 } -- far above escapeAt: the reactive ladder would not fire
+    expect(S.disengage("test")).toBeTrue()
+    expect(S.state).toBe("pulling")
+  end)
+
+  it("is cooldown-limited so repeat bursts cannot churn the retreat", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    gmcp.Room.Info.details = { "indoors" }
+    S._lastDisengageAt = nil
+    expect(S.disengage("one")).toBeTrue()
+    S.state = "idle" -- pretend the pull completed
+    expect(S.disengage("two")).toBeFalse()
+    clock = clock + 11
+    expect(S.disengage("three")).toBeTrue()
+  end)
+
+  -- A failed attempt must not burn the cooldown: the caller that read the fight as lethal
+  -- gets to try again the moment a route exists, rather than being locked out for 10s.
+  it("returns false WITHOUT stamping the cooldown when there is no route out", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    gmcp.Room.Info.details = { "indoors" }
+    S._lastDisengageAt = nil
+    M.explore.fromRoom = nil -- no validated back edge
+    expect(S.disengage("no route")).toBeFalse()
+    expect(S._lastDisengageAt).toBe(nil)
+    M.explore.fromRoom = 100
+    expect(S.disengage("route back")).toBeTrue()
+  end)
+
+  it("reports success when we are already out and recovering", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    S._lastDisengageAt = nil
+    S.state = "recovering"
+    local before = #sent
+    expect(S.disengage("already gone")).toBeTrue()
+    expect(#sent).toBe(before) -- no churn
+  end)
+
+  it("is inert when swarm tactics are disabled", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    S._lastDisengageAt = nil
+    cfg.swarm.enabled = false
+    local before = #sent
+    expect(S.disengage("disabled")).toBeFalse()
+    expect(#sent).toBe(before)
+    cfg.swarm.enabled = true
+  end)
+end)
+
 -- Restore the mock send for whoever runs after us (see the note at the top).
 send = _mockSend
 

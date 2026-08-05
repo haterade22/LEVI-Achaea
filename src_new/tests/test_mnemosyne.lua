@@ -663,6 +663,13 @@ describe("Seasone tree reserve", function()
     reset(false)
     ataxiaBasher = { inMnemosyne = true }
     M._treeReserved, M._treeCuringOff = nil, nil
+    -- reset() does NOT touch ataxiaTemp, and the burst tally lives there. Without this the
+    -- tests below leak a count into each other and the SECOND one to run silently exercises
+    -- the disengage branch instead of the banking branch it claims to test -- it still
+    -- passes, which is what makes the leak dangerous rather than merely untidy.
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.phialBursts, ataxiaTemp.phialSpendTree = nil, nil
+    M.swarm, M.phialDisengage = nil, nil
   end
 
   it("reserves the tree once when Seasone is the objective (any run state)", function()
@@ -751,6 +758,116 @@ describe("Seasone tree reserve", function()
       M._phialTreeTick()
       expect(captured[#captured]).toBe("touch tree")
     end)
+    ataxiaBasher = nil
+  end)
+
+  -- DISENGAGE ON THE SECOND BURST (v4.7.215). Rationing ONE tattoo only ever buys ONE extra
+  -- burst, and the death log has her throwing more than two -- so the second burst is not a
+  -- cue to cure harder, it is the cue to leave while we can still act.
+  it("leaves on the second burst, and only the second", function()
+    bossReset()
+    ataxiaTemp = { usedTree = nil, phialBursts = nil }
+    ataxia.vitals = { hpp = 90 }
+    ataxia.afflictions = {}
+    local calls = {}
+    M.swarm = { disengage = function(why) calls[#calls + 1] = why; return true end }
+    captureSend(function()
+      M.onSeasonePhials()
+      expect(#calls).toBe(0)                       -- burst one is survivable: stand and fight
+      expect(ataxiaTemp.phialSpendTree).toBeNil()  -- ...and the tattoo stays banked for it
+      M.onSeasonePhials()
+      expect(#calls).toBe(1)
+      expect(calls[1]).toBe("phial burst #2")
+      -- Leaving ends the banking: there is no burst three to save the charge for.
+      expect(ataxiaTemp.phialSpendTree).toBeTrue()
+    end)
+    M._phialTreeStop()
+    M.swarm = nil
+    ataxiaBasher = nil
+  end)
+
+  -- The unbank must actually reach the watcher, not just set a flag: the tick's own
+  -- healthy-and-recent hold is what kept the tree banked, and it has to yield to it.
+  it("unbanking overrides the healthy-and-recent hold", function()
+    bossReset()
+    ataxiaTemp = { usedTree = nil, phialBursts = nil }
+    ataxia.vitals = { hpp = 95 }               -- healthy: the tick would normally hold
+    ataxia.afflictions = { slickness = true }  -- but the lock is up
+    M.swarm = { disengage = function() return true end }
+    captureSend(function(captured)
+      M.onSeasonePhials()
+      M._phialTreeTick()
+      expect(#captured).toBe(0)                -- burst one: still banked
+      M.onSeasonePhials()                      -- burst two: unbank
+      M._phialTreeTick()
+      expect(captured[#captured]).toBe("touch tree")
+    end)
+    M._phialTreeStop()
+    M.swarm = nil
+    ataxiaBasher = nil
+  end)
+
+  it("counts bursts per ripple -- a new ripple is a new fight", function()
+    bossReset()
+    ataxiaTemp = { usedTree = nil, phialBursts = nil }
+    ataxia.vitals = { hpp = 90 }
+    ataxia.afflictions = {}
+    local calls = 0
+    M.swarm = { disengage = function() calls = calls + 1; return true end }
+    captureSend(function()
+      M.onSeasonePhials()
+      M.onRipple(4)                            -- her ripple ended; the tally must not carry
+      M.onSeasonePhials()
+      expect(calls).toBe(0)                    -- this is burst ONE again, not two
+    end)
+    M._phialTreeStop()
+    M.swarm = nil
+    ataxiaBasher = nil
+  end)
+
+  -- SPLINTERBARK is the case the old early-return silently broke: the tree is tainted, so
+  -- the escape ladder is the only answer left -- and it was the one path that never ran.
+  it("leaves on the FIRST burst when Splinterbark has tainted the tree", function()
+    bossReset()
+    M._treeCuringOff = true
+    ataxiaTemp = { usedTree = nil, phialBursts = nil }
+    ataxia.vitals = { hpp = 90 }
+    local calls = {}
+    M.swarm = { disengage = function(why) calls[#calls + 1] = why; return true end }
+    captureSend(function(captured)
+      M.onSeasonePhials()
+      expect(#calls).toBe(1)
+      expect(calls[1]).toBe("phial burst #1")
+      -- A tainted tree is never touched or re-enabled, disengage or not.
+      expect(#captured).toBe(0)
+      expect(ataxiaTemp.phialSpendTree).toBeNil()
+      expect(ataxiaTemp.phialLockAt).toBeNil()   -- no watcher: there is nothing to spend
+    end)
+    M._treeCuringOff = nil
+    M.swarm = nil
+    ataxiaBasher = nil
+  end)
+
+  it("honours phialDisengage (0 disables, 3 stands longer)", function()
+    bossReset()
+    ataxiaTemp = { usedTree = nil, phialBursts = nil }
+    ataxia.vitals = { hpp = 90 }
+    ataxia.afflictions = {}
+    local calls = 0
+    M.swarm = { disengage = function() calls = calls + 1; return true end }
+    M.phialDisengage = 0
+    captureSend(function()
+      M.onSeasonePhials(); M.onSeasonePhials(); M.onSeasonePhials()
+      expect(calls).toBe(0)
+      ataxiaTemp.phialBursts = nil
+      M.phialDisengage = 3
+      M.onSeasonePhials(); M.onSeasonePhials()
+      expect(calls).toBe(0)
+      M.onSeasonePhials()
+      expect(calls).toBe(1)
+    end)
+    M._phialTreeStop()
+    M.phialDisengage, M.swarm = nil, nil
     ataxiaBasher = nil
   end)
 
