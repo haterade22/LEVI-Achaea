@@ -2,6 +2,27 @@
 
 ---
 
+## 2026-08-05 - Show every damage type in the Taken table (v4.7.216)
+
+User: *"expand that all of the way"* -- the panel was showing ten types and `+1 more`.
+
+The top-10 cap was mine, from the original "at least top 10" request, and it was the wrong
+default. **The tail is where the surprises live.** The leaders are usually unremarkable -- of
+course a Bard bashing physical denizens takes physical cutting -- but a 1% type that has no
+business being there means something is hitting us we did not know was in the room, and `+1
+more` hid exactly the row worth looking at.
+
+The list is self-limiting anyway: it can only be as long as the types actually dealt to us this
+session, and Achaea has under twenty. There was never a real risk of it running away.
+
+`ataxiaBasher.takenTop` survives as an opt-in cap for anyone who wants one, and its `+N more`
+tail still renders when it is set. The default is now `0`, meaning all.
+
+Files: `windows/001_Limb_Counter_Window.lua`. Suite unchanged at **1013**; syntax-checked by
+hand, since this file needs Geyser and the suite does not cover it.
+
+---
+
 ## 2026-08-05 - Disengage from Seasone on the second phial burst (v4.7.215)
 
 User: *"try that"* -- accepting the offer made after v4.7.213.

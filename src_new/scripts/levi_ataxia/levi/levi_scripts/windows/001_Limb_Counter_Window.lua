@@ -418,7 +418,14 @@ function tarc.write()
           local ranked = bashStats_incomingRanked and bashStats_incomingRanked() or {}
           if #ranked > 0 then
             local total = bashStats.incomingTotal or 0
-            local top = tonumber(ataxiaBasher and ataxiaBasher.takenTop) or 10
+            -- EVERY type, not a top-N (user, 2026-08-05: "expand that all of the way"). The
+            -- tail is where the surprises live: a 1% type that should be 0% means something is
+            -- hitting us we did not know was in the room, and "+1 more" hid exactly that. The
+            -- list is self-limiting -- it can only be as long as the types actually dealt to
+            -- us this session, and Achaea has under twenty.
+            -- `takenTop` survives as a cap for anyone who wants one; 0 (the default) is all.
+            local top = tonumber(ataxiaBasher and ataxiaBasher.takenTop) or 0
+            if top <= 0 then top = #ranked end
             tarc:cecho("\n   <cyan>── Taken ────────<reset>\n")
             tarc:cecho(string.format("   <gray>total<reset> <indian_red>%s<reset>  <gray>%s hits<reset>\n",
               _fmtNum(total), _fmtNum(bashStats.incomingHits or 0)))
