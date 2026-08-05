@@ -2,6 +2,56 @@
 
 ---
 
+## 2026-08-04 - Colour the damage-taken table, and stop prying every embrasure (v4.7.212)
+
+### Damage taken, coloured by type
+
+User: *"Is it possible to highlight these damage takens with their respective colors? Cold
+blue, etc."*
+
+`TAKEN_COLOUR` maps type -> colour, matched as an ordered SUBSTRING because the game names a
+category and a subtype together: "physical cutting" must hit `cutting` before `physical`, and
+"magical" must hit `magic`. Name and amount share the colour so a row reads as one unit -- the
+point is to scan the table by colour ("is the blue one growing?"), not to read numbers -- and
+the percentage stays grey so it never competes.
+
+cutting steel-grey, blunt rosy-brown, **cold deep-sky-blue**, fire red, electricity yellow,
+psychic plum, magic orchid, poison lime, asphyxiation slate, unblockable white, raw light-grey.
+An unknown type keeps the old `indian_red`, which is itself the signal that we have not seen it
+before.
+
+**Fire is `red`, not the obvious orange** -- the orange family stays reserved. And every one of
+the fourteen colours was checked against `007_Custom_Colour_Table` before shipping, by script:
+that table WHOLESALE REPLACES Mudlet's, so a plausible-but-absent name (`crimson`, `silver`)
+makes `fg()` throw, and in a per-prompt render that kills the entire HUD.
+
+### Only pry the embrasure that changes
+
+User, from a log of a working swap: *"We only need to pry out the one paragon and replace it,
+not all of them."*
+
+The swap pried **all three** embrasures and re-inserted **all three**, every time, on the
+original reasoning that game state "can't be verified without a probe". But it IS tracked:
+`state.currentSlots` is written both by the swap itself and by the `probe armour` trigger.
+Borrowed Power changes exactly one slot, so five of the six commands were churn -- and every
+needless pry is another chance to half-apply and leave an embrasure empty, which is exactly
+the failure v4.7.211 had to fix.
+
+Now a per-slot diff, compared by `paragonKey` so an id and a bare type name for one physical
+paragon do not read as a change. A slot that already matches is left alone; an identical
+profile sends nothing at all.
+
+**The honesty guard is `slotsKnown`.** Until a swap or a probe has actually told us what is in
+the armour, every slot is UNKNOWN and gets the old pry+insert treatment -- skipping on an
+assumption would silently leave the wrong paragon in place. A known-empty slot is filled
+without a pointless pry; clearing a slot pries without inserting.
+
+Eight tests, including that unknown state still rebuilds all three.
+
+Suite 988 -> **996**.
+
+---
+
 ## 2026-08-04 - Borrowed Power emptied an embrasure (v4.7.211)
 
 A live log, and the swap I shipped in v4.7.204 half-failed:

@@ -44,5 +44,8 @@ if ataxia and ataxia.armour and ataxia.armour.state and ataxia.armour.state.prob
   local paragonId = matches[3]
   if slotNum and paragonId and slotNum >= 1 and slotNum <= 3 then
     ataxia.armour.state.currentSlots[slotNum] = paragonId
+    -- A probe is ground truth, so the next swap can diff instead of prying every slot
+    -- (v4.7.212). Without this the diff has no baseline on a fresh session.
+    ataxia.armour.state.slotsKnown = true
   end
 end

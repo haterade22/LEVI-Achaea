@@ -110,6 +110,46 @@ local function _fmtShort(n)
   return tostring(n)
 end
 
+-- Damage type -> colour for the Taken table. Ordered, and matched as a SUBSTRING, because the
+-- game names a category and a subtype together: "physical cutting" has to hit `cutting`
+-- before `physical`, and "magical" has to hit `magic`. First match wins, so the specific
+-- entries come first.
+--
+-- Every name here was checked against misc_scripts/007_Custom_Colour_Table, which WHOLESALE
+-- REPLACES Mudlet's table -- a plausible-but-absent name (`crimson`, `silver`) makes fg()
+-- throw, and in a per-prompt render that means the whole HUD dies. Deliberately no orange
+-- family: reserved for the user, so fire is `red` rather than the obvious choice.
+local TAKEN_COLOUR = {
+  { "cutting",     "light_slate_grey" }, -- steel
+  { "blunt",       "rosy_brown"       },
+  { "fire",        "red"              },
+  { "burn",        "red"              },
+  { "cold",        "deep_sky_blue"    }, -- user: "Cold blue"
+  { "ice",         "deep_sky_blue"    },
+  { "frost",       "deep_sky_blue"    },
+  { "electric",    "yellow"           },
+  { "lightning",   "yellow"           },
+  { "psychic",     "plum"             },
+  { "magic",       "medium_orchid"    }, -- also matches "magical"
+  { "poison",      "lime_green"       },
+  { "venom",       "lime_green"       },
+  { "asphyx",      "slate_grey"       },
+  { "unblockable", "white"            },
+  { "shifting",    "cyan"             },
+  { "excorable",   "khaki"            },
+  { "raw",         "light_grey"       },
+}
+
+-- Unknown types keep the old `indian_red`: it still reads as damage, and being the one row
+-- without a distinctive colour is itself the signal that we have not seen this type before.
+local function _takenColour(dtype)
+  dtype = tostring(dtype or ""):lower()
+  for _, row in ipairs(TAKEN_COLOUR) do
+    if dtype:find(row[1], 1, true) then return row[2] end
+  end
+  return "indian_red"
+end
+
 -- seconds -> compact duration: "45s", "8m03s", "1h02m"
 local function _fmtTime(sec)
   sec = math.floor(tonumber(sec) or 0)
@@ -361,8 +401,13 @@ function tarc.write()
               -- Names run to ~16 chars ("physical cutting"); clip rather than wrap, since a
               -- wrapped row would break the column alignment the table exists for.
               if #dtype > 16 then dtype = dtype:sub(1, 15) .. "." end
-              tarc:cecho(string.format("   <white>%-16s<reset> <indian_red>%5s<reset> <gray>%2d%%<reset>\n",
-                dtype, _fmtShort(amt), pct))
+              -- Colour the row by DAMAGE TYPE (user request 2026-08-04). Name and amount share
+              -- the colour so a row reads as one unit and the table can be scanned by colour
+              -- alone -- which is the point: you are usually looking for "is the blue one
+              -- growing", not reading numbers. The percentage stays grey so it never competes.
+              local col = _takenColour(ranked[i][1])
+              tarc:cecho(string.format("   <%s>%-16s<reset> <%s>%5s<reset> <gray>%2d%%<reset>\n",
+                col, dtype, col, _fmtShort(amt), pct))
             end
             if #ranked > top then
               tarc:cecho(string.format("   <gray>+%d more<reset>\n", #ranked - top))

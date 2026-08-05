@@ -432,16 +432,47 @@ function ataxia.armour.swap(profileName)
     tempTimer(2, function()
       local cmds = {}
       -- Pry all first
-      table.insert(cmds, "pry armour embrasure 1")
-      table.insert(cmds, "pry armour embrasure 2")
-      table.insert(cmds, "pry armour embrasure 3")
-      -- Insert new
-      for i, paragonId in ipairs(profile.slots) do
-        if paragonId and paragonId ~= "" then
-          table.insert(cmds, "insert " .. paragonId .. " into armour embrasure " .. i)
+      -- ONLY TOUCH THE SLOTS THAT CHANGE (v4.7.212, user: "we only need to pry out the one
+      -- paragon and replace it, not all of them").
+      --
+      -- This used to pry all three and re-insert all three on every swap, because the original
+      -- comment reasoned "can't verify game state without probe". But we DO track it:
+      -- `state.currentSlots` is written both by this function and by the `probe armour`
+      -- trigger. Borrowed Power changes exactly ONE slot, so five of the six commands were
+      -- pure churn -- and every needless pry is another chance to half-apply and leave an
+      -- embrasure empty, which is precisely the failure v4.7.211 fixed.
+      --
+      -- Comparison is by `paragonKey`, so an id and a bare type name for the same physical
+      -- paragon do not read as a change (the v4.7.211 lesson).
+      --
+      -- `slotsKnown` is the honesty guard: until a swap or a probe has told us what is
+      -- actually in the armour, every slot is UNKNOWN and gets the old pry+insert treatment.
+      -- Skipping on an assumption would leave the wrong paragon in place silently.
+      local cur = ataxia.armour.state.currentSlots or {}
+      local known = ataxia.armour.state.slotsKnown == true
+      local changed = 0
+      for i = 1, 3 do
+        local want = profile.slots[i]
+        if want == "" then want = nil end
+        local have = known and cur[i] or nil
+        local same = known and want ~= nil and have ~= nil
+          and ataxia.armour.paragonKey(want) == ataxia.armour.paragonKey(have)
+        if not same then
+          changed = changed + 1
+          -- Pry unless we KNOW the slot is already empty -- prying an empty embrasure is a
+          -- wasted command and a refusal line.
+          if (not known) or have ~= nil then
+            table.insert(cmds, "pry armour embrasure " .. i)
+          end
+          if want then
+            table.insert(cmds, "insert " .. want .. " into armour embrasure " .. i)
+          end
         end
       end
-      send(table.concat(cmds, ";"))
+      if #cmds > 0 then send(table.concat(cmds, ";")) end
+      if changed == 0 then
+        ataxia.armour.echo("<grey>Paragons already correct -- nothing to swap.")
+      end
 
       -- Update state
       ataxia.armour.state.currentSlots = {
@@ -449,6 +480,8 @@ function ataxia.armour.swap(profileName)
         profile.slots[2] or nil,
         profile.slots[3] or nil,
       }
+      -- We now know what is in the armour, so the next swap can diff instead of rebuilding.
+      ataxia.armour.state.slotsKnown = true
       ataxia.armour.state.swapping = false
       ataxia.armour.save()
       ataxia.armour.echo("Swapped to profile: <white>" .. profileName)
