@@ -43,6 +43,40 @@ packageName: ''
 --                                             Magi's Bloodboil gate uses ataxiaTemp.usedTree, NOT tBals.)
 --   shape (Earth Lord)                     -- 121_SHAPE_PLUS does `shape = shape + 1` unguarded
 battleRage_Timers = battleRage_Timers or {}
+
+-- ---------------------------------------------------------------------------
+-- GEAR BATTLERAGE COOLDOWN REDUCTION (v4.7.229)
+-- ---------------------------------------------------------------------------
+-- User: "now I am wearing the actual gear for 40 BR at 23 percent damage bonus."
+--
+-- Every battlerage cooldown in this system is a hardcoded tempTimer at the ability's BASE
+-- duration -- moulinet 17s, the large slot 24s, specials 32-46s, culling blade 24s, cyclone
+-- 23s. Gear that reduces battlerage cooldowns does not change any of them, so at 40% we hold
+-- moulinet for 17s when the game frees it at ~10.2s: seven seconds of dead air per cycle,
+-- every cycle, for the entire run.
+--
+-- The game DOES tell us ("You can use Moulinet again.") but that line only clears the OWNED
+-- rotations and culling blade -- the shared small/large/special timers have no name mapping,
+-- so for Bard the line is parsed and then dropped. Scaling the timers fixes every ability at
+-- once, including the ones whose ready line we cannot match.
+--
+-- Set from the gear audit: `bashset brcd 40`. Zero (the default) leaves every existing
+-- duration exactly as it was, so this cannot change behaviour for anyone who has not measured
+-- their own reduction.
+--
+-- CLAMPED to 90%: a mis-typed 400 would otherwise produce a negative delay, and tempTimer with
+-- a negative delay is not a fast cooldown, it is an undefined one.
+function ataxiaBasher_brCd(base)
+  base = tonumber(base) or 0
+  local pct = tonumber(ataxiaBasher and ataxiaBasher.brCooldownPct) or 0
+  if pct <= 0 then return base end
+  if pct > 90 then pct = 90 end
+  local scaled = base * (1 - pct / 100)
+  -- Never below a floor: the server is the real gate, and a client timer that expires long
+  -- before the ability is usable just spams refusals.
+  if scaled < 1 then scaled = 1 end
+  return scaled
+end
 tBals = tBals or {tree = true, focus = true, plant = true, salve = true, timers = {}, passive = true}
 shape = shape or 0
 
@@ -967,6 +1001,30 @@ end
 -- A banked Rage-Fuelled charge short-circuits BOTH the cost and the floor -- the ability
 -- is free, so there is no surplus to preserve and nothing to afford. This one function
 -- gates all 37 rotation call sites, so the boon lands on every class at once.
+-- CULLING vs THE RAGE FLOOR (v4.7.229). User: "we need to keep 40 battlerage at all times in
+-- order to increase our damage by 23 percent."
+--
+-- Culling has always been exempt from `rageFloor` -- every gate reads `rage >= 36 or brFree()`
+-- directly instead of going through rageAfford. That exemption is right for GOLDEN DRAGON,
+-- where the ability is `reap`: an EXECUTE, and a kill is worth more than any damage bonus on
+-- swings that will never happen.
+--
+-- It is wrong for the artifact culling blade on a class like Bard, where it is simply a 1505
+-- unblockable hit. Firing it at 36 rage drops us under a 40 floor and switches off a 23% bonus
+-- on every subsequent swing until rage rebuilds -- and at ~1.8s per swing across culling's own
+-- 24s cooldown that is roughly a dozen swings, which comfortably outweighs the one hit.
+--
+-- So the exemption becomes a SETTING rather than a rule. Default OFF preserves the existing
+-- behaviour exactly (and keeps reap unfloored, which is still correct); `bash floor culling`
+-- makes culling respect the floor like everything else.
+function ataxiaBasher_cullAfford(rage, cost)
+  cost = tonumber(cost) or 36
+  if ataxiaBasher and ataxiaBasher.floorCulling then
+    return ataxiaBasher_rageAfford(rage, cost)
+  end
+  return (tonumber(rage) or 0) >= cost or ataxiaBasher_brFree()
+end
+
 function ataxiaBasher_rageAfford(rage, cost)
   if ataxiaBasher_brFree() then return true end
   local floor = tonumber(ataxiaBasher and ataxiaBasher.rageFloor) or 0
@@ -1037,7 +1095,7 @@ function ataxiaBasher_bardBattlerage(sp)
 
   -- Culling blade first, above everything else: usage toggled on, off cooldown, >=36 rage.
   if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown
-     and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" and (rage >= 36 or ataxiaBasher_brFree()) then
+     and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" and ataxiaBasher_cullAfford(rage, 36) then
     return "reap "..target..sp
   end
 
@@ -1074,7 +1132,7 @@ function ataxiaBasher_bardBattlerage(sp)
     and (ataxiaBasher_dsHasAff(target, "stun") or ataxiaBasher_dsHasAff(target, "clumsy"))
   if hasAff and ataxiaBasher_rageAfford(rage, tonumber(ataxiaBasher.bardCycloneRage) or 25)
      and getEpoch() >= (ataxiaTemp.bardCycloneAt or 0) then
-    ataxiaTemp.bardCycloneAt = getEpoch() + (tonumber(ataxiaBasher.bardCycloneCd) or 23)
+    ataxiaTemp.bardCycloneAt = getEpoch() + ataxiaBasher_brCd(tonumber(ataxiaBasher.bardCycloneCd) or 23)
     local cmd = ataxiaBasher.bardCycloneCmd or "cyclone"
     return cmd.." "..target..sp
   end
@@ -1124,7 +1182,7 @@ function ataxiaBasher_blademasterBattlerage(sp)
     -- Blademaster is excluded from the shared culling check.)
     if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown
        and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree"
-       and (rage >= 36 or ataxiaBasher_brFree()) then
+       and ataxiaBasher_cullAfford(rage, 36) then
       return "reap "..target..sp
     end
 
@@ -1274,7 +1332,7 @@ function ataxiaBasher_magiBattlerage(sp)
     -- 1. Culling reap (owned here; Magi is excluded from the shared culling check).
     if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown
        and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree"
-       and (rage >= 36 or ataxiaBasher_brFree()) then
+       and ataxiaBasher_cullAfford(rage, 36) then
       return "reap "..target..sp
     end
 
@@ -1414,7 +1472,7 @@ function ataxiaBasher_assembleBattlerage()
 		-- So the majority of classes banked a free charge and then declined the single
 		-- best thing to spend it on: a free AoE execute. The charge was not lost (it stays
 		-- banked), it was spent on a cheaper battlerage further down this function instead.
-		if ataxia.vitals.rage >= bigRage or ataxiaBasher_brFree() then
+		if ataxiaBasher_cullAfford(ataxia.vitals.rage, bigRage) then
 			command = command.."reap "..target..sp
 		end
 	-- Black Dragon: dragonfear on 3rd target when 3+ mobs present

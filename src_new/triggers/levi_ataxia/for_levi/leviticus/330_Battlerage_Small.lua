@@ -95,7 +95,7 @@ ataxiaBasher.shielded = false
 ataxiaTemp.ignoreCrits = false
 bashStats.attacks = bashStats.attacks + 1
 
-battleRage_Timers.small = tempTimer(17, [[battleRage_Timers.small = nil]])
+battleRage_Timers.small = tempTimer(ataxiaBasher_brCd(17), [[battleRage_Timers.small = nil]])
 
 -- Runewarden owns its rotation (RW_BR, basher/002), which is timer-FREE -- so also
 -- restart COLLIDE's cooldown from this CONFIRMED line and release the in-flight hold.

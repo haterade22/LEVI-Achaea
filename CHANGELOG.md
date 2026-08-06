@@ -31,6 +31,49 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-06 - Keep 40 rage: culling stops breaking the floor (v4.7.229)
+
+User: *"We need to keep 40 battlerage at all times in order to increase our damage by 23
+percent."*
+
+The mechanism already existed and was built for exactly this gear -- `bash floor 40` makes
+every rotation spend only the SURPLUS, so an ability costing C fires at C + 40. **One thing
+would have broken it:** culling was exempt from the floor unconditionally, every gate reading
+`rage >= 36 or brFree()` directly instead of going through `rageAfford`.
+
+That exemption is right for **Golden Dragon**, where the ability is `reap` -- an EXECUTE, and a
+kill beats any per-swing multiplier on swings that will never happen. It is wrong for the
+artifact culling blade on a class like **Bard**, where it is simply a 1505 unblockable hit:
+firing at 36 rage drops under a 40 floor and switches off a 23% bonus until rage rebuilds. At
+~1.8s per swing across culling's own 24s cooldown that is roughly a dozen swings, comfortably
+outweighing the one hit.
+
+So the exemption is now a setting. `bash floor culling` toggles it; **default off preserves
+today's behaviour exactly**, so reap stays unfloored. All 8 gates across `basher/001` and
+`basher/002` route through the new `ataxiaBasher_cullAfford`. A free battlerage still fires
+below the floor either way -- it costs no rage, so it cannot breach it, and refusing it would
+simply waste the charge.
+
+### Also shipped: gear battlerage-cooldown scaling
+
+Written while I was misreading the request as 40% cooldown reduction, but worth keeping -- the
+audit shows ~20 chest pieces and a head carrying exactly that, and every battlerage cooldown in
+the system is a hardcoded `tempTimer` at the ability's BASE duration (moulinet 17s, large 24s,
+specials 32-46s, culling 24s, cyclone 23s). Nothing scaled them. `ataxiaBasher.brCooldownPct`
+now scales all 15 arm sites; **0 (the default) leaves every duration byte-identical**, so it
+cannot change behaviour for anyone who has not measured their own reduction. Clamped at 90%,
+floored at 1s -- a negative tempTimer delay is not a fast cooldown, it is an undefined one.
+
+Worth recording separately: the game's ready line (*"You can use Moulinet again."*) is parsed
+and then **dropped** for Bard. `BR_READY_MAP` covers the owned rotations and culling blade, but
+the shared `battleRage_Timers.small/large/special` have no name mapping -- so the game tells us
+the ability is ready and we ignore it.
+
+Files: `basher/001`, `basher/002`, `configs/016_Rage_Floor.lua`, triggers `330`/`331`/`332`/`342`.
+Suite **1085 -> 1089**; both directions verified by breaking the code back.
+
+---
+
 ## 2026-08-06 - Test the invariant, not just the instances (v4.7.228)
 
 Asked whether bonus damage was actually tested, the answer was yes -- five separate tests, and

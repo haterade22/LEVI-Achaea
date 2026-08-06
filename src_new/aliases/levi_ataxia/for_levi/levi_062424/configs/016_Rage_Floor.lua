@@ -9,7 +9,7 @@ hierarchy:
 attributes:
   isActive: 'yes'
   isFolder: 'no'
-regex: ^bash floor (\d+|off)$
+regex: ^bash floor (\d+|off|culling|cull)$
 command: ''
 packageName: ''
 ]]--
@@ -17,6 +17,21 @@ packageName: ''
 -- `bash floor <n|off>` -- keep battlerage at or above <n> by spending only the
 -- surplus (gear that pays a bonus above a rage threshold keeps paying). Culling
 -- reap is never floored. See ataxiaBasher_rageAfford (basher/001).
+-- CULLING (v4.7.229). Culling is exempt from the floor by default -- correct for Golden
+-- Dragon, where the ability is `reap`, an EXECUTE, and a kill beats any bonus on swings that
+-- will never happen. Wrong for the artifact culling blade on e.g. Bard, where it is just a
+-- 1505 unblockable hit: firing it at 36 rage drops us under a 40 floor and switches off the
+-- damage bonus for roughly a dozen swings, which outweighs the one hit.
+if matches[2] == "culling" or matches[2] == "cull" then
+	ataxiaBasher.floorCulling = not ataxiaBasher.floorCulling
+	if ataxiaBasher.floorCulling then
+		ataxiaEcho("Culling now <green>RESPECTS<reset> the rage floor -- it will not spend below it.")
+	else
+		ataxiaEcho("Culling is <dark_orange>EXEMPT<reset> from the rage floor (default; right for reap/execute).")
+	end
+	return
+end
+
 if matches[2] == "off" then
 	ataxiaBasher.rageFloor = nil
 	ataxiaEcho("Rage floor <red>disabled<reset> -- battlerage spends freely again.")

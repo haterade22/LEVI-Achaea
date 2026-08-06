@@ -252,7 +252,7 @@ function ataxiaBasher_goldenDragonBattlerage(sp)
     return pend.verb.." "..target..sp
   end
   ataxiaTemp.gdragonBrPending = nil
-  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and (rage >= 36 or ataxiaBasher_brFree())
+  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and ataxiaBasher_cullAfford(rage, 36)
      and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" then
     return "reap "..target..sp
   end
@@ -720,7 +720,7 @@ function ataxiaBasher_dwBattlerage(sp, wordUsed)
   if getEpoch and getEpoch() < (ataxiaTemp.brGlobalReadyAt or 0) then return "" end
 
   -- Culling reap, owned here (never floored -- an execute beats a per-swing multiplier).
-  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and (rage >= 36 or ataxiaBasher_brFree())
+  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and ataxiaBasher_cullAfford(rage, 36)
      and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" then
     ataxiaBasher_brSent()
     return "reap "..target..sp
@@ -1669,7 +1669,7 @@ function ataxiaBasher_psionBattlerage(sp)
     return pend.cmd
   end
   ataxiaTemp.psionBrPending = nil
-  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and (rage >= 36 or ataxiaBasher_brFree())
+  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and ataxiaBasher_cullAfford(rage, 36)
      and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" then
     return "reap "..target..sp
   end
@@ -1908,7 +1908,7 @@ function ataxiaBasher_rwBattlerage(sp)
   ataxiaTemp.rwBrPending = nil
   if getEpoch and getEpoch() < (ataxiaTemp.brGlobalReadyAt or 0) then return "" end
 
-  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and (rage >= 36 or ataxiaBasher_brFree())
+  if ataxiaBasher.cullingBlade and not ataxiaTemp.bladeCooldown and ataxiaBasher_cullAfford(rage, 36)
      and gmcp.Room.Info.area ~= "the Fathomless Expanse of the World Tree" then
     ataxiaBasher_brSent()
     return "reap "..target..sp

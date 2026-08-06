@@ -44,7 +44,7 @@ if line ~= "You swing the culling blade in a great arc, black energy leaping fro
 	bashStats.attacks = bashStats.attacks + 1
 end
 
-ataxiaTemp.bladeCooldown = tempTimer(24, [[ataxiaTemp.bladeCooldown = nil]])
+ataxiaTemp.bladeCooldown = tempTimer(ataxiaBasher_brCd(24), [[ataxiaTemp.bladeCooldown = nil]])
 
 if type(target) == "number" and ataxiaBasher.enabled then
 	if line ~= "You swing the culling blade in a great arc, black energy leaping from the blade." then

@@ -101,7 +101,7 @@ ataxiaBasher.shielded = false
 ataxiaTemp.ignoreCrits = false
 bashStats.attacks = bashStats.attacks + 1
 
-battleRage_Timers.large = tempTimer(24, [[battleRage_Timers.large = nil]])
+battleRage_Timers.large = tempTimer(ataxiaBasher_brCd(24), [[battleRage_Timers.large = nil]])
 
 -- Runewarden owns its rotation (RW_BR, basher/002), which is timer-FREE -- so also
 -- restart ONSLAUGHT's cooldown from this CONFIRMED line and release the in-flight hold.

@@ -508,6 +508,54 @@ end)
 -- reap 36 (exempt), spinslash 36, daze 26, headstrike 25, nerveslash 22,
 -- leapstrike 14. NOTE: each successful call arms the ~1s global BR cooldown, so
 -- every assertion below re-resets (reset() clears brGlobalReadyAt).
+-- CULLING vs THE FLOOR (v4.7.229). User: "we need to keep 40 battlerage at all times in order
+-- to increase our damage by 23 percent." Culling was exempt from the floor unconditionally --
+-- right for Golden Dragon's `reap` (an EXECUTE; a kill beats a bonus on swings that never
+-- happen), wrong for the artifact culling blade on a class like Bard, where firing at 36 rage
+-- drops us under a 40 floor and switches the bonus off for roughly a dozen swings.
+describe("ataxiaBasher_cullAfford -- the exemption is now a setting", function()
+  local function cullReset(floor, floorCulling)
+    reset()
+    gmcp.Char.Status.class = "Blademaster"
+    ataxiaBasher.rageFloor = floor
+    ataxiaBasher.floorCulling = floorCulling
+  end
+
+  it("keeps the exemption by DEFAULT -- reap still fires on the floor", function()
+    cullReset(40, nil)
+    expect(ataxiaBasher_cullAfford(36, 36)).toBeTrue()  -- would breach a 40 floor, allowed
+    expect(ataxiaBasher_cullAfford(35, 36)).toBeFalse() -- but still needs the cost itself
+    cullReset(nil, nil)
+  end)
+
+  it("respects the floor once `bash floor culling` is on", function()
+    cullReset(40, true)
+    expect(ataxiaBasher_cullAfford(36, 36)).toBeFalse() -- 36 would leave 0, under the floor
+    expect(ataxiaBasher_cullAfford(75, 36)).toBeFalse() -- needs 36 + 40
+    expect(ataxiaBasher_cullAfford(76, 36)).toBeTrue()
+    cullReset(nil, nil)
+  end)
+
+  it("is unchanged when no floor is set, either way", function()
+    for _, fc in ipairs({ false, true }) do
+      cullReset(nil, fc)
+      expect(ataxiaBasher_cullAfford(36, 36)).toBeTrue()
+      expect(ataxiaBasher_cullAfford(35, 36)).toBeFalse()
+    end
+    cullReset(nil, nil)
+  end)
+
+  -- A FREE battlerage costs no rage, so it can never breach the floor -- and must stay
+  -- allowed even with culling floored, or the free charge is simply wasted.
+  it("still allows a free battlerage below the floor", function()
+    cullReset(40, true)
+    ataxiaTemp.brFreeCharge = true
+    expect(ataxiaBasher_cullAfford(0, 36)).toBeTrue()
+    ataxiaTemp.brFreeCharge = nil
+    cullReset(nil, nil)
+  end)
+end)
+
 describe("rage floor -- spend only the surplus", function()
   local function floorReset(floor)
     reset()
