@@ -215,6 +215,42 @@ tempo_choice:
   allegro: "Reaches back fastest (hit #4) -> more back hits per kill on squishy denizens that die before Moderato ever reaches back."
 ```
 
+## Bladedance dances (defences)
+```yaml
+# Confirmed from AB, 2026-08-06. All dances are DEFENCES: they appear in DEF and are raised
+# with DANCE <name>. They are MUTUALLY EXCLUSIVE -- AB HAWKSTEP: "you can only dance one
+# thing at a time, so the hawkstep is exclusive with the dance of the harrying, for example."
+# Never put two of them in one keepup profile; the system would re-raise each in turn forever.
+exclusivity: "one dance at a time -- raising any dance drops the current one"
+dances:
+  harrying:
+    syntax: "DANCE HARRYING"
+    cooldown: "2.50 seconds of balance"
+    ab_effect: "Swift rapier blows keep the enemy pinned inside your encirclement. The blows typically do no real harm, but the threat of the point makes it hard for even a fleet foe to escape."
+    abadmin_id: 3166
+  hawkstep:
+    syntax: "DANCE HAWKSTEP"
+    cooldown: "2.50 seconds of balance"
+    ab_effect: "Swift motion and exacting precision. While dancing it, attempts to hinder YOUR escape from a room (rites of piety and the like) are less likely to succeed."
+    abadmin_id: 3193
+  wavedance:
+    syntax: "DANCE WAVEDANCE"
+    cooldown: "2.00 seconds of balance"
+    ab_effect: "You will NOT be parried while dancing, but you also do NO limb damage."
+    abadmin_id: 3242
+system_wiring:
+  eligibility: "ataxiaTables.classDefences.bard (deffing/004) -- lets defadd/keepadd accept them"
+  display: "ataxiaTables.defenceWords.bard (deffing/004) -- renders 'Hawkstep (dance hawkstep)' in `defs valid`"
+  gmcp_names: "UNCONFIRMED for hawkstep/wavedance. `harrying` is confirmed GMCP-tracked; the other two are assumed to use the same bare-word naming. A live DEF capture while dancing each would settle it -- if they differ, fix deffing/004 and BARD_DANCES in basher/002."
+open_question: |
+  The bashing dance-picker (ataxiaBasher_bardWantDance, basher/002) selects wavedance for
+  bosses on the stated basis of "ignoring 75% of resistance", and hawkstep for crowds/deep
+  ripples on the basis of "25% damage resistance". NEITHER number appears anywhere in the AB
+  text above, which describes hawkstep as escape-assurance and wavedance as unparryable /
+  no-limb-damage. Those bashing rationales are therefore unverified and possibly wrong; the
+  picker's behaviour has not been changed pending confirmation.
+```
+
 ## Fighting Against This Class
 ```yaml
 priority_cures:

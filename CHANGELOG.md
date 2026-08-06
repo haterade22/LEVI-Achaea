@@ -2,6 +2,35 @@
 
 ---
 
+## Unreleased - Hawkstep and Wavedance recognised as Bard defences
+
+`DEFADD`/`KEEPADD` now accept `hawkstep` and `wavedance`, and `defs valid` renders them with
+the command that raises them. Previously only `harrying` was listed, so the other two
+Bladedance dances were rejected as "not a defence for your class" even though the basher
+already knew how to dance them (`BARD_DANCES`, basher/002).
+
+AB confirmed (2026-08-06): `DANCE HAWKSTEP` (2.50s balance, makes attempts to hinder your
+escape from a room less likely to succeed) and `DANCE WAVEDANCE` (2.00s balance, you cannot
+be parried but do no limb damage).
+
+**All three dances are mutually exclusive** — AB: *"you can only dance one thing at a time, so
+the hawkstep is exclusive with the dance of the harrying."* They are eligible for profiles but
+must not be put in the SAME keepup profile, or the system would re-raise each in turn forever.
+Noted in the code at both tables.
+
+Still unconfirmed: the GMCP defence names for hawkstep/wavedance are *assumed* to match the
+dance names, as `harrying` does. A live `DEF` capture while dancing each would settle it; if
+they differ, `deffing/004` and `BARD_DANCES` in `basher/002` are the two places to correct.
+
+**Open question flagged, not changed:** the bashing dance-picker justifies wavedance for bosses
+by "ignoring 75% of resistance" and hawkstep for crowds by "25% damage resistance". Neither
+number appears in the AB text for either ability. Recorded in `.claude/classes/bard.md`.
+
+Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cleaner.lua`,
+`.claude/classes/bard.md`. Suite 1037 green.
+
+---
+
 ## 2026-08-06 - Documentation pass for v4.7.214-v4.7.220
 
 Docs only -- **no version bump and no tag**. The package contents are byte-identical to

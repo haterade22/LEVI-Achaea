@@ -86,7 +86,13 @@ function sortedDefenceShow()
       tune = "blade tune",
 			heartsfury = "heartsfury",
       acrobatics = "acrobatics on",
+      -- Bladedance dances. All three are MUTUALLY EXCLUSIVE -- AB: "you can only dance one
+      -- thing at a time, so the hawkstep is exclusive with the dance of the harrying, for
+      -- example." They are listed here so `defadd`/`keepadd` accept them; do NOT put two of
+      -- them in the same keepup profile or the system will re-raise each in turn forever.
       harrying = "dance harrying",
+      hawkstep = "dance hawkstep",
+      wavedance = "dance wavedance",
    },
 
 	blademaster = {
@@ -292,7 +298,13 @@ ataxiaTables.defenceWords = {
     -- form is recorded here because it is the half you have to know when doing it by hand.
     acrobatics = "acrobatics on",
     tune       = "blade tune",     -- not `tune`
-    harrying   = "dance harrying", -- a Bladedance dance, not a bare defence word
+    -- Bladedance dances, not bare defence words. Syntax confirmed from AB (2026-08-06):
+    -- DANCE HARRYING / DANCE HAWKSTEP / DANCE WAVEDANCE. The GMCP defence names are still
+    -- assumed to equal the dance names -- consistent with `harrying`, which IS confirmed,
+    -- but hawkstep/wavedance are not yet seen in a live DEF capture.
+    harrying   = "dance harrying",
+    hawkstep   = "dance hawkstep",
+    wavedance  = "dance wavedance",
   },
   depthswalker = {
     precision   = "trusad",    -- AB: "Your precision is without compare" (crit vs denizens)
