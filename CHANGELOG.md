@@ -2,6 +2,50 @@
 
 ---
 
+## 2026-08-06 - Roll Hide: heal where we land, then go back in (v4.7.218)
+
+User: *"the denizens wont follow so we can use this to our advantage to heal up and then do hit
+and run tactics. We should set to do this around 35 percent health."*
+
+### The tumble was only half the tactic
+
+We already tumbled out on Roll Hide. What we did next threw the boon away: the panic dropped
+straight to `idle`, which handed back to the explorer, and the `swarmHold` self-cleared after
+`HOLD_TIMEOUT` (~8s) -- so within about eight seconds we **navigated back into the room we had
+just fled, still at panic HP**. Shedding pursuers is worth nothing if you walk back into them.
+
+The tumble now enters the same recovery state the escape ladder uses: navigation and attack
+dispatch held until `recoverAt`% **and** affliction-free, self-ticking so it never waits on an
+outside event to notice it healed. Then it hands back and the sweep goes in again -- which is
+the hit-and-run cycle asked for.
+
+### A ground recovery is not a hover
+
+The existing recovery state assumed flight, where we are untouchable. This one is standing on
+the floor, so it carries `recoverGround` and two differences:
+
+* **a denizen wandering in ends it.** Standing there attack-gated at panic HP while something
+  hits us is strictly worse than fighting it, so it hands back to the basher.
+* **it does not send `land`.** It never left the ground, and noise in the escape path is how a
+  real refusal gets missed.
+
+Also: the panic no longer fires *while* recovering. Roll Hide already shed them, so a second
+tumble sheds nothing and only walks us further from the sweep -- previously the 10s cooldown
+was the only thing between a slow heal and a tumble every ten seconds, wandering the ripple.
+
+### 40% -> 35%, and why it needed a migration
+
+Changing the default alone would have changed nothing. `_cfg` **writes** its defaults into the
+saved table and `ataxia` is serialized wholesale, so a literal `40` is already stored in every
+config. Hence a migration -- but **one-shot**, behind a persisted marker: `panicAt` is settable
+(`mnem swarm panic <n>`), and an unconditional rewrite would make 40 permanently untypeable,
+dragged back to 35 by the next `_cfg()` call on the next tick.
+
+Files: `mnemosyne/009_Swarm_Tactics.lua`. Suite **1019 -> 1025**; all four behaviours verified
+by breaking the code back.
+
+---
+
 ## 2026-08-06 - Bard backflips instead of leaping (v4.7.217)
 
 User: *"When in bard, we should BACKFLIP (direction) instead of Leap as it is faster balance."*

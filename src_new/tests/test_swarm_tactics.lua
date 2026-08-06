@@ -587,7 +587,12 @@ describe("swarm stage 2 — Roll Hide panic", function()
     ataxia.vitals = { hpp = 30 }
     S._lastPanicAt = nil
     expect(S.onTick()).toBeTrue()
-    expect(S.state).toBe("idle")
+    -- REQUIREMENT CHANGED v4.7.218: the tumble used to drop to `idle`, which handed straight
+    -- back to the explorer and walked us into the room we had just fled once the hold expired
+    -- (~8s), still at panic HP. Roll Hide's value is that the room we land in is QUIET; we now
+    -- heal there first. This is a deliberate behaviour change, not a test bent to pass.
+    expect(S.state).toBe("recovering")
+    expect(S.recoverGround).toBeTrue()
     expect(findCmd(TUMBLE) ~= nil).toBeTrue()
     -- The hold must guard the queued tumble from the next attack's addclearfull.
     expect(ataxiaTemp.swarmHold).toBeTrue()
@@ -891,7 +896,10 @@ describe("vitals-driven emergency wake-up", function()
     local sawTumble = false
     for _, c in ipairs(sent) do if c:find("tumble", 1, true) then sawTumble = true end end
     expect(sawTumble).toBeTrue()
-    expect(S.state).toBe("idle") -- panic resets; no hover started
+    -- Recovers on the GROUND where it landed (v4.7.218), not in a hover: we landed to tumble.
+    expect(S.state).toBe("recovering")
+    expect(S.recoverGround).toBeTrue()
+    expect(S.flying).toBe(nil)
   end)
 
   it("rate-limits repeat firings", function()
@@ -1066,6 +1074,82 @@ describe("flight confirmation for the recovery hover", function()
     S.onFlightDown() -- forced/incidental landing mid-hover
     S.onTick()
     expect(flyCount()).toBe(3) -- grounded again -> re-send
+  end)
+end)
+
+-- ROLL HIDE, the point of it (user, 2026-08-06): "the denizens wont follow so we can use this
+-- to our advantage to heal up and then do hit and run tactics". The tumble was only ever half
+-- the tactic -- shedding pursuers is worth nothing if we walk straight back in.
+describe("Roll Hide -- heal where we landed, then go back in", function()
+  local function panicNow()
+    fixture(3); mnemRollHide = true
+    S._lastPanicAt = nil
+    S.onTick(); S.decorate("attack", ";")
+    MAP.current = 100; mobs = 2; S.onTick()
+    MAP.rooms[100].exits.west = 50
+    ataxia.vitals = { hpp = 30 }
+    S._lastPanicAt = nil
+    expect(S.onTick()).toBeTrue()
+  end
+
+  it("holds navigation and attacks after the tumble instead of walking back in", function()
+    panicNow()
+    expect(S.state).toBe("recovering")
+    expect(ataxiaTemp.swarmHold).toBeTrue()
+    -- Self-ticking: a recovery must never wait on an outside event to notice it healed.
+    expect(#scheduled > 0).toBeTrue()
+  end)
+
+  it("stays put until FULLY healed -- HP alone is not enough", function()
+    panicNow()
+    mobs = 0
+    ataxia.vitals = { hpp = 99 }
+    ataxia.afflictions = { ["broken left leg"] = true } -- restoration still running
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")
+    ataxia.afflictions = {}
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("idle") -- healed and clean: hand back for the next hit-and-run
+  end)
+
+  it("does not land -- it never left the ground", function()
+    panicNow()
+    mobs = 0
+    ataxia.vitals = { hpp = 99 }
+    ataxia.afflictions = {}
+    local before = #sent
+    S.onTick()
+    for i = before + 1, #sent do expect(sent[i] ~= "land").toBeTrue() end
+  end)
+
+  -- A ground recovery is NOT untouchable the way the hover is. Standing there attack-gated at
+  -- panic HP while something hits us is strictly worse than fighting it.
+  it("hands back if a denizen wanders in mid-recovery", function()
+    panicNow()
+    mobs = 2
+    expect(S.onTick()).toBeFalse()
+    expect(S.state).toBe("idle")
+    expect(ataxiaTemp.swarmHold).toBe(nil)
+  end)
+
+  it("does not tumble again while recovering", function()
+    panicNow()
+    mobs = 0
+    clock = clock + 60 -- well past PANIC_COOLDOWN
+    ataxia.vitals = { hpp = 20 } -- still deep in panic territory
+    local before = #sent
+    S.onTick()
+    for i = before + 1, #sent do expect(sent[i]:find("tumble", 1, true) == nil).toBeTrue() end
+  end)
+
+  it("defaults to 35% and migrates a stored 40 exactly once", function()
+    fixture(1)
+    cfg.swarm = { enabled = true, threshold = 3, panicAt = 40 } -- the old shipped default
+    expect(S._cfg().panicAt).toBe(35)
+    -- ...but 40 stays TYPEABLE afterwards: `mnem swarm panic 40` must not be dragged back to
+    -- 35 by the next _cfg() call, which happens every tick.
+    S._cfg().panicAt = 40
+    expect(S._cfg().panicAt).toBe(40)
   end)
 end)
 

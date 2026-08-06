@@ -106,7 +106,17 @@ function S._cfg()
   if s.icewall == nil then s.icewall = true end -- indoors: wall the door + leap it
   if s.kite == nil then s.kite = true end       -- outdoors swarm-followed: fly/land/hit
   if s.panic == nil then s.panic = true end     -- Roll Hide boon: tumble out at low HP
-  s.panicAt = tonumber(s.panicAt) or 40         -- HP% that triggers the panic tumble
+  -- 35%, not 40 (user, 2026-08-06: "we should set to do this around 35 percent health").
+  s.panicAt = tonumber(s.panicAt) or 35         -- HP% that triggers the panic tumble
+  -- Changing the default alone would change nothing: _cfg WRITES its defaults into the saved
+  -- table, and `ataxia` is serialized wholesale, so a literal 40 is already stored. Hence the
+  -- migration -- but ONE-SHOT, behind a persisted marker. `panicAt` is settable (`mnem swarm
+  -- panic <n>`), and an unconditional rewrite would make 40 permanently untypeable: every
+  -- _cfg() call, on every tick, would drag it back to 35 seconds after it was set.
+  if not s.panicAt35 then
+    s.panicAt35 = true
+    if s.panicAt == 40 then s.panicAt = 35 end
+  end
   -- ABSOLUTE HP floor (user, 2026-08-03: "we are entering critical health, like 3000").
   -- Percent and absolute answer different questions and BOTH matter: 40% is "this fight is
   -- going badly", 3000 is "the next hit can kill me". With a large max HP the percentage
@@ -514,6 +524,10 @@ function S._maybePanic(hpNow)
   local hp = tonumber(hpNow) or hpp()
   local s = S._cfg()
   if s.panic == false or not mnemRollHide then return false end
+  -- Already out and healing: a second tumble sheds nothing (Roll Hide shed them the first
+  -- time) and only walks us further from the sweep. Without this the 10s cooldown was the
+  -- only thing between a slow heal and a tumble every ten seconds, wandering the ripple.
+  if S.state == "recovering" then return false end
   if not S._panicHpHit(hp) then return false end
   if S._lastPanicAt and (now() - S._lastPanicAt) < PANIC_COOLDOWN then return false end
   local dir = S._panicDir()
@@ -542,7 +556,26 @@ function S._maybePanic(hpNow)
   end)
   local sep = (ataxia.settings and ataxia.settings.separator) or ";"
   send("queue addclear free stand" .. sep .. "tumble " .. dir)
-  S._echo("<indian_red>PANIC (" .. hp .. "% hp)<reset> -- Roll Hide tumble <cyan>" .. dir .. "<reset> sheds all pursuers.")
+  -- HEAL WHERE WE LANDED, then go back in (user, 2026-08-06: "the denizens wont follow so we
+  -- can use this to our advantage to heal up and then do hit and run tactics").
+  --
+  -- The tumble used to hand straight back to the explorer at `idle`, and the swarmHold
+  -- self-cleared in HOLD_TIMEOUT -- so within about eight seconds we NAVIGATED BACK INTO THE
+  -- ROOM WE HAD JUST FLED, still at panic HP. Roll Hide's whole value is that the room we land
+  -- in is quiet; spending that on an immediate return threw the boon away.
+  --
+  -- So the tumble now enters the same recovery state the escape ladder uses -- navigation and
+  -- attack dispatch held until recoverAt% AND affliction-free -- with recoverGround set,
+  -- because unlike the hover this one is standing on the floor and is NOT untouchable.
+  S.state = "recovering"
+  S.recoverGround = true
+  S.recoverStarted = now()
+  S._armRecoverHold()
+  -- Self-ticking, like the hover: a recovery must never wait on an outside event to notice
+  -- it has healed.
+  if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
+  S._echo("<indian_red>PANIC (" .. hp .. "% hp)<reset> -- Roll Hide tumble <cyan>" .. dir
+    .. "<reset> sheds all pursuers; healing to " .. s.recoverAt .. "% before going back in.")
   return true
 end
 
@@ -696,10 +729,23 @@ function S.onTick()
   -- before we drop back in) -- or the hard cap.
   if S.state == "recovering" then
     local s = S._cfg()
+    -- A GROUND recovery (the Roll Hide tumble) is not untouchable the way the hover is. If
+    -- something wanders into the room with us, standing there attack-gated at panic HP is
+    -- strictly worse than fighting it -- hand back and let the basher swing.
+    if S.recoverGround and M._roomHasDenizens and M._roomHasDenizens() then
+      S.recoverGround = nil
+      S._clearHold()
+      S.state = "idle"
+      S._echo("<grey>company arrived mid-recovery (" .. hpp() .. "%) -- handing back.")
+      return false
+    end
     local healed = hpp() >= s.recoverAt and not S._afflicted()
     if healed or (now() - (S.recoverStarted or 0)) > RECOVER_MAX then
+      -- Only land if we are actually up: a ground recovery sending "land" every time is
+      -- noise, and noise in the escape path is how a real refusal gets missed.
+      if S.flying then send("land") end
       S.flying = nil
-      send("land")
+      S.recoverGround = nil
       S._clearHold()
       S.state = "idle"
       S._echo(healed and "<green>fully recovered<reset> (" .. hpp() .. "%, aff-free) -- landing and resuming."
@@ -995,6 +1041,7 @@ function S.reset(reason)
   end
   S.state = "idle"
   S.mode = nil
+  S.recoverGround = nil
   S.swarmRoom, S.funnelRoom, S.funnelAt = nil, nil, nil
   S.backShort, S.backLong, S.fwdShort = nil, nil, nil
   S.peakFollowers, S.announcedFollow = nil, nil
