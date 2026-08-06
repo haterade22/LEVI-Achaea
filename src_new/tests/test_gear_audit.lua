@@ -432,3 +432,39 @@ describe("gearAudit.bisByCategory", function()
   end)
 end)
 
+
+--------------------------------------------------------------------------------
+-- THE INVARIANT: summarised implies scored (v4.7.227)
+--------------------------------------------------------------------------------
+-- The crit-DoT bug existed because the SUMMARISER recognised an effect and the SCORER did
+-- not. Nothing was wrong with either in isolation: the audit table showed the effect, so it
+-- looked handled, while the ranker read it as worthless -- and `gearaudit scrap` destroys what
+-- ranks low. The two are separate pattern sets that can drift apart silently.
+--
+-- So this asserts the relationship rather than the individual patterns: an effect the
+-- summariser labels must also produce a non-zero score. Cases are the real game wordings for
+-- every family the Mnemosyne set actually contains.
+describe("every summarised effect is also scored", function()
+  local CASES = {
+    "Your attacks will deal 23% bonus damage to denizens.",
+    "Your attacks will generate 16% more rage.",
+    "Your battlerage abilities will cool down 21% faster. This effect persists only within the waters of the Mnemosyne.",
+    "When sustaining bleeding from a denizen, you will automatically clot 24% of it.",
+    "You gain 6% resistance against priest denizens.",
+    "When you critically strike, 17% of the damage will be dealt as an additional DoT over the next few seconds.",
+    "Increases the damage of your critical strikes by 4%.",
+    "Increases your chance to deal a critical strike by 3%.",
+    "While you have any amount of stored battlerage, your health will regenerate 37% faster.",
+    "While you have any amount of stored battlerage, your mana will regenerate 42% faster.",
+  }
+
+  for _, text in ipairs(CASES) do
+    it("scores: " .. text:sub(1, 46), function()
+      local summary = gearAudit.summarizeEffect({ text })
+      -- Guard the guard: a case the summariser cannot label proves nothing about the scorer.
+      expect(summary ~= nil and summary ~= "").toBeTrue()
+      local score = gearAudit.calculateScore(gearAudit.scoreEffect({ text }))
+      expect(score > 0).toBeTrue()
+    end)
+  end
+end)

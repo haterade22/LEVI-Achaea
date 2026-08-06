@@ -31,6 +31,29 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-06 - Test the invariant, not just the instances (v4.7.228)
+
+Asked whether bonus damage was actually tested, the answer was yes -- five separate tests, and
+the summariser and scorer happen to share the identical pattern, which is why the `+23% Bonus
+Dmg` in a live audit proves the scorer matched too.
+
+But that is luck, not design, and it is exactly the gap the crit-DoT bug lived in. The
+summariser recognised that effect and the scorer did not. Nothing was wrong with either in
+isolation: the audit table showed the effect, so it looked handled, while the ranker read it as
+worthless -- and `gearaudit scrap` destroys what ranks low.
+
+So the relationship is now asserted rather than each pattern separately: **an effect the
+summariser labels must also produce a non-zero score**, across the real game wording for every
+family the Mnemosyne set contains. Reverting the crit-DoT fix makes the invariant fail on its
+own, without the specific test for it -- which is the point.
+
+The test also guards itself: a case the summariser cannot label proves nothing about the
+scorer, so an empty summary fails rather than passing vacuously.
+
+Files: `test_gear_audit.lua`. Suite **1075 -> 1085**.
+
+---
+
 ## 2026-08-06 - Score mana regen; a false accusation retracted (v4.7.227)
 
 Answering *"what gear is best to wear for dungeoneer"* meant scoring the set properly, which
