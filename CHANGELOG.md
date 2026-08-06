@@ -31,6 +31,58 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-06 - Gear audit: score what it was ignoring, rank per category (v4.7.226)
+
+User: *"We must categorize them.. Best in Slot per category. Best damage, rage generation,
+defensive stuff, etc per slot."* -- prompted by a live 178-item audit.
+
+### The scrap hazard, found first
+
+Scoring the real audit turned up two effect families worth **zero**:
+
+* **`Your battlerage abilities will cool down X% faster.`** -- no pattern for it existed
+  *anywhere* in the file (`cool down`: 0 occurrences; the only cooldown parsing is for burst
+  items). Roughly 20 of the user's chest pieces, plus a head.
+* **The crit-on-strike DoT** -- the *summariser* recognised it, but the *scorer* had no stat
+  for it. Another ~14 hands pieces.
+
+So ~35 of 178 items ranked below a +1% crit trinket, fell outside `keepPerSet`, and would have
+been listed by **`gearaudit scrap` -- which destroys gear**. Both are now scored:
+`brCooldownPct` at 2.5 (just above rage generation: rage only *enables* a battlerage, the
+cooldown gates how often one can be used at all, and the Semiro log shows both binding in the
+same fight) and `critDotPct` at 1.5.
+
+The Mnemosyne restriction is now **named but not discounted**. Every other condition in that
+list is a place you pass through; the tower is where this character bashes, so applying
+`conditionalMult` would under-rate the gear precisely where it is worn.
+
+### `gearaudit cat` -- best in slot per category
+
+The single-score BiS hid the actual decision. One chest slot holds `+23% bonus damage`,
+`+16% rage generation` and `-21% battlerage cooldown`; collapsing those into one number says
+which the **weights** prefer, not which to wear. `gearaudit cat` reports a winner per category
+per slot -- Damage / Rage-BR / Defensive -- with runners-up, so you can see whether the leader
+is a clear win or a coin toss. An item only appears under a category it actually contributes
+to. Each stat belongs to exactly one category, so category scores are a strict subset of the
+total and the two can never disagree.
+
+### Compact summaries
+
+`Bleed: a denizen, you will automatically clot 18% of it` -> `Auto-clot 18%`;
+`Execute: a third of their health, you deal 11% bonus damage` -> `Execute +11%`; and battlerage
+cooldown, previously not summarised at all and printed as two full sentences -> `BR cooldown
+-19% (Mnem)`. That last one was the single biggest cause of the audit table wrapping.
+
+**A regression caught by an existing test:** the first version hardcoded the on-crit clause as
+`as DoT`. It is not always a DoT -- lifesteal (*"returned as health"*) uses the same opener.
+The effect is now tagged from its own wording, and anything unrecognised keeps a clipped
+version of the real clause rather than claiming something false.
+
+Files: `gear_system/001_Gear_Audit.lua`. Suite **1062 -> 1073**; three behaviours verified by
+breaking the code back.
+
+---
+
 ## 2026-08-06 - Say whether we are immune, either way (v4.7.225)
 
 User, with a live offer screen: *"Here is an example would be excellent to see if we are immune

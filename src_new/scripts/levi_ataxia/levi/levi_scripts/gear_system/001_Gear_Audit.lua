@@ -56,6 +56,17 @@ gearAudit.config = {
     rageGenPct       = 2.0,  -- enables battlerage, deals no damage itself
     brRageGenPct     = 2.0,  -- rage from battlerage abilities
     bleedDmgPct      = 2.0,  -- conditional on sustaining bleed
+    -- BATTLERAGE COOLDOWN (v4.7.226). Was scored at ZERO -- no pattern for it existed
+    -- anywhere in this file, so every "your battlerage abilities will cool down X% faster"
+    -- piece ranked below a +1% crit trinket and fell straight into the scrap list. Rated just
+    -- above rage generation: rage only ENABLES a battlerage, whereas the cooldown gates how
+    -- often one can be used at all, and the Semiro log shows both binding in the same fight
+    -- ("You must wait a short time before you can use a battlerage ability again." alongside
+    -- "you lack the necessary Rage").
+    brCooldownPct    = 2.5,
+    -- Crit-on-strike DoT: also previously unscored. A fraction of crit damage, which is
+    -- itself a fraction of hits, so it sits below flat crit damage.
+    critDotPct       = 1.5,
     resistPct        = 1.5,  -- resistance
     wpRegenPct       = 1.0,  -- WP regen
     blackoutPct      = 1.0,  -- blackout reduction
@@ -432,9 +443,36 @@ function gearAudit.summarizeEffect(effects)
   end
   -- The captured clause continues the game's own sentence, so the percent stays in
   -- front of it: "Crit: 16% of the damage dealt is returned ..."
-  local onCritPct, onCritEffect = fullText:match("[Ww]hen you critically strike, (%d+)%%%s*(.-)%.")
-  if onCritPct and onCritEffect then
-    table.insert(summary, "Crit: " .. onCritPct .. "% " .. onCritEffect)
+  -- COMPACT, not a sentence fragment (v4.7.226). These three used to splice the game's own
+  -- clause onto a label, producing "Bleed: a denizen, you will automatically clot 18% of it" --
+  -- ungrammatical, and long enough to force every such row to wrap onto two lines in the audit
+  -- table. The column exists to be SCANNED; the full text is a `gearaudit detail <id>` away.
+  -- The on-crit clause is NOT always a DoT -- lifesteal ("returned as health") uses the same
+  -- opener, and an existing test proves it. So the effect is TAGGED from its own wording
+  -- rather than assumed; anything unrecognised keeps a clipped version of the real clause,
+  -- which is still shorter than the whole sentence but never claims something false.
+  local onCritPct, onCritClause = fullText:match("[Ww]hen you critically strike, (%d+)%%%s*(.-)%.")
+  if onCritPct then
+    local tag
+    if not onCritClause or onCritClause == "" then
+      tag = nil
+    elseif onCritClause:find("DoT") or onCritClause:find("over the next") then
+      tag = "as DoT"
+    elseif onCritClause:find("returned as health") then
+      tag = "as health"
+    elseif #onCritClause > 22 then
+      tag = onCritClause:sub(1, 21) .. "."
+    else
+      tag = onCritClause
+    end
+    table.insert(summary, "Crit: " .. onCritPct .. "%" .. (tag and (" " .. tag) or ""))
+  end
+  local brCdPct = fullText:match("battlerage abilities will cool down (%d+)%%")
+  if brCdPct then
+    -- Was not summarised AT ALL, so the whole two-sentence effect printed verbatim -- the
+    -- single biggest cause of wrapping in the table, across ~20 chest pieces.
+    local where = fullText:find("within the waters of the Mnemosyne") and " (Mnem)" or ""
+    table.insert(summary, "BR cooldown -" .. brCdPct .. "%" .. where)
   end
 
   -- Stored-battlerage clause: "While you have any amount of stored battlerage, X."
@@ -444,9 +482,12 @@ function gearAudit.summarizeEffect(effects)
   end
 
   -- Bleed synergy: "When sustaining bleeding from X, ..."
-  local bleed = fullText:match("[Ww]hen sustaining bleeding from%s*(.-)%.")
-  if bleed then
-    table.insert(summary, "Bleed: " .. bleed)
+  local clotPct = fullText:match("[Ww]hen sustaining bleeding from.-automatically clot (%d+)%%")
+  if clotPct then
+    table.insert(summary, "Auto-clot " .. clotPct .. "%")
+  else
+    local bleed = fullText:match("[Ww]hen sustaining bleeding from%s*(.-)%.")
+    if bleed then table.insert(summary, "Bleed: " .. bleed) end
   end
 
   -- Experience loss reduction
@@ -462,9 +503,12 @@ function gearAudit.summarizeEffect(effects)
   end
 
   -- Execute-style: "When striking a denizen below X, ..."
-  local execute = fullText:match("[Ww]hen striking a denizen below%s*(.-)%.")
-  if execute then
-    table.insert(summary, "Execute: " .. execute)
+  local execPct = fullText:match("[Ww]hen striking a denizen below.-(%d+)%% bonus")
+  if execPct then
+    table.insert(summary, "Execute +" .. execPct .. "%")
+  else
+    local execute = fullText:match("[Ww]hen striking a denizen below%s*(.-)%.")
+    if execute then table.insert(summary, "Execute: " .. execute) end
   end
 
   -- Respawn modifier: "Denizens you slay will respawn X."
@@ -505,6 +549,13 @@ function gearAudit.scoreEffect(effects)
     scored.condition = "Water"; scored.conditional = true
   elseif fullText:find("requires you to be within a forest") then
     scored.condition = "Forest"; scored.conditional = true
+  elseif fullText:find("within the waters of the Mnemosyne") then
+    -- NAMED but NOT discounted (v4.7.226). Every other condition here is a place we pass
+    -- through; the Mnemosyne is where this character does essentially all of their bashing, so
+    -- applying `conditionalMult` would under-rate the gear precisely where it is worn. It is
+    -- still recorded, so `gearaudit score` shows the restriction and anyone bashing elsewhere
+    -- can see at a glance why the piece is dead weight for them.
+    scored.condition = "Mnemosyne"
   end
   if fullText:find("battlerage") and fullText:find("requires") then
     scored.brCondition = true; scored.conditional = true
@@ -575,6 +626,14 @@ function gearAudit.scoreEffect(effects)
   if brDmg then scored.brDmgPct = tonumber(brDmg) end
   local brRage = fullText:match("battlerage abilities will generate (%d+)%%")
   if brRage then scored.brRageGenPct = tonumber(brRage) end
+  -- "Your battlerage abilities will cool down 21% faster." Previously unscored ENTIRELY --
+  -- no pattern for it existed anywhere in this file.
+  local brCd = fullText:match("battlerage abilities will cool down (%d+)%%")
+  if brCd then scored.brCooldownPct = tonumber(brCd) end
+  -- "When you critically strike, 17% of the damage will be dealt as an additional DoT..."
+  -- The summariser recognised this shape; the scorer had no stat for it.
+  local critDot = fullText:match("[Ww]hen you critically strike, (%d+)%%")
+  if critDot then scored.critDotPct = tonumber(critDot) end
 
   -- Critical hits
   local critDmg = fullText:match("[Ii]ncreases the damage of your critical.-(%d+)%%")
@@ -634,12 +693,144 @@ function gearAudit.calculateScore(scored)
   add("Damage Reduction",     scored.dmgReductionPct,  w.dmgReductionPct)
   add("Rage Generation",      scored.rageGenPct,       w.rageGenPct)
   add("Battlerage Rage Gen",  scored.brRageGenPct,     w.brRageGenPct)
+  add("Battlerage Cooldown",  scored.brCooldownPct,    w.brCooldownPct)
+  add("Crit DoT",             scored.critDotPct,       w.critDotPct)
   add("Bleed Damage",         scored.bleedDmgPct,      w.bleedDmgPct)
   add("Resistance",           scored.resistPct,        w.resistPct)
   add("WP Regen",             scored.wpRegenPct,       w.wpRegenPct)
   add("Blackout Reduction",   scored.blackoutPct,      w.blackoutPct)
 
   return score, breakdown
+end
+
+-- ---------------------------------------------------------------------------
+-- BEST IN SLOT *PER CATEGORY* (v4.7.226)
+-- ---------------------------------------------------------------------------
+-- User: "We must categorize them.. Best in Slot per category. Best damage, rage generation,
+-- defensive stuff, etc per slot."
+--
+-- Exactly right, and the single-score BiS was hiding the real decision. One chest slot holds
+-- three genuinely different pieces -- +23% bonus damage, +16% rage generation, -21% battlerage
+-- cooldown -- and collapsing them into one number does not tell you which to wear, it tells
+-- you which the WEIGHTS happen to prefer. The weights are a guess; the category split is a
+-- fact about the gear.
+--
+-- Each stat belongs to exactly one category, so a category score is a strict subset of the
+-- total and the two can never disagree about what an item does.
+gearAudit.CATEGORIES = {
+  { key = "damage",  label = "Damage",     colour = "indian_red",
+    stats = { "addDmgPct", "bonusDmgPct", "burst", "ignorePct", "critChancePct",
+              "critDmgPct", "critDotPct", "celerity", "execute" } },
+  { key = "rage",    label = "Rage / BR",  colour = "gold",
+    stats = { "rageGenPct", "brRageGenPct", "brCooldownPct", "brDmgPct" } },
+  { key = "defence", label = "Defensive",  colour = "cyan",
+    stats = { "hpPct", "hpRegenPct", "dmgReductionPct", "resistPct", "bleedDmgPct",
+              "wpRegenPct", "blackoutPct" } },
+}
+
+-- Which category owns a stat, or nil for one deliberately left out of the split (XP loss,
+-- respawn speed -- real effects, but not things you would ever build a slot around).
+function gearAudit.statCategory(stat)
+  for _, cat in ipairs(gearAudit.CATEGORIES) do
+    for _, st in ipairs(cat.stats) do
+      if st == stat then return cat.key end
+    end
+  end
+  return nil
+end
+
+-- Score `scored` restricted to one category. Reuses calculateScore's breakdown rather than
+-- re-deriving the arithmetic: two implementations of the same sum WILL drift, and the one
+-- nobody looks at is the one that goes wrong.
+function gearAudit.categoryScore(scored, catKey)
+  local _, breakdown = gearAudit.calculateScore(scored)
+  local STAT_OF = {
+    ["Additional Damage"] = "addDmgPct", ["Bonus Damage"] = "bonusDmgPct",
+    ["Burst Damage"] = "burst",          ["Ignore Resistance"] = "ignorePct",
+    ["Crit Chance"] = "critChancePct",   ["Crit Damage"] = "critDmgPct",
+    ["Crit DoT"] = "critDotPct",         ["Celerity"] = "celerity",
+    ["Rage Generation"] = "rageGenPct",  ["Battlerage Rage Gen"] = "brRageGenPct",
+    ["Battlerage Cooldown"] = "brCooldownPct", ["Battlerage Damage"] = "brDmgPct",
+    ["HP Increase"] = "hpPct",           ["HP Regen"] = "hpRegenPct",
+    ["Damage Reduction"] = "dmgReductionPct", ["Resistance"] = "resistPct",
+    ["Bleed Damage"] = "bleedDmgPct",    ["WP Regen"] = "wpRegenPct",
+    ["Blackout Reduction"] = "blackoutPct",
+  }
+  local total = 0
+  for _, row in ipairs(breakdown) do
+    local stat = STAT_OF[row.stat]
+    if stat and gearAudit.statCategory(stat) == catKey then total = total + row.points end
+  end
+  return total
+end
+
+-- { [slot] = { [category] = { {gear, score}, ... sorted desc } } }
+-- `topN` defaults to 3: enough to see whether the best is a clear winner or a coin toss.
+function gearAudit.bisByCategory(topN)
+  topN = tonumber(topN) or 3
+  local out = {}
+  for id, gear in pairs(gearAudit.data or {}) do
+    local slot = gear.slot
+    if slot and slot ~= "" then
+      local scored = gearAudit.scoreEffect(gear.effects)
+      out[slot] = out[slot] or {}
+      for _, cat in ipairs(gearAudit.CATEGORIES) do
+        local sc = gearAudit.categoryScore(scored, cat.key)
+        if sc > 0 then -- an item with nothing in this category is not a candidate for it
+          out[slot][cat.key] = out[slot][cat.key] or {}
+          table.insert(out[slot][cat.key], { id = id, gear = gear, score = sc })
+        end
+      end
+    end
+  end
+  for _, cats in pairs(out) do
+    for _, items in pairs(cats) do
+      table.sort(items, function(a, b)
+        if a.score ~= b.score then return a.score > b.score end
+        return tostring(a.id) < tostring(b.id) -- stable, so repeat runs agree
+      end)
+      while #items > topN do table.remove(items) end
+    end
+  end
+  return out
+end
+
+-- Render the per-category BiS. One block per slot, one line per category, so the question
+-- "what do I wear in my chest if I want rage?" is answered by looking at one line.
+function gearAudit.showBisByCategory(topN)
+  if not gearAudit.data or not next(gearAudit.data) then
+    gearAudit.echo("No gear data. Run 'gearaudit' to collect or 'gearaudit load' to load saved data.")
+    return
+  end
+  local bis = gearAudit.bisByCategory(topN)
+  local slots = {}
+  for slot in pairs(bis) do slots[#slots + 1] = slot end
+  table.sort(slots)
+
+  cecho("\n<gold>Best in Slot by CATEGORY<reset>  <grey>(a slot's best damage piece is rarely its best rage piece)<reset>\n")
+  for _, slot in ipairs(slots) do
+    cecho("\n<white>" .. slot:upper() .. "<reset>\n")
+    local any = false
+    for _, cat in ipairs(gearAudit.CATEGORIES) do
+      local items = bis[slot][cat.key]
+      if items and #items > 0 then
+        any = true
+        local parts = {}
+        for i, it in ipairs(items) do
+          local eff = (it.gear.summary and it.gear.summary[1])
+            or (it.gear.effects and it.gear.effects[1]) or "?"
+          if #eff > 34 then eff = eff:sub(1, 33) .. "." end
+          -- The leader is named in full; the runners-up are there to show whether it is a
+          -- clear win or a coin toss, which is the thing a single number cannot tell you.
+          parts[#parts + 1] = string.format("%s<cyan>%s<reset> %s <grey>(%.0f)<reset>",
+            i == 1 and "" or "  |  ", tostring(it.id), eff, it.score)
+        end
+        cecho(string.format("  <%s>%-10s<reset> %s\n", cat.colour, cat.label, table.concat(parts)))
+      end
+    end
+    if not any then cecho("  <grey>nothing scored in any category<reset>\n") end
+  end
+  cecho("\n<grey>'gearaudit score <id>' for the breakdown behind any of these.<reset>\n")
 end
 
 -- Score a single gear item
@@ -1501,6 +1692,7 @@ function gearAudit.help()
   cecho("\n<cyan>+----------------------------------------------------------------------+")
   cecho("\n<cyan>|                    <white>PvE BiS ANALYSIS<cyan>                                |")
   cecho("\n<cyan>+----------------------------------------------------------------------+")
+  cecho("\n<cyan>| <green>gearaudit cat<cyan>          - BiS per CATEGORY per slot (dmg/rage/def)  |")
   cecho("\n<cyan>| <green>gearaudit bis<cyan>          - PvE Best in Slot analysis (all slots)     |")
   cecho("\n<cyan>| <green>gearaudit bis <slot><cyan>   - BiS analysis for a specific slot          |")
   cecho("\n<cyan>| <green>gearaudit score <id><cyan>   - Detailed score breakdown for a gear ID    |")
@@ -1554,6 +1746,8 @@ function gearAudit.command(args)
     gearAudit.load()
   elseif cmd == "status" then
     gearAudit.status()
+  elseif cmd == "cat" or cmd == "categories" then
+    gearAudit.showBisByCategory(rest ~= "" and tonumber(rest) or nil)
   elseif cmd == "bis" then
     gearAudit.displayBis(rest ~= "" and rest or nil)
   elseif cmd == "score" then

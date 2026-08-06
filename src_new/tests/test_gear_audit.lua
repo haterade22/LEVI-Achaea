@@ -152,9 +152,13 @@ describe("gearAudit.summarizeEffect - new patterns", function()
     end)
   end
 
-  it("labels an on-crit clause, keeping the game's sentence order", function()
+  -- REQUIREMENT CHANGED v4.7.226: the label is now COMPACT rather than the game's full
+  -- sentence -- these rows were long enough to wrap every crit item onto two lines in the
+  -- audit table, and the column exists to be scanned. The effect is still tagged from its own
+  -- wording, so lifesteal is never mislabelled as a DoT.
+  it("tags an on-crit lifesteal clause without calling it a DoT", function()
     expect(gearAudit.summarizeEffect({"When you critically strike, 16% of the damage is returned as health."}))
-      .toBe("Crit: 16% of the damage is returned as health")
+      .toBe("Crit: 16% as health")
   end)
 
   it("labels a stored-battlerage clause", function()
@@ -276,3 +280,139 @@ describe("gearAudit.calculateScore - new stats", function()
     expect(score).toBe(10 * w.bonusDmgPct * w.conditionalMult)
   end)
 end)
+
+--------------------------------------------------------------------------------
+-- Previously UNSCORED effect families (v4.7.226)
+--------------------------------------------------------------------------------
+-- Found by scoring the user's real 178-item audit: "your battlerage abilities will cool down
+-- X% faster" had NO pattern anywhere in the file, and the crit-on-strike DoT was recognised by
+-- the summariser but had no scoring stat. Both therefore scored ZERO -- so ~35 of 178 items
+-- ranked below a +1% crit trinket, fell outside keepPerSet, and would have been listed by
+-- `gearaudit scrap`, which destroys gear.
+
+describe("battlerage cooldown is scored", function()
+  local w = gearAudit.config.bisWeights
+
+  it("scores the reduction rather than ignoring it", function()
+    local scored = gearAudit.scoreEffect({ "Your battlerage abilities will cool down 21% faster." })
+    expect(scored.brCooldownPct).toBe(21)
+    expect(gearAudit.calculateScore(scored)).toBe(21 * w.brCooldownPct)
+  end)
+
+  -- The Mnemosyne clause is NAMED but deliberately NOT discounted: every other condition here
+  -- is a place you pass through, whereas the tower is where this character bashes, so applying
+  -- conditionalMult would under-rate the gear precisely where it is worn.
+  it("names the Mnemosyne restriction without discounting it", function()
+    local scored = gearAudit.scoreEffect({
+      "Your battlerage abilities will cool down 21% faster. This effect persists only within the waters of the Mnemosyne." })
+    expect(scored.condition).toBe("Mnemosyne")
+    expect(scored.conditional).toBe(nil)
+    expect(gearAudit.calculateScore(scored)).toBe(21 * w.brCooldownPct)
+  end)
+
+  it("scores the crit-on-strike DoT the summariser already recognised", function()
+    local scored = gearAudit.scoreEffect({
+      "When you critically strike, 17% of the damage will be dealt as an additional DoT over the next few seconds." })
+    expect(scored.critDotPct).toBe(17)
+    expect(gearAudit.calculateScore(scored)).toBe(17 * w.critDotPct)
+  end)
+end)
+
+--------------------------------------------------------------------------------
+-- Compact summaries
+--------------------------------------------------------------------------------
+-- These three used to splice the game's own clause onto a label -- "Bleed: a denizen, you will
+-- automatically clot 18% of it" -- which is ungrammatical AND long enough to wrap every such
+-- row onto two lines. The column exists to be scanned.
+
+describe("effect summaries are compact", function()
+  local function sum(text)
+    return gearAudit.summarizeEffect({ text })
+  end
+
+  it("compacts the auto-clot clause", function()
+    expect(sum("When sustaining bleeding from a denizen, you will automatically clot 18% of it."))
+      .toBe("Auto-clot 18%")
+  end)
+
+  it("compacts the execute clause", function()
+    expect(sum("When striking a denizen below a third of their health, you deal 11% bonus damage."))
+      .toBe("Execute +11%")
+  end)
+
+  it("compacts the crit DoT clause", function()
+    expect(sum("When you critically strike, 17% of the damage will be dealt as an additional DoT over the next few seconds."))
+      .toBe("Crit: 17% as DoT")
+  end)
+
+  -- Was not summarised AT ALL, so the full two-sentence effect printed verbatim -- the single
+  -- biggest cause of wrapping across ~20 chest pieces.
+  it("summarises battlerage cooldown, and marks the Mnemosyne restriction", function()
+    expect(sum("Your battlerage abilities will cool down 19% faster. This effect persists only within the waters of the Mnemosyne."))
+      .toBe("BR cooldown -19% (Mnem)")
+    expect(sum("Your battlerage abilities will cool down 11% faster.")).toBe("BR cooldown -11%")
+  end)
+end)
+
+--------------------------------------------------------------------------------
+-- Best in slot PER CATEGORY
+--------------------------------------------------------------------------------
+-- User: "Best damage, rage generation, defensive stuff, etc per slot." The single-score BiS
+-- hid the real decision: one chest slot holds three genuinely different pieces, and collapsing
+-- them into one number says which the WEIGHTS prefer, not which to wear.
+
+describe("gearAudit.bisByCategory", function()
+  -- The user's own chest and feet items, verbatim.
+  local function fixture()
+    gearAudit.data = {
+      [20271] = { slot = "chest", effects = { "Your attacks will deal 23% bonus damage." } },
+      [15772] = { slot = "chest", effects = { "Your attacks will generate 16% more rage." } },
+      [21121] = { slot = "chest", effects = {
+        "Your battlerage abilities will cool down 21% faster. This effect persists only within the waters of the Mnemosyne." } },
+      [1435]  = { slot = "chest", effects = { "Your battlerage abilities will cool down 20% faster." } },
+      [16085] = { slot = "feet",  effects = {
+        "When sustaining bleeding from a denizen, you will automatically clot 24% of it." } },
+    }
+  end
+
+  it("names a different winner per category in the same slot", function()
+    fixture()
+    local bis = gearAudit.bisByCategory(3)
+    expect(bis.chest.damage[1].id).toBe(20271)  -- +23% bonus damage
+    expect(bis.chest.rage[1].id).toBe(21121)    -- -21% BR cooldown beats -20% and +16% rage
+    -- ...and the damage piece is NOT a rage candidate at all, nor the reverse.
+    for _, it in ipairs(bis.chest.rage) do expect(it.id ~= 20271).toBeTrue() end
+    for _, it in ipairs(bis.chest.damage) do expect(it.id ~= 15772).toBeTrue() end
+  end)
+
+  it("only lists an item under a category it actually contributes to", function()
+    fixture()
+    local bis = gearAudit.bisByCategory(3)
+    expect(bis.chest.defence).toBe(nil)         -- no chest piece is defensive
+    expect(bis.feet.defence[1].id).toBe(16085)  -- auto-clot is defensive, not damage
+    expect(bis.feet.damage).toBe(nil)
+  end)
+
+  it("caps each category at topN and sorts descending", function()
+    fixture()
+    local bis = gearAudit.bisByCategory(1)
+    expect(#bis.chest.rage).toBe(1)
+    expect(bis.chest.rage[1].id).toBe(21121)
+  end)
+
+  -- A category score is a strict SUBSET of the total, so the parts can never exceed the whole.
+  -- Two implementations of the same sum drift; this is what catches it if they ever do.
+  it("category scores sum to no more than the item total", function()
+    fixture()
+    for _, gear in pairs(gearAudit.data) do
+      local scored = gearAudit.scoreEffect(gear.effects)
+      local total = gearAudit.calculateScore(scored)
+      local parts = 0
+      for _, cat in ipairs(gearAudit.CATEGORIES) do
+        parts = parts + gearAudit.categoryScore(scored, cat.key)
+      end
+      expect(parts <= total + 0.001).toBeTrue()
+    end
+  end)
+end)
+
