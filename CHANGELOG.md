@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-08-06 - Documentation pass for v4.7.214-v4.7.220
+
+Docs only -- **no version bump and no tag**. The package contents are byte-identical to
+v4.7.220, and bumping would push a release that prompts every user to SYSUPDATE for nothing.
+
+| File | What was stale |
+|---|---|
+| `CLAUDE.md` | Roll Hide `panicAt` still said 40 and stopped at "10s cooldown"; tactical moves still described as always LEAP; no `S.disengage`; the Taken table still described as "shows only the worst offender"; `/boons_offered` payload; stun had no entry at all |
+| `.claude/AGENTS.md` | Three new pitfalls: refusal-set flags need a failsafe; config-default changes need a ONE-SHOT migration; read the API schema instead of inferring field names |
+| `.claude/classes/bard.md` | BACKFLIP over LEAP, where it does and does not apply, and the `acrobatics on/off` syntax |
+| `mnemosyne/02-reporting.md` | `class`/`race` on `/boons_offered` + the normalisation calls in `M._charInfo()` |
+| `mnemosyne/03-parsing-triggers.md` | Seasone row still said the burst SPENDS the tree; new section covering bank-then-leave and its two traps |
+| `mnemosyne/05-commands.md` | `mnem swarm panicat` default |
+| `mnemosyne/07-explorer.md` | Roll Hide heal-then-return, `S.disengage`, `S.moveVerb` |
+| `basher/01-architecture.md` | Taken table (all types, per-type colour), HUD top-alignment, and the warning that this file is not unit-tested |
+| `basher/05-safety-systems.md` | New stun section |
+
+Memory files were updated per-release as the work shipped (`mnemosyne`, `bard`, `bug-patterns`,
+`gui-windows`); no new memory files, so `MEMORY.md` needed no new index lines.
+
+---
+
 ## 2026-08-06 - Send race and class with /boons_offered (v4.7.220)
 
 The tracker author added `class` and `race` as optional arguments to `/boons_offered` so the

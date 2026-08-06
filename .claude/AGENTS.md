@@ -347,6 +347,60 @@ the state from an affliction-name lookup. It sidesteps the whole `crippled*` vs 
 
 ---
 
+### A flag set by a REFUSAL line needs a failsafe (v4.7.219)
+
+`ataxia.afflictions.stun` gated the whole basher. Two of its three setter patterns were
+mob-specific, so the real setter was the refusal line ("You are too stunned...") -- which fires
+for ANY stun source, because it only appears when we tried to act. Exactly ONE line cleared it,
+with no timeout. Miss that line (different wording, split line, lost packet) and the basher was
+blocked until the next stun happened to print it. That is a STALL, and from the keyboard it is
+indistinguishable from lag.
+
+**Rule:** when a client-side gate is set by a line whose sources you cannot enumerate, and
+cleared by exactly one line, give it a self-expiring timer sized to the game mechanic. Worst
+case becomes N seconds instead of forever. Have the failsafe do the same follow-up work the
+real clear does -- if the line never came, nothing else is going to.
+
+**Corollary: a throttle armed before a blocking state outlives it.** `ataxiaBasher_atk` (the
+0.3s re-queue window) was armed by the last dispatch before the stun latched, and its clearing
+timer ran through the stun while nothing consumed it -- so the first dispatch after the stun
+could serve out a window armed for an unrelated reason. Clear throttles when LEAVING a blocking
+state, and kill their timers too, or a stale timer fires later and clobbers a fresh one.
+
+### Changing a config DEFAULT needs a one-shot migration (v4.7.218)
+
+`_cfg()` WRITES its defaults into the saved settings table, and `ataxia` is serialized
+wholesale -- so the old default is already stored literally in every config and changing the
+`or 40` to `or 35` changes nothing at all.
+
+Migrate behind a **persisted one-shot marker**:
+
+```lua
+if not s.panicAt35 then
+  s.panicAt35 = true
+  if s.panicAt == 40 then s.panicAt = 35 end
+end
+```
+
+An UNCONDITIONAL rewrite is wrong whenever the key is user-settable (`mnem swarm panic <n>`):
+`_cfg()` runs on every tick, so the old value becomes permanently untypeable -- dragged back
+seconds after the user sets it. (The `recoverAt == 75` precedent had no marker only because
+that default was short-lived and never typeable.)
+
+### Read the API schema; do not infer field names from prose (v4.7.220)
+
+Told that "race and class are now optional arguments for the boons_offered endpoint", the
+natural guess is that they join `BoonInfo` alongside `name`/`rarity`. They do not -- they are
+**top-level on `BoonsOfferedRequest`**, next to `token` and `offered`. `curl`
+`http://104.128.56.238:8000/openapi.json` settles it in one call; guessing produces a request
+that posts happily and drops the fields.
+
+**And when you send data for someone else to query, decide normalisation deliberately.**
+Normalise where a known distortion would fragment the results ("Earth Lord"/"Earth Lady" are
+one class and would halve every per-class count). Do NOT normalise against a vocabulary you
+cannot verify -- that corrupts data more quietly than leaving it raw. OMIT missing values
+rather than sending `"unknown"`, which becomes its own cohort in the queries.
+
 ## Quality Gates (Hooks)
 
 Hooks in `.claude/hooks/` run automatically and block operations that fail validation:

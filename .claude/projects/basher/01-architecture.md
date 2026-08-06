@@ -123,4 +123,27 @@ Alchemist, Apostate, Bard, Blademaster, Depthswalker, Druid, Infernal, Jester, M
 
 `windows/001_Limb_Counter_Window.lua` (`tarc.write`) doubles as the basher HUD. For a **denizen** target (numeric id) it shows the mob NAME (`ataxia.denizensHere[target]`), colored Mob-health + HP/WP/EP BARS, a Rage + XP line, DPS Now/Avg/Total, and a SESSION block (Kills/Crits/Gold/Time + kills-per-hour, from `bashStats`). The PvP lock/aff readout is suppressed for numeric targets. The whole panel is gated on **`ataxiaBasher.enabled`** (not `gmcp.IRE.Target.Info`, which hid it inside Mnemosyne).
 
+**Taken table (v4.7.211/216):** below DPS, every damage TYPE dealt to us this session, ranked,
+with amount and share -- `bashStats_incomingRanked()` over `bashStats.incomingByType`, fed by
+trigger 351 parsing `Health lost: N (physical cutting)`. Rows are coloured **by damage type**
+(`TAKEN_COLOUR`, 18 ordered substring rules) so the table can be scanned by colour rather than
+read: you are usually looking for whether the blue one is growing, not reading numbers. The
+percentage stays grey so it never competes. **All types, not a top-N** (v4.7.216) -- the
+leaders are unremarkable (a Bard bashing physical denizens takes physical cutting) and the tail
+is where the surprises live: a 1% type that has no business being there means something is
+hitting us we did not know was in the room, which `+N more` hid. `ataxiaBasher.takenTop`
+survives as an opt-in cap (0 = all, the default) and still renders its `+N more` tail when set.
+
+**Top-alignment (v4.7.214):** a Mudlet MiniConsole SCROLLS, so a buffer shorter than the window
+renders BOTTOM-anchored and the panel floats down with dead space above it. There is no padding
+to remove -- the behaviour is inherent. `tarc:cecho` counts the newlines it writes into
+`tarc._lines`, and `tarc:padToTop()` appends blanks BELOW the content at the end of each
+render. Derived from `getRowCount`, never a fixed count (a fixed number is wrong the moment the
+window is drag-resized), and `pcall`-guarded, since that API returns nil for a console not yet
+laid out and a HUD that errors is worse than one that sits low.
+
+> **This file is NOT unit-tested** -- it needs Geyser, so the suite cannot load it.
+> Syntax-check it by hand after every edit. An edit that wrote a literal newline into a Lua
+> string literal nearly shipped and would have killed the entire HUD.
+
 **Bar sources:** HP/WP/EP read straight from `gmcp.Char.Vitals` (`hp/maxhp`, `wp/maxwp`, `ep/maxep`; XP from `.nl`) — the live values, not the derived `ataxia.vitals` copy (v4.7.96). The **Mob** bar reads the denizen-state HP `ataxiaBasher_dsGet(target).hpp`, which `010_Prompt_Running` feeds every prompt from `gmcp.IRE.Target.Info.hpperc`, falling back to the live GMCP field for a just-acquired target (v4.7.97) — this is what makes it render reliably in Mnemosyne, where the raw field is briefly nil right after a retarget. **Refresh:** `tarc.write` fires on `"targets updated"` and on `"gmcp.IRE.Target.Info"` (pushed each combat round), so the Mob/vitals bars track the fight live; handlers are registered once behind a `tarc._refreshHandlers` flag to avoid stacking on reload.

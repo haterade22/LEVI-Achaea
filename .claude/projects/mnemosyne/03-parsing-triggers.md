@@ -33,7 +33,7 @@ Patterns are Mudlet regex (`type: 1`), quoted verbatim from each trigger file.
 | 029 | Haemophiliac | `^Haemophiliac:\s+Defeating a denizen causes you to bleed` (status-screen effect row) | `onHaemophiliacSeen()` — arms wade-slower pacing (post-clear explorer moves hold until bleeding < 50 AND HP >= 90%, `M._haemoHold`; SSC `curing clotat` does the clotting) | inline `inMnemosyne` gate + transition guard (mirrors Splinterbark) |
 | 030 | Kai Unleashed | `^Kai Unleashed\s+\d+\s+\w+` (BOONS-list row) | sets `mnemKaiUnleashed = true` (Shikudo basher: Rain-form `KAI CHOKE` AoE prepended to the combo at 2+ denizens — eq-based, kai-free vs denizens — 30s burst cooldown; `ataxiaBasher_kaiUnleashedChoke`) | none (flag set unconditionally; reset on run start/end) |
 | 031 | Kai Burst | `^Your surroundings ripple like a lake's surface struck as a transparent wave of kai energy surges` | `ataxiaBasher_kaiUnleashedBurst()` — burst CONFIRMED: starts the 30s cooldown, clears the retry guard, (re)sets the flag (self-proving line) | none |
-| 032 | Seasone Phials | `reaches into her robes and withdraws a handful of fragile glass phials` (substring) | `onSeasonePhials()` — RELEASES the reserved tree (`curing tree on`; SSC breaks the phial truelock). The reserve is armed by `reserveTreeForBoss` from the `Objective: defeat Seasone...` line (telemetry-independent, before onObjective's `_inRun` gate; `TREE_RESERVE_BOSSES`); released on ripple change / run end; Splinterbark taint always wins | reserve gated on `inMnemosyne` |
+| 032 | Seasone Phials | `reaches into her robes and withdraws a handful of fragile glass phials` (substring) | `onSeasonePhials()` — RELEASES the reserved tree (`curing tree on`), then **BANKS** it (v4.7.213) and **DISENGAGES on burst two** (v4.7.215). See *Seasone: bank the tree, then leave* below | gated on `inMnemosyne`; Splinterbark gates only the TATTOO half |
 | 033 | Senseless Flurry | `^Senseless Flurry\s+\d+\s+\w+` (BOONS-list row) | sets `mnemSenselessFlurry = true` (Shikudo basher keeps NUMB up in Rain form — eq rider; defence-gated `ataxia.defences.numbness`, 5s attempt-hold; Kai Choke outranks it — `ataxiaBasher_senselessFlurryNumb`) | none (flag set unconditionally; reset on run start/end) |
 | 034 | Panoply | `^Panoply\s+\d+\s+\w+` (BOONS-list row) | sets `psionPanoply = true` (Psion basher swaps `weave deathblow` → `weave flurry`; cleave keeps shield-break — `ataxiaBasher_psionBashing`) | none (flag set unconditionally; reset on run start/end) |
 | 035 | Might Of Sycaerunax | `^Might of Sycaerunax\s+\d+\s+\w+` (BOONS-list row) | sets `dragonMightSycaerunax = true` (dragon basher drops the `;summon <ele>` from the blast weave AND the shielded reblast — breath persists through BLAST, +25% blast damage; breath-down still summons once — `ataxiaBasher_dragonBashing`) | none (flag set unconditionally; reset on run start/end) |
@@ -184,3 +184,43 @@ Both walks are word-capped (6 left, 5 right) so a runaway sentence can't blow up
 - **One capture at a time.** `_captureLines`, `_captureContemplate`, and the monster one-shot each own the single in-flight temp trigger; the `M._capturing` guard and the sequential `_contemplateNext` walk keep effects/boons/contemplate blocks from interleaving.
 - **Silence backstop.** Every block has a `timeout` (1.5s effects, 3s boons, 2s contemplate) so a block that never emits an explicit terminator still flushes and never leaves a catch-all trigger armed.
 - **Description authority.** `_applyContemplate` never overwrites the offered-block description; contemplate only adds `rarity` / `quote` / `num_echoes_possible`.
+
+## Seasone: bank the tree, then leave (v4.7.213 + v4.7.215)
+
+Seasone throws a phial burst that lands a DENIZEN-dealt truelock (kalmia/gecko/slike ->
+AST/SLI/ANO/IMP; any one of them blocks a cure CHANNEL, which is what makes it lethal). While
+her boss ripple is up the tree tattoo is RESERVED (`curing tree off`, so SSC cannot burn it on
+incidental afflictions) by `reserveTreeForBoss` from the `Objective: defeat Seasone...` line --
+telemetry-independent, armed before the `_inRun` gate in `onObjective`, released on ripple
+change and run end.
+
+**The burst ARMS a watcher, it does not spend the tattoo (v4.7.213).** From a death log: the
+old handler touched tree the instant the first burst landed. That burst was survivable (51% HP,
+SSC curing through it), so the charge was spent on a lock we were winning; eight seconds later
+the second burst landed at 27% with the tattoo on cooldown, and repeated
+`Your tree of life tattoo glows faintly for a moment then fades` until death.
+`M._phialTreeTick` now spends it only when the lock is still up AND either HP has fallen to
+`treeHp` (50%) or `treeGrace` (5s) has passed -- gated on `ataxiaTemp.usedTree`, the real
+cooldown flag, so we no longer fire blind into a cooldown. If SSC breaks the lock itself, the
+charge stays banked.
+
+**Burst two DISENGAGES (v4.7.215).** Rationing one charge only ever buys ONE extra burst, and
+she throws more than two -- each burst is a fresh truelock and there is one tattoo, so the
+fight is not winnable by out-curing her. On burst two (`ataxia.mnemosyne.phialDisengage`,
+default 2; `0` disables, `3+` stands longer) we unbank the tattoo -- there is no burst three to
+save it for -- and call `S.disengage` (see [07-explorer](07-explorer.md)).
+
+Two traps worth keeping written down:
+
+- **Do NOT tick `_phialTreeTick()` from the burst line.** The afflictions arrive by GMCP a beat
+  after it, so an immediate tick sees no lock, takes the `_phialTreeStop()` branch and tears
+  down the whole watcher. That asynchrony is exactly why the existing code arms at t+1, never
+  t+0. Set `ataxiaTemp.phialSpendTree` and let the already-armed watcher act.
+- **Splinterbark gates only the tattoo half.** Its early `return` used to sit above every line
+  of `onSeasonePhials`, so a Splinterbark Seasone got no tattoo AND no disengage -- the case
+  with the fewest options left had the fewest behaviours. With the tree tainted there is no
+  charge to ration, so the disengage moves to the **first** burst.
+
+Burst count lives on `ataxiaTemp.phialBursts`, PER RIPPLE (cleared in `onRipple` and
+`onRunEnd`): a new ripple is a new fight and must not start pre-armed by the last boss.
+

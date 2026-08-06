@@ -78,11 +78,37 @@ Each function guards on `M._hasToken()` and enqueues. Payload shapes:
 | `reportMonsters(str)` | `POST /monsters` | `{ monsters = str }` | — |
 | `reportBoss(name)` | `POST /boss` | `{ boss = name }` | — |
 | `reportEffects(list)` | `POST /effects` | `{ effects = [{name, description}, …] }` | — |
-| `reportBoonsOffered(list)` | `POST /boons_offered` | `{ offered = [{name, description, quote?, rarity?, num_echoes_possible?}, …] }` | — |
+| `reportBoonsOffered(list)` | `POST /boons_offered` | `{ offered = [{name, description, quote?, rarity?, num_echoes_possible?}, …], class?, race? }` | `class`/`race` from `M._charInfo()` (v4.7.220) |
 | `reportBoonsSelected(names)` | `POST /boons_selected` | `{ selected = [name, …] }` | — |
 | `reportDeath(killer)` | `POST /death` | `{ killer = <name or "unknown"> }` | — |
 
 ### Notable behaviours
+
+- **`/boons_offered` carries `class` and `race` (v4.7.220).** Both are **top-level optional
+  strings on `BoonsOfferedRequest`** — not members of `BoonInfo`, which is where the field
+  names suggest they would live. Verified against the live schema at
+  `http://104.128.56.238:8000/openapi.json`; that endpoint is the way to settle any question
+  about this API's shape rather than inferring it from prose. They exist so the offer data can
+  be sliced ("does Bard see Songstep more often" is not a question you can ask of a pile of
+  undifferentiated offers).
+
+  `M._charInfo()` makes two deliberate choices:
+  * **Class is normalised, race is not.** "Earth Lord" and "Earth Lady" are one class wearing a
+    gender suffix, and leaving them distinct halves every per-class count. The basher's
+    existing `:title():gsub(" Lady", ""):gsub(" Lord", "")` is reused, so the values also match
+    what the rest of the system calls a class. Race is passed through as GMCP reports it —
+    there is no known distortion to correct, and normalising against an unverified vocabulary
+    corrupts data more quietly than leaving it raw.
+  * **Omitted, never guessed.** A missing or empty GMCP read sends no key at all. A literal
+    `"unknown"` would appear in the queries as its own cohort — worse than a smaller honest
+    sample.
+
+  Both branches of `_reportBoonsOfferedEnriched` (the immediate post and the
+  contemplate-enriched one) route through `reportBoonsOffered`, so the tagging lands on the
+  real path either way. Source path: `gmcp.Char.Status.class` / `gmcp.Char.Status.race` —
+  `Char.Status` is pushed on login and on change, NOT every prompt like `Char.Vitals`.
+  Note that a dragon reports race `Dragon` with class `<colour> Dragon`, so dragons appear as
+  several classes sharing one race; `Undead` is a race, not a modifier.
 
 - **`setRipple(n)` guard.** Skips locally if `n <= run.ripple` (the API errors on a lower ripple and no-ops on equal). `run.ripple` is only advanced inside the success callback.
 - **`startRun()` optimism.** Sets `run.active = true` and calls `_resetRun()` *synchronously* before the async POST, so the first wave isn't lost while waiting for the response.

@@ -265,3 +265,31 @@ Edge cases:
 - Crescendo builds and can burst via finale
 - Sagas vs Woe have different abilities
 ```
+
+## Movement in the tower: BACKFLIP, not LEAP (v4.7.217)
+
+User, 2026-08-06: *"when in bard, we should BACKFLIP (direction) instead of Leap as it is
+faster balance."* Acrobatics BACKFLIP recovers quicker than the chitin-greaves LEAP, and every
+tactical move in Mnemosyne is a retreat made because something is going badly -- the balance we
+get back is the balance we spend curing.
+
+Applied in `S._tacticalGo` (`mnemosyne/009_Swarm_Tactics.lua`) via `S.moveVerb(dir)`: the pull
+retreat, the low-HP escape, the re-entry and the forced disengage. The normal sweep already
+WALKS (`_exploreMove` sends a bare direction), so there was never balance to save there.
+
+**LEAP is kept wherever a wall is known to stand** -- `_escapeSuffix` wall-mode (both
+branches), the wall-mode re-entry, and the explorer's "a wall blocks the way". Those jumps
+exist to clear our OWN icewall, and greaves-LEAP is the ability confirmed to do that in both
+directions (it is why re-entry needs no melt). **Whether BACKFLIP crosses an icewall is not
+confirmed**, and guessing wrong is not a slow move -- it is a silent no-op in the indoor low-HP
+escape, i.e. the anti-death ladder livelocking at crash HP, the exact failure the LEAP was
+introduced to fix. `moveVerb` disambiguates from `wallRaised[room]` and falls back to LEAP when
+the wall state cannot be resolved.
+
+*Open:* if backflip does clear icewalls, the wall branch can be dropped and all four sites
+converted. One in-game test settles it -- raise a wall with the bracers and backflip that edge.
+
+## Acrobatics defence
+
+The defence is toggled with `acrobatics on` / `acrobatics off` (not `defence acrobatics`).
+

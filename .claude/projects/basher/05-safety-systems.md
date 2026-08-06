@@ -86,6 +86,35 @@ Function: `ataxiaBasher_executeFlee()` in `basher/001_Bashing_Functions.lua`
    - Random exit direction
    - Shield if no exit available
 
+## Stun (`ataxiaBasher_stunStart` / `ataxiaBasher_stunEnd`, v4.7.219)
+
+`ataxia.afflictions.stun` gates the affliction check in `ataxiaBasher_tryAttack`, and trigger
+723 dispatches straight off `You are no longer stunned.` -- the dispatch was never the slow
+part. Two things around it were:
+
+1. **The re-queue cooldown outlived the stun.** `ataxiaBasher_atk` (0.3s) is armed by the last
+   dispatch BEFORE the stun latched, and its clearing `tempTimer` runs through the whole stun
+   while `affed("stun")` blocks every `tryAttack`, so nothing consumes it. 723's direct call
+   ignores the flag, but the follow-up prompt dispatch does not -- a refused or wiped first
+   round sat out a window armed for an unrelated reason. `stunEnd` now drops it and kills its
+   timer, so that timer cannot fire later and clobber a fresh one.
+
+2. **The flag had one way out and no failsafe.** Two of trigger 722's three patterns are
+   Vertani-soldier-specific, so in practice the setter is the REFUSAL line ("You are too
+   stunned to be able to do anything") -- which fires for ANY stun source, because it only
+   appears when we tried to act. Exactly one line cleared it. Miss that line (different
+   wording, split line, lost packet) and the flag latched TRUE and the basher was blocked until
+   the next stun happened to print it: a STALL, indistinguishable from lag at the keyboard. The
+   flag now self-expires after `ataxiaBasher_STUN_FAILSAFE` (5s) and dispatches on the way out,
+   so the worst case is five seconds instead of forever.
+
+**Not done, and why:** pre-queuing during the stun would beat the client round-trip, but the
+refusal line exists and is GAGGED in `011_GAG2`, which means queued commands are attempted and
+burned mid-stun rather than held. Re-queuing to compensate would re-run the whole round
+assembly each time, spending battlerage charges, deck picks and cooldown stamps on rounds that
+get refused -- the class of bug `ataxiaBasher_brCommit` exists to prevent. Needs the server's
+queue-during-stun behaviour confirmed first.
+
 ## Circuit Breaker
 
 Function: `ataxiaBasher_startFleeTimer()` — 20-second timeout (configurable via `ataxiaBasher.fleeTimeout`).

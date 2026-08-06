@@ -276,7 +276,7 @@ this tick). Stage 1 = the **pull & funnel** loop:
   `wallRaised` stores the walled edge's LONG dir (the panic tumble avoids it) and is wiped
   only on a GENUINE ripple change (`S._wallsRipple`) — a mid-ripple `mnem explore off/on`
   restart keeps it (review MEDIUM: walls are physical). ALL tactical moves LEAP
-  (`_tacticalGo` sends `stand;leap <dir>`, review CRITICAL: the indoor low-HP retreat
+  (`_tacticalGo` sends `stand;<jump> <dir>` — see *Which jump* below; review CRITICAL: the indoor low-HP retreat
   crosses the walled funnel edge — a plain walk livelocked the anti-death ladder).
 
 **Wall-leap navigation** (`M.onWallBlocked`, trigger 025, v4.7.119, user-directed): "A
@@ -326,8 +326,53 @@ leapt the raw `command` string and `addclearfull`-wiped the explorer's queue.
   shield-in-place remains. SLC's both-arms flee is inert in the tower (fixed-direction blind
   runs); the swarm module owns tower escapes.
 - **Roll Hide panic** (`swarm.panic`, default on, needs the `mnemRollHide` boon): at
-  `swarm.panicAt`% HP (default 40) mid-funnel, tumble out through a non-swarm exit — the boon
-  sheds ALL pursuers — then full reset (10s cooldown).
+  `swarm.panicAt`% HP (default **35** since v4.7.218 — the old 40 is migrated once, behind a
+  persisted `panicAt35` marker so `mnem swarm panic 40` stays typeable) OR the absolute
+  `panicHp` floor (3000), tumble out through a non-swarm exit — the boon sheds ALL pursuers.
+  10s cooldown.
+  **Then it HEALS THERE (v4.7.218)** rather than dropping to `idle`. Until v4.7.218 the tumble
+  handed straight back to the explorer and the `swarmHold` self-cleared in `HOLD_TIMEOUT`
+  (~8s), so we navigated back into the room we had just fled, still at panic HP — the boon's
+  entire value spent on an immediate return. It now enters `recovering` with
+  `S.recoverGround = true`, held until `recoverAt`% AND affliction-free, then hands back for
+  the next run-in. That is the hit-and-run cycle the boon exists for (user, 2026-08-06: "the
+  denizens wont follow so we can use this to our advantage to heal up and then do hit and run
+  tactics").
+  A **ground** recovery is not a hover and differs in two ways: a denizen arriving ENDS it
+  (standing attack-gated at panic HP while something hits us is worse than fighting it), and
+  it never sends `land` — it never left the ground. `_maybePanic` also refuses while
+  `state == "recovering"`: Roll Hide already shed them, so a repeat tumble sheds nothing and
+  only walks us off the sweep (previously only the 10s cooldown stood between a slow heal and
+  a tumble every ten seconds).
+
+- **Forced disengage** (`S.disengage(reason)`, v4.7.215): leave on a TACTICAL judgement rather
+  than an HP reading. The ladder above is entirely reactive, which is useless against an enemy
+  whose kill pattern is "apply an unsurvivable lock, then wait" — by the time HP crosses
+  `escapeAt` we are locked, and a locked character cannot be relied on to execute an escape at
+  all. Callers that can RECOGNISE a losing pattern get to leave while we can still obey.
+  Everything downstream is the proven ladder (hover outdoors / pull back indoors) including
+  the recovery gate, which is what makes it a real disengage: we do not return until the lock
+  is gone. Returns **false** rather than pretending — disabled, on cooldown
+  (`DISENGAGE_COOLDOWN` 10s), or indoors with no validated route — and a FAILED attempt does
+  not stamp the cooldown, so a caller that read the fight as lethal retries the moment a route
+  exists. First consumer: Seasone's second phial burst (see 03-parsing-triggers).
+
+**Which jump — `S.moveVerb(dir)` (v4.7.217)**: `_tacticalGo` sends **`backflip`** for a Bard
+and **`leap`** for everyone else. Acrobatics BACKFLIP recovers quicker than the chitin-greaves
+LEAP (user, 2026-08-06: "it is faster balance"), and every tactical move here is a retreat made
+because something is going badly — the balance we get back is the balance we spend curing. The
+normal sweep already WALKS (`_exploreMove` sends a bare direction), so there was never balance
+to save there.
+
+**LEAP is kept wherever a wall is known to stand** — `_escapeSuffix` wall-mode (both branches),
+the wall-mode re-entry, and the explorer's "a wall blocks the way". Those jumps exist to clear
+our OWN icewall, and greaves-LEAP is the ability confirmed to do that in both directions.
+Whether BACKFLIP crosses an icewall is **not confirmed**, and guessing wrong is not a slow move
+— it is a silent no-op in the indoor low-HP escape, i.e. the anti-death ladder livelocking at
+crash HP, the exact failure the LEAP was introduced to fix. `moveVerb` disambiguates from
+`wallRaised[room]` (the same field the panic tumble reads to avoid its own ice) and falls back
+to LEAP when the wall state cannot be resolved — the conservative answer is the one that still
+moves us. *If backflip turns out to clear icewalls, the wall branch can be dropped.*
 
 **Hit-and-run continuation (v4.7.117)**: the pull budget (`MAX_PULLS` 3) exists to stop
 POINTLESS ping-pong — but the Putoran-wildcat log showed non-chasing mobs ("peak
