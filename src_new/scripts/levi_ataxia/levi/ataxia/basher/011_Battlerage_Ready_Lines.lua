@@ -82,8 +82,24 @@ local BR_READY_MAP = {
 
 -- The shared trigger-driven timers used by the classes that do NOT own a rotation
 -- (330/331/332 set these). A ready-line for one of those slots clears it too.
+--
+-- BARD WAS MISSING ENTIRELY (v4.7.230). Its rotation runs on the shared slots -- moulinet
+-- gates on battleRage_Timers.small, howlslash on .large, trill on .special -- but no name
+-- mapped to them, so "You can use Moulinet again." was parsed and then dropped on the floor.
+-- The game told us the ability was ready and we sat out the rest of a hardcoded 17s timer;
+-- with cooldown-reduction gear the real cooldown is shorter still, so the waste grows.
+--
+-- Slots read straight off ataxiaBasher_bardBattlerage (basher/001), not guessed:
+--   moulinet  -- `ataxiaBasher_rageAfford(rage, 14) and not battleRage_Timers.small`
+--   howlslash -- `ataxiaBasher_rageAfford(rage, 36) and not battleRage_Timers.large`
+--   trill     -- `... and not battleRage_Timers.special`
+-- `charm` is deliberately not cooldown-gated, and `cyclone` carries its own epoch stamp, so
+-- neither belongs here -- cyclone is handled separately below.
 local BR_SHARED = {
   cullingblade = "culling", -- handled specially below
+  moulinet     = "small",
+  howlslash    = "large",
+  trill        = "special",
 }
 
 --- Mark a battlerage ability as off cooldown, from the game's own ready line.
@@ -97,6 +113,25 @@ function ataxiaBasher_brReady(verb)
   if BR_SHARED[key] == "culling" then
     ataxiaTemp.bladeCooldown = nil
     return "culling"
+  end
+
+  -- Cyclone gates on an epoch stamp, not a timer: clearing it is what "ready" means.
+  if key == "cyclone" then
+    ataxiaTemp.bardCycloneAt = nil
+    return "cyclone"
+  end
+
+  -- A shared slot. KILL the pending timer as well as clearing the handle -- otherwise it
+  -- fires later and sets the slot nil again, which would un-gate a NEWER arm early and earn
+  -- a stream of "you must wait" refusals. (Same stale-timer shape as the stun throttle,
+  -- v4.7.219, and the parry cooldown, v4.7.222.)
+  local slot = BR_SHARED[key]
+  if slot then
+    if battleRage_Timers and battleRage_Timers[slot] then
+      pcall(killTimer, battleRage_Timers[slot])
+      battleRage_Timers[slot] = nil
+    end
+    return slot
   end
 
   local entry = BR_READY_MAP[key]

@@ -31,6 +31,41 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-06 - Bard's ready lines stop being thrown away (v4.7.230)
+
+Follow-up to the gap noted in v4.7.229. The game says **"You can use Moulinet again."** and we
+ignored it.
+
+`BR_READY_MAP` covered the four owned rotations (Runewarden, Golden Dragon, Psion,
+Depthswalker) and culling blade. **Bard runs on the shared slots instead** -- moulinet gates on
+`battleRage_Timers.small`, howlslash on `.large`, trill on `.special` -- and no name mapped to
+any of them. So the ready line was matched by trigger 328, passed to `ataxiaBasher_brReady`,
+found nothing, and was dropped. We then sat out the remainder of a hardcoded 17s timer that the
+game had already ended.
+
+Slots were read straight off `ataxiaBasher_bardBattlerage`, not guessed:
+
+| Ability | Gate in the rotation |
+|---|---|
+| `moulinet` | `rageAfford(rage, 14) and not battleRage_Timers.small` |
+| `howlslash` | `rageAfford(rage, 36) and not battleRage_Timers.large` |
+| `trill` | `... and not battleRage_Timers.special` |
+| `cyclone` | its own epoch stamp, `ataxiaTemp.bardCycloneAt` -- handled separately |
+| `charm` | **deliberately not cooldown-gated**, so it maps to nothing |
+
+That last row matters: mapping charm to a slot would free an unrelated ability early on its
+ready line, and there is a test asserting it does not.
+
+**The pending timer is KILLED, not just unhooked.** Left alive it fires later and nils the slot
+again -- un-gating a *newer* arm early and earning a stream of "you must wait" refusals. Third
+time this exact stale-timer shape has come up (stun throttle v4.7.219, parry cooldown
+v4.7.222), so it is now a checked-for pattern rather than a surprise.
+
+Files: `basher/011_Battlerage_Ready_Lines.lua`. Suite **1089 -> 1094**; all three behaviours
+verified by breaking the code back.
+
+---
+
 ## 2026-08-06 - Keep 40 rage: culling stops breaking the floor (v4.7.229)
 
 User: *"We need to keep 40 battlerage at all times in order to increase our damage by 23

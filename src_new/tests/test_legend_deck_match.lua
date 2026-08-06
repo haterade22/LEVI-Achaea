@@ -77,6 +77,63 @@ describe("ataxiaBasher_brReady -- the game's own cooldown feed", function()
     expect(ataxiaTemp.rwBrPending.verb).toBe("onslaught")
   end)
 
+  -- BARD'S SHARED SLOTS (v4.7.230). Bard's rotation gates on battleRage_Timers.small/large/
+  -- special, and nothing mapped a name to them -- so "You can use Moulinet again." was parsed
+  -- and dropped, and we sat out the rest of a hardcoded 17s timer the game had already ended.
+  it("clears the shared slot a Bard ability gates on", function()
+    battleRage_Timers = { small = 11, large = 22, special = 33 }
+    ataxiaTemp = {}
+    expect(ataxiaBasher_brReady("Moulinet")).toBe("small")
+    expect(battleRage_Timers.small).toBe(nil)
+    expect(battleRage_Timers.large).toBe(22)    -- only the named ability's slot
+    expect(battleRage_Timers.special).toBe(33)
+
+    expect(ataxiaBasher_brReady("Howlslash")).toBe("large")
+    expect(battleRage_Timers.large).toBe(nil)
+    expect(ataxiaBasher_brReady("Trill")).toBe("special")
+    expect(battleRage_Timers.special).toBe(nil)
+  end)
+
+  -- The pending timer must be KILLED, not just unhooked. Left alive it fires later and nils
+  -- the slot again -- un-gating a NEWER arm early and earning a stream of "you must wait"
+  -- refusals. Same stale-timer shape as the stun throttle (v4.7.219) and parry (v4.7.222).
+  it("kills the pending timer rather than leaking it", function()
+    local killed = {}
+    local realKill = killTimer
+    killTimer = function(id) killed[#killed + 1] = id; return true end
+    battleRage_Timers = { small = 77 }
+    ataxiaTemp = {}
+    ataxiaBasher_brReady("Moulinet")
+    killTimer = realKill
+    expect(#killed).toBe(1)
+    expect(killed[1]).toBe(77)
+  end)
+
+  it("no-ops safely when the slot is already clear", function()
+    battleRage_Timers = {}
+    ataxiaTemp = {}
+    expect(ataxiaBasher_brReady("Moulinet")).toBe("small")
+  end)
+
+  -- Cyclone gates on an epoch stamp, not a timer.
+  it("clears the cyclone stamp", function()
+    battleRage_Timers = {}
+    ataxiaTemp = { bardCycloneAt = 999999 }
+    expect(ataxiaBasher_brReady("Cyclone")).toBe("cyclone")
+    expect(ataxiaTemp.bardCycloneAt).toBe(nil)
+  end)
+
+  -- Charm is deliberately NOT cooldown-gated, so it must not map to a slot -- clearing one on
+  -- its ready line would free an unrelated ability early.
+  it("ignores an ability that is not cooldown-gated", function()
+    battleRage_Timers = { small = 5, large = 6, special = 7 }
+    ataxiaTemp = {}
+    expect(ataxiaBasher_brReady("Charm")).toBe(nil)
+    expect(battleRage_Timers.small).toBe(5)
+    expect(battleRage_Timers.large).toBe(6)
+    expect(battleRage_Timers.special).toBe(7)
+  end)
+
   it("routes Cullingblade to its own flag, not a rotation stamp", function()
     ataxiaTemp = { bladeCooldown = true }
     expect(ataxiaBasher_brReady("Cullingblade")).toBe("culling")
