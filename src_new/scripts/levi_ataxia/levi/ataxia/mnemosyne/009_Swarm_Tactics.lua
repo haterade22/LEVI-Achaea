@@ -254,17 +254,46 @@ end
 -- Issue a plain tactical move (no swing) -- the fallback when the decorator is
 -- never consumed, and the re-entry step. Rides M._tacticalArm so the explorer's
 -- moving guard/timeout apply WITHOUT the condemn-on-failure behavior.
+-- WHICH JUMP (v4.7.217). User: "when in bard, we should BACKFLIP (direction) instead of Leap
+-- as it is faster balance." Acrobatics BACKFLIP recovers quicker than the chitin-greaves LEAP,
+-- and in the tower every tactical move is a retreat we are making because something is going
+-- badly -- the balance we get back is the balance we spend curing.
+--
+-- EXCEPT over a wall. The leaps in this module are not merely movement: the whole point of
+-- several of them is to clear our OWN standing icewall, and greaves-LEAP is the ability we
+-- have confirmed does that (in both directions -- it is why re-entry needs no melt). Whether
+-- BACKFLIP crosses an icewall is NOT confirmed, and the cost of being wrong is not a slow
+-- move, it is a silent no-op in the indoor low-HP escape -- the anti-death ladder livelocking
+-- at crash HP, which is the exact failure the LEAP was introduced to fix.
+--
+-- So: backflip when the edge we are crossing has no wall we know about, leap when it does.
+-- `wallRaised[room]` already records the walled edge's LONG dir (the panic tumble reads the
+-- same field to avoid tumbling into our own ice). Unresolvable wall state falls back to LEAP:
+-- the conservative answer is the one that still moves us.
+function S.moveVerb(dirShort)
+  local MAP = M.map
+  local walled = S.wallRaised and MAP and MAP.current and S.wallRaised[MAP.current]
+  if walled then
+    local ws = (type(walled) == "string" and MAP.normDir and MAP.shortDir
+      and MAP.shortDir(MAP.normDir(walled))) or nil
+    if ws == nil or ws == dirShort then return "leap" end
+  end
+  local class = gmcp and gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class
+  if class == "Bard" then return "backflip" end
+  return "leap"
+end
+
 function S._tacticalGo(dirShort, why)
   if not (M._tacticalArm and dirShort) then return S.reset("no tactical mover") end
   M._tacticalArm(dirShort)
   local sep = (ataxia.settings and ataxia.settings.separator) or ";"
-  -- LEAP, never walk (review CRITICAL): a tactical retreat can cross our OWN
+  -- JUMP, never walk (review CRITICAL): a tactical retreat can cross our OWN
   -- standing icewall -- the indoor low-HP escape retreats through the walled
   -- funnel edge, where a plain walk silently fails and the anti-death ladder
-  -- livelocks at crash HP. A chitin-greaves leap clears any wall (ours or an
-  -- affix's) and is plain movement when there is none. Eq-gated; the tactical
-  -- timeout still hands back to assess if the jump never lands.
-  send("queue addclear free stand" .. sep .. "leap " .. dirShort)
+  -- livelocks at crash HP. A jump clears any wall (ours or an affix's) and is
+  -- plain movement when there is none. Eq-gated; the tactical timeout still
+  -- hands back to assess if the jump never lands. See S.moveVerb for which one.
+  send("queue addclear free stand" .. sep .. S.moveVerb(dirShort) .. " " .. dirShort)
   if why then S._echo(why .. " -> <cyan>" .. dirShort .. "<reset>.") end
 end
 

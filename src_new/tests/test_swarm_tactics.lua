@@ -1069,6 +1069,63 @@ describe("flight confirmation for the recovery hover", function()
   end)
 end)
 
+describe("which jump -- Bard backflips, everyone leaps", function()
+  local function asBard()
+    gmcp.Char = { Status = { class = "Bard" } }
+  end
+  local function lastJump()
+    for i = #sent, 1, -1 do
+      if sent[i]:find("leap ", 1, true) or sent[i]:find("backflip ", 1, true) then return sent[i] end
+    end
+  end
+
+  it("uses backflip for a Bard -- faster balance on every tactical retreat", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    asBard()
+    S._tacticalGo("s", nil)
+    expect(lastJump()).toBe("queue addclear free stand;backflip s")
+  end)
+
+  it("leaves every other class on leap", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    gmcp.Char = { Status = { class = "Runewarden" } }
+    S._tacticalGo("s", nil)
+    expect(lastJump()).toBe("queue addclear free stand;leap s")
+  end)
+
+  -- The safeguard. Several of this module's jumps exist to clear our OWN icewall, and
+  -- greaves-LEAP is the ability confirmed to do that; backflip is NOT confirmed to. Being
+  -- wrong there is not a slow move, it is a silent no-op in the indoor low-HP escape --
+  -- the anti-death ladder livelocking at crash HP, which is why the leap exists at all.
+  it("falls back to leap when crossing OUR OWN walled edge", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    asBard()
+    S.wallRaised[200] = "south" -- we walled the edge we are about to cross
+    expect(S.moveVerb("s")).toBe("leap")
+  end)
+
+  it("still backflips across an edge that is not the walled one", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    asBard()
+    S.wallRaised[200] = "south"
+    expect(S.moveVerb("n")).toBe("backflip")
+  end)
+
+  it("falls back to leap when the wall state cannot be resolved to a direction", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    asBard()
+    S.wallRaised[200] = true -- legacy/boolean marker: we know a wall stands, not where
+    expect(S.moveVerb("s")).toBe("leap")
+  end)
+
+  it("is unaffected by a wall in a DIFFERENT room", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    asBard()
+    S.wallRaised[100] = "south" -- the funnel room's wall, not ours
+    expect(S.moveVerb("s")).toBe("backflip")
+  end)
+end)
+
 describe("forced disengage (tactical, not HP-driven)", function()
   local function lastLeap()
     for i = #sent, 1, -1 do if sent[i]:find("leap ", 1, true) then return sent[i] end end

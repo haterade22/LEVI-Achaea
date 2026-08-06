@@ -2,6 +2,45 @@
 
 ---
 
+## 2026-08-06 - Bard backflips instead of leaping (v4.7.217)
+
+User: *"When in bard, we should BACKFLIP (direction) instead of Leap as it is faster balance."*
+
+Acrobatics BACKFLIP recovers quicker than the chitin-greaves LEAP, and every tactical move in
+the tower is a retreat we are making because something is going badly -- the balance we get
+back is the balance we spend curing.
+
+### Where it applies, and where it deliberately does not
+
+Only `S._tacticalGo` -- the general tactical mover behind the pull retreat, the low-HP escape,
+the re-entry and the new disengage. The normal sweep already *walks* (`_exploreMove` sends a
+bare direction), so there was no balance to save there in the first place.
+
+**The four known-wall jumps stay on LEAP.** These are not merely movement -- their entire
+purpose is to clear our OWN standing icewall, and greaves-LEAP is the ability we have confirmed
+does that in both directions (it is why re-entry needs no melt):
+
+| Site | Why it stays |
+|---|---|
+| `_escapeSuffix` wall-mode (both branches) | raising or crossing our own wall |
+| `onTick` wall-mode re-entry | crossing back over it |
+| explorer `"a wall blocks the way"` | an authoritative wall signal |
+
+Whether BACKFLIP crosses an icewall is **not confirmed**, and the cost of guessing wrong is not
+a slow move -- it is a silent no-op in the indoor low-HP escape, i.e. the anti-death ladder
+livelocking at crash HP. That is the exact failure the LEAP was introduced to fix.
+
+`S._tacticalGo` is the ambiguous one: it serves both plain pulls and walled retreats. It now
+asks `S.moveVerb(dir)`, which reads the `wallRaised[room]` edge we already track (the panic
+tumble reads the same field to avoid tumbling into our own ice) and returns `leap` when
+crossing it, `backflip` otherwise. Unresolvable wall state falls back to LEAP -- the
+conservative answer is the one that still moves us.
+
+Files: `mnemosyne/009_Swarm_Tactics.lua`. Suite **1013 -> 1019**; both regressions verified by
+breaking the code back.
+
+---
+
 ## 2026-08-05 - Show every damage type in the Taken table (v4.7.216)
 
 User: *"expand that all of the way"* -- the panel was showing ten types and `+1 more`.
