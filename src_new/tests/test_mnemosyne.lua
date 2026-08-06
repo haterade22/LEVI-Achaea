@@ -429,6 +429,35 @@ describe("boon-granted affliction immunity", function()
     expect(M._immunityFrom("immune to the sort of thing that causes affliction")).toBe(nil)
   end)
 
+  -- The cost-clause restriction, tested directly. Break it and an affliction named ANYWHERE --
+  -- including in a boon that CURES it -- gets reported as a cost. Neither of the two
+  -- screen-level tests catches that on its own, which is why this is here.
+  it("only reads an affliction as a cost when a cost clause introduces it", function()
+    expect(M._boonDrawback("Your poison resistance is increased by 66% but you suffer permanent nausea."))
+      .toBe("nausea")
+    -- Same affliction, no cost clause: this boon is doing us a favour.
+    expect(M._boonDrawback("Cures your nausea instantly.")).toBe(nil)
+    expect(M._boonDrawback("Your nausea recovery is twice as fast.")).toBe(nil)
+  end)
+
+  -- An immunity GRANT names an affliction and would otherwise read as a cost -- reporting a
+  -- boon's benefit as its drawback is the precise opposite of the truth.
+  it("never reads an immunity grant as a cost", function()
+    expect(M._boonDrawback("You are immune to the haemophilia affliction.")).toBe(nil)
+    -- The case that actually exercises the guard: a cost clause PRECEDING the grant, so the
+    -- affliction sits inside the scanned tail. Without it, the boon's benefit is reported as
+    -- its drawback -- the precise opposite of the truth. (A first pass at this test used the
+    -- bare grant above, which has no cost marker at all and so could never fail.)
+    expect(M._boonDrawback("Your damage is halved, but you are immune to the nausea affliction."))
+      .toBe(nil)
+  end)
+
+  -- A real cost that is not an affliction must not be dressed up as one.
+  it("does not invent an affliction for a non-affliction cost", function()
+    expect(M._boonDrawback("Potash is 200% stronger, but you can no longer drink health or mana."))
+      .toBe(nil)
+  end)
+
   it("collects immunities from THIS run's claims only", function()
     claims(
       { run = 7, name = "Sure-Footed", description = "You are immune to the dizziness affliction." },
@@ -477,10 +506,79 @@ describe("boon-granted affliction immunity", function()
     expect(saw("dizziness")).toBeTrue()
   end)
 
-  it("says nothing at all when we hold no immunities", function()
+  -- REQUIREMENT EXTENDED, v4.7.225 (user: "would be excellent to see if we are immune or
+  -- not"). This used to assert silence when we hold nothing. Saying nothing answers only half
+  -- the question -- a boon with a cost we do NOT block is exactly as worth knowing at the
+  -- moment of choosing, so it is now called out as such.
+  it("calls out a cost we do NOT block, rather than staying silent", function()
     claims({ run = 7, name = "Beeline", description = "You may now utilise prism tattoos." })
     capture(function()
-      M._echoImmunities({ { name = "Vertigo Step", description = "You suffer dizziness." } })
+      M._echoImmunities({
+        { name = "Corrupted Blood",
+          description = "Your poison resistance is increased by 66% but you suffer permanent nausea." },
+      })
+    end)
+    expect(saw("not immune")).toBeTrue()
+    expect(saw("nausea")).toBeTrue()
+  end)
+
+  -- ...but a boon with no cost at all must stay quiet. Annotating everything is noise, and
+  -- noise on the offer screen is what makes the useful lines get skipped.
+  -- THE REAL OFFER SCREEN, verbatim (user screenshot, 2026-08-06). Six boons, and every branch
+  -- of the annotation appears in it exactly once -- which is why it is worth keeping as a
+  -- fixture rather than six synthetic ones.
+  local SCREEN = {
+    { name = "Corrupted Blood",
+      description = "Your poison resistance is increased by 66% but you suffer permanent nausea." },
+    { name = "Crystal Blue Protection",
+      description = "Upon killing a denizen, you have a 10% chance of gaining the prismatic defence for 5 seconds." },
+    { name = "Rage-Fuelled",
+      description = "When slaying a denizen, your next battlerage attack will cost no resource." },
+    { name = "Plasmatic", description = "You are immune to the haemophilia affliction." },
+    { name = "Stone Stomach",
+      description = "Your tash'la heritage increases the effects of potash (not moss) by 200% and potash has a 50% reduced cooldown, but you can no longer drink health or mana." },
+    { name = "Restoration", description = "Restore your resources instead." },
+  }
+
+  it("annotates the live offer screen correctly, holding nothing", function()
+    claims({ run = 7, name = "Beeline", description = "You may now utilise prism tattoos." })
+    capture(function() M._echoImmunities(SCREEN) end)
+    -- Plasmatic is the immunity on the table: say what taking it buys.
+    expect(saw("GRANTS IMMUNITY")).toBeTrue()
+    expect(saw("Plasmatic")).toBeTrue()
+    expect(saw("haemophilia")).toBeTrue()
+    -- Corrupted Blood's cost is a real affliction we do not block.
+    expect(saw("Corrupted Blood")).toBeTrue()
+    expect(saw("nausea")).toBeTrue()
+    expect(saw("not immune")).toBeTrue()
+    -- Stone Stomach's "but you can no longer drink health or mana" is a real cost, but NOT an
+    -- affliction -- so it must not be dressed up as one. The clause marker is present; the
+    -- affliction is not, and that distinction is the whole point of matching names.
+    expect(saw("Stone Stomach")).toBeFalse()
+    -- Pure-benefit boons stay quiet.
+    expect(saw("Restoration")).toBeFalse()
+    expect(saw("Rage-Fuelled")).toBeFalse()
+    expect(saw("Crystal Blue")).toBeFalse()
+  end)
+
+  it("flips Corrupted Blood to FREE once we hold the matching immunity", function()
+    claims(
+      { run = 7, name = "Iron Gut", description = "You are immune to the nausea affliction." }
+    )
+    capture(function() M._echoImmunities(SCREEN) end)
+    expect(saw("IMMUNE")).toBeTrue()
+    expect(saw("Corrupted Blood")).toBeTrue()
+    expect(saw("Iron Gut")).toBeTrue()
+    expect(saw("Free for us")).toBeTrue()
+    expect(saw("not immune")).toBeFalse()
+    -- ...and the standing list still names it, so a cost the matcher missed is still visible.
+    expect(saw("Immune this run")).toBeTrue()
+  end)
+
+  it("stays quiet for a boon with no cost and no immunity", function()
+    claims({ run = 7, name = "Beeline", description = "You may now utilise prism tattoos." })
+    capture(function()
+      M._echoImmunities({ { name = "Restoration", description = "Restore your resources instead." } })
     end)
     expect(#echoes).toBe(0)
   end)

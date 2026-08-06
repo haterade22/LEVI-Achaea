@@ -31,6 +31,55 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-06 - Say whether we are immune, either way (v4.7.225)
+
+User, with a live offer screen: *"Here is an example would be excellent to see if we are immune
+or not."*
+
+v4.7.224 only spoke up when a boon's cost was something we **already** blocked. That screen
+showed the gap: **Plasmatic** *grants* haemophilia immunity and **Corrupted Blood** costs
+nausea, and neither got a word. The annotation now answers the question in all three
+directions:
+
+| Boon | Now says |
+|---|---|
+| `Plasmatic` -- *"You are immune to the haemophilia affliction."* | **GRANTS IMMUNITY** -- what taking it buys |
+| `Corrupted Blood` -- *"...but you suffer permanent nausea."* | costs nausea -- **not immune** (or **IMMUNE, free for us**, once we hold it) |
+| `Restoration`, `Rage-Fuelled`, `Crystal Blue Protection` | nothing -- no cost to report |
+
+### Two tiers, because the two questions carry different risk
+
+**A. "Is this cost something we block?"** scans only the immunities we actually **hold** -- one
+or two specific words -- so it needs no clause restriction and still catches alternate word
+forms. Unchanged from v4.7.224 and exactly as safe.
+
+**B. "Does this have a cost we do NOT block?"** has to scan every plausible affliction, so it
+is restricted to a **cost clause** (`but`, `however`, `at the cost of`, `you suffer`, ...). The
+affliction list is also filtered rather than the full canonical 115: the limb compounds never
+appear in prose, and the ordinary-English ones -- *fear, peace, guilt, justice, generosity,
+burning, frozen, prone, sleeping, itching* -- would match innocent sentences. Scanning free
+text for "peace" and calling it an affliction is how an annotation stops being trusted.
+
+An immunity **grant** is explicitly excluded from the cost scan: without that, a boon reading
+*"...but you are immune to nausea"* has its benefit reported as its drawback.
+
+`Stone Stomach`'s *"but you can no longer drink health or mana"* is a genuine cost with a
+genuine cost clause and **no affliction** -- it stays quiet rather than being dressed up as
+one.
+
+### On verifying the tests
+
+Breaking the code back showed **two of the three safeguards were not actually covered** by the
+first set of tests. The cost-clause restriction needed a case where an affliction appears
+outside a cost clause (a boon that *cures* nausea), and the grant-exclusion needed a cost
+clause *preceding* the grant -- a bare `"You are immune to X"` has no marker at all, so that
+test could never have failed. Both are now real.
+
+Files: `mnemosyne/004_Parsers.lua`. Suite **1056 -> 1062**, including the user's screen as a
+verbatim fixture.
+
+---
+
 ## 2026-08-06 - Call out boon drawbacks we are immune to (v4.7.224)
 
 User: *"We select boons that make us immune to an affliction and I would love for it to echo on

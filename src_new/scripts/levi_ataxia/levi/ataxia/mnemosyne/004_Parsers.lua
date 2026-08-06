@@ -970,6 +970,53 @@ function M.runImmunities()
   return out
 end
 
+-- Afflictions that can plausibly appear in a boon's prose, from the canonical curing table
+-- (001_Default_Curing_Prios). Deliberately FILTERED, not the whole 115: the limb compounds
+-- ("brokenleftarm") never appear in prose, and the ordinary-English ones -- fear, peace, guilt,
+-- justice, generosity, burning, frozen, prone, bound, sleeping, itching, pressure -- would
+-- match innocent sentences. Scanning free text for "peace" and calling it an affliction is how
+-- an annotation stops being trusted.
+local DRAWBACK_AFFS = {
+  "agoraphobia", "hallucinations", "claustrophobia", "hypochondria", "whisperingmadness",
+  "wristfractures", "temperedmelancholic", "temperedphlegmatic", "temperedcholeric",
+  "temperedsanguine", "recklessness", "haemophilia", "hypersomnia", "hypothermia",
+  "healthleech", "manaleech", "sensitivity", "impatience", "clumsiness", "tenderskin",
+  "stuttering", "depression", "loneliness", "addiction", "confusion", "darkshade",
+  "dizziness", "epilepsy", "masochism", "paralysis", "blindness", "weariness", "stupidity",
+  "slickness", "lethargy", "insomnia", "paranoia", "dementia", "deafness", "anorexia",
+  "hyperactivity", "shyness", "nausea", "asthma", "vertigo", "voyria", "webbed", "aeon",
+}
+
+-- Clause markers that introduce a COST. The drawback scan runs only on the text after one of
+-- these, which is what keeps the ordinary-English risk down to nothing worth worrying about:
+-- "Your poison resistance is increased by 66% BUT YOU SUFFER permanent nausea." Without the
+-- restriction, a boon reading "you are immune to X" would have its own benefit reported as a
+-- drawback, which is the exact opposite of the truth.
+local COST_MARKERS = { " but ", " however", " at the cost of ", " in exchange", " you suffer ",
+                       " causes you to ", " causing " }
+
+-- The affliction a boon inflicts as its cost, or nil. Pure; unit-tested.
+function M._boonDrawback(desc)
+  if type(desc) ~= "string" or desc == "" then return nil end
+  local low = " " .. desc:lower() .. " "
+  -- An immunity GRANT is never a drawback, even though it names an affliction.
+  if M._immunityFrom(desc) then return nil end
+  local tail
+  for _, mark in ipairs(COST_MARKERS) do
+    local at = low:find(mark, 1, true)
+    if at then
+      local seg = low:sub(at)
+      -- Earliest marker wins: "X but you suffer Y" must not be read from " you suffer ".
+      if not tail or #seg > #tail then tail = seg end
+    end
+  end
+  if not tail then return nil end
+  for _, aff in ipairs(DRAWBACK_AFFS) do
+    if tail:find(aff, 1, true) then return aff end
+  end
+  return nil
+end
+
 -- Does `desc` mention `aff` (or one of its known word forms)?
 function M._mentionsAff(desc, aff)
   if type(desc) ~= "string" or type(aff) ~= "string" then return false end
@@ -984,33 +1031,61 @@ end
 -- Annotate the offer screen with immunities we already hold. Deliberately NOT gated on
 -- `_inRun()`/telemetry: this is decision support for the player, and it has to work whether or
 -- not the tracker is reporting.
+-- TWO TIERS, because the two questions carry different false-positive risk (v4.7.225).
+--
+--   A. "Is this boon's cost something we already block?" -- scanned against the immunities we
+--      actually HOLD, which is a set of one or two specific words, so it needs no clause
+--      restriction and catches alternate word forms via M.IMMUNITY_ALIASES. This is the
+--      original v4.7.224 behaviour and stays exactly as safe as it was.
+--
+--   B. "Does this boon have a cost at all, that we do NOT block?" -- has to scan against every
+--      plausible affliction, so it is restricted to a COST CLAUSE. Without that restriction a
+--      boon reading "you are immune to X" would have its own BENEFIT reported as a drawback,
+--      which is the precise opposite of the truth.
+--
+-- Boons that GRANT an immunity are flagged in their own right: that is what taking one buys,
+-- and it makes every later boon costing that affliction free.
 function M._echoImmunities(list)
   local imm = M.runImmunities()
   local names = {}
   for aff in pairs(imm) do names[#names + 1] = aff end
-  if #names == 0 then return end
   table.sort(names)
 
-  -- Per-boon callouts first: that is the actual decision. A boon whose drawback we are immune
-  -- to is free, and saying so next to the boon beats making the player join two lists.
-  local hit = false
+  local said = false
   for _, b in ipairs(list or {}) do
-    for _, aff in ipairs(names) do
-      if M._mentionsAff(b.description, aff) then
-        hit = true
-        M.echo("<pale_green>IMMUNE<reset> -- <gold>" .. tostring(b.name) .. "<reset> mentions <cyan>"
-          .. aff .. "<reset>, which <gold>" .. tostring(imm[aff]) .. "<reset> already blocks."
-          .. " Its downside is free for us.")
+    local grants = M._immunityFrom(b.description)
+    if grants then
+      said = true
+      M.echo("<pale_green>GRANTS IMMUNITY<reset> -- <gold>" .. tostring(b.name)
+        .. "<reset> blocks <cyan>" .. grants .. "<reset>.")
+    else
+      -- Tier A: a cost we already block, by name or known word form.
+      local blocked, via
+      for _, aff in ipairs(names) do
+        if M._mentionsAff(b.description, aff) then blocked, via = aff, imm[aff]; break end
+      end
+      if blocked then
+        said = true
+        M.echo("<pale_green>IMMUNE<reset> -- <gold>" .. tostring(b.name) .. "<reset> costs <cyan>"
+          .. blocked .. "<reset>, blocked by <gold>" .. tostring(via) .. "<reset>. Free for us.")
+      else
+        -- Tier B: a cost we do not block.
+        local cost = M._boonDrawback(b.description)
+        if cost then
+          said = true
+          M.echo("<gold>" .. tostring(b.name) .. "<reset> costs <indian_red>" .. cost
+            .. "<reset> -- <indian_red>not immune<reset>.")
+        end
       end
     end
   end
 
-  -- ...and the standing list regardless, because the per-boon match can only catch wording we
-  -- have seen. Showing what we are immune to lets the player spot a drawback the matcher
-  -- missed, which is the difference between a helpful feature and a misleading one.
-  if not hit then
+  -- The standing list whenever we hold any. The per-boon scan can only catch wording we have
+  -- seen, so showing what we are immune to lets the player spot a cost the matcher missed --
+  -- the difference between decision support and a false all-clear.
+  if #names > 0 then
     M.echo("<pale_green>Immune this run<reset>: <cyan>" .. table.concat(names, "<reset>, <cyan>")
-      .. "<reset> (no offered boon names one).")
+      .. "<reset>.")
   end
 end
 
