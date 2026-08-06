@@ -145,11 +145,50 @@ function M.reportEffects(list)
   M._enqueue("/effects", { effects = list })
 end
 
+-- WHO WE WERE WHEN THE BOONS WERE OFFERED (v4.7.220).
+--
+-- `class` and `race` are optional strings on BoonsOfferedRequest -- verified against the live
+-- schema at http://104.128.56.238:8000/openapi.json rather than assumed from the field names.
+-- They are what makes the offer data answerable: "does Bard see Songstep more often" is not a
+-- question you can ask of a pile of undifferentiated offers.
+--
+-- CLASS IS NORMALISED, race is not. "Earth Lord" and "Earth Lady" are the same class wearing a
+-- gender suffix, and leaving them distinct would split every per-class count in half for no
+-- reason -- so the basher's existing normalisation is reused verbatim, which also means the
+-- values match what the rest of this system already calls a class. Race is passed through as
+-- GMCP reports it: there is no equivalent known distortion, and normalising data I cannot
+-- verify against the game's own vocabulary would corrupt it more quietly than leaving it raw.
+--
+-- Omitted, never guessed. Both fields are optional server-side, so a missing or empty GMCP
+-- read sends no key at all rather than "unknown" -- a literal "unknown" would show up in the
+-- queries as a cohort, which is worse than a smaller honest sample.
+function M._charInfo()
+  local st = gmcp and gmcp.Char and gmcp.Char.Status
+  if type(st) ~= "table" then return nil, nil end
+  local class, race = st.class, st.race
+  if type(class) == "string" then
+    class = class:gsub("^%s+", ""):gsub("%s+$", "")
+    if class ~= "" then
+      local ok, norm = pcall(function()
+        return class:title():gsub(" Lady", ""):gsub(" Lord", "")
+      end)
+      -- string.title is a Mudlet extension; if it is ever missing, the raw value still beats
+      -- dropping the field.
+      if ok and type(norm) == "string" and norm ~= "" then class = norm end
+    end
+  end
+  if type(race) == "string" then race = race:gsub("^%s+", ""):gsub("%s+$", "") end
+  if class == "" then class = nil end
+  if race == "" then race = nil end
+  return (type(class) == "string") and class or nil, (type(race) == "string") and race or nil
+end
+
 -- list: array of { name, description?, quote?, rarity?, num_echoes_possible? }
 function M.reportBoonsOffered(list)
   if not M._hasToken() then return end
   if type(list) ~= "table" or #list == 0 then return end
-  M._enqueue("/boons_offered", { offered = list })
+  local class, race = M._charInfo()
+  M._enqueue("/boons_offered", { offered = list, class = class, race = race })
 end
 
 -- names: string or array of strings

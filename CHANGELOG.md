@@ -2,6 +2,36 @@
 
 ---
 
+## 2026-08-06 - Send race and class with /boons_offered (v4.7.220)
+
+The tracker author added `class` and `race` as optional arguments to `/boons_offered` so the
+offer data can be sliced. Discord queries land Sunday/Monday; the collection starts now, and
+data not gathered this week is data those queries will never have.
+
+Field names and types were read from the live schema
+(`http://104.128.56.238:8000/openapi.json`) rather than inferred from the sentence -- both are
+top-level optional strings on `BoonsOfferedRequest`, not members of `BoonInfo`.
+
+### Two judgement calls in `M._charInfo()`
+
+**Class is normalised, race is not.** "Earth Lord" and "Earth Lady" are one class wearing a
+gender suffix; leaving them distinct would halve every per-class count in exactly the queries
+this data exists to answer. The basher's existing normalisation is reused verbatim, so the
+values also match what the rest of the system already calls a class. Race gets no equivalent
+treatment -- there is no known distortion to correct, and normalising against a vocabulary I
+cannot verify would corrupt it more quietly than leaving it raw.
+
+**Omitted, never guessed.** Both fields are optional server-side, so an absent or empty GMCP
+read sends no key at all. A literal `"unknown"` would appear in the queries as its own cohort,
+which is worse than a smaller honest sample.
+
+Both branches of `_reportBoonsOfferedEnriched` -- the immediate post and the contemplate-enriched
+one -- route through `reportBoonsOffered`, so the tagging lands on the real path either way.
+
+Files: `mnemosyne/002_Reporter_API.lua`. Suite **1033 -> 1037**.
+
+---
+
 ## 2026-08-06 - Stop losing time after a stun (v4.7.219)
 
 User: *"You are no longer stunned. We need to be a bit faster to account for this because

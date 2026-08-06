@@ -334,6 +334,49 @@ describe("boons offered reporting", function()
     expect(sent[1].payload.offered[2].name).toBe("Iron Throat")
   end)
 
+  -- RACE + CLASS (v4.7.220). Optional strings on BoonsOfferedRequest; they are what makes the
+  -- offer data answerable at all -- "does Bard see Songstep more often" cannot be asked of a
+  -- pile of undifferentiated offers.
+  it("tags the post with the character's class and race", function()
+    reset(true)
+    gmcp = gmcp or {}; gmcp.Char = gmcp.Char or {}
+    gmcp.Char.Status = { class = "Bard", race = "Xoran" }
+    M.reportBoonsOffered({ { name = "Songstep" } })
+    expect(sent[1].payload.class).toBe("Bard")
+    expect(sent[1].payload.race).toBe("Xoran")
+  end)
+
+  -- "Earth Lord" and "Earth Lady" are one class wearing a gender suffix. Leaving them distinct
+  -- would halve every per-class count in the queries this data exists to answer.
+  it("normalises the Lord/Lady gender suffix off the class", function()
+    reset(true)
+    gmcp.Char.Status = { class = "earth Elemental Lord", race = "Human" }
+    M.reportBoonsOffered({ { name = "Tantrum" } })
+    expect(sent[1].payload.class).toBe("Earth Elemental")
+    expect(sent[1].payload.race).toBe("Human")
+  end)
+
+  -- Omitted, never guessed: both fields are optional server-side, and a literal "unknown"
+  -- would show up in the queries as its own cohort -- worse than a smaller honest sample.
+  it("omits the fields entirely when GMCP has not reported them", function()
+    reset(true)
+    gmcp.Char.Status = { class = "", race = nil }
+    M.reportBoonsOffered({ { name = "Reaper" } })
+    expect(sent[1].payload.class).toBe(nil)
+    expect(sent[1].payload.race).toBe(nil)
+    expect(sent[1].payload.offered[1].name).toBe("Reaper") -- the post still goes
+  end)
+
+  it("survives GMCP not being populated at all", function()
+    reset(true)
+    local saved = gmcp.Char
+    gmcp.Char = nil
+    M.reportBoonsOffered({ { name = "Sharp Mind" } })
+    expect(sent[1].url).toContain("/boons_offered")
+    expect(sent[1].payload.class).toBe(nil)
+    gmcp.Char = saved
+  end)
+
   it("force-finishes a wedged prior capture instead of dropping the new boon capture", function()
     reset(true)
     -- Simulate a wedged capture still holding the single-slot lock.
