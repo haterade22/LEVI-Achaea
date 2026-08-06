@@ -37,3 +37,14 @@ patterns:
 ]]--
 
 ataxia.parrying.limb = matches[2]:lower()
+
+-- The parry has LANDED, so the anti-spam guard has done its job -- free it now rather than
+-- serving out the rest of the fallback timer (v4.7.221). That timer only exists for a
+-- confirm that never arrives; holding the guard until it expires is what made the auto-parry
+-- adapt at best every other swing against a fast mob. Kill the fallback too, or it fires
+-- later and clears the guard belonging to a newer send.
+parryAttempted = false
+if ataxiaTemp and ataxiaTemp.parryCdT then
+  pcall(killTimer, ataxiaTemp.parryCdT)
+  ataxiaTemp.parryCdT = nil
+end

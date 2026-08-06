@@ -2,7 +2,7 @@
 
 ---
 
-## Unreleased - Hawkstep and Wavedance recognised as Bard defences
+## 2026-08-06 - Hawkstep and Wavedance recognised as Bard defences (ships in v4.7.222)
 
 `DEFADD`/`KEEPADD` now accept `hawkstep` and `wavedance`, and `defs valid` renders them with
 the command that raises them. Previously only `harrying` was listed, so the other two
@@ -28,6 +28,85 @@ number appears in the AB text for either ability. Recorded in `.claude/classes/b
 
 Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cleaner.lua`,
 `.claude/classes/bard.md`. Suite 1037 green.
+
+---
+
+## 2026-08-06 - Auto-parry: pick by frequency, and stop waiting 3s to change (v4.7.222)
+
+*(Numbered 222, not 221: a concurrent session committed into this same working tree between
+this change's `git add` and its `git commit`, so the `v4.7.221` tag landed on THEIR commit --
+whose `version.txt` still said 4.7.220. That tag's CI was cancelled and it published no
+release, so nothing shipped wrong; the name is simply burnt. Lesson re-learned the hard way:
+with a shared tree, stage explicit paths, never `git add -A`.)*
+
+User: *"Our auto parry needs to be better or cleared and requeue faster."* From a Duke Semiro
+log: over ~20 swings, **two parries landed**.
+
+Three separate defects, all visible in that one log.
+
+### 1. Following the LAST hit is the wrong rule against a mob that spreads
+
+Semiro interleaves right leg, torso and head. Focus-follow parks the cover on the limb he has
+just *finished* with, so we are permanently one swing behind -- the rule is actively
+anti-correlated with a mob that alternates.
+
+`selfLimbDamage.hitHistory` (rolling 6) already existed and **nothing in the PvE path was
+reading it**. `ataxia_bashingParryFocus()` now takes the most-hit limb, ties broken toward the
+more recent so a genuine focus-switch is still followed immediately rather than outvoted by
+history. With no history at all it degrades to the old last-hit rule -- one observation is weak
+evidence, but the ladder below it is none.
+
+### 2. The broken-limb filter excluded exactly the limb worth covering
+
+Focus-follow skipped any limb already broken. That is precisely backwards in PvE: a broken limb
+that keeps getting hit is how `rl1` becomes `Rl2`, and how BOTH legs end up broken -- the state
+that refuses our own attacks outright (`Both of your legs must be free and unhindered to do
+that.`, which the log ends on). In this fight the right leg was both the most-attacked
+parryable limb and broken most of the time, so the filter removed the only call worth making.
+
+The predictive `fixed` path in 005 has always parked on a broken limb deliberately -- *"the
+parry still fires on a just-broken limb"* -- so this only brings focus-follow in line with a
+decision the codebase had already made and written down.
+
+### 3. A 3-second lockout on a mob swinging every 2 seconds
+
+`parryAttempted` exists to stop re-sending during the round-trip before the server confirms --
+about 100-300ms. It was held for a flat 3s, so against Semiro we could change cover at best
+every OTHER swing, and even a correct new choice arrived a swing late.
+
+Trigger 757 (the confirm, gagged for display but still firing) now clears the guard the moment
+the parry lands; the timer is only the fallback for a confirm that never comes, default cut
+3 -> 1.5s. The fallback timer is tracked and killed on re-arm -- otherwise an earlier timer
+fires later and clears the guard belonging to a newer send, re-opening the window it was armed
+to close. Same stale-timer shape as the stun throttle in v4.7.219.
+
+### The bug the fix created, and the trap behind it
+
+A parried swing emits **no** `dealt N% damage` perceive line, so it never reaches
+`ataxia_raiseLimbDamage` -- the only thing feeding `hitHistory`. Counting only unparried hits
+would make the history under-represent exactly the limb the parry is succeeding on, so the
+frequency pick would drift off it the moment it started working: **the parry would sabotage
+itself.** `ataxia_recordSelfHit` is now shared, and `ataxia_parrySuccess` feeds it too.
+
+Files: `self_limb_tracking/002`, `003`, `010_Prompt_Running.lua`, trigger `757_Parrying`.
+Suite **1037 -> 1044**; all three fixes verified by breaking the code back.
+
+### Also: the bladedance fire lines (triggers 043/044/045)
+
+User: *"Lets also highlight and echo these"* -- the three `Spiral steps bleed into a perfect
+staccato...` lines for Hawkstep, Harrying and Wave Dance.
+
+They turned out to be worth more than a highlight, and the code already said so.
+`ataxiaBasher_bardDance` refuses to re-buy a dance it believes is up (`ataxia.defences[def]`),
+and `004_Defence_Sorting` records that hawkstep/wavedance had **never been seen in a live DEF
+capture** -- so nothing was reliably setting that flag. These are the confirmations, so they
+set it.
+
+The three dances are mutually exclusive (AB: *"you can only dance one thing at a time"*), so
+landing one CLEARS the other two. Without that the first dance of a session would leave its
+flag set forever and the gate would refuse the dance we actually wanted for the rest of the
+run. Colours (`deep_sky_blue` / `medium_purple` / `light_sea_green`) verified present in the
+wholesale-replaced colour table; none from the reserved orange family.
 
 ---
 

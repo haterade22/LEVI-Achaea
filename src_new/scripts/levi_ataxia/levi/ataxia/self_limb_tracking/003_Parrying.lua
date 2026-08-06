@@ -416,16 +416,37 @@ function ataxia_bashingParry()
 		return
 	end
 
-	-- Focus-follow only while FRESH: no timestamp (seed/old-save shape) or one older than
-	-- LASTHIT_STALE_AFTER means it belongs to a previous mob -- fall to the head default.
+	-- FREQUENCY, NOT THE LAST HIT (v4.7.221). Following the most recent hit is only right
+	-- against a mob that repeat-hits one limb. Against one that SPREADS -- Duke Semiro's log
+	-- 2026-08-06: right leg x5, torso x4, left leg x1 interleaved -- last-hit is the worst
+	-- possible rule, because it parks the cover on the limb the mob has just finished with
+	-- and we are permanently one swing behind. Two parries landed in about twenty swings.
+	--
+	-- `hitHistory` (rolling 6, fed by ataxia_raiseLimbDamage AND ataxia_parrySuccess) already
+	-- held the answer and nothing in the PvE path was reading it. Most-hit wins; ties break
+	-- toward the MORE RECENT limb, so a genuine focus-switch is still followed immediately
+	-- rather than being outvoted by history.
+	--
+	-- Freshness is still judged from `lasthitAt`: no timestamp (seed/old-save shape) or one
+	-- older than LASTHIT_STALE_AFTER means the whole history belongs to a previous mob.
 	local last = selfLimbDamage.lasthit
 	local lastAt = selfLimbDamage.lasthitAt
-	if last and last ~= "none" and lastAt and (_now() - lastAt) <= LASTHIT_STALE_AFTER
-		and selfLimbDamage[last] and not ataxia_selfLimbBroken(last) then
-		ataxia.parrying.shouldparry = last
-		return
+	if last and last ~= "none" and lastAt and (_now() - lastAt) <= LASTHIT_STALE_AFTER then
+		local focus = ataxia_bashingParryFocus()
+		if focus and selfLimbDamage[focus] then
+			ataxia.parrying.shouldparry = focus
+			return
+		end
 	end
 
+	-- NOTE the absence of a broken-limb filter, here and above (v4.7.221). It used to skip
+	-- any limb already broken, which is precisely backwards in PvE: a broken limb that keeps
+	-- getting hit is how rl1 becomes Rl2, and how BOTH legs end up broken -- the state that
+	-- refuses our own attacks outright ("Both of your legs must be free and unhindered").
+	-- In the Semiro log the right leg was both the most-attacked parryable limb AND broken
+	-- most of the time, so the filter excluded exactly the limb worth covering. The predictive
+	-- `fixed` path (005) has always parked on a broken limb deliberately -- "the parry still
+	-- fires on a just-broken limb" -- so this only brings focus-follow in line with it.
 	for _, limb in ipairs({"head", "right leg", "left leg", "torso"}) do
 		if not ataxia_selfLimbBroken(limb) then
 			ataxia.parrying.shouldparry = limb
@@ -433,6 +454,32 @@ function ataxia_bashingParry()
 		end
 	end
 	ataxia.parrying.shouldparry = "head"
+end
+
+-- Most-hit limb in the rolling history, ties broken toward the more recent. Nil when there
+-- is nothing to go on. Pure; unit-tested.
+function ataxia_bashingParryFocus()
+	local hist = selfLimbDamage and selfLimbDamage.hitHistory
+	-- No history yet (first hit of an engagement, or a save from before the history existed):
+	-- degrade to the old last-hit rule rather than to the head default. One observation is
+	-- weak evidence, but it is evidence, and the ladder below is none.
+	if type(hist) ~= "table" or #hist == 0 then
+		local last = selfLimbDamage and selfLimbDamage.lasthit
+		if type(last) == "string" and last ~= "" and last ~= "none" then return last end
+		return nil
+	end
+	local count, bestLimb, bestCount, bestAt = {}, nil, 0, 0
+	for i = 1, #hist do
+		local limb = hist[i]
+		if type(limb) == "string" and limb ~= "" and limb ~= "none" then
+			count[limb] = (count[limb] or 0) + 1
+			-- `i` doubles as recency, so the comparison below never needs a second pass.
+			if count[limb] > bestCount or (count[limb] == bestCount and i > bestAt) then
+				bestLimb, bestCount, bestAt = limb, count[limb], i
+			end
+		end
+	end
+	return bestLimb
 end
 
 -- Server-confirmed self-parry ("You parry the assault to your <limb> ...", trigger
@@ -444,6 +491,10 @@ function ataxia_parrySuccess(limb)
 	if not selfLimbDamage[limb] then return end
 	selfLimbDamage.lasthit = limb
 	selfLimbDamage.lasthitAt = _now()
+	-- ...and into the frequency history (v4.7.221). A parried swing emits no perceive line, so
+	-- it never reaches ataxia_raiseLimbDamage -- without this the history under-counts the very
+	-- limb the parry is succeeding on, and the frequency pick drifts off it.
+	if ataxia_recordSelfHit then ataxia_recordSelfHit(limb) end
 	-- The line is also server truth about WHERE our parry currently sits -- heal any
 	-- desync (the "will now attempt to parry" confirm line is gagged by 006_GAG).
 	if ataxia and ataxia.parrying then ataxia.parrying.limb = limb end

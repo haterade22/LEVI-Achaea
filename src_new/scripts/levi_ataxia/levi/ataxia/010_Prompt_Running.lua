@@ -42,9 +42,21 @@ function ataxia_promptCommands()
       else
 			 send("parry "..ataxia.parrying.shouldparry)
       end
+			-- REQUEUE FASTER (v4.7.221). `parryAttempted` exists to stop us re-sending during
+			-- the round-trip before the server confirms -- roughly 100-300ms. The old 3s
+			-- blanket meant that against a mob swinging every ~2s we could change cover at
+			-- best every OTHER swing, so even a correct new choice arrived a swing late.
+			-- Trigger 757 (the confirm, gagged for display but still firing) now clears this
+			-- the moment the parry lands, and the timer is only the fallback for a confirm
+			-- that never comes. Default cut 3 -> 1.5 for the same reason.
 			parryAttempted = true
-			local parryCd = (selfLimbDamage and selfLimbDamage.config and selfLimbDamage.config.parrySpamCooldown) or 3
-			tempTimer(parryCd, [[parryAttempted = false]])
+			local parryCd = (selfLimbDamage and selfLimbDamage.config and selfLimbDamage.config.parrySpamCooldown) or 1.5
+			-- Track and kill the fallback: without this an EARLIER timer fires later and
+			-- clears the guard belonging to a NEWER send, re-opening the spam window it was
+			-- armed to close. (Same stale-timer shape as the stun throttle, v4.7.219.)
+			if ataxiaTemp and ataxiaTemp.parryCdT then pcall(killTimer, ataxiaTemp.parryCdT) end
+			local t = tempTimer(parryCd, [[parryAttempted = false; if ataxiaTemp then ataxiaTemp.parryCdT = nil end]])
+			if ataxiaTemp then ataxiaTemp.parryCdT = t end
 		end
 	end
 

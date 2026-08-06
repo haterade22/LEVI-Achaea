@@ -37,7 +37,7 @@ local defaultConfig = {
 	warningHits = 2,
 	criticalHits = 1,
 	shieldCooldown = 4,
-	parrySpamCooldown = 3,
+	parrySpamCooldown = 1.5, -- fallback only: the confirm line (757) frees the guard first
 
 	-- Parry mode
 	parryMode = "stand",
@@ -197,6 +197,22 @@ end
 -- DAMAGE TRACKING
 -------------------------------------------------------------------
 
+-- Rolling window of 6 incoming hits, keyed by limb. Read by ataxia_detectLimbFocus and (since
+-- v4.7.221) by ataxia_bashingParryFocus, which picks the MOST-hit limb rather than the last.
+--
+-- Shared rather than inlined because a PARRIED swing produces no "dealt N% damage" perceive
+-- line, so it never reaches ataxia_raiseLimbDamage -- and a swing we parried is still evidence
+-- of where the mob is aiming. Counting only unparried hits would make the history quietly
+-- under-represent exactly the limb the parry is already working on, and the frequency pick
+-- would drift off it the moment it started succeeding.
+function ataxia_recordSelfHit(limb)
+	if type(limb) ~= "string" or limb == "" or limb == "none" then return end
+	selfLimbDamage.hitHistory = selfLimbDamage.hitHistory or {}
+	local hist = selfLimbDamage.hitHistory
+	hist[#hist + 1] = limb
+	if #hist > 6 then table.remove(hist, 1) end
+end
+
 function ataxia_raiseLimbDamage(limb, num)
 	if not selfLimbDamage.config.enabled then return end
 
@@ -213,10 +229,7 @@ function ataxia_raiseLimbDamage(limb, num)
 	-- lasthit is ignored so a previous mob's focus can't pin the parry.
 	selfLimbDamage.lasthitAt = (getEpoch and getEpoch()) or os.time()
 
-	-- Track hit history for auto-parry focus detection (rolling window of 6)
-	local hist = selfLimbDamage.hitHistory
-	hist[#hist + 1] = limb
-	if #hist > 6 then table.remove(hist, 1) end
+	ataxia_recordSelfHit(limb)
 
 	-- Feed the denizen-pattern parry predictor (005) -- name-keyed, basher-gated, swing-deduped
 	if ataxia_denizenParryObserve then ataxia_denizenParryObserve(limb) end

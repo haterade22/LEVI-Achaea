@@ -48,13 +48,21 @@ describe("ataxia_bashingParry — PvE selection ladder", function()
     expect(ataxia.parrying.shouldparry).toBe("left arm")
   end)
 
-  it("does not follow a BROKEN focus limb -- falls to the head default", function()
+  -- REQUIREMENT REVERSED, v4.7.221 (Duke Semiro log, 2026-08-06). This used to assert that a
+  -- broken focus limb is SKIPPED. That is precisely backwards in PvE: a broken limb that keeps
+  -- being hit is how rl1 becomes Rl2 and how BOTH legs end up broken -- the state that refuses
+  -- our own attacks outright. In that log the right leg was both the most-attacked parryable
+  -- limb and broken most of the time, so the filter excluded exactly the limb worth covering.
+  -- The predictive `fixed` path (005) has always parked on a broken limb deliberately; this
+  -- brings focus-follow in line with it. Deliberate behaviour change, not a test bent to pass.
+  it("DOES follow a broken focus limb -- re-hits are what escalate a break", function()
     predictedLimb = nil
     selfLimbDamage.lasthit = "left arm"
     selfLimbDamage.lasthitAt = now
+    selfLimbDamage["left arm"] = { damage = 30 }
     brokenLimbs = { ["left arm"] = true }
     ataxia_bashingParry()
-    expect(ataxia.parrying.shouldparry).toBe("head")
+    expect(ataxia.parrying.shouldparry).toBe("left arm")
     brokenLimbs = {}
   end)
 
@@ -151,6 +159,77 @@ describe("ataxia_parrySuccess — confirmed-parry feed", function()
     ataxia_parrySuccess("left arm")
     ataxia_bashingParry()
     expect(ataxia.parrying.shouldparry).toBe("left arm")
+  end)
+end)
+
+-- FREQUENCY OVER LAST-HIT (v4.7.221). Driven by the Duke Semiro log, 2026-08-06: over ~20
+-- swings he interleaved right leg x5, torso x4 and left leg x1, and exactly TWO parries landed.
+-- Following the most recent hit is the worst possible rule against a mob that spreads -- it
+-- parks the cover on the limb he has just finished with, permanently one swing behind.
+describe("ataxia_bashingParryFocus — most-hit wins, recency breaks ties", function()
+  local function hist(...)
+    selfLimbDamage.hitHistory = { ... }
+  end
+
+  it("picks the most-hit limb, not the most recent one", function()
+    -- Semiro's actual ratio, oldest -> newest. The LAST hit is the torso -- which is what the
+    -- old rule would have covered -- but the right leg is the majority and the limb to cover.
+    hist("right leg", "torso", "right leg", "right leg", "right leg", "torso")
+    expect(ataxia_bashingParryFocus()).toBe("right leg")
+  end)
+
+  it("breaks a tie toward the more recent limb, so a real focus-switch is followed", function()
+    hist("torso", "torso", "right leg", "right leg")
+    expect(ataxia_bashingParryFocus()).toBe("right leg")
+  end)
+
+  it("degrades to the last hit when there is no history yet", function()
+    selfLimbDamage.hitHistory = {}
+    selfLimbDamage.lasthit = "left arm"
+    expect(ataxia_bashingParryFocus()).toBe("left arm")
+    -- ...and to nothing at all when there is not even that: the caller falls to the ladder.
+    selfLimbDamage.lasthit = "none"
+    expect(ataxia_bashingParryFocus()).toBe(nil)
+  end)
+
+  it("ignores junk entries rather than counting them", function()
+    hist("none", "", "torso")
+    expect(ataxia_bashingParryFocus()).toBe("torso")
+  end)
+
+  it("drives the full selection when the focus is fresh", function()
+    predictedLimb = nil
+    hist("right leg", "torso", "right leg", "torso", "right leg")
+    selfLimbDamage.lasthit = "torso"
+    selfLimbDamage.lasthitAt = now
+    selfLimbDamage["right leg"] = { damage = 30 }
+    ataxia_bashingParry()
+    expect(ataxia.parrying.shouldparry).toBe("right leg")
+  end)
+
+  it("still ignores the whole history once it is stale", function()
+    predictedLimb = nil
+    hist("right leg", "right leg", "right leg")
+    selfLimbDamage.lasthit = "right leg"
+    selfLimbDamage.lasthitAt = now - 13 -- past LASTHIT_STALE_AFTER
+    ataxia_bashingParry()
+    expect(ataxia.parrying.shouldparry).toBe("head")
+  end)
+
+  -- A parried swing emits NO "dealt N% damage" perceive line, so it never reaches
+  -- ataxia_raiseLimbDamage. If the history counted only unparried hits it would under-count
+  -- exactly the limb the parry is succeeding on, and the frequency pick would drift off it the
+  -- moment it started working -- the parry would sabotage itself.
+  it("counts parried swings too, so a working parry does not un-elect its own limb", function()
+    selfLimbDamage.hitHistory = {}
+    selfLimbDamage["right leg"] = { damage = 0 }
+    ataxia_recordSelfHit = ataxia_recordSelfHit or function(l)
+      selfLimbDamage.hitHistory[#selfLimbDamage.hitHistory + 1] = l
+    end
+    ataxia_parrySuccess("right leg")
+    ataxia_parrySuccess("right leg")
+    expect(#selfLimbDamage.hitHistory).toBe(2)
+    expect(ataxia_bashingParryFocus()).toBe("right leg")
   end)
 end)
 
