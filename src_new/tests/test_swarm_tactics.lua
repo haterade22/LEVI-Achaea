@@ -1210,6 +1210,61 @@ describe("which jump -- Bard backflips, everyone leaps", function()
   end)
 end)
 
+-- ROLL HIDE OUTRANKS THE ICEWALL (v4.7.223). User: "if we have roll hide boon, we dont need to
+-- icewall, just tumble out." The wall was never a barrier -- denizens walk through icewalls
+-- without Maklak's Promise, so it only PACED the swarm -- and it costs a balance-gated `point`,
+-- a wall-memory entry and a melt cycle later. Shedding every pursuer beats pacing them.
+describe("Roll Hide replaces the icewall", function()
+  it("takes the plain pull indoors instead of walling, while the boon is up", function()
+    fixture(3)
+    gmcp.Room.Info.details = { "indoors" }
+    cfg.swarm.icewall = true
+    mnemRollHide = true
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("pulling")
+    expect(S.mode).toBe("pull")
+    -- ...and no bracers were pointed: that is the balance the boon saves us.
+    for _, c in ipairs(sent) do expect(c:find("point ", 1, true) == nil).toBeTrue() end
+    mnemRollHide = false
+  end)
+
+  it("still walls indoors when the boon is NOT up", function()
+    fixture(3)
+    gmcp.Room.Info.details = { "indoors" }
+    cfg.swarm.icewall = true
+    mnemRollHide = false
+    expect(S.onTick()).toBeTrue()
+    expect(S.mode).toBe("wall")
+  end)
+
+  it("tumbles out of the pull rather than stepping, so nothing follows", function()
+    fixture(3)
+    mnemRollHide = true
+    S.onTick()
+    local cmd = S.decorate("attack", ";")
+    expect(cmd).toBe("attack;tumble s")
+    mnemRollHide = false
+  end)
+
+  it("steps out normally without the boon -- the funnel branch still has work to do", function()
+    fixture(3)
+    mnemRollHide = false
+    S.onTick()
+    expect(S.decorate("attack", ";")).toBe("attack;s")
+  end)
+
+  it("leaves the wall-mode suffix alone -- a raised wall still needs leaping", function()
+    fixture(3)
+    gmcp.Room.Info.details = { "indoors" }
+    cfg.swarm.icewall = true
+    mnemRollHide = false
+    S.onTick() -- enters wall mode and raises the wall
+    local cmd = S.decorate("attack", ";")
+    expect(cmd:find("point ", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("leap s", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
 describe("forced disengage (tactical, not HP-driven)", function()
   local function lastLeap()
     for i = #sent, 1, -1 do if sent[i]:find("leap ", 1, true) then return sent[i] end end

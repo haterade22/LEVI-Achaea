@@ -335,6 +335,16 @@ function S._escapeSuffix(sep)
     end
     return sep .. "point " .. s.bracersId .. " " .. S.backLong .. sep .. "leap " .. S.backShort
   end
+  -- ROLL HIDE: tumble instead of stepping (v4.7.223). A plain step-out is what lets the swarm
+  -- follow us into the funnel room -- the whole reason the funnel branch and the fly-kite
+  -- exist. Tumbling sheds them, so the pull stops being "move the fight" and becomes "end the
+  -- fight", and the follower-handling branches simply never fire.
+  --
+  -- Safe inside the single queue entry, for the reason the wall chain already proves: the
+  -- entry's commands do NOT all run on one balance -- `point` fires on the next balance and
+  -- `leap` on equilibrium, draining across ~7s. So a balance-gated tumble is HELD by the queue
+  -- until balance returns rather than being rejected, exactly like the point is.
+  if mnemRollHide then return sep .. "tumble " .. S.backShort end
   return sep .. S.backShort
 end
 
@@ -919,7 +929,14 @@ function S.onTick()
   -- Route by terrain (user-confirmed flow): INDOORS -> wall the door we came through
   -- and leap it (fly is unavailable inside); OUTDOORS -> plain pull, and if the swarm
   -- chases, the funnel branch escalates to the fly-kite.
-  local mode = (S._indoors() and S._cfg().icewall) and "wall" or "pull"
+  --
+  -- ROLL HIDE OUTRANKS THE ICEWALL (v4.7.223, user: "if we have roll hide boon, we dont need
+  -- to icewall, just tumble out"). The wall was never a barrier -- denizens walk through
+  -- icewalls without Maklak's Promise, so it only ever PACED the swarm -- and it costs a
+  -- balance-gated `point <bracers>`, a wall-memory entry, and a melt cycle when the room
+  -- empties. The boon sheds every pursuer outright, which is strictly better than pacing them
+  -- and free of all three costs. So when it is up we take the plain pull and tumble out of it.
+  local mode = (S._indoors() and S._cfg().icewall and not mnemRollHide) and "wall" or "pull"
   return S._beginPull(shortBack, longBack, shortFwd, n, mode)
 end
 

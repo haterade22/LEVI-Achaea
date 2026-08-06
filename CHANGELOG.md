@@ -31,6 +31,33 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-06 - Roll Hide replaces the icewall (v4.7.223)
+
+User: *"If we have roll hide boon, we dont need to icewall, just tumble out."*
+
+Right, and the icewall was always the weaker tool. **It was never a barrier** -- denizens walk
+through icewalls without Maklak's Promise, which the swarm doc has said since v4.7.119, so all
+it ever did was PACE the swarm. For that it costs a balance-gated `point <bracers>`, a
+wall-memory entry, and a melt cycle when the room empties. Roll Hide sheds every pursuer
+outright: strictly better than pacing, and free of all three costs.
+
+So while the boon is up, indoors takes the plain pull rather than wall mode, and the pull's
+step-out becomes a **tumble**. That changes what the pull IS: a step-out is what lets the swarm
+follow us into the funnel room -- the whole reason the funnel branch and the fly-kite exist --
+whereas a tumble ends the fight instead of moving it, and those branches simply never fire.
+
+Without the boon, nothing changes: wall mode and the plain step are untouched.
+
+**Why the tumble is safe inside the single queue entry**, which was the one thing worth
+checking: the entry's commands do NOT all run on one balance. The wall chain already proves it
+-- `point` fires on the next balance and `leap` on equilibrium, draining across ~7s -- so a
+balance-gated tumble is HELD by the queue until balance returns rather than rejected.
+
+Files: `mnemosyne/009_Swarm_Tactics.lua`. Suite **1044 -> 1049**; both behaviours verified by
+breaking the code back.
+
+---
+
 ## 2026-08-06 - Auto-parry: pick by frequency, and stop waiting 3s to change (v4.7.222)
 
 *(Numbered 222, not 221: a concurrent session committed into this same working tree between
