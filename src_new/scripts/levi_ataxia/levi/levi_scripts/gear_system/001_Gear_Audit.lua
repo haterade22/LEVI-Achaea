@@ -67,6 +67,11 @@ gearAudit.config = {
     -- Crit-on-strike DoT: also previously unscored. A fraction of crit damage, which is
     -- itself a fraction of hits, so it sits below flat crit damage.
     critDotPct       = 1.5,
+    -- Mana regen was the last unscored family in the Mnemosyne set (~11 head pieces at zero).
+    -- Below HP regen because HP is what actually binds when bashing -- but not dismissed:
+    -- running out of mana IS a kill condition for some classes (Psion excise, the Kai Choke
+    -- 250-mana floor), so a head that only offers mana is still worth more than nothing.
+    manaRegenPct     = 1.5,
     resistPct        = 1.5,  -- resistance
     wpRegenPct       = 1.0,  -- WP regen
     blackoutPct      = 1.0,  -- blackout reduction
@@ -593,6 +598,8 @@ function gearAudit.scoreEffect(effects)
   if hpRegen then scored.hpRegenPct = tonumber(hpRegen) end
 
   -- WP regen
+  local manaRegen = fullText:match("mana will regenerate (%d+)%% faster")
+  if manaRegen then scored.manaRegenPct = tonumber(manaRegen) end
   local wpRegen = fullText:match("willpower will regenerate (%d+)%% faster")
   if wpRegen then scored.wpRegenPct = tonumber(wpRegen) end
 
@@ -698,6 +705,7 @@ function gearAudit.calculateScore(scored)
   add("Bleed Damage",         scored.bleedDmgPct,      w.bleedDmgPct)
   add("Resistance",           scored.resistPct,        w.resistPct)
   add("WP Regen",             scored.wpRegenPct,       w.wpRegenPct)
+  add("Mana Regen",           scored.manaRegenPct,     w.manaRegenPct)
   add("Blackout Reduction",   scored.blackoutPct,      w.blackoutPct)
 
   return score, breakdown
@@ -725,7 +733,7 @@ gearAudit.CATEGORIES = {
     stats = { "rageGenPct", "brRageGenPct", "brCooldownPct", "brDmgPct" } },
   { key = "defence", label = "Defensive",  colour = "cyan",
     stats = { "hpPct", "hpRegenPct", "dmgReductionPct", "resistPct", "bleedDmgPct",
-              "wpRegenPct", "blackoutPct" } },
+              "wpRegenPct", "manaRegenPct", "blackoutPct" } },
 }
 
 -- Which category owns a stat, or nil for one deliberately left out of the split (XP loss,
@@ -754,7 +762,7 @@ function gearAudit.categoryScore(scored, catKey)
     ["HP Increase"] = "hpPct",           ["HP Regen"] = "hpRegenPct",
     ["Damage Reduction"] = "dmgReductionPct", ["Resistance"] = "resistPct",
     ["Bleed Damage"] = "bleedDmgPct",    ["WP Regen"] = "wpRegenPct",
-    ["Blackout Reduction"] = "blackoutPct",
+    ["Mana Regen"] = "manaRegenPct",  ["Blackout Reduction"] = "blackoutPct",
   }
   local total = 0
   for _, row in ipairs(breakdown) do

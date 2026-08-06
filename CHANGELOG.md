@@ -31,6 +31,25 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-06 - Score mana regen; a false accusation retracted (v4.7.227)
+
+Answering *"what gear is best to wear for dungeoneer"* meant scoring the set properly, which
+turned up the last unscored family: **mana regen** (`while you have any amount of stored
+battlerage, your mana will regenerate X% faster`) -- about 11 head pieces sitting at zero.
+Weighted 1.5, below HP regen's 2.5 because HP is what actually binds while bashing, but not
+dismissed: running out of mana IS a kill condition for some classes (Psion excise, the Kai
+Choke 250-mana floor).
+
+**And a correction.** I also reported denizen-type resistance (`+6% vs priest`) as unscored. It
+was not -- my probe fed the parser *"You take 6% less damage from priest denizens"* when the
+real pattern is `gain (%d+)%% resistance against`. The code was right and the test input was
+wrong, twice in the same session; a test asserting the same thing is now in the suite so the
+question does not have to be re-litigated from memory.
+
+Files: `gear_system/001_Gear_Audit.lua`. Suite **1073 -> 1075**.
+
+---
+
 ## 2026-08-06 - Gear audit: score what it was ignoring, rank per category (v4.7.226)
 
 User: *"We must categorize them.. Best in Slot per category. Best damage, rage generation,

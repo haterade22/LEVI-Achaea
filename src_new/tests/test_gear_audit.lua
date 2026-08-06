@@ -310,6 +310,22 @@ describe("battlerage cooldown is scored", function()
     expect(gearAudit.calculateScore(scored)).toBe(21 * w.brCooldownPct)
   end)
 
+  -- The last unscored family in the Mnemosyne set: ~11 head pieces offered only mana regen and
+  -- ranked at zero. Denizen-type resistance ("+6% vs priest") turned out to be scored already
+  -- -- an earlier probe of mine used the wrong wording and wrongly accused it.
+  it("scores mana regen, below HP regen but not at zero", function()
+    local scored = gearAudit.scoreEffect({
+      "While you have any amount of stored battlerage, your mana will regenerate 42% faster." })
+    expect(scored.manaRegenPct).toBe(42)
+    expect(gearAudit.calculateScore(scored)).toBe(42 * w.manaRegenPct)
+    expect(w.manaRegenPct < w.hpRegenPct).toBeTrue()
+  end)
+
+  it("still scores denizen-type resistance (it always did)", function()
+    local scored = gearAudit.scoreEffect({ "You gain 6% resistance against priest denizens." })
+    expect(gearAudit.calculateScore(scored)).toBe(6 * w.resistPct)
+  end)
+
   it("scores the crit-on-strike DoT the summariser already recognised", function()
     local scored = gearAudit.scoreEffect({
       "When you critically strike, 17% of the damage will be dealt as an additional DoT over the next few seconds." })
