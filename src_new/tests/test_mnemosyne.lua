@@ -393,6 +393,99 @@ end)
 
 -- ─── Boss objective ──────────────────────────────────────────────────────────
 
+-- AFFLICTION IMMUNITY FROM BOONS (v4.7.224). User: "We select boons that make us immune to an
+-- affliction and I would love for it to echo on the boon option screen to be able to state we
+-- have the immunity to this boon's downside." Sure-Footed's real text, from the offer screen:
+-- "You are immune to the dizziness affliction."
+describe("boon-granted affliction immunity", function()
+  local echoes
+  local function capture(fn)
+    echoes = {}
+    local real = M.echo
+    M.echo = function(msg) echoes[#echoes + 1] = tostring(msg) end
+    local ok, err = pcall(fn)
+    M.echo = real
+    if not ok then error(err) end
+  end
+  local function saw(frag)
+    for _, e in ipairs(echoes) do if e:find(frag, 1, true) then return true end end
+    return false
+  end
+  local function claims(...)
+    M.history = M.history or {}
+    M.history.run = 7
+    M.history.claims = { ... }
+  end
+
+  it("reads the immunity out of a boon description", function()
+    expect(M._immunityFrom("You are immune to the dizziness affliction.")).toBe("dizziness")
+    expect(M._immunityFrom("Restore your resources instead.")).toBe(nil)
+    expect(M._immunityFrom(nil)).toBe(nil)
+  end)
+
+  -- A lazy `(.-)` between two anchors will happily swallow a clause. Bound it, or a sentence
+  -- that merely contains both words invents an affliction nobody has ever had.
+  it("refuses a runaway match rather than inventing an affliction", function()
+    expect(M._immunityFrom("immune to the sort of thing that causes affliction")).toBe(nil)
+  end)
+
+  it("collects immunities from THIS run's claims only", function()
+    claims(
+      { run = 7, name = "Sure-Footed", description = "You are immune to the dizziness affliction." },
+      { run = 6, name = "Iron Throat",  description = "You are immune to the asthma affliction." },
+      { run = 7, name = "Beeline",      description = "You may now utilise prism tattoos." }
+    )
+    local imm = M.runImmunities()
+    expect(imm.dizziness).toBe("Sure-Footed")
+    expect(imm.asthma).toBe(nil) -- last run's boon is not ours any more
+  end)
+
+  it("calls out an offered boon whose drawback we already block", function()
+    claims({ run = 7, name = "Sure-Footed", description = "You are immune to the dizziness affliction." })
+    capture(function()
+      M._echoImmunities({
+        { name = "Vertigo Step", description = "Move faster, but you suffer dizziness." },
+        { name = "Restoration",  description = "Restore your resources instead." },
+      })
+    end)
+    expect(saw("IMMUNE")).toBeTrue()
+    expect(saw("Vertigo Step")).toBeTrue()
+    expect(saw("Sure-Footed")).toBeTrue()
+    expect(saw("Restoration")).toBeFalse() -- no drawback we block: stays quiet
+  end)
+
+  -- The grant says "dizziness"; a drawback may say "dizzy", and no stemming turns one into the
+  -- other safely. The alias table is data for exactly this, extended as real lines are seen.
+  it("matches a known alternate word form", function()
+    claims({ run = 7, name = "Sure-Footed", description = "You are immune to the dizziness affliction." })
+    capture(function()
+      M._echoImmunities({ { name = "Whirl", description = "Spin fast enough to become dizzy." } })
+    end)
+    expect(saw("IMMUNE")).toBeTrue()
+    expect(saw("Whirl")).toBeTrue()
+  end)
+
+  -- The per-boon match can only catch wording we have seen, so the standing list is shown when
+  -- nothing matched. Without it a missed drawback reads as "no drawback", which is worse than
+  -- saying nothing at all.
+  it("still states what we are immune to when no offered boon names one", function()
+    claims({ run = 7, name = "Sure-Footed", description = "You are immune to the dizziness affliction." })
+    capture(function()
+      M._echoImmunities({ { name = "Restoration", description = "Restore your resources instead." } })
+    end)
+    expect(saw("Immune this run")).toBeTrue()
+    expect(saw("dizziness")).toBeTrue()
+  end)
+
+  it("says nothing at all when we hold no immunities", function()
+    claims({ run = 7, name = "Beeline", description = "You may now utilise prism tattoos." })
+    capture(function()
+      M._echoImmunities({ { name = "Vertigo Step", description = "You suffer dizziness." } })
+    end)
+    expect(#echoes).toBe(0)
+  end)
+end)
+
 describe("onObjective", function()
   it("reports the boss when the objective is 'defeat <name>'", function()
     reset(true)

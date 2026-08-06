@@ -31,6 +31,47 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-06 - Call out boon drawbacks we are immune to (v4.7.224)
+
+User: *"We select boons that make us immune to an affliction and I would love for it to echo on
+the boon option screen to be able to state we have the immunity to this boon's downside."*
+
+Several boons trade a drawback for a benefit. When the drawback is an affliction we already
+block -- **Sure-Footed**: *"You are immune to the dizziness affliction."* -- that boon is
+strictly free for us, and the offer screen is the only moment the information is worth
+anything. Three seconds later the choice is made.
+
+The offer screen now annotates each boon whose description names an affliction we are immune
+to, saying which claimed boon blocks it.
+
+### Derived from claim history, not a new flag
+
+`M.runImmunities()` reads the current run's claims, which already carry their description,
+already reset per run, and already survive a SYSUPDATE reload. A parallel latch would have been
+a third thing to keep in sync with two that already work.
+
+### Two things that stop it being misleading
+
+**A bounded match.** `immune to the (.-) affliction` with a lazy capture will happily swallow a
+whole clause -- *"immune to the sort of thing that causes affliction"* would invent an
+affliction nobody has ever had. Rejected on length or an embedded space.
+
+**The standing list is shown when nothing matched.** The per-boon match can only catch wording
+we have seen: the grant says `dizziness`, a drawback may say `dizzy`, and no stemming turns one
+into the other safely (`dizziness` minus `ness` is `dizzi`). So word forms live in a small
+DATA table (`M.IMMUNITY_ALIASES`) extended as real lines appear, rather than a clever rule that
+is wrong in ways nobody notices -- and when no offered boon matches, the immunities are simply
+listed. A missed drawback reading as *"no drawback"* would be worse than saying nothing.
+
+Deliberately **not** gated on `_inRun()`/telemetry: this is decision support for the player and
+must work whether or not `mnem` reporting is on. `pcall`'d, because a display nicety must never
+break the capture that feeds the catalogue and the API.
+
+Files: `mnemosyne/004_Parsers.lua`. Suite **1049 -> 1056**; all three safeguards verified by
+breaking the code back.
+
+---
+
 ## 2026-08-06 - Roll Hide replaces the icewall (v4.7.223)
 
 User: *"If we have roll hide boon, we dont need to icewall, just tumble out."*

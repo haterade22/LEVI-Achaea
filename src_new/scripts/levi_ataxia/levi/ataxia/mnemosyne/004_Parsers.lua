@@ -913,6 +913,107 @@ end
 -- for anyone not running the remote tracker, i.e. for the default install: every BOONS row then
 -- printed "no description learned yet" forever. So: always capture and learn locally; gate only
 -- the telemetry POST below.
+-- ---------------------------------------------------------------------------
+-- Affliction IMMUNITY from boons (v4.7.224)
+-- ---------------------------------------------------------------------------
+-- User: "We select boons that make us immune to an affliction and I would love for it to echo
+-- on the boon option screen to be able to state we have the immunity to this boon's downside."
+--
+-- Several boons trade a drawback for a benefit ("Stone Stomach: ...but you can no longer drink
+-- health or mana"). When the drawback is an affliction we are ALREADY immune to -- Sure-Footed
+-- grants immunity to dizziness -- that boon is strictly free for us, and the offer screen is
+-- the only moment the information is worth anything. Three seconds later the choice is made.
+--
+-- Derived from the run's CLAIM HISTORY rather than a flag we set and hope to clear: claims
+-- already carry their description (007), already reset per run, and already survive a
+-- SYSUPDATE reload. A parallel latch would be a third thing to keep in sync with two that
+-- already work.
+local IMMUNE_PAT = "immune to the%s+(.-)%s+affliction"
+
+-- Word forms a boon might use for the same affliction. The grant says "dizziness"; a drawback
+-- may well say "dizzy", and no amount of stemming turns one into the other safely ("dizziness"
+-- minus "ness" is "dizzi"). So this is a DATA table, extended as real lines are seen, rather
+-- than a clever rule that is wrong in ways nobody notices. Keys are lowercase.
+M.IMMUNITY_ALIASES = M.IMMUNITY_ALIASES or {
+  dizziness = { "dizzy" },
+}
+
+-- The affliction a boon description grants immunity to, or nil.
+function M._immunityFrom(desc)
+  if type(desc) ~= "string" then return nil end
+  local aff = desc:lower():match(IMMUNE_PAT)
+  if not aff or aff == "" then return nil end
+  -- Guard against a runaway lazy match swallowing half a sentence.
+  if #aff > 24 or aff:find("%s") then return nil end
+  return aff
+end
+
+-- { [affliction] = <boon that granted it> } for the CURRENT run. Empty table when none.
+function M.runImmunities()
+  local out = {}
+  local h = M.history
+  if not h or type(h.claims) ~= "table" then return out end
+  for _, c in ipairs(h.claims) do
+    if c.run == h.run then
+      -- The claim record's own description first; fall back to the all-time library, which is
+      -- populated from the offer screen and may be richer for a boon claimed before we learned
+      -- to store descriptions on the claim.
+      local desc = c.description
+      if type(desc) ~= "string" or desc == "" then
+        local info = M.boonInfo and M.boonInfo(c.name)
+        desc = info and info.description
+      end
+      local aff = M._immunityFrom(desc)
+      if aff then out[aff] = c.name end
+    end
+  end
+  return out
+end
+
+-- Does `desc` mention `aff` (or one of its known word forms)?
+function M._mentionsAff(desc, aff)
+  if type(desc) ~= "string" or type(aff) ~= "string" then return false end
+  local low = desc:lower()
+  if low:find(aff, 1, true) then return true end
+  for _, alt in ipairs(M.IMMUNITY_ALIASES[aff] or {}) do
+    if low:find(alt, 1, true) then return true end
+  end
+  return false
+end
+
+-- Annotate the offer screen with immunities we already hold. Deliberately NOT gated on
+-- `_inRun()`/telemetry: this is decision support for the player, and it has to work whether or
+-- not the tracker is reporting.
+function M._echoImmunities(list)
+  local imm = M.runImmunities()
+  local names = {}
+  for aff in pairs(imm) do names[#names + 1] = aff end
+  if #names == 0 then return end
+  table.sort(names)
+
+  -- Per-boon callouts first: that is the actual decision. A boon whose drawback we are immune
+  -- to is free, and saying so next to the boon beats making the player join two lists.
+  local hit = false
+  for _, b in ipairs(list or {}) do
+    for _, aff in ipairs(names) do
+      if M._mentionsAff(b.description, aff) then
+        hit = true
+        M.echo("<pale_green>IMMUNE<reset> -- <gold>" .. tostring(b.name) .. "<reset> mentions <cyan>"
+          .. aff .. "<reset>, which <gold>" .. tostring(imm[aff]) .. "<reset> already blocks."
+          .. " Its downside is free for us.")
+      end
+    end
+  end
+
+  -- ...and the standing list regardless, because the per-boon match can only catch wording we
+  -- have seen. Showing what we are immune to lets the player spot a drawback the matcher
+  -- missed, which is the difference between a helpful feature and a misleading one.
+  if not hit then
+    M.echo("<pale_green>Immune this run<reset>: <cyan>" .. table.concat(names, "<reset>, <cyan>")
+      .. "<reset> (no offered boon names one).")
+  end
+end
+
 function M.onBoonsOffered()
   local seenDash = false
   M._captureLines({
@@ -937,6 +1038,12 @@ function M.onBoonsOffered()
         for _, b in ipairs(list) do M._learnBoon(b.name, b.description) end
         M._historySave()
       end
+
+      -- Immunity annotation (v4.7.224). Above the telemetry gate on purpose: this is decision
+      -- support shown while the offer screen is up, and it must not depend on `mnem` reporting
+      -- being switched on. pcall'd because nothing about a display nicety justifies breaking
+      -- the capture that feeds the catalogue and the API.
+      if M._echoImmunities then pcall(M._echoImmunities, list) end
 
       -- Everything below is telemetry.
       if not M._inRun() then return end
