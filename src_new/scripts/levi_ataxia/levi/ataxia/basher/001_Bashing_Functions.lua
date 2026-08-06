@@ -1459,3 +1459,65 @@ function ataxiaBasher_assembleBattlerage()
 	-- via brSent internally; clearing an already-clear flag is a no-op.
 	return ataxiaBasher_brCommit(command)
 end
+-- ---------------------------------------------------------------------------
+-- STUN (v4.7.219) -- user: "there is a noticeable lag from this message to
+-- actually doing something."
+-- ---------------------------------------------------------------------------
+-- Two things were costing us time on every stun, and neither was the dispatch itself
+-- (723 already calls ataxiaBasher_attack() straight off the line).
+--
+-- 1. THE THROTTLE OUTLIVED THE STUN. ataxiaBasher_atk is the 0.3s re-queue cooldown, and it
+--    is set by the LAST dispatch before the stun latched -- then a tempTimer that has been
+--    running the whole time clears it. Meanwhile `affed("stun")` blocked every tryAttack, so
+--    the flag went stale mid-stun and could still be set when the stun lifted. 723's direct
+--    call is not gated by it, but the follow-up prompt dispatch IS -- so a refused or wiped
+--    round waited out a fresh 0.3s window before anything retried. Clear it on the way out.
+--
+-- 2. THE FLAG HAD NO FAILSAFE. `ataxia.afflictions.stun` is set by 722 -- and two of its
+--    three patterns are Vertani-specific, so in practice the setter is the REFUSAL line
+--    ("You are too stunned to be able to do anything"), which arrives only because we tried
+--    to act. Exactly ONE line clears it, with no timeout behind it. If that line is ever
+--    missed -- a different stun source with different wording, a split line, a lost packet --
+--    the flag latches TRUE and tryAttack's affliction gate blocks the basher indefinitely,
+--    until the next stun cycle happens to print the clear line. That is not lag, it is a
+--    stall, and it looks exactly like lag from the chair.
+--
+--    Achaea stun is bounded at a few seconds, so a self-expiring flag is strictly safer than
+--    a latched one: the worst case becomes STUN_FAILSAFE seconds instead of forever. The
+--    failsafe dispatches too -- if the clear line never came, nothing else is going to.
+--
+-- What this does NOT do is pre-queue during the stun. That would need a command sitting on
+-- the server so it fires with no round-trip, and the evidence says the server does not hold
+-- it: the refusal line exists, and is gagged (011_GAG2), which means queued commands are
+-- attempted and burned mid-stun. Re-queuing through the stun to beat that would re-run the
+-- whole round assembly each time, spending battlerage charges, deck picks and cooldown
+-- stamps on rounds that get refused -- the exact class of bug ataxiaBasher_brCommit exists
+-- to prevent. Not worth it without confirming the server's behaviour first.
+ataxiaBasher_STUN_FAILSAFE = 5
+
+function ataxiaBasher_stunStart()
+  ataxia.afflictions.stun = true
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.stunAt = (getEpoch and getEpoch()) or 0
+  if ataxiaBasher_stunT then pcall(killTimer, ataxiaBasher_stunT) end
+  -- Timer ID on a script-local, never on ataxiaTemp: a serialized id is meaningless after a
+  -- reload and killTimer on it would either no-op or kill an unrelated timer.
+  ataxiaBasher_stunT = tempTimer(tonumber(ataxiaBasher_STUN_FAILSAFE) or 5, function()
+    ataxiaBasher_stunT = nil
+    if not ataxia.afflictions.stun then return end -- the real clear line beat us to it
+    ataxiaEcho("Stun flag expired without the clear line -- resuming.")
+    ataxiaBasher_stunEnd()
+  end)
+end
+
+function ataxiaBasher_stunEnd()
+  ataxia.afflictions.stun = nil
+  if ataxiaTemp then ataxiaTemp.stunAt = nil end
+  if ataxiaBasher_stunT then pcall(killTimer, ataxiaBasher_stunT); ataxiaBasher_stunT = nil end
+  -- Drop the stale re-queue cooldown and the timer that would have cleared it later, so the
+  -- next prompt dispatch is free immediately rather than serving out a window that was armed
+  -- before the stun even started.
+  if ataxiaBasher_atkTimer then pcall(killTimer, ataxiaBasher_atkTimer); ataxiaBasher_atkTimer = nil end
+  ataxiaBasher_atk = false
+  if ataxiaBasher and ataxiaBasher.enabled then ataxiaBasher_attack() end
+end

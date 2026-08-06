@@ -40,5 +40,13 @@ patterns:
   type: 3
 ]]--
 
-ataxia.afflictions.stun = true
+-- Arms a self-expiring flag rather than a latched one. Two of the three patterns above are
+-- Vertani-specific, so in practice the setter is the REFUSAL line -- and exactly one line
+-- clears it. A missed clear (different stun source, split line, lost packet) used to block
+-- tryAttack's affliction gate indefinitely. See ataxiaBasher_stunStart in basher/001.
+if ataxiaBasher_stunStart then
+  ataxiaBasher_stunStart()
+else
+  ataxia.afflictions.stun = true
+end
 

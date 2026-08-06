@@ -34,8 +34,13 @@ patterns:
   type: 3
 ]]--
 
-ataxia.afflictions.stun = nil
-
-if ataxiaBasher.enabled then
-ataxiaBasher_attack()
+-- Clears the flag, kills the failsafe, DROPS THE STALE 0.3s re-queue cooldown (armed before
+-- the stun and still ticking, so the follow-up prompt dispatch was serving out a window it
+-- had no reason to), and dispatches. See ataxiaBasher_stunEnd in basher/001.
+if ataxiaBasher_stunEnd then
+  ataxiaBasher_stunEnd()
+else
+  -- Load-order fallback: never leave the flag latched, because nothing else clears it.
+  ataxia.afflictions.stun = nil
+  if ataxiaBasher.enabled then ataxiaBasher_attack() end
 end

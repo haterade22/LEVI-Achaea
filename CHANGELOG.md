@@ -2,6 +2,52 @@
 
 ---
 
+## 2026-08-06 - Stop losing time after a stun (v4.7.219)
+
+User: *"You are no longer stunned. We need to be a bit faster to account for this because
+there is a noticeable lag from this message to actually doing something."*
+
+The dispatch itself was already immediate -- trigger 723 calls `ataxiaBasher_attack()` straight
+off the line, bypassing the throttle. Two things around it were not.
+
+### 1. The re-queue cooldown outlived the stun
+
+`ataxiaBasher_atk` is the 0.3s window that stops us refreshing the server queue too often. It
+is armed by the **last dispatch before the stun latched**, and the `tempTimer` that clears it
+runs through the whole stun -- while `affed("stun")` blocked every `tryAttack`, so nothing
+re-armed or consumed it. 723's direct call ignores the flag, but the *follow-up* prompt
+dispatch does not: if that first round was refused or wiped, we sat out a window that had been
+armed for a completely unrelated reason. It is now dropped on the way out, along with its
+timer, so the timer cannot fire later and clobber a fresh one.
+
+### 2. The stun flag had exactly one way out and no failsafe
+
+`ataxia.afflictions.stun` gates `tryAttack`'s affliction check. Two of trigger 722's three
+patterns are Vertani-soldier-specific, so in practice the setter is the **refusal** line ("You
+are too stunned to be able to do anything") -- which fires for any stun source, because it
+only appears when we tried to act. Exactly one line clears it, with nothing behind it.
+
+Miss that clear -- a stun source with different wording, a split line, a lost packet -- and the
+flag latches TRUE and the basher is blocked **until the next stun happens to print it**. That
+is not lag, it is a stall, and from the chair it looks identical. Achaea stun is bounded at a
+few seconds, so the flag now self-expires after 5s and dispatches on the way out: worst case
+becomes five seconds instead of forever.
+
+### What this deliberately does not do
+
+Pre-queue during the stun. Beating the client round-trip needs a command already sitting on the
+server, and the evidence says it would be burned rather than held: the refusal line exists and
+is gagged in `011_GAG2`, which means queued commands *are* attempted mid-stun. Re-queuing
+through the stun to compensate would re-run the whole round assembly each time -- spending
+battlerage charges, deck picks and cooldown stamps on rounds that get refused, which is the
+exact class of bug `ataxiaBasher_brCommit` exists to prevent. Not worth it without confirming
+the server's behaviour first; see the note in `basher/001`.
+
+Files: `basher/001_Bashing_Functions.lua`, triggers `722_Stunned`, `723_Stun_Gone`. New
+`test_basher_stun.lua`. Suite **1025 -> 1033**; both fixes verified by breaking the code back.
+
+---
+
 ## 2026-08-06 - Roll Hide: heal where we land, then go back in (v4.7.218)
 
 User: *"the denizens wont follow so we can use this to our advantage to heal up and then do hit
