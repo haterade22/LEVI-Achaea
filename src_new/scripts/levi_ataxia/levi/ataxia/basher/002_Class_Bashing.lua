@@ -363,9 +363,37 @@ function ataxiaBasher_apostateBashing()
 end
 
 -- Wield the lyre and (re)compose the bash performance, then (re)start the 15-min
--- "Bard Performance" timer. Needs the instrument in hand, so it wields the lyre first
--- (the next blade attack re-wields the left shield; the rapier stays in the right hand).
--- Called once at bash start (basher_engaged) and again when the 15-min timer expires.
+-- "Bard Performance" timer. Called at bash start (basher_engaged), when the 15-min timer
+-- expires, and off the "not performing" / performance-ended lines.
+--
+-- THE ATTACK WAS EATING THE LYRE (v4.7.232). Live log:
+--
+--   (LEVI): Bard bash: composed paean prelude scherzo sonata maqam
+--   You aren't wearing a Lasallian lyre.
+--   How are you going to perform a song without your instrument wielded?
+--
+-- The three commands went out RAW, and the basher dispatches an attack on the very next
+-- prompt -- sub-second. That attack re-wields the SHIELD into the left hand (the comment this
+-- replaces said so itself), so the lyre was pulled back out between `wield` and `compose`, and
+-- compose landed with nothing in hand. The echo still claimed success, which is why this went
+-- unnoticed: we announced a performance that never started.
+--
+-- Two changes, and both are needed -- either alone still loses the race:
+--
+--   1. ONE QUEUED LINE. `queue addclear free` keeps remove -> wield -> compose in order and
+--      lets each wait for what it needs, instead of three raw commands racing the attack
+--      dispatch. (One queued line is ONE queue entry -- the commands run in sequence.)
+--   2. HOLD THE ATTACK across it (user: "this should be done before bashing attack").
+--      ataxiaTemp.bardComposeHold gates ataxiaBasher_attack the same way swarmHold does, so
+--      nothing re-wields the shield mid-sequence. Bounded by a timer and cleared by the
+--      performance-duration line, so it can never wedge the basher: worst case is
+--      BARD_COMPOSE_HOLD seconds of not swinging, which is the cost of a round we would have
+--      wasted unbuffed anyway.
+--
+-- `wield lyre`, not `wield left lyre` (user's wording): let the game pick the free hand rather
+-- than forcing the slot the shield lives in.
+ataxiaBasher_BARD_COMPOSE_HOLD = 3
+
 function ataxiaBasher_bardCompose()
    -- Debounce: rapid "not performing" lines (repeated battlerage 'play' commands fire before the
    -- compose lands) can call this several times; the extras are just redundant. Allow one per 2s.
@@ -373,9 +401,30 @@ function ataxiaBasher_bardCompose()
    bardComposePending = true
    tempTimer(2, [[bardComposePending = false]])
    local c = (ataxia.bardStuff and ataxia.bardStuff.bashCompose) or "paean prelude scherzo sonata maqam"
-   send("remove lyre;wield left lyre;compose "..c)
+   local sep = (ataxia.settings and ataxia.settings.separator) or ";"
+
+   -- Hold BEFORE sending, or the dispatch this is racing can slip in first.
+   ataxiaTemp = ataxiaTemp or {}
+   ataxiaTemp.bardComposeHold = true
+   if ataxiaBasher_bardComposeT then pcall(killTimer, ataxiaBasher_bardComposeT) end
+   ataxiaBasher_bardComposeT = tempTimer(tonumber(ataxiaBasher_BARD_COMPOSE_HOLD) or 3, function()
+      ataxiaBasher_bardComposeT = nil
+      if ataxiaTemp then ataxiaTemp.bardComposeHold = nil end
+   end)
+
+   send("queue addclear free remove lyre"..sep.."wield lyre"..sep.."compose "..c)
    enableTimer("Bard Performance")
-   ataxiaEcho("<green>Bard bash:<reset> composed <cyan>"..c)
+   ataxiaEcho("<green>Bard bash:<reset> composing <cyan>"..c.."<reset> (holding the swing)")
+end
+
+-- The performance-duration line proves one is actually running, so release the hold early
+-- rather than serving out the timer. Called from performance_tracking/001.
+function ataxiaBasher_bardComposeDone()
+   if ataxiaBasher_bardComposeT then
+      pcall(killTimer, ataxiaBasher_bardComposeT)
+      ataxiaBasher_bardComposeT = nil
+   end
+   if ataxiaTemp then ataxiaTemp.bardComposeHold = nil end
 end
 
 -- SONGSTEP (Mnemosyne legendary boon, v4.7.200): "Your dances gain additional bonuses.

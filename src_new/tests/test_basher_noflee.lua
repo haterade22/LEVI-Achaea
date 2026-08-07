@@ -269,3 +269,41 @@ describe("ataxiaBasher_areaKey", function()
     expect(ataxiaBasher_areaKey()).toBe("")
   end)
 end)
+
+--------------------------------------------------------------------------------
+-- The Bard compose hold gates the attack (v4.7.232)
+--------------------------------------------------------------------------------
+-- User: "this should be done before bashing attack." An attack dispatched mid-compose
+-- re-wields the SHIELD into the left hand, pulling the lyre out from under the compose --
+-- which then fails with "How are you going to perform a song without your instrument
+-- wielded?". The gate lives inside ataxiaBasher_attack rather than only in tryAttack because
+-- several triggers call attack() directly.
+--
+-- Proved by SPYING ON dangerLevel: it is the first thing attack() does after the holds, so if
+-- it never runs, the early return happened. Asserting on the gate any other way (reading the
+-- source, checking a flag) would pass without the gate actually being wired in -- which is
+-- exactly what a first version of this test did.
+describe("bard compose hold -- attack refuses while the lyre is in hand", function()
+  local danger
+
+  local function spy()
+    baseline()
+    danger = 0
+    ataxiaBasher_dangerLevel = function() danger = danger + 1; return "wait" end
+  end
+
+  it("does not reach the attack round while composing", function()
+    spy()
+    ataxiaTemp.bardComposeHold = true
+    ataxiaBasher_attack()
+    expect(danger).toBe(0)
+    ataxiaTemp.bardComposeHold = nil
+  end)
+
+  it("attacks normally once the hold clears", function()
+    spy()
+    ataxiaTemp.bardComposeHold = nil
+    ataxiaBasher_attack()
+    expect(danger).toBe(1)
+  end)
+end)

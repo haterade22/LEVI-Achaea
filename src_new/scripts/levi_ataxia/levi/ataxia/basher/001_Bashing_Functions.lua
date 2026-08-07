@@ -137,6 +137,13 @@ function ataxiaBasher_attack()
   -- key, the shikudo-error retry -- and every caller must respect the hold.
   if ataxiaTemp.swarmHold then return end
 
+  -- Bard compose in flight (v4.7.232): an attack here re-wields the SHIELD and pulls the lyre
+  -- out from under the compose, which then fails with "How are you going to perform a song
+  -- without your instrument wielded?". Gated in the same place as swarmHold because several
+  -- triggers call this function directly. Self-clearing (timer + the performance-duration
+  -- line), so it can only ever cost a few seconds of swinging.
+  if ataxiaTemp.bardComposeHold then return end
+
   -- Determine danger level (flee/shield/attack/wait) — single check, no redundant logic
   local danger = ataxiaBasher_dangerLevel()
 

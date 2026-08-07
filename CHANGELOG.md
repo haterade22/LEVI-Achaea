@@ -31,6 +31,57 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-07 - The attack was eating the lyre (v4.7.232)
+
+User, with a live log, then: *"need to fix this to remove lyre, wield lyre and than performance
+... this should be done before bashing attack."*
+
+```
+(LEVI): Bard bash: composed paean prelude scherzo sonata maqam
+You aren't wearing a Lasallian lyre.
+How are you going to perform a song without your instrument wielded?
+```
+
+### What was actually happening
+
+The three commands went out **raw**, and the basher dispatches an attack on the very next
+prompt -- sub-second. That attack **re-wields the shield into the left hand**, which the old
+comment on this very function said out loud. So the lyre was pulled back out between `wield`
+and `compose`, and `compose` landed with nothing in hand.
+
+The echo still said *"composed"*, which is why this went unnoticed: **we announced a
+performance that never started**, then bashed unbuffed until the 15-minute timer came round
+again.
+
+### The fix needs both halves
+
+Either alone still loses the race:
+
+1. **One queued line** -- `queue addclear free remove lyre;wield lyre;compose <list>`. One
+   queued line is one queue entry, so the three run in order and each waits for what it needs,
+   instead of three raw commands racing the dispatcher.
+2. **Hold the attack across it** -- `ataxiaTemp.bardComposeHold` gates `ataxiaBasher_attack`
+   in the same place as `swarmHold`, because several triggers call `attack()` directly. Bounded
+   by a timer AND released early by the performance-duration line, so it cannot wedge: the
+   worst case is ~3s of not swinging, which is a round we would have wasted unbuffed anyway.
+
+Also `wield lyre` rather than `wield left lyre` (user's wording): let the game pick a free hand
+instead of forcing the slot the shield lives in.
+
+### On verifying it
+
+Breaking the code back showed the **attack gate -- the actual thing asked for -- was not
+covered** by the first set of tests. It now is, and the way it is proved matters: the test spies
+on `dangerLevel`, which is the first thing `attack()` does after the holds, so if it never runs
+the early return genuinely happened. Asserting on a flag or reading the source would have
+passed with the gate unwired.
+
+Files: `basher/002_Class_Bashing.lua`, `basher/001_Bashing_Functions.lua`,
+`performance_tracking/001`. New `test_bard_compose.lua`. Suite **1101 -> 1111**; all three
+behaviours verified by breaking the code back.
+
+---
+
 ## 2026-08-07 - The rage floor sets itself from the gear summary (v4.7.231)
 
 User: *"We can do the command gear audit in game and capture this ... which should already set

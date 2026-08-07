@@ -39,6 +39,11 @@ patterns:
   type: 1
 ]]--
 
+-- The performance is genuinely running, so release the compose hold early rather than making
+-- the basher serve out the rest of its timer (v4.7.232).
+if ataxiaBasher_bardComposeDone then ataxiaBasher_bardComposeDone() end
+
+
 -- This line is also the ANSWER to the per-ripple PERFORMANCE probe (explorer
 -- M._bardPerformanceCheck): seeing it at all proves a performance is up, so clear the probe
 -- stamp. If nothing clears it, the probe's timer recomposes.
