@@ -31,6 +31,49 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-07 - A boon can be a grant AND a cost (v4.7.238)
+
+From another live screen:
+
+> **Inflammable:** You are immune to **burning**, but suffer permanent **shivering**.
+
+That one line broke three assumptions.
+
+**The grant phrasing has a short form.** `immune to burning` -- no `the`, no `affliction`. The
+pattern required both, so Inflammable registered nothing. There is now a fallback that reads up
+to the first comma or full stop, which is where the grant clause ends in every example seen.
+
+**A grant is not automatically "not a cost".** `_boonDrawbacks` bailed out entirely on any line
+containing a grant. That was right for *"Your damage is halved, but you are immune to nausea"*
+and wrong here, where the boon genuinely is both. What matters is which **clause** the
+affliction sits in, so the check moved from the whole description to the **cost clause only** --
+the original protection survives and stops eating the common case.
+
+**And a grant was hiding its price.** The grant branch short-circuited, so Inflammable would
+have reported as pure upside with `shivering` never mentioned. Same failure as calling a
+partly-blocked boon "free", one release earlier. It now reads:
+
+```
+GRANTS IMMUNITY -- Inflammable blocks burning, but costs shivering.
+```
+
+My own first test for this asserted only that the grant was named, and **passed while the price
+was silently dropped** -- the second time in three releases that a test has been satisfied by
+half the answer.
+
+`shivering` added to the cost list. **`burning` deliberately was not:** it is also a damage
+type (*"deals burning damage"*), which a cost clause cannot disambiguate. It still works as a
+grant, because that path reads the affliction out of the sentence rather than scanning for
+known names.
+
+`Font of Life` -- *"...tree tattoo to now cure two afflictions"* -- is covered as a negative
+fixture, since it mentions `afflictions` and must not be read as an immunity.
+
+Files: `mnemosyne/004_Parsers.lua`. Suite **1144 -> 1151**; all three behaviours verified by
+breaking the code back.
+
+---
+
 ## 2026-08-07 - Costs come in pairs too, and partly free is not free (v4.7.237)
 
 From another live offer screen:

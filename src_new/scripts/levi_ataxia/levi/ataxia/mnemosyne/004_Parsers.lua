@@ -1031,8 +1031,19 @@ M.IMMUNITY_ALIASES = M.IMMUNITY_ALIASES or {
 function M._immunitiesFrom(desc)
   local out = {}
   if type(desc) ~= "string" then return out end
+  local low = desc:lower()
   -- "affliction" or "afflictionS": the plural is what a multi-affliction grant uses.
-  local body = desc:lower():match("immune to the%s+(.-)%s+afflictions?%f[%A]")
+  local body = low:match("immune to the%s+(.-)%s+afflictions?%f[%A]")
+  -- SHORTER PHRASING (v4.7.238). Live: "Inflammable: You are immune to burning, but suffer
+  -- permanent shivering." No "the", no "affliction" -- so the pattern above misses it entirely
+  -- and the boon registered nothing. Fall back to reading up to the first comma or full stop,
+  -- which is where the grant clause ends in every example seen.
+  if not body or body == "" then
+    body = low:match("immune to ([^,%.;]+)")
+    if body then
+      body = body:gsub("^the%s+", ""):gsub("%s+afflictions?$", "")
+    end
+  end
   if not body or body == "" then return out end
   if #body > 60 then return out end -- a whole clause, not a list of names
   body = body:gsub("%s+and%s+", ",")
@@ -1099,6 +1110,12 @@ local DRAWBACK_AFFS = {
   -- dehydration and tenderskin." `dehydration` was in neither this list nor the canonical
   -- curing table it was derived from -- so the cost was only ever half-reported.
   "dehydration",
+  -- v4.7.238, live: "Inflammable: ...but suffer permanent shivering." `shivering` was held out
+  -- with the generic words; it is a real affliction and the cost clause makes it unambiguous.
+  -- `burning` stays OUT of this list deliberately -- it is also a damage type ("deals burning
+  -- damage"), so a cost clause is not enough to disambiguate it. It still works as a GRANT,
+  -- which reads the affliction straight out of the sentence rather than scanning for names.
+  "shivering",
 }
 
 -- Clause markers that introduce a COST. The drawback scan runs only on the text after one of
@@ -1123,7 +1140,6 @@ function M._boonDrawbacks(desc)
   local out, seen = {}, {}
   if type(desc) ~= "string" or desc == "" then return out end
   local low = " " .. desc:lower() .. " "
-  if M._immunityFrom(desc) then return out end -- a grant is never a cost
   local tail
   for _, mark in ipairs(COST_MARKERS) do
     local at = low:find(mark, 1, true)
@@ -1133,6 +1149,13 @@ function M._boonDrawbacks(desc)
     end
   end
   if not tail then return out end
+  -- A GRANT INSIDE THE COST CLAUSE IS STILL A GRANT (v4.7.238). This check used to run on the
+  -- WHOLE description and bail out entirely -- which was right for "Your damage is halved, but
+  -- you are immune to nausea" and catastrophically wrong for "You are immune to burning, but
+  -- suffer permanent shivering", where the boon is a grant AND has a cost. A boon can be both;
+  -- what matters is which CLAUSE the affliction sits in. Checking the tail rather than the
+  -- whole line keeps the original protection and stops it eating the common case.
+  if M._immunityFrom(tail) then return out end
   for _, aff in ipairs(DRAWBACK_AFFS) do
     if tail:find(aff, 1, true) and not seen[aff] then
       seen[aff] = true
@@ -1203,8 +1226,18 @@ function M._echoImmunities(list)
     local grants = M._immunityFrom(b.description)
     if grants then
       said = true
-      M.echo("<pale_green>GRANTS IMMUNITY<reset> -- <gold>" .. tostring(b.name)
-        .. "<reset> blocks <cyan>" .. grants .. "<reset>.")
+      -- A GRANT CAN ALSO HAVE A PRICE (v4.7.238). "Inflammable: You are immune to burning, but
+      -- suffer permanent shivering." Reporting only the grant sells it as pure upside, which
+      -- is the same confident-wrong-answer failure as calling a partly-blocked boon "free".
+      local costs = M._boonDrawbacks(b.description)
+      local all = M._immunitiesFrom(b.description)
+      local line = "<pale_green>GRANTS IMMUNITY<reset> -- <gold>" .. tostring(b.name)
+        .. "<reset> blocks <cyan>" .. table.concat(all, "<reset> + <cyan>") .. "<reset>"
+      if #costs > 0 then
+        line = line .. ", but costs <indian_red>"
+          .. table.concat(costs, "<reset> + <indian_red>") .. "<reset>"
+      end
+      M.echo(line .. ".")
     else
       -- Tier A: a cost we already block, by name or known word form.
       local blocked, via

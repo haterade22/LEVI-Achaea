@@ -564,6 +564,81 @@ describe("boon-granted affliction immunity", function()
     expect(saw("Restoration")).toBeFalse()
   end)
 
+  -- A BOON CAN BE BOTH A GRANT AND A COST (v4.7.238). Live:
+  --   "Inflammable: You are immune to burning, but suffer permanent shivering."
+  -- Two assumptions broke at once: the grant pattern required "the <x> affliction" (this says
+  -- neither), and _boonDrawbacks bailed out entirely on any line containing a grant.
+  local INFLAM = "You are immune to burning, but suffer permanent shivering."
+
+  it("reads a grant phrased without 'the' or 'affliction'", function()
+    local list = M._immunitiesFrom(INFLAM)
+    expect(#list).toBe(1)
+    expect(list[1]).toBe("burning")
+  end)
+
+  it("still finds the cost on a boon that is ALSO a grant", function()
+    local costs = M._boonDrawbacks(INFLAM)
+    expect(#costs).toBe(1)
+    expect(costs[1]).toBe("shivering")
+  end)
+
+  -- The protection that check was there for has to survive: a grant sitting INSIDE the cost
+  -- clause is still a grant, and must not be reported as a price.
+  it("still refuses a grant that lives in the cost clause", function()
+    expect(#M._boonDrawbacks("Your damage is halved, but you are immune to the nausea affliction."))
+      .toBe(0)
+  end)
+
+  -- Reporting ONLY the grant sells the boon as pure upside -- the same confident-wrong-answer
+  -- failure as calling a partly-blocked boon "free". A first version of this test asserted
+  -- only that the grant was named, and passed while the price was silently dropped.
+  it("reports Inflammable as a grant AND names its price", function()
+    claims({ run = 7, name = "Beeline", description = "You may now utilise prism tattoos." })
+    capture(function()
+      M._echoImmunities({ { name = "Inflammable", description = INFLAM } })
+    end)
+    expect(saw("GRANTS IMMUNITY")).toBeTrue()
+    expect(saw("burning")).toBeTrue()
+    expect(saw("but costs")).toBeTrue()
+    expect(saw("shivering")).toBeTrue()
+  end)
+
+  it("a grant with no price says nothing about costs", function()
+    claims({ run = 7, name = "Beeline", description = "You may now utilise prism tattoos." })
+    capture(function()
+      M._echoImmunities({
+        { name = "Hyperfixate", description = "You are immune to the confusion affliction." } })
+    end)
+    expect(saw("GRANTS IMMUNITY")).toBeTrue()
+    expect(saw("but costs")).toBeFalse()
+  end)
+
+  -- `burning` is deliberately NOT in the cost list: it is also a damage type ("deals burning
+  -- damage"), which a cost clause cannot disambiguate. It works as a GRANT because that path
+  -- reads the affliction out of the sentence rather than scanning for known names.
+  it("does not treat burning as a cost, since it is also a damage type", function()
+    expect(#M._boonDrawbacks("Your attacks are stronger, but you deal burning damage instead."))
+      .toBe(0)
+  end)
+
+  -- The rest of that screen. Font of Life mentions "afflictions" and must NOT be mistaken for
+  -- an immunity grant.
+  it("does not read 'cure two afflictions' as an immunity", function()
+    expect(#M._immunitiesFrom(
+      "The Earthmother empowers your tree tattoo to now cure two afflictions.")).toBe(0)
+    claims({ run = 7, name = "Beeline", description = "You may now utilise prism tattoos." })
+    capture(function()
+      M._echoImmunities({
+        { name = "Font of Life",
+          description = "The Earthmother empowers your tree tattoo to now cure two afflictions." },
+        { name = "Razor Leaf",
+          description = "When touching your tree tattoo, razor-sharp leaves will descend upon the locale, dealing damage to all denizens present." },
+      })
+    end)
+    expect(saw("Font of Life")).toBeFalse()
+    expect(saw("Razor Leaf")).toBeFalse()
+  end)
+
   -- The cost-clause restriction, tested directly. Break it and an affliction named ANYWHERE --
   -- including in a boon that CURES it -- gets reported as a cost. Neither of the two
   -- screen-level tests catches that on its own, which is why this is here.
