@@ -31,6 +31,47 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-07 - One boon, several immunities (v4.7.236)
+
+User: *"Corrupted Mind: ...but you suffer permanent guilt. Outlaw: You are immune to the
+justice and guilt afflictions. Should've highlighted the above."*
+
+Right, and the reason is a guard doing its job at the wrong level.
+
+`_immunityFrom` captured a **single** affliction, so `"immune to the justice and guilt
+afflictions"` captured `"justice and guilt"` -- and the runaway-guard I added in v4.7.224 then
+threw it away for containing a space. **Outlaw registered nothing at all**, so the boon that
+would have made `Corrupted Mind` free was invisible.
+
+The guard was right to exist and wrong to be the last word: a multi-word capture is not
+automatically junk, it is sometimes a **list**. `M._immunitiesFrom` now splits on `and` and
+commas and applies the length-and-space check to each **part** -- a real affliction name is one
+word, so a part that still has a space after splitting is genuine runaway text and is dropped.
+The protection survives; it just runs at the right level. The plural `afflictions` is matched
+too, since that is what a multi-grant uses.
+
+### And `Corrupted Blood`, which you asked me to check
+
+It works, but only once you hold the immunity. Naming the cost when you *do not* hold it was
+broken for a different reason: **`guilt` and `justice` were deliberately excluded** from the
+cost list in v4.7.225, along with the genuinely generic English words (*fear, peace, pressure,
+burning, frozen, prone, sleeping, bound*). That was over-cautious -- the cost-clause
+restriction already does that job, since the scan only looks after `but` / `you suffer` / `at
+the cost of`, and *"but you suffer permanent guilt"* is unambiguous. `generosity`,
+`disloyalty`, `justice`, `guilt` and `itching` are back in; the truly generic ones stay out.
+
+So the offer screen now reads, with Outlaw held:
+
+```
+IMMUNE -- Corrupted Mind costs guilt, blocked by Outlaw. Free for us.
+Corrupted Blood costs nausea -- not immune.
+```
+
+Files: `mnemosyne/004_Parsers.lua`. Suite **1134 -> 1139**; all three behaviours verified by
+breaking the code back.
+
+---
+
 ## 2026-08-07 - Seasone: the swing ate the escape (v4.7.235)
 
 Death-log analysis. The disengage fired **correctly and on time** at phial burst #2 -- the

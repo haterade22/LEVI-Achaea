@@ -429,6 +429,71 @@ describe("boon-granted affliction immunity", function()
     expect(M._immunityFrom("immune to the sort of thing that causes affliction")).toBe(nil)
   end)
 
+  -- ONE BOON, SEVERAL IMMUNITIES (v4.7.236). Live miss, user-supplied:
+  --   Outlaw:        "You are immune to the justice and guilt afflictions."
+  --   Corrupted Mind: "Your psychic resistance is increased by 66% but you suffer permanent guilt."
+  -- The single-capture version grabbed "justice and guilt" and its own runaway-guard threw it
+  -- away for containing a space, so Outlaw registered NOTHING and Corrupted Mind was never
+  -- flagged as free.
+  it("reads BOTH afflictions out of a multi-grant", function()
+    local list = M._immunitiesFrom("You are immune to the justice and guilt afflictions.")
+    expect(#list).toBe(2)
+    expect(list[1]).toBe("justice")
+    expect(list[2]).toBe("guilt")
+  end)
+
+  it("still reads a single grant, and still refuses runaway text", function()
+    local one = M._immunitiesFrom("You are immune to the dizziness affliction.")
+    expect(#one).toBe(1)
+    expect(one[1]).toBe("dizziness")
+    -- The guard survives -- it just runs per PART now, so a genuine clause is still rejected.
+    expect(#M._immunitiesFrom("immune to the sort of thing that causes affliction")).toBe(0)
+    expect(#M._immunitiesFrom("Restore your resources instead.")).toBe(0)
+  end)
+
+  it("registers every affliction from a multi-grant as held", function()
+    claims({ run = 7, name = "Outlaw",
+             description = "You are immune to the justice and guilt afflictions." })
+    local imm = M.runImmunities()
+    expect(imm.justice).toBe("Outlaw")
+    expect(imm.guilt).toBe("Outlaw")
+  end)
+
+  -- The whole point of the report: Outlaw makes Corrupted Mind free.
+  it("flags Corrupted Mind as free once Outlaw is held", function()
+    claims({ run = 7, name = "Outlaw",
+             description = "You are immune to the justice and guilt afflictions." })
+    capture(function()
+      M._echoImmunities({
+        { name = "Corrupted Mind",
+          description = "Your psychic resistance is increased by 66% but you suffer permanent guilt." },
+      })
+    end)
+    expect(saw("IMMUNE")).toBeTrue()
+    expect(saw("Corrupted Mind")).toBeTrue()
+    expect(saw("Outlaw")).toBeTrue()
+    expect(saw("Free for us")).toBeTrue()
+  end)
+
+  -- ...and without it, the cost is still named. "guilt" and "justice" were held out of the
+  -- cost list as ordinary English; the cost-clause restriction already does that job.
+  it("names guilt and nausea as costs when we do NOT hold the immunity", function()
+    claims({ run = 7, name = "Beeline", description = "You may now utilise prism tattoos." })
+    capture(function()
+      M._echoImmunities({
+        { name = "Corrupted Mind",
+          description = "Your psychic resistance is increased by 66% but you suffer permanent guilt." },
+        { name = "Corrupted Blood",
+          description = "Your poison resistance is increased by 66% but you suffer permanent nausea." },
+      })
+    end)
+    expect(saw("Corrupted Mind")).toBeTrue()
+    expect(saw("guilt")).toBeTrue()
+    expect(saw("Corrupted Blood")).toBeTrue()
+    expect(saw("nausea")).toBeTrue()
+    expect(saw("not immune")).toBeTrue()
+  end)
+
   -- The cost-clause restriction, tested directly. Break it and an affliction named ANYWHERE --
   -- including in a boon that CURES it -- gets reported as a cost. Neither of the two
   -- screen-level tests catches that on its own, which is why this is here.

@@ -1015,14 +1015,41 @@ M.IMMUNITY_ALIASES = M.IMMUNITY_ALIASES or {
   dizziness = { "dizzy" },
 }
 
--- The affliction a boon description grants immunity to, or nil.
+-- ONE BOON CAN GRANT SEVERAL (v4.7.236). Live miss: Outlaw reads
+--
+--   "You are immune to the justice and guilt afflictions."
+--
+-- The old single-capture version grabbed "justice and guilt" and then its own runaway-guard
+-- rejected it for containing a space -- so the boon registered NOTHING, and Corrupted Mind
+-- ("...but you suffer permanent guilt") was never flagged as free. The guard was right to
+-- exist and wrong to be the last word: a multi-word capture is not automatically junk, it is
+-- sometimes a LIST.
+--
+-- Split on "and" / commas, then apply the length-and-space guard to each PART. A real
+-- affliction name is one word, so a part that still has a space after splitting is genuine
+-- runaway text and is dropped -- the protection survives, it just runs at the right level.
+function M._immunitiesFrom(desc)
+  local out = {}
+  if type(desc) ~= "string" then return out end
+  -- "affliction" or "afflictionS": the plural is what a multi-affliction grant uses.
+  local body = desc:lower():match("immune to the%s+(.-)%s+afflictions?%f[%A]")
+  if not body or body == "" then return out end
+  if #body > 60 then return out end -- a whole clause, not a list of names
+  body = body:gsub("%s+and%s+", ",")
+  for part in body:gmatch("[^,]+") do
+    part = part:gsub("^%s+", ""):gsub("%s+$", "")
+    if part ~= "" and #part <= 24 and not part:find("%s") then
+      out[#out + 1] = part
+    end
+  end
+  return out
+end
+
+-- Back-compat single-value form: the first immunity, or nil. Kept because the cost scan asks
+-- only "is this line a GRANT at all", for which the first answer is enough.
 function M._immunityFrom(desc)
-  if type(desc) ~= "string" then return nil end
-  local aff = desc:lower():match(IMMUNE_PAT)
-  if not aff or aff == "" then return nil end
-  -- Guard against a runaway lazy match swallowing half a sentence.
-  if #aff > 24 or aff:find("%s") then return nil end
-  return aff
+  local list = M._immunitiesFrom(desc)
+  return list[1]
 end
 
 -- { [affliction] = <boon that granted it> } for the CURRENT run. Empty table when none.
@@ -1040,8 +1067,7 @@ function M.runImmunities()
         local info = M.boonInfo and M.boonInfo(c.name)
         desc = info and info.description
       end
-      local aff = M._immunityFrom(desc)
-      if aff then out[aff] = c.name end
+      for _, aff in ipairs(M._immunitiesFrom(desc)) do out[aff] = c.name end
     end
   end
   return out
@@ -1062,6 +1088,13 @@ local DRAWBACK_AFFS = {
   "dizziness", "epilepsy", "masochism", "paralysis", "blindness", "weariness", "stupidity",
   "slickness", "lethargy", "insomnia", "paranoia", "dementia", "deafness", "anorexia",
   "hyperactivity", "shyness", "nausea", "asthma", "vertigo", "voyria", "webbed", "aeon",
+  -- Added v4.7.236 after a live miss. These ARE real afflictions; they were held out with the
+  -- genuinely generic words (fear, peace, pressure, burning, frozen, prone, sleeping, bound)
+  -- because they read as ordinary English. But the cost-clause restriction already does that
+  -- work -- the scan only looks after "but" / "you suffer" / "at the cost of" -- and
+  -- "Corrupted Mind: ...but you suffer permanent guilt" is exactly the line being missed.
+  -- The truly generic ones stay out; these are nouns Achaea uses as affliction names.
+  "generosity", "disloyalty", "justice", "guilt", "itching",
 }
 
 -- Clause markers that introduce a COST. The drawback scan runs only on the text after one of
