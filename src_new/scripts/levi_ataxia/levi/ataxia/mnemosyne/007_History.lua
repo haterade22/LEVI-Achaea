@@ -74,6 +74,9 @@ function M._historySave()
   local fn = histFile()
   if not fn or type(table.save) ~= "function" then return end
   pcall(table.save, fn, M.history)
+  -- ...and the catalogue to its own file, so a bad history write cannot take the one part
+  -- that cannot be rebuilt. Both writes are already debounced by the caller.
+  if M._boonDbSave then M._boonDbSave() end
 end
 
 -- Debounced save. A BOONS list calls _learnBoon once PER ROW (30+ rows is normal), and a
@@ -263,5 +266,137 @@ function M.reportLibrary()
   end
 end
 
--- Load persisted history at startup.
+-- ---------------------------------------------------------------------------
+-- THE BOON DATABASE (v4.7.239)
+-- ---------------------------------------------------------------------------
+-- User: "I would love to do a boons database that captures all of the boons and their effects
+-- for safe storage."
+--
+-- Most of it already existed: `M.history.boonLibrary` has been learning name + description +
+-- rarity + maxEchoes from every offer screen since the catalogue was added. What it did NOT
+-- have was any way to LOOK at it, and -- the part that matters -- any storage of its own.
+--
+-- WHY ITS OWN FILE. A boon's description is shown exactly ONCE, on the offer screen, and never
+-- again: the BOONS list you read to see what you own is `Boon | Echoes | Rarity` with no
+-- description at all. That makes the catalogue genuinely irreplaceable -- if it is lost, the
+-- only way to rebuild it is to be offered every boon in the game again. It was living inside
+-- `mnemosyne_history.lua` alongside run counters, claims and offers, which are rewritten
+-- constantly and are worth nothing next week. Bundling something irreplaceable with something
+-- disposable means one bad write loses both.
+--
+-- So the catalogue is ALSO written to its own file, and loading MERGES rather than replaces --
+-- same semantics as `_learnBoon`, where the offer screen supplies the description, the BOONS
+-- list supplies rarity and the detail screen supplies maxEchoes, and no source ever blanks a
+-- field another one filled. That makes an import safe: a backup can only ever add.
+local function boonDbFile()
+  if type(getMudletHomeDir) ~= "function" then return nil end
+  return getMudletHomeDir() .. "/mnemosyne_boons.lua"
+end
+
+function M._boonDbSave()
+  local fn = boonDbFile()
+  if not fn or type(table.save) ~= "function" then return false end
+  -- Saved as a wrapper table rather than the bare catalogue: a version field costs nothing now
+  -- and is the difference between a readable file and a guess if the shape ever changes.
+  local ok = pcall(table.save, fn, { version = 1, boons = M.history.boonLibrary or {} })
+  return ok and true or false
+end
+
+-- Merge a stored catalogue in. Never blanks a field that is already filled -- see above.
+function M._boonDbMerge(src)
+  if type(src) ~= "table" then return 0, 0 end
+  M.history.boonLibrary = M.history.boonLibrary or {}
+  local added, enriched = 0, 0
+  for name, rec in pairs(src) do
+    if type(name) == "string" and name ~= "" and type(rec) == "table" then
+      local cur = M.history.boonLibrary[name]
+      if not cur then
+        M.history.boonLibrary[name] = { description = rec.description, rarity = rec.rarity,
+                                        maxEchoes = rec.maxEchoes }
+        added = added + 1
+      else
+        local before = tostring(cur.description) .. tostring(cur.rarity) .. tostring(cur.maxEchoes)
+        if (cur.description == nil or cur.description == "") and rec.description then
+          cur.description = rec.description
+        end
+        if (cur.rarity == nil or cur.rarity == "") and rec.rarity then cur.rarity = rec.rarity end
+        if cur.maxEchoes == nil and rec.maxEchoes then cur.maxEchoes = rec.maxEchoes end
+        if before ~= (tostring(cur.description) .. tostring(cur.rarity) .. tostring(cur.maxEchoes)) then
+          enriched = enriched + 1
+        end
+      end
+    end
+  end
+  return added, enriched
+end
+
+function M._boonDbLoad()
+  local fn = boonDbFile()
+  if not fn or type(table.load) ~= "function" then return 0, 0 end
+  local blob = {}
+  local ok = pcall(table.load, fn, blob)
+  if not ok then return 0, 0 end
+  -- Accept both shapes: the versioned wrapper, and a bare catalogue in case someone hand-edits
+  -- or an older export turns up. Refusing to read a file we clearly understand would be
+  -- pedantry at the cost of the backup actually working.
+  return M._boonDbMerge(blob.boons or blob)
+end
+
+-- What do we actually have? Counts, not a dump -- the dump is the report below.
+function M.boonDbStats()
+  local total, described, rarity, echoes = 0, 0, 0, 0
+  for _, rec in pairs(M.history.boonLibrary or {}) do
+    total = total + 1
+    if type(rec) == "table" then
+      if rec.description and rec.description ~= "" then described = described + 1 end
+      if rec.rarity and rec.rarity ~= "" then rarity = rarity + 1 end
+      if rec.maxEchoes then echoes = echoes + 1 end
+    end
+  end
+  return { total = total, described = described, rarity = rarity, echoes = echoes }
+end
+
+-- The viewer. `filter` matches the name OR the description, so "immune" finds every immunity
+-- boon and "battlerage" finds everything that touches rage -- which is the question you
+-- actually have when you are staring at an offer screen.
+function M.reportBoonDb(filter)
+  local lib = M.history.boonLibrary or {}
+  local names = {}
+  local f = (type(filter) == "string" and filter ~= "") and filter:lower() or nil
+  for name, rec in pairs(lib) do
+    local hay = (name .. " " .. tostring(type(rec) == "table" and rec.description or "")):lower()
+    if not f or hay:find(f, 1, true) then names[#names + 1] = name end
+  end
+  table.sort(names)
+
+  local st = M.boonDbStats()
+  M.echo("<gold>Boon database<reset> -- " .. st.total .. " known, " .. st.described
+    .. " described, " .. st.rarity .. " with rarity"
+    .. (f and ("  <grey>(filter: " .. filter .. " -> " .. #names .. ")<reset>") or ""))
+  if #names == 0 then return cecho("\n  <grey>(nothing matches)") end
+
+  for _, name in ipairs(names) do
+    local rec = lib[name] or {}
+    local col = (M.RARITY_COLOUR and rec.rarity and M.RARITY_COLOUR[rec.rarity]) or "cyan"
+    cecho("\n  <" .. col .. ">" .. name .. "<reset>"
+      .. (rec.rarity and ("  <grey>" .. rec.rarity) or "")
+      .. (rec.maxEchoes and ("  <grey>x" .. rec.maxEchoes) or "") .. "<reset>")
+    if rec.description and rec.description ~= "" then
+      cecho("\n      <grey>" .. rec.description)
+      -- Annotate with what we parse out of it, so the database answers the question the
+      -- offer screen asks rather than just storing prose.
+      local grants = M._immunitiesFrom and M._immunitiesFrom(rec.description) or {}
+      local costs = M._boonDrawbacks and M._boonDrawbacks(rec.description) or {}
+      if #grants > 0 then
+        cecho("\n      <pale_green>immune: <cyan>" .. table.concat(grants, "<reset>, <cyan>") .. "<reset>")
+      end
+      if #costs > 0 then
+        cecho("\n      <indian_red>costs: " .. table.concat(costs, ", ") .. "<reset>")
+      end
+    end
+  end
+end
+
+-- Load persisted history at startup, then merge the standalone catalogue over it.
 M._historyLoad()
+if M._boonDbLoad then pcall(M._boonDbLoad) end

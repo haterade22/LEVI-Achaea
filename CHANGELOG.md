@@ -31,6 +31,53 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-07 - The boon database gets a viewer and its own file (v4.7.239)
+
+User: *"I would love to do a boons database that captures all of the boons and their effects
+for safe storage."*
+
+**Most of it already existed.** `M.history.boonLibrary` has been learning name + description +
+rarity + maxEchoes from every offer screen since the catalogue was added. What it lacked was any
+way to *look* at it -- `mnem library` reports the AFFIX catalogue, and the boon one had no
+command at all -- and, more seriously, any storage of its own.
+
+### Why its own file
+
+A boon's description is shown **exactly once**, on the offer screen. The BOONS list you read to
+see what you own is `Boon | Echoes | Rarity` with no description at all. That makes the
+catalogue genuinely irreplaceable: lose it and the only way to rebuild it is to be offered
+every boon in the game again.
+
+It was living inside `mnemosyne_history.lua` next to run counters, claims and offers -- data
+that is rewritten constantly and worth nothing next week. **Bundling something irreplaceable
+with something disposable means one bad write loses both.** The catalogue is now also written
+to `mnemosyne_boons.lua`, saved alongside the history and merged back at startup.
+
+### An import can only ever add
+
+Loading MERGES rather than replaces, with the same semantics as `_learnBoon`: the offer screen
+supplies the description, the BOONS list the rarity, the detail screen the maxEchoes, and no
+source ever blanks a field another one filled. So restoring a backup is safe even if the backup
+is thinner than what is in memory -- and re-importing the same file twice changes nothing.
+
+### The viewer
+
+```
+mnem boondb                -- everything, with rarity and echo counts
+mnem boondb immune         -- filter, matched against name AND effect text
+mnem boondb export|import
+```
+
+The filter matching the *effect* is the point: `immune` finds every immunity boon and
+`battlerage` everything touching rage, which is the question you actually have with an offer
+screen up. Each entry is annotated with the immunities and costs parsed out of its own
+description, so the database answers that question rather than merely storing prose.
+
+Files: `mnemosyne/007_History.lua`, `mnemosyne/003_Commands.lua`. Suite **1151 -> 1156**; all
+three behaviours verified by breaking the code back.
+
+---
+
 ## 2026-08-07 - A boon can be a grant AND a cost (v4.7.238)
 
 From another live screen:

@@ -57,6 +57,7 @@ function M.help()
     { "mnem boonfill", "BOON CONTEMPLATE owned boons with no description yet (run BOONS first)" },
     { "mnem affixes", "This run's active affixes (ongoing effects)" },
     { "mnem library", "All-time affix catalogue" },
+    { "mnem boondb [filter|export|import]", "All-time BOON catalogue (own file; filter matches name or effect)" },
     { "mnem quiet [on|off]", "Silence auto boon/affix echoes (still records)" },
     { "mnem start | end", "Manually start / end a run" },
     { "mnem check", "Re-sync with an in-progress run (/run_exists)" },
@@ -238,6 +239,25 @@ function M.command(rest)
     M.reportAffixes()
   elseif cmd == "library" then
     M.reportLibrary()
+  elseif cmd == "boondb" or cmd == "db" then
+    -- `mnem boondb` view / filter, `export`, `import`. The catalogue is the one thing here
+    -- that cannot be rebuilt (a description is shown once, on the offer screen), so it gets
+    -- its own file and its own commands rather than living only inside run history.
+    local sub = (arg or ""):match("^(%S*)")
+    if sub == "export" or sub == "save" then
+      if M._boonDbSave() then
+        local st = M.boonDbStats()
+        M.echo("Boon database <green>saved<reset> -- " .. st.total .. " boons to mnemosyne_boons.lua.")
+      else
+        M.echo("<indian_red>Could not save<reset> the boon database.")
+      end
+    elseif sub == "import" or sub == "load" then
+      local added, enriched = M._boonDbLoad()
+      M.echo("Boon database loaded -- <green>" .. added .. "<reset> new, <cyan>" .. enriched
+        .. "<reset> filled in. (A merge: an import can only ever add.)")
+    else
+      M.reportBoonDb(arg)
+    end
   elseif cmd == "cards" then
     -- Legend deck auto-draw (basher/010). Conditions are fixed by the card's
     -- effect; only the three thresholds and the master switch are tunable.

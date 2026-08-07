@@ -1839,6 +1839,89 @@ end)
 
 -- ─── Local run history (#6) ──────────────────────────────────────────────────
 
+-- THE BOON DATABASE (v4.7.239). User: "I would love to do a boons database that captures all
+-- of the boons and their effects for safe storage."
+--
+-- The catalogue itself already existed (M.history.boonLibrary, fed by every offer screen).
+-- What it lacked was a viewer and storage of its OWN. A boon's description is shown exactly
+-- once -- the BOONS list you read to see what you own has no descriptions at all -- so the
+-- catalogue is genuinely irreplaceable, and it was living inside the same file as run counters
+-- and claims, which are rewritten constantly and worthless next week.
+describe("boon database", function()
+  local function lib(t)
+    M.history = M.history or {}
+    M.history.boonLibrary = t
+  end
+
+  it("counts what it actually knows, not just how many names", function()
+    lib({
+      Outlaw = { description = "You are immune to the justice and guilt afflictions.", rarity = "uncommon" },
+      Beeline = { description = "You may now utilise prism tattoos." },
+      Mystery = {},
+    })
+    local st = M.boonDbStats()
+    expect(st.total).toBe(3)
+    expect(st.described).toBe(2)
+    expect(st.rarity).toBe(1)
+  end)
+
+  -- A merge, never a replace: the offer screen supplies the description, the BOONS list the
+  -- rarity, the detail screen maxEchoes. An import must only ever ADD -- otherwise restoring a
+  -- backup could blank richer data than it carries.
+  it("merges an import without blanking anything richer", function()
+    lib({ Outlaw = { description = "You are immune to the justice and guilt afflictions." } })
+    local added, enriched = M._boonDbMerge({
+      Outlaw  = { description = "", rarity = "uncommon" },   -- fills rarity, keeps description
+      Newcomer = { description = "Something new.", rarity = "rare" },
+    })
+    expect(added).toBe(1)
+    expect(enriched).toBe(1)
+    expect(M.history.boonLibrary.Outlaw.description)
+      .toBe("You are immune to the justice and guilt afflictions.")
+    expect(M.history.boonLibrary.Outlaw.rarity).toBe("uncommon")
+    expect(M.history.boonLibrary.Newcomer.rarity).toBe("rare")
+  end)
+
+  it("ignores junk rather than storing it", function()
+    lib({})
+    local added = M._boonDbMerge({ [""] = { description = "x" }, Good = { description = "y" } })
+    expect(added).toBe(1)
+    expect(M.history.boonLibrary[""]).toBe(nil)
+    expect(M._boonDbMerge("not a table")).toBe(0)
+  end)
+
+  it("is idempotent -- re-importing the same file changes nothing", function()
+    lib({})
+    local src = { Outlaw = { description = "You are immune to the justice and guilt afflictions.",
+                             rarity = "uncommon" } }
+    local a1 = M._boonDbMerge(src)
+    local a2, e2 = M._boonDbMerge(src)
+    expect(a1).toBe(1)
+    expect(a2).toBe(0)
+    expect(e2).toBe(0)
+  end)
+
+  -- The filter is the point of the viewer: "immune" should find every immunity boon, because
+  -- that is the question you have while an offer screen is up.
+  it("filters on the effect text, not just the name", function()
+    lib({
+      Outlaw   = { description = "You are immune to the justice and guilt afflictions." },
+      Plasmatic = { description = "You are immune to the haemophilia affliction." },
+      Beeline  = { description = "You may now utilise prism tattoos." },
+    })
+    local shown = {}
+    local realEcho, realCecho = M.echo, cecho
+    M.echo = function() end
+    cecho = function(t) shown[#shown + 1] = tostring(t) end
+    M.reportBoonDb("immune")
+    M.echo, cecho = realEcho, realCecho
+    local blob = table.concat(shown, " ")
+    expect(blob:find("Outlaw", 1, true) ~= nil).toBeTrue()
+    expect(blob:find("Plasmatic", 1, true) ~= nil).toBeTrue()
+    expect(blob:find("Beeline", 1, true)).toBe(nil)
+  end)
+end)
+
 describe("local run history", function()
   local function freshHistory()
     M.history = { run = 0, claims = {}, offers = {}, affixes = {}, library = {} }
