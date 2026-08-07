@@ -589,6 +589,77 @@ function S._maybePanic(hpNow)
   return true
 end
 
+-- ---------------------------------------------------------------------------
+-- A TUMBLE THAT NEVER LANDED (v4.7.233)
+-- ---------------------------------------------------------------------------
+-- Death log, 2026-08-07:
+--
+--   You begin to tumble agilely to the north.
+--   ... [ shiv PAR dis ]        <- paralysed, still in the room
+--   ... You have been slain by a HaHaHa lancer.
+--
+-- "You begin to tumble agilely to the north." is the START of a two-stage action, not its
+-- completion. Paralysis (or prone, or a stun) between the two halves cancels it and we simply
+-- stay put -- and NOTHING checked. The panic tumble is a raw free-queued send with no
+-- confirmation of any kind, so the one move the anti-death ladder depends on was the only move
+-- in this module that could fail silently.
+--
+-- Confirmation is the ROOM CHANGING. Not a success line -- the game prints several depending
+-- on how the tumble ends, and picking one to trust is how triggers ship dead here. If the room
+-- number is the same `TUMBLE_CONFIRM` seconds later, the tumble did not happen: re-send it,
+-- with `stand` in front (prone is one of the two things that cancels it) and bounded retries
+-- so a genuinely stuck character cannot spin forever.
+local TUMBLE_CONFIRM = 2      -- seconds to allow a tumble to land before re-sending
+local TUMBLE_RETRIES = 2      -- re-sends before giving up and letting the ladder decide
+
+function S.onTumbleStart(dir)
+  if type(dir) ~= "string" or dir == "" then return end
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  local MAP = M.map
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.tumbleDir = dir
+  ataxiaTemp.tumbleFrom = MAP and MAP.current
+  ataxiaTemp.tumbleTries = tonumber(ataxiaTemp.tumbleTries) or 0
+  if S._tumbleT then pcall(killTimer, S._tumbleT) end
+  S._tumbleT = tempTimer(TUMBLE_CONFIRM, function()
+    S._tumbleT = nil
+    S._tumbleCheck()
+  end)
+end
+
+function S._tumbleCheck()
+  local MAP = M.map
+  if not ataxiaTemp or not ataxiaTemp.tumbleDir then return end
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return S.onTumbleDone() end
+  -- Moved: the tumble landed. Nothing to do.
+  if not MAP or MAP.current ~= ataxiaTemp.tumbleFrom then return S.onTumbleDone() end
+
+  local tries = (tonumber(ataxiaTemp.tumbleTries) or 0) + 1
+  if tries > TUMBLE_RETRIES then
+    S._echo("<indian_red>tumble failed " .. TUMBLE_RETRIES .. "x<reset> -- handing back to the ladder.")
+    return S.onTumbleDone()
+  end
+  ataxiaTemp.tumbleTries = tries
+  local sep = (ataxia.settings and ataxia.settings.separator) or ";"
+  -- Free-queued and stand-first, exactly as the panic sends it: the two things that cancel a
+  -- tumble are prone and a lost balance, and this covers both.
+  send("queue addclear free stand" .. sep .. "tumble " .. ataxiaTemp.tumbleDir)
+  S._echo("<indian_red>tumble did not land<reset> (still in the same room) -- retry "
+    .. tries .. "/" .. TUMBLE_RETRIES .. " <cyan>" .. ataxiaTemp.tumbleDir .. "<reset>.")
+  if S._tumbleT then pcall(killTimer, S._tumbleT) end
+  S._tumbleT = tempTimer(TUMBLE_CONFIRM, function()
+    S._tumbleT = nil
+    S._tumbleCheck()
+  end)
+end
+
+function S.onTumbleDone()
+  if S._tumbleT then pcall(killTimer, S._tumbleT); S._tumbleT = nil end
+  if ataxiaTemp then
+    ataxiaTemp.tumbleDir, ataxiaTemp.tumbleFrom, ataxiaTemp.tumbleTries = nil, nil, nil
+  end
+end
+
 -- Keep the attack-dispatch hold alive while we hover to recover -- refreshed every
 -- recovery tick so the HOLD_TIMEOUT self-clear can't expose us mid-hover.
 function S._armRecoverHold()
@@ -743,14 +814,51 @@ function S.onTick()
     -- something wanders into the room with us, standing there attack-gated at panic HP is
     -- strictly worse than fighting it -- hand back and let the basher swing.
     if S.recoverGround and M._roomHasDenizens and M._roomHasDenizens() then
+      -- MOVE AGAIN, do not stand and fight (v4.7.233). The v4.7.218 rule handed straight back
+      -- to the basher here, and the death log shows what that costs: "company arrived
+      -- mid-recovery (43%) -- handing back", then "LOW HP (31%)" four seconds later, then
+      -- dead. Handing back drops us into a mob-filled room at half health with the recovery
+      -- abandoned -- the worst of both.
+      --
+      -- With Roll Hide up the answer is another tumble: it sheds pursuers outright, so the
+      -- fight does not follow, and we keep healing somewhere quieter. Only when we cannot move
+      -- (no boon, no route) is standing and fighting genuinely the better option -- and then
+      -- it really is better than being attack-gated while something hits us.
+      local dir = mnemRollHide and S._panicDir()
+      if dir then
+        local sep = (ataxia.settings and ataxia.settings.separator) or ";"
+        send("queue addclear free stand" .. sep .. "tumble " .. dir)
+        S.onTumbleStart(dir) -- confirm it actually lands; retry if it does not
+        S.recoverStarted = now() -- the recovery continues where we land, not from zero
+        S._armRecoverHold()
+        if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
+        S._echo("<indian_red>company mid-recovery (" .. hpp() .. "%)<reset> -- tumbling on <cyan>"
+          .. dir .. "<reset> rather than trading.")
+        return true
+      end
       S.recoverGround = nil
       S._clearHold()
       S.state = "idle"
-      S._echo("<grey>company arrived mid-recovery (" .. hpp() .. "%) -- handing back.")
+      S._echo("<grey>company arrived mid-recovery (" .. hpp() .. "%) and nowhere to go -- handing back.")
       return false
     end
+    -- CONFIRM WITH DIAGNOSE (v4.7.233, user: "when tumbling we should ensure we heal to full
+    -- and nothing on diagnose"). `S._afflicted()` reads our CLIENT-SIDE tracking, which is
+    -- exactly the thing that is unreliable after a chaotic fight -- the death log has
+    -- afflictions arriving faster than they were being cured. So the first time we believe we
+    -- are clean, send one DIAGNOSE and require the NEXT tick to still agree; the existing
+    -- affliction triggers fold its output back into ataxia.afflictions. One extra tick, once
+    -- per recovery, and it is the difference between "we think we are clean" and "we are".
     local healed = hpp() >= s.recoverAt and not S._afflicted()
+    if healed and not S.recoverDiagnosed then
+      S.recoverDiagnosed = true
+      send("diagnose")
+      S._armRecoverHold()
+      if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
+      return true
+    end
     if healed or (now() - (S.recoverStarted or 0)) > RECOVER_MAX then
+      S.recoverDiagnosed = nil
       -- Only land if we are actually up: a ground recovery sending "land" every time is
       -- noise, and noise in the escape path is how a real refusal gets missed.
       if S.flying then send("land") end
@@ -1059,6 +1167,8 @@ function S.reset(reason)
   S.state = "idle"
   S.mode = nil
   S.recoverGround = nil
+  S.recoverDiagnosed = nil
+  if S.onTumbleDone then S.onTumbleDone() end
   S.swarmRoom, S.funnelRoom, S.funnelAt = nil, nil, nil
   S.backShort, S.backLong, S.fwdShort = nil, nil, nil
   S.peakFollowers, S.announcedFollow = nil, nil

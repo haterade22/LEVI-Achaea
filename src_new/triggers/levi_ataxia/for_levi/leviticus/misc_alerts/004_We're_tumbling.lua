@@ -40,6 +40,15 @@ patterns:
 ]]--
 
 ataxia_boxEcho("WE HAVE STARTED TO TUMBLE "..matches[2].."!", "orange")
+
+-- BEGIN, not done (v4.7.233). This line is the START of a two-stage action; paralysis, prone
+-- or a stun between the halves cancels it and we stay put. Hand it to the swarm module, which
+-- confirms the room actually changed and re-sends if it did not -- the anti-death ladder
+-- depends on this move landing, and it was the one move here that could fail silently.
+if ataxia and ataxia.mnemosyne and ataxia.mnemosyne.swarm
+   and ataxia.mnemosyne.swarm.onTumbleStart then
+  ataxia.mnemosyne.swarm.onTumbleStart(matches[2])
+end
 --clearCmdLine()
 --appendCmdLine(matches[2])	
 

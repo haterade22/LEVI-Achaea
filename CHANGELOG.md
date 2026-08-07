@@ -31,6 +31,57 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-07 - A tumble that never landed (v4.7.233)
+
+User, from a death log: *"Something stop us from tumbling, maybe prone or paralysis and we
+would need to redo tumble. Additionally, when tumbling we should ensure we heal to full and
+nothing on diagnose."*
+
+```
+You begin to tumble agilely to the north.
+...  [ shiv PAR dis ]        <- paralysed, still in the room
+(MNEM): [swarm] company arrived mid-recovery (43%) -- handing back.
+(MNEM): [swarm] LOW HP (31%) -- retreating to recover -> n.
+You have been slain by a HaHaHa lancer.
+```
+
+### The tumble was never confirmed
+
+`"You begin to tumble agilely to the north."` is the **start** of a two-stage action, not its
+completion. Paralysis, prone or a stun between the halves cancels it and we simply stay put --
+and nothing checked. The panic tumble is a raw free-queued send, so **the one move the
+anti-death ladder depends on was the only move in the module that could fail silently.**
+
+Confirmation is now the **room changing** -- not a success line, because the game prints
+several depending on how the tumble ends and picking one to trust is how triggers ship dead
+here. Same room 2s later means it did not happen: re-send with `stand` in front (prone is one
+of the two things that cancels it), bounded at 2 retries so a genuinely stuck character cannot
+spin forever.
+
+### And v4.7.218 made it worse -- reversed
+
+That release handed straight back to the basher when a denizen arrived mid-recovery, on the
+reasoning that standing attack-gated at low HP is worse than fighting. The log shows the real
+cost: handed back at **43%**, `LOW HP (31%)` four seconds later, dead. It drops us into a
+mob-filled room at half health with the recovery abandoned -- the worst of both.
+
+With Roll Hide up the answer is **another tumble**: it sheds pursuers outright, so the fight
+does not follow and we keep healing somewhere quieter. Handing back is kept only for when we
+genuinely cannot move -- and there it really is the better option.
+
+### Healed means confirmed, not assumed
+
+`S._afflicted()` reads client-side tracking, which is exactly what is least reliable after a
+chaotic fight -- the log has afflictions arriving faster than they were cured. The first tick
+that believes we are clean now sends one **`diagnose`** and requires the next tick to still
+agree; the existing affliction triggers fold its output back in. One extra tick, once per
+recovery, and it is the difference between *"we think we are clean"* and *"we are"*.
+
+Files: `mnemosyne/009_Swarm_Tactics.lua`, trigger `misc_alerts/004_We're_tumbling`. Suite
+**1111 -> 1119**; all four behaviours verified by breaking the code back.
+
+---
+
 ## 2026-08-07 - The attack was eating the lyre (v4.7.232)
 
 User, with a live log, then: *"need to fix this to remove lyre, wield lyre and than performance

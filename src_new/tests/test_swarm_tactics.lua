@@ -689,6 +689,12 @@ describe("swarm low-HP escape ladder", function()
     -- Landing CONSUMES the tick and settles (live catch 2026-07-27: airborne gmcp
     -- Items reflect the SKY, so denizensHere is empty -- deciding now would read a
     -- mob-filled ground room as "clear" and walk out of the fight on touchdown).
+    -- DIAGNOSE FIRST (v4.7.233): the first tick that believes we are clean sends `diagnose`
+    -- and waits one more, because S._afflicted() reads client-side tracking -- the thing that
+    -- is least reliable straight after a chaotic fight. One extra tick per recovery.
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")
+    expect(findCmd("diagnose") ~= nil).toBeTrue()
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("idle")
     expect(S.flying).toBe(nil)
@@ -714,6 +720,7 @@ describe("swarm low-HP escape ladder", function()
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("recovering") -- the BROKEN LIMB is real and still holds us
     ataxia.afflictions = { paranoia = true, shyness = true } -- only parked affs left
+    expect(S.onTick()).toBeTrue()      -- diagnose tick (v4.7.233)
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("idle")       -- lands rather than floating to the cap
     expect(findCmd("land") ~= nil).toBeTrue()
@@ -1080,6 +1087,83 @@ end)
 -- ROLL HIDE, the point of it (user, 2026-08-06): "the denizens wont follow so we can use this
 -- to our advantage to heal up and then do hit and run tactics". The tumble was only ever half
 -- the tactic -- shedding pursuers is worth nothing if we walk straight back in.
+-- A TUMBLE THAT NEVER LANDED (v4.7.233). Death log, 2026-08-07: "You begin to tumble agilely
+-- to the north." then paralysis, then still in the room, then dead. That line is the START of
+-- a two-stage action; paralysis, prone or a stun between the halves cancels it. Nothing
+-- checked, and the panic tumble is the one move the anti-death ladder depends on.
+--
+-- Confirmation is the ROOM CHANGING, not a success line -- the game prints several depending
+-- on how the tumble ends, and picking one to trust is how triggers ship dead in this project.
+describe("tumble confirmation and retry", function()
+  local function armTumble()
+    fixture(1)
+    ataxiaBasher.inMnemosyne = true
+    MAP.current = 200
+    sent = {}
+    S.onTumbleDone()
+    S.onTumbleStart("n")
+  end
+  local function tumbles()
+    local n = 0
+    for _, c in ipairs(sent) do if c:find("tumble", 1, true) then n = n + 1 end end
+    return n
+  end
+
+  it("records where it started from, so the check has a baseline", function()
+    armTumble()
+    expect(ataxiaTemp.tumbleDir).toBe("n")
+    expect(ataxiaTemp.tumbleFrom).toBe(200)
+  end)
+
+  it("re-sends when the room did NOT change", function()
+    armTumble()
+    S._tumbleCheck()               -- still in room 200: the tumble was cancelled
+    expect(tumbles()).toBe(1)
+    expect(ataxiaTemp.tumbleTries).toBe(1)
+    expect(sent[#sent]).toBe("queue addclear free stand;tumble n")
+  end)
+
+  -- `stand` in front matters: prone is one of the two things that cancels a tumble, so a bare
+  -- re-send would be cancelled exactly the same way.
+  it("stands first on the retry", function()
+    armTumble()
+    S._tumbleCheck()
+    expect(sent[#sent]:find("stand", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("stops re-sending once the room changed -- the tumble landed", function()
+    armTumble()
+    MAP.current = 100              -- we moved
+    S._tumbleCheck()
+    expect(tumbles()).toBe(0)
+    expect(ataxiaTemp.tumbleDir).toBe(nil)   -- and the state is cleared
+  end)
+
+  -- Bounded: a genuinely stuck character (permanently paralysed, walled in) must not spin
+  -- forever re-sending a move that cannot work.
+  it("gives up after the retry budget and hands back", function()
+    armTumble()
+    S._tumbleCheck(); S._tumbleCheck(); S._tumbleCheck(); S._tumbleCheck()
+    expect(tumbles()).toBe(2)      -- TUMBLE_RETRIES
+    expect(ataxiaTemp.tumbleDir).toBe(nil)
+  end)
+
+  it("is inert outside the tower", function()
+    fixture(1)
+    ataxiaBasher.inMnemosyne = false
+    sent = {}
+    S.onTumbleStart("n")
+    expect(ataxiaTemp.tumbleDir).toBe(nil)
+    ataxiaBasher.inMnemosyne = true
+  end)
+
+  it("a reset clears any tumble in flight", function()
+    armTumble()
+    S.reset("test")
+    expect(ataxiaTemp.tumbleDir).toBe(nil)
+  end)
+end)
+
 describe("Roll Hide -- heal where we landed, then go back in", function()
   local function panicNow()
     fixture(3); mnemRollHide = true
@@ -1108,8 +1192,13 @@ describe("Roll Hide -- heal where we landed, then go back in", function()
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("recovering")
     ataxia.afflictions = {}
+    expect(S.onTick()).toBeTrue()          -- diagnose tick (v4.7.233)
+    local sawDiag = false
+    for _, c in ipairs(sent) do if c == "diagnose" then sawDiag = true end end
+    expect(sawDiag).toBeTrue()
+    expect(S.state).toBe("recovering")
     expect(S.onTick()).toBeTrue()
-    expect(S.state).toBe("idle") -- healed and clean: hand back for the next hit-and-run
+    expect(S.state).toBe("idle") -- healed, clean AND confirmed: hand back for the next run-in
   end)
 
   it("does not land -- it never left the ground", function()
@@ -1122,14 +1211,32 @@ describe("Roll Hide -- heal where we landed, then go back in", function()
     for i = before + 1, #sent do expect(sent[i] ~= "land").toBeTrue() end
   end)
 
-  -- A ground recovery is NOT untouchable the way the hover is. Standing there attack-gated at
-  -- panic HP while something hits us is strictly worse than fighting it.
-  it("hands back if a denizen wanders in mid-recovery", function()
+  -- REQUIREMENT REVERSED, v4.7.233, from a death log. v4.7.218 handed straight back to the
+  -- basher here; the log shows the cost -- "company arrived mid-recovery (43%) -- handing
+  -- back", then "LOW HP (31%)" four seconds later, then dead. Handing back drops us into a
+  -- mob-filled room at half health with the recovery abandoned. With Roll Hide up the answer
+  -- is another tumble: it sheds pursuers, so the fight does not follow.
+  it("tumbles ON rather than trading, when a denizen wanders in", function()
     panicNow()
     mobs = 2
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")     -- still recovering, just somewhere else
+    local sawTumble = false
+    for _, c in ipairs(sent) do if c:find("tumble", 1, true) then sawTumble = true end end
+    expect(sawTumble).toBeTrue()
+    expect(ataxiaTemp.swarmHold).toBeTrue()
+  end)
+
+  -- ...but standing and fighting IS right when we genuinely cannot move: being attack-gated
+  -- while something hits us is the one thing worse than trading.
+  it("hands back when there is nowhere to tumble to", function()
+    panicNow()
+    mobs = 2
+    mnemRollHide = false                   -- no boon: a tumble sheds nothing
     expect(S.onTick()).toBeFalse()
     expect(S.state).toBe("idle")
     expect(ataxiaTemp.swarmHold).toBe(nil)
+    mnemRollHide = true
   end)
 
   it("does not tumble again while recovering", function()
