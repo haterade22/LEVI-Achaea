@@ -306,4 +306,22 @@ describe("bard compose hold -- attack refuses while the lyre is in hand", functi
     ataxiaBasher_attack()
     expect(danger).toBe(1)
   end)
+
+  -- FULL PHIAL LOCK (v4.7.235). Tree and shield are queued; every attack sends
+  -- `queue addclearfull`, which clears the FULL queue -- exactly how the escape was thrown
+  -- away in the Seasone death log. Swinging is not what saves us at IMP SLI AST ANO.
+  it("does not reach the attack round during a full phial lock", function()
+    spy()
+    ataxiaTemp.phialHold = true
+    ataxiaBasher_attack()
+    expect(danger).toBe(0)
+    ataxiaTemp.phialHold = nil
+  end)
+
+  it("resumes once the phial hold expires", function()
+    spy()
+    ataxiaTemp.phialHold = nil
+    ataxiaBasher_attack()
+    expect(danger).toBe(1)
+  end)
 end)

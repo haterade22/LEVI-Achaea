@@ -1105,6 +1105,113 @@ describe("Seasone tree reserve", function()
     ataxiaBasher = nil
   end)
 
+  -- THE FULL LOCK IS A DIFFERENT EVENT FROM THE BURST (v4.7.235). User: "When we get imp sli
+  -- ast ano we should be touching tree and also shielding would help here. So pause the attack
+  -- touch tree and shield as we dont have paralysis yet."
+  --
+  -- v4.7.213 was right that the BURST is not the moment to spend the tattoo. But once all four
+  -- land, slickness blocks salves and anorexia blocks eating -- there is no cure route left
+  -- that does not start with the tattoo, so waiting out treeGrace just donates five seconds.
+  it("stops swinging, trees and shields on the FULL lock", function()
+    bossReset()
+    ataxiaTemp = { usedTree = nil }
+    ataxia.vitals = { hpp = 90 }
+    ataxia.defences = {}
+    ataxia.afflictions = { anorexia = true, slickness = true, asthma = true, impatience = true }
+    captureSend(function(captured)
+      expect(M._phialLockResponse()).toBeTrue()
+      -- `cq all` FIRST: whatever is queued was decided before the lock existed, and every
+      -- attack sends `queue addclearfull` -- which is what ate the escape in the death log.
+      expect(captured[1]:find("cq all", 1, true) ~= nil).toBeTrue()
+      expect(captured[1]:find("touch tree", 1, true) ~= nil).toBeTrue()
+      expect(captured[1]:find("touch shield", 1, true) ~= nil).toBeTrue()
+    end)
+    expect(ataxiaTemp.phialHold).toBeTrue()   -- attack paused
+    ataxiaBasher = nil
+  end)
+
+  it("does nothing until ALL FOUR are up", function()
+    bossReset()
+    ataxiaTemp = {}
+    ataxia.afflictions = { anorexia = true, slickness = true, asthma = true } -- no impatience
+    captureSend(function(captured)
+      expect(M._phialLockResponse()).toBeFalse()
+      expect(#captured).toBe(0)
+    end)
+    expect(ataxiaTemp.phialHold).toBe(nil)
+    ataxiaBasher = nil
+  end)
+
+  -- A shield needs an arm and a free action. Paralysed, the command is a refusal that costs
+  -- the round -- and the round is the only thing we have left.
+  it("skips the shield while paralysed, but still trees", function()
+    bossReset()
+    ataxiaTemp = { usedTree = nil }
+    ataxia.defences = {}
+    ataxia.afflictions = { anorexia = true, slickness = true, asthma = true,
+                           impatience = true, paralysis = true }
+    captureSend(function(captured)
+      expect(M._phialLockResponse()).toBeTrue()
+      expect(captured[1]:find("touch tree", 1, true) ~= nil).toBeTrue()
+      expect(captured[1]:find("touch shield", 1, true)).toBe(nil)
+    end)
+    ataxiaBasher = nil
+  end)
+
+  it("skips a shield we already have", function()
+    bossReset()
+    ataxiaTemp = { usedTree = nil }
+    ataxia.defences = { shield = true }
+    ataxia.afflictions = { anorexia = true, slickness = true, asthma = true, impatience = true }
+    captureSend(function(captured)
+      expect(M._phialLockResponse()).toBeTrue()
+      expect(captured[1]:find("touch shield", 1, true)).toBe(nil)
+    end)
+    ataxiaBasher = nil
+  end)
+
+  -- The tattoo is on cooldown: sending it is a guaranteed refusal, and Splinterbark taints it
+  -- outright. Neither should stop the shield going up.
+  it("skips the tree on cooldown and still shields", function()
+    bossReset()
+    ataxiaTemp = { usedTree = true }
+    ataxia.defences = {}
+    ataxia.afflictions = { anorexia = true, slickness = true, asthma = true, impatience = true }
+    captureSend(function(captured)
+      expect(M._phialLockResponse()).toBeTrue()
+      expect(captured[1]:find("touch tree", 1, true)).toBe(nil)
+      expect(captured[1]:find("touch shield", 1, true) ~= nil).toBeTrue()
+    end)
+    ataxiaBasher = nil
+  end)
+
+  -- Once per lock, not once per tick: the watcher fires every second and this must not become
+  -- a stream of cq-all, which would wipe whatever curing SSC has queued.
+  it("responds once per lock, not on every tick", function()
+    bossReset()
+    ataxiaTemp = { usedTree = nil }
+    ataxia.defences = {}
+    ataxia.afflictions = { anorexia = true, slickness = true, asthma = true, impatience = true }
+    captureSend(function(captured)
+      M._phialLockResponse()
+      M._phialLockResponse()
+      M._phialLockResponse()
+      expect(#captured).toBe(1)
+    end)
+    ataxiaBasher = nil
+  end)
+
+  it("is inert outside the tower", function()
+    bossReset()
+    ataxiaBasher = nil
+    ataxiaTemp = {}
+    ataxia.afflictions = { anorexia = true, slickness = true, asthma = true, impatience = true }
+    captureSend(function(captured)
+      expect(M._phialLockResponse()).toBeFalse()
+      expect(#captured).toBe(0)
+    end)
+  end)
+
   -- The banking only pays off if the tree survives a lock SSC handles itself.
   it("keeps the tree banked when the lock clears on its own", function()
     bossReset()

@@ -31,6 +31,66 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-07 - Seasone: the swing ate the escape (v4.7.235)
+
+Death-log analysis. The disengage fired **correctly and on time** at phial burst #2 -- the
+v4.7.215 logic worked exactly as designed -- and then never happened:
+
+```
+12:54:17  DISENGAGE (phial burst #2) -- breaking off rather than trading
+12:54:22  pull move lost -- reassessing
+```
+
+### The killer
+
+`S._beginEscape()`'s **hover** branch arms the attack hold. The indoor **pull** branch never
+did. `_tacticalGo` queues `stand;<jump> <dir>`, and the next attack dispatch sends
+`queue addclearfull`, which clears the **full** queue and throws the escape away.
+
+The log proves it: **three complete attack rounds fired between the disengage and the lost
+move.** We were swinging while trying to leave, and the swings ate the retreat. Identical shape
+to the lyre bug (v4.7.232) -- a queued action with nothing holding the dispatcher off it -- and
+the second death caused by this pattern.
+
+Those 14 extra seconds cost roughly **26,700 damage against an 18,709 pool**: bees ×3 for
+10,359, venom ×3 for 4,370, ~6,100 of inferno, 2,548 of retching.
+
+### And a lost move is now retried
+
+`onMoveFailed` set state to `idle` and relied on the next tick re-deciding. The explorer tick
+is EVENT-driven, and in a stationary slugfest almost nothing fires it -- the gap here was
+**fourteen seconds**, by which point both legs were broken and every action was refused. It now
+re-sends immediately (bounded at `PULL_RETRIES`), with the hold re-armed so the same dispatch
+cannot eat the retry either.
+
+### The full lock is a different event from the burst
+
+User: *"When we get imp sli ast ano we should be touching tree and also shielding would help
+here. So pause the attack touch tree and shield as we dont have paralysis yet."*
+
+v4.7.213 was right that the **burst** is not the moment to spend the tattoo -- burst one is
+survivable and SSC often wins it. But once **all four** land and the game reports
+`(Locks: soft, hard)`, the argument for waiting is gone: slickness blocks salves and anorexia
+blocks eating, so no cure route remains that does not start with the tattoo. Waiting out
+`treeGrace` from there just donates five seconds.
+
+`M._phialLockResponse()` fires once per lock and does three things in order, and the order is
+the point: **stop swinging** (so `queue addclearfull` cannot throw the rest away, which is
+precisely what happened to the escape), **touch tree**, **touch shield**. The shield is skipped
+while paralysed or already up -- it needs a free action, and a refusal costs the round.
+
+### Also
+
+The disengage reported `LOW HP (97%)` because it reused `_beginEscape`'s echo -- 97 was the
+mana column and HP was nowhere near the threshold. It now reports the actual reason, which
+would have made this log considerably easier to read.
+
+Files: `mnemosyne/009_Swarm_Tactics.lua`, `mnemosyne/004_Parsers.lua`,
+`basher/001_Bashing_Functions.lua`. Suite **1121 -> 1134**; all four behaviours verified by
+breaking the code back.
+
+---
+
 ## 2026-08-07 - The tumble has a completion line, and it takes 4 seconds (v4.7.234)
 
 User: *"'You tumble out of the room.' is the confirmation of tumble completing. 11:52:29:160 -

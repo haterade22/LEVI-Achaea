@@ -144,6 +144,12 @@ function ataxiaBasher_attack()
   -- line), so it can only ever cost a few seconds of swinging.
   if ataxiaTemp.bardComposeHold then return end
 
+  -- Full phial lock (v4.7.235): tree and shield are queued and every attack sends
+  -- `queue addclearfull`, which would clear them exactly as it cleared the escape in the
+  -- Seasone death log. Bounded by a timer, so at worst it costs a few seconds of swinging --
+  -- and swinging is not what was going to save us at IMP SLI AST ANO.
+  if ataxiaTemp.phialHold then return end
+
   -- Determine danger level (flee/shield/attack/wait) — single check, no redundant logic
   local danger = ataxiaBasher_dangerLevel()
 

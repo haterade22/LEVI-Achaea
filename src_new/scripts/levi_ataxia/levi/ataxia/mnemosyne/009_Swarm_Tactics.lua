@@ -620,6 +620,7 @@ end
 -- that line never arrives at all -- which is exactly the paralysis case that started this.
 S.TUMBLE_CONFIRM = 5          -- seconds to allow a tumble to land before re-sending
 S.TUMBLE_RETRIES = 2          -- re-sends before giving up and letting the ladder decide
+S.PULL_RETRIES   = 2          -- re-sends of a lost tactical retreat before handing back
 
 function S.onTumbleStart(dir)
   if type(dir) ~= "string" or dir == "" then return end
@@ -716,7 +717,7 @@ function S._canHover()
   return true
 end
 
-function S._beginEscape()
+function S._beginEscape(why)
   local s = S._cfg()
   if not S._indoors() and S._canHover() then
     S.state = "recovering"
@@ -738,7 +739,18 @@ function S._beginEscape()
   S.swarmRoom, S.funnelRoom = (M.map and M.map.current), M.explore.fromRoom
   S.backShort, S.backLong, S.fwdShort = shortBack, longBack, shortFwd
   S.peakFollowers, S.announcedFollow = 0, false
-  S._tacticalGo(shortBack, "<indian_red>LOW HP (" .. hpp() .. "%)<reset> -- retreating to recover")
+  -- HOLD THE ATTACK (v4.7.235). This is what killed us against Seasone: the hover branch above
+  -- arms the hold, this one never did. `_tacticalGo` queues `stand;<jump> <dir>`, and the very
+  -- next attack dispatch sends `queue addclearfull <attack>` -- which clears the FULL queue and
+  -- throws the escape away. The death log shows THREE complete attack rounds between the
+  -- disengage and "pull move lost": we were swinging while trying to leave, and the swings ate
+  -- the retreat. Same shape as the lyre (v4.7.232) -- a queued action with nothing holding the
+  -- dispatcher off it.
+  S._armRecoverHold()
+  -- `why` is passed by the caller now: this function is reached from the HP ladder AND from
+  -- S.disengage, and reporting "LOW HP (97%)" on a tactical disengage made the log unreadable
+  -- (97 was the mana column, and HP was nowhere near the escape threshold).
+  S._tacticalGo(shortBack, why or ("<indian_red>LOW HP (" .. hpp() .. "%)<reset> -- retreating to recover"))
   return true
 end
 
@@ -787,7 +799,8 @@ function S.disengage(reason)
   if S.state ~= "idle" then S.reset(reason or "disengage") end
   -- Stamp only on success: an indoor room with no validated route back returns false, and
   -- that attempt must not burn the cooldown that a later, movable moment depends on.
-  if not S._beginEscape() then return false end
+  if not S._beginEscape("<indian_red>DISENGAGE<reset>"
+      .. (reason and (" (" .. reason .. ")") or "") .. " -- breaking off") then return false end
   S._lastDisengageAt = now()
   S._echo("<indian_red>DISENGAGE<reset>" .. (reason and (" (" .. reason .. ")") or "")
     .. " -- breaking off rather than trading.")
@@ -1100,6 +1113,20 @@ function S.onMoveFailed()
       M.explore.fromRoom = S.funnelRoom
       M.explore.fromDir = S.fwdShort
     end
+    -- RETRY, do not just reassess (v4.7.235). Going idle here relies on the next tick
+    -- re-deciding, and the explorer tick is EVENT-driven -- in a stationary slugfest almost
+    -- nothing fires it. Against Seasone that gap was FOURTEEN SECONDS between the lost move
+    -- and the next escape attempt, by which point both legs were broken and every action was
+    -- refused. Re-send immediately, bounded, with the hold re-armed so the same attack
+    -- dispatch cannot eat the retry the way it ate the original.
+    local tries = (tonumber(S._pullRetries) or 0) + 1
+    if tries <= (tonumber(S.PULL_RETRIES) or 2) and S.backShort and M._tacticalArm then
+      S._pullRetries = tries
+      S._armRecoverHold()
+      S._tacticalGo(S.backShort, "<indian_red>pull move lost<reset> -- retry " .. tries)
+      return
+    end
+    S._pullRetries = nil
     S._echo("<grey>pull move lost -- reassessing.")
     S.state = "idle"
   elseif S.state == "reenter" then
@@ -1177,6 +1204,7 @@ function S.reset(reason)
   S.mode = nil
   S.recoverGround = nil
   S.recoverDiagnosed = nil
+  S._pullRetries = nil
   if S.onTumbleDone then S.onTumbleDone() end
   S.swarmRoom, S.funnelRoom, S.funnelAt = nil, nil, nil
   S.backShort, S.backLong, S.fwdShort = nil, nil, nil

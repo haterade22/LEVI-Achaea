@@ -827,11 +827,28 @@ describe("swarm reset + lifecycle", function()
     expect(S.pulls[200]).toBe(nil)
     expect(S.noTactics[300]).toBe(nil)
   end)
-  it("onMoveFailed returns to idle without condemning anything", function()
+  -- REQUIREMENT CHANGED v4.7.235: a lost move is now RETRIED before we fall back to idle.
+  -- Going idle relied on the next tick re-deciding, and the explorer tick is EVENT-driven --
+  -- in a stationary slugfest almost nothing fires it. Against Seasone that gap was FOURTEEN
+  -- SECONDS, by which point both legs were broken and every action was refused.
+  it("onMoveFailed retries the move, then falls back to idle", function()
     fixture(3)
     S.onTick()
     S.onMoveFailed()
-    expect(S.state).toBe("idle")
+    expect(S.state).toBe("pulling")            -- retry #1 in flight
+    S.onMoveFailed()
+    expect(S.state).toBe("pulling")            -- retry #2
+    S.onMoveFailed()
+    expect(S.state).toBe("idle")               -- budget spent: hand back, condemn nothing
+    expect(S.noTactics[200]).toBe(nil)
+  end)
+
+  it("re-arms the hold on each retry, so the attack cannot eat it either", function()
+    fixture(3)
+    S.onTick()
+    ataxiaTemp.swarmHold = nil
+    S.onMoveFailed()
+    expect(ataxiaTemp.swarmHold).toBeTrue()
   end)
   it("sense stores raw recon lines", function()
     fixture(0)
@@ -942,9 +959,13 @@ describe("pull retry after a lost move", function()
     -- The tactical arm clobbered the explorer's anchor with the pull itself:
     M.explore.fromRoom, M.explore.fromDir = 200, "s"
     S.onMoveFailed() -- the step-out was eaten (stupidity); we never left room 200
-    expect(S.state).toBe("idle")
+    -- Retries first (v4.7.235), then hands back. The anchor restore still has to happen on
+    -- the FIRST failure -- it is what stops the eventual reassess latching noTactics on the
+    -- room that most needs tactics.
     expect(M.explore.fromRoom).toBe(100) -- anchor restored from the tactic's own route
     expect(M.explore.fromDir).toBe("n")
+    S.onMoveFailed(); S.onMoveFailed()    -- spend the retry budget
+    expect(S.state).toBe("idle")
     expect(S.onTick()).toBeTrue() -- reassess: pull #2, not a noTactics latch
     expect(S.state).toBe("pulling")
     expect(S.pulls[200]).toBe(2)
@@ -957,7 +978,7 @@ describe("pull retry after a lost move", function()
       expect(S.onTick()).toBeTrue()
       S.decorate("attack", ";")
       M.explore.fromRoom, M.explore.fromDir = 200, "s"
-      S.onMoveFailed()
+      S.onMoveFailed(); S.onMoveFailed(); S.onMoveFailed() -- retries then idle (v4.7.235)
     end
     expect(S.onTick()).toBeFalse()
     expect(S.noTactics[200]).toBeTrue()
@@ -1094,6 +1115,52 @@ end)
 --
 -- Confirmation is the ROOM CHANGING, not a success line -- the game prints several depending
 -- on how the tumble ends, and picking one to trust is how triggers ship dead in this project.
+-- THE KILLER FROM THE SEASONE DEATH (v4.7.235). `_beginEscape`'s HOVER branch armed the
+-- attack hold; the indoor PULL branch never did. `_tacticalGo` queues `stand;<jump> <dir>`,
+-- and the next attack dispatch sends `queue addclearfull`, which clears the FULL queue and
+-- throws the escape away. The log shows three complete attack rounds between the disengage
+-- and "pull move lost" -- we were swinging while trying to leave, and the swings ate it.
+describe("the escape pull holds the attack dispatcher", function()
+  it("arms the hold when retreating indoors", function()
+    fixture(1)
+    gmcp.Room.Info.details = { "indoors" } -- no hover: takes the pull branch
+    ataxiaTemp.swarmHold = nil
+    expect(S._beginEscape()).toBeTrue()
+    expect(S.state).toBe("pulling")
+    expect(ataxiaTemp.swarmHold).toBeTrue()
+  end)
+
+  it("arms it on a disengage too -- same branch, same hazard", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    gmcp.Room.Info.details = { "indoors" }
+    S._lastDisengageAt = nil
+    ataxiaTemp.swarmHold = nil
+    expect(S.disengage("phial burst #2")).toBeTrue()
+    expect(ataxiaTemp.swarmHold).toBeTrue()
+  end)
+
+  -- The echo said "LOW HP (97%)" on a tactical disengage -- 97 was the mana column and HP was
+  -- nowhere near the threshold. Reporting the wrong reason made the death log much harder to
+  -- read than it needed to be.
+  it("reports the disengage as a disengage, not as low HP", function()
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    gmcp.Room.Info.details = { "indoors" }
+    S._lastDisengageAt = nil
+    local said = {}
+    local realEcho = S._echo
+    S._echo = function(m) said[#said + 1] = tostring(m) end
+    S.disengage("phial burst #2")
+    S._echo = realEcho
+    local sawLowHp, sawDisengage = false, false
+    for _, m in ipairs(said) do
+      if m:find("LOW HP", 1, true) then sawLowHp = true end
+      if m:find("DISENGAGE", 1, true) then sawDisengage = true end
+    end
+    expect(sawDisengage).toBeTrue()
+    expect(sawLowHp).toBeFalse()
+  end)
+end)
+
 describe("tumble confirmation and retry", function()
   local function armTumble()
     fixture(1)

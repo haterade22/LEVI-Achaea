@@ -753,6 +753,76 @@ end
 -- Gated on `ataxiaTemp.usedTree` (the real cooldown flag, set by the touch/"unchanged" lines
 -- and cleared by "You may utilise the tree tattoo again."), so we no longer fire blind into a
 -- cooldown -- the old 3/6/10s timers did exactly that, three times per burst.
+-- THE FULL LOCK IS A DIFFERENT EVENT FROM THE BURST (v4.7.235).
+--
+-- User: "When we get imp sli ast ano we should be touching tree and also shielding would help
+-- here. So pause the attack touch tree and shield as we dont have paralysis yet."
+--
+-- v4.7.213 was right that the BURST is not the moment to spend the tattoo -- burst one is
+-- survivable and SSC often wins it. But when all four land and the game itself reports
+-- "(Locks: soft, hard)", the argument for waiting is gone: slickness blocks salves and
+-- anorexia blocks eating, so there is no cure route left that does not start with the tattoo.
+-- Waiting out `treeGrace` from there just donates five seconds.
+--
+-- Three actions, in this order, and the order is the point:
+--   1. STOP SWINGING. Every attack sends `queue addclearfull`, which clears the full queue --
+--      that is what ate the escape in the death log. Holding first means the tree and shield
+--      cannot be thrown away the same way.
+--   2. TOUCH TREE -- the only cure channel the lock does not close.
+--   3. TOUCH SHIELD -- user: "shielding would help here ... as we dont have paralysis yet".
+--      Gated on exactly that: a shield needs an arm and a free action, so paralysis or an
+--      existing shield means skip it rather than spend the round on a refusal.
+local PHIAL_FULL = { "anorexia", "slickness", "asthma", "impatience" }
+
+function M._phialFullLock()
+  local a = (ataxia and ataxia.afflictions) or {}
+  for _, aff in ipairs(PHIAL_FULL) do
+    if not a[aff] then return false end
+  end
+  return true
+end
+
+-- Bounded hold so a missed cure can never park the basher permanently.
+M.PHIAL_HOLD = 4
+
+function M._phialLockResponse()
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return false end
+  if not M._phialFullLock() then return false end
+  ataxiaTemp = ataxiaTemp or {}
+  if ataxiaTemp.phialResponded then return false end -- once per lock, not once per tick
+  ataxiaTemp.phialResponded = true
+
+  -- 1. Stop swinging.
+  ataxiaTemp.phialHold = true
+  if M._phialHoldT then pcall(killTimer, M._phialHoldT) end
+  M._phialHoldT = tempTimer(tonumber(M.PHIAL_HOLD) or 4, function()
+    M._phialHoldT = nil
+    if ataxiaTemp then ataxiaTemp.phialHold = nil end
+  end)
+
+  local a = (ataxia and ataxia.afflictions) or {}
+  local parts = {}
+  -- 2. Tree, unless it is tainted or already spent.
+  if not M._treeCuringOff and not ataxiaTemp.usedTree then
+    parts[#parts + 1] = "touch tree"
+  end
+  -- 3. Shield, unless paralysed (no free action) or already up.
+  local shielded = ataxia and ataxia.defences and ataxia.defences.shield
+  if not a.paralysis and not shielded then
+    parts[#parts + 1] = "touch shield"
+  end
+  if #parts == 0 then return false end
+
+  local sep = (ataxia.settings and ataxia.settings.separator) or ";"
+  -- `cq all` first: whatever is queued was decided before the lock existed.
+  send("cq all" .. sep .. table.concat(parts, sep))
+  if not M._quiet() then
+    M.echo("<indian_red>FULL PHIAL LOCK<reset> (IMP SLI AST ANO) -- attack held, <cyan>"
+      .. table.concat(parts, "<reset> + <cyan>") .. "<reset>.")
+  end
+  return true
+end
+
 function M._phialTreeTick()
   if not ataxiaTemp or not ataxiaTemp.phialLockAt then return end
   if M._treeCuringOff then return M._phialTreeStop() end       -- Splinterbark: tainted tree
@@ -762,6 +832,9 @@ function M._phialTreeTick()
   local now = (getEpoch and getEpoch()) or 0
   local waited = now - (tonumber(ataxiaTemp.phialLockAt) or now)
   if waited > (tonumber(M.PHIAL_TREE_MAX) or 25) then return M._phialTreeStop() end
+
+  -- Full lock: act now rather than banking. See M._phialLockResponse.
+  if M._phialLockResponse() then return end
 
   if ataxiaTemp.usedTree then return end -- on cooldown: wait for the ready line, do not spam
 
@@ -782,7 +855,11 @@ function M._phialTreeTick()
 end
 
 function M._phialTreeStop()
-  if ataxiaTemp then ataxiaTemp.phialLockAt = nil; ataxiaTemp.phialSpendTree = nil end
+  if ataxiaTemp then
+    ataxiaTemp.phialLockAt, ataxiaTemp.phialSpendTree = nil, nil
+    ataxiaTemp.phialResponded, ataxiaTemp.phialHold = nil, nil
+  end
+  if M._phialHoldT then pcall(killTimer, M._phialHoldT); M._phialHoldT = nil end
   if M._phialTreeT then pcall(killTimer, M._phialTreeT); M._phialTreeT = nil end
 end
 
