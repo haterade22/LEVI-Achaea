@@ -609,8 +609,17 @@ end
 -- number is the same `TUMBLE_CONFIRM` seconds later, the tumble did not happen: re-send it,
 -- with `stand` in front (prone is one of the two things that cancels it) and bounded retries
 -- so a genuinely stuck character cannot spin forever.
-local TUMBLE_CONFIRM = 2      -- seconds to allow a tumble to land before re-sending
-local TUMBLE_RETRIES = 2      -- re-sends before giving up and letting the ladder decide
+-- 5s, not 2 (v4.7.234). The user timed a REAL tumble: start 11:52:29.160, "You tumble out of
+-- the room." at 11:52:33.178 -- FOUR SECONDS. The 2s window shipped in v4.7.233 would have
+-- fired mid-tumble, re-sending a move that was working and landing us two rooms away or
+-- burning the queue on a duplicate. A retry window shorter than the action it is guarding is
+-- not a safety net, it is a second bug.
+--
+-- This is only the FALLBACK now: "You tumble out of the room." is the game's own completion
+-- line and confirms it directly (trigger misc_alerts/005). The timer covers the case where
+-- that line never arrives at all -- which is exactly the paralysis case that started this.
+S.TUMBLE_CONFIRM = 5          -- seconds to allow a tumble to land before re-sending
+S.TUMBLE_RETRIES = 2          -- re-sends before giving up and letting the ladder decide
 
 function S.onTumbleStart(dir)
   if type(dir) ~= "string" or dir == "" then return end
@@ -621,7 +630,7 @@ function S.onTumbleStart(dir)
   ataxiaTemp.tumbleFrom = MAP and MAP.current
   ataxiaTemp.tumbleTries = tonumber(ataxiaTemp.tumbleTries) or 0
   if S._tumbleT then pcall(killTimer, S._tumbleT) end
-  S._tumbleT = tempTimer(TUMBLE_CONFIRM, function()
+  S._tumbleT = tempTimer(S.TUMBLE_CONFIRM, function()
     S._tumbleT = nil
     S._tumbleCheck()
   end)
@@ -635,8 +644,8 @@ function S._tumbleCheck()
   if not MAP or MAP.current ~= ataxiaTemp.tumbleFrom then return S.onTumbleDone() end
 
   local tries = (tonumber(ataxiaTemp.tumbleTries) or 0) + 1
-  if tries > TUMBLE_RETRIES then
-    S._echo("<indian_red>tumble failed " .. TUMBLE_RETRIES .. "x<reset> -- handing back to the ladder.")
+  if tries > S.TUMBLE_RETRIES then
+    S._echo("<indian_red>tumble failed " .. S.TUMBLE_RETRIES .. "x<reset> -- handing back to the ladder.")
     return S.onTumbleDone()
   end
   ataxiaTemp.tumbleTries = tries
@@ -645,9 +654,9 @@ function S._tumbleCheck()
   -- tumble are prone and a lost balance, and this covers both.
   send("queue addclear free stand" .. sep .. "tumble " .. ataxiaTemp.tumbleDir)
   S._echo("<indian_red>tumble did not land<reset> (still in the same room) -- retry "
-    .. tries .. "/" .. TUMBLE_RETRIES .. " <cyan>" .. ataxiaTemp.tumbleDir .. "<reset>.")
+    .. tries .. "/" .. S.TUMBLE_RETRIES .. " <cyan>" .. ataxiaTemp.tumbleDir .. "<reset>.")
   if S._tumbleT then pcall(killTimer, S._tumbleT) end
-  S._tumbleT = tempTimer(TUMBLE_CONFIRM, function()
+  S._tumbleT = tempTimer(S.TUMBLE_CONFIRM, function()
     S._tumbleT = nil
     S._tumbleCheck()
   end)

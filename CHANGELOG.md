@@ -31,6 +31,36 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-07 - The tumble has a completion line, and it takes 4 seconds (v4.7.234)
+
+User: *"'You tumble out of the room.' is the confirmation of tumble completing. 11:52:29:160 -
+start of tumble, 11:52:33:178 - end of tumble."*
+
+Both halves of that correct v4.7.233, shipped an hour earlier.
+
+**The retry window was shorter than the action it guarded.** A real tumble takes **4.0
+seconds**; I set the check at 2. It would have fired *mid-tumble* and re-sent a move that was
+working -- landing us two rooms away, or burning the queue on a duplicate. A safety net with a
+shorter fuse than the thing it protects is not a safety net, it is a second bug. Now 5s, and
+there is a test asserting the window outlasts a real tumble, so it cannot silently drift back
+under.
+
+**And completion is a LINE, not an inference.** v4.7.233 watched for the room number changing
+-- a proxy for the thing rather than the thing, chosen because I did not know a completion line
+existed. `You tumble out of the room.` is it. Trigger `misc_alerts/005_Tumble_Complete` clears
+the watch directly, and the timer drops to being purely the fallback for when that line never
+arrives -- which is exactly the paralysis case that started this.
+
+`TUMBLE_CONFIRM`/`TUMBLE_RETRIES` moved from file-locals onto `S`, so they are tunable and can
+be asserted on directly. The first version of that assertion read the numbers out of the source
+file, which broke on the runner's working directory -- testing a constant by grepping for it is
+a smell, and the fix was to make it reachable instead.
+
+Files: `mnemosyne/009_Swarm_Tactics.lua`, new trigger `misc_alerts/005_Tumble_Complete`. Suite
+**1119 -> 1121**; both behaviours verified by breaking the code back.
+
+---
+
 ## 2026-08-07 - A tumble that never landed (v4.7.233)
 
 User, from a death log: *"Something stop us from tumbling, maybe prone or paralysis and we

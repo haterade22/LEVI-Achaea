@@ -1148,6 +1148,30 @@ describe("tumble confirmation and retry", function()
     expect(ataxiaTemp.tumbleDir).toBe(nil)
   end)
 
+  -- THE GAME'S OWN COMPLETION LINE (v4.7.234, user-supplied): "You tumble out of the room."
+  -- Timed at FOUR SECONDS after the start line, which is why the v4.7.233 window of 2s was
+  -- itself a bug -- it would have re-sent a tumble that was working. The line confirms
+  -- directly; the timer is only the fallback for when it never comes.
+  it("the completion line ends the watch outright, mid-flight", function()
+    armTumble()
+    expect(ataxiaTemp.tumbleDir).toBe("n")
+    S.onTumbleDone()                 -- what trigger misc_alerts/005 calls
+    expect(ataxiaTemp.tumbleDir).toBe(nil)
+    expect(ataxiaTemp.tumbleFrom).toBe(nil)
+    expect(ataxiaTemp.tumbleTries).toBe(nil)
+    -- ...and a later check cannot resurrect it into a spurious re-send.
+    sent = {}
+    S._tumbleCheck()
+    expect(tumbles()).toBe(0)
+  end)
+
+  -- The window must outlast the action it guards, or the "safety net" re-sends mid-tumble.
+  it("allows longer than a real tumble takes before retrying", function()
+    -- Observed: 11:52:29.160 start -> 11:52:33.178 complete = 4.0s.
+    expect(S.TUMBLE_CONFIRM ~= nil).toBeTrue()
+    expect(S.TUMBLE_CONFIRM > 4).toBeTrue()
+  end)
+
   it("is inert outside the tower", function()
     fixture(1)
     ataxiaBasher.inMnemosyne = false
