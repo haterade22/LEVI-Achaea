@@ -468,3 +468,80 @@ describe("every summarised effect is also scored", function()
     end)
   end
 end)
+
+--------------------------------------------------------------------------------
+-- Rage threshold read from the game's TOTAL BONUSES summary (v4.7.231)
+--------------------------------------------------------------------------------
+-- "Your attacks will deal 23% bonus damage so long as you have 40 battlerage or more."
+-- That IS the rage floor. `bash floor 40` was a manual restatement of a number the game
+-- already prints, and a manual restatement goes stale the moment the gear changes.
+
+describe("gearAudit.parseRageThreshold", function()
+  it("reads the percentage and the threshold from the real line", function()
+    local pct, rage = gearAudit.parseRageThreshold(
+      "Your attacks will deal 23% bonus damage so long as you have 40 battlerage or more.")
+    expect(pct).toBe(23)
+    expect(rage).toBe(40)
+  end)
+
+  it("ignores a bonus-damage line with no threshold", function()
+    expect(gearAudit.parseRageThreshold("Your attacks will deal 23% bonus damage.")).toBe(nil)
+    expect(gearAudit.parseRageThreshold("You gain 6% resistance against physical blunt damage.")).toBe(nil)
+    expect(gearAudit.parseRageThreshold(nil)).toBe(nil)
+  end)
+end)
+
+describe("gearAudit.applyRageThreshold", function()
+  local function reset()
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.rageFloor = nil
+    gearAudit.totals = {}
+  end
+
+  it("sets the rage floor from the summary, with no user input", function()
+    reset()
+    expect(gearAudit.applyRageThreshold(
+      "Your attacks will deal 23% bonus damage so long as you have 40 battlerage or more.")).toBe(40)
+    expect(ataxiaBasher.rageFloor).toBe(40)
+    expect(gearAudit.totals.bonusDmgPct).toBe(23)
+    expect(gearAudit.totals.rageThreshold).toBe(40)
+  end)
+
+  -- Gear changes; the floor must follow rather than keep the old number.
+  it("follows a gear swap to a different threshold", function()
+    reset()
+    gearAudit.applyRageThreshold("Your attacks will deal 23% bonus damage so long as you have 40 battlerage or more.")
+    gearAudit.applyRageThreshold("Your attacks will deal 18% bonus damage so long as you have 25 battlerage or more.")
+    expect(ataxiaBasher.rageFloor).toBe(25)
+  end)
+
+  -- Mirrors the `bash floor` alias cap: rage caps at 100 and the priciest gated ability costs
+  -- 54 under rageraze, so a floor above 46 makes it unaffordable forever -- and a rotation
+  -- banking for an unaffordable cast stops producing battlerage entirely.
+  it("caps an absurd threshold rather than wedging the rotation", function()
+    reset()
+    expect(gearAudit.applyRageThreshold(
+      "Your attacks will deal 99% bonus damage so long as you have 80 battlerage or more.")).toBe(46)
+    expect(ataxiaBasher.rageFloor).toBe(46)
+  end)
+
+  it("does nothing for a line that names no threshold", function()
+    reset()
+    expect(gearAudit.applyRageThreshold("Your attacks will deal 23% bonus damage.")).toBe(nil)
+    expect(ataxiaBasher.rageFloor).toBe(nil)
+  end)
+
+  -- The summary is re-printed every time it is asked for; re-applying the SAME value must not
+  -- re-announce it, or a routine gear check spams the screen.
+  it("is silent when the floor is already correct", function()
+    reset()
+    local said = 0
+    local realEcho = gearAudit.echo
+    gearAudit.echo = function() said = said + 1 end
+    gearAudit.applyRageThreshold("Your attacks will deal 23% bonus damage so long as you have 40 battlerage or more.")
+    gearAudit.applyRageThreshold("Your attacks will deal 23% bonus damage so long as you have 40 battlerage or more.")
+    gearAudit.echo = realEcho
+    expect(said).toBe(1)
+    expect(ataxiaBasher.rageFloor).toBe(40)
+  end)
+end)

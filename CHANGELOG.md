@@ -31,6 +31,42 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-07 - The rage floor sets itself from the gear summary (v4.7.231)
+
+User: *"We can do the command gear audit in game and capture this ... which should already set
+it automatically."*
+
+The game's TOTAL BONUSES summary spells out the number we were asking to be typed by hand:
+
+> Your attacks will deal 23% bonus damage **so long as you have 40 battlerage or more**.
+
+That IS the rage floor. `bash floor 40` was always a manual restatement of something the game
+already prints -- and a manual restatement goes stale the moment the gear changes. It is now
+read straight off the line, so swapping the chest moves the floor with it.
+
+**Triggered on the LINE, not on a command.** The command that produces the summary has not been
+confirmed, and guessing one is exactly how bare `BOONS` (v4.7.203) and bare `PERFORMANCE`
+(v4.7.209) shipped as invalid commands earlier in this project -- a wrong command is worse than
+no command, because it times out and takes a real behaviour down with it. Whatever you type,
+the result gets read.
+
+Three details worth stating:
+
+* **Substring, not an anchored whole line.** The clause could reasonably appear inside a
+  `GEAR PROBE` for a single item with different lead-in text; anchoring would silently miss
+  that, which is the failure mode this project keeps re-learning.
+* **Capped at 46**, mirroring the `bash floor` alias. Rage caps at 100 and the priciest gated
+  ability costs 54 under rageraze, so a higher floor makes it unaffordable forever -- and a
+  rotation banking for an unaffordable cast stops producing battlerage at all. If gear ever
+  demands more, the cap is honoured and said out loud rather than silently wedging.
+* **Silent when already correct.** The summary is re-printed every time it is asked for, so
+  re-applying the same value must not re-announce it or a routine gear check spams the screen.
+
+Files: `gear_system/001_Gear_Audit.lua`, new trigger `380_Gear_Rage_Threshold`. Suite
+**1094 -> 1101**; all three behaviours verified by breaking the code back.
+
+---
+
 ## 2026-08-06 - Bard's ready lines stop being thrown away (v4.7.230)
 
 Follow-up to the gap noted in v4.7.229. The game says **"You can use Moulinet again."** and we

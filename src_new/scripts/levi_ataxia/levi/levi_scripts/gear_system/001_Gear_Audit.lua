@@ -841,6 +841,61 @@ function gearAudit.showBisByCategory(topN)
   cecho("\n<grey>'gearaudit score <id>' for the breakdown behind any of these.<reset>\n")
 end
 
+-- ---------------------------------------------------------------------------
+-- TOTAL GEAR BONUSES -- the game's own summary (v4.7.231)
+-- ---------------------------------------------------------------------------
+-- User: "We can do the command gear audit in game and capture this ... which should already
+-- set it automatically."
+--
+-- The game prints a rolled-up total of everything worn, and one line carries a number we were
+-- asking the user to type by hand:
+--
+--   "Your attacks will deal 23% bonus damage so long as you have 40 battlerage or more."
+--
+-- That IS the rage floor. `bash floor 40` was always a manual restatement of something the
+-- game had already told us, and a manual restatement goes stale the moment the gear changes.
+-- Reading it from the summary means the floor is right by construction.
+--
+-- Triggered on the LINE, not on a command. The command that produces this block has not been
+-- confirmed, and guessing one is how `BOONS` and `PERFORMANCE` shipped as invalid commands
+-- earlier in this project -- a bad command is worse than a missing one, because it times out
+-- and takes a real behaviour with it. Whatever the user types, we read the result.
+gearAudit.totals = gearAudit.totals or {}
+
+-- The line that names the rage threshold. Returns pct, threshold (both numbers) or nil.
+function gearAudit.parseRageThreshold(line)
+  if type(line) ~= "string" then return nil end
+  local pct, rage = line:match("deal (%d+)%% bonus damage so long as you have (%d+) battlerage or more")
+  if not pct then return nil end
+  return tonumber(pct), tonumber(rage)
+end
+
+-- Apply it. Returns the floor set, or nil when nothing changed.
+function gearAudit.applyRageThreshold(line)
+  local pct, rage = gearAudit.parseRageThreshold(line)
+  if not rage then return nil end
+  gearAudit.totals.bonusDmgPct = pct
+  gearAudit.totals.rageThreshold = rage
+
+  ataxiaBasher = ataxiaBasher or {}
+  -- MAX_FLOOR mirrors the `bash floor` alias: rage caps at 100 and the priciest gated ability
+  -- costs 54 under rageraze, so a floor above 46 makes that ability unaffordable forever and a
+  -- rotation that banks for an unaffordable cast stops producing battlerage at all. If gear
+  -- ever demands more than that, honour the cap and say so rather than silently wedging.
+  local MAX_FLOOR = 46
+  local want = rage
+  local capped = false
+  if want > MAX_FLOOR then want, capped = MAX_FLOOR, true end
+
+  if ataxiaBasher.rageFloor == want then return want end -- already correct: stay silent
+  ataxiaBasher.rageFloor = want
+  gearAudit.echo("Gear pays <green>+" .. tostring(pct) .. "%<reset> damage at <gold>" .. rage
+    .. "<reset> battlerage -- rage floor set to <gold>" .. want .. "<reset> automatically."
+    .. (capped and (" (capped from " .. rage .. "; above " .. MAX_FLOOR
+        .. " the priciest battlerage could never fire)") or ""))
+  return want
+end
+
 -- Score a single gear item
 function gearAudit.scoreItem(gearId)
   local gear = gearAudit.data[tonumber(gearId)]
