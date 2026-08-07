@@ -494,6 +494,76 @@ describe("boon-granted affliction immunity", function()
     expect(saw("not immune")).toBeTrue()
   end)
 
+  -- COSTS CAN NAME SEVERAL TOO (v4.7.237) -- the mirror of the multi-grant fix, found the
+  -- same way, on a live offer screen:
+  --   "Corrupted Cold: Your cold resistance is increased by 66%, but you suffer permanent
+  --    dehydration and tenderskin."
+  -- Returning only the first is worse than saying nothing: a boon whose price is two
+  -- afflictions reads as though it costs one.
+  local COLD = "Your cold resistance is increased by 66%, but you suffer permanent dehydration and tenderskin."
+
+  it("reads BOTH costs out of one clause", function()
+    local costs = M._boonDrawbacks(COLD)
+    expect(#costs).toBe(2)
+    local set = {}
+    for _, c in ipairs(costs) do set[c] = true end
+    expect(set.dehydration).toBeTrue()
+    expect(set.tenderskin).toBeTrue()
+  end)
+
+  it("names both when we block neither", function()
+    claims({ run = 7, name = "Beeline", description = "You may now utilise prism tattoos." })
+    capture(function()
+      M._echoImmunities({ { name = "Corrupted Cold", description = COLD } })
+    end)
+    expect(saw("Corrupted Cold")).toBeTrue()
+    expect(saw("dehydration")).toBeTrue()
+    expect(saw("tenderskin")).toBeTrue()
+    expect(saw("not immune")).toBeTrue()
+  end)
+
+  -- PARTLY free is not free. Blocking one of two costs and calling the boon "free for us" is
+  -- the kind of confident wrong answer that gets someone killed on a boon screen.
+  it("says PARTLY IMMUNE when it blocks only one of two costs", function()
+    claims({ run = 7, name = "Camelskin",
+             description = "You are immune to the dehydration affliction." })
+    capture(function()
+      M._echoImmunities({ { name = "Corrupted Cold", description = COLD } })
+    end)
+    expect(saw("PARTLY IMMUNE")).toBeTrue()
+    expect(saw("Camelskin")).toBeTrue()
+    expect(saw("tenderskin")).toBeTrue()   -- the one still owed
+    expect(saw("Free for us")).toBeFalse()
+  end)
+
+  it("says fully IMMUNE only when every cost is blocked", function()
+    claims({ run = 7, name = "Thickhide",
+             description = "You are immune to the dehydration and tenderskin afflictions." })
+    capture(function()
+      M._echoImmunities({ { name = "Corrupted Cold", description = COLD } })
+    end)
+    expect(saw("Free for us")).toBeTrue()
+    expect(saw("PARTLY")).toBeFalse()
+  end)
+
+  -- The rest of that live screen, which must stay quiet or be reported as a grant.
+  it("handles the rest of the screen correctly", function()
+    claims({ run = 7, name = "Beeline", description = "You may now utilise prism tattoos." })
+    capture(function()
+      M._echoImmunities({
+        { name = "Hyperfixate", description = "You are immune to the confusion affliction." },
+        { name = "Iron Throat", description = "Gain 25% resistance to asphyxiation damage." },
+        { name = "Restoration", description = "Restore your resources instead." },
+      })
+    end)
+    expect(saw("GRANTS IMMUNITY")).toBeTrue()
+    expect(saw("Hyperfixate")).toBeTrue()
+    expect(saw("confusion")).toBeTrue()
+    -- A pure resistance boon has no affliction cost and must not be dressed up as having one.
+    expect(saw("Iron Throat")).toBeFalse()
+    expect(saw("Restoration")).toBeFalse()
+  end)
+
   -- The cost-clause restriction, tested directly. Break it and an affliction named ANYWHERE --
   -- including in a boon that CURES it -- gets reported as a cost. Neither of the two
   -- screen-level tests catches that on its own, which is why this is here.

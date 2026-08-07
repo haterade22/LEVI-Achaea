@@ -1095,6 +1095,10 @@ local DRAWBACK_AFFS = {
   -- "Corrupted Mind: ...but you suffer permanent guilt" is exactly the line being missed.
   -- The truly generic ones stay out; these are nouns Achaea uses as affliction names.
   "generosity", "disloyalty", "justice", "guilt", "itching",
+  -- v4.7.237, from a live offer screen: "Corrupted Cold: ...but you suffer permanent
+  -- dehydration and tenderskin." `dehydration` was in neither this list nor the canonical
+  -- curing table it was derived from -- so the cost was only ever half-reported.
+  "dehydration",
 }
 
 -- Clause markers that introduce a COST. The drawback scan runs only on the text after one of
@@ -1105,7 +1109,40 @@ local DRAWBACK_AFFS = {
 local COST_MARKERS = { " but ", " however", " at the cost of ", " in exchange", " you suffer ",
                        " causes you to ", " causing " }
 
--- The affliction a boon inflicts as its cost, or nil. Pure; unit-tested.
+-- EVERY affliction a boon inflicts as its cost. The mirror of the multi-grant fix in
+-- v4.7.236, and found the same way -- a live offer screen (v4.7.237):
+--
+--   "Corrupted Cold: Your cold resistance is increased by 66%, but you suffer permanent
+--    dehydration and tenderskin."
+--
+-- Returning only the first match under-reported the cost, which is worse than saying nothing:
+-- a boon whose price is two afflictions reads as though it costs one. Grants had already been
+-- taught to be lists; costs had not, and there was no reason to expect the game to be
+-- one-sided about it.
+function M._boonDrawbacks(desc)
+  local out, seen = {}, {}
+  if type(desc) ~= "string" or desc == "" then return out end
+  local low = " " .. desc:lower() .. " "
+  if M._immunityFrom(desc) then return out end -- a grant is never a cost
+  local tail
+  for _, mark in ipairs(COST_MARKERS) do
+    local at = low:find(mark, 1, true)
+    if at then
+      local seg = low:sub(at)
+      if not tail or #seg > #tail then tail = seg end
+    end
+  end
+  if not tail then return out end
+  for _, aff in ipairs(DRAWBACK_AFFS) do
+    if tail:find(aff, 1, true) and not seen[aff] then
+      seen[aff] = true
+      out[#out + 1] = aff
+    end
+  end
+  return out
+end
+
+-- Back-compat single-value form: the first cost, or nil.
 function M._boonDrawback(desc)
   if type(desc) ~= "string" or desc == "" then return nil end
   local low = " " .. desc:lower() .. " "
@@ -1176,14 +1213,35 @@ function M._echoImmunities(list)
       end
       if blocked then
         said = true
-        M.echo("<pale_green>IMMUNE<reset> -- <gold>" .. tostring(b.name) .. "<reset> costs <cyan>"
-          .. blocked .. "<reset>, blocked by <gold>" .. tostring(via) .. "<reset>. Free for us.")
+        -- PARTIALLY free is not free (v4.7.237). "Corrupted Cold" costs dehydration AND
+        -- tenderskin; blocking one of them still leaves the other, and calling that "free for
+        -- us" is the kind of confident wrong answer that gets someone killed on a boon screen.
+        local costs = M._boonDrawbacks(b.description)
+        local unblocked = {}
+        for _, c in ipairs(costs) do
+          if not imm[c] then
+            local covered = false
+            for aff in pairs(imm) do if M._mentionsAff(c, aff) then covered = true end end
+            if not covered then unblocked[#unblocked + 1] = c end
+          end
+        end
+        if #unblocked > 0 then
+          M.echo("<pale_green>PARTLY IMMUNE<reset> -- <gold>" .. tostring(b.name)
+            .. "<reset>: <cyan>" .. blocked .. "<reset> blocked by <gold>" .. tostring(via)
+            .. "<reset>, but still costs <indian_red>"
+            .. table.concat(unblocked, "<reset> + <indian_red>") .. "<reset>.")
+        else
+          M.echo("<pale_green>IMMUNE<reset> -- <gold>" .. tostring(b.name) .. "<reset> costs <cyan>"
+            .. blocked .. "<reset>, blocked by <gold>" .. tostring(via) .. "<reset>. Free for us.")
+        end
       else
-        -- Tier B: a cost we do not block.
-        local cost = M._boonDrawback(b.description)
-        if cost then
+        -- Tier B: costs we do not block. ALL of them -- a boon whose price is two afflictions
+        -- reading as though it costs one is worse than saying nothing at all.
+        local costs = M._boonDrawbacks(b.description)
+        if #costs > 0 then
           said = true
-          M.echo("<gold>" .. tostring(b.name) .. "<reset> costs <indian_red>" .. cost
+          M.echo("<gold>" .. tostring(b.name) .. "<reset> costs <indian_red>"
+            .. table.concat(costs, "<reset> + <indian_red>")
             .. "<reset> -- <indian_red>not immune<reset>.")
         end
       end

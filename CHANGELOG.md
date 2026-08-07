@@ -31,6 +31,43 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-07 - Costs come in pairs too, and partly free is not free (v4.7.237)
+
+From another live offer screen:
+
+> **Corrupted Cold:** Your cold resistance is increased by 66%, but you suffer permanent
+> **dehydration and tenderskin**.
+
+Three problems, and the third is the one that mattered.
+
+**`dehydration` was in no list at all** -- not in `DRAWBACK_AFFS`, and not in the canonical
+curing table it was derived from. So half the cost was invisible.
+
+**Costs could only ever be one affliction.** The exact mirror of v4.7.236's multi-grant bug,
+found the same way and one release later. Grants had been taught to be lists; costs had not,
+and there was no reason to expect the game to be one-sided about it. `M._boonDrawbacks` now
+returns all of them.
+
+**And "partly free" was being reported as free.** This is the one worth calling out: with an
+immunity to *one* of two costs, the old code matched on the blocked affliction and printed
+`Free for us.` -- while the other cost still landed. A confident wrong answer on a boon screen
+is worse than no answer, because there is no time to check it. It now distinguishes:
+
+```
+PARTLY IMMUNE -- Corrupted Cold: dehydration blocked by Camelskin,
+                 but still costs tenderskin.
+IMMUNE        -- ...only when every cost is blocked.
+```
+
+The rest of that screen is covered as a fixture too: `Hyperfixate` reports as a grant,
+`Iron Throat` (a pure resistance boon) and `Restoration` stay silent rather than being dressed
+up as having a cost.
+
+Files: `mnemosyne/004_Parsers.lua`. Suite **1139 -> 1144**; all three behaviours verified by
+breaking the code back.
+
+---
+
 ## 2026-08-07 - One boon, several immunities (v4.7.236)
 
 User: *"Corrupted Mind: ...but you suffer permanent guilt. Outlaw: You are immune to the
