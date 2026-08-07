@@ -31,6 +31,50 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-07 - 294 boons seeded, and the parser audited against all of them (v4.7.240)
+
+User supplied <https://mediaresachaea.github.io/mnemosyne-boons/> -- a community boon database
+captured in-game by the `mnemosyne.lua` Mudlet tracker (Achaea, Treyal). 294 boons with
+descriptions and rarity.
+
+### The parser, audited against real data instead of one screen at a time
+
+The last five releases each fixed an immunity/cost parsing gap found when an offer screen
+happened to show a shape I had not anticipated. With the full catalogue in hand, that whole
+process could be run at once -- the real parser over all 294 descriptions, comparing what it
+extracted against what the text says.
+
+**Result: exactly one grant under-read, and three affliction names missing.** Better than
+expected, and the remaining unreported cost clauses are genuinely not afflictions (balance
+cost, maximum mana, magic resistance, healing caps) and correctly stay silent.
+
+* **`Careless Whisperer`** -- *"immune to masochism, hallucinations, and paranoia, and you
+  always walk with a zealous warding against the Outer Cold"*. The short-form capture stopped
+  at the first comma and read one of three. It now reads to the sentence end and lets the
+  per-part guard drop the trailing prose -- **the same "guard at the right level" lesson as
+  v4.7.236**, which is twice now.
+* **`timeflux`, `fulmination`, `hamstrung`** added to the cost list, from `Coarse Flesh`,
+  `Corrupted Current` and `Trenchfoot`.
+
+### The seed
+
+All 294 are shipped as `mnemosyne/010_Boon_Seed.lua` and merged at load, so the database is
+useful on day one instead of only for boons this character has personally been offered -- and
+the immunity/cost annotations work on the first offer screen rather than the hundredth.
+
+**Merged, never imposed.** It goes through `_boonDbMerge`, which only fills empty fields: what
+you have seen in-game always wins, a later in-game sighting can enrich a seeded row, and
+reloading changes nothing. A seed that overwrote observed data would be worse than no seed.
+Descriptions and rarity only -- the flavour quotes are about half the source file's bulk and
+nothing reads them.
+
+Source credited in the file header. It is not our data.
+
+Files: `mnemosyne/004_Parsers.lua`, new `mnemosyne/010_Boon_Seed.lua`. Suite **1156 -> 1166**;
+both parser fixes verified by breaking the code back.
+
+---
+
 ## 2026-08-07 - The boon database gets a viewer and its own file (v4.7.239)
 
 User: *"I would love to do a boons database that captures all of the boons and their effects

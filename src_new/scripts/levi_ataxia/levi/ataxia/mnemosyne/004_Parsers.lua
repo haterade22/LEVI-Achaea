@@ -1039,13 +1039,22 @@ function M._immunitiesFrom(desc)
   -- and the boon registered nothing. Fall back to reading up to the first comma or full stop,
   -- which is where the grant clause ends in every example seen.
   if not body or body == "" then
-    body = low:match("immune to ([^,%.;]+)")
+    -- To the SENTENCE end, not the first comma (v4.7.240). Found by running this parser over
+    -- all 294 boons in the community catalogue: "Careless Whisperer: You are immune to
+    -- masochism, hallucinations, and paranoia, and you always walk with a zealous warding
+    -- against the Outer Cold." Stopping at the first comma read ONE of three.
+    --
+    -- Capturing generously is safe because the per-PART guard below is the real protection: a
+    -- real affliction name is one word, so the trailing "you always walk with a zealous
+    -- warding..." is dropped while the three names survive. Guard at the right level again --
+    -- the same lesson as v4.7.236.
+    body = low:match("immune to ([^%.;]+)")
     if body then
       body = body:gsub("^the%s+", ""):gsub("%s+afflictions?$", "")
     end
   end
   if not body or body == "" then return out end
-  if #body > 60 then return out end -- a whole clause, not a list of names
+  if #body > 200 then return out end -- a paragraph, not a list of names
   body = body:gsub("%s+and%s+", ",")
   for part in body:gmatch("[^,]+") do
     part = part:gsub("^%s+", ""):gsub("%s+$", "")
@@ -1116,6 +1125,10 @@ local DRAWBACK_AFFS = {
   -- damage"), so a cost clause is not enough to disambiguate it. It still works as a GRANT,
   -- which reads the affliction straight out of the sentence rather than scanning for names.
   "shivering",
+  -- v4.7.240. Found by auditing this parser against all 294 boons in the community catalogue
+  -- rather than waiting for each to turn up on an offer screen -- which is how the previous
+  -- five gaps were found, one release at a time.
+  "fulmination", "hamstrung", "timeflux",
 }
 
 -- Clause markers that introduce a COST. The drawback scan runs only on the text after one of

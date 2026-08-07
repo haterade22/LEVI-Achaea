@@ -639,6 +639,63 @@ describe("boon-granted affliction immunity", function()
     expect(saw("Razor Leaf")).toBeFalse()
   end)
 
+  -- REAL BOONS FROM THE COMMUNITY CATALOGUE (v4.7.240). Found by running this parser over all
+  -- 294 boons at mediaresachaea.github.io/mnemosyne-boons rather than waiting for each shape
+  -- to turn up on an offer screen -- which is how the previous five gaps were found, one
+  -- release at a time. Exactly one grant was under-read, and three affliction names were
+  -- missing from the cost list.
+  it("reads a comma list that runs on into more prose", function()
+    -- Careless Whisperer. Stopping at the first comma read ONE of three; the per-part guard
+    -- is what drops the trailing clause, so the capture can afford to be generous.
+    local g = M._immunitiesFrom(
+      "You are immune to masochism, hallucinations, and paranoia, and you always walk with a zealous warding against the Outer Cold.")
+    expect(#g).toBe(3)
+    local set = {}
+    for _, x in ipairs(g) do set[x] = true end
+    expect(set.masochism).toBeTrue()
+    expect(set.hallucinations).toBeTrue()
+    expect(set.paranoia).toBeTrue()
+  end)
+
+  it("reads a bare two-item 'and' list", function()
+    local g = M._immunitiesFrom("You are immune to lethargy and weariness.")
+    expect(#g).toBe(2)
+  end)
+
+  -- Candour: the grant clause is followed by more sentence. The lazy match must stop at
+  -- "affliction" rather than swallowing "by the clarity of the Lightbringer".
+  it("stops at 'affliction' when the sentence continues", function()
+    local g = M._immunitiesFrom(
+      "You are immune to the blackout affliction by the clarity of the Lightbringer.")
+    expect(#g).toBe(1)
+    expect(g[1]).toBe("blackout")
+  end)
+
+  it("names the three afflictions that were missing from the cost list", function()
+    expect(M._boonDrawbacks("You are immune to slickness, but suffer permanent timeflux.")[1])
+      .toBe("timeflux")
+    expect(M._boonDrawbacks(
+      "Your electric resistance is increased by 66% but you suffer permanent fulmination.")[1])
+      .toBe("fulmination")
+    expect(M._boonDrawbacks("Your movement is faster but you suffer permanent hamstrung.")[1])
+      .toBe("hamstrung")
+  end)
+
+  -- Coarse Flesh is the grant-AND-cost shape again, from real data this time.
+  it("reads Coarse Flesh as both a grant and a cost", function()
+    local d = "You are immune to slickness, but suffer permanent timeflux."
+    expect(M._immunitiesFrom(d)[1]).toBe("slickness")
+    expect(M._boonDrawbacks(d)[1]).toBe("timeflux")
+  end)
+
+  -- Non-affliction costs must stay silent rather than being forced into an affliction name.
+  it("stays silent on costs that are not afflictions", function()
+    expect(#M._boonDrawbacks("Tumbling completes instantly but incurs a 50% increased balance cost.")).toBe(0)
+    expect(#M._boonDrawbacks("Gain 15% physical resistance, but lose 10% magical resistance.")).toBe(0)
+    expect(#M._boonDrawbacks(
+      "Your balance recovers 30% faster, but you can no longer be healed above 30% health.")).toBe(0)
+  end)
+
   -- The cost-clause restriction, tested directly. Break it and an affliction named ANYWHERE --
   -- including in a boon that CURES it -- gets reported as a cost. Neither of the two
   -- screen-level tests catches that on its own, which is why this is here.
@@ -1919,6 +1976,66 @@ describe("boon database", function()
     expect(blob:find("Outlaw", 1, true) ~= nil).toBeTrue()
     expect(blob:find("Plasmatic", 1, true) ~= nil).toBeTrue()
     expect(blob:find("Beeline", 1, true)).toBe(nil)
+  end)
+end)
+
+-- THE SEED CATALOGUE (v4.7.240): 294 boons from the community database at
+-- mediaresachaea.github.io/mnemosyne-boons, so the database is useful on day one instead of
+-- only for boons this character has personally been offered.
+describe("boon seed catalogue", function()
+  -- The seed populates the shared library, so save and restore around it -- this file's other
+  -- tests build their own fixtures on M.history and must not inherit 294 rows.
+  local saved
+  local function withSeed(fn)
+    saved = M.history.boonLibrary
+    M.history.boonLibrary = {}
+    local ok, err = pcall(fn)
+    M.history.boonLibrary = saved
+    if not ok then error(err) end
+  end
+
+  it("loads, and carries descriptions for every entry", function()
+    withSeed(function()
+      dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/010_Boon_Seed.lua")
+      local st = M.boonDbStats()
+      expect(st.total > 250).toBeTrue()
+      expect(st.described).toBe(st.total)   -- a row with no effect text is not worth seeding
+    end)
+  end)
+
+  -- THE POINT OF A MERGE: what YOU saw in-game always wins. A seed that overwrote observed
+  -- data would be worse than no seed at all.
+  it("never overwrites a description observed in-game", function()
+    withSeed(function()
+      M.history.boonLibrary = { Outlaw = { description = "MY OWN OBSERVED TEXT" } }
+      dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/010_Boon_Seed.lua")
+      expect(M.history.boonLibrary.Outlaw.description).toBe("MY OWN OBSERVED TEXT")
+      -- ...but it may FILL a field we did not have.
+      expect(M.history.boonLibrary.Outlaw.rarity ~= nil).toBeTrue()
+    end)
+  end)
+
+  it("is idempotent -- reloading changes nothing", function()
+    withSeed(function()
+      dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/010_Boon_Seed.lua")
+      local added, enriched = M._boonDbMerge(M.BOON_SEED)
+      expect(added).toBe(0)
+      expect(enriched).toBe(0)
+    end)
+  end)
+
+  -- The seed is only worth having if the parsers can read it: these are the shapes that cost
+  -- five separate releases to discover one offer screen at a time.
+  it("parses the shapes that took five releases to find", function()
+    withSeed(function()
+      dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/010_Boon_Seed.lua")
+      local seed = M.BOON_SEED
+      expect(#M._immunitiesFrom(seed["Careless Whisperer"].description)).toBe(3)
+      expect(#M._immunitiesFrom(seed["Energetic"].description)).toBe(2)
+      expect(M._immunitiesFrom(seed["Coarse Flesh"].description)[1]).toBe("slickness")
+      expect(M._boonDrawbacks(seed["Coarse Flesh"].description)[1]).toBe("timeflux")
+      expect(M._boonDrawbacks(seed["Corrupted Blood"].description)[1]).toBe("nausea")
+    end)
   end)
 end)
 
