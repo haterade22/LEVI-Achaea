@@ -325,6 +325,15 @@ leapt the raw `command` string and `addclearfull`-wiped the explorer's queue.
   retreat to the cleared room (no swing) and cure while fighting the trickle; no route ->
   shield-in-place remains. SLC's both-arms flee is inert in the tower (fixed-direction blind
   runs); the swarm module owns tower escapes.
+- **Roll Hide OUTRANKS the icewall (v4.7.223)**: the wall was never a barrier -- denizens
+  walk through icewalls without Maklak's Promise, so it only PACED the swarm, at the cost of a
+  balance-gated `point`, a wall-memory entry and a later melt. With `mnemRollHide` up, indoors
+  takes `mode = "pull"` and `_escapeSuffix` returns `;tumble <back>`: shedding every pursuer
+  beats pacing them, and the funnel/kite branches then never fire at all. Safe inside the single
+  queue entry for the reason the wall chain already proves -- the entry's commands do NOT all run
+  on one balance (`point` on the next balance, `leap` on eq), so a balance-gated tumble is HELD
+  rather than rejected.
+
 - **Roll Hide panic** (`swarm.panic`, default on, needs the `mnemRollHide` boon): at
   `swarm.panicAt`% HP (default **35** since v4.7.218 — the old 40 is migrated once, behind a
   persisted `panicAt35` marker so `mnem swarm panic 40` stays typeable) OR the absolute
@@ -345,6 +354,14 @@ leapt the raw `command` string and `addclearfull`-wiped the explorer's queue.
   only walks us off the sweep (previously only the 10s cooldown stood between a slow heal and
   a tumble every ten seconds).
 
+- **Vitalising Tincture** (`S._maybeTincture`, v4.7.241, needs the boon): 33% of maximum
+  health on a 20s cooldown -- the largest single heal in the system, ~6,000 at tower pools, and
+  the ladder previously ignored it. Fires at `escapeAt` from `S.onVitals` **before** the
+  flee/panic decision, because a third of our health back may mean the retreat is unnecessary.
+  **`ataxia.mnemosyne.tinctureCmd` is nil by default** -- the command that imbibes a nutritional
+  formulation is unconfirmed, and guessing commands is how bare `BOONS`/`PERFORMANCE` shipped
+  broken. Inert until set.
+
 - **Forced disengage** (`S.disengage(reason)`, v4.7.215): leave on a TACTICAL judgement rather
   than an HP reading. The ladder above is entirely reactive, which is useless against an enemy
   whose kill pattern is "apply an unsurvivable lock, then wait" — by the time HP crosses
@@ -356,6 +373,37 @@ leapt the raw `command` string and `addclearfull`-wiped the explorer's queue.
   (`DISENGAGE_COOLDOWN` 10s), or indoors with no validated route — and a FAILED attempt does
   not stamp the cooldown, so a caller that read the fight as lethal retries the moment a route
   exists. First consumer: Seasone's second phial burst (see 03-parsing-triggers).
+
+**Re-entry readiness (`S._reenterReady`, v4.7.242)**: the funnel does NOT go back in just
+because the trickle stopped. `_beginReenter` used to decide on one question -- *"did anything
+follow?"* -- and **"nothing followed" is not the same fact as "we are ready"**: 0 followers means
+the retreat worked perfectly, which it read as permission to undo it. A death log has it walking
+back onto Seasone **two seconds** after a successful disengage, at 28% HP and still soft-locked.
+Re-entry now needs `recoverAt`% AND affliction-free -- the SAME gate the hover uses -- and when
+we are not ready it enters `recovering` (ground recovery: diagnose confirm, tumble-on-company,
+`RECOVER_MAX` cap) rather than inventing a second wait.
+
+Worth knowing why nothing else caught it: the low-HP ladder runs BEFORE the funnel branch and
+would have fired at 28%, but `_beginEscape` needs a back-route and we were already standing in
+the room it would have retreated to -- so it returned false and fell through. **The one moment
+the ladder could not help was the one moment we walked back in.**
+
+**The escape pull HOLDS the attack dispatcher (v4.7.235)**: `_beginEscape`'s hover branch always
+armed the hold; the indoor pull branch did not, so the next attack's `queue addclearfull` --
+which clears the FULL queue -- threw the queued escape away. A Seasone log shows three complete
+attack rounds between the disengage and `pull move lost`. General rule for this module:
+**anything we queue that is not an attack must hold the dispatcher.**
+
+**A lost move is RETRIED (v4.7.235)**: `onMoveFailed` used to go idle and rely on the next tick.
+The tick is EVENT-driven, and in a stationary slugfest the gap measured **fourteen seconds**.
+Bounded by `S.PULL_RETRIES`, hold re-armed on each retry.
+
+**Tumble confirmation (v4.7.233/234)**: `"You begin to tumble agilely to the <dir>."` is the
+START of a two-stage action -- paralysis, prone or a stun between the halves cancels it, which
+killed us once. `"You tumble out of the room."` is the completion line (trigger
+`misc_alerts/005`); the room-change fallback fires only after `S.TUMBLE_CONFIRM` = **5s**,
+because a real tumble takes **4.0s** and the first version's 2s window would have re-sent a
+tumble that was working. *A retry window must outlast the action it guards.*
 
 **Which jump — `S.moveVerb(dir)` (v4.7.217)**: `_tacticalGo` sends **`backflip`** for a Bard
 and **`leap`** for everyone else. Acrobatics BACKFLIP recovers quicker than the chitin-greaves

@@ -329,3 +329,48 @@ converted. One in-game test settles it -- raise a wall with the bracers and back
 
 The defence is toggled with `acrobatics on` / `acrobatics off` (not `defence acrobatics`).
 
+## The bash performance: the attack eats the lyre (v4.7.232)
+
+`ataxiaBasher_bardCompose` sent `remove lyre;wield left lyre;compose ...` **raw**, and the
+basher dispatches an attack on the next prompt -- which **re-wields the shield into the left
+hand**. The lyre was pulled out between `wield` and `compose`, so compose failed with *"How are
+you going to perform a song without your instrument wielded?"* while the echo still said
+*"composed"*. We announced a performance that never started, then bashed unbuffed for 15
+minutes.
+
+The fix needs BOTH halves, either alone still loses the race:
+
+1. **One queued line** -- `queue addclear free remove lyre;wield lyre;compose <list>` -- so the
+   three run in order and each waits for what it needs.
+2. **`ataxiaTemp.bardComposeHold` gates `ataxiaBasher_attack`** (same place as `swarmHold`,
+   because several triggers call `attack()` directly). Bounded by a timer AND released by the
+   performance-duration line, so it cannot wedge.
+
+*General shape: any multi-command setup that changes what is in our HANDS races the attack
+dispatcher, because the attack re-wields. Queue it and hold the attack.*
+
+## Battlerage runs on the SHARED slots (v4.7.230)
+
+Bard owns no rotation table. `moulinet` gates on `battleRage_Timers.small`, `howlslash` on
+`.large`, `trill` on `.special`; `cyclone` carries its own epoch stamp
+(`ataxiaTemp.bardCycloneAt`) and **`charm` is deliberately not cooldown-gated**.
+
+Those names were missing from `BR_READY_MAP`, so *"You can use Moulinet again."* was matched by
+trigger 328, passed to `ataxiaBasher_brReady`, found nothing and was **dropped** -- we then waited
+out the rest of a hardcoded 17s timer the game had already ended. Now mapped. **Do not map
+`charm`**: clearing a slot on its ready line would free an unrelated ability.
+
+## Shadow Tempo (boon, v4.7.241)
+
+*"Increase the bonus damage when striking denizens from the back position with bladedance
+attacks to 100%."*
+
+Bladedance moves us around the target on its own -- *"carries you with lethal promise to the
+blindspot"*, *"carries you back around to face"* -- so the back position arrives without being
+chosen. Doubling its bonus makes it worth **keeping**: `charm` and `trill` are the two abilities
+that reposition us, so while `mnemShadowTempo` is held AND `bardtempo == "back"` they yield to
+plain damage.
+
+Reads `bardtempo`, which the tempo triggers (`tempo/001-004`) have maintained all along -- a
+second position flag would have been two sources of truth for one fact. Gated on the boon:
+without it the back bonus is small and the crowd abilities are worth more.

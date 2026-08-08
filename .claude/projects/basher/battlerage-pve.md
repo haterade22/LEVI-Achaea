@@ -377,3 +377,46 @@ their keys; that is a coincidence, not a design, so do not copy it into a fifth 
 gating on current balance/word/shin state cannot see what an earlier element of the same chain
 already claimed. Blademaster now threads `shinSpent`; Depthswalker now threads `wordUsed`. When
 the cooldown stamp lives inside the helper, the caller must skip the CALL, not the result.
+
+## The rage floor, and culling (v4.7.229 / v4.7.231)
+
+Gear can pay a damage bonus **while rage stays at or above a threshold** -- the live example is
+*"Your attacks will deal 23% bonus damage so long as you have 40 battlerage or more."*
+`ataxiaBasher.rageFloor` makes every rotation spend only the SURPLUS: an ability costing C fires
+at C + floor. `bash floor <n|off>`, clamped at 46 (rage caps at 100 and the priciest gated
+ability is 54 under rageraze, so a higher floor never fires and a banking rotation stops
+producing rage entirely).
+
+**It sets itself (v4.7.231).** Trigger `380_Gear_Rage_Threshold` reads that number straight off
+the gear TOTAL BONUSES summary, so swapping the chest moves the floor with it -- a hand-typed
+`bash floor 40` goes stale the moment the gear changes. Triggered on the LINE, not a command:
+the command producing that block is unconfirmed, and guessing commands is how bare `BOONS` and
+`PERFORMANCE` shipped broken.
+
+**Culling was exempt from the floor**, every gate reading `rage >= 36 or brFree()` instead of
+`rageAfford`. Right for Golden Dragon's `reap` (an EXECUTE -- a kill beats a multiplier on swings
+that never happen); wrong for the artifact culling blade on e.g. Bard, where firing at 36 drops
+under a 40 floor and kills the bonus for ~a dozen swings to gain one 1505 hit.
+`ataxiaBasher_cullAfford` + `bash floor culling`, **default off** (today's behaviour). A free
+battlerage always fires -- it costs no rage, so it cannot breach the floor.
+
+## Ready lines feed the SHARED slots too (v4.7.230)
+
+`BR_READY_MAP` (basher/011) covered the four owned rotations and culling blade. **Bard runs on
+the shared timers** -- `moulinet` gates on `battleRage_Timers.small`, `howlslash` on `.large`,
+`trill` on `.special` -- and no name mapped to them, so *"You can use Moulinet again."* was
+parsed and dropped while we waited out a hardcoded 17s timer the game had already ended.
+`cyclone` carries its own epoch stamp; **`charm` is deliberately NOT mapped** (it is not
+cooldown-gated, so clearing a slot on its ready line would free an unrelated ability).
+
+**Kill the pending timer, do not just nil the handle** -- a live timer fires later and nils the
+slot again, un-gating a NEWER arm and earning a stream of "you must wait" refusals. Third
+occurrence of that shape (stun throttle v4.7.219, parry cooldown v4.7.222).
+
+## Gear cooldown scaling (v4.7.229)
+
+Every battlerage cooldown is a hardcoded `tempTimer` at the ability's BASE duration -- moulinet
+17s, large 24s, specials 32-46s, culling 24s, cyclone 23s -- and nothing scaled them.
+`ataxiaBasher.brCooldownPct` scales all 15 arm sites; **0 (the default) leaves every duration
+byte-identical**. Clamped at 90%, floored at 1s: a negative tempTimer delay is not a fast
+cooldown, it is an undefined one.

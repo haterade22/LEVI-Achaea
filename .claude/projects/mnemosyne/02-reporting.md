@@ -84,6 +84,24 @@ Each function guards on `M._hasToken()` and enqueues. Payload shapes:
 
 ### Notable behaviours
 
+- **The boon DATABASE (v4.7.239/240).** `M.history.boonLibrary` has always learned name +
+  description + rarity + maxEchoes from the offer screen. It now also writes its **own file**,
+  `<profile>/mnemosyne_boons.lua`: a boon's description is shown **exactly once** (the BOONS
+  list is `Boon | Echoes | Rarity` with no description), so the catalogue is irreplaceable, and
+  it was sharing a file with run counters and claims that are rewritten constantly. Bundling
+  something irreplaceable with something disposable means one bad write loses both.
+  Loading **merges** -- same semantics as `_learnBoon`, so an import can only ever ADD and
+  re-importing is idempotent. `mnem boondb [filter|export|import]`; the filter matches name AND
+  effect text. **294 boons ship as a seed** (`M.BOON_SEED`) (`mnemosyne/010_Boon_Seed.lua`, sourced from
+  <https://mediaresachaea.github.io/mnemosyne-boons/> and credited there), merged the same way
+  so observed data always wins.
+  **The audit method matters more than the data:** five consecutive releases each fixed a
+  boon-parsing gap found when an offer screen happened to show an unanticipated shape. Running
+  the real parser over all 294 descriptions at once found everything remaining in ONE pass --
+  one under-read grant (`Careless Whisperer`, a comma list running on into prose) and three
+  missing cost afflictions (timeflux, fulmination, hamstrung). *When a corpus exists, audit
+  against it instead of waiting for the next live example.*
+
 - **`/boons_offered` carries `class` and `race` (v4.7.220).** Both are **top-level optional
   strings on `BoonsOfferedRequest`** — not members of `BoonInfo`, which is where the field
   names suggest they would live. Verified against the live schema at

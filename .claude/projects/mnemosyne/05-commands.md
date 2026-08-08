@@ -49,6 +49,7 @@ Guarded by `if ataxia.mnemosyne.map then`; see [04-ripple-map.md](04-ripple-map.
 | `mnem boons` | `M.reportBoons()` — this run's claimed boons (rarity, echoes, ripple, description) |
 | `mnem affixes` | `M.reportAffixes()` — this run's active affixes (ongoing effects) |
 | `mnem library` | `M.reportLibrary()` — the all-time affix catalogue |
+| `mnem boondb [filter\|export\|import]` | All-time BOON catalogue -- its own file, filter matches name **or** effect text, entries annotated with parsed immunities/costs (v4.7.239) |
 
 ### Auto-explorer (see [07-explorer.md](07-explorer.md))
 

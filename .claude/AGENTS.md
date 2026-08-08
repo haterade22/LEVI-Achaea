@@ -401,6 +401,60 @@ one class and would halve every per-class count). Do NOT normalise against a voc
 cannot verify -- that corrupts data more quietly than leaving it raw. OMIT missing values
 rather than sending `"unknown"`, which becomes its own cohort in the queries.
 
+### Anything queued that is NOT an attack must hold the dispatcher (v4.7.232 / v4.7.235)
+
+Every attack sends `queue addclearfull`, which clears the **full** server queue. So any
+multi-command setup we queue -- an escape move, tree + shield, an instrument swap -- races the
+attack dispatcher and loses. This has now caused two deaths and one silently-broken feature:
+
+* the Bard compose (`remove lyre;wield lyre;compose`) had the lyre pulled back out by the next
+  attack re-wielding the shield, and the echo still claimed success;
+* `_beginEscape`'s indoor pull queued `stand;<jump> <dir>` with no hold, and a Seasone log shows
+  **three complete attack rounds** between the disengage and `pull move lost`.
+
+The fix is always the same shape: one queued line for ordering, plus a bounded hold on
+`ataxiaBasher_attack` (gate it THERE, not only in `tryAttack` -- several triggers call
+`attack()` directly). **When a queued action "mysteriously" does not happen, check this first.**
+
+### "Nothing followed" is not "we are ready" (v4.7.242)
+
+A decision that reads one fact and acts on a different one. `_beginReenter` went back into the
+boss room because the follower trickle had stopped -- at 28% HP, still locked. Zero followers
+means the retreat *worked*, which it took as permission to undo it.
+
+Before acting on a signal, ask what it actually measures. If the action needs a readiness
+condition, gate on the readiness condition -- and prefer REUSING an existing gate (the recovery
+hover's `recoverAt`% + affliction-free) over inventing a second opinion that will drift.
+
+### A retry window must outlast the action it guards (v4.7.234)
+
+The tumble-retry shipped with a 2s window against an action that takes **4.0s** -- it would have
+re-sent a tumble that was working. Time the action from a log before choosing the number; a
+safety net with a shorter fuse than the thing it protects is a second bug. And prefer the game's
+own completion line to inferring completion from state.
+
+### When a corpus exists, audit against it (v4.7.240)
+
+Five consecutive releases each fixed a boon-parsing gap found when an offer screen happened to
+show an unanticipated shape. Running the REAL parser over all 294 boons in the community
+catalogue found everything remaining **in one pass**: one under-read grant, three missing
+affliction names. Do not wait for the next live example when the whole corpus is fetchable.
+
+### Test the RELATIONSHIP between two pattern sets, not just each one (v4.7.228)
+
+The gear crit-DoT bug lived in the gap between the summariser and the scorer: the audit table
+showed the effect, so it looked handled, while the ranker read it as worthless -- and
+`gearaudit scrap` destroys what ranks low. Neither pattern set was individually wrong.
+The invariant *"any effect the summariser labels must also produce a non-zero score"* catches
+the whole class; per-pattern tests cannot.
+
+### Assert what should be ABSENT, not only what should be present
+
+Three times this project has had a test pass on half an answer: a boon reported as a grant while
+its cost was silently dropped; a partly-blocked boon reported as "free"; an attack gate with no
+coverage at all because the test only checked the flag. **Break the code back after writing a
+test** -- if nothing fails, the test is decoration.
+
 ## Quality Gates (Hooks)
 
 Hooks in `.claude/hooks/` run automatically and block operations that fail validation:

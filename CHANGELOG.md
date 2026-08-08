@@ -31,6 +31,39 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-08 - Documentation pass for v4.7.221-v4.7.242
+
+Docs only -- **no version bump and no tag**. The package is byte-identical to v4.7.242, and
+bumping would prompt every user to SYSUPDATE for nothing.
+
+Twenty-two releases had shipped since the last pass, each updating `CHANGELOG.md` and the memory
+files but not the project docs.
+
+**The worst staleness** was in `CLAUDE.md`: the Seasone tree logic still described v4.7.138's
+*"touches tree DIRECTLY... bounded 3/6/10s re-touches"*. That has been wrong through three
+subsequent revisions -- v4.7.213 made the burst BANK the tattoo, v4.7.215 added the burst-two
+disengage, v4.7.235 added the full-lock response, and v4.7.241 fixed the immunity hole in it.
+Anyone reading that section would have built on a description of behaviour that no longer
+existed.
+
+| File | Added |
+|---|---|
+| `CLAUDE.md` | Seasone tree logic rewritten; re-entry gate; escape-pull hold; pull retry; tumble confirmation; Vitalising Tincture |
+| `.claude/AGENTS.md` | Six patterns: queued-actions-must-hold-the-dispatcher; "nothing followed" is not "we are ready"; retry windows must outlast their action; audit against a corpus when one exists; test the relationship between pattern sets; assert what should be ABSENT |
+| `classes/bard.md` | The compose/lyre race; battlerage on the SHARED slots; Shadow Tempo |
+| `mnemosyne/02-reporting.md` | The boon database, the 294-boon seed, and the audit method |
+| `mnemosyne/03-parsing-triggers.md` | The full-lock response; immunity-counts-as-present; Font of Life; the generic boon latch |
+| `mnemosyne/05-commands.md` | `mnem boondb` |
+| `mnemosyne/07-explorer.md` | Re-entry readiness; dispatcher hold; lost-move retry; tumble confirmation; Roll Hide vs the icewall; Vitalising Tincture |
+| `basher/01-architecture.md` | Gear-audit scoring gaps, `gearaudit cat`, the summarised-implies-scored invariant |
+| `basher/05-safety-systems.md` | The PvE auto-parry rework and the trap it created |
+| `basher/battlerage-pve.md` | Rage floor + auto-set from gear; culling vs the floor; ready lines feeding the shared slots; gear cooldown scaling |
+
+Memory files were updated per-release as the work shipped; no new memory files, so `MEMORY.md`
+needed no new index lines.
+
+---
+
 ## 2026-08-08 - Never go back in hurt (v4.7.242)
 
 User, from a death log: *"We should've never went back into that room until fully cured!"*

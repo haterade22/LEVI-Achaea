@@ -123,6 +123,24 @@ Alchemist, Apostate, Bard, Blademaster, Depthswalker, Druid, Infernal, Jester, M
 
 `windows/001_Limb_Counter_Window.lua` (`tarc.write`) doubles as the basher HUD. For a **denizen** target (numeric id) it shows the mob NAME (`ataxia.denizensHere[target]`), colored Mob-health + HP/WP/EP BARS, a Rage + XP line, DPS Now/Avg/Total, and a SESSION block (Kills/Crits/Gold/Time + kills-per-hour, from `bashStats`). The PvP lock/aff readout is suppressed for numeric targets. The whole panel is gated on **`ataxiaBasher.enabled`** (not `gmcp.IRE.Target.Info`, which hid it inside Mnemosyne).
 
+**Gear audit scoring (v4.7.226-228, 240):** two effect families scored **zero** --
+`"your battlerage abilities will cool down X% faster"` had no pattern anywhere in the file, and
+the crit-on-strike DoT was recognised by the SUMMARISER but had no scoring stat. ~35 of 178
+items ranked below a +1% crit trinket, fell outside `keepPerSet`, and would have been listed by
+`gearaudit scrap` -- **which destroys gear**. Both are scored now (`brCooldownPct` 2.5,
+`critDotPct` 1.5, `manaRegenPct` 1.5). Mnemosyne-locked gear is NAMED but not discounted: other
+conditions are places you pass through, the tower is where this character bashes.
+
+**`gearaudit cat` -- BiS per CATEGORY per slot** (Damage / Rage-BR / Defensive). A single score
+says which the WEIGHTS prefer, not which to wear: one chest slot holds +23% bonus damage, +16%
+rage generation and -21% battlerage cooldown. Each stat belongs to exactly one category, so
+category scores are a strict subset of the total.
+
+**The invariant that now guards it:** *any effect the summariser LABELS must also produce a
+non-zero score.* The crit-DoT bug lived precisely in the gap between two pattern sets -- the
+table showed the effect, so it looked handled, while the ranker read it as worthless. Per-pattern
+tests cannot catch that class; a relationship test can.
+
 **Taken table (v4.7.211/216):** below DPS, every damage TYPE dealt to us this session, ranked,
 with amount and share -- `bashStats_incomingRanked()` over `bashStats.incomingByType`, fed by
 trigger 351 parsing `Health lost: N (physical cutting)`. Rows are coloured **by damage type**

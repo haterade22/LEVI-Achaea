@@ -185,6 +185,23 @@ Both walks are word-capped (6 left, 5 right) so a runaway sentence can't blow up
 - **Silence backstop.** Every block has a `timeout` (1.5s effects, 3s boons, 2s contemplate) so a block that never emits an explicit terminator still flushes and never leaves a catch-all trigger armed.
 - **Description authority.** `_applyContemplate` never overwrites the offered-block description; contemplate only adds `rarity` / `quote` / `num_echoes_possible`.
 
+## Generic boon latch (v4.7.241)
+
+Sixty-odd boons own a hand-written trigger each. Reasonable when each needed bespoke parsing;
+not reasonable for the next ten, which only need a flag. `M.BOON_FLAGS` maps boon NAME to a
+global flag, latched from the BOON CLAIM and cleared by `M.clearBoonFlags()` on run end.
+`(ECHO)` is stripped -- a second copy of a boon is the same boon, and a live export carries 37
+of them.
+
+**Every consumer stays gated on its flag** (user: *"we need those boons for those skills to
+work"*). Without the boon the ability does not exist, and sending it is a refusal that costs a
+round. Current consumers: `mnemFontOfLife` (phial disengage +1 burst), `mnemVitalisingTincture`
+(the escape-ladder heal), `mnemShadowTempo` (Bard back-position priority). Flags latched with
+consumers still to come: Revel in Slaughter, Morudai, Stormcleaver, Convocation, Mutated Jaws,
+Wrath and Righteousness, Pyrrhic Victory, Razor Leaf.
+
+Adding a boon consumer is now a table row, not a trigger.
+
 ## Seasone: bank the tree, then leave (v4.7.213 + v4.7.215)
 
 Seasone throws a phial burst that lands a DENIZEN-dealt truelock (kalmia/gecko/slike ->
@@ -220,6 +237,26 @@ Two traps worth keeping written down:
   of `onSeasonePhials`, so a Splinterbark Seasone got no tattoo AND no disengage -- the case
   with the fewest options left had the fewest behaviours. With the tree tainted there is no
   charge to ration, so the disengage moves to the **first** burst.
+
+**The FULL lock is a different event from the burst (v4.7.235).** Burst one is survivable and
+SSC often wins it -- but once all four land and the game reports `(Locks: soft, hard)`, slickness
+blocks salves and anorexia blocks eating, so no cure route remains that does not start with the
+tattoo. `M._phialLockResponse()` fires once per lock and does three things **in this order**:
+**stop swinging** (`ataxiaTemp.phialHold`, gating `ataxiaBasher_attack` -- every attack sends
+`queue addclearfull`, which is exactly what threw away the escape), **`touch tree`**, then
+**`touch shield`** (skipped while paralysed or already shielded: it needs a free action, and a
+refusal costs the round).
+
+**An affliction we CANNOT GET counts as present (v4.7.241).** `_phialFullLock` originally
+required all four to be actively on us -- but `Coarse Flesh` grants immunity to *slickness* and
+`Kevadrin's Patience` to *impatience*, so holding either made the check unreachable and the
+response never fired against the fight it was written for. The lock is "every channel that can
+be closed IS closed"; a channel that cannot be closed is the best version of that, not an
+exception to it.
+
+**`Font of Life` buys one more burst (v4.7.241).** The disengage exists because one tattoo
+cannot answer a four-affliction lock twice; curing two halves what the lock costs to break, so
+`phialDisengage` shifts from burst 2 to burst 3 while the boon is held.
 
 Burst count lives on `ataxiaTemp.phialBursts`, PER RIPPLE (cleared in `onRipple` and
 `onRunEnd`): a new ripple is a new fight and must not start pre-armed by the last boss.

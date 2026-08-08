@@ -115,6 +115,33 @@ assembly each time, spending battlerage charges, deck picks and cooldown stamps 
 get refused -- the class of bug `ataxiaBasher_brCommit` exists to prevent. Needs the server's
 queue-during-stun behaviour confirmed first.
 
+## PvE Auto-Parry (v4.7.222)
+
+From a Duke Semiro log: over ~20 swings, **two parries landed**. Three separate defects.
+
+1. **Following the LAST hit is the wrong rule** against a mob that spreads. Semiro interleaves
+   right leg, torso and head, so focus-follow parked the cover on the limb he had just finished
+   with -- permanently one swing behind, actively anti-correlated with an alternating attacker.
+   `selfLimbDamage.hitHistory` (rolling 6) already existed and **nothing in the PvE path read
+   it**. `ataxia_bashingParryFocus()` now takes the MOST-hit limb, ties broken toward the more
+   recent so a genuine focus-switch is still followed rather than outvoted by history.
+2. **The broken-limb filter excluded exactly the limb worth covering.** Skipping a limb because
+   it is already broken is backwards in PvE: re-hits are how `rl1` becomes `Rl2`, and how BOTH
+   legs break -- the state that refuses our own attacks outright. The predictive `fixed` path
+   (005) had always parked on broken limbs deliberately; focus-follow now matches.
+3. **A 3-second lockout on a mob swinging every 2 seconds.** `parryAttempted` exists to cover
+   the round-trip until the server confirms (~100-300ms). Trigger 757 -- the confirm, gagged for
+   display but still firing -- now frees it on landing; the timer is the fallback only, cut
+   3 -> 1.5s, tracked and killed on re-arm so a stale timer cannot clear a newer guard.
+
+**The trap this created:** a PARRIED swing emits no `dealt N% damage` perceive line, so it never
+reaches `ataxia_raiseLimbDamage`. Counting only unparried hits would under-represent exactly the
+limb the parry is succeeding on -- the parry would sabotage itself. `ataxia_recordSelfHit` is
+shared and `ataxia_parrySuccess` feeds it.
+
+*General shape: when you start scoring an event stream, check which events the SUCCESS case
+removes from the stream.*
+
 ## Circuit Breaker
 
 Function: `ataxiaBasher_startFleeTimer()` — 20-second timeout (configurable via `ataxiaBasher.fleeTimeout`).
