@@ -31,6 +31,55 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-08 - Never go back in hurt (v4.7.242)
+
+User, from a death log: *"We should've never went back into that room until fully cured!"*
+
+Everything up to the re-entry worked. The disengage fired on phial burst #2, the lost-move
+retry from v4.7.235 recovered it, the Bard backflip from v4.7.217 landed it, and the tree broke
+the hard lock:
+
+```
+12:50:32  DISENGAGE (phial burst #2) -- breaking off -> e
+12:50:37  pull move lost -- retry 1 -> e
+12:50:38  You gather your legs under you and backflip out to the east.
+12:50:39  PHIAL LOCK -- spending the tree ... You are patient once again.   (Locks: soft)
+12:50:40  trickle over (peak followers: 0) -- re-entering -> w
+```
+
+**Two seconds later we walked back onto the boss at 28% HP**, still carrying `itching`, a
+crippled arm, `ANO SLI AST diz` and a soft lock. Then the bees, both legs, and 877 HP.
+
+### The cause
+
+`_beginReenter` had **no health or affliction gate of any kind**. It re-entered on one
+question -- *"did anything follow?"* -- and **"nothing followed" is not the same fact as "we are
+ready"**. Peak followers of 0 meant the retreat had worked perfectly, which it read as
+permission to undo it.
+
+Nothing else caught it either, and the reason is worth recording: the low-HP ladder runs
+*before* the funnel branch and would have fired at 28% -- but `_beginEscape` needs a back-route,
+and we were already standing in the room it would have retreated to, so it returned false and
+fell straight through to the re-entry. **The one moment the ladder could not help was the one
+moment we walked back in.**
+
+### The fix
+
+Re-entry now requires `recoverAt`% **and** affliction-free -- the *same* gate the recovery hover
+already uses, not a second opinion invented here. And when we are not ready we do not merely
+wait: we enter `recovering`, which already knows how to heal on the ground, confirm with
+`DIAGNOSE`, tumble on if company arrives, and give up after the cap. Reusing it means this path
+inherits every fix those made instead of repeating their bugs.
+
+Health alone would have been enough to stop *this* death, but it is not the right rule on its
+own: we left because of a **lock**, and returning while still carrying it walks back into the
+thing we fled.
+
+Files: `mnemosyne/009_Swarm_Tactics.lua`. Suite **1183 -> 1188**; both halves of the gate
+verified by breaking the code back.
+
+---
+
 ## 2026-08-07 - Acting on the boon analysis (v4.7.241)
 
 User: *"proceed with all of your recommendations, understand we need those boons for those

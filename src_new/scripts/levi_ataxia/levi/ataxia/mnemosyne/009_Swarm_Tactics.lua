@@ -447,7 +447,47 @@ function S._enterFunnel()
   S._echo("in the funnel room -- fighting what follows (window " .. FOLLOW_WINDOW .. "s).")
 end
 
+-- ARE WE FIT TO GO BACK IN? (v4.7.242)
+--
+-- User, from a death log: "We should've never went back into that room until fully cured!"
+--
+--   12:50:38  in the funnel room -- fighting what follows (window 2s)
+--   12:50:40  trickle over (peak followers: 0) -- re-entering -> w
+--
+-- Two seconds, at 28% HP, still carrying itching / crippled arm / ANO SLI AST diz and a soft
+-- lock -- straight back onto the boss that had just locked us. `_beginReenter` had NO health
+-- or affliction gate of any kind: it re-entered on ONE question, "did anything follow?", and
+-- "nothing followed" is not the same fact as "we are ready".
+--
+-- Worse, nothing else caught it. The low-HP ladder runs BEFORE the funnel branch and would
+-- have fired at 28% -- but `_beginEscape` needs a back-route, and we were already standing in
+-- the room it would have retreated to, so it returned false and fell straight through to the
+-- re-entry. The one moment the ladder could not help was the one moment we walked back in.
+--
+-- The gate is the SAME one the recovery hover uses -- recoverAt% AND affliction-free -- rather
+-- than a second opinion invented here. And when we are not ready we do not merely wait: we
+-- enter `recovering`, which already knows how to heal on the ground, confirm with DIAGNOSE,
+-- tumble on if company arrives, and give up after RECOVER_MAX. Reusing it means this path
+-- inherits every fix those made rather than repeating their bugs.
+function S._reenterReady()
+  local s = S._cfg()
+  if hpp() < (tonumber(s.recoverAt) or 95) then return false end
+  if S._afflicted() then return false end
+  return true
+end
+
 function S._beginReenter()
+  if not S._reenterReady() then
+    S.state = "recovering"
+    S.recoverGround = true
+    S.recoverStarted = now()
+    S.recoverDiagnosed = nil
+    S._armRecoverHold()
+    if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
+    S._echo("<indian_red>NOT going back in<reset> at " .. hpp() .. "%"
+      .. (S._afflicted() and " and still afflicted" or "") .. " -- healing here first.")
+    return true
+  end
   S.state = "reenter"
   local followers = S.peakFollowers or 0
   if S.flying then send("land"); S.flying = nil end

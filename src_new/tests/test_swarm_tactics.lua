@@ -1467,6 +1467,72 @@ end)
 -- ladder never used. Gated on the BOON and on a command being configured -- I do not know what
 -- imbibes a nutritional formulation, and guessing a command is how bare BOONS and bare
 -- PERFORMANCE shipped as no-ops that ate real behaviour for a release each.
+-- NEVER GO BACK IN HURT (v4.7.242). User, from a death log: "We should've never went back
+-- into that room until fully cured!"
+--
+--   12:50:38  in the funnel room -- fighting what follows (window 2s)
+--   12:50:40  trickle over (peak followers: 0) -- re-entering -> w
+--
+-- Two seconds, 28% HP, still locked. `_beginReenter` re-entered on ONE question -- "did
+-- anything follow?" -- and "nothing followed" is not the same fact as "we are ready".
+describe("re-entry readiness", function()
+  local function funnelled(hp, affs)
+    fixture(3)
+    ataxiaBasher.inMnemosyne = true
+    S.onTick(); S.decorate("attack", ";")   -- pull armed + consumed
+    MAP.current = 100                        -- we are in the funnel room
+    S.state = "funnel"
+    S.fwdShort = "n"
+    S.peakFollowers = 0
+    ataxia.vitals = { hpp = hp }
+    ataxia.afflictions = affs or {}
+    sent = {}
+  end
+  local function movedBack()
+    for _, c in ipairs(sent) do
+      if c:find("leap n", 1, true) or c:find("backflip n", 1, true) then return true end
+    end
+    return false
+  end
+
+  it("goes back in when healthy and clean", function()
+    funnelled(100, {})
+    expect(S._beginReenter()).toBeTrue()
+    expect(S.state).toBe("reenter")
+    expect(movedBack()).toBeTrue()
+  end)
+
+  it("refuses at the HP from the death log, and heals instead", function()
+    funnelled(28, {})
+    expect(S._beginReenter()).toBeTrue()
+    expect(S.state).toBe("recovering")   -- not "reenter"
+    expect(movedBack()).toBeFalse()
+    expect(ataxiaTemp.swarmHold).toBeTrue()
+  end)
+
+  -- Health alone is not the question: we left because of a LOCK, so returning while still
+  -- carrying it walks back into the thing we fled.
+  it("refuses while still afflicted even at full health", function()
+    funnelled(100, { slickness = true, asthma = true })
+    expect(S._beginReenter()).toBeTrue()
+    expect(S.state).toBe("recovering")
+    expect(movedBack()).toBeFalse()
+  end)
+
+  -- Kept defences must not hold us out forever -- the same exemption the hover already uses.
+  it("is not held out by kept defences", function()
+    funnelled(100, { blindness = true, deafness = true })
+    expect(S._reenterReady()).toBeTrue()
+  end)
+
+  it("recovers on the GROUND -- we never left it", function()
+    funnelled(28, {})
+    S._beginReenter()
+    expect(S.recoverGround).toBeTrue()
+    for _, c in ipairs(sent) do expect(c ~= "land").toBeTrue() end
+  end)
+end)
+
 describe("Vitalising Tincture", function()
   local function setup(boon, cmd, hp)
     fixture(1); ataxiaBasher.inMnemosyne = true
