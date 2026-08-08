@@ -1982,6 +1982,109 @@ end)
 -- THE SEED CATALOGUE (v4.7.240): 294 boons from the community database at
 -- mediaresachaea.github.io/mnemosyne-boons, so the database is useful on day one instead of
 -- only for boons this character has personally been offered.
+-- GENERIC BOON LATCH + the consumers it enables (v4.7.241). User: "understand we need those
+-- boons for those skills to work" -- so every consumer is gated on its flag and a boon we do
+-- not hold must change NOTHING.
+describe("generic boon latch", function()
+  local function clean()
+    M.clearBoonFlags()
+  end
+
+  it("arms the flag for a known boon", function()
+    clean()
+    expect(M.latchBoonFlag("Vitalising Tincture")).toBe("mnemVitalisingTincture")
+    expect(mnemVitalisingTincture).toBeTrue()
+    clean()
+  end)
+
+  -- An (ECHO) row names the SAME boon: a second copy does not make it a different one, and the
+  -- user's own export has 37 of them.
+  it("treats an (ECHO) row as the same boon", function()
+    clean()
+    expect(M.latchBoonFlag("(ECHO) Font of Life")).toBe("mnemFontOfLife")
+    expect(mnemFontOfLife).toBeTrue()
+    clean()
+  end)
+
+  it("ignores a boon it has no consumer for", function()
+    clean()
+    expect(M.latchBoonFlag("Beeline")).toBe(nil)
+    expect(M.latchBoonFlag(nil)).toBe(nil)
+  end)
+
+  it("clears every flag on a run end -- boons are per-run", function()
+    M.latchBoonFlag("Shadow Tempo")
+    expect(mnemShadowTempo).toBeTrue()
+    M.clearBoonFlags()
+    expect(mnemShadowTempo).toBeFalse()
+  end)
+end)
+
+-- THE BUG THIS ANALYSIS FOUND. _phialFullLock required all four afflictions to be actively on
+-- us -- but `Coarse Flesh` grants immunity to SLICKNESS and `Kevadrin's Patience` to
+-- IMPATIENCE. Holding either made the full lock unreachable, so the tree-and-shield response
+-- never fired against the exact fight it was written for.
+describe("phial lock vs an affliction we cannot get", function()
+  local function locked(affs, claimsList)
+    ataxiaBasher = { inMnemosyne = true }
+    ataxiaTemp = { usedTree = nil }
+    ataxia.defences = {}
+    ataxia.afflictions = affs
+    M.history = M.history or {}
+    M.history.run = 7
+    M.history.claims = claimsList or {}
+    return M._phialFullLock()
+  end
+
+  it("still needs all four when we hold no immunity", function()
+    expect(locked({ anorexia = true, slickness = true, asthma = true })).toBeFalse()
+    expect(locked({ anorexia = true, slickness = true, asthma = true, impatience = true })).toBeTrue()
+  end)
+
+  it("counts an immune affliction as satisfied", function()
+    -- Coarse Flesh: immune to slickness. Slickness will never land, so the other three ARE
+    -- the full lock -- the best version of it available, not an exception to it.
+    local claims = { { run = 7, name = "Coarse Flesh",
+                       description = "You are immune to slickness, but suffer permanent timeflux." } }
+    expect(locked({ anorexia = true, asthma = true, impatience = true }, claims)).toBeTrue()
+  end)
+
+  it("does not fire on a partial lock just because we hold an immunity", function()
+    local claims = { { run = 7, name = "Coarse Flesh",
+                       description = "You are immune to slickness, but suffer permanent timeflux." } }
+    expect(locked({ anorexia = true, asthma = true }, claims)).toBeFalse()
+  end)
+end)
+
+-- FONT OF LIFE: the tattoo cures two, so it buys one more burst before leaving.
+describe("Font of Life shifts the disengage", function()
+  it("leaves on burst two without it, three with it", function()
+    ataxiaBasher = { inMnemosyne = true }
+    ataxia.afflictions = {}
+    ataxia.vitals = { hpp = 90 }
+    local calls = 0
+    M.swarm = { disengage = function() calls = calls + 1; return true end }
+
+    mnemFontOfLife = false
+    ataxiaTemp = { phialBursts = nil }
+    M.onSeasonePhials(); M.onSeasonePhials()
+    expect(calls).toBe(1)
+    M._phialTreeStop()
+
+    calls = 0
+    mnemFontOfLife = true
+    ataxiaTemp = { phialBursts = nil }
+    M.onSeasonePhials(); M.onSeasonePhials()
+    expect(calls).toBe(0)          -- the tattoo is worth twice as much: stay one more burst
+    M.onSeasonePhials()
+    expect(calls).toBe(1)
+    M._phialTreeStop()
+    mnemFontOfLife = false
+    M.swarm = nil
+    ataxiaBasher = nil
+  end)
+end)
+
 describe("boon seed catalogue", function()
   -- The seed populates the shared library, so save and restore around it -- this file's other
   -- tests build their own fixtures on M.history and must not inherit 294 rows.

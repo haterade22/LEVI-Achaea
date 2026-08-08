@@ -31,6 +31,63 @@ Files: `src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cl
 
 ---
 
+## 2026-08-07 - Acting on the boon analysis (v4.7.241)
+
+User: *"proceed with all of your recommendations, understand we need those boons for those
+skills to work."* Every consumer below is gated on its boon flag: a boon we do not hold changes
+nothing, because the ability does not exist without it and sending it is a refusal that costs a
+round.
+
+### The bug the analysis found
+
+`M._phialFullLock()` required all four of anorexia/slickness/asthma/impatience to be **actively
+on us**. The catalogue has boons that make one impossible -- **Coarse Flesh** grants immunity to
+*slickness*, **Kevadrin's Patience** to *impatience*. Hold either and the check could never be
+true, so the tree-and-shield response shipped in v4.7.235 **never fired against the exact fight
+it was written for**.
+
+An affliction we cannot get now counts as satisfied. The lock is "every channel that can be
+closed is closed" -- a channel that cannot be closed is not an exception to that, it is the best
+possible version of it.
+
+### A generic boon latch
+
+Sixty-odd boons currently own a hand-written trigger each. Reasonable when each needed bespoke
+parsing; not reasonable for the next ten, which only need a flag. `M.BOON_FLAGS` maps name to
+flag, latched from the BOON CLAIM and cleared on run end. `(ECHO)` rows name the same boon --
+the live export has 37 of them, and a second copy does not make it a different boon.
+
+### The four consumers
+
+* **Font of Life** -- *tree cures two afflictions*. The disengage exists because one tattoo
+  cannot answer a four-affliction lock twice; curing two halves what the lock costs to break, so
+  it buys exactly one more burst. Burst 2 without it, burst 3 with.
+* **Vitalising Tincture** -- *33% of maximum health, 20s cooldown*. The largest single heal
+  anywhere in this system, ~6,000 at these pools, and the escape ladder did nothing with it. It
+  now fires at the escape threshold **before** deciding whether to flee, because a third of our
+  health back may mean the retreat is not needed at all.
+* **Shadow Tempo** -- *back-position bladedance bonus raised to 100%*. Bladedance moves us
+  around the target on its own, so the back position arrives without being chosen; doubling its
+  bonus makes it worth KEEPING. `charm` and `trill` are the two abilities that reposition us, so
+  while the bonus is live they yield to plain damage. Reads `bardtempo`, which the tempo
+  triggers have maintained all along -- a second position flag would have been two sources of
+  truth for one fact.
+* Flags also latched, consumers still to come: Revel in Slaughter, Morudai, Stormcleaver,
+  Convocation, Mutated Jaws, Wrath and Righteousness, Pyrrhic Victory, Razor Leaf.
+
+### The tincture command is deliberately not shipped
+
+I do not know what actually imbibes a nutritional formulation, and guessing a command is how
+bare `BOONS` (v4.7.203) and bare `PERFORMANCE` (v4.7.209) shipped as no-ops that ate real
+behaviour for a release each. `ataxia.mnemosyne.tinctureCmd` defaults to nil and the feature
+stays inert until it is set.
+
+Files: `mnemosyne/004_Parsers.lua`, `mnemosyne/009_Swarm_Tactics.lua`,
+`basher/001_Bashing_Functions.lua`. Suite **1166 -> 1183**; all four verified by breaking the
+code back, each including its boon gate.
+
+---
+
 ## 2026-08-07 - 294 boons seeded, and the parser audited against all of them (v4.7.240)
 
 User supplied <https://mediaresachaea.github.io/mnemosyne-boons/> -- a community boon database

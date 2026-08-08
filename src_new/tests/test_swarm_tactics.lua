@@ -1463,6 +1463,64 @@ describe("Roll Hide replaces the icewall", function()
   end)
 end)
 
+-- VITALISING TINCTURE (v4.7.241): a third of max health on a 20s cooldown, which the escape
+-- ladder never used. Gated on the BOON and on a command being configured -- I do not know what
+-- imbibes a nutritional formulation, and guessing a command is how bare BOONS and bare
+-- PERFORMANCE shipped as no-ops that ate real behaviour for a release each.
+describe("Vitalising Tincture", function()
+  local function setup(boon, cmd, hp)
+    fixture(1); ataxiaBasher.inMnemosyne = true
+    mnemVitalisingTincture = boon
+    M.tinctureCmd = cmd
+    ataxia.vitals = { hpp = hp, hp = hp * 100 }
+    ataxiaTemp.tinctureAt = nil
+    sent = {}
+  end
+  local function fired()
+    for _, c in ipairs(sent) do if c == "drink formulation" then return true end end
+    return false
+  end
+
+  it("is inert without the boon, however low we are", function()
+    setup(false, "drink formulation", 10)
+    expect(S._maybeTincture(10)).toBeFalse()
+    expect(fired()).toBeFalse()
+  end)
+
+  -- The command is NOT shipped: unset means the whole thing stays quiet rather than sending a
+  -- guess and eating the round on a syntax error.
+  it("is inert with the boon but no command configured", function()
+    setup(true, nil, 10)
+    expect(S._maybeTincture(10)).toBeFalse()
+    expect(#sent).toBe(0)
+  end)
+
+  it("fires at the escape threshold with both in place", function()
+    setup(true, "drink formulation", 30)
+    expect(S._maybeTincture(30)).toBeTrue()
+    expect(fired()).toBeTrue()
+  end)
+
+  -- At the escape threshold, not the panic floor: a heal we could have had ten seconds earlier
+  -- is a heal we did not get.
+  it("does not fire while healthy", function()
+    setup(true, "drink formulation", 80)
+    expect(S._maybeTincture(80)).toBeFalse()
+    expect(fired()).toBeFalse()
+  end)
+
+  it("respects its 20s cooldown", function()
+    setup(true, "drink formulation", 30)
+    expect(S._maybeTincture(30)).toBeTrue()
+    sent = {}
+    expect(S._maybeTincture(30)).toBeFalse()   -- straight away: still on cooldown
+    clock = clock + 21
+    expect(S._maybeTincture(30)).toBeTrue()
+    mnemVitalisingTincture = false
+    M.tinctureCmd = nil
+  end)
+end)
+
 describe("forced disengage (tactical, not HP-driven)", function()
   local function lastLeap()
     for i = #sent, 1, -1 do if sent[i]:find("leap ", 1, true) then return sent[i] end end

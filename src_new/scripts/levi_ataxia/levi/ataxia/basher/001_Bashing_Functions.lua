@@ -1103,6 +1103,26 @@ end
 -- Global, like the other OWNED rotations (blademaster/monk/magi). It was the only one of that
 -- group still file-local, which meant it could not be unit-tested at all -- and the cyclone
 -- branch below is exactly the kind of conditional that wants a test.
+-- SHADOW TEMPO (v4.7.241): "Increase the bonus damage when striking denizens from the back
+-- position with bladedance attacks to 100%."
+--
+-- Bladedance already moves us around the target on its own -- "Your deadly dance carries you
+-- with lethal promise to the blindspot", "carries you back around to face" -- so the BACK
+-- position arrives and leaves without us choosing it. Doubling its bonus makes it worth
+-- choosing: while we are behind the target, a battlerage spent moving us off it is a
+-- battlerage that costs 100% of a swing.
+--
+-- So with the boon held AND the position live, the crowd abilities that reposition us yield to
+-- plain damage. Gated on the boon -- without it the back bonus is small and the crowd
+-- abilities are worth more.
+-- Reads `bardtempo`, which the tempo triggers (tempo/001-004) have been maintaining all along
+-- -- "back" / "front" / "side" straight off the bladedance lines. Inventing a second position
+-- flag would have meant two sources of truth for one fact, and the one nobody looks at is the
+-- one that goes stale.
+function ataxiaBasher_bardBackBonus()
+  return mnemShadowTempo == true and bardtempo == "back"
+end
+
 function ataxiaBasher_bardBattlerage(sp)
   local rage = ataxia.vitals.rage
 
@@ -1113,9 +1133,15 @@ function ataxiaBasher_bardBattlerage(sp)
   end
 
   local twoPlus = ataxiaBasher_validTargets() >= 2  -- also refreshes stormhammerTargets
-  if twoPlus and ataxiaBasher_rageAfford(rage, 32) then
+  -- SHADOW TEMPO (v4.7.241): while the boon is held AND we are actually behind the target, the
+  -- back-position bonus is 100% -- a doubled swing. `charm` and `trill` are the two abilities
+  -- here that reposition us, so spending one now trades a doubled swing for a crowd effect.
+  -- Yield to plain damage while the bonus is live; everything else about the rotation is
+  -- unchanged, and without the boon this is inert.
+  local backBonus = ataxiaBasher_bardBackBonus and ataxiaBasher_bardBackBonus()
+  if not backBonus and twoPlus and ataxiaBasher_rageAfford(rage, 32) then
     return "play charm at "..(stormhammerTargets[2] or target)..sp
-  elseif twoPlus and ataxiaBasher_rageAfford(rage, 28) and not battleRage_Timers.special then
+  elseif not backBonus and twoPlus and ataxiaBasher_rageAfford(rage, 28) and not battleRage_Timers.special then
     return "play trill at "..target..sp
   end
 

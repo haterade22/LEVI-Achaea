@@ -530,6 +530,49 @@ function S._panicHpHit(hp)
   return raw <= floor
 end
 
+-- ---------------------------------------------------------------------------
+-- VITALISING TINCTURE (v4.7.241)
+-- ---------------------------------------------------------------------------
+-- "Imbibing a nutritional formulation heals you for 33% of your maximum health. This effect
+-- has a 20 second cooldown."
+--
+-- A THIRD of maximum health on a twenty-second cooldown is the largest single heal available
+-- anywhere in this system -- roughly 6,000 at the pools these fights run at -- and the escape
+-- ladder did nothing with it. Every death log in this project ends with the ladder retreating
+-- correctly and losing the race anyway; this is the one lever that changes the arithmetic
+-- rather than the geometry.
+--
+-- THE COMMAND IS NOT SHIPPED, DELIBERATELY. I do not know what actually imbibes a nutritional
+-- formulation, and guessing a command is how bare `BOONS` (v4.7.203) and bare `PERFORMANCE`
+-- (v4.7.209) shipped as no-ops that ate real behaviour for a release each. So
+-- `ataxia.mnemosyne.tinctureCmd` defaults to nil and the whole thing stays inert until it is
+-- set -- with a one-time nudge when the boon is claimed, so it cannot be silently forgotten.
+S.TINCTURE_CD = 20
+
+function S._tinctureReady()
+  if not mnemVitalisingTincture then return false end
+  local cmd = ataxia and ataxia.mnemosyne and ataxia.mnemosyne.tinctureCmd
+  if type(cmd) ~= "string" or cmd == "" then return false end
+  local at = tonumber(ataxiaTemp and ataxiaTemp.tinctureAt) or 0
+  return (now() - at) >= (tonumber(S.TINCTURE_CD) or 20)
+end
+
+-- Fire it if it is worth firing. `hp` is a percentage. Returns true when sent.
+function S._maybeTincture(hp)
+  if not S._tinctureReady() then return false end
+  hp = tonumber(hp) or hpp()
+  local s = S._cfg()
+  -- At or below the ESCAPE threshold: the same line that says "this fight is going badly".
+  -- Not the panic floor -- by then we are leaving anyway and a heal we could have had ten
+  -- seconds earlier is a heal we did not get.
+  if hp > (tonumber(s.escapeAt) or 35) then return false end
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.tinctureAt = now()
+  send(ataxia.mnemosyne.tinctureCmd)
+  S._echo("<pale_green>TINCTURE<reset> (" .. hp .. "% hp) -- +33% max health.")
+  return true
+end
+
 function S._maybePanic(hpNow)
   local hp = tonumber(hpNow) or hpp()
   local s = S._cfg()
@@ -1082,6 +1125,10 @@ function S.onVitals()
   local s = S._cfg()
   local hp = hppFresh()
   if hp <= 0 then return end -- blackout sentinel: vitals unknown, never "dying"
+  -- Heal FIRST, then decide whether to leave (v4.7.241): a third of our health back may mean
+  -- the retreat is not needed at all, and it costs nothing we were going to spend anyway.
+  -- Gated on the boon and on a command being configured, so it is inert for everyone else.
+  S._maybeTincture(hp)
   local wantPanic = s.panic ~= false and mnemRollHide and S._panicHpHit(hp)
   local wantEscape = s.escape ~= false and hp <= s.escapeAt
   if not (wantPanic or wantEscape) then return end

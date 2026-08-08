@@ -556,6 +556,62 @@ describe("ataxiaBasher_cullAfford -- the exemption is now a setting", function()
   end)
 end)
 
+-- SHADOW TEMPO (v4.7.241): "Increase the bonus damage when striking denizens from the back
+-- position with bladedance attacks to 100%." Bladedance moves us around the target on its own,
+-- so the back position arrives without us choosing it -- doubling its bonus makes it worth
+-- KEEPING. charm and trill are the two abilities that reposition us, so while the bonus is
+-- live they yield to plain damage.
+describe("Shadow Tempo -- keep the back position while it is doubled", function()
+  local function bard(boon, tempo, rage)
+    reset()
+    -- The Bard rotation asks how many killable denizens are here (the crowd abilities are
+    -- 2+-target only). Stubbed to 2 so charm/trill are eligible and the ONLY thing deciding
+    -- them is the boon -- which is what these tests are about.
+    ataxiaBasher_validTargets = function() return 2 end
+    gmcp.Char.Status.class = "Bard"
+    mnemShadowTempo = boon
+    bardtempo = tempo
+    ataxia.vitals.rage = rage
+    stormhammerTargets = { "one", "two" }
+    ataxiaBasher.cullingBlade = false
+  end
+
+  it("is inert without the boon -- charm still fires from the back", function()
+    bard(false, "back", 60)
+    local cmd = ataxiaBasher_bardBattlerage(";")
+    expect(cmd:find("charm", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("is inert with the boon when we are NOT behind the target", function()
+    bard(true, "front", 60)
+    local cmd = ataxiaBasher_bardBattlerage(";")
+    expect(cmd:find("charm", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("yields the repositioning abilities while the bonus is live", function()
+    bard(true, "back", 60)
+    local cmd = ataxiaBasher_bardBattlerage(";")
+    expect(cmd:find("charm", 1, true)).toBe(nil)
+    expect(cmd:find("trill", 1, true)).toBe(nil)
+    -- ...and still swings: yielding a battlerage must not mean doing nothing.
+    expect(cmd ~= "").toBeTrue()
+    mnemShadowTempo = false
+    bardtempo = nil
+  end)
+
+  -- It reads `bardtempo`, which the tempo triggers have maintained all along. A second
+  -- position flag would have meant two sources of truth for one fact.
+  it("reads the position feed the tempo triggers already maintain", function()
+    mnemShadowTempo = true
+    bardtempo = "back"
+    expect(ataxiaBasher_bardBackBonus()).toBeTrue()
+    bardtempo = "side"
+    expect(ataxiaBasher_bardBackBonus()).toBeFalse()
+    mnemShadowTempo = false
+    bardtempo = nil
+  end)
+end)
+
 describe("rage floor -- spend only the surplus", function()
   local function floorReset(floor)
     reset()

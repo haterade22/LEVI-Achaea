@@ -225,6 +225,7 @@ function M.onRunEnd()
   mnemLastWord = false -- affixes gone on a confirmed run-end (pacing back to normal)
   mnemBravado = false -- affixes gone on a confirmed run-end (barriers work again)
   mnemTantrum = false -- boons gone on a confirmed run-end
+  if M.clearBoonFlags then M.clearBoonFlags() end -- ...and every generically-latched boon
   if ataxiaTemp then
     ataxiaTemp.tantrumRipple = nil
     ataxiaTemp.phialBursts = nil -- the boss phial tally dies with the run
@@ -774,10 +775,19 @@ end
 --      existing shield means skip it rather than spend the round on a refusal.
 local PHIAL_FULL = { "anorexia", "slickness", "asthma", "impatience" }
 
+-- AN AFFLICTION WE CANNOT GET COUNTS AS PRESENT (v4.7.241).
+--
+-- Requiring all four to be actively on us looks right and is not: the catalogue has boons that
+-- make one of them impossible -- `Coarse Flesh` grants immunity to SLICKNESS, `Kevadrin's
+-- Patience` to IMPATIENCE. Hold either and this could never return true, so the tree-and-shield
+-- response never fired against the exact fight it was written for. The lock is "every channel
+-- that can be closed IS closed", and a channel that cannot be closed is not an exception to
+-- that -- it is the best possible version of it.
 function M._phialFullLock()
   local a = (ataxia and ataxia.afflictions) or {}
+  local imm = M.runImmunities and M.runImmunities() or {}
   for _, aff in ipairs(PHIAL_FULL) do
-    if not a[aff] then return false end
+    if not a[aff] and not imm[aff] then return false end
   end
   return true
 end
@@ -910,6 +920,12 @@ function M.onSeasonePhials()
   ataxiaTemp.phialBursts = (tonumber(ataxiaTemp.phialBursts) or 0) + 1
   local bursts = ataxiaTemp.phialBursts
   local at = tonumber(ataxia.mnemosyne and ataxia.mnemosyne.phialDisengage) or 2
+  -- FONT OF LIFE (v4.7.241): "The Earthmother empowers your tree tattoo to now cure two
+  -- afflictions." The disengage exists because ONE tattoo cannot answer a four-affliction lock
+  -- twice. Curing two at a time is not a small improvement -- it halves what the lock costs to
+  -- break -- so it buys exactly one more burst before leaving is the better call. Gated on the
+  -- boon: without it the tattoo cures one and burst two is still the moment to go.
+  if mnemFontOfLife and at > 0 then at = at + 1 end
   -- With the tree tainted there is no charge to ration, so the reasoning that makes burst
   -- one survivable does not apply: leave on the first one.
   if tainted and at > 1 then at = 1 end
@@ -990,6 +1006,56 @@ end
 -- for anyone not running the remote tracker, i.e. for the default install: every BOONS row then
 -- printed "no description learned yet" forever. So: always capture and learn locally; gate only
 -- the telemetry POST below.
+-- ---------------------------------------------------------------------------
+-- GENERIC BOON LATCH (v4.7.241)
+-- ---------------------------------------------------------------------------
+-- Sixty-odd boons currently each own a hand-written trigger. That was reasonable when each one
+-- needed bespoke parsing, and it is not reasonable for the next ten, which only need a flag
+-- set when the boon is held. So: a NAME -> FLAG table, latched from the two places that
+-- already tell us what we own -- the BOON CLAIM (as it happens) and the BOONS list (on demand,
+-- and after a reload).
+--
+-- EVERY consumer stays gated on its flag. A boon we do not hold must change nothing: the
+-- abilities below do not exist without it, and sending them is a refusal that costs a round.
+-- That is the whole contract of this table.
+M.BOON_FLAGS = {
+  ["Vitalising Tincture"]  = "mnemVitalisingTincture",
+  ["Font of Life"]         = "mnemFontOfLife",
+  ["Shadow Tempo"]         = "mnemShadowTempo",
+  ["Revel in Slaughter"]   = "mnemRevelInSlaughter",
+  ["Morudai"]              = "mnemMorudai",
+  ["Stormcleaver"]         = "mnemStormcleaver",
+  ["Convocation"]          = "mnemConvocation",
+  ["Mutated Jaws"]         = "mnemMutatedJaws",
+  ["Wrath and Righteousness"] = "mnemWrathRighteousness",
+  ["Pyrrhic Victory"]      = "mnemPyrrhicVictory",
+  ["Razor Leaf"]           = "mnemRazorLeaf",
+}
+
+-- An (ECHO) row names the same boon; a second copy does not make it a different one.
+local function boonFlagFor(name)
+  if type(name) ~= "string" then return nil end
+  local clean = name:gsub("^%(ECHO%)%s*", ""):gsub("^%s+", ""):gsub("%s+$", "")
+  return M.BOON_FLAGS[clean], clean
+end
+
+-- Latch one boon we are confirmed to hold. Returns the flag name, or nil.
+function M.latchBoonFlag(name)
+  local flag, clean = boonFlagFor(name)
+  if not flag then return nil end
+  if _G[flag] then return flag end -- already known: stay quiet
+  _G[flag] = true
+  if not M._quiet() then
+    M.echo("<pale_green>Boon<reset> <gold>" .. clean .. "<reset> -- <cyan>" .. flag .. "<reset> armed.")
+  end
+  return flag
+end
+
+-- Clear them all. Boons are per-RUN, so this belongs with the other run-end resets.
+function M.clearBoonFlags()
+  for _, flag in pairs(M.BOON_FLAGS) do _G[flag] = false end
+end
+
 -- ---------------------------------------------------------------------------
 -- Affliction IMMUNITY from boons (v4.7.224)
 -- ---------------------------------------------------------------------------
@@ -1373,6 +1439,7 @@ function M.onBoonClaim(name)
     return M.decho("BOON CLAIM '" .. name .. "' not resolvable against last offered set; not reporting.")
   end
   if M._recordClaim then M._recordClaim(canonical) end -- local history (#6)
+  if M.latchBoonFlag then M.latchBoonFlag(canonical) end -- generic flags (v4.7.241)
   M.reportBoonsSelected(canonical)
 end
 
