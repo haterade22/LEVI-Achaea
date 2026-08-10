@@ -1326,10 +1326,18 @@ mnemosyne_boons:
       and room", so it is dead weight in PvE; this boon is what makes it hit denizens.
       AB: the UNTARGETED form damages everyone in the room for 4.75s of balance; naming a
       target hits only them for 3.00s -- we always want the room form.
-      ataxiaBasher_infArc swings it INSTEAD of the single-target attack (it spends the
-      same balance) at 2+ denizens, user-directed, tunable via `ataxiaBasher.infArcAt`.
-      The crowd gate is the whole point: at 4.75s versus a ~2s dsl, one arc costs more
-      than two normal swings, so it only pays with enough denizens standing in it.
+      ataxiaBasher_knightArc swings it INSTEAD of the single-target attack (it spends the
+      same balance) at 3+ denizens, tunable via `ataxiaBasher.arcAt` (the legacy
+      `ataxiaBasher.infArcAt` is still read as a fallback).
+      The crowd gate is the whole point: 4.75s of arc against a ~2s dsl is 2.375 normal
+      swings, so at TWO denizens arc lands 2 hits where focused swinging lands ~2.4 -- a
+      loss. Three is where it starts paying, and the margin widens per extra mob. The old
+      default of 2 was one denizen short (corrected v4.7.244, user: "if denizens is more
+      than 2 please use arc instead").
+      NOT AN INFERNAL ABILITY: Arc is Weaponmastery, so this helper is called from all
+      four knight bashing functions (Infernal, Paladin, Runewarden, generic/Unnamable).
+      It was Infernal-only from v4.7.145 to v4.7.243 purely because Infernal was the class
+      in the tower when the boon was captured -- three knights held a dead boon.
       Yields on shielded rounds (break the shield first).
 
   fury_of_ages:

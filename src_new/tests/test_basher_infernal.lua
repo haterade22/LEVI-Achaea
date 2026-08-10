@@ -10,7 +10,14 @@ target = 42
 ataxia = { settings = { separator = ";" }, vitals = { rage = 0, knight = "Dual Cutting" }, defences = {} }
 ataxiaBasher = {
   shielded = false, rageraze = false,
-  battlerage = { Infernal = { small = "ravage 42", large = "spike 42", raze = "shiver 42" } },
+  -- Arc is WEAPONMASTERY, so v4.7.244 exercises all four knight entry points from here.
+  -- Each reads ataxiaBasher.battlerage[<class>].raze, so every one needs a table.
+  battlerage = {
+    Infernal   = { small = "ravage 42", large = "spike 42", raze = "shiver 42" },
+    Paladin    = { small = "smite 42",  large = "rebuke 42", raze = "disrupt 42" },
+    Runewarden = { small = "collide 42", large = "onslaught 42", raze = "sunder 42" },
+    Unnamable  = { small = "rend 42",   large = "maul 42",   raze = "shatter 42" },
+  },
 }
 ataxiaTemp = {}
 gmcp = {
@@ -49,7 +56,9 @@ local function reset()
   ataxiaBasher.deepfreezeAt, ataxiaBasher.infTyrannyAt = nil, nil
   gmcp.Char.Vitals = { ep = 100, maxep = 100 }
   ataxia.defences = {}
-  ataxiaBasher.infArcAt = nil
+  ataxiaBasher.arcAt, ataxiaBasher.infArcAt = nil, nil
+  ataxiaBasher.falconRakeReady, ataxiaBasher.sowuluAt = false, nil
+  mnemThunderclap, mnemHammerAndNail = false, false
   denizens = 0
   clock = clock + 100
 end
@@ -344,19 +353,24 @@ end)
 describe("Indiscriminate -- ARC as a denizen AoE", function()
   it("does nothing without the boon", function()
     reset(); denizens = 4
-    expect(ataxiaBasher_infArc(";")).toBe("")
+    expect(ataxiaBasher_knightArc()).toBe("")
   end)
 
-  it("needs 2+ denizens -- a 4.75s arc costs more than two normal swings", function()
+  -- THE THRESHOLD IS 3 (v4.7.244, user: "if denizens is more than 2"). Arc spends 4.75s of
+  -- balance against a ~2s dsl -- 2.375 normal swings -- so at TWO denizens it lands 2 hits
+  -- where focused swinging lands ~2.4. It only starts paying at three.
+  it("needs 3+ denizens -- a 4.75s arc costs more than two normal swings", function()
     reset(); infIndiscriminate = true; denizens = 1
-    expect(ataxiaBasher_infArc(";")).toBe("")
+    expect(ataxiaBasher_knightArc()).toBe("")
     reset(); infIndiscriminate = true; denizens = 2
-    expect(ataxiaBasher_infArc(";")).toBe("arc")
+    expect(ataxiaBasher_knightArc()).toBe("") -- the old default fired here, one mob early
+    reset(); infIndiscriminate = true; denizens = 3
+    expect(ataxiaBasher_knightArc()).toBe("arc")
   end)
 
   it("swings the UNTARGETED room form, not the single-target one", function()
     reset(); infIndiscriminate = true; denizens = 3
-    expect(ataxiaBasher_infArc(";")).toBe("arc") -- naming a target would hit only them
+    expect(ataxiaBasher_knightArc()).toBe("arc") -- naming a target would hit only them
   end)
 
   it("REPLACES the single-target swing in the assembled command", function()
@@ -369,16 +383,91 @@ describe("Indiscriminate -- ARC as a denizen AoE", function()
   it("yields to a shielded round -- break the shield first", function()
     reset(); infIndiscriminate = true; denizens = 3
     ataxiaBasher.shielded = true
-    expect(ataxiaBasher_infArc(";")).toBe("")
+    expect(ataxiaBasher_knightArc()).toBe("")
   end)
 
   it("honours a custom threshold", function()
+    reset(); infIndiscriminate = true; denizens = 3
+    ataxiaBasher.arcAt = 4
+    expect(ataxiaBasher_knightArc()).toBe("")
+    denizens = 4
+    expect(ataxiaBasher_knightArc()).toBe("arc")
+    ataxiaBasher.arcAt = nil
+  end)
+
+  -- A hand-tuned value under the OLD key must not be silently discarded by the rename.
+  it("still honours the legacy infArcAt key", function()
     reset(); infIndiscriminate = true; denizens = 2
-    ataxiaBasher.infArcAt = 3
-    expect(ataxiaBasher_infArc(";")).toBe("")
-    denizens = 3
-    expect(ataxiaBasher_infArc(";")).toBe("arc")
+    ataxiaBasher.infArcAt = 2
+    expect(ataxiaBasher_knightArc()).toBe("arc")
     ataxiaBasher.infArcAt = nil
+  end)
+
+  it("the new key wins over the legacy one", function()
+    reset(); infIndiscriminate = true; denizens = 2
+    ataxiaBasher.infArcAt = 2
+    ataxiaBasher.arcAt = 5
+    expect(ataxiaBasher_knightArc()).toBe("")
+    ataxiaBasher.infArcAt, ataxiaBasher.arcAt = nil, nil
+  end)
+end)
+
+-- ARC IS WEAPONMASTERY, NOT AN INFERNAL ABILITY (v4.7.244). It shipped Infernal-only
+-- because that was the class in the tower when the boon was captured, which left the other
+-- three knights holding a boon that did nothing at all.
+describe("Indiscriminate reaches every knight", function()
+  local function crowd()
+    reset(); infIndiscriminate = true; denizens = 3
+    ataxiaTemp.class = "Unnamable"
+  end
+
+  it("Paladin swings arc instead of its spec attack", function()
+    crowd()
+    local cmd = ataxiaBasher_paladinBashing()
+    expect(has(cmd, "arc")).toBeTrue()
+    expect(has(cmd, "dsl 42")).toBeFalse()
+  end)
+
+  it("the generic knight path (Unnamable) swings arc", function()
+    crowd()
+    local cmd = ataxiaBasher_knightBashing()
+    expect(has(cmd, "arc")).toBeTrue()
+    expect(has(cmd, "dsl 42")).toBeFalse()
+  end)
+
+  it("Runewarden swings arc when it has no bisect", function()
+    crowd()
+    mnemThunderclap = false
+    local cmd = ataxiaBasher_runewardenBashing()
+    expect(has(cmd, "arc")).toBeTrue()
+    expect(has(cmd, "dsl 42")).toBeFalse()
+  end)
+
+  -- Both spend BALANCE, so at most one can land. Bisect buys the same room-wide reach for
+  -- the price of an ordinary swing; arc costs 4.75s. Taking the cheap one is free money.
+  it("Runewarden prefers BISECT over arc when both are available", function()
+    crowd()
+    mnemThunderclap = true
+    local cmd = ataxiaBasher_runewardenBashing()
+    expect(has(cmd, "bisect")).toBeTrue()
+    expect(has(cmd, "arc")).toBeFalse()
+    mnemThunderclap = false
+  end)
+
+  it("no knight swings arc below the threshold", function()
+    reset(); infIndiscriminate = true; denizens = 2
+    ataxiaTemp.class = "Unnamable"
+    expect(has(ataxiaBasher_paladinBashing(), "arc")).toBeFalse()
+    expect(has(ataxiaBasher_knightBashing(), "arc")).toBeFalse()
+    expect(has(ataxiaBasher_runewardenBashing(), "arc")).toBeFalse()
+  end)
+
+  it("and none of them swing it without the boon", function()
+    reset(); denizens = 5
+    ataxiaTemp.class = "Unnamable"
+    expect(has(ataxiaBasher_paladinBashing(), "arc")).toBeFalse()
+    expect(has(ataxiaBasher_knightBashing(), "arc")).toBeFalse()
+    expect(has(ataxiaBasher_runewardenBashing(), "arc")).toBeFalse()
   end)
 end)
 

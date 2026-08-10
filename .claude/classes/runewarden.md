@@ -243,14 +243,40 @@ gate:      "ataxiaBasher.bisectAt denizens (default 2). Over a 4s window combina
             covers ground combination cannot, widening with each extra mob. bisectAt tunes
             UPWARD only -- 2 is a CLAMPED FLOOR, not a default (user rule): at one denizen
             the third strike has nothing to splash to, so no setting makes it correct.
-            Same trade as Infernal Arc (4.75s vs ~2s dsl, 2+)."
+            Same SHAPE of trade as Arc, but a much better price -- see below."
 replaces:  "the swing (both spend balance) -- but the FREE falcon rake still rides"
+outranks:  "ARC (Indiscriminate boon), when both are held. Both are crowd-gated BALANCE
+            swaps, so at most one lands per round. Bisect buys room-wide reach for the
+            price of an ORDINARY swing; arc buys the same reach for 4.75s, more than two
+            normal swings. Taking the cheap one is free money, so bisect wins and arc is
+            the answer only when Thunderclap is not held (v4.7.244)."
 skips:     "shielded rounds (bisect bypasses rebounding, NOT shields); non-numeric target"
 no_execute: "the <=20% slain-outright clause is ADVENTURERS ONLY -- no low-hp branch exists"
 prereq:    "an edged runeblade with HUGALAZ on the blade -- NOT managed by the system.
             Nothing here knows hugalaz and the blade-sketch syntax was never captured."
 fire_line: "Lightning follows the path of <weapon> as you sweep it at <target>, a clap of
             thunder heralding your strike.  -> highlighting/035, chartreuse bold"
+```
+
+### Indiscriminate (Mnemosyne boon) -- ARC becomes a denizen AoE
+```yaml
+# ataxiaBasher_knightArc, basher/002. Flag infIndiscriminate (trigger mnemosyne/041).
+boon:      "Your Arc is now effective against denizens."
+ability:   "ARC -- WEAPONMASTERY, general, all four specs. So this is a Runewarden ability
+            as much as an Infernal one; it was wired for Infernal only from v4.7.145 to
+            v4.7.243 because Infernal was the class in the tower when the boon was first
+            captured (corrected v4.7.244)."
+effect:    "Normally reads 'Works on: Adventurers and room' -- dead weight in PvE. The boon
+            is what makes it hit denizens."
+form:      "UNTARGETED (room-wide), 4.75s balance. Naming a target is 3.00s and hits only
+            them -- we always want the room form."
+gate:      "ataxiaBasher.arcAt denizens (default 3; legacy ataxiaBasher.infArcAt still read
+            as a fallback). 4.75s against a ~2s dsl is 2.375 normal swings, so at TWO
+            denizens arc lands 2 hits where focused swinging lands ~2.4 -- a loss. Three is
+            where it starts paying. User-directed: 'if denizens is more than 2'."
+replaces:  "the swing (balance) -- the battlerage still rides, and so does the falcon rake"
+skips:     "shielded rounds (break the shield first)"
+loses_to:  "BISECT under Thunderclap -- same coverage, ordinary-swing price"
 ```
 
 ## Passive Cures

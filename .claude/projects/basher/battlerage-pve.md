@@ -420,3 +420,33 @@ Every battlerage cooldown is a hardcoded `tempTimer` at the ability's BASE durat
 `ataxiaBasher.brCooldownPct` scales all 15 arm sites; **0 (the default) leaves every duration
 byte-identical**. Clamped at 90%, floored at 1s: a negative tempTimer delay is not a fast
 cooldown, it is an undefined one.
+
+## Arc is Weaponmastery, so it is every knight's (v4.7.244)
+
+`ataxiaBasher_knightArc()` (basher/002, renamed from `ataxiaBasher_infArc`) is called from all
+four knight bashing functions: `infernalBashing`, `paladinBashing`, `runewardenBashing` and the
+generic `knightBashing` (Unnamable). It shipped Infernal-only in v4.7.145 because that was the
+class in the tower when the Indiscriminate boon was captured — the other three knights held a
+boon that did nothing.
+
+| | |
+|---|---|
+| Gate | `infIndiscriminate` (boon), not shielded, `_denizenCount() >= 3` |
+| Threshold key | `ataxiaBasher.arcAt`, falling back to the legacy `ataxiaBasher.infArcAt` |
+| Cost | 4.75s **balance** — so it REPLACES the swing, it does not ride it |
+| Form | untargeted (room-wide). Naming a target is 3.00s and hits only them |
+| Battlerage | still rides — rage is its own resource |
+
+**Why 3 and not 2.** 4.75s of arc against a ~2s dsl is 2.375 normal swings. At two denizens arc
+lands 2 hits where focused swinging lands ~2.4 — a loss. At three it lands 3 and wins, widening
+per extra mob. The old default of 2 was one denizen short of paying for itself.
+
+**Runewarden: bisect outranks arc.** Thunderclap's bisect and arc are both crowd-gated BALANCE
+swaps, so at most one lands per round. Bisect buys room-wide reach for the price of an ordinary
+swing; arc costs more than two. With both boons held, bisect wins. The falcon rake rides with
+either — it is a free pet order, not part of the balance swing.
+
+**The flag keeps its legacy name.** `infIndiscriminate` is reset in three places (run start,
+confirmed run end, the `BOON CLAIM` alias). Renaming it to `mnemIndiscriminate` would read
+better and risks leaving arc armed outside the tower if one reset is missed — where it is a
+4.75s swing that does nothing to a denizen. Accuracy of the name loses to safety of the disarm.

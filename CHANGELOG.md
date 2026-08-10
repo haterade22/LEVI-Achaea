@@ -2,6 +2,66 @@
 
 ---
 
+## 2026-08-10 - Indiscriminate reaches every knight, at 3 denizens not 2 (v4.7.244)
+
+> "When a knight class, and this boon, if denizens is more than 2 please use arc instead."
+> -- user, 2026-08-10
+
+**Arc is WEAPONMASTERY, not an Infernal ability.** All four knights have it -- Infernal,
+Paladin, Runewarden, Unnamable -- and all four specs. It shipped Infernal-only in v4.7.145
+purely because that was the class in the tower when the boon was captured, so the other three
+knights have been holding a boon that did nothing at all: `ataxiaBasher_infArc` was called from
+exactly one of the four bashing functions.
+
+Renamed `ataxiaBasher_infArc` -> **`ataxiaBasher_knightArc`** and wired into
+`ataxiaBasher_paladinBashing`, `ataxiaBasher_knightBashing` (the generic path, Unnamable today)
+and `ataxiaBasher_runewardenBashing` beside the existing Infernal call.
+
+### The threshold moves 2 -> 3
+
+The user's number and the arithmetic agree. Arc spends **4.75s of balance** against a ~2s dsl --
+2.375 normal swings -- so over one arc's worth of balance:
+
+| Denizens | Arc lands | Focused swinging lands | Winner |
+|---|---|---|---|
+| 2 | 2 hits | ~2.4 hits on one mob | focused |
+| 3 | 3 hits | ~2.4 hits on one mob | **arc** |
+| 4+ | 4+ hits | ~2.4 hits on one mob | **arc**, widening |
+
+Two was one denizen short of paying for itself. Tunable via **`ataxiaBasher.arcAt`**; the old
+`ataxiaBasher.infArcAt` is still read as a fallback so an existing hand-tuned value is not
+silently discarded, and the new key wins when both are set. Neither is ever *written* (both are
+read-time defaults), so this is a pure default change with no serialized-settings migration to
+get wrong -- unlike the `_cfg()` pattern, where a default becomes a stored value.
+
+### Runewarden: BISECT outranks arc
+
+Both are crowd-gated **balance** swaps, so at most one can land in a round. Thunderclap's bisect
+buys room-wide reach for the price of an *ordinary* swing; arc buys the same reach for 4.75s.
+With both boons held, taking the cheap one is free money -- so bisect wins and arc is the answer
+only when Thunderclap is not held. The free falcon rake rides with either, as it did with bisect
+alone: it is a pet order, not part of the balance swing.
+
+### What deliberately did NOT change
+
+The boon flag keeps its legacy global name **`infIndiscriminate`**. It is reset in three separate
+places (run start, confirmed run end, the `BOON CLAIM` alias) and a missed rename would leave arc
+armed *outside* the tower -- where it is a 4.75s swing that does nothing to a denizen. The name is
+misleading; a silent failure to disarm is worse.
+
+### Tests
+
+**1217 -> 1225.** The existing Indiscriminate suite was retargeted at the new name and threshold,
+and a new `Indiscriminate reaches every knight` block covers Paladin, the generic knight path and
+Runewarden (with and without bisect), plus the below-threshold and no-boon cases for all three.
+The Infernal fixture now seeds battlerage tables for all four knights, since each bashing
+function reads `ataxiaBasher.battlerage[<class>].raze`.
+
+Four deliberate breaks confirmed the coverage: threshold back to 2, Paladin's arc removed,
+Runewarden preferring arc over bisect, and the legacy `infArcAt` fallback dropped.
+
+---
+
 ## 2026-08-10 - Getting out of the room: a movement lock, escape mode, and a danger alarm that actually fires (v4.7.243)
 
 Death log, 08:26, caves beneath Kuthalebak -- 3 infested Vertani plus thralls, ~2,150 HP/s

@@ -1044,22 +1044,37 @@ end
 
 -- Indiscriminate (Mnemosyne boon): "Your Arc is now effective against denizens."
 --
--- ARC (Weaponmastery, general -- all four specs) normally reads "Works on: Adventurers
--- and room", so it is dead weight in PvE; the boon is what makes it hit denizens. The
--- UNTARGETED form damages EVERYONE in the room for 4.75s of balance; naming a target
--- hits only them for 3.00s. We always want the room form -- one wide swing instead of
--- several narrow ones.
+-- ARC is WEAPONMASTERY, not an Infernal ability -- so it belongs to EVERY knight
+-- (Infernal, Paladin, Runewarden, Unnamable) and to all four specs. It shipped
+-- Infernal-only in v4.7.145 purely because that was the class in the tower when the boon
+-- was first captured, which left the other three knights holding a boon that did nothing
+-- (user, 2026-08-10: "When a knight class, and this boon, if denizens is more than 2
+-- please use arc instead"). Renamed from `ataxiaBasher_infArc` to match what it covers.
+-- The boon FLAG keeps its legacy `infIndiscriminate` name: it is reset in three separate
+-- places (run start, confirmed run end, the claim alias) and a missed rename there would
+-- silently leave arc armed outside the tower, where it is a 4.75s swing that does nothing.
 --
--- It spends BALANCE, so like Tyranny it REPLACES the round's swing rather than riding
--- alongside it. That is also why the crowd gate matters: at 4.75s versus a ~2s dsl, one
--- arc costs more than two normal swings, so it only pays with enough denizens standing
--- in it. User-directed threshold: 2+ (tunable via ataxiaBasher.infArcAt).
-function ataxiaBasher_infArc(sp)
+-- Arc normally reads "Works on: Adventurers and room", so it is dead weight in PvE; the
+-- boon is what makes it hit denizens. The UNTARGETED form damages EVERYONE in the room
+-- for 4.75s of balance; naming a target hits only them for 3.00s. We always want the room
+-- form -- one wide swing instead of several narrow ones.
+--
+-- THE THRESHOLD IS 3, NOT 2 (v4.7.244, user-directed: "more than 2"). It spends BALANCE,
+-- so like Tyranny it REPLACES the round's swing rather than riding alongside it, and the
+-- arithmetic says the same thing the user did: 4.75s of arc against a ~2s dsl is 2.375
+-- normal swings, so at TWO denizens arc lands 2 hits where focused swinging lands ~2.4 --
+-- a loss. At three it lands 3 and wins, and the margin widens with every extra mob. Two
+-- was the old default and was one denizen short of paying for itself.
+--
+-- `ataxiaBasher.arcAt` tunes it; the old `ataxiaBasher.infArcAt` is still honoured so an
+-- existing hand-tuned value is not silently discarded. Neither is ever WRITTEN, so this is
+-- a pure read-time default change with no migration to get wrong.
+function ataxiaBasher_knightArc()
 	if not infIndiscriminate then return "" end
 	if ataxiaBasher.shielded then return "" end -- break the shield first
 	local M = ataxia.mnemosyne
 	local n = (M and M._denizenCount and M._denizenCount()) or 0
-	if n < (tonumber(ataxiaBasher.infArcAt) or 2) then return "" end
+	if n < (tonumber(ataxiaBasher.arcAt or ataxiaBasher.infArcAt) or 3) then return "" end
 	-- No venom: denizens ignore the affliction, and a venom-less arc keeps the line short.
 	return "arc"
 end
@@ -1144,8 +1159,9 @@ function ataxiaBasher_infernalBashing()
 		command = aura..maul..brage..graveHands:gsub(sp.."$", "")
 	else
 		-- ARC (Indiscriminate boon) likewise spends balance and so replaces the swing --
-		-- one 4.75s room-wide hit instead of several single-target ones.
-		local arc = ataxiaBasher_infArc(sp)
+		-- one 4.75s room-wide hit instead of several single-target ones. The maul still
+		-- rides: it is a pet order, not one of OUR balances.
+		local arc = ataxiaBasher_knightArc()
 		command = aura..maul..brage..sp..((arc ~= "") and arc or bash)
 	end
 
@@ -1674,7 +1690,11 @@ function ataxiaBasher_paladinBashing()
 			command = raze..sp..brage
 		end
 	else
-		command = brage..sp..bash
+		-- ARC (Indiscriminate boon): Weaponmastery, so Paladin gets it too. Spends balance,
+		-- therefore REPLACES the swing rather than riding it. The battlerage still goes --
+		-- rage is its own resource.
+		local arc = ataxiaBasher_knightArc()
+		command = brage..sp..((arc ~= "") and arc or bash)
 	end
 
 	return command
@@ -1861,7 +1881,10 @@ function ataxiaBasher_knightBashing()
 			command = raze..sp..brage
 		end
 	else
-		command = brage..sp..bash
+		-- ARC (Indiscriminate boon): this is the generic knight path -- Unnamable today, and
+		-- whatever else routes here later. Weaponmastery is shared, so the boon is too.
+		local arc = ataxiaBasher_knightArc()
+		command = brage..sp..((arc ~= "") and arc or bash)
 	end
 
 	return command
@@ -2069,13 +2092,28 @@ function ataxiaBasher_runewardenBashing()
 			command = raze..sp..brage
 		end
 	else
-		-- Thunderclap: at a crowd the room-wide bisect replaces the single-target swing.
-		-- The falcon rake is folded back in because it is a FREE pet order, not part of the
+		-- Two crowd swaps can want this slot, and both spend BALANCE, so at most one lands.
+		--
+		-- BISECT (Thunderclap) WINS when it is available. It is an ordinary-cost swing that
+		-- gains a third strike plus electric damage to every denizen in the room -- room-wide
+		-- coverage for the price of the normal attack. ARC (Indiscriminate) buys the same
+		-- coverage for 4.75s of balance, i.e. more than two normal swings. Given both boons,
+		-- taking the cheap one is free money; arc is the answer only when Thunderclap is not
+		-- held (or the target/spec puts bisect out of reach).
+		--
+		-- The falcon rake is folded into BOTH because it is a FREE pet order, not part of the
 		-- balance swing -- dropping it with `bash` would quietly cost us a free hit.
-		-- No separator argument: bisect is placed at the TAIL of the command, so unlike its
-		-- sibling helpers it returns a bare verb. Anything appended after it must add its own.
+		-- No separator argument: both are placed at the TAIL of the command, so unlike their
+		-- sibling helpers they return a bare verb. Anything appended must add its own.
 		local bisect = ataxiaBasher_rwBisect()
-		command = sowulu..brage..sp..(bisect and (falcon..bisect) or bash)
+		local arc = ataxiaBasher_knightArc()
+		local swing = bash
+		if bisect then
+			swing = falcon..bisect
+		elseif arc ~= "" then
+			swing = falcon..arc
+		end
+		command = sowulu..brage..sp..swing
 	end
 
 	return command
