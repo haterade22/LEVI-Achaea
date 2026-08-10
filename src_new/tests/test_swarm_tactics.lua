@@ -94,6 +94,7 @@ local function fixture(count)
   -- clear it explicitly for isolation.
   S.wallRaised = {}
   S._wallsRipple = nil
+  S.tumbleResolvedAt, S._recoverTumbles = nil, nil -- fixture rewinds the clock; these must go with it
   S._meltRoom, S._meltTries = nil, nil
   mobs = count or 3
   MAP.current = 200
@@ -1799,6 +1800,133 @@ describe("escape mode (v4.7.243)", function()
     expect(ataxiaTemp.escapeMode).toBeTrue()
     S.reset("test")
     expect(ataxiaTemp.escapeMode).toBe(nil)
+  end)
+end)
+
+-- ============================================================================
+-- v4.7.245 -- the tumble chain, and the cancellation line
+-- ============================================================================
+--
+-- User log, 2026-08-10: "Seems like tumble is a tad bit broken." FOUR tumbles in nineteen
+-- seconds, across rooms whose descriptions named no denizens at all, while the Ablaze affix
+-- took ~1,200 per tick. HP went 31% -> 14% and stayed there: a recovery that keeps moving
+-- never recovers.
+describe("the mid-recovery tumble chain (v4.7.245)", function()
+  -- Put us in a ground recovery with company, the state the log was stuck in.
+  local function recovering()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    mnemRollHide = true
+    S._lastPanicAt = nil
+    ataxia.vitals.hpp = 30
+    gmcp.Char = { Vitals = { hp = "3000", maxhp = "10000" } }
+    expect(S._maybePanic(30)).toBeTrue()
+    expect(S.state).toBe("recovering")
+    -- _maybePanic SENDS the tumble; trigger misc_alerts/004 is what arms the state off the
+    -- game's "You begin to tumble" line. Stand in for it, then land it.
+    S.onTumbleStart("n")
+    S.onTumbleDone() -- the tumble landed
+    sent = {}
+    mobs = 2         -- ...and the stale denizen list still lists the room we fled
+  end
+  local function tumbles()
+    local n = 0
+    for _, c in ipairs(sent) do if c:find("tumble", 1, true) then n = n + 1 end end
+    return n
+  end
+
+  -- `_roomHasDenizens` reads `ataxia.denizensHere`, fed by gmcp Char.Items, which lags the
+  -- room change. The tick that fires ON arrival reads the OLD room's company.
+  it("does not re-tumble on the stale denizen list right after landing", function()
+    recovering()
+    expect(S.onTick()).toBeTrue()   -- tick consumed...
+    expect(tumbles()).toBe(0)       -- ...but nothing sent: re-decide on fresh data
+    expect(S.state).toBe("recovering")
+  end)
+
+  it("does re-tumble once the arrival has settled and company is real", function()
+    recovering()
+    clock = clock + 5               -- past ARRIVE_SETTLE
+    expect(S.onTick()).toBeTrue()
+    expect(tumbles()).toBe(1)
+  end)
+
+  -- Roll Hide sheds pursuers, so needing a third tumble means something is wrong with our
+  -- reading of the room. Chain-tumbling at panic HP pays the affix damage again every hop.
+  it("spends at most RECOVER_TUMBLES before standing and fighting", function()
+    recovering()
+    for _ = 1, S.RECOVER_TUMBLES + 1 do
+      S.onTumbleDone()   -- stamps the arrival...
+      clock = clock + 5  -- ...and only then does it settle
+      S.onTick()
+    end
+    expect(tumbles()).toBe(S.RECOVER_TUMBLES)
+    expect(S.state).toBe("idle")    -- handed back to the basher rather than hopping on
+  end)
+
+  it("the budget is per RECOVERY, not per session", function()
+    recovering()
+    for _ = 1, S.RECOVER_TUMBLES + 1 do
+      S.onTumbleDone()
+      clock = clock + 5
+      S.onTick()
+    end
+    expect(S.state).toBe("idle")
+    recovering()                    -- a NEW panic recovery
+    expect(S._recoverTumbles).toBe(nil)
+    clock = clock + 5
+    sent = {}
+    expect(S.onTick()).toBeTrue()
+    expect(tumbles()).toBe(1)       -- the fresh budget works
+  end)
+
+  -- A stamp that outlived its context must not hold the settle open forever, which would
+  -- silently disable the re-tumble -- the failure direction that actually hurts.
+  it("a stale future-dated stamp cannot wedge the settle", function()
+    recovering()
+    S.tumbleResolvedAt = clock + 10000
+    expect(S.onTick()).toBeTrue()
+    expect(tumbles()).toBe(1)
+  end)
+end)
+
+describe("the tumble cancellation line (v4.7.245)", function()
+  local function tumbling()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    mnemRollHide = true
+    S.onTumbleStart("north")
+    sent = {}
+  end
+
+  -- Before this the trigger printed a banner and flushed the queue, and the state machine
+  -- sat on `tumbleDir` for the full TUMBLE_CONFIRM window -- which v4.7.243 made a MOVEMENT
+  -- LOCK, so nothing could move for those seconds either.
+  it("retries immediately instead of waiting out TUMBLE_CONFIRM", function()
+    tumbling()
+    S.onTumbleCanceled()
+    expect(#sent).toBe(1)
+    expect(sent[1]:find("tumble north", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("still respects the retry budget", function()
+    tumbling()
+    for _ = 1, S.TUMBLE_RETRIES + 1 do S.onTumbleCanceled() end
+    expect(#sent).toBe(S.TUMBLE_RETRIES)
+    expect(S.moveLocked()).toBeFalse() -- gave up and released the lock
+  end)
+
+  it("is inert when no tumble is being tracked", function()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    sent = {}
+    S.onTumbleCanceled()
+    expect(#sent).toBe(0)
+  end)
+
+  it("is inert outside the tower", function()
+    tumbling()
+    ataxiaBasher.inMnemosyne = false
+    S.onTumbleCanceled()
+    expect(#sent).toBe(0)
+    ataxiaBasher.inMnemosyne = true
   end)
 end)
 

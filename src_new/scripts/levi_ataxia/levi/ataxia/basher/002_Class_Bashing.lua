@@ -1075,6 +1075,36 @@ function ataxiaBasher_knightArc()
 	local M = ataxia.mnemosyne
 	local n = (M and M._denizenCount and M._denizenCount()) or 0
 	if n < (tonumber(ataxiaBasher.arcAt or ataxiaBasher.infArcAt) or 3) then return "" end
+	-- PROOF OF LIFE (v4.7.245). Arc has no cooldown and no in-flight replay, so nothing here
+	-- ever knew whether it actually fired -- and v4.7.244 handed it to three knights that have
+	-- never run it. A silent refusal (wrong spec, nothing wielded, some prerequisite we do not
+	-- know about) would spend EVERY round at 3+ denizens on nothing, in a crowded tower room:
+	-- the exact "a feature that quietly never fires" shape this codebase keeps getting bitten
+	-- by, in the exact situation v4.7.243 exists to survive.
+	--
+	-- The fire line (highlighting/046) sets `arcOk`, and that short-circuits this for good --
+	-- once arc is proven for this character we stop policing it.
+	--
+	-- COUNT ATTEMPTS, NOT CALLS. This function runs on every 0.3s `queue addclearfull` rebuild,
+	-- so a naive counter would reach three before the first arc had left the queue -- the same
+	-- phantom-stamp trap that burned the battlerage rotations. The 4s gate (one arc's 4.75s
+	-- balance, minus slack) collapses a round's rebuilds into a single attempt, and a gap
+	-- between fights simply reads as the next attempt, which is correct.
+	--
+	-- It WARNS and does not disable: the diagnosis is a guess until the user confirms it, and
+	-- a wrong auto-disable would silently remove a working ability. Worst case is one echo.
+	if not ataxiaTemp.arcOk then
+		local nowT = (getEpoch and getEpoch()) or os.time()
+		if (nowT - (tonumber(ataxiaTemp.arcTryAt) or 0)) > 4 then
+			ataxiaTemp.arcTryAt = nowT
+			ataxiaTemp.arcTries = (tonumber(ataxiaTemp.arcTries) or 0) + 1
+			if ataxiaTemp.arcTries >= 3 and not ataxiaTemp.arcWarned then
+				ataxiaTemp.arcWarned = true
+				ataxiaEcho("ARC swung 3 times with no fire line -- it may not be landing for this "
+					.. "spec. Check it, or set <a_darkmagenta>ataxiaBasher.arcAt = 99<reset> to park it.")
+			end
+		end
+	end
 	-- No venom: denizens ignore the affliction, and a venom-less arc keeps the line short.
 	return "arc"
 end

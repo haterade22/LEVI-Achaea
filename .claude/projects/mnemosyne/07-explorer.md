@@ -589,6 +589,32 @@ Guarded sites: `_tacticalGo`, `_beginPull`'s arm-timeout fallback, `_maybePanic`
 
 Also cleared on `sysLoadEvent` alongside `escapeMode` — both are timer-backed and the timers do not survive a reload.
 
+### The tumble chain, and the line that says a tumble failed (v4.7.245)
+
+> "Seems like tumble is a tad bit broken." — user, 2026-08-10
+
+Live log: **four tumbles in nineteen seconds**, four rooms, while the Ablaze affix took ~1,200 per tick. HP 31% → 14% and stuck — *a recovery that keeps moving never recovers*. Two causes, neither of them the movement lock, which behaved correctly: these were **sequential** tumbles, not concurrent ones.
+
+**Cause 1 — the mid-recovery tumble decided on a stale denizen list.** `M._roomHasDenizens()` reads `ataxia.denizensHere`, fed by gmcp `Char.Items`, which lags the room change. The recovery tick that fires *on arrival* therefore reads the room we just left. The arrival rooms in the log name no denizens at all ("Glowing pools of heat", "Upon a sluggish stream") — Roll Hide had shed the pursuers exactly as advertised, and we fled an empty room three times.
+
+Same class as the v4.7.125 catch (airborne `Char.Items` reflects the sky, so a mob-filled ground room reads as clear), sign flipped. The explorer already carries a settle window for this; the swarm's recovery branch did not.
+
+| Guard | Value | Why |
+|---|---|---|
+| `S.ARRIVE_SETTLE` | 1.5s from the tumble **resolving** (stamped in `onTumbleDone`) | inside it the tick is consumed and re-scheduled, not decided — the next look is at real data |
+| `S.RECOVER_TUMBLES` | 2, **per recovery** | Roll Hide sheds pursuers, so a third tumble means our reading of the room is wrong; every hop pays the affix damage again and heals nothing |
+| `since >= 0` | — | a future-dated stamp cannot hold the settle open. Impossible on a monotonic clock, but the failure direction — silently disabling the re-tumble forever — is the one that hurts |
+
+Past the budget we fall through to standing and fighting, which the v4.7.233 comment already argues is better than being attack-gated while something hits us.
+
+**Cause 2 — `You cease your tumbling.` was never wired to anything.** `misc_alerts/003` has printed a banner and sent `cq all` for a long time without ever telling the swarm. So a cancelled tumble was invisible to the only system that depends on tumbles landing: `ataxiaTemp.tumbleDir` stayed set until the `TUMBLE_CONFIRM` fallback expired — and since v4.7.243 made that state a **movement lock**, those were seconds in which nothing could move at all.
+
+The log measures the cost: cancel at **11:40:41.115**, retry at **11:40:45.938**. Four and a half seconds at 14% HP in a burning room, waiting out a timer, while the line that said *this failed* was already on screen in a box.
+
+`S.onTumbleCanceled()` retries immediately, sharing `S._tumbleRetry()` with the timer path so both honour `TUMBLE_RETRIES`. It is ordered **after** the trigger's existing `cq all` — that flush would otherwise wipe the retry it is about to queue — and is inert outside Mnemosyne and when no tumble is tracked, so the manual/PvP uses of the line are unaffected.
+
+**A fallback timer is for when the game says NOTHING. When it names the failure, use it.**
+
 ### Escape mode (v4.7.243)
 
 > "We should've stopped attacking here and put a priority on leaving the room." — user, 2026-08-10

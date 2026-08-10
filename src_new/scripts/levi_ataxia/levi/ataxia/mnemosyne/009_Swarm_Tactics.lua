@@ -686,6 +686,7 @@ function S._maybePanic(hpNow)
   S.state = "recovering"
   S.recoverGround = true
   S.recoverStarted = now()
+  S._recoverTumbles = nil -- v4.7.245: the chain budget is per RECOVERY, not per session
   S._armRecoverHold()
   -- Self-ticking, like the hover: a recovery must never wait on an outside event to notice
   -- it has healed.
@@ -727,6 +728,8 @@ end
 S.TUMBLE_CONFIRM = 5          -- seconds to allow a tumble to land before re-sending
 S.TUMBLE_RETRIES = 2          -- re-sends before giving up and letting the ladder decide
 S.PULL_RETRIES   = 2          -- re-sends of a lost tactical retreat before handing back
+S.RECOVER_TUMBLES = 2         -- consecutive mid-recovery tumbles before we stand and fight
+S.ARRIVE_SETTLE   = 1.5       -- seconds after a tumble resolves before denizensHere is trusted
 S.ESCAPE_MODE_MAX = 12        -- hard cap on escape mode, so it can never wedge the basher
 
 -- ---------------------------------------------------------------------------
@@ -813,13 +816,9 @@ function S.onTumbleStart(dir)
   end)
 end
 
-function S._tumbleCheck()
-  local MAP = M.map
-  if not ataxiaTemp or not ataxiaTemp.tumbleDir then return end
-  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return S.onTumbleDone() end
-  -- Moved: the tumble landed. Nothing to do.
-  if not MAP or MAP.current ~= ataxiaTemp.tumbleFrom then return S.onTumbleDone() end
-
+-- Shared by the CONFIRM-timer fallback and the game's own cancellation line. `why` only
+-- changes the echo -- the response to "that tumble did not happen" is the same either way.
+function S._tumbleRetry(why)
   local tries = (tonumber(ataxiaTemp.tumbleTries) or 0) + 1
   if tries > S.TUMBLE_RETRIES then
     S._echo("<indian_red>tumble failed " .. S.TUMBLE_RETRIES .. "x<reset> -- handing back to the ladder.")
@@ -830,7 +829,7 @@ function S._tumbleCheck()
   -- Free-queued and stand-first, exactly as the panic sends it: the two things that cancel a
   -- tumble are prone and a lost balance, and this covers both.
   send("queue addclear free stand" .. sep .. "tumble " .. ataxiaTemp.tumbleDir)
-  S._echo("<indian_red>tumble did not land<reset> (still in the same room) -- retry "
+  S._echo("<indian_red>" .. (why or "tumble did not land") .. "<reset> -- retry "
     .. tries .. "/" .. S.TUMBLE_RETRIES .. " <cyan>" .. ataxiaTemp.tumbleDir .. "<reset>.")
   if S._tumbleT then pcall(killTimer, S._tumbleT) end
   S._tumbleT = tempTimer(S.TUMBLE_CONFIRM, function()
@@ -839,9 +838,44 @@ function S._tumbleCheck()
   end)
 end
 
+function S._tumbleCheck()
+  local MAP = M.map
+  if not ataxiaTemp or not ataxiaTemp.tumbleDir then return end
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return S.onTumbleDone() end
+  -- Moved: the tumble landed. Nothing to do.
+  if not MAP or MAP.current ~= ataxiaTemp.tumbleFrom then return S.onTumbleDone() end
+  S._tumbleRetry("tumble did not land (still in the same room)")
+end
+
+-- ---------------------------------------------------------------------------
+-- THE GAME TELLS US WHEN A TUMBLE FAILS (v4.7.245)
+-- ---------------------------------------------------------------------------
+-- "You cease your tumbling." -- captured live 2026-08-10.
+--
+-- The trigger for this line has existed for a long time (misc_alerts/003) and did two
+-- things: print a banner and `cq all`. It never told the swarm, so a cancelled tumble was
+-- invisible to the one system that cared. The state machine then sat on `tumbleDir` until
+-- the TUMBLE_CONFIRM fallback expired -- and because v4.7.243 made that state a MOVEMENT
+-- LOCK, those seconds became seconds in which nothing could move at all.
+--
+-- The user's log measures the cost exactly: cancel at 11:40:41.115, retry at 11:40:45.938.
+-- FOUR AND A HALF SECONDS standing at 14% HP in a burning room, waiting out a timer, while
+-- the line that said "this failed" had already been printed and highlighted.
+--
+-- A fallback timer is for when the game says NOTHING. When it says something, use it.
+function S.onTumbleCanceled()
+  if not (ataxiaTemp and ataxiaTemp.tumbleDir) then return end
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return S.onTumbleDone() end
+  if S._tumbleT then pcall(killTimer, S._tumbleT); S._tumbleT = nil end
+  S._tumbleRetry("tumble CANCELLED")
+end
+
 function S.onTumbleDone()
   if S._tumbleT then pcall(killTimer, S._tumbleT); S._tumbleT = nil end
   if ataxiaTemp then
+    -- Stamp only when a tumble was actually being tracked, so S.reset()'s unconditional call
+    -- cannot fake an arrival and open a settle window over a room we never left.
+    if ataxiaTemp.tumbleDir then S.tumbleResolvedAt = now() end
     ataxiaTemp.tumbleDir, ataxiaTemp.tumbleFrom, ataxiaTemp.tumbleTries = nil, nil, nil
   end
 end
@@ -1029,8 +1063,39 @@ function S.onTick()
       -- fight does not follow, and we keep healing somewhere quieter. Only when we cannot move
       -- (no boon, no route) is standing and fighting genuinely the better option -- and then
       -- it really is better than being attack-gated while something hits us.
-      local dir = (not S.moveLocked()) and mnemRollHide and S._panicDir() -- v4.7.243
+      -- ARRIVAL IS NOT SETTLED (v4.7.245). `_roomHasDenizens` reads `ataxia.denizensHere`,
+      -- which is fed by gmcp Char.Items and lags the room change -- so for a beat after
+      -- landing it still lists the mobs we just fled. This tick fires on arrival, reads the
+      -- OLD room's company, and tumbles again. The user's log is that loop running four
+      -- times: tumble at :31.4, again at :36.0, again at :40.9, again at :46.9, through
+      -- rooms whose descriptions name NO denizens at all ("Glowing pools of heat", "Upon a
+      -- sluggish stream") -- while the Ablaze affix took ~1,200 per tick. HP went 31% ->
+      -- 14% and stayed there, because a recovery that keeps moving never recovers.
+      --
+      -- The v4.7.243 movement lock does not cover this: it correctly stops a SECOND tumble
+      -- while one is in flight, and this is the next one starting after the first properly
+      -- resolved. Same symptom, different cause -- the lock is about concurrency, this is
+      -- about stale data.
+      --
+      -- Re-tick instead of deciding: RECOVER_TICK later the denizen list is real.
+      local since = S.tumbleResolvedAt and (now() - S.tumbleResolvedAt) or nil
+      -- `since >= 0` guards a stamp from the FUTURE. It cannot happen on a monotonic clock,
+      -- but a stale stamp that outlives its context would otherwise hold the settle open
+      -- forever and silently disable the re-tumble -- the failure direction that hurts.
+      if since and since >= 0 and since < (tonumber(S.ARRIVE_SETTLE) or 1.5) then
+        if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
+        return true
+      end
+      -- AND A HARD BUDGET. Roll Hide sheds pursuers, so needing a third tumble means either
+      -- the rooms really are occupied or something is wrong with our reading of them. Either
+      -- way, chain-tumbling across the ripple at panic HP is worse than standing and fighting
+      -- one room: every hop pays the affix damage again and heals nothing. Reset when a
+      -- recovery begins, so it is a per-recovery budget rather than a session one.
+      local spent = tonumber(S._recoverTumbles) or 0
+      local budget = tonumber(S.RECOVER_TUMBLES) or 2
+      local dir = (not S.moveLocked()) and (spent < budget) and mnemRollHide and S._panicDir()
       if dir then
+        S._recoverTumbles = spent + 1
         local sep = (ataxia.settings and ataxia.settings.separator) or ";"
         send("queue addclear free stand" .. sep .. "tumble " .. dir)
         S.onTumbleStart(dir) -- confirm it actually lands; retry if it does not
@@ -1044,7 +1109,11 @@ function S.onTick()
       S.recoverGround = nil
       S._clearHold()
       S.state = "idle"
-      S._echo("<grey>company arrived mid-recovery (" .. hpp() .. "%) and nowhere to go -- handing back.")
+      S._echo("<grey>company arrived mid-recovery (" .. hpp() .. "%) and "
+        .. ((tonumber(S._recoverTumbles) or 0) >= (tonumber(S.RECOVER_TUMBLES) or 2)
+            and "already tumbled " .. S._recoverTumbles .. "x" or "nowhere to go")
+        .. " -- handing back.")
+      S._recoverTumbles = nil
       return false
     end
     -- CONFIRM WITH DIAGNOSE (v4.7.233, user: "when tumbling we should ensure we heal to full
@@ -1414,6 +1483,7 @@ function S.reset(reason)
   S.state = "idle"
   S.mode = nil
   S.escapeOff() -- v4.7.243: the tactic is over either way (a NEW escape re-arms it)
+  S._recoverTumbles = nil
   S.recoverGround = nil
   S.recoverDiagnosed = nil
   S._pullRetries = nil

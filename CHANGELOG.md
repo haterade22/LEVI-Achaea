@@ -2,6 +2,96 @@
 
 ---
 
+## 2026-08-10 - The tumble chain, the cancellation line, and Arc's fire lines (v4.7.245)
+
+> "Seems like tumble is a tad bit broken." -- user, 2026-08-10
+
+Live log: **four tumbles in nineteen seconds**, moving four rooms, while the Ablaze affix took
+~1,200 per tick. HP went 31% -> 14% and stayed there -- a recovery that keeps moving never
+recovers. Two distinct causes, neither of them the v4.7.243 movement lock (which did its job:
+these were sequential tumbles, not concurrent ones).
+
+### 1. The mid-recovery tumble fired on a stale denizen list
+
+`_roomHasDenizens()` reads `ataxia.denizensHere`, fed by gmcp `Char.Items`, which **lags the
+room change**. The recovery tick that fires on arrival therefore reads the *previous* room's
+company and tumbles again -- and the arrival rooms in the log name no denizens at all
+("Glowing pools of heat", "Upon a sluggish stream"). Roll Hide had shed the pursuers exactly as
+advertised; we fled an empty room three times.
+
+This is the same class of bug as v4.7.125 (airborne `Char.Items` reflects the sky, so a
+mob-filled ground room reads as clear) with the sign flipped. The explorer already carries a
+settle window for it; the swarm's recovery branch did not.
+
+- **`S.ARRIVE_SETTLE`** (1.5s from the tumble RESOLVING, stamped in `S.onTumbleDone`): inside
+  it the tick is consumed and re-scheduled rather than decided, so the next look is at real
+  data.
+- **`S.RECOVER_TUMBLES`** (2, per recovery): Roll Hide sheds pursuers, so needing a third
+  tumble means our reading of the room is wrong. Beyond the budget we stand and fight -- every
+  extra hop pays the affix damage again and heals nothing.
+- A stamp from the future cannot hold the settle open (`since >= 0`). It should be impossible
+  on a monotonic clock, but the failure direction -- silently disabling the re-tumble forever
+  -- is the one that hurts.
+
+### 2. "You cease your tumbling." was never wired to anything
+
+The trigger (`misc_alerts/003`) has existed for a long time and did two things: print a banner
+and `cq all`. It never told the swarm. So a cancelled tumble was invisible to the only system
+that depends on tumbles landing: `ataxiaTemp.tumbleDir` stayed set until the `TUMBLE_CONFIRM`
+fallback expired -- and since v4.7.243 made that state a **movement lock**, those were seconds
+in which nothing could move at all.
+
+The log measures it: cancel at **11:40:41.115**, retry at **11:40:45.938**. Four and a half
+seconds at 14% HP in a burning room, waiting out a timer, while the line that said *this
+failed* was already on screen, highlighted, in a box.
+
+`S.onTumbleCanceled()` now retries immediately, sharing `S._tumbleRetry()` with the timer path
+so both honour `TUMBLE_RETRIES`. Ordered after the trigger's existing `cq all` so that flush
+cannot wipe the retry it is about to queue; inert outside Mnemosyne and when no tumble is
+tracked.
+
+**A fallback timer is for when the game says NOTHING.** When it names the failure, use it.
+
+### 3. Arc's fire lines
+
+```
+You swing your weapon in a wide arc to hit everyone within your reach.
+Your weapon carves through the air with deadly accuracy, slicing open all it touches as its
+keen edge passes by.
+```
+
+Both highlighted chartreuse bold (`highlighting/046`), the established "damage actually
+happening" colour -- the same treatment as the hyena maul, falcon rake and bisect landings.
+
+**Only the first is used as confirmation.** It says "your weapon" and names nothing about it;
+the second says "its keen edge", which is edged-weapon wording that a Dual Blunt or blunt-2H
+knight will not print. Treating the effect line as proof would put a false "arc never fires"
+warning in front of every blunt knight. *When a line names a weapon property, assume the other
+specs word it differently until seen.*
+
+That confirmation feeds a **proof of life** in `ataxiaBasher_knightArc`: arc has no cooldown and
+no in-flight replay, so nothing anywhere knew whether it had ever actually fired -- and v4.7.244
+handed it to three knights that have never run it. Three attempts with no fire line and it warns
+once. It counts *attempts*, not calls: the function runs on every 0.3s `queue addclearfull`
+rebuild, so a naive counter would reach three before the first arc left the queue -- the same
+phantom-stamp trap that burned the battlerage rotations. A 4s gate (one arc's balance) collapses
+a round's rebuilds into one attempt. It **warns and does not disable**: the diagnosis is a guess
+until confirmed, and a wrong auto-disable would silently remove a working ability.
+
+### Tests
+
+**1225 -> 1234.** Two new suites in `test_swarm_tactics.lua`: the mid-recovery chain (stale list,
+settled re-tumble, the budget, per-recovery reset, the stale-stamp guard) and the cancellation
+line (immediate retry, retry budget, inert when untracked, inert outside the tower).
+
+All four fixes broken back and confirmed to fail. Two test-fixture faults surfaced while doing
+it and are worth remembering: the panic tumble is armed by **trigger 004**, not by
+`_maybePanic`, so a fixture that skips the trigger never arms the lock it means to test; and the
+budget loop advanced the clock *before* stamping the arrival, so every iteration landed inside
+its own settle window and the budget was never reached.
+
+---
+
 ## 2026-08-10 - Indiscriminate reaches every knight, at 3 denizens not 2 (v4.7.244)
 
 > "When a knight class, and this boon, if denizens is more than 2 please use arc instead."
