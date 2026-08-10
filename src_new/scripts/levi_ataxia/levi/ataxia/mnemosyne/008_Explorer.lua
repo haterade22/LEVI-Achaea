@@ -54,6 +54,11 @@ local HAEMO_MOVE_HP = 90 -- Haemophiliac affix: hold navigation below this HP% (
 local HAEMO_MOVE_BLEED = 50 -- ...and while bleeding above this (SSC clots it down; we stand still meanwhile)
 local MAX_PATROL_LOOPS = 3 -- fruitless full patrol loops (hunting the boss) before giving up
 local MAX_ICE_SLIPS = 15 -- re-send a move this many times after slipping on ice before giving up on the exit
+-- A TACTICAL move gets a far smaller budget (v4.7.243). 15 re-sends is defensible for an idle
+-- sweep that has all day; under fire it is 13 seconds of standing in the room we are trying to
+-- flee. The caves-beneath-Kuthalebak death log spent exactly that, slipping, while three
+-- infested Vertani did ~2,150 HP/s to an ~18,700 pool.
+local MAX_TACTICAL_ICE_SLIPS = 3
 
 -- Check for STARTING: must be physically in the tower. This used to also require
 -- gmcp.Room.Info.area == "" as direct proof, so a telemetry run that outlived your presence
@@ -225,6 +230,10 @@ end
 -- ---------------------------------------------------------------------------
 
 function M._exploreMove(dir, isRetry)
+  -- Never move while a tumble is in flight (v4.7.243): a walk between "You begin to tumble"
+  -- and "You tumble out of the room." cancels it. The swarm's own machinery re-decides once
+  -- the tumble resolves (S.onTumbleDone), so dropping the step here loses nothing.
+  if M.swarm and M.swarm.moveLocked and M.swarm.moveLocked() then return end
   M.explore.moving = true
   M.explore.fromRoom = MAP and MAP.current
   M.explore.fromDir = dir
@@ -317,9 +326,14 @@ end
 -- stuck exit still yields eventually.
 function M.onIceSlip()
   if not (M.explore.on and M.explore.moving and M.explore.fromDir) then return end
+  -- A tumble in flight owns the movement (v4.7.243) -- do not count its slip or re-send under it.
+  if M.swarm and M.swarm.moveLocked and M.swarm.moveLocked() then return end
   M.explore.iceSlips = (M.explore.iceSlips or 0) + 1
-  if M.explore.iceSlips > MAX_ICE_SLIPS then
-    M._exploreEcho("<indian_red>stuck on the ice<reset> after " .. MAX_ICE_SLIPS .. " tries -- skipping this exit.")
+  -- TACTICAL moves get their own, much smaller budget (v4.7.243).
+  local tactical = M.explore.tacticalMove and true or false
+  local cap = tactical and MAX_TACTICAL_ICE_SLIPS or MAX_ICE_SLIPS
+  if M.explore.iceSlips > cap then
+    M._exploreEcho("<indian_red>stuck on the ice<reset> after " .. cap .. " tries -- skipping this exit.")
     if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
     local nd = MAP.normDir and MAP.normDir(M.explore.fromDir)
     if nd and M.explore.fromRoom and not M.explore.tacticalMove then -- never condemn a walked tactical edge
@@ -332,6 +346,24 @@ function M.onIceSlip()
       if M.swarm and M.swarm.onMoveFailed then pcall(M.swarm.onMoveFailed) end
     end
     return M._exploreTick()
+  end
+  -- RE-SEND THE REAL COMMAND (v4.7.243). `_exploreMove` sends a bare `stand;<dir>` WALK. For a
+  -- sweep step that is exactly right; for a tactical retreat it is the wrong command entirely --
+  -- it discards the `leap`/`backflip` the escape was, and a walk into our own standing icewall
+  -- silently fails. The death log shows this looping: "slipped on the ice -- up and going again"
+  -- against a room reporting "An icewall is here, blocking passage to the north".
+  --
+  -- So hand tactical slips back to the swarm, which re-sends its OWN verb via `_tacticalGo`
+  -- (bounded by S.PULL_RETRIES, hold re-armed, route anchor restored). `M.explore.moving` must
+  -- be cleared first or S.onMoveFailed's re-arm would collide with the in-flight move it is
+  -- replacing.
+  if tactical then
+    M._exploreEcho("<grey>slipped on the ice mid-retreat -- <cyan>re-sending the retreat<reset>.")
+    if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
+    M.explore.moving = false
+    M.explore.tacticalMove = false
+    if M.swarm and M.swarm.onMoveFailed then pcall(M.swarm.onMoveFailed) end
+    return
   end
   M._exploreEcho("<grey>slipped on the ice -- up and going again.")
   M._exploreMove(M.explore.fromDir, true) -- re-send (silent; keeps tries, re-arms timeout)
@@ -346,6 +378,7 @@ end
 -- defeats the leap still yields eventually.
 function M.onWallBlocked()
   if not (M.explore.on and M.explore.moving and M.explore.fromDir) then return end
+  if M.swarm and M.swarm.moveLocked and M.swarm.moveLocked() then return end -- v4.7.243
   M.explore.iceSlips = (M.explore.iceSlips or 0) + 1
   if M.explore.iceSlips > MAX_ICE_SLIPS then
     M._exploreEcho("<indian_red>wall would not yield<reset> after " .. MAX_ICE_SLIPS .. " leaps -- giving up on this exit.")

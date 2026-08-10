@@ -325,3 +325,164 @@ describe("bard compose hold -- attack refuses while the lyre is in hand", functi
     expect(danger).toBe(1)
   end)
 end)
+
+-- ============================================================================
+-- v4.7.243 — escape mode, the TTL danger alarm, and the missing no-flee HP branch
+-- ============================================================================
+
+describe("escape mode gates the attack round (v4.7.243)", function()
+  local danger
+  local function spy()
+    baseline()
+    danger = 0
+    ataxiaBasher_dangerLevel = function() danger = danger + 1; return "wait" end
+  end
+
+  -- The death log: three complete attack rounds between the disengage and "pull move lost".
+  -- Every one of them sent `queue addclearfull`, which clears the FULL server queue -- so the
+  -- swings were not merely wasted, they were actively deleting the escape.
+  it("does not reach the attack round while we are leaving", function()
+    spy()
+    ataxiaTemp.escapeMode = true
+    ataxiaBasher_attack()
+    expect(danger).toBe(0)
+    ataxiaTemp.escapeMode = nil
+  end)
+
+  it("swings again the moment escape mode clears", function()
+    spy()
+    ataxiaTemp.escapeMode = nil
+    ataxiaBasher_attack()
+    expect(danger).toBe(1)
+  end)
+end)
+
+describe("the damage watchdog projects TIME TO DEATH (v4.7.243)", function()
+  -- The fight that killed us: ~2,150 HP/s against an ~18,700 pool. Under the old test
+  -- (net HP delta >= maxhp * 0.6) this could not fire at all.
+  local function bigPool()
+    baseline()
+    ataxia.vitals = { hp = 18700, hpp = 100, maxhp = 18700, rage = 0 }
+    ataxiaBasher_dmgSamples = {}
+    ataxiaBasher_incSamples = {}
+    ataxiaBasher.dangerTTL = 6
+  end
+
+  it("trips at ~2150 HP/s while we are still at ~64% health", function()
+    bigPool()
+    -- 3 seconds of real incoming, gross (what the game printed, before any healing).
+    -- 8,600 over 3s = ~2,866 HP/s; at 12,000 HP that is ~4.2s to live, inside the 6s floor.
+    -- We died at 1024. This alarm fires roughly eleven thousand HP earlier.
+    ataxia.vitals.hp, ataxia.vitals.hpp = 12000, 64
+    local t = getEpoch()
+    ataxiaBasher_incSamples = { {t - 3, 2150}, {t - 2, 2150}, {t - 1, 2150}, {t, 2150} }
+    expect(ataxiaBasher_isDamageRateExtreme()).toBeTrue()
+    local ttl = ataxiaBasher_secondsToLive()
+    expect(ttl ~= nil and ttl < 10).toBeTrue()
+  end)
+
+  it("the OLD absolute test could not have fired on the same fight", function()
+    bigPool()
+    local t = getEpoch()
+    -- 8,600 damage over the window is well short of maxhp * 0.6 = 11,220.
+    ataxiaBasher_dmgSamples = { {t - 3, 2150}, {t - 2, 2150}, {t - 1, 2150}, {t, 2150} }
+    local total = 0
+    for _, s in ipairs(ataxiaBasher_dmgSamples) do total = total + s[2] end
+    expect(total < (ataxia.vitals.maxhp * 0.6)).toBeTrue()
+  end)
+
+  it("a normal fight does NOT trip it", function()
+    bigPool()
+    local t = getEpoch()
+    ataxiaBasher_incSamples = { {t - 3, 300}, {t - 2, 300}, {t - 1, 300}, {t, 300} }
+    expect(ataxiaBasher_isDamageRateExtreme()).toBeFalse()
+  end)
+
+  -- The structural flaw in the old feed: it recorded NET HP delta, so a prompt that took 2000
+  -- and sipped 1500 recorded 500, and a net-positive prompt recorded nothing at all.
+  it("healing no longer masks the incoming rate", function()
+    bigPool()
+    ataxia.vitals.hp, ataxia.vitals.hpp = 12000, 64
+    local t = getEpoch()
+    ataxiaBasher_incSamples = { {t - 3, 2150}, {t - 2, 2150}, {t - 1, 2150}, {t, 2150} }
+    ataxiaBasher_dmgSamples = { {t - 3, 200}, {t - 2, 0}, {t - 1, 150} } -- what net delta saw
+    expect(ataxiaBasher_isDamageRateExtreme()).toBeTrue()
+  end)
+
+  it("is silent when nothing is hitting us", function()
+    bigPool()
+    expect(ataxiaBasher_isDamageRateExtreme()).toBeFalse()
+    expect(ataxiaBasher_secondsToLive()).toBe(nil)
+  end)
+
+  it("scales with the pool -- the same rate is survivable on a bigger one", function()
+    bigPool()
+    local t = getEpoch()
+    ataxiaBasher_incSamples = { {t - 3, 500}, {t - 2, 500}, {t - 1, 500}, {t, 500} }
+    expect(ataxiaBasher_isDamageRateExtreme()).toBeFalse() -- ~37s to live
+    ataxia.vitals.hp = 2000
+    expect(ataxiaBasher_isDamageRateExtreme()).toBeTrue()  -- ~4s to live
+  end)
+end)
+
+-- The attack-gate describes above (compose, phial, escape mode) replace
+-- ataxiaBasher_dangerLevel with a spy and never put it back -- test files share one Lua state,
+-- so everything appended after them would silently be testing the spy instead of the code.
+-- Reload the real implementation before testing the function itself.
+do
+  local okr, errr = pcall(dofile, basher_file)
+  if not okr then error("Failed to reload basher functions: " .. tostring(errr)) end
+end
+
+describe("no-flee areas finally have an HP branch (v4.7.243)", function()
+  -- The bug that let us swing Valafar at 1024 HP of an ~18,700 pool: `hpp <= fleePct` lived
+  -- ONLY in the non-no-flee else-arm, so in the tower dangerLevel() returned "attack".
+  local function tower()
+    baseline()
+    ataxiaBasher.inMnemosyne = true
+    setArea("")
+    ataxia.vitals = { hp = 1024, hpp = 5, maxhp = 18700, rage = 0 }
+    ataxiaBasher_dmgSamples = {}
+    ataxiaBasher_incSamples = {}
+  end
+
+  it("spends the round LEAVING when the swarm can get us out", function()
+    tower()
+    local asked = 0
+    ataxia.mnemosyne = ataxia.mnemosyne or {}
+    ataxia.mnemosyne.swarm = { disengage = function() asked = asked + 1; return true end }
+    expect(ataxiaBasher_dangerLevel()).toBe("wait")
+    expect(asked).toBe(1)
+    ataxia.mnemosyne.swarm = nil
+  end)
+
+  -- Deliberate: a refusal means no validated route back, and fighting in place is then the best
+  -- available answer. Muting the basher there would be lethal.
+  it("keeps fighting when the swarm CANNOT get us out", function()
+    tower()
+    ataxia.mnemosyne = ataxia.mnemosyne or {}
+    ataxia.mnemosyne.swarm = { disengage = function() return false end }
+    ataxiaBasher_canShield = function() return false end
+    expect(ataxiaBasher_dangerLevel()).toBe("attack")
+    ataxiaBasher_canShield = function() return true end
+    ataxia.mnemosyne.swarm = nil
+  end)
+
+  -- canShield() returns false whenever a room denizen is on the area target list -- i.e. every
+  -- real tower fight. Gating the ALARM on it made the whole branch unreachable.
+  it("the alarm no longer depends on canShield", function()
+    tower()
+    ataxia.vitals.hpp = 100
+    local t = getEpoch()
+    ataxiaBasher_incSamples = { {t - 3, 2150}, {t - 2, 2150}, {t - 1, 2150}, {t, 2150} }
+    local asked = 0
+    ataxia.mnemosyne = ataxia.mnemosyne or {}
+    ataxia.mnemosyne.swarm = { disengage = function() asked = asked + 1; return true end }
+    ataxiaBasher_canShield = function() return false end
+    expect(ataxiaBasher_dangerLevel()).toBe("wait")
+    expect(asked).toBe(1) -- the spike alone reached the disengage, at FULL HP
+    ataxiaBasher_canShield = function() return true end
+    ataxia.mnemosyne.swarm = nil
+    ataxiaBasher_incSamples = {}
+  end)
+end)

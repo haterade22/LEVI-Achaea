@@ -455,6 +455,53 @@ its cost was silently dropped; a partly-blocked boon reported as "free"; an atta
 coverage at all because the test only checked the flag. **Break the code back after writing a
 test** -- if nothing fails, the test is decoration.
 
+## A long action needs a LOCK, not just a retry (v4.7.243)
+
+A tumble takes ~4 seconds and any other movement inside that window cancels it. Five separate
+code paths in one module could send one, and the prompt-driven `S.onVitals` did so routinely --
+each path individually correct, the combination lethal. When an action spans time and a second
+action of the same KIND aborts it, a retry window is not enough: serialise it. Read the state
+that already exists (`ataxiaTemp.tumbleDir` was already armed and released by real triggers)
+rather than inventing a second lifecycle to keep in sync.
+
+And decide explicitly what is NOT covered: `_maybeTincture` sits outside the lock because
+healing is not movement, and mid-tumble at crash HP is when it is worth most.
+
+## A "protect this queued command" flag is not a "we are leaving" flag (v4.7.243)
+
+Three ad-hoc holds existed (`swarmHold` 8s, `bardComposeHold` 3s, `phialHold` 4s), each armed
+where someone remembered to and each meaning "do not wipe my one queued line". Two escape paths
+armed nothing at all. The general answer is ONE flag with a real lifecycle: armed at the choke
+point every instance passes through, cleared by the EVIDENCE the situation ended (the room
+number changing), plus a hard cap so it can never wedge.
+
+Watch the arming point, though: escape mode arms at `_onPullSent`, not `_beginPull`, because a
+pull's escape RIDES the next attack. Gating attacks at arm time would have starved the very
+swing carrying the step-out -- a correct-looking guard that disables the feature it protects.
+
+## A retry must re-send the ACTUAL command, not the generic one (v4.7.243)
+
+The ice-slip recovery re-sent movement via `_exploreMove`, which emits a bare `stand;<dir>`
+walk. For a sweep step that is right; for a tactical retreat it silently discarded the
+`leap`/`backflip` the move was -- and a walk into our own icewall fails without saying so. The
+recovery path must go back to whoever OWNS the action, not re-derive it from the direction.
+
+Budgets need the same treatment: `MAX_ICE_SLIPS = 15` is fine for an idle sweep and is thirteen
+seconds of standing still under fire. The same constant serving both contexts is a bug.
+
+## An alarm evaluated inside the thing it guards cannot fire (v4.7.243)
+
+`ataxiaBasher_isDamageRateExtreme` lived inside `ataxiaBasher_attack`, below the holds -- so it
+went quiet precisely when an escape was in flight, which is when "is this killing us faster than
+we can leave?" matters. Emergency checks belong on an unconditional feed (`gmcp.Char.Vitals`
+runs every prompt and reads no holds).
+
+Two more general points from the same rewrite. **A metric computed from a NET figure is not
+measuring what its name says**: net HP delta made healing subtract from incoming damage, so the
+harder we cured the safer we looked. **An absolute threshold does not survive a changing pool**:
+`maxhp * 0.6` in 5s was reachable at 5,000 HP and unreachable at 18,700. Prefer a projection
+(time-to-death) whose units mean the same thing at every scale.
+
 ## Quality Gates (Hooks)
 
 Hooks in `.claude/hooks/` run automatically and block operations that fail validation:

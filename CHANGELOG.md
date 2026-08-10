@@ -2,6 +2,157 @@
 
 ---
 
+## 2026-08-10 - Getting out of the room: a movement lock, escape mode, and a danger alarm that actually fires (v4.7.243)
+
+Death log, 08:26, caves beneath Kuthalebak -- 3 infested Vertani plus thralls, ~2,150 HP/s
+sustained against an ~18,700 pool. The escape machinery ran for **thirteen seconds** and never
+got us out. We died at 1024 HP still swinging.
+
+The user's reading of it, all four points borne out by the source:
+
+> "We have to do more to try and get out of that room. If we tumble and then leap or walk in a
+> direction it cancels the tumble. We should've stopped attacking here and put a priority on
+> leaving the room. This is somewhat difficult with ice in the room. It also seems thralls try
+> and stop us from leaving."
+
+### 1. The movement lock -- nothing moves while a tumble is in flight
+
+A tumble is ~4 seconds between `You begin to tumble agilely to the <dir>.` and `You tumble out
+of the room.`, and anything else we send inside that window cancels it. **We were doing this to
+ourselves from five different code paths.** `S.moveLocked()` (mnemosyne/009) reads the state that
+already exists -- `ataxiaTemp.tumbleDir`, armed by `S.onTumbleStart`, released by
+`S.onTumbleDone` on the game's own completion line or the `TUMBLE_CONFIRM` fallback -- so there
+is no second lifecycle to keep in sync. Guarded: `_tacticalGo`, `_beginPull`'s arm-timeout
+fallback, `_maybePanic`, `_beginEscape`'s hover, `_beginReenter`'s wall branch, the mid-recovery
+tumble, and in the explorer `_exploreMove`, `onIceSlip` and `onWallBlocked`.
+
+**`S.onVitals` was the worst of them.** A Roll Hide pull tumble leaves `S.state == "pulling"`, and
+the only early return there is the `recovering` one -- so two seconds into a four-second tumble it
+fired `cq all` + `_beginEscape` -> `stand;leap <dir>`, throwing away a tumble that was about to
+land. It is also the one path independent of every existing hold.
+
+`_maybeTincture` is deliberately left OUTSIDE the lock. Healing is not movement, and mid-tumble at
+crash HP is exactly when we want it.
+
+### 2. The ice-slip recovery re-sent the wrong command
+
+`M.onIceSlip` called `M._exploreMove(fromDir, true)`, which sends a **bare `stand;<dir>` walk** --
+discarding the `leap`/`backflip` the tactical retreat was. A walk into our own standing icewall
+silently fails, and `MAX_ICE_SLIPS` is **15**. The log shows it looping: `slipped on the ice -- up
+and going again`, against a room reporting `An icewall is here, blocking passage to the north`.
+**That is the thirteen seconds.**
+
+Tactical slips now hand back to `S.onMoveFailed()`, which re-sends the swarm's OWN verb via
+`_tacticalGo` with the route anchor restored and the hold re-armed, bounded by `S.PULL_RETRIES`.
+New `MAX_TACTICAL_ICE_SLIPS = 3`: fifteen re-sends is defensible for an idle sweep and
+indefensible under fire.
+
+### 3. Escape mode -- stop attacking until we are out
+
+The existing suppression was three ad-hoc holds (`swarmHold` 8s, `bardComposeHold` 3s,
+`phialHold` 4s) armed inconsistently -- `_beginReenter` and `_beginPull`'s fallback armed nothing
+at all -- and each really means "protect this one queued command", not "we are leaving".
+
+`ataxiaTemp.escapeMode` is the single authoritative answer. Armed at `_tacticalGo` (the choke
+point every tactical move passes through), the panic tumble, the pull-with-no-swing fallback, and
+`_onPullSent`. Cleared when the room number **actually changes** -- the only real evidence we got
+out -- on `S.reset`, and at `S.ESCAPE_MODE_MAX` (12s) so it can never wedge the basher. Read by
+`ataxiaBasher_attack()` and `ataxiaBasher_tryAttack()`.
+
+Two placements matter and are commented in the source:
+
+- **It arms at `_onPullSent`, NOT at `_beginPull`.** A pull's escape RIDES the next attack -- the
+  `swarmPullDir` decorator turns the round into `<attack>;<backdir>` as one queued line. Gating
+  attacks at arm time would starve the very swing carrying the step-out, and every pull would
+  degrade to its timeout fallback.
+- **`_beginEscape` clears it again when there is no route back.** Fighting in place is then the
+  best available answer, and muting the basher there would be lethal.
+
+`tryAttack` was also missing `bardComposeHold` and `phialHold` entirely: `attack()` returns
+immediately for them, but reaching it still burns the 0.3s re-queue cooldown -- which is exactly
+what makes the next real dispatch late.
+
+### 4. A danger alarm that fires in three seconds, not never
+
+`ataxiaBasher_isDamageRateExtreme` tested `net HP delta over 5s >= maxhp * 0.6`. Three independent
+reasons it could not fire in this fight:
+
+- **Healing subtracted from its own samples.** A prompt that took 2000 and sipped 1500 recorded
+  500; a net-positive prompt recorded nothing at all.
+- **The bar was an absolute fraction of a large pool.** 11,220 damage inside five seconds.
+- **It was only ever evaluated inside `ataxiaBasher_attack`, below the holds** -- so it fell
+  silent precisely while an escape was in flight.
+
+Now: fed by `bashStats_recordIncoming` (trigger `351_Health_Lost_By_Type`), which is the damage
+**before** any healing, in its own window beside the old net-delta feed -- whichever reports MORE
+wins, so the net feed stays as a floor where the game does not print the type line. And it judges
+**time to death** (`hp / incoming-per-second` vs `ataxiaBasher.dangerTTL`, default 6s) rather than
+a fraction of max HP, which is the only figure that means the same thing at every pool size.
+Against 2,150 HP/s it trips at ~12,000 HP -- roughly eleven thousand HP earlier than we died. The
+old absolute test is kept as an OR, so this can only ever be more sensitive than before.
+
+It is also **called from `S.onVitals`**, which runs on every prompt and reads none of the holds.
+
+### 5. The no-flee HP branch that never existed
+
+`hpp <= fleePct` lived **only** in the non-no-flee `else` arm. At 5% HP in Mnemosyne
+`dangerLevel()` returned `"attack"`. That is how we came to swing Valafar at 1024 HP.
+
+In a no-flee area we now ask the swarm to leave the ROOM (the area is what we cannot flee) and
+return `"wait"` only if it actually can. A refusal falls through to the shield/attack tail --
+deliberately, since no route out means fighting in place is the best answer available.
+
+`canShield()` is also dropped from the alarm condition. It returns false whenever a room denizen
+is on the area target list, i.e. every real tower fight, which made the whole branch unreachable.
+It now gates only the shielding.
+
+### 6. The thrall lines, and an icewall we could not see
+
+`As the thrall draws near, it wildly grasps at your arms and legs, disrupting your focus.` and
+`A mindless thrall hurls itself at you in a frenzy, disrupting your countermeasures.` matched
+**nothing** in the package -- the mechanic eating our escapes was invisible. Both are from the
+Necromantic affix, captured in v4.7.196 and left unhandled pending observation; this is the
+observation. New trigger `denizen_attacks_misc_lines/025` stamps `ataxiaTemp.moveDisruptedAt` and
+echoes while a tactic is running. It deliberately re-sends nothing: with the movement lock, a
+disruption landing mid-tumble must wait, and a reflexive re-send is the exact tumble-cancelling
+move the lock exists to prevent.
+
+`An icewall is here, blocking passage to the <dir>.` was **highlight-only**, and `S.wallRaised` was
+written in exactly one place: optimistically, from our own escape send. So a wall we did not place
+-- or one that survived a reload -- was invisible to `S.moveVerb` (BACKFLIP vs LEAP; only LEAP is
+confirmed to cross an icewall) and to `S._panicDir` (which avoids tumbling into a walled edge).
+The room description names the direction, so `highlighting/001_Icewall` now parses it. Keyed on
+the Mnemosyne map's current room, which is nil outside the tower -- that is what keeps real-world
+rooms out of the table without a second area check.
+
+### Explicitly not done
+
+Falling back to any other exit when `_backDir()` returns nil (user declined; `S._panicDir` already
+enumerates `room.exits` and avoids our own walled edge, so it stays a one-call change). No
+abort-the-run escape -- no confirmed command exists, and we do not guess commands (bare `BOONS`
+v4.7.203, bare `PERFORMANCE` v4.7.209 both shipped as invalid no-ops).
+
+### Tests
+
+**1188 -> 1217.** New suites in `test_swarm_tactics.lua` (the move lock across every guarded path,
+the tincture still firing under it, escape-mode lifecycle including the `_onPullSent` timing and
+the no-route non-latch), `test_basher_noflee.lua` (escape mode gating the round, the TTL alarm at
+four different pool/rate combinations, the no-flee HP branch both ways) and `test_mnemosyne.lua`
+(tactical vs sweep ice slips, the tactical budget, the lock).
+
+**Each of the seven fixes was broken back and confirmed to fail its tests.** Two tests passed on
+the break the first time and were tightened: the panic-lock test was being refused by the panic
+COOLDOWN rather than the lock (`S._lastPanicAt` survives `fixture()`, which only rewinds the
+clock), and the ice budget test never crossed the cap -- it now asserts via `_exploreTick`, which
+only the give-up branch calls.
+
+One harness trap fixed while here: the attack-gate describes in `test_basher_noflee.lua` replace
+`ataxiaBasher_dangerLevel` with a spy and never restore it. Test files share one Lua state, so
+everything appended after them was silently testing the spy. The file now reloads the real
+implementation before testing the function itself.
+
+---
+
 ## 2026-08-06 - Hawkstep and Wavedance recognised as Bard defences (ships in v4.7.222)
 
 `DEFADD`/`KEEPADD` now accept `hawkstep` and `wavedance`, and `defs valid` renders them with

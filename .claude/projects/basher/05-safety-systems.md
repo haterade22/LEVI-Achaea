@@ -9,23 +9,61 @@ Returns one of: `"attack"`, `"shield"`, `"flee"`, `"wait"`
 ### Decision Tree
 
 ```
-1. bashFlee == true?                → "wait"
-2. hpp == 0?                        → "wait" (invalid state)
-3. aeon, paralysis, or peace?       → "wait" (can't act)
+1. bashFlee == true?                    → "wait"
+2. hpp == 0?                            → "wait" (invalid state)
+3. aeon, paralysis, or peace?           → "wait" (can't act)
 4. No-flee area (World Tree/Mnemosyne)?
-     ├─ extreme damage + can shield → "shield" (one-cycle guard, keep attacking)
-     └─ else                        → skip both flee checks below
-5. hpp ≤ fleeThresholdPct (25%)?    → "flee"
-6. Extreme damage rate detected?    → "flee"
-7. hpp ≤ shieldThresholdPct (40%)?  → "shield" (if can shield)
-8. Otherwise                        → "attack"
+     ├─ hpp ≤ fleePct OR damage spike:
+     │    ├─ swarm.disengage() worked → "wait"  (spend the round LEAVING THE ROOM)
+     │    └─ refused (no route back)  → fall through: fighting in place is the answer
+     ├─ damage spike + can shield       → "shield" (one-cycle guard, keep attacking)
+     └─ else                            → skip both flee checks below
+5. hpp ≤ fleeThresholdPct (25%)?        → "flee"
+6. Extreme damage rate detected?        → "flee"
+7. hpp ≤ shieldThresholdPct (40%)?      → "shield" (if can shield)
+8. Otherwise                            → "attack"
 ```
 
-### Extreme Damage Rate Detection
+**Step 4's HP branch did not exist until v4.7.243.** `hpp <= fleePct` lived *only* in the
+non-no-flee arm, so at 5% HP in Mnemosyne this function returned `"attack"` — which is how we
+came to swing Valafar at 1024 HP of an ~18,700 pool. The area is what cannot be fled; the ROOM
+can be left, and that is what the swarm ladder is for. A refusal falls through deliberately:
+no validated route back means fighting in place is genuinely the best available answer, and
+muting the basher there would be lethal.
 
-Function: `ataxiaBasher_isDamageRateExtreme()` — returns true if total damage in last 5 seconds exceeds 60% of max HP.
+**`canShield()` no longer gates the alarm**, only the shielding. It returns false whenever a
+room denizen is on the area target list — i.e. every real tower fight — so gating the alarm on
+it made the whole branch unreachable.
 
-Damage recorded via `ataxiaBasher_recordDamage(amount)` as `{timestamp, amount}` tuples in a rolling window.
+### Extreme Damage Rate Detection (rewritten v4.7.243)
+
+Function: `ataxiaBasher_isDamageRateExtreme()`.
+
+The original test was `net HP delta over 5s >= maxhp * 0.6`. In the caves-beneath-Kuthalebak
+death (~2,150 HP/s sustained against an ~18,700 pool) it could not fire, for three independent
+reasons:
+
+1. **Healing subtracted from its own samples.** The feed was `ataxia.vitals.oldhealth - hp` per
+   prompt, so a prompt that took 2000 and sipped 1500 recorded 500 — and a net-positive prompt
+   recorded nothing at all. The harder we cured, the safer we looked.
+2. **The bar was an absolute fraction of a large pool** — 11,220 damage inside five seconds.
+3. **It was only ever evaluated inside `ataxiaBasher_attack`, below the three holds**, so it fell
+   silent precisely while an escape was in flight.
+
+| Piece | Now |
+|---|---|
+| Feed | `bashStats_recordIncoming` → `ataxiaBasher_recordIncoming` (trigger `351_Health_Lost_By_Type`) — the damage **before** healing |
+| Old feed | kept as a floor in its own window (`ataxiaBasher_dmgSamples`), since the type line does not exist everywhere |
+| Combination | `ataxiaBasher_incomingRate()` takes whichever window reports MORE, divided by the **elapsed span** (not the nominal 5s, so a 3s-old fight reads at its real rate) |
+| Test | time to death: `hp / rate <= ataxiaBasher.dangerTTL` (default **6s**) |
+| Legacy test | kept as an OR, so this can only be *more* sensitive than before |
+| Also called from | `S.onVitals` (`mnemosyne/009`), which runs every prompt and reads no holds |
+
+`ataxiaBasher_secondsToLive()` exposes the projection for display/diagnostics.
+
+Time-to-death is the only figure that means the same thing at every pool size: against 2,150 HP/s
+it trips at ~12,000 HP — roughly eleven thousand HP earlier than we died — and it does not need
+retuning when the pool changes.
 
 ### No-Flee Areas
 
@@ -287,7 +325,8 @@ cloak refuses while prone, and has a 50% chance to eat the charge for nothing.
 | Return navigation timeout | 15s | No |
 | Stuck detection | 15s | `stuckTimeout` |
 | Shield duration (default) | 3.1s | `shieldTimerDefault` |
-| Damage rate window | 5s | No |
+| Damage rate window | 5s | No (`ataxiaBasher_dmgWindowSec`) |
+| Danger time-to-death floor | 6s | Yes (`ataxiaBasher.dangerTTL`) |
 | Throttle pause | 2s | No |
 | Max attacks/sec | 5 | No |
 

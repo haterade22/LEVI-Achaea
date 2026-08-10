@@ -150,6 +150,14 @@ function ataxiaBasher_attack()
   -- and swinging is not what was going to save us at IMP SLI AST ANO.
   if ataxiaTemp.phialHold then return end
 
+  -- ESCAPE MODE (v4.7.243). User: "We should've stopped attacking here and put a priority on
+  -- leaving the room." In the death log we swung at 1024 HP of an ~18,700 pool while the escape
+  -- machinery was still trying to get us out -- and every attack sends `queue addclearfull`,
+  -- which clears the FULL queue and can throw the escape away with it. While we are leaving,
+  -- the round is worth more spent leaving. Cleared when the room actually changes, on reset, or
+  -- at S.ESCAPE_MODE_MAX, so it cannot mute the basher indefinitely.
+  if ataxiaTemp.escapeMode then return end
+
   -- Determine danger level (flee/shield/attack/wait) — single check, no redundant logic
   local danger = ataxiaBasher_dangerLevel()
 
@@ -314,15 +322,88 @@ function ataxiaBasher_recordDamage(amount)
   end
 end
 
+-- TRUE incoming damage, from `Health lost: N (type).` via bashStats_recordIncoming (v4.7.243).
+-- Kept in its own window rather than merged into ataxiaBasher_dmgSamples: the two feeds measure
+-- different things (gross damage vs net HP delta) and merging them would double-count every hit
+-- that appears in both.
+ataxiaBasher_incSamples = ataxiaBasher_incSamples or {}
+
+function ataxiaBasher_recordIncoming(amount)
+  amount = tonumber(amount) or 0
+  if amount <= 0 then return end
+  if not (ataxiaBasher and ataxiaBasher.enabled) then return end
+  local nowT = getEpoch()
+  table.insert(ataxiaBasher_incSamples, {nowT, amount})
+  local cutoff = nowT - ataxiaBasher_dmgWindowSec
+  while #ataxiaBasher_incSamples > 0 and ataxiaBasher_incSamples[1][1] < cutoff do
+    table.remove(ataxiaBasher_incSamples, 1)
+  end
+end
+
+local function windowSum(samples, cutoff)
+  local total, oldest = 0, nil
+  for _, s in ipairs(samples) do
+    if s[1] >= cutoff then
+      total = total + s[2]
+      if not oldest or s[1] < oldest then oldest = s[1] end
+    end
+  end
+  return total, oldest
+end
+
+-- Incoming HP per second over the last ataxiaBasher_dmgWindowSec, from whichever feed reports
+-- MORE. The gross feed is the honest one, but it only exists where the game prints the
+-- damage-type line; the net-delta feed is the floor that keeps the watchdog working elsewhere.
+-- Divided by the ELAPSED span, not the nominal window: a fight three seconds old must read as
+-- its real rate rather than three fifths of it -- being late is the failure mode we are fixing.
+function ataxiaBasher_incomingRate()
+  local nowT = getEpoch()
+  local cutoff = nowT - ataxiaBasher_dmgWindowSec
+  local gross, gOld = windowSum(ataxiaBasher_incSamples, cutoff)
+  local net, nOld = windowSum(ataxiaBasher_dmgSamples, cutoff)
+  local total, oldest = gross, gOld
+  if net > total then total, oldest = net, nOld end
+  if total <= 0 or not oldest then return 0 end
+  local span = nowT - oldest
+  if span < 1 then span = 1 end -- one sample is not a rate; do not extrapolate a single hit
+  return total / span
+end
+
+-- ---------------------------------------------------------------------------
+-- THE DANGER ALARM (rewritten v4.7.243)
+-- ---------------------------------------------------------------------------
+-- The old test was `net HP delta over 5s >= maxhp * 0.6`. Three separate reasons it could not
+-- fire in the fight that killed us (caves beneath Kuthalebak, ~2,150 HP/s against an ~18,700
+-- pool): healing subtracted from the samples, the bar was an absolute fraction of a large pool,
+-- and it was only ever evaluated INSIDE ataxiaBasher_attack after the holds -- so it went quiet
+-- exactly while we were escaping.
+--
+-- Judge TIME TO DEATH instead. `hp / incoming-per-second` is the only figure that means the
+-- same thing at every pool size, and against 2,150 HP/s it crosses a 6-second floor while we
+-- still have ~13,000 HP -- i.e. near full health, which is where the user wanted the alarm.
+-- The old absolute test is kept as an OR so this can only ever be MORE sensitive than before.
 function ataxiaBasher_isDamageRateExtreme()
+  local rate = ataxiaBasher_incomingRate()
+  if rate > 0 then
+    local hp = tonumber(ataxia.vitals.hp) or 0
+    local ttl = tonumber(ataxiaBasher.dangerTTL) or 6
+    if hp > 0 and (hp / rate) <= ttl then return true end
+  end
   if #ataxiaBasher_dmgSamples < 2 then return false end
   local cutoff = getEpoch() - ataxiaBasher_dmgWindowSec
-  local totalDmg = 0
-  for _, s in ipairs(ataxiaBasher_dmgSamples) do
-    if s[1] >= cutoff then totalDmg = totalDmg + s[2] end
-  end
+  local totalDmg = windowSum(ataxiaBasher_dmgSamples, cutoff)
   local threshold = (ataxia.vitals.maxhp or 5000) * 0.6
   return totalDmg >= threshold
+end
+
+-- Seconds of life left at the current incoming rate, or nil when nothing is hitting us.
+-- Display/diagnostic use; the alarm above does its own arithmetic.
+function ataxiaBasher_secondsToLive()
+  local rate = ataxiaBasher_incomingRate()
+  if rate <= 0 then return nil end
+  local hp = tonumber(ataxia.vitals.hp) or 0
+  if hp <= 0 then return nil end
+  return hp / rate
 end
 
 -- ============================================================================
@@ -338,6 +419,8 @@ function ataxiaBasher_initThresholds()
     end
   end
   if not ataxiaBasher.shieldThresholdPct then ataxiaBasher.shieldThresholdPct = 40 end
+  -- Seconds of projected life below which the damage watchdog trips (v4.7.243).
+  if not ataxiaBasher.dangerTTL then ataxiaBasher.dangerTTL = 6 end
   if not ataxiaBasher.fleeRecoveryPct then ataxiaBasher.fleeRecoveryPct = 70 end
   if not ataxiaBasher.bloodMaidenBosses then
     ataxiaBasher.bloodMaidenBosses = {
@@ -367,13 +450,34 @@ function ataxiaBasher_dangerLevel()
   ataxiaBasher_initThresholds()
 
   if ataxiaBasher_isNoFleeArea(gmcp.Room.Info.area) then
-    -- No-flee area (World Tree, Mnemosyne): never run. Raise a shield on a damage
-    -- spike as a one-cycle guard, but keep attacking (the shield drops next attack).
-    if ataxiaBasher_isDamageRateExtreme()
-       and ataxiaBasher_canShield and ataxiaBasher_canShield()
-       and not ataxia.defences.shield then
-      ataxiaEcho("DANGER: Extreme incoming damage in no-flee area! Shielding.")
-      return "shield"
+    -- No-flee area (World Tree, Mnemosyne): never run from the AREA -- but leaving the ROOM is
+    -- both possible and the whole point of the swarm ladder.
+    --
+    -- THE MISSING BRANCH (v4.7.243): `hpp <= fleePct` lived only in the else-arm below, so at 5%
+    -- HP in the tower this function returned "attack". That is how we came to swing Valafar at
+    -- 1024 HP of an ~18,700 pool. Ask the swarm to leave the room; only if it actually can do we
+    -- spend the round on that. A refusal (no validated route back) means fighting in place is
+    -- genuinely the best available answer, and muting the basher there would be lethal -- so we
+    -- deliberately fall through to the shield/attack tail rather than returning "wait".
+    local fleePct = ataxiaBasher.fleeThresholdPct or 25
+    local spiking = ataxiaBasher_isDamageRateExtreme()
+    if hpp <= fleePct or spiking then
+      local S = ataxia.mnemosyne and ataxia.mnemosyne.swarm
+      if S and S.disengage then
+        local ok = false
+        pcall(function() ok = S.disengage(spiking and "incoming damage" or ("HP " .. hpp .. "%")) end)
+        if ok then return "wait" end
+      end
+    end
+    -- Shield as a one-cycle guard on a spike. `canShield()` used to gate the ALARM itself, which
+    -- made this branch unreachable in every real tower fight: it returns false whenever a room
+    -- denizen is on the area target list, i.e. the normal case. It now gates only the shielding.
+    if spiking then
+      if ataxiaBasher_canShield and ataxiaBasher_canShield() and not ataxia.defences.shield then
+        ataxiaEcho("DANGER: Extreme incoming damage in no-flee area! Shielding.")
+        return "shield"
+      end
+      ataxiaEcho("DANGER: Extreme incoming damage in no-flee area -- no way out, fighting on.")
     end
   else
     local fleePct = ataxiaBasher.fleeThresholdPct or 25

@@ -1656,6 +1656,152 @@ describe("forced disengage (tactical, not HP-driven)", function()
   end)
 end)
 
+-- ============================================================================
+-- v4.7.243 -- the movement lock and escape mode
+-- ============================================================================
+
+-- User: "If we tumble and then leap or walk in a direction it cancels the tumble."
+-- A tumble is ~4s between "You begin to tumble agilely to the <dir>." and "You tumble out of
+-- the room."; anything else we send in that window throws it away. Four of our own code paths
+-- could do exactly that, and S.onVitals -- which runs on EVERY prompt and is exempt from every
+-- existing hold -- was the worst of them.
+describe("the movement lock (v4.7.243)", function()
+  local function tumbling()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    mnemRollHide = true
+    S.onTumbleStart("south")
+    sent = {}
+  end
+
+  it("is armed by a tumble and released when it lands", function()
+    tumbling()
+    expect(S.moveLocked()).toBeTrue()
+    S.onTumbleDone()
+    expect(S.moveLocked()).toBeFalse()
+  end)
+
+  it("is off when nothing is tumbling", function()
+    fixture(3)
+    expect(S.moveLocked()).toBeFalse()
+  end)
+
+  it("blocks _tacticalGo -- the jump that cancelled the tumble", function()
+    tumbling()
+    S._tacticalGo("s", "test")
+    expect(#sent).toBe(0)
+    S.onTumbleDone()
+    S._tacticalGo("s", "test")
+    expect(#sent).toBe(1)
+  end)
+
+  it("blocks a second panic tumble", function()
+    tumbling()
+    S._lastPanicAt = nil -- or the panic COOLDOWN would refuse it and the lock go untested
+    ataxia.vitals.hpp = 10
+    expect(S._maybePanic(10)).toBeFalse()
+    expect(#sent).toBe(0)
+  end)
+
+  it("blocks the escape ladder's hover", function()
+    tumbling()
+    gmcp.Room.Info.details = {} -- outdoors: the hover branch
+    S.state = "idle"
+    expect(S._beginEscape("test")).toBeFalse()
+    expect(#sent).toBe(0)
+  end)
+
+  -- THE CRITICAL PATH. A Roll Hide pull tumble leaves state == "pulling", so the only early
+  -- return in onVitals (the `recovering` one) does not apply -- two seconds later it fired
+  -- `cq all` + _beginEscape -> `stand;leap <dir>` into a tumble that was 2s from landing.
+  it("stops onVitals cancelling a tumble in flight", function()
+    tumbling()
+    S.state = "pulling"
+    ataxia.vitals.hpp = 12
+    gmcp.Char = { Vitals = { hp = "1200", maxhp = "10000" } }
+    S.onVitals()
+    expect(#sent).toBe(0)
+  end)
+
+  -- Healing is NOT movement. Blocking the tincture mid-tumble would take it away at exactly
+  -- the moment it is worth most.
+  it("does NOT block healing", function()
+    tumbling()
+    S.state = "pulling"
+    mnemVitalisingTincture = true
+    M.tinctureCmd = "apply tincture"
+    ataxiaTemp.tinctureAt = nil
+    ataxia.vitals.hpp = 12
+    gmcp.Char = { Vitals = { hp = "1200", maxhp = "10000" } }
+    S.onVitals()
+    expect(#sent).toBe(1)
+    expect(sent[1]).toBe("apply tincture")
+    mnemVitalisingTincture = nil
+    M.tinctureCmd = nil
+  end)
+end)
+
+-- User: "We should've stopped attacking here and put a priority on leaving the room."
+describe("escape mode (v4.7.243)", function()
+  it("arms on every tactical move and reports the room it is leaving", function()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    expect(ataxiaTemp.escapeMode).toBe(nil)
+    S._tacticalGo("s", "retreating")
+    expect(ataxiaTemp.escapeMode).toBeTrue()
+    expect(ataxiaTemp.escapeRoom).toBe(200)
+  end)
+
+  it("clears when the room ACTUALLY changes -- the only proof we got out", function()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    S._tacticalGo("s", "retreating")
+    expect(ataxiaTemp.escapeMode).toBeTrue()
+    S.escapeCheckRoom()                 -- same room: still trying
+    expect(ataxiaTemp.escapeMode).toBeTrue()
+    MAP.current = 100                   -- we arrived
+    S.escapeCheckRoom()
+    expect(ataxiaTemp.escapeMode).toBe(nil)
+  end)
+
+  it("arms on the panic tumble", function()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    mnemRollHide = true
+    S._lastPanicAt = nil -- fixture() rewinds the clock but not the panic cooldown stamp
+    ataxia.vitals.hpp = 10
+    expect(S._maybePanic(10)).toBeTrue()
+    expect(ataxiaTemp.escapeMode).toBeTrue()
+  end)
+
+  -- A pull's escape RIDES the next attack (the swarmPullDir decorator turns the round into
+  -- "<attack>;<backdir>"), so arming the attack gate at _beginPull time would starve the very
+  -- swing carrying the step-out. It must arm only once the chain has actually been sent.
+  it("does NOT arm while the pull is still waiting for its swing", function()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("pulling")
+    expect(ataxiaTemp.swarmPullDir).toBe("s")
+    expect(ataxiaTemp.escapeMode).toBe(nil) -- the swing must still be allowed through
+    S._onPullSent()
+    expect(ataxiaTemp.escapeMode).toBeTrue() -- ...and gated the instant it is queued
+  end)
+
+  -- Fighting in place is sometimes the best answer. Muting the basher there would be lethal.
+  it("does not latch when the escape had nowhere to go", function()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    M.explore.fromRoom, M.explore.fromDir = nil, nil -- no validated route back
+    gmcp.Room.Info.details = { "indoors" }
+    S.state = "idle"
+    expect(S._beginEscape("test")).toBeFalse()
+    expect(ataxiaTemp.escapeMode).toBe(nil)
+  end)
+
+  it("is dropped by a reset, so the next context starts clean", function()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    S._tacticalGo("s", "retreating")
+    expect(ataxiaTemp.escapeMode).toBeTrue()
+    S.reset("test")
+    expect(ataxiaTemp.escapeMode).toBe(nil)
+  end)
+end)
+
 -- Restore the mock send for whoever runs after us (see the note at the top).
 send = _mockSend
 

@@ -295,6 +295,14 @@ end
 
 function S._tacticalGo(dirShort, why)
   if not (M._tacticalArm and dirShort) then return S.reset("no tactical mover") end
+  -- A tumble is mid-flight; a jump now cancels it (v4.7.243).
+  if S.moveLocked() then return end
+  -- Every tactical move -- escape, retry, re-entry -- is a queued line that the next attack's
+  -- `queue addclearfull` would wipe (v4.7.243). This is the choke point they all pass through,
+  -- so arming here covers the paths that previously armed nothing (`_beginReenter`). Re-entry
+  -- is not a retreat, but holding the swing until we have actually ARRIVED is right there too,
+  -- and the arrival itself clears the flag.
+  S.escapeOn()
   M._tacticalArm(dirShort)
   local sep = (ataxia.settings and ataxia.settings.separator) or ";"
   -- JUMP, never walk (review CRITICAL): a tactical retreat can cross our OWN
@@ -380,6 +388,8 @@ function S._beginPull(shortBack, longBack, shortFwd, count, mode)
       ataxiaTemp.swarmPullDir = nil
       local sep = (ataxia.settings and ataxia.settings.separator) or ";"
       if M._tacticalArm then M._tacticalArm(S.backShort) end
+      if S.moveLocked() then return end -- v4.7.243: never cancel a live tumble
+      S.escapeOn("pull, no swing") -- v4.7.243: this branch armed nothing at all before
       send("queue addclear free stand" .. S._escapeSuffix(sep))
       S._echo("no swing came; escaping plain -> <cyan>" .. S.backShort .. "<reset>.")
     end
@@ -393,6 +403,13 @@ end
 -- Called by S.decorate at the moment the pull chain is actually being sent.
 function S._onPullSent()
   if S._pullFallbackT then pcall(killTimer, S._pullFallbackT); S._pullFallbackT = nil end
+  -- ESCAPE MODE arms HERE, not in _beginPull (v4.7.243). A pull IS a retreat, but its escape
+  -- rides ON the next attack -- `ataxiaTemp.swarmPullDir` decorates the assembled round into
+  -- "<attack>;<backdir>" as one queued line. Arming the attack gate at _beginPull time would
+  -- therefore starve the very swing carrying the step-out, and the pull would degrade to the
+  -- PULL_ARM_TIMEOUT fallback every single time. Once the chain is SENT the situation inverts:
+  -- another dispatch's `queue addclearfull` would wipe it, which is what this gates.
+  S.escapeOn("pull")
   -- Gate further dispatches: the next `queue addclearfull` would wipe the queued chain.
   ataxiaTemp.swarmHold = true
   if S._holdT then pcall(killTimer, S._holdT) end
@@ -500,6 +517,8 @@ function S._beginReenter()
     -- cleanup) so normal navigation can walk the edge again. If the wall already
     -- broke, the leap still lands -- it is plain movement without an obstacle.
     if not (M._tacticalArm and S.fwdShort) then return S.reset("no tactical mover") end
+    if S.moveLocked() then return true end -- v4.7.243
+    S.escapeOn() -- v4.7.243: hold the swing until the leap has actually landed us back in
     M._tacticalArm(S.fwdShort)
     local sep = (ataxia.settings and ataxia.settings.separator) or ";"
     send("queue addclear free stand" .. sep .. "leap " .. S.fwdShort)
@@ -625,6 +644,9 @@ function S._maybePanic(hpNow)
   if S._lastPanicAt and (now() - S._lastPanicAt) < PANIC_COOLDOWN then return false end
   local dir = S._panicDir()
   if not dir then return false end
+  -- Already tumbling: a second tumble cancels the first (v4.7.243). The one in flight IS the
+  -- panic; let it land rather than restarting the clock on it.
+  if S.moveLocked() then return false end
   S._lastPanicAt = now()
   send("cq all")
   if S.flying then
@@ -647,6 +669,7 @@ function S._maybePanic(hpNow)
     S._holdT = nil
     ataxiaTemp.swarmHold = nil
   end)
+  S.escapeOn("panic tumble") -- v4.7.243: stop swinging until we are out
   local sep = (ataxia.settings and ataxia.settings.separator) or ";"
   send("queue addclear free stand" .. sep .. "tumble " .. dir)
   -- HEAL WHERE WE LANDED, then go back in (user, 2026-08-06: "the denizens wont follow so we
@@ -704,6 +727,76 @@ end
 S.TUMBLE_CONFIRM = 5          -- seconds to allow a tumble to land before re-sending
 S.TUMBLE_RETRIES = 2          -- re-sends before giving up and letting the ladder decide
 S.PULL_RETRIES   = 2          -- re-sends of a lost tactical retreat before handing back
+S.ESCAPE_MODE_MAX = 12        -- hard cap on escape mode, so it can never wedge the basher
+
+-- ---------------------------------------------------------------------------
+-- MOVEMENT LOCK (v4.7.243)
+-- ---------------------------------------------------------------------------
+-- User: "If we tumble and then leap or walk in a direction it cancels the tumble."
+--
+-- A tumble takes ~4 seconds between "You begin to tumble agilely to the <dir>." and "You tumble
+-- out of the room.", and any other movement inside that window CANCELS it. We were doing this
+-- to ourselves: a Roll Hide pull tumble leaves `S.state == "pulling"`, so `S.onVitals` stays
+-- live and two seconds later fires `cq all` + `_beginEscape` -> `stand;leap <dir>`. Three other
+-- paths can do the same -- the tick's low-HP escape, the tick's panic branch, and the pull
+-- retry -- and the ice-slip recovery re-sends a bare walk on top.
+--
+-- So movement is SERIALISED: while a tumble is in flight, no code path may send another move.
+-- The state already exists (`ataxiaTemp.tumbleDir`, armed by `S.onTumbleStart`, cleared by
+-- `S.onTumbleDone` on the game's own completion line or the TUMBLE_CONFIRM fallback) -- this
+-- only reads it, so there is no second lifecycle to keep in sync.
+--
+-- HEALING IS NOT MOVEMENT and is deliberately outside the lock: `_maybeTincture` must still
+-- fire while we are tumbling, because that is exactly when we need it.
+function S.moveLocked()
+  return (ataxiaTemp and ataxiaTemp.tumbleDir ~= nil) or false
+end
+
+-- ---------------------------------------------------------------------------
+-- ESCAPE MODE (v4.7.243)
+-- ---------------------------------------------------------------------------
+-- User: "We should've stopped attacking here and put a priority on leaving the room."
+--
+-- We swung Valafar at 1024 HP of an ~18,700 pool. The existing suppression is three ad-hoc
+-- holds (swarmHold 8s, bardComposeHold 3s, phialHold 4s) armed inconsistently -- `_beginReenter`
+-- and `_beginPull`'s fallback arm nothing at all -- and each is really "protect this one queued
+-- command", not "we are leaving".
+--
+-- This is the single authoritative answer to "are we trying to get out?". Set on entry to every
+-- escape decision, cleared when the room actually CHANGES (the only real evidence we got out),
+-- on reset, or at ESCAPE_MODE_MAX so a wedged escape cannot mute the basher forever.
+function S.escapeOn(why)
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.escapeMode = true
+  ataxiaTemp.escapeRoom = M.map and M.map.current
+  if S._escapeT then pcall(killTimer, S._escapeT) end
+  S._escapeT = tempTimer(tonumber(S.ESCAPE_MODE_MAX) or 12, function()
+    S._escapeT = nil
+    if ataxiaTemp and ataxiaTemp.escapeMode then
+      ataxiaTemp.escapeMode = nil
+      S._echo("<grey>escape mode expired -- swinging again.")
+    end
+  end)
+  if why and not S._escapeAnnounced then
+    S._escapeAnnounced = true
+    S._echo("<indian_red>ESCAPE MODE<reset> -- attacks held until we are out (" .. why .. ").")
+  end
+end
+
+function S.escapeOff()
+  if ataxiaTemp then ataxiaTemp.escapeMode = nil; ataxiaTemp.escapeRoom = nil end
+  if S._escapeT then pcall(killTimer, S._escapeT); S._escapeT = nil end
+  S._escapeAnnounced = nil
+end
+
+-- Called from the arrival path: the room number changing is the only real proof we left.
+function S.escapeCheckRoom()
+  if not (ataxiaTemp and ataxiaTemp.escapeMode) then return end
+  local cur = M.map and M.map.current
+  if cur and ataxiaTemp.escapeRoom and cur ~= ataxiaTemp.escapeRoom then
+    S.escapeOff()
+  end
+end
 
 function S.onTumbleStart(dir)
   if type(dir) ~= "string" or dir == "" then return end
@@ -802,7 +895,9 @@ end
 
 function S._beginEscape(why)
   local s = S._cfg()
+  S.escapeOn(why or "low HP") -- v4.7.243
   if not S._indoors() and S._canHover() then
+    if S.moveLocked() then return false end -- v4.7.243
     S.state = "recovering"
     S.recoverStarted = now()
     S.flying = true
@@ -816,7 +911,12 @@ function S._beginEscape(why)
     return true
   end
   local shortBack, longBack, shortFwd = S._backDir()
-  if not shortBack then return false end -- indoors with no route: shield-in-place remains the fallback
+  if not shortBack then
+    -- Indoors with no route: shield-in-place remains the fallback, and fighting in place is
+    -- exactly when the basher must NOT be muted (v4.7.243). Hand the round back.
+    S.escapeOff()
+    return false
+  end
   S.state = "pulling"
   S.mode = "pull"
   S.swarmRoom, S.funnelRoom = (M.map and M.map.current), M.explore.fromRoom
@@ -929,7 +1029,7 @@ function S.onTick()
       -- fight does not follow, and we keep healing somewhere quieter. Only when we cannot move
       -- (no boon, no route) is standing and fighting genuinely the better option -- and then
       -- it really is better than being attack-gated while something hits us.
-      local dir = mnemRollHide and S._panicDir()
+      local dir = (not S.moveLocked()) and mnemRollHide and S._panicDir() -- v4.7.243
       if dir then
         local sep = (ataxia.settings and ataxia.settings.separator) or ";"
         send("queue addclear free stand" .. sep .. "tumble " .. dir)
@@ -1169,8 +1269,31 @@ function S.onVitals()
   -- the retreat is not needed at all, and it costs nothing we were going to spend anyway.
   -- Gated on the boon and on a command being configured, so it is inert for everyone else.
   S._maybeTincture(hp)
+  -- THE MOVE LOCK (v4.7.243). This is the worst of the tumble-cancel paths and the reason the
+  -- lock exists: a Roll Hide panic tumble leaves `S.state == "pulling"`, so the ONLY early
+  -- return above is the `recovering` one -- two seconds later this function fires `cq all` and
+  -- `_beginEscape` -> `stand;leap <dir>`, cancelling a tumble that was 2s from landing. It sits
+  -- BELOW _maybeTincture on purpose: healing is not movement, and mid-tumble at crash HP is
+  -- exactly when we want the tincture.
+  if S.moveLocked() then return end
   local wantPanic = s.panic ~= false and mnemRollHide and S._panicHpHit(hp)
   local wantEscape = s.escape ~= false and hp <= s.escapeAt
+  -- THE DAMAGE WATCHDOG, EVALUATED HERE (v4.7.243). It used to live only inside
+  -- `ataxiaBasher_attack`, BELOW the three holds -- so it fell silent the moment an escape was in
+  -- flight, which is precisely when the question "is this fight killing us faster than we can
+  -- leave?" matters. This function runs on every prompt and reads none of the holds.
+  --
+  -- It is an OR with the HP gate, not a replacement: the HP gate answers "we are nearly dead",
+  -- this answers "we will be dead in six seconds" -- and against 2,150 HP/s that fires at ~13,000
+  -- HP, near full health, which is the whole point. Costs one arithmetic pass over two short
+  -- sample lists; the `wantEscape` short-circuit means it is not even reached on a healthy prompt.
+  if not wantEscape and s.escape ~= false and ataxiaBasher_isDamageRateExtreme
+     and ataxiaBasher_isDamageRateExtreme() then
+    wantEscape = true
+    S._echo("<indian_red>DYING FAST<reset> -- " .. hp .. "% and ~"
+      .. string.format("%.1f", (ataxiaBasher_secondsToLive and ataxiaBasher_secondsToLive()) or 0)
+      .. "s to live at this rate; leaving.")
+  end
   if not (wantPanic or wantEscape) then return end
   if S._lastEmergencyAt and (now() - S._lastEmergencyAt) < EMERGENCY_COOLDOWN then return end
   S._lastEmergencyAt = now()
@@ -1209,6 +1332,7 @@ function S.onMoveFailed()
     local tries = (tonumber(S._pullRetries) or 0) + 1
     if tries <= (tonumber(S.PULL_RETRIES) or 2) and S.backShort and M._tacticalArm then
       S._pullRetries = tries
+      S.escapeOn("pull retry") -- v4.7.243
       S._armRecoverHold()
       S._tacticalGo(S.backShort, "<indian_red>pull move lost<reset> -- retry " .. tries)
       return
@@ -1289,6 +1413,7 @@ function S.reset(reason)
   end
   S.state = "idle"
   S.mode = nil
+  S.escapeOff() -- v4.7.243: the tactic is over either way (a NEW escape re-arms it)
   S.recoverGround = nil
   S.recoverDiagnosed = nil
   S._pullRetries = nil
@@ -1427,6 +1552,13 @@ end
 if S._vitalsH then pcall(killAnonymousEventHandler, S._vitalsH) end
 S._vitalsH = registerAnonymousEventHandler("gmcp.Char.Vitals", function() pcall(S.onVitals) end)
 
+-- Escape mode ends when the room number CHANGES -- the only real evidence we got out. Not
+-- gated on the explorer being on, unlike 008's own gmcp.Room handler: escape mode can be armed
+-- by a manual `mnem swarm` tactic too, and a flag that mutes the basher must never depend on a
+-- second subsystem still running to be released. (S.escapeOn's timer is the other backstop.)
+if S._roomH then pcall(killAnonymousEventHandler, S._roomH) end
+S._roomH = registerAnonymousEventHandler("gmcp.Room", function() pcall(S.escapeCheckRoom) end)
+
 -- Manual `bash` toggle mid-tactic: the basher going away invalidates everything.
 if S._bashOffH then pcall(killAnonymousEventHandler, S._bashOffH) end
 S._bashOffH = registerAnonymousEventHandler("basher disabled", function()
@@ -1440,4 +1572,6 @@ S._loadH = registerAnonymousEventHandler("sysLoadEvent", function()
   S.pulls, S.noTactics = {}, {}
   ataxiaTemp.swarmHold = nil
   ataxiaTemp.swarmPullDir = nil
+  ataxiaTemp.tumbleDir, ataxiaTemp.tumbleFrom, ataxiaTemp.tumbleTries = nil, nil, nil
+  S.escapeOff() -- v4.7.243: both locks are timer-backed, and the timers did not survive
 end)

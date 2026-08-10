@@ -2803,3 +2803,103 @@ describe("boon flags re-latch once per run (v4.7.188)", function()
     expect(M._boonsRelatched).toBe(nil)   -- would survive a reload and defeat the relatch
   end)
 end)
+
+-- ============================================================================
+-- v4.7.243 -- the ice-slip recovery re-sends the RIGHT command
+-- ============================================================================
+--
+-- Death log, caves beneath Kuthalebak: "pull move lost -- retry 1 -> n" then
+-- "You slip and fall on the ice as you try to leave" then "slipped on the ice -- up and going
+-- again", against a room reporting "An icewall is here, blocking passage to the north".
+--
+-- M.onIceSlip re-sent via M._exploreMove, which sends a BARE `stand;<dir>` walk -- discarding
+-- the leap/backflip the tactical retreat was. A walk into our own icewall silently fails, and
+-- MAX_ICE_SLIPS is 15. That is the thirteen seconds we spent in the room that killed us.
+describe("ice-slip recovery during a tactical retreat (v4.7.243)", function()
+  local M = ataxia.mnemosyne
+  local realSend, realSwarm
+
+  local function slipping(tactical)
+    realSend, realSwarm = send, M.swarm
+    M.explore.on = true
+    M.explore.moving = true
+    M.explore.fromDir = "s"
+    M.explore.fromRoom = 200
+    M.explore.iceSlips = 0
+    M.explore.tacticalMove = tactical and true or false
+  end
+  local function restore() send = realSend; M.swarm = realSwarm end
+
+  it("hands a TACTICAL slip back to the swarm instead of walking", function()
+    slipping(true)
+    local walked, handed = 0, 0
+    send = function() walked = walked + 1 end
+    M.swarm = { moveLocked = function() return false end,
+                onMoveFailed = function() handed = handed + 1 end }
+    M.onIceSlip()
+    expect(handed).toBe(1)   -- S.onMoveFailed re-sends `stand;<moveVerb> <dir>`
+    expect(walked).toBe(0)   -- ...and NOT a bare walk
+    expect(M.explore.moving).toBeFalse()
+    restore()
+  end)
+
+  it("still re-sends the plain walk for an ordinary sweep step", function()
+    slipping(false)
+    local walked, handed = 0, 0
+    send = function() walked = walked + 1 end
+    M.swarm = { moveLocked = function() return false end,
+                onMoveFailed = function() handed = handed + 1 end }
+    M.onIceSlip()
+    expect(walked).toBe(1)
+    expect(handed).toBe(0)
+    restore()
+  end)
+
+  -- 15 re-sends is defensible for an idle sweep and indefensible under fire: at ~2,150 HP/s
+  -- each one costs roughly a second of standing in the room we are fleeing.
+  --
+  -- Asserted via _exploreTick, which ONLY the give-up branch calls: under the budget we hand
+  -- back to the swarm and let it retry, over it we abandon the exit entirely.
+  it("gives up on a tactical retreat's exit after 3 slips, not 15", function()
+    slipping(true)
+    local handed, ticks = 0, 0
+    local realTick = M._exploreTick
+    send = function() end
+    M._exploreTick = function() ticks = ticks + 1 end
+    M.swarm = { moveLocked = function() return false end,
+                onMoveFailed = function() handed = handed + 1 end }
+    for i = 1, 4 do
+      M.explore.moving = true
+      M.explore.tacticalMove = true
+      M.onIceSlip()
+      if i < 4 then expect(ticks).toBe(0) end -- still inside the budget: retry, do not abandon
+    end
+    expect(ticks).toBe(1)  -- the 4th slip exceeded 3 and gave up on the exit
+    expect(handed).toBe(4) -- the swarm is told every time either way
+    M._exploreTick = realTick
+    restore()
+  end)
+
+  it("does nothing at all while a tumble is in flight", function()
+    slipping(true)
+    local walked, handed = 0, 0
+    send = function() walked = walked + 1 end
+    M.swarm = { moveLocked = function() return true end,
+                onMoveFailed = function() handed = handed + 1 end }
+    M.onIceSlip()
+    expect(walked).toBe(0)
+    expect(handed).toBe(0)
+    expect(M.explore.iceSlips).toBe(0) -- not even counted against the budget
+    restore()
+  end)
+
+  it("_exploreMove refuses to move under the tumble lock", function()
+    slipping(false)
+    local walked = 0
+    send = function() walked = walked + 1 end
+    M.swarm = { moveLocked = function() return true end }
+    M._exploreMove("s", true)
+    expect(walked).toBe(0)
+    restore()
+  end)
+end)

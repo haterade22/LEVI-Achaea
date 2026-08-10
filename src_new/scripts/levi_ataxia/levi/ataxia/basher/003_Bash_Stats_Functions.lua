@@ -112,6 +112,10 @@ function bashStats_recordIncoming(amount, dtype)
   bashStats.incomingByType[dtype] = (bashStats.incomingByType[dtype] or 0) + amount
   bashStats.incomingTotal = (bashStats.incomingTotal or 0) + amount
   bashStats.incomingHits = (bashStats.incomingHits or 0) + 1
+  -- Feed the danger watchdog with the REAL number (v4.7.243). Its own feed is the net HP delta
+  -- per prompt, which healing masks: a prompt that takes 2000 and sips 1500 records 500, and a
+  -- net-positive prompt records nothing at all. This line is the damage BEFORE any of that.
+  if ataxiaBasher_recordIncoming then ataxiaBasher_recordIncoming(amount) end
 end
 
 -- The damage type that has cost us the most this session: type, amount, share (0-100).
