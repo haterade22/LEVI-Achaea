@@ -251,11 +251,40 @@ outranks:  "ARC (Indiscriminate boon), when both are held. Both are crowd-gated 
             normal swings. Taking the cheap one is free money, so bisect wins and arc is
             the answer only when Thunderclap is not held (v4.7.244)."
 skips:     "shielded rounds (bisect bypasses rebounding, NOT shields); non-numeric target"
-no_execute: "the <=20% slain-outright clause is ADVENTURERS ONLY -- no low-hp branch exists"
+execute:   "the <=20% slain-outright clause is ADVENTURERS ONLY in the base ability -- but the
+            STORMCLEAVER boon drops that qualifier and turns it on for denizens. See below."
 prereq:    "an edged runeblade with HUGALAZ on the blade -- NOT managed by the system.
             Nothing here knows hugalaz and the blade-sketch syntax was never captured."
 fire_line: "Lightning follows the path of <weapon> as you sweep it at <target>, a clap of
             thunder heralding your strike.  -> highlighting/035, chartreuse bold"
+```
+
+### Stormcleaver (Mnemosyne boon) -- bisect EXECUTES a nearly-dead denizen
+```yaml
+# ataxiaBasher_rwBisect, basher/002. Flag mnemStormcleaver (trigger mnemosyne/062).
+boon:      "Your bisect attack now executes denizens with less than 20% of their maximum
+            health."
+mechanic:  "Switches on a clause bisect ALREADY HAS. AB 3107: 'If your target is an ADVENTURER
+            and at 20% of their health or lower when the cutting damage would be applied, they
+            will be slain outright instead.' The boon drops the adventurer qualifier."
+gate:      "ONE denizen at or under ataxiaBasher.bisectExecuteAt (default 20). Deliberately NOT
+            crowd-gated: the Thunderclap floor exists because splash needs somewhere to splash,
+            and a kill does not."
+priority:  "checked BEFORE the crowd gate, and outranks ARC -- both spend balance, so only one
+            lands, and a guaranteed instant kill beats spread damage. It also denies the
+            self-healing denizens ('...ceases tending to his wounds') any chance to recover."
+independence: "Thunderclap and Stormcleaver are INDEPENDENT and pull opposite ways. rwBisect no
+            longer head-gates on Thunderclap -- doing so made Stormcleaver silently inert for
+            anyone holding it alone (v4.7.246)."
+hp_read:   "bisectTargetHp() -- gmcp.IRE.Target.Info.hpperc, falling back to denizen state.
+            A MISSING READING MEANS NO EXECUTE (hpperc is '-1' when the server has said
+            nothing). Opposite default from the legend deck's targetNearlyDead: there a wrong
+            guess withholds a card, here it spends 4s of balance on a finisher that cannot
+            finish anything."
+threshold: "`<=`. The boon says 'less than 20%', the AB says 'at 20% or lower'; hpperc is
+            LAST-PROMPT data on a mob we are actively hitting, so the real figure when the
+            cutting damage lands is already lower -- the boundary errs in the safe direction."
+skips:     "shielded rounds -- a shield stops the strike before any damage type is applied"
 ```
 
 ### Indiscriminate (Mnemosyne boon) -- ARC becomes a denizen AoE

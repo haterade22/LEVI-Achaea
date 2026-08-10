@@ -2,6 +2,72 @@
 
 ---
 
+## 2026-08-10 - Stormcleaver: bisect finally executes (v4.7.246)
+
+> Stormcleaver: "Your bisect attack now executes denizens with less than 20% of their maximum
+> health."
+
+**This boon switches on a clause the ability already had.** From AB Bisect (3107), supplied by
+the user:
+
+> ** If your target is an **adventurer** and at 20% of their health or lower when the cutting
+> damage would be applied, they will be slain outright instead.
+
+The execute has always been in bisect and has always been worthless while bashing -- so much so
+that `ataxiaBasher_rwBisect` carried an explicit note saying *"there is no execute value against
+denizens, so no low-hp branch here"*. Stormcleaver drops the adventurer qualifier and that note
+is now wrong: there **is** a single-target finisher, and it is an instant kill.
+
+### The two bisect boons pull in opposite directions
+
+| Boon | Fires when | Why |
+|---|---|---|
+| **Thunderclap** | 2+ denizens | room-wide electric -- needs something to splash to |
+| **Stormcleaver** | ONE denizen at or under the execute threshold | a kill has nothing to splash |
+
+They are independent -- you can hold either without the other -- so the old
+`if not mnemThunderclap then return nil end` head-gate had to go. Left in place it would have
+made Stormcleaver **silently inert** for anyone holding it alone, which is this codebase's
+signature failure mode.
+
+The execute is checked **before** the crowd gate and is deliberately not crowd-gated itself. A
+guaranteed instant kill outranks any amount of spread damage: in the tower, where incoming
+damage is the real constraint, guaranteed-now beats probably-soon, and it denies the
+self-healing denizens ("...ceases tending to his wounds") any chance to climb back out. It
+outranks Arc for the same reason -- both spend balance, so only one can land.
+
+### Reading the target's health
+
+`bisectTargetHp()` prefers `gmcp.IRE.Target.Info.hpperc` and falls back to the denizen-state
+mirror. **A missing reading means NO execute** -- the opposite default from the legend deck's
+`targetNearlyDead`, which treats a missing reading as "never block". The asymmetry is
+deliberate: there a wrong guess withholds a card; here it spends 4s of balance on a finisher
+that cannot finish anything. `hpperc` is `"-1"` when the server has told us nothing, and the
+denizen-state mirror can be nil or negative, so both are guarded.
+
+Threshold is `<=` on `ataxiaBasher.bisectExecuteAt` (default 20). The boon says "less than 20%"
+while the AB says "at 20% or lower"; they describe the same mechanic and we cannot tell which is
+exact. `hpperc` is **last-prompt data on a mob we are actively hitting**, so the real figure when
+the cutting damage lands is already below what we read -- firing at the boundary errs in the safe
+direction, and the cost of being wrong is one bisect that deals damage instead of executing.
+
+### Wiring
+
+New flag `mnemStormcleaver`: trigger `mnemosyne/062_Stormcleaver` (BOONS row), the `BOON CLAIM`
+intercept, and resets on run start **and** confirmed run end -- all four sites, since a boon flag
+that survives the run is one that fires outside the tower.
+
+### Tests
+
+**1234 -> 1247.** A new suite covers the single-denizen fire, the threshold boundary, the
+above-threshold hold, both missing-reading refusals, the shield gate, a custom threshold, both
+boons independently, the assembled round, and the Arc interaction in both directions.
+
+Three deliberate breaks confirmed it: execute branch removed, the Thunderclap head-gate restored
+(which is exactly the silent-inertness bug), and the missing-reading guard loosened.
+
+---
+
 ## 2026-08-10 - The tumble chain, the cancellation line, and Arc's fire lines (v4.7.245)
 
 > "Seems like tumble is a tad bit broken." -- user, 2026-08-10

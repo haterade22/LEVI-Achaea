@@ -2060,12 +2060,30 @@ end
 --
 -- It REPLACES the swing rather than riding alongside it: both spend balance.
 --
+-- STORMCLEAVER (v4.7.246) turns on the OTHER half of this ability. AB Bisect 3107:
+--
+--   ** If your target is an ADVENTURER and at 20% of their health or lower when the cutting
+--      damage would be applied, they will be slain outright instead.
+--
+-- That clause was always present and always worthless while bashing -- this function used to
+-- carry a note saying exactly that. The boon ("Your bisect attack now executes denizens with
+-- less than 20% of their maximum health") drops the "adventurer" qualifier, so there is now a
+-- single-target finisher worth 4s of balance: an EXECUTE is a guaranteed instant kill, which
+-- beats two combinations that merely probably finish the job -- and in the tower, where
+-- incoming damage is the real constraint, guaranteed-now beats probably-soon. It also denies
+-- the self-healing denizens ("...ceases tending to his wounds") any chance to climb back out.
+--
+-- THE TWO BISECT BOONS PULL IN OPPOSITE DIRECTIONS and are independent of each other:
+--   * Thunderclap  -> swing bisect at 2+ denizens (room-wide electric)
+--   * Stormcleaver -> swing bisect at ONE denizen under the execute threshold
+-- so the old `if not mnemThunderclap then return nil end` head-gate had to go: it would have
+-- made Stormcleaver silently inert for anyone who held it without Thunderclap.
+--
 -- Notes from the AB entry that deliberately do NOT appear in this logic:
---   * The "slain outright at <=20% health" clause is ADVENTURERS ONLY. There is no execute
---     value against denizens, so no low-hp branch here -- the boon's AoE is the whole point.
 --   * It bypasses rebounding and reflections but leaves them intact, so it needs no raze
 --     handling and gives none. The shielded branch is untouched: a shield must still be
---     broken first.
+--     broken first -- the execute does not change that, since a shield stops the strike
+--     before any damage type is applied.
 --   * `BISECT <target> [venom]` takes an optional venom; unused for bashing.
 --
 -- PREREQUISITE, deliberately unmanaged (user decision): bisect requires an edged runeblade
@@ -2073,10 +2091,48 @@ end
 -- sketch syntax for a BLADE rune was never captured, and inventing it would send garbage --
 -- so keeping it on the weapon is the user's setup. If it ever lapses, bisect is refused
 -- until re-sketched; capture that refusal line and this can back off on its own.
+-- Denizen health for the Stormcleaver execute, as a percentage, or nil when we have no
+-- reading. Fully guarded: `hpperc` is "-1" when the server has told us nothing, and the
+-- denizen-state mirror can be nil or negative for the same reason.
+--
+-- NO READING MEANS NO EXECUTE -- the opposite default from the legend deck's
+-- `targetNearlyDead`, which treats a missing reading as "never block". The asymmetry is
+-- deliberate: there, a wrong guess withholds a card; here, it spends 4s of balance on a
+-- finisher that will not finish anything.
+local function bisectTargetHp()
+	local ti = gmcp and gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info
+	local hp = tonumber((tostring(ti and ti.hpperc or ""):gsub("%%", "")))
+	if hp and hp > 0 then return hp end
+	if ataxiaBasher_dsGet and type(target) == "number" then
+		local ds = ataxiaBasher_dsGet(target)
+		local dhp = ds and tonumber(ds.hpp)
+		if dhp and dhp > 0 then return dhp end
+	end
+	return nil
+end
+
 function ataxiaBasher_rwBisect()
-	if not mnemThunderclap then return nil end
 	if ataxiaBasher.shielded then return nil end -- break the shield first
 	if type(target) ~= "number" then return nil end
+
+	-- EXECUTE FIRST (Stormcleaver). A kill outranks any amount of spread damage, so this is
+	-- checked before the crowd gate and is deliberately NOT crowd-gated itself: one denizen
+	-- under the threshold is the entire case the boon exists for.
+	--
+	-- `<=` rather than `<`, though the boon says "less than 20%" while the AB says "at 20% of
+	-- their health or lower". They are describing the same mechanic with different wording and
+	-- we cannot tell which is exact -- but `hpperc` is LAST-PROMPT data on a mob we are
+	-- actively hitting, so the real figure when the cutting damage lands is already lower than
+	-- what we read. Firing at the boundary is therefore safe in the direction that matters,
+	-- and the cost of being wrong is one bisect that deals damage instead of executing.
+	if mnemStormcleaver then
+		local hp = bisectTargetHp()
+		if hp and hp <= (tonumber(ataxiaBasher.bisectExecuteAt) or 20) then
+			return "bisect "..target
+		end
+	end
+
+	if not mnemThunderclap then return nil end
 	local M = ataxia.mnemosyne
 	local n = (M and M._denizenCount and M._denizenCount()) or 0
 	-- FLOOR OF 2 IS A RULE, NOT A DEFAULT (user, 2026-07-31: "bisect should only be used if
@@ -2084,6 +2140,8 @@ function ataxiaBasher_rwBisect()
 	-- splash to, so the extra 2s of balance buys literally nothing -- there is no
 	-- configuration in which that is correct, so it is CLAMPED rather than merely defaulted.
 	-- Same shape as `mnem swarm assess <n>`, which validates n >= 2 for the same reason.
+	-- The execute above is exempt: it is a KILL, not splash damage, so the floor's reasoning
+	-- ("nothing to splash to") simply does not apply to it.
 	if n < math.max(2, tonumber(ataxiaBasher.bisectAt) or 2) then return nil end
 	return "bisect "..target
 end

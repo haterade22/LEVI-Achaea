@@ -69,6 +69,7 @@ mnemBravado = false  -- affixes reset each run (re-latches from the next WADE ST
 mnemDeluge = false  -- affixes reset each run (re-latches from the next WADE STATUS row)
 mnemRageFuelled = false -- boons reset each run (re-latches from the BOONS row / claim)
 mnemThunderclap = false -- boons reset each run (re-latches from the BOONS row / claim)
+mnemStormcleaver = false
 mnemDivineThunder = false -- boons reset each run (re-latches from the BOONS row / claim)
 mnemIcyHeart = false -- boons reset each run (re-latches from the BOONS row / claim)
 mnemSongstep = false -- boons reset each run (re-latches from the BOONS row / claim)

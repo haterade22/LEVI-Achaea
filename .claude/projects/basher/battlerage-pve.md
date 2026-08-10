@@ -450,3 +450,33 @@ either — it is a free pet order, not part of the balance swing.
 confirmed run end, the `BOON CLAIM` alias). Renaming it to `mnemIndiscriminate` would read
 better and risks leaving arc armed outside the tower if one reset is missed — where it is a
 4.75s swing that does nothing to a denizen. Accuracy of the name loses to safety of the disarm.
+
+## Stormcleaver: the bisect execute (v4.7.246)
+
+`Your bisect attack now executes denizens with less than 20% of their maximum health.`
+
+Switches on a clause the ability already had. AB Bisect 3107: *"If your target is an **adventurer**
+and at 20% of their health or lower when the cutting damage would be applied, they will be slain
+outright instead."* The execute has been in bisect all along and has been dead weight in PvE --
+`ataxiaBasher_rwBisect` carried an explicit note to that effect, which this boon invalidates.
+
+| | Thunderclap | Stormcleaver |
+|---|---|---|
+| Fires at | 2+ denizens | ONE denizen at/under the threshold |
+| Buys | room-wide electric | a guaranteed instant kill |
+| Gate reason | splash needs somewhere to splash | a kill has nothing to splash |
+
+**They are independent**, so `rwBisect` no longer head-gates on `mnemThunderclap`. Leaving that
+gate would have made Stormcleaver silently inert for anyone holding it alone -- the recurring
+failure mode in this codebase.
+
+Ordering: the execute is checked **first**, is not crowd-gated, and outranks Arc. All three
+(bisect-execute, bisect-crowd, arc) spend balance, so exactly one can land per round, and a
+guaranteed kill beats any amount of spread damage -- especially in the tower, where incoming
+damage rather than outgoing is the binding constraint.
+
+**A missing health reading must not execute.** `bisectTargetHp()` returns nil for `hpperc == "-1"`
+(the server has told us nothing) and for a nil/negative denizen-state mirror, and the caller then
+declines. This is the opposite default from the legend deck's `targetNearlyDead`, deliberately:
+there a wrong guess withholds a card, here it spends 4s of balance on a finisher that will not
+finish anything.

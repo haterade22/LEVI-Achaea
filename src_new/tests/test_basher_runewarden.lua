@@ -48,7 +48,9 @@ local function reset()
   ataxiaTemp = {}
   mnemHammerAndNail, mnemFalconersTactics = false, false
   mnemThunderclap = false
-  ataxiaBasher.bisectAt = nil
+  mnemStormcleaver, infIndiscriminate = false, false
+  ataxiaBasher.bisectAt, ataxiaBasher.bisectExecuteAt = nil, nil
+  ataxiaBasher.arcAt, ataxiaBasher.infArcAt = nil, nil
   gmcp.Room.Info.num = 5
   gmcp.Room.Info.area = ""
   gmcp.IRE.Target.Info = {}
@@ -350,6 +352,100 @@ describe("Thunderclap -- bisect becomes the crowd swing (v4.7.181)", function()
     reset(); mnemThunderclap = true; denizens = 1
     local cmd = ataxiaBasher_runewardenBashing()
     expect(has(cmd, "combination 7 slice smash")).toBeTrue()
+    expect(has(cmd, "bisect")).toBeFalse()
+  end)
+end)
+
+-- STORMCLEAVER (v4.7.246): "Your bisect attack now executes denizens with less than 20% of
+-- their maximum health." AB Bisect 3107 already carries the clause -- "If your target is an
+-- ADVENTURER and at 20% of their health or lower ... slain outright" -- and the boon simply
+-- drops the adventurer qualifier. So this turns on a finisher that has been dead weight in
+-- PvE since the ability shipped.
+describe("Stormcleaver -- bisect EXECUTES a nearly-dead denizen", function()
+  local function hp(pct) gmcp.IRE.Target.Info = { hpperc = tostring(pct) .. "%" } end
+
+  it("does nothing without the boon", function()
+    reset(); denizens = 1; hp(5)
+    expect(ataxiaBasher_rwBisect()).toBe(nil)
+  end)
+
+  -- The whole point: ONE denizen, under the threshold. The Thunderclap crowd floor is about
+  -- having something to splash to; an execute is a kill and has nothing to splash.
+  it("fires at a SINGLE denizen, ignoring the crowd floor", function()
+    reset(); mnemStormcleaver = true; denizens = 1; hp(12)
+    expect(ataxiaBasher_rwBisect()).toBe("bisect 7")
+  end)
+
+  it("holds off above the threshold", function()
+    reset(); mnemStormcleaver = true; denizens = 1; hp(45)
+    expect(ataxiaBasher_rwBisect()).toBe(nil)
+  end)
+
+  it("fires AT the threshold -- hpperc is last-prompt data on a mob we are hitting", function()
+    reset(); mnemStormcleaver = true; denizens = 1; hp(20)
+    expect(ataxiaBasher_rwBisect()).toBe("bisect 7")
+  end)
+
+  -- Spending 4s of balance on a finisher that cannot finish anything is the failure to avoid,
+  -- so a missing reading must NOT execute -- the opposite default from the legend deck's
+  -- targetNearlyDead, where a missing reading merely withholds a card.
+  it("refuses to execute on no health reading at all", function()
+    reset(); mnemStormcleaver = true; denizens = 1
+    gmcp.IRE.Target.Info = {}
+    expect(ataxiaBasher_rwBisect()).toBe(nil)
+  end)
+
+  it("refuses on the server's -1 sentinel", function()
+    reset(); mnemStormcleaver = true; denizens = 1
+    gmcp.IRE.Target.Info = { hpperc = "-1" }
+    expect(ataxiaBasher_rwBisect()).toBe(nil)
+  end)
+
+  it("still breaks a shield first -- a shield stops the strike before any damage lands", function()
+    reset(); mnemStormcleaver = true; denizens = 1; hp(5)
+    ataxiaBasher.shielded = true
+    expect(ataxiaBasher_rwBisect()).toBe(nil)
+  end)
+
+  it("honours a custom execute threshold", function()
+    reset(); mnemStormcleaver = true; denizens = 1; hp(30)
+    expect(ataxiaBasher_rwBisect()).toBe(nil)
+    ataxiaBasher.bisectExecuteAt = 35
+    expect(ataxiaBasher_rwBisect()).toBe("bisect 7")
+  end)
+
+  -- The two bisect boons are INDEPENDENT and pull opposite ways. Before v4.7.246 the function
+  -- head-gated on Thunderclap, so Stormcleaver alone would have been silently inert.
+  it("works with NO Thunderclap -- the boons are independent", function()
+    reset(); mnemStormcleaver = true; mnemThunderclap = false; denizens = 1; hp(8)
+    expect(ataxiaBasher_rwBisect()).toBe("bisect 7")
+  end)
+
+  it("Thunderclap alone still needs the crowd", function()
+    reset(); mnemThunderclap = true; mnemStormcleaver = false; denizens = 1; hp(8)
+    expect(ataxiaBasher_rwBisect()).toBe(nil)
+  end)
+
+  it("reaches the assembled round, displacing the swing", function()
+    reset(); mnemStormcleaver = true; denizens = 1; hp(10)
+    local cmd = ataxiaBasher_runewardenBashing()
+    expect(has(cmd, "bisect 7")).toBeTrue()
+    expect(has(cmd, "combination 7 slice smash")).toBeFalse()
+    expect(has(cmd, "falcon rake 7")).toBeTrue() -- the free pet order still rides
+  end)
+
+  -- Both spend balance, so only one lands. A guaranteed kill beats spread damage.
+  it("outranks ARC even at an arc-sized crowd", function()
+    reset(); mnemStormcleaver = true; infIndiscriminate = true; denizens = 4; hp(10)
+    local cmd = ataxiaBasher_runewardenBashing()
+    expect(has(cmd, "bisect 7")).toBeTrue()
+    expect(has(cmd, "arc")).toBeFalse()
+  end)
+
+  it("but arc still wins when nothing is executable", function()
+    reset(); mnemStormcleaver = true; infIndiscriminate = true; denizens = 4; hp(90)
+    local cmd = ataxiaBasher_runewardenBashing()
+    expect(has(cmd, "arc")).toBeTrue()
     expect(has(cmd, "bisect")).toBeFalse()
   end)
 end)
