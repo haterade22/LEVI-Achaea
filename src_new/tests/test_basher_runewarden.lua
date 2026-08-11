@@ -51,6 +51,7 @@ local function reset()
   mnemStormcleaver, infIndiscriminate = false, false
   ataxiaBasher.bisectAt, ataxiaBasher.bisectExecuteAt = nil, nil
   ataxiaBasher.arcAt, ataxiaBasher.infArcAt = nil, nil
+  ataxiaBasher.uruzAt = nil
   gmcp.Room.Info.num = 5
   gmcp.Room.Info.area = ""
   gmcp.IRE.Target.Info = {}
@@ -497,8 +498,75 @@ describe("Rage-Fuelled spends the charge on the MOST EXPENSIVE ready ability (v4
   end)
 end)
 
+-- URUZ (v4.7.248, user: "in rooms of 3 or more denizens, the first thing we should do is
+-- sketch uruz on ground for healing of health", "when in runewarden"). The package's own rune
+-- tables (triggers 738/740) already identify uruz as "hp regen", which corroborates it.
+describe("uruz on the ground -- health regen in a crowded room", function()
+  it("does nothing below the threshold", function()
+    reset(); denizens = 2
+    expect(ataxiaBasher_rwUruz(";")).toBe("")
+  end)
+
+  it("sketches at 3+ denizens", function()
+    reset(); denizens = 3
+    expect(ataxiaBasher_rwUruz(";")).toBe("sketch uruz on ground;")
+  end)
+
+  -- The rune sits on this room's ground; re-laying it every round would waste the prefix.
+  it("is once per room", function()
+    reset(); denizens = 3
+    expect(ataxiaBasher_rwUruz(";")).toBe("sketch uruz on ground;")
+    expect(ataxiaBasher_rwUruz(";")).toBe("")
+    gmcp.Room.Info.num = 99                      -- a new room needs its own
+    expect(ataxiaBasher_rwUruz(";")).toBe("sketch uruz on ground;")
+  end)
+
+  it("honours a custom threshold", function()
+    reset(); denizens = 3
+    ataxiaBasher.uruzAt = 5
+    expect(ataxiaBasher_rwUruz(";")).toBe("")
+    denizens = 5
+    expect(ataxiaBasher_rwUruz(";")).toBe("sketch uruz on ground;")
+  end)
+
+  -- Unlike sowulu, which skips a shielded round because splash is pointless while razing.
+  -- Uruz heals US, so the target's shield is irrelevant -- and a crowded room whose opener is
+  -- a raze is exactly the one we want to be healing through.
+  it("rides a SHIELDED round too, unlike sowulu", function()
+    reset(); denizens = 3
+    ataxiaBasher.shielded = true
+    expect(ataxiaBasher_rwUruz(";")).toBe("sketch uruz on ground;")
+    reset(); denizens = 3; mnemHammerAndNail = true
+    ataxiaBasher.shielded = true
+    expect(ataxiaBasher_rwSowulu(";")).toBe("")   -- the sibling still skips
+  end)
+
+  it("is FIRST in the assembled round, ahead of sowulu and the swing", function()
+    reset(); denizens = 3; mnemHammerAndNail = true
+    local cmd = ataxiaBasher_runewardenBashing()
+    local u = cmd:find("sketch uruz on ground", 1, true)
+    local w = cmd:find("sketch sowulu on ground", 1, true)
+    expect(u).toBe(1)                 -- literally the first thing in the round
+    expect(w ~= nil and u < w).toBeTrue()
+  end)
+
+  it("reaches a shielded round in the assembled command", function()
+    reset(); denizens = 3
+    ataxiaBasher.shielded = true
+    local cmd = ataxiaBasher_runewardenBashing()
+    expect(cmd:find("sketch uruz on ground", 1, true)).toBe(1)
+  end)
+
+  it("is absent from a quiet room", function()
+    reset(); denizens = 1
+    local cmd = ataxiaBasher_runewardenBashing()
+    expect(has(cmd, "sketch uruz")).toBeFalse()
+  end)
+end)
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 mnemHammerAndNail, mnemFalconersTactics = false, false
 mnemThunderclap = false
 getEpoch = _epoch
 target = nil
+ataxiaBasher.uruzAt = nil

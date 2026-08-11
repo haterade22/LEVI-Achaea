@@ -2,6 +2,61 @@
 
 ---
 
+## 2026-08-11 - Uruz on the ground in a crowded room (v4.7.248)
+
+> "in rooms of 3 or more denizens, the first thing we should do is sketch uruz on ground for
+> healing of health" / "when in runewarden" -- user, 2026-08-11
+
+`ataxiaBasher_rwUruz` (basher/002), called from `ataxiaBasher_runewardenBashing` and nowhere
+else -- Runelore is Runewarden's, so the ability is too.
+
+The package already knew what this rune does, independently of the request: the rune
+identification tables (`triggers/738_Runes_on_Totem`, `740_Rune_Found`, `totem/001`) map
+uruz to **"hp regen"** from its totem description ("like a lightning bolt"). Nothing here is
+guessed -- the command wording came from the user and the effect corroborates in-tree.
+
+It is modelled on `ataxiaBasher_rwSowulu` (the Hammer and Nail rune) and differs in three
+deliberate ways:
+
+| | sowulu | uruz |
+|---|---|---|
+| Boon-gated | yes (`mnemHammerAndNail`) | **no** -- base Runelore, always available |
+| Shielded round | skipped | **ridden** |
+| Threshold | 2 | **3** (`ataxiaBasher.uruzAt`) |
+
+**Why it rides a shielded round.** Sowulu skips one because splash damage is pointless while
+we are still breaking a shield. That reasoning does not transfer: uruz heals *us*, so its
+value has nothing to do with the target's shield -- and "the first thing we should do" means
+the first round, not the first round after the shield falls. A crowded room whose opener is a
+raze is precisely the one we want to be healing through.
+
+**Why the threshold is a default, not a rule.** Bisect's floor of 2 is clamped because at one
+denizen the third strike has literally nothing to splash to -- no setting makes it correct.
+There is no denizen count at which health regeneration becomes *wrong*, only counts at which
+it is not worth the prefix, so `uruzAt` tunes freely in both directions.
+
+**Once per room**, latched on the room number exactly like sowulu: the rune sits on this
+room's ground, a new room needs its own, and re-entering re-sketches. No expiry line for a
+ground rune has ever been captured, so a duration-based refresh would be invented timing.
+If uruz turns out to lapse mid-fight, capture that line and this can refresh on it.
+
+Ordering in the assembled round: **uruz, then sowulu, then battlerage, then the swing** -- it
+is literally the first thing in the command.
+
+### Tests
+
+**1264 -> 1272.** Threshold, once-per-room, custom threshold, the shielded-round divergence
+from sowulu (asserted against sowulu in the same test), first-position in both the normal and
+shielded rounds, and absence from a quiet room. Four deliberate breaks confirmed each.
+
+One harness fault fixed while here: the new suite was initially appended **after**
+`test_basher_runewarden.lua`'s shared-state teardown (which sets `target = nil` and restores
+`getEpoch`), so it ran against the torn-down state and three tests errored. Moved above the
+teardown, and `ataxiaBasher.uruzAt` added to it so the next file does not inherit our
+threshold.
+
+---
+
 ## 2026-08-11 - The curing sets are full, and the installer never checked (v4.7.247)
 
 A pasted `CURINGSET LIST` turned up three problems at once:

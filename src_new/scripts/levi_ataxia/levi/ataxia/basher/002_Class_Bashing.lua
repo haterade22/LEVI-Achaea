@@ -1929,6 +1929,49 @@ end
 -- room's ground, so a new room needs its own and re-entering a room re-sketches. Sketching
 -- is a FREE-queue action (see the rune aliases, `queue add free sketch ...`), so it costs
 -- no balance and can ride ahead of the swing.
+-- URUZ ON THE GROUND -- health regeneration, laid FIRST in a crowded room (v4.7.248).
+--
+-- User, 2026-08-11: "in rooms of 3 or more denizens, the first thing we should do is sketch
+-- uruz on ground for healing of health", "when in runewarden".
+--
+-- Runewarden-only because RUNELORE is: the helper is called from ataxiaBasher_runewardenBashing
+-- and nowhere else. Corroborated inside this package -- the rune identification tables
+-- (triggers 738/740, totem/001) already map uruz to "hp regen" from its totem description
+-- ("like a lightning bolt"), which is independent confirmation of what the rune does.
+--
+-- THREE DIFFERENCES FROM ITS SIBLING ataxiaBasher_rwSowulu, all deliberate:
+--
+--   1. NOT boon-gated. Sowulu's splash only exists while Hammer and Nail is held; uruz
+--      regeneration is base Runelore and always available.
+--
+--   2. NOT shield-gated. Sowulu skips a shielded round because splash damage is pointless
+--      while we are still breaking a shield -- that reasoning does not transfer. Uruz heals
+--      US, so its value has nothing to do with the target's shield, and "the first thing we
+--      should do" means the first round, not the first round after the shield falls. A
+--      crowded room where the opener is a raze is precisely the one we most need to be
+--      healing through.
+--
+--   3. Threshold 3, not 2 (`ataxiaBasher.uruzAt`) -- the user's number. Tunable rather than
+--      clamped: unlike bisect's floor-of-2 (where at one denizen there is literally nothing
+--      to splash to) there is no count at which regeneration becomes *wrong*, only counts at
+--      which it is not worth the round. So this is a default, not a rule.
+--
+-- ONCE PER ROOM, on the room number, exactly like sowulu: the rune sits on this room's
+-- ground, a new room needs its own, and re-entering re-sketches. No expiry line for a ground
+-- rune has ever been captured, so a duration-based re-sketch would be invented timing --
+-- the once-per-room latch is what we can actually justify. If uruz turns out to lapse
+-- mid-fight, capture that line and this can refresh on it.
+function ataxiaBasher_rwUruz(sp)
+	local M = ataxia.mnemosyne
+	local n = (M and M._denizenCount and M._denizenCount()) or 0
+	if n < (tonumber(ataxiaBasher.uruzAt) or 3) then return "" end
+	ataxiaTemp = ataxiaTemp or {}
+	local room = (gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num) or "unknown"
+	if ataxiaTemp.rwUruzRoom == room then return "" end
+	ataxiaTemp.rwUruzRoom = room
+	return "sketch uruz on ground"..sp
+end
+
 function ataxiaBasher_rwSowulu(sp)
 	if not mnemHammerAndNail then return "" end
 	if ataxiaBasher.shielded then return "" end -- break the shield first
@@ -2151,6 +2194,10 @@ function ataxiaBasher_runewardenBashing()
 	local raze, bash, spec = "", "", ataxia.vitals.knight
 	local brage = ataxiaBasher_rwBattlerage(sp)
 	local braze = ataxiaBasher.battlerage.Runewarden.raze
+	-- URUZ FIRST (user: "the first thing we should do"). Health regeneration for a crowded
+	-- room, laid ahead of everything else including the shield-break -- see rwUruz for why it
+	-- does not share sowulu's shielded skip.
+	local uruz = ataxiaBasher_rwUruz(sp)
 	-- Lay the Hammer and Nail rune before swinging (free queue, so it costs no balance).
 	local sowulu = ataxiaBasher_rwSowulu(sp)
 
@@ -2174,10 +2221,12 @@ function ataxiaBasher_runewardenBashing()
 	end
 
 	if ataxiaBasher.shielded then
+		-- uruz rides the shielded round too: it heals US, so the target's shield is irrelevant
+		-- to it, and a crowded room whose opener is a raze is exactly when we want it down.
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-			command = braze..sp..bash
+			command = uruz..braze..sp..bash
 		else
-			command = raze..sp..brage
+			command = uruz..raze..sp..brage
 		end
 	else
 		-- Two crowd swaps can want this slot, and both spend BALANCE, so at most one lands.
@@ -2201,7 +2250,7 @@ function ataxiaBasher_runewardenBashing()
 		elseif arc ~= "" then
 			swing = falcon..arc
 		end
-		command = sowulu..brage..sp..swing
+		command = uruz..sowulu..brage..sp..swing
 	end
 
 	return command

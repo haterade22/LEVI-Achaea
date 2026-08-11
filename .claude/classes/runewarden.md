@@ -259,6 +259,27 @@ fire_line: "Lightning follows the path of <weapon> as you sweep it at <target>, 
             thunder heralding your strike.  -> highlighting/035, chartreuse bold"
 ```
 
+### Uruz on the ground -- crowd healing (v4.7.248)
+```yaml
+# ataxiaBasher_rwUruz, basher/002. NOT boon-gated -- base Runelore.
+user:      "in rooms of 3 or more denizens, the first thing we should do is sketch uruz on
+            ground for healing of health" (2026-08-11)
+command:   "sketch uruz on ground"
+effect:    "health regeneration. Corroborated in-tree: the rune identification tables
+            (triggers 738/740, totem/001) map uruz -> 'hp regen' from its totem description
+            'like a lightning bolt'."
+gate:      "3+ denizens (ataxiaBasher.uruzAt). A DEFAULT, not a clamped rule -- unlike
+            bisect's floor of 2 there is no count at which regeneration is wrong, only counts
+            at which it is not worth the prefix."
+once:      "per ROOM, latched on the room number like sowulu. The rune sits on this room's
+            ground; a new room needs its own and re-entering re-sketches. No expiry line has
+            ever been captured, so no duration-based refresh -- that would be invented timing."
+position:  "FIRST in the assembled round: uruz -> sowulu -> battlerage -> swing."
+shielded:  "RIDES a shielded round, unlike sowulu. Sowulu skips one because splash damage is
+            pointless while razing; uruz heals US, so the target's shield is irrelevant to it,
+            and a crowded room whose opener is a raze is exactly when we want it down."
+```
+
 ### Stormcleaver (Mnemosyne boon) -- bisect EXECUTES a nearly-dead denizen
 ```yaml
 # ataxiaBasher_rwBisect, basher/002. Flag mnemStormcleaver (trigger mnemosyne/062).
