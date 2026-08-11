@@ -165,19 +165,28 @@ end
 -- states -- they were never going to clear, so waiting on them just burns RECOVER_MAX.
 --
 -- MANALEECH joins them in v4.7.252 (user: "We do have manaleech so our mana will decrease over
--- time"). It is a real affliction, priority 13 in the PvP table and well under the PARKED
--- floor, so `parkedAff` does not excuse it -- which meant that while it was up `S._afflicted()`
--- was permanently TRUE, `S._reenterReady()` could never pass, and every hover ran to its full
--- 60s cap before landing. In the tower it is re-applied faster than it is cured, so that is
--- not a wait that ends.
+-- time"), and the reason it has to be UNCONDITIONAL is worth writing down.
+--
+-- The PvE bash curing profile ALREADY parks manaleech at 25 (ataxia/008), so whenever that
+-- profile is active `parkedAff` excuses it and this entry is redundant. But `parkedAff` returns
+-- false the moment the profile is NOT active -- and the profile is opt-in, needs a server-side
+-- curingset, and silently does nothing if that set was never created (see
+-- ataxia/009_Curingset_State). On a character in exactly that state manaleech sits at its PvP
+-- priority of 13, `S._afflicted()` is permanently TRUE while it is up, `S._reenterReady()` can
+-- never pass, and every hover runs its full 60s cap. Belt as well as braces: the recovery must
+-- not depend on a curing profile being installed.
+--
+-- CORRUPTED BREATH makes it permanent -- "Your asphyxiation resistance is increased by 66% but
+-- you suffer permanent manaleech" (common; in the boon seed DB). So there is no version of
+-- "wait for it to clear" that terminates, and no mana threshold that is ever reached again:
+-- mana is a one-way resource for the rest of the run.
 --
 -- And the direction of the cost is backwards from every other affliction here: manaleech is a
 -- DRAIN, so standing still does not recover from it, it pays for it. Mana is a kill condition
 -- for several of our routes, so an aff that makes idling expensive is the last thing that
 -- should be forcing us to idle.
 --
--- Scoped to this module (the Mnemosyne swarm/recovery logic); PvP curing is untouched, and
--- SSC still cures manaleech normally at its own priority.
+-- Scoped to this module (the Mnemosyne swarm/recovery logic); PvP curing is untouched.
 local AFF_IGNORE = {
   blindness = true, deafness = true, curseward = true, insomnia = true,
   manaleech = true,
