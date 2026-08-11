@@ -908,7 +908,19 @@ end
 -- "not arrived yet" and leave the move/ice machinery alone.
 function M._onExploreRoom()
   if not M.explore.on then return end
-  local sameRoom = M.explore.moving and MAP and MAP.current ~= nil
+  -- ARRIVAL DETECTION UNDER DEMENTIA (v4.7.250). The normal test is "the room number changed",
+  -- which is worthless when the number is re-invented on every look: it reads TRUE for a plain
+  -- `ql` and FALSE never. Under dead reckoning the question is answered by what WE did instead
+  -- -- a gmcp.Room while a move is in flight is the arrival, because every way a move can fail
+  -- (Room.WrongDir, the wall line, the ice slip, the move timeout) clears `moving` first.
+  -- The recording and the reckoning belong to 005's handler, which fires first. All this
+  -- needs to know is that the normal arrival test cannot be trusted here: "the room number
+  -- changed" is worthless when the number is re-invented on every look -- it reads TRUE for a
+  -- plain `ql` and never FALSE. Under dead reckoning a gmcp.Room while a move is in flight IS
+  -- the arrival, because every way a move can fail (Room.WrongDir, the wall line, the ice
+  -- slip, the move timeout) clears `moving` first.
+  local dr = MAP and MAP.drActive and MAP.drActive()
+  local sameRoom = (not dr) and M.explore.moving and MAP and MAP.current ~= nil
     and MAP.current == M.explore.fromRoom
   if not sameRoom then -- a genuine arrival (or we weren't moving): end the move
     M.explore.moving = false

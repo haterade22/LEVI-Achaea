@@ -2993,3 +2993,138 @@ describe("the 4x4 grid constrains what can be a real exit", function()
     MAP.GRID = 4
   end)
 end)
+
+-- ============================================================================
+-- v4.7.250 -- dead reckoning, when the room ID itself is a lie
+-- ============================================================================
+--
+-- User, 2026-08-11: "the gmcp room id will be changed every time we look because of dementia
+-- that we cannot cure, so we need to track by exits and map it out like that."
+describe("dead reckoning under dementia", function()
+  local M = ataxia.mnemosyne
+  local MAP = ataxia.mnemosyne.map
+
+  local function demented(on)
+    MAP.drForce = on and true or false
+    ataxia.afflictions = ataxia.afflictions or {}
+  end
+
+  local function fresh()
+    demented(true)
+    MAP.reset()
+    M.explore.failed = {}
+    M.explore.moving = false
+    M.explore.fromDir = nil
+  end
+
+  -- Drive the REAL arrival path (MAP.drArrive), not a reimplementation of it -- an earlier
+  -- draft of these tests rebuilt the logic in this helper and therefore passed while the
+  -- handler was broken. The explorer's move state is what drArrive reads to decide whether we
+  -- moved, so set that rather than passing a direction.
+  local function look(exits, movedDir)
+    M.explore.moving = movedDir and true or false
+    M.explore.fromDir = movedDir
+    MAP._lastMoveDir = nil
+    MAP.drArrive(exits)
+    M.explore.moving = false
+    M.explore.fromDir = nil
+  end
+
+  it("is off when dementia is not up", function()
+    demented(false)
+    expect(MAP.drActive()).toBeFalse()
+    MAP.drForce = nil
+  end)
+
+  -- THE CORE FAILURE: three looks at the SAME room used to mint three rooms.
+  it("three looks at one room stay ONE room", function()
+    fresh()
+    look({ north = 111 })
+    look({ north = 222 })   -- dementia renumbers everything...
+    look({ north = 333 })   -- ...and renumbers it again
+    local n = 0
+    for _ in pairs(MAP.rooms) do n = n + 1 end
+    expect(n).toBe(1)
+    expect(MAP.current).toBe("dr:0,0")
+  end)
+
+  it("keys rooms by where WE are, not by what the server calls it", function()
+    fresh()
+    look({ north = 0 })
+    look({ south = 0 }, "north")
+    expect(MAP.current).toBe("dr:0,1")
+    look({ north = 0 }, "south")
+    expect(MAP.current).toBe("dr:0,0")   -- back where we started, same key
+    local n = 0
+    for _ in pairs(MAP.rooms) do n = n + 1 end
+    expect(n).toBe(2)                    -- two real cells, not four phantoms
+  end)
+
+  -- "track by exits": the DIRECTION set is the fingerprint, the destination id is noise.
+  it("keeps exit directions but discards the faked destinations", function()
+    fresh()
+    look({ north = 987654, west = 123456 })
+    local r = MAP.rooms["dr:0,0"]
+    expect(r.exits.north).toBe(0)
+    expect(r.exits.west).toBe(0)
+  end)
+
+  -- Without the walked edge, every exit reads unexplored forever and backtracking is impossible.
+  it("records the walked edge so the sweep can backtrack", function()
+    fresh()
+    look({ north = 0, south = 0 })
+    look({ south = 0 }, "north")
+    expect(MAP.rooms["dr:0,0"].edges.north).toBe("dr:0,1")
+    expect(MAP.rooms["dr:0,1"].edges.south).toBe("dr:0,0")
+  end)
+
+  it("coordinates come straight from the key -- no BFS to mislead", function()
+    fresh()
+    look({ north = 0 })
+    look({ south = 0, east = 0 }, "north")
+    look({ west = 0 }, "east")
+    MAP.relayout()
+    expect(MAP.rooms["dr:1,1"].x).toBe(1)
+    expect(MAP.rooms["dr:1,1"].y).toBe(1)
+    expect(MAP.rooms["dr:0,0"].x).toBe(0)
+  end)
+
+  it("the sweep still finds unexplored exits on synthetic keys", function()
+    fresh()
+    look({ north = 0, east = 0 })
+    MAP.relayout()
+    local step = M._nextExploreStep()
+    expect(step ~= nil).toBeTrue()
+  end)
+
+  -- The 4x4 bound from v4.7.249 still applies, now over dead-reckoned coordinates.
+  it("still refuses to leave the 4x4", function()
+    fresh()
+    look({ east = 0 })
+    look({ west = 0, east = 0 }, "east")
+    look({ west = 0, east = 0 }, "east")
+    look({ west = 0, east = 0 }, "east")
+    MAP.relayout()
+    expect(MAP.exitFitsGrid("dr:3,0", "east")).toBeFalse()
+  end)
+
+  it("a new ripple restarts the reckoning at its own origin", function()
+    fresh()
+    look({ east = 0 })
+    look({ west = 0 }, "east")
+    expect(MAP.dr.x).toBe(1)
+    MAP.reset()
+    expect(MAP.dr.x).toBe(0)
+    expect(MAP.dr.y).toBe(0)
+  end)
+
+  it("a non-planar step does not move us on the grid", function()
+    fresh()
+    look({ down = 0 })
+    MAP.drMoved("down")
+    expect(MAP.dr.x).toBe(0)
+    expect(MAP.dr.y).toBe(0)
+  end)
+
+  MAP.drForce = nil -- restore for anything after us
+end)

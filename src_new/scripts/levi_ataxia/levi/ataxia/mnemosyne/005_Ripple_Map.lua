@@ -127,12 +127,87 @@ function MAP.exitFitsGrid(num, dir)
   return w <= g and h <= g
 end
 
+-- ---------------------------------------------------------------------------
+-- DEAD RECKONING -- WHEN THE ROOM ID ITSELF IS A LIE (v4.7.250)
+-- ---------------------------------------------------------------------------
+-- User, 2026-08-11: "the gmcp room id will be changed every time we look because of dementia
+-- that we cannot cure, so we need to track by exits and map it out like that."
+--
+-- This is deeper than the faked EXITS handled in v4.7.249. If `gmcp.Room.Info.num` is a fresh
+-- invention on every look, then keying the graph by it is broken at the root:
+--
+--   * every look mints a NEW room record, so MAP.rooms fills with phantoms;
+--   * MAP.current changes without us moving, so the explorer's arrival test
+--     (`MAP.current ~= explore.fromRoom`) reads TRUE on every gmcp.Room -- including a plain
+--     `ql` -- and every look looks like an arrival;
+--   * `room.exits` destination ids never match any key we hold, so relayout links nothing
+--     and the layout never forms.
+--
+-- And Creville's Legacy says "incurable", so this is not a state to wait out.
+--
+-- THE ONE THING DEMENTIA CANNOT TOUCH IS WHAT WE OURSELVES DID. We know which direction we
+-- sent, and we know when a move failed, because failure has its own lines (Room.WrongDir, the
+-- wall line, the ice slip). So position is dead-reckoned from our own movement and the room
+-- KEY becomes that position -- "dr:2,1" -- instead of the server's id.
+--
+-- Deliberately a KEY SWAP rather than a parallel map. Everything downstream -- MAP.rooms,
+-- room.edges, MAP.path, unexploredExits, the explorer's whole sweep -- treats the key as
+-- opaque, so it all keeps working unchanged on synthetic keys. A second implementation of the
+-- navigation would have been a second thing to keep correct.
+MAP.dr = MAP.dr or { on = false, x = 0, y = 0 }
+
+-- Dementia is the trigger, not a guess: the affliction is tracked already (it is in the
+-- default curing table and rides the prompt as `dem`). Outside the tower this is inert.
+function MAP.drActive()
+  if not MAP.inMnem() then return false end
+  if MAP.drForce ~= nil then return MAP.drForce == true end -- test/manual override
+  return (ataxia.afflictions ~= nil and ataxia.afflictions.dementia == true)
+end
+
+function MAP.drKey(x, y)
+  return "dr:" .. tostring(x) .. "," .. tostring(y)
+end
+
+-- The key for where dead reckoning currently believes we are.
+function MAP.drHereKey()
+  return MAP.drKey(MAP.dr.x, MAP.dr.y)
+end
+
+-- A confirmed move. Called only where the move is known to have happened, never speculatively:
+-- a wrong step here silently mislabels every room from now on, which is worse than not mapping.
+function MAP.drMoved(dir)
+  local nd = MAP.normDir(dir)
+  local off = nd and MAP.OFFSETS and MAP.OFFSETS[nd]
+  if not off then return end -- non-planar (the holding room's descent) carries no 2-D step
+  MAP.dr.x = MAP.dr.x + off[1]
+  MAP.dr.y = MAP.dr.y + off[2]
+end
+
+function MAP.drResetPos()
+  MAP.dr.x, MAP.dr.y = 0, 0
+end
+
+-- The whole dead-reckoned arrival, in one place so it can be exercised directly. ONE OWNER:
+-- this runs from 005's gmcp.Room handler, which is registered before the explorer's (package
+-- load order) and so still sees `explore.moving` before the explorer clears it. Advancing in
+-- both would double-step; advancing only in the explorer would miss every move made outside
+-- the sweep -- the swarm's tumbles and pulls.
+function MAP.drArrive(exits)
+  local ex = ataxia.mnemosyne and ataxia.mnemosyne.explore
+  local movedDir = (ex and ex.moving and ex.fromDir) or MAP._lastMoveDir
+  if movedDir then MAP.drMoved(movedDir) end
+  -- Pass the direction so the WALKED edge is recorded: without it `room.edges` stays empty,
+  -- every exit reads as unexplored forever and MAP.path can never backtrack.
+  MAP.onRoom(MAP.drHereKey(), nil, exits, movedDir)
+end
+
 function MAP.reset()
   MAP.rooms = {} -- [num] = room record
   MAP.order = {} -- visit order (nums)
   MAP.current = nil
   MAP.origin = nil
   MAP._lastMoveDir = nil
+  MAP.drResetPos() -- a new ripple starts the reckoning at its own origin
 end
 MAP.reset()
 
@@ -157,9 +232,14 @@ function MAP.onRoom(num, name, exits, moveDir)
   -- they compare against room nums -- gmcp reports exit dests as strings).
   room.exits = {}
   if type(exits) == "table" then
+    -- Under dead reckoning the DESTINATION ids are inventions and will never match a synthetic
+    -- key, so store 0 ("known exit, unknown destination") and keep only the DIRECTION. That is
+    -- the half the sweep actually needs, and it is what the user meant by tracking by exits:
+    -- the direction set is the room's fingerprint, the id attached to it is noise.
+    local dr = MAP.drActive()
     for d, dest in pairs(exits) do
       local nd = MAP.normDir(d)
-      if nd then room.exits[nd] = tonumber(dest) or dest end
+      if nd then room.exits[nd] = dr and 0 or (tonumber(dest) or dest) end
     end
   end
 
@@ -215,6 +295,17 @@ end
 -- re-anchor the whole layout on the current room so it's always visible.
 function MAP.relayout()
   local rooms = MAP.rooms or {}
+
+  -- Under dead reckoning the coordinate IS the key, so there is nothing to derive: parse it
+  -- back out. BFS would have nothing to work with anyway -- we deliberately discarded the
+  -- faked exit destinations that its adjacency is built from.
+  if MAP.drActive() then
+    for key, r in pairs(rooms) do
+      local sx, sy = tostring(key):match("^dr:(-?%d+),(-?%d+)$")
+      r.x, r.y = tonumber(sx), tonumber(sy)
+    end
+    return
+  end
 
   -- Undirected planar adjacency from every known exit edge (both directions):
   -- an exit `d` from A to a known room B means B sits `d` of A, and A sits
@@ -447,6 +538,17 @@ MAP._roomHandler = registerAnonymousEventHandler("gmcp.Room", function()
   if MAP.autoShow then MAP.autoShow() end
   if not here or not (gmcp and gmcp.Room and gmcp.Room.Info) then return end
   local ri = gmcp.Room.Info
-  MAP.onRoom(ri.num, ri.name, ri.exits, MAP._lastMoveDir)
+  -- Under dementia the id and the name are both inventions; the key comes from our own dead
+  -- reckoning instead, and the name is dropped rather than recorded as this cell's identity
+  -- (it would be a different lie every look).
+  if MAP.drActive() then
+    -- ONE OWNER for the reckoning. This handler is registered in 005 and the explorer's in
+    -- 008, so this one fires first (package load order) and sees `moving` before the explorer
+    -- clears it. Advancing in both places would double-step; advancing in the explorer alone
+    -- would miss moves made outside the sweep (the swarm's tumbles and pulls).
+    MAP.drArrive(ri.exits)
+  else
+    MAP.onRoom(ri.num, ri.name, ri.exits, MAP._lastMoveDir)
+  end
   if MAP.render then MAP.render() end
 end)

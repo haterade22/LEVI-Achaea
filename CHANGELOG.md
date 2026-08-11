@@ -2,6 +2,67 @@
 
 ---
 
+## 2026-08-11 - Dead reckoning: when the room ID itself is a lie (v4.7.250)
+
+> "the gmcp room id will be changed every time we look because of dementia that we cannot
+> cure, so we need to track by exits and map it out like that" -- user, 2026-08-11
+
+This is deeper than the faked *exits* handled an hour earlier in v4.7.249. If
+`gmcp.Room.Info.num` is a fresh invention on **every look**, then keying the graph by it is
+broken at the root:
+
+- every look mints a NEW room record, so `MAP.rooms` fills with phantoms;
+- `MAP.current` changes without us moving, so the explorer's arrival test
+  (`MAP.current ~= explore.fromRoom`) reads TRUE on every `gmcp.Room` -- including a plain
+  `ql` -- and every look looks like an arrival;
+- `room.exits` destination ids never match any key we hold, so `relayout` links nothing and
+  the layout never forms.
+
+And Creville's Legacy says **incurable**, so this is not a state to wait out.
+
+### Track what dementia cannot touch: what we did
+
+The one reliable input is our own movement. We know which direction we sent, and we know when
+a move failed, because failure has its own lines (`Room.WrongDir`, the wall line, the ice
+slip, the move timeout). So position is dead-reckoned from our own moves and **the room key
+becomes that position** -- `dr:2,1` -- instead of the server's id.
+
+**Deliberately a KEY SWAP, not a parallel map.** Everything downstream -- `MAP.rooms`,
+`room.edges`, `MAP.path`, `unexploredExits`, the explorer's whole sweep -- treats the key as
+opaque, so it all keeps working unchanged on synthetic keys. A second implementation of the
+navigation would have been a second thing to keep correct.
+
+| Piece | Behaviour |
+|---|---|
+| `MAP.drActive()` | dementia up **and** in the tower (`MAP.drForce` overrides for tests) |
+| `MAP.drArrive(exits)` | the whole arrival: advance the reckoning, record the cell |
+| exits | directions kept, **destination ids discarded** -- the direction set is the fingerprint, the id attached to it is noise |
+| `MAP.relayout` | coordinates parsed straight back out of the key; no BFS to mislead |
+| `MAP.reset` | a new ripple restarts the reckoning at its own origin |
+| non-planar | `up`/`down` carry no 2-D step, so the holding room's descent does not move us on the grid |
+
+**One owner for the advance.** `MAP.drArrive` runs from 005's `gmcp.Room` handler, which is
+registered before the explorer's (package load order) and so still sees `explore.moving`
+before the explorer clears it. Advancing in both places would double-step; advancing only in
+the explorer would miss every move made outside the sweep -- the swarm's tumbles and pulls.
+
+The v4.7.249 4x4 bound still applies, now over dead-reckoned coordinates.
+
+### Tests
+
+**1280 -> 1290.** Three looks at one room staying one room; keys following us rather than the
+server; exit directions kept and destinations discarded; the walked edge recorded so
+backtracking works; coordinates from the key; the sweep still finding work; the 4x4 bound over
+reckoned coordinates; ripple reset; non-planar steps.
+
+**A test-quality note worth keeping.** The first draft of this suite reimplemented the arrival
+logic inside its own helper -- so it passed while the real handler was broken, and a deliberate
+break of the walked-edge recording was *not* caught. The logic was extracted into
+`MAP.drArrive` and the tests pointed at it; the same break then failed three tests. A helper
+that mirrors the code under test is testing itself.
+
+---
+
 ## 2026-08-11 - The ripple is 4x4, and that is evidence against dementia (v4.7.249)
 
 > "The dementia mapping in the wade isnt working right. We KNOW the exits we have available.
