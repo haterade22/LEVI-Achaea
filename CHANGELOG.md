@@ -2,6 +2,75 @@
 
 ---
 
+## 2026-08-11 - Track by exits, and stop the move loop (v4.7.251)
+
+> "we need to track by exits and map it out like that" / "if needed the auto mapper should do
+> a QL to see room exits" -- user, 2026-08-11
+
+### The move loop
+
+The live log shows the sweep issuing `room clear -> moving e` **eight times in five seconds**,
+never getting anywhere. `_exploreTick` does guard on `explore.moving`, so the flag was being
+cleared each time -- by `_onExploreRoom` treating every `gmcp.Room` as a genuine arrival.
+
+Two faults compounded it:
+
+1. **The arrival test.** `MAP.current ~= explore.fromRoom` is worthless when the id is
+   re-invented: TRUE for a plain look, never FALSE. v4.7.250 replaced it under dead reckoning
+   with "any room event while moving is the arrival" -- which is the *same bug* wearing a
+   different hat, because several room events land inside one move's window.
+2. **The reckoning double-stepped.** Every one of those events advanced the position again, so
+   the map believed we were three cells east of where we stood. **A confidently wrong map is
+   worse than no map** -- every later decision is built on it.
+
+`MAP.drArm(dir)` / `MAP.drDisarm()` fix both with one piece of state: the reckoning is armed
+for exactly one step when a move is sent, and consumed by the first event after it. While it is
+still armed we have not been credited with the step, so that event **is** the arrival; once
+consumed, further events are looks and must neither end the move nor re-decide.
+
+### Track by exits
+
+`You see exits leading northeast, southeast, and south.` is the only honest exit reading under
+dementia. gmcp pairs each direction with a **destination id**, and those ids are inventions
+matching nothing we hold. This line carries directions and nothing else -- exactly the half
+that survives.
+
+- `MAP.parseExitsLine(text)` -- pure list parse (commas and the trailing "and"), unit-tested
+  against the captured strings.
+- `MAP.onExitsLine(text)` -- records them against the dead-reckoned cell. **Replaces** rather
+  than merges: a direction that has stopped being reported is a direction the room does not
+  have, and leaving it in is what sends the sweep into a wall.
+- Trigger `mnemosyne/063` is a one-line adapter, so the parse stays testable. Inert unless
+  dead reckoning is active, and deliberately **not** gated on the explorer running -- the swarm
+  moves us too.
+- **QL on demand**: on landing in a cell whose exits are unknown, the explorer sends `ql`. Free
+  (no balance), one line per genuinely new cell.
+
+### Two highlights
+
+- `An echo of the Great Bard forms in the wake of your strike...` -- already recorded the AoE
+  stun and echoed it, but the line itself was unstyled. Now **magenta bold**, matching the
+  colour its own `dsAlert` uses, so the line and its echo read as one event.
+- `Your vicious attack cleaves to a nearby enemy.` -- new trigger `026_Cleave_Splash`,
+  **chartreuse bold** (the "damage actually happening" family). This is the Hammer and Nail
+  splash landing, and it is the *only* feedback that the sowulu rune is paying off -- the rune
+  is sketched once per room and never mentioned again, so a rune that failed to land looked
+  identical to one splashing every swing.
+
+### Also confirmed, no change needed
+
+Thunderclap already outranks Arc: `rwBisect` is tried first and arc only fills in when it
+returns nil (v4.7.244), with a passing test for exactly that pairing.
+
+### Tests
+
+**1290 -> 1298**, and the test helper was corrected to arm the reckoning the way `_exploreMove`
+does -- otherwise it would have been asserting against a contract the code no longer has. Two
+deliberate breaks confirmed: advancing on every event (the live loop), and merging exits
+instead of replacing them.
+
+---
+
 ## 2026-08-11 - Dead reckoning: when the room ID itself is a lie (v4.7.250)
 
 > "the gmcp room id will be changed every time we look because of dementia that we cannot

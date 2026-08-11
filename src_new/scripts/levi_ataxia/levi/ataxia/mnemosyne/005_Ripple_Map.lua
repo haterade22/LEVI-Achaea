@@ -187,15 +187,81 @@ function MAP.drResetPos()
   MAP.dr.x, MAP.dr.y = 0, 0
 end
 
+-- "You see exits leading northeast, southeast, and south." -- the room's exits, in prose,
+-- from the description or a QL (v4.7.251, user: "if needed the auto mapper should do a QL to
+-- see room exits", "we need to track by exits and map it out like that").
+--
+-- Under dementia this is the exit source we actually want. gmcp's exit table carries invented
+-- DESTINATIONS keyed to invented room ids; this line carries only DIRECTIONS, which is exactly
+-- the half that survives -- and it can be re-requested on demand with QL, which the gmcp table
+-- cannot be trusted to refresh honestly.
+--
+-- Pure list parse, no game knowledge: split on commas and the trailing "and". Returns a
+-- direction->true set, or nil when the line is not one of these.
+function MAP.parseExitsLine(text)
+  if type(text) ~= "string" then return nil end
+  local body = text:match("^You see exits leading (.+)%.$")
+  if not body then return nil end
+  local out, n = {}, 0
+  body = body:gsub("%s+and%s+", ", ")
+  for part in body:gmatch("[^,]+") do
+    local d = MAP.normDir((part:gsub("^%s+", ""):gsub("%s+$", "")))
+    if d then out[d] = true; n = n + 1 end
+  end
+  if n == 0 then return nil end
+  return out
+end
+
+-- Record a parsed exits line against wherever we currently believe we are. Only under dead
+-- reckoning: with honest room ids gmcp's table is richer (it carries destinations, which the
+-- normal relayout needs) and this would throw that away.
+function MAP.onExitsLine(text)
+  if not MAP.drActive() then return false end
+  local dirs = MAP.parseExitsLine(text)
+  if not dirs then return false end
+  local key = MAP.drHereKey()
+  local r = MAP.rooms and MAP.rooms[key]
+  if not r then
+    MAP.onRoom(key, nil, {}, nil)
+    r = MAP.rooms[key]
+  end
+  if not r then return false end
+  -- Authoritative: REPLACE rather than merge. A stale direction that no longer appears is a
+  -- direction the room does not have, and leaving it in is what sends the sweep into a wall.
+  local kept = {}
+  for d in pairs(dirs) do kept[d] = 0 end -- destination unknown by construction
+  r.exits = kept
+  return true
+end
+
 -- The whole dead-reckoned arrival, in one place so it can be exercised directly. ONE OWNER:
 -- this runs from 005's gmcp.Room handler, which is registered before the explorer's (package
 -- load order) and so still sees `explore.moving` before the explorer clears it. Advancing in
 -- both would double-step; advancing only in the explorer would miss every move made outside
 -- the sweep -- the swarm's tumbles and pulls.
+-- Arm the reckoning for exactly ONE step. Set when a move is sent, consumed by the first
+-- arrival, cleared by any failure.
+--
+-- Without this the reckoning double-steps (v4.7.251). `explore.moving` stays true across the
+-- whole in-flight window, and under dementia the server pushes several room events inside it
+-- -- the live log shows a movement echo followed by repeated location blocks -- so every one
+-- of them advanced us another cell. The map then believes we are three rooms east of where we
+-- stand, which is worse than not mapping at all: every later decision is confidently wrong.
+function MAP.drArm(dir)
+  MAP._drArmed = MAP.normDir(dir) or true
+end
+
+function MAP.drDisarm()
+  MAP._drArmed = nil
+end
+
 function MAP.drArrive(exits)
   local ex = ataxia.mnemosyne and ataxia.mnemosyne.explore
-  local movedDir = (ex and ex.moving and ex.fromDir) or MAP._lastMoveDir
-  if movedDir then MAP.drMoved(movedDir) end
+  local armed = MAP._drArmed
+  local movedDir = (armed ~= true and armed) or (ex and ex.moving and ex.fromDir) or MAP._lastMoveDir
+  -- Only the FIRST event after a move counts as the step.
+  if armed and movedDir then MAP.drMoved(movedDir) else movedDir = nil end
+  MAP.drDisarm()
   -- Pass the direction so the WALKED edge is recorded: without it `room.edges` stays empty,
   -- every exit reads as unexplored forever and MAP.path can never backtrack.
   MAP.onRoom(MAP.drHereKey(), nil, exits, movedDir)

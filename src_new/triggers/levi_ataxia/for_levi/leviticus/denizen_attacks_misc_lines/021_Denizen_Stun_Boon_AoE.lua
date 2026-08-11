@@ -55,3 +55,13 @@ if ataxiaBasher and ataxiaBasher.enabled and ataxiaBasher_dsSetAff then
     ataxiaBasher_dsAlert("STUN (AoE) on " .. n .. " denizen(s) -- Great Bard echo boon", "magenta")
   end
 end
+
+-- HIGHLIGHT IT (v4.7.251, user-directed). The console echo alone is easy to lose in a busy
+-- round -- it prints below the line it describes, among the damage numbers. MAGENTA to match
+-- the colour dsAlert already uses for this same event, so the line and its echo read as one
+-- thing rather than two unrelated notices.
+selectString(line, 1)
+setBold(true)
+fg("magenta")
+deselect()
+resetFormat()

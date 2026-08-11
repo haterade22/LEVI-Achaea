@@ -264,6 +264,9 @@ function M._exploreMove(dir, isRetry)
     M._exploreEcho("<cyan>Homebound<reset> -- raido sketched in the holding room.")
   end
   send("queue addclear free stand" .. sep .. pre .. dir)
+  -- Arm the dead reckoning for exactly this one step (v4.7.251). Under dementia several room
+  -- events arrive inside one move's window; without arming, each advanced the position again.
+  if MAP.drArm and MAP.drActive and MAP.drActive() then MAP.drArm(dir) end
   if M._explMoveT then pcall(killTimer, M._explMoveT); M._explMoveT = nil end
   M._explMoveT = tempTimer(MOVE_TIMEOUT, function()
     M._explMoveT = nil
@@ -919,9 +922,23 @@ function M._onExploreRoom()
   -- plain `ql` and never FALSE. Under dead reckoning a gmcp.Room while a move is in flight IS
   -- the arrival, because every way a move can fail (Room.WrongDir, the wall line, the ice
   -- slip, the move timeout) clears `moving` first.
+  -- ARRIVAL UNDER DEMENTIA (v4.7.250, corrected v4.7.251). "The room number changed" is
+  -- worthless when the number is re-invented: it reads TRUE for a plain look and never FALSE,
+  -- so every event became an arrival, `moving` was cleared, and the tick issued ANOTHER move.
+  -- The live log is that loop -- "room clear -> moving e" eight times in five seconds.
+  --
+  -- The reckoning's arm flag is the answer: it is set when a move is sent and consumed by the
+  -- first event after it. While it is still armed we have not been credited with the step yet,
+  -- so this IS the arrival; once consumed, further events are looks and must not end the move
+  -- or re-decide.
   local dr = MAP and MAP.drActive and MAP.drActive()
-  local sameRoom = (not dr) and M.explore.moving and MAP and MAP.current ~= nil
-    and MAP.current == M.explore.fromRoom
+  local sameRoom
+  if dr then
+    sameRoom = M.explore.moving and (MAP._drArmed ~= nil)
+  else
+    sameRoom = M.explore.moving and MAP and MAP.current ~= nil
+      and MAP.current == M.explore.fromRoom
+  end
   if not sameRoom then -- a genuine arrival (or we weren't moving): end the move
     M.explore.moving = false
     M.explore.tacticalMove = false
@@ -929,6 +946,17 @@ function M._onExploreRoom()
     -- Open the settle window: the new room's Char.Items (denizens) will land in a
     -- following "targets updated"; keep the full TICK_DELAY until they've settled.
     M.explore.settling = true
+    -- ASK FOR THE EXITS (v4.7.251, user: "if needed the auto mapper should do a QL to see
+    -- room exits"). Under dementia gmcp's exit table is keyed to invented room ids, so the
+    -- prose line -- "You see exits leading northeast, southeast, and south." -- is the only
+    -- honest reading, and QL is how we get it on demand. Free (no balance), and only when the
+    -- cell has no exits recorded yet, so it costs one line per genuinely new cell.
+    if MAP.drActive and MAP.drActive() then
+      local r = MAP.rooms and MAP.rooms[MAP.drHereKey()]
+      local known = false
+      if r then for _ in pairs(r.exits or {}) do known = true break end end
+      if not known then send("ql", false) end
+    end
   end
   M._scheduleTick()
   M._armWatchdog()

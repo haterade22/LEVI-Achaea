@@ -3022,9 +3022,13 @@ describe("dead reckoning under dementia", function()
   -- handler was broken. The explorer's move state is what drArrive reads to decide whether we
   -- moved, so set that rather than passing a direction.
   local function look(exits, movedDir)
+    -- Mirror the real flow: _exploreMove ARMS the reckoning for exactly one step, and the
+    -- first arrival consumes it. Without arming, drArrive must not advance -- that is the
+    -- v4.7.251 contract that stops several room events inside one move from double-stepping.
     M.explore.moving = movedDir and true or false
     M.explore.fromDir = movedDir
     MAP._lastMoveDir = nil
+    if movedDir then MAP.drArm(movedDir) end
     MAP.drArrive(exits)
     M.explore.moving = false
     M.explore.fromDir = nil
@@ -3116,6 +3120,83 @@ describe("dead reckoning under dementia", function()
     MAP.reset()
     expect(MAP.dr.x).toBe(0)
     expect(MAP.dr.y).toBe(0)
+  end)
+
+  -- THE LIVE LOOP: under dementia several room events land inside one move's window. Each
+  -- used to advance the reckoning again, so the map believed we were rooms away from where we
+  -- actually stood -- and the explorer, seeing every event as an arrival, issued another move.
+  -- The log shows "room clear -> moving e" eight times in five seconds.
+  it("advances ONCE per move, however many room events arrive", function()
+    fresh()
+    look({ east = 0 })
+    M.explore.moving = true
+    M.explore.fromDir = "east"
+    MAP.drArm("east")
+    MAP.drArrive({ west = 0 })   -- the real arrival
+    MAP.drArrive({ west = 0 })   -- a second event inside the same window
+    MAP.drArrive({ west = 0 })   -- and a third
+    expect(MAP.dr.x).toBe(1)     -- one step east, not three
+    M.explore.moving = false
+    M.explore.fromDir = nil
+  end)
+
+  it("a failure disarms, so nothing is credited", function()
+    fresh()
+    look({ east = 0 })
+    MAP.drArm("east")
+    MAP.drDisarm()
+    MAP.drArrive({ east = 0 })
+    expect(MAP.dr.x).toBe(0)
+  end)
+
+  -- "if needed the auto mapper should do a QL to see room exits" (user). The prose exits line
+  -- carries DIRECTIONS only -- exactly the half that survives dementia, since gmcp's table
+  -- carries invented destinations keyed to invented room ids.
+  it("parses the prose exits line", function()
+    local e = MAP.parseExitsLine("You see exits leading northeast, southeast, and south.")
+    expect(e ~= nil).toBeTrue()
+    expect(e.northeast).toBeTrue()
+    expect(e.southeast).toBeTrue()
+    expect(e.south).toBeTrue()
+    expect(e.north).toBe(nil)
+  end)
+
+  it("parses the two-exit form", function()
+    local e = MAP.parseExitsLine("You see exits leading north and west.")
+    expect(e.north).toBeTrue()
+    expect(e.west).toBeTrue()
+  end)
+
+  it("ignores anything that is not that line", function()
+    expect(MAP.parseExitsLine("You have no idea where you are.")).toBe(nil)
+    expect(MAP.parseExitsLine(nil)).toBe(nil)
+  end)
+
+  it("records the parsed exits against the dead-reckoned cell", function()
+    fresh()
+    look({})
+    expect(MAP.onExitsLine("You see exits leading north and west.")).toBeTrue()
+    local r = MAP.rooms[MAP.drHereKey()]
+    expect(r.exits.north).toBe(0)
+    expect(r.exits.west).toBe(0)
+  end)
+
+  -- A direction that has stopped being reported is a direction the room does not have.
+  -- Merging would leave the sweep walking into a wall it was already told about.
+  it("REPLACES the exit set rather than merging", function()
+    fresh()
+    look({ north = 0, east = 0, south = 0 })
+    MAP.onExitsLine("You see exits leading north and west.")
+    local r = MAP.rooms[MAP.drHereKey()]
+    expect(r.exits.east).toBe(nil)
+    expect(r.exits.south).toBe(nil)
+    expect(r.exits.west).toBe(0)
+  end)
+
+  it("is inert with honest room ids -- gmcp's table is richer there", function()
+    MAP.drForce = false
+    expect(MAP.onExitsLine("You see exits leading north and west.")).toBeFalse()
+    MAP.drForce = true
   end)
 
   it("a non-planar step does not move us on the grid", function()
