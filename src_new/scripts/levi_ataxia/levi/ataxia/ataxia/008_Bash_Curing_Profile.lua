@@ -222,18 +222,46 @@ end
 -- ataxia_sendDefaultPrios (001) -- the server rejects more than 5 commands a second.
 -- The switch BACK is scheduled after the last batch: a priority written after we have
 -- already left the set would land in the wrong one.
-function ataxia_bashProfileInstall()
-  local s = ataxia_bashCuringSettings()
-  local from = currentSet()
-  s.restoreTo = from
+-- WHAT TO DO GIVEN A PARSED CURINGSET LIST. Pure, so the decision is unit-testable without
+-- a live game: returns "proceed" (the set exists, switch to it and write), "create" (it does
+-- not exist and there is room), or "abort" with a reason.
+--
+-- The `unknown` case matters as much as the other two: if we could not read the list at all
+-- we must NOT fall through to "create". That is precisely the assumption that made the old
+-- install dangerous.
+function ataxia_bashInstallDecide(cs, setname)
+  if type(cs) ~= "table" or not cs.set then
+    return "abort", "could not read CURINGSET LIST -- refusing to write priorities blind"
+  end
+  if (cs.set[setname] or 0) > 1 then
+    return "abort", "'" .. setname .. "' is listed " .. cs.set[setname] ..
+      " times; switching to it is ambiguous. Delete the extras first."
+  end
+  if (cs.set[setname] or 0) == 1 then return "proceed" end
+  local used, allowed = tonumber(cs.used), tonumber(cs.allowed)
+  if used and allowed and used >= allowed then
+    return "abort", "no free curing set slots (" .. used .. "/" .. allowed ..
+      "). Delete one, or CURINGSET EXPAND, then run this again."
+  end
+  return "create"
+end
 
+-- THE PRIORITY WRITES ONLY EVER RUN ONCE WE ARE PROVABLY ON THE TARGET SET.
+--
+-- The old version sent `curingset new` / `curingset switch` and immediately started timing
+-- out ~55 `curing priority` commands on the assumption both had worked. Both fail when the
+-- account is at its curing-set cap (live capture: "a total of 22 of your allowed 22"), and a
+-- failed switch leaves the PVP set active -- so those 55 writes landed in it and rewrote the
+-- user's real curing priorities, while `installed = true` was set regardless. This path also
+-- calls send() directly, bypassing ataxia_sendCuringPriority's guard, so nothing else caught
+-- it either.
+local function bashInstallWrite(s, from)
   local entries = {}
   for aff, val in pairs(ataxia_bashCuringPrios()) do
     entries[#entries + 1] = "curing priority " .. aff .. " " .. val
   end
   table.sort(entries)  -- deterministic batching, so a retry sends the same thing
 
-  send("curingset new " .. s.setname)
   send("curingset switch " .. s.setname)
   send("curingset clone " .. from)
 
@@ -263,6 +291,46 @@ function ataxia_bashProfileInstall()
   end
 end
 
+function ataxia_bashProfileInstall()
+  local s = ataxia_bashCuringSettings()
+  if not ataxia_curingsetRefresh then
+    if ataxiaEcho then ataxiaEcho("<red>Curingset state module missing<reset> -- cannot verify safely.") end
+    return
+  end
+  if ataxiaEcho then ataxiaEcho("Checking CURINGSET LIST before writing anything...") end
+  ataxia_curingsetRefresh(function(cs)
+    local what, why = ataxia_bashInstallDecide(cs, s.setname)
+    if what == "abort" then
+      if ataxiaEcho then
+        ataxiaEcho("<red>Bash curing install ABORTED<reset> -- " .. tostring(why))
+        ataxiaEcho("Nothing was written. <DimGrey>(aconfig bashcuring status, or `curingsets` for the full picture.)")
+      end
+      return
+    end
+    -- `from` is read from the GAME's own "(current)" marker when we have it: classDetect's
+    -- tracked value is a guess about a switch it may only have attempted.
+    local from = (cs and cs.current) or currentSet()
+    s.restoreTo = from
+    if what == "create" then
+      send("curingset new " .. s.setname)
+      -- VERIFY, do not assume. One more list read costs a second and is the whole difference
+      -- between installing a profile and overwriting the user's PvP priorities.
+      ataxia_curingsetRefresh(function(cs2)
+        if not (cs2 and (cs2.set[s.setname] or 0) == 1) then
+          if ataxiaEcho then
+            ataxiaEcho("<red>Bash curing install ABORTED<reset> -- '" .. s.setname ..
+              "' did not appear after CURINGSET NEW. Nothing was written.")
+          end
+          return
+        end
+        bashInstallWrite(s, from)
+      end)
+      return
+    end
+    bashInstallWrite(s, from)
+  end)
+end
+
 function ataxia_bashProfileOn()
   local s = ataxia_bashCuringSettings()
   if not s.enabled or not s.installed then return end
@@ -270,6 +338,17 @@ function ataxia_bashProfileOn()
   -- Remember where we came from BEFORE switching, or the restore goes to a stale set.
   s.restoreTo = currentSet()
   if s.restoreTo == s.setname then s.restoreTo = "normal" end
+  -- Do not switch to a set we have positive evidence does not exist (v4.7.247). `nil` means
+  -- we have never read a list and is deliberately allowed through -- refusing on "unknown"
+  -- would disable the profile for anyone who has not run `curingsets` yet.
+  if ataxia_curingsetHas and ataxia_curingsetHas(s.setname) == false then
+    if ataxiaEcho then
+      ataxiaEcho("<red>Curing set '" .. s.setname .. "' does not exist<reset> -- PvE curing profile NOT applied. "
+        .. "<DimGrey>(aconfig bashcuring install, or aconfig bashcuring setname <name>)")
+    end
+    s.active = false
+    return
+  end
   s.active = true
   send("curingset switch " .. s.setname)
   if ataxiaEcho then ataxiaEcho("Curing -> <green>" .. s.setname .. "<reset> (PvE: limbs first, mental spray parked).") end
@@ -322,7 +401,20 @@ function ataxia_bashProfileStatus()
   cecho("\n  <NavajoWhite>installed:  " .. (s.installed and "<green>yes" or "<red>no  <DimGrey>(run: aconfig bashcuring install)"))
   cecho("\n  <NavajoWhite>auto-swap:  " .. (s.enabled and "<green>on" or "<red>off"))
   cecho("\n  <NavajoWhite>active now: " .. (s.active and "<green>yes" or "<DimGrey>no"))
-  cecho("\n  <NavajoWhite>restore to: <white>" .. tostring(s.restoreTo) .. "\n")
+  cecho("\n  <NavajoWhite>restore to: <white>" .. tostring(s.restoreTo))
+  -- "installed" only ever meant "we ran the installer", which was true even when every
+  -- command in it failed. Show what the GAME says instead.
+  local has = ataxia_curingsetHas and ataxia_curingsetHas(s.setname)
+  if has == nil then
+    cecho("\n  <NavajoWhite>exists:     <DimGrey>unknown <DimGrey>(run: curingsets)")
+  else
+    cecho("\n  <NavajoWhite>exists:     " .. (has and "<green>yes" or "<red>NO -- the profile cannot switch to it"))
+  end
+  local free = ataxia_curingsetFree and ataxia_curingsetFree()
+  if free ~= nil then
+    cecho("\n  <NavajoWhite>free slots: " .. (free > 0 and ("<green>" .. free) or "<red>0 (full)"))
+  end
+  cecho("\n")
 end
 
 function ataxia_bashProfileShow()

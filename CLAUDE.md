@@ -1043,6 +1043,26 @@ Achaea provides built-in curing that simulates average latency. Custom systems c
 | `CURINGSET LIST` | List all curingsets |
 | `CURINGSET CLONE <from>` | Clone into current setup |
 
+**KNOW WHAT SETS EXIST BEFORE TOUCHING THEM (v4.7.247).** `ataxia/009_Curingset_State.lua`
+parses `CURINGSET LIST` into `ataxia.curingsets` (ordered list, per-name COUNTS so duplicates
+stay visible, the `(current)` marker, used/allowed) via TEMP triggers armed only when we asked
+-- a set-name row is a bare lowercase word and would be a catastrophic permanent trigger.
+Queries answer **nil = unknown** as a third state; a caller reading unknown as "no" creates a
+set that already exists (burning one of a hard-capped 22) or refuses one that does. This exists
+because `ataxia_bashProfileInstall` used to send `curingset new`/`switch` and then write ~55
+`curing priority` commands on timers ASSUMING both worked -- at the cap (live capture: 22 of 22)
+both fail, the PVP set stays active, and those writes rewrote it, while `installed = true` was
+set regardless. It is the one path that bypasses `ataxia_sendCuringPriority`'s guard by calling
+`send()` directly. Now: `ataxia_bashInstallDecide` (pure, tested) returns proceed/create/abort,
+**an unreadable list ABORTS rather than falling through to create**, `create` re-reads the list
+to VERIFY the set appeared before writing, `bashProfileOn` refuses a set proven absent, and
+`aconfig bashcuring status` reports what the GAME says instead of the old `installed` flag
+(which only ever meant "we ran the installer"). `classDetect.setup()` was equally blind --
+`curingsetMap` names 27 sets against a cap of 22 and it sent every `curingset new` silently
+(`send(..., false)`), so it could never succeed and never said so; it now plans against free
+slots (`classDetect.planCuringsets`, pure + sorted so drops are deterministic) and reports what
+it could not create. Command: `curingsets`.
+
 **CRITICAL: `CURING PRIORITY <aff> <n>` writes a STORED priority into whichever curingset is
 ACTIVE.** Any code path that writes priorities while a non-default set is selected mutates
 that set permanently — and `ataxia_restorePrio()` will then write the *default* table's value

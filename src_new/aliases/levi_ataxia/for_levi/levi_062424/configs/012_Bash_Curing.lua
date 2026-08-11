@@ -18,10 +18,13 @@ packageName: ''
 -- aconfig bashcuring install    -- one-time server-side setup (writes the `bash` curingset)
 -- aconfig bashcuring show       -- print the PvE deltas, pvp -> bash
 -- aconfig bashcuring on|off     -- auto-switching on basher enable/disable
+-- aconfig bashcuring sets       -- what the GAME says exists (curingsets)
 
 local sub = (matches[2] or ""):lower()
 
-if sub == "install" then
+if sub == "sets" then
+	ataxia_curingsetReport()
+elseif sub == "install" then
 	ataxia_bashProfileInstall()
 elseif sub == "show" then
 	ataxia_bashProfileShow()
@@ -30,5 +33,5 @@ elseif sub == "on" or sub == "off" then
 elseif sub == "" or sub == "status" then
 	ataxia_bashProfileStatus()
 else
-	ataxiaEcho("Usage: aconfig bashcuring [install|show|on|off|status]")
+	ataxiaEcho("Usage: aconfig bashcuring [install|show|on|off|status|sets]")
 end

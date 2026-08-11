@@ -486,15 +486,66 @@ end
 -- SETUP: BULK CREATE CURINGSETS IN-GAME
 --------------------------------------------------------------------------------
 
+-- Which sets this map wants, deduplicated and sorted. Pure, so the count is testable.
+function classDetect.wantedCuringsets()
+  local seen, out = {}, {}
+  for _, setName in pairs(classDetect.curingsetMap or {}) do
+    if not seen[setName] then seen[setName] = true; out[#out + 1] = setName end
+  end
+  table.sort(out)
+  return out
+end
+
+-- THE MAP WANTS MORE SETS THAN THE GAME ALLOWS (v4.7.247).
+--
+-- curingsetMap names 27 distinct sets. A live capture puts the cap at 22 ("a total of 22 of
+-- your allowed 22"), so this could never fully succeed -- and it sent every `curingset new`
+-- with `send(..., false)`, i.e. silently, so the five-plus rejections were invisible and the
+-- user was left with a partially-populated map and no idea which classes were missing.
+--
+-- It now reads CURINGSET LIST first: skip what exists (creating a duplicate wastes one of a
+-- hard-capped 22 and makes `curingset switch` ambiguous), stop at the cap, and SAY what it
+-- could not create so the choice of which classes matter is the user's.
 function classDetect.setup()
-  local created = {}
-  for _, setName in pairs(classDetect.curingsetMap) do
-    if not created[setName] then
-      send("curingset new " .. setName, false)
-      created[setName] = true
+  local wanted = classDetect.wantedCuringsets()
+  if not ataxia_curingsetRefresh then
+    classDetect.echo("<red>Curingset state module missing<plum> -- cannot check the cap; aborting.")
+    return
+  end
+  classDetect.echo("Reading <white>curingset list<plum> before creating anything...")
+  ataxia_curingsetRefresh(function(cs)
+    if not cs then
+      classDetect.echo("<red>Could not read CURINGSET LIST<plum> -- aborting rather than creating blind.")
+      return
+    end
+    local plan = classDetect.planCuringsets(cs, wanted)
+    for _, name in ipairs(plan.create) do send("curingset new " .. name, false) end
+    classDetect.echo("Created <white>" .. #plan.create .. "<plum>, already present <white>"
+      .. #plan.present .. "<plum>, no room for <white>" .. #plan.skipped .. "<plum>.")
+    if #plan.skipped > 0 then
+      classDetect.echo("<red>No slots for:<plum> " .. table.concat(plan.skipped, ", "))
+      classDetect.echo("Free a slot (<white>curingset delete <name><plum>) or <white>CURINGSET EXPAND<plum>, then re-run.")
+    end
+  end)
+end
+
+-- Pure planner: split the wanted sets into already-present / creatable-within-the-cap /
+-- no-room. Sorted input in, deterministic plan out, so what gets dropped when the cap bites
+-- is stable rather than dependent on pairs() ordering.
+function classDetect.planCuringsets(cs, wanted)
+  local plan = { create = {}, present = {}, skipped = {} }
+  local free = math.max(0, (tonumber(cs.allowed) or 0) - (tonumber(cs.used) or 0))
+  for _, name in ipairs(wanted or {}) do
+    if (cs.set and cs.set[name] or 0) > 0 then
+      plan.present[#plan.present + 1] = name
+    elseif free > 0 then
+      plan.create[#plan.create + 1] = name
+      free = free - 1
+    else
+      plan.skipped[#plan.skipped + 1] = name
     end
   end
-  classDetect.echo("Sent <white>curingset new<plum> for " .. #table.keys(created) .. " curingsets. Check <white>curingset list<plum> in-game.")
+  return plan
 end
 
 --------------------------------------------------------------------------------

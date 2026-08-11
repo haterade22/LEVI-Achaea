@@ -2,6 +2,97 @@
 
 ---
 
+## 2026-08-11 - The curing sets are full, and the installer never checked (v4.7.247)
+
+A pasted `CURINGSET LIST` turned up three problems at once:
+
+```
+normal (current)
+... bashing ... bashing ...
+You are using a total of 22 of your allowed 22 curing sets.
+```
+
+1. **The account is at its cap**, 22 of 22.
+2. **`bashing` is listed twice** -- two sets with one name, each eating a slot.
+3. **There is no `bash` set at all** -- which is the name the PvE bashing curing profile
+   actually switches to (`ataxia.settings.bashcuring.setname`, default `bash`).
+
+### The dangerous one: install wrote priorities it could not verify
+
+`ataxia_bashProfileInstall` did this:
+
+```lua
+send("curingset new "    .. s.setname)   -- fails at 22/22
+send("curingset switch " .. s.setname)   -- fails, no such set -> STILL ON THE PVP SET
+send("curingset clone "  .. from)
+-- then ~55 `curing priority <aff> <n>` on staggered timers
+-- then unconditionally: s.installed = true
+```
+
+At the cap, both of the first two commands fail and the active set is still the PvP one --
+so **the ~55 priority writes land in it and rewrite the user's real curing priorities**. This
+is exactly the curingset write hazard documented since v4.7.172, firing on the one path that
+bypasses the guarded writer (`ataxia_sendCuringPriority`) by calling `send()` directly, so
+nothing else caught it either. And `installed = true` was set regardless, so every later
+basher-enable fired `curingset switch bash` into the void, silently, forever.
+
+### The fix: read the list, then decide
+
+New `009_Curingset_State.lua` parses `CURINGSET LIST` -- entirely from the captured output,
+nothing guessed -- into `ataxia.curingsets` (ordered list, per-name counts so duplicates stay
+visible, the `(current)` marker, and used/allowed).
+
+**Captured with temp triggers, not permanent ones.** A set-name row is a bare lowercase word
+on its own line; as a permanent trigger that would match a huge amount of unrelated game text.
+Temp triggers armed only when we asked for the list, torn down on completion or a 4s timeout,
+cannot false-positive.
+
+`ataxia_bashInstallDecide(cs, setname)` is pure and unit-tested, and returns:
+
+| | |
+|---|---|
+| `proceed` | the set exists exactly once -- switch and write |
+| `create` | absent, and there is a free slot |
+| `abort` | full, or listed more than once, **or the list could not be read at all** |
+
+That last case matters as much as the others: an unreadable list must not fall through to
+"create". Assuming is what made the old version dangerous. On `create` it sends `curingset
+new` and then **re-reads the list to verify the set appeared** before writing anything -- one
+extra second, and it is the whole difference between installing a profile and overwriting the
+user's PvP priorities.
+
+`ataxia_bashProfileOn` now also refuses to switch to a set we have positive evidence does not
+exist. `nil` (never read a list) is deliberately allowed through, so the profile is not
+disabled for anyone who has not run the new command yet.
+
+`aconfig bashcuring status` reports what the **game** says rather than the old `installed`
+flag, which only ever meant "we ran the installer" -- true even when every command in it
+failed.
+
+### classDetect.setup() wanted 27 sets against a cap of 22
+
+`curingsetMap` names 27 distinct sets and `setup()` sent `curingset new` for every one of
+them with `send(..., false)` -- silently. It could never fully succeed, and the five-plus
+rejections were invisible. It now reads the list first, skips what already exists (a duplicate
+wastes one of a hard-capped 22 and makes `curingset switch` ambiguous), fills only the free
+slots, and **says which sets it could not create** so the choice of which classes matter stays
+the user's. `classDetect.planCuringsets` is pure and sorted, so what gets dropped when the cap
+bites is deterministic rather than `pairs()` order.
+
+### Commands
+
+`curingsets` (also `aconfig bashcuring sets`) prints the parsed list, flags duplicates, shows
+free slots, and says whether the bash profile's set actually exists.
+
+### Tests
+
+**1247 -> 1264.** The fixture is the user's real captured output, duplicate and 22/22 cap
+included. Five deliberate breaks confirmed the coverage: install ignoring the cap (the original
+bug), an unreadable list falling through to create, a duplicate name accepted, the parser
+accepting a truncated list, and `setup()` ignoring the free-slot budget.
+
+---
+
 ## 2026-08-10 - Stormcleaver: bisect finally executes (v4.7.246)
 
 > Stormcleaver: "Your bisect attack now executes denizens with less than 20% of their maximum
