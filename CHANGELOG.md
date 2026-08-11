@@ -2,6 +2,48 @@
 
 ---
 
+## 2026-08-11 - A burst is not a rate (v4.7.253)
+
+The v4.7.243 damage watchdog had become a hair trigger: **"DYING FAST -- 83% and ~5.7s to
+live"**, at 83% health, on essentially every prompt, twice each, with the escape ladder
+thrashing between rooms at 60-83% HP instead of fighting.
+
+### The rate maths
+
+v4.7.243 clamped the divisor to a **minimum of one second**, reasoning that a fight three
+seconds old should read at its true rate rather than three fifths of it. That is right for a
+sustained fight and badly wrong for a burst: three blows landing inside 0.3s were divided by
+the 1s floor and reported as **three times** the sustained rate -- and in a crowded room every
+round looks like that.
+
+The divisor is now clamped **up** to `ataxiaBasher_dmgMinSpan` (3s). A rate needs time:
+
+| Input | Old | New |
+|---|---|---|
+| 3 x 1,000 landing together | 3,000/s -> trips at 12,000 HP | 1,000/s -> does not trip |
+| 2,150/s genuinely sustained | 2,150/s -> trips | 2,150/s -> still trips |
+
+The fight the alarm was built for still trips it comfortably, because its samples really do
+span the window.
+
+### The echo
+
+`DYING FAST` sat **above** the emergency cooldown in `S.onVitals`, so it printed on every
+prompt the watchdog was tripped on rather than when we actually acted. It now prints only after
+the cooldown gate passes, and only when the rate (rather than the HP threshold) was what
+triggered the escape. The no-flee `DANGER: ... fighting on` echo is throttled to 5s for the
+same reason -- it is evaluated on the attack path, so it printed every round of a fight we had
+already decided to stand and fight.
+
+**An alarm nobody can read past is not an alarm** -- it buried the lines that actually mattered.
+
+### Tests
+
+**1304 -> 1308.** The tight burst not tripping, the damped rate reported, sustained damage
+still tripping, and `dmgMinSpan` being configurable. Restoring the 1s floor fails three of them.
+
+---
+
 ## 2026-08-11 - A tumble in flight is not "nowhere to go" (v4.7.252)
 
 Two faults from one log, both of which had us fighting when we meant to be leaving.

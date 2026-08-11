@@ -1389,16 +1389,23 @@ function S.onVitals()
   -- this answers "we will be dead in six seconds" -- and against 2,150 HP/s that fires at ~13,000
   -- HP, near full health, which is the whole point. Costs one arithmetic pass over two short
   -- sample lists; the `wantEscape` short-circuit means it is not even reached on a healthy prompt.
+  local byRate = false
   if not wantEscape and s.escape ~= false and ataxiaBasher_isDamageRateExtreme
      and ataxiaBasher_isDamageRateExtreme() then
-    wantEscape = true
-    S._echo("<indian_red>DYING FAST<reset> -- " .. hp .. "% and ~"
-      .. string.format("%.1f", (ataxiaBasher_secondsToLive and ataxiaBasher_secondsToLive()) or 0)
-      .. "s to live at this rate; leaving.")
+    wantEscape, byRate = true, true
   end
   if not (wantPanic or wantEscape) then return end
   if S._lastEmergencyAt and (now() - S._lastEmergencyAt) < EMERGENCY_COOLDOWN then return end
   S._lastEmergencyAt = now()
+  -- ECHO ONLY WHEN WE ACT (v4.7.253). This sat ABOVE the emergency cooldown, so it printed on
+  -- every prompt the watchdog was tripped on -- the live log has it twice per prompt for
+  -- dozens of prompts, burying the lines that actually mattered. An alarm nobody can read
+  -- past is not an alarm.
+  if byRate then
+    S._echo("<indian_red>DYING FAST<reset> -- " .. hp .. "% and ~"
+      .. string.format("%.1f", (ataxiaBasher_secondsToLive and ataxiaBasher_secondsToLive()) or 0)
+      .. "s to live at this rate; leaving.")
+  end
   if wantPanic and S._maybePanic(hp) then
     if M._disarmMove then M._disarmMove() end -- a stale in-flight move must not gate the aftermath
     return

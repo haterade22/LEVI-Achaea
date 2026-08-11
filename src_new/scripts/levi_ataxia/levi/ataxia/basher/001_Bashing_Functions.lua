@@ -311,6 +311,9 @@ end
 -- ============================================================================
 ataxiaBasher_dmgSamples = ataxiaBasher_dmgSamples or {}
 ataxiaBasher_dmgWindowSec = 5
+-- Shortest span the incoming-damage rate is willing to be measured over. Below this we are
+-- looking at a burst, not a rate, and dividing by the real (tiny) span extrapolates it wildly.
+ataxiaBasher_dmgMinSpan = 3
 
 function ataxiaBasher_recordDamage(amount)
   if not ataxiaBasher.enabled then return end
@@ -364,8 +367,26 @@ function ataxiaBasher_incomingRate()
   local total, oldest = gross, gOld
   if net > total then total, oldest = net, nOld end
   if total <= 0 or not oldest then return 0 end
+  -- DIVIDE BY A REAL MEASUREMENT WINDOW, NOT BY HOW CLOSE THE HITS HAPPENED TO LAND
+  -- (corrected v4.7.253).
+  --
+  -- v4.7.243 clamped this to a MINIMUM of one second, reasoning that a fight three seconds old
+  -- should read at its true rate rather than three fifths of it. That is right for a sustained
+  -- fight and badly wrong for a burst: three blows inside 0.3s divided by a 1s floor reports
+  -- THREE TIMES the sustained rate, and in a crowded room every round looks like that.
+  --
+  -- The live log is the result -- "DYING FAST -- 83% and ~5.7s to live" while at 83% health,
+  -- fired on essentially every prompt, with the escape ladder thrashing between rooms at
+  -- 60-83% HP instead of fighting. The alarm that was built to fire eleven thousand HP earlier
+  -- than we died had become one that never stopped firing, which is the same thing as no alarm.
+  --
+  -- A rate needs TIME. Clamping the divisor UP to a minimum window damps a burst into its
+  -- honest contribution instead of extrapolating it: 2,000 damage in 0.2s becomes ~667/s
+  -- rather than 2,000/s, while a genuinely sustained 2,150/s still reports 2,150/s because its
+  -- samples really do span the window. The original death still trips this comfortably.
   local span = nowT - oldest
-  if span < 1 then span = 1 end -- one sample is not a rate; do not extrapolate a single hit
+  local minSpan = tonumber(ataxiaBasher_dmgMinSpan) or 3
+  if span < minSpan then span = minSpan end
   return total / span
 end
 
@@ -477,7 +498,13 @@ function ataxiaBasher_dangerLevel()
         ataxiaEcho("DANGER: Extreme incoming damage in no-flee area! Shielding.")
         return "shield"
       end
-      ataxiaEcho("DANGER: Extreme incoming damage in no-flee area -- no way out, fighting on.")
+      -- Throttled: this is evaluated on the attack path, so an unthrottled echo prints for
+      -- every round of a fight we have already decided to stand and fight (v4.7.253).
+      local nowT = (getEpoch and getEpoch()) or 0
+      if (nowT - (tonumber(ataxiaTemp.dangerEchoAt) or 0)) >= 5 then
+        ataxiaTemp.dangerEchoAt = nowT
+        ataxiaEcho("DANGER: Extreme incoming damage in no-flee area -- no way out, fighting on.")
+      end
     end
   else
     local fleePct = ataxiaBasher.fleeThresholdPct or 25

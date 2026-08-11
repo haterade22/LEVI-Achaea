@@ -486,3 +486,56 @@ describe("no-flee areas finally have an HP branch (v4.7.243)", function()
     ataxiaBasher_incSamples = {}
   end)
 end)
+
+-- ============================================================================
+-- v4.7.253 -- a burst is not a rate
+-- ============================================================================
+--
+-- v4.7.243 clamped the rate divisor to a MINIMUM of one second so a young fight would read at
+-- its true rate. For a burst that extrapolates wildly: three blows inside 0.3s were reported as
+-- three times the sustained rate. The live log shows the consequence -- "DYING FAST -- 83% and
+-- ~5.7s to live" at 83% health, on essentially every prompt, with the escape ladder thrashing
+-- between rooms instead of fighting.
+describe("the damage watchdog does not mistake a burst for a rate", function()
+  local function bigPool()
+    baseline()
+    ataxia.vitals = { hp = 12000, hpp = 64, maxhp = 18700, rage = 0 }
+    ataxiaBasher_dmgSamples = {}
+    ataxiaBasher_incSamples = {}
+    ataxiaBasher.dangerTTL = 6
+  end
+
+  it("a tight burst does not trip it", function()
+    bigPool()
+    local t = getEpoch()
+    -- Three ~1,000 blows landing together: real, survivable, and utterly normal in a crowd.
+    ataxiaBasher_incSamples = { {t, 1000}, {t, 1000}, {t, 1000} }
+    expect(ataxiaBasher_isDamageRateExtreme()).toBeFalse()
+  end)
+
+  it("...and reports it at the damped rate, not the clustered one", function()
+    bigPool()
+    local t = getEpoch()
+    ataxiaBasher_incSamples = { {t, 1000}, {t, 1000}, {t, 1000} }
+    -- 3,000 over the 3s minimum span = 1,000/s, not 3,000/s.
+    expect(ataxiaBasher_incomingRate()).toBe(1000)
+  end)
+
+  -- The fight this alarm exists for is still caught: its samples genuinely span the window.
+  it("sustained damage still trips it", function()
+    bigPool()
+    local t = getEpoch()
+    ataxiaBasher_incSamples = { {t - 3, 2150}, {t - 2, 2150}, {t - 1, 2150}, {t, 2150} }
+    expect(ataxiaBasher_isDamageRateExtreme()).toBeTrue()
+  end)
+
+  it("the minimum span is configurable", function()
+    bigPool()
+    local t = getEpoch()
+    ataxiaBasher_incSamples = { {t, 3000} }
+    expect(ataxiaBasher_incomingRate()).toBe(1000)   -- 3000 / 3
+    ataxiaBasher_dmgMinSpan = 6
+    expect(ataxiaBasher_incomingRate()).toBe(500)    -- 3000 / 6
+    ataxiaBasher_dmgMinSpan = 3
+  end)
+end)
