@@ -3209,3 +3209,146 @@ describe("dead reckoning under dementia", function()
 
   MAP.drForce = nil -- restore for anything after us
 end)
+
+-- ============================================================================
+-- v4.7.254 -- boiling lava: leave by any door
+-- ============================================================================
+--
+-- User: "We need to move rooms if the room is lava." 5,890 UNBLOCKABLE per tick against the
+-- 10,939 HP in that prompt -- 54% of the pool, two ticks is a death.
+describe("boiling lava", function()
+  local M = ataxia.mnemosyne
+  local MAP = ataxia.mnemosyne.map
+  local sentCmds, realSend
+
+  local function room(exits, fromDir)
+    -- Earlier scenarios in this file nil ataxiaBasher out; the explorer gates everything on it.
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = true
+    MAP.drForce = false
+    MAP.reset()
+    MAP.onRoom(50, "In the depths of a murky lake.", exits, nil)
+    M.explore.on = true
+    M.explore.fromDir = fromDir
+    M.explore.lavaRooms = {}
+    M.explore.failed = {}
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.mnemLavaAt = nil
+    ataxiaTemp.mnemLavaQlAt = nil
+    realSend = send
+    sentCmds = {}
+    send = function(c) table.insert(sentCmds, c) end
+  end
+  local function restore() send = realSend; MAP.drForce = nil end
+  local function moved()
+    for _, c in ipairs(sentCmds) do
+      if c:find("stand", 1, true) and not c:find("ql", 1, true) then return c end
+    end
+  end
+
+  it("leaves immediately, back the way we came", function()
+    -- We walked EAST to get here, so the room lists WEST back the way we came.
+    room({ west = 0, northwest = 0 }, "e")
+    M.onLava()
+    local cmd = moved()
+    expect(cmd ~= nil).toBeTrue()
+    -- "w" exactly, not "nw": back is provably not lava because we just stood in it.
+    expect(cmd:match("stand;(%a+)$")).toBe("w")
+    restore()
+  end)
+
+  -- The escape ladder refuses unvalidated exits by user decision. Lava is the exception:
+  -- staying costs half the pool per tick, so any door beats the floor.
+  it("takes ANY exit when there is no way back", function()
+    room({ east = 0, northwest = 0 }, nil)
+    M.onLava()
+    expect(moved() ~= nil).toBeTrue()
+    restore()
+  end)
+
+  it("marks the room so the sweep never routes back in", function()
+    room({ east = 0 }, nil)
+    M.onLava()
+    expect(M.explore.lavaRooms[50]).toBeTrue()
+    restore()
+  end)
+
+  it("prefers an exit that does not lead into another lava room", function()
+    room({ east = 60, northwest = 61 }, nil)
+    MAP.onRoom(60, "burned", {}, nil)
+    MAP.current = 50
+    M.explore.lavaRooms[60] = true          -- east is known lava
+    M.onLava()
+    local cmd = moved()
+    expect(cmd ~= nil).toBeTrue()
+    expect(cmd:find("nw", 1, true) ~= nil).toBeTrue()
+    restore()
+  end)
+
+  -- The one case the sweep cannot save us from: say so rather than fail silently.
+  it("asks for a look and warns when no exit is known", function()
+    room({}, nil)
+    M.onLava()
+    expect(moved()).toBe(nil)
+    local asked = false
+    for _, c in ipairs(sentCmds) do if c == "ql" then asked = true end end
+    expect(asked).toBeTrue()
+    restore()
+  end)
+
+  it("re-sends on every tick -- an eaten move must be retried", function()
+    room({ east = 0 }, nil)
+    M.onLava()
+    local first = #sentCmds
+    M.onLava()
+    expect(#sentCmds > first).toBeTrue()
+    restore()
+  end)
+
+  it("roomLava reports while it is eating us, and expires after we leave", function()
+    room({ east = 0 }, nil)
+    M.onLava()
+    expect(M.roomLava()).toBeTrue()
+    ataxiaTemp.mnemLavaAt = getEpoch() - 60
+    expect(M.roomLava()).toBeFalse()
+    restore()
+  end)
+
+  it("is inert outside the tower", function()
+    room({ east = 0 }, nil)
+    ataxiaBasher.inMnemosyne = false
+    M.onLava()
+    expect(moved()).toBe(nil)
+    ataxiaBasher.inMnemosyne = true
+    restore()
+  end)
+
+  -- The exit choice is SORTED, so "back the way we came" is observably a preference rather
+  -- than a coin flip: sorted order would reach `northwest` before `west`.
+  it("prefers back over the sorted-first exit", function()
+    room({ west = 0, northwest = 0 }, "e")
+    expect(M._lavaExit()).toBe("w")
+    M.explore.fromDir = nil
+    expect(M._lavaExit()).toBe("nw")   -- no back known: sorted order wins
+    restore()
+  end)
+
+  it("picks the same door every time -- no pairs-order roulette", function()
+    room({ west = 0, northwest = 0, south = 0 }, nil)
+    local first = M._lavaExit()
+    for _ = 1, 10 do expect(M._lavaExit()).toBe(first) end
+    restore()
+  end)
+
+  -- Re-entering a room that has boiled us is never worth exploration credit.
+  it("the sweep will not route back into a lava room", function()
+    -- Do NOT visit room 60: arriving there would record the walked edge and the exit would
+    -- stop counting as unexplored, so the test would pass for the wrong reason.
+    room({ east = 60 }, nil)
+    M.explore.failed = {}
+    expect(M._nextExploreStep()).toBe("e")   -- normally worth exploring
+    M.explore.lavaRooms[60] = true
+    expect(M._nextExploreStep()).toBe(nil)   -- ...but not once it has boiled us
+    restore()
+  end)
+end)

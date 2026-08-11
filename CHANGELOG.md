@@ -2,6 +2,62 @@
 
 ---
 
+## 2026-08-11 - Boiling lava: leave by any door (v4.7.254)
+
+> "We need to move rooms if the room is lava." -- user, 2026-08-11
+
+```
+Molten lava bubbles and churns. ...
+You see exits leading east and northwest.
+You splash into boiling lava!
+Health lost: 5890 (unblockable).
+You continue to struggle in the boiling grasp of the lava as it eats away at your body.
+Health lost: 5890 (unblockable).
+```
+
+**5,890 unblockable per tick against the 10,939 HP in that prompt** -- 54% of the pool, twice
+over is a death, and *unblockable* means no shield, no barrier and no resistance changes it.
+Every other hazard in this module can be fought through or healed against; Ablaze is ~1,200 and
+merely gates the hover. This one cannot be traded with at all, so it gets the only unconditional
+"leave now" in the sweep.
+
+**This is the exception to the validated-route rule.** The escape ladder deliberately refuses to
+leave by an unvalidated exit (user decision, v4.7.243) because a wrong door there costs a move
+and some HP. Here staying costs half the health pool per tick, so any door beats the floor --
+including one we have never walked.
+
+`M.onLava` (explorer 008), fired by both lines via trigger `mnemosyne/064`:
+
+| | |
+|---|---|
+| Exit choice | back the way we came (provably not lava -- we just stood there) -> any planar exit not leading into a known lava room -> any planar exit -> `down` |
+| Attack hold | escape mode, so the next `queue addclearfull` cannot wipe the move |
+| Tactics | any swarm tactic in flight is reset -- a funnel is a plan for a room we can survive |
+| Repeat | re-sends every tick; an eaten move must be retried, and there is no budget worth preserving against a two-tick death |
+| No exit known | sends `ql` (the exits line is parsed) and says **MOVE MANUALLY** -- the one case the sweep cannot save us from |
+| Memory | the room is recorded, and `usableUnexplored` will not route back into it |
+
+**Both lines are used, deliberately.** The splash is the entry and the struggle is the tick;
+entering without the tick still puts us in the room, and the tick fires without an entry line
+when we were already standing in it.
+
+### A latent flaw found while testing
+
+The exit scan iterated `pairs`, so the same room could pick a **different door on different
+runs** -- unreproducible in exactly the situation where the log most needs to be readable
+afterwards. It also made the back-direction preference untestable, because whether it mattered
+was a coin flip. The scan is now sorted, which is what let two deliberate breaks be caught that
+had previously slipped through.
+
+### Tests
+
+**1309 -> 1319.** Back-direction preference, any-exit fallback, avoiding a known lava room,
+the no-exit warning, re-sending each tick, `roomLava` expiry, tower-only, deterministic
+ordering, and the sweep refusing to route back in. Three breaks confirmed the move, the
+preference and the sweep avoidance.
+
+---
+
 ## 2026-08-11 - A burst is not a rate (v4.7.253)
 
 The v4.7.243 damage watchdog had become a hair trigger: **"DYING FAST -- 83% and ~5.7s to

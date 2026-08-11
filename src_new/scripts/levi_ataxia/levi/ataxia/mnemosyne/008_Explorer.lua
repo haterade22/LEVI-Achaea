@@ -151,7 +151,11 @@ local function usableUnexplored(num)
     -- and walking one costs MOVE_TIMEOUT plus a retry before Room.WrongDir or the timeout
     -- condemns it. The geometry knows in advance, and only ever rejects a provable overflow.
     local fits = (MAP.exitFitsGrid == nil) or MAP.exitFitsGrid(num, d)
-    if not failed[d] and fits and (planar or (not hasPlanar and d == "down")) then
+    -- Never walk back into a room that has boiled us (v4.7.254). At 5890 unblockable a tick
+    -- there is no exploration value that pays for re-entering one.
+    local tgt = M._exitTarget and M._exitTarget(num, d)
+    local lava = tgt ~= nil and M.explore.lavaRooms[tgt] == true
+    if not failed[d] and fits and not lava and (planar or (not hasPlanar and d == "down")) then
       out[#out + 1] = d
     end
   end
@@ -229,6 +233,137 @@ function M._nextPatrolStep()
     end
   end
   return nil
+end
+
+-- ---------------------------------------------------------------------------
+-- LAVA -- THE ONE ROOM WE LEAVE BY ANY DOOR (v4.7.254)
+-- ---------------------------------------------------------------------------
+-- User, 2026-08-11: "We need to move rooms if the room is lava."
+--
+--   In the depths of a murky lake.
+--   Molten lava bubbles and churns. ...
+--   You see exits leading east and northwest.
+--   You splash into boiling lava!
+--   Health lost: 5890 (unblockable).
+--   ... You continue to struggle in the boiling grasp of the lava as it eats away at your body.
+--   Health lost: 5890 (unblockable).
+--
+-- FIVE THOUSAND EIGHT HUNDRED AND NINETY, UNBLOCKABLE, PER TICK, against the 10,939 HP in that
+-- prompt. That is 54% of the pool a tick: two of them is a death, and "unblockable" means no
+-- shield, no barrier and no resistance changes it. Every other hazard in this module can be
+-- fought through or healed against -- Ablaze is ~1,200 and only gates the hover. This one
+-- cannot be traded with at all, so it gets the only unconditional "leave now" in the sweep.
+--
+-- THIS IS THE EXCEPTION TO THE VALIDATED-ROUTE RULE. The escape ladder deliberately refuses to
+-- leave by an unvalidated exit (user decision, v4.7.243) because a wrong door there costs a
+-- move and some HP. Here staying costs half the health pool per tick, so ANY door beats the
+-- floor -- including one we have never walked.
+M.explore.lavaRooms = M.explore.lavaRooms or {}
+
+-- Where an exit leads, as a room key, or nil when we cannot tell. Works in both worlds: with
+-- honest ids the exit table carries the destination; under dementia the destination is an
+-- invention but the dead-reckoned cell is computable from our own position.
+function M._exitTarget(num, dir)
+  local r = MAP.rooms and MAP.rooms[num]
+  if not r then return nil end
+  if MAP.drActive and MAP.drActive() then
+    local off = MAP.OFFSETS and MAP.OFFSETS[dir]
+    if not (off and r.x and r.y) then return nil end
+    return MAP.drKey(r.x + off[1], r.y + off[2])
+  end
+  local dest = r.exits and r.exits[dir]
+  if type(dest) == "number" and dest > 0 then return dest end
+  return nil
+end
+
+-- The door to take out of lava. Ordered by what we KNOW rather than by what the sweep wants:
+--   1. back the way we came -- we were just standing there, so it is provably not lava;
+--   2. any planar exit whose destination is not a room we have already burned in;
+--   3. any planar exit at all.
+-- Non-planar is excluded for the usual reason (`up` climbs out of the grid), except that
+-- `down` stays eligible if it is genuinely all there is -- drowning beats boiling.
+function M._lavaExit()
+  local cur = MAP and MAP.current
+  local r = cur and MAP.rooms and MAP.rooms[cur]
+  if not r then return nil end
+
+  local back = MAP.normDir(M.explore.fromDir)
+  back = back and MAP.OPPOSITE and MAP.OPPOSITE[back]
+  if back and r.exits[back] ~= nil and MAP.OFFSETS[back] then
+    return MAP.shortDir(back)
+  end
+
+  -- SORTED, not pairs order. An unordered scan means the same room can pick a different door
+  -- on different runs, which makes the behaviour unreproducible in exactly the situation where
+  -- we most want to be able to read the log afterwards -- and it made the back-direction
+  -- preference above untestable, because whether it mattered was a coin flip.
+  local dirs = {}
+  for d in pairs(r.exits) do dirs[#dirs + 1] = d end
+  table.sort(dirs)
+
+  local fallback
+  for _, d in ipairs(dirs) do
+    if MAP.OFFSETS[d] then
+      local tgt = M._exitTarget(cur, d)
+      if not (tgt and M.explore.lavaRooms[tgt]) then return MAP.shortDir(d) end
+      fallback = fallback or MAP.shortDir(d)
+    elseif d == "down" then
+      fallback = fallback or MAP.shortDir(d)
+    end
+  end
+  return fallback
+end
+
+-- Fired by the lava lines (triggers mnemosyne/064). Idempotent per tick: the struggle line
+-- repeats every tick and each one re-sends, because a move that was eaten must be retried --
+-- there is no budget worth preserving when the alternative is dying in place.
+function M.onLava()
+  if not inMnem() then return end
+  ataxiaTemp = ataxiaTemp or {}
+  local nowT = (getEpoch and getEpoch()) or 0
+  local first = not ataxiaTemp.mnemLavaAt
+  ataxiaTemp.mnemLavaAt = nowT
+  local cur = MAP and MAP.current
+  if cur then M.explore.lavaRooms[cur] = true end
+
+  -- Hold the attack dispatcher: every attack sends `queue addclearfull`, which would wipe the
+  -- move we are about to queue. Same rule as every other queued non-attack action.
+  if M.swarm and M.swarm.escapeOn then pcall(M.swarm.escapeOn, "LAVA") end
+
+  -- Abandon any tactic in flight. A funnel or a pull is a plan for a room we can survive.
+  if M.swarm and M.swarm.state and M.swarm.state ~= "idle" and M.swarm.reset then
+    pcall(M.swarm.reset, "lava")
+  end
+
+  local dir = M._lavaExit()
+  if not dir then
+    -- No exit we know of. Ask -- the exits line is parsed (005) and QL is free -- and say so,
+    -- because this is the one situation where the sweep genuinely cannot save us.
+    if (nowT - (tonumber(ataxiaTemp.mnemLavaQlAt) or 0)) >= 2 then
+      ataxiaTemp.mnemLavaQlAt = nowT
+      send("ql", false)
+    end
+    M._exploreEcho("<indian_red>LAVA and no exit known<reset> -- looking. <a_darkmagenta>MOVE MANUALLY.")
+    return
+  end
+
+  local sep = (ataxia.settings and ataxia.settings.separator) or ";"
+  send("queue addclear free stand" .. sep .. dir)
+  M._tacticalArm(dir) -- so a lost move times out without condemning a real exit
+  if first then
+    M._exploreEcho("<indian_red>BOILING LAVA<reset> (5890/tick, unblockable) -- leaving by <cyan>"
+      .. dir .. "<reset> immediately.")
+  end
+end
+
+-- True while lava is still eating us. Lazy expiry like roomAblaze: leaving the room stops the
+-- struggle line, and no "you climb out" line has ever been captured.
+function M.roomLava()
+  local at = ataxiaTemp and tonumber(ataxiaTemp.mnemLavaAt)
+  if not at then return false end
+  local nowT = (getEpoch and getEpoch()) or 0
+  if (nowT - at) > 6 then ataxiaTemp.mnemLavaAt = nil; return false end
+  return true
 end
 
 -- ---------------------------------------------------------------------------
@@ -995,5 +1130,6 @@ M._explLoadH = registerAnonymousEventHandler("sysLoadEvent", function()
   M.explore.pausedAtBoon = false
   M.explore.moving = false
   M.explore.tacticalMove = false
+  M.explore.lavaRooms = {}
   M.explore._prevBasher = nil
 end)
