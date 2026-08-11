@@ -73,6 +73,60 @@ end
 -- Graph
 -- ---------------------------------------------------------------------------
 
+-- ---------------------------------------------------------------------------
+-- THE RIPPLE IS 4x4, AND THAT IS EVIDENCE (v4.7.249)
+-- ---------------------------------------------------------------------------
+-- User, 2026-08-11: "The dementia mapping in the wade isnt working right. We KNOW the exits
+-- we have available. We know it is a 4 X 4 so we should know."
+--
+-- DEMENTIA (Creville's Legacy, a common boon -- "You attack 20% faster but you have incurable
+-- dementia") hallucinates the room wholesale. A live capture:
+--
+--   Nothing can be seen here by that name.
+--   ... [ dem ]
+--   Meadows east of the Pachacacha.
+--   ... The area is ablaze! Lokash stands here, engrossed in some administrative task.
+--   You see exits leading north and west.
+--   You have no idea where you are.
+--   Your environment conforms to that of Urban.
+--   You are in wading the Mnemosyne.
+--
+-- A real Achaea room name, a real room NUMBER in the prompt (79390), an NPC that is not
+-- there, and a pair of exits -- none of it true, and all of it arriving through the same
+-- gmcp channel the map trusts. Until now nothing could tell it apart: `MAP.onRoom` recorded
+-- whatever exits it was handed and `relayout` placed rooms wherever those exits implied,
+-- so one demented room could stretch the layout across the map and strand the sweep.
+--
+-- The 4x4 is the one fact dementia cannot fake, and it was known ONLY to the renderer
+-- (006's `LEVEL = 4`) -- the graph never used it. It is a hard geometric constraint: every
+-- room of a ripple fits inside a 4x4 box, so any exit whose destination would push the
+-- bounding box past 4 cells on either axis CANNOT be a real exit of this ripple.
+--
+-- It only ever rejects what it can PROVE impossible: with few rooms placed the box is small,
+-- nothing exceeds it, and every exit is allowed. The check tightens as the ripple is explored,
+-- which is exactly when dementia has had time to inject something.
+MAP.GRID = 4
+
+-- Would stepping `dir` out of room `num` land inside the ripple's 4x4?
+-- TRUE when it fits, when the direction is non-planar (up/down carry no offset -- the
+-- holding room's descent is the one legitimate one), or whenever we cannot tell. Only a
+-- provable overflow returns false: never reject on ignorance, or a half-mapped ripple would
+-- refuse its own real exits.
+function MAP.exitFitsGrid(num, dir)
+  local rooms = MAP.rooms or {}
+  local r = rooms[num]
+  if not r or r.x == nil or r.y == nil then return true end
+  local off = MAP.OFFSETS and MAP.OFFSETS[dir]
+  if not off then return true end -- non-planar: no 2-D claim to check
+  local tx, ty = r.x + off[1], r.y + off[2]
+  local minx, maxx, miny, maxy = MAP.bounds()
+  if not minx then return true end
+  local g = tonumber(MAP.GRID) or 4
+  local w = math.max(maxx, tx) - math.min(minx, tx) + 1
+  local h = math.max(maxy, ty) - math.min(miny, ty) + 1
+  return w <= g and h <= g
+end
+
 function MAP.reset()
   MAP.rooms = {} -- [num] = room record
   MAP.order = {} -- visit order (nums)
@@ -180,10 +234,26 @@ function MAP.relayout()
     end
   end
 
+  -- BFS, BOUNDED BY THE 4x4 (v4.7.249). A dementia-faked exit is a link like any other, so
+  -- without this one lie drags the layout across the map and every room placed through it is
+  -- in the wrong cell. Refusing a placement that would burst the box keeps the lie OUT of the
+  -- coordinates entirely: the room simply stays unplaced (invisible on the mini-map, and
+  -- MAP.path already tolerates unplaced rooms) instead of corrupting the rooms around it.
+  --
+  -- The running box is tracked over VISITED rooms only, matching MAP.bounds() -- propagation
+  -- stubs are not drawn and must not stretch the grid.
   local function bfs(anchor)
     for _, r in pairs(rooms) do r.x, r.y = nil, nil end
     if not (anchor and rooms[anchor]) then return end
+    local g = tonumber(MAP.GRID) or 4
+    local minx, maxx, miny, maxy
+    local function note(r)
+      if not r.visited then return end
+      minx = math.min(minx or r.x, r.x); maxx = math.max(maxx or r.x, r.x)
+      miny = math.min(miny or r.y, r.y); maxy = math.max(maxy or r.y, r.y)
+    end
     rooms[anchor].x, rooms[anchor].y = 0, 0
+    note(rooms[anchor])
     local q, head = { anchor }, 1
     while head <= #q do
       local cur = q[head]; head = head + 1
@@ -191,8 +261,18 @@ function MAP.relayout()
       for _, e in ipairs(adj[cur] or {}) do
         local nb = rooms[e.to]
         if nb and nb.x == nil then
-          nb.x, nb.y = cr.x + e.dx, cr.y + e.dy
-          q[#q + 1] = e.to
+          local nx, ny = cr.x + e.dx, cr.y + e.dy
+          local fits = true
+          if nb.visited and minx then
+            local w = math.max(maxx, nx) - math.min(minx, nx) + 1
+            local h = math.max(maxy, ny) - math.min(miny, ny) + 1
+            fits = (w <= g and h <= g)
+          end
+          if fits then
+            nb.x, nb.y = nx, ny
+            note(nb)
+            q[#q + 1] = e.to
+          end
         end
       end
     end

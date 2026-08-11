@@ -2903,3 +2903,93 @@ describe("ice-slip recovery during a tactical retreat (v4.7.243)", function()
     restore()
   end)
 end)
+
+-- ============================================================================
+-- v4.7.249 -- the ripple is 4x4, and that is evidence against dementia
+-- ============================================================================
+--
+-- User, 2026-08-11: "We KNOW the exits we have available. We know it is a 4 X 4 so we should
+-- know." Dementia (Creville's Legacy) hallucinates the room wholesale -- a real Achaea room
+-- name, a real room number, an NPC that is not there, and invented exits, all arriving down
+-- the same gmcp channel the map trusts.
+describe("the 4x4 grid constrains what can be a real exit", function()
+  local M = ataxia.mnemosyne
+  local MAP = ataxia.mnemosyne.map
+
+  -- A west-to-east corridor of four rooms spans the whole grid: nothing further east or
+  -- west can exist, whatever the game claims.
+  local function fullWidthRow()
+    MAP.reset()
+    MAP.onRoom(1, "A", { east = 2 }, nil)
+    MAP.onRoom(2, "B", { west = 1, east = 3 }, "east")
+    MAP.onRoom(3, "C", { west = 2, east = 4 }, "east")
+    MAP.onRoom(4, "D", { west = 3 }, "east")
+  end
+
+  it("allows any exit while the ripple is barely mapped", function()
+    MAP.reset()
+    MAP.onRoom(1, "A", { north = 0, east = 0, south = 0, west = 0 }, nil)
+    expect(MAP.exitFitsGrid(1, "north")).toBeTrue()
+    expect(MAP.exitFitsGrid(1, "west")).toBeTrue()
+  end)
+
+  it("rejects the exit that would make the row FIVE wide", function()
+    fullWidthRow()
+    local minx, maxx = MAP.bounds()
+    expect(maxx - minx + 1).toBe(4)          -- the row already spans the grid
+    expect(MAP.exitFitsGrid(4, "east")).toBeFalse()
+    expect(MAP.exitFitsGrid(1, "west")).toBeFalse()
+    -- ...but the perpendicular axis is still empty, so north/south stay legal
+    expect(MAP.exitFitsGrid(4, "north")).toBeTrue()
+  end)
+
+  it("never rejects a non-planar exit -- the holding room's descent is real", function()
+    fullWidthRow()
+    expect(MAP.exitFitsGrid(4, "down")).toBeTrue()
+    expect(MAP.exitFitsGrid(4, "up")).toBeTrue()
+  end)
+
+  it("never rejects on ignorance (unplaced room, unknown room)", function()
+    fullWidthRow()
+    expect(MAP.exitFitsGrid(999, "east")).toBeTrue()
+  end)
+
+  -- THE ACTUAL BUG: a faked link used to drag the layout across the map, putting every room
+  -- placed through it in the wrong cell. Now the lie simply fails to place.
+  it("relayout keeps the layout inside the 4x4 despite a faked exit", function()
+    fullWidthRow()
+    -- Dementia invents a fifth room east of D, and reports it as a real destination.
+    MAP.onRoom(5, "Meadows east of the Pachacacha", { west = 4 }, "east")
+    MAP.rooms[4].exits.east = 5
+    MAP.relayout()
+    local minx, maxx, miny, maxy = MAP.bounds()
+    expect(maxx - minx + 1 <= MAP.GRID).toBeTrue()
+    expect(maxy - miny + 1 <= MAP.GRID).toBeTrue()
+  end)
+
+  it("the sweep will not spend a move on an impossible exit", function()
+    fullWidthRow()
+    M.explore.failed = {}
+    -- D reports an east exit it cannot have; the only real work is elsewhere.
+    MAP.rooms[4].exits.east = 0
+    MAP.current = 4
+    local step = M._nextExploreStep()
+    expect(step).toBe(nil) -- not "e": the grid says east cannot exist
+  end)
+
+  it("still sweeps a legitimate unexplored exit on the free axis", function()
+    fullWidthRow()
+    M.explore.failed = {}
+    MAP.rooms[4].exits.north = 0   -- perpendicular axis is empty, so this is plausible
+    MAP.current = 4
+    expect(M._nextExploreStep()).toBe("n")
+  end)
+
+  it("GRID is configurable rather than hardcoded in the check", function()
+    fullWidthRow()
+    expect(MAP.exitFitsGrid(4, "east")).toBeFalse()
+    MAP.GRID = 5
+    expect(MAP.exitFitsGrid(4, "east")).toBeTrue()
+    MAP.GRID = 4
+  end)
+end)

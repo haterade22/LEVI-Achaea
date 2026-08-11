@@ -2,6 +2,78 @@
 
 ---
 
+## 2026-08-11 - The ripple is 4x4, and that is evidence against dementia (v4.7.249)
+
+> "The dementia mapping in the wade isnt working right. We KNOW the exits we have available.
+> We know it is a 4 X 4 so we should know." -- user, 2026-08-11
+
+Dementia (**Creville's Legacy**, a common boon: *"You attack 20% faster but you have incurable
+dementia"*) hallucinates the room wholesale. From the capture:
+
+```
+Nothing can be seen here by that name.
+... [ dem ]
+Meadows east of the Pachacacha.
+... The area is ablaze! Lokash stands here, engrossed in some administrative task.
+You see exits leading north and west.
+You have no idea where you are.
+Your environment conforms to that of Urban.
+You are in wading the Mnemosyne.
+```
+
+A real Achaea room name, a real room **number** in the prompt (79390), an NPC who is not
+there, and a pair of exits -- none of it true, and **all of it arriving through the same gmcp
+channel the map trusts**. `MAP.onRoom` recorded whatever exits it was handed and `MAP.relayout`
+placed rooms wherever those exits implied, so a single demented room could stretch the layout
+across the map and put every room reached through it in the wrong cell.
+
+### The fix is the user's own observation
+
+The 4x4 is the one fact dementia cannot fake -- and it was known **only to the renderer**
+(`006`'s `LEVEL = 4`). The graph never used it.
+
+`MAP.GRID = 4` and `MAP.exitFitsGrid(num, dir)`: every room of a ripple fits inside a 4x4 box,
+so any exit whose destination would push the bounding box past 4 cells on either axis **cannot
+be a real exit of this ripple**.
+
+It only ever rejects what it can *prove* impossible:
+
+| Situation | Answer |
+|---|---|
+| few rooms placed, box still small | allowed -- nothing is provable yet |
+| room has no coordinates, or is unknown | allowed -- never reject on ignorance |
+| non-planar (`up`/`down`) | allowed -- no 2-D claim to check; the holding room's descent is real |
+| would make the layout 5 wide or 5 tall | **rejected** |
+
+The check tightens as the ripple is explored, which is exactly when dementia has had time to
+inject something.
+
+Two consumers:
+
+- **`MAP.relayout`'s BFS is now bounded.** A faked exit is a link like any other; refusing a
+  placement that would burst the box keeps the lie out of the coordinates entirely. The room
+  simply stays unplaced (invisible on the mini-map, and `MAP.path` already tolerates unplaced
+  rooms) instead of corrupting the rooms around it.
+- **`usableUnexplored` will not spend a move on an impossible exit.** Walking one costs
+  `MOVE_TIMEOUT` plus a retry before `Room.WrongDir` or the timeout condemns it; the geometry
+  knows in advance.
+
+`MAP.GRID` is a field rather than a literal, so if a ripple ever turns out not to be 4x4 the
+constraint relaxes with one assignment instead of a patch.
+
+### Tests
+
+**1272 -> 1280.** A full-width four-room row (which by definition spans the grid) proves the
+east/west rejection while leaving the perpendicular axis legal; plus the barely-mapped case,
+non-planar exits, unknown rooms, the relayout containment against a faked fifth room named
+after the one in the log, the sweep declining an impossible exit while still taking a
+legitimate one, and `GRID` being configurable.
+
+Three deliberate breaks confirmed each: `exitFitsGrid` always true, `relayout` unbounded (the
+original bug), and the explorer ignoring the grid.
+
+---
+
 ## 2026-08-11 - Uruz on the ground in a crowded room (v4.7.248)
 
 > "in rooms of 3 or more denizens, the first thing we should do is sketch uruz on ground for

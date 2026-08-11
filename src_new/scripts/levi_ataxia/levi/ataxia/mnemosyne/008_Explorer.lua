@@ -145,7 +145,13 @@ local function usableUnexplored(num)
   local out = {}
   for _, d in ipairs(MAP.unexploredExits(num) or {}) do
     local planar = MAP.OFFSETS and MAP.OFFSETS[d]
-    if not failed[d] and (planar or (not hasPlanar and d == "down")) then
+    -- An exit that would leave the ripple's 4x4 cannot be real, so do not spend a move on it
+    -- (v4.7.249). Under DEMENTIA the game reports invented exits through the same gmcp channel
+    -- as the true ones -- "You see exits leading north and west" in a room that has neither --
+    -- and walking one costs MOVE_TIMEOUT plus a retry before Room.WrongDir or the timeout
+    -- condemns it. The geometry knows in advance, and only ever rejects a provable overflow.
+    local fits = (MAP.exitFitsGrid == nil) or MAP.exitFitsGrid(num, d)
+    if not failed[d] and fits and (planar or (not hasPlanar and d == "down")) then
       out[#out + 1] = d
     end
   end
