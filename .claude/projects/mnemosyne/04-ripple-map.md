@@ -4,7 +4,9 @@ Every Mnemosyne ripple ("level") is a fresh room layout, so the map builds a per
 
 ## Data model
 
-Each room is a record keyed by its gmcp room `num`:
+Each room is a record keyed by its gmcp room `num` — **except under dementia, where the key is
+our own dead-reckoned position instead** (`dr:2,1`; see *Dementia* below, v4.7.250). Everything
+downstream treats the key as opaque, so both worlds use the same structures:
 
 | Field | Type | Meaning |
 |-------|------|---------|
@@ -102,6 +104,65 @@ Before propagation coerced dest ids, exit destinations (strings) were compared a
 | `MAP.bounds()` | `minx, maxx, miny, maxy` | **VISITED rooms only**, so unplaced/stub coords don't stretch the grid |
 
 `MAP.path` walks the `edges` graph (never `exits`), reconstructs the route via a `from_of` predecessor map, and emits each hop through `shortDir` so the result is directly sendable (e.g. `{"w","s"}`). Restricting `bounds` to `r.visited` keeps the drawn window tight even though stubs carry coordinates.
+
+## Dementia — when the room itself is a lie (v4.7.249, v4.7.250, v4.7.251)
+
+Creville's Legacy is a **common** boon: *"You attack 20% faster but you have incurable
+dementia."* It hallucinates the room wholesale — a real Achaea room name, a real room **number**,
+NPCs who are not there, and invented exits — and all of it arrives through the same gmcp channel
+the map trusts. There is no field that says "this is fake".
+
+### 1. The 4×4 is evidence (`MAP.GRID`, `MAP.exitFitsGrid`)
+
+Every ripple fits in a 4×4 box, so an exit whose destination would push the bounding box past 4
+cells on either axis **cannot be a real exit of this ripple**. That fact previously lived only
+in the renderer (`006`'s `LEVEL = 4`); the graph never used it.
+
+It rejects only what it can *prove*: an unplaced or unknown room, a non-planar `up`/`down` (the
+holding room's descent is real), and a box still smaller than the grid all pass. Never reject on
+ignorance, or a half-mapped ripple refuses its own real exits. Consumed by `relayout`'s BFS
+(a placement that would burst the box is refused, so the fake link never enters the coordinates)
+and by the explorer's `usableUnexplored` (never spend a move + `MOVE_TIMEOUT` + retry on an exit
+the geometry already rules out).
+
+### 2. Dead reckoning — the room id is also a lie (`MAP.drActive`, `MAP.drArrive`)
+
+The id is re-invented on every look, so keying by it is broken at the root: every look mints a
+new room record, `MAP.current` changes without us moving (so `MAP.current ~= explore.fromRoom`
+reads TRUE for a plain `ql` and never FALSE), and exit destinations never match any key we hold.
+
+The one reliable input is **our own movement** — we know which direction we sent, and every way
+a move can fail has its own line (`Room.WrongDir`, the wall line, the ice slip, the move
+timeout). So position is dead-reckoned and the key becomes that position.
+
+Deliberately a **key swap, not a parallel map**: `MAP.rooms`, `room.edges`, `MAP.path`,
+`unexploredExits` and the whole sweep treat the key as opaque and keep working unchanged.
+
+| Piece | Behaviour |
+|---|---|
+| `MAP.drActive()` | dementia up **and** in the tower (`MAP.drForce` overrides in tests) |
+| `MAP.drArm(dir)` / `drDisarm()` | the reckoning is armed for **exactly one step** when a move is sent, consumed by the first event after it |
+| `MAP.drArrive(exits)` | the whole arrival: advance, record. **Single owner** — runs from 005's `gmcp.Room` handler, registered before the explorer's, so it still sees `explore.moving` |
+| `MAP.relayout` | coordinates parsed straight back out of the key; no BFS to mislead |
+| `MAP.reset` | a new ripple restarts the reckoning at its own origin |
+
+**Why the arm flag.** v4.7.250 first replaced the arrival test with "any room event while a move
+is in flight". That is the same bug in a new hat: several room events land inside one move's
+window, so the move ended early *and* the reckoning advanced again each time. The live log shows
+`room clear -> moving e` eight times in five seconds. A token that gets **spent** is what
+distinguishes the first event after a move from the rest; a predicate over current state cannot.
+
+### 3. Track by exits (`MAP.parseExitsLine`, `MAP.onExitsLine`)
+
+`You see exits leading northeast, southeast, and south.` is the only honest exit reading under
+dementia: gmcp pairs each direction with an invented **destination**, while this line carries
+directions and nothing else — exactly the half that survives.
+
+- **Replaces** the exit set, never merges. A direction that has stopped being reported is one the
+  room does not have, and leaving it in is what sends the sweep into a wall.
+- Trigger `mnemosyne/063` is a one-line adapter so the parse stays unit-testable.
+- **QL on demand**: landing in a cell whose exits are unknown, the explorer sends `ql`. Free, one
+  line per genuinely new cell.
 
 ## Reset & re-seed
 

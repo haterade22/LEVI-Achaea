@@ -502,6 +502,97 @@ harder we cured the safer we looked. **An absolute threshold does not survive a 
 `maxhp * 0.6` in 5s was reachable at 5,000 HP and unreachable at 18,700. Prefer a projection
 (time-to-death) whose units mean the same thing at every scale.
 
+## When a source can lie, check the invariant it cannot violate (v4.7.249-251)
+
+Dementia feeds the Mnemosyne map a fake room name, a fake room NUMBER, fake NPCs and fake
+exits, all through the same gmcp channel as the truth. There is no field to test for "is this
+real". But every ripple is a 4x4, so an exit that would make the layout 5 wide is provably not
+an exit of this ripple; and our own movement is something the game cannot fake, so position
+dead-reckoned from the directions WE sent is a key nothing can forge.
+
+Three things made it work rather than merely sound clever:
+1. **Reject only what is PROVABLE.** Unplaced room, unknown room, non-planar direction, box
+   still smaller than the grid -- all pass. A check that rejects on ignorance makes a
+   half-mapped ripple refuse its own real exits, which is worse than the bug.
+2. **Apply it where the lie ENTERS the model.** Bounding `relayout`'s BFS keeps the fake link
+   out of the coordinates entirely; filtering only the navigation choice would have left the
+   map corrupt but the sweep polite.
+3. **Swap the KEY, do not build a parallel model.** Everything downstream already treated the
+   room key as opaque, so dead reckoning cost one function instead of a second navigation layer.
+
+Corollary: the 4x4 was hardcoded in the RENDERER and nowhere else. **A constant that describes
+the DOMAIN belongs where decisions are made, not only where pixels are drawn.**
+
+## "Is this the event I am waiting for?" needs a token, not a predicate (v4.7.251)
+
+Two successive releases got the arrival test wrong the same way. "The room number changed" is
+useless when the number is re-invented; "any room event while a move is in flight" is useless
+when several events land inside one move's window. Both are predicates over current state, and
+both fire every time.
+
+The fix is a token that gets SPENT: armed when the move is sent, consumed by the first event
+after it. Still armed = not yet credited = this is the one.
+
+Watch for the second-order damage too. Ending the move early was visible (a move loop); the
+same events silently advancing the dead reckoning left the map confidently wrong, which is
+worse than blank. **When a bug makes something fire N times, check what else that path
+increments.**
+
+## A falsy guard carries a REASON -- do not let the fall-through flatten it (v4.7.252)
+
+```lua
+local dir = (not S.moveLocked()) and (spent < budget) and mnemRollHide and S._panicDir()
+if dir then ... end
+-- fall through: "nowhere to go -- hand back and fight"
+```
+
+Four conditions collapse into one falsy value and the else-branch gives them all one meaning.
+But "a tumble is already in flight" means WAIT while "no route" means GIVE UP -- opposite
+actions. The recovery was abandoned and the basher released mid-escape.
+
+When several conditions are `and`-ed into one value and the else-branch does something
+irreversible, check whether every one of them really implies that branch. If any means "not
+yet" rather than "never", it needs its own early return.
+
+## A burst is not a rate, and an unreadable alarm is not an alarm (v4.7.253)
+
+A damage watchdog divided its window total by the span between oldest and newest sample,
+clamped to a MINIMUM of 1s so a young fight would not read low. Blows landing together were
+then reported at several times the sustained rate, and the alarm fired at 83% health on every
+prompt. **When converting a sum to a rate, the divisor must be a real measurement window, not
+the incidental spacing of the samples** -- clamp it UP, which damps a burst while leaving
+genuinely sustained damage untouched.
+
+Its echo sat above the action's cooldown, so it printed whenever the condition held rather than
+when we acted -- dozens of identical lines burying everything else in the log. **Put the
+notification behind the same gate as the action it announces.**
+
+## An affliction whose cost is a DRAIN should not gate WAITING (v4.7.252)
+
+`_afflicted()` gates the Mnemosyne recovery: do not go back in until healed and clean. It
+treated manaleech like any other affliction, so a hover with manaleech up could never pass and
+always ran to its 60s cap -- while manaleech drained the whole time.
+
+The direction of the cost is the test: blindness or a broken limb is a state that WAITING
+fixes; a leech is a state that waiting PAYS FOR. Only the first belongs in a gate whose action
+is "stand still longer".
+
+## Assuming a setup command worked is how you corrupt user data (v4.7.247)
+
+`curingset new X` -> `curingset switch X` -> 55 `curing priority` writes, on timers, with no
+check between them. At the account's set cap the first two fail and the writes land in whatever
+set was already active -- the user's real PvP priorities -- and the installer reported success.
+
+1. **Verify the precondition before the irreversible part**, and re-read to confirm a `create`
+   actually took.
+2. **Unknown is a third answer.** "Could not read the list" must not collapse into "does not
+   exist" (-> create) or "exists" (-> write).
+3. **Success flags must mean what they say.** `installed = true` meant "we ran the installer",
+   not "the profile exists", so the status screen lied for as long as it was wrong.
+
+Corollary: a command sent with `send(cmd, false)` is invisible, so its rejection is invisible
+too. If you silence a command, you owe the user an explicit report of what happened.
+
 ## Quality Gates (Hooks)
 
 Hooks in `.claude/hooks/` run automatically and block operations that fail validation:

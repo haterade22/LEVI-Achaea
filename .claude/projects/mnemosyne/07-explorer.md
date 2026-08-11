@@ -615,6 +615,37 @@ The log measures the cost: cancel at **11:40:41.115**, retry at **11:40:45.938**
 
 **A fallback timer is for when the game says NOTHING. When it names the failure, use it.**
 
+### A tumble in flight is not "nowhere to go" (v4.7.252)
+
+The mid-recovery re-tumble computed its direction as
+
+```lua
+local dir = (not S.moveLocked()) and (spent < budget) and mnemRollHide and S._panicDir()
+```
+
+and the fall-through below treated a falsy `dir` as *we cannot leave* — handing back to the
+basher. So while a tumble was **mid-air** the v4.7.243 move lock made `dir` falsy and the
+recovery was abandoned, the attack hold cleared, and we fought on with the escape still
+resolving. The log times it: tumble east at 13.736, "nowhere to go — handing back" at 14.841,
+two attack rounds, then "You tumble out of the room."
+
+Four conditions were `and`-ed into one value and the else-branch gave them all the same meaning
+— but **"already leaving" means WAIT and "no route" means GIVE UP**. The lock now consumes the
+tick and re-schedules; a genuine dead end still hands back, because standing attack-gated while
+something hits us is the one thing worse than trading.
+
+### Manaleech must not hold a recovery (v4.7.252)
+
+`manaleech` is a real affliction at PvP priority 13 — under the PARKED floor, so `parkedAff`
+did not excuse it. While it was up `S._afflicted()` was permanently TRUE, `S._reenterReady()`
+could never pass, and **every hover burned its full 60s cap**. In the tower it is re-applied
+faster than it is cured, so that is not a wait that ends.
+
+It is now in `AFF_IGNORE` beside the kept defences, and the reasoning generalises: the cost runs
+the *opposite* way from every other affliction there. Blindness or a broken limb is a state that
+waiting **fixes**; a leech is a state that waiting **pays for**. Only the first belongs in a gate
+whose action is "stand still longer" — especially as mana is a kill condition for several routes.
+
 ### Escape mode (v4.7.243)
 
 > "We should've stopped attacking here and put a priority on leaving the room." — user, 2026-08-10

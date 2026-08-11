@@ -1,5 +1,17 @@
 # Basher Architecture
 
+> **Curing sets are capped and the installer used to assume otherwise (v4.7.247).** The PvE
+> bash curing profile switches to `ataxia.settings.bashcuring.setname` on every basher enable.
+> `ataxia/009_Curingset_State.lua` parses `CURINGSET LIST` (temp triggers only — a set-name row
+> is a bare lowercase word and would be a ruinous permanent trigger) into `ataxia.curingsets`:
+> ordered list, per-name **counts** so duplicates stay visible, the `(current)` marker, and
+> used/allowed. Queries answer **nil = unknown** as a third state; a caller reading unknown as
+> "no" creates a set that already exists (burning one of a hard-capped 22) or refuses one that
+> does. `ataxia_bashInstallDecide` returns proceed/create/**abort**, an unreadable list aborts
+> rather than falling through to create, and `create` re-reads the list to VERIFY before writing
+> ~55 priorities — which at the cap used to land in the user's live PvP set while `installed`
+> was set true regardless. Command: `curingsets`. Full detail in `memory/curing.md`.
+
 ## State Machine
 
 The basher has 7 states controlled by flag combinations:

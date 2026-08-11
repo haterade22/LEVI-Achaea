@@ -54,12 +54,38 @@ reasons:
 |---|---|
 | Feed | `bashStats_recordIncoming` → `ataxiaBasher_recordIncoming` (trigger `351_Health_Lost_By_Type`) — the damage **before** healing |
 | Old feed | kept as a floor in its own window (`ataxiaBasher_dmgSamples`), since the type line does not exist everywhere |
-| Combination | `ataxiaBasher_incomingRate()` takes whichever window reports MORE, divided by the **elapsed span** (not the nominal 5s, so a 3s-old fight reads at its real rate) |
+| Combination | `ataxiaBasher_incomingRate()` takes whichever window reports MORE, divided by the elapsed span **clamped UP to `ataxiaBasher_dmgMinSpan` (3s)** |
 | Test | time to death: `hp / rate <= ataxiaBasher.dangerTTL` (default **6s**) |
 | Legacy test | kept as an OR, so this can only be *more* sensitive than before |
 | Also called from | `S.onVitals` (`mnemosyne/009`), which runs every prompt and reads no holds |
 
 `ataxiaBasher_secondsToLive()` exposes the projection for display/diagnostics.
+
+**A burst is not a rate (v4.7.253).** v4.7.243 clamped that divisor to a *minimum* of one
+second, so a fight three seconds old would read at its true rate rather than three fifths of
+it. Correct for sustained damage, badly wrong for a burst: blows landing together were divided
+by the 1s floor and reported as several times the sustained rate — and in a crowded room every
+round looks like that. Worked against a live round (925 magical + 1384 cold at the same
+instant, 13,678 HP):
+
+| Divisor | Rate | Time to live | Result |
+|---|---|---|---|
+| 1s (old) | 2,309 HP/s | 5.9s | **trips** |
+| 3s (new) | 770 HP/s | 17.8s | quiet |
+
+The alarm had become one that fired on essentially every prompt at 60–83% HP, with the escape
+ladder thrashing between rooms and, in one log, abandoning a fight we were winning. Clamping
+the divisor **up** to a real measurement window damps a burst to its honest contribution while
+leaving genuinely sustained damage untouched — its samples really do span the window, so
+2,150 HP/s still reports 2,150 HP/s and still trips.
+
+**Both alarms are throttled (v4.7.253).** `DYING FAST` sat *above* the emergency cooldown in
+`S.onVitals`, so it printed whenever the condition held rather than when we acted — dozens of
+duplicate lines per fight. It now prints only after the cooldown gate passes and only when the
+*rate* (not the HP threshold) triggered the escape. The no-flee `DANGER: … fighting on` echo is
+throttled to 5s, because it is evaluated on the attack path and otherwise printed every round
+of a fight we had already decided to stand and fight. **An alarm nobody can read past is not an
+alarm.**
 
 Time-to-death is the only figure that means the same thing at every pool size: against 2,150 HP/s
 it trips at ~12,000 HP — roughly eleven thousand HP earlier than we died — and it does not need
@@ -327,6 +353,7 @@ cloak refuses while prone, and has a 50% chance to eat the charge for nothing.
 | Shield duration (default) | 3.1s | `shieldTimerDefault` |
 | Damage rate window | 5s | No (`ataxiaBasher_dmgWindowSec`) |
 | Danger time-to-death floor | 6s | Yes (`ataxiaBasher.dangerTTL`) |
+| Damage-rate minimum span | 3s | Yes (`ataxiaBasher_dmgMinSpan`) |
 | Throttle pause | 2s | No |
 | Max attacks/sec | 5 | No |
 
