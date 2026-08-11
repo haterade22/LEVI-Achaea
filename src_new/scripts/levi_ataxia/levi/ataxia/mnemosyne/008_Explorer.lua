@@ -236,6 +236,96 @@ function M._nextPatrolStep()
 end
 
 -- ---------------------------------------------------------------------------
+-- A BOSS THAT RUNS AWAY (v4.7.255)
+-- ---------------------------------------------------------------------------
+-- User, 2026-08-11: "When fighting this boss, we need to follow him out and continue
+-- attacking."
+--
+--   Lyaeus, the travelling bard flails in panic.
+--   His fingers plucking a plaintive melody on his lyre, a satyri bard strolls out to the
+--   southeast, the sorrowful music gradually fading in his wake.
+--
+-- Two lines, and they name him DIFFERENTLY: the panic line uses the boss's proper name and the
+-- departure line uses the generic denizen description. Neither alone is enough -- the panic
+-- line says WHO but not where, the departure line says WHERE but, under its generic name,
+-- could be any wandering denizen. So the panic latches the identity and the next departure
+-- within PANIC_WINDOW supplies the direction.
+--
+-- Boss ripples end when the boss dies, so a boss that walks out is not a fight we can decline:
+-- leaving him alone means the ripple never closes. That is the opposite of every other "should
+-- we move?" decision in this module, which is why it gets its own path rather than a flag on
+-- the sweep.
+local PANIC_WINDOW = 6   -- seconds a panic stays fresh enough to explain a departure
+local MAX_CHASES = 4     -- per ripple; a boss kiting us across the grid is its own hazard
+
+-- Do the panicking name and the ripple's Objective boss refer to the same creature? Loose on
+-- purpose: the Objective line and the room line rarely word a denizen identically. When we do
+-- not know the boss at all we allow it -- something we were fighting just panicked, and that
+-- is the case the user is describing.
+function M._isBossName(name)
+  local boss = M.run and M.run.boss
+  if type(boss) ~= "string" or boss == "" then return true end
+  if type(name) ~= "string" or name == "" then return false end
+  local a, b = name:lower(), boss:lower()
+  return a:find(b, 1, true) ~= nil or b:find(a, 1, true) ~= nil
+end
+
+function M.onDenizenPanic(name)
+  if not inMnem() then return end
+  if not M._isBossName(name) then return end
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.bossPanicAt = (getEpoch and getEpoch()) or 0
+  ataxiaTemp.bossPanicName = name
+end
+
+-- Should we follow something that just left in `dir`? Split out from the send so the decision
+-- is unit-testable, and so every refusal has a nameable reason rather than a silent `return`.
+function M._chaseRefusal(dir)
+  if not inMnem() then return "not in the tower" end
+  if not (ataxiaBasher and ataxiaBasher.enabled) then return "basher off" end
+  if not (MAP.normDir and MAP.normDir(dir)) then return "no direction" end
+  local at = ataxiaTemp and tonumber(ataxiaTemp.bossPanicAt)
+  local nowT = (getEpoch and getEpoch()) or 0
+  if not at or (nowT - at) > PANIC_WINDOW then return "nothing panicked recently" end
+  -- NEVER chase while leaving. Escape mode, a swarm recovery and lava all mean the room we are
+  -- standing in is already losing us the fight; adding a pursuit to that is how a retreat turns
+  -- into a death. The boss keeps until we are fit.
+  if ataxiaTemp.escapeMode then return "escaping" end
+  if M.roomLava and M.roomLava() then return "lava" end
+  if M.swarm and M.swarm.state == "recovering" then return "recovering" end
+  -- Defaulted, not conditional: a guard that evaporates because the config is missing a key
+  -- fails in the wrong direction -- it would chase a boss at crash HP on a fresh profile.
+  -- 35 is the same escapeAt default the swarm ladder documents.
+  local s = M._cfg and M._cfg()
+  local esc = (s and s.swarm and tonumber(s.swarm.escapeAt)) or 35
+  local hp = tonumber(ataxia and ataxia.vitals and ataxia.vitals.hpp)
+  if hp and hp <= esc then return "too hurt to chase" end
+  if (tonumber(ataxiaTemp.bossChases) or 0) >= MAX_CHASES then return "chase budget spent" end
+  return nil
+end
+
+function M.onDenizenFled(dir)
+  local why = M._chaseRefusal(dir)
+  if why then
+    -- Only worth saying when we knew who ran: otherwise this fires on every wandering denizen.
+    if ataxiaTemp and ataxiaTemp.bossPanicAt and why ~= "nothing panicked recently" then
+      M._exploreEcho("<grey>" .. tostring(ataxiaTemp.bossPanicName or "the boss")
+        .. " fled " .. tostring(dir) .. " -- not following (" .. why .. ").")
+    end
+    return
+  end
+  ataxiaTemp.bossChases = (tonumber(ataxiaTemp.bossChases) or 0) + 1
+  ataxiaTemp.bossPanicAt = nil -- consumed: one departure per panic
+  local short = MAP.shortDir(MAP.normDir(dir))
+  local sep = (ataxia.settings and ataxia.settings.separator) or ";"
+  send("queue addclear free stand" .. sep .. short)
+  M._tacticalArm(short) -- a lost chase times out without condemning a real exit
+  M._exploreEcho("<gold>" .. tostring(ataxiaTemp.bossPanicName or "the boss")
+    .. " fled<reset> -- following <cyan>" .. short .. "<reset> ("
+    .. ataxiaTemp.bossChases .. "/" .. MAX_CHASES .. ").")
+end
+
+-- ---------------------------------------------------------------------------
 -- LAVA -- THE ONE ROOM WE LEAVE BY ANY DOOR (v4.7.254)
 -- ---------------------------------------------------------------------------
 -- User, 2026-08-11: "We need to move rooms if the room is lava."
@@ -1131,5 +1221,7 @@ M._explLoadH = registerAnonymousEventHandler("sysLoadEvent", function()
   M.explore.moving = false
   M.explore.tacticalMove = false
   M.explore.lavaRooms = {}
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.bossChases, ataxiaTemp.bossPanicAt = nil, nil
   M.explore._prevBasher = nil
 end)

@@ -504,6 +504,9 @@ function M.onRipple(n)
   -- A tree reserve must never outlive its boss ripple (telemetry-independent).
   M.releaseTreeReserve()
   M.run.boss = nil -- re-learned from the new ripple's Objective line
+  -- A new ripple is a new boss: the chase budget and any stale panic go with it (v4.7.255).
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.bossChases, ataxiaTemp.bossPanicAt, ataxiaTemp.bossPanicName = nil, nil, nil
   -- Re-latch owned boon flags. Called from HERE as well as the explorer because onRipple
   -- fires in every mode, whereas the explorer entry points only exist for `mnem explore`
   -- users -- a manual-mode basher would otherwise never get the re-latch at all (review

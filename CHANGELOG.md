@@ -2,6 +2,61 @@
 
 ---
 
+## 2026-08-11 - A boss that runs away (v4.7.255)
+
+> "When fighting this boss, we need to follow him out and continue attacking." -- user
+
+```
+Lyaeus, the travelling bard flails in panic.
+His fingers plucking a plaintive melody on his lyre, a satyri bard strolls out to the
+southeast, the sorrowful music gradually fading in his wake.
+```
+
+**The two lines name him differently** — the proper name on the panic, the generic denizen
+description on the departure. Neither is sufficient alone: the panic says *who* but not where,
+the departure says *where* but under a name that could be any wandering denizen. So the panic
+latches identity and the next departure within `PANIC_WINDOW` (6s) supplies the direction.
+
+A boss ripple ends when the boss dies, so one that walks out is not a fight we can decline —
+leaving him alone means the ripple never closes. That is the opposite of every other "should we
+move?" decision in this module, which is why it gets its own path rather than a flag on the
+sweep.
+
+### Refusals are named, not silent
+
+`M._chaseRefusal(dir)` is split out from the send so the decision is testable and every refusal
+has a reason:
+
+| Refusal | Why |
+|---|---|
+| `nothing panicked recently` | a bare departure is any denizen wandering off |
+| `escaping` / `recovering` / `lava` | **adding a pursuit to a retreat is how a retreat becomes a death** |
+| `too hurt to chase` | at or below `escapeAt` |
+| `chase budget spent` | `MAX_CHASES` 4 per ripple — a boss kiting us across the grid is its own hazard |
+| `basher off` / `not in the tower` | inert outside a fight |
+
+The HP guard is **defaulted, not conditional** (35 when the config lacks the key): a guard that
+evaporates because a setting is missing fails in the wrong direction — it would chase at crash
+HP on a fresh profile.
+
+### The departure trigger matches the fragment, not the sentence
+
+Every denizen words its exit differently — "strolls out to", "prowls out to", "stomps out to"
+(see the PvP set in trigger 637) — and enumerating them is how you get a trigger that works for
+one boss and silently misses the next. Trigger `mnemosyne/066` matches
+`out to the <direction>` with the **directions enumerated**, so it cannot match arbitrary prose.
+That breadth is safe because it decides nothing on its own: every gate above still applies, and
+an ordinary denizen wandering off costs one table lookup.
+
+### Tests
+
+**1319 -> 1329.** Following, no-panic departure, a non-boss panic, loose name matching, the
+escape/hurt/lava refusals, the bounded budget, one-departure-per-panic, and basher-off. Four
+deliberate breaks confirmed the panic requirement, the identity check, the escape guard and the
+budget.
+
+---
+
 ## 2026-08-11 - Boiling lava: leave by any door (v4.7.254)
 
 > "We need to move rooms if the room is lava." -- user, 2026-08-11

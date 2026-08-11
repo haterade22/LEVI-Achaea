@@ -3352,3 +3352,137 @@ describe("boiling lava", function()
     restore()
   end)
 end)
+
+-- ============================================================================
+-- v4.7.255 -- a boss that runs away
+-- ============================================================================
+--
+-- User: "When fighting this boss, we need to follow him out and continue attacking."
+--   Lyaeus, the travelling bard flails in panic.
+--   ... a satyri bard strolls out to the southeast, ...
+-- The two lines name him DIFFERENTLY -- proper name on the panic, generic description on the
+-- departure -- so the panic latches identity and the departure supplies direction.
+describe("following a fleeing boss", function()
+  local M = ataxia.mnemosyne
+  local MAP = ataxia.mnemosyne.map
+  local sentCmds, realSend
+
+  local function fighting(bossName)
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne, ataxiaBasher.enabled = true, true
+    MAP.drForce = false
+    MAP.reset()
+    MAP.onRoom(70, "boss room", { southeast = 0 }, nil)
+    M.explore.on = true
+    M.run = M.run or {}
+    M.run.boss = bossName
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.bossChases, ataxiaTemp.bossPanicAt, ataxiaTemp.escapeMode = nil, nil, nil
+    ataxiaTemp.mnemLavaAt = nil
+    ataxia.vitals = ataxia.vitals or {}
+    ataxia.vitals.hpp = 90
+    if M.swarm then M.swarm.state = "idle" end
+    realSend = send; sentCmds = {}
+    send = function(c) table.insert(sentCmds, c) end
+  end
+  local function restore() send = realSend; MAP.drForce = nil end
+  local function followed()
+    for _, c in ipairs(sentCmds) do if c:find("stand", 1, true) then return c end end
+  end
+
+  it("follows the boss out", function()
+    fighting("Lyaeus, the travelling bard")
+    M.onDenizenPanic("Lyaeus, the travelling bard")
+    M.onDenizenFled("southeast")
+    local cmd = followed()
+    expect(cmd ~= nil).toBeTrue()
+    expect(cmd:find("se", 1, true) ~= nil).toBeTrue()
+    restore()
+  end)
+
+  -- The departure line alone could be any wandering denizen.
+  it("does not chase a departure with no panic behind it", function()
+    fighting("Lyaeus, the travelling bard")
+    M.onDenizenFled("southeast")
+    expect(followed()).toBe(nil)
+    restore()
+  end)
+
+  it("ignores a panic from something that is not the boss", function()
+    fighting("Lyaeus, the travelling bard")
+    M.onDenizenPanic("a mindless thrall")
+    M.onDenizenFled("southeast")
+    expect(followed()).toBe(nil)
+    restore()
+  end)
+
+  it("matches loosely -- the Objective and the room rarely word it identically", function()
+    fighting("Lyaeus")
+    M.onDenizenPanic("Lyaeus, the travelling bard")
+    expect(M._isBossName("Lyaeus, the travelling bard")).toBeTrue()
+    M.onDenizenFled("southeast")
+    expect(followed() ~= nil).toBeTrue()
+    restore()
+  end)
+
+  -- Adding a pursuit to a retreat is how a retreat becomes a death.
+  it("never chases while escaping", function()
+    fighting("Lyaeus")
+    M.onDenizenPanic("Lyaeus")
+    ataxiaTemp.escapeMode = true
+    expect(M._chaseRefusal("southeast")).toBe("escaping")
+    M.onDenizenFled("southeast")
+    expect(followed()).toBe(nil)
+    restore()
+  end)
+
+  it("never chases while too hurt", function()
+    fighting("Lyaeus")
+    M.onDenizenPanic("Lyaeus")
+    ataxia.vitals.hpp = 10
+    expect(M._chaseRefusal("southeast")).toBe("too hurt to chase")
+    restore()
+  end)
+
+  it("never chases out of lava", function()
+    fighting("Lyaeus")
+    M.onDenizenPanic("Lyaeus")
+    ataxiaTemp.mnemLavaAt = getEpoch()
+    expect(M._chaseRefusal("southeast")).toBe("lava")
+    ataxiaTemp.mnemLavaAt = nil
+    restore()
+  end)
+
+  -- A boss kiting us across the grid is its own hazard.
+  it("spends a bounded chase budget", function()
+    fighting("Lyaeus")
+    local n = 0
+    for _ = 1, 10 do
+      M.onDenizenPanic("Lyaeus")
+      M.onDenizenFled("southeast")
+    end
+    for _, c in ipairs(sentCmds) do if c:find("stand", 1, true) then n = n + 1 end end
+    expect(n).toBe(4)
+    expect(M._chaseRefusal("southeast")).toBe("chase budget spent")
+    restore()
+  end)
+
+  it("one departure per panic -- the latch is consumed", function()
+    fighting("Lyaeus")
+    M.onDenizenPanic("Lyaeus")
+    M.onDenizenFled("southeast")
+    sentCmds = {}
+    M.onDenizenFled("southeast")   -- a second departure, no new panic
+    expect(followed()).toBe(nil)
+    restore()
+  end)
+
+  it("is inert with the basher off", function()
+    fighting("Lyaeus")
+    M.onDenizenPanic("Lyaeus")
+    ataxiaBasher.enabled = false
+    expect(M._chaseRefusal("southeast")).toBe("basher off")
+    ataxiaBasher.enabled = true
+    restore()
+  end)
+end)
