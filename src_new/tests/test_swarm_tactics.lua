@@ -1930,6 +1930,89 @@ describe("the tumble cancellation line (v4.7.245)", function()
   end)
 end)
 
+-- ============================================================================
+-- v4.7.252 -- a tumble in flight is not "nowhere to go"
+-- ============================================================================
+describe("recovery while a tumble is still in the air", function()
+  local function recovering()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    mnemRollHide = true
+    S._lastPanicAt = nil
+    ataxia.vitals.hpp = 30
+    gmcp.Char = { Vitals = { hp = "3000", maxhp = "10000" } }
+    expect(S._maybePanic(30)).toBeTrue()
+    S.onTumbleStart("n")   -- the game confirms the tumble started
+    sent = {}
+    mobs = 2               -- ...and something is in the room with us
+  end
+
+  -- THE LIVE BUG: the v4.7.243 move lock made `dir` falsy while a tumble was mid-air, and the
+  -- fall-through read that as "we cannot leave" -- abandoning the recovery, clearing the hold
+  -- and handing the round back to the basher WHILE THE ESCAPE WAS STILL RESOLVING.
+  it("holds the recovery instead of handing back", function()
+    recovering()
+    clock = clock + 5                 -- past the arrival settle
+    expect(S.moveLocked()).toBeTrue() -- the tumble has not landed yet
+    expect(S.onTick()).toBeTrue()     -- tick consumed...
+    expect(S.state).toBe("recovering") -- ...and we are STILL recovering
+    expect(ataxiaTemp.swarmHold).toBeTrue() -- the basher is still held off
+  end)
+
+  it("sends nothing while it waits -- a second tumble would cancel the first", function()
+    recovering()
+    clock = clock + 5
+    S.onTick()
+    local tumbles = 0
+    for _, c in ipairs(sent) do if c:find("tumble", 1, true) then tumbles = tumbles + 1 end end
+    expect(tumbles).toBe(0)
+  end)
+
+  -- ...but a genuine dead end must still hand back: standing attack-gated while something
+  -- hits us is the one thing worse than trading.
+  it("still hands back when there is genuinely nowhere to go", function()
+    recovering()
+    S.onTumbleDone()                  -- the tumble resolved
+    clock = clock + 5
+    mnemRollHide = false              -- no boon: a tumble sheds nothing
+    expect(S.onTick()).toBeFalse()
+    expect(S.state).toBe("idle")
+    mnemRollHide = true
+  end)
+end)
+
+-- User: "We do have manaleech so our mana will decrease over time."
+describe("manaleech must not hold a recovery (v4.7.252)", function()
+  it("does not count as an affliction for readiness", function()
+    fixture(3)
+    ataxia.afflictions = { manaleech = true }
+    expect(S._afflicted()).toBeFalse()
+  end)
+
+  it("a real affliction still does", function()
+    fixture(3)
+    ataxia.afflictions = { manaleech = true, paralysis = true }
+    expect(S._afflicted()).toBeTrue()
+    ataxia.afflictions = {}
+  end)
+
+  -- It is a DRAIN: waiting does not recover from it, it pays for it. Before this, a hover with
+  -- manaleech up could never satisfy the aff-free gate and burned its full 60s cap.
+  it("lets a healed recovery actually complete", function()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    S.state = "recovering"
+    S.recoverGround = true
+    S.recoverStarted = clock  -- `now` is module-local; the fixture clock is the same source
+    S.recoverDiagnosed = true
+    ataxia.vitals.hpp = 99
+    gmcp.Char = { Vitals = { hp = "9900", maxhp = "10000" } }
+    ataxia.afflictions = { manaleech = true }
+    mobs = 0
+    S.onTick()
+    expect(S.state).toBe("idle")   -- handed back to the sweep, recovery done
+    ataxia.afflictions = {}
+  end)
+end)
+
 -- Restore the mock send for whoever runs after us (see the note at the top).
 send = _mockSend
 

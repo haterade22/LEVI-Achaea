@@ -161,7 +161,27 @@ end
 -- afflictions, so restoration cycles finish before we drop back in. Blindness/deafness/
 -- curseward are deliberately KEPT as defences while bashing -- never hold the hover for
 -- them (we'd float forever).
-local AFF_IGNORE = { blindness = true, deafness = true, curseward = true, insomnia = true }
+-- Afflictions that must not hold a recovery. The first four are KEPT DEFENCES or harmless
+-- states -- they were never going to clear, so waiting on them just burns RECOVER_MAX.
+--
+-- MANALEECH joins them in v4.7.252 (user: "We do have manaleech so our mana will decrease over
+-- time"). It is a real affliction, priority 13 in the PvP table and well under the PARKED
+-- floor, so `parkedAff` does not excuse it -- which meant that while it was up `S._afflicted()`
+-- was permanently TRUE, `S._reenterReady()` could never pass, and every hover ran to its full
+-- 60s cap before landing. In the tower it is re-applied faster than it is cured, so that is
+-- not a wait that ends.
+--
+-- And the direction of the cost is backwards from every other affliction here: manaleech is a
+-- DRAIN, so standing still does not recover from it, it pays for it. Mana is a kill condition
+-- for several of our routes, so an aff that makes idling expensive is the last thing that
+-- should be forcing us to idle.
+--
+-- Scoped to this module (the Mnemosyne swarm/recovery logic); PvP curing is untouched, and
+-- SSC still cures manaleech normally at its own priority.
+local AFF_IGNORE = {
+  blindness = true, deafness = true, curseward = true, insomnia = true,
+  manaleech = true,
+}
 
 -- The bash curing profile (ataxia/008) PARKS the junk mental spray at priority 25 so it
 -- cannot outbid a potash for the eating balance. The consequence here is that those affs
@@ -1091,9 +1111,22 @@ function S.onTick()
       -- way, chain-tumbling across the ripple at panic HP is worse than standing and fighting
       -- one room: every hop pays the affix damage again and heals nothing. Reset when a
       -- recovery begins, so it is a per-recovery budget rather than a session one.
+      -- A TUMBLE ALREADY IN FLIGHT IS NOT "NOWHERE TO GO" (v4.7.252). The v4.7.243 move lock
+      -- made `dir` falsy while a tumble was mid-air, and the code below reads a falsy `dir` as
+      -- "we cannot leave" -- so it abandoned the recovery, cleared the hold and handed the
+      -- round back to the basher WHILE THE ESCAPE WAS STILL RESOLVING. The live log has it
+      -- exactly: tumble east begins at 13.736, "company arrived mid-recovery (100%) and
+      -- nowhere to go -- handing back" at 14.841, then two attack rounds, and only then "You
+      -- tumble out of the room."
+      --
+      -- The lock means "wait, we are already leaving" -- the opposite of "we are stuck".
+      if S.moveLocked() then
+        if M._scheduleTick then M._scheduleTick(RECOVER_TICK) end
+        return true
+      end
       local spent = tonumber(S._recoverTumbles) or 0
       local budget = tonumber(S.RECOVER_TUMBLES) or 2
-      local dir = (not S.moveLocked()) and (spent < budget) and mnemRollHide and S._panicDir()
+      local dir = (spent < budget) and mnemRollHide and S._panicDir()
       if dir then
         S._recoverTumbles = spent + 1
         local sep = (ataxia.settings and ataxia.settings.separator) or ";"

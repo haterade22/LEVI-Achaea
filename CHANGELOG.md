@@ -2,6 +2,63 @@
 
 ---
 
+## 2026-08-11 - A tumble in flight is not "nowhere to go" (v4.7.252)
+
+Two faults from one log, both of which had us fighting when we meant to be leaving.
+
+### 1. The move lock was read as a dead end -- my bug, from v4.7.243
+
+The mid-recovery re-tumble computed:
+
+```lua
+local dir = (not S.moveLocked()) and (spent < budget) and mnemRollHide and S._panicDir()
+if dir then ... tumble ... end
+-- fall through: "nowhere to go -- handing back"
+```
+
+So while a tumble was **mid-air**, `dir` went falsy and the fall-through read that as *we
+cannot leave* -- abandoning the recovery, clearing the attack hold and handing the round back
+to the basher while the escape was still resolving. The log times it exactly:
+
+```
+13.736  You begin to tumble agilely to the east.
+14.841  company arrived mid-recovery (100%) and nowhere to go -- handing back.
+        ...two full attack rounds...
+        You tumble out of the room.
+```
+
+The lock means **"wait, we are already leaving"** -- the opposite of "we are stuck". It now
+consumes the tick and re-schedules. A genuine dead end (no boon, no route, budget spent) still
+hands back, because standing attack-gated while something hits us is the one thing worse than
+trading.
+
+### 2. Manaleech made every recovery run to its cap
+
+> "We do have manaleech so our mana will decrease over time." -- user
+
+`manaleech` is a real affliction at PvP priority 13 -- well under the PARKED floor, so
+`parkedAff` did not excuse it. While it was up `S._afflicted()` was permanently TRUE, which
+means `S._reenterReady()` could never pass and **every hover burned its full 60s cap** before
+landing. In the tower it is re-applied faster than it is cured, so that is not a wait that ends.
+
+It is now in `AFF_IGNORE` alongside the kept defences, and the reasoning is worth keeping: the
+cost runs the *opposite* way from every other affliction there. Manaleech is a **drain** --
+standing still does not recover from it, it pays for it. Mana is a kill condition for several
+of our routes, so an affliction that makes idling expensive is the last thing that should be
+forcing us to idle.
+
+Scoped to the swarm/recovery module. PvP curing is untouched and SSC still cures manaleech at
+its own priority.
+
+### Tests
+
+**1298 -> 1304.** The tumble-in-flight hold (state stays `recovering`, hold stays armed,
+nothing sent), the genuine dead end still handing back, manaleech not counting for readiness,
+a real affliction still counting, and a healed recovery actually completing with manaleech up.
+Two deliberate breaks confirmed both fixes.
+
+---
+
 ## 2026-08-11 - Track by exits, and stop the move loop (v4.7.251)
 
 > "we need to track by exits and map it out like that" / "if needed the auto mapper should do
