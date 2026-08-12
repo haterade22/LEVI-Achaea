@@ -50,5 +50,18 @@ patterns:
 -- Gated on ataxiaTemp.mnemSurveyPending so only the answer to OUR survey counts -- an
 -- unrelated "You are in ..." line can never knock us out of the tower.
 -- The still-in-Mnemosyne case is trigger 351.
-if matches[2]:find("Mnemosyne") then return end
+-- MATCH THE TOWER'S PHRASE, NOT THE BARE WORD (v4.7.260). "Ruins of Seleucar West of River
+-- Mnemosyne" is a REAL area -- the riverbank you wade in from -- and its name contains
+-- "Mnemosyne". Bailing on the bare word meant that stepping out of the tower into it closed
+-- every exit from the flag at once: 351 fired and killed the "assume we left" timer, this
+-- guard blocked the only clearing path, and ataxiaBasher.inMnemosyne stayed pinned ON for as
+-- long as you stood there.
+--
+-- The collateral of that latch is worse than the tower being wrong: isNoFleeArea() returns
+-- true everywhere so the basher will not flee in the open world, areaKey() pins to "" so real
+-- denizens are auto-learned into the tower's target list, and `mnem explore on` would happily
+-- start a 4x4 sweep in open Achaea.
+--
+-- Plain find (4th arg true): an area name is not a Lua pattern and must not be treated as one.
+if ataxiaBasher_mnemSurveySaysTower and ataxiaBasher_mnemSurveySaysTower(matches[2]) then return end
 if ataxiaBasher_mnemLeftFor then ataxiaBasher_mnemLeftFor(matches[2]) end

@@ -211,7 +211,12 @@ end
 -- direction->true set, or nil when the line is not one of these.
 function MAP.parseExitsLine(text)
   if type(text) ~= "string" then return nil end
+  -- BOTH WORDINGS (v4.7.260). The game says "You see exits leading north and west." for two
+  -- or more and "You see A SINGLE EXIT leading northeast." for one -- and the room that broke
+  -- the sweep had exactly one exit, so the singular form is the case that mattered. Trigger
+  -- 353_Real_Exits has matched both since v4.7.75; this parser only ever matched the plural.
   local body = text:match("^You see exits leading (.+)%.$")
+             or text:match("^You see a single exit leading (.+)%.$")
   if not body then return nil end
   local out, n = {}, 0
   body = body:gsub("%s+and%s+", ", ")
@@ -223,25 +228,51 @@ function MAP.parseExitsLine(text)
   return out
 end
 
--- Record a parsed exits line against wherever we currently believe we are. Only under dead
--- reckoning: with honest room ids gmcp's table is richer (it carries destinations, which the
--- normal relayout needs) and this would throw that away.
+-- Record a parsed exits line against wherever we currently believe we are.
+--
+-- NO LONGER DEMENTIA-ONLY (v4.7.260). The v4.7.251 reasoning -- "with honest room ids gmcp's
+-- table is richer, and this would throw that away" -- was right about the RICHNESS and wrong
+-- about the premise, because it assumed gmcp always has the exits at all. In the tower it does
+-- not: CHANGELOG v4.7.75 recorded exactly this ("gmcp.Room.Info.exits is not a usable adjacency
+-- source in the tower; the text is") and listed pointing the explorer at the text as the next
+-- step. That step was never taken, and the cost was a sweep that stopped dead in a room whose
+-- description plainly listed an exit.
+--
+-- The richness argument survives as the REPLACE/BACKFILL split below, which is the whole point:
+--   * under dead reckoning the ids are inventions, so the text is authoritative and REPLACES;
+--   * outside it the ids are real and relayout needs them for coordinates, so the text only
+--     BACKFILLS directions gmcp did not give -- adding what is missing without discarding what
+--     is known.
 function MAP.onExitsLine(text)
-  if not MAP.drActive() then return false end
+  if not MAP.inMnem() then return false end
   local dirs = MAP.parseExitsLine(text)
   if not dirs then return false end
-  local key = MAP.drHereKey()
+  local dr = MAP.drActive()
+  local key = dr and MAP.drHereKey() or MAP.current
+  if key == nil then return false end
   local r = MAP.rooms and MAP.rooms[key]
   if not r then
     MAP.onRoom(key, nil, {}, nil)
     r = MAP.rooms[key]
   end
   if not r then return false end
-  -- Authoritative: REPLACE rather than merge. A stale direction that no longer appears is a
-  -- direction the room does not have, and leaving it in is what sends the sweep into a wall.
-  local kept = {}
-  for d in pairs(dirs) do kept[d] = 0 end -- destination unknown by construction
-  r.exits = kept
+  if dr then
+    -- Authoritative: REPLACE rather than merge. Under dementia a stale direction that no longer
+    -- appears is a direction the room does not have, and leaving it in sends the sweep into a
+    -- wall.
+    local kept = {}
+    for d in pairs(dirs) do kept[d] = 0 end -- destination unknown by construction
+    r.exits = kept
+  else
+    -- BACKFILL only. gmcp's destination ids are real here and relayout needs them, so never
+    -- overwrite a direction we already have; just add the ones the text knows about and gmcp
+    -- did not. 0 means "exit exists, destination unknown", which unexploredExits treats as
+    -- unwalked -- exactly right for an exit we have never taken.
+    r.exits = r.exits or {}
+    for d in pairs(dirs) do
+      if r.exits[d] == nil then r.exits[d] = 0 end
+    end
+  end
   return true
 end
 
@@ -285,6 +316,11 @@ function MAP.reset()
   MAP.origin = nil
   MAP._lastMoveDir = nil
   MAP.drResetPos() -- a new ripple starts the reckoning at its own origin
+  -- The explorer's room-number-keyed memory (lava, condemned exits, chase counters) is only
+  -- meaningful for the level it was learned on -- the tower reuses real room ids across ripples.
+  -- Guarded: 005 loads first, and reset() runs once at load before 008 exists.
+  local ex = ataxia.mnemosyne
+  if ex and ex.onRippleReset then pcall(ex.onRippleReset) end
 end
 MAP.reset()
 

@@ -379,6 +379,37 @@ M.explore.lavaRooms = M.explore.lavaRooms or {}
 -- the form both the sweep and the escape ladder can act on.
 M.explore.lavaEdges = M.explore.lavaEdges or {}
 
+-- EVERYTHING KEYED BY ROOM NUMBER DIES WITH THE RIPPLE (v4.7.260).
+--
+-- The tower draws each ripple's 4x4 from a POOL OF REAL ROOMS, and the same gmcp id comes back
+-- on a later level with a different layout and different affixes. So a room number is only a
+-- name for "this cell, this ripple" -- and every table below is keyed by one.
+--
+-- The bill: a user opened ripple 2 in a cavern whose sole exit was north, and `mnem explore why`
+-- answered `north -> 65420 REFUSED: leads into lava`. We had never glanced north, let alone
+-- stepped in it. The lava was remembered from an EARLIER ripple that happened to reuse the id,
+-- and the only thing that had ever cleared it was a package reload. The sweep then reported
+-- "grid swept -- nowhere left to patrol" and switched off with one room mapped.
+--
+-- `MAP.reset()` already draws exactly this line -- it is called on ripple change and on a fresh
+-- tower entry, and it throws the whole room graph away. This hangs off it so there is ONE
+-- definition of "the old level's room numbers mean nothing now", rather than two that drift.
+--
+-- `failed` is the same hazard and was carrying the same way: an exit condemned on the old level
+-- (a wall, or an invented dementia exit) stayed condemned on a level where it is a real door.
+function M.onRippleReset()
+  M.explore.lavaRooms = {}
+  M.explore.lavaEdges = {}
+  M.explore.failed = {}
+  M.explore.fromRoom = nil
+  M.explore.fromDir = nil
+  M.explore._noExitLooks = nil
+  M.explore._retriedFailed = nil
+  ataxiaTemp = ataxiaTemp or {}
+  -- MAX_CHASES is documented "per ripple" and was only ever reset on reload.
+  ataxiaTemp.bossChases, ataxiaTemp.bossPanicAt = nil, nil
+end
+
 function M.roomIsLava(key)
   return key ~= nil and M.explore.lavaRooms[key] == true
 end
@@ -958,6 +989,48 @@ function M._exploreTick()
       M._exploreEcho("<grey>clearing failed exits and retrying before giving up.")
       return M._exploreTick()
     end
+    -- NO DATA IS NOT THE SAME ANSWER AS NO EXITS (v4.7.260).
+    --
+    -- "Nowhere left to patrol" is a claim about the RIPPLE. If the room we are standing in has
+    -- no exits recorded at all, it is really a claim about our own ignorance -- and stopping
+    -- turns a missing reading into a finished sweep. That is the reported bug: the description
+    -- said "You see a single exit leading northeast", the map held nothing, and we announced
+    -- the grid was swept and switched off.
+    --
+    -- Note what else was closed at that moment: the failed-exit rescue above is skipped
+    -- (nothing was ever attempted, which is exactly the case most deserving a second look), and
+    -- _exploreStop kills the stall watchdog whose nudge would have sent the very `ql` that
+    -- refills the exits. So every recovery path shut off together.
+    --
+    -- A quicklook is free (no balance) and re-prints the exits line, which now feeds the map in
+    -- every state. Bounded by _noExitLooks so a room that genuinely has none still terminates.
+    local r = MAP.rooms and MAP.current and MAP.rooms[MAP.current]
+    local bare = true
+    if r then for _ in pairs(r.exits or {}) do bare = false; break end end
+    if r and bare and (tonumber(M.explore._noExitLooks) or 0) < 3 then
+      M.explore._noExitLooks = (tonumber(M.explore._noExitLooks) or 0) + 1
+      M._exploreEcho("<indian_red>no exits recorded for this room<reset> -- <cyan>QL<reset>"
+        .. " and re-deciding (" .. M.explore._noExitLooks .. "/3).")
+      send("ql", false)
+      return M._scheduleTick(1.5)
+    end
+    -- SAY WHY, DO NOT JUST SAY "SWEPT" (v4.7.260). The reported stop printed "grid swept --
+    -- nowhere left to patrol" in a room with one unwalked exit; the truth was a single refusal,
+    -- and nothing on screen carried it. A stop that hides its reason costs a `mnem explore why`
+    -- and a round trip to find out -- print the refusals with the stop instead.
+    local refusals = {}
+    for num in pairs(MAP.rooms or {}) do
+      for _, d in ipairs(MAP.unexploredExits(num) or {}) do
+        local why = M._stepRefusal(num, d)
+        if why then refusals[#refusals + 1] = tostring(num) .. " " .. d .. ": " .. why end
+      end
+    end
+    if #refusals > 0 then
+      table.sort(refusals)
+      M._exploreEcho("<indian_red>every remaining exit was refused<reset> --")
+      for i = 1, math.min(#refusals, 6) do cecho("\n    <DimGrey>" .. refusals[i]) end
+      cecho("\n")
+    end
     M._exploreStop("nowhere left to patrol")
   end
 end
@@ -1286,11 +1359,16 @@ function M._onExploreRoom()
     -- prose line -- "You see exits leading northeast, southeast, and south." -- is the only
     -- honest reading, and QL is how we get it on demand. Free (no balance), and only when the
     -- cell has no exits recorded yet, so it costs one line per genuinely new cell.
-    if MAP.drActive and MAP.drActive() then
-      local r = MAP.rooms and MAP.rooms[MAP.drHereKey()]
+    -- NOT dementia-only (v4.7.260). A room with no recorded exits is worth one free `ql`
+    -- whether or not we are demented -- that is precisely the state that stalled the sweep,
+    -- and gating the only repair on an affliction we did not have is why nothing repaired it.
+    do
+      local dr = MAP.drActive and MAP.drActive()
+      local key = dr and MAP.drHereKey() or MAP.current
+      local r = key and MAP.rooms and MAP.rooms[key]
       local known = false
       if r then for _ in pairs(r.exits or {}) do known = true break end end
-      if not known then send("ql", false) end
+      if key and not known then send("ql", false) end
     end
   end
   M._scheduleTick()
@@ -1332,6 +1410,7 @@ M._explLoadH = registerAnonymousEventHandler("sysLoadEvent", function()
   M.explore.tacticalMove = false
   M.explore.lavaRooms = {}
   M.explore.lavaEdges = {}
+  M.explore._noExitLooks = nil
   ataxiaTemp = ataxiaTemp or {}
   ataxiaTemp.bossChases, ataxiaTemp.bossPanicAt = nil, nil
   M.explore._prevBasher = nil

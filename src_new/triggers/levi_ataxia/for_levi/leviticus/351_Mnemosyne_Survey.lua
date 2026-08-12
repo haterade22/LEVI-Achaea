@@ -32,7 +32,7 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^You are in .*Mnemosyne
+- pattern: ^You are in wading the Mnemosyne
   type: 1
 ]]--
 

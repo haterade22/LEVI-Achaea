@@ -2,6 +2,105 @@
 
 ---
 
+## 2026-08-11 - The exit was never in the map (v4.7.260)
+
+Root cause of the v4.7.259 report, found by executing the real 005/008 under Lua against the
+log's exact topology. **My two standing hypotheses were both wrong** -- `exitFitsGrid` returned
+TRUE (bounds 0..0, w=h=2), and no refusal gate fired at all. The sweep did not refuse the exit:
+**the exit was never recorded.**
+
+### The room description was thrown away three times
+
+`MAP.onRoom` rebuilds `room.exits` **only** from the gmcp table, and outside dementia nothing
+else ever wrote to it. So when gmcp's table for a tower room is empty, `MAP.unexploredExits`
+returns `{}` and the sweep is blind in a room that visibly has an exit.
+
+The honest reading was on screen and discarded at every step:
+
+| | |
+|---|---|
+| `MAP.parseExitsLine` | matched only `You see exits leading ...` -- **the room had ONE exit**, which the game words `You see a single exit leading northeast.` |
+| trigger `mnemosyne/063` | same plural-only pattern, so it never fired |
+| `MAP.onExitsLine` | dementia-gated, and no `dem` in the prompt |
+
+And `353_Real_Exits` has matched **both** wordings since v4.7.75, writing `ataxiaTemp.realExits`
+-- which **nothing has ever read**. CHANGELOG v4.7.75 recorded the finding verbatim ("gmcp
+Room.Info.exits is not a usable adjacency source in the tower; the text is") and listed pointing
+the explorer at it as the next step. That step was never taken, and this is the bill.
+
+Fixed: both wordings parse, trigger 063 matches both, and `onExitsLine` runs anywhere in the
+tower. The "gmcp is richer" reasoning survives as a **REPLACE/BACKFILL split** -- under dead
+reckoning the ids are inventions so the text is authoritative and replaces; outside it the ids
+are real and `relayout` needs them, so the text only backfills directions gmcp did not give.
+
+### No data is not the same answer as no exits
+
+The second half of the log, and independent: what turned "I know nothing about this room" into
+`off`.
+
+`_nextPatrolStep` builds its queue only from visited rooms with a planar exit, which excludes
+the ripple's holding room -- so on a two-room map the queue is **always** empty, even in a
+perfectly healthy sweep. The instant `_nextExploreStep` returned nil the stop was guaranteed.
+Worse, every recovery path was shut at the same moment: the failed-exit rescue is skipped
+because nothing was ever *attempted* (exactly the case most deserving a second look), and
+`_exploreStop` kills the watchdog whose nudge would have sent the `ql` that refills the exits.
+The arrival `ql`-for-exits reflex was also gated on dementia.
+
+Now: a room with **no exits recorded at all** gets a free `ql` and a re-decide (bounded, 3
+looks) instead of being reported as a completed ripple, and the arrival `ql` is no longer
+dementia-gated. A missing reading must never present as a finished sweep.
+
+### Separate real bug: a room number is not a place
+
+Found live in the next ripple, with the new `mnem explore why`:
+
+```
+room:  65314 (An empty cavern (indoors))
+grid:  1x1 over 2 rooms
+  north -> 65420 REFUSED: leads into lava
+```
+
+We had never glanced north, let alone stepped in it. The tower draws each ripple's 4x4 from a
+**pool of real rooms**, so the same gmcp id comes back on a later level with a different layout
+and different affixes -- but `lavaRooms`, `lavaEdges` and `failed` are all keyed by room number
+and were cleared **only on a package reload**. Lava learned on one level condemned the same id
+for the rest of the session, and a condemned exit (a wall, or an invented dementia exit) stayed
+condemned where it had become a real door.
+
+`MAP.reset()` already draws exactly this line -- it runs on ripple change and on a fresh tower
+entry, and throws the whole room graph away. `M.onRippleReset()` now hangs off it, so there is
+one definition of "the old level's room numbers mean nothing now" rather than two that drift.
+`ataxiaTemp.bossChases` goes with them: `MAX_CHASES` is documented per-ripple and was also only
+ever reset on reload.
+
+And the stop that hid it now prints its own refusals instead of reporting "grid swept --
+nowhere left to patrol" over a room with one unwalked exit.
+
+### Separate real bug: the inMnemosyne latch
+
+`ataxiaBasher.inMnemosyne` could **never self-clear in any real area whose name contains
+"Mnemosyne"** -- which is precisely the riverbank you wade in from. Trigger 351 matched
+`^You are in .*Mnemosyne` and 352 (the only clearing path) bailed on `find("Mnemosyne")`, so
+stepping out of the tower closed all three exits from the flag at once.
+
+The collateral was worse than the tower being wrong: `isNoFleeArea()` returned true
+**everywhere**, so the basher would not flee in the open world; `areaKey()` pinned to `""`, so
+real denizens were auto-learned into the tower's target list; and `mnem explore on` would
+happily start a 4x4 sweep in open Achaea.
+
+`ataxiaBasher_mnemSurveySaysTower(where)` is now the single owner of "does this survey reply
+mean the tower", matching the full phrase with a plain find. It lives in the script, not the
+trigger -- the first cut of this fix put the check in the trigger, where a unit test calling
+`mnemLeftFor` directly sailed straight past it and a deliberate break went unnoticed.
+
+### Tests
+
+**1367 -> 1376**, and six deliberate breaks confirmed each fix. Note the mapper screenshot was
+a red herring throughout: `ataxia_Room_Update` calls `centerview` unconditionally, and an
+unmapped instance id leaves the map parked on the last real room.
+
+---
+
 ## 2026-08-11 - Why is the sweep not moving? (v4.7.259)
 
 > "Our mnem explore seems to be broken" ... "It did it again another level" -- user

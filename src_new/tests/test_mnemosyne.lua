@@ -3193,9 +3193,35 @@ describe("dead reckoning under dementia", function()
     expect(r.exits.west).toBe(0)
   end)
 
-  it("is inert with honest room ids -- gmcp's table is richer there", function()
+  -- v4.7.260 reversed this. It WAS inert outside dementia, on the reasoning that gmcp's table
+  -- is richer -- true, but it assumed gmcp has the exits at all, and in the tower it may not.
+  -- Outside dead reckoning the text now BACKFILLS: it adds directions gmcp did not give and
+  -- never overwrites a real destination id, which relayout needs for coordinates.
+  it("BACKFILLS with honest room ids rather than being inert", function()
     MAP.drForce = false
-    expect(MAP.onExitsLine("You see exits leading north and west.")).toBeFalse()
+    MAP.reset()
+    MAP.onRoom(80, "a room", { north = 81 }, nil)   -- gmcp knows north, with a real dest
+    expect(MAP.onExitsLine("You see exits leading north and west.")).toBeTrue()
+    local r = MAP.rooms[80]
+    expect(r.exits.north).toBe(81)                  -- the real id survives
+    expect(r.exits.west).toBe(0)                    -- the missing one is added
+    MAP.drForce = true
+  end)
+
+  -- The room that stopped the sweep dead had exactly ONE exit, and the singular wording is
+  -- what the game prints for it.
+  it("parses the single-exit wording", function()
+    local e = MAP.parseExitsLine("You see a single exit leading northeast.")
+    expect(e ~= nil).toBeTrue()
+    expect(e.northeast).toBeTrue()
+  end)
+
+  it("records a single-exit room outside dementia -- the live failure", function()
+    MAP.drForce = false
+    MAP.reset()
+    MAP.onRoom(90, "A place of death.", {}, nil)     -- gmcp gave NOTHING
+    expect(MAP.onExitsLine("You see a single exit leading northeast.")).toBeTrue()
+    expect(MAP.rooms[90].exits.northeast).toBe(0)
     MAP.drForce = true
   end)
 
@@ -3566,6 +3592,60 @@ describe("never walking back into lava", function()
     M.onLava()
     send = realSend
     expect(M.explore.lavaEdges[200]).toBe(nil)
+    MAP.drForce = nil
+  end)
+end)
+
+-- ---------------------------------------------------------------------------
+-- Room numbers are only meaningful within one ripple (v4.7.260)
+-- ---------------------------------------------------------------------------
+describe("room-keyed memory dies with the ripple", function()
+  local M = ataxia.mnemosyne
+  local MAP = ataxia.mnemosyne.map
+
+  local function inTower()
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne, ataxiaBasher.enabled = true, true
+    MAP.drForce = false
+    ataxiaTemp = ataxiaTemp or {}
+  end
+
+  it("clears lava, condemned exits and chase counters on a new ripple", function()
+    inTower()
+    MAP._ripple = 1
+    M.explore.lavaRooms = { [65420] = true }
+    M.explore.lavaEdges = { [65314] = { north = true } }
+    M.explore.failed = { [65314] = { west = true } }
+    M.explore.fromRoom, M.explore.fromDir = 65314, "n"
+    ataxiaTemp.bossChases = 4
+
+    MAP.onRipple(2)
+
+    expect(M.explore.lavaEdges[65314]).toBe(nil)
+    expect(M.explore.lavaRooms[65420]).toBe(nil)
+    expect(M.explore.failed[65314]).toBe(nil)
+    expect(M.explore.fromRoom).toBe(nil)
+    expect(ataxiaTemp.bossChases).toBe(nil)
+    MAP.drForce = nil
+  end)
+
+  -- The reported bug, end to end: ripple 2 opens in a cavern whose only exit is north, and the
+  -- sweep refuses it as lava because an EARLIER ripple reused room id 65314.
+  it("does not refuse an exit on lava learned in a previous ripple", function()
+    inTower()
+    MAP._ripple = 1
+    MAP.reset()
+    MAP.onRoom(65314, "A corridor.", { north = 65420 }, nil)
+    M.explore.fromRoom, M.explore.fromDir = 65314, "n"
+    local realSend = send; send = function() end
+    MAP.onRoom(65420, "Boiling lava.", { south = 65314 }, "north")
+    M.onLava()
+    send = realSend
+    expect(M._stepRefusal(65314, "north")).toBe("leads into lava") -- correct, THIS ripple
+
+    MAP.onRipple(2) -- new level, same ids come back around
+    MAP.onRoom(65314, "An empty cavern.", { north = 65420 }, nil)
+    expect(M._stepRefusal(65314, "north")).toBe(nil)
     MAP.drForce = nil
   end)
 end)

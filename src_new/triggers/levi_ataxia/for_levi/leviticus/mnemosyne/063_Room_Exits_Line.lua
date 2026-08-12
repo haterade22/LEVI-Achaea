@@ -30,7 +30,7 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^You see exits leading .+\.$
+- pattern: ^You see (?:a single exit|exits) leading .+\.$
   type: 1
 ]]--
 
@@ -48,10 +48,15 @@ patterns:
 -- Handing off to MAP.onExitsLine rather than parsing here: the module owns the parse, so it is
 -- unit-testable against captured strings, and this trigger stays a one-line adapter.
 --
--- Self-limiting: onExitsLine no-ops unless dead reckoning is active (dementia + in the tower),
--- so outside the tower this costs a table lookup and does nothing. Deliberately NOT gated on
--- the explorer running -- the swarm moves us too, and a cell's exits are worth recording
--- whoever walked us into it.
+-- BOTH WORDINGS (v4.7.260): the singular "You see a single exit leading northeast." is what a
+-- one-exit room prints, and it is the room that stopped the sweep dead -- the plural-only
+-- pattern never fired there. Trigger 353_Real_Exits has matched both since v4.7.75 (into
+-- ataxiaTemp.realExits, which nothing has ever read); this is the same wording, finally wired
+-- to something that uses it.
+--
+-- Self-limiting: onExitsLine no-ops unless we are in the tower, so elsewhere this costs a table
+-- lookup and does nothing. Deliberately NOT gated on the explorer running -- the swarm moves us
+-- too, and a room's exits are worth recording whoever walked us into it.
 if ataxia and ataxia.mnemosyne and ataxia.mnemosyne.map
    and ataxia.mnemosyne.map.onExitsLine then
   ataxia.mnemosyne.map.onExitsLine(line)

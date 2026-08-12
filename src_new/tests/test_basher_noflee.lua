@@ -539,3 +539,57 @@ describe("the damage watchdog does not mistake a burst for a rate", function()
     ataxiaBasher_dmgMinSpan = 3
   end)
 end)
+
+-- ============================================================================
+-- v4.7.260 -- the inMnemosyne latch
+-- ============================================================================
+--
+-- "Ruins of Seleucar West of River Mnemosyne" is a REAL area -- the riverbank you wade in from
+-- -- and its name contains "Mnemosyne". Trigger 351 matched the bare word and 352 bailed on it,
+-- so stepping out of the tower into that area closed every exit from the flag at once and
+-- ataxiaBasher.inMnemosyne stayed pinned ON for as long as you stood there.
+describe("leaving the tower into an area whose name contains Mnemosyne", function()
+  it("distinguishes the tower phrase from a real area containing the word", function()
+    expect(ataxiaBasher_mnemSurveySaysTower("wading the Mnemosyne")).toBeTrue()
+    expect(ataxiaBasher_mnemSurveySaysTower("Ruins of Seleucar West of River Mnemosyne")).toBeFalse()
+    expect(ataxiaBasher_mnemSurveySaysTower("the Northern Ithmia")).toBeFalse()
+    expect(ataxiaBasher_mnemSurveySaysTower(nil)).toBeFalse()
+  end)
+
+  it("refuses to be told we left when the reply IS the tower", function()
+    baseline()
+    ataxiaBasher.inMnemosyne = true
+    ataxiaTemp.mnemSurveyPending = true
+    ataxiaBasher_mnemLeftFor("wading the Mnemosyne")
+    expect(ataxiaBasher.inMnemosyne).toBeTrue()
+  end)
+
+  it("is a real area that must clear the flag", function()
+    baseline()
+    ataxiaBasher.inMnemosyne = true
+    -- mnemLeftFor only acts on the reply to OUR survey, so arm that first -- otherwise the
+    -- test passes an unrelated line and proves nothing.
+    ataxiaTemp.mnemSurveyPending = true
+    if ataxiaBasher_mnemLeftFor then
+      ataxiaBasher_mnemLeftFor("Ruins of Seleucar West of River Mnemosyne")
+      expect(ataxiaBasher.inMnemosyne).toBeFalse()
+    end
+  end)
+
+  it("still clears for an ordinary area", function()
+    baseline()
+    ataxiaBasher.inMnemosyne = true
+    ataxiaTemp.mnemSurveyPending = true
+    if ataxiaBasher_mnemLeftFor then
+      ataxiaBasher_mnemLeftFor("the Northern Ithmia")
+      expect(ataxiaBasher.inMnemosyne).toBeFalse()
+    end
+  end)
+
+  -- The collateral of the latch was worse than the tower being wrong: no fleeing anywhere.
+  it("no-flee does not apply to that real area", function()
+    baseline()
+    ataxiaBasher.inMnemosyne = false
+    expect(ataxiaBasher_isNoFleeArea("Ruins of Seleucar West of River Mnemosyne")).toBeFalse()
+  end)
+end)

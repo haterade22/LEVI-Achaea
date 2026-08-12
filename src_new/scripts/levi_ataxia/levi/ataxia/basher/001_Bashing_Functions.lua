@@ -567,7 +567,27 @@ end
 -- SURVEY named a REAL location (trigger 352): that is the only thing that takes us out of the
 -- Mnemosyne. The area can never do it -- the permanent-dementia boon fakes gmcp.Room.Info
 -- wholesale (area/num/exits/desc all a plausible real room), so SURVEY is the sole authority.
+-- Does a SURVEY reply mean we are still in the tower? (v4.7.260)
+--
+-- The tower answers "You are in wading the Mnemosyne." -- but "Ruins of Seleucar West of River
+-- Mnemosyne" is a REAL area, the riverbank you wade in from, and its name contains the same
+-- word. Testing for the bare word pinned ataxiaBasher.inMnemosyne ON for as long as you stood
+-- on that bank: 351 fired and killed the "assume we left" timer, 352 refused to clear, and
+-- every exit from the flag was closed at once.
+--
+-- Lives here rather than inside the trigger so there is ONE owner and it can be tested -- the
+-- first version of this fix put the check in the trigger, where a unit test calling
+-- mnemLeftFor directly sailed straight past it and a deliberate break went unnoticed.
+--
+-- Plain find (4th arg true): an area name is not a Lua pattern and must not be treated as one.
+function ataxiaBasher_mnemSurveySaysTower(where)
+  return type(where) == "string" and where:find("wading the Mnemosyne", 1, true) ~= nil
+end
+
 function ataxiaBasher_mnemLeftFor(where)
+  -- Belt as well as braces: the trigger already declines to call us for a tower reply, but a
+  -- real area that merely CONTAINS "Mnemosyne" must never be read as the tower by any path.
+  if ataxiaBasher_mnemSurveySaysTower(where) then return end
   if not ataxiaTemp.mnemSurveyPending then return end -- not our survey; ignore
   ataxiaBasher_mnemStillHere() -- close the window; we have a definitive answer
   ataxiaTemp.mnemSurveyPending = nil
