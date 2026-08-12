@@ -71,6 +71,7 @@ mnemRageFuelled = false -- boons reset each run (re-latches from the BOONS row /
 mnemThunderclap = false -- boons reset each run (re-latches from the BOONS row / claim)
 mnemStormcleaver = false
 mnemTruthseeker = false
+mnemToughCrowd, mnemElusiveFoolery, mnemApostatic = false, false, false
 mnemDivineThunder = false -- boons reset each run (re-latches from the BOONS row / claim)
 mnemIcyHeart = false -- boons reset each run (re-latches from the BOONS row / claim)
 mnemSongstep = false -- boons reset each run (re-latches from the BOONS row / claim)

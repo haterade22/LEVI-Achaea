@@ -838,6 +838,22 @@ Each class has:
 | Druid | Forest-loving metamorphs | Groves, Metamorphosis, Reclamation |
 | Infernal | Evil warriors employing necromantic methods (Knight) | Malignity, Oppression, Weaponmastery |
 | Jester | Happy-go-lucky pranksters and roguish entertainers | Puppetry, Pranks, Tarot |
+
+**JESTER PvE (v4.7.258).** **BADJOKE TAKES NO TARGET** -- AB 681 is `Syntax: BADJOKE`, "Works
+on: Adventurers, denizens, and room", 3.00s equilibrium, 100 mana, and it strips rebounding and
+shield from everyone who hears it. The basher sent `badjoke <target>` for its entire existence,
+so every shield-break was a malformed command; a rejected command is silent here, which is why
+nothing surfaced it. Three boons now handled in `ataxiaBasher_jesterBashing`: **Tough Crowd**
+(badjoke also deals psychic damage to all denizens, but stuns AND stupefies US -- so it rides
+the eq slot at 2+ denizens on a 12s cooldown behind a 300 mana floor, and `jesterJokeSafe`
+refuses while escaping / recovering / in lava / already stunned / at or below `escapeAt`, because
+stun blocks every action and stupidity EATS QUEUED COMMANDS; a shielded round where the joke is
+unsafe falls back to the rage raze); **Elusive Foolery** (keeps the `slippery` defence up -- the
+standard keeper shape, and shrugging off webs/ropes matters in the tower because entanglement is
+what strands an escape); **Apostatic** (`fling priestess at <target>` -- syntax confirmed in-tree
+from the lock-breakers' `fling fool at me`, NOT guessed -- on a deliberately generous 20s
+cooldown because whether a fling consumes an INSCRIBED CARD is unconfirmed, and it is appended
+rather than replacing the swing because its balance type is unconfirmed too).
 | Magi | Masters of the four elements and crystalline vibrations | Crystalism, Elementalism, Artificing |
 | Monk | Forges mind, body, and spirit into a unified whole | Tekura/Shikudo, Kaido, Telepathy |
 | Occultist | Chaos-loving summoners of extra-planar entities | Domination, Tarot, Occultism |

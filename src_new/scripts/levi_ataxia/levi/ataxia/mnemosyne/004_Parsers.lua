@@ -214,6 +214,7 @@ function M.onRunEnd()
   mnemThunderclap = false   -- boons gone on a confirmed run-end
   mnemStormcleaver = false
   mnemTruthseeker = false
+  mnemToughCrowd, mnemElusiveFoolery, mnemApostatic = false, false, false
   mnemDivineThunder = false -- boons gone on a confirmed run-end
   if ataxiaTemp then ataxiaTemp.mnemNulled = nil end
   ataxiaTemp.brFreeCharge = nil -- ...and any charge it had banked

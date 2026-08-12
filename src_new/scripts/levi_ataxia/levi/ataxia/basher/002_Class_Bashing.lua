@@ -1198,6 +1198,123 @@ function ataxiaBasher_infernalBashing()
 	return command
 end
 
+-- ELUSIVE FOOLERY (Mnemosyne boon, v4.7.258): "While slippery, your dexterity is increased by
+-- 2, the defence allows you to shrug off webs, ropes, and other entanglements, but your
+-- constitution is reduced by 1."
+--
+-- Everything it gives is conditional on the SLIPPERY defence being up, so the whole handling is
+-- "keep slippery raised" -- the same defence-keeper shape as infDeathaura / senselessFlurryNumb
+-- / dwFlashforward: defence-gated on the GMCP read, attempt-held so an unconfirmed raise cannot
+-- cost every round, and prefixed to the round rather than replacing anything.
+--
+-- `slippery` is a KNOWN Jester defence in this package (the defences map and classDefences both
+-- carry it), so neither the name nor the raising command is invented.
+--
+-- The -1 constitution is accepted rather than managed: it is the price of the boon and there is
+-- nothing to decide about it. Shrugging off entanglements is worth having in the tower on its
+-- own -- webs and ropes are exactly what strands an escape.
+function ataxiaBasher_jesterSlippery(sp)
+	if not mnemElusiveFoolery then return "" end
+	if ataxia.defences and ataxia.defences.slippery then return "" end
+	local nowT = (getEpoch and getEpoch()) or os.time()
+	ataxiaTemp = ataxiaTemp or {}
+	if (nowT - (tonumber(ataxiaTemp.jesterSlipperyAt) or 0)) < 10 then return "" end
+	ataxiaTemp.jesterSlipperyAt = nowT
+	return "slippery"..sp
+end
+
+-- Is it safe to BADJOKE right now? Only interesting while TOUGH CROWD is held, because that is
+-- the boon that turns our own joke into a self-affliction.
+--
+-- "Telling a bad joke will cause psychic damage to all denizens present, but your comedic flair
+-- is so horrific that doing so will cause you to become STUPID AND STUNNED."
+--
+-- Stun blocks every action outright, and stupidity is the affliction this codebase already
+-- documents as EATING QUEUED COMMANDS (the Pinnacle death, v4.7.116). So each use buys AoE
+-- damage at the price of a window in which we cannot act or reliably queue -- which is fine in
+-- a fight we are winning and lethal in one we are leaving. Every escape this session has been
+-- lost to something that stopped us moving; deliberately stunning ourselves mid-retreat would
+-- be doing it on purpose.
+function ataxiaBasher_jesterJokeSafe()
+	if not mnemToughCrowd then return true end -- no self-affliction: nothing to weigh
+	if ataxiaTemp and ataxiaTemp.escapeMode then return false end
+	local M = ataxia.mnemosyne
+	if M and M.roomLava and M.roomLava() then return false end
+	if M and M.swarm and M.swarm.state == "recovering" then return false end
+	if ataxia.afflictions and (ataxia.afflictions.stun or ataxia.afflictions.paralysis) then
+		return false -- already unable to act; a second stun only extends it
+	end
+	-- Defaulted, not conditional (the v4.7.255 rule): a guard that evaporates because a config
+	-- key is missing would stun us at crash HP on a fresh profile.
+	local s = M and M._cfg and M._cfg()
+	local esc = (s and s.swarm and tonumber(s.swarm.escapeAt)) or 35
+	local hp = tonumber(ataxia.vitals and ataxia.vitals.hpp)
+	if hp and hp <= esc then return false end
+	return true
+end
+
+-- BADJOKE. Base ability (AB 681): syntax `BADJOKE`, works on "Adventurers, denizens, and room",
+-- 3.00s of EQUILIBRIUM, 100 mana, and it strips the rebounding aura and shield defences from
+-- everyone who hears it.
+--
+-- SYNTAX CORRECTION (v4.7.258): this was sent as `badjoke <target>`. The ability takes NO
+-- target -- it is a room effect -- so every shield-break the Jester basher has ever thrown was
+-- a malformed command. Nothing surfaced it because a rejected command is silent here.
+--
+-- TOUGH CROWD adds psychic damage to all denizens, which makes it worth throwing on an
+-- UNSHIELDED round too. It costs equilibrium, so it rides free beside the balance swing (the
+-- standing resource rule) -- but the boon's self-stun means the limit is not equilibrium, it is
+-- how often we can afford to be unable to act. Hence a cooldown far longer than the 3s eq, a
+-- crowd gate (it is AoE), a mana floor (100 a throw, and mana is one-way under Corrupted
+-- Breath), and jesterJokeSafe above.
+function ataxiaBasher_jesterBadjoke(sp, shielded)
+	if not ataxiaBasher_jesterJokeSafe() then return "" end
+	-- 100 mana a throw. Keep headroom rather than bottoming out the pool: running out of mana
+	-- is a kill condition, and with a manaleech boon it does not come back.
+	local mp = tonumber(ataxia.vitals and ataxia.vitals.mp) or 0
+	if mp < (tonumber(ataxiaBasher.jesterJokeMana) or 300) then return "" end
+	if shielded then return "badjoke"..sp end -- the shield strip: no boon or crowd needed
+	if not mnemToughCrowd then return "" end
+	local M = ataxia.mnemosyne
+	local n = (M and M._denizenCount and M._denizenCount()) or 0
+	if n < (tonumber(ataxiaBasher.jesterJokeAt) or 2) then return "" end
+	local nowT = (getEpoch and getEpoch()) or os.time()
+	ataxiaTemp = ataxiaTemp or {}
+	if (nowT - (tonumber(ataxiaTemp.jesterJokeAt) or 0)) < (tonumber(ataxiaBasher.jesterJokeCd) or 12) then
+		return ""
+	end
+	ataxiaTemp.jesterJokeAt = nowT
+	return "badjoke"..sp
+end
+
+-- APOSTATIC (Mnemosyne boon): "Your priestess tarot now deals magic damage to denizens instead
+-- of healing them." So a card that was actively counterproductive while bashing becomes damage.
+--
+-- The FLING syntax is not invented: `fling fool at me` is already sent by this package's
+-- lock-breakers (can(x)/003_Lock_breakers), so `fling <card> at <target>` is the confirmed form.
+--
+-- TWO THINGS ARE GENUINELY UNKNOWN and the defaults are conservative because of it:
+--   * which balance a fling spends (equilibrium is likely, but unconfirmed), so this is
+--     appended rather than allowed to replace the swing -- if it turns out to take BALANCE it
+--     costs a round rather than silently eating the attack;
+--   * whether it consumes an INSCRIBED CARD. Tarot cards are stock a Jester has to inscribe,
+--     so a fling every round could quietly empty the deck. The cooldown is therefore generous
+--     (`ataxiaBasher.jesterPriestessCd`, default 20s) rather than tuned.
+-- Capture the AB entry and both can be tightened; until then the failure mode is "we throw it
+-- less often than we could", which costs damage rather than resources we cannot replace.
+function ataxiaBasher_jesterPriestess(sp)
+	if not mnemApostatic then return "" end
+	if type(target) ~= "number" then return "" end
+	if ataxiaBasher.shielded then return "" end -- break the shield first
+	local nowT = (getEpoch and getEpoch()) or os.time()
+	ataxiaTemp = ataxiaTemp or {}
+	if (nowT - (tonumber(ataxiaTemp.jesterPriestessAt) or 0)) < (tonumber(ataxiaBasher.jesterPriestessCd) or 20) then
+		return ""
+	end
+	ataxiaTemp.jesterPriestessAt = nowT
+	return "fling priestess at "..target..sp
+end
+
 function ataxiaBasher_jesterBashing()
 	local command, sp = "", ataxia.settings.separator
 	local brage = ataxiaBasher_assembleBattlerage()
@@ -1206,15 +1323,26 @@ function ataxiaBasher_jesterBashing()
 	local rawhp = (gmcp.IRE.Target.Info.hpperc or "100"):gsub("%%", "")
 	local mobhp = tonumber(rawhp) or 100
 	local attack = (mobhp < 50) and "gallowshumour " or "bop "
+	-- Keep SLIPPERY up (Elusive Foolery) ahead of everything: it is a defence, not a swing.
+	local slip = ataxiaBasher_jesterSlippery(sp)
 
 	if ataxiaBasher.shielded then
+		local joke = ataxiaBasher_jesterBadjoke(sp, true)
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-			command = wield..raze..sp..attack..target
+			command = slip..wield..raze..sp..attack..target
+		elseif joke ~= "" then
+			command = slip..wield..joke..brage
 		else
-			command = wield.."badjoke "..target..sp..brage
+			-- Tough Crowd made the joke unsafe (or mana is short): fall back to the rage raze
+			-- rather than standing there shielded. Better a spent battlerage than a stun at
+			-- crash HP or a round that does nothing.
+			command = slip..wield..raze..sp..brage
 		end
 	else
-		command = wield..brage..sp..attack..target
+		-- Both riders spend something other than the balance swing, so they ride beside it.
+		local joke = ataxiaBasher_jesterBadjoke(sp, false)
+		local card = ataxiaBasher_jesterPriestess(sp)
+		command = slip..wield..joke..card..brage..sp..attack..target
 	end
 
 	return command

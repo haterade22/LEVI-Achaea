@@ -2,6 +2,81 @@
 
 ---
 
+## 2026-08-11 - Three Jester boons, and a BADJOKE that was never valid (v4.7.258)
+
+### The base bug, found in the AB the user supplied
+
+```
+Badjoke (Pranks)  ABADMIN ID: 681
+Syntax:            BADJOKE
+Works on/against:  Adventurers, denizens, and room
+Cooldown:          3.00 seconds of equilibrium
+Resource:          100 mana
+```
+
+**BADJOKE takes no target** -- it is a room effect. The Jester basher has been sending
+`badjoke <target>` for its entire existence, so every shield-break it threw was a malformed
+command. Nothing surfaced it because a rejected command is silent here. Fixed regardless of the
+boons.
+
+Worth noting what the base ability already does: it strips **rebounding and shield** from
+everyone in the room, which is why it is the Jester shield-break in the first place.
+
+### Tough Crowd
+
+> "Telling a bad joke will cause psychic damage to all denizens present, but your comedic flair
+> is so horrific that doing so will cause you to become stupid and stunned."
+
+BADJOKE becomes an AoE nuke, so it is worth throwing on an **unshielded** round too. It spends
+equilibrium, so it rides free beside the balance swing -- **but equilibrium is not the limit**.
+Stun blocks every action, and stupidity is the affliction this codebase already documents as
+*eating queued commands* (the Pinnacle death, v4.7.116). Each use buys damage at the price of a
+window in which we cannot act or reliably queue.
+
+`ataxiaBasher_jesterJokeSafe()` therefore refuses while **escaping, recovering, in lava, already
+stunned or paralysed, or at/below `escapeAt`**. Every escape lost this session was lost to
+something that stopped us moving; deliberately stunning ourselves mid-retreat would be doing it
+on purpose. The HP guard is *defaulted* (35), not conditional -- the v4.7.255 rule.
+
+Plus a 12s cooldown (far beyond the 3s eq), a 2+ crowd gate, and a 300 mana floor -- 100 a
+throw, and under Corrupted Breath mana never comes back. On a shielded round where the joke is
+unsafe, the round falls back to the rage raze rather than doing nothing.
+
+### Elusive Foolery
+
+> "While slippery, your dexterity is increased by 2, the defence allows you to shrug off webs,
+> ropes, and other entanglements, but your constitution is reduced by 1."
+
+Everything is conditional on the SLIPPERY defence, so the handling is simply "keep it up" --
+the established keeper shape (defence-gated on the GMCP read, 10s attempt-hold, prefixed to the
+round including shielded ones). `slippery` is already a known Jester defence in this package, so
+neither the name nor the raise command is invented. Shrugging off entanglements is worth having
+in the tower on its own: webs and ropes are exactly what strands an escape.
+
+### Apostatic
+
+> "Your priestess tarot now deals magic damage to denizens instead of healing them."
+
+`fling priestess at <target>` -- and the syntax is **not** guessed: `fling fool at me` is already
+sent by this package's lock-breakers, so `fling <card> at <target>` is confirmed in-tree.
+
+**Two things are genuinely unknown, and the defaults are conservative because of it:** which
+balance a fling spends (equilibrium is likely but unconfirmed), so it is appended rather than
+allowed to replace the swing; and whether it consumes an **inscribed card**, which is stock a
+Jester has to make. The cooldown is 20s rather than tuned. The failure mode is "we throw it less
+often than we could" -- damage lost, rather than resources we cannot replace.
+
+All three boons are also added to the seed DB, which did not carry them.
+
+### Tests
+
+New `test_basher_jester.lua`, **1343 -> 1367**. The bare-badjoke syntax, the crowd gate,
+cooldown, mana floor, all five safety refusals, the safety gate being inert without the boon,
+the shielded fallback, the slippery keeper and its hold, the fling and its cooldown, and both
+riders surviving alongside the swing. Four deliberate breaks confirmed each.
+
+---
+
 ## 2026-08-11 - Truthseeker: there are no hidden afflictions to count (v4.7.257)
 
 > Truthseeker (uncommon): "The God of Darkness allows your eyes to perceive the truth of all
