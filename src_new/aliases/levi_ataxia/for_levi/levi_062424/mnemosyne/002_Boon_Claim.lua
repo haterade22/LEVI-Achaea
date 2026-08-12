@@ -90,6 +90,10 @@ if matches[2]:lower():find("hammer and nail") then mnemHammerAndNail = true end
 if matches[2]:lower():find("rage%-fuelled") then mnemRageFuelled = true end
 if matches[2]:lower():find("thunderclap") then mnemThunderclap = true end
 if matches[2]:lower():find("stormcleaver") then mnemStormcleaver = true end
+if matches[2]:lower():find("truthseeker") then
+	mnemTruthseeker = true
+	if ataxia and ataxia.afflictions then ataxia.afflictions.unknown = nil end
+end
 if matches[2]:lower():find("divine thunder") then mnemDivineThunder = true end
 -- Midnight Snow's Icy Heart: the cold twin of Divine Thunder (blizzard instead of
 -- thunderstorm, same 30 shin / 4s eq / room). Matched on "icy heart" so the possessive

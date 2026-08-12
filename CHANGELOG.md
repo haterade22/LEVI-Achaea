@@ -2,6 +2,61 @@
 
 ---
 
+## 2026-08-11 - Truthseeker: there are no hidden afflictions to count (v4.7.257)
+
+> Truthseeker (uncommon): "The God of Darkness allows your eyes to perceive the truth of all
+> hidden afflictions that may befall you."
+>
+> "When we have this boon, the ? in our prompt isnt true." -- user
+
+Exactly right, and **the prompt is the least of it.**
+
+`ataxia.afflictions.unknown` is a counter that only ever goes *up* in `gotUnknownAff`
+(004_Aff_gains_losses) — nothing decrements it. It is read as a real affliction by the
+Mnemosyne recovery gate:
+
+```lua
+if k == "unknown" then if type(v) == "number" and v > 0 then return true end
+```
+
+So a phantom count makes `S._afflicted()` permanently true: `S._reenterReady()` can never pass
+and **every recovery hover burns its full 60s cap**. The screenshot shows roughly twenty
+accumulated — that gate wedged shut for the rest of the run. Same shape as the manaleech bug
+(v4.7.252), and worse, because manaleech at least clears when cured.
+
+It also spammed `diagnose`: the `>= 2` branch fires a queued diagnose to resolve afflictions
+that were never hidden.
+
+**Refused at the source, not filtered at each reader.** The boon means the *input* is wrong, so
+nothing downstream should have to know about it. `gotUnknownAff` returns immediately while
+`mnemTruthseeker` is held — it does not even arm the next-line capture.
+
+It also **clears anything already banked**, in the flag-setting paths as well as the guard: the
+BOONS row and the `BOON CLAIM` intercept are how the flag comes back after a reload or a mid-run
+re-latch, by which point the phantoms exist and stopping *new* ones would leave the old ones
+forever.
+
+Boon already present in the seed DB with this exact wording; new flag `mnemTruthseeker`, trigger
+`mnemosyne/067`, claim intercept, resets on run start and confirmed run end.
+
+### Tests
+
+**1338 -> 1343.** Normal counting without the boon, the capture not even armed with it, banked
+phantoms cleared, no diagnose spam, and diagnose still firing normally without it.
+
+Two test-quality problems surfaced and are worth recording:
+
+- **A deliberate break cascaded into 15 unrelated failures.** `gotUnknownAff`'s non-boon path
+  arms a `tempLineTrigger`, which the mock does not provide, so the break errored mid-test,
+  `restore()` never ran, and the overridden `send` leaked into every later file. Fixed by
+  stubbing the missing API and restoring defensively at the *start* of each test as well as the
+  end — an errored test never reaches its own cleanup.
+- **One assertion passed either way.** `gotUnknownAff` does not increment directly; it arms a
+  capture that increments on the next line. Asserting on the counter was therefore meaningless
+  at that point — it is nil in both worlds. The test now counts whether the capture was *armed*.
+
+---
+
 ## 2026-08-11 - Never walk back into the lava (v4.7.256)
 
 > "We cannot be escaping into a lava room as it will kill us." -- user

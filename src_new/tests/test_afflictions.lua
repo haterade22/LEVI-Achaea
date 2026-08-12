@@ -303,3 +303,105 @@ describe("darkshade tracking survives an uninitialised namespace", function()
     expect(ataxia.darkshadeTracker.threshold).toBe(9) -- config survives, state does not
   end)
 end)
+
+-- ============================================================================
+-- v4.7.257 -- Truthseeker: there are no hidden afflictions to count
+-- ============================================================================
+--
+-- User: "When we have this boon, the ? in our prompt isnt true." The cosmetic half is the
+-- least of it -- `ataxia.afflictions.unknown` is a counter that only goes UP in
+-- gotUnknownAff, and S._afflicted() reads it as a real affliction, so a phantom count wedges
+-- the Mnemosyne recovery gate shut for the rest of the run.
+describe("Truthseeker suppresses the unknown-affliction counter", function()
+  local realSend, sent
+
+  -- gotUnknownAff's NON-boon path arms a tempLineTrigger, which the mock does not provide.
+  -- Without this stub a deliberate break errors out mid-test, `restore()` never runs, and the
+  -- overridden `send` leaks into every file that runs after us -- which is exactly what
+  -- happened the first time these were broken back (15 unrelated failures).
+  -- Counting stub: gotUnknownAff does not increment directly, it ARMS a line trigger that
+  -- calls confirmedUnknownAff on the next line. So "did it record anything" has to be asked as
+  -- "did it arm the trigger" -- asserting on the counter alone passes whether or not the guard
+  -- exists, because the increment has not happened yet either way.
+  local armed = 0
+  local realTLT = tempLineTrigger
+
+  local function fresh(boon)
+    -- Restore defensively at the START too: an errored test never reaches its restore().
+    if realSend then send = realSend end
+    armed = 0
+    tempLineTrigger = function() armed = armed + 1; return 0 end
+    ataxia = ataxia or {}
+    ataxia.afflictions = {}
+    ataxia.vitals = { hp = 100, maxhp = 200, mp = 100, maxmp = 200 }
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.lokiCheck = nil
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.enabled = false
+    sent_diagnose = nil
+    mnemTruthseeker = boon and true or false
+    realSend, sent = send, {}
+    send = function(c) table.insert(sent, c) end
+  end
+  local function restore()
+    send = realSend
+    mnemTruthseeker = false
+    -- Never leave our counting stub for the next file. The mock has no tempLineTrigger, so
+    -- restore a plain no-op rather than nil -- reinstating nil is what made the first attempt
+    -- error on its own second test.
+    tempLineTrigger = realTLT or function() return 0 end
+  end
+
+  it("counts hidden afflictions normally without the boon", function()
+    fresh(false)
+    line = "You are confused as to the effects of the venom."
+    confirmedUnknownAff()
+    expect(ataxia.afflictions.unknown).toBe(1)
+    restore()
+  end)
+
+  it("does not even arm the capture while the boon is held", function()
+    fresh(false)
+    gotUnknownAff()
+    expect(armed).toBe(1)              -- normally it arms the next-line capture...
+    fresh(true)
+    gotUnknownAff()
+    expect(armed).toBe(0)              -- ...and under the boon it does not
+    expect(ataxia.afflictions.unknown).toBe(nil)
+    restore()
+  end)
+
+  -- Claimed mid-run, or re-latched from the BOONS list after a reload: phantoms have already
+  -- banked, and the flag alone would only stop NEW ones.
+  it("clears phantoms banked before the boon latched", function()
+    fresh(false)
+    ataxia.afflictions.unknown = 20   -- roughly what the screenshot showed
+    mnemTruthseeker = true
+    gotUnknownAff()
+    expect(ataxia.afflictions.unknown).toBe(nil)
+    restore()
+  end)
+
+  -- The `>= 2` branch fires a queued diagnose; under the boon there is nothing to diagnose.
+  it("does not spam diagnose for afflictions that were never hidden", function()
+    fresh(true)
+    ataxiaBasher.enabled = true
+    for _ = 1, 5 do gotUnknownAff() end
+    local diag = false
+    for _, c in ipairs(sent) do if c:find("diagnose", 1, true) then diag = true end end
+    expect(diag).toBeFalse()
+    restore()
+  end)
+
+  it("still diagnoses without the boon", function()
+    fresh(false)
+    ataxiaBasher.enabled = true
+    line = "You are confused as to the effects of the venom."
+    confirmedUnknownAff()
+    confirmedUnknownAff()
+    local diag = false
+    for _, c in ipairs(sent) do if c:find("diagnose", 1, true) then diag = true end end
+    expect(diag).toBeTrue()
+    restore()
+  end)
+end)

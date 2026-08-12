@@ -40,7 +40,35 @@ function confirmedUnknownAff()
 	end
 end
 
+-- TRUTHSEEKER (Mnemosyne boon, uncommon, v4.7.257): "The God of Darkness allows your eyes to
+-- perceive the truth of all hidden afflictions that may befall you."
+--
+-- User: "When we have this boon, the ? in our prompt isnt true." Exactly right -- there are no
+-- hidden afflictions to count while it is held, so every `?` is a phantom.
+--
+-- The cosmetic half is the least of it. `ataxia.afflictions.unknown` is a COUNTER that only
+-- ever goes up here, and it is read as a real affliction by `S._afflicted()` (mnemosyne/009):
+--
+--     if k == "unknown" then if type(v) == "number" and v > 0 then return true end
+--
+-- So a phantom count makes us permanently "afflicted" -- `S._reenterReady()` can never pass and
+-- every recovery hover burns its full 60s cap. The screenshot shows roughly twenty of them
+-- accumulated, which is that gate wedged shut for the rest of the run. Same shape as the
+-- manaleech bug (v4.7.252), and worse, because nothing ever decrements this.
+--
+-- It also spams `diagnose` -- the `>= 2` branch below fires a queued diagnose to resolve
+-- afflictions that were never hidden in the first place.
+--
+-- Refused at the SOURCE rather than filtered at each reader: the boon means the input is
+-- wrong, so nothing downstream should have to know about it.
 function gotUnknownAff()
+	if mnemTruthseeker then
+		-- Also drop anything banked before the boon was latched (claimed mid-run, or re-latched
+		-- from the BOONS list after a reload), so the prompt clears rather than keeping its
+		-- phantoms until the next full cure.
+		ataxia.afflictions.unknown = nil
+		return
+	end
 	if ataxia.vitals.hp == ataxia.vitals.maxhp and ataxia.vitals.mp == ataxia.vitals.maxmp then
 		send("curing predict recklessness")
 	elseif not ataxiaTemp.lokiCheck then
