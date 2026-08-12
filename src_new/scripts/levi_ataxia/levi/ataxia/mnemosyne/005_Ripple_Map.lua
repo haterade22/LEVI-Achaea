@@ -122,6 +122,17 @@ function MAP.exitFitsGrid(num, dir)
   local minx, maxx, miny, maxy = MAP.bounds()
   if not minx then return true end
   local g = tonumber(MAP.GRID) or 4
+  -- IF THE BOX IS ALREADY TOO BIG, OUR COORDINATES ARE WRONG -- NOT THE ROOM (v4.7.259).
+  -- Every ripple fits in GRIDxGRID, so a placed layout that already exceeds it is proof that
+  -- something upstream mis-placed a room (a stale map that outlived its ripple, a faked link,
+  -- an unreset counter). In that state EVERY exit overflows the box and this function refuses
+  -- all of them -- which presents as "grid swept -- nowhere left to patrol" in a room that
+  -- plainly has an exit, i.e. the sweep stops dead and says nothing useful.
+  --
+  -- A geometric check that can reject EVERY option is strictly worse than no check: it turns a
+  -- bad coordinate into a total stall. Decline to judge instead, and let the move be attempted
+  -- -- Room.WrongDir and the move timeout are still there to condemn a genuinely bad exit.
+  if (maxx - minx + 1) > g or (maxy - miny + 1) > g then return true end
   local w = math.max(maxx, tx) - math.min(minx, tx) + 1
   local h = math.max(maxy, ty) - math.min(miny, ty) + 1
   return w <= g and h <= g

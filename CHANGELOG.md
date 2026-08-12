@@ -2,6 +2,61 @@
 
 ---
 
+## 2026-08-11 - Why is the sweep not moving? (v4.7.259)
+
+> "Our mnem explore seems to be broken" ... "It did it again another level" -- user
+
+Live log: the sweep descends into a room whose description says **"You see a single exit
+leading northeast"**, immediately announces `grid swept -- patrolling`, then `off (nowhere left
+to patrol)`, and repeats the cycle on the next ripple.
+
+Root cause still under verification. What ships here is the reason it was hard to diagnose at
+all, plus one guard that is correct regardless.
+
+### The sweep refused silently
+
+`usableUnexplored` collapsed four independent conditions into one boolean, so when the answer
+came out "nothing to explore" the log said only *nowhere left to patrol* -- with no way to tell
+which gate refused without reading the source and guessing. That is the same fault the boss
+chase had before v4.7.255 gave it named refusals.
+
+`M._stepRefusal(num, dir)` now returns the reason or nil, and is the **single source** both the
+sweep and the new diagnostic use, so the explanation can never drift from the behaviour.
+
+**`mnem explore why`** prints, for the room you are standing in: whether we are in the tower,
+whether dead reckoning is active, whether the room is recorded at all, the grid bounding box
+against `MAP.GRID`, and every exit with `USABLE`, `[walked]`, or `REFUSED: <reason>`. It also
+shouts the one case that is otherwise invisible -- **gmcp reported no exits at all**, which
+against a room description that lists them is itself the fault.
+
+### A check that can reject EVERY option is worse than no check
+
+`MAP.exitFitsGrid` refuses an exit that would push the layout past `GRID` cells. If the placed
+box is *already* wider than the grid, then every exit overflows it and the function refuses all
+of them -- which presents exactly as the reported symptom: a dead stop in a room that plainly
+has an exit.
+
+But a box already larger than 4x4 is proof that **our coordinates are wrong**, not that the room
+has no real exits -- a stale map that outlived its ripple, a faked link, an unreset counter.
+`exitFitsGrid` now declines to judge in that state and lets the move be attempted;
+`Room.WrongDir` and the move timeout are still there to condemn a genuinely bad exit.
+
+### Jester: gallowshumour keys off the wrong stat
+
+From AB 2680 (user-supplied): gallowshumour "deals damage based on whichever stat is higher
+between your intelligence or strength". `ataxia.data.classPrimaryStat` had `jester = "str"`, so
+every Jester hit was recorded under `str` and the mob-damage DB's per-stat comparison was
+meaningless for an int-built character. A **list** value now means "whichever of these is
+currently higher", resolved against the live character. The `classPrimaryStat[x] ~= nil`
+presence test used to recognise a class-name filter is unaffected -- a list is non-nil too.
+
+The same AB **confirms the existing 50% switch is exactly right**: gallowshumour gains damage
+under 50% health and gains more under 25%, so the second tier needs no code -- it is the same
+command, simply worth more as the target drops. Also confirmed: it takes a TARGET, unlike
+badjoke, which does not.
+
+---
+
 ## 2026-08-11 - Three Jester boons, and a BADJOKE that was never valid (v4.7.258)
 
 ### The base bug, found in the AB the user supplied

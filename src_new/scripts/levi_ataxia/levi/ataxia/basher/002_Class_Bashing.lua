@@ -1322,6 +1322,13 @@ function ataxiaBasher_jesterBashing()
 	local wield = "wield blackjack;wield shield"..sp
 	local rawhp = (gmcp.IRE.Target.Info.hpperc or "100"):gsub("%%", "")
 	local mobhp = tonumber(rawhp) or 100
+	-- GALLOWSHUMOUR vs BOP (AB 2680, confirmed 2026-08-11). Against a denizen gallowshumour
+	-- needs no puppet, deals PSYCHIC damage off the better of intellect or strength, and
+	-- "the closer they are to death, the sharper your wit cuts": increased damage under 50%
+	-- health, and increased FURTHER under 25%. So the existing 50% switch is exactly the
+	-- documented breakpoint, and the second tier needs no code -- it is the same command,
+	-- simply worth more as the target drops. 2.10s of balance, and it takes a TARGET (unlike
+	-- badjoke, which does not).
 	local attack = (mobhp < 50) and "gallowshumour " or "bop "
 	-- Keep SLIPPERY up (Elusive Foolery) ahead of everything: it is a defence, not a swing.
 	local slip = ataxiaBasher_jesterSlippery(sp)

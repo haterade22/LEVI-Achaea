@@ -46,7 +46,11 @@ ataxia.data.classPrimaryStat = {
   ["depthswalker"] = "str",
   ["druid"] = "str",
   ["infernal"] = "str",
-  ["jester"] = "str",
+  -- GALLOWSHUMOUR (AB 2680) "deals damage based on whichever stat is higher between your
+  -- intelligence or strength", so Jester has no single primary stat -- the answer depends on
+  -- the character. A list means "whichever of these is currently higher" (v4.7.259); keying
+  -- every Jester hit under `str` made the per-stat comparison meaningless for an int-built one.
+  ["jester"] = { "int", "str" },
   ["magi"] = "int",
   ["monk"] = "str",
   ["occultist"] = "int",
@@ -72,6 +76,17 @@ ataxia.data.classPrimaryStat = {
 function ataxia.data.db.getPrimaryStat()
   local class = string.lower(gmcp.Char.Status.class or "")
   local statName = ataxia.data.classPrimaryStat[class] or "str"
+  -- A LIST means the class scales off whichever of those stats is higher (Jester's
+  -- gallowshumour: "the better of your intellect or strength"). Resolve it against the live
+  -- character rather than picking a fixed one, or the DB records the stat that did not matter.
+  if type(statName) == "table" then
+    local best, bestVal = statName[1], -1
+    for _, nm in ipairs(statName) do
+      local v = tonumber(ataxia.data.char and ataxia.data.char[nm]) or -1
+      if v > bestVal then best, bestVal = nm, v end
+    end
+    statName = best
+  end
   local statValue = "0"
   if statName == "str" then
     statValue = ataxia.data.char.str or "0"
@@ -147,6 +162,8 @@ function ataxia.data.db.showMobDamage(filter)
   if filter and filter ~= "" then
     -- Check if filter matches a class name
     local lowerFilter = string.lower(filter)
+    -- Still a plain presence test: a LIST value (a multi-stat class) is non-nil like any
+    -- other, so recognising a filter as a class name is unaffected by the change above.
     local isClass = ataxia.data.classPrimaryStat[lowerFilter] ~= nil
     if isClass then
       rows = db:fetch(ataxia.data.db.mobdmgdb.hits,

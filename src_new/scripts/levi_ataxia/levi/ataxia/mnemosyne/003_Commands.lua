@@ -50,6 +50,7 @@ function M.help()
     { "mnem debug", "Toggle verbose debug echoes" },
     { "mnem map [on|off|status]", "Toggle / diagnose the per-ripple mini-map" },
     { "mnem explore [on|off|status]", "Auto-sweep the 4x4, clear rooms, stop at the boon screen" },
+    { "mnem explore why", "Why is the sweep not moving? Per-exit refusal reasons" },
     { "mnem swarm [on|off|assess <n>|deep <r> <n>|icewall|kite|panic|escape|panicat|escapeat|recoverat]", "Multi-mob tactics + low-HP escape (fly/retreat instead of shield-in-place)" },
     { "mnem sense", "Fullsense recon of the ripple (Sleuth boon reveals all denizens)" },
     { "mnem cards [on|off|maran <hp%>|seasone <hp%>|matic <n>]", "Legend deck auto-draw (maran/seasone/morimbuul/matic/covenant/xylthus)" },
@@ -141,6 +142,7 @@ function M.command(rest)
   elseif cmd == "explore" then
     if arg == "off" then M.exploreOff()
     elseif arg == "status" then M.exploreStatus()
+    elseif arg == "why" then M.exploreWhy()
     elseif arg == "on" then M.exploreOn()
     else M.exploreToggle() end
   elseif cmd == "swarm" then

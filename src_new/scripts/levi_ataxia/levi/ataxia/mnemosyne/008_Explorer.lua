@@ -139,24 +139,36 @@ end
 -- from a room that has no planar exit at all (the holding room); `up`/`in`/`out`
 -- are never used, and a grid room's deeper `down` (alongside planar exits) is not
 -- taken either. Used for both the current-room pick and backtrack candidacy.
-local function usableUnexplored(num)
+-- WHY an exit cannot be swept, or nil when it can (v4.7.259).
+--
+-- The sweep used to refuse silently: four separate conditions collapsed into one boolean, and
+-- when the answer came out "nothing to explore" the log said only "grid swept -- nowhere left
+-- to patrol". A user hit exactly that in a room whose sole exit was an unwalked northeast, on
+-- every ripple, and there was no way to tell WHICH gate had refused without reading the source
+-- and guessing. Naming the reason is the same fix the boss chase got in v4.7.255.
+--
+-- Single source of truth on purpose: `usableUnexplored` and the `mnem explore why` diagnostic
+-- both call this, so the explanation can never drift from the behaviour it explains.
+function M._stepRefusal(num, d)
   local failed = (M.explore.failed and M.explore.failed[num]) or {}
-  local hasPlanar = roomHasPlanarExit(num)
+  if failed[d] then return "condemned -- a previous move that way failed" end
+  if M.edgeIsLava and M.edgeIsLava(num, d) then return "leads into lava" end
+  local planar = MAP.OFFSETS and MAP.OFFSETS[d]
+  if not planar then
+    -- up/in/out are never swept; `down` only from the holding room (no planar exit at all),
+    -- which is the ripple entry.
+    if d ~= "down" then return "non-planar (never swept)" end
+    if roomHasPlanarExit(num) then return "down, but this room has planar exits" end
+    return nil
+  end
+  if MAP.exitFitsGrid and not MAP.exitFitsGrid(num, d) then return "would leave the 4x4 grid" end
+  return nil
+end
+
+local function usableUnexplored(num)
   local out = {}
   for _, d in ipairs(MAP.unexploredExits(num) or {}) do
-    local planar = MAP.OFFSETS and MAP.OFFSETS[d]
-    -- An exit that would leave the ripple's 4x4 cannot be real, so do not spend a move on it
-    -- (v4.7.249). Under DEMENTIA the game reports invented exits through the same gmcp channel
-    -- as the true ones -- "You see exits leading north and west" in a room that has neither --
-    -- and walking one costs MOVE_TIMEOUT plus a retry before Room.WrongDir or the timeout
-    -- condemns it. The geometry knows in advance, and only ever rejects a provable overflow.
-    local fits = (MAP.exitFitsGrid == nil) or MAP.exitFitsGrid(num, d)
-    -- Never walk back into a room that has boiled us (v4.7.254). At 5890 unblockable a tick
-    -- there is no exploration value that pays for re-entering one.
-    local lava = M.edgeIsLava and M.edgeIsLava(num, d)
-    if not failed[d] and fits and not lava and (planar or (not hasPlanar and d == "down")) then
-      out[#out + 1] = d
-    end
+    if not M._stepRefusal(num, d) then out[#out + 1] = d end
   end
   return out
 end
@@ -497,6 +509,61 @@ function M.roomLava()
   local nowT = (getEpoch and getEpoch()) or 0
   if (nowT - at) > 6 then ataxiaTemp.mnemLavaAt = nil; return false end
   return true
+end
+
+-- `mnem explore why` -- answer "why is the sweep not moving?" from the GAME's state rather
+-- than from reading the source (v4.7.259).
+--
+-- Everything printed here is something a wrong answer would have made obvious at a glance:
+-- whether we are even in the tower, whether the room is recorded at all, what exits gmcp gave
+-- us versus which we have walked, the grid bounding box (a box already wider than GRID means
+-- the coordinates are wrong and every geometric refusal below is suspect), and the reason each
+-- individual exit was refused.
+function M.exploreWhy()
+  local cur = MAP and MAP.current
+  M._exploreEcho("<white>why<reset> -- sweep diagnostics")
+  cecho("\n  <NavajoWhite>in tower:   " .. (inMnem() and "<green>yes" or "<red>no")
+    .. "   <NavajoWhite>explore: " .. (M.explore.on and "<green>on" or "<red>off")
+    .. "   <NavajoWhite>moving: " .. (M.explore.moving and "<yellow>yes" or "<DimGrey>no"))
+  cecho("\n  <NavajoWhite>dead reckoning: "
+    .. ((MAP.drActive and MAP.drActive()) and "<yellow>ON (dementia)" or "<DimGrey>off"))
+  if not cur then
+    cecho("\n  <red>no current room<reset> -- nothing to decide from.\n")
+    return
+  end
+  local r = MAP.rooms and MAP.rooms[cur]
+  cecho("\n  <NavajoWhite>room:       <white>" .. tostring(cur)
+    .. (r and (" <DimGrey>(" .. tostring(r.name or "?") .. ")") or " <red>NOT RECORDED"))
+  if not r then cecho("\n"); return end
+
+  local minx, maxx, miny, maxy = MAP.bounds()
+  local n = 0
+  for _ in pairs(MAP.rooms) do n = n + 1 end
+  if minx then
+    local w, h = maxx - minx + 1, maxy - miny + 1
+    local g = tonumber(MAP.GRID) or 4
+    cecho("\n  <NavajoWhite>grid:       <white>" .. w .. "x" .. h .. "<reset> over " .. n .. " rooms"
+      .. ((w > g or h > g) and " <red>(LARGER THAN " .. g .. "x" .. g
+          .. " -- coordinates are wrong, geometry refusals below are suspect)" or ""))
+  else
+    cecho("\n  <NavajoWhite>grid:       <DimGrey>nothing placed<reset> (" .. n .. " rooms)")
+  end
+
+  local any = false
+  for d, dest in pairs(r.exits or {}) do
+    any = true
+    local walked = r.edges and r.edges[d]
+    local why = M._stepRefusal(cur, d)
+    cecho("\n    <white>" .. d .. "<reset> -> " .. tostring(dest)
+      .. (walked and " <DimGrey>[walked]" or "")
+      .. (walked and "" or (why and (" <red>REFUSED: " .. why) or " <green>USABLE")))
+  end
+  if not any then
+    -- The case worth shouting about: the game printed exits in prose and gmcp gave us none.
+    cecho("\n    <red>gmcp reported NO EXITS for this room<reset> -- if the room description"
+      .. " listed some, that is the fault.")
+  end
+  cecho("\n")
 end
 
 -- ---------------------------------------------------------------------------
