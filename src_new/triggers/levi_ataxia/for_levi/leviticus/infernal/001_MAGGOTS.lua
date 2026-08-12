@@ -39,7 +39,8 @@ patterns:
 
 if isTargeted(matches[2]) then
 	tarAffed(matches[3])
-  tarAffedConfirmed(matches[3])
+  -- Guarded v4.7.261: callee lives in a script that is switched off, so a bare call throws.
+  if tarAffedConfirmed then tarAffedConfirmed(matches[3]) end
    confirmAffV2(matches[3])
  if partyrelay then send("pt "..target..": "..matches[3])
       end

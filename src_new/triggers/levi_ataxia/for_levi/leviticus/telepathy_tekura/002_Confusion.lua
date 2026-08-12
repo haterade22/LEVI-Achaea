@@ -40,7 +40,8 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-	tarAffedConfirmed("confusion")
+	-- Guarded v4.7.261: callee lives in a script that is switched off, so a bare call throws.
+	if tarAffedConfirmed then tarAffedConfirmed("confusion") end
   if ataxia.settings.raid.enabled then
     if partyrelay and not ataxia.afflictions.aeon then
     send("pt confusion on "..matches[2],false)

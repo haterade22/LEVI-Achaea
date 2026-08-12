@@ -38,5 +38,6 @@ patterns:
 ]]--
 
 if target == matches[2] then
- slc_stance("Arash")
+ -- Guarded v4.7.261: callee lives in a script that is switched off, so a bare call throws.
+ if slc_stance then slc_stance("Arash") end
 end

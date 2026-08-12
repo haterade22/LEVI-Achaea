@@ -39,10 +39,11 @@ patterns:
 ]]--
 
 --dbg(matches[1])
-if SLC_blocked(matches[1]) == false then
+-- Guarded v4.7.261: callee lives in a script that is switched off, so a bare call throws.
+if SLC_blocked and SLC_blocked(matches[1]) == false then
  if slc.underhand_weapon == "hammer" then
-  SLC_connects(slc_last_limb,"underhand_hammer")
+  if SLC_connects then SLC_connects(slc_last_limb,"underhand_hammer") end
  elseif slc.underhand_weapon == "blade" then
-  SLC_connects(slc_last_limb,"underhand_blade")
+  if SLC_connects then SLC_connects(slc_last_limb,"underhand_blade") end
  end
 end

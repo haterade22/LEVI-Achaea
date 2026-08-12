@@ -2,6 +2,63 @@
 
 ---
 
+## 2026-08-12 - A script switched off must take its callers with it (v4.7.261)
+
+A live error storm, dozens of lines per second:
+
+```
+[ERROR:] object:<hit> function:<Trigger2153>
+  <[string "Trigger: hit"]:2: attempt to call global 'SLC_blocked' (a nil value)>
+```
+
+`SLC_blocked` is defined -- at `levi_scripts/slc/001_functions.lua:242`. The file simply never
+runs: its header carries **`isActive: 'no'`**, set when `lb` superseded the old SLC. The script
+still SHIPS (61 references in the built XML) and is still parsed by CI; Mudlet just never
+executes it, so every function in it is nil. The 70 sibling triggers that call those functions
+were left ACTIVE -- and most carry the pattern `^.*$`, so they were evaluated against **every
+line of game output** and threw on each one. Both a correctness bug and a real per-line cost.
+
+### Two different fixes, because they are two different situations
+
+`tools/check_orphans.py` found **108 orphaned call sites across four disabled scripts**, not one:
+the old SLC, the pre-V3 affliction core (`affliction_tracking_core/001_Core.lua`, superseded by
+V3), and a retired Shaman `ATTACK` script. Splitting them by whether the trigger does anything
+ELSE was the whole job:
+
+* **35 triggers did nothing but call dead code** -- disabled, matching the script they belong to.
+  Kept rather than deleted: they are the record of which attack each child mapped to.
+* **27 triggers do live work** and merely had one dead call among it. `390_Smoked` is typical --
+  its V3 call was already written `if onSmokeCureV3 then onSmokeCureV3() end` while the V2 call
+  beside it was bare. Those are now guarded in the file's own existing idiom, so behaviour is
+  identical if the script is ever re-enabled. Disabling these would have taken real curing logic
+  with them.
+
+### Why nothing caught it
+
+Every gate in the pipeline was blind to this by construction. The Lua syntax check passes -- the
+code is *valid*, the callee just does not exist at runtime. The unit tests never load triggers.
+The build succeeds, because a disabled script still ships. So the only symptom was an error
+window nobody was reading. `check_orphans.py` now runs in CI and fails the build; re-enabling a
+single orphan makes it fail, confirmed.
+
+### A retraction
+
+The first diagnosis in this session was that `[\[` at line 220 of the SLC file is an invalid Lua
+escape and the file therefore never parsed. **CI refuted it**: it runs `luac5.1 -p` over every
+file in `src_new` and has passed on every push -- Lua 5.1 silently maps an unknown escape to the
+bare character, and only 5.2+ rejects it. The escape was never the cause. It was still
+normalised to `[[` / `]]` (valid under both) so the file no longer depends on which interpreter
+reads it, and a sweep found six more files in the same shape, left alone as 5.1-legal.
+
+### Also
+
+`highlighting/047_Full_Mettle_Alchemist_Proc.lua` -- "The spirit of the Alchemist revitalises
+your body and mind.", the proc for the attune-gated boon, in `aquamarine` rather than the Sharp
+Mind pale blue because this one restores health and mana and should not read as a mind buff.
+It is also the only ground truth that the boon's Aspar attunement is actually live.
+
+---
+
 ## 2026-08-11 - The exit was never in the map (v4.7.260)
 
 Root cause of the v4.7.259 report, found by executing the real 005/008 under Lua against the

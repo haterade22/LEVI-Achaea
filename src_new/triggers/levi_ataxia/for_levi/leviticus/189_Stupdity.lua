@@ -37,7 +37,8 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-	tarAffedConfirmed("stupidity")
+	-- Guarded v4.7.261: callee lives in a script that is switched off, so a bare call throws.
+	if tarAffedConfirmed then tarAffedConfirmed("stupidity") end
   if ataxia.settings.raid.enabled then
     send("pt stupidity on "..matches[2],false)
   end

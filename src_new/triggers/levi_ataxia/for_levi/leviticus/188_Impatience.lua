@@ -37,7 +37,8 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-	tarAffedConfirmed("impatience")
+	-- Guarded v4.7.261: callee lives in a script that is switched off, so a bare call throws.
+	if tarAffedConfirmed then tarAffedConfirmed("impatience") end
   if ataxia.settings.raid.enabled then
     send("pt "..matches[2]..": impatience",false)
   end

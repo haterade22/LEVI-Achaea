@@ -40,4 +40,5 @@ patterns:
 ]]--
 
 slc_last_limb = matches[3]
-SLC_connects(slc_last_limb,"frontkick")
+-- Guarded v4.7.261: callee lives in a script that is switched off, so a bare call throws.
+if SLC_connects then SLC_connects(slc_last_limb,"frontkick") end

@@ -37,5 +37,6 @@ patterns:
   type: 1
 ]]--
 
-tarAffedConfirmed("haemophilia")
+-- Guarded v4.7.261: callee lives in a script that is switched off, so a bare call throws.
+if tarAffedConfirmed then tarAffedConfirmed("haemophilia") end
 confirmAffV2("haemophilia")

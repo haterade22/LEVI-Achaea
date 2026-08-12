@@ -34,6 +34,9 @@ jobs:
           echo "=== Checked $(find src_new -name '*.lua' -type f | wc -l) files, $errors errors ==="
           if [ $errors -gt 0 ]; then exit 1; fi
 
+      - name: Check for orphaned calls into disabled scripts
+        run: python3 tools/check_orphans.py
+
       - name: Check version consistency
         run: |
           echo "=== Checking version sync ==="

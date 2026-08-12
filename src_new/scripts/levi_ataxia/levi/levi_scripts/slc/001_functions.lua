@@ -217,7 +217,17 @@ function SLC_longdisplay() -- RETURNS A STRING
 		elseif x == 3 then out = out.."<magenta> ]   <yellow>["
 		elseif x == 4 then out = out.."<yellow> | "
 		elseif x == 5 then out = out.."<yellow> ]   <white>["
-		elseif x == 6 then out = out.."<white> ] <green> [\["
+		-- `[[` and `]]` (line 234) open/close the torso group, doubled to read differently from
+		-- the single-bracket groups above. Written `[\[` / `]\]` until v4.7.261 -- someone
+		-- escaped a bracket that needs no escaping, presumably fearing `[[` would open a long
+		-- string. It does not: long-bracket syntax only applies where a string may START.
+		--
+		-- NOT a bug in Lua 5.1, which silently maps any unknown escape to the bare character --
+		-- and CI proves it, since `luac5.1 -p` has passed over this file on every push. It IS a
+		-- hard error in 5.2+, so it was normalised to be valid under both rather than left to
+		-- depend on which interpreter reads it. This file being INACTIVE is why its functions
+		-- were nil; the escape was never the cause.
+		elseif x == 6 then out = out.."<white> ] <green> [["
 		end
 
 
@@ -231,7 +241,7 @@ function SLC_longdisplay() -- RETURNS A STRING
 		
 	end
 
-	out = out.."<green> ]\]"
+	out = out.."<green> ]]" -- closes the doubled torso bracket opened at x == 6
 
 	--lCount.middle:cecho(out)
 	cecho(out)

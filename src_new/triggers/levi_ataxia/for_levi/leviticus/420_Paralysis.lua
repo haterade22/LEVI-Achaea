@@ -49,7 +49,8 @@ patterns:
 ]]--
 
 if isTargeted(matches[2]) then
-	tarAffedConfirmed("paralysis")
+	-- Guarded v4.7.261: callee lives in a script that is switched off, so a bare call throws.
+	if tarAffedConfirmed then tarAffedConfirmed("paralysis") end
 
 	-- V3 integration: collapse branches (proves paralysis present)
 	if onTargetParalysisBlockV3 then onTargetParalysisBlockV3() end

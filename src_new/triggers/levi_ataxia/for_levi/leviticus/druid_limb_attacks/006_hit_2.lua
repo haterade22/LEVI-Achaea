@@ -38,4 +38,5 @@ patterns:
 ]]--
 
 slc_last_limb = matches[2]
-SLC_connects(slc_last_limb,"hydra")
+-- Guarded v4.7.261: callee lives in a script that is switched off, so a bare call throws.
+if SLC_connects then SLC_connects(slc_last_limb,"hydra") end
