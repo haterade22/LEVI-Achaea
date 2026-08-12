@@ -48,7 +48,25 @@ ataxia = { settings = { separator = ";" }, vitals = { hpp = 100 } }
 ataxia.mnemosyne = {
   map = MAP,
   run = { ripple = 1 },
-  explore = { on = true, fromRoom = nil, fromDir = nil },
+  explore = { on = true, fromRoom = nil, fromDir = nil, lavaRooms = {}, lavaEdges = {} },
+  -- Faithful minimal stand-ins for the predicates that live in 008 (not loaded here). The
+  -- swarm's escape routes consult these, so without them the lava guards are simply absent
+  -- and the tests would pass while the guard did nothing.
+  roomIsLava = function(k)
+    return k ~= nil and ataxia.mnemosyne.explore.lavaRooms[k] == true
+  end,
+  edgeIsLava = function(num, dir)
+    local nd = MAP.normDir(dir)
+    if num == nil or not nd then return false end
+    local e = ataxia.mnemosyne.explore.lavaEdges[num]
+    if e and e[nd] then return true end
+    local r = MAP.rooms[num]
+    local dest = r and r.exits and r.exits[nd]
+    if type(dest) == "number" and dest > 0 then
+      return ataxia.mnemosyne.explore.lavaRooms[dest] == true
+    end
+    return false
+  end,
   _cfg = function() return cfg end,
   _roomHasDenizens = function() return mobs > 0 end,
   _denizenCount = function() return mobs end,
@@ -93,6 +111,7 @@ local function fixture(count)
   -- onRipple deliberately preserves wall memory within a ripple, so tests must
   -- clear it explicitly for isolation.
   S.wallRaised = {}
+  M.explore.lavaRooms, M.explore.lavaEdges = {}, {}
   S._wallsRipple = nil
   S.tumbleResolvedAt, S._recoverTumbles = nil, nil -- fixture rewinds the clock; these must go with it
   S._meltRoom, S._meltTries = nil, nil
@@ -2010,6 +2029,52 @@ describe("manaleech must not hold a recovery (v4.7.252)", function()
     S.onTick()
     expect(S.state).toBe("idle")   -- handed back to the sweep, recovery done
     ataxia.afflictions = {}
+  end)
+end)
+
+-- ============================================================================
+-- v4.7.256 -- the escape routes refuse lava
+-- ============================================================================
+--
+-- Death log: "LOW HP (65%) retreating -> s" walked into boiling lava, and at 20% the ladder
+-- chose it again. 6,874 unblockable a tick, three times, dead. The room we came from is
+-- normally the safest square on the grid -- but "we walked through it" is not the same fact
+-- as "it is survivable".
+describe("escape routes refuse lava (v4.7.256)", function()
+  it("_backDir returns nil rather than retreating into it", function()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    expect(S._backDir()).toBe("s")            -- normally the cleared room behind us
+    M.explore.lavaRooms = { [100] = true }    -- ...which turns out to be lava
+    expect(S._backDir()).toBe(nil)            -- nil -> shield fallback, not death
+    M.explore.lavaRooms = {}
+  end)
+
+  it("_backDir also refuses on the remembered EDGE", function()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    M.explore.lavaEdges = { [200] = { south = true } }
+    expect(S._backDir()).toBe(nil)
+    M.explore.lavaEdges = {}
+  end)
+
+  -- The lava edge must sort BEFORE the safe one, or the scan would reach the safe exit first
+  -- and the test would pass whether or not the guard exists. (It did, on the first draft.)
+  it("the panic tumble never tumbles into it", function()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    MAP.rooms[200].exits = { east = 0, west = 0 }
+    M.explore.fromRoom, M.explore.fromDir = nil, nil  -- no back route: force the scan
+    S.wallRaised = {}
+    S.fwdShort = nil
+    M.explore.lavaEdges = { [200] = { east = true } } -- "east" sorts first
+    expect(S._panicDir()).toBe("w")           -- skips the lava despite it sorting first
+    M.explore.lavaEdges = {}
+  end)
+
+  it("panic direction is deterministic", function()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    MAP.rooms[200].exits = { south = 100, east = 0, north = 0 }
+    S.wallRaised = {}
+    local first = S._panicDir()
+    for _ = 1, 10 do expect(S._panicDir()).toBe(first) end
   end)
 end)
 

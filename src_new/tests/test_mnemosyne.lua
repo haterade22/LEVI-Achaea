@@ -3230,7 +3230,9 @@ describe("boiling lava", function()
     MAP.onRoom(50, "In the depths of a murky lake.", exits, nil)
     M.explore.on = true
     M.explore.fromDir = fromDir
+    M.explore.fromRoom = nil   -- stale values here would mark an edge out of the wrong room
     M.explore.lavaRooms = {}
+    M.explore.lavaEdges = {}
     M.explore.failed = {}
     ataxiaTemp = ataxiaTemp or {}
     ataxiaTemp.mnemLavaAt = nil
@@ -3484,5 +3486,86 @@ describe("following a fleeing boss", function()
     expect(M._chaseRefusal("southeast")).toBe("basher off")
     ataxiaBasher.enabled = true
     restore()
+  end)
+end)
+
+-- ============================================================================
+-- v4.7.256 -- never walk back into the lava
+-- ============================================================================
+--
+-- Death log, 08:36. v4.7.254 marked the lava room but nothing stopped us RE-ENTERING it:
+--   moving n -> splash 6874 -> flee s -> "room clear -> moving n" -> splash 6874
+--   -> flee s -> moving n -> splash 6874 -> "LOW HP (20%) retreating -> n" -> splash -> DEAD.
+-- Three separate paths led back in, and none consulted the lava memory.
+describe("never walking back into lava", function()
+  local M = ataxia.mnemosyne
+  local MAP = ataxia.mnemosyne.map
+
+  -- The grid from the log: a stone tunnel (100) with the lava corridor (200) to its north,
+  -- and the corridor has an unexplored northwest exit beyond it.
+  local function afterSplash()
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne, ataxiaBasher.enabled = true, true
+    MAP.drForce = false
+    MAP.reset()
+    M.explore.lavaRooms, M.explore.lavaEdges, M.explore.failed = {}, {}, {}
+    -- Only ONE way on from the tunnel, and it is the lava room: that is what made the lava a
+    -- transit node in the log rather than a place we merely visited.
+    MAP.onRoom(100, "In a stone tunnel.", { north = 0 }, nil)
+    M.explore.fromRoom, M.explore.fromDir = 100, "n"
+    MAP.onRoom(200, "A corridor inside the Gnoll fortress.", { south = 100, northwest = 0 }, "north")
+    local realSend = send; send = function() end
+    M.onLava()                       -- we splashed on arrival
+    send = realSend
+  end
+
+  it("remembers the EDGE, not just the room", function()
+    afterSplash()
+    expect(M.roomIsLava(200)).toBeTrue()
+    expect(M.edgeIsLava(100, "north")).toBeTrue()
+    MAP.drForce = nil
+  end)
+
+  -- The edge is what saves us: gmcp gives no destination id for an unvisited neighbour, so
+  -- room-keyed marking alone is unusable from the room next door.
+  it("refuses the step even with no destination id known", function()
+    afterSplash()
+    MAP.rooms[100].exits.north = 0   -- gmcp never filled it
+    expect(M._exitTarget(100, "north")).toBe(nil)
+    expect(M.edgeIsLava(100, "north")).toBeTrue()
+    MAP.drForce = nil
+  end)
+
+  -- THE ONE THAT KILLED US. Once the lava room was walked its exits stopped counting as
+  -- unexplored, so the earlier filter never saw them -- but the unexplored NW exit BEYOND it
+  -- made the lava room the shortest path, and the sweep took it three times.
+  it("will not backtrack THROUGH the lava room", function()
+    afterSplash()
+    MAP.current = 100
+    local step = M._nextExploreStep()
+    expect(step).toBe(nil)           -- the only route out is through lava: stay put
+    MAP.drForce = nil
+  end)
+
+  it("still sweeps a route that does not touch lava", function()
+    afterSplash()
+    MAP.rooms[100].exits.east = 0    -- a clean unexplored exit appears
+    MAP.current = 100
+    expect(M._nextExploreStep()).toBe("e")
+    MAP.drForce = nil
+  end)
+
+  -- An edge marked out of a room we were never next to would refuse a good exit forever.
+  it("does not record an edge from a stale fromRoom", function()
+    afterSplash()
+    M.explore.lavaRooms, M.explore.lavaEdges = {}, {}
+    MAP.current = 200
+    M.explore.fromRoom = 200          -- stale: says we came from the room we are standing in
+    M.explore.fromDir = "n"
+    local realSend = send; send = function() end
+    M.onLava()
+    send = realSend
+    expect(M.explore.lavaEdges[200]).toBe(nil)
+    MAP.drForce = nil
   end)
 end)

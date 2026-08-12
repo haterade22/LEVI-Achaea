@@ -283,6 +283,13 @@ function S._backDir()
   if not (MAP.OFFSETS and MAP.OFFSETS[back]) then return nil end
   local room = MAP.rooms and MAP.rooms[MAP.current]
   if not (room and room.exits and room.exits[back] == e.fromRoom) then return nil end
+  -- NEVER RETREAT INTO LAVA (v4.7.256). The room we came from is normally the safest square on
+  -- the grid -- we just cleared it -- but "we walked through it" is not the same fact as "it is
+  -- survivable". A death log has the ladder retreating south into boiling lava at 65%, and then
+  -- north into it again at 20%: 6,874 unblockable a tick, three times, and dead. Returning nil
+  -- drops the escape to its shield-in-place fallback, which is a bad outcome and not a fatal one.
+  if M.roomIsLava and M.roomIsLava(e.fromRoom) then return nil end
+  if M.edgeIsLava and M.edgeIsLava(MAP.current, back) then return nil end
   return MAP.shortDir(back), back, MAP.shortDir(fwd)
 end
 
@@ -593,9 +600,17 @@ function S._panicDir()
   -- walled room): wallRaised stores the walled edge's LONG dir for this room.
   local walled = S.wallRaised and MAP.current and S.wallRaised[MAP.current]
   walled = (type(walled) == "string" and MAP.normDir and MAP.normDir(walled)) or nil
+  -- Sorted for the same reason the lava exit chooser is (v4.7.254): an unordered scan means
+  -- the same room can tumble a different way on different runs, which is unreadable in a log.
+  local dirs = {}
+  for d in pairs(room.exits) do dirs[#dirs + 1] = d end
+  table.sort(dirs)
+
   local fallback
-  for d in pairs(room.exits) do
-    if MAP.OFFSETS and MAP.OFFSETS[d] then
+  for _, d in ipairs(dirs) do
+    -- Lava is excluded OUTRIGHT, not merely deprioritised like the forward and walled edges:
+    -- tumbling into 6,874 unblockable is worse than any fight we are fleeing (v4.7.256).
+    if MAP.OFFSETS and MAP.OFFSETS[d] and not (M.edgeIsLava and M.edgeIsLava(MAP.current, d)) then
       if d ~= fwd and d ~= walled then return MAP.shortDir(d) end
       fallback = MAP.shortDir(d)
     end

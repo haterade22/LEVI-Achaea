@@ -153,8 +153,7 @@ local function usableUnexplored(num)
     local fits = (MAP.exitFitsGrid == nil) or MAP.exitFitsGrid(num, d)
     -- Never walk back into a room that has boiled us (v4.7.254). At 5890 unblockable a tick
     -- there is no exploration value that pays for re-entering one.
-    local tgt = M._exitTarget and M._exitTarget(num, d)
-    local lava = tgt ~= nil and M.explore.lavaRooms[tgt] == true
+    local lava = M.edgeIsLava and M.edgeIsLava(num, d)
     if not failed[d] and fits and not lava and (planar or (not hasPlanar and d == "down")) then
       out[#out + 1] = d
     end
@@ -192,7 +191,15 @@ function M._nextExploreStep()
       -- Prefer the walked path; fall back to the known-room graph so a walked-graph gap
       -- (dropped edge in the demented tower) can't strand a placed, unexplored room.
       local steps = MAP.path(cur, num) or (MAP.pathKnown and MAP.pathKnown(cur, num))
-      if steps and #steps > 0 and planarStep(steps[1]) and (not best or #steps < #best) then best = steps end
+      -- REFUSE A PATH THAT STARTS BY WALKING INTO LAVA (v4.7.256). This is the one that killed
+      -- us: once the lava room had been walked, its exits were no longer "unexplored", so the
+      -- filter above never saw them -- but the room BEYOND it still had an unexplored exit, and
+      -- the shortest path to that ran straight through the lava. The sweep took it three times
+      -- at 6,874 a go. Checking only the FIRST step is sufficient and cheap: every step is
+      -- re-decided on arrival, so a route we never enter is a route we never traverse.
+      local firstOk = steps and steps[1] and not (M.edgeIsLava and M.edgeIsLava(cur, steps[1]))
+      if steps and #steps > 0 and firstOk and planarStep(steps[1])
+         and (not best or #steps < #best) then best = steps end
     end
   end
   if best then return best[1] end
@@ -349,6 +356,31 @@ end
 -- move and some HP. Here staying costs half the health pool per tick, so ANY door beats the
 -- floor -- including one we have never walked.
 M.explore.lavaRooms = M.explore.lavaRooms or {}
+-- LAVA IS ALSO REMEMBERED AS AN EDGE (v4.7.256), and that is the half that actually saves us.
+--
+-- Marking the ROOM only helps if we can tell that an exit leads to it, and `_exitTarget` returns
+-- nil whenever gmcp has not filled a destination id -- which is exactly the case for a
+-- neighbour we have not visited. So "room 512 is lava" is unusable from the room next door.
+--
+-- At the instant we splash we know something better: which room we came FROM and which way we
+-- walked. "From room P, going north, is lava" needs no destination id from anyone, and it is
+-- the form both the sweep and the escape ladder can act on.
+M.explore.lavaEdges = M.explore.lavaEdges or {}
+
+function M.roomIsLava(key)
+  return key ~= nil and M.explore.lavaRooms[key] == true
+end
+
+-- Would stepping `dir` out of `num` put us in lava? True on either the remembered edge or a
+-- known destination room.
+function M.edgeIsLava(num, dir)
+  local nd = MAP.normDir and MAP.normDir(dir)
+  if not (num ~= nil and nd) then return false end
+  local byEdge = M.explore.lavaEdges[num]
+  if byEdge and byEdge[nd] then return true end
+  local tgt = M._exitTarget and M._exitTarget(num, nd)
+  return M.roomIsLava(tgt)
+end
 
 -- Where an exit leads, as a room key, or nil when we cannot tell. Works in both worlds: with
 -- honest ids the exit table carries the destination; under dementia the destination is an
@@ -415,6 +447,17 @@ function M.onLava()
   ataxiaTemp.mnemLavaAt = nowT
   local cur = MAP and MAP.current
   if cur then M.explore.lavaRooms[cur] = true end
+  -- Record the way IN, from wherever we came, so the room next door can refuse the step even
+  -- though it has no destination id for this room.
+  local from, fdir = M.explore.fromRoom, MAP.normDir and MAP.normDir(M.explore.fromDir)
+  -- Only when `from` really is a room we just LEFT. `explore.fromRoom` is stale whenever we
+  -- arrived by something other than a sweep step -- a swarm tumble, a boss chase, a forced
+  -- move -- and marking an edge out of a room we are not next to would refuse a perfectly good
+  -- exit somewhere else on the grid, forever.
+  if from ~= nil and fdir and from ~= cur then
+    M.explore.lavaEdges[from] = M.explore.lavaEdges[from] or {}
+    M.explore.lavaEdges[from][fdir] = true
+  end
 
   -- Hold the attack dispatcher: every attack sends `queue addclearfull`, which would wipe the
   -- move we are about to queue. Same rule as every other queued non-attack action.
@@ -1221,6 +1264,7 @@ M._explLoadH = registerAnonymousEventHandler("sysLoadEvent", function()
   M.explore.moving = false
   M.explore.tacticalMove = false
   M.explore.lavaRooms = {}
+  M.explore.lavaEdges = {}
   ataxiaTemp = ataxiaTemp or {}
   ataxiaTemp.bossChases, ataxiaTemp.bossPanicAt = nil, nil
   M.explore._prevBasher = nil

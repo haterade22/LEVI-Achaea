@@ -2,6 +2,64 @@
 
 ---
 
+## 2026-08-11 - Never walk back into the lava (v4.7.256)
+
+> "We cannot be escaping into a lava room as it will kill us." -- user
+
+**A death.** v4.7.254 marked the lava room and filtered one code path; three others still led
+straight back in:
+
+```
+moving n -> splash 6874 -> flee s -> "room clear -> moving n" -> splash 6874
+-> flee s -> moving n -> splash 6874 -> "LOW HP (20%) retreating -> n" -> splash -> DEAD
+```
+
+| Path | Why it walked in |
+|---|---|
+| Sweep **backtrack** | once the lava room was walked its exits stopped counting as unexplored, so the v4.7.254 filter never saw them — but the unexplored exit **beyond** it made the lava room the shortest path, and `MAP.path` has no hazard filter |
+| **Escape ladder** (`S._backDir`) | the room we came from is normally the safest square on the grid, and nothing told it otherwise |
+| **Panic tumble** (`S._panicDir`) | avoided icewalls and the forward edge, but not lava |
+
+### Remember the EDGE, not just the room
+
+Marking the room only helps if we can tell that an exit leads to it, and `_exitTarget` returns
+nil whenever gmcp has not filled a destination id — which is exactly the case for a neighbour we
+have not visited. **"Room 512 is lava" is unusable from the room next door.**
+
+At the instant we splash we know something better: which room we came *from* and which way we
+walked. `M.explore.lavaEdges[from][dir]` needs no destination id from anyone, and it is the form
+every consumer can act on. Shared predicates `M.roomIsLava(key)` / `M.edgeIsLava(num, dir)` are
+now used by `usableUnexplored`, the backtrack, `S._backDir` and `S._panicDir`.
+
+The backtrack checks only the **first step** of a candidate path — sufficient and cheap, because
+every step is re-decided on arrival, so a route we never enter is a route we never traverse.
+
+`S._backDir` returning nil drops the escape to its shield-in-place fallback: a bad outcome, and
+not a fatal one. **"We walked through it" is not the same fact as "it is survivable."**
+
+### Guards found while testing
+
+- **A stale `explore.fromRoom` would mark the wrong edge.** It is only current when we arrived
+  by a sweep step — a swarm tumble, a boss chase or a forced move leaves it stale, and an edge
+  recorded out of a room we are not next to would refuse a good exit somewhere else on the grid
+  forever. Now requires `from ~= cur`.
+- **`S._panicDir` scanned `pairs`**, so which way we tumbled was unreproducible — and it made
+  the lava guard untestable, since whether the guard mattered depended on hash order. Sorted,
+  the same fix v4.7.254 applied to the lava exit chooser.
+
+### Tests
+
+**1329 -> 1338.** The edge remembered, the step refused with no destination id, the backtrack
+refusing to transit, a clean route still swept, `_backDir` nil on both room and edge, the panic
+tumble skipping a lava exit that sorts first, deterministic panic direction, and the stale
+`fromRoom` guard.
+
+Four deliberate breaks confirmed all four paths. **Two of the tests initially passed on the
+break** and were rewritten: the panic test had the safe exit sorting first, so the guard was
+never reached, and two swarm assertions were in a file that does not load the swarm module.
+
+---
+
 ## 2026-08-11 - A boss that runs away (v4.7.255)
 
 > "When fighting this boss, we need to follow him out and continue attacking." -- user
