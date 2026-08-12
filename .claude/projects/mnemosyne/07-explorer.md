@@ -615,6 +615,89 @@ The log measures the cost: cancel at **11:40:41.115**, retry at **11:40:45.938**
 
 **A fallback timer is for when the game says NOTHING. When it names the failure, use it.**
 
+### Boiling lava - the only unconditional "leave now" (v4.7.254, hardened v4.7.256)
+
+```
+Molten lava bubbles and churns. ...
+You splash into boiling lava!
+Health lost: 5890 (unblockable).
+You continue to struggle in the boiling grasp of the lava as it eats away at your body.
+```
+
+**5,890 unblockable per tick against a 10,939 pool** - 54% of the pool, two ticks is a death,
+and *unblockable* means no shield, no barrier, no resistance. Ablaze is ~1,200 and merely gates
+the hover; this cannot be traded with at all.
+
+**It is the exception to the validated-route rule.** The escape ladder refuses unvalidated exits
+by user decision (v4.7.243) because a wrong door costs a move and some HP. Here staying costs
+half the pool per tick, so any door beats the floor - including one we have never walked.
+
+| | |
+|---|---|
+| Exit order | back the way we came (provably safe - we just stood there) -> any planar exit not into a known lava room -> any planar -> `down` |
+| Attack hold | escape mode, so the next `queue addclearfull` cannot wipe the move |
+| Tactics | any swarm tactic in flight is reset - a funnel is a plan for a room we can survive |
+| Repeat | re-sends every tick; an eaten move must be retried against a two-tick death |
+| No exit known | `ql` (the exits line is parsed) and **MOVE MANUALLY** - the one case the sweep cannot save us from |
+
+Both lines are used: the splash is entry, the struggle is the tick, and the tick fires without
+an entry line when we were already standing in it.
+
+#### v4.7.256 - the death, and why marking the room was not enough
+
+Marking the lava room caught the unexplored-exit chooser. **Three other paths still led back
+in**, and the log shows all of them inside twenty seconds:
+
+| Path | Why |
+|---|---|
+| Sweep **backtrack** | once the room was walked, its exits stopped counting as unexplored - but the unexplored exit *beyond* it made lava the shortest path, and `MAP.path` has no hazard filter |
+| `S._backDir` | the room we came from is normally the safest square on the grid |
+| `S._panicDir` | avoided icewalls and the forward edge, not lava |
+
+**Remember the EDGE, not just the room.** Room-keyed marking is unusable from the room next
+door: `_exitTarget` returns nil whenever gmcp has not filled a destination id, which is exactly
+the case for a neighbour we have not visited. At the instant we splash we know which room we
+came *from* and which way we walked - `M.explore.lavaEdges[from][dir]` needs no id from anyone.
+Shared predicates `M.roomIsLava` / `M.edgeIsLava` now feed all four consumers.
+
+The backtrack checks only the **first step**: every step is re-decided on arrival, so a route we
+never enter is a route we never traverse. `S._backDir` returning nil drops the ladder to
+shield-in-place - bad, and not fatal. **"We walked through it" is not the same fact as "it is
+survivable."**
+
+Two guards found while testing: a stale `explore.fromRoom` (current only after a sweep step -
+not a tumble, chase or forced move) would mark an edge out of a non-adjacent room and refuse a
+good exit forever, so recording requires `from ~= cur`; and both exit scans are **sorted**,
+because an unordered choice makes the log unreadable *and* made the guards untestable.
+
+**Residual, by design:** if a lava room is the only route to unexplored territory the sweep
+refuses and returns nil, so a ripple can end partially swept. That is the intended trade.
+
+### A boss that runs away (v4.7.255)
+
+```
+Lyaeus, the travelling bard flails in panic.
+His fingers plucking a plaintive melody on his lyre, a satyri bard strolls out to the southeast...
+```
+
+**The two lines name him differently** - proper name on the panic, generic denizen description
+on the departure. Neither suffices alone: the panic says *who*, the departure says *where*, and
+they are paired within `PANIC_WINDOW` (6s). A boss ripple only ends when the boss dies, so a
+boss that walks out is not a fight we can decline - the opposite of every other "should we
+move?" decision here.
+
+`M._chaseRefusal(dir)` is split from the send so the decision is testable and every refusal is
+named: `nothing panicked recently`, `escaping` / `recovering` / `lava`, `too hurt to chase`,
+`chase budget spent` (4/ripple), `basher off`, `not in the tower`. **Never chase while leaving**
+- adding a pursuit to a retreat is how a retreat becomes a death. The HP guard is **defaulted**
+(35) rather than conditional, because a guard that evaporates on a missing config key would
+chase at crash HP on a fresh profile.
+
+Trigger `mnemosyne/066` matches the **fragment** `out to the <direction>` with the directions
+enumerated - every denizen words its exit differently ("strolls", "prowls", "stomps"), and
+enumerating verbs gives a trigger that works for the boss you captured and silently misses the
+next. Safe because it decides nothing on its own.
+
 ### A tumble in flight is not "nowhere to go" (v4.7.252)
 
 The mid-recovery re-tumble computed its direction as
@@ -633,6 +716,21 @@ Four conditions were `and`-ed into one value and the else-branch gave them all t
 — but **"already leaving" means WAIT and "no route" means GIVE UP**. The lock now consumes the
 tick and re-schedules; a genuine dead end still hands back, because standing attack-gated while
 something hits us is the one thing worse than trading.
+
+### Truthseeker: phantom `?` wedge the same gate (v4.7.257)
+
+`S._afflicted()` also reads `ataxia.afflictions.unknown > 0` as a real affliction. That counter
+only ever goes **up** in `gotUnknownAff` -- nothing decrements it -- and under the **Truthseeker**
+boon ("perceive the truth of all hidden afflictions") there are no hidden afflictions, so every
+increment is a phantom. A live screenshot showed ~20 banked: `S._reenterReady()` could never
+pass and every hover burned its full 60s cap for the rest of the run.
+
+Same failure as manaleech below, reached by a different field, which is the point -- this gate
+has now been wedged shut twice by inputs that were never real afflictions. Fixed at the
+**source** (`gotUnknownAff` returns before even arming its next-line capture) rather than in the
+gate, because the boon means the input is wrong and the prompt and the `diagnose` trigger read
+it too. The flag-setting paths also clear what is already banked, since they are how the flag
+returns after a reload or mid-run re-latch.
 
 ### Manaleech must not hold a recovery (v4.7.252)
 

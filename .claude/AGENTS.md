@@ -593,6 +593,75 @@ set was already active -- the user's real PvP priorities -- and the installer re
 Corollary: a command sent with `send(cmd, false)` is invisible, so its rejection is invisible
 too. If you silence a command, you owe the user an explicit report of what happened.
 
+## A guard that evaporates on missing config fails in the wrong direction (v4.7.255)
+
+```lua
+local esc = s and s.swarm and tonumber(s.swarm.escapeAt)
+if esc and hp and hp <= esc then return "too hurt" end   -- no esc -> NO GUARD
+```
+
+The "do not chase a fleeing boss at low HP" check silently disappeared when the config lacked
+the key, so on a fresh profile it would chase at crash HP. Defaulting the threshold (`or 35`)
+rather than conditioning on its existence keeps the guard present always.
+
+When a guard reads a tunable, ask what happens when the tunable is absent. If the answer is
+"the guard does not run", default the value instead of guarding on it.
+
+## Mark the EDGE, not the node, when the node id may be unknown (v4.7.256)
+
+A room was recorded as lethal by its room id. Useless from the room next door: the exit table
+carries a destination id only for neighbours the server already knows, so for an unvisited
+neighbour there is nothing to compare against and the guard silently passed. What we DO know at
+the moment of harm is which room we came from and which direction we walked -- an edge
+`(fromRoom, dir)` needs no id from anyone.
+
+Two corollaries that cost a death between them:
+- **Fix every consumer, not the one you were looking at.** The first pass filtered the
+  unexplored-exit chooser; the PATHFINDER, the escape ladder and the panic tumble all still
+  routed in. Grep for every place that picks a destination.
+- **A "first step only" check is enough for a re-decided walk.** Each arrival re-plans, so
+  refusing to ENTER a hazard is equivalent to refusing to traverse it, and far cheaper than
+  filtering whole paths.
+
+Guard the recording too: `explore.fromRoom` is current only after a sweep step. After a tumble
+or a chase it is stale, and an edge recorded out of a non-adjacent room refuses a good exit
+forever.
+
+## pairs-order roulette hides bugs from your tests (v4.7.254, again v4.7.256)
+
+Two "return the first acceptable X" scans iterated `pairs`. Deliberate breaks of the guards
+inside them left the suite GREEN, because which candidate came out first was chance and the
+tests happened to get the answer they wanted. Sorting fixed the tests *and* the behaviour: an
+unordered choice means the same room picks a different door on different runs, unreproducible
+exactly when the log most needs to be readable.
+
+**If a function returns "the first acceptable X" out of an unordered container, sort it.** And
+when writing the test, make the WRONG candidate sort first -- otherwise the assertion passes
+whether or not the guard exists.
+
+## A counter that only goes UP is a latch with extra steps (v4.7.257)
+
+`ataxia.afflictions.unknown` counts hidden afflictions; nothing decrements it, and a recovery
+gate reads `> 0` as "we are afflicted". Under a boon that reveals hidden afflictions every
+increment is a phantom, ~20 banked, and the gate was wedged shut for the rest of the run.
+
+- **Refuse bad input at the SOURCE, not at each reader.** Filtering it in the recovery gate, the
+  prompt and the diagnose trigger separately would have been three chances to miss one.
+- **When a flag can be set LATE** (claimed mid-run, re-latched after a reload), stopping new bad
+  data is not enough -- clear what already accumulated, in the flag-setting path too.
+
+## Two test-hygiene faults worth naming (v4.7.257)
+
+**An errored test never reaches its own cleanup.** A deliberate break hit an unmocked API,
+threw, skipped `restore()`, and leaked an overridden `send` into every later file: 15 unrelated
+failures from one real one. Stub the APIs the path under test touches, and restore defensively
+at the START of each test as well as the end.
+
+**Assert on the observable the function actually produces.** `gotUnknownAff` does not increment
+its counter -- it ARMS a line trigger that increments later, so asserting on the counter passed
+whether or not the guard existed (nil in both worlds at that moment). Count the ARM instead. If
+a test cannot distinguish the two worlds, it is not testing the change.
+
 ## Quality Gates (Hooks)
 
 Hooks in `.claude/hooks/` run automatically and block operations that fail validation:
