@@ -243,8 +243,30 @@ end
 --   * outside it the ids are real and relayout needs them for coordinates, so the text only
 --     BACKFILLS directions gmcp did not give -- adding what is missing without discarding what
 --     is known.
+-- A GLANCE PRINTS SOMEONE ELSE'S ROOM (v4.7.262). `Glancing to the northwest, you see:` is
+-- followed by the NEIGHBOUR's description and the NEIGHBOUR's exits line -- and trigger 063
+-- hands every exits line to onExitsLine with no notion of whose room it describes. Observed
+-- live: room 67777, whose own description lists two exits, holding FOUR, with the two extras
+-- being exactly the glanced room's. They store as destination 0, which reads as USABLE, so the
+-- sweep offers steps through doors that do not exist.
+--
+-- A one-shot TOKEN, not a time window: the glanced block prints its exits line immediately, and
+-- a token that gets SPENT distinguishes the first line from the rest. Same reasoning as
+-- MAP.drArm -- a predicate over current state cannot tell one line from the next.
+function MAP.onGlance(dir)
+  MAP._glanceSkip = { dir = dir, at = (getEpoch and getEpoch()) or 0 }
+end
+
 function MAP.onExitsLine(text)
   if not MAP.inMnem() then return false end
+  -- Spend the glance token before anything else: this line belongs to the room we LOOKED at.
+  if MAP._glanceSkip then
+    local g = MAP._glanceSkip
+    MAP._glanceSkip = nil
+    -- Belt as well as braces. A stale token -- the glanced block printed no exits line at all --
+    -- must never eat OUR next one, so it expires as well as being consumed.
+    if ((getEpoch and getEpoch()) or 0) - (tonumber(g.at) or 0) <= 3 then return false end
+  end
   local dirs = MAP.parseExitsLine(text)
   if not dirs then return false end
   local dr = MAP.drActive()
@@ -315,6 +337,7 @@ function MAP.reset()
   MAP.current = nil
   MAP.origin = nil
   MAP._lastMoveDir = nil
+  MAP._lastArrival = nil -- a new ripple's ids mean nothing, and neither does the arrival using them
   MAP.drResetPos() -- a new ripple starts the reckoning at its own origin
   -- The explorer's room-number-keyed memory (lava, condemned exits, chase counters) is only
   -- meaningful for the level it was learned on -- the tower reuses real room ids across ripples.
@@ -383,12 +406,27 @@ function MAP.onRoom(num, name, exits, moveDir)
     from.edges[dir] = num
     local opp = MAP.OPPOSITE[dir]
     if opp then room.edges[opp] = from.num end
+    -- THE MAP IS THE ONLY HONEST WITNESS TO HOW WE GOT HERE (v4.7.262).
+    --
+    -- `explore.fromRoom`/`fromDir` record the move we ARMED, and nothing on any arrival path
+    -- ever corrects them -- so after an unarmed room change (panic tumble, recovery tumble,
+    -- drag, forced move) they name a room we are not next to, and whoever reads them as fact
+    -- condemns an edge somewhere else on the grid.
+    --
+    -- This block is the ONE place an arrival is resolved; it runs for EVERY arrival however
+    -- caused, and it has already PROVEN adjacency by writing the edge. The direction survives a
+    -- tumble because MAP._lastMoveDir is captured from sysDataSendRequest, which sees
+    -- `...;tumble ne` exactly as it sees `...;nw`. Publish it rather than making each consumer
+    -- re-derive it, badly.
+    MAP._lastArrival = { from = from.num, dir = dir, to = num,
+                         at = (getEpoch and getEpoch()) or 0 }
   end
   if from and num ~= from.num then MAP._prev = from.num end -- for `mnem map status`
 
   if MAP.origin == nil then MAP.origin = num end
   MAP.current = num
   MAP._lastMoveDir = nil
+  MAP._glanceSkip = nil -- a room change ends any glance context
 
   -- Re-derive every room's coordinate from the exit graph now that this room and
   -- its exits are recorded (see MAP.relayout).

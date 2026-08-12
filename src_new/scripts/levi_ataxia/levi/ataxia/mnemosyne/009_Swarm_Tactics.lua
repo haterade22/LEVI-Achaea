@@ -423,8 +423,16 @@ function S._beginPull(shortBack, longBack, shortFwd, count, mode)
       -- No swing came (shielded branch / no target / hard aff) -- escape without the hit.
       ataxiaTemp.swarmPullDir = nil
       local sep = (ataxia.settings and ataxia.settings.separator) or ";"
-      if M._tacticalArm then M._tacticalArm(S.backShort) end
+      -- ORDER MATTERS (v4.7.262). The arm ran BEFORE the bail, so a tumble in flight left
+      -- explore.fromRoom/fromDir describing a move that was never transmitted, and
+      -- explore.moving set with a timeout armed. The tumble then landed somewhere that is NOT
+      -- backShort of the swarm room, and that fabricated anchor was live from then on -- one of
+      -- the ways a lava splash came to condemn an edge on the far side of the grid.
+      --
+      -- A bail must precede the state it would strand. This is the order S._tacticalGo already
+      -- uses: lock first, arm second.
       if S.moveLocked() then return end -- v4.7.243: never cancel a live tumble
+      if M._tacticalArm then M._tacticalArm(S.backShort) end
       S.escapeOn("pull, no swing") -- v4.7.243: this branch armed nothing at all before
       send("queue addclear free stand" .. S._escapeSuffix(sep))
       S._echo("no swing came; escaping plain -> <cyan>" .. S.backShort .. "<reset>.")

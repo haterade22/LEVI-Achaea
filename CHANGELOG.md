@@ -2,6 +2,101 @@
 
 ---
 
+## 2026-08-12 - The move we ARMED is not the move that HAPPENED (v4.7.262)
+
+```
+(MNEM): [explore] every remaining exit was refused --
+    67777 northwest: leads into lava
+  room:  67777 (Darkened corridor)   grid: 4x3 over 8 rooms
+    northwest -> 67738 REFUSED: leads into lava
+```
+
+The user glanced northwest and saw an ordinary room with a denizen in it. There had never been
+lava there. Diagnosed by executing the real 005/008 under Lua rather than by reading them.
+
+### The root cause
+
+`M.explore.fromRoom` / `fromDir` are a record of the move we last **ARMED**. Nothing on any
+arrival path confirms, rewrites or clears them, and `onLava`'s guard -- `from ~= cur` -- rejects
+only the single case where the armed move failed and we never left. **Every other room on the
+grid satisfies it.** So any unarmed room change (panic tumble, recovery tumble, drag, forced
+move) left the pair naming a room we are not next to, and the next lava tick condemned an edge
+out of *that* room, permanently.
+
+The map already knew the truth. `MAP.onRoom` resolves the traversed direction for **every**
+arrival however caused -- and it survives a tumble, because `MAP._lastMoveDir` is captured from
+`sysDataSendRequest` and sees `...;tumble ne` exactly as it sees `...;nw` -- then proves adjacency
+by writing the edge both ways. It now publishes that as `MAP._lastArrival`, and `M._inbound()` is
+the single owner of "how did we get into this room", preferring the witnessed arrival and
+accepting the armed pair **only** where the map can prove it adjacent. A refusal returns its
+REASON and is echoed in red as it happens.
+
+### Five more confirmed faults in the same area
+
+* **A trailing struggle tick spoke for a room we had already left.** The splash is the ENTRY, the
+  struggle is the TICK, and they shared one script with no way to tell them apart -- so a
+  buffered tick processed after the escape's `gmcp.Room` marked the *safe* room we had just
+  reached and condemned the escape edge, the one door the code itself calls provably not lava.
+  The trigger now passes `line`. Bounded at ONE discarded tick: a second identical tick means we
+  really are burning and the entry line was missed, so we adopt it. **Never raise
+  `LAVA_STRAY_TICKS` above 1** -- two discarded ticks is 11,780 unblockable, a death at the
+  observed pool.
+* **The escape flipped direction mid-episode.** `_lavaExit` re-derived the exit every tick, but
+  the ticks are not independent: `_tacticalArm` overwrites `fromDir` with the *escape* direction,
+  so from tick 2 "back the way we came" resolved to its OPPOSITE -- straight back into the room
+  we were fleeing toward. Since each send is `queue addclear` (it REPLACES the queued line), the
+  last tick before balance is the one that executed, so this was a coin flip over which way we
+  actually left, re-flipped every tick. And only tick 1 prints a banner, which is why it never
+  showed up in a log. The door is now chosen once per episode and re-validated, not re-derived.
+* **The lava banner never re-armed.** `first` was `not ataxiaTemp.mnemLavaAt`, and nothing ever
+  nils that stamp -- so every lava episode after the first in a session was completely silent.
+  That is a large part of why phantom marks accumulated unnoticed.
+* **`_beginPull` armed a move it then never sent.** The arm ran *before* the `moveLocked()` bail,
+  so a tumble in flight left a fabricated anchor plus `explore.moving` with a timeout. A bail must
+  precede the state it would strand.
+* **A new sweep inherited the previous context's armed pair.** Cleared in both `exploreOn` and
+  `_exploreResume`.
+
+### A regression of my own, from v4.7.260
+
+**A glance grafts the neighbour's exits onto the room we are standing in.** v4.7.260 ungated
+`onExitsLine` from dementia so the prose could feed the map at all -- correct, and this is its
+missing half. `Glancing to the northwest, you see:` is followed by the NEIGHBOUR's exits line, and
+trigger 063 hands every exits line to the map with no notion of whose room it is. That is the
+4-exits-vs-2 discrepancy in the report: 67777 held `north` and `southeast`, which are the glanced
+room's. Text exits store as destination `0`, which reads as an unwalked door, so
+`_nextExploreStep` returned nil before the glance and `se` after it -- the sweep would have walked
+a door that does not exist. Trigger `mnemosyne/071` arms a one-shot token the next exits line
+spends. **Widening what a parser accepts obliges you to say what it must still refuse.**
+
+### Diagnosability
+
+Lava marks are now RECORDS (`at`, `ripple`, `cur`, `why`) instead of bare `true`; `_stepRefusal`
+names *which* of the two independent lava facts fired (a remembered inbound edge, or a known lava
+destination room -- different repair paths, previously collapsed into one literal); and
+`mnem explore why` prints the whole lava ledger plus the map's witnessed arrival beside the
+explorer's armed pair. Seeing those two disagree is the entire diagnosis at a glance.
+
+### Do NOT re-chase these -- verified refuted
+
+1. **Stale-across-ripples lava marks** (the v4.7.260 fix regressing). `MAP.reset()` calls
+   `onRippleReset`; nothing carries across a ripple. Confirmed by execution.
+2. **The `MOVE_TIMEOUT` closure condemning an exit after an unarmed move.** It cannot fire in that
+   state -- `_onExploreRoom` runs on the same `gmcp.Room` event, ends the move and kills the timer.
+3. **An honest `lavaRooms` mark joined to an unvalidated gmcp destination id.** `_exitTarget`
+   validates nothing (a real latent gap), but the regime that would supply a dishonest id is the
+   regime that zeroes it, and gmcp was honest here.
+4. **"gmcp re-push wipes the text backfill."** Real and reachable, but a false-NEGATIVE mechanism
+   proposed as the cause of a false positive.
+
+### Tests
+
+**1376 -> 1385**, and every fix was reverted individually and confirmed to fail. Two first
+attempts did NOT fail on revert and were rewritten: the adjacency test used an anchor that was not
+a known room, so it tripped an earlier guard instead of the one under test.
+
+---
+
 ## 2026-08-12 - A script switched off must take its callers with it (v4.7.261)
 
 A live error storm, dozens of lines per second:

@@ -3263,6 +3263,12 @@ describe("boiling lava", function()
     ataxiaTemp = ataxiaTemp or {}
     ataxiaTemp.mnemLavaAt = nil
     ataxiaTemp.mnemLavaQlAt = nil
+    -- v4.7.262: a lava EPISODE is now stateful (anchor + stray count), and MAP publishes the
+    -- resolved arrival. Leaving any of them set leaks one scenario's geography into the next --
+    -- which is exactly the class of bug this block exists to catch.
+    ataxiaTemp.mnemLavaRoom, ataxiaTemp.mnemLavaStray = nil, nil
+    ataxiaTemp.mnemLavaDir = nil
+    MAP._lastArrival = nil
     realSend = send
     sentCmds = {}
     send = function(c) table.insert(sentCmds, c) end
@@ -3297,7 +3303,7 @@ describe("boiling lava", function()
   it("marks the room so the sweep never routes back in", function()
     room({ east = 0 }, nil)
     M.onLava()
-    expect(M.explore.lavaRooms[50]).toBeTrue()
+    expect(M.explore.lavaRooms[50] ~= nil).toBeTrue() -- v4.7.262: a record, not a bare true
     restore()
   end)
 
@@ -3639,13 +3645,162 @@ describe("room-keyed memory dies with the ripple", function()
     M.explore.fromRoom, M.explore.fromDir = 65314, "n"
     local realSend = send; send = function() end
     MAP.onRoom(65420, "Boiling lava.", { south = 65314 }, "north")
-    M.onLava()
+    M.onLava("You splash into boiling lava!")
     send = realSend
-    expect(M._stepRefusal(65314, "north")).toBe("leads into lava") -- correct, THIS ripple
+    -- Pass the real entry line: onLava now distinguishes the splash (entry) from the struggle
+    -- (tick), and only the splash may speak for a room mid-episode.
+    expect((M._stepRefusal(65314, "north") or ""):find("leads into lava", 1, true) ~= nil).toBeTrue()
 
     MAP.onRipple(2) -- new level, same ids come back around
     MAP.onRoom(65314, "An empty cavern.", { north = 65420 }, nil)
     expect(M._stepRefusal(65314, "north")).toBe(nil)
     MAP.drForce = nil
+  end)
+end)
+
+
+-- ---------------------------------------------------------------------------
+-- The phantom lava edge (v4.7.262)
+-- ---------------------------------------------------------------------------
+describe("lava marks only what the map witnessed", function()
+  local M = ataxia.mnemosyne
+  local MAP = ataxia.mnemosyne.map
+  local realSend, sentCmds
+
+  local SPLASH = "You splash into boiling lava!"
+  local TICK = "You continue to struggle in the boiling grasp of the lava as it eats away at your body."
+
+  local function setup()
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = true
+    MAP.drForce = false
+    MAP.reset()
+    M.explore.on = true
+    M.explore.lavaRooms, M.explore.lavaEdges, M.explore.failed = {}, {}, {}
+    M.explore.fromRoom, M.explore.fromDir = nil, nil
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.mnemLavaAt, ataxiaTemp.mnemLavaRoom, ataxiaTemp.mnemLavaStray = nil, nil, nil
+    ataxiaTemp.mnemLavaDir = nil
+    ataxiaTemp.mnemLavaQlAt = nil
+    MAP._lastArrival = nil
+    realSend = send; sentCmds = {}
+    send = function(c) table.insert(sentCmds, c) end
+  end
+  local function restore() send = realSend; MAP.drForce = nil end
+
+  -- THE REPORTED BUG. A tumble moved us without arming, so the armed pair named a door on the
+  -- far side of the grid and the splash condemned it forever.
+  it("condemns the edge we ACTUALLY walked, not the one we armed", function()
+    setup()
+    MAP.onRoom(50, "Darkened corridor.", { northeast = 0, northwest = 0 }, nil)
+    M.explore.fromRoom, M.explore.fromDir = 50, "nw"  -- armed a sweep step northwest...
+    MAP._lastMoveDir = "ne"                           -- ...but something tumbled us NORTHEAST
+    MAP.onRoom(70, "A river of boiling lava.", { southwest = 50 }, nil)
+    M.onLava(SPLASH)
+    expect(M.explore.lavaEdges[50] ~= nil).toBeTrue()
+    expect(M.explore.lavaEdges[50].northeast ~= nil).toBeTrue()
+    expect(M.explore.lavaEdges[50].northwest).toBe(nil) -- THE PHANTOM
+    restore()
+  end)
+
+  it("records no edge at all when the map cannot prove how we arrived", function()
+    setup()
+    MAP.onRoom(50, "A river of boiling lava.", { north = 0 }, nil)
+    MAP._lastArrival = nil
+    M.explore.fromRoom, M.explore.fromDir = 999, "nw" -- a room we are not next to
+    M.onLava(SPLASH)
+    expect(M.explore.lavaEdges[999]).toBe(nil)
+    expect(M.explore.lavaRooms[50] ~= nil).toBeTrue() -- the ROOM mark still stands
+    restore()
+  end)
+
+  -- The DISCRIMINATING case for the adjacency check. The anchor is a room we really do know --
+  -- so the "is it in the map?" guard passes -- but the edge it names does not lead to where we
+  -- are standing. The old guard (from ~= cur) accepted exactly this, which is the bug.
+  it("refuses an armed anchor that is KNOWN but not adjacent", function()
+    setup()
+    MAP.onRoom(50, "Darkened corridor.", { northeast = 70, northwest = 60 }, nil)
+    MAP.onRoom(60, "Hallway of spoils.", { southeast = 50 }, "northwest")
+    MAP._lastArrival = nil                            -- the map cannot witness this arrival
+    MAP.onRoom(70, "A river of boiling lava.", { southwest = 50 }, nil)
+    MAP._lastArrival = nil
+    M.explore.fromRoom, M.explore.fromDir = 50, "nw"  -- 50 nw leads to 60, NOT to 70
+    M.onLava(SPLASH)
+    expect((M.explore.lavaEdges[50] or {}).northwest).toBe(nil)
+    expect(M.explore.lavaRooms[70] ~= nil).toBeTrue()
+    restore()
+  end)
+
+  it("a trailing struggle tick does not condemn the room we escaped into", function()
+    setup()
+    MAP.onRoom(50, "Lava.", { west = 60 }, nil)
+    M.onLava(SPLASH)
+    expect(M.explore.lavaRooms[50] ~= nil).toBeTrue()
+    MAP.onRoom(60, "Hallway of spoils.", { east = 50 }, "west") -- the escape LANDS
+    M.onLava(TICK)                                              -- ...and a buffered tick arrives
+    expect(M.explore.lavaRooms[60]).toBe(nil)                   -- a perfectly good room
+    expect((M.explore.lavaEdges[50] or {}).west).toBe(nil)      -- the escape edge
+    restore()
+  end)
+
+  -- The bound matters more than the guard: refusing forever would cost a death.
+  it("believes the SECOND mismatched tick -- a missed entry line must not strand us", function()
+    setup()
+    MAP.onRoom(50, "Lava.", { west = 60 }, nil)
+    M.onLava(SPLASH)
+    MAP.onRoom(60, "Also lava, entry line missed.", { east = 50 }, "west")
+    M.onLava(TICK)
+    M.onLava(TICK)
+    expect(M.explore.lavaRooms[60] ~= nil).toBeTrue()
+    restore()
+  end)
+
+  it("keeps escaping by the SAME door on every tick", function()
+    setup()
+    MAP.onRoom(50, "Lava.", { south = 0, north = 0 }, nil)
+    M.explore.fromDir = "n" -- we walked north in, so south is back
+    M.onLava(SPLASH)
+    M.onLava(TICK)
+    M.onLava(TICK)
+    local seen = 0
+    for _, c in ipairs(sentCmds) do
+      local d = c:find("stand", 1, true) and c:match("stand;(%a+)$")
+      if d then seen = seen + 1; expect(d).toBe("s") end
+    end
+    expect(seen > 1).toBeTrue() -- proves more than one tick actually queued a move
+    restore()
+  end)
+
+  it("a glance does not graft the neighbour's exits onto our room", function()
+    setup()
+    MAP.onRoom(67777, "Darkened corridor.", { northeast = 67869, northwest = 67738 }, nil)
+    MAP.onGlance("northwest")
+    MAP.onExitsLine("You see exits leading north and southeast.") -- the NEIGHBOUR's exits
+    local ex = MAP.rooms[67777].exits
+    expect(ex.north).toBe(nil)
+    expect(ex.southeast).toBe(nil)
+    expect(ex.northeast).toBe(67869)
+    MAP.onExitsLine("You see exits leading northeast and northwest.") -- token spent: ours lands
+    expect(MAP.rooms[67777].exits.northeast).toBe(67869)
+    restore()
+  end)
+
+  it("a refusal names WHICH lava fact caused it", function()
+    setup()
+    MAP.onRoom(50, "Darkened corridor.", { northwest = 0 }, nil)
+    M.explore.lavaEdges[50] = { northwest = { at = 1, ripple = 7, why = "walked in" } }
+    local why = M._stepRefusal(50, "northwest") or ""
+    expect(why:find("edge remembered", 1, true) ~= nil).toBeTrue()
+    expect(why:find("ripple 7", 1, true) ~= nil).toBeTrue()
+    restore()
+  end)
+
+  it("a resumed sweep inherits no adjacency claim", function()
+    setup()
+    M.explore.fromRoom, M.explore.fromDir = 4242, "nw"
+    M._exploreResume("test")
+    expect(M.explore.fromRoom).toBe(nil)
+    expect(M.explore.fromDir).toBe(nil)
+    restore()
   end)
 end)

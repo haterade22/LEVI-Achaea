@@ -59,6 +59,9 @@ local MAX_ICE_SLIPS = 15 -- re-send a move this many times after slipping on ice
 -- flee. The caves-beneath-Kuthalebak death log spent exactly that, slipping, while three
 -- infested Vertani did ~2,150 HP/s to an ~18,700 pool.
 local MAX_TACTICAL_ICE_SLIPS = 3
+-- Fields rather than locals so tests can tune them (v4.7.262).
+M.LAVA_EPISODE_GAP = 6   -- seconds of silence that end one lava episode (matches M.roomLava)
+M.LAVA_STRAY_TICKS = 1   -- mismatched struggle ticks discarded before we believe them
 
 -- Check for STARTING: must be physically in the tower. This used to also require
 -- gmcp.Room.Info.area == "" as direct proof, so a telemetry run that outlived your presence
@@ -152,7 +155,20 @@ end
 function M._stepRefusal(num, d)
   local failed = (M.explore.failed and M.explore.failed[num]) or {}
   if failed[d] then return "condemned -- a previous move that way failed" end
-  if M.edgeIsLava and M.edgeIsLava(num, d) then return "leads into lava" end
+  -- NAME THE SOURCE (v4.7.262). edgeIsLava is the OR of two independent facts with completely
+  -- different repair paths -- a remembered inbound EDGE versus a DESTINATION room we burned in
+  -- -- and collapsing them into one literal is why the live refusal could not be attributed from
+  -- the transcript at all. Nothing branches on this string (callers use truthiness or print it),
+  -- so splitting it costs nothing.
+  local byEdge = (M.explore.lavaEdges[num] or {})[d]
+  if byEdge then
+    return "leads into lava (edge remembered"
+      .. (type(byEdge) == "table" and (", ripple " .. tostring(byEdge.ripple or "?")) or "") .. ")"
+  end
+  if M.edgeIsLava and M.edgeIsLava(num, d) then
+    return "leads into lava (destination " .. tostring(M._exitTarget and M._exitTarget(num, d))
+      .. " is a known lava room)"
+  end
   local planar = MAP.OFFSETS and MAP.OFFSETS[d]
   if not planar then
     -- up/in/out are never swept; `down` only from the holding room (no planar exit at all),
@@ -408,10 +424,20 @@ function M.onRippleReset()
   ataxiaTemp = ataxiaTemp or {}
   -- MAX_CHASES is documented "per ripple" and was only ever reset on reload.
   ataxiaTemp.bossChases, ataxiaTemp.bossPanicAt = nil, nil
+  -- The lava EPISODE is stateful as of v4.7.262 (anchor room, stray-tick count, chosen door).
+  -- All three are about a specific room on a specific level, so they die with the ripple too.
+  ataxiaTemp.mnemLavaAt, ataxiaTemp.mnemLavaRoom = nil, nil
+  ataxiaTemp.mnemLavaStray, ataxiaTemp.mnemLavaDir = nil, nil
 end
 
+-- A MARK MUST CARRY ITS REASON (v4.7.262). Both lava tables stored a bare `true`, so when a
+-- refusal turned out to be wrong there was nothing anywhere -- screen, memory or disk -- saying
+-- WHEN it was recorded, on which ripple, or which room we were burning in at the time. The live
+-- 67777 incident could only be attributed by reconstructing the module offline. The value is now
+-- a record; every other predicate here was already a truthiness test, so this `== true` was the
+-- only thing that had to change.
 function M.roomIsLava(key)
-  return key ~= nil and M.explore.lavaRooms[key] == true
+  return key ~= nil and M.explore.lavaRooms[key] ~= nil
 end
 
 -- Would stepping `dir` out of `num` put us in lava? True on either the remembered edge or a
@@ -447,12 +473,59 @@ end
 --   3. any planar exit at all.
 -- Non-planar is excluded for the usual reason (`up` climbs out of the grid), except that
 -- `down` stays eligible if it is genuinely all there is -- drowning beats boiling.
+-- HOW WE GOT INTO THE ROOM WE ARE STANDING IN -- returns fromKey, longDir, or nil plus the
+-- REASON we cannot say (v4.7.262). A falsy guard carrying no reason is why the 67777 refusal
+-- went unexplained for a whole session.
+--
+-- The preference order IS the fix. `MAP._lastArrival` is written by the single owner of arrivals
+-- and is true for tumbles and drags as well as sweep steps. The explorer's armed pair is only a
+-- fallback, and only where the MAP can prove it adjacent -- `from ~= cur`, the old guard, proves
+-- nothing whatsoever, since every other room on the grid satisfies it.
+function M._inbound()
+  local cur = MAP and MAP.current
+  if cur == nil then return nil, nil, "no current room" end
+  local a = MAP._lastArrival
+  if a and a.to == cur and a.from ~= nil and a.from ~= cur then
+    local nd = MAP.normDir and MAP.normDir(a.dir)
+    if nd then return a.from, nd, nil end
+  end
+  local from = M.explore.fromRoom
+  local fdir = MAP.normDir and MAP.normDir(M.explore.fromDir)
+  if from == nil or not fdir then return nil, nil, "no inbound movement recorded" end
+  if from == cur then return nil, nil, "the armed move never left the room" end
+  local r = MAP.rooms and MAP.rooms[from]
+  if not r then return nil, nil, "armed anchor " .. tostring(from) .. " is not a known room" end
+  if (r.edges and r.edges[fdir] == cur) or (r.exits and r.exits[fdir] == cur) then
+    return from, fdir, nil
+  end
+  return nil, nil, "armed anchor " .. tostring(from) .. " " .. fdir .. " does not lead to "
+    .. tostring(cur) .. " -- something moved us without arming"
+end
+
+-- Just the DIRECTION we came in by, for the escape chooser. Deliberately NOT gated on knowing
+-- the room: "back the way we came is provably not lava" needs the direction, not the id.
+function M._inboundDir()
+  local _, d = M._inbound()
+  if d then return d end
+  local from, cur = M.explore.fromRoom, MAP and MAP.current
+  if from ~= nil and cur ~= nil and from == cur then return nil end -- our own escape arm
+  return MAP.normDir and MAP.normDir(M.explore.fromDir)
+end
+
 function M._lavaExit()
   local cur = MAP and MAP.current
   local r = cur and MAP.rooms and MAP.rooms[cur]
   if not r then return nil end
 
-  local back = MAP.normDir(M.explore.fromDir)
+  -- THE INBOUND DIRECTION, NOT THE LAST ARMED ONE (v4.7.262). onLava calls `_tacticalArm(dir)`
+  -- with the ESCAPE direction, and the struggle line re-fires every tick -- so from tick 2 this
+  -- read `fromDir` = the escape direction and took its OPPOSITE, turning us straight back INTO
+  -- the room we were fleeing toward and abandoning the one door the comment below calls provably
+  -- safe. Each send is `queue addclear`, which REPLACES the queued line, so the LAST tick before
+  -- balance is the one that executed; and only tick 1 prints the banner, which is why the flip
+  -- never appeared in any log. `_inboundDir` rejects an anchor equal to the current room --
+  -- exactly what `_tacticalArm` writes -- so the read is now stable across ticks.
+  local back = M._inboundDir()
   back = back and MAP.OPPOSITE and MAP.OPPOSITE[back]
   if back and r.exits[back] ~= nil and MAP.OFFSETS[back] then
     return MAP.shortDir(back)
@@ -482,24 +555,66 @@ end
 -- Fired by the lava lines (triggers mnemosyne/064). Idempotent per tick: the struggle line
 -- repeats every tick and each one re-sends, because a move that was eaten must be retried --
 -- there is no budget worth preserving when the alternative is dying in place.
-function M.onLava()
+function M.onLava(lineText)
   if not inMnem() then return end
   ataxiaTemp = ataxiaTemp or {}
   local nowT = (getEpoch and getEpoch()) or 0
-  local first = not ataxiaTemp.mnemLavaAt
-  ataxiaTemp.mnemLavaAt = nowT
   local cur = MAP and MAP.current
-  if cur then M.explore.lavaRooms[cur] = true end
-  -- Record the way IN, from wherever we came, so the room next door can refuse the step even
-  -- though it has no destination id for this room.
-  local from, fdir = M.explore.fromRoom, MAP.normDir and MAP.normDir(M.explore.fromDir)
-  -- Only when `from` really is a room we just LEFT. `explore.fromRoom` is stale whenever we
-  -- arrived by something other than a sweep step -- a swarm tumble, a boss chase, a forced
-  -- move -- and marking an edge out of a room we are not next to would refuse a perfectly good
-  -- exit somewhere else on the grid, forever.
-  if from ~= nil and fdir and from ~= cur then
+  local entry = type(lineText) == "string"
+    and lineText:find("splash into boiling lava", 1, true) ~= nil
+  local at = tonumber(ataxiaTemp.mnemLavaAt)
+  local live = at ~= nil and (nowT - at) <= M.LAVA_EPISODE_GAP
+  local anchor = ataxiaTemp.mnemLavaRoom
+
+  -- A STRUGGLE TICK NAMING A ROOM WE HAVE LEFT IS A LINE ABOUT THE PAST (v4.7.262). The two
+  -- patterns mean different things: the splash is the ENTRY and always speaks for the room we
+  -- are in now, while the struggle is the TICK -- and a buffered tick can be processed AFTER the
+  -- escape's gmcp.Room has already moved MAP.current. Acting on it marks a perfectly good room
+  -- as lava, condemns the escape edge (the one door we had just proven safe by walking it), and
+  -- queues yet another move out of the room we legitimately reached.
+  --
+  -- Bounded, and deliberately so. ONE stray line is the race. A SECOND identical tick means we
+  -- really are burning in a new room and the entry line was missed, so we adopt it. That caps
+  -- the cost of being wrong at ONE tick of damage; refusing forever would cost a death, and this
+  -- hazard kills in two. Never raise LAVA_STRAY_TICKS above 1 -- two discarded ticks is 11,780
+  -- unblockable, which is a death at the observed pool -- and never apply this to the entry line.
+  if (not entry) and live and anchor ~= nil and cur ~= nil and cur ~= anchor then
+    local stray = (tonumber(ataxiaTemp.mnemLavaStray) or 0) + 1
+    ataxiaTemp.mnemLavaStray = stray
+    if stray <= M.LAVA_STRAY_TICKS then
+      return M._exploreEcho("<indian_red>lava tick ignored<reset> -- it names "
+        .. tostring(anchor) .. " and we are already in " .. tostring(cur)
+        .. " (stray " .. stray .. "/" .. M.LAVA_STRAY_TICKS .. ").")
+    end
+    M._exploreEcho("<indian_red>second lava tick in " .. tostring(cur)
+      .. "<reset> -- treating this room as lava too (entry line missed).")
+  end
+  ataxiaTemp.mnemLavaStray = nil
+
+  -- THE BANNER RE-ARMS PER EPISODE. `first` was `not ataxiaTemp.mnemLavaAt`, and nothing ever
+  -- nils that stamp except the lazy expiry inside M.roomLava, which nothing calls -- so every
+  -- lava episode after the first in a session was completely SILENT. That is a large part of
+  -- why phantom marking accumulated with no user-visible record of it happening.
+  local first = (at == nil) or (nowT - at) > M.LAVA_EPISODE_GAP
+  ataxiaTemp.mnemLavaAt = nowT
+  ataxiaTemp.mnemLavaRoom = cur
+  if cur then
+    M.explore.lavaRooms[cur] = { at = nowT, cur = cur,
+      ripple = tonumber(M.run and M.run.ripple) or 0,
+      why = entry and "splashed in" or "struggle tick" }
+  end
+
+  -- Record the way IN, so the room next door can refuse the step even though it has no
+  -- destination id for this room. The witness is the MAP's resolved arrival, NOT the pair the
+  -- explorer armed -- see M._inbound. A refusal is ECHOED: an edge we declined to condemn is
+  -- exactly the fact that was missing when a phantom refusal had to be diagnosed offline.
+  local from, fdir, whyNot = M._inbound()
+  if from and fdir then
     M.explore.lavaEdges[from] = M.explore.lavaEdges[from] or {}
-    M.explore.lavaEdges[from][fdir] = true
+    M.explore.lavaEdges[from][fdir] = { at = nowT, cur = cur,
+      ripple = tonumber(M.run and M.run.ripple) or 0, why = "walked in" }
+  elseif whyNot then
+    M._exploreEcho("<indian_red>lava edge NOT recorded<reset> -- " .. whyNot .. ".")
   end
 
   -- Hold the attack dispatcher: every attack sends `queue addclearfull`, which would wipe the
@@ -511,7 +626,25 @@ function M.onLava()
     pcall(M.swarm.reset, "lava")
   end
 
-  local dir = M._lavaExit()
+  -- ONE DOOR PER EPISODE (v4.7.262). `_lavaExit` re-derives the exit on every struggle tick, and
+  -- the ticks are not independent: `_tacticalArm` below overwrites explore.fromDir with the
+  -- ESCAPE direction, so from tick 2 the "back the way we came" preference cannot resolve and
+  -- the sorted planar scan answers instead -- a DIFFERENT door, chosen alphabetically. Since
+  -- each send is `queue addclear` (it REPLACES the queued line), whichever tick lands last before
+  -- balance is the one that executes, so alternating doors is not a cosmetic inconsistency: it is
+  -- a coin flip over which way we actually leave, re-flipped every tick.
+  --
+  -- Remembering beats re-deriving. Re-validated against the room's exits each time so a stale
+  -- direction can never strand us, and released when the episode ends.
+  local dir
+  local remembered = (not first) and ataxiaTemp.mnemLavaDir or nil
+  if remembered then
+    local r = cur and MAP.rooms and MAP.rooms[cur]
+    local nd = MAP.normDir and MAP.normDir(remembered)
+    if r and r.exits and nd and r.exits[nd] ~= nil then dir = remembered end
+  end
+  dir = dir or M._lavaExit()
+  ataxiaTemp.mnemLavaDir = dir
   if not dir then
     -- No exit we know of. Ask -- the exits line is parsed (005) and QL is free -- and say so,
     -- because this is the one situation where the sweep genuinely cannot save us.
@@ -594,6 +727,36 @@ function M.exploreWhy()
     cecho("\n    <red>gmcp reported NO EXITS for this room<reset> -- if the room description"
       .. " listed some, that is the fault.")
   end
+
+  -- THE LEDGER (v4.7.262). Every consumer of these tables printed only their EFFECT ("REFUSED:
+  -- leads into lava"), so when the effect was wrong there was nothing left to inspect -- the
+  -- live 67777 refusal had to be attributed by reconstructing the module offline. Print the
+  -- facts themselves, with provenance, and print the two candidate answers to "how did we get
+  -- here" side by side: the map's witnessed arrival, and the pair the explorer merely ARMED.
+  -- Seeing those disagree is the whole diagnosis at a glance.
+  local ibFrom, ibDir, ibWhy = M._inbound()
+  cecho("\n  <NavajoWhite>inbound:    " .. (ibFrom and ("<white>" .. tostring(ibFrom) .. " " .. ibDir)
+    or ("<red>unknown<reset> <DimGrey>(" .. tostring(ibWhy) .. ")")))
+  cecho("\n  <NavajoWhite>armed pair: <DimGrey>" .. tostring(M.explore.fromRoom) .. " "
+    .. tostring(M.explore.fromDir))
+  local marks = 0
+  for key, rec in pairs(M.explore.lavaRooms or {}) do
+    marks = marks + 1
+    cecho("\n    <indian_red>lava room " .. tostring(key) .. "<reset> <DimGrey>"
+      .. (type(rec) == "table"
+          and ("ripple " .. tostring(rec.ripple) .. ", " .. tostring(rec.why))
+          or "legacy mark, no provenance"))
+  end
+  for anchor, tbl in pairs(M.explore.lavaEdges or {}) do
+    for d, rec in pairs(tbl) do
+      marks = marks + 1
+      cecho("\n    <indian_red>lava edge " .. tostring(anchor) .. " " .. d .. "<reset> <DimGrey>"
+        .. (type(rec) == "table"
+            and ("-> " .. tostring(rec.cur) .. ", ripple " .. tostring(rec.ripple))
+            or "legacy mark, no provenance"))
+    end
+  end
+  if marks == 0 then cecho("\n    <DimGrey>no lava recorded this ripple") end
   cecho("\n")
 end
 
@@ -1158,6 +1321,10 @@ function M._exploreResume(reason)
   if ataxiaBasher_mnemHere then ataxiaBasher_mnemHere("explore resume") else ataxiaBasher.inMnemosyne = true end
   M.explore.pausedAtBoon = false
   M.explore.moving = false
+  -- A NEW SWEEP INHERITS NO ADJACENCY CLAIM (v4.7.262). fromRoom/fromDir describe the last move
+  -- ARMED, which across a pause/resume or an off/on belongs to a context that no longer exists
+  -- -- and onLava reading them as fact is how an edge on the far side of the grid got condemned.
+  M.explore.fromRoom, M.explore.fromDir = nil, nil
   M.explore.failed = {}
   M.explore._retriedFailed = nil -- fresh one-shot failed-exit retry for this ripple
   M.explore.hunting = false
@@ -1212,6 +1379,10 @@ function M.exploreOn()
 
   M.explore.on = true
   M.explore.moving = false
+  -- A NEW SWEEP INHERITS NO ADJACENCY CLAIM (v4.7.262). fromRoom/fromDir describe the last move
+  -- ARMED, which across a pause/resume or an off/on belongs to a context that no longer exists
+  -- -- and onLava reading them as fact is how an edge on the far side of the grid got condemned.
+  M.explore.fromRoom, M.explore.fromDir = nil, nil
   M.explore.failed = {}
   M.explore._retriedFailed = nil
   M.explore.hunting = false

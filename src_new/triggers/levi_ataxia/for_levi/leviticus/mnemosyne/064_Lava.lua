@@ -55,8 +55,15 @@ patterns:
 --
 -- Highlighted in the "this is hurting us badly" colour rather than the attack-landing family:
 -- it is incoming, and it is the largest single number in the log.
+-- PASS THE LINE (v4.7.262). The two patterns mean different things and the script must be able
+-- to tell them apart: the splash is the ENTRY and always speaks for the room we are standing in
+-- now, while the struggle is the TICK -- and a buffered tick can be processed AFTER the escape's
+-- gmcp.Room has already moved MAP.current. Sharing one script with no way to distinguish them
+-- meant a trailing tick marked the SAFE room we had just escaped into and condemned the escape
+-- edge, i.e. the one door the code above calls provably not lava. `line` is the Mudlet global
+-- holding the matched line, already used below by selectString.
 if ataxia and ataxia.mnemosyne and ataxia.mnemosyne.onLava then
-	ataxia.mnemosyne.onLava()
+	ataxia.mnemosyne.onLava(line)
 end
 
 selectString(line, 1)
