@@ -742,7 +742,12 @@ describe("bard cyclone -- exploits stun or clumsy", function()
 
   it("is inert when the denizen-state layer is absent (PvP / no basher)", function()
     setup(); affs.stun = true
+    -- RESTORE IT. Leaving this nil leaked out of the file entirely: every later suite that reads
+    -- the denizen model saw an absent layer, which silently rewrote what those tests measured
+    -- (found v4.7.268, when the aeon wear-off tests could not see an affliction they had just set).
+    local prev = ataxiaBasher_dsHasAff
     ataxiaBasher_dsHasAff = nil
     expect(ataxiaBasher_bardBattlerage(";"):find("cyclone", 1, true)).toBe(nil)
+    ataxiaBasher_dsHasAff = prev
   end)
 end)

@@ -4174,8 +4174,14 @@ end)
 -- ---------------------------------------------------------------------------
 -- Aeonic cash-in: degenerate / deteriorate (v4.7.265)
 -- ---------------------------------------------------------------------------
+-- The real denizen-model functions, captured BEFORE anything stubs them. Two suites below
+-- replace these globals, and a stub that outlives its suite silently rewrites what every later
+-- test is measuring -- which is exactly what happened to the aeon wear-off tests (v4.7.268).
+_REAL_ds = { hasAff = ataxiaBasher_dsHasAff, resolve = ataxiaBasher_dsResolveNameToId,
+             clearAff = ataxiaBasher_dsClearAff }
+
 describe("cashing a denizen affliction into an aeonic nuke", function()
-  local affs
+  local affs, realHasAff
 
   local function setup(age)
     ataxiaBasher = ataxiaBasher or {}
@@ -4188,6 +4194,9 @@ describe("cashing a denizen affliction into an aeonic nuke", function()
     ataxiaTemp.dwAeonicAt = nil
     target = 4242 -- numeric: the denizen model is PvE-only
     affs = {}
+    -- SAVE AND RESTORE. Stubbing a global and walking away leaks it into every later suite --
+    -- these two stubs silently broke the aeon-wear-off tests further down the file.
+    realHasAff = realHasAff or ataxiaBasher_dsHasAff
     ataxiaBasher_dsHasAff = function(_, a) return affs[a] == true end
   end
 
@@ -4267,13 +4276,21 @@ describe("cashing a denizen affliction into an aeonic nuke", function()
     expect(cleared.aeon).toBeTrue()
     expect(ataxiaBasher_dwAeonicCashIn()).toBe("") -- nothing left to cash in
   end)
+
+  -- Last statement of the suite: put the real model back. A stub that outlives its suite rewrites
+  -- what every later test is measuring, which is how this file broke its own aeon tests.
+  it("restores the real denizen model on the way out", function()
+    ataxiaBasher_dsHasAff = realHasAff
+    ataxiaBasher_dsClearAff = _REAL_ds.clearAff or ataxiaBasher_dsClearAff
+    expect(type(ataxiaBasher_dsHasAff)).toBe("function")
+  end)
 end)
 
 -- ---------------------------------------------------------------------------
 -- Dragon SCORCH reacting to a self-healing denizen (v4.7.266)
 -- ---------------------------------------------------------------------------
 describe("scorching a denizen that healed itself", function()
-  local sent, realSend, affs
+  local sent, realSend, affs, realResolve, realHasAff2
 
   local function setup(opts)
     opts = opts or {}
@@ -4294,10 +4311,18 @@ describe("scorching a denizen that healed itself", function()
     ataxiaTemp = ataxiaTemp or {}
     ataxiaTemp.scorchAt, ataxiaTemp.brGlobalReadyAt, ataxiaTemp.brFreeCharge = nil, nil, nil
     affs = {}
+    realResolve = realResolve or ataxiaBasher_dsResolveNameToId
+    realHasAff2 = realHasAff2 or ataxiaBasher_dsHasAff
     ataxiaBasher_dsResolveNameToId = function() return opts.id end
     ataxiaBasher_dsHasAff = function(_, a) return affs[a] == true end
   end
-  local function restore() send = realSend end
+  -- Restores the REAL implementations as well as send: a stub left behind here made two
+  -- later tests read a denizen model that was not there (v4.7.268).
+  local function restore()
+    send = realSend
+    ataxiaBasher_dsResolveNameToId = realResolve
+    ataxiaBasher_dsHasAff = realHasAff2
+  end
 
   it("scorches the resolved denizen id", function()
     setup({ id = 8181 })
@@ -4353,5 +4378,63 @@ describe("scorching a denizen that healed itself", function()
     setup({ id = 8181 }); ataxiaBasher.scorchAuto = false
     expect(ataxiaBasher_dragonScorch("a monstrous hellhound")).toBeFalse()
     restore()
+  end)
+end)
+
+-- ---------------------------------------------------------------------------
+-- Aeon wearing off a denizen (v4.7.268)
+-- ---------------------------------------------------------------------------
+describe("aeon wear-off clears the denizen model", function()
+  -- Trigger 016 matches `^(.+) abruptly begins to move at normal speed again\.$` and hands the
+  -- captured name to ataxiaBasher_dsResolveNameToId, which is an EXACT lowercase match against
+  -- ataxia.denizensHere. That resolver is the only interesting logic in the trigger, and it is
+  -- what these pin -- the aeonic cash-in spends 300 age off this flag, so a stale aeon buys
+  -- nothing and a failed clear leaves one.
+  --
+  -- State is built DIRECTLY rather than through ataxiaBasher_dsSetAff: several suites in this
+  -- project replace that global at file scope without restoring it, so a test that depends on it
+  -- measures whichever stub loaded last (v4.7.268 -- three separate leaks found this way).
+  -- dsAdd/dsGet are untouched, and the setter itself is covered by test_denizen_state.
+  -- LOAD THE MODULE. This file never did, so every ataxiaBasher_ds* global here was whatever
+  -- leaked in from an earlier test file -- and three separate files stub them at file scope
+  -- without restoring (v4.7.268). Loading 008 re-defines them to the real implementations, which
+  -- is both the fix and the guarantee that these tests measure the shipped code.
+  ataxiaTemp = ataxiaTemp or {}
+  dofile("src_new/scripts/levi_ataxia/levi/ataxia/basher/008_Denizen_State.lua")
+
+  local function seed(names, aeonOn)
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.enabled = true
+    ataxia = ataxia or {}
+    ataxia.denizensHere = names
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaBasher_dsReset()
+    for id, nm in pairs(names) do
+      local ds = ataxiaBasher_dsAdd(id, nm)
+      if ds and id == aeonOn then ds.affs.aeon = { endsAt = nil } end -- nil = until cleared
+    end
+  end
+
+  it("resolves a proper-named denizen with a comma in it", function()
+    seed({ [259973] = "Celepharn, High Priest of Life" }, 259973)
+    expect(ataxiaBasher_dsHasAff(259973, "aeon", 1000)).toBeTrue()
+    local id = ataxiaBasher_dsResolveNameToId("Celepharn, High Priest of Life", nil, "aeon", 1000)
+    expect(id).toBe(259973)
+    ataxiaBasher_dsClearAff(id, "aeon")
+    expect(ataxiaBasher_dsHasAff(259973, "aeon", 1000)).toBeFalse()
+  end)
+
+  -- The line capitalises the article at the start of a sentence ("An haruspex...") while
+  -- denizensHere holds it lowercase; the resolver lowercases both, so this must hold.
+  it("resolves across the sentence-initial capital", function()
+    seed({ [8181] = "an haruspex of Life" }, 8181)
+    expect(ataxiaBasher_dsResolveNameToId("An haruspex of Life", nil, "aeon", 1000)).toBe(8181)
+  end)
+
+  -- Two identically-named mobs, one aeoned: preferAff is what stops the clear landing on the
+  -- wrong one and leaving a phantom aeon for the cash-in to spend 300 age on.
+  it("prefers the denizen that actually carries the aeon", function()
+    seed({ [1] = "an haruspex of Life", [2] = "an haruspex of Life" }, 2)
+    expect(ataxiaBasher_dsResolveNameToId("An haruspex of Life", nil, "aeon", 1000)).toBe(2)
   end)
 end)

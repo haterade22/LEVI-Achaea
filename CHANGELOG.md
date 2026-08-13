@@ -2,6 +2,48 @@
 
 ---
 
+## 2026-08-12 - Aeon wear-off was already wired; the TESTS were lying (v4.7.268)
+
+`Celepharn, High Priest of Life abruptly begins to move at normal speed again.` -- the aeon
+wear-off. Trigger `denizen_attacks_misc_lines/016` has matched that exact wording since v4.7.145
+and clears `aeon` from the denizen model, so the reported behaviour was already correct. Pinning it
+is what mattered, because the aeonic cash-in (v4.7.265) spends 300 age off that flag: a stale aeon
+buys nothing and a failed clear leaves one.
+
+Three regression tests now cover the resolver, which is the only interesting logic in that trigger:
+a **proper name containing a comma** ("Celepharn, High Priest of Life"), the **sentence-initial
+capital** ("An haruspex" against a lowercase `denizensHere` entry), and **two identically-named
+mobs** where `preferAff` is what stops the clear landing on the wrong one. All three fail when the
+resolver is broken back.
+
+### The real find: the test suite was measuring stubs, not code
+
+Writing those tests took six attempts, and every failure was the harness rather than the subject.
+**`test_mnemosyne.lua` never loaded `basher/008_Denizen_State.lua` at all** -- so every
+`ataxiaBasher_ds*` global it touched was whatever the previously-loaded test file happened to leave
+behind. Three separate files replace those globals at file scope and never restore them:
+
+| File | What it left behind |
+|---|---|
+| `test_mnem_ldeck.lua:34` | redefines `ataxiaBasher_dsSetAff` as a file-scope function -- every later file's `dsSetAff` wrote into that file's table instead of the model |
+| `test_basher_battlerage.lua:745` | sets `ataxiaBasher_dsHasAff = nil` to test the absent-layer path, and walks away |
+| `test_basher_battlerage.lua:289` | stubs `dsHasAff` in a `setup()` with no restore |
+
+The first two are fixed to save and restore. The suite now **loads the module it is testing**,
+which is both the fix and the guarantee that it measures shipped code.
+
+**This is the same failure class as the v4.7.261 orphan hunt, one level up:** there, active
+triggers called functions from a disabled script; here, active tests called functions from a file
+that was never loaded. In both cases the symptom was silence -- the tests passed, they were simply
+not exercising the code they named. Worth remembering the next time a test in this project looks
+green.
+
+### Tests
+
+**1431 -> 1435**, two deliberate breaks of the resolver each confirmed to fail.
+
+---
+
 ## 2026-08-12 - The aeonic cash-in was announcing, not casting (v4.7.267)
 
 A live log, and it is the echo that gives it away:

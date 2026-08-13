@@ -31,6 +31,10 @@ end
 local denizenAffs = {}
 function ataxiaBasher_dsHasAff(_, aff) return denizenAffs[aff] == true end
 local setAffs = {}
+-- FILE-SCOPE STUB OF A SHARED GLOBAL -- restored at the bottom of this file (v4.7.268). Left
+-- unrestored it replaced the REAL denizen-model setter for every test file loaded after this one,
+-- so their dsSetAff calls wrote into `setAffs` here and the model they were testing stayed empty.
+local _realDsSetAff = ataxiaBasher_dsSetAff
 function ataxiaBasher_dsSetAff(_, aff) setAffs[aff] = true end
 function ataxiaBasher_dsAlert() end
 
@@ -420,3 +424,6 @@ end)
 getEpoch = _epoch
 target, secondTarget = nil, nil
 ldm = nil
+
+-- Put the real denizen-model setter back for every suite that loads after this file.
+ataxiaBasher_dsSetAff = _realDsSetAff
