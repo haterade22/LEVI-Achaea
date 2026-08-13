@@ -2,6 +2,58 @@
 
 ---
 
+## 2026-08-12 - The aeonic cash-in was announcing, not casting (v4.7.267)
+
+A live log, and it is the echo that gives it away:
+
+```
+(BR): aeonic cash-in on aeon (+25% Herald).      12:17:53.485
+(BR): aeonic cash-in on aeon (+25% Herald).      12:17:55.531
+...
+Time wreaks ruin upon an haruspex of Life...     12:18:02.460   <- the only one that landed
+```
+
+Two picks announced, and the effect appears seven seconds later. **v4.7.265 gave the cash-in a 4s
+HOLD when it needed an in-flight REPLAY** -- the exact mistake the owned battlerage rotations were
+built to avoid, restated in a new place.
+
+The basher rebuilds the round every prompt and every rebuild sends `queue addclearfull`, which
+**wipes the line queued 0.3s earlier**. So a hold does not stop us wasting the affliction; it
+guarantees the cast is deleted before balance ever comes up, because the next rebuild replaces our
+queued `chrono deteriorate` with a plain swing. The command goes out once and is then removed. It
+only ever landed when balance happened to fall inside a single 0.3s window.
+
+Fixed to the `dwBrPending` shape (v4.7.129): hold the PICK and re-emit the SAME command verbatim on
+every rebuild until it fires, so each `addclearfull` re-queues it rather than dropping it.
+Byte-stable on purpose -- a command that changes between rebuilds is a command that never survives
+one. The echo now fires once per pick rather than once per attempt.
+
+### Two faults the fix exposed
+
+**Releasing the replay is not enough.** With the confirmation wired, the next rebuild would see the
+same affliction still recorded and cash in again -- 300-700 age every round, and on a 30s amnesia
+that is up to five casts for one application. `ataxiaBasher_dwAeonicConfirm` now **spends** the
+affliction in the denizen model, which is also the honest reading of the AB ("drastically
+accelerates the effects of said afflictions" is a consumption). If it turns out not to consume, the
+cost is that we may re-apply an affliction the denizen still has; the cost of the other error is
+hundreds of age a round.
+
+**A trailing separator.** The cash-in occupies the primary slot, so it must carry no trailing
+separator -- v4.7.265 appended one and tried to strip it with `gsub("%s*$", "")`, which strips
+WHITESPACE, and the separator is `;`. Every cash-in round went out with a trailing empty command.
+
+Confirmation line captured live: `Time wreaks ruin upon <target>, deteriorating before your eyes.`
+(~129 psychic a tick). It repeats as the effect ticks, which is harmless -- the first call releases
+the replay and spends the affliction, the rest are no-ops. Highlighted chartreuse with the other
+attack-landing lines (`highlighting/049`).
+
+### Tests
+
+**1430 -> 1431.** The v4.7.265 test had to be **rewritten**: it asserted the hold, so it was
+pinning the bug. Both new behaviours broken back and confirmed to fail.
+
+---
+
 ## 2026-08-12 - Red Dragon SCORCH: announce it, and record what it did (v4.7.266)
 
 `You blacken <target>'s flesh with a quick blast of flame, slowing <his/her/its> healing process.`

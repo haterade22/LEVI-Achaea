@@ -1062,7 +1062,7 @@ function ataxiaBasher_dwAeonicPick()
   return nil
 end
 
-function ataxiaBasher_dwAeonicCashIn(sp)
+function ataxiaBasher_dwAeonicCashIn()
   if ataxiaBasher.dwAeonic == false then return "" end
   if ataxiaBasher.shielded then return "" end -- break the shield first; the affliction keeps
   local dw = ataxiaTables and ataxiaTables.depthswalker
@@ -1070,18 +1070,53 @@ function ataxiaBasher_dwAeonicCashIn(sp)
   if age > (tonumber(ataxiaBasher.dwAgeCap) or 400) then return "" end
   local cmd, aff = ataxiaBasher_dwAeonicPick()
   if not cmd then return "" end
-  -- In-flight hold, the DW_BR shape: the basher rebuilds this line every prompt and each
-  -- `queue addclearfull` wipes the last one, so without a hold we would re-send every 0.3s and
-  -- the affliction's short life (aeon ~6s, charm ~5s) would be spent on duplicates.
+  -- IN-FLIGHT REPLAY, NOT A HOLD (corrected v4.7.267 from a live log).
+  --
+  -- v4.7.265 shipped a 4s hold here, reasoning that re-sending every 0.3s would waste the
+  -- affliction. That is the exact opposite of what this round needs, and the log shows it: the
+  -- echo fired twice while almost nothing landed. The basher rebuilds the round every prompt and
+  -- every rebuild sends `queue addclearfull`, which WIPES the line queued 0.3s earlier -- so a
+  -- hold means the very next rebuild replaces our queued `chrono deteriorate` with a plain swing
+  -- before balance ever comes up. The command is only sent once and then deleted.
+  --
+  -- The owned battlerage rotations solved this years ago (`dwBrPending`, v4.7.129): hold the PICK
+  -- and re-emit the SAME command verbatim on every rebuild until it fires, so each addclearfull
+  -- re-queues it rather than dropping it. Byte-stable on purpose -- a command that changes between
+  -- rebuilds is a command that never survives one.
   local nowT = (getEpoch and getEpoch()) or os.time()
   ataxiaTemp = ataxiaTemp or {}
-  if (nowT - (tonumber(ataxiaTemp.dwAeonicAt) or 0)) < 4 then return "" end
-  ataxiaTemp.dwAeonicAt = nowT
+  local pend = ataxiaTemp.dwAeonicPending
+  if pend and pend.cmd and (nowT - (tonumber(pend.at) or 0)) < 3 then return pend.cmd end
+  ataxiaTemp.dwAeonicPending = nil
+  ataxiaTemp.dwAeonicPending = { cmd = cmd, aff = aff, at = nowT }
+  -- Announced once per PICK, not per rebuild: the replay above returns before reaching this.
   if ataxiaBasher_dsAlert then
     ataxiaBasher_dsAlert("aeonic cash-in on <cyan>" .. aff .. "<reset>"
       .. (dwHeraldInfirmity and " <pale_green>(+25% Herald)<reset>" or "") .. ".")
   end
-  return cmd..sp
+  return cmd
+end
+
+-- Fire-line confirmation, the dwConfirm shape: the cast landed, so release the replay instead of
+-- re-queueing it for the rest of the 3s window. Captured live 2026-08-12:
+--   `Time wreaks ruin upon <target>, deteriorating before your eyes.`
+-- It repeats as the effect ticks; the first one is the confirmation and the rest are no-ops.
+function ataxiaBasher_dwAeonicConfirm()
+  ataxiaTemp = ataxiaTemp or {}
+  local pend = ataxiaTemp.dwAeonicPending
+  ataxiaTemp.dwAeonicPending = nil
+  -- SPEND THE AFFLICTION IN OUR MODEL. Without this the replay releases, the next rebuild sees
+  -- the same affliction still recorded, and cashes in AGAIN -- 300-700 age every round for as
+  -- long as it lasts. Amnesia runs 30s, so that is up to five casts on one application.
+  --
+  -- Clearing it is also the honest reading of the AB: the ability "drastically accelerates the
+  -- effects of said afflictions", which is a consumption. If it turns out not to consume, the
+  -- cost of being wrong is that we may re-apply an affliction the denizen still has -- cheap,
+  -- and self-correcting the moment the rotation's own tracking updates. The cost of the other
+  -- error is hundreds of age a round.
+  if pend and pend.aff and type(target) == "number" and ataxiaBasher_dsClearAff then
+    ataxiaBasher_dsClearAff(target, pend.aff)
+  end
 end
 
 function ataxiaBasher_depthswalkerBashing()
@@ -1131,9 +1166,12 @@ function ataxiaBasher_depthswalkerBashing()
 	-- THE CASH-IN REPLACES THE SWING (see the block above for why that direction). The battlerage
 	-- still rides -- it is paid in rage, not balance -- and it is what plants the affliction in
 	-- the first place, so cutting it here would starve the very loop this feeds.
-	local aeonic = ataxiaBasher_dwAeonicCashIn(sp)
+	-- It occupies the PRIMARY slot, so it carries no trailing separator (as  does not).
+	-- v4.7.265 appended one and stripped it with gsub("%s*$") -- which strips WHITESPACE and the
+	-- separator is ";", so the round went out with a trailing empty command.
+	local aeonic = ataxiaBasher_dwAeonicCashIn()
 	if aeonic ~= "" then
-		return ff..keeper..br..aeonic:gsub("%s*$", "")
+		return ff..keeper..br..aeonic
 	end
 	command = ff..keeper..br..primary
 	return command

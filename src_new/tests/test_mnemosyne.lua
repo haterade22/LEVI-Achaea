@@ -4227,7 +4227,7 @@ describe("cashing a denizen affliction into an aeonic nuke", function()
     setup()
     affs.stun = true -- tracked, but not a trigger for either ability
     expect(ataxiaBasher_dwAeonicPick()).toBe(nil)
-    expect(ataxiaBasher_dwAeonicCashIn(";")).toBe("")
+    expect(ataxiaBasher_dwAeonicCashIn()).toBe("")
   end)
 
   it("is PvE-only -- a player target never reads the denizen model", function()
@@ -4239,17 +4239,33 @@ describe("cashing a denizen affliction into an aeonic nuke", function()
 
   it("respects the age cap and the shield", function()
     setup(500); affs.aeon = true
-    expect(ataxiaBasher_dwAeonicCashIn(";")).toBe("")
+    expect(ataxiaBasher_dwAeonicCashIn()).toBe("")
     setup(); affs.aeon = true; ataxiaBasher.shielded = true
-    expect(ataxiaBasher_dwAeonicCashIn(";")).toBe("")
+    expect(ataxiaBasher_dwAeonicCashIn()).toBe("")
   end)
 
-  -- The basher rebuilds the round every prompt; without a hold the short-lived affliction
-  -- (aeon ~6s, charm ~5s) would be spent on duplicate sends.
-  it("holds in flight so it is not re-sent every prompt", function()
+  -- THE CORRECTION THAT MATTERED (v4.7.267, from a live log). v4.7.265 HELD the command for 4s,
+  -- reasoning that re-sending would waste the affliction. The opposite is true: every rebuild
+  -- sends "queue addclearfull", which WIPES the line queued 0.3s earlier -- so a hold means the
+  -- next rebuild replaces our queued cast with a plain swing before balance ever comes up, and
+  -- the command is sent once then deleted. The echo fired while nothing landed.
+  it("REPLAYS the command verbatim so each addclearfull re-queues it", function()
     setup(); affs.aeon = true
-    expect(ataxiaBasher_dwAeonicCashIn(";")).toBe("chrono deteriorate 4242;")
-    expect(ataxiaBasher_dwAeonicCashIn(";")).toBe("")
+    expect(ataxiaBasher_dwAeonicCashIn()).toBe("chrono deteriorate 4242")
+    expect(ataxiaBasher_dwAeonicCashIn()).toBe("chrono deteriorate 4242") -- not ""
+    expect(ataxiaBasher_dwAeonicCashIn()).toBe("chrono deteriorate 4242")
+  end)
+
+  -- Releasing the replay is not enough: the affliction is still recorded, so the next rebuild
+  -- would cash in again at 300-700 age. On a 30s amnesia that is five casts for one application.
+  it("spends the affliction on confirmation so it does not re-cast", function()
+    setup(); affs.aeon = true
+    local cleared = {}
+    ataxiaBasher_dsClearAff = function(_, a) cleared[a] = true; affs[a] = nil end
+    expect(ataxiaBasher_dwAeonicCashIn()).toBe("chrono deteriorate 4242")
+    ataxiaBasher_dwAeonicConfirm()
+    expect(cleared.aeon).toBeTrue()
+    expect(ataxiaBasher_dwAeonicCashIn()).toBe("") -- nothing left to cash in
   end)
 end)
 
