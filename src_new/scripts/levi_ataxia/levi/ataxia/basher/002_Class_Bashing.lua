@@ -948,6 +948,65 @@ function ataxiaBasher_dwDistortMark(refused)
 end
 
 -- ---------------------------------------------------------------------------
+-- Dragon SCORCH -- react to a denizen healing itself (v4.7.266)
+-- ---------------------------------------------------------------------------
+--
+-- `Swallowing the morsel, a monstrous hellhound crouches low, seeming invigorated.` -- the mob
+-- ate someone and healed. SCORCH (AB 2299: 18 rage, 25.00s cooldown, denizens only) applies
+-- INHIBIT, which slows exactly that healing, so the heal line is the cue.
+--
+-- REACTIVE, so it is SENT DIRECTLY rather than queued. The standing rule -- anything queued that
+-- is not an attack must hold the dispatcher, because every attack sends `queue addclearfull` --
+-- exists because a QUEUED command can be wiped before it fires. A direct send executes now, which
+-- is what a counter to a heal that already happened wants, and battlerage carries no balance cost
+-- to wait for.
+--
+-- It still has to respect the rotation's economy, or the next assembled round queues a second
+-- battlerage and one of the two is rejected: it honours `brGlobalReadyAt` and calls
+-- `ataxiaBasher_brSent()` on the way out, exactly as every rotation pick does.
+--
+-- WHY THE TARGET IS RESOLVED RATHER THAN ASSUMED: the hellhound in the capture lunged at a PARTY
+-- MEMBER, not at us, so the healer is very often NOT our current target -- which is the whole
+-- reason this cannot simply ride the attack round. Prefer the numeric id from the denizen model
+-- (unambiguous, and what the package targets with everywhere else) and fall back to the last word
+-- of the captured name, which is the keyword form a player would type.
+--
+-- Colour: gated on class Dragon rather than RED specifically. The AB records no colour
+-- restriction, and gating on an unconfirmed one would silently disable the feature for whoever
+-- the restriction does not apply to -- the failure direction that hides itself.
+function ataxiaBasher_dragonScorch(name)
+	if not (ataxiaBasher and ataxiaBasher.enabled) or ataxiaBasher.paused then return false end
+	if ataxiaBasher.scorchAuto == false then return false end
+	local class = string.lower((gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class) or "")
+	if not class:find("dragon", 1, true) then return false end
+
+	local nowT = (getEpoch and getEpoch()) or os.time()
+	ataxiaTemp = ataxiaTemp or {}
+	if nowT < (tonumber(ataxiaTemp.brGlobalReadyAt) or 0) then return false end
+	if (nowT - (tonumber(ataxiaTemp.scorchAt) or 0)) < 25 then return false end -- AB cooldown
+	if not ataxiaBasher_rageAfford(tonumber(ataxia.vitals.rage) or 0, 18) then return false end
+
+	-- Resolve the healer. It is usually not `target` -- see above.
+	local id
+	if ataxiaBasher_dsResolveNameToId then
+		id = ataxiaBasher_dsResolveNameToId(name, ataxia.denizensHere, nil, nowT)
+	end
+	-- Already inhibited: the heal is already slowed, and a second scorch is 18 rage for nothing.
+	if id and ataxiaBasher_dsHasAff and ataxiaBasher_dsHasAff(id, "inhibit", nowT) then return false end
+
+	local ref = id or (type(name) == "string" and name:match("(%a+)%s*$"))
+	if not ref then return false end
+
+	ataxiaTemp.scorchAt = nowT
+	send("scorch " .. ref, false)
+	ataxiaBasher_brSent() -- arm the shared ~1s global BR cooldown, as every rotation pick does
+	if ataxiaBasher_dsAlert then
+		ataxiaBasher_dsAlert("<gold>" .. tostring(name) .. "<reset> healed itself -- <cyan>SCORCH<reset>.")
+	end
+	return true
+end
+
+-- ---------------------------------------------------------------------------
 -- Aeonic cash-in: DEGENERATE / DETERIORATE (v4.7.265)
 -- ---------------------------------------------------------------------------
 --

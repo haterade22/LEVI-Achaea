@@ -4252,3 +4252,90 @@ describe("cashing a denizen affliction into an aeonic nuke", function()
     expect(ataxiaBasher_dwAeonicCashIn(";")).toBe("")
   end)
 end)
+
+-- ---------------------------------------------------------------------------
+-- Dragon SCORCH reacting to a self-healing denizen (v4.7.266)
+-- ---------------------------------------------------------------------------
+describe("scorching a denizen that healed itself", function()
+  local sent, realSend, affs
+
+  local function setup(opts)
+    opts = opts or {}
+    realSend = send
+    sent = {}
+    send = function(c) table.insert(sent, c) end
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.enabled, ataxiaBasher.paused = true, false
+    ataxiaBasher.scorchAuto = nil
+    ataxiaBasher.rageFloor = nil
+    ataxia = ataxia or {}
+    ataxia.vitals = ataxia.vitals or {}
+    ataxia.vitals.rage = opts.rage or 50
+    ataxia.denizensHere = {}
+    gmcp = gmcp or {}
+    gmcp.Char = gmcp.Char or {}
+    gmcp.Char.Status = { class = opts.class or "Dragon" }
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.scorchAt, ataxiaTemp.brGlobalReadyAt, ataxiaTemp.brFreeCharge = nil, nil, nil
+    affs = {}
+    ataxiaBasher_dsResolveNameToId = function() return opts.id end
+    ataxiaBasher_dsHasAff = function(_, a) return affs[a] == true end
+  end
+  local function restore() send = realSend end
+
+  it("scorches the resolved denizen id", function()
+    setup({ id = 8181 })
+    expect(ataxiaBasher_dragonScorch("a monstrous hellhound")).toBeTrue()
+    expect(sent[1]).toBe("scorch 8181")
+    restore()
+  end)
+
+  -- The healer is usually NOT our target -- in the capture it lunged at a party member -- so a
+  -- keyword fallback keeps it working when the model cannot resolve an id.
+  it("falls back to the name's last word when the id is unknown", function()
+    setup({ id = nil })
+    expect(ataxiaBasher_dragonScorch("a monstrous hellhound")).toBeTrue()
+    expect(sent[1]).toBe("scorch hellhound")
+    restore()
+  end)
+
+  it("does not scorch a denizen that is already inhibited", function()
+    setup({ id = 8181 })
+    affs.inhibit = true
+    expect(ataxiaBasher_dragonScorch("a monstrous hellhound")).toBeFalse()
+    expect(#sent).toBe(0)
+    restore()
+  end)
+
+  it("respects the 25s cooldown and the rage cost", function()
+    setup({ id = 8181 })
+    expect(ataxiaBasher_dragonScorch("a monstrous hellhound")).toBeTrue()
+    -- Clear the shared ~1s BR cooldown that the first send armed, so ONLY the ability's own 25s
+    -- cooldown can refuse the second call. Without this the test passes with the 25s check
+    -- deleted -- the global gate masks it, which is exactly what the first version did.
+    ataxiaTemp.brGlobalReadyAt = nil
+    expect(ataxiaBasher_dragonScorch("a monstrous hellhound")).toBeFalse() -- the 25s cooldown
+    setup({ id = 8181, rage = 5 })
+    expect(ataxiaBasher_dragonScorch("a monstrous hellhound")).toBeFalse() -- 18 rage
+    restore()
+  end)
+
+  -- It must not queue a second battlerage behind one the rotation already sent.
+  it("honours and arms the shared battlerage cooldown", function()
+    setup({ id = 8181 })
+    ataxiaTemp.brGlobalReadyAt = (getEpoch() or 0) + 5
+    expect(ataxiaBasher_dragonScorch("a monstrous hellhound")).toBeFalse()
+    setup({ id = 8181 })
+    ataxiaBasher_dragonScorch("a monstrous hellhound")
+    expect((tonumber(ataxiaTemp.brGlobalReadyAt) or 0) > (getEpoch() or 0)).toBeTrue()
+    restore()
+  end)
+
+  it("is inert on another class and when switched off", function()
+    setup({ id = 8181, class = "Runewarden" })
+    expect(ataxiaBasher_dragonScorch("a monstrous hellhound")).toBeFalse()
+    setup({ id = 8181 }); ataxiaBasher.scorchAuto = false
+    expect(ataxiaBasher_dragonScorch("a monstrous hellhound")).toBeFalse()
+    restore()
+  end)
+end)

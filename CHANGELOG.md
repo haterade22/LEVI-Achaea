@@ -2,6 +2,76 @@
 
 ---
 
+## 2026-08-12 - Red Dragon SCORCH: announce it, and record what it did (v4.7.266)
+
+`You blacken <target>'s flesh with a quick blast of flame, slowing <his/her/its> healing process.`
+
+AB 2299 (Attainment): `SCORCH <target>`, 18 rage, 25.00s cooldown, denizens only -- and the AB
+names its own effect, "Gives denizen affliction: **Inhibit**".
+
+Two jobs, and the second is the one asked for:
+
+1. **Record the affliction.** `inhibit` is already modelled by `basher/008_Denizen_State`
+   (`BR_AFFS.inhibit`; Monk's Ripplestrike and the Infernal Necrotic Aura proc are the other two
+   sources, and trigger 024 does exactly this). Recording it stops a second inhibit being spent on
+   a mob that already carries one, and it is the direct counter to the self-healing denizens that
+   otherwise out-heal a slow kill. It also makes scorch a **`chrono degenerate` enabler** for a
+   Depthswalker in the party -- inhibit is one of that ability's four physical triggers (v4.7.265).
+2. **Announce on PT**, gated on `ataxia.settings.raid.enabled` -- the party-relay toggle every
+   other PT announce in this tree uses (`188_Impatience` is the model), so it has an off switch and
+   behaves consistently.
+
+`\w+` matches the possessive pronoun rather than enumerating his/her/its: the game prints it by
+denizen gender, and enumerating is how you get a trigger that works for the mob that was in the
+room when it was captured and silently misses the next one. Verified against the captured line
+plus both other genders.
+
+**Deliberately not wired into a rotation.** There is no red-dragon battlerage rotation -- `GDRAGON_BR`
+is Golden (deaden/psidaze/psiblast/overwhelm) -- so scorch stays a manual cast. At 18 rage for a
+25s heal-block it is worth automating, but that means building a colour-specific rotation, which is
+a larger change than this line needs.
+
+### Reacting to a denizen that heals itself
+
+```
+A monstrous hellhound lunges at Gavai and clamps down on his arm, shredding flesh...
+Swallowing the morsel, a monstrous hellhound crouches low, seeming invigorated.
+```
+
+The **second** line is the one worth acting on: it is the heal, and inhibit is precisely "slows
+the healing process". `ataxiaBasher_dragonScorch(name)` answers it.
+
+Reacting to the heal rather than pre-empting the bite is deliberate. The bite names a PLAYER and
+its wording varies per victim; the swallow names the DENIZEN and is stable -- and a mob that has
+just healed is proven worth 18 rage where one that merely bit someone is not. The cost is that the
+first heal always lands, which against a 25s cooldown is the right trade.
+
+**The healer is usually not our target** -- in the capture it lunged at a party member -- which is
+why this cannot ride the attack round, and why the handler resolves the name through the denizen
+model rather than assuming `target`, falling back to the name's last word (the keyword form a
+player would type).
+
+**Sent directly, not queued.** The standing rule that a queued non-attack must hold the dispatcher
+exists because `queue addclearfull` can wipe a QUEUED command; a direct send executes now, which is
+what a counter to a heal that already happened wants, and battlerage carries no balance to wait
+for. It still honours `brGlobalReadyAt` and calls `ataxiaBasher_brSent()`, or the next assembled
+round would queue a second battlerage and one of the two would be rejected.
+
+Gates: class Dragon (not RED specifically -- the AB records no colour restriction, and gating on
+an unconfirmed one fails silently), 18 rage through `rageAfford`, the AB's 25s cooldown, the shared
+global battlerage cooldown, and **not already inhibited** -- a second scorch on an inhibited mob is
+18 rage for nothing. `bash scorch off` disables it.
+
+**Note on verification:** the trigger bodies are not loaded by the unit suite, so their patterns
+were checked directly against the captured lines and pronoun variants instead (including that the
+YAML line-wrap folds back to the intended regex). `ataxiaBasher_dragonScorch` itself is pure and
+IS covered: **six** deliberate breaks, one of which did not fail on the first attempt -- the
+ability's own 25s cooldown was masked by the shared ~1s battlerage cooldown that its own send
+arms, so the test had to clear the latter to become discriminating. The regex was checked directly against the captured line and both pronoun
+variants instead, including that the YAML line-wrap folds back to the intended pattern.
+
+---
+
 ## 2026-08-12 - Depthswalker cashes its own afflictions in (v4.7.265)
 
 User: *"Even without the boon we need to coordinate these attacks for Depthswalker if the target

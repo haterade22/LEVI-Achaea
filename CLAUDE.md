@@ -1008,6 +1008,17 @@ rather than replacing the swing because its balance type is unconfirmed too).
 - Airlord, Earthlord, Firelord, Waterlord
 
 ### Dragon (End-Game Class)
+
+**RED DRAGON SCORCH applies INHIBIT (v4.7.266).** AB 2299: `SCORCH <target>`, 18 rage, 25.00s
+cooldown, denizens only, "Gives denizen affliction: Inhibit". Trigger
+`denizen_attacks_misc_lines/027` records it into the denizen-state model (`BR_AFFS.inhibit`, the
+same state Monk Ripplestrike and the Infernal Necrotic Aura proc apply) and announces it on PT
+when `ataxia.settings.raid.enabled`. Recording matters twice over: it stops a second inhibit being
+spent on a mob that already has one, and inhibit is one of the four PHYSICAL triggers for
+Depthswalker's `chrono degenerate` (v4.7.265) -- so a scorching dragon sets up an aeonic cash-in
+for a Depthswalker in the party. **Not in any rotation**: `GDRAGON_BR` is Golden-specific, so
+there is no red-dragon rotation to add it to and it remains a manual cast.
+
 - Unlocked at level 99
 - 6 color variants: Red, Black, Silver, Gold, Blue, Green
 - Each color has unique breath weapon and battlerage
