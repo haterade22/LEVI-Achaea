@@ -48,7 +48,13 @@ ataxia = { settings = { separator = ";" }, vitals = { hpp = 100 } }
 ataxia.mnemosyne = {
   map = MAP,
   run = { ripple = 1 },
-  explore = { on = true, fromRoom = nil, fromDir = nil, lavaRooms = {}, lavaEdges = {} },
+  explore = { on = true, pausedAtBoon = false, fromRoom = nil, fromDir = nil,
+              lavaRooms = {}, lavaEdges = {} },
+  -- Same reason as the lava stand-ins below: S.onTick consults this, so leaving it out would
+  -- make the pause tests pass against an absent guard (v4.7.263). Mirrors 008's real one.
+  _navRefusal = function()
+    return ataxia.mnemosyne.explore.pausedAtBoon and "paused at the boon screen" or nil
+  end,
   -- Faithful minimal stand-ins for the predicates that live in 008 (not loaded here). The
   -- swarm's escape routes consult these, so without them the lava guards are simply absent
   -- and the tests would pass while the guard did nothing.
@@ -112,6 +118,7 @@ local function fixture(count)
   -- clear it explicitly for isolation.
   S.wallRaised = {}
   M.explore.lavaRooms, M.explore.lavaEdges = {}, {}
+  M.explore.pausedAtBoon = false -- v4.7.263: the pause is per-test state
   S._wallsRipple = nil
   S.tumbleResolvedAt, S._recoverTumbles = nil, nil -- fixture rewinds the clock; these must go with it
   S._meltRoom, S._meltTries = nil, nil
@@ -2119,5 +2126,53 @@ describe("dragged out of the sky -- flight is a trap on this ripple", function()
     S.onDraggedDown()
     expect(S.grounded).toBe(nil)
     ataxiaBasher.inMnemosyne = true
+  end)
+end)
+
+-- ---------------------------------------------------------------------------
+-- The boon-screen pause: finish escaping, never start hunting (v4.7.263)
+-- ---------------------------------------------------------------------------
+describe("a suspended sweep still defends itself", function()
+  -- The headline anti-over-gating assertion. S._enabled() gates onVitals, disengage AND onTick
+  -- together, so folding the pause into it would kill the escape ladder outright.
+  it("still runs the low-HP escape ladder while paused", function()
+    fixture(1)
+    M.explore.pausedAtBoon = true
+    S._cfg().escape = true
+    gmcp.Char = { Vitals = { hp = "2000", maxhp = "10000" } }
+    ataxia.vitals.hpp = 20
+    S.onVitals()
+    expect(S.state ~= "idle").toBeTrue()
+    M.explore.pausedAtBoon = false
+  end)
+
+  it("still lets a forced disengage through while paused", function()
+    fixture(1)
+    M.explore.pausedAtBoon = true
+    S._lastDisengageAt = nil
+    expect(S.disengage("phial burst")).toBeTrue()
+    M.explore.pausedAtBoon = false
+  end)
+
+  -- ...but it must not START anything. A pull commits to a funnel cycle that walks the grid and
+  -- spends per-room budgets on a ripple that is already over.
+  it("does not assess or pull while paused, and stamps nothing", function()
+    fixture(3)
+    M.explore.pausedAtBoon = true
+    ataxia.vitals.hpp = 100
+    S.state = "idle"
+    expect(S.onTick()).toBeTrue() -- consumed: the sweep must not navigate either
+    expect(S.pulls[200]).toBe(nil)
+    expect(ataxiaTemp.swarmPullDir).toBe(nil)
+    M.explore.pausedAtBoon = false
+  end)
+
+  it("assesses normally once the pause lifts", function()
+    fixture(3)
+    M.explore.pausedAtBoon = false
+    ataxia.vitals.hpp = 100
+    S.state = "idle"
+    S.onTick()
+    expect(ataxiaTemp.swarmPullDir ~= nil or S.state ~= "idle").toBeTrue()
   end)
 end)

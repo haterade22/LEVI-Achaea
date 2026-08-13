@@ -87,6 +87,34 @@ function M._exploreEcho(msg)
   M.echo("<gold>[explore]<reset> " .. tostring(msg))
 end
 
+-- WHY NAVIGATION IS SUSPENDED, or nil when it may proceed (v4.7.263). Reason-string form, like
+-- M._stepRefusal and M._chaseRefusal -- a refusal that cannot name itself cannot be diagnosed
+-- from a transcript, which is what cost three versions of guesswork on the lava edge.
+--
+-- The axis is NOT paused/not-paused. It is:
+--   INITIATION      -- choosing to move for positional reasons (sweep, patrol, pull, re-entry,
+--                      boss chase, map upkeep, wall melt)  ->  SUSPEND
+--   COMPLETION      -- a move already in flight landing, failing, slipping, retrying
+--                      ->  NEVER suspend; suspending it strands `moving`, swarmHold, S.state
+--   SELF-PRESERVATION -- lava, the escape ladder, the panic tumble, the recovery loop, the
+--                      tincture, a forced disengage  ->  NEVER suspend
+--
+-- SUSPENSION, NOT LIVENESS. This answers "is the sweep paused?", not "is the sweep running?".
+-- Callers keep their own `explore.on` check: the boss chase deliberately works while the
+-- explorer is OFF (manual bashing in the tower is a legitimate chase context), and folding
+-- liveness in here would silently kill it.
+--
+-- Deliberately NOT folded in, each because it already has an owner and a DIFFERENT action:
+--   inMnem()       -- leaving the tower must STOP, not suspend; _exploreTick owns it, above.
+--   M.roomLava()   -- lava outranks every pause; _chaseRefusal already names it separately.
+--   explore.moving -- "a move is in flight" wants WAIT, not refuse.
+-- A guard that answers every question is a guard that refuses everything.
+function M._navRefusal()
+  local e = M.explore
+  if e and e.pausedAtBoon then return "paused at the boon screen" end
+  return nil
+end
+
 -- ---------------------------------------------------------------------------
 -- Room state
 -- ---------------------------------------------------------------------------
@@ -325,6 +353,14 @@ function M._chaseRefusal(dir)
   -- NEVER chase while leaving. Escape mode, a swarm recovery and lava all mean the room we are
   -- standing in is already losing us the fight; adding a pursuit to that is how a retreat turns
   -- into a death. The boss keeps until we are fit.
+  --
+  -- NAVIGATION is the first of that group as of v4.7.263. The boon screen IS the ripple ending,
+  -- so a boss cannot still be alive and fleeing -- and a chase spends the per-ripple budget,
+  -- arms a 5s move lock that then collides with the GO resume, and walks us off the holding
+  -- square while the user is reading a menu. Deliberately placed AFTER the panic-freshness check
+  -- above so an ordinary wandering denizen still refuses silently.
+  local nav = M._navRefusal()
+  if nav then return nav end
   if ataxiaTemp.escapeMode then return "escaping" end
   if M.roomLava and M.roomLava() then return "lava" end
   if M.swarm and M.swarm.state == "recovering" then return "recovering" end
@@ -420,6 +456,7 @@ function M.onRippleReset()
   M.explore.fromRoom = nil
   M.explore.fromDir = nil
   M.explore._noExitLooks = nil
+  M.explore._noExitHolds = nil
   M.explore._retriedFailed = nil
   ataxiaTemp = ataxiaTemp or {}
   -- MAX_CHASES is documented "per ripple" and was only ever reset on reload.
@@ -992,7 +1029,9 @@ end
 -- on fresh data. ql is free (no balance) so it's cheap and safe to do every stall.
 -- Then schedule a tick anyway, so we re-decide even if the ql yields no event.
 function M._watchdogNudge()
-  if not M.explore.on or M.explore.pausedAtBoon then return end
+  -- NAVIGATION: its whole purpose is to unstick the SWEEP with a ql. Nothing self-preserving
+  -- reaches it. (Behaviour unchanged -- this moves ownership to M._navRefusal, v4.7.263.)
+  if not M.explore.on or M._navRefusal() then return end
   -- A move / ice-slip is in flight: its own machinery owns this (MOVE_TIMEOUT for a
   -- lost move; onIceSlip's MAX_ICE_SLIPS cap for a stuck icy exit). A ql here would
   -- fire gmcp.Room, be mistaken for an arrival, clear `moving`, kill the ice-slip
@@ -1016,7 +1055,7 @@ function M._armWatchdog()
   if M._explWatchT then pcall(killTimer, M._explWatchT); M._explWatchT = nil end
   M._explWatchT = tempTimer(WATCHDOG, function()
     M._explWatchT = nil
-    if not M.explore.on or M.explore.pausedAtBoon then return end
+    if not M.explore.on or M._navRefusal() then return end
     M._watchdogNudge() -- ql-refresh + re-tick on fresh data
     M._armWatchdog()   -- keep watching
   end)
@@ -1056,7 +1095,6 @@ end
 function M._exploreTick()
   if not M.explore.on then return end
   if not inMnem() then return M._exploreStop("left Mnemosyne") end
-  if M.explore.pausedAtBoon then return end -- paused at the boon screen: leave-tower handled above; don't navigate
   if M.explore.moving then return end -- awaiting arrival
   -- A tick ran in a decidable state, so the post-arrival settle window is over: the
   -- room's denizens have had the full TICK_DELAY of quiet to load (each load re-armed
@@ -1069,6 +1107,18 @@ function M._exploreTick()
     local ok, consumed = pcall(M.swarm.onTick)
     if ok and consumed then return end
   end
+  -- NAVIGATION SUSPENDED -- and this gate sits BELOW the swarm delegation deliberately (v4.7.263).
+  --
+  -- It used to be the third line of this function, above the delegation, and that was the bug:
+  -- every swarm state machine self-ticks through M._scheduleTick, so pausing the sweep also
+  -- froze the recovery loop, the funnel and the re-entry. At the boon screen the escape ladder
+  -- would fire ONCE (S.onVitals is independent) and then disable itself -- S.onVitals returns
+  -- early while state == "recovering", and only the tick can leave that state. Nothing landed,
+  -- nothing re-sent an eaten `fly`, nothing enforced RECOVER_MAX, until GO unwedged it. Which
+  -- needs the user at the keyboard, i.e. exactly the case a pause is supposed to survive.
+  --
+  -- Below the delegation: the swarm finishes what is in flight, the sweep starts nothing new.
+  if M._navRefusal() then return end
   if M._roomHasDenizens() then
     -- basher is clearing this room; wait. Finding denizens is progress, so reset the
     -- boss-hunt counter. Announce once per room, not every tick.
@@ -1170,6 +1220,32 @@ function M._exploreTick()
     local r = MAP.rooms and MAP.current and MAP.rooms[MAP.current]
     local bare = true
     if r then for _ in pairs(r.exits or {}) do bare = false; break end end
+
+    -- THE GAME ALREADY ANSWERED: ZERO (v4.7.263). "There are no obvious exits." is a positive
+    -- statement, not silence, so asking again cannot change it -- and this branch is where the
+    -- boon-screen storm ended up looping. HOLD rather than stop: `_exploreStop` restores the
+    -- basher and clears `explore.on`, and `exploreOnGo` only UN-PAUSES (it needs pausedAtBoon),
+    -- so stopping in the holding room kills the sweep for the rest of the run.
+    --
+    -- Note "no OBVIOUS exits" is not "no exits": the holding room prints this line and still has
+    -- the `down` the sweep descends by. That is precisely why the marker never touches
+    -- room.exits and is never consulted by unexploredExits / _stepRefusal / the stop decision.
+    if r and bare and r.exitsTextZero then
+      local held = (tonumber(M.explore._noExitHolds) or 0) + 1
+      M.explore._noExitHolds = held
+      if held <= 40 then -- x3s = 2 minutes, comfortably past a wave countdown
+        if held == 1 then
+          M._exploreEcho("<grey>the game reports NO exits from this room<reset>"
+            .. " -- waiting for one to open (holding room before the descent?).")
+        end
+        return M._scheduleTick(3)
+      end
+    end
+
+    -- Budget RESET ON A GENUINE ARRIVAL rather than per ripple (v4.7.263): as a single counter
+    -- spanning the whole level, three bare rooms anywhere exhausted it and every later one was
+    -- blind. Not keyed by room either -- a dead-reckoned cell is re-entered many times, and a
+    -- spent-and-never-reset key would make that cell permanently unlookable.
     if r and bare and (tonumber(M.explore._noExitLooks) or 0) < 3 then
       M.explore._noExitLooks = (tonumber(M.explore._noExitLooks) or 0) + 1
       M._exploreEcho("<indian_red>no exits recorded for this room<reset> -- <cyan>QL<reset>"
@@ -1530,24 +1606,44 @@ function M._onExploreRoom()
     -- prose line -- "You see exits leading northeast, southeast, and south." -- is the only
     -- honest reading, and QL is how we get it on demand. Free (no balance), and only when the
     -- cell has no exits recorded yet, so it costs one line per genuinely new cell.
-    -- NOT dementia-only (v4.7.260). A room with no recorded exits is worth one free `ql`
-    -- whether or not we are demented -- that is precisely the state that stalled the sweep,
-    -- and gating the only repair on an affliction we did not have is why nothing repaired it.
-    do
-      local dr = MAP.drActive and MAP.drActive()
-      local key = dr and MAP.drHereKey() or MAP.current
-      local r = key and MAP.rooms and MAP.rooms[key]
-      local known = false
-      if r then for _ in pairs(r.exits or {}) do known = true break end end
-      if key and not known then send("ql", false) end
-    end
+    -- A GENUINE ARRIVAL REFILLS THE ASK BUDGET. Both counters are about the room we are
+    -- standing in, and we are now standing somewhere else.
+    M.explore._noExitLooks, M.explore._noExitHolds = nil, nil
+
+    -- THE ARRIVAL NO LONGER ASKS FOR EXITS (v4.7.263). This is where the boon-screen ql storm
+    -- was emitted from: no counter, no throttle, no token, and its own `ql` re-raised the very
+    -- event that re-ran it. Two things made it non-terminating -- 005 rebuilt room.exits from
+    -- the empty gmcp table on each push (fixed there), and the holding room genuinely reports
+    -- no obvious exits, so the answer could never satisfy the question.
+    --
+    -- It was also redundant even when it worked: this handler runs BEFORE the room's own
+    -- description has been processed, so it asked for exits the very next line was about to
+    -- supply. Asking now belongs to the tick, 0.5s later, by which point the description has
+    -- already fed the map -- see M._askExitsMaybe.
   end
+  -- THE TICK IS KEPT WHILE PAUSED, DELIBERATELY (v4.7.263). It is a decision point, not an
+  -- action -- _exploreTick refuses to navigate, below the swarm delegation -- and it is the
+  -- ONLY clock S._beginEscape's indoor branch has: that branch sets state = "pulling", arms the
+  -- hold, sends the retreat, and does NOT self-schedule. Suppress this and an indoor escape
+  -- taken during the pause never reaches `recovering`, swarmHold self-clears at 8s, and the
+  -- basher resumes swinging at crash HP with the recovery abandoned (the v4.7.235/252 family).
   M._scheduleTick()
-  M._armWatchdog()
+  -- The WATCHDOG is navigation-only -- it exists to `ql` the sweep unstuck -- so it does not
+  -- re-arm while suspended. onBoonScreen killed the outstanding one, and both resume paths arm
+  -- a fresh one, so nothing is lost.
+  if not M._navRefusal() then M._armWatchdog() end
 end
 
+-- `gmcp.Room.Info`, NOT the `gmcp.Room` prefix (v4.7.263) -- and it MUST match 005's
+-- registration. Mudlet raises the prefix for Room.Players / AddPlayer / RemovePlayer /
+-- WrongDir too, and every one of those reached `sameRoom == false` here, i.e. was treated as a
+-- genuine ARRIVAL: `moving` cleared, the move timeout killed, the settle window opened, all
+-- while a move was still in flight. Another player entering the room was enough.
+--
+-- Moving 005 alone would not have been enough either: this handler is where the arrival
+-- decision is actually made, so it has to decline the same events 005 declines.
 if M._explRoomH then killAnonymousEventHandler(M._explRoomH) end
-M._explRoomH = registerAnonymousEventHandler("gmcp.Room", function() M._onExploreRoom() end)
+M._explRoomH = registerAnonymousEventHandler("gmcp.Room.Info", function() M._onExploreRoom() end)
 
 -- Denizen change (killed / left / arrived): re-decide. The "killed the last mob ->
 -- move on" case wants FAST_TICK -- denizensHere is already current. BUT arriving in a
@@ -1559,8 +1655,10 @@ M._explRoomH = registerAnonymousEventHandler("gmcp.Room", function() M._onExplor
 if M._explTgtH then killAnonymousEventHandler(M._explTgtH) end
 M._explTgtH = registerAnonymousEventHandler("targets updated", function()
   if not M.explore.on then return end
+  -- Same split as the arrival handler: a denizen change is exactly what a ground recovery must
+  -- react to, so the tick still fires; the watchdog is navigation and does not re-arm.
   M._scheduleTick(M.explore.settling and TICK_DELAY or FAST_TICK)
-  M._armWatchdog()
+  if not M._navRefusal() then M._armWatchdog() end
 end)
 
 -- Server-authoritative wall: gmcp Room.WrongDir (body = the non-existent direction). Condemns

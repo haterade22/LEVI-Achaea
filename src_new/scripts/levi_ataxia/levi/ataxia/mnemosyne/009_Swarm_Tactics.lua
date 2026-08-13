@@ -1309,6 +1309,23 @@ function S.onTick()
     end
   end
 
+  -- NAVIGATION ENDS HERE WHILE THE SWEEP IS SUSPENDED (v4.7.263).
+  --
+  -- Everything ABOVE this line is completion or self-preservation -- the panic branch, the
+  -- recovery loop, the funnel window, the re-entry -- and must keep running through the boon
+  -- screen: "finish escaping, never start hunting". Everything BELOW starts something new: the
+  -- wall melt (cleanup for a LATER walk) and the assess -> pull, which commits to a funnel cycle
+  -- that walks the grid and spends per-room budgets on a ripple that is already over.
+  --
+  -- Refused HERE rather than inside S._beginPull, because that helper STAMPS (S.pulls, entrySnap,
+  -- swarmPullDir, the arm-timeout timer) and a stamping helper must not survive a caller-side
+  -- refusal -- the ataxiaBasher_infGravehands lesson. One gate, at the single call site.
+  --
+  -- Note S._enabled() is deliberately NOT pause-aware: it gates S.onVitals and S.disengage too,
+  -- so a pause check there would kill the escape ladder, the panic tumble, the tincture and the
+  -- forced disengage in one line -- the reported bug with its sign flipped.
+  if M._navRefusal and M._navRefusal() then return true end
+
   -- idle: assess the room we're standing in
   if not (M._roomHasDenizens and M._roomHasDenizens()) then
     -- Room done. If our icewall from the wall tactic still stands on the funnel

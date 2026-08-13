@@ -3804,3 +3804,246 @@ describe("lava marks only what the map witnessed", function()
     restore()
   end)
 end)
+
+-- ---------------------------------------------------------------------------
+-- The boon-screen ql storm (v4.7.263)
+-- ---------------------------------------------------------------------------
+describe("an empty gmcp push is silence, not a denial", function()
+  local MAP = ataxia.mnemosyne.map
+
+  local function tower()
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = true
+    MAP.drForce = false
+    MAP.reset()
+  end
+
+  -- THE ENGINE of the storm: every push rebuilt exits from the tower's empty gmcp table, so
+  -- whatever the room's own description had just taught us was erased -- including on the push
+  -- that our own `ql` had caused. Ask, wipe, find nothing, ask again.
+  it("keeps the exits we already have when gmcp reports none", function()
+    tower()
+    MAP.onRoom(50, "A corridor.", { north = 51 }, nil)
+    MAP.onRoom(50, "A corridor.", {}, nil)
+    expect(MAP.rooms[50].exits.north).toBe(51)
+    MAP.onRoom(50, "A corridor.", nil, nil)
+    expect(MAP.rooms[50].exits.north).toBe(51)
+    MAP.drForce = nil
+  end)
+
+  -- The wipe's actual purpose, which must survive: a direction gmcp STOPS naming, in a push
+  -- where it names others, is a direction the room does not have.
+  it("still drops a direction a non-empty push stopped reporting", function()
+    tower()
+    MAP.onRoom(50, "A corridor.", { north = 51, east = 52 }, nil)
+    MAP.onRoom(50, "A corridor.", { north = 51 }, nil)
+    expect(MAP.rooms[50].exits.east).toBe(nil)
+    expect(MAP.rooms[50].exits.north).toBe(51)
+    MAP.drForce = nil
+  end)
+
+  it("a text-derived exit survives a later empty push", function()
+    tower()
+    MAP.onRoom(50, "A corridor.", {}, nil)
+    MAP.onExitsLine("You see a single exit leading northeast.")
+    expect(MAP.rooms[50].exits.northeast).toBe(0)
+    MAP.onRoom(50, "A corridor.", {}, nil)
+    expect(MAP.rooms[50].exits.northeast).toBe(0)
+    MAP.drForce = nil
+  end)
+end)
+
+describe("room sub-events are not arrivals", function()
+  local M = ataxia.mnemosyne
+  local MAP = ataxia.mnemosyne.map
+
+  -- gmcp.Room is a PREFIX event: Room.Players / AddPlayer / RemovePlayer / WrongDir all raise
+  -- it. Acting on those meant another player walking in rebuilt our exits, and -- worse --
+  -- Room.WrongDir credited a dead-reckoning step for a move the server had just REFUSED.
+  it("a bare gmcp.Room raise does not advance the dead reckoning", function()
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = true
+    MAP.drForce = true
+    MAP.reset()
+    gmcp = gmcp or {}
+    gmcp.Room = { Info = { num = 900, name = "A cell.", exits = { east = 0 } } }
+    local wasOn = M.explore.on
+    M.explore.on = false -- keep 008's handler inert; this test is about 005
+    MAP.drArm("east")
+    raiseEvent("gmcp.Room")
+    expect(MAP.dr.x).toBe(0) -- a Players push must move nothing
+    raiseEvent("gmcp.Room.Info")
+    expect(MAP.dr.x).toBe(1) -- a real arrival does
+    M.explore.on = wasOn
+    MAP.drForce = nil
+  end)
+end)
+
+describe("the arrival handler never asks for exits", function()
+  local M = ataxia.mnemosyne
+  local MAP = ataxia.mnemosyne.map
+
+  it("sends no ql however many times it runs on an exitless room", function()
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = true
+    ataxiaBasher.enabled = true
+    MAP.drForce = false
+    MAP.reset()
+    MAP.onRoom(50, "Wading the Mnemosyne.", {}, nil)
+    M.explore.on = true
+    M.explore.moving = false
+    local realSend, sent = send, {}
+    send = function(c) table.insert(sent, c) end
+    for _ = 1, 5 do M._onExploreRoom() end
+    send = realSend
+    local qls = 0
+    for _, c in ipairs(sent) do if c == "ql" then qls = qls + 1 end end
+    expect(qls).toBe(0)
+    M.explore.on = false
+    MAP.drForce = nil
+  end)
+end)
+
+-- ---------------------------------------------------------------------------
+-- The pause suspends NAVIGATION only (v4.7.263)
+-- ---------------------------------------------------------------------------
+describe("navigation suspension", function()
+  local M = ataxia.mnemosyne
+  local MAP = ataxia.mnemosyne.map
+
+  it("names its refusal, and is silent when clear", function()
+    M.explore.pausedAtBoon = false
+    expect(M._navRefusal()).toBe(nil)
+    M.explore.pausedAtBoon = true
+    expect(M._navRefusal()).toBe("paused at the boon screen")
+    M.explore.pausedAtBoon = false
+  end)
+
+  -- THE REGRESSION THAT MATTERED. The old gate sat above the swarm delegation, so pausing the
+  -- sweep also froze every swarm state machine -- the escape ladder fired once and then had no
+  -- clock to leave `recovering`.
+  it("a paused tick still reaches the swarm", function()
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = true
+    MAP.drForce = false
+    MAP.reset()
+    MAP.onRoom(50, "A corridor.", { north = 51 }, nil)
+    M.explore.on = true
+    M.explore.moving = false
+    M.explore.pausedAtBoon = true
+    local called = false
+    local realSwarm = M.swarm
+    M.swarm = { onTick = function() called = true; return false end }
+    local realSend, sent = send, {}
+    send = function(c) table.insert(sent, c) end
+    M._exploreTick()
+    send = realSend
+    M.swarm = realSwarm
+    expect(called).toBeTrue()
+    -- ...and having reached it, the sweep itself still navigates nowhere.
+    local moved = false
+    for _, c in ipairs(sent) do if c:find("stand", 1, true) then moved = true end end
+    expect(moved).toBeFalse()
+    M.explore.pausedAtBoon = false
+    M.explore.on = false
+    MAP.drForce = nil
+  end)
+
+  it("refuses a boss chase while paused", function()
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = true
+    ataxiaBasher.enabled = true
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.bossPanicAt = getEpoch()
+    ataxiaTemp.escapeMode = nil
+    M.explore.pausedAtBoon = true
+    expect(M._chaseRefusal("southeast")).toBe("paused at the boon screen")
+    M.explore.pausedAtBoon = false
+  end)
+end)
+
+-- ---------------------------------------------------------------------------
+-- "There are no obvious exits." -- an answer, not silence (v4.7.263)
+-- ---------------------------------------------------------------------------
+describe("a told-zero room", function()
+  local M = ataxia.mnemosyne
+  local MAP = ataxia.mnemosyne.map
+
+  local function tower()
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.inMnemosyne = true
+    MAP.drForce = false
+    MAP.reset()
+  end
+
+  it("is not parsed as an exits list", function()
+    expect(MAP.parseExitsLine("There are no obvious exits.")).toBe(nil)
+  end)
+
+  it("records the zero without touching the exit graph", function()
+    tower()
+    MAP.onRoom(90, "Wading the Mnemosyne.", { down = 91 }, nil)
+    expect(MAP.onNoExits()).toBeTrue()
+    expect(MAP.rooms[90].exitsTextZero).toBeTrue()
+    -- THE DESCENT: "no OBVIOUS exits" is not "no exits".
+    expect(MAP.rooms[90].exits.down).toBe(91)
+    expect(M._stepRefusal(90, "down")).toBe(nil)
+    MAP.drForce = nil
+  end)
+
+  it("is inert outside the tower", function()
+    tower()
+    MAP.onRoom(90, "A closet.", {}, nil)
+    ataxiaBasher.inMnemosyne = false
+    -- inMnem() is an OR: an active telemetry run also counts as being in the tower.
+    local wasRun = M.run and M.run.active
+    if M.run then M.run.active = false end
+    expect(MAP.onNoExits()).toBeFalse()
+    if M.run then M.run.active = wasRun end
+    expect(MAP.rooms[90].exitsTextZero).toBe(nil)
+    ataxiaBasher.inMnemosyne = true
+    MAP.drForce = nil
+  end)
+
+  -- The v4.7.262 regression in a new hat: a glanced dead end prints this line inside the
+  -- GLANCED block, and marking our own room from it would be exactly that bug.
+  it("spends the glance token so a neighbour's dead end is not ours", function()
+    tower()
+    MAP.onRoom(90, "A corridor.", { north = 91 }, nil)
+    MAP.onGlance("north")
+    expect(MAP.onNoExits()).toBeFalse()          -- that was the NEIGHBOUR's line
+    expect(MAP.rooms[90].exitsTextZero).toBe(nil)
+    expect(MAP.onNoExits()).toBeTrue()           -- token spent: this one is ours
+    MAP.drForce = nil
+  end)
+
+  it("a later exits line retracts the zero", function()
+    tower()
+    MAP.onRoom(90, "A corridor.", {}, nil)
+    MAP.onNoExits()
+    expect(MAP.rooms[90].exitsTextZero).toBeTrue()
+    MAP.onExitsLine("You see a single exit leading northeast.")
+    expect(MAP.rooms[90].exitsTextZero).toBe(nil)
+    MAP.drForce = nil
+  end)
+
+  -- _exploreStop restores the basher and clears `explore.on`, and exploreOnGo only UN-pauses --
+  -- so stopping here would kill the sweep for the rest of the run.
+  it("holds the sweep instead of switching it off", function()
+    tower()
+    ataxiaBasher.enabled = true
+    MAP.onRoom(90, "Wading the Mnemosyne.", {}, nil)
+    MAP.onNoExits()
+    M.explore.on = true
+    M.explore.moving = false
+    M.explore.pausedAtBoon = false
+    M.explore._noExitHolds = nil
+    local realSend = send; send = function() end
+    M._exploreTick()
+    send = realSend
+    expect(M.explore.on).toBeTrue()
+    expect((tonumber(M.explore._noExitHolds) or 0) > 0).toBeTrue()
+    M.explore.on = false
+    MAP.drForce = nil
+  end)
+end)

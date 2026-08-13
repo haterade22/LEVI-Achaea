@@ -257,6 +257,36 @@ function MAP.onGlance(dir)
   MAP._glanceSkip = { dir = dir, at = (getEpoch and getEpoch()) or 0 }
 end
 
+-- "There are no obvious exits." -- a POSITIVE statement of zero, not a missing reading
+-- (v4.7.263). Nothing in this package parsed it before, so an honest zero was indistinguishable
+-- from ignorance and the explorer re-asked forever; that is the boon-screen ql storm.
+--
+-- DELIBERATELY WRITES NOTHING TO room.exits, and no consumer of the exit graph reads this flag.
+-- "No OBVIOUS exits" is not "no exits": the ripple's holding room prints this line and still has
+-- the `down` the sweep descends by, so zeroing the table would make usableUnexplored yield
+-- nothing -> _nextExploreStep nil -> _nextPatrolStep nil -> _exploreStop, which raises
+-- "basher disabled" -- i.e. the sweep switching COMBAT off, in a no-flee instance, while the
+-- user is reading a boon menu. Its only job is to stop the asking.
+--
+-- Spends the same one-shot glance token as onExitsLine: a glanced neighbour that is a dead end
+-- prints this line inside the GLANCED block, and marking our own room from it is exactly the
+-- v4.7.262 regression in a new hat.
+function MAP.onNoExits()
+  if not MAP.inMnem() then return false end
+  if MAP._glanceSkip then
+    local g = MAP._glanceSkip
+    MAP._glanceSkip = nil
+    if ((getEpoch and getEpoch()) or 0) - (tonumber(g.at) or 0) <= 3 then return false end
+  end
+  local key = MAP.drActive() and MAP.drHereKey() or MAP.current
+  if key == nil then return false end
+  local r = MAP.rooms and MAP.rooms[key]
+  if not r then MAP.onRoom(key, nil, {}, nil); r = MAP.rooms[key] end
+  if not r then return false end
+  r.exitsTextZero = true
+  return true
+end
+
 function MAP.onExitsLine(text)
   if not MAP.inMnem() then return false end
   -- Spend the glance token before anything else: this line belongs to the room we LOOKED at.
@@ -269,6 +299,8 @@ function MAP.onExitsLine(text)
   end
   local dirs = MAP.parseExitsLine(text)
   if not dirs then return false end
+  -- Any positive exits line retracts a previous "no obvious exits" for this key: the room just
+  -- named doors, so the zero is stale.
   local dr = MAP.drActive()
   local key = dr and MAP.drHereKey() or MAP.current
   if key == nil then return false end
@@ -295,6 +327,7 @@ function MAP.onExitsLine(text)
       if r.exits[d] == nil then r.exits[d] = 0 end
     end
   end
+  r.exitsTextZero = nil -- the room just NAMED doors; any earlier "no obvious exits" is stale
   return true
 end
 
@@ -366,7 +399,27 @@ function MAP.onRoom(num, name, exits, moveDir)
 
   -- Record the room's exits (normalise dir keys; coerce dest ids to numbers so
   -- they compare against room nums -- gmcp reports exit dests as strings).
-  room.exits = {}
+  --
+  -- THE WIPE ONLY APPLIES WHEN GMCP ACTUALLY TOLD US SOMETHING (v4.7.263).
+  --
+  -- What the wipe is FOR -- it had no comment, and was load-bearing by accident: a direction
+  -- gmcp stops reporting is a direction the room does not have, so the table must be rebuilt
+  -- from the current push rather than merged into. That is still exactly what happens below
+  -- whenever the push NAMES any direction, so the v4.7.251 REPLACE reasoning is untouched, and
+  -- a demented push (which always names directions) still overrides completely.
+  --
+  -- What it must NOT do is treat SILENCE as a denial. In the tower gmcp's exit table is empty,
+  -- so every push erased whatever the room's own description had just taught us via
+  -- MAP.onExitsLine -- including the push that the explorer's own `ql` had triggered. That is
+  -- the engine of the boon-screen ql storm: ask, wipe, find nothing, ask again. Capping the
+  -- asker would have been a cap on a still-running engine.
+  --
+  -- Deliberately NOT per-direction provenance (tagging each entry gmcp/text and refreshing each
+  -- source independently). That is more powerful and strictly riskier: it lets a leaked exit
+  -- survive indefinitely, and under dementia it turns the exit set from a snapshot into a union.
+  -- "Empty push changes nothing" is the smallest rule that breaks the loop.
+  if type(exits) == "table" and next(exits) ~= nil then room.exits = {} end
+  room.exits = room.exits or {}
   if type(exits) == "table" then
     -- Under dead reckoning the DESTINATION ids are inventions and will never match a synthetic
     -- key, so store 0 ("known exit, unknown destination") and keep only the DIRECTION. That is
@@ -676,17 +729,46 @@ MAP._sendHandler = registerAnonymousEventHandler("sysDataSendRequest", function(
   if last and MAP.normDir(last) then MAP._lastMoveDir = MAP.normDir(last) end
 end)
 
--- On each room arrival: show/hide the widget by context; a fresh Mnemosyne entry
--- starts a clean map; while inside, record the room and refresh.
+-- Widget visibility only, on the PREFIX event, so showing/hiding still tracks any room-ish push.
+-- Split out of the arrival handler below when that moved to Room.Info (v4.7.263): this half is
+-- cosmetic and idempotent, so it costs nothing to keep it broad.
+if MAP._showHandler then killAnonymousEventHandler(MAP._showHandler) end
+MAP._showHandler = registerAnonymousEventHandler("gmcp.Room", function()
+  if MAP.autoShow then MAP.autoShow() end
+end)
+
+-- On each room arrival: a fresh Mnemosyne entry starts a clean map; while inside, record the
+-- room and refresh.
+--
+-- REGISTERED ON `gmcp.Room.Info`, NOT THE `gmcp.Room` PREFIX (v4.7.263). Mudlet raises the
+-- prefix for EVERY sub-event -- Room.Players, Room.AddPlayer, Room.RemovePlayer,
+-- Room.WrongDir -- and this handler acted on all of them using whatever `gmcp.Room.Info`
+-- happened to be left over. Three real consequences, all observed or provable:
+--
+--   * DEAD RECKONING ADVANCED ON A FAILED MOVE. Room.WrongDir raises the prefix, so
+--     drArrive() consumed the arm and credited a step the server had just refused.
+--   * ANOTHER PLAYER WALKING IN rebuilt room.exits from a stale Info -- and in the tower
+--     that table is empty, which fed the ql storm this version fixes.
+--   * A non-Info push looked like an ARRIVAL to the explorer (008), clearing `moving` and
+--     killing the move timer mid-move. Same class as the v4.7.251 double-step.
+--
+-- The obvious guard, `if not gmcp.Room.Info then return end` (copied from
+-- update_stuff/002_ataxia_Room_Update.lua:39), does NOT work and must not be used: it tests
+-- whether the TABLE EXISTS, not whether THIS EVENT was an Info, and the table persists after
+-- the first room push -- so it is dead code from the second room onward. Line 690 below had
+-- exactly that non-guard. Registering on the sub-event is unambiguous and needs no detection;
+-- deffing/006_Rebound_Hold.lua and zdata/002_movement.lua already do it this way.
+--
+-- 008's arrival handler MUST move with this one (it does, same version) -- otherwise the
+-- explorer keeps treating sub-events as arrivals and 005 declining changes nothing.
 if MAP._roomHandler then killAnonymousEventHandler(MAP._roomHandler) end
-MAP._roomHandler = registerAnonymousEventHandler("gmcp.Room", function()
+MAP._roomHandler = registerAnonymousEventHandler("gmcp.Room.Info", function()
   local here = MAP.inMnem()
   if here and not MAP._wasInMnem then
     MAP.reset()
     MAP._ripple = nil
   end
   MAP._wasInMnem = here
-  if MAP.autoShow then MAP.autoShow() end
   if not here or not (gmcp and gmcp.Room and gmcp.Room.Info) then return end
   local ri = gmcp.Room.Info
   -- Under dementia the id and the name are both inventions; the key comes from our own dead

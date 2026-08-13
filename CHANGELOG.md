@@ -2,6 +2,119 @@
 
 ---
 
+## 2026-08-12 - The boon-screen ql storm, and a pause that paused almost nothing (v4.7.263)
+
+```
+(MNEM): [explore] boon screen up -- ripple swept. Pick a boon and wade; basher stays on
+Wading the Mnemosyne.
+There are no obvious exits.          (x15, ~8ms apart)
+```
+
+User: *"Something to do with mnem explore not pausing."* Correct, and it went further than the
+spam: **`pausedAtBoon` was consulted in 2 of the 8 paths that could still act**, two of which
+send movement. The storm itself is a regression from **v4.7.260**, where two of my own changes
+close a loop.
+
+### The engine was the WIPE, not the ask
+
+My first read was "008 sends an unthrottled `ql` that re-raises its own event". True, and
+incomplete in the way that matters:
+
+1. `send("ql")` -> server pushes `Room.Info`
+2. `MAP.onRoom` rebuilds `room.exits = {}` from the gmcp table **only** -- empty in the tower --
+   so whatever the room's own description had just taught us is erased. 005's handler runs
+   before the explorer's, so this always won.
+3. 008 reads the just-emptied table and asks again
+4. the prose exits line arrives *after* the GMCP push and refills exits -- too late, the decision
+   is made and the next `ql` is already out
+
+**Capping step 3 while step 2 still runs is a cap on a live engine.** The wipe now applies only
+when gmcp actually named something: a non-empty push replaces exactly as before (so the v4.7.251
+REPLACE reasoning, and a demented push, are untouched), and an empty or absent one changes
+nothing. Chosen over per-direction gmcp/text provenance because the narrow rule cannot resurrect
+the demented-union problem -- a hallucination always names directions.
+
+### `gmcp.Room` is a PREFIX event
+
+`Room.Players`, `Room.AddPlayer`, `Room.RemovePlayer` and `Room.WrongDir` all raise it, and 005
+acted on every one using whatever `Room.Info` was lying around. So **another player walking into
+the room rebuilt our exits** -- and, under dementia, `Room.WrongDir` spent `MAP._drArmed` and
+credited a dead-reckoning step for a move the server had just REFUSED. 005 and 008 both now
+register on `gmcp.Room.Info`, together, so neither depends on the other declining.
+
+The obvious guard is a trap and is documented as one: `if not gmcp.Room.Info then return end`
+(as at `002_ataxia_Room_Update.lua:39`) tests whether the TABLE EXISTS, not whether THIS EVENT
+was an Info -- and it persists after the first room push, so it is dead code from the second room
+onward. 005 already had that non-guard. Registering on the sub-event needs no detection.
+
+### The pause: initiation / completion / self-preservation
+
+The axis was never paused/not-paused. `M._navRefusal()` is the single owner, returning a reason
+string like `_stepRefusal`/`_chaseRefusal`, and every site is classified:
+
+* **INITIATION** (sweep, patrol, pull, re-entry, boss chase, map upkeep, wall melt) -- suspend.
+* **COMPLETION** (a move landing, failing, slipping, retrying) -- never; suspending it strands
+  `moving`, `swarmHold` and `S.state`.
+* **SELF-PRESERVATION** (lava, escape ladder, panic tumble, recovery loop, tincture, disengage)
+  -- never.
+
+**`S._enabled()` is deliberately NOT pause-aware.** It gates `S.onVitals`, `S.disengage` and
+`S.onTick` together, so the obvious one-line fix would have killed the escape ladder, the panic
+tumble, the tincture and the forced disengage at a stroke -- the reported bug with its sign
+flipped. The gate went on the *idle assess* inside `onTick` instead, refused at the call site
+rather than inside `_beginPull`, which stamps.
+
+**And the existing check was in the wrong place.** `_exploreTick` returned on `pausedAtBoon`
+*above* the swarm delegation -- but every swarm state machine self-ticks through
+`M._scheduleTick`, so pausing froze the recovery loop too. At the boon screen the ladder fired
+ONCE and then disabled itself (`S.onVitals` returns early while `recovering`, and only the tick
+can leave that state): nothing landed, nothing re-sent an eaten `fly`, nothing enforced
+`RECOVER_MAX`, until GO -- which needs the user at the keyboard, i.e. the exact case a pause
+should survive. The gate moved below the delegation. The arrival tick is also still re-armed
+while paused, deliberately: `_beginEscape`'s indoor branch does not self-schedule and has no
+other clock.
+
+### Zero is an answer
+
+Nothing in the package parsed `There are no obvious exits.` -- the only match anywhere was the
+bundled third-party mapper's wormhole trigger, which feeds nothing here. So an empty `room.exits`
+meant both "none" and "not told", and the honest zero read as ignorance forever. Trigger
+`mnemosyne/072` records it, and the marker is deliberately **inert**: it never writes
+`room.exits`, and nothing in the exit graph reads it.
+
+That restraint is the whole design. **"No OBVIOUS exits" is not "no exits"** -- the holding room
+prints this line and still has the `down` the sweep descends by. Zeroing the table would make
+`usableUnexplored` yield nothing -> `_nextExploreStep` nil -> `_nextPatrolStep` nil ->
+`_exploreStop`, which raises `"basher disabled"`: the sweep switching COMBAT off, in a no-flee
+instance, while the user reads a menu. It also spends the same one-shot glance token as
+`onExitsLine`, or a glanced dead end would mark our own room -- the v4.7.262 regression in a new
+hat.
+
+A told-zero room now **holds** rather than stopping (bounded, ~2 minutes), because `_exploreStop`
+clears `explore.on` and `exploreOnGo` only un-pauses -- so stopping there kills the sweep for the
+rest of the run. And the `ql` budget resets on a genuine ARRIVAL instead of per ripple: as one
+counter for the whole level, three bare rooms exhausted it and every later one was blind.
+
+### Rejected: gating auto-learn on dementia
+
+Considered for the phantom `You detect nothing here by that name.` rounds, and **it would have
+disabled combat for the entire run.** `003_ataxia_RoomContents_Update.lua` is the *only* writer
+to `ataxiaBasher.targetList[""]`, and `search_targets` refuses any target absent from it. Every
+ripple draws a new roster and dementia is common and incurable, so "don't auto-learn while
+demented" is operationally "don't auto-learn in the tower": no acquisition, no attacks, in a
+no-flee instance, with the explorer waiting on `_roomHasDenizens()` to go false forever. The
+pollution it would have fixed is inert anyway -- a name not in `denizensHere` matches nothing.
+Recorded here so it is not re-proposed.
+
+### Tests
+
+**1385 -> 1403**, and every fix reverted individually and confirmed to fail (eleven breaks). The
+swarm suite needed a faithful `_navRefusal` stand-in in its mocked `ataxia.mnemosyne` for the
+same reason its lava stand-ins exist: without it the pause tests would pass against an absent
+guard.
+
+---
+
 ## 2026-08-12 - The move we ARMED is not the move that HAPPENED (v4.7.262)
 
 ```
