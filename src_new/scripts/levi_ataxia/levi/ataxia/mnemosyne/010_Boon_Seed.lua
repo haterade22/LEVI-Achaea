@@ -153,7 +153,11 @@ M.BOON_SEED = {
   ["Hardened"] = { description = "You are immune to the sensitivity affliction.", rarity = "legendary" },
   ["Haskor's Bravado"] = { description = "Your attacks have a 5% chance to afflict the target with recklessness. This may only occur every 5 seconds.", rarity = "common", echo = "Your attacks have a 10% chance to afflict the target with recklessness. This may only occur every 5 seconds." },
   ["Hawk Eyes"] = { description = "The God of War increases your chance to critically strike by 1%.", rarity = "uncommon", echo = "The God of War increases your chance to critically strike by 2%." },
-  ["Herald of Infirmity"] = { description = "Your aeonics degenerate and deteriorate abilities deal 50% bonus damage against denizens.", rarity = "uncommon", echo = "Your aeonics degenerate and deteriorate abilities deal 50% bonus damage against denizens." },
+  -- CORRECTED 2026-08-12 from a live offer screen: the seed said 50%, the game says 25%. The
+  -- capture is authoritative and the seed was presumably taken before a rebalance. Flagged rather
+  -- than silently overwritten because it means other seeded NUMBERS may have drifted too -- the
+  -- descriptions are what the offer-screen annotations reason over.
+  ["Herald of Infirmity"] = { description = "Your aeonics degenerate and deteriorate abilities deal 25% bonus damage against denizens.", rarity = "uncommon", echo = "Your aeonics degenerate and deteriorate abilities deal 25% bonus damage against denizens." },
   ["Heroic Strength"] = { description = "The Patron of Heroes increases your strength by 1.", rarity = "common", echo = "The Patron of Heroes increases your strength by 2." },
   ["Hexweaver"] = { description = "You no longer lose swiftcurse charges, and your curses consume no willpower.", rarity = "rare" },
   ["Hidden Gem"] = { description = "You deal 1% bonus damage.", rarity = "common", echo = "You deal 10% bonus damage." },
@@ -289,7 +293,6 @@ M.BOON_SEED = {
   ["Statuesque"] = { description = "You are immune to the epilepsy affliction.", rarity = "rare" },
   ["Stone Stomach"] = { description = "Your tash'la heritage increases the effects of potash (not moss) by 200% and potash has a 50% reduced cooldown, but you can no longer drink health or mana.", rarity = "uncommon" },
   ["Storm Anvil"] = { description = "Your skyhammer ability is now instant and deals a large amount of electric damage to all denizens in the location.", rarity = "rare" },
-  ["Timequake"] = { description = "Your aeonics distortion ability now deals magic damage to all denizens when distorting a location.", rarity = "uncommon" },
   ["Stormcleaver"] = { description = "Your bisect attack now executes denizens with less than 20% of their maximum health.", rarity = "legendary" },
   ["Stormkeeper"] = { description = "Your buffet ability now causes a bolt of lightning to strike a second nearby enemy.", rarity = "rare" },
   ["Stout"] = { description = "Your dwarven heritage grants you an additional 10% magic, fire, cold, and poison resistance.", rarity = "common" },

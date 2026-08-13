@@ -214,6 +214,7 @@ function M.onRunEnd()
   mnemThunderclap = false   -- boons gone on a confirmed run-end
   mnemStormcleaver = false
   dwTimequake = false
+  dwHeraldInfirmity = false
   mnemTruthseeker = false
   mnemToughCrowd, mnemElusiveFoolery, mnemApostatic = false, false, false
   mnemDivineThunder = false -- boons gone on a confirmed run-end
@@ -1033,6 +1034,7 @@ M.BOON_FLAGS = {
   ["Morudai"]              = "mnemMorudai",
   ["Stormcleaver"]         = "mnemStormcleaver",
   ["Timequake"]            = "dwTimequake",
+  ["Herald of Infirmity"]  = "dwHeraldInfirmity",
   ["Convocation"]          = "mnemConvocation",
   ["Mutated Jaws"]         = "mnemMutatedJaws",
   ["Wrath and Righteousness"] = "mnemWrathRighteousness",

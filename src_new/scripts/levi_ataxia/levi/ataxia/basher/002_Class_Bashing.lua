@@ -947,6 +947,84 @@ function ataxiaBasher_dwDistortMark(refused)
 	end
 end
 
+-- ---------------------------------------------------------------------------
+-- Aeonic cash-in: DEGENERATE / DETERIORATE (v4.7.265)
+-- ---------------------------------------------------------------------------
+--
+-- These are NOT boon-gated (user-directed). The base abilities already deal "significant magical
+-- damage" to a denizen carrying the right affliction; Herald of Infirmity only adds 25% on top.
+--
+-- AB 2423 CHRONO DEGENERATE <target>, 700 age -- fires on a PHYSICALLY-PLAGUED denizen:
+--     inhibit, weakness, sensitivity, clumsiness
+-- AB 2425 CHRONO DETERIORATE <target>, 300 age -- fires on a MIND-ADDLED denizen:
+--     recklessness, charm, fear, aeon, amnesia
+--
+-- All nine are already modelled by basher/008 (`ataxiaBasher_BR_AFFS`), which is the whole
+-- reason this is cheap to build: the denizen-state layer was written for exactly this shape of
+-- question and `dwHasAff` already asks it. Note the two naming mismatches between the AB prose
+-- and the tracked keys -- "clumsiness" is `clumsy`, "fear" is `feared`.
+--
+-- THE LOOP IS SELF-FEEDING, which is the point. Depthswalker's own battlerage applies two of the
+-- five mental triggers: `chrono curse` -> AEON (DW_BR, `skipIfAff = "aeon"`) and `intone boinad`
+-- -> CHARM. So the rotation plants the affliction and this cashes it in a round or two later --
+-- the same shape as the Blademaster cashing reckless/feared denizens into Headstrike.
+--
+-- NEVER BOOSTED. Both ABs say so explicitly for the denizen case ("cannot be boosted"), so the
+-- BOOST suffix is not merely unhelpful here, it is invalid.
+--
+-- IT REPLACES THE SWING rather than riding beside it. The balance type is NOT stated in either AB
+-- -- unlike distortion, whose AB names an eq cost by saying boost removes it -- so this is a
+-- judgement made in the safe direction. If these are balance abilities and we appended them, the
+-- swing would be REJECTED after the chain had already spent the age; if they are equilibrium and
+-- we replace, we lose one `shadow reap` per cash-in, which "significant magical damage" should
+-- comfortably beat. Losing a swing is recoverable, spending 300-700 age on a rejected command is
+-- not. Correct this the moment the resource is confirmed.
+--
+-- DETERIORATE IS PREFERRED WHEN BOTH ARE AVAILABLE: 300 age against 700 for the same stated
+-- effect. Age is the class's PvP currency, and the cap below is shared with chrono blur so
+-- bashing cannot price out the chrono kit.
+--
+-- AMNESIA IS SORTED LAST, deliberately. `chrono erasure` (DW_BR) CONSUMES weakness or amnesia,
+-- so the two cash-ins compete for the same affliction; preferring any other trigger first means
+-- the rotation and this rarely fight over one. Same reason weakness is last in the physical set.
+local DW_DETERIORATE_AFFS = { "aeon", "charm", "feared", "recklessness", "amnesia" }
+local DW_DEGENERATE_AFFS  = { "inhibit", "sensitivity", "clumsy", "weakness" }
+
+-- Which cash-in is live, or nil. Returns command, the affliction that enabled it, and the age
+-- cost -- named rather than inlined so `bash dwaeonic` and the tests can report WHY.
+function ataxiaBasher_dwAeonicPick()
+  if type(target) ~= "number" then return nil end -- PvE only; these read the denizen model
+  for _, aff in ipairs(DW_DETERIORATE_AFFS) do
+    if dwHasAff(aff) then return "chrono deteriorate "..target, aff, 300 end
+  end
+  for _, aff in ipairs(DW_DEGENERATE_AFFS) do
+    if dwHasAff(aff) then return "chrono degenerate "..target, aff, 700 end
+  end
+  return nil
+end
+
+function ataxiaBasher_dwAeonicCashIn(sp)
+  if ataxiaBasher.dwAeonic == false then return "" end
+  if ataxiaBasher.shielded then return "" end -- break the shield first; the affliction keeps
+  local dw = ataxiaTables and ataxiaTables.depthswalker
+  local age = tonumber(dw and dw.age) or 0
+  if age > (tonumber(ataxiaBasher.dwAgeCap) or 400) then return "" end
+  local cmd, aff = ataxiaBasher_dwAeonicPick()
+  if not cmd then return "" end
+  -- In-flight hold, the DW_BR shape: the basher rebuilds this line every prompt and each
+  -- `queue addclearfull` wipes the last one, so without a hold we would re-send every 0.3s and
+  -- the affliction's short life (aeon ~6s, charm ~5s) would be spent on duplicates.
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp = ataxiaTemp or {}
+  if (nowT - (tonumber(ataxiaTemp.dwAeonicAt) or 0)) < 4 then return "" end
+  ataxiaTemp.dwAeonicAt = nowT
+  if ataxiaBasher_dsAlert then
+    ataxiaBasher_dsAlert("aeonic cash-in on <cyan>" .. aff .. "<reset>"
+      .. (dwHeraldInfirmity and " <pale_green>(+25% Herald)<reset>" or "") .. ".")
+  end
+  return cmd..sp
+end
+
 function ataxiaBasher_depthswalkerBashing()
 	local command, sp = "", ataxia.settings.separator
 	-- Equilibrium rider: rides every round, shielded or not (see above).
@@ -990,7 +1068,15 @@ function ataxiaBasher_depthswalkerBashing()
 	-- The keeper wins the tie because it only ever fires when a defence has actually
 	-- dropped, and it holds 20s between attempts -- boinad gets every other round.
 	local keeper = ataxiaBasher_dwKeeper(sp)
-	command = ff..keeper..ataxiaBasher_dwBattlerage(sp, keeper ~= "")..primary
+	local br = ataxiaBasher_dwBattlerage(sp, keeper ~= "")
+	-- THE CASH-IN REPLACES THE SWING (see the block above for why that direction). The battlerage
+	-- still rides -- it is paid in rage, not balance -- and it is what plants the affliction in
+	-- the first place, so cutting it here would starve the very loop this feeds.
+	local aeonic = ataxiaBasher_dwAeonicCashIn(sp)
+	if aeonic ~= "" then
+		return ff..keeper..br..aeonic:gsub("%s*$", "")
+	end
+	command = ff..keeper..br..primary
 	return command
 end
 

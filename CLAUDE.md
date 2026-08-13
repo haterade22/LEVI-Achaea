@@ -321,6 +321,22 @@ All combat systems in `src_new/scripts/levi_ataxia/levi/levi_scripts/`:
 | **bard** | 10 | **Documented** | Voyria lock; Composition/Bladedance affliction; PvE footwork bashing | `bard/` |
 | **blademaster** | ~10 | **Documented** | Lightning/Ice, Brokenstar | `blademaster/` |
 | **depthswalker** | 1 | **Documented** | Shadow/time; PvE = owned battlerage (all 6 abilities denizen-legal) + Terminus word-balance keepers | `depthswalker/` |
+
+**DEPTHSWALKER AEONIC CASH-IN (v4.7.265, NOT boon-gated).** `CHRONO DETERIORATE <t>` (AB 2425,
+**300 age**) deals significant magical damage to a MIND-ADDLED denizen -- recklessness, charm,
+fear, aeon, amnesia -- and `CHRONO DEGENERATE <t>` (AB 2423, **700 age**) to a PHYSICALLY-PLAGUED
+one -- inhibit, weakness, sensitivity, clumsiness. Herald of Infirmity only adds 25% on top, so the
+coordination is worth doing without it. **All nine were already modelled** by
+`basher/008_Denizen_State.lua` (`ataxiaBasher_BR_AFFS`), and the loop FEEDS ITSELF: DW battlerage
+applies two of the five mental triggers (`chrono curse` -> aeon, `intone boinad` -> charm), so the
+rotation plants and `ataxiaBasher_dwAeonicCashIn` collects a round later -- the Blademaster
+Headstrike shape. **Never boosted** (both ABs say denizens cannot be). **REPLACES the swing**: the
+balance type is unstated in both ABs, and if they are balance abilities an appended swing would be
+REJECTED after the age was already spent, whereas if they are equilibrium we merely lose one
+`shadow reap` -- the recoverable error. Deteriorate is preferred (300 vs 700 age); **amnesia sorts
+LAST** because `chrono erasure` consumes weakness/amnesia and the two cash-ins would otherwise
+fight over the same affliction. Age-capped on `dwAgeCap` like chrono blur, 4s in-flight hold,
+PvE-only (`type(target) == "number"`), `bash dwaeonic off` to disable.
 | **dwb** | 1 | Undocumented | Breakpoint/rift | `dwb/` |
 | **dwb_runie** | 1 | Undocumented | DWB + runelore | `dwb_runie/` |
 | **dwc** | 3 | **Documented** | Vivisect, damage kill | `dwc/` |

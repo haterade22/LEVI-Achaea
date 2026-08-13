@@ -2,6 +2,64 @@
 
 ---
 
+## 2026-08-12 - Depthswalker cashes its own afflictions in (v4.7.265)
+
+User: *"Even without the boon we need to coordinate these attacks for Depthswalker if the target
+has those afflictions."* Correct -- **Herald of Infirmity only adds 25%**; the base abilities
+already deal "significant magical damage" to a denizen carrying the right affliction, and nothing
+was using them.
+
+| Ability | AB | Age | Fires on a denizen carrying |
+|---|---|---|---|
+| `CHRONO DETERIORATE <t>` | 2425 | **300** | recklessness, charm, fear, aeon, amnesia |
+| `CHRONO DEGENERATE <t>` | 2423 | **700** | inhibit, weakness, sensitivity, clumsiness |
+
+**All nine were already modelled.** `basher/008_Denizen_State.lua` tracks exactly these under
+`ataxiaBasher_BR_AFFS`, and `dwHasAff` already asks the question -- the denizen-state layer was
+built for this shape and this is the first thing to spend it. (Two naming mismatches between the
+AB prose and the tracked keys: "clumsiness" is `clumsy`, "fear" is `feared`.)
+
+**The loop feeds itself, which is the point.** Depthswalker's own battlerage applies two of the
+five mental triggers -- `chrono curse` → AEON and `intone boinad` → CHARM -- so the rotation plants
+the affliction and the cash-in collects it a round later. Same shape as the Blademaster cashing
+reckless/feared denizens into Headstrike.
+
+Decisions worth recording:
+
+* **Never boosted.** Both ABs say so explicitly for the denizen case, so the suffix is not merely
+  unhelpful, it is invalid.
+* **It REPLACES the swing.** The balance type is not stated in either AB -- unlike distortion,
+  whose AB names an eq cost by saying boost removes it -- so this is a judgement made in the safe
+  direction: if these are balance abilities and we appended them, the swing would be rejected
+  *after* the chain had spent the age; if they are equilibrium and we replace, we lose one
+  `shadow reap` per cash-in. Losing a swing is recoverable; spending 300-700 age on a rejected
+  command is not.
+* **Deteriorate is preferred** -- 300 age against 700 for the same stated effect.
+* **Amnesia sorts last.** `chrono erasure` CONSUMES weakness or amnesia, so the rotation and the
+  cash-in compete for the same affliction; preferring any other trigger first means they rarely
+  fight. Weakness is last in the physical set for the same reason.
+* In-flight hold (4s), the DW_BR shape: the round is rebuilt every prompt and each
+  `queue addclearfull` wipes the last, so without it the affliction's short life (aeon ~6s,
+  charm ~5s) would be spent on duplicate sends.
+
+### Two seed-DB corrections found while wiring this
+
+**Herald of Infirmity was already seeded, saying 50%. The live offer screen says 25%.** The
+capture is authoritative -- presumably the seed predates a rebalance. Corrected, and flagged in
+place rather than silently overwritten, because it means other seeded NUMBERS may have drifted:
+the descriptions are what the offer-screen annotations reason over.
+
+**Timequake was already seeded too** (as *rare*), and v4.7.264 added a second entry for it. In a
+Lua table constructor the last duplicate key wins, so the pre-existing one was still in force and
+nothing broke -- but the addition was dead weight with the wrong rarity. Removed. **Check the seed
+DB before adding to it**; a duplicate key is silent in both Lua and review.
+
+### Tests
+
+**1416 -> 1424**, five deliberate breaks each confirmed to fail.
+
+---
+
 ## 2026-08-12 - Five open findings, closed (v4.7.264)
 
 ### 1. The back route was dead for the whole of a demented ripple

@@ -91,6 +91,7 @@ if matches[2]:lower():find("rage%-fuelled") then mnemRageFuelled = true end
 if matches[2]:lower():find("thunderclap") then mnemThunderclap = true end
 if matches[2]:lower():find("stormcleaver") then mnemStormcleaver = true end
 if matches[2]:lower():find("timequake") then dwTimequake = true end
+if matches[2]:lower():find("herald of infirmity") then dwHeraldInfirmity = true end
 if matches[2]:lower():find("tough crowd") then mnemToughCrowd = true end
 if matches[2]:lower():find("elusive foolery") then mnemElusiveFoolery = true end
 if matches[2]:lower():find("apostatic") then mnemApostatic = true end

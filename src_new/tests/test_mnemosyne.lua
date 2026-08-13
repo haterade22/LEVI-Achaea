@@ -4170,3 +4170,85 @@ describe("Timequake distortion", function()
     expect(ataxiaBasher_dwTimequake(";")).toBe("")
   end)
 end)
+
+-- ---------------------------------------------------------------------------
+-- Aeonic cash-in: degenerate / deteriorate (v4.7.265)
+-- ---------------------------------------------------------------------------
+describe("cashing a denizen affliction into an aeonic nuke", function()
+  local affs
+
+  local function setup(age)
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.shielded = false
+    ataxiaBasher.dwAeonic = nil
+    ataxiaBasher.dwAgeCap = nil
+    ataxiaTables = ataxiaTables or {}
+    ataxiaTables.depthswalker = { age = age or 0 }
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.dwAeonicAt = nil
+    target = 4242 -- numeric: the denizen model is PvE-only
+    affs = {}
+    ataxiaBasher_dsHasAff = function(_, a) return affs[a] == true end
+  end
+
+  it("uses DETERIORATE on a mind-addled denizen", function()
+    setup()
+    affs.aeon = true
+    local cmd, aff, cost = ataxiaBasher_dwAeonicPick()
+    expect(cmd).toBe("chrono deteriorate 4242")
+    expect(aff).toBe("aeon")
+    expect(cost).toBe(300)
+  end)
+
+  it("uses DEGENERATE on a physically-plagued denizen", function()
+    setup()
+    affs.sensitivity = true
+    local cmd, _, cost = ataxiaBasher_dwAeonicPick()
+    expect(cmd).toBe("chrono degenerate 4242")
+    expect(cost).toBe(700)
+  end)
+
+  -- 300 age against 700 for the same stated effect.
+  it("prefers the cheaper deteriorate when both are available", function()
+    setup()
+    affs.aeon, affs.weakness = true, true
+    expect(ataxiaBasher_dwAeonicPick()).toBe("chrono deteriorate 4242")
+  end)
+
+  -- chrono erasure CONSUMES weakness/amnesia, so the two cash-ins compete for them.
+  it("sorts amnesia last so erasure and deteriorate rarely fight", function()
+    setup()
+    affs.amnesia, affs.charm = true, true
+    local _, aff = ataxiaBasher_dwAeonicPick()
+    expect(aff).toBe("charm")
+  end)
+
+  it("is silent when the denizen carries nothing it can use", function()
+    setup()
+    affs.stun = true -- tracked, but not a trigger for either ability
+    expect(ataxiaBasher_dwAeonicPick()).toBe(nil)
+    expect(ataxiaBasher_dwAeonicCashIn(";")).toBe("")
+  end)
+
+  it("is PvE-only -- a player target never reads the denizen model", function()
+    setup()
+    affs.aeon = true
+    target = "someone"
+    expect(ataxiaBasher_dwAeonicPick()).toBe(nil)
+  end)
+
+  it("respects the age cap and the shield", function()
+    setup(500); affs.aeon = true
+    expect(ataxiaBasher_dwAeonicCashIn(";")).toBe("")
+    setup(); affs.aeon = true; ataxiaBasher.shielded = true
+    expect(ataxiaBasher_dwAeonicCashIn(";")).toBe("")
+  end)
+
+  -- The basher rebuilds the round every prompt; without a hold the short-lived affliction
+  -- (aeon ~6s, charm ~5s) would be spent on duplicate sends.
+  it("holds in flight so it is not re-sent every prompt", function()
+    setup(); affs.aeon = true
+    expect(ataxiaBasher_dwAeonicCashIn(";")).toBe("chrono deteriorate 4242;")
+    expect(ataxiaBasher_dwAeonicCashIn(";")).toBe("")
+  end)
+end)
