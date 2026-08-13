@@ -2176,3 +2176,68 @@ describe("a suspended sweep still defends itself", function()
     expect(ataxiaTemp.swarmPullDir ~= nil or S.state ~= "idle").toBeTrue()
   end)
 end)
+
+-- ---------------------------------------------------------------------------
+-- _backDir under dead reckoning, and the lava-safe reset (v4.7.264)
+-- ---------------------------------------------------------------------------
+describe("the back route survives dementia", function()
+  -- Under dead reckoning `fromRoom` is a synthetic string key while every exit destination is
+  -- stored as the integer 0, so the destination comparison could NEVER be true -- the pull, the
+  -- funnel, the indoor escape and the preferred panic direction were all dead for the whole of a
+  -- demented ripple, and dementia is common and incurable in the tower.
+  it("proves adjacency from the WALKED edge, not the exit destination", function()
+    fixture(1)
+    MAP.current = "dr:1,0"
+    MAP.rooms = {
+      ["dr:0,0"] = { visited = true, exits = { north = 0 }, edges = { north = "dr:1,0" } },
+      ["dr:1,0"] = { visited = true, exits = { south = 0 }, edges = { south = "dr:0,0" } },
+    }
+    M.explore.fromRoom, M.explore.fromDir = "dr:0,0", "north"
+    local short, long = S._backDir()
+    expect(short).toBe("s")
+    expect(long).toBe("south")
+  end)
+
+  it("still refuses when nothing proves adjacency", function()
+    fixture(1)
+    MAP.current = "dr:1,0"
+    MAP.rooms = {
+      ["dr:1,0"] = { visited = true, exits = { south = 0 }, edges = {} }, -- never walked
+    }
+    M.explore.fromRoom, M.explore.fromDir = "dr:9,9", "north"
+    expect(S._backDir()).toBe(nil)
+  end)
+end)
+
+describe("a reset in lava does not flush the escape", function()
+  it("skips cq all and keeps the hold while burning", function()
+    fixture(1)
+    S.state = "pulling"
+    ataxiaTemp.escapeMode = true
+    local realLava, realSend = M.roomLava, send
+    local cmds = {}
+    M.roomLava = function() return true end
+    send = function(c) table.insert(cmds, c) end
+    S.reset("boon screen")
+    send, M.roomLava = realSend, realLava
+    local flushed = false
+    for _, c in ipairs(cmds) do if c == "cq all" then flushed = true end end
+    expect(flushed).toBeFalse()
+    expect(ataxiaTemp.escapeMode).toBeTrue() -- lava owns the hold until we are out
+  end)
+
+  it("still flushes normally when not in lava", function()
+    fixture(1)
+    local realLava, realSend = M.roomLava, send
+    local cmds = {}
+    M.roomLava = function() return false end
+    send = function(c) table.insert(cmds, c) end
+    S.state = "pulling"
+    S.reset("boon screen")
+    send, M.roomLava = realSend, realLava
+    local flushed = false
+    for _, c in ipairs(cmds) do if c == "cq all" then flushed = true end end
+
+    expect(flushed).toBeTrue()
+  end)
+end)

@@ -282,7 +282,26 @@ function S._backDir()
   if not back then return nil end
   if not (MAP.OFFSETS and MAP.OFFSETS[back]) then return nil end
   local room = MAP.rooms and MAP.rooms[MAP.current]
-  if not (room and room.exits and room.exits[back] == e.fromRoom) then return nil end
+  if not (room and room.exits) then return nil end
+  -- ADJACENCY IS PROVEN BY THE WALKED EDGE, NOT THE EXIT'S DESTINATION (v4.7.264).
+  --
+  -- The destination test alone was DEAD UNDER DEAD RECKONING, and had been since v4.7.250:
+  -- `e.fromRoom` is then a synthetic string key (`"dr:2,1"`) while every exit destination is
+  -- stored as the integer 0 by construction (the ids are inventions, so only the DIRECTION is
+  -- kept). `0 == "dr:2,1"` is never true, so `_backDir` returned nil for the whole of a demented
+  -- ripple -- silently disabling the PULL, the FUNNEL, the indoor escape and the preferred panic
+  -- direction, and leaving only `_panicDir`'s fallback scan. Dementia is a common, INCURABLE
+  -- boon in the tower, so this was the normal case, not an edge case.
+  --
+  -- `room.edges` is the fix and needs no new state: MAP.onRoom writes both halves of a traversal
+  -- (`from.edges[dir] = num`, `room.edges[opposite] = from.num`) using whatever key the map is
+  -- currently keyed by -- real ids or dead-reckoned cells. It is also STRONGER evidence than the
+  -- destination: an edge is only written for a move we actually made, whereas a destination is
+  -- gmcp's claim. It additionally rescues the honest-id case where the exit came from the prose
+  -- backfill and carries destination 0.
+  local proven = (room.exits[back] == e.fromRoom)
+    or (room.edges and room.edges[back] == e.fromRoom)
+  if not proven then return nil end
   -- NEVER RETREAT INTO LAVA (v4.7.256). The room we came from is normally the safest square on
   -- the grid -- we just cleared it -- but "we walked through it" is not the same fact as "it is
   -- survivable". A death log has the ladder retreating south into boiling lava at 65%, and then
@@ -1565,13 +1584,33 @@ function S.reset(reason)
     S.flying = nil
   end
   S.flightConfirmed = nil
+  -- NEVER FLUSH THE QUEUE WHILE WE ARE STANDING IN LAVA (v4.7.264).
+  --
+  -- `cq all` is correct for its usual reason -- a queued pull chain must not fire into the next
+  -- context -- but `M.onLava` queues the ESCAPE, and every caller of this function can land while
+  -- we are burning: the boon screen (onBoonScreen resets unconditionally), a ripple change, the
+  -- basher being toggled. Flushing there destroys the one command keeping us alive, and
+  -- `escapeOff()` below then un-mutes the basher, whose next `queue addclearfull` wipes the
+  -- re-send as well.
+  --
+  -- Bounded, not fatal -- onLava re-sends on the next struggle tick -- but a tick is 5,890
+  -- UNBLOCKABLE, 54% of the pool, and two of them is a death. Skipping the flush costs at worst
+  -- a stale pull chain firing once; keeping it can cost the character.
+  local burning = M.roomLava and M.roomLava()
   if wasActive then
-    send("cq all") -- a queued pull chain must not fire into the new context
-    S._echo("<grey>reset" .. (reason and (" (" .. reason .. ")") or "") .. ".")
+    if burning then
+      S._echo("<indian_red>reset held<reset> -- standing in lava, not flushing the queue"
+        .. (reason and (" (" .. reason .. ")") or "") .. ".")
+    else
+      send("cq all")
+      S._echo("<grey>reset" .. (reason and (" (" .. reason .. ")") or "") .. ".")
+    end
   end
   S.state = "idle"
   S.mode = nil
-  S.escapeOff() -- v4.7.243: the tactic is over either way (a NEW escape re-arms it)
+  -- Same reasoning: escapeOff un-mutes the attack dispatcher, and the very next round's
+  -- `queue addclearfull` would wipe the lava escape. Lava owns the hold until we are out of it.
+  if not burning then S.escapeOff() end -- v4.7.243: the tactic is over either way (a NEW escape re-arms it)
   S._recoverTumbles = nil
   S.recoverGround = nil
   S.recoverDiagnosed = nil

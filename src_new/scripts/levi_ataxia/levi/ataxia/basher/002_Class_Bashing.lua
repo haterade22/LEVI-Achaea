@@ -886,10 +886,79 @@ function ataxiaBasher_dwFlashforward(sp)
   return "chrono blur"..sp
 end
 
+-- TIMEQUAKE (Mnemosyne boon, v4.7.264): "Your aeonics distortion ability now deals magic damage
+-- to all denizens when distorting a location." User-directed: at 2+ denizens, ON ENTRANCE, once.
+--
+-- AB Distortion (2426): `CHRONO DISTORTION [BOOST]`, works on "Adventurers and room", costs
+-- **300 AGE**. Read the Syntax line, not just the boon text -- three facts follow from it:
+--
+--   * NOT BOOSTED, deliberately. Boost removes the EQUILIBRIUM cost, and equilibrium is the one
+--     resource we do not need to save: an eq ability RIDES beside the balance swing, so the cost
+--     is already free. What boost trades it for is the AB's warning that the spell becomes
+--     "progressively less potent the older you grow" -- an unquantified penalty for a cost we are
+--     not paying. Plain distortion, every time.
+--   * AGE-CAPPED on the SAME key as chrono blur (`ataxiaBasher.dwAgeCap`, 400). Age is the class's
+--     PvP currency and 300 is a large spend; bashing must not price out the chrono kit. Whether
+--     the 300 is added to the age counter or drawn from it is NOT confirmed, so the cap is applied
+--     to the current reading exactly as `dwFlashforward` does -- consistent, and conservative in
+--     the direction that costs us damage rather than the kit.
+--   * ONCE PER ROOM (the sowulu/uruz guard). Distortion is a persistent room effect, so re-casting
+--     it in a room that already has ours spends 300 age for nothing.
+--
+-- Worth knowing and NOT relied upon: distortion stops *enemies* leaving, not us, so it cannot
+-- strand the escape ladder -- and it should incidentally hold a fleeing boss (Lyaeus) in the room.
+-- Neither is asserted anywhere, because neither has been observed.
+function ataxiaBasher_dwTimequake(sp)
+	if not dwTimequake then return "" end
+	if ataxiaBasher.shielded then return "" end -- break the shield first; the nuke keeps
+	local M = ataxia.mnemosyne
+	local n = (M and M._denizenCount and M._denizenCount()) or 0
+	if n < (tonumber(ataxiaBasher.distortionAt) or 2) then return "" end
+	local dw = ataxiaTables and ataxiaTables.depthswalker
+	local age = tonumber(dw and dw.age) or 0
+	if age > (tonumber(ataxiaBasher.dwAgeCap) or 400) then return "" end
+	ataxiaTemp = ataxiaTemp or {}
+	local nowT = (getEpoch and getEpoch()) or os.time()
+	-- THE GAME'S REFUSAL IS THE GROUND TRUTH, NOT OUR ROOM KEY (captured live 2026-08-12).
+	-- `You have already distorted time in this location.` arrived TWICE in the user's log, which
+	-- is what a room-keyed guard looks like when the key is a lie -- and in the tower it often is,
+	-- because dementia mints a new room id on every look. Same lesson as the legend deck, where
+	-- the game's "lacks the power to invoke" rejection outranks ldm's own charge count. A global
+	-- hold after a refusal covers the case the per-room guard cannot see.
+	if (nowT - (tonumber(ataxiaTemp.dwDistortRefusedAt) or 0)) < 20 then return "" end
+	local room = (gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num) or "unknown"
+	if ataxiaTemp.dwDistortRoom == room then return "" end
+	-- Stamped OPTIMISTICALLY at send: an unconfirmed cast must not re-fire every prompt at 300
+	-- age a go. The confirmation line re-stamps it and the refusal line hard-stops it, so both
+	-- outcomes converge on "do not cast here again".
+	ataxiaTemp.dwDistortRoom = room
+	return "chrono distortion"..sp
+end
+
+-- Both outcomes of a distortion mean the same thing operationally: THIS LOCATION IS DISTORTED,
+-- do not spend 300 age on it again. Called from the confirmation line and the refusal line
+-- (triggers mnemosyne/073 and 074). The refusal additionally arms a global hold, because it is
+-- the only evidence available when our room key is wrong.
+function ataxiaBasher_dwDistortMark(refused)
+	ataxiaTemp = ataxiaTemp or {}
+	ataxiaTemp.dwDistortRoom = (gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num) or "unknown"
+	if refused then
+		ataxiaTemp.dwDistortRefusedAt = (getEpoch and getEpoch()) or os.time()
+	end
+end
+
 function ataxiaBasher_depthswalkerBashing()
 	local command, sp = "", ataxia.settings.separator
 	-- Equilibrium rider: rides every round, shielded or not (see above).
 	local ff = ataxiaBasher_dwFlashforward(sp)
+	-- ONE EQUILIBRIUM SPENDER PER ASSEMBLED ROUND (the v4.7.193 rule). `queue addclearfull a;b;c`
+	-- is ONE entry -- every command runs back to back in the same instant -- so chrono blur and
+	-- chrono distortion would both pass their own "do I have eq?" gate, only the first could pay,
+	-- and the second would be REJECTED after already stamping its once-per-room guard. The blur
+	-- keeper wins the tie because it only fires when a defence has actually dropped and holds 8s
+	-- between attempts; distortion is once per room and can wait a round.
+	local tq = (ff == "") and ataxiaBasher_dwTimequake(sp) or ""
+	ff = ff .. tq
 	-- `shadow cull` is the slow/high-damage swing, `shadow reap` the fast/low one; the
 	-- wiki gives numbers for neither, so reap stays the default until measured
 	-- (`bash dwcull on` flips it -- see the A/B note in the class doc).

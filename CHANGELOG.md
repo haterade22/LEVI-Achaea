@@ -2,6 +2,102 @@
 
 ---
 
+## 2026-08-12 - Five open findings, closed (v4.7.264)
+
+### 1. The back route was dead for the whole of a demented ripple
+
+`S._backDir` proved adjacency with `room.exits[back] == e.fromRoom`. Under dead reckoning
+`fromRoom` is a synthetic string key (`"dr:2,1"`) while **every** exit destination is stored as
+the integer `0` by construction -- the ids are inventions, so only the direction is kept. That
+comparison can never be true, so the function returned nil for the whole ripple, silently
+disabling the **pull**, the **funnel**, the **indoor escape** and the preferred **panic
+direction**, leaving only `_panicDir`'s fallback scan. Dementia is a common, incurable boon in the
+tower, so this was the normal case, not an edge case -- and it had been true since v4.7.250.
+
+`room.edges` fixes it with no new state: `MAP.onRoom` writes both halves of a traversal using
+whatever key the map is currently keyed by. It is also **stronger** evidence than a destination --
+an edge is only written for a move we actually made -- and it rescues the honest-id case where the
+exit came from the prose backfill and carries destination `0`.
+
+### 2. A reset in lava destroyed the escape it was standing on
+
+`S.reset` sends `cq all` whenever a tactic was active, and every caller can land while we are
+burning -- the boon screen resets unconditionally, as does a ripple change or a basher toggle.
+That flush destroys the move `M.onLava` queued, and `escapeOff()` immediately after un-mutes the
+basher, whose next `queue addclearfull` wipes the re-send too. Bounded (onLava re-sends next tick)
+but a tick is **5,890 unblockable**, 54% of the pool, and two is a death. Both the flush and the
+`escapeOff` are now skipped while `M.roomLava()`.
+
+### 3. `zgui` is not always there
+
+Five always-active wilderness-map triggers indexed the **legacy ZulahGUI** namespace unguarded --
+it is created by a group inline script, so whenever that group is off, every room change threw
+`attempt to index global 'zgui' (a nil value)`. Same family as the v4.7.261 orphans and invisible
+to the same gates, but **not** catchable by `check_orphans.py`: that finds *calls* to globals
+defined by inactive *scripts*, and this is a table *index* whose definition lives in a group's
+inline script. Guarded rather than disabled -- the feature is real for anyone running that GUI.
+
+### 4. Attune-gated boons were silent
+
+Four boons do nothing unless a specific spirit is attuned -- Echoing Hydra/**Arius**, Full Mettle
+Alchemist/**Aspar**, Viridian Balm/**Daina**, Knight's Resolve/**Garon** -- and nothing connected
+them to `shaman.spiritlore.attunements`. You get three attune slots, so this is a real choice made
+at a screen that gave you no way to see it: a live `sp list` had `Bashing2` attuning
+`[Aelkesh, Marak, Ri'shen]`, which turns off a Knight's Resolve the character had already claimed.
+
+`M._echoAttuneGated` annotates the offer screen beside the existing immunity notes, and
+`M._warnAttuneOnClaim` warns at claim time. Three design calls:
+
+* **Parse the sentence, not a name table.** Every one of these descriptions says "attuned to
+  &lt;Spirit&gt;" in its own words, exactly as the damage-suppression affixes always name their own
+  damage type (v4.7.186). A boon→spirit table would cover today's four and go stale on the fifth.
+* **Three states, not two.** `M._attuned` returns true / false / **nil = cannot tell**. On a
+  non-Shaman, or before the first SPIRIT BINDINGS read, "not attuned" would be a confident wrong
+  answer at a screen where the user is choosing.
+* **The claim path falls back to the SEED DB.** `_histBoonInfo` only reads offers recorded this
+  session, so a re-latch, a manual `BOON CLAIM` or a missed capture would have no description at
+  all -- and the warning would silently never fire on exactly the paths where the user is least
+  likely to have seen the offer note.
+
+It also names the profile that would satisfy the gate (`sp &lt;name&gt;`), sorted so the answer is
+deterministic rather than pairs-order roulette.
+
+### 5. Timequake (Depthswalker)
+
+> "Your aeonics distortion ability now deals magic damage to all denizens when distorting a
+> location."
+
+User-directed: at 2+ denizens, on entrance, once. AB Distortion 2426 is
+`CHRONO DISTORTION [BOOST]`, works on "Adventurers and room", **300 age** -- and three decisions
+follow from reading the Syntax line rather than the boon text:
+
+* **Not boosted.** Boost removes the *equilibrium* cost, and equilibrium is the one resource we do
+  not need to save -- an eq ability rides beside the balance swing, so it is already free. What
+  boost trades it for is the AB's warning that the spell becomes "progressively less potent the
+  older you grow": an unquantified penalty for a cost we are not paying.
+* **Age-capped on the same key as chrono blur** (`dwAgeCap`, 400). Whether the 300 is added to the
+  age counter or drawn from it is not confirmed, so the cap is applied to the current reading
+  exactly as `dwFlashforward` does -- conservative in the direction that costs damage rather than
+  the chrono kit.
+* **One equilibrium spender per assembled round** (the v4.7.193 rule). Blur and distortion would
+  both pass their own gate, only the first could pay, and the second would be rejected *after*
+  stamping its once-per-room guard. The blur keeper wins the tie; distortion can wait a round.
+
+Live capture gave all three lines. The **refusal** -- `You have already distorted time in this
+location.` -- arrived **twice**, which is what a room-keyed guard looks like when the key is a lie,
+and in the tower dementia mints a new room id on every look. So the game's refusal is treated as
+ground truth over our own room key and arms a short global hold, the same way the legend deck's
+"lacks the power to invoke" rejection outranks `ldm`'s charge count. The cast line confirms (the
+ability has no cooldown feed, so it is the only proof of life it has) and the proc line is
+highlighted -- anchored on the **first** line only, since the sentence wraps at a
+client-dependent column.
+
+### Tests
+
+**1403 -> 1416**, seven deliberate breaks each confirmed to fail.
+
+---
+
 ## 2026-08-12 - The boon-screen ql storm, and a pause that paused almost nothing (v4.7.263)
 
 ```

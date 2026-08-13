@@ -213,6 +213,7 @@ function M.onRunEnd()
   mnemRageFuelled = false   -- boons gone on a confirmed run-end
   mnemThunderclap = false   -- boons gone on a confirmed run-end
   mnemStormcleaver = false
+  dwTimequake = false
   mnemTruthseeker = false
   mnemToughCrowd, mnemElusiveFoolery, mnemApostatic = false, false, false
   mnemDivineThunder = false -- boons gone on a confirmed run-end
@@ -1031,6 +1032,7 @@ M.BOON_FLAGS = {
   ["Revel in Slaughter"]   = "mnemRevelInSlaughter",
   ["Morudai"]              = "mnemMorudai",
   ["Stormcleaver"]         = "mnemStormcleaver",
+  ["Timequake"]            = "dwTimequake",
   ["Convocation"]          = "mnemConvocation",
   ["Mutated Jaws"]         = "mnemMutatedJaws",
   ["Wrath and Righteousness"] = "mnemWrathRighteousness",
@@ -1300,6 +1302,103 @@ end
 --
 -- Boons that GRANT an immunity are flagged in their own right: that is what taking one buys,
 -- and it makes every later boon costing that affliction free.
+-- ---------------------------------------------------------------------------
+-- Attune-gated boons (v4.7.264)
+-- ---------------------------------------------------------------------------
+--
+-- Four boons in the seed DB do nothing at all unless a specific SPIRIT is attuned:
+--
+--   Echoing Hydra (legendary)  -> Arius   Full Mettle Alchemist (rare) -> Aspar
+--   Viridian Balm (uncommon)   -> Daina   Knight's Resolve (common)    -> Garon
+--
+-- ...and nothing in the package connected them to `shaman.spiritlore.attunements`, so holding one
+-- with the wrong loadout was completely SILENT. You get three attune slots, so this is a real
+-- choice made at a screen that gave you no way to see it: a live `sp list` had Bashing2 attuning
+-- [Aelkesh, Marak, Ri'shen], which turns off a Knight's Resolve the character had already claimed.
+--
+-- PARSE THE SENTENCE, NOT A NAME TABLE. Every one of these descriptions says "attuned to <Spirit>"
+-- in its own words, exactly as the damage-suppression affixes always name their own damage type
+-- (v4.7.186). A boon->spirit lookup table would cover today's four and go stale on the fifth.
+function M._spiritGate(description)
+  if type(description) ~= "string" then return nil end
+  return description:match("attuned to ([A-Z][%a']+)")
+end
+
+-- Is that spirit attuned RIGHT NOW? Three-state on purpose: true / false / nil = "cannot tell".
+-- `shaman.spiritlore` is populated by text triggers off SPIRIT BINDINGS, so on a non-Shaman -- or
+-- before the first read -- the honest answer is unknown, and claiming "not attuned" there would be
+-- a confident wrong answer at a screen where the user is choosing.
+function M._attuned(spirit)
+  if not spirit then return nil end
+  local sl = shaman and shaman.spiritlore
+  local list = sl and sl.attunements
+  if type(list) ~= "table" or next(list) == nil then return nil end
+  for _, s in ipairs(list) do
+    if type(s) == "string" and s:lower() == spirit:lower() then return true end
+  end
+  return false
+end
+
+-- Which saved `sp` profile would satisfy it -- the actionable half. Sorted so the answer is
+-- deterministic rather than pairs-order roulette.
+function M._profileWith(spirit)
+  local sl = shaman and shaman.spiritlore
+  if not (spirit and sl and type(sl.profiles) == "table") then return nil end
+  local hits = {}
+  for name, prof in pairs(sl.profiles) do
+    for _, s in ipairs((prof and prof.attunements) or {}) do
+      if type(s) == "string" and s:lower() == spirit:lower() then hits[#hits + 1] = name; break end
+    end
+  end
+  table.sort(hits)
+  return hits[1]
+end
+
+-- Offer-screen annotation, beside _echoImmunities. Says nothing when no offered boon is gated.
+function M._echoAttuneGated(list)
+  for _, b in ipairs(list or {}) do
+    local spirit = M._spiritGate(b.description)
+    if spirit then
+      local on = M._attuned(spirit)
+      if on == true then
+        M.echo("<pale_green>ATTUNED<reset> -- <gold>" .. tostring(b.name)
+          .. "<reset> needs <cyan>" .. spirit .. "<reset>, which is up.")
+      elseif on == false then
+        local prof = M._profileWith(spirit)
+        M.echo("<indian_red>INERT<reset> -- <gold>" .. tostring(b.name)
+          .. "<reset> does nothing unless <cyan>" .. spirit .. "<reset> is attuned"
+          .. (prof and (" (<white>sp " .. prof .. "<reset> has it)") or "") .. ".")
+      else
+        M.echo("<gold>" .. tostring(b.name) .. "<reset> needs <cyan>" .. spirit
+          .. "<reset> attuned -- <DimGrey>attunements unknown, check <white>sp list<reset>.")
+      end
+    end
+  end
+end
+
+-- Claim-time warning. Louder than the offer note, because by now it is spent.
+function M._warnAttuneOnClaim(name)
+  if not name or name == "" then return end
+  -- History first (this run's offer screen carries the live wording), then the SEED DB. The
+  -- fallback is load-bearing, not belt-and-braces: _histBoonInfo only reads offers recorded this
+  -- session, so a claim made without a parsed offer screen -- a re-latch, a manual BOON CLAIM,
+  -- a missed capture -- would have no description at all, and the warning would silently never
+  -- fire on exactly the paths where the user is least likely to have seen the offer note.
+  local _, description = M._histBoonInfo(name)
+  if (not description or description == "") and M.BOON_SEED then
+    local seed = M.BOON_SEED[name]
+    description = seed and seed.description or description
+  end
+  local spirit = M._spiritGate(description)
+  if not spirit then return end
+  if M._attuned(spirit) == false then
+    local prof = M._profileWith(spirit)
+    M.echo("<indian_red>WARNING<reset> -- <gold>" .. tostring(name)
+      .. "<reset> is INERT: <cyan>" .. spirit .. "<reset> is not attuned"
+      .. (prof and (", try <white>sp " .. prof) or "") .. "<reset>.")
+  end
+end
+
 function M._echoImmunities(list)
   local imm = M.runImmunities()
   local names = {}
@@ -1405,6 +1504,7 @@ function M.onBoonsOffered()
       -- being switched on. pcall'd because nothing about a display nicety justifies breaking
       -- the capture that feeds the catalogue and the API.
       if M._echoImmunities then pcall(M._echoImmunities, list) end
+      if M._echoAttuneGated then pcall(M._echoAttuneGated, list) end
 
       -- Everything below is telemetry.
       if not M._inRun() then return end

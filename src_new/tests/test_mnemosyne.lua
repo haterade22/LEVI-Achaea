@@ -4047,3 +4047,126 @@ describe("a told-zero room", function()
     MAP.drForce = nil
   end)
 end)
+
+-- ---------------------------------------------------------------------------
+-- Attune-gated boons (v4.7.264)
+-- ---------------------------------------------------------------------------
+describe("a boon that names a spirit", function()
+  local M = ataxia.mnemosyne
+  local HYDRA = "When attuned to Arius, your attacks will trigger a terrible roar which strikes another random denizen in the location."
+  local RESOLVE = "While attuned to Garon, all damage you take will be reduced by an additional 10%."
+
+  local function spirits(attunes, profiles)
+    shaman = shaman or {}
+    shaman.spiritlore = { attunements = attunes, profiles = profiles or {} }
+  end
+
+  -- Parse the SENTENCE, not a boon->spirit table: every one of these descriptions names its own
+  -- spirit, so a lookup table would cover today's four and go stale on the fifth.
+  it("reads the spirit out of the description", function()
+    expect(M._spiritGate(HYDRA)).toBe("Arius")
+    expect(M._spiritGate(RESOLVE)).toBe("Garon")
+    expect(M._spiritGate("Your bisect attack now executes denizens.")).toBe(nil)
+    expect(M._spiritGate(nil)).toBe(nil)
+  end)
+
+  it("answers attuned / not attuned", function()
+    spirits({ "Garon", "Arius", "Marak" })
+    expect(M._attuned("Arius")).toBeTrue()
+    expect(M._attuned("Aspar")).toBeFalse()
+  end)
+
+  -- Three states on purpose. On a non-Shaman, or before the first SPIRIT BINDINGS read, "not
+  -- attuned" would be a confident wrong answer at a screen where the user is choosing.
+  it("says UNKNOWN rather than guessing when the attunements have never been read", function()
+    shaman = shaman or {}
+    shaman.spiritlore = { attunements = {} }
+    expect(M._attuned("Arius")).toBe(nil)
+    shaman.spiritlore = nil
+    expect(M._attuned("Arius")).toBe(nil)
+  end)
+
+  it("names a profile that would satisfy it, deterministically", function()
+    spirits({ "Aelkesh", "Marak", "Ri'shen" }, {
+      Zebra = { attunements = { "Garon", "Marak", "Arius" } },
+      Bashing = { attunements = { "Arius", "Garon", "Marak" } },
+    })
+    expect(M._profileWith("Garon")).toBe("Bashing") -- sorted, so never pairs-order roulette
+    expect(M._profileWith("Aspar")).toBe(nil)
+  end)
+
+  it("warns on claim only when the spirit is provably absent", function()
+    local said = {}
+    local realEcho = M.echo
+    M.echo = function(t) table.insert(said, t) end
+    M.history = M.history or {}
+
+    spirits({ "Aelkesh", "Marak", "Ri'shen" })
+    M._warnAttuneOnClaim2 = nil
+    M.echo = function(t) table.insert(said, t) end
+    -- description comes from the seed DB via _histBoonInfo
+    M._warnAttuneOnClaim("Knight's Resolve")
+    local warned = false
+    for _, t in ipairs(said) do if t:find("INERT", 1, true) then warned = true end end
+    expect(warned).toBeTrue()
+
+    said = {}
+    spirits({ "Garon", "Marak", "Arius" })
+    M._warnAttuneOnClaim("Knight's Resolve")
+    expect(#said).toBe(0) -- attuned: nothing to say
+    M.echo = realEcho
+  end)
+end)
+
+-- ---------------------------------------------------------------------------
+-- Timequake (v4.7.264)
+-- ---------------------------------------------------------------------------
+describe("Timequake distortion", function()
+  local M = ataxia.mnemosyne
+
+  local function setup(n, age)
+    ataxiaBasher = ataxiaBasher or {}
+    ataxiaBasher.shielded = false
+    ataxiaBasher.distortionAt = nil
+    ataxiaBasher.dwAgeCap = nil
+    ataxiaTables = ataxiaTables or {}
+    ataxiaTables.depthswalker = { age = age or 0 }
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.dwDistortRoom, ataxiaTemp.dwDistortRefusedAt = nil, nil
+    gmcp = gmcp or {}
+    gmcp.Room = { Info = { num = 500 } }
+    M._denizenCount = function() return n end
+    dwTimequake = true
+  end
+
+  it("distorts at 2+ denizens, once per room", function()
+    setup(2)
+    expect(ataxiaBasher_dwTimequake(";")).toBe("chrono distortion;")
+    expect(ataxiaBasher_dwTimequake(";")).toBe("") -- same room
+    gmcp.Room.Info.num = 501
+    expect(ataxiaBasher_dwTimequake(";")).toBe("chrono distortion;")
+  end)
+
+  it("is inert below the threshold and without the boon", function()
+    setup(1)
+    expect(ataxiaBasher_dwTimequake(";")).toBe("")
+    setup(3); dwTimequake = false
+    expect(ataxiaBasher_dwTimequake(";")).toBe("")
+    dwTimequake = true
+  end)
+
+  -- 300 age is a large spend and age is the class's PvP currency; bashing must not price out the
+  -- chrono kit, so it shares chrono blur's cap rather than inventing a second one.
+  it("respects the age cap", function()
+    setup(3, 500)
+    expect(ataxiaBasher_dwTimequake(";")).toBe("")
+  end)
+
+  -- The game's refusal outranks our room key, because under dementia that key is a lie.
+  it("stops trying after the game says it is already distorted", function()
+    setup(3)
+    ataxiaBasher_dwDistortMark(true)
+    gmcp.Room.Info.num = 777 -- a NEW room id -- exactly what dementia mints on every look
+    expect(ataxiaBasher_dwTimequake(";")).toBe("")
+  end)
+end)

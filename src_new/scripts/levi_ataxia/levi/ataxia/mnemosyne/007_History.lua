@@ -165,6 +165,10 @@ end
 -- Record one claimed boon; echoes = how many times we've claimed it this run.
 function M._recordClaim(name)
   if not name or name == "" then return end
+  -- A spirit-gated boon we cannot benefit from is worth saying out loud at the moment it is
+  -- spent, not only when it was offered (v4.7.264). pcall: history recording must not depend on
+  -- the Shaman module being present.
+  if M._warnAttuneOnClaim then pcall(M._warnAttuneOnClaim, name) end
   local rarity, description = M._histBoonInfo(name)
   local echoes = 1
   for _, c in ipairs(M.history.claims) do

@@ -289,6 +289,7 @@ M.BOON_SEED = {
   ["Statuesque"] = { description = "You are immune to the epilepsy affliction.", rarity = "rare" },
   ["Stone Stomach"] = { description = "Your tash'la heritage increases the effects of potash (not moss) by 200% and potash has a 50% reduced cooldown, but you can no longer drink health or mana.", rarity = "uncommon" },
   ["Storm Anvil"] = { description = "Your skyhammer ability is now instant and deals a large amount of electric damage to all denizens in the location.", rarity = "rare" },
+  ["Timequake"] = { description = "Your aeonics distortion ability now deals magic damage to all denizens when distorting a location.", rarity = "uncommon" },
   ["Stormcleaver"] = { description = "Your bisect attack now executes denizens with less than 20% of their maximum health.", rarity = "legendary" },
   ["Stormkeeper"] = { description = "Your buffet ability now causes a bolt of lightning to strike a second nearby enemy.", rarity = "rare" },
   ["Stout"] = { description = "Your dwarven heritage grants you an additional 10% magic, fire, cold, and poison resistance.", rarity = "common" },
