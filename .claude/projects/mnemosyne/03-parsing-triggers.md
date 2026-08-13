@@ -261,3 +261,22 @@ cannot answer a four-affliction lock twice; curing two halves what the lock cost
 Burst count lives on `ataxiaTemp.phialBursts`, PER RIPPLE (cleared in `onRipple` and
 `onRunEnd`): a new ripple is a new fight and must not start pre-armed by the last boss.
 
+
+
+## Room-shape triggers (v4.7.260 - v4.7.263)
+
+| Trigger | Pattern | Handler | Notes |
+|---|---|---|---|
+| `mnemosyne/063_Room_Exits_Line` | `^You see (?:a single exit\|exits) leading .+\.$` | `MAP.onExitsLine(line)` | **Both wordings** since v4.7.260 — the singular is what a one-exit room prints, and the plural-only pattern is why a sweep stopped dead in a room whose description plainly listed an exit |
+| `mnemosyne/071_Glance_Header` | `^Glancing (?:to the )?(\w+), you see:$` | `MAP.onGlance(matches[2])` | Arms a **one-shot token** the next exits line spends. A glance prints the NEIGHBOUR's block, and 063 has no notion of whose room a line describes — this is the missing half of v4.7.260's ungating |
+| `mnemosyne/072_No_Obvious_Exits` | `^There are no obvious exits\.$` | `MAP.onNoExits()` | Zero is an **answer**, not silence. Records `room.exitsTextZero` and touches nothing else; spends the same glance token |
+| `mnemosyne/064_Lava` | the splash + the struggle line | `M.onLava(line)` | Passes `line` since v4.7.262 so entry and tick are distinguishable — a buffered tick can be processed *after* the escape's `gmcp.Room` has already moved us |
+
+All four use `triggerType: 0` with per-pattern `type: 1` (anchored perl regex). **Never `type: 3`**
+— exact-whole-line has silently killed triggers in this tree before.
+
+Gating lives in the **module**, not the trigger: `There are no obvious exits.` occurs all over
+Achaea, so `MAP.onNoExits` opens with `MAP.inMnem()` exactly as `MAP.onExitsLine` does. One gate,
+in the place that is unit-testable, and the trigger stays a one-line adapter. Deliberately **not**
+gated on the explorer running — the swarm moves us too, and a room's exits are worth recording
+whoever walked us in.

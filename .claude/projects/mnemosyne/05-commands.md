@@ -58,6 +58,7 @@ Guarded by `if ataxia.mnemosyne.map then`; see [04-ripple-map.md](04-ripple-map.
 | `mnem explore` | `M.exploreToggle()` — start/stop the 4×4 auto-sweep |
 | `mnem explore on` / `mnem explore off` | `M.exploreOn()` / `M.exploreOff()` — force state |
 | `mnem explore status` | `M.exploreStatus()` — diagnostic (`inMnem`/denizens/moving/next step) |
+| `mnem explore why` | `M.exploreWhy()` — **why is the sweep not moving?** Per-exit refusal reasons, grid bounding box, nav-suspension state, and the lava ledger with provenance (v4.7.259/262) |
 | `mnem swarm` | `M.swarm.status()` — swarm-tactics state/threshold/recon |
 | `mnem swarm on` / `off` | Toggle multi-mob tactics (persisted, `swarm.enabled`) |
 | `mnem swarm assess <n>` | Pull threshold (default 3) |

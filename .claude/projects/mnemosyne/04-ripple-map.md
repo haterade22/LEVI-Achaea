@@ -40,8 +40,8 @@ onRoom(num, name, exits, moveDir):
   room.visited = true                         -- a real arrival, not a stub
   if name: room.name = name
 
-  -- 1. Record REPORTED exits (rebuilt fresh each visit)
-  room.exits = {}
+  -- 1. Record REPORTED exits -- rebuilt fresh ONLY when gmcp named something (v4.7.263)
+  if exits is a non-empty table: room.exits = {}    -- else KEEP what we have
   for d, dest in gmcp exits:
     nd = normDir(d)
     if nd: room.exits[nd] = tonumber(dest) or dest   -- coerce string dest -> number
@@ -158,11 +158,88 @@ distinguishes the first event after a move from the rest; a predicate over curre
 dementia: gmcp pairs each direction with an invented **destination**, while this line carries
 directions and nothing else — exactly the half that survives.
 
-- **Replaces** the exit set, never merges. A direction that has stopped being reported is one the
-  room does not have, and leaving it in is what sends the sweep into a wall.
-- Trigger `mnemosyne/063` is a one-line adapter so the parse stays unit-testable.
-- **QL on demand**: landing in a cell whose exits are unknown, the explorer sends `ql`. Free, one
-  line per genuinely new cell.
+**Both wordings** parse (v4.7.260) — the game says `a single exit leading northeast` for one and
+`exits leading …` for two or more, and the singular is what a one-exit room prints. Trigger
+`mnemosyne/063` matches both and is a one-line adapter so the parse stays unit-testable.
+(`353_Real_Exits` had captured both since v4.7.75 into `ataxiaTemp.realExits`, which nothing ever
+read — dead output is indistinguishable from a missing feature.)
+
+**REPLACE under dementia, BACKFILL outside it** (v4.7.260). The ids differ in trustworthiness, not
+the directions:
+
+- **Dead reckoning on** — the ids are inventions, so the text is authoritative and *replaces* the
+  set. A direction that stopped being reported is one the room does not have.
+- **Dead reckoning off** — the ids are real and `relayout` needs them, so the text only *adds*
+  directions gmcp did not give, storing `0` = "exit exists, destination unknown".
+
+Not gated on dementia any more: in the tower gmcp's exit table is frequently empty, and CHANGELOG
+v4.7.75 had already recorded that the text is the usable adjacency source there.
+
+### 4. Zero is an answer (`MAP.onNoExits`, v4.7.263)
+
+`There are no obvious exits.` is a **positive statement**, and until v4.7.263 nothing parsed it —
+so an empty `room.exits` meant both "the room has none" and "we have not been told", and the
+explorer re-asked forever. That was the boon-screen `ql` storm.
+
+`room.exitsTextZero` records it and is **deliberately inert**: it never writes `room.exits`, and
+no consumer of the exit graph reads it. **"No OBVIOUS exits" is not "no exits"** — the ripple's
+holding room prints this line and still has the `down` the sweep descends by, so zeroing the table
+would run `usableUnexplored` → nil → `_exploreStop` → `raiseEvent("basher disabled")`, i.e. combat
+off in a no-flee instance. Its only job is to stop the asking. Retracted by any later exits line
+for that key, and by `MAP.reset`.
+
+### 5. A glance prints someone else's room (`MAP.onGlance`, v4.7.262)
+
+`Glancing to the northwest, you see:` is followed by the **neighbour's** description and the
+neighbour's exits line, and trigger 063 has no notion of whose room a line describes. Observed
+live: room 67777, whose own description listed two exits, holding four — the extras being exactly
+the glanced room's pair. Not cosmetic: text exits store as destination `0`, which reads as an
+unwalked door, so the sweep would step through a door that does not exist.
+
+`MAP._glanceSkip` is a **one-shot token** (not a time window — the glanced block prints its exits
+line immediately, and a token that gets *spent* distinguishes the first line from the rest; same
+reasoning as `MAP.drArm`). Trigger `mnemosyne/071` arms it; **both** `onExitsLine` and `onNoExits`
+spend it. Expires at 3s and is cleared on arrival so a stale token cannot eat our own next line.
+
+Deliberately **not** used to populate the glanced room: tempting, and a separate change with its
+own failure modes (a glanced room has no id at all under dementia).
+
+### 6. The empty push is silence, not a denial (v4.7.263)
+
+`MAP.onRoom` rebuilt `room.exits` from the gmcp table on **every** push, and 005's handler runs
+before the explorer's — so in the tower, where that table is empty, each push erased whatever the
+prose had just supplied. Combined with the explorer's unbounded arrival `ql`, that closed a loop:
+ask → wipe → find nothing → ask again, ~15 room descriptions in half a second.
+
+The wipe's *purpose* is retained: a non-empty push replaces exactly as before, so a direction gmcp
+stops naming is still dropped, and a demented push (which always names directions) still overrides
+completely. An **empty or absent** table now changes nothing.
+
+Chosen over per-direction `gmcp`/`text` provenance, which is more powerful and strictly riskier —
+it lets a leaked exit survive indefinitely and turns the demented exit set from a snapshot into a
+union. "An empty push changes nothing" is the smallest rule that breaks the loop.
+
+### 7. Registered on `gmcp.Room.Info`, not the prefix (v4.7.263)
+
+Mudlet raises the `gmcp.Room` **prefix** for every sub-event — `Room.Players`, `Room.AddPlayer`,
+`Room.RemovePlayer`, `Room.WrongDir` — and 005's handler acted on all of them using whatever
+`gmcp.Room.Info` happened to be left over. Consequences, all real:
+
+- **another player walking in** rebuilt our exits (and fed the `ql` storm);
+- **`Room.WrongDir` advanced the dead reckoning** — `drArrive` consumed the arm and credited a
+  step for a move the server had just *refused*;
+- a non-Info push looked like an **arrival** to the explorer, clearing `moving` and killing the
+  move timer mid-move.
+
+**The obvious guard does not work and must not be used**: `if not gmcp.Room.Info then return end`
+(as at `update_stuff/002_ataxia_Room_Update.lua:39`) tests whether the *table exists*, not whether
+*this event* was an Info — and the table persists after the first room push, so it is dead code
+from the second room onward. 005 already had exactly that non-guard. Registering on the sub-event
+is unambiguous.
+
+008's arrival handler moved in the same change: it is where the arrival decision is actually made,
+so 005 declining alone would have changed nothing. A two-line handler stays on the prefix purely
+for `MAP.autoShow()`.
 
 ## Reset & re-seed
 

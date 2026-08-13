@@ -146,7 +146,27 @@ The project uses [Muddler](https://github.com/demonnic/muddler) to build Mudlet 
 
 **Claude Code**: Use `/build` skill or invoke the `build-and-version` subagent.
 
-**CI/CD**: GitHub Actions (`.github/workflows/build.yml`) runs Lua syntax checks, version consistency checks, unit tests, and YAML validation on every push. Tagged releases (`v*`) trigger a full build and upload to GitHub Releases.
+**CI/CD**: GitHub Actions (`.github/workflows/build.yml`) runs Lua syntax checks, **an orphaned-call check**, version consistency checks, unit tests, and YAML validation on every push. Tagged releases (`v*`) trigger a full build and upload to GitHub Releases.
+
+**`tools/check_orphans.py` — a script switched off must take its callers with it (v4.7.261).**
+`isActive: 'no'` on a script does NOT disable the triggers that call into it. They stay live, call
+a nil global, and throw once per matching line — and where the pattern is `^.*$`, that is *every
+line of game output*. **108 such call sites existed across four superseded scripts** (the old SLC,
+the pre-V3 affliction core, a retired Shaman `ATTACK`), producing dozens of errors a second in the
+user's client. Every gate in the pipeline was blind to it by construction: the syntax check passes
+(the code is valid, the callee merely does not exist), the tests never load triggers, and the build
+succeeds because a disabled script still ships. The only symptom was an error window nobody reads.
+
+The fix has **two shapes, and choosing between them is the point** — a trigger that does *nothing
+but* call dead code is disabled to match its script; a trigger that does live work and merely
+contains one dead call has that **call guarded** (`if NAME then NAME(...) end`, the idiom those
+files already use for their V3 calls), never disabled, or real logic goes with it. 27 of 62 were
+the second kind.
+
+**Verify which interpreter before blaming the syntax.** Local `luac` may be 5.4, which rejects
+unknown escapes like `[\[`; **Mudlet runs Lua 5.1, which silently maps them to the bare
+character**, and CI's own `luac5.1 -p` passes over them. When a tool reports an error the runtime
+does not, check the tool's version against the runtime's before acting on it.
 
 **Manual pipeline**:
 1. **Edit** source files in `src_new/` (YAML-header Lua format)
@@ -425,7 +445,7 @@ shielding.
 
 **Safety Features:**
 - **Attack gate**: Blocks attacks during disabling afflictions (paralysis, aeon, peace, transfixation, webbed, impaled, constricted, deepsleep, entangled, unconsciousness, snared)
-- **No-flee areas** (`ataxiaBasher_isNoFleeArea()`): World Tree + Mnemosyne (`inMnemosyne` flag) never flee — shield on damage spike and keep attacking
+- **No-flee areas** (`ataxiaBasher_isNoFleeArea()`): World Tree + Mnemosyne (`inMnemosyne` flag) never flee — shield on damage spike and keep attacking. **The flag could never self-clear in a real area whose name CONTAINS "Mnemosyne" (v4.7.260)** — which is precisely "Ruins of Seleucar West of River Mnemosyne", the riverbank you wade in from. Trigger 351 matched `^You are in .*Mnemosyne` and 352 (the only clearing path) bailed on `find("Mnemosyne")`, so stepping out of the tower closed all three exits from the flag at once. The collateral was worse than the tower being wrong: `isNoFleeArea()` returned true **everywhere**, so the basher would not flee in the open world; `areaKey()` pinned to `""`, so real denizens were auto-learned into the tower's target list; and `mnem explore on` would happily start a 4×4 sweep in open Achaea. `ataxiaBasher_mnemSurveySaysTower(where)` is now the single owner, matching the full phrase with a **plain** find (an area name is not a Lua pattern). It lives in the script, not the trigger — the first cut of the fix put the check inside trigger 352, where a unit test calling `mnemLeftFor` directly sailed straight past it and a deliberate break went unnoticed. **A guard inside a trigger is a guard the test suite cannot see.**
 - **Own denizens** (`ataxiaBasher.ownDenizens` / `bash mine`): pet/ally name keywords excluded from auto-learn and targeting without skipping the room. Matched by case-insensitive SUBSTRING, which cuts both ways: `ataxiaBasher.notOwnDenizens` / `bash notmine` (v4.7.169) exempts a REAL denizen whose name merely contains a pet's word and WINS over the keyword -- "a slope-backed hyena" was shielded by the `hyena` keyword seeded for the Infernal pet. In Mnemosyne the consequence is that the SWEEP WALKS AWAY FROM A LIVE MOB: `_roomHasDenizens`/`_denizenCount` (008_Explorer:97,108) filter own denizens too, so a room holding only the shadowed mob reads as CLEAR and the explorer navigates out, trailing an aggressive denizen (v4.7.169 called this a stall; corrected v4.7.170 -- it is silent, not stuck). Seeded by backfill, since existing saves already carry the bare keyword. The user's five MOUNTS are on the list too (v4.7.174) and are keyed on their FULL descriptive name — `lean grizzly bear`, never `bear` — for exactly the same reason: a bare creature noun would shadow half the bestiary
 - **PvP auto-flee**: On `"attacker class detected"` event, disables basher and navigates to Mhaldor (`genrunning/001_Bashing_API.lua`)
 - **PvE target switching**: `switchTarget()` skips all PvP state resets when basher is enabled
@@ -472,6 +492,18 @@ SQLite database tracking non-critical damage per mob, keyed by class + primary s
 **DB Schema** (`mob_damage_db.hits`): `class`, `stat` (e.g., "str 16"), `mob`, `area`, `min_damage`, `max_damage`, `hit_count`, `when`
 
 **Class-Stat Mapping** (`ataxia.data.classPrimaryStat`): Maps each class to its primary bashing stat (str/dex/int). Multi-stat classes (Monk, Psion, Dragon) use highest priority stat.
+
+**A LIST value means "whichever of these is currently higher" (v4.7.259).** Jester's
+GALLOWSHUMOUR (AB 2680) "deals damage based on whichever stat is higher between your intelligence
+or strength", so the class has no single primary stat -- the answer depends on the character.
+`["jester"] = { "int", "str" }` is resolved against the live character at record time; keying
+every Jester hit under `str` made the per-stat comparison meaningless for an int build. The
+filter-recognition test (`classPrimaryStat[filter] ~= nil`) is unaffected -- a table value is
+non-nil like any other. Also confirmed from that AB: gallowshumour needs **no puppet**, deals
+PSYCHIC damage, takes a target, spends 2.10s of balance, and "the closer they are to death, the
+sharper your wit cuts" -- increased damage under 50% health and *further* under 25%, so the
+existing 50% bop->gallowshumour switch is exactly the documented breakpoint and the second tier
+needs no code.
 
 **Commands:**
 | Command | Purpose |
@@ -680,8 +712,77 @@ SPENT distinguishes the first event from the rest; a predicate over current stat
 honest exit source under dementia, since gmcp pairs directions with invented DESTINATIONS while
 this line carries directions alone. It REPLACES the exit set (a direction that stopped being
 reported is one the room does not have; merging is what walks the sweep into a wall), trigger
-`mnemosyne/063` is a one-line adapter so the parse stays testable, and the explorer sends `ql`
-on landing in a cell whose exits are unknown (free, one line per new cell).
+`mnemosyne/063` is a one-line adapter so the parse stays testable.
+
+**BOTH WORDINGS, AND THE EXITS LINE IS NOT DEMENTIA-ONLY (v4.7.260).** The game prints
+`a single exit leading northeast` for one and `exits leading ...` for two or more, and the
+plural-only pattern is why a sweep stopped dead in a room whose description plainly listed an
+exit. `353_Real_Exits` had captured both since v4.7.75 into `ataxiaTemp.realExits` -- which
+**nothing ever read**, and the CHANGELOG entry that added it listed wiring the explorer to it as
+the next step. Dead output is indistinguishable from a missing feature. The "gmcp is richer"
+reasoning survives as a REPLACE/BACKFILL split: under dead reckoning the ids are inventions so the
+text replaces; outside it `relayout` needs the real destinations, so the text only backfills
+directions gmcp did not give (stored `0` = exit exists, destination unknown).
+
+**A ROOM NUMBER IS NOT A PLACE (v4.7.260).** The tower draws each ripple's 4x4 from a POOL OF REAL
+ROOMS, so the same gmcp id returns on a later level with a different layout and different affixes.
+`lavaRooms`, `lavaEdges`, `failed` and the boss-chase counter are all keyed by room number and
+were cleared only on a package RELOAD -- so lava learned on one level condemned that id for the
+rest of the session (live: `north -> 65420 REFUSED: leads into lava` on an exit never glanced at).
+`M.onRippleReset()` now hangs off `MAP.reset()`, which already draws that line.
+
+**A GLANCE PRINTS SOMEONE ELSE'S ROOM (v4.7.262).** `Glancing to the northwest, you see:` is
+followed by the NEIGHBOUR's exits line, and 063 has no notion of whose room a line describes -- so
+the neighbour's exits were grafted onto ours (observed: 67777 holding four exits where its own
+description lists two). Not cosmetic: text exits store as destination `0`, which reads as an
+unwalked door, so the sweep would step through a door that does not exist. Trigger
+`mnemosyne/071` arms a **one-shot token** (not a time window -- the glanced block prints
+immediately, and a token that gets SPENT distinguishes the first line from the rest, the same
+reasoning as `MAP.drArm`); both `onExitsLine` and `onNoExits` spend it. This was the missing half
+of v4.7.260's ungating: **widening what a parser accepts obliges you to say what it must still
+refuse.**
+
+**ZERO IS AN ANSWER (v4.7.263, trigger `mnemosyne/072`).** Nothing parsed
+`There are no obvious exits.` -- so an empty `room.exits` meant both "none" and "not told", and
+the explorer re-asked forever. `room.exitsTextZero` is deliberately **inert**: it never writes
+`room.exits` and no consumer of the exit graph reads it, because **"no OBVIOUS exits" is not "no
+exits"** -- the holding room prints that line and still has the `down` the sweep descends by.
+Zeroing the table would run `usableUnexplored` -> nil -> `_exploreStop` ->
+`raiseEvent("basher disabled")`, i.e. combat off in a no-flee instance while the user reads a
+menu. Its only job is to stop the asking, and a told-zero room **holds** (bounded) rather than
+stopping, since `_exploreStop` clears `explore.on` and `exploreOnGo` only un-pauses.
+
+**THE EMPTY PUSH IS SILENCE, NOT A DENIAL (v4.7.263).** `MAP.onRoom` rebuilt `room.exits` from the
+gmcp table on EVERY push, and 005's handler runs before the explorer's -- so in the tower, where
+that table is empty, each push erased whatever the prose had just supplied, **including the push
+our own `ql` caused**. That closed the boon-screen loop: ask -> wipe -> find nothing -> ask again,
+~15 room descriptions in half a second. The wipe's purpose is retained (a non-empty push replaces
+exactly as before, so a direction gmcp stops naming is still dropped and a demented push still
+overrides); an empty or absent table now changes nothing. **Capping the asker would have been a
+cap on a live engine.**
+
+**`gmcp.Room` IS A PREFIX EVENT (v4.7.263).** `Room.Players`, `Room.AddPlayer`,
+`Room.RemovePlayer` and `Room.WrongDir` all raise it, and 005 acted on all of them off a stale
+`Room.Info`: another player entering rebuilt our exits, and **`Room.WrongDir` spent
+`MAP._drArmed` and credited a dead-reckoning step for a move the server had just REFUSED**. 005
+and 008 both register on `gmcp.Room.Info` now, in the same change (008 is where the arrival
+decision is made, so 005 declining alone changes nothing); a two-liner stays on the prefix for
+`MAP.autoShow()`. **The obvious guard is a trap:** `if not gmcp.Room.Info then return end` (as at
+`update_stuff/002_ataxia_Room_Update.lua:39`) tests whether the TABLE EXISTS, not whether THIS
+EVENT was an Info -- and the table persists after the first room push, so it is dead code from the
+second room onward.
+
+**THE WITNESS, NOT THE INTENT (v4.7.262).** `explore.fromRoom`/`fromDir` record the move we
+**ARMED**; nothing on any arrival path corrects them, and `onLava`'s `from ~= cur` guard is not an
+adjacency check (every other room on the grid satisfies it). So any unarmed room change -- panic
+tumble, drag, forced move, the lava escape itself -- left them naming a room we are not next to,
+and the next lava tick condemned an edge out of THAT room permanently. `MAP.onRoom` already
+resolved the true traversed direction for every arrival however caused (it survives a tumble
+because `MAP._lastMoveDir` comes from `sysDataSendRequest`, which sees `...;tumble ne` as readily
+as `...;nw`) and proved adjacency by writing the edge -- it simply never published it. It now
+publishes `MAP._lastArrival`, and `M._inbound()` is the single owner of "how did we get here":
+prefer the witness, accept the armed pair only where the map corroborates it, and return the
+REASON when it cannot.
 
 **THE 4x4 IS EVIDENCE (v4.7.249).** DEMENTIA (Creville's Legacy) hallucinates the room wholesale -- a real Achaea room name, a real room NUMBER, an NPC that is not there and invented exits ("You see exits leading north and west"), all arriving through the SAME gmcp channel the map trusts. `MAP.onRoom` recorded whatever it was handed and `relayout` placed rooms wherever those exits implied, so one demented room stretched the layout across the map. The 4x4 is the one thing dementia cannot fake and it was known ONLY to the renderer (`006`'s `LEVEL = 4`). `MAP.GRID = 4` + `MAP.exitFitsGrid(num, dir)`: an exit whose destination would push the bounding box past 4 cells on either axis cannot be real. It rejects ONLY provable overflow -- unplaced room, unknown room, non-planar `up`/`down` (the holding room's descent) and a still-small box all pass, so it never rejects on ignorance and tightens as the ripple is explored. Consumed by `relayout`'s BFS (a placement that would burst the box is refused, so the room stays unplaced rather than corrupting its neighbours) and by `usableUnexplored` (never spend a move + MOVE_TIMEOUT + retry on an exit the geometry already rules out). `MAP.GRID` is a field, not a literal, so a non-4x4 ripple relaxes it with one assignment. **Coordinates come from `MAP.relayout()`** — on every arrival it rebuilds a bidirectional adjacency from all rooms' known exits (`dir → neighbour-num`, coerced with `tonumber`; gmcp reports them as strings and `0` for unknown dests) and BFS-assigns coordinates from the origin. Re-deriving from the full accumulated graph each step is what makes it robust: a room unplaceable on arrival is placed on a later pass once either side of a link is known (per-arrival placement couldn't bootstrap). Anchored on the origin, falling back to the current room so it's always shown. Walked edges (for click-to-walk `MAP.path` BFS → `queue add free`) are recorded separately. Render (006) draws a **fixed 4×4 grid** (every ripple is a 4×4): visited rooms coloured (current green, un-walked-exit gold `?`, else grey), unvisited positions as dim placeholders. Wipes each ripple and re-seeds the current room from `gmcp.Room.Info` (`onRipple → MAP.onRipple`). Toggle `mnem map on|off` (`ataxia.settings.reporting.mapEnabled`, default on); `mnem map status` prints diagnostics incl. per-exit state. GUI (006) needs Geyser/`main` so it's not unit-tested; the pure graph in 005 is (`test_mnemosyne.lua`).
 
@@ -742,7 +843,26 @@ a separate `MAX_TACTICAL_ICE_SLIPS = 3`. **The escape pull HOLDS the attack disp
 
 **Boon re-latch** (v4.7.188, corrected v4.7.192): every boon flag latches from the `BOON CLAIM` alias or a BOONS-list row, so a boon owned BEFORE its handling shipped -- or claimed outside the alias -- stays inert silently. `M._relatchBoons()` sends **`BOON CLAIMED`** once per run to re-latch all 33 at once (**corrected v4.7.203** -- it sent bare `BOONS` from v4.7.188, which is NOT a command: the game answers it with its syntax help, so the re-latch never re-latched anything and printed a syntax block into combat. Three passes touched the function reasoning about WHEN to send and never WHAT, and its test pinned the string `"boons"` without checking it was a real command. Unexplained syntax help in a combat log is always one of our commands being rejected), called from `M.onRipple` (every mode) AND both explorer entry points. Its guard lives on **`ataxiaTemp`**, not `ataxia.mnemosyne`: `ataxia` is serialized wholesale and `deepMerge` lets a disk value win, so a guard stored there would come back TRUE after a reload while the bare-global boon flags came back nil -- defeating the function on exactly the path it exists for. Deliberately NOT latched from boon DESCRIPTIONS (unlike the damage affixes): a boon description also appears on the OFFER screen, listing boons we declined.
 
-**Auto-explorer (`ataxia.mnemosyne.explore`, file 008):** `mnem explore on` auto-sweeps the ripple's 4×4 — it drives the **basher in manual mode** (combat + no-flee, never mapper-moving) and handles *navigation* itself: room clear (`ataxia.denizensHere` empty) → step through a usable unexplored exit or backtrack via `MAP.path` to the nearest room with one, moving with `queue addclear free stand;<dir>` (stands first — you're often prone post-fight). `usableUnexplored` keeps **planar** unwalked exits, plus **only `down`** from a room with no planar exit at all — the entry **holding room's `down`** into the grid. `up`/`in`/`out` are never used (there is no `up` in Mnemosyne), and a 4×4 room's deeper `down` isn't taken. Event-driven (`gmcp.Room` + `"targets updated"` → debounced tick, `moving` guard); it echoes each step (`room clear → moving <dir>`) and once per room `clearing this room (N denizen(s))`. When the grid is fully swept it does **not** stop — on a **boss ripple** (every 5th) the boss spawns at the end in any already-cleared room, so it **patrols** (`_nextPatrolStep`, round-robin re-visit) to find + kill it, capped at `MAX_PATROL_LOOPS` fruitless loops. **Pauses** at the boon screen (`onBoonScreen` — sets `explore.pausedAtBoon`, halts navigation but **keeps the basher on** in explore mode; **auto-resumes on `GO!`** via `exploreOnGo` — a `look` to lock in the holding room's `down` exit, then `_exploreResume()` — or `mnem explore on` manually). It **stops** (restoring the saved basher state) on leaving Mnemosyne (strict `ataxiaBasher.inMnemosyne`, still detected during the pause), on `mnem explore off`, or the patrol cap. Safety: start-guard (`area==""`), stall watchdog, basher save/restore, `sysLoadEvent` reset, and **ice handling** — icy rooms print "You slip and fall on the ice as you try to leave" (move fails, but the exit is fine), so trigger `011_Ice_Slip.lua` → `onIceSlip` re-sends the move (no failed-exit charge) until you leave, capped at `MAX_ICE_SLIPS`. **Wears armour before sweeping** (v4.7.175): `M._wearArmour()` fires from BOTH `exploreOn()` and `_exploreResume()` — the latter is the PER-RIPPLE entry (GO calls it after every boon screen), so armour is re-asserted before each dive, not only the first `explore on`. Sent DIRECTLY, not queued, because `queue addclearfull` wipes queued lines; deliberately ungated on a worn-check since there is no reliable worn-state to read and the failure mode of guessing wrong is exactly what it exists to prevent. Pure logic (`_nextExploreStep`/`_roomHasDenizens`) is unit-tested; the timer/event machine is validated in-game.
+**Auto-explorer (`ataxia.mnemosyne.explore`, file 008):** `mnem explore on` auto-sweeps the ripple's 4×4 — it drives the **basher in manual mode** (combat + no-flee, never mapper-moving) and handles *navigation* itself: room clear (`ataxia.denizensHere` empty) → step through a usable unexplored exit or backtrack via `MAP.path` to the nearest room with one, moving with `queue addclear free stand;<dir>` (stands first — you're often prone post-fight). `usableUnexplored` keeps **planar** unwalked exits, plus **only `down`** from a room with no planar exit at all — the entry **holding room's `down`** into the grid. `up`/`in`/`out` are never used (there is no `up` in Mnemosyne), and a 4×4 room's deeper `down` isn't taken. Event-driven (`gmcp.Room` + `"targets updated"` → debounced tick, `moving` guard); it echoes each step (`room clear → moving <dir>`) and once per room `clearing this room (N denizen(s))`. When the grid is fully swept it does **not** stop — on a **boss ripple** (every 5th) the boss spawns at the end in any already-cleared room, so it **patrols** (`_nextPatrolStep`, round-robin re-visit) to find + kill it, capped at `MAX_PATROL_LOOPS` fruitless loops. **Pauses** at the boon screen (`onBoonScreen` — sets `explore.pausedAtBoon`, halts navigation but **keeps the basher on** in explore mode; **auto-resumes on `GO!`** via `exploreOnGo` — a `look` to lock in the holding room's `down` exit, then `_exploreResume()` — or `mnem explore on` manually).
+
+**A PAUSE IS THREE QUESTIONS, NOT ONE (v4.7.263).** `pausedAtBoon` was consulted in **2 of the 8
+paths that could still act**, two of which send movement. `M._navRefusal()` (008, reason-string
+form like `_stepRefusal`/`_chaseRefusal`) is now the single owner, and every site is classified:
+**INITIATION** (sweep, patrol, pull, re-entry, boss chase, map upkeep, wall melt) suspends;
+**COMPLETION** (a move in flight landing, failing, slipping, retrying) never does, because
+suspending it strands `moving`/`swarmHold`/`S.state`; **SELF-PRESERVATION** (lava, escape ladder,
+panic tumble, recovery loop, tincture, disengage) never does. Two traps, both of which this code
+fell into: **(1) `S._enabled()` must stay pause-blind** -- it gates `S.onVitals`, `S.disengage`
+AND `S.onTick` together, so the obvious one-line fix would kill the escape ladder, the panic
+tumble, the tincture and the forced disengage at a stroke (the bug with its sign flipped); the
+gate belongs on the *idle assess* inside `onTick`, at its single call site, never inside
+`_beginPull`, which stamps. **(2) The old gate was in the wrong PLACE** -- third line of
+`_exploreTick`, above the swarm delegation -- and every swarm state machine self-ticks through
+`M._scheduleTick`, so pausing froze the recovery loop: the ladder fired ONCE and then disabled
+itself (`S.onVitals` returns early while `recovering`, and only the tick can leave that state),
+until GO, which needs the user at the keyboard. It now sits BELOW the delegation. The arrival tick
+is still re-armed while paused, deliberately -- `_beginEscape`'s indoor branch does not
+self-schedule and has no other clock -- while the watchdog, being navigation-only, does not. It **stops** (restoring the saved basher state) on leaving Mnemosyne (strict `ataxiaBasher.inMnemosyne`, still detected during the pause), on `mnem explore off`, or the patrol cap. Safety: start-guard (`area==""`), stall watchdog, basher save/restore, `sysLoadEvent` reset, and **ice handling** — icy rooms print "You slip and fall on the ice as you try to leave" (move fails, but the exit is fine), so trigger `011_Ice_Slip.lua` → `onIceSlip` re-sends the move (no failed-exit charge) until you leave, capped at `MAX_ICE_SLIPS`. **Wears armour before sweeping** (v4.7.175): `M._wearArmour()` fires from BOTH `exploreOn()` and `_exploreResume()` — the latter is the PER-RIPPLE entry (GO calls it after every boon screen), so armour is re-asserted before each dive, not only the first `explore on`. Sent DIRECTLY, not queued, because `queue addclearfull` wipes queued lines; deliberately ungated on a worn-check since there is no reliable worn-state to read and the failure mode of guessing wrong is exactly what it exists to prevent. Pure logic (`_nextExploreStep`/`_roomHasDenizens`) is unit-tested; the timer/event machine is validated in-game.
 
 ### Data Persistence & Profile Backup
 
@@ -1902,7 +2022,7 @@ The project uses Claude Code hooks for automated quality gates and context prese
 
 ---
 
-**Last Updated**: 2026-08-11
+**Last Updated**: 2026-08-12
 **Project Lead**: Michael
 **Development Environment**: VS Code + Mudlet + Claude Code
 **Reference Systems**: Orion, Ataxia

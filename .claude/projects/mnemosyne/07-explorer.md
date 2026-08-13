@@ -135,11 +135,68 @@ The patrol queue is built from visited **grid** rooms only: `roomHasPlanarExit` 
 
 The **boon screen is deliberately not in this table** — it *pauses*, it doesn't stop (see below).
 
+**A told-zero room HOLDS, it does not stop** (v4.7.263). When the game has answered
+`There are no obvious exits.` for the room we are standing in (`room.exitsTextZero`, see
+[04-ripple-map.md](04-ripple-map.md)), the sweep waits — bounded, ~40 × 3s — instead of falling
+through to `_exploreStop("nowhere left to patrol")`. Stopping there would be unrecoverable for the
+run: `_exploreStop` restores the basher and clears `explore.on`, and `exploreOnGo` only
+*un-pauses* (it requires `pausedAtBoon`), so nothing would restart it. The holding room is exactly
+that case — it prints the zero line every ripple and its `down` opens on GO.
+
+**"Nowhere left to patrol" prints its refusals** (v4.7.260). The stop used to state a conclusion
+about the ripple when it was really reporting our own ignorance; it now lists each remaining exit
+and why `_stepRefusal` declined it.
+
 ### Boon-screen pause
 
 The boon-offer screen marks the ripple swept, but it no longer **stops** the sweep — it **pauses** it. `M.onBoonScreen()` (called straight from the boon-offer trigger **regardless of telemetry state**) sets `explore.pausedAtBoon = true`, clears `moving`, and kills the tick / move / watchdog timers — but it leaves `explore.on = true` and the basher exactly as the sweep set it (**enabled + manual + autoLearn + no-flee**). Nothing is restored or disabled here: the basher stays on through the boon pick and into the next ripple. `_prevBasher` is preserved so the eventual real stop still restores the *original* pre-sweep basher state.
 
-While paused, `_exploreTick` short-circuits on the `explore.pausedAtBoon` gate — but that gate sits **after** the `inMnem()` leave-tower check, so leaving the tower, dying, or `mnem explore off` during the pause still runs the normal lifecycle and restores the basher. `_watchdogNudge` / `_armWatchdog` also bail while `pausedAtBoon`, so a paused sweep never `ql`-nudges.
+#### What a pause suspends — and what it must not (v4.7.263)
+
+The axis is **not** paused/not-paused. Every site belongs to exactly one of three classes:
+
+| Class | Examples | Rule |
+|---|---|---|
+| **INITIATION** | sweep step, backtrack, patrol, pull, funnel re-entry, boss chase, map upkeep, wall melt | **suspend** |
+| **COMPLETION** | a move in flight landing, failing, slipping, being retried | **never suspend** — doing so strands `explore.moving`, `swarmHold` and `S.state` |
+| **SELF-PRESERVATION** | lava, the escape ladder, the panic tumble, the recovery loop, the tincture, a forced disengage | **never suspend** |
+
+`M._navRefusal()` is the single owner, returning a **reason string or nil** in the same shape as
+`_stepRefusal` / `_chaseRefusal`. It answers *"is navigation suspended"*, deliberately **not**
+*"is the sweep running"* — the boss chase legitimately works with the explorer off — and folds in
+nothing else (`inMnem` means *stop*, not suspend; `roomLava` outranks every pause; `moving` means
+*wait*, not refuse). A guard that answers every question refuses everything.
+
+Consumers: `_exploreTick` (below the swarm delegation), `_watchdogNudge` and both watchdog re-arm
+sites, `_chaseRefusal`, and the **idle assess** inside `S.onTick`.
+
+**Two traps, both of which this code fell into before v4.7.263:**
+
+1. **`S._enabled()` (009) is deliberately NOT pause-aware.** It gates `S.onVitals`, `S.disengage`
+   *and* `S.onTick` together, so adding the pause there — the obvious one-line fix — kills the
+   escape ladder, the panic tumble, the tincture and the forced disengage at a stroke: the
+   reported bug with its sign flipped. The gate belongs on the idle assess, at its single call
+   site, never inside `_beginPull` (which *stamps* `pulls`/`entrySnap`/`swarmPullDir`).
+2. **The old gate was in the wrong place**, third line of `_exploreTick`, **above** the swarm
+   delegation. Every swarm state machine self-ticks through `M._scheduleTick`, so pausing the
+   sweep froze the recovery loop too: at the boon screen the escape ladder fired **once** and then
+   disabled itself (`S.onVitals` returns early while `recovering`, and only the tick can leave that
+   state). Nothing landed, nothing re-sent an eaten `fly`, nothing enforced `RECOVER_MAX`, until
+   GO — which needs the user at the keyboard, i.e. exactly the case a pause exists to survive.
+
+The gate now sits **below** the delegation, so the swarm finishes what is in flight and the sweep
+starts nothing new.
+
+**The arrival tick is still re-armed while paused, deliberately.** A tick under suspension is a
+*decision point*, not an action, and it is the only clock `S._beginEscape`'s indoor branch has —
+that branch sets `state = "pulling"`, arms the hold, sends the retreat and does **not**
+self-schedule. Suppress it and an indoor escape taken during the pause never reaches `recovering`,
+`swarmHold` self-clears at 8s, and the basher resumes swinging at crash HP with the recovery
+abandoned (the v4.7.235 / v4.7.252 family). The **watchdog** is navigation-only and does not
+re-arm; `onBoonScreen` killed the outstanding one, and both resume paths arm a fresh one.
+
+The `inMnem()` leave-tower check stays **above** the nav gate, so leaving the tower, dying, or
+`mnem explore off` during the pause still runs the normal lifecycle and restores the basher.
 
 **Resume** is shared in `M._exploreResume(reason)`: it re-asserts the explore-mode basher config (idempotent — guards a flag that flickered during the pause, notably `inMnemosyne` missed between floors), clears `pausedAtBoon`, resets the per-ripple progress (`failed`, `hunting`, `patrolQueue`, `patrolLoops`, `iceSlips`) and opens the settle window, then schedules a tick and re-arms the watchdog — mirroring the fresh-start path so the next ripple starts clean. It does **not** re-save `_prevBasher`.
 
@@ -231,6 +288,7 @@ Dispatched from `003_Commands.lua`; a bare `mnem explore` toggles.
 | `mnem explore on` | `M.exploreOn()` | Start (guarded by `canStart`), **or resume** if paused at a boon (`_exploreResume`) |
 | `mnem explore off` | `M.exploreOff()` | Stop and restore the basher |
 | `mnem explore status` | `M.exploreStatus()` | Echo `ON` / `paused (boon screen)` / `off`, `inMnem`, `denizens`, `moving`, `next` |
+| `mnem explore why` | `M.exploreWhy()` | **Why is the sweep not moving?** Per-exit refusal reasons, the grid bounding box (a box wider than `GRID` means the coordinates are wrong and every geometric refusal is suspect), the nav-suspension state, the **lava ledger** with provenance, and the map's witnessed arrival beside the explorer's armed pair — seeing those two disagree *is* the diagnosis (v4.7.259, extended v4.7.262) |
 | `mnem explore` | `M.exploreToggle()` | Flip on/off |
 
 See [05-commands.md](05-commands.md) for the full `mnem` dispatch.
@@ -238,6 +296,16 @@ See [05-commands.md](05-commands.md) for the full `mnem` dispatch.
 ## Testing
 
 The **pure logic** is unit-tested — `M._nextExploreStep` and `M._roomHasDenizens` are exercised directly against a mocked `MAP`/`ataxia.denizensHere`, locking in the pick-here-then-backtrack order, the planar/failed filtering, and the own-denizen guard. The **timer/event state machine** (debounced ticks, the `moving` guard, move timeout, watchdog) depends on live tempTimers and GMCP and is validated in-game.
+
+**Every fix here must be broken back**: revert the hunk and confirm the named assertion fails.
+This is not ceremony — three tests in this suite have passed against reverted code and had to be
+rewritten (an assertion that was nil in both worlds; a helper that *reimplemented* the code under
+test; an adjacency test whose anchor tripped an earlier guard instead of the one under test).
+
+`test_swarm_tactics.lua` mocks `ataxia.mnemosyne` because 008 is not loaded there, so any predicate
+009 consults needs a **faithful stand-in** in that mock (`roomIsLava`, `edgeIsLava`, `_navRefusal`).
+Without one the tests pass while the guard is simply absent — the file says so in a comment, and it
+is worth re-reading before adding a cross-module guard.
 
 ---
 
@@ -665,10 +733,62 @@ never enter is a route we never traverse. `S._backDir` returning nil drops the l
 shield-in-place - bad, and not fatal. **"We walked through it" is not the same fact as "it is
 survivable."**
 
-Two guards found while testing: a stale `explore.fromRoom` (current only after a sweep step -
-not a tumble, chase or forced move) would mark an edge out of a non-adjacent room and refuse a
-good exit forever, so recording requires `from ~= cur`; and both exit scans are **sorted**,
-because an unordered choice makes the log unreadable *and* made the guards untestable.
+Both exit scans are **sorted**, because an unordered choice makes the log unreadable *and* made
+the guards untestable.
+
+#### The witness, not the intent (v4.7.262)
+
+The `from ~= cur` guard shipped in v4.7.256 was **not an adjacency check** — every other room on
+the grid satisfies it — and the bill arrived as a phantom refusal:
+`67777 northwest: leads into lava`, on a door the user glanced through and found an ordinary room.
+There had never been lava there.
+
+`M.explore.fromRoom` / `fromDir` are a record of the move we last **ARMED**. Nothing on any arrival
+path confirms, rewrites or clears them, so after any *unarmed* room change — panic tumble, recovery
+tumble, drag, forced move, and the lava escape itself — they name a room we are not next to, and
+the next lava tick condemns an edge out of *that* room permanently.
+
+The map already knew the truth and never published it. `MAP.onRoom` resolves the traversed
+direction for **every** arrival however caused (it survives a tumble because `MAP._lastMoveDir` is
+captured from `sysDataSendRequest`, which sees `...;tumble ne` exactly as it sees `...;nw`) and
+then *proves* adjacency by writing the edge both ways. It now publishes `MAP._lastArrival`, and
+**`M._inbound()` is the single owner of "how did we get into this room"**: prefer the witnessed
+arrival, accept the armed pair only where the map can corroborate it, and return the **reason**
+when it cannot — echoed in red at the moment the edge is declined.
+
+Four more faults surfaced in the same code, all confirmed by executing the real modules:
+
+- **A trailing struggle tick spoke for a room we had already left.** The splash is the ENTRY, the
+  struggle is the TICK, and they shared one script with no way to tell them apart — so a buffered
+  tick processed after the escape's `gmcp.Room` marked the *safe* room we had just reached and
+  condemned the escape edge. Trigger 064 now passes `line`. Bounded at **one** discarded tick: a
+  second identical tick means we really are burning and the entry line was missed, so it is
+  adopted. **Never raise `LAVA_STRAY_TICKS` above 1** — two discarded ticks is 11,780 unblockable.
+- **The escape flipped direction mid-episode.** `_tacticalArm` overwrites `fromDir` with the
+  *escape* direction, so from tick 2 "back the way we came" resolved to its OPPOSITE. Since each
+  send is `queue addclear` (it *replaces* the queued line), the last tick before balance is the one
+  that executed — a coin flip over which way we left, re-flipped every tick, and invisible because
+  only tick 1 prints a banner. The door is now chosen **once per episode** and re-validated.
+- **The banner never re-armed** (`first` was `not ataxiaTemp.mnemLavaAt`, and nothing nils that
+  stamp), so every lava episode after the first in a session was silent — a large part of why
+  phantom marks accumulated unnoticed.
+- **`_beginPull` armed a move it then never sent** — the arm ran *before* the `moveLocked()` bail.
+  A bail must precede the state it would strand.
+
+**Marks are records, not booleans** (`at`, `ripple`, `cur`, `why`), `_stepRefusal` names *which* of
+the two independent lava facts fired (a remembered inbound edge, or a known lava destination room —
+different repair paths), and `mnem explore why` prints the whole ledger.
+
+#### Ripple-scoped, because a room number is not a place (v4.7.260)
+
+The tower draws each ripple's 4×4 from a **pool of real rooms**, so the same gmcp id returns on a
+later level with a different layout and different affixes. `lavaRooms`, `lavaEdges`, `failed` and
+the boss-chase counter are all keyed by room number and were cleared **only on a package reload** —
+so lava learned on one level condemned that id for the rest of the session.
+
+`M.onRippleReset()` hangs off `MAP.reset()`, which already draws exactly that line (ripple change +
+fresh tower entry). **When you add a table keyed by an id, name the scope in which that id means
+something, and clear it there.**
 
 **Residual, by design:** if a lava room is the only route to unexplored territory the sweep
 refuses and returns nil, so a ripple can end partially swept. That is the intended trade.
