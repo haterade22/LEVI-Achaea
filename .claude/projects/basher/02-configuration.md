@@ -209,9 +209,39 @@ gate. Narrow it by editing the table if a charge ever feels wasted.
 | `bash notmine add <name>` | Exempt a real denizen that a pet keyword shadows |
 | `bash notmine rem <name>` | Drop an exemption |
 | `mnem cards [on\|off\|maran <hp%>\|seasone <hp%>\|matic <n>]` | Mnemosyne legend-deck auto-draw; bare form prints charges, intervals and whether this class has a Covenant/Xylthus payoff |
+| `bash shinprobe [report\|on\|off\|dump <n>\|clear\|status]` | Measured SHIN AUGMENT duration curve (basher/012); bare form prints per-spend mean/min/max and seconds-per-shin |
+| `bash augment <n>` | Shin to spend on `SHIN AUGMENT`; bare form prints the current value |
 | `bsi <name>` / `bsi all` | Manage the player `ignore` list (allow in room) |
 | `ataxia setup basher` | Setup wizard |
 | `ataxia setup basher autolearn <on\|off>` | Toggle auto-learning denizens |
 | `ataxiadmg [filter]` | Mob damage database query |
 | `resetbashstats` | Reset session kill stats |
 | `showbashstats` | Display session stats |
+
+
+## Class-resource budgets (v4.7.264-271)
+
+Config added after this document's original v4.7.169 pass. **Coverage note:** the tables above were
+written at v4.7.169 and have not been swept since -- keys added between then and v4.7.263 may be
+missing, so treat the code (`basher/001`, `basher/002`) as authoritative and this as a reading guide.
+
+### Blademaster shin (`ataxiaBasher_blademasterBashing`, basher/002)
+
+| Key | Type | Default | Meaning |
+|-----|------|---------|---------|
+| `bmInfusePrefs` | table | `{"lightning","fire","ice","void"}` | Infuse element preference; lightning-first since v4.7.269 (was fire, and that was only ever for byte-compatibility with the hardcoded `infuse fire`) |
+| `bmInfuseAt` | number | 90 | **Tower only.** Minimum shin to spend on an infuse. DERIVED: Phoenix needs 80, so 90 leaves >80 afterwards -- an infuse can never be the action that takes Phoenix off the table |
+| `phoenixAt` | number | 10 | HP % that fires `SHIN PHOENIX` (80 shin, consumes ALL of it, cleanses + **full heal**). `hpp > 0` is also required, since 0 means BLACKOUT rather than nearly-dead |
+| `bmAugmentAmount` | number | 20 | Shin spent on `SHIN AUGMENT` (Bladed Reflexes boon). Provisional middle, not an optimum -- the duration curve is unknown and `bash shinprobe` measures it |
+| `shinProbe` | table | `{on=true, samples={}}` | Accumulated (spend -> measured duration) samples, capped at 200. On the SAVED namespace deliberately: a curve needs collecting across sessions |
+
+**Priority within a round is hardcoded POSITION, not a planner:** Phoenix (whole pool) > augment >
+storm > infuse, threaded through a local `shinSpent`. Inserting anything into that order is a
+breaking change -- see AGENTS.md.
+
+### Depthswalker age (`ataxiaBasher_dwAeonicCashIn`, basher/002)
+
+| Key | Type | Default | Meaning |
+|-----|------|---------|---------|
+| `dwAeonic` | bool | *(unset = on)* | Set `false` to stop the deteriorate/degenerate cash-in. **No alias exists** -- v4.7.265 documented `bash dwaeonic off`, which was never a real command |
+| `dwAgeCap` | number | 400 | Age floor below which age-spending bashing abilities stand down, so bashing cannot price out the chrono kit |

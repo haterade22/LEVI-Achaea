@@ -435,7 +435,11 @@ strategy: |
 ```yaml
 attack_command: "SLASH <target>" or stance-appropriate attacks
 attack_skill: TwoArts
-# Basher melee (ataxiaBasher_blademasterBashing, basher/002): "infuse fire ; drawslash <t> sternum"
+# Basher melee (ataxiaBasher_blademasterBashing, basher/002): "infuse lightning ; drawslash <t>
+# sternum" -- LIGHTNING-first since v4.7.269 (BM_INFUSE_ORDER, user-directed); it was fire only so
+# that introducing ataxiaBasher_bmInfuse behaved identically to the hardcoded `infuse fire` it
+# replaced, while the class's own PvP offense (blademaster/003_BrokenStar) had always used lightning.
+# IN THE TOWER the infuse is SKIPPED below ataxiaBasher.bmInfuseAt (90) shin -- see the shin budget
 # (razes first on a shielded mob). Mnemosyne "White Heaven's Shattered Star" boon buffs multislash
 # (+3 strikes = 6 total); while bmShatteredStar is set the basher swaps the verb to
 # "multislash <t> sternum". Flag set on boon claim / the BOONS-list row (trigger mnemosyne/012),
@@ -1133,8 +1137,24 @@ end
 both take the equilibrium and both draw on shin, so the basher sends at most ONE of them per
 round -- augment first, storm on the following round. The storm's helper is not called at all
 on an augment round, because `ataxiaTemp.bmThunderstormAt` is stamped inside it and a
-discarded return value would still buy a 4s lockout. `INFUSE` also draws shin but is cheap
-enough to ride alongside. See `ataxiaBasher_blademasterBashing`, basher/002.
+discarded return value would still buy a 4s lockout. See `ataxiaBasher_blademasterBashing`,
+basher/002.
+
+**`INFUSE` was the unpriced one until v4.7.269** -- the only shin spender in that function with no
+cost check, no hold, no cooldown and no place in the one-spender rule, and the only one that fired
+on EVERY round, which makes it plausibly the largest sustained draw in the pool. The note here used
+to say it was "cheap enough to ride alongside"; that was never measured, and its cost is still
+unverified (see the Shin Costs section). In the tower it now requires
+`shin > ataxiaBasher.bmInfuseAt` (**90**), a threshold DERIVED rather than tuned: SHIN PHOENIX needs
+80, so infusing only above 90 leaves more than 80 afterwards, and an infuse can never be the action
+that takes Phoenix off the table.
+
+Four spenders, and the priority is hardcoded POSITION in the round, not a planner:
+**SHIN PHOENIX (whole pool) > SHIN AUGMENT > storm > infuse.** v4.7.269 learned why that matters --
+the augment block had no `shinSpent` check and wrote `command = "shin augment "..` as an ASSIGNMENT,
+both correct-by-accident while it was first in the round, and both silently destroyed the Phoenix
+the moment something was placed above it. **A one-spender rule enforced by ordering makes every
+insertion into that order a breaking change.**
 
 
 ## PvE: the shin room-nuke is one slot with two damage types (v4.7.195)

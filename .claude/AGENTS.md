@@ -662,6 +662,144 @@ its counter -- it ARMS a line trigger that increments later, so asserting on the
 whether or not the guard existed (nil in both worlds at that moment). Count the ARM instead. If
 a test cannot distinguish the two worlds, it is not testing the change.
 
+## `queue addclearfull` decides between a HOLD and a REPLAY (v4.7.267)
+
+Every assembled round sends `queue addclearfull ...`, which **wipes the entire server-side queue**.
+So the two obvious ways to stop a command being sent twice are not equivalent:
+
+* a **HOLD** ("do not emit this again for N seconds") lets the next rebuild DELETE the queued command
+  while the hold prevents re-adding it -- the ability announces and never fires;
+* a **REPLAY** (re-emit the same command **byte-for-byte** until a fire line releases it) survives the
+  rebuild loop, which is why every owned battlerage rotation is built that way.
+
+Byte-stability is part of the contract: a command that differs between rebuilds is a new queue entry,
+not a replay. And **an INSTANT ability in a re-queued round executes on every re-queue** -- there is no
+balance for it to wait on -- so for those, only the game's own refusal line can stop a respam. A
+send-time flag cannot: `shin augment` was observed refused **five times in 0.45s** behind one.
+
+## The game's word outranks our bookkeeping -- and the poll outranks nothing (v4.7.266-271)
+
+Wherever the game states its own state, that line is the authority and anything we derive is the
+fallback: the augment refusal over a send-time flag, `You have already distorted time in this
+location.` over a room-keyed guard (which dementia renumbers anyway), the legend deck's rejection over
+`ldm`'s charge count, `You may augment yourself with shin energy once again.` over a computed cooldown.
+
+Two constraints on doing that:
+
+1. **Never DELETE the derived value -- demote it.** A flag cleared only by a confirmation is a
+   livelock the moment the confirmation cannot arrive. Keep the derivation as a backstop and let
+   whichever arrives first win.
+2. **Where a LINE and a POLL cover the same edge, the poll can UNDO the line.** GMCP still reported
+   `bodyaugment` for a prompt after the dissipate line, and the poll read that trailing state as a
+   fresh cover starting -- a near-zero sample overwriting the real cooldown. Any line+poll pair needs
+   a grace on the poll, sized so it provably cannot hide a real event.
+
+## A script switched off does not switch off its callers (v4.7.261)
+
+`isActive: 'no'` on a script leaves every trigger that calls into it LIVE, calling a nil global once
+per matching line -- and where the pattern is `^.*$`, that is every line of game output. **108 such
+call sites existed across four superseded scripts.** Every gate was blind by construction: the syntax
+check passes (the code is valid, the callee merely does not exist), tests never load triggers, and the
+build ships disabled scripts happily.
+
+`tools/check_orphans.py` now fails CI on it. The fix has **two shapes and choosing is the point**: a
+trigger that does nothing but call dead code is disabled to match its script; a trigger that does live
+work and merely contains one dead call has that CALL guarded (`if NAME then NAME(...) end`) -- 27 of 62
+were the second kind, and disabling those would have taken real logic with them.
+
+Sibling case the checker cannot see (v4.7.264): five always-active triggers INDEXED a global (`zgui`)
+defined by a group's inline script, so the whole family throws whenever that group is off. The checker
+finds *calls* to globals defined by inactive *scripts*, not *indexes* of tables defined in group
+scripts.
+
+## A prefix event is not the event you registered for (v4.7.263)
+
+`gmcp.Room` fires for `Room.Players`, `Room.AddPlayer`, `Room.RemovePlayer` and `Room.WrongDir` too.
+Acting on all of them off a stale `Room.Info` meant another player walking in rebuilt our exits, and
+`Room.WrongDir` **credited a movement step for a move the server had just refused**. Register on the
+specific event (`gmcp.Room.Info`).
+
+**The obvious guard is a trap:** `if not gmcp.Room.Info then return end` tests whether the TABLE
+EXISTS, not which event fired -- and that table persists after the first room push, so it is dead code
+from the second room onward.
+
+## Zero is an answer; silence is not (v4.7.263)
+
+`There are no obvious exits.` was unparsed, so an empty exit table meant both "none" and "not told"
+and the explorer re-asked forever. Two rules came out of it:
+
+* **An empty push is silence, not a denial.** Rebuilding state from a payload that arrives empty
+  erases what a better source just supplied -- including the answer to our own question, which is how
+  a boon-screen `ql` storm became self-sustaining.
+* **Record the told-zero, but keep it INERT.** "No *obvious* exits" is not "no exits" (the holding
+  room prints it and still has the `down` we descend by), so the fact stops the asking and nothing
+  else reads it.
+
+Corollary from the same version: **capping a loop whose engine still runs is not a fix.** The cap
+hides the symptom and the wipe/re-ask cycle continues.
+
+## A pause is three questions, not one (v4.7.263)
+
+`pausedAtBoon` was consulted in 2 of the 8 paths that could still act. Classify every site:
+**INITIATION** (start a sweep, a pull, a chase) suspends; **COMPLETION** (a move already in flight
+landing, failing, retrying) never does, or you strand the in-flight state; **SELF-PRESERVATION**
+(escape, panic, healing, forced disengage) never does. Two traps: the shared `_enabled()` predicate
+gates self-preservation *and* initiation together, so guarding it kills the escape ladder; and the
+gate's PLACEMENT matters -- above the state-machine delegation it froze the recovery loop, which
+self-ticks through the same scheduler.
+
+## A one-spender rule enforced by POSITION breaks when the positions move (v4.7.269)
+
+Blademaster's shin economy allowed one spender per round, and the mechanism was that `shin augment`
+happened to be written first: it had no `shinSpent` check (nothing could precede it) and it wrote
+`command = "shin augment "..` -- an ASSIGNMENT, destroying whatever was already in the buffer. Both
+were correct-by-accident. Inserting SHIN PHOENIX above it broke both at once: the phoenix was built,
+then silently overwritten, and the round went out with the augment alone.
+
+**When a rule is implemented as an ordering, adding to the order is a breaking change.** The two tells
+are a guard the first element does not need, and an assignment where every later element appends.
+
+## An intent is not a fact, and a witness beats both (v4.7.262)
+
+The explorer recorded the move it **ARMED** and nothing corrected it on arrival, so any unarmed room
+change -- a tumble, a drag, a forced move, an escape -- left it naming a room we were not next to, and
+the next hazard tick condemned an edge out of THAT room permanently. The map already resolved the
+truly-traversed direction for every arrival however caused, and proved adjacency by writing the edge;
+it simply never published it. **Read the value the EVENT wrote, not the one the REQUEST wrote** -- and
+have the resolver return a REASON when it cannot corroborate, rather than a bare falsy.
+
+## Measure it rather than argue about it (v4.7.270)
+
+When an ability's numbers are not in its AB text and a stated mechanic does not fit the logs, the
+answer is a probe, not a better estimate. `basher/009` (rage threshold) and `basher/012` (augment
+duration) both accumulate live samples on the SAVED namespace, because a curve needs collecting across
+sessions. Two things that made it cheap: **some questions do not need the curve at all** (a cooldown
+stated as "equal to the duration" is directly observable), and **capture the EDGES** -- timing from
+the send was 4s early, timing from the first prompt that noticed the defence was up to a prompt late.
+
+## Test-hygiene faults, all four found live (v4.7.268-271)
+
+* **A test file that never loads its subject** tests whatever leaked in from the file before it.
+* **A file-scope redefinition of a helper** (`dsSetAff`) silently replaces it for every later test.
+* **`X = nil` inside a test** deletes the global for the rest of the run -- restore in scope instead.
+* **A failing expectation THROWS, skipping the teardown below it** -- so a leaked boon flag turns one
+  real failure into three, in a different file. Collect results, reset state, *then* assert.
+
+And a rule about break-backs themselves: **one gate can mask another.** Five deliberate breaks this
+session passed on the first attempt because a second guard (a shared cooldown, an earlier `shinSpent`,
+a guard living inside a trigger where a unit test cannot see it) already prevented the failure. If a
+break passes, find out which gate saved it before believing the code is covered -- and if a change is
+genuinely unpinnable, record it as such rather than writing a test that would not fail.
+
+## Before declaring a game line "uncaptured", grep the docs (v4.7.271)
+
+v4.7.270 told the user the augment cooldown-recovery line was uncaptured. It had been in
+`.claude/classes/blademaster.md` since 2026-07-26, with a timing beside it, read by no trigger. Third
+instance of this shape: `ataxiaTemp.realExits` was captured from v4.7.75 and read by nothing until
+v4.7.260; an arc fire-line "next step" sat unwired for versions. **Dead output is indistinguishable
+from a missing feature.** Grep `.claude/classes/` and the trigger tree for the wording first -- and
+when capturing a line nothing consumes yet, say so where it is written down.
+
 ## Quality Gates (Hooks)
 
 Hooks in `.claude/hooks/` run automatically and block operations that fail validation:

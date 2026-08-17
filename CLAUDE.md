@@ -335,8 +335,14 @@ balance type is unstated in both ABs, and if they are balance abilities an appen
 REJECTED after the age was already spent, whereas if they are equilibrium we merely lose one
 `shadow reap` -- the recoverable error. Deteriorate is preferred (300 vs 700 age); **amnesia sorts
 LAST** because `chrono erasure` consumes weakness/amnesia and the two cash-ins would otherwise
-fight over the same affliction. Age-capped on `dwAgeCap` like chrono blur, 4s in-flight hold,
-PvE-only (`type(target) == "number"`), `bash dwaeonic off` to disable.
+fight over the same affliction. Age-capped on `dwAgeCap` like chrono blur and
+PvE-only (`type(target) == "number"`). **The v4.7.265 cut ANNOUNCED without CASTING** (fixed
+v4.7.267): it used a 4s in-flight HOLD, and since `queue addclearfull` wipes the whole server queue
+every round, the command was deleted by the next rebuild while the hold stopped it being re-added --
+so it is a REPLAY (`ataxiaTemp.dwAeonicPending`, re-emitted verbatim until a fire line releases it),
+the shape the owned battlerage rotations already use. Its test was pinning the bug by asserting the
+echo. Disabling it is the config field `ataxiaBasher.dwAeonic = false`; **there is no alias** --
+v4.7.265 documented `bash dwaeonic off`, which was never a real command.
 | **dwb** | 1 | Undocumented | Breakpoint/rift | `dwb/` |
 | **dwb_runie** | 1 | Undocumented | DWB + runelore | `dwb_runie/` |
 | **dwc** | 3 | **Documented** | Vivisect, damage kill | `dwc/` |

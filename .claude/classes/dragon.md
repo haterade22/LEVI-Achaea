@@ -612,3 +612,38 @@ Attack Priority (1v1):
 4. Break torso -> legs -> bite OR
 5. Break torso -> arm -> legs -> devour
 ```
+
+
+## RED DRAGON: SCORCH applies INHIBIT (v4.7.266)
+
+`SCORCH <target>` -- **AB 2299 (Attainment), 18 rage, 25.00s cooldown, denizens only**, and the AB
+states the effect outright: *"Gives denizen affliction: Inhibit."* Fire line captured live:
+
+```
+You blacken <target>'s flesh with a quick blast of flame, slowing <his/her> healing process.
+```
+
+Trigger `denizen_attacks_misc_lines/027` does two things with it, and both matter:
+
+1. **Records `inhibit` on the denizen** (`ataxiaBasher_BR_AFFS.inhibit`, the same state Monk
+   Ripplestrike and the Infernal Necrotic Aura proc apply). That stops a second inhibit being spent
+   on a mob that already carries one -- and inhibit is one of the four PHYSICAL triggers for
+   **Depthswalker `chrono degenerate`** (v4.7.265), so a scorching dragon sets up an aeonic cash-in
+   for a Depthswalker in the party.
+2. **Announces it on PT** when `ataxia.settings.raid.enabled`, because a healing-inhibit the party
+   cannot see is a healing-inhibit the party re-applies.
+
+**It is in no rotation.** `GDRAGON_BR` is Golden-specific, so there is no red-dragon battlerage
+rotation to add it to and scorch remains a MANUAL cast. Building one is the open item.
+
+### Answering a self-heal
+
+```
+Swallowing the morsel, a monstrous hellhound crouches low, seeming invigorated.
+```
+
+A denizen that eats a corpse **returns to full health** (user-confirmed), which is precisely what
+inhibit is for. Trigger `denizen_attacks_misc_lines/028` scorches the healer by name on that line,
+with a 25s cooldown of its own -- **not** the shared battlerage cooldown, which masked the check
+when it was first written and let the break-back test pass against reverted code. Highlighted
+`indian_red`, deliberately not the orange family (reserved).

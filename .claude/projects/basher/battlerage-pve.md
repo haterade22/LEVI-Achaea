@@ -480,3 +480,37 @@ damage rather than outgoing is the binding constraint.
 declines. This is the opposite default from the legend deck's `targetNearlyDead`, deliberately:
 there a wrong guess withholds a card, here it spends 4s of balance on a finisher that will not
 finish anything.
+
+
+## Red Dragon SCORCH -- a battlerage with no rotation to hold it (v4.7.266)
+
+`SCORCH <target>` (AB 2299, Attainment): **18 rage, 25.00s cooldown, denizens only**, and the AB
+states the effect -- *"Gives denizen affliction: Inhibit."* Fire line:
+`You blacken <t>'s flesh with a quick blast of flame, slowing <his> healing process.`
+
+`GDRAGON_BR` is **Golden**-specific, so there is no red-dragon rotation to add this to and it stays a
+MANUAL cast. Building one is the open item; until then trigger
+`denizen_attacks_misc_lines/027` does the two things that do not need a rotation:
+
+* **records `inhibit`** into the denizen-state model, which stops a second inhibit on a mob that has
+  one **and** feeds Depthswalker's `chrono degenerate` (inhibit is one of its four physical triggers)
+  -- so a scorching dragon sets up a party member's cash-in;
+* **announces it on PT** under `ataxia.settings.raid.enabled`.
+
+Trigger 028 answers a denizen self-heal (`Swallowing the morsel, ... crouches low, seeming
+invigorated.` = back to FULL health) by scorching the healer by name, on its **own** 25s cooldown --
+reusing the shared battlerage cooldown masked the check and let a break-back test pass against
+reverted code.
+
+## Depthswalker: battlerage plants, aeonics collects (v4.7.265/267)
+
+The DW rotation applies two of the five affliction triggers `CHRONO DETERIORATE` reads -- aeon
+(`chrono curse`) and charm (`intone boinad`) -- so the rotation plants and
+`ataxiaBasher_dwAeonicCashIn` collects a round later, the Blademaster Headstrike shape. Deteriorate
+(300 age, mind-addled) is preferred over degenerate (700 age, physically plagued); **amnesia sorts
+last** because `chrono erasure` consumes weakness/amnesia and the two would otherwise contend for one
+affliction. Not boon-gated -- Herald of Infirmity only adds 25%.
+
+**It REPLACES the swing** (unstated balance type in both ABs: appending risks a rejected swing after
+the age is spent), and it is a **REPLAY, not a hold** -- `queue addclearfull` deletes a held command
+on the next rebuild, which is why the first cut announced without ever casting.

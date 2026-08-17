@@ -722,3 +722,74 @@ answer about what the round already claimed; a current-state read of
 the buffer. The keeper wins the tie (it fires only when a GMCP-tracked defence actually
 dropped, and holds 20s between attempts) and goes quiet once all three defences are up,
 handing the word balance back to boinad.
+
+
+## PvE: the AEONIC CASH-IN (v4.7.265, corrected v4.7.267) -- not boon-gated
+
+Two Aeonics abilities pay off afflictions the rotation is ALREADY APPLYING, and neither needs a
+Mnemosyne boon to be worth casting:
+
+| Ability | AB | Age | Fires when the denizen carries |
+|---|---|---|---|
+| `CHRONO DETERIORATE <t>` | 2425 | **300** | recklessness, charm, fear, **aeon**, amnesia (MIND-ADDLED) |
+| `CHRONO DEGENERATE <t>` | 2423 | **700** | inhibit, weakness, sensitivity, clumsiness (PHYSICALLY PLAGUED) |
+
+Both deal significant magical damage; the **Herald of Infirmity** boon only adds 25% on top, so the
+coordination stands on its own. All nine afflictions were already modelled by
+`basher/008_Denizen_State.lua` (`ataxiaBasher_BR_AFFS`), so nothing new had to be tracked.
+
+**The loop feeds itself.** DW battlerage applies two of the five mental triggers -- `chrono curse`
+gives aeon, `intone boinad` gives charm -- so the rotation plants and `ataxiaBasher_dwAeonicCashIn`
+collects a round later. Same shape as Blademaster's reckless-denizen Headstrike.
+
+Decisions worth keeping:
+
+* **It REPLACES the swing.** Neither AB states a balance type. If they are balance abilities an
+  appended swing would be REJECTED *after* the age was already spent; if they are equilibrium we
+  merely lose one `shadow reap`. Replacing is the recoverable error in both directions.
+* **Deteriorate is preferred** (300 age vs 700), and **amnesia sorts LAST** because `chrono erasure`
+  consumes weakness/amnesia -- otherwise the two cash-ins fight over the same affliction.
+* **Never boosted** (both ABs say denizens cannot be), age-capped on `ataxiaBasher.dwAgeCap` like
+  chrono blur, PvE-only (`type(target) == "number"`).
+* **The off switch is `ataxiaBasher.dwAeonic = false` and has NO ALIAS.** v4.7.265's own notes said
+  "`bash dwaeonic off` to disable" -- there is no such command; the field is read at
+  `basher/002:1214` and written by nothing. Documented as the gap it is rather than left as an
+  instruction that fails silently when typed.
+
+### It was announcing without casting (v4.7.267) -- a REPLAY, not a hold
+
+The v4.7.265 cut echoed the cash-in and then sent nothing. `queue addclearfull` **wipes the whole
+server queue every round**, so a 4s in-flight HOLD ("do not emit again") had the command deleted by
+the next rebuild while the hold kept it from being re-added. What survives that loop is a **REPLAY**
+-- `ataxiaTemp.dwAeonicPending` re-emits the same command verbatim, byte-for-byte, until a fire line
+releases it, which is the same mechanism the owned battlerage rotations use.
+
+**The v4.7.265 test was pinning the bug** (it asserted the echo, which fired) and had to be
+rewritten. Also fixed there: the separator was stripped with `aeonic:gsub("%s*$","")`, which removes
+whitespace -- but the separator is `;`, so every cash-in round shipped a trailing empty command.
+
+## Mnemosyne boon: TIMEQUAKE (v4.7.264)
+
+> "Your aeonics distortion ability now deals magic damage to all denizens when distorting a
+> location."
+
+`CHRONO DISTORTION [BOOST]` (AB 2426), works on "Adventurers and room", **300 age**. User-directed
+shape: at **2+ denizens, on entrance, once per location.**
+
+* **Not boosted.** Boost removes the *equilibrium* cost, and equilibrium is the one resource a basher
+  does not need to save -- an eq ability already rides free beside the balance swing. What boost
+  trades it for is the AB's own warning that the spell grows "progressively less potent the older you
+  grow": an unquantified penalty for a cost we are not paying.
+* **The refusal is the authority.** `You have already distorted time in this location.` (trigger
+  `mnemosyne/074`) is what stops a re-cast -- our own room bookkeeping cannot be trusted across a
+  dementia-renumbered room, and the cast line `Bending your considerable will upon the temporal
+  flow...` (073) confirms a real one.
+
+## Curse wear-off: the line was already wired (v4.7.268)
+
+`<t> abruptly begins to move at normal speed again.` -- **trigger 016 already handled it.** The
+apparent gap was in the TESTS: `test_mnemosyne.lua` never loaded `basher/008_Denizen_State.lua`, so
+the aeon-clearing path had nothing to clear and its assertions were measuring a stub. Two sibling
+leaks in the same family were fixed with it (a file-scope `dsSetAff` redefinition, and a
+`dsHasAff = nil` that leaked out of one test into every later one). **A test file that never loads
+its subject tests whatever leaked in from the file before it.**
