@@ -726,8 +726,16 @@ legslash; there is no centreslash-up parry-bypass fallback in the double-prep pa
   behind it; the sole code enforcing the arithmetic is the PvP airfist gate (`25 = 20 + 5`) as an
   opaque total, and no AB text for INFUSE exists anywhere in the tree. The PvE shin budget
   (v4.7.269) deliberately does NOT compute its threshold from this number.
-- **Augment**: **1 shin = 1 SECOND of augment** (user-confirmed 2026-08-12). `bmAugmentAmount`
-  defaults to 20 for that reason; the old default of 3 bought three seconds of the boon's 20% DR.
+- **Augment** (user-confirmed 2026-08-12, none of it in AB 316): duration **SCALES** with the shin
+  spent, ~10s to ~1.5min, and is **NOT** 1 shin per second -- the curve is UNKNOWN and `bash
+  shinprobe` measures it. Takes **4 seconds to activate** in all cases, and on ending goes on
+  **cooldown equal to the duration it was up for** -- so uptime can never exceed 50%. `bmAugmentAmount`
+  defaults to 20 as a provisional middle. Lines captured: `You focus inward, drawing upon your
+  reserves of shin energy.` (accepted), `You are already beginning the process of augmenting your
+  body with shin energy.` (refused -- already channelling; seen 5x in 0.45s because `shin augment`
+  costs no balance and so executes on every re-queue), `You channel your accumulated shin energy
+  into enhancing your defensive bladework.` (cover starts). Still uncaptured: the wear-off line and
+  the COOLDOWN refusal ("...so soon would be fatal").
 - **SHIN PHOENIX** (AB 321): requires 80 shin, **consumes ALL of it**, cleanses almost every
   affliction **and restores full health** (the heal is user-confirmed and NOT in the AB text). The
   strongest button in the kit, and what the PvE infuse budget exists to protect. Auto-fires at

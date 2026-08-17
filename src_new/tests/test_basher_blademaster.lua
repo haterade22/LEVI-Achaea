@@ -427,3 +427,118 @@ describe("SHIN PHOENIX", function()
     expect(bmBladedReflexes).toBeFalse()
   end)
 end)
+
+-- ---------------------------------------------------------------------------
+-- SHIN AUGMENT: the measured cooldown and the probe (v4.7.270)
+-- ---------------------------------------------------------------------------
+describe("shin augment cooldown is measured, not guessed", function()
+  local function fresh()
+    dofile("src_new/scripts/levi_ataxia/levi/ataxia/basher/012_Shin_Augment_Probe.lua")
+    ataxiaTemp = {}
+    ataxia.defences = {}
+    ataxiaBasher.shinProbe = { on = true, samples = {} }
+  end
+
+  -- "When it ends it goes on cooldown equal to the duration it was up for." That needs no
+  -- knowledge of the duration curve -- the interval is observable.
+  it("holds for exactly as long as the augment lasted", function()
+    fresh()
+    ataxiaTemp.bmAugmentSpent = 20
+    ataxiaBasher_bmAugmentActive()               -- cover starts
+    local upAt = ataxiaTemp.bmAugmentUpAt
+    expect(upAt ~= nil).toBeTrue()
+    ataxia.defences.bodyaugment = true
+    expect(ataxiaBasher_bmAugmentWatch()).toBe(0) -- still up: nothing to wait for
+    -- ...it drops 30s later
+    ataxiaTemp.bmAugmentUpAt = upAt - 30
+    ataxia.defences.bodyaugment = nil
+    local until_ = ataxiaBasher_bmAugmentWatch()
+    expect(until_ > 0).toBeTrue()
+    expect(math.abs((until_ - getEpoch()) - 30) < 2).toBeTrue() -- cooldown == duration
+  end)
+
+  it("records the (spend -> duration) pair for the curve", function()
+    fresh()
+    ataxiaTemp.bmAugmentSpent = 20
+    ataxiaBasher_bmAugmentActive()
+    ataxiaTemp.bmAugmentUpAt = ataxiaTemp.bmAugmentUpAt - 30
+    ataxia.defences.bodyaugment = nil
+    ataxiaBasher_bmAugmentWatch()
+    local s = ataxiaBasher.shinProbe.samples
+    expect(#s).toBe(1)
+    expect(s[1].spend).toBe(20)
+    expect(math.abs(s[1].dur - 30) < 2).toBeTrue()
+  end)
+
+  -- A hand-raised augment still tells us about the range, so it is kept rather than dropped.
+  it("keeps a manual augment as an unattributed sample", function()
+    fresh()
+    ataxiaBasher_bmAugmentActive()               -- no bmAugmentSpent set
+    ataxiaTemp.bmAugmentUpAt = ataxiaTemp.bmAugmentUpAt - 12
+    ataxiaBasher_bmAugmentWatch()
+    expect(ataxiaBasher.shinProbe.samples[1].spend).toBe(nil)
+    expect(ataxiaBasher_shinProbeRows()[1].spend).toBe(0) -- reported as "manual"
+  end)
+
+  -- THE OBSERVED BUG: five refusals in 0.45s during one activation. `shin augment` costs no
+  -- balance, so it executes on every re-queue; the game's refusal is the only reliable stop.
+  it("arms the hold from the game's refusal, not just from our send", function()
+    fresh()
+    expect(ataxiaTemp.bmAugmentAttempted).toBe(nil)
+    ataxiaBasher_bmAugmentRefused()
+    expect(ataxiaTemp.bmAugmentAttempted).toBeTrue()
+    expect(ataxiaBasher_bmAugmentWatch()).toBe(0)
+  end)
+
+  it("the activation line clears the attempt hold and starts the clock", function()
+    fresh()
+    ataxiaBasher_bmAugmentRefused()
+    ataxiaBasher_bmAugmentActive()
+    expect(ataxiaTemp.bmAugmentAttempted).toBe(nil)
+    expect(ataxiaTemp.bmAugmentUpAt ~= nil).toBeTrue()
+  end)
+
+  it("groups samples by spend, sorted", function()
+    fresh()
+    ataxiaBasher_shinProbeRecord(20, 30)
+    ataxiaBasher_shinProbeRecord(20, 34)
+    ataxiaBasher_shinProbeRecord(5, 10)
+    local rows = ataxiaBasher_shinProbeRows()
+    expect(rows[1].spend).toBe(5)
+    expect(rows[2].spend).toBe(20)
+    expect(rows[2].n).toBe(2)
+    expect(rows[2].mean).toBe(32)
+  end)
+end)
+
+describe("the round honours the measured augment cooldown", function()
+  -- The point of measuring it: `shin augment` costs no balance, so it executes on every re-queue.
+  -- With a 7s attempt-hold against a cooldown that can run 90s, the basher would have re-sent a
+  -- refused command a dozen times per cycle -- which is exactly what the live log showed.
+  it("does not re-augment while the post-drop cooldown is live", function()
+    dofile("src_new/scripts/levi_ataxia/levi/ataxia/basher/012_Shin_Augment_Probe.lua")
+    bmShatteredStar, mnemDivineThunder, mnemIcyHeart = false, false, false
+    bmBladedReflexes = true
+    ataxiaBasher.shielded, ataxiaBasher.rageraze = false, false
+    ataxiaBasher.inMnemosyne = false
+    ataxiaBasher.bmAugmentAmount = nil
+    ataxiaTemp = {}
+    ataxia.defences = {}
+    ataxia.vitals = ataxia.vitals or {}
+    ataxia.vitals.hpp, ataxia.vitals.rage = 100, 0
+    blademaster = { getShin = function() return 100 end }
+
+    -- Cover ran for 30s and just dropped -> 30s of cooldown.
+    ataxiaBasher_bmAugmentActive()
+    ataxiaTemp.bmAugmentUpAt = ataxiaTemp.bmAugmentUpAt - 30
+    ataxiaBasher_bmAugmentWatch()
+    ataxiaTemp.bmAugmentAttempted = nil -- only the COOLDOWN should be refusing now
+
+    expect(has(ataxiaBasher_blademasterBashing(), "shin augment")).toBeFalse()
+
+    -- ...and once it expires, the augment returns.
+    ataxiaTemp.bmAugmentCdUntil = getEpoch() - 1
+    expect(has(ataxiaBasher_blademasterBashing(), "shin augment 20")).toBeTrue()
+    bmBladedReflexes = false
+  end)
+end)

@@ -612,11 +612,26 @@ function ataxiaBasher_blademasterBashing()
 	-- augmented with Shin energy via your Shindo augment ability." SHIN AUGMENT <ALL|amount>
 	-- (AB 316) channels shin into the reflex augment, tracked as the `bodyaugment` defence.
 	--
-	-- ONE SHIN IS ONE SECOND OF DEFENCE (user-confirmed 2026-08-12). That single fact rewrites
-	-- this block: the old default of 3 bought THREE SECONDS of a 20% damage reduction, which is
-	-- indistinguishable from not having the boon at all -- and it explains the v4.7.126 live log
-	-- where `shin augment 1` visibly dissipated 12ms later. The default is now 20, i.e. ~20
-	-- seconds of cover, tunable via `ataxiaBasher.bmAugmentAmount`.
+	-- THE MECHANIC, user-confirmed 2026-08-12 (none of it is in AB 316):
+	--   * duration SCALES with the shin spent -- roughly 10 seconds at the bottom to ~1.5 minutes
+	--     at the top -- but the CURVE IS UNKNOWN. It is explicitly NOT 1 shin = 1 second.
+	--   * 4 SECONDS TO ACTIVATE, in all cases: a fixed overhead, not proportional to the spend.
+	--   * when it ENDS it goes on COOLDOWN EQUAL TO THE DURATION IT WAS UP FOR.
+	--
+	-- The old default of 3 is wrong regardless of the curve -- it sits at or under the 10s floor,
+	-- which is what the v4.7.126 log showed when `shin augment 1` visibly dissipated 12ms later.
+	-- 20 is a provisional middle, NOT a computed optimum: choosing properly needs the curve, which
+	-- is what `bash shinprobe` (basher/012) is for -- it records every (spend -> measured duration)
+	-- pair from live play, the same way the rage probe measures a damage threshold.
+	--
+	-- What the mechanic already tells us without the curve: because the cooldown equals the
+	-- duration, uptime can never exceed 50% however much is spent, and the 4s activation is a
+	-- fixed tax that a SHORT augment pays proportionally more of. So the useful range is bounded at
+	-- both ends, and the question the probe answers is where in it the shin is best spent.
+	--
+	-- THE COOLDOWN NEEDS NO CURVE. "Equal to the duration it was up for" is directly OBSERVABLE:
+	-- watch the `bodyaugment` defence, time up -> down, and hold for exactly that long. That is
+	-- what the block below does, and it is why this is correct today despite the unknown.
 	--
 	-- DELIBERATELY EXEMPT FROM THE SHIN FLOOR (user rule): this may spend below the 90 the infuse
 	-- budget protects, and therefore below Phoenix's 80. That is the right trade -- 20% damage
@@ -638,14 +653,25 @@ function ataxiaBasher_blademasterBashing()
 	-- above it exposed both at once: the phoenix was built and then thrown away, and the round went
 	-- out with the augment alone. A "one spender per round" rule enforced by position alone breaks
 	-- the moment the positions change.
+	-- Observe the defence so the COOLDOWN can be honoured without knowing the duration curve.
+	-- `ataxiaBasher_bmAugmentWatch` times up -> down and returns the moment we may try again;
+	-- it also feeds the probe, so every cycle we actually live through becomes a data point.
+	local augCdUntil = ataxiaBasher_bmAugmentWatch and ataxiaBasher_bmAugmentWatch() or 0
+	local nowAug = (getEpoch and getEpoch()) or os.time()
+
 	if not shinSpent and bmBladedReflexes
 		 and not (ataxia.defences and ataxia.defences.bodyaugment)
+		 and nowAug >= augCdUntil -- the post-drop cooldown, MEASURED (see the watcher)
 		 and not ataxiaTemp.bmAugmentAttempted then
 		local shin = ataxiaBasher_shinNow()
 		local amt = tonumber(ataxiaBasher.bmAugmentAmount) or 20
 		if shin >= amt then
 			ataxiaTemp.bmAugmentAttempted = true
+			-- 7s covers the 4s activation with margin. It is only the ATTEMPT hold; the real
+			-- post-drop wait is the measured cooldown above, which can be up to ~90s -- retrying
+			-- every 7s through that would have been a rejected command a dozen times over.
 			tempTimer(7, [[ataxiaTemp.bmAugmentAttempted = nil]])
+			ataxiaTemp.bmAugmentSpent = amt -- what this cycle cost, for the probe
 			command = command.."shin augment "..amt..sp
 			shinSpent = true
 		end

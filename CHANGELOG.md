@@ -2,6 +2,76 @@
 
 ---
 
+## 2026-08-12 - SHIN AUGMENT: three captured lines, a measured cooldown, and a probe (v4.7.270)
+
+Three user-supplied mechanics for AB 316, none of which are in the ability text:
+
+* duration **SCALES** with the shin spent -- about 10 seconds at the bottom to ~1.5 minutes at the
+  top -- and it is **explicitly not** one shin per second, so **the curve is unknown**;
+* **4 seconds to activate**, in all cases: a fixed overhead, not proportional;
+* when it ends it goes on **cooldown equal to the duration it was up for**.
+
+**A retraction.** v4.7.269 recorded "1 shin = 1 second" and I built an uptime table on it. The
+premise was wrong, so the table is withdrawn. What survives it is the part that does not need the
+curve: because the cooldown equals the duration, **uptime can never exceed 50% however much is
+spent**, and the 4s activation is a fixed tax that a short augment pays proportionally more of. The
+useful range is bounded at both ends; where in it to spend is now a measurement, not an argument.
+
+### The cooldown needs no curve
+
+"Equal to the duration it was up for" is **observable**. `ataxiaBasher_bmAugmentWatch` times cover
+start to cover end and holds for exactly that long. This was a live bug, not a refinement: the only
+thing standing between us and a re-send was a **7s attempt-hold**, against a cooldown that can run
+**90s**.
+
+### Three lines, captured live
+
+| Line | Meaning |
+|---|---|
+| `You focus inward, drawing upon your reserves of shin energy.` | the channel was ACCEPTED |
+| `You are already beginning the process of augmenting your body with shin energy.` | REFUSED -- already channelling |
+| `You channel your accumulated shin energy into enhancing your defensive bladework.` | cover STARTS (end of the 4s) |
+
+The refusal arrived **five times inside 0.45 seconds** during a single activation. The cause is
+mechanical: **`shin augment` costs no balance, so it EXECUTES on every re-queue of the round**
+rather than waiting like the swing does -- and the basher re-queues every prompt. A send-time flag
+cannot be relied on against that, so the game's refusal is now the authority, exactly as the
+Depthswalker distortion refusal is (v4.7.266) and the legend deck's rejection is over `ldm`'s own
+charge count.
+
+The third line is what makes the measurement honest: the duration is timed from **cover starting**,
+not from the send (4s early) or from the first prompt that noticed the defence (up to a prompt late).
+An accurate start is also an accurate cooldown.
+
+Still uncaptured, and recorded as such: the **wear-off** line (the GMCP `bodyaugment` removal covers
+that edge) and the **cooldown** refusal, which the class doc quotes as *"Regardless of your skill,
+augmenting yourself with shin energy so soon would be fatal"* -- a different refusal from the one
+above, meaning "too soon after the last one ended" rather than "already channelling".
+
+### The probe -- `bash shinprobe`
+
+`basher/012_Shin_Augment_Probe.lua`, modelled on `basher/009_Rage_Probe.lua`, which measures a
+damage threshold no ability text will state either. It records every completed
+**(spend -> measured duration)** pair from live play and reports them grouped by spend with mean,
+min, max and **seconds per shin** -- which is the column that answers where the knee of the curve
+is. `bash augment <n>` sets the spend once the curve says what it should be.
+
+Deliberate choices: samples persist on the saved namespace (a curve needs accumulating across
+sessions) capped at 200; a **hand-raised** augment is kept as an unattributed sample rather than
+discarded, since it still bounds the range; and the report restates the two facts that limit what any
+spend can buy, so the numbers are never read without them.
+
+**20 remains the default and is now labelled a provisional middle rather than a computed optimum** --
+which is what it actually was.
+
+### Tests
+
+**1446 -> 1453**, six deliberate breaks each confirmed to fail. One needed a second attempt: nothing
+drove the full round with a live cooldown, so deleting the cooldown check from the round passed
+until a test exercised it end to end.
+
+---
+
 ## 2026-08-12 - Blademaster: a shin budget, and SHIN PHOENIX (v4.7.269)
 
 ### The infuse order
