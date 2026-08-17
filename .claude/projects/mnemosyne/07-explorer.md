@@ -813,7 +813,19 @@ named: `nothing panicked recently`, `escaping` / `recovering` / `lava`, `too hur
 (35) rather than conditional, because a guard that evaporates on a missing config key would
 chase at crash HP on a fresh profile.
 
-Trigger `mnemosyne/066` matches the **fragment** `out to the <direction>` with the directions
+**Two grammars** (v4.7.272). `out to the <direction>` was Lyaeus's wording, not a shared one:
+`Celepharn, High Priest of Life` departs as `The muted rustling of fabric accompanies Celepharn as
+he departs east.` -- a different syntactic FRAME, so the panic latched, the departure never matched
+and the boss walked. The pattern is now `(?:out to the|departs?(?: to the)?)\s+<dir>`. **One boss is
+not a sample** -- the generalisation held on the verb axis and failed on the frame axis.
+
+The line is passed to `M.onDenizenFled(dir, line)` as corroboration that can only STRENGTHEN:
+Celepharn's departure names him, Lyaeus's names nobody ("a satyri bard"), so a match proves identity
+and a non-match proves nothing and is still followed. `M._fledLineNames` compares the FIRST WORD of
+the panicked name, since the panic line carries a comma-title the room line does not repeat. The
+follow echo reports which evidence fired -- proof by name, or inference from the 6s window.
+
+Trigger `mnemosyne/066` matches the **fragment** with the directions
 enumerated - every denizen words its exit differently ("strolls", "prowls", "stomps"), and
 enumerating verbs gives a trigger that works for the boss you captured and silently misses the
 next. Safe because it decides nothing on its own.

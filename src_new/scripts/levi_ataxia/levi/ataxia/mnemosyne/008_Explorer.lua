@@ -375,7 +375,23 @@ function M._chaseRefusal(dir)
   return nil
 end
 
-function M.onDenizenFled(dir)
+-- Does the departure line itself name the creature that panicked? POSITIVE EVIDENCE ONLY, and the
+-- asymmetry is the point: Celepharn's departure carries his proper name
+-- ("...accompanies Celepharn as he departs east."), while Lyaeus's carries only a generic
+-- description ("a satyri bard strolls out to the southeast"). So a match confirms; a non-match
+-- proves NOTHING and must never veto, or the boss this whole path was written for stops being
+-- followed. Compared on the FIRST WORD of the panicked name, since the panic line carries a
+-- comma-title ("Celepharn, High Priest of Life") the room line does not repeat.
+function M._fledLineNames(lineText)
+  local name = ataxiaTemp and ataxiaTemp.bossPanicName
+  if type(lineText) ~= "string" or type(name) ~= "string" then return false end
+  local first = name:match("^([%a']+)")
+  if not first or #first < 3 then return false end
+  return lineText:lower():find(first:lower(), 1, true) ~= nil
+end
+
+function M.onDenizenFled(dir, lineText)
+  local named = M._fledLineNames(lineText)
   local why = M._chaseRefusal(dir)
   if why then
     -- Only worth saying when we knew who ran: otherwise this fires on every wandering denizen.
@@ -393,7 +409,11 @@ function M.onDenizenFled(dir)
   M._tacticalArm(short) -- a lost chase times out without condemning a real exit
   M._exploreEcho("<gold>" .. tostring(ataxiaTemp.bossPanicName or "the boss")
     .. " fled<reset> -- following <cyan>" .. short .. "<reset> ("
-    .. ataxiaTemp.bossChases .. "/" .. MAX_CHASES .. ").")
+    .. ataxiaTemp.bossChases .. "/" .. MAX_CHASES .. ")"
+    -- Which evidence identified the runner. Worth printing because the two are not equally
+    -- strong: a named departure is proof, a panic window is an inference, and when a chase goes
+    -- to the wrong room that distinction is the first thing worth knowing.
+    .. (named and "." or " <grey>[by panic window]<reset>."))
 end
 
 -- ---------------------------------------------------------------------------

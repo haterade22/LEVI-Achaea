@@ -800,6 +800,32 @@ v4.7.260; an arc fire-line "next step" sat unwired for versions. **Dead output i
 from a missing feature.** Grep `.claude/classes/` and the trigger tree for the wording first -- and
 when capturing a line nothing consumes yet, say so where it is written down.
 
+## One example is not a sample -- generalise on the AXIS, not the instance (v4.7.272)
+
+v4.7.255 reasoned correctly that enumerating a denizen's exit VERBS ("strolls out to", "prowls out
+to") gives a trigger that works for one boss and misses the next, so it matched the fragment they
+share and enumerated the DIRECTIONS instead. Then it took `out to the <direction>` from the single
+boss it had seen. The next boss used a different **syntactic frame** -- `departs <direction>` -- and
+the trigger designed to survive new wordings did not survive the first one after it.
+
+The lesson is not "be more general". It is that **choosing an invariant from one observation gives you
+the shape of a rule with the content of an example.** When you catch yourself writing "this is the
+part they all share", say out loud how many you have seen. One means you have a hypothesis.
+
+Corollary, the v4.7.262 rule again: **widening a parser obliges you to say what it must still
+refuse** -- and sometimes the honest answer is "nothing new", which still has to be reasoned to rather
+than assumed. Here the departure line's NAME looked like a free tightening, until the asymmetry
+surfaced: one boss's departure names him, the other's says only "a satyri bard". So the name can only
+STRENGTHEN identity, never veto it. Implemented as a veto to check, it failed four tests including the
+case the feature was originally built for.
+
+## A test that re-implements a trigger's pattern cannot catch a revert of it (v4.7.272)
+
+Triggers hold perl regexes; the Lua suite cannot execute one, so grammar tests re-implement the
+pattern with Lua patterns. That tests the GRAMMAR and pins nothing about the trigger -- the same blind
+spot as v4.7.260's guard-inside-a-trigger, which cost a live bug. Where a trigger's pattern IS the
+fix, have a test read the file and assert the pattern still contains what matters.
+
 ## Quality Gates (Hooks)
 
 Hooks in `.claude/hooks/` run automatically and block operations that fail validation:

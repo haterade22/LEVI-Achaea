@@ -2,6 +2,78 @@
 
 ---
 
+## 2026-08-17 - The boss departure line has a SECOND grammar (v4.7.272)
+
+```
+Celepharn, High Priest of Life flails in panic.
+The muted rustling of fabric accompanies Celepharn as he departs east.
+```
+
+The panic fired. The departure did not match. The pair never completed, and the chase that exists
+for exactly this situation never ran -- **the boss walked out and the sweep carried on as though
+nothing had left.**
+
+### What v4.7.255 got wrong
+
+It generalised on the right axis and then picked the wrong invariant. The reasoning was sound --
+*every denizen words its exit differently ("strolls out to", "prowls out to", "stomps out to"), so
+enumerating the VERBS is how you get a trigger that works for one boss and silently misses the next;
+match the fragment they SHARE and enumerate the directions instead.* All still true.
+
+**But `out to the <direction>` was not the shared fragment.** It was Lyaeus's, and one boss is not a
+sample. Celepharn uses a different **syntactic frame** entirely -- `departs <direction>` -- so the
+generalisation that was supposed to survive the next boss did not survive the first one after it.
+
+Trigger `mnemosyne/066` now accepts both frames (plus `depart`/`departs to the`), directions still
+enumerated:
+
+```
+\b(?:out to the|departs?(?: to the)?)\s+(north|northeast|...|up|down)\b
+```
+
+Checked against both live lines and six adversarial ones, including that `northeast` does not
+truncate to `north` (the trailing `\b` forces the backtrack) and that `He departs quietly,
+muttering.` does not match.
+
+### Widening obliges saying what it still refuses -- and here the answer is "nothing"
+
+`departs <dir>` is a far commoner English frame than `out to the <dir>`, so the line is now passed
+through to `M.onDenizenFled(dir, line)` as corroborating evidence. **It can only strengthen, never
+veto**, and the asymmetry is the whole point:
+
+* Celepharn's departure **names him** (`...accompanies Celepharn as he departs east.`)
+* Lyaeus's departure names **nobody** (`a satyri bard strolls out to the southeast`)
+
+So a match proves identity; a non-match proves nothing and must still be followed, or the boss this
+path was written for stops being chased. `M._fledLineNames` compares the **first word** of the
+panicked name, because the panic line carries a comma-title (`Celepharn, High Priest of Life`) that
+the room line does not repeat. The follow echo now says which evidence identified the runner --
+a named departure is proof, a 6s panic window is an inference, and when a chase goes to the wrong
+room that distinction is the first thing worth knowing.
+
+A veto was implemented as a deliberate break to check: it fails **four** tests, including the
+original Lyaeus follow.
+
+### A new test idiom: reading the trigger's own pattern
+
+The grammar test re-implements the frames in Lua patterns, because Lua cannot execute a perl regex --
+which means **it cannot catch a revert of the trigger**. That is precisely the
+"a guard inside a trigger is a guard the suite cannot see" trap that already cost a live bug in
+v4.7.260. No test in this repo had ever read a trigger file; one does now, asserting the pattern
+still carries both frames and still enumerates the directions. Reverting the pattern fails it.
+
+### Still open
+
+`MAX_CHASES` is **4** per ripple. Flagged as untested-in-anger when it was written and still is --
+a boss kiting across a 4x4 could plausibly exhaust it. Unchanged rather than guessed at.
+
+### Tests
+
+**1459 -> 1464.** Three deliberate breaks, all three caught.
+
+---
+
+
 ## 2026-08-12 - SHIN AUGMENT: the last two lines, and the cooldown stops being arithmetic (v4.7.271)
 
 v4.7.270 closed by naming the two lines it could not capture. Both arrived, and the second one

@@ -3519,6 +3519,85 @@ describe("following a fleeing boss", function()
     ataxiaBasher.enabled = true
     restore()
   end)
+
+  -- -------------------------------------------------------------------------
+  -- The SECOND departure grammar (v4.7.272)
+  -- -------------------------------------------------------------------------
+  --
+  --   Celepharn, High Priest of Life flails in panic.
+  --   The muted rustling of fabric accompanies Celepharn as he departs east.
+  --
+  -- v4.7.255 assumed "out to the <direction>" was the fragment every denizen shares. It is not --
+  -- this boss uses a different frame, so the panic latched, the departure never matched, and the
+  -- chase written for exactly this situation never ran.
+  local DEPARTS = "The muted rustling of fabric accompanies Celepharn as he departs east."
+  local OUT_TO  = "...a satyri bard strolls out to the southeast, the music fading in his wake."
+  -- The trigger's own pattern, kept here so the two grammars are pinned rather than assumed.
+  local FLED_PAT = "%f[%a]out to the%s+(%a+)%f[%A]"
+  local function parseFled(text)
+    local d = text:match(FLED_PAT)
+    if not d then d = text:match("departs?%s+to the%s+(%a+)%f[%A]") end
+    if not d then d = text:match("departs?%s+(%a+)%f[%A]") end
+    local DIRS = { north = 1, northeast = 1, east = 1, southeast = 1, south = 1,
+                   southwest = 1, west = 1, northwest = 1, up = 1, down = 1 }
+    return (d and DIRS[d:lower()]) and d:lower() or nil
+  end
+
+  it("reads the direction out of BOTH departure grammars", function()
+    expect(parseFled(OUT_TO)).toBe("southeast")
+    expect(parseFled(DEPARTS)).toBe("east")
+    -- and still refuses arbitrary prose, because the DIRECTIONS are what is enumerated
+    expect(parseFled("He departs quietly, muttering.")).toBe(nil)
+  end)
+
+  -- THE TEST ABOVE CANNOT CATCH A REVERT, because it re-implements the grammar in Lua patterns
+  -- rather than using the trigger's perl regex -- the "a guard inside a trigger is a guard the
+  -- suite cannot see" trap that already cost this codebase a live bug (v4.7.260). Lua cannot
+  -- execute a perl regex, so the next best thing is to read the trigger and assert its pattern
+  -- still carries both frames. It would fail the moment someone narrows it back.
+  it("the trigger itself still carries both frames and enumerates directions", function()
+    local f = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/066_Boss_Fled.lua")
+    expect(f ~= nil).toBeTrue()
+    local src = f:read("*a"); f:close()
+    local pat = src:match("%- pattern: ([^\n]+)")
+    expect(pat ~= nil).toBeTrue()
+    expect(pat:find("out to the", 1, true) ~= nil).toBeTrue()   -- Lyaeus
+    expect(pat:find("departs?", 1, true) ~= nil).toBeTrue()     -- Celepharn
+    -- The directions must stay enumerated: a bare capture would match arbitrary prose, which is
+    -- the whole reason the VERBS are not enumerated instead.
+    expect(pat:find("northeast", 1, true) ~= nil).toBeTrue()
+    expect(pat:find("southwest", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("follows a boss that DEPARTS rather than strolling out to", function()
+    fighting("Celepharn, High Priest of Life")
+    M.onDenizenPanic("Celepharn, High Priest of Life")
+    MAP.onRoom(70, "boss room", { east = 0 }, nil)
+    M.onDenizenFled("east", DEPARTS)
+    local cmd = followed()
+    expect(cmd ~= nil).toBeTrue()
+    expect(cmd:find("e", 1, true) ~= nil).toBeTrue()
+    restore()
+  end)
+
+  -- The line names him, so identity is PROVEN rather than inferred from the 6s window.
+  it("recognises the boss's own name in the departure line", function()
+    fighting("Celepharn, High Priest of Life")
+    M.onDenizenPanic("Celepharn, High Priest of Life")
+    expect(M._fledLineNames(DEPARTS)).toBeTrue()
+    restore()
+  end)
+
+  -- ...and the absence of a name must NEVER veto: Lyaeus's departure calls him "a satyri bard",
+  -- so a nameless line is the ORIGINAL case and still has to be followed.
+  it("still follows a departure line that names nobody", function()
+    fighting("Lyaeus, the travelling bard")
+    M.onDenizenPanic("Lyaeus, the travelling bard")
+    expect(M._fledLineNames(OUT_TO)).toBeFalse()
+    M.onDenizenFled("southeast", OUT_TO)
+    expect(followed() ~= nil).toBeTrue()
+    restore()
+  end)
 end)
 
 -- ============================================================================
