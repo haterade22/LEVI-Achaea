@@ -2,6 +2,81 @@
 
 ---
 
+## 2026-08-12 - SHIN AUGMENT: the last two lines, and the cooldown stops being arithmetic (v4.7.271)
+
+v4.7.270 closed by naming the two lines it could not capture. Both arrived, and the second one
+removes a derivation rather than adding a feature.
+
+| Line | Meaning | Trigger |
+|---|---|---|
+| `The shin energy enhancing your body dissipates.` | cover ENDS, cooldown starts | `highlighting/053` |
+| `You may augment yourself with shin energy once again.` | **cooldown OVER** | `highlighting/054` |
+
+### The cooldown was never ours to compute
+
+v4.7.270 MEASURED the duration and then waited that long, because "cooldown equal to the duration it
+was up for" was the only thing we had and the end of it was invisible. **The game announces the end**,
+so we wait for the announcement. `ataxiaTemp.bmAugmentCdUntil` still gets its derived value, but only
+as a **backstop for a missed line** -- an optimistic flag cleared solely by a confirmation is a
+livelock the moment the confirmation cannot arrive, which this codebase has written down four times.
+Whichever comes first releases the augment.
+
+Same rule as the augment REFUSAL a version earlier, and the Depthswalker distortion refusal before
+that: **where the game speaks about its own state, our bookkeeping is the fallback.**
+
+### The down edge, and the trap under it
+
+053 also replaces the GMCP poll on the down edge, which was up to a prompt late -- so every duration
+it measured read short and derived a short cooldown from it. The poll stays as the backstop, and that
+overlap needed one guard: GMCP can still report `bodyaugment` for a prompt or two AFTER the dissipate
+line, and the poll would read that as a fresh cover starting -- recording a near-zero sample and
+overwriting the real cooldown with a near-zero one, i.e. **the backstop undoing the line that
+outranks it**. A 2s grace from the dissipate line fixes it and provably cannot hide a real cycle,
+since the next cover is at least cooldown + 4s of activation away.
+
+### The measurement, and it does not fit
+
+The capture is the first end-to-end timing of the cycle:
+
+* dissipate `10:25:09.886` -> ready `10:25:12.886` = **cooldown 3.0s exactly**
+* focus inward `10:25:15.257` -> cover starts `10:25:18.916` = **activation 3.66s**, corroborating
+  the stated 4s.
+
+The activation is settled. **Nothing else is.** `.claude/classes/blademaster.md` has held a
+2026-07-26 combat log all along recording a **3-shin augment lasting ~2.0s** and the recovery line
+arriving **~6s** later -- so across two sessions the cooldown reads 3.0s and ~6s, and a 2.0s duration
+cannot be squared with a stated floor of ~10s. The ABLATIVE hypothesis in that doc is the only
+reading that fits both (augment absorbs a POOL proportional to the spend and ends early when the pool
+is consumed; ~10s is its unspent lifetime, 12ms is what 1 shin buys under boss-tier fire), and it is
+now **testable rather than idle**: the probe brackets each duration between 052 and 053, so a wide
+spread at one spend is evidence FOR ablative and a tight cluster is evidence against.
+
+None of that blocks the change, and that is the point -- **the cooldown no longer depends on being
+right about the curve.**
+
+### The capture in hand looks like a PRE-v4.7.269 build
+
+A 3.0s cooldown implies a ~3s duration, and 3 was the `bmAugmentAmount` default until v4.7.269 raised
+it to 20. If those timestamps came from a client that has not taken the update yet, the numbers
+describe the old spend rather than the new one.
+
+### A documentation failure, recorded
+
+**v4.7.270 declared the cooldown-recovery line uncaptured, and it was in the class doc.** Written down
+on 2026-07-26, with a timing, and no trigger ever consumed it -- so it was asked of the user again.
+Third instance of exactly this shape: `ataxiaTemp.realExits` was captured from v4.7.75 and read by
+nothing until v4.7.260, and the arc fire-line "next step" sat unwired for versions. **Dead output is
+indistinguishable from a missing feature, and a documented line nothing reads is dead output.**
+
+### Tests
+
+**1453 -> 1459**, three deliberate breaks, all three caught. One incidental fix: a failing
+expectation throws, which skips whatever teardown sits below it -- so a leaked `bmBladedReflexes`
+put a `shin augment` into a LATER test FILE's round and turned one real failure into three. The new
+round test collects both rounds and drops the flag before asserting anything.
+
+---
+
 ## 2026-08-12 - SHIN AUGMENT: three captured lines, a measured cooldown, and a probe (v4.7.270)
 
 Three user-supplied mechanics for AB 316, none of which are in the ability text:

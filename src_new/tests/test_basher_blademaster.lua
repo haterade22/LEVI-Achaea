@@ -509,6 +509,78 @@ describe("shin augment cooldown is measured, not guessed", function()
     expect(rows[2].n).toBe(2)
     expect(rows[2].mean).toBe(32)
   end)
+
+  -- -------------------------------------------------------------------------
+  -- The last two lines of the cycle (v4.7.271)
+  -- -------------------------------------------------------------------------
+
+  -- `The shin energy enhancing your body dissipates.` is the exact down edge; the poll was a
+  -- prompt late, so every duration it measured read short and derived a short cooldown with it.
+  it("the dissipate line closes the cycle without waiting for a prompt", function()
+    fresh()
+    ataxiaTemp.bmAugmentSpent = 20
+    ataxiaBasher_bmAugmentActive()
+    ataxiaTemp.bmAugmentUpAt = ataxiaTemp.bmAugmentUpAt - 25
+    ataxia.defences.bodyaugment = true -- GMCP has not caught up, and must not have to
+    ataxiaBasher_bmAugmentEnded()
+    expect(#ataxiaBasher.shinProbe.samples).toBe(1)
+    expect(math.abs(ataxiaBasher.shinProbe.samples[1].dur - 25) < 2).toBeTrue()
+    expect(ataxiaTemp.bmAugmentUpAt).toBe(nil)
+  end)
+
+  -- THE POINT OF 054: the cooldown END is an event, so we stop predicting it. The observed gap was
+  -- 3.0s (10:25:09.886 -> 10:25:12.886) against a derived wait that can run 90s.
+  it("the ready line releases the cooldown early, whatever we derived", function()
+    fresh()
+    ataxiaBasher_bmAugmentActive()
+    ataxiaTemp.bmAugmentUpAt = ataxiaTemp.bmAugmentUpAt - 90
+    ataxiaBasher_bmAugmentEnded()
+    expect(ataxiaBasher_bmAugmentWatch() > getEpoch()).toBeTrue() -- 90s of derived wait
+    ataxiaBasher_bmAugmentReady()
+    expect(ataxiaBasher_bmAugmentWatch()).toBe(0)
+    expect(ataxiaTemp.bmAugmentAttempted).toBe(nil)
+  end)
+
+  -- A flag cleared ONLY by a confirmation is a livelock the moment the confirmation cannot arrive,
+  -- which is why the derived wait survives underneath rather than being deleted.
+  it("still releases on the derived wait when the ready line never comes", function()
+    fresh()
+    ataxiaBasher_bmAugmentActive()
+    ataxiaTemp.bmAugmentUpAt = ataxiaTemp.bmAugmentUpAt - 4
+    ataxiaBasher_bmAugmentEnded()
+    expect(ataxiaBasher_bmAugmentWatch() > getEpoch()).toBeTrue()
+    ataxiaTemp.bmAugmentCdUntil = getEpoch() - 1 -- the wait elapses; no line ever fired
+    -- An ELAPSED epoch releases exactly as `0` does: the round's gate is `now >= augCdUntil`, so
+    -- the watcher is not obliged to nil a stamp that is already in the past.
+    expect(ataxiaBasher_bmAugmentWatch() <= getEpoch()).toBeTrue()
+  end)
+
+  -- The grace. A trailing `bodyaugment` read after the dissipate line would otherwise open a
+  -- phantom cycle, whose near-zero duration becomes a near-zero sample AND overwrites the real
+  -- cooldown with a near-zero one -- i.e. the poll undoing the line that outranks it.
+  it("a trailing GMCP defence read does not open a phantom cycle", function()
+    fresh()
+    ataxiaTemp.bmAugmentSpent = 20
+    ataxiaBasher_bmAugmentActive()
+    ataxiaTemp.bmAugmentUpAt = ataxiaTemp.bmAugmentUpAt - 25
+    ataxiaBasher_bmAugmentEnded()
+    local cd = ataxiaTemp.bmAugmentCdUntil
+    ataxia.defences.bodyaugment = true -- the stale read arrives on the next prompt
+    ataxiaBasher_bmAugmentWatch()
+    expect(ataxiaTemp.bmAugmentUpAt).toBe(nil)
+    expect(#ataxiaBasher.shinProbe.samples).toBe(1)
+    expect(ataxiaTemp.bmAugmentCdUntil).toBe(cd)
+  end)
+
+  -- The dissipate line can also arrive with no cycle open (a missed 052, or one that started
+  -- before the package loaded). It must still stamp the grace and must not record anything.
+  it("tolerates a dissipate line with no cycle open", function()
+    fresh()
+    ataxiaBasher_bmAugmentEnded()
+    expect(#ataxiaBasher.shinProbe.samples).toBe(0)
+    expect(ataxiaTemp.bmAugmentEndedAt ~= nil).toBeTrue()
+    expect(ataxiaBasher_bmAugmentWatch()).toBe(0)
+  end)
 end)
 
 describe("the round honours the measured augment cooldown", function()
@@ -540,5 +612,37 @@ describe("the round honours the measured augment cooldown", function()
     ataxiaTemp.bmAugmentCdUntil = getEpoch() - 1
     expect(has(ataxiaBasher_blademasterBashing(), "shin augment 20")).toBeTrue()
     bmBladedReflexes = false
+  end)
+
+  -- End to end through the game's own two lines rather than the poll: the round must refuse while
+  -- the cooldown holds and resume the moment 054 says it is over -- without the derived wait
+  -- (30s here) having elapsed at all.
+  it("resumes on the ready line, not on our arithmetic", function()
+    dofile("src_new/scripts/levi_ataxia/levi/ataxia/basher/012_Shin_Augment_Probe.lua")
+    bmShatteredStar, mnemDivineThunder, mnemIcyHeart = false, false, false
+    bmBladedReflexes = true
+    ataxiaBasher.shielded, ataxiaBasher.rageraze = false, false
+    ataxiaBasher.inMnemosyne = false
+    ataxiaBasher.bmAugmentAmount = nil
+    ataxiaTemp = {}
+    ataxia.defences = {}
+    ataxia.vitals = ataxia.vitals or {}
+    ataxia.vitals.hpp, ataxia.vitals.rage = 100, 0
+    blademaster = { getShin = function() return 100 end }
+
+    ataxiaBasher_bmAugmentActive()
+    ataxiaTemp.bmAugmentUpAt = ataxiaTemp.bmAugmentUpAt - 30
+    ataxiaBasher_bmAugmentEnded()               -- "The shin energy ... dissipates."
+    local held = ataxiaBasher_blademasterBashing()
+    ataxiaBasher_bmAugmentReady()               -- "You may augment yourself ... once again."
+    local released = ataxiaBasher_blademasterBashing()
+
+    -- Both rounds are collected BEFORE anything is asserted, and the boon flag is dropped here
+    -- rather than on the last line: a failing expectation throws, which skips whatever teardown
+    -- sits below it, and a leaked `bmBladedReflexes` puts a `shin augment` into every later
+    -- suite's round. That is how one real failure became three in a break-back run.
+    bmBladedReflexes = false
+    expect(has(held, "shin augment")).toBeFalse()
+    expect(has(released, "shin augment 20")).toBeTrue()
   end)
 end)

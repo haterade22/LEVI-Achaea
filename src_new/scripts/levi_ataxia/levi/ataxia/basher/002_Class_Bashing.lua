@@ -653,9 +653,11 @@ function ataxiaBasher_blademasterBashing()
 	-- above it exposed both at once: the phoenix was built and then thrown away, and the round went
 	-- out with the augment alone. A "one spender per round" rule enforced by position alone breaks
 	-- the moment the positions change.
-	-- Observe the defence so the COOLDOWN can be honoured without knowing the duration curve.
-	-- `ataxiaBasher_bmAugmentWatch` times up -> down and returns the moment we may try again;
-	-- it also feeds the probe, so every cycle we actually live through becomes a data point.
+	-- Honour the COOLDOWN without knowing the duration curve. As of v4.7.271 the game tells us both
+	-- edges -- `The shin energy enhancing your body dissipates.` starts it and `You may augment
+	-- yourself with shin energy once again.` ends it (triggers highlighting/053-054) -- so this
+	-- usually returns 0 and the derived wait is only the backstop for a missed line. It still feeds
+	-- the probe, so every cycle we live through becomes a data point.
 	local augCdUntil = ataxiaBasher_bmAugmentWatch and ataxiaBasher_bmAugmentWatch() or 0
 	local nowAug = (getEpoch and getEpoch()) or os.time()
 

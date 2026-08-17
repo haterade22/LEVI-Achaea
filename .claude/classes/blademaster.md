@@ -448,19 +448,39 @@ attack_skill: TwoArts
 # as the `bodyaugment` defence (deffing keep-map, with the other Shindo defs blur/disperse/
 # durability). Mnemosyne "Bladed Reflexes" boon = 20% reduced damage while augmented: with
 # bmBladedReflexes set (claim alias / BOONS row trigger mnemosyne/019, reset each run) the
-# basher prepends "shin augment <n>" (n = ataxiaBasher.bmAugmentAmount, default 3 -- LIVE LOG
-# 2026-07-26: a 1-shin augment channels and DISSIPATES ~12ms later, twice observed; duration
-# scales with the spend, and infuse fire competes for the same shin) whenever
-# shin >= 1, bodyaugment is down, and the 5s attempt-hold (ataxiaTemp.bmAugmentAttempted)
-# has cleared.
-# LIVE LOG 2026-07-26 (Pinnacle death, ~3k HP/s incoming): the default-3 augment lasted
-# ~2.0s exactly, and the immediate re-up was refused with "Regardless of your skill,
-# augmenting yourself with shin energy so soon would be fatal." (a re-augment COOLDOWN,
-# recovery line "You may augment yourself with shin energy once again.", ~6s). Working
-# theory: augment is ABLATIVE -- it absorbs damage proportional to shin spent rather than
-# holding a fixed duration (12ms at 1 shin vs 2s at 3 under fire fits; an out-of-combat
-# duration check would falsify). Under boss-tier fire the keeper buys ~2s of 20% DR per
-# cooldown cycle -- thin; consider raising bmAugmentAmount or dropping the keeper there.
+# basher prepends "shin augment <n>" (n = ataxiaBasher.bmAugmentAmount, default 20 since
+# v4.7.269) whenever shin >= n, bodyaugment is down, the 7s attempt-hold
+# (ataxiaTemp.bmAugmentAttempted) has cleared and the cooldown is over.
+#
+# ALL FIVE LINES OF THE CYCLE (captured 2026-08-12, triggers highlighting/050-054):
+#   "You focus inward, drawing upon your reserves of shin energy."                  channel begins
+#   "You are already beginning the process of augmenting your body with shin energy." REFUSED, busy
+#   "You channel your accumulated shin energy into enhancing your defensive bladework." cover STARTS
+#   "The shin energy enhancing your body dissipates."                                cover ENDS
+#   "You may augment yourself with shin energy once again."                          cooldown OVER
+# A sixth line exists and is NOT wired: "Regardless of your skill, augmenting yourself with shin
+# energy so soon would be fatal." -- the COOLDOWN refusal, distinct from the busy one above.
+#
+# USER-STATED MECHANICS (2026-08-12): duration SCALES with the spend, ~10s to ~1.5min, and is
+# explicitly NOT one shin per second; 4 seconds to activate in all cases; on ending it goes on
+# cooldown EQUAL TO THE DURATION it was up for. Therefore uptime can never exceed 50%, and the 4s
+# activation is a fixed tax a short augment pays proportionally more of.
+#
+# FOUR MEASUREMENTS, AND THEY DO NOT ALL AGREE -- which is why `bash shinprobe` exists:
+#   2026-07-26 (Pinnacle, ~3k HP/s incoming): 1-shin augment DISSIPATED ~12ms later, twice;
+#              3-shin augment lasted ~2.0s; re-up refused, recovery line ~6s later.
+#   2026-08-12 (adjacent prompt timestamps): dissipate 10:25:09.886 -> ready 10:25:12.886 =
+#              cooldown 3.0s EXACTLY; focus 10:25:15.257 -> cover 10:25:18.916 = activation 3.66s,
+#              which corroborates the stated 4s.
+# The activation is settled. The duration is not: a 3-shin augment lasting 2.0s cannot be squared
+# with a floor of ~10s. The ABLATIVE hypothesis remains the only reading that fits both -- augment
+# absorbs a POOL proportional to the shin spent and ends early when the pool is consumed, so ~10s
+# is its unspent lifetime and 12ms is what 1 shin buys under boss-tier fire. It is now TESTABLE
+# rather than idle: the probe brackets each duration between the cover-starts and dissipates lines,
+# so a WIDE spread at one spend is evidence for ablative and a tight cluster is evidence against.
+# Cooldown-equals-duration is also unconfirmed (2.0s up vs ~6s down contradicts it; 3.0s down is
+# consistent with a 3s duration) -- which is exactly why the ready LINE is now the authority and
+# the derived wait is only a backstop for a missed line.
 # Battlerage kit (commands/costs verified vs basher/001 ataxiaBasher_blademasterBattlerage
 # and _groups.yaml get_Battlerage Blademaster config). Blademaster OWNS its battlerage:
 # it is EXCLUDED from the shared culling check and spends rage by priority so it never idles.
@@ -734,8 +754,14 @@ legslash; there is no centreslash-up parry-bypass fallback in the double-prep pa
   reserves of shin energy.` (accepted), `You are already beginning the process of augmenting your
   body with shin energy.` (refused -- already channelling; seen 5x in 0.45s because `shin augment`
   costs no balance and so executes on every re-queue), `You channel your accumulated shin energy
-  into enhancing your defensive bladework.` (cover starts). Still uncaptured: the wear-off line and
-  the COOLDOWN refusal ("...so soon would be fatal").
+  into enhancing your defensive bladework.` (cover starts), `The shin energy enhancing your body
+  dissipates.` (cover ends), `You may augment yourself with shin energy once again.` (**cooldown
+  over** -- so v4.7.271 stopped predicting the cooldown and waits for this instead; the derived
+  wait survives only as a backstop for a missed line). Still uncaptured: the COOLDOWN refusal
+  ("...so soon would be fatal"), which is a different line from the already-channelling one.
+  **Measured, and not yet consistent** -- cooldown 3.0s on 2026-08-12 vs ~6s on 2026-07-26, and a
+  3-shin augment lasting ~2.0s cannot be squared with a ~10s floor; see the augment block above for
+  the ablative hypothesis the probe can now test.
 - **SHIN PHOENIX** (AB 321): requires 80 shin, **consumes ALL of it**, cleanses almost every
   affliction **and restores full health** (the heal is user-confirmed and NOT in the AB text). The
   strongest button in the kit, and what the PvE infuse budget exists to protect. Auto-fires at

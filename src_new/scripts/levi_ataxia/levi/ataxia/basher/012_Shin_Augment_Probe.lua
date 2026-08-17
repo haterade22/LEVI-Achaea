@@ -29,21 +29,34 @@ packageName: ''
 
       1. The CURVE -- (spend -> duration) samples, so `bmAugmentAmount` can be chosen rather than
          guessed. `bash shinprobe report`.
-      2. The COOLDOWN -- "when it ends it goes on cooldown equal to the duration it was up for".
-         That needs no curve: the duration we just measured IS the cooldown, so the watcher returns
-         the epoch at which the next augment may be attempted. This is what keeps the basher from
-         re-sending a refused `shin augment` every 7s for up to a minute and a half.
+      2. The COOLDOWN -- keeping the basher from re-sending a refused `shin augment` every 7s for
+         up to a minute and a half.
 
-    Polled, not triggered, and deliberately: the defence is read from GMCP
-    (`ataxia.defences.bodyaugment`), which is already refreshed by Char.Defences Add/Remove, and
-    the basher's round runs every prompt -- so a poll costs one table lookup and needs no new line
-    capture. The activation line and the wear-off line are both uncaptured; had this been built on
-    them it would have needed two triggers that do not exist yet.
+    v4.7.271: ALL FIVE LINES OF THE CYCLE ARE NOW CAPTURED, so both outputs come from the game's
+    own wording rather than from a poll and a derivation:
 
-    Timing is therefore prompt-granular, not exact. A sample is the interval between the first
-    prompt that SAW the defence and the first that saw it gone, so it errs slightly LOW on both
-    edges. Good enough to pick a spend from; recorded as approximate rather than presented as
-    precise.
+      focus inward (channel) -> channel accepted, 4s to go       (050)
+      already beginning      -> REFUSED, still channelling       (051)
+      you channel ... into   -> cover STARTS, duration clock on   (052)
+      shin energy dissipates -> cover ENDS, cooldown starts       (053)
+      may augment once again -> cooldown OVER                     (054)
+
+    That is what makes the second output exact. v4.7.270 had to DERIVE the cooldown from the
+    mechanic the user stated ("equal to the duration it was up for") because the end of it was
+    invisible; 054 announces it, so the arithmetic is demoted to a backstop for a missed line.
+    Where the game speaks about its own state, we listen -- the same rule that made the augment
+    refusal outrank our send-time flag, and the distortion refusal outrank ours (v4.7.266).
+
+    The GMCP poll (`ataxia.defences.bodyaugment`, refreshed by Char.Defences Add/Remove, read once
+    per assembled round) survives underneath as the backstop for a missed 053. It is a prompt late
+    on the down edge, which is why it is no longer the primary: every duration it measured read
+    slightly short, and a short duration derived a short cooldown.
+
+    First real measurement, from the capture that supplied 053/054: dissipated at 10:25:09.886,
+    ready at 10:25:12.886 -- a 3.0s cooldown. Consistent with "cooldown equals duration" IF the
+    augment before it lasted 3s, which is what 3 shin buys and was the default before v4.7.269.
+    The same capture times the activation at 10:25:15.257 -> 10:25:18.916 = 3.66s, corroborating
+    the stated 4s. One sample is not the curve; that is what the probe accumulates.
 ]]--
 
 ataxiaBasher = ataxiaBasher or {}
@@ -116,23 +129,81 @@ function ataxiaBasher_bmAugmentActive()
   ataxiaTemp.bmAugmentHoldT = nil
   ataxiaTemp.bmAugmentUpAt = now()
   ataxiaTemp.bmAugmentUpSpend = tonumber(ataxiaTemp.bmAugmentSpent)
+  ataxiaTemp.bmAugmentEndedAt = nil
+end
+
+-- ---------------------------------------------------------------------------
+-- The other two lines (v4.7.271, triggers highlighting/053-054)
+-- ---------------------------------------------------------------------------
+--
+-- `The shin energy enhancing your body dissipates.`          -> cover ENDS, cooldown starts
+-- `You may augment yourself with shin energy once again.`     -> cooldown OVER
+--
+-- v4.7.270 asked for exactly these two and recorded them as uncaptured. The second is the more
+-- valuable by far: it removes the last arithmetic from the cycle. We were MEASURING the duration
+-- and then waiting that long, because "cooldown equal to the duration it was up for" was all we
+-- had to go on. The game announces the end, so we wait for the announcement.
+
+-- Shared by the line (exact) and the GMCP poll (a prompt late, kept only as a backstop).
+local function augmentCycleEnded(t)
+  local dur = t - ataxiaTemp.bmAugmentUpAt
+  local spend = ataxiaTemp.bmAugmentUpSpend
+  ataxiaTemp.bmAugmentUpAt, ataxiaTemp.bmAugmentUpSpend = nil, nil
+  if dur <= 0 then return end
+  ataxiaBasher_shinProbeRecord(spend, dur)
+  -- The DERIVED cooldown, now a BACKSTOP rather than the authority: if the ready line is missed
+  -- we must still be released eventually, or the augment is off for the rest of the run -- the
+  -- failure mode this codebase keeps writing down (an optimistic flag cleared only by a
+  -- confirmation is a livelock the moment the confirmation cannot arrive). Whichever comes first.
+  ataxiaTemp.bmAugmentCdUntil = t + dur
+  if ataxiaBasher_dsAlert then
+    ataxiaBasher_dsAlert(string.format(
+      "<cyan>augment<reset> ended after <white>%.1fs<reset>%s -- waiting for the ready line.",
+      dur, spend and (" on <white>" .. spend .. "<reset> shin") or ""))
+  end
+end
+
+function ataxiaBasher_bmAugmentEnded()
+  ataxiaTemp = ataxiaTemp or {}
+  -- Stamped even when no cycle was open, because the POLL must not then invent one: GMCP can still
+  -- report `bodyaugment` for a prompt or two after this line, and the poll would read that as a
+  -- fresh cover starting -- recording a phantom sample and a phantom cooldown from it. A 2s grace
+  -- cannot suppress a real cycle: cover cannot restart inside cooldown + the 4s activation.
+  ataxiaTemp.bmAugmentEndedAt = now()
+  if ataxiaTemp.bmAugmentUpAt then augmentCycleEnded(ataxiaTemp.bmAugmentEndedAt) end
+end
+
+-- The cooldown is over because the game said so. Same principle as the augment REFUSAL (v4.7.270)
+-- and the Depthswalker distortion refusal (v4.7.266): where the game speaks about its own state,
+-- our derived bookkeeping is the fallback, not the authority.
+function ataxiaBasher_bmAugmentReady()
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.bmAugmentCdUntil = nil
+  ataxiaTemp.bmAugmentAttempted = nil
+  if killTimer and ataxiaTemp.bmAugmentHoldT then pcall(killTimer, ataxiaTemp.bmAugmentHoldT) end
+  ataxiaTemp.bmAugmentHoldT = nil
 end
 
 -- THE WATCHER. Called once per assembled round. Returns the epoch before which no augment should
--- be attempted -- 0 when nothing is known -- and records a sample on each completed cycle.
+-- be attempted -- 0 when nothing is known, which is now the NORMAL answer, because 054 nils the
+-- stamp the moment the game says the cooldown is over.
 --
--- Three states, and the transitions are the whole function:
---   defence UP   and we had not seen it  -> cycle started; stamp the time and the spend
---   defence UP   and we had              -> nothing to do
---   defence DOWN and we had seen it up   -> cycle ended; duration = now - upAt, and the cooldown
---                                           is EQUAL TO IT, so the next attempt is now + duration
+-- Everything below it is the backstop for a missed line, in both directions:
+--   defence UP   and no cycle open   -> a missed 052; open one (outside the post-053 grace)
+--   defence UP   and one is open     -> nothing to do
+--   defence DOWN and one is open     -> a missed 053; close it and derive the cooldown
 function ataxiaBasher_bmAugmentWatch()
   ataxiaTemp = ataxiaTemp or {}
   local up = (ataxia and ataxia.defences and ataxia.defences.bodyaugment) and true or false
   local t = now()
 
   if up then
-    if not ataxiaTemp.bmAugmentUpAt then
+    -- The GRACE, and it is load-bearing: GMCP can still report the defence for a prompt or two
+    -- after the dissipate line, and starting a cycle from that trailing read would record a
+    -- near-zero sample AND stamp a near-zero cooldown over the real one. Two seconds cannot hide a
+    -- genuine cycle, since the next cover is at least cooldown + 4s of activation away.
+    local sinceEnd = t - (tonumber(ataxiaTemp.bmAugmentEndedAt) or -99)
+    if not ataxiaTemp.bmAugmentUpAt and sinceEnd > 2 then
       ataxiaTemp.bmAugmentUpAt = t
       -- Snapshot the spend at the moment cover begins: bmAugmentSpent is overwritten by the next
       -- send, and a long augment can outlive several rounds.
@@ -141,22 +212,9 @@ function ataxiaBasher_bmAugmentWatch()
     return 0 -- it is up; the gate above already refuses on the defence itself
   end
 
-  if ataxiaTemp.bmAugmentUpAt then
-    local dur = t - ataxiaTemp.bmAugmentUpAt
-    local spend = ataxiaTemp.bmAugmentUpSpend
-    ataxiaTemp.bmAugmentUpAt, ataxiaTemp.bmAugmentUpSpend = nil, nil
-    if dur > 0 then
-      ataxiaBasher_shinProbeRecord(spend, dur)
-      -- The cooldown IS the duration. Stored rather than returned alone so it survives the rounds
-      -- between now and its expiry.
-      ataxiaTemp.bmAugmentCdUntil = t + dur
-      if ataxiaBasher_dsAlert then
-        ataxiaBasher_dsAlert(string.format(
-          "<cyan>augment<reset> ended after <white>%.1fs<reset>%s -- cooldown until +%.0fs.",
-          dur, spend and (" on <white>" .. spend .. "<reset> shin") or "", dur))
-      end
-    end
-  end
+  -- Only reached when the dissipate line was MISSED -- it clears bmAugmentUpAt itself, so this is
+  -- the backstop for the down edge exactly as bmAugmentCdUntil is for the cooldown.
+  if ataxiaTemp.bmAugmentUpAt then augmentCycleEnded(t) end
 
   return tonumber(ataxiaTemp.bmAugmentCdUntil) or 0
 end
@@ -200,8 +258,8 @@ function ataxiaBasher_shinProbeReport()
   end
   -- The two facts worth restating beside the numbers, because they bound what the curve can buy.
   cecho("\n  <DimGrey>cooldown equals the duration, so uptime cannot exceed 50%; the 4s activation"
-    .. "\n  is a fixed tax a SHORT augment pays proportionally more of. Timing is prompt-granular"
-    .. "\n  and errs low. Set the chosen spend with <white>bash augment <n><reset>.\n")
+    .. "\n  is a fixed tax a SHORT augment pays proportionally more of. Timed between the game's own"
+    .. "\n  cover-starts and dissipates lines. Set the spend with <white>bash augment <n><reset>.\n")
 end
 
 function ataxiaBasher_shinProbeCommand(arg, rest)
