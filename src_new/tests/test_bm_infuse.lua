@@ -49,19 +49,30 @@ local function reset()
 end
 
 describe("ataxiaBasher_bmInfuse -- stepping around a suppressed damage type", function()
-  it("uses FIRE on a clean ripple -- unchanged from the hardcoded behaviour it replaced", function()
+  -- LIGHTNING leads as of v4.7.269. The old head was `fire`, chosen in v4.7.186 only so
+  -- introducing this function changed nothing versus the hardcoded `infuse fire` it replaced --
+  -- never a damage judgement, and the class's own PvP offense infuses lightning throughout.
+  it("uses LIGHTNING on a clean ripple", function()
     reset()
-    expect(ataxiaBasher_bmInfuse()).toBe("fire")
+    expect(ataxiaBasher_bmInfuse()).toBe("lightning")
   end)
 
   it("ignores an affix that suppresses a type we were not using", function()
     reset(); nullify("magic")
+    expect(ataxiaBasher_bmInfuse()).toBe("lightning")
+  end)
+
+  it("moves off LIGHTNING when electricity is the suppressed type", function()
+    reset(); nullify("electricity")
     expect(ataxiaBasher_bmInfuse()).toBe("fire")
   end)
 
-  it("moves off FIRE when fire damage is the suppressed type", function()
-    reset(); nullify("fire")
-    expect(ataxiaBasher_bmInfuse()).toBe("lightning")
+  -- The old head is now the first FALLBACK, which is the other half of the reorder.
+  it("falls back to FIRE, then ICE, as each is suppressed in turn", function()
+    reset(); nullify("electricity")
+    expect(ataxiaBasher_bmInfuse()).toBe("fire")
+    reset(); nullify("electricity", "fire")
+    expect(ataxiaBasher_bmInfuse()).toBe("ice")
   end)
 
   it("knows VOID deals MAGIC -- the mapping that makes this non-obvious", function()
@@ -69,35 +80,36 @@ describe("ataxiaBasher_bmInfuse -- stepping around a suppressed damage type", fu
     -- Only void is left, and it must be found by its DAMAGE TYPE, not its name.
     expect(ataxiaBasher_bmInfuse()).toBe("void")
     reset(); nullify("fire", "electricity", "cold", "magic")
-    expect(ataxiaBasher_bmInfuse()).toBe("fire") -- all suppressed: fall back, never nil
+    -- All suppressed: fall back to the HEAD of the order, never nil.
+    expect(ataxiaBasher_bmInfuse()).toBe("lightning")
   end)
 
   it("knows ICE deals COLD", function()
-    reset(); nullify("fire", "electricity")
+    reset(); nullify("electricity", "fire")
     expect(ataxiaBasher_bmInfuse()).toBe("ice")
   end)
 
   it("accepts the wording synonyms, since only 'magic' has been seen live", function()
     for _, word in ipairs({"electricity", "electric", "lightning"}) do
-      reset(); nullify("fire", word)
-      expect(ataxiaBasher_bmInfuse()).toBe("ice")
+      reset(); nullify(word)
+      expect(ataxiaBasher_bmInfuse()).toBe("fire") -- lightning suppressed -> next in order
     end
     for _, word in ipairs({"cold", "ice", "frost"}) do
-      reset(); nullify("fire", "electricity", word)
+      reset(); nullify("electricity", "fire", word)
       expect(ataxiaBasher_bmInfuse()).toBe("void")
     end
     for _, word in ipairs({"magic", "void"}) do
-      reset(); nullify("fire", "electricity", "cold", word)
-      expect(ataxiaBasher_bmInfuse()).toBe("fire") -- nothing left; falls back
+      reset(); nullify("electricity", "fire", "cold", word)
+      expect(ataxiaBasher_bmInfuse()).toBe("lightning") -- nothing left; falls back to the head
     end
   end)
 
   it("is case-insensitive about the captured type", function()
-    reset(); nullify("FIRE")
-    expect(ataxiaBasher_bmInfuse()).toBe("fire") -- table key is lower-cased by the parser
+    reset(); nullify("ELECTRICITY")
+    expect(ataxiaBasher_bmInfuse()).toBe("lightning") -- table key is lower-cased by the parser
     reset()
-    ataxiaTemp.mnemNulled = { fire = 33 }
-    expect(ataxiaBasher_bmInfuse()).toBe("lightning")
+    ataxiaTemp.mnemNulled = { electricity = 33 }
+    expect(ataxiaBasher_bmInfuse()).toBe("fire")
   end)
 
   it("honours a custom preference order", function()
@@ -110,18 +122,23 @@ describe("ataxiaBasher_bmInfuse -- stepping around a suppressed damage type", fu
 
   it("never returns nil -- an empty infuse would break the attack string", function()
     reset()
+    -- A garbage prefs list is the ONLY path that reaches the literal last resort, and it now
+    -- matches the head of BM_INFUSE_ORDER rather than contradicting it.
     ataxiaBasher.bmInfusePrefs = {}
-    expect(ataxiaBasher_bmInfuse()).toBe("fire")
+    expect(ataxiaBasher_bmInfuse()).toBe("lightning")
     ataxiaBasher.bmInfusePrefs = { "nonsense" }
-    expect(ataxiaBasher_bmInfuse()).toBe("fire")
+    expect(ataxiaBasher_bmInfuse()).toBe("lightning")
   end)
 
   it("survives the mnemosyne module being absent entirely (out of the tower)", function()
     reset()
     local saved = ataxia.mnemosyne
     ataxia.mnemosyne = nil
-    expect(ataxiaBasher_bmInfuse()).toBe("fire")
+    -- Restored via pcall so a FAILING assertion cannot leak `ataxia.mnemosyne = nil` into every
+    -- suite after this one -- which is exactly what happened while updating these expectations.
+    local ok, err = pcall(function() expect(ataxiaBasher_bmInfuse()).toBe("lightning") end)
     ataxia.mnemosyne = saved
+    if not ok then error(err, 0) end
   end)
 end)
 
@@ -242,13 +259,15 @@ describe("the affix sentence pattern tolerates wording variation (v4.7.191)", fu
   -- asserts the DECISION the captured type drives, using the types the live rows yield.
   it("STEEL SKIN suppresses physical -- and physical is not an infusable type", function()
     reset(); nullify("physical")
-    -- None of fire/magic/electricity/cold is nulled, so the infuse pick is untouched.
-    expect(ataxiaBasher_bmInfuse()).toBe("fire")
+    -- None of electricity/fire/cold/magic is nulled, so the infuse pick is untouched.
+    -- Physical is what BM's UNENCHANTED damage is, which is why it never appears in BM_INFUSE:
+    -- an affix on it cannot be stepped around by choosing a different element.
+    expect(ataxiaBasher_bmInfuse()).toBe("lightning")
   end)
 
   it("physical alongside an infusable type still moves the infuse", function()
-    reset(); nullify("physical", "fire")
-    expect(ataxiaBasher_bmInfuse()).toBe("lightning")
+    reset(); nullify("physical", "electricity")
+    expect(ataxiaBasher_bmInfuse()).toBe("fire")
   end)
 
   it("records every member of the family independently", function()
@@ -267,23 +286,23 @@ describe("the four affixes seen live, by name (v4.7.192)", function()
   -- Only two of the four touch an infusable damage type, and that asymmetry is the point.
   it("ICEPROOF moves the infuse off ICE -- the first affix that actually hits the picker", function()
     reset(); nullify("cold")
-    expect(ataxiaBasher_bmInfuse()).toBe("fire")     -- fire still first and unaffected
-    reset(); nullify("fire", "cold")
-    expect(ataxiaBasher_bmInfuse()).toBe("lightning")
-    reset(); nullify("fire", "electricity", "cold")
+    expect(ataxiaBasher_bmInfuse()).toBe("lightning") -- lightning still first and unaffected
+    reset(); nullify("electricity", "cold")
+    expect(ataxiaBasher_bmInfuse()).toBe("fire")
+    reset(); nullify("electricity", "fire", "cold")
     expect(ataxiaBasher_bmInfuse()).toBe("void")     -- must not fall back to the nulled ice
   end)
 
   it("NULL MAGIC moves it off VOID, not off some element named magic", function()
-    reset(); nullify("fire", "electricity", "cold", "magic")
-    expect(ataxiaBasher_bmInfuse()).toBe("fire")     -- everything nulled: falls back
-    reset(); nullify("fire", "electricity", "magic")
+    reset(); nullify("electricity", "fire", "cold", "magic")
+    expect(ataxiaBasher_bmInfuse()).toBe("lightning") -- everything nulled: falls back to the head
+    reset(); nullify("electricity", "fire", "magic")
     expect(ataxiaBasher_bmInfuse()).toBe("ice")
   end)
 
   it("STEEL SKIN and BLANK MIND do not touch the infuse -- neither type is infusable", function()
     reset(); nullify("physical", "psychic")
-    expect(ataxiaBasher_bmInfuse()).toBe("fire")
+    expect(ataxiaBasher_bmInfuse()).toBe("lightning")
   end)
 end)
 

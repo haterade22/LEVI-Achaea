@@ -40,11 +40,11 @@ describe("ataxiaBasher_blademasterBashing — Shattered Star (multislash) boon",
     expect(has(cmd, "drawslash")).toBeFalse()
   end)
 
-  it("keeps infuse fire in the chain with multislash", function()
+  it("keeps the infuse in the chain with multislash", function()
     bmShatteredStar = true
     ataxiaBasher.shielded = false
     local cmd = ataxiaBasher_blademasterBashing()
-    expect(has(cmd, "infuse fire")).toBeTrue()
+    expect(has(cmd, "infuse lightning")).toBeTrue() -- lightning leads as of v4.7.269
   end)
 
   it("still swaps to multislash on the rageraze+shielded path", function()
@@ -85,14 +85,20 @@ describe("ataxiaBasher_blademasterBashing — Bladed Reflexes (shin augment) boo
     ataxiaBasher.rageraze = false
     ataxiaTemp = {}
     ataxia.defences = {}
-    ataxia.vitals.class = shin -- shin count (blademaster.getShin fallback source)
+    -- Inject through the REAL accessor (the test_bm_infuse idiom). This used to set
+    -- ataxia.vitals.class, which reached shin via a fallback branch PRODUCTION NEVER RAN --
+    -- getShin returns 0 not nil, and 0 is truthy, so the `or` never fired. These tests were the
+    -- only consumer of that dead branch (v4.7.269).
+    blademaster = { getShin = function() return shin end }
   end
 
   it("prepends the configurable augment spend with the boon on and enough shin", function()
-    reset(3)
+    reset(20)
     local cmd = ataxiaBasher_blademasterBashing()
-    expect(has(cmd, "shin augment 3")).toBeTrue() -- default spend: 1 shin dissipates instantly (live log)
-    expect(cmd:find("shin augment 3", 1, true)).toBe(1) -- augment leads the chain
+    -- Default spend is 20, not 3: ONE SHIN IS ONE SECOND of the augment (user-confirmed), so the
+    -- old default bought three seconds of a 20% damage reduction.
+    expect(has(cmd, "shin augment 20")).toBeTrue()
+    expect(cmd:find("shin augment 20", 1, true)).toBe(1) -- augment leads the chain
     expect(has(cmd, "drawslash " .. target .. " sternum")).toBeTrue() -- attack intact
     reset(5)
     ataxiaBasher.bmAugmentAmount = 5
@@ -122,9 +128,9 @@ describe("ataxiaBasher_blademasterBashing — Bladed Reflexes (shin augment) boo
   end)
 
   it("arms the attempt-hold when it sends, so the NEXT swing skips the augment", function()
-    reset(4)
+    reset(20) -- must clear the DEFAULT spend, which is 20 as of v4.7.269 (1 shin = 1 second)
     local first = ataxiaBasher_blademasterBashing()
-    expect(has(first, "shin augment 3")).toBeTrue()
+    expect(has(first, "shin augment 20")).toBeTrue()
     local second = ataxiaBasher_blademasterBashing()
     expect(has(second, "shin augment")).toBeFalse()
   end)
@@ -150,7 +156,7 @@ describe("ataxiaBasher_blademasterBashing -- augment and thunderstorm never shar
     ataxiaBasher.shielded, ataxiaBasher.rageraze = false, false
     ataxiaTemp = {}
     ataxia.defences = {}
-    ataxia.vitals.class = shin
+    blademaster = { getShin = function() return shin end }
     ataxia.mnemosyne = { _denizenCount = function() return denizens or 4 end }
   end
 
@@ -164,7 +170,7 @@ describe("ataxiaBasher_blademasterBashing -- augment and thunderstorm never shar
   it("sends the augment alone and SUPPRESSES the storm when both would fire", function()
     reset(40); bmBladedReflexes = true -- 40 shin clears augment (3) AND storm (30) alone
     local cmd = ataxiaBasher_blademasterBashing()
-    expect(has(cmd, "shin augment 3")).toBeTrue()
+    expect(has(cmd, "shin augment 20")).toBeTrue()
     expect(has(cmd, "shin thunderstorm")).toBeFalse()
   end)
 
@@ -179,7 +185,7 @@ describe("ataxiaBasher_blademasterBashing -- augment and thunderstorm never shar
 
   it("lets the storm through on the NEXT round, once the augment attempt-hold is up", function()
     reset(40); bmBladedReflexes = true
-    expect(has(ataxiaBasher_blademasterBashing(), "shin augment 3")).toBeTrue()
+    expect(has(ataxiaBasher_blademasterBashing(), "shin augment 20")).toBeTrue()
     -- The augment arms bmAugmentAttempted for 5s; with it held, the round is free again.
     local cmd = ataxiaBasher_blademasterBashing()
     expect(has(cmd, "shin augment")).toBeFalse()
@@ -189,7 +195,7 @@ describe("ataxiaBasher_blademasterBashing -- augment and thunderstorm never shar
   it("is inert without the Divine Thunder boon (no storm to collide with)", function()
     reset(40); bmBladedReflexes = true; mnemDivineThunder = false
     local cmd = ataxiaBasher_blademasterBashing()
-    expect(has(cmd, "shin augment 3")).toBeTrue()
+    expect(has(cmd, "shin augment 20")).toBeTrue()
     expect(has(cmd, "shin thunderstorm")).toBeFalse()
   end)
 end)
@@ -208,7 +214,7 @@ describe("shin storms -- one slot, two damage types", function()
     ataxiaBasher.bmStormPrefs, ataxiaBasher.blizzardAt = nil, nil
     ataxiaTemp = {}
     ataxia.defences = {}
-    ataxia.vitals.class = shin or 40
+    blademaster = { getShin = function() return shin or 40 end }
     nulled = {}
     ataxia.mnemosyne = {
       _denizenCount = function() return denizens or 4 end,
@@ -298,7 +304,7 @@ describe("shin storms -- one slot, two damage types", function()
   it("still yields the round to SHIN AUGMENT (the v4.7.193 rule)", function()
     reset(); mnemIcyHeart = true; bmBladedReflexes = true
     local cmd = ataxiaBasher_blademasterBashing()
-    expect(has(cmd, "shin augment 3")).toBeTrue()
+    expect(has(cmd, "shin augment 20")).toBeTrue()
     expect(has(cmd, "shin blizzard")).toBeFalse()
     expect(ataxiaTemp.bmShinStormAt).toBe(nil)
   end)
@@ -314,3 +320,110 @@ bmShatteredStar, bmBladedReflexes, mnemDivineThunder = false, false, false
 mnemIcyHeart = false
 ataxia.mnemosyne = nil
 ataxiaTemp = {}
+
+-- ---------------------------------------------------------------------------
+-- The shin budget and SHIN PHOENIX (v4.7.269)
+-- ---------------------------------------------------------------------------
+describe("shin budget -- infuse yields to Phoenix", function()
+  local function setup(shin, inTower)
+    bmShatteredStar, bmBladedReflexes, mnemDivineThunder, mnemIcyHeart = false, false, false, false
+    ataxiaBasher.shielded, ataxiaBasher.rageraze = false, false
+    ataxiaBasher.inMnemosyne = inTower and true or false
+    ataxiaBasher.bmInfuseAt, ataxiaBasher.phoenixAt = nil, nil
+    ataxiaTemp = {}
+    ataxia.defences = {}
+    ataxia.vitals = ataxia.vitals or {}
+    ataxia.vitals.hpp = 100
+    ataxia.vitals.rage = 0
+    blademaster = { getShin = function() return shin end }
+  end
+
+  -- The whole point: infuse was the ONE shin spender with no arithmetic behind it, and it fired
+  -- every single round.
+  it("holds the infuse in the tower below 90 shin", function()
+    setup(85, true)
+    expect(has(ataxiaBasher_blademasterBashing(), "infuse")).toBeFalse()
+  end)
+
+  -- 90 is derived: Phoenix needs 80, so infusing only above 90 leaves >80 afterwards.
+  it("infuses in the tower above 90 shin", function()
+    setup(95, true)
+    expect(has(ataxiaBasher_blademasterBashing(), "infuse lightning")).toBeTrue()
+  end)
+
+  it("is unrestricted OUTSIDE the tower -- nothing is being saved for", function()
+    setup(5, false)
+    expect(has(ataxiaBasher_blademasterBashing(), "infuse lightning")).toBeTrue()
+  end)
+
+  it("also holds it on the shielded rage-raze round", function()
+    setup(85, true)
+    ataxiaBasher.shielded, ataxiaBasher.rageraze = true, true
+    ataxia.vitals.rage = 50
+    expect(has(ataxiaBasher_blademasterBashing(), "infuse")).toBeFalse()
+    setup(95, true)
+    ataxiaBasher.shielded, ataxiaBasher.rageraze = true, true
+    ataxia.vitals.rage = 50
+    expect(has(ataxiaBasher_blademasterBashing(), "infuse lightning")).toBeTrue()
+  end)
+end)
+
+describe("SHIN PHOENIX", function()
+  local function setup(shin, hpp)
+    bmShatteredStar, bmBladedReflexes, mnemDivineThunder, mnemIcyHeart = false, false, false, false
+    ataxiaBasher.shielded, ataxiaBasher.rageraze = false, false
+    ataxiaBasher.inMnemosyne = true
+    ataxiaBasher.bmInfuseAt, ataxiaBasher.phoenixAt = nil, nil
+    ataxiaTemp = {}
+    ataxia.defences = {}
+    ataxia.vitals = ataxia.vitals or {}
+    ataxia.vitals.hpp = hpp
+    ataxia.vitals.rage = 0
+    blademaster = { getShin = function() return shin end }
+  end
+
+  it("fires at 10% HP with 80 shin", function()
+    setup(80, 10)
+    expect(has(ataxiaBasher_blademasterBashing(), "shin phoenix")).toBeTrue()
+  end)
+
+  it("does not fire above the threshold or below 80 shin", function()
+    setup(80, 35)
+    expect(has(ataxiaBasher_blademasterBashing(), "shin phoenix")).toBeFalse()
+    setup(79, 10)
+    expect(has(ataxiaBasher_blademasterBashing(), "shin phoenix")).toBeFalse()
+  end)
+
+  -- hpp == 0 is BLACKOUT, not 10% -- the idiom ataxiaBasher_dangerLevel already uses. A bare
+  -- `hpp <= 10` empties the whole shin pool every time we lose sight of our own health.
+  it("does NOT fire on a zero HP reading (blackout, not nearly dead)", function()
+    setup(100, 0)
+    expect(has(ataxiaBasher_blademasterBashing(), "shin phoenix")).toBeFalse()
+  end)
+
+  -- It consumes the whole pool, so it cannot share a round: augment must yield.
+  it("outranks the augment and suppresses it for that round", function()
+    setup(100, 10)
+    bmBladedReflexes = true
+    local cmd = ataxiaBasher_blademasterBashing()
+    expect(has(cmd, "shin phoenix")).toBeTrue()
+    expect(has(cmd, "shin augment")).toBeFalse()
+  end)
+
+  it("lets the augment through once HP recovers", function()
+    setup(100, 100)
+    bmBladedReflexes = true
+    local cmd = ataxiaBasher_blademasterBashing()
+    expect(has(cmd, "shin phoenix")).toBeFalse()
+    expect(has(cmd, "shin augment 20")).toBeTrue()
+  end)
+
+  -- Leave the globals as we found them. A boon flag or a low hpp left set here rewrites what every
+  -- later test FILE measures -- three separate leaks of exactly this kind were found in v4.7.268.
+  it("leaves no state behind for the next suite", function()
+    bmBladedReflexes = false
+    ataxiaBasher.inMnemosyne = false
+    ataxia.vitals.hpp = 100
+    expect(bmBladedReflexes).toBeFalse()
+  end)
+end)

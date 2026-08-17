@@ -575,25 +575,78 @@ function ataxiaBasher_blademasterBashing()
 	-- trigger / boon-claim alias and reset each run (mirrors bardWarmarch); nil/false -> drawslash.
 	local slash = bmShatteredStar and ("multislash "..target.." sternum") or ("drawslash "..target.." sternum")
 
-	-- Bladed Reflexes boon (Mnemosyne): 20% reduced damage while the Shindo AUGMENT state is
-	-- up. SHIN AUGMENT <ALL|amount> channels shin into the reflex augment (tracked as the
-	-- bodyaugment defence); spend the MINIMUM (1) -- augment with 0 shin just fails, and
-	-- infuse fire competes for the same resource. Gated on the GMCP-tracked defence (expiry
-	-- arrives via Char.Defences.Remove, no duration guessing) plus a short attempt-hold so
-	-- the channel wind-up ("beginning the process...") isn't respammed every swing. Flag
-	-- mirrors bmShatteredStar (claim alias + BOONS row trigger 019, reset each run).
-	if bmBladedReflexes and not (ataxia.defences and ataxia.defences.bodyaugment)
+	-- SHIN PHOENIX -- the emergency reset, and it outranks every other shin spender (v4.7.269).
+	--
+	-- AB 321: `SHIN PHOENIX`, self, requires 80 shin and CONSUMES ALL OF IT, "cleansed almost all
+	-- ailments and afflictions" -- and, user-confirmed 2026-08-12, it also RETURNS US TO FULL
+	-- HEALTH. The AB states only the cleanse, so the heal is knowledge its text does not carry and
+	-- is the reason this is worth automating at all: a full reset for 80 shin is the strongest
+	-- button in the kit, and it is what the infuse budget below exists to protect.
+	--
+	-- FIRST IN THE ROUND, deliberately. There is no round planner here -- shin priority is
+	-- hardcoded position, and the augment used to win simply by being written first. Phoenix must
+	-- outrank it: at 10% HP a 20% damage reduction is not the answer, and since Phoenix takes the
+	-- whole pool it cannot share a round with anything.
+	--
+	-- `hpp > 0` IS NOT REDUNDANT. A zero reading means BLACKOUT -- vitals unknown, not nearly dead
+	-- -- which ataxiaBasher_dangerLevel already encodes as `if hpp == 0 then return "wait" end`. A
+	-- bare `hpp <= 10` would empty the shin pool every time we lose sight of our own health.
+	--
+	-- No cooldown stamp and no confirm line: consuming ALL shin means the `>= 80` gate is its own
+	-- re-fire guard, and our own cast line is uncaptured (the only phoenix trigger in the tree,
+	-- passive_active/010, is the OPPONENT-side line for an enemy Blademaster).
+	if not shinSpent then
+		local hpp = tonumber(ataxia.vitals and ataxia.vitals.hpp) or 0
+		if hpp > 0 and hpp <= (tonumber(ataxiaBasher.phoenixAt) or 10)
+			 and ataxiaBasher_shinNow() >= 80 then
+			command = command.."shin phoenix"..sp
+			shinSpent = true
+			if ataxiaBasher_dsAlert then
+				ataxiaBasher_dsAlert("<indian_red>" .. hpp .. "% HP<reset> -- <cyan>SHIN PHOENIX<reset>"
+					.. " (full heal + cleanse, spends all shin).")
+			end
+		end
+	end
+
+	-- Bladed Reflexes boon (Mnemosyne): "You take 20% reduced damage while your reflexes are
+	-- augmented with Shin energy via your Shindo augment ability." SHIN AUGMENT <ALL|amount>
+	-- (AB 316) channels shin into the reflex augment, tracked as the `bodyaugment` defence.
+	--
+	-- ONE SHIN IS ONE SECOND OF DEFENCE (user-confirmed 2026-08-12). That single fact rewrites
+	-- this block: the old default of 3 bought THREE SECONDS of a 20% damage reduction, which is
+	-- indistinguishable from not having the boon at all -- and it explains the v4.7.126 live log
+	-- where `shin augment 1` visibly dissipated 12ms later. The default is now 20, i.e. ~20
+	-- seconds of cover, tunable via `ataxiaBasher.bmAugmentAmount`.
+	--
+	-- DELIBERATELY EXEMPT FROM THE SHIN FLOOR (user rule): this may spend below the 90 the infuse
+	-- budget protects, and therefore below Phoenix's 80. That is the right trade -- 20% damage
+	-- reduction held continuously beats banking a panic button we may never need -- and the
+	-- ORDERING resolves the conflict on its own: Phoenix is evaluated above this block, so at 10%
+	-- HP it claims the pool and the augment never runs. Only while healthy can the augment take us
+	-- under Phoenix's floor, and while healthy is exactly when that does not matter.
+	--
+	-- Gated on the GMCP-tracked defence (expiry arrives via Char.Defences.Remove, no duration
+	-- guessing) plus an attempt-hold so the channel wind-up isn't respammed every swing. The hold
+	-- is 7s, not 5: a live capture recorded a ~6s re-augment lockout ("Regardless of your skill,
+	-- augmenting yourself with shin energy so soon would be fatal") whose refusal line has no
+	-- trigger, so a 5s hold walked into a rejection nothing could see. Flag mirrors
+	-- bmShatteredStar (claim alias + BOONS row trigger 019, reset each run).
+	-- `not shinSpent` and the APPEND are both new in v4.7.269, and both were latent traps rather
+	-- than style: this block used to be the first thing in the round, so it needed neither. It had
+	-- no shinSpent check because nothing could precede it, and it wrote `command = "shin augment "..`
+	-- -- an ASSIGNMENT -- which silently DESTROYS anything already in the buffer. Putting Phoenix
+	-- above it exposed both at once: the phoenix was built and then thrown away, and the round went
+	-- out with the augment alone. A "one spender per round" rule enforced by position alone breaks
+	-- the moment the positions change.
+	if not shinSpent and bmBladedReflexes
+		 and not (ataxia.defences and ataxia.defences.bodyaugment)
 		 and not ataxiaTemp.bmAugmentAttempted then
-		local shin = (blademaster and blademaster.getShin and blademaster.getShin())
-			or (ataxia.vitals and tonumber(ataxia.vitals.class)) or 0
-		-- Live log 2026-07-26: "shin augment 1" channeled and DISSIPATED 12ms later, twice --
-		-- one shin buys ~zero duration, so the boon's 20% DR was never actually up. Spend a
-		-- real chunk (duration appears to scale with the amount); tune via bmAugmentAmount.
-		local amt = tonumber(ataxiaBasher.bmAugmentAmount) or 3
+		local shin = ataxiaBasher_shinNow()
+		local amt = tonumber(ataxiaBasher.bmAugmentAmount) or 20
 		if shin >= amt then
 			ataxiaTemp.bmAugmentAttempted = true
-			tempTimer(5, [[ataxiaTemp.bmAugmentAttempted = nil]])
-			command = "shin augment "..amt..sp
+			tempTimer(7, [[ataxiaTemp.bmAugmentAttempted = nil]])
+			command = command.."shin augment "..amt..sp
 			shinSpent = true
 		end
 	end
@@ -620,14 +673,54 @@ function ataxiaBasher_blademasterBashing()
 	-- cost, so the picker takes whichever the ripple is not suppressing.
 	local storm = (not shinSpent) and ataxiaBasher_bmShinStorm(sp) or ""
 
+	-- THE SHIN BUDGET (v4.7.269, user rule: "only infuse if above 90 shin").
+	--
+	-- `infuse` was the ONLY shin spender in this function with no arithmetic behind it -- no cost
+	-- check, no hold, no cooldown, no place in the one-spender rule -- and the only one that fired
+	-- on EVERY round, which makes it plausibly the largest sustained draw in the whole economy.
+	--
+	-- 90 IS DERIVED, NOT ARBITRARY: Phoenix needs 80, so infusing only above 90 means that after
+	-- paying for one infuse we still hold more than 80. An infuse can therefore never be the action
+	-- that takes Phoenix off the table. Keep that relationship in mind before tuning either number.
+	--
+	-- The cost of an infuse is NOT verified. `.claude/classes/blademaster.md` states 5 shin with no
+	-- AB capture behind it, and the only code that enforces the arithmetic is the PvP airfist gate
+	-- (25 = 20 + 5) as an opaque total. 90 clears 80 with headroom whether the real figure is 5 or
+	-- 10, which is why this is a tunable with its derivation written down rather than 80 + a
+	-- constant we would be inventing.
+	--
+	-- TOWER-SCOPED, matching the "while wading" framing: outside Mnemosyne nothing is being saved
+	-- for, so general bashing keeps infusing every round and the blast radius stays in the tower.
+	--
+	-- The gate lives HERE rather than inside ataxiaBasher_bmInfuse on purpose: that function is a
+	-- pure element-chooser with its own suite, and giving it a shin/area dependency would force
+	-- every one of those tests to mock both.
+	local infuse = ""
+	if not ataxiaBasher.inMnemosyne or ataxiaBasher_shinNow() > (tonumber(ataxiaBasher.bmInfuseAt) or 90) then
+		infuse = "infuse "..ataxiaBasher_bmInfuse().." "..sp.." "
+	elseif ataxia.mnemosyne and ataxia.mnemosyne.damageNulled
+		 and ataxia.mnemosyne.damageNulled("cutting") and not ataxiaTemp.bmCuttingWarned then
+		-- SAY IT OUT LOUD, once per ripple. Our base bashing damage IS physical cutting, so under a
+		-- ripple that suppresses it the infuse stops being a bonus and becomes the only real damage
+		-- we have -- and the user's rule is that the floor holds anyway, so we are knowingly
+		-- swinging into a resistance to keep Phoenix available. A deliberate trade the log never
+		-- mentions is indistinguishable from a bug, and this is the one place to mention it.
+		ataxiaTemp.bmCuttingWarned = true
+		if ataxiaBasher_dsAlert then
+			ataxiaBasher_dsAlert("<indian_red>cutting damage is suppressed this ripple<reset> and shin is"
+				.. " below " .. (tonumber(ataxiaBasher.bmInfuseAt) or 90) .. " -- holding it for PHOENIX."
+				.. " <a_darkmagenta>infuse manually if you would rather have the damage.")
+		end
+	end
+
 	if ataxiaBasher.shielded then
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-			command = command..raze..sp.."infuse "..ataxiaBasher_bmInfuse().." "..sp.." "..slash
+			command = command..raze..sp..infuse..slash
 		else
 			command = command.."raze "..target..sp..brage
 		end
 	else
-		command = command..storm..brage..sp.."infuse "..ataxiaBasher_bmInfuse().." "..sp.." "..slash
+		command = command..storm..brage..sp..infuse..slash
 	end
 
 	return command
@@ -660,10 +753,34 @@ local BM_INFUSE = {
   void      = { "magic", "void" },
 }
 
--- Preference order. `fire` stays first so an unaffected ripple behaves exactly as before
--- (this replaced a hardcoded `infuse fire`); the rest are fallbacks, tunable via
--- ataxiaBasher.bmInfusePrefs.
-local BM_INFUSE_ORDER = { "fire", "lightning", "ice", "void" }
+-- CURRENT SHIN, one accessor (v4.7.269). This two-line expression was copy-pasted verbatim at
+-- three call sites (the augment block, thunderstorm, blizzard) and the shin budget below would have
+-- made it four.
+--
+-- The `ataxia.vitals.class` fallback those copies carried is DEAD and is deliberately not
+-- reproduced: `blademaster.getShin()` is declared unconditionally regardless of class and returns
+-- `0` rather than nil when the charstat is missing -- and `0` is truthy in Lua, so the `or` branch
+-- could never run. That matters because it hides the failure mode: if Achaea ever rewords the
+-- `Shin:` charstat, shin reads 0, the augment and both storms gate themselves off, and (before this
+-- version) `infuse` carried on firing unpriced. One accessor makes that one place to fix.
+--
+-- Never nil, so callers may compare directly.
+function ataxiaBasher_shinNow()
+  if blademaster and blademaster.getShin then
+    return tonumber(blademaster.getShin()) or 0
+  end
+  return 0
+end
+
+-- Preference order, tunable via ataxiaBasher.bmInfusePrefs.
+--
+-- LIGHTNING FIRST (v4.7.269, user-directed). The old order led with `fire`, and that was never a
+-- damage judgement: v4.7.186 introduced this function to replace a hardcoded `infuse fire` and put
+-- fire first purely so an unaffected ripple behaved exactly as before. That caution has outlived
+-- its purpose -- and the class's own PvP offense has always disagreed with it, since
+-- levi_scripts/blademaster/003_BrokenStar.lua infuses LIGHTNING in every branch. The PvE basher
+-- was the odd one out.
+local BM_INFUSE_ORDER = { "lightning", "fire", "ice", "void" }
 
 function ataxiaBasher_bmInfuse()
   local M = ataxia and ataxia.mnemosyne
@@ -685,7 +802,10 @@ function ataxiaBasher_bmInfuse()
   end
   -- Every element suppressed (or a garbage prefs list): fall back to the first valid one
   -- rather than returning nil, which would drop the infuse from the attack string entirely.
-  return first or "fire"
+  -- `first` covers any usable list, so the literal is only reached when bmInfusePrefs is garbage
+  -- (no recognised element at all). Match the head of BM_INFUSE_ORDER so the last resort agrees
+  -- with the module's own first choice.
+  return first or "lightning"
 end
 
 -- Depthswalker OWNS its battlerage (the Psion/Golden Dragon pattern). Unlike those two
@@ -1669,8 +1789,7 @@ function ataxiaBasher_bmThunderstorm(sp)
 
 	-- 30 Shin, and the pool is contested (infuse, SHIN AUGMENT). `thunderstormReserve`
 	-- keeps a configurable buffer back for them; 0 by default, i.e. spend down to empty.
-	local shin = (blademaster and blademaster.getShin and blademaster.getShin())
-		or (ataxia.vitals and tonumber(ataxia.vitals.class)) or 0
+	local shin = ataxiaBasher_shinNow()
 	if shin < (30 + (tonumber(ataxiaBasher.thunderstormReserve) or 0)) then return "" end
 
 	local nowT = (getEpoch and getEpoch()) or os.time()
@@ -1703,8 +1822,7 @@ function ataxiaBasher_bmBlizzard(sp)
 	local n = (M and M._denizenCount and M._denizenCount()) or 0
 	if n < (tonumber(ataxiaBasher.blizzardAt) or tonumber(ataxiaBasher.thunderstormAt) or 3) then return "" end
 
-	local shin = (blademaster and blademaster.getShin and blademaster.getShin())
-		or (ataxia.vitals and tonumber(ataxia.vitals.class)) or 0
+	local shin = ataxiaBasher_shinNow()
 	if shin < (30 + (tonumber(ataxiaBasher.thunderstormReserve) or 0)) then return "" end
 
 	local nowT = (getEpoch and getEpoch()) or os.time()

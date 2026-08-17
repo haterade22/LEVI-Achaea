@@ -2,6 +2,122 @@
 
 ---
 
+## 2026-08-12 - Blademaster: a shin budget, and SHIN PHOENIX (v4.7.269)
+
+### The infuse order
+
+`BM_INFUSE_ORDER` now leads with **lightning**: `{ "lightning", "fire", "ice", "void" }`.
+
+The old head was `fire` and it was never a damage judgement -- v4.7.186 introduced
+`ataxiaBasher_bmInfuse` to replace a hardcoded `infuse fire` and put fire first purely so an
+unaffected ripple behaved exactly as before. The class's own PvP offense had disagreed the whole
+time: `levi_scripts/blademaster/003_BrokenStar.lua` infuses LIGHTNING in every branch. The PvE
+basher was the odd one out. The literal last resort moved with the head, so it no longer
+contradicts the order it is meant to back up.
+
+### The shin budget
+
+`infuse` was **the only shin spender in `ataxiaBasher_blademasterBashing` with no arithmetic behind
+it** -- no cost check, no hold, no cooldown, no place in the one-spender rule -- and the only one
+that fired on *every* round. The other three all gate on a cost (`shin augment` on its amount, both
+storms on `shin >= 30 + thunderstormReserve`). There was no shin floor anywhere in the tree; the
+nearest thing, `thunderstormReserve`, defaults to 0 and covers two of the four spend sites.
+
+In the tower, infuse now requires `shin > ataxiaBasher.bmInfuseAt` (**90**). **90 is derived, not
+tuned:** Phoenix needs 80, so infusing only above 90 leaves more than 80 afterwards -- an infuse can
+never be the action that takes Phoenix off the table.
+
+Three deliberate choices:
+
+* **The gate lives in the CALLER, not in `ataxiaBasher_bmInfuse`.** That function stays a pure
+  element-chooser; giving it a shin/area dependency would force every test in its suite to mock both.
+* **Tower-scoped** (`inMnemosyne`) -- outside it nothing is being saved for, so general bashing keeps
+  infusing every round and the blast radius stays where the ask was.
+* **The infuse's cost is NOT verified.** The figure 5 appears only in
+  `.claude/classes/blademaster.md` with no AB capture behind it, and the only code enforcing that
+  arithmetic is the PvP airfist gate (`25 = 20 + 5`) as an opaque total. So 90 is a tunable with its
+  derivation written down rather than `80 + a constant we would be inventing`. The class doc now says
+  so where the number lives.
+
+Per the user's decision the floor is **unconditional**: a cutting-reduction affix does not buy
+permission to infuse below it. Since Blademaster's unenchanted damage *is* physical cutting, that
+means knowingly swinging into a resistance to keep Phoenix available -- so the sweep **echoes once
+per ripple** when that combination occurs. A deliberate trade the log never mentions is
+indistinguishable from a bug.
+
+### SHIN PHOENIX (AB 321)
+
+Requires 80 shin, **consumes all of it**, cleanses almost every affliction **and returns us to full
+health** -- the heal is user-confirmed and is *not* in the AB text, which is what makes it worth
+automating. Entirely absent from the tree before now: the only `phoenix` trigger,
+`passive_active/010`, is the OPPONENT-side line for an enemy Blademaster.
+
+Fires at `hpp <= ataxiaBasher.phoenixAt` (**10**) with 80+ shin.
+
+* **`hpp > 0` is not redundant.** A zero reading is BLACKOUT -- vitals unknown, not nearly dead --
+  which `ataxiaBasher_dangerLevel` already encodes as `if hpp == 0 then return "wait" end`. A bare
+  `hpp <= 10` empties the whole shin pool every time we lose sight of our own health.
+* **First in the round**, setting `shinSpent`. There is no round planner here; shin priority is
+  hardcoded position, and since Phoenix takes the whole pool it cannot share a round.
+* No cooldown stamp and no confirm line: consuming all shin makes the `>= 80` gate its own re-fire
+  guard, and our cast line is uncaptured.
+
+Noted for later rather than changed: because it is a full heal it is worth **more** the earlier it
+fires. `escapeAt` and `panicAt` are both 35, so by 10% the ladder has already spent the tumble and
+the ground it cleared -- a Phoenix at 35 would *prevent* that where one at 10 only *rescues* it. It
+is `ataxiaBasher.phoenixAt` precisely so raising it is one word.
+
+### Two latent traps that putting Phoenix first exposed
+
+Neither was style, and both were invisible while the augment block was the first thing in the round:
+
+1. **No `shinSpent` check** -- nothing could precede it, so it never needed one.
+2. **`command = "shin augment "..`** -- an **assignment**, not an append, which silently destroys
+   anything already in the buffer.
+
+Together they meant the phoenix was built and then thrown away, and the round went out with the
+augment alone. **A "one spender per round" rule enforced by position alone breaks the moment the
+positions change.**
+
+### Bladed Reflexes: 1 shin is 1 second
+
+User-confirmed, and it rewrites the block: `bmAugmentAmount` defaulted to **3**, so the boon's 20%
+damage reduction was being bought **three seconds at a time** -- indistinguishable from not holding
+it, and the explanation for the v4.7.126 live log where `shin augment 1` visibly dissipated 12ms
+later. Default is now **20**. The augment is **exempt from the shin floor** by explicit user rule,
+and the ordering resolves the conflict on its own: Phoenix is evaluated above it, so at 10% HP the
+augment never runs, and only while healthy can it take us under Phoenix's floor -- which is exactly
+when that does not matter.
+
+The attempt-hold also went 5s -> **7s**: `.claude/classes/blademaster.md` records a live-observed
+~6s re-augment lockout whose refusal line has no trigger, so a 5s hold walked into a rejection
+nothing could see.
+
+### One accessor
+
+`ataxiaBasher_shinNow()` replaces the two-line shin expression that was copy-pasted verbatim at
+three call sites (and this change would have made four). The `ataxia.vitals.class` fallback those
+copies carried is **not** reproduced, because it was dead: `blademaster.getShin()` returns `0` rather
+than nil and `0` is truthy, so the `or` branch could never run. That mattered -- it hid the failure
+mode, where a reworded `Shin:` charstat reads 0, the augment and both storms gate themselves off, and
+(before this version) infuse carried on firing unpriced.
+
+**The tests were the only consumer of that dead branch**, injecting shin via `ataxia.vitals.class`.
+They now stub `blademaster.getShin`, which is the idiom `test_bm_infuse.lua` already used -- so they
+exercise the path production actually takes.
+
+### Tests
+
+**1435 -> 1446.** Eight deliberate breaks, seven caught. The eighth -- assignment instead of append
+in the augment -- **cannot be pinned**, because the `shinSpent` guard beside it already prevents the
+augment running after Phoenix, so the difference is unobservable from outside. It is kept as
+hardening and recorded here as unpinnable rather than covered by a test that would not fail.
+
+Expectation churn was large and deliberate: `test_bm_infuse.lua` and `test_basher_blademaster.lua`
+between them held ~20 assertions pinning fire-first, the 3-shin default, and the dead shin fallback.
+
+---
+
 ## 2026-08-12 - Aeon wear-off was already wired; the TESTS were lying (v4.7.268)
 
 `Celepharn, High Priest of Life abruptly begins to move at normal speed again.` -- the aeon

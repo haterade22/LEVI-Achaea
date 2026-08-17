@@ -722,7 +722,17 @@ legslash; there is no centreslash-up parry-bypass fallback in the double-prep pa
 
 ### Shin Mechanics
 - **Generation**: 8 per strike normally, 12 in Sanya stance
-- **Infuse cost**: 5 shin
+- **Infuse cost**: 5 shin -- **UNVERIFIED.** This figure appears only here, with no AB capture
+  behind it; the sole code enforcing the arithmetic is the PvP airfist gate (`25 = 20 + 5`) as an
+  opaque total, and no AB text for INFUSE exists anywhere in the tree. The PvE shin budget
+  (v4.7.269) deliberately does NOT compute its threshold from this number.
+- **Augment**: **1 shin = 1 SECOND of augment** (user-confirmed 2026-08-12). `bmAugmentAmount`
+  defaults to 20 for that reason; the old default of 3 bought three seconds of the boon's 20% DR.
+- **SHIN PHOENIX** (AB 321): requires 80 shin, **consumes ALL of it**, cleanses almost every
+  affliction **and restores full health** (the heal is user-confirmed and NOT in the AB text). The
+  strongest button in the kit, and what the PvE infuse budget exists to protect. Auto-fires at
+  `ataxiaBasher.phoenixAt` (10% HP) with 80+ shin. Our own cast line is uncaptured -- the only
+  phoenix trigger in the tree is the opponent-side line.
 - **Airfist cost**: 20 shin
 - **Total for Airfist**: 25 shin (20 + 5 for infuse)
 - **Airfist cooldown**: NONE (only shin requirement)
