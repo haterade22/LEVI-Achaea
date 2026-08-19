@@ -90,12 +90,40 @@ describe("setStackAff() — no spurious keys", function()
     expect(count).toBe(1)
   end)
 
-  it("unrecognised aff name produces no key (empty string tow)", function()
+  it("unrecognised aff name produces NO key at all", function()
     ataxia.afflictions = {}
     setStackAff("totallymadeupaffliction")
-    -- tow = "" so afflictions[""] gets set — this is a pre-existing behaviour;
-    -- the test documents it rather than asserting it shouldn't happen.
-    expect(ataxia.afflictions[""]).toBeGreaterThan(-1)
+    -- Used to write ataxia.afflictions[""] (the substring scan left tow = ""), which
+    -- rTabSize counts -- so the prompt's affliction bracket printed forever off a name we
+    -- do not model. The old test documented that rather than asserting against it.
+    local count = 0
+    for _ in pairs(ataxia.afflictions) do count = count + 1 end
+    expect(count).toBe(0)
+  end)
+
+  it("setafflictionstackslevi() zeroes every stacking aff", function()
+    -- Rewritten to iterate the shared list. The hand-written copy it replaced was MISSING
+    -- temperedcholeric, so an Alchemist's fourth humour was never reset, and carried a
+    -- `burns` key nothing else in the package uses.
+    dofile("src_new/scripts/levi_ataxia/levi/ataxia/015_Set_Affliction_Stacks_to_Zero.lua")
+    ataxia.afflictions = { asthma = true }
+    setafflictionstackslevi()
+    for _, name in ipairs(EXPECTED_STACK_AFFS) do
+      expect(ataxia.afflictions[name]).toBe(0)
+    end
+    expect(ataxia.afflictions.asthma).toBeTrue()  -- non-stack affs are untouched
+    expect(ataxia.afflictions.burns).toBeNil()
+  end)
+
+  it("the shared stack-aff list is the one setStackAff uses", function()
+    -- ataxia_stackAffs() is now the single owner; 015_Set_Affliction_Stacks_to_Zero
+    -- iterates it too. This pins the two against EXPECTED_STACK_AFFS above.
+    expect(#ataxia_stackAffs()).toBe(#EXPECTED_STACK_AFFS)
+    for _, name in ipairs(EXPECTED_STACK_AFFS) do
+      local found = false
+      for _, x in ipairs(ataxia_stackAffs()) do if x == name then found = true end end
+      expect(found).toBeTrue()
+    end
   end)
 end)
 

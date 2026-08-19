@@ -46,6 +46,13 @@ local PAIRS = {
 
 local function effective(aff) return BASH[aff] or DEFAULTS[aff] end
 
+-- Stack overrides that sit at <= 2 in the PvP table because of a KILL CONDITION (broken
+-- head + burning 5 = the Paladin's Damnation), NOT because they stop us acting. A denizen
+-- cannot perform Damnation, so PvE deliberately flattens them back to the family base.
+-- Keep this list minimal: every name in it is one the "never demoted" invariant stops
+-- guarding.
+local PVP_KILL_ESCALATION = { burning4 = true, burning5 = true, pyre3 = true }
+
 describe("bash curing profile -- delta table integrity", function()
   it("every delta names an affliction the default table knows", function()
     -- Guards the crippled*/broken*/damaged* naming split the codebase is genuinely
@@ -118,7 +125,7 @@ describe("bash curing profile -- the orderings that ARE the profile", function()
     -- Anything the PvP table put at 2 or better is a total-incapacitation or ticking-
     -- death aff (aeon, prone, the writhe band, heartseed). PvE does not change that.
     for aff, val in pairs(DEFAULTS) do
-      if val <= 2 and BASH[aff] and BASH[aff] > val then
+      if val <= 2 and BASH[aff] and BASH[aff] > val and not PVP_KILL_ESCALATION[aff] then
         error(aff .. " demoted from " .. val .. " to " .. BASH[aff] .. " -- it blocks all action")
       end
     end
@@ -134,10 +141,114 @@ describe("bash curing profile -- the orderings that ARE the profile", function()
     end
   end)
 
+  it("no burn level outbids a limb for the salve balance in PvE", function()
+    -- This is what the burning4/burning5 deltas buy. Burning is salve-cured, so inheriting
+    -- the PvP escalation (burning5 = 2) would put a DoT ahead of a broken arm that is
+    -- refusing every attack -- the exact failure this profile was written to fix.
+    for _, aff in ipairs({"burning", "burning4", "burning5"}) do
+      for _, limb in ipairs(LIMBS) do
+        if not (effective(limb) < effective(aff)) then
+          error(aff .. " (" .. effective(aff) .. ") must not outrank " ..
+            limb .. " (" .. effective(limb) .. ")")
+        end
+      end
+    end
+  end)
+
   it("leaves the Mnemosyne truelock affs alone", function()
     -- The Seasone phial truelock is asthma + anorexia, and the counter in mnemosyne/004
     -- re-touches tree only while BOTH persist. Demoting asthma would lengthen it.
     expect(BASH["asthma"]).toBeNil()
+  end)
+end)
+
+describe("stacking afflictions -- base and override", function()
+  -- Achaea (2026-08-19): a BARE `curing priority <aff> <n>` is the BASE for every stack
+  -- count with no entry of its own; `<aff><N> <n>` overrides at exactly N. These pin the
+  -- invariants that new rule creates.
+  local STACK_AFFS = {
+    horror = true, pyre = true, unweavingspirit = true, unweavingmind = true,
+    unweavingbody = true, temperedsanguine = true, temperedcholeric = true,
+    temperedmelancholic = true, temperedphlegmatic = true, pressure = true,
+    crackedribs = true, torntendons = true, skullfractures = true,
+    wristfractures = true, burning = true, crescendo = true,
+  }
+
+  local function overrides(tbl)
+    local out = {}
+    for aff, val in pairs(tbl) do
+      local base, n = aff:match("^(%a+)(%d+)$")
+      if base then out[#out + 1] = { aff = aff, base = base, n = tonumber(n), val = val } end
+    end
+    table.sort(out, function(a, b) return a.aff < b.aff end)
+    return out
+  end
+
+  it("every stack override has a BASE entry to fall back to", function()
+    -- THE invariant the new semantics create. Deleting a base out from under its overrides
+    -- silently hands every unenumerated level back to the server's own default.
+    for _, o in ipairs(overrides(DEFAULTS)) do
+      if DEFAULTS[o.base] == nil then
+        error(o.aff .. " overrides a base (" .. o.base .. ") that is not in the table")
+      end
+    end
+  end)
+
+  it("every stack override names an affliction we model as stacking", function()
+    -- Catches `burnings5` and friends. Nothing parses a REJECTED curing priority, so a
+    -- typo here is invisible in game.
+    for _, o in ipairs(overrides(DEFAULTS)) do
+      if not STACK_AFFS[o.base] then
+        error(o.aff .. " is not a known stacking affliction")
+      end
+    end
+  end)
+
+  it("no override repeats its own base", function()
+    -- The direct analogue of "no delta repeats the default": an override equal to the base
+    -- is dead weight, and dead weight at every level is what made the bases unreachable.
+    for _, o in ipairs(overrides(DEFAULTS)) do
+      if DEFAULTS[o.base] == o.val then
+        error(o.aff .. " is " .. o.val .. ", the same as its base -- drop it")
+      end
+    end
+  end)
+
+  it("escalation is monotone -- more stacks is never LESS urgent", function()
+    -- Encodes "it gets worse as it stacks" as a machine check. Would have caught the old
+    -- shape, where a base of 19 sat above five levels at 9.
+    local byBase = {}
+    for _, o in ipairs(overrides(DEFAULTS)) do
+      byBase[o.base] = byBase[o.base] or {}
+      table.insert(byBase[o.base], o)
+    end
+    for base, list in pairs(byBase) do
+      table.sort(list, function(a, b) return a.n < b.n end)
+      local prev = DEFAULTS[base]
+      for _, o in ipairs(list) do
+        if o.val > prev then
+          error(base .. o.n .. " (" .. o.val .. ") is LESS urgent than the level below it (" ..
+            prev .. ")")
+        end
+        prev = o.val
+      end
+    end
+  end)
+
+  it("resolves a level with no override of its own to the base", function()
+    -- burning3 has no entry; the effective priority is the base, and that is what
+    -- ataxia_restorePrio must write rather than concatenating nil.
+    expect(ataxia_defaultPrioAff("burning3")).toBe(DEFAULTS["burning"])
+    expect(ataxia_defaultPrioAff("burning5")).toBe(DEFAULTS["burning5"])
+    expect(ataxia_defaultPrioAff("nosuchaff9")).toBeNil()
+    expect(ataxia_defaultPrioAff(nil)).toBeNil()
+  end)
+
+  it("ataxia_restorePrio survives a name the table does not know", function()
+    local ok = pcall(ataxia_restorePrio, "brokenhead")
+    expect(ok).toBeTrue()
+    ok = pcall(ataxia_restorePrio, "burning3")
+    expect(ok).toBeTrue()
   end)
 end)
 
@@ -280,6 +391,12 @@ end)
 describe("bash curing profile -- stored-priority write guard", function()
   local function armed(on)
     mock.reset()
+    -- The 4/sec throttle carries `sentThisSecond` across tests, and the mock clock does not
+    -- advance -- so without this the window never rolls and a later test in the file starts
+    -- with the budget already spent, queueing its sends instead of making them.
+    ataxia.prioThrottle.commands = {}
+    ataxia.prioThrottle.sentThisSecond = 0
+    ataxia.prioThrottle.windowStart = 0
     ataxia.settings.bashcuring = {
       enabled = true, installed = true, setname = "bash", restoreTo = "normal", active = on,
     }
@@ -306,10 +423,26 @@ describe("bash curing profile -- stored-priority write guard", function()
     expect(#mock.sent_commands).toBe(2)
   end)
 
+  it("drops a STACK-SUFFIXED priority while the bash set is active", function()
+    -- The headline hole: the pattern was letters-only, so `burning5` did not match and the
+    -- write sailed into whichever curingset was active. Reachable from the UI, since
+    -- trigger 717 makes `burning5` its own row in ataxia_showPrios.
+    armed(true)
+    ataxia_sendCuringPriority("curing priority burning5 2", false)
+    expect(#mock.sent_commands).toBe(0)
+  end)
+
+  it("drops a batch mixing a base and an override", function()
+    armed(true)
+    ataxia_sendCuringPriority("curing priority burning 9;curing priority burning5 2", false)
+    expect(#mock.sent_commands).toBe(0)
+  end)
+
   it("passes everything through when the bash set is not active", function()
     armed(false)
     ataxia_sendCuringPriority("curing priority paralysis 25", false)
-    expect(#mock.sent_commands).toBe(1)
+    ataxia_sendCuringPriority("curing priority burning5 2", false)
+    expect(#mock.sent_commands).toBe(2)
   end)
 end)
 

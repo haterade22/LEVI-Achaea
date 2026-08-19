@@ -99,6 +99,12 @@ blademaster.state = {
   bladetwistCount = 0,        -- Number of bladetwists since impaleslash
   -- Flamefist tracking (Quad-Prep ice path)
   flamefistDone = false,       -- Flamefist sent this fight (reset on target change)
+  -- Prompt retry (v4.7.275) -- see blademaster.retryTick
+  autoRetry = true,           -- `bmretry` toggles
+  lastManualAt = nil,         -- epoch of the last bmd/bmdq/bmbs/bmgroup keypress
+  -- Suppression echo (v4.7.275)
+  lastSuppressAt = nil,
+  lastSuppressReason = nil,
   -- Other
   lastHamstringTime = 0,
   compassDamage = 14.9,
@@ -113,6 +119,7 @@ blademaster.config = {
   proneTimerDuration = 9,     -- Seconds from salve to stand
   balanceslashThreshold = 4,  -- Switch to balanceslash on this attack number
   brokenstarBleedThreshold = 700,  -- Bleeding level for brokenstar execution
+  retryWindow = 12,           -- seconds after the last manual press that retryTick keeps swinging
 }
 
 --------------------------------------------------------------------------------
@@ -139,17 +146,55 @@ end
 -- Source: DWC knightSendAttack() + DWB dwbRunie.sendAttack()
 --------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------
+-- SUPPRESSION ECHO (v4.7.275)
+--
+-- Every guard below used to `return` in silence, and the [BM ...] status block prints in
+-- runDoublePrep BEFORE the send -- so in the 2026-08-19 Grulk log the screen reported
+-- "6 hits to leg double-break" 89 times while only 8 commands reached the server, and the
+-- log could not say which guard ate the other 81. Reconstructing it took two passes over
+-- 2,819 lines. One line per suppression turns that into a glance.
+--
+-- Debounced per-REASON, not globally: repeated identical suppressions collapse, but a change
+-- of reason still prints immediately, which is the transition worth seeing.
+--------------------------------------------------------------------------------
+function blademaster.suppressed(reason)
+  local now = (getEpoch and getEpoch()) or os.time()
+  local st = blademaster.state
+  if st.lastSuppressReason == reason and st.lastSuppressAt
+     and (now - st.lastSuppressAt) < 1.0 then
+    return
+  end
+  st.lastSuppressAt = now
+  st.lastSuppressReason = reason
+  cecho("\n<red>[BM]<reset> attack suppressed: <yellow>" .. tostring(reason))
+end
+
 function blademaster.sendAttack(cmd)
   if not cmd or cmd == "" then return end
 
-  -- Lock break check (shared system)
+  -- Lock break check (shared system).
+  --
+  -- v4.7.275: this used to return UNCONDITIONALLY, which produced the 2026-08-19 deadlock.
+  -- ataxia_lockBreak() does nothing when ataxia_canActive() is false, and Blademaster's
+  -- blocker is WEARINESS -- which the Sentinel kept up for the last 19 seconds of the fight.
+  -- So the offense deferred to a lock-break that could not run, the lock-break declined
+  -- because of weariness, and we stood still for 86 seconds while he broke our head.
+  --
+  -- Defer ONLY when the cure can actually go out. When it cannot, swinging is strictly
+  -- better than doing nothing at all.
   if ataxia_needLockBreak and ataxia_needLockBreak() then
     if ataxia_lockBreak then ataxia_lockBreak() end
-    return
+    if ataxia_canActive and ataxia_canActive() then
+      blademaster.suppressed("breaking lock (active cure going out)")
+      return
+    end
+    -- fall through and attack: the lock-break is blocked, standing still helps nobody
   end
 
   -- Target presence check
   if ataxia and ataxia.playersHere and not table.contains(ataxia.playersHere, target) then
+    blademaster.suppressed("target '" .. tostring(target) .. "' not in ataxia.playersHere")
     return
   end
 
@@ -162,6 +207,34 @@ function blademaster.sendAttack(cmd)
   else
     send("queue addclear freestand " .. cmd)
   end
+end
+
+--------------------------------------------------------------------------------
+-- QUEUE RECALL ON A DEFENCE RAISED MID-SWING (v4.7.275)
+--
+-- selectAttackDoublePrep / QuadPrep / Brokenstar / Group all decide raze-vs-attack at DISPATCH
+-- time. Once `queue addclear freestand <cmd>` is with the server, a defence raised afterwards is
+-- eaten -- and `queue addclear` cannot be recalled by the dispatch that made it.
+--
+-- Both halves of that cost us in the 2026-08-19 Grulk log:
+--   * 09:58:07 -- shield went up after we queued; the swing rebounded off it and stunned us.
+--   * 09:58:34 -- [REB] printed 830ms before our armslash landed. It reflected for 18.1% into
+--     our OWN left arm, which is the hit that broke it: his six throws made 88.2%, not a break,
+--     and our 18.1% took it to 106.3% -- a break AND a second restoration.
+--
+-- `addclear` REPLACES rather than appends, so this is a one-command correction with no new
+-- state. Converting can still whiff if the defence drops again before our balance returns (that
+-- is the "to no effect" line, twice in the log) -- but a whiffed raze costs only the swing,
+-- where eating a rebound costs the swing, 615 damage, and a self-inflicted limb break.
+--------------------------------------------------------------------------------
+function blademaster.onTargetDefenceUp(def)
+  if not blademaster.state.attackInFlight then return end
+  if not target or target == "" then return end
+  if ataxia_isClass and not ataxia_isClass("blademaster") then return end
+  if ataxia and ataxia.playersHere and not table.contains(ataxia.playersHere, target) then return end
+
+  send("queue addclear freestand raze " .. target)
+  cecho("\n<cyan>[BM]<reset> " .. tostring(def) .. " raised mid-swing -- pending attack converted to <yellow>RAZE<reset>.")
 end
 
 --------------------------------------------------------------------------------
@@ -643,6 +716,61 @@ end
 -- reset, and aeon checks apply uniformly across all strategies.
 --------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------
+-- PROMPT RETRY (v4.7.275)
+--
+-- PvP Blademaster offense is 100% keypress-driven. ataxia_promptCommands() re-dispatches every
+-- prompt ONLY when ataxiaBasher.enabled -- the PvE path -- so in PvP a suppressed or
+-- server-refused attack is simply lost until the next press, silently.
+--
+-- In the 2026-08-19 Grulk log that produced a 30-second stretch (09:59:10 -> 09:59:39) with
+-- zero dispatches at all, and 89 presses that yielded 10 outbound actions.
+--
+-- The window is deliberately anchored to the last MANUAL press, not to the last run: press once
+-- and we keep swinging; stop pressing and it stops on its own inside `retryWindow`. That keeps
+-- the "attack only when I say so" contract while removing the "one press, one lost attack" tax.
+--------------------------------------------------------------------------------
+function blademaster.markManual()
+  blademaster.state.lastManualAt = (getEpoch and getEpoch()) or os.time()
+end
+
+-- MODE FLAP WARNING (v4.7.275). The 2026-08-19 log switched double -> quad -> double -> quad
+-- mid-fight. Each switch changes which limb group we prep, and the group left behind decays
+-- back to 0 -- the two productive arm swings (30.2%/30.2%) were abandoned and the legs
+-- (18.1%/12.1%) never advanced past the opening swing. Advisory only: the user may well mean
+-- it, and refusing a keypress mid-fight would be worse than a line of text.
+function blademaster.warnModeFlap(newMode)
+  if blademaster.state.mode == newMode then return end
+  local LL, RL = blademaster.getLL(), blademaster.getRL()
+  local LA, RA = blademaster.getLA(), blademaster.getRA()
+  if (LL + RL + LA + RA) <= 0 then return end
+  cecho(string.format(
+    "\n<yellow>[BM]<reset> mode <white>%s<reset> -> <white>%s<reset> with prep on the board"
+    .. " (legs %.1f/%.1f, arms %.1f/%.1f) -- the group you leave decays back to 0.",
+    tostring(blademaster.state.mode), tostring(newMode), LL, RL, LA, RA))
+end
+
+function blademaster.retryTick()
+  local st = blademaster.state
+  if not st.autoRetry then return end
+  if not st.lastManualAt then return end
+  if st.attackInFlight then return end
+  if not target or target == "" then return end
+  if ataxia_isClass and not ataxia_isClass("blademaster") then return end
+
+  local now = (getEpoch and getEpoch()) or os.time()
+  if (now - st.lastManualAt) > blademaster.config.retryWindow then return end
+
+  -- Cheap pre-checks so we do not rebuild a combo we cannot possibly send. `blademaster.run()`
+  -- and `sendAttack` still own the real guards; these only avoid the churn.
+  if canBals and not canBals() then return end
+  if affed then
+    if affed("prone") or affed("paralysis") or affed("aeon") then return end
+  end
+
+  blademaster.run()
+end
+
 function blademaster.run()
   -- Anti-desync: block re-dispatch while previous attack hasn't resolved (DWC pattern)
   if blademaster.state.attackInFlight then return end
@@ -662,10 +790,16 @@ function blademaster.run()
   end
 
   -- Aeon check (shared with shaman/serpent)
-  if ataxia.afflictions.aeon then return end
+  if ataxia.afflictions.aeon then
+    blademaster.suppressed("aeon")
+    return
+  end
 
-  -- Rebound hold gate (shared system — delays attack until rebound drops)
-  if reboundHold and reboundHold.gate(blademaster.run) then return end
+  -- Rebound hold gate (shared system - delays attack until rebound drops)
+  if reboundHold and reboundHold.gate(blademaster.run) then
+    blademaster.suppressed("rebound hold (waiting for our rebounding)")
+    return
+  end
 
   -- Target-change reset (DWB pattern: prevents stale Brokenstar state on new target)
   if blademaster.state.lastTarget ~= target then
@@ -888,12 +1022,16 @@ end
 
 -- Aliases for Double-Prep (thin wrappers → unified dispatch)
 function bmd()
+  blademaster.warnModeFlap("double")
   blademaster.state.mode = "double"
+  blademaster.markManual()
   blademaster.run()
 end
 
 function bmdispatch()
+  blademaster.warnModeFlap("double")
   blademaster.state.mode = "double"
+  blademaster.markManual()
   blademaster.run()
 end
 
@@ -1166,12 +1304,16 @@ end
 
 -- Aliases for Quad-Prep (thin wrappers → unified dispatch)
 function bmdq()
+  blademaster.warnModeFlap("quad")
   blademaster.state.mode = "quad"
+  blademaster.markManual()
   blademaster.run()
 end
 
 function bmdispatchquad()
+  blademaster.warnModeFlap("quad")
   blademaster.state.mode = "quad"
+  blademaster.markManual()
   blademaster.run()
 end
 
@@ -1502,12 +1644,16 @@ end
 
 -- Aliases for Brokenstar (thin wrappers → unified dispatch)
 function bmbs()
+  blademaster.warnModeFlap("brokenstar")
   blademaster.state.mode = "brokenstar"
+  blademaster.markManual()
   blademaster.run()
 end
 
 function bmdispatchbs()
+  blademaster.warnModeFlap("brokenstar")
   blademaster.state.mode = "brokenstar"
+  blademaster.markManual()
   blademaster.run()
 end
 
@@ -1648,7 +1794,9 @@ end
 
 -- Aliases for Group
 function bmgroup()
+  blademaster.warnModeFlap("group")
   blademaster.state.mode = "group"
+  blademaster.markManual()
   blademaster.run()
 end
 
@@ -2096,28 +2244,37 @@ end
 blademaster._aliases = {}
 
 if tempAlias then
-  blademaster._aliases.bmd = tempAlias("^bmd$", function()
-    blademaster.state.mode = "double"
-    blademaster.run()
-  end)
+  -- v4.7.275: these delegate to the named functions instead of re-implementing them, so the
+  -- markManual() stamp that drives blademaster.retryTick cannot be missed by whichever entry
+  -- point the user happens to have bound.
+  blademaster._aliases.bmd = tempAlias("^bmd$", function() bmd() end)
 
-  blademaster._aliases.bmdq = tempAlias("^bmdq$", function()
-    blademaster.state.mode = "quad"
-    blademaster.run()
-  end)
+  blademaster._aliases.bmdq = tempAlias("^bmdq$", function() bmdq() end)
 
-  blademaster._aliases.bmbs = tempAlias("^bmbs$", function()
-    blademaster.state.mode = "brokenstar"
-    blademaster.run()
-  end)
+  blademaster._aliases.bmbs = tempAlias("^bmbs$", function() bmbs() end)
 
-  blademaster._aliases.bmgroup = tempAlias("^bmgroup$", function()
-    blademaster.state.mode = "group"
-    blademaster.run()
-  end)
+  blademaster._aliases.bmgroup = tempAlias("^bmgroup$", function() bmgroup() end)
 
   blademaster._aliases.bmreset = tempAlias("^bmreset$", function()
     blademaster.fullReset()
+  end)
+
+  blademaster._aliases.bmretry = tempAlias("^bmretry(?: (on|off|\\d+))?$", function()
+    local arg = matches[2]
+    if arg == "on" then
+      blademaster.state.autoRetry = true
+    elseif arg == "off" then
+      blademaster.state.autoRetry = false
+      blademaster.state.lastManualAt = nil
+    elseif tonumber(arg) then
+      blademaster.config.retryWindow = tonumber(arg)
+    else
+      blademaster.state.autoRetry = not blademaster.state.autoRetry
+      if not blademaster.state.autoRetry then blademaster.state.lastManualAt = nil end
+    end
+    cecho("\n<cyan>[BM]<reset> Prompt retry: "
+      .. (blademaster.state.autoRetry and "<green>ON" or "<red>OFF")
+      .. "<reset> (window " .. blademaster.config.retryWindow .. "s)")
   end)
 
   blademaster._aliases.bmstatus = tempAlias("^bmstatus$", function()

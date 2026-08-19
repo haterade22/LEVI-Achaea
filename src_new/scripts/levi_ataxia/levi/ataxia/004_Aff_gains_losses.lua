@@ -77,31 +77,84 @@ function gotUnknownAff()
 end
 
 function affed(what)
-	if ataxia.afflictions[what:lower()] then
-		return true
-	else
-		return false
-	end
+	local v = ataxia.afflictions[what:lower()]
+	-- 0 IS TRUTHY IN LUA. Every stacking affliction sits at 0 once cured (lostAff zeroes
+	-- rather than nils, so the prompt's numeric renderer and checkDamnationThreat's
+	-- `or 0` both keep working), and setafflictionstackslevi plants sixteen zeroes on
+	-- reset -- so a bare truthiness test reported a burn we had just put out.
+	if v == nil or v == false then return false end
+	if type(v) == "number" then return v > 0 end
+	return true
 end
 
-function setStackAff(aff, num)
-	local affs = {"horror", "pyre", "unweavingspirit", "unweavingmind", "unweavingbody", "temperedsanguine", "temperedcholeric",
-    "temperedmelancholic", "temperedphlegmatic", "pressure", "crackedribs", "torntendons",
-    "skullfractures", "wristfractures", "burning", "crescendo"}
-	local tow = ""
-	for _, x in pairs(affs) do
-		if aff:find(x) then
-			tow = x
-		end
+-- Stacking afflictions arrive from GMCP as <base><count>: burning3, horror5, pyre2.
+-- ONE owner for the list -- 015_Set_Affliction_Stacks_to_Zero.lua resets the same names
+-- and test_combat_tables.lua pins them, so a third copy is a drift waiting to happen.
+-- Deliberately a file-local behind an accessor rather than a field on ataxiaTables: that
+-- namespace is assigned wholesale in places, and a list that can be silently emptied by an
+-- unrelated `ataxiaTables = {...}` would turn the reset below into a quiet no-op.
+local STACK_AFFS = {
+  "horror", "pyre", "unweavingspirit", "unweavingmind", "unweavingbody",
+  "temperedsanguine", "temperedcholeric", "temperedmelancholic", "temperedphlegmatic",
+  "pressure", "crackedribs", "torntendons", "skullfractures", "wristfractures",
+  "burning", "crescendo",
+}
+
+-- Returns a COPY. The point of a single owner is that nobody else can change it, and
+-- handing out the live table would let any caller empty the list that drives
+-- setafflictionstackslevi.
+function ataxia_stackAffs()
+	local out = {}
+	for i, v in ipairs(STACK_AFFS) do out[i] = v end
+	return out
+end
+
+-- The afflictions that can change a Damnation verdict: both kill routes plus the broken
+-- head they share. Kept beside the stack list because the burn route IS a stack level.
+DAMNATION_AFFS = {
+  pyre = true, burning = true, guilt = true, spiritburn = true,
+  damagedhead = true, brokenhead = true, mangledhead = true,
+}
+
+-- Returns base, count -- or nil when the name is not a stacking affliction.
+-- A bare name decodes to count 1: that is what the server sends at one stack.
+--
+-- The old test was `tonumber(string.sub(aff, -2, -2))` -- the SECOND-TO-LAST character --
+-- which is nil for every single-digit suffix ("burning3" tests "g") and returns the TENS
+-- digit for a two-digit one. So the stack path never ran for the names Achaea actually
+-- sends, and gotAff stored a BOOLEAN under the suffixed key instead. Three silent
+-- consequences, none of which announced itself:
+--   * the prompt burn counter never rendered -- numericAffDisplay (005) keys on the BARE
+--     name, so `afflictions.burning3 = true` matched nothing;
+--   * checkDamnationThreat read `ataxia.afflictions.burning or 0` as permanently 0, i.e.
+--     the Paladin kill-condition alarm was blind at the source;
+--   * S._afflicted (mnemosyne/009) counts `v == true` and parkedAff cannot excuse a
+--     suffixed key, so one `burning3 = true` held the recovery hover to its full 60s cap
+--     for the rest of a fire ripple -- the manaleech bug a third time.
+--
+-- Matching the base by EQUALITY rather than the old `aff:find(x)` substring scan also
+-- removes an ordering hazard: that loop kept the LAST match, so any future affliction
+-- whose name merely CONTAINED a stack name would have been decoded as one.
+function ataxia_stackAff(aff)
+	if type(aff) ~= "string" then return nil end
+	local base, digits = aff:lower():match("^(%a+)(%d*)$")
+	if not base then return nil end
+	for _, x in ipairs(STACK_AFFS) do
+		if base == x then return base, tonumber(digits) or 1 end
 	end
-	
-	if num then
-		ataxia.afflictions[tow] = 0
-	elseif tonumber( string.sub(aff, -2, -2) ) then
-		ataxia.afflictions[tow] = tonumber(string.sub(aff, -2, -2))
-	else
-		ataxia.afflictions[tow] = 1
-	end
+	return nil
+end
+
+-- `zero` is retained for the tests and for any caller that wants the reset shape, but
+-- lostAff deliberately does NOT use it: the removal rule there is conditional (zero only
+-- when the removed count is the one still held), which a boolean flag cannot express.
+function setStackAff(aff, zero)
+	local base, count = ataxia_stackAff(aff)
+	-- An unrecognised name used to fall through with tow = "" and write
+	-- ataxia.afflictions[""] -- a key rTabSize counts, so the prompt's affliction bracket
+	-- printed forever off a name we did not even model.
+	if not base then return end
+	ataxia.afflictions[base] = zero and 0 or count
 end
 
 function afflictionList()
@@ -113,17 +166,32 @@ function afflictionList()
 	ataxia.afflictions = {}
 	sent_diagnose = nil
 
+	-- The herb-stack counters are DERIVED from ataxia.afflictions, and Stack_My_Affs only
+	-- ever steps them by one. This handler is the single place the affliction table is
+	-- rebuilt from scratch, so without a matching reset every cure that follows decrements a
+	-- count whose gain was never recorded and the numbers walk away from reality. Latent
+	-- until v4.7.274 -- lostAff used to hand Stack_My_Affs the gmcp TABLE, which matched
+	-- nothing, so the decrement path had never run.
+	if Algedonic and Algedonic.mystack then
+		for herb in pairs(Algedonic.mystack) do Algedonic.mystack[herb] = 0 end
+	end
+
 	ataxia.affCures = ataxia.affCures or {} -- reference: server's cure command per affliction (Char.Afflictions.cure)
 	for _, affl in pairs(affs) do
 		local aff = affl.name
 		if affl.cure then ataxia.affCures[aff:lower()] = affl.cure end
 		if not table.contains(ignore, aff:lower()) then
-			if tonumber( string.sub(aff:lower(), -2, -2) ) then
-				setStackAff(aff:lower())
+			local base = ataxia_stackAff(aff)
+			if base then
+				setStackAff(aff)
 			else
-				ataxia.afflictions[aff:lower()] = true
-				raiseEvent("aff gained", aff:lower())
+				base = aff:lower()
+				ataxia.afflictions[base] = true
+				raiseEvent("aff gained", base)
 			end
+			-- Counted ONCE per affliction, not once per stack: the herb counters measure how
+			-- many afflictions contend for a cure balance, and a five-stack burn is still one.
+			if Algedonic and Algedonic.Stack_My_Affs then Algedonic.Stack_My_Affs(true, base) end
 		end
   Algedonic.AffCount = Algedonic.Count_My_Affs() 
 	end
@@ -140,7 +208,7 @@ function gotAff()
 		ataxia.affCures[aff:lower()] = gmcp.Char.Afflictions.Add.cure
 	end
 	if not table.contains(ignore, aff) then
-  	if tonumber( string.sub(aff, -2, -2) ) then
+  	if ataxia_stackAff(aff) then
 			setStackAff(aff)
 		else
 			ataxia.afflictions[aff:lower()] = true
@@ -270,23 +338,55 @@ function gotAff()
 	end
   --Are we close to being locked where we need to hit our active ability?
 	ataxia_lockBreak()
-	raiseEvent("aff gained", aff)
+
+-- Downstream consumers key on the BARE name. ApplySwaps tests `aff == "burning"` and
+-- Stack_My_Affs looks the name up in the herb tables (002_Wide_Groups lists bare names
+-- only), so every one of them was dead for stacking affs while we passed "burning3".
+local base = ataxia_stackAff(aff) or aff:lower()
+
+-- DAMNATION lives on the SELF path, and until v4.7.276 nothing put it there. Both the alarm
+-- (checkDamnationThreat) and the Paladin auto-detect hung off pali_addPyre/pali_addBurns,
+-- whose only reachable caller was tarAffed -- the TARGET path, driven by our own attack
+-- lines. So taking a burn or a pyre OURSELVES armed neither, and the "SHIELD NOW OR DIE"
+-- box could not fire however correct the burn level was.
+if base == "pyre" then
+  -- Only a Paladin can apply pyre (PERFORM PYRE), so this is a reliable class tell -- and
+  -- the one that still works when the target is not in NDB.
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.fightingPaladin = true
+end
+if DAMNATION_AFFS[base] and checkDamnationThreat then checkDamnationThreat() end
+
+	raiseEvent("aff gained", base)
   if zgui then zgui.showAffs() end
 
 -- Generic swaps first (persistent prio changes), then class-specific (one-shot prioaff)
-Algedonic.ApplySwaps(aff)
+Algedonic.ApplySwaps(base)
 Algedonic.Prioritize()
 -- Calculate Stacks (Kelp/Goldenseal/Bloodroot/etc)
-Algedonic.Stack_My_Affs(true, aff)
+Algedonic.Stack_My_Affs(true, base)
 end
 
 function lostAff()
 	local ignore = {"blindness", "deafness", "insomnia"}
 	local aff = gmcp.Char.Afflictions.Remove
 
-	if not table.contains(ignore, aff) then
-  	if tonumber( string.sub(aff[1]:lower(), -2, -2) ) and tonumber( string.sub(aff[1]:lower(), -2, -2) ) == 1 then
-			setStackAff(aff[1]:lower(), true)
+	local base, count = ataxia_stackAff(aff[1])
+	-- `table.contains(ignore, aff)` tested the gmcp TABLE against strings, so the ignore
+	-- list has never matched anything here. Inert either way (the same three are ignored on
+	-- the ADD side, so they are never in the table to remove) -- corrected rather than left
+	-- knowingly wrong.
+	if not table.contains(ignore, aff[1]) then
+		if base and aff[1]:lower() ~= base then
+			-- A SUFFIXED remove ends the stack only if it names the level we still hold.
+			-- Achaea sends Remove(old) + Add(new) when a stack CHANGES and the order is not
+			-- guaranteed, so zeroing unconditionally kills a live stack whenever the Add lands
+			-- first. `== count` is correct under both orderings; `<= count` is not -- it would
+			-- zero a real 3-stack on a 5 -> 3 drop. A missed Add leaves a stale value until the
+			-- next full Char.Afflictions.List push, which rebuilds the table from scratch.
+			if ataxia.afflictions[base] == count then ataxia.afflictions[base] = 0 end
+		elseif base then
+			ataxia.afflictions[base] = 0  -- a BARE remove is the full-cure signal
 		else
 			ataxia.afflictions[aff[1]:lower()] = nil
 		end
@@ -317,14 +417,9 @@ function lostAff()
   elseif aff[1] == "impatience" then
      myaeon = false
   -- impSnap removed: Serpents no longer deliver impatience via SNAP, they use Impulse instead
-  elseif aff[1] == "unweavingmind" then
-    ataxia.afflictions.unweavingmind = 0
-  elseif aff[1] == "unweavingbody" then
-    ataxia.afflictions.unweavingbody = 0
-  elseif aff[1] == "unweavingspirit" then
-    ataxia.afflictions.unweavingspirit = 0
-  elseif aff[1] == "crescendo" then
-    ataxia.afflictions.crescendo = 0
+  -- unweavingmind/body/spirit and crescendo used to be zeroed here by name. The generic
+  -- stack branch above does exactly that for all sixteen stacking affs, and a second owner
+  -- of the same state is what drifts.
   -- Darkshade cleanup - stop timer when cured. Same nil-index crash as the gain path
   -- (`ataxia.darkshadeTracker` was never created outside the two test fixtures), and here
   -- it aborted `raiseEvent("aff cured", ...)` and `Algedonic.RestoreSwaps` below -- so the
@@ -338,11 +433,14 @@ function lostAff()
     ataxiaTemp.darkshadePrioritized = nil
   end
 
-	raiseEvent("aff cured", aff[1])
+-- Same base-name rule as gotAff. Stack_My_Affs was also handed the gmcp TABLE rather than
+-- aff[1] -- a pre-existing bug that made the cure-stack count wrong for EVERY affliction.
+local cured = base or aff[1]:lower()
+	raiseEvent("aff cured", cured)
   if zgui then zgui.showAffs() end
-Algedonic.RestoreSwaps(aff[1])
+Algedonic.RestoreSwaps(cured)
 Algedonic.Prioritize()
-Algedonic.Stack_My_Affs(false, aff)
+Algedonic.Stack_My_Affs(false, cured)
 end
 
 registerAnonymousEventHandler("gmcp.Char.Afflictions.List", "afflictionList")

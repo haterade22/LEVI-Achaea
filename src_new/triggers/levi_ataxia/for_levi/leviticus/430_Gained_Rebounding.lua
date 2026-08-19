@@ -40,6 +40,12 @@ patterns:
 if target == matches[2] then
 	tAffs.rebounding = true
 		tarAffed("rebounding")
+	-- v4.7.275: the raze-vs-attack choice is made at dispatch time, so a rebounding raised after
+	-- we queued is eaten. On 2026-08-19 this line printed 830ms before our armslash landed; the
+	-- reflection put 18.1% into our own left arm and was the hit that broke it.
+	if blademaster and blademaster.onTargetDefenceUp then
+		blademaster.onTargetDefenceUp("Rebounding")
+	end
 	selectString(line,1)
 	setBold(true)
 	fg("NavajoWhite")

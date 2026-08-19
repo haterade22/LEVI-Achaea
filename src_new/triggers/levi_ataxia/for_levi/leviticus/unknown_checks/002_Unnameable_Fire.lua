@@ -40,7 +40,9 @@ local unn = {
 	"confusion",
 	"dementia",
 }
-for i=1, tonumber(matches[2]) do
+-- Clamped to #unn: the capture is whatever number the game printed, and a 4 would index
+-- past the table, then throw on `nil:upper()` and on `ataxia.afflictions[nil] = true`.
+for i = 1, math.min(tonumber(matches[2]) or 0, #unn) do
 	send("curing predict "..unn[i],false)
 	cecho("\n<red> + + <yellow>"..unn[i]:upper().."<red> + +")
 	ataxia.afflictions[unn[i]] = true

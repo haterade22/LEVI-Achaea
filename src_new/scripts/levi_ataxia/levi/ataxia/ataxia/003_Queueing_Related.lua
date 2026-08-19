@@ -35,12 +35,26 @@ function combatQueue()
   end
   
   --Jester AEON Cheese \ OCCIE Wheel Cheese \ Sentinel Riftlock \ Pariah Voyria Kill
+  --
+  -- THROTTLED (v4.7.275). This branch fires once per DISPATCH, and each pass sends `cq all`,
+  -- which clears our own attack queue. In the 2026-08-19 Grulk log `preventriftlock` stayed set
+  -- (it only clears on a successful shield, and a lemming stripped every shield in ~2s), so we
+  -- re-shielded and re-cleared repeatedly: six balances spent to block our own offense.
+  --
+  -- The throttle matters more since v4.7.275 added blademaster.retryTick, which dispatches on
+  -- the PROMPT rather than only on a keypress -- without it, an un-clearable cheese flag would
+  -- send `cq all` several times a second and offense could never resume.
   if jestercheese == true or myaeon == true or preventriftlock == true or stoplatency == true then
-    ataxiaEcho("CLASS CHEESE INCOMMING")
-    if gmcp.Char.Status.class == "Magi" then
-      send("cq all;cast reflection at me")
-    else
-    send("cq all;touch shield")
+    ataxiaTemp = ataxiaTemp or {}
+    local now = (getEpoch and getEpoch()) or os.time()
+    if not ataxiaTemp.cheeseAt or (now - ataxiaTemp.cheeseAt) >= 4 then
+      ataxiaTemp.cheeseAt = now
+      ataxiaEcho("CLASS CHEESE INCOMMING")
+      if gmcp.Char.Status.class == "Magi" then
+        send("cq all;cast reflection at me")
+      else
+        send("cq all;touch shield")
+      end
     end
   end
  if gmcp.Char.Status.class == "Psion" then 

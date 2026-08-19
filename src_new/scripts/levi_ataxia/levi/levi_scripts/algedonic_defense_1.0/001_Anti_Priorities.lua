@@ -18,19 +18,48 @@ packageName: ''
 -- CORE FUNCTIONS (moved from _groups.yaml inline script)
 -- ============================================================================
 
+-- mystack is bootstrapped in _groups.yaml with SEVEN herbs while whatcures lists EIGHT --
+-- ["pear"] = {"pressure"} has no counter. That divergence was invisible while the suffixed
+-- name (`pressure3`) matched nothing; passing BASE names made it a crash. Sync the two here
+-- rather than in the YAML so any future herb added to one is picked up automatically.
+function Algedonic.SyncStackKeys()
+  Algedonic.mystack = Algedonic.mystack or {}
+  for herb in pairs(Algedonic.whatcures or {}) do
+    Algedonic.mystack[herb] = Algedonic.mystack[herb] or 0
+  end
+end
+
+-- How many afflictions currently contend for this herb? NINE call sites compared
+-- `Algedonic.mystack["<herb>"]` against a number with no nil guard, and mystack is
+-- bootstrapped only by the inline init in _groups.yaml -- so a herb present in whatcures but
+-- not in that literal (["pear"] was exactly that) threw on comparison rather than reading 0.
+function Algedonic.stackOf(herb)
+  return (Algedonic.mystack and Algedonic.mystack[herb]) or 0
+end
+
 function Algedonic.Stack_My_Affs(adding, aff)
+  Algedonic.SyncStackKeys()
   local stack = "default"
-  for i, j in pairs(Algedonic.whatcures) do
+  for i, j in pairs(Algedonic.whatcures or {}) do
     if table.contains(j, aff) then
       stack = i
       break
     end
   end
   if stack == "default" then return end
+  -- `or 0`: whatcures carries a ["pear"] = {"pressure"} entry that mystack has no key for,
+  -- so this threw on every pressure gain the moment v4.7.274 started passing BASE names
+  -- (the old suffixed `pressure3` matched nothing and returned above). Any future herb
+  -- added to one table and not the other now self-heals instead of erroring.
+  --
+  -- Floored at 0: these are DERIVED counts. A cure with no matching gain -- an affliction
+  -- applied before the system loaded, or anything the full Char.Afflictions.List rebuild
+  -- did not see -- would otherwise walk them negative, which silently satisfies every
+  -- `mystack[x] <= 1` test that reads them.
   if adding == true then
-    Algedonic.mystack[stack] = Algedonic.mystack[stack] + 1
+    Algedonic.mystack[stack] = (Algedonic.mystack[stack] or 0) + 1
   else
-    Algedonic.mystack[stack] = Algedonic.mystack[stack] - 1
+    Algedonic.mystack[stack] = math.max(0, (Algedonic.mystack[stack] or 0) - 1)
   end
 end
 
@@ -184,12 +213,17 @@ function Algedonic.ApplySwaps(aff)
   if ps.magi and ps.magi.active then
     if (aff == "dehydrated" or (aff == "burning" and affed("dehydrated")))
        and ataxia_getPrio("dehydrated") > 1 then
-      ataxia_sendCuringPriority("curing priority burning 1", false)
+      -- The whole family, not just the base. A bare write sets the BASE, which the static
+      -- burning4/burning5 overrides beat -- so raising only the base leaves the two most
+      -- dangerous levels LESS urgent than the three below them.
+      ataxia_setAffPrio("burning", 1)
+      ataxia_setAffPrio("burning4", 1)
+      ataxia_setAffPrio("burning5", 1)
     elseif aff == "hypothermia" then
       ataxia_sendCuringPriority("curing priority shivering 20;curing priority frozen 20", false)
     end
     if affed("frozen") or (affed("shivering") and ataxia_getPrio("frozen") ~= 2) then
-      ataxia_sendCuringPriority("curing priority frozen 2 shivering 2;curing priority defence insulation 2", false)
+      ataxia_sendCuringPriority("curing priority frozen 2;curing priority shivering 2;curing priority defence insulation 2", false)
     end
   end
 
@@ -206,6 +240,9 @@ end
 -- ============================================================================
 
 function Algedonic.RestoreSwaps(aff)
+  -- Ahead of the prioritySwaps guard: AntiPaladin is a CLASS handler, not a toggleable
+  -- swap, so its escalation must be undone whether or not the swap table exists.
+  if Algedonic.RestorePaladin then Algedonic.RestorePaladin() end
   if not ataxia.prioritySwaps then return end
   local ps = ataxia.prioritySwaps
 
@@ -285,7 +322,7 @@ function Algedonic.RestoreSwaps(aff)
   if ps.magi and ps.magi.active then
     if aff == "hypothermia" then
       if affed("frozen") or affed("shivering") then
-        ataxia_sendCuringPriority("curing priority frozen 2 shivering 2;curing priority defence insulation 2", false)
+        ataxia_sendCuringPriority("curing priority frozen 2;curing priority shivering 2;curing priority defence insulation 2", false)
       else
         if ataxia_getPrio("frozen") ~= ataxia_defaultPrioAff("frozen") then ataxia_restorePrio("frozen") end
         if ataxia_getPrio("shivering") ~= ataxia_defaultPrioAff("shivering") then
@@ -294,9 +331,12 @@ function Algedonic.RestoreSwaps(aff)
         end
       end
     elseif aff == "dehydrated" then
-      if ataxia_getPrio("burning") ~= ataxia_defaultPrioAff("burning") then
-        if ataxia.afflictions.burning then ataxia.afflictions.burning = 1 end
-        ataxia_restorePrio("burning")
+      -- Restores the same three names ApplySwaps raises. The old line also forced
+      -- `ataxia.afflictions.burning = 1` -- a client-state lie that was harmless only while
+      -- the decoder never produced a real burn level, and would now clobber the reading
+      -- checkDamnationThreat depends on.
+      for _, b in ipairs({"burning", "burning4", "burning5"}) do
+        if ataxia_getPrio(b) ~= ataxia_defaultPrioAff(b) then ataxia_restorePrio(b) end
       end
     end
   end
@@ -323,15 +363,18 @@ end
 function Algedonic.AntiAlchemist()
   if ataxia.afflictions.temperedsanguine ~= nil and ataxia.afflictions.temperedsanguine >= 5 then
   Algedonic.Echo("Clearing free <red>YOU SHOULD RUN BEFORE BLEEDING INTO AURIFY<white>.")
-  elseif ataxia.afflictions.temperedphlegmatic >= 6 and ataxia.afflictions.impatience then
+  -- (x or 0): these are numbers only once a stack has been seen, so a bare `>= 6` threw
+  -- whenever the humour was absent. Pre-existing, but the decoder fix is what finally gives
+  -- this handler live data to run on.
+  elseif (ataxia.afflictions.temperedphlegmatic or 0) >= 6 and ataxia.afflictions.impatience then
     Algedonic.Echo("Clearing free <red>YOUR ABOUT TO GET LOCKED - WEARINESS LETHARGY ANOREXIA SLICKNESS INCOMMING <white>.")
     send("curing prioaff impatience")
-  elseif ataxia.afflictions.temperedphlegmatic >= 6 and not ataxia.afflictions.impatience and ataxia.afflictions.asthma then
+  elseif (ataxia.afflictions.temperedphlegmatic or 0) >= 6 and not ataxia.afflictions.impatience and ataxia.afflictions.asthma then
     send("curing prioaff asthma")
   elseif not ataxia.afflictions.paralysis then
-    if Algedonic.mystack["goldenseal"] == 1 and ataxia.afflictions.impatience then
+    if Algedonic.stackOf("goldenseal") == 1 and ataxia.afflictions.impatience then
       send("curing prioaff impatience")
-    elseif Algedonic.mystack["goldenseal"] >= 2 and ataxia.afflictions.impatience and ataxia.afflictions.asthma then
+    elseif Algedonic.stackOf("goldenseal") >= 2 and ataxia.afflictions.impatience and ataxia.afflictions.asthma then
       send("curing prioaff asthma")
     elseif ataxia.afflictions.slickness and ataxia.afflictions.asthma then
       send("curing prioaff asthma")
@@ -351,7 +394,7 @@ function Algedonic.AntiApostate()
       if ataxia.afflictions.impatience and ataxia.afflictions.paralysis and ataxia.afflictions.anorexia and ataxia.afflictions.slickness and not ataxia.afflictions.asthma then
         send("curing prioaff impatience")
         send("curseward")
-      elseif Algedonic.mystack["kelp"] >= 3 and ataxia.afflictions.asthma and not ataxia.afflictions.paralysis then
+      elseif Algedonic.stackOf("kelp") >= 3 and ataxia.afflictions.asthma and not ataxia.afflictions.paralysis then
         Algedonic.Echo("Digging for <green>asthma<white>! Be ready to hit <orange>FITNESS!")
         send("curing prioaff asthma")
       elseif ataxia.afflictions.asthma and ataxia.afflictions.manaleech then
@@ -362,7 +405,8 @@ function Algedonic.AntiApostate()
 
 end
 function Algedonic.AntiBard()
-      if ataxia.afflictions.crescendo >= 4 then
+      -- (x or 0) for the same reason as AntiAlchemist: an absent crescendo threw here.
+      if (ataxia.afflictions.crescendo or 0) >= 4 then
       send("curing prioaff crescendo")
       end
 end
@@ -404,7 +448,7 @@ function Algedonic.AntiMagi()
     send("focus")
   elseif ataxia.afflictions.fulminated and not ataxia.afflictions.paralysis and not ataxia.afflictions.asthma then
     send("curing prioaff fulminated")
-  elseif ataxia.afflictions.fulminated and ataxia.afflictions.paralysis and Algedonic.mystack["goldenseal"] >= 1 then
+  elseif ataxia.afflictions.fulminated and ataxia.afflictions.paralysis and Algedonic.stackOf("goldenseal") >= 1 then
     send("focus")
   elseif ataxia.afflictions.asthma and not ataxia.afflictions.paralysis then
     send("curing prioaff asthma")
@@ -421,9 +465,9 @@ function Algedonic.AntiPariah()
   if ataxia.afflictions.voyria then
     stoplatency = true
   elseif ataxia.afflictions.pyramides and ataxia.afflictions.flushings and ataxia.afflictions.rebbies then
-    if Algedonic.mystack["kelp"] <= 1 then
+    if Algedonic.stackOf("kelp") <= 1 then
       send("curing prioaff rebbies")
-    elseif Algedonic.mystack["ginseng"] <= 1 then
+    elseif Algedonic.stackOf("ginseng") <= 1 then
       send("curing prioaff flushings")
     else
       send("curing prioaff pyramides")
@@ -456,12 +500,55 @@ function Algedonic.AntiPsion()
   end
 end
 
+-- The genuine rift lock, as ataxia_promptLocks() defines it: asthma + slickness/bloodfire +
+-- BOTH arms out. That is the state in which you cannot outrift, and shielding is the correct
+-- panic response. A single damaged arm is not it.
+local function sentinelRiftLocked()
+  local a = ataxia.afflictions
+  local leftOut  = a.damagedleftarm  or a.mangledleftarm  or a.brokenleftarm
+  local rightOut = a.damagedrightarm or a.mangledrightarm or a.brokenrightarm
+  return (a.asthma and (a.slickness or a.bloodfire) and leftOut and rightOut) and true or false
+end
+
+-- SKULLBASH needs PRONE **and** a BROKEN HEAD -- both, simultaneously (user-confirmed game
+-- mechanic, 2026-08-19). That single fact explains the whole Sentinel endgame:
+--
+--   * TRIP does double duty -- it prones us AND breaks the leg, so one action supplies half
+--     the kill condition and removes our ability to stand out of the other half.
+--   * The affliction lock is not a parallel win condition. It exists to make BOTH conditions
+--     uncurable at once: prone cannot be stood out of (broken leg + weariness) and the head
+--     cannot be restored (anorexia/slickness block the salve). In the death log the true lock
+--     landed at 09:59:55.789 -- BEFORE the leg break (09:59:58) and the head break (10:00:02).
+--   * He parked both limbs at 1-hit-from-break for 19s and 8s respectively and cashed them
+--     only once the lock was up, because restoration is ~4s and heals ONE limb.
+--
+-- Therefore the alarm that matters is the CONJUNCTION, and the counter is to break EITHER leg
+-- of it: restore the head, or stand. Warning on a broken head alone fires constantly against
+-- any limb class and trains you to ignore it.
+local function sentinelLimbWarn()
+  if not ataxia_selfLimbBroken then return end
+  local headBroken = ataxia_selfLimbBroken("head")
+  local prone = ataxia.afflictions and ataxia.afflictions.prone
+
+  if headBroken and prone then
+    ataxia_boxEcho("SKULLBASH RANGE - HEAD BROKEN + PRONE - STAND OR RESTORE HEAD NOW", "a_darkred")
+  elseif headBroken then
+    ataxia_boxEcho("HEAD BROKEN - DO NOT GO PRONE - SKULLBASH KILLS", "a_darkred")
+  elseif prone and ataxia_selfHitsToBreak and ataxia_selfHitsToBreak("head") <= 1 then
+    -- The head is one hit away and we are already prone: he only needs the throw.
+    ataxia_boxEcho("PRONE + HEAD 1 HIT FROM BREAK - STAND NOW", "a_darkred")
+  end
+end
+
 function Algedonic.AntiSentinel()
 if ataxia.afflictions.slickness and ataxia.afflictions.paralysis and not ataxia.afflictions.asthma then
   send("endure")
   send("curing prioaff paralysis")
-elseif tAffs.prone then
-  if ataxia.afflictions.asthma and Algedonic.mystack["kelp"] >= 3 then
+-- v4.7.275: was `tAffs.prone` -- the TARGET's prone -- inside a branch that is entirely about
+-- OUR curing. It was therefore never true in a 1v1, which gated off the kelp-stack handling
+-- below: the one piece of code that addresses a Sentinel overloading the herb balance.
+elseif ataxia.afflictions.prone then
+  if ataxia.afflictions.asthma and Algedonic.stackOf("kelp") >= 3 then
     send("curing prioaff asthma")
   elseif ataxia.afflictions.impatience then
     send("curing prioaff impatience")
@@ -471,12 +558,76 @@ elseif ataxia.vitals.bleed >= 150 then
     send("curing prioaff haemophilia")
 end
 
-if ataxia.afflictions.damagedleftarm or ataxia.afflictions.damagedrightarm and not ataxia.afflictions.prone then
-    expandAlias("goto 11090")
-    preventriftlock = true
-    
-    ataxia_boxEcho("TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK -", "a_darkred")
+-- HEALTHLEECH (v4.7.275). 14,056 damage across 12 unblockable ticks in the 2026-08-19 log --
+-- 16.5% of everything we took -- and it was NEVER cured, because it sits at priority 9 behind a
+-- four-way tie at 7 on the same herb. The fox applies it on a free companion action, so it comes
+-- straight back; the point is to make SSC spend one herb on it when it is the biggest single
+-- source of incoming damage. Sensitivity first when both are up: it amplified every tick by 31%
+-- (1,062 -> 1,390 the moment it landed), so curing it is worth more than curing the leech alone.
+-- SENSITIVITY is a MEASURED +33% damage multiplier (v4.7.276): wolf bite 1,113 -> 1,480
+-- (+33.0%) and healthleech tick 1,062 -> 1,390 (+30.9%) in the same log, two independent
+-- sources. It multiplies EVERYTHING he and his animals do, so it outranks the leech itself --
+-- and it is worth prioritising on its own, not only when healthleech happens to be up too.
+if ataxia.afflictions.sensitivity then
+  send("curing prioaff sensitivity")
+elseif ataxia.afflictions.healthleech then
+  send("curing prioaff healthleech")
 end
+
+-- RIFT LOCK / limb kill watch.
+--
+-- v4.7.275 -- what this block used to be, and why every line of it changed:
+--
+--   if ataxia.afflictions.damagedleftarm or ataxia.afflictions.damagedrightarm and not ...prone then
+--       expandAlias("goto 11090")
+--       preventriftlock = true
+--       ataxia_boxEcho("TOUCH SHIELD TOUCH SHIELD - RIFT LOCK - RIFT LOCK -", "a_darkred")
+--   end
+--
+-- Algedonic.Prioritize() runs on every affliction GAIN AND LOSS, and paralysis cycled 24 times
+-- in that fight, so this fired ~20 times. The results, all visible in the log:
+--
+--   * `A or B and not C` parses as `A or (B and not C)` -- a damaged LEFT arm triggered it
+--     regardless of prone. It also fired on a single damaged arm, which is not a rift lock.
+--   * `goto 11090` is a hardcoded room id the mapper could not route to from the caverns:
+--     "(mapper): Don't know how to get there (11090) from here :(" -- NINE times. A silent
+--     no-op that reads like an escape plan. Auto-walking mid-fight on a hardcoded id is now
+--     gone entirely; the user gets told to run instead.
+--   * `preventriftlock` makes combatQueue() send `cq all;touch shield` on EVERY dispatch. We
+--     shielded six times and a lemming stripped it within ~2s every single time, and each
+--     `cq all` cleared our own attack queue. Six balances spent to block ourselves.
+--
+-- Now: the real rift-lock condition only, once per engagement, with no movement.
+-- SKULLBASH EMERGENCY (v4.7.276). Confirmed condition: PRONE **and** BROKEN HEAD, together.
+-- Both halves are individually cheap to cure, so the correct response is to attack whichever
+-- one SSC can actually reach right now -- not to pick one and hope. `curing prioaff` is a
+-- TEMPORARY prioritisation and does not write stored priorities, so this is safe to spam
+-- (see memory/curing.md on the curingset write hazard).
+if ataxia_selfLimbBroken and ataxia_selfLimbBroken("head") and ataxia.afflictions.prone then
+  send("curing prioaff prone")
+  send("curing prioaff damagedhead")
+end
+
+-- RIFT LOCK.
+--
+-- v4.7.276: this no longer sets `preventriftlock`, i.e. it no longer drives `touch shield`.
+-- Shielding a Sentinel is a losing trade TWICE over and the 2026-08-19 log proves it:
+--   * `ENRAGE LEMMING` (Woodlore) strips SHIELD before REBOUNDING and costs him NO BALANCE.
+--     He stripped six of our shields, each within ~2 seconds of it going up.
+--   * `RIVE` (Skirmishing, 2.25s) shatters a shield outright.
+-- Every shield we raised cost a balance and bought about two seconds, and each one also fired
+-- `cq all` through combatQueue(), clearing our own attack queue. Warn instead; the human can
+-- still shield if they judge it worth it.
+if sentinelRiftLocked() then
+  if not Algedonic.sentinelRiftWarned then
+    Algedonic.sentinelRiftWarned = true
+    ataxia_boxEcho("RIFT LOCKED - BOTH ARMS OUT - RUN (shield gets lemming-stripped in ~2s)", "a_darkred")
+  end
+else
+  Algedonic.sentinelRiftWarned = false
+end
+
+sentinelLimbWarn()
 end
 
 
@@ -515,7 +666,7 @@ end
 function Algedonic.AntiShaman()
 local myclass = ataxiaTemp.class
     --Prevent Tza Instant Kill
-  if Algedonic.mystack["goldenseal"] >= 3 and not ataxia.afflictions.paralysis then
+  if Algedonic.stackOf("goldenseal") >= 3 and not ataxia.afflictions.paralysis then
       if ataxia.afflictions.impatience then
           send("curing prioaff impatience")
    
@@ -529,7 +680,7 @@ local myclass = ataxiaTemp.class
   elseif ataxia.afflictions.impatience and ataxia.afflictions.stupidity and ataxia.afflictions.dizziness or ataxia.afflictions.epilepsy then
     send("curing prioaff impatience")  
   -- Prevent Lock
-  elseif Algedonic.mystack["kelp"] >= 3 and ataxia.afflictions.asthma and not ataxia.afflictions.impatience and not ataxia.afflictions.paralysis then
+  elseif Algedonic.stackOf("kelp") >= 3 and ataxia.afflictions.asthma and not ataxia.afflictions.impatience and not ataxia.afflictions.paralysis then
         send("curing prioaff asthma")
  
   
@@ -556,10 +707,15 @@ end
 
 function Algedonic.AntiUnnameable()
 if ataxia.afflictions.damageleftleg or ataxia.afflictions.damagedrightleg or ataxia.afflictions.damagedleftarm or ataxia.afflictions.damagedrightarm or ataxia.afflictions.damagedhead then  
-  if ataxia.afflictions.horror == 5 then
-  send("curing prioaff horror (5)")
-  elseif ataxia.afflictions.horror == 4 then
-  send("curing prioaff horror (4)")
+  -- `horror (5)` -- parenthesised, with a space -- is not a form the game accepts anywhere
+  -- else, and a rejected curing command is completely silent. `horror5` is the token the
+  -- server itself uses in CURING PRIORITY LIST, so it is a real affliction name; whether
+  -- PRIOAFF takes the suffixed form is still unverified. This branch was doubly dead until
+  -- now: ataxia.afflictions.horror was never a number either.
+  if (ataxia.afflictions.horror or 0) == 5 then
+  send("curing prioaff horror5")
+  elseif (ataxia.afflictions.horror or 0) == 4 then
+  send("curing prioaff horror4")
     end
   end
 end
@@ -624,7 +780,7 @@ function Algedonic.AntiOccultist()
   local hasWhisperingmadness = ataxia.afflictions.whisperingmadness
   local hasImpatience = ataxia.afflictions.impatience
   local hasProne = ataxia.afflictions.prone or tAffs.prone
-  local kelpStack = Algedonic.mystack["kelp"] or 0
+  local kelpStack = Algedonic.stackOf("kelp") or 0
 
   -- PRIORITY 1: AEON - Must cure asthma to smoke elm
   if hasAeon and hasAsthma then

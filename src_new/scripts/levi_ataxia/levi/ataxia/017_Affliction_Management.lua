@@ -60,50 +60,19 @@ function unnamableHorrorLower()
   end
 end
 
--- Paladin Pyre tracking (for Damnation kill condition)
--- Pyre is applied via "fire surges about the righteous <Paladin>" message
-function pali_addPyre()
-  -- Auto-detect: If we're getting pyre, we're fighting a Paladin
-  -- This enables Damnation defense even if target isn't in NDB
-  ataxiaTemp = ataxiaTemp or {}
-  ataxiaTemp.fightingPaladin = true
-
-  ataxia.afflictions.pyre = (ataxia.afflictions.pyre or 0) + 1
-  if ataxia.afflictions.pyre > 3 then ataxia.afflictions.pyre = 3 end  -- Pyre caps at level 3
-
-  local cstring = "<magenta>[<white>PYRE "..ataxia.afflictions.pyre.."<magenta>] "
-  cinsertText(cstring)
-
-  -- Check for Damnation threat after pyre increase
-  if checkDamnationThreat then
-    checkDamnationThreat()
-  end
-end
-
-function pali_removePyre()
-  ataxia.afflictions.pyre = (ataxia.afflictions.pyre or 1) - 1
-  if ataxia.afflictions.pyre < 0 then ataxia.afflictions.pyre = 0 end
-
-  if ataxia.afflictions.pyre == 0 then
-    cecho("\n<green> -= pyre cured completely =-")
-  else
-    cecho("\n<green> -= pyre reduced to "..ataxia.afflictions.pyre.." =-")
-  end
-end
-
--- Paladin Burns tracking (Magi-style burning counter)
-function pali_addBurns()
-  ataxia.afflictions.burning = (ataxia.afflictions.burning or 0) + 1
-  if ataxia.afflictions.burning > 5 then ataxia.afflictions.burning = 5 end
-
-  local cstring = "<orange>[<white>BURNS "..ataxia.afflictions.burning.."<orange>] "
-  cinsertText(cstring)
-
-  -- Check for Damnation threat after burns increase (level 5 burning enables Damnation)
-  if checkDamnationThreat then
-    checkDamnationThreat()
-  end
-end
+-- pali_addPyre / pali_removePyre / pali_addBurns were DELETED in v4.7.276.
+--
+-- They maintained `ataxia.afflictions.pyre` / `.burning` -- our SELF counters -- but their
+-- only reachable caller was tarAffed's target branch (above), so they were fed by our own
+-- offence against an enemy: tarAffed("burns") fires from 492_Flamewhip and 493_Blisters,
+-- both of which match OUR attack line. They also carried the only setter for
+-- `ataxiaTemp.fightingPaladin` and the only call to checkDamnationThreat -- which is why
+-- both were effectively dead, since no trigger in src_new applies pyre to US through
+-- tarAffed.
+--
+-- GMCP now owns both counters (ataxia_stackAff -> setStackAff), and gotAff owns the Paladin
+-- auto-detect and the Damnation alarm -- the SELF path, where a self affliction belongs.
+-- See 004_Aff_gains_losses.lua.
 
 function tarZealHit(aff)
 	if not affs_to_colour then populate_aff_colours() end
@@ -227,10 +196,18 @@ function tarAffed(...)
           table.insert(added, "sensitivity")
           affTimers.sensitivity = getEpoch()
         end
-      elseif aff == "burns" or aff == "burn" then
-        pali_addBurns()
-      elseif aff == "pyre" then
-        pali_addPyre()
+      elseif aff == "burns" or aff == "burn" or aff == "pyre" then
+        -- These used to call pali_addBurns/pali_addPyre, which write
+        -- `ataxia.afflictions.burning` / `.pyre` -- OUR SELF-AFFLICTION TABLE -- from the
+        -- TARGET path. Harmless while those keys were never real numbers; since v4.7.274
+        -- they are the Damnation alarm's only input and the static burning4/burning5
+        -- escalation reads them, so five flamewhips on an enemy would trip a kill-condition
+        -- response for a burn we do not have. Routed through the normal target path now.
+        local canonical = (aff == "pyre") and "pyre" or "burning"
+        tAffs[canonical] = true
+        if applyAffV3 then applyAffV3(canonical) end
+        table.insert(added, canonical)
+        affTimers[canonical] = getEpoch()
       else
         -- Core tracking: V1 cache + V3 branching state
         tAffs[aff] = true
@@ -265,7 +242,12 @@ function addAffList(affTable)
           affTimers.sensitivity = getEpoch()
         end
       elseif aff == "burns" or aff == "burn" then
-        magi_addBurns()
+        -- magi_addBurns() is not defined anywhere in src_new -- it survives only in a stale
+        -- build artefact -- so this call THREW every time, aborting the rest of the handler.
+        -- Routed through the normal target path, which is what it should always have been:
+        -- applyAffV3("burning") is what maintains targetBurningLevelV3.
+        tAffs.burning = true
+        if applyAffV3 then applyAffV3("burning") end
       else
         tAffs[aff] = true
         if applyAffV3 then applyAffV3(aff) end
@@ -292,7 +274,9 @@ function tarSingleAff(what)
 			if applyAffV3 then applyAffV3("sensitivity") end
 		end
 	elseif what == "burns" or what == "burn" then
-		magi_addBurns()
+		-- See above: magi_addBurns() has no definition in src_new and threw here too.
+		tAffs.burning = true
+		if applyAffV3 then applyAffV3("burning") end
 	elseif not tAffs[what] then
 		tAffs[what] = true
 		if applyAffV3 then applyAffV3(what) end

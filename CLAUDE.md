@@ -958,6 +958,15 @@ falls back primary → `.bak` → `_ataxia_backup`.
 
 ## Achaea Classes Reference
 
+**Enemy kill paths: `docs/kill-paths.md`.** Cross-class index of what each class is actually
+trying to do to you, with a CONFIRMED / WIKI / ASSUMED confidence tag per entry, plus the
+worked method for deriving a kill path from a combat log. Per-class dossiers stay in
+`.claude/classes/<class>.md`.
+
+**Do not silently promote ASSUMED to CONFIRMED.** The Sentinel entry read "primary kill:
+eviscerate" for a long time; the class killed us with SKULLBASH and eviscerate is not in the
+current Skirmishing ability list at all.
+
 Achaea has **26 classes** total: 21 base classes + 4 Elemental Lords + Dragon.
 
 Each class has:
@@ -1261,8 +1270,44 @@ Achaea provides built-in curing that simulates average latency. Custom systems c
 |---------|-------------|
 | `CURING PRIORITY LIST` | List affliction cure priority |
 | `CURING PRIORITY <aff> <priority>` | Move affliction priority |
+| `CURING PRIORITY <aff><N> <priority>` | Priority at exactly N stacks (e.g. `BURNING5`) |
 | `CURING PRIORITY RESET` | Reset to default priority |
 | `CURING PRIORITY DEFENCE LIST` | List defence upkeep priority |
+
+**BASE + PER-STACK, and a bare write is the BASE (announcement 2026-08-19, v4.7.274).** A bare
+`CURING PRIORITY BURNING 8` answers every stack count with no entry of its own; `BURNING5 2`
+overrides at exactly five. The two used to conflict, which is why our table carried a value for
+EVERY level of every stacking affliction -- and why its bare entries were **unreachable**, along with
+every runtime write that targeted them. **The Damnation defence was one of those**: it raised
+`curing priority burning 1`, the one value the per-stack entries override, so the response to the
+Paladin kill condition had never taken effect. Rules that follow:
+- **Never write a bare stack name to escalate** -- a bare write is the base, and the base is what the
+  overrides beat. `002_Damnation_Defence.lua` and the anti-Magi/Firelord swaps all write the LEVEL.
+- **Only escalate a level that has a static entry** in `ataxia_defaultCuringPrios()`, so
+  `ataxia_restorePrio` always has an exact value to put back. `ataxia_defaultPrioAff` falls back to
+  the family base for a level with no entry of its own; without it the restore concatenated nil.
+- **Escalate the STATIC table, not just the dynamic swap.** `Algedonic.AntiPaladin` only runs once
+  the target is KNOWN to be a Paladin, so a missed class read used to cost the entire response.
+  `burning5 = 2` in the table answers the same threat with no detection at all.
+- **A family's escalation must be re-flattened in the PvE delta whenever the cure shares a contended
+  balance.** Burning is salve-cured, so `burning5 = 2` would outbid every limb for mending -- the
+  exact failure the bash profile exists to fix. See `008_Bash_Curing_Profile.lua`.
+- **A stacking aff with a BARE-ONLY entry is correct** (pressure, the fracture family, `tempered*`):
+  one base covers every count. Do not "complete" them.
+- Nothing parses a **rejected** `curing priority`. After adding any suffixed name: `reset prios`,
+  then `CURING PRIORITY LIST`, and confirm it came back. Silence is not success.
+- **Deleting a key from the Lua table does NOT delete the row from the server-side curingset.**
+  `ataxia_sendDefaultPrios` only writes what the table holds; it never sends
+  `CURING PRIORITY RESET`. Orphaned per-stack rows persist at their old values, so a base changed
+  without accounting for them produces a value that never applies -- the same class of bug the
+  base/override change fixed.
+- **The throttle counts COMMANDS, not calls** (`ataxia.prioThrottle`, v4.7.276). Semicolon batches
+  are charged for every command in them; the server cap is 5/sec and several sites batch three.
+- **A swap that WRITES needs a restore designed with it.** `Algedonic.AntiPaladin` wrote stored
+  priorities for years with no restore anywhere -- survivable only because the writes were
+  unreachable. A restore also has to answer two questions the write does not: can it actually send
+  right now (the bash-set guard drops these), and how does it recover if its latch is lost to a
+  reload.
 
 **Curingsets** (save/load priority configurations):
 | Command | Description |
@@ -1298,7 +1343,9 @@ that set permanently — and `ataxia_restorePrio()` will then write the *default
 into the *other* set, rotting it one affliction at a time. Route every priority write through
 `ataxia_sendCuringPriority()` (`ataxia/ataxia/002_Prio_Management.lua`), which throttles to
 4/sec (server limit 5/sec, Announce #5450) **and** drops stored affliction writes while the
-PvE bash set is active. `CURING PRIOAFF <aff>` is a *temporary* prioritisation, writes nothing
+PvE bash set is active. Its classifier matched **letters only** until v4.7.274, so every
+stack-suffixed write (`curing priority burning5 9`) slipped the guard into whatever set was
+active -- reachable from the UI, since trigger 717 makes `burning5` its own clickable row. `CURING PRIOAFF <aff>` is a *temporary* prioritisation, writes nothing
 stored, and is always safe.
 
 **PvE bashing curing profile** (`ataxia/ataxia/008_Bash_Curing_Profile.lua`, v4.7.172): the
@@ -1308,7 +1355,10 @@ a denizen: **potash/moss shares the EATING balance with every cure-mineral**, an
 restoration shares the SALVE balance with crackedribs/fractures/traumas**. So the PvE table
 inverts it — cure-channel blockers (anorexia/slickness/paralysis) > limbs at 4-6 (arms gate
 the attack, legs gate every escape) > damage math > salve competitors parked at 20 > junk
-mental spray parked at 25. Held in a server-side `bash` curingset so the swap is ONE command
+mental spray parked at 25. It also **re-flattens the PvP burn escalation** (`burning4`/`burning5`
+back to the base): burning is salve-cured, so the PvP `burning5 = 2` -- which exists because broken
+head + burning 5 IS Damnation -- would outbid every limb for mending, and a denizen cannot perform
+Damnation. Held in a server-side `bash` curingset so the swap is ONE command
 rather than ~55 throttled pushes (~15s). Switched on `"basher enabled"` / `"basher disabled"`;
 opt-in via `aconfig bashcuring install`. A priority at/above `ataxiaBashProfile.PARKED` (20)
 means SSC will not cure it, so it stays up for the whole fight — **anything testing
@@ -1794,9 +1844,18 @@ Tracks exact limb damage percentages from combat text with automated defensive r
 
 ## Blademaster Combat System
 
-3 modes: double-prep (`bmd`), quad-prep (`bmdq`), brokenstar (`bmbs`). Lightning/Ice phase system for damage kills.
+3 modes: double-prep (`bmd`), quad-prep (`bmdq`), brokenstar (`bmbs`), plus group (`bmgroup`). Lightning/Ice phase system for damage kills.
 
-**Full documentation**: See `memory/blademaster.md` (strategies, phase system, helper functions, config, brokenstar kill route)
+**PvP offense is keypress-driven.** `ataxia_promptCommands` re-dispatches every prompt only when
+`ataxiaBasher.enabled` (the PvE basher). `blademaster.retryTick` (v4.7.275) keeps swinging for
+`config.retryWindow` (12s) after the last **manual** press — anchored to `markManual()`, not to the
+last run, so it cannot sustain itself. Toggle: **`bmretry on|off|<seconds>`**.
+
+**`queue addclear freestand` requires STANDING.** An entry that cannot satisfy it sits until the
+next dispatch's `addclear` *replaces* it — mashing the alias while prone queues one attack ten
+times, not ten attacks.
+
+**Full documentation**: See `memory/blademaster.md` (strategies, phase system, helper functions, config, brokenstar kill route, the FITNESS/weariness deadlock)
 
 **Key file:** `blademaster/005_CC_BM_Ice.lua`. **Namespace:** `blademaster`. **Class docs:** `.claude/classes/blademaster.md`
 
@@ -1839,6 +1898,55 @@ Weave-based combat with 2 modes (mind/flurry) and 3 simultaneous kill routes: Ps
 ---
 
 ## Lessons Learned (Combat System Development)
+
+### Silent gates: four rules from the 2026-08-19 Grulk death (v4.7.275)
+
+A 123-second PvP loss took two full analysis passes to explain. Both passes were slowed by the
+same class of problem, and all four rules generalise well beyond that fight.
+
+**1. A status display that prints BEFORE the send is not evidence of a send.**
+The `[BM ...]` block prints inside `runDoublePrep`, after `blademaster.run()`'s guards but before
+`sendAttack`'s. It reported healthy prep **89 times while 10 commands reached the server**.
+Instrument every `return` in a guard chain — debounced per-*reason*, so a change of reason still
+prints immediately (that transition is the interesting part).
+
+**2. `send(cmd, false)` makes a command invisible in the log.**
+`ataxia_breakLock` sends `fitness` that way, so a log shows only the server's replies. The first
+analysis pass concluded fitness had never been sent; it had fired twice, and the cooldown refusals
+were sitting right there in the log. **Before concluding a command was never sent, check the
+sender's echo flag.**
+
+**3. Two components can each correctly defer to the other and produce total inaction.**
+`blademaster.sendAttack` deferred to `ataxia_lockBreak()`; `ataxia_lockBreak` declines when
+`ataxia_canActive()` is false. With weariness up, neither did anything — for 86 seconds, silently.
+**When A defers to B, A must verify B can actually run.**
+
+**4. A gate can INVERT — get stricter exactly as the threat gets worse.**
+`canParry()` blocked on prone, paralysis and limb damage: every one a state a limb-prep class
+manufactures on purpose. The parry froze precisely as the opponent closed in (2 parries in 44
+throws). The identical reasoning error had already been found and fixed in the PvE *selection*
+path in v4.7.221 and never checked in the *send* gate. **When you fix a reasoning error in one
+layer, grep for the same reasoning in the others.**
+
+**Corollary on precedence:** `if A or B and not C` parses as `A or (B and not C)`. This was live in
+`Algedonic.AntiSentinel`, making a single damaged left arm trigger a rift-lock panic ~20 times a
+fight. Parenthesise mixed `and`/`or` conditions.
+
+**Corollary on affliction decoding:** our prompt abbreviations come from
+`ataxia/008_Affliction_Colouring.lua`, and some are one letter apart in meaning. `par` is
+**paranoia**; `PAR` is **paralysis**. `dar` is darkshade, `ver` vertigo, `stu` stupidity.
+**Never infer an affliction from its abbreviation -- look it up.** Also: the prompt WRAPS across
+two lines when the affliction block is long, so a naive log parser silently drops exactly the
+most-afflicted (i.e. most interesting) prompts.
+
+**Corollary on our own afflictions:** they come from **GMCP `Char.Afflictions.Add`** (`gotAff`
+in `004_Aff_gains_losses.lua`), not from text triggers. If an affliction never appears in the
+prompt, the question is whether GMCP surfaces it at all -- and adding a text trigger to "fix"
+it strands a phantom affliction unless GMCP also sends the matching Remove.
+
+**Corollary on log forensics:** when reading a combat log, count what *didn't* happen. Consumption
+totals, cure confirmations per eat, and outbound-command counts are all recoverable from a log and
+are usually more informative than the lines that did fire.
 
 ### Mudlet Trigger Patterns
 

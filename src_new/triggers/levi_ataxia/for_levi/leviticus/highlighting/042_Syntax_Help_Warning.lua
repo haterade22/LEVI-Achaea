@@ -64,8 +64,11 @@ deselect()
 resetFormat()
 
 ataxiaTemp = ataxiaTemp or {}
+-- getEpoch() is a float with millisecond precision, so `nowT ~= last` was true on every
+-- single call and the documented 3s throttle did nothing. Compare an ELAPSED span, the way
+-- ataxia.prioThrottle does.
 local nowT = (getEpoch and getEpoch()) or 0
-if nowT ~= ataxiaTemp.syntaxWarnAt then
+if (nowT - (ataxiaTemp.syntaxWarnAt or 0)) >= 3 then
   ataxiaTemp.syntaxWarnAt = nowT
   if ataxiaEcho then
     ataxiaEcho("<indian_red>SYNTAX<reset> -- a command was rejected. If you did not type one, "

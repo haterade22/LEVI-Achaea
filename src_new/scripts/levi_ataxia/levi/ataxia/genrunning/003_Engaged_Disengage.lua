@@ -88,8 +88,11 @@ function basher_disengaged()
 		end
   end
   
+  -- Restores the same three names the engage path parks. Was a hardcoded `burning 8`, which
+  -- has to be kept in step with the table by hand and had already drifted from it (the base
+  -- is 9); ataxia_restorePrio reads ataxia_defaultCuringPrios() and cannot drift.
   if string.find(ataxiaTemp.class, "fire") and ataxia_getPrio("burning") == 26 then
-    ataxia_sendCuringPriority("curing priority burning 8", false)
+    for _, b in ipairs({"burning", "burning4", "burning5"}) do ataxia_restorePrio(b) end
   end  
   
   if ataxia.usegui or ataxia.usegui == nil then
@@ -274,8 +277,20 @@ function basher_engaged()
 		send("summon daegger")	
 	end
   
+  -- FIRE CLASSES BURN BY DESIGN, so curing the burn just spends the salve balance forever.
+  -- Park the WHOLE FAMILY: since the 2026-08-19 announcement a bare write sets only the
+  -- BASE, and the static burning4 = 5 / burning5 = 2 would keep curing hard at exactly the
+  -- stacks a permanent burn sits at. `ataxia_getPrio("burning")` stays the sentinel -- it is
+  -- the bare key trigger 719 confirms.
+  --
+  -- KNOWN LIMITATION: this fires on "basher enabled", the same event that arms the PvE bash
+  -- curingset, and ataxia_sendCuringPriority drops stored affliction writes while that set
+  -- is active. On a fire class with the profile installed the park is silently skipped. The
+  -- right home for it is a delta in 008_Bash_Curing_Profile.lua, but that table is not
+  -- class-conditional -- recorded rather than half-fixed.
   if string.find(ataxiaTemp.class, "fire") and ataxia_getPrio("burning") ~= 26 then
-    ataxia_sendCuringPriority("curing priority burning 26", false)
+    ataxia_sendCuringPriority(
+      "curing priority burning 26;curing priority burning4 26;curing priority burning5 26", false)
     send("manifest torch", false)
   end  
 end

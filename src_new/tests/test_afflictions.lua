@@ -85,9 +85,20 @@ end)
 
 describe("setStackAff()", function()
   it("sets a numeric stack aff to its encoded value", function()
+    -- Was pinned at 1: the old decoder read the SECOND-TO-LAST character, so this
+    -- returned the tens digit. The suffix is the count, however many digits it has.
     ataxia.afflictions = {}
-    setStackAff("burning12")  -- second-to-last char is "1" → value 1
-    expect(ataxia.afflictions.burning).toBe(1)
+    setStackAff("burning12")
+    expect(ataxia.afflictions.burning).toBe(12)
+  end)
+
+  it("decodes a SINGLE-digit suffix -- the form Achaea actually sends", function()
+    -- The regression that mattered: "burning3" tests "g" under sub(-2,-2), so the whole
+    -- stack path was skipped and a boolean was stored under the suffixed key instead.
+    ataxia.afflictions = {}
+    setStackAff("burning3")
+    expect(ataxia.afflictions.burning).toBe(3)
+    expect(ataxia.afflictions.burning3).toBeNil()
   end)
 
   it("resets a stack aff to 0 when num=true", function()
@@ -96,11 +107,20 @@ describe("setStackAff()", function()
     expect(ataxia.afflictions.burning).toBe(0)
   end)
 
-  it("defaults to 1 when suffix digit is not parseable as a number", function()
-    -- aff name where second-to-last char is non-numeric
+  it("treats a BARE stack name as one stack", function()
     ataxia.afflictions = {}
-    setStackAff("pressure")  -- no numeric suffix → falls to else branch → 1
+    setStackAff("pressure")
     expect(ataxia.afflictions.pressure).toBe(1)
+  end)
+
+  it("writes nothing for a name we do not model as stacking", function()
+    -- The old substring scan left tow = "" and wrote ataxia.afflictions[""], a key
+    -- rTabSize counts -- so the prompt's affliction bracket printed forever.
+    ataxia.afflictions = {}
+    setStackAff("totallymadeupaffliction")
+    local count = 0
+    for _ in pairs(ataxia.afflictions) do count = count + 1 end
+    expect(count).toBe(0)
   end)
 
   it("recognises every stack-aff name", function()
@@ -159,6 +179,30 @@ describe("gotAff() — basic state tracking", function()
     expect(type(ataxia.afflictions.burning)).toBe("number")
   end)
 
+  it("stores a SINGLE-digit stack aff under the bare name, not the suffixed one", function()
+    -- checkDamnationThreat reads ataxia.afflictions.burning as a level; before this it
+    -- was permanently 0 because the count lived under a suffixed boolean key.
+    ataxia.afflictions = {}
+    gmcp.Char.Afflictions.Add = { name = "burning4" }
+    gotAff()
+    expect(ataxia.afflictions.burning).toBe(4)
+    expect(ataxia.afflictions.burning4).toBeNil()
+  end)
+
+  it("raises 'aff gained' with the BARE name for a stack aff", function()
+    -- ApplySwaps tests `aff == "burning"` and Stack_My_Affs looks the name up in the herb
+    -- tables, which list bare names only -- both were dead while we passed "burning4".
+    mock.raised_events = {}
+    ataxia.afflictions = {}
+    gmcp.Char.Afflictions.Add = { name = "burning4" }
+    gotAff()
+    local found = false
+    for _, e in ipairs(mock.raised_events) do
+      if e.name == "aff gained" and e.args and e.args[1] == "burning" then found = true end
+    end
+    expect(found).toBeTrue()
+  end)
+
   it("raises the 'aff gained' event", function()
     mock.raised_events = {}
     gmcp.Char.Afflictions.Add = { name = "slickness" }
@@ -168,6 +212,77 @@ describe("gotAff() — basic state tracking", function()
       if e.name == "aff gained" then found = true end
     end
     expect(found).toBeTrue()
+  end)
+end)
+
+-- ─── affed() and the cured-stack contract ───────────────────────────────────
+
+describe("affed() -- a cured stack is not an affliction", function()
+  it("is FALSE for a stacking aff at zero", function()
+    -- 0 is TRUTHY in Lua. lostAff zeroes rather than nils (the prompt renderer and
+    -- checkDamnationThreat both want a number), and setafflictionstackslevi plants sixteen
+    -- zeroes on reset -- so a bare truthiness test reported a burn we had just put out.
+    ataxia.afflictions = { burning = 0 }
+    expect(affed("burning")).toBeFalse()
+  end)
+
+  it("is TRUE for a stacking aff with stacks", function()
+    ataxia.afflictions = { burning = 3 }
+    expect(affed("burning")).toBeTrue()
+  end)
+
+  it("still handles ordinary boolean afflictions", function()
+    ataxia.afflictions = { asthma = true }
+    expect(affed("asthma")).toBeTrue()
+    expect(affed("paralysis")).toBeFalse()
+  end)
+
+  it("survives an explicit false", function()
+    ataxia.afflictions = { unweavingmind = false }
+    expect(affed("unweavingmind")).toBeFalse()
+  end)
+end)
+
+-- ─── ataxia_stackAff() ──────────────────────────────────────────────────────
+
+describe("ataxia_stackAff() — the base/count decoder", function()
+  it("splits a suffixed name into base and count", function()
+    local base, n = ataxia_stackAff("burning5")
+    expect(base).toBe("burning")
+    expect(n).toBe(5)
+  end)
+
+  it("handles a multi-digit count", function()
+    local base, n = ataxia_stackAff("burning12")
+    expect(base).toBe("burning")
+    expect(n).toBe(12)
+  end)
+
+  it("reads a bare stack name as one stack", function()
+    local base, n = ataxia_stackAff("horror")
+    expect(base).toBe("horror")
+    expect(n).toBe(1)
+  end)
+
+  it("is case-insensitive", function()
+    expect(ataxia_stackAff("UnweavingMind3")).toBe("unweavingmind")
+  end)
+
+  it("returns nil for an affliction that does not stack", function()
+    expect(ataxia_stackAff("paralysis")).toBeNil()
+    expect(ataxia_stackAff("asthma4")).toBeNil()
+  end)
+
+  it("matches the base by EQUALITY, not substring", function()
+    -- The old loop used aff:find(x) and kept the LAST match, so any future affliction
+    -- whose name merely CONTAINED a stack name decoded as that stack aff.
+    expect(ataxia_stackAff("burningaura")).toBeNil()
+    expect(ataxia_stackAff("prepressure2")).toBeNil()
+  end)
+
+  it("survives a non-string", function()
+    expect(ataxia_stackAff(nil)).toBeNil()
+    expect(ataxia_stackAff(5)).toBeNil()
   end)
 end)
 
@@ -206,6 +321,36 @@ describe("lostAff() — affliction removal", function()
     gmcp.Char.Afflictions.Remove = { "crescendo" }
     lostAff()
     expect(ataxia.afflictions.crescendo).toBe(0)
+  end)
+
+  it("zeroes a suffixed stack remove that names the level we hold", function()
+    ataxia.afflictions = { burning = 3 }
+    gmcp.Char.Afflictions.Remove = { "burning3" }
+    lostAff()
+    expect(ataxia.afflictions.burning).toBe(0)
+  end)
+
+  it("IGNORES a suffixed stack remove for a level we have already moved past", function()
+    -- A stack CHANGE is Remove(old) + Add(new) and the order is not guaranteed. If the
+    -- Add lands first, zeroing on the trailing Remove kills a live stack.
+    ataxia.afflictions = { burning = 4 }
+    gmcp.Char.Afflictions.Remove = { "burning3" }
+    lostAff()
+    expect(ataxia.afflictions.burning).toBe(4)
+  end)
+
+  it("zeroes on a BARE stack remove regardless of the level held", function()
+    ataxia.afflictions = { burning = 5 }
+    gmcp.Char.Afflictions.Remove = { "burning" }
+    lostAff()
+    expect(ataxia.afflictions.burning).toBe(0)
+  end)
+
+  it("resets unweavingmind to 0 via a suffixed remove", function()
+    ataxia.afflictions = { unweavingmind = 5 }
+    gmcp.Char.Afflictions.Remove = { "unweavingmind5" }
+    lostAff()
+    expect(ataxia.afflictions.unweavingmind).toBe(0)
   end)
 
   it("raises the 'aff cured' event", function()

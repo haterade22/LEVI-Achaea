@@ -2,6 +2,471 @@
 
 ---
 
+## 2026-08-19 - Stack-aware curing priorities, and the Damnation defence that never fired (v4.7.276)
+
+Game announcement:
+
+> Serverside curing will now handle the case where a stackable affliction has a base-level
+> priority equivalent to the default affliction priority, while a priority is set for a certain
+> count of stacks. E.g. you can now have CURING PRIORITY BURNING 8 and CURING PRIORITY BURNING5 2
+> in the priority list together without issues. Burning 1 through 4 would be handled with the
+> base-affliction priority.
+
+A bare `CURING PRIORITY <aff> <n>` is the **BASE** -- it answers every stack count with no entry
+of its own -- and `<aff><N> <n>` **overrides at exactly N stacks**. The two used to conflict,
+which is the only reason our table carried a value for *every* level of every stacking affliction.
+
+**We were on the wrong side of that, and it hid three dead features.** `burning` = 19 with
+`burning1..5` all at 9, `pyre` = 8 with `pyre1..3` at 9, `horror` = 10 with `horror1..5` at 9. An
+explicit entry at every real count means the base is **never consulted** -- and neither is any
+runtime write that targets it.
+
+*(Shipped as 4.7.276 rather than 4.7.274: a concurrent change took 275, and the deep review below
+revised enough of this that it is one release, not two.)*
+
+### 1. The Damnation defence could not fire, at either end
+
+`Algedonic.AntiPaladin` raised `curing priority pyre 1` and `curing priority burning 1` -- the
+**base**, the one value the per-stack 9s override. Nothing parses a rejected or ineffective
+`curing priority`, so it never said so.
+
+And the alarm that *triggers* it was blind twice over:
+
+- `setStackAff` decoded the count with `tonumber(string.sub(aff, -2, -2))` -- the **second-to-last
+  character**. For `burning3` that reads `"g"`, so the stack path never ran for the single-digit
+  names Achaea sends (`paladin.md` documents `gmcp_name: "pyre1, pyre2, pyre3"`) and `gotAff`
+  stored a **boolean under the suffixed key** instead.
+- Even with a correct value, **nothing on the defensive path asked for it.** `checkDamnationThreat`
+  was reachable only from `pali_addPyre`/`pali_addBurns`, which are called only from `tarAffed` --
+  the **target** path, fired by `492_Flamewhip` and `493_Blisters`, both of which match *our own
+  attack on an enemy*. So setting a target ablaze raised **our** burn counter, and taking a burn
+  ourselves raised nothing. `ataxiaTemp.fightingPaladin` had the same problem: its only setter was
+  `pali_addPyre`, and no trigger in the tree applies pyre to us through `tarAffed`.
+
+`ataxia_stackAff(name)` replaces the character test with a `^(%a+)(%d*)$` match -- correct for any
+suffix length. `gotAff` now owns both the Paladin auto-detect (only a Paladin can PERFORM PYRE) and
+the Damnation alarm, which is where a *self* affliction belongs. `tarAffed` routes burns and pyre
+through the normal target path, and `pali_addPyre`/`pali_removePyre`/`pali_addBurns` are deleted.
+
+### 2. Base + escalation, and the balance a number actually competes on
+
+26 scattered stack entries become 18 in one `STACKING AFFLICTIONS` block (137 -> 130 entries
+overall). **Read a base as "level 1"**: it is what the server sends at one stack and what answers
+any count we did not anticipate, so the base carries the low value and overrides escalate upward.
+
+```
+burning  = 9  (base, 1-3)     pyre  = 9  (base, 1-2)     horror = 9  (flat)
+burning4 = 6                  pyre3 = 5
+burning5 = 4
+unweavingbody / unweavingmind / unweavingspirit = 25 (base, 1-2), 3/4/5 = 2
+crescendo = 9
+```
+
+**The first cut of this block priced pyre3 at 2 and burning5 at 2, and both were wrong for the same
+reason: it labelled both families "Salve".** Burning *is* a salve (mending body). **Pyre is an EAT**
+-- bellwort/cuprum, per the bellwort list in `007_Branching_State_Tracker` and "Cuprum flake" in
+`paladin.md`. At 2, `pyre3` outranked **paralysis** at 3, whose own comment three bands up reads
+*"Bloodroot has NO herb competition"*. A priority is a claim on one balance and only means anything
+beside the others cured by that same balance. Both families now stay clear of the bands that stop
+us acting outright; the dynamic layer promotes them to the reserved slot 1 when the head is broken,
+which is the only state in which either is lethal.
+
+**`unweavingspirit` and `crescendo` had no entry at all** and ran on the server's own default.
+`psion.md` names the kill as "any TWO unweaves at level 3+", so pricing body and mind while leaving
+spirit alone covered two of three components -- and left the one cured on a *different* balance
+(smoke valerian) as the cheap way through. Both are now priced; a new test asserts that every
+affliction in `ataxia_stackAffs()` has a base entry, which is the inverse of the existing
+"every override has a base" check.
+
+`pressure`, the four fracture affs and the four `tempered*` keep **bare-only** entries -- correct as
+they stand, and a comment says so.
+
+### 3. PvE flattens the escalation back
+
+Burning is salve-cured, and mending/restoration share that balance -- so inheriting the PvP
+escalation would put a DoT ahead of every limb, the crackedribs-beats-broken-arm failure the PvE
+profile exists to fix. A denizen cannot perform Damnation, so `burning4`/`burning5` flatten to the
+base in the `bash` delta. `pyre` is Paladin-only and gets no delta. `horror1..5` are gone -- one
+base parks every stack (6 install commands -> 1).
+
+This tripped `test_bash_curing_profile`'s *"nothing that stops us acting is ever demoted"*
+invariant, whose rationale no longer covers the whole `<= 2` band now that a stack override can sit
+there for a **kill-condition** reason. Named exemption `PVP_KILL_ESCALATION`, kept minimal.
+
+### 4. Every bare-name writer, and the restore that never existed
+
+Four more, all inert for the same reason; each now writes the **level**:
+
+| Site | Was | Now |
+|---|---|---|
+| `002_Damnation_Defence` x3 | `pyre 1` / `burning 1` / `pyre 3` | `pyre3 1`, `burning4 1` + `burning5 1`; the third is dropped (the static `pyre3` already beats it) |
+| `001_Anti_Priorities` (anti-Magi) | `burning 1` | the whole family, restored likewise |
+| `003_Engaged_Disengage` (Firelord park) | `burning 26`, restore to a hardcoded `8` | family park; restore via `ataxia_restorePrio`, which reads the table and cannot drift |
+
+**`AntiPaladin` also lost its three early returns.** The old chain was `if ... return end` three
+times, which meant the **head cure was skipped by the pyre-3 branch** -- the single most dangerous
+state it models -- and `curing priority guilt 3` at the bottom was reachable **only when the head
+was whole**, the one state in which guilt does not matter. `paladin.md` calls "two of
+pyre/guilt/spiritburn" the MOST COMMON route and nothing escalated any of its members. Now the head
+is raised whenever broken, both routes are answered independently, and one callout is chosen from
+the whole picture rather than from whichever branch fired first.
+
+**And the restore.** `AntiPaladin` writes STORED priorities and this file had never put them back --
+survivable only while they were no-ops. `Algedonic.RestorePaladin` is called from `RestoreSwaps`
+**ahead of its `prioritySwaps` guard** (AntiPaladin is a class handler, not a toggleable swap). Two
+things it must not do: clear its latch while the bash set is active, because
+`ataxia_sendCuringPriority` drops those writes and the escalation would be stranded in the PvP set
+forever; and rely on the `ataxiaTemp` latch alone, because that does not survive a reload and
+`ataxia_resetOnLogin` -- long cited in a comment as the backstop -- **has no callers**. It falls
+back to `ataxia.curingprio`, which is saved to disk and refilled by trigger 719: a recorded value
+that disagrees with the table is an escalation that outlived its latch.
+
+### 5. The write guard, and a throttle that undercounted
+
+`writesStoredAffPrio` matched `([%a]+)` -- **letters only** -- so `curing priority burning5 9` did
+not match and passed the bash-curingset guard. Reachable from the UI: trigger 717 fills
+`ataxia.curingprio` from server tokens, so `burning5` becomes its own clickable row.
+
+`ataxia.prioThrottle` counted **calls**, not commands, against a 5-commands-per-second server cap --
+and several sites batch three at a time with semicolons, so a batch overlapping a `reset prios`
+could put 7+ commands into one second. Overflow is dropped server-side with no signal.
+
+`ataxia_defaultPrioAff` gains a base fallback and is now case-insensitive (trigger 717 writes keys
+straight from server tokens); `ataxia_restorePrio` reads that one source for both the comparison and
+the send -- it used to compare via the function but index the table directly on the line that
+concatenates, so an unknown name built `"... nil"` and threw.
+
+### Also fixed -- the deep review's long tail
+
+- **`Algedonic.Stack_My_Affs` threw on every `pressure` gain.** `whatcures` carries
+  `["pear"] = {"pressure"}`; `mystack` has no `pear` key. Invisible while the suffixed name matched
+  nothing. `Algedonic.SyncStackKeys` now reconciles the two, and **ten** unguarded
+  `Algedonic.mystack["<herb>"] >= n` comparisons route through `Algedonic.stackOf`, which answers 0.
+- **`affed()` returned true for a cured stack.** 0 is truthy in Lua, and `lostAff` zeroes rather
+  than nils. It now treats a numeric 0 as absent.
+- **The herb counters could walk negative.** The decrement path only went live in this change;
+  `afflictionList` rebuilds `ataxia.afflictions` wholesale but was not rebuilding the derived
+  counts, so cures arrived unmatched. It rebuilds them now, and the decrement floors at 0.
+- **`lostAff` is order-independent.** A stack change is Remove(old) + Add(new) with no guaranteed
+  order, so it zeroes only when the removed count is the one still held. (The old code zeroed only
+  when the second-to-last character was the digit `1` -- i.e. only for a two-digit suffix.)
+- `gotAff`/`lostAff` passed the **suffixed** name downstream, so `ApplySwaps` (which tests
+  `aff == "burning"`) and `Stack_My_Affs` (bare-name herb tables) were dead for every stacking
+  affliction. `Stack_My_Affs` was additionally handed the gmcp **table** rather than `aff[1]`.
+- `setStackAff` wrote `ataxia.afflictions[""]` for an unrecognised name -- a key `rTabSize` counts.
+- `setafflictionstackslevi` was missing `temperedcholeric` and carried an unused `burns` key; it
+  iterates `ataxia_stackAffs()` now, and says so rather than silently doing nothing if load order
+  breaks.
+- **`magi_addBurns()` does not exist anywhere in `src_new`** and both its call sites threw, aborting
+  the rest of the handler. Routed through the target path.
+- `AntiAlchemist` and `AntiBard` compared `temperedphlegmatic`/`crescendo` against a number with no
+  nil guard. `AntiUnnameable` sent `curing prioaff horror (5)` -- parenthesised, with a space, a form
+  nothing else accepts; now `horror5`, the token the server itself uses.
+- `curing priority frozen 2 shivering 2` -- two afflictions in one command, in both halves of the
+  Magi swap. Split.
+- `misc_alerts/004_We're_tumbling` sent its parshield swap with a raw `sendAll`, bypassing the
+  throttle **and** the bash-curingset guard -- which would permanently demote **paralysis** to 25 in
+  the bash set.
+- `curing priority defense blind reset` (FIRE_SCALD, FIRE_ABLAZE) was wrong on both halves: every
+  other site spells it `defence`, and the defence is named `blindness`.
+- `042_Syntax_Help_Warning`'s throttle compared `getEpoch()` floats for equality, so it never
+  throttled. `unknown_checks/002` looped over a captured count against a 3-element table.
+- `sentinel_limb_attacks/003_Throwingaxe_2` demanded the literal `a throwing axe` while the attested
+  line names the weapon -- the same defect fixed in `determine_class/022` -- **and** read
+  `multimatches[1][4]` on a two-group pattern, so even a matching line set `slc_last_limb` to nil.
+  The SLC feed for the Sentinel's most common attack was dead at both ends.
+- `ataxia_sendDefaultPrios` iterated `pairs()` and batched non-deterministically; sorted now, which
+  also emits each family's base ahead of its overrides. `ataxia_stackAffs()` returns a copy.
+
+### Verifying it in game
+
+**Nothing parses a rejected `curing priority`** -- a bad affliction name produces no error, no echo,
+and never receives trigger 719's confirmation. So, in order:
+
+1. Take a burn: the prompt should show `burns(N)` climbing. If it shows a raw suffixed word instead,
+   GMCP is not sending suffixed names and the rest of this rests on a wrong premise.
+2. `reset prios`, wait ~40s, then `CURING PRIORITY LIST` and confirm the 18 stack rows are present
+   at their values. **Stale rows will still be there**: deleting a key from the Lua table does not
+   delete the row from the server-side curingset, and `reset prios` only writes what the table
+   holds -- it never sends `CURING PRIORITY RESET`. Every orphan (`burning1..3`, `horror1..5`,
+   `pyre1/2`, `unweaving*1/2`) happens to equal its new base, so they are inert, but they will
+   appear.
+3. `aconfig bashcuring install` then `aconfig bashcuring show`: `horror` once, `burning4/5` at 9.
+4. **`CURING PRIOAFF HORROR5`, typed by hand.** Whether PRIOAFF accepts a suffixed name is still
+   unverified, and `AntiUnnameable` fires it exactly when it matters.
+
+**Known limitation, recorded here because a code comment is not findable:** the Firelord burn park
+fires on `"basher enabled"`, the same event that arms the PvE bash curingset, and
+`ataxia_sendCuringPriority` drops stored affliction writes while that set is active. On a fire class
+with the profile installed the park is silently skipped. Its right home is a delta in
+`008_Bash_Curing_Profile.lua`, but that table is not class-conditional.
+
+Tests: 1469 -> 1585, including a new `test_curing_prios.lua` (the priority-write layer had none) and
+a new `test_damnation.lua` (that file had zero coverage and its core was rewritten).
+
+---
+
+## 2026-08-19 - Sentinel: the SKULLBASH conjunction, wired into curing (v4.7.276)
+
+Acting on the confirmed mechanic: **SKULLBASH needs PRONE *and* a BROKEN HEAD, simultaneously.**
+Both halves are individually trivial to cure, which is exactly why the conjunction kills -- it is
+invisible unless something names it, and the affliction lock exists to make both permanent at
+once. In the death log the true lock landed 09:59:55.789, **before** the leg break (09:59:58) and
+the head break (10:00:02).
+
+### 1. `SKULLBASH` on the prompt
+
+`ataxia_promptLocks` now appends **`SKULLBASH`** to the lock display on `prone` +
+(`damagedhead` or `mangledhead`). It sits alongside soft/venom/hard/true rather than replacing
+them. Tested in `test_lock_and_parry.lua`, including that it does not displace the venom ladder.
+
+### 2. Skullbash emergency in `Algedonic.AntiSentinel`
+
+On head-broken + prone we now `curing prioaff prone` **and** `curing prioaff damagedhead` --
+attack whichever half SSC can actually reach, rather than picking one and hoping. `prioaff` is a
+temporary prioritisation and writes no stored priority, so it is safe against the curingset write
+hazard (see `memory/curing.md`).
+
+The limb alarm fires on the **conjunction**, with a softer "do not go prone" on a broken head
+alone. Warning on a broken head by itself fires against every limb class and trains you to
+ignore it.
+
+### 3. Stopped shielding a Sentinel
+
+The rift-lock branch no longer sets `preventriftlock`, so it no longer drives `touch shield`.
+Shielding a Sentinel is a losing trade twice over, and the log proves it:
+
+- **`ENRAGE LEMMING`** (Woodlore) strips **SHIELD before REBOUNDING** and costs him **no balance**.
+  Six of our shields went up; a lemming took every one within ~2 seconds.
+- **`RIVE`** (Skirmishing, 2.25s) shatters a shield outright.
+
+Each shield also fired `cq all` through `combatQueue()`, clearing our own attack queue. It now
+warns instead -- the human can still shield if they judge it worth it.
+
+### 4. Sensitivity promoted on its own merit
+
+**Measured at ~+33% damage taken**, from two independent sources in one log: wolf bite
+1,113 -> 1,480 (+33.0%) and healthleech tick 1,062 -> 1,390 (+30.9%). It multiplies everything he
+and his animals do, so `AntiSentinel` now prioaffs it whenever it is up -- previously only when
+healthleech happened to be up alongside it.
+
+### 5. Documentation restructured
+
+`.claude/classes/sentinel.md` had drifted into contradicting itself -- confirmed findings
+interleaved with inherited assumptions. It now opens with a **HOW TO READ THIS FILE** banner and
+every legacy section is tagged **ASSUMED**, including `Kill Routes` (whose "primary kill:
+eviscerate" is probably wrong -- eviscerate is not in the current Skirmishing ability list and was
+never attempted).
+
+### Known gap, not fixed
+
+**Confusion is never captured.** `You gasp as your fine-tuned reflexes disappear into a haze of
+confusion.` fired three times and never reached our affliction table. Our own afflictions come
+from **GMCP `Char.Afflictions.Add`** (`gotAff`), not text triggers -- so either the server does
+not surface confusion over GMCP, or it was cured sub-prompt each time. **A text trigger was
+deliberately NOT added:** setting the flag from text while relying on GMCP for the Remove would
+strand a phantom affliction if GMCP never knew about it, and SSC would then burn balance curing
+something we do not have. Needs the GMCP stream checked first.
+
+### Also learned (documentation only)
+
+- **He has FITNESS too, and it is not ours.** Metamorphosis `FITNESS` is **3.00s balance**,
+  purges asthma, available on Cheetah/Elephant/Hydra/Hyena/Jaguar/Wolf/Wyvern -- and Grulk was in
+  **jaguar** form all fight. **An asthma-based lock on a Sentinel is therefore expensive.** Ours
+  measured a **~9.8s cooldown** and is blocked by weariness: same verb, different ability.
+- **BLOODSCENT tested and eliminated** as the source of `A savage light enters the eyes of <X>`.
+  It needs a *tumbling* target: spear PASSES 4/4, **tumbling FAILS 4/4** (all four fired before
+  our first tumble at 09:59:24). Still unidentified.
+
+---
+
+## 2026-08-19 - The Grulk death: two silent gates that inverted (v4.7.275)
+
+A 123-second PvP log against **Grulk Stormwing (Sentinel)** ending in death. Total damage taken
+**84,982 (~692 dps)** against a ~14,906 HP pool; Grulk finished at **100% HP**. Net health damage
+dealt: approximately zero.
+
+Everything below is measured from that log, not inferred.
+
+### The kill
+
+`Agony radiates out from the point of impact as Grulk brings the haft of a Stormspear down upon
+your head with crushing force.` -- **8,556 unblockable**, from 9,817 HP, on a head he had broken
+1.4 seconds earlier with the seventh of seven 14.7% handaxe throws. A wolf bite and a second haft
+crush finished it. **Not an attrition death**: our HP sat between 9,800 and 14,900 the entire fight.
+
+### 1. `canParry()` refused precisely when a limb class had done its job
+
+We parried **2 of 44 throws (4.5%)** while he walked right leg -> left leg -> left arm -> right
+leg -> **head** in clean runs of 4-7 hits each. The selection logic was right and
+`ataxia_promptCommands` already sends `parry` every prompt -- the gate in front of it was the bug:
+
+| Removed clause | Why |
+|---|---|
+| `ataxia.vitals.bal and ataxia.vitals.eq` | PARRY spends neither. Excluded every moment of our own attack recovery, for no game reason. |
+| `canStand()` | False on ANY damaged/broken/mangled **leg**. His right-leg prep alone would have frozen the cover permanently; `prone` is checked directly. |
+| `damagedleftarm` / `damagedrightarm` | Sub-break damage. `broken*` / `mangled*` are checked separately, so these could only block, never permit. |
+
+A single broken arm no longer blocks either -- you parry with the other one. Both do.
+**The through-line: every removed clause was a state a limb-prep class manufactures on purpose,
+so the gate tightened exactly as the opponent's setup improved.** Same inversion `003_Parrying.lua`
+fixed in the PvE *selection* path in v4.7.221; the SEND gate was never revisited.
+
+### 2. The offense/lock-break deadlock
+
+`blademaster.sendAttack` deferred unconditionally to `ataxia_lockBreak()`. But `ataxia_lockBreak`
+does nothing when `ataxia_canActive()` is false, and **Blademaster's blocker is WEARINESS** --
+which the Sentinel held up for the last 19 seconds. So the offense waited for a cure that could
+not go out, and neither side said anything. **89 dispatch attempts produced 10 outbound actions**,
+with zero offense for the last 86 seconds.
+
+Now: defer only when the cure can actually be sent. When it cannot, swinging beats standing still.
+
+### 3. FITNESS fired reactively, which is always too late
+
+`ataxia_lockBreak` gated on `ataxia_needLockBreak()` -- the **completed** triad (asthma AND
+anorexia AND slickness). Fitness sat ready and unblocked for **34.8 seconds** (09:59:01 ->
+09:59:35) with asthma repeatedly up. At 09:59:33 we held asthma + slickness, one affliction from
+the lock, cure idle. Anorexia landed 2.9s later, the lock closed, weariness returned 1.3 seconds
+before the cure came off cooldown, and it was blocked for the rest of the fight.
+
+- **`ataxia_needPreLockCure()`** fires at ONE component away, never on a bare asthma (the cure has
+  a ~10s cooldown -- measured 9.8s and 8.7s in this log).
+- **`ataxia_lockBreakHeartbeat()`** runs every prompt. The old wiring fired only on affliction
+  change or attack dispatch; the prompt was byte-identical for four seconds while we sat locked,
+  so nothing called it. The cure only went out because two unrelated afflictions happened to land.
+- The blocked branch now **echoes**. `ataxia_breakLock` uses `send(cmd, false)`, which suppresses
+  the client echo -- which is why the first pass over this log concluded fitness had never been
+  sent at all, when in fact it fired twice and the server's replies were the only evidence.
+
+### 4. ClassDetect recognised 4 of Grulk's 51 attacks (8%)
+
+`^(\w+) cocks back \w+ arm and throws .+ axe at your` needs the literal `" axe at your"`. His line
+reads `"...throws a claw-etched handaxe of steel and ash AT YOUR left leg"` -- the material suffix
+comes after the noun. **44 throws, zero detections.** Five Stormspear lines were absent entirely,
+including the haft crush that killed us.
+
+Consequence: `combatTimeoutSeconds` kept expiring mid-fight, so the `sentinel` curingset was
+switched in and reset to `normal` **three times in 123 seconds**, each reset also firing
+`All your defence priorities have been reset to defaults` -- once while we were prone, bleeding and
+locked. And it self-reinforced: "combat ended" partly because we had stopped attacking.
+Timeout 15s -> 30s as a backstop for a genuine lull (he left and re-entered the room six times).
+
+### 5. The `preventriftlock` loop
+
+`Algedonic.AntiSentinel` fired on every affliction gain **and loss** (paralysis cycled 24 times):
+
+- `A or B and not C` parses as `A or (B and not C)` -- a damaged left arm triggered it regardless
+  of prone, and a single damaged arm is not a rift lock.
+- `expandAlias("goto 11090")` -- a hardcoded room id the mapper could not route to:
+  `Don't know how to get there (11090)` **nine times**. Auto-walking mid-fight on a hardcoded id
+  is gone; the user is told to run instead.
+- `preventriftlock` makes `combatQueue()` send `cq all;touch shield` on every dispatch. We shielded
+  six times and **a lemming stripped it within ~2 seconds every single time** -- six balances spent
+  to block our own offense, each `cq all` clearing our own attack queue.
+- `tAffs.prone` (the **target's** prone) inside a branch entirely about our own curing, which gated
+  off the `kelp >= 3` handling -- the one piece of code that addresses a Sentinel overloading the
+  herb balance.
+
+Now: the real rift-lock condition only (asthma + slickness + **both** arms out), once per
+engagement, with no movement. Plus a head/legs warning keyed to the actual kill routes.
+
+### 6. Queue recall, target-left cleanup, and priorities
+
+- **Queue recall.** The raze-vs-attack choice is made at dispatch; `queue addclear` cannot be
+  recalled. `[REB]` printed **830ms** before our armslash landed and the reflection put 18.1% into
+  our own left arm -- **the hit that broke it** (his six throws made 88.2%, not a break; ours took
+  it to 106.3%, a break *and* a second restoration). `blademaster.onTargetDefenceUp` now converts a
+  pending swing to a raze. A whiffed raze costs the swing; eating a rebound cost the swing, 615
+  damage, and a self-inflicted limb break.
+- **Target-left cleanup** now runs ABOVE the `chasing_Targets` early return in `637`/`634`/`638`/
+  `639`. With chasing off, none of it ran: our queued combo fired into an empty room (three server
+  refusals) and a jade spider hit us four times for **3,509**. Chasing disabled means "do not
+  follow", never "do not clean up".
+- **`weariness` 7 -> 6.** It was tied with three other kelp affs while its own comment already said
+  "Blocks Fitness". Curing it restores a *repeatable* free asthma purge.
+- **`healthleech` 9 -> 8.** 12 unblockable ticks for **14,056 damage -- 16.5% of everything we
+  took** -- never cured once. Per-tick value stepped 1,062 -> 1,390 (+31%) the moment
+  **sensitivity** landed, which is why sensitivity stays at 7 above it.
+- **`damagedhead` 12 -> 8.** A targeted exception to PvP's deliberately-low limb ranking, not a
+  reversal: a broken head is what enables the haft crush.
+
+### 7. Visibility, and a bounded PvP retry
+
+Every guard returned in silence and the `[BM ...]` status block prints *before* the send, so the
+screen reported healthy prep 89 times while nothing left the client. `blademaster.suppressed()`
+now echoes the reason, debounced per-reason so a *change* of reason always prints.
+
+`ataxia_promptCommands` re-dispatches every prompt only when `ataxiaBasher.enabled` (PvE), so in
+PvP a refused attack was lost until the next keypress. `blademaster.retryTick` keeps swinging for
+`retryWindow` (12s) after the last **manual** press -- press once and it continues, stop pressing
+and it stops. `bmretry on|off|<seconds>`.
+
+`blademaster.warnModeFlap` warns when a mode switch abandons accumulated prep (the log went
+double -> quad -> double -> quad; two productive arm swings to 30.2/30.2 were thrown away).
+
+### Corrected during analysis
+
+- **`Your addiction can never be sated` is a passive rider on eats that cured something real** --
+  every one of the 12 occurrences accompanies a genuine cure. An earlier draft called them wasted
+  eats and proposed a priority change; withdrawn, no change made.
+- Weariness is cured by **aurum** here, not kelp (`You eat an aurum flake.` -> `Your limbs
+  strengthen and you feel stronger.`), so the contended channel is the shared eat balance.
+
+Tests: `test_lock_and_parry.lua` (25), `test_bm_dispatch_guards.lua` (16). Suite 1509 -> 1550.
+
+### Follow-up: the Sentinel ability map, and a kill-path knowledge base
+
+A second forensic pass over the same log, cross-referenced against
+[Skirmishing](https://wiki.achaea.com/Skirmishing) and [Woodlore](https://wiki.achaea.com/Woodlore),
+resolved every attack line to a named ability and **corrected three of the first pass's
+conclusions**. Recorded in `.claude/classes/sentinel.md`; new cross-class index at
+**`docs/kill-paths.md`** with a CONFIRMED / WIKI / ASSUMED confidence tag and the worked method.
+
+Each attack has exactly one job: **RETURNING** (throw) is the engine -- 42 of 57 attacks,
+14.7% limb *and* a venom on the same hit; **TRIP** is prone + the level-2 break (483 dmg, 3/3
+landed trips broke a limb); **GOUGE** is weariness (all 3 weariness windows); **LACERATE** is
+haemophilia (2/2); **DOUBLESTRIKE** is the lock-closer -- the slash gives anorexia and the haft
+follow-up gives impatience, one ability, two messages, both hard-lock components; **SKULLBASH**
+is the kill and requires **prone**.
+
+**Corrections to the v4.7.275 entry above:**
+
+- **The fox does not apply healthleech.** Its attack produces no damage line at all -- it is a
+  bleed amplifier. Healthleech is almost certainly a layered venom (`ENVENOM` *"layers venoms
+  on weapons"*), which also explains paralysis + healthleech landing together.
+- **The butterfly strips OUR deafness and blindness** -- the exact counters to the wolf howl
+  (amplifies damage if you lack deafness) and the raven (needs line of sight). He carries a
+  dedicated animal to peel the defences that blank his other animals.
+- **`ENRAGE LEMMING` costs no balance** and strips **shield before rebounding**; **RIVE**
+  shatters a shield in 2.25s. `preventriftlock`'s re-shielding response never had a chance.
+
+**SKULLBASH requires PRONE *and* a BROKEN HEAD, simultaneously** (user-confirmed) -- and that
+is what the affliction lock is FOR. Two individually-trivial conditions become a kill once they
+are made permanent together: prone cannot be stood out of (broken leg + weariness) and the head
+cannot be restored (anorexia/slickness block the salve). The true lock landed 09:59:55.789,
+BEFORE the leg break (09:59:58) and the head break (10:00:02). **TRIP supplies both halves in one
+action** -- it prones you and breaks the leg you would stand up with.
+
+`Algedonic.AntiSentinel`'s alarm now fires on the **conjunction** (head broken + prone), with a
+softer "do not go prone" on a broken head alone. Warning on a broken head by itself fires against
+every limb class and trains you to ignore it. **Counter: break either leg -- restore, or stand.**
+
+**SENSITIVITY quantified at ~+33% damage taken**, from two independent sources in one log:
+wolf bite 1,113 -> 1,480 (+33.0%) and healthleech tick 1,062 -> 1,390 (+30.9%).
+
+**EVISCERATE is not in the current Skirmishing ability list** and was never attempted. The class
+doc had it as the primary kill; it is now flagged UNVERIFIED.
+
+### Not done, deliberately
+
+**Flamefist on demand.** It is quad-phase 3, reachable only once all four limbs are prepped.
+Making it available whenever rebounding is up would need a phase-machine change, and flamefist was
+never used in this log (`Flamefist` count: 0) -- so there is no evidence for how it actually
+behaves against a cycling rebounding. Guessing at it offline risks making the break sequence worse.
+
+---
+
 ## 2026-08-17 - Inline INFUSE: one command instead of two (v4.7.273)
 
 Game announcement **#174**:

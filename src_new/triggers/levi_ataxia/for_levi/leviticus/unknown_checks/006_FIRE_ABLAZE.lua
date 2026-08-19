@@ -40,4 +40,8 @@ patterns:
 ]]--
 
 if ataxia.afflictions.blackout then		expandAlias("diag") end
-send("curing priority defense blind reset")
+-- Was `defense blind reset`: wrong on both halves. Every other site in the tree spells it
+-- `defence`, and the defence is named `blindness` (deffing/004_Defence_Sorting) -- `blind`
+-- is not a defence, so this was silently rejected. A rejected curing command prints
+-- nothing, which is why it survived.
+ataxia_sendCuringPriority("curing priority defence blindness reset", false)

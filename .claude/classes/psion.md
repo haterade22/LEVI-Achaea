@@ -652,3 +652,21 @@ key (`barbedblade`, `whirlwind`, `devastate`, `regrowth`). Storing the command s
 (`"weave barbedblade"`) there -- as this rotation did until v4.7.193 -- means the release never
 matches and a stale pick is replayed for the rest of its 3s window after the game has already
 said the ability is ready.
+
+## Defending the unweave kill (package side, v4.7.276)
+
+`ataxia_defaultCuringPrios()` prices all three families identically, because the kill condition is
+**any two unweaves at level 3+** -- so pricing two of them leaves the third as the cheap way through:
+
+```
+unweavingbody / unweavingmind / unweavingspirit = 25   (BASE -- levels 1-2, deliberately parked)
+                              3 / 4 / 5         = 2    (3+ is critical, 5 is near-kill)
+```
+
+**`unweavingspirit` had no entry at all** until v4.7.276 and ran on the server's own default while
+body and mind were tuned -- and it is the one cured on a *different* balance (smoke valerian, one
+level at a time), so it was both the cheapest to leave and the slowest to clear.
+
+The low levels are parked on purpose: `Algedonic.AntiPsion` prioaffs mind and body at 2+ stacks, and
+`CURING PRIOAFF` is a TEMPORARY prioritisation that writes nothing stored -- so the parked base and
+the prioaff are not in conflict, they are the two halves of "ignore it until it matters".

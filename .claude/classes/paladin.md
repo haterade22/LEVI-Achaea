@@ -320,6 +320,61 @@ recommended_strategy: |
   - Consider fleeing/shielding if head broken and any component present
 ```
 
+## How the package actually defends this (v4.7.276)
+
+**The burn and component routes are covered STATICALLY**, in `ataxia_defaultCuringPrios()`:
+
+```
+burning  = 9   (base, levels 1-3)      pyre  = 9   (base, levels 1-2)
+burning4 = 6                           pyre3 = 5   -- pins the burn floor at 3
+burning5 = 4   <- broken head + burning 5 IS Damnation
+```
+
+**Why static rather than only in `Algedonic.AntiPaladin`:** that handler runs only once
+`Algedonic.Prioritize()` has matched the target's class, so a missed NDB read used to cost the
+entire response. The table answers the same threat with no detection at all; the dynamic layer adds
+the context the table cannot know -- *the head is broken* -- by raising the relevant names into
+priority 1, the reserved emergency slot.
+
+**Why those numbers and not lower.** A priority is a claim on ONE cure balance. **Burning is a salve**
+(mending body, one stack per application) and **pyre is an EAT** (bellwort/cuprum). The first cut of
+this block labelled both "Salve" and priced them at 2, which put pyre3 above **paralysis** at 3 --
+whose own comment in the same table reads "Bloodroot has NO herb competition". Neither family now
+enters the band that stops us acting outright; the escalation to 1 happens only when the head is
+broken, which is the only state in which either is lethal.
+
+**Three things were silently broken until v4.7.276, and each is a class of fault worth remembering:**
+
+1. **A write to the wrong key.** Every dynamic write targeted the **bare** name
+   (`curing priority burning 1`). Since a bare write is the BASE and our table carried an explicit
+   entry at every stack level, those writes were the one value the overrides beat. Nothing parses a
+   rejected or ineffective `curing priority`, so it never announced itself.
+2. **A read that was never a number.** `checkDamnationThreat` reads `ataxia.afflictions.burning` as
+   a level, and the GMCP stack decoder tested the *second-to-last* character of the name -- nil for
+   every single-digit suffix, which is what Achaea sends (`gmcp_name: "pyre1, pyre2, pyre3"` above).
+   Fixed by `ataxia_stackAff`.
+3. **A function nothing called.** Even with a correct value, `checkDamnationThreat` was reachable
+   only from `pali_addPyre`/`pali_addBurns`, which are called only from `tarAffed` -- the **target**
+   path, fired by `492_Flamewhip` and `493_Blisters`, both of which match *our own attack on an
+   enemy*. So setting a target ablaze raised OUR burn counter, and taking a burn ourselves raised
+   nothing. `ataxiaTemp.fightingPaladin` had the same shape: its only setter was `pali_addPyre`, and
+   no trigger applies pyre to us through `tarAffed`, so the auto-detect never fired either.
+
+   Both now live in `gotAff` -- the GMCP **self** path, where a self affliction belongs. Only a
+   Paladin can PERFORM PYRE, so gaining pyre sets `fightingPaladin`; `DAMNATION_AFFS` gates the
+   alarm to the seven names that can change the verdict.
+
+**`AntiPaladin` has no early returns.** It used to be three `if ... return end` branches, so the
+head cure was skipped by the pyre-3 branch -- the most dangerous state it models -- and the guilt
+write was reachable only when the head was WHOLE. The "two of pyre/guilt/spiritburn" route above,
+which this file calls the MOST COMMON, had none of its members escalated at all.
+
+**`Algedonic.RestorePaladin`** (from `RestoreSwaps`, ahead of its `prioritySwaps` guard) puts the
+escalated names back once the head heals. It did not exist before, which was survivable only while
+the writes were no-ops. It holds its latch while the PvE bash set is active -- those writes are
+dropped there, and clearing anyway would strand the escalation in the PvP set -- and falls back to
+`ataxia.curingprio` when the `ataxiaTemp` latch is lost to a reload.
+
 ## Limb Tracking
 ```yaml
 # Uses lb[target].hits["limb"] format for limb damage tracking

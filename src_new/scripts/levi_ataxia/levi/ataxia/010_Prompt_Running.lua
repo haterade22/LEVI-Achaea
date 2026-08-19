@@ -60,6 +60,22 @@ function ataxia_promptCommands()
 		end
 	end
 
+	-- LOCK-BREAK HEARTBEAT (v4.7.275). ataxia_lockBreak previously ran only as a side effect of
+	-- an affliction changing or of an attack dispatch. In the 2026-08-19 Grulk log the prompt was
+	-- byte-identical for four seconds while we sat locked, so nothing called it; the cure went out
+	-- only when two unrelated afflictions happened to land. A static lock now still gets attacked.
+	-- Cheap: a few table lookups, and `attemptedLockBreak` throttles the send to one per 1.5s.
+	if ataxia_lockBreakHeartbeat then ataxia_lockBreakHeartbeat() end
+
+	-- PvP OFFENSE RETRY (v4.7.275). The basher block below re-dispatches every prompt in PvE and
+	-- there has never been an equivalent for PvP, so a suppressed or server-refused attack was
+	-- lost until the next keypress -- silently. Bounded by the last manual press; see
+	-- blademaster.retryTick.
+	if not ataxiaBasher.enabled and blademaster and blademaster.retryTick then
+		local ok, err = pcall(blademaster.retryTick)
+		if not ok then cecho("\n<red>[BM] retryTick error: " .. tostring(err)) end
+	end
+
 	if ataxia_isClass("bard") and ataxiaTemp.needSymphony and ataxia.bardStuff.symphony and canBals() and bardHarmsInRoom and not ataxiaTemp.symphAttempted then
 		ataxiaTemp.symphAttempted = true
 		tempTimer(2, [[ataxiaTemp.symphAttempted = nil]])

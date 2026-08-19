@@ -1,5 +1,60 @@
 # Blademaster
 
+## FITNESS is the lock-breaker, and WEARINESS switches it off (confirmed 2026-08-19)
+
+`ataxia_breakLock` (`can(x)/003_Lock_breakers.lua`) sends **`fitness`** for Blademaster -- shared
+with Druid, Infernal, Monk, Paladin, Runewarden, Sentinel and Unnamable. `ataxia_canActive`
+blocks it on **weariness**, and that is correct game mechanics, not a code assumption.
+
+Measured from the Grulk death log (`Sentinel.txt`, 123 seconds):
+
+| Fact | Value |
+|---|---|
+| Cooldown | **~9.8s** and **~8.7s** (two clean measurements) |
+| Success line | `You inhale deeply, purging yourself of your asthmatic condition.` |
+| Cooldown refusal | `You may not purge your lungs again as of this time.` |
+| Ready line | `You may purge your lungs once again.` |
+| Cures | asthma (and weariness -- `onClassCureV3({"asthma","weariness"})`) |
+
+**The command is INVISIBLE in logs.** `ataxia_breakLock` uses `send(cmd, false)`, which suppresses
+the client echo, so only the server's replies appear. A first pass over that log concluded fitness
+had never been sent; it had fired twice. v4.7.275 adds an explicit `[LOCK]` echo so a log can
+answer the question directly.
+
+**The deadlock this produced (v4.7.275 fix).** `blademaster.sendAttack` deferred unconditionally to
+`ataxia_lockBreak()`. With weariness up, `ataxia_lockBreak` declines -- so the offense waited for a
+cure that could never go out, and neither side echoed anything. **89 dispatch attempts, 10 outbound
+actions, zero offense for 86 seconds.** `sendAttack` now defers only when `ataxia_canActive()` is
+true; otherwise it swings, because standing still helps nobody.
+
+**Use it pre-emptively.** `ataxia_needPreLockCure` fires at ONE lock component away
+(asthma + any of slickness/bloodfire/anorexia/impatience/sandfever), never on a bare asthma. In
+that log fitness sat ready and unblocked for **34.8 seconds** with asthma repeatedly up, because
+the only caller gated on the *completed* triad. By the time the lock closed, weariness was back.
+
+## PvP dispatch: every guard is silent, and the status block lies
+
+`blademaster.run()` bails before the echo on `attackInFlight` / no target / aeon / `reboundHold`.
+`blademaster.sendAttack()` bails after it on `needLockBreak` / `playersHere`. The `[BM ...]
+Target:` block prints **between** them -- so a healthy-looking status display is not evidence that
+anything was sent. v4.7.275 adds `blademaster.suppressed(reason)`, debounced per-reason.
+
+**PvP offense is keypress-driven with no retry.** `ataxia_promptCommands` re-dispatches every
+prompt only when `ataxiaBasher.enabled` (PvE). `blademaster.retryTick` (v4.7.275) keeps swinging
+for `config.retryWindow` (12s) after the last **manual** press -- anchored to `markManual()`, not to
+the last run, so it cannot sustain itself. `bmretry on|off|<seconds>`.
+
+**`queue addclear freestand` requires STANDING.** An entry that cannot satisfy it sits until the
+next dispatch's `addclear` *replaces* it -- so mashing the alias while prone does not queue ten
+attacks, it queues one, ten times. Confirmed refusals in that log:
+`Both of your legs must be free and unhindered to do that.` / `You must be standing first.`
+
+**Rebounding/shield raised after we queue is eaten.** The raze-vs-attack choice is made at dispatch
+time. `blademaster.onTargetDefenceUp` (v4.7.275, wired from triggers `430` and
+`misc_alerts/002`) converts a pending swing to a raze -- `addclear` replaces, so it is one command.
+Worth it: eating one rebound put **18.1% into our own left arm and was the hit that broke it**
+(his six throws made 88.2%; ours took it to 106.3%, a break *and* a second restoration).
+
 ## Divine Thunder Cataclysm (Mnemosyne boon) -- thunderstorm as a crowd rider
 ```yaml
 # ataxiaBasher_bmThunderstorm, basher/002. Flag mnemDivineThunder (trigger mnemosyne/054).

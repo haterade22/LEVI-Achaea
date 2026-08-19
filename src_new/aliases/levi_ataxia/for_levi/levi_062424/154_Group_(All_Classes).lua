@@ -26,7 +26,13 @@ if gmcp.Char.Status.class == "Serpent" then
 end
 
 if gmcp.Char.Status.class == "Blademaster" then
-  if blademaster and blademaster.run then
+  -- v4.7.275: route through bmd() rather than setting the mode inline, so this entry point picks
+  -- up markManual() (which drives blademaster.retryTick) and warnModeFlap(). `sr` is a manual
+  -- press like any other, and it silently forcing mode="double" mid-fight is one of the ways the
+  -- 2026-08-19 log ended up flapping double -> quad -> double and abandoning its prep.
+  if bmd then
+    bmd()
+  elseif blademaster and blademaster.run then
     blademaster.state.mode = "double"
     blademaster.run()
   end

@@ -40,7 +40,14 @@ classDetect.state = classDetect.state or {
 --------------------------------------------------------------------------------
 
 classDetect.config = classDetect.config or {
-  combatTimeoutSeconds = 15,
+  -- 15 -> 30 (v4.7.275). The timeout is reset ONLY by a class-signature line, never by taking
+  -- damage, so a lull in identifiable attacks reads as "combat ended" and reverts the curingset
+  -- -- which also fires `All your defence priorities have been reset to defaults` mid-fight.
+  -- The 2026-08-19 Grulk log did that three times in 123 seconds, once while we were prone,
+  -- bleeding and locked. Fixing the Sentinel patterns (022_Sentinel_Class_Grab) removes most of
+  -- the cause; this is the backstop for a genuine lull -- he left and re-entered the room six
+  -- times while kiting, and a reverted curingset mid-kite is worse than a stale one.
+  combatTimeoutSeconds = 30,
   debounceMs = 500,
   echoSwitches = true,
   proactiveLookup = true,

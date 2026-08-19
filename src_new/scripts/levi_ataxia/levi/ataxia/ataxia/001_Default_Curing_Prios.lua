@@ -38,6 +38,10 @@ function ataxia_sendDefaultPrios()
   for aff, val in pairs(prios) do
     entries[#entries + 1] = "curing priority " .. aff .. " " .. val
   end
+  -- Sorted for the reason bashInstallWrite sorts: a retry must send the same thing. pairs()
+  -- order is undefined, so the batching was non-deterministic. It also puts a family's BASE
+  -- ahead of its overrides (" " sorts before "4"), which is the safe order to write them in.
+  table.sort(entries)
   -- Send in batches of 5, staggered by 1.5s
   local batchSize = 5
   local delay = 0
@@ -90,13 +94,7 @@ function ataxia_defaultCuringPrios()
     ["impaled"] = 2,          -- Writhe.
     ["transfixation"] = 2,    -- Writhe.
     ["webbed"] = 2,           -- Writhe.
-    -- Psion unweaving (high stacks = near-kill)
-    ["unweavingbody5"] = 2,   -- Psion mechanic. 5 stacks = critical.
-    ["unweavingbody4"] = 2,   -- Psion mechanic. 4 stacks.
-    ["unweavingbody3"] = 2,   -- Psion mechanic. 3 stacks.
-    ["unweavingmind5"] = 2,   -- Psion mechanic. 5 stacks = critical.
-    ["unweavingmind4"] = 2,   -- Psion mechanic. 4 stacks.
-    ["unweavingmind3"] = 2,   -- Psion mechanic. 3 stacks.
+    -- Psion unweaving lives in the STACKING AFFLICTIONS block at the foot of this table.
 
     -----------------------------------------------------------
     -- PRIORITY 3: Severe incapacitation / lock core
@@ -135,22 +133,26 @@ function ataxia_defaultCuringPrios()
     -----------------------------------------------------------
     -- PRIORITY 7: Lock support / herb competition
     -----------------------------------------------------------
+    -- weariness 7 -> 6 (v4.7.275). It was tied with three other kelp affs while its own comment
+    -- already said "Blocks Fitness" -- and FITNESS is the whole lock-breaker
+    -- (003_Lock_breakers: Blademaster/Druid/Infernal/Monk/Paladin/Runewarden/Sentinel/Serpent
+    -- all gate on weariness). In the 2026-08-19 Grulk log weariness was up in 180 of 511 prompts
+    -- and continuous for the last 19 seconds, so ataxia_canActive() was false through the entire
+    -- true lock and the cure never went out. It got two kelp/aurum cures in 123 seconds.
+    -- Curing weariness restores a REPEATABLE free asthma purge; curing asthma directly fixes one
+    -- instance. Higher leverage, so it goes first.
+    ["weariness"] = 6,        -- Blocks Fitness (the lock-breaker). Kelp. (was 7)
     ["asthma"] = 7,           -- Softlock core. #1 kelp priority. astWear swap boosts to 3 vs Serpent.
     ["sensitivity"] = 7,      -- Damage amplifier. Kelp.
-    ["weariness"] = 7,        -- Blocks Fitness. Class lock aff. Kelp.
     ["clumsiness"] = 7,       -- 33% miss chance! Kelp. (was 14)
     ["parasite"] = 7,         -- Kelp.
     ["rebbies"] = 7,          -- Pariah mechanic. Ginseng.
-    ["unweavingbody2"] = 25,  -- Psion mechanic (low stacks, deprioritized).
-    ["unweavingbody1"] = 25,  -- Psion mechanic (low stacks, deprioritized).
     ["brokenrightleg"] = 7,   -- Mending.
     ["brokenleftleg"] = 7,    -- Mending.
 
     -----------------------------------------------------------
     -- PRIORITY 8: Mental fallback / moderate
     -----------------------------------------------------------
-    ["unweavingmind2"] = 25,  -- Psion mechanic (low stacks, deprioritized).
-    ["unweavingmind1"] = 25,  -- Psion mechanic (low stacks, deprioritized).
     ["guilt"] = 8,            -- Paladin mechanic. Lobelia.
     ["nausea"] = 8,           -- Blocks parry. Ginseng. (was 11)
     ["skullfractures"] = 8,   -- Health elixir.
@@ -174,9 +176,23 @@ function ataxia_defaultCuringPrios()
     ["crackedribs"] = 9,      -- Health elixir.
     ["dizziness"] = 9,        -- Vertigo synergy. Goldenseal. Focus handles normally. (was 23)
     ["vertigo"] = 9,          -- Dizziness+vertigo = falling. Lobelia. (was 16)
-    ["healthleech"] = 9,      -- Ticking damage. Kelp. (was 14)
+    -- healthleech moved to 8 -- see the PRIORITY 8 block below.
     ["addiction"] = 9,        -- Riftlock enabler. Ginseng. (was 11)
     ["mangledhead"] = 8,      -- Mending.
+
+    -- healthleech 9 -> 8 (v4.7.275). Measured, not estimated: 12 unblockable ticks for 14,056
+    -- damage in the 2026-08-19 Grulk log -- 16.5% of everything we took across 123 seconds --
+    -- and it was never cured once, sitting at 9 behind a four-way kelp tie at 7. Per-tick value
+    -- stepped 1,062 -> 1,390 (+31%) the moment SENSITIVITY landed, which is why sensitivity
+    -- stays at 7 above it rather than being demoted alongside.
+    ["healthleech"] = 8,      -- Ticking damage. Kelp. (was 9, was 14)
+
+    -- damagedhead 12 -> 8 (v4.7.275). PvP deliberately ranks limbs low (see memory/curing.md),
+    -- and this is a targeted exception, not a reversal: a BROKEN HEAD is what enables Sentinel
+    -- Skirmishing's haft crush, which did 8,556 unblockable from 9,817 HP and ended the
+    -- 2026-08-19 fight in one hit. Seven 14.7% throws is ~25 seconds of warning we did not use.
+    -- Kept below the cure-channel blockers; moved above the arm restorations.
+    ["damagedhead"] = 8,      -- Restoration. Head break = Skirmishing execute. (was 12)
 
     -----------------------------------------------------------
     -- PRIORITY 10: Arm breaks / misc
@@ -184,12 +200,6 @@ function ataxia_defaultCuringPrios()
     ["brokenleftarm"] = 10,   -- Mending.
     ["brokenrightarm"] = 10,  -- Mending.
     ["torntendons"] = 10,     -- Health elixir.
-    ["horror"] = 10,          -- Less urgent than recklessness/masochism. (was 8)
-    ["horror1"] = 9,          -- Stacking horror.
-    ["horror2"] = 9,          -- Stacking horror.
-    ["horror3"] = 9,          -- Stacking horror.
-    ["horror4"] = 9,          -- Stacking horror.
-    ["horror5"] = 9,          -- Stacking horror.
     ["paranoia"] = 10,        -- Blocks allies helping. Ash. (was 17)
     ["dementia"] = 10,        -- Random actions. Ash. (was 17)
 
@@ -207,7 +217,7 @@ function ataxia_defaultCuringPrios()
     -----------------------------------------------------------
     -- PRIORITY 12: Low priority
     -----------------------------------------------------------
-    ["damagedhead"] = 12,     -- Restoration.
+    -- damagedhead moved to 8 -- see the PRIORITY 8 block above.
     ["concussion"] = 12,      -- Health elixir.
     ["hellsight"] = 12,       -- Smoke.
     ["shyness"] = 12,         -- Focus handles it. Goldenseal. (was 23)
@@ -242,19 +252,9 @@ function ataxia_defaultCuringPrios()
 
     ["serioustrauma"] = 17,   -- Salve.
     ["mildtrauma"] = 17,      -- Salve.
-    ["pressure"] = 25,        -- Smoke. Deprioritized.
+    ["pressure"] = 25,        -- Smoke. BASE for every stack count -- see the block below.
     --["rebounding"] = 18,    -- (DEFENCE QUEUE SLOT 18) IMPORTANT: keep below pressure
 
-    ["burning"] = 19,         -- Salve.
-    ["burning1"] = 9,         -- Salve. Stacking burn.
-    ["burning2"] = 9,         -- Salve. Stacking burn.
-    ["burning3"] = 9,         -- Salve. Stacking burn.
-    ["burning4"] = 9,         -- Salve. Stacking burn.
-    ["burning5"] = 9,         -- Salve. Stacking burn.
-    ["pyre"] = 8,             -- Salve. Pyre damage.
-    ["pyre1"] = 9,            -- Salve. Stacking pyre.
-    ["pyre2"] = 9,            -- Salve. Stacking pyre.
-    ["pyre3"] = 9,            -- Salve. Stacking pyre.
     ["stuttering"] = 19,      -- Salve.
     ["slashedthroat"] = 19,   -- Salve.
     ["laceratedthroat"] = 19, -- Salve.
@@ -262,6 +262,77 @@ function ataxia_defaultCuringPrios()
 
     ["stridulating"] = 24,    -- Deprioritized.
     ["indifference"] = 25,    -- Bellwort. Deprioritized.
+
+    -----------------------------------------------------------
+    -- STACKING AFFLICTIONS -- BASE + ESCALATION
+    --
+    -- Achaea changed the rules (announcement, 2026-08-19): a BARE `curing priority <aff> <n>`
+    -- is the BASE for every stack count with no entry of its own, and `<aff><N> <n>` overrides
+    -- it at exactly N stacks. The two used to conflict, which is the only reason these affs
+    -- previously carried a value for EVERY level -- and why their bare entries (burning 19,
+    -- pyre 8, horror 10) were unreachable: an explicit entry at every real count meant the
+    -- base was never consulted.
+    --
+    -- READ A BASE AS "LEVEL 1". A bare name is what the server sends at one stack and is also
+    -- what answers any count we did not anticipate, so the base carries the LOW value and the
+    -- overrides escalate upward. (The inverse -- a dangerous base with low levels overridden
+    -- down -- fails safe against an unexpected 6th stack, and is what to reach for if Achaea
+    -- ever raises a cap.)
+    --
+    -- THE ESCALATION IS STATIC ON PURPOSE. Algedonic.AntiPaladin only runs once the target is
+    -- KNOWN to be a Paladin, so a missed class read used to cost us the entire response. The
+    -- table answers the same threat with no detection at all; the dynamic swap is left to
+    -- handle only the emergency above it (priority 1, reserved).
+    --
+    -- A NEW NAME HERE IS UNVERIFIED UNTIL THE GAME ECHOES IT BACK. Nothing parses a REJECTED
+    -- `curing priority` -- a bad affliction name fails in total silence. After editing:
+    -- `reset prios`, wait, then CURING PRIORITY LIST (trigger 717 parses it into
+    -- ataxia.curingprio) and confirm every name below came back at its value.
+    --
+    -- Stacking affs with a BARE ENTRY ONLY are correct as they stand and must not be
+    -- "completed": pressure (25), crackedribs (9), torntendons (10), skullfractures (8),
+    -- wristfractures (11) and the four tempered* (14) do not get more dangerous per stack,
+    -- so one base covers every count. crescendo and unweavingspirit have NO entry at all and
+    -- run on the server's own default -- a gap, recorded rather than silently priced.
+    -----------------------------------------------------------
+    -- CHECK THE CURE BALANCE BEFORE CHOOSING A NUMBER. These two families look alike and
+    -- are not: BURNING is a SALVE (mending body -- 391_Applied_Body_Skin decrements it one
+    -- stack per application) while PYRE is an EAT (bellwort/cuprum -- see the bellwort list
+    -- in 007_Branching_State_Tracker, and "Cuprum flake" in paladin.md). The first cut of
+    -- this block labelled both "Salve" and priced pyre3 at 2, which put an EAT above
+    -- paralysis at 3 -- whose own comment three bands up reads "Bloodroot has NO herb
+    -- competition". A priority is a claim on ONE balance, so it only means anything beside
+    -- the other afflictions cured by that same balance.
+    --
+    -- Both families now stay clear of the bands that stop us acting outright. The dynamic
+    -- layer (Algedonic.AntiPaladin) still promotes them to the reserved slot 1 when the head
+    -- is broken, which is the only state in which either is lethal.
+    ["burning"] = 9,          -- Salve (mending body). BASE = levels 1-3.
+    ["burning4"] = 6,         -- One stack short of the Damnation burn route. (was 9)
+    ["burning5"] = 4,         -- Broken head + burning 5 IS Damnation. (was 9)
+    ["pyre"] = 9,             -- EAT (bellwort/cuprum). BASE = levels 1-2; resto is safe there.
+    ["pyre3"] = 5,            -- Pyre 3 pins the burn floor at 3 -- cure before resto. (was 9)
+    ["horror"] = 9,           -- FLAT: horror does not get worse per stack. (was 10 + five 9s)
+    ["unweavingbody"] = 25,   -- Ginseng. BASE = levels 1-2, deliberately deprioritized.
+    ["unweavingbody3"] = 2,   -- Psion. 3+ stacks = critical.
+    ["unweavingbody4"] = 2,
+    ["unweavingbody5"] = 2,   -- 5 stacks = near-kill.
+    ["unweavingmind"] = 25,   -- Goldenseal. BASE = levels 1-2, deliberately deprioritized.
+    ["unweavingmind3"] = 2,   -- Psion. 3+ stacks = critical.
+    ["unweavingmind4"] = 2,
+    ["unweavingmind5"] = 2,   -- 5 stacks = near-kill.
+    -- SPIRIT was the missing third. psion.md names the kill as "any TWO unweaves at level
+    -- 3+", so pricing body and mind while leaving spirit on the server default covered two
+    -- of the three components -- and left the one cured on a DIFFERENT balance (smoke
+    -- valerian, psion.md: "cures ONE level at a time") as the cheap way through.
+    ["unweavingspirit"] = 25,  -- Smoke (valerian). BASE = levels 1-2.
+    ["unweavingspirit3"] = 2,  -- Psion. 3+ stacks = critical.
+    ["unweavingspirit4"] = 2,
+    ["unweavingspirit5"] = 2,  -- 5 stacks = near-kill.
+    -- crescendo had no entry either, so it ran on the server default while AntiBard was
+    -- prioaffing it at 4+. Ash, so priced with its ash siblings (confusion 8, hypersomnia
+    -- and hallucinations 9). No escalation: nothing documents a crescendo kill threshold.
+    ["crescendo"] = 9,        -- Ash. Bard mechanic.
 
     ["blindness"] = 26,       -- Ignored by SSC (custom handling).
     ["deafness"] = 26,        -- Ignored by SSC (custom handling).

@@ -50,6 +50,13 @@ end
 
 	ataxia_boxEcho(target.." HAS LEFT TO THE "..dir_left, "black:green")
 
+	-- CLEANUP BEFORE THE CHASE DECISION (v4.7.275) -- see 637_Target_Left.lua for the full
+	-- reasoning. Chasing disabled means "do not follow", never "do not clean up": leaving
+	-- the queue loaded fires our combo into an empty room.
+	send("cq all")
+	targetIshere = false
+	enableTimer("TargetOutOfRoom")
+
 	if not chasing_Targets then cecho("<red>           -= Target chasing is currently disabled =-") return end
 if jumping and jumping == true then
 	sendAll("cq all", "queue addclear free mountjump "..dir_left)

@@ -174,16 +174,25 @@ function ataxia_bashCuringPrios()
     ["lovers"] = 25,          -- (14)
     ["shadowmadness"] = 25,   -- (6)
     ["retribution"] = 25,     -- (6)
-    ["horror"] = 25,          -- (10)
-    ["horror1"] = 25,         -- (9)
-    ["horror2"] = 25,         -- (9)
-    ["horror3"] = 25,         -- (9)
-    ["horror4"] = 25,         -- (9)
-    ["horror5"] = 25,         -- (9)
+    ["horror"] = 25,          -- (9) One entry parks every stack now -- it IS the base.
     ["temperedmelancholic"] = 25, -- (14)
     ["temperedcholeric"] = 25,    -- (14)
     ["temperedsanguine"] = 25,    -- (14)
     ["temperedphlegmatic"] = 25,  -- (14)
+
+    -----------------------------------------------------------
+    -- PvP KILL-CONDITION ESCALATION, FLATTENED BACK TO THE BASE.
+    -- The PvP table escalates the burn stack (burning4 = 5, burning5 = 2) because a broken
+    -- head plus burning 5 IS the Paladin's DAMNATION. A denizen cannot perform Damnation, so
+    -- in PvE a 5-stack burn is only a DoT -- and at 2 it would outbid every limb (4-6) AND
+    -- anorexia for the salve balance, which is the exact crackedribs-beats-broken-arm failure
+    -- this whole profile exists to fix. Denizen fire and the Mnemosyne Ablaze affix make it a
+    -- live case, not a hypothetical.
+    -- pyre is Paladin-only and cannot occur in PvE at all, so its escalation is left alone
+    -- rather than spending an install command on an entry nothing can trigger.
+    -----------------------------------------------------------
+    ["burning4"] = 9,         -- (5) back to the base.
+    ["burning5"] = 9,         -- (2) back to the base.
 
     -----------------------------------------------------------
     -- DELIBERATELY UNCHANGED (recorded so a future reader does not "fix" them):
@@ -195,8 +204,9 @@ function ataxia_bashCuringPrios()
     --     persist; demoting asthma would lengthen that lock;
     --   nausea -- blocks parry, and the SLC bashing parry mode depends on it;
     --   epilepsy -- seizures lose balance;
-    --   burning*/pyre*/scytherus/crushedthroat/itching/fear -- ticking damage or
-    --     forced actions;
+    --   burning (base 9) / pyre / scytherus / crushedthroat / itching / fear -- ticking
+    --     damage or forced actions. The burn ESCALATION is NOT unchanged -- see the flatten
+    --     above; only the base is;
     --   guilt -- gotAff() sends `curing focus off` for it;
     --   blindness/deafness/insomnia (26) -- SSC-ignored by design, kept as defences.
     -----------------------------------------------------------

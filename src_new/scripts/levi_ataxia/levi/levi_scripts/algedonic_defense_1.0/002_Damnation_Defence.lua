@@ -138,72 +138,152 @@ end
 -- Solo Paladin Damnation requires: broken head + burning level 5
 -- Group fight: Priest can provide guilt/spiritburn for faster kill
 
+-- Is any Damnation escalation currently warranted? Deliberately SILENT -- checkDamnationThreat
+-- prints alert boxes, so it cannot be used as a predicate on the restore path.
+-- Every branch of AntiPaladin that writes a priority requires a broken head, so this one
+-- condition covers all of them.
+local function damnationEscalationNeeded()
+  if not isPaladinTarget() then return false end
+  return (ataxia.afflictions.damagedhead
+       or ataxia.afflictions.brokenhead
+       or ataxia.afflictions.mangledhead) and true or false
+end
+
+-- Every name AntiPaladin escalates, so the writes and the restores can never drift apart.
+-- All eight have a static entry in ataxia_defaultCuringPrios(), which is what lets
+-- ataxia_restorePrio put an exact value back.
+local DAMNATION_PRIOS = {
+  "pyre", "pyre3", "burning4", "burning5", "guilt", "spiritburn",
+  "damagedhead", "mangledhead",
+}
+
+-- Is an escalation of ours still standing? The ataxiaTemp latch is the normal answer, but it
+-- does not survive a reload -- and `ataxia_resetOnLogin`, which an earlier version of this
+-- comment named as the backstop, HAS NO CALLERS anywhere in src_new, so nothing rewrites the
+-- table on login. What does survive is `ataxia.curingprio`: saved to disk, refilled by
+-- trigger 719. A recorded value that disagrees with the table is an escalation that outlived
+-- its latch. ataxia_getPrio answers 0 for a name the server never confirmed, so a real
+-- recorded value is required before believing it.
+local function damnationStillEscalated()
+  ataxiaTemp = ataxiaTemp or {}
+  if ataxiaTemp.damnationPrios then return true end
+  for _, aff in ipairs(DAMNATION_PRIOS) do
+    local cur = ataxia.curingprio and ataxia.curingprio[aff]
+    local def = ataxia_defaultPrioAff and ataxia_defaultPrioAff(aff)
+    if type(cur) == "number" and cur > 0 and def and cur ~= def then return true end
+  end
+  return false
+end
+
+-- AntiPaladin writes STORED curing priorities and this file had NEVER restored them. That
+-- was survivable only while the writes were no-ops: they all targeted the BARE name
+-- (`curing priority burning 1`), which the per-stack entries silently overrode. Now that
+-- they land, one Damnation scare would otherwise leave burning ahead of paralysis in the
+-- active curingset permanently -- and if that set is the PvE `bash` one, permanently there.
+--
+-- The latch lives on ataxiaTemp, NOT ataxia: the saved namespace is serialized wholesale and
+-- deepMerged back with an unconditional dst[k] = v, so a latch stored there would come back
+-- TRUE after a relog with nothing alive to clear it.
+function Algedonic.RestorePaladin()
+  ataxiaTemp = ataxiaTemp or {}
+  if not damnationStillEscalated() then return end
+  if damnationEscalationNeeded() then return end
+  -- ataxia_restorePrio routes through ataxia_sendCuringPriority, which DROPS stored
+  -- affliction writes while the PvE bash set is active. Clearing the latch regardless would
+  -- strand the escalation in the PvP set the moment a Damnation scare was followed by a
+  -- bashing session -- so hold it until the writes can actually leave.
+  if ataxia_bashProfileActive and ataxia_bashProfileActive() then return end
+  for _, aff in ipairs(DAMNATION_PRIOS) do
+    ataxia_restorePrio(aff)
+  end
+  ataxiaTemp.damnationPrios = nil
+  Algedonic.Echo("Damnation threat clear <white>- curing priorities restored.")
+end
+
 function Algedonic.AntiPaladin()
   -- Only run when fighting Paladins
   if not isPaladinTarget() then return end
 
-  -- Track current affliction state
   local headBroken = ataxia.afflictions.damagedhead
                   or ataxia.afflictions.brokenhead
                   or ataxia.afflictions.mangledhead
 
-  local hasPyre = ataxia.afflictions.pyre and ataxia.afflictions.pyre >= 1
   local pyreLevel = ataxia.afflictions.pyre or 0
+  local burnLevel = ataxia.afflictions.burning or 0
   local hasGuilt = ataxia.afflictions.guilt
   local hasSpiritburn = ataxia.afflictions.spiritburn
-  local burnLevel = ataxia.afflictions.burning or 0
 
-  -- Count how many Damnation components we have
-  local damnationComponents = 0
-  if hasPyre then damnationComponents = damnationComponents + 1 end
-  if hasGuilt then damnationComponents = damnationComponents + 1 end
-  if hasSpiritburn then damnationComponents = damnationComponents + 1 end
+  -- Two of pyre/guilt/spiritburn with a broken head IS the kill.
+  local components = (pyreLevel >= 1 and 1 or 0)
+                   + (hasGuilt and 1 or 0)
+                   + (hasSpiritburn and 1 or 0)
 
-  -- CRITICAL PRIORITY: Head broken with pyre 3 or high burning
-  -- PYRE CURE STRATEGY: Only cure pyre if at level 3 AND need to resto
-  -- At pyre 1-2, burning can be cured down safely (resto is safe)
-  -- At pyre 3, burning floor is locked at 3 (Damnation danger zone)
-  if headBroken and pyreLevel >= 3 then
-    -- Pyre 3 + head broken = must cure pyre before resto is safe
-    ataxia_sendCuringPriority("curing priority pyre 1")
-    Algedonic.Echo("CRITICAL: <magenta>PYRE 3<white> + head broken - cure pyre before resto!")
-    return
+  -- NEVER WRITE A BARE STACK NAME TO ESCALATE. Since the 2026-08-19 announcement a bare
+  -- `curing priority burning <n>` sets the BASE, which is exactly what the per-stack entries
+  -- override -- so the writes this function used to make were unreachable at the very levels
+  -- they were written for. Only escalate a level that has a static entry in
+  -- ataxia_defaultCuringPrios(), so ataxia_restorePrio always has an exact value to put back.
+  --
+  -- ataxia_setAffPrio (not sendCuringPriority) because AntiPaladin runs from
+  -- Algedonic.Prioritize() on EVERY affliction gained, and setAffPrio carries the 1s per-aff
+  -- debounce. `brokenhead` is deliberately not written: it is not in the default table, so it
+  -- could never be restored -- if it turns out to be a real server name, price it there first.
+  local function escalate(aff, n)
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.damnationPrios = true
+    ataxia_setAffPrio(aff, n)
   end
 
-  if headBroken and burnLevel >= 3 then
-    -- Burning approaching Damnation threshold
-    ataxia_sendCuringPriority("curing priority burning 1")
-    Algedonic.Echo("CRITICAL: <orange>BURNING "..burnLevel.."<white> + head broken - Damnation threat!")
-    -- Also prioritize head healing
-    ataxia_sendCuringPriority("curing priority damagedhead 2")
-    ataxia_sendCuringPriority("curing priority brokenhead 2")
-    ataxia_sendCuringPriority("curing priority mangledhead 2")
-    return
-  end
+  -- NO EARLY RETURNS. The old chain was three `if ... return end` branches, which meant the
+  -- head cure was skipped by the pyre-3 branch -- the single most dangerous state it models
+  -- -- and the guilt write at the bottom was reachable ONLY when the head was whole, the one
+  -- state in which guilt does not matter. Every applicable response now runs.
 
-  -- HIGH PRIORITY: Head broken, safe to resto if pyre <= 2
+  -- THE HEAD is the shared prerequisite of both kill routes, so it is raised whenever broken.
   if headBroken then
-    ataxia_sendCuringPriority("curing priority damagedhead 2")
-    ataxia_sendCuringPriority("curing priority brokenhead 2")
-    ataxia_sendCuringPriority("curing priority mangledhead 2")
-    if pyreLevel >= 1 then
-      Algedonic.Echo("Head broken + pyre "..pyreLevel.." - safe to resto (pyre <= 2)")
-    else
-      Algedonic.Echo("Head broken vs Paladin - prioritizing head cure")
+    escalate("damagedhead", 2)
+    escalate("mangledhead", 2)
+  end
+
+  -- ROUTE A -- COMPONENTS. paladin.md calls "two of pyre/guilt/spiritburn" the MOST COMMON
+  -- route, and nothing used to escalate any of its members.
+  if headBroken and components >= 1 then
+    if pyreLevel >= 3 then
+      escalate("pyre3", 1)      -- pyre 3 pins the burn floor at 3; 1 is the reserved slot
+    elseif pyreLevel >= 1 then
+      escalate("pyre", 3)
     end
-    return
+    if hasGuilt then escalate("guilt", 2) end
+    if hasSpiritburn then escalate("spiritburn", 2) end
   end
 
-  -- MEDIUM PRIORITY: Pyre 3 without head broken - cure down preemptively
-  if pyreLevel >= 3 then
-    ataxia_sendCuringPriority("curing priority pyre 3")
-    Algedonic.Echo("Pyre 3 - curing preemptively before head gets targeted")
-    return
+  -- ROUTE B -- SOLO BURN. A Paladin alone can only apply pyre, so their other route is
+  -- burning 5 with a broken head. The static table has burning4 at 6 and burning5 at 4; the
+  -- broken head is the context it cannot know, so both go to the emergency slot.
+  if headBroken and burnLevel >= 3 then
+    escalate("burning4", 1)
+    escalate("burning5", 1)
   end
 
-  -- Guilt blocks Focus - always high priority
-  if hasGuilt then
-    ataxia_sendCuringPriority("curing priority guilt 3")
+  -- Guilt blocks Focus even with the head whole.
+  if hasGuilt and not headBroken then escalate("guilt", 3) end
+
+  -- One callout, chosen from the whole picture rather than from whichever branch fired first.
+  local parts = {}
+  if pyreLevel >= 1 then parts[#parts + 1] = "PYRE(" .. pyreLevel .. ")" end
+  if hasGuilt then parts[#parts + 1] = "GUILT" end
+  if hasSpiritburn then parts[#parts + 1] = "SPIRITBURN" end
+  if burnLevel >= 1 then parts[#parts + 1] = "BURNING(" .. burnLevel .. ")" end
+  local desc = table.concat(parts, " + ")
+
+  if headBroken and (components >= 2 or burnLevel >= 5) then
+    Algedonic.Echo("CRITICAL: <a_darkred>DAMNATION READY<white> - head + " .. desc)
+  elseif headBroken and (components >= 1 or burnLevel >= 3) then
+    Algedonic.Echo("WARNING: <orange>head broken<white> + " .. desc)
+  elseif headBroken then
+    Algedonic.Echo("Head broken vs Paladin - prioritising head cure")
+  elseif pyreLevel >= 3 then
+    Algedonic.Echo("Pyre 3 - already prioritised by the table; watch for the head")
   end
 
   -- Handle disembowel threat (standard Knight logic)

@@ -52,9 +52,18 @@ if isTargeted(matches[3]) then
 
 	ataxia_boxEcho(target.." HAS LEFT TO THE "..dir_left, "black:green")
 
+	-- CLEANUP BEFORE THE CHASE DECISION (v4.7.275) -- see 637_Target_Left.lua for the full
+	-- reasoning. Chasing disabled means "do not follow", never "do not clean up": leaving
+	-- the queue loaded fires our combo into an empty room.
+	send("cq all")
+	targetIshere = false
+	enableTimer("TargetOutOfRoom")
+
 	if not chasing_Targets then cecho("<red>           -= Target chasing is currently disabled =-") return end
 
-	sendAll("cq all;queue addclear free "..dir_left)
+	-- `cq all` already sent above; 637_Target_Left removed this duplicate and the three
+	-- files that copied its block did not.
+	sendAll("queue addclear free "..dir_left)
 
 	if tChaseTimer then
 		killTimer(tostring(tChaseTimer))

@@ -47,6 +47,12 @@ if type(target) == "string" and isTargeted(matches[2]) then
 	setBold(true)
 	resetFormat()
 	send("cq eqbal")
+	-- v4.7.275: `cq eqbal` does not touch the `freestand` queue the Blademaster dispatch uses,
+	-- so a shield raised after we queued still ate the swing (2026-08-19, 09:58:07 -- the attack
+	-- rebounded off it and stunned us). Convert the pending swing to a raze instead.
+	if blademaster and blademaster.onTargetDefenceUp then
+		blademaster.onTargetDefenceUp("Shield")
+	end
   if target == "Kshavatra" then
   erAff("shield")
   else

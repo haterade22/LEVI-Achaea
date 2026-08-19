@@ -826,6 +826,72 @@ pattern with Lua patterns. That tests the GRAMMAR and pins nothing about the tri
 spot as v4.7.260's guard-inside-a-trigger, which cost a live bug. Where a trigger's pattern IS the
 fix, have a test read the file and assert the pattern still contains what matters.
 
+## A write to the wrong key is indistinguishable from one that works (v4.7.276)
+
+Achaea changed `CURING PRIORITY` so a bare `<aff> <n>` sets a BASE that answers any stack count with
+no entry of its own. Our table already carried an explicit entry at every level of every stacking
+affliction, which meant the bare entries were **unreachable** -- and so was every runtime write that
+targeted one. The Damnation defence had been raising `curing priority burning 1` for its entire
+existence and had never once taken effect.
+
+Nothing in the package parses a rejected or ineffective `curing priority`: no error, no echo, and
+trigger 719 simply never confirms. So the failure had no symptom at all.
+
+Three rules fell out, and they generalise past curing:
+
+- **Never write a bare name to escalate a thing that has levels.** The bare value is the fallback;
+  the levels beat it. Write the level.
+- **Only escalate a level that has a static entry**, so the restore has an exact value to put back.
+  A fallback that *computes* the restore value can mint an entry the design does not want.
+- **Put the escalation in the STATIC table, not only in the dynamic swap.** The swap here ran only
+  once the target's class was known, so a missed class read cost the entire response. A table entry
+  answers with no detection at all.
+
+## A swap that WRITES needs its restore designed with it (v4.7.276)
+
+`Algedonic.AntiPaladin` wrote stored curing priorities for years with no restore anywhere in the
+file. That was survivable only because the writes were unreachable (above). The moment they landed,
+one Damnation scare would have left burning ahead of paralysis in the active curingset permanently.
+
+A restore has to answer two questions the write never does:
+
+- **Can it actually send right now?** `ataxia_sendCuringPriority` drops stored affliction writes
+  while the PvE bash set is active. Clearing the "we escalated" latch anyway strands the escalation.
+  Hold the latch until the writes can leave.
+- **What happens if the latch is lost?** Transient state belongs on `ataxiaTemp`, which does not
+  survive a reload -- so a reload mid-escalation needs a second source of truth. Here it is
+  `ataxia.curingprio`, which IS persisted: a recorded value that disagrees with the table is an
+  escalation nothing is left to undo. The comment that claimed `ataxia_resetOnLogin` was the
+  backstop was wrong; that function has no callers.
+
+## Fixing an argument switches on everything downstream of it (v4.7.276)
+
+`lostAff` had been handing `Algedonic.Stack_My_Affs` the gmcp **table** instead of the affliction
+name, so `table.contains` never matched and the herb-counter decrement had **never run**. Correcting
+the argument was a one-word change that turned on a code path with years of unexercised assumptions
+behind it, and it broke immediately: a `whatcures` herb (`pear`) that `mystack` had no counter for
+threw on arithmetic, and the counters could walk negative because `afflictionList` rebuilds the
+affliction table wholesale without rebuilding what is derived from it.
+
+**Treat a newly-reachable path as new code**, with the same review it would get if you had written
+it today. The same session found `magi_addBurns()` called at two sites and defined nowhere, and a
+Sentinel trigger reading `multimatches[1][4]` on a two-group pattern -- both invisible for the same
+reason: nothing downstream was ever asked to be correct.
+
+Corollary on the read side: **0 is truthy in Lua.** Zeroing a cured stack rather than nilling it is
+right (the prompt renderer and the alarm both want a number), but `affed()` was a bare truthiness
+test and began reporting burns we had just put out.
+
+## A priority is a claim on ONE balance (v4.7.276)
+
+`pyre3 = 2` read as a sensible emergency until you notice pyre is bellwort/cuprum -- an **eat** --
+and 2 puts it above paralysis at 3, whose own comment in the same table says "Bloodroot has NO herb
+competition". The entry's comment said "Salve", inherited verbatim from the line it replaced.
+
+Priorities only mean anything relative to the other afflictions cured on the same balance. **Check
+the cure channel from the code (the herb/salve tables, the class doc), never from the neighbouring
+comment**, and when a number changes, list what else competes for that balance at that rank.
+
 ## Quality Gates (Hooks)
 
 Hooks in `.claude/hooks/` run automatically and block operations that fail validation:

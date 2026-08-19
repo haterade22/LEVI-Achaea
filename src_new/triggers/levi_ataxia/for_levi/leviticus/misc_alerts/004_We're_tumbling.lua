@@ -59,6 +59,11 @@ if ataxiaTemp.fakeLeave and gmcp.Char.Status.class == "Bard" then
 end
 
 if ataxia.prioritySwaps and ataxia.prioritySwaps.parshield and ataxia.prioritySwaps.parshield.active then
-  sendAll("curing priority slickness 25;curing priority paralysis 25",false)
+  -- Was a raw sendAll, which bypasses ataxia_sendCuringPriority and therefore BOTH the
+  -- 4/sec throttle and the bash-curingset guard. While the PvE `bash` set is active that
+  -- permanently demoted PARALYSIS to 25 in it -- the affliction that blocks tree, our main
+  -- PvE heal -- and the 3.5s restore below would have written the PvP default back into the
+  -- bash set, which is the curingset write hazard exactly.
+  ataxia_sendCuringPriority("curing priority slickness 25;curing priority paralysis 25", false)
   tempTimer(3.5, [[ ataxia_restorePrio("paralysis");ataxia_restorePrio("slickness") ]])
 end

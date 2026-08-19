@@ -108,8 +108,22 @@ if isTargeted(matches[2]) then
 	ataxia_boxEcho(target.." HAS LEFT TO THE "..dir_left, "black:green")
   ataxia_boxEcho(target.." HAS LEFT TO THE "..dir_left, "black:green")
 
+	-- CLEANUP BEFORE THE CHASE DECISION (v4.7.275). This block used to sit BELOW the
+	-- `chasing_Targets` early return, so with chasing off none of it ran. In the 2026-08-19
+	-- Grulk log that meant our queued combo stayed in the server queue and fired into an empty
+	-- room -- three refusals ("I do not see anyone by that name here", "You detect nothing here
+	-- by that name", "I do not recognise anything called that here") -- and while we stood there
+	-- a jade spider hit us four times for 3,509 damage, 4% of our total.
+	--
+	-- Chasing disabled means "do not follow". It never meant "do not clean up".
+	send("cq all")
+	targetIshere = false
+	enableTimer("TargetOutOfRoom")
+	if ataxiaTemp.tarTumble then ataxiaTemp.tarTumble = nil end
+	if ataxiaTemp.tumbleTimer then killTimer(ataxiaTemp.tumbleTimer) end
+
 	if not chasing_Targets then cecho("<red>           -= Target chasing is currently disabled =-") return end
-  
+
   if gmcp.Char.Status.class == "Infernal" and ataxia.vitals.knight ~= "Dual Blunt" then
   send("queue addclear free lunge "..target..";tyranny")
 elseif jumping and jumping == true then
@@ -123,12 +137,9 @@ end
  	end
  	tChaseTimer = tempTimer(2.5, [[tChaseTimer = nil]])
 
-	if ataxiaTemp.tarTumble then ataxiaTemp.tarTumble = nil end
-	if ataxiaTemp.tumbleTimer then killTimer(ataxiaTemp.tumbleTimer) end
+	-- (tarTumble / tumbleTimer / targetIshere / TargetOutOfRoom now run above the chase
+	-- decision -- v4.7.275. Duplicates removed rather than left to run twice.)
 
-	targetIshere = false
-	enableTimer("TargetOutOfRoom")
-	
 	if ataxiaTemp.repeatOffence and not ataxiaTemp.doRepeat and chasing_Targets then
 		enableTrigger("Repeat Offence")
 	end
