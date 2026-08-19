@@ -206,6 +206,93 @@ a new `test_damnation.lua` (that file had zero coverage and its core was rewritt
 
 ---
 
+## 2026-08-19 - Don't get locked: the lock is self-sealing and lives on one balance (v4.7.277)
+
+Reframing: **the plan is to never get soft- or true-locked.** Everything shipped before this was
+reactive -- it fired once we were already locked, prone, or in Skullbash range. This makes the
+system act while the lock is still preventable.
+
+### The mechanic, measured
+
+**Four of the five lock components cure on the same contended EAT balance**, and paralysis alone
+saturates it: paralysis -> magnesium (x24), slickness -> magnesium (x3), asthma -> aurum (x3),
+impatience -> plumbum (x2). **ANOREXIA is the only component off that balance** (realgar smoke /
+focus). **27 magnesium and ZERO herbs in 123 seconds.**
+
+**And each component protects the others:**
+
+```
+asthma      -> "Your lungs are much too constricted to smoke."  kills SMOKE
+impatience  -> blocks FOCUS
+               ...SMOKE + FOCUS are the ONLY two cures for anorexia
+weariness   -> blocks FITNESS, the only non-eat cure for asthma
+paralysis   -> saturates the EAT balance the other three depend on
+```
+
+**"True lock" is not five afflictions stacked -- it is four gates shutting one door.**
+
+### 1. The prompt now warns while it is preventable
+
+`ataxia_promptLocks` previously named a lock only once it had **already closed**, which is
+exactly backwards. It now shows:
+
+- **`PRE-LOCK 2/3`** at two of {asthma, slickness/bloodfire, anorexia}
+- **`SEALED(no smoke/focus)`** the moment asthma + impatience close both anorexia channels --
+  which can be true *before* any lock is assembled, and is the real point of no return
+
+New helpers `ataxia_lockComponents()` and `ataxia_lockEscapes()` are pure and unit-tested.
+
+### 2. `ataxia_preLockEscalate()` -- class-agnostic, runs on the heartbeat
+
+At **two** components (never three), spend on a channel that is still open rather than queueing
+behind paralysis: **anorexia** while smoke or focus survives, else **asthma** (curing it re-opens
+smoke), else slickness. Lock attempt 1 in the log collapsed in **0.3 seconds** precisely because
+anorexia went first. Throttled to 1.5s; `prioaff` writes no stored priority.
+
+### 3. `Algedonic.sentinelKelpDig()` -- dig order by what each cure BUYS
+
+A Sentinel inflicts **five of the six kelp/aurum afflictions** (asthma, weariness, sensitivity,
+healthleech, clumsiness) and one eat removes ONE. Same design as the paralysis spam, applied to a
+second queue. Dig order:
+
+1. **weariness** -- the only one that pays for itself: unblocks FITNESS, which then clears asthma
+   off-balance. One eat, two afflictions gone.
+2. **asthma** -- prefer FITNESS (no eat balance at all); asthma also blocks SMOKE.
+3. **sensitivity** (+33% damage taken) 4. **healthleech** (16.5% of damage taken) 5. **clumsiness**.
+
+Fires at 2+, throttled, echoes `KELP STACK n/5 - DIGGING <aff>` at 3+. Replaces the narrower
+sensitivity/healthleech branch from v4.7.276.
+
+### Review fixes found in self-review
+
+Three defects in the above, caught before shipping:
+
+1. **Table allocation on the prompt hot path.** `ataxia_activeCureBlockers()` rebuilt a 14-entry
+   table on every call, and `ataxia_canActive()` now sits on the prompt path via
+   `ataxia_lockEscapes()` -- two or three allocations per prompt. CLAUDE.md is explicit about
+   this ("Minimize table creation in hot paths"). Hoisted to a module-level constant; the
+   function survives as an accessor so the API is unchanged.
+2. **`esc.fitness` was dead.** Now consumed: the prompt shows **`NO-FITNESS(<blocker>)`** when
+   asthma is live and something is holding our active cure. That is the most actionable line on
+   the prompt -- curing the named blocker hands FITNESS straight back.
+3. **FITNESS was unreachable on a pure kelp stack.** `Algedonic.sentinelKelpDig` routed through
+   `ataxia_lockBreak()`, which only fires when a lock exists or is one component away -- so
+   asthma + sensitivity (no lock partner) never reached it. New `ataxia_tryActiveCure()` fires
+   the class active cure as **free value**, independent of lock state, gated on asthma and
+   sharing the 1.5s attempt throttle with the lock-breaker so the two cannot double-send.
+
+### Full Sentinel affliction inventory (documented in `.claude/classes/sentinel.md`)
+
+Three non-competing delivery channels: **venoms** riding every weapon hit (curare, kalmia, gecko,
+slike, euphorbia, vernalius, prefarar, eurypteria, epseth, xentio, notechis), **ability-inherent**
+(TRIP prone, GOUGE weariness, LACERATE haemophilia, DOUBLESTRIKE anorexia+impatience), and **free
+companions** (lemming vertigo + defence strips, raven paranoia, badger addiction/nausea, wolf
+hallucinations, fox bleed amplification).
+
+Tests: 16 added to `test_lock_and_parry.lua`. Suite 1590 -> 1606.
+
+---
+
 ## 2026-08-19 - Sentinel: the SKULLBASH conjunction, wired into curing (v4.7.276)
 
 Acting on the confirmed mechanic: **SKULLBASH needs PRONE *and* a BROKEN HEAD, simultaneously.**

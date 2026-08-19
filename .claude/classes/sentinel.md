@@ -108,6 +108,66 @@ chooses between prepping a limb and pressuring your cures.
 **The lock is not a parallel win condition -- it is the mechanism that makes prone and
 broken-head simultaneously uncurable.** That is its entire purpose in this class's plan.
 
+## THE LOCK IS SELF-SEALING -- and it lives on ONE balance
+
+**The whole plan is to not get soft- or true-locked.** Everything else is damage control.
+
+Measured cure channels from the 2026-08-19 log -- **four of the five components cure on the same
+contended EAT balance**, and paralysis alone saturates it:
+
+| Component | Cured by, in this fight | Balance |
+|---|---|---|
+| paralysis | magnesium **x24** | **EAT** |
+| slickness | magnesium x3 | **EAT** |
+| asthma | aurum x3 -- *or* **FITNESS** | **EAT** / free |
+| impatience | plumbum x2 | **EAT** |
+| **anorexia** | realgar **SMOKE** x1, **FOCUS** x1 | **not eat** |
+
+**27 magnesium and ZERO herbs in 123 seconds.** You cannot out-cure a Sentinel lock on the eat
+balance; he re-applies curare faster than the queue drains.
+
+**And each component protects the others:**
+
+```
+asthma      -> "Your lungs are much too constricted to smoke."  kills SMOKE
+impatience  -> blocks FOCUS
+              ...and SMOKE + FOCUS are the ONLY two cures for anorexia
+weariness   -> blocks FITNESS, the only non-eat cure for asthma
+paralysis   -> saturates the EAT balance the other three depend on
+```
+
+**That is what "true lock" actually means here: every non-eat escape channel closed.** It is not
+five afflictions stacked, it is four gates shutting one door.
+
+### What follows for play
+
+1. **Act at TWO components, never three.** By three, the cheap outs are gone. The prompt now shows
+   **`PRE-LOCK 2/3`** while it is still preventable, and **`SEALED(no smoke/focus)`** the moment
+   asthma + impatience close both anorexia channels -- which can be true *before* any lock exists.
+2. **ANOREXIA is the lever.** It is the only component never on the eat balance, and it is the one
+   he holds back as the trigger. Lock attempt 1 in that log collapsed in **0.3 seconds** because
+   anorexia went first.
+3. **WEARINESS is the highest-value cure in the fight** -- it is the gate on FITNESS, and FITNESS
+   is the only asthma cure that does not queue behind paralysis.
+
+### The kelp stack, and the order to dig it out
+
+He inflicts **five of the six kelp/aurum afflictions**: asthma, weariness, sensitivity,
+healthleech, clumsiness. One eat removes ONE. That is deliberate -- it is the same design as the
+paralysis spam, applied to a second queue.
+
+`Algedonic.sentinelKelpDig()` digs in the order of **what each cure BUYS**, not severity:
+
+| # | Aff | Why here |
+|---|---|---|
+| 1 | **weariness** | the only one that pays for itself -- unblocks FITNESS, which then clears asthma **off-balance**. One eat, two afflictions gone |
+| 2 | **asthma** | prefer **FITNESS** (no eat balance at all). Asthma also blocks SMOKE, one of anorexia's two outs |
+| 3 | **sensitivity** | measured **+33%** damage taken |
+| 4 | **healthleech** | 16.5% of all damage taken in that fight, never cured once |
+| 5 | **clumsiness** | 33% miss -- costs offence, not survival |
+
+Fires at 2+ of the five, throttled to 1.5s, and echoes `KELP STACK n/5 - DIGGING <aff>` at 3+.
+
 ## The lock ladder: three attempts, not one
 
 | # | Time | Reached | How it ended |

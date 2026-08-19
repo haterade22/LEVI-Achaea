@@ -540,6 +540,76 @@ local function sentinelLimbWarn()
   end
 end
 
+-- =====================================================================================
+-- WHAT A SENTINEL CAN ACTUALLY INFLICT, AND THE ORDER TO DIG IT OUT (v4.7.277)
+--
+-- Enumerated from the 2026-08-19 Grulk log + the Skirmishing/Woodlore wiki. He has three
+-- delivery channels and they do not compete with each other:
+--
+--   VENOMS (ride every weapon hit -- 40 of 44 limb hits carried one)
+--     curare paralysis | kalmia asthma | gecko slickness | slike anorexia
+--     euphorbia impatience | vernalius weariness | prefarar sensitivity
+--     eurypteria haemophilia | epseth healthleech | xentio stupidity | notechis shyness
+--   ABILITY-INHERENT
+--     TRIP prone | GOUGE weariness | LACERATE haemophilia | DOUBLESTRIKE anorexia+impatience
+--   COMPANIONS (free actions, cost him nothing)
+--     lemming vertigo + defence strips | raven paranoia | badger addiction/nausea
+--     wolf hallucinations + damage | fox bleed amplification
+--
+-- FIVE OF THOSE ARE KELP/AURUM AFFS -- asthma, weariness, sensitivity, healthleech,
+-- clumsiness -- i.e. five of the six things one herb can cure. That is not coincidence, it is
+-- the design: one eat removes ONE of them, and paralysis (curare on nearly every hit) is
+-- already saturating that same balance. In the log: 27 magnesium, ZERO herbs, in 123 seconds.
+--
+-- SO THE DIG ORDER MATTERS MORE THAN THE PRIORITIES DO. Ranked by what each cure BUYS:
+--
+--   1. WEARINESS  -- the only one that pays for itself. It blocks FITNESS; curing it hands
+--                    back a free, off-balance asthma purge. One eat -> two afflictions gone.
+--   2. ASTHMA     -- but prefer FITNESS, which costs no eat balance at all. Asthma also
+--                    blocks SMOKING, which is one of only two ways to cure anorexia.
+--   3. SENSITIVITY-- measured +33% damage taken (wolf 1,113->1,480; leech 1,062->1,390).
+--   4. HEALTHLEECH-- 16.5% of all damage taken in that fight, never cured once.
+--   5. CLUMSINESS -- 33% miss chance; real, but it only costs offence, not survival.
+--
+-- The static table cannot express this because the right answer depends on whether FITNESS is
+-- available, so it is done here with `curing prioaff` (temporary, writes no stored priority --
+-- safe against the curingset write hazard in memory/curing.md).
+-- =====================================================================================
+
+local SENTINEL_KELP_DIG = {"weariness", "asthma", "sensitivity", "healthleech", "clumsiness"}
+
+function Algedonic.sentinelKelpDig()
+  local a = ataxia.afflictions
+  local stack = 0
+  for _, aff in ipairs(SENTINEL_KELP_DIG) do
+    if a[aff] then stack = stack + 1 end
+  end
+  -- One kelp aff is not a stack; the normal table handles it fine.
+  if stack < 2 then return end
+
+  if Algedonic.kelpDigThrottle then return end
+  Algedonic.kelpDigThrottle = true
+  tempTimer(1.5, function() Algedonic.kelpDigThrottle = nil end)
+
+  -- FITNESS first when it can actually go out: it removes asthma WITHOUT touching the
+  -- contended eat balance, which is the whole problem. ataxia_lockBreak owns the send.
+  -- ataxia_tryActiveCure, NOT ataxia_lockBreak: the latter only fires when a lock exists or is
+  -- one component away, so a pure kelp stack (asthma + sensitivity, no lock partner) never
+  -- reached FITNESS at all. FITNESS clears asthma OFF the contended eat balance, which is the
+  -- entire problem, so it is free value whenever the stack is up.
+  if a.asthma and ataxia_tryActiveCure then ataxia_tryActiveCure() end
+
+  for _, aff in ipairs(SENTINEL_KELP_DIG) do
+    if a[aff] then
+      send("curing prioaff " .. aff)
+      if stack >= 3 then
+        ataxia_boxEcho("KELP STACK " .. stack .. "/5 - DIGGING " .. aff:upper(), "a_darkred")
+      end
+      return
+    end
+  end
+end
+
 function Algedonic.AntiSentinel()
 if ataxia.afflictions.slickness and ataxia.afflictions.paralysis and not ataxia.afflictions.asthma then
   send("endure")
@@ -568,11 +638,7 @@ end
 -- (+33.0%) and healthleech tick 1,062 -> 1,390 (+30.9%) in the same log, two independent
 -- sources. It multiplies EVERYTHING he and his animals do, so it outranks the leech itself --
 -- and it is worth prioritising on its own, not only when healthleech happens to be up too.
-if ataxia.afflictions.sensitivity then
-  send("curing prioaff sensitivity")
-elseif ataxia.afflictions.healthleech then
-  send("curing prioaff healthleech")
-end
+Algedonic.sentinelKelpDig()
 
 -- RIFT LOCK / limb kill watch.
 --
