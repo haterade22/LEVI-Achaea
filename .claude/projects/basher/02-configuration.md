@@ -211,6 +211,7 @@ gate. Narrow it by editing the table if a charge ever feels wasted.
 | `mnem cards [on\|off\|maran <hp%>\|seasone <hp%>\|matic <n>]` | Mnemosyne legend-deck auto-draw; bare form prints charges, intervals and whether this class has a Covenant/Xylthus payoff |
 | `bash shinprobe [report\|on\|off\|dump <n>\|clear\|status]` | Measured SHIN AUGMENT duration curve (basher/012); bare form prints per-spend mean/min/max and seconds-per-shin |
 | `bash augment <n>` | Shin to spend on `SHIN AUGMENT`; bare form prints the current value |
+| `bash inlineinfuse [on\|off\|status]` | Weave the infuse element into the attack vs sending it separately |
 | `bsi <name>` / `bsi all` | Manage the player `ignore` list (allow in room) |
 | `ataxia setup basher` | Setup wizard |
 | `ataxia setup basher autolearn <on\|off>` | Toggle auto-learning denizens |
@@ -233,6 +234,7 @@ missing, so treat the code (`basher/001`, `basher/002`) as authoritative and thi
 | `bmInfuseAt` | number | 90 | **Tower only.** Minimum shin to spend on an infuse. DERIVED: Phoenix needs 80, so 90 leaves >80 afterwards -- an infuse can never be the action that takes Phoenix off the table |
 | `phoenixAt` | number | 10 | HP % that fires `SHIN PHOENIX` (80 shin, consumes ALL of it, cleanses + **full heal**). `hpp > 0` is also required, since 0 means BLACKOUT rather than nearly-dead |
 | `bmAugmentAmount` | number | 20 | Shin spent on `SHIN AUGMENT` (Bladed Reflexes boon). Provisional middle, not an optimum -- the duration curve is unknown and `bash shinprobe` measures it |
+| `bmInlineInfuse` | bool | *(unset = on)* | Weave the element into the attack (`drawslash <t> infuselightning sternum`, announcement #174) instead of sending `infuse <el>` as its own command. On because a separate instant executes on every `addclearfull` rebuild rather than once per swing; `false` restores the two-command form if the inline syntax is ever refused |
 | `shinProbe` | table | `{on=true, samples={}}` | Accumulated (spend -> measured duration) samples, capped at 200. On the SAVED namespace deliberately: a curve needs collecting across sessions |
 
 **Priority within a round is hardcoded POSITION, not a planner:** Phoenix (whole pool) > augment >

@@ -573,7 +573,10 @@ function ataxiaBasher_blademasterBashing()
 	-- (6 total), so it out-damages the single drawslash -- swap to it while the boon is up.
 	-- Straight verb swap (same "sternum" target part): bmShatteredStar is set by the BOONS-list
 	-- trigger / boon-claim alias and reset each run (mirrors bardWarmarch); nil/false -> drawslash.
-	local slash = bmShatteredStar and ("multislash "..target.." sternum") or ("drawslash "..target.." sternum")
+	--
+	-- Held as the VERB rather than the finished command since v4.7.273, because the infuse element
+	-- is now woven INTO it (announcement #174) and that is not decided until the shin budget below.
+	local slashVerb = bmShatteredStar and "multislash" or "drawslash"
 
 	-- SHIN PHOENIX -- the emergency reset, and it outranks every other shin spender (v4.7.269).
 	--
@@ -723,9 +726,9 @@ function ataxiaBasher_blademasterBashing()
 	-- The gate lives HERE rather than inside ataxiaBasher_bmInfuse on purpose: that function is a
 	-- pure element-chooser with its own suite, and giving it a shin/area dependency would force
 	-- every one of those tests to mock both.
-	local infuse = ""
+	local infuse, infuseEl = "", nil
 	if not ataxiaBasher.inMnemosyne or ataxiaBasher_shinNow() > (tonumber(ataxiaBasher.bmInfuseAt) or 90) then
-		infuse = "infuse "..ataxiaBasher_bmInfuse().." "..sp.." "
+		infuseEl = ataxiaBasher_bmInfuse()
 	elseif ataxia.mnemosyne and ataxia.mnemosyne.damageNulled
 		 and ataxia.mnemosyne.damageNulled("cutting") and not ataxiaTemp.bmCuttingWarned then
 		-- SAY IT OUT LOUD, once per ripple. Our base bashing damage IS physical cutting, so under a
@@ -739,6 +742,37 @@ function ataxiaBasher_blademasterBashing()
 				.. " below " .. (tonumber(ataxiaBasher.bmInfuseAt) or 90) .. " -- holding it for PHOENIX."
 				.. " <a_darkmagenta>infuse manually if you would rather have the damage.")
 		end
+	end
+
+	-- INLINE INFUSE (announcement #174, 2026-08-17):
+	--
+	--   "You can now include INFUSEELEMENT in inline blademaster attacks. For example,
+	--    COMPASSSLASH MAKARIOS NORTH INFUSEFIRE STERNUM. You must specify infuse<element> rather
+	--    than just element name -- this is to avoid various permutations of the syntax that might
+	--    clash with serverside targeting against elemental based denizens otherwise."
+	--
+	-- WHY THIS IS WORTH TAKING, and it is not tidiness. `infuse` is a SEPARATE command in a chain
+	-- that `queue addclearfull` rebuilds every prompt, and this package has already learned twice
+	-- what that costs: a command in the round that does not wait on balance executes on EVERY
+	-- re-queue rather than once per swing (v4.7.270 -- `shin augment` observed refused five times
+	-- in 0.45s for exactly that reason). Woven into the attack, the infuse can only happen when the
+	-- attack does -- once per balance, by construction.
+	--
+	-- TOKEN ORDER IS INFERRED FROM THE ONE EXAMPLE: attack, target, [direction], infuse<element>,
+	-- body part. Our verbs take no direction, so `drawslash <t> infuselightning sternum`. That is a
+	-- single data point and the announcement states no grammar -- see v4.7.272, one example is not
+	-- a sample.
+	--
+	-- AND THE FAILURE MODE IS WORSE THAN THE OLD FORM'S, which is why the toggle exists: a
+	-- malformed `infuse X` costs the infuse and the swing still lands, while a malformed inline
+	-- attack is rejected WHOLE and the swing is lost. `bash inlineinfuse off` restores the
+	-- two-command form.
+	local slash
+	if infuseEl and ataxiaBasher.bmInlineInfuse ~= false then
+		slash = slashVerb.." "..target.." infuse"..infuseEl.." sternum"
+	else
+		slash = slashVerb.." "..target.." sternum"
+		if infuseEl then infuse = "infuse "..infuseEl.." "..sp.." " end
 	end
 
 	if ataxiaBasher.shielded then

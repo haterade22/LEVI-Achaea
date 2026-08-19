@@ -23,12 +23,27 @@ if not ok then error("Failed to load class-bashing file: " .. tostring(err)) end
 
 local function has(cmd, needle) return cmd:find(needle, 1, true) ~= nil end
 
+-- THE ATTACK STRING CHANGED SHAPE IN v4.7.273 (game announcement #174): the infuse element is
+-- WOVEN INTO the attack rather than sent as its own command, so the body part is no longer
+-- adjacent to the target --
+--
+--   before:  infuse lightning ; drawslash <t> sternum
+--   after:   drawslash <t> infuselightning sternum
+--
+-- Nine assertions here were pinning `<verb> <target> sternum` as a contiguous substring and all
+-- nine failed, which is exactly what they were for. Expressed as a helper so the suite states the
+-- shape once: pass the element when the round should carry one, nil when the shin budget
+-- suppresses it.
+local function attack(verb, el)
+  return verb .. " " .. target .. (el and (" infuse" .. el) or "") .. " sternum"
+end
+
 describe("ataxiaBasher_blademasterBashing — Shattered Star (multislash) boon", function()
   it("uses drawslash <t> sternum when the boon is OFF", function()
     bmShatteredStar = false
     ataxiaBasher.shielded = false
     local cmd = ataxiaBasher_blademasterBashing()
-    expect(has(cmd, "drawslash " .. target .. " sternum")).toBeTrue()
+    expect(has(cmd, attack("drawslash", "lightning"))).toBeTrue()
     expect(has(cmd, "multislash")).toBeFalse()
   end)
 
@@ -36,7 +51,7 @@ describe("ataxiaBasher_blademasterBashing — Shattered Star (multislash) boon",
     bmShatteredStar = true
     ataxiaBasher.shielded = false
     local cmd = ataxiaBasher_blademasterBashing()
-    expect(has(cmd, "multislash " .. target .. " sternum")).toBeTrue()
+    expect(has(cmd, attack("multislash", "lightning"))).toBeTrue()
     expect(has(cmd, "drawslash")).toBeFalse()
   end)
 
@@ -44,7 +59,7 @@ describe("ataxiaBasher_blademasterBashing — Shattered Star (multislash) boon",
     bmShatteredStar = true
     ataxiaBasher.shielded = false
     local cmd = ataxiaBasher_blademasterBashing()
-    expect(has(cmd, "infuse lightning")).toBeTrue() -- lightning leads as of v4.7.269
+    expect(has(cmd, attack("multislash", "lightning"))).toBeTrue() -- woven in, v4.7.273
   end)
 
   it("still swaps to multislash on the rageraze+shielded path", function()
@@ -53,7 +68,7 @@ describe("ataxiaBasher_blademasterBashing — Shattered Star (multislash) boon",
     ataxiaBasher.rageraze = true
     ataxia.vitals.rage = 20 -- >= 17 so the rageraze branch is taken
     local cmd = ataxiaBasher_blademasterBashing()
-    expect(has(cmd, "multislash " .. target .. " sternum")).toBeTrue()
+    expect(has(cmd, attack("multislash", "lightning"))).toBeTrue()
     expect(has(cmd, "drawslash")).toBeFalse()
   end)
 
@@ -63,7 +78,7 @@ describe("ataxiaBasher_blademasterBashing — Shattered Star (multislash) boon",
     ataxiaBasher.rageraze = true
     ataxia.vitals.rage = 20
     local cmd = ataxiaBasher_blademasterBashing()
-    expect(has(cmd, "drawslash " .. target .. " sternum")).toBeTrue()
+    expect(has(cmd, attack("drawslash", "lightning"))).toBeTrue()
     expect(has(cmd, "multislash")).toBeFalse()
   end)
 
@@ -99,7 +114,7 @@ describe("ataxiaBasher_blademasterBashing — Bladed Reflexes (shin augment) boo
     -- old default bought three seconds of a 20% damage reduction.
     expect(has(cmd, "shin augment 20")).toBeTrue()
     expect(cmd:find("shin augment 20", 1, true)).toBe(1) -- augment leads the chain
-    expect(has(cmd, "drawslash " .. target .. " sternum")).toBeTrue() -- attack intact
+    expect(has(cmd, attack("drawslash", "lightning"))).toBeTrue() -- attack intact
     reset(5)
     ataxiaBasher.bmAugmentAmount = 5
     local cmd2 = ataxiaBasher_blademasterBashing()
@@ -348,12 +363,12 @@ describe("shin budget -- infuse yields to Phoenix", function()
   -- 90 is derived: Phoenix needs 80, so infusing only above 90 leaves >80 afterwards.
   it("infuses in the tower above 90 shin", function()
     setup(95, true)
-    expect(has(ataxiaBasher_blademasterBashing(), "infuse lightning")).toBeTrue()
+    expect(has(ataxiaBasher_blademasterBashing(), "infuselightning")).toBeTrue()
   end)
 
   it("is unrestricted OUTSIDE the tower -- nothing is being saved for", function()
     setup(5, false)
-    expect(has(ataxiaBasher_blademasterBashing(), "infuse lightning")).toBeTrue()
+    expect(has(ataxiaBasher_blademasterBashing(), "infuselightning")).toBeTrue()
   end)
 
   it("also holds it on the shielded rage-raze round", function()
@@ -364,7 +379,78 @@ describe("shin budget -- infuse yields to Phoenix", function()
     setup(95, true)
     ataxiaBasher.shielded, ataxiaBasher.rageraze = true, true
     ataxia.vitals.rage = 50
-    expect(has(ataxiaBasher_blademasterBashing(), "infuse lightning")).toBeTrue()
+    expect(has(ataxiaBasher_blademasterBashing(), "infuselightning")).toBeTrue()
+  end)
+end)
+
+-- ---------------------------------------------------------------------------
+-- INLINE INFUSE (v4.7.273, game announcement #174)
+-- ---------------------------------------------------------------------------
+--
+--   "You can now include INFUSEELEMENT in inline blademaster attacks. For example,
+--    COMPASSSLASH MAKARIOS NORTH INFUSEFIRE STERNUM."
+--
+-- Worth taking because `infuse` as a SEPARATE command sits in a chain `queue addclearfull`
+-- rebuilds every prompt, and a command that does not wait on balance executes on every rebuild
+-- rather than once per swing (v4.7.270). Woven in, it can only happen when the attack happens.
+describe("inline infuse", function()
+  local function setup(shin, inTower)
+    bmShatteredStar, bmBladedReflexes, mnemDivineThunder, mnemIcyHeart = false, false, false, false
+    ataxiaBasher.shielded, ataxiaBasher.rageraze = false, false
+    ataxiaBasher.inMnemosyne = inTower and true or false
+    ataxiaBasher.bmInlineInfuse = nil
+    ataxiaTemp = {}
+    ataxia.defences = {}
+    ataxia.vitals.hpp, ataxia.vitals.rage = 100, 0
+    blademaster = { getShin = function() return shin end }
+  end
+
+  -- THE TOKEN ORDER IS THE RISK. It is inferred from the announcement's single example
+  -- (attack, target, [direction], infuse<element>, body part), and unlike the old form a
+  -- malformed inline attack is rejected WHOLE -- we lose the swing, not just the infuse.
+  it("puts the element between the target and the body part", function()
+    setup(95, false)
+    local cmd = ataxiaBasher_blademasterBashing()
+    expect(has(cmd, "drawslash " .. target .. " infuselightning sternum")).toBeTrue()
+    -- and NOT the separate command, which is the whole point
+    expect(has(cmd, "infuse lightning")).toBeFalse()
+  end)
+
+  it("uses infuse<element> as one word, never the bare element name", function()
+    setup(95, false)
+    local cmd = ataxiaBasher_blademasterBashing()
+    -- The announcement is explicit about why: a bare element name "might clash with serverside
+    -- targeting against elemental based denizens".
+    expect(has(cmd, "infuselightning")).toBeTrue()
+    expect(has(cmd, target .. " lightning")).toBeFalse()
+  end)
+
+  it("falls back to the two-command form when switched off", function()
+    setup(95, false)
+    ataxiaBasher.bmInlineInfuse = false
+    local cmd = ataxiaBasher_blademasterBashing()
+    expect(has(cmd, "infuse lightning")).toBeTrue()
+    expect(has(cmd, attack("drawslash", nil))).toBeTrue() -- body part adjacent again
+    expect(has(cmd, "infuselightning")).toBeFalse()
+    ataxiaBasher.bmInlineInfuse = nil
+  end)
+
+  -- The shin budget still decides WHETHER, and it runs before this decides HOW. A suppressed
+  -- infuse must leave a clean attack rather than an empty token where the element goes.
+  it("leaves a clean attack when the shin budget suppresses the infuse", function()
+    setup(85, true) -- tower, below the 90 floor
+    local cmd = ataxiaBasher_blademasterBashing()
+    expect(has(cmd, attack("drawslash", nil))).toBeTrue()
+    expect(has(cmd, "infuse")).toBeFalse()
+  end)
+
+  it("weaves into multislash too, and rides the shielded rage-raze round", function()
+    setup(95, false)
+    bmShatteredStar = true
+    ataxiaBasher.shielded, ataxiaBasher.rageraze = true, true
+    ataxia.vitals.rage = 50
+    expect(has(ataxiaBasher_blademasterBashing(), attack("multislash", "lightning"))).toBeTrue()
+    bmShatteredStar = false
   end)
 end)
 

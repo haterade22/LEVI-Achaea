@@ -2,6 +2,66 @@
 
 ---
 
+## 2026-08-17 - Inline INFUSE: one command instead of two (v4.7.273)
+
+Game announcement **#174**:
+
+> You can now include INFUSEELEMENT in inline blademaster attacks. For example,
+> COMPASSSLASH MAKARIOS NORTH INFUSEFIRE STERNUM. You must specify infuse<element> rather than
+> just element name - this is to avoid various permutations of the syntax that might clash with
+> serverside targeting against elemental based denizens otherwise.
+
+```
+before:  infuse lightning ; drawslash <t> sternum
+after:   drawslash <t> infuselightning sternum
+```
+
+### This is a correctness fix, not tidiness
+
+`infuse` was a SEPARATE command in a chain that `queue addclearfull` rebuilds **every prompt**, and
+this package has already paid twice for what that means: **a command in the round that does not wait
+on balance executes on every re-queue, not once per swing.** That is exactly how `shin augment` came
+to be refused **five times in 0.45 seconds** (v4.7.270) -- the swing waits for balance, an instant
+does not.
+
+Woven into the attack, the infuse can only happen when the attack happens -- once per balance, **by
+construction**. Which also means v4.7.269's shin budget was rationing a spender whose real
+consumption nobody had measured; the 90 floor stays (Phoenix still needs 80) but the pressure it was
+built against should be materially lower.
+
+### The token order is the risk, and the toggle is the answer
+
+Order is **inferred from the announcement's single example** -- attack, target, [direction],
+infuse<element>, body part. Our verbs take no direction, so `drawslash <t> infuselightning sternum`.
+One data point, no stated grammar; see v4.7.272, one boss is not a sample.
+
+**And the failure modes are not symmetric.** A malformed `infuse X` costs the infuse and the swing
+still lands. A malformed inline attack is rejected **whole** -- no swing at all. So
+`bash inlineinfuse off` (`ataxiaBasher.bmInlineInfuse = false`) restores the two-command form
+instantly, and the alias exists rather than being documented into existence (v4.7.271's lesson about
+`bash dwaeonic off`, a command that was never real).
+
+`infuse<element>` is deliberately one word because the announcement says why: a bare element name can
+clash with server-side targeting against elemental denizens.
+
+### PvP is NOT changed, deliberately
+
+`blademaster/002_Attack.lua` and `003_BrokenStar.lua` hold 12+ `infuse lightning;...` sites -- and
+`003:118` is already `compassslash <target> southeast <strike>`, the announcement's exact example
+shape. Two reasons to leave them: they queue with `addclear FREE`, which ACCUMULATES rather than
+being wiped every prompt, so the re-execution argument above does not transfer; and rewriting a dozen
+untested kill-route combos is not something to do between fights. Worth doing as its own change.
+
+### Tests
+
+**1464 -> 1469.** Nine existing assertions failed on the first run because they pinned
+`<verb> <target> sternum` as a contiguous substring -- which is precisely what they were for, since
+the body part is no longer adjacent to the target. They now go through an `attack(verb, element)`
+helper so the suite states the shape once. Four deliberate breaks (never weave / element after the
+body part / bare element name / toggle ignored), all four caught.
+
+---
+
 ## 2026-08-17 - The boss departure line has a SECOND grammar (v4.7.272)
 
 ```

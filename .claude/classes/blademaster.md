@@ -435,8 +435,9 @@ strategy: |
 ```yaml
 attack_command: "SLASH <target>" or stance-appropriate attacks
 attack_skill: TwoArts
-# Basher melee (ataxiaBasher_blademasterBashing, basher/002): "infuse lightning ; drawslash <t>
-# sternum" -- LIGHTNING-first since v4.7.269 (BM_INFUSE_ORDER, user-directed); it was fire only so
+# Basher melee (ataxiaBasher_blademasterBashing, basher/002): "drawslash <t> infuselightning
+# sternum" -- the element is INLINE since v4.7.273 (announcement #174), previously
+# "infuse lightning ; drawslash <t> sternum" -- LIGHTNING-first since v4.7.269 (BM_INFUSE_ORDER, user-directed); it was fire only so
 # that introducing ataxiaBasher_bmInfuse behaved identically to the hardcoded `infuse fire` it
 # replaced, while the class's own PvP offense (blademaster/003_BrokenStar) had always used lightning.
 # IN THE TOWER the infuse is SKIPPED below ataxiaBasher.bmInfuseAt (90) shin -- see the shin budget
