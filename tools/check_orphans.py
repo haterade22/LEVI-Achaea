@@ -48,6 +48,36 @@ DEF_RE = re.compile(r"^\s*function\s+([A-Za-z_]\w*)\s*\(", re.M)
 DEF_ASSIGN_RE = re.compile(r"^\s*([A-Za-z_]\w*)\s*=\s*function\s*\(", re.M)
 CALL_RE = re.compile(r"\b([A-Za-z_]\w*)\s*\(")
 
+# --- CHECK 2: a namespace FIELD that is called but never assigned anywhere ------------------
+#
+# Added v4.7.281, after the third instance of the same failure reached the user's client:
+#
+#     [ERROR:] object:<Shin Augment> function:<Alias2759>
+#       <[string "Script: Shin Augment Probe"]:284: attempt to call field 'echo' (a nil value)>
+#
+# `ataxia.echo` does not exist -- the helper is the global `ataxiaEcho` -- so every echoing
+# branch of `bash shinprobe`, `bash augment` and `bash inlineinfuse` had been dead since it
+# shipped, along with all nine echoes in `ataxiabars`. The same sweep found `shaman.help()`,
+# called unguarded by `sp help` and never defined at all.
+#
+# Check 1 above cannot see any of this: it reasons about GLOBALS defined by INACTIVE scripts,
+# and these are table FIELDS that were never defined by anything. Same for the v4.7.264 `zgui`
+# family, which was a table INDEX rather than a call.
+#
+# Only namespaces this repo OWNS are listed. `mmp` is deliberately absent: the mapper is a
+# separate package whose ~220 functions live outside src_new, so including it would report
+# hundreds of false positives -- and a noisy gate gets switched off, which is how a guard
+# becomes decoration.
+NAMESPACES = (
+    "ataxia", "ataxiaBasher", "ataxiaNDB", "ataxiagui", "ataxiaTables", "ataxiaTemp",
+    "selfLimbDamage", "blademaster", "shaman", "psion", "apostate", "tekura", "tekura6",
+    "infernalDWC", "ldm", "bashStats", "gearAudit", "itemCatalog", "classDetect", "leviSetup",
+)
+_NS = "(?:" + "|".join(NAMESPACES) + ")"
+FIELD_CALL_RE = re.compile(r"\b(" + _NS + r")((?:\.[A-Za-z_]\w*)+)\s*\(")
+FIELD_DEF_FN_RE = re.compile(r"function\s+(" + _NS + r")((?:[.:][A-Za-z_]\w*)+)")
+FIELD_DEF_EQ_RE = re.compile(r"\b(" + _NS + r")((?:\.[A-Za-z_]\w*)+)\s*=[^=]")
+
 
 def split(path):
     """Return (is_active, body). Files with no header are treated as active."""
@@ -73,6 +103,73 @@ def rel(p):
     return os.path.relpath(p, ROOT).replace(os.sep, "/")
 
 
+def walk_all():
+    """Every source file that can define or call, including the group inline scripts."""
+    for dirpath, _, names in os.walk(SRC):
+        if os.sep + "tests" in dirpath:
+            continue
+        for n in sorted(names):
+            if n.endswith(".lua") or n.endswith(".yaml"):
+                yield os.path.join(dirpath, n)
+
+
+def strip_comments(body):
+    """Drop line comments. Without this, prose like `-- Set ataxiaBasher.fleeTimeout (seconds)`
+    reads as a call to a field that does not exist."""
+    out = []
+    for line in body.splitlines():
+        i = line.find("--")
+        out.append(line if i < 0 else line[:i])
+    return "\n".join(out)
+
+
+def check_missing_fields():
+    """CHECK 2: NS.field(...) where NS.field is assigned nowhere in the tree."""
+    assigned, called = set(), {}
+    for path in walk_all():
+        try:
+            text = open(path, encoding="utf-8", errors="replace").read()
+        except OSError:
+            continue
+        # Definitions are searched in the RAW text: the group inline scripts in _groups.yaml
+        # carry Lua as escaped YAML strings, and that is where several namespaces are built.
+        for m in FIELD_DEF_FN_RE.finditer(text):
+            assigned.add(m.group(1) + m.group(2).replace(":", "."))
+        for m in FIELD_DEF_EQ_RE.finditer(text):
+            assigned.add(m.group(1) + m.group(2))
+        if not path.endswith(".lua"):
+            continue
+        _active, body = split(path)
+        # Report REAL file line numbers: split() drops the YAML header, so body line 1 is not
+        # file line 1, and a finding you cannot jump to is a finding you will not act on.
+        offset = len(text) - len(body)
+        header_lines = text[:offset].count("\n")
+        lines = strip_comments(body).splitlines()
+        for i, line in enumerate(lines):
+            for m in FIELD_CALL_RE.finditer(line):
+                name = m.group(1) + m.group(2)
+                # A guarded call cannot throw. Unlike check 1 this looks at the two PRECEDING
+                # lines as well, because the idiom this tree actually uses for optional FIELDS
+                # puts the test on its own line:
+                #     if ataxia and ataxia.decho then
+                #         ataxia.decho("...")
+                #     end
+                # Check 1 is per-line because it guards against a real orphan slipping through;
+                # here the same strictness would report six safe call sites in one file, and a
+                # gate that cries wolf gets switched off.
+                window = "\n".join(lines[max(0, i - 2):i + 1])
+                if re.search(r"\b%s\s+(?:and|then)\b" % re.escape(name), window):
+                    continue
+                called.setdefault(name, []).append((rel(path), header_lines + i + 1))
+
+    def covered(name):
+        # Assigning any PREFIX covers the leaf: `ataxia.mnemosyne = M` defines every method on it.
+        parts = name.split(".")
+        return any(".".join(parts[:i]) in assigned for i in range(2, len(parts) + 1))
+
+    return {n: sites for n, sites in called.items() if not covered(n)}
+
+
 def main():
     live, dead = set(), {}
 
@@ -89,7 +186,7 @@ def main():
     orphaned = {n: f for n, f in dead.items() if n not in live}
     if not orphaned:
         print("check_orphans: no inactive-script globals defined; nothing to check.")
-        return 0
+        return report_missing_fields()
 
     findings = []
     for path in walk(*CALLER_DIRS):
@@ -118,7 +215,7 @@ def main():
     if not findings:
         print("check_orphans: OK -- %d global(s) defined only by inactive scripts, none called "
               "by an active item." % len(orphaned))
-        return 0
+        return report_missing_fields()
 
     print("=== ORPHANED CALLS: active items call globals only an INACTIVE script defines ===")
     print("These will throw 'attempt to call global (a nil value)' on every match, at runtime,")
@@ -128,6 +225,28 @@ def main():
     print("\nFix by disabling the caller (isActive: 'no') if the feature is genuinely retired,")
     print("or by re-activating the script if it is not. Do not leave them disagreeing.")
     print("\n%d orphaned call site(s)." % len(findings))
+    report_missing_fields()
+    return 1
+
+
+def report_missing_fields():
+    missing = check_missing_fields()
+    if not missing:
+        print("check_orphans: OK -- no namespace field is called without being defined.")
+        return 0
+    print("\n=== MISSING NAMESPACE FIELDS: called, but assigned nowhere in the tree ===")
+    print("These throw \"attempt to call field 'x' (a nil value)\" every time the line runs,")
+    print("with no build or test failure to warn you.\n")
+    for name in sorted(missing):
+        sites = missing[name]
+        print("  %s()  -- %d call site(s)" % (name, len(sites)))
+        for f, ln in sites[:4]:
+            print("      %s:%d" % (f, ln))
+        if len(sites) > 4:
+            print("      ... and %d more" % (len(sites) - 4))
+    print("\nEither define it, point the call at the real helper, or guard it")
+    print("(`if NS.field then NS.field(...) end`) if it is genuinely optional.")
+    print("\n%d undefined field(s)." % len(missing))
     return 1
 
 

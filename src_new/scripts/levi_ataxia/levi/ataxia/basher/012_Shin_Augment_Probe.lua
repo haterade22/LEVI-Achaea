@@ -266,7 +266,7 @@ end
 
 function ataxiaBasher_shinProbeReport()
   local rows = ataxiaBasher_shinProbeRows()
-  ataxia.echo("<gold>SHIN AUGMENT<reset> -- measured duration by spend"
+  ataxiaEcho("<gold>SHIN AUGMENT<reset> -- measured duration by spend"
     .. (P().on and "" or " <indian_red>(probe OFF)<reset>"))
   if #rows == 0 then
     cecho("\n  <DimGrey>no samples yet. Bash as a Blademaster with Bladed Reflexes up; each"
@@ -291,13 +291,13 @@ function ataxiaBasher_shinProbeCommand(arg, rest)
   arg = arg and arg:lower() or "report"
   if arg == "on" or arg == "off" then
     p.on = (arg == "on")
-    ataxia.echo("<gold>shin augment probe<reset> " .. (p.on and "<green>ON" or "<indian_red>OFF"))
+    ataxiaEcho("<gold>shin augment probe<reset> " .. (p.on and "<green>ON" or "<indian_red>OFF"))
   elseif arg == "clear" then
     p.samples = {}
-    ataxia.echo("<gold>shin augment probe<reset> -- samples cleared.")
+    ataxiaEcho("<gold>shin augment probe<reset> -- samples cleared.")
   elseif arg == "dump" then
     local n = tonumber(rest) or 10
-    ataxia.echo("<gold>shin augment probe<reset> -- last " .. n .. " samples")
+    ataxiaEcho("<gold>shin augment probe<reset> -- last " .. n .. " samples")
     local s = p.samples
     for i = math.max(1, #s - n + 1), #s do
       cecho(string.format("\n  <white>%s<reset> shin -> <white>%.1fs",
@@ -305,7 +305,7 @@ function ataxiaBasher_shinProbeCommand(arg, rest)
     end
     cecho("\n")
   elseif arg == "status" then
-    ataxia.echo("<gold>shin augment probe<reset> " .. (p.on and "<green>ON" or "<indian_red>OFF")
+    ataxiaEcho("<gold>shin augment probe<reset> " .. (p.on and "<green>ON" or "<indian_red>OFF")
       .. " <reset>-- " .. #p.samples .. " sample(s), spend "
       .. tostring(tonumber(ataxiaBasher.bmAugmentAmount) or 20))
   else

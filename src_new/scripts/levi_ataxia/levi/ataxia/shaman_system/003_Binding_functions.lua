@@ -132,6 +132,35 @@ function shaman.tetherandattune()
 		end
 end
 
+-- `sp help` -- THE ALIAS HAS CALLED THIS SINCE THE PROFILE SWITCHER SHIPPED AND IT DID NOT
+-- EXIST (v4.7.281). `aliases/.../003_Profile_Switcher.lua` dispatches `shaman.help()`
+-- UNGUARDED, so typing `sp help` threw "attempt to call field 'help' (a nil value)" every
+-- time -- the same shape as the `ataxia.echo` calls fixed in this version, and found by the
+-- same sweep: a namespace FIELD that is called but never assigned anywhere in the tree.
+-- `tools/check_orphans.py` could see neither, because it only knows about globals defined by
+-- INACTIVE scripts, not table fields that were never defined at all.
+--
+-- Written from the alias PATTERNS rather than from memory, so it lists what actually exists:
+-- 003 (this dispatcher), 004 `sp create`, 005 `sp bash`, 001 `comm`, 002 `shaman profile save`.
+function shaman.help()
+  shecho("<gold>Spirit profiles<reset> -- <white>sp <command>")
+  cecho("\n  <white>sp <name><reset>                    load a saved profile (the bare form)")
+  cecho("\n  <white>sp list<reset>                      list saved profiles")
+  cecho("\n  <white>sp save <name><reset>               save the CURRENT binds/attunes as <name>")
+  cecho("\n  <white>sp delete <name><reset>             delete a saved profile")
+  cecho("\n  <white>sp create <name> binds <a b c> attunes <a b c> tether <x><reset>")
+  cecho("\n                                     build a profile explicitly")
+  cecho("\n  <white>sp bash <jinx|swiftcurse|arius><reset>   set the bashing attack type")
+  cecho("\n  <white>sp precommune <cmd><reset>          run <cmd> before COMMUNE")
+  cecho("\n  <white>sp postcommune <cmd><reset>         run <cmd> after COMMUNE")
+  cecho("\n  <white>comm<reset>                         commune: unbind, bind, attune, tether")
+  -- The one non-obvious constraint, and it decides real fights: three attune slots gate four
+  -- Mnemosyne boons (Echoing Hydra/Arius, Full Mettle Alchemist/Aspar, Viridian Balm/Daina,
+  -- Knight's Resolve/Garon), so a bashing profile can silently switch a claimed boon OFF.
+  cecho("\n  <DimGrey>Three attune slots only -- and four Mnemosyne boons are dead without a"
+    .. "\n  specific spirit attuned, so a profile switch can disable a boon you hold.\n")
+end
+
 function shaman.listspiritprofiles()
 	cecho("\n<SeaGreen>(<white>Profile<SeaGreen>)"..string.rep(" ", 12).."<brown>(<white>Bindings<brown>)"..string.rep(" ", 25).."<orange>(<white>Attunes<orange>)"..string.rep(" ", 15).."<violet>(<white>Tether<violet>)\n")                  
 	cecho("<DodgerBlue>"..string.rep("-", 90).."\n")

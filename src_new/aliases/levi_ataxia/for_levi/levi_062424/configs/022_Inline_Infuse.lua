@@ -35,7 +35,7 @@ if arg == "on" or arg == "off" then
 end
 
 local on = ataxiaBasher.bmInlineInfuse ~= false
-ataxia.echo("<gold>inline infuse<reset> " .. (on and "<green>ON" or "<indian_red>OFF")
+ataxiaEcho("<gold>inline infuse<reset> " .. (on and "<green>ON" or "<indian_red>OFF")
 	.. "<reset> -- " .. (on and "<white>drawslash <t> infuse<element> sternum"
 	                        or "<white>infuse <element><reset> as a separate command"))
 if on then

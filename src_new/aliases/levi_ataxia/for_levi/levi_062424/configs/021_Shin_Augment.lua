@@ -29,12 +29,12 @@ local arg, rest = matches[2], matches[3]
 if verb == "augment" then
 	local n = tonumber(arg)
 	if not n or n < 1 then
-		ataxia.echo("<gold>bash augment <n><reset> -- shin to spend on SHIN AUGMENT. Currently <white>"
+		ataxiaEcho("<gold>bash augment <n><reset> -- shin to spend on SHIN AUGMENT. Currently <white>"
 			.. tostring(tonumber(ataxiaBasher.bmAugmentAmount) or 20)
 			.. "<reset>. See <white>bash shinprobe<reset> for what each spend actually buys.")
 	else
 		ataxiaBasher.bmAugmentAmount = n
-		ataxia.echo("<gold>shin augment spend<reset> -> <white>" .. n .. "<reset> shin."
+		ataxiaEcho("<gold>shin augment spend<reset> -> <white>" .. n .. "<reset> shin."
 			.. " <DimGrey>(cooldown equals the duration, so uptime cannot exceed 50% whatever you pick.)")
 	end
 elseif ataxiaBasher_shinProbeCommand then

@@ -269,7 +269,7 @@ end
 -------------------------------------------------
 function ataxia.bars.toggleBar(name)
   if not barDefs[name] then
-    ataxia.echo("Unknown bar: " .. tostring(name) .. ". Valid: health, mana, willpower, endurance, cape")
+    ataxiaEcho("Unknown bar: " .. tostring(name) .. ". Valid: health, mana, willpower, endurance, cape")
     return
   end
   ataxia.bars.config.enabled[name] = not ataxia.bars.config.enabled[name]
@@ -281,7 +281,7 @@ function ataxia.bars.toggleBar(name)
     end
   end
   local status = ataxia.bars.config.enabled[name] and "<green>ON" or "<red>OFF"
-  ataxia.echo(barDefs[name].label .. " bar: " .. status)
+  ataxiaEcho(barDefs[name].label .. " bar: " .. status)
   ataxia.bars.saveConfig()
 end
 
@@ -338,7 +338,7 @@ function ataxia.bars.resetPositions()
       bar.window:hide()
     end
   end
-  ataxia.echo("Vital bar positions reset to defaults")
+  ataxiaEcho("Vital bar positions reset to defaults")
 end
 
 -------------------------------------------------
@@ -346,13 +346,13 @@ end
 -------------------------------------------------
 function ataxia.bars.status()
   local master = ataxia.bars.config.masterEnabled and "<green>ON" or "<red>OFF"
-  ataxia.echo("Vital Bars: " .. master)
+  ataxiaEcho("Vital Bars: " .. master)
   for _, name in ipairs(barOrder) do
     local enabled = ataxia.bars.config.enabled[name]
     local status = enabled and "<green>ON" or "<red>OFF"
-    ataxia.echo("  " .. barDefs[name].label .. ": " .. status)
+    ataxiaEcho("  " .. barDefs[name].label .. ": " .. status)
   end
-  ataxia.echo("Commands: <white>ataxiabars on/off<reset> | <white>ataxiabars <name><reset> | <white>ataxiabars reset")
+  ataxiaEcho("Commands: <white>ataxiabars on/off<reset> | <white>ataxiabars <name><reset> | <white>ataxiabars reset")
 end
 
 -------------------------------------------------
@@ -423,15 +423,15 @@ function ataxia.bars.dispatch(args)
     ataxia.bars.status()
   elseif args == "on" then
     ataxia.bars.toggle("on")
-    ataxia.echo("Vital Bars: <green>ON")
+    ataxiaEcho("Vital Bars: <green>ON")
   elseif args == "off" then
     ataxia.bars.toggle("off")
-    ataxia.echo("Vital Bars: <red>OFF")
+    ataxiaEcho("Vital Bars: <red>OFF")
   elseif args == "reset" then
     ataxia.bars.resetPositions()
   elseif barDefs[args] then
     ataxia.bars.toggleBar(args)
   else
-    ataxia.echo("Unknown: " .. args .. ". Use: on, off, reset, health, mana, willpower, endurance, cape")
+    ataxiaEcho("Unknown: " .. args .. ". Use: on, off, reset, health, mana, willpower, endurance, cape")
   end
 end

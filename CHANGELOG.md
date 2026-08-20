@@ -2,6 +2,71 @@
 
 ---
 
+## 2026-08-20 - `ataxia.echo` does not exist, and the checker could not see it (v4.7.281)
+
+```
+[ERROR:] object:<Shin Augment> function:<Alias2759>
+  <[string "Script: Shin Augment Probe"]:284: attempt to call field 'echo' (a nil value)>
+```
+
+Line 284 of the built script is the `clear` branch -- the exact command the previous release told
+the user to run. **`ataxia.echo` is defined nowhere in the tree.** The helper is the global
+`ataxiaEcho`, built in a `_groups.yaml` inline script.
+
+**17 dead call sites in 4 files**, and only 8 of them were mine:
+
+| File | Sites | Consequence |
+|---|---|---|
+| `basher/012_Shin_Augment_Probe.lua` | 5 | every echoing branch of `bash shinprobe` |
+| `configs/021_Shin_Augment.lua` | 2 | `bash augment <n>` |
+| `configs/022_Inline_Infuse.lua` | 1 | `bash inlineinfuse` |
+| `build_windows/016_buildVitalBars.lua` | **9** | **the whole `ataxiabars` command**, pre-existing |
+
+So `bash shinprobe` has never once printed a report, and `ataxiabars` has been throwing for
+however long -- neither of which anything noticed, because a nil callee is silent everywhere
+except the error window.
+
+### The third instance of one failure, so the gate now covers it
+
+* v4.7.261 -- an ACTIVE trigger calling a global only an INACTIVE script defined (108 sites).
+* v4.7.264 -- five triggers INDEXING `zgui`, a table built by a group script that may be off.
+* v4.7.281 -- a namespace FIELD called but never assigned at all.
+
+`tools/check_orphans.py` could see only the first: it reasons about globals defined by inactive
+scripts. **Check 2** now looks for `NS.field(...)` where `NS.field` is assigned nowhere -- across
+`.lua` *and* `_groups.yaml`, since that is where several namespaces are actually built.
+
+Three things keep it quiet enough to be worth having, which matters because **a gate that cries
+wolf gets switched off, and that is how a guard becomes decoration**:
+
+* **`mmp` is deliberately excluded.** The mapper is a separate package whose ~220 functions live
+  outside `src_new`; including it produced hundreds of false positives in the prototype.
+* **Comments are stripped.** Prose like `-- Set ataxiaBasher.fleeTimeout (seconds, default 20)`
+  otherwise reads as a call to a field that does not exist -- three of the prototype's five hits.
+* **The guard window is TWO LINES**, not one like check 1, because the idiom this tree uses for
+  optional fields puts the test on its own line (`if ataxia and ataxia.decho then` / call / `end`).
+  Per-line strictness reported six safe sites in one file.
+
+Findings now carry the REAL file line: `split()` drops the YAML header, so body-relative numbers
+pointed at the wrong place, and a finding you cannot jump to is a finding you will not act on.
+
+### The same sweep found a second live crash
+
+**`shaman.help()` was called by `sp help` and defined nowhere** -- so typing it threw, for as long
+as the profile switcher has existed. Written now from the alias PATTERNS rather than from memory,
+so it documents what actually exists (`sp <name>` / `list` / `save` / `delete` / `create ... binds
+... attunes ... tether ...` / `bash jinx|swiftcurse|arius` / `precommune` / `postcommune` / `comm`),
+and it closes with the constraint that decides fights: **three attune slots, four Mnemosyne boons
+that need a specific spirit attuned**, so a profile switch can silently disable a boon you hold.
+
+### Verification
+
+Both bugs were re-introduced and the checker caught each with an exact `file:line`. Tests
+unchanged at **1624** -- this is a class of fault the unit suite structurally cannot reach, which
+is the entire reason the gate exists.
+
+---
+
 ## 2026-08-20 - The augment poll was ending augments that had just begun (v4.7.280)
 
 Live capture:
