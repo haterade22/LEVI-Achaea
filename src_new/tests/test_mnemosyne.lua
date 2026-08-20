@@ -3388,6 +3388,103 @@ describe("boiling lava", function()
 end)
 
 -- ============================================================================
+-- v4.7.278 -- what the WADE STATUS block was still throwing away
+-- ============================================================================
+--
+-- From reviewing MediaRes' standalone Mnemosyne tracker: it reads `Wave progress` and
+-- `Remaining lives` out of the same block we already parse for affixes, and confirms boon
+-- claims on `A fulgent eddy falls still.` We had none of the three.
+describe("wade status: lives and wave progress", function()
+  local M = ataxia.mnemosyne
+
+  it("records both numbers off the status block", function()
+    M.run = M.run or {}
+    M.run.lives, M.run.waveProgress = nil, nil
+    M.onLivesLeft("3")
+    M.onWaveProgress("75")
+    expect(M.run.lives).toBe(3)
+    expect(M.run.waveProgress).toBe(75)
+  end)
+
+  it("ignores a non-numeric reading rather than blanking what it knows", function()
+    M.run.lives = 2
+    M.onLivesLeft("many")
+    expect(M.run.lives).toBe(2)
+  end)
+
+  -- THE DISTINCTION THAT MATTERS: an affix is re-read from every ripple's status block, so it
+  -- is cleared per ripple. A life spent is spent for the whole dive.
+  it("keeps lives across a ripple change", function()
+    M.run.lives = 2
+    M.run.active = true
+    M.onRipple(7)
+    expect(M.run.lives).toBe(2)
+  end)
+
+  it("clears lives on a RUN boundary", function()
+    M.run.lives, M.run.waveProgress = 2, 50
+    M._resetRun()
+    expect(M.run.lives).toBe(nil)
+    expect(M.run.waveProgress).toBe(nil)
+  end)
+end)
+
+-- `A fulgent eddy falls still.` -- our boon flags latch at SEND time, so a REFUSED claim arms
+-- automation for a boon we do not hold. The confirmation is the game's own proof.
+describe("boon claim verification", function()
+  local M = ataxia.mnemosyne
+
+  local function armed(name)
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.mnemClaimPending, ataxiaTemp.mnemClaimConfirms = nil, nil
+    M._armClaimVerify(name)
+  end
+
+  it("arms on the claim and clears on the confirmation", function()
+    armed("Warmarch")
+    expect(ataxiaTemp.mnemClaimPending ~= nil).toBeTrue()
+    M.onBoonClaimConfirmed()
+    expect(ataxiaTemp.mnemClaimPending).toBe(nil)
+    expect(ataxiaTemp.mnemClaimConfirms).toBe(1)
+  end)
+
+  it("does not warn while the claim is still fresh", function()
+    armed("Warmarch")
+    ataxiaTemp.mnemClaimConfirms = 1 -- the line is known to fire for us
+    expect(M.checkClaimVerify()).toBe(nil)
+    expect(ataxiaTemp.mnemClaimPending ~= nil).toBeTrue() -- still pending, not consumed
+  end)
+
+  it("warns once the window passes -- the claim may never have landed", function()
+    armed("Warmarch")
+    ataxiaTemp.mnemClaimConfirms = 1
+    ataxiaTemp.mnemClaimPending.at = (getEpoch() - 30)
+    expect(M.checkClaimVerify()).toBe("Warmarch")
+    expect(ataxiaTemp.mnemClaimPending).toBe(nil) -- consumed: warn once, not every ripple
+  end)
+
+  -- THE GUARD THAT KEEPS IT HONEST. This wording is second-hand -- adopted from another
+  -- player's script, never seen in our own logs. Until we have seen it fire at least once we
+  -- cannot tell "the claim failed" from "the game does not print that line to us", and warning
+  -- on the latter after every claim trains the user to ignore the warning.
+  it("stays quiet if that line has NEVER been seen", function()
+    armed("Warmarch")
+    ataxiaTemp.mnemClaimConfirms = nil
+    ataxiaTemp.mnemClaimPending.at = (getEpoch() - 30)
+    expect(M.checkClaimVerify()).toBe(nil)
+  end)
+
+  -- A confirmation with nothing pending is normal: the user can claim from the game's own
+  -- menu without going through our alias.
+  it("tolerates a confirmation we never armed", function()
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.mnemClaimPending, ataxiaTemp.mnemClaimConfirms = nil, nil
+    M.onBoonClaimConfirmed()
+    expect(ataxiaTemp.mnemClaimConfirms).toBe(1)
+  end)
+end)
+
+-- ============================================================================
 -- v4.7.255 -- a boss that runs away
 -- ============================================================================
 --

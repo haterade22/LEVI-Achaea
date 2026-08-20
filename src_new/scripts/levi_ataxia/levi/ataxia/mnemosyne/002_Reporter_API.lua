@@ -44,6 +44,11 @@ function M._resetRun()
   M.run.pendingMonsters = {}
   M.run.lastOffered = {}
   M.run.paused = nil -- a genuine start/end clears any pending pause-resume
+  -- WADE STATUS numbers (v4.7.278). Lives are per RUN, so they are cleared HERE and
+  -- deliberately NOT in onRipple beside the affixes -- an affix is re-read from every ripple's
+  -- status block, a life spent is spent for the rest of the dive.
+  M.run.lives = nil
+  M.run.waveProgress = nil
 end
 
 -- Send any buffered monster spawns as one combined string, then clear.

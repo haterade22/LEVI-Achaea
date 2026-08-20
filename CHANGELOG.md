@@ -2,6 +2,91 @@
 
 ---
 
+## 2026-08-20 - Three captures adopted from a community tracker (v4.7.278)
+
+Reviewed **MediaRes' `mnemosyne_standalone.lua`**, an open-source Mudlet tracker for the same
+event. It is a pure TRACKER where ours also fights, so most of it we already have or do not want --
+but it reads three things out of blocks we were **already parsing and then discarding**.
+
+| Line | Ours before | Now |
+|---|---|---|
+| `Remaining lives:  <n>` | not captured | `M.run.lives`, `mnem status`, echo on spend |
+| `Wave progress:  <n>` | not captured | `M.run.waveProgress` |
+| `A fulgent eddy falls still.` | not captured | boon-claim CONFIRMATION |
+
+### Lives is the stake we never knew
+
+Every risk decision in this package is priced in **HP** -- the escape ladder at 35%, the panic
+tumble, the boss-chase HP guard, the forced disengage. HP measures how close *this fight* is to
+going wrong. **Lives measure what dying COSTS**, and that is a different question: at three lives a
+death is a setback, at one it ends the run and every boon claimed in it. The same 20% reading
+deserves different answers at 3 and at 1.
+
+**Captured and surfaced, deliberately NOT wired into any threshold.** Turning it into policy means
+choosing numbers -- refuse the boss chase on the last life? drop `escapeAt` to 50%? -- and a wrong
+guess kills us in a no-flee instance. The number is now available and the decision is the user's.
+It echoes only when it CHANGES, because a number reprinted every ripple is a number nobody reads.
+
+Per-RUN, so it is cleared in `M._resetRun()` and **not** in `onRipple` beside the affixes: an affix
+is re-read from every ripple's status block, a life spent is spent for the dive.
+
+### The claim confirmation closes a real hole
+
+Our boon flags latch at **SEND** time -- `aliases/.../002_Boon_Claim.lua` passes the command
+through and immediately calls `onBoonClaim`, which records history, latches the flag and posts
+telemetry. Nothing in that chain knew whether the game **accepted** it. So a refused claim (wrong
+name, eddy already spent, screen gone) still armed that boon's automation for the whole run: a Bard
+swapping to paean for a Warmarch it never got, a Knight swinging `arc` at 3 denizens for an
+Indiscriminate that is not there.
+
+The same rule this codebase keeps re-learning: **where the game speaks about its own state, our
+bookkeeping is the fallback** (v4.7.266 distortion, v4.7.270 augment refusal, v4.7.271 cooldown).
+
+**It WARNS rather than un-latching**, and the asymmetry is deliberate -- the same call made for the
+Arc proof-of-life in v4.7.245. This wording is **second-hand**: adopted from someone else's script,
+never seen in our own logs. If claims can also succeed silently, auto-reverting would strip real
+boons, which is far worse than a warning. There is a second guard on top: **it stays quiet until
+that line has fired at least once**, because until then we cannot distinguish "the claim failed"
+from "the game does not print this to us", and warning after every claim trains the user to ignore
+it. Promote to an un-latch once the line is confirmed live.
+
+Polled from `onRipple` rather than timered -- a ripple boundary is well past the 4s window, and a
+`tempTimer` id must never be serialized (v4.7.192).
+
+### Class/race: already sent, now visible
+
+Re-verified against the live schema (`http://104.128.56.238:8000/openapi.json`, 2026-08-20):
+`class` and `race` are **top-level optional strings on `BoonsOfferedRequest`**, exactly where
+v4.7.220 put them, and both call paths route through `M.reportBoonsOffered`. Nothing was missing.
+
+But a missing `gmcp.Char.Status` read **omits the key** rather than sending `"unknown"` -- right for
+the data, invisible to the user. `mnem status` now prints what would be sent, showing
+`<indian_red>unread` when the read fails, so "we send class" is checkable instead of trusted.
+
+### Reviewed and deliberately NOT adopted
+
+* **`M.MOBTYPES`** -- 80+ wave announcement lines mapped to a monster roster and boss. Genuinely
+  valuable and **the one significant thing still missing** (see below), but it is a data import we
+  do not have the data for -- and their approach is a name table, which our house rule
+  (v4.7.264) says goes stale on the entry after the last one someone added. Ours parses the spawn
+  SENTENCE generically (`MOB_VERBS`), which survives new waves but cannot name the roster.
+* **Per-slot `boon contemplate` on every offer** -- we deliberately moved off that in v4.7.91: the
+  enrichment chain raced the next ripple's captures for the single `_capturing` slot and silently
+  dropped whole boon reports on a lost race.
+* **SQLite storage, gist auto-update, `/health`** -- ours are `table.save` + SYSUPDATE and work.
+
+### Still open
+
+Their `MOBTYPES` would give us the **monster names and boss BEFORE first contact**, which our
+sentence parse cannot derive. That would let the SLC denizen parry patterns, `controlMobs` and the
+swarm thresholds pre-arm on arrival instead of learning on the first hit. Needs the actual table.
+
+### Tests
+
+**1606 -> 1615.** Four deliberate breaks, all four caught.
+
+---
+
 ## 2026-08-19 - Stack-aware curing priorities, and the Damnation defence that never fired (v4.7.276)
 
 Game announcement:
@@ -21,7 +106,7 @@ which is the only reason our table carried a value for *every* level of every st
 explicit entry at every real count means the base is **never consulted** -- and neither is any
 runtime write that targets it.
 
-*(Shipped as 4.7.276 rather than 4.7.274: a concurrent change took 275, and the deep review below
+*(Shipped as 4.7.276 rather than 4.7.278: a concurrent change took 275, and the deep review below
 revised enough of this that it is one release, not two.)*
 
 ### 1. The Damnation defence could not fire, at either end

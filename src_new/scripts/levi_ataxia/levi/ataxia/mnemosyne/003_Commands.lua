@@ -33,10 +33,30 @@ function M.status()
   cecho("\n  <NavajoWhite>Token:      " .. (M._hasToken() and "<green>set" or "<indian_red>not set"))
   cecho("\n  <NavajoWhite>Auto:       " .. (c.enabled and "<green>ON" or "<grey>off"))
   cecho("\n  <NavajoWhite>Contemplate:" .. (c.contemplate and " <green>ON" or " <grey>off"))
+  -- WHAT WE ACTUALLY SEND AS CLASS/RACE (v4.7.278). These have ridden `/boons_offered` since
+  -- v4.7.220 -- top-level optional strings on BoonsOfferedRequest, re-verified against the live
+  -- schema 2026-08-20 -- but a missing `gmcp.Char.Status` read OMITS the key rather than sending
+  -- "unknown", which is right for the data and invisible to the user. Now it is visible: an
+  -- absent read shows as a warning here instead of quietly never being sent.
+  if M._charInfo then
+    local cls, race = M._charInfo()
+    cecho("\n  <NavajoWhite>Class/Race: "
+      .. (cls and ("<grey>" .. cls) or "<indian_red>unread")
+      .. "<grey> / " .. (race and race or "<indian_red>unread")
+      .. "  <DimGrey>(sent with /boons_offered)")
+  end
   local r = M.run or {}
   cecho("\n  <NavajoWhite>Run:        "
     .. (r.active and ("<green>active <grey>(ripple " .. tostring(r.ripple or 0)
       .. (r.publicId and (", id " .. tostring(r.publicId)) or "") .. ")") or "<grey>none"))
+  -- Read from WADE STATUS (v4.7.278, triggers mnemosyne/075-076). Lives is the number no risk
+  -- decision in this package has ever had: HP says how close this FIGHT is to going wrong,
+  -- lives says what dying costs.
+  if r.lives or r.waveProgress then
+    cecho("\n  <NavajoWhite>Lives:      "
+      .. (r.lives and ((r.lives <= 1 and "<indian_red>" or "<grey>") .. tostring(r.lives)) or "<grey>?")
+      .. (r.waveProgress and ("<grey>   wave " .. tostring(r.waveProgress) .. "%") or ""))
+  end
 end
 
 function M.help()

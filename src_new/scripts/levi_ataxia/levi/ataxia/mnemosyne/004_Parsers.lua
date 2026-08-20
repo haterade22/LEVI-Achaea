@@ -499,6 +499,53 @@ function M.restoreTreeCuring()
   if not M._quiet() then M.echo("Splinterbark cleared -- <green>curing tree on<reset>") end
 end
 
+-- ---------------------------------------------------------------------------
+-- TWO NUMBERS IN THE WADE STATUS BLOCK WE WERE THROWING AWAY (v4.7.278)
+-- ---------------------------------------------------------------------------
+--
+-- Found by reviewing MediaRes' standalone Mnemosyne tracker, which reads both:
+--
+--   Wave progress:   <n>      how far through clearing this ripple we are
+--   Remaining lives: <n>      how many deaths this RUN can still absorb
+--
+-- LIVES IS THE OPERATIONALLY IMPORTANT ONE, and it is the only run-scoped stake this
+-- package has never known. Every risk decision we make -- the escape ladder, the panic
+-- tumble, the boss chase budget, the forced disengage -- is priced in HP, which measures
+-- how close THIS FIGHT is to going wrong. Lives measure what dying actually COSTS: at
+-- three lives a death is a setback, at one it ends the run and everything claimed in it.
+-- The same 20% HP reading deserves different answers at 3 lives and at 1.
+--
+-- CAPTURED AND SURFACED, NOT YET WIRED, deliberately. Turning it into policy means
+-- choosing thresholds (chase on the last life or not? drop escapeAt to 50%?) and a wrong
+-- guess there gets us killed in a no-flee instance -- so the number is made available and
+-- the decision is the user's. `mnem status` shows it.
+--
+-- Anchorless patterns on purpose: these lines sit inside an indented status block and
+-- CLAUDE.md's own trigger guidance is to avoid ^/$ unless necessary. Both phrases are
+-- distinctive enough that a false positive is not credible.
+function M.onWaveProgress(n)
+  n = tonumber(n)
+  if not n then return end
+  M.run = M.run or {}
+  M.run.waveProgress = n
+end
+
+-- Lives are per RUN, so unlike the affixes this must NOT be cleared per ripple -- only on
+-- a run boundary. It lives on M.run beside the ripple for exactly that reason.
+function M.onLivesLeft(n)
+  n = tonumber(n)
+  if not n then return end
+  M.run = M.run or {}
+  local was = M.run.lives
+  M.run.lives = n
+  -- Say it when it CHANGES, not on every wade status: a number that prints every ripple is
+  -- a number nobody reads, and the moment worth noticing is the moment one is spent.
+  if was and n < was then
+    M.echo("<indian_red>a life spent<reset> -- <white>" .. n .. "<reset> remaining"
+      .. (n <= 1 and " <indian_red>(LAST ONE)" or ""))
+  end
+end
+
 -- "You wade N ripples deep into the tides of memory:" (WADE STATUS output).
 -- Seeing this proves we're in a run, so (re)assert active, set the ripple
 -- first, then flush any buffered monsters so /ripple_level precedes /monsters.
@@ -530,6 +577,10 @@ function M.onRipple(n)
   -- Forget per-room / in-flight card state; the per-card intervals deliberately
   -- survive (charges are global and regenerate hourly, not per ripple).
   if ataxiaBasher_mnemLdeckReset then ataxiaBasher_mnemLdeckReset() end
+  -- A ripple boundary is well past the CLAIM_CONFIRM_WINDOW of anything claimed at the boon
+  -- screen we just left, so this is the natural place to notice a claim that was never
+  -- confirmed. Polled rather than timered so it is reload-safe (never serialize a tempTimer id).
+  if M.checkClaimVerify then M.checkClaimVerify() end
   if not M._auto() then return end
   -- Context guard: a stray/re-read "You wade N deep" seen outside a dive must not
   -- BOOTSTRAP a phantom run. Require in-Mnemosyne context to first assert active;
@@ -1549,7 +1600,74 @@ function M.onBoonClaim(name)
   if M._recordClaim then M._recordClaim(canonical) end -- local history (#6)
   if M.latchBoonFlag then M.latchBoonFlag(canonical) end -- generic flags (v4.7.241)
   M.reportBoonsSelected(canonical)
+  -- ...and arm the VERIFICATION. Everything above happens because we SENT the command
+  -- (see the alias): the flag latches, the history records, the telemetry posts. Nothing
+  -- yet knows whether the game accepted it. See M.onBoonClaimConfirmed below.
+  M._armClaimVerify(canonical)
 end
+
+-- ---------------------------------------------------------------------------
+-- THE CLAIM CONFIRMATION LINE (v4.7.278) -- `A fulgent eddy falls still.`
+-- ---------------------------------------------------------------------------
+--
+-- From MediaRes' tracker, and it closes a real hole. Our boon flags latch at SEND time
+-- (aliases/.../002_Boon_Claim.lua passes the command through, then calls onBoonClaim), so a
+-- claim the game REFUSES -- wrong name, eddy already spent, screen gone -- still flips the
+-- flag. We then run that boon's automation for the rest of the run on a boon we do not
+-- hold: the Bard swaps to paean for a Warmarch we never got, the Knight swings arc at 3
+-- denizens for an Indiscriminate that is not there.
+--
+-- This is the rule this codebase keeps re-learning stated once more: WHERE THE GAME SPEAKS
+-- ABOUT ITS OWN STATE, OUR BOOKKEEPING IS THE FALLBACK (v4.7.266 distortion, v4.7.270
+-- augment refusal, v4.7.271 augment cooldown).
+--
+-- IT WARNS, IT DOES NOT UN-LATCH. Deliberate, and the same call made for the Arc proof of
+-- life (v4.7.245): this wording is captured from one source and we have never seen it
+-- ourselves. If it turns out claims can succeed silently -- a different wording, a gag, a
+-- line eaten by a spammy screen -- then auto-reverting would strip real boons, which is a
+-- far worse failure than a warning that occasionally cries wolf. Promote it to an un-latch
+-- only once the line is confirmed to fire on every successful claim.
+M.CLAIM_CONFIRM_WINDOW = 4 -- seconds a claim may stay unconfirmed before we say so
+
+function M._armClaimVerify(canonical)
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.mnemClaimPending = { name = canonical, at = (getEpoch and getEpoch()) or os.time() }
+end
+
+function M.onBoonClaimConfirmed()
+  ataxiaTemp = ataxiaTemp or {}
+  local p = ataxiaTemp.mnemClaimPending
+  ataxiaTemp.mnemClaimPending = nil
+  ataxiaTemp.mnemClaimConfirms = (tonumber(ataxiaTemp.mnemClaimConfirms) or 0) + 1
+  -- A confirmation with nothing pending is not an error: the user can claim from the game's
+  -- own menu without going through our alias, and that is a claim we never armed.
+  if not p then return end
+  M.decho("boon claim CONFIRMED: " .. tostring(p.name))
+end
+
+-- Polled rather than timered, so it is reload-safe (a tempTimer id must never be serialized,
+-- v4.7.192) and so a claim armed before a SYSUPDATE cannot leave a warning permanently owed.
+function M.checkClaimVerify()
+  ataxiaTemp = ataxiaTemp or {}
+  local p = ataxiaTemp.mnemClaimPending
+  if not p then return nil end
+  local now = (getEpoch and getEpoch()) or os.time()
+  if (now - (tonumber(p.at) or now)) < (tonumber(M.CLAIM_CONFIRM_WINDOW) or 4) then return nil end
+  ataxiaTemp.mnemClaimPending = nil
+  -- Only worth warning if we have EVER seen the line. Until then we cannot distinguish "the
+  -- claim failed" from "this game does not print that line to us", and warning on the latter
+  -- every single claim would train the user to ignore it.
+  if (tonumber(ataxiaTemp.mnemClaimConfirms) or 0) == 0 then
+    M.decho("claim verify: no confirmation seen yet, and none ever seen -- staying quiet.")
+    return nil
+  end
+  M.echo("<indian_red>BOON CLAIM UNCONFIRMED<reset> -- <white>" .. tostring(p.name)
+    .. "<reset> was claimed but no <grey>'A fulgent eddy falls still.'<reset> followed."
+    .. "\n  <a_darkmagenta>Its automation is armed anyway. Check <white>BOONS<a_darkmagenta> before trusting it.")
+  return p.name
+end
+
+
 
 -- Resolve a "boon claim <arg>" argument to a canonical offered name: a slot
 -- NUMBER (boon claim 2 -> the 2nd offered boon), an exact case-insensitive name,
