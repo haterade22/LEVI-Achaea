@@ -2,6 +2,68 @@
 
 ---
 
+## 2026-08-20 - The augment poll was ending augments that had just begun (v4.7.280)
+
+Live capture:
+
+```
+You channel your accumulated shin energy into enhancing your defensive bladework.
+...
+12:52:59:408 ...
+(BR): augment ended after 1.2s on 20 shin -- waiting for the ready line.
+```
+
+The cover had just STARTED. **The cover-starts line (052) opens the cycle immediately; the very
+next assembled round polls `ataxia.defences.bodyaugment`, GMCP has not reported it yet, and the
+poll -- seeing a cycle open and the defence absent -- "ends" the augment 1.2 seconds in.**
+
+Everything downstream is then wrong: a junk `(20 shin -> 1.2s)` pair in the probe, and a 1.2s
+cooldown stamped over the real one.
+
+### This is the v4.7.271 grace with the sign flipped
+
+That version guarded the poll from OPENING a phantom cycle on a trailing up-read after the
+dissipate line, and left the opposite direction unguarded. One rule covers both, and here is the
+honest statement of it:
+
+> **A backstop must not overrule the thing it backs up.**
+
+So the poll now has to prove it can observe the defence before it is allowed to act on not
+observing it. `ataxiaTemp.bmAugmentSeenUp` is set when the poll actually reads the defence up, and
+the down-branch closes a cycle only if that flag is set. **If GMCP never reports this defence for
+the Shindo augment, the poll can never close a cycle -- which is correct**, because line 053 is
+captured and closes it exactly.
+
+Worth noting on that: `bodyaugment` is a real key (`deffing/004`), but the place we have actually
+watched it work is Depthswalker's `intone mainaas`. Whether the Shindo augment sets the same
+defence is still unconfirmed -- and after this change it no longer matters, which is the point.
+
+### Three of the existing tests were asserting the bug
+
+`records the (spend -> duration) pair`, `keeps a manual augment` and `does not re-augment while the
+post-drop cooldown is live` all drove the poll to close a cycle **without ever letting it see the
+defence up first** -- exactly the sequence that produced the live failure. They now perform the real
+sequence (observe up, then observe gone), which is what a working poll does.
+
+### The break-back that did not fail
+
+Deleting the `bmAugmentSeenUp` reset in `ataxiaBasher_bmAugmentActive` passed everything, because
+every other path clears the flag through `augmentCycleEnded`. It is load-bearing on one real
+sequence: 053 ends a cycle -> a trailing GMCP read sets the flag while the grace correctly refuses
+to open a new cycle -> 052 opens the next one -> the poll closes it on the PREVIOUS cycle's
+evidence. The same bug, one augment later. Pinned now.
+
+### Housekeeping for anyone running v4.7.270-279
+
+Every augment recorded in that window produced a junk short sample. **`bash shinprobe clear`** --
+the curve is worth nothing built on them.
+
+### Tests
+
+**1621 -> 1624.** Three deliberate breaks; two caught immediately, the third is the one above.
+
+---
+
 ## 2026-08-20 - The boon offer was filed under the wrong ripple (v4.7.279)
 
 Reported by the tracker's author:

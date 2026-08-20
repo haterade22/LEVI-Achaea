@@ -547,8 +547,12 @@ describe("shin augment cooldown is measured, not guessed", function()
     fresh()
     ataxiaTemp.bmAugmentSpent = 20
     ataxiaBasher_bmAugmentActive()
-    ataxiaTemp.bmAugmentUpAt = ataxiaTemp.bmAugmentUpAt - 30
+    -- The poll must OBSERVE the cover before it is allowed to act on its absence (v4.7.280) --
+    -- otherwise it closes a cycle the cover-starts LINE has only just opened.
+    ataxia.defences.bodyaugment = true
+    ataxiaBasher_bmAugmentWatch()
     ataxia.defences.bodyaugment = nil
+    ataxiaTemp.bmAugmentUpAt = ataxiaTemp.bmAugmentUpAt - 30
     ataxiaBasher_bmAugmentWatch()
     local s = ataxiaBasher.shinProbe.samples
     expect(#s).toBe(1)
@@ -560,6 +564,11 @@ describe("shin augment cooldown is measured, not guessed", function()
   it("keeps a manual augment as an unattributed sample", function()
     fresh()
     ataxiaBasher_bmAugmentActive()               -- no bmAugmentSpent set
+    -- The poll must OBSERVE the cover before it is allowed to act on its absence (v4.7.280) --
+    -- otherwise it closes a cycle the cover-starts LINE has only just opened.
+    ataxia.defences.bodyaugment = true
+    ataxiaBasher_bmAugmentWatch()
+    ataxia.defences.bodyaugment = nil
     ataxiaTemp.bmAugmentUpAt = ataxiaTemp.bmAugmentUpAt - 12
     ataxiaBasher_bmAugmentWatch()
     expect(ataxiaBasher.shinProbe.samples[1].spend).toBe(nil)
@@ -612,6 +621,67 @@ describe("shin augment cooldown is measured, not guessed", function()
     expect(#ataxiaBasher.shinProbe.samples).toBe(1)
     expect(math.abs(ataxiaBasher.shinProbe.samples[1].dur - 25) < 2).toBeTrue()
     expect(ataxiaTemp.bmAugmentUpAt).toBe(nil)
+  end)
+
+  -- THE LIVE BUG (v4.7.280). Captured:
+  --
+  --   You channel your accumulated shin energy into enhancing your defensive bladework.
+  --   ...
+  --   (BR): augment ended after 1.2s on 20 shin -- waiting for the ready line.
+  --
+  -- The cover-starts LINE opens the cycle; the very next assembled round polls the defence,
+  -- GMCP has not reported it yet, and the poll "ends" the augment a second in -- recording a
+  -- junk sample and stamping a junk cooldown. This is the v4.7.271 grace with the sign
+  -- flipped, and the general rule stated once: A BACKSTOP MUST NOT OVERRULE THE THING IT
+  -- BACKS UP.
+  it("the poll does NOT close a cycle it has never seen open", function()
+    fresh()
+    ataxiaTemp.bmAugmentSpent = 20
+    ataxiaBasher_bmAugmentActive()               -- the LINE opens it
+    ataxia.defences.bodyaugment = nil            -- GMCP has not caught up (or never will)
+    ataxiaTemp.bmAugmentUpAt = ataxiaTemp.bmAugmentUpAt - 1.2
+    ataxiaBasher_bmAugmentWatch()
+    expect(#ataxiaBasher.shinProbe.samples).toBe(0)   -- no junk sample
+    expect(ataxiaTemp.bmAugmentUpAt ~= nil).toBeTrue() -- cycle still open
+    expect(ataxiaBasher_bmAugmentWatch()).toBe(0)      -- and no junk cooldown
+  end)
+
+  -- THE STALE-EVIDENCE PATH, and it is why bmAugmentActive clears the flag rather than relying
+  -- on augmentCycleEnded having done it. Real sequence:
+  --   1. 053 ends the cycle (flag cleared, grace stamped)
+  --   2. GMCP still reports the defence for a prompt -- the grace correctly refuses to open a
+  --      new cycle, but the poll has now SEEN it up
+  --   3. 052 opens the next cycle
+  --   4. GMCP has not caught up -> the poll closes the fresh cycle on last cycle's evidence
+  -- i.e. the exact bug, one augment later.
+  it("a new cycle does not inherit the previous cycle's evidence", function()
+    fresh()
+    ataxiaBasher_bmAugmentActive()
+    ataxia.defences.bodyaugment = true
+    ataxiaBasher_bmAugmentWatch()                 -- poll sees cycle 1
+    ataxiaBasher_bmAugmentEnded()                 -- 053 ends it
+    ataxiaBasher_bmAugmentWatch()                 -- trailing up-read: grace blocks the open...
+    ataxiaBasher.shinProbe.samples = {}           -- ...discard cycle 1's legitimate sample
+
+    ataxiaBasher_bmAugmentActive()                -- 052 opens cycle 2
+    ataxia.defences.bodyaugment = nil             -- GMCP has not caught up
+    ataxiaTemp.bmAugmentUpAt = ataxiaTemp.bmAugmentUpAt - 1.2
+    ataxiaBasher_bmAugmentWatch()
+    expect(#ataxiaBasher.shinProbe.samples).toBe(0)
+    expect(ataxiaTemp.bmAugmentUpAt ~= nil).toBeTrue()
+  end)
+
+  -- ...and the dissipate LINE still closes it, which is the whole reason the poll can afford
+  -- to be this conservative: 053 is captured, so nothing depends on the poll noticing.
+  it("the dissipate line closes it even when the poll never saw the defence", function()
+    fresh()
+    ataxiaTemp.bmAugmentSpent = 20
+    ataxiaBasher_bmAugmentActive()
+    ataxia.defences.bodyaugment = nil
+    ataxiaTemp.bmAugmentUpAt = ataxiaTemp.bmAugmentUpAt - 30
+    ataxiaBasher_bmAugmentEnded()
+    expect(#ataxiaBasher.shinProbe.samples).toBe(1)
+    expect(math.abs(ataxiaBasher.shinProbe.samples[1].dur - 30) < 2).toBeTrue()
   end)
 
   -- THE POINT OF 054: the cooldown END is an event, so we stop predicting it. The observed gap was
@@ -688,6 +758,11 @@ describe("the round honours the measured augment cooldown", function()
 
     -- Cover ran for 30s and just dropped -> 30s of cooldown.
     ataxiaBasher_bmAugmentActive()
+    -- The poll must OBSERVE the cover before it is allowed to act on its absence (v4.7.280) --
+    -- otherwise it closes a cycle the cover-starts LINE has only just opened.
+    ataxia.defences.bodyaugment = true
+    ataxiaBasher_bmAugmentWatch()
+    ataxia.defences.bodyaugment = nil
     ataxiaTemp.bmAugmentUpAt = ataxiaTemp.bmAugmentUpAt - 30
     ataxiaBasher_bmAugmentWatch()
     ataxiaTemp.bmAugmentAttempted = nil -- only the COOLDOWN should be refusing now

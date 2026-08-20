@@ -130,6 +130,8 @@ function ataxiaBasher_bmAugmentActive()
   ataxiaTemp.bmAugmentUpAt = now()
   ataxiaTemp.bmAugmentUpSpend = tonumber(ataxiaTemp.bmAugmentSpent)
   ataxiaTemp.bmAugmentEndedAt = nil
+  -- A new cycle: the poll has not seen THIS one yet, whatever it saw of the last.
+  ataxiaTemp.bmAugmentSeenUp = nil
 end
 
 -- ---------------------------------------------------------------------------
@@ -149,6 +151,7 @@ local function augmentCycleEnded(t)
   local dur = t - ataxiaTemp.bmAugmentUpAt
   local spend = ataxiaTemp.bmAugmentUpSpend
   ataxiaTemp.bmAugmentUpAt, ataxiaTemp.bmAugmentUpSpend = nil, nil
+  ataxiaTemp.bmAugmentSeenUp = nil
   if dur <= 0 then return end
   ataxiaBasher_shinProbeRecord(spend, dur)
   -- The DERIVED cooldown, now a BACKSTOP rather than the authority: if the ready line is missed
@@ -209,12 +212,33 @@ function ataxiaBasher_bmAugmentWatch()
       -- send, and a long augment can outlive several rounds.
       ataxiaTemp.bmAugmentUpSpend = tonumber(ataxiaTemp.bmAugmentSpent)
     end
+    -- PROOF THE POLL CAN OBSERVE THIS CYCLE AT ALL -- see the DOWN branch below.
+    ataxiaTemp.bmAugmentSeenUp = true
     return 0 -- it is up; the gate above already refuses on the defence itself
   end
 
-  -- Only reached when the dissipate line was MISSED -- it clears bmAugmentUpAt itself, so this is
-  -- the backstop for the down edge exactly as bmAugmentCdUntil is for the cooldown.
-  if ataxiaTemp.bmAugmentUpAt then augmentCycleEnded(t) end
+  -- THE POLL MAY ONLY CLOSE A CYCLE IT HAS ITSELF SEEN OPEN (v4.7.280).
+  --
+  -- Live capture, and it is the v4.7.271 grace with the sign flipped:
+  --
+  --   You channel your accumulated shin energy into enhancing your defensive bladework.
+  --   ...
+  --   (BR): augment ended after 1.2s on 20 shin -- waiting for the ready line.
+  --
+  -- The cover-starts LINE opens the cycle immediately. The very next assembled round then polls
+  -- `ataxia.defences.bodyaugment`, GMCP has not reported it yet (or does not report it for the
+  -- Shindo augment at all -- the key is real, but it is Depthswalker's `intone mainaas` we have
+  -- actually watched it on), so the poll reads DOWN with a cycle open and "ends" the augment
+  -- 1.2 seconds in. That poisons everything downstream: a junk (20 shin -> 1.2s) sample in the
+  -- probe, and a 1.2s cooldown stamped where the real one belongs.
+  --
+  -- v4.7.271 guarded the poll from OPENING a phantom cycle on a trailing up-read and left the
+  -- opposite direction unguarded. The general rule is one rule, and this is the honest statement
+  -- of it: **a backstop must not overrule the thing it backs up.** So the poll now requires
+  -- evidence it can see the defence at all before it is allowed to act on not seeing it -- if
+  -- GMCP never reports this defence, `bmAugmentSeenUp` never sets and the poll can never close a
+  -- cycle, which is correct, because line 053 is captured and closes it exactly.
+  if ataxiaTemp.bmAugmentUpAt and ataxiaTemp.bmAugmentSeenUp then augmentCycleEnded(t) end
 
   return tonumber(ataxiaTemp.bmAugmentCdUntil) or 0
 end
