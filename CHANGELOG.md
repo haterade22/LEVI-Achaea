@@ -2,6 +2,52 @@
 
 ---
 
+## 2026-08-20 - A 2 second funnel window that took eight (v4.7.282)
+
+```
+13:12:26.370  [swarm] in the funnel room -- fighting what follows (window 2s).
+13:12:34      [swarm] trickle over (peak followers: 0) -- leaping our wall back in -> n.
+```
+
+**Peak followers: 0.** Nothing came, nothing was fought, and we stood in an empty room for eight
+seconds of a two second window -- six seconds off every unproductive hit-and-run cycle.
+
+### Two faults, and the second is the general one
+
+1. **`S._enterFunnel` stamped the deadline and scheduled nothing.** Every recovery state in this
+   file self-ticks on `RECOVER_TICK` -- **eight call sites** -- because v4.7.116 already learned
+   that an event-driven tick starves in a quiet room. The funnel never got the same treatment. It
+   does send a `ql`, which usually produces a room event and therefore a tick, and "usually" is
+   what made this a bug: with nothing following there is no combat, no arrival and no target
+   change, so the deadline was owned by nobody.
+
+2. **`M._scheduleTick` is LAST-CALL-WINS.** It kills the pending timer and arms a new one, so even
+   once the funnel branch computed `remain + 0.1`, any other caller could push it out -- the
+   explorer alone re-arms at 1.5s (the no-exit `ql`) and 3s (the told-zero hold). Chained, those
+   turn a 2s window into eight.
+
+> **A shared single-slot timer where every caller assumes it owns the schedule cannot hold a
+> deadline.**
+
+Rather than change tick semantics globally -- which would let an early tick undercut every
+deliberate deferral in the explorer -- the funnel keeps **its own** clock, exactly as the attack
+hold keeps `S._holdT`: armed at birth in `_enterFunnel`, re-armed whenever combat refreshes the
+window, killed in `S.reset`. `_exploreTick` still re-decides everything when it fires; this only
+guarantees that it fires.
+
+### The break-back that did not fail, again
+
+Reverting the `remain` branch to the shared tick passed -- because the birth-armed timer is still
+pending, so `expect(S._funnelT ~= nil)` is true either way. The assertion now compares against the
+birth-armed id, so a revert to the shared tick is visible. **An assertion that something EXISTS
+cannot detect the wrong thing having created it.**
+
+### Tests
+
+**1624 -> 1627.** Four deliberate breaks; three caught immediately, the fourth is the one above.
+
+---
+
 ## 2026-08-20 - `ataxia.echo` does not exist, and the checker could not see it (v4.7.281)
 
 ```

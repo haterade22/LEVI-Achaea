@@ -516,6 +516,44 @@ function S._clearHold()
   ataxiaTemp.swarmHold = nil
 end
 
+-- ---------------------------------------------------------------------------
+-- THE FUNNEL WINDOW NEEDS ITS OWN CLOCK (v4.7.282)
+-- ---------------------------------------------------------------------------
+--
+-- Live capture -- a 2 second window that took EIGHT:
+--
+--   13:12:26.370  [swarm] in the funnel room -- fighting what follows (window 2s).
+--   13:12:34      [swarm] trickle over (peak followers: 0) -- leaping our wall back in -> n.
+--
+-- Nothing followed (peak 0), so the room was silent, and two things conspired:
+--
+--   1. `_enterFunnel` stamped `funnelAt` and scheduled NOTHING. Every recovery state in this
+--      file self-ticks on RECOVER_TICK -- eight call sites -- because v4.7.116 learned that an
+--      event-driven tick starves in a quiet room. The funnel never got the same treatment, so
+--      its deadline was owned by nobody until some unrelated event produced a tick.
+--   2. `M._scheduleTick` is LAST-CALL-WINS: it kills the pending timer and arms a new one. So
+--      even once the funnel branch computed `remain + 0.1`, any other caller could push it out
+--      -- the explorer alone re-arms at 1.5s (no-exit ql) and 3s (told-zero hold). Chained,
+--      those turn a 2s window into eight.
+--
+-- A shared single-slot timer where every caller assumes it owns the schedule cannot hold a
+-- deadline. So the funnel keeps its own, exactly as the attack hold keeps `S._holdT`: armed at
+-- birth, re-armed whenever combat refreshes the window, killed on reset. `_exploreTick` still
+-- re-decides everything when it fires -- this only guarantees that it FIRES.
+function S._clearFunnelTimer()
+  if S._funnelT then pcall(killTimer, S._funnelT); S._funnelT = nil end
+end
+
+function S._armFunnelTimer(delay)
+  S._clearFunnelTimer()
+  -- 0.1 of margin so `remain` is unambiguously past zero when the tick reads it, rather than
+  -- landing on the boundary and rescheduling itself for another lap.
+  S._funnelT = tempTimer((tonumber(delay) or FOLLOW_WINDOW) + 0.1, function()
+    S._funnelT = nil
+    if M._exploreTick then M._exploreTick() end
+  end)
+end
+
 function S._enterFunnel()
   S._clearHold()
   S.state = "funnel"
@@ -524,7 +562,12 @@ function S._enterFunnel()
   -- Items.List, but a never-Listed spawn would be invisible to search_targets --
   -- one quicklook re-Lists the room (the watchdog's own nudge, known-safe).
   send("ql")
-  S._echo("in the funnel room -- fighting what follows (window " .. FOLLOW_WINDOW .. "s).")
+  -- Own the deadline from birth. The `ql` above usually produces a room event and therefore a
+  -- tick, but "usually" is what made this a bug: when nothing follows us there is no combat, no
+  -- arrival and no target change, so an event-driven tick has nothing to fire it.
+  local window = (S.mode == "wall") and WALL_WINDOW or FOLLOW_WINDOW
+  S._armFunnelTimer(window)
+  S._echo("in the funnel room -- fighting what follows (window " .. window .. "s).")
 end
 
 -- ARE WE FIT TO GO BACK IN? (v4.7.242)
@@ -1306,14 +1349,19 @@ function S.onTick()
       end
       S.announcedFollow = true
       S.funnelAt = now() -- fighting counts as activity; window restarts after the kill
+      -- ...and the clock restarts with it, or the refresh only moves a deadline nothing watches.
+      S._armFunnelTimer((S.mode == "wall") and WALL_WINDOW or FOLLOW_WINDOW)
       return true
     end
     local window = (S.mode == "wall") and WALL_WINDOW or FOLLOW_WINDOW
     local remain = (S.funnelAt or 0) + window - now()
     if remain > 0 then
-      if M._scheduleTick then M._scheduleTick(remain + 0.1) end
+      -- The DEDICATED timer, not M._scheduleTick: the shared one is last-call-wins, so an
+      -- unrelated caller re-arming it at 1.5s or 3s silently pushed this deadline out.
+      S._armFunnelTimer(remain)
       return true
     end
+    S._clearFunnelTimer()
     return S._beginReenter()
   end
 
@@ -1577,6 +1625,7 @@ end
 function S.reset(reason)
   local wasActive = S.state ~= "idle"
   if S._pullFallbackT then pcall(killTimer, S._pullFallbackT); S._pullFallbackT = nil end
+  S._clearFunnelTimer()
   S._clearHold()
   ataxiaTemp.swarmPullDir = nil
   if S.flying then

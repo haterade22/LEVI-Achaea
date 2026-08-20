@@ -262,9 +262,45 @@ describe("swarm funnel phase", function()
   it("holds navigation through the empty follow window", function()
     pullAndArrive()
     mobs = 0
+    local armedAtBirth = S._funnelT
     expect(S.onTick()).toBeTrue()
     expect(S.state).toBe("funnel")
-    expect(#scheduled > 0).toBeTrue() -- re-check scheduled for the window end
+    -- The DEDICATED timer, not M._scheduleTick (v4.7.282). The shared tick is last-call-wins:
+    -- it kills whatever is pending, so an unrelated caller re-arming it at 1.5s or 3s pushed
+    -- this deadline out. A live 2s window measured EIGHT seconds that way.
+    --
+    -- Compared against the birth-armed id on purpose: asserting only that SOME timer exists
+    -- passes even if this branch goes back to the shared tick, because the birth timer is
+    -- still pending. That is exactly the break-back this test failed to catch first time.
+    expect(S._funnelT ~= nil).toBeTrue()
+    expect(S._funnelT ~= armedAtBirth).toBeTrue()
+  end)
+
+  -- THE BUG ITSELF: the window is armed when we ENTER the funnel, not merely when a tick
+  -- happens to reach the branch. Nothing follows us, so there is no combat, no arrival and no
+  -- target change -- an event-driven tick has nothing to fire it, and the deadline was owned
+  -- by nobody. Every recovery state in this file has self-ticked since v4.7.116; the funnel
+  -- never got the same treatment.
+  it("arms the window clock on ENTERING the funnel, before any tick", function()
+    pullAndArrive()
+    expect(S.state).toBe("funnel")
+    expect(S._funnelT ~= nil).toBeTrue()
+  end)
+
+  it("restarts the clock when combat refreshes the window", function()
+    pullAndArrive()
+    mobs = 2
+    local first = S._funnelT
+    S.onTick()
+    expect(S._funnelT ~= nil).toBeTrue()
+    expect(S._funnelT ~= first).toBeTrue() -- re-armed, not left on the original deadline
+  end)
+
+  it("kills the clock when the tactic resets", function()
+    pullAndArrive()
+    expect(S._funnelT ~= nil).toBeTrue()
+    S.reset("test")
+    expect(S._funnelT).toBe(nil)
   end)
   it("re-enters the swarm room once the window expires", function()
     pullAndArrive()
