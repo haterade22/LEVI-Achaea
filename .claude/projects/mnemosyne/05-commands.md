@@ -124,3 +124,21 @@ ataxia.mnemosyne.onBoonClaim(matches[2])   -- then report the selection
 ## Setup wizard entry point
 
 `ataxia setup reporting` (in `misc_scripts/020_Setup_Wizard.lua`, `leviSetup.setupReporting`) is the guided front door to the same controls — token, auto on/off, and the `/health` test — for players who don't want to learn the raw `mnem` verbs.
+
+
+---
+
+## `mnem status` gained two rows (v4.7.278)
+
+* **`Class/Race`** -- what would actually be sent with `/boons_offered`, showing `unread` in red
+  when `gmcp.Char.Status` cannot be read. The fields have ridden that endpoint since v4.7.220, but a
+  failed read OMITS the key rather than sending `"unknown"` (right for the data), which made a
+  broken read indistinguishable from a working one. **A field that is correct and invisible is
+  indistinguishable from one that is broken.**
+* **`Lives`** -- `Remaining lives` from the WADE STATUS block, with `Wave progress` beside it. Shown
+  in red at 1. It also echoes on CHANGE (never on every wade status: a number reprinted each ripple
+  is a number nobody reads).
+
+**Still misleading:** the `Contemplate:` row. `M._contemplateNext` is dead code since v4.7.91 took
+the enrichment chain off the offer path, so the setting no longer affects offers -- it reaches only
+`boonFill`.

@@ -518,6 +518,18 @@ attack_skill: TwoArts
 #   "You channel your accumulated shin energy into enhancing your defensive bladework." cover STARTS
 #   "The shin energy enhancing your body dissipates."                                cover ENDS
 #   "You may augment yourself with shin energy once again."                          cooldown OVER
+# THE GMCP POLL IS A RESTRICTED BACKSTOP, NOT A SECOND OPINION (v4.7.280). `ataxia.defences.
+# bodyaugment` is read once per assembled round, but it may only CLOSE a cycle it has itself seen
+# OPEN. Without that, the cover-starts line opened the cycle and the very next round -- GMCP not yet
+# caught up -- "ended" the augment 1.2s in, writing a junk (spend -> 1.2s) sample and a 1.2s cooldown
+# over the real one. `bodyaugment` is a real key, but the place we have actually watched it work is
+# Depthswalker's `intone mainaas`; whether the Shindo augment sets it at all is unconfirmed, and
+# after this change it does not matter -- if GMCP never reports it, the poll never closes a cycle and
+# line 053 does the whole job.
+#
+# ANY `bash shinprobe` SAMPLE COLLECTED ON v4.7.270-279 IS JUNK -- every augment in that window
+# recorded a short phantom duration. `bash shinprobe clear` before trusting the curve.
+#
 # A sixth line exists and is NOT wired: "Regardless of your skill, augmenting yourself with shin
 # energy so soon would be fatal." -- the COOLDOWN refusal, distinct from the busy one above.
 #

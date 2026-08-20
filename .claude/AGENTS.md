@@ -892,6 +892,106 @@ Priorities only mean anything relative to the other afflictions cured on the sam
 the cure channel from the code (the herb/salve tables, the class doc), never from the neighbouring
 comment**, and when a number changes, list what else competes for that balance at that rank.
 
+## A backstop must not overrule the thing it backs up (v4.7.271, v4.7.280)
+
+Where a captured LINE and a polled STATE cover the same edge, the line is the authority and the poll
+is the fallback. That obliges two guards, and shipping only one is how the same bug arrives twice
+with its sign flipped:
+
+* **The poll must not OPEN what the line already closed.** GMCP kept reporting `bodyaugment` for a
+  prompt after the dissipate line, and the poll read that trailing state as a fresh cover starting --
+  a near-zero sample written over the real cooldown. Fixed with a grace window (v4.7.271).
+* **The poll must not CLOSE what the line just opened.** The cover-starts line opens the cycle
+  immediately; the next round polled the defence, GMCP had not caught up, and the poll ended the
+  augment 1.2s in -- junk sample, junk cooldown (v4.7.280). Fixed by requiring the poll to have
+  OBSERVED the state before it may act on not observing it.
+
+The second form generalises: **before code may act on an absence, make it prove it can perceive the
+presence.** If it never can -- if GMCP simply does not report that defence -- the correct behaviour
+is for the backstop to stay silent forever, because the line it backs up is already exact.
+
+## `queue addclearfull` is why one command beats two (v4.7.273)
+
+Every assembled round rebuilds the whole server queue, and **a command in that chain that does not
+wait on balance executes on EVERY rebuild** rather than once per swing. That is the mechanic behind
+`shin augment` being refused five times in 0.45s, and it applied equally to `infuse` -- a separate
+command firing on every prompt, whose real consumption nobody had measured.
+
+So when the game offers a way to fold a rider INTO the balance-gated attack (announcement #174:
+`drawslash <t> infuselightning sternum`), that is a correctness fix, not tidiness: the rider can now
+only happen when the attack happens, by construction.
+
+Two things to check before taking such an offer:
+* **The failure modes are rarely symmetric.** A malformed separate command costs the rider; a
+  malformed inline attack is rejected WHOLE and costs the swing. That asymmetry is what justifies a
+  toggle, and the toggle must be a real alias, not a documented one (v4.7.271).
+* **The queue type matters.** The same change was NOT made to the PvP paths, which use
+  `queue addclear FREE` -- that accumulates rather than being wiped, so the re-execution argument
+  does not transfer.
+
+## Timing IS the attribution when the payload has no field for it (v4.7.279)
+
+`/boons_offered` carries `token`, `offered`, `class`, `race` -- and no ripple. The server files the
+offer under whatever the last `/ripple_level` said, so WHEN we post decides WHERE it lands. Ours
+posted at the boon screen while `/ripple_level` had last been sent at the start of the wave we had
+just finished, and the very first offer of a run posted before any `/ripple_level` at all.
+
+**When an endpoint has no field for a dimension, find out what the server infers it from, and order
+the calls accordingly.** The serial queue makes ordering sufficient: enqueue the context first, the
+payload behind it.
+
+## A shared single-slot timer cannot hold a deadline (v4.7.282)
+
+`M._scheduleTick` kills the pending timer and arms a new one, so every caller silently assumes it
+owns the schedule. A funnel window of 2s measured EIGHT, because unrelated callers re-armed the
+shared tick at 1.5s and 3s -- and because the state that owned the deadline never scheduled anything
+at birth, relying on an event that a quiet room never produced.
+
+**A state with a timeout must own a clock for that timeout.** Prefer a dedicated timer over changing
+shared-tick semantics to "earliest wins": the latter lets an early tick undercut every deliberate
+deferral elsewhere in the system.
+
+## The nil callee has three shapes; a gate that knows one is not a gate (v4.7.281)
+
+1. an ACTIVE trigger calling a global only an INACTIVE script defines (v4.7.261)
+2. a trigger INDEXING a table built by a group script that may be off (v4.7.264)
+3. a namespace FIELD called but never assigned anywhere (v4.7.281)
+
+`ataxia.echo` is shape 3 and does not exist -- the helper is the global `ataxiaEcho` -- which left 17
+dead call sites, including every echoing branch of `bash shinprobe` and all nine in `ataxiabars`.
+`tools/check_orphans.py` now covers shapes 1 and 3.
+
+What made shape 3 checkable was keeping it quiet: **exclude external packages** (`mmp` alone
+produced hundreds of hits), **strip comments** (prose naming a config field parses as a call), and
+**widen the guard window to two lines**, because the idiom for optional fields here puts the test on
+its own line. Per-line strictness reported six safe sites in one file. **A gate that cries wolf gets
+switched off, which is how a guard becomes decoration.**
+
+Corollary: **when writing a helper call, grep for its DEFINITION, not for other callers.** All 17
+sites were copied from a sibling that was equally wrong.
+
+## Break-backs that pass: three more shapes (v4.7.279-282)
+
+The rule is already here -- if a deliberate break passes, find out which gate saved it. These are
+the shapes that keep recurring:
+
+* **The test never crosses the seam the bug lives in.** Five tests called `_offerAfterRipple`
+  directly, so reverting the caller to post immediately -- the exact bug -- passed all of them.
+  Closed by driving the real offer screen through the real capture.
+* **The assertion checks EXISTENCE, so it cannot see the wrong thing having created it.** Reverting
+  the funnel to the shared tick passed, because the birth-armed timer was still pending and the test
+  only asked whether *a* timer existed. Compare against the id you expect to be replaced.
+* **Another path already clears the state.** Deleting a flag reset passed because every other route
+  cleared it anyway; it was load-bearing on exactly one sequence. Find that sequence and pin it.
+
+## Tests can assert the bug (v4.7.280)
+
+Three tests drove the augment poll to close a cycle **without ever letting it see the defence up** --
+precisely the sequence that failed live. They passed for years and would have gone on passing.
+
+**A test that never performs the real sequence will happily pin the wrong behaviour.** When fixing a
+live bug, check whether the existing tests describe the world as it is or as the bug made it.
+
 ## Quality Gates (Hooks)
 
 Hooks in `.claude/hooks/` run automatically and block operations that fail validation:

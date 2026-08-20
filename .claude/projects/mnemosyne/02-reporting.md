@@ -139,3 +139,50 @@ Each function guards on `M._hasToken()` and enqueues. Payload shapes:
 ### Monster buffering
 
 `M.run.pendingMonsters` accumulates spawn lines (de-duped) captured at `GO!`. `M._flushMonsters()` joins them with `"; "` into a single `reportMonsters()` call and clears the buffer. It runs in `onRipple()` (after `setRipple`) and again in `endRun()`.
+
+
+---
+
+## The offer's ripple is decided by TIMING, not by a field (v4.7.279)
+
+Reported by the tracker's author: *"you're sending boons a ripple late so you're not sending the
+boons that are initially offered ... you're also sending boon information that you have cached."*
+
+**`BoonsOfferedRequest` is `token` / `offered` / `class` / `race` and nothing else** -- verified
+against the live `openapi.json`. There is **no ripple field**, so the server files an offer under
+whatever ripple our last `/ripple_level` reported. That makes timing the whole of the attribution,
+and ours was wrong at both ends:
+
+* `wade status` was sent on **`GO!` and nowhere else**, so `/ripple_level` only ever updated at the
+  START of a wave -- an offer posted at the boon screen landed under the ripple just FINISHED.
+* At the **first** offer of a run, `/ripple_level` had never been sent at all. Nowhere to file it,
+  which is exactly "not sending the boons that are initially offered".
+
+The "cached" complaint is the same fault seen from the other side: an offer filed under the previous
+ripple looks like data the tracker already holds. **Our list was never cached** -- `_parseNamedBlock`
+reads the live screen every time.
+
+`M._offerAfterRipple` now stashes the parsed list, sends `wade status`, and posts when `onRipple`
+has reported. The flush sits **after** `M.setRipple(n)`, never before: the HTTP queue is serial, so
+enqueueing `/boons_offered` behind `/ripple_level` is the entire fix.
+
+**Bounded at `M.OFFER_RIPPLE_WAIT` (3s)**, because deferring this is what broke it once already --
+v4.7.91 removed a deferral (the per-boon CONTEMPLATE chain) that could stall and silently drop the
+whole report. Whichever comes first posts it; never dropped, at worst filed where it was before.
+
+## `class` and `race` (v4.7.220, re-verified 2026-08-20)
+
+Top-level optional strings on `BoonsOfferedRequest` -- **not** members of `BoonInfo`, where the
+names suggest. Class is normalised (`:title()` minus the ` Lord`/` Lady` gender suffix, which would
+otherwise halve every per-class count); race is passed through raw, since normalising against an
+unverified vocabulary corrupts data more quietly than leaving it alone. **A missing
+`gmcp.Char.Status` read OMITS the key** rather than sending `"unknown"`, which would become its own
+cohort in the queries -- and because that omission is silent, `mnem status` now prints what would be
+sent (`unread` in red when the read fails). A field that is correct and invisible is
+indistinguishable from one that is broken.
+
+## Not reported, deliberately
+
+`Remaining lives` and `Wave progress` (v4.7.278) are parsed from the WADE STATUS block but have no
+endpoint. They are local state (`M.run.lives` / `M.run.waveProgress`) for `mnem status` and for
+future risk gating, not telemetry.

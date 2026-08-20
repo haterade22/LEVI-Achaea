@@ -979,3 +979,39 @@ SSC clots down (`curing clotat 30`), so standing still is doing work. A Last Wor
 **instantaneous** -- there is nothing to clot, only HP to regain, so waiting on a bleed reading
 would just idle the sweep. At 95% HP with 900 bleed the haemophiliac hold holds and the Last
 Word hold does not.
+
+
+---
+
+## The funnel window owns its own clock (v4.7.282)
+
+```
+13:12:26.370  [swarm] in the funnel room -- fighting what follows (window 2s).
+13:12:34      [swarm] trickle over (peak followers: 0) -- leaping our wall back in -> n.
+```
+
+**Peak followers: 0** -- nothing came, nothing was fought, and we stood in an empty room for eight
+seconds of a two second window. Six seconds off every unproductive hit-and-run cycle.
+
+Two faults:
+
+1. **`S._enterFunnel` stamped `funnelAt` and scheduled nothing.** Every recovery state in `009`
+   self-ticks on `RECOVER_TICK` -- eight call sites -- because v4.7.116 already learned that an
+   event-driven tick starves in a quiet room. The funnel never got the same treatment. It does send
+   a `ql`, which *usually* produces a room event and therefore a tick; with nothing following there
+   is no combat, no arrival and no target change, so "usually" was the bug.
+2. **`M._scheduleTick` is LAST-CALL-WINS.** It kills the pending timer and arms a new one, so even
+   once the funnel branch computed `remain + 0.1`, another caller could push it out -- the explorer
+   alone re-arms at 1.5s (the no-exit `ql`) and 3s (the told-zero hold). Chained, 2s becomes 8.
+
+> **A shared single-slot timer where every caller assumes it owns the schedule cannot hold a
+> deadline.**
+
+Fixed with a DEDICATED `S._funnelT` -- armed at birth in `_enterFunnel`, re-armed whenever combat
+refreshes the window, killed in `S.reset` -- rather than changing tick semantics globally to
+"earliest wins", which would let an early tick undercut every deliberate deferral in the explorer
+(the told-zero hold, the arrival settle, the no-exit `ql`). `_exploreTick` still re-decides
+everything when it fires; the timer only guarantees that it fires.
+
+**Note the two windows**: `FOLLOW_WINDOW` is 2s, `WALL_WINDOW` is 8s (behind our own icewall,
+leakers trickle slower). An 8s wait in wall mode is correct, not this bug.

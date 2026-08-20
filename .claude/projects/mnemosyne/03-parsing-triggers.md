@@ -280,3 +280,52 @@ Achaea, so `MAP.onNoExits` opens with `MAP.inMnem()` exactly as `MAP.onExitsLine
 in the place that is unit-testable, and the trigger stays a one-line adapter. Deliberately **not**
 gated on the explorer running — the swarm moves us too, and a room's exits are worth recording
 whoever walked us in.
+
+
+---
+
+## Three captures adopted from a community tracker (v4.7.278)
+
+Reviewing MediaRes' open-source `mnemosyne_standalone.lua` turned up three lines it reads out of
+blocks **we were already parsing and then discarding**.
+
+| Trigger | Line | Handler |
+|---|---|---|
+| `mnemosyne/075` | `Wave progress:  <n>` | `M.onWaveProgress` |
+| `mnemosyne/076` | `Remaining lives:  <n>` | `M.onLivesLeft` |
+| `mnemosyne/077` | `A fulgent eddy falls still.` | `M.onBoonClaimConfirmed` |
+
+**075 and 076 are anchorless on purpose.** Both fields sit inside an indented status block, so `^`
+would depend on how the game pads them, and CLAUDE.md's own trigger guidance is to avoid `^`/`$`
+unless they earn their place. Both phrases are distinctive enough that a false positive is not
+credible.
+
+**076 is the important one.** `Remaining lives` is the only run-scoped STAKE this package has ever
+had: every risk decision is priced in HP, which says how close *this fight* is to going wrong, while
+lives say what dying COSTS. Per-RUN, so it is cleared in `M._resetRun()` and **not** in `onRipple`
+beside the affixes -- an affix is re-read from every ripple's status block, a life spent is spent
+for the dive. Captured and surfaced only; wiring it to a threshold means choosing numbers, and a
+wrong guess kills us in a no-flee instance.
+
+**077 closes a real hole.** Boon flags latch at SEND time -- the claim alias passes the command
+through and immediately calls `onBoonClaim`, which records history, latches the flag and posts
+telemetry -- so a claim the game REFUSES still armed that boon's automation for the whole run. It
+**warns rather than un-latching**, the same call made for the Arc proof-of-life: the wording is
+second-hand, and if claims can also succeed silently then auto-reverting would strip real boons.
+Second guard: it stays silent until that line has fired at least once, because until then "the claim
+failed" and "the game does not print this to us" are the same observation, and a warning after every
+claim is one the user learns to ignore. Verified from `onRipple` (a ripple boundary is well past the
+4s window) rather than a timer, since a `tempTimer` id must never be serialized.
+
+## Reviewed and NOT adopted
+
+* **`M.MOBTYPES`** -- their 80+ wave announcement lines mapped to a monster roster and boss. The one
+  significant thing still missing, because it names the ROSTER, which our generic spawn-sentence
+  parse (`MOB_VERBS`) cannot derive: it would let the SLC denizen parry patterns, `controlMobs` and
+  the swarm thresholds pre-arm on arrival instead of learning on the first hit. Not taken because it
+  is a data import we do not have the data for, and a name table is the shape our own rule
+  (v4.7.264) says goes stale on the entry after the last one someone added.
+* **Contemplating every offered slot.** We moved off that in v4.7.91; the enrichment chain raced the
+  next ripple for the single `_capturing` slot and dropped whole reports. Note `M._contemplateNext`
+  is now DEAD CODE -- nothing calls it but itself -- and `mnem status` still advertises
+  "Contemplate: ON", which no longer describes anything on the offer path.

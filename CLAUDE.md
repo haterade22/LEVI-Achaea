@@ -717,7 +717,7 @@ Reports Mnemosyne (tides-of-memory) run progress to an external REST tracker as 
 
 **Key files:** `scripts/.../mnemosyne/001_HTTP_Client.lua` (serial POST queue + error recovery), `002_Reporter_API.lua` (per-endpoint fns + run state), `003_Commands.lua` (`mnem` dispatch), `004_Parsers.lua` (effects/boons parsers, monster buffering), `005_Ripple_Map.lua` + `006_Ripple_Map_Window.lua` (per-ripple room mini-map), `007_History.lua` (local run history + reports), `008_Explorer.lua` (auto-sweep the 4×4), `009_Swarm_Tactics.lua` (multi-mob pull & funnel — see below). Triggers `triggers/.../mnemosyne/001-021` (incl. `006_Go` → `exploreOnGo` + `swarm.onGo`, `013_Boons_List_Row`, boon-flag triggers `014_Aspect_Of_Kkractle`/`015_Hot_Springs`/`018_Hammer_And_Anvil`/`019_Bladed_Reflexes`/`020_Sleuth`/`021_Roll_Hide`, `016_Run_Pause`, `017_Splinterbark`). Aliases `aliases/.../mnemosyne/001-002`.
 
-**Flow:** `GO!` → capture the mob spawn line (the line directly above `GO!`, positional — spawn wording varies per mob) → auto `WADE STATUS` → `/ripple_level`, `/boss` (from the `Objective: defeat <boss>` line), `/effects`; buffered monsters flush after `/ripple_level`. Serial queue enforces ordering (ripple_level first; boons_offered before boons_selected). `_auto()` gates run-start/GO/ripple; `_inRun()` gates monsters/effects/boons/boss/death so generic phrases can't report outside a tracked run. **`/boons_offered` posts IMMEDIATELY** with the offer-screen name+description (v4.7.91) — it is no longer gated behind the slow per-boon `BOON CONTEMPLATE` enrichment chain, which raced the next ripple's captures for the single `_capturing` slot and, on a lost race, stalled and silently dropped the entire boon report (rarity/echoes are still learned locally). The line-capture (`_captureLines`) **force-finishes** a wedged prior capture rather than dropping the new one (v4.7.93). **`/boons_offered` also carries `class` and `race`** (v4.7.220, tracker-side request) -- top-level optional strings on `BoonsOfferedRequest`, NOT members of `BoonInfo` where the names suggest; verified against the live schema at `http://104.128.56.238:8000/openapi.json`, which is how to settle any question about this API's shape rather than inferring from prose. `M._charInfo()` reads `gmcp.Char.Status.class`/`.race` and makes two deliberate calls: **class is normalised** (the basher's `:title():gsub(" Lady",""):gsub(" Lord","")` -- Lord/Lady is a gender suffix on one class and leaving them distinct halves every per-class count) while **race is passed through raw** (no known distortion, and normalising against an unverified vocabulary corrupts data more quietly than leaving it alone); and a missing/empty read **omits the key** rather than sending `"unknown"`, which would become its own cohort in the queries. Both branches of `_reportBoonsOfferedEnriched` route through `reportBoonsOffered`, so the tagging lands on the real path. **Pause/resume (v4.7.88):** `WHISPER … beseech that it grow still` pauses the run without ending it server-side; the next wade **resumes via `/run_exists`** (no new `/run_start`), and `M.run.paused` is cleared unconditionally on a confirmed run-end.
+**Flow:** `GO!` → capture the mob spawn line (the line directly above `GO!`, positional — spawn wording varies per mob) → auto `WADE STATUS` → `/ripple_level`, `/boss` (from the `Objective: defeat <boss>` line), `/effects`; buffered monsters flush after `/ripple_level`. Serial queue enforces ordering (ripple_level first; boons_offered before boons_selected). `_auto()` gates run-start/GO/ripple; `_inRun()` gates monsters/effects/boons/boss/death so generic phrases can't report outside a tracked run. **`/boons_offered` posts once the RIPPLE IS CURRENT** (v4.7.279; it posted IMMEDIATELY from v4.7.91 until then) with the offer-screen name+description — it is no longer gated behind the slow per-boon `BOON CONTEMPLATE` enrichment chain, which raced the next ripple's captures for the single `_capturing` slot and, on a lost race, stalled and silently dropped the entire boon report (rarity/echoes are still learned locally). The line-capture (`_captureLines`) **force-finishes** a wedged prior capture rather than dropping the new one (v4.7.93). **`/boons_offered` also carries `class` and `race`** (v4.7.220, tracker-side request) -- top-level optional strings on `BoonsOfferedRequest`, NOT members of `BoonInfo` where the names suggest; verified against the live schema at `http://104.128.56.238:8000/openapi.json`, which is how to settle any question about this API's shape rather than inferring from prose. `M._charInfo()` reads `gmcp.Char.Status.class`/`.race` and makes two deliberate calls: **class is normalised** (the basher's `:title():gsub(" Lady",""):gsub(" Lord","")` -- Lord/Lady is a gender suffix on one class and leaving them distinct halves every per-class count) while **race is passed through raw** (no known distortion, and normalising against an unverified vocabulary corrupts data more quietly than leaving it alone); and a missing/empty read **omits the key** rather than sending `"unknown"`, which would become its own cohort in the queries. Both branches of `_reportBoonsOfferedEnriched` route through `reportBoonsOffered`, so the tagging lands on the real path. **Pause/resume (v4.7.88):** `WHISPER … beseech that it grow still` pauses the run without ending it server-side; the next wade **resumes via `/run_exists`** (no new `/run_start`), and `M.run.paused` is cleared unconditionally on a confirmed run-end.
 
 **Commands:** `mnem status|token <t>|on|off|contemplate|debug|quiet [on|off]|test|start|end|check|ripple <n>|boss <name>|monsters <text>|death [killer]|map [on|off|status]|boons|affixes|library|explore [on|off|status]|cards [on|off|maran <hp%>|seasone <hp%>|matic <n>]`. Also `ataxia setup reporting`.
 
@@ -1614,22 +1614,37 @@ registerAnonymousEventHandler("aff gained", "updateUI")
 ```
 
 ### Echo/Debug Pattern
+
+**THIS SECTION TAUGHT A HELPER THAT DOES NOT EXIST (corrected v4.7.281).** It presented
+`ataxia.echo` as the idiom, and `ataxia.echo` is defined nowhere in the tree -- which is precisely
+how **17 call sites** came to be written against it and silently die (`attempt to call field 'echo'
+(a nil value)`), including every echoing branch of `bash shinprobe` and all nine in `ataxiabars`.
+A pattern in this guide gets copied without checking, so a wrong one here becomes a bug everywhere.
+
+**The real helper is the global `ataxiaEcho`**, defined in a `_groups.yaml` inline script:
+
 ```lua
-function ataxia.echo(text)
-  cecho("\n<dark_orchid>[<light_slate_blue>Ataxia<dark_orchid>]<lavender>: <plum>" .. text)
-end
+-- The user-facing echo. GLOBAL, not a namespace field:
+ataxiaEcho("shin augment probe -- samples cleared.")
+-- renders: (LEVI): shin augment probe -- samples cleared.
 
-function ataxia.decho(text)
-  if ataxia.debug then
-    ataxia.echo(text)
-  end
-end
+-- Colour tags pass straight through, since it is cecho underneath:
+ataxiaEcho("<gold>SHIN AUGMENT<reset> -- measured duration by spend")
 
--- Quiet commands (no echo)
-function ataxia.quietSend(command)
-  send(command, false)
-end
+-- Quiet commands (no local echo of the command itself):
+send(command, false)
 ```
+
+Module-scoped alternatives that DO exist, where a subsystem wants its own prefix: `shecho`
+(Shaman), `ataxia.mnemosyne.echo` / `.decho` (Mnemosyne, `M.echo` internally), and
+`ataxiaBasher_dsAlert` (basher denizen-state alerts, gated on `ataxiaBasher.brAlerts`).
+
+`ataxia.decho` is called in `affliction_tracking_core/008_V3_Integration.lua` and is likewise
+undefined -- those six sites are safe only because every one of them is guarded
+(`if ataxia and ataxia.decho then`). **Guard an optional helper or use a real one; never assume.**
+
+`tools/check_orphans.py` now fails CI on a namespace field that is called but assigned nowhere, so
+this class of mistake cannot ship silently again.
 
 **Echo strings must be pure ASCII** (2026-07-26): typographic characters (em-dashes `—`,
 arrows `→`, ellipses `…`, curly quotes) mojibake through the packaging/display pipeline
