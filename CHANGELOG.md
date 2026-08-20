@@ -2,6 +2,69 @@
 
 ---
 
+## 2026-08-20 - The boon offer was filed under the wrong ripple (v4.7.279)
+
+Reported by the tracker's author:
+
+> "you're sending boons a ripple late so you're not sending the boons that are initially
+> offered ... you're also sending boon information that you have cached and not sending what's
+> actually offered"
+
+**Confirmed, and it is one bug with two faces.**
+
+### There is no ripple field, so timing IS the attribution
+
+`BoonsOfferedRequest` is `token`, `offered`, `class`, `race` -- that is the entire schema
+(re-verified against the live `openapi.json` today). The server files an offer under whatever
+ripple our last `/ripple_level` told it. **Timing is the only lever we have, and ours was wrong at
+both ends:**
+
+* We send `wade status` **on `GO!` and nowhere else**, so `/ripple_level` is only ever updated at
+  the START of a wave. An offer posted at the boon screen therefore lands under the ripple we have
+  just *finished* -- the "ripple late".
+* At the **first** offer of a run -- the one before wave one -- we have never sent `/ripple_level`
+  at all, so the server has no ripple to file it under. That is precisely "not sending the boons
+  that are initially offered": the report goes out with nowhere to put it.
+
+And the second complaint follows from the first: an offer filed under the previous ripple looks,
+from the tracker's side, like a repeat of data it already holds -- "cached" rather than current.
+Our list itself was never cached; `M._parseNamedBlock` reads the live screen every time.
+
+### The fix is the reference client's own sequence
+
+MediaRes' tracker sends `wade status` when the offer block CLOSES and posts the offer behind it.
+`M._offerAfterRipple` now does the same: stash the parsed list, ask for `wade status`, and post
+when `onRipple` has reported the ripple. The HTTP queue is serial, so enqueueing `/boons_offered`
+after `/ripple_level` is enough to fix the order on the wire -- hence the flush sits **after**
+`M.setRipple(n)` in `onRipple`, never before.
+
+**Bounded, because deferring this is exactly what broke it once already.** v4.7.91 removed a
+deferral -- the per-boon CONTEMPLATE chain -- that could stall and silently drop the whole report.
+This one cannot stall: `M.OFFER_RIPPLE_WAIT` (3s) posts it regardless. Never dropped; at worst
+filed where it is today.
+
+### The break-back that did not fail, and why it mattered
+
+Reverting `onBoonsOffered` to post immediately -- *the exact bug* -- passed all five new tests,
+because every one of them called `M._offerAfterRipple` directly and none crossed the seam where
+the bug lived. Same shape as the guard-inside-a-trigger trap (v4.7.260): **a seam the suite never
+crosses is a seam the suite cannot defend.** Closed with a test that drives the real offer screen
+through the real capture, feeding lines to the temp trigger the mock records. It fails on the
+revert.
+
+### Also found while reading that path
+
+`M._contemplateNext` is **dead code** -- nothing calls it but itself, left behind when v4.7.91
+took the enrichment chain off the offer path. `mnem status` still advertises "Contemplate: ON",
+which now describes nothing for offers (the setting only reaches `boonFill`). Left in place and
+recorded rather than deleted mid-bugfix.
+
+### Tests
+
+**1615 -> 1621.** Four deliberate breaks; three caught immediately, the fourth is the one above.
+
+---
+
 ## 2026-08-20 - Three captures adopted from a community tracker (v4.7.278)
 
 Reviewed **MediaRes' `mnemosyne_standalone.lua`**, an open-source Mudlet tracker for the same

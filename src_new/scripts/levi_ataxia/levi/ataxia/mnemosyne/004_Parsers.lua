@@ -591,7 +591,10 @@ function M.onRipple(n)
   if not M.run.active and M._historyNewRun then M._historyNewRun() end -- bootstrapped run (start line missed) gets its own history bucket
   M.run.active = true
   M.setRipple(n)
+  -- AFTER setRipple, never before: the queue is serial, so /ripple_level must be enqueued
+  -- first for the offer behind it to be filed under this ripple rather than the last one.
   M._flushMonsters()
+  M._flushPendingOffer("ripple")
 end
 
 -- Verbs a mob group's spawn line uses right after the subject noun phrase
@@ -1565,7 +1568,7 @@ function M.onBoonsOffered()
       -- with the exact spelling the game used.
       M.run.lastOffered = {}
       for _, b in ipairs(list) do table.insert(M.run.lastOffered, b.name) end
-      M._reportBoonsOfferedEnriched(list)
+      M._offerAfterRipple(list)
     end,
   })
 end
@@ -1695,6 +1698,65 @@ end
 -- Enrichment: when `contemplate` is enabled, BOON CONTEMPLATE each offered boon
 -- to fill rarity/quote/num_echoes_possible before reporting; otherwise send the
 -- name + description straight through.
+-- ---------------------------------------------------------------------------
+-- THE OFFER HAS TO CARRY THE RIGHT RIPPLE (v4.7.279)
+-- ---------------------------------------------------------------------------
+--
+-- Reported by the tracker's author, 2026-08-20:
+--
+--   "you're sending boons a ripple late so you're not sending the boons that are
+--    initially offered ... you're also sending boon information that you have cached
+--    and not sending what's actually offered"
+--
+-- `BoonsOfferedRequest` has NO ripple field -- token, offered, class, race, and that is
+-- the whole schema (re-verified against the live openapi.json). So the server files an
+-- offer under whatever ripple our LAST `/ripple_level` told it. Timing is the only lever
+-- we have, and ours was wrong at both ends:
+--
+--   * We send `wade status` on GO! and nowhere else, so `/ripple_level` is only ever
+--     updated at the START of a wave. An offer posted at the boon screen therefore lands
+--     under the ripple we have just FINISHED.
+--   * At the very FIRST offer -- the one before wave one -- we have never sent
+--     `/ripple_level` at all, so the server has no ripple for it. That is exactly "not
+--     sending the boons that are initially offered": the report goes out with no place to
+--     put it.
+--
+-- The reference client (MediaRes' standalone tracker) sends `wade status` when the offer
+-- block CLOSES and posts the offer after it. This does the same: ask, wait for the ripple
+-- to be reported, then send the offer behind it. The HTTP queue is serial, so enqueueing
+-- `/boons_offered` after `/ripple_level` is enough to guarantee the order on the wire.
+--
+-- BOUNDED, BECAUSE DEFERRING THIS IS EXACTLY WHAT BROKE IT BEFORE. v4.7.91 removed a
+-- deferral (the per-boon CONTEMPLATE chain) that could stall and silently drop the entire
+-- report. So this one cannot stall: whatever happens, the offer posts -- on the ripple line
+-- if it arrives, on a timer if it does not. Never dropped, at worst filed where it is now.
+M.OFFER_RIPPLE_WAIT = 3 -- seconds to wait for the ripple line before posting anyway
+
+function M._offerAfterRipple(list)
+  M._pendingOffer = list
+  -- A stale timer from a previous screen must not fire against this list.
+  if M._offerTimer then pcall(killTimer, M._offerTimer); M._offerTimer = nil end
+  -- Ask for the ripple. Gated exactly like the GO! send: `_auto()` rather than `_inRun()`,
+  -- so an offer seen before the run-start line was noticed still bootstraps one.
+  if M._auto() or (ataxiaBasher and ataxiaBasher.inMnemosyne) then
+    send("wade status", false)
+  end
+  M._offerTimer = tempTimer(M.OFFER_RIPPLE_WAIT, function() M._flushPendingOffer("timeout") end)
+end
+
+-- Called from onRipple (the ripple has just been reported) and from the timeout. Whichever
+-- gets here first wins; the second finds nothing pending and does nothing.
+function M._flushPendingOffer(why)
+  local list = M._pendingOffer
+  M._pendingOffer = nil
+  if M._offerTimer then pcall(killTimer, M._offerTimer); M._offerTimer = nil end
+  if type(list) ~= "table" or #list == 0 then return false end
+  M.decho("posting /boons_offered (" .. tostring(why) .. ") at ripple "
+    .. tostring(M.run and M.run.ripple))
+  M._reportBoonsOfferedEnriched(list)
+  return true
+end
+
 function M._reportBoonsOfferedEnriched(list)
   -- Post the offer to the API IMMEDIATELY, with the name+description straight off the offer screen.
   -- The old design gated the report behind a slow (~2.5s/boon) BOON CONTEMPLATE enrichment chain,

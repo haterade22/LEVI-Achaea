@@ -377,6 +377,143 @@ describe("boons offered reporting", function()
     gmcp.Char = saved
   end)
 
+  -- Every /boons_offered we have committed, IN ORDER, without double-counting: the serial
+  -- queue posts the head immediately and leaves it in _queue until the server answers, so an
+  -- in-flight request appears in BOTH sent and _queue[1].
+  local function offeredNames()
+    local out = {}
+    for _, r in ipairs(sent) do
+      if r.payload and r.payload.offered then out[#out + 1] = r.payload.offered[1].name end
+    end
+    for i, q in ipairs(M._queue) do
+      if not (i == 1 and M._busy) and q.payload and q.payload.offered then
+        out[#out + 1] = q.payload.offered[1].name
+      end
+    end
+    return out
+  end
+
+  -- Fire ONLY the offer-wait timer. mock_mudlet.fire_timers() fires every pending timer in
+  -- the process and then wipes the table, which would detonate captures armed by earlier
+  -- tests in this file; matching on the delay keeps the blast radius to the thing under test.
+  local function fireOfferWait()
+    local mock = require("mock_mudlet")
+    for id, t in pairs(mock.active_timers) do
+      if t.delay == M.OFFER_RIPPLE_WAIT and type(t.callback) == "function" then
+        mock.active_timers[id] = nil
+        t.callback()
+      end
+    end
+  end
+
+  -- -------------------------------------------------------------------------
+  -- THE OFFER MUST CARRY THE RIGHT RIPPLE (v4.7.279)
+  -- -------------------------------------------------------------------------
+  --
+  -- Reported by the tracker's author: "you're sending boons a ripple late so you're not
+  -- sending the boons that are initially offered". BoonsOfferedRequest has no ripple field,
+  -- so the server files an offer under whatever our last /ripple_level said -- and we only
+  -- ever sent that on GO!, i.e. at the START of a wave. An offer posted at the boon screen
+  -- therefore landed under the ripple we had just finished, and the FIRST offer of a run
+  -- landed with no /ripple_level ever having been sent at all.
+  it("does not post the offer until a ripple has been reported", function()
+    reset(true)
+    M._offerAfterRipple({ { name = "Songstep", description = "d" } })
+    expect(#sent).toBe(0)                       -- nothing on the wire yet
+    expect(M._pendingOffer ~= nil).toBeTrue()
+  end)
+
+  -- ORDER ON THE WIRE IS THE WHOLE POINT: /ripple_level has to be enqueued first, or the
+  -- server files the offer against the previous ripple exactly as before.
+  it("posts it behind /ripple_level once the ripple line arrives", function()
+    reset(true)
+    M._offerAfterRipple({ { name = "Songstep", description = "d" } })
+    M.onRipple(4)
+    local urls = {}
+    for _, r in ipairs(sent) do urls[#urls + 1] = r.url end
+    -- the queue is serial, so only the head is on the wire; the rest are queued in order
+    local order = {}
+    for _, r in ipairs(sent) do order[#order + 1] = r.url end
+    for _, q in ipairs(M._queue) do order[#order + 1] = q.endpoint end
+    local iRipple, iOffer
+    for i, u in ipairs(order) do
+      if u:find("/ripple_level", 1, true) and not iRipple then iRipple = i end
+      if u:find("/boons_offered", 1, true) and not iOffer then iOffer = i end
+    end
+    expect(iRipple ~= nil).toBeTrue()
+    expect(iOffer ~= nil).toBeTrue()
+    expect(iRipple < iOffer).toBeTrue()
+  end)
+
+  -- BOUNDED, BECAUSE DEFERRING THIS IS WHAT BROKE IT BEFORE. v4.7.91 removed a deferral that
+  -- could stall and silently drop the whole report; this one must post regardless.
+  it("posts anyway if the ripple line never comes", function()
+    reset(true)
+    M._offerAfterRipple({ { name = "Songstep", description = "d" } })
+    expect(#sent).toBe(0)
+    fireOfferWait()                          -- the wait elapses, no wade status reply
+    expect(sent[1].url).toContain("/boons_offered")
+    expect(sent[1].payload.offered[1].name).toBe("Songstep")
+  end)
+
+  it("posts exactly once when both the ripple and the timeout land", function()
+    reset(true)
+    M._offerAfterRipple({ { name = "Songstep", description = "d" } })
+    M.onRipple(4)
+    fireOfferWait()
+    expect(#offeredNames()).toBe(1)
+  end)
+
+  -- A second offer screen must not be posted with the first screen's list, and the first
+  -- screen's timer must not fire against it.
+  it("a new offer screen replaces the pending one", function()
+    reset(true)
+    M._offerAfterRipple({ { name = "First", description = "d" } })
+    M._offerAfterRipple({ { name = "Second", description = "d" } })
+    fireOfferWait()
+    local names = offeredNames()
+    expect(#names).toBe(1)
+    expect(names[1]).toBe("Second")
+  end)
+
+  -- BREAK-BACK GAP, CLOSED. The tests above call M._offerAfterRipple directly, so reverting
+  -- onBoonsOffered to post immediately -- the exact bug being fixed -- passed all of them.
+  -- Same shape as the guard-inside-a-trigger trap (v4.7.260): a seam the suite never crosses
+  -- is a seam the suite cannot defend. This drives the REAL offer screen through the real
+  -- capture, by feeding lines to the temp trigger the mock records.
+  it("the offer SCREEN itself defers -- nothing posts until the ripple", function()
+    reset(true)
+    local mock = require("mock_mudlet")
+    M._capturing = false
+    M.onBoonsOffered()
+
+    -- Feed the block exactly as the game prints it: header already matched by the trigger,
+    -- then a divider, the offers, and the BOON CLAIM footer that closes the capture.
+    local feed = {
+      "----------------------------------------",
+      "Songstep:      Your dances are free.",
+      "Reaper:        Gain 1% damage per kill.",
+      "Type BOON CLAIM <name> to choose.",
+    }
+    for _, ln in ipairs(feed) do
+      line = ln
+      for _, t in pairs(mock.active_triggers) do
+        if t.regex and t.pattern == "^.*$" and type(t.callback) == "function" then t.callback() end
+      end
+    end
+
+    -- The capture is done and the boons are parsed...
+    expect(M.run.lastOffered[1]).toBe("Songstep")
+    -- ...but NOTHING is on the wire yet, because the ripple is not current.
+    expect(#offeredNames()).toBe(0)
+
+    -- The ripple arrives and it goes out behind /ripple_level.
+    M.onRipple(3)
+    local names = offeredNames()
+    expect(#names).toBe(1)
+    expect(names[1]).toBe("Songstep")
+  end)
+
   it("force-finishes a wedged prior capture instead of dropping the new boon capture", function()
     reset(true)
     -- Simulate a wedged capture still holding the single-slot lock.
