@@ -2,6 +2,45 @@
 
 ---
 
+## 2026-08-20 - The hyena needs the drop as well (v4.7.284)
+
+v4.7.283 shipped the recall redeploy for the falcon and asserted the hyena did not need it. Wrong,
+and the user corrected it: **Infernal is the same, with `drop hyena`.**
+
+```
+runewarden:  falcon recall  ->  whistle  ->  drop falcon ; order falcon follow me
+infernal:    hyena recall   ->  whistle  ->  drop hyena  ; order hyena follow me
+```
+
+The same whistle line answers both recalls, so one trigger covers both -- now
+`runie_dom/021_Pet_Recall_Redeploy.lua`, class-keyed.
+
+### How the wrong claim got made
+
+The tree has `hyena recall;order hyena follow me` at four sites (login 208 and 224,
+`genrunning/003:240`, `127_HYENA_FOLLOW`), and none of them drops. I read that absence as evidence
+that a recalled hyena lands in the room rather than in inventory, and wrote it into three documents
+as a fact.
+
+It was inference from missing code, and it is **exactly the trap v4.7.281 recorded**: *when writing
+a helper call, grep for the DEFINITION, not for other callers -- all 17 sites were copied from a
+sibling that was equally wrong.* Those four hyena pairings are the same shape: an
+`order <pet> follow me` aimed at an animal still sitting in our inventory. The trigger now fixes
+them by side effect, since every one of them produces the whistle.
+
+**The rule generalises past pet handling: the absence of a step in existing code is not evidence
+that the step is unnecessary. It is evidence about the code, not about the game.** Corrected in the
+v4.7.283 changelog entry, `.claude/classes/runewarden.md` and `memory/runewarden.md` rather than
+left to mislead.
+
+### Paladin is deliberately absent
+
+The eagle's item keyword has never been captured, and guessing an in-game command is how you ship a
+rejected one on every recall. The two classes are listed explicitly rather than via
+`ataxia_isClass("knight")`, which is true for all three knights.
+
+---
+
 ## 2026-08-20 - A recalled falcon was never put back out (v4.7.283)
 
 ```
@@ -22,9 +61,11 @@ and the Runewarden basher's **free** falcon rake had no bird to command.
 was simply never written -- the same asymmetry as v4.7.244's Arc, which shipped Infernal-only
 because that was the class in the tower at the time.
 
-The falcon needs one step the hyena does not: **a recalled falcon is an ITEM on us**, so it must be
-DROPPED before it can be ordered. Hence `drop falcon` then `order falcon follow me`, in that order
-(user-directed).
+**A recalled falcon is an ITEM on us**, so it must be DROPPED before it can be ordered. Hence
+`drop falcon` then `order falcon follow me`, in that order (user-directed).
+
+> **CORRECTED IN v4.7.284:** this entry originally said the falcon "needs one step the hyena does
+> not". Wrong -- the hyena needs the drop too, and those existing pairings were simply incomplete.
 
 ### Three decisions
 

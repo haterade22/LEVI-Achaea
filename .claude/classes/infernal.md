@@ -1507,3 +1507,26 @@ is never reset -- so it must not be stamped on a round that does not actually se
 It now self-guards on `ataxiaBasher.shielded`, because `infernalBashing` calls it eagerly and
 then discards the result on its shielded branch: before the fix, arriving in a room to a
 shielded denizen meant Tyranny never fired there again for the rest of the session.
+
+
+## The hyena: a recalled hyena is an ITEM on you (v4.7.284)
+
+`HYENA RECALL` -> `You put your fingers to your lips and utter a shrill whistle.` -> the hyena
+returns **to hand**. Redeploying takes two free commands, in order:
+
+```
+drop hyena
+order hyena follow me
+```
+
+Both are free (no balance, no equilibrium), like `ORDER HYENA PASSIVE`.
+
+**The four `hyena recall;order hyena follow me` pairings in the tree are INCOMPLETE** -- login 208
+and 224, `genrunning/003_Engaged_Disengage.lua:240`, and the `127_HYENA_FOLLOW` alias. Each orders
+an animal still sitting in inventory. Trigger `runie_dom/021_Pet_Recall_Redeploy.lua` fixes all of
+them by side effect, because every one produces the whistle; it is class-keyed and shared with the
+Runewarden's falcon.
+
+Related lines already handled: the hyena maul cooldown (`basher/005_Falcon_Cooldowns.lua`, shrunk to
+~10.2s by the Daemon Jaws boon) and trigger 372, our own hyena turning on us -> `ORDER HYENA
+PASSIVE`.

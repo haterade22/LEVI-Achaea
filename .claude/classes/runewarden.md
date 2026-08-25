@@ -660,8 +660,11 @@ the falcon sat on us and the basher's free falcon rake had no bird -- fixed by t
 `runie_dom/021_Falcon_Recall_Redeploy.lua`, which reacts to the whistle line, is Runewarden-gated
 (other classes whistle for other things) and debounced 10s.
 
-**Contrast the hyena**, which has always been paired correctly (`hyena recall;order hyena follow
-me`) and needs no drop -- a recalled hyena is in the room, a recalled falcon is in your inventory.
+**The Infernal's hyena is the same** (corrected v4.7.284): `hyena recall` -> the same whistle ->
+`drop hyena;order hyena follow me`. The four existing `hyena recall;order hyena follow me` pairings
+in the tree are INCOMPLETE, not a counter-example -- they order an animal still in inventory. One
+trigger covers both classes. **Paladin's eagle is deliberately unhandled**: its item keyword has
+never been captured.
 
 Other captured falcon lines: `A razor-beaked falcon wings into the room with an angry cry.`
 (trigger 244, tracking), the rake cooldown/ready pair (370/371), and the two second-person attack
