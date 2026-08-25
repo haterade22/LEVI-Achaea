@@ -2,6 +2,54 @@
 
 ---
 
+## 2026-08-20 - A recalled falcon was never put back out (v4.7.283)
+
+```
+You put your fingers to your lips and utter a shrill whistle.
+```
+
+That is the reply to **`FALCON RECALL`**, and the bird comes back to hand. Nothing in the package
+ever put it out again.
+
+`falcon recall` is sent from two places -- `login/001_Login_Function.lua:200` and the `pass` alias
+(`019_PASSIVE.lua`) -- and both stopped there. After either one the falcon sat on us doing nothing,
+and the Runewarden basher's **free** falcon rake had no bird to command.
+
+### The hyena has done this correctly all along
+
+`hyena recall;order hyena follow me` appears in the login (208, 224), in the disengage path
+(`genrunning/003:240`) and in its own alias (`127_HYENA_FOLLOW`). The falcon's half of that pairing
+was simply never written -- the same asymmetry as v4.7.244's Arc, which shipped Infernal-only
+because that was the class in the tower at the time.
+
+The falcon needs one step the hyena does not: **a recalled falcon is an ITEM on us**, so it must be
+DROPPED before it can be ordered. Hence `drop falcon` then `order falcon follow me`, in that order
+(user-directed).
+
+### Three decisions
+
+* **Sent DIRECTLY, not queued.** Both are free actions -- no balance, no equilibrium, the same
+  reasoning trigger 376 records for `ORDER FALCON PASSIVE` -- and anything queued here would be
+  wiped by the basher's next `queue addclearfull`, which rebuilds the whole server queue every
+  prompt. Two `send`s rather than one `;`-joined string, so ordering does not depend on the
+  configured separator.
+* **Runewarden-gated.** "You put your fingers to your lips..." is a generic whistle; other classes
+  whistle for other things, and ordering a falcon we do not own would be a rejected command on
+  every one of them.
+* **10s debounce**, the idiom trigger 376 already uses for the flipped falcon -- `pass` sends the
+  recall inside a chain, and a redeploy racing that chain should happen once.
+
+### Worth knowing
+
+The `pass` alias exists to go quiet (`unenemy all; ... falcon recall; order falcon passive`). This
+trigger will now put the falcon back out on the ground there too -- still PASSIVE, so it will not
+attack, but it will be visible and following. If that is wrong for how `pass` is used, the gate to
+add is on the alias rather than the line.
+
+Trigger `runie_dom/021_Falcon_Recall_Redeploy.lua`.
+
+---
+
 ## 2026-08-20 - A 2 second funnel window that took eight (v4.7.282)
 
 ```

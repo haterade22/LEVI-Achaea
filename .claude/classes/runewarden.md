@@ -640,3 +640,29 @@ Edge cases:
 - Runes persist until triggered or erased
 - Some runes affect movement/positioning
 ```
+
+
+## Falconry: recall leaves the bird ON YOU (v4.7.283)
+
+`FALCON RECALL` -> `You put your fingers to your lips and utter a shrill whistle.` -> the falcon
+returns **to hand, as an item**. It is not deployed again until you **drop** it and order it to
+follow:
+
+```
+drop falcon
+order falcon follow me
+```
+
+Both are FREE (no balance, no equilibrium), like `ORDER FALCON PASSIVE`.
+
+The package sent `falcon recall` from the login and from the `pass` alias and never redeployed, so
+the falcon sat on us and the basher's free falcon rake had no bird -- fixed by trigger
+`runie_dom/021_Falcon_Recall_Redeploy.lua`, which reacts to the whistle line, is Runewarden-gated
+(other classes whistle for other things) and debounced 10s.
+
+**Contrast the hyena**, which has always been paired correctly (`hyena recall;order hyena follow
+me`) and needs no drop -- a recalled hyena is in the room, a recalled falcon is in your inventory.
+
+Other captured falcon lines: `A razor-beaked falcon wings into the room with an angry cry.`
+(trigger 244, tracking), the rake cooldown/ready pair (370/371), and the two second-person attack
+lines that mean **our own falcon has turned on us** (376 -> `ORDER FALCON PASSIVE`).
