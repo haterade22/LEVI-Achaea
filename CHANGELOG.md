@@ -2,6 +2,90 @@
 
 ---
 
+## 2026-08-20 - Fury of Ages was Infernal-only, and its state was a guess (v4.7.285)
+
+> "When runewarden and have this boon, every time we enter the wade (go down into the main
+> rooms) we should ensure we do FURY ON."
+
+Three things, and the first is the one that was actually broken.
+
+### FURY IS A RUNEWARDEN ABILITY
+
+`ataxiaBasher_infFury` was reachable only from `ataxiaBasher_infernalBashing`, so a Runewarden
+holding the boon got **nothing**. The evidence it should always have covered both was already in
+the tree: `aliases/.../snb/003` and `snb/004` have sent `fury on` beside `falcon slay` for as long
+as they have existed, and a falcon is a Runewarden's bird.
+
+**The same one-class-at-a-time gap as Arc (v4.7.244) and the falcon/hyena redeploy (v4.7.284)** --
+a boon wired for whichever class happened to be in the tower when it was captured.
+
+It is now computed in the Runewarden round and prefixed to **every** branch including the shielded
+one, exactly as the Infernal prefixes its `aura`: fury costs willpower, not balance or equilibrium,
+so it never competes with the round it rides on.
+
+**The OFF switch is the point as much as the on.** The boon QUADRUPLES endurance costs, and turning
+fury on for a class with nothing to turn it off would strand a Runewarden mid-grind -- which is the
+exact hazard the existing EP hysteresis (on at 60%, off at 25%, 30s anti-flap floor) was written
+for. Wiring the on without the off would have been half a feature.
+
+### FURY ON AT EVERY DESCENT
+
+`M._furyCheck()` sits beside `_wearArmour` and `_bardPerformanceCheck` in explorer 008 and fires
+from **both** per-wade entry points. The boon screen is a gap in which fury can lapse, exactly like
+the armour and the Bard's performance.
+
+**Asking costs nothing, because the refusal is an answer.** If fury is already up the game says
+`You're already raged with fury!`, which trigger 056 reads as confirmation -- so the redundant send
+is a free state probe. That is why the check does **not** gate on `ataxiaTemp.infFuryOn`: our flag
+is the thing being verified, and gating on it would make the check believe itself.
+
+Class-keyed to the two that have fury, listed explicitly rather than via
+`ataxia_isClass("knight")`, which is true for all three knights. **Paladin is absent**: an eagle,
+no fury.
+
+### THE STATE IS NO LONGER A GUESS
+
+`ataxiaBasher_infFury` has carried this note since the day it was written:
+
+> State is optimistic (`ataxiaTemp.infFuryOn`) because no fury on/off game line has been captured
+> yet -- **if one shows up, confirm from it instead.**
+
+Two showed up (`highlighting/055-056`):
+
+| Line | Meaning |
+|---|---|
+| `Your eyes rage with fury.` | it went up |
+| `You're already raged with fury!` | it was ALREADY up |
+
+Both resolve to the same fact, so one handler takes both -- the second is a refusal only in
+wording. `ataxiaBasher_furyConfirmed` also stamps the 30s anti-flap floor, so a confirmation
+arriving from the wade-entry check cannot be followed a second later by the keeper toggling.
+
+Only the ON edge is confirmed; no fury-OFF line has been seen, so `fury off` stays optimistic.
+
+### Naming kept deliberately
+
+`infFuryOfAges`, `infFuryOn`, `infFuryAt`, `infFuryOnAt`, `infFuryOffAt` keep the `inf` prefix even
+though none of it is Infernal-specific now -- the same call made for `infIndiscriminate` in
+v4.7.244. The boon flag is reset in three separate places, and a rename that missed one would leave
+fury armed **outside** the tower, quadrupling endurance costs on an ordinary grind.
+
+### Two break-backs that did not fail
+
+* **The anti-flap assertion did not discriminate.** It checked that the keeper returned `""` at
+  HEALTHY endurance -- which it does whether or not the floor was stamped. Rewritten to drop
+  endurance immediately, where the stamp is the only thing preventing an instant `fury off`.
+* **The wiring was untested.** Every test called `M._furyCheck()` directly, so deleting the call
+  from `_exploreResume` passed all of them -- the same seam problem as v4.7.279. A test now reads
+  `008_Explorer.lua` and requires the call beside **both** `_wearArmour` sites.
+
+### Tests
+
+**1630 -> 1641.** Five deliberate breaks; three caught immediately, two after the tests above were
+made to discriminate.
+
+---
+
 ## 2026-08-20 - The hyena needs the drop as well (v4.7.284)
 
 v4.7.283 shipped the recall redeploy for the falcon and asserted the hyena did not need it. Wrong,

@@ -1530,3 +1530,21 @@ Runewarden's falcon.
 Related lines already handled: the hyena maul cooldown (`basher/005_Falcon_Cooldowns.lua`, shrunk to
 ~10.2s by the Daemon Jaws boon) and trigger 372, our own hyena turning on us -> `ORDER HYENA
 PASSIVE`.
+
+
+## FURY state is confirmed, not assumed (v4.7.285)
+
+```
+Your eyes rage with fury.        -> it went up          (highlighting/055)
+You're already raged with fury!  -> it was ALREADY up   (highlighting/056)
+```
+
+`ataxiaBasher_infFury` tracked fury optimistically from its own send, with a note saying to confirm
+from a game line if one ever showed up. These are those lines, and both resolve to the same fact --
+the second is a refusal only in wording. `ataxiaBasher_furyConfirmed` also stamps the 30s anti-flap
+floor, so a confirmation cannot be followed a second later by the keeper toggling.
+
+Only the ON edge is confirmed; no fury-OFF line has been captured, so `fury off` stays optimistic.
+
+**The keeper is shared with the Runewarden now** (v4.7.285) -- fury is that class's ability too, and
+the helper had been reachable only from the Infernal round.

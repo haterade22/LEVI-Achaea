@@ -1431,8 +1431,29 @@ end
 --   * OFF at EP <  infFuryOffAt  (default 25%)
 -- The gap between the two is hysteresis on purpose -- flapping would be worse than not
 -- using it, because each activation may cost 500 willpower. A 30s minimum between toggles
--- backs that up. State is optimistic (`ataxiaTemp.infFuryOn`) because no fury on/off game
--- line has been captured yet -- if one shows up, confirm from it instead.
+-- backs that up.
+--
+-- NOT INFERNAL-ONLY (v4.7.285). Fury is a RUNEWARDEN ability too -- the SnB combos in
+-- `aliases/.../snb/003` and `snb/004` have sent `fury on` beside `falcon slay` for as long as
+-- they have existed, and a falcon is a Runewarden's bird. This helper was reachable only from
+-- `ataxiaBasher_infernalBashing`, so a Runewarden holding the boon got nothing: the same
+-- one-class-at-a-time gap as Arc (v4.7.244) and the falcon/hyena redeploy (v4.7.284). It is
+-- now called from the Runewarden round as well.
+--
+-- The `inf` PREFIX ON EVERY NAME IS KEPT DELIBERATELY (`infFuryOfAges`, `infFuryOn`,
+-- `infFuryAt`, `infFuryOnAt`, `infFuryOffAt`) -- exactly the call made for `infIndiscriminate`
+-- in v4.7.244. The boon flag is reset in three separate places, and a rename that missed one
+-- would leave fury armed outside the tower, quadrupling endurance costs on a normal grind.
+--
+-- STATE IS NOW CONFIRMED, NOT OPTIMISTIC (v4.7.285). The note here used to say "no fury on/off
+-- game line has been captured yet -- if one shows up, confirm from it instead." Two showed up:
+--
+--     Your eyes rage with fury.        -> it went up          (highlighting/055)
+--     You're already raged with fury!  -> it was ALREADY up   (highlighting/056)
+--
+-- Both mean the same thing for our purposes, which is why one handler takes both: the refusal
+-- is not a failure, it is the game telling us the state we wanted is the state we have. Only
+-- the ON edge is confirmed -- no fury-OFF line has been seen, so `fury off` stays optimistic.
 function ataxiaBasher_infFury(sp)
 	if not infFuryOfAges then return "" end
 	local gv = (gmcp.Char and gmcp.Char.Vitals) or {}
@@ -1452,6 +1473,20 @@ function ataxiaBasher_infFury(sp)
 		return "fury off"..sp
 	end
 	return ""
+end
+
+-- FURY IS UP, from the game rather than from our own send (v4.7.285, triggers
+-- highlighting/055-056). `Your eyes rage with fury.` and `You're already raged with fury!` both
+-- resolve to the same fact, so both land here -- the second is a refusal only in wording.
+--
+-- It also stamps `infFuryAt`, which is the 30s anti-flap floor: a confirmation arriving from
+-- the wade-entry check must not be followed a second later by the EP keeper deciding to toggle.
+function ataxiaBasher_furyConfirmed()
+	ataxiaTemp = ataxiaTemp or {}
+	local wasOn = ataxiaTemp.infFuryOn
+	ataxiaTemp.infFuryOn = true
+	ataxiaTemp.infFuryAt = (getEpoch and getEpoch()) or os.time()
+	return wasOn and "already" or "raised"
 end
 
 -- Necrotic Aura (Mnemosyne boon): "While you are empowered by an aura of death, your
@@ -2765,6 +2800,15 @@ function ataxiaBasher_runewardenBashing()
 	-- room, laid ahead of everything else including the shield-break -- see rwUruz for why it
 	-- does not share sowulu's shielded skip.
 	local uruz = ataxiaBasher_rwUruz(sp)
+	-- Fury of Ages keeper (v4.7.285). Prefixed to EVERY branch including the shielded one, the
+	-- way the Infernal prefixes its `aura`: fury costs willpower, not balance or equilibrium, so
+	-- it never competes with the round it rides on.
+	--
+	-- This is the OFF switch as much as the on: the boon quadruples endurance costs, and turning
+	-- fury on for a class with nothing to turn it off would strand a Runewarden mid-grind. That
+	-- is the hazard `ataxiaBasher_infFury`'s EP hysteresis was written for, and it applies to
+	-- both classes identically.
+	local fury = ataxiaBasher_infFury(sp)
 	-- Lay the Hammer and Nail rune before swinging (free queue, so it costs no balance).
 	local sowulu = ataxiaBasher_rwSowulu(sp)
 
@@ -2791,9 +2835,9 @@ function ataxiaBasher_runewardenBashing()
 		-- uruz rides the shielded round too: it heals US, so the target's shield is irrelevant
 		-- to it, and a crowded room whose opener is a raze is exactly when we want it down.
 		if ataxiaBasher.rageraze and ataxia.vitals.rage >= 17 then
-			command = uruz..braze..sp..bash
+			command = fury..uruz..braze..sp..bash
 		else
-			command = uruz..raze..sp..brage
+			command = fury..uruz..raze..sp..brage
 		end
 	else
 		-- Two crowd swaps can want this slot, and both spend BALANCE, so at most one lands.
@@ -2817,7 +2861,7 @@ function ataxiaBasher_runewardenBashing()
 		elseif arc ~= "" then
 			swing = falcon..arc
 		end
-		command = uruz..sowulu..brage..sp..swing
+		command = fury..uruz..sowulu..brage..sp..swing
 	end
 
 	return command

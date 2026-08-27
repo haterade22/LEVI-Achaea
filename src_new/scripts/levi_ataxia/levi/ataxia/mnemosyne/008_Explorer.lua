@@ -1311,6 +1311,31 @@ function M._wearArmour()
   send("wear armour", false)
 end
 
+-- FURY ON AT EVERY DESCENT (v4.7.285, user: "every time we enter the wade (go down into the main
+-- rooms) we should ensure we do FURY ON").
+--
+-- Fury of Ages makes FURY worth holding almost permanently -- 45 minutes of every hour, +8
+-- strength and 20% faster balance -- and the wade entry is the natural moment to assert it: the
+-- boon screen is a gap in which it can lapse, exactly like the armour and the Bard's performance
+-- that this sits beside.
+--
+-- ASKING COSTS NOTHING BECAUSE THE REFUSAL IS AN ANSWER. If fury is already up the game says
+-- "You're already raged with fury!", which trigger 056 reads as confirmation -- so the redundant
+-- send is not waste, it is a free state probe. That is why this does not gate on
+-- `ataxiaTemp.infFuryOn`: our flag is the thing being verified, and gating on it would make the
+-- check believe itself.
+--
+-- CLASS-KEYED to the two that actually have fury (Runewarden, Infernal), listed explicitly rather
+-- than via ataxia_isClass("knight"), which is true for all three knights. Sent DIRECTLY, like the
+-- armour: `queue addclearfull` would wipe it.
+function M._furyCheck()
+  if not infFuryOfAges then return end
+  if not (ataxia_isClass and (ataxia_isClass("runewarden") or ataxia_isClass("infernal"))) then
+    return
+  end
+  send("fury on", false)
+end
+
 -- BARD: confirm the bash performance survived the ripple (user, 2026-08-03: "after selecting
 -- the boons, we should send the command PERFORMANCE to ensure we have our stuff up").
 --
@@ -1433,6 +1458,7 @@ function M._exploreResume(reason)
   -- also where armour gets re-checked before each dive -- not just on the first `explore on`.
   M._wearArmour()
   M._bardPerformanceCheck() -- per-ripple: a performance can lapse across the boon screen
+  M._furyCheck()            -- ...nor un-furied, if the boon makes fury worth holding
   M._relatchBoons()   -- once per run: re-latch boon flags we may have owned before load
   if M.swarm and M.swarm.onRipple then pcall(M.swarm.onRipple) end -- fresh ripple: new pull budgets
   M._exploreEcho("<green>resuming<reset> the sweep" .. (reason and (" (" .. reason .. ")") or "") .. ".")
@@ -1488,6 +1514,7 @@ function M.exploreOn()
   M.explore.settling = true -- treat the starting room like an arrival: let its denizens settle first
   M._wearArmour()           -- never start a sweep undressed
   M._bardPerformanceCheck() -- ...nor unperforming
+  M._furyCheck()            -- ...nor un-furied
   M._relatchBoons()   -- once per run: re-latch boon flags we may have owned before load
   if M.swarm and M.swarm.onRipple then pcall(M.swarm.onRipple) end -- fresh sweep: fresh tactics state
   M._exploreEcho("<green>ON<reset> -- sweeping the 4x4, clearing to the boon screen (patrols for the boss on boss ripples). (<a_darkmagenta>mnem explore off<reset> to stop)")

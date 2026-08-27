@@ -3622,6 +3622,114 @@ describe("boon claim verification", function()
 end)
 
 -- ============================================================================
+-- v4.7.285 -- FURY ON at every wade entry
+-- ============================================================================
+--
+-- User: "When runewarden and have this boon, every time we enter the wade (go down into the
+-- main rooms) we should ensure we do FURY ON." Fury of Ages makes FURY worth holding almost
+-- permanently, and the boon screen is a gap in which it can lapse -- exactly like the armour
+-- and the Bard's performance this check sits beside.
+describe("wade entry: fury", function()
+  local M = ataxia.mnemosyne
+  local sent, realSend, realIsClass
+
+  local function setup(class, boon)
+    infFuryOfAges = boon and true or false
+    gmcp = gmcp or {}; gmcp.Char = gmcp.Char or {}
+    gmcp.Char.Status = { class = class }
+    -- This suite does not load the class helpers, so the real ataxia_isClass is absent and the
+    -- gate would return early on every case -- including the ones that must SEND. Stubbed to the
+    -- part of its behaviour these tests exercise (exact class match off gmcp), and restored
+    -- afterwards: files share one Lua state, and a leaked global here rewrites what a later
+    -- suite measures.
+    realIsClass = ataxia_isClass
+    ataxia_isClass = function(what)
+      local c = gmcp and gmcp.Char and gmcp.Char.Status and gmcp.Char.Status.class
+      return type(c) == "string" and c:lower() == tostring(what):lower()
+    end
+    sent = {}
+    realSend = send
+    send = function(c) table.insert(sent, c) end
+  end
+  local function restore()
+    send = realSend
+    ataxia_isClass = realIsClass
+    infFuryOfAges = false
+  end
+  local function sentFury()
+    for _, c in ipairs(sent) do if c == "fury on" then return true end end
+    return false
+  end
+
+  it("sends fury on for a Runewarden holding the boon", function()
+    setup("Runewarden", true)
+    M._furyCheck()
+    expect(sentFury()).toBeTrue()
+    restore()
+  end)
+
+  it("covers the Infernal too -- same boon, same ability", function()
+    setup("Infernal", true)
+    M._furyCheck()
+    expect(sentFury()).toBeTrue()
+    restore()
+  end)
+
+  it("does nothing without the boon", function()
+    setup("Runewarden", false)
+    M._furyCheck()
+    expect(sentFury()).toBeFalse()
+    restore()
+  end)
+
+  -- Listed explicitly rather than via ataxia_isClass("knight"), which is true for all three
+  -- knights -- a Paladin has an eagle and no fury, and ordering one would be a rejected command.
+  it("does nothing for a class without fury", function()
+    setup("Paladin", true)
+    M._furyCheck()
+    expect(sentFury()).toBeFalse()
+    restore()
+  end)
+
+  -- THE REFUSAL IS AN ANSWER, so the check does not gate on our own flag: gating on
+  -- ataxiaTemp.infFuryOn would make the verification believe itself. If fury is already up the
+  -- game says so, and trigger 056 reads that as confirmation.
+  -- THE TESTS ABOVE CANNOT CATCH AN UNWIRED CHECK, because every one calls M._furyCheck()
+  -- directly and none crosses the seam where the call lives -- deleting the call from
+  -- _exploreResume passed all of them. Same gap as v4.7.279's offer timing, and the same
+  -- answer: read the source and pin the wiring. There are TWO per-wade entry points and the
+  -- user asked for EVERY descent, so both are required.
+  it("is wired into BOTH wade entry points, beside the armour", function()
+    local f = io.open("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/008_Explorer.lua")
+    expect(f ~= nil).toBeTrue()
+    local src = f:read("*a"); f:close()
+
+    -- `_wearArmour` is the established per-ripple entry idiom: exploreOn (first sweep) and
+    -- _exploreResume (after every boon screen). Fury must ride with it at both.
+    local paired, from = 0, 1
+    while true do
+      local i = src:find("M._wearArmour()", from, true)
+      if not i then break end
+      -- within the next few lines of that call site
+      local window = src:sub(i, i + 260)
+      if window:find("M._furyCheck()", 1, true) then paired = paired + 1 end
+      from = i + 1
+    end
+    expect(paired).toBe(2)
+  end)
+
+  it("still asks when we already believe fury is up", function()
+    setup("Runewarden", true)
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.infFuryOn = true
+    M._furyCheck()
+    expect(sentFury()).toBeTrue()
+    ataxiaTemp.infFuryOn = nil
+    restore()
+  end)
+end)
+
+-- ============================================================================
 -- v4.7.255 -- a boss that runs away
 -- ============================================================================
 --

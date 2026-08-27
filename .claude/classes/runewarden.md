@@ -669,3 +669,28 @@ never been captured.
 Other captured falcon lines: `A razor-beaked falcon wings into the room with an angry cry.`
 (trigger 244, tracking), the rake cooldown/ready pair (370/371), and the two second-person attack
 lines that mean **our own falcon has turned on us** (376 -> `ORDER FALCON PASSIVE`).
+
+
+## FURY, and the Fury of Ages boon (v4.7.285)
+
+**Fury is a Runewarden ability**, not just an Infernal one -- the SnB combos in
+`aliases/.../snb/003` and `snb/004` have sent `fury on` beside `falcon slay` for as long as they
+have existed. Base FURY is +2 strength, 500 willpower after the first daily use, capped at 4 uses
+per Achaean day, which is why it is not automated normally.
+
+The Mnemosyne boon changes the economics: 45 minutes of every hour, **+8 more strength and 20%
+faster balance**, at the cost of **QUADRUPLED endurance**.
+
+```
+Your eyes rage with fury.        -> it went up          (highlighting/055)
+You're already raged with fury!  -> it was ALREADY up   (highlighting/056)
+```
+
+Both mean the same thing, so one handler takes both -- and that is what makes the wade-entry check
+free: `M._furyCheck()` sends `fury on` at every descent without asking whether it is needed,
+because if it is not, the refusal tells us the state anyway.
+
+`ataxiaBasher_infFury` (the `inf` prefix is legacy, kept deliberately) is now prefixed to every
+Runewarden branch including the shielded one -- fury costs willpower, so it never competes with the
+round. It holds fury while EP >= 60% and drops it under 25%, with a 30s anti-flap floor: **the off
+switch matters as much as the on**, because quadrupled endurance is what strands a long grind.

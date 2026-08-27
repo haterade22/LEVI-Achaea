@@ -49,6 +49,8 @@ local function reset()
   mnemHammerAndNail, mnemFalconersTactics = false, false
   mnemThunderclap = false
   mnemStormcleaver, infIndiscriminate = false, false
+  infFuryOfAges = false
+  gmcp.Char.Vitals = { ep = 100, maxep = 100 }
   ataxiaBasher.bisectAt, ataxiaBasher.bisectExecuteAt = nil, nil
   ataxiaBasher.arcAt, ataxiaBasher.infArcAt = nil, nil
   ataxiaBasher.uruzAt = nil
@@ -564,9 +566,57 @@ describe("uruz on the ground -- health regen in a crowded room", function()
   end)
 end)
 
+-- ---------------------------------------------------------------------------
+-- FURY OF AGES IS NOT INFERNAL-ONLY (v4.7.285)
+-- ---------------------------------------------------------------------------
+--
+-- Fury is a Runewarden ability -- the SnB combos in `aliases/.../snb/003` and `snb/004` have
+-- sent `fury on` beside `falcon slay` for as long as they have existed, and a falcon is a
+-- Runewarden's bird. The keeper was reachable only from ataxiaBasher_infernalBashing, so a
+-- Runewarden holding the boon got nothing: the same one-class-at-a-time gap as Arc (v4.7.244)
+-- and the falcon/hyena redeploy (v4.7.284).
+describe("Runewarden -- Fury of Ages", function()
+  it("does not touch fury without the boon", function()
+    reset()
+    expect(has(ataxiaBasher_runewardenBashing(), "fury")).toBeFalse()
+  end)
+
+  it("raises fury when the boon is held and endurance is healthy", function()
+    reset(); infFuryOfAges = true
+    expect(has(ataxiaBasher_runewardenBashing(), "fury on")).toBeTrue()
+  end)
+
+  -- THE OFF SWITCH IS THE POINT, not a bonus. The boon QUADRUPLES endurance costs, so turning
+  -- fury on for a class with nothing to turn it off would strand a Runewarden mid-grind -- the
+  -- exact hazard the EP hysteresis was written for.
+  it("drops fury before endurance strands us", function()
+    reset(); infFuryOfAges = true
+    expect(has(ataxiaBasher_runewardenBashing(), "fury on")).toBeTrue()
+    clock = clock + 31
+    gmcp.Char.Vitals = { ep = 20, maxep = 100 } -- under the 25% off-threshold
+    expect(has(ataxiaBasher_runewardenBashing(), "fury off")).toBeTrue()
+  end)
+
+  -- Prefixed to EVERY branch the way the Infernal prefixes its `aura`: fury costs willpower,
+  -- not balance or equilibrium, so it never competes with the round it rides on.
+  it("rides the shielded round too", function()
+    reset(); infFuryOfAges = true
+    ataxiaBasher.shielded = true
+    expect(has(ataxiaBasher_runewardenBashing(), "fury on")).toBeTrue()
+  end)
+
+  it("rides the shielded rage-raze round", function()
+    reset(); infFuryOfAges = true
+    ataxiaBasher.shielded, ataxiaBasher.rageraze = true, true
+    ataxia.vitals.rage = 50
+    expect(has(ataxiaBasher_runewardenBashing(), "fury on")).toBeTrue()
+  end)
+end)
+
+target = nil
+ataxiaBasher.uruzAt = nil
+
 -- Restore shared state for whoever runs after us (files share one Lua state).
 mnemHammerAndNail, mnemFalconersTactics = false, false
 mnemThunderclap = false
 getEpoch = _epoch
-target = nil
-ataxiaBasher.uruzAt = nil

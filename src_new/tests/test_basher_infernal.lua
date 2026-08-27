@@ -292,6 +292,47 @@ describe("Fury of Ages -- hold FURY while endurance allows", function()
     expect(ataxiaTemp.infFuryOn).toBe(nil)
   end)
 
+  -- -------------------------------------------------------------------------
+  -- The confirmation lines and the Runewarden extension (v4.7.285)
+  -- -------------------------------------------------------------------------
+  --
+  -- `ataxiaBasher_infFury` carried a note from the day it was written: state is optimistic
+  -- "because no fury on/off game line has been captured yet -- if one shows up, confirm from
+  -- it instead." Two showed up.
+  it("confirms fury from the game line, not from our own send", function()
+    reset(); infFuryOfAges = true
+    expect(ataxiaTemp.infFuryOn).toBe(nil)
+    expect(ataxiaBasher_furyConfirmed()).toBe("raised")
+    expect(ataxiaTemp.infFuryOn).toBeTrue()
+  end)
+
+  -- "You're already raged with fury!" is a refusal only in wording -- it reports the state we
+  -- wanted, which is why one handler takes both lines and why the wade-entry check can send
+  -- `fury on` unconditionally and treat the answer as a free state probe.
+  it("treats the already-raged refusal as confirmation too", function()
+    reset(); infFuryOfAges = true
+    ataxiaBasher_furyConfirmed()
+    expect(ataxiaBasher_furyConfirmed()).toBe("already")
+    expect(ataxiaTemp.infFuryOn).toBeTrue()
+  end)
+
+  -- It also stamps the 30s anti-flap floor: a confirmation arriving from the wade-entry check
+  -- must not be followed a second later by the EP keeper toggling.
+  it("the confirmation stamps the anti-flap floor", function()
+    reset(); infFuryOfAges = true; ep(80)
+    ataxiaBasher_furyConfirmed()
+    -- Drop endurance IMMEDIATELY. With the stamp, the 30s floor holds the toggle; without it
+    -- the keeper would flip straight back to `fury off` on the very next round, and each
+    -- activation may cost 500 willpower.
+    --
+    -- Asserting "" at HEALTHY endurance would not discriminate: the keeper returns "" there
+    -- whether or not the floor was stamped, which is exactly how a deliberate break passed.
+    ep(24)
+    expect(ataxiaBasher_infFury(";")).toBe("")
+    clock = clock + 31
+    expect(ataxiaBasher_infFury(";")).toBe("fury off;")  -- ...and it still drops once past it
+  end)
+
   it("holds in the hysteresis band -- no flapping (each activation may cost 500 wp)", function()
     reset(); infFuryOfAges = true; ep(80)
     expect(ataxiaBasher_infFury(";")).toBe("fury on;")
