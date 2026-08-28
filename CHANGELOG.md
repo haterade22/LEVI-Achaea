@@ -2,6 +2,76 @@
 
 ---
 
+## 2026-08-20 - Two crit-proc boon lines, and a wrap that no single pattern can match (v4.7.286)
+
+Highlight-only, by instruction. Both boons were already in the seed catalogue
+(`mnemosyne/010_Boon_Seed.lua`) with full descriptions -- only the lines they PRINT had never been
+captured, so both scrolled past unmarked.
+
+| Boon | Rarity | Effect | Trigger / colour |
+|---|---|---|---|
+| **Baron's Bro** | rare | on a crit, a low chance to summon a squad of ogre goons; **once per 20s** | `highlighting/057`, `plum` |
+| **The Human Spirit** | uncommon | **critical strikes restore 2% of your health** | `highlighting/058`, `medium_sea_green` |
+
+**Both are CRIT procs**, which is exactly why they are erratic and easy to lose in a log -- and
+worth noting for anyone reading later, since neither line says so.
+
+### The wrap is the interesting part
+
+Achaea wraps server-side at the player's WIDTH, so the Baron's Bro announcement reaches Mudlet as
+**two physical lines**:
+
+```
+...bursting in from without, a squad of ogre goons rushes forward, their
+bellowing cries of "THAT HIM!" shaking the earth as each brandish ... to batter and  bruise the
+fool that would bring you harm.
+```
+
+**A pattern spanning that break can never match.** So the trigger carries TWO substring patterns,
+one taken from near the start of the sentence and one from the very end, and the body colours
+whichever line it landed on -- both rows get marked wherever the break falls. If a different WIDTH
+moves the wrap, the worst case is a middle row left uncoloured, never a missed proc.
+
+Substring (type 0) rather than anchored regex for the same reason: the fragments are mid-line by
+construction, so `^`/`$` were never available. Both are distinctive enough that a false positive is
+not credible -- checked against `A squad of guards rushes forward to help.`, which does not match.
+
+The Human Spirit line is short and does not wrap, so it is anchored like the other short self-lines
+in the folder, which also keeps it off any third-party phrasing (only ours says "your body").
+
+### Colours, and the table that makes a typo fatal
+
+`007_Custom_Colour_Table.lua` **wholesale replaces** Mudlet's palette, so a plausible-but-absent
+name makes `fg()` throw at render time -- not at build time. All three names used here were
+verified present in that file before shipping: `plum` (221,160,221), `medium_sea_green`
+(60,179,113), `firebrick` (178,34,34).
+
+`plum` is the lightest true purple in the table and was unused in `highlighting/`, so it carries no
+competing meaning; `medium_purple` was rejected because it already means *Bard dance -- harrying*.
+`medium_sea_green` is deliberately SHARED with the necrotic/scorch inhibit lines, the sonata cleanse
+and dagaz: same meaning class ("a beneficial effect landed"), and a colour the eye already reads
+that way beats inventing another.
+
+### Correction: an orange I shipped yesterday
+
+`highlighting/055_Fury_Raised.lua` (v4.7.285, mine) was coloured `orange_red`. **The orange family
+is reserved.** Existing sites are grandfathered -- CHANGELOG v4.7.136, roughly fifty of them, and a
+sweep would be a large unrequested user-visible change -- but *new* code must avoid it, and 055 is
+new. Recoloured `firebrick`.
+
+Scope held to that one line on purpose: the two other `orange_red` uses in this folder
+(`032_Overwhelm_Lands`, `033_Rampage_Proc`) are grandfathered and untouched. **A backlog note is a
+hypothesis; this one was re-derived from the CHANGELOG before acting**, which is what stopped it
+becoming a fifty-site sweep.
+
+### Deliberately not done
+
+Both lines are also free crit-proc signals, and Baron's Bro has a 20s internal cooldown a counter
+could track (the shape `mnemReaper`'s kill tithe already uses). The instruction was "just
+highlight", so no counter was added.
+
+---
+
 ## 2026-08-20 - Fury of Ages was Infernal-only, and its state was a guess (v4.7.285)
 
 > "When runewarden and have this boon, every time we enter the wade (go down into the main

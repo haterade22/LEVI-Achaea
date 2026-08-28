@@ -47,6 +47,8 @@ if ataxiaBasher_furyConfirmed then ataxiaBasher_furyConfirmed() end
 
 selectString(line, 1)
 setBold(true)
-fg("orange_red")
+fg("firebrick") -- NOT the orange family: reserved (CHANGELOG v4.7.136). Existing sites
+                -- are grandfathered, but this trigger is new (v4.7.285) and was written
+                -- `orange_red` in error; corrected v4.7.286.
 deselect()
 resetFormat()
