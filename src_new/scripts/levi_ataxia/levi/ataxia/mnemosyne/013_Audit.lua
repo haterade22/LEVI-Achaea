@@ -106,7 +106,11 @@ function M._auditRow(ln)
   local label, value = ln:match("^%s*([%a][%a%s'-]-)%s*:%s+(%S.*)$")
   if not label or not value then return nil end
   label = label:lower():gsub("%s+$", "")
-  value = value:gsub("%s+$", "")
+  -- Thousands separators stripped BEFORE any number is read. `tonumber(value:match("^%d+"))`
+  -- stops at the comma, so "1,234" would parse to 1 -- a confidently WRONG number, which is the
+  -- one outcome this module exists to prevent. No captured block has exceeded 100 yet; that is a
+  -- reason to guard it cheaply, not a reason to assume it never will.
+  value = value:gsub("%s+$", ""):gsub("(%d),(%d)", "%1%2")
 
   local key = PAIRS_[label]
   if key then
@@ -166,19 +170,48 @@ end
 -- typed by the user is captured exactly like ours. That matters beyond convenience: if the command
 -- we send is ever wrong, this still works and the failure is visible (nothing arrives) rather than
 -- silent.
+--
+-- THE HANDLES ARE FILE-SCOPE LOCALS, NEVER FIELDS ON `M` (deep review, v4.7.291). `M` is
+-- `ataxia.mnemosyne`, which lives under the wholesale-SERIALIZED `ataxia` namespace: a bare
+-- integer written there is saved to disk by `ataxia_saveSettings` and restored by `deepMerge`'s
+-- unconditional `dst[k] = v`. A capture is in flight for two to three and a half seconds, and a
+-- disconnect inside that window would persist a live trigger id -- which, next session, names
+-- whatever temp trigger inherited that number, and the first thing `_auditCapture` does is
+-- `killTrigger` it. That is the documented "never serialize a tempTimer id" invariant, and
+-- `_captureLines` (004_Parsers) already gets it right by keeping its handles as closure upvalues.
+local auditTrig, auditTimer, auditDeadline
+
+-- A SILENCE TIMER IS NOT A DEADLINE (deep review, v4.7.291). The per-line timer below is re-armed
+-- by every line the capture sees, so while output keeps arriving it never fires -- and this arms
+-- right after `GO!`, in a no-flee tower room where a fresh wave has just spawned and combat is
+-- starting. Output does not stop. The consequence is worse than a long capture: the baseline is
+-- FIRST-WINS AND PERMANENT (`_auditRecord`), so anything that contaminates it is silent and lasts
+-- the whole run, recoverable only by a manual `mnem audit reset`.
+--
+-- So there are TWO timers, and the second is never re-armed: a hard ceiling from the moment the
+-- header was seen. Same reasoning as the dedicated funnel timer of v4.7.282 -- a clock that every
+-- caller may push out cannot hold a deadline.
+--
+-- The line cap is the same guard against a burst that lands INSIDE the ceiling. The real block is
+-- eighteen lines; sixty is a wide margin that still bounds a flood.
+local AUDIT_MAX_SECONDS = 5
+local AUDIT_MAX_LINES = 60
+
 function M._auditCapture()
-  if M._auditTrig then pcall(killTrigger, M._auditTrig); M._auditTrig = nil end
-  if M._auditTimer then pcall(killTimer, M._auditTimer); M._auditTimer = nil end
+  if auditTrig then pcall(killTrigger, auditTrig); auditTrig = nil end
+  if auditTimer then pcall(killTimer, auditTimer); auditTimer = nil end
+  if auditDeadline then pcall(killTimer, auditDeadline); auditDeadline = nil end
 
   local lines, rules = {}, 0
   local function finish()
-    if M._auditTrig then pcall(killTrigger, M._auditTrig); M._auditTrig = nil end
-    if M._auditTimer then pcall(killTimer, M._auditTimer); M._auditTimer = nil end
+    if auditTrig then pcall(killTrigger, auditTrig); auditTrig = nil end
+    if auditTimer then pcall(killTimer, auditTimer); auditTimer = nil end
+    if auditDeadline then pcall(killTimer, auditDeadline); auditDeadline = nil end
     local rec = M._parseAudit(lines)
     if rec then M._auditRecord(rec) end
   end
 
-  M._auditTrig = tempRegexTrigger([[^.*$]], function()
+  auditTrig = tempRegexTrigger([[^.*$]], function()
     local ln = line
     if type(ln) == "string" and ln:match("^%s*%-%-%-") then
       rules = rules + 1
@@ -187,10 +220,12 @@ function M._auditCapture()
       return
     end
     table.insert(lines, ln)
-    if M._auditTimer then pcall(killTimer, M._auditTimer) end
-    M._auditTimer = tempTimer(1.5, finish)
+    if #lines >= AUDIT_MAX_LINES then return finish() end
+    if auditTimer then pcall(killTimer, auditTimer) end
+    auditTimer = tempTimer(1.5, finish)
   end)
-  M._auditTimer = tempTimer(2, finish)
+  auditTimer = tempTimer(2, finish)
+  auditDeadline = tempTimer(AUDIT_MAX_SECONDS, finish)  -- armed once, never re-armed
 end
 
 -- Store a parsed block. The FIRST of a run becomes the baseline and is never overwritten by a
@@ -211,18 +246,34 @@ end
 -- current - baseline, per field. Returns nil when there is nothing to compare, rather than a
 -- table of zeroes: "no second reading yet" and "the boons bought nothing" are different answers
 -- and a panel must not render them the same.
+-- ROUNDED AT THE SOURCE, because a delta is only ever displayed. AUDIT prints one and two
+-- decimal places (`47.4`, `56.93`) and subtracting two such doubles produces binary noise --
+-- `76.2 - 56.93` is `19.270000000000003` in Lua 5.1, and `tostring` shows every digit of it. On
+-- the one panel section whose whole claim is that it is MEASURED rather than derived, printing
+-- that would undermine exactly the thing it exists to provide. Two places is enough to hold
+-- everything AUDIT reports, so rounding cannot lose a real difference.
+-- Rounded on the MAGNITUDE and the sign reapplied. The obvious
+-- `math.floor(n * 100 + (n >= 0 and 0.5 or -0.5)) / 100` is wrong for negatives: `-19.27 * 100`
+-- is `-1927.0000000000002`, so subtracting 0.5 and flooring lands on -1928 and reports -19.28 --
+-- a rounding fix that introduced its own off-by-one in exactly the direction it was meant to
+-- prevent. Caught by the negative-delta test, which is why that test exists.
+local function round2(n)
+  local sign = n < 0 and -1 or 1
+  return sign * math.floor(math.abs(n) * 100 + 0.5) / 100
+end
+
 function M._auditDelta()
   local a, b = M.audit.baseline, M.audit.current
   if not (a and b) or a == b then return nil end
   local d = { resists = {} }
   for _, k in ipairs({ "critRate", "critBonus", "celerity" }) do
     if type(a[k]) == "number" and type(b[k]) == "number" and b[k] ~= a[k] then
-      d[k] = b[k] - a[k]
+      d[k] = round2(b[k] - a[k])
     end
   end
   for k, v in pairs(b.resists or {}) do
     local base = (a.resists or {})[k]
-    if type(base) == "number" and v ~= base then d.resists[k] = v - base end
+    if type(base) == "number" and v ~= base then d.resists[k] = round2(v - base) end
   end
   return d
 end
@@ -237,7 +288,10 @@ end
 function M.auditSend(reset)
   if reset then M.audit.baseline, M.audit.baselineRun = nil, nil end
   M.audit.pending = os.time()
-  send("audit")
+  -- Echo-suppressed, matching `send("wade status", false)` in the same GO! cascade: this is
+  -- auto-sent once per run and the AUDIT block that follows is unmistakable, so echoing the word
+  -- "audit" into a combat log adds a line and tells the reader nothing.
+  send("audit", false)
 end
 
 -- Once per RUN, not per ripple: a baseline is a run-scoped fact, and re-asking every ripple would

@@ -174,7 +174,7 @@ RENDERER writes, AND the `colour = "name"` fields plus `*_COLOUR` table values a
 chooses. A colour name travels as a plain STRING whenever the module that picks it is separate from
 the one that draws it (`mnemosyne/011` -> `012`), so scanning tags alone audits the renderer and
 misses every name the picker chose -- exactly where `silver` would have got in. Run against named
-files only, never tree-wide: ~50 existing orange sites are grandfathered.
+files only, never tree-wide: ~50 existing orange sites are grandfathered. **It is NOT wired into CI**, unlike `check_orphans.py` -- usage strings put placeholder syntax inside real echo calls (`M.echo("Usage: mnem token <token>")`) and no regex separates a placeholder from a colour name, since the only difference is palette membership, which is the thing under test. A tree-wide gate would fail on correct files, and a gate that cries wolf gets switched off. Run it by hand against the files you add or change.
 
 **Verify which interpreter before blaming the syntax.** Local `luac` may be 5.4, which rejects
 unknown escapes like `[\[`; **Mudlet runs Lua 5.1, which silently maps them to the bare
@@ -993,12 +993,11 @@ swallowed `"Your options are simple: hit harder."` in testing, so a label is cap
 **Boon re-latch** (v4.7.188, corrected v4.7.192): every boon flag latches from the `BOON CLAIM` alias or a BOONS-list row, so a boon owned BEFORE its handling shipped -- or claimed outside the alias -- stays inert silently. `M._relatchBoons()` sends **`BOON CLAIMED`** once per run to re-latch all 33 at once (**corrected v4.7.203** -- it sent bare `BOONS` from v4.7.188, which is NOT a command: the game answers it with its syntax help, so the re-latch never re-latched anything and printed a syntax block into combat. Three passes touched the function reasoning about WHEN to send and never WHAT, and its test pinned the string `"boons"` without checking it was a real command. Unexplained syntax help in a combat log is always one of our commands being rejected), called from `M.onRipple` (every mode) AND both explorer entry points. Its guard lives on **`ataxiaTemp`**, not `ataxia.mnemosyne`: `ataxia` is serialized wholesale and `deepMerge` lets a disk value win, so a guard stored there would come back TRUE after a reload while the bare-global boon flags came back nil -- defeating the function on exactly the path it exists for. Deliberately NOT latched from boon DESCRIPTIONS (unlike the damage affixes): a boon description also appears on the OFFER screen, listing boons we declined.
 
 **The BONUSES panel (`ataxia.mnemosyne.bonuses`, files 011/012, v4.7.287, `mnem bonuses`).** Folds
-this run's claims into eight sections -- AFFIXES, BOONS, STATS, RESISTANCES, DMG BOOSTS, IMMUNE TO,
-ON-HIT PROCS, COSTS. A run's boons arrive one at a time across an hour, each announced once on a
+this run's claims into TEN sections, in render order -- AFFIXES, BOONS, STATS, OFFENSE, RESISTANCES, DMG BOOSTS, AUDIT (measured), IMMUNE TO, ON-HIT PROCS, COSTS. A run's boons arrive one at a time across an hour, each announced once on a
 screen that is gone a second later, so nothing could answer "what am I immune to, how much fire
 resistance do I have, what is my strength" -- `mnem boons` prints names with no arithmetic and the
 offer-screen immunity note (v4.7.224) says it ONCE. **The numbers are DERIVED FROM THE DESCRIPTION,
-not from a name table** (v4.7.264, v4.7.186): measured against the 297 described seed entries before
+not from a name table** (v4.7.264, v4.7.186): measured against the described seed entries before (297 at the time, 299 now)
 committing, procs parse 9/9, stats 18/22, resistances 11/16, so `M.BONUS_EXCEPTIONS` is **six
 entries against the community file's forty-seven** -- only sentences a regex provably cannot read
 (TWO NUMBERS OF OPPOSITE SIGN, `Earthen Will`'s "gain 15% physical ... lose 10% magical", where

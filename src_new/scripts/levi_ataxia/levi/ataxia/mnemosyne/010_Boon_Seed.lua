@@ -363,9 +363,13 @@ M.BOON_SEED = {
 -- KNOWN, so `mnem boondb` counts it in `total` but not in `described` and it shows up as an
 -- explicit hole to go and fill, without asserting anything we have not read.
 --
--- DECLARED AS A LIST, not written as empty rows inline, so the hole is auditable: the test suite
--- asserts that the set of undescribed seed entries is EXACTLY this list. An accidental omission
--- therefore still fails, while a deliberate one has to be admitted here first.
+-- DECLARED AS A LIST, not written as empty rows inline, so the hole is auditable. The test suite
+-- asserts BOTH DIRECTIONS but not a bijection: every undescribed entry must appear in this list
+-- (an accidental omission fails) and every name in this list must exist in the seed (a stale
+-- declaration fails). It does NOT assert that every name here is undescribed, because `Cavalry`
+-- is on the announcement's "new boons" list and already had text -- so the list has 28 names and
+-- 27 of them are actually holes. A comment claiming EXACTLY would invite a future reader to
+-- "tighten" the check and delete the one entry that documents that "new" is not always new.
 --
 -- Deliberately NOT extrapolated. Fire/Venom/Asphyxiation Mastery above share one obvious sentence
 -- shape and it would take a single line to generate the other five masteries from it -- which is

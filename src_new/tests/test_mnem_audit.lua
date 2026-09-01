@@ -105,6 +105,14 @@ describe("audit block parsing", function()
     expect(M._auditRow("Some New Thing:         7%").kind).toBe("resist")
   end)
 
+  -- A thousands separator used to truncate rather than reject: "1,234" parsed to 1. A confidently
+  -- WRONG number is the one outcome this module exists to prevent, so it is stripped before any
+  -- number is read.
+  it("reads a value carrying a thousands separator", function()
+    expect(M._auditRow("Critical Rate:          1,234").value).toBe(1234)
+    expect(M._auditRow("Fire:                   1,234%").value).toBe(1234)
+  end)
+
   it("returns nil for a block with no rows at all", function()
     expect(M._parseAudit({ "Audit records:", "----------" })).toBe(nil)
     expect(M._parseAudit(nil)).toBe(nil)
@@ -135,6 +143,34 @@ describe("baseline and delta", function()
     expect(math.floor(d.resists.Fire * 10 + 0.5)).toBe(200)  -- +20.0, float-safe
     expect(d.critRate).toBe(4)
     expect(d.resists.Psychic).toBe(nil)  -- unchanged types are absent, not zero
+  end)
+
+  -- FLOAT NOISE (deep review, v4.7.291). AUDIT prints one and two decimal places and subtracting
+  -- two such doubles produces binary garbage: `76.2 - 56.93` is `19.270000000000003` in Lua 5.1,
+  -- and `tostring` shows every digit. On the one panel section whose whole claim is that it is
+  -- MEASURED, printing that undermines exactly what it exists to provide. The earlier test here
+  -- dodged it with `math.floor(x * 10 + 0.5)` and left the DISPLAY path unrounded -- dodging a
+  -- float in a test while shipping it to the user is not testing the float.
+  it("rounds a delta rather than exposing binary noise", function()
+    reset()
+    local a = M._parseAudit(BLOCK)
+    a.resists.Fire = 56.93
+    M._auditRecord(a)
+    local b = M._parseAudit(BLOCK)
+    b.resists.Fire = 76.2
+    M._auditRecord(b)
+    expect(M._auditDelta().resists.Fire).toBe(19.27)   -- not 19.270000000000003
+  end)
+
+  it("rounds a NEGATIVE delta to the same precision", function()
+    reset()
+    local a = M._parseAudit(BLOCK)
+    a.resists.Cold = 76.2
+    M._auditRecord(a)
+    local b = M._parseAudit(BLOCK)
+    b.resists.Cold = 56.93
+    M._auditRecord(b)
+    expect(M._auditDelta().resists.Cold).toBe(-19.27)
   end)
 
   -- "No second reading yet" and "the boons bought nothing" are different answers. Returning a

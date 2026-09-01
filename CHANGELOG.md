@@ -2,6 +2,147 @@
 
 ---
 
+## 2026-09-01 - Deep review of v4.7.287-290, and two captured lines (v4.7.291)
+
+Four parallel reviewers over everything shipped this session. **Fourteen findings, all verified
+against the code before acting**; the three most serious were things the test suite could not have
+caught, and two of them are in the aggregation the `mnem bonuses` panel is read to trust.
+
+### CRITICAL -- an echoed boon counted its BASE once per claim
+
+`_recordClaim` inserts a row per claim EVENT and never dedupes, and `bonusTotals` folded a
+description in once per row. So a boon claimed twice contributed **base x claim count** -- correct
+only when a boon's echo happens to be an exact multiple of its base, which the catalogue
+contradicts:
+
+- **Reckless Rage** is base 10% / echo **15%**. Claimed twice it reported **+20%**.
+- **Furious Speed**'s echo text *drops the "20% resistance to all damage" clause entirely*. The
+  second claim was adding a resistance the upgraded form no longer grants -- a wrong FACT, not
+  merely a wrong number.
+
+`_claimedBoons` now returns one entry per BOON, and `_bonusDesc(name, echoes)` uses the seed's
+`echo` wording when we hold two or more. **Where no echo text is known the base counts ONCE and
+nothing is scaled** -- an invented multiplier is precisely the fabricated number this module
+exists to avoid.
+
+### CRITICAL -- live trigger and timer ids on the serialized namespace
+
+`M._auditTrig`/`M._auditTimer` were fields on `ataxia.mnemosyne`, which rides the wholesale-saved
+`ataxia` table. A disconnect inside the 2-3.5s capture window persists a live handle; on reload
+`deepMerge` restores it and `_auditCapture`'s first act is to `killTrigger` **whatever unrelated
+temp trigger inherited that integer**. That is this project's own documented "never serialize a
+tempTimer id" invariant (v4.7.192-194), and `_captureLines` already gets it right by keeping its
+handles as closure upvalues. Now file-scope locals. Two reviewers found this independently.
+
+### HIGH -- the audit baseline could adopt the previous run's numbers
+
+`M.audit` was cleared nowhere, and the guard was only `baselineRun == M.history.run`. On a
+BOOTSTRAPPED run (start line missed) that counter is not bumped until `onRipple` parses the async
+wade-status reply -- which lands *after* `GO!`, i.e. after `auditBaselineOnWade` has already asked.
+The stale number matched, no AUDIT was sent, and the last run's figures stood in as this run's
+baseline until ripple 2. Cleared on run start and on the confirmed end; a RESUME deliberately
+keeps its baseline, since re-baselining mid-dive would treat boons already claimed as the starting
+point. **An ordering hazard should not be the only thing a guard rests on.**
+
+### HIGH -- multi-type resistance sentences were mis-parsed, one of them silently
+
+- **Stout**: "an additional 10% magic, fire, cold, and poison resistance." The single-`%a+`
+  patterns returned nil, so **all four resistances vanished from the panel**.
+- **Shin Enhanced**: "10% resistance to fire, cold, electric, and magic damage." This one matched
+  and captured **only Fire** -- three of four dropped.
+- `magic` was not a key at all; only `magical` was. The catalogue uses both, so even the types that
+  did resolve left Magical missing -- a partial parse, the worst kind.
+
+Fixed by parsing the list. **The validation is the load-bearing half**: `([%a,%s]-)%s*resistance`
+will happily span most of a sentence, and against **Rose of Pain** it captured
+"faster, but you suffer ... and your fire" and reported **Fire +15** -- a number from an unrelated
+clause with the sign inverted. Only "and" and a trailing "damage" may sit between types; any other
+word means the capture ran past the list, and the parser falls through to the branch that reads the
+sentence correctly.
+
+### HIGH -- two conditional bonuses were counted as always-on
+
+- **Cavalry** states its condition FIRST -- "When you are mounted, ... you deal 10% more damage" --
+  and the detector only looked to the right of the word "damage".
+- **Furious Speed** is a **60-second proc at each ripple start**, held in `BONUS_EXCEPTIONS` as a
+  flat `Damage = 30`. The panel claimed +30% for whole ripples it did not apply to -- exactly the
+  failure `_dmgGenericFrom` refuses for *parsed* sentences, baked into the hand-written table
+  instead. Exceptions can now carry a `cond`.
+
+### MEDIUM -- a penalty the panel dropped
+
+**Rose of Pain**: "...and your fire resistance is **reduced** by 20%." No pattern read "reduced",
+and its exception had no `resist` field, so the penalty vanished. Parsed generically rather than
+pinned in the table -- a dropped penalty reports a defence we do not have.
+
+### Also fixed
+
+- **Float noise in the audit delta.** `76.2 - 56.93` is `19.270000000000003` and `tostring` shows
+  every digit -- on the one section whose whole claim is that it is *measured*. Rounded at the
+  source. **The rounding fix then had its own off-by-one for negatives** (`-19.27` -> `-19.28`),
+  caught by the negative-delta test written beside it.
+- **The audit capture had a silence timer, not a deadline.** It re-armed on every line, and it arms
+  right after `GO!` in a room where combat is starting -- output does not stop. Since the baseline
+  is first-wins-and-permanent, contamination would have been silent and lasted the run. A second
+  timer, armed once and never re-armed, plus a line cap.
+- `_auditRow` truncated at a thousands separator (`1,234` -> `1`) -- a confidently wrong number.
+- `send("audit")` now echo-suppressed, matching `send("wade status", false)` in the same cascade.
+- Trigger `078`'s YAML hierarchy did not match its siblings; nor did both new triggers below.
+
+### Documentation, which the fourth reviewer took apart
+
+Every count it challenged was wrong and is now corrected: the panel has **ten** sections, not eight
+(CLAUDE.md, `memory/mnemosyne.md` and `05-commands.md` all still listed the pre-OFFENSE,
+pre-AUDIT set); `BONUS_EXCEPTIONS` has **six** entries, not the "nine" its own docstring claimed;
+the seed is **326/299**, not the 297 snapshot quoted in three places. `010_Boon_Seed.lua` claimed
+the suite asserts the undescribed set is "EXACTLY" the declared list -- it asserts both directions
+but not a bijection, and saying otherwise invites a future reader to "tighten" the check and delete
+the one entry documenting that "new" is not always new.
+
+**Stale Reaper references were left in a file this session edited.** `03-parsing-triggers.md` still
+described triggers 023/024 as live and carried the `reaperOnWade()` ordering constraint, with the
+new rebalance section added directly beneath them. Also `01-architecture.md`, `MEMORY.md`,
+`memory/basher.md` and `battlerage-pve.md`. All corrected. Two are kept as *annotated historical
+examples*: `bug-patterns.md`'s per-run-accumulator lesson is still live for the next counter, and
+the 2026-08-01 archived Codex review is a dated snapshot that would be falsified by editing.
+
+**`check_colours.py` is NOT CI-enforced, and that is now stated** rather than implied by presenting
+it beside `check_orphans.py`. Wiring it tree-wide was attempted and reverted: usage strings put
+placeholder syntax inside real echo calls -- `M.echo("Usage: mnem token <token>")` -- and no regex
+separates a placeholder from a colour name, because the only difference is palette membership,
+which is the thing under test. A gate that cries wolf gets switched off. The tool did gain three
+real fixes: it was blind to CamelCase (`<NavajoWhite>` matched nothing), it read prose in comments,
+and it now only reads tags from lines carrying a colour call.
+
+### Two captured lines
+
+**The wade stone tells you what the next offer will be** (`highlighting/059`), bold gold:
+
+> You cast the wade stone across the river Mnemosyne, ... your next boon offering shall be tailored
+> to **Legendary** Boons.
+
+The category is CAPTURED, not enumerated (`tailored to (.+?) [Bb]oons`) -- verified against
+Legendary/Offence/Defence/Utility and a two-word category. Two patterns, because at ~190 characters
+that line wraps. **The end fragment was first written fifty characters long and did not match the
+tail on its own**, so a break inside that clause would have lost the category while the line still
+looked highlighted; it is now the shortest fragment that still carries the capture.
+
+**"Your falcon is too far away for you to command like that."** (`runie_dom/022`) sends
+`<pet> recall`, and the existing trigger `021` handles the drop and order-follow. For a Runewarden
+this silently killed the free falcon rake for the rest of a fight: it costs no balance, so nothing
+noticed, and there is no fire line to be missing -- only a refusal nobody read. The pet is taken
+from the line but acting on it is gated on recall syntax **proven in-tree**; a Paladin's eagle warns
+once rather than guessing. 10s debounce, since the basher attempts the rake every round. Verified
+that a refused rake does not burn its cooldown -- `falconRakeReady` is cleared by the FIRE line.
+
+### Verification
+
+**1696 tests** (up from 1683). **Eighteen break-backs across the session's fixes**, each failing its
+named test. Two of my own fixes were wrong on first write and caught by their own tests: the
+negative rounding, and a resistance list pattern that over-matched a whole sentence.
+
+---
+
 ## 2026-09-01 - AUDIT: the game's own numbers, and something that can prove us wrong (v4.7.290)
 
 User: *"Audit can be used in the very beginning to also try and track resistances and critical rate

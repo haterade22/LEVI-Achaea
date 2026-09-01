@@ -3,6 +3,8 @@ type: trigger
 name: Mnemosyne Audit Records
 hierarchy:
 - Levi_Ataxia
+- For Levi
+- leviticus
 - Ataxia
 - Mnemosyne
 attributes:

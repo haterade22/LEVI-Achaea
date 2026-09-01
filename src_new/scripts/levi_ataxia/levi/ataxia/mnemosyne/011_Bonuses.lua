@@ -33,15 +33,20 @@ packageName: ''
     **parse the sentence, because the sentence always names its own numbers, and a name table
     goes stale on the entry after the last one someone added.**
 
-    Measured against `M.BOON_SEED` (297 described boons) before committing to it:
+    Measured against `M.BOON_SEED` before committing to it. The counts below are the SNAPSHOT
+    THEY WERE TAKEN FROM -- 297 described entries, pre-rebalance. The catalogue is 326/299 as
+    of the 2026-09-01 changes; the ratios are what the argument rests on, not the totals, and
+    re-measuring is a script away (`tools/` scratch, or just count in `010_Boon_Seed.lua`):
 
         battlerage procs   9/9  parse cleanly
         stat bonuses      18/22 parse cleanly
         resistances       11/16 parse cleanly
 
-    So the exceptions below are the residue, not the design -- nine entries against forty-seven,
-    each with a note saying WHY the sentence cannot carry it. Do not "tidy" them back into prose
-    parsing; they are here because a regex provably cannot tell the two numbers apart.
+    So the exceptions below are the residue, not the design -- SIX entries against the community
+    file's forty-seven, each with a note saying WHY the sentence cannot carry it. Do not "tidy"
+    them back into prose parsing; they are here because a regex provably cannot tell the two
+    numbers apart. (This said "nine" from v4.7.287 until a doc review counted them: the plan
+    estimated nine and the implementation needed six. A count in a comment is a claim.)
 ]]--
 
 local M = ataxia.mnemosyne
@@ -67,7 +72,11 @@ M.BONUS_EXCEPTIONS = {
   ["Good Jera"]         = { stat = { Strength = 1, Constitution = 1 } },
   ["Rose of Pain"]      = { stat = { Intelligence = 3, Speed = 15 } },
   ["Dungeoneer"]        = { stat = { Damage = 5, Speed = 5 } },
-  ["Furious Speed"]     = { stat = { Damage = 30 } },
+  -- CONDITIONAL, not permanent: "infuses you FOR 60 SECONDS at the start of each new ripple".
+  -- Held as a flat +30% it overstated the panel's headline for all but the first minute of every
+  -- ripple -- the exact "conditional counted as unconditional" failure `_dmgGenericFrom` refuses
+  -- for parsed sentences, which had been baked into the hand-written table instead.
+  ["Furious Speed"]     = { stat = { Damage = 30 }, cond = "60s at each ripple start" },
 }
 
 local STAT_NAMES = {
@@ -88,6 +97,10 @@ local RESIST_TYPES = {
   physical = "Physical", magical = "Magical", fire = "Fire", cold = "Cold",
   poison = "Poison", asphyxiation = "Asphyxiation", electric = "Electric", psychic = "Psychic",
   venom = "Poison", arcane = "Arcane",
+  -- The catalogue says "magic" as often as "magical" ("10% magic, fire, cold, and poison
+  -- resistance"), and only `magical` was a key -- so Stout and Shin Enhanced lost their
+  -- Magical row while their other types resolved fine. A partial parse is the worst kind.
+  magic = "Magical",
 }
 
 -- The DISTINCT display names, which is not the same list as the keys above -- `poison` and `venom`
@@ -109,15 +122,35 @@ end
 
 -- Every boon claimed in the CURRENT run, with how many copies. Reads the same history the
 -- `mnem boons` report does, so the window and the report can never disagree.
+-- ONE ENTRY PER BOON, NOT PER CLAIM (deep review, v4.7.291). `_recordClaim` inserts a row for
+-- every claim EVENT and never dedupes, so a boon echoed twice appeared twice here -- and
+-- `bonusTotals` folded its description in once per row. The result was the base value multiplied
+-- by the claim count, which is right only when a boon's echo happens to be an exact multiple of
+-- its base. `Reckless Rage` is base 10% / echo 15%: claimed twice it reported +20% instead of
+-- +15%. `Furious Speed` is worse -- its echo text DROPS the "20% resistance to all damage" clause
+-- entirely, so the second claim was adding a resistance the upgraded form no longer grants.
+-- The echo count is kept, because it selects the echo WORDING below.
 function M._claimedBoons()
-  local out = {}
+  local out, seen = {}, {}
   local h = M.history
   if not h or type(h.claims) ~= "table" then return out end
   for _, c in ipairs(h.claims) do
     if c.run == h.run and type(c.name) == "string" then
-      out[#out + 1] = { name = c.name, echoes = tonumber(c.echoes) or 1, rarity = c.rarity }
+      local rec = seen[c.name]
+      if rec then
+        rec.echoes = math.max(rec.echoes, tonumber(c.echoes) or 1)
+        rec.count = rec.count + 1
+        rec.rarity = rec.rarity or c.rarity
+      else
+        rec = { name = c.name, echoes = tonumber(c.echoes) or 1, count = 1, rarity = c.rarity }
+        seen[c.name] = rec
+        out[#out + 1] = rec
+      end
     end
   end
+  -- `echoes` is what the claim RECORD said; `count` is how many times we saw it claimed. They
+  -- normally agree, and where they do not the larger is the safer read of "how many do we hold".
+  for _, r in ipairs(out) do r.echoes = math.max(r.echoes, r.count) end
   table.sort(out, function(a, b) return a.name < b.name end)
   return out
 end
@@ -125,7 +158,16 @@ end
 -- The wording for a boon, best source first: this run's own claim record (the live offer text),
 -- then the all-time library, then the seed. Same ladder `_warnAttuneOnClaim` uses -- and the
 -- fallback is load-bearing there for the same reason, so it is not belt-and-braces here either.
-function M._bonusDesc(name)
+function M._bonusDesc(name, echoes)
+  -- AN ECHOED BOON HAS ITS OWN SENTENCE. 38 seed entries carry `echo`, and it is not a multiplier
+  -- of the base: `Reckless Rage` goes 10% -> 15%, and `Furious Speed`'s echo drops a whole clause.
+  -- So when we hold two or more, that wording IS the description -- and where we have no echo text
+  -- the base is used ONCE and nothing is scaled, because a multiplier we invented would be exactly
+  -- the fabricated number this module exists to avoid.
+  if (tonumber(echoes) or 1) >= 2 then
+    local seed = M.BOON_SEED and M.BOON_SEED[name]
+    if seed and seed.echo and seed.echo ~= "" then return seed.echo end
+  end
   local _, desc = M._histBoonInfo(name)
   if desc and desc ~= "" then return desc end
   local lib = M.boonInfo and M.boonInfo(name)
@@ -144,16 +186,63 @@ end
 --   "Your poison resistance is increased by 66% but ..."
 -- The type and the number swap places between them, which is why this is three patterns rather
 -- than one clever one.
+-- Every damage type named in a fragment. A LIST is as common as a single type -- "an additional
+-- 10% magic, fire, cold, and poison resistance" (Stout), "10% resistance to fire, cold, electric,
+-- and magic damage" (Shin Enhanced) -- and the single-`%a+` patterns this used to have returned
+-- nil for the first (all four resistances vanished from the panel) and captured only Fire from
+-- the second (three of four silently dropped). Non-type words in the fragment ("and", "damage")
+-- simply are not in the table, so no separator handling is needed.
+-- Only "and" and a trailing "damage" may sit between the types; ANY other word means the capture
+-- ran past the list and this is not a type list at all. That check is load-bearing: the pattern
+-- `([%a,%s]-)%s*resistance` will happily span most of a sentence, and against Rose of Pain
+-- ("...recovers 15% faster, but you suffer from permanent hallucinations, and your fire
+-- resistance is reduced by 20%") it captured "faster, but you suffer ... and your fire" and
+-- reported Fire +15 -- a number from an unrelated clause, with the sign inverted. Rejecting on an
+-- unknown word makes the parser fall through to the branch that reads the sentence correctly.
+local LIST_FILLER = { ["and"] = true, ["damage"] = true }
+
+local function typesIn(fragment)
+  local found = {}
+  for w in (fragment or ""):gmatch("%a+") do
+    local lw = w:lower()
+    local t = RESIST_TYPES[lw]
+    if t then
+      found[#found + 1] = t
+    elseif not LIST_FILLER[lw] then
+      return {}   -- not a type list; let a later pattern have the sentence
+    end
+  end
+  return found
+end
+
 function M._resistFrom(desc)
   if type(desc) ~= "string" then return nil end
   local out = {}
-  local n, t = desc:match("(%d+)%%%s+resistance to%s+(%a+)")
-  if not n then n, t = desc:match("(%d+)%%%s+(%a+)%s+resistance") end
-  if not n then
-    t, n = desc:match("(%a+)%s+resistance is increased by%s+(%d+)%%")
+
+  -- Positive grants, three wordings, each allowing a comma list where the type sits.
+  local n, list = desc:match("(%d+)%%%s+resistance to%s+([%a,%s]+)")
+  if not n then n, list = desc:match("(%d+)%%%s+([%a,%s]-)%s*resistance") end
+  if n then
+    local types = typesIn(list)
+    if #types > 0 then
+      for _, t in ipairs(types) do out[t] = tonumber(n) end
+      return out
+    end
   end
+
+  local t
+  t, n = desc:match("(%a+)%s+resistance is increased by%s+(%d+)%%")
   if n and t and RESIST_TYPES[t:lower()] then
     out[RESIST_TYPES[t:lower()]] = tonumber(n)
+    return out
+  end
+
+  -- "...and your fire resistance is reduced by 20%." (Rose of Pain). Parsed generically rather
+  -- than pinned in BONUS_EXCEPTIONS: a penalty the panel drops reports a defence we do not have,
+  -- and the sentence names its own number here perfectly well.
+  t, n = desc:match("(%a+)%s+resistance is reduced by%s+(%d+)%%")
+  if n and t and RESIST_TYPES[t:lower()] then
+    out[RESIST_TYPES[t:lower()]] = -tonumber(n)
     return out
   end
 
@@ -205,7 +294,8 @@ end
 
 -- GENERIC outgoing damage: the number a player actually asks for, and it ADDS.
 --
--- Measured across the 297 described entries before writing a pattern, and the measurement is the
+-- Measured across the described entries before writing a pattern (297 of them at the time; 299
+-- after the 2026-09-01 rebalance), and the measurement is the
 -- whole design. 35 boons mention dealing more damage; only SEVEN are the thing you would want
 -- summed into one figure:
 --
@@ -245,10 +335,16 @@ function M._dmgGenericFrom(desc)
   -- The condition, if the sentence carries one. Captured rather than merely detected: "conditional
   -- +20%" is nearly useless and "+20% while chrono blur is up" is actionable, and the clause is
   -- sitting right there in the text we already have.
+  -- The clause can come BEFORE the number as easily as after it: `Cavalry` opens "When you are
+  -- mounted, ... you deal 10% more damage", and looking only to the right of the word "damage"
+  -- read that as unconditional and folded a mounted-only bonus into the always-on total.
   local cond = desc:match("damage%s+(while[^.]+)")
       or desc:match("damage%s+(when[^.]+)")
       or desc:match("damage%s+(against[^.]+)")
       or desc:match("damage%s+(to enemies[^.]+)")
+      or desc:match("^([Ww]hen [^,]+),")
+      or desc:match("^([Ww]hile [^,]+),")
+      or desc:match("damage%s+(on the ground)")
   return { pct = tonumber(n), cond = cond }
 end
 
@@ -285,7 +381,7 @@ function M.bonusTotals()
   local offense = { total = 0, rows = {}, conditional = {} }
 
   for _, b in ipairs(M._claimedBoons()) do
-    local desc = M._bonusDesc(b.name)
+    local desc = M._bonusDesc(b.name, b.echoes)
     local ex = M.BONUS_EXCEPTIONS[b.name]
 
     -- `Damage` is a PERCENTAGE, not a stat, so it is routed to the offense total rather than
@@ -293,8 +389,13 @@ function M.bonusTotals()
     -- carrying two numbers of opposite meaning), which is why it is peeled off here.
     local st = (ex and ex.stat) or M._statFrom(desc)
     if st and st.Damage then
-      offense.total = offense.total + st.Damage
-      offense.rows[#offense.rows + 1] = { name = b.name, pct = st.Damage }
+      if ex and ex.cond then
+        offense.conditional[#offense.conditional + 1] =
+          { name = b.name, pct = st.Damage, cond = ex.cond }
+      else
+        offense.total = offense.total + st.Damage
+        offense.rows[#offense.rows + 1] = { name = b.name, pct = st.Damage }
+      end
       st = (function(t) local c = {}; for k, v in pairs(t) do if k ~= "Damage" then c[k] = v end end; return c end)(st)
     end
     addInto(stats, st)

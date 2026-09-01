@@ -58,8 +58,10 @@ mid-ripple; gating it on `inMnem()` would blank it exactly when you are reading 
 client where Geyser failed to build it is the only surface there is. One source, two surfaces --
 `B.report()` and `B.render()` both walk `M.bonusSections()`, so they cannot disagree.
 
-Sections, in order: AFFIXES, BOONS (rarity-coloured, `INERT` when a Shaman attunement is missing),
-STATS, **OFFENSE**, RESISTANCES, DMG BOOSTS, IMMUNE TO, ON-HIT PROCS, COSTS.
+Sections, in render order: AFFIXES, BOONS (rarity-coloured, `INERT` when a Shaman attunement is
+missing), STATS, **OFFENSE**, RESISTANCES, DMG BOOSTS, **AUDIT (measured)**, IMMUNE TO,
+ON-HIT PROCS, COSTS -- ten of them. AUDIT sits last of the numeric blocks because it is the check,
+not the headline; see the AUDIT section above.
 
 **OFFENSE** (v4.7.289) prints `TOTAL +N% damage` followed by the boons that make it up, so the
 figure is auditable rather than asserted. Only ALWAYS-ON generic bonuses reach the total:

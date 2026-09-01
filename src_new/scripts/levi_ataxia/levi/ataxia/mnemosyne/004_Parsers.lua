@@ -133,6 +133,14 @@ end
 
 -- "You begin to wade out into the depths of the Mnemosyne..."
 function M.onRunStart()
+  -- Cleared on the way IN as well as on the confirmed way out, and deliberately ABOVE the
+  -- `_auto()` gate: telemetry is off by default, so anything below it never runs for most users
+  -- and a run-scoped fact would carry over between dives. A RESUME keeps the baseline -- it is
+  -- the same server-side run, and re-baselining mid-dive would measure the boons already claimed
+  -- as if they were the starting point.
+  if M.audit and not (M.run and M.run.paused) then
+    M.audit.baseline, M.audit.baselineRun, M.audit.current = nil, nil, nil
+  end
   if not M._auto() then return end
   if M.run.paused then
     -- Re-entering a run we PAUSED: it's the same wade, so resume the existing server run rather
@@ -240,6 +248,14 @@ function M.onRunEnd()
     ataxiaTemp.kaiUnleashedAt = nil -- the burst cooldown stamp dies with it
     ataxiaTemp.kaiChokePendingAt = nil -- ...and the unconfirmed-choke retry guard
   end
+  -- THE AUDIT BASELINE IS PER-RUN AND WAS NEVER CLEARED (deep review, v4.7.291). It was guarded
+  -- only by `baselineRun == M.history.run`, and on a BOOTSTRAPPED run (start line missed) the
+  -- history counter is not bumped until `onRipple` parses the async wade-status reply -- which
+  -- lands AFTER `GO!`, i.e. after `auditBaselineOnWade` has already asked. So the check matched
+  -- the previous run's number, no fresh AUDIT was sent, and the last run's figures stood in as
+  -- this run's baseline until ripple 2. Clearing here makes the guard belt-and-braces instead of
+  -- the only thing holding it up: an ordering hazard should not be the sole defence.
+  if M.audit then M.audit.baseline, M.audit.baselineRun, M.audit.current = nil, nil, nil end
   -- Clear the pause flag UNCONDITIONALLY (like the boon flags above), not only via the
   -- _inRun()-gated endRun()->_resetRun(): with telemetry off (the shipped default) that path
   -- never runs, so a paused-then-ended run would leave paused=true and misfire the NEXT fresh

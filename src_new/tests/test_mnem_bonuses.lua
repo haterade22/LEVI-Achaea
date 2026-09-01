@@ -36,9 +36,9 @@ local function reset()
   M._testImmune, M._testCosts, M._testAttuned = nil, nil, nil
 end
 
-local function claim(name, desc, rarity, echoes)
+local function claim(name, desc, rarity, echoes, echoDesc)
   table.insert(M.history.claims, { run = 1, name = name, rarity = rarity, echoes = echoes })
-  M.BOON_SEED[name] = { description = desc, rarity = rarity }
+  M.BOON_SEED[name] = { description = desc, rarity = rarity, echo = echoDesc }
 end
 
 local function sectionRows(title)
@@ -258,6 +258,114 @@ describe("all-damage resistance", function()
     local r = M.bonusTotals().resists
     expect(r.Physical).toBe(0)    -- +10 all, -10 physical
     expect(r.Fire).toBe(10)
+  end)
+end)
+
+-- ─── Echoes: a second copy is a different sentence, not a second helping ────
+--
+-- `_recordClaim` inserts a row per claim EVENT and never dedupes, so the aggregation used to fold
+-- a boon's description in once per row -- base value times claim count. That is right only when a
+-- boon's echo happens to be an exact multiple of its base, and the real catalogue disagrees.
+
+describe("echoed boons", function()
+  it("uses the ECHO wording, not the base counted twice", function()
+    reset()
+    -- Reckless Rage, real seed text: base 10%, echo 15%. Counting the base twice gives 20%.
+    claim("Reckless Rage", "Deal 10% more damage but you can no longer benefit from shields.",
+          "uncommon", 1, "Deal 15% more damage but you can no longer benefit from shields.")
+    table.insert(M.history.claims, { run = 1, name = "Reckless Rage", rarity = "uncommon", echoes = 2 })
+    expect(M.bonusTotals().offense.total).toBe(15)
+  end)
+
+  -- Furious Speed's echo DROPS the "20% resistance to all damage" clause. Counting the base twice
+  -- credited a resistance the upgraded form no longer grants at all -- worse than a wrong number,
+  -- a wrong FACT.
+  it("does not keep a clause the echo dropped", function()
+    reset()
+    claim("Furious Speed",
+          "Granting you 30% increased damage, 5 additional celerity, and 20% resistance to all damage.",
+          "legendary", 1,
+          "Granting you 60% increased damage and 5 additional celerity.")
+    table.insert(M.history.claims, { run = 1, name = "Furious Speed", rarity = "legendary", echoes = 2 })
+    expect(M.bonusTotals().resists.Fire).toBe(nil)
+  end)
+
+  -- With no echo text we know nothing about the upgrade, so the base counts ONCE and nothing is
+  -- scaled. An invented multiplier is exactly the fabricated number this module exists to avoid.
+  it("counts an unknown echo ONCE rather than inventing a multiplier", function()
+    reset()
+    claim("Hidden Gem", "You deal 1% bonus damage.", "common", 1)
+    table.insert(M.history.claims, { run = 1, name = "Hidden Gem", rarity = "common", echoes = 2 })
+    expect(M.bonusTotals().offense.total).toBe(1)
+  end)
+
+  it("lists an echoed boon once, marked, rather than twice", function()
+    reset()
+    claim("Hidden Gem", "You deal 1% bonus damage.", "common", 1)
+    table.insert(M.history.claims, { run = 1, name = "Hidden Gem", rarity = "common", echoes = 2 })
+    local rows = sectionRows("BOONS")
+    expect(#rows).toBe(1)
+    expect(rows[1].text:find("x2", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
+-- ─── Resistance sentences that name more than one type ──────────────────────
+
+describe("multi-type resistance sentences", function()
+  -- Stout, real seed text. The single-type pattern returned nil here, so ALL FOUR resistances
+  -- vanished from the panel -- a silent nothing, which is the failure mode this codebase is
+  -- worst at noticing.
+  it("reads a comma list in the 'N% <list> resistance' form", function()
+    local r = M._resistFrom("Your dwarven heritage grants you an additional 10% magic, fire, cold, and poison resistance.")
+    expect(r.Magical).toBe(10)
+    expect(r.Fire).toBe(10)
+    expect(r.Cold).toBe(10)
+    expect(r.Poison).toBe(10)
+  end)
+
+  -- Shin Enhanced. This one DID match before -- and captured only Fire, dropping three of four.
+  it("reads a comma list in the 'resistance to <list> damage' form", function()
+    local r = M._resistFrom("While in the Shin trance you gain an additional 10% resistance to fire, cold, electric, and magic damage.")
+    expect(r.Fire).toBe(10)
+    expect(r.Cold).toBe(10)
+    expect(r.Electric).toBe(10)
+    expect(r.Magical).toBe(10)
+  end)
+
+  it("still reads a single type, and still refuses prose with no type", function()
+    expect(M._resistFrom("Gain 25% resistance to electric damage.").Electric).toBe(25)
+    expect(M._resistFrom("You are immune to the hellsight affliction.")).toBe(nil)
+  end)
+
+  -- Rose of Pain: "...and your fire resistance is reduced by 20%." Parsed generically rather than
+  -- pinned in the exceptions table -- a penalty the panel drops reports a defence we lack.
+  it("reads a REDUCED resistance as a negative", function()
+    local r = M._resistFrom("Your intelligence is increased by 3, and your equilibrium recovers 15% faster, but you suffer from permanent hallucinations, and your fire resistance is reduced by 20%.")
+    expect(r.Fire).toBe(-20)
+  end)
+end)
+
+-- ─── Conditions that come BEFORE the number ─────────────────────────────────
+
+describe("leading conditional clauses", function()
+  -- Cavalry opens with its condition, so looking only to the right of the word "damage" read a
+  -- mounted-only bonus as always-on.
+  it("catches a condition stated before the damage clause", function()
+    reset()
+    claim("Cavalry", "When you are mounted, you gain 2 celerity and you deal 10% more damage, but you can no longer walk normally.")
+    local O = M.bonusTotals().offense
+    expect(O.total).toBe(0)
+    expect(O.conditional[1].cond:find("mounted", 1, true) ~= nil).toBeTrue()
+  end)
+
+  -- Furious Speed is a 60-second proc at each ripple start, held in the exceptions table with no
+  -- expiry -- so the panel claimed a flat +30% for whole ripples it did not apply to.
+  it("keeps an exception's conditional bonus out of the total", function()
+    reset()
+    claim("Furious Speed", "The fury of the Skylord infuses you for 60 seconds at the start of each new ripple, granting you 30% increased damage.", "legendary")
+    local O = M.bonusTotals().offense
+    expect(O.total).toBe(0)
+    expect(O.conditional[1].name).toBe("Furious Speed")
   end)
 end)
 

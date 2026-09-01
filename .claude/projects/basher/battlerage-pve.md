@@ -153,7 +153,7 @@ is only a sanity check.
 kills/hr + non-crit dmg/min, ABBA interleaving, corruption guards for stats-reset/death/
 SYSUPDATE) is designed but intentionally NOT built — the probe is expected to settle the
 question first. Note if it is ever built: **Mnemosyne is disqualified as a trial venue**
-(Reaper's +1%/kill drift, per-run boon rosters, ripple-scaled mob mixes).
+(per-run boon rosters, ripple-scaled mob mixes; Reaper's +1%/kill drift was the original example and that boon was deleted from the game on 2026-09-01).
 
 ## Cooldown truth — the game's own ready lines (v4.7.167)
 
