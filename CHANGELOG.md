@@ -2,6 +2,113 @@
 
 ---
 
+## 2026-09-01 - What are our boons actually GIVING us? (v4.7.287)
+
+`mnem bonuses` -- a new panel (`mnemosyne/011_Bonuses.lua` + `012_Bonuses_Window.lua`) that folds
+this run's claimed boons into the eight things worth knowing at a glance: AFFIXES, BOONS,
+STATS, RESISTANCES, DMG BOOSTS, IMMUNE TO, ON-HIT PROCS, COSTS.
+
+The data was all there and none of it was readable. A run's boons arrive one at a time across an
+hour, each announced once on a screen that is gone a second later; the offer-screen immunity note
+(v4.7.224) says it ONCE, at the moment of choosing, and `mnem boons` prints a flat list of names
+with no arithmetic. Nothing could answer "what am I immune to right now, how much fire resistance
+do I have, what is my strength".
+
+Ported in DESIGN, not in code, from a community window (`immunities_window.lua`) -- so CLAUDE.md's
+"Porting Foreign Combat Scripts" checklist applied, and its findings are the valuable half.
+
+### DERIVED FROM THE DESCRIPTION, NOT FROM A NAME TABLE
+
+The community file keeps ~47 hand-written `name -> amount` entries. Our house rule says otherwise
+(v4.7.264 attune-gating, v4.7.186 damage-suppression affixes): **parse the sentence, because the
+sentence always names its own numbers, and a name table goes stale on the entry after the last one
+someone added.** Measured against `M.BOON_SEED` (297 described boons) BEFORE committing to it:
+battlerage procs 9/9 parse cleanly, stats 18/22, resistances 11/16.
+
+So `M.BONUS_EXCEPTIONS` is the residue, not the design -- **six entries against forty-seven**, each
+carrying a note saying why a regex provably cannot read it. Two shapes end up there: TWO NUMBERS OF
+OPPOSITE SIGN (`Earthen Will`: "Gain 15% physical resistance, but lose 10% magical resistance" --
+taking the first is how you report a penalty as a bonus, the gear-audit `generate N% less` trap of
+v4.7.208), and TWO STATS SHARING ONE NUMBER (`Good Jera`).
+
+### Four porting findings, three of which would have shipped broken
+
+1. **`silver` IS NOT IN OUR COLOUR TABLE.** `007_Custom_Colour_Table.lua` WHOLESALE REPLACES
+   Mudlet's palette, and CHANGELOG v4.7.136 names `silver` specifically as the plausible-but-absent
+   name that makes the render throw. The community file uses it for Physical resistance; we use
+   `light_grey`. In a panel that redraws on every claim, one bad name kills the whole window.
+2. **Its rarity palette uses `orange` for epic** -- present, but the orange family is RESERVED for
+   new code by user rule. Substituted `gold`.
+3. **`Careless Whisperer` disagrees with our seed.** The community file maps it to Cold +10; our
+   seed says "immune to masochism, hallucinations, and paranoia". One of the two is wrong and we
+   have not confirmed which, so it is **deliberately absent from the exceptions** and contributes
+   no resistance row rather than a guessed one.
+4. **Fire / Venom / Asphyxiation Mastery were absent from our seed entirely** -- added, and
+   commented **SECOND-HAND** (taken from the community file, not from an offer screen we captured),
+   the same honesty marker as the v4.7.278 boon-claim confirmation line.
+
+### Design calls worth keeping
+
+- **The eight sections are pure, the window is not.** `011` returns plain tables and touches no
+  Geyser, so it is unit-tested; `012` is `Adjustable.Container` + a `Geyser.MiniConsole` and is
+  not -- exactly the `005_Ripple_Map` / `006_Ripple_Map_Window` split. A MiniConsole rather than N
+  labels because the row count GROWS with every claim, and a console scrolls, wraps and takes
+  cecho tags for free.
+- **"All damage" folds into every TYPE** rather than getting its own row: at the point of use
+  "+15% to everything" and "+15% fire" are the same fact, and a reader comparing two rows should
+  not have to add a hidden third.
+- **On-hit procs are gated on the literal phrase "your attacks."** The same "chance to afflict the
+  target with" clause also covers ABILITY-SPECIFIC procs (the draconic blast breaths, `scream`,
+  `confront`), which fire only when you use that one ability. Folding them together would read as
+  though a Dragon's blast chance applied to ordinary swings.
+- **Type damage boosts are kept OUT of the stat totals.** A Damage stat lifts everything; a Fire
+  boost lifts one type. Merging would tell a Blademaster his void damage was up when only his fire
+  was.
+- **INERT is three-state.** A Shaman boon whose spirit is not attuned is MARKED, not hidden -- a
+  boon you hold and cannot use is the one most worth seeing -- but `nil` means "cannot tell"
+  (non-Shaman, or SPIRIT BINDINGS never read) and must never render as INERT. A confident wrong
+  answer on a panel is worse than a blank.
+- **COSTS is a section.** Every other one is upside, and a panel that shows only upside lies by
+  arrangement.
+- **The panel is NOT gated on `inMnem()`**, unlike the ripple map. Boons persist for the whole run
+  and it is as useful on the riverbank deciding whether to dive again as it is mid-ripple.
+- **Bare `mnem bonuses` REPORTS rather than toggling** (unlike `mnem map`): the console fallback
+  keeps the aggregation readable with the panel off, or in a client where Geyser failed to build.
+  One source, two surfaces.
+- The empty panel **says why it is empty** -- a blank panel and a broken panel look identical, and
+  this one is legitimately blank for most of a session.
+
+### `tools/check_colours.py` -- new
+
+Asserts every colour name a file chooses exists in `007_Custom_Colour_Table.lua`, and that none is
+in the reserved orange family. **It scans two things, and the second is the point:** the `<tag>` /
+`fg("name")` forms a RENDERER writes, AND the `colour = "name"` fields plus `*_COLOUR` table values
+an AGGREGATOR chooses. A colour name travels as a plain STRING whenever the module that picks it is
+separate from the module that draws it -- `011` -> `012` -- so scanning tags alone would audit the
+renderer and miss every name the picker chose, which is exactly where `silver` would have got in.
+Run against named files only, never tree-wide, because ~50 existing orange sites are grandfathered.
+
+### Verification
+
+18 new tests in `src_new/tests/test_mnem_bonuses.lua` (1658 total, all passing). **Eight
+break-backs, each failing its named test** -- the exceptions, the All-damage fold, the "your
+attacks" gate, highest-vs-last proc, the three-state inert, run-scoping of claims, the stats/dmg
+separation, and empty-section suppression. Plus a break-back of the colour audit itself against
+both `silver` and `orange`.
+
+One break-back initially PASSED and is worth recording: `math.max` reverted to a plain assignment
+agreed with the test, because boons fold in SORTED order and the larger chance happened to sort
+last. The names in that test are now chosen so the bigger number is seen FIRST. **An assertion that
+cannot distinguish the two implementations is not testing either of them** -- the same shape as the
+v4.7.282 funnel timer.
+
+**Files:** new `mnemosyne/011_Bonuses.lua`, `mnemosyne/012_Bonuses_Window.lua`,
+`tests/test_mnem_bonuses.lua`, `tools/check_colours.py`; edited `mnemosyne/003_Commands.lua`
+(`mnem bonuses`, help row), `mnemosyne/004_Parsers.lua` (refresh on claim + ripple),
+`mnemosyne/010_Boon_Seed.lua` (three Mastery entries).
+
+---
+
 ## 2026-08-20 - Two crit-proc boon lines, and a wrap that no single pattern can match (v4.7.286)
 
 Highlight-only, by instruction. Both boons were already in the seed catalogue

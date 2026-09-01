@@ -69,6 +69,7 @@ function M.help()
     { "mnem test", "Ping /health to check connectivity" },
     { "mnem debug", "Toggle verbose debug echoes" },
     { "mnem map [on|off|status]", "Toggle / diagnose the per-ripple mini-map" },
+    { "mnem bonuses [on|off]", "Panel: what this run's boons are actually giving us" },
     { "mnem explore [on|off|status]", "Auto-sweep the 4x4, clear rooms, stop at the boon screen" },
     { "mnem explore why", "Why is the sweep not moving? Per-exit refusal reasons" },
     { "mnem swarm [on|off|assess <n>|deep <r> <n>|icewall|kite|panic|escape|panicat|escapeat|recoverat]", "Multi-mob tactics + low-HP escape (fly/retreat instead of shield-in-place)" },
@@ -133,6 +134,19 @@ function M.command(rest)
   elseif cmd == "debug" then
     c.debug = not c.debug
     M.echo("Debug " .. (c.debug and "<green>ON" or "<grey>off") .. ".")
+  elseif cmd == "bonuses" or cmd == "bonus" then
+    -- Bare `mnem bonuses` REPORTS rather than toggling, unlike `mnem map`. The panel is a
+    -- reference surface you leave up or down for a whole session, so making the bare word flip
+    -- it would be the wrong default -- and the console report is the useful answer to someone
+    -- who just wants to look once. `on`/`off` do the toggling explicitly.
+    local B = ataxia.mnemosyne.bonuses
+    if B then
+      if arg == "on" or arg == "off" then
+        if B.toggle then B.toggle(arg == "on") end
+      elseif B.report then
+        B.report()
+      end
+    end
   elseif cmd == "map" then
     if ataxia.mnemosyne.map then
       if arg == "status" and ataxia.mnemosyne.map.status then

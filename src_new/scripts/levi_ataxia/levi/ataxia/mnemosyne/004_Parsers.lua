@@ -563,6 +563,8 @@ function M.onRipple(n)
   -- users -- a manual-mode basher would otherwise never get the re-latch at all (review
   -- finding, v4.7.192). The once-per-run guard on ataxiaTemp keeps it to a single send.
   if M._relatchBoons then M._relatchBoons() end
+  -- New ripple, new affixes -- the panel's first section changes even when no boon does.
+  if M.bonuses and M.bonuses.refresh then pcall(M.bonuses.refresh) end
   -- Ongoing effects are re-read from each ripple's WADE STATUS, so damage-suppression
   -- affixes re-latch per ripple rather than being assumed to persist.
   if ataxiaTemp then
@@ -1602,6 +1604,9 @@ function M.onBoonClaim(name)
   end
   if M._recordClaim then M._recordClaim(canonical) end -- local history (#6)
   if M.latchBoonFlag then M.latchBoonFlag(canonical) end -- generic flags (v4.7.241)
+  -- The bonuses panel is derived from the claim history, so it is stale the instant a claim
+  -- lands. pcall'd: a display refresh must never break the claim path it hangs off.
+  if M.bonuses and M.bonuses.refresh then pcall(M.bonuses.refresh) end
   M.reportBoonsSelected(canonical)
   -- ...and arm the VERIFICATION. Everything above happens because we SENT the command
   -- (see the alias): the flag latches, the history records, the telemetry posts. Nothing

@@ -42,6 +42,30 @@ Guarded by `if ataxia.mnemosyne.map then`; see [04-ripple-map.md](04-ripple-map.
 | `mnem map on` / `mnem map off` | `map.toggle(true)` / `map.toggle(false)` — force state (persists `mapEnabled`) |
 | `mnem map status` | `map.status()` — diagnostic echo |
 
+### Bonuses panel (`mnemosyne/011_Bonuses.lua` + `012_Bonuses_Window.lua`, v4.7.287)
+
+Guarded by `if B then`, and **not gated on being in the tower** -- unlike the map. Boons persist for
+the whole run, so the panel is as useful on the riverbank deciding whether to dive again as it is
+mid-ripple; gating it on `inMnem()` would blank it exactly when you are reading it to plan.
+
+| Command | Effect |
+|---------|--------|
+| `mnem bonuses` | `B.report()` -- **REPORTS to the console**, it does NOT toggle |
+| `mnem bonuses on` / `mnem bonuses off` | `B.toggle(true)` / `B.toggle(false)` -- force the panel, persists `bonusesEnabled` (default **off**) |
+
+**Why bare `mnem bonuses` reports rather than toggling** (the one place this diverges from
+`mnem map`): the console fallback keeps the aggregation readable with the panel off, and in a
+client where Geyser failed to build it is the only surface there is. One source, two surfaces --
+`B.report()` and `B.render()` both walk `M.bonusSections()`, so they cannot disagree.
+
+Sections, in order: AFFIXES, BOONS (rarity-coloured, `INERT` when a Shaman attunement is missing),
+STATS, RESISTANCES, DMG BOOSTS, IMMUNE TO, ON-HIT PROCS, COSTS. An empty section is omitted rather
+than printed as a bare heading, and a wholly empty panel **says why** -- a blank panel and a broken
+panel look identical, and this one is legitimately blank for most of a session.
+
+`B.refresh()` is called from `onBoonClaim` and `onRipple` in `004_Parsers.lua` (both `pcall`'d):
+those are the two events that can change the answer -- a new claim, and a new ripple's affixes.
+
 ### Local history (see [06-history.md](06-history.md))
 
 | Command | Effect |

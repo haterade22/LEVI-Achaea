@@ -136,6 +136,13 @@ M.BOON_SEED = {
   ["Flow State"] = { description = "Your acrobatics defence now conveys a 10% chance to dodge denizen attacks outright.", rarity = "legendary" },
   ["Fluid Form"] = { description = "While maintaining your watery cohesion, you take 12% reduced damage and become immune to dehydration.", rarity = "uncommon" },
   ["Font of Life"] = { description = "The Earthmother empowers your tree tattoo to now cure two afflictions.", rarity = "rare" },
+  -- SECOND-HAND (v4.7.287): these three came from a community window's hand-maintained
+  -- amount table, NOT from an offer screen we captured, and each embeds TWO numbers in one
+  -- sentence (a damage boost and a resistance). Marked so a future reader knows the
+  -- wording is reconstructed -- replace it the first time one is actually offered.
+  ["Fire Mastery"] = { description = "Your fire damage dealt is increased by 15% and you gain 10% fire resistance.", rarity = "uncommon" },
+  ["Venom Mastery"] = { description = "Your poison damage dealt is increased by 15% and you gain 10% poison resistance.", rarity = "uncommon" },
+  ["Asphyxiation Mastery"] = { description = "Your asphyxiation damage dealt is increased by 15% and you gain 10% asphyxiation resistance.", rarity = "uncommon" },
   ["Forgeweaver"] = { description = "You may wear any armour regardless of class, but you lose 10% magic resistance.", rarity = "rare" },
   ["Frostbite"] = { description = "Your draconic blast attack is imbued with a Blue Dragon's breath, granting it a 20% chance to afflict your foe with aeon.", rarity = "common" },
   ["Fulcrum's Legacy"] = { description = "Your equilibrium recovers 20% faster.", rarity = "legendary", echo = "Your equilibrium recovers 25% faster." },
