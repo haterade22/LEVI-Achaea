@@ -2,6 +2,98 @@
 
 ---
 
+## 2026-09-01 - AUDIT: the game's own numbers, and something that can prove us wrong (v4.7.290)
+
+User: *"Audit can be used in the very beginning to also try and track resistances and critical rate
+and hit bonus too."*
+
+### Why this matters more than it looks
+
+Everything the bonuses panel prints is **derived** -- read out of a boon's description sentence and
+added up by us. That is the right design (v4.7.287: a hand-maintained `name -> amount` table goes
+stale on the entry after the last one someone added), but it has never had any way to be **wrong
+out loud**. A misparsed sentence produces a confident number and nothing contradicts it.
+`Ogre's Defence` sat on the panel as +2% for a full day and only a screenshot caught it.
+
+AUDIT is the game reporting its own accounting. It is the first input to this panel that can
+disagree with us -- and disagreement is the whole point.
+
+### Two things, and the second is the reason to bother
+
+1. **A BASELINE**, captured once at the start of a run: what we brought in before a single boon was
+   claimed. Sent from the explorer's wade entry beside `_wearArmour` / `_furyCheck`, but **once per
+   RUN rather than once per ripple** -- a baseline is a run-scoped fact, and re-asking every ripple
+   would drop an eighteen-line block into the log at every boon screen for nothing.
+
+2. **A MEASUREMENT.** Audit again later and `current - baseline` is what this run's boons *actually*
+   bought, in the game's own numbers, against a known set of claims. That is the only way to settle
+   how boon resistances combine -- additively, with diminishing returns, multiplicatively -- and
+   this package's standing rule is to measure rather than argue (the shin-augment probe v4.7.269,
+   the rage probe v4.7.141). **Nothing here assumes an answer**: the delta is reported, not
+   modelled.
+
+### The vocabulary does not match ours, and that is data
+
+AUDIT names NINE damage types where our boon descriptions name eight:
+
+- **`Electricity` is our `Electric`** -- a spelling difference, normalised, or the measured row and
+  the derived row would never line up.
+- **`Cutting` and `Blunt` are NOT `Physical`.** The game tracks them separately and they carry
+  different numbers in the very first capture (76.2% vs 78%). Every boon description says
+  "physical", which makes folding them the tempting move -- and it would invent a figure that is
+  neither. They stay apart, and no `Physical` row is synthesised.
+- **There is no `Arcane` row.** One more point toward Arcane == Magical, which v4.7.289 deliberately
+  declined to assume. Still not proof -- AUDIT may simply predate the naming -- so it is recorded
+  and not acted on.
+
+### Design calls
+
+- **The capture is armed by the OUTPUT, not by our send.** Trigger `mnemosyne/078` fires on
+  `Audit records:`, so a manual AUDIT typed by the user is captured identically -- and if the
+  command we send is ever wrong, the failure is *visible* (nothing arrives) rather than a silently
+  absent baseline.
+- **It does not use `_captureLines`.** That helper holds one global capture slot and a second caller
+  force-finishes the first (v4.7.93). The wade-entry baseline fires from `_exploreResume`, which
+  runs off `GO!` -- the same instant the monster capture is arming. Sharing the slot would make two
+  unrelated features race for it: the v4.7.282 lesson (a shared single-slot resource where every
+  caller assumes it owns it) in a new place.
+- **A resistance row is recognised by its PERCENTAGE.** A future category we have not seen would
+  otherwise be promoted into a damage type -- a made-up row on the one panel section whose entire
+  job is to be trustworthy.
+- **A bonus/penalty pair stays two numbers** (`+60  -0`). Netting them hides a penalty, and the
+  penalty is the half worth seeing.
+- **The baseline never drifts.** A baseline that moves forward with each capture measures nothing.
+  `mnem audit reset` drops it explicitly, which is what you need after joining a run late -- a
+  baseline taken after boons were claimed is worse than none.
+- **No delta from a single reading.** "No second reading yet" and "the boons bought nothing" are
+  different answers and must not render alike; unchanged types are absent from the delta, not zero.
+
+### Commands
+
+`mnem audit` asks the game. `mnem audit report` prints what we hold without spending a command.
+`mnem audit reset` drops the baseline so the next capture becomes one. The panel gains an
+**AUDIT (measured)** section, placed last of the numeric blocks because it is the check, not the
+headline.
+
+### Verification
+
+1683 tests, all passing, against a fixture transcribed from the live screenshot rather than
+invented. **Nine break-backs, each failing its named test**: the Electricity alias, folding
+Cutting/Blunt into Physical, promoting a non-percentage row, a drifting baseline, a delta from one
+reading, unchanged types reported as zero, the per-ripple re-ask, netting a paired row, and a
+loosened label pattern eating the dashed rules.
+
+One break-back passed first time and is worth recording: **netting `+60  -0` is invisible**, because
+the live block's penalty is zero. The test now also parses `+60  -15`. *A fixture whose two branches
+agree is a fixture that tests neither* -- the third time this session (v4.7.287's `math.max`,
+v4.7.289's non-aliased fold types).
+
+**Files:** new `mnemosyne/013_Audit.lua`, `triggers/mnemosyne/078_Audit_Records.lua`,
+`tests/test_mnem_audit.lua`; edited `mnemosyne/003_Commands.lua`, `008_Explorer.lua`,
+`011_Bonuses.lua`.
+
+---
+
 ## 2026-09-01 - OFFENSE on the bonuses panel, and the +22% that should have been +30% (v4.7.289)
 
 User, from a live panel screenshot: *"We should also include offense abilities like 10 percent more

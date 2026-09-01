@@ -894,6 +894,31 @@ a separate `MAX_TACTICAL_ICE_SLIPS = 3`. **The escape pull HOLDS the attack disp
 
 **Pacing affixes (v4.7.196).** Two affixes make the instant a room goes quiet the worst instant to walk, so the auto-explorer carries two post-clear holds, both gated on 90% HP and both re-checking at 1.5s: **Haemophiliac** (`M._haemoHold`, also waits for the bleed to be CLOTTED, since SSC's `curing clotat` is doing real work while we stand still) and **Last Word** -- "Denizens explode on death!" (`M._lastWordHold`, HP only: an explosion is instantaneous, so there is nothing to clot and waiting on a bleed reading would just idle the sweep). Either holding is sufficient. Affix flags are now three (`mnemHaemophiliac`, `mnemDeluge`, `mnemLastWord`) plus the damage-suppression family on `ataxiaTemp.mnemNulled`, so the run-start reset block is **30 boons + 3 affixes = 33 lines** -- never read a boon count off that block. Captured in the same screenshot but deliberately UNHANDLED pending observation: **Necromantic** ("Denizens may revive as mindless thralls" -- potentially significant, since a room that clears then repopulates from its own corpses is exactly what `_roomHasDenizens` is trusted for) and **Iceblood** ("Taking damage causes your blood to freeze").
 
+**AUDIT -- THE FIRST INPUT THAT CAN PROVE THE PANEL WRONG (v4.7.290, `mnem audit`,
+`mnemosyne/013_Audit.lua` + trigger `078`).** Everything else on the bonuses panel is DERIVED from a
+boon's description sentence, so a misparse yields a confident number with nothing to contradict it
+-- `Ogre's Defence` sat there as +2% for a day. AUDIT is the game's own accounting. Two uses: a
+**BASELINE** captured once per RUN at the wade entry (user: "in the very beginning"; once per run,
+not per ripple -- it is a run-scoped fact and re-asking would dump an 18-line block at every boon
+screen), and a **MEASUREMENT** -- `current - baseline` is what the run's boons ACTUALLY bought, in
+the game's numbers, against a known set of claims. That is the only way to settle whether boon
+resistances add, diminish or multiply, and **nothing here assumes an answer**: the delta is
+reported, not modelled (the shin/rage probe rule, v4.7.141/269). **THE VOCABULARY DIFFERS AND THAT
+IS DATA**: `Electricity` is our `Electric` (normalised, or measured and derived rows never line
+up); **`Cutting` and `Blunt` are NOT `Physical`** -- the game tracks them separately with different
+numbers (76.2% vs 78% in the first capture) while every boon description says "physical", so
+folding them would invent a figure that is neither, and no `Physical` row is synthesised; and there
+is **no `Arcane` row**, one more point toward Arcane == Magical which v4.7.289 declined to assume
+and which this does not settle either. **Armed by the OUTPUT, not by our send** -- the trigger
+fires on `Audit records:`, so a manual AUDIT is captured identically and a wrong send fails
+VISIBLY rather than leaving a silently absent baseline. **Deliberately NOT `_captureLines`**: that
+helper holds one global slot and a second caller force-finishes the first (v4.7.93), while this
+baseline fires from `_exploreResume` off `GO!` -- the instant the monster capture is arming. A
+resistance row is recognised by its PERCENTAGE (an unseen category must never be promoted into a
+damage type); a `+60  -0` pair stays two numbers (netting hides a penalty); the baseline never
+drifts (`mnem audit reset` drops it, for a run joined late); and there is NO delta from a single
+reading, since "no second reading yet" and "the boons bought nothing" are different answers.
+
 **OFFENSE ON THE PANEL, AND THE +22% THAT WAS +30% (v4.7.289).** The live panel under-reported
 resistance because the all-damage branch took `desc:match("(%d+)%%")` -- the FIRST percentage in the
 sentence -- and `Ogre's Defence` reads "You lose **2%** critical strike chance, but you gain **10%**

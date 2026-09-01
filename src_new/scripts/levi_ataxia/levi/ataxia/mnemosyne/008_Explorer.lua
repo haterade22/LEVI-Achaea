@@ -1459,6 +1459,9 @@ function M._exploreResume(reason)
   M._wearArmour()
   M._bardPerformanceCheck() -- per-ripple: a performance can lapse across the boon screen
   M._furyCheck()            -- ...nor un-furied, if the boon makes fury worth holding
+  -- ONCE PER RUN, unlike its three neighbours: a baseline is a run-scoped fact, and the earlier
+  -- it is taken the fewer boons are already priced into it (user: "in the very beginning").
+  if M.auditBaselineOnWade then pcall(M.auditBaselineOnWade) end
   M._relatchBoons()   -- once per run: re-latch boon flags we may have owned before load
   if M.swarm and M.swarm.onRipple then pcall(M.swarm.onRipple) end -- fresh ripple: new pull budgets
   M._exploreEcho("<green>resuming<reset> the sweep" .. (reason and (" (" .. reason .. ")") or "") .. ".")
@@ -1515,6 +1518,7 @@ function M.exploreOn()
   M._wearArmour()           -- never start a sweep undressed
   M._bardPerformanceCheck() -- ...nor unperforming
   M._furyCheck()            -- ...nor un-furied
+  if M.auditBaselineOnWade then pcall(M.auditBaselineOnWade) end
   M._relatchBoons()   -- once per run: re-latch boon flags we may have owned before load
   if M.swarm and M.swarm.onRipple then pcall(M.swarm.onRipple) end -- fresh sweep: fresh tactics state
   M._exploreEcho("<green>ON<reset> -- sweeping the 4x4, clearing to the boon screen (patrols for the boss on boss ripples). (<a_darkmagenta>mnem explore off<reset> to stop)")

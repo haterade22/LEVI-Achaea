@@ -486,6 +486,37 @@ function M.bonusSections()
   end
   section("DMG BOOSTS", dmg)
 
+  -- AUDIT -- the game's own accounting, and the only thing on this panel that is MEASURED rather
+  -- than derived from a sentence. Placed last of the numeric blocks: it is the check, not the
+  -- headline. A delta appears only once there are two readings, because "no second reading yet"
+  -- and "the boons bought nothing" are different answers and must not render alike.
+  local aud = {}
+  local A = M.audit or {}
+  if A.current then
+    local d = M._auditDelta and M._auditDelta() or nil
+    local function scal(label, key, suffix)
+      if type(A.current[key]) ~= "number" then return end
+      local delta = d and d[key]
+      aud[#aud + 1] = {
+        text = label .. "  " .. A.current[key] .. (suffix or "")
+          .. (delta and ("  (" .. signed(delta) .. " this run)") or ""),
+        colour = "cyan",
+      }
+    end
+    scal("Crit rate", "critRate", "%")
+    scal("Crit bonus", "critBonus", "")
+    scal("Celerity", "celerity", "")
+    for _, k in ipairs(sortedKeys(A.current.resists)) do
+      local delta = d and d.resists[k]
+      aud[#aud + 1] = {
+        text = "  " .. k .. "  " .. A.current.resists[k] .. "%"
+          .. (delta and ("  (" .. signed(delta) .. ")") or ""),
+        colour = RESIST_COLOUR[k] or "light_grey",
+      }
+    end
+  end
+  section("AUDIT (measured)", aud)
+
   local immune = {}
   for _, aff in ipairs(sortedKeys(T.immune)) do
     immune[#immune + 1] = { text = aff .. "  (" .. tostring(T.immune[aff]) .. ")", colour = "spring_green" }

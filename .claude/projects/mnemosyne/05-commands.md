@@ -73,6 +73,28 @@ panel look identical, and this one is legitimately blank for most of a session.
 `B.refresh()` is called from `onBoonClaim` and `onRipple` in `004_Parsers.lua` (both `pcall`'d):
 those are the two events that can change the answer -- a new claim, and a new ripple's affixes.
 
+### AUDIT (`mnemosyne/013_Audit.lua` + trigger `078`, v4.7.290)
+
+The game's own accounting -- the only input to the bonuses panel that is MEASURED rather than
+derived from a boon's description, and therefore the only one that can prove the rest of it wrong.
+
+| Command | Effect |
+|---|---|
+| `mnem audit` | Send `AUDIT` and capture the block |
+| `mnem audit report` | Print what we already hold -- no command spent |
+| `mnem audit reset` | Drop the baseline, so the next capture becomes one (for a run joined late) |
+
+A **baseline** is taken once per RUN from the explorer's wade entry, beside `_wearArmour` /
+`_furyCheck` -- once per run rather than per ripple, since it is a run-scoped fact and re-asking
+would put an 18-line block in the log at every boon screen. `current - baseline` is then what the
+run's boons actually bought, in the game's numbers. **The delta is reported, never modelled**: how
+boon resistances combine is exactly what this exists to measure.
+
+The capture is armed by trigger `078` on the `Audit records:` header -- i.e. by the OUTPUT rather
+than by our send -- so a manual AUDIT is captured identically and a wrong send fails visibly. It
+deliberately does not use `_captureLines`, which holds one global slot that the `GO!` monster
+capture is contending for at the same instant.
+
 ### Local history (see [06-history.md](06-history.md))
 
 | Command | Effect |
