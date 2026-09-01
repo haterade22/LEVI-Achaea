@@ -2,6 +2,92 @@
 
 ---
 
+## 2026-09-01 - OFFENSE on the bonuses panel, and the +22% that should have been +30% (v4.7.289)
+
+User, from a live panel screenshot: *"We should also include offense abilities like 10 percent more
+damage, 30 percent, etc and it should be additive."* The screenshot also contained a bug.
+
+### THE LIVE PANEL WAS UNDER-REPORTING RESISTANCE
+
+It showed **+22%** across every type. The truth was **+30%**. The all-damage branch took
+`desc:match("(%d+)%%")` -- the FIRST percentage in the sentence -- and `Ogre's Defence` reads
+*"You lose 2% critical strike chance, but you gain 10% resistance to all damage."* It was credited
+with **2%**.
+
+That is the two-numbers-in-one-sentence trap `BONUS_EXCEPTIONS` exists for, reappearing in the one
+branch that was not reading its number positionally. The percentage must be the one **adjacent to
+the phrase**. Worth noting how it surfaced: not from a test, but from a screenshot of eight rows
+that all said the same slightly-wrong number.
+
+### OFFENSE -- additive, and the measurement is the design
+
+35 catalogue entries mention dealing more damage. **Seven** are the always-on, every-swing kind
+worth summing. The other two groups are why this is not one `%d+%%` match:
+
+- **CONDITIONAL** -- real, but only sometimes: *"20% bonus damage WHILE you possess the chrono blur
+  defence"*, *"10% more damage WHEN above 90% mana"*, *"15% more damage TO ENEMIES whose health
+  percent is lower than yours"*. Summed into a headline, these produce a number that is wrong
+  almost all the time. They are shown **with their clause captured from the sentence** and left out
+  of the total -- "+20% while chrono blur is up" is actionable where "conditional +20%" is not.
+- **ABILITY-SPECIFIC** -- *"Your STERNUM STRIKES deal an additional 300% damage"* (Blossom of Pain),
+  *"Your PAEAN REFRAIN ... increased by 200%"* (Warmarch). The same distinction `_procFrom` already
+  draws, for the same reason: they fire on one ability, not every swing. Warmarch alone would have
+  put the headline 200 points out. Every pattern requires the subject to be **you** and the object
+  to be **bare "damage"**, so these do not match at all. Such a boon still appears in BOONS -- it is
+  unquantified, not hidden.
+
+The section prints `TOTAL +N% damage` and then the boons that make it up, so the figure is
+**auditable rather than asserted**, and sits above the defensive blocks because it is what the panel
+is usually being read for.
+
+### Three double-counts, two of them found by tests written after a break-back passed
+
+1. **The exception and the parser both read the same sentence.** `Silvestri's Grace` ("You deal 25%
+   more damage but lose 1 constitution") satisfies `BONUS_EXCEPTIONS` *and* `_dmgGenericFrom`, and
+   totalled **+50%**. An exception exists precisely because a sentence cannot be parsed safely, so
+   it is authoritative and the parser stands down. Same shape as the v4.7.288 Poison alias, one
+   layer up.
+2. **`Damage` was being printed in STATS**, beside Strength and Constitution -- two incomparable
+   units in one column. It is a percentage and now feeds the offense total.
+3. (v4.7.288's Poison fold, already fixed, is the third instance of this family in two days. **When
+   two sources can describe the same fact, exactly one of them must own it.**)
+
+### A weakness is a negative resistance
+
+`Violent Impulse` grants +30% damage *"but you take 10% additional physical damage"*, and
+`Offspring's Error` gives *"a 10% weakness to psychic damage"*. Neither was parsed, so the panel
+reported a defence we did not have. Both wordings now net onto the type's own row -- which is why
+the corrected panel shows every type at +30% and **Physical at +20%**. That single differing row is
+the one worth seeing.
+
+### Eight identical rows carry one bit
+
+The live panel spent half its height on eight rows that all said `+22%`. The v4.7.287 reason for
+folding "all damage" into every type stands **exactly as written** -- it exists so a reader
+comparing Fire against Cold does not have to add a hidden third row -- but where every row is the
+same number there is no comparison to make. The rows now collapse to a single `All types +N%` line
+**only when every type is equal**; a mixed set still prints per type, which is the case the fold was
+written for.
+
+### Two of the 30 holes filled, from a live capture
+
+`Violent Impulse` and `Ogre's Defence` were seeded name-only yesterday; the user's BOONS-list
+screenshot carries their real text, so they are now seeded first-hand and removed from
+`M.BOON_UNDESCRIBED` (28 left). `Ogre's Defence` is the entry that exposed the all-damage bug --
+**a hole you can see is a hole that gets filled.**
+
+### Verification
+
+1670 tests, all passing. **Eight break-backs, each failing its named test**: the first-percentage
+regression, weakness parsing, conditional bonuses summed, ability-specific bonuses accepted, the
+exception losing authority, Damage left in STATS, the collapse removed, and the collapse applied to
+a mixed set. Also rendered against the user's exact nine-boon set as a fixture, which is what
+confirmed +30% / Physical +20%.
+
+**Files:** `mnemosyne/011_Bonuses.lua`, `mnemosyne/010_Boon_Seed.lua`, `tests/test_mnem_bonuses.lua`.
+
+---
+
 ## 2026-09-01 - The boon/affix rebalance: three boons deleted, fourteen rewritten (v4.7.288)
 
 Adopting the 2026-09-01 game announcement. Three of its lines are defects in code shipped

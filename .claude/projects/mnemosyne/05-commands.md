@@ -59,7 +59,14 @@ client where Geyser failed to build it is the only surface there is. One source,
 `B.report()` and `B.render()` both walk `M.bonusSections()`, so they cannot disagree.
 
 Sections, in order: AFFIXES, BOONS (rarity-coloured, `INERT` when a Shaman attunement is missing),
-STATS, RESISTANCES, DMG BOOSTS, IMMUNE TO, ON-HIT PROCS, COSTS. An empty section is omitted rather
+STATS, **OFFENSE**, RESISTANCES, DMG BOOSTS, IMMUNE TO, ON-HIT PROCS, COSTS.
+
+**OFFENSE** (v4.7.289) prints `TOTAL +N% damage` followed by the boons that make it up, so the
+figure is auditable rather than asserted. Only ALWAYS-ON generic bonuses reach the total:
+conditional ones are listed below it with their clause and excluded, and ability-specific ones
+(Warmarch's paean +200%, Blossom of Pain's sternum +300%) do not match the parser at all -- they
+fire on one ability, not every swing. **RESISTANCES** collapses to one `All types +N%` row when
+every type carries the same number, and prints per type otherwise. An empty section is omitted rather
 than printed as a bare heading, and a wholly empty panel **says why** -- a blank panel and a broken
 panel look identical, and this one is legitimately blank for most of a session.
 

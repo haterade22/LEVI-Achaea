@@ -178,6 +178,89 @@ describe("bonus totals", function()
   end)
 end)
 
+-- ─── OFFENSE: the number a player is actually asking for ────────────────────
+--
+-- 35 catalogue entries mention dealing more damage and only seven are the always-on, every-swing
+-- kind. The other two groups are the point of these tests.
+
+describe("generic damage bonuses", function()
+  it("adds the always-on ones together", function()
+    reset()
+    claim("Violent Impulse", "Gain 30% bonus damage, but you take 10% additional physical damage.")
+    claim("Wild Magic", "You deal 12% increased damage, but the spells invoked by your staffcast will now be out of your control.")
+    claim("Hidden Gem", "You deal 1% bonus damage.")
+    expect(M.bonusTotals().offense.total).toBe(43)
+  end)
+
+  it("reads the other live wordings", function()
+    expect(M._dmgGenericFrom("Deal 10% more damage but you can no longer benefit from shields.").pct).toBe(10)
+    expect(M._dmgGenericFrom("Your damage dealt is increased by 5% and your balance recovers 5% faster.").pct).toBe(5)
+    expect(M._dmgGenericFrom("You deal 25% more damage but all mana costs now cost health.").pct).toBe(25)
+  end)
+
+  -- The `_procFrom` distinction again: an ability bonus fires on ONE ability, not every swing.
+  -- Summing Warmarch's +200% into a headline would be off by 200 on almost every attack.
+  it("REFUSES an ability-specific damage bonus", function()
+    expect(M._dmgGenericFrom("Your sternum strikes deal an additional 300% damage.")).toBe(nil)
+    expect(M._dmgGenericFrom("Your paean refrain can now target denizens, dealing psychic damage. This damage is increased by 200%.")).toBe(nil)
+    expect(M._dmgGenericFrom("Your draconic blast ability does 25% more damage, and your breath weapon persists.")).toBe(nil)
+  end)
+
+  -- A conditional bonus is REAL but not always on. It is shown with its clause and kept out of
+  -- the total: a headline that is right only while some defence happens to be up is worse than
+  -- no headline on a panel read to make decisions.
+  it("keeps a conditional bonus out of the total but records its condition", function()
+    reset()
+    claim("Flashforward", "You deal 20% bonus damage while you possess the chrono blur defence.")
+    claim("Hidden Gem", "You deal 1% bonus damage.")
+    local O = M.bonusTotals().offense
+    expect(O.total).toBe(1)
+    expect(#O.conditional).toBe(1)
+    expect(O.conditional[1].name).toBe("Flashforward")
+    expect(O.conditional[1].cond:find("chrono blur", 1, true) ~= nil).toBeTrue()
+  end)
+
+  -- Damage is a PERCENTAGE, not a stat, and only ever arrives via an exception. Printing it
+  -- beside Strength would put two incomparable units in one column.
+  it("routes an exception's Damage to OFFENSE, not to STATS", function()
+    reset()
+    claim("Silvestri's Grace", "You deal 25% more damage but lose 1 constitution.")
+    local T = M.bonusTotals()
+    expect(T.offense.total).toBe(25)
+    expect(T.stats.Damage).toBe(nil)
+    expect(T.stats.Constitution).toBe(-1)   -- the other half of the exception still lands
+  end)
+end)
+
+-- ─── Two numbers in one sentence, again ─────────────────────────────────────
+
+describe("all-damage resistance", function()
+  -- LIVE BUG (2026-09-01): the panel showed +22% where the truth was +30%. The all-damage branch
+  -- took the FIRST percentage in the sentence, and Ogre's Defence opens with an unrelated one.
+  it("takes the percentage ATTACHED to the phrase, not the first in the sentence", function()
+    reset()
+    claim("Ogre's Defence", "You lose 2% critical strike chance, but you gain 10% resistance to all damage.")
+    claim("Resilience of Lessers", "While you are in lesserform (not a Dragon or Elemental Lord) gain an additional 20% resistance to all damage.")
+    expect(M.bonusTotals().resists.Fire).toBe(30)   -- not 22
+  end)
+
+  -- A weakness is a negative resistance and belongs on the same row, or the panel reports a
+  -- defence we do not have.
+  it("reads a weakness as a negative resistance, in both wordings", function()
+    expect(M._resistFrom("Your grook heritage grants 3 intelligence but a 10% weakness to psychic damage.").Psychic).toBe(-10)
+    expect(M._resistFrom("Gain 30% bonus damage, but you take 10% additional physical damage.").Physical).toBe(-10)
+  end)
+
+  it("nets a weakness against the all-damage grant on the SAME row", function()
+    reset()
+    claim("Ogre's Defence", "You lose 2% critical strike chance, but you gain 10% resistance to all damage.")
+    claim("Violent Impulse", "Gain 30% bonus damage, but you take 10% additional physical damage.")
+    local r = M.bonusTotals().resists
+    expect(r.Physical).toBe(0)    -- +10 all, -10 physical
+    expect(r.Fire).toBe(10)
+  end)
+end)
+
 -- ─── Sections ───────────────────────────────────────────────────────────────
 
 describe("bonus sections", function()
@@ -213,6 +296,25 @@ describe("bonus sections", function()
     local rows = sectionRows("COSTS")
     expect(rows ~= nil).toBeTrue()
     expect(rows[1].text:find("stupidity", 1, true) ~= nil).toBeTrue()
+  end)
+
+  -- Eight identical rows carry one bit of information and filled half the live panel. The
+  -- v4.7.287 reason for folding "all damage" into every type stands where there IS a comparison
+  -- to make; where every row is the same number there is not.
+  it("collapses the resistance rows when every type carries the same number", function()
+    reset()
+    claim("Ogre's Defence", "You lose 2% critical strike chance, but you gain 10% resistance to all damage.")
+    local rows = sectionRows("RESISTANCES")
+    expect(#rows).toBe(1)
+    expect(rows[1].text).toBe("All types  +10%")
+  end)
+
+  it("still prints per type when ONE row differs", function()
+    reset()
+    claim("Ogre's Defence", "You lose 2% critical strike chance, but you gain 10% resistance to all damage.")
+    claim("Violent Impulse", "Gain 30% bonus damage, but you take 10% additional physical damage.")
+    local rows = sectionRows("RESISTANCES")
+    expect(#rows > 1).toBeTrue()   -- Physical nets to 0 and the rest are +10: a real comparison
   end)
 
   it("lists this run's affixes first", function()

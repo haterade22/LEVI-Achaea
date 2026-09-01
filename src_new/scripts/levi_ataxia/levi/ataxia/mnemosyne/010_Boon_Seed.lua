@@ -325,6 +325,11 @@ M.BOON_SEED = {
   ["Timequake"] = { description = "Your aeonics distortion ability now deals magic damage to all denizens when distorting a location.", rarity = "rare" },
   ["Tireless"] = { description = "Defeating a denizen will restore 2% of your willpower and 2% of your endurance.", rarity = "common" },
   ["Toxicologist"] = { description = "Your venoms now relapse against denizens, dealing damage again after a delay.", rarity = "rare" },
+  -- CAPTURED LIVE 2026-09-01 from the in-game BOONS list: two of the 30 name-only holes below,
+  -- filled with first-hand text. `Ogre's Defence` is the one that exposed the all-damage parser
+  -- bug -- "You lose 2% ... but you gain 10% resistance to all damage" was being credited with 2%.
+  ["Violent Impulse"] = { description = "Gain 30% bonus damage, but you take 10% additional physical damage.", rarity = "uncommon" },
+  ["Ogre's Defence"] = { description = "You lose 2% critical strike chance, but you gain 10% resistance to all damage.", rarity = "uncommon" },
   -- RENAMED 2026-09-01 from "Trenchfoot", and the cost changed hamstrung -> clumsiness. Kept
   -- at the old alphabetical position deliberately: the rename is the fact worth seeing.
   ["Sprightly"] = { description = "Your dexterity is increased by 5, but you suffer permanent clumsiness.", rarity = "uncommon" },
@@ -381,14 +386,12 @@ M.BOON_UNDESCRIBED = {
   "Heelbreaker",
   "Thick Skull",
   "Ogre's Strike",
-  "Ogre's Defence",
   "Ogre's Speed",
   "Mana Powered",
   "Brute Force",
   "Mental Prowess",
   "Deadly Finesse",
   "Training Arc",
-  "Violent Impulse",
   "Battle Frenzy",
   "Rage Within",
   "Glass Cannon",

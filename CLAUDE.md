@@ -894,6 +894,30 @@ a separate `MAX_TACTICAL_ICE_SLIPS = 3`. **The escape pull HOLDS the attack disp
 
 **Pacing affixes (v4.7.196).** Two affixes make the instant a room goes quiet the worst instant to walk, so the auto-explorer carries two post-clear holds, both gated on 90% HP and both re-checking at 1.5s: **Haemophiliac** (`M._haemoHold`, also waits for the bleed to be CLOTTED, since SSC's `curing clotat` is doing real work while we stand still) and **Last Word** -- "Denizens explode on death!" (`M._lastWordHold`, HP only: an explosion is instantaneous, so there is nothing to clot and waiting on a bleed reading would just idle the sweep). Either holding is sufficient. Affix flags are now three (`mnemHaemophiliac`, `mnemDeluge`, `mnemLastWord`) plus the damage-suppression family on `ataxiaTemp.mnemNulled`, so the run-start reset block is **30 boons + 3 affixes = 33 lines** -- never read a boon count off that block. Captured in the same screenshot but deliberately UNHANDLED pending observation: **Necromantic** ("Denizens may revive as mindless thralls" -- potentially significant, since a room that clears then repopulates from its own corpses is exactly what `_roomHasDenizens` is trusted for) and **Iceblood** ("Taking damage causes your blood to freeze").
 
+**OFFENSE ON THE PANEL, AND THE +22% THAT WAS +30% (v4.7.289).** The live panel under-reported
+resistance because the all-damage branch took `desc:match("(%d+)%%")` -- the FIRST percentage in the
+sentence -- and `Ogre's Defence` reads "You lose **2%** critical strike chance, but you gain **10%**
+resistance to all damage." The number must be the one ADJACENT to the phrase; this is the
+two-numbers-in-one-sentence trap `BONUS_EXCEPTIONS` exists for, reappearing in the one branch not
+reading positionally. **The OFFENSE section sums generic damage bonuses additively**, and the
+measurement is the design: 35 catalogue entries mention dealing more damage and only SEVEN are the
+always-on every-swing kind. **CONDITIONAL** ones ("20% while chrono blur is up", "10% when above 90%
+mana") are shown with their clause CAPTURED FROM THE SENTENCE and excluded from the total -- summed,
+they give a headline wrong almost all the time. **ABILITY-SPECIFIC** ones ("your STERNUM STRIKES
+deal an additional 300%", Warmarch's paean +200%) do not match at all, because every pattern
+requires the subject to be YOU and the object to be BARE "damage" -- the `_procFrom` distinction
+again, and Warmarch alone would have put the headline 200 points out. The total prints with the
+boons that make it up, so it is AUDITABLE rather than asserted. **A WEAKNESS IS A NEGATIVE
+RESISTANCE** ("a 10% weakness to psychic damage", "you take 10% additional physical damage") and
+nets onto that type's own row, or the panel reports a defence we do not have. **WHEN TWO SOURCES
+CAN DESCRIBE THE SAME FACT, EXACTLY ONE MUST OWN IT** -- three double-counts in two days: the
+Poison alias in the all-damage fold (v4.7.288), the exception AND the generic parser both reading
+`Silvestri's Grace` (+50% instead of +25%; the exception wins, since it exists because the sentence
+cannot be parsed safely), and `Damage` printed in STATS beside Strength. **The eight identical
+resistance rows now collapse to one** `All types +N%` when every type is equal -- the v4.7.287
+reason for folding "all" into every type stands where there IS a comparison to make, and buys
+nothing where there is not; a mixed set still prints per type.
+
 **THE 2026-09-01 REBALANCE, AND WHY A SEED CANNOT CORRECT ITSELF (v4.7.288).** The game rewrote
 fourteen boons, deleted three, renamed one and added thirty-three. Editing `010_Boon_Seed.lua`
 **reaches nobody on its own**: the seed merges into `history.boonLibrary` at load through

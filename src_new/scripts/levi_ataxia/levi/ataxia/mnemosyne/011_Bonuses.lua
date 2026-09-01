@@ -156,6 +156,16 @@ function M._resistFrom(desc)
     out[RESIST_TYPES[t:lower()]] = tonumber(n)
     return out
   end
+
+  -- A WEAKNESS is a negative resistance and belongs on the same row, or the panel reports a
+  -- defence we do not have. Two wordings, both live: "a 10% weakness to psychic damage"
+  -- (Offspring's Error) and "you take 10% additional physical damage" (Violent Impulse).
+  n, t = desc:match("(%d+)%%%s+weakness to%s+(%a+)")
+  if not n then n, t = desc:match("[Yy]ou take%s+(%d+)%%%s+additional%s+(%a+)%s+damage") end
+  if n and t and RESIST_TYPES[t:lower()] then
+    out[RESIST_TYPES[t:lower()]] = -tonumber(n)
+    return out
+  end
   return nil
 end
 
@@ -193,6 +203,55 @@ function M._dmgBoostFrom(desc)
   return nil
 end
 
+-- GENERIC outgoing damage: the number a player actually asks for, and it ADDS.
+--
+-- Measured across the 297 described entries before writing a pattern, and the measurement is the
+-- whole design. 35 boons mention dealing more damage; only SEVEN are the thing you would want
+-- summed into one figure:
+--
+--   "You deal 25% more damage but all mana costs now cost health."    Blood Pact
+--   "Deal 10% more damage but you can no longer benefit from..."      Reckless Rage
+--   "You deal 1% bonus damage."                                      Hidden Gem
+--   "Gain 30% bonus damage, but you take 10% additional physical..."  Violent Impulse
+--   "You deal 12% increased damage, but the spells invoked..."        Wild Magic
+--   "You deal 10% bonus damage on the ground but..."                  Ormyrr Claws
+--   "Your damage dealt is increased by 5% and your balance..."        Dungeoneer
+--
+-- The rest fall into two groups that must NOT be added to that total:
+--
+--   CONDITIONAL -- real, but only sometimes. "You deal 20% bonus damage WHILE you possess the
+--     chrono blur defence", "10% more damage WHEN above 90% mana", "15% more damage TO ENEMIES
+--     whose health percent is lower than yours". Summing these produces a headline that is wrong
+--     almost all the time, which on a panel read to make decisions is worse than showing nothing.
+--     They are listed with their condition and left out of the arithmetic.
+--
+--   ABILITY-SPECIFIC -- "Your STERNUM STRIKES deal an additional 300% damage" (Blossom of Pain),
+--     "Your PAEAN REFRAIN ... increased by 200%" (Warmarch), "Your DRACONIC BLAST ability does 25%
+--     more damage". Same distinction `_procFrom` already draws, and for the same reason: these
+--     fire on one ability, not on every swing. They do not match the patterns below at all,
+--     because every pattern requires the subject to be YOU and the object to be BARE "damage".
+--     A boon in this group still appears in the BOONS section -- it is unquantified, not hidden.
+--
+-- Returns { pct = n, cond = "<the governing clause>" or nil }.
+function M._dmgGenericFrom(desc)
+  if type(desc) ~= "string" then return nil end
+  local n =
+    desc:match("[Yy]ou deal%s+(%d+)%%%s+[%a]+%s+damage")
+    or desc:match("[Yy]ou deal%s+(%d+)%%%s+damage")
+    or desc:match("^[Dd]eal%s+(%d+)%%%s+[%a]+%s+damage")
+    or desc:match("[Gg]ain%s+(%d+)%%%s+bonus damage")
+    or desc:match("[Yy]our damage dealt is increased by%s+(%d+)%%")
+  if not n then return nil end
+  -- The condition, if the sentence carries one. Captured rather than merely detected: "conditional
+  -- +20%" is nearly useless and "+20% while chrono blur is up" is actionable, and the clause is
+  -- sitting right there in the text we already have.
+  local cond = desc:match("damage%s+(while[^.]+)")
+      or desc:match("damage%s+(when[^.]+)")
+      or desc:match("damage%s+(against[^.]+)")
+      or desc:match("damage%s+(to enemies[^.]+)")
+  return { pct = tonumber(n), cond = cond }
+end
+
 -- ON-HIT affliction procs: "Your attacks have a 5% chance to afflict the target with weakness."
 --
 -- DELIBERATELY GATED ON "your attacks" (v4.7.287). The same "chance to afflict the target with"
@@ -223,13 +282,22 @@ end
 function M.bonusTotals()
   local stats, resists, procs, immune, costs, dmg = {}, {}, {}, {}, {}, {}
   local allResist = 0
+  local offense = { total = 0, rows = {}, conditional = {} }
 
   for _, b in ipairs(M._claimedBoons()) do
     local desc = M._bonusDesc(b.name)
     local ex = M.BONUS_EXCEPTIONS[b.name]
 
-    if ex and ex.stat then addInto(stats, ex.stat)
-    else addInto(stats, M._statFrom(desc)) end
+    -- `Damage` is a PERCENTAGE, not a stat, so it is routed to the offense total rather than
+    -- printed beside Strength and Constitution. It only ever arrives via an exception (a sentence
+    -- carrying two numbers of opposite meaning), which is why it is peeled off here.
+    local st = (ex and ex.stat) or M._statFrom(desc)
+    if st and st.Damage then
+      offense.total = offense.total + st.Damage
+      offense.rows[#offense.rows + 1] = { name = b.name, pct = st.Damage }
+      st = (function(t) local c = {}; for k, v in pairs(t) do if k ~= "Damage" then c[k] = v end end; return c end)(st)
+    end
+    addInto(stats, st)
 
     if ex and ex.resist then addInto(resists, ex.resist)
     else
@@ -237,11 +305,36 @@ function M.bonusTotals()
       if r then addInto(resists, r) end
     end
 
-    if desc and desc:lower():find("resistance to all damage", 1, true) then
-      allResist = allResist + (tonumber(desc:match("(%d+)%%")) or 0)
+    -- ALL-DAMAGE resistance. The percentage must be the one ADJACENT to the phrase, never just
+    -- the first in the sentence: Ogre's Defence reads "You lose 2% critical strike chance, but you
+    -- gain 10% resistance to all damage", and taking the first number credited it with 2% -- which
+    -- is exactly the two-numbers-in-one-sentence trap `BONUS_EXCEPTIONS` exists for, reappearing
+    -- in the one branch that was not reading its number positionally. Live panel showed +22% where
+    -- the truth was +30%.
+    if desc then
+      local all = desc:match("(%d+)%%%s+resistance to all damage")
+        or desc:match("(%d+)%%%s+resistance to all")
+      if all then allResist = allResist + tonumber(all) end
     end
 
     addInto(dmg, M._dmgBoostFrom(desc))
+
+    -- Generic damage, ADDITIVE (user, 2026-09-01). Only the always-on ones reach the total; a
+    -- conditional bonus is recorded beside it with its clause so the headline stays honest.
+    -- SKIPPED when an exception already supplied this boon's damage: both read the same sentence,
+    -- and `Silvestri's Grace` ("You deal 25% more damage but lose 1 constitution") satisfies both,
+    -- which totalled +50%. An exception exists precisely because the sentence cannot be parsed
+    -- safely, so it is authoritative and the parser must stand down -- the same shape as the
+    -- Poison alias double-count, one layer up.
+    local g = (not (ex and ex.stat and ex.stat.Damage)) and M._dmgGenericFrom(desc) or nil
+    if g then
+      if g.cond then
+        offense.conditional[#offense.conditional + 1] = { name = b.name, pct = g.pct, cond = g.cond }
+      else
+        offense.total = offense.total + g.pct
+        offense.rows[#offense.rows + 1] = { name = b.name, pct = g.pct }
+      end
+    end
 
     local p = M._procFrom(desc)
     if p then procs[p.aff] = math.max(procs[p.aff] or 0, p.chance) end
@@ -256,8 +349,10 @@ function M.bonusTotals()
   end
 
   immune = (M.runImmunities and M.runImmunities()) or {}
+  table.sort(offense.rows, function(a, b) return a.pct > b.pct end)
+  table.sort(offense.conditional, function(a, b) return a.pct > b.pct end)
   return { stats = stats, resists = resists, procs = procs, immune = immune,
-           costs = costs, dmg = dmg }
+           costs = costs, dmg = dmg, offense = offense }
 end
 
 -- Is this boon INERT right now? Only a Shaman attunement can make one so, and the answer is
@@ -339,13 +434,45 @@ function M.bonusSections()
   end
   section("STATS", stats)
 
+  -- OFFENSE, above the defensive blocks: it is the number you are usually reading the panel for.
+  -- TOTAL first, then the boons that make it up, so the figure is auditable rather than asserted.
+  local off = {}
+  local O = T.offense or { total = 0, rows = {}, conditional = {} }
+  if O.total ~= 0 then
+    off[#off + 1] = { text = "TOTAL  " .. signed(O.total) .. "% damage", colour = "gold" }
+  end
+  for _, r in ipairs(O.rows) do
+    off[#off + 1] = { text = "  " .. signed(r.pct) .. "%  " .. r.name, colour = "yellow" }
+  end
+  -- Conditional bonuses are shown but NOT summed. A headline that is right only while some
+  -- defence happens to be up is worse than no headline, and the clause is what makes it usable.
+  for _, r in ipairs(O.conditional) do
+    off[#off + 1] = { text = "  " .. signed(r.pct) .. "%  " .. r.name .. "  <dim_grey>" .. r.cond,
+                      colour = "dark_khaki" }
+  end
+  section("OFFENSE", off)
+
+  -- RESISTANCES. When every type carries the SAME number there is nothing to compare, so the
+  -- eight rows are collapsed to one -- which is what an "all damage" grant with no type-specific
+  -- boon beside it produces, and it filled half the panel. The v4.7.287 reason for folding "all"
+  -- into every type stands exactly as written: it exists so a reader comparing Fire against Cold
+  -- does not have to add a hidden third row. Where there is no comparison to make, it buys
+  -- nothing. A MIXED set still prints per type.
   local resists = {}
-  for _, k in ipairs(sortedKeys(T.resists)) do
-    if T.resists[k] ~= 0 then
-      resists[#resists + 1] = {
-        text = k .. "  " .. signed(T.resists[k]) .. "%",
-        colour = RESIST_COLOUR[k] or "white",
-      }
+  local rkeys, same, first = sortedKeys(T.resists), true, nil
+  for _, k in ipairs(rkeys) do
+    if first == nil then first = T.resists[k] elseif T.resists[k] ~= first then same = false end
+  end
+  if same and first and first ~= 0 and #rkeys == #RESIST_ROWS then
+    resists[1] = { text = "All types  " .. signed(first) .. "%", colour = "white" }
+  else
+    for _, k in ipairs(rkeys) do
+      if T.resists[k] ~= 0 then
+        resists[#resists + 1] = {
+          text = k .. "  " .. signed(T.resists[k]) .. "%",
+          colour = RESIST_COLOUR[k] or "white",
+        }
+      end
     end
   end
   section("RESISTANCES", resists)
