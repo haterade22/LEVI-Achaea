@@ -2,6 +2,154 @@
 
 ---
 
+## 2026-09-01 - The boon/affix rebalance: three boons deleted, fourteen rewritten (v4.7.288)
+
+Adopting the 2026-09-01 game announcement. Three of its lines are defects in code shipped
+*yesterday*, and one is a defect in a mechanism that has been quietly wrong since the seed shipped.
+
+### REAPER IS GONE FROM THE GAME -- and so is our wiring for it
+
+`Reaper`, `Reaped` and `Reaver` were deleted. We had a whole subsystem for the first: trigger
+`mnemosyne/023` counting "You reap a tithe of power from your fallen foe." into
+`ataxiaTemp.reaperKills`, trigger `024` latching `mnemReaper` off the BOONS row, `M.onReaperTithe`
+echoing the running +N% (the game never printed a total), `M.reaperOnWade` sparing the tally across
+a pause-resume wade, plus the claim-alias latch and two run-reset lines.
+
+**All removed rather than left inert.** A trigger whose line can no longer be printed is exactly
+what `tools/check_orphans.py` exists to catch (v4.7.261): it stays live, costs a pattern match on
+every line of game output, and reads as working code to the next person. The boon is not nerfed, it
+is *removed* -- there is no state to preserve and nothing to re-enable. A tombstone comment in
+`004_Parsers.lua` says what was there and why it went.
+
+Two tests went with it. A third was **retargeted rather than deleted** -- what
+"clears mnemReaper AND the kill tally" was really pinning is that a run-scoped `ataxiaTemp` stamp
+dies on the confirmed run-end and *not* on the unconfirmed maybe, and that invariant outlived the
+boon that motivated it. It now runs against Kai Unleashed.
+
+### THE SEED CANNOT CORRECT ITSELF -- `_boonDbMerge` is fill-only
+
+Fourteen boons were rewritten. Editing `010_Boon_Seed.lua` **would have reached nobody**: the seed
+merges into `history.boonLibrary` at load through `_boonDbMerge`, which never overwrites a field
+the library already holds, and *every previous release had already merged the old text in*. So the
+library would keep serving descriptions the game no longer honours -- and `_bonusDesc` prefers the
+library over the seed, so yesterday's `mnem bonuses` panel would have reported stale numbers as
+fact.
+
+Fill-only is right for ENRICHMENT and wrong for a RETCON. `M._boonSeedRetcon()` runs **once per
+epoch** (`M.BOON_SEED_EPOCH`, the `controlMobsSeeded` / `panicAt35` shape of v4.7.198 / v4.7.218):
+it overwrites the named boons from the seed and drops the deleted ones from the library, then
+stamps. Once, because an unconditional rewrite would undo a genuine in-game sighting on every load
+-- the fill-only rule broken in the other direction. `_learnBoon` does overwrite, so a sighting
+still wins afterwards; that self-healing is not sufficient on its own, since a boon may not come
+round for many runs and a RENAMED one (`Trenchfoot` -> `Sprightly`) never comes round under the old
+name at all.
+
+Changed: Negotiator (now legendary, +5 rerolls), Conqueror (echoes x3), Battlemaster's Fury,
+Offspring's Error (15% -> 10%), Sapwise (+10% poison resist), Elixir Addict (echoes x3), Thirst for
+Power (penalty removed), Silvestri's Grace, Robust Restoration, Sohtanate's Suffering, Coarse Flesh
+(downside removed), Meathead, Master of Harmony (10s cooldown), Trenchfoot -> **Sprightly**.
+
+### A landmine the game just defused, and the rule it leaves behind
+
+`Battlemaster's Fury` used to read "you can no longer be healed above 30% health." Our recovery
+gate is `recoverAt` = **95%**, and `S._reenterReady()` requires it. **Holding that boon made every
+hover and every ground recovery burn its full 60s cap, forever** -- the MANALEECH shape of v4.7.252
+with a different cause. Nothing in the package knew. It was the only healing-cap boon in a
+297-entry catalogue and it is now a balance boon instead, so there is nothing to fix -- but the
+rule is worth keeping: **a boon that CAPS healing breaks every gate whose action is "stand still
+until healthy."** Grep `recoverAt` when one appears.
+
+### Three defects in code shipped yesterday
+
+1. **`Silvestri's Grace` was in `BONUS_EXCEPTIONS` with the old numbers** (`Dexterity +3,
+   Constitution -2`). Now `Damage +25, Constitution -1`. Still an exception, for the same reason:
+   two numbers of opposite sign in one sentence.
+2. **Eight new Mastery boons name eight damage types to our eight**, six matching exactly. The two
+   that differ are handled as ALIASES: `venom` -> Poison is *confirmed* by our own catalogue, since
+   Venom Mastery's text says "poison damage" in so many words. **`arcane` gets its OWN row rather
+   than being folded into Magical** -- pairing them by elimination is a guess, and a guess here
+   silently *inflates* a number the panel exists to be trusted on, whereas a separate row asserts
+   nothing and shows you two rows to merge if they do turn out to be the same thing.
+3. **That alias immediately introduced a double-count.** Two keys resolving to one row means
+   anything iterating the type table to write one row per type writes the aliased row twice -- and
+   the "All damage" fold did exactly that, silently doubling Poison. `RESIST_ROWS` (the distinct
+   display names) is now what the fold walks. Caught by break-back, then pinned by a test written
+   *because* the break-back passed: the existing fold test used Cold and Fire, neither aliased.
+
+### `BOON CONTEMPLATE` gained two lines, and the parser would have eaten them
+
+The screen now prints a boon's **category**, and for an unlocked boon a line naming what unlocked
+it. `_parseContemplate` was a `meta -> desc -> quote` state machine that knew exactly three labels
+and treated **any** other non-blank line as the start of the description. Both new lines would have
+flipped it early and been concatenated into `info.description` -- which reaches `_learnBoon`, which
+*overwrites*, so good library text would have been replaced by `"Category: Offensive Your fire
+damage..."` and then served to the bonuses panel.
+
+We have never seen the wording, so the fix matches the **shape**: while still in the meta block, a
+short `Label: value` line is meta. Unrecognised labels are **kept** in `info.meta` and carried onto
+the boon rather than dropped -- the announcement says category is now available, and storing it
+under whatever the game calls it is how we find out what to call it.
+
+**The bound is the interesting half.** A shape rule with no length limit swallowed
+`"Your options are simple: hit harder."` in testing, so a label is capped at `META_LABEL_WORDS`
+(3): every label the screen has ever printed is one or two words, and prose that opens with a colon
+is longer. *Widening what a parser accepts obliges you to say what it must still refuse*
+(v4.7.262).
+
+### 33 new boons, 30 of them seeded with NO description
+
+The announcement names them and says nothing about what any of them does. **Seeding a name with no
+description is the entry, not a gap**: it makes the boon known, so `mnem boondb` counts it in
+`total` but not in `described` and it shows as an explicit hole to go and fill. One
+`BOON CONTEMPLATE` apiece fills any of them in.
+
+**Deliberately not extrapolated.** Fire / Venom / Asphyxiation Mastery (seeded second-hand
+yesterday; existence now confirmed by this announcement, wording still not) share one obvious
+sentence shape, and a single line would have generated the other five masteries from it -- which is
+precisely the hand-maintained `name -> amount` table this module exists to replace. Invented
+numbers would flow straight into the bonuses panel and be read there as measured.
+
+The holes are **declared** in `M.BOON_UNDESCRIBED` rather than written inline, so the invariant got
+*stricter*, not looser: the suite asserts every undescribed entry is declared (an accidental
+omission still fails) and every declared name is present in the seed (a stale declaration fails).
+The old assertion was `described == total`.
+
+`Cavalry` is on the announcement's "new boons" list and our catalogue **already had its text** --
+so "new" is not strictly new, and the `or {}` in the seeding loop is load-bearing rather than
+defensive: a plain assignment would have destroyed a real description on day one.
+
+### Affixes: 13 new, 2 removed -- recorded, not coded
+
+Names and first-appearance ripples are in `.claude/projects/mnemosyne/03-parsing-triggers.md`. The
+affix layer learns each one's sentence from WADE STATUS at runtime, so there is nothing to
+implement; the value is knowing what is coming and at what depth. Two facts from the announcement
+do change how we should reason:
+
+- **All affixes that spawn enemies on a denizen kill are mutually exclusive with one another.**
+  `_roomHasDenizens` is trusted to mean "this room is finished", and `Necromantic` is the affix
+  that makes that untrue -- the guarantee puts a ceiling on the repopulation rate.
+- **A manifested nightmare's attack speed was reduced.** It is the one seeded `controlMobs` entry
+  (v4.7.198) and its justification is now weaker. Left in place -- user-owned list, still
+  defensible -- but the comment there overstates the case.
+
+Also noted: `Meathead`'s cost changed stupidity -> **confusion**, which is not cosmetic. Stupidity
+EATS QUEUED COMMANDS, and most of this package queues.
+
+### Verification
+
+1660 tests, all passing. **Eight break-backs, each failing its named test**: the contemplate meta
+branch, the label word-bound, the retcon epoch stamp, the retcon made fill-only, the deleted-boon
+drop, an undeclared hole, a stale declaration, and the aliased all-damage fold.
+
+**Files:** `mnemosyne/010_Boon_Seed.lua` (14 changed, 3 deleted, 1 renamed, 30 added, retcon pass),
+`mnemosyne/004_Parsers.lua` (Reaper removal + contemplate meta), `mnemosyne/011_Bonuses.lua`
+(Silvestri's Grace, type aliases, `RESIST_ROWS`), `triggers/mnemosyne/001_Run_Start.lua`,
+`aliases/.../mnemosyne/002_Boon_Claim.lua`, `tests/test_mnemosyne.lua`,
+`tests/test_mnem_bonuses.lua`, `.claude/projects/mnemosyne/03-parsing-triggers.md`.
+**Deleted:** `triggers/mnemosyne/023_Reaper_Tithe.lua`, `triggers/mnemosyne/024_Reaper.lua`.
+
+---
+
 ## 2026-09-01 - What are our boons actually GIVING us? (v4.7.287)
 
 `mnem bonuses` -- a new panel (`mnemosyne/011_Bonuses.lua` + `012_Bonuses_Window.lua`) that folds

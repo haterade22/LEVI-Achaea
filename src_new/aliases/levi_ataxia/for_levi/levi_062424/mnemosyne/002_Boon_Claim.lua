@@ -33,10 +33,6 @@ if matches[2]:lower():find("sleuth") then mnemSleuth = true end
 -- Roll Hide: tumbling out of a room sheds all pursuers; swarm panic-abort (stage 2).
 -- Frontier pattern: a plain find("roll hide") would also match inside "Troll Hide".
 if matches[2]:lower():find("%f[%a]roll hide") then mnemRollHide = true end
--- Reaper: each denizen kill permanently (for the run) adds +1% damage dealt; the
--- tithe trigger (023) counts kills and echoes the running total. Frontier pattern
--- so a boon named e.g. "Soulreaper" can't false-match.
-if matches[2]:lower():find("%f[%a]reaper") then mnemReaper = true end
 -- Bloodscent: senses out every denizen (name/#id/room) on entering a ripple; the
 -- sense-line trigger (028) parses it into the swarm module's recon.
 if matches[2]:lower():find("bloodscent") then mnemBloodscent = true end

@@ -317,6 +317,55 @@ failed" and "the game does not print this to us" are the same observation, and a
 claim is one the user learns to ignore. Verified from `onRipple` (a ripple boundary is well past the
 4s window) rather than a timer, since a `tempTimer` id must never be serialized.
 
+## The 2026-09-01 affix and boon rebalance (v4.7.288)
+
+Recorded here rather than coded, because **an affix name plus a ripple threshold is real
+information and an affix EFFECT is not something we were told.** Our affix layer learns from the
+WADE STATUS block at runtime (`_recordAffixes` -> `M.history.library`), so every one of these will
+be captured with its own sentence the first time it appears — the value of the list below is
+knowing what is *coming*, and at what depth, before it does.
+
+### New affixes, with the ripple they first appear at
+
+| Ripple | Affix | Ripple | Affix |
+|---|---|---|---|
+| 20+ | Suffering of Abbadon | 70+ | Thunderous |
+| 25+ | Khentimen's Enmity | 80+ | Starforged |
+| 30+ | Sanctioned Wade | 85+ | Fulminous |
+| 50+ | Deathmarked | 90+ | Lone Hunter |
+| 65+ | Deathbound | 95+ | Starborn |
+| 100+ | Sorcerous | 105+ | Pack Hunter |
+| 115+ | Reckoning | | |
+
+**Removed:** `Dreamwracked`, `Dream of Tavarius`. Nothing referenced either by name, so there is
+no code to delete — but a local `history.library` keeps them, which is correct: that table is a
+record of what this character has *seen*, not a list of what currently exists.
+
+### Two mutual-exclusion facts, which bound the worst case
+
+- `Meldscorned`, `Mindworm` and `Khentimen's Enmity` are mutually exclusive with one another.
+- **All affixes that spawn new enemies on killing a denizen are mutually exclusive with one
+  another.** This one matters to the sweep: `_roomHasDenizens` is trusted to mean "this room is
+  finished", and `Necromantic` ("denizens may revive as mindless thralls") is the affix that makes
+  that untrue. The guarantee is that we can face at most ONE such affix per ripple, so the
+  repopulation rate has a ceiling.
+
+### Changes that quietly *removed* hazards
+
+- `Heretical` no longer reduces fire resistance; `Iconoclast` no longer increases all damage taken.
+- **A manifested nightmare's attack speed has been reduced.** It is the one seeded entry in
+  `ataxiaBasher.controlMobs` (v4.7.198), whose whole justification was that rage spent on its
+  balance beat rage spent on our damage. That case is now weaker. Left in place — it is a
+  user-owned list and the entry is still defensible — but the reasoning behind the default is no
+  longer as strong as the comment there claims.
+- `Apathetic` and `Torrential` are no longer dropped from the pool in late ripples.
+
+### `BOON CONTEMPLATE` now prints a boon's category, and what unlocked it
+
+Handled in `_parseContemplate` — see the meta-block note in `004_Parsers.lua`. We have not seen
+the wording, so the parser matches the SHAPE (a short `Label: value` line while still in the meta
+block) and stores anything unrecognised in `info.meta` rather than dropping it.
+
 ## Reviewed and NOT adopted
 
 * **`M.MOBTYPES`** -- their 80+ wave announcement lines mapped to a monster roster and boss. The one

@@ -61,7 +61,9 @@ local M = ataxia.mnemosyne
 -- and we have not confirmed which, so it contributes no resistance row rather than a guessed one.
 M.BONUS_EXCEPTIONS = {
   ["Earthen Will"]      = { resist = { Physical = 15, Magical = -10 } },
-  ["Silvestri's Grace"] = { stat = { Dexterity = 3, Constitution = -2 } },
+  -- CHANGED 2026-09-01: was "Gain 3 dexterity but lose 2 constitution". Now a damage boon.
+  -- Still an exception for the same reason -- two numbers, opposite signs, one sentence.
+  ["Silvestri's Grace"] = { stat = { Damage = 25, Constitution = -1 } },
   ["Good Jera"]         = { stat = { Strength = 1, Constitution = 1 } },
   ["Rose of Pain"]      = { stat = { Intelligence = 3, Speed = 15 } },
   ["Dungeoneer"]        = { stat = { Damage = 5, Speed = 5 } },
@@ -73,10 +75,33 @@ local STAT_NAMES = {
   intelligence = "Intelligence",
 }
 
+-- Eight types, and the 2026-09-01 Mastery boons name eight to match -- six of them identically.
+-- The two that differ are handled as ALIASES rather than by renaming a row:
+--   `venom` -> Poison is CONFIRMED by our own catalogue, since Venom Mastery's description says
+--     "poison damage" in so many words.
+--   `arcane` gets its OWN row, NOT folded into Magical. Pairing them by elimination would be a
+--     guess, and a guess here silently INFLATES a number the panel exists to be trusted on --
+--     whereas a separate row asserts nothing and, if the two turn out to be the same thing, shows
+--     you two rows to merge. `Antimagic Shell` and `Arcane Will` shipping in the same batch make
+--     the pairing likely; likely is not read.
 local RESIST_TYPES = {
   physical = "Physical", magical = "Magical", fire = "Fire", cold = "Cold",
   poison = "Poison", asphyxiation = "Asphyxiation", electric = "Electric", psychic = "Psychic",
+  venom = "Poison", arcane = "Arcane",
 }
+
+-- The DISTINCT display names, which is not the same list as the keys above -- `poison` and `venom`
+-- both resolve to "Poison". Anything that iterates the types to write one row per type must walk
+-- THIS, or an aliased type is written twice: the "All damage" fold below would have credited
+-- Poison with the all-bonus once per alias.
+local RESIST_ROWS = {}
+do
+  local seen = {}
+  for _, t in pairs(RESIST_TYPES) do
+    if not seen[t] then seen[t] = true; RESIST_ROWS[#RESIST_ROWS + 1] = t end
+  end
+  table.sort(RESIST_ROWS)
+end
 
 -- ---------------------------------------------------------------------------
 -- Inputs
@@ -227,7 +252,7 @@ function M.bonusTotals()
   end
 
   if allResist ~= 0 then
-    for _, t in pairs(RESIST_TYPES) do resists[t] = (resists[t] or 0) + allResist end
+    for _, t in ipairs(RESIST_ROWS) do resists[t] = (resists[t] or 0) + allResist end
   end
 
   immune = (M.runImmunities and M.runImmunities()) or {}

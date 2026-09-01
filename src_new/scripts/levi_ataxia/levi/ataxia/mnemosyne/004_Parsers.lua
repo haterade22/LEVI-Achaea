@@ -192,7 +192,6 @@ function M.onRunEnd()
   bmBladedReflexes = false -- boons gone on a confirmed run-end
   mnemSleuth = false -- boons gone on a confirmed run-end
   mnemRollHide = false -- boons gone on a confirmed run-end
-  mnemReaper = false -- boons gone on a confirmed run-end
   mnemBloodscent = false -- boons gone on a confirmed run-end
   mnemKaiUnleashed = false -- boons gone on a confirmed run-end
   mnemSenselessFlurry = false -- boons gone on a confirmed run-end
@@ -238,7 +237,6 @@ function M.onRunEnd()
   mnemDeluge = false -- affixes gone on a confirmed run-end (flight available again)
   ataxiaTemp.mnemAblazeAt = nil   -- per-room burn state cannot outlive the run
   if ataxiaTemp then
-    ataxiaTemp.reaperKills = nil -- the +1%/kill tally dies with the run
     ataxiaTemp.kaiUnleashedAt = nil -- the burst cooldown stamp dies with it
     ataxiaTemp.kaiChokePendingAt = nil -- ...and the unconfirmed-choke retry guard
   end
@@ -274,36 +272,17 @@ function M.onRunEnd()
   if M._inRun() then M.endRun() end
 end
 
--- Reaper boon (legendary): each denizen kill permanently (for the run) adds +1%
--- damage dealt, announced by "You reap a tithe of power from your fallen foe."
--- (trigger 023). The game never shows the running total, so count the tithes and
--- echo the cumulative bonus after each kill (user spec: "You now have X increased
--- damage total"). The tithe line only prints with Reaper up, so it is its own
--- proof -- seeing it also sets mnemReaper, and a missed claim/BOONS row can't
--- desync the tally. Counter lives in ataxiaTemp so a SYSUPDATE reload mid-run
--- keeps it; reset on run start (trigger 001) + the confirmed run-end above.
-function M.onReaperTithe()
-  mnemReaper = true
-  ataxiaTemp = ataxiaTemp or {}
-  ataxiaTemp.reaperKills = (tonumber(ataxiaTemp.reaperKills) or 0) + 1
-  local n = ataxiaTemp.reaperKills
-  M.echo("<orange>Reaper<reset>: you now have <green>+" .. n .. "%<reset> damage total ("
-    .. n .. " kill" .. (n == 1 and "" or "s") .. " this run).")
-end
-
--- Wade-start hook for the Reaper tally, called by trigger 001 BEFORE onRunStart()
--- (which CONSUMES run.paused on a resume). A resume-after-pause wade (WADE STILL ->
--- wade back in) re-enters the SAME server-side run, so the +1%/kill tally must
--- survive it -- the game never prints a running total, so a wiped count is
--- unrecoverable (adversarial-review catch, v4.7.118). Only a genuinely fresh wade
--- resets it. Telemetry-independent, like the boon-flag resets: run.paused is SET
--- unconditionally by onRunPause and cleared unconditionally by the confirmed
--- onRunEnd, so it is a reliable resume marker in both telemetry modes here.
-function M.reaperOnWade()
-  local resuming = (M.run and M.run.paused) and true or false
-  if not resuming and ataxiaTemp then ataxiaTemp.reaperKills = nil end
-  return resuming
-end
+-- REAPER / REAPED / REAVER WERE DELETED FROM THE GAME (2026-09-01, v4.7.288).
+--
+-- What lived here: `M.onReaperTithe` counted "You reap a tithe of power from your fallen foe."
+-- into `ataxiaTemp.reaperKills` and echoed the running +N% (the game never showed a total), plus
+-- `M.reaperOnWade`, which spared the tally across a pause-resume wade because a wiped count was
+-- unrecoverable. Trigger `mnemosyne/023` fed it and the BOON CLAIM alias latched `mnemReaper`.
+--
+-- All of it is gone rather than left inert. A trigger whose line can no longer be printed is the
+-- exact shape `tools/check_orphans.py` exists to catch (v4.7.261): it stays live, costs a pattern
+-- match on every line, and reads as working code to the next person. The boon is not nerfed, it
+-- is REMOVED -- so there is no state to preserve and nothing to re-enable.
 
 -- Splinterbark ongoing-effect safety (telemetry-INDEPENDENT: driven by a plain status-screen
 -- trigger, not the _inRun()-gated affix parse). The "Splinterbark" affix taints our tree tattoo
@@ -1846,6 +1825,9 @@ function M._applyContemplate(boon, info)
   if info.rarity then boon.rarity = info.rarity end
   if info.quote then boon.quote = info.quote end
   if info.num_echoes_possible ~= nil then boon.num_echoes_possible = info.num_echoes_possible end
+  -- Category / unlocked-by and anything the screen gains later. Carried whole rather than picked
+  -- apart, because we have not seen the labels: keeping them is what lets us learn them.
+  if info.meta then boon.meta = info.meta end
 end
 
 -- Capture one BOON CONTEMPLATE block (skip the "<name>:" header + opening
@@ -1873,8 +1855,39 @@ function M._captureContemplate(cb)
 end
 
 -- Parse a captured CONTEMPLATE block into { rarity, num_echoes_possible,
--- description, quote }. Layout: "Rarity: <r>", "Can echo: <Yes/No>", the
+-- description, quote, meta }. Layout: "Rarity: <r>", "Can echo: <Yes/No>", the
 -- description paragraph, a blank line, then the quote in double quotes.
+--
+-- THE META BLOCK IS OPEN-ENDED (v4.7.288). The 2026-09-01 announcement adds a boon's CATEGORY to
+-- this screen, plus -- for a boon unlocked by another -- a line naming the unlocking boon. The old
+-- state machine recognised exactly three meta labels and treated ANY other non-blank line as the
+-- start of the description, so both new lines would have flipped it early and been concatenated
+-- into `info.description`. That is not cosmetic: a polluted description reaches `_learnBoon`,
+-- which OVERWRITES, so it would have replaced good library text with "Category: Offensive Your
+-- fire damage..." -- and the library outranks the seed in `_bonusDesc`, so the corruption lands
+-- straight on the bonuses panel.
+--
+-- The fix is SHAPE, not names, since we have never seen the new wording: while still in the meta
+-- section, a `Label: value` line is meta. A real description is prose and does not open that way.
+-- Unrecognised labels are KEPT in `info.meta[label]` rather than dropped -- the announcement says
+-- category is now available, and storing it under whatever the game calls it is how we find out
+-- what to call it. Only a non-label line ends the meta section, exactly as before.
+-- Is this a `Label: value` header rather than a sentence that happens to contain a colon?
+-- WORD COUNT is the discriminator. Every label the screen has ever printed is one or two words
+-- ("Rarity", "Can echo", "Maximum echoes", and now "Category" / "Unlocked by"); prose that opens
+-- with a colon does not -- "Your options are simple: hit harder." is four. A shape rule with no
+-- length bound swallowed exactly that line in testing, which is the whole reason the bound is
+-- here: widening what a parser accepts obliges you to say what it must still refuse (v4.7.262).
+local META_LABEL_WORDS = 3
+local function metaLabel(ln)
+  local k = ln:match("^(%u[%w'%- ]-):%s+%S")
+  if not k then return nil end
+  local words = 1
+  for _ in k:gmatch(" ") do words = words + 1 end
+  if words > META_LABEL_WORDS then return nil end
+  return k
+end
+
 function M._parseContemplate(lines)
   local info = {}
   local descParts, quoteParts = {}, {}
@@ -1901,6 +1914,12 @@ function M._parseContemplate(lines)
       end
     elseif ln:match("^%s*$") then
       if section == "desc" then section = "quote" end
+    elseif section == "meta" and metaLabel(ln) then
+      -- An unrecognised `Label: value` while still in the meta block -- category, unlocked-by, or
+      -- whatever is added next. Record it and do NOT let it start the description.
+      local k, v = ln:match("^(%u[%w'%- ]-):%s+(.+)$")
+      info.meta = info.meta or {}
+      info.meta[k] = (v:gsub("%s+$", ""))
     else
       local t = ln:gsub("^%s+", ""):gsub("%s+$", "")
       if section == "meta" then section = "desc" end

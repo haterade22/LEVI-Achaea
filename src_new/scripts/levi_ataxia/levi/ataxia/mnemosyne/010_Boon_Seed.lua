@@ -59,7 +59,7 @@ M.BOON_SEED = {
   ["Azure Scales"] = { description = "Gain 25% resistance to cold damage.", rarity = "common", echo = "Gain 50% resistance to cold damage." },
   ["Baron's Bro"] = { description = "When you critically strike, there is a low chance that your attack will invoke Baron Balam Agab, summoning a squad of ogre goons to lay waste to your enemies. This may only occur once every 20 seconds.", rarity = "rare" },
   ["Battle-Scarred"] = { description = "The memory of the War Veil grants 10% physical resistance.", rarity = "common", echo = "The memory of the War Veil grants 30% physical resistance." },
-  ["Battlemaster's Fury"] = { description = "Your balance recovers 30% faster, but you can no longer be healed above 30% health.", rarity = "rare" },
+  ["Battlemaster's Fury"] = { description = "While below 50% of your health, your balance and equilibrium recover 30% faster.", rarity = "rare" },
   ["Beeline"] = { description = "You may now utilise prism tattoos against non-boss denizens.", rarity = "common" },
   ["Berkana Surround"] = { description = "Berkana now additionally reduces your mana, willpower, and endurance costs by 5%.", rarity = "common" },
   ["Blade of Celestia"] = { description = "Smiting a denizen has a chance to invoke the wrath of Celestia, summoning forth an angelic manifestation to visit devastation upon your enemies.", rarity = "uncommon" },
@@ -82,9 +82,9 @@ M.BOON_SEED = {
   ["Child of Chaos"] = { description = "The Wayward Heir lends your attacks a 10% chance to deliver a random battlerage affliction to your target.", rarity = "rare" },
   ["Child of the Sky"] = { description = "Your atavian heritage allows you to fly without consuming, but still requiring, balance.", rarity = "common" },
   ["Cleave"] = { description = "Your attacks deal a small amount of splash damage to another random denizen in the location.", rarity = "rare", echo = "Your attacks deal a small amount of splash damage to another random denizen in the location." },
-  ["Coarse Flesh"] = { description = "You are immune to slickness, but suffer permanent timeflux.", rarity = "rare" },
+  ["Coarse Flesh"] = { description = "You are immune to slickness.", rarity = "rare" },
   ["Conductivity"] = { description = "When you take electric damage, your aqueous form will conduct the electricity to strike all denizens present.", rarity = "rare" },
-  ["Conqueror"] = { description = "The unflinching will of Malevolence causes you to deal 15% more damage to enemies whose health percent is lower than yours.", rarity = "rare" },
+  ["Conqueror"] = { description = "The unflinching will of Malevolence causes you to deal 15% more damage to enemies whose health percent is lower than yours.", rarity = "rare", maxEchoes = 3 },
   ["Convocation"] = { description = "You may now use brazier tattoos on non-boss denizens, but your brazier tattoo incurs a 1 minutes cooldown.", rarity = "rare" },
   ["Corrupted Blood"] = { description = "Your poison resistance is increased by 66% but you suffer permanent nausea.", rarity = "common" },
   ["Corrupted Breath"] = { description = "Your asphyxiation resistance is increased by 66% but you suffer permanent manaleech.", rarity = "common" },
@@ -122,7 +122,7 @@ M.BOON_SEED = {
   ["Echo of Nemuritoaure"] = { description = "You take 25% less physical damage, but falling below 35% health causes you to become transfixed and lose the benefit for 7 seconds. This can only occur once every 7 seconds.", rarity = "uncommon" },
   ["Echoing Hydra"] = { description = "When attuned to Arius, your attacks will trigger a terrible roar which strikes another random denizen in the location.", rarity = "legendary" },
   ["Elder Wisdom"] = { description = "The Jade Empress increases your intelligence by 1.", rarity = "common", echo = "The Jade Empress increases your intelligence by 2." },
-  ["Elixir Addict"] = { description = "Your health elixirs are 15% more effective but you gain no health from moss or potash.", rarity = "uncommon" },
+  ["Elixir Addict"] = { description = "Your health elixirs are 15% more effective but you gain no health from moss or potash.", rarity = "uncommon", maxEchoes = 3 },
   ["Energetic"] = { description = "You are immune to lethargy and weariness.", rarity = "common" },
   ["Epidemic"] = { description = "When under the effects of death sickness, you deal 20% additional damage and your balance recovery is increased by 20%, but your ability to recover mana and health from elixirs is reduced by 50%", rarity = "rare" },
   ["Escape Artist"] = { description = "Non-boss denizens will no longer block your movements.", rarity = "uncommon" },
@@ -136,10 +136,13 @@ M.BOON_SEED = {
   ["Flow State"] = { description = "Your acrobatics defence now conveys a 10% chance to dodge denizen attacks outright.", rarity = "legendary" },
   ["Fluid Form"] = { description = "While maintaining your watery cohesion, you take 12% reduced damage and become immune to dehydration.", rarity = "uncommon" },
   ["Font of Life"] = { description = "The Earthmother empowers your tree tattoo to now cure two afflictions.", rarity = "rare" },
-  -- SECOND-HAND (v4.7.287): these three came from a community window's hand-maintained
-  -- amount table, NOT from an offer screen we captured, and each embeds TWO numbers in one
-  -- sentence (a damage boost and a resistance). Marked so a future reader knows the
-  -- wording is reconstructed -- replace it the first time one is actually offered.
+  -- SECOND-HAND WORDING (v4.7.287), EXISTENCE CONFIRMED (v4.7.288). The 2026-09-01 announcement
+  -- names all three as new neutral boons, so the second-hand call was right about WHAT exists --
+  -- but it says nothing about their TEXT, so these numbers are still a community window's
+  -- hand-maintained amount table and not an offer screen we captured. Replace on first sighting.
+  -- The five SIBLING masteries the same announcement names are seeded BELOW with no description
+  -- at all: extrapolating "15% damage / 10% resistance" from three unverified rows is exactly the
+  -- inventing this catalogue exists to avoid.
   ["Fire Mastery"] = { description = "Your fire damage dealt is increased by 15% and you gain 10% fire resistance.", rarity = "uncommon" },
   ["Venom Mastery"] = { description = "Your poison damage dealt is increased by 15% and you gain 10% poison resistance.", rarity = "uncommon" },
   ["Asphyxiation Mastery"] = { description = "Your asphyxiation damage dealt is increased by 15% and you gain 10% asphyxiation resistance.", rarity = "uncommon" },
@@ -207,9 +210,9 @@ M.BOON_SEED = {
   ["Maklak's Promise"] = { description = "Non-boss denizens can now be impeded by icewalls.", rarity = "rare" },
   ["Maliceborn"] = { description = "Slaying a denizen will now restore 5% of your life essence.", rarity = "common" },
   ["Master of Four"] = { description = "Casting simultaneity deals four elemental bursts of damage to all denizens in your location as fire, cold, electric, and blunt damage. There is a 30 seconds cooldown before this effect can occur again.", rarity = "legendary" },
-  ["Master of Harmony"] = { description = "When you defeat a denizen, you will gain a bubble of serenity for 10 seconds.", rarity = "legendary" },
+  ["Master of Harmony"] = { description = "When you defeat a denizen, you will gain a bubble of serenity for 10 seconds. It cannot proc again for 10 seconds.", rarity = "legendary" },
   ["Matter Over Mind"] = { description = "Gain 15% increased damage but you are plagued with uncurable stupidity.", rarity = "uncommon" },
-  ["Meathead"] = { description = "Your strength is increased by 5, but you suffer permanent stupidity.", rarity = "common" },
+  ["Meathead"] = { description = "Your strength is increased by 5, but you suffer permanent confusion.", rarity = "common" },
   ["Midnight Snow's Icy Heart"] = { description = "Your Shindo blizzard ability now deals cold damage to all denizens in your location.", rarity = "rare" },
   ["Might of Minia"] = { description = "Your attacks have a 5% chance to afflict the target with weakness. This may only occur every 5 seconds.", rarity = "uncommon", echo = "Your attacks have a 10% chance to afflict the target with weakness. This may only occur every 5 seconds." },
   ["Might of Sycaerunax"] = { description = "Your draconic blast ability does 25% more damage, and your breath weapon persists and will not need to be resummoned upon use.", rarity = "rare", echo = "Your draconic blast ability does 50% more damage, and your breath weapon persists and will not need to be resummoned upon use." },
@@ -219,10 +222,10 @@ M.BOON_SEED = {
   ["Morudai"] = { description = "Returning to your fulcrum cures you of all afflictions and restores you to full health. Not effective in the same location.", rarity = "rare" },
   ["Mutated Jaws"] = { description = "The cooldown for commanding your hound to maul a denizen is reduced by 66%.", rarity = "common" },
   ["Name That Tune"] = { description = "Your tune defence now provides an additional 10% damage resistance.", rarity = "uncommon" },
-  ["Negotiator"] = { description = "Every fifth boon you select will grant you Prospero's Fortune, allowing you to choose a second one.", rarity = "uncommon" },
+  ["Negotiator"] = { description = "Every fifth boon you select will grant you Prospero's Fortune, allowing you to choose a second one. Claiming it also grants 5 additional rerolls.", rarity = "legendary" },
   ["Nightwalker"] = { description = "You are immune to the darkshade affliction.", rarity = "common" },
   ["Oakskin"] = { description = "Barkskin now grants an additional 10% resistance to all damage types.", rarity = "common" },
-  ["Offspring's Error"] = { description = "Your grook heritage grants 3 intelligence but a 15% weakness to psychic damage.", rarity = "uncommon" },
+  ["Offspring's Error"] = { description = "Your grook heritage grants 3 intelligence but a 10% weakness to psychic damage.", rarity = "uncommon" },
   ["Old as Humanity"] = { description = "Your maximum age is increased by 500%.", rarity = "rare" },
   ["One Step Ahead"] = { description = "Your muscles are almost as strong as Alynzar's, and you will automatically shrug off entanglement and ropes that would bind you.", rarity = "rare" },
   ["Onyx Scales"] = { description = "Gain 15% resistance to all damage.", rarity = "rare" },
@@ -254,9 +257,6 @@ M.BOON_SEED = {
   ["Rat Catcher"] = { description = "Extispicy is now permanent and grants an additional 2% critical strike chance.", rarity = "rare" },
   ["Razor Clarity"] = { description = "You deal 50% bonus damage and have 2% bonus critical chance while benefitting from the emulation clarity defence.", rarity = "uncommon" },
   ["Razor Leaf"] = { description = "When touching your tree tattoo, razor-sharp leaves will descend upon the locale, dealing damage to all denizens present.", rarity = "uncommon" },
-  ["Reaped"] = { description = "You lose all dexterity and strength but gain the putrefaction defence and you deal 200% additional damage.", rarity = "legendary" },
-  ["Reaper"] = { description = "Each kill on a denizen permanently increases your damage dealt by 1%.", rarity = "legendary" },
-  ["Reaver"] = { description = "You gain 4 dexterity and strength and the putrefaction defence, and you deal 200% bonus damage but your intelligence is reduced by 4.", rarity = "legendary" },
   ["Reckless Rage"] = { description = "Deal 10% more damage but you can no longer benefit from shields, prismatic barriers, or blood barriers.", rarity = "uncommon", echo = "Deal 15% more damage but you can no longer benefit from shields, prismatic barriers, or blood barriers." },
   ["Resilience of Lessers"] = { description = "While you are in lesserform (not a Dragon or Elemental Lord) gain an additional 20% resistance to all damage.", rarity = "common" },
   ["Resourceful"] = { description = "Your endurance and willpower costs are reduced by 10% and defeating a denizen restores 10% of your class resources.", rarity = "uncommon", echo = "Your endurance and willpower costs are reduced by 20% and defeating a denizen restores 20% of your class resources." },
@@ -264,11 +264,11 @@ M.BOON_SEED = {
   ["Restoration"] = { description = "Restore your resources instead.", rarity = "common" },
   ["Revel in Slaughter"] = { description = "When you slay a denizen, a random affliction will be cured.", rarity = "common" },
   ["Righteous Brand"] = { description = "Your devotion penitence ability deals additional fire damage when it condemns a denizen.", rarity = "rare" },
-  ["Robust Restoration"] = { description = "Your survival restoration uses 20% reduced equilibrium, restores 20% of your health, but drains 10% of your mana, willpower, and endurance.", rarity = "common" },
+  ["Robust Restoration"] = { description = "Your restoration ability also cures a random affliction and heals you for 15% of your maximum health.", rarity = "common" },
   ["Roll Hide"] = { description = "Tumbling out of a room will cause you to lose all pursuing denizens.", rarity = "rare" },
   ["Rose of Pain"] = { description = "Your intelligence is increased by 3, and your equilibrium recovers 15% faster, but you suffer from permanent hallucinations, and your fire resistance is reduced by 20%.", rarity = "legendary" },
   ["Rust"] = { description = "Educe Iron now deals fire damage and afflicts your foe with sensitivity.", rarity = "rare" },
-  ["Sapwise"] = { description = "Your Tsol'aa heritage grants you immunity to the voyria affliction.", rarity = "common" },
+  ["Sapwise"] = { description = "Your Tsol'aa heritage grants you immunity to the voyria affliction and 10% resistance to poison damage.", rarity = "common" },
   ["Savant"] = { description = "Focusing your mind has no cooldown but costs 10% of your maximum mana.", rarity = "uncommon" },
   ["Scar of Creation"] = { description = "Your scream ability has a 20% chance to afflict the target with sensitivity.", rarity = "common" },
   ["Scout's Honour"] = { description = "Activating hypersight while in a ripple hub will reveal all denizens in the current ripple to you.", rarity = "common" },
@@ -283,7 +283,7 @@ M.BOON_SEED = {
   ["Shattered Glass"] = { description = "Defeating a denizen surrounds you in a magical shield for three seconds, but also causes you to bleed for 5% of your maximum health.", rarity = "uncommon" },
   ["Shimite's Blessing"] = { description = "While you have mutated tentacles, your attacks will cause them to strike at another denizen in the location, dealing blunt damage.", rarity = "uncommon" },
   ["Shin Enhanced"] = { description = "While in the Shin trance you gain an additional 10% resistance to fire, cold, electric, and magic damage.", rarity = "common" },
-  ["Silvestri's Grace"] = { description = "Gain 3 dexterity but lose 2 constitution.", rarity = "uncommon" },
+  ["Silvestri's Grace"] = { description = "You deal 25% more damage but lose 1 constitution.", rarity = "uncommon" },
   ["Singed Flesh"] = { description = "Your attacks have a 5% chance to afflict the target with sensitivity. This may only occur every 5 seconds.", rarity = "rare", echo = "Your attacks have a 10% chance to afflict the target with sensitivity. This may only occur every 5 seconds." },
   ["Single Minded Focus"] = { description = "Gain 5% critical strike chance but you can no longer squint, glance, or observe.", rarity = "uncommon" },
   ["Sinuosity"] = { description = "Your scales reduce physical damage by an additional 15%, but your ability to resist cold is reduced by 10%.", rarity = "uncommon" },
@@ -291,7 +291,7 @@ M.BOON_SEED = {
   ["Sleuth"] = { description = "Your fullsense ability will reveal all denizens in your ripple.", rarity = "uncommon" },
   ["Snowflake"] = { description = "Your constitution is increased by 5, but you suffer permanent sensitivity.", rarity = "uncommon" },
   ["Social Anxiety"] = { description = "You are immune to shyness and loneliness.", rarity = "common" },
-  ["Sohtanate's Suffering"] = { description = "Focusing your mind cures two afflictions, but all stupidity you labour under shall be muddled further.", rarity = "uncommon" },
+  ["Sohtanate's Suffering"] = { description = "Focusing your mind cures an additional mental affliction, but all stupidity you labour under shall be muddled further.", rarity = "uncommon" },
   ["Songstep"] = { description = "Your dances gain additional bonuses. Hawkstep: Gain 25% resistance to damage. Wavedance: Ignore 75% of a denizen's resistance. Harrying: Deal 50% bonus damage.", rarity = "legendary" },
   ["Sow"] = { description = "Hatred's shadow empowers your scythe and arm, causing you to strike 1 additional times with reap and cull.", rarity = "legendary" },
   ["Spark Extant"] = { description = "Your incantation now hits all enemy denizens in the location and costs 33% less willpower.", rarity = "rare" },
@@ -317,7 +317,7 @@ M.BOON_SEED = {
   ["The Frozen North"] = { description = "Manifesting effervescence will bring about a storm of icy vapour to assault your enemies.", rarity = "uncommon" },
   ["The Human Spirit"] = { description = "Critical strikes restore 2% of your health.", rarity = "uncommon" },
   ["The Justice That Is"] = { description = "Your confront ability has a 20% chance to afflict the target with sensitivity.", rarity = "common" },
-  ["Thirst for Power"] = { description = "You deal 10% more damage when above 90% mana but 10% less damage below 90% mana.", rarity = "uncommon", echo = "You deal 20% more damage when above 90% mana but 20% less damage below 90% mana." },
+  ["Thirst for Power"] = { description = "You deal 10% more damage when above 90% mana.", rarity = "uncommon" },
   ["Thorn of the Ithmia"] = { description = "You can now use the groves thornlash ability from any location.", rarity = "uncommon" },
   ["Thunderclap"] = { description = "Your bisect ability now strikes a third time, dealing bonus electric damage to all denizens in your location.", rarity = "uncommon" },
   ["Thundercry"] = { description = "Your draconic blast attack is imbued with a Silver Dragon's breath, granting it a 20% chance to afflict your foe with fear.", rarity = "common" },
@@ -325,7 +325,9 @@ M.BOON_SEED = {
   ["Timequake"] = { description = "Your aeonics distortion ability now deals magic damage to all denizens when distorting a location.", rarity = "rare" },
   ["Tireless"] = { description = "Defeating a denizen will restore 2% of your willpower and 2% of your endurance.", rarity = "common" },
   ["Toxicologist"] = { description = "Your venoms now relapse against denizens, dealing damage again after a delay.", rarity = "rare" },
-  ["Trenchfoot"] = { description = "Your dexterity is increased by 5, but you suffer permanent hamstrung.", rarity = "uncommon" },
+  -- RENAMED 2026-09-01 from "Trenchfoot", and the cost changed hamstrung -> clumsiness. Kept
+  -- at the old alphabetical position deliberately: the rename is the fact worth seeing.
+  ["Sprightly"] = { description = "Your dexterity is increased by 5, but you suffer permanent clumsiness.", rarity = "uncommon" },
   ["Truther"] = { description = "You are immune to the paranoia and hallucinations afflictions.", rarity = "common" },
   ["Tough Crowd"] = { description = "Telling a bad joke will cause psychic damage to all denizens present, but your comedic flair is so horrific that doing so will cause you to become stupid and stunned." },
   ["Elusive Foolery"] = { description = "While slippery, your dexterity is increased by 2, the defence allows you to shrug off webs, ropes, and other entanglements, but your constitution is reduced by 1." },
@@ -348,6 +350,123 @@ M.BOON_SEED = {
   ["Wyrmvenom"] = { description = "Your draconic blast attack is imbued with a Green Dragon's breath, granting it a 20% chance to afflict your foe with weakness.", rarity = "common" },
 }
 
+-- ─────────────────────────────────────────────────────────────────────────────────────────────
+-- NEW 2026-09-01 -- NAME ONLY, NO DESCRIPTION (v4.7.288)
+--
+-- The announcement lists these as new neutral boons and says nothing about what any of them does.
+-- A name with no description is not a gap in the catalogue, it IS the entry: it makes the boon
+-- KNOWN, so `mnem boondb` counts it in `total` but not in `described` and it shows up as an
+-- explicit hole to go and fill, without asserting anything we have not read.
+--
+-- DECLARED AS A LIST, not written as empty rows inline, so the hole is auditable: the test suite
+-- asserts that the set of undescribed seed entries is EXACTLY this list. An accidental omission
+-- therefore still fails, while a deliberate one has to be admitted here first.
+--
+-- Deliberately NOT extrapolated. Fire/Venom/Asphyxiation Mastery above share one obvious sentence
+-- shape and it would take a single line to generate the other five masteries from it -- which is
+-- precisely the hand-maintained name->amount table this module exists to replace (v4.7.287).
+-- Numbers we invent would flow straight into the bonuses panel and be read there as measured.
+--
+-- One BOON CONTEMPLATE apiece fills any of these in; `_learnBoon` OVERWRITES a description, so a
+-- real sighting always beats the seed and no migration is needed.
+-- ─────────────────────────────────────────────────────────────────────────────────────────────
+M.BOON_UNDESCRIBED = {
+  "Physical Mastery",
+  "Arcane Mastery",
+  "Cold Mastery",
+  "Electric Mastery",
+  "Psychic Mastery",
+  "Arcane Will",
+  "Antimagic Shell",
+  "Heelbreaker",
+  "Thick Skull",
+  "Ogre's Strike",
+  "Ogre's Defence",
+  "Ogre's Speed",
+  "Mana Powered",
+  "Brute Force",
+  "Mental Prowess",
+  "Deadly Finesse",
+  "Training Arc",
+  "Violent Impulse",
+  "Battle Frenzy",
+  "Rage Within",
+  "Glass Cannon",
+  "Fired Up",
+  "Vigorous",
+  "Desperation",
+  "Slow And Steady",
+  "Healing Metabolism",
+  "Bloodquell",
+  "Cavalry",
+  "Phaestian Fortitude",
+  "Death Stare",
+}
+
+for _, name in ipairs(M.BOON_UNDESCRIBED) do
+  -- `or {}` so a description learned from a later source is never blanked by re-loading the file.
+  -- It also matters immediately: `Cavalry` is on the announcement's "new boons" list and this
+  -- catalogue already carried its text, so the announcement's "new" is not strictly new and a
+  -- plain assignment would have destroyed a real description on the day it shipped.
+  M.BOON_SEED[name] = M.BOON_SEED[name] or {}
+end
+
+
+-- ─────────────────────────────────────────────────────────────────────────────────────────────
+-- RETCON: when the GAME changes a boon, "what you already have" is no longer the better answer
+-- ─────────────────────────────────────────────────────────────────────────────────────────────
+--
+-- `_boonDbMerge` is FILL-ONLY by design -- it never overwrites a field the library already holds,
+-- because observed data beats seeded data. That is right for ENRICHMENT and wrong for a RETCON:
+-- on 2026-09-01 the game rewrote fourteen boons and deleted three, and every previous release of
+-- this file had already merged the OLD text into every user's library. Without the pass below the
+-- corrections in this file would reach nobody -- the merge would decline to overwrite, the library
+-- would keep serving text the game no longer honours, and `_bonusDesc` prefers the library over
+-- the seed, so the stale numbers would land straight on the `mnem bonuses` panel as fact.
+--
+-- `_learnBoon` DOES overwrite, so any of these self-heals the next time that boon is offered. That
+-- is not good enough on its own: a boon may not come round for many runs, and a RENAMED one
+-- (Trenchfoot -> Sprightly) never comes round at all under the old name.
+--
+-- Runs ONCE per epoch, the `controlMobsSeeded` / `panicAt35` shape (v4.7.198, v4.7.218): an
+-- unconditional rewrite would undo a genuine in-game sighting on every single load, which is the
+-- fill-only rule broken in the other direction.
+M.BOON_SEED_EPOCH = "2026-09-01"
+
+-- Descriptions/rarities the game CHANGED. The seed above is now the better answer for these.
+M.BOON_RETCONNED = {
+  "Negotiator", "Conqueror", "Battlemaster's Fury", "Offspring's Error", "Sapwise",
+  "Elixir Addict", "Thirst for Power", "Silvestri's Grace", "Robust Restoration",
+  "Sohtanate's Suffering", "Coarse Flesh", "Meathead", "Master of Harmony", "Sprightly",
+}
+
+-- Gone from the game. A catalogue of what EXISTS should not list what does not -- and "Trenchfoot"
+-- is a name that can never be offered again, so it would sit in the library forever.
+M.BOON_DELETED = { "Reaper", "Reaped", "Reaver", "Trenchfoot" }
+
+function M._boonSeedRetcon()
+  local h = M.history
+  if type(h) ~= "table" then return 0, 0 end
+  if h.boonSeedEpoch == M.BOON_SEED_EPOCH then return 0, 0 end
+  h.boonLibrary = h.boonLibrary or {}
+
+  local fixed, dropped = 0, 0
+  for _, name in ipairs(M.BOON_RETCONNED) do
+    local seed, cur = M.BOON_SEED[name], h.boonLibrary[name]
+    if seed and cur then
+      cur.description, cur.rarity, cur.maxEchoes = seed.description, seed.rarity, seed.maxEchoes
+      fixed = fixed + 1
+    end
+  end
+  for _, name in ipairs(M.BOON_DELETED) do
+    if h.boonLibrary[name] then h.boonLibrary[name] = nil; dropped = dropped + 1 end
+  end
+
+  h.boonSeedEpoch = M.BOON_SEED_EPOCH
+  if M._historySave then pcall(M._historySave) end
+  return fixed, dropped
+end
+
 -- Merge at load. Guarded: the merge lives in 007, and a load-order change must degrade to
 -- "no seed" rather than an error on every startup.
 if M._boonDbMerge then
@@ -356,4 +475,7 @@ if M._boonDbMerge then
     M._seedAdded, M._seedEnriched = added, enriched
   end
 end
+
+-- AFTER the merge, so a name the merge has just added is present to be corrected.
+if M.history then pcall(M._boonSeedRetcon) end
 

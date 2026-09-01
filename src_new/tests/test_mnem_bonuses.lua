@@ -123,6 +123,27 @@ describe("bonus totals", function()
     expect(r.Fire).toBe(15)     -- a type with no boon of its own still shows the all-bonus
   end)
 
+  -- ALIASES (v4.7.288). The 2026-09-01 Mastery boons name eight damage types to our eight, and
+  -- two are worded differently: `venom` is our Poison -- confirmed by our own catalogue, since
+  -- Venom Mastery's text says "poison damage" -- and `arcane` gets its OWN row rather than being
+  -- folded into Magical, because pairing them is a guess and a guess inflates a number silently.
+  it("reads an aliased damage type onto the row it belongs to", function()
+    reset()
+    claim("Venom Mastery", "Your venom damage dealt is increased by 15% and you gain 10% venom resistance.")
+    local T = M.bonusTotals()
+    expect(T.dmg.Poison).toBe(15)
+    expect(T.resists.Poison).toBe(10)
+  end)
+
+  -- The alias created a trap: two KEYS resolve to one ROW, so anything iterating the type table
+  -- to write one row per type writes the aliased row twice. The all-damage fold did exactly that
+  -- the moment the alias was added, silently doubling Poison.
+  it("gives an aliased type the all-damage bonus exactly ONCE", function()
+    reset()
+    claim("Onyx Scales", "Gain 15% resistance to all damage.")
+    expect(M.bonusTotals().resists.Poison).toBe(15)  -- not 30, once per alias
+  end)
+
   it("keeps type damage boosts out of the stat totals", function()
     reset()
     claim("Fire Mastery", "Your fire damage dealt is increased by 15% and you gain 10% fire resistance.")

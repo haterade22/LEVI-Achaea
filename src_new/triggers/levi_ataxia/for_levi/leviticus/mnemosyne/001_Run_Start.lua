@@ -32,17 +32,12 @@ patterns:
   type: 1
 ]]--
 
--- BEFORE onRunStart(): it reads run.paused, which onRunStart consumes on a resume.
--- A resume-after-pause wade is the SAME run, so the Reaper tally survives it;
--- only a genuinely fresh wade resets it (the count is unrecoverable otherwise).
-ataxia.mnemosyne.reaperOnWade()
 ataxia.mnemosyne.onRunStart()
 bardWarmarch = false  -- boons reset each run
 bmShatteredStar = false  -- boons reset each run
 magiKkractle = false  -- boons reset each run
 magiHotSprings = false  -- boons reset each run
 mnemHammerAnvil = false  -- boons reset each run
-mnemReaper = false  -- boons reset each run (re-latches from the next tithe/BOONS row on a resume)
 bmBladedReflexes = false  -- boons reset each run
 mnemSleuth = false  -- boons reset each run
 mnemRollHide = false  -- boons reset each run

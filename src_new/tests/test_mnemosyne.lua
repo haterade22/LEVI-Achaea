@@ -361,10 +361,10 @@ describe("boons offered reporting", function()
   it("omits the fields entirely when GMCP has not reported them", function()
     reset(true)
     gmcp.Char.Status = { class = "", race = nil }
-    M.reportBoonsOffered({ { name = "Reaper" } })
+    M.reportBoonsOffered({ { name = "Iron Throat" } })
     expect(sent[1].payload.class).toBe(nil)
     expect(sent[1].payload.race).toBe(nil)
-    expect(sent[1].payload.offered[1].name).toBe("Reaper") -- the post still goes
+    expect(sent[1].payload.offered[1].name).toBe("Iron Throat") -- the post still goes
   end)
 
   it("survives GMCP not being populated at all", function()
@@ -492,7 +492,7 @@ describe("boons offered reporting", function()
     local feed = {
       "----------------------------------------",
       "Songstep:      Your dances are free.",
-      "Reaper:        Gain 1% damage per kill.",
+      "Iron Throat:   Gain 25% resistance to asphyxiation damage.",
       "Type BOON CLAIM <name> to choose.",
     }
     for _, ln in ipairs(feed) do
@@ -1247,44 +1247,27 @@ describe("run-end confirmation", function()
     expect(bmBladedReflexes).toBeFalse()
   end)
 
-  it("clears mnemReaper AND the kill tally on the confirmed onRunEnd", function()
+  -- Was the Reaper tally until 2026-09-01 removed that boon from the game. Retargeted onto Kai
+  -- Unleashed rather than deleted: what the pair was really pinning is that a run-scoped
+  -- `ataxiaTemp` stamp dies with the run and does NOT die on the unconfirmed maybe, and that
+  -- invariant outlived the boon that motivated it.
+  it("clears a boon flag AND its ataxiaTemp stamp on the confirmed onRunEnd", function()
     reset(true)
-    mnemReaper = true
+    mnemKaiUnleashed = true
     ataxiaTemp = ataxiaTemp or {}
-    ataxiaTemp.reaperKills = 42
+    ataxiaTemp.kaiUnleashedAt = 42
     M.onRunEndMaybe() -- deferred maybe must NOT clear the boon yet
-    expect(mnemReaper).toBeTrue()
-    expect(ataxiaTemp.reaperKills).toBe(42)
-    M.onRunEnd() -- confirmation fired -> boons gone, tally dies with the run
-    expect(mnemReaper).toBeFalse()
-    expect(ataxiaTemp.reaperKills).toBeNil()
+    expect(mnemKaiUnleashed).toBeTrue()
+    expect(ataxiaTemp.kaiUnleashedAt).toBe(42)
+    M.onRunEnd() -- confirmation fired -> boons gone, stamp dies with the run
+    expect(mnemKaiUnleashed).toBeFalse()
+    expect(ataxiaTemp.kaiUnleashedAt).toBeNil()
   end)
 end)
 
--- ─── Reaper tithe counter ────────────────────────────────────────────────────
-
-describe("M.onReaperTithe()", function()
-  it("counts each tithe and sets the boon flag (the line is its own proof)", function()
-    reset(true)
-    mnemReaper = false
-    ataxiaTemp = ataxiaTemp or {}
-    ataxiaTemp.reaperKills = nil
-    M.onReaperTithe()
-    expect(mnemReaper).toBeTrue()
-    expect(ataxiaTemp.reaperKills).toBe(1)
-    M.onReaperTithe()
-    M.onReaperTithe()
-    expect(ataxiaTemp.reaperKills).toBe(3) -- additive: +3% damage total
-  end)
-
-  it("resumes an existing tally (ataxiaTemp survives a SYSUPDATE reload)", function()
-    reset(true)
-    ataxiaTemp = ataxiaTemp or {}
-    ataxiaTemp.reaperKills = "17" -- persisted values can come back as strings
-    M.onReaperTithe()
-    expect(ataxiaTemp.reaperKills).toBe(18)
-  end)
-end)
+-- The Reaper tithe counter's tests lived here. Reaper was DELETED from the game on
+-- 2026-09-01, so `M.onReaperTithe` is gone and there is nothing left to assert -- a test for a
+-- line the game can no longer print passes forever and defends nothing.
 
 -- ─── Boss tactics: Seasone tree reserve ──────────────────────────────────────
 
@@ -1983,26 +1966,7 @@ describe("Tantrum -- a free battlerage once per ripple", function()
 end)
 
 
-describe("M.reaperOnWade()", function()
-  it("resets the tally on a genuinely fresh wade", function()
-    reset(true)
-    M.run.paused = nil
-    ataxiaTemp = ataxiaTemp or {}
-    ataxiaTemp.reaperKills = 12
-    expect(M.reaperOnWade()).toBeFalse()
-    expect(ataxiaTemp.reaperKills).toBeNil()
-  end)
-
-  it("preserves the tally on a resume-after-pause wade (same server-side run)", function()
-    reset(true)
-    M.run.paused = true -- WADE STILL happened; the next wade re-enters the SAME run
-    ataxiaTemp = ataxiaTemp or {}
-    ataxiaTemp.reaperKills = 20
-    expect(M.reaperOnWade()).toBeTrue()
-    expect(ataxiaTemp.reaperKills).toBe(20) -- +20% is server-side truth; the count must survive
-    M.run.paused = nil
-  end)
-end)
+-- `M.reaperOnWade` (spare the tally across a pause-resume wade) went with the boon, 2026-09-01.
 
 -- ─── Boon claim resolution (#4) ──────────────────────────────────────────────
 
@@ -2234,12 +2198,61 @@ describe("boon seed catalogue", function()
     if not ok then error(err) end
   end
 
-  it("loads, and carries descriptions for every entry", function()
+  -- Was `described == total` ("a row with no effect text is not worth seeding") until 2026-09-01
+  -- added 30 boons whose EFFECTS the announcement did not state. Seeding the names anyway is
+  -- deliberate -- it turns an unknown into a visible hole -- but the invariant has to get
+  -- STRICTER, not looser, or a genuine omission hides among the intentional ones. So: every
+  -- undescribed entry must be DECLARED in `M.BOON_UNDESCRIBED`, and every declared name must
+  -- actually be in the seed. A hole has to be admitted before it is allowed.
+  it("describes every entry except the holes it declares", function()
     withSeed(function()
       dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/010_Boon_Seed.lua")
       local st = M.boonDbStats()
       expect(st.total > 250).toBeTrue()
-      expect(st.described).toBe(st.total)   -- a row with no effect text is not worth seeding
+
+      local declared = {}
+      for _, n in ipairs(M.BOON_UNDESCRIBED) do
+        expect(M.BOON_SEED[n] ~= nil).toBeTrue()   -- declared but absent = a stale declaration
+        declared[n] = true
+      end
+      for name, rec in pairs(M.BOON_SEED) do
+        if not (rec.description and rec.description ~= "") then
+          expect(declared[name]).toBeTrue()        -- undeclared hole = an accidental omission
+        end
+      end
+      -- NOT `described == total - #declared`. `Cavalry` is on the announcement's "new boons"
+      -- list and our catalogue already had its text -- so the announcement's "new" is not
+      -- strictly new, and the `or {}` in the seeding loop correctly kept the description it
+      -- found. A declared name that turns out to be described is fine; the two checks above are
+      -- the real invariant, and arithmetic over both sets would only re-break on the next one.
+      expect(#M.BOON_UNDESCRIBED > 0).toBeTrue()
+    end)
+  end)
+
+  -- The merge is fill-only, which is right for enrichment and WRONG when the game rewrites a
+  -- boon: every earlier release had already merged the old text into the library, so a corrected
+  -- seed reaches nobody without this. `_bonusDesc` prefers the library, so the stale number would
+  -- have landed on the bonuses panel as fact.
+  it("retcons a changed boon over the library, but only once", function()
+    withSeed(function()
+      dofile("src_new/scripts/levi_ataxia/levi/ataxia/mnemosyne/010_Boon_Seed.lua")
+      M.history.boonSeedEpoch = nil
+      M.history.boonLibrary["Coarse Flesh"] = { description = "STALE", rarity = "rare" }
+      M.history.boonLibrary["Reaper"] = { description = "a boon that no longer exists" }
+      local fixed, dropped = M._boonSeedRetcon()
+      expect(fixed > 0).toBeTrue()
+      expect(dropped).toBe(1)
+      expect(M.history.boonLibrary["Coarse Flesh"].description)
+        .toBe(M.BOON_SEED["Coarse Flesh"].description)
+      expect(M.history.boonLibrary["Reaper"]).toBeNil()
+
+      -- ONCE. A later in-game sighting is newer than the seed and must not be reverted on the
+      -- next load -- an unconditional rewrite is the fill-only rule broken the other way.
+      M.history.boonLibrary["Coarse Flesh"].description = "SEEN IN GAME, NEWER THAN THE SEED"
+      local again = M._boonSeedRetcon()
+      expect(again).toBe(0)
+      expect(M.history.boonLibrary["Coarse Flesh"].description)
+        .toBe("SEEN IN GAME, NEWER THAN THE SEED")
     end)
   end)
 
@@ -2273,9 +2286,68 @@ describe("boon seed catalogue", function()
       expect(#M._immunitiesFrom(seed["Careless Whisperer"].description)).toBe(3)
       expect(#M._immunitiesFrom(seed["Energetic"].description)).toBe(2)
       expect(M._immunitiesFrom(seed["Coarse Flesh"].description)[1]).toBe("slickness")
-      expect(M._boonDrawbacks(seed["Coarse Flesh"].description)[1]).toBe("timeflux")
       expect(M._boonDrawbacks(seed["Corrupted Blood"].description)[1]).toBe("nausea")
+      -- Coarse Flesh USED to be the grant-and-cost example ("but suffer permanent timeflux").
+      -- 2026-09-01 removed the cost, so it now pins the opposite: a boon with no downside must
+      -- report no downside. Left here rather than deleted because the derive-from-the-sentence
+      -- design is exactly what made this a one-line change instead of a code change.
+      expect(#M._boonDrawbacks(seed["Coarse Flesh"].description)).toBe(0)
+      -- Meathead's cost changed stupidity -> confusion, which is not cosmetic: stupidity EATS
+      -- QUEUED COMMANDS, and half this package queues.
+      expect(M._boonDrawbacks(seed["Meathead"].description)[1]).toBe("confusion")
     end)
+  end)
+end)
+
+-- ─── BOON CONTEMPLATE: the meta block is open-ended (v4.7.288) ───────────────
+--
+-- The 2026-09-01 announcement adds a boon's CATEGORY to this screen, and for an unlocked boon a
+-- line naming what unlocked it. We have never seen the wording, so the parser matches the SHAPE:
+-- while still in the meta block, `Label: value` is meta. The damage this prevents is not cosmetic
+-- -- a polluted description reaches `_learnBoon`, which OVERWRITES, and the library outranks the
+-- seed in `_bonusDesc`, so it lands on the bonuses panel as fact.
+
+describe("contemplate meta lines", function()
+  it("keeps unknown Label: value lines out of the description, and records them", function()
+    local info = M._parseContemplate({
+      "Category: Offensive",
+      "Rarity: legendary",
+      "Can echo: Yes",
+      "Maximum echoes: 3",
+      "Unlocked by: Iron Throat",
+      "Your attacks burn with a righteous fire.",
+      "",
+      '"A quote."',
+    })
+    expect(info.description).toBe("Your attacks burn with a righteous fire.")
+    expect(info.rarity).toBe("legendary")
+    expect(info.num_echoes_possible).toBe(3)
+    expect(info.meta["Category"]).toBe("Offensive")
+    expect(info.meta["Unlocked by"]).toBe("Iron Throat")
+    expect(info.quote).toBe("A quote.")
+  end)
+
+  -- The rule must not eat a description. It applies ONLY while still in the meta block, so a
+  -- colon in prose is safe -- and prose is what actually follows the labels.
+  it("does not treat a colon inside the description as a meta line", function()
+    local info = M._parseContemplate({
+      "Rarity: common",
+      "Your options are simple: hit harder.",
+      "And it keeps going.",
+    })
+    expect(info.description).toBe("Your options are simple: hit harder. And it keeps going.")
+    expect(info.meta).toBeNil()
+  end)
+
+  it("still parses a screen with no new lines at all", function()
+    local info = M._parseContemplate({
+      "Rarity: common",
+      "Can echo: No",
+      "Gain 1 additional dexterity.",
+    })
+    expect(info.description).toBe("Gain 1 additional dexterity.")
+    expect(info.num_echoes_possible).toBe(0)
+    expect(info.meta).toBeNil()
   end)
 end)
 
