@@ -2,6 +2,38 @@
 
 ---
 
+## 2026-09-02 - The NUMB line, named for two years and never captured (v4.7.293)
+
+`highlighting/060`, **turquoise bold** (user: "highlight numb for us as a bright color"):
+
+> You grit your teeth and will your pain out of existence.
+
+**The line was already written down and never wired.** `basher/002_Class_Bashing.lua:2227` has
+quoted it verbatim inside the Senseless Flurry comment since v4.7.124 -- so the package knew the
+exact text and still let it scroll past unmarked in every log. A line documented but not captured is
+indistinguishable from one we never saw; the same shape as `353_Real_Exits` writing
+`ataxiaTemp.realExits` for months with nothing reading it (v4.7.260).
+
+**Worth seeing on sight because NUMB CHANGES WHAT THE HP NUMBER MEANS.** AB Numbness (Kaido 894)
+defers 40% of incoming damage into one later blow, so while it is up the prompt stops tracking how
+the fight is going -- which is exactly why `ataxiaBasher_senselessFlurryNumb` is crowd-gated: the
+rate watchdog, the danger levels and the escape ladder are all HP-threshold machines and numb blinds
+every one of them until the lump lands. Knowing when that window opened is the point of marking it.
+
+**Colour chosen by elimination, not taste:** `turquoise` is bright as asked, cold like the effect,
+and -- checked against every `fg()` in `highlighting/` -- the one bright name there carrying no
+competing meaning. `chartreuse` already means attack-landed, `spring_green` a successful parry,
+`gold` a heading. Verified present in `007_Custom_Colour_Table.lua`.
+
+**Highlight only, deliberately.** This is also the ability's true confirmation, and it is tempting to
+hang the Senseless Flurry attempt-hold off it -- but that hold exists to cover GMCP lag on
+`ataxia.defences.numbness`, and the defence flag is what actually stops the refresh. Clearing the
+hold here would only let us re-numb sooner, which is the opposite of what it guards.
+
+**Files:** new `triggers/highlighting/060_Numb.lua`.
+
+---
+
 ## 2026-09-02 - Spirit Rend, the balance banner that read 0.000, and two captured lines (v4.7.292)
 
 ### SPIRIT REND -- KAI ENFEEBLE as a third eq rider (user-directed)

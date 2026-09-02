@@ -1187,3 +1187,18 @@ gender, and "a haskrovska vine" is a plant that still took "him".
 **Unrelated manual alias:** `ke` (`aliases/.../kaido/001_kai_enfeeble.lua`) sends
 `kai enfeeble <target>` on the free queue behind a class-level check, with no boon gate or cooldown.
 It is a separate path and does not interact with the basher rider.
+
+
+## NUMB fire line (v4.7.293)
+
+```
+You grit your teeth and will your pain out of existence.
+```
+
+Highlighted **turquoise bold** (`triggers/highlighting/060_Numb.lua`). AB Numbness (Kaido 894):
+self, 3.00s equilibrium, defers 40% of incoming damage into one later blow.
+
+**Read it as a warning, not a buff notice.** While numb is up the HP number stops tracking the
+fight, which blinds the rate watchdog, the danger levels and the escape ladder until the deferred
+lump lands -- the reason `ataxiaBasher_senselessFlurryNumb` refuses at or above the swarm threshold
+and while any swarm tactic is running.
