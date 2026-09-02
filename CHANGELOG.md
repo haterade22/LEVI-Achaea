@@ -2,6 +2,147 @@
 
 ---
 
+## 2026-09-02 - Keeping the boon catalogue current (v4.7.295)
+
+User: *"We should be constantly updating our Boon database."*
+
+**The catalogue cannot be rebuilt.** A boon's description is shown ONCE, on a screen that is gone a
+second later, so a hole stays a hole until something goes and asks. `mnem boonfill` already existed
+to ask -- and could only reach boons we were **currently holding**.
+
+### That was the smaller half of the problem
+
+The holes are precisely the boons we have **never been offered**: 25 declared outright in
+`M.BOON_UNDESCRIBED` after the 2026-09-01 rebalance named thirty-three new boons without saying what
+any of them did, plus four we have working automation for and no text at all (`Kai Unleashed`,
+`Daemon Jaws`, `Necrotic Aura`, `Icy Heart`). None of those is reachable from "what am I holding".
+
+`BOON CONTEMPLATE <name>` answers for any name, held or not. So `M.boonGaps()` unions three
+sources -- the **seed** (which carries every declared hole), the **library** (anything learned or
+imported, in case a row lost its text) and **what the last BOONS list showed** -- dedupes, and
+sorts, so a batch is deterministic across runs rather than depending on `pairs()` order.
+
+### It now fills itself, one gap per boon screen
+
+**The moment is the whole design.** The boon screen is the only long quiet stretch in a run: the
+explorer is paused, combat is over, the user is reading. It is also when the offer capture runs, and
+`_captureLines` holds **one global slot** whose second caller force-finishes the first (v4.7.93) --
+exactly the race v4.7.279 had to unpick when contemplate enrichment silently dropped whole offer
+reports.
+
+So the trickle fires only **after the offer has been flushed**, waits another `BOON_FILL_IDLE` (4s),
+and **still refuses if anything holds the slot**. One gap per screen, not a batch: a trickle cannot
+starve a capture, and over a twenty-ripple run it closes twenty holes on its own.
+
+### Commands
+
+| | |
+|---|---|
+| `mnem boonfill` | contemplate the first `BOON_FILL_BATCH` (8) gaps |
+| `mnem boonfill all` | all of them -- the deliberate opt-in for a quiet moment on the riverbank |
+| `mnem boonfill gaps` | just name what is missing, spending no command |
+
+Batched by default for the same slot reason: filling twenty-five in one burst is the race above,
+self-inflicted.
+
+### Verification
+
+**1736 tests** (up from 1730). **Six break-backs, each failing its named test**: the narrowed pool,
+seed descriptions ignored, the dedupe, the trickle stealing the capture slot, the trickle firing
+with no gaps, and unsorted output.
+
+### Not in this change
+
+The **boon FLAG lifecycle** audit from earlier today (`M.clearBoonFlags` being dead code, 3
+asymmetric flags, ~29 hand-wired boons) remains **recorded and deliberately unfixed** -- see the
+entry below. That is about automation wiring; this is about the data.
+
+**Files:** `mnemosyne/004_Parsers.lua`, `mnemosyne/003_Commands.lua`, `tests/test_mnemosyne.lua`.
+
+---
+
+## 2026-09-02 - Seasonal boon churn: an audit of the surface (docs only, NOTHING FIXED)
+
+User: *"Every season the achaea team adds new boons and removes others."*
+
+Audited what that costs us. **No code changed** -- the findings below are recorded as known and
+deliberately deferred, so nobody reads this and assumes they are handled.
+
+### The mechanism to absorb this already exists, and is half-wired
+
+`M.BOON_FLAGS` (`mnemosyne/004_Parsers.lua`, v4.7.241) is a NAME -> FLAG table added for exactly
+this reason -- its own comment says "that was reasonable when each one needed bespoke parsing, and
+it is not reasonable for the next ten." It has two halves:
+
+- `M.latchBoonFlag(name)` -- **wired**, called from the claim path at `004:1608`.
+- `M.clearBoonFlags()` -- **called from nowhere in the tree.**
+
+So registry boons are latched generically and reset only where somebody *also* hand-added them to
+the two reset lists. The reset half of the mechanism is dead code, which is why the churn has been
+absorbed by hand ever since.
+
+### Measured surface
+
+| | |
+|---|---|
+| Boon flags in use | **42** |
+| On the generic registry | **13** |
+| Hand-wired across four files each | **~29** |
+| Per-boon cost to ADD | BOONS-row trigger + claim-intercept line + run-start reset + run-end reset + the consuming code |
+
+### Three flags with an asymmetric lifecycle
+
+All three straddle the two systems -- on the registry (so someone assumed the bulk reset covered
+them) *and* hand-added to one list but not the other:
+
+| Flag | run-start | run-end |
+|---|---|---|
+| `dwTimequake` | **missing** | present (`004:226`) |
+| `dwHeraldInfirmity` | **missing** | present (`004:227`) |
+| `mnemIcyHeart` | present (`001:74`) | **missing** |
+
+Run-start is the more load-bearing of the two: trigger `001` fires on the wade line with no
+telemetry gate, whereas `onRunEnd` needs its confirmation, so a run that ends untidily is cleaned up
+only by the next run's start. A flag missing from run-start therefore stays armed indefinitely.
+
+### Four boons we AUTOMATE are absent from the catalogue
+
+`Kai Unleashed`, `Daemon Jaws`, `Necrotic Aura`, `Icy Heart`. Working automation, no seed entry --
+so `mnem bonuses` cannot describe them and `mnem boondb` does not know they exist. Not dangerous;
+it is the same class of gap the 2026-09-01 rebalance filled for thirty others.
+
+### What a REMOVAL costs, from the one we have actually done
+
+Reaper (deleted 2026-09-01) took two triggers, four functions, an `ataxiaTemp` counter, a claim
+latch, two reset lines and three tests -- and **stale Reaper prose survived in a project doc that
+was edited in the same session**, because nothing connects "this boon is gone" to "these files
+mention it." A removed boon's trigger also stays live, matching a line that can never print again.
+
+**Nothing detects a removal.** We found Reaper because an announcement was pasted in. Absent that,
+its subsystem would have run forever.
+
+### Two notes for whoever audits this next
+
+- **A flag can be cleared on a shared multi-assignment line** --
+  `mnemToughCrowd, mnemElusiveFoolery, mnemApostatic = false, false, false`. A naive
+  `grep "FLAG = false"` under-reports and will hand you false defects; two of my passes did exactly
+  that before the third checked each name individually.
+- The claim intercept stores **Lua search patterns**, not names (`%f[%a]roll hide`, `rage%-fuelled`),
+  so matching them against catalogue keys needs unescaping first.
+
+### The options that were costed, and not taken
+
+1. **Fix + guard** -- wire `clearBoonFlags()` into both reset paths, correct the three asymmetries,
+   seed the four missing boons, and add a test asserting every automated flag has a complete
+   lifecycle plus a drift check naming any automated boon absent from the catalogue. Low risk; would
+   turn next season's removal into a test failure.
+2. **Migrate the legacy 29** onto the registry -- one registry-driven trigger replacing ~40 per-boon
+   trigger files, and the claim intercept becoming a loop. A new boon would then be one table row.
+
+Deferred by decision, not oversight.
+
+---
+
 ## 2026-09-02 - Obligate Carnivore + Healing Metabolism: food becomes upkeep (v4.7.294)
 
 > **Obligate Carnivore:** You can EAT corpses, restoring hunger and small amounts of endurance and

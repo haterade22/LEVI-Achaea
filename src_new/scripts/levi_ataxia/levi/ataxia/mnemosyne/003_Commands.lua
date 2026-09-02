@@ -81,6 +81,7 @@ function M.help()
     { "mnem affixes", "This run's active affixes (ongoing effects)" },
     { "mnem library", "All-time affix catalogue" },
     { "mnem boondb [filter|export|import]", "All-time BOON catalogue (own file; filter matches name or effect)" },
+    { "mnem boonfill [gaps|all|<n>]", "Learn what undescribed boons do via BOON CONTEMPLATE" },
     { "mnem quiet [on|off]", "Silence auto boon/affix echoes (still records)" },
     { "mnem start | end", "Manually start / end a run" },
     { "mnem check", "Re-sync with an in-progress run (/run_exists)" },
@@ -283,7 +284,21 @@ function M.command(rest)
   elseif cmd == "boons" then
     M.reportBoons()
   elseif cmd == "boonfill" then
-    M.boonFill()
+    -- `mnem boonfill` takes a batch; `mnem boonfill all` is the deliberate opt-in for a quiet
+    -- moment, and `mnem boonfill gaps` just names what is missing without spending a command.
+    if arg == "gaps" or arg == "list" then
+      local gaps = M.boonGaps and M.boonGaps() or {}
+      if #gaps == 0 then
+        M.echo("Boon catalogue has no gaps.")
+      else
+        M.echo("<gold>Boon catalogue gaps<reset> -- " .. #gaps .. " name(s) with no text:")
+        for _, n in ipairs(gaps) do cecho("\n  <cyan>" .. n .. "<reset>") end
+        cecho("\n  <grey>mnem boonfill<reset> takes the first " .. (M.BOON_FILL_BATCH or 8)
+          .. "; <grey>mnem boonfill all<reset> takes them all.\n")
+      end
+    else
+      M.boonFill(arg ~= "" and arg or nil)
+    end
   elseif cmd == "affixes" then
     M.reportAffixes()
   elseif cmd == "library" then

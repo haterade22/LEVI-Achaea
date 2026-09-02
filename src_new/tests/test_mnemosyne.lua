@@ -2307,6 +2307,108 @@ end)
 -- -- a polluted description reaches `_learnBoon`, which OVERWRITES, and the library outranks the
 -- seed in `_bonusDesc`, so it lands on the bonuses panel as fact.
 
+-- ─── Keeping the boon catalogue current (v4.7.295) ──────────────────────────
+--
+-- The catalogue cannot be rebuilt: a description is shown ONCE, on a screen that is gone a second
+-- later. So the holes matter, and until now `boonFill` could only reach boons we were CURRENTLY
+-- HOLDING -- which is the smaller half, since the holes are precisely the boons we have never been
+-- offered (25 declared outright after the 2026-09-01 rebalance, plus four we automate and have no
+-- text for at all).
+
+describe("boon catalogue gaps", function()
+  local saveSeed, saveLib, saveOwned
+
+  local function gapsSetup()
+    saveSeed, saveLib = M.BOON_SEED, M.history.boonLibrary
+    saveOwned = ataxiaTemp and ataxiaTemp.boonsOwned
+    M.BOON_SEED = {
+      ["Described Boon"] = { description = "It does a thing." },
+      ["Seed Hole"]      = {},                    -- a declared name-only entry
+    }
+    M.history.boonLibrary = {
+      ["Library Hole"] = { rarity = "rare" },     -- learned a rarity, never the text
+      ["Library Full"] = { description = "Known." },
+    }
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.boonsOwned = { ["Owned Hole"] = true, ["Described Boon"] = true }
+  end
+
+  local function gapsRestore()
+    M.BOON_SEED, M.history.boonLibrary = saveSeed, saveLib
+    if ataxiaTemp then ataxiaTemp.boonsOwned = saveOwned end
+  end
+
+  local function has(t, v)
+    for _, x in ipairs(t) do if x == v then return true end end
+    return false
+  end
+
+  -- THE WIDENED POOL is the whole point: a boon we have never held is exactly the one whose text
+  -- we are missing, and `BOON CONTEMPLATE <name>` answers for any name, held or not.
+  it("collects holes from the seed, the library AND what we hold", function()
+    gapsSetup()
+    local g = M.boonGaps()
+    expect(has(g, "Seed Hole")).toBeTrue()
+    expect(has(g, "Library Hole")).toBeTrue()
+    expect(has(g, "Owned Hole")).toBeTrue()
+    gapsRestore()
+  end)
+
+  it("never reports a name we already have text for, from either source", function()
+    gapsSetup()
+    local g = M.boonGaps()
+    expect(has(g, "Described Boon")).toBeFalse()  -- described in the seed
+    expect(has(g, "Library Full")).toBeFalse()    -- described in the library
+    gapsRestore()
+  end)
+
+  -- A name in two sources is one gap, not two -- otherwise the batch spends two CONTEMPLATEs on it.
+  it("counts a name appearing in two sources exactly once", function()
+    gapsSetup()
+    M.BOON_SEED["Library Hole"] = {}
+    local n = 0
+    for _, x in ipairs(M.boonGaps()) do if x == "Library Hole" then n = n + 1 end end
+    expect(n).toBe(1)
+    gapsRestore()
+  end)
+
+  it("is sorted, so a batch is deterministic across runs", function()
+    gapsSetup()
+    local g = M.boonGaps()
+    local sorted = true
+    for i = 2, #g do if g[i] < g[i - 1] then sorted = false end end
+    expect(sorted).toBeTrue()
+    gapsRestore()
+  end)
+end)
+
+-- THE TRICKLE. Each fill is a CONTEMPLATE and a captured block, and `_captureLines` holds ONE
+-- global slot whose second caller force-finishes the first (v4.7.93) -- the race v4.7.279 had to
+-- unpick when enrichment silently dropped whole offer reports. So the automatic path must never
+-- take the slot from anyone.
+describe("the automatic catalogue trickle", function()
+  it("REFUSES while another capture holds the slot", function()
+    local saveSeed = M.BOON_SEED
+    M.BOON_SEED = { ["A Hole"] = {} }
+    M._capturing = true
+    expect(M._boonFillTrickle()).toBeFalse()
+    M._capturing = false
+    M.BOON_SEED = saveSeed
+  end)
+
+  it("does nothing when the catalogue has no gaps", function()
+    local saveSeed, saveLib = M.BOON_SEED, M.history.boonLibrary
+    local saveOwned = ataxiaTemp and ataxiaTemp.boonsOwned
+    M.BOON_SEED = { ["Full"] = { description = "text" } }
+    M.history.boonLibrary = {}
+    if ataxiaTemp then ataxiaTemp.boonsOwned = {} end
+    M._capturing = false
+    expect(M._boonFillTrickle()).toBeFalse()
+    M.BOON_SEED, M.history.boonLibrary = saveSeed, saveLib
+    if ataxiaTemp then ataxiaTemp.boonsOwned = saveOwned end
+  end)
+end)
+
 describe("contemplate meta lines", function()
   it("keeps unknown Label: value lines out of the description, and records them", function()
     local info = M._parseContemplate({

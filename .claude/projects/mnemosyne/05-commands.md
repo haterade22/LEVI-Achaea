@@ -42,6 +42,24 @@ Guarded by `if ataxia.mnemosyne.map then`; see [04-ripple-map.md](04-ripple-map.
 | `mnem map on` / `mnem map off` | `map.toggle(true)` / `map.toggle(false)` — force state (persists `mapEnabled`) |
 | `mnem map status` | `map.status()` — diagnostic echo |
 
+### Keeping the catalogue current (v4.7.295)
+
+A description is shown once, on a screen gone a second later, so the catalogue cannot be rebuilt.
+
+| Command | Effect |
+|---|---|
+| `mnem boonfill` | contemplate the first `BOON_FILL_BATCH` (8) undescribed boons |
+| `mnem boonfill all` | all of them -- opt-in, for a quiet moment |
+| `mnem boonfill gaps` | name what is missing, spending no command |
+
+`M.boonGaps()` unions the SEED (which carries every name-only hole), the LIBRARY and the last BOONS
+list, then dedupes and sorts. The old version read `boonsOwned` alone, which could only ever reach
+boons we were already holding -- the opposite of where the holes are.
+
+**One gap fills itself per boon screen.** The trickle runs only after the offer has been flushed,
+waits `BOON_FILL_IDLE` (4s), and refuses if `_captureLines`' single global slot is taken -- the
+v4.7.93 / v4.7.279 race. One per screen, never a batch.
+
 ### Bonuses panel (`mnemosyne/011_Bonuses.lua` + `012_Bonuses_Window.lua`, v4.7.287)
 
 Guarded by `if B then`, and **not gated on being in the tower** -- unlike the map. Boons persist for

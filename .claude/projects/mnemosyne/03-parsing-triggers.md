@@ -364,6 +364,28 @@ Handled in `_parseContemplate` — see the meta-block note in `004_Parsers.lua`.
 the wording, so the parser matches the SHAPE (a short `Label: value` line while still in the meta
 block) and stores anything unrecognised in `info.meta` rather than dropping it.
 
+## Boon churn and the half-wired registry (audited 2026-09-02, UNFIXED)
+
+Boons are added and removed every season, and the cost of that lands here. `M.BOON_FLAGS`
+(`004_Parsers`) exists to absorb it -- a NAME -> FLAG table so a new boon needs a row rather than a
+trigger -- but only its latch is connected:
+
+| Half | State |
+|---|---|
+| `M.latchBoonFlag(name)` | wired, called from the claim path (`004:1608`) |
+| `M.clearBoonFlags()` | **called nowhere** |
+
+So 13 boons use the registry, ~29 remain hand-wired across four files each, and three flags are
+asymmetric as a result: `dwTimequake` / `dwHeraldInfirmity` (run-end reset, no run-start) and
+`mnemIcyHeart` (run-start, no run-end). Run-start matters more -- trigger `001` fires on the wade
+line ungated, while `onRunEnd` waits on its confirmation.
+
+Four boons we automate have no catalogue entry: `Kai Unleashed`, `Daemon Jaws`, `Necrotic Aura`,
+`Icy Heart`.
+
+**Nothing detects a removal.** A deleted boon's trigger stays live, matching a line the game can no
+longer print, and its documentation stays true-looking. Reaper is the worked example (v4.7.288).
+
 ## Reviewed and NOT adopted
 
 * **`M.MOBTYPES`** -- their 80+ wave announcement lines mapped to a monster roster and boss. The one

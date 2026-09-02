@@ -730,7 +730,7 @@ Reports Mnemosyne (tides-of-memory) run progress to an external REST tracker as 
 
 **Flow:** `GO!` → capture the mob spawn line (the line directly above `GO!`, positional — spawn wording varies per mob) → auto `WADE STATUS` → `/ripple_level`, `/boss` (from the `Objective: defeat <boss>` line), `/effects`; buffered monsters flush after `/ripple_level`. Serial queue enforces ordering (ripple_level first; boons_offered before boons_selected). `_auto()` gates run-start/GO/ripple; `_inRun()` gates monsters/effects/boons/boss/death so generic phrases can't report outside a tracked run. **`/boons_offered` posts once the RIPPLE IS CURRENT** (v4.7.279; it posted IMMEDIATELY from v4.7.91 until then) with the offer-screen name+description — it is no longer gated behind the slow per-boon `BOON CONTEMPLATE` enrichment chain, which raced the next ripple's captures for the single `_capturing` slot and, on a lost race, stalled and silently dropped the entire boon report (rarity/echoes are still learned locally). The line-capture (`_captureLines`) **force-finishes** a wedged prior capture rather than dropping the new one (v4.7.93). **`/boons_offered` also carries `class` and `race`** (v4.7.220, tracker-side request) -- top-level optional strings on `BoonsOfferedRequest`, NOT members of `BoonInfo` where the names suggest; verified against the live schema at `http://104.128.56.238:8000/openapi.json`, which is how to settle any question about this API's shape rather than inferring from prose. `M._charInfo()` reads `gmcp.Char.Status.class`/`.race` and makes two deliberate calls: **class is normalised** (the basher's `:title():gsub(" Lady",""):gsub(" Lord","")` -- Lord/Lady is a gender suffix on one class and leaving them distinct halves every per-class count) while **race is passed through raw** (no known distortion, and normalising against an unverified vocabulary corrupts data more quietly than leaving it alone); and a missing/empty read **omits the key** rather than sending `"unknown"`, which would become its own cohort in the queries. Both branches of `_reportBoonsOfferedEnriched` route through `reportBoonsOffered`, so the tagging lands on the real path. **Pause/resume (v4.7.88):** `WHISPER … beseech that it grow still` pauses the run without ending it server-side; the next wade **resumes via `/run_exists`** (no new `/run_start`), and `M.run.paused` is cleared unconditionally on a confirmed run-end.
 
-**Commands:** `mnem status|token <t>|on|off|contemplate|debug|quiet [on|off]|test|start|end|check|ripple <n>|boss <name>|monsters <text>|death [killer]|map [on|off|status]|boons|bonuses [on|off]|affixes|library|explore [on|off|status]|cards [on|off|maran <hp%>|seasone <hp%>|matic <n>]`. Also `ataxia setup reporting`.
+**Commands:** `mnem status|token <t>|on|off|contemplate|debug|quiet [on|off]|test|start|end|check|ripple <n>|boss <name>|monsters <text>|death [killer]|map [on|off|status]|boons|bonuses [on|off]|boonfill [gaps|all|<n>]|affixes|library|explore [on|off|status]|cards [on|off|maran <hp%>|seasone <hp%>|matic <n>]`. Also `ataxia setup reporting`.
 
 **Persistence:** `ataxia.settings.reporting` (`enabled`, `contemplate`, `token`, `url`, `mapEnabled`, `quiet`) — saved inside the main `ataxia` file / `_ataxia_backup.ataxia`. Run state is in-memory (re-synced via `/run_exists` on load). The **local history** (`ataxia.mnemosyne.history`) is the one thing on its own disk file, `<profile>/mnemosyne_history.lua`.
 
@@ -1031,6 +1031,42 @@ how we learn what to call it. **The bound is the interesting half**: an unbounde
 swallowed `"Your options are simple: hit harder."` in testing, so a label is capped at
 `META_LABEL_WORDS` (3). Widening what a parser accepts obliges you to say what it must still refuse
 (v4.7.262).
+
+**KEEPING THE CATALOGUE CURRENT (v4.7.295, `mnem boonfill`).** A boon's description is shown ONCE,
+on a screen gone a second later, so the catalogue cannot be rebuilt and a hole stays a hole until
+something asks. `boonFill` used to read `ataxiaTemp.boonsOwned` alone -- the smaller half, since the
+holes are precisely the boons we have NEVER been offered (25 declared in `M.BOON_UNDESCRIBED` after
+the 2026-09-01 rebalance, plus four we automate with no text at all: Kai Unleashed, Daemon Jaws,
+Necrotic Aura, Icy Heart). `BOON CONTEMPLATE <name>` answers for any name, held or not, so
+`M.boonGaps()` unions the SEED (carrying every declared hole), the LIBRARY and `boonsOwned`,
+dedupes, and SORTS so a batch is deterministic rather than `pairs()`-ordered. **It now fills itself,
+one gap per boon screen** -- and the MOMENT is the design: the boon screen is the only long quiet
+stretch in a run, but it is also when the offer capture runs, and `_captureLines` holds ONE global
+slot whose second caller force-finishes the first (v4.7.93). So the trickle fires only AFTER the
+offer is flushed, waits `BOON_FILL_IDLE` (4s), and still refuses if anything holds the slot; ONE per
+screen, because a trickle cannot starve a capture. Batched by default (`BOON_FILL_BATCH` 8) for the
+same reason -- filling twenty-five at once is that race, self-inflicted. `mnem boonfill gaps` names
+the holes without spending a command.
+
+**SEASONAL CHURN: THE REGISTRY EXISTS AND ITS RESET IS DEAD CODE (audited 2026-09-02, KNOWN AND
+UNFIXED).** Achaea adds and removes boons every season, and this package absorbs that BY HAND. The
+mechanism not to was built in v4.7.241 -- `M.BOON_FLAGS`, a NAME -> FLAG table in `004_Parsers`,
+whose own comment says a hand-written trigger per boon "is not reasonable for the next ten" -- and
+only half of it was wired: **`M.latchBoonFlag` is called (`004:1608`); `M.clearBoonFlags` is called
+NOWHERE.** So registry boons are latched generically and cleared only where somebody also hand-added
+them to the two reset lists. Measured surface: **42 boon flags, 13 on the registry, ~29 hand-wired
+across four files each** (BOONS-row trigger, claim-intercept line, run-start reset, run-end reset,
+plus the consuming code). **Three flags are asymmetric today** -- `dwTimequake` and
+`dwHeraldInfirmity` have a run-END reset but no run-START, `mnemIcyHeart` the reverse; run-start is
+the load-bearing one, since trigger `001` fires on the wade line with no telemetry gate while
+`onRunEnd` needs its confirmation, so a flag missing from run-start stays armed indefinitely. **Four
+boons we automate have no catalogue entry at all** (`Kai Unleashed`, `Daemon Jaws`, `Necrotic Aura`,
+`Icy Heart`). **And nothing detects a REMOVAL**: Reaper's deletion (2026-09-01) cost two triggers,
+four functions, a claim latch, two reset lines and three tests, left a live trigger matching a line
+that can never print again, and left stale prose in a project doc edited that same session -- we
+knew only because an announcement was pasted in. **When auditing this surface, note that a flag may
+be cleared on a shared multi-assignment line** (`a, b, c = false, false, false`), so a naive
+`grep "FLAG = false"` under-reports and manufactures false defects.
 
 **Boon re-latch** (v4.7.188, corrected v4.7.192): every boon flag latches from the `BOON CLAIM` alias or a BOONS-list row, so a boon owned BEFORE its handling shipped -- or claimed outside the alias -- stays inert silently. `M._relatchBoons()` sends **`BOON CLAIMED`** once per run to re-latch all 33 at once (**corrected v4.7.203** -- it sent bare `BOONS` from v4.7.188, which is NOT a command: the game answers it with its syntax help, so the re-latch never re-latched anything and printed a syntax block into combat. Three passes touched the function reasoning about WHEN to send and never WHAT, and its test pinned the string `"boons"` without checking it was a real command. Unexplained syntax help in a combat log is always one of our commands being rejected), called from `M.onRipple` (every mode) AND both explorer entry points. Its guard lives on **`ataxiaTemp`**, not `ataxia.mnemosyne`: `ataxia` is serialized wholesale and `deepMerge` lets a disk value win, so a guard stored there would come back TRUE after a reload while the bare-global boon flags came back nil -- defeating the function on exactly the path it exists for. Deliberately NOT latched from boon DESCRIPTIONS (unlike the damage affixes): a boon description also appears on the OFFER screen, listing boons we declined.
 

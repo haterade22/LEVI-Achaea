@@ -1753,6 +1753,32 @@ end
 
 -- Called from onRipple (the ripple has just been reported) and from the timeout. Whichever
 -- gets here first wins; the second finds nothing pending and does nothing.
+-- ONE GAP PER BOON SCREEN, and only once the offer is off our hands (v4.7.295).
+--
+-- User: "We should be constantly updating our Boon database." The catalogue cannot be rebuilt --
+-- a description is shown once, on a screen that is gone a second later -- so anything that closes
+-- holes without being asked is worth more than a command nobody remembers to type.
+--
+-- THE MOMENT IS THE WHOLE DESIGN. The boon screen is the only long quiet stretch in a run: the
+-- explorer is paused, combat is over, and the user is reading. But it is ALSO when the offer
+-- capture runs, and `_captureLines` holds ONE global slot whose second caller force-finishes the
+-- first (v4.7.93) -- which is exactly the race v4.7.279 had to unpick when contemplate enrichment
+-- silently dropped whole offer reports. So this fires only AFTER the offer has been flushed, waits
+-- another `BOON_FILL_IDLE` seconds, and then still refuses if anything holds the slot.
+--
+-- ONE per screen, not a batch: a trickle cannot starve a capture, and over a twenty-ripple run it
+-- closes twenty holes on its own.
+M.BOON_FILL_IDLE = 4
+
+function M._boonFillTrickle()
+  if not (M.history and M.history.boonLibrary) then return false end
+  if M._capturing then return false end            -- something else owns the slot
+  local gaps = M.boonGaps()
+  if #gaps == 0 then return false end
+  M._boonFillNext({ gaps[1] }, 1, 0)
+  return true
+end
+
 function M._flushPendingOffer(why)
   local list = M._pendingOffer
   M._pendingOffer = nil
@@ -1761,6 +1787,14 @@ function M._flushPendingOffer(why)
   M.decho("posting /boons_offered (" .. tostring(why) .. ") at ripple "
     .. tostring(M.run and M.run.ripple))
   M._reportBoonsOfferedEnriched(list)
+  -- The offer is off our hands, so the capture slot is free and the boon screen is the quietest
+  -- stretch of a run. Trickle ONE catalogue gap after a pause -- see `M._boonFillTrickle`, which
+  -- refuses again if anything has taken the slot in the meantime.
+  if tempTimer and M.BOON_FILL_IDLE then
+    tempTimer(M.BOON_FILL_IDLE, function()
+      if M._boonFillTrickle then pcall(M._boonFillTrickle) end
+    end)
+  end
   return true
 end
 
@@ -1802,23 +1836,56 @@ end
 -- so BOONS must be run first. Sequential with the same 0.5s spacing as the offer-screen
 -- enrichment -- deliberately not parallel, since each CONTEMPLATE is a captured block and they
 -- would interleave.
-function M.boonFill()
-  local owned = (ataxiaTemp and ataxiaTemp.boonsOwned) or {}
-  local seen, todo = 0, {}
-  for name in pairs(owned) do
-    seen = seen + 1
+-- EVERY NAME WE KNOW OF, not just the ones we are holding (v4.7.295).
+--
+-- `boonFill` used to read `ataxiaTemp.boonsOwned` alone, so it could only ever describe boons we
+-- had already been offered AND claimed. That is the smaller half of the problem: the catalogue's
+-- holes are precisely the boons we have NEVER been offered -- 25 of them declared outright in
+-- `M.BOON_UNDESCRIBED` after the 2026-09-01 rebalance named thirty-three new boons without saying
+-- what any of them did, plus four we have working automation for and no text at all (Kai Unleashed,
+-- Daemon Jaws, Necrotic Aura, Icy Heart).
+--
+-- `BOON CONTEMPLATE <name>` answers for any name, held or not, which is what makes the wider pool
+-- reachable. Three sources, unioned:
+--   * the SEED           -- includes every declared hole
+--   * the LIBRARY        -- anything learned or imported, in case a row lost its description
+--   * `boonsOwned`       -- what the last BOONS list showed, which may name something new
+function M.boonGaps()
+  local gaps, seen = {}, {}
+  local function consider(name)
+    if type(name) ~= "string" or name == "" or seen[name] then return end
+    seen[name] = true
     local rec = M.boonInfo and M.boonInfo(name)
-    if not (rec and rec.description and rec.description ~= "") then todo[#todo + 1] = name end
+    if rec and rec.description and rec.description ~= "" then return end
+    local sd = M.BOON_SEED and M.BOON_SEED[name]
+    if sd and sd.description and sd.description ~= "" then return end
+    gaps[#gaps + 1] = name
   end
-  table.sort(todo)
-  if seen == 0 then
-    return M.echo("No boons seen yet -- run <cyan>BOONS<grey> first, then <cyan>mnem boonfill<grey>.")
+  for name in pairs(M.BOON_SEED or {}) do consider(name) end
+  for name in pairs((M.history and M.history.boonLibrary) or {}) do consider(name) end
+  for name in pairs((ataxiaTemp and ataxiaTemp.boonsOwned) or {}) do consider(name) end
+  table.sort(gaps)
+  return gaps
+end
+
+-- BOUNDED BY DEFAULT. Each entry is one CONTEMPLATE and one captured block, and the capture slot
+-- is shared with the offer and effects parsers -- so filling all of them in one burst is the same
+-- race v4.7.279 had to unpick. `mnem boonfill` takes a handful; `mnem boonfill all` is the
+-- deliberate opt-in for a quiet moment on the riverbank.
+M.BOON_FILL_BATCH = 8
+
+function M.boonFill(limit)
+  local gaps = M.boonGaps()
+  if #gaps == 0 then
+    return M.echo("Boon catalogue has no gaps -- every name we know of has its text.")
   end
-  if #todo == 0 then
-    return M.echo("Boon catalogue already complete for all <cyan>" .. seen .. "<grey> owned boon(s).")
-  end
-  M.echo("Contemplating <cyan>" .. #todo .. "<grey> boon(s) to learn what they do (~" ..
-         string.format("%.0f", #todo * 0.6) .. "s)...")
+  local n = tonumber(limit) or M.BOON_FILL_BATCH
+  if limit == "all" then n = #gaps end
+  if n > #gaps then n = #gaps end
+  local todo = {}
+  for i = 1, n do todo[i] = gaps[i] end
+  M.echo("Contemplating <cyan>" .. #todo .. "<grey> of <cyan>" .. #gaps
+         .. "<grey> undescribed boon(s) (~" .. string.format("%.0f", #todo * 0.6) .. "s)...")
   M._boonFillNext(todo, 1, 0)
 end
 
