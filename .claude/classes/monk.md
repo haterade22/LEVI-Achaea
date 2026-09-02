@@ -1148,3 +1148,42 @@ senseless_flurry:  # balance recovers 30% faster while the numbness defence is u
     ladder until the lump lands — in a crowd that lump can exceed max HP (death
     from 'full HP' with every alarm silent). Thin rooms only."
 ```
+
+
+## Spirit Rend (Mnemosyne boon) -- KAI ENFEEBLE on denizens (v4.7.292)
+
+> "Your kaido enfeeble ability costs no kai and can target denizens, halving the target's current
+> health. You can only use this ability against denizens every 60 seconds."
+
+**AB Enfeeble (Kaido, ID 901)** -- `KAI ENFEEBLE <target>`, **3.00 seconds of EQUILIBRIUM**, 61 kai,
+"Works on/against: Adventurers". Halves current health *and mana*; against an adventurer who is not
+prone that is reduced to 25%.
+
+**What the boon changes, and what the basher therefore does** (`ataxiaBasher_spiritRend`,
+`basher/002_Class_Bashing.lua`):
+
+| Fact | Source | Handling |
+|---|---|---|
+| Costs no kai | boon | no kai gate at all -- the AB's 61 is exactly what is removed |
+| Targets denizens | boon | `type(target) == "number"`; inert in PvP, where it is a normal 61-kai ability |
+| 60s cooldown | boon | timed from the CONFIRMED fire line, not from send |
+| Halves current health | boon | fires only above `ataxiaBasher.spiritRendAt` (**50**) -- halving 90% removes nearly half the mob, halving 40% removes a fifth |
+| "reduced to 25% if not prone" | AB | **NOT applied.** That clause is in the adventurer ability; the boon restates the denizen effect with no prone condition. Revisit only if a live capture shows a reduced effect on a standing denizen. |
+| 3.00s equilibrium | AB | rides free beside the balance combo, like Kai Choke and NUMB |
+
+**Rain form only** (user doctrine, as with the other two riders), and it **sorts ahead of Kai
+Choke**: Rend's window closes as the target drops below 50%, where the choke is equally good next
+round. Skips a shielded round so the shield breaks first.
+
+**Fire line, captured 2026-09-02** (highlighted chartreuse bold, trigger `mnemosyne/080`):
+
+```
+You violently propel your kai energy at a haskrovska vine, enfeebling him.
+```
+
+The pattern deliberately stops before the pronoun -- the game picks him/her/it from the denizen's
+gender, and "a haskrovska vine" is a plant that still took "him".
+
+**Unrelated manual alias:** `ke` (`aliases/.../kaido/001_kai_enfeeble.lua`) sends
+`kai enfeeble <target>` on the free queue behind a class-level check, with no boon gate or cooldown.
+It is a separate path and does not interact with the basher rider.

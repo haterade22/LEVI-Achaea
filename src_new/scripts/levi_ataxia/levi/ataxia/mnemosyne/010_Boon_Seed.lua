@@ -332,6 +332,9 @@ M.BOON_SEED = {
   ["Ogre's Defence"] = { description = "You lose 2% critical strike chance, but you gain 10% resistance to all damage.", rarity = "uncommon" },
   -- RENAMED 2026-09-01 from "Trenchfoot", and the cost changed hamstrung -> clumsiness. Kept
   -- at the old alphabetical position deliberately: the rename is the fact worth seeing.
+  -- CAPTURED LIVE 2026-09-02 from the boon screen. Rarity not shown in the capture, so it is
+  -- deliberately omitted rather than guessed -- `_learnBoon` fills it from the next BOONS row.
+  ["Spirit Rend"] = { description = "Your kaido enfeeble ability costs no kai and can target denizens, halving the target's current health. You can only use this ability against denizens every 60 seconds." },
   ["Sprightly"] = { description = "Your dexterity is increased by 5, but you suffer permanent clumsiness.", rarity = "uncommon" },
   ["Truther"] = { description = "You are immune to the paranoia and hallucinations afflictions.", rarity = "common" },
   ["Tough Crowd"] = { description = "Telling a bad joke will cause psychic damage to all denizens present, but your comedic flair is so horrific that doing so will cause you to become stupid and stunned." },

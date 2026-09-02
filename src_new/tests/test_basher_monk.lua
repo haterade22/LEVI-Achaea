@@ -335,3 +335,139 @@ describe("ataxiaBasher_monkBashing2 -- Senseless Flurry numb keeper", function()
   ataxia.mnemosyne = nil
   ataxia.defences = nil
 end)
+
+-- ─── SPIRIT REND (Mnemosyne boon) ───────────────────────────────────────────
+--
+-- KAI ENFEEBLE halves a denizen's CURRENT health, so it is worth twice as much at 80% as at 40%
+-- and illegal below the floor entirely. That makes it the one eq rider whose opportunity EXPIRES,
+-- which is why it sorts ahead of the Kai Choke burst rather than behind it.
+
+describe("Spirit Rend -- KAI ENFEEBLE as an eq rider", function()
+  local function rendReset()
+    reset()
+    target = 12345                       -- numeric = denizen; the boon is the denizen permit
+    ataxia.vitals.form = "Rain"
+    mnemSpiritRend, mnemKaiUnleashed, mnemSenselessFlurry = true, false, false
+    ataxiaTemp = {}
+    ataxia.mnemosyne = { _denizenCount = function() return 1 end,
+                         swarm = { state = "idle", threshold = function() return 3 end } }
+    gmcp = { IRE = { Target = { Info = { hpperc = "80" } } } }
+  end
+
+  it("fires in Rain form on a denizen above the health floor", function()
+    rendReset()
+    expect(has(ataxiaBasher_monkBashing2(), "kai enfeeble 12345")).toBeTrue()
+  end)
+
+  -- The floor is the user's rule and the reason is arithmetic: halving 40% removes a fifth of the
+  -- mob, halving 90% removes nearly half. Below the floor the cooldown is better saved.
+  it("holds below the health floor", function()
+    rendReset(); gmcp.IRE.Target.Info.hpperc = "50"
+    expect(has(ataxiaBasher_monkBashing2(), "kai enfeeble")).toBeFalse()
+    gmcp.IRE.Target.Info.hpperc = "51"
+    expect(has(ataxiaBasher_monkBashing2(), "kai enfeeble")).toBeTrue()
+  end)
+
+  it("respects a raised floor from config", function()
+    rendReset(); ataxiaBasher.spiritRendAt = 90
+    expect(has(ataxiaBasher_monkBashing2(), "kai enfeeble")).toBeFalse()
+    ataxiaBasher.spiritRendAt = nil
+  end)
+
+  it("is Rain-form only, like the choke and the numb refresh", function()
+    rendReset(); ataxia.vitals.form = "Willow"
+    expect(has(ataxiaBasher_monkBashing2(), "kai enfeeble")).toBeFalse()
+  end)
+
+  -- The AB says "Works on/against: Adventurers"; the BOON is what permits a denizen. Against a
+  -- player this is an ordinary 61-kai ability and the basher has no business spending it.
+  it("is PvE only -- never fires at a named player target", function()
+    rendReset(); target = "Grulk"
+    expect(has(ataxiaBasher_monkBashing2(), "kai enfeeble")).toBeFalse()
+    target = 12345
+  end)
+
+  it("does nothing without the boon", function()
+    rendReset(); mnemSpiritRend = false
+    expect(has(ataxiaBasher_monkBashing2(), "kai enfeeble")).toBeFalse()
+  end)
+
+  it("skips a shielded round so the shield breaks first", function()
+    rendReset(); ataxiaBasher.shielded = true
+    expect(has(ataxiaBasher_monkBashing2(), "kai enfeeble")).toBeFalse()
+  end)
+
+  -- The 60s clock starts at the CONFIRMED line, never at send: a command the server ate has not
+  -- spent the cooldown, and stamping on send would lock the ability out for a minute over a round
+  -- that never happened.
+  it("holds for 60s after a CONFIRMED enfeeble, not after a send", function()
+    rendReset()
+    expect(has(ataxiaBasher_monkBashing2(), "kai enfeeble")).toBeTrue()
+    ataxiaBasher_spiritRendConfirm()
+    expect(has(ataxiaBasher_monkBashing2(), "kai enfeeble")).toBeFalse()
+    ataxiaTemp.spiritRendAt = ((getEpoch and getEpoch()) or os.time()) - 61
+    ataxiaTemp.spiritRendPendingAt = nil
+    expect(has(ataxiaBasher_monkBashing2(), "kai enfeeble")).toBeTrue()
+  end)
+
+  it("re-latches the flag from the confirm line (self-proving)", function()
+    rendReset(); mnemSpiritRend = false
+    ataxiaBasher_spiritRendConfirm()
+    expect(mnemSpiritRend).toBeTrue()
+  end)
+
+  -- An UNCONFIRMED send holds only briefly, so an eaten command retries instead of locking out.
+  it("retries an unconfirmed send rather than waiting the full cooldown", function()
+    rendReset()
+    expect(has(ataxiaBasher_monkBashing2(), "kai enfeeble")).toBeTrue()
+    expect(has(ataxiaBasher_monkBashing2(), "kai enfeeble")).toBeFalse() -- inside the retry hold
+    ataxiaTemp.spiritRendPendingAt = ((getEpoch and getEpoch()) or os.time()) - 7
+    expect(has(ataxiaBasher_monkBashing2(), "kai enfeeble")).toBeTrue()  -- not 60s later
+  end)
+
+  -- A threshold we cannot evaluate is not a threshold we may assume. But refusing SILENTLY is
+  -- this package's commonest failure, and here it would be invisible -- the ability costs no
+  -- balance, so nothing else would look wrong.
+  it("holds when the target's health cannot be read, and says so once", function()
+    rendReset()
+    gmcp = {}
+    local said = 0
+    local realEcho = ataxiaEcho
+    ataxiaEcho = function() said = said + 1 end
+    expect(has(ataxiaBasher_monkBashing2(), "kai enfeeble")).toBeFalse()
+    ataxiaBasher_monkBashing2()
+    ataxiaEcho = realEcho
+    expect(said).toBe(1)   -- once, not once per round
+  end)
+
+  -- ORDER IS THE DECISION. Rend's window closes as the target drops; the choke is just as good
+  -- next round. So rend goes first when both are eligible -- and the choke helper must not even
+  -- be CALLED, or it would stamp its own retry guard for a round it did not win.
+  it("outranks the Kai Choke burst when both are eligible", function()
+    rendReset()
+    mnemKaiUnleashed = true
+    ataxia.mnemosyne._denizenCount = function() return 3 end
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "kai enfeeble")).toBeTrue()
+    expect(has(cmd, "kai choke")).toBeFalse()
+    expect(ataxiaTemp.kaiChokePendingAt).toBeNil()  -- the loser stamped nothing
+  end)
+
+  it("lets the choke through once rend is on cooldown", function()
+    rendReset()
+    mnemKaiUnleashed = true
+    ataxia.mnemosyne._denizenCount = function() return 3 end
+    ataxiaBasher_spiritRendConfirm()          -- rend now held for 60s
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "kai enfeeble")).toBeFalse()
+    expect(has(cmd, "kai choke")).toBeTrue()
+  end)
+
+  -- Restore shared state for whoever runs after us.
+  mnemSpiritRend, mnemKaiUnleashed = false, false
+  target = "manticore"
+  gmcp = nil
+  ataxia.mnemosyne = nil
+  ataxiaTemp = {}
+end)
+

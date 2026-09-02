@@ -44,6 +44,7 @@ mnemRollHide = false  -- boons reset each run
 mnemBloodscent = false  -- boons reset each run
 mnemKaiUnleashed = false  -- boons reset each run
 mnemSenselessFlurry = false  -- boons reset each run
+mnemSpiritRend = false  -- boons reset each run
 psionPanoply = false  -- boons reset each run
 dragonMightSycaerunax = false  -- boons reset each run
 dragonRampage = false  -- boons reset each run

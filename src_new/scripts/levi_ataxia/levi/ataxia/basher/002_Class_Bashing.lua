@@ -2072,6 +2072,108 @@ local SHIKUDO_BASH_COMBOS = {
   Maelstrom = {normal = "ruku torso livestrike risingkick head",  shieldbreak = "shatter ruku risingkick head"},
 }
 
+-- The focused target's health as a percentage, or nil when we genuinely cannot read it.
+--
+-- Hoisted to a named global (v4.7.292) because a SECOND class helper now needs it: it lived as a
+-- file-local `bisectTargetHp` defined ~650 lines below, which Lua would not let anything above it
+-- call. `bisectTargetHp` is kept as a thin wrapper so the Runewarden call sites and their tests are
+-- untouched.
+--
+-- `gmcp.IRE.Target.Info.hpperc` first (live, server-fed, needs the IRE.Target module negotiated and
+-- a server target set -- see `ataxiaBasher_setServerTarget`), then our own denizen-state model.
+-- Returns NIL rather than a guess: every caller has to decide for itself what an unreadable target
+-- means, and the two current callers answer differently on purpose.
+function ataxiaBasher_targetHpPct()
+  local ti = gmcp and gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info
+  local hp = tonumber((tostring(ti and ti.hpperc or ""):gsub("%%", "")))
+  if hp and hp > 0 then return hp end
+  if ataxiaBasher_dsGet and type(target) == "number" then
+    local ds = ataxiaBasher_dsGet(target)
+    local dhp = ds and tonumber(ds.hpp)
+    if dhp and dhp > 0 then return dhp end
+  end
+  return nil
+end
+
+-- ---------------------------------------------------------------------------
+-- SPIRIT REND (Mnemosyne boon, v4.7.292, user-directed)
+-- ---------------------------------------------------------------------------
+--
+--   "Your kaido enfeeble ability costs no kai and can target denizens, halving the target's
+--    current health. You can only use this ability against denizens every 60 seconds."
+--
+-- AB Enfeeble (Kaido, ID 901): `KAI ENFEEBLE <target>`, **3.00 seconds of EQUILIBRIUM**, 61 kai.
+--
+-- The boon rewrites three of those facts and each one shapes the code:
+--   * "costs no kai"      -> NO kai gate. The AB's 61 is what the boon removes.
+--   * "can target denizens" -> the AB says "Works on/against: Adventurers"; the boon is the only
+--     reason this is legal in PvE at all. So it is `type(target) == "number"` gated -- against a
+--     player it would be an ordinary 61-kai ability and the basher has no business spending it.
+--   * "every 60 seconds"  -> a denizen-only cooldown the AB does not mention.
+--
+-- HALVING CURRENT HEALTH IS WORTH MOST AT FULL HEALTH, which is why the user's rule is a floor
+-- rather than a ceiling: fire above `ataxiaBasher.spiritRendAt` (50). At 100% it removes half the
+-- mob; at 20% it removes a tenth of one. There is no wasted-overkill case to guard against, only a
+-- diminishing one.
+--
+-- NO PRONE GATE, deliberately. The AB carries "if your opponent does not lie prone before you,
+-- this will be reduced to a 25% reduction" -- but that sentence is in the ADVENTURER ability, and
+-- the boon restates the denizen effect flatly as "halving the target's current health" with no
+-- such clause. Adding a prone requirement would be inventing a mechanic from the wrong paragraph;
+-- if a live capture ever shows a reduced effect on a standing denizen, this is the note to revisit.
+--
+-- NO MANA FLOOR, unlike the Kai Choke beside it. Choke has one because its AB lists 50 mana; this
+-- AB lists kai and nothing else, and the boon removes the kai.
+--
+-- IT RIDES, IT DOES NOT REPLACE. 3s of equilibrium is idle during a balance combo (the same reason
+-- Kai Choke and NUMB ride), so the enfeeble and the combo land in one queued round.
+local SPIRIT_REND_CD = 60     -- the boon's own denizen cooldown, timed from the CONFIRMED line
+local SPIRIT_REND_RETRY = 6   -- an eaten/refused send retries this often rather than locking out
+
+function ataxiaBasher_spiritRend(useShieldbreak)
+  if not mnemSpiritRend then return nil end
+  if useShieldbreak then return nil end -- shielded round: break it first, as the choke does
+  if ataxia.vitals.form ~= "Rain" then return nil end -- user doctrine, as with choke and numb
+  if type(target) ~= "number" then return nil end     -- PvE only; the boon is the denizen permit
+
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp = ataxiaTemp or {}
+  if (nowT - (tonumber(ataxiaTemp.spiritRendAt) or 0)) < SPIRIT_REND_CD then return nil end
+  if (nowT - (tonumber(ataxiaTemp.spiritRendPendingAt) or 0)) < SPIRIT_REND_RETRY then return nil end
+
+  -- AN UNREADABLE TARGET DOES NOT FIRE, and says so once per run. The rule matches
+  -- `ataxiaBasher_rwBisect`'s: a threshold we cannot evaluate is not a threshold we may assume.
+  -- But refusing silently is this package's most common failure -- a feature that quietly never
+  -- fires -- and here the refusal would be invisible, because the ability costs no balance and
+  -- nothing else would look wrong. So it warns, once, naming the reason (the Arc proof-of-life
+  -- shape, v4.7.245).
+  local hp = ataxiaBasher_targetHpPct()
+  if not hp then
+    if not ataxiaTemp.spiritRendNoHpWarned then
+      ataxiaTemp.spiritRendNoHpWarned = true
+      ataxiaEcho("<gold>SPIRIT REND<reset> held, but the target's health cannot be read -- "
+        .. "holding off. Check the server target (IRE.Target) if this persists.")
+    end
+    return nil
+  end
+  if hp <= (tonumber(ataxiaBasher.spiritRendAt) or 50) then return nil end
+
+  ataxiaTemp.spiritRendPendingAt = nowT
+  return "kai enfeeble "..target.."; "
+end
+
+-- Enfeeble CONFIRMED (trigger 080, live-captured 2026-09-02): "You violently propel your kai
+-- energy at <mob>, enfeebling him." The REAL 60s cooldown starts HERE rather than at send, for
+-- the reason the choke's does: a command the server ate or refused has not spent the cooldown, and
+-- stamping on send would lock the ability out for a minute over a round that never happened.
+-- Self-proving, so it re-latches the flag too -- a missed BOONS row cannot desync it.
+function ataxiaBasher_spiritRendConfirm()
+  mnemSpiritRend = true
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.spiritRendAt = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp.spiritRendPendingAt = nil
+end
+
 -- Kai Unleashed boon (Mnemosyne, legendary): "Kai choking a denizen deals a burst of
 -- magic damage to all denizens in its location, including itself. This effect has a
 -- 30 seconds cooldown before it can trigger again." User doctrine: RAIN form only,
@@ -2245,11 +2347,22 @@ function ataxiaBasher_monkBashing2()
     command = command.."unwield all"..sp.."combo "..target..(useShieldbreak and " rhk ucp ucp; " or " sdk ucp ucp; ")
   elseif shikudo then
     monkWarnedNoSpec = false
-    -- EQ riders alongside the balance combo (both land the same round). One eq
-    -- spender per round: Kai Unleashed's 30s AoE burst outranks the Senseless
-    -- Flurry numb refresh when both are eligible.
-    local choke = ataxiaBasher_kaiUnleashedChoke(useShieldbreak)
-    command = command..(choke or ataxiaBasher_senselessFlurryNumb() or "")
+    -- EQ riders alongside the balance combo (both land the same round). ONE eq spender per
+    -- round, and the order below is the whole decision -- the `or` chain short-circuits, so a
+    -- helper further down is not even CALLED when an earlier one fires, and none of them stamps
+    -- anything before it is chosen.
+    --
+    -- SPIRIT REND FIRST, because its window CLOSES. It is legal only while the target is above
+    -- `spiritRendAt` (50%), and every round we spend elsewhere is a round the mob drops closer to
+    -- the floor that makes it illegal -- and halving current health is worth twice as much at 80%
+    -- as at 40%. Kai Choke has no such window: at 2+ denizens it is just as good next round, and
+    -- its own 30s clock keeps running whether we cast it now or in six seconds. The numb refresh
+    -- is a self-buff and waits happily. **The ability whose opportunity expires outranks the ones
+    -- that merely recur** -- the same reasoning that puts Stormcleaver's execute ahead of the
+    -- Thunderclap crowd gate in `ataxiaBasher_rwBisect`.
+    local rend = ataxiaBasher_spiritRend(useShieldbreak)
+    local choke = (not rend) and ataxiaBasher_kaiUnleashedChoke(useShieldbreak) or nil
+    command = command..(rend or choke or ataxiaBasher_senselessFlurryNumb() or "")
     command = command..shikudoBashCombo(target, useShieldbreak)
   elseif not monkWarnedNoSpec then
     monkWarnedNoSpec = true
@@ -2744,16 +2857,11 @@ end
 -- `targetNearlyDead`, which treats a missing reading as "never block". The asymmetry is
 -- deliberate: there, a wrong guess withholds a card; here, it spends 4s of balance on a
 -- finisher that will not finish anything.
+-- Kept as a name so the Runewarden sites and their tests read unchanged; the body moved up to
+-- `ataxiaBasher_targetHpPct` when Spirit Rend needed the same read from above this point in the
+-- file (v4.7.292). One implementation, two callers that disagree about what nil means.
 local function bisectTargetHp()
-	local ti = gmcp and gmcp.IRE and gmcp.IRE.Target and gmcp.IRE.Target.Info
-	local hp = tonumber((tostring(ti and ti.hpperc or ""):gsub("%%", "")))
-	if hp and hp > 0 then return hp end
-	if ataxiaBasher_dsGet and type(target) == "number" then
-		local ds = ataxiaBasher_dsGet(target)
-		local dhp = ds and tonumber(ds.hpp)
-		if dhp and dhp > 0 then return dhp end
-	end
-	return nil
+	return ataxiaBasher_targetHpPct()
 end
 
 function ataxiaBasher_rwBisect()

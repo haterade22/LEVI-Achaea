@@ -2,6 +2,116 @@
 
 ---
 
+## 2026-09-02 - Spirit Rend, the balance banner that read 0.000, and two captured lines (v4.7.292)
+
+### SPIRIT REND -- KAI ENFEEBLE as a third eq rider (user-directed)
+
+> "Your kaido enfeeble ability costs no kai and can target denizens, halving the target's current
+> health. You can only use this ability against denizens every 60 seconds."
+
+User doctrine: **Rain form, every 60 seconds, on targets above 50% health.** The floor is the
+arithmetic -- halving 90% removes nearly half the mob, halving 40% removes a fifth -- so it is a
+floor and not a ceiling, and there is no overkill case to guard, only a diminishing one.
+
+**AB Enfeeble (Kaido, ID 901) and the boon disagree on three facts, and each one shaped the code:**
+
+| AB says | Boon says | Consequence |
+|---|---|---|
+| 61 kai | "costs no kai" | **No kai gate.** The 61 is exactly what the boon removes. |
+| "Works on/against: **Adventurers**" | "can target denizens" | **`type(target) == "number"` gated** -- the boon is the only reason this is legal in PvE, and against a player it is an ordinary 61-kai ability the basher has no business spending. |
+| no cooldown | "every 60 seconds" | A denizen-only cooldown the AB does not mention. |
+
+**NO PRONE GATE, deliberately.** The AB carries "if your opponent does not lie prone before you,
+this will be reduced to a 25% reduction" -- but that sentence is in the ADVENTURER ability, and the
+boon restates the denizen effect flatly as "halving the target's current health" with no such
+clause. Adding a prone requirement would be inventing a mechanic from the wrong paragraph. **No
+mana floor** either, unlike the Kai Choke beside it: choke has one because its AB lists 50 mana;
+this AB lists kai and nothing else.
+
+**IT SORTS AHEAD OF THE KAI CHOKE, and that is the whole decision.** Three eq riders now compete
+for one slot, resolved by an `or` chain whose order is the policy -- and because it short-circuits,
+a helper further down is never *called*, so a loser cannot stamp its own retry guard for a round it
+did not win. Spirit Rend goes first because **its window CLOSES**: it is illegal below 50%, and
+every round spent elsewhere is a round the mob drops nearer the floor. Kai Choke has no window -- at
+2+ denizens it is just as good next round, and its 30s clock runs either way. The numb refresh is a
+self-buff and waits happily. **The ability whose opportunity expires outranks the ones that merely
+recur** -- the same reasoning that puts Stormcleaver's execute ahead of the Thunderclap crowd gate.
+
+**The 60s clock starts at the CONFIRMED line, never at send** (live capture, "You violently propel
+your kai energy at a haskrovska vine, enfeebling him."): a command the server ate has not spent the
+cooldown, and stamping on send would lock the ability out for a full minute over a round that never
+happened. That line is also **highlighted chartreuse bold** (user-requested) in the same trigger
+that owns the match -- two triggers on one line is how two handlers drift apart.
+
+An **unreadable target does not fire, and says so once per run**. The rule matches
+`ataxiaBasher_rwBisect`'s -- a threshold we cannot evaluate is not one we may assume -- but refusing
+silently is this package's commonest failure, and here it would be invisible, because the ability
+costs no balance and nothing else would look wrong.
+
+Also: `bisectTargetHp` was a file-local defined ~650 lines BELOW where Spirit Rend needed the same
+read, so Lua could not reach it. Hoisted to `ataxiaBasher_targetHpPct()` with the old name kept as a
+thin wrapper -- one implementation, two callers that deliberately disagree about what `nil` means.
+
+### THE BALANCE BANNER PRINTED 0.000 BECAUSE TWO TRIGGERS STOP ONE STOPWATCH
+
+User: *"balance is showing 0 again, happens quite a bit."*
+
+`balances/001_Limb_Balance` fires on "You have recovered balance on your legs." and
+`balances/006_All_Limbs` on "You have recovered balance on all limbs." **Both call `endBalTimer()` +
+`balanceHighlight()`, and both lines routinely arrive in the same round.** The first stopped the
+watch, RESET it to zero and cleared `ataxiaBalStopwatchStarted`; the second stopped an already-reset
+watch, read ~0, and printed it as though it were a measurement.
+
+The start side has always been guarded -- `timerOnBalUsed` refuses while one is running -- and the
+stop side simply never got the matching guard. **A stopwatch with a guarded start and an unguarded
+stop is not a pair.**
+
+**Not cosmetic:** the fabricated zero was written straight into `bashStats.lastBalanceTime`, and
+`currentBalanceDamage` was zeroed a second time -- so a round's damage was attributed to a balance
+of no length at all, corrupting the DPS figures the panel reports.
+
+`endBalTimer` now returns whether it measured anything and `balanceHighlight` prints only for a real
+reading; "0.000 seconds" and "nothing was running" are different answers and must not render alike.
+**EQ is guarded the same way** even though it has only one stopper (`003_EQUILIBRIUM`) and never
+showed this: the ASYMMETRY was the defect, and fixing only the half that happens to bite leaves the
+other waiting for a second trigger to be added. `btime`/`etime` were also unprefixed globals; now
+locals.
+
+### Two captured lines
+
+- **The wade stone** (`highlighting/059`), bold gold, category CAPTURED not enumerated
+  (`tailored to (.+?) [Bb]oons`) -- verified against Legendary/Offence/Defence/Utility and a
+  two-word category. Two patterns because the ~190-character line wraps; **the end fragment was
+  first written fifty characters long and did not match the tail on its own**, so a break inside
+  that clause would have lost the category silently while the line still looked highlighted.
+- **"Your falcon is too far away for you to command like that."** (`runie_dom/022`) sends
+  `<pet> recall` and lets the existing trigger `021` do the drop and order-follow. For a Runewarden
+  this silently killed the free falcon rake for the rest of a fight: it costs no balance, so nothing
+  noticed, and there is no fire line to be missing -- only a refusal nobody read. The pet comes from
+  the line, but acting on it is gated on recall syntax **proven in-tree**; a Paladin's eagle warns
+  once rather than guessing `eagle recall`. 10s debounce, since the basher attempts the rake every
+  round. Verified that a refused rake does not burn its cooldown -- `falconRakeReady` is cleared by
+  the FIRE line, not on send.
+
+### Verification
+
+**1717 tests** (up from 1696), including a new `test_balance_timers.lua` that models the stopwatch
+API so the double-stop can be reproduced. **Ten break-backs, each failing its named test** -- seven
+for Spirit Rend (floor, unreadable target, PvE gate, Rain gate, send-vs-confirm stamping, shielded
+round, and the choke ordering) and three for the balance timers.
+
+Worth recording: the first cut of the new test file **nil'd `cecho` and `gmcp` in its teardown and
+took nine unrelated tests down with it** -- test files share one Lua state, and `test_mnemosyne.lua`
+already carries that warning in its header. Globals are saved and restored now, never blanked.
+
+**Files:** `basher/002_Class_Bashing.lua`, `ataxia/014_Balance_Timers.lua`,
+`mnemosyne/{004_Parsers,010_Boon_Seed}.lua`, `aliases/.../mnemosyne/002_Boon_Claim.lua`,
+`triggers/mnemosyne/{001_Run_Start,079_Spirit_Rend,080_Spirit_Rend_Confirmed}.lua`,
+`triggers/highlighting/059_Wade_Stone_Tailored.lua`, `triggers/runie_dom/022_Pet_Too_Far.lua`,
+`tests/{test_basher_monk,test_balance_timers}.lua`.
+
+---
+
 ## 2026-09-01 - Deep review of v4.7.287-290, and two captured lines (v4.7.291)
 
 Four parallel reviewers over everything shipped this session. **Fourteen findings, all verified
