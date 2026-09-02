@@ -325,6 +325,14 @@ M.BOON_SEED = {
   ["Timequake"] = { description = "Your aeonics distortion ability now deals magic damage to all denizens when distorting a location.", rarity = "rare" },
   ["Tireless"] = { description = "Defeating a denizen will restore 2% of your willpower and 2% of your endurance.", rarity = "common" },
   ["Toxicologist"] = { description = "Your venoms now relapse against denizens, dealing damage again after a delay.", rarity = "rare" },
+  -- CAPTURED LIVE 2026-09-02 from the boon screen. `Healing Metabolism` and `Thick Skull` were
+  -- name-only holes declared in M.BOON_UNDESCRIBED; `Obligate Carnivore` and `Power Up` were not
+  -- in the catalogue at all. Rarity is not shown on that screen, so it is omitted rather than
+  -- guessed -- `_learnBoon` fills it from the next BOONS row.
+  ["Healing Metabolism"] = { description = "Your health elixirs are 50% more effective while you possess the satiation defence." },
+  ["Obligate Carnivore"] = { description = "You can EAT corpses, restoring hunger and small amounts of endurance and willpower." },
+  ["Thick Skull"] = { description = "Your survival headslam ability stuns denizens for 5 seconds. This effect has a cooldown of 40 seconds." },
+  ["Power Up"] = { description = "Gain 10% bonus damage." },
   -- CAPTURED LIVE 2026-09-01 from the in-game BOONS list: two of the 30 name-only holes below,
   -- filled with first-hand text. `Ogre's Defence` is the one that exposed the all-damage parser
   -- bug -- "You lose 2% ... but you gain 10% resistance to all damage" was being credited with 2%.
@@ -391,7 +399,6 @@ M.BOON_UNDESCRIBED = {
   "Arcane Will",
   "Antimagic Shell",
   "Heelbreaker",
-  "Thick Skull",
   "Ogre's Strike",
   "Ogre's Speed",
   "Mana Powered",
@@ -406,7 +413,6 @@ M.BOON_UNDESCRIBED = {
   "Vigorous",
   "Desperation",
   "Slow And Steady",
-  "Healing Metabolism",
   "Bloodquell",
   "Cavalry",
   "Phaestian Fortitude",

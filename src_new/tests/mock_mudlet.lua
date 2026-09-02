@@ -327,4 +327,9 @@ end
 -- Mudlet's string extension: Title-case the first letter (used by class routing).
 function string.title(s) return (s:gsub("^%l", string.upper)) end
 
+-- Mudlet's string extension: strip leading and trailing whitespace. Real Mudlet API, and its
+-- absence here was a MOCK gap rather than a production problem -- `triggers/733_Corpse_Found`
+-- has used it since long before any test loaded the file that does.
+function string.trim(s) return (s:gsub("^%s+", ""):gsub("%s+$", "")) end
+
 return M

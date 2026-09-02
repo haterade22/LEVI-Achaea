@@ -62,6 +62,14 @@ if type(target) == "number" and ataxiaBasher.enabled then
 			ataxiaBasher_dsAlert("Rage-Fuelled: next battlerage is FREE", "chartreuse")
 		end
 	end
+
+	-- OBLIGATE CARNIVORE + HEALING METABOLISM: top the satiation defence up off the corpse we
+	-- have just been handed. A kill is the right moment twice over -- a corpse exists, and the
+	-- fight is ending rather than peaking, which matters because eating contends with cure-herbs
+	-- for the eating balance. Throttled inside `ataxia_carnivoreEat`, and a no-op unless BOTH
+	-- boons are held: without Healing Metabolism a corpse is just food and the horn's emergency
+	-- path is enough.
+	if ataxia_carnivoreTopUp then ataxia_carnivoreTopUp() end
 end
 
 if ataxiaBasher.enabled and matches[2] then

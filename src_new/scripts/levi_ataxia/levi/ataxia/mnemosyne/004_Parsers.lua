@@ -204,6 +204,8 @@ function M.onRunEnd()
   mnemKaiUnleashed = false -- boons gone on a confirmed run-end
   mnemSenselessFlurry = false -- boons gone on a confirmed run-end
   mnemSpiritRend = false -- boons gone on a confirmed run-end
+  mnemObligateCarnivore = false -- boons gone on a confirmed run-end
+  mnemHealingMetabolism = false -- boons gone on a confirmed run-end
   psionPanoply = false -- boons gone on a confirmed run-end
   dragonMightSycaerunax = false -- boons gone on a confirmed run-end
   dragonRampage = false -- boons gone on a confirmed run-end
@@ -251,6 +253,7 @@ function M.onRunEnd()
     ataxiaTemp.spiritRendAt = nil -- Spirit Rend's 60s clock is run-scoped like the burst's
     ataxiaTemp.spiritRendPendingAt = nil
     ataxiaTemp.spiritRendNoHpWarned = nil -- re-arm the once-per-run unreadable-target warning
+    ataxiaTemp.corpseAteAt = nil -- the corpse-eat throttle is run-scoped like the rest
   end
   -- THE AUDIT BASELINE IS PER-RUN AND WAS NEVER CLEARED (deep review, v4.7.291). It was guarded
   -- only by `baselineRun == M.history.run`, and on a BOOTSTRAPPED run (start line missed) the

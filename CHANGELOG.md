@@ -2,6 +2,109 @@
 
 ---
 
+## 2026-09-02 - Obligate Carnivore + Healing Metabolism: food becomes upkeep (v4.7.294)
+
+> **Obligate Carnivore:** You can EAT corpses, restoring hunger and small amounts of endurance and
+> willpower.
+> **Healing Metabolism:** Your health elixirs are 50% more effective while you possess the satiation
+> defence.
+
+User: *"When we have Obligate Carnivore we need to eat the corpses we have to sustain food"* and
+*"With Healing Metabolism, we need to maintain utterly satiated."*
+
+### The two boons change what food IS
+
+The horn of plenty (v4.7.169) exists because **starvation knocks you unconscious** -- an emergency,
+handled reactively off the starvation lines. Healing Metabolism attacks the same axis from the other
+end: satiation stops being a floor to stay above and becomes a **defence worth holding**, because
+50% on every health elixir is a real fraction of survivability in a no-flee instance. And Obligate
+Carnivore supplies the food to hold it with, for free, delivered automatically -- `340_Slain` has
+always ended "...retrieving the corpse."
+
+So: **`ataxia_carnivoreEat`**, and **corpses outrank the horn whenever the boon is held**. That is
+the one avoidable cost in the old path -- a horn charge is one of six on its own refill clock, and a
+corpse is lying in the pack.
+
+### Nothing is guessed; every piece is proven in-tree
+
+The boon supplies the verb ("You can **EAT** corpses") and the rest is assembly:
+
+| Piece | Proven by |
+|---|---|
+| `ii corpse` | `aliases/.../176_Butchering.lua` |
+| that listing's rows -> an id | `triggers/733_Corpse_Found.lua`, parsing exactly this shape |
+| that id used as an item ref | `001_Queue_Scanning`: `butcher <id> for reagent` |
+| `eat <id>` | `ataxia_hornFeed`, on horn item ids |
+
+A bare `eat corpse` would have been shorter and would have **assumed how the game disambiguates a
+noun we hold several of**. The id form assumes nothing.
+
+### Two decisions about WHEN, both about the eating balance
+
+**Eating shares the EATING balance with every cure-herb** -- the entire reason the PvE curing
+profile exists (v4.7.172) -- so a corpse eaten mid-round can delay a real cure. Therefore:
+
+- The eat goes out on the **free queue** (`queue add free eat <id>`, the shape `butcher` already
+  uses), so the basher's next `queue addclearfull` cannot wipe it.
+- The **upkeep** fires on a KILL, which is the right moment twice over: a corpse exists, and the
+  fight is ending rather than peaking.
+- The **starvation** path FORCES past the upkeep throttle. Starvation ends in unconsciousness, and
+  while unconscious nothing in this system can help -- a throttle written for upkeep must not stand
+  in front of an emergency.
+
+**The top-up requires BOTH boons.** With only Obligate Carnivore a corpse is just food and the
+horn's emergency path already covers hunger; it is Healing Metabolism that makes holding the defence
+worth a command. With only Healing Metabolism there is no food source to hold it with.
+
+**The attempt is stamped, not just the confirmation.** An empty pack is the normal state between
+kills, so without stamping the probe every kill would re-probe forever and fill the channel with
+`ii corpse`. The confirmed line re-stamps on top of it, because a probe that found nothing has spent
+nothing.
+
+### The eat lines, captured and highlighted (`highlighting/061`)
+
+> With primal ferocity, you dig into the corpse of a haskrovska vine, sating your appetite with the
+> creature's flesh.
+> Your fatigue fades away as the meat slides down your gullet.
+
+**Two patterns, two jobs.** The first sentence runs to ~120 characters, so the server-side wrap can
+split it -- the fragment used is short and sits EARLY, where a break is least likely to fall through
+it. The second line is the endurance/willpower half of the same mouthful and is matched in its own
+right, so the restore stays visible even if the wrap swallows the first.
+
+`medium_sea_green` is **deliberately shared** with the inhibit and cleanse lines rather than given a
+colour of its own -- same meaning class, restoration, the convention the Human Spirit proc already
+follows. A new colour per line is how a palette stops meaning anything.
+
+### Four boon texts captured first-hand
+
+`Healing Metabolism` and `Thick Skull` were **name-only holes** declared in `M.BOON_UNDESCRIBED`
+(v4.7.288); `Obligate Carnivore` and `Power Up` were absent from the catalogue entirely. All four
+seeded from the boon screen. Rarity is not shown there, so it is omitted rather than guessed --
+`_learnBoon` fills it from the next BOONS row. **26 declared holes left.**
+
+`Blood Pact`, `Savant` and `Restoration` in the same screenshot matched our existing text verbatim,
+which is the first independent check any of that catalogue has had.
+
+### `string.trim` was missing from the mock
+
+A real Mudlet string extension that `733_Corpse_Found` has used for years -- absent from
+`mock_mudlet.lua` only because no test had loaded a file that used it. **A mock gap, not a
+production problem**, so it was added to the mock rather than routed around in the code.
+
+### Verification
+
+**1730 tests** (up from 1717), new `test_carnivore.lua`. **Seven break-backs, each failing its named
+test**: the horn deferral, the starvation force, the attempt stamp, the free queue, the both-boons
+requirement, the boon gate, and the confirmed re-stamp.
+
+**Files:** `misc_scripts/022_Horn_Of_Plenty.lua`, `triggers/340_Slain.lua`,
+`mnemosyne/{004_Parsers,010_Boon_Seed}.lua`, `aliases/.../mnemosyne/002_Boon_Claim.lua`,
+`triggers/mnemosyne/{001_Run_Start,081_Obligate_Carnivore,082_Healing_Metabolism}.lua`,
+`triggers/highlighting/061_Corpse_Eaten.lua`, `tests/{test_carnivore,mock_mudlet}.lua`.
+
+---
+
 ## 2026-09-02 - The NUMB line, named for two years and never captured (v4.7.293)
 
 `highlighting/060`, **turquoise bold** (user: "highlight numb for us as a bright color"):

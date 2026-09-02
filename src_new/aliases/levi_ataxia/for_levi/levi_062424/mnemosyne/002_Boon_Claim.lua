@@ -45,6 +45,11 @@ if matches[2]:lower():find("senseless flurry") then mnemSenselessFlurry = true e
 -- Spirit Rend: KAI ENFEEBLE costs no kai, may target denizens, and HALVES their current
 -- health once every 60s; the Shikudo basher fires it in Rain form above 50% target health.
 if matches[2]:lower():find("spirit rend") then mnemSpiritRend = true end
+-- Obligate Carnivore: corpses become food, so they outrank the horn's six charges.
+if matches[2]:lower():find("obligate carnivore") then mnemObligateCarnivore = true end
+-- Healing Metabolism: satiation is worth 50% on every health elixir, so it becomes upkeep
+-- rather than a hunger floor -- the kill trigger tops it up off the fresh corpse.
+if matches[2]:lower():find("healing metabolism") then mnemHealingMetabolism = true end
 -- Panoply: WEAVE FLURRY scales with strikes landed (60-200% per attack); the Psion
 -- basher swaps its deathblow bash to flurry while it's up.
 if matches[2]:lower():find("panoply") then psionPanoply = true end
