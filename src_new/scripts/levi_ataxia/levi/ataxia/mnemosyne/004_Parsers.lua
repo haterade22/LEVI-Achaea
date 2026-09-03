@@ -138,9 +138,23 @@ function M.onRunStart()
   -- and a run-scoped fact would carry over between dives. A RESUME keeps the baseline -- it is
   -- the same server-side run, and re-baselining mid-dive would measure the boons already claimed
   -- as if they were the starting point.
-  if M.audit and not (M.run and M.run.paused) then
+  local resuming = M.run and M.run.paused
+  if M.audit and not resuming then
     M.audit.baseline, M.audit.baselineRun, M.audit.current = nil, nil, nil
   end
+  -- SESSION STATS -- kills, gold, DPS, damage taken; the `tarc` HUD (user-directed, 2026-09-02):
+  -- reset on a FRESH run, kept across a RESUME, for exactly the reason just above -- `WHISPER
+  -- ... beseech that it grow still` pauses the run without ending it server-side, and the next
+  -- wade re-enters the SAME run. A dive interrupted by a pause is not a new dive, so wiping
+  -- kills/gold/DPS on every pause/resume would lose real progress for nothing.
+  --
+  -- ABOVE the `_auto()` gate below, like the audit baseline: session stats are a core basher
+  -- feature with no dependency on the REST telemetry, so a user with reporting OFF must still
+  -- get a fresh session on a fresh dive. Unlike the run's ~40 boon flags -- reset
+  -- UNCONDITIONALLY in trigger 001, because they answer "do we hold this boon RIGHT NOW" and a
+  -- resume is not evidence either way, so a stale TRUE would be actively wrong -- session stats
+  -- carry no such correctness requirement, so keeping them across a resume is strictly better.
+  if not resuming and resetBashingStats then resetBashingStats(true) end
   if not M._auto() then return end
   if M.run.paused then
     -- Re-entering a run we PAUSED: it's the same wade, so resume the existing server run rather
@@ -206,6 +220,13 @@ function M.onRunEnd()
   mnemSpiritRend = false -- boons gone on a confirmed run-end
   mnemObligateCarnivore = false -- boons gone on a confirmed run-end
   mnemHealingMetabolism = false -- boons gone on a confirmed run-end
+  -- Berserker's Edge pinned the rage floor to 100 (basher/001). Putting it back is the half that
+  -- matters -- left alone we would quietly hoard battlerage the whole rest of the day for a bonus
+  -- that no longer applies. Same shape as the Borrowed Power revert just above.
+  if mnemBerserkersEdge then
+    mnemBerserkersEdge = false
+    if ataxiaBasher_berserkersEdgeRevert then ataxiaBasher_berserkersEdgeRevert() end
+  end
   psionPanoply = false -- boons gone on a confirmed run-end
   dragonMightSycaerunax = false -- boons gone on a confirmed run-end
   dragonRampage = false -- boons gone on a confirmed run-end

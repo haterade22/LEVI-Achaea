@@ -299,6 +299,71 @@ describe("run lifecycle", function()
   end)
 end)
 
+-- ─── Session stats (the `tarc` HUD) reset on a fresh run, not a resume ───────
+--
+-- User, from a live tarc screenshot: "Anytime our RUN STARTED this information should reset."
+-- Placed beside the AUDIT baseline logic in M.onRunStart (v4.7.291) for the identical reason: a
+-- pause (`WHISPER ... beseech that it grow still`) does not end the run server-side, so the next
+-- wade re-enters the SAME run, and wiping kills/gold/DPS on a mere pause/resume would lose real
+-- progress for nothing the user asked for.
+describe("session stats reset on a fresh run, kept across a resume", function()
+  local calls
+  local realReset
+
+  local function statsSetup()
+    calls = {}
+    realReset = resetBashingStats
+    resetBashingStats = function(silent) calls[#calls + 1] = silent end
+  end
+
+  local function statsTeardown()
+    resetBashingStats = realReset
+  end
+
+  it("resets on a genuinely fresh wade", function()
+    reset(false)
+    statsSetup()
+    M.onRunStart()
+    expect(#calls).toBe(1)
+    expect(calls[1]).toBeTrue()       -- silent -- no "stats reset" spam on every dive
+    statsTeardown()
+  end)
+
+  it("does NOT reset when resuming a paused run", function()
+    reset(true)
+    M.run.ripple = 3
+    M.onRunPause()
+    statsSetup()
+    M.onRunStart()                    -- re-enter the same wade
+    expect(#calls).toBe(0)
+    statsTeardown()
+  end)
+
+  -- ABOVE the `_auto()` gate, like the audit baseline: session stats are a core basher feature
+  -- and must reset on a fresh dive even for a user who has REST telemetry turned off entirely.
+  it("still resets with telemetry OFF (the shipped default)", function()
+    reset(false)
+    ataxia.settings.reporting.enabled = false
+    statsSetup()
+    M.onRunStart()
+    expect(#calls).toBe(1)
+    statsTeardown()
+    ataxia.settings.reporting.enabled = true
+  end)
+
+  it("resets again on the NEXT fresh run after a resume", function()
+    reset(true)
+    M.onRunPause()
+    statsSetup()
+    M.onRunStart()                    -- resume: no reset
+    expect(#calls).toBe(0)
+    M.onRunEnd()                      -- confirmed end
+    M.onRunStart()                    -- a genuinely new dive
+    expect(#calls).toBe(1)
+    statsTeardown()
+  end)
+end)
+
 -- ─── Boon claim ──────────────────────────────────────────────────────────────
 
 describe("onBoonClaim", function()
@@ -396,13 +461,25 @@ describe("boons offered reporting", function()
   -- Fire ONLY the offer-wait timer. mock_mudlet.fire_timers() fires every pending timer in
   -- the process and then wipes the table, which would detonate captures armed by earlier
   -- tests in this file; matching on the delay keeps the blast radius to the thing under test.
+  --
+  -- SNAPSHOT THE MATCHING IDS BEFORE MUTATING (found live, 2026-09-02, the mock_mudlet.fire_timers
+  -- fix applies here too): the offer-wait callback (`_flushPendingOffer`) arms its OWN follow-up
+  -- timer -- the v4.7.295 catalogue trickle -- so deleting and calling inside one `pairs()` pass
+  -- adds a key to the very table being walked. Undefined in Lua, and table-size-dependent: it did
+  -- not fail every run, only once enough OTHER tests had left enough timers behind to push the
+  -- hash part over a rehash boundary at exactly this call.
   local function fireOfferWait()
     local mock = require("mock_mudlet")
+    local ids = {}
     for id, t in pairs(mock.active_timers) do
       if t.delay == M.OFFER_RIPPLE_WAIT and type(t.callback) == "function" then
-        mock.active_timers[id] = nil
-        t.callback()
+        ids[#ids + 1] = id
       end
+    end
+    for _, id in ipairs(ids) do
+      local t = mock.active_timers[id]
+      mock.active_timers[id] = nil
+      if t then t.callback() end
     end
   end
 
@@ -461,6 +538,26 @@ describe("boons offered reporting", function()
     M._offerAfterRipple({ { name = "Songstep", description = "d" } })
     M.onRipple(4)
     fireOfferWait()
+    expect(#offeredNames()).toBe(1)
+  end)
+
+  -- REGRESSION (found live, 2026-09-02): `_flushPendingOffer` arms its own follow-up timer (the
+  -- v4.7.295 catalogue trickle) FROM INSIDE the offer-wait timer's own callback. Firing a timer
+  -- that arms another timer is an ordinary, common pattern in this codebase -- but both
+  -- `mock_mudlet.fire_timers()` and this file's own `fireOfferWait()` used to walk
+  -- `mock.active_timers` with a bare `pairs()` loop, so the new timer being added mutated the
+  -- very table the loop was iterating: `invalid key to 'next'`. It did not fail every run --
+  -- Lua's hash part only breaks like this near a rehash boundary, so it was a table-SIZE-
+  -- dependent flake that surfaced only when enough OTHER tests happened to have left enough
+  -- timers lying around. Pinned directly here so the "arm one timer from another's callback"
+  -- shape can never silently regress in the harness again.
+  it("does not corrupt timer iteration when the flush arms its own follow-up timer", function()
+    reset(true)
+    M.history = M.history or {}
+    M.history.boonLibrary = M.history.boonLibrary or {}
+    M._offerAfterRipple({ { name = "Songstep", description = "d" } })
+    local ok = pcall(fireOfferWait)
+    expect(ok).toBeTrue()
     expect(#offeredNames()).toBe(1)
   end)
 

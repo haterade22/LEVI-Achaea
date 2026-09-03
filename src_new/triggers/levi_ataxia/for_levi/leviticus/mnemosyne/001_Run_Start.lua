@@ -47,6 +47,11 @@ mnemSenselessFlurry = false  -- boons reset each run
 mnemSpiritRend = false  -- boons reset each run
 mnemObligateCarnivore = false  -- boons reset each run
 mnemHealingMetabolism = false  -- boons reset each run
+mnemBerserkersEdge = false  -- boons reset each run
+-- Defensive: a run that ended WITHOUT a confirmed run-end (a crash, a relog) would leave
+-- the rage floor pinned from the last dive. A fresh wade is always the right moment to
+-- put it back, whether or not the boon's own confirmed-end revert already ran.
+if ataxiaBasher_berserkersEdgeRevert then ataxiaBasher_berserkersEdgeRevert() end
 psionPanoply = false  -- boons reset each run
 dragonMightSycaerunax = false  -- boons reset each run
 dragonRampage = false  -- boons reset each run

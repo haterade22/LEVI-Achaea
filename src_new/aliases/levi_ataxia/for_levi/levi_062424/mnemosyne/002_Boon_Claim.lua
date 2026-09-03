@@ -50,6 +50,12 @@ if matches[2]:lower():find("obligate carnivore") then mnemObligateCarnivore = tr
 -- Healing Metabolism: satiation is worth 50% on every health elixir, so it becomes upkeep
 -- rather than a hunger floor -- the kill trigger tops it up off the fresh corpse.
 if matches[2]:lower():find("healing metabolism") then mnemHealingMetabolism = true end
+-- Berserker's Edge: 1% damage per point of battlerage held, capped at 100 -- so hold rage
+-- rather than spend it. Pins ataxiaBasher.rageFloor at 100 (basher/001).
+if matches[2]:lower():find("berserker's edge") then
+  mnemBerserkersEdge = true
+  if ataxiaBasher_berserkersEdgeApply then ataxiaBasher_berserkersEdgeApply() end
+end
 -- Panoply: WEAVE FLURRY scales with strikes landed (60-200% per attack); the Psion
 -- basher swaps its deathblow bash to flurry while it's up.
 if matches[2]:lower():find("panoply") then psionPanoply = true end

@@ -287,12 +287,31 @@ if not io.exists then
 end
 
 --- Fire all pending timers (for testing async logic)
+--
+-- SNAPSHOT THE TABLE BEFORE ITERATING (found live, 2026-09-02). A callback that arms a NEW timer
+-- -- a self-rearming tick, a retry, exactly the "trickle" pattern `_flushPendingOffer` uses --
+-- adds a key to `M.active_timers` while this loop's own `pairs()` is still walking it, which is
+-- undefined in Lua and surfaced as `invalid key to 'next'`. It did not fire every run: Lua's hash
+-- part only breaks like this around a rehash boundary, so it was a table-SIZE-dependent flake
+-- that an unrelated test elsewhere in the suite could trip by changing how many timers happened
+-- to be live at the moment this ran. Real Mudlet has no such hazard -- its timer registry is not
+-- a Lua table this code iterates -- so this was a fragility in the MOCK, not in the shipped
+-- trickle-timer pattern, which is exactly the shape several production tick loops already use.
+--
+-- Semantics preserved exactly: copy the keys first, fire from the copy, and still wipe the table
+-- unconditionally afterward -- a timer armed BY a callback during this pass is still discarded
+-- rather than fired, matching the old (accidental) behaviour, just without corrupting the walk.
 function M.fire_timers()
-  for id, timer in pairs(M.active_timers) do
-    if type(timer.callback) == "function" then
-      timer.callback()
-    elseif type(timer.callback) == "string" then
-      loadstring(timer.callback)()
+  local ids = {}
+  for id in pairs(M.active_timers) do ids[#ids + 1] = id end
+  for _, id in ipairs(ids) do
+    local timer = M.active_timers[id]
+    if timer then
+      if type(timer.callback) == "function" then
+        timer.callback()
+      elseif type(timer.callback) == "string" then
+        loadstring(timer.callback)()
+      end
     end
   end
   M.active_timers = {}

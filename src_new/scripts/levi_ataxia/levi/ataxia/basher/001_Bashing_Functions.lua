@@ -1195,6 +1195,53 @@ function ataxiaBasher_rageAfford(rage, cost)
   return (tonumber(rage) or 0) >= ((tonumber(cost) or 0) + floor)
 end
 
+-- BERSERKER'S EDGE (Mnemosyne boon, v4.7.296, user-directed): "Your attacks deal 1% extra damage
+-- for each point of battlerage you possess, up to a maximum of 100 rage." A static per-swing bonus
+-- that SCALES WITH THE RAGE WE ARE SITTING ON, capped at the same 100 the resource itself caps at
+-- -- so the boon is worth the most precisely when we do the opposite of what a battlerage rotation
+-- normally does, and spending any of it below the cap gives up bonus damage on every ordinary
+-- swing until rage rebuilds. User: "we should keep our battlerage and not use it to maximize it."
+--
+-- THE MECHANISM ALREADY EXISTS. This is exactly the shape `rageFloor` (v4.7.141) was built for --
+-- "some gear pays a flat bonus while battlerage is at or above a threshold" -- so Berserker's Edge
+-- is not a new system, it is `rageFloor` pinned at the boon's own cap. `ataxiaBasher_rageAfford`
+-- already gates all 37 rotation call sites, so setting the floor lands the hold on every class at
+-- once with no per-rotation change.
+--
+-- BYPASSES THE USER ALIAS'S CLAMP ON PURPOSE. `bash floor <n>` caps at `MAX_FLOOR` (46) because
+-- above that the priciest gated ability (54 rage) could never fire and a rotation banking for an
+-- unaffordable cast would stop producing battlerage entirely -- exactly the outcome this boon
+-- WANTS. That clamp is a safety rail for a human typing a number; it does not apply to an
+-- automated boon whose whole point is to hold rage at the cap. Written directly to
+-- `ataxiaBasher.rageFloor`, not through the alias.
+--
+-- THE REVERT IS DESIGNED WITH THE EFFECT (the Borrowed Power rule, v4.7.204: "a per-run boon
+-- that mutates persistent state needs its revert designed before its effect"). The PRE-BOON floor
+-- is saved once -- guarded so a second confirm (BOONS row after the claim, a mid-run re-latch)
+-- cannot overwrite a real saved value with the boon's own 100 -- and restored on the confirmed
+-- run end, mirroring `M.onRunEnd()`'s Borrowed Power branch exactly.
+--
+-- A MANUAL `bash floor` COMMAND ALWAYS WINS. If the user sets or clears the floor by hand while
+-- the boon is held, `016_Rage_Floor.lua` drops the saved-for-boon bookkeeping -- so our own
+-- revert never overwrites a choice the user made afterwards. Without that, a user typing
+-- `bash floor off` mid-boon would find their floor mysteriously restored to the OLD value when
+-- the run ended.
+function ataxiaBasher_berserkersEdgeApply()
+  if not ataxiaBasher then return end
+  if not ataxiaBasher.rageFloorSavedForBerserkersEdge then
+    ataxiaBasher.rageFloorPreBerserkersEdge = ataxiaBasher.rageFloor
+    ataxiaBasher.rageFloorSavedForBerserkersEdge = true
+  end
+  ataxiaBasher.rageFloor = 100
+end
+
+function ataxiaBasher_berserkersEdgeRevert()
+  if not (ataxiaBasher and ataxiaBasher.rageFloorSavedForBerserkersEdge) then return end
+  ataxiaBasher.rageFloor = ataxiaBasher.rageFloorPreBerserkersEdge
+  ataxiaBasher.rageFloorPreBerserkersEdge = nil
+  ataxiaBasher.rageFloorSavedForBerserkersEdge = nil
+end
+
 -- Generic battlerage handler for the standard pattern:
 -- With 2+ targets: try special → small → large
 -- With <2 targets: try small → large

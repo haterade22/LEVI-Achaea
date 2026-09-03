@@ -32,6 +32,17 @@ if matches[2] == "culling" or matches[2] == "cull" then
 	return
 end
 
+-- A MANUAL COMMAND ALWAYS WINS OVER THE BERSERKER'S EDGE BOON (v4.7.296). While the boon is up,
+-- `ataxiaBasher_berserkersEdgeApply` has pinned `rageFloor` to 100 and saved whatever it replaced
+-- in `rageFloorPreBerserkersEdge`, to be restored on the confirmed run end. If the user then
+-- types a floor of their own -- including `bash floor off` -- that choice must be the one that
+-- survives, not the boon's saved value from before it was claimed. Dropping the saved-for-boon
+-- bookkeeping here means the later revert (`ataxiaBasher_berserkersEdgeRevert`) finds nothing to
+-- restore and leaves the user's own setting alone. Without this, typing `bash floor off` mid-boon
+-- would appear to work immediately and then silently revert to the OLD floor when the run ended.
+ataxiaBasher.rageFloorPreBerserkersEdge = nil
+ataxiaBasher.rageFloorSavedForBerserkersEdge = nil
+
 if matches[2] == "off" then
 	ataxiaBasher.rageFloor = nil
 	ataxiaEcho("Rage floor <red>disabled<reset> -- battlerage spends freely again.")
@@ -40,7 +51,10 @@ end
 
 -- Clamp: rage caps at 100 and the priciest gated ability costs 54 (rageraze bigRage).
 -- Above 46 that ability could never be afforded, and a class whose rotation banks for
--- an unaffordable cast would stop producing battlerage entirely.
+-- an unaffordable cast would stop producing battlerage entirely. This clamp is a safety
+-- rail for a HUMAN typing a number -- it does not apply to Berserker's Edge, which writes
+-- `rageFloor` directly rather than through this alias, because 100 with nothing firing is
+-- exactly what that boon wants.
 local MAX_FLOOR = 46
 local n = tonumber(matches[2])
 if n > MAX_FLOOR then

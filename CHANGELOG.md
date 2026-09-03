@@ -2,6 +2,121 @@
 
 ---
 
+## 2026-09-02 - Session stats on a fresh run, Berserker's Edge, and a latent mock crash (v4.7.296)
+
+### Session stats reset on a fresh run, kept across a resume
+
+User, from a live `tarc` HUD screenshot: *"Anytime our RUN STARTED this information should
+reset."*
+
+`resetBashingStats()` already existed (kills, gold, DPS, damage-taken breakdown); nothing called
+it on a Mnemosyne wade. Wired into `M.onRunStart()`, right beside the identical AUDIT-baseline
+logic (v4.7.291), and for the same reason: `WHISPER ... beseech that it grow still` pauses a run
+without ending it server-side, and the next wade **re-enters the same run** -- a dive interrupted
+by a pause is not a new dive, so wiping kills/gold/DPS on a mere pause/resume would throw away
+real progress the user never asked to lose.
+
+That is the opposite rule from the ~40 boon flags reset **unconditionally** on the same trigger
+line: those answer "do we hold this boon *right now*", and a resume is not evidence either way, so
+a stale `true` would be actively wrong. Session stats carry no such correctness requirement --
+keeping them across a resume is strictly better, with no downside.
+
+**Above the `_auto()` gate**, like the audit baseline: session stats are a core basher feature
+with no dependency on the REST telemetry, so a user with reporting off still gets a fresh session
+on a fresh dive.
+
+### Berserker's Edge -- hold rage instead of spending it
+
+> "Your attacks deal 1% extra damage for each point of battlerage you possess, up to a maximum of
+> 100 rage."
+
+User: *"we should keep our battlerage and not use it to maximize it."*
+
+**Not a new system.** `ataxiaBasher.rageFloor` (v4.7.141) already exists for exactly this shape --
+"some gear pays a flat bonus while battlerage is at or above a threshold" -- and
+`ataxiaBasher_rageAfford` already gates all 37 rotation call sites. Berserker's Edge is that
+mechanism pinned at its own cap: `ataxiaBasher_berserkersEdgeApply()` sets `rageFloor = 100`, and
+because the resource itself caps at 100, `rage >= cost + 100` can never hold for any ability with
+a real cost -- the hold lands on every class at once with zero per-rotation code.
+
+**Deliberately bypasses the user alias's clamp.** `bash floor <n>` caps at `MAX_FLOOR` (46),
+because above that a human typing a number would strand their own rotation -- "a class whose
+rotation banks for an unaffordable cast would stop producing battlerage entirely." That clamp is a
+safety rail for a person; it is exactly the outcome this boon *wants*, so the boon writes
+`ataxiaBasher.rageFloor` directly rather than through the alias.
+
+**The revert is designed with the effect** -- the Borrowed Power rule (v4.7.204): "a per-run boon
+that mutates persistent state needs its revert designed before its effect." The pre-boon floor is
+saved once, guarded against a second confirm (a BOONS row after the claim, a mid-run
+`BOON CLAIMED` re-latch) overwriting a real saved value with the boon's own 100, and restored on
+the confirmed run end -- mirroring `M.onRunEnd()`'s Borrowed Power branch exactly. A defensive
+revert also runs unconditionally at run start, in case a prior run ended without a confirmation.
+
+**A manual `bash floor` command always wins.** If the user sets or clears the floor by hand while
+the boon is held, the alias now drops the saved-for-boon bookkeeping -- so the automatic revert at
+run end finds nothing to restore and leaves the user's own choice alone. Without this, typing
+`bash floor off` mid-boon would appear to work immediately and then silently revert to the OLD
+floor when the run ended. Culling reap's existing, unrelated exemption from the floor
+(`ataxiaBasher.floorCulling`, v4.7.229) is untouched -- this boon neither needs nor changes that
+decision.
+
+Seeded first-hand from the `tarc` screenshot.
+
+### A latent, table-size-dependent crash in the test mock, found while testing the above
+
+Writing the session-stats regression test exposed `invalid key to 'next'` in an **unrelated,
+pre-existing** test ("a new offer screen replaces the pending one") several thousand lines away in
+the same file -- intermittently, not on every run.
+
+**Root cause:** both `mock_mudlet.lua`'s `M.fire_timers()` and this test file's own
+`fireOfferWait()` helper walked `mock.active_timers` with a bare `pairs()` loop. `_flushPendingOffer`
+(v4.7.295's catalogue trickle) arms a **follow-up timer from inside the offer-wait timer's own
+callback** -- an entirely ordinary, common pattern this codebase already uses for self-rearming
+ticks and retries -- and doing so adds a new key to the table `pairs()` is still iterating, which
+is undefined in Lua.
+
+**Why it was flaky rather than always-broken:** Lua's hash part only breaks like this near a
+rehash boundary, so whether the crash fires depends on how many *other* timers happen to be lying
+around in `active_timers` at that exact moment -- a table-size coincidence, not a logic error in
+the offer/trickle code itself. My new tests, by calling `M.onRunStart()`/`onRunPause()` several
+times without draining every async HTTP call, happened to leave enough extra timers behind to tip
+an unrelated test over that boundary. **Real Mudlet has no equivalent hazard** -- its timer
+registry is not a Lua table this code iterates -- so this was a fragility in the mock, never in
+the shipped trickle pattern.
+
+**Fixed in both places** by snapshotting the keys into an array before iterating, firing from the
+snapshot, and preserving the exact prior semantics otherwise (a timer armed by a callback during
+the pass is still discarded, not fired -- only the crash is new territory).
+
+### Verification
+
+**1752 tests** (up from 1736). New `test_berserkers_edge.lua` (8 tests, dofiling
+`basher/001_Bashing_Functions.lua` directly per the `test_rage_fuelled.lua` precedent), new
+`test_mock_infra.lua` (3 tests pinning the timer-iteration fix directly), plus 5 new tests in
+`test_mnemosyne.lua` for the session-stats reset and one regression test reproducing the exact
+crash.
+
+**Nine break-backs.** Six for Berserker's Edge (apply sets 100, rageAfford blocks every costed
+ability, a second apply does not clobber the saved value, revert restores an existing floor,
+revert restores to nil, revert is a safe no-op / idempotent). The mock-crash break-back is the
+interesting one: reverting `fireOfferWait()`'s fix reproduced the exact `invalid key to 'next'`
+crash **10 out of 10 runs** and additionally broke the original, unrelated "a new offer screen"
+test -- confirming this was a real, live defect and not a false alarm from the new test's own
+setup. Reverting `mock_mudlet.lua`'s own `fire_timers()` fix, exercised only by the new isolated
+`test_mock_infra.lua` (two timers, not enough to reliably hit the rehash boundary), did **not**
+reproduce on 15 runs -- recorded honestly rather than claimed as a clean break-back, since forcing
+a specific Lua hash-table rehash boundary deterministically is not practical; the fix is correct by
+inspection and by the general-shape test passing, even though this one instance's break-back could
+not be made to fail reliably.
+
+**Files:** `mnemosyne/004_Parsers.lua`, `basher/001_Bashing_Functions.lua`,
+`mnemosyne/010_Boon_Seed.lua`, `aliases/.../mnemosyne/002_Boon_Claim.lua`,
+`aliases/.../configs/016_Rage_Floor.lua`, `triggers/mnemosyne/001_Run_Start.lua`,
+`triggers/mnemosyne/083_Berserkers_Edge.lua`, `tests/mock_mudlet.lua`, `tests/test_mnemosyne.lua`,
+`tests/test_berserkers_edge.lua` (new), `tests/test_mock_infra.lua` (new).
+
+---
+
 ## 2026-09-02 - Keeping the boon catalogue current (v4.7.295)
 
 User: *"We should be constantly updating our Boon database."*

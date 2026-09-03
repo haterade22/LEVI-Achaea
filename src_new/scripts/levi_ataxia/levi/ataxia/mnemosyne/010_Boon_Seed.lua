@@ -330,6 +330,9 @@ M.BOON_SEED = {
   -- in the catalogue at all. Rarity is not shown on that screen, so it is omitted rather than
   -- guessed -- `_learnBoon` fills it from the next BOONS row.
   ["Healing Metabolism"] = { description = "Your health elixirs are 50% more effective while you possess the satiation defence." },
+  -- CAPTURED LIVE 2026-09-02 from the tarc HUD screenshot.
+  ["Berserker's Edge"] = { description = "Your attacks deal 1% extra damage for each point of battlerage you possess, up to a maximum of 100 rage." },
+
   ["Obligate Carnivore"] = { description = "You can EAT corpses, restoring hunger and small amounts of endurance and willpower." },
   ["Thick Skull"] = { description = "Your survival headslam ability stuns denizens for 5 seconds. This effect has a cooldown of 40 seconds." },
   ["Power Up"] = { description = "Gain 10% bonus damage." },
