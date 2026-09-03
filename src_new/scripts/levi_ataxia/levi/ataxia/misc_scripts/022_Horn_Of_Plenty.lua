@@ -186,6 +186,6 @@ end
 -- are starving, and starvation ends in unconsciousness, so a throttle meant for upkeep must not
 -- stand in front of an emergency.
 function ataxia_hornOnHungry(state)
-  if mnemObligateCarnivore and ataxia_carnivoreEat(state or "hungry", true) then return end
-  ataxia_hornFeed(state or "hungry")
+  if mnemObligateCarnivore and ataxia_carnivoreEat(state or "hungry", true) then return true end
+  return ataxia_hornFeed(state or "hungry")
 end

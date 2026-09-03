@@ -574,6 +574,30 @@ function M._lavaExit()
   local r = cur and MAP.rooms and MAP.rooms[cur]
   if not r then return nil end
 
+  -- SORTED, not pairs order -- see the reasoning below; built once and reused by both the
+  -- unexplored pass and the fallback pass.
+  local dirs = {}
+  for d in pairs(r.exits) do dirs[#dirs + 1] = d end
+  table.sort(dirs)
+
+  -- UNEXPLORED OUTRANKS THE PREVIOUS ROOM (user-directed, 2026-09-03, live log: exits north and
+  -- west, "back" fell through to the alphabetical fallback and picked north -- the room we had
+  -- JUST LEFT -- while west led into the grid we had not swept yet). A forced lava move that
+  -- lands us back in an already-cleared room is a wasted sweep step; `MAP.unexploredExits` is
+  -- the exact set the ordinary sweep already treats as progress, so re-using it here means the
+  -- escape door and the sweep's own step selector agree. Still excludes a KNOWN lava
+  -- destination -- an unexplored room CAN be lava, that is what "unexplored" means, but the
+  -- worst case is one more tick of damage before the next struggle line re-picks a door, where
+  -- refusing to explore never recovers the sweep.
+  local unexplored = {}
+  for _, d in ipairs(MAP.unexploredExits(cur) or {}) do unexplored[d] = true end
+  for _, d in ipairs(dirs) do
+    if MAP.OFFSETS[d] and unexplored[d] then
+      local tgt = M._exitTarget(cur, d)
+      if not (tgt and M.explore.lavaRooms[tgt]) then return MAP.shortDir(d) end
+    end
+  end
+
   -- THE INBOUND DIRECTION, NOT THE LAST ARMED ONE (v4.7.262). onLava calls `_tacticalArm(dir)`
   -- with the ESCAPE direction, and the struggle line re-fires every tick -- so from tick 2 this
   -- read `fromDir` = the escape direction and took its OPPOSITE, turning us straight back INTO
@@ -588,14 +612,11 @@ function M._lavaExit()
     return MAP.shortDir(back)
   end
 
-  -- SORTED, not pairs order. An unordered scan means the same room can pick a different door
-  -- on different runs, which makes the behaviour unreproducible in exactly the situation where
-  -- we most want to be able to read the log afterwards -- and it made the back-direction
-  -- preference above untestable, because whether it mattered was a coin flip.
-  local dirs = {}
-  for d in pairs(r.exits) do dirs[#dirs + 1] = d end
-  table.sort(dirs)
-
+  -- Reuses the same sorted `dirs` built above -- an unordered scan means the same room could
+  -- pick a different door on different runs, which makes the behaviour unreproducible in
+  -- exactly the situation where we most want to be able to read the log afterwards, and it
+  -- made the back-direction preference above untestable, because whether it mattered was a
+  -- coin flip.
   local fallback
   for _, d in ipairs(dirs) do
     if MAP.OFFSETS[d] then

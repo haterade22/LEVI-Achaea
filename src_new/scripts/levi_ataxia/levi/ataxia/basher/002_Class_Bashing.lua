@@ -2130,10 +2130,29 @@ end
 local SPIRIT_REND_CD = 60     -- the boon's own denizen cooldown, timed from the CONFIRMED line
 local SPIRIT_REND_RETRY = 6   -- an eaten/refused send retries this often rather than locking out
 
+-- TEKURA OR SHIKUDO-RAIN (user-directed, 2026-09-03) -- shared by all three Kaido eq riders
+-- below (Spirit Rend, Kai Choke, the Senseless Flurry numb refresh). Kaido is the class skill
+-- COMMON to both specs (CLAUDE.md: "Monk: Tekura/Shikudo, Kaido, Telepathy"), so none of these
+-- abilities is Shikudo-exclusive -- "Rain form" was always user doctrine for WHICH Shikudo form
+-- to use them in, never a restriction to Shikudo itself. It shipped as a bare `form ~= "Rain"`
+-- gate anyway, which silently blocked all three for a Tekura Monk (`form` is nil in Tekura, so
+-- the check always failed) for as long as they have existed.
+--
+-- NO STANCE-NAME FILTER FOR TEKURA, deliberately. `ataxiaBasher_monkBashing2` already uses
+-- `ataxia.vitals.stance and true or false` as its Tekura/Shikudo discriminator, and that is all
+-- this needs too: during ordinary bashing a Tekura Monk sits in exactly ONE stance the whole
+-- time (Horse/Bear only appear in the TK6 backbreaker's FINISHING sequence against a target
+-- already being killed, per `.claude/classes/tekura.md`), so there is nothing to filter beyond
+-- "are we in Tekura at all". Filtering by stance NAME would be inventing a restriction the boon
+-- text never states, in the direction that costs damage rather than the direction that is safe.
+local function ataxiaBasher_monkKaidoReady()
+  return (ataxia.vitals.stance and true or false) or ataxia.vitals.form == "Rain"
+end
+
 function ataxiaBasher_spiritRend(useShieldbreak)
   if not mnemSpiritRend then return nil end
   if useShieldbreak then return nil end -- shielded round: break it first, as the choke does
-  if ataxia.vitals.form ~= "Rain" then return nil end -- user doctrine, as with choke and numb
+  if not ataxiaBasher_monkKaidoReady() then return nil end
   if type(target) ~= "number" then return nil end     -- PvE only; the boon is the denizen permit
 
   local nowT = (getEpoch and getEpoch()) or os.time()
@@ -2191,7 +2210,7 @@ local KAI_CHOKE_RETRY = 6   -- unconfirmed choke (eaten/wiped/no proc): retry th
 function ataxiaBasher_kaiUnleashedChoke(useShieldbreak)
   if not mnemKaiUnleashed then return nil end
   if useShieldbreak then return nil end -- shielded target: let shatter land first
-  if ataxia.vitals.form ~= "Rain" then return nil end
+  if not ataxiaBasher_monkKaidoReady() then return nil end
   if (tonumber(ataxia.vitals.mp) or 9999) < 250 then return nil end -- 50-mana cost; never scrape a dry pool
   local M = ataxia.mnemosyne
   local n = (M and M._denizenCount and M._denizenCount()) or 0
@@ -2230,7 +2249,7 @@ end
 -- is worth more than a numb refresh. Self-targeted, so shielded rounds still numb.
 function ataxiaBasher_senselessFlurryNumb()
   if not mnemSenselessFlurry then return nil end
-  if ataxia.vitals.form ~= "Rain" then return nil end
+  if not ataxiaBasher_monkKaidoReady() then return nil end
   if ataxia.defences and ataxia.defences.numbness then return nil end
   -- CROWD GATE (review HIGH): while numb is up HP does not move, so EVERY HP-based
   -- safety goes blind -- the damage-rate watchdog records nothing, danger levels
@@ -2344,6 +2363,13 @@ function ataxiaBasher_monkBashing2()
     command = command.."mind crush "..target.."; "
   elseif tekura then
     monkWarnedNoSpec = false
+    -- Same eq-rider chain as Shikudo below (Kaido is shared by both specs -- see
+    -- ataxiaBasher_monkKaidoReady). Tekura's balance combo is unarmed (`combo ... rhk/sdk ucp
+    -- ucp`), not the staff flow, but it is still a BALANCE action with idle equilibrium beside
+    -- it, so the riders prepend exactly as they do for Shikudo.
+    local tRend = ataxiaBasher_spiritRend(useShieldbreak)
+    local tChoke = (not tRend) and ataxiaBasher_kaiUnleashedChoke(useShieldbreak) or nil
+    command = command..(tRend or tChoke or ataxiaBasher_senselessFlurryNumb() or "")
     command = command.."unwield all"..sp.."combo "..target..(useShieldbreak and " rhk ucp ucp; " or " sdk ucp ucp; ")
   elseif shikudo then
     monkWarnedNoSpec = false

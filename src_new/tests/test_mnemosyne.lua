@@ -3661,7 +3661,18 @@ describe("boiling lava", function()
     ataxiaBasher.inMnemosyne = true
     MAP.drForce = false
     MAP.reset()
-    MAP.onRoom(50, "In the depths of a murky lake.", exits, nil)
+    if fromDir then
+      -- SIMULATE THE REAL ARRIVAL (v4.7.297), not just `explore.fromDir` in isolation. A real
+      -- sweep step records the walked edge BOTH ways (MAP.onRoom), so the door we just came
+      -- through shows up as EXPLORED to `MAP.unexploredExits` -- the fact `_lavaExit` now needs
+      -- to tell "the room we just left" apart from genuinely new territory. Without this, room
+      -- 50 has no recorded edges at all and every one of its exits reads as unexplored, which is
+      -- not what a mid-sweep lava splash actually looks like.
+      MAP.onRoom(1, "the previous room", {}, nil)
+      MAP.onRoom(50, "In the depths of a murky lake.", exits, fromDir)
+    else
+      MAP.onRoom(50, "In the depths of a murky lake.", exits, nil)
+    end
     M.explore.on = true
     M.explore.fromDir = fromDir
     M.explore.fromRoom = nil   -- stale values here would mark an edge out of the wrong room
@@ -3688,14 +3699,16 @@ describe("boiling lava", function()
     end
   end
 
-  it("leaves immediately, back the way we came", function()
-    -- We walked EAST to get here, so the room lists WEST back the way we came.
+  it("leaves immediately, toward the room not yet explored", function()
+    -- We walked EAST to get here, so WEST is the room we just left; NORTHWEST is unswept.
+    -- User-directed (2026-09-03, live log): a forced lava move should buy sweep progress, not
+    -- walk us back into a room already cleared -- "w" would be provably safe but is a wasted
+    -- step, where "nw" both escapes the lava and advances the sweep.
     room({ west = 0, northwest = 0 }, "e")
     M.onLava()
     local cmd = moved()
     expect(cmd ~= nil).toBeTrue()
-    -- "w" exactly, not "nw": back is provably not lava because we just stood in it.
-    expect(cmd:match("stand;(%a+)$")).toBe("w")
+    expect(cmd:match("stand;(%a+)$")).toBe("nw")
     restore()
   end)
 
@@ -3765,13 +3778,32 @@ describe("boiling lava", function()
     restore()
   end)
 
-  -- The exit choice is SORTED, so "back the way we came" is observably a preference rather
-  -- than a coin flip: sorted order would reach `northwest` before `west`.
-  it("prefers back over the sorted-first exit", function()
+  -- Directly on `_lavaExit`, mirroring the integration test above: unexplored outranks the
+  -- room we just left.
+  it("ranks the unexplored exit above the room we just left", function()
     room({ west = 0, northwest = 0 }, "e")
+    expect(M._lavaExit()).toBe("nw")
+    M.explore.fromDir = nil -- clearing the explorer's OWN bookkeeping changes nothing here --
+    expect(M._lavaExit()).toBe("nw") -- the map already recorded "w" as walked, not this field
+    restore()
+  end)
+
+  -- The room we just left is still the fallback once there is nothing left to explore --
+  -- exactly the old "back the way we came" guarantee, just ranked below progress instead of
+  -- above it.
+  it("falls back to the previous room once nothing is unexplored", function()
+    room({ west = 0 }, "e") -- west is the only exit, and it is the room we just left
     expect(M._lavaExit()).toBe("w")
-    M.explore.fromDir = nil
-    expect(M._lavaExit()).toBe("nw")   -- no back known: sorted order wins
+    restore()
+  end)
+
+  -- SORTED, not pairs order, still applies to the unexplored pass -- reaching the same
+  -- conclusion regardless of table iteration order.
+  it("the unexplored pass is sorted, not pairs-order roulette", function()
+    room({ west = 0, northwest = 0, south = 0 }, "e") -- west is back; nw and south are new
+    local first = M._lavaExit()
+    for _ = 1, 10 do expect(M._lavaExit()).toBe(first) end
+    expect(first).toBe("nw") -- alphabetically first of the two unexplored options
     restore()
   end)
 
@@ -4449,15 +4481,20 @@ describe("lava marks only what the map witnessed", function()
 
   it("keeps escaping by the SAME door on every tick", function()
     setup()
-    MAP.onRoom(50, "Lava.", { south = 0, north = 0 }, nil)
-    M.explore.fromDir = "n" -- we walked north in, so south is back
+    -- Simulate the real arrival (walked north to get here), so the map records SOUTH as the
+    -- explored back door and NORTH -- a continuing, never-walked corridor -- as the unexplored
+    -- pick v4.7.297 now prefers. The episode must still remember and reuse ONE door across
+    -- ticks regardless of which door that is.
+    MAP.onRoom(1, "before", {}, nil)
+    MAP.onRoom(50, "Lava.", { south = 0, north = 0 }, "n")
+    M.explore.fromDir = "n"
     M.onLava(SPLASH)
     M.onLava(TICK)
     M.onLava(TICK)
     local seen = 0
     for _, c in ipairs(sentCmds) do
       local d = c:find("stand", 1, true) and c:match("stand;(%a+)$")
-      if d then seen = seen + 1; expect(d).toBe("s") end
+      if d then seen = seen + 1; expect(d).toBe("n") end
     end
     expect(seen > 1).toBeTrue() -- proves more than one tick actually queued a move
     restore()

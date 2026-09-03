@@ -328,6 +328,22 @@ function ataxia_loadSettings()
     ataxiaBasher.falconRakeReady = true
   end
 
+  -- BERSERKER'S EDGE DEFENSIVE REVERT, ON LOAD (review CRITICAL, 2026-09-03).
+  -- `ataxiaBasher_berserkersEdgeApply/Revert` (basher/001) pin `ataxiaBasher.rageFloor` to 100
+  -- for the boon's duration -- and that field, plus the two bookkeeping keys it saves the prior
+  -- floor under, all live on `ataxiaBasher`, which is SERIALIZED wholesale. The only revert call
+  -- sites were the confirmed Mnemosyne run-end and the wade-entry defensive reset in
+  -- `mnemosyne/001_Run_Start.lua` -- neither of which fires on a plain disconnect/reconnect or a
+  -- SYSUPDATE reload mid-run. A player holding the boon who drops connection before the run ends
+  -- keeps rageFloor pinned at 100 on disk, silently starving every one of the 37 rotation
+  -- affordability checks `ataxiaBasher_rageAfford` gates -- in and out of Mnemosyne, PvE or PvP --
+  -- until the next wade's defensive reset or a manual `bash floor`. Reverting here is safe even
+  -- for a run still genuinely in progress: it costs at most a few seconds at the pre-boon floor
+  -- until the next wade re-applies it, against leaving a normal bashing session silently capped.
+  if ataxiaBasher_berserkersEdgeRevert then
+    pcall(ataxiaBasher_berserkersEdgeRevert)
+  end
+
   if ataxiaBasher then
     local ok_paths, err_paths = pcall(function()
     local paths_file = findFile(paths_loc)

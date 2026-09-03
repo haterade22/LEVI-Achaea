@@ -878,7 +878,7 @@ a separate `MAX_TACTICAL_ICE_SLIPS = 3`. **The escape pull HOLDS the attack disp
 
 **SHIN PHOENIX (v4.7.269, AB 321).** `SHIN PHOENIX`, self, **requires 80 shin and CONSUMES ALL OF IT**, cleanses almost every affliction **and returns us to full health** (user-confirmed; the AB states only the cleanse, so the heal is knowledge its text does not carry, and it is why this is worth automating). Fires at `hpp <= ataxiaBasher.phoenixAt` (**10**) with 80+ shin. **`hpp > 0` is not redundant** -- a zero reading is BLACKOUT, the idiom `ataxiaBasher_dangerLevel` already encodes (`if hpp == 0 then return "wait" end`), and a bare `hpp <= 10` would empty the pool every time we lose sight of our own health. It is placed **FIRST in the round** and sets `shinSpent`, because there is no round planner here -- shin priority is hardcoded position. Since it consumes the whole pool the `>= 80` gate is its own re-fire guard, so no cooldown was invented; our own cast line is uncaptured (the only phoenix trigger in the tree, `passive_active/010`, is the OPPONENT-side line for an enemy Blademaster). Worth trying at 35-40 rather than 10 once proven: `escapeAt`/`panicAt` are both 35, so at 10% the ladder has already spent the tumble and the ground -- a Phoenix at 35 would PREVENT that where one at 10 only rescues it.
 
-**Putting Phoenix first exposed two latent traps in the augment block**, neither of which was style: it had no `shinSpent` check and it wrote `command = "shin augment "..` -- an **ASSIGNMENT** -- because nothing had ever preceded it. The phoenix was built and then silently destroyed, and the round went out with the augment alone. **A "one spender per round" rule enforced by position alone breaks the moment the positions change.** **Deluge affix** (v4.7.140, trigger 037 → `onDelugeSeen`, same shape): "All rooms are underwater" makes FLY impossible — `S._canFly()` gates the escape ladder's outdoor fly+hover (falls through to the grounded retreat / shield fallback) and the fly-kite entry, so neither wedges on a silently-rejected queued fly. **Dragged out of the sky** (v4.7.168, trigger `mnemosyne/050` → `S.onDraggedDown`): "A tentacle shoots up from the ground, wraps itself around you, and drags you back to earth." — a DENIZEN can pull us out of the air. Third way flight fails after Deluge and an eaten FLY, and the worst, because it is SILENT to the state machine: the hover keeps `S.flying` optimistically true until a flight line confirms (the guard that exists because stupidity eats queued commands), and after a drag that confirmation never comes — so the hover re-sends `fly` EVERY TICK while the tentacle yanks us back, holding us attack-GATED at crash HP until `RECOVER_MAX` expires. Latches `S.grounded` (honoured by `S._canFly` and hence `S._canHover`), corrects the flight state, and converts an in-progress hover into the grounded retreat. **Per-RIPPLE** — `S.onRipple` clears it. **BOILING LAVA -- the only unconditional "leave now"** (v4.7.254, hardened v4.7.256, trigger `mnemosyne/064` → `M.onLava`/`M.roomLava`): `You splash into boiling lava!` / `You continue to struggle in the boiling grasp of the lava as it eats away at your body.` -- **5,890 UNBLOCKABLE per tick** against a 10,939 pool, i.e. 54% of the pool, two ticks is a death, and unblockable means no shield, barrier or resistance helps. Every other hazard here can be fought through (Ablaze is ~1,200 and only gates the hover), so this is **the exception to the validated-route rule**: the escape ladder refuses unvalidated exits by user decision, but staying costs half the pool per tick, so ANY door beats the floor. Exit order: back the way we came (provably safe -- we just stood there) → any planar exit not into a known lava room → any planar → `down`; holds the attack dispatcher, resets any swarm tactic, re-sends every tick (an eaten move must be retried), and on no known exit sends `ql` and says **MOVE MANUALLY**. Both lines are used: the splash is entry, the struggle is the tick, and the tick fires without an entry line when we were already standing in it. **v4.7.256 was a DEATH**: marking the room caught one code path and three others still led back in -- the sweep BACKTRACK (once the room was walked its exits stopped counting as unexplored, but the unexplored exit BEYOND it made lava the shortest path, and `MAP.path` has no hazard filter), `S._backDir` (the room we came from is normally the safest square) and `S._panicDir`. **Remember the EDGE, not just the room**: room-keyed marking is unusable from the room next door, because `_exitTarget` returns nil when gmcp has not filled a destination id -- exactly the case for an unvisited neighbour. `M.explore.lavaEdges[from][dir]`, recorded at the moment we splash, needs no id from anyone; shared predicates `M.roomIsLava`/`M.edgeIsLava` feed all four consumers. The backtrack checks only the FIRST step (every step is re-decided on arrival, so a route we never enter is one we never traverse), and `_backDir` returning nil drops the ladder to shield-in-place -- bad, not fatal. **"We walked through it" is not the same fact as "it is survivable."** Two guards found while testing: a stale `explore.fromRoom` (current only after a sweep step, not a tumble or chase) would mark an edge out of a non-adjacent room and refuse a good exit forever, so recording requires `from ~= cur`; and both exit scans are SORTED, because an unordered choice makes the log unreadable and made the guards untestable.
+**Putting Phoenix first exposed two latent traps in the augment block**, neither of which was style: it had no `shinSpent` check and it wrote `command = "shin augment "..` -- an **ASSIGNMENT** -- because nothing had ever preceded it. The phoenix was built and then silently destroyed, and the round went out with the augment alone. **A "one spender per round" rule enforced by position alone breaks the moment the positions change.** **Deluge affix** (v4.7.140, trigger 037 → `onDelugeSeen`, same shape): "All rooms are underwater" makes FLY impossible — `S._canFly()` gates the escape ladder's outdoor fly+hover (falls through to the grounded retreat / shield fallback) and the fly-kite entry, so neither wedges on a silently-rejected queued fly. **Dragged out of the sky** (v4.7.168, trigger `mnemosyne/050` → `S.onDraggedDown`): "A tentacle shoots up from the ground, wraps itself around you, and drags you back to earth." — a DENIZEN can pull us out of the air. Third way flight fails after Deluge and an eaten FLY, and the worst, because it is SILENT to the state machine: the hover keeps `S.flying` optimistically true until a flight line confirms (the guard that exists because stupidity eats queued commands), and after a drag that confirmation never comes — so the hover re-sends `fly` EVERY TICK while the tentacle yanks us back, holding us attack-GATED at crash HP until `RECOVER_MAX` expires. Latches `S.grounded` (honoured by `S._canFly` and hence `S._canHover`), corrects the flight state, and converts an in-progress hover into the grounded retreat. **Per-RIPPLE** — `S.onRipple` clears it. **BOILING LAVA -- the only unconditional "leave now"** (v4.7.254, hardened v4.7.256, trigger `mnemosyne/064` → `M.onLava`/`M.roomLava`): `You splash into boiling lava!` / `You continue to struggle in the boiling grasp of the lava as it eats away at your body.` -- **5,890 UNBLOCKABLE per tick** against a 10,939 pool, i.e. 54% of the pool, two ticks is a death, and unblockable means no shield, barrier or resistance helps. Every other hazard here can be fought through (Ablaze is ~1,200 and only gates the hover), so this is **the exception to the validated-route rule**: the escape ladder refuses unvalidated exits by user decision, but staying costs half the pool per tick, so ANY door beats the floor. **Exit order changed in v4.7.297, user-directed** (live log: exits north and west, the old order picked north -- the room already cleared -- while west led into the unswept grid): an exit `MAP.unexploredExits` has never walked now outranks the room we just left, so the order is any UNEXPLORED planar exit (sorted, excluding known lava) → back the way we came (still provably safe, still the fallback once nothing is unexplored) → any planar not into known lava → `down`. An unexplored room CAN be lava -- that is what unexplored means -- but the worst case is one more tick of damage before the next struggle line re-picks a door, where refusing to explore never recovers the sweep. Holds the attack dispatcher, resets any swarm tactic, re-sends every tick (an eaten move must be retried), and on no known exit sends `ql` and says **MOVE MANUALLY**. Both lines are used: the splash is entry, the struggle is the tick, and the tick fires without an entry line when we were already standing in it. **v4.7.256 was a DEATH**: marking the room caught one code path and three others still led back in -- the sweep BACKTRACK (once the room was walked its exits stopped counting as unexplored, but the unexplored exit BEYOND it made lava the shortest path, and `MAP.path` has no hazard filter), `S._backDir` (the room we came from is normally the safest square) and `S._panicDir`. **Remember the EDGE, not just the room**: room-keyed marking is unusable from the room next door, because `_exitTarget` returns nil when gmcp has not filled a destination id -- exactly the case for an unvisited neighbour. `M.explore.lavaEdges[from][dir]`, recorded at the moment we splash, needs no id from anyone; shared predicates `M.roomIsLava`/`M.edgeIsLava` feed all four consumers. The backtrack checks only the FIRST step (every step is re-decided on arrival, so a route we never enter is one we never traverse), and `_backDir` returning nil drops the ladder to shield-in-place -- bad, not fatal. **"We walked through it" is not the same fact as "it is survivable."** Two guards found while testing: a stale `explore.fromRoom` (current only after a sweep step, not a tumble or chase) would mark an edge out of a non-adjacent room and refuse a good exit forever, so recording requires `from ~= cur`; and both exit scans are SORTED, because an unordered choice makes the log unreadable and made the guards untestable.
 
 **A BOSS THAT RUNS AWAY** (v4.7.255, triggers `mnemosyne/065`+`066`): `Lyaeus, the travelling bard flails in panic.` then `... a satyri bard strolls out to the southeast, ...`. **The two lines name him differently** -- proper name on the panic, generic denizen description on the departure -- so neither suffices alone: the panic says WHO, the departure says WHERE, paired within a 6s window. A boss ripple only ends when the boss dies, so a boss that leaves is not a fight we can decline. `M._chaseRefusal(dir)` is split from the send so every refusal is named and testable (nothing panicked / escaping / recovering / lava / too hurt / budget spent / basher off); **never chase while leaving** -- adding a pursuit to a retreat is how a retreat becomes a death -- and the budget is 4 per ripple since a boss kiting us across the grid is its own hazard. The HP guard is DEFAULTED (35) rather than conditional: a guard that evaporates on a missing config key would chase at crash HP on a fresh profile. **THE DEPARTURE LINE HAS TWO GRAMMARS** (v4.7.272): trigger 066 matches a direction FRAGMENT with the directions enumerated rather than the whole sentence -- because every denizen words its exit differently ("strolls"/"prowls"/"stomps") and enumerating VERBS is how you get a trigger that works for one boss and silently misses the next. That axis was right and the chosen invariant was wrong: `out to the <direction>` was **Lyaeus's** fragment, not a shared one, and `Celepharn, High Priest of Life` uses a different syntactic FRAME -- `The muted rustling of fabric accompanies Celepharn as he departs east.` The panic fired, the departure never matched, and the boss walked. The pattern is now `(?:out to the|departs?(?: to the)?)`. **One boss is not a sample.** The whole line is passed through as well, and it can only STRENGTHEN: Celepharn's departure names him where Lyaeus's says only "a satyri bard", so a name match PROVES identity while a non-match proves nothing and must still be followed (`M._fledLineNames`, compared on the FIRST WORD since the panic line carries a comma-title the room line omits) -- implemented as a veto to check, it fails four tests including the original follow. Safe because it decides nothing alone.
 
@@ -914,6 +914,18 @@ only Carnivore a corpse is just food and the horn already covers hunger; with on
 is no food source. The ATTEMPT is stamped as well as the confirmation, because an empty pack is the
 normal state between kills and would otherwise re-probe on every one.
 
+**THE STARVATION PATH WAS NEVER WIRED IN (found in review, fixed v4.7.297).** `ataxia_hornOnHungry`
+-- corpse-first, horn-fallback -- has existed since v4.7.294, but `triggers/374_Starving.lua`, the
+ONLY place starvation is ever detected, called `ataxia_hornFeed` directly the whole time, so
+Obligate Carnivore's entire starvation behaviour was unreachable in production: starvation still
+burned a horn charge exactly as before the boon existed, and the test suite stayed green because it
+calls `ataxia_hornOnHungry` directly rather than driving the trigger. **A function with a test and a
+caller that bypasses it is still dead code.** Fixed by pointing the trigger at the right function.
+The trigger now also owns its OWN re-fire throttle (`STARVING_RETRY`, 5s): the forced corpse-eat
+deliberately bypasses `ataxia_carnivoreEat`'s own cooldown (starvation must not wait on a throttle
+written for upkeep), so without a throttle at the trigger the vitals row -- which prints every
+prompt while starving persists -- would re-send `ii corpse` on every single prompt.
+
 **SPIRIT REND -- THE THIRD MONK EQ RIDER, AND THE ORDER IS THE DECISION (v4.7.292,
 `ataxiaBasher_spiritRend`).** "Your kaido enfeeble ability costs no kai and can target denizens,
 halving the target's current health... every 60 seconds." User doctrine: Rain form, above 50%
@@ -935,6 +947,34 @@ highlighted there rather than in a second trigger), never at send. An unreadable
 fire and warns once per run -- the `rwBisect` rule, plus the Arc proof-of-life, because a silent
 refusal here would be invisible (no balance is spent, so nothing else looks wrong).
 `bisectTargetHp` was hoisted to `ataxiaBasher_targetHpPct()` so a second class could reach it.
+**Fires in Tekura too, since v4.7.297** -- see the Tekura/Kaido note further down, and
+`.claude/classes/monk.md`. **Trigger `080`'s pattern spanned the denizen name in one anchored
+regex (found in review, fixed v4.7.297)**: the name is arbitrary length, Achaea wraps server-side
+at the player's WIDTH (the v4.7.286 rule), and a longer or titled denizen name pushes ", enfeebling"
+onto a second physical line -- silently failing the match, so nothing ever stamped the 60s cooldown
+and the ability would spam every `SPIRIT_REND_RETRY` (6s) against a server-enforced 60s cooldown.
+Split into two substring fragments (the `057`/`058` convention) so either half of a wrapped line
+still confirms.
+
+**TEKURA GETS THE SAME THREE KAIDO RIDERS (v4.7.297, user-directed): "The monk boons should also be
+coded to be used when I am in tekura. In tekura I am only in one stance. SO the stance criteria for
+tekura needs to be removed."** Kai Choke, Kai Enfeeble (Spirit Rend) and Numbness are all Kaido
+abilities, and Kaido is the skill Tekura and Shikudo SHARE (`.claude/classes` table: "Monk:
+Tekura/Shikudo, Kaido, Telepathy") -- "Rain form" was always user doctrine for *which Shikudo form*
+to use them in, never a restriction to Shikudo itself. Before this fix `ataxia.vitals.form` is
+`nil` for a Tekura Monk, so a bare `form ~= "Rain"` gate silently blocked all three the entire time
+these boons existed, for Tekura specifically -- and separately, the `elseif tekura then` branch of
+`ataxiaBasher_monkBashing2` never called any of the three rider helpers at all, so fixing the gates
+alone would still have shipped nothing for Tekura. Both halves needed the fix: a new shared
+`ataxiaBasher_monkKaidoReady()` gate (`stance-truthy OR form == "Rain"`, reusing the dispatcher's
+own `tekura`/`shikudo` discriminator locals) replaces all three bare `form ~= "Rain"` checks, and
+the Tekura branch now prepends the same `rend or choke or numb` chain, in the same rend-before-
+choke-before-numb order, ahead of its `unwield all;combo ... rhk/sdk ucp ucp`. **No stance-NAME
+filtering, deliberately**: per the user, a Tekura Monk sits in exactly one stance during ordinary
+bashing (Horse/Bear appear only in the TK6 backbreaker's finishing sequence against an
+already-dying target, per `.claude/classes/tekura.md`), so truthy `stance` alone is the whole test
+-- filtering by stance NAME would invent a restriction the boon text never states, in the direction
+that costs damage rather than the direction that is safe.
 
 **AUDIT -- THE FIRST INPUT THAT CAN PROVE THE PANEL WRONG (v4.7.290, `mnem audit`,
 `mnemosyne/013_Audit.lua` + trigger `078`).** Everything else on the bonuses panel is DERIVED from a
@@ -1058,6 +1098,18 @@ confirmation. **A manual `bash floor` command always wins**: it drops the saved-
 bookkeeping, so the automatic revert later finds nothing to restore rather than clobbering a
 choice the user made afterwards. Culling's own, unrelated floor exemption is untouched.
 
+**THE REVERT HAD NO RECONNECT PATH (found in review, fixed v4.7.297).** The two revert call sites
+above are both Mnemosyne-specific trigger lines -- neither fires on a plain disconnect/reconnect or
+a SYSUPDATE reload mid-run. A player holding the boon who drops connection before the confirmed
+run-end line prints keeps `ataxiaBasher.rageFloor` pinned at 100 **on disk**, since that field (and
+the two bookkeeping keys the revert reads) all live on the serialized `ataxiaBasher` table --
+silently starving all 37 rotation affordability checks, in and out of Mnemosyne, PvE or PvP, until
+the next wade's defensive reset or a manual `bash floor`. `ataxia_loadSettings()`
+(`001_Save_Load_Settings.lua`) now calls `ataxiaBasher_berserkersEdgeRevert()` defensively right
+after the basher block loads, mirroring the run-start safety net. Safe even for a run still
+genuinely in progress: worst case is a few seconds at the pre-boon floor until the next wade
+re-applies it, against leaving an ordinary bashing session silently capped indefinitely.
+
 **A LATENT MOCK CRASH, TABLE-SIZE DEPENDENT (v4.7.296).** Both `mock_mudlet.lua`'s
 `M.fire_timers()` and a test-local `fireOfferWait()` helper walked a timer table with a bare
 `pairs()` loop; `_flushPendingOffer`'s catalogue trickle (v4.7.295) arms a follow-up timer FROM
@@ -1088,13 +1140,17 @@ screen, because a trickle cannot starve a capture. Batched by default (`BOON_FIL
 same reason -- filling twenty-five at once is that race, self-inflicted. `mnem boonfill gaps` names
 the holes without spending a command.
 
-**SEASONAL CHURN: THE REGISTRY EXISTS AND ITS RESET IS DEAD CODE (audited 2026-09-02, KNOWN AND
-UNFIXED).** Achaea adds and removes boons every season, and this package absorbs that BY HAND. The
-mechanism not to was built in v4.7.241 -- `M.BOON_FLAGS`, a NAME -> FLAG table in `004_Parsers`,
-whose own comment says a hand-written trigger per boon "is not reasonable for the next ten" -- and
-only half of it was wired: **`M.latchBoonFlag` is called (`004:1608`); `M.clearBoonFlags` is called
-NOWHERE.** So registry boons are latched generically and cleared only where somebody also hand-added
-them to the two reset lists. Measured surface: **42 boon flags, 13 on the registry, ~29 hand-wired
+**SEASONAL CHURN: THE REGISTRY EXISTS AND ITS RESET IS HALF-WIRED (audited 2026-09-02, corrected
+2026-09-03, KNOWN AND UNFIXED).** Achaea adds and removes boons every season, and this package
+absorbs that BY HAND. The mechanism not to was built in v4.7.241 -- `M.BOON_FLAGS`, a NAME -> FLAG
+table in `004_Parsers`, whose own comment says a hand-written trigger per boon "is not reasonable
+for the next ten" -- and only half of it covers both ends: **`M.latchBoonFlag` is called
+(`004:1608`); `M.clearBoonFlags` is called from `M.onRunEnd()` (`004:264`) and NOWHERE AT RUN-START.**
+(An earlier pass of this audit read `clearBoonFlags` as dead everywhere, which understated the gap
+by half.) So registry boons are latched generically, cleared on a CONFIRMED run end, and otherwise
+cleared only where somebody also hand-added them to the two legacy reset lists -- with no run-start
+safety net, which is the load-bearing half (see below). Measured surface: **42 boon flags, 13 on the
+registry, ~29 hand-wired
 across four files each** (BOONS-row trigger, claim-intercept line, run-start reset, run-end reset,
 plus the consuming code). **Three flags are asymmetric today** -- `dwTimequake` and
 `dwHeraldInfirmity` have a run-END reset but no run-START, `mnemIcyHeart` the reverse; run-start is

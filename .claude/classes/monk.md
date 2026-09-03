@@ -1125,7 +1125,8 @@ Edge cases:
 ```yaml
 kai_unleashed:  # legendary — kai choke bursts magic damage on ALL denizens in the room
   flag: mnemKaiUnleashed
-  behavior: "KAI CHOKE <target> PREPENDS to the Rain-form combo at 2+ denizens"
+  behavior: "KAI CHOKE <target> PREPENDS to the combo at 2+ denizens, in EITHER spec
+    (v4.7.297 — Tekura and Rain-form Shikudo; see ataxiaBasher_monkKaidoReady below)"
   ability_facts: "AB Kaichoke 896: 4.00s of EQUILIBRIUM (idle during balance combos —
     both land the same round); vs DENIZENS consumes NO kai, only 50 mana (250-mana
     floor); bonus damage vs damaged/mangled head/torso or mind clamp"
@@ -1137,9 +1138,9 @@ kai_unleashed:  # legendary — kai choke bursts magic damage on ALL denizens in
 
 senseless_flurry:  # balance recovers 30% faster while the numbness defence is up
   flag: mnemSenselessFlurry
-  behavior: "NUMB prepends to the Rain-form combo when the numbness defence is down
-    (GMCP-tracked, 5s attempt-hold); fires on shielded rounds (self-targeted);
-    Kai Choke OUTRANKS it — one eq spender per round"
+  behavior: "NUMB prepends to the combo (Tekura or Rain-form Shikudo, v4.7.297) when the
+    numbness defence is down (GMCP-tracked, 5s attempt-hold); fires on shielded rounds
+    (self-targeted); Kai Choke OUTRANKS it — one eq spender per round"
   ability_facts: "AB Numbness 894: self-only, 3.00s eq; DEFERS incoming damage,
     delivered later in one blow at -40%. Fire line: 'You grit your teeth and will
     your pain out of existence.'"
@@ -1148,6 +1149,18 @@ senseless_flurry:  # balance recovers 30% faster while the numbness defence is u
     ladder until the lump lands — in a crowd that lump can exceed max HP (death
     from 'full HP' with every alarm silent). Thin rooms only."
 ```
+
+**TEKURA GETS THE SAME THREE RIDERS (v4.7.297, user-directed).** Kai Choke, Kai Enfeeble (Spirit
+Rend) and Numbness are all **Kaido** abilities, and Kaido is the skill Tekura and Shikudo SHARE
+(see the class table above) -- "Rain form" was always user doctrine for *which Shikudo form* to
+use them in, never a restriction to Shikudo itself. Before this fix `ataxia.vitals.form` is `nil`
+for a Tekura Monk, so a bare `form ~= "Rain"` gate silently blocked all three for Tekura the whole
+time these boons existed, and the Tekura branch of `ataxiaBasher_monkBashing2` never called any of
+the three rider helpers at all -- both halves needed the fix. `ataxiaBasher_monkKaidoReady()`
+(`basher/002_Class_Bashing.lua`, shared by all three) is `stance-truthy OR form == "Rain"`, reusing
+the exact discriminator the dispatcher's own `tekura`/`shikudo` locals already compute. **No
+stance-NAME filtering**: per the user ("In tekura I am only in one stance"), a Tekura Monk sits in
+exactly one stance during ordinary bashing, so truthy `stance` alone is the whole test.
 
 
 ## Spirit Rend (Mnemosyne boon) -- KAI ENFEEBLE on denizens (v4.7.292)
@@ -1171,9 +1184,10 @@ prone that is reduced to 25%.
 | "reduced to 25% if not prone" | AB | **NOT applied.** That clause is in the adventurer ability; the boon restates the denizen effect with no prone condition. Revisit only if a live capture shows a reduced effect on a standing denizen. |
 | 3.00s equilibrium | AB | rides free beside the balance combo, like Kai Choke and NUMB |
 
-**Rain form only** (user doctrine, as with the other two riders), and it **sorts ahead of Kai
-Choke**: Rend's window closes as the target drops below 50%, where the choke is equally good next
-round. Skips a shielded round so the shield breaks first.
+**Tekura or Rain-form Shikudo** (`ataxiaBasher_monkKaidoReady()`, v4.7.297 -- Kaido is shared by
+both specs; see the note above), and it **sorts ahead of Kai Choke**: Rend's window closes as the
+target drops below 50%, where the choke is equally good next round. Skips a shielded round so the
+shield breaks first.
 
 **Fire line, captured 2026-09-02** (highlighted chartreuse bold, trigger `mnemosyne/080`):
 
@@ -1201,4 +1215,4 @@ self, 3.00s equilibrium, defers 40% of incoming damage into one later blow.
 **Read it as a warning, not a buff notice.** While numb is up the HP number stops tracking the
 fight, which blinds the rate watchdog, the danger levels and the escape ladder until the deferred
 lump lands -- the reason `ataxiaBasher_senselessFlurryNumb` refuses at or above the swarm threshold
-and while any swarm tactic is running.
+and while any swarm tactic is running. Fires for Tekura as well as Rain-form Shikudo (v4.7.297).

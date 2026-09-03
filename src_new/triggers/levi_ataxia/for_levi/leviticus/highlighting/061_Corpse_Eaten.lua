@@ -32,7 +32,7 @@ colorTriggerBgColor: '#000000'
 patterns:
 - pattern: you dig into the corpse of
   type: 0
-- pattern: Your fatigue fades away as the meat slides down your gullet\.
+- pattern: Your fatigue fades away as the meat slides down your gullet.
   type: 0
 ]]--
 

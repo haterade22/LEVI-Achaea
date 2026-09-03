@@ -2,6 +2,108 @@
 
 ---
 
+## 2026-09-03 - Tekura gets the Kaido riders, lava leaves toward progress, and five deep-review fixes (v4.7.297)
+
+### Tekura gets the same three Kaido eq riders as Shikudo
+
+User: *"The monk boons should also be coded to be used when I am in tekura. In tekura I am only in
+one stance. SO the stance criteria for tekura needs to be removed."*
+
+Kai Choke, Kai Enfeeble (Spirit Rend) and Numbness are all **Kaido** abilities, and Kaido is the
+skill Tekura and Shikudo SHARE. "Rain form" was always user doctrine for *which Shikudo form* to
+use them in, never a restriction to Shikudo itself -- but `ataxia.vitals.form` is `nil` for a
+Tekura Monk, so the bare `form ~= "Rain"` gate on all three silently blocked every one of them for
+Tekura the entire time these boons have existed. Separately, the `elseif tekura then` branch of
+`ataxiaBasher_monkBashing2` never called any of the three rider helpers at all, so fixing the gates
+alone would still have shipped nothing for Tekura -- both halves needed the fix.
+
+- New shared `ataxiaBasher_monkKaidoReady()` (`basher/002_Class_Bashing.lua`) replaces all three
+  bare `form ~= "Rain"` checks: `stance-truthy OR form == "Rain"`, reusing the exact discriminator
+  `ataxiaBasher_monkBashing2` already computes for its own Tekura/Shikudo branch.
+- The Tekura branch now prepends `rend or choke or numb`, in the same rend-before-choke-before-numb
+  order as Shikudo, ahead of `unwield all;combo ... rhk/sdk ucp ucp`.
+- **No stance-NAME filtering, deliberately**: per the user, a Tekura Monk sits in exactly one
+  stance during ordinary bashing, so truthy `stance` alone is the whole test.
+
+**Tests:** 6 new cases in `test_basher_monk.lua` (still swings with no boon; each rider prepends;
+rend-before-choke order holds; shielded rounds skip rend/choke but still numb; stance name is never
+checked). Break-back on both halves independently (the gate, and the dispatcher wiring) --  each
+fails all 6 new tests when reverted alone.
+
+**Files:** `basher/002_Class_Bashing.lua`, `tests/test_basher_monk.lua`, `.claude/classes/monk.md`.
+
+### Boiling lava now leaves toward the unswept grid, not back into a cleared room
+
+User, from a live log (exits north and west; the sweep picked north, which was the room already
+cleared, while west led into new territory): *"When going into a lava room we need to move to the
+room that is not explored yet, not the previous room!"*
+
+`M._lavaExit()` (`mnemosyne/008_Explorer.lua`) previously preferred "back the way we came" (provably
+not lava, since we just stood there) and otherwise fell through to a plain alphabetically-sorted
+scan with no notion of exploration progress at all -- which is how "north" won purely because 'n' <
+'w'. The order is now: any UNEXPLORED planar exit (`MAP.unexploredExits`, the same set the ordinary
+sweep already treats as progress; sorted, excluding known lava) -> the room we just left (still the
+provably-safe fallback once nothing is unexplored) -> any other planar exit not into known lava ->
+`down`. An unexplored room CAN be lava -- that is what "unexplored" means -- but the worst case is
+one more tick of damage before the next struggle line re-picks a door, where refusing to explore
+never recovers the sweep.
+
+**Tests:** `test_mnemosyne.lua`'s "boiling lava" block reframed -- the two tests that previously
+asserted "back the way we came" now assert the unexplored exit wins, plus a new test confirming the
+back door is still the fallback once nothing is unexplored, and a determinism test updated to a
+scenario where the previous room is properly marked explored via a simulated arrival. Break-back
+confirms all 4 fail when the priority is reverted.
+
+**Files:** `mnemosyne/008_Explorer.lua`, `tests/test_mnemosyne.lua`.
+
+### Five fixes from a 4-agent deep review of v4.7.292-296
+
+Scoped review of everything shipped since the last one (v4.7.291). Findings, most severe first:
+
+- **CRITICAL -- Obligate Carnivore's starvation path was never wired in.** `ataxia_hornOnHungry`
+  (corpse-first, horn-fallback, v4.7.294) existed but `triggers/374_Starving.lua` -- the only place
+  starvation is ever detected -- called `ataxia_hornFeed` directly the whole time. Obligate
+  Carnivore's headline starvation behaviour had zero effect in an actual run; the test suite stayed
+  green because it calls `ataxia_hornOnHungry` directly rather than driving the trigger. Fixed by
+  pointing the trigger at the right function, and `ataxia_hornOnHungry` now returns the outcome so
+  the trigger's confirmation echo means something. Also added a `STARVING_RETRY` (5s) throttle at
+  the trigger itself: the forced corpse-eat deliberately bypasses `ataxia_carnivoreEat`'s own
+  cooldown, so without one the vitals row (prints every prompt while starving persists) would
+  re-send `ii corpse` every single prompt.
+- **HIGH -- Spirit Rend's confirmation trigger could be split by server-side wrap.** `080` matched
+  `^You violently propel your kai energy at .+, enfeebling` as one anchored regex spanning the
+  denizen's name -- arbitrary length, and Achaea wraps at the player's WIDTH (the v4.7.286 rule).
+  A longer or titled denizen name pushes ", enfeebling" onto a second physical line and the match
+  silently fails, so the 60s cooldown never stamps and the ability spams every 6s retry against a
+  server-enforced 60s cooldown. Split into two substring fragments (the `057`/`058` convention).
+- **HIGH -- CHANGELOG.md and CLAUDE.md both claimed `M.clearBoonFlags()` is dead code.** It is
+  wired at run-END (`004_Parsers.lua:264`, inside `M.onRunEnd()`) -- just never at run-start, which
+  is the more load-bearing half. Corrected in both docs plus the mnemosyne project doc; the
+  underlying gap (no run-start reset for the 13 registry boons) remains recorded and, per the
+  user's earlier explicit decision, deliberately unfixed.
+- **MEDIUM -- Berserker's Edge's revert had no reconnect path.** Both revert call sites are
+  Mnemosyne-specific trigger lines; a disconnect or SYSUPDATE mid-run leaves `rageFloor` pinned at
+  100 on disk, since the field lives on the serialized `ataxiaBasher` table. `ataxia_loadSettings()`
+  now calls the revert defensively right after the basher block loads, mirroring the run-start
+  safety net.
+- **MEDIUM -- a stray escaped period made a Corpse Eaten highlight pattern unreachable.**
+  `highlighting/061_Corpse_Eaten.lua`'s second pattern was `type: 0` (substring) but written with a
+  literal `\.`, which substring matching never interprets as an escape -- the real game line ends in
+  a plain `.`, so the pattern could never match. Dropped the backslash.
+
+**Files:** `triggers/374_Starving.lua`, `misc_scripts/022_Horn_Of_Plenty.lua`,
+`triggers/mnemosyne/080_Spirit_Rend_Confirmed.lua`, `triggers/highlighting/061_Corpse_Eaten.lua`,
+`001_Save_Load_Settings.lua`, `CHANGELOG.md`, `CLAUDE.md`, `.claude/projects/mnemosyne/03-parsing-triggers.md`.
+
+### Verification
+
+**1762 tests** (up from 1749), all passing. Break-backs performed and confirmed failing for both
+user-directed fixes; the review fixes are either covered by existing tests (no regression) or are
+trigger-dispatch/load-path changes validated by inspection, consistent with this codebase's existing
+testing boundary (pure logic is unit-tested; trigger/timer wiring is validated in-game).
+
+---
+
 ## 2026-09-02 - Session stats on a fresh run, Berserker's Edge, and a latent mock crash (v4.7.296)
 
 ### Session stats reset on a fresh run, kept across a resume
@@ -168,7 +270,7 @@ with no gaps, and unsorted output.
 
 ### Not in this change
 
-The **boon FLAG lifecycle** audit from earlier today (`M.clearBoonFlags` being dead code, 3
+The **boon FLAG lifecycle** audit from earlier today (`M.clearBoonFlags` wired at run-end only, 3
 asymmetric flags, ~29 hand-wired boons) remains **recorded and deliberately unfixed** -- see the
 entry below. That is about automation wiring; this is about the data.
 
@@ -190,11 +292,17 @@ this reason -- its own comment says "that was reasonable when each one needed be
 it is not reasonable for the next ten." It has two halves:
 
 - `M.latchBoonFlag(name)` -- **wired**, called from the claim path at `004:1608`.
-- `M.clearBoonFlags()` -- **called from nowhere in the tree.**
+- `M.clearBoonFlags()` -- **wired at run-END** (`004:264`, inside `M.onRunEnd()`), **called
+  nowhere at run-START** (corrected 2026-09-03; a prior pass of this audit read it as dead
+  everywhere, which understated the gap by half). Run-start is the load-bearing reset (see below),
+  so a registry boon whose run ends WITHOUT the run-end confirmation firing is left armed
+  indefinitely -- the exact `dwTimequake`/`dwHeraldInfirmity`/`mnemIcyHeart` failure mode, but for
+  all 13 registry boons at once rather than three hand-wired ones.
 
-So registry boons are latched generically and reset only where somebody *also* hand-added them to
-the two reset lists. The reset half of the mechanism is dead code, which is why the churn has been
-absorbed by hand ever since.
+So registry boons are latched generically and reset on a CONFIRMED run end, but have no run-start
+safety net -- and are also reset by hand wherever somebody separately added them to the legacy
+lists. The reset half of the mechanism is half-wired, which is why the churn has been absorbed by
+hand ever since.
 
 ### Measured surface
 

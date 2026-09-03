@@ -471,3 +471,122 @@ describe("Spirit Rend -- KAI ENFEEBLE as an eq rider", function()
   ataxiaTemp = {}
 end)
 
+-- ─── TEKURA GETS THE SAME KAIDO RIDERS (v4.7.297, user-directed) ───────────────────────────
+--
+-- "The monk boons should also be coded to be used when I am in tekura. In tekura I am only in
+-- one stance. SO the stance criteria for tekura needs to be removed."
+--
+-- Kai Choke, Kai Enfeeble (Spirit Rend), and Numbness are all Kaido abilities, and Kaido is the
+-- skill Tekura and Shikudo SHARE (CLAUDE.md: "Monk: Tekura/Shikudo, Kaido, Telepathy") -- so
+-- "Rain form" was always user doctrine for WHICH Shikudo form to use them in, never a
+-- restriction to Shikudo itself. Before this fix `ataxia.vitals.form` is nil for a Tekura Monk,
+-- so a bare `form ~= "Rain"` gate silently blocked all three every time, AND the `elseif tekura`
+-- branch of ataxiaBasher_monkBashing2 never even CALLED the three rider helpers -- both halves
+-- had to change. No stance-NAME filtering: `ataxia.vitals.stance` truthy already means Tekura
+-- (the discriminator the dispatcher itself uses), and a Tekura Monk sits in exactly one stance
+-- during ordinary bashing.
+describe("ataxiaBasher_monkBashing2 -- Tekura gets the Kaido eq riders too", function()
+  local function tekuraReset()
+    reset()
+    ataxia.vitals.form = nil
+    ataxia.vitals.stance = "Horse" -- any truthy stance; the NAME is deliberately not checked
+    ataxia.mnemosyne = { _denizenCount = function() return 3 end,
+                         swarm = { state = "idle", threshold = function() return 3 end } }
+    ataxiaTemp = {}
+    mnemKaiUnleashed, mnemSenselessFlurry, mnemSpiritRend = false, false, false
+  end
+
+  it("still swings the unarmed combo with no boon at all", function()
+    tekuraReset()
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "unwield all")).toBeTrue()
+    expect(has(cmd, "combo " .. target .. " sdk ucp ucp")).toBeTrue()
+  end)
+
+  it("prepends kai choke to the Tekura combo (eq rides the balance swing)", function()
+    tekuraReset()
+    mnemKaiUnleashed = true
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "kai choke " .. target)).toBeTrue()
+    expect(has(cmd, "combo " .. target .. " sdk ucp ucp")).toBeTrue()
+    expect(cmd:find("kai choke", 1, true) < cmd:find("combo", 1, true)).toBeTrue()
+  end)
+
+  it("prepends the numb refresh to the Tekura combo", function()
+    tekuraReset()
+    ataxia.mnemosyne._denizenCount = function() return 1 end -- under the numb crowd gate
+    mnemSenselessFlurry = true
+    ataxia.defences = nil
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "numb; ")).toBeTrue()
+    expect(has(cmd, "combo")).toBeTrue()
+    ataxia.defences = nil
+  end)
+
+  it("prepends kai enfeeble to the Tekura combo against a denizen above the floor", function()
+    tekuraReset()
+    target = 12345
+    mnemSpiritRend = true
+    gmcp = { IRE = { Target = { Info = { hpperc = "80" } } } }
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "kai enfeeble 12345")).toBeTrue()
+    expect(has(cmd, "combo 12345 sdk ucp ucp")).toBeTrue()
+    target = "manticore"; gmcp = nil
+  end)
+
+  -- Same eq slot, same order as Shikudo: rend's window closes, so it wins; the choke's helper
+  -- must not even be called for a round rend takes, or it would stamp its own retry guard.
+  it("keeps the rend-before-choke-before-numb order in Tekura too", function()
+    tekuraReset()
+    target = 12345
+    mnemSpiritRend, mnemKaiUnleashed = true, true
+    gmcp = { IRE = { Target = { Info = { hpperc = "80" } } } }
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "kai enfeeble")).toBeTrue()
+    expect(has(cmd, "kai choke")).toBeFalse()
+    expect(ataxiaTemp.kaiChokePendingAt).toBeNil()
+    target = "manticore"; gmcp = nil
+  end)
+
+  it("still breaks a shield with rhk first -- shielded rounds skip rend and choke", function()
+    tekuraReset()
+    ataxiaBasher.shielded = true
+    mnemKaiUnleashed, mnemSpiritRend = true, true
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "combo " .. target .. " rhk ucp ucp")).toBeTrue()
+    expect(has(cmd, "kai choke")).toBeFalse()
+    expect(has(cmd, "kai enfeeble")).toBeFalse()
+  end)
+
+  -- Numb is self-targeted, so unlike rend/choke it still rides a shielded round -- matching the
+  -- Shikudo behaviour exactly.
+  it("still numbs on a shielded Tekura round", function()
+    tekuraReset()
+    ataxia.mnemosyne._denizenCount = function() return 1 end -- under the numb crowd gate
+    ataxiaBasher.shielded = true
+    mnemSenselessFlurry = true
+    local cmd = ataxiaBasher_monkBashing2()
+    expect(has(cmd, "combo " .. target .. " rhk ucp ucp")).toBeTrue()
+    expect(has(cmd, "numb; ")).toBeTrue()
+  end)
+
+  -- No stance-NAME filtering: the user's own words -- "In tekura I am only in one stance" --
+  -- mean the boons must not care WHICH stance string charstats reports.
+  it("does not care which stance name is reported", function()
+    for _, name in ipairs({ "Horse", "Bear", "Dragon", "Scorpion" }) do
+      tekuraReset()
+      ataxia.vitals.stance = name
+      mnemKaiUnleashed = true
+      expect(has(ataxiaBasher_monkBashing2(), "kai choke")).toBeTrue()
+    end
+  end)
+
+  -- Restore shared state for whoever runs after us.
+  mnemKaiUnleashed, mnemSenselessFlurry, mnemSpiritRend = false, false, false
+  target = "manticore"
+  gmcp = nil
+  ataxia.mnemosyne = nil
+  ataxia.defences = nil
+  ataxiaTemp = {}
+end)
+

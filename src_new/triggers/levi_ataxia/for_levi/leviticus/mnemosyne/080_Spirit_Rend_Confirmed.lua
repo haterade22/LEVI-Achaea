@@ -30,8 +30,10 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^You violently propel your kai energy at .+, enfeebling
-  type: 1
+- pattern: ^You violently propel your kai energy at
+  type: 0
+- pattern: ', enfeebling'
+  type: 0
 ]]--
 
 -- Enfeeble CONFIRMED, live-captured 2026-09-02:
@@ -42,10 +44,17 @@ patterns:
 -- server ate or refused has not spent it, and stamping on send would lock the ability out for a
 -- full minute over a round that never happened (the Kai Choke reasoning, v4.7.122).
 --
--- The pattern stops before the pronoun. The game picks "him"/"her"/"it" from the denizen's
--- gender -- "a haskrovska vine" is a plant and still took "him" -- so matching one of them would
--- work until the first mob the game genders differently. Nothing in Achaea else says "propel your
--- kai energy at ... enfeebling", so the fragment is distinctive without it.
+-- TWO SUBSTRING FRAGMENTS, not one anchored regex spanning the denizen name (fixed in review,
+-- 2026-09-03; the earlier single-pattern version matched the captured line by luck). The name in
+-- between is ARBITRARY length -- Achaea wraps server-side at the player's WIDTH (v4.7.286's rule,
+-- `057_Barons_Bro_Proc.lua`/`058_Human_Spirit_Proc.lua`), so a longer or titled denizen name pushes
+-- ", enfeebling" onto a second physical line and a single `.+`-spanning pattern fails outright --
+-- silently, since nothing else stamps the cooldown, which then lets `ataxiaBasher_spiritRend`
+-- re-fire the ability every SPIRIT_REND_RETRY (6s) against a server-enforced 60s cooldown. Either
+-- fragment alone is enough to confirm (both call the same handler below), so a wrap that splits the
+-- line still lands one hit. The opening fragment stops well short of the name; the pronoun
+-- ("him"/"her"/"it", by the denizen's gender -- "a haskrovska vine" is a plant and still took
+-- "him") is never matched, so the second fragment leads with the punctuation instead.
 --
 -- Self-proving, like the choke burst: the line only prints when the ability actually landed, so it
 -- also (re)sets the flag and a missed BOONS row cannot desync us.

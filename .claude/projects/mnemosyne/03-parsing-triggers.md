@@ -364,16 +364,19 @@ Handled in `_parseContemplate` — see the meta-block note in `004_Parsers.lua`.
 the wording, so the parser matches the SHAPE (a short `Label: value` line while still in the meta
 block) and stores anything unrecognised in `info.meta` rather than dropping it.
 
-## Boon churn and the half-wired registry (audited 2026-09-02, UNFIXED)
+## Boon churn and the half-wired registry (audited 2026-09-02, corrected 2026-09-03, UNFIXED)
 
 Boons are added and removed every season, and the cost of that lands here. `M.BOON_FLAGS`
 (`004_Parsers`) exists to absorb it -- a NAME -> FLAG table so a new boon needs a row rather than a
-trigger -- but only its latch is connected:
+trigger -- but only one END of the reset is connected:
 
 | Half | State |
 |---|---|
 | `M.latchBoonFlag(name)` | wired, called from the claim path (`004:1608`) |
-| `M.clearBoonFlags()` | **called nowhere** |
+| `M.clearBoonFlags()` | wired at run-END (`004:264`, inside `M.onRunEnd()`), **called nowhere at run-START** |
+
+(A prior pass of this doc read `clearBoonFlags()` as dead everywhere, which understated the gap by
+half -- it runs on every CONFIRMED run end, just not defensively at the next run's start.)
 
 So 13 boons use the registry, ~29 remain hand-wired across four files each, and three flags are
 asymmetric as a result: `dwTimequake` / `dwHeraldInfirmity` (run-end reset, no run-start) and
