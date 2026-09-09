@@ -5789,3 +5789,66 @@ describe("the server's message on a successful call", function()
     expect(#said).toBe(0)   -- ok:true is not a user-facing event
   end)
 end)
+
+describe("_clearStaleRun -- run state must not survive a reload", function()
+  -- `M.run` lives under `ataxia`, which ataxia_saveSettings writes WHOLESALE, and deepMerge ends
+  -- in an unconditional dst[k] = v -- so every scalar here came back from disk and won.
+  it("clears everything a previous session could have left behind", function()
+    reset(true)
+    M.run.active = true
+    M.run.ripple = 30
+    M.run.publicId = "abc123"
+    M.run.boss = "Seasone the Industrious"
+    M.run.lastOffered = { "Songstep" }
+    M.run.lives = 1
+    M.run.waveProgress = 7
+    M.run.pendingMonsters = { "a host of malagmae" }
+    M.run.paused = true
+
+    M._clearStaleRun()
+
+    expect(M.run.active).toBeFalse()
+    expect(M.run.ripple).toBe(0)
+    expect(M.run.publicId).toBeNil()
+    expect(M.run.boss).toBeNil()
+    expect(#M.run.lastOffered).toBe(0)
+    expect(M.run.lives).toBeNil()
+    expect(M.run.waveProgress).toBeNil()
+    expect(#M.run.pendingMonsters).toBe(0)
+    expect(M.run.paused).toBeNil()
+  end)
+
+  -- It routes through _resetRun, so the transient state that lives elsewhere goes too.
+  it("also clears the reroll chain and any deferred offer", function()
+    reset(true)
+    ataxiaTemp.mnemRerolls = 3
+    ataxiaTemp.mnemOfferChain = true
+    M._offerAfterRipple({ { name = "Songstep", description = "d" } })
+    sent = {}
+
+    M._clearStaleRun()
+
+    expect(M._rerollCount()).toBe(0)
+    expect(ataxiaTemp.mnemOfferChain).toBeFalse()
+    expect(M._pendingOffer).toBeNil()
+  end)
+
+  -- `active` and `boss` are deliberately NOT in _resetRun -- startRun sets active true and then
+  -- calls it, and boss is re-learned from each ripple's Objective line. On load neither is true,
+  -- so this clears both itself; a regression that folded them into _resetRun would break startRun.
+  it("does not disturb startRun's own use of _resetRun", function()
+    reset(false)
+    M.startRun()
+    expect(M.run.active).toBeTrue()   -- _resetRun must not have cleared it
+  end)
+
+  -- The consumers that are NOT gated on telemetry are why this matters with reporting off:
+  -- run.boss steers the Bard's dance and makes the legend deck withhold Xylthus; run.ripple
+  -- feeds the swarm's depth-scaled thresholds.
+  it("leaves a stale boss unable to reach the gameplay readers", function()
+    reset(true)
+    M.run.boss = "Seasone the Industrious"
+    M._clearStaleRun()
+    expect(M.run.boss).toBeNil()
+  end)
+end)

@@ -172,6 +172,50 @@ describe("ataxia_loadSettings()", function()
     expect(ataxia.loaded).toBeTrue()
   end)
 
+  -- MNEMOSYNE RUN STATE MUST NOT SURVIVE A RELOAD (v4.7.299).
+  --
+  -- This is the SEAM test, and it is the point of the fix: `_clearStaleRun` having its own unit
+  -- test in test_mnemosyne.lua proves only that the function works, not that anything calls it.
+  -- That exact gap shipped once before -- v4.7.297's starvation path had a tested function and a
+  -- caller that bypassed it, so the behaviour was unreachable in production while the suite
+  -- stayed green.
+  --
+  -- It also pins the ORDERING, which is the subtle half. The reset has to run AFTER deepMerge,
+  -- or it wipes fresh values and the stored ones land on top of it. The stub reads the run table
+  -- at the moment it is called: seeing the STORED values there is what proves the ordering, and
+  -- it simultaneously demonstrates the bug being fixed (that the values reach memory at all).
+  it("wipes stale Mnemosyne run state that came back from disk", function()
+    freshLoadState()
+    -- Mirrors reality: the module is loaded (so the function exists) before settings load.
+    local sawActive, sawRipple, sawBoss
+    ataxia.mnemosyne = {
+      run = { active = false, ripple = 0 },
+      _clearStaleRun = function()
+        sawActive = ataxia.mnemosyne.run.active
+        sawRipple = ataxia.mnemosyne.run.ripple
+        sawBoss   = ataxia.mnemosyne.run.boss
+        ataxia.mnemosyne.run.active = false
+        ataxia.mnemosyne.run.ripple = 0
+        ataxia.mnemosyne.run.boss = nil
+      end,
+    }
+    _saved[ATAXIA] = {
+      settings = { class = "Bard" },
+      mnemosyne = { run = { active = true, ripple = 30, boss = "Seasone the Industrious" } },
+    }
+
+    ataxia_loadSettings()
+
+    -- The premise: this state really does come back from disk and win.
+    expect(sawActive).toBeTrue()
+    expect(sawRipple).toBe(30)
+    expect(sawBoss).toBe("Seasone the Industrious")
+    -- The fix: and the reset ran after it, not before.
+    expect(ataxia.mnemosyne.run.active).toBeFalse()
+    expect(ataxia.mnemosyne.run.ripple).toBe(0)
+    expect(ataxia.mnemosyne.run.boss).toBeNil()
+  end)
+
   it("still loads the name database when an earlier sub-load throws", function()
     freshLoadState()
     _saved[ATAXIA] = { settings = { class = "Serpent" } }

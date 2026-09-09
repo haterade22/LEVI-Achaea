@@ -2,6 +2,90 @@
 
 ---
 
+## 2026-09-09 - Mnemosyne run state no longer survives a reload (v4.7.299)
+
+Follow-up to v4.7.298's deep review, which found that `M.run` is serialized and recorded it as out
+of scope. This is that fix.
+
+### The bug
+
+`ataxia.mnemosyne.run` is a plain table hanging off `ataxia`, and `ataxia_saveSettings` does
+`table.save(file, sanitizeForSave(ataxia))` -- **wholesale**. `sanitizeForSave` strips only
+functions, metatabled objects and GUI snapshots, so a table of ordinary scalars goes straight to
+disk; `deepMerge` then ends in an unconditional `dst[k] = v` for non-tables, so the **stored value
+wins** over the freshly-initialised one. `active`, `ripple`, `publicId`, `lastOffered`, `lives` and
+`waveProgress` all came back from a previous session. The module's own header comment said run
+state was "in-memory only". It was not.
+
+### Why it was worth fixing, and it is not the telemetry
+
+The only thing that clears run state is `_resetRun`, reached through `startRun`/`endRun` -- both
+**below** the `_auto()` gate. So with reporting off (the shipped default) nothing ever cleared it,
+while several consumers that are **not** gated on reporting read it:
+
+| Reader | Field | Effect of a stale value |
+|---|---|---|
+| `ataxiaBasher_bardDance` (`basher/002`) | `run.boss` | picks **wavedance** (the boss dance) on an ordinary ripple |
+| `ataxiaBasher_bardDance` | `run.ripple` | **hawkstep** (ripple >= 25) applied at ripple 1 |
+| legend deck (`basher/010`) | `run.boss` | **withholds Xylthus** -- a card cannot bind a boss |
+| `_nextPatrolStep` (`008_Explorer`) | `run.boss` | patrols a cleared grid for a boss that is not there |
+| swarm depth-scaling (`009_Swarm_Tactics`) | `run.ripple` | deep-ripple thresholds at shallow depth |
+
+### The fix
+
+`M._clearStaleRun()` (`002_Reporter_API.lua`) wipes `active`, `boss` and everything `_resetRun`
+owns, called from **`ataxia_loadSettings`** -- not from a second `sysLoadEvent` handler.
+**Ordering is the subtle half:** a separate handler's order relative to the loader is undefined, so
+it could run *before* the merge and simply be undone by it. Inside the loader it is ordered by
+construction. It sits after the whole main-load `pcall`, so it covers the `_ataxia_backup` restore
+branch too.
+
+`active` and `boss` are cleared there but deliberately **not** folded into `_resetRun`: `startRun`
+sets `active` true and *then* calls `_resetRun`, so clearing it there would undo the caller; and
+`boss` is re-learned from every ripple's `Objective:` line, so per-ripple clearing is already
+right -- it is only at load, before any ripple line, that a stale one is live. A test pins that,
+so a future tidy-up cannot merge them.
+
+A load-time reset rather than a save-time exclusion, because the save path is one generic walk over
+`ataxia` and teaching it about a single namespace would put module knowledge in a function that
+should have none. It is also the pattern already used for this exact failure
+(`ataxiaBasher_berserkersEdgeRevert`, v4.7.297).
+
+### Found while doing it, NOT fixed: the profile-backup restore destroys live namespaces
+
+`ataxia_loadSettings`'s backup branch is `for k, v in pairs(_ataxia_backup.ataxia) do ataxia[k] = v
+end` -- a **raw wholesale replace** that bypasses every protection `mergeLoad` has: the cycle-safe
+`deepMerge`, `stripGui`, and the live-runtime-object guard whose reasoning is spelled out at length
+directly above `mergeLoad`.
+
+Because `sanitizeForSave` strips functions, `_ataxia_backup.ataxia.<ns>` is a **data-only
+snapshot**. Assigning it over a live namespace therefore **deletes that namespace's functions** --
+`ataxia.mnemosyne` (the entire run tracker, map, explorer and swarm API), `ataxia.armour`,
+`ataxia.updater`, `ataxia.bars`, `ataxia.defense`. It also re-introduces exactly the live-GUI-object
+corruption that comment exists to prevent, since a serialized snapshot is written straight over the
+live object.
+
+This surfaced because a test asserting the new reset runs on the backup path failed -- the reset
+was not reached, because `ataxia.mnemosyne._clearStaleRun` no longer existed by then. **Recorded in
+place with a `KNOWN DEFECT` comment rather than fixed here:** the fix is to give that branch the
+same merge semantics as the file branch (hoist `deepMerge`/`stripGui` out of `mergeLoad`), which
+changes disaster recovery for *every* namespace under `ataxia` and wants its own change and its own
+testing rather than riding along with an unrelated one. Until then, a profile-backup restore is
+expected to need a reload.
+
+**Tests:** 1818 passing (+5). The seam is tested in `test_settings.lua`, not only the function in
+`test_mnemosyne.lua` -- *a tested function with a caller that bypasses it is still dead code*
+(v4.7.297) -- and that test also pins the **ordering**, by asserting the reset observes the
+*stored* values at the moment it runs. Break-back verified on five reverts, each caught; the
+ordering revert was re-run properly after a first attempt that only inserted a marker and therefore
+proved nothing.
+
+**Files:** `ataxia/001_Save_Load_Settings.lua`, `mnemosyne/002_Reporter_API.lua`,
+`tests/test_settings.lua`, `tests/test_mnemosyne.lua`,
+`.claude/projects/mnemosyne/02-reporting.md`, `README.md`, `CLAUDE.md`.
+
+---
+
 ## 2026-09-08 - The rest of the Mnemosyne tracker's schema: /run_pause, boon detail, reroll_count (v4.7.298)
 
 Reviewed everything we push to the run tracker against the live schema at

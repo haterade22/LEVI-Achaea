@@ -207,10 +207,9 @@ Each function guards on `M._hasToken()` and enqueues. Payload shapes:
     serialization that strips only functions, metatabled objects and GUI snapshots — and
     `deepMerge` ends in an unconditional `dst[k] = v`, so a scalar kept under `ataxia.mnemosyne`
     comes back from disk on the next load. That is the v4.7.192–194 rule, and it is why
-    `_relatchBoons` already keeps its guard on `ataxiaTemp`. **Note that `002_Reporter_API.lua`'s
-    own header claim that run state is "in-memory only" is false** — `run.active`, `ripple`,
-    `publicId` and `lastOffered` all persist today. Fixing *that* is out of scope; not adding to
-    it was not.
+    `_relatchBoons` already keeps its guard on `ataxiaTemp`. **`002_Reporter_API.lua`'s header
+    claim that run state is "in-memory only" was false** — `run.active`, `ripple`, `publicId` and
+    `lastOffered` all persisted. Fixed separately in v4.7.299 (below).
   * **The count is snapshotted with the screen** (`M._pendingRerolls`), never re-read at send
     time. The POST is deferred to the ripple line or the 3s timeout, and `onBoonClaim`/`onGo` both
     close the chain the instant they fire — so a player claiming inside that window made the *last*
@@ -297,3 +296,43 @@ indistinguishable from one that is broken.
 `Remaining lives` and `Wave progress` (v4.7.278) are parsed from the WADE STATUS block but have no
 endpoint. They are local state (`M.run.lives` / `M.run.waveProgress`) for `mnem status` and for
 future risk gating, not telemetry.
+
+## Run state does not survive a reload (v4.7.299)
+
+The module was always *designed* around "the server is the source of truth" — on load, re-sync via
+`/run_exists` rather than trust a stored copy. The header said so. It was not true.
+
+`M.run` is a plain table hanging off `ataxia.mnemosyne`, and `ataxia_saveSettings` does
+`table.save(file, sanitizeForSave(ataxia))` — **wholesale**. `sanitizeForSave` strips only
+functions, metatabled objects and GUI snapshots, so a table of ordinary scalars goes straight to
+disk; and `deepMerge` ends in an unconditional `dst[k] = v` for non-tables, so the **stored value
+wins** over the freshly-initialised one. `active`, `ripple`, `publicId`, `lastOffered`, `lives` and
+`waveProgress` all came back.
+
+**This was never only a telemetry problem, which is what made it worth fixing.** The only thing
+that clears run state is `_resetRun`, reached through `startRun`/`endRun` — both *below* the
+`_auto()` gate. So with reporting off (the shipped default) nothing ever cleared it, while several
+consumers that are **not** gated on reporting read it:
+
+| Reader | Field | Effect of a stale value |
+|---|---|---|
+| `ataxiaBasher_bardDance` (`basher/002`) | `run.boss` | picks **wavedance** (the boss dance) on an ordinary ripple |
+| `ataxiaBasher_bardDance` | `run.ripple` | **hawkstep** at ripple >= 25 applied at ripple 1 |
+| `ataxiaBasher_mnemLdeck…` (`basher/010`) | `run.boss` | **withholds Xylthus** — a card cannot bind a boss |
+| `_nextPatrolStep` (`008_Explorer`) | `run.boss` | patrols a cleared grid for a boss that is not there |
+| swarm depth-scaling (`009_Swarm_Tactics`) | `run.ripple` | deep-ripple thresholds at shallow depth |
+
+`M._clearStaleRun()` wipes `active`, `boss` and everything `_resetRun` owns, and is called from
+**`ataxia_loadSettings`** rather than from a second `sysLoadEvent` handler — ordering is the subtle
+half, and a separate handler's order relative to the loader is undefined, so it could run *before*
+the merge and be undone by it. Inside the loader it is ordered by construction. It sits after the
+whole main-load `pcall`, so it covers the `_ataxia_backup` restore branch as well.
+
+`active` and `boss` are cleared here but deliberately **not** in `_resetRun`: `startRun` sets
+`active` true and *then* calls `_resetRun`, so clearing it there would undo the caller; and `boss`
+is re-learned from every ripple's `Objective:` line, so per-ripple clearing is already correct —
+it is only at load, before any ripple line, that a stale one is live.
+
+The seam is tested in `test_settings.lua`, not just the function in `test_mnemosyne.lua`: a tested
+function with a caller that bypasses it is still dead code (v4.7.297). That test also pins the
+**ordering**, by asserting the reset observes the *stored* values at the moment it runs.

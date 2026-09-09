@@ -264,6 +264,25 @@ function ataxia_loadSettings()
 		if not ataxia_file then
 			if _ataxia_backup and _ataxia_backup.ataxia then
 				ataxia_Echo("Disk save not found -- restoring from profile backup.")
+				-- KNOWN DEFECT, FOUND 2026-09-09, DELIBERATELY NOT FIXED HERE.
+				--
+				-- This is a RAW WHOLESALE REPLACE, and it bypasses every protection `mergeLoad`
+				-- has: the cycle-safe deepMerge, `stripGui`, and the live-runtime-object guard
+				-- whose reasoning is spelled out at length directly above `mergeLoad`.
+				--
+				-- `sanitizeForSave` strips FUNCTIONS, so `_ataxia_backup.ataxia.<ns>` is a
+				-- data-only snapshot. Assigning it over a live namespace therefore DELETES that
+				-- namespace's functions: `ataxia.mnemosyne` (the whole run tracker, map, explorer
+				-- and swarm API), `ataxia.armour`, `ataxia.updater`, `ataxia.bars`, `ataxia.defense`
+				-- -- all replaced by their own saved data with no methods. It also re-introduces
+				-- exactly the live-GUI-object corruption the comment above `mergeLoad` exists to
+				-- prevent, since a serialized snapshot is written straight over the live object.
+				--
+				-- The fix is to give this branch the same merge semantics as the file branch
+				-- (hoist deepMerge/stripGui out of `mergeLoad` and call them here). That changes
+				-- how disaster recovery behaves for EVERY namespace under `ataxia`, so it wants
+				-- its own change and its own testing rather than riding along with an unrelated
+				-- one. Until then: a profile-backup restore is expected to need a reload.
 				for k, v in pairs(_ataxia_backup.ataxia) do ataxia[k] = v end
 			else
 				ataxia_Echo("I don't believe I recognise you. If you want my abilities, fix that.")
@@ -294,6 +313,19 @@ function ataxia_loadSettings()
 	ataxia.settings.user = ataxia.settings.user or {}
 	ataxia.settings.reporting = ataxia.settings.reporting or { enabled = false, contemplate = true, url = "http://104.128.56.238:8000" }
 	ataxia.curingprio = ataxia.curingprio or {}
+
+  -- MNEMOSYNE RUN STATE IS TRANSIENT, BUT IT IS STORED UNDER `ataxia` (v4.7.299).
+  -- `sanitizeForSave` keeps plain scalar tables, and `deepMerge` above ends in an unconditional
+  -- `dst[k] = v`, so a previous session's `run.active` / `ripple` / `publicId` / `lastOffered`
+  -- come back from disk and win. That is not only a telemetry concern: `run.boss` steers the
+  -- Bard's dance choice and makes the legend deck withhold Xylthus, and `run.ripple` feeds the
+  -- swarm's depth-scaled thresholds -- none of which is gated on reporting being enabled, while
+  -- the only thing that CLEARS the state (`_resetRun`, via startRun/endRun) is.
+  -- Placed after the whole main-load pcall so it covers the `_ataxia_backup` restore branch too,
+  -- which copies the same keys in wholesale. Same shape as the Berserker's Edge revert below.
+  if ataxia.mnemosyne and ataxia.mnemosyne._clearStaleRun then
+    pcall(ataxia.mnemosyne._clearStaleRun)
+  end
 
 	ataxia_Echo("I suppose I can lend you my aid. Go and annihilate our foes.")
 

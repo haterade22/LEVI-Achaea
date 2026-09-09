@@ -21,8 +21,22 @@ packageName: ''
     commands work even with auto-reporting off). Triggers gate on M._auto()/
     M._inRun() before calling these.
 
-    Run state is intentionally in-memory only -- on load we re-sync via
-    /run_exists rather than persisting it (the server is the source of truth).
+    RUN STATE IS MEANT TO BE IN-MEMORY ONLY -- on load we re-sync via /run_exists rather than
+    trusting a stored copy (the server is the source of truth). For a long time this comment was
+    simply WRONG, and it is worth understanding why, because the same trap catches anything else
+    parked under `ataxia`:
+
+      * `M.run` is a plain table hanging off `ataxia.mnemosyne`, and `ataxia_saveSettings` does
+        `table.save(file, sanitizeForSave(ataxia))` -- WHOLESALE. `sanitizeForSave` strips only
+        functions, metatabled objects and GUI snapshots, so a table of ordinary scalars goes
+        straight to disk.
+      * On load, `deepMerge` ends in an unconditional `dst[k] = v` for non-tables, so the stored
+        value WINS over the freshly-initialised one.
+
+    So `active`, `ripple`, `publicId`, `lastOffered`, `lives` and `waveProgress` all survived a
+    reload. `M._clearStaleRun()` (below, called from `ataxia_loadSettings`) is what now makes the
+    first sentence true. Anything transient added here must be cleared there, or moved to
+    `ataxiaTemp`, which is never serialized.
 
     Depends on 001_HTTP_Client.lua (loads first).
 
@@ -66,6 +80,37 @@ function M._resetRun()
   if M._rerollReset then M._rerollReset() end
   -- ...and the deferred offer that belonged to the run just ended.
   if M._dropPendingOffer then M._dropPendingOffer() end
+end
+
+-- WIPE ANYTHING THAT CAME BACK FROM DISK (v4.7.299).
+--
+-- The header above explains how run state reaches disk at all. This is the counterpart: on load,
+-- forget everything we think we know about a run and let the game and the server re-establish it.
+--
+-- WHY A LOAD-TIME RESET RATHER THAN A SAVE-TIME EXCLUSION: the save path is a single generic
+-- walk over `ataxia`, and special-casing one namespace inside it would put knowledge of this
+-- module in a function that should not have any. A defensive reset at load is also the pattern
+-- this codebase already uses for exactly this failure (`ataxiaBasher_berserkersEdgeRevert`,
+-- v4.7.297), and it is ordered correctly by construction: it runs from inside
+-- `ataxia_loadSettings`, after the merge, rather than racing it from a second `sysLoadEvent`
+-- handler whose order relative to the loader is not defined.
+--
+-- IT IS NOT ONLY TELEMETRY THAT SUFFERS. `_resetRun` is reached only through `startRun`/`endRun`,
+-- both of which sit BELOW the `_auto()` gate -- so with reporting off (the shipped default)
+-- nothing ever cleared this state, while several NON-telemetry consumers read it:
+-- `run.boss` steers the Bard's dance choice and makes the legend deck refuse Xylthus (a card
+-- cannot bind a boss), and `run.ripple` feeds the swarm's depth-scaled thresholds. A stale boss
+-- from a previous session is a wrong dance and a withheld card until the next Objective line.
+--
+-- `active` is cleared HERE but not in `_resetRun`, because `startRun` deliberately sets it true
+-- and then calls `_resetRun` -- clearing it there would undo the caller. `boss` likewise: it is
+-- re-learned from every ripple's Objective line, so `_resetRun` leaves it alone, but on load
+-- there is no ripple line yet and a stale one would be live until the next.
+function M._clearStaleRun()
+  M.run = M.run or {}
+  M.run.active = false
+  M.run.boss = nil
+  M._resetRun()
 end
 
 -- Send any buffered monster spawns as one combined string, then clear.
