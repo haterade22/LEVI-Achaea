@@ -145,13 +145,40 @@ end
 -- Merges rather than overwrites: the offer screen supplies the description, the BOONS list
 -- supplies rarity, and the BOON <name> detail screen supplies maxEchoes -- each fills in the
 -- fields it knows and never blanks a field another source already filled.
-function M._learnBoon(name, description, rarity, maxEchoes)
+--
+-- `extra` (v4.7.298) carries the rest of what a CONTEMPLATE block prints: quote, category,
+-- unlockedBy, conflictsWith. All four were already being PARSED and then dropped on the floor --
+-- `_boonFillNext` read `info.quote` and `info.meta` and passed neither on -- which is the
+-- expensive kind of gap, because a contemplate is a command spent and a captured block, and
+-- throwing away half of what it returned means paying for it again to get the rest.
+--
+-- A TABLE rather than four more positional parameters: the four existing call sites pass 2-4
+-- args positionally, so a fifth table arg leaves every one of them correct untouched, and the
+-- next field added does not shift anything.
+--
+-- Same fill-never-blank contract as the fields above -- each source (offer screen, BOONS list,
+-- CONTEMPLATE) fills what it knows and never erases what another source already supplied.
+local EXTRA_STRINGS = { "quote", "category", "unlockedBy" }
+
+function M._learnBoon(name, description, rarity, maxEchoes, extra)
   if type(name) ~= "string" or name == "" then return end
   M.history.boonLibrary = M.history.boonLibrary or {}
   local rec = M.history.boonLibrary[name] or {}
   if type(description) == "string" and description ~= "" then rec.description = description end
   if type(rarity) == "string" and rarity ~= "" then rec.rarity = rarity:lower() end
   if tonumber(maxEchoes) then rec.maxEchoes = tonumber(maxEchoes) end
+  if type(extra) == "table" then
+    for _, f in ipairs(EXTRA_STRINGS) do
+      if type(extra[f]) == "string" and extra[f] ~= "" then rec[f] = extra[f] end
+    end
+    -- Copied, not aliased: the caller's table is a parse result that may be reused or mutated,
+    -- and the catalogue is persisted -- it must own its own storage.
+    if type(extra.conflictsWith) == "table" and #extra.conflictsWith > 0 then
+      local cw = {}
+      for i, n in ipairs(extra.conflictsWith) do cw[i] = n end
+      rec.conflictsWith = cw
+    end
+  end
   M.history.boonLibrary[name] = rec
   return rec
 end
@@ -307,6 +334,35 @@ function M._boonDbSave()
 end
 
 -- Merge a stored catalogue in. Never blanks a field that is already filled -- see above.
+--
+-- FIELD-DRIVEN SINCE v4.7.298, and that is a correctness change rather than tidying: the old
+-- body named description/rarity/maxEchoes three times each, so the four fields added in the same
+-- release would have been silently dropped on both the add and the enrich path -- a saved
+-- catalogue would round-trip through save/load LOSING them. A merge that enumerates its fields
+-- inline is a merge that goes stale the next time the record grows.
+M.BOON_DB_FIELDS = { "description", "rarity", "maxEchoes", "quote", "category",
+                     "unlockedBy", "conflictsWith" }
+
+-- A FIELD-DRIVEN LOOP MUST STILL RESPECT THE FIELDS' TYPES (deep review, v4.7.298).
+--
+-- `conflictsWith` is the only entry above that is a TABLE, and making the merge generic put it
+-- through a loop written for strings. Two bugs came with that, both fixed here:
+--
+--   * A plain `cur[f] = rec[f]` ALIASES the source table rather than copying it -- the exact
+--     hazard `_learnBoon` guards against two functions above, for this same field, with a
+--     comment saying why. The seed is merged at load time (`010_Boon_Seed.lua`), so aliasing
+--     would hand the persisted catalogue a reference to a literal that lives for the session.
+--   * A table is never `== ""`, so an empty `{}` passes the "is there anything here" test, is
+--     merged as though it were data, and then permanently passes the "already filled" test.
+--     Nothing would ever refill it: `boonGaps` selects on a missing DESCRIPTION alone.
+local function mergeValue(v)
+  if type(v) ~= "table" then return v end
+  if #v == 0 then return nil end                 -- empty list: no information, do not store it
+  local out = {}
+  for i, item in ipairs(v) do out[i] = item end  -- copied, never aliased
+  return out
+end
+
 function M._boonDbMerge(src)
   if type(src) ~= "table" then return 0, 0 end
   M.history.boonLibrary = M.history.boonLibrary or {}
@@ -315,19 +371,25 @@ function M._boonDbMerge(src)
     if type(name) == "string" and name ~= "" and type(rec) == "table" then
       local cur = M.history.boonLibrary[name]
       if not cur then
-        M.history.boonLibrary[name] = { description = rec.description, rarity = rec.rarity,
-                                        maxEchoes = rec.maxEchoes }
+        local fresh = {}
+        for _, f in ipairs(M.BOON_DB_FIELDS) do fresh[f] = mergeValue(rec[f]) end
+        M.history.boonLibrary[name] = fresh
         added = added + 1
       else
-        local before = tostring(cur.description) .. tostring(cur.rarity) .. tostring(cur.maxEchoes)
-        if (cur.description == nil or cur.description == "") and rec.description then
-          cur.description = rec.description
+        local touched = false
+        for _, f in ipairs(M.BOON_DB_FIELDS) do
+          local have = cur[f]
+          local empty = (have == nil) or (have == "")
+            or (type(have) == "table" and #have == 0)
+          if empty then
+            local v = mergeValue(rec[f])
+            if v ~= nil and v ~= "" then
+              cur[f] = v
+              touched = true
+            end
+          end
         end
-        if (cur.rarity == nil or cur.rarity == "") and rec.rarity then cur.rarity = rec.rarity end
-        if cur.maxEchoes == nil and rec.maxEchoes then cur.maxEchoes = rec.maxEchoes end
-        if before ~= (tostring(cur.description) .. tostring(cur.rarity) .. tostring(cur.maxEchoes)) then
-          enriched = enriched + 1
-        end
+        if touched then enriched = enriched + 1 end
       end
     end
   end

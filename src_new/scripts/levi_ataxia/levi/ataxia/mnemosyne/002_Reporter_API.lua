@@ -25,6 +25,11 @@ packageName: ''
     /run_exists rather than persisting it (the server is the source of truth).
 
     Depends on 001_HTTP_Client.lua (loads first).
+
+    Also calls FORWARD into 007_History.lua (`M.boonInfo`, `M._rerollCount`/`M._rerollReset` in
+    004_Parsers) -- both load AFTER this file. That is safe because those calls only fire at a
+    boon screen, long after the whole package has loaded, and each is guarded (`M.boonInfo and
+    ...`). Do not turn any of them into a load-time call.
     ============================================================================
 ]]--
 
@@ -49,6 +54,18 @@ function M._resetRun()
   -- status block, a life spent is spent for the rest of the dive.
   M.run.lives = nil
   M.run.waveProgress = nil
+  -- Rerolls are counted per BOON SCREEN, and the count is inferred (see M._rerollBump in
+  -- 004_Parsers). The state itself lives on `ataxiaTemp`, NOT here -- `M.run` is serialized to
+  -- disk with the rest of `ataxia`, so a counter kept here would come back from a reload with
+  -- whatever value was last saved. Reset through the owner so there is exactly one way to do it.
+  --
+  -- BOTH halves, because clearing only the count is worse than clearing neither: a chain left
+  -- open means the next run's FIRST offer screen is read as continuing it, and it necessarily
+  -- differs from the (now empty) previous names -- so it would post reroll_count 1 for a screen
+  -- nobody rerolled.
+  if M._rerollReset then M._rerollReset() end
+  -- ...and the deferred offer that belonged to the run just ended.
+  if M._dropPendingOffer then M._dropPendingOffer() end
 end
 
 -- Send any buffered monster spawns as one combined string, then clear.
@@ -98,6 +115,26 @@ function M.runExists()
     else
       M.run.active = false
     end
+  end)
+end
+
+-- TELL THE SERVER THE RUN IS PAUSED (v4.7.298).
+--
+-- `/run_pause` has existed on the API for as long as we have been posting to it and we have
+-- never called it. `WHISPER ... beseech that it grow still` suspends a run WITHOUT ending it
+-- server-side, and v4.7.88 taught the client half of that -- `M.run.paused`, so the next wade
+-- resumes via `/run_exists` rather than minting a fresh `public_id` that would orphan the dive's
+-- progress. The server was simply never told, so from the tracker's side a paused run is
+-- indistinguishable from a player who stopped mid-dive and came back an hour later.
+--
+-- Fire-and-forget by design: the local flag is what drives the resume, and it is set by the
+-- caller BEFORE this is reached. A failed POST therefore costs the tracker a pause marker and
+-- costs us nothing -- so there is deliberately no onError undo here, unlike `startRun`, whose
+-- optimistic `active` flag would otherwise keep firing at a run the server never created.
+function M.reportRunPause()
+  if not M._hasToken() then return M.decho("runPause skipped (no token)") end
+  M._enqueue("/run_pause", {}, function()
+    M.decho("Run pause reported.")
   end)
 end
 
@@ -188,12 +225,87 @@ function M._charInfo()
   return (type(class) == "string") and class or nil, (type(race) == "string") and race or nil
 end
 
--- list: array of { name, description?, quote?, rarity?, num_echoes_possible? }
-function M.reportBoonsOffered(list)
+-- WHAT THE SCHEMA TAKES THAT THE OFFER SCREEN DOES NOT PRINT (v4.7.298).
+--
+-- `BoonInfo` has eight fields. The offer screen supplies two -- name and description -- and we
+-- were sending only those. The other six were not missing data: we HOLD them, in the local
+-- catalogue (`M.history.boonLibrary`), which learns rarity from the BOONS list and
+-- description/quote/category/unlocked-by/conflicts from `mnem boonfill` and the per-screen
+-- trickle. They were simply never joined up.
+--
+-- THIS IS NOT A REVIVAL OF THE CONTEMPLATE CHAIN, and the distinction is the whole design.
+-- v4.7.279 removed live enrichment because it sent a `BOON CONTEMPLATE` per boon, raced the next
+-- ripple's captures for the single `_capturing` slot, and on a lost race stalled and silently
+-- dropped the ENTIRE report. Every one of those hazards belongs to the FETCH, not to the fields.
+-- A local table read cannot stall, cannot race, and cannot drop the post -- so the enrichment
+-- rides the post that was already going out, and the reasons the chain was removed still stand.
+--
+-- FILL, NEVER OVERWRITE: the offer screen is authoritative for the description (it is the
+-- wrap-joined text the player actually read); the catalogue only supplies what the screen did not.
+-- Returns a COPY, because the caller's list is also what goes to local history and seeds
+-- `run.lastOffered` -- a reporting concern must not mutate either.
+local BOON_FIELDS = { "description", "quote", "rarity", "category" }
+
+function M._enrichOffer(list)
+  local out = {}
+  for i, b in ipairs(list) do
+    local rec = {}
+    for k, v in pairs(b) do rec[k] = v end
+    local known = M.boonInfo and M.boonInfo(rec.name)
+    if type(known) == "table" then
+      for _, f in ipairs(BOON_FIELDS) do
+        if (rec[f] == nil or rec[f] == "") and type(known[f]) == "string" and known[f] ~= "" then
+          rec[f] = known[f]
+        end
+      end
+      -- Names differ across the boundary: the catalogue keeps Lua-side camelCase (matching its
+      -- existing `maxEchoes`), the API takes snake_case. Mapped here, at the one place the two
+      -- vocabularies meet.
+      if (rec.unlocked_by == nil or rec.unlocked_by == "")
+        and type(known.unlockedBy) == "string" and known.unlockedBy ~= "" then
+        rec.unlocked_by = known.unlockedBy
+      end
+      if rec.num_echoes_possible == nil and tonumber(known.maxEchoes) then
+        rec.num_echoes_possible = math.floor(tonumber(known.maxEchoes))
+      end
+      -- Only when non-empty. An empty Lua table has no array/object distinction, so yajl may
+      -- encode `{}` where the schema wants `[]` -- and "we know of no conflicts" is what
+      -- omitting the key already says.
+      if rec.conflicts_with == nil and type(known.conflictsWith) == "table"
+        and #known.conflictsWith > 0 then
+        local cw = {}
+        for j, name in ipairs(known.conflictsWith) do cw[j] = name end
+        rec.conflicts_with = cw
+      end
+    end
+    out[i] = rec
+  end
+  return out
+end
+
+-- list: array of { name, description?, quote?, rarity?, category?, unlocked_by?,
+--                  conflicts_with?, num_echoes_possible? }
+--
+-- `rerolls` is the count SNAPSHOTTED when this screen was captured (see `_offerAfterRipple`).
+-- It is a parameter rather than a live read because the POST is deferred, and a claim landing
+-- inside that window resets the chain -- reading it here would report 0 for the screen that was
+-- actually the Nth reroll. Falls back to the live count for a direct call (a manual `mnem`
+-- command, or a test).
+function M.reportBoonsOffered(list, rerolls)
   if not M._hasToken() then return end
   if type(list) ~= "table" or #list == 0 then return end
   local class, race = M._charInfo()
-  M._enqueue("/boons_offered", { offered = list, class = class, race = race })
+  -- An INTEGER, always sent, unlike class/race. Those are omitted when GMCP cannot be read
+  -- because a guessed value would become its own cohort in the queries; a reroll count of 0 is
+  -- not an unknown -- it is the positive observation that no reroll happened on this screen.
+  if rerolls == nil and M._rerollCount then rerolls = M._rerollCount() end
+  rerolls = math.floor(tonumber(rerolls) or 0)
+  M._enqueue("/boons_offered", {
+    offered = M._enrichOffer(list),
+    class = class,
+    race = race,
+    reroll_count = rerolls,
+  })
 end
 
 -- names: string or array of strings

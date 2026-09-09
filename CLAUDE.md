@@ -744,6 +744,91 @@ Reports Mnemosyne (tides-of-memory) run progress to an external REST tracker as 
 
 **Class/race on `/boons_offered` were already correct** and are now VISIBLE: `mnem status` prints what would be sent (`unread` in red when `gmcp.Char.Status` cannot be read), because a missing read OMITS the key rather than sending `"unknown"` -- right for the data, previously invisible. Schema re-verified 2026-08-20.
 
+**THE WHOLE SCHEMA, INCLUDING THE OPTIONAL HALF (v4.7.298, re-verified against
+`http://104.128.56.238:8000/openapi.json` on 2026-09-08).** Four things the API had been accepting
+the entire time. **(1) `/run_pause` existed and was NEVER CALLED** -- v4.7.88 taught the client half
+of a pause (`M.run.paused`, so the next wade resumes via `/run_exists` instead of minting a fresh
+`public_id`) and nothing ever went on the wire, so a deliberate pause looked to the tracker exactly
+like a player who stopped mid-dive. `M.reportRunPause()`, gated on `_inRun()`, fire-and-forget
+(the flag is set BEFORE the POST, so a failure costs a marker and nothing else -- hence no
+`onError` undo, unlike `startRun`). **(2) `BoonInfo` HAS EIGHT FIELDS AND WE SENT TWO.** The other
+six were never missing DATA -- the local catalogue already holds them -- they were never joined up.
+`M._enrichOffer` does it at post time, and **this is not a revival of the contemplate chain**:
+every hazard that got that chain removed in v4.7.279 (a command per boon, the shared `_capturing`
+slot, a stall that dropped the ENTIRE report) belongs to the FETCH, not the fields, and a local
+table read cannot stall, race or drop the post. Fill-never-overwrite (the offer screen owns
+`description`), returns a COPY (the caller's list is also history and `lastOffered`), camelCase ->
+snake_case mapped at the boundary, and `conflicts_with` OMITTED when empty rather than sent as `{}`
+(an empty Lua table has no array/object distinction for yajl). **(3) `reroll_count` IS INFERRED
+FROM THE SCREEN, NEVER FROM A COMMAND** -- rerolls are real (`Negotiator` grants "5 additional
+rerolls") but the command that spends one has never been captured, and inventing one is how
+`bash dwaeonic off` got documented for a command that never existed. `M._rerollBump` counts the
+EVIDENCE: a second offer screen with no claim and no `GO!` between. **The NAME SET is the guard** --
+a reroll yields DIFFERENT boons, a mere re-print yields the identical set, so an identical re-print
+neither counts nor resets. The comparison must happen BEFORE `run.lastOffered` is overwritten, and
+the chain is ended by a claim and by GO! and **never by the ripple number** (at the boon screen
+`_offerAfterRipple` sends its own `wade status`, so `run.ripple` can advance BETWEEN two screens of
+one chain -- keying on it would miss exactly the reroll it exists to count). Prospero's Fortune is
+correctly not counted, because a claim intervened. `_resetRun` clears BOTH the count and
+`offerChain`: **clearing only the count is worse than clearing neither**, since a chain left open
+makes the next run's first screen differ from the now-empty previous names and post
+`reroll_count = 1` for a screen nobody rerolled. **(4) `OkResponse { ok, message? }` WAS NEVER
+READ** -- an HTTP 200 carrying `ok: false` (the server saying it did not happen) was logged as a
+success. Now surfaced with the server's own message, but it SURFACES rather than re-routing:
+`onOk` still runs, because we have never observed this server answer `ok: false` and `startRun`'s
+`onError` would silently stop all reporting for the dive on a guess (the claim-confirmation rule,
+v4.7.278). Also v4.7.298: three CONTEMPLATE meta labels graduate to typed fields
+(`M._promoteMeta` -- `category`, `unlocked_by`, `conflicts_with`, with **`info.meta` left whole**
+because it is the mechanism that learns the NEXT label, and **`Conflicts with` split on COMMAS
+ONLY** since `Hammer and Anvil`/`Hammer and Nail` are real boons and a phantom name is worse than
+an unsplit one), `_learnBoon` gains a fifth TABLE argument so the four existing positional call
+sites stay correct, and `_boonDbMerge` becomes field-driven (`M.BOON_DB_FIELDS`) -- **a correctness
+change, not tidying**: naming its three fields inline meant a saved catalogue would round-trip
+through save/load LOSING the four new ones. Already correct and left alone: `/health` (wired to
+`mnem test`), `public_id`, `RunExistsResponse`, and `DeathRequest.killer` (schema-required; OUR caller defaults it).
+
+**THE DEEP REVIEW OF v4.7.298 (four parallel agents; every finding verified before acting, two
+rejected).** Six of the nine fixes were defects in the change itself, and three rules come out of
+it. **(1) `M.run` IS SERIALIZED -- the header comment saying otherwise is FALSE.**
+`ataxia_saveSettings` does `table.save(file, sanitizeForSave(ataxia))`, wholesale, stripping only
+functions/metatabled objects/GUI snapshots, and `deepMerge` ends in an unconditional `dst[k] = v`
+-- so `run.active`, `ripple`, `publicId` and `lastOffered` ALL persist today, and the reroll chain
+did too until it moved to `ataxiaTemp.mnemRerolls`/`.mnemOfferChain`. Before putting a transient
+flag anywhere under `ataxia`, re-read the v4.7.192-194 rule; `_relatchBoons` already obeys it.
+**(2) A DEFERRED SEND MUST CARRY ITS OWN DATA.** `/boons_offered` posts on the ripple line or a 3s
+timeout, and `onBoonClaim`/`onGo` close the reroll chain the moment they fire -- so reading the
+count at send time reported 0 for the LAST screen of a chain, the one row that mattered. It is
+snapshotted with the screen now (`M._pendingRerolls`). The same deferral had a second face: a
+replaced `_pendingOffer` was DISCARDED, correct in v4.7.279 when a second screen meant a duplicate
+capture, wrong the moment rerolls made two distinct screens normal -- it is FLUSHED now, and
+`_resetRun` drops it at a run boundary so a stale offer cannot post under the next run. *When a
+feature makes a previously-impossible event routine, go and re-read what the old code assumed.*
+**(3) A PARSER THAT READS RAW PHYSICAL LINES MUST NOT BE GIVEN A LONG VALUE.** `Conflicts with` is
+no longer promoted from the CONTEMPLATE meta block. `_parseContemplate` does no
+continuation-joining and Achaea wraps server-side (v4.7.286/297); every label the screen has ever
+printed has a SHORT value (`rare`, `No`, `3`), but a conflicts value is a LIST OF BOON NAMES. A
+wrap truncates the value AND -- the continuation line having no colon, so not a label -- flips the
+state machine into `desc`, making that fragment the opening words of the DESCRIPTION, which is
+written to the catalogue and never revisited (`boonGaps` only chases a MISSING description) and is
+read by the bonuses panel. It is undetectable: the real captured block in our own fixture wraps
+mid-sentence with a FLUSH-LEFT continuation. Promoting a label we have never read, whose value is
+the shape most likely to wrap, buys nothing (no line means no value) and risks the catalogue's most
+irreplaceable field; it stays in `info.meta`, which is what v4.7.288 built `meta` for. The two
+labels that remain are promoted because their values PROVABLY cannot wrap, and `META_VALUE_MAX`
+(60) ENFORCES that rather than assuming it, with `META_PLACEHOLDER` refusing `None`/`N/A` so a
+game's word for "no value" cannot become a boon named None. Also fixed: an identical re-print
+posted a DUPLICATE `/boons_offered` (the name-set guard protected the count, not the send);
+`/run_pause` is gated on `_auto()` rather than `_inRun()`, because `run.active` is our BELIEF and
+is false in exactly the window that matters -- after a reload mid-run, until the delayed
+`/run_exists` answers, a request with no `onError` -- while trigger 016 is exact and
+Mnemosyne-only, so if the game says we paused, the run exists; `mnem pause` now exists, since
+`05-commands.md` opens by promising a manual override for EVERY reporter endpoint and the one
+driven by a single exact trigger line had none; and `_boonDbMerge`'s field-driven loop now respects
+its fields' TYPES -- `conflictsWith` is the only table in it, `cur[f] = rec[f]` ALIASED the source
+(the hazard `_learnBoon` guards against two functions above), and since **a table is never `== ""`**
+an empty `{}` merged as data and then permanently passed the already-filled test with nothing able
+to refill it.
+
 **Ripple mini-map (`ataxia.mnemosyne.map`, files 005/006):** draggable per-ripple grid widget (`Adjustable.Container`, position auto-persists). Builds a room graph from `gmcp.Room` arrivals in Mnemosyne. **DEAD RECKONING -- THE ROOM ID IS ALSO A LIE (v4.7.250).** User: "the gmcp room id will be changed every time we look because of dementia that we cannot cure". Keying the graph by `gmcp.Room.Info.num` is then broken at the root: every look mints a NEW room record, `MAP.current` changes without us moving (so the explorer's `MAP.current ~= explore.fromRoom` arrival test reads TRUE for a plain `ql` and never FALSE), and exit destination ids never match any key we hold so `relayout` links nothing. Creville's Legacy is INCURABLE, so it cannot be waited out. **Track what dementia cannot touch: our own movement.** Position is dead-reckoned from the directions WE sent (failure has its own lines -- `Room.WrongDir`, the wall line, the ice slip, the move timeout -- so a failed move is known), and the room KEY becomes that position (`dr:2,1`). Deliberately a KEY SWAP, not a parallel map: `MAP.rooms`/`room.edges`/`MAP.path`/`unexploredExits`/the whole sweep treat the key as opaque and keep working unchanged. `MAP.drActive()` (dementia + in tower, `MAP.drForce` for tests), `MAP.drArrive(exits)` (advance + record, the single owner -- it runs from 005's gmcp.Room handler which is registered BEFORE the explorer's, so it still sees `explore.moving`; advancing in both would double-step, advancing only in the explorer would miss the swarm's tumbles and pulls). Exit DIRECTIONS are kept and destination ids discarded (the direction set is the fingerprint, the id is noise); `relayout` parses coordinates back out of the key instead of BFS; `MAP.reset` restarts the reckoning per ripple; `up`/`down` carry no 2-D step so the holding room's descent does not move us on the grid.
 **TRACK BY EXITS, AND ARM THE STEP (v4.7.251).** `MAP.drArm(dir)`/`drDisarm()` arm the reckoning
 for EXACTLY ONE step when a move is sent, consumed by the first event after it: v4.7.250's "any

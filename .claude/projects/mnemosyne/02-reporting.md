@@ -9,7 +9,7 @@ Two files: `001_HTTP_Client.lua` (transport — a serial POST queue) and `002_Re
 | Key | Default | Purpose |
 |-----|---------|---------|
 | `enabled` | false | Master auto-report toggle (`mnem on/off`) |
-| `contemplate` | true | Stored boon-enrichment toggle (`BOON CONTEMPLATE`). **No longer gates `/boons_offered`** — offers post immediately now (see Notable behaviours); the enrichment chain (`_contemplateNext`) is retained but off the offer path |
+| `contemplate` | true | **Legacy; controls nothing on the reporting path.** It once gated `/boons_offered` behind a per-boon `BOON CONTEMPLATE` chain (`_contemplateNext`, now dead code). Since v4.7.279 offers post without it, and since v4.7.298 the optional `BoonInfo` fields are filled from the local catalogue by `M._enrichOffer` — a mechanism with no relationship to this toggle. Reading it as "does boon detail get sent" gives the wrong answer |
 | `url` | `M.DEFAULT_URL` | Tracker base URL |
 | `token` | nil | API token (`mnem token <t>`) |
 | `debug` | nil | Verbose `M.decho` echoes |
@@ -61,6 +61,20 @@ M._onTimeout()               (watchdog fired: dropped response / POST→GET)
 | Idempotent-only retry | `M._IDEMPOTENT = { ["/ripple_level"]=true, ["/run_exists"]=true }` | Only endpoints safe to repeat are auto-retried; everything else is left alone to avoid double-posting a run/death/etc. |
 | Handler survival | `registerAnonymousEventHandler` for all 4 http events | Handlers survive `uninstallPackage` (same reasoning as `ataxia.updater`); prior handlers are `killAnonymousEventHandler`'d on reload |
 
+### Reading the response (v4.7.298)
+
+Every endpoint answers `OkResponse { ok, message? }` and `_onDone` used to read neither — an HTTP
+200 carrying `ok: false` (the server saying the operation did **not** happen) was logged as a
+success and never shown. It is now surfaced with the server's own `message`, which is the only
+place a refusal reason can come from.
+
+**It surfaces; it does not re-route.** `ok: false` still runs the request's `onOk` rather than
+firing the error path, for the same reason the claim-confirmation line warns instead of un-latching
+(v4.7.278): we have never observed this server answer `ok: false`, so we do not know which
+conditions produce it — and `startRun`'s `onError` undoes the optimistic `run.active`, which would
+silently stop all reporting for the rest of the dive on a guess. Promote it to the error path once a
+real `ok: false` has been seen and its meaning is known.
+
 ### Health check (`mnem test`)
 
 `M.testHealth()` does a plain `getHTTP(baseUrl.."/health", {})`. Separate `sysGetHttpDone`/`sysGetHttpError` handlers (`_onGetDone`/`_onGetError`) match on the `/health` URL and echo the result. GET is used here, not the POST queue.
@@ -74,11 +88,12 @@ Each function guards on `M._hasToken()` and enqueues. Payload shapes:
 | `startRun()` | `POST /run_start` | `{}` | `public_id` → `run.publicId` |
 | `runExists()` | `POST /run_exists` | `{}` | `exists`, `ripple` → sync run state |
 | `endRun()` | `POST /run_end` | `{}` | — (echo only) |
+| `reportRunPause()` | `POST /run_pause` | `{}` | — (v4.7.298) |
 | `setRipple(n)` | `POST /ripple_level` | `{ ripple = n }` | — (sets `run.ripple` on OK) |
 | `reportMonsters(str)` | `POST /monsters` | `{ monsters = str }` | — |
 | `reportBoss(name)` | `POST /boss` | `{ boss = name }` | — |
 | `reportEffects(list)` | `POST /effects` | `{ effects = [{name, description}, …] }` | — |
-| `reportBoonsOffered(list)` | `POST /boons_offered` | `{ offered = [{name, description, quote?, rarity?, num_echoes_possible?}, …], class?, race? }` | `class`/`race` from `M._charInfo()` (v4.7.220) |
+| `reportBoonsOffered(list)` | `POST /boons_offered` | `{ offered = [{name, description?, quote?, rarity?, category?, unlocked_by?, conflicts_with?, num_echoes_possible?}, …], class?, race?, reroll_count }` | `class`/`race` from `M._charInfo()` (v4.7.220); the six optional `BoonInfo` fields filled from the local catalogue and `reroll_count` inferred (v4.7.298) |
 | `reportBoonsSelected(names)` | `POST /boons_selected` | `{ selected = [name, …] }` | — |
 | `reportDeath(killer)` | `POST /death` | `{ killer = <name or "unknown"> }` | — |
 
@@ -132,7 +147,103 @@ Each function guards on `M._hasToken()` and enqueues. Payload shapes:
 - **`startRun()` optimism.** Sets `run.active = true` and calls `_resetRun()` *synchronously* before the async POST, so the first wave isn't lost while waiting for the response.
 - **Pause / resume (no new `public_id`).** A "beseech that it grow still" pause sets `run.paused` (`onRunPause`, `004_Parsers.lua`) **without** ending the run server-side. The next wade's `onRunStart` then resumes via **`runExists()`** (`/run_exists`) instead of `startRun()`, so no fresh `/run_start` fires and **no new `public_id` is minted** — the resumed run keeps its server-side identity, and `/run_exists` re-syncs `run.active` + `run.ripple`. `run.paused` is cleared unconditionally in `_resetRun()` (hence on any genuine `startRun`/`endRun`) and in `onRunEnd`, so a telemetry-off end can't hijack the next fresh wade into a resume.
 - **`endRun()`** flushes any final-wave monsters (`_flushMonsters()`) before enqueuing `/run_end`, then resets locally immediately (the run is over regardless of the response).
-- **`reportBoonsOffered` is posted immediately.** `_reportBoonsOfferedEnriched(list)` (`004_Parsers.lua`) records local history and calls `reportBoonsOffered(list)` **right away**, with the `name`+`description` scraped straight off the offer screen — it is **not** gated behind the per-boon `BOON CONTEMPLATE` enrichment chain. (The old design contemplated each boon (~0.5s apiece) to fill `rarity`/`quote`/`num_echoes_possible` *before* posting; that chain competed with the next ripple's captures for the single `_capturing` slot and, on a lost race, stalled and silently dropped the whole `/boons_offered`, and even on success could post after the player had already waded onto the next ripple.) Name+description is all the tracker needs; the optional enrichment fields are learned locally instead (BOONS list via trigger 013 + `mnem boonfill`), which is why the `/boons_offered` payload lists them as optional (`?`).
+- **`reportBoonsOffered` is posted immediately.** `_reportBoonsOfferedEnriched(list)` (`004_Parsers.lua`) records local history and calls `reportBoonsOffered(list)` **right away**, with the `name`+`description` scraped straight off the offer screen — it is **not** gated behind the per-boon `BOON CONTEMPLATE` enrichment chain. (The old design contemplated each boon (~0.5s apiece) to fill `rarity`/`quote`/`num_echoes_possible` *before* posting; that chain competed with the next ripple's captures for the single `_capturing` slot and, on a lost race, stalled and silently dropped the whole `/boons_offered`, and even on success could post after the player had already waded onto the next ripple.)
+
+- **…but the optional fields still go, read from the CATALOGUE (v4.7.298).** `BoonInfo` has eight
+  fields and we were sending two. The six missing ones were never missing *data* — the local
+  catalogue (`M.history.boonLibrary`) already holds them, learned from the BOONS list, `mnem
+  boonfill` and the per-screen trickle — they were simply never joined up. `M._enrichOffer(list)`
+  does the join at post time.
+
+  **This is not a revival of the contemplate chain, and the distinction is the whole design.**
+  Every hazard that got the chain removed in v4.7.279 belongs to the **fetch** — a command per
+  boon, the shared `_capturing` slot, a stall that dropped the entire report — not to the fields.
+  A local table read cannot stall, race or drop the post, so the enrichment rides the post that
+  was already going out and v4.7.279's reasoning stands untouched.
+
+  Rules it follows:
+  * **Fill, never overwrite.** The offer screen is authoritative for `description` (it is the
+    wrap-joined text the player actually read); the catalogue supplies only what the screen did not.
+  * **Returns a COPY.** The caller's list is also what goes to local history and seeds
+    `run.lastOffered` — a reporting concern must not mutate either.
+  * **Names are mapped at the boundary.** The catalogue keeps Lua-side camelCase (matching its
+    existing `maxEchoes`); the API takes snake_case (`unlockedBy` → `unlocked_by`,
+    `conflictsWith` → `conflicts_with`, `maxEchoes` → `num_echoes_possible`).
+  * **`conflicts_with` is omitted when empty**, never sent as `{}`: an empty Lua table has no
+    array/object distinction for yajl, and omitting the key already says "no known conflicts".
+  * **`conflicts_with` currently has no parser** — the transport and storage exist, but nothing
+    populates it from game text. `Conflicts with` was promoted in this change's first cut and the
+    deep review removed it: its value is a *list of boon names*, the one shape that wraps, and
+    `_parseContemplate` reads raw physical lines, so a wrap both truncates the value and turns its
+    tail into the opening words of the description. See
+    [03-parsing-triggers.md](03-parsing-triggers.md#why-conflicts-with-is-not-promoted-deep-review-v47298).
+
+- **`reroll_count` is INFERRED from the screen, never from a command (v4.7.298).** Rerolls are real
+  — `Negotiator`'s own text grants "5 additional rerolls" — but the command that spends one has
+  never been captured, and inventing a command name is how `bash dwaeonic off` came to be
+  documented for a command that never existed. So `M._rerollBump(list)` counts the **evidence**: a
+  second offer screen, with no claim and no `GO!` in between, *is* a reroll.
+
+  **The name set is the guard**, and it is what makes the inference safe — a reroll produces a
+  different set of boons, while a mere re-print (scrollback, re-issued command, duplicated capture)
+  produces the identical set. An identical re-print therefore neither counts nor resets: it is not
+  evidence either way. Comparison happens **before** `run.lastOffered` is overwritten, which is the
+  one line that would destroy it.
+
+  The chain is ended by a claim (`onBoonClaim`) and by `GO!` (`onGo`), and **never by the ripple
+  number** — at the boon screen `_offerAfterRipple` sends its own `wade status`, so `run.ripple`
+  can advance *between two screens of one chain*, and keying on it would miss exactly the reroll it
+  exists to count. `_resetRun()` clears **both** the count and the chain flag: clearing only the
+  count is worse than clearing neither, because a chain left open makes the next run's first screen
+  differ from the (now empty) previous names and post `reroll_count = 1` for a screen nobody
+  rerolled. Prospero's Fortune (Negotiator's second pick after every fifth claim) is correctly
+  *not* counted, because a claim intervened.
+
+  Four things the deep review changed:
+
+  * **The state lives on `ataxiaTemp`, not `M.run`** (`ataxiaTemp.mnemRerolls` /
+    `.mnemOfferChain`, owned by `M._rerollCount()` / `_rerollReset()` / `_rerollBump()`).
+    `ataxia_saveSettings` does `table.save(file, sanitizeForSave(ataxia))` — a **wholesale**
+    serialization that strips only functions, metatabled objects and GUI snapshots — and
+    `deepMerge` ends in an unconditional `dst[k] = v`, so a scalar kept under `ataxia.mnemosyne`
+    comes back from disk on the next load. That is the v4.7.192–194 rule, and it is why
+    `_relatchBoons` already keeps its guard on `ataxiaTemp`. **Note that `002_Reporter_API.lua`'s
+    own header claim that run state is "in-memory only" is false** — `run.active`, `ripple`,
+    `publicId` and `lastOffered` all persist today. Fixing *that* is out of scope; not adding to
+    it was not.
+  * **The count is snapshotted with the screen** (`M._pendingRerolls`), never re-read at send
+    time. The POST is deferred to the ripple line or the 3s timeout, and `onBoonClaim`/`onGo` both
+    close the chain the instant they fire — so a player claiming inside that window made the *last*
+    screen of a chain, the most informative row there is, report `reroll_count = 0`.
+  * **A replaced pending offer is FLUSHED, not dropped.** `_offerAfterRipple` used to overwrite
+    `_pendingOffer` unconditionally. That was right when it was written (v4.7.279): a second screen
+    arriving before the first had posted meant a duplicate capture. **The reroll feature makes two
+    distinct, meaningful screens a normal event**, and nobody reconciled the two — so the
+    rerolled-away screen was never posted and never recorded locally, which is precisely the data
+    `reroll_count` exists to make sense of. Flushing is ripple-safe (a reroll is the same boon
+    screen, hence the same ripple), and the original intent — no cross-contamination between the
+    two lists — is preserved exactly.
+  * **A run boundary DROPS it instead** (`M._dropPendingOffer`, called from `_resetRun`). Nothing
+    cleared that slot before, which was survivable only while a replacement discarded it silently;
+    once a replacement flushes, a stale pending offer would be posted under the *next* run. This is
+    the one case where losing it beats sending it.
+
+- **`/run_pause` is actually called (v4.7.298).** It had been on the API for as long as we have been
+  posting to it and was never invoked. `onRunPause` sets the local `run.paused` flag (which is what
+  drives the resume) and now also posts, gated on `_inRun()` — with nothing on the wire, a
+  deliberate pause was indistinguishable to the tracker from a player who simply stopped mid-dive.
+  Fire-and-forget: the flag is set by the caller before the POST, so a failed request costs the
+  tracker a marker and costs us nothing — hence no `onError` undo, unlike `startRun`.
+
+  **Gated on `_auto()`, not `_inRun()`** (changed by the deep review). `_inRun()` also requires
+  `run.active`, which is our *belief* about the server and is false in exactly the window that
+  matters: after a reload or SYSUPDATE mid-run, until the load handler's 6-second-delayed
+  `/run_exists` answers — and that request has no `onError`, so an unreachable tracker leaves it
+  false indefinitely. A pause landing there would be silently unreported, with no retry,
+  reproducing the very problem this call was added to fix. Trigger 016's pattern is exact and
+  Mnemosyne-only, so it cannot fire outside a dive: if the game says we paused a run, the run
+  exists and the server is the authority. A stale POST answers `ok:false`, which is now surfaced.
+  `mnem pause` is the manual override (see [05-commands.md](05-commands.md)).
 - **`reportBoonsSelected`** accepts a string or array; a bare string is wrapped to `{ str }`.
 - **`reportDeath`** defaults `killer` to `"unknown"` when empty.
 

@@ -48,6 +48,15 @@ local function reset(active)
             pendingMonsters = {}, lastOffered = {} }
   M._mobCandidate = nil
   M._mobTrig = nil
+  -- The deferred-offer slot is process-wide and survives a run; a leftover from an earlier test
+  -- would now be FLUSHED by the next _offerAfterRipple rather than silently dropped.
+  M._pendingOffer = nil
+  M._pendingRerolls = nil
+  M._offerTimer = nil
+  -- The reroll chain lives on ataxiaTemp (never serialized), not on M.run.
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.mnemRerolls = nil
+  ataxiaTemp.mnemOfferChain = nil
   sent = {}
   lastPayload = nil
   decodeNext = nil
@@ -269,12 +278,34 @@ describe("run lifecycle", function()
     M.run.ripple = 3
     M.onRunPause()
     expect(M.run.paused).toBeTrue()
+    expect(sent[1].url).toContain("/run_pause")     -- ...and the server is TOLD (v4.7.298)
+    completeHead({ ok = true })                     -- serial queue: let the pause finish
     M.onRunStart()                                  -- re-enter the same wade
-    expect(sent[1].url).toContain("/run_exists")    -- resume, not /run_start
+    expect(sent[2].url).toContain("/run_exists")    -- resume, not /run_start
     for _, s in ipairs(sent) do
       if s.url:find("/run_start") then error("paused re-wade must not start a new run") end
     end
     expect(M.run.paused).toBeNil()                  -- flag consumed
+  end)
+
+  -- GATED ON _auto(), NOT _inRun() (deep review). `run.active` is our BELIEF about the server,
+  -- and it is false in exactly the window that matters: after a reload mid-run, until the delayed
+  -- /run_exists answers -- a request with no onError, so a slow tracker leaves it false
+  -- indefinitely. The whisper trigger is exact and Mnemosyne-only, so if the game says we paused,
+  -- the run exists and the server is the authority.
+  it("posts /run_pause even when our own run.active belief is false", function()
+    reset(false)                                     -- telemetry on, run.active false
+    M.onRunPause()
+    expect(M.run.paused).toBeTrue()
+    expect(sent[1].url).toContain("/run_pause")
+  end)
+
+  it("does not post /run_pause with reporting switched off", function()
+    reset(true)
+    ataxia.settings.reporting.enabled = false
+    M.onRunPause()
+    expect(M.run.paused).toBeTrue()
+    expect(#sent).toBe(0)
   end)
 
   it("a genuine startRun/endRun clears a stale pause flag", function()
@@ -563,9 +594,29 @@ describe("boons offered reporting", function()
 
   -- A second offer screen must not be posted with the first screen's list, and the first
   -- screen's timer must not fire against it.
-  it("a new offer screen replaces the pending one", function()
+  --
+  -- CHANGED IN v4.7.298 (deep review): the first screen is now FLUSHED rather than discarded.
+  -- Discarding was right when a second screen close behind the first meant a duplicate capture;
+  -- the reroll feature makes two distinct, meaningful screens a normal event, and dropping the
+  -- earlier one loses exactly what was rerolled away. The original intent -- no cross-
+  -- contamination between the two lists -- is what this now asserts.
+  it("a new offer screen flushes the pending one instead of discarding it", function()
     reset(true)
     M._offerAfterRipple({ { name = "First", description = "d" } })
+    M._offerAfterRipple({ { name = "Second", description = "d" } })
+    fireOfferWait()
+    local names = offeredNames()
+    expect(#names).toBe(2)
+    expect(names[1]).toBe("First")    -- posted with ITS OWN list...
+    expect(names[2]).toBe("Second")   -- ...and the second with its own
+  end)
+
+  -- The one case where losing it beats sending it: the offer belongs to a run that is over.
+  it("a run boundary drops the pending offer rather than filing it under the next run", function()
+    reset(true)
+    M._offerAfterRipple({ { name = "First", description = "d" } })
+    M._resetRun()
+    expect(M._pendingOffer).toBeNil()
     M._offerAfterRipple({ { name = "Second", description = "d" } })
     fireOfferWait()
     local names = offeredNames()
@@ -5165,5 +5216,576 @@ describe("aeon wear-off clears the denizen model", function()
   it("prefers the denizen that actually carries the aeon", function()
     seed({ [1] = "an haruspex of Life", [2] = "an haruspex of Life" }, 2)
     expect(ataxiaBasher_dsResolveNameToId("An haruspex of Life", nil, "aeon", 1000)).toBe(2)
+  end)
+end)
+
+-- --- v4.7.298: the rest of the tracker's schema -----------------------------
+--
+-- `BoonInfo` has eight fields and we were sending two; `BoonsOfferedRequest` has a
+-- `reroll_count` we had never sent; `/run_pause` existed and was never called. These cover the
+-- three, plus the catalogue plumbing that had been parsing fields and dropping them.
+
+-- Swap the boon catalogue for the duration of one test. The library is process-wide state that
+-- `reset()` deliberately does NOT clear (it is a persisted catalogue, not run state), so a test
+-- that seeds it must put it back or it leaks into every test that runs after it.
+local function withLibrary(entries, fn)
+  local saved = M.history.boonLibrary
+  M.history.boonLibrary = entries
+  local ok, err = pcall(fn)
+  M.history.boonLibrary = saved
+  if not ok then error(err, 0) end
+end
+
+-- Payloads for every /boons_offered committed, in order, from BOTH sources -- the serial queue
+-- posts the head and leaves it in _queue until the server answers.
+local function offeredPayloads()
+  local out = {}
+  for _, r in ipairs(sent) do
+    if r.payload and r.payload.offered then out[#out + 1] = r.payload end
+  end
+  for i, q in ipairs(M._queue) do
+    if not (i == 1 and M._busy) and q.payload and q.payload.offered then
+      out[#out + 1] = q.payload
+    end
+  end
+  return out
+end
+
+describe("boons_offered enrichment from the local catalogue", function()
+  it("fills rarity/quote/category/unlocked_by/conflicts_with/echoes the screen never prints", function()
+    reset(true)
+    withLibrary({
+      ["Iron Throat"] = {
+        description = "catalogue copy",
+        rarity = "uncommon",
+        maxEchoes = 3,
+        quote = "A voice like gravel.",
+        category = "Defensive",
+        unlockedBy = "Sharp Mind",
+        conflictsWith = { "Glass Jaw", "Hammer and Anvil" },
+      },
+    }, function()
+      M.reportBoonsOffered({
+        { name = "Iron Throat", description = "Gain 25% resistance to asphyxiation damage." },
+      })
+      local b = sent[1].payload.offered[1]
+      -- FILL, NEVER OVERWRITE: the offer screen is authoritative for the description.
+      expect(b.description).toBe("Gain 25% resistance to asphyxiation damage.")
+      expect(b.rarity).toBe("uncommon")
+      expect(b.quote).toBe("A voice like gravel.")
+      expect(b.category).toBe("Defensive")
+      expect(b.unlocked_by).toBe("Sharp Mind")          -- camelCase -> snake_case at the boundary
+      expect(b.num_echoes_possible).toBe(3)
+      expect(#b.conflicts_with).toBe(2)
+      expect(b.conflicts_with[2]).toBe("Hammer and Anvil")
+    end)
+  end)
+
+  -- The caller's list is also what goes to local history and seeds run.lastOffered.
+  it("returns a copy -- the caller's list is never mutated", function()
+    reset(true)
+    local list = { { name = "Iron Throat" } }
+    withLibrary({ ["Iron Throat"] = { rarity = "rare", conflictsWith = { "Glass Jaw" } } }, function()
+      M.reportBoonsOffered(list)
+      expect(sent[1].payload.offered[1].rarity).toBe("rare")
+      expect(list[1].rarity).toBeNil()
+      expect(list[1].conflicts_with).toBeNil()
+    end)
+  end)
+
+  it("posts unchanged when the catalogue has never seen the boon", function()
+    reset(true)
+    withLibrary({}, function()
+      M.reportBoonsOffered({ { name = "Never Seen", description = "d" } })
+      local b = sent[1].payload.offered[1]
+      expect(b.name).toBe("Never Seen")
+      expect(b.description).toBe("d")
+      expect(b.rarity).toBeNil()
+      expect(b.conflicts_with).toBeNil()
+    end)
+  end)
+
+  -- An empty Lua table has no array/object distinction, so yajl may encode {} where the schema
+  -- wants []. Omitting the key already says "we know of no conflicts".
+  it("omits conflicts_with rather than sending an empty table", function()
+    reset(true)
+    withLibrary({ ["Iron Throat"] = { conflictsWith = {} } }, function()
+      M.reportBoonsOffered({ { name = "Iron Throat" } })
+      expect(sent[1].payload.offered[1].conflicts_with).toBeNil()
+    end)
+  end)
+
+  -- A catalogue entry must never blank something the screen supplied.
+  it("does not overwrite a field the offer screen already carried", function()
+    reset(true)
+    withLibrary({ ["Iron Throat"] = { rarity = "common", quote = "catalogue quote" } }, function()
+      M.reportBoonsOffered({ { name = "Iron Throat", rarity = "legendary" } })
+      expect(sent[1].payload.offered[1].rarity).toBe("legendary")
+      expect(sent[1].payload.offered[1].quote).toBe("catalogue quote") -- the one it lacked
+    end)
+  end)
+end)
+
+describe("reroll_count inference", function()
+  -- Drive the REAL offer screen through the real capture, the way the v4.7.279 break-back test
+  -- does: calling _rerollBump directly would leave the wiring in onBoonsOffered undefended, and
+  -- that wiring (bumping BEFORE lastOffered is overwritten) is the whole trick.
+  local function feedScreen(rows)
+    local mock = require("mock_mudlet")
+    M._capturing = false
+    M.onBoonsOffered()
+    local feed = { "----------------------------------------" }
+    for _, r in ipairs(rows) do feed[#feed + 1] = r end
+    feed[#feed + 1] = "Type BOON CLAIM <name> to choose."
+    for _, ln in ipairs(feed) do
+      line = ln
+      for _, t in pairs(mock.active_triggers) do
+        if t.regex and t.pattern == "^.*$" and type(t.callback) == "function" then t.callback() end
+      end
+    end
+  end
+
+  local A = { "Songstep:      Your dances are free.", "Iron Throat:   Resist asphyxiation." }
+  local B = { "Tantrum:       Free battlerage.", "Sharp Mind:    Think faster." }
+
+  it("sends 0 on an ordinary single offer screen", function()
+    reset(true)
+    feedScreen(A)
+    M.onRipple(3)
+    expect(offeredPayloads()[1].reroll_count).toBe(0)
+  end)
+
+  it("counts a second screen with DIFFERENT boons and no claim in between", function()
+    reset(true)
+    feedScreen(A)
+    feedScreen(B)
+    M.onRipple(3)
+    local p = offeredPayloads()
+    expect(p[#p].reroll_count).toBe(1)
+  end)
+
+  -- A reprint is not evidence of anything: same names, so it neither counts nor resets.
+  it("ignores an identical re-print of the same screen", function()
+    reset(true)
+    feedScreen(A)
+    feedScreen(A)
+    M.onRipple(3)
+    local p = offeredPayloads()
+    expect(p[#p].reroll_count).toBe(0)
+  end)
+
+  -- Negotiator's Prospero's Fortune opens a second screen AFTER a claim. That is a second pick,
+  -- not a reroll, and the claim is what distinguishes them.
+  it("a claim between two screens starts a fresh chain", function()
+    reset(true)
+    feedScreen(A)
+    M.onBoonClaim("Songstep")
+    feedScreen(B)
+    M.onRipple(3)
+    local p = offeredPayloads()
+    expect(p[#p].reroll_count).toBe(0)
+  end)
+
+  -- GO! means a wave was fought, so the next screen is a new offer however the claim went.
+  it("GO! ends the chain even when no claim was detected", function()
+    reset(true)
+    feedScreen(A)
+    M.onGo()
+    feedScreen(B)
+    M.onRipple(3)
+    local p = offeredPayloads()
+    expect(p[#p].reroll_count).toBe(0)
+  end)
+
+  it("accumulates across several rerolls in one chain", function()
+    reset(true)
+    feedScreen(A)
+    feedScreen(B)
+    feedScreen(A)
+    expect(M._rerollCount()).toBe(2)
+  end)
+
+  it("a fresh run never inherits the last one's tally", function()
+    reset(true)
+    ataxiaTemp.mnemRerolls = 4
+    ataxiaTemp.mnemOfferChain = true
+    M._resetRun()
+    expect(M._rerollCount()).toBe(0)
+    -- the CHAIN too, or the next first screen reads as 1
+    expect(ataxiaTemp.mnemOfferChain).toBeFalse()
+  end)
+
+  -- THE SERIALIZATION RULE (deep review). `M.run` is a plain table inside `ataxia`, which
+  -- `ataxia_saveSettings` writes to disk WHOLESALE, and `deepMerge` lets the disk value win on
+  -- load. A per-screen counter kept there comes back stuck at whatever was last saved. This
+  -- asserts the state is NOT on the serialized namespace -- the v4.7.192-194 rule.
+  it("keeps the chain off the serialized namespace", function()
+    reset(true)
+    feedScreen(A)
+    feedScreen(B)
+    expect(M._rerollCount()).toBe(1)
+    expect(M.run.rerolls).toBeNil()
+    expect(M.run.offerChain).toBeNil()
+  end)
+
+  -- The failure this guards: a run that ended mid-chain leaves the chain open, and the next
+  -- run's FIRST screen necessarily differs from the (empty) previous names.
+  it("the first screen of a new run is never a reroll, even after a mid-chain end", function()
+    reset(true)
+    feedScreen(A)                 -- chain opens
+    M.startRun()                  -- new dive: _resetRun runs
+    feedScreen(B)
+    expect(M._rerollCount()).toBe(0)
+  end)
+
+  -- Defence in depth: even with the flag forced on, no previous names means no reroll.
+  it("refuses to count a reroll with no previous screen to differ from", function()
+    reset(true)
+    ataxiaTemp.mnemOfferChain = true
+    M.run.lastOffered = {}
+    M._rerollBump({ { name = "Songstep" } })
+    expect(M._rerollCount()).toBe(0)
+  end)
+
+  -- THE SNAPSHOT (deep review). The POST is deferred to the ripple line or a 3s timeout, and a
+  -- claim zeroes the chain the instant it fires -- so reading the live count at send time made
+  -- the LAST screen of a chain, the most informative row there is, report 0.
+  it("reports the count the screen was captured with, even if a claim lands first", function()
+    reset(true)
+    feedScreen(A)
+    feedScreen(B)                       -- reroll #1, pending
+    M.onBoonClaim("Tantrum")            -- player claims before the ripple line arrives
+    expect(M._rerollCount()).toBe(0)    -- chain correctly closed...
+    M.onRipple(3)
+    local p = offeredPayloads()
+    expect(p[#p].reroll_count).toBe(1)  -- ...but the pending screen keeps its own count
+  end)
+
+  -- A re-print is not evidence either way -- and that has to mean it produces no REPORT either,
+  -- not merely no count. It used to re-send `wade status` and post a duplicate row.
+  it("an identical re-print does not produce a second /boons_offered", function()
+    reset(true)
+    feedScreen(A)
+    M.onRipple(3)
+    local before = #offeredPayloads()
+    feedScreen(A)                       -- same screen printed again
+    M.onRipple(4)
+    expect(#offeredPayloads()).toBe(before)
+  end)
+end)
+
+describe("M._promoteMeta() -- contemplate labels we now know the name of", function()
+  it("promotes Category and Unlocked by, and leaves meta whole", function()
+    local info = M._promoteMeta({ meta = { ["Category"] = "Offensive", ["Unlocked by"] = "Sharp Mind" } })
+    expect(info.category).toBe("Offensive")
+    expect(info.unlockedBy).toBe("Sharp Mind")
+    -- meta is the mechanism that learns the NEXT label; promotion reads it, never consumes it.
+    expect(info.meta["Category"]).toBe("Offensive")
+  end)
+
+  it("is case-insensitive on the label", function()
+    local info = M._promoteMeta({ meta = { ["category"] = "Defensive" } })
+    expect(info.category).toBe("Defensive")
+  end)
+
+  -- CONFLICTS IS DELIBERATELY NOT PROMOTED (deep review). Its value is a LIST OF BOON NAMES --
+  -- long, and this parser reads raw physical lines with no continuation-joining while Achaea
+  -- wraps server-side. A wrapped meta value truncates AND, having no colon on its continuation
+  -- line, flips the state machine into `desc`, so the tail becomes the opening words of the
+  -- description that gets written to the catalogue. We have never seen the line, so there is
+  -- nothing to lose by waiting and a corrupted description to lose by guessing.
+  it("does not promote Conflicts with -- it stays in meta until we have seen the line", function()
+    local info = M._promoteMeta({ meta = { ["Conflicts with"] = "Glass Jaw, Iron Throat." } })
+    expect(info.conflictsWith).toBeNil()
+    expect(info.meta["Conflicts with"]).toBe("Glass Jaw, Iron Throat.")
+  end)
+
+  -- A value long enough to have wrapped cannot be trusted, so it is refused rather than stored
+  -- truncated. This is what makes "category and unlockedBy provably cannot wrap" enforced
+  -- rather than assumed.
+  it("refuses a promoted value long enough to have wrapped", function()
+    local long = string.rep("x", 61)
+    local info = M._promoteMeta({ meta = { ["Unlocked by"] = long } })
+    expect(info.unlockedBy).toBeNil()
+    expect(info.meta["Unlocked by"]).toBe(long)   -- still recorded, just not trusted
+  end)
+
+  it("accepts a normal-length value", function()
+    local info = M._promoteMeta({ meta = { ["Unlocked by"] = "Midnight Snow's Icy Heart" } })
+    expect(info.unlockedBy).toBe("Midnight Snow's Icy Heart")
+  end)
+
+  -- "Unlocked by: None" must not become a boon called None -- fill-never-blank would then let it
+  -- outrank the real answer when we finally saw it.
+  it("refuses placeholder values", function()
+    expect(M._promoteMeta({ meta = { ["Unlocked by"] = "None" } }).unlockedBy).toBeNil()
+    expect(M._promoteMeta({ meta = { ["Unlocked by"] = "N/A" } }).unlockedBy).toBeNil()
+    expect(M._promoteMeta({ meta = { ["Category"] = "none." } }).category).toBeNil()
+  end)
+
+  -- Two labels map to unlockedBy; with a first-wins guard, pairs() order would make the winner
+  -- arbitrary. Sorted iteration makes it deterministic.
+  it("is deterministic when two labels map to one field", function()
+    local meta = { ["Unlocked by"] = "Sharp Mind", ["Unlocks from"] = "Iron Throat" }
+    local first = M._promoteMeta({ meta = meta }).unlockedBy
+    for _ = 1, 20 do
+      expect(M._promoteMeta({ meta = meta }).unlockedBy).toBe(first)
+    end
+  end)
+
+  it("leaves an unrecognised label alone, in meta", function()
+    local info = M._promoteMeta({ meta = { ["Whatever"] = "something" } })
+    expect(info.whatever).toBeNil()
+    expect(info.meta["Whatever"]).toBe("something")
+  end)
+
+  it("is a no-op with no meta block at all", function()
+    local info = M._promoteMeta({ description = "d" })
+    expect(info.description).toBe("d")
+    expect(info.category).toBeNil()
+  end)
+
+  -- The live path: _parseContemplate must hand back promoted fields, not just meta.
+  it("_parseContemplate promotes on the way out", function()
+    local info = M._parseContemplate({
+      "Rarity: uncommon",
+      "Category: Defensive",
+      "Your fire damage is increased.",
+      "",
+      '"A line of flavour."',
+    })
+    expect(info.rarity).toBe("uncommon")
+    expect(info.category).toBe("Defensive")
+    expect(info.description).toBe("Your fire damage is increased.")
+    expect(info.quote).toBe("A line of flavour.")
+  end)
+end)
+
+describe("the catalogue keeps what a CONTEMPLATE prints", function()
+  it("_learnBoon stores quote/category/unlockedBy/conflictsWith", function()
+    withLibrary({}, function()
+      local rec = M._learnBoon("Iron Throat", "desc", "Uncommon", 2, {
+        quote = "q", category = "Defensive", unlockedBy = "Sharp Mind",
+        conflictsWith = { "Glass Jaw" },
+      })
+      expect(rec.description).toBe("desc")
+      expect(rec.rarity).toBe("uncommon")   -- lowercased, as before
+      expect(rec.maxEchoes).toBe(2)
+      expect(rec.quote).toBe("q")
+      expect(rec.category).toBe("Defensive")
+      expect(rec.unlockedBy).toBe("Sharp Mind")
+      expect(rec.conflictsWith[1]).toBe("Glass Jaw")
+    end)
+  end)
+
+  it("copies conflictsWith rather than aliasing the caller's table", function()
+    withLibrary({}, function()
+      local mine = { "Glass Jaw" }
+      local rec = M._learnBoon("Iron Throat", "d", nil, nil, { conflictsWith = mine })
+      mine[1] = "MUTATED"
+      expect(rec.conflictsWith[1]).toBe("Glass Jaw")
+    end)
+  end)
+
+  it("still fills without blanking -- a later call with nothing new keeps what is there", function()
+    withLibrary({}, function()
+      M._learnBoon("Iron Throat", "desc", "rare", 1, { quote = "q" })
+      local rec = M._learnBoon("Iron Throat", nil, nil, nil, nil)
+      expect(rec.description).toBe("desc")
+      expect(rec.quote).toBe("q")
+    end)
+  end)
+
+  -- The old merge named its three fields inline, so the four added in the same release would
+  -- have been dropped on BOTH paths -- a saved catalogue would lose them on every round trip.
+  it("_boonDbMerge carries every field on the ADD path", function()
+    withLibrary({}, function()
+      M._boonDbMerge({ ["Iron Throat"] = { description = "d", rarity = "rare", maxEchoes = 2,
+                                           quote = "q", category = "Defensive",
+                                           unlockedBy = "Sharp Mind",
+                                           conflictsWith = { "Glass Jaw" } } })
+      local rec = M.boonInfo("Iron Throat")
+      expect(rec.quote).toBe("q")
+      expect(rec.category).toBe("Defensive")
+      expect(rec.unlockedBy).toBe("Sharp Mind")
+      expect(rec.conflictsWith[1]).toBe("Glass Jaw")
+    end)
+  end)
+
+  it("_boonDbMerge fills the new fields on the ENRICH path without blanking", function()
+    withLibrary({ ["Iron Throat"] = { description = "kept", category = "Defensive" } }, function()
+      local _, enriched = M._boonDbMerge({
+        ["Iron Throat"] = { description = "ignored", category = "Offensive", quote = "new" },
+      })
+      local rec = M.boonInfo("Iron Throat")
+      expect(rec.description).toBe("kept")      -- never blanked or replaced
+      expect(rec.category).toBe("Defensive")    -- ditto
+      expect(rec.quote).toBe("new")             -- the gap it could fill
+      expect(enriched).toBe(1)
+    end)
+  end)
+end)
+
+describe("OkResponse is actually read", function()
+  -- An HTTP 200 carrying ok:false is the server saying the operation did NOT happen. It used to
+  -- be logged as a success and never shown.
+  it("surfaces an ok:false refusal with the server's message", function()
+    reset(true)
+    local said = {}
+    local savedEcho = M.echo
+    M.echo = function(msg) said[#said + 1] = tostring(msg) end
+    M.reportBoss("Seasone")
+    completeHead({ ok = false, message = "no active run" })
+    M.echo = savedEcho
+    expect(#said).toBe(1)
+    expect(said[1]).toContain("refused")
+    expect(said[1]).toContain("no active run")
+  end)
+
+  -- It surfaces; it does not re-route. onOk still runs, because we have never seen this server
+  -- answer ok:false and startRun's error path would silently stop reporting for the whole dive.
+  it("still runs the success callback on ok:false", function()
+    reset(true)
+    local ran = false
+    local savedEcho = M.echo
+    M.echo = function() end
+    M._enqueue("/boss", { boss = "x" }, function() ran = true end)
+    completeHead({ ok = false, message = "nope" })
+    M.echo = savedEcho
+    expect(ran).toBeTrue()
+  end)
+
+  it("says nothing extra on an ordinary ok:true", function()
+    reset(true)
+    local said = {}
+    local savedEcho = M.echo
+    M.echo = function(msg) said[#said + 1] = tostring(msg) end
+    M.reportBoss("Seasone")
+    completeHead({ ok = true })
+    M.echo = savedEcho
+    expect(#said).toBe(0)
+  end)
+end)
+
+-- --- Deep-review coverage gaps ----------------------------------------------
+
+describe("_nameSet / _sameOffer (the reroll guard's own primitives)", function()
+  -- Only ever exercised indirectly before, so nothing proved the dedup branch actually deduped
+  -- rather than double-counting -- which would make two screens compare unequal on size alone.
+  it("dedupes repeated names when counting", function()
+    local set, n = M._nameSet({ { name = "A" }, { name = "A" }, { name = "B" } })
+    expect(n).toBe(2)
+    expect(set["A"]).toBeTrue()
+    expect(set["B"]).toBeTrue()
+  end)
+
+  it("accepts bare strings as well as {name=} tables", function()
+    local _, n = M._nameSet({ "A", "B" })
+    expect(n).toBe(2)
+  end)
+
+  it("ignores empty and non-string names", function()
+    local _, n = M._nameSet({ { name = "" }, { name = 42 }, { name = "A" } })
+    expect(n).toBe(1)
+  end)
+
+  it("treats a differently-ordered but identical set as the same offer", function()
+    expect(M._sameOffer({ "A", "B" }, { { name = "B" }, { name = "A" } })).toBeTrue()
+  end)
+
+  it("treats a same-size but different set as different", function()
+    expect(M._sameOffer({ "A", "B" }, { { name = "A" }, { name = "C" } })).toBeFalse()
+  end)
+
+  it("never calls an empty previous set the same", function()
+    expect(M._sameOffer({}, { { name = "A" } })).toBeFalse()
+  end)
+end)
+
+describe("_enrichOffer does not overwrite non-string fields either", function()
+  -- The existing no-overwrite test only covered a STRING field (rarity). num_echoes_possible and
+  -- conflicts_with use a different nil-check and were a separate, untested code path.
+  it("keeps an echo count the offer already carried", function()
+    reset(true)
+    local saved = M.history.boonLibrary
+    M.history.boonLibrary = { ["Iron Throat"] = { maxEchoes = 9 } }
+    M.reportBoonsOffered({ { name = "Iron Throat", num_echoes_possible = 2 } })
+    M.history.boonLibrary = saved
+    expect(sent[1].payload.offered[1].num_echoes_possible).toBe(2)
+  end)
+
+  it("keeps a conflicts list the offer already carried", function()
+    reset(true)
+    local saved = M.history.boonLibrary
+    M.history.boonLibrary = { ["Iron Throat"] = { conflictsWith = { "FromCatalogue" } } }
+    M.reportBoonsOffered({ { name = "Iron Throat", conflicts_with = { "FromScreen" } } })
+    M.history.boonLibrary = saved
+    expect(sent[1].payload.offered[1].conflicts_with[1]).toBe("FromScreen")
+  end)
+
+  it("copies the conflicts list rather than aliasing the catalogue's table", function()
+    reset(true)
+    local saved = M.history.boonLibrary
+    local shared = { "Glass Jaw" }
+    M.history.boonLibrary = { ["Iron Throat"] = { conflictsWith = shared } }
+    M.reportBoonsOffered({ { name = "Iron Throat" } })
+    local posted = sent[1].payload.offered[1].conflicts_with
+    M.history.boonLibrary = saved
+    posted[1] = "MUTATED"
+    expect(shared[1]).toBe("Glass Jaw")
+  end)
+end)
+
+describe("_boonDbMerge respects the types of the fields it copies", function()
+  -- Making the merge field-driven put a TABLE through a loop written for strings.
+  it("copies conflictsWith rather than aliasing the source (ADD path)", function()
+    local saved = M.history.boonLibrary
+    M.history.boonLibrary = {}
+    local src = { ["Iron Throat"] = { description = "d", conflictsWith = { "Glass Jaw" } } }
+    M._boonDbMerge(src)
+    local rec = M.boonInfo("Iron Throat")
+    M.history.boonLibrary = saved
+    rec.conflictsWith[1] = "MUTATED"
+    expect(src["Iron Throat"].conflictsWith[1]).toBe("Glass Jaw")
+  end)
+
+  it("copies conflictsWith rather than aliasing the source (ENRICH path)", function()
+    local saved = M.history.boonLibrary
+    M.history.boonLibrary = { ["Iron Throat"] = { description = "kept" } }
+    local src = { ["Iron Throat"] = { conflictsWith = { "Glass Jaw" } } }
+    M._boonDbMerge(src)
+    local rec = M.boonInfo("Iron Throat")
+    M.history.boonLibrary = saved
+    rec.conflictsWith[1] = "MUTATED"
+    expect(src["Iron Throat"].conflictsWith[1]).toBe("Glass Jaw")
+  end)
+
+  -- A table is never == "", so an empty list used to pass the "is there data" test, merge as
+  -- though it were data, and then permanently pass the "already filled" test -- with nothing to
+  -- ever refill it, since boonGaps only chases a missing description.
+  it("does not store an empty conflicts list as if it were data", function()
+    local saved = M.history.boonLibrary
+    M.history.boonLibrary = {}
+    M._boonDbMerge({ ["Iron Throat"] = { description = "d", conflictsWith = {} } })
+    local rec = M.boonInfo("Iron Throat")
+    expect(rec.conflictsWith).toBeNil()
+    -- ...and a real list can still fill it afterwards
+    M._boonDbMerge({ ["Iron Throat"] = { conflictsWith = { "Glass Jaw" } } })
+    local after = M.boonInfo("Iron Throat")
+    M.history.boonLibrary = saved
+    expect(after.conflictsWith[1]).toBe("Glass Jaw")
+  end)
+end)
+
+describe("the server's message on a successful call", function()
+  it("does not echo, but does not lose the message either", function()
+    reset(true)
+    local said = {}
+    local savedEcho = M.echo
+    M.echo = function(msg) said[#said + 1] = tostring(msg) end
+    M.reportBoss("Seasone")
+    completeHead({ ok = true, message = "recorded" })
+    M.echo = savedEcho
+    expect(#said).toBe(0)   -- ok:true is not a user-facing event
   end)
 end)

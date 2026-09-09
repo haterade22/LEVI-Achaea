@@ -57,7 +57,9 @@ Trigger 006 (`GO!`) also calls `ataxia.mnemosyne.exploreOnGo()` after `onGo()` �
 
 ## Pause / resume — `onRunPause` + `onRunStart` (triggers 016, 001)
 
-`WADE STILL` — "You whisper to the Mnemosyne and beseech that it grow still for a time." — suspends the current run **without ending it server-side**: the next wade re-enters the *same* wade, not a fresh one. `onRunPause` (trigger 016) sets `M.run.paused = true` unconditionally (mirroring the boon flags — the `_auto` gate is applied later, when the flag is consumed).
+`WADE STILL` — "You whisper to the Mnemosyne and beseech that it grow still for a time." — suspends the current run **without ending it server-side**: the next wade re-enters the *same* wade, not a fresh one. `onRunPause` (trigger 016) sets `M.run.paused = true` unconditionally (mirroring the boon flags — the flag itself is never gated) **and, since v4.7.298, posts `/run_pause`** so the server learns about it too.
+
+That POST is gated on **`_auto()`, not `_inRun()`**. `_inRun()` additionally requires `run.active`, which is our *belief* about the server's state and is false in precisely the window that matters — after a reload or SYSUPDATE mid-run, until the load handler's delayed `/run_exists` answers, a request with no `onError` callback, so an unreachable tracker leaves it false indefinitely. A pause landing there would be silently unreported with no retry. Trigger 016's pattern is exact and Mnemosyne-only, so it cannot fire outside a dive: if the game says we paused a run, the run exists and the server is the authority on it. A stale POST comes back `ok:false`, which is now surfaced.
 
 `onRunStart` (trigger 001, gated on `_auto`) then branches on that flag: if `M.run.paused`, it clears the flag and calls `runExists()` (`/run_exists`, re-syncs `active` + ripple, and safely no-ops to inactive if the server no longer holds the run) instead of `startRun()` (`/run_start`) — so a resumed wade doesn't orphan the paused run's progress under a brand-new `public_id`. `onRunEnd` clears `M.run.paused` **unconditionally** (not only via the `_inRun`-gated `endRun`), because with telemetry off — the shipped default — that gated path never runs, and a leftover `paused=true` would misfire the *next* fresh wade into a resume that never `/run_start`s it.
 
@@ -132,6 +134,15 @@ The old design gated this POST behind a slow (~2.5s/boon) per-boon `BOON CONTEMP
 ### The `BOON CONTEMPLATE` enrichment state machine (now backfill-only)
 
 The sequential contemplate walk **is no longer on the offer path** — `_reportBoonsOfferedEnriched` posts immediately (above). The machinery is retained and now drives only `boonFill` (the `mnem boonfill` backfill of already-owned boons whose description was never captured). It is still strictly sequential — one contemplate block in flight at a time, matching the `_captureLines` guard — `_contemplateNext` walking `send("boon contemplate <name>")` → `_captureContemplate(cb)` → `_applyContemplate` → `tempTimer(0.5, next)`.
+
+> **"Immediately" means "not behind the contemplate chain", not "synchronously".** Text below
+> describing `_reportBoonsOfferedEnriched` as posting *right away* predates v4.7.279's ripple
+> ordering fix and is only half the story: the offer is parked in `M._pendingOffer` and posted
+> from `_flushPendingOffer`, driven either by the ripple line or by a 3-second
+> `OFFER_RIPPLE_WAIT` fallback, so it lands *behind* `/ripple_level` and is filed under the right
+> ripple. It is never deferred behind another command, and never dropped. See
+> [02-reporting.md](02-reporting.md) for the deferred-post machinery and what it means for
+> rerolls.
 
 - **`_captureContemplate(cb)`** captures with `timeout = 2`. It **never** captures a `BOON CLAIM` line (returns `"skip"`), skips the `<name>:` header and opening divider, and **stops** at the closing divider. `onDone` is one-shot (`called` latch) and passes `_parseContemplate(lines)` to `cb`.
 - **`_parseContemplate(lines)`** returns `{ rarity, num_echoes_possible, description, quote }`. It reads `Rarity: <r>`, the authoritative **`Maximum echoes: N`** line (printed only for echo-capable boons → `num_echoes_possible = N`), and `Can echo: <Yes/No>` (`No` → `0`, `Yes` → a floor of `1` that a `Maximum echoes` line refines to `N`) — so an echo-capable boon reports its real cap, not a flat `1`, and the `Maximum echoes` line is consumed as meta rather than leaking into the description. It then advances through sections `meta → desc → quote`: non-blank lines after the meta rows build the description paragraph, a blank line switches to the quote section, and the trailing double-quoted line becomes `quote` (surrounding `"` stripped).
@@ -363,6 +374,56 @@ record of what this character has *seen*, not a list of what currently exists.
 Handled in `_parseContemplate` — see the meta-block note in `004_Parsers.lua`. We have not seen
 the wording, so the parser matches the SHAPE (a short `Label: value` line while still in the meta
 block) and stores anything unrecognised in `info.meta` rather than dropping it.
+
+**Two of those labels have graduated (v4.7.298, `M._promoteMeta`).** v4.7.288 said that storing an
+unknown label "under whatever the game calls it is how we find out what to call it" — and the
+tracker's `BoonInfo` names three: `category`, `unlocked_by`, `conflicts_with`. **Two are promoted;
+the third is deliberately not.**
+
+- **`info.meta` is left whole.** Promotion *reads* it, never consumes it — meta is the mechanism
+  that learns the *next* label, and emptying it as labels graduate removes that mechanism exactly
+  when a new one appears.
+- **Safe-fail.** A label we never see promotes nothing; the value stays in `meta`.
+- **Sorted iteration.** Two labels map to `unlockedBy` (`Unlocked by` / `Unlocks from`) under a
+  first-wins guard, so `pairs()` order would make the winner arbitrary. The keys are sorted, for
+  the same reason `boonGaps` sorts.
+
+### Why `Conflicts with` is NOT promoted (deep review, v4.7.298)
+
+It was, in the first cut of this change, on the strength of the schema having the field. That was
+wrong, and the reasoning generalises to any future long-valued label.
+
+**`_parseContemplate` reads RAW PHYSICAL LINES with no continuation-joining**, unlike its sibling
+`_parseNamedBlock`, which exists precisely because this game wraps. Achaea wraps server-side at the
+player's width (the v4.7.286/297 rule). Every label the screen has printed until now has a *short*
+value — `rare`, `No`, `3` — so this never mattered. A conflicts value is **a list of boon names**,
+i.e. the one shape that will wrap.
+
+A wrapped meta value fails twice at once:
+
+1. The stored value is silently **truncated** at the wrap, so the last name in the list is a
+   fragment (`Midnight Snow's` instead of `Midnight Snow's Icy Heart`).
+2. The continuation line has **no colon**, so it is not a label — the state machine flips to `desc`
+   and that fragment becomes **the opening words of the description**. That description is written
+   to the catalogue, and `boonGaps` only ever re-contemplates a boon whose description is
+   *missing*, so a corrupted-but-present one is never revisited. The bonuses panel reads it.
+
+And it is not detectable: the real captured block in `test_mnemosyne.lua`'s own fixture wraps its
+description mid-sentence with a **flush-left** continuation line, so there is no indentation to
+tell a wrapped meta tail from the description's first line.
+
+Promoting a label we have never read, whose value is the shape most likely to wrap, **buys nothing
+today** — no line means no value — and risks the catalogue's most irreplaceable field. `info.meta`
+records it verbatim if it ever appears, which is exactly what v4.7.288 built `meta` for. The
+storage and transport for `conflictsWith` remain (an imported catalogue can carry one), so only the
+unverified *parse* is gone.
+
+The two that stay are promoted because their values **provably cannot wrap** — a category is one
+word, an unlocking boon is one name (longest in the seed ~30 chars, against the ~115-column wrap
+seen in the fixture) — and `META_VALUE_MAX` (60) **enforces** that rather than assuming it: a value
+long enough to have wrapped is refused and left in `meta`. `META_PLACEHOLDER` separately refuses
+`None`/`N/A`/`-`/`nothing`, so a game rendering "no value" as a word cannot become a boon named
+`None` that fill-never-blank then locks in ahead of the real answer.
 
 ## Boon churn and the half-wired registry (audited 2026-09-02, corrected 2026-09-03, UNFIXED)
 

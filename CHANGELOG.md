@@ -2,6 +2,209 @@
 
 ---
 
+## 2026-09-08 - The rest of the Mnemosyne tracker's schema: /run_pause, boon detail, reroll_count (v4.7.298)
+
+Reviewed everything we push to the run tracker against the live schema at
+`http://104.128.56.238:8000/openapi.json` (the endpoint that settles any question about this API's
+shape, rather than inferring it from prose). Four gaps, all of them things the API had been
+accepting the whole time.
+
+### `/run_pause` was on the API and had never been called
+
+`WHISPER ... beseech that it grow still` suspends a run **without** ending it server-side. v4.7.88
+taught the client half of that -- `M.run.paused`, so the next wade resumes via `/run_exists` rather
+than minting a fresh `public_id` that would orphan the dive's progress. The server was simply never
+told, so from the tracker's side a deliberate pause was indistinguishable from a player who stopped
+mid-dive and came back an hour later.
+
+`M.reportRunPause()` (`002_Reporter_API.lua`), called from `M.onRunPause` under `_inRun()`.
+Fire-and-forget by design: the local flag is what drives the resume and is set before the POST, so a
+failed request costs the tracker a marker and costs us nothing -- hence no `onError` undo, unlike
+`startRun`, whose optimistic `active` flag would otherwise keep firing at a run the server never
+created.
+
+### `BoonInfo` has eight fields and we were sending two
+
+`description`, `quote`, `rarity`, `category`, `unlocked_by`, `conflicts_with`,
+`num_echoes_possible` -- we sent `name` and `description`. The other six were never missing *data*:
+the local catalogue (`M.history.boonLibrary`) already holds them, learned from the BOONS list,
+`mnem boonfill` and the per-screen trickle. They were simply never joined up.
+
+**This is not a revival of the contemplate chain, and the distinction is the whole design.** Every
+hazard that got that chain removed in v4.7.279 -- a `BOON CONTEMPLATE` per boon, the shared
+`_capturing` slot, a stall that silently dropped the *entire* report -- belongs to the **fetch**,
+not to the fields. A local table read cannot stall, cannot race and cannot drop the post, so
+`M._enrichOffer(list)` rides the post that was already going out and v4.7.279's reasoning stands
+untouched.
+
+- **Fill, never overwrite.** The offer screen is authoritative for `description` (it is the
+  wrap-joined text the player actually read); the catalogue supplies only what the screen did not.
+- **Returns a COPY.** The caller's list is also what goes to local history and seeds
+  `run.lastOffered` -- a reporting concern must not mutate either.
+- **Names mapped at the boundary**: catalogue camelCase (matching its existing `maxEchoes`) ->
+  API snake_case.
+- **`conflicts_with` omitted when empty**, never `{}`: an empty Lua table has no array/object
+  distinction for yajl, and omitting the key already says "no known conflicts".
+
+### `reroll_count` -- inferred from the screen, never from a command
+
+Rerolls are real (`Negotiator`'s own text grants "5 additional rerolls") but the command that spends
+one has never been captured, and inventing a command name is how `bash dwaeonic off` came to be
+documented for a command that never existed. So `M._rerollBump(list)` counts the **evidence**: a
+second offer screen, with no claim and no `GO!` in between, *is* a reroll.
+
+**The name set is the guard.** A reroll produces a different set of boons; a mere re-print
+(scrollback, re-issued command, duplicated capture) produces the identical set -- so an identical
+re-print neither counts nor resets, because it is not evidence either way. The comparison happens
+**before** `run.lastOffered` is overwritten, which is the one line that would destroy it.
+
+The chain ends on a claim and on `GO!`, and **never on the ripple number**: at the boon screen
+`_offerAfterRipple` sends its own `wade status`, so `run.ripple` can advance *between two screens of
+one chain*, and keying on it would miss exactly the reroll it exists to count. Prospero's Fortune
+(Negotiator's second pick after every fifth claim) is correctly not counted, because a claim
+intervened.
+
+`_resetRun()` clears **both** the count and `offerChain` -- clearing only the count is worse than
+clearing neither, since a chain left open makes the next run's first screen differ from the (now
+empty) previous names and post `reroll_count = 1` for a screen nobody rerolled. `_rerollBump` also
+refuses on its own when there are no previous names to differ from.
+
+### Three contemplate labels graduate, and the catalogue stops dropping what it parsed
+
+v4.7.288 said that storing an unknown `Label: value` "under whatever the game calls it is how we
+find out what to call it". The schema names three of them, so `M._promoteMeta` lifts `category`,
+`unlocked_by` and `conflicts_with` out of `info.meta` into typed fields.
+
+- **`info.meta` is left whole** -- promotion reads it, never consumes it. Meta is the mechanism that
+  learns the *next* label, and emptying it as labels graduate removes that mechanism exactly when a
+  new one appears.
+- **`Conflicts with` splits on COMMAS ONLY, never on " and "**: `Hammer and Anvil` and `Hammer and
+  Nail` are both real boons, so splitting on the conjunction would invent two boons that do not
+  exist. A phantom name is worse than an unsplit one.
+- **`_boonFillNext` was reading `info.quote` and `info.meta` and passing neither on**, so the only
+  way to learn a boon's quote or category was to spend the same contemplate a second time -- which
+  nothing was ever going to do. `_learnBoon` takes a fifth **table** argument (all four existing
+  call sites pass positionally and stay correct untouched).
+- **`_boonDbMerge` is now field-driven (`M.BOON_DB_FIELDS`) -- a correctness change, not tidying.**
+  The old body named its three fields inline on both paths, so the four new ones would have been
+  dropped on save/load round-trip. *A merge that enumerates its fields inline goes stale the next
+  time the record grows.*
+
+### `OkResponse` is finally read
+
+Every endpoint answers `OkResponse { ok, message? }` and `_onDone` read neither -- an HTTP 200
+carrying `ok: false` (the server saying the operation did **not** happen) was logged as a success
+and never shown. Now surfaced with the server's own `message`.
+
+**It surfaces; it does not re-route.** `ok: false` still runs `onOk` rather than firing the error
+path, for the same reason the claim-confirmation line warns instead of un-latching (v4.7.278): we
+have never observed this server answer `ok: false`, so we do not know what produces it -- and
+`startRun`'s `onError` undoes the optimistic `run.active`, which would silently stop all reporting
+for the rest of the dive on a guess.
+
+### Checked and already correct
+
+`/health` is already wired to `mnem test`; `StartRunResponse.public_id` and
+`RunExistsResponse.exists`/`.ripple` are already consumed; `DeathRequest.killer` is schema-REQUIRED and our own caller already defaults it to `"unknown"`;
+`class`/`race` on `/boons_offered` were correct since v4.7.220.
+
+### Deep review — nine fixes, six of them defects in the work above
+
+Four parallel review agents audited the change; every finding below was independently verified
+against the code before acting on it, and two agent claims were rejected on inspection.
+
+**The reroll chain rode the serialized namespace.** `M.run` is a plain table inside `ataxia`, and
+`ataxia_saveSettings` does `table.save(file, sanitizeForSave(ataxia))` — wholesale, stripping only
+functions, metatabled objects and GUI snapshots — while `deepMerge` ends in an unconditional
+`dst[k] = v`. So `rerolls`/`offerChain` reached disk and the disk value won on load: the v4.7.192–194
+rule, which `_relatchBoons` already obeys by keeping its guard on `ataxiaTemp`. Moved to
+`ataxiaTemp.mnemRerolls`/`.mnemOfferChain` behind `M._rerollCount()`/`_rerollReset()`. **Worth
+recording: `002_Reporter_API.lua`'s header comment claiming run state is "in-memory only" is
+false** — `run.active`, `ripple`, `publicId` and `lastOffered` all persist today. Out of scope to
+fix; in scope not to add to.
+
+**The count was read at send time, so a fast claim erased it.** The POST is deferred to the ripple
+line or a 3s timeout, and `onBoonClaim`/`onGo` close the chain the instant they fire — so a player
+claiming inside that window made the *last screen of a chain*, the most informative row there is,
+report `reroll_count = 0`. The count is now snapshotted with the screen (`M._pendingRerolls`).
+
+**A rerolled-away screen was never reported at all.** `_offerAfterRipple` overwrote `_pendingOffer`
+unconditionally. That was right when written (v4.7.279) — a second screen close behind the first
+meant a duplicate capture — but **the reroll feature makes two distinct, meaningful screens a normal
+event**, and nobody reconciled the two. The earlier screen is now FLUSHED rather than discarded
+(ripple-safe: a reroll is the same boon screen, hence the same ripple). Its own test asserted the
+discard and has been rewritten to assert the original *intent* — no cross-contamination between the
+two lists — which flushing satisfies exactly. Consequence handled with it: nothing ever cleared that
+slot, so `_resetRun` now calls `M._dropPendingOffer()`, or a stale offer would be posted under the
+*next* run.
+
+**An identical re-print produced a duplicate report.** The name-set guard stopped a re-print
+inflating the count, but `_offerAfterRipple` still ran — re-sending `wade status` and posting a
+second identical `/boons_offered`. The design note says a re-print "is not evidence either way"; it
+now produces no report either.
+
+**`Conflicts with` is no longer parsed** — the most important fix, and the reasoning generalises.
+`_parseContemplate` reads **raw physical lines with no continuation-joining**, and Achaea wraps
+server-side at the player's width (the v4.7.286/297 rule). Every label the screen has ever printed
+has a short value (`rare`, `No`, `3`), so this never mattered — but a conflicts value is *a list of
+boon names*, the one shape that wraps. A wrapped meta value fails twice: the stored value is
+truncated, **and** its continuation line, having no colon, flips the state machine into `desc` and
+becomes the opening words of the description — which is written to the catalogue, and `boonGaps`
+only re-contemplates a boon whose description is *missing*, so a corrupted-but-present one is never
+revisited. It is not detectable either: the real captured block in our own test fixture wraps
+mid-sentence with a **flush-left** continuation. Promoting a label we have never read, whose value
+is the shape most likely to wrap, buys nothing today and risks the catalogue's most irreplaceable
+field. It stays in `info.meta` — exactly what v4.7.288 built `meta` for. Transport and storage for
+`conflictsWith` remain, so an imported catalogue still works.
+
+The two labels that stay are promoted because their values *provably* cannot wrap, and
+`META_VALUE_MAX` (60) now **enforces** that rather than assuming it. `META_PLACEHOLDER` separately
+refuses `None`/`N/A`/`-`/`nothing`, so a game rendering "no value" as a word cannot become a boon
+named `None` that fill-never-blank then locks in ahead of the real answer. Promotion also iterates
+**sorted** keys, since two labels map to `unlockedBy` under a first-wins guard.
+
+**`/run_pause` is gated on `_auto()`, not `_inRun()`.** `_inRun()` also requires `run.active` —
+our *belief* about the server — which is false in exactly the window that matters: after a reload
+mid-run, until the delayed `/run_exists` answers, a request with **no `onError`**, so an unreachable
+tracker leaves it false indefinitely. A pause there was silently unreported with no retry,
+reproducing the problem the call was added to fix. Trigger 016 is exact and Mnemosyne-only, so it
+cannot fire outside a dive.
+
+**`mnem pause` now exists.** `05-commands.md` opens by claiming `mnem` is "a manual override for
+every reporter endpoint", and `/run_pause` shipped without one — the endpoint most exposed to a
+wording change, since a single exact trigger line drives it, was the one with no fallback.
+
+**The generic merge did not respect its fields' types.** `conflictsWith` is the only table in
+`M.BOON_DB_FIELDS`, and making `_boonDbMerge` field-driven put it through a loop written for
+strings: `cur[f] = rec[f]` **aliased** the source (the exact hazard `_learnBoon` guards against two
+functions above, for this same field), and since **a table is never `== ""`**, an empty `{}` merged
+as though it were data and then permanently satisfied the "already filled" test with nothing to ever
+refill it. `mergeValue()` copies lists and treats an empty one as no information.
+
+**Rejected after checking.** An agent rated the `_pendingOffer` replacement a pre-existing
+non-defect; another rated it HIGH. The second was right about the *consequence* (a lost row) but the
+first was right that the mechanism predates this work — it is fixed above because the reroll feature
+is what made it reachable, not because it was newly broken. A separate CRITICAL claim that the
+`onRipple` bootstrap inherits stale chain state was verified as **bounded**: `GO!` precedes every
+boon screen within a run and closes the chain, so the exposure is real only across a reload — which
+the `ataxiaTemp` move already eliminates. The `ok:false`-still-runs-`onOk` design is deliberate and
+unchanged.
+
+**Tests:** 51 new cases in `test_mnemosyne.lua` (1813 total, all passing). Break-back verified on
+nineteen independent reverts -- pause POST removed, reroll bump moved after the `lastOffered`
+overwrite, enrichment removed, promotion removed, merge returned to inline fields, `ok:false`
+silenced, `offerChain` left uncleared, prev-names guard dropped -- each fails only its own tests.
+The reroll cases drive the **real** offer screen through the real capture (the v4.7.279 break-back
+shape), because calling `_rerollBump` directly would leave the wiring in `onBoonsOffered`
+undefended, and that wiring is the whole trick.
+
+**Files:** `mnemosyne/001_HTTP_Client.lua`, `002_Reporter_API.lua`, `003_Commands.lua`,
+`004_Parsers.lua`, `007_History.lua`, `tests/test_mnemosyne.lua`,
+`.claude/projects/mnemosyne/01-architecture.md`, `02-reporting.md`, `03-parsing-triggers.md`,
+`05-commands.md`, `06-history.md`, `CLAUDE.md`.
+
+---
+
 ## 2026-09-03 - Tekura gets the Kaido riders, lava leaves toward progress, and five deep-review fixes (v4.7.297)
 
 ### Tekura gets the same three Kaido eq riders as Shikudo

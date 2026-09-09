@@ -65,7 +65,7 @@ function M.help()
     { "mnem status", "Show config + current run state" },
     { "mnem token <token>", "Save your API token" },
     { "mnem on | off", "Toggle automatic reporting" },
-    { "mnem contemplate", "Toggle boon enrichment via BOON CONTEMPLATE" },
+    { "mnem contemplate", "Legacy toggle -- does NOT control what is sent (see mnem status)" },
     { "mnem test", "Ping /health to check connectivity" },
     { "mnem debug", "Toggle verbose debug echoes" },
     { "mnem map [on|off|status]", "Toggle / diagnose the per-ripple mini-map" },
@@ -85,6 +85,7 @@ function M.help()
     { "mnem quiet [on|off]", "Silence auto boon/affix echoes (still records)" },
     { "mnem start | end", "Manually start / end a run" },
     { "mnem check", "Re-sync with an in-progress run (/run_exists)" },
+    { "mnem pause", "Report a pause (/run_pause); the next wade resumes the same run" },
     { "mnem ripple <n>", "Manually report ripple level" },
     { "mnem boss <name>", "Manually report the boss" },
     { "mnem monsters <text>", "Manually report monsters" },
@@ -179,6 +180,12 @@ function M.command(rest)
     M.endRun()
   elseif cmd == "check" then
     M.runExists()
+  -- The manual override for /run_pause. Every other reporter endpoint has one, as a test tool
+  -- and as the fallback for when game wording changes -- and the pause is driven by a single
+  -- exact trigger line, so it is the endpoint most exposed to a wording change.
+  -- Sets the local resume flag too, so a manual pause behaves exactly like the trigger.
+  elseif cmd == "pause" then
+    M.onRunPause()
   elseif cmd == "ripple" then
     if arg == "" then M.echo("Usage: mnem ripple <number>") else M.setRipple(tonumber(arg)) end
   elseif cmd == "boss" then

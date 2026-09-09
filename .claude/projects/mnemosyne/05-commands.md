@@ -1,6 +1,8 @@
 # Commands & Boon-Claim Intercept
 
-The `mnem` alias is the operator surface for the run tracker: config toggles, a map control, and a manual override for every reporter endpoint. A second alias silently intercepts the player's own `BOON CLAIM` and auto-reports the selection. Run lifecycle and payloads live in [01-architecture.md](01-architecture.md) and [02-reporting.md](02-reporting.md); this doc is just the command layer.
+The `mnem` alias is the operator surface for the run tracker: config toggles, a map control, and a manual override for every reporter endpoint. A second alias silently intercepts the player's own `BOON CLAIM` and auto-reports the selection.
+
+That "every reporter endpoint" claim was **false between v4.7.298's first cut and its deep review**: `/run_pause` shipped with no manual override. It matters more here than elsewhere — the pause is driven by a *single exact trigger line*, so it is the endpoint most exposed to a wording change, and the override is the documented fallback for exactly that. `mnem pause` calls `onRunPause()` rather than `reportRunPause()` directly, so a manual pause also sets the local resume flag and therefore behaves identically to the trigger. Run lifecycle and payloads live in [01-architecture.md](01-architecture.md) and [02-reporting.md](02-reporting.md); this doc is just the command layer.
 
 ## The alias layer
 
@@ -172,6 +174,7 @@ These call the Reporter API directly. The API functions guard only on `M._hasTok
 | `mnem start` | `M.startRun()` | `POST /run_start` |
 | `mnem end` | `M.endRun()` | flush monsters + `POST /run_end` |
 | `mnem check` | `M.runExists()` | `POST /run_exists` — resync with an in-progress run |
+| `mnem pause` | `M.onRunPause()` | `POST /run_pause` + set the local resume flag (v4.7.298) |
 | `mnem ripple <n>` | `M.setRipple(tonumber(arg))` | `POST /ripple_level` (guarded: only if `n > run.ripple`) |
 | `mnem boss <name>` | `M.reportBoss(arg)` | `POST /boss` |
 | `mnem monsters <text>` | `M.reportMonsters(arg)` | `POST /monsters` |

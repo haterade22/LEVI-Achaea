@@ -187,7 +187,26 @@ function M._onDone(_, url, body)
   end
 
   if req then
-    M.decho(req.endpoint .. " -> OK")
+    -- WHAT THE SERVER SAID, NOT JUST THAT IT ANSWERED (v4.7.298). Every endpoint returns
+    -- `OkResponse { ok, message? }` and we were reading neither: an HTTP 200 carrying
+    -- `ok: false` -- the server telling us the operation did NOT happen -- was logged as a
+    -- success and never shown. `message` is the server's own explanation and is the only place
+    -- a refusal reason can come from.
+    --
+    -- IT SURFACES, IT DOES NOT RE-ROUTE. `ok: false` deliberately still runs `onOk` rather than
+    -- firing the error path, for the same reason the claim-confirmation line warns instead of
+    -- un-latching (v4.7.278): we have never seen this server answer `ok: false`, so we do not
+    -- know which conditions produce it -- and `startRun`'s onError undoes the optimistic
+    -- `run.active`, which would silently stop all reporting for the dive on a guess. Promote it
+    -- to the error path once a real `ok: false` has been observed and its meaning is known.
+    local msg = (type(parsed) == "table") and parsed.message or nil
+    if type(parsed) == "table" and parsed.ok == false then
+      M.echo("<indian_red>" .. req.endpoint .. " refused<reset>"
+        .. ((type(msg) == "string" and msg ~= "") and (": " .. msg) or ""))
+    else
+      M.decho(req.endpoint .. " -> OK"
+        .. ((type(msg) == "string" and msg ~= "") and (" (" .. msg .. ")") or ""))
+    end
     if req.onOk then
       local cok, cerr = pcall(req.onOk, parsed, body)
       if not cok then M.echo("Callback error (" .. req.endpoint .. "): " .. tostring(cerr)) end

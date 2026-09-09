@@ -129,6 +129,21 @@ end
 function M.onRunPause()
   M.run.paused = true
   M.decho("Run paused (beseeched still) -- next wade resumes the same run.")
+  -- ...and TELL the server (v4.7.298). `/run_pause` has been on the API the whole time and we
+  -- had never called it: the flag above is what makes OUR next wade resume rather than start
+  -- afresh, but with nothing on the wire the tracker cannot tell a deliberate pause from a
+  -- player who simply stopped.
+  --
+  -- GATED ON `_auto()`, NOT `_inRun()` (deep review). `_inRun()` additionally requires
+  -- `run.active`, which is OUR belief about the server's state and can be wrong in exactly the
+  -- window that matters: after a reload or SYSUPDATE mid-run, `active` is false until the
+  -- load handler's delayed `/run_exists` answers -- and that request has no `onError`, so a
+  -- slow or unreachable tracker leaves it false indefinitely. A pause landing in that window
+  -- would be silently unreported with no retry, reproducing the very problem this call fixes.
+  -- The whisper is an exact, anchored, Mnemosyne-only trigger line (trigger 016), so it cannot
+  -- fire outside a dive: if the game says we paused a run, the run exists and the server is the
+  -- authority on it. A stale POST is answered by `ok:false`, which is now surfaced.
+  if M._auto() then M.reportRunPause() end
 end
 
 -- "You begin to wade out into the depths of the Mnemosyne..."
@@ -743,6 +758,15 @@ end
 -- reporting. Gated on _auto() (not _inRun) for the wade status so it can bootstrap
 -- a run whose start line was missed. (M._extractMob is retained as a utility.)
 function M.onGo()
+  -- THE BOON SCREEN IS OVER. Ends the reroll chain (see M._rerollBump): a wave has to be fought
+  -- between one genuine offer and the next, and GO! is where that wave starts -- so any offer
+  -- screen after this point is a new one, not a reroll of the last.
+  --
+  -- ABOVE the gate below, and deliberately not keyed on the ripple NUMBER: at the boon screen
+  -- `_offerAfterRipple` sends its own `wade status`, so `run.ripple` can advance BETWEEN two
+  -- offer screens of the same chain. Keying the chain on it would miss exactly the reroll it
+  -- exists to count.
+  M._rerollReset()
   -- Fire for telemetry OR just for the ripple map (so WADE STATUS -> the ripple
   -- line drives the per-ripple map reset even with reporting off).
   local mnem = ataxiaBasher and ataxiaBasher.inMnemosyne
@@ -1555,6 +1579,89 @@ function M._echoImmunities(list)
   end
 end
 
+-- REROLLS ARE INFERRED FROM THE SCREEN, NEVER FROM A COMMAND (v4.7.298).
+--
+-- `BoonsOfferedRequest.reroll_count` is an integer field we had never sent. Rerolls are real --
+-- the `Negotiator` boon's own text grants "5 additional rerolls" -- but we have never captured
+-- the command that spends one, and inventing a command name is how `bash dwaeonic off` came to
+-- be documented for a command that never existed (v4.7.265). So this counts the EVIDENCE
+-- instead: a second offer screen, with no claim and no wave in between, IS a reroll.
+--
+-- THE NAME SET IS THE GUARD, and it is what makes the inference safe. A reroll produces a
+-- DIFFERENT set of boons; a screen that merely re-prints -- a scrollback, a re-issued command,
+-- a duplicated capture -- produces the identical set. Comparing against `run.lastOffered`, which
+-- we already keep for resolving claim spellings, separates the two without knowing what caused
+-- the reprint. An identical reprint therefore neither counts nor resets: it is not evidence
+-- either way.
+--
+-- The chain is ended by a claim (M.onBoonClaim) and by GO! (M.onGo), never by the ripple number
+-- -- see the note in onGo for why that number cannot be trusted between two screens of one chain.
+function M._nameSet(list)
+  local set, n = {}, 0
+  for _, b in ipairs(list or {}) do
+    local name = (type(b) == "table") and b.name or b
+    if type(name) == "string" and name ~= "" and not set[name] then
+      set[name] = true
+      n = n + 1
+    end
+  end
+  return set, n
+end
+
+function M._sameOffer(prevNames, list)
+  local a, an = M._nameSet(prevNames)
+  local b, bn = M._nameSet(list)
+  if an == 0 or an ~= bn then return false end
+  for name in pairs(a) do
+    if not b[name] then return false end
+  end
+  return true
+end
+
+-- THE CHAIN LIVES ON `ataxiaTemp`, NOT ON `M.run` (deep review, v4.7.298).
+--
+-- `M.run` is a plain table hanging off `ataxia`, and `ataxia_saveSettings` does
+-- `table.save(file, sanitizeForSave(ataxia))` -- a WHOLESALE serialization that strips only
+-- functions, metatabled objects and GUI snapshots. Scalars like these two go straight to disk,
+-- and `deepMerge` ends in an unconditional `dst[k] = v`, so the disk value wins on load. That is
+-- exactly the trap CLAUDE.md documents from v4.7.192-194, and the reason `_relatchBoons` already
+-- keeps its guard here rather than under `ataxia`.
+--
+-- Note for anyone reading `002_Reporter_API.lua`'s header: its claim that run state is
+-- "in-memory only" is FALSE -- `run.active`, `ripple`, `publicId` and `lastOffered` all persist
+-- today. Correcting that is out of scope here; what is in scope is not adding to it.
+--
+-- `ataxiaTemp` is never serialized (only `ataxia`, `ataxiaBasher`, `ataxiaBasherPaths`,
+-- `ataxiaNDB`, `ataxiaExtraction` and `selfLimbDamage.config` are written to disk), so these
+-- two are guaranteed to start clean on every load -- which for a per-screen counter is the only
+-- correct starting state.
+function M._rerollCount()
+  ataxiaTemp = ataxiaTemp or {}
+  return tonumber(ataxiaTemp.mnemRerolls) or 0
+end
+
+function M._rerollReset()
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.mnemRerolls = 0
+  ataxiaTemp.mnemOfferChain = false
+end
+
+function M._rerollBump(list)
+  ataxiaTemp = ataxiaTemp or {}
+  -- A chain needs a PREVIOUS SCREEN to differ from. Requiring names as well as the flag is
+  -- belt-and-braces: with no previous names there is nothing a reroll could have replaced, so
+  -- the only honest answer is 0.
+  local _, prevCount = M._nameSet(M.run.lastOffered)
+  local continuing = (ataxiaTemp.mnemOfferChain == true) and prevCount > 0
+  if continuing and not M._sameOffer(M.run.lastOffered, list) then
+    ataxiaTemp.mnemRerolls = M._rerollCount() + 1
+    M.decho("Offer replaced with no claim in between -- reroll #" .. tostring(ataxiaTemp.mnemRerolls))
+  elseif not continuing then
+    ataxiaTemp.mnemRerolls = 0
+  end
+  ataxiaTemp.mnemOfferChain = true
+end
+
 function M.onBoonsOffered()
   local seenDash = false
   M._captureLines({
@@ -1589,10 +1696,25 @@ function M.onBoonsOffered()
 
       -- Everything below is telemetry.
       if not M._inRun() then return end
+      -- BEFORE lastOffered is overwritten: the comparison against the previous screen's names is
+      -- the entire reroll test, and this line is what would destroy it.
+      --
+      -- A RE-PRINT IS NOT A SECOND OFFER (deep review). The name-set guard inside `_rerollBump`
+      -- stops an identical screen inflating the COUNT, but the count was never the only thing
+      -- downstream: `_offerAfterRipple` below would re-send `wade status` and post a second,
+      -- identical `/boons_offered`, giving the tracker two rows for one offer event. The
+      -- comment on `_rerollBump` says a re-print "is not evidence either way" -- so it must not
+      -- produce a report either.
+      ataxiaTemp = ataxiaTemp or {}
+      local reprint = (ataxiaTemp.mnemOfferChain == true) and M._sameOffer(M.run.lastOffered, list)
+      M._rerollBump(list)
       -- Remember canonical names so a later BOON CLAIM can be reported
       -- with the exact spelling the game used.
       M.run.lastOffered = {}
       for _, b in ipairs(list) do table.insert(M.run.lastOffered, b.name) end
+      if reprint then
+        return M.decho("Identical offer re-printed -- not re-reporting.")
+      end
       M._offerAfterRipple(list)
     end,
   })
@@ -1625,6 +1747,10 @@ function M.onBoonClaim(name)
   if not canonical then
     return M.decho("BOON CLAIM '" .. name .. "' not resolvable against last offered set; not reporting.")
   end
+  -- A CLAIM ENDS THE CHAIN, which is what keeps Prospero's Fortune from being miscounted:
+  -- Negotiator's every-fifth-claim second pick opens another offer screen, but a claim
+  -- intervened, so the screen that follows starts a fresh chain rather than reading as a reroll.
+  M._rerollReset()
   if M._recordClaim then M._recordClaim(canonical) end -- local history (#6)
   if M.latchBoonFlag then M.latchBoonFlag(canonical) end -- generic flags (v4.7.241)
   -- The bonuses panel is derived from the claim history, so it is stale the instant a claim
@@ -1760,8 +1886,38 @@ end
 -- if it arrives, on a timer if it does not. Never dropped, at worst filed where it is now.
 M.OFFER_RIPPLE_WAIT = 3 -- seconds to wait for the ripple line before posting anyway
 
+-- DROP a pending offer without posting it. Used at a run boundary: the offer belongs to a run
+-- that is over, so flushing it would file it under the wrong run -- the one case where losing it
+-- is better than sending it. Nothing cleared this slot before, which was survivable only while a
+-- replaced offer was silently discarded; now that a replacement FLUSHES, a stale pending offer
+-- would be posted into the next run.
+function M._dropPendingOffer()
+  M._pendingOffer = nil
+  M._pendingRerolls = nil
+  if M._offerTimer then pcall(killTimer, M._offerTimer); M._offerTimer = nil end
+end
+
 function M._offerAfterRipple(list)
+  -- FLUSH THE PREVIOUS SCREEN, DO NOT DROP IT (deep review).
+  --
+  -- `_pendingOffer` is a single slot and this function used to overwrite it unconditionally.
+  -- That was right when it was written (v4.7.279): a second screen arriving before the first had
+  -- posted meant a duplicate capture, and keeping the newer one was the safe call. THE REROLL
+  -- FEATURE MAKES TWO DISTINCT, MEANINGFUL SCREENS A NORMAL EVENT, and nothing reconciled the
+  -- two -- so a rerolled-away screen was never posted and never recorded to local history, which
+  -- is precisely the data `reroll_count` exists to make sense of.
+  --
+  -- Flushing here is ripple-safe: a reroll happens at the same boon screen, so the previous
+  -- screen belongs to the same ripple the pending `wade status` was already asking about.
+  -- The original test's intent -- "a second offer screen must not be posted with the first
+  -- screen's list" -- is preserved exactly; only the discarding changes.
+  if M._pendingOffer then M._flushPendingOffer("replaced") end
   M._pendingOffer = list
+  -- THE COUNT IS SNAPSHOTTED WITH THE LIST, never re-read at send time. The POST is deferred
+  -- (ripple line, or the timeout below), and `onBoonClaim`/`onGo` both zero the chain the moment
+  -- they fire -- so a player claiming inside that window would otherwise make the LAST screen of
+  -- a chain, the most informative row there is, report `reroll_count = 0`.
+  M._pendingRerolls = M._rerollCount()
   -- A stale timer from a previous screen must not fire against this list.
   if M._offerTimer then pcall(killTimer, M._offerTimer); M._offerTimer = nil end
   -- Ask for the ripple. Gated exactly like the GO! send: `_auto()` rather than `_inRun()`,
@@ -1802,12 +1958,14 @@ end
 
 function M._flushPendingOffer(why)
   local list = M._pendingOffer
+  local rerolls = M._pendingRerolls
   M._pendingOffer = nil
+  M._pendingRerolls = nil
   if M._offerTimer then pcall(killTimer, M._offerTimer); M._offerTimer = nil end
   if type(list) ~= "table" or #list == 0 then return false end
   M.decho("posting /boons_offered (" .. tostring(why) .. ") at ripple "
     .. tostring(M.run and M.run.ripple))
-  M._reportBoonsOfferedEnriched(list)
+  M._reportBoonsOfferedEnriched(list, rerolls)
   -- The offer is off our hands, so the capture slot is free and the boon screen is the quietest
   -- stretch of a run. Trickle ONE catalogue gap after a pause -- see `M._boonFillTrickle`, which
   -- refuses again if anything has taken the slot in the meantime.
@@ -1819,7 +1977,7 @@ function M._flushPendingOffer(why)
   return true
 end
 
-function M._reportBoonsOfferedEnriched(list)
+function M._reportBoonsOfferedEnriched(list, rerolls)
   -- Post the offer to the API IMMEDIATELY, with the name+description straight off the offer screen.
   -- The old design gated the report behind a slow (~2.5s/boon) BOON CONTEMPLATE enrichment chain,
   -- which (a) races the NEXT ripple's captures for the single `_capturing` slot -- when it loses, the
@@ -1828,7 +1986,7 @@ function M._reportBoonsOfferedEnriched(list)
   -- the boons on the wrong ripple. Name+description is what the tracker shows; rarity/echoes are
   -- optional and are still learned locally from the BOONS list (trigger 013) + `mnem boonfill`.
   if M._recordOffers then M._recordOffers(list) end -- local history (#6)
-  M.reportBoonsOffered(list)
+  M.reportBoonsOffered(list, rerolls)
 end
 
 -- Sequentially BOON CONTEMPLATE each boon, merge the parsed detail into the
@@ -1918,7 +2076,17 @@ function M._boonFillNext(todo, i, learned)
   local name = todo[i]
   M._captureContemplate(function(info)
     if info and info.description and info.description ~= "" and M._learnBoon then
-      M._learnBoon(name, info.description, info.rarity, info.num_echoes_possible)
+      -- A CONTEMPLATE IS A COMMAND SPENT AND A CAPTURE SLOT HELD, so take everything it printed
+      -- (v4.7.298). Until now this read `info.quote` and the promoted meta fields and passed
+      -- neither on -- meaning the only way to learn a boon's quote or category was to spend the
+      -- same contemplate a second time, which nothing was ever going to do.
+      -- `conflictsWith` is not passed: nothing parses it (see META_PROMOTE above). The storage
+      -- and transport for it remain, so an imported catalogue that carries one still works.
+      M._learnBoon(name, info.description, info.rarity, info.num_echoes_possible, {
+        quote = info.quote,
+        category = info.category,
+        unlockedBy = info.unlockedBy,
+      })
       learned = learned + 1
     end
     tempTimer(0.5, function() M._boonFillNext(todo, i + 1, learned) end)
@@ -1999,6 +2167,85 @@ local function metaLabel(ln)
   return k
 end
 
+-- PROMOTE THE LABELS WE NOW KNOW THE NAME OF (v4.7.298).
+--
+-- v4.7.288 taught the meta block to KEEP an unrecognised `Label: value` instead of letting it
+-- corrupt the description, and said that storing it "under whatever the game calls it is how we
+-- find out what to call it". Three of those names are now known: the tracker's `BoonInfo` asks
+-- for `category`, `unlocked_by` and `conflicts_with`, and the 2026-09-01 announcement put the
+-- category and the unlocking boon on this very screen. So they graduate to typed fields.
+--
+-- `info.meta` IS LEFT WHOLE. It is the mechanism that learns the NEXT label, and emptying it as
+-- labels graduate would remove that mechanism exactly when a new label appears. Promotion reads
+-- from meta; it does not consume it.
+--
+-- SAFE-FAIL. A label we never see promotes nothing; the value simply stays in `meta`, which is
+-- where the next reader will find it.
+--
+-- `Conflicts with` IS DELIBERATELY ABSENT (deep review, v4.7.298). It was promoted in the first
+-- cut of this change, on the strength of the tracker schema having a `conflicts_with` field --
+-- but that line has never appeared in one of our own logs, and unlike every other label here its
+-- value is a LIST OF BOON NAMES, i.e. long. That matters because this parser reads RAW PHYSICAL
+-- LINES with no continuation-joining, and Achaea wraps server-side at the player's width (the
+-- v4.7.286/297 rule). A wrapped meta value does two bad things at once: the stored value is
+-- silently TRUNCATED, and the continuation line -- having no colon, so not a label -- flips the
+-- state machine into `desc` and becomes THE FIRST WORDS OF THE DESCRIPTION. That description is
+-- then written to the catalogue, and `boonGaps` only ever re-contemplates a boon whose
+-- description is MISSING, so a corrupted-but-present one is never revisited. The bonuses panel
+-- reads it.
+--
+-- The wrap is not hypothetical: the real captured block in `test_mnemosyne.lua`'s own fixture
+-- wraps its description mid-sentence, and its continuation line is FLUSH-LEFT -- so there is no
+-- indentation to distinguish a wrapped meta tail from the description's opening line, and no
+-- honest way to parse one without having seen it. Promoting a label we have never read, whose
+-- value is the one shape most likely to wrap, buys nothing today (no line means no value) and
+-- risks the catalogue's most irreplaceable field. `info.meta` still records it verbatim if it
+-- ever appears -- which is exactly what v4.7.288 built `meta` for.
+--
+-- The two that remain are promoted because their values PROVABLY cannot wrap: a category is a
+-- single word, and an unlocking boon is one name (the longest in the seed is ~30 characters,
+-- versus the ~115-column wrap seen in the fixture). `META_VALUE_MAX` enforces that rather than
+-- assuming it -- a value long enough to have wrapped is refused and left in `meta`.
+local META_PROMOTE = {
+  ["category"] = "category",
+  ["unlocked by"] = "unlockedBy",
+  ["unlocks from"] = "unlockedBy",
+}
+
+-- Long enough that a wrap cannot be ruled out -> we do not trust the value. Comfortably above
+-- the longest real value either promoted label can carry.
+local META_VALUE_MAX = 60
+
+-- A game rendering "no value" as a word must not become a value. `Unlocked by: None` would
+-- otherwise be stored and shipped as though a boon called "None" unlocked this one -- and
+-- fill-never-blank means it would then outrank the real answer when we finally saw it.
+local META_PLACEHOLDER = {
+  ["none"] = true, ["n/a"] = true, ["na"] = true, ["-"] = true,
+  ["nothing"] = true, ["nil"] = true, ["unknown"] = true,
+}
+
+function M._promoteMeta(info)
+  if type(info) ~= "table" or type(info.meta) ~= "table" then return info end
+  -- SORTED, not `pairs()`. Two labels can map to one field ("unlocked by" / "unlocks from"), and
+  -- with a first-wins guard an unspecified iteration order would make the winner arbitrary. The
+  -- codebase sorts for exactly this reason elsewhere (`boonGaps`).
+  local labels = {}
+  for label in pairs(info.meta) do labels[#labels + 1] = label end
+  table.sort(labels)
+  for _, label in ipairs(labels) do
+    local value = info.meta[label]
+    local field = META_PROMOTE[tostring(label):lower()]
+    if field and type(value) == "string" and value ~= "" and info[field] == nil then
+      local trimmed = value:gsub("^%s+", ""):gsub("%s+$", "")
+      local bare = trimmed:gsub("%s*%.%s*$", ""):lower()
+      if #trimmed <= META_VALUE_MAX and not META_PLACEHOLDER[bare] then
+        info[field] = trimmed
+      end
+    end
+  end
+  return info
+end
+
 function M._parseContemplate(lines)
   local info = {}
   local descParts, quoteParts = {}, {}
@@ -2045,5 +2292,5 @@ function M._parseContemplate(lines)
   if #quoteParts > 0 then
     info.quote = (table.concat(quoteParts, " "):gsub('^"', ""):gsub('"$', ""))
   end
-  return info
+  return M._promoteMeta(info)
 end

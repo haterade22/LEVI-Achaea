@@ -84,6 +84,9 @@ boons offer: "...flickers of power that may aide you..."   [trig 004]
        flags; the server run keeps living. The NEXT wade's onRunStart consumes
        it → RESUME via /run_exists instead of a fresh /run_start, so the paused
        run's progress isn't orphaned under a new public_id.)
+                     → POST /run_pause  (v4.7.298; gated on _auto(), NOT
+       _inRun() — `run.active` is our belief about the server and is false in
+       exactly the window that matters, right after a reload mid-run.)
 
 ──────────────  end conditions  ──────────────
 
@@ -121,7 +124,7 @@ Mnemosyne is an endless climb with **no win condition**. A "slain by" line (trig
 
 ## Pause vs. Restart (beseech still)
 
-The message *"You whisper to the Mnemosyne and beseech that it grow still for a time."* (trigger 016) **suspends** the run without ending it server-side — the next wade re-enters the *same* run. `onRunPause()` sets `M.run.paused = true` unconditionally (like the boon flags, so it's set even with telemetry off). The next *"You begin to wade…"* line routes through `onRunStart()`, which — under the `_auto()` gate — branches on `paused`: if set, it clears the flag and calls `runExists()` (`POST /run_exists`, which re-syncs `active`+`ripple`) instead of `startRun()` (`POST /run_start`). Resuming rather than restarting avoids orphaning the paused run's accumulated progress under a brand-new `public_id`. A genuine run end (`onRunEnd`, above) or start/end reset (`_resetRun`) clears `paused` so a stale flag can never redirect a later fresh wade.
+The message *"You whisper to the Mnemosyne and beseech that it grow still for a time."* (trigger 016) **suspends** the run without ending it server-side — the next wade re-enters the *same* run. `onRunPause()` sets `M.run.paused = true` unconditionally (like the boon flags, so it's set even with telemetry off) **and posts `/run_pause`** (v4.7.298 — see [02-reporting.md](02-reporting.md); before that the server was never told, so a deliberate pause was indistinguishable from a player who simply stopped mid-dive). The next *"You begin to wade…"* line routes through `onRunStart()`, which — under the `_auto()` gate — branches on `paused`: if set, it clears the flag and calls `runExists()` (`POST /run_exists`, which re-syncs `active`+`ripple`) instead of `startRun()` (`POST /run_start`). Resuming rather than restarting avoids orphaning the paused run's accumulated progress under a brand-new `public_id`. A genuine run end (`onRunEnd`, above) or start/end reset (`_resetRun`) clears `paused` so a stale flag can never redirect a later fresh wade.
 
 **Start-failure recovery.** `startRun()` sets `run.active = true` optimistically; its `onError` callback resets it if `/run_start` fails (500 or timeout), so the client never keeps posting at a run the server never created — see [02-reporting.md](02-reporting.md).
 

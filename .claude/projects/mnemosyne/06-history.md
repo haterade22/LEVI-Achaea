@@ -162,3 +162,39 @@ Recording is honest about its coverage: it only happens at parser hooks that are
 ---
 
 See also: [01-architecture.md](01-architecture.md) (run lifecycle, `_auto`/`_inRun` gating), [02-reporting.md](02-reporting.md) (the remote endpoints these calls sit beside), [03-parsing-triggers.md](03-parsing-triggers.md) (the block parsers that feed the recorders), [05-commands.md](05-commands.md) (the `mnem` command surface).
+
+## The catalogue record (v4.7.298)
+
+`M.history.boonLibrary[name]` learned `description`, `rarity` and `maxEchoes`. A `BOON CONTEMPLATE`
+block prints more than that, and `_boonFillNext` was reading `info.quote` and `info.meta` and
+passing **neither** on — so the only way to learn a boon's quote or category was to spend the same
+contemplate a second time, which nothing was ever going to do. *A contemplate is a command spent and
+a capture slot held; take everything it printed.*
+
+`_learnBoon(name, description, rarity, maxEchoes, extra)` now takes a fifth **table** argument
+carrying `quote`, `category`, `unlockedBy`, `conflictsWith`. A table rather than four more
+positional parameters: all four existing call sites pass 2–4 args positionally and stay correct
+untouched, and the next field added shifts nothing. Same fill-never-blank contract as before — each
+source (offer screen, BOONS list, CONTEMPLATE) fills what it knows and never erases what another
+already supplied. `conflictsWith` is **copied, not aliased**: the caller's table is a parse result
+that may be reused, and the catalogue is persisted, so it must own its storage.
+
+**`_boonDbMerge` is now field-driven (`M.BOON_DB_FIELDS`), and that is a correctness change rather
+than tidying.** The old body named its three fields inline on both the add and the enrich path, so
+the four fields added in the same release would have been silently dropped — a saved catalogue would
+round-trip through `_boonDbSave`/`_boonDbLoad` **losing them**. A merge that enumerates its fields
+inline is a merge that goes stale the next time the record grows.
+
+**...but a field-driven loop must still respect the fields' types (deep review, v4.7.298).**
+`conflictsWith` is the only entry in `M.BOON_DB_FIELDS` that is a *table*, and making the merge
+generic put it through a loop written for strings. Two bugs came with that:
+
+- A plain `cur[f] = rec[f]` **aliases** the source table instead of copying it — the exact hazard
+  `_learnBoon` guards against, for this same field, two functions above. The seed is merged at load
+  time, so aliasing would hand the persisted catalogue a reference to a literal that lives for the
+  whole session.
+- **A table is never `== ""`**, so an empty `{}` passed the "is there anything here" test, merged as
+  though it were data, and then permanently passed the "already filled" test. Nothing would ever
+  refill it: `boonGaps` selects on a missing *description* alone.
+
+`mergeValue()` now copies list values and treats an empty list as no information at all.
