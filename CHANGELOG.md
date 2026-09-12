@@ -2,6 +2,20 @@
 
 ---
 
+## 2026-09-11 - Re-release of v4.7.299 with no code changes (v4.7.300)
+
+**No source changed.** This tag carries exactly the v4.7.299 tree with only the three version
+strings bumped (`version.txt`, `muddler_project/mfile`, `_groups.yaml`'s `ataxiaVersion`). Cut
+on request so every client's `sysupdate` sees a newer `version.txt` on raw `main` and re-downloads
+the package from `/releases/latest`.
+
+Recorded here rather than left as a bare tag because the auto-updater's version CHECK (raw `main`)
+and its DOWNLOAD (`/releases/latest`) read different sources; a version that exists in one and not
+the other is exactly the mismatch the release flow in `CLAUDE.md` warns about, so a no-op release
+still goes through the full bump -> build -> commit -> tag -> push-by-name sequence.
+
+---
+
 ## 2026-09-09 - Mnemosyne run state no longer survives a reload (v4.7.299)
 
 Follow-up to v4.7.298's deep review, which found that `M.run` is serialized and recorded it as out
