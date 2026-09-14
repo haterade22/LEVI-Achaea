@@ -96,9 +96,15 @@ jobs:
           java-version: '8'
 
       - name: Download Muddler
+        # 2026-09-14: GitHub served a 504 page for this asset and a bare `curl -L -o` saved it as
+        # the zip, so the v4.7.302 tag build failed twice on infrastructure with the code green.
+        # --fail turns an HTTP error into a non-zero exit, --retry rides out a transient outage
+        # (--retry-all-errors covers 5xx, which curl does not retry by default), and `unzip -tq`
+        # proves it is an archive before anything depends on it.
         run: |
-          curl -L -o muddler.zip https://github.com/demonnic/muddler/releases/download/1.1.0/muddle-shadow-1.1.0.zip
-          unzip muddler.zip -d muddler-bin
+          curl --fail --location --retry 8 --retry-delay 15 --retry-all-errors             -o muddler.zip https://github.com/demonnic/muddler/releases/download/1.1.0/muddle-shadow-1.1.0.zip
+          unzip -tq muddler.zip
+          unzip -q muddler.zip -d muddler-bin
           chmod +x muddler-bin/muddle-shadow-1.1.0/bin/muddle
 
       - name: Install Python dependencies

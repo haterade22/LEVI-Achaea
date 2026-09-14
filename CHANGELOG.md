@@ -19,6 +19,19 @@ a lagging zero with no Mnemosyne module at all, and a stale knob value being ign
 **Files:** `basher/002_Class_Bashing.lua`, `tests/test_bard_flourish.lua`, `.claude/classes/bard.md`,
 `CLAUDE.md`.
 
+### Release note: published from the local build, and the workflow hardened
+
+The `v4.7.302` tag build failed twice in its "Download Muddler" step -- GitHub served an HTTP 504
+page for the Muddler 1.1.0 asset (reproduced from a workstation: 92 bytes of HTML, three tries),
+and the step's bare `curl -L -o` saved that page as `muddler.zip` and tried to unzip it. The
+"Validate Lua & Version" job passed both times; nothing about the package was wrong. The release
+was therefore created by hand from the local `./build.sh` output of the identical tagged tree
+(same converter, same Muddler 1.1.0), which is exactly the file the release step would have
+uploaded. `build.yml` now downloads with `--fail --retry 8 --retry-all-errors` and verifies the
+archive with `unzip -tq` before use, so a transient upstream error retries instead of failing on
+an error page. **A download step that cannot tell an error page from the file is a build that
+fails on someone else's outage.**
+
 ---
 
 ## 2026-09-14 - Deadly Flourish: the Bard flourishes every 15 seconds (v4.7.301)
