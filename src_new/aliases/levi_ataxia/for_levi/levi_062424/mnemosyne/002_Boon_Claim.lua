@@ -51,7 +51,8 @@ if matches[2]:lower():find("obligate carnivore") then mnemObligateCarnivore = tr
 -- in the room, once every 15s; the Bard basher spends a balance on it whenever the clock is up.
 if matches[2]:lower():find("deadly flourish") then mnemDeadlyFlourish = true end
 -- Healing Metabolism: satiation is worth 50% on every health elixir, so it becomes upkeep
--- rather than a hunger floor -- the kill trigger tops it up off the fresh corpse.
+-- rather than a hunger floor -- off a corpse when Obligate Carnivore is also held, off the horn
+-- of plenty otherwise (v4.7.303), whenever hunger reads below "utterly satiated".
 if matches[2]:lower():find("healing metabolism") then mnemHealingMetabolism = true end
 -- Berserker's Edge: 1% damage per point of battlerage held, capped at 100 -- so hold rage
 -- rather than spend it. Pins ataxiaBasher.rageFloor at 100 (basher/001).

@@ -1023,10 +1023,11 @@ several of. **Two decisions about WHEN, both about the EATING balance** (contend
 cure-herb, the reason the PvE curing profile exists): the eat goes out on the FREE queue so the next
 `queue addclearfull` cannot wipe it, and the UPKEEP fires on a KILL -- a corpse exists and the fight
 is ending rather than peaking. The STARVATION path forces past that throttle, because a throttle
-written for upkeep must not stand in front of unconsciousness. **The top-up needs BOTH boons**: with
-only Carnivore a corpse is just food and the horn already covers hunger; with only Metabolism there
-is no food source. The ATTEMPT is stamped as well as the confirmation, because an empty pack is the
-normal state between kills and would otherwise re-probe on every one.
+written for upkeep must not stand in front of unconsciousness. **The CORPSE top-up needs BOTH boons**: with
+only Carnivore a corpse is just food and the horn already covers hunger; with only Metabolism the
+food source is the HORN (v4.7.303, below -- v4.7.294 wrongly said there was none). The ATTEMPT is
+stamped as well as the confirmation, because an empty pack is the normal state between kills and
+would otherwise re-probe on every one.
 
 **THE STARVATION PATH WAS NEVER WIRED IN (found in review, fixed v4.7.297).** `ataxia_hornOnHungry`
 -- corpse-first, horn-fallback -- has existed since v4.7.294, but `triggers/374_Starving.lua`, the
@@ -1039,6 +1040,31 @@ The trigger now also owns its OWN re-fire throttle (`STARVING_RETRY`, 5s): the f
 deliberately bypasses `ataxia_carnivoreEat`'s own cooldown (starvation must not wait on a throttle
 written for upkeep), so without a throttle at the trigger the vitals row -- which prints every
 prompt while starving persists -- would re-send `ii corpse` on every single prompt.
+
+**HEALING METABOLISM ALONE: HOLD "UTTERLY SATIATED" OFF THE HORN (v4.7.303, user-directed:
+"When we have this boon we need to be full satiation. I have a horn which produces food ... If
+HUNGER is lower than utterly satiated").** Six horn charges on a refill clock is a real cost and
+the user has priced it. **Three ways to notice hunger, because none is complete alone**: (1) the
+SCORE row `| Hunger : <state>` -- trigger `374` now captures WHATEVER the row says (it used to match
+only the three emergency states) and hands it to `ataxia_hungerSeen`, which classifies: emergency
+states take the starvation path whether or not any boon is held, anything else below "utterly
+satiated" is upkeep, and "utterly satiated" closes the episode -- the classification lives in the
+script because a guard inside a trigger is a guard the suite cannot see; (2) the satiation DEFENCE
+leaving `gmcp.Char.Defences` -- the boon itself calls it "the satiation defence", so it is in DEF;
+its GMCP name is INFERRED (any defence containing "satiat") and unverified, which is safe because a
+Remove can only follow an Add, so a wrong guess simply never fires (the Songstep reasoning); (3) a
+SCORE on a KILL when the last reading is older than `ataxia.settings.satiatePoll` (default 300s,
+`horn poll <n|off>`) -- kill-driven rather than a timer so it runs only while bashing, at the
+moment a fight is ending, with no lifecycle wiring of its own; not spent at all when Obligate
+Carnivore is also held, since the corpse top-up already keeps satiation up blind and free. **Every
+upkeep feed is VERIFIED**: SCORE again 6s later, and a row still short feeds again FORCED past the
+horn's 20s cooldown -- one loaf may not climb the whole ladder -- bounded at `SATIATE_MAX_CHAIN`
+(3) per episode, an episode ending on "utterly satiated" or after 300s of silence, so an empty
+horn, a refused eat or an unparseable row can never spend charges forever. Corpses still outrank
+the horn (unforced, so a closed corpse throttle falls through). The eat is the proven
+`ataxia_hornFeed` path -- `probe horn` -> first listed id -> `get <id> from horn;eat <id>` -- so
+nothing new is guessed about the horn. The starvation path's 5s re-fire throttle moved from the
+trigger into `ataxia_hornOnHungry` so a SCORE reading is never swallowed by it.
 
 **SPIRIT REND -- THE THIRD MONK EQ RIDER, AND THE ORDER IS THE DECISION (v4.7.292,
 `ataxiaBasher_spiritRend`).** "Your kaido enfeeble ability costs no kai and can target denizens,

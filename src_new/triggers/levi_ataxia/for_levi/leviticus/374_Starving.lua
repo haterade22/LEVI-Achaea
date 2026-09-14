@@ -32,7 +32,7 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^\|\s+Hunger\s+:\s+(starving to death|famished|ravenous)
+- pattern: ^\|\s+Hunger\s+:\s+(.+?)(?:\s{2,}|\s*$)
   type: 1
 - pattern: ^You are starving to death\.$
   type: 1
@@ -48,34 +48,24 @@ patterns:
 -- wall of "You are unconscious and thus incapable of action." while a puma, two
 -- cockatrices and our own hyena took ~10k health off us.
 --
--- So: feed the moment we see a starvation state. ataxia_hornOnHungry (v4.7.294) tries a
--- forced corpse-eat FIRST when Obligate Carnivore is held -- a corpse is already in the pack,
--- where a horn charge is one of six on its own refill clock -- and falls back to the horn
--- otherwise. This line used to call ataxia_hornFeed directly, which bypassed that precedence
--- entirely: Obligate Carnivore's starvation behaviour was unreachable from the only place
--- starvation is ever detected (found in review, 2026-09-03). ataxia_hornFeed keeps its own
--- 20s cooldown either way, so repeated lines can't spam probes.
+-- PATTERN 1 IS THE WHOLE SCORE HUNGER ROW (widened in v4.7.303). It used to match only the
+-- three emergency states; it now captures WHATEVER the row says -- the text up to the column
+-- gap before "Sobriety" -- and hands it to `ataxia_hungerSeen`, which owns the decision:
+-- emergency states feed at once (corpse first with Obligate Carnivore, else the horn), any
+-- other state below "utterly satiated" is Healing Metabolism upkeep, and "utterly satiated"
+-- closes an upkeep episode. The classification lives in the SCRIPT, not here, because a guard
+-- inside a trigger is a guard the test suite cannot see (v4.7.260).
 --
--- Pattern 1 is the SCORE vitals row (confirmed verbatim from the log). The others are the
--- standing hunger warnings -- if the exact wording differs in play, add it here; the
--- mechanism is already correct.
---
--- THIS TRIGGER, not either helper, owns the re-fire throttle. ataxia_carnivoreEat's own cooldown
--- is deliberately BYPASSED here (force=true, since starvation must not wait on a throttle written
--- for upkeep) and the horn's 20s cooldown only covers ITS OWN branch -- so with nothing here, the
--- vitals row alone (prints every prompt while starving persists) would re-run `corpseCleanup()`
--- and re-send `ii corpse` on every single prompt for as long as starvation lasts. `starvingAt`
--- (5s, well under the vitals row's own prompt cadence but plenty for the eat to land) is a floor,
--- not a lockout: STARVING_RETRY is short specifically so a probe that finds no corpse retries soon.
-local STARVING_RETRY = 5
+-- Patterns 2-4 are the standing hunger warnings -- always an emergency. If the exact wording
+-- differs in play, add it here; the mechanism is already correct. The 5s re-fire throttle
+-- moved into `ataxia_hornOnHungry` in v4.7.303 so a SCORE reading is never swallowed by it.
 if ataxia.settings.hornAuto == false then return end
-ataxiaTemp = ataxiaTemp or {}
-local nowT = (getEpoch and getEpoch()) or os.time()
-if (nowT - (tonumber(ataxiaTemp.starvingRespondAt) or 0)) < STARVING_RETRY then return end
-ataxiaTemp.starvingRespondAt = nowT
-local state = matches[2] or "starving"
-if ataxia_hornOnHungry then
-	if ataxia_hornOnHungry(state) and ataxia_boxEcho then
-		ataxia_boxEcho("STARVING - EATING", "goldenrod")
-	end
+local outcome
+if matches[2] then
+	outcome = ataxia_hungerSeen and ataxia_hungerSeen(matches[2])
+else
+	outcome = ataxia_hornOnHungry and ataxia_hornOnHungry("starving") and "emergency"
+end
+if outcome == "emergency" and ataxia_boxEcho then
+	ataxia_boxEcho("STARVING - EATING", "goldenrod")
 end

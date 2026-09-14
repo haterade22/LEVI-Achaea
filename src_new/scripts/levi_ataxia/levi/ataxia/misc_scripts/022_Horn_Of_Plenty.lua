@@ -185,7 +185,153 @@ end
 -- of six. `ataxia_carnivoreEat` is FORCED here -- this path only runs when the game has told us we
 -- are starving, and starvation ends in unconsciousness, so a throttle meant for upkeep must not
 -- stand in front of an emergency.
+--
+-- THE 5s RE-FIRE THROTTLE LIVES HERE (moved from trigger 374 in v4.7.303, so the observation
+-- path above it can stay unthrottled): the standing hunger lines can repeat, the corpse path is
+-- FORCED past its own cooldown, and the horn's 20s cooldown covers only its own branch.
+local STARVING_RETRY = 5
 function ataxia_hornOnHungry(state)
+  ataxiaTemp = ataxiaTemp or {}
+  local nowT = getEpoch()
+  if (nowT - (tonumber(ataxiaTemp.starvingRespondAt) or 0)) < STARVING_RETRY then return false end
+  ataxiaTemp.starvingRespondAt = nowT
   if mnemObligateCarnivore and ataxia_carnivoreEat(state or "hungry", true) then return true end
   return ataxia_hornFeed(state or "hungry")
 end
+
+-- ---------------------------------------------------------------------------
+-- HEALING METABOLISM ALONE: HOLD "UTTERLY SATIATED" OFF THE HORN (v4.7.303, user-directed)
+-- ---------------------------------------------------------------------------
+--
+-- User: "When we have this boon we need to be full satiation. I have a horn which produces
+-- food ... Get loaf from horn / eat loaf / If HUNGER is lower than utterly satiated."
+--
+-- v4.7.294 held satiation only when BOTH boons were up (a corpse top-up on every kill) and said
+-- of Metabolism alone "there is no food source". There is: the horn. Six charges on a refill
+-- clock is a real cost, and the user has priced it -- the 50% elixir bonus is worth the charges.
+--
+-- THREE WAYS TO NOTICE HUNGER, because none is complete on its own:
+--   1. The SCORE row `| Hunger : <state>` -- the user's stated authority, and the only place the
+--      game prints the WORD. It prints only when SCORE is sent, so alone it observes nothing.
+--   2. The satiation DEFENCE leaving `gmcp.Char.Defences`. The boon itself calls it "the
+--      satiation defence", so it is in DEF and GMCP reports it. Its exact GMCP name is INFERRED
+--      (any defence whose name contains "satiat") and unverified -- but a Remove can only follow
+--      an Add, so a wrong guess costs nothing: the path simply never fires (the Songstep
+--      hawkstep/wavedance reasoning, v4.7.200). Live and free of noise when it does.
+--   3. A SCORE on a KILL when the last reading is older than `ataxia.settings.satiatePoll`
+--      seconds (default 300; 0 = never) -- the backstop for (2) being wrong. Kill-driven rather
+--      than timer-driven on purpose: it runs only while we are actually bashing (the only time
+--      hunger burns fast and elixirs matter), at the moment a fight is ending, and it needs no
+--      lifecycle wiring of its own.
+--
+-- A FEED IS VERIFIED. One loaf may not climb the whole hunger ladder, so `SATIATE_VERIFY`
+-- seconds after an upkeep feed we SCORE again; a row still below satiated feeds again, FORCED
+-- past the horn's 20s cooldown -- bounded at `SATIATE_MAX_CHAIN` per episode, so an empty horn,
+-- a refused eat or an unparseable row can never spend charges forever. The episode ends when the
+-- row reads "utterly satiated", or falls silent for `SATIATE_EPISODE_GAP`.
+--
+-- Corpses still outrank the horn whenever Obligate Carnivore is held (unforced, so the corpse
+-- throttle stands and a closed one falls through to the horn). The eat itself is the proven
+-- `ataxia_hornFeed` path -- `probe horn` -> first listed id -> `get <id> from horn;eat <id>` --
+-- so nothing new is guessed about the horn.
+
+local SATIATED = "utterly satiated"
+local EMERGENCY_HUNGER = { ["starving to death"] = true, famished = true, ravenous = true }
+local SATIATE_VERIFY = 6        -- seconds after an upkeep feed before the confirming SCORE
+local SATIATE_MAX_CHAIN = 3     -- feeds per episode before we stop and wait for a fresh reading
+local SATIATE_EPISODE_GAP = 300 -- a chain older than this is a stale episode; start a new one
+local SATIATE_POLL_DEFAULT = 300
+
+local function satiateVerifyCleanup()
+  if ataxiaTemp.satiateVerifyTimer then pcall(killTimer, ataxiaTemp.satiateVerifyTimer) end
+  ataxiaTemp.satiateVerifyTimer = nil
+end
+
+-- Upkeep feed. Returns true when something was sent.
+function ataxia_hornSatiate(state)
+  if not mnemHealingMetabolism then return false end
+  ataxiaTemp = ataxiaTemp or {}
+  local nowT = getEpoch()
+  if (nowT - (tonumber(ataxiaTemp.satiateChainAt) or 0)) > SATIATE_EPISODE_GAP then
+    ataxiaTemp.satiateChain = 0
+  end
+  local chain = tonumber(ataxiaTemp.satiateChain) or 0
+  if chain >= SATIATE_MAX_CHAIN then return false end
+
+  local reason = "satiation upkeep" .. (state and (" -- " .. tostring(state)) or "")
+  local fed = false
+  if mnemObligateCarnivore and ataxia_carnivoreEat(reason) then fed = true end
+  -- A chained feed forces past the horn's 20s cooldown: the verify comes back in SATIATE_VERIFY
+  -- seconds, and the chain bound is what keeps that safe.
+  if not fed then fed = ataxia_hornFeed(reason, chain > 0) end
+  if not fed then return false end
+
+  ataxiaTemp.satiateChain, ataxiaTemp.satiateChainAt = chain + 1, nowT
+  satiateVerifyCleanup()
+  ataxiaTemp.satiateVerifyTimer = tempTimer(SATIATE_VERIFY, function()
+    ataxiaTemp.satiateVerifyTimer = nil
+    if mnemHealingMetabolism then send("score", false) end
+  end)
+  return true
+end
+
+-- The SCORE row, from trigger 374. Records the reading, then routes: emergency states take the
+-- starvation path whether or not any boon is held; anything else below "utterly satiated" is
+-- upkeep, and "utterly satiated" closes the episode. Returns what it did, for the trigger's echo.
+function ataxia_hungerSeen(state)
+  state = tostring(state or ""):lower():gsub("^%s+", ""):gsub("%s+$", "")
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.hungerState, ataxiaTemp.hungerSeenAt = state, getEpoch()
+  if state == SATIATED then
+    ataxiaTemp.satiateChain, ataxiaTemp.satiateChainAt = nil, nil
+    satiateVerifyCleanup()
+    return "satiated"
+  end
+  if EMERGENCY_HUNGER[state] then
+    return ataxia_hornOnHungry(state) and "emergency" or false
+  end
+  return ataxia_hornSatiate(state) and "upkeep" or false
+end
+
+-- The satiation defence, off GMCP (way 2 above). Substring on "satiat" because the exact GMCP
+-- name has never been captured; nothing else in DEF contains it.
+local function isSatiationDef(name)
+  return type(name) == "string" and name:lower():find("satiat", 1, true) ~= nil
+end
+
+function ataxia_satiationLost()
+  local rem = gmcp and gmcp.Char and gmcp.Char.Defences and gmcp.Char.Defences.Remove
+  local name = type(rem) == "table" and rem[1] or rem
+  if not isSatiationDef(name) then return false end
+  if not mnemHealingMetabolism then return false end
+  return ataxia_hornSatiate("satiation defence lost")
+end
+
+-- Kill-driven backstop (way 3 above), called from trigger 340 beside the corpse top-up. With
+-- BOTH boons the v4.7.294 corpse top-up already keeps satiation up blind and free, so no SCORE is
+-- spent; with Metabolism alone, ask when the last reading is stale.
+function ataxia_satiateKillCheck()
+  if not mnemHealingMetabolism then return false end
+  if mnemObligateCarnivore then return false end
+  local poll = tonumber(ataxia.settings and ataxia.settings.satiatePoll)
+  if poll == nil then poll = SATIATE_POLL_DEFAULT end
+  if poll <= 0 then return false end
+  ataxiaTemp = ataxiaTemp or {}
+  local nowT = getEpoch()
+  if (nowT - (tonumber(ataxiaTemp.hungerSeenAt) or 0)) < poll then return false end
+  if (nowT - (tonumber(ataxiaTemp.satiatePolledAt) or 0)) < poll then return false end
+  ataxiaTemp.satiatePolledAt = nowT
+  send("score", false)
+  return true
+end
+
+-- Re-registered on every load; the previous registration (a SYSUPDATE reload) is killed first
+-- so the handler cannot stack. The id lives on ataxiaTemp, which survives a reload and is never
+-- serialized (a timer or handler id on the saved namespace names a stranger after a restart).
+ataxiaTemp = ataxiaTemp or {}
+if ataxiaTemp.satiateDefHandler and killAnonymousEventHandler then
+  pcall(killAnonymousEventHandler, ataxiaTemp.satiateDefHandler)
+end
+ataxiaTemp.satiateDefHandler = registerAnonymousEventHandler("gmcp.Char.Defences.Remove", function()
+  if ataxia_satiationLost then ataxia_satiationLost() end
+end)

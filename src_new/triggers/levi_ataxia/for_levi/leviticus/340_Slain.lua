@@ -70,6 +70,11 @@ if type(target) == "number" and ataxiaBasher.enabled then
 	-- boons are held: without Healing Metabolism a corpse is just food and the horn's emergency
 	-- path is enough.
 	if ataxia_carnivoreTopUp then ataxia_carnivoreTopUp() end
+	-- HEALING METABOLISM ALONE (v4.7.303): no corpse to eat, so ask SCORE for the hunger row when
+	-- the last reading is stale (`ataxia.settings.satiatePoll`); the row's trigger feeds off the
+	-- horn if it reads below "utterly satiated". A kill is the moment the fight is ending, and it
+	-- is the only clock this needs.
+	if ataxia_satiateKillCheck then ataxia_satiateKillCheck() end
 end
 
 if ataxiaBasher.enabled and matches[2] then

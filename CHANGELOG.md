@@ -2,6 +2,62 @@
 
 ---
 
+## 2026-09-14 - Healing Metabolism alone: hold "utterly satiated" off the horn (v4.7.303)
+
+User, with SCORE and PROBE HORN captures: *"When we have this boon we need to be full satiation. I
+have a horn which produces food ... Get loaf from horn / eat loaf / If HUNGER is lower than utterly
+satiated."*
+
+v4.7.294 held satiation only with BOTH boons (a corpse top-up on every kill) and said of Healing
+Metabolism alone "there is no food source". There is: the horn of plenty. Six charges on a refill
+clock is a real cost, and the user has priced it -- the 50% elixir bonus is worth the charges.
+
+### Three ways to notice hunger, because none is complete on its own
+
+Achaea prints the hunger WORD only on the SCORE row, and nothing in the package sent SCORE.
+
+1. **The SCORE row** (`| Hunger : <state>`) -- the user's stated authority. Trigger `374` used to
+   match only the three emergency states; it now captures whatever the row says and hands it to
+   `ataxia_hungerSeen`, which classifies: emergency states take the starvation path whether or not
+   a boon is held, anything else below "utterly satiated" is Metabolism upkeep, and "utterly
+   satiated" closes the episode. Classification lives in the script, not the trigger.
+2. **The satiation defence leaving GMCP.** The boon calls it "the satiation defence", so it is in
+   DEF. Its GMCP name is INFERRED (any defence containing "satiat") and unverified -- safe because
+   a Remove can only follow an Add: a wrong guess never fires, it costs nothing.
+3. **A SCORE on a kill** when the last reading is older than `ataxia.settings.satiatePoll`
+   (default 300s; `horn poll <n|off>`). Kill-driven rather than a timer: it runs only while
+   bashing, when a fight is ending, and needs no lifecycle wiring. Not spent at all with both
+   boons held -- the corpse top-up already keeps satiation up blind and free.
+
+### Every feed is verified, and the chain is bounded
+
+One loaf may not climb the whole ladder, so 6s after an upkeep feed we SCORE again; a row still
+short feeds again, FORCED past the horn's 20s cooldown -- bounded at 3 per episode (an episode
+ends on "utterly satiated" or after 300s of silence), so an empty horn, a refused eat or an
+unparseable row can never spend charges forever. Corpses still outrank the horn when Obligate
+Carnivore is held (unforced, so a closed corpse throttle falls through to the horn). The eat is the
+proven `ataxia_hornFeed` path -- `probe horn` -> first listed id -> `get <id> from horn;eat <id>`.
+
+The starvation path's 5s re-fire throttle moved from trigger 374 into `ataxia_hornOnHungry`, so a
+SCORE reading can never be swallowed by it.
+
+### Verification
+
+**1853 tests** (up from 1835): 18 in the new `test_satiation.lua` covering the row classification
+(satiated / lower / emergency / padding), the verify timer and its boon gate, the forced re-feed
+chain and its bound, episode expiry, corpse-first with fall-through, the defence-removal handler
+(substring match, other defences ignored, boon gate), the kill-driven backstop (stale / fresh /
+poll window / both-boons / poll 0), and the relocated 5s throttle. Break-backs: no chain bound
+fails 2, satiated no longer closing fails 4, freshness gate dropped fails 1, defence name unchecked
+fails 1.
+
+**Files:** `misc_scripts/022_Horn_Of_Plenty.lua`, `triggers/374_Starving.lua`,
+`triggers/340_Slain.lua`, `002_Check_For_Any_Missing_Variables.lua`,
+`aliases/configs/019_Horn_Of_Plenty.lua`, `triggers/mnemosyne/082_Healing_Metabolism.lua`,
+`aliases/mnemosyne/002_Boon_Claim.lua`, `tests/test_satiation.lua` (new), `CLAUDE.md`.
+
+---
+
 ## 2026-09-14 - Deadly Flourish: no denizen-count knob (v4.7.302)
 
 User, on the v4.7.301 floor knob: *"I'd rather use it regardless of the denizens in the room, 1 or
