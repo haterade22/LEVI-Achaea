@@ -51,7 +51,6 @@ local function reset(opts)
   ataxia.bardStuff = { bashPunctuate = false }
   ataxia.mnemosyne = { _denizenCount = function() return opts.denizens or 1 end }
   ataxiaBasher.shielded = false
-  ataxiaBasher.bardFlourishAt = nil
   bardtempo = opts.tempo -- nil = position unreadable
   bardWarmarch = false
   mnemSongstep = false
@@ -183,20 +182,29 @@ describe("Deadly Flourish -- footwork: never from the side position while readab
   end)
 end)
 
--- "All denizens in your location" includes the one we are hitting, so there is NO crowd gate by
--- default; the knob exists to raise the floor if the single-target trade proves bad in practice.
-describe("Deadly Flourish -- ataxiaBasher.bardFlourishAt is a floor, off by default", function()
-  it("does not consult the denizen count at the default, so a lagging 0 cannot block it", function()
-    reset({ denizens = 0 })
+-- "Regardless of the denizens in the room, 1 or 50" (user, 2026-09-14). The count is never read.
+describe("Deadly Flourish -- the denizen count is irrelevant", function()
+  it("fires alone with one denizen", function()
+    reset({ denizens = 1 })
     expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
   end)
 
-  it("honours a raised floor", function()
-    reset({ denizens = 1 }); ataxiaBasher.bardFlourishAt = 2
-    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
-    expect(ataxiaTemp.bardFlourishAt).toBeNil()
-    reset({ denizens = 2 }); ataxiaBasher.bardFlourishAt = 2
+  it("fires in a crowd of fifty", function()
+    reset({ denizens = 50 })
     expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
+  end)
+
+  it("fires on a lagging count of zero -- the count is not consulted at all", function()
+    reset({ denizens = 0 })
+    ataxia.mnemosyne = nil -- not even a Mnemosyne module to ask
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
+  end)
+
+  it("has no floor knob to consult (v4.7.301's hedge is gone)", function()
+    reset({ denizens = 1 })
+    ataxiaBasher.bardFlourishAt = 50 -- a stale config value from v4.7.301 must change nothing
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
+    ataxiaBasher.bardFlourishAt = nil
   end)
 end)
 

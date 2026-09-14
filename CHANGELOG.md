@@ -2,6 +2,25 @@
 
 ---
 
+## 2026-09-14 - Deadly Flourish: no denizen-count knob (v4.7.302)
+
+User, on the v4.7.301 floor knob: *"I'd rather use it regardless of the denizens in the room, 1 or
+50."*
+
+The default already fired at one denizen; `ataxiaBasher.bardFlourishAt` existed only as a hedge in
+case the single-target trade proved bad. The user declined the hedge, so the knob is **removed**
+rather than left at a default nobody wants -- `ataxiaBasher_bardFlourish` no longer reads the
+denizen count at all, and a stale `bardFlourishAt` value in a saved profile changes nothing. The
+footwork rule (never from `side` while readable) is unrelated to the count and is unchanged.
+
+**Tests:** the floor-knob block is replaced by four count-is-irrelevant cases (one denizen, fifty,
+a lagging zero with no Mnemosyne module at all, and a stale knob value being ignored). 1835 total.
+
+**Files:** `basher/002_Class_Bashing.lua`, `tests/test_bard_flourish.lua`, `.claude/classes/bard.md`,
+`CLAUDE.md`.
+
+---
+
 ## 2026-09-14 - Deadly Flourish: the Bard flourishes every 15 seconds (v4.7.301)
 
 User: *"Deadly Flourish: Your bladedance flourish ability now deals additional cutting damage to

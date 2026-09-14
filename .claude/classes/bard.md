@@ -396,7 +396,7 @@ time this ability appears anywhere in the package -- nothing in PvP uses it.
 | 2.10s of BALANCE, same as flick | AB | it **REPLACES the swing** (the Songstep rule: eq rides, balance replaces); the battlerage still rides. A flourish round has no flick in it -- that is the price the user has accepted for the AoE |
 | Adventurers only | AB | the **boon is the denizen permit**: `type(target) == "number"` gated, the Spirit Rend shape. Without the boon a denizen flourish is a refusal that still costs the balance |
 | once every 15s | boon | `FLOURISH_CD` 15s, send-side stamp + the v4.7.129 in-flight replay hold (`bardFlourishPendingAt`, 4s), because the flourish fire line is **uncaptured** -- move the stamp to the confirmed line once one is seen |
-| "all denizens in your location" | boon | **no crowd gate** -- the one we are hitting is in the location, so it pays at one denizen. `ataxiaBasher.bardFlourishAt` (default 1 = not consulted) raises the floor only if the single-target trade proves bad |
+| "all denizens in your location" | boon | **no crowd gate, and no knob for one** (user: "regardless of the denizens in the room, 1 or 50") -- the count is never read. v4.7.301 shipped a floor knob as a hedge; the user declined it and it was removed in v4.7.302 |
 | advances TWO positions | AB | **the moment matters for footwork** (below) |
 | shielded target | -- | skipped, so the punctuate breaks the shield first (the dance's rule); a Songstep dance switch outranks it for the same balance |
 

@@ -542,11 +542,11 @@ end
 --     Rooms rule, v4.7.167). An UNREADABLE position (nil/false) fires: the user's rule is "every
 --     15 seconds", and a hold on a fact we cannot read is a hold we cannot justify.
 --
--- NO CROWD GATE. "All denizens in your location" includes the one we are hitting, so the boon
--- pays at one denizen. `ataxiaBasher.bardFlourishAt` (default 1 = no gate) exists only to raise
--- the floor if the single-target trade -- a flick's damage + refrain + back bonus against an
--- unmeasured AoE -- turns out to be a loss in practice; it is not consulted at its default, so a
--- lagging `_denizenCount` reading of 0 can never block a default-config flourish.
+-- NO CROWD GATE, AND NO KNOB FOR ONE (user, 2026-09-14: "regardless of the denizens in the room,
+-- 1 or 50"). "All denizens in your location" includes the one we are hitting, so the boon pays
+-- at one denizen, and the denizen count is deliberately never read here -- a lagging
+-- `_denizenCount` of 0 therefore cannot block it either. v4.7.301 shipped a floor knob as a
+-- hedge; the user declined it, so it is gone rather than left at a default nobody wants.
 --
 -- SEND-SIDE STAMP with the v4.7.129 in-flight hold (the Draconic Rampage shape), because our
 -- own flourish fire line is UNCAPTURED. Note that a bare "flourish" substring would confirm the
@@ -572,13 +572,6 @@ function ataxiaBasher_bardFlourish()
   ataxiaTemp.bardFlourishPendingAt = nil
 
   if (nowT - (tonumber(ataxiaTemp.bardFlourishAt) or 0)) < FLOURISH_CD then return nil end
-
-  local minN = tonumber(ataxiaBasher.bardFlourishAt) or 1
-  if minN > 1 then
-    local M = ataxia.mnemosyne
-    local n = (M and M._denizenCount and M._denizenCount()) or 0
-    if n < minN then return nil end
-  end
 
   -- Footwork: never from side while readable, bounded (see above).
   if bardtempo == "side" then

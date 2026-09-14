@@ -991,10 +991,11 @@ five away, and **side->front is the one loss** (two hits from back becomes five)
 **never fires from `side` while `bardtempo` is readable**, bounded twice (the dance leaves side
 within four hits; `FLOURISH_SIDE_HOLD_MAX` 10s caps a stale flag, since a hold released only by a
 game line livelocks the moment that line stops arriving). An unreadable position FIRES: the rule is
-every 15 seconds, and a hold on a fact we cannot read is a hold we cannot justify. **No crowd gate**
--- "all denizens in your location" includes the one we are hitting, so it pays at one denizen;
-`ataxiaBasher.bardFlourishAt` (default 1, not consulted at the default so a lagging count of 0
-cannot block it) exists only to raise the floor. Send-side stamp + the v4.7.129 in-flight replay
+every 15 seconds, and a hold on a fact we cannot read is a hold we cannot justify. **No crowd gate, and
+no knob for one** (user, v4.7.302: "regardless of the denizens in the room, 1 or 50") -- "all
+denizens in your location" includes the one we are hitting, so it pays at one denizen, and the
+count is never read, so a lagging 0 cannot block it either; v4.7.301's floor knob was declined and
+removed. Send-side stamp + the v4.7.129 in-flight replay
 hold, because **the fire line is UNCAPTURED** -- and a bare "flourish" substring would confirm the
 WRONG ability: the only "flourish" lines in the tree are HIGHSUN's (`blade_dance/005`) and an
 enemy bard's. Shielded rounds skip it (punctuate breaks the shield first) and a Songstep dance
