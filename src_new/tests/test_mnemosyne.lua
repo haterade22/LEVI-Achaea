@@ -1359,6 +1359,20 @@ describe("run-end confirmation", function()
     expect(bardWarmarch).toBeFalse()
   end)
 
+  it("clears mnemDeadlyFlourish AND its run-scoped stamps on the confirmed onRunEnd", function()
+    reset(true)
+    mnemDeadlyFlourish = true
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.bardFlourishAt, ataxiaTemp.bardFlourishPendingAt, ataxiaTemp.bardFlourishSideSince = 1, 2, 3
+    M.onRunEndMaybe() -- deferred maybe must NOT clear the boon yet
+    expect(mnemDeadlyFlourish).toBeTrue()
+    M.onRunEnd() -- confirmation fired -> boon and its clocks gone
+    expect(mnemDeadlyFlourish).toBeFalse()
+    expect(ataxiaTemp.bardFlourishAt).toBeNil()
+    expect(ataxiaTemp.bardFlourishPendingAt).toBeNil()
+    expect(ataxiaTemp.bardFlourishSideSince).toBeNil()
+  end)
+
   it("clears bmShatteredStar (multislash boon) on the confirmed onRunEnd", function()
     reset(true)
     bmShatteredStar = true

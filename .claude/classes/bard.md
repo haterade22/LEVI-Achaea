@@ -111,6 +111,7 @@ blade:
     - punctuate: "shield/rebounding bypass (used when target shielded or rebounding)"
     - sunset: "limb finisher (bardsunset routes to envenom-fang jab variant)"
     - sunrise: "kill finisher once head+arm+torso+leg prepped"
+    - flourish: "NO damage; advances TWO dance positions (front->back, side->front, back->side). 2.10s balance, adventurers-only. Unused in PvP; the Deadly Flourish boon is what makes it a PvE attack (see below)"
 
 finale:
   skill: Composition
@@ -195,7 +196,7 @@ notes: "The PRIMARY kill route is limb-based. bard.calcPreps() marks a limb 'pre
 
 ## Bashing (PvE)
 ```yaml
-attack_command: "blade flick <target> nomos"   # default; 'blade punctuate <target> nomos' when the bashPunctuate toggle is on (psychic-resistant denizens); 'blade flick <target> paean' while the Warmarch boon is active
+attack_command: "blade flick <target> nomos"   # default; 'blade punctuate <target> nomos' when the bashPunctuate toggle is on (psychic-resistant denizens); 'blade flick <target> paean' while the Warmarch boon is active; 'blade flourish <target>' REPLACES the swing once every 15s while the Deadly Flourish boon is held (v4.7.301, see below)
 attack_skill: Bladedance
 warmarch: "Mnemosyne 'Warmarch' boon makes the paean refrain hit denizens (+100% psychic). While bardWarmarch is set, flick becomes 'blade flick <target> paean'. Set on boon claim / seeing it in the BOONS list; cleared on Mnemosyne run start/end (triggers 001/009/010)."
 mechanic:
@@ -374,3 +375,53 @@ plain damage.
 Reads `bardtempo`, which the tempo triggers (`tempo/001-004`) have maintained all along -- a
 second position flag would have been two sources of truth for one fact. Gated on the boon:
 without it the back bonus is small and the crowd abilities are worth more.
+
+## Deadly Flourish (boon, v4.7.301)
+
+*"Your bladedance flourish ability now deals additional cutting damage to all denizens in your
+location when used on a denizen. This can only occur once every 15 seconds."* User: *"if we have
+this boon, we should use flourish every 15 seconds."*
+
+**AB Flourish (Bladedance, wiki.achaea.com/Bladedance):** `BLADE FLOURISH <target>`, **2.10
+seconds of balance**, "Works against: Adventurers". *"This elegant flourish with your blade may
+not inflict any harm, but it'll certainly give you the opportunity to adjust your footwork while
+your partner is spellbound by your peerless grace. In practice, you will advance two positions
+through the bladedance immediately (so from front to back, side to front, back to side)."* First
+time this ability appears anywhere in the package -- nothing in PvP uses it.
+
+**What the AB dictates** (`ataxiaBasher_bardFlourish`, `basher/002_Class_Bashing.lua`):
+
+| Fact | Source | Handling |
+|---|---|---|
+| 2.10s of BALANCE, same as flick | AB | it **REPLACES the swing** (the Songstep rule: eq rides, balance replaces); the battlerage still rides. A flourish round has no flick in it -- that is the price the user has accepted for the AoE |
+| Adventurers only | AB | the **boon is the denizen permit**: `type(target) == "number"` gated, the Spirit Rend shape. Without the boon a denizen flourish is a refusal that still costs the balance |
+| once every 15s | boon | `FLOURISH_CD` 15s, send-side stamp + the v4.7.129 in-flight replay hold (`bardFlourishPendingAt`, 4s), because the flourish fire line is **uncaptured** -- move the stamp to the confirmed line once one is seen |
+| "all denizens in your location" | boon | **no crowd gate** -- the one we are hitting is in the location, so it pays at one denizen. `ataxiaBasher.bardFlourishAt` (default 1 = not consulted) raises the floor only if the single-target trade proves bad |
+| advances TWO positions | AB | **the moment matters for footwork** (below) |
+| shielded target | -- | skipped, so the punctuate breaks the shield first (the dance's rule); a Songstep dance switch outranks it for the same balance |
+
+**Footwork is why WHEN matters.** The whole bard basher is built around the back-position bonus
+(AB Footwork, doubled by Shadow Tempo), and a flourish moves us two positions:
+
+| From | To | Verdict |
+|---|---|---|
+| front | back | best case -- straight to the bonus position, skipping every front and side swing the tempo would have charged |
+| back | side | forfeits the remaining back swings, but lands two hits from back again where the natural cycle (back -> front) is five away |
+| side | front | **the one loss** -- two hits from back becomes five |
+
+So the pick **never fires from `side` while `bardtempo` is readable** (the same flag Shadow Tempo
+reads, maintained by `tempo/001-004`). The hold is bounded twice over: the dance itself carries us
+out of side within four hits (adagio), and `FLOURISH_SIDE_HOLD_MAX` (10s) caps it in case the
+flag goes stale -- a flourish's own two-step jump may not print the position line we track. An
+unreadable position (`nil`/`false`) fires: the user's rule is every 15 seconds, and a hold on a
+fact we cannot read is a hold we cannot justify.
+
+**Fire line: UNCAPTURED.** A bare "flourish" substring would confirm the WRONG ability -- the only
+"flourish" lines in the tree are HIGHSUN's (*"With a flourish of <weapon> you step smoothly
+into..."*, `blade_dance/005`) and an enemy bard's. The boon's own AoE line is also unseen. When
+either is captured, stamp the 15s from it (the Draconic Rampage proc shape, `highlighting/033`).
+
+Flag `mnemDeadlyFlourish`: BOONS row (`mnemosyne/084`), claim intercept, run-start reset,
+confirmed run-end reset (+ the three `ataxiaTemp.bardFlourish*` stamps). Seeded in
+`010_Boon_Seed.lua` with the description above, no rarity (not shown on the capture).
+

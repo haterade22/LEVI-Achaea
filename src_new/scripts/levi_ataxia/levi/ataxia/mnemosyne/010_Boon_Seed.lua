@@ -334,6 +334,8 @@ M.BOON_SEED = {
   ["Berserker's Edge"] = { description = "Your attacks deal 1% extra damage for each point of battlerage you possess, up to a maximum of 100 rage." },
 
   ["Obligate Carnivore"] = { description = "You can EAT corpses, restoring hunger and small amounts of endurance and willpower." },
+  -- CAPTURED LIVE 2026-09-14 from the boon screen (pasted by the user); rarity not shown, so omitted.
+  ["Deadly Flourish"] = { description = "Your bladedance flourish ability now deals additional cutting damage to all denizens in your location when used on a denizen. This can only occur once every 15 seconds." },
   ["Thick Skull"] = { description = "Your survival headslam ability stuns denizens for 5 seconds. This effect has a cooldown of 40 seconds." },
   ["Power Up"] = { description = "Gain 10% bonus damage." },
   -- CAPTURED LIVE 2026-09-01 from the in-game BOONS list: two of the 30 name-only holes below,

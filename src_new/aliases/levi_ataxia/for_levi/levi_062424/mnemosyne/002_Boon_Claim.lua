@@ -47,6 +47,9 @@ if matches[2]:lower():find("senseless flurry") then mnemSenselessFlurry = true e
 if matches[2]:lower():find("spirit rend") then mnemSpiritRend = true end
 -- Obligate Carnivore: corpses become food, so they outrank the horn's six charges.
 if matches[2]:lower():find("obligate carnivore") then mnemObligateCarnivore = true end
+-- Deadly Flourish: BLADE FLOURISH may target a denizen and deals cutting damage to every denizen
+-- in the room, once every 15s; the Bard basher spends a balance on it whenever the clock is up.
+if matches[2]:lower():find("deadly flourish") then mnemDeadlyFlourish = true end
 -- Healing Metabolism: satiation is worth 50% on every health elixir, so it becomes upkeep
 -- rather than a hunger floor -- the kill trigger tops it up off the fresh corpse.
 if matches[2]:lower():find("healing metabolism") then mnemHealingMetabolism = true end

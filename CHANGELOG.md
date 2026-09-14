@@ -2,6 +2,73 @@
 
 ---
 
+## 2026-09-14 - Deadly Flourish: the Bard flourishes every 15 seconds (v4.7.301)
+
+User: *"Deadly Flourish: Your bladedance flourish ability now deals additional cutting damage to
+all denizens in your location when used on a denizen. This can only occur once every 15 seconds.
+For bard, if we have this boon, we should use flourish every 15 seconds."*
+
+### What the AB says, and what each fact became
+
+FLOURISH had never appeared in this package -- not in the PvP dispatchers, not in the class doc.
+From AB Flourish (Bladedance, wiki.achaea.com/Bladedance, linked by the user): `BLADE FLOURISH
+<target>`, **2.10s of balance**, "Works against: Adventurers", "may not inflict any harm" -- in its
+base form it exists only to "advance two positions through the bladedance immediately (so from
+front to back, side to front, back to side)".
+
+| Fact | Gate |
+|---|---|
+| 2.10s of BALANCE, same as flick | it **REPLACES the swing** (the Songstep rule: eq rides, balance replaces); the battlerage still rides |
+| adventurers only | the **boon is the denizen permit** -- `type(target) == "number"`, the Spirit Rend shape |
+| once every 15s | `FLOURISH_CD` 15, send-side stamp + the v4.7.129 in-flight replay hold, because the fire line is uncaptured |
+| "all denizens in your location" | **no crowd gate** -- the one we are hitting is in the location; `ataxiaBasher.bardFlourishAt` (default 1, not consulted at the default) can raise the floor |
+| advances two positions | **footwork decides the moment** -- see below |
+
+### Footwork: never from the side
+
+The bard basher exists to maximise back-position uptime (AB Footwork bonus, doubled by Shadow
+Tempo). A flourish moves us two positions, so WHEN we fire it is a footwork decision: front->back
+is a straight win (skip every front and side swing the tempo would charge), back->side lands two
+hits from back where the natural cycle is five away, and **side->front is the one loss** (two hits
+from back becomes five). `ataxiaBasher_bardFlourish` therefore never fires from `side` while
+`bardtempo` is readable. Bounded twice: the dance leaves side within four hits at most, and
+`FLOURISH_SIDE_HOLD_MAX` (10s) caps a stale flag -- a flourish's own two-step jump may not print
+the position line we track, and a hold released only by a game line livelocks the moment that
+line stops arriving. An unreadable position fires: the rule is every 15 seconds.
+
+Shielded rounds skip it (the punctuate breaks the shield first) and a Songstep dance switch
+outranks it for the same balance -- without the flourish helper being CALLED, so it cannot stamp
+a cooldown for a round it did not get.
+
+### Fire line: uncaptured, and the obvious trigger would be wrong
+
+A bare "flourish" substring would confirm the WRONG ability: the only "flourish" lines in the
+tree are HIGHSUN's (`blade_dance/005`, "With a flourish of <weapon> you step smoothly into...") and
+an enemy bard's. The boon's own AoE line is also unseen. When either is captured, move the 15s
+stamp to it (the Draconic Rampage proc shape).
+
+### Lifecycle
+
+`mnemDeadlyFlourish`: BOONS row `mnemosyne/084`, claim intercept, run-start reset, confirmed
+run-end reset plus the three `ataxiaTemp.bardFlourish*` stamps. Seeded in `010_Boon_Seed.lua`
+with the pasted description, no rarity (not shown).
+
+### Verification
+
+**1833 tests** (up from 1818): 14 in the new `test_bard_flourish.lua` (inert without the boon,
+replaces the flick, replays without restamping, the 15s clock, PvE-only, shielded skip, dance
+outranks it, front/back fire, side holds then fires, the side cap, unreadable fires, the floor
+knob) plus a run-end lifecycle case in `test_mnemosyne.lua`. Break-backs: dropping the side rule
+fails 2, stamping per rebuild fails 1, forgetting the run-end reset fails 1.
+
+**Files:** `basher/002_Class_Bashing.lua`, `triggers/mnemosyne/084_Deadly_Flourish.lua` (new),
+`aliases/mnemosyne/002_Boon_Claim.lua`, `triggers/mnemosyne/001_Run_Start.lua`,
+`mnemosyne/004_Parsers.lua`, `mnemosyne/010_Boon_Seed.lua`, `tests/test_bard_flourish.lua` (new),
+`tests/test_mnemosyne.lua`, `.claude/classes/bard.md`, `CLAUDE.md`,
+`.claude/projects/mnemosyne/03-parsing-triggers.md`.
+
+---
+
 ## 2026-09-11 - Re-release of v4.7.299 with no code changes (v4.7.300)
 
 **No source changed.** This tag carries exactly the v4.7.299 tree with only the three version

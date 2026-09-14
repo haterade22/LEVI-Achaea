@@ -512,6 +512,87 @@ function ataxiaBasher_bardDance(sp)
   return d.cmd..sp
 end
 
+-- DEADLY FLOURISH (Mnemosyne boon, user-directed 2026-09-14): "Your bladedance flourish ability
+-- now deals additional cutting damage to all denizens in your location when used on a denizen.
+-- This can only occur once every 15 seconds." User: "if we have this boon, we should use
+-- flourish every 15 seconds."
+--
+-- AB Flourish (Bladedance, wiki.achaea.com/Bladedance): `BLADE FLOURISH <target>`, 2.10s of
+-- BALANCE, "Works against: Adventurers", "may not inflict any harm" -- in its base form it deals
+-- NOTHING and exists to "advance two positions through the bladedance immediately (so from front
+-- to back, side to front, back to side)". Three facts, each of which is a gate below:
+--
+--   * BALANCE, the same 2.10s as flick. So it REPLACES the swing; it cannot ride beside it (the
+--     Songstep rule: equilibrium rides, balance replaces). A flourish round is a round with no
+--     flick in it, and that is the price the user has decided the AoE is worth.
+--   * Adventurers only. The BOON is the denizen permit, so `type(target) == "number"` gates it
+--     exactly as Spirit Rend is gated -- without the boon a denizen flourish is a refusal that
+--     still costs the balance.
+--   * TWO POSITIONS. The whole bard basher is built around FOOTWORK -- the back-position damage
+--     bonus (AB Footwork), doubled by Shadow Tempo -- and a flourish MOVES us:
+--         front -> back   the best possible outcome: straight to the bonus position, skipping
+--                         every front and side swing the tempo would have charged us
+--         back  -> side   forfeits the remaining back swings but lands two hits from back again,
+--                         where the natural cycle (back -> front) would be five away
+--         side  -> front  the ONE bad case: two hits from back becomes five
+--     So: NEVER FROM SIDE while the position is readable. That hold is bounded twice over -- the
+--     dance itself carries us out of side after at most four hits (adagio), and
+--     FLOURISH_SIDE_HOLD_MAX caps it in case `bardtempo` goes stale, because a hold released
+--     only by a game line becomes a livelock the moment that line stops arriving (the Burning
+--     Rooms rule, v4.7.167). An UNREADABLE position (nil/false) fires: the user's rule is "every
+--     15 seconds", and a hold on a fact we cannot read is a hold we cannot justify.
+--
+-- NO CROWD GATE. "All denizens in your location" includes the one we are hitting, so the boon
+-- pays at one denizen. `ataxiaBasher.bardFlourishAt` (default 1 = no gate) exists only to raise
+-- the floor if the single-target trade -- a flick's damage + refrain + back bonus against an
+-- unmeasured AoE -- turns out to be a loss in practice; it is not consulted at its default, so a
+-- lagging `_denizenCount` reading of 0 can never block a default-config flourish.
+--
+-- SEND-SIDE STAMP with the v4.7.129 in-flight hold (the Draconic Rampage shape), because our
+-- own flourish fire line is UNCAPTURED. Note that a bare "flourish" substring would confirm the
+-- WRONG ability: the only "flourish" lines in the tree are HIGHSUN's ("With a flourish of
+-- <weapon> you step smoothly into...", blade_dance/005) and an enemy bard's. Move the 15s stamp
+-- to the confirmed line once one is captured, the way the Rampage proc (highlighting/033) was.
+local FLOURISH_CD = 15            -- the boon's own proc cooldown
+local FLOURISH_HOLD = 4           -- replay window across the 0.3s re-queue loop (~two balances)
+local FLOURISH_SIDE_HOLD_MAX = 10 -- longest we will wait at "side" for the dance to carry us on
+
+function ataxiaBasher_bardFlourish()
+  if not mnemDeadlyFlourish then return nil end
+  if ataxiaBasher.shielded then return nil end    -- break the shield first (the dance's rule)
+  if type(target) ~= "number" then return nil end -- PvE only; the boon is the denizen permit
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp = ataxiaTemp or {}
+  local cmd = "blade flourish "..target
+
+  -- In flight: replay verbatim until balance spends it. Stamping per rebuild would flip the
+  -- queued line back to a flick before the flourish ever executed (the phantom-stamp trap).
+  local pend = tonumber(ataxiaTemp.bardFlourishPendingAt)
+  if pend and (nowT - pend) < FLOURISH_HOLD then return cmd end
+  ataxiaTemp.bardFlourishPendingAt = nil
+
+  if (nowT - (tonumber(ataxiaTemp.bardFlourishAt) or 0)) < FLOURISH_CD then return nil end
+
+  local minN = tonumber(ataxiaBasher.bardFlourishAt) or 1
+  if minN > 1 then
+    local M = ataxia.mnemosyne
+    local n = (M and M._denizenCount and M._denizenCount()) or 0
+    if n < minN then return nil end
+  end
+
+  -- Footwork: never from side while readable, bounded (see above).
+  if bardtempo == "side" then
+    local since = tonumber(ataxiaTemp.bardFlourishSideSince) or nowT
+    ataxiaTemp.bardFlourishSideSince = since
+    if (nowT - since) < FLOURISH_SIDE_HOLD_MAX then return nil end
+  end
+  ataxiaTemp.bardFlourishSideSince = nil
+
+  ataxiaTemp.bardFlourishAt = nowT
+  ataxiaTemp.bardFlourishPendingAt = nowT
+  return cmd
+end
+
 function ataxiaBasher_bardBashing()
    local command = ""
    if bardNeedRapierWield then
@@ -554,6 +635,14 @@ function ataxiaBasher_bardBashing()
     local dance = ataxiaBasher_bardDance(ataxia.settings.separator)
     if dance ~= "" then
        return command..dance:gsub(ataxia.settings.separator.."$", "")
+    end
+
+    -- Deadly Flourish: the same rule as the dance -- BALANCE, so on a flourish round it REPLACES
+    -- the flick (the battlerage above still rides). The dance switch outranks it because a
+    -- dance is a state we then hold for a whole fight and its window is the rarer one.
+    local flourish = ataxiaBasher_bardFlourish()
+    if flourish then
+       return command.."wield right rapier;wield left shield;"..flourish
     end
 
     command = command.."wield right rapier;wield left shield;"..atk
