@@ -2,6 +2,107 @@
 
 ---
 
+## 2026-09-15 - Death Stare, and a denizen resistance database fed by CONSIDER (v4.7.306)
+
+### Death Stare: CONSIDER as the once-per-ripple instant kill
+
+User: *"Death Stare: CONSIDER now costs 3 seconds of equilibrium and instantly kills any non-boss
+denizen target. This can only be used once per ripple. We should use this when there are two or
+more in a room to immediately CONSIDER TARGET. We need to use this at least once per ripple
+wave."* -- and, live, the whole CONSIDER block including the kill line.
+
+`ataxiaBasher_deathStare` (basher/001) is a class-agnostic EQUILIBRIUM rider prepended to the
+assembled round in `ataxiaBasher_assembleAttack` -- first in the chain, so it lands on a live
+target rather than a corpse. Crowd first: at 2+ denizens it fires at once. Alone it holds, but a
+charge that expires with the ripple must not go unused, so after `ataxiaBasher.deathStareAfter`
+(default 90s from the first round evaluated in that ripple) it fires on whatever non-boss target
+is in front of us. Never on the boss (`ataxiaBasher_targetIsBoss`, the legend deck's first-word
+rule hoisted to a global), never on a shielded target, never at a player.
+
+**The charge is spent by the kill line, not the send.** `A stout footsoldier freezes for a moment
+before dying. Instantly.` -> trigger `mnemosyne/086` -> `ataxiaBasher_deathStareConfirm`: the
+ripple's charge is marked used, the in-flight replay released, the flag re-latched (the line only
+prints with the boon). A send the server ate therefore retries after 8s instead of forfeiting the
+ripple's one kill -- bounded at 3 tries so a missed line cannot cost an eq spend every few seconds
+all ripple. The 4s replay across the re-queue loop is bound to the target it was sent for; a
+retarget mid-hold stops it rather than considering a second mob. The ripple key is the MAP's
+(`MAP._ripple`, stamped by `M.onRipple` unconditionally) -- telemetry's `M.run.ripple` sits
+behind the `_auto()` gate and never moves with reporting off, which would have made "once per
+ripple" mean "once per run".
+
+Lifecycle: BOONS row `mnemosyne/085`, claim intercept, run-start reset, confirmed run-end reset
+plus the six `ataxiaTemp.deathStare*` stamps. The seed entry gains its description (it was a
+name-only hole in `M.BOON_UNDESCRIBED`, now removed from that list).
+
+### The denizen resistance database, and CONSIDER as recon
+
+User: *"I also didnt know consider showed what they are strong against and what they are not. We
+need to probably make a database of this and consider any mob not in the database ... when
+fighting against X denizen and we know their weakness, if we can, use their weakness against them
+(damage type). Mage staffcast will be impacted also. Dragon gut, incantation, etc."*
+
+CONSIDER prints, per denizen:
+
+```
+A stout footsoldier exudes an aura of overwhelming power.
+a stout footsoldier has a significant resistance against physical cutting damage.
+a stout footsoldier has a significant resistance against physical blunt damage.
+```
+
+New trigger `771_Consider_Lines` records these into `ataxiaBasher.denizenResist[key]` -- on
+`ataxiaBasher` because it is knowledge meant to persist across sessions like the target lists;
+keyed by the short description lowercased with the article stripped so the capitalised aura line,
+the lowercase resistance rows and gmcp's item name all land on one row. A weakness row is parsed
+on the same shape with the noun swapped; that wording has never been seen, so it is somewhere for
+the line to land, not a claim about it.
+
+**Unknown mobs are CONSIDERed once, ever** (`ataxiaBasher_considerRecon`, from the round
+assembly). Sent DIRECTLY, never in the addclearfull chain: CONSIDER is balanceless, and a
+balanceless command in that chain executes on every 0.3s rebuild (the shin-augment lesson,
+v4.7.270). The row is created on the attempt, so a mob whose consider prints nothing we parse is
+still never asked twice (`bash resist forget <name>` re-opens one). Never while Death Stare is
+held -- with that boon CONSIDER is the ripple's kill, and its output feeds the database anyway.
+
+**Consumers** ask `ataxiaBasher_targetResists(type)` / `ataxiaBasher_targetWeakTo(type)` --
+substring either way, so each asks in its own vocabulary ("cutting" finds "physical cutting"),
+and an unknown mob is never a guess. Wired now:
+
+- **Blademaster infuse element** (`ataxiaBasher_bmInfuse`): a known weakness outranks the
+  preference order outright; an element the mob resists is skipped exactly as an affix-suppressed
+  one, with the same everything-suppressed fall-through (a resisted infuse beats none).
+- **Bard flick vs punctuate**: a mob CONSIDER showed to resist psychic gets punctuate -- the
+  psychic-resistant denizen the manual `bashpunctuate` toggle was written for, now known without
+  the toggle.
+
+**Next, per the user's list, and deliberately not guessed**: Magi staffcast (the crystal spells as
+an element choice), Dragon gut/jab/whip/incantation vs the colour's blast, and the rest. Each needs
+its attack's damage type confirmed first; the `Damage dealt: N (type)` line trigger 350 already
+captures is the honest way to LEARN each attack's type rather than hand-maintaining a table.
+
+`bash resist [<name>|forget <name>|clear]` (`aliases/configs/023`) shows the database.
+
+### Verification
+
+**1885 tests** (up from 1863): 16 in the new `test_death_stare.lua` (the pick's gates, the crowd
+rule, the ripple fallback and its window, the target-bound replay, the kill-line spend, the
+self-proving flag, the bounded retry, the map-keyed ripple reset; the database's key
+normalisation, rows, vocabulary queries, once-ever recon, the boon gate and the player/unnamed
+gates), 6 in `test_bm_infuse.lua` (resisted element skipped, weakness wins, suppressed weakness
+not taken, everything-resisted fall-through, unknown mob unchanged, Bard punctuate on psychic
+resistance), 1 in `test_mnemosyne.lua` (run-end clears the flag and stamps). Break-backs: confirm
+not spending fails 2, boss gate dropped fails 1, replay not target-bound fails 1, recon ignoring
+the boon fails 1, infuse ignoring resistances fails 1.
+
+**Files:** `basher/001_Bashing_Functions.lua`, `basher/002_Class_Bashing.lua`,
+`triggers/mnemosyne/085_Death_Stare.lua` (new), `triggers/mnemosyne/086_Death_Stare_Kill.lua`
+(new), `triggers/771_Consider_Lines.lua` (new), `aliases/configs/023_Denizen_Resist.lua` (new),
+`aliases/mnemosyne/002_Boon_Claim.lua`, `triggers/mnemosyne/001_Run_Start.lua`,
+`mnemosyne/004_Parsers.lua`, `mnemosyne/010_Boon_Seed.lua`, `tests/test_death_stare.lua` (new),
+`tests/test_bm_infuse.lua`, `tests/test_mnemosyne.lua`, `CLAUDE.md`,
+`.claude/projects/mnemosyne/03-parsing-triggers.md`.
+
+---
+
 ## 2026-09-15 - Obligate Carnivore never eats a boss corpse (v4.7.305)
 
 User: *"Cant eat bosses I think."* -- and in the v4.7.304 log the boss's corpse (Giacinto, the

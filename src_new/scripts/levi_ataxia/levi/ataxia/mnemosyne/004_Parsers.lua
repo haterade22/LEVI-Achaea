@@ -235,6 +235,7 @@ function M.onRunEnd()
   mnemSpiritRend = false -- boons gone on a confirmed run-end
   mnemObligateCarnivore = false -- boons gone on a confirmed run-end
   mnemDeadlyFlourish = false -- boons gone on a confirmed run-end
+  mnemDeathStare = false -- boons gone on a confirmed run-end
   mnemHealingMetabolism = false -- boons gone on a confirmed run-end
   -- Berserker's Edge pinned the rage floor to 100 (basher/001). Putting it back is the half that
   -- matters -- left alone we would quietly hoard battlerage the whole rest of the day for a bonus
@@ -294,6 +295,9 @@ function M.onRunEnd()
     ataxiaTemp.bardFlourishAt = nil -- Deadly Flourish's 15s clock is run-scoped like the rest
     ataxiaTemp.bardFlourishPendingAt = nil -- ...and its in-flight replay hold
     ataxiaTemp.bardFlourishSideSince = nil -- ...and the bounded side-position hold
+    ataxiaTemp.deathStareRipple, ataxiaTemp.deathStareRippleAt = nil, nil -- Death Stare's per-ripple charge
+    ataxiaTemp.deathStareUsed, ataxiaTemp.deathStareTries = nil, nil
+    ataxiaTemp.deathStarePendingAt, ataxiaTemp.deathStarePendingTarget = nil, nil
   end
   -- THE AUDIT BASELINE IS PER-RUN AND WAS NEVER CLEARED (deep review, v4.7.291). It was guarded
   -- only by `baselineRun == M.history.run`, and on a BOOTSTRAPPED run (start line missed) the

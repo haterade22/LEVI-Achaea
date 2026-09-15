@@ -147,6 +147,67 @@ end)
 -- The Bard twin: FLICK is psychic, PUNCTUATE is not, so a psychic-nulling
 -- ripple should flip the same branch the manual toggle already used.
 -- ---------------------------------------------------------------------------
+-- The resistance database's first consumers (v4.7.306). The database lives in basher/001, so the
+-- query is stubbed here exactly as the affix query is: the picker asks by damage TYPE.
+describe("the denizen resistance database routes the infuse element (v4.7.306)", function()
+  local realResists, realWeak = ataxiaBasher_targetResists, ataxiaBasher_targetWeakTo
+  local resists, weak = {}, {}
+  local function fake()
+    ataxiaBasher_targetResists = function(t) return resists[t] == true end
+    ataxiaBasher_targetWeakTo = function(t) return weak[t] == true end
+  end
+  local function restore() ataxiaBasher_targetResists, ataxiaBasher_targetWeakTo = realResists, realWeak end
+
+  it("skips an element the mob resists, exactly like an affix-suppressed one", function()
+    reset(); fake(); resists, weak = { electricity = true }, {}
+    expect(ataxiaBasher_bmInfuse()).toBe("fire")
+    restore()
+  end)
+
+  it("a known weakness outranks the preference order outright", function()
+    reset(); fake(); resists, weak = {}, { cold = true }
+    expect(ataxiaBasher_bmInfuse()).toBe("ice")
+    restore()
+  end)
+
+  it("a weakness to a type the ripple suppresses is not taken", function()
+    reset(); fake(); resists, weak = {}, { cold = true }
+    nullify("cold")
+    expect(ataxiaBasher_bmInfuse()).toBe("lightning")
+    restore()
+  end)
+
+  it("everything resisted still infuses the first preference -- a resisted infuse beats none", function()
+    reset(); fake(); resists, weak = { electricity = true, fire = true, cold = true, magic = true }, {}
+    expect(ataxiaBasher_bmInfuse()).toBe("lightning")
+    restore()
+  end)
+
+  it("an unknown mob changes nothing", function()
+    reset(); fake(); resists, weak = {}, {}
+    expect(ataxiaBasher_bmInfuse()).toBe("lightning")
+    restore()
+  end)
+end)
+
+describe("the Bard punctuates a mob CONSIDER showed to resist psychic (v4.7.306)", function()
+  local realResists = ataxiaBasher_targetResists
+  it("flick by default; punctuate once the database says psychic is resisted", function()
+    gmcp.Char.Status.class = "Bard"
+    ataxiaTemp = {}
+    ataxia.bardStuff = { bashPunctuate = false }
+    bardWarmarch = false
+    ataxiaBasher.shielded = false
+    ataxiaBasher_targetResists = function(t) return t == "psychic" end
+    local cmd = ataxiaBasher_bardBashing()
+    expect(cmd:find("blade punctuate", 1, true) ~= nil).toBeTrue()
+    expect(cmd:find("blade flick", 1, true)).toBe(nil)
+    ataxiaBasher_targetResists = function() return false end
+    expect(ataxiaBasher_bardBashing():find("blade flick", 1, true) ~= nil).toBeTrue()
+    ataxiaBasher_targetResists = realResists
+  end)
+end)
+
 describe("Bard flick vs punctuate under a psychic-nulling affix (v4.7.187)", function()
   local function bardAtk()
     gmcp.Char.Status.class = "Bard"

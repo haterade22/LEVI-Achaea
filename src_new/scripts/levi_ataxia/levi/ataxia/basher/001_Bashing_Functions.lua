@@ -1065,7 +1065,16 @@ function ataxiaBasher_assembleAttack()
   end
 
   if not ataxiaTemp.bashFlee and not ataxia.afflictions.paralysis and not ataxia.afflictions.aeon and not ataxia.afflictions.peace and not ataxia.afflictions.transfixation and not ataxia.afflictions.webbed and not ataxia.afflictions.impaled and not ataxia.afflictions.constricted and not ataxia.afflictions.deepsleep and not ataxia.afflictions.entangled and not ataxia.afflictions.unconsciousness and not ataxia.afflictions.snared then
-    command = command..ldeckCmd.._G[ataxiaBasher_bashingFuncs[class]]()
+    -- Death Stare (v4.7.306): class-agnostic eq rider, FIRST in the chain so it lands on a live
+    -- target. Resistance recon rides beside it as a direct send (never in the chain -- CONSIDER is
+    -- balanceless and would execute on every rebuild). Both pcall-guarded like the card draw.
+    local stareCmd = ""
+    if ataxiaBasher_deathStare then
+      local ok, res = pcall(ataxiaBasher_deathStare, sp)
+      if ok and type(res) == "string" then stareCmd = res end
+    end
+    if ataxiaBasher_considerRecon then pcall(ataxiaBasher_considerRecon) end
+    command = command..ldeckCmd..stareCmd.._G[ataxiaBasher_bashingFuncs[class]]()
     -- Mnemosyne swarm tactics (mnemosyne/009): one-shot decorators ride the assembled
     -- chain (e.g. the pull appends ";<backdir>" so the swing and the step out are ONE
     -- queued line). Consumption also arms the swarmHold gate -- see S.decorate.
@@ -1084,6 +1093,220 @@ function ataxiaBasher_assembleAttack()
     if bare then send("queue add free "..bare) end
   end
 
+end
+
+
+-- IS THE CURRENT TARGET THIS RIPPLE'S BOSS? The Objective line names the boss ("defeat Seasone
+-- the Industrious"); the mob's short description is worded differently, so match on the boss's
+-- leading word (>= 4 letters) -- the rule the legend deck's Xylthus guard and `_fledLineNames`
+-- already use. Global so more than one consumer can share it (v4.7.306).
+function ataxiaBasher_targetIsBoss()
+  local M = ataxia and ataxia.mnemosyne
+  local boss = M and M.run and M.run.boss
+  if type(boss) ~= "string" or boss == "" then return false end
+  local nm = secondTarget
+  if type(nm) ~= "string" or nm == "" then return false end
+  local first = boss:lower():match("[%a]+")
+  if not first or #first < 4 then return false end
+  return nm:lower():find(first, 1, true) ~= nil
+end
+
+-- DEATH STARE (Mnemosyne boon, v4.7.306, user-directed): "CONSIDER now costs 3 seconds of
+-- equilibrium and instantly kills any non-boss denizen target. This can only be used once per
+-- ripple." User: "use this when there are two or more in a room to immediately CONSIDER TARGET
+-- ... at least once per ripple wave."
+--
+-- AN EQUILIBRIUM RIDER, PREPENDED. 3s of eq rides free beside every balance swing (the Kai Choke
+-- reasoning), and it goes FIRST in the chain so it lands on a live target -- appended after the
+-- swing it could consider a corpse. For the classes whose own attack spends equilibrium (Magi)
+-- it displaces one cast; a guaranteed kill is worth a round.
+--
+-- CROWD FIRST, THEN THE RIPPLE FALLBACK. At 2+ denizens it fires at once (one instant kill is
+-- worth most in a crowd, and the user's rule). Alone, it holds -- but a charge that expires with
+-- the ripple must not go unused, so after `ataxiaBasher.deathStareAfter` seconds into the ripple
+-- (default 90) it fires on whatever non-boss target is in front of us.
+--
+-- ONCE PER RIPPLE, COUNTED FROM THE KILL, NOT THE SEND. The confirm line -- "<mob> freezes for a
+-- moment before dying. Instantly." (trigger mnemosyne/086, captured live 2026-09-15) -- marks the
+-- charge spent. A send the server ate (stupidity) therefore RETRIES after DEATH_STARE_RETRY
+-- rather than forfeiting the ripple's one kill, bounded at DEATH_STARE_MAX_TRIES so a missed line
+-- cannot cost an eq spend every few seconds all ripple. The replay across the 0.3s re-queue loop
+-- (DEATH_STARE_HOLD) is bound to the TARGET it was sent for: if the target changes mid-hold the
+-- replay stops rather than considering a second mob.
+--
+-- THE RIPPLE KEY IS THE MAP'S, not telemetry's. `M.run.ripple` is stamped behind the `_auto()`
+-- gate and never moves with reporting off; `MAP._ripple` is stamped by `M.onRipple` first and
+-- unconditionally. Never on a boss: the boon says non-boss, and a wasted consider on the boss is
+-- a lost ripple. Never on a shielded target (break it first, every rider's rule).
+local DEATH_STARE_HOLD = 4
+local DEATH_STARE_RETRY = 8
+local DEATH_STARE_MAX_TRIES = 3
+
+function ataxiaBasher_deathStareRipple()
+  local M = ataxia and ataxia.mnemosyne
+  local MAP = M and M.map
+  local r = MAP and MAP._ripple
+  if r == nil then r = M and M.run and M.run.ripple end
+  return tonumber(r) or 0
+end
+
+function ataxiaBasher_deathStare(sp)
+  if not mnemDeathStare then return "" end
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return "" end
+  if type(target) ~= "number" then return "" end
+  if ataxiaBasher.shielded then return "" end
+  if ataxiaBasher_targetIsBoss() then return "" end
+  ataxiaTemp = ataxiaTemp or {}
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  local rip = ataxiaBasher_deathStareRipple()
+  if ataxiaTemp.deathStareRipple ~= rip then
+    ataxiaTemp.deathStareRipple, ataxiaTemp.deathStareRippleAt = rip, nowT
+    ataxiaTemp.deathStareUsed, ataxiaTemp.deathStareTries = nil, 0
+    ataxiaTemp.deathStarePendingAt, ataxiaTemp.deathStarePendingTarget = nil, nil
+  end
+  if ataxiaTemp.deathStareUsed then return "" end
+  sp = sp or ((ataxia.settings and ataxia.settings.separator) or ";")
+  local cmd = "consider "..target..sp
+
+  local pend = tonumber(ataxiaTemp.deathStarePendingAt)
+  if pend then
+    local since = nowT - pend
+    if since < DEATH_STARE_HOLD then
+      if ataxiaTemp.deathStarePendingTarget == target then return cmd end
+      return "" -- target changed mid-hold: never consider a second mob on one charge
+    end
+    if since < DEATH_STARE_RETRY then return "" end -- waiting on the confirm line
+  end
+  if (tonumber(ataxiaTemp.deathStareTries) or 0) >= DEATH_STARE_MAX_TRIES then return "" end
+
+  local M = ataxia.mnemosyne
+  local n = (M and M._denizenCount and M._denizenCount()) or 0
+  local elapsed = nowT - (tonumber(ataxiaTemp.deathStareRippleAt) or nowT)
+  if n < 2 and elapsed < (tonumber(ataxiaBasher.deathStareAfter) or 90) then return "" end
+
+  ataxiaTemp.deathStarePendingAt, ataxiaTemp.deathStarePendingTarget = nowT, target
+  ataxiaTemp.deathStareTries = (tonumber(ataxiaTemp.deathStareTries) or 0) + 1
+  return cmd
+end
+
+-- The kill line (mnemosyne/086). Self-proving -- it only prints with the boon -- so it also
+-- (re)latches the flag. Spends the ripple's charge and releases the replay.
+function ataxiaBasher_deathStareConfirm()
+  mnemDeathStare = true
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.deathStareUsed = true
+  ataxiaTemp.deathStarePendingAt, ataxiaTemp.deathStarePendingTarget = nil, nil
+end
+
+-- ---------------------------------------------------------------------------------------------
+-- DENIZEN RESISTANCE DATABASE (v4.7.306, user-directed). CONSIDER prints, per denizen:
+--
+--   A stout footsoldier exudes an aura of overwhelming power.
+--   Sentience governs this creature's actions.
+--   He has 86% health remaining.
+--   a stout footsoldier has a significant resistance against physical cutting damage.
+--   a stout footsoldier has a significant resistance against physical blunt damage.
+--
+-- User: "I also didnt know consider showed what they are strong against ... We need to probably
+-- make a database of this and consider any mob not in the database."
+--
+-- `ataxiaBasher.denizenResist[key]` = { resist = { [type] = qualifier }, weak = {...}, aura =
+-- "...", seenAt = epoch }. On `ataxiaBasher` because it is KNOWLEDGE, meant to persist across
+-- sessions like the target lists -- a mob's resistances do not change between logins. Keyed by
+-- the short description lowercased with the leading article stripped, so the Capitalised aura
+-- line, the lowercase resistance rows and gmcp's item name ("a stout footsoldier") all land on
+-- one row. Trigger 771 parses the lines; nothing CONSUMES the rows yet -- a per-mob damage-type
+-- router (the Blademaster infuse element, Bard flick vs punctuate) is the obvious next step, and
+-- it wants a database before it wants a rule.
+--
+-- AUTO-CONSIDER, once per NAME, ever. `ataxiaBasher_considerRecon` sends a plain `consider
+-- <target>` for a mob whose name is not in the database -- DIRECTLY, never in the addclearfull
+-- chain, because CONSIDER costs nothing and a balanceless command in that chain executes on every
+-- 0.3s rebuild (the shin augment lesson, v4.7.270). The row is created ON THE ATTEMPT, so a mob
+-- whose consider prints nothing we parse is still never asked twice; `bash resist forget <name>`
+-- re-opens one. NEVER while Death Stare is held: with that boon CONSIDER is a 3s-eq instant kill
+-- that can be used once per ripple, and the kill's own output feeds the database anyway.
+ataxiaBasher = ataxiaBasher or {}
+ataxiaBasher.denizenResist = ataxiaBasher.denizenResist or {}
+
+function ataxiaBasher_resistKey(name)
+  if type(name) ~= "string" then return nil end
+  local k = name:lower():gsub("^%s+", ""):gsub("%s+$", "")
+  k = k:gsub("^an? ", ""):gsub("^the ", "")
+  if k == "" then return nil end
+  return k
+end
+
+local function resistRow(name)
+  local key = ataxiaBasher_resistKey(name)
+  if not key then return nil end
+  ataxiaBasher.denizenResist = ataxiaBasher.denizenResist or {}
+  local row = ataxiaBasher.denizenResist[key]
+  if not row then
+    row = { resist = {}, weak = {} }
+    ataxiaBasher.denizenResist[key] = row
+  end
+  row.resist, row.weak = row.resist or {}, row.weak or {}
+  row.seenAt = (getEpoch and getEpoch()) or os.time()
+  return row, key
+end
+
+function ataxiaBasher_considerResist(name, qualifier, dtype)
+  local row = resistRow(name)
+  if not row or type(dtype) ~= "string" then return false end
+  row.resist[dtype:lower()] = (type(qualifier) == "string" and qualifier:lower()) or "significant"
+  return true
+end
+
+-- Wording never seen; kept symmetrical with the resistance row so a weakness line, whatever it
+-- turns out to say, has somewhere to land once its trigger is written.
+function ataxiaBasher_considerWeakness(name, qualifier, dtype)
+  local row = resistRow(name)
+  if not row or type(dtype) ~= "string" then return false end
+  row.weak[dtype:lower()] = (type(qualifier) == "string" and qualifier:lower()) or "significant"
+  return true
+end
+
+function ataxiaBasher_considerAura(name, aura)
+  local row = resistRow(name)
+  if not row then return false end
+  if type(aura) == "string" and aura ~= "" then row.aura = aura:lower() end
+  return true
+end
+
+function ataxiaBasher_resistKnown(name)
+  local key = ataxiaBasher_resistKey(name)
+  return (key and ataxiaBasher.denizenResist and ataxiaBasher.denizenResist[key]) and true or false
+end
+
+-- THE QUESTION CONSUMERS ASK (user: "when fighting against X denizen and we know their weakness,
+-- if we can, use their weakness against them"). Substring in EITHER direction, so a caller may ask
+-- in its own vocabulary: the row says "physical cutting", the Bard asks about "cutting"; the row
+-- might one day say "cold" while the Blademaster asks about "ice"'s type list. Reads the CURRENT
+-- target (`secondTarget`); nil/unknown mob -> false, never a guess.
+local function resistLookup(field, dtype)
+  if type(dtype) ~= "string" or dtype == "" then return false end
+  local key = ataxiaBasher_resistKey(secondTarget)
+  local row = key and ataxiaBasher.denizenResist and ataxiaBasher.denizenResist[key]
+  if not row or type(row[field]) ~= "table" then return false end
+  local want = dtype:lower()
+  for t in pairs(row[field]) do
+    if t == want or t:find(want, 1, true) or want:find(t, 1, true) then return true end
+  end
+  return false
+end
+function ataxiaBasher_targetResists(dtype) return resistLookup("resist", dtype) end
+function ataxiaBasher_targetWeakTo(dtype) return resistLookup("weak", dtype) end
+
+function ataxiaBasher_considerRecon()
+  if mnemDeathStare then return false end
+  if type(target) ~= "number" then return false end
+  local key = ataxiaBasher_resistKey(secondTarget)
+  if not key then return false end
+  if ataxiaBasher_resistKnown(secondTarget) then return false end
+  resistRow(secondTarget) -- the attempt is the record: once per name, ever
+  send("consider "..target, false)
+  return true
 end
 
 -- Per-class special rage thresholds for the standard battlerage pattern

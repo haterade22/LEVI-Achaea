@@ -1391,6 +1391,23 @@ describe("run-end confirmation", function()
     expect(ataxiaTemp.bardFlourishSideSince).toBeNil()
   end)
 
+  it("clears mnemDeathStare AND its per-ripple charge state on the confirmed onRunEnd", function()
+    reset(true)
+    mnemDeathStare = true
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.deathStareRipple, ataxiaTemp.deathStareUsed, ataxiaTemp.deathStareTries = 3, true, 2
+    ataxiaTemp.deathStarePendingAt, ataxiaTemp.deathStarePendingTarget = 1, 7
+    M.onRunEndMaybe()
+    expect(mnemDeathStare).toBeTrue()
+    M.onRunEnd()
+    expect(mnemDeathStare).toBeFalse()
+    expect(ataxiaTemp.deathStareRipple).toBeNil()
+    expect(ataxiaTemp.deathStareUsed).toBeNil()
+    expect(ataxiaTemp.deathStareTries).toBeNil()
+    expect(ataxiaTemp.deathStarePendingAt).toBeNil()
+    expect(ataxiaTemp.deathStarePendingTarget).toBeNil()
+  end)
+
   it("clears bmShatteredStar (multislash boon) on the confirmed onRunEnd", function()
     reset(true)
     bmShatteredStar = true

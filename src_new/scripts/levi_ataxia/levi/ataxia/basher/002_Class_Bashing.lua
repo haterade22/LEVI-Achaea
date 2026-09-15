@@ -632,8 +632,12 @@ function ataxiaBasher_bardBashing()
     -- alongside it -- a user who asked for punctuate gets punctuate regardless.
     local M = ataxia and ataxia.mnemosyne
     local psychicNulled = (M and M.damageNulled and M.damageNulled("psychic")) and true or false
+    -- ...and a denizen CONSIDER has shown to RESIST psychic is the same fact per mob rather than
+    -- per ripple (v4.7.306, the resistance database in basher/001) -- the psychic-resistant
+    -- denizen the manual toggle was written for, now known without the toggle.
+    local psychicResisted = ataxiaBasher_targetResists and ataxiaBasher_targetResists("psychic") or false
     local atk
-    if (ataxia.bardStuff and ataxia.bardStuff.bashPunctuate) or psychicNulled then
+    if (ataxia.bardStuff and ataxia.bardStuff.bashPunctuate) or psychicNulled or psychicResisted then
        atk = "blade punctuate "..target.." nomos"
     elseif bardWarmarch then
        atk = "blade flick "..target.." paean"  -- Warmarch boon: paean refrain now hits denizens (+100% psychic)
@@ -949,15 +953,26 @@ function ataxiaBasher_bmInfuse()
   local nulled = M and M.damageNulled
   local order = ataxiaBasher.bmInfusePrefs or BM_INFUSE_ORDER
   local first
+  -- THE MOB'S OWN RESISTANCES ROUTE THE ELEMENT TOO (v4.7.306): a WEAKNESS the database knows
+  -- outranks the preference order outright, and an element the mob RESISTS is skipped exactly as
+  -- an affix-suppressed one is. Same query shape as the affix (`damageNulled` per type), same
+  -- fall-through: if everything is resisted or suppressed the first preference still goes out,
+  -- because a resisted infuse beats no infuse.
+  local weakTo, resists = ataxiaBasher_targetWeakTo, ataxiaBasher_targetResists
+  if weakTo then
+    for _, element in ipairs(order) do
+      for _, t in ipairs(BM_INFUSE[element] or {}) do
+        if weakTo(t) and not (nulled and M.damageNulled(t)) then return element end
+      end
+    end
+  end
   for _, element in ipairs(order) do
     local types = BM_INFUSE[element]
     if types then
       first = first or element
       local suppressed = false
-      if nulled then
-        for _, t in ipairs(types) do
-          if M.damageNulled(t) then suppressed = true; break end
-        end
+      for _, t in ipairs(types) do
+        if (nulled and M.damageNulled(t)) or (resists and resists(t)) then suppressed = true; break end
       end
       if not suppressed then return element end
     end

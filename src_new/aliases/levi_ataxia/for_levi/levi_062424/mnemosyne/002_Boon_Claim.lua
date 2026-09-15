@@ -50,6 +50,9 @@ if matches[2]:lower():find("obligate carnivore") then mnemObligateCarnivore = tr
 -- Deadly Flourish: BLADE FLOURISH may target a denizen and deals cutting damage to every denizen
 -- in the room, once every 15s; the Bard basher spends a balance on it whenever the clock is up.
 if matches[2]:lower():find("deadly flourish") then mnemDeadlyFlourish = true end
+-- Death Stare: CONSIDER costs 3s of eq and instantly kills a non-boss denizen, once per ripple;
+-- the basher prepends it at 2+ denizens, or on a lone target late in the ripple.
+if matches[2]:lower():find("death stare") then mnemDeathStare = true end
 -- Healing Metabolism: satiation is worth 50% on every health elixir, so it becomes upkeep
 -- rather than a hunger floor -- off a corpse when Obligate Carnivore is also held, off the horn
 -- of plenty otherwise (v4.7.303), whenever hunger reads below "utterly satiated".
