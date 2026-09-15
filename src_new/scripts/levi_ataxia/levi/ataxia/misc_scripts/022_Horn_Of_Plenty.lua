@@ -109,11 +109,17 @@ end
 -- would have been shorter and would have assumed how the game disambiguates a noun we hold several
 -- of; the id form assumes nothing.
 --
--- ON THE FREE QUEUE. Eating shares the EATING balance with every cure-herb (the whole reason the
--- PvE curing profile exists, v4.7.172), so a corpse eaten mid-fight can delay a real cure. It is
--- sent `queue add free` -- the shape `butcher` already uses -- and the CALLERS decide when: the
--- hunger path is an emergency and fires immediately, while the satiation top-up waits for a kill,
--- which is the moment a fight is ending rather than peaking.
+-- SENT DIRECTLY, NOT QUEUED (v4.7.304, from a live log). v4.7.294 put the eat on the FREE queue
+-- to survive the basher's `queue addclearfull`. It never ate. The kill top-up fires at the exact
+-- moment a room clears, and the explorer's own move for that moment is `queue addclear free
+-- stand;<dir>` (008_Explorer) -- which CLEARS the free queue before adding the step. The log
+-- shows it verbatim: our "eating the corpse of Giacinto" echo, then "room clear -> moving ne",
+-- and no eat. EAT needs no balance ("It is balance less" -- user), so there was never anything
+-- to queue for: `send("eat <id>")` executes at once, the way the horn's `get;eat` always has.
+-- **A queue is a place a command can be deleted from; a balanceless command has no reason to be
+-- in one.** The CALLERS still decide WHEN: the hunger path is an emergency and fires immediately,
+-- the satiation top-up waits for a kill -- the moment a fight is ending rather than peaking --
+-- which is what keeps the eat off the eating balance a cure-herb might need.
 
 local CORPSE_PROBE_TIMEOUT = 3
 -- Long enough that a burst of kills cannot queue a probe each, short enough to hold satiation
@@ -144,7 +150,7 @@ function ataxia_carnivoreEat(reason, force)
   ataxiaTemp.corpseTrigger = tempRegexTrigger([[^\s+(.+)the corpse of (.+)$]], function()
     local id, what = string.trim(matches[2]), matches[3]
     corpseCleanup()
-    send("queue add free eat " .. id, false)
+    send("eat " .. id, false)
     if ataxiaEcho then
       ataxiaEcho("Obligate Carnivore: eating <green>the corpse of " .. tostring(what) .. "<reset>"
         .. (reason and (" (" .. reason .. ")") or "") .. ".")

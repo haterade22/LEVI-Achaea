@@ -182,6 +182,41 @@ describe("Deadly Flourish -- footwork: never from the side position while readab
   end)
 end)
 
+-- The landed line (highlighting/062) restarts the 15s from the moment the flourish actually
+-- executed -- a balance after the pick's send stamp -- and releases the in-flight replay.
+describe("Deadly Flourish -- the landed line restarts the clock and releases the replay", function()
+  it("re-stamps the 15s from the landed moment", function()
+    reset()
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue() -- send stamp at 500000
+    clock = clock + 3
+    ataxiaBasher_bardFlourishConfirm()                                     -- landed at 500003
+    expect(ataxiaTemp.bardFlourishAt).toBe(500003)
+    expect(ataxiaTemp.bardFlourishPendingAt).toBeNil()                    -- replay released
+    clock = clock + 13 -- 16s after the SEND, 13s after the landing: still held
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
+    clock = clock + 3  -- 16s after the landing
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
+  end)
+
+  it("a released replay stops re-sending inside what would have been the hold", function()
+    reset()
+    ataxiaBasher_bardBashing()
+    clock = clock + 1
+    ataxiaBasher_bardFlourishConfirm()
+    clock = clock + 1 -- 2s after the send: the 4s replay hold would still be open
+    local cmd = ataxiaBasher_bardBashing()
+    expect(has(cmd, "blade flourish")).toBeFalse()
+    expect(has(cmd, "blade flick 7 nomos")).toBeTrue()
+  end)
+
+  it("does not latch the boon flag -- the base ability prints the same line", function()
+    reset({ boon = false })
+    ataxiaBasher_bardFlourishConfirm()
+    expect(mnemDeadlyFlourish).toBeFalse()
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
+  end)
+end)
+
 -- "Regardless of the denizens in the room, 1 or 50" (user, 2026-09-14). The count is never read.
 describe("Deadly Flourish -- the denizen count is irrelevant", function()
   it("fires alone with one denizen", function()

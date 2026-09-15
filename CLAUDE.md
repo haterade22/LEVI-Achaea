@@ -996,9 +996,13 @@ no knob for one** (user, v4.7.302: "regardless of the denizens in the room, 1 or
 denizens in your location" includes the one we are hitting, so it pays at one denizen, and the
 count is never read, so a lagging 0 cannot block it either; v4.7.301's floor knob was declined and
 removed. Send-side stamp + the v4.7.129 in-flight replay
-hold, because **the fire line is UNCAPTURED** -- and a bare "flourish" substring would confirm the
-WRONG ability: the only "flourish" lines in the tree are HIGHSUN's (`blade_dance/005`) and an
-enemy bard's. Shielded rounds skip it (punctuate breaks the shield first) and a Songstep dance
+hold as a FLOOR, and **the landed line restarts the 15s from the moment it actually executed**
+(v4.7.304, `highlighting/062` -> `ataxiaBasher_bardFlourishConfirm`; captured live: "You weave a
+Soulpiercer through the air in a dazzling display, the music of your bladesong sweeping forth to
+wash over <target> while your feet shift to a new stance." -- two substring fragments because it
+wraps, and neither contains the word "flourish", since HIGHSUN's line begins "With a flourish of
+<weapon>..." (`blade_dance/005`)). The line prints with or without the boon, so it does NOT latch
+the flag, and the send-side floor stays so a missed confirmation costs one window, never a re-fire. Shielded rounds skip it (punctuate breaks the shield first) and a Songstep dance
 switch outranks it for the same balance, without the flourish helper even being CALLED, so it
 cannot stamp a cooldown for a round it did not get. Flag lifecycle: BOONS row `mnemosyne/084`,
 claim intercept, run-start reset, confirmed run-end reset plus the three `ataxiaTemp.bardFlourish*`
@@ -1019,10 +1023,15 @@ on its own refill clock, a corpse is already in the pack. **Nothing is guessed**
 verb and every other piece is proven in-tree (`ii corpse` from `176_Butchering`, the row->id parse
 from `733_Corpse_Found`, that id as an item ref from `butcher <id> for reagent`, and `eat <id>` from
 the horn feeder). A bare `eat corpse` would have assumed how the game disambiguates a noun we hold
-several of. **Two decisions about WHEN, both about the EATING balance** (contended with every
-cure-herb, the reason the PvE curing profile exists): the eat goes out on the FREE queue so the next
-`queue addclearfull` cannot wipe it, and the UPKEEP fires on a KILL -- a corpse exists and the fight
-is ending rather than peaking. The STARVATION path forces past that throttle, because a throttle
+several of. **The eat is SENT DIRECTLY, never queued** (v4.7.304, from a live
+log: v4.7.294 put it on the FREE queue "so the next `queue addclearfull` cannot wipe it", and it
+never ate once -- the kill top-up fires at the exact moment a room clears, and the explorer's own
+move for that moment is `queue addclear free stand;<dir>`, which CLEARS the free queue first; EAT
+needs no balance, so there was never anything to queue for. **A queue is a place a command can be
+deleted from; a balanceless command has no reason to be in one.**) The one WHEN decision that
+remains is about the EATING balance (contended with every cure-herb, the reason the PvE curing
+profile exists): the UPKEEP fires on a KILL -- a corpse exists and the fight is ending rather than
+peaking. The STARVATION path forces past that throttle, because a throttle
 written for upkeep must not stand in front of unconsciousness. **The CORPSE top-up needs BOTH boons**: with
 only Carnivore a corpse is just food and the horn already covers hunger; with only Metabolism the
 food source is the HORN (v4.7.303, below -- v4.7.294 wrongly said there was none). The ATTEMPT is

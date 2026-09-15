@@ -65,13 +65,15 @@ describe("Obligate Carnivore -- corpses as food", function()
     expect(sentAny("eat corpse123456")).toBeTrue()
   end)
 
-  -- Eating contends with cure-herbs for the EATING balance, and the basher's next
-  -- `queue addclearfull` would wipe an ordinary queued command outright.
-  it("sends the eat on the FREE queue", function()
+  -- v4.7.294 queued the eat on the FREE queue; the explorer's own room-clear move is
+  -- `queue addclear free stand;<dir>` and wiped it before it ran (live log, v4.7.304). EAT is
+  -- balanceless, so it is sent DIRECTLY -- nothing to wait for, nothing to be deleted from.
+  it("sends the eat DIRECTLY, never on a queue", function()
     reset(); mnemObligateCarnivore = true
     ataxia_carnivoreEat("test")
     listCorpse("corpse1 ", "a rat")
-    expect(sentAny("queue add free eat corpse1")).toBeTrue()
+    expect(sentAny("eat corpse1")).toBeTrue()
+    expect(sentAny("queue")).toBeFalse()
   end)
 
   -- An empty pack is the normal state between kills. Without stamping the ATTEMPT, every kill

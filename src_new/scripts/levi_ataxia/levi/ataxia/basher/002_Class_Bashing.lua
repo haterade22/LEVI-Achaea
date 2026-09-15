@@ -548,11 +548,19 @@ end
 -- `_denizenCount` of 0 therefore cannot block it either. v4.7.301 shipped a floor knob as a
 -- hedge; the user declined it, so it is gone rather than left at a default nobody wants.
 --
--- SEND-SIDE STAMP with the v4.7.129 in-flight hold (the Draconic Rampage shape), because our
--- own flourish fire line is UNCAPTURED. Note that a bare "flourish" substring would confirm the
--- WRONG ability: the only "flourish" lines in the tree are HIGHSUN's ("With a flourish of
--- <weapon> you step smoothly into...", blade_dance/005) and an enemy bard's. Move the 15s stamp
--- to the confirmed line once one is captured, the way the Rampage proc (highlighting/033) was.
+-- SEND-SIDE STAMP with the v4.7.129 in-flight hold, AND a confirmed line (the Draconic Rampage
+-- shape exactly). The fire line, captured live 2026-09-15 (trigger highlighting/062):
+--
+--   "You weave a Soulpiercer through the air in a dazzling display, the music of your bladesong
+--    sweeping forth to wash over Seasone the Industrious while your feet shift to a new stance."
+--
+-- `ataxiaBasher_bardFlourishConfirm` restarts the 15s from the LANDED moment (the queued flourish
+-- can land a balance after the send stamp) and releases the in-flight hold. The send-side stamp
+-- stays as a FLOOR rather than being replaced: the line does not contain the word "flourish",
+-- wraps at the player's width, and prints for a flourish with or without the boon, so a missed
+-- confirmation must cost one 15s window, never a re-fire every replay hold. (The word "flourish"
+-- is deliberately not matched anywhere: the only "flourish" lines in the tree are HIGHSUN's --
+-- "With a flourish of <weapon> you step smoothly into...", blade_dance/005 -- and an enemy bard's.)
 local FLOURISH_CD = 15            -- the boon's own proc cooldown
 local FLOURISH_HOLD = 4           -- replay window across the 0.3s re-queue loop (~two balances)
 local FLOURISH_SIDE_HOLD_MAX = 10 -- longest we will wait at "side" for the dance to carry us on
@@ -584,6 +592,16 @@ function ataxiaBasher_bardFlourish()
   ataxiaTemp.bardFlourishAt = nowT
   ataxiaTemp.bardFlourishPendingAt = nowT
   return cmd
+end
+
+-- Flourish LANDED (trigger highlighting/062). Restart the boon's 15s from now -- the queued
+-- flourish executes a balance after the pick's send stamp, so counting from the send would let
+-- the next one go out early -- and release the in-flight replay. Not self-proving of the boon:
+-- the base ability prints this line too, so the flag is NOT latched here.
+function ataxiaBasher_bardFlourishConfirm()
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.bardFlourishAt = (getEpoch and getEpoch()) or os.time()
+  ataxiaTemp.bardFlourishPendingAt = nil
 end
 
 function ataxiaBasher_bardBashing()

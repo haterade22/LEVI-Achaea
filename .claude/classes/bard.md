@@ -416,10 +416,21 @@ flag goes stale -- a flourish's own two-step jump may not print the position lin
 unreadable position (`nil`/`false`) fires: the user's rule is every 15 seconds, and a hold on a
 fact we cannot read is a hold we cannot justify.
 
-**Fire line: UNCAPTURED.** A bare "flourish" substring would confirm the WRONG ability -- the only
-"flourish" lines in the tree are HIGHSUN's (*"With a flourish of <weapon> you step smoothly
-into..."*, `blade_dance/005`) and an enemy bard's. The boon's own AoE line is also unseen. When
-either is captured, stamp the 15s from it (the Draconic Rampage proc shape, `highlighting/033`).
+**Fire line, captured 2026-09-15** (highlighted chartreuse bold, `highlighting/062`):
+
+```
+You weave a Soulpiercer through the air in a dazzling display, the music of your bladesong
+sweeping forth to wash over Seasone the Industrious while your feet shift to a new stance.
+```
+
+Two substring fragments (`through the air in a dazzling display` / `while your feet shift to a
+new stance`) because it wraps at the player's width. Neither contains the word "flourish" -- the
+only "flourish" lines in the tree are HIGHSUN's (*"With a flourish of <weapon> you step smoothly
+into..."*, `blade_dance/005`) and an enemy bard's. It feeds `ataxiaBasher_bardFlourishConfirm`:
+the 15s restarts from the LANDED moment (the queued flourish executes a balance after the pick's
+send stamp) and the in-flight replay is released. The send-side stamp stays as a floor -- the line
+prints with or without the boon, so it does not latch the flag, and a missed confirmation must
+cost one window rather than a re-fire every hold. The boon's own AoE line is still unseen.
 
 Flag `mnemDeadlyFlourish`: BOONS row (`mnemosyne/084`), claim intercept, run-start reset,
 confirmed run-end reset (+ the three `ataxiaTemp.bardFlourish*` stamps). Seeded in

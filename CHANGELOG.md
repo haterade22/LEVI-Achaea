@@ -2,6 +2,59 @@
 
 ---
 
+## 2026-09-15 - The corpse eat never ate, and the flourish line is captured (v4.7.304)
+
+### Obligate Carnivore: the eat was queued into a queue the explorer clears
+
+User, with the log: *"IT doesnt actually eat a corpse... It should be eating the corpse. It is
+balance less. So it should do eat guard."*
+
+The log shows the whole mechanism in three lines: our `(LEVI): Obligate Carnivore: eating the
+corpse of Giacinto, the Golden (satiation upkeep).` echo, then `(MNEM): [explore] room clear ->
+moving ne.`, and no eat. v4.7.294 sent the eat as `queue add free eat <id>` "so the next `queue
+addclearfull` cannot wipe it". But the kill top-up fires at the exact moment a room clears, and
+the explorer's own move for that moment is `queue addclear free stand;<dir>` (`008_Explorer`) --
+which CLEARS the free queue before adding the step. The eat never survived long enough to run,
+on any kill that cleared a room, which in the tower is most of them.
+
+EAT needs no balance, so there was never anything to queue for. It is now `send("eat <id>")`,
+executed at once -- the way the horn's `get;eat` has always been sent. **A queue is a place a
+command can be deleted from; a balanceless command has no reason to be in one.** The WHEN
+decision (on a kill, when the fight is ending) is unchanged and is what keeps it off the eating
+balance a cure-herb might need.
+
+One open question: the first corpse listed was the boss's (Giacinto). Whether a boss corpse is
+edible is unknown; if the game refuses it, the satiation verify (v4.7.303) re-feeds and the next
+row is a guard. If that shows up in play, the fix is to skip the run's boss by name.
+
+### Deadly Flourish: the landed line, captured
+
+User: *"Additionally this is flourish: You weave a Soulpiercer through the air in a dazzling
+display, the music of your bladesong sweeping forth to wash over Seasone the Industrious while
+your feet shift to a new stance."*
+
+New trigger `highlighting/062_Flourish.lua` (chartreuse bold, the attack-landed colour): two
+substring fragments because the line is ~190 characters and wraps at the player's width; neither
+contains the word "flourish", since HIGHSUN's line begins "With a flourish of <weapon>...". It
+feeds `ataxiaBasher_bardFlourishConfirm`: the boon's 15s now restarts from the LANDED moment (the
+queued flourish executes a balance after the pick's send stamp, so counting from the send let the
+next one go out early) and the in-flight replay is released. The send-side stamp stays as a
+FLOOR rather than being replaced: the line prints with or without the boon (so it does not latch
+the flag), and a missed confirmation must cost one 15s window, never a re-fire every replay hold.
+
+### Verification
+
+**1856 tests** (up from 1853): the carnivore free-queue test is replaced by one asserting the eat
+is sent directly and nothing is queued; three new flourish cases (re-stamp from the landed moment,
+replay released, flag not latched). Break-backs: eat back on the free queue fails 1, confirm not
+releasing the replay fails 2, confirm not re-stamping fails 1.
+
+**Files:** `misc_scripts/022_Horn_Of_Plenty.lua`, `basher/002_Class_Bashing.lua`,
+`triggers/highlighting/062_Flourish.lua` (new), `tests/test_carnivore.lua`,
+`tests/test_bard_flourish.lua`, `.claude/classes/bard.md`, `CLAUDE.md`.
+
+---
+
 ## 2026-09-14 - Healing Metabolism alone: hold "utterly satiated" off the horn (v4.7.303)
 
 User, with SCORE and PROBE HORN captures: *"When we have this boon we need to be full satiation. I
