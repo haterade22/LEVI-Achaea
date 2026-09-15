@@ -97,6 +97,85 @@ describe("Obligate Carnivore -- corpses as food", function()
   end)
 end)
 
+-- "Cant eat bosses I think" (user, 2026-09-15). The boss's corpse was the first row listed.
+describe("Obligate Carnivore -- never a boss corpse", function()
+  local function withBoss(name)
+    ataxia.mnemosyne = { run = { boss = name } }
+  end
+
+  it("skips the current ripple's boss and eats the next row", function()
+    reset(); mnemObligateCarnivore = true; withBoss("Giacinto, the Golden")
+    ataxia_carnivoreEat("test")
+    listCorpse("giacinto612432 ", "Giacinto, the Golden")
+    expect(sentAny("eat giacinto")).toBeFalse()
+    listCorpse("guard619981 ", "a Qurnok guard")
+    expect(sentAny("eat guard619981")).toBeTrue()
+    ataxia.mnemosyne = nil
+  end)
+
+  it("remembers a boss from an EARLIER ripple, whose corpse is still in the pack", function()
+    reset(); mnemObligateCarnivore = true; withBoss(nil)
+    ataxiaTemp.mnemBossNames = { ["Giacinto, the Golden"] = true }
+    ataxia_carnivoreEat("test")
+    listCorpse("giacinto612432 ", "Giacinto, the Golden")
+    expect(sentAny("eat")).toBeFalse()
+    listCorpse("bat652312 ", "a lithic cave bat")
+    expect(sentAny("eat bat652312")).toBeTrue()
+    ataxia.mnemosyne = nil
+  end)
+
+  it("matches on the boss's first word, so a comma-title on the Objective line cannot hide it", function()
+    reset(); mnemObligateCarnivore = true; withBoss("Seasone the Industrious")
+    ataxia_carnivoreEat("test")
+    listCorpse("seasone1 ", "Seasone")
+    expect(sentAny("eat")).toBeFalse()
+    ataxia.mnemosyne = nil
+  end)
+
+  it("a boss first word shorter than four letters never matches (no false skips)", function()
+    reset(); mnemObligateCarnivore = true; withBoss("Ur, the Vast")
+    ataxia_carnivoreEat("test")
+    listCorpse("guard1 ", "a Qurnok guard")   -- contains "ur"; must still be eaten
+    expect(sentAny("eat guard1")).toBeTrue()
+    ataxia.mnemosyne = nil
+  end)
+
+  -- Whatever the name rule cannot know is LEARNED: an eat the confirm line does not follow
+  -- marks that corpse inedible for the session.
+  it("learns a corpse that was not confirmed eaten, and skips it next time", function()
+    reset(); mnemObligateCarnivore = true
+    local timers = {}
+    local realTimer = tempTimer
+    tempTimer = function(delay, fn) timers[#timers + 1] = { delay = delay, fn = fn }; return #timers end
+    ataxia_carnivoreEat("test")
+    listCorpse("weird1 ", "a thing that will not go down")
+    expect(sentAny("eat weird1")).toBeTrue()
+    for _, t in ipairs(timers) do if t.delay == 3 then t.fn() end end  -- no confirm arrived
+    expect(ataxiaTemp.corpseInedible.weird1).toBeTrue()
+    tempTimer = realTimer
+    -- next listing: skipped, the row after it is eaten
+    sent = {}; NOW = NOW + 60
+    ataxia_carnivoreEat("test")
+    listCorpse("weird1 ", "a thing that will not go down")
+    expect(sentAny("eat")).toBeFalse()
+    listCorpse("rat1 ", "a rat")
+    expect(sentAny("eat rat1")).toBeTrue()
+  end)
+
+  it("does NOT learn a corpse whose confirm line arrived", function()
+    reset(); mnemObligateCarnivore = true
+    local timers = {}
+    local realTimer = tempTimer
+    tempTimer = function(delay, fn) timers[#timers + 1] = { delay = delay, fn = fn }; return #timers end
+    ataxia_carnivoreEat("test")
+    listCorpse("rat1 ", "a rat")
+    ataxia_carnivoreAte()                                                -- highlighting/061 fired
+    for _, t in ipairs(timers) do if t.delay == 3 then t.fn() end end
+    expect((ataxiaTemp.corpseInedible or {}).rat1).toBeNil()
+    tempTimer = realTimer
+  end)
+end)
+
 describe("the horn defers to a corpse", function()
   -- A corpse is free; the horn holds six charges and refills on its own clock. Spending one on
   -- hunger we could have eaten off the floor is the single avoidable cost here.

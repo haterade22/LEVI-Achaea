@@ -1349,6 +1349,24 @@ describe("M._toggleState()", function()
   end)
 end)
 
+describe("bosses named this run are remembered for the corpse-eat skip list (v4.7.305)", function()
+  it("onObjective records every boss and _resetRun clears them", function()
+    reset(true)
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.mnemBossNames = nil
+    M.onObjective("defeat Giacinto, the Golden")
+    M.onObjective("defeat 3 waves of enemies") -- not a boss
+    M.onObjective("defeat Seasone the Industrious")
+    expect(ataxiaTemp.mnemBossNames["Giacinto, the Golden"]).toBeTrue()
+    expect(ataxiaTemp.mnemBossNames["Seasone the Industrious"]).toBeTrue()
+    local n = 0
+    for _ in pairs(ataxiaTemp.mnemBossNames) do n = n + 1 end
+    expect(n).toBe(2)
+    M._resetRun()
+    expect(ataxiaTemp.mnemBossNames).toBeNil()
+  end)
+end)
+
 describe("run-end confirmation", function()
   it("clears bardWarmarch only when onRunEnd commits, not on the deferred maybe", function()
     reset(true)

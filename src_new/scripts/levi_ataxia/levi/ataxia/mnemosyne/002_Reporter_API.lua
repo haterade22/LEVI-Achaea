@@ -80,6 +80,8 @@ function M._resetRun()
   if M._rerollReset then M._rerollReset() end
   -- ...and the deferred offer that belonged to the run just ended.
   if M._dropPendingOffer then M._dropPendingOffer() end
+  -- ...and the bosses named in it (the corpse-eat skip list, `ataxia_corpseInedible`).
+  if ataxiaTemp then ataxiaTemp.mnemBossNames = nil end
 end
 
 -- WIPE ANYTHING THAT CAME BACK FROM DISK (v4.7.299).

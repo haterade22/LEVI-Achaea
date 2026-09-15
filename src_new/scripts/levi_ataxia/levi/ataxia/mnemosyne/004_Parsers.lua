@@ -797,6 +797,12 @@ function M.onObjective(text)
   -- legend-deck layer reads it: Xylthus cannot bind a boss, so a charge must
   -- never be spent trying.
   M.run.boss = target
+  -- Every boss named this RUN, not just this ripple: a boss corpse stays in the pack for the
+  -- whole dive and Obligate Carnivore must never try to eat it (`ataxia_corpseInedible`). On
+  -- ataxiaTemp because `M.run` is serialized; reset with the run in `_resetRun`.
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.mnemBossNames = ataxiaTemp.mnemBossNames or {}
+  ataxiaTemp.mnemBossNames[target] = true
   -- Boss tactics fire regardless of telemetry (Splinterbark's independence rule):
   -- a reserve-boss objective arms the tree reserve even with reporting off.
   M.reserveTreeForBoss(target)

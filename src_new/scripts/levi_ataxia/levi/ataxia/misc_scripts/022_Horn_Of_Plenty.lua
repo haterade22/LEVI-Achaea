@@ -132,6 +132,66 @@ local function corpseCleanup()
   ataxiaTemp.corpseTrigger, ataxiaTemp.corpseTimer = nil, nil
 end
 
+-- BOSSES CANNOT BE EATEN (user, 2026-09-15: "Cant eat bosses I think"), and the boss's corpse was
+-- the FIRST row of the listing that never ate. Two guards, because neither is complete alone:
+--
+--   * NAME: skip a corpse that carries the first word of any boss named THIS RUN. Not just
+--     `M.run.boss` -- that is cleared on every ripple change, while the corpse stays in the pack
+--     for the whole dive (Giacinto's did). `M.onObjective` records every boss into
+--     `ataxiaTemp.mnemBossNames`, reset with the run. First word, >= 4 letters, plain find --
+--     the rule `ataxiaBasher_bardWantDance` and `M._fledLineNames` already use, because the
+--     Objective line carries a comma-title ("Giacinto, the Golden") the corpse row may not.
+--   * LEARNED: an `eat <id>` that the confirm line (`highlighting/061`) does not follow within
+--     CORPSE_CONFIRM_WAIT marks that id inedible for the session and it is never tried again.
+--     Covers whatever the name rule cannot know -- a boss we never saw the Objective for, or a
+--     corpse the game refuses for a reason it has not told us yet. A wrong mark costs one corpse.
+--
+-- The listing capture therefore stays ARMED past a skipped row and disarms on the first row it
+-- will eat; the PROBE timeout still ends it if every row is skipped.
+local CORPSE_CONFIRM_WAIT = 3
+
+local function bossFirstWord(name)
+  local w = type(name) == "string" and name:lower():match("[%a]+")
+  return (w and #w >= 4) and w or nil
+end
+
+function ataxia_corpseInedible(id, what)
+  ataxiaTemp = ataxiaTemp or {}
+  if id and ataxiaTemp.corpseInedible and ataxiaTemp.corpseInedible[id] then return true end
+  local hay = type(what) == "string" and what:lower() or ""
+  if hay == "" then return false end
+  local names = {}
+  for n in pairs(ataxiaTemp.mnemBossNames or {}) do names[#names + 1] = n end
+  local M = ataxia and ataxia.mnemosyne
+  if M and M.run and type(M.run.boss) == "string" then names[#names + 1] = M.run.boss end
+  for _, n in ipairs(names) do
+    local w = bossFirstWord(n)
+    if w and hay:find(w, 1, true) then return true end
+  end
+  return false
+end
+
+local function corpseLearnCleanup()
+  if ataxiaTemp.corpseLearnTimer then pcall(killTimer, ataxiaTemp.corpseLearnTimer) end
+  ataxiaTemp.corpseLearnTimer = nil
+end
+
+-- The confirm line did not follow the eat: remember the id, say so once per corpse.
+function ataxia_corpseUnconfirmed(id, what, attemptAt)
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.corpseLearnTimer = nil
+  local confirmed = tonumber(ataxiaTemp.corpseConfirmedAt) or 0
+  if confirmed >= (tonumber(attemptAt) or 0) then return false end
+  ataxiaTemp.corpseInedible = ataxiaTemp.corpseInedible or {}
+  if ataxiaTemp.corpseInedible[id] then return true end
+  ataxiaTemp.corpseInedible[id] = true
+  if ataxiaEcho then
+    ataxiaEcho("Obligate Carnivore: <red>the corpse of " .. tostring(what) .. " was not eaten<reset>"
+      .. " -- skipping it from now on.")
+  end
+  return true
+end
+
 -- Probe our corpses, take the first, eat it. Returns false when the boon is absent or the
 -- throttle is closed, so a caller can fall through to the horn.
 function ataxia_carnivoreEat(reason, force)
@@ -145,16 +205,22 @@ function ataxia_carnivoreEat(reason, force)
   ataxiaTemp.corpseAteAt = getEpoch()
   corpseCleanup()
 
-  -- The same row shape `733_Corpse_Found` already parses off `ii corpse`. FIRST match only, then
-  -- disarm: we want one corpse, not the whole inventory.
+  -- The same row shape `733_Corpse_Found` already parses off `ii corpse`. First EDIBLE row only,
+  -- then disarm: we want one corpse, not the whole inventory -- and never a boss (see above).
   ataxiaTemp.corpseTrigger = tempRegexTrigger([[^\s+(.+)the corpse of (.+)$]], function()
     local id, what = string.trim(matches[2]), matches[3]
+    if ataxia_corpseInedible(id, what) then return end -- stay armed for the next row
     corpseCleanup()
+    local attemptAt = getEpoch()
     send("eat " .. id, false)
     if ataxiaEcho then
       ataxiaEcho("Obligate Carnivore: eating <green>the corpse of " .. tostring(what) .. "<reset>"
         .. (reason and (" (" .. reason .. ")") or "") .. ".")
     end
+    corpseLearnCleanup()
+    ataxiaTemp.corpseLearnTimer = tempTimer(CORPSE_CONFIRM_WAIT, function()
+      ataxia_corpseUnconfirmed(id, what, attemptAt)
+    end)
   end)
 
   -- Backstop: no corpses listed. Silent by design -- an empty pack is the normal state between
@@ -172,6 +238,8 @@ function ataxia_carnivoreAte()
   mnemObligateCarnivore = true   -- self-proving: this line only prints with the boon up
   ataxiaTemp = ataxiaTemp or {}
   ataxiaTemp.corpseAteAt = getEpoch()
+  ataxiaTemp.corpseConfirmedAt = getEpoch() -- distinct from the ATTEMPT stamp above: the learn
+  corpseLearnCleanup()                       -- timer compares against this one
 end
 
 -- Satiation upkeep, called from the kill trigger. HEALING METABOLISM is what makes this worth

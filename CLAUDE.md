@@ -1031,7 +1031,15 @@ needs no balance, so there was never anything to queue for. **A queue is a place
 deleted from; a balanceless command has no reason to be in one.**) The one WHEN decision that
 remains is about the EATING balance (contended with every cure-herb, the reason the PvE curing
 profile exists): the UPKEEP fires on a KILL -- a corpse exists and the fight is ending rather than
-peaking. The STARVATION path forces past that throttle, because a throttle
+peaking. **NEVER A BOSS CORPSE** (v4.7.305, user: "Cant eat bosses I think" -- and the boss's
+corpse was the first row of the listing that never ate). Two guards, since neither is complete
+alone: `ataxia_corpseInedible` skips any row carrying the first word (>= 4 letters, the
+`bardWantDance`/`_fledLineNames` rule) of a boss named THIS RUN -- `ataxiaTemp.mnemBossNames`,
+recorded by `M.onObjective` and reset with the run, NOT `M.run.boss` alone, which is cleared on
+every ripple change while the corpse stays in the pack for the whole dive -- and an `eat <id>`
+that the confirm line (`highlighting/061`) does not follow within 3s marks that id inedible for
+the session (`ataxia_corpseUnconfirmed`), so whatever the name rule cannot know costs exactly one
+attempt. The listing capture stays ARMED past a skipped row and disarms on the first row it eats. The STARVATION path forces past that throttle, because a throttle
 written for upkeep must not stand in front of unconsciousness. **The CORPSE top-up needs BOTH boons**: with
 only Carnivore a corpse is just food and the horn already covers hunger; with only Metabolism the
 food source is the HORN (v4.7.303, below -- v4.7.294 wrongly said there was none). The ATTEMPT is

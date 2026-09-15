@@ -2,6 +2,45 @@
 
 ---
 
+## 2026-09-15 - Obligate Carnivore never eats a boss corpse (v4.7.305)
+
+User: *"Cant eat bosses I think."* -- and in the v4.7.304 log the boss's corpse (Giacinto, the
+Golden) was the FIRST row of the `ii corpse` listing, i.e. the one every top-up would have picked.
+
+Two guards, because neither is complete on its own:
+
+- **By name.** `ataxia_corpseInedible` skips any row carrying the first word (four letters or
+  more, the rule `ataxiaBasher_bardWantDance` and `M._fledLineNames` already use, because the
+  Objective line carries a comma-title the corpse row may not) of a boss named THIS RUN. Not just
+  `M.run.boss`: that is cleared on every ripple change, while a boss corpse stays in the pack for
+  the whole dive -- Giacinto's did. `M.onObjective` now records every boss into
+  `ataxiaTemp.mnemBossNames` (on `ataxiaTemp` because `M.run` is serialized), and `_resetRun`
+  clears it with the run.
+- **By learning.** An `eat <id>` that the confirm line (`highlighting/061`) does not follow
+  within 3s marks that id inedible for the session (`ataxia_corpseUnconfirmed`, one echo per
+  corpse) and it is never tried again. Whatever the name rule cannot know -- a boss whose
+  Objective line was missed, a corpse refused for a reason the game has not told us -- costs
+  exactly one attempt. `ataxia_carnivoreAte` now stamps `corpseConfirmedAt` separately from the
+  attempt stamp so the two can be compared.
+
+The listing capture stays ARMED past a skipped row and disarms on the first row it will eat; the
+probe timeout still ends it if every row is skipped.
+
+### Verification
+
+**1863 tests** (up from 1856): six in `test_carnivore.lua` (skip the current boss and eat the next
+row; remember an earlier ripple's boss; first-word matching through a comma-title; a boss word
+under four letters never false-skips; learn an unconfirmed corpse and skip it next time; never
+learn a confirmed one) and one in `test_mnemosyne.lua` (`onObjective` records, `_resetRun`
+clears). Break-backs: no skip fails 4, run-scoped list ignored fails 1, confirm ignored fails 1,
+boss not recorded fails 1.
+
+**Files:** `misc_scripts/022_Horn_Of_Plenty.lua`, `mnemosyne/004_Parsers.lua`,
+`mnemosyne/002_Reporter_API.lua`, `tests/test_carnivore.lua`, `tests/test_mnemosyne.lua`,
+`CLAUDE.md`.
+
+---
+
 ## 2026-09-15 - The corpse eat never ate, and the flourish line is captured (v4.7.304)
 
 ### Obligate Carnivore: the eat was queued into a queue the explorer clears
