@@ -81,7 +81,7 @@ function M.help()
     { "mnem affixes", "This run's active affixes (ongoing effects)" },
     { "mnem library", "All-time affix catalogue" },
     { "mnem boondb [filter|export|import]", "All-time BOON catalogue (own file; filter matches name or effect)" },
-    { "mnem boonfill [gaps|all|<n>]", "Learn what undescribed boons do via BOON CONTEMPLATE" },
+    { "mnem boonfill [gaps|all|<n>|unknown|retry <name>]", "Learn what undescribed boons do via BOON CONTEMPLATE; `unknown` lists names the game refused" },
     { "mnem quiet [on|off]", "Silence auto boon/affix echoes (still records)" },
     { "mnem start | end", "Manually start / end a run" },
     { "mnem check", "Re-sync with an in-progress run (/run_exists)" },
@@ -293,6 +293,7 @@ function M.command(rest)
   elseif cmd == "boonfill" then
     -- `mnem boonfill` takes a batch; `mnem boonfill all` is the deliberate opt-in for a quiet
     -- moment, and `mnem boonfill gaps` just names what is missing without spending a command.
+    local retry = arg:match("^retry%s+(.+)$")
     if arg == "gaps" or arg == "list" then
       local gaps = M.boonGaps and M.boonGaps() or {}
       if #gaps == 0 then
@@ -302,6 +303,31 @@ function M.command(rest)
         for _, n in ipairs(gaps) do cecho("\n  <cyan>" .. n .. "<reset>") end
         cecho("\n  <grey>mnem boonfill<reset> takes the first " .. (M.BOON_FILL_BATCH or 8)
           .. "; <grey>mnem boonfill all<reset> takes them all.\n")
+      end
+      local unk = {}
+      for n in pairs((M.history and M.history.boonUnknown) or {}) do unk[#unk + 1] = n end
+      if #unk > 0 then
+        table.sort(unk)
+        cecho("\n  <red>" .. #unk .. " name(s) the game does not recognise<reset> (mnem boonfill unknown)\n")
+      end
+    elseif arg == "unknown" then
+      -- Names BOON CONTEMPLATE refused. These are OUR spellings being wrong, not the game's
+      -- holes; correct the seed and `mnem boonfill retry <name>`.
+      local unk = {}
+      for n in pairs((M.history and M.history.boonUnknown) or {}) do unk[#unk + 1] = n end
+      table.sort(unk)
+      if #unk == 0 then
+        M.echo("No boon names refused by the game.")
+      else
+        M.echo("<red>Boon names the game does not recognise<reset> -- " .. #unk .. ":")
+        for _, n in ipairs(unk) do cecho("\n  <cyan>" .. n .. "<reset>") end
+        cecho("\n  <grey>Fix the spelling in 010_Boon_Seed.lua, then mnem boonfill retry <name>.<reset>\n")
+      end
+    elseif retry then
+      if M.boonUnknownRetry and M.boonUnknownRetry(retry) then
+        M.echo("'<cyan>" .. retry .. "<reset>' will be contemplated again.")
+      else
+        M.echo("'" .. tostring(retry) .. "' is not on the refused list (mnem boonfill unknown).")
       end
     else
       M.boonFill(arg ~= "" and arg or nil)

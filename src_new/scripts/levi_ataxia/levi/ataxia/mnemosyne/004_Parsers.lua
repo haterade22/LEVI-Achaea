@@ -2046,11 +2046,25 @@ end
 --   * the SEED           -- includes every declared hole
 --   * the LIBRARY        -- anything learned or imported, in case a row lost its description
 --   * `boonsOwned`       -- what the last BOONS list showed, which may name something new
+-- NAMES THE GAME DOES NOT RECOGNISE ARE NOT GAPS (v4.7.308). "You consider for a time, but no
+-- information comes to you on such a boon." is the game's answer to a name it does not know --
+-- and until this version nothing heard it, so the trickle asked the SAME first gap at every boon
+-- screen of every run, forever, and learned nothing. The 25 name-only holes came from the
+-- 2026-09-01 ANNOUNCEMENT, not from the game's own BOONS list, so a spelling the game does not
+-- use is exactly what to expect. `M.history.boonUnknown[name]` (persisted) is set from the refusal
+-- (trigger mnemosyne/089 -> M.onContemplateUnknown), skipped here, listed by `mnem boonfill
+-- unknown`, and cleared by `mnem boonfill retry <name>` once the seed's spelling is corrected.
+function M.boonUnknown(name)
+  local u = M.history and M.history.boonUnknown
+  return (u and name and u[name]) and true or false
+end
+
 function M.boonGaps()
   local gaps, seen = {}, {}
   local function consider(name)
     if type(name) ~= "string" or name == "" or seen[name] then return end
     seen[name] = true
+    if M.boonUnknown(name) then return end
     local rec = M.boonInfo and M.boonInfo(name)
     if rec and rec.description and rec.description ~= "" then return end
     local sd = M.BOON_SEED and M.BOON_SEED[name]
@@ -2108,7 +2122,40 @@ function M._boonFillNext(todo, i, learned)
     end
     tempTimer(0.5, function() M._boonFillNext(todo, i + 1, learned) end)
   end)
+  -- Say WHICH name goes out (v4.7.308): the send is silent, so a refusal in the log could not be
+  -- tied to a name -- the user's first guess was the apostrophe, and the real cause was a
+  -- spelling. `contemplating` is what the refusal handler reads back.
+  ataxiaTemp = ataxiaTemp or {}
+  ataxiaTemp.contemplating = name
+  M.echo("contemplating <cyan>" .. name .. "<grey>...")
   send("boon contemplate " .. name, false)
+end
+
+-- The refusal (trigger mnemosyne/089). Marks the name in flight as unknown to the game -- so it
+-- is never asked again until `mnem boonfill retry <name>` -- and finishes the capture at once so
+-- a batch moves on instead of waiting out the 2s silence timeout.
+function M.onContemplateUnknown()
+  ataxiaTemp = ataxiaTemp or {}
+  local name = ataxiaTemp.contemplating
+  ataxiaTemp.contemplating = nil
+  if type(name) ~= "string" or name == "" then return false end
+  M.history = M.history or {}
+  M.history.boonUnknown = M.history.boonUnknown or {}
+  M.history.boonUnknown[name] = (getEpoch and getEpoch()) or os.time()
+  if M._historySaveSoon then M._historySaveSoon() end
+  M.echo("<red>the game does not recognise the boon name<reset> '<cyan>" .. name
+    .. "<reset>' -- skipping it from now on. <grey>mnem boonfill unknown<reset> lists these;"
+    .. " fix the spelling in 010_Boon_Seed.lua, then <grey>mnem boonfill retry " .. name .. "<reset>.")
+  if M._capturing and M._captureForceFinish then pcall(M._captureForceFinish) end
+  return true
+end
+
+function M.boonUnknownRetry(name)
+  local u = M.history and M.history.boonUnknown
+  if not (u and type(name) == "string" and u[name]) then return false end
+  u[name] = nil
+  if M._historySaveSoon then M._historySaveSoon() end
+  return true
 end
 
 -- Merge contemplate detail into an offered boon: rarity/quote/echoes ONLY. The

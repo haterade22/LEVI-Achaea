@@ -2,6 +2,39 @@
 
 ---
 
+## 2026-09-16 - BOON CONTEMPLATE: a name the game refuses is remembered, not re-asked forever (v4.7.308)
+
+User, with the refusal line: *"You consider for a time, but no information comes to you on such a
+boon. Doesnt look like we are boon contemplating correctly. Maybe not grabbing the ' or other
+special characters."*
+
+Not the apostrophe -- every catalogue name is plain ASCII with a straight quote, the same character
+the game prints, and `BOON CLAIM Berserker's Edge` has worked. The cause: the catalogue trickle
+(v4.7.295) contemplates `gaps[1]`, the alphabetically first undescribed name, at every boon screen
+-- and the 25 name-only holes came from the 2026-09-01 ANNOUNCEMENT, not from the game's own BOONS
+list, so a spelling the game does not use ("Antimagic Shell" sorts first) is exactly what to expect.
+Nothing heard the refusal, the capture timed out learning nothing, the gap stayed a gap, and the
+same name went out again at the next screen, every screen, every run.
+
+New trigger `mnemosyne/089` -> `M.onContemplateUnknown`: the name in flight is recorded in
+`M.history.boonUnknown` (persisted), dropped from `M.boonGaps()`, announced by name, and the
+capture is finished at once so a batch moves on. `_boonFillNext` now also echoes which name it is
+contemplating, because the send was silent and a refusal in the log could not be tied to a name --
+which is how the wrong suspect got blamed. `mnem boonfill unknown` lists the refused names;
+`mnem boonfill retry <name>` clears one once the seed's spelling is corrected.
+
+### Verification
+
+**1902 tests** (up from 1898): marked and skipped; inert with nothing in flight; retry clears; the
+fill records the name it sends. Break-backs: gaps ignoring the list fails 1, the refusal not
+recording fails 1.
+
+**Files:** `mnemosyne/004_Parsers.lua`, `mnemosyne/003_Commands.lua`,
+`triggers/mnemosyne/089_Contemplate_Unknown.lua` (new), `tests/test_mnemosyne.lua`, `CLAUDE.md`,
+`.claude/projects/mnemosyne/03-parsing-triggers.md`.
+
+---
+
 ## 2026-09-16 - Searing Light: the Serpent's lightwall as a room nuke, first in the round (v4.7.307)
 
 User, with the boon screen, the AB and both fire lines: *"Searing Light: Conjuring a lightwall

@@ -1366,7 +1366,12 @@ slot whose second caller force-finishes the first (v4.7.93). So the trickle fire
 offer is flushed, waits `BOON_FILL_IDLE` (4s), and still refuses if anything holds the slot; ONE per
 screen, because a trickle cannot starve a capture. Batched by default (`BOON_FILL_BATCH` 8) for the
 same reason -- filling twenty-five at once is that race, self-inflicted. `mnem boonfill gaps` names
-the holes without spending a command.
+the holes without spending a command. **A NAME THE GAME REFUSES IS NOT A GAP (v4.7.308):** "You
+consider for a time, but no information comes to you on such a boon." (trigger `mnemosyne/089`)
+records the name in flight in `M.history.boonUnknown`, drops it from `boonGaps()`, and says which
+name it was -- until then the trickle asked the same unrecognised announcement-spelled name at every
+boon screen forever, and the silent send meant the apostrophe got blamed. `mnem boonfill unknown`
+lists them; `mnem boonfill retry <name>` re-arms one after the seed's spelling is corrected.
 
 **SEASONAL CHURN: THE REGISTRY EXISTS AND ITS RESET IS HALF-WIRED (audited 2026-09-02, corrected
 2026-09-03, KNOWN AND UNFIXED).** Achaea adds and removes boons every season, and this package

@@ -1367,6 +1367,58 @@ describe("bosses named this run are remembered for the corpse-eat skip list (v4.
   end)
 end)
 
+-- "You consider for a time, but no information comes to you on such a boon." (v4.7.308)
+describe("a boon name the game refuses is remembered, skipped, and retryable", function()
+  it("marks the name in flight unknown and drops it from the gaps", function()
+    reset(true)
+    M.history.boonUnknown = nil
+    M.BOON_SEED = M.BOON_SEED or {}
+    M.BOON_SEED["Antimagic Shell"] = {}         -- a name-only hole, as the announcement left it
+    local before = M.boonGaps()
+    local present = false
+    for _, n in ipairs(before) do if n == "Antimagic Shell" then present = true end end
+    expect(present).toBeTrue()
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.contemplating = "Antimagic Shell"
+    expect(M.onContemplateUnknown()).toBeTrue()
+    expect(M.boonUnknown("Antimagic Shell")).toBeTrue()
+    expect(ataxiaTemp.contemplating).toBeNil()
+    local after = M.boonGaps()
+    for _, n in ipairs(after) do expect(n ~= "Antimagic Shell").toBeTrue() end
+    M.BOON_SEED["Antimagic Shell"] = nil
+  end)
+
+  it("does nothing when no contemplate is in flight (someone typed it by hand)", function()
+    reset(true)
+    M.history.boonUnknown = nil
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.contemplating = nil
+    expect(M.onContemplateUnknown()).toBeFalse()
+    expect(next(M.history.boonUnknown or {})).toBeNil()
+  end)
+
+  it("retry clears the mark so a corrected spelling is asked again", function()
+    reset(true)
+    M.history.boonUnknown = { ["Antimagic Shell"] = 1 }
+    expect(M.boonUnknownRetry("Antimagic Shell")).toBeTrue()
+    expect(M.boonUnknown("Antimagic Shell")).toBeFalse()
+    expect(M.boonUnknownRetry("Antimagic Shell")).toBeFalse() -- not on the list any more
+  end)
+
+  it("the fill records which name it is contemplating", function()
+    reset(true)
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.contemplating = nil
+    local sentCmds, realSend = {}, send
+    send = function(c) table.insert(sentCmds, c) end
+    M._boonFillNext({ "Ogre's Speed" }, 1, 0)
+    send = realSend
+    expect(ataxiaTemp.contemplating).toBe("Ogre's Speed")
+    expect(sentCmds[#sentCmds]).toBe("boon contemplate Ogre's Speed")
+    if M._captureForceFinish then pcall(M._captureForceFinish) end
+  end)
+end)
+
 describe("run-end confirmation", function()
   it("clears bardWarmarch only when onRunEnd commits, not on the deferred maybe", function()
     reset(true)
