@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-09-16 - Footwork flourish on by default (v4.7.312)
+
+User: *"We should flourish from the front to get to the back."*
+
+v4.7.311 shipped the footwork flourish opt-in. It is now ON by default: BLADE FLOURISH at every
+return to FRONT, boon or no boon, on the tempos where the analysis says the lost balance pays
+(Vivace at any back bonus; Adagio/Moderato only with Shadow Tempo; never Allegro/no-tempo), read
+from the GAME's tempo line so an unlearned Tempo keeps it quiet. `bashflourish always` drops the
+tempo rule -- every return to front, whatever the tempo -- for a user who has decided the
+Allegro/no-tempo exception does not apply to them; `bashflourish off` leaves flourish to the
+Deadly Flourish boon.
+
+v4.7.311's backfill had written `false` into every existing save, so the flipped default alone
+would reach nobody: migrated ONCE behind a persisted marker (the tempo migration's shape), so a
+later `bashflourish off` is respected.
+
+**Tests:** 1912 -- the default-off case becomes off-means-off, plus `always` firing on Allegro and
+on no confirmed tempo while still refusing from the side.
+
+**Files:** `001_Save_Load_Settings.lua`, `basher/002_Class_Bashing.lua`,
+`aliases/bard_things/011_Toggle_Footwork_Flourish.lua`, `tests/test_bard_flourish.lua`,
+`.claude/classes/bard.md`, `CLAUDE.md`.
+
+---
+
 ## 2026-09-16 - Tempo analysis redone: Vivace is the default, footwork flourish is a policy (v4.7.311)
 
 User, with AB Tempo (now listing **Vivace: 1, 6, 5**) and AB Flourish: *"We did dps analysis

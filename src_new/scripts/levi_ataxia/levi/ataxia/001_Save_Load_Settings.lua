@@ -638,9 +638,17 @@ for k, v in pairs({
 	symphony = false, harmsList = {}, ariaBash = false, bashHarms = false,
 	instrument = "lyre", bashTempo = "vivace",
 	bashCompose = "paean prelude scherzo sonata maqam", bashPunctuate = false,
-	footworkFlourish = false,
+	footworkFlourish = true,
 }) do
 	if ataxia.bardStuff[k] == nil then ataxia.bardStuff[k] = v end
+end
+-- FOOTWORK FLOURISH DEFAULTS ON (v4.7.312, user: "We should flourish from the front to get to the
+-- back"). v4.7.311 shipped it opt-in and its backfill wrote `false` into every existing save, so
+-- flipping the default above reaches nobody -- migrate ONCE behind a persisted marker, the same
+-- shape as the tempo migration below; a later `bashflourish off` is respected thereafter.
+if not ataxia.bardStuff.footworkFlourishDefaulted then
+	ataxia.bardStuff.footworkFlourishDefaulted = true
+	if ataxia.bardStuff.footworkFlourish == false then ataxia.bardStuff.footworkFlourish = true end
 end
 -- VIVACE REPLACES MODERATO AS THE DEFAULT (v4.7.311). The 2026-09-16 tempo analysis (see
 -- .claude/classes/bard.md, "Tempo: the numbers") puts Vivace (1/6/5) first in every regime: 5 of

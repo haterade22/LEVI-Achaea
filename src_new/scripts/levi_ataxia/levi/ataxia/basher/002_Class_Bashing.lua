@@ -572,10 +572,14 @@ local FLOURISH_SIDE_HOLD_MAX = 10 -- longest we will wait at "side" for the danc
 -- plausible back bonus; on ADAGIO or MODERATO only with Shadow Tempo (back bonus 100%); never on
 -- ALLEGRO or no tempo, where it costs more than it buys. The tempo is read from `bardtempostance`,
 -- the GAME's own line, never from config: a Tempo the character has not learned prints no line,
--- leaves the stance at "none", and the policy correctly stays off. Opt-in (`bashflourish on`):
--- the back bonus outside Shadow Tempo is UNMEASURED and Flourish itself is a 1924-lesson ability.
+-- leaves the stance at "none", and the policy correctly stays off. ON by default since v4.7.312
+-- (user: "We should flourish from the front to get to the back"); `bashflourish off` disables it,
+-- and `bashflourish always` drops the tempo rule -- every return to front, whatever the tempo --
+-- for a user who has decided the maths' Allegro/no-tempo exception does not apply to them.
 function ataxiaBasher_bardFootworkFlourishPays()
-  if not (ataxia.bardStuff and ataxia.bardStuff.footworkFlourish) then return false end
+  local mode = ataxia.bardStuff and ataxia.bardStuff.footworkFlourish
+  if not mode then return false end
+  if mode == "always" then return true end
   local stance = type(bardtempostance) == "string" and bardtempostance:lower() or "none"
   if stance == "vivace" then return true end
   if (stance == "adagio" or stance == "moderato") and mnemShadowTempo == true then return true end

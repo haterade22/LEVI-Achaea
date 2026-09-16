@@ -242,12 +242,23 @@ describe("footwork flourish -- flourish at every return to front, boon or no boo
     expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
   end)
 
-  it("is off by default and switchable", function()
+  it("is switchable off, and off means off", function()
     fw({ stance = "Vivace", on = false })
     expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
     expect(ataxiaBasher_bardFootworkFlourishPays()).toBeFalse()
     ataxia.bardStuff.footworkFlourish = true
     expect(ataxiaBasher_bardFootworkFlourishPays()).toBeTrue()
+  end)
+
+  -- "We should flourish from the front to get to the back" (user, v4.7.312): `always` drops the
+  -- tempo rule -- every return to front, whatever the tempo, even one the game never confirmed.
+  it("ALWAYS fires from the front on any tempo, including none", function()
+    fw({ stance = "Allegro" }); ataxia.bardStuff.footworkFlourish = "always"
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
+    fw({ stance = nil }); ataxia.bardStuff.footworkFlourish = "always"
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
+    fw({ stance = nil, pos = "side" }); ataxia.bardStuff.footworkFlourish = "always"
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse() -- still front only
   end)
 
   it("leaves the boon path exactly as it was when the policy is off", function()

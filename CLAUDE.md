@@ -979,9 +979,11 @@ a separate `MAX_TACTICAL_ICE_SLIPS = 3`. **The escape pull HOLDS the attack disp
 analysis (`.claude/classes/bard.md`, "Tempo: the numbers") puts it first in every regime -- 5 of 12
 hits from the back alone, 5 of 6 with a flourish at each return to front -- and the ranking does
 not depend on the unmeasured base back bonus. It is the default (`bashTempo`, a saved moderato
-migrated once), `bashflourish on` enables the boon-free FOOTWORK FLOURISH on the tempos where the
-lost balance pays (Vivace always; Adagio/Moderato only with Shadow Tempo; never Allegro/none), read
-from the GAME's tempo line so an unlearned Tempo keeps it off. The character's ABs show Tempo and
+migrated once), the boon-free FOOTWORK FLOURISH is ON by default (v4.7.312, user: "We should flourish
+from the front to get to the back") on the tempos where the lost balance pays (Vivace always;
+Adagio/Moderato only with Shadow Tempo; never Allegro/none), read from the GAME's tempo line so an
+unlearned Tempo keeps it quiet; `bashflourish always` drops the tempo rule, `bashflourish off`
+leaves flourish to the boon. The character's ABs show Tempo and
 Flourish both Known: No -- Tempo (703 lessons) is the far better buy.
 
 **DEADLY FLOURISH -- THE BARD'S SECOND BALANCE SWAP, AND FOOTWORK DECIDES THE MOMENT (v4.7.301,
