@@ -196,7 +196,7 @@ function basher_engaged()
 	elseif ataxia_isClass("Bard") then
     ataxiaBasher_bardCompose()
     tempTimer(1, function()
-      local t = (ataxia.bardStuff and ataxia.bardStuff.bashTempo) or "moderato"
+      local t = (ataxia.bardStuff and ataxia.bardStuff.bashTempo) or "vivace"
       if t ~= "none" then
         send("tempo "..t)
         ataxiaEcho("<green>Bard bash:<reset> tempo set to <cyan>"..t)

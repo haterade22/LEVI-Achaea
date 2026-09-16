@@ -18,6 +18,7 @@ require("mock_mudlet")
 local saved = {
   target = target, ataxia = ataxia, ataxiaBasher = ataxiaBasher, ataxiaTemp = ataxiaTemp,
   gmcp = gmcp, bardtempo = bardtempo, mnemDeadlyFlourish = mnemDeadlyFlourish,
+  bardtempostance = bardtempostance, mnemShadowTempo = mnemShadowTempo,
   mnemSongstep = mnemSongstep, bardWarmarch = bardWarmarch, getEpoch = getEpoch,
   ataxiaEcho = ataxiaEcho, ataxiaBasher_assembleBattlerage = ataxiaBasher_assembleBattlerage,
 }
@@ -48,7 +49,7 @@ local function reset(opts)
   target = 7
   ataxiaTemp = {}
   ataxia.defences = {}
-  ataxia.bardStuff = { bashPunctuate = false }
+  ataxia.bardStuff = { bashPunctuate = false, footworkFlourish = false }
   ataxia.mnemosyne = { _denizenCount = function() return opts.denizens or 1 end }
   ataxiaBasher.shielded = false
   bardtempo = opts.tempo -- nil = position unreadable
@@ -182,6 +183,86 @@ describe("Deadly Flourish -- footwork: never from the side position while readab
   end)
 end)
 
+-- FOOTWORK FLOURISH (v4.7.311): the boon-free policy from the tempo analysis. Front -> back at
+-- every return to front, on the tempos where the maths says the lost balance pays, read from the
+-- GAME's tempo line so an unlearned Tempo (no line, stance "none") keeps it off.
+describe("footwork flourish -- flourish at every return to front, boon or no boon", function()
+  local savedStance = bardtempostance
+  local function fw(opts)
+    reset({ boon = false, tempo = (opts.pos == nil) and "front" or opts.pos })
+    ataxia.bardStuff.footworkFlourish = (opts.on ~= false)
+    bardtempostance = opts.stance
+    mnemShadowTempo = opts.shadow or false
+  end
+
+  it("fires on Vivace from the front with no boon at all, and again at the next front", function()
+    fw({ stance = "Vivace" })
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
+    clock = clock + 5 -- replay hold over; the boon's 15s would still be running
+    bardtempo = "back"                                  -- landed at the back
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
+    clock = clock + 11                                  -- 16s: five back hits later...
+    bardtempo = "front"                                 -- ...the dance carried us to front
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
+  end)
+
+  it("has no 15s clock of its own -- the dance is the clock", function()
+    fw({ stance = "Vivace" })
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
+    clock = clock + 5
+    bardtempo = "front" -- back to front inside the boon's 15s window
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
+  end)
+
+  it("only from the front -- at the side or the back it is the boon's business", function()
+    fw({ stance = "Vivace", pos = "side" })
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
+    fw({ stance = "Vivace", pos = "back" })
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
+    fw({ stance = "Vivace", pos = false }) -- position unreadable: the policy needs the front
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
+  end)
+
+  it("Adagio and Moderato pay only with Shadow Tempo; Allegro and no tempo never", function()
+    fw({ stance = "Moderato" })
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
+    fw({ stance = "Moderato", shadow = true })
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
+    fw({ stance = "Adagio", shadow = true })
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
+    fw({ stance = "Allegro", shadow = true })
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
+    fw({ stance = "none", shadow = true })
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
+  end)
+
+  it("reads the GAME's tempo line, never config -- an unlearned Tempo keeps it off", function()
+    fw({ stance = nil })
+    ataxia.bardStuff.bashTempo = "vivace" -- what we ASKED for; the game never confirmed it
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
+  end)
+
+  it("is off by default and switchable", function()
+    fw({ stance = "Vivace", on = false })
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
+    expect(ataxiaBasher_bardFootworkFlourishPays()).toBeFalse()
+    ataxia.bardStuff.footworkFlourish = true
+    expect(ataxiaBasher_bardFootworkFlourishPays()).toBeTrue()
+  end)
+
+  it("leaves the boon path exactly as it was when the policy is off", function()
+    fw({ stance = "Vivace", on = false })
+    mnemDeadlyFlourish = true
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
+    clock = clock + 6
+    bardtempo = "front"
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse() -- the boon's 15s holds
+  end)
+
+  bardtempostance = savedStance
+  mnemShadowTempo = false
+end)
+
 -- The landed line (highlighting/062) restarts the 15s from the moment the flourish actually
 -- executed -- a balance after the pick's send stamp -- and releases the in-flight replay.
 describe("Deadly Flourish -- the landed line restarts the clock and releases the replay", function()
@@ -251,6 +332,7 @@ ataxiaTemp = saved.ataxiaTemp
 gmcp = saved.gmcp
 bardtempo = saved.bardtempo
 mnemDeadlyFlourish = saved.mnemDeadlyFlourish
+bardtempostance, mnemShadowTempo = saved.bardtempostance, saved.mnemShadowTempo
 mnemSongstep = saved.mnemSongstep
 bardWarmarch = saved.bardWarmarch
 getEpoch = saved.getEpoch

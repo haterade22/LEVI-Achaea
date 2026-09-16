@@ -594,7 +594,7 @@ function ataxia_defaultSettings()
     }
 	}
 	ataxia.curingprio = {}
-	ataxia.bardStuff = {symphony = false, harmsList = {}, ariaBash = false, bashHarms = false, instrument = "lyre", bashTempo = "moderato", bashCompose = "paean prelude scherzo sonata maqam", bashPunctuate = false}
+	ataxia.bardStuff = {symphony = false, harmsList = {}, ariaBash = false, bashHarms = false, instrument = "lyre", bashTempo = "vivace", bashCompose = "paean prelude scherzo sonata maqam", bashPunctuate = false}
 	ataxia.sylvanStuff = {propagateList = {arms = false, legs = false, head = false, body = false}}
 
 	-- User-configurable weapons, mount, artefacts (populated via Setup Wizard)
@@ -636,8 +636,19 @@ ataxia = ataxia or {}
 ataxia.bardStuff = ataxia.bardStuff or {}
 for k, v in pairs({
 	symphony = false, harmsList = {}, ariaBash = false, bashHarms = false,
-	instrument = "lyre", bashTempo = "moderato",
+	instrument = "lyre", bashTempo = "vivace",
 	bashCompose = "paean prelude scherzo sonata maqam", bashPunctuate = false,
+	footworkFlourish = false,
 }) do
 	if ataxia.bardStuff[k] == nil then ataxia.bardStuff[k] = v end
+end
+-- VIVACE REPLACES MODERATO AS THE DEFAULT (v4.7.311). The 2026-09-16 tempo analysis (see
+-- .claude/classes/bard.md, "Tempo: the numbers") puts Vivace (1/6/5) first in every regime: 5 of
+-- every 12 hits from the back against Moderato's 2 of 7, and with a flourish at each return to
+-- front, 5 of every 6. Migrated ONCE behind a persisted marker (the `panicAt35` shape): the old
+-- default is moved off, but a user who later types `bashtempo moderato` is not dragged back on
+-- every load.
+if not ataxia.bardStuff.tempoVivaceMigrated then
+	ataxia.bardStuff.tempoVivaceMigrated = true
+	if ataxia.bardStuff.bashTempo == "moderato" then ataxia.bardStuff.bashTempo = "vivace" end
 end

@@ -975,6 +975,15 @@ a separate `MAX_TACTICAL_ICE_SLIPS = 3`. **The escape pull HOLDS the attack disp
 
 **A dance is a STATE, not a rider (Songstep, v4.7.200).** Every other Mnemosyne rider in this package spends EQUILIBRIUM, so it rides free beside the swing and can be re-asserted whenever its defence drops. The Bard's Bladedance dances spend **BALANCE** (AB Hawkstep 3193: 3.00s) and are mutually exclusive ("you can only dance one thing at a time"), so a dance costs the attack and can only be SWITCHED. `ataxiaBasher_bardDance` therefore returns `""` on almost every round -- it fires only when the wanted dance differs from what is up, then holds 8s so an unconfirmed dance cannot cost every balance. On a switching round the dance REPLACES the swing (the battlerage still rides -- rage, not balance). Choice: boss -> **wavedance** (ignore 75% resistance), 2+ denizens or ripple >= `bardHawkstepRipple` (**25** -- the user's number for where the tower's difficulty steps up; an earlier guess of 5 anchored on the boss cadence, which is not the same thing) -> **hawkstep** (25% DR), else **harrying** (+50% damage); boss beats crowd. One knowingly-unverified bit: `hawkstep`/`wavedance` as GMCP defence names are inferred from `harrying`, which IS tracked -- the attempt-hold is what makes that safe to ship, since a wrong name costs one dance per 8s rather than one per round. **Rule for any new ability: check the RESOURCE first -- equilibrium/word/rage ride, balance replaces, and a mutually-exclusive balance ability is a state machine, not a keeper.**
 
+**TEMPO: VIVACE (v4.7.311).** AB Tempo 3159 now lists a fourth tempo, Vivace 1/6/5. The 2026-09-16
+analysis (`.claude/classes/bard.md`, "Tempo: the numbers") puts it first in every regime -- 5 of 12
+hits from the back alone, 5 of 6 with a flourish at each return to front -- and the ranking does
+not depend on the unmeasured base back bonus. It is the default (`bashTempo`, a saved moderato
+migrated once), `bashflourish on` enables the boon-free FOOTWORK FLOURISH on the tempos where the
+lost balance pays (Vivace always; Adagio/Moderato only with Shadow Tempo; never Allegro/none), read
+from the GAME's tempo line so an unlearned Tempo keeps it off. The character's ABs show Tempo and
+Flourish both Known: No -- Tempo (703 lessons) is the far better buy.
+
 **DEADLY FLOURISH -- THE BARD'S SECOND BALANCE SWAP, AND FOOTWORK DECIDES THE MOMENT (v4.7.301,
 `ataxiaBasher_bardFlourish`).** "Your bladedance flourish ability now deals additional cutting
 damage to all denizens in your location when used on a denizen. This can only occur once every 15

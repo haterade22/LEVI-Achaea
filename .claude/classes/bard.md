@@ -200,7 +200,7 @@ attack_command: "blade flick <target> nomos"   # default; 'blade punctuate <targ
 attack_skill: Bladedance
 warmarch: "Mnemosyne 'Warmarch' boon makes the paean refrain hit denizens (+100% psychic). While bardWarmarch is set, flick becomes 'blade flick <target> paean'. Set on boon claim / seeing it in the BOONS list; cleared on Mnemosyne run start/end (triggers 001/009/010)."
 mechanic:
-  footwork_tempo: "The dance auto-cycles front -> side -> back -> loop as you attack. Tempo/stance sets attacks-per-position before you're carried onward: Adagio 4/4/3, Moderato 3/2/2, Allegro 2/1/1, none 5/2/1. Tracked by bardtempo/bardtempostance/bardtemposequence (tempo triggers)."
+  footwork_tempo: "The dance auto-cycles front -> side -> back -> loop as you attack. Tempo/stance sets attacks-per-position before you're carried onward: Adagio 4/4/3, Moderato 3/2/2, Allegro 2/1/1, VIVACE 1/6/5 (new, AB Tempo 3159), none 5/2/1. Tracked by bardtempo/bardtempostance/bardtemposequence (tempo triggers; Vivace's line is INFERRED, tempo/008)."
   back_bonus: "Bladedance attacks vs denizens deal BONUS DAMAGE from the back position (AB FOOTWORK). The bashing goal is to maximize back-position uptime."
 battlerage: "ataxiaBasher_bardBattlerage() (basher/001). Priority: culling blade (reap, off cooldown + >=36 rage; Bard is excluded from the global culling check and owns it here) > charm 2nd denizen (2+ denizens, >=32 rage) > trill target (2+ denizens, >=28, off ~42s cd) > howlslash (>=36) > moulinet (>=14)."
 lifecycle:
@@ -208,13 +208,54 @@ lifecycle:
   compose: "ataxiaBasher_bardCompose() (basher/002) wields the lyre (required to perform), composes bashCompose, and arms the 15-min 'Bard Performance' timer. Compose is NOT done per attack, and only ever runs when not performing (bash start / timer expiry / 'not performing' trigger), so no 'performance end' is needed. Debounced to one compose per 2s."
   refresh: "The performance lasts 15 min. On timer expiry the Bard Performance timer (timers/004) re-runs ataxiaBasher_bardCompose(); disengage disables the timer so it never fires while idle. If it lapses early, the 'You can hardly manipulate a grand performance...' line (performance_tracking/005) also re-composes while bashing."
 config:
-  bashTempo: "ataxia.bardStuff.bashTempo (default 'moderato'). Sent as 'TEMPO <name>' at bash start. Alias: 'bashtempo <adagio|moderato|allegro|none>'. 'none' = unmanaged."
+  bashTempo: "ataxia.bardStuff.bashTempo (default 'vivace' since v4.7.311; a saved 'moderato' is migrated once). Sent as 'TEMPO <name>' at bash start. Alias: 'bashtempo <vivace|adagio|moderato|allegro|none>'. 'none' = unmanaged."
+  footworkFlourish: "ataxia.bardStuff.footworkFlourish (default false). 'bashflourish on|off': BLADE FLOURISH at every return to FRONT (front -> back), boon or no boon, on the tempos where the maths says it pays -- Vivace always, Adagio/Moderato only with Shadow Tempo, never Allegro/none -- read from the GAME's tempo line (ataxiaBasher_bardFootworkFlourishPays, basher/002)."
   bashCompose: "ataxia.bardStuff.bashCompose (default 'paean prelude scherzo sonata maqam') = paean song + prelude/scherzo(regen)/sonata(cleanse)/maqam(crit)."
   bashPunctuate: "ataxia.bardStuff.bashPunctuate (default false). Toggle with the 'bashpunctuate' alias; true -> attack becomes 'blade punctuate <target> nomos' for psychic-resistant denizens (002_Class_Bashing.lua:202)."
 tempo_choice:
-  moderato: "Best steady-state back share (2 of every 7 hits); default. First back attack at hit #6."
-  allegro: "Reaches back fastest (hit #4) -> more back hits per kill on squishy denizens that die before Moderato ever reaches back."
+  vivace: "DEFAULT since v4.7.311. Most back hits in every regime: 5 of every 12 (42%) alone, 5 of every 6 (83%) with a flourish at each return to front. Weakness: alone, its first back hit is hit #8, so on mobs dead in <8 hits it is no better than no-tempo -- flourish fixes that (back on balance #2). See 'Tempo: the numbers'."
+  moderato: "The old default (2 of every 7 hits, first back at hit #6). Beaten by Vivace in every regime; flourish only pays on it with Shadow Tempo."
+  allegro: "Reaches back fastest (hit #4) -> best ONLY on very short kills (~5 hits) with a big back bonus. Flourish never pays on it."
 ```
+
+## Tempo: the numbers (2026-09-16, redone for Vivace and Flourish)
+
+Model: every attack is one balance (flick 2.10s, flourish 2.10s, AB-confirmed equal). A front or
+side hit deals 1.00; a back hit deals 1+B, where **B is the Footwork back-position bonus against
+denizens -- its BASE value is unmeasured** (AB Footwork states only "bonus damage"); Shadow Tempo
+sets it to 100%, so 50% below is a guess for the base. A flourish deals 0 and jumps front -> back
+(AB Flourish 3151). A new target starts at front. "H" is hits-to-kill in front-hit units; the
+tower's mobs are H >= 10. Damage per balance:
+
+| tempo | back share alone | B=50% alone | B=50% +flourish | B=100% alone | B=100% +flourish |
+|---|---|---|---|---|---|
+| none 5/2/1 | 12.5% | 1.06 | worse | 1.13 | worse |
+| allegro 2/1/1 | 25.0% | 1.13 | worse | 1.25 | worse |
+| moderato 3/2/2 | 28.6% | 1.14 | worse (1.00) | 1.29 | 1.33 |
+| adagio 4/4/3 | 27.3% | 1.14 | 1.13 | 1.27 | 1.50 |
+| **vivace 1/6/5** | **41.7%** | **1.21** | **1.25** | **1.42** | **1.67** |
+
+Finite kills tell the same story except at the very short end: at H=5 everyone is ~1.00 (nobody
+reaches back) and Allegro alone leads at B=100% (1.25); from H=8 upward Vivace+flourish leads
+(1.60 at H=8, B=100%), and Vivace alone matches Moderato by H=12 and beats it from H=20.
+
+**What follows:**
+- **Vivace wins in every regime, and the ranking does not depend on B** -- it has the most back
+  hits per cycle with or without flourish; B only scales the margin.
+- **Flourish is a trade** (a balance of nothing for a jump to back): pays on Vivace at any B, on
+  Adagio/Moderato only with Shadow Tempo, never on Allegro or no-tempo. Hence the
+  `footworkFlourish` policy and its tempo rule above. "Smart" flourish (skip it when the mob dies
+  in a hit or two) only matters on very short kills and is not implemented.
+- **Lessons:** Tempo (703) buys +14% (B=50%) to +26% (B=100%) via Vivace alone; Flourish (1924)
+  adds +3% to +18% on top. Tempo first.
+- **Measure B**: a footwork probe pairing `Damage dealt: N (type)` lines with `bardtempo` at the
+  moment of the hit -- the `bash probe` shape -- would replace the 50% guess with a number.
+- **The ABs pasted 2026-09-16 show BOTH Tempo and Flourish as Known: No.** Until Tempo is learned
+  the character is on no-tempo (5/2/1) and every `TEMPO vivace` at bash start is refused; the
+  footwork policy reads the GAME's tempo line and so correctly stays off. A Deadly Flourish claim
+  without Flourish learned would send a refused `blade flourish` every 15s -- one wasted balance
+  each; the fire line was captured on 2026-09-15, so which character/session that was is worth
+  checking.
 
 ## Bladedance dances (defences)
 ```yaml
@@ -382,8 +423,9 @@ without it the back bonus is small and the crowd abilities are worth more.
 location when used on a denizen. This can only occur once every 15 seconds."* User: *"if we have
 this boon, we should use flourish every 15 seconds."*
 
-**AB Flourish (Bladedance, wiki.achaea.com/Bladedance):** `BLADE FLOURISH <target>`, **2.10
-seconds of balance**, "Works against: Adventurers". *"This elegant flourish with your blade may
+**AB Flourish (Bladedance 3151, in-game AB 2026-09-16):** `BLADE FLOURISH <target>`, **2.10
+seconds of balance**, "Works on/against: Adventurers and denizens" (the wiki's "Adventurers"
+was stale). *"This elegant flourish with your blade may
 not inflict any harm, but it'll certainly give you the opportunity to adjust your footwork while
 your partner is spellbound by your peerless grace. In practice, you will advance two positions
 through the bladedance immediately (so from front to back, side to front, back to side)."* First
@@ -394,7 +436,7 @@ time this ability appears anywhere in the package -- nothing in PvP uses it.
 | Fact | Source | Handling |
 |---|---|---|
 | 2.10s of BALANCE, same as flick | AB | it **REPLACES the swing** (the Songstep rule: eq rides, balance replaces); the battlerage still rides. A flourish round has no flick in it -- that is the price the user has accepted for the AoE |
-| Adventurers only | AB | the **boon is the denizen permit**: `type(target) == "number"` gated, the Spirit Rend shape. Without the boon a denizen flourish is a refusal that still costs the balance |
+| "Adventurers and denizens" (AB 3151, pasted 2026-09-16 -- the wiki text used on 2026-09-14 said adventurers only) | AB | the boon is NOT the denizen permit; flourish works on denizens natively. The `type(target) == "number"` gate stays because the basher's targets are denizens and a player target is never its business |
 | once every 15s | boon | `FLOURISH_CD` 15s, send-side stamp + the v4.7.129 in-flight replay hold (`bardFlourishPendingAt`, 4s), because the flourish fire line is **uncaptured** -- move the stamp to the confirmed line once one is seen |
 | "all denizens in your location" | boon | **no crowd gate, and no knob for one** (user: "regardless of the denizens in the room, 1 or 50") -- the count is never read. v4.7.301 shipped a floor knob as a hedge; the user declined it and it was removed in v4.7.302 |
 | advances TWO positions | AB | **the moment matters for footwork** (below) |

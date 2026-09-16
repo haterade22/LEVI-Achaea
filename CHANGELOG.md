@@ -2,6 +2,71 @@
 
 ---
 
+## 2026-09-16 - Tempo analysis redone: Vivace is the default, footwork flourish is a policy (v4.7.311)
+
+User, with AB Tempo (now listing **Vivace: 1, 6, 5**) and AB Flourish: *"We did dps analysis
+before and determined through math that moderato was the best stance because it had the most time
+in the back position, however, there is a new stance called vivace. Redo the analysis. Also factor
+in we can flourish to advance to back from front."*
+
+### The numbers
+
+Every attack one balance; front/side hit 1.00, back hit 1+B (the Footwork back bonus -- base
+value UNMEASURED, Shadow Tempo makes it 100%, 50% is a guess for the base); flourish 0 damage and
+front -> back. Damage per balance at steady state:
+
+| tempo | back share alone | B=50% alone | B=50% +flourish | B=100% alone | B=100% +flourish |
+|---|---|---|---|---|---|
+| none 5/2/1 | 12.5% | 1.06 | worse | 1.13 | worse |
+| allegro 2/1/1 | 25% | 1.13 | worse | 1.25 | worse |
+| moderato 3/2/2 | 28.6% | 1.14 | worse | 1.29 | 1.33 |
+| adagio 4/4/3 | 27.3% | 1.14 | 1.13 | 1.27 | 1.50 |
+| **vivace 1/6/5** | **41.7%** | **1.21** | **1.25** | **1.42** | **1.67** |
+
+Vivace wins in every regime, and the ranking does not depend on B. Its one weakness -- first back
+hit at hit #8 alone -- is exactly what a flourish at front erases (back on balance #2). Flourish is
+a trade: it pays on Vivace at any B, on Adagio/Moderato only with Shadow Tempo, never on Allegro or
+no-tempo. Finite-kill runs (H=5..40) agree except at H~5, where nobody reaches back and Allegro
+alone edges it. Full table and method in `.claude/classes/bard.md`, "Tempo: the numbers".
+
+### What changed
+
+- **Vivace is the default tempo** (`bashTempo`; a saved `moderato` is migrated ONCE behind a
+  persisted marker, the `panicAt35` shape, so `bashtempo moderato` stays typeable). `bashtempo`
+  accepts `vivace`. New tempo trigger `tempo/008_Vivace.lua` -- wording INFERRED from the three
+  identical known lines; a wrong guess leaves `bardtempostance` unchanged and costs nothing.
+- **Footwork flourish** (`bashflourish on|off`, `ataxia.bardStuff.footworkFlourish`, default off):
+  BLADE FLOURISH at every return to FRONT, boon or no boon, with no clock of its own -- the dance is
+  the clock -- on the tempos where the analysis says the lost balance pays:
+  `ataxiaBasher_bardFootworkFlourishPays` reads the GAME's tempo line (`bardtempostance`), never
+  config, so a Tempo the character has not learned prints no line and the policy correctly stays
+  off. The Deadly Flourish boon path is unchanged.
+- **Flourish AB corrected**: "Works on/against: Adventurers and denizens" -- the wiki text used
+  on 2026-09-14 said adventurers only, so the boon is not the denizen permit. The `type(target)
+  == "number"` gate stays for the reason that was always true: the basher's targets are denizens.
+
+### Worth knowing
+
+Both ABs show **Known: No** for this character (Tempo 703 lessons, Flourish 1924). Until Tempo is
+learned the character is on no-tempo (5/2/1) and every `TEMPO` sent at bash start is refused;
+Tempo is the far better buy (+14-26% via Vivace alone; Flourish adds +3-18% on top). A Deadly
+Flourish claim without Flourish learned would send a refused `blade flourish` every 15s. Next
+step: a footwork probe pairing `Damage dealt` lines with `bardtempo` to measure B.
+
+### Verification
+
+**1911 tests** (up from 1904): 7 for the footwork policy (fires on Vivace with no boon and again at
+the next front; no clock of its own; front only; the tempo rule with and without Shadow Tempo;
+game line over config; default off; the boon path untouched when off). Break-backs: the tempo rule
+widened to any stance fails 2, the footwork path subjected to the boon's 15s fails 1.
+
+**Files:** `basher/002_Class_Bashing.lua`, `001_Save_Load_Settings.lua`,
+`genrunning/003_Engaged_Disengage.lua`, `aliases/bard_things/009_Set_Bash_Tempo.lua`,
+`aliases/bard_things/011_Toggle_Footwork_Flourish.lua` (new), `triggers/tempo/008_Vivace.lua`
+(new), `tests/test_bard_flourish.lua`, `.claude/classes/bard.md`, `CLAUDE.md`.
+
+---
+
 ## 2026-09-16 - Searing Light: one wall per room, full stop; CONSIDER highlighted, second strength grammar (v4.7.310)
 
 User: *"We should only do the lightwall attack one time per room."*

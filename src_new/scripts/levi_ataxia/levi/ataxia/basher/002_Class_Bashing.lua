@@ -565,10 +565,30 @@ local FLOURISH_CD = 15            -- the boon's own proc cooldown
 local FLOURISH_HOLD = 4           -- replay window across the 0.3s re-queue loop (~two balances)
 local FLOURISH_SIDE_HOLD_MAX = 10 -- longest we will wait at "side" for the dance to carry us on
 
+-- FOOTWORK FLOURISH -- the boon-free policy (v4.7.311, from the 2026-09-16 tempo analysis in
+-- .claude/classes/bard.md). A flourish at every RETURN TO FRONT turns Vivace's 1/6/5 cycle into
+-- [flourish, 5 back hits] -- 5 of every 6 balances from the back, never a side hit -- at the price
+-- of one balance of nothing per cycle. The analysis says when that price pays: on VIVACE at any
+-- plausible back bonus; on ADAGIO or MODERATO only with Shadow Tempo (back bonus 100%); never on
+-- ALLEGRO or no tempo, where it costs more than it buys. The tempo is read from `bardtempostance`,
+-- the GAME's own line, never from config: a Tempo the character has not learned prints no line,
+-- leaves the stance at "none", and the policy correctly stays off. Opt-in (`bashflourish on`):
+-- the back bonus outside Shadow Tempo is UNMEASURED and Flourish itself is a 1924-lesson ability.
+function ataxiaBasher_bardFootworkFlourishPays()
+  if not (ataxia.bardStuff and ataxia.bardStuff.footworkFlourish) then return false end
+  local stance = type(bardtempostance) == "string" and bardtempostance:lower() or "none"
+  if stance == "vivace" then return true end
+  if (stance == "adagio" or stance == "moderato") and mnemShadowTempo == true then return true end
+  return false
+end
+
 function ataxiaBasher_bardFlourish()
-  if not mnemDeadlyFlourish then return nil end
+  -- The footwork policy fires from FRONT only (front -> back is the whole point); the boon path
+  -- fires from any readable position but side. Either is reason enough to spend the balance.
+  local footwork = bardtempo == "front" and ataxiaBasher_bardFootworkFlourishPays()
+  if not (mnemDeadlyFlourish or footwork) then return nil end
   if ataxiaBasher.shielded then return nil end    -- break the shield first (the dance's rule)
-  if type(target) ~= "number" then return nil end -- PvE only; the boon is the denizen permit
+  if type(target) ~= "number" then return nil end -- PvE only: the basher's targets are denizens
   local nowT = (getEpoch and getEpoch()) or os.time()
   ataxiaTemp = ataxiaTemp or {}
   local cmd = "blade flourish "..target
@@ -579,7 +599,9 @@ function ataxiaBasher_bardFlourish()
   if pend and (nowT - pend) < FLOURISH_HOLD then return cmd end
   ataxiaTemp.bardFlourishPendingAt = nil
 
-  if (nowT - (tonumber(ataxiaTemp.bardFlourishAt) or 0)) < FLOURISH_CD then return nil end
+  -- The 15s clock is the BOON's (its AoE proc cooldown); the footwork policy has no clock but the
+  -- dance itself -- it fires once per return to front, however often that comes.
+  if not footwork and (nowT - (tonumber(ataxiaTemp.bardFlourishAt) or 0)) < FLOURISH_CD then return nil end
 
   -- Footwork: never from side while readable, bounded (see above).
   if bardtempo == "side" then
