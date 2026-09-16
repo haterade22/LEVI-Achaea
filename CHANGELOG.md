@@ -25,6 +25,11 @@ on no confirmed tempo while still refusing from the side.
 `aliases/bard_things/011_Toggle_Footwork_Flourish.lua`, `tests/test_bard_flourish.lua`,
 `.claude/classes/bard.md`, `CLAUDE.md`.
 
+**Post-release note (docs only, on main):** the Vivace tempo line was captured live --
+`Your feet move in vivace perfected, speeding each step within a new blade's song.` -- exactly
+the wording `tempo/008` inferred, so that trigger is confirmed and the footwork flourish is live on
+Vivace. Comment and class doc updated; no behaviour change, no new version.
+
 ---
 
 ## 2026-09-16 - Tempo analysis redone: Vivace is the default, footwork flourish is a policy (v4.7.311)

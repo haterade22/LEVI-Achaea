@@ -37,11 +37,13 @@ patterns:
   type: 3
 ]]--
 
--- WORDING INFERRED, NOT CAPTURED (v4.7.311). The three known tempo lines are identical but for
--- the tempo word ("Your feet move in moderato perfected, speeding each step within a new blade's
--- song."), so Vivace is assumed to follow. If the real line differs, `bardtempostance` stays at
--- its previous value and the footwork flourish (which reads it) simply does not fire -- the
--- failure direction that costs nothing. Paste the line when TEMPO VIVACE is first sent.
+-- CAPTURED LIVE 2026-09-16 (pasted by the user after TEMPO VIVACE) -- the wording v4.7.311
+-- inferred from the three identical known lines, confirmed verbatim:
+--
+--   "Your feet move in vivace perfected, speeding each step within a new blade's song."
+--
+-- This is what the footwork flourish reads (`bardtempostance == "Vivace"` -> flourish at every
+-- return to front), so with this line landing the policy is live.
 bardtempostance = "Vivace"
 
 --1,6,5

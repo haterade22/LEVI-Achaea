@@ -200,7 +200,7 @@ attack_command: "blade flick <target> nomos"   # default; 'blade punctuate <targ
 attack_skill: Bladedance
 warmarch: "Mnemosyne 'Warmarch' boon makes the paean refrain hit denizens (+100% psychic). While bardWarmarch is set, flick becomes 'blade flick <target> paean'. Set on boon claim / seeing it in the BOONS list; cleared on Mnemosyne run start/end (triggers 001/009/010)."
 mechanic:
-  footwork_tempo: "The dance auto-cycles front -> side -> back -> loop as you attack. Tempo/stance sets attacks-per-position before you're carried onward: Adagio 4/4/3, Moderato 3/2/2, Allegro 2/1/1, VIVACE 1/6/5 (new, AB Tempo 3159), none 5/2/1. Tracked by bardtempo/bardtempostance/bardtemposequence (tempo triggers; Vivace's line is INFERRED, tempo/008)."
+  footwork_tempo: "The dance auto-cycles front -> side -> back -> loop as you attack. Tempo/stance sets attacks-per-position before you're carried onward: Adagio 4/4/3, Moderato 3/2/2, Allegro 2/1/1, VIVACE 1/6/5 (new, AB Tempo 3159), none 5/2/1. Tracked by bardtempo/bardtempostance/bardtemposequence (tempo triggers; Vivace's line captured live 2026-09-16, tempo/008)."
   back_bonus: "Bladedance attacks vs denizens deal BONUS DAMAGE from the back position (AB FOOTWORK). The bashing goal is to maximize back-position uptime."
 battlerage: "ataxiaBasher_bardBattlerage() (basher/001). Priority: culling blade (reap, off cooldown + >=36 rage; Bard is excluded from the global culling check and owns it here) > charm 2nd denizen (2+ denizens, >=32 rage) > trill target (2+ denizens, >=28, off ~42s cd) > howlslash (>=36) > moulinet (>=14)."
 lifecycle:
@@ -250,6 +250,9 @@ reaches back) and Allegro alone leads at B=100% (1.25); from H=8 upward Vivace+f
   adds +3% to +18% on top. Tempo first.
 - **Measure B**: a footwork probe pairing `Damage dealt: N (type)` lines with `bardtempo` at the
   moment of the hit -- the `bash probe` shape -- would replace the 50% guess with a number.
+- **Vivace's tempo line, captured 2026-09-16:** `Your feet move in vivace perfected, speeding
+  each step within a new blade's song.` -- exactly the inferred wording, so `bardtempostance`
+  reads "Vivace" and the footwork flourish is live on it.
 - **The ABs pasted 2026-09-16 show BOTH Tempo and Flourish as Known: No.** Until Tempo is learned
   the character is on no-tempo (5/2/1) and every `TEMPO vivace` at bash start is refused; the
   footwork policy reads the GAME's tempo line and so correctly stays off. A Deadly Flourish claim
