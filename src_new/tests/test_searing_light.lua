@@ -1,10 +1,10 @@
 --- test_searing_light.lua -- Searing Light: CONJURE LIGHTWALL first, at 2+ denizens (Serpent)
 --
 -- Boon (captured 2026-09-16): "Conjuring a lightwall now deals fire damage to all denizens in
--- your location." User: "in a room of 2 or more denizens the first thing we need to do is conjure
--- lightwall in any direction." AB Lightwall: 4.00s of EQUILIBRIUM, 45 mana -- so it rides beside
--- the balance garrote, first in the chain, behind a mana floor; once per room on the first free
--- planar exit, and a refused direction rotates to the next.
+-- your location." User: "the first thing we need to do is conjure lightwall in any direction" --
+-- and, v4.7.309, "regardless of denizen as it does fire damage one time". AB Lightwall: 4.00s of
+-- EQUILIBRIUM, 45 mana -- so it rides beside the balance garrote, first in the chain, behind a mana
+-- floor; once per room on the first free planar exit, and a refused direction rotates to the next.
 --
 -- Loads the real basher/002_Class_Bashing.lua. Files share ONE Lua state: every global touched
 -- here is saved at the top and restored at the bottom.
@@ -64,7 +64,7 @@ local function reset(opts)
   }
 end
 
-describe("Searing Light -- CONJURE LIGHTWALL first at 2+ denizens", function()
+describe("Searing Light -- CONJURE LIGHTWALL first, whatever the room holds", function()
   it("is inert without the boon", function()
     reset({ boon = false })
     local cmd = ataxiaBasher_serpentBashing()
@@ -80,9 +80,18 @@ describe("Searing Light -- CONJURE LIGHTWALL first at 2+ denizens", function()
     expect(has(cmd, "BRAGE;")).toBeTrue()
   end)
 
-  it("needs 2+ denizens, a denizen target, the tower, and a mana pool worth spending", function()
+  -- "regardless of denizen as it does fire damage one time" (user, v4.7.309): the count is
+  -- never read -- one mob, fifty, or a lagging zero.
+  it("fires alone, in a crowd, and on a lagging count of zero", function()
     reset({ denizens = 1 })
-    expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall")).toBeFalse()
+    expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall n;")).toBeTrue()
+    reset({ denizens = 50 })
+    expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall n;")).toBeTrue()
+    reset({ denizens = 0 })
+    expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall n;")).toBeTrue()
+  end)
+
+  it("needs a denizen target, the tower, and a mana pool worth spending", function()
     reset(); target = "Grulk"
     expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall")).toBeFalse()
     reset(); ataxiaBasher.inMnemosyne = false

@@ -3139,9 +3139,13 @@ end
 -- on/against: Adventurers and room", **4.00 seconds of EQUILIBRIUM**, 45 mana. Equilibrium rides
 -- beside the balance garrote (the Kai Choke rule), and FIRST in the chain because the user said
 -- first -- and because both commands fire back to back the moment the round executes, so order
--- only decides which one a mid-chain refusal costs.
+-- only decides which one a mid-chain refusal costs. (The "2 or more" in the original request was
+-- withdrawn in v4.7.309 -- see the gate list below.)
 --
---   * 2+ denizens: the AoE is the point; alone, the fire on one mob is not worth 45 mana + 4s eq.
+--   * NO CROWD GATE (user, v4.7.309: "we should conjure lightwall regardless of denizen as it does
+--     fire damage one time"). v4.7.307 shipped a 2+ gate on the reasoning that the AoE was the
+--     point; the user's read is that one hit of fire on one mob is still worth 45 mana and 4s of
+--     idle equilibrium, and it is their mana. The count is no longer read.
 --   * MANA FLOOR (`LIGHTWALL_MANA`, 250): a 45-mana ability, and the Kai Choke floor for the same
 --     reason -- never scrape a dry pool for a rider.
 --   * ONCE PER ROOM, re-armed after `LIGHTWALL_REARM` (60s) for a room that refills (roamers).
@@ -3173,8 +3177,6 @@ function ataxiaBasher_searingLightwall(sp)
   if (tonumber(ataxia.vitals and ataxia.vitals.mp) or 9999) < LIGHTWALL_MANA then return "" end
   local M = ataxia.mnemosyne
   local MAP = M and M.map
-  local n = (M and M._denizenCount and M._denizenCount()) or 0
-  if n < 2 then return "" end
   ataxiaTemp = ataxiaTemp or {}
   local nowT = (getEpoch and getEpoch()) or os.time()
   sp = sp or ((ataxia.settings and ataxia.settings.separator) or ";")

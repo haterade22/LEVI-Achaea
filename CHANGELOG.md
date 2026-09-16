@@ -2,6 +2,25 @@
 
 ---
 
+## 2026-09-16 - Searing Light: no crowd gate (v4.7.309)
+
+User: *"Actually we should conjure lightwall regardless of denizen as it does fire damage one
+time."*
+
+v4.7.307 shipped a 2+ denizen gate on the reasoning that the AoE was the point. Withdrawn: one hit
+of fire on one mob is still worth 45 mana and 4s of idle equilibrium, and it is the user's mana.
+`ataxiaBasher_searingLightwall` no longer reads the denizen count at all -- a lagging count of zero
+cannot block it either. Everything else stands: first in the round, the mana floor, once per room
+with the 60s re-arm, the refusal rotating the exit, the two landed lines.
+
+**Tests:** the 2+ case is replaced by one asserting it fires alone, in a crowd of fifty, and on a
+count of zero. 1903 total.
+
+**Files:** `basher/002_Class_Bashing.lua`, `tests/test_searing_light.lua`, `.claude/classes/serpent.md`,
+`CLAUDE.md`.
+
+---
+
 ## 2026-09-16 - BOON CONTEMPLATE: a name the game refuses is remembered, not re-asked forever (v4.7.308)
 
 User, with the refusal line: *"You consider for a time, but no information comes to you on such a

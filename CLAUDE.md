@@ -1113,8 +1113,9 @@ all denizens in your location." User: "in a room of 2 or more denizens the first
 do is conjure lightwall in any direction." AB Lightwall (Subterfuge 1244): `CONJURE LIGHTWALL
 <direction>`, **4.00s of EQUILIBRIUM**, 45 mana -- so it RIDES beside the balance garrote (the Kai
 Choke rule), prepended FIRST per the user (and both commands fire back to back the instant the
-round executes, so order only decides which one a mid-chain refusal costs). 2+ denizens (the AoE
-is the point), a 250-mana floor (the Kai Choke floor: never scrape a dry pool for a rider), ONCE
+round executes, so order only decides which one a mid-chain refusal costs). **No crowd gate**
+(v4.7.309, user: "regardless of denizen as it does fire damage one time" -- v4.7.307's 2+ gate
+withdrawn), a 250-mana floor (the Kai Choke floor: never scrape a dry pool for a rider), ONCE
 PER ROOM keyed on the MAP's current room (stable under dementia), re-armed after 60s for a room
 roamers refill. Direction: "any" per the user, so the first PLANAR exit of the room's known exits,
 sorted -- and **"There is already a lightwall in that direction."** (trigger `serpent/001`,
