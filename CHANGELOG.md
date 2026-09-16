@@ -2,6 +2,45 @@
 
 ---
 
+## 2026-09-16 - The position triggers never read a denizen; flourish once per front; the boon needs a crowd (v4.7.313)
+
+User, with a live log of `blade flourish` firing on every balance -- back, side, front, back,
+never an attack -- *"it is using flourish all of the time.. when it should only use flourish with
+multiple denizens and the boon, or in the front stance to get to the back stance (just once)."*
+
+### The cause was upstream of the flourish
+
+`tempo/001-003` -- the triggers that set `bardtempo` from the game's position lines -- took
+`\w+` for the partner's name. That is a player's one word ("Grulk"); it is never a denizen's
+"a royal guard of Zanzibaar". So in PvE the position was NEVER updated, and everything that reads
+it was blind: Shadow Tempo's back-bonus rule (v4.7.241) never saw "back", and the footwork
+flourish (v4.7.311), seeing a "front" that never changed, fired on every single balance -- which
+the boon's 15s clock could not stop, because the footwork path has no clock but the dance. Now
+`.+?`, verified against all three of the log's lines and a one-word player name.
+
+### Two more guards
+
+- **Once per visit to the front.** The trigger fix removes the cause; a latch removes the class:
+  the footwork flourish fires once on arriving at the front and is released only when the position
+  is SEEN to leave it. A stuck flag now costs one balance, never every balance.
+- **The boon needs 2+ denizens.** v4.7.302 removed that gate at the user's request ("1 or 50");
+  the instruction above is the later one and it stands. The count is read only on the boon path;
+  the footwork policy covers the lone mob.
+
+### Verification
+
+**1912 tests**: the "count is irrelevant" block becomes "the boon path needs a crowd" (holds at
+one and at a lagging zero, fires at two and at fifty); a once-per-front-visit case reproducing
+the log's stuck position; the no-clock case now models a real departure from the front (its old
+form was exactly the ghost visit the latch refuses). Break-backs: the latch never set fails 1,
+the crowd gate dropped fails 2.
+
+**Files:** `triggers/tempo/001_Tempo_-_Side.lua`, `002_Tempo_-_Back.lua`, `003_Tempo_-_Front.lua`,
+`basher/002_Class_Bashing.lua`, `tests/test_bard_flourish.lua`, `.claude/classes/bard.md`,
+`CLAUDE.md`.
+
+---
+
 ## 2026-09-16 - Footwork flourish on by default (v4.7.312)
 
 User: *"We should flourish from the front to get to the back."*

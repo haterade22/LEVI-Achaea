@@ -542,11 +542,11 @@ end
 --     Rooms rule, v4.7.167). An UNREADABLE position (nil/false) fires: the user's rule is "every
 --     15 seconds", and a hold on a fact we cannot read is a hold we cannot justify.
 --
--- NO CROWD GATE, AND NO KNOB FOR ONE (user, 2026-09-14: "regardless of the denizens in the room,
--- 1 or 50"). "All denizens in your location" includes the one we are hitting, so the boon pays
--- at one denizen, and the denizen count is deliberately never read here -- a lagging
--- `_denizenCount` of 0 therefore cannot block it either. v4.7.301 shipped a floor knob as a
--- hedge; the user declined it, so it is gone rather than left at a default nobody wants.
+-- THE BOON PATH NEEDS 2+ DENIZENS (v4.7.313). v4.7.302 removed the crowd gate at the user's
+-- request ("regardless of the denizens in the room, 1 or 50"); on 2026-09-16, after a log of the
+-- flourish firing every balance, the user restated the rule as "only use flourish with multiple
+-- denizens and the boon, or in the front stance to get to the back stance (just once)". The later
+-- instruction stands: the boon's AoE wants company, and the footwork policy covers the lone mob.
 --
 -- SEND-SIDE STAMP with the v4.7.129 in-flight hold, AND a confirmed line (the Draconic Rampage
 -- shape exactly). The fire line, captured live 2026-09-15 (trigger highlighting/062):
@@ -587,14 +587,30 @@ function ataxiaBasher_bardFootworkFlourishPays()
 end
 
 function ataxiaBasher_bardFlourish()
-  -- The footwork policy fires from FRONT only (front -> back is the whole point); the boon path
-  -- fires from any readable position but side. Either is reason enough to spend the balance.
-  local footwork = bardtempo == "front" and ataxiaBasher_bardFootworkFlourishPays()
-  if not (mnemDeadlyFlourish or footwork) then return nil end
+  ataxiaTemp = ataxiaTemp or {}
+  -- ONCE PER VISIT TO THE FRONT (v4.7.313, from a live log). The footwork policy fires from FRONT
+  -- only, and a live log showed it firing on EVERY balance: the position triggers could not read
+  -- a multi-word denizen name (fixed in tempo/001-003), so `bardtempo` sat at "front" forever and
+  -- "front" was true every round. The trigger fix removes the cause; this latch removes the
+  -- CLASS of failure -- one flourish per arrival at the front, released only when the position is
+  -- seen to LEAVE the front. A stuck flag now costs one balance, never every balance.
+  if bardtempo ~= "front" then ataxiaTemp.bardFlourishFrontUsed = nil end
+  local footwork = bardtempo == "front" and not ataxiaTemp.bardFlourishFrontUsed
+    and ataxiaBasher_bardFootworkFlourishPays()
+  -- THE BOON NEEDS A CROWD (v4.7.313, user: "only use flourish with multiple denizens and the
+  -- boon, or in the front stance to get to the back stance"). v4.7.302 had removed this gate at
+  -- the user's request; this is the later instruction and it stands. The count is read only on
+  -- the boon path -- the footwork path is about position, not company.
+  local boon = false
+  if mnemDeadlyFlourish then
+    local M = ataxia.mnemosyne
+    local n = (M and M._denizenCount and M._denizenCount()) or 0
+    boon = n >= 2
+  end
+  if not (boon or footwork) then return nil end
   if ataxiaBasher.shielded then return nil end    -- break the shield first (the dance's rule)
   if type(target) ~= "number" then return nil end -- PvE only: the basher's targets are denizens
   local nowT = (getEpoch and getEpoch()) or os.time()
-  ataxiaTemp = ataxiaTemp or {}
   local cmd = "blade flourish "..target
 
   -- In flight: replay verbatim until balance spends it. Stamping per rebuild would flip the
@@ -615,6 +631,7 @@ function ataxiaBasher_bardFlourish()
   end
   ataxiaTemp.bardFlourishSideSince = nil
 
+  if footwork then ataxiaTemp.bardFlourishFrontUsed = true end -- this front visit is spent
   ataxiaTemp.bardFlourishAt = nowT
   ataxiaTemp.bardFlourishPendingAt = nowT
   return cmd

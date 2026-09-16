@@ -50,7 +50,7 @@ local function reset(opts)
   ataxiaTemp = {}
   ataxia.defences = {}
   ataxia.bardStuff = { bashPunctuate = false, footworkFlourish = false }
-  ataxia.mnemosyne = { _denizenCount = function() return opts.denizens or 1 end }
+  ataxia.mnemosyne = { _denizenCount = function() return opts.denizens or 2 end }
   ataxiaBasher.shielded = false
   bardtempo = opts.tempo -- nil = position unreadable
   bardWarmarch = false
@@ -206,11 +206,28 @@ describe("footwork flourish -- flourish at every return to front, boon or no boo
     expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
   end)
 
+  -- THE LIVE LOG (2026-09-16): position tracking could not read a multi-word denizen, so
+  -- "front" never changed and the policy flourished on every balance. The trigger is fixed; this
+  -- pins the latch that makes such a fault cost ONE balance instead of every balance.
+  it("flourishes ONCE per visit to the front, even if the position never appears to change", function()
+    fw({ stance = "Vivace" })
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
+    clock = clock + 5 -- replay over; bardtempo still reads "front"
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
+    clock = clock + 5
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
+    bardtempo = "back"; ataxiaBasher_bardBashing() -- seen to leave the front...
+    clock = clock + 5
+    bardtempo = "front"                            -- ...and come back: a fresh visit
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
+  end)
+
   it("has no 15s clock of its own -- the dance is the clock", function()
     fw({ stance = "Vivace" })
     expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
     clock = clock + 5
-    bardtempo = "front" -- back to front inside the boon's 15s window
+    bardtempo = "back"; ataxiaBasher_bardBashing() -- left the front (a real visit ends)...
+    bardtempo = "front"                            -- ...and back again inside the boon's 15s
     expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
   end)
 
@@ -310,28 +327,29 @@ describe("Deadly Flourish -- the landed line restarts the clock and releases the
 end)
 
 -- "Regardless of the denizens in the room, 1 or 50" (user, 2026-09-14). The count is never read.
-describe("Deadly Flourish -- the denizen count is irrelevant", function()
-  it("fires alone with one denizen", function()
+-- "only use flourish with multiple denizens and the boon" (user, 2026-09-16, v4.7.313 -- the
+-- later instruction, reversing v4.7.302's "1 or 50").
+describe("Deadly Flourish -- the boon path needs a crowd", function()
+  it("holds alone with one denizen", function()
     reset({ denizens = 1 })
-    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
+    local cmd = ataxiaBasher_bardBashing()
+    expect(has(cmd, "blade flourish")).toBeFalse()
+    expect(has(cmd, "blade flick 7 nomos")).toBeTrue()
+    expect(ataxiaTemp.bardFlourishAt).toBeNil()
   end)
 
-  it("fires in a crowd of fifty", function()
+  it("fires at two, and in a crowd of fifty", function()
+    reset({ denizens = 2 })
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
     reset({ denizens = 50 })
     expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
   end)
 
-  it("fires on a lagging count of zero -- the count is not consulted at all", function()
+  it("a lagging count of zero, or no Mnemosyne module at all, holds", function()
     reset({ denizens = 0 })
-    ataxia.mnemosyne = nil -- not even a Mnemosyne module to ask
-    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
-  end)
-
-  it("has no floor knob to consult (v4.7.301's hedge is gone)", function()
-    reset({ denizens = 1 })
-    ataxiaBasher.bardFlourishAt = 50 -- a stale config value from v4.7.301 must change nothing
-    expect(has(ataxiaBasher_bardBashing(), "blade flourish 7")).toBeTrue()
-    ataxiaBasher.bardFlourishAt = nil
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
+    reset({ denizens = 2 }); ataxia.mnemosyne = nil
+    expect(has(ataxiaBasher_bardBashing(), "blade flourish")).toBeFalse()
   end)
 end)
 

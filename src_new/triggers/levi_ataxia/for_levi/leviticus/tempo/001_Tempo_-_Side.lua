@@ -35,10 +35,17 @@ mSoundFile: ''
 colorTriggerFgColor: '#000000'
 colorTriggerBgColor: '#000000'
 patterns:
-- pattern: ^You continue to circle \w+, your deadly dance carrying you around to \w+ flank\.$
+- pattern: ^You continue to circle .+?, your deadly dance carrying you around to \w+ flank\.$
   type: 1
 ]]--
 
+-- MULTI-WORD NAMES (v4.7.313, from a live log). This pattern took `\w+` for the partner's name --
+-- fine for a player ("Grulk"), never for a denizen ("a royal guard of Zanzibaar"), so in PvE
+-- `bardtempo` was NEVER updated by this line. Everything that reads the position was blind:
+-- Shadow Tempo's back-bonus rule (v4.7.241) never saw "back", and the footwork flourish
+-- (v4.7.311) saw a "front" that never changed and flourished on every single balance --
+-- back -> side -> front -> back, no attack ever landing. `.+?` now, anchored by the fixed text
+-- around it.
 bardtempo = "side"
 
 bardtemposequence = 0

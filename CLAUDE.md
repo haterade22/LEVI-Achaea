@@ -983,7 +983,14 @@ migrated once), the boon-free FOOTWORK FLOURISH is ON by default (v4.7.312, user
 from the front to get to the back") on the tempos where the lost balance pays (Vivace always;
 Adagio/Moderato only with Shadow Tempo; never Allegro/none), read from the GAME's tempo line so an
 unlearned Tempo keeps it quiet; `bashflourish always` drops the tempo rule, `bashflourish off`
-leaves flourish to the boon. The character's ABs show Tempo and
+leaves flourish to the boon. **THE POSITION TRIGGERS COULD NOT READ A DENIZEN (v4.7.313, live
+log):** `tempo/001-003` took `\w+` for the partner's name -- a player's one word, never "a royal
+guard of Zanzibaar" -- so in PvE `bardtempo` was NEVER updated; Shadow Tempo's back-bonus rule
+never saw "back", and the footwork flourish, seeing a "front" that never changed, flourished on
+every balance (back -> side -> front, no attack ever landing). `.+?` now, and the pick latches
+ONCE PER VISIT TO THE FRONT, released only when the position is seen to leave it -- a stuck flag
+costs one balance, never every balance. **A trigger written for a one-word player name is a
+trigger that has never fired in PvE; grep `\w+` before trusting any position flag.** The character's ABs show Tempo and
 Flourish both Known: No -- Tempo (703 lessons) is the far better buy.
 
 **DEADLY FLOURISH -- THE BARD'S SECOND BALANCE SWAP, AND FOOTWORK DECIDES THE MOMENT (v4.7.301,
@@ -1002,11 +1009,10 @@ five away, and **side->front is the one loss** (two hits from back becomes five)
 **never fires from `side` while `bardtempo` is readable**, bounded twice (the dance leaves side
 within four hits; `FLOURISH_SIDE_HOLD_MAX` 10s caps a stale flag, since a hold released only by a
 game line livelocks the moment that line stops arriving). An unreadable position FIRES: the rule is
-every 15 seconds, and a hold on a fact we cannot read is a hold we cannot justify. **No crowd gate, and
-no knob for one** (user, v4.7.302: "regardless of the denizens in the room, 1 or 50") -- "all
-denizens in your location" includes the one we are hitting, so it pays at one denizen, and the
-count is never read, so a lagging 0 cannot block it either; v4.7.301's floor knob was declined and
-removed. Send-side stamp + the v4.7.129 in-flight replay
+every 15 seconds, and a hold on a fact we cannot read is a hold we cannot justify. **The boon path needs
+2+ denizens** (v4.7.313, user: "only use flourish with multiple denizens and the boon, or in the
+front stance to get to the back stance (just once)" -- the later instruction; v4.7.302 had removed
+the gate at the user's request). The footwork policy covers the lone mob. Send-side stamp + the v4.7.129 in-flight replay
 hold as a FLOOR, and **the landed line restarts the 15s from the moment it actually executed**
 (v4.7.304, `highlighting/062` -> `ataxiaBasher_bardFlourishConfirm`; captured live: "You weave a
 Soulpiercer through the air in a dazzling display, the music of your bladesong sweeping forth to
