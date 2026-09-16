@@ -299,8 +299,9 @@ function M.onRunEnd()
     ataxiaTemp.deathStareRipple, ataxiaTemp.deathStareRippleAt = nil, nil -- Death Stare's per-ripple charge
     ataxiaTemp.deathStareUsed, ataxiaTemp.deathStareTries = nil, nil
     ataxiaTemp.deathStarePendingAt, ataxiaTemp.deathStarePendingTarget = nil, nil
-    ataxiaTemp.lightwallRoom, ataxiaTemp.lightwallAt, ataxiaTemp.lightwallPendingAt = nil, nil, nil -- Searing Light's per-room state
+    ataxiaTemp.lightwallRoom, ataxiaTemp.lightwallPendingAt = nil, nil -- Searing Light's per-room state
     ataxiaTemp.lightwallDir, ataxiaTemp.lightwallBlocked = nil, nil
+    ataxiaTemp.lightwallRipple, ataxiaTemp.lightwallRooms = nil, nil -- ...and the rooms conjured this ripple
   end
   -- THE AUDIT BASELINE IS PER-RUN AND WAS NEVER CLEARED (deep review, v4.7.291). It was guarded
   -- only by `baselineRun == M.history.run`, and on a BOOTSTRAPPED run (start line missed) the

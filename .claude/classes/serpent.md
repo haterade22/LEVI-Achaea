@@ -917,7 +917,7 @@ afflicts darkshade and the wall speeds darkshade's progression for anyone standi
 |---|---|
 | 4.00s of EQUILIBRIUM | rides beside the balance garrote; prepended FIRST, per the user, even ahead of the shield flay |
 | 45 mana | 250-mana floor (`LIGHTWALL_MANA`) -- never scrape a dry pool for a rider |
-| "all denizens in your location" | **no crowd gate** (user, v4.7.309: "regardless of denizen as it does fire damage one time" -- v4.7.307's 2+ gate withdrawn); once per room (MAP's current room), re-armed after 60s for a refilled room |
+| "all denizens in your location" | **no crowd gate** (user, v4.7.309: "regardless of denizen as it does fire damage one time" -- v4.7.307's 2+ gate withdrawn); **once per room per ripple, full stop** (user, v4.7.310 -- the 60s re-arm withdrawn); rooms conjured this ripple are remembered, so a room patrolled back into is not conjured twice; a new ripple's rooms are new |
 | needs a direction | first PLANAR exit of the room's known exits, sorted; a refused direction (`There is already a lightwall in that direction.`, trigger `serpent/001`) is skipped next time |
 | confirmation | trigger `mnemosyne/088`: the conjure line restamps the room from the landed moment and releases the replay; the detonation line prints only with the boon and re-latches the flag |
 

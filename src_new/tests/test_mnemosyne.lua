@@ -1464,16 +1464,18 @@ describe("run-end confirmation", function()
     reset(true)
     mnemSearingLight = true
     ataxiaTemp = ataxiaTemp or {}
-    ataxiaTemp.lightwallRoom, ataxiaTemp.lightwallAt, ataxiaTemp.lightwallDir = 50, 1, "n"
+    ataxiaTemp.lightwallRoom, ataxiaTemp.lightwallDir = 50, "n"
     ataxiaTemp.lightwallBlocked = { north = true }
+    ataxiaTemp.lightwallRipple, ataxiaTemp.lightwallRooms = 3, { [50] = true }
     M.onRunEndMaybe()
     expect(mnemSearingLight).toBeTrue()
     M.onRunEnd()
     expect(mnemSearingLight).toBeFalse()
     expect(ataxiaTemp.lightwallRoom).toBeNil()
-    expect(ataxiaTemp.lightwallAt).toBeNil()
     expect(ataxiaTemp.lightwallDir).toBeNil()
     expect(ataxiaTemp.lightwallBlocked).toBeNil()
+    expect(ataxiaTemp.lightwallRipple).toBeNil()
+    expect(ataxiaTemp.lightwallRooms).toBeNil()
   end)
 
   it("clears bmShatteredStar (multislash boon) on the confirmed onRunEnd", function()

@@ -55,6 +55,7 @@ local function reset(opts)
   ataxia.mnemosyne = {
     _denizenCount = function() return opts.denizens or 2 end,
     map = {
+      _ripple = opts.ripple or 3,
       current = opts.room or 50,
       rooms = { [opts.room or 50] = { exits = exits } },
       OFFSETS = OFFSETS,
@@ -106,27 +107,41 @@ describe("Searing Light -- CONJURE LIGHTWALL first, whatever the room holds", fu
     expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall n;")).toBeTrue()
     clock = clock + 2
     expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall n;")).toBeTrue()
-    clock = clock + 5 -- past the hold, inside the per-room window
+    clock = clock + 5 -- past the hold
     local cmd = ataxiaBasher_serpentBashing()
     expect(has(cmd, "conjure lightwall")).toBeFalse()
     expect(has(cmd, "garrote 7")).toBeTrue()
-    expect(ataxiaTemp.lightwallAt).toBe(800000) -- one stamp
+    expect(ataxiaTemp.lightwallRooms[50]).toBeTrue()
   end)
 
-  it("re-arms for the same room once the window passes (roamers refill a room)", function()
+  -- "only do the lightwall attack one time per room" (user, v4.7.310): no re-arm, however long
+  -- we stay, and no second wall on walking back into the room later in the ripple.
+  it("never conjures a second wall in the same room, however long we stay", function()
     reset()
     ataxiaBasher_serpentBashing()
-    clock = clock + 61
-    expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall n;")).toBeTrue()
+    clock = clock + 600
+    expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall")).toBeFalse()
   end)
 
-  it("a new room is a new wall", function()
+  it("a new room is a new wall, and coming BACK to the first room is not", function()
     reset()
     ataxiaBasher_serpentBashing()
     clock = clock + 10
     ataxia.mnemosyne.map.current = 51
     ataxia.mnemosyne.map.rooms[51] = { exits = { east = 0 } }
     expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall e;")).toBeTrue()
+    clock = clock + 10
+    ataxia.mnemosyne.map.current = 50 -- patrolled back into the first room
+    expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall")).toBeFalse()
+  end)
+
+  it("a new ripple forgets the rooms (keyed on the MAP's ripple, telemetry-independent)", function()
+    reset()
+    ataxiaBasher_serpentBashing()
+    clock = clock + 10
+    expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall")).toBeFalse()
+    ataxia.mnemosyne.map._ripple = 4
+    expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall n;")).toBeTrue()
   end)
 
   -- "There is already a lightwall in that direction." -- that exit is spent, try the next one.
@@ -134,6 +149,7 @@ describe("Searing Light -- CONJURE LIGHTWALL first, whatever the room holds", fu
     reset({ exits = { west = 0, north = 0 } })
     expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall n;")).toBeTrue()
     ataxiaBasher_lightwallRefused()
+    expect(ataxiaTemp.lightwallRooms[50]).toBeNil() -- a refused conjure did not do the room
     expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall w;")).toBeTrue()
     ataxiaBasher_lightwallRefused()
     local cmd = ataxiaBasher_serpentBashing()
@@ -157,18 +173,14 @@ end)
 -- Both lines captured live: the conjure releases the replay and restamps the room from the
 -- landed moment; the detonation is the boon's own and re-latches the flag.
 describe("Searing Light -- the landed lines", function()
-  it("the conjure line releases the replay and restamps the room from the landed moment", function()
+  it("the conjure line releases the replay; the room stays done", function()
     reset()
     expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall n;")).toBeTrue()
     clock = clock + 2
     ataxiaBasher_searingLightConfirm(false)
     expect(ataxiaTemp.lightwallPendingAt).toBeNil()
-    expect(ataxiaTemp.lightwallAt).toBe(800002)
     expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall")).toBeFalse() -- no longer replaying
-    clock = clock + 59 -- 61s after the SEND, 59s after the landing: still this room's window
-    expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall")).toBeFalse()
-    clock = clock + 2
-    expect(has(ataxiaBasher_serpentBashing(), "conjure lightwall n;")).toBeTrue()
+    expect(ataxiaTemp.lightwallRooms[50]).toBeTrue()
   end)
 
   it("the detonation line is self-proving and re-latches the flag; the plain conjure is not", function()
@@ -179,10 +191,10 @@ describe("Searing Light -- the landed lines", function()
     expect(mnemSearingLight).toBeTrue()
   end)
 
-  it("a landing with nothing in flight stamps nothing (a wall we did not conjure)", function()
+  it("a landing with nothing in flight marks nothing (a wall we did not conjure)", function()
     reset()
     ataxiaBasher_searingLightConfirm(false)
-    expect(ataxiaTemp.lightwallAt).toBeNil()
+    expect(next(ataxiaTemp.lightwallRooms or {})).toBeNil()
   end)
 end)
 

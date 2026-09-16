@@ -1081,9 +1081,12 @@ first-word rule hoisted to a global) and never on a shielded target.
 **THE DENIZEN RESISTANCE DATABASE, AND CONSIDER AS RECON (v4.7.306, user: "I also didnt know
 consider showed what they are strong against ... make a database of this and consider any mob not
 in the database ... when fighting against X denizen and we know their weakness, if we can, use
-their weakness against them").** CONSIDER prints, per denizen, `<mob> exudes an aura of <x>.` and
-`<mob> has a significant resistance against <type> damage.` (captured live: a stout footsoldier,
-physical cutting and physical blunt). Trigger `771_Consider_Lines` records them into
+their weakness against them").** CONSIDER prints, per denizen, a strength line in at least TWO grammars -- `<mob> exudes an
+aura of <x>.` and `<mob> has an air of <x>.` (v4.7.310; a third would leave that mob unrecorded
+until pasted) -- and `<mob> has a significant resistance against <type> damage.` (captured live: a
+stout footsoldier, physical cutting and blunt; a blood-spattered jester, psychic). The block is
+highlighted (v4.7.310): strength `gold` bold, resistance `indian_red` bold, weakness
+`spring_green` bold, sentience `dim_grey`, health `gold`. Trigger `771_Consider_Lines` records them into
 `ataxiaBasher.denizenResist[key]` -- on `ataxiaBasher` because it is KNOWLEDGE meant to persist
 across sessions, keyed by the short description lowercased with the article stripped so the
 capitalised aura line, the lowercase resistance rows and gmcp's item name land on one row. A
@@ -1115,9 +1118,11 @@ do is conjure lightwall in any direction." AB Lightwall (Subterfuge 1244): `CONJ
 Choke rule), prepended FIRST per the user (and both commands fire back to back the instant the
 round executes, so order only decides which one a mid-chain refusal costs). **No crowd gate**
 (v4.7.309, user: "regardless of denizen as it does fire damage one time" -- v4.7.307's 2+ gate
-withdrawn), a 250-mana floor (the Kai Choke floor: never scrape a dry pool for a rider), ONCE
-PER ROOM keyed on the MAP's current room (stable under dementia), re-armed after 60s for a room
-roamers refill. Direction: "any" per the user, so the first PLANAR exit of the room's known exits,
+withdrawn), a 250-mana floor (the Kai Choke floor: never scrape a dry pool for a rider), **ONCE
+PER ROOM PER RIPPLE, FULL STOP** (v4.7.310, user: "only do the lightwall attack one time per room"
+-- the 60s re-arm withdrawn): the rooms conjured this ripple live in `ataxiaTemp.lightwallRooms`,
+keyed on the MAP's current room (stable under dementia) and wiped when the MAP's ripple counter
+moves, so a room patrolled back into is not conjured twice. Direction: "any" per the user, so the first PLANAR exit of the room's known exits,
 sorted -- and **"There is already a lightwall in that direction."** (trigger `serpent/001`,
 captured long ago) marks that exit spent for the room and clears the attempt, so the next rebuild
 tries the next exit rather than replaying a refusal. Send-side stamp as a floor + the in-flight

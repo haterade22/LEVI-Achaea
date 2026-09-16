@@ -2,6 +2,39 @@
 
 ---
 
+## 2026-09-16 - Searing Light: one wall per room, full stop; CONSIDER highlighted, second strength grammar (v4.7.310)
+
+User: *"We should only do the lightwall attack one time per room."*
+
+v4.7.307 re-armed the same room after 60s on the theory that roamers refill a room; withdrawn. The
+rooms conjured this ripple are now a set (`ataxiaTemp.lightwallRooms`), keyed on the MAP's current
+room -- the one stable key under dementia -- and wiped when the MAP's ripple counter moves (the
+telemetry-independent key Death Stare uses). So: never a second wall however long we stay, never
+one on walking back into a room on a patrol, and a new ripple's rooms are new. A refused direction
+un-marks the room (a refused conjure did not do it) and rotates to the next exit as before; the
+landed lines release the replay and the room stays done.
+
+### CONSIDER highlighted, and a second strength grammar
+
+User, with a second CONSIDER block: *"Please highlight these lines to make it easier to read."*
+That block also showed the strength line in a second wording -- `A blood-spattered jester has an
+air of extreme strength.` against the footsoldier's `exudes an aura of overwhelming power.` --
+which the v4.7.306 parser would not have matched, leaving a mob that resists psychic unrecorded.
+Trigger `771` now names both grammars, and colours the block: strength line `gold` bold, a
+resistance row `indian_red` bold (the thing to route around), a weakness row `spring_green` bold
+(the thing to exploit), the sentience line `dim_grey`, the health line `gold`. Every name is
+verified in `007_Custom_Colour_Table`. A third strength wording would leave that mob unrecorded
+until pasted.
+
+**Tests:** 1904 (the 60s re-arm case replaced by never-in-the-same-room, the walk-back case, the
+new-ripple case, and the refusal un-marking the room). Break-backs: the room set dropped fails 5,
+the ripple wipe dropped fails 1.
+
+**Files:** `basher/002_Class_Bashing.lua`, `mnemosyne/004_Parsers.lua`, `tests/test_searing_light.lua`,
+`tests/test_mnemosyne.lua`, `.claude/classes/serpent.md`, `CLAUDE.md`.
+
+---
+
 ## 2026-09-16 - Searing Light: no crowd gate (v4.7.309)
 
 User: *"Actually we should conjure lightwall regardless of denizen as it does fire damage one

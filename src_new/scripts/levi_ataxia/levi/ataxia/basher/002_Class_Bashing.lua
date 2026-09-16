@@ -3148,8 +3148,11 @@ end
 --     idle equilibrium, and it is their mana. The count is no longer read.
 --   * MANA FLOOR (`LIGHTWALL_MANA`, 250): a 45-mana ability, and the Kai Choke floor for the same
 --     reason -- never scrape a dry pool for a rider.
---   * ONCE PER ROOM, re-armed after `LIGHTWALL_REARM` (60s) for a room that refills (roamers).
---     Keyed on the MAP's current room, the one stable key under dementia.
+--   * ONCE PER ROOM PER RIPPLE, FULL STOP (user, v4.7.310: "only do the lightwall attack one time
+--     per room"). v4.7.307 re-armed the same room after 60s for roamers; withdrawn. The rooms
+--     conjured this ripple live in `ataxiaTemp.lightwallRooms`, keyed on the MAP's current room
+--     (the one stable key under dementia) and wiped when the MAP's ripple counter moves -- so a
+--     room walked back into on a patrol is not conjured twice, and a new ripple's rooms are new.
 --   * DIRECTION: "any direction" (user). A wall needs an exit, so it is the first PLANAR exit of
 --     the room's known exits, sorted -- deterministic, so the log is readable -- skipping any the
 --     game has refused. "There is already a lightwall in that direction." (trigger serpent/001,
@@ -3167,8 +3170,15 @@ end
 -- Serpent, said "any direction"; if a self-darkshade ever shows up, `SNUFF LIGHTWALLS` on room
 -- clear is the fix and the explorer's room-clear hook is where it goes.
 local LIGHTWALL_HOLD = 4
-local LIGHTWALL_REARM = 60
 local LIGHTWALL_MANA = 250
+
+local function lightwallRippleKey()
+  local M = ataxia and ataxia.mnemosyne
+  local MAP = M and M.map
+  local r = MAP and MAP._ripple
+  if r == nil then r = M and M.run and M.run.ripple end
+  return tonumber(r) or 0
+end
 
 function ataxiaBasher_searingLightwall(sp)
   if not mnemSearingLight then return "" end
@@ -3181,10 +3191,16 @@ function ataxiaBasher_searingLightwall(sp)
   local nowT = (getEpoch and getEpoch()) or os.time()
   sp = sp or ((ataxia.settings and ataxia.settings.separator) or ";")
 
+  local rip = lightwallRippleKey()
+  if ataxiaTemp.lightwallRipple ~= rip then
+    ataxiaTemp.lightwallRipple, ataxiaTemp.lightwallRooms = rip, {}
+  end
+  ataxiaTemp.lightwallRooms = ataxiaTemp.lightwallRooms or {}
+
   local room = (MAP and MAP.current) or (gmcp and gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num) or 0
   if ataxiaTemp.lightwallRoom ~= room then
     ataxiaTemp.lightwallRoom = room
-    ataxiaTemp.lightwallAt, ataxiaTemp.lightwallPendingAt, ataxiaTemp.lightwallDir = nil, nil, nil
+    ataxiaTemp.lightwallPendingAt, ataxiaTemp.lightwallDir = nil, nil
     ataxiaTemp.lightwallBlocked = {}
   end
 
@@ -3192,8 +3208,7 @@ function ataxiaBasher_searingLightwall(sp)
   if pend and (nowT - pend) < LIGHTWALL_HOLD and ataxiaTemp.lightwallDir then
     return "conjure lightwall "..ataxiaTemp.lightwallDir..sp
   end
-  local at = tonumber(ataxiaTemp.lightwallAt)
-  if at and (nowT - at) < LIGHTWALL_REARM then return "" end
+  if ataxiaTemp.lightwallRooms[room] then return "" end -- one per room, this ripple; never a second
 
   local r = MAP and MAP.rooms and MAP.rooms[room]
   local dirs = {}
@@ -3208,12 +3223,14 @@ function ataxiaBasher_searingLightwall(sp)
   if not dir then return "" end
   local short = (MAP.shortDir and MAP.shortDir(dir)) or dir
 
-  ataxiaTemp.lightwallAt, ataxiaTemp.lightwallPendingAt, ataxiaTemp.lightwallDir = nowT, nowT, short
+  ataxiaTemp.lightwallRooms[room] = true
+  ataxiaTemp.lightwallPendingAt, ataxiaTemp.lightwallDir = nowT, short
   return "conjure lightwall "..short..sp
 end
 
 -- "There is already a lightwall in that direction." (trigger serpent/001): that exit is spent for
--- this room and the attempt bought nothing, so forget it -- the next rebuild picks the next exit.
+-- this room and the attempt bought nothing, so the ROOM is not done -- un-mark it and forget the
+-- attempt; the next rebuild picks the next exit, and a room with none left simply conjures nothing.
 function ataxiaBasher_lightwallRefused()
   ataxiaTemp = ataxiaTemp or {}
   local M = ataxia and ataxia.mnemosyne
@@ -3224,18 +3241,18 @@ function ataxiaBasher_lightwallRefused()
     ataxiaTemp.lightwallBlocked = ataxiaTemp.lightwallBlocked or {}
     ataxiaTemp.lightwallBlocked[nd] = true
   end
-  ataxiaTemp.lightwallAt, ataxiaTemp.lightwallPendingAt, ataxiaTemp.lightwallDir = nil, nil, nil
+  if ataxiaTemp.lightwallRooms and ataxiaTemp.lightwallRoom ~= nil then
+    ataxiaTemp.lightwallRooms[ataxiaTemp.lightwallRoom] = nil
+  end
+  ataxiaTemp.lightwallPendingAt, ataxiaTemp.lightwallDir = nil, nil
 end
 
 -- The conjure LANDED (trigger mnemosyne/088). `proc` is true for the boon's own detonation line,
 -- which is self-proving and re-latches the flag; the plain conjure line is not (a lightwall is a
--- base Serpent ability). Both restamp the room from the landed moment and release the replay.
+-- base Serpent ability). Both release the replay; the room was marked done at the send.
 function ataxiaBasher_searingLightConfirm(proc)
   ataxiaTemp = ataxiaTemp or {}
   if proc then mnemSearingLight = true end
-  if ataxiaTemp.lightwallPendingAt or ataxiaTemp.lightwallAt then
-    ataxiaTemp.lightwallAt = (getEpoch and getEpoch()) or os.time()
-  end
   ataxiaTemp.lightwallPendingAt = nil
 end
 
