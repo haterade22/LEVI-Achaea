@@ -53,6 +53,9 @@ if matches[2]:lower():find("deadly flourish") then mnemDeadlyFlourish = true end
 -- Death Stare: CONSIDER costs 3s of eq and instantly kills a non-boss denizen, once per ripple;
 -- the basher prepends it at 2+ denizens, or on a lone target late in the ripple.
 if matches[2]:lower():find("death stare") then mnemDeathStare = true end
+-- Searing Light: conjuring a lightwall deals fire to every denizen in the room; the Serpent basher
+-- conjures one first in the round at 2+ denizens, once per room.
+if matches[2]:lower():find("searing light") then mnemSearingLight = true end
 -- Healing Metabolism: satiation is worth 50% on every health elixir, so it becomes upkeep
 -- rather than a hunger floor -- off a corpse when Obligate Carnivore is also held, off the horn
 -- of plenty otherwise (v4.7.303), whenever hunger reads below "utterly satiated".

@@ -2,6 +2,55 @@
 
 ---
 
+## 2026-09-16 - Searing Light: the Serpent's lightwall as a room nuke, first in the round (v4.7.307)
+
+User, with the boon screen, the AB and both fire lines: *"Searing Light: Conjuring a lightwall
+now deals fire damage to all denizens in your location ... in a room of 2 or more denizens the
+first thing we need to do is conjure lightwall in any direction."*
+
+AB Lightwall (Subterfuge 1244): `CONJURE LIGHTWALL <direction>`, **4.00s of equilibrium**, 45
+mana. Equilibrium rides beside the balance garrote (the Kai Choke rule), and it is prepended
+FIRST per the user -- ahead even of the shield flay -- since both commands fire back to back the
+instant the round executes and order only decides which one a mid-chain refusal costs.
+
+`ataxiaBasher_searingLightwall` (basher/002): 2+ denizens (the AoE is the point), a 250-mana floor
+(never scrape a dry pool for a rider), once per room keyed on the MAP's current room (the stable
+key under dementia) and re-armed after 60s for a room roamers refill. Direction: "any" per the
+user, so the first PLANAR exit of the room's known exits, sorted for a readable log -- and the
+long-captured refusal `There is already a lightwall in that direction.` (trigger `serpent/001`)
+now marks that exit spent for the room and clears the attempt, so the next rebuild tries the next
+exit instead of replaying a refusal.
+
+Both lines captured live (new trigger `mnemosyne/088`): the conjure -- `You form a ball of light
+in your palm and hurl it northwards.` -- releases the in-flight replay and restamps the room from
+the LANDED moment; the boon's detonation -- `...searing the location with solar force.`, matched
+as an end fragment because it wraps -- prints only with the boon, so it also re-latches the flag.
+The send-side stamp stays as a floor.
+
+**Open, deliberately not guessed:** whether our own lightwall darkshades us when the sweep or the
+escape ladder walks through it. If it does, `SNUFF LIGHTWALLS` on room clear is the fix.
+
+### Verification
+
+**1898 tests** (up from 1885): 12 in the new `test_searing_light.lua` (inert without the boon;
+first in the chain with the garrote and rage still riding; the crowd/target/tower/mana gates;
+replay then done; the 60s re-arm; a new room; refusal rotation to the next exit and a room with
+none left; unknown exits; a shielded round still first; the conjure line releasing and
+restamping; the detonation re-latching; a landing with nothing in flight stamping nothing) and 1
+in `test_mnemosyne.lua` (run-end clears the flag and per-room state). Break-backs: crowd gate
+dropped fails 1, refusal not blocking fails 1, not first in the round fails 1 (caught only after
+the shielded-round test was tightened to assert position -- the first version pinned "first" on
+unshielded rounds alone, where nothing precedes it), confirm not releasing fails 1.
+
+**Files:** `basher/002_Class_Bashing.lua`, `triggers/mnemosyne/087_Searing_Light.lua` (new),
+`triggers/mnemosyne/088_Searing_Light_Proc.lua` (new), `triggers/serpent/001_Lightwall.lua`,
+`aliases/mnemosyne/002_Boon_Claim.lua`, `triggers/mnemosyne/001_Run_Start.lua`,
+`mnemosyne/004_Parsers.lua`, `mnemosyne/010_Boon_Seed.lua`, `tests/test_searing_light.lua` (new),
+`tests/test_mnemosyne.lua`, `.claude/classes/serpent.md`, `CLAUDE.md`,
+`.claude/projects/mnemosyne/03-parsing-triggers.md`.
+
+---
+
 ## 2026-09-15 - Death Stare, and a denizen resistance database fed by CONSIDER (v4.7.306)
 
 ### Death Stare: CONSIDER as the once-per-ripple instant kill

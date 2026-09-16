@@ -3131,9 +3131,118 @@ function ataxiaBasher_sentinelBashing()
    return command 
 end
 
+-- SEARING LIGHT (Mnemosyne boon, v4.7.307, user-directed): "Conjuring a lightwall now deals fire
+-- damage to all denizens in your location." User: "in a room of 2 or more denizens the first thing
+-- we need to do is conjure lightwall in any direction."
+--
+-- AB Lightwall (Subterfuge 1244): `CONJURE LIGHTWALL <direction>`, `SNUFF LIGHTWALLS`, "Works
+-- on/against: Adventurers and room", **4.00 seconds of EQUILIBRIUM**, 45 mana. Equilibrium rides
+-- beside the balance garrote (the Kai Choke rule), and FIRST in the chain because the user said
+-- first -- and because both commands fire back to back the moment the round executes, so order
+-- only decides which one a mid-chain refusal costs.
+--
+--   * 2+ denizens: the AoE is the point; alone, the fire on one mob is not worth 45 mana + 4s eq.
+--   * MANA FLOOR (`LIGHTWALL_MANA`, 250): a 45-mana ability, and the Kai Choke floor for the same
+--     reason -- never scrape a dry pool for a rider.
+--   * ONCE PER ROOM, re-armed after `LIGHTWALL_REARM` (60s) for a room that refills (roamers).
+--     Keyed on the MAP's current room, the one stable key under dementia.
+--   * DIRECTION: "any direction" (user). A wall needs an exit, so it is the first PLANAR exit of
+--     the room's known exits, sorted -- deterministic, so the log is readable -- skipping any the
+--     game has refused. "There is already a lightwall in that direction." (trigger serpent/001,
+--     captured long ago) marks that direction spent for the room and clears the attempt, so the
+--     next rebuild tries the next exit rather than replaying the refusal.
+--   * Send-side stamp as a FLOOR + the v4.7.129 in-flight replay hold, and BOTH lines captured
+--     live (trigger mnemosyne/088): the conjure itself -- "You form a ball of light in your palm
+--     and hurl it northwards." -- releases the replay and restamps the room from the LANDED
+--     moment; the boon's proc -- "A bright, fiery detonation flares outwards as the lightwall
+--     takes shape, searing the location with solar force." -- prints only with the boon, so it
+--     also re-latches the flag.
+--
+-- OPEN QUESTION, DELIBERATELY NOT GUESSED: whether OUR OWN lightwall darkshades US when we walk
+-- through it (the sweep and the escape ladder both use every exit sooner or later). The user, a
+-- Serpent, said "any direction"; if a self-darkshade ever shows up, `SNUFF LIGHTWALLS` on room
+-- clear is the fix and the explorer's room-clear hook is where it goes.
+local LIGHTWALL_HOLD = 4
+local LIGHTWALL_REARM = 60
+local LIGHTWALL_MANA = 250
+
+function ataxiaBasher_searingLightwall(sp)
+  if not mnemSearingLight then return "" end
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return "" end
+  if type(target) ~= "number" then return "" end
+  if (tonumber(ataxia.vitals and ataxia.vitals.mp) or 9999) < LIGHTWALL_MANA then return "" end
+  local M = ataxia.mnemosyne
+  local MAP = M and M.map
+  local n = (M and M._denizenCount and M._denizenCount()) or 0
+  if n < 2 then return "" end
+  ataxiaTemp = ataxiaTemp or {}
+  local nowT = (getEpoch and getEpoch()) or os.time()
+  sp = sp or ((ataxia.settings and ataxia.settings.separator) or ";")
+
+  local room = (MAP and MAP.current) or (gmcp and gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.num) or 0
+  if ataxiaTemp.lightwallRoom ~= room then
+    ataxiaTemp.lightwallRoom = room
+    ataxiaTemp.lightwallAt, ataxiaTemp.lightwallPendingAt, ataxiaTemp.lightwallDir = nil, nil, nil
+    ataxiaTemp.lightwallBlocked = {}
+  end
+
+  local pend = tonumber(ataxiaTemp.lightwallPendingAt)
+  if pend and (nowT - pend) < LIGHTWALL_HOLD and ataxiaTemp.lightwallDir then
+    return "conjure lightwall "..ataxiaTemp.lightwallDir..sp
+  end
+  local at = tonumber(ataxiaTemp.lightwallAt)
+  if at and (nowT - at) < LIGHTWALL_REARM then return "" end
+
+  local r = MAP and MAP.rooms and MAP.rooms[room]
+  local dirs = {}
+  for d in pairs((r and r.exits) or {}) do
+    local nd = MAP.normDir and MAP.normDir(d) or d
+    if MAP.OFFSETS and MAP.OFFSETS[nd] and not (ataxiaTemp.lightwallBlocked or {})[nd] then
+      dirs[#dirs + 1] = nd
+    end
+  end
+  table.sort(dirs)
+  local dir = dirs[1]
+  if not dir then return "" end
+  local short = (MAP.shortDir and MAP.shortDir(dir)) or dir
+
+  ataxiaTemp.lightwallAt, ataxiaTemp.lightwallPendingAt, ataxiaTemp.lightwallDir = nowT, nowT, short
+  return "conjure lightwall "..short..sp
+end
+
+-- "There is already a lightwall in that direction." (trigger serpent/001): that exit is spent for
+-- this room and the attempt bought nothing, so forget it -- the next rebuild picks the next exit.
+function ataxiaBasher_lightwallRefused()
+  ataxiaTemp = ataxiaTemp or {}
+  local M = ataxia and ataxia.mnemosyne
+  local MAP = M and M.map
+  local dir = ataxiaTemp.lightwallDir
+  if dir then
+    local nd = (MAP and MAP.normDir and MAP.normDir(dir)) or dir
+    ataxiaTemp.lightwallBlocked = ataxiaTemp.lightwallBlocked or {}
+    ataxiaTemp.lightwallBlocked[nd] = true
+  end
+  ataxiaTemp.lightwallAt, ataxiaTemp.lightwallPendingAt, ataxiaTemp.lightwallDir = nil, nil, nil
+end
+
+-- The conjure LANDED (trigger mnemosyne/088). `proc` is true for the boon's own detonation line,
+-- which is self-proving and re-latches the flag; the plain conjure line is not (a lightwall is a
+-- base Serpent ability). Both restamp the room from the landed moment and release the replay.
+function ataxiaBasher_searingLightConfirm(proc)
+  ataxiaTemp = ataxiaTemp or {}
+  if proc then mnemSearingLight = true end
+  if ataxiaTemp.lightwallPendingAt or ataxiaTemp.lightwallAt then
+    ataxiaTemp.lightwallAt = (getEpoch and getEpoch()) or os.time()
+  end
+  ataxiaTemp.lightwallPendingAt = nil
+end
+
 function ataxiaBasher_serpentBashing()
    local command = ""
 	 local brage = ataxiaBasher_assembleBattlerage()
+
+   -- Searing Light rides FIRST (see above): an eq cast, so the balance garrote still swings.
+   command = command..ataxiaBasher_searingLightwall(ataxia.settings.separator)
 
    if ataxiaBasher.shielded then
       command = command.."flay "..target.." shield"..ataxia.settings.separator

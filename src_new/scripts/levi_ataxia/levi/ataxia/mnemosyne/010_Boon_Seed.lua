@@ -339,6 +339,8 @@ M.BOON_SEED = {
   -- CAPTURED LIVE 2026-09-15 from the boon screen (pasted by the user); was a name-only hole in
   -- M.BOON_UNDESCRIBED until then. Rarity not shown, so omitted.
   ["Death Stare"] = { description = "CONSIDER now costs 3 seconds of equilibrium and instantly kills any non-boss denizen target. This can only be used once per ripple." },
+  -- CAPTURED LIVE 2026-09-16 from the boon screen (pasted by the user); rarity not shown, so omitted.
+  ["Searing Light"] = { description = "Conjuring a lightwall now deals fire damage to all denizens in your location." },
   ["Thick Skull"] = { description = "Your survival headslam ability stuns denizens for 5 seconds. This effect has a cooldown of 40 seconds." },
   ["Power Up"] = { description = "Gain 10% bonus damage." },
   -- CAPTURED LIVE 2026-09-01 from the in-game BOONS list: two of the 30 name-only holes below,

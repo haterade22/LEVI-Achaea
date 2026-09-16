@@ -1408,6 +1408,22 @@ describe("run-end confirmation", function()
     expect(ataxiaTemp.deathStarePendingTarget).toBeNil()
   end)
 
+  it("clears mnemSearingLight AND its per-room wall state on the confirmed onRunEnd", function()
+    reset(true)
+    mnemSearingLight = true
+    ataxiaTemp = ataxiaTemp or {}
+    ataxiaTemp.lightwallRoom, ataxiaTemp.lightwallAt, ataxiaTemp.lightwallDir = 50, 1, "n"
+    ataxiaTemp.lightwallBlocked = { north = true }
+    M.onRunEndMaybe()
+    expect(mnemSearingLight).toBeTrue()
+    M.onRunEnd()
+    expect(mnemSearingLight).toBeFalse()
+    expect(ataxiaTemp.lightwallRoom).toBeNil()
+    expect(ataxiaTemp.lightwallAt).toBeNil()
+    expect(ataxiaTemp.lightwallDir).toBeNil()
+    expect(ataxiaTemp.lightwallBlocked).toBeNil()
+  end)
+
   it("clears bmShatteredStar (multislash boon) on the confirmed onRunEnd", function()
     reset(true)
     bmShatteredStar = true

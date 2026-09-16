@@ -48,6 +48,7 @@ mnemSpiritRend = false  -- boons reset each run
 mnemObligateCarnivore = false  -- boons reset each run
 mnemDeadlyFlourish = false  -- boons reset each run
 mnemDeathStare = false  -- boons reset each run
+mnemSearingLight = false  -- boons reset each run
 mnemHealingMetabolism = false  -- boons reset each run
 mnemBerserkersEdge = false  -- boons reset each run
 -- Defensive: a run that ended WITHOUT a confirmed run-end (a crash, a relog) would leave
