@@ -1135,6 +1135,21 @@ kai_unleashed:  # legendary — kai choke bursts magic damage on ALL denizens in
     an eaten choke retries after 6s instead of forfeiting the window"
   live_numbers: "choke 3338→6369 asphyx (coalescence-empowered); burst 8472→25560
     magical (scales; one burst one-shot the primary); eq spend observed ~2.97s"
+  lines: |
+    Both halves of the choke are captured and highlighted chartreuse bold (v4.7.314,
+    live 2026-09-17) -- the attack-LANDED colour shared with Spirit Rend and Arc:
+      CAST  : "Your face contorted in a twisted grimace, you clench your fists to
+               crush the life out of your foe."        (leviatax/004_Kai_Choke.lua)
+      LANDED: "<mob> gasps and stumbles as an unseen force crushes the life breath
+               out of him."                    (highlighting/063_Kai_Choke_Landed.lua)
+    THE CAST LINE SAYS "your foe" AGAINST A DENIZEN, not the target's name. The old
+    pattern was `...crush the life out of (\w+)\.$` -- one word, i.e. a player name --
+    so the trigger had NEVER fired in PvE, and its party relay never ran there. Same
+    bug as the v4.7.313 tempo triggers: grep `\w+` before trusting any PvE line.
+    The LANDED line was previously uncaptured entirely, which is why a choke without
+    the Kai Unleashed boon had no visible confirmation at all -- the burst line is
+    boon-only. It is a highlight only; it deliberately does NOT clear
+    `ataxiaTemp.kaiChokePendingAt` (see the trigger's note on confirmation livelocks).
 
 senseless_flurry:  # balance recovers 30% faster while the numbness defence is up
   flag: mnemSenselessFlurry
