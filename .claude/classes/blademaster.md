@@ -1247,3 +1247,82 @@ an electric-nulling ripple -> blizzard; both -> cast anyway). Tune with
 Blizzard's fire line is **uncaptured** -- no confirm trigger exists yet, so the send-side
 stamp is the only cooldown source. Its AB also leaves "a temporary obscuring snowstorm" in
 the room, which nothing models; check it first if mob tracking degrades after a blizzard.
+
+
+## DEAF / BLIND self-senses -- the keeper is a TIMER, not a reply (v4.7.315)
+
+Both classes self-apply **deafness** and **blindness** as DEFENCES, kept up automatically by
+`deffing/007_Sense_Keepers.lua` (called once per prompt from `318_Prompt_Trigger.lua`).
+
+**The ability itself is Kaido (AB Deaf 875), which is a MONK skill** -- Blademaster has TwoArts,
+Striking and Shindo, and `deaf`/`blind` appear nowhere in this file's Shindo ability list. The
+class gate (`Monk` or `Blademaster`) is inherited from code that predates v4.7.315, so the package
+has always believed a Blademaster can do this, but **no Blademaster-side AB or live capture exists
+in the tree**, and the 2026-09-17 live captures do not record which class produced them. Treat the
+Blademaster half as UNCONFIRMED until an AB or a class-attributed log is pasted -- see monk.md for
+the Kaido text. What is NOT in doubt is the cost: the AB lists no balance and no equilibrium.
+
+Lines, live-captured 2026-09-17:
+
+| Line | Meaning |
+|---|---|
+| `You stare straight ahead and concentrate on a distant focal point.` | deaf attempt in flight (trigger 763) |
+| `The world about you falls silent as the deafness trance sinks upon you.` | deaf trance LANDED (trigger 773) |
+| `Your hearing is suddenly restored.` | defence lost -- GMCP Removes it, and that is what re-arms the keeper |
+| `You close your eyes for a moment.` | blind attempt in flight (trigger 762) |
+| `You open your eyes once more, and the world about you is darkness.` | blind trance LANDED (trigger 772) |
+| `You are already deaf.` | DEAF refused, already up (trigger 774) |
+| `You are already blind.` | BLIND refused, already up (trigger 775) |
+
+**All six lines are live-captured** (2026-09-17): attempt, landed and refusal for each sense. No
+wording here is inferred.
+
+**The refusal is a free state probe** -- the reasoning that wired the Fury refusal ("You're already
+raged with fury!") and the shin-augment already-channelling line. It says two things: no trance
+started, and the defence IS up. It takes the FULL hold (not the landed line's grace), because a
+refusal means our picture is already wrong somewhere and backing off properly is the right response.
+**It deliberately does NOT write `ataxia.defences`**, even though the game just stated the state --
+this is the one place that rule is genuinely tempting. If GMCP disagrees with the game here then
+GMCP is not tracking the defence, and something GMCP never Added it will never Remove, so the write
+would be a belief nothing can ever clear: the v4.7.280 livelock reached from the opposite direction.
+It warns once per session instead and lets the hold re-probe.
+
+BLIND is no longer unconfirmed: the command `blind` works, trigger 762's line is right, and the
+trance has a landing line of its own.
+
+**The trance duration, measured once.** The blind capture brackets it: the attempt echoed before
+the `13:59:29.740` prompt and the landed line fell between the `13:59:32.925` and `13:59:35.679`
+prompts -- so **3.2s at minimum, 5.9s at most**. That sample spans a `GO!` into a ripple, so treat
+the slow end as soft. It is still enough to condemn the old 6s hold, which was inherited from a
+`tempTimer(6, ...)` and sat right on the boundary: a slow trance would have drawn a duplicate at
+almost the moment it landed. The hold is 10s now, and the landed line collapses it to a 1.5s grace,
+so a long hold no longer costs anything -- an opponent stripping the defence is answered in ~1.5s
+rather than ~10s. The grace exists because GMCP's `Char.Defences` Add can lag the landed line, and
+a fully cleared stamp would re-send into a defence that is already coming up.
+
+**Why it needed fixing:** the old guard was `incomingdeafness`, set by the trigger matching the
+ATTEMPT ECHO -- a guard fed by the game's reply, which cannot close until our command has made the
+round trip. Six DEAF went out in 0.15s for one trance. The hold is now stamped at SEND time, and
+again on the attempt echo so a **manually typed** DEAF is not answered with a duplicate. GMCP owns
+whether the defence is up (`ataxia.defences.deafness` / `.blindness`); the client only owns whether
+an attempt is in flight. See CLAUDE.md's Defense Systems section for the four rules this produced.
+
+
+### Why the skill route matters: HERB BALANCE
+
+DEAF and BLIND are **defences we want UP**, and they are TIMED -- they lapse on their own, and a
+mob or a venom can strip them. There are two separate ways the eating balance can be wasted on
+them, and they need different answers:
+
+1. **SSC eating a herb to CURE them off** -- to *undeafen* us. Prevented by the AFFLICTION priority
+   `26`, which means "ignored": `curing priority deafness 26` / `curing priority blindness 26`.
+   Already set for every class in `ataxia/001_Default_Curing_Prios.lua:337-339`, and correct there
+   -- the whole tree treats these two as kept defences (`004_Aff_gains_losses.lua` ignore lists,
+   `mnemosyne/009` `AFF_IGNORE`). **Nothing to change; do not "fix" it per class.**
+2. **SSC eating a herb to put the defence back UP** after a mob or venom strips it. This is what
+   the SKILL keeper exists to prevent: the trance costs no herb balance, so raising it ourselves is
+   free where the curative is not.
+
+**So the keeper is the herb saving**, and it only had to be made to behave: the defence being TIMED
+is exactly why it re-fires, and the pre-v4.7.315 guard was fed by the game's attempt echo, so it
+could not close until the command had made the round trip -- six DEAF in 0.15s for one trance.

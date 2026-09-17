@@ -2447,7 +2447,73 @@ gmcp.Room.Info = {
 src_new/scripts/levi_ataxia/levi/ataxia/deffing/001_Defence_API.lua        # Main defense tracking API
 src_new/scripts/levi_ataxia/levi/ataxia/deffing/003_Defence_Reporting.lua  # Defense status display
 src_new/scripts/levi_ataxia/levi/ataxia/deffing/004_Defence_Sorting_-_Cleaner.lua  # Defense priority management
+src_new/scripts/levi_ataxia/levi/ataxia/deffing/007_Sense_Keepers.lua      # Monk/BM DEAF + BLIND keepers
 ```
+
+**MONK/BLADEMASTER SENSE KEEPERS -- THE POINT IS HERB BALANCE (v4.7.315/316).** DEAF and BLIND are
+defences we WANT UP, and they are TIMED -- they lapse on their own, and a mob or a venom can strip
+them. Two different wastes of the EATING balance are possible and they need different answers.
+**(1) SSC eating a herb to CURE them off** (to *undeafen* us) is prevented by the AFFLICTION
+priority **26**, which means ignored -- `curing priority deafness 26` / `curing priority blindness
+26`. Already set for EVERY class at `ataxia/001_Default_Curing_Prios.lua:337-339`, and correct
+there: the whole tree treats these two as kept defences (`004_Aff_gains_losses.lua` ignore lists,
+`mnemosyne/009` `AFF_IGNORE`), so **do not make that per-class**. **(2) SSC eating a herb to put the
+defence back UP** after it is stripped is what the SKILL keeper prevents -- the trance costs no herb
+balance, so raising it ourselves is free where the curative is not. **The keeper IS the herb
+saving**; it only had to be made to behave. (An earlier draft of this note claimed the herb saving
+had not been delivered and recommended excluding the two names from `systemDefup` -- that was wrong,
+and is retracted. The `curing priority defence` axis is a separate lever that is not what these two
+run on.) Note for anyone auditing the priority write path: a `curing priority defence ...` command
+is NOT filtered by `ataxia_sendCuringPriority`'s classifier (the pattern needs a trailing number, so
+both the `25` and `reset` forms slip through) and lands in whichever curingset is ACTIVE, and
+`isDefenceForCurrentClass` is a NO-OP for these two because it returns true for anything in
+`curatives`.
+
+**AND THE MECHANICAL BUG BEHIND IT -- A GUARD FED BY THE GAME'S REPLY CANNOT HOLD OFF THE SENDS THAT
+PRECEDE IT (v4.7.315).** AB Deaf (Kaido 875) is `DEAF`, self, "enter a short TRANCE" -- it resolves
+over TIME and spends no balance or equilibrium we track, so nothing about sending it makes the next
+send wait. The keeper lived in `318_Prompt_Trigger.lua` guarded only by `incomingdeafness`, a global
+set when the game's ATTEMPT ECHO printed -- which cannot close until our command has made the round
+trip, so every prompt inside that window re-sent: **six DEAF for one trance in 0.15s**. The hold is
+now stamped at SEND time, the only moment we know something is in flight (the `shin augment` lesson,
+v4.7.270). `deffing/007` owns the class gate, the GMCP check and the hold; the trigger just calls
+`ataxia_senseKeepTick()`, because **a guard inside a trigger is a guard the test suite cannot see**.
+Three further rules came out of the same three lines. **A missing stamp reads READY** (v4.7.192):
+`incomingdeafness` was never initialised and `nil == false` is FALSE, so a fresh session raised
+nothing until the first *manual* DEAF. **GMCP owns whether a defence is up; we only own whether one
+is in flight** -- the old triggers wrote `ataxia.defences.<sense> = true` from the ATTEMPT line, and
+an interrupted trance would leave us believing in a defence GMCP never confirmed and so will never
+Remove, i.e. a keeper silently off for the session (v4.7.280); that write is gone, and the hold is a
+timestamp against a window rather than a flag awaiting a confirmation, so it cannot livelock
+(v4.7.167). **The attempt echo still stamps** (762/763), because it proves an attempt is in flight
+whoever started it -- without it a manually typed DEAF draws a duplicate from the keeper. And the
+blind half of that block had **never executed**: it read `incommingblindness` (two m's, assigned
+nowhere) against 762's `incomingblindness`, and read `ataxia.afflictions.blindness` where 762 writes
+`ataxia.defences.blindness` -- two names wrong and one table wrong. Fixed and enabled at the user's
+direction, treating the repaired branch as new code (the v4.7.314 Kai Choke rule). **That repair
+carries an UNVERIFIED PvE risk worth naming:** `ataxia.denizensHere` is fed from GMCP `Char.Items`
+for the room -- what the character PERCEIVES -- and v4.7.125 already records that "airborne gmcp
+`Char.Items` reflects the SKY so `denizensHere` is empty". If blindness does the same on the
+ground, `_roomHasDenizens` reads clear, the explorer walks out of occupied rooms and targeting
+finds nothing, silently. Hence the per-sense opt-out (`ataxia.settings.senseKeep.blindness =
+false`, default ON) added in v4.7.316. **Both landed lines are now captured (v4.7.317)** -- `772_Blind_Landed`
+("You open your eyes once more, and the world about you is darkness.") and `773_Deaf_Landed`
+("The world about you falls silent as the deafness trance sinks upon you."), which also CONFIRMS
+`blind` as a real command. A live blind capture brackets the trance at **3.2-5.9s** (the landed
+line sits between two prompts), condemning the inherited 6s hold that sat right on that boundary;
+it is **10s** now. Raising it used to trade against masking an opponent STRIPPING deafness
+(stridulation, prefarar) -- **that trade is gone**: `ataxia_senseLanded` collapses the hold to a
+1.5s grace the moment the game says the trance resolved, so a strip is answered in ~1.5s rather
+than ~10s. A grace, not a clear, because GMCP's Add can lag the landed line. The landed line never
+writes `ataxia.defences`: it proves the ACTION finished, GMCP still owns the STATE. **Both REFUSAL lines are captured too** (v4.7.317, `774`/`775`: "You are already deaf." /
+"You are already blind."), so all six lines -- attempt, landed and refusal per sense -- are live and
+none is inferred. A refusal is a free state probe (the Fury / shin-augment rule): it proves no
+trance started AND that the defence is up. It takes the FULL hold rather than the landed grace,
+since a refusal means our picture is already wrong. **It still does not write `ataxia.defences`** --
+the one place that rule is genuinely tempting, and the reason is that a GMCP which disagrees here is
+a GMCP not tracking the defence, which will therefore never Remove it: the write would be a belief
+nothing can clear, i.e. the v4.7.280 livelock from the opposite direction. It warns once per session
+and lets the hold re-probe.
 
 ### Defence API (`ataxia.defense`)
 The defense system tracks active defenses and manages automatic rekeeping.

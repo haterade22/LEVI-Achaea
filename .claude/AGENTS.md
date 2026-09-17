@@ -677,6 +677,19 @@ not a replay. And **an INSTANT ability in a re-queued round executes on every re
 balance for it to wait on -- so for those, only the game's own refusal line can stop a respam. A
 send-time flag cannot: `shin augment` was observed refused **five times in 0.45s** behind one.
 
+**READ THAT NARROWLY -- IT IS ABOUT THE QUEUED ROUND, NOT ABOUT SEND-TIME FLAGS (v4.7.315/316).**
+The reason a send-time flag could not save `shin augment` is that the command lived INSIDE a round
+rebuilt by `queue addclearfull` roughly three times a second: the flag was set once, and the
+SERVER re-executed the balanceless command on every rebuild regardless of what the client believed.
+The flag was never consulted again. A command sent DIRECTLY, once per prompt, is the opposite case
+-- there is no round re-executing it, so a send-time stamp is consulted before every send and does
+hold. Monk/Blademaster `DEAF` went out **six times in 0.15s** for one trance precisely because its
+only guard was fed by the game's ATTEMPT ECHO, which cannot close until the command has made the
+round trip; a send-time stamp fixed it (`deffing/007_Sense_Keepers.lua`). So: **inside a re-queued
+round, listen for the game's line; outside one, stamp at send.** Getting this backwards costs you
+either a respam or a feature that never fires. (The game's line is still worth capturing where it
+exists -- v4.7.271 -- but as the thing that RELEASES a hold, not as the thing that creates it.)
+
 ## The game's word outranks our bookkeeping -- and the poll outranks nothing (v4.7.266-271)
 
 Wherever the game states its own state, that line is the authority and anything we derive is the

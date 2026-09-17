@@ -40,15 +40,17 @@ jestercheese = false
 end
 
 if gmcp.Char and gmcp.Char.Status then
-if gmcp.Char.Status.class == "Blademaster" or gmcp.Char.Status.class == "Monk" then
-
-if ataxia.defences.deafness == nil and incomingdeafness == false then
-send("deaf")
-end
-if ataxia.afflictions.blindness == nil and incommingblindness == false then
-send("blind")
-end
-end
+-- Monk/Blademaster DEAF + BLIND keepers (v4.7.315). The class gate, the GMCP defence
+-- check and the in-flight hold all live in `deffing/007_Sense_Keepers.lua` -- a guard
+-- inside a trigger is a guard the test suite cannot see (v4.7.260).
+--
+-- What used to be here re-sent on EVERY prompt until the game's attempt echo came back
+-- and set `incomingdeafness`: six DEAF for one trance in a live log. And the blind half
+-- was unreachable outright -- it read `incommingblindness` (two m's), which is assigned
+-- nowhere, and `nil == false` is FALSE -- while also reading `ataxia.afflictions.blindness`
+-- where trigger 762 writes `ataxia.defences.blindness`. Two names wrong, one table wrong,
+-- silent in both directions.
+if ataxia_senseKeepTick then ataxia_senseKeepTick() end
 if gmcp.Char.Status.class == "Magi" then
 get_resonance()
 cecho("Target: Burns " ..tburns)

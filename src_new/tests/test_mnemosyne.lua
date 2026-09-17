@@ -5193,7 +5193,13 @@ describe("scorching a denizen that healed itself", function()
 
   local function setup(opts)
     opts = opts or {}
-    realSend = send
+    -- `or send`, NOT a bare capture: the last test in this block calls setup() TWICE before its
+    -- single restore(), so a bare capture takes the FIRST setup's recorder as "the real send" and
+    -- restore() then installs that recorder globally -- leaking it into every test file sorted
+    -- after this one. test_runner loads all files into one Lua state, and test_swarm_tactics.lua
+    -- captures `local _mockSend = send` AT LOAD TIME, so its own restore went on to install this
+    -- recorder too. Same idempotent-capture idiom as realResolve/realHasAff2 below (v4.7.316).
+    realSend = realSend or send
     sent = {}
     send = function(c) table.insert(sent, c) end
     ataxiaBasher = ataxiaBasher or {}
