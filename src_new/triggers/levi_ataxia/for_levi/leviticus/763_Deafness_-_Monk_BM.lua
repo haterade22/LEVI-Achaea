@@ -33,6 +33,12 @@ patterns:
   type: 3
 ]]--
 
-ataxia.defences.deafness = true
-incomingdeafness = true
-tempTimer(6,[[incomingdeafness = false]])
+-- The game's own echo that a deaf trance is in flight -- whoever started it. Stamping here is
+-- what stops the keeper answering a MANUALLY typed DEAF with a duplicate; the keeper stamps
+-- separately when it sends (see deffing/007_Sense_Keepers.lua).
+--
+-- It no longer writes `ataxia.defences.deafness = true`. That was OPTIMISM on an attempt line,
+-- and an interrupted trance would have left us believing in a defence GMCP never confirmed and
+-- so will never Remove -- a keeper silently off for the rest of the session (v4.7.280). GMCP
+-- owns whether the defence is up; this line only proves an attempt exists.
+if ataxia_senseAttemptSeen then ataxia_senseAttemptSeen("deafness") end

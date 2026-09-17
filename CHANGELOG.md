@@ -2,6 +2,222 @@
 
 ---
 
+## 2026-09-17 - The trance is measured, and the landed lines are captured (v4.7.317)
+
+User pasted a live BLIND capture, which closes the last two open items on the sense keepers.
+
+### BLIND is confirmed, and both trances now have landing lines
+
+```
+You close your eyes for a moment.                                    13:59:29.740 prompt
+... GO!, wade status ...                                             13:59:32.925 prompt
+You open your eyes once more, and the world about you is darkness.   13:59:35.679 prompt
+```
+
+So `blind` is a real command, trigger 762's line was right, and the blind trance has its own
+landing line. All four lines are now captured: attempt + landed for each sense (`762`/`772` blind,
+`763`/`773` deaf). The UNCONFIRMED markers come off BLIND. (The Blademaster *half* stays marked --
+these captures do not record which class produced them, and Kaido is a Monk skill.)
+
+### The hold is measured rather than inherited -- and no longer a trade-off
+
+The landed line falls between the `32.925` and `35.679` prompts while the attempt echoed before
+`29.740`, so attempt -> landing is **3.2s minimum, 5.9s maximum**. One sample, and it spans a `GO!`
+into a ripple, so the slow end is soft -- but it is enough to condemn the old **6s**, which came
+from the original `tempTimer(6, ...)` and sat *right on the boundary*: a slow trance would have
+drawn a duplicate at almost exactly the moment it landed.
+
+`ataxia_SENSE_HOLD` is **10** now. Raising it used to be a straight trade against masking an
+opponent's strip (the deep review's Q5) -- **that trade is gone**, because `ataxia_senseLanded`
+collapses the hold to a 1.5s grace the moment the game says the trance resolved. A strip is now
+answered in ~1.5s instead of ~10s. It collapses to a grace rather than clearing outright, since
+GMCP's `Char.Defences` Add can lag the landed line and a cleared stamp would re-send into a defence
+already coming up. The landed line **never writes `ataxia.defences`** -- it is proof the ACTION
+finished; GMCP remains the only authority on the STATE (v4.7.280).
+
+This is the v4.7.271 shin-augment rule applied: stop predicting the window, listen for the
+announcement.
+
+### Both refusals captured too -- and the one place the "game's word wins" rule must NOT apply
+
+`You are already deaf.` / `You are already blind.` (triggers `774`/`775`, both pasted by the user,
+so neither is inferred). That makes **all six lines live-captured**: attempt, landed and refusal per
+sense. A refusal is a free state probe -- the reasoning that wired the Fury refusal and the
+shin-augment already-channelling line -- proving no trance started AND that the defence is up.
+
+It takes the **full** hold rather than the landed line's grace: a landing means "confirmed, now
+watch for a strip", a refusal means "our picture is already wrong", and backing off properly is the
+right answer to the second.
+
+**It deliberately does NOT write `ataxia.defences`**, and this is the one place CLAUDE.md's "the
+game's word outranks our bookkeeping" rule has to be resisted. If GMCP disagrees with the game here,
+then GMCP is not tracking this defence -- and something GMCP never Added, it will never Remove. The
+write would be a belief nothing can ever clear: the v4.7.280 livelock, reached from the opposite
+direction to the one v4.7.315 removed. It warns **once per session** instead (a warning after every
+refusal is one the user learns to ignore) and lets the hold re-probe every 10s: noisy at worst,
+never permanently wrong.
+
+### Files
+
+- `deffing/007_Sense_Keepers.lua` -- `ataxia_senseLanded`, `ataxia_senseRefused`,
+  `ataxia_SENSE_LANDED_GRACE`, hold 6 -> 10 with the measurement recorded inline.
+- `772_Blind_Landed.lua`, `773_Deaf_Landed.lua`, `774_Deaf_Refused.lua`, `775_Blind_Refused.lua` -- new.
+- `tests/test_sense_keepers.lua` -- 6 new tests. **All break-back verified**: clearing outright
+  instead of leaving the grace fails the grace test; an inert landed line fails the strip test; a
+  refusal that writes the defence fails two; warning every time fails the warn-once test; and a
+  refusal taking the landed grace instead of the full hold fails the re-probe test.
+- `.claude/classes/monk.md`, `blademaster.md` -- all four lines, and the measurement.
+
+---
+
+## 2026-09-17 - Deep review of the sense keepers: the herb saving was never delivered (v4.7.316)
+
+A four-agent deep review of v4.7.315. The headline finding is uncomfortable and correct.
+
+### The herb-balance mechanism, corrected by the user
+
+The deep review concluded that v4.7.315 had not delivered the stated goal, on the theory that SSC
+was still eating a curative to RAISE these defences. **That conclusion was wrong and is retracted.**
+The user's account:
+
+> SSC would waste a herb balance when the defence is removed by a mob or other venom. It would eat
+> a herb to put the defence back UP. `curing priority deaf 26` makes it so that it doesnt eat a herb
+> to undeafen us (since it is a defence). The problem here is it spams deaf when it is a timed
+> defence.
+
+So there are **two** distinct wastes and they have different answers:
+
+1. **Eating to CURE them off** (undeafen us) -- prevented by the AFFLICTION priority **26**
+   ("ignored"), already set for every class at `ataxia/001_Default_Curing_Prios.lua:337-339`. The
+   review's suggestion to make this per-class is **rejected by the user** and would be wrong: the
+   tree treats both as kept defences everywhere (`004_Aff_gains_losses.lua` ignore lists,
+   `mnemosyne/009` `AFF_IGNORE`).
+2. **Eating to put the defence back UP** after a mob or venom strips it -- which is exactly what the
+   free SKILL trance replaces. **The keeper IS the herb saving.**
+
+So v4.7.315 did deliver the goal; the only thing wrong with it was the behaviour the user actually
+reported -- it **spams DEAF because the defence is TIMED**. The review's `systemDefup` exclusion
+recommendation is dropped. No code change follows from this; the correction is to the
+documentation, which had the rationale wrong in `CLAUDE.md` and both class docs.
+
+### Fixed in this version
+
+- **The YAML `hierarchy:` had 3 elements where all six siblings have 6**, so the converter could not
+  resolve it and fabricated a *second* top-level `Deffing` group containing one script. Confirmed in
+  the built tree; now 0 auto-created groups.
+- **`ataxia_SENSE_HOLD = 0` silently restored the spam** -- zero is TRUTHY in Lua, so
+  `tonumber(x) or 6` passed it through, and a negative did the same via `since >= 0`. Clamped to a
+  1s floor.
+- **The keeper echoed** every send; now quiet (`send(cmd, false)`), matching comparable keepers.
+- **Per-sense opt-out** `ataxia.settings.senseKeep.<def> = false` (default ON, so nothing changes by
+  itself). It exists because BLIND had never executed before v4.7.315 and now runs on every
+  Monk/BM prompt everywhere. `ataxia.denizensHere` is fed from GMCP `Char.Items` -- what the
+  character PERCEIVES -- and v4.7.125 records "airborne gmcp `Char.Items` reflects the SKY so
+  `denizensHere` is empty". **If blindness does the same on the ground, `_roomHasDenizens` reads
+  clear, the explorer walks out of occupied rooms and targeting finds nothing, silently.**
+  UNVERIFIED; this is the switch to reach for.
+
+### Test defects found by the review, all fixed
+
+- **The headline design decision was UNDEFENDED.** Mutating `ataxia_senseAttemptSeen` to re-introduce
+  the exact v4.7.280 optimism bug -- writing `ataxia.defences[def] = true` from an attempt echo --
+  passed **9/9**. Nothing asserted the defence stays nil after an attempt. Now pinned.
+- **`test_sense_keepers.lua` was leaking the global `send` and `getEpoch`** into every test file
+  sorted after it. `test_runner` loads all files into one Lua state, so
+  `test_swarm_tactics.lua:16`'s load-time `local _mockSend = send` captured OUR recorder and its
+  "restore" installed the wrong function -- which is the leak noted as unexplained in the v4.7.314
+  entry. **Answered: this file was the last writer; `test_mnemosyne.lua:5198` is the original.**
+  Violates `AGENTS.md:653` (v4.7.257, "leaked an overridden `send` ... 15 unrelated failures from
+  one real one"). **The root leak has a neat mechanism worth keeping:** `test_mnemosyne.lua:5196`
+  captured `realSend = send` on EVERY `setup()`, and the last test in that block calls `setup()`
+  twice before its single `restore()` -- so the second capture took the FIRST setup's recorder as
+  "the real send", and `restore()` then installed that recorder globally. Two lines below, the same
+  function already used the idempotent `realResolve = realResolve or ...` idiom for exactly this
+  reason; `send` just never got it. Now `realSend = realSend or send`, and
+  `test_sense_keepers.lua` restores both `send` and `getEpoch`. Verified empirically: a probe
+  replicating the runner's load order reports **0 files leaving global `send` changed**, down from 2.
+- **A test read the constant it should have pinned**: advancing by `ataxia_SENSE_HOLD` meant a hold
+  wrongly set to 600s passed 9/9. Now pins the value and advances by a literal.
+- Added coverage for drop/re-raise cycling and for an attempt echo naming a sense we do not keep.
+
+### Documentation
+
+The herb-balance rationale -- the actual motivation -- **appeared in no document at all**. Added to
+`CLAUDE.md`, both class docs and `memory/bug-patterns.md`, together with the unresolved SSC race.
+Also: `.claude/classes/blademaster.md` cited **AB Deaf (Kaido 875)** for a class that has no Kaido
+(TwoArts/Striking/Shindo) -- corrected and marked unconfirmed on the Blademaster side, and `BLIND`
+marked unconfirmed everywhere, since no AB for it exists in the tree and both the command string and
+trigger 762's line are inherited from a branch that had never run.
+
+---
+
+## 2026-09-17 - Six DEAF for one trance; the blind keeper that never ran (v4.7.315)
+
+User, with a live log: *"We only need to do this once. It is on a timer."*
+
+```
+You stare straight ahead and concentrate on a distant focal point.    (x6, in 0.15s)
+The world about you falls silent as the deafness trance sinks upon you.
+```
+
+AB Deaf (Kaido 875) is `DEAF`, self, "enter a short TRANCE and deafen yourself" -- it resolves
+over TIME and costs no balance or equilibrium we track, so nothing about sending it makes the
+next send wait.
+
+### A guard fed by the game's reply cannot hold off the sends that precede the reply
+
+The keeper lived in `318_Prompt_Trigger.lua` and its only guard was `incomingdeafness`, a global
+set by trigger 763 when the game's ATTEMPT ECHO printed. That guard cannot close until our command
+has reached the server and its echo has come back -- and **every prompt inside that round trip
+re-sent**. The hold has to be stamped at SEND time, the only moment we know something is in
+flight. Same shape as `shin augment` refused five times in 0.45s (v4.7.270); the recurring rule is
+that **a command which does not wait on a balance we track re-fires on every rebuild unless
+something client-side holds it.**
+
+### Two more defects in the same three lines, both silent
+
+- **`incomingdeafness` was never initialised.** `nil == false` is FALSE in Lua, so on a fresh
+  session the deaf keeper did nothing at all until the first *manual* DEAF happened to set the
+  flag. It now uses a timestamp, where a MISSING stamp reads READY (the v4.7.192 rule) -- the
+  failure direction is one early re-send, never a keeper silently off forever.
+- **The blind half was unreachable outright.** It read `incommingblindness` -- *two* m's --
+  assigned nowhere in the tree, against trigger 762's `incomingblindness`. It also read
+  `ataxia.afflictions.blindness` where 762 writes `ataxia.defences.blindness`. Two names wrong and
+  one table wrong, so `send("blind")` had never executed. **Fixed and enabled at the user's
+  direction** -- with the Kai Choke caveat in mind (v4.7.314): repairing a branch that has never
+  run means reading its body as new code, because that is what it is.
+
+### The fix
+
+`deffing/007_Sense_Keepers.lua` owns the class gate, the GMCP defence check and the in-flight
+hold; the prompt trigger just calls `ataxia_senseKeepTick()`. **A guard inside a trigger is a guard
+the test suite cannot see** (v4.7.260).
+
+**Stamped in two places, deliberately.** The keeper stamps when WE send, closing the round-trip
+window. Triggers 762/763 stamp again on the attempt echo, which covers a DEAF or BLIND the user
+typed themselves -- the echo proves an attempt is in flight no matter who started it, and without
+it a manual cast draws a duplicate from the keeper.
+
+**GMCP owns whether the defence is up; we only own whether one is in flight.** The old triggers
+wrote `ataxia.defences.<sense> = true` from the ATTEMPT line -- optimism the v4.7.280 rule forbids,
+since an INTERRUPTED trance leaves us believing in a defence GMCP never confirmed and will
+therefore never Remove: a keeper silently off for the session. That write is gone. The live log
+proves GMCP tracks both edges ("Your hearing is suddenly restored." is what cleared the defence
+and made the keeper fire at all). The hold is a timestamp against a window, not a flag waiting on
+a confirmation, so it cannot livelock (v4.7.167).
+
+### Files
+
+- `deffing/007_Sense_Keepers.lua` -- new; `ataxia_senseKeepTick`, `ataxia_senseKeepNeeded`,
+  `ataxia_senseAttemptSeen`, `ataxia_SENSE_HOLD` (6s, matching the old timer's intent).
+- `318_Prompt_Trigger.lua` -- the two broken blocks replaced by one call.
+- `762_Blindness_-_Monk_BM.lua`, `763_Deafness_-_Monk_BM.lua` -- stamp the hold; no optimistic
+  defence write; the dead `incoming*` globals removed.
+- `tests/test_sense_keepers.lua` -- new, 9 tests. **Break-back verified**: reverting the send-side
+  stamp reproduces the log exactly (`Expected 1 but got 6`).
+
+---
+
 ## 2026-09-17 - The escape banner that was never true (v4.7.314)
 
 User, with a death log from a Mnemosyne swarm room: *"this should not be happening (me dying). As
