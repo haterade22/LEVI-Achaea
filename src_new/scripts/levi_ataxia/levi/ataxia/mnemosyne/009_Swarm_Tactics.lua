@@ -366,6 +366,20 @@ function S._tacticalGo(dirShort, why)
   -- livelocks at crash HP. A jump clears any wall (ours or an affix's) and is
   -- plain movement when there is none. Eq-gated; the tactical timeout still
   -- hands back to assess if the jump never lands. See S.moveVerb for which one.
+  -- TAKE THE BALANCE WITH US (v4.7.314). The move goes on the FREE queue; an attack already
+  -- committed by `queue addclearfull freestand` sits on the STANDARD queue. They coexist, and
+  -- the attack takes balance FIRST -- so the escape waits a full round for balance it was never
+  -- going to get. Setting a hold stops the NEXT round being queued; it cannot retract one the
+  -- server already holds, and only another addclearfull or a `cq all` can. The death log has
+  -- two full rounds firing after the escape began and the `-> e` landing 1.7s late with no
+  -- balance behind it.
+  --
+  -- TWO PATHS MUST NOT GET THIS FLUSH. Standing in LAVA, the queued escape is the one command
+  -- keeping us alive and flushing it is fatal (the same reasoning guards S.reset). And a PULL's
+  -- escape RIDES the attack (S.decorate -> S._onPullSent), so flushing would destroy the very
+  -- swing carrying the step-out -- a pull never reaches _tacticalGo, so that is satisfied by
+  -- construction, but do not merge the two paths later without re-reading this.
+  if not (M.roomLava and M.roomLava()) then send("cq all") end
   send("queue addclear free stand" .. sep .. S.moveVerb(dirShort) .. " " .. dirShort)
   if why then S._echo(why .. " -> <cyan>" .. dirShort .. "<reset>.") end
 end
@@ -1041,11 +1055,70 @@ function S._canHover()
   return true
 end
 
+-- Is staying provably worse than any door? (v4.7.314)
+--
+-- Deliberately NOT S._panicHpHit: its percentage line is `panicAt`, which defaults to the SAME
+-- 35 as `escapeAt`, so on the low-HP ladder it is true by construction and would be no gate at
+-- all -- turning the last resort below into "always", which is not what was asked for. The two
+-- honest crash signals are the time-to-death watchdog ("dead in under dangerTTL seconds at this
+-- rate", which fires near full health against a big enough spike) and the ABSOLUTE hp floor,
+-- which means the same thing at every pool size.
+function S._dyingFast()
+  if ataxiaBasher_isDamageRateExtreme and ataxiaBasher_isDamageRateExtreme() then return true end
+  local floor = tonumber(S._cfg().panicHp) or 0
+  if floor <= 0 then return false end
+  local raw = tonumber(ataxia and ataxia.vitals and ataxia.vitals.hp)
+  -- A missing or blackout reading is "unknown", never "dying" -- the same rule _panicHpHit uses.
+  if not raw or raw <= 0 then return false end
+  return raw <= floor
+end
+
+-- THE EXCEPTION TO THE VALIDATED-ROUTE RULE (v4.7.314, user-directed).
+--
+-- The ladder refuses unvalidated exits by user decision, and that is right when the cost of
+-- being wrong is one wasted move. It is NOT right when the cost of staying is the character.
+-- BOILING LAVA already carries this exception (M.onLava takes ANY door because a tick is 54%
+-- of the pool); this is the same judgement for the same reason, bounded to the moments where
+-- staying is provably lethal rather than merely bad.
+--
+-- The death this was written for: _backDir returned nil -- it returns nil whenever
+-- `explore.fromRoom == MAP.current` or the anchor is stale, both NORMAL after a pull, a tumble
+-- or a forced move -- so the ladder answered "fight in place" at ~2,000 HP/s. The room had an
+-- east exit the whole time, and we eventually left through it.
+--
+-- S._panicDir is the scanner rather than a new one: it already prefers the validated back edge,
+-- excludes known lava OUTRIGHT, avoids our own standing icewall, and walks a SORTED exit list
+-- so the same room chooses the same door every time and the log stays readable.
+function S._escapeLastResort()
+  if not S._dyingFast() then return nil end
+  return S._panicDir and S._panicDir()
+end
+
+-- CAN WE ACTUALLY LEAVE RIGHT NOW? (v4.7.314) Side-effect-free, so a caller may ask before
+-- spending anything. This exists because S.disengage used to call S.reset() -- which sends
+-- `cq all` and tears down the running tactic -- BEFORE asking _beginEscape whether an escape was
+-- even possible. On a no-route room that is a destructive no-op repeated on every prompt.
+-- Same principle as the arming fix below: do not tear down what you have until you know you can
+-- replace it.
+function S._escapeRouteReady()
+  if not S._indoors() and S._canHover() then return not S.moveLocked() end
+  if S._backDir() then return true end
+  return S._escapeLastResort() ~= nil
+end
+
 function S._beginEscape(why)
   local s = S._cfg()
-  S.escapeOn(why or "low HP") -- v4.7.243
+  -- ARM ONLY ON A PATH THAT COMMITS TO LEAVING (v4.7.314). This used to open with
+  -- `S.escapeOn(why or "low HP")` -- muting the basher and printing "ESCAPE MODE -- attacks held
+  -- until we are out" BEFORE asking whether we could leave at all -- and the no-route branch then
+  -- called `S.escapeOff()`, which un-mutes SILENTLY. Releasing on no-route is correct (fighting in
+  -- place is exactly when the basher must not be muted); announcing a hold we are about to drop is
+  -- not. Because escapeOn only prints when `_escapeAnnounced` is falsy and only escapeOff clears
+  -- that flag, the live log printed the banner SIX TIMES in 1.7s -- six arm/announce/release
+  -- cycles, each release a window the prompt dispatcher put a full attack round through.
   if not S._indoors() and S._canHover() then
     if S.moveLocked() then return false end -- v4.7.243
+    S.escapeOn(why or "low HP")
     S.state = "recovering"
     S.recoverStarted = now()
     S.flying = true
@@ -1059,14 +1132,24 @@ function S._beginEscape(why)
     return true
   end
   local shortBack, longBack, shortFwd = S._backDir()
+  local lastResort = false
   if not shortBack then
-    -- Indoors with no route: shield-in-place remains the fallback, and fighting in place is
-    -- exactly when the basher must NOT be muted (v4.7.243). Hand the round back.
-    S.escapeOff()
+    -- No VALIDATED route. If staying is provably lethal, any door beats the floor (v4.7.314).
+    shortBack = S._escapeLastResort()
+    lastResort = shortBack ~= nil
+  end
+  if not shortBack then
+    -- Indoors with no route and not dying fast: shield-in-place remains the fallback, and
+    -- fighting in place is exactly when the basher must NOT be muted (v4.7.243). Hand the round
+    -- back -- WITHOUT having armed or announced anything (v4.7.314).
     return false
   end
+  S.escapeOn(why or "low HP")
   S.state = "pulling"
-  S.mode = "pull"
+  -- A last-resort exit is NOT a pull: we have no verified forward direction to come back
+  -- through, so mode "escape" keeps onTick's pull/funnel bookkeeping from trying to re-enter a
+  -- room we never deliberately left. longBack/shortFwd are nil on this path by construction.
+  S.mode = lastResort and "escape" or "pull"
   S.swarmRoom, S.funnelRoom = (M.map and M.map.current), M.explore.fromRoom
   S.backShort, S.backLong, S.fwdShort = shortBack, longBack, shortFwd
   S.peakFollowers, S.announcedFollow = 0, false
@@ -1081,7 +1164,13 @@ function S._beginEscape(why)
   -- `why` is passed by the caller now: this function is reached from the HP ladder AND from
   -- S.disengage, and reporting "LOW HP (97%)" on a tactical disengage made the log unreadable
   -- (97 was the mana column, and HP was nowhere near the escape threshold).
-  S._tacticalGo(shortBack, why or ("<indian_red>LOW HP (" .. hpp() .. "%)<reset> -- retreating to recover"))
+  local reason = why or ("<indian_red>LOW HP (" .. hpp() .. "%)<reset> -- retreating to recover")
+  if lastResort then
+    -- Say it plainly. A deliberate rule-break that looks identical to a normal retreat is
+    -- indistinguishable from a bug the next time this log is read (v4.7.314).
+    reason = reason .. " <indian_red>[NO VALIDATED ROUTE -- dying fast, taking any exit]<reset>"
+  end
+  S._tacticalGo(shortBack, reason)
   return true
 end
 
@@ -1127,6 +1216,10 @@ function S.disengage(reason)
       .. " -- holding altitude until clean.")
     return true
   end
+  -- ASK BEFORE DESTROYING (v4.7.314). S.reset sends `cq all` and drops the running tactic; doing
+  -- that and THEN discovering there is no route leaves us worse off than before, once per prompt
+  -- for as long as the caller keeps reading the fight as lethal.
+  if not S._escapeRouteReady() then return false end
   if S.state ~= "idle" then S.reset(reason or "disengage") end
   -- Stamp only on success: an indoor room with no validated route back returns false, and
   -- that attempt must not burn the cooldown that a later, movable moment depends on.
@@ -1300,6 +1393,14 @@ function S.onTick()
   do
     local s = S._cfg()
     if s.escape ~= false and hpp() <= s.escapeAt then
+      -- THE SAME BOUND onVitals HAS (v4.7.314). These two paths call _beginEscape for the same
+      -- reason and only onVitals was throttled, so this one ran on every tick -- and each pass
+      -- reset the tactic (`cq all`) and re-entered the escape machinery. Share the stamp as well
+      -- as the constant: two unsynchronised clocks on one emergency is how the churn came back.
+      if S._lastEmergencyAt and (now() - S._lastEmergencyAt) < EMERGENCY_COOLDOWN then
+        return false
+      end
+      S._lastEmergencyAt = now()
       if S.flying then
         S._convertToHover(hpp())
         return true

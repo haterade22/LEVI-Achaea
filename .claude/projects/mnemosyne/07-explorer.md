@@ -469,6 +469,39 @@ which clears the FULL queue -- threw the queued escape away. A Seasone log shows
 attack rounds between the disengage and `pull move lost`. General rule for this module:
 **anything we queue that is not an attack must hold the dispatcher.**
 
+**The banner that was never true (v4.7.314)**: `_beginEscape` armed `escapeMode` and printed
+`ESCAPE MODE -- attacks held until we are out` **before** resolving a route, and its no-route
+branch then called `escapeOff()`, which un-mutes silently. `escapeOn` only prints when
+`_escapeAnnounced` is falsy and only `escapeOff` clears it, so the death log's **six banners in
+1.7s** were six arm/announce/release cycles -- each release a window the prompt dispatcher put a
+full attack round through. Arming now happens only on a path that commits to leaving. The
+regression test counts banners and reads `6` against the reverted code.
+
+Three consequences of the same reasoning error, all fixed together:
+
+- **`S.disengage` destroyed before it asked.** It called `S.reset()` -- `cq all`, tactic torn
+  down -- and only then discovered `_beginEscape` could not leave. On a no-route room that is a
+  destructive no-op *per prompt*. Now gated on the side-effect-free `S._escapeRouteReady()`. A
+  fixed retry throttle was tried first and rejected: it delayed the documented contract that a
+  failed attempt must not lock us out "the moment a route exists", and the existing test for that
+  contract caught it.
+- **The move could not spend the balance it needed.** The escape rides the FREE queue, a committed
+  attack rides the STANDARD queue, and the attack takes balance first -- so `-> e` went out with
+  nothing to backflip on. `_tacticalGo` now sends `cq all` first. **A hold stops the NEXT round
+  being queued; it cannot retract one the server already holds.** Skipped in LAVA (that queued
+  escape is keeping us alive) and never reached by the PULL path (whose escape rides the attack).
+- **No route did not mean no exit.** `_backDir` returns nil whenever
+  `explore.fromRoom == MAP.current` or the anchor is stale -- both normal after a pull, a tumble
+  or a forced move -- and the room had an east exit throughout. `S._escapeLastResort()` takes any
+  planar non-lava exit when `S._dyingFast()` (the time-to-death watchdog, or the absolute
+  `panicHp` floor -- **not** `_panicHpHit`, whose `panicAt` defaults to the same 35 as `escapeAt`
+  and would make it fire always). Reuses `S._panicDir` as the scanner; echoes the downgrade
+  loudly; sets `S.mode = "escape"`, not `"pull"`, since there is no verified way back in.
+
+**One emergency, one clock (v4.7.314)**: `onTick`'s low-HP branch had no cooldown where
+`onVitals` had `EMERGENCY_COOLDOWN`, so it re-entered the escape every tick. It now shares the
+constant *and* `S._lastEmergencyAt`.
+
 **A lost move is RETRIED (v4.7.235)**: `onMoveFailed` used to go idle and rely on the next tick.
 The tick is EVENT-driven, and in a stationary slugfest the gap measured **fourteen seconds**.
 Bounded by `S.PULL_RETRIES`, hold re-armed on each retry.

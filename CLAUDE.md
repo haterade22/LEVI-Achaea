@@ -948,9 +948,30 @@ every tactical move passes -- plus the panic tumble, the no-swing pull fallback 
 `_onPullSent`; cleared when the room number ACTUALLY CHANGES, on reset, and at
 `ESCAPE_MODE_MAX` (12s). **It arms at `_onPullSent`, never `_beginPull`**: a pull's escape RIDES
 the next attack (the `swarmPullDir` decorator makes the round `<attack>;<backdir>`), so gating
-at arm time starves the swing carrying the step-out. `_beginEscape` clears it again when there
-is no route back -- fighting in place is then the best answer and muting the basher would be
-lethal. **The ice-slip recovery re-sent the WRONG COMMAND** (v4.7.243): `M.onIceSlip` called
+at arm time starves the swing carrying the step-out. `_beginEscape` does not arm at all when
+there is no route back -- fighting in place is then the best answer and muting the basher would
+be lethal. **IT USED TO ARM AND ANNOUNCE FIRST, THEN RELEASE SILENTLY (v4.7.314).** `escapeOn`
+only prints when `_escapeAnnounced` is falsy and only `escapeOff` clears that flag, so the live
+death log's SIX banners in 1.7s were six arm/announce/release cycles -- and each release was a
+window the prompt dispatcher put a full attack round through, while the banner said the opposite.
+Two rules out of it: **do not tear down (or mute, or announce) until you know you can replace it**
+-- `S.disengage` had the same shape, calling `S.reset()` (which sends `cq all`) before asking
+whether an escape was even possible, now gated on the side-effect-free `S._escapeRouteReady()`;
+and **a hold stops the NEXT round being queued, it cannot retract one the server already holds**,
+so `_tacticalGo` now sends `cq all` before its move (the escape rides the FREE queue, a committed
+attack rides the STANDARD queue, and the attack takes balance first -- which is why the `-> e`
+landed with nothing to backflip on). That flush is skipped in LAVA, where the queued escape is
+the one command keeping us alive, and never reaches the PULL path, whose escape rides the attack.
+**The validated-route rule now has the lava exception** (`S._escapeLastResort`, user-directed):
+`_backDir` returns nil whenever `explore.fromRoom == MAP.current` or the anchor is stale -- both
+NORMAL after a pull, a tumble or a forced move -- and the room that killed us had an east exit the
+whole time. When `S._dyingFast()` (the time-to-death watchdog, or the ABSOLUTE `panicHp` floor --
+**not** `_panicHpHit`, whose `panicAt` defaults to the same 35 as `escapeAt` and would make it
+fire always), any planar exit that is not known lava beats standing. It reuses `S._panicDir` as
+the scanner and echoes the downgrade loudly, because a deliberate rule-break that reads like an
+ordinary retreat is indistinguishable from a bug. Also v4.7.314: `onTick`'s low-HP branch had **no
+cooldown at all** where `onVitals` had `EMERGENCY_COOLDOWN`; it now shares both the constant and
+`S._lastEmergencyAt`, since two unsynchronised clocks on one emergency is how the churn returns. **The ice-slip recovery re-sent the WRONG COMMAND** (v4.7.243): `M.onIceSlip` called
 `_exploreMove`, which sends a bare `stand;<dir>` WALK -- discarding the leap/backflip the
 retreat was, and a walk into our own icewall silently fails. With `MAX_ICE_SLIPS = 15` that
 cost thirteen seconds in the room that killed us. Tactical slips now hand back to

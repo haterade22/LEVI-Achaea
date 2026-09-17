@@ -1754,7 +1754,11 @@ describe("the movement lock (v4.7.243)", function()
     expect(#sent).toBe(0)
     S.onTumbleDone()
     S._tacticalGo("s", "test")
-    expect(#sent).toBe(1)
+    -- v4.7.314: a tactical move now FLUSHES first -- an attack already committed to the server
+    -- queue would otherwise take the balance the escape needs. Two sends, in this order.
+    expect(#sent).toBe(2)
+    expect(sent[1]).toBe("cq all")
+    expect(sent[2]:find("s", 1, true) ~= nil).toBeTrue()
   end)
 
   it("blocks a second panic tumble", function()
@@ -2275,5 +2279,186 @@ describe("a reset in lava does not flush the escape", function()
     for _, c in ipairs(cmds) do if c == "cq all" then flushed = true end end
 
     expect(flushed).toBeTrue()
+  end)
+end)
+
+-- ===========================================================================
+-- v4.7.314: the escape banner that was never true
+--
+-- The death: "ESCAPE MODE -- attacks held until we are out" printed SIX times in 1.7s while
+-- two full attack rounds fired through it, and the move landed 1.7s late with no balance
+-- behind it. _beginEscape armed and ANNOUNCED the hold before asking whether it could leave,
+-- then released it silently on the no-route branch -- and every release was a window the
+-- prompt dispatcher put a round through.
+-- ===========================================================================
+describe("v4.7.314 -- escape mode arms only when it can actually leave", function()
+  -- Strip the validated back edge AND the last-resort scanner's exits, so there is genuinely
+  -- no way out. Indoors, so the hover branch cannot answer instead.
+  local function noRouteRoom()
+    fixture(1)
+    ataxiaBasher.inMnemosyne = true
+    gmcp.Room.Info.details = { "indoors" }
+    M.explore.fromRoom = nil       -- no validated back edge
+    MAP.rooms[200].exits = {}      -- and no exit for _panicDir to fall back on
+    S._lastDisengageAt = nil
+  end
+
+  local function capture(fn)
+    local said = {}
+    local realEcho = S._echo
+    S._echo = function(m) said[#said + 1] = tostring(m) end
+    local ok, err = pcall(fn)
+    S._echo = realEcho
+    if not ok then error(err) end
+    return said
+  end
+
+  it("does not arm OR announce when there is no route and we are not dying fast", function()
+    noRouteRoom()
+    ataxiaBasher_isDamageRateExtreme = function() return false end
+    ataxia.vitals.hp = 9000 -- well above the panicHp floor
+
+    local said = capture(function() expect(S._beginEscape("test")).toBeFalse() end)
+
+    -- The basher must be left free to fight in place -- that part was always correct.
+    expect(ataxiaTemp.escapeMode).toBe(nil)
+    -- The part that was not: it printed the banner anyway.
+    local sawBanner = false
+    for _, m in ipairs(said) do
+      if m:find("ESCAPE MODE", 1, true) then sawBanner = true end
+    end
+    expect(sawBanner).toBeFalse()
+  end)
+
+  it("repeated failures stay silent -- six banners in 1.7s was the symptom", function()
+    noRouteRoom()
+    ataxiaBasher_isDamageRateExtreme = function() return false end
+    ataxia.vitals.hp = 9000
+
+    local said = capture(function()
+      for _ = 1, 6 do expect(S._beginEscape("test")).toBeFalse() end
+    end)
+
+    local banners = 0
+    for _, m in ipairs(said) do
+      if m:find("ESCAPE MODE", 1, true) then banners = banners + 1 end
+    end
+    expect(banners).toBe(0)
+    expect(ataxiaTemp.escapeMode).toBe(nil)
+  end)
+
+  -- The lava rule, generalised: when staying is provably lethal, any door beats the floor.
+  it("takes an UNVALIDATED exit when the damage watchdog says we are dying", function()
+    fixture(1)
+    ataxiaBasher.inMnemosyne = true
+    gmcp.Room.Info.details = { "indoors" }
+    M.explore.fromRoom = nil            -- no validated back edge ...
+    MAP.rooms[200].exits = { east = 0 } -- ... but the room plainly has a door
+    ataxiaBasher_isDamageRateExtreme = function() return true end
+
+    local realSend = send
+    local cmds = {}
+    send = function(c) table.insert(cmds, c) end
+    local said = capture(function() expect(S._beginEscape("test")).toBeTrue() end)
+    send = realSend
+
+    expect(ataxiaTemp.escapeMode).toBeTrue()
+    expect(S.mode).toBe("escape") -- NOT "pull": there is no verified way back in
+    local movedEast, saidDowngrade = false, false
+    for _, c in ipairs(cmds) do
+      if c:find("stand", 1, true) and c:sub(-2) == " e" then movedEast = true end
+    end
+    for _, m in ipairs(said) do
+      if m:find("NO VALIDATED ROUTE", 1, true) then saidDowngrade = true end
+    end
+    expect(movedEast).toBeTrue()
+    -- A deliberate rule-break must not look like an ordinary retreat in the log.
+    expect(saidDowngrade).toBeTrue()
+  end)
+
+  it("does NOT take an unvalidated exit at merely-low HP", function()
+    fixture(1)
+    ataxiaBasher.inMnemosyne = true
+    gmcp.Room.Info.details = { "indoors" }
+    M.explore.fromRoom = nil
+    MAP.rooms[200].exits = { east = 0 }
+    ataxiaBasher_isDamageRateExtreme = function() return false end
+    ataxia.vitals.hp = 9000 -- low enough for the ladder, nowhere near the crash floor
+
+    expect(S._beginEscape("test")).toBeFalse()
+    expect(ataxiaTemp.escapeMode).toBe(nil)
+  end)
+
+  -- S.disengage used to reset (cq all, tactic torn down) and THEN discover it could not leave.
+  it("a doomed disengage does not tear down the tactic first", function()
+    noRouteRoom()
+    ataxiaBasher_isDamageRateExtreme = function() return false end
+    ataxia.vitals.hp = 9000
+    S.state = "funnel"
+    local realSend = send
+    local cmds = {}
+    send = function(c) table.insert(cmds, c) end
+
+    expect(S.disengage("no route")).toBeFalse()
+    send = realSend
+
+    expect(S.state).toBe("funnel")   -- not reset out from under us
+    expect(#cmds).toBe(0)            -- and no `cq all`
+    expect(S._lastDisengageAt).toBe(nil) -- failure still must not burn the 10s cooldown
+  end)
+
+  -- The balance thief: the move rides the FREE queue, a committed attack rides the STANDARD
+  -- queue, and the attack takes balance first.
+  it("_tacticalGo flushes the committed attack before queueing the move", function()
+    fixture(1)
+    -- Stub `send` locally, as the lava tests above do: the file-level `sent` table is not
+    -- reliable this late in the run (another test leaves the global `send` replaced).
+    local realSend = send
+    local cmds = {}
+    send = function(c) table.insert(cmds, c) end
+    S._tacticalGo("s", "test")
+    send = realSend
+    expect(cmds[1]).toBe("cq all")
+    expect(cmds[2]:find("stand", 1, true) ~= nil).toBeTrue()
+  end)
+
+  -- onVitals was throttled by EMERGENCY_COOLDOWN; onTick's low-HP branch calls the same
+  -- machinery for the same reason and had no bound at all, so it ran every tick -- and each
+  -- pass reset the tactic (`cq all`) before re-entering the escape.
+  it("onTick's low-HP branch is throttled like onVitals, and shares its stamp", function()
+    fixture(1)
+    ataxiaBasher.inMnemosyne = true
+    gmcp.Room.Info.details = { "indoors" }
+    ataxia.vitals = { hpp = 20, hp = 9000 } -- under escapeAt, above the crash floor
+    ataxiaBasher_isDamageRateExtreme = function() return false end
+
+    local realSend = send
+    local cmds = {}
+    send = function(c) table.insert(cmds, c) end
+    for _ = 1, 6 do S.onTick() end -- six ticks inside one cooldown window
+    send = realSend
+
+    -- One escape, not six. The move is `cq all` + the jump.
+    local moves = 0
+    for _, c in ipairs(cmds) do
+      if c:find("stand", 1, true) and c:find("leap", 1, true) then moves = moves + 1 end
+    end
+    expect(moves).toBe(1)
+    -- And it shares onVitals' stamp, so the two clocks cannot drift apart.
+    expect(S._lastEmergencyAt ~= nil).toBeTrue()
+  end)
+
+  it("but NOT while standing in lava -- that queued escape is keeping us alive", function()
+    fixture(1)
+    local realSend, realLava = send, M.roomLava
+    local cmds = {}
+    send = function(c) table.insert(cmds, c) end
+    M.roomLava = function() return true end
+    S._tacticalGo("s", "test")
+    send, M.roomLava = realSend, realLava
+    local flushed = false
+    for _, c in ipairs(cmds) do if c == "cq all" then flushed = true end end
+    expect(flushed).toBeFalse()
+    expect(#cmds).toBe(1) -- the move still goes out
   end)
 end)

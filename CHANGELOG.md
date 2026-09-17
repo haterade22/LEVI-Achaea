@@ -2,6 +2,129 @@
 
 ---
 
+## 2026-09-17 - The escape banner that was never true (v4.7.314)
+
+User, with a death log from a Mnemosyne swarm room: *"this should not be happening (me dying). As
+it was trying to escape but also kept attacking."*
+
+`ESCAPE MODE -- attacks held until we are out` printed **six times in 1.7 seconds** while two full
+attack rounds fired through it. The move went out 1.7s after the first banner, and 2115 + 1303 +
+1086 = **4504** landed -- exactly the health in the prompt.
+
+### The banner was a lie, and the un-mute was silent
+
+`S._beginEscape` opened with `S.escapeOn(why)` -- muting the basher and printing the banner --
+**before** asking whether it could leave at all. The no-route branch then called `S.escapeOff()`,
+which un-mutes *silently*. Because `escapeOn` only prints when `_escapeAnnounced` is falsy and only
+`escapeOff` clears that flag, six banners is proof of six arm/announce/release cycles -- and every
+release was a window `ataxiaBasher_attack`'s `escapeMode` gate let a full round through.
+
+Releasing on no-route is CORRECT and stays (fighting in place is exactly when the basher must not
+be muted). Announcing a hold we are about to drop is not. The arming now happens only on a path
+that commits to leaving. **The regression test reproduces the log exactly: reverted, it counts 6.**
+
+### Why there was no route, and the exception that answers it
+
+`S._backDir()` returns nil whenever `explore.fromRoom == MAP.current` or the anchor is stale --
+both NORMAL after a pull, a tumble or a forced move. The room had an east exit the whole time; we
+eventually left through it. Today that case means "fight in place", at ~2,000 HP/s.
+
+`S._escapeLastResort()` generalises the rule BOILING LAVA already carries (`M.onLava` takes any
+door because a tick is 54% of the pool): **when staying is provably lethal, any door beats the
+floor.** Gated on `S._dyingFast()` -- the time-to-death watchdog, or the ABSOLUTE `panicHp` floor.
+Deliberately **not** `S._panicHpHit`, whose percentage line is `panicAt`, defaulting to the same 35
+as `escapeAt` -- on the low-HP ladder that is true by construction and would have made the last
+resort fire *always*, which is not what was asked for. It reuses `S._panicDir` as the scanner
+rather than adding one: that already prefers the validated back edge, excludes known lava
+outright, avoids our own icewall, and walks a SORTED list so the same room picks the same door.
+The downgrade is echoed distinctly -- a deliberate rule-break that looks like an ordinary retreat
+is indistinguishable from a bug the next time the log is read. `S.mode = "escape"`, not `"pull"`:
+there is no verified way back in.
+
+### The leaked rounds ate the balance the escape needed
+
+The move rides the **free** queue; an attack committed by `queue addclearfull freestand` rides the
+**standard** queue. They coexist, and the attack takes balance first -- so `-> e` sat there with
+nothing to backflip on. **Every gate here is evaluated at send time: a hold stops the NEXT round
+being queued, it cannot retract one the server already holds.** `S._tacticalGo` now sends
+`cq all` first. Two paths must never get that flush, and both are guarded: standing in LAVA the
+queued escape is the one command keeping us alive (the same reasoning guards `S.reset`), and a
+PULL's escape RIDES the attack, so flushing would destroy the very swing carrying the step-out.
+
+### Ask before destroying
+
+`S.disengage` called `S.reset()` -- which sends `cq all` and tears down the running tactic -- and
+THEN asked `_beginEscape` whether an escape was possible. On a no-route room that is a destructive
+no-op repeated on every prompt. `S._escapeRouteReady()` is side-effect-free and is now asked first.
+This replaces the blanket retry throttle the plan called for: a fixed cooldown would have delayed
+the documented contract that a failed attempt must not lock us out *"the moment a route exists"* --
+and the existing test for that contract caught it.
+
+### One emergency, one clock
+
+`S.onTick`'s low-HP branch called the same machinery as `S.onVitals` for the same reason and had
+**no bound at all**, so it ran every tick, resetting the tactic each pass. It now shares
+`EMERGENCY_COOLDOWN` *and* `S._lastEmergencyAt` -- two unsynchronised clocks on one emergency is
+how this churn comes back.
+
+### Also in this version: both Kai Choke lines captured, and one of them had never fired
+
+User: *"Can we highlight this like we did kai enfeeble."*
+
+Both halves are now `chartreuse` bold -- the attack-LANDED colour shared with Spirit Rend, Arc and
+Thunderclap-bisect:
+
+- CAST: `Your face contorted in a twisted grimace, you clench your fists to crush the life out of
+  your foe.` (`leviatax/004_Kai_Choke.lua`)
+- LANDED: `<mob> gasps and stumbles as an unseen force crushes the life breath out of him.`
+  (`highlighting/063_Kai_Choke_Landed.lua`, new)
+
+**THE CAST TRIGGER COULD NEVER FIRE IN PvE.** Its pattern was
+`^...crush the life out of (\w+)\.$` -- ONE word before the period, which is a player's name and
+never a denizen's, because against a denizen **the game says "your foe"**. Two words, so the
+anchored line failed outright and its party relay had never run in PvE. This is the v4.7.313
+tempo-trigger bug in a second file: *a trigger written for a one-word player name is a trigger that
+has never fired in PvE.*
+
+Both triggers use **two substring fragments** rather than one anchored regex (the
+`080_Spirit_Rend_Confirmed` convention): Achaea wraps server-side at the player's width, the cast
+line is long, and the landed line opens with an arbitrary-length denizen short description. Neither
+fragment reaches the name or the gendered pronoun.
+
+Two deliberate calls. **The relay is narrowed to PvP** (`type(target) ~= "number"`): fixing the
+pattern makes this fire in PvE for the first time, where the Monk basher chokes on cooldown at
+every 2-denizen room, and an unchanged relay would have spammed the party with
+`Kai Choked 12345` every round. **A wrapped line matches both fragments**, so the highlight applies
+to each physical line (correct -- both halves are the same event) while the relay is throttled to
+once. And the landed line is a **highlight only**: clearing `ataxiaTemp.kaiChokePendingAt` there
+would be an honest confirmation, but that guard exists so an *eaten* choke retries, and a flag
+cleared only by a confirmation livelocks the moment the confirmation cannot arrive (v4.7.167) --
+a behaviour change to make on its own evidence, not as a side effect of adding a colour.
+
+Notable: the landed line was uncaptured entirely, so a choke **without** the Kai Unleashed boon had
+no visible confirmation at all -- the burst line (`mnemosyne/031`) only prints with the boon.
+
+### Files
+
+- `mnemosyne/009_Swarm_Tactics.lua` -- `_beginEscape`, `_tacticalGo`, `disengage`, `onTick`; new
+  `_dyingFast`, `_escapeLastResort`, `_escapeRouteReady`.
+- `tests/test_swarm_tactics.lua` -- 8 new tests. **Every one break-back verified**: each fix
+  reverted individually fails exactly its own test and nothing else.
+- `leviatax/004_Kai_Choke.lua` -- pattern fixed, highlight added, relay narrowed to PvP.
+- `highlighting/063_Kai_Choke_Landed.lua` -- new.
+- `.claude/classes/monk.md` -- both lines recorded under `kai_unleashed`.
+
+### Known, not fixed
+
+- **No heal fired in the window.** The ladder's only client-side heal is the Vitalising Tincture,
+  and it is inert by default (`tinctureCmd` is nil -- the command was never confirmed). Sipping is
+  server-side. Whether SSC was sipping at all here is worth its own look.
+- **A test-harness leak**: some test replaces the global `send` without restoring it, so the
+  file-level `sent` table is unreliable late in the run. The new tests stub `send` locally, as the
+  lava tests already do. Existing assertions on `sent` after that point may be silently vacuous.
+
+---
+
 ## 2026-09-16 - The position triggers never read a denizen; flourish once per front; the boon needs a crowd (v4.7.313)
 
 User, with a live log of `blade flourish` firing on every balance -- back, side, front, back,
