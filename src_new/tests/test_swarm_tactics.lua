@@ -122,6 +122,10 @@ local function fixture(count)
   S._wallsRipple = nil
   S.tumbleResolvedAt, S._recoverTumbles = nil, nil -- fixture rewinds the clock; these must go with it
   S._meltRoom, S._meltTries = nil, nil
+  -- v4.7.321: the hover/escape clocks. A stamp left by an earlier test sits in this test's FUTURE
+  -- once the clock rewinds, and reads as fresh evidence (a flightUpAt >= recoverStarted is "up").
+  S.flightUpAt, S.hoverSeenUpAt, S._escapeStartedAt, S._strayLandAt = nil, nil, nil, nil
+  gmcp.Room.Info.name = nil
   mobs = count or 3
   MAP.current = 200
   MAP.rooms = {
@@ -806,12 +810,20 @@ describe("swarm low-HP escape ladder", function()
     fixture(2)
     ataxia.vitals = { hpp = 30 }
     S.onTick()
+    -- v4.7.321: model a hover that is genuinely UP with an empty sky -- the fly confirmed, gmcp
+    -- naming the room "Flying above", and Char.Items (which reflects the sky while airborne) empty.
+    -- Before v4.7.321 the hover never checked any of this, so the old fixture left the ground
+    -- room's two mobs "in our company" for the whole 120s; the hover now rightly ends on that.
+    mobs = 0
+    S.flightConfirmed, S.flightUpAt = true, clock
+    gmcp.Room.Info.name = "Flying above A corridor."
     clock = clock + 120 -- past RECOVER_MAX
     expect(S.onTick()).toBeTrue() -- consumed: settle on real ground data first
     expect(S.state).toBe("idle")
     expect(S.flying).toBe(nil)
     expect(M.explore.settling).toBeTrue()
     M.explore.settling = false
+    gmcp.Room.Info.name = nil
   end)
 
   it("retreats to the cleared room indoors (no fly available) -- by LEAP", function()
@@ -2128,6 +2140,550 @@ end)
 -- Restore the mock send for whoever runs after us (see the note at the top).
 send = _mockSend
 
+-- ---------------------------------------------------------------------------
+-- v4.7.321: THE HOVER IS NOT A SANCTUARY (a death, 2026-09-18). Dream horrors FLEW UP after us,
+-- knocked us to the ground, and we sat there ~52s with every attack held by the recovery hover
+-- until its 60s cap -- then re-hovered into a web that refused the fly, and died.
+-- ---------------------------------------------------------------------------
+describe("the recovery hover checks its own premise", function()
+  -- `send` is the mock's own from here on (restored above), so a test that asserts on commands
+  -- captures locally -- and restores even if its body throws.
+  local function capture(fn)
+    local got, real = {}, send
+    send = function(cmd) got[#got + 1] = cmd end
+    local ok, err = pcall(fn)
+    send = real
+    if not ok then error(err, 0) end
+    return got
+  end
+  local function has(cmds, want)
+    for i, c in ipairs(cmds) do if c == want then return i end end
+    return nil
+  end
+  local FLY = "queue addclear free stand;fly"
+  -- Start a hover, SEE it airborne with an empty sky (the evidence the checks key on), and step
+  -- past the takeoff settle.
+  local function hovering()
+    fixture(2)
+    ataxiaBasher.inMnemosyne = true
+    ataxia.vitals = { hpp = 30 }
+    S.onTick()                                  -- low HP -> fly and hover
+    expect(S.state).toBe("recovering")
+    mobs = 0                                    -- Char.Items reflects the (empty) SKY
+    S.onFlightUp()                              -- the fly line
+    gmcp.Room.Info.name = "Flying above A corridor."
+    ataxia.vitals = { hpp = 60 }                -- recovering; not yet at recoverAt
+    clock = clock + 2
+    expect(S.onTick()).toBeTrue()               -- the hover sees itself airborne
+    expect(S.state).toBe("recovering")
+    expect(S.hoverSeenUpAt ~= nil).toBeTrue()
+    clock = clock + 2                           -- past ARRIVE_SETTLE
+  end
+  local function done()
+    gmcp.Room.Info.name = nil
+    M.explore.settling = false
+  end
+
+  it("a real hover with an empty sky keeps holding -- and nothing lands it", function()
+    hovering()
+    local cmds = capture(function() expect(S.onTick()).toBeTrue() end)
+    expect(S.state).toBe("recovering")
+    expect(ataxiaTemp.swarmHold).toBeTrue()
+    expect(has(cmds, "land")).toBe(nil)
+    done()
+  end)
+
+  -- THE DEATH: gmcp stopped saying "Flying above" at 12:10:37 and the swarm never noticed.
+  it("ends the hover when gmcp says we are no longer airborne -- releasing BOTH holds", function()
+    hovering()
+    gmcp.Room.Info.name = "A narrow pathway of grey pebbles."
+    expect(S.onTick()).toBeTrue()               -- consumed: the landing settles
+    expect(S.state).toBe("idle")
+    expect(ataxiaTemp.swarmHold).toBe(nil)      -- the recovery hold
+    expect(ataxiaTemp.escapeMode).toBe(nil)     -- ...and the escape mode the hover also armed
+    expect(S.grounded).toBeTrue()               -- whatever did it lives on this ripple
+    expect(M.explore.settling).toBeTrue()
+    done()
+  end)
+
+  it("ends the hover when a denizen is in the air with us, and comes down", function()
+    hovering()
+    mobs = 2
+    local cmds = capture(function() expect(S.onTick()).toBeTrue() end)
+    expect(S.state).toBe("idle")
+    expect(ataxiaTemp.swarmHold).toBe(nil)
+    expect(S.grounded).toBeTrue()
+    expect(has(cmds, "land") ~= nil).toBeTrue() -- gmcp says we are up: get out of the air
+    done()
+  end)
+
+  -- The review's lead finding. FLY needs balance: at the first ticks we are often still on the
+  -- ground, and gmcp (correctly) lists the mobs we are fleeing. The first cut called that
+  -- "company in the air", killed the hover before takeoff and latched no-flying for the ripple.
+  it("never calls the ground we are leaving 'company in the air' -- before takeoff", function()
+    fixture(2)
+    ataxia.vitals = { hpp = 30 }
+    S.onTick()
+    ataxia.vitals = { hpp = 40 }
+    gmcp.Room.Info.name = "A corridor."         -- the fly is still waiting on balance
+    for _ = 1, 4 do                             -- 8s, all inside FLY_CONFIRM_MAX (mobs stay 2)
+      clock = clock + 2
+      expect(S.onTick()).toBeTrue()
+      expect(S.state).toBe("recovering")
+    end
+    expect(S.grounded).toBe(nil)
+    done()
+  end)
+
+  -- The mutation review's hole: the tick only looks every RECOVER_TICK, so a knock-down inside the
+  -- first window left no "seen up" -- and the knock-down check never armed until the 60s cap.
+  it("a takeoff noted by the gmcp.Room event is judged even if a tick never saw it", function()
+    fixture(2)
+    ataxiaBasher.inMnemosyne = true
+    ataxia.vitals = { hpp = 30 }
+    S.onTick()
+    mobs = 0
+    ataxia.vitals = { hpp = 60 }
+    local mock = require("mock_mudlet")
+    local list = mock.named_handlers and mock.named_handlers["gmcp.Room"]
+    local handler = list and list[S._roomH]
+    expect(type(handler)).toBe("function")
+    gmcp.Room.Info.name = "Flying above A corridor."
+    handler("gmcp.Room")                        -- the takeoff, as gmcp reports it
+    clock = clock + 1
+    gmcp.Room.Info.name = "A narrow pathway."   -- knocked down before any tick saw us up
+    clock = clock + 1
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("idle")
+    expect(S.grounded).toBeTrue()
+    done()
+  end)
+
+  -- Wings, class flight, anything but the ring: no 022 line, so no flightConfirmed. The check is
+  -- keyed on what gmcp showed, not on the line.
+  it("a hover seen up by gmcp alone is still judged when it comes down", function()
+    fixture(2)
+    ataxiaBasher.inMnemosyne = true
+    ataxia.vitals = { hpp = 30 }
+    S.onTick()
+    mobs = 0
+    ataxia.vitals = { hpp = 60 }
+    gmcp.Room.Info.name = "Flying above A corridor."
+    clock = clock + 2
+    expect(S.onTick()).toBeTrue()
+    expect(S.flightConfirmed).toBe(nil)
+    clock = clock + 2
+    gmcp.Room.Info.name = "A narrow pathway."
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("idle")
+    done()
+  end)
+
+  it("does not call a missing room name 'no longer airborne'", function()
+    hovering()
+    gmcp.Room.Info.name = nil                   -- no word from gmcp is not a word about the ground
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")
+    done()
+  end)
+
+  it("a kite converting to a hover carries no earlier hover's evidence", function()
+    fixture(3)
+    ataxiaBasher.inMnemosyne = true
+    S.state, S.flying, S.flightConfirmed = "funnel", true, true
+    S.funnelRoom = MAP.current
+    S.hoverSeenUpAt = clock - 100               -- a previous hover's, never cleared
+    gmcp.Char = { Vitals = { hp = "2000", maxhp = "10000" } }
+    S.onVitals()
+    gmcp.Char = nil
+    expect(S.state).toBe("recovering")
+    ataxia.vitals = { hpp = 20 }
+    gmcp.Room.Info.name = "A corridor."         -- mid-swing: the kite had landed to hit
+    clock = clock + 2
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")          -- not "knocked out of the sky"
+    done()
+  end)
+
+  it("only a LEADING 'Flying above' is flight -- the mapper strips it the same way", function()
+    gmcp.Room.Info.name = "Flying above A corridor."
+    expect(S._gmcpFlying()).toBeTrue()
+    gmcp.Room.Info.name = "The Hall of Flying above the Sea"
+    expect(S._gmcpFlying()).toBeFalse()
+    done()
+  end)
+
+  it("times the settle from TAKEOFF, not from the fly send", function()
+    fixture(2)
+    ataxia.vitals = { hpp = 30 }
+    S.onTick()
+    ataxia.vitals = { hpp = 40 }
+    clock = clock + 4                           -- a slow takeoff: two balances
+    S.onFlightUp()
+    gmcp.Room.Info.name = "Flying above A corridor."
+    -- mobs stays 2: Char.Items has not been re-pushed for the sky yet
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")          -- inside ARRIVE_SETTLE of the takeoff
+    mobs = 0                                    -- the sky's own (empty) list arrives
+    clock = clock + 2
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")
+    done()
+  end)
+
+  it("ends the hover when the fly never took -- without grounding the ripple", function()
+    fixture(2)
+    ataxia.vitals = { hpp = 30 }
+    S.onTick()                                  -- fly sent; nothing ever says we are up
+    mobs = 0
+    ataxia.vitals = { hpp = 60 }
+    gmcp.Room.Info.name = "A corridor."
+    clock = clock + 8
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")          -- a slow balance is not a failure yet
+    clock = clock + 3                           -- past FLY_CONFIRM_MAX (10)
+    local cmds = capture(function() expect(S.onTick()).toBeTrue() end)
+    expect(S.state).toBe("idle")
+    expect(ataxiaTemp.swarmHold).toBe(nil)
+    expect(S.grounded).toBe(nil)                -- transient cause: the ripple may still fly
+    expect(S._canFly()).toBeTrue()
+    expect(has(cmds, "cq all") ~= nil).toBeTrue() -- the fly may still be queued: kill it
+    expect(has(cmds, "land")).toBe(nil)         -- no evidence we ever left the ground
+    done()
+  end)
+
+  it("a stale confirmation from an earlier hover is not evidence for this one", function()
+    fixture(2)
+    S.flightConfirmed, S.flightUpAt = true, clock - 30 -- an earlier hover's, never cleared
+    ataxia.vitals = { hpp = 30 }
+    S.onTick()
+    expect(S.flightConfirmed).toBe(nil)
+    ataxia.vitals = { hpp = 40 }
+    gmcp.Room.Info.name = "A corridor."
+    clock = clock + 2
+    local cmds = capture(function() expect(S.onTick()).toBeTrue() end)
+    expect(S.state).toBe("recovering")          -- not judged: we have not been seen up
+    expect(has(cmds, FLY) ~= nil).toBeTrue()    -- ...so the eaten-fly re-send still runs
+    -- ...and the stale stamp does not pass for a takeoff: the budget still ends a fly that never took.
+    clock = clock + 9
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("idle")
+    done()
+  end)
+
+  -- The ring's fly line (022) is proof of takeoff on its own: the budget is for a fly with NO
+  -- evidence, and must not call a confirmed takeoff a failed one because gmcp is silent.
+  it("the fly line alone is proof of takeoff -- the budget does not fire", function()
+    fixture(2)
+    ataxia.vitals = { hpp = 30 }
+    S.onTick()
+    mobs = 0
+    ataxia.vitals = { hpp = 60 }
+    clock = clock + 3
+    S.onFlightUp()
+    gmcp.Room.Info.name = nil                   -- gmcp silent about the room
+    clock = clock + 9                           -- 12s after the send: past FLY_CONFIRM_MAX
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("recovering")
+    done()
+  end)
+
+  it("stops re-sending fly once gmcp says we are up (no captured line needed)", function()
+    fixture(2)
+    ataxia.vitals = { hpp = 30 }
+    S.onTick()
+    mobs = 0
+    ataxia.vitals = { hpp = 40 }
+    gmcp.Room.Info.name = "Flying above A corridor." -- wings/class flight: no 022 line
+    clock = clock + 2
+    local cmds = capture(function() expect(S.onTick()).toBeTrue() end)
+    expect(has(cmds, FLY)).toBe(nil)
+    expect(S.state).toBe("recovering")
+    done()
+  end)
+
+  it("does not trust the room name under dementia", function()
+    hovering()
+    MAP.drActive = function() return true end
+    gmcp.Room.Info.name = "A hallucinated hall."
+    local ok, err = pcall(function()
+      expect(S.onTick()).toBeTrue()
+      expect(S.state).toBe("recovering")
+    end)
+    MAP.drActive = nil
+    done()
+    if not ok then error(err, 0) end
+  end)
+
+  it("hands back to FIGHT, not a new escape, when HP is no longer low", function()
+    hovering()
+    ataxia.vitals = { hpp = 80 }                -- above escapeAt: the ladder does not re-run
+    gmcp.Room.Info.name = "A narrow pathway."
+    S.onTick()
+    expect(S.state).toBe("idle")
+    expect(ataxiaTemp.swarmHold).toBe(nil)
+    expect(ataxiaTemp.escapeMode).toBe(nil)
+    done()
+  end)
+
+  it("re-runs the ladder ON FOOT when HP is still low", function()
+    hovering()
+    ataxia.vitals = { hpp = 20 }
+    gmcp.Room.Info.name = "A narrow pathway."
+    expect(S.onTick()).toBeTrue()
+    expect(S.grounded).toBeTrue()
+    expect(S.state).toBe("pulling")             -- the grounded retreat, not another hover
+    expect(ataxiaTemp.escapeMode).toBeTrue()
+    expect(S.flying).toBe(nil)
+    done()
+  end)
+
+  -- The flyer lines, as the trigger feeds them.
+  it("a flyer rising to our level ends the hover at once, and we come down", function()
+    hovering()
+    local cmds = capture(function()
+      S.onFlightTruth("A dream horror flies up to your level from below.")
+    end)
+    expect(S.state).toBe("idle")
+    expect(S.grounded).toBeTrue()
+    expect(ataxiaTemp.swarmHold).toBe(nil)
+    expect(has(cmds, "land") ~= nil).toBeTrue()
+    done()
+  end)
+
+  it("a flyer swooping down beside us ends the hover", function()
+    hovering()
+    S.onFlightTruth("A dream horror swoops down from the skies to land beside you.")
+    expect(S.state).toBe("idle")
+    expect(S.flying).toBe(nil)
+    expect(S.grounded).toBeTrue()
+    done()
+  end)
+
+  it("a flyer during a KITE ends the kite properly -- landing, not just forgetting", function()
+    fixture(3)
+    ataxiaBasher.inMnemosyne = true
+    S.state, S.flying = "funnel", true
+    local cmds = capture(function()
+      S.onFlightTruth("A dream horror flies up to your level from below.")
+    end)
+    expect(S.grounded).toBeTrue()
+    expect(S.state).toBe("idle")
+    expect(S.flying).toBe(nil)
+    expect(has(cmds, "land") ~= nil).toBeTrue()
+  end)
+
+  it("a flyer seen on the ground latches the ripple and touches nothing else", function()
+    fixture(2)
+    ataxiaBasher.inMnemosyne = true
+    local cmds = capture(function()
+      S.onFlightTruth("A dream horror swoops down from the skies to land beside you.")
+    end)
+    expect(S.grounded).toBeTrue()
+    expect(S.state).toBe("idle")
+    expect(#cmds).toBe(0)
+  end)
+
+  it("outside the tower the lines mean nothing", function()
+    fixture(2)
+    local was = ataxiaBasher.inMnemosyne
+    ataxiaBasher.inMnemosyne = false
+    S.onFlightTruth("A dream horror flies up to your level from below.")
+    ataxiaBasher.inMnemosyne = was
+    expect(S.grounded).toBe(nil)
+  end)
+
+  it("'You are not flying, my friend.' corrects the physical belief -- only", function()
+    fixture(2)
+    ataxiaBasher.inMnemosyne = true
+    S.state, S.flying, S.flightConfirmed = "funnel", true, true -- a kite
+    S.onFlightTruth("You are not flying, my friend.")
+    expect(S.flightConfirmed).toBe(nil)
+    expect(S.flying).toBeTrue()                 -- the kite's MODE flag is not the line's to clear
+    expect(S.state).toBe("funnel")
+  end)
+
+  -- The death's 12:11:29: the reply to the cap's `land` arrived after a NEW hover had begun.
+  it("a stale 'not flying' reply does not kill a new hover", function()
+    hovering()
+    S.onFlightTruth("You are not flying, my friend.")
+    expect(S.state).toBe("recovering")
+    expect(S.onTick()).toBeTrue()               -- gmcp still says we are up; the sky is empty
+    expect(S.state).toBe("recovering")
+    done()
+  end)
+
+  -- The re-hover into the web -- and the retreat that would have been refused just the same.
+  it("bound: no hover, no retreat, nothing armed or announced", function()
+    fixture(2)
+    ataxia.afflictions = { webbed = true }
+    expect(S._canFly()).toBeFalse()
+    expect(S._canHover()).toBeFalse()
+    expect(S._escapeRouteReady()).toBeFalse()
+    expect(S._beginEscape()).toBeFalse()
+    expect(ataxiaTemp.escapeMode).toBe(nil)
+    expect(S.state).toBe("idle")
+    ataxia.vitals = { hpp = 30 }                -- and the tick's low-HP branch agrees
+    S.onTick()
+    expect(S.state).toBe("idle")
+    expect(ataxiaTemp.swarmHold).toBe(nil)
+    expect(ataxiaTemp.escapeMode).toBe(nil)
+    for _, k in ipairs({ "entangled", "transfixation", "impaled", "paralysis", "bound", "daeggerimpale" }) do
+      ataxia.afflictions = { [k] = true }
+      expect(S._bound()).toBeTrue()
+    end
+    ataxia.afflictions = {}
+    expect(S._canFly()).toBeTrue()
+    expect(S._escapeRouteReady()).toBeTrue()
+  end)
+
+  -- Same principle as v4.7.314's _escapeRouteReady: do not tear down what you cannot replace.
+  it("bound mid-pull: low HP does not flush a tactic it cannot replace", function()
+    fixture(3)
+    S.onTick()
+    expect(S.state).toBe("pulling")
+    ataxia.afflictions = { webbed = true }
+    gmcp.Char = { Vitals = { hp = "2000", maxhp = "10000" } }
+    local cmds = capture(function() S.onVitals() end)
+    gmcp.Char = nil
+    expect(S.state).toBe("pulling")
+    expect(has(cmds, "cq all")).toBe(nil)
+    clock = clock + 3
+    ataxia.vitals = { hpp = 20 }
+    cmds = capture(function() S.onTick() end)
+    ataxia.afflictions = {}
+    expect(has(cmds, "cq all")).toBe(nil)
+    expect(S.state).toBe("pulling")
+  end)
+
+  it("a fresh hover flushes the committed queue before the fly -- except in lava", function()
+    fixture(2)
+    ataxia.vitals = { hpp = 30 }
+    local cmds = capture(function() S.onTick() end)
+    local flush, fly = has(cmds, "cq all"), has(cmds, FLY)
+    expect(flush ~= nil and fly ~= nil).toBeTrue()
+    expect(flush < fly).toBeTrue()
+    fixture(2)
+    local realLava = M.roomLava
+    M.roomLava = function() return true end
+    ataxia.vitals = { hpp = 30 }
+    local ok, err = pcall(function() cmds = capture(function() S._beginEscape() end) end)
+    M.roomLava = realLava
+    if not ok then error(err, 0) end
+    expect(has(cmds, "cq all")).toBe(nil)       -- the queued lava escape must survive
+    expect(has(cmds, FLY) ~= nil).toBeTrue()
+  end)
+
+  -- The pre-existing race the hover exit made immediate: onVitals reset the escape it had
+  -- started two seconds earlier and re-ran the ladder from a clobbered anchor.
+  it("an escape it just started owns the situation -- for a bounded time", function()
+    fixture(2)
+    gmcp.Room.Info.details = { "indoors" }
+    ataxia.vitals = { hpp = 30 }
+    expect(S.onTick()).toBeTrue()
+    expect(S.state).toBe("pulling")
+    clock = clock + 3                           -- past EMERGENCY_COOLDOWN, inside ESCAPE_OWN
+    gmcp.Char = { Vitals = { hp = "2000", maxhp = "10000" } }
+    local cmds = capture(function() S.onVitals() end)
+    expect(S.state).toBe("pulling")
+    expect(has(cmds, "cq all")).toBe(nil)       -- the retreat was not flushed
+    clock = clock + 3
+    ataxia.vitals = { hpp = 20 }
+    cmds = capture(function() expect(S.onTick()).toBeTrue() end)
+    expect(has(cmds, "cq all")).toBe(nil)       -- ...nor by the tick's low-HP branch
+    clock = clock + (tonumber(S.ESCAPE_OWN) or 8) -- a stuck escape cannot wedge the ladder
+    cmds = capture(function() S.onVitals() end)
+    expect(has(cmds, "cq all") ~= nil).toBeTrue()
+    gmcp.Char = nil
+  end)
+
+  -- The ownership belongs to the ESCAPE: a pull begun after it has ended must stay replaceable,
+  -- or a low-HP prompt mid-pull would be ignored for the rest of the window.
+  it("a pull is a tactic, not an escape -- vitals may still replace it", function()
+    fixture(3)
+    S._escapeStartedAt = clock - 1              -- an escape that ended a moment ago
+    S.onTick()
+    expect(S.state).toBe("pulling")
+    gmcp.Char = { Vitals = { hp = "3000", maxhp = "10000" } }
+    local cmds = capture(function() S.onVitals() end)
+    gmcp.Char = nil
+    expect(has(cmds, "cq all") ~= nil).toBeTrue()
+    expect(S.state ~= "pulling").toBeTrue()
+  end)
+
+  it("lands a stray flight nothing else will land -- throttled", function()
+    fixture(0)
+    gmcp.Room.Info.name = "Flying above A corridor."
+    local cmds = capture(function() S.onTick() end)
+    expect(has(cmds, "land") ~= nil).toBeTrue()
+    cmds = capture(function() S.onTick() end)
+    expect(has(cmds, "land")).toBe(nil)         -- a refused land cannot spam
+    clock = clock + 3
+    cmds = capture(function() S.onTick() end)
+    expect(has(cmds, "land") ~= nil).toBeTrue()
+    done()
+  end)
+
+  it("the escape-mode banner never claims we are swinging while any hold is up", function()
+    local function expire(hold)
+      fixture(2)
+      local said, cb = {}, nil
+      local realEcho, realTimer = S._echo, tempTimer
+      S._echo = function(m) said[#said + 1] = tostring(m) end
+      tempTimer = function(_, f) cb = f; return 1 end
+      local ok, err = pcall(function()
+        S.escapeOn()
+        if hold then ataxiaTemp[hold] = true end
+        cb()
+      end)
+      tempTimer, S._echo = realTimer, realEcho
+      if hold then ataxiaTemp[hold] = nil end
+      if not ok then error(err, 0) end
+      for _, m in ipairs(said) do if m:find("swinging again", 1, true) then return true end end
+      return false
+    end
+    expect(expire("swarmHold")).toBeFalse()
+    expect(expire("phialHold")).toBeFalse()
+    expect(expire("bardComposeHold")).toBeFalse()
+    expect(expire(nil)).toBeTrue()              -- and with nothing holding, it says so
+  end)
+end)
+
+-- The two triggers, read and run as files: a guard inside a trigger is a guard the suite cannot
+-- see unless the suite reads the trigger (the v4.7.260 lesson).
+describe("v4.7.321 triggers", function()
+  it("091 feeds all three lines to onFlightTruth as tail substrings", function()
+    local f = io.open("src_new/triggers/levi_ataxia/for_levi/leviticus/mnemosyne/091_Flight_Truth.lua")
+    expect(f ~= nil).toBeTrue()
+    local src = f:read("*a"); f:close()
+    for _, want in ipairs({ "flies up to your level from below.",
+                            "swoops down from the skies to land beside you.",
+                            "You are not flying, my friend." }) do
+      expect(src:find("- pattern: " .. want .. "\n  type: 0", 1, true) ~= nil).toBeTrue()
+    end
+    expect(src:find("S.onFlightTruth(line)", 1, true) ~= nil).toBeTrue()
+  end)
+
+  it("344 says the arms are BOUND when they are, not broken", function()
+    local function fire(affs)
+      local said, realEcho, realAffs = {}, ataxiaEcho, ataxia.afflictions
+      ataxiaEcho = function(m) said[#said + 1] = m end
+      ataxia.afflictions = affs
+      local ok, err = pcall(dofile, "src_new/triggers/levi_ataxia/for_levi/leviticus/344_Broken_Arms.lua")
+      ataxiaEcho, ataxia.afflictions = realEcho, realAffs
+      if not ok then error(err, 0) end
+      return said[1] or ""
+    end
+    ataxiaBasher.enabled = true
+    for _, k in ipairs({ "webbed", "entangled", "bound" }) do
+      local m = fire({ [k] = true })
+      expect(m:find("Arms bound", 1, true) ~= nil).toBeTrue()
+      expect(m:find("broken", 1, true)).toBe(nil)
+    end
+    expect(fire({}):find("Both arms broken", 1, true) ~= nil).toBeTrue()
+  end)
+end)
+
 describe("dragged out of the sky -- flight is a trap on this ripple", function()
   it("latches grounded so the ladder stops trying to fly", function()
     fixture(3); ataxiaBasher.inMnemosyne = true
@@ -2149,6 +2705,22 @@ describe("dragged out of the sky -- flight is a trap on this ripple", function()
     -- retreat -- which is the whole point. It must not be left sitting in
     -- "recovering", where it would re-send fly every tick while attack-gated.
     expect(S.state).toBe("pulling")
+  end)
+
+  -- The hover armed escape mode as well as the recovery hold. With a route, the re-run escape
+  -- re-arms it anyway; WITHOUT one, only the explicit release stops it holding attacks for up to
+  -- ESCAPE_MODE_MAX while we stand there being hit (v4.7.321 review).
+  it("releases the hover's escape mode when there is nowhere to retreat to", function()
+    fixture(3); ataxiaBasher.inMnemosyne = true
+    ataxia.vitals = { hpp = 30 }
+    S.onTick()                                  -- a real hover: escape mode AND the recovery hold
+    expect(S.state).toBe("recovering")
+    expect(ataxiaTemp.escapeMode).toBeTrue()
+    M.explore.fromRoom = nil                    -- no validated route back
+    S.onDraggedDown()
+    expect(ataxiaTemp.escapeMode).toBe(nil)
+    expect(ataxiaTemp.swarmHold).toBe(nil)
+    expect(S.state).toBe("idle")
   end)
 
   it("is per-RIPPLE -- the next ripple is a different room set", function()

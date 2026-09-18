@@ -6491,6 +6491,16 @@ describe("glance recon before a never-walked door", function()
     expect(ataxiaTemp.mnemLavaPlan).toBeNil()
   end)
 
+  it("a ripple reset lifts the flyer latch (v4.7.321 review)", function()
+    setup()
+    local realSwarm = M.swarm
+    M.swarm = { grounded = true }
+    M.onRippleReset()
+    local after = M.swarm.grounded
+    M.swarm = realSwarm
+    expect(after).toBeNil()
+  end)
+
   it("explore stop drops the pending glance and its timer", function()
     setup()
     M._exploreTick()

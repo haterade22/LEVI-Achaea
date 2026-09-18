@@ -64,5 +64,10 @@ for _, k in ipairs({"rwBrPending", "dwBrPending", "psionBrPending", "gdragonBrPe
 end
 
 if ataxiaEcho and ataxiaBasher and ataxiaBasher.enabled then
-	ataxiaEcho("<red>Both arms broken<reset> -- weapon attack refused; battlerage and pet still ride.")
+	-- "whole AND UNBOUND": web, entanglement or binding produce this line with both arms intact. The
+	-- death log of 2026-09-18 printed "Both arms broken" three times on prompts showing `web` and no
+	-- broken limb, which sent the diagnosis the wrong way (v4.7.321).
+	local a = ataxia and ataxia.afflictions or {}
+	local why = (a.webbed or a.entangled or a.bound) and "Arms bound (web/entangled/bound)" or "Both arms broken"
+	ataxiaEcho("<red>" .. why .. "<reset> -- weapon attack refused; battlerage and pet still ride.")
 end

@@ -571,14 +571,44 @@ the MODE flag (optimistic); `S.flightConfirmed` is the last confirmed physical s
 by trigger `022_Flight_Lines` ("The ring of shining metal carries you up into the skies."
 / "You land easily, back on the ground again."). The recovery hover re-sends
 `queue addclear free stand;fly` each 2s tick until confirmed — grounded-but-gated is the
-worst of both worlds. Unknown fly sources just re-send harmlessly ("You are already
-flying."). Kiting flaps the flag freely; only the hover consumes it.
+worst of both worlds. Since v4.7.321 the re-send also stops once gmcp names the room
+"Flying above" -- only the ring's line is captured, so every other fly source used to re-send
+on every tick of a hover that was already up -- and a fly with no airborne evidence at all ends
+the hover after `FLY_CONFIRM_MAX` (10s) instead of riding to the 60s cap. Kiting flaps the flag
+freely; the hover's re-send and `_hoverCompromised`'s land-or-flush choice consume it.
+
+**The hover is not a sanctuary (v4.7.321, from a death).** The recovery hover holds every attack
+for up to 60s on the premise that the sky is untouchable. Dream horrors flew up after us, knocked us
+out of the sky, and we sat on the ground attack-gated for 52 seconds. The prompt trigger's "YOU ARE
+FLYING" echo had stopped, and nothing in the swarm read it. The recovery tick now checks the
+premise every tick -- but only once we are IN the air:
+
+- **Airborne evidence for this hover** is gmcp's room name starting "Flying above" (the mapper
+  strips it as a leading prefix; `S._gmcpFlying`), stamped as `S.hoverSeenUpAt` by the `gmcp.Room`
+  handler at the rename itself (`S._noteAirborne`) and by the tick -- or the ring's fly line
+  (`S.flightUpAt`, trigger 022) stamped after this hover's send. A fresh hover, including a kite
+  converting to one, carries no earlier hover's evidence.
+- **Before any evidence**, the only question is the budget: no evidence within `FLY_CONFIRM_MAX`
+  (10s -- FLY needs balance, and one to two balances is 4-9s on the slower classes) means the fly
+  was refused, eaten or bound. Not latched: every such cause is transient.
+- **From `ARRIVE_SETTLE` after the first evidence**: a hover SEEN up that gmcp no longer names
+  "Flying above" was knocked, dragged or dropped out of the sky (skipped under dementia, where the
+  name is an invention, and when gmcp names no room); company in `Char.Items` while gmcp says we are
+  up is something in the air with us. Both latch `S.grounded` for the ripple.
+
+The first cut timed the settle from the fly SEND, so at the first tick -- still on the ground,
+waiting on balance -- the mobs we were fleeing read as "company in the air" and killed the hover
+before takeoff. Trigger 091 accelerates the exit for the flyer lines. `S._hoverCompromised` releases
+BOTH holds, `land`s if there is any evidence we are up or `cq all`s the still-queued fly if there is
+none, and re-runs the ladder only if its conditions still hold, otherwise the basher fights; it
+consumes the tick and opens the settle window like any landing. A stray flight nothing will land
+(idle, not kiting, gmcp says "Flying above") gets a throttled `land` at the top of `S.onTick`.
 
 **When flight is not an option (`S._canFly` / `S._canHover`)**: the escape ladder's outdoor
 branch and the fly-kite both go UP, so both need to know when up is a trap. `S._canFly()` is
-`not mnemDeluge and not S.grounded` — "we cannot get airborne at all"; `S._canHover()` is
-`_canFly()` plus `M.roomAblaze()` — "and even if we could, hanging there is no safer than the
-ground". Three things now feed them:
+`not mnemDeluge and not S.grounded and not S._bound()` — "we cannot get airborne at all";
+`S._canHover()` is `_canFly()` plus `M.roomAblaze()` — "and even if we could, hanging there is no
+safer than the ground". Four things now feed them:
 
 - **Deluge** (affix, trigger 037, run-wide): all rooms are underwater, so FLY is simply
   rejected — the ladder and the kite take their grounded branches.
@@ -597,7 +627,19 @@ ground". Three things now feed them:
   shield-in-place fallback with no route; a test that asserted it should land back in
   `recovering` was the thing that was wrong). **Per-ripple, not per-run** (user call): the
   denizen that dragged us lives on this ripple and will do it again, but the next ripple is a
-  different room set — `S.onRipple` clears `S.grounded`.
+  different room set — `S.onRipple` clears `S.grounded`, and since v4.7.321 so does
+  `M.onRippleReset` (the genuine ripple boundary: `S.onRipple` is only called from the
+  explorer's resume/on paths, so a missed boon screen carried "no flying" into the next ripple).
+  **The same latch is set by flyers** (v4.7.321): trigger `mnemosyne/091`'s "flies up to your
+  level from below" / "swoops down from the skies to land beside you", and a recovery hover
+  compromised by a knock-down or by company in the air. Not by a fly that merely never took.
+- **Bound** (v4.7.321): `S._bound()` -- webbed, entangled, transfixation, impaled, paralysis,
+  bound, daeggerimpale. The death this came from re-hovered at the cap while WEBBED: `fly` was
+  refused ("Sticky strands of webbing prevent you from moving.") and the recovery state and its
+  hold were armed anyway, for the last 17 seconds of the character's life. Bound also refuses
+  the LEAP, so `_beginEscape` and `_escapeRouteReady` return false too, and the low-HP paths in
+  `onVitals` and the tick arm, announce and flush nothing while it lasts: curing frees us and
+  the next vitals re-decide.
 - **Burning rooms** (v4.7.167): `The area is ablaze!` in the room text, then *"The roaring
   inferno engulfs you as you fight to find a way out."* for ~800 every few seconds,
   indefinitely — ~6% of max HP a tick on top of whatever the denizens are doing. `M.roomAblaze()`
@@ -621,6 +663,12 @@ confirmation impossible.* `S.flying` was right to be optimistic (a queued fly ca
 and the re-send loop was right to keep trying — but between them they had no way to represent
 "this will never confirm". Such a flag needs a third input: the line that says the thing can
 never happen at all.
+
+v4.7.321 is the same rule one level up. The recovery hover's HOLD was justified by a premise --
+the sky is empty -- checked once, on entry, and then only the clock was consulted for 60 seconds.
+**A hold justified by a premise must re-check the premise, not just the clock**, and must check it
+from evidence that the premise has started (we are actually up), not from the command that was
+meant to start it.
 
 **Tactical moves never condemn exits**: `M._tacticalArm(dir)` sets `explore.moving` +
 `explore.tacticalMove`; the three condemn paths (move-timeout give-up, ice-slip cap,

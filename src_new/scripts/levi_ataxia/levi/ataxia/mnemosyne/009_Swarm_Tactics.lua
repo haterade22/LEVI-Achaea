@@ -73,12 +73,21 @@ local RECOVER_TICK = 2      -- while hovering to recover, re-check HP this often
 local RECOVER_MAX = 60      -- hard cap on a recovery hover (then land and hand back)
 local EMERGENCY_COOLDOWN = 2 -- min seconds between vitals-driven emergency actions
 local DISENGAGE_COOLDOWN = 10 -- min seconds between forced tactical disengages
+-- A hover fly with no airborne evidence this long has failed. 10s, not the first cut's 4: FLY
+-- needs balance, and the only timed live takeoff (2026-07-27) took 1.85s on a ~2s-balance Monk --
+-- one to two balances, which is 4-9s on the slower classes (deep review, v4.7.321).
+S.FLY_CONFIRM_MAX = 10
+-- An escape we just started OWNS the situation for this long: onVitals and the tick's low-HP branch
+-- must not tear it down and start another (deep review, v4.7.321 -- they did, and the second
+-- `_beginEscape` ran from a clobbered anchor, either failing or leaping straight back in).
+S.ESCAPE_OWN = 8
 
 -- Reload-safety: ataxiaTemp persists across a SYSUPDATE reload; a stranded hold or
 -- armed decorator would silently gate the whole basher / decorate a random attack.
 ataxiaTemp = ataxiaTemp or {}
 ataxiaTemp.swarmHold = nil
 ataxiaTemp.swarmPullDir = nil
+S.flightUpAt, S.hoverSeenUpAt, S._escapeStartedAt = nil, nil, nil -- v4.7.321: per-hover / per-escape
 
 S.state = "idle" -- idle | pulling | funnel | reenter
 S.pulls = S.pulls or {}       -- [roomNum] = UNPRODUCTIVE pull count this ripple (progress refunds it)
@@ -426,6 +435,7 @@ function S._escapeSuffix(sep)
 end
 
 function S._beginPull(shortBack, longBack, shortFwd, count, mode)
+  S._escapeStartedAt = nil -- a pull is a tactic, not an escape: onVitals may still replace it
   local MAP = M.map
   local cur = MAP and MAP.current
   if not cur then return false end
@@ -905,7 +915,14 @@ function S.escapeOn(why)
     S._escapeT = nil
     if ataxiaTemp and ataxiaTemp.escapeMode then
       ataxiaTemp.escapeMode = nil
-      S._echo("<grey>escape mode expired -- swinging again.")
+      -- ONLY SAY "SWINGING" IF WE WILL (v4.7.321). The death log printed "swinging again" twice
+      -- while the recovery hold was still being refreshed every tick -- we did not swing again at
+      -- all. Same class as v4.7.314's banner that was never true.
+      if ataxiaTemp.swarmHold or ataxiaTemp.phialHold or ataxiaTemp.bardComposeHold then
+        S._echo("<grey>escape mode expired -- another hold still keeps attacks off (" .. tostring(S.state) .. ").")
+      else
+        S._echo("<grey>escape mode expired -- swinging again.")
+      end
     end
   end)
   if why and not S._escapeAnnounced then
@@ -1037,7 +1054,39 @@ end
 --     the thing that yanked us lives on this ripple and will do it again.
 -- Either way FLY is a trap rather than an escape, and the ladder must fall through
 -- to the grounded retreat instead of wedging on a fly that never sticks.
-function S._canFly() return not mnemDeluge and not S.grounded end
+-- BOUND MEANS GROUNDED (v4.7.321, from a death). The ladder re-entered the hover while WEBBED:
+-- `fly` was refused ("Sticky strands of webbing prevent you from moving."), yet the recovery state
+-- and its attack hold were armed anyway, and we sat gated on the ground until we died. Nothing that
+-- binds or paralyses us lets us take off.
+local FLY_BLOCKERS = { "webbed", "entangled", "transfixation", "impaled", "paralysis",
+                       "bound", "daeggerimpale" } -- the last two: the writhe list (001 prios)
+function S._bound()
+  local a = ataxia and ataxia.afflictions
+  if not a then return false end
+  for _, k in ipairs(FLY_BLOCKERS) do if a[k] then return true end end
+  return false
+end
+function S._canFly() return not mnemDeluge and not S.grounded and not S._bound() end
+
+-- THE GAME'S OWN WORD ON WHETHER WE ARE AIRBORNE (v4.7.321). Flying renames the gmcp room to
+-- "Flying above <room>"; the prompt trigger (318) has echoed "YOU ARE FLYING" off exactly this for
+-- a long time. In the death log that echo STOPPED at 12:10:35 -- the prompt knew we had hit the
+-- ground -- while the swarm went on believing in the hover for another 52 seconds.
+function S._gmcpFlying()
+  local name = gmcp and gmcp.Room and gmcp.Room.Info and gmcp.Room.Info.name
+  return type(name) == "string" and name:find("^Flying above") ~= nil
+end
+
+-- SEEN UP AT THE MOMENT IT HAPPENS (mutation review, v4.7.321). The recovery tick stamps this as
+-- well, but only every RECOVER_TICK: a hover knocked down inside that first window had no "seen
+-- up" at all, so the knock-down check below never armed and the hover sat, attack-gated on the
+-- ground, until RECOVER_MAX -- the death again, just faster. The room rename IS the takeoff, so
+-- the gmcp.Room handler notes it (registered at the bottom of this file).
+function S._noteAirborne()
+  if S.state == "recovering" and not S.recoverGround and not S.hoverSeenUpAt and S._gmcpFlying() then
+    S.hoverSeenUpAt = now()
+  end
+end
 
 -- HOVERING to heal is only a plan if the air is safer than the ground. In an ABLAZE
 -- room it is not: the fire keeps burning us at ~6% max HP a tick while we hang there
@@ -1101,6 +1150,7 @@ end
 -- Same principle as the arming fix below: do not tear down what you have until you know you can
 -- replace it.
 function S._escapeRouteReady()
+  if S._bound() then return false end -- bound: no fly AND no leap (deep review, v4.7.321)
   if not S._indoors() and S._canHover() then return not S.moveLocked() end
   if S._backDir() then return true end
   return S._escapeLastResort() ~= nil
@@ -1116,13 +1166,27 @@ function S._beginEscape(why)
   -- not. Because escapeOn only prints when `_escapeAnnounced` is falsy and only escapeOff clears
   -- that flag, the live log printed the banner SIX TIMES in 1.7s -- six arm/announce/release
   -- cycles, each release a window the prompt dispatcher put a full attack round through.
+  -- BOUND IS NOT AN ESCAPE (deep review, v4.7.321). Webbed/entangled/etc. refuse the leap as surely
+  -- as the fly: the first cut routed a bound character from a refused hover into a refused ground
+  -- retreat, announcing and arming a hold on a path that could not leave (the v4.7.314 pattern).
+  -- While bound: arm nothing, announce nothing; curing frees us and the next vitals re-decides.
+  if S._bound() then return false end
   if not S._indoors() and S._canHover() then
     if S.moveLocked() then return false end -- v4.7.243
     S.escapeOn(why or "low HP")
     S.state = "recovering"
     S.recoverStarted = now()
+    S._escapeStartedAt = now()
     S.flying = true
+    -- A FRESH HOVER CARRIES NO EARLIER HOVER'S EVIDENCE (deep review, v4.7.321): a stale
+    -- flightConfirmed from a hover that ended without the land line counted as "up" before this
+    -- fly had even executed.
+    S.flightConfirmed, S.hoverSeenUpAt = nil, nil
     local sep = (ataxia.settings and ataxia.settings.separator) or ";"
+    -- TAKE THE BALANCE WITH US -- the v4.7.314 rule for `_tacticalGo`, never applied here. FLY needs
+    -- balance, and an attack already committed on the standard queue takes it first, delaying the
+    -- takeoff by a whole balance. Skipped in lava (the queued lava escape must survive).
+    if not (M.roomLava and M.roomLava()) then send("cq all") end
     send("queue addclear free stand" .. sep .. "fly")
     S._armRecoverHold()
     -- The hover loop is SELF-ticking; without this kick the next evaluation would
@@ -1145,6 +1209,7 @@ function S._beginEscape(why)
     return false
   end
   S.escapeOn(why or "low HP")
+  S._escapeStartedAt = now()
   S.state = "pulling"
   -- A last-resort exit is NOT a pull: we have no verified forward direction to come back
   -- through, so mode "escape" keeps onTick's pull/funnel bookkeeping from trying to re-enter a
@@ -1178,6 +1243,10 @@ end
 function S._convertToHover(hp)
   S.state = "recovering"
   S.recoverStarted = now()
+  -- A fresh hover carries no earlier hover's "seen up" (v4.7.321 review): a stale stamp would let
+  -- the knock-down check judge the kite's mid-swing landing as being knocked out of the sky. The
+  -- kite's own flightConfirmed is current, so it stays.
+  S.hoverSeenUpAt = nil
   S._armRecoverHold()
   -- Kick the self-tick loop (see _beginEscape): a hover must never depend on
   -- outside events to notice it has healed -- or that its fly never happened.
@@ -1207,6 +1276,7 @@ function S.disengage(reason)
   if not S._enabled() then return false end
   if S.state == "recovering" then return true end -- already out and healing; nothing to do
   if S._lastDisengageAt and (now() - S._lastDisengageAt) < DISENGAGE_COOLDOWN then return false end
+  if S._bound() then return false end -- v4.7.321 review: bound -- neither fly nor leap will take
   if S.flying then
     -- Mid-kite: convert in place. A land/fly churn here would put us on the ground for a
     -- round, which is the one thing a disengage exists to avoid.
@@ -1233,12 +1303,34 @@ end
 
 -- Explorer tick delegation. Returns true when the tick is consumed (the explorer
 -- must not navigate/announce this tick); false hands back to the normal flow.
+function S._escapeOwns()
+  local at = tonumber(S._escapeStartedAt)
+  if not at then return false end
+  if S.state ~= "pulling" and S.state ~= "funnel" then return false end
+  local since = now() - at
+  return since >= 0 and since < (tonumber(S.ESCAPE_OWN) or 8)
+end
+
 function S.onTick()
   local MAP = M.map
   local cur = MAP and MAP.current
   if not S._enabled() then
     if S.state ~= "idle" then S.reset("disabled") end
     return false
+  end
+
+  -- AIRBORNE WITH NOTHING THAT WILL LAND US (deep review, v4.7.321). No hover, no kite, and gmcp
+  -- says "Flying above": the explorer is reading the SKY as the room (v4.7.125) and every `land` in
+  -- this file keys on `S.flying`. A backstop for any path that loses track of flight -- throttled,
+  -- and silent after the first line so a refused land cannot spam.
+  if S.state == "idle" and not S.flying and S._gmcpFlying() then
+    if (now() - (tonumber(S._strayLandAt) or 0)) >= 3 then
+      if not S._strayLandAt then S._echo("<grey>airborne with no hover or kite running -- landing.") end
+      S._strayLandAt = now()
+      send("land", false)
+    end
+  else
+    S._strayLandAt = nil
   end
 
   -- Roll Hide panic covers EVERY crowded situation, not just the funnel -- the worst HP
@@ -1336,6 +1428,49 @@ function S.onTick()
       S._recoverTumbles = nil
       return false
     end
+    -- THE HOVER CHECKS ITS OWN PREMISE EVERY TICK (v4.7.321).
+    --
+    -- JUDGE THE AIR ONLY ONCE WE ARE IN IT (deep review -- four agents independently). The first cut
+    -- timed the settle from the fly SEND. FLY needs balance, so at the first 2s tick we were often
+    -- still on the ground, gmcp still (correctly) listed the mobs we were fleeing, and "company in
+    -- the air" killed the hover before takeoff and latched no-flying for the ripple -- i.e. it
+    -- disabled the hover in exactly the case it exists for. Now: airborne evidence for THIS hover
+    -- is gmcp's "Flying above" (the mapper strips it as a LEADING prefix) or the fly line after
+    -- this hover's send; the settle runs from the first of those; before any of them, the only
+    -- question is the budget.
+    if not S.recoverGround then
+      local gUp = S._gmcpFlying()
+      if gUp and not S.hoverSeenUpAt then S.hoverSeenUpAt = now() end
+      local lineUp = (tonumber(S.flightUpAt) and tonumber(S.flightUpAt) >= (tonumber(S.recoverStarted) or 0))
+        and tonumber(S.flightUpAt) or nil
+      local tookOff = lineUp or S.hoverSeenUpAt
+      if S.hoverSeenUpAt and lineUp and S.hoverSeenUpAt < lineUp then tookOff = S.hoverSeenUpAt end
+      if tookOff then
+        if (now() - tookOff) >= (tonumber(S.ARRIVE_SETTLE) or 1.5) then
+          -- (a) We were seen UP this hover and gmcp no longer says so: knocked, dragged or dropped
+          -- out of the sky by ANY line. Keyed on having SEEN "Flying above" this hover, not on
+          -- flightConfirmed: a stale confirmation cannot fire it, and most fly sources have no
+          -- captured line at all (only the ring's, 022). "Seen" is stamped by the gmcp.Room handler
+          -- at the rename itself and by this tick. Skipped under dementia, where the room name is an
+          -- invention (005) and could drop the prefix while we are up, and when gmcp names no room.
+          local demented = M.map and M.map.drActive and M.map.drActive()
+          local named = gmcp and gmcp.Room and gmcp.Room.Info and type(gmcp.Room.Info.name) == "string"
+          if S.hoverSeenUpAt and not gUp and named and not demented then
+            return S._hoverCompromisedTick("no longer airborne", true)
+          end
+          -- (b) Company while we are UP. Char.Items reflects the SKY while airborne (v4.7.125),
+          -- and own denizens are filtered (008). Only asked when gmcp says we are in the air.
+          if gUp and M._roomHasDenizens and M._roomHasDenizens() then
+            return S._hoverCompromisedTick("company in the air", true)
+          end
+        end
+      elseif (now() - (tonumber(S.recoverStarted) or 0)) >= (tonumber(S.FLY_CONFIRM_MAX) or 10) then
+        -- (c) No airborne evidence at all within the budget: refused, eaten or bound. NOT latched --
+        -- every cause is transient (a stupidity-eaten command, balance latency), and the ripple-wide
+        -- latch is for things that live on the ripple (a flyer, a dragger).
+        return S._hoverCompromisedTick("the fly never took", false)
+      end
+    end
     -- CONFIRM WITH DIAGNOSE (v4.7.233, user: "when tumbling we should ensure we heal to full
     -- and nothing on diagnose"). `S._afflicted()` reads our CLIENT-SIDE tracking, which is
     -- exactly the thing that is unreliable after a chaotic fight -- the death log has
@@ -1357,6 +1492,7 @@ function S.onTick()
       -- noise, and noise in the escape path is how a real refusal gets missed.
       if S.flying then send("land") end
       S.flying = nil
+      S.flightConfirmed, S.hoverSeenUpAt = nil, nil -- v4.7.321: no evidence carries into the next hover
       S.recoverGround = nil
       S._clearHold()
       S.state = "idle"
@@ -1377,9 +1513,10 @@ function S.onTick()
     -- replaces queued commands with involuntary actions): S.flying is optimistic
     -- until the flight line confirms (trigger 022 -> S.onFlightUp). Grounded-but-
     -- gated is the worst of both worlds, so re-send each tick until we're really
-    -- up. If this fly source's confirm line is unknown, the extra sends are
-    -- harmless ("You are already flying.").
-    if S.flying and not S.flightConfirmed then
+    -- up. gmcp's "Flying above" counts as up too (v4.7.321): only the ring's
+    -- line is captured (022), so on every other fly source this used to re-send
+    -- `fly` every tick of a hover that was already airborne.
+    if S.flying and not S.flightConfirmed and not S._gmcpFlying() then
       local sep = (ataxia.settings and ataxia.settings.separator) or ";"
       send("queue addclear free stand" .. sep .. "fly")
     end
@@ -1401,6 +1538,8 @@ function S.onTick()
         return false
       end
       S._lastEmergencyAt = now()
+      if S._escapeOwns() then return true end -- v4.7.321 review: an escape is already in flight
+      if S._bound() then return false end     -- bound: nothing to do but cure and fight
       if S.flying then
         S._convertToHover(hpp())
         return true
@@ -1628,6 +1767,14 @@ function S.onVitals()
     return
   end
   if not wantEscape then return end
+  -- AN ESCAPE WE STARTED OWNS THE SITUATION (deep review, v4.7.321). This path used to reset any
+  -- non-idle state -- including the escape it had started itself two seconds earlier -- and
+  -- re-run the ladder from an anchor `_tacticalArm` had already clobbered: the retreat was
+  -- flushed (`cq all`), and the second `_beginEscape` either found no route (fight in place at low
+  -- HP) or found one straight BACK into the room we fled. Pre-existing; v4.7.321's hover exit made
+  -- it immediate. Bounded by S.ESCAPE_OWN so a stuck escape cannot wedge the ladder.
+  if S._escapeOwns() then return end
+  if S._bound() then return end -- bound: neither the fly nor the leap will take
   if M._disarmMove then M._disarmMove() end -- an in-flight pull dies with the escape's reset
   if S.flying then return S._convertToHover(hp) end
   if S.state ~= "idle" then S.reset("low-hp escape") end
@@ -1672,10 +1819,100 @@ function S.onMoveFailed()
   end
 end
 
--- Fed by trigger 022_Flight_Lines: the last CONFIRMED physical airborne state.
--- Distinct from S.flying, the tactic's mode flag -- kiting keeps S.flying true
--- across the per-swing land/fly churn while this flag flaps with the actual game
--- lines. Only the recovery hover's fly re-send consumes it.
+-- THE HOVER IS NOT A SANCTUARY (v4.7.321, from a death). The recovery hover holds every attack
+-- for up to RECOVER_MAX (60s) on the premise that the sky is untouchable. Against dream horrors it
+-- was not, twice over:
+--
+--   A dream horror flies up to your level from below.               (they FOLLOW us up)
+--   A dream horror swipes at you with one of its tentacles, sending you sprawling to the ground.
+--   A dream horror swoops down from the skies to land beside you.   (we are on the ground now)
+--
+-- ...and then ~52 seconds of being mauled on the ground by two of them with every attack held,
+-- the recovery cap, a re-hover that the web refused, and death. The ground recovery has always
+-- handed back when company arrives; the hover never checked, because the sky was assumed empty.
+--
+-- One exit for every way the premise fails. The sky is marked unsafe for the rest of the ripple
+-- (the S.grounded latch the tentacle-drag already uses -- whatever did this lives on this ripple),
+-- we get out of the air if gmcp says we are still up, the hold is released, and the ladder is re-run
+-- ONLY if its own conditions still hold -- otherwise the basher simply fights, which beats being
+-- attack-gated while something hits us every time.
+function S._hoverCompromised(why, latch)
+  if S.state ~= "recovering" or S.recoverGround then return false end
+  local s = S._cfg()
+  -- Latch "no flying this ripple" only for causes that LIVE on the ripple (a flyer, a knock-down).
+  -- A fly that never took is transient; latching on it would ground the whole ripple over one
+  -- eaten command (deep review, v4.7.321).
+  if latch then S.grounded = true end
+  local evidence = S._gmcpFlying() or S.flightConfirmed or S.hoverSeenUpAt
+  if evidence then
+    send("land", false)
+  elseif not (M.roomLava and M.roomLava()) then
+    -- No evidence we ever left the ground: the fly may still be QUEUED behind balance. Kill it, or
+    -- it lifts us after we have stopped tracking flight (deep review) -- and nothing would land us.
+    send("cq all")
+  end
+  S.flying, S.flightConfirmed, S.flightUpAt, S.hoverSeenUpAt = nil, nil, nil, nil
+  S.state = "idle"
+  S.recoverStarted, S.recoverDiagnosed = nil, nil
+  S._clearHold()
+  -- BOTH holds. The hover's `_beginEscape` armed ESCAPE MODE as well as the recovery hold, and
+  -- escape mode self-expires only at ESCAPE_MODE_MAX (12s) -- clearing just the recovery hold
+  -- would leave attacks held for up to twelve more seconds while we are being hit. (Caught by the
+  -- test that asks for a plain hand-back; a re-run escape below re-arms it if it moves us.)
+  S.escapeOff()
+  -- ONE EMERGENCY, ONE CLOCK (v4.7.314, applied here in review). Without this stamp the very next
+  -- prompt's onVitals saw a 2s-old stamp, reset the retreat we are about to start (`cq all`), and
+  -- re-ran the ladder from a clobbered anchor.
+  S._lastEmergencyAt = now()
+  local escaped = false
+  if s.escape ~= false and (hpp() <= s.escapeAt or S._dyingFast()) then
+    escaped = S._beginEscape() and true or false -- grounded now; no route -> false -> we fight
+  end
+  S._echo("<indian_red>hover compromised<reset> (" .. tostring(why) .. ")"
+    .. (latch and " -- no flying this ripple" or "")
+    .. (escaped and "; retreating on foot." or "; fighting instead of waiting."))
+  return true
+end
+
+-- From the recovery tick: a compromised hover LANDS, so the tick is consumed and the settle window
+-- opened -- the rule the cap-landing below already follows (v4.7.125: a landing settles, never
+-- decides). Attacks do not wait on this: the hold is already released, and the basher's own loop is
+-- prompt-driven, independent of the explorer tick.
+function S._hoverCompromisedTick(why, latch)
+  S._hoverCompromised(why, latch)
+  if M.explore then M.explore.settling = true end
+  if M._scheduleTick then M._scheduleTick() end
+  return true
+end
+
+-- Three lines that each prove the hover premise false. Classified here, not in the trigger (a
+-- guard inside a trigger is a guard the suite cannot see).
+function S.onFlightTruth(lineText)
+  if not (ataxiaBasher and ataxiaBasher.inMnemosyne) then return end
+  if type(lineText) ~= "string" then return end
+  local hovering = S.state == "recovering" and not S.recoverGround
+  if lineText:find("flies up to your level from below", 1, true)
+     or lineText:find("swoops down from the skies to land beside you", 1, true) then
+    -- A FLYER LIVES ON THIS RIPPLE: nothing we do in the air is out of its reach.
+    S.grounded = true
+    if hovering then
+      return S._hoverCompromisedTick(lineText:find("swoops down", 1, true)
+        and "knocked out of the sky" or "a flyer followed us up", true)
+    end
+    S.flightConfirmed = nil
+    -- A KITE whose sky is not safe is just fighting with extra steps; end it properly (reset lands
+    -- while `S.flying` is set). Clearing `S.flying` alone -- the first cut -- dropped the kite's
+    -- MODE flag without landing us, and every `land` in this file keys on that flag (deep review).
+    if S.flying and S.state ~= "idle" then S.reset("a flyer is on this ripple") end
+  elseif lineText:find("You are not flying, my friend", 1, true) then
+    -- The game's reply to OUR `land`. It corrects the physical belief and nothing else: it can be
+    -- STALE (the reply to the cap's land arrived after a NEW hover began -- the death's 12:11:29
+    -- sequence -- and the first cut killed that hover), and `S.flying` is the kite's MODE flag,
+    -- not the physical state. The recovery tick judges the hover on its own evidence.
+    S.flightConfirmed = nil
+  end
+end
+
 -- "A tentacle shoots up from the ground, wraps itself around you, and drags you back
 -- to earth." A denizen on THIS RIPPLE can pull us out of the air, which makes the
 -- whole airborne branch of the escape ladder a liability: the recovery hover would
@@ -1700,11 +1937,19 @@ function S.onDraggedDown()
     -- which now takes the retreat branch (or the shield fallback with no route).
     S.state = "idle"
     S._clearHold()
+    S.escapeOff()               -- v4.7.321 review: release EVERY hold the hover armed
+    S._lastEmergencyAt = now()  -- ...and one emergency, one clock
     S._beginEscape()
   end
 end
 
-function S.onFlightUp() S.flightConfirmed = true end
+-- Fed by trigger 022_Flight_Lines: the last CONFIRMED physical airborne state.
+-- Distinct from S.flying, the tactic's mode flag -- kiting keeps S.flying true
+-- across the per-swing land/fly churn while this flag flaps with the actual game
+-- lines. Consumed by the recovery hover's fly re-send, and by _hoverCompromised as
+-- evidence we may be up (land) rather than never having left (cq all the queued fly).
+-- v4.7.321: also stamps WHEN, so the hover can tell this takeoff from an earlier one.
+function S.onFlightUp() S.flightConfirmed = true; S.flightUpAt = now() end
 function S.onFlightDown() S.flightConfirmed = nil end
 
 -- "You send a lash of fire to strike the icewall to the <dir>, and it quickly
@@ -1764,6 +2009,7 @@ function S.reset(reason)
   S._recoverTumbles = nil
   S.recoverGround = nil
   S.recoverDiagnosed = nil
+  S.hoverSeenUpAt = nil -- v4.7.321: per-hover evidence
   S._pullRetries = nil
   if S.onTumbleDone then S.onTumbleDone() end
   S.swarmRoom, S.funnelRoom, S.funnelAt = nil, nil, nil
@@ -1905,7 +2151,10 @@ S._vitalsH = registerAnonymousEventHandler("gmcp.Char.Vitals", function() pcall(
 -- by a manual `mnem swarm` tactic too, and a flag that mutes the basher must never depend on a
 -- second subsystem still running to be released. (S.escapeOn's timer is the other backstop.)
 if S._roomH then pcall(killAnonymousEventHandler, S._roomH) end
-S._roomH = registerAnonymousEventHandler("gmcp.Room", function() pcall(S.escapeCheckRoom) end)
+S._roomH = registerAnonymousEventHandler("gmcp.Room", function()
+  pcall(S.escapeCheckRoom)
+  pcall(S._noteAirborne) -- v4.7.321: a hover's takeoff, noted when it happens (see _noteAirborne)
+end)
 
 -- Manual `bash` toggle mid-tactic: the basher going away invalidates everything.
 if S._bashOffH then pcall(killAnonymousEventHandler, S._bashOffH) end

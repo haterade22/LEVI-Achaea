@@ -510,6 +510,10 @@ M.explore.lavaEdges = M.explore.lavaEdges or {}
 -- `failed` is the same hazard and was carrying the same way: an exit condemned on the old level
 -- (a wall, or an invented dementia exit) stayed condemned on a level where it is a real door.
 function M.onRippleReset()
+  -- THE FLYER LATCH IS PER RIPPLE (deep review, v4.7.321). S.grounded was cleared only by
+  -- S.onRipple, which only the explorer's resume/on paths call -- a missed boon screen carried
+  -- "no flying" into the whole next ripple. This is the genuine ripple boundary (MAP.reset).
+  if M.swarm then M.swarm.grounded = nil end
   M.explore.lavaRooms = {}
   M.explore.lavaEdges = {}
   M.explore.glance = nil

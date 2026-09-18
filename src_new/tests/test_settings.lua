@@ -27,6 +27,10 @@ end
 
 io.exists = function(path) return _saved[path] ~= nil end
 
+-- The REAL io.open is restored at the end of this file: test files share one Lua state, and this
+-- mock (a write handle for any path opened without a mode) broke every later test that reads a
+-- source file -- a trigger-pattern test in test_swarm_tactics found it (v4.7.321).
+local _realOpen = io.open
 io.open = function(path, mode)
   if mode == "r" then
     if not _saved[path] then return nil end
@@ -401,3 +405,6 @@ describe("ataxia_loadSettings()", function()
     expect(savedAtaxia.settings.class).toBe("Serpent")
   end)
 end)
+
+-- Restore the real io.open for whoever runs after us (see the note on the mock).
+io.open = _realOpen

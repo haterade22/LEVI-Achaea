@@ -2,6 +2,144 @@
 
 ---
 
+## 2026-09-18 - The hover is not a sanctuary: 52 seconds on the ground with every attack held (v4.7.321)
+
+User, with a death log: *"I do not understand why we stopped attacking and just died here..."*
+
+```
+12:10:30.999  The ring of shining metal carries you up into the skies.     <- the recovery hover
+12:10:31.640  A dream horror flies up to your level from below.   (x2)     <- they FOLLOW us up
+12:10:37.016  A dream horror swipes at you with one of its tentacles, sending you sprawling to the ground.
+12:10:37.714  A dream horror swoops down from the skies to land beside you. (x2)
+   ... 52 seconds on the ground: web, prone, fear, ~1,100 HP/s average incoming
+       (~2,180 HP/s over the worst 5s), no attack from us ...
+12:11:28.993  (MNEM): recover cap hit -- landing and handing back.
+12:11:29      DYING FAST -- 65%  ->  LOW HP (65%) -- flying to recover
+              You are not flying, my friend.                       <- the reply to the cap's LAND
+              Sticky strands of webbing prevent you from moving.   <- the new fly, refused
+   ... 17 more seconds, still held ...
+12:11:46.5    You have been slain by a dream horror.
+```
+
+### Why we stopped attacking
+
+The low-HP ladder's outdoor answer is **fly and hover**: state `recovering`, every attack held by the
+recovery hold (refreshed each 2s tick), until 95% HP and affliction-free or the 60s `RECOVER_MAX`.
+Its whole premise is that the sky is untouchable. Against dream horrors it was not, and **nothing
+checked**:
+
+- **They followed us up.** `flies up to your level from below`. The GROUND recovery has reacted to
+  company since v4.7.218 (hand back; tumble first since v4.7.233), but that check is gated on
+  `S.recoverGround`, because the hover was assumed to be alone.
+- **They knocked us out of the sky** at 12:10:37, and the swarm never noticed. The only captured
+  knock-down was v4.7.168's tentacle *drag* ("...drags you back to earth"), a different wording.
+  `S.flying` and `S.flightConfirmed` stayed true, so the hover didn't even re-send `fly`. It just
+  kept the attacks held. **The prompt trigger knew:** `(LEVI): YOU ARE FLYING`, echoed off gmcp's
+  "Flying above <room>", prints on every prompt until 12:10:35 and never again.
+- **At the cap we re-hovered into a web.** `_canHover` didn't consider binding, so `fly` was
+  refused, and the recovery state and its hold were armed anyway, for another 17 seconds, until death.
+- **Two banners lied.** "escape mode expired -- swinging again" printed twice while the recovery
+  hold was still up, and "Both arms broken" printed three times on prompts that showed `web` and no
+  broken limb. "Whole AND UNBOUND" is the refusal line; web binds, it doesn't break. That sent the
+  diagnosis the wrong way.
+
+### The fix: the hover checks its own premise every tick
+
+`S._hoverCompromised(why, latch)` is the single exit. It releases **both** holds (the recovery hold
+and escape mode, which self-expires only at 12s), gets us out of the air if there is any evidence we
+are up (`land`), or kills the fly if there is none (`cq all` -- it may still be queued behind
+balance, and would lift us after we stopped tracking flight). It stamps the emergency clock, and
+re-runs the ladder only if the ladder's own conditions still hold (HP at `escapeAt` or dying fast);
+otherwise the basher simply fights. Causes that **live on the ripple** (a flyer, a knock-down) latch
+`S.grounded` -- no flying for the rest of the ripple, the latch the drag already uses; a fly that
+merely never took does not.
+
+| Signal | Latches | What it proves |
+|---|---|---|
+| seen "Flying above" this hover, and gmcp no longer says so | yes | knocked, dragged or dropped out of the sky by ANY line, captured or not |
+| company in `Char.Items` while gmcp says we are up | yes | something is in the air with us (Char.Items reflects the sky while airborne) |
+| no airborne evidence at all within `S.FLY_CONFIRM_MAX` (10s) | no | refused, eaten or bound. The per-tick re-send stays for an eaten fly, but it no longer gets 60s |
+| `flies up to your level from below` (trigger `mnemosyne/091`) | yes | a flyer followed us up |
+| `swoops down from the skies to land beside you` (091) | yes | it came down to us, so we are on the ground |
+
+The first three are denizen-agnostic and are the guard; the lines only make the exit immediate for
+wordings we've seen. A compromised hover **consumes** the tick and opens the settle window, the same
+"a landing settles, never decides" rule the cap path follows. Attacks don't wait on that, since the
+basher's loop is prompt-driven.
+
+**Judge the air only once we are in it.** Airborne evidence for *this* hover is gmcp's "Flying above"
+(noted by the `gmcp.Room` handler at the rename itself, and by the tick) or the ring's fly line
+stamped after this hover's send. The checks run from `ARRIVE_SETTLE` after the first of those --
+never from the fly send, because FLY needs balance and gmcp still (correctly) lists the ground we are
+fleeing until we actually leave it. Before any evidence the only question is the 10s budget. The
+knock-down check is also skipped under dementia (the room name is an invention) and when gmcp names no
+room at all.
+
+**`You are not flying, my friend.` corrects `flightConfirmed` and nothing else.** It is the reply to
+OUR `land`, so it can be stale -- in the death, the reply to the cap's land arrived after a new hover
+had begun -- and `S.flying` is the kite's mode flag, not the physical state.
+
+**A flyer during a kite ends the kite properly** (`S.reset`, which lands while `S.flying` is set),
+and a stray flight that nothing will land (idle, not kiting, gmcp says "Flying above") gets a
+throttled `land`.
+
+**Bound is not an escape.** `S._bound()` (webbed, entangled, transfixation, impaled, paralysis, bound,
+daeggerimpale) makes `S._canFly()` false, so `_canHover` never re-enters a hover the web will refuse --
+and `_beginEscape` and `_escapeRouteReady` return false too, because the leap is refused just the same.
+While bound, the low-HP paths arm nothing, announce nothing and flush nothing: curing frees us and the
+next vitals re-decide.
+
+**An escape we just started owns the situation** for `S.ESCAPE_OWN` (8s): `onVitals` and the tick's
+low-HP branch no longer reset it and re-run the ladder from an anchor `_tacticalArm` had already
+clobbered (pre-existing; the hover exit made it immediate). A pull clears the stamp, so a tactic is
+still replaceable.
+
+**Smaller fixes from the same review:** a fresh hover (and a kite converting to one) carries no earlier
+hover's evidence; the hover's fly is preceded by `cq all` (except in lava), the v4.7.314 rule for
+`_tacticalGo` that the hover never got; the eaten-fly re-send stops once gmcp says we are up (only the
+ring's line is captured); `M.onRippleReset` clears `S.grounded` at the genuine ripple boundary; the
+escape-mode banner checks every hold (`swarmHold`, `phialHold`, `bardComposeHold`) before saying
+"swinging again"; and trigger 344 says "Arms bound (web/entangled/bound)" when that's the cause.
+
+### How the first cut was wrong (six-agent deep review)
+
+The first cut timed the settle from the fly SEND, so at the first tick -- often still on the ground,
+waiting on balance -- "company in the air" fired on the mobs we were fleeing, killed the hover and
+latched no-flying for the ripple: it disabled the hover in exactly the case it exists for. It also
+keyed the knock-down check on `flightConfirmed` (stale across hovers, absent for every fly source but
+the ring), gave the fly 4s where one to two balances is 4-9s on slower classes, latched the ripple on
+a merely eaten fly, killed a new hover on the stale "not flying" reply, dropped a kite's mode flag
+without landing, and routed a bound character from a refused hover into a refused leap. A mutation
+pass then found one more hole: the tick only looks every 2s, so a knock-down inside the first window
+left no "seen up" and the check never armed -- hence the `gmcp.Room` handler.
+
+### Verification
+
+2020 tests pass, 35 of them new: 31 in the hover-premise block, 2 that read and run the triggers
+(091's patterns, 344's message), 1 in the drag block and 1 in `test_mnemosyne.lua` for the
+ripple-reset latch. **Mutation-verified:** 59 mutants of the new code; 54 fail a test. The five survivors are equivalent under other guards (the emergency-clock stamps in
+`_hoverCompromised`/`onDraggedDown`, which `_escapeOwns` covers; the `hoverSeenUpAt` clears on the
+healed exit and in `S.reset`, which both hover entry points repeat) or deliberately conservative
+(company is judged only while gmcp says we are up). Two pre-existing test leaks were fixed on the way:
+`test_settings.lua` never restored `io.open`, and the fixture now rewinds every clock stamp with the
+clock. One existing fixture was corrected: the hard-cap test left the ground room's two mobs "in our
+company" for its whole 120s hover, which the hover now rightly ends on; it models an empty sky now.
+
+### Files
+
+- `mnemosyne/009_Swarm_Tactics.lua`: `S._bound`, `S._gmcpFlying`, `S._noteAirborne` (on the
+  `gmcp.Room` handler), `S._hoverCompromised`, `S._hoverCompromisedTick`, `S.onFlightTruth`,
+  `S._escapeOwns`, the premise checks in the recovery tick, the bound gates, `S.FLY_CONFIRM_MAX`,
+  `S.ESCAPE_OWN`, the stray-flight land, `cq all` before the hover's fly, the honest escape banner.
+- `mnemosyne/008_Explorer.lua`: `M.onRippleReset` clears `S.grounded`.
+- `mnemosyne/091_Flight_Truth.lua`: new.
+- `344_Broken_Arms.lua`: says "bound" when web/entangled/bound is the cause.
+- `tests/test_swarm_tactics.lua`, `tests/test_mnemosyne.lua`, `tests/test_settings.lua` (the
+  `io.open` leak).
+- `CLAUDE.md`, `.claude/projects/mnemosyne/03-parsing-triggers.md`, `07-explorer.md`; memory.
+
+---
+
 ## 2026-09-18 - Sharp Mind: the Monk transmute becomes a top-up (v4.7.320)
 
 User: *"we can be a bit more heavy on transmute as a monk when we have the boon sharp mind, as each
