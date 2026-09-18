@@ -73,6 +73,7 @@ function M.help()
     { "mnem audit [report|reset]", "AUDIT the game's own resistances/crit; baseline + delta" },
     { "mnem explore [on|off|status]", "Auto-sweep the 4x4, clear rooms, stop at the boon screen" },
     { "mnem explore why", "Why is the sweep not moving? Per-exit refusal reasons" },
+    { "mnem explore glance [on|off]", "Look before stepping into a never-walked room (lava pass-through)" },
     { "mnem swarm [on|off|assess <n>|deep <r> <n>|icewall|kite|panic|escape|panicat|escapeat|recoverat]", "Multi-mob tactics + low-HP escape (fly/retreat instead of shield-in-place)" },
     { "mnem sense", "Fullsense recon of the ripple (Sleuth boon reveals all denizens)" },
     { "mnem cards [on|off|maran <hp%>|seasone <hp%>|matic <n>]", "Legend deck auto-draw (maran/seasone/morimbuul/matic/covenant/xylthus)" },
@@ -195,10 +196,20 @@ function M.command(rest)
   elseif cmd == "death" then
     M.reportDeath(arg)
   elseif cmd == "explore" then
+    local sub, subarg = arg:match("^(%S*)%s*(.-)$")
     if arg == "off" then M.exploreOff()
     elseif arg == "status" then M.exploreStatus()
     elseif arg == "why" then M.exploreWhy()
     elseif arg == "on" then M.exploreOn()
+    elseif sub == "glance" then
+      -- v4.7.319: the field existed since v4.7.318 with no in-game writer. Persisted config.
+      ataxia.settings = ataxia.settings or {}
+      ataxia.settings.reporting = ataxia.settings.reporting or {}
+      local cur = ataxia.settings.reporting.glance ~= false
+      ataxia.settings.reporting.glance = M._toggleState(subarg, cur)
+      if ataxia_saveSettings then ataxia_saveSettings(false) end
+      M.echo("Explore glance recon: " .. (ataxia.settings.reporting.glance and "ON" or "OFF")
+        .. " (look before stepping into a never-walked room; plans the lava pass-through door).")
     else M.exploreToggle() end
   elseif cmd == "swarm" then
     local S = M.swarm

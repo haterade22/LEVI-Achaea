@@ -132,8 +132,9 @@ capture is contending for at the same instant.
 |---------|--------|
 | `mnem explore` | `M.exploreToggle()` — start/stop the 4×4 auto-sweep |
 | `mnem explore on` / `mnem explore off` | `M.exploreOn()` / `M.exploreOff()` — force state |
-| `mnem explore status` | `M.exploreStatus()` — diagnostic (`inMnem`/denizens/moving/next step) |
-| `mnem explore why` | `M.exploreWhy()` — **why is the sweep not moving?** Per-exit refusal reasons, grid bounding box, nav-suspension state, and the lava ledger with provenance (v4.7.259/262) |
+| `mnem explore status` | `M.exploreStatus()` — diagnostic (`inMnem`/denizens/moving/next step, plus a glance-recon line since v4.7.319) |
+| `mnem explore why` | `M.exploreWhy()` — **why is the sweep not moving?** Per-exit refusal reasons, grid bounding box, nav-suspension state, the lava ledger with provenance (v4.7.259/262), and the glance state (v4.7.319) |
+| `mnem explore glance [on\|off]` | Toggle GLANCE recon (look before stepping into a never-walked room; plans the lava pass-through door). Persisted as `ataxia.settings.reporting.glance`. `status` and `why` both print whether a glance is PENDING -- it holds the step and its send is echo-suppressed (v4.7.318/319) |
 | `mnem swarm` | `M.swarm.status()` — swarm-tactics state/threshold/recon |
 | `mnem swarm on` / `off` | Toggle multi-mob tactics (persisted, `swarm.enabled`) |
 | `mnem swarm assess <n>` | Pull threshold (default 3) |

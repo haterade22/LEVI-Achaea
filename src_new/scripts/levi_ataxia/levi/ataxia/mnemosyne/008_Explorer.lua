@@ -244,23 +244,46 @@ function M._nextExploreStep()
   -- non-planar step (that would climb `up` out of the grid to the holding room).
   local best
   for num, r in pairs(MAP.rooms) do
-    if r.visited and num ~= cur and #usableUnexplored(num) > 0 then
+    -- NEVER TARGET A LAVA ROOM (v4.7.319, deep review, probe-confirmed LIVELOCK). A lava room
+    -- with an unwalked exit of its own was a valid backtrack target, refused only at the FIRST
+    -- step -- so from two rooms away the sweep walked adjacent, refused, fell into the patrol
+    -- (which v4.7.318 taught to skip lava), stepped away, and the sweep step reset the patrol
+    -- counters: `E -n-> NE -s-> E -n-> ...` for 24 ticks, no HP lost, no stop, MAX_PATROL_LOOPS
+    -- never accruing. v4.7.318's patrol filter made that the ONLY outcome where the patrol used
+    -- to walk in and pay once. The lava room's own doors are not the sweep's to finish.
+    if r.visited and num ~= cur and #usableUnexplored(num) > 0
+       and not (M.roomIsLava and M.roomIsLava(num)) then
       -- Prefer the walked path; fall back to the known-room graph so a walked-graph gap
       -- (dropped edge in the demented tower) can't strand a placed, unexplored room.
       local steps = MAP.path(cur, num) or (MAP.pathKnown and MAP.pathKnown(cur, num))
-      -- REFUSE A PATH THAT STARTS BY WALKING INTO LAVA (v4.7.256). This is the one that killed
-      -- us: once the lava room had been walked, its exits were no longer "unexplored", so the
-      -- filter above never saw them -- but the room BEYOND it still had an unexplored exit, and
-      -- the shortest path to that ran straight through the lava. The sweep took it three times
-      -- at 6,874 a go. Checking only the FIRST step is sufficient and cheap: every step is
-      -- re-decided on arrival, so a route we never enter is a route we never traverse.
-      local firstOk = steps and steps[1] and not (M.edgeIsLava and M.edgeIsLava(cur, steps[1]))
-      if steps and #steps > 0 and firstOk and planarStep(steps[1])
+      -- REFUSE A PATH THAT WALKS INTO LAVA ANYWHERE (v4.7.256 checked the FIRST step; v4.7.319
+      -- checks every step it can resolve). The first-step rule relied on "every step is
+      -- re-decided on arrival" -- true, but a target whose only route runs THROUGH lava is
+      -- re-selected on every arrival too, which is the same oscillation as above with the lava
+      -- one hop further away. Walk the path over the walked edges; a hop that cannot be
+      -- resolved is accepted (unknown is not lava), exactly as the old rule accepted it.
+      if steps and #steps > 0 and planarStep(steps[1]) and M._pathIsLavaFree(cur, steps)
          and (not best or #steps < #best) then best = steps end
     end
   end
   if best then return best[1] end
   return nil
+end
+
+-- Does this route cross a known lava edge or enter a known lava room at any hop we can
+-- resolve? Pure; used by the sweep backtrack and the patrol.
+function M._pathIsLavaFree(fromNum, steps)
+  local node = fromNum
+  for _, s in ipairs(steps) do
+    if M.edgeIsLava and M.edgeIsLava(node, s) then return false end
+    local r = MAP.rooms and MAP.rooms[node]
+    local nd = MAP.normDir and MAP.normDir(s)
+    local nxt = r and nd and ((r.edges and r.edges[nd]) or (M._exitTarget and M._exitTarget(node, nd)))
+    if not nxt then return true end -- cannot resolve the next hop; nothing more to check
+    if M.roomIsLava and M.roomIsLava(nxt) then return false end
+    node = nxt
+  end
+  return true
 end
 
 -- Patrol step (boss hunt). Once the grid is swept there are no unexplored exits,
@@ -304,9 +327,12 @@ function M._nextPatrolStep()
       -- And skip one whose first step is a known lava EDGE (v4.7.318) -- the same first-step
       -- test the sweep's backtrack applies, for the same reason: every step is re-decided on
       -- arrival, so refusing the first step is enough to never traverse the route.
-      local firstOk = steps and steps[1] and not (M.edgeIsLava and M.edgeIsLava(cur, steps[1]))
-      if steps and #steps > 0 and firstOk and planarStep(steps[1]) then return steps[1] end
-      table.remove(M.explore.patrolQueue, 1) -- unreachable / non-planar / lava first step: skip
+      -- Whole-path lava test since v4.7.319 (see _pathIsLavaFree): a target whose only route
+      -- runs through lava is skipped here rather than walked toward and refused on arrival.
+      if steps and #steps > 0 and planarStep(steps[1]) and M._pathIsLavaFree(cur, steps) then
+        return steps[1]
+      end
+      table.remove(M.explore.patrolQueue, 1) -- unreachable / non-planar / lava route: skip
     end
   end
   return nil
@@ -609,9 +635,11 @@ function M._lavaExit()
   local unexplored = {}
   for _, d in ipairs(MAP.unexploredExits(cur) or {}) do unexplored[d] = true end
   for _, d in ipairs(dirs) do
-    if MAP.OFFSETS[d] and unexplored[d] then
-      local tgt = M._exitTarget(cur, d)
-      if not (tgt and M.explore.lavaRooms[tgt]) then return MAP.shortDir(d) end
+    -- `edgeIsLava` here too (v4.7.319): an unexplored door cannot carry a lava edge by
+    -- construction, so this changes nothing today -- but every other pass uses it and the
+    -- documented rule is absolute; one exception invites the next.
+    if MAP.OFFSETS[d] and unexplored[d] and not M.edgeIsLava(cur, d) then
+      return MAP.shortDir(d)
     end
   end
 
@@ -761,20 +789,34 @@ function M.onLava(lineText)
   -- THE PLANNED DOOR (v4.7.318). If a glance saw this room was lava before we stepped in, the
   -- forward door was chosen then; use it rather than deriving one under fire. Matched to THIS
   -- entry (same origin room and direction), validated against the room's real exits, and spent.
+  -- GATED ON THE SPLASH, NOT ON THE EPISODE FLAG (v4.7.319, deep review, probe-confirmed).
+  -- `first` is "no lava tick in the last LAVA_EPISODE_GAP seconds" -- episode TIMING. Escape
+  -- lava room X, arrive clean, glance B, enter B within 6s of X's last tick: `first` is false,
+  -- the plan for B was silently skipped and left unconsumed, and X's REMEMBERED door was sent
+  -- into B, validated only by "that exit exists" -- in the probe, `n`, the way we came. The
+  -- splash line IS a room entry; that is the event the plan was made for.
+  -- AND LAVA-CHECKED (deep review x3): at glance time the neighbour's exits carry no ids, so the
+  -- splash is the first moment `edgeIsLava` can be asked -- without it the plan sent us from one
+  -- lava room straight into a KNOWN second one where `_lavaExit` would have chosen `w`.
   local plan = ataxiaTemp.mnemLavaPlan
-  if first and plan and from and fdir and plan.room == from and plan.dir == fdir then
+  if entry and plan and from and fdir and plan.room == from and plan.dir == fdir then
     ataxiaTemp.mnemLavaPlan = nil
     local r = cur and MAP.rooms and MAP.rooms[cur]
-    if plan.fwd and r and r.exits and r.exits[plan.fwd] ~= nil then
+    if plan.fwd and r and r.exits and r.exits[plan.fwd] ~= nil
+       and not (M.edgeIsLava and M.edgeIsLava(cur, plan.fwd)) then
       dir = MAP.shortDir(plan.fwd)
       M._exploreEcho("<indian_red>LAVA as glanced<reset> -- passing through by the planned door.")
     end
   end
-  local remembered = (not first) and ataxiaTemp.mnemLavaDir or nil
+  -- The remembered door is for the SAME room's struggle ticks (v4.7.262). Re-entering a
+  -- different lava room inside the episode gap must not inherit it (v4.7.319): `anchor` is the
+  -- episode's room as it stood BEFORE this line updated it. And it, too, is lava-checked now.
+  local remembered = (not first) and anchor == cur and ataxiaTemp.mnemLavaDir or nil
   if remembered then
     local r = cur and MAP.rooms and MAP.rooms[cur]
     local nd = MAP.normDir and MAP.normDir(remembered)
-    if r and r.exits and nd and r.exits[nd] ~= nil then dir = remembered end
+    if r and r.exits and nd and r.exits[nd] ~= nil
+       and not (M.edgeIsLava and M.edgeIsLava(cur, nd)) then dir = remembered end
   end
   dir = dir or M._lavaExit()
   ataxiaTemp.mnemLavaDir = dir
@@ -824,6 +866,7 @@ function M.exploreWhy()
     .. "   <NavajoWhite>moving: " .. (M.explore.moving and "<yellow>yes" or "<DimGrey>no"))
   cecho("\n  <NavajoWhite>dead reckoning: "
     .. ((MAP.drActive and MAP.drActive()) and "<yellow>ON (dementia)" or "<DimGrey>off"))
+  cecho("\n  <NavajoWhite>" .. M._glanceLine())
   if not cur then
     cecho("\n  <red>no current room<reset> -- nothing to decide from.\n")
     return
@@ -938,6 +981,12 @@ function M._glanceWanted(dirShort)
   local nd = MAP.normDir and MAP.normDir(dirShort)
   if not (cur and nd) then return false end
   if not (MAP.OFFSETS and MAP.OFFSETS[nd]) then return false end -- never glance down
+  -- NOTHING TO SEE WHILE BLIND (v4.7.319, deep review). The Monk/BM keeper (v4.7.315) holds
+  -- BLIND up in the tower too; a glance then prints nothing we parse, and the only release is
+  -- the timeout -- one wasted second per never-walked door, ~16-24 a ripple, silently. The same
+  -- GMCP key the keeper reads. (Single Minded Focus -- "you can no longer squint, glance, or
+  -- observe" -- has no latch yet; it would belong here.)
+  if ataxia.defences and ataxia.defences.blindness then return false end
   local g = M.explore.glance
   if g and g.done and g.room == cur and g.dir == nd then return false end -- already looked
   local r = MAP.rooms and MAP.rooms[cur]
@@ -979,7 +1028,7 @@ function M._onGlanceExits(dirLong, exits)
   local g = M.explore.glance
   if not g or g.done then return end
   local nd = MAP.normDir and MAP.normDir(dirLong)
-  if nd and g.dir ~= nd then return end -- someone else's glance
+  if nd ~= g.dir then return end -- someone else's glance, or a header word that is no direction
   g.exits = exits or {}
   M._glanceResolve("exits line")
 end
@@ -989,6 +1038,12 @@ function M._glanceResolve(why)
   if not g or g.done then return end
   g.done = true
   if M._glanceT then pcall(killTimer, M._glanceT); M._glanceT = nil end
+  -- The exits line is the normal end and needs no line of its own; anything else is the glance
+  -- NOT working (blind, darkness, a wording change in the header) and is worth one line, since
+  -- a timeout-resolved glance was otherwise indistinguishable from one that never happened.
+  if why and why ~= "exits line" then
+    M._exploreEcho("<DimGrey>glance " .. MAP.shortDir(g.dir) .. " gave nothing (" .. why .. ") -- moving anyway.")
+  end
   ataxiaTemp = ataxiaTemp or {}
   if g.lava then
     -- Plan the pass-through: any planar door of the glanced room that is not the one we will
@@ -1389,11 +1444,23 @@ function M._exploreTick()
     -- the exits line lands or GLANCE_TIMEOUT expires, and by then _glanceWanted is false for
     -- this door, so the second pass moves. A pending glance holds the step.
     local g = M.explore.glance
+    if g and not g.done and g.room ~= MAP.current then
+      -- A GLANCE FOR A ROOM WE HAVE LEFT IS DROPPED, NOT WAITED FOR (v4.7.319, deep review,
+      -- reproduced). v4.7.318 stopped the resolve re-ticking after a room change so it could
+      -- not kill the arrival settle -- correct -- but the settle tick then hit THIS gate, saw a
+      -- pending glance, and returned with nothing scheduled; the timeout resolved without a
+      -- re-tick; only the 30s watchdog was left. The glance is about the old room's neighbour
+      -- and its plan is keyed to the old room, so nothing is lost by discarding it here.
+      if M._glanceT then pcall(killTimer, M._glanceT); M._glanceT = nil end
+      M.explore.glance = nil
+      g = nil
+    end
     if g and not g.done then
       -- A WEDGED GLANCE MUST NOT HOLD THE SWEEP FOREVER (deep review, v4.7.318). The timeout
       -- timer is the normal release; if it was lost (killed, never armed, a mock without timers)
       -- this gate would return on every tick -- including the watchdog's -- with nothing left to
-      -- clear it. Three times GLANCE_TIMEOUT is far beyond any real glance.
+      -- clear it. Three times GLANCE_TIMEOUT is far beyond any real glance. (This gate only
+      -- runs when a tick runs, so in a quiet room the real bound is the 30s watchdog.)
       local age = ((getEpoch and getEpoch()) or 0) - (tonumber(g.at) or 0)
       if age > GLANCE_TIMEOUT * 3 then
         M._glanceResolve("stale glance forced")
@@ -1775,6 +1842,16 @@ function M.exploreToggle()
   if M.explore.on then M.exploreOff() else M.exploreOn() end
 end
 
+-- One line for status/why: what the recon is doing right now.
+function M._glanceLine()
+  local g = M.explore.glance
+  local on = M._glanceEnabled() and "on" or "off"
+  if not g then return "glance recon: " .. on end
+  return "glance recon: " .. on .. " -- " .. (g.done and "last" or "PENDING") .. " "
+    .. tostring(MAP.shortDir and MAP.shortDir(g.dir) or g.dir) .. " from " .. tostring(g.room)
+    .. (g.lava and " (LAVA)" or "")
+end
+
 function M.exploreStatus()
   M.echo("<gold>[explore]<reset> " .. (M.explore.on and (M.explore.pausedAtBoon and "<cyan>paused (boon screen)" or "<green>ON") or "<grey>off")
     .. "<reset> inMnem=" .. tostring(inMnem())
@@ -1782,6 +1859,9 @@ function M.exploreStatus()
     .. " moving=" .. tostring(M.explore.moving) .. (M.explore.tacticalMove and " (tactical)" or "")
     .. " swarm=" .. tostring(M.swarm and M.swarm.state or "n/a")
     .. " next=" .. tostring(M._nextExploreStep()))
+  -- A pending glance HOLDS the step and its send is echo-suppressed, so without this line a
+  -- held sweep looked identical to a stalled one (v4.7.319, deep review).
+  M.echo("<gold>[explore]<reset> " .. M._glanceLine())
 end
 
 -- The ripple is complete when the boon-offer screen appears. PAUSE the sweep (stop navigating so
@@ -1946,7 +2026,10 @@ M._explLoadH = registerAnonymousEventHandler("sysLoadEvent", function()
   M.explore.lavaRooms = {}
   M.explore.lavaEdges = {}
   M.explore._noExitLooks = nil
+  M.explore.glance = nil
+  if M._glanceT then pcall(killTimer, M._glanceT); M._glanceT = nil end
   ataxiaTemp = ataxiaTemp or {}
   ataxiaTemp.bossChases, ataxiaTemp.bossPanicAt = nil, nil
+  ataxiaTemp.mnemLavaPlan = nil
   M.explore._prevBasher = nil
 end)
