@@ -35,7 +35,7 @@ The GUI system (zGUI Redux) was originally created by **Zulah**. It has been enh
 |---------|-------------|
 | **Affliction Tracking** | Branching probability tracker (V3) — models multiple possible world states, resolves ambiguous cures via probabilistic branching and verification collapse |
 | **Automated Curing** | SSC integration with custom priority management, curingset profiles |
-| **Defense Management** | Automatic defense rekeeping, parry system, anti-class priority adjustments |
+| **Defense Management** | Automatic defense rekeeping, parry system, anti-class priority adjustments; Monk and Blademaster keep DEAF and BLIND up with their timed skills (one send per trance) instead of spending herb balance |
 | **Limb Tracking** | Self limb counter (SLC) with percentage-based damage, auto-parry, threshold alerts, party callouts |
 | **Target Affliction Tracking** | V3 probability engine with branching cure prediction, lock detection at configurable confidence thresholds |
 
@@ -81,7 +81,7 @@ Full tooling for **the Mnemosyne**, Achaea's endless tower-climb PvE challenge �
 | **Run History** | Local record of every boon offered/claimed and every affix seen, plus an all-time affix library |
 | **Auto-Explorer** | `mnem explore` sweeps each ripple hands-free: clears rooms, hunts the boss, pauses at boon screens |
 | **Swarm Tactics** | Crowded rooms (3+ mobs) get pulled, walled, or kited instead of stood in — hit-and-run continues while it works, walls get leapt, plus a vitals-driven low-HP escape ladder |
-| **Boon Integration** | `BOON CLAIM` intercept auto-reports your pick and adapts to claimed boons — class rotations, a live Reaper +1%/kill damage counter, Bloodscent per-ripple recon |
+| **Boon Integration** | `BOON CLAIM` intercept auto-reports your pick and adapts to claimed boons — class rotations, Bloodscent per-ripple recon |
 | **Affix Handling** | Splinterbark turns tree curing off; Haemophiliac slows the sweep until post-kill bleeds are clotted |
 | **Boss Tactics** | Per-boss counters — Seasone's phial truelock is met with a tree tattoo held in reserve for exactly that moment |
 | **Dementia Mapper** | Standalone `dmap` package — the map + explorer with no LEVI dependency |
@@ -480,9 +480,15 @@ History lives in its own profile file (`mnemosyne_history.lua`) and survives pac
 
 Hands-free ripple sweeping. The explorer drives the basher in manual mode for combat and handles navigation itself: when a room is clear it steps through an unexplored exit, or backtracks to the nearest room that still has one. On a fully swept boss ripple it **patrols** cleared rooms to find the late-spawning boss. It pauses at the boon screen (basher stays on), **auto-resumes on `GO!`**, refuses to give up while an unexplored room is still reachable, handles ice-slip rooms, and restores your saved basher state when it stops.
 
+**Lava** is passed through, never retreated from: the entry damage is already paid, and stepping
+back only means paying it again, so the explorer takes the next door *forward*. Before stepping
+into a room it has never walked, it GLANCEs in first (free, and on by default —
+`mnem explore glance off` to disable), so a lava room's exit is planned before the splash rather
+than worked out under fire.
+
 ### Boon → Class Integration
 
-A passthrough intercept of `BOON CLAIM <name>` forwards your command, auto-reports the selection, and flips combat flags so the basher adapts to the boons you take — Bard **Warmarch**, Blademaster **Shattered Star** / **Bladed Reflexes** (keeps the Shindo augment up for 20% damage reduction), and Magi **Aspect of Kkractle** / **Hot Springs** reshape their class's attack logic, and the class-agnostic **Hammer and Anvil** (attacks bypass denizen shields) turns off razing and shield-swapping entirely for the rest of the run. **Reaper** (+1% damage per kill) gets a live counter — every tithe line echoes your running total (`Reaper: you now have +23% damage total`), surviving even a mid-run system update and a pause/resume wade. **Bloodscent** turns each ripple entry into parsed recon (below). Monk/Shikudo gets two more: **Kai Unleashed** fires a room-wide KAI CHOKE burst (25k+ magical observed) alongside the combo in crowded rooms on its 30-second cooldown — confirmed by the burst's own game line, so an eaten choke never wastes the window — and **Senseless Flurry** keeps the numbness defence up in thin rooms for 30% faster balance (crowd-gated: numbness defers damage and would blind the safety nets in a swarm). Psion's **Panoply** swaps the bash to WEAVE FLURRY (60–200% scaling per strike). The **Haemophiliac** affix (kills bleed thousands) automatically slows the sweep: after each room clears, movement holds until the bleed is clotted and HP recovers. **Boss tactics** are per-boss scripted: against Seasone the Industrious the tree tattoo is held in reserve from the moment her objective appears and released the instant her phial truelock lands — a fresh tree breaks the lock immediately.
+A passthrough intercept of `BOON CLAIM <name>` forwards your command, auto-reports the selection, and flips combat flags so the basher adapts to the boons you take — Bard **Warmarch**, Blademaster **Shattered Star** / **Bladed Reflexes** (keeps the Shindo augment up for 20% damage reduction), and Magi **Aspect of Kkractle** / **Hot Springs** reshape their class's attack logic, and the class-agnostic **Hammer and Anvil** (attacks bypass denizen shields) turns off razing and shield-swapping entirely for the rest of the run. **Bloodscent** turns each ripple entry into parsed recon (below). Monk/Shikudo gets two more: **Kai Unleashed** fires a room-wide KAI CHOKE burst (25k+ magical observed) alongside the combo in crowded rooms on its 30-second cooldown — confirmed by the burst's own game line, so an eaten choke never wastes the window — and **Senseless Flurry** keeps the numbness defence up in thin rooms for 30% faster balance (crowd-gated: numbness defers damage and would blind the safety nets in a swarm). Any Monk holding **Sharp Mind** (critical strikes restore mana, and the Monk strikes three times a balance) transmutes mana into health as a top-up at 90% HP rather than a 70% gap-filler. Psion's **Panoply** swaps the bash to WEAVE FLURRY (60–200% scaling per strike). The **Haemophiliac** affix (kills bleed thousands) automatically slows the sweep: after each room clears, movement holds until the bleed is clotted and HP recovers. **Boss tactics** are per-boss scripted: against Seasone the Industrious the tree tattoo is held in reserve from the moment her objective appears and released the instant her phial truelock lands — a fresh tree breaks the lock immediately.
 
 ### Swarm Tactics & Low-HP Escape (`mnem swarm`)
 
@@ -504,10 +510,13 @@ explorer fights on chosen ground:
 - **Outdoors swarm-followed**: **fly-kite** — `FLY`, then every attack becomes
   `land;attack;fly`, touching ground only for the swing; lands when the pack thins.
 - **Roll Hide panic** (boon): at panic HP, tumble out — sheds all pursuers.
-- **Low-HP escape ladder** (any mob count, default 35%): outdoors fly and hover untouchable
-  — works with every limb broken, unlike `touch shield` — landing only when FULLY healed
-  (95%+ and affliction-free); indoors retreat to the cleared room; shield stays as the last
-  resort.
+- **Low-HP escape ladder** (any mob count, default 35%): outdoors fly and hover — works
+  with every limb broken, unlike `touch shield` — landing only when FULLY healed (95%+ and
+  affliction-free). The hover re-checks its own premise every tick: knocked out of the sky,
+  a denizen in the air with you, or a fly that never took ends it at once and hands back to
+  fighting instead of holding your attacks. Indoors, retreat to the cleared room; when dying
+  fast with no known route back, any safe door beats standing still. While webbed or
+  otherwise bound it doesn't try to fly or leap at all. Shield stays as the last resort.
 - **Bloodscent recon** (boon): every ripple entry senses out all denizens — the rows are
   parsed into per-room counts with crowded rooms called out before you take a step
   (`recon: 8 denizens across 6 rooms -- crowded: Beneath an ancient tree (3)`).
@@ -518,7 +527,9 @@ explorer fights on chosen ground:
 
 Any icewall that blocks a walk — yours or the tower's — is simply **leapt** (chitin
 greaves), so walls never derail navigation. Tactical moves never blacklist real exits, a
-server-side hold protects every queued escape from being overwritten by the attack loop,
+server-side hold protects every queued escape from being overwritten by the attack loop
+(escape mode is only announced on a path that is really leaving, and flushes the queue first
+so a committed swing can't take the escape's balance),
 and a vitals-driven watchdog fires the panic/escape ladder on the very prompt your HP
 crosses the threshold. The standalone Dementia Mapper mirrors the pull/funnel core via
 `dmap swarm <n|off>`.
@@ -533,10 +544,11 @@ crosses the threshold. The standalone Dementia Mapper mirrors the pull/funnel co
 | `mnem map [on\|off\|status]` | Toggle or diagnose the ripple mini-map |
 | `mnem boons` / `mnem affixes` / `mnem library` | Run history reports (see above) |
 | `mnem explore [on\|off\|status]` | Start/stop/inspect the auto-sweep |
+| `mnem explore glance [on\|off]` | Glance into never-walked rooms before stepping (lava pass-through; default on) |
 | `mnem swarm` | Swarm-tactics status (state, thresholds, branch toggles, recon) |
 | `mnem swarm assess <n>` / `deep <r> <n>` | Pull threshold (default 3) / depth-scaled threshold |
 | `mnem swarm icewall\|kite\|panic\|escape on\|off` | Per-branch toggles |
-| `mnem swarm panicat\|escapeat\|recoverat <hp%>` | Panic (40) / escape (35) / recovery-land (95) thresholds |
+| `mnem swarm panicat\|escapeat\|recoverat <hp%>` | Panic (35) / escape (35) / recovery-land (95) thresholds |
 | `mnem sense` | Manual fullsense recon (Sleuth boon reveals all denizens) |
 | `mnem contemplate` | Toggle boon-description enrichment (`BOON CONTEMPLATE`) |
 | `mnem quiet [on\|off]` | Silence automatic boon/affix echoes (still records) |
