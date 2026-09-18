@@ -347,7 +347,7 @@ kai:
   abilities:
     - heal: "Heal HP"
     - cripple: "Self-damage for affliction cure"
-    - transmute: "Convert health to mana"
+    - transmute: "Convert MANA into HEALTH (AB 893; requires balance, does not consume it) -- this line said health-to-mana until v4.7.320, which is backwards"
 
 # Telepathy
 mindblast:
@@ -414,6 +414,7 @@ tekura_attack: "unwield all; combo <tar> sdk ucp ucp"   # rhk instead of sdk whe
 shikudo_attack: "per-form COMBOs via shikudoBashCombo, riding Willow(leaveAt 9) -> Rain(5) -> Oak(5)"
 shikudo_notes: "inline TRANSITION suffix on the combo; shatter variant for shieldbreak; kata self-zeroed after transition to avoid a fail loop"
 transmute_gapfiller: "transmute to top up HP ONLY when sip balance is down and HP <= transmuteat (default 70)"
+transmute_sharp_mind: "with the Sharp Mind boon, in the tower: a plain top-up at HP <= sharpmindat (default 90), sip balance ignored; floor + transmuteto unchanged (v4.7.320)"
 crushbash: "if ataxia.settings.crushbash set, sends 'mind crush <target>' instead"
 shield: "Monk never spends rage on Splinterkick (spk) to raze - both specs break denizen shields free (shatter / rhk)"
 
@@ -1306,3 +1307,44 @@ them, and they need different answers:
 **So the keeper is the herb saving**, and it only had to be made to behave: the defence being TIMED
 is exactly why it re-fires, and the pre-v4.7.315 guard was fed by the game's attempt echo, so it
 could not close until the command had made the round trip -- six DEAF in 0.15s for one trance.
+
+## Transmute, and Sharp Mind (v4.7.320)
+
+**AB Transmute (Kaido 893)**, live-pasted 2026-09-18:
+
+```
+Syntax:            TRANSMUTE <amount>
+Extra Information: Balance
+Works on/against:  Self
+Details: This will instantly turn the specified amount of mana into health, minus a bit that is
+lost in the transfer.
+```
+
+Mana INTO health (this file said the reverse until v4.7.320). **It requires balance but does not
+consume it** (user) -- which is the ideal shape for a rider on the bash round: it can only execute
+when the round actually fires, so it runs once per swing and never on every 0.3s rebuild (the
+v4.7.270 `shin augment` trap, where a balanceless command re-fired on every re-queue), and it
+costs the combo nothing. "Minus a bit lost in the transfer": `transmute N` buys slightly under N
+health, which is harmless for a top-up to `transmuteto`.
+
+**Normally a gap-filler** (`ataxiaBasher_monkBashing2`, basher/002): only while sip balance is DOWN,
+only at or below `transmuteat` (70%) HP, topping to `transmuteto` (99%), never spending past the
+`manause` floor (30% mana). It is stingy on purpose -- every point transmuted is mana the rest of
+the kit wanted, and server-side sipping is already healing us while sip balance is up.
+
+**Sharp Mind changes the premise** (Mnemosyne boon, common: "Critical strikes restore 5% of your
+mana", 15% echoed). The Monk bash round is a three-strike combo -- three chances to crit every
+balance -- so the mana transmute spends comes back. With the boon held **and** in the tower,
+transmute becomes a plain top-up (user-directed):
+
+| | Gap-filler (default) | Sharp Mind, in the tower |
+|---|---|---|
+| Fires at HP | <= `transmuteat` (70) | <= `sharpmindat` (90) |
+| Sip balance | must be DOWN | ignored |
+| Tops up to | `transmuteto` (99) | `transmuteto` (99) |
+| Mana floor | `manause` (30%) | `manause` (30%) -- kept as the safety net |
+
+Flag `mnemSharpMind`, latched through the generic boon registry (`004 M.BOON_FLAGS`) from the
+BOONS row or an `(ECHO)` row. **Tower-gated as well as boon-gated** because the registry clears its
+flags on a confirmed run END but not at run START (a known registry gap), and outside the tower
+there are no crits refilling anything. `ataxia.settings.sipping.sharpmindat` tunes the threshold.

@@ -6581,3 +6581,20 @@ describe("the send capture ignores look verbs", function()
     MAP._lastMoveDir = nil
   end)
 end)
+
+-- v4.7.320: Sharp Mind joins the generic registry -- it arms the Monk transmute top-up.
+describe("Sharp Mind latches through the boon registry", function()
+  local M = ataxia.mnemosyne
+  it("latches from the plain row and from an (ECHO) row", function()
+    mnemSharpMind = nil
+    expect(M.BOON_FLAGS["Sharp Mind"]).toBe("mnemSharpMind")
+    expect(M.latchBoonFlag("Sharp Mind")).toBe("mnemSharpMind")
+    expect(mnemSharpMind).toBeTrue()
+    mnemSharpMind = nil
+    expect(M.latchBoonFlag("(ECHO) Sharp Mind")).toBe("mnemSharpMind")
+    expect(mnemSharpMind).toBeTrue()
+    M.clearBoonFlags()
+    expect(mnemSharpMind).toBeFalse()
+    mnemSharpMind = nil
+  end)
+end)

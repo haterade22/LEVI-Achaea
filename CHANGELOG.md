@@ -2,6 +2,49 @@
 
 ---
 
+## 2026-09-18 - Sharp Mind: the Monk transmute becomes a top-up (v4.7.320)
+
+User: *"we can be a bit more heavy on transmute as a monk when we have the boon sharp mind, as each
+critical refills our mana and we attack 3 times."*
+
+Sharp Mind (Mnemosyne, common): "Critical strikes restore 5% of your mana" -- 15% echoed. The Monk
+bash round is a three-strike combo, three chances to crit every balance, so the mana transmute
+spends comes back.
+
+`ataxiaBasher_monkBashing2`'s transmute is a deliberately stingy **gap-filler**: only while sip
+balance is DOWN, only at or below 70% HP, never past a 30% mana floor -- because every point
+transmuted is mana the rest of the kit wanted. With the boon held **and** in the tower it is now a
+**plain top-up** (user's choice of the offered options): fire at HP <= `sharpmindat` (**90**) with
+or without sip balance, still topping to `transmuteto` (99), still never past the `manause` floor,
+which stays as the safety net if crits dry up against a resistant boss.
+
+**AB Transmute (Kaido 893)**, pasted by the user: `TRANSMUTE <amount>`, "Extra Information:
+Balance", self -- "instantly turn the specified amount of mana into health, minus a bit that is
+lost in the transfer". Two facts from it:
+
+- **Mana INTO health.** `.claude/classes/monk.md` said "Convert health to mana" -- backwards. The
+  code was always right; the doc is corrected.
+- **It requires balance but does not consume it** (user). That is exactly the shape a rider on the
+  bash round wants: it can only execute when the round actually fires, so it runs once per swing
+  and never on every 0.3s rebuild (the v4.7.270 `shin augment` trap), and it costs the combo
+  nothing -- so going heavier on it trades against nothing but mana.
+
+`mnemSharpMind` is latched through the generic boon registry (`M.BOON_FLAGS`), from the BOONS row
+or an `(ECHO)` row. **Tower-gated as well as boon-gated**: the registry clears its flags on a
+confirmed run END but not at run START (the known registry gap), and outside the tower no crits
+refill anything. `ataxia.settings.sipping.sharpmindat` tunes the threshold.
+
+### Files
+
+- `basher/002_Class_Bashing.lua` -- the Sharp Mind branch of the transmute block.
+- `mnemosyne/004_Parsers.lua` -- `["Sharp Mind"] = "mnemSharpMind"` in `M.BOON_FLAGS`.
+- `tests/test_basher_monk.lua` -- 6 tests; `tests/test_mnemosyne.lua` -- the registry latch incl.
+  the `(ECHO)` row. **Break-back verified**: keeping the sip gate, dropping the tower gate, and not
+  raising the threshold each fail their own tests.
+- `.claude/classes/monk.md` (the AB, the corrected direction, a Sharp Mind table), `CLAUDE.md`.
+
+---
+
 ## 2026-09-18 - The v4.7.318 review, run properly: a livelock, a plan that skipped itself, and a look that moved us (v4.7.319)
 
 The v4.7.318 multi-agent review died at the weekly API limit and was finished by hand. With the

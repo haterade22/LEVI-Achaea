@@ -124,6 +124,70 @@ describe("ataxiaBasher_monkBashing2 — transmute is a gap-filler", function()
   end)
 end)
 
+-- SHARP MIND (v4.7.320): "Critical strikes restore 5% of your mana" and the Monk combo strikes
+-- three times a balance, so mana is cheap -- transmute becomes a top-up. Tower-only and
+-- boon-only; the floor still holds.
+describe("ataxiaBasher_monkBashing2 — Sharp Mind makes transmute a top-up", function()
+  local function sharp(on, inTower)
+    mnemSharpMind = on
+    ataxiaBasher.inMnemosyne = inTower
+  end
+
+  it("transmutes with sip balance UP when Sharp Mind is held in the tower", function()
+    reset(); sharp(true, true)
+    ataxia.vitals.sipbal = true; ataxia.vitals.hp = 4000 -- 80%: above transmuteat (50), below 90
+    -- target ceil(5000*0.70)=3500 < 4000 -> no deficit at transmuteto 70; use the real default
+    ataxia.settings.sipping.transmuteto = 99
+    -- target ceil(5000*0.99)=4950; deficit 950; spendable 5000-1500=3500 -> 950
+    expect(has(ataxiaBasher_monkBashing2(), "transmute 950;")).toBeTrue()
+    sharp(nil, nil)
+  end)
+
+  it("fires at the Sharp Mind threshold (90), not transmuteat", function()
+    reset(); sharp(true, true)
+    ataxia.settings.sipping.transmuteto = 99
+    ataxia.vitals.sipbal = true; ataxia.vitals.hp = 4600 -- 92%: above 90
+    expect(has(ataxiaBasher_monkBashing2(), "transmute")).toBeFalse()
+    ataxia.vitals.hp = 4500 -- 90%: at the threshold
+    expect(has(ataxiaBasher_monkBashing2(), "transmute 450;")).toBeTrue()
+    sharp(nil, nil)
+  end)
+
+  it("honours a configured sharpmindat", function()
+    reset(); sharp(true, true)
+    ataxia.settings.sipping.transmuteto = 99
+    ataxia.settings.sipping.sharpmindat = 80
+    ataxia.vitals.sipbal = true; ataxia.vitals.hp = 4250 -- 85%: above 80
+    expect(has(ataxiaBasher_monkBashing2(), "transmute")).toBeFalse()
+    sharp(nil, nil)
+  end)
+
+  it("still never spends past the mana floor", function()
+    reset(); sharp(true, true)
+    ataxia.settings.sipping.transmuteto = 99
+    ataxia.vitals.sipbal = true; ataxia.vitals.hp = 2000
+    ataxia.vitals.mp = 1800 -- spendable 1800-1500=300
+    expect(has(ataxiaBasher_monkBashing2(), "transmute 300;")).toBeTrue()
+    sharp(nil, nil)
+  end)
+
+  it("is inert OUTSIDE the tower even with the flag set", function()
+    reset(); sharp(true, false)
+    ataxia.settings.sipping.transmuteto = 99
+    ataxia.vitals.sipbal = true; ataxia.vitals.hp = 4000
+    expect(has(ataxiaBasher_monkBashing2(), "transmute")).toBeFalse() -- gap-filler rules apply
+    sharp(nil, nil)
+  end)
+
+  it("is inert without the boon (the gap-filler is unchanged)", function()
+    reset(); sharp(nil, true)
+    ataxia.settings.sipping.transmuteto = 99
+    ataxia.vitals.sipbal = true; ataxia.vitals.hp = 4000
+    expect(has(ataxiaBasher_monkBashing2(), "transmute")).toBeFalse()
+    sharp(nil, nil)
+  end)
+end)
+
 describe("ataxiaBasher_monkBashing2 — Shikudo form rotation", function()
   it("rides Willow, then transitions to Rain at its leaveAt", function()
     reset(); ataxia.vitals.kata = 0

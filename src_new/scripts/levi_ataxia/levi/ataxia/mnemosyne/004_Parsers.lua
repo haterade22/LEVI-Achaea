@@ -1161,6 +1161,7 @@ M.BOON_FLAGS = {
   ["Wrath and Righteousness"] = "mnemWrathRighteousness",
   ["Pyrrhic Victory"]      = "mnemPyrrhicVictory",
   ["Razor Leaf"]           = "mnemRazorLeaf",
+  ["Sharp Mind"]           = "mnemSharpMind", -- v4.7.320: Monk transmute becomes a top-up (basher/002)
 }
 
 -- An (ECHO) row names the same boon; a second copy does not make it a different one.
