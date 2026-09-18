@@ -140,7 +140,7 @@ The old design gated this POST behind a slow (~2.5s/boon) per-boon `BOON CONTEMP
 
 ### The `BOON CONTEMPLATE` enrichment state machine (now backfill-only)
 
-The sequential contemplate walk **is no longer on the offer path** — `_reportBoonsOfferedEnriched` posts immediately (above). The machinery is retained and now drives only `boonFill` (the `mnem boonfill` backfill of already-owned boons whose description was never captured). It is still strictly sequential — one contemplate block in flight at a time, matching the `_captureLines` guard — `_contemplateNext` walking `send("boon contemplate <name>")` → `_captureContemplate(cb)` → `_applyContemplate` → `tempTimer(0.5, next)`.
+The sequential contemplate walk **is no longer on the offer path** — `_reportBoonsOfferedEnriched` posts immediately (above). The offer-path chain (`_contemplateNext` / `_applyContemplate`) was dead from v4.7.279 and **removed in v4.7.322**. Contemplate now drives only `boonFill` (`mnem boonfill`, and the one-per-screen trickle): strictly sequential — one contemplate block in flight at a time, matching the `_captureLines` guard — `_boonFillNext` walking `send("boon contemplate <name>")` → `_captureContemplate(cb)` → `_learnBoon` → `tempTimer(0.5, next)`. Since v4.7.322 it also contemplates DESCRIBED boons never checked (combo status, quote, category -- never the text), and ignores a captured block with neither `Rarity:` nor `Can echo:`.
 
 > **"Immediately" means "not behind the contemplate chain", not "synchronously".** Text below
 > describing `_reportBoonsOfferedEnriched` as posting *right away* predates v4.7.279's ripple
@@ -153,7 +153,7 @@ The sequential contemplate walk **is no longer on the offer path** — `_reportB
 
 - **`_captureContemplate(cb)`** captures with `timeout = 2`. It **never** captures a `BOON CLAIM` line (returns `"skip"`), skips the `<name>:` header and opening divider, and **stops** at the closing divider. `onDone` is one-shot (`called` latch) and passes `_parseContemplate(lines)` to `cb`.
 - **`_parseContemplate(lines)`** returns `{ rarity, num_echoes_possible, description, quote }`. It reads `Rarity: <r>`, the authoritative **`Maximum echoes: N`** line (printed only for echo-capable boons → `num_echoes_possible = N`), and `Can echo: <Yes/No>` (`No` → `0`, `Yes` → a floor of `1` that a `Maximum echoes` line refines to `N`) — so an echo-capable boon reports its real cap, not a flat `1`, and the `Maximum echoes` line is consumed as meta rather than leaking into the description. It then advances through sections `meta → desc → quote`: non-blank lines after the meta rows build the description paragraph, a blank line switches to the quote section, and the trailing double-quoted line becomes `quote` (surrounding `"` stripped).
-- **`_applyContemplate(boon, info)`** merges **only `rarity`, `quote`, and `num_echoes_possible`** onto the offered entry. It deliberately does **not** take contemplate's `description`: the offered-block description is authoritative and already wrap-joined, and the first boon's contemplate is armed right beside the `BOON CLAIM` offered footer, which was corrupting the first boon's description.
+- **Description authority.** For a boon the catalogue already describes, `_boonFillNext` passes `_learnBoon` NO description: the offer screen's text is authoritative and already wrap-joined. (This was `_applyContemplate`'s rule on the old offer-path chain, removed in v4.7.322.)
 
 ### `onBoonClaim(name)`
 
@@ -197,9 +197,9 @@ Both walks are word-capped (6 left, 5 right) so a runaway sentence can't blow up
 
 ### Notable behaviours
 
-- **One capture at a time.** `_captureLines`, `_captureContemplate`, and the monster one-shot each own the single in-flight temp trigger; the `M._capturing` guard and the sequential `_contemplateNext` walk keep effects/boons/contemplate blocks from interleaving.
+- **One capture at a time.** `_captureLines`, `_captureContemplate`, and the monster one-shot each own the single in-flight temp trigger; the `M._capturing` guard and the sequential `_boonFillNext` walk keep effects/boons/contemplate blocks from interleaving.
 - **Silence backstop.** Every block has a `timeout` (1.5s effects, 3s boons, 2s contemplate) so a block that never emits an explicit terminator still flushes and never leaves a catch-all trigger armed.
-- **Description authority.** `_applyContemplate` never overwrites the offered-block description; contemplate only adds `rarity` / `quote` / `num_echoes_possible`.
+- **Description authority.** Contemplate never overwrites a description the catalogue already holds (`_boonFillNext` passes none for a described boon), and `_learnBoon` never stores a description with a screen label glued on (v4.7.322).
 
 ## Generic boon latch (v4.7.241)
 
@@ -397,6 +397,27 @@ the third is deliberately not.**
   first-wins guard, so `pairs()` order would make the winner arbitrary. The keys are sorted, for
   the same reason `boonGaps` sorts.
 
+**A label may end in `?` (v4.7.322).** The screen prints `Combo Boon?:        Yes`, and the label
+pattern had no `?`, so that line started the description and was glued onto it -- the exact
+corruption visible in the tracker's own catalogue (`GET /boons/export`), which is the only sample
+of the wording we have. `META_KEY` (`^(%u[%w'%- ]-%??):%s+`) now serves both the label test and the
+value capture. The `?` must sit directly before the colon, so prose that merely contains one is
+still refused. **Yes/No labels promote to booleans** through a separate map (`META_FLAG`:
+`Combo Boon?` -> `comboBoon`, and ONLY that label -- a guessed `Combo Boon` alias sorted first and
+would have overridden the real one); anything but a clean yes/no stays in `meta`. **`Unset`** joins
+the placeholders (Restoration's category is "Unset" in the tracker's export, and Curse of Time's
+description opens with the glued line `Category:           Unset`). The same export also leaves it
+**unproven which screen prints the line**, so the guard is on both: `M._cleanOfferList` stops a meta
+row on the OFFER screen becoming a fake boon (or being glued to a real one's text).
+
+**Glued lines, and the capture that caught the wrong block (v4.7.322).** `M._splitGluedMeta` peels
+`Label:   value` pairs off the front of a description -- the tell is two or more spaces after the
+colon, which prose never has -- and `_learnBoon` refuses to store one; `M._boonDbRepair` fixes any
+already stored at load. The one it found on the user's install, Deadly Finesse ("Denizen levels
+increased by:  70 Denizen speed increased by:   2"), was a CONTEMPLATE capture that caught a WADE
+STATUS block instead, so `_boonFillNext` now ignores a captured block with neither `Rarity:` nor
+`Can echo:` -- every real contemplate opens with them.
+
 ### Why `Conflicts with` is NOT promoted (deep review, v4.7.298)
 
 It was, in the first cut of this change, on the strength of the schema having the field. That was
@@ -468,6 +489,6 @@ longer print, and its documentation stays true-looking. Reaper is the worked exa
   is a data import we do not have the data for, and a name table is the shape our own rule
   (v4.7.264) says goes stale on the entry after the last one someone added.
 * **Contemplating every offered slot.** We moved off that in v4.7.91; the enrichment chain raced the
-  next ripple for the single `_capturing` slot and dropped whole reports. Note `M._contemplateNext`
-  is now DEAD CODE -- nothing calls it but itself -- and `mnem status` still advertises
+  next ripple for the single `_capturing` slot and dropped whole reports. `M._contemplateNext`
+  was dead code from then and was removed in v4.7.322; `mnem status` still advertises
   "Contemplate: ON", which no longer describes anything on the offer path.

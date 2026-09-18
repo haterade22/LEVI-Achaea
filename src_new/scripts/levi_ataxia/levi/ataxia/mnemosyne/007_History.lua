@@ -143,8 +143,8 @@ end
 -- boon we are ever offered lets us join the two and annotate BOONS with what each one does.
 --
 -- Merges rather than overwrites: the offer screen supplies the description, the BOONS list
--- supplies rarity, and the BOON <name> detail screen supplies maxEchoes -- each fills in the
--- fields it knows and never blanks a field another source already filled.
+-- supplies rarity, and BOON CONTEMPLATE (`mnem boonfill`) supplies maxEchoes and the rest -- each
+-- fills in the fields it knows and never blanks a field another source already filled.
 --
 -- `extra` (v4.7.298) carries the rest of what a CONTEMPLATE block prints: quote, category,
 -- unlockedBy, conflictsWith. All four were already being PARSED and then dropped on the floor --
@@ -162,6 +162,22 @@ local EXTRA_STRINGS = { "quote", "category", "unlockedBy" }
 
 function M._learnBoon(name, description, rarity, maxEchoes, extra)
   if type(name) ~= "string" or name == "" then return end
+  -- NEVER STORE A GLUED SCREEN LINE AS TEXT (v4.7.322). This function OVERWRITES the description,
+  -- so it is the one place a corrupted one does lasting damage: it replaces good text and lands on
+  -- the bonuses panel. Whatever source called us, peel off any `Label:   value` padding-glued to
+  -- the front (see `_splitGluedMeta`), keep the rest, and promote what the labels said.
+  if type(description) == "string" and M._splitGluedMeta then
+    local rest, glued = M._splitGluedMeta(description)
+    if glued then
+      description = (rest ~= "") and rest or nil
+      local p = M._promoteMeta and M._promoteMeta({ meta = glued }) or {}
+      local x = {}
+      if type(extra) == "table" then for k, v in pairs(extra) do x[k] = v end end
+      if x.comboBoon == nil and type(p.comboBoon) == "boolean" then x.comboBoon = p.comboBoon end
+      if x.category == nil and type(p.category) == "string" then x.category = p.category end
+      extra = x
+    end
+  end
   M.history.boonLibrary = M.history.boonLibrary or {}
   local rec = M.history.boonLibrary[name] or {}
   if type(description) == "string" and description ~= "" then rec.description = description end
@@ -178,6 +194,9 @@ function M._learnBoon(name, description, rarity, maxEchoes, extra)
       for i, n in ipairs(extra.conflictsWith) do cw[i] = n end
       rec.conflictsWith = cw
     end
+    -- A BOOLEAN (v4.7.322): `false` is an answer ("Combo Boon?: No"), so it is stored like `true`.
+    -- A truthiness test here would silently drop every "No".
+    if type(extra.comboBoon) == "boolean" then rec.comboBoon = extra.comboBoon end
   end
   M.history.boonLibrary[name] = rec
   return rec
@@ -341,7 +360,10 @@ end
 -- catalogue would round-trip through save/load LOSING them. A merge that enumerates its fields
 -- inline is a merge that goes stale the next time the record grows.
 M.BOON_DB_FIELDS = { "description", "rarity", "maxEchoes", "quote", "category",
-                     "unlockedBy", "conflictsWith" }
+                     "unlockedBy", "conflictsWith", "comboBoon" }
+-- `comboBoon` (v4.7.322) is a boolean. The merge below already treats `false` as FILLED (it is not
+-- nil, "" or an empty table) and `mergeValue` passes it through, so a known "No" survives
+-- save/load and is never overwritten by an import.
 
 -- A FIELD-DRIVEN LOOP MUST STILL RESPECT THE FIELDS' TYPES (deep review, v4.7.298).
 --
@@ -357,10 +379,24 @@ M.BOON_DB_FIELDS = { "description", "rarity", "maxEchoes", "quote", "category",
 --     Nothing would ever refill it: `boonGaps` selects on a missing DESCRIPTION alone.
 local function mergeValue(v)
   if type(v) ~= "table" then return v end
-  if #v == 0 then return nil end                 -- empty list: no information, do not store it
   local out = {}
-  for i, item in ipairs(v) do out[i] = item end  -- copied, never aliased
+  for _, item in ipairs(v) do                    -- copied, never aliased
+    if type(item) == "string" and item ~= "" then out[#out + 1] = item end -- names only (v4.7.322)
+  end
+  if #out == 0 then return nil end               -- empty list: no information, do not store it
   return out
+end
+
+-- THE TYPE A FIELD MUST HAVE (review, v4.7.322). A hand-edited or foreign import could carry
+-- `comboBoon = "yes"`: stored, it would count as FILLED and block every later real answer, and
+-- only `_enrichOffer`'s own type test kept it off the wire. A value of the wrong type is now no
+-- value -- not merged, and an existing one does not count as filled. Only the non-string fields
+-- are listed; the rest keep their existing behaviour.
+local FIELD_TYPE = { comboBoon = "boolean", conflictsWith = "table" }
+local function typed(f, v)
+  local want = FIELD_TYPE[f]
+  if want and v ~= nil and type(v) ~= want then return nil end
+  return v
 end
 
 function M._boonDbMerge(src)
@@ -372,7 +408,7 @@ function M._boonDbMerge(src)
       local cur = M.history.boonLibrary[name]
       if not cur then
         local fresh = {}
-        for _, f in ipairs(M.BOON_DB_FIELDS) do fresh[f] = mergeValue(rec[f]) end
+        for _, f in ipairs(M.BOON_DB_FIELDS) do fresh[f] = mergeValue(typed(f, rec[f])) end
         M.history.boonLibrary[name] = fresh
         added = added + 1
       else
@@ -381,8 +417,9 @@ function M._boonDbMerge(src)
           local have = cur[f]
           local empty = (have == nil) or (have == "")
             or (type(have) == "table" and #have == 0)
+            or (have ~= nil and typed(f, have) == nil)
           if empty then
-            local v = mergeValue(rec[f])
+            local v = mergeValue(typed(f, rec[f]))
             if v ~= nil and v ~= "" then
               cur[f] = v
               touched = true
@@ -410,16 +447,19 @@ end
 
 -- What do we actually have? Counts, not a dump -- the dump is the report below.
 function M.boonDbStats()
-  local total, described, rarity, echoes = 0, 0, 0, 0
+  local total, described, rarity, echoes, combo, checked = 0, 0, 0, 0, 0, 0
   for _, rec in pairs(M.history.boonLibrary or {}) do
     total = total + 1
     if type(rec) == "table" then
       if rec.description and rec.description ~= "" then described = described + 1 end
       if rec.rarity and rec.rarity ~= "" then rarity = rarity + 1 end
       if rec.maxEchoes then echoes = echoes + 1 end
+      if rec.comboBoon == true then combo = combo + 1 end        -- v4.7.322
+      if rec.comboChecked then checked = checked + 1 end
     end
   end
-  return { total = total, described = described, rarity = rarity, echoes = echoes }
+  return { total = total, described = described, rarity = rarity, echoes = echoes,
+           combo = combo, checked = checked }
 end
 
 -- The viewer. `filter` matches the name OR the description, so "immune" finds every immunity
@@ -437,8 +477,15 @@ function M.reportBoonDb(filter)
 
   local st = M.boonDbStats()
   M.echo("<gold>Boon database<reset> -- " .. st.total .. " known, " .. st.described
-    .. " described, " .. st.rarity .. " with rarity"
+    .. " described, " .. st.rarity .. " with rarity, " .. st.combo .. " combo, "
+    .. st.checked .. " contemplated"
     .. (f and ("  <grey>(filter: " .. filter .. " -> " .. #names .. ")<reset>") or ""))
+  -- Say what the load-time repair changed (v4.7.322): a description it emptied is text the user
+  -- used to see, and a silent change to the catalogue is indistinguishable from data loss.
+  if M._repairedBoons and #M._repairedBoons > 0 then
+    M.echo("<grey>Repaired at load (a screen line was glued to the text): <cyan>"
+      .. table.concat(M._repairedBoons, "<grey>, <cyan>") .. "<grey>. <cyan>mnem boonfill<grey> re-learns any left blank.")
+  end
   if #names == 0 then return cecho("\n  <grey>(nothing matches)") end
 
   for _, name in ipairs(names) do
@@ -446,7 +493,8 @@ function M.reportBoonDb(filter)
     local col = (M.RARITY_COLOUR and rec.rarity and M.RARITY_COLOUR[rec.rarity]) or "cyan"
     cecho("\n  <" .. col .. ">" .. name .. "<reset>"
       .. (rec.rarity and ("  <grey>" .. rec.rarity) or "")
-      .. (rec.maxEchoes and ("  <grey>x" .. rec.maxEchoes) or "") .. "<reset>")
+      .. (rec.maxEchoes and ("  <grey>x" .. rec.maxEchoes) or "")
+      .. ((rec.comboBoon == true) and "  <cyan>combo" or "") .. "<reset>")
     if rec.description and rec.description ~= "" then
       cecho("\n      <grey>" .. rec.description)
       -- Annotate with what we parse out of it, so the database answers the question the
@@ -463,6 +511,36 @@ function M.reportBoonDb(filter)
   end
 end
 
+-- REPAIR WHAT WAS ALREADY STORED (v4.7.322). `_learnBoon` now refuses a glued screen line, but a
+-- catalogue saved before this version can already hold one: the user's did (Deadly Finesse's
+-- "description" is two WADE STATUS lines). Nothing would ever fix it -- `boonGaps` skips a boon
+-- that HAS a description -- so the text sat on the bonuses panel for good. Peeled here, once per
+-- load (cheap, idempotent); a boon left with no text becomes a gap again and is re-learned.
+function M._boonDbRepair()
+  local lib = M.history and M.history.boonLibrary
+  if type(lib) ~= "table" or not M._splitGluedMeta then return 0, {} end
+  local fixed = {}
+  for name, rec in pairs(lib) do
+    if type(rec) == "table" and type(rec.description) == "string" then
+      local rest, glued = M._splitGluedMeta(rec.description)
+      if glued then
+        rec.description = (rest ~= "") and rest or nil
+        local p = M._promoteMeta and M._promoteMeta({ meta = glued }) or {}
+        if rec.comboBoon == nil and type(p.comboBoon) == "boolean" then rec.comboBoon = p.comboBoon end
+        if rec.category == nil and type(p.category) == "string" then rec.category = p.category end
+        fixed[#fixed + 1] = name
+      end
+    end
+  end
+  table.sort(fixed)
+  if #fixed > 0 then
+    M._repairedBoons = fixed -- reported by `mnem boondb`
+    if M._historySave then pcall(M._historySave) end
+  end
+  return #fixed, fixed
+end
+
 -- Load persisted history at startup, then merge the standalone catalogue over it.
 M._historyLoad()
 if M._boonDbLoad then pcall(M._boonDbLoad) end
+pcall(M._boonDbRepair)

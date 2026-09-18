@@ -2,6 +2,129 @@
 
 ---
 
+## 2026-09-18 - `combo_boon`: the tracker's ninth boon field, and the corrupted descriptions it exposed (v4.7.322)
+
+User: *"He updated what we can send over to the API so we may as well update ours to match what we
+can do."*
+
+Diffed the live schema (`http://104.128.56.238:8000/openapi.json`) against every payload we send.
+Everything matched except **one new field**: `BoonInfo.combo_boon`, a boolean (default false). There
+is also a new read-only endpoint, `GET /boons/export` (below).
+
+### What a combo boon looks like on screen -- known only from the tracker's own data
+
+No log of ours has ever captured the line. The tracker's export has it, as corruption: ten boons whose
+stored description reads *"Combo Boon?:        Yes Gain 25% resistance to cold damage."* -- a
+`Label:   value` screen line glued onto the front of the text. Which screen prints it is **not
+proven**: the glued text fits a `BOON CONTEMPLATE` block and an offer screen equally well. The export
+also never shows "No" (not even for the 46 non-combo boons updated alongside), so the game may print
+the line only for combo boons.
+
+### Where combo status now comes from (user's choice: both)
+
+- **Seeded.** `M.BOON_COMBO` in `010_Boon_Seed.lua` marks the ten boons the export shows as combo
+  boons. Fill-only like every seed field, so anything CONTEMPLATE shows wins. Nothing is seeded as
+  *not* a combo: absence of the line is not an answer.
+- **Learned by `mnem boonfill`.** It used to contemplate only boons with **no description** -- and a
+  mature catalogue has none (the user's: 402 boons, 0 gaps), so nothing new would ever have been
+  learned. It now fills the rest of its batch with described boons it has never contemplated
+  (`M.boonMetaGaps`), taking only what the offer screen never prints -- combo status, quote,
+  category -- and **never touching the text**. Each is marked `comboChecked` once a real block comes
+  back, so a boon is asked once, not forever. The ten seeded combo boons go **first**, and the
+  summary says whether their contemplate printed the line -- which settles which screen prints it.
+  Queue on the user's catalogue: 350 boons (echoes excluded), 8 per `mnem boonfill`.
+- **Sent** on `/boons_offered` as `combo_boon` when the catalogue knows either answer, and
+  **omitted** when it knows neither. The server defaults to false, so whether an omission is stored
+  as "false" is a question for the tracker's author (see Open).
+
+### Screen lines glued onto descriptions -- found by the review, and fixed at every door
+
+`_parseContemplate` treated `Label: value` lines as metadata only if the label had no `?`, so
+`Combo Boon?:` would have started the description exactly as in the tracker's data. Fixed (a label may
+end in ONE `?`). The deep review then found the same class of corruption already **in the user's
+catalogue**: Deadly Finesse's "description" was *"Denizen levels increased by:  70 Denizen speed
+increased by:   2"* -- two `WADE STATUS` lines a contemplate capture had swallowed. It showed on the
+bonuses panel, and nothing would ever have fixed it (a boon with a description is never a gap).
+
+- **`M._splitGluedMeta`** peels `Label:   value` pairs off the front of a description. The tell is
+  **two or more spaces after the colon** -- screen column padding, which prose never has (wrapped text
+  is re-joined with single spaces). Scanned against ~1,100 descriptions (our catalogue, the seed, the
+  tracker's export), it matches exactly the corrupted ones and nothing else.
+- **`_learnBoon` never stores one** -- whatever the source -- and promotes what the labels said.
+- **The catalogue repairs itself at load** (`M._boonDbRepair`). On the user's install that is Deadly
+  Finesse alone; with no text left it becomes a gap again and is re-learned. `mnem boondb` says what
+  was repaired.
+- **The offer screen gets the same guard** (`M._cleanOfferList`): a meta line on its own row would
+  otherwise have become a fake boon named "Combo Boon?" -- learned, posted, and counted as a reroll --
+  and one on a boon's row would have been glued to its text.
+- **A contemplate must look like one.** Every real block prints `Rarity:` or `Can echo:` first; a
+  captured block with neither (the Deadly Finesse root cause) is now ignored and the boon is not
+  marked checked.
+- **A padded label printed AFTER the text is metadata too.** Outside the meta block, a
+  column-padded `Label:   value` line no longer joins the description; a prose line with a single
+  space after a colon still does.
+
+Checked against the user's own data rather than assumed: none of ~1,100 real descriptions opens
+like a label (so the shape rule's remaining edge -- a description beginning "Why?: ..." -- has never
+occurred), Deadly Finesse is the only description holding a padded label anywhere, and none of the
+2,383 affixes in the user's history looks like one (the effects block shares the same parser).
+
+### Smaller fixes from the same review
+
+- Only the label actually seen (`Combo Boon?`) promotes; the guessed alias `Combo Boon` is gone
+  (it sorted first, so it would have overridden the real one). `Unset` is a placeholder category.
+- `_boonDbMerge` checks the type of the non-string fields: an imported `comboBoon = "yes"` is no value,
+  and no longer counts as "filled" against a later real answer; conflict lists keep only names.
+- `/ripple_level` takes whole numbers only (`mnem ripple 2.5` used to reach the server's 422).
+- The dead pre-v4.7.279 contemplate chain (`_contemplateNext`, `_applyContemplate`) is removed: if
+  revived it would have copied raw screen labels into the payload.
+- `mnem boondb` shows combo and contemplated counts and tags combo boons; the two patterns the meta
+  parser uses are built once rather than per line.
+- **`mnem boonfill recheck`** clears every boon's "contemplated" mark so the combo pass asks again
+  after a game change -- the answers already learned are kept until a contemplate says otherwise.
+  (Nothing refreshed combo status before; a boon that stopped being a combo would have kept its
+  seeded `true` for good.)
+- Docs that still described the removed contemplate chain as live are corrected (02, 03, 05,
+  CLAUDE.md); the README documents `mnem boondb` and `mnem boonfill`.
+
+### `GET /boons/export` -- seen, not consumed
+
+Returns the tracker's whole boon catalogue: 396 boons with description, quote, rarity, category,
+unlocked-by, conflicts, echo counts, and the classes, races and ripple range each has been offered at
+-- but **not** `combo_boon`. Nothing here reads it. Importing it would need the glued descriptions
+filtered out first, and posting its values back to the tracker would add nothing.
+
+### Open
+
+- Whether the tracker stores an omitted `combo_boon` as false. If it does, and keeps the latest value,
+  every client that omits the field could overwrite another client's true.
+- The tracker's catalogue holds eleven corrupted descriptions (ten "Combo Boon?: Yes", Curse of Time's
+  "Category: Unset").
+
+### Verification
+
+2057 tests pass (38 new, and the dead chain's one test removed with it). Six-agent deep review; every
+finding fixed except the server-side question under Open. **53 mutants** of the new code, **all
+caught** -- including the four the review's own mutation pass found surviving. Runs identically on real Lua 5.1.5 and 5.4; Mudlet's own `yajl` was
+loaded and confirmed to emit a JSON `false`.
+
+### Files
+
+- `mnemosyne/004_Parsers.lua`: `META_KEY` (+ `?`), `META_FLAG`, `unset`, `_splitGluedMeta`,
+  `_cleanOfferList`, contemplate validation, `M.boonMetaGaps`, `boonFill`/`_boonFillNext` combo pass;
+  dead chain removed.
+- `mnemosyne/007_History.lua`: `_learnBoon` strips glued lines, stores the boolean; typed merge;
+  `_boonDbRepair` at load; `boonDbStats`/`mnem boondb` show combo status.
+- `mnemosyne/002_Reporter_API.lua`: `_enrichOffer` sends `combo_boon`; `setRipple` whole numbers.
+- `mnemosyne/003_Commands.lua`: help text, `boonfill gaps` count, `boonfill recheck`, `mnem ripple`
+  usage.
+- `mnemosyne/010_Boon_Seed.lua`: `M.BOON_COMBO`.
+- `tests/test_mnemosyne.lua`.
+- `README.md`, `CLAUDE.md`, `.claude/projects/mnemosyne/02-reporting.md`, `03-parsing-triggers.md`,
+  `05-commands.md`; memory.
+
+---
+
 ## 2026-09-18 - The hover is not a sanctuary: 52 seconds on the ground with every attack held (v4.7.321)
 
 User, with a death log: *"I do not understand why we stopped attacking and just died here..."*

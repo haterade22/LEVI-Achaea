@@ -1696,13 +1696,17 @@ function M.onBoonsOffered()
       return nil
     end,
     onDone = function(lines)
-      local list = M._parseNamedBlock(lines)
+      -- Cleaned BEFORE anything reads it -- catalogue, history, reroll test and the post all see
+      -- the same list (v4.7.322, see `_cleanOfferList`).
+      local list = M._cleanOfferList(M._parseNamedBlock(lines))
       if #list == 0 then return end
 
       -- Local catalogue FIRST and unconditionally: the offer screen is the only place a boon's
       -- description is ever shown, so if we don't take it here it is gone the moment you claim.
       if M._learnBoon then
-        for _, b in ipairs(list) do M._learnBoon(b.name, b.description) end
+        for _, b in ipairs(list) do
+          M._learnBoon(b.name, b.description, nil, nil, { comboBoon = b.combo_boon, category = b.category })
+        end
         M._historySave()
       end
 
@@ -2008,20 +2012,10 @@ function M._reportBoonsOfferedEnriched(list, rerolls)
   M.reportBoonsOffered(list, rerolls)
 end
 
--- Sequentially BOON CONTEMPLATE each boon, merge the parsed detail into the
--- entry, then send the fully-populated /boons_offered.
-function M._contemplateNext(list, i)
-  if i > #list then
-    if M._recordOffers then M._recordOffers(list) end -- local history (#6), now enriched
-    return M.reportBoonsOffered(list)
-  end
-  local boon = list[i]
-  M._captureContemplate(function(info)
-    M._applyContemplate(boon, info)
-    tempTimer(0.5, function() M._contemplateNext(list, i + 1) end)
-  end)
-  send("boon contemplate " .. boon.name, false)
-end
+-- `_contemplateNext` / `_applyContemplate` -- the pre-v4.7.279 chain that CONTEMPLATEd each offered
+-- boon before posting -- were removed in v4.7.322. Nothing had called them since v4.7.279, and
+-- `_applyContemplate` copied a parse's `meta` table straight into the offer entry, so reviving the
+-- chain would have put raw screen labels on the wire.
 
 -- Backfill the boon catalogue: BOON CONTEMPLATE everything we own but have no description for.
 --
@@ -2080,49 +2074,130 @@ function M.boonGaps()
   return gaps
 end
 
+-- BOONS WE CAN DESCRIBE BUT HAVE NEVER CONTEMPLATED (v4.7.322, user-directed).
+--
+-- `combo_boon` -- and the quote and category the tracker also takes -- are printed only by
+-- CONTEMPLATE, and `boonGaps` only ever queues boons with NO description. Every boon in a mature
+-- catalogue has one, so on the user's install (402 boons, 0 gaps) nothing would ever have been
+-- learned and `combo_boon` would never have been sent. So `mnem boonfill` also contemplates
+-- described boons it has not yet checked, marking each `comboChecked` once a real block comes back
+-- -- whether or not it printed a combo line, so a boon is asked once, not forever.
+--
+-- Boons SEEDED as combo (`M.BOON_COMBO`, from the tracker's data) go FIRST: seeing -- or not seeing
+-- -- "Combo Boon?" on their contemplate is what settles which screen prints the line, the one thing
+-- no log of ours has shown. Echoes ("(ECHO) Name") and names the game refused are skipped. Only
+-- `mnem boonfill` runs this pass; the automatic trickle stays on description gaps.
+function M.boonMetaGaps()
+  local combo, rest = {}, {}
+  for name, rec in pairs((M.history and M.history.boonLibrary) or {}) do
+    if type(name) == "string" and type(rec) == "table"
+       and type(rec.description) == "string" and rec.description ~= ""
+       and not rec.comboChecked and not name:find("^%(ECHO%)") and not M.boonUnknown(name) then
+      if rec.comboBoon == true then combo[#combo + 1] = name else rest[#rest + 1] = name end
+    end
+  end
+  table.sort(combo)
+  table.sort(rest)
+  for _, name in ipairs(rest) do combo[#combo + 1] = name end
+  return combo
+end
+
+-- Forget which boons were contemplated, so the combo pass asks them all again (`mnem boonfill
+-- recheck`). The ANSWERS stay: nothing here can tell a stale value from a current one, and a
+-- contemplate that prints the line overwrites it (`_learnBoon`).
+function M.boonRecheck()
+  local n = 0
+  for _, rec in pairs((M.history and M.history.boonLibrary) or {}) do
+    if type(rec) == "table" and rec.comboChecked then rec.comboChecked = nil; n = n + 1 end
+  end
+  if n > 0 and M._historySaveSoon then M._historySaveSoon() end
+  return n
+end
+
 -- BOUNDED BY DEFAULT. Each entry is one CONTEMPLATE and one captured block, and the capture slot
 -- is shared with the offer and effects parsers -- so filling all of them in one burst is the same
 -- race v4.7.279 had to unpick. `mnem boonfill` takes a handful; `mnem boonfill all` is the
--- deliberate opt-in for a quiet moment on the riverbank.
+-- deliberate opt-in for a quiet moment on the riverbank. Description gaps are queued first; the
+-- rest of the batch goes to the combo-status pass (v4.7.322).
 M.BOON_FILL_BATCH = 8
 
 function M.boonFill(limit)
   local gaps = M.boonGaps()
-  if #gaps == 0 then
-    return M.echo("Boon catalogue has no gaps -- every name we know of has its text.")
+  local metaGaps = M.boonMetaGaps()
+  if #gaps == 0 and #metaGaps == 0 then
+    return M.echo("Boon catalogue has no gaps -- every boon has its text and has been contemplated.")
   end
-  local n = tonumber(limit) or M.BOON_FILL_BATCH
-  if limit == "all" then n = #gaps end
-  if n > #gaps then n = #gaps end
-  local todo = {}
-  for i = 1, n do todo[i] = gaps[i] end
-  M.echo("Contemplating <cyan>" .. #todo .. "<grey> of <cyan>" .. #gaps
-         .. "<grey> undescribed boon(s) (~" .. string.format("%.0f", #todo * 0.6) .. "s)...")
-  M._boonFillNext(todo, 1, 0)
+  local n = (limit == "all") and (#gaps + #metaGaps) or (tonumber(limit) or M.BOON_FILL_BATCH)
+  local todo, meta, nMeta = {}, {}, 0
+  for _, name in ipairs(gaps) do
+    if #todo < n then todo[#todo + 1] = name end
+  end
+  local nDesc = #todo
+  for _, name in ipairs(metaGaps) do
+    if #todo < n then todo[#todo + 1] = name; meta[name] = true; nMeta = nMeta + 1 end
+  end
+  M.echo("Contemplating <cyan>" .. #todo .. "<grey> boon(s): <cyan>" .. nDesc .. "<grey> of <cyan>"
+    .. #gaps .. "<grey> undescribed, <cyan>" .. nMeta .. "<grey> of <cyan>" .. #metaGaps
+    .. "<grey> to check for combo status (~" .. string.format("%.0f", #todo * 0.6) .. "s)...")
+  M._boonFillNext(todo, 1, 0, { meta = meta, checked = 0, lines = 0, noLine = {} })
 end
 
-function M._boonFillNext(todo, i, learned)
+-- `ctx` (v4.7.322) is nil for the trickle's single description gap, and carries the combo-status
+-- pass's bookkeeping for `mnem boonfill`: which names are `meta` (described already -- their text
+-- must not be touched), how many were checked, how many printed the combo line, and which boons
+-- SEEDED as combo came back without it.
+function M._boonFillNext(todo, i, learned, ctx)
   if i > #todo then
     M._historySave()
-    return M.echo("Boon catalogue updated: <cyan>" .. learned .. "<grey> learned. Run <cyan>BOONS<grey> to see them.")
+    local msg = "Boon catalogue updated: <cyan>" .. learned .. "<grey> learned."
+    if ctx and ctx.checked > 0 then
+      msg = msg .. " Contemplated <cyan>" .. ctx.checked .. "<grey> for combo status; the "
+        .. "'Combo Boon?' line appeared on <cyan>" .. ctx.lines .. "<grey>."
+      if #ctx.noLine > 0 then
+        msg = msg .. " <yellow>No 'Combo Boon?' line on " .. table.concat(ctx.noLine, ", ")
+          .. "<grey> (seeded as combo from the tracker's data) -- that line may be printed by the"
+          .. " offer screen rather than CONTEMPLATE."
+      end
+    end
+    return M.echo(msg .. " Run <cyan>BOONS<grey> to see them.")
   end
   local name = todo[i]
+  local metaOnly = ctx and ctx.meta and ctx.meta[name] or false
+  local before = M.boonInfo and M.boonInfo(name)
+  local seededCombo = type(before) == "table" and before.comboBoon == true
   M._captureContemplate(function(info)
-    if info and info.description and info.description ~= "" and M._learnBoon then
+    -- A REAL CONTEMPLATE BLOCK OPENS WITH ITS META (review, v4.7.322). Every one we have seen
+    -- prints `Rarity:` and `Can echo:` before the text. The capture is divider-bounded and shares
+    -- one slot, so it can catch the wrong block -- which is how Deadly Finesse's "description"
+    -- became two WADE STATUS lines. A block with neither line is not a contemplate: learn nothing
+    -- from it, and do not mark the boon checked.
+    local real = type(info) == "table" and (info.rarity ~= nil or info.num_echoes_possible ~= nil)
+    if real and M._learnBoon then
       -- A CONTEMPLATE IS A COMMAND SPENT AND A CAPTURE SLOT HELD, so take everything it printed
-      -- (v4.7.298). Until now this read `info.quote` and the promoted meta fields and passed
-      -- neither on -- meaning the only way to learn a boon's quote or category was to spend the
-      -- same contemplate a second time, which nothing was ever going to do.
-      -- `conflictsWith` is not passed: nothing parses it (see META_PROMOTE above). The storage
-      -- and transport for it remain, so an imported catalogue that carries one still works.
-      M._learnBoon(name, info.description, info.rarity, info.num_echoes_possible, {
+      -- (v4.7.298). `conflictsWith` is not passed: nothing parses it (see META_PROMOTE above).
+      local extra = {
         quote = info.quote,
         category = info.category,
         unlockedBy = info.unlockedBy,
-      })
-      learned = learned + 1
+        comboBoon = info.comboBoon, -- v4.7.322: a boolean, so `false` is passed too
+      }
+      if metaOnly then
+        -- An already-described boon: its text came from the offer screen, which owns it. The
+        -- contemplate only adds what the offer screen never prints.
+        M._learnBoon(name, nil, info.rarity, info.num_echoes_possible, extra)
+      elseif info.description and info.description ~= "" then
+        M._learnBoon(name, info.description, info.rarity, info.num_echoes_possible, extra)
+        learned = learned + 1
+      end
+      local rec = M.boonInfo and M.boonInfo(name)
+      if type(rec) == "table" then rec.comboChecked = true end
+      if ctx then
+        ctx.checked = ctx.checked + 1
+        if info.comboBoon ~= nil then ctx.lines = ctx.lines + 1 end
+        if seededCombo and info.comboBoon == nil then ctx.noLine[#ctx.noLine + 1] = name end
+      end
     end
-    tempTimer(0.5, function() M._boonFillNext(todo, i + 1, learned) end)
+    tempTimer(0.5, function() M._boonFillNext(todo, i + 1, learned, ctx) end)
   end)
   -- Say WHICH name goes out (v4.7.308): the send is silent, so a refusal in the log could not be
   -- tied to a name -- the user's first guess was the apostrophe, and the real cause was a
@@ -2158,21 +2233,6 @@ function M.boonUnknownRetry(name)
   u[name] = nil
   if M._historySaveSoon then M._historySaveSoon() end
   return true
-end
-
--- Merge contemplate detail into an offered boon: rarity/quote/echoes ONLY. The
--- description is kept from the offered block (authoritative, already wrap-joined).
--- We deliberately do NOT take contemplate's description: it is redundant, and the
--- first boon's contemplate is armed right beside the "BOON CLAIM ..." offered
--- footer, which was corrupting the first boon's description.
-function M._applyContemplate(boon, info)
-  if not info then return end
-  if info.rarity then boon.rarity = info.rarity end
-  if info.quote then boon.quote = info.quote end
-  if info.num_echoes_possible ~= nil then boon.num_echoes_possible = info.num_echoes_possible end
-  -- Category / unlocked-by and anything the screen gains later. Carried whole rather than picked
-  -- apart, because we have not seen the labels: keeping them is what lets us learn them.
-  if info.meta then boon.meta = info.meta end
 end
 
 -- Capture one BOON CONTEMPLATE block (skip the "<name>:" header + opening
@@ -2223,9 +2283,21 @@ end
 -- with a colon does not -- "Your options are simple: hit harder." is four. A shape rule with no
 -- length bound swallowed exactly that line in testing, which is the whole reason the bound is
 -- here: widening what a parser accepts obliges you to say what it must still refuse (v4.7.262).
+--
+-- A LABEL MAY END IN "?" (v4.7.322). The screen now prints `Combo Boon?:        Yes`, and the
+-- character class above had no `?`, so that line was not a label: it flipped the parser into the
+-- description and was glued onto the front of it -- "Combo Boon?:        Yes Gain 25% resistance
+-- to cold damage." -- which `_learnBoon` then stored OVER the good text. That exact corruption is
+-- sitting in the tracker's own catalogue for ten boons (GET /boons/export, 2026-09-18), which is
+-- how we know the wording at all: no log of ours has captured it.
 local META_LABEL_WORDS = 3
+local META_KEY = "^(%u[%w'%- ]-%??):%s+"
+local META_KEY_LABEL = META_KEY .. "%S"    -- built once, not per line (review, v4.7.322)
+local META_KEY_VALUE = META_KEY .. "(.+)$"
+-- Column-padded (2+ spaces after the colon): screen layout, never prose -- see `_splitGluedMeta`.
+local META_KEY_PADDED = "^(%u[%w'%- ]-%??):%s%s+%S"
 local function metaLabel(ln)
-  local k = ln:match("^(%u[%w'%- ]-):%s+%S")
+  local k = ln:match(META_KEY_LABEL)
   if not k then return nil end
   local words = 1
   for _ in k:gmatch(" ") do words = words + 1 end
@@ -2288,7 +2360,21 @@ local META_VALUE_MAX = 60
 local META_PLACEHOLDER = {
   ["none"] = true, ["n/a"] = true, ["na"] = true, ["-"] = true,
   ["nothing"] = true, ["nil"] = true, ["unknown"] = true,
+  -- The game's own word for a category it has not assigned (v4.7.322). The tracker's catalogue
+  -- has it twice: Restoration's CATEGORY field is "Unset", and Curse of Time's DESCRIPTION opens
+  -- with the glued line "Category:           Unset".
+  ["unset"] = true,
 }
+
+-- YES/NO LABELS BECOME BOOLEANS (v4.7.322). `combo_boon` is a boolean on the tracker's BoonInfo,
+-- so for this field "No" is information, not absence -- unlike a string, where an empty value
+-- means we do not know. Anything but a clean yes/no stays in `meta` and promotes nothing.
+-- Only the label we have actually SEEN: a guessed alias ("Combo Boon", no "?") sorts first, so it
+-- would have outranked the real one had both ever appeared (review, v4.7.322).
+local META_FLAG = {
+  ["combo boon?"] = "comboBoon",
+}
+local FLAG_VALUE = { yes = true, no = false }
 
 function M._promoteMeta(info)
   if type(info) ~= "table" or type(info.meta) ~= "table" then return info end
@@ -2308,8 +2394,72 @@ function M._promoteMeta(info)
         info[field] = trimmed
       end
     end
+    local flag = META_FLAG[tostring(label):lower()]
+    if flag and type(value) == "string" and info[flag] == nil then
+      local word = value:gsub("^%s+", ""):gsub("[%s%.]+$", ""):lower()
+      local b = FLAG_VALUE[word]
+      if b ~= nil then info[flag] = b end
+    end
   end
   return info
+end
+
+-- A SCREEN LINE GLUED ONTO A DESCRIPTION (v4.7.322). When a `Label:   value` line is mistaken for
+-- the start of the description it ends up glued to the front of it: "Combo Boon?:        Yes Gain
+-- 25% resistance to cold damage." (ten boons in the tracker's catalogue), "Category:           Unset
+-- Your aeonics..." (one), and in OUR catalogue "Denizen levels increased by:  70 Denizen speed
+-- increased by:   2" -- two WADE STATUS lines a contemplate capture swallowed as Deadly Finesse's
+-- whole description.
+--
+-- The discriminator is TWO OR MORE SPACES after the colon. That is screen column padding, and
+-- prose never has it: wrapped text is re-joined with single spaces. Scanned against every
+-- description we hold (our catalogue, the seed and the tracker's export, ~1,100 strings), this
+-- pattern matched exactly the corrupted ones and nothing else. Returns the remaining text and the
+-- pairs it peeled off (nil when there were none). The value is ONE word: every glued value seen is.
+local GLUED_META = "^(%u[%w'%- ]-%??):%s%s+(%S+)%s*(.*)$"
+local GLUED_MAX = 8 -- no screen has this many meta lines; bounds the loop on hostile input
+
+function M._splitGluedMeta(desc)
+  if type(desc) ~= "string" then return desc, nil end
+  local rest, meta = desc, nil
+  for _ = 1, GLUED_MAX do
+    local k, v, tail = rest:match(GLUED_META)
+    if not k then break end
+    meta = meta or {}
+    if meta[k] == nil then meta[k] = v end
+    rest = tail
+  end
+  return rest, meta
+end
+
+-- THE OFFER SCREEN GETS THE SAME PROTECTION (review, v4.7.322). The tracker's corruption could as
+-- easily have come from the offer screen as from CONTEMPLATE, and `_parseNamedBlock` (whose rows
+-- are `Name:  description`) would read a meta line two ways: on its OWN line it becomes a fake
+-- boon named "Combo Boon?" -- learned into the catalogue, posted to the tracker, and counted in
+-- the reroll comparison -- and ON THE SAME LINE as a boon it is glued onto that boon's text. Our
+-- 13,998 recorded offers show neither, so this guards a line the game may add, not one it prints.
+local OFFER_META_NAMES = {
+  ["rarity"] = true, ["can echo"] = true, ["maximum echoes"] = true, ["category"] = true,
+  ["combo boon?"] = true, ["unlocked by"] = true, ["unlocks from"] = true,
+  ["conflicts with"] = true,
+}
+
+function M._cleanOfferList(list)
+  local out = {}
+  for _, b in ipairs(type(list) == "table" and list or {}) do
+    local lname = (type(b) == "table" and type(b.name) == "string") and b.name:lower() or nil
+    if lname and not OFFER_META_NAMES[lname] then
+      local rest, glued = M._splitGluedMeta(b.description)
+      if glued then
+        b.description = (rest ~= "") and rest or nil
+        local p = M._promoteMeta({ meta = glued })
+        if b.combo_boon == nil and type(p.comboBoon) == "boolean" then b.combo_boon = p.comboBoon end
+        if b.category == nil and type(p.category) == "string" then b.category = p.category end
+      end
+      out[#out + 1] = b
+    end
+  end
+  return out
 end
 
 function M._parseContemplate(lines)
@@ -2338,10 +2488,13 @@ function M._parseContemplate(lines)
       end
     elseif ln:match("^%s*$") then
       if section == "desc" then section = "quote" end
-    elseif section == "meta" and metaLabel(ln) then
+    elseif metaLabel(ln) and (section == "meta" or ln:match(META_KEY_PADDED)) then
+      -- (v4.7.322) Outside the meta block only a COLUMN-PADDED label counts: a meta line printed
+      -- AFTER the text (unseen, but nothing rules it out) must not be glued onto its end, and a
+      -- prose line with a single space after a colon still stays prose.
       -- An unrecognised `Label: value` while still in the meta block -- category, unlocked-by, or
       -- whatever is added next. Record it and do NOT let it start the description.
-      local k, v = ln:match("^(%u[%w'%- ]-):%s+(.+)$")
+      local k, v = ln:match(META_KEY_VALUE)
       info.meta = info.meta or {}
       info.meta[k] = (v:gsub("%s+$", ""))
     else

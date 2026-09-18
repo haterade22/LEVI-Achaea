@@ -78,11 +78,11 @@ function M.help()
     { "mnem sense", "Fullsense recon of the ripple (Sleuth boon reveals all denizens)" },
     { "mnem cards [on|off|maran <hp%>|seasone <hp%>|matic <n>]", "Legend deck auto-draw (maran/seasone/morimbuul/matic/covenant/xylthus)" },
     { "mnem boons", "This run's claimed boons (local history)" },
-    { "mnem boonfill", "BOON CONTEMPLATE owned boons with no description yet (run BOONS first)" },
+    { "mnem boonfill", "BOON CONTEMPLATE boons with no description, then boons not yet checked for combo status" },
     { "mnem affixes", "This run's active affixes (ongoing effects)" },
     { "mnem library", "All-time affix catalogue" },
     { "mnem boondb [filter|export|import]", "All-time BOON catalogue (own file; filter matches name or effect)" },
-    { "mnem boonfill [gaps|all|<n>|unknown|retry <name>]", "Learn what undescribed boons do via BOON CONTEMPLATE; `unknown` lists names the game refused" },
+    { "mnem boonfill [gaps|all|<n>|unknown|retry <name>|recheck]", "Learn what undescribed boons do, and each boon's combo status/quote/category, via BOON CONTEMPLATE; `unknown` lists names the game refused; `recheck` asks every boon again" },
     { "mnem quiet [on|off]", "Silence auto boon/affix echoes (still records)" },
     { "mnem start | end", "Manually start / end a run" },
     { "mnem check", "Re-sync with an in-progress run (/run_exists)" },
@@ -188,7 +188,8 @@ function M.command(rest)
   elseif cmd == "pause" then
     M.onRunPause()
   elseif cmd == "ripple" then
-    if arg == "" then M.echo("Usage: mnem ripple <number>") else M.setRipple(tonumber(arg)) end
+    local n = tonumber(arg)
+    if not n or n ~= math.floor(n) then M.echo("Usage: mnem ripple <whole number>") else M.setRipple(n) end
   elseif cmd == "boss" then
     if arg == "" then M.echo("Usage: mnem boss <name>") else M.reportBoss(arg) end
   elseif cmd == "monsters" then
@@ -305,6 +306,13 @@ function M.command(rest)
     -- `mnem boonfill` takes a batch; `mnem boonfill all` is the deliberate opt-in for a quiet
     -- moment, and `mnem boonfill gaps` just names what is missing without spending a command.
     local retry = arg:match("^retry%s+(.+)$")
+    -- `recheck` (v4.7.322): the combo-status pass asks each boon ONCE (`comboChecked`). After the
+    -- game changes boons, this lets it ask again; the answers already learned are kept until a
+    -- contemplate says otherwise.
+    if arg == "recheck" then
+      local n = M.boonRecheck and M.boonRecheck() or 0
+      return M.echo("Cleared the contemplated mark on <cyan>" .. n .. "<grey> boon(s); <cyan>mnem boonfill<grey> will ask them again.")
+    end
     if arg == "gaps" or arg == "list" then
       local gaps = M.boonGaps and M.boonGaps() or {}
       if #gaps == 0 then
@@ -314,6 +322,13 @@ function M.command(rest)
         for _, n in ipairs(gaps) do cecho("\n  <cyan>" .. n .. "<reset>") end
         cecho("\n  <grey>mnem boonfill<reset> takes the first " .. (M.BOON_FILL_BATCH or 8)
           .. "; <grey>mnem boonfill all<reset> takes them all.\n")
+      end
+      -- The combo-status pass (v4.7.322): described boons never contemplated. Counted, not
+      -- listed -- on a mature catalogue it is most of the library.
+      local metaGaps = M.boonMetaGaps and M.boonMetaGaps() or {}
+      if #metaGaps > 0 then
+        M.echo(#metaGaps .. " described boon(s) not yet contemplated for combo status/quote/category"
+          .. " -- queued after any gaps above.")
       end
       local unk = {}
       for n in pairs((M.history and M.history.boonUnknown) or {}) do unk[#unk + 1] = n end

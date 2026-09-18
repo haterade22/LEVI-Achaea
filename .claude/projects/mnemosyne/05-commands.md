@@ -50,9 +50,10 @@ A description is shown once, on a screen gone a second later, so the catalogue c
 
 | Command | Effect |
 |---|---|
-| `mnem boonfill` | contemplate the first `BOON_FILL_BATCH` (8) undescribed boons |
-| `mnem boonfill all` | all of them -- opt-in, for a quiet moment |
-| `mnem boonfill gaps` | name what is missing, spending no command |
+| `mnem boonfill` | contemplate `BOON_FILL_BATCH` (8) boons: undescribed ones first, then described ones never contemplated -- for combo status, quote and category (v4.7.322; seeded combo boons first; the text is never touched). The summary says whether the `Combo Boon?` line appeared |
+| `mnem boonfill all` | all of them -- opt-in, for a quiet moment (~350 on a mature catalogue) |
+| `mnem boonfill gaps` | name what is missing and count the combo-status queue, spending no command |
+| `mnem boonfill recheck` | clear every boon's "contemplated" mark so the combo pass asks again (after a game change); answers already learned are kept (v4.7.322) |
 
 `M.boonGaps()` unions the SEED (which carries every name-only hole), the LIBRARY and the last BOONS
 list, then dedupes and sorts. The old version read `boonsOwned` alone, which could only ever reach
@@ -124,7 +125,7 @@ capture is contending for at the same instant.
 | `mnem boons` | `M.reportBoons()` — this run's claimed boons (rarity, echoes, ripple, description) |
 | `mnem affixes` | `M.reportAffixes()` — this run's active affixes (ongoing effects) |
 | `mnem library` | `M.reportLibrary()` — the all-time affix catalogue |
-| `mnem boondb [filter\|export\|import]` | All-time BOON catalogue -- its own file, filter matches name **or** effect text, entries annotated with parsed immunities/costs (v4.7.239) |
+| `mnem boondb [filter\|export\|import]` | All-time BOON catalogue -- its own file, filter matches name **or** effect text, entries annotated with parsed immunities/costs (v4.7.239); shows combo/contemplated counts, tags combo boons, and lists any description repaired at load (v4.7.322) |
 
 ### Auto-explorer (see [07-explorer.md](07-explorer.md))
 
@@ -176,7 +177,7 @@ These call the Reporter API directly. The API functions guard only on `M._hasTok
 | `mnem end` | `M.endRun()` | flush monsters + `POST /run_end` |
 | `mnem check` | `M.runExists()` | `POST /run_exists` — resync with an in-progress run |
 | `mnem pause` | `M.onRunPause()` | `POST /run_pause` + set the local resume flag (v4.7.298) |
-| `mnem ripple <n>` | `M.setRipple(tonumber(arg))` | `POST /ripple_level` (guarded: only if `n > run.ripple`) |
+| `mnem ripple <n>` | `M.setRipple(tonumber(arg))` | `POST /ripple_level` (guarded: only if `n > run.ripple`; whole numbers only since v4.7.322 -- `ripple` is an integer in the schema) |
 | `mnem boss <name>` | `M.reportBoss(arg)` | `POST /boss` |
 | `mnem monsters <text>` | `M.reportMonsters(arg)` | `POST /monsters` |
 | `mnem death [killer]` | `M.reportDeath(arg)` | `POST /death` (killer defaults to `"unknown"`) |
@@ -216,6 +217,6 @@ ataxia.mnemosyne.onBoonClaim(matches[2])   -- then report the selection
   in red at 1. It also echoes on CHANGE (never on every wade status: a number reprinted each ripple
   is a number nobody reads).
 
-**Still misleading:** the `Contemplate:` row. `M._contemplateNext` is dead code since v4.7.91 took
-the enrichment chain off the offer path, so the setting no longer affects offers -- it reaches only
-`boonFill`.
+**Still misleading:** the `Contemplate:` row. The enrichment chain it once gated left the offer path
+in v4.7.91 (its `M._contemplateNext` was removed in v4.7.322), so the setting no longer affects
+offers.
